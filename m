@@ -2,33 +2,34 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB53DEEE
-	for <lists+linux-fpga@lfdr.de>; Mon, 29 Apr 2019 11:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D32DEF0
+	for <lists+linux-fpga@lfdr.de>; Mon, 29 Apr 2019 11:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727976AbfD2JNH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 29 Apr 2019 05:13:07 -0400
+        id S1727957AbfD2JNR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 29 Apr 2019 05:13:17 -0400
 Received: from mga02.intel.com ([134.134.136.20]:32630 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727957AbfD2JNG (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 29 Apr 2019 05:13:06 -0400
+        id S1727975AbfD2JNH (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 29 Apr 2019 05:13:07 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Apr 2019 02:13:05 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Apr 2019 02:13:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.60,409,1549958400"; 
-   d="scan'208";a="165988340"
+   d="scan'208";a="165988347"
 Received: from hao-dev.bj.intel.com ([10.238.157.65])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Apr 2019 02:13:03 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 29 Apr 2019 02:13:05 -0700
 From:   Wu Hao <hao.wu@intel.com>
 To:     atull@kernel.org, mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     linux-api@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
         Luwei Kang <luwei.kang@intel.com>,
+        Ananda Ravuri <ananda.ravuri@intel.com>,
         Xu Yilun <yilun.xu@intel.com>
-Subject: [PATCH v2 16/18] fpga: dfl: fme: add power management support
-Date:   Mon, 29 Apr 2019 16:55:49 +0800
-Message-Id: <1556528151-17221-17-git-send-email-hao.wu@intel.com>
+Subject: [PATCH v2 17/18] fpga: dfl: fme: add global error reporting support
+Date:   Mon, 29 Apr 2019 16:55:50 +0800
+Message-Id: <1556528151-17221-18-git-send-email-hao.wu@intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1556528151-17221-1-git-send-email-hao.wu@intel.com>
 References: <1556528151-17221-1-git-send-email-hao.wu@intel.com>
@@ -37,380 +38,563 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This patch adds support for power management private feature under
-FPGA Management Engine (FME). This private feature driver registers
-a hwmon for power (power1_input), thresholds information, e.g.
-(power1_cap / crit) and also read-only sysfs interfaces for other
-power management information. For configuration, user could write
-threshold values via above power1_cap / crit sysfs interface
-under hwmon too.
+This patch adds support for global error reporting for FPGA
+Management Engine (FME), it introduces sysfs interfaces to
+report different error detected by the hardware, and allow
+user to clear errors or inject error for testing purpose.
 
 Signed-off-by: Luwei Kang <luwei.kang@intel.com>
+Signed-off-by: Ananda Ravuri <ananda.ravuri@intel.com>
 Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 Signed-off-by: Wu Hao <hao.wu@intel.com>
 ---
-v2: create a dfl_fme_power hwmon to expose power sysfs interfaces.
-    move all sysfs interfaces under hwmon
-        consumed          --> hwmon power1_input
-        threshold1        --> hwmon power1_cap
-        threshold2        --> hwmon power1_crit
-        threshold1_status --> hwmon power1_cap_status
-        threshold2_status --> hwmon power1_crit_status
-        xeon_limit        --> hwmon power1_xeon_limit
-        fpga_limit        --> hwmon power1_fpga_limit
-        ltr               --> hwmon power1_ltr
+v2: fix issues found in sysfs doc.
+    fix returned error code issues for writable sysfs interfaces.
+    (use -EINVAL if input doesn't match error code)
+    reorder the sysfs groups in code.
 ---
- Documentation/ABI/testing/sysfs-platform-dfl-fme |  67 ++++++
- drivers/fpga/dfl-fme-main.c                      | 247 +++++++++++++++++++++++
- 2 files changed, 314 insertions(+)
+ Documentation/ABI/testing/sysfs-platform-dfl-fme |  75 +++++
+ drivers/fpga/Makefile                            |   2 +-
+ drivers/fpga/dfl-fme-error.c                     | 385 +++++++++++++++++++++++
+ drivers/fpga/dfl-fme-main.c                      |   4 +
+ drivers/fpga/dfl-fme.h                           |   2 +
+ drivers/fpga/dfl.h                               |   2 +
+ 6 files changed, 469 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/fpga/dfl-fme-error.c
 
 diff --git a/Documentation/ABI/testing/sysfs-platform-dfl-fme b/Documentation/ABI/testing/sysfs-platform-dfl-fme
-index dfbd315..e2ba92d 100644
+index e2ba92d..503984b 100644
 --- a/Documentation/ABI/testing/sysfs-platform-dfl-fme
 +++ b/Documentation/ABI/testing/sysfs-platform-dfl-fme
-@@ -52,6 +52,7 @@ Contact:	Wu Hao <hao.wu@intel.com>
- Description:	Read-Only. Read this file to get the name of hwmon device, it
- 		supports values:
- 		    'dfl_fme_thermal' - thermal hwmon device name
-+		    'dfl_fme_power'   - power hwmon device name
+@@ -175,3 +175,78 @@ Contact:	Wu Hao <hao.wu@intel.com>
+ Description:	Read-only. Read this file to get current Latency Tolerance
+ 		Reporting (ltr) value. This ltr impacts the CPU low power
+ 		state in integrated solution.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/errors/revision
++Date:		April 2019
++KernelVersion:	5.2
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-only. Read this file to get the revision of this global
++		error reporting private feature.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/errors/pcie0_errors
++Date:		April 2019
++KernelVersion:  5.2
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-Write. Read this file for errors detected on pcie0 link.
++		Write this file to clear errors logged in pcie0_errors. Write
++		fails with -EINVAL if input parsing fails or input error code
++		doesn't match.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/errors/pcie1_errors
++Date:		April 2019
++KernelVersion:  5.2
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-Write. Read this file for errors detected on pcie1 link.
++		Write this file to clear errors logged in pcie1_errors. Write
++		fails with -EINVAL if input parsing fails or input error code
++		doesn't match.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/errors/nonfatal_errors
++Date:		April 2019
++KernelVersion:  5.2
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-only. It returns non-fatal errors detected.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/errors/catfatal_errors
++Date:		April 2019
++KernelVersion:  5.2
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-only. It returns catastrophic and fatal errors detected.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/errors/inject_error
++Date:		April 2019
++KernelVersion:  5.2
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-Write. Read this file to check errors injected. Write this
++		file to inject errors for testing purpose. Write fails with
++		-EINVAL if input parsing fails or input inject error code isn't
++		supported.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/errors/fme-errors/errors
++Date:		April 2019
++KernelVersion:  5.2
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-only. Read this file to get errors detected by hardware.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/errors/fme-errors/first_error
++Date:		April 2019
++KernelVersion:  5.2
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-only. Read this file to get the first error detected by
++		hardware.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/errors/fme-errors/next_error
++Date:		April 2019
++KernelVersion:  5.2
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-only. Read this file to get the second error detected by
++		hardware.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/errors/fme-errors/clear
++Date:		April 2019
++KernelVersion:  5.2
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Write-only. Write error code to this file to clear all errors
++		logged in errors, first_error and next_error. Write fails with
++		-EINVAL if input parsing fails or input error code doesn't
++		match.
+diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+index f1f0af7..1a9fa3d 100644
+--- a/drivers/fpga/Makefile
++++ b/drivers/fpga/Makefile
+@@ -38,7 +38,7 @@ obj-$(CONFIG_FPGA_DFL_FME_BRIDGE)	+= dfl-fme-br.o
+ obj-$(CONFIG_FPGA_DFL_FME_REGION)	+= dfl-fme-region.o
+ obj-$(CONFIG_FPGA_DFL_AFU)		+= dfl-afu.o
  
- What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_input
- Date:		April 2019
-@@ -108,3 +109,69 @@ Description:	Read-Only. Read this file to get the policy of hardware threshold1
- 		(see 'temp1_alarm'). It only supports two values (policies):
- 		    0 - AP2 state (90% throttling)
- 		    1 - AP1 state (50% throttling)
-+
-+What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_input
-+Date:		April 2019
-+KernelVersion:	5.2
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-Only. It returns current FPGA power consumption in uW.
-+
-+What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_cap
-+Date:		April 2019
-+KernelVersion:	5.2
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-Write. Read this file to get current hardware power
-+		threshold1 in uW. If power consumption rises at or above
-+		this threshold, hardware starts 50% throttling.
-+		Write this file to set current hardware power threshold1 in uW.
-+		As hardware only accepts values in Watts, so input value will
-+		be round down per Watts (< 1 watts part will be discarded).
-+		Write fails with -EINVAL if input parsing fails or input isn't
-+		in the valid range (0 - 127000000 uW).
-+
-+What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_crit
-+Date:		April 2019
-+KernelVersion:	5.2
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-Write. Read this file to get current hardware power
-+		threshold2 in uW. If power consumption rises at or above
-+		this threshold, hardware starts 90% throttling.
-+		Write this file to set current hardware power threshold2 in uW.
-+		As hardware only accepts values in Watts, so input value will
-+		be round down per Watts (< 1 watts part will be discarded).
-+		Write fails with -EINVAL if input parsing fails or input isn't
-+		in the valid range (0 - 127000000 uW).
-+
-+What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_cap_status
-+Date:		April 2019
-+KernelVersion:	5.2
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-only. It returns 1 if power consumption is currently at or
-+		above hardware threshold1 (see 'power1_cap'), otherwise 0.
-+
-+What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_crit_status
-+Date:		April 2019
-+KernelVersion:	5.2
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-only. It returns 1 if power consumption is currently at or
-+		above hardware threshold2 (see 'power1_crit'), otherwise 0.
-+
-+What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_xeon_limit
-+Date:		April 2019
-+KernelVersion:	5.2
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-Only. It returns power limit for XEON in uW.
-+
-+What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_fpga_limit
-+Date:		April 2019
-+KernelVersion:	5.2
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-Only. It returns power limit for FPGA in uW.
-+
-+What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_ltr
-+Date:		April 2019
-+KernelVersion:	5.2
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-only. Read this file to get current Latency Tolerance
-+		Reporting (ltr) value. This ltr impacts the CPU low power
-+		state in integrated solution.
-diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
-index b9a68b8..7005316 100644
---- a/drivers/fpga/dfl-fme-main.c
-+++ b/drivers/fpga/dfl-fme-main.c
-@@ -425,6 +425,249 @@ static void fme_thermal_mgmt_uinit(struct platform_device *pdev,
- 	.uinit = fme_thermal_mgmt_uinit,
- };
+-dfl-fme-objs := dfl-fme-main.o dfl-fme-pr.o
++dfl-fme-objs := dfl-fme-main.o dfl-fme-pr.o dfl-fme-error.o
+ dfl-afu-objs := dfl-afu-main.o dfl-afu-region.o dfl-afu-dma-region.o
+ dfl-afu-objs += dfl-afu-error.o
  
-+#define FME_PWR_STATUS		0x8
-+#define FME_LATENCY_TOLERANCE	BIT_ULL(18)
-+#define PWR_CONSUMED		GENMASK_ULL(17, 0)
+diff --git a/drivers/fpga/dfl-fme-error.c b/drivers/fpga/dfl-fme-error.c
+new file mode 100644
+index 0000000..772b53e
+--- /dev/null
++++ b/drivers/fpga/dfl-fme-error.c
+@@ -0,0 +1,385 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Driver for FPGA Management Engine Error Management
++ *
++ * Copyright 2019 Intel Corporation, Inc.
++ *
++ * Authors:
++ *   Kang Luwei <luwei.kang@intel.com>
++ *   Xiao Guangrong <guangrong.xiao@linux.intel.com>
++ *   Wu Hao <hao.wu@intel.com>
++ *   Joseph Grecco <joe.grecco@intel.com>
++ *   Enno Luebbers <enno.luebbers@intel.com>
++ *   Tim Whisonant <tim.whisonant@intel.com>
++ *   Ananda Ravuri <ananda.ravuri@intel.com>
++ *   Mitchel, Henry <henry.mitchel@intel.com>
++ */
 +
-+#define FME_PWR_THRESHOLD	0x10
-+#define PWR_THRESHOLD1		GENMASK_ULL(6, 0)	/* in Watts */
-+#define PWR_THRESHOLD2		GENMASK_ULL(14, 8)	/* in Watts */
-+#define PWR_THRESHOLD_MAX	0x7f			/* in Watts */
-+#define PWR_THRESHOLD1_STATUS	BIT_ULL(16)
-+#define PWR_THRESHOLD2_STATUS	BIT_ULL(17)
++#include <linux/uaccess.h>
 +
-+#define FME_PWR_XEON_LIMIT	0x18
-+#define XEON_PWR_LIMIT		GENMASK_ULL(14, 0)	/* in 0.1 Watts */
-+#define XEON_PWR_EN		BIT_ULL(15)
-+#define FME_PWR_FPGA_LIMIT	0x20
-+#define FPGA_PWR_LIMIT		GENMASK_ULL(14, 0)	/* in 0.1 Watts */
-+#define FPGA_PWR_EN		BIT_ULL(15)
++#include "dfl.h"
++#include "dfl-fme.h"
 +
-+#define PWR_THRESHOLD_MAX_IN_UW (PWR_THRESHOLD_MAX * 1000000)
++#define FME_ERROR_MASK		0x8
++#define FME_ERROR		0x10
++#define MBP_ERROR		BIT_ULL(6)
++#define PCIE0_ERROR_MASK	0x18
++#define PCIE0_ERROR		0x20
++#define PCIE1_ERROR_MASK	0x28
++#define PCIE1_ERROR		0x30
++#define FME_FIRST_ERROR		0x38
++#define FME_NEXT_ERROR		0x40
++#define RAS_NONFAT_ERROR_MASK	0x48
++#define RAS_NONFAT_ERROR	0x50
++#define RAS_CATFAT_ERROR_MASK	0x58
++#define RAS_CATFAT_ERROR	0x60
++#define RAS_ERROR_INJECT	0x68
++#define INJECT_ERROR_MASK	GENMASK_ULL(2, 0)
 +
-+static int power_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, long *val)
++static ssize_t revision_show(struct device *dev, struct device_attribute *attr,
++			     char *buf)
 +{
-+	struct dfl_feature *feature = dev_get_drvdata(dev);
-+	u64 v;
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
 +
-+	switch (attr) {
-+	case hwmon_power_input:
-+		v = readq(feature->ioaddr + FME_PWR_STATUS);
-+		*val = (long)(FIELD_GET(PWR_CONSUMED, v) * 1000000);
-+		break;
-+	case hwmon_power_cap:
-+		v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-+		*val = (long)(FIELD_GET(PWR_THRESHOLD1, v) * 1000000);
-+		break;
-+	case hwmon_power_crit:
-+		v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-+		*val = (long)(FIELD_GET(PWR_THRESHOLD2, v) * 1000000);
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
 +
-+	return 0;
++	return scnprintf(buf, PAGE_SIZE, "%u\n", dfl_feature_revision(base));
++}
++static DEVICE_ATTR_RO(revision);
++
++static ssize_t pcie0_errors_show(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	return scnprintf(buf, PAGE_SIZE, "0x%llx\n",
++			 (unsigned long long)readq(base + PCIE0_ERROR));
 +}
 +
-+static int power_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-+			     u32 attr, int channel, long val)
++static ssize_t pcie0_errors_store(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t count)
 +{
 +	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev->parent);
-+	struct dfl_feature *feature = dev_get_drvdata(dev);
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
 +	int ret = 0;
-+	u64 v;
++	u64 v, val;
 +
-+	if (val < 0 || val > PWR_THRESHOLD_MAX_IN_UW)
++	if (kstrtou64(buf, 0, &val))
 +		return -EINVAL;
 +
-+	val = val / 1000000;
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
 +
 +	mutex_lock(&pdata->lock);
++	writeq(GENMASK_ULL(63, 0), base + PCIE0_ERROR_MASK);
 +
-+	switch (attr) {
-+	case hwmon_power_cap:
-+		v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-+		v &= ~PWR_THRESHOLD1;
-+		v |= FIELD_PREP(PWR_THRESHOLD1, val);
-+		writeq(v, feature->ioaddr + FME_PWR_THRESHOLD);
-+		break;
-+	case hwmon_power_crit:
-+		v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-+		v &= ~PWR_THRESHOLD2;
-+		v |= FIELD_PREP(PWR_THRESHOLD2, val);
-+		writeq(v, feature->ioaddr + FME_PWR_THRESHOLD);
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
-+		break;
++	v = readq(base + PCIE0_ERROR);
++	if (val == v)
++		writeq(v, base + PCIE0_ERROR);
++	else
++		ret = -EINVAL;
++
++	writeq(0ULL, base + PCIE0_ERROR_MASK);
++	mutex_unlock(&pdata->lock);
++	return ret ? ret : count;
++}
++static DEVICE_ATTR_RW(pcie0_errors);
++
++static ssize_t pcie1_errors_show(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	return scnprintf(buf, PAGE_SIZE, "0x%llx\n",
++			 (unsigned long long)readq(base + PCIE1_ERROR));
++}
++
++static ssize_t pcie1_errors_store(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t count)
++{
++	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev->parent);
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++	int ret = 0;
++	u64 v, val;
++
++	if (kstrtou64(buf, 0, &val))
++		return -EINVAL;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	mutex_lock(&pdata->lock);
++	writeq(GENMASK_ULL(63, 0), base + PCIE1_ERROR_MASK);
++
++	v = readq(base + PCIE1_ERROR);
++	if (val == v)
++		writeq(v, base + PCIE1_ERROR);
++	else
++		ret = -EINVAL;
++
++	writeq(0ULL, base + PCIE1_ERROR_MASK);
++	mutex_unlock(&pdata->lock);
++	return ret ? ret : count;
++}
++static DEVICE_ATTR_RW(pcie1_errors);
++
++static ssize_t nonfatal_errors_show(struct device *dev,
++				    struct device_attribute *attr, char *buf)
++{
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	return scnprintf(buf, PAGE_SIZE, "0x%llx\n",
++			 (unsigned long long)readq(base + RAS_NONFAT_ERROR));
++}
++static DEVICE_ATTR_RO(nonfatal_errors);
++
++static ssize_t catfatal_errors_show(struct device *dev,
++				    struct device_attribute *attr, char *buf)
++{
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	return scnprintf(buf, PAGE_SIZE, "0x%llx\n",
++			 (unsigned long long)readq(base + RAS_CATFAT_ERROR));
++}
++static DEVICE_ATTR_RO(catfatal_errors);
++
++static ssize_t inject_error_show(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++	u64 v;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	v = readq(base + RAS_ERROR_INJECT);
++
++	return scnprintf(buf, PAGE_SIZE, "0x%llx\n",
++			 (unsigned long long)FIELD_GET(INJECT_ERROR_MASK, v));
++}
++
++static ssize_t inject_error_store(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t count)
++{
++	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev->parent);
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++	u8 inject_error;
++	u64 v;
++
++	if (kstrtou8(buf, 0, &inject_error))
++		return -EINVAL;
++
++	if (inject_error & ~INJECT_ERROR_MASK)
++		return -EINVAL;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	mutex_lock(&pdata->lock);
++	v = readq(base + RAS_ERROR_INJECT);
++	v &= ~INJECT_ERROR_MASK;
++	v |= FIELD_PREP(INJECT_ERROR_MASK, inject_error);
++	writeq(v, base + RAS_ERROR_INJECT);
++	mutex_unlock(&pdata->lock);
++
++	return count;
++}
++static DEVICE_ATTR_RW(inject_error);
++
++static struct attribute *errors_attrs[] = {
++	&dev_attr_revision.attr,
++	&dev_attr_pcie0_errors.attr,
++	&dev_attr_pcie1_errors.attr,
++	&dev_attr_nonfatal_errors.attr,
++	&dev_attr_catfatal_errors.attr,
++	&dev_attr_inject_error.attr,
++	NULL,
++};
++
++static struct attribute_group errors_attr_group = {
++	.attrs	= errors_attrs,
++};
++
++static ssize_t errors_show(struct device *dev,
++			   struct device_attribute *attr, char *buf)
++{
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	return scnprintf(buf, PAGE_SIZE, "0x%llx\n",
++			 (unsigned long long)readq(base + FME_ERROR));
++}
++static DEVICE_ATTR_RO(errors);
++
++static ssize_t first_error_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	return scnprintf(buf, PAGE_SIZE, "0x%llx\n",
++			 (unsigned long long)readq(base + FME_FIRST_ERROR));
++}
++static DEVICE_ATTR_RO(first_error);
++
++static ssize_t next_error_show(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	return scnprintf(buf, PAGE_SIZE, "0x%llx\n",
++			 (unsigned long long)readq(base + FME_NEXT_ERROR));
++}
++static DEVICE_ATTR_RO(next_error);
++
++static ssize_t clear_store(struct device *dev, struct device_attribute *attr,
++			   const char *buf, size_t count)
++{
++	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev->parent);
++	struct device *err_dev = dev->parent;
++	void __iomem *base;
++	u64 v, val;
++	int ret = 0;
++
++	if (kstrtou64(buf, 0, &val))
++		return -EINVAL;
++
++	base = dfl_get_feature_ioaddr_by_id(err_dev, FME_FEATURE_ID_GLOBAL_ERR);
++
++	mutex_lock(&pdata->lock);
++	writeq(GENMASK_ULL(63, 0), base + FME_ERROR_MASK);
++
++	v = readq(base + FME_ERROR);
++	if (val == v) {
++		writeq(v, base + FME_ERROR);
++		v = readq(base + FME_FIRST_ERROR);
++		writeq(v, base + FME_FIRST_ERROR);
++		v = readq(base + FME_NEXT_ERROR);
++		writeq(v, base + FME_NEXT_ERROR);
++	} else {
++		ret = -EINVAL;
 +	}
 +
++	/* Workaround: disable MBP_ERROR if feature revision is 0 */
++	writeq(dfl_feature_revision(base) ? 0ULL : MBP_ERROR,
++	       base + FME_ERROR_MASK);
 +	mutex_unlock(&pdata->lock);
++	return ret ? ret : count;
++}
++static DEVICE_ATTR_WO(clear);
++
++static struct attribute *fme_errors_attrs[] = {
++	&dev_attr_errors.attr,
++	&dev_attr_first_error.attr,
++	&dev_attr_next_error.attr,
++	&dev_attr_clear.attr,
++	NULL,
++};
++
++static struct attribute_group fme_errors_attr_group = {
++	.attrs	= fme_errors_attrs,
++	.name	= "fme-errors",
++};
++
++static const struct attribute_group *error_groups[] = {
++	&fme_errors_attr_group,
++	&errors_attr_group,
++	NULL
++};
++
++static void fme_error_enable(struct dfl_feature *feature)
++{
++	void __iomem *base = feature->ioaddr;
++
++	/* Workaround: disable MBP_ERROR if revision is 0 */
++	writeq(dfl_feature_revision(feature->ioaddr) ? 0ULL : MBP_ERROR,
++	       base + FME_ERROR_MASK);
++	writeq(0ULL, base + PCIE0_ERROR_MASK);
++	writeq(0ULL, base + PCIE1_ERROR_MASK);
++	writeq(0ULL, base + RAS_NONFAT_ERROR_MASK);
++	writeq(0ULL, base + RAS_CATFAT_ERROR_MASK);
++}
++
++static void err_dev_release(struct device *dev)
++{
++	kfree(dev);
++}
++
++static int fme_global_err_init(struct platform_device *pdev,
++			       struct dfl_feature *feature)
++{
++	struct device *dev;
++	int ret = 0;
++
++	dev_dbg(&pdev->dev, "FME Global Error Reporting Init.\n");
++
++	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
++	if (!dev)
++		return -ENOMEM;
++
++	dev->parent = &pdev->dev;
++	dev->release = err_dev_release;
++	dev_set_name(dev, "errors");
++
++	fme_error_enable(feature);
++
++	ret = device_register(dev);
++	if (ret) {
++		put_device(dev);
++		return ret;
++	}
++
++	ret = sysfs_create_groups(&dev->kobj, error_groups);
++	if (ret) {
++		device_unregister(dev);
++		return ret;
++	}
++
++	feature->priv = dev;
 +
 +	return ret;
 +}
 +
-+static umode_t power_hwmon_attrs_visible(const void *drvdata,
-+					 enum hwmon_sensor_types type,
-+					 u32 attr, int channel)
-+{
-+	switch (attr) {
-+	case hwmon_power_input:
-+		return 0444;
-+	case hwmon_power_cap:
-+	case hwmon_power_crit:
-+		return 0644;
-+	}
-+
-+	return 0;
-+}
-+
-+static const u32 power_hwmon_config[] = {
-+	HWMON_P_INPUT | HWMON_P_CAP | HWMON_P_CRIT,
-+	0
-+};
-+
-+static const struct hwmon_channel_info hwmon_pwr_info = {
-+	.type = hwmon_power,
-+	.config = power_hwmon_config,
-+};
-+
-+static const struct hwmon_channel_info *power_hwmon_info[] = {
-+	&hwmon_pwr_info,
-+	NULL
-+};
-+
-+static const struct hwmon_ops power_hwmon_ops = {
-+	.is_visible = power_hwmon_attrs_visible,
-+	.read = power_hwmon_read,
-+	.write = power_hwmon_write,
-+};
-+
-+static const struct hwmon_chip_info power_hwmon_chip_info = {
-+	.ops = &power_hwmon_ops,
-+	.info = power_hwmon_info,
-+};
-+
-+static ssize_t power1_cap_status_show(struct device *dev,
-+				      struct device_attribute *attr, char *buf)
-+{
-+	struct dfl_feature *feature = dev_get_drvdata(dev);
-+	u64 v;
-+
-+	v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%u\n",
-+			 (unsigned int)FIELD_GET(PWR_THRESHOLD1_STATUS, v));
-+}
-+
-+static ssize_t power1_crit_status_show(struct device *dev,
-+				       struct device_attribute *attr, char *buf)
-+{
-+	struct dfl_feature *feature = dev_get_drvdata(dev);
-+	u64 v;
-+
-+	v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%u\n",
-+			 (unsigned int)FIELD_GET(PWR_THRESHOLD2_STATUS, v));
-+}
-+
-+static ssize_t power1_xeon_limit_show(struct device *dev,
-+				      struct device_attribute *attr, char *buf)
-+{
-+	struct dfl_feature *feature = dev_get_drvdata(dev);
-+	u16 xeon_limit = 0;
-+	u64 v;
-+
-+	v = readq(feature->ioaddr + FME_PWR_XEON_LIMIT);
-+
-+	if (FIELD_GET(XEON_PWR_EN, v))
-+		xeon_limit = FIELD_GET(XEON_PWR_LIMIT, v);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%u\n", xeon_limit * 100000);
-+}
-+
-+static ssize_t power1_fpga_limit_show(struct device *dev,
-+				      struct device_attribute *attr, char *buf)
-+{
-+	struct dfl_feature *feature = dev_get_drvdata(dev);
-+	u16 fpga_limit = 0;
-+	u64 v;
-+
-+	v = readq(feature->ioaddr + FME_PWR_FPGA_LIMIT);
-+
-+	if (FIELD_GET(FPGA_PWR_EN, v))
-+		fpga_limit = FIELD_GET(FPGA_PWR_LIMIT, v);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%u\n", fpga_limit * 100000);
-+}
-+
-+static ssize_t power1_ltr_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	struct dfl_feature *feature = dev_get_drvdata(dev);
-+	u64 v;
-+
-+	v = readq(feature->ioaddr + FME_PWR_STATUS);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%u\n",
-+			 (unsigned int)FIELD_GET(FME_LATENCY_TOLERANCE, v));
-+}
-+
-+static DEVICE_ATTR_RO(power1_cap_status);
-+static DEVICE_ATTR_RO(power1_crit_status);
-+static DEVICE_ATTR_RO(power1_xeon_limit);
-+static DEVICE_ATTR_RO(power1_fpga_limit);
-+static DEVICE_ATTR_RO(power1_ltr);
-+
-+static struct attribute *power_extra_attrs[] = {
-+	&dev_attr_power1_cap_status.attr,
-+	&dev_attr_power1_crit_status.attr,
-+	&dev_attr_power1_xeon_limit.attr,
-+	&dev_attr_power1_fpga_limit.attr,
-+	&dev_attr_power1_ltr.attr,
-+	NULL
-+};
-+
-+ATTRIBUTE_GROUPS(power_extra);
-+
-+static int fme_power_mgmt_init(struct platform_device *pdev,
-+			       struct dfl_feature *feature)
-+{
-+	struct device *hwmon;
-+
-+	dev_dbg(&pdev->dev, "FME Power Management Init.\n");
-+
-+	hwmon = devm_hwmon_device_register_with_info(&pdev->dev,
-+						     "dfl_fme_power", feature,
-+						     &power_hwmon_chip_info,
-+						     power_extra_groups);
-+	if (IS_ERR(hwmon)) {
-+		dev_err(&pdev->dev, "Fail to register power hwmon\n");
-+		return PTR_ERR(hwmon);
-+	}
-+
-+	return 0;
-+}
-+
-+static void fme_power_mgmt_uinit(struct platform_device *pdev,
++static void fme_global_err_uinit(struct platform_device *pdev,
 +				 struct dfl_feature *feature)
 +{
-+	dev_dbg(&pdev->dev, "FME Power Management UInit.\n");
++	struct device *dev = feature->priv;
++
++	dev_dbg(&pdev->dev, "FME Global Error Reporting UInit.\n");
++
++	sysfs_remove_groups(&dev->kobj, error_groups);
++	device_unregister(dev);
 +}
 +
-+static const struct dfl_feature_id fme_power_mgmt_id_table[] = {
-+	{.id = FME_FEATURE_ID_POWER_MGMT,},
++const struct dfl_feature_id fme_global_err_id_table[] = {
++	{.id = FME_FEATURE_ID_GLOBAL_ERR,},
 +	{0,}
 +};
 +
-+static const struct dfl_feature_ops fme_power_mgmt_ops = {
-+	.init = fme_power_mgmt_init,
-+	.uinit = fme_power_mgmt_uinit,
++const struct dfl_feature_ops fme_global_err_ops = {
++	.init = fme_global_err_init,
++	.uinit = fme_global_err_uinit,
 +};
-+
- static struct dfl_feature_driver fme_feature_drvs[] = {
- 	{
- 		.id_table = fme_hdr_id_table,
-@@ -439,6 +682,10 @@ static void fme_thermal_mgmt_uinit(struct platform_device *pdev,
- 		.ops = &fme_thermal_mgmt_ops,
+diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
+index 7005316..1986b32 100644
+--- a/drivers/fpga/dfl-fme-main.c
++++ b/drivers/fpga/dfl-fme-main.c
+@@ -686,6 +686,10 @@ static void fme_power_mgmt_uinit(struct platform_device *pdev,
+ 		.ops = &fme_power_mgmt_ops,
  	},
  	{
-+		.id_table = fme_power_mgmt_id_table,
-+		.ops = &fme_power_mgmt_ops,
++		.id_table = fme_global_err_id_table,
++		.ops = &fme_global_err_ops,
 +	},
 +	{
  		.ops = NULL,
  	},
  };
+diff --git a/drivers/fpga/dfl-fme.h b/drivers/fpga/dfl-fme.h
+index 7a021c4..5fbe3f5 100644
+--- a/drivers/fpga/dfl-fme.h
++++ b/drivers/fpga/dfl-fme.h
+@@ -37,5 +37,7 @@ struct dfl_fme {
+ 
+ extern const struct dfl_feature_ops fme_pr_mgmt_ops;
+ extern const struct dfl_feature_id fme_pr_mgmt_id_table[];
++extern const struct dfl_feature_ops fme_global_err_ops;
++extern const struct dfl_feature_id fme_global_err_id_table[];
+ 
+ #endif /* __DFL_FME_H */
+diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+index fbc57f0..6c32080 100644
+--- a/drivers/fpga/dfl.h
++++ b/drivers/fpga/dfl.h
+@@ -197,12 +197,14 @@ struct dfl_feature_driver {
+  *		    feature dev (platform device)'s reources.
+  * @ioaddr: mapped mmio resource address.
+  * @ops: ops of this sub feature.
++ * @priv: priv data of this feature.
+  */
+ struct dfl_feature {
+ 	u64 id;
+ 	int resource_index;
+ 	void __iomem *ioaddr;
+ 	const struct dfl_feature_ops *ops;
++	void *priv;
+ };
+ 
+ #define DEV_STATUS_IN_USE	0
 -- 
 1.8.3.1
 
