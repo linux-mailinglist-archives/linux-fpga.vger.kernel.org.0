@@ -2,147 +2,188 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B198B13629
-	for <lists+linux-fpga@lfdr.de>; Sat,  4 May 2019 01:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582FD13E72
+	for <lists+linux-fpga@lfdr.de>; Sun,  5 May 2019 10:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbfECX2a (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 3 May 2019 19:28:30 -0400
-Received: from mail-eopbgr70049.outbound.protection.outlook.com ([40.107.7.49]:10055
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726150AbfECX23 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 3 May 2019 19:28:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eMqWUI2G/ksOaJmStmpjJCrxAv/NkatFY6m2td/HHaE=;
- b=hn6dY7g7Ps9UCNFhsY1boaR3VUt/n7cy460xSr+3PAwdvL0zzHqQ1JbPNoK8xhKIV2fM+mF+b7Lq4bRKmrTmlqXa0MQKyc5mU59HdywJ4/6f5aKrNIC6S9GV+PucrqLLkRecvIbiXz3M3c+bGZSCH5Fym7aWjP0NVQ7utHKg1pk=
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (10.171.182.144) by
- VI1PR05MB3357.eurprd05.prod.outlook.com (10.170.238.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.12; Fri, 3 May 2019 23:28:22 +0000
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::711b:c0d6:eece:f044]) by VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::711b:c0d6:eece:f044%5]) with mapi id 15.20.1856.008; Fri, 3 May 2019
- 23:28:22 +0000
-From:   Jason Gunthorpe <jgg@mellanox.com>
-To:     Daniel Jordan <daniel.m.jordan@oracle.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Alan Tull <atull@kernel.org>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christoph Lameter <cl@linux.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Moritz Fischer <mdf@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Steve Sistare <steven.sistare@oracle.com>,
-        Wu Hao <hao.wu@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "kvm-ppc@vger.kernel.org" <kvm-ppc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm: add account_locked_vm utility function
-Thread-Topic: [PATCH] mm: add account_locked_vm utility function
-Thread-Index: AQHVAe2ZLngO8JYpNki+X4vS/Cz1vqZaC+sA
-Date:   Fri, 3 May 2019 23:28:22 +0000
-Message-ID: <20190503232818.GA5182@mellanox.com>
-References: <20190503201629.20512-1-daniel.m.jordan@oracle.com>
-In-Reply-To: <20190503201629.20512-1-daniel.m.jordan@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MN2PR04CA0003.namprd04.prod.outlook.com
- (2603:10b6:208:d4::16) To VI1PR05MB4141.eurprd05.prod.outlook.com
- (2603:10a6:803:4d::16)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=jgg@mellanox.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [65.119.211.164]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cbafa94b-6447-4be8-56b3-08d6d01f0818
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR05MB3357;
-x-ms-traffictypediagnostic: VI1PR05MB3357:
-x-microsoft-antispam-prvs: <VI1PR05MB33578A2BC54EF9B341D8F7FDCF350@VI1PR05MB3357.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 0026334A56
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(396003)(346002)(39860400002)(376002)(366004)(189003)(199004)(186003)(8936002)(6916009)(53936002)(11346002)(446003)(316002)(2906002)(2616005)(6246003)(386003)(7736002)(305945005)(6506007)(26005)(66946007)(66446008)(1076003)(33656002)(5660300002)(66476007)(66556008)(64756008)(73956011)(15650500001)(4326008)(102836004)(81156014)(36756003)(25786009)(3846002)(6116002)(99286004)(6486002)(66066001)(86362001)(52116002)(7416002)(14454004)(6436002)(486006)(68736007)(71200400001)(54906003)(476003)(229853002)(71190400001)(6512007)(81166006)(76176011)(14444005)(478600001)(256004)(8676002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR05MB3357;H:VI1PR05MB4141.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 9MggK/iMBpnv+TQWX1Y6xFTS5HHusO1C0bnxQyn7vZkFZN8dPKUOJIgFo1LMg2KiSdlVm3+U697HF0tSDf0Y17UeKgOKYd8UFLsizzRP7FxW4JzMD7jl4Wnj7gtZHqG6M7RigUH1tIHPMa48M/V3ENKTCWYrrNqKODknwq2+en4Y44Cdn50yhM8stLsiKRDaE40HKhXlMlxzDgtgyJE0UgPHQ1oW2z2MlzBhdBQlLg54fr/TNvn8Z8xOOmjwVb9FYypHcfiKt83xiQO6SwqPhMK49lWiFmgh7561E55Wqv4nDpj7YIn6c9UxWwMI/dpwqVvXnsoKUfNRXxCGgj9ouQIm5UEH0rhZPqvhfHoOEyfqkLEXCCXuo+9/QYi7kmvytl85Kgih04VuzfSUJgFA/DQJYi2wupIPY1g136PN0ss=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <6BC684B50DAD6D4A8D031B0B8F7E32C4@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726800AbfEEIkk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 5 May 2019 04:40:40 -0400
+Received: from mail-wm1-f42.google.com ([209.85.128.42]:39166 "EHLO
+        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725873AbfEEIkk (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 5 May 2019 04:40:40 -0400
+Received: by mail-wm1-f42.google.com with SMTP id n25so11455710wmk.4
+        for <linux-fpga@vger.kernel.org>; Sun, 05 May 2019 01:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yKCOTDQOXUsSPAME2lkXIJpmj87HyoGf++bvVNmxMvQ=;
+        b=ROhZxZZZWUPTpjdGNV/YM3v2spwhKZkTCo4HBBSuuHscQDuaWXqDchQ8K+cNka/KJw
+         +2TRrajwZ66ZPhH2mSYcM+/QWnxw2lJsCiyOK8I7GiCO8NziXjWlNUHqScEv03zdRVP7
+         UfeOX+9l7vbt90YO98mnkxsC9z90XpA9/7W4XPYod5BP+zVaq5p4fxpwp2M8nvbe4YZK
+         drURyxjQD9qxzM0t4GEMOl7rH1Uy6mvumNAK/3YyAACZ8ho2kXHHx3qVn/CmzBgXMPUA
+         dZVP/f9q0UySPQChDdEYi6GPb+076i7gmYVjUMmz7JDaTShfYMaGWuXYpepvsvL+G7Hx
+         54eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yKCOTDQOXUsSPAME2lkXIJpmj87HyoGf++bvVNmxMvQ=;
+        b=Z5wWxfhEimQqsSrzHQouvwGhEue/t6bPya/rRsvZuYwMyot9tgV/STbbW5JoVAuETH
+         5ebKHHHxmRgkGw0zVmhe6qNFAOo6l03P9gaxdqbNukaDaL0baDhaKoN/7QK0NOK0lrrn
+         jdT2Ke15waJj9SnKUjNna2VMVpleAL+p6+rWYejnxXgNca2IzkUY4oAuQyCq7kIc/QjO
+         nqLdJ6ly2IaIK2ydg+r8psPTxFh+9cQHjsR3XmU9oVxVyrjgGStVLVOiHEa+URhfGkVG
+         zP72COYG9vAHhkEnTGkSL2bv7vFbcFyIFqgNAQ7ok0WbNU2UP51ZFW5KbK87kQeAzHqg
+         /R7w==
+X-Gm-Message-State: APjAAAWVG3DEl/hWvXakSFpGFWUiNpooTRYyomQBLaC8RleIzzeEWTrY
+        1yBk3oM3B4UrsgR0W5jZ1fMeZudn
+X-Google-Smtp-Source: APXvYqywsmOkVM6RM/2rVoQmQ9Cq+daTvTY1YrXUfdH9HNPyNbGZLJY4SBRLG+l/s+J9rgDOtDUZCw==
+X-Received: by 2002:a1c:2986:: with SMTP id p128mr12529294wmp.134.1557045638488;
+        Sun, 05 May 2019 01:40:38 -0700 (PDT)
+Received: from [192.168.0.18] ([94.54.58.88])
+        by smtp.gmail.com with ESMTPSA id y197sm6438803wmd.34.2019.05.05.01.40.36
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Sun, 05 May 2019 01:40:37 -0700 (PDT)
+Subject: Re: FPGA Manager - Partial Reconfiguration support for Xilinx
+ Zynq-7000
+To:     Michal Simek <michal.simek@xilinx.com>, linux-fpga@vger.kernel.org,
+        Nava kishore Manne <navam@xilinx.com>
+Cc:     Ronan Keryell <rkeryell@xilinx.com>
+References: <5bdf4d79-c0d6-30c1-1eb0-360b7dce615b@gmail.com>
+ <70789e51-cb23-9776-dafe-fb34a0736bad@xilinx.com>
+From:   Alper Yazar <alperyazar2@gmail.com>
+Message-ID: <25125fd1-639b-69c3-f381-dfbfcee31c02@gmail.com>
+Date:   Sun, 5 May 2019 11:40:35 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbafa94b-6447-4be8-56b3-08d6d01f0818
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2019 23:28:22.2133
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB3357
+In-Reply-To: <70789e51-cb23-9776-dafe-fb34a0736bad@xilinx.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, May 03, 2019 at 01:16:30PM -0700, Daniel Jordan wrote:
-> locked_vm accounting is done roughly the same way in five places, so
-> unify them in a helper.  Standardize the debug prints, which vary
-> slightly.  Error codes stay the same, so user-visible behavior does too.
->=20
-> Signed-off-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-> Cc: Alan Tull <atull@kernel.org>
-> Cc: Alexey Kardashevskiy <aik@ozlabs.ru>
-> Cc: Alex Williamson <alex.williamson@redhat.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Christophe Leroy <christophe.leroy@c-s.fr>
-> Cc: Davidlohr Bueso <dave@stgolabs.net>
-> Cc: Jason Gunthorpe <jgg@mellanox.com>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Moritz Fischer <mdf@kernel.org>
-> Cc: Paul Mackerras <paulus@ozlabs.org>
-> Cc: Steve Sistare <steven.sistare@oracle.com>
-> Cc: Wu Hao <hao.wu@intel.com>
-> Cc: linux-mm@kvack.org
-> Cc: kvm@vger.kernel.org
-> Cc: kvm-ppc@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-fpga@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
->=20
-> Based on v5.1-rc7.  Tested with the vfio type1 driver.  Any feedback
-> welcome.
->=20
-> Andrew, this one patch replaces these six from [1]:
->=20
->     mm-change-locked_vms-type-from-unsigned-long-to-atomic64_t.patch
->     vfio-type1-drop-mmap_sem-now-that-locked_vm-is-atomic.patch
->     vfio-spapr_tce-drop-mmap_sem-now-that-locked_vm-is-atomic.patch
->     fpga-dlf-afu-drop-mmap_sem-now-that-locked_vm-is-atomic.patch
->     kvm-book3s-drop-mmap_sem-now-that-locked_vm-is-atomic.patch
->     powerpc-mmu-drop-mmap_sem-now-that-locked_vm-is-atomic.patch
->=20
-> That series converts locked_vm to an atomic, but on closer inspection cau=
-ses at
-> least one accounting race in mremap, and fixing it just for this type
-> conversion came with too much ugly in the core mm to justify, especially =
-when
-> the right long-term fix is making these drivers use pinned_vm instead.
+On 3/7/19 2:06 PM, Michal Simek wrote:
+> Hi,
+> 
+> On 03. 03. 19 12:32, Alper Yazar wrote:
+>> Hi,
+>>
+>> I asked the question on Xilinx forums about 1 months ago but didn't get any response [1]. I hope that someone on this list may guide me.
+>>
+>> I am creating Linux based images for Zynq-7000 devices by using Petalinux 2018.3 which is a set of build tools provided by Xilinx. For FPGA management, FPGA Manager is included by default. However it doesn't support partial reconfiguration for Zynq-7000 devices as stated [2]. I tested and verified that it doesn't work. I assumed that /drivers/fpga/zynq-fpga.c is the source code, checked it and noticed some comments about partial reconfig. AFAIK previous driver used by Xilinx before FPGA Manager whose source code file is xilinx_devcfg.c supported partial reconfig. So I don't think that there is a hardware limitation since the previous solution was working on the same device. So I wonder why the newest method is less capable than the older one. I need partial reconfig support for the newest petalinux version. What should I do?
+>>
+>> a) Compile old xilinx_devcfg.c driver for Petalinux 2018.3 and disable FPGA Manager. 
+>>
+>> b) Somehow patch FPGA Manager
+>>
+>> c) Wait (how long?) Xilinx to solve this issue
+>>
+>> Two names are listed as MODULE_AUTHOR of zynq-fpga.c: Moritz Fischer and Michal Simek. I don't know whether they are subscribed to this list or not.
+>>
+>>
+>> [1]: https://forums.xilinx.com/t5/Embedded-Linux/Partial-Reconfiguration-support-in-Petalinux-2018-3-for-Zynq/td-p/934057
+>> [2]: https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841645/Solution+Zynq+PL+Programming+With+FPGA+Manager
+> 
+> Nava: Can you please check if partial reconfiguration is still working?
+> I see code in the driver.
+> 
+> Alper: Can you please use u-boot and check that your bitstreams are
+> correct?
+> Also will be good to have some logs to see what it is happening.
+> 
+> Thanks,
+> Michal
+> 
 
-Did we ever decide what to do here? Should all these drivers be
-switched to pinned_vm anyhow?
+Hi Michal,
 
-Jason
+Sorry for late response. We checked U-boot and it worked without any problem. Our bitstreams are based on the Xilinx example project on partial reconfiguration.
+
+1. Loading full bitstream using U-boot (successful):
+
+Zynq> fatload mmc 0 0x4000000 top.bit
+
+reading top.bit
+
+4045663 bytes read in 235 ms (16.4 MiB/s)
+
+Zynq> fpga loadb 0 0x4000000 4045663
+
+  design filename = "top;UserID=0XFFFFFFFF;Version=2018.3"
+
+  part number = "7z020clg484"
+
+  date = "2019/01/30"
+
+  time = "00:54:18"
+
+  bytes in bitstream = 4045564
+
+zynq_align_dma_buffer: Align buffer at 4000063 to 3ffff80(swap 1)
+
+
+2. Loading partial bitstream using U-boot (successful):
+
+Zynq> fatload mmc 0 0x4000000 S_knight_top_partial.bit
+
+reading S_knight_top_partial.bit
+
+1238420 bytes read in 81 ms (14.6 MiB/s)
+
+Zynq> fpga loadbp 0 0x4000000 1238420
+
+  design filename = "top;UserID=0XFFFFFFFF;PARTIAL=TRUE;Version=2018.3"
+
+  part number = "7z020clg484"
+
+  date = "2019/01/30"
+
+  time = "00:54:40"
+
+  bytes in bitstream = 1238308
+
+zynq_align_dma_buffer: Align buffer at 4000070 to 3ffff80(swap 1)
+
+Both of them worked fine.
+
+
+3. Loading full bitstream on Petalinux 2018.3 (successful):
+
+root@project4:~# mkdir -p /lib/firmware
+
+root@project4:~# cd /mnt
+
+root@project4:/mnt# cp top.bit.bin /lib/firmware
+
+root@project4:/mnt# echo top.bit.bin >/sys/class/fpga_manager/fpga0/firmware
+
+fpga_manager fpga0: writing top.bit.bin to Xilinx Zynq FPGA Manager
+
+
+4. Loading partial bitstream on Petalinux 2018.3 (NOT successful):
+
+root@project4:/mnt# cp S_knight_top_partial.bit.bin /lib/firmware
+
+root@project4:/mnt# echo S_knight_top_partial.bit.bin >/sys/class/fpga_manager/fpga0/firmware
+
+fpga_manager fpga0: writing S_knight_top_partial.bit.bin to Xilinx Zynq FPGA Manager
+
+--- Wait few seconds ---
+
+fpga_manager fpga0: Error after writing image data to FPGA
+
+-sh: echo: write error: Connection timed out
+
+We also checked fpga-mgr.h and saw the definiton: "#define FPGA_MGR_PARTIAL_RECONFIG	BIT(0)". For partial bitstream trials we also tried setting this bit to 1 by "echo 1 > /sys/class/fpga_manager/fpga0/flags" command but this didn't affect the result.
+
+Since FPGA manager uses BIN file we convert BIT to BIN using SDK. U-boot works with BIT files. Is it possible that this conversion cause the problem? How should we convert BIT to BIN file?
+
+Best,
+
+Alper
+
