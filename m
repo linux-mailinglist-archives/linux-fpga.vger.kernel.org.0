@@ -2,175 +2,117 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D647C14970
-	for <lists+linux-fpga@lfdr.de>; Mon,  6 May 2019 14:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B6A157E5
+	for <lists+linux-fpga@lfdr.de>; Tue,  7 May 2019 05:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725852AbfEFMUT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 6 May 2019 08:20:19 -0400
-Received: from mail-eopbgr770070.outbound.protection.outlook.com ([40.107.77.70]:22833
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725827AbfEFMUT (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 6 May 2019 08:20:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector1-xilinx-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bY3OuE6idAGudP9Qe6amah9Obasqi7Yg6tx8woiAkqA=;
- b=ID02ZMQy7JLYiOxBVXG9xYxPmEBFe2lElgLPPN5xv5A3yQUf7FltbQDg5BorEX1hqb9YsCsL3p3jg0aBTmuhiXILAwOzC0SzCAkLsxjiUhhoEx2imtdI4KbWUnDk1pRmepfmhfPnkPkkJXgV60Tvas7fJWcfNDav/AXXUEOqM9g=
-Received: from MN2PR02MB6224.namprd02.prod.outlook.com (52.132.174.89) by
- MN2PR02MB5935.namprd02.prod.outlook.com (20.179.98.25) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.11; Mon, 6 May 2019 12:20:12 +0000
-Received: from MN2PR02MB6224.namprd02.prod.outlook.com
- ([fe80::7cd5:16a0:9002:8a1d]) by MN2PR02MB6224.namprd02.prod.outlook.com
- ([fe80::7cd5:16a0:9002:8a1d%7]) with mapi id 15.20.1856.012; Mon, 6 May 2019
- 12:20:12 +0000
-From:   Nava kishore Manne <navam@xilinx.com>
-To:     Alper Yazar <alperyazar2@gmail.com>,
-        Michal Simek <michals@xilinx.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
-CC:     Ronan Keryell <rkeryell@xilinx.com>
-Subject: RE: FPGA Manager - Partial Reconfiguration support for Xilinx
- Zynq-7000
-Thread-Topic: FPGA Manager - Partial Reconfiguration support for Xilinx
- Zynq-7000
-Thread-Index: AQHU1NW/pG6CAHbWYEO2GaB/QUOyuqZckr6AgAHMnAA=
-Date:   Mon, 6 May 2019 12:20:12 +0000
-Message-ID: <MN2PR02MB62240EE694CB567FC3F7D46DC2300@MN2PR02MB6224.namprd02.prod.outlook.com>
-References: <5bdf4d79-c0d6-30c1-1eb0-360b7dce615b@gmail.com>
- <70789e51-cb23-9776-dafe-fb34a0736bad@xilinx.com>
- <25125fd1-639b-69c3-f381-dfbfcee31c02@gmail.com>
-In-Reply-To: <25125fd1-639b-69c3-f381-dfbfcee31c02@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=navam@xilinx.com; 
-x-originating-ip: [149.199.50.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3a1f993b-0ef6-4d34-7165-08d6d21d3058
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:MN2PR02MB5935;
-x-ms-traffictypediagnostic: MN2PR02MB5935:
-x-ms-exchange-purlcount: 3
-x-microsoft-antispam-prvs: <MN2PR02MB5935733782B57B13F64BDA24C2300@MN2PR02MB5935.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 0029F17A3F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(136003)(376002)(39860400002)(366004)(396003)(189003)(199004)(45904002)(13464003)(107886003)(256004)(64756008)(478600001)(9686003)(52536014)(53546011)(446003)(71200400001)(102836004)(26005)(316002)(2501003)(6246003)(186003)(66946007)(81166006)(3846002)(476003)(7696005)(33656002)(66446008)(8936002)(6116002)(7736002)(55016002)(5660300002)(6306002)(76116006)(110136005)(305945005)(73956011)(6436002)(81156014)(8676002)(76176011)(14454004)(486006)(86362001)(25786009)(66066001)(2906002)(71190400001)(6506007)(66476007)(19627235002)(66556008)(68736007)(4326008)(229853002)(53936002)(74316002)(11346002)(99286004)(966005);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR02MB5935;H:MN2PR02MB6224.namprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: xilinx.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 3h8BOHrurt4dTUgtYBWtkGFG0Sw+2Wrs215is9VaUbDtJ3W5Yq1J3j4lysjsf1vFwC/f1D6AJm0WpUEWQNTJyrwHG9/CQcN5wcMT03PC9N767hX75i9wBS+gljGmlrTdC0nPtHMm8NtRRO7hkgC4zuhvVeWLc/VV3XawPaqxPueG8HjUm5gcnibJXMEI7yXC7WtPPEgAEbrLfWCsaZsviLv+4grf9nzBTp53yu268Fjdr23NXU2HB5G1KxsdnxcpESgz+bNM0K26EhWh0PMEohPxzA/pAHj8ZM5J8RQ9QIn0snG3hW1x4PKLaJkXzRNiJvvxhHfQ2iPEymZ17yqvkAnxjgoJMKyN7I1VV25uvqZrwO/zMyEpt70/bzxXL5wuVL7EJUYB7ITM04UM55I2TRSpcdo3Ct0ZeXr7hosKN5M=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726857AbfEGDLE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 6 May 2019 23:11:04 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:52210 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726346AbfEGDLD (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 6 May 2019 23:11:03 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4738uBG073685;
+        Tue, 7 May 2019 03:10:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2018-07-02;
+ bh=Sa+cOJtJx0K5ZUTspQzVWRaHsaM72rSdt2S6cah8KqE=;
+ b=qPZyJEvFwNkpPyu498f2W9cJG3cwo3YzJHpJuUkM4qNXyo0XdOQ9+2nBbN/aGX6t9k1U
+ wHeLMsyAc1cE1N+uTUZnW/Iyw54XcN6jiBEm0jAv/cQLsff/0gr7PXOraCv+40U7PJWD
+ R/9Fkc7FCq8Z9qdqoT6DH83+M46p62s329nBRNiN69nX2PhdQ2dCEdLOHXuJEXE0hF3p
+ GLmiF0TCkWeY+nB04qmMqqK6u9J8x9umk/1yUcK+AKwwac5NjQpKLneDVrp7r8yIEyQW
+ 1GH7C9dCib2+z68OBCyWe+2gDeM+qGNzSX60HntCF330GSmcl5vC0+RL01+Q5LaL4Rk4 Og== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2s94b0j77m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 May 2019 03:10:22 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x473A5lN185360;
+        Tue, 7 May 2019 03:10:22 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2s94af7xxr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 May 2019 03:10:22 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x473A6JU021461;
+        Tue, 7 May 2019 03:10:07 GMT
+Received: from ca-dmjordan1.us.oracle.com (/10.211.9.48)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 06 May 2019 20:10:06 -0700
+Date:   Mon, 6 May 2019 23:09:57 -0400
+From:   Daniel Jordan <daniel.m.jordan@oracle.com>
+To:     Jason Gunthorpe <jgg@mellanox.com>
+Cc:     Daniel Jordan <daniel.m.jordan@oracle.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Alan Tull <atull@kernel.org>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christoph Lameter <cl@linux.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Moritz Fischer <mdf@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Steve Sistare <steven.sistare@oracle.com>,
+        Wu Hao <hao.wu@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "kvm-ppc@vger.kernel.org" <kvm-ppc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: add account_locked_vm utility function
+Message-ID: <20190507030957.3qp7yflco6ckcj5q@ca-dmjordan1.us.oracle.com>
+References: <20190503201629.20512-1-daniel.m.jordan@oracle.com>
+ <20190503232818.GA5182@mellanox.com>
 MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a1f993b-0ef6-4d34-7165-08d6d21d3058
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2019 12:20:12.4459
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB5935
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190503232818.GA5182@mellanox.com>
+User-Agent: NeoMutt/20180323-268-5a959c
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9249 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905070018
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9249 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905070018
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-SGkgQWxwZXIgWWF6YXIsDQoNClBsZWFzZSBsb29rIGF0IHRoZSBiZWxvdyB3aWtpIGxpbmsgdG8g
-Z2VuZXJhdGUgLmJpbiBmb3JtIC5iaXQgZmlsZS4NCmh0dHBzOi8veGlsaW54LXdpa2kuYXRsYXNz
-aWFuLm5ldC93aWtpL3NwYWNlcy9BL3BhZ2VzLzE4ODQxNjQ1L1NvbHV0aW9uK1p5bnErUEwrUHJv
-Z3JhbW1pbmcrV2l0aCtGUEdBK01hbmFnZXIjU29sdXRpb25aeW5xUExQcm9ncmFtbWluZ1dpdGhG
-UEdBTWFuYWdlci1HZW5lcmF0aW5nLmJpbmZyb20uYml0ZmlsZXVzaW5nQm9vdGdlbiANCg0KUmVn
-YXJkcywNCk5hdmFraXNob3JlLg0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZy
-b206IEFscGVyIFlhemFyIFttYWlsdG86YWxwZXJ5YXphcjJAZ21haWwuY29tXQ0KPiBTZW50OiBT
-dW5kYXksIE1heSA1LCAyMDE5IDI6MTEgUE0NCj4gVG86IE1pY2hhbCBTaW1layA8bWljaGFsc0B4
-aWxpbnguY29tPjsgbGludXgtZnBnYUB2Z2VyLmtlcm5lbC5vcmc7IE5hdmENCj4ga2lzaG9yZSBN
-YW5uZSA8bmF2YW1AeGlsaW54LmNvbT4NCj4gQ2M6IFJvbmFuIEtlcnllbGwgPHJrZXJ5ZWxsQHhp
-bGlueC5jb20+DQo+IFN1YmplY3Q6IFJlOiBGUEdBIE1hbmFnZXIgLSBQYXJ0aWFsIFJlY29uZmln
-dXJhdGlvbiBzdXBwb3J0IGZvciBYaWxpbnggWnlucS0NCj4gNzAwMA0KPiANCj4gT24gMy83LzE5
-IDI6MDYgUE0sIE1pY2hhbCBTaW1layB3cm90ZToNCj4gPiBIaSwNCj4gPg0KPiA+IE9uIDAzLiAw
-My4gMTkgMTI6MzIsIEFscGVyIFlhemFyIHdyb3RlOg0KPiA+PiBIaSwNCj4gPj4NCj4gPj4gSSBh
-c2tlZCB0aGUgcXVlc3Rpb24gb24gWGlsaW54IGZvcnVtcyBhYm91dCAxIG1vbnRocyBhZ28gYnV0
-IGRpZG4ndCBnZXQgYW55DQo+IHJlc3BvbnNlIFsxXS4gSSBob3BlIHRoYXQgc29tZW9uZSBvbiB0
-aGlzIGxpc3QgbWF5IGd1aWRlIG1lLg0KPiA+Pg0KPiA+PiBJIGFtIGNyZWF0aW5nIExpbnV4IGJh
-c2VkIGltYWdlcyBmb3IgWnlucS03MDAwIGRldmljZXMgYnkgdXNpbmcgUGV0YWxpbnV4DQo+IDIw
-MTguMyB3aGljaCBpcyBhIHNldCBvZiBidWlsZCB0b29scyBwcm92aWRlZCBieSBYaWxpbnguIEZv
-ciBGUEdBIG1hbmFnZW1lbnQsDQo+IEZQR0EgTWFuYWdlciBpcyBpbmNsdWRlZCBieSBkZWZhdWx0
-LiBIb3dldmVyIGl0IGRvZXNuJ3Qgc3VwcG9ydCBwYXJ0aWFsDQo+IHJlY29uZmlndXJhdGlvbiBm
-b3IgWnlucS03MDAwIGRldmljZXMgYXMgc3RhdGVkIFsyXS4gSSB0ZXN0ZWQgYW5kIHZlcmlmaWVk
-IHRoYXQgaXQNCj4gZG9lc24ndCB3b3JrLiBJIGFzc3VtZWQgdGhhdCAvZHJpdmVycy9mcGdhL3p5
-bnEtZnBnYS5jIGlzIHRoZSBzb3VyY2UgY29kZSwNCj4gY2hlY2tlZCBpdCBhbmQgbm90aWNlZCBz
-b21lIGNvbW1lbnRzIGFib3V0IHBhcnRpYWwgcmVjb25maWcuIEFGQUlLIHByZXZpb3VzDQo+IGRy
-aXZlciB1c2VkIGJ5IFhpbGlueCBiZWZvcmUgRlBHQSBNYW5hZ2VyIHdob3NlIHNvdXJjZSBjb2Rl
-IGZpbGUgaXMNCj4geGlsaW54X2RldmNmZy5jIHN1cHBvcnRlZCBwYXJ0aWFsIHJlY29uZmlnLiBT
-byBJIGRvbid0IHRoaW5rIHRoYXQgdGhlcmUgaXMgYQ0KPiBoYXJkd2FyZSBsaW1pdGF0aW9uIHNp
-bmNlIHRoZSBwcmV2aW91cyBzb2x1dGlvbiB3YXMgd29ya2luZyBvbiB0aGUgc2FtZSBkZXZpY2Uu
-DQo+IFNvIEkgd29uZGVyIHdoeSB0aGUgbmV3ZXN0IG1ldGhvZCBpcyBsZXNzIGNhcGFibGUgdGhh
-biB0aGUgb2xkZXIgb25lLiBJIG5lZWQNCj4gcGFydGlhbCByZWNvbmZpZyBzdXBwb3J0IGZvciB0
-aGUgbmV3ZXN0IHBldGFsaW51eCB2ZXJzaW9uLiBXaGF0IHNob3VsZCBJIGRvPw0KPiA+Pg0KPiA+
-PiBhKSBDb21waWxlIG9sZCB4aWxpbnhfZGV2Y2ZnLmMgZHJpdmVyIGZvciBQZXRhbGludXggMjAx
-OC4zIGFuZCBkaXNhYmxlIEZQR0ENCj4gTWFuYWdlci4NCj4gPj4NCj4gPj4gYikgU29tZWhvdyBw
-YXRjaCBGUEdBIE1hbmFnZXINCj4gPj4NCj4gPj4gYykgV2FpdCAoaG93IGxvbmc/KSBYaWxpbngg
-dG8gc29sdmUgdGhpcyBpc3N1ZQ0KPiA+Pg0KPiA+PiBUd28gbmFtZXMgYXJlIGxpc3RlZCBhcyBN
-T0RVTEVfQVVUSE9SIG9mIHp5bnEtZnBnYS5jOiBNb3JpdHogRmlzY2hlcg0KPiBhbmQgTWljaGFs
-IFNpbWVrLiBJIGRvbid0IGtub3cgd2hldGhlciB0aGV5IGFyZSBzdWJzY3JpYmVkIHRvIHRoaXMg
-bGlzdCBvciBub3QuDQo+ID4+DQo+ID4+DQo+ID4+IFsxXToNCj4gPj4gaHR0cHM6Ly9mb3J1bXMu
-eGlsaW54LmNvbS90NS9FbWJlZGRlZC1MaW51eC9QYXJ0aWFsLVJlY29uZmlndXJhdGlvbi1zDQo+
-ID4+IHVwcG9ydC1pbi1QZXRhbGludXgtMjAxOC0zLWZvci1aeW5xL3RkLXAvOTM0MDU3DQo+ID4+
-IFsyXToNCj4gPj4gaHR0cHM6Ly94aWxpbngtd2lraS5hdGxhc3NpYW4ubmV0L3dpa2kvc3BhY2Vz
-L0EvcGFnZXMvMTg4NDE2NDUvU29sdXRpDQo+ID4+IG9uK1p5bnErUEwrUHJvZ3JhbW1pbmcrV2l0
-aCtGUEdBK01hbmFnZXINCj4gPg0KPiA+IE5hdmE6IENhbiB5b3UgcGxlYXNlIGNoZWNrIGlmIHBh
-cnRpYWwgcmVjb25maWd1cmF0aW9uIGlzIHN0aWxsIHdvcmtpbmc/DQo+ID4gSSBzZWUgY29kZSBp
-biB0aGUgZHJpdmVyLg0KPiA+DQo+ID4gQWxwZXI6IENhbiB5b3UgcGxlYXNlIHVzZSB1LWJvb3Qg
-YW5kIGNoZWNrIHRoYXQgeW91ciBiaXRzdHJlYW1zIGFyZQ0KPiA+IGNvcnJlY3Q/DQo+ID4gQWxz
-byB3aWxsIGJlIGdvb2QgdG8gaGF2ZSBzb21lIGxvZ3MgdG8gc2VlIHdoYXQgaXQgaXMgaGFwcGVu
-aW5nLg0KPiA+DQo+ID4gVGhhbmtzLA0KPiA+IE1pY2hhbA0KPiA+DQo+IA0KPiBIaSBNaWNoYWws
-DQo+IA0KPiBTb3JyeSBmb3IgbGF0ZSByZXNwb25zZS4gV2UgY2hlY2tlZCBVLWJvb3QgYW5kIGl0
-IHdvcmtlZCB3aXRob3V0IGFueSBwcm9ibGVtLg0KPiBPdXIgYml0c3RyZWFtcyBhcmUgYmFzZWQg
-b24gdGhlIFhpbGlueCBleGFtcGxlIHByb2plY3Qgb24gcGFydGlhbA0KPiByZWNvbmZpZ3VyYXRp
-b24uDQo+IA0KPiAxLiBMb2FkaW5nIGZ1bGwgYml0c3RyZWFtIHVzaW5nIFUtYm9vdCAoc3VjY2Vz
-c2Z1bCk6DQo+IA0KPiBaeW5xPiBmYXRsb2FkIG1tYyAwIDB4NDAwMDAwMCB0b3AuYml0DQo+IA0K
-PiByZWFkaW5nIHRvcC5iaXQNCj4gDQo+IDQwNDU2NjMgYnl0ZXMgcmVhZCBpbiAyMzUgbXMgKDE2
-LjQgTWlCL3MpDQo+IA0KPiBaeW5xPiBmcGdhIGxvYWRiIDAgMHg0MDAwMDAwIDQwNDU2NjMNCj4g
-DQo+ICAgZGVzaWduIGZpbGVuYW1lID0gInRvcDtVc2VySUQ9MFhGRkZGRkZGRjtWZXJzaW9uPTIw
-MTguMyINCj4gDQo+ICAgcGFydCBudW1iZXIgPSAiN3owMjBjbGc0ODQiDQo+IA0KPiAgIGRhdGUg
-PSAiMjAxOS8wMS8zMCINCj4gDQo+ICAgdGltZSA9ICIwMDo1NDoxOCINCj4gDQo+ICAgYnl0ZXMg
-aW4gYml0c3RyZWFtID0gNDA0NTU2NA0KPiANCj4genlucV9hbGlnbl9kbWFfYnVmZmVyOiBBbGln
-biBidWZmZXIgYXQgNDAwMDA2MyB0byAzZmZmZjgwKHN3YXAgMSkNCj4gDQo+IA0KPiAyLiBMb2Fk
-aW5nIHBhcnRpYWwgYml0c3RyZWFtIHVzaW5nIFUtYm9vdCAoc3VjY2Vzc2Z1bCk6DQo+IA0KPiBa
-eW5xPiBmYXRsb2FkIG1tYyAwIDB4NDAwMDAwMCBTX2tuaWdodF90b3BfcGFydGlhbC5iaXQNCj4g
-DQo+IHJlYWRpbmcgU19rbmlnaHRfdG9wX3BhcnRpYWwuYml0DQo+IA0KPiAxMjM4NDIwIGJ5dGVz
-IHJlYWQgaW4gODEgbXMgKDE0LjYgTWlCL3MpDQo+IA0KPiBaeW5xPiBmcGdhIGxvYWRicCAwIDB4
-NDAwMDAwMCAxMjM4NDIwDQo+IA0KPiAgIGRlc2lnbiBmaWxlbmFtZSA9ICJ0b3A7VXNlcklEPTBY
-RkZGRkZGRkY7UEFSVElBTD1UUlVFO1ZlcnNpb249MjAxOC4zIg0KPiANCj4gICBwYXJ0IG51bWJl
-ciA9ICI3ejAyMGNsZzQ4NCINCj4gDQo+ICAgZGF0ZSA9ICIyMDE5LzAxLzMwIg0KPiANCj4gICB0
-aW1lID0gIjAwOjU0OjQwIg0KPiANCj4gICBieXRlcyBpbiBiaXRzdHJlYW0gPSAxMjM4MzA4DQo+
-IA0KPiB6eW5xX2FsaWduX2RtYV9idWZmZXI6IEFsaWduIGJ1ZmZlciBhdCA0MDAwMDcwIHRvIDNm
-ZmZmODAoc3dhcCAxKQ0KPiANCj4gQm90aCBvZiB0aGVtIHdvcmtlZCBmaW5lLg0KPiANCj4gDQo+
-IDMuIExvYWRpbmcgZnVsbCBiaXRzdHJlYW0gb24gUGV0YWxpbnV4IDIwMTguMyAoc3VjY2Vzc2Z1
-bCk6DQo+IA0KPiByb290QHByb2plY3Q0On4jIG1rZGlyIC1wIC9saWIvZmlybXdhcmUNCj4gDQo+
-IHJvb3RAcHJvamVjdDQ6fiMgY2QgL21udA0KPiANCj4gcm9vdEBwcm9qZWN0NDovbW50IyBjcCB0
-b3AuYml0LmJpbiAvbGliL2Zpcm13YXJlDQo+IA0KPiByb290QHByb2plY3Q0Oi9tbnQjIGVjaG8g
-dG9wLmJpdC5iaW4NCj4gPi9zeXMvY2xhc3MvZnBnYV9tYW5hZ2VyL2ZwZ2EwL2Zpcm13YXJlDQo+
-IA0KPiBmcGdhX21hbmFnZXIgZnBnYTA6IHdyaXRpbmcgdG9wLmJpdC5iaW4gdG8gWGlsaW54IFp5
-bnEgRlBHQSBNYW5hZ2VyDQo+IA0KPiANCj4gNC4gTG9hZGluZyBwYXJ0aWFsIGJpdHN0cmVhbSBv
-biBQZXRhbGludXggMjAxOC4zIChOT1Qgc3VjY2Vzc2Z1bCk6DQo+IA0KPiByb290QHByb2plY3Q0
-Oi9tbnQjIGNwIFNfa25pZ2h0X3RvcF9wYXJ0aWFsLmJpdC5iaW4gL2xpYi9maXJtd2FyZQ0KPiAN
-Cj4gcm9vdEBwcm9qZWN0NDovbW50IyBlY2hvIFNfa25pZ2h0X3RvcF9wYXJ0aWFsLmJpdC5iaW4N
-Cj4gPi9zeXMvY2xhc3MvZnBnYV9tYW5hZ2VyL2ZwZ2EwL2Zpcm13YXJlDQo+IA0KPiBmcGdhX21h
-bmFnZXIgZnBnYTA6IHdyaXRpbmcgU19rbmlnaHRfdG9wX3BhcnRpYWwuYml0LmJpbiB0byBYaWxp
-bnggWnlucSBGUEdBDQo+IE1hbmFnZXINCj4gDQo+IC0tLSBXYWl0IGZldyBzZWNvbmRzIC0tLQ0K
-PiANCj4gZnBnYV9tYW5hZ2VyIGZwZ2EwOiBFcnJvciBhZnRlciB3cml0aW5nIGltYWdlIGRhdGEg
-dG8gRlBHQQ0KPiANCj4gLXNoOiBlY2hvOiB3cml0ZSBlcnJvcjogQ29ubmVjdGlvbiB0aW1lZCBv
-dXQNCj4gDQo+IFdlIGFsc28gY2hlY2tlZCBmcGdhLW1nci5oIGFuZCBzYXcgdGhlIGRlZmluaXRv
-bjogIiNkZWZpbmUNCj4gRlBHQV9NR1JfUEFSVElBTF9SRUNPTkZJRwlCSVQoMCkiLiBGb3IgcGFy
-dGlhbCBiaXRzdHJlYW0gdHJpYWxzIHdlDQo+IGFsc28gdHJpZWQgc2V0dGluZyB0aGlzIGJpdCB0
-byAxIGJ5ICJlY2hvIDEgPg0KPiAvc3lzL2NsYXNzL2ZwZ2FfbWFuYWdlci9mcGdhMC9mbGFncyIg
-Y29tbWFuZCBidXQgdGhpcyBkaWRuJ3QgYWZmZWN0IHRoZQ0KPiByZXN1bHQuDQo+IA0KPiBTaW5j
-ZSBGUEdBIG1hbmFnZXIgdXNlcyBCSU4gZmlsZSB3ZSBjb252ZXJ0IEJJVCB0byBCSU4gdXNpbmcg
-U0RLLiBVLWJvb3QNCj4gd29ya3Mgd2l0aCBCSVQgZmlsZXMuIElzIGl0IHBvc3NpYmxlIHRoYXQg
-dGhpcyBjb252ZXJzaW9uIGNhdXNlIHRoZSBwcm9ibGVtPyBIb3cNCj4gc2hvdWxkIHdlIGNvbnZl
-cnQgQklUIHRvIEJJTiBmaWxlPw0KPiANCj4gQmVzdCwNCj4gDQo+IEFscGVyDQoNCg==
+On Fri, May 03, 2019 at 11:28:22PM +0000, Jason Gunthorpe wrote:
+> On Fri, May 03, 2019 at 01:16:30PM -0700, Daniel Jordan wrote:
+> > Andrew, this one patch replaces these six from [1]:
+> > 
+> >     mm-change-locked_vms-type-from-unsigned-long-to-atomic64_t.patch
+> >     vfio-type1-drop-mmap_sem-now-that-locked_vm-is-atomic.patch
+> >     vfio-spapr_tce-drop-mmap_sem-now-that-locked_vm-is-atomic.patch
+> >     fpga-dlf-afu-drop-mmap_sem-now-that-locked_vm-is-atomic.patch
+> >     kvm-book3s-drop-mmap_sem-now-that-locked_vm-is-atomic.patch
+> >     powerpc-mmu-drop-mmap_sem-now-that-locked_vm-is-atomic.patch
+> > 
+> > That series converts locked_vm to an atomic, but on closer inspection causes at
+> > least one accounting race in mremap, and fixing it just for this type
+> > conversion came with too much ugly in the core mm to justify, especially when
+> > the right long-term fix is making these drivers use pinned_vm instead.
+> 
+> Did we ever decide what to do here? Should all these drivers be
+> switched to pinned_vm anyhow?
+
+Well, there were the concerns about switching in [1].  Alex, is there an
+example of an application or library that would break or be exploitable?  If
+there were particular worries (qemu for vfio type1, for example), perhaps some
+coordinated changes across the kernel and userspace would be possible,
+especially given the amount of effort it's likely going to take to get the
+locked_vm/pinned_vm accounting sorted out.
+
+[1] https://lore.kernel.org/linux-mm/20190213130330.76ef1987@w520.home/
