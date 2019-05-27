@@ -2,100 +2,100 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A3E2A724
-	for <lists+linux-fpga@lfdr.de>; Sat, 25 May 2019 23:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9452AE3D
+	for <lists+linux-fpga@lfdr.de>; Mon, 27 May 2019 07:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726169AbfEYVvV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 25 May 2019 17:51:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36054 "EHLO mail.kernel.org"
+        id S1726308AbfE0Fi4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 27 May 2019 01:38:56 -0400
+Received: from mga04.intel.com ([192.55.52.120]:7420 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726061AbfEYVvV (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sat, 25 May 2019 17:51:21 -0400
-Received: from localhost.localdomain (c-73-223-200-170.hsd1.ca.comcast.net [73.223.200.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7150B20717;
-        Sat, 25 May 2019 21:51:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558821080;
-        bh=9GojVzJw4LUT0FwL1uJ2uxQz/GR22xKEGuM8E5lF4U4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=yeCoL/9YBkEk1sCDuZGtqcOLLhjEc3XPpvmQxhmXpl1ivii7ueziKdgVyPiry9ByA
-         ADOT2OgdVR0DYv4LRRgW5QSfW6vt2A05lzKc6kYMl7/+P1G4g6y87rsbUW7KSF+/pj
-         wELWVZx/6l9yaDm7Gysp2a6pdP0M1R6mJkI2X3yI=
-Date:   Sat, 25 May 2019 14:51:18 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>, Alan Tull <atull@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christoph Lameter <cl@linux.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Moritz Fischer <mdf@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Steve Sistare <steven.sistare@oracle.com>,
-        Wu Hao <hao.wu@intel.com>, linux-mm@kvack.org,
-        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-fpga@vger.kernel.org,
+        id S1726302AbfE0Fi4 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 27 May 2019 01:38:56 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 May 2019 22:38:56 -0700
+X-ExtLoop1: 1
+Received: from hao-dev.bj.intel.com ([10.238.157.65])
+  by orsmga001.jf.intel.com with ESMTP; 26 May 2019 22:38:54 -0700
+From:   Wu Hao <hao.wu@intel.com>
+To:     atull@kernel.org, mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm: add account_locked_vm utility function
-Message-Id: <20190525145118.bfda2d75a14db05a001e49ad@linux-foundation.org>
-In-Reply-To: <20190524175045.26897-1-daniel.m.jordan@oracle.com>
-References: <de375582-2c35-8e8a-4737-c816052a8e58@ozlabs.ru>
-        <20190524175045.26897-1-daniel.m.jordan@oracle.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Cc:     linux-api@vger.kernel.org, Wu Hao <hao.wu@intel.com>
+Subject: [PATCH v3 00/16] add new features for FPGA DFL drivers
+Date:   Mon, 27 May 2019 13:22:10 +0800
+Message-Id: <1558934546-12171-1-git-send-email-hao.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, 24 May 2019 13:50:45 -0400 Daniel Jordan <daniel.m.jordan@oracle.com> wrote:
+This patchset adds more features support for FPGA Device Feature List
+(DFL) drivers, including PR enhancement, virtualization support based
+on PCIe SRIOV, private features to Port, private features to FME, and
+enhancement to DFL framework. Please refer to details in below list.
 
-> locked_vm accounting is done roughly the same way in five places, so
-> unify them in a helper.  Standardize the debug prints, which vary
-> slightly, but include the helper's caller to disambiguate between
-> callsites.
-> 
-> Error codes stay the same, so user-visible behavior does too.  The one
-> exception is that the -EPERM case in tce_account_locked_vm is removed
-> because Alexey has never seen it triggered.
-> 
-> ...
->
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1564,6 +1564,25 @@ long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
->  int get_user_pages_fast(unsigned long start, int nr_pages,
->  			unsigned int gup_flags, struct page **pages);
->  
-> +int __account_locked_vm(struct mm_struct *mm, unsigned long pages, bool inc,
-> +			struct task_struct *task, bool bypass_rlim);
-> +
-> +static inline int account_locked_vm(struct mm_struct *mm, unsigned long pages,
-> +				    bool inc)
-> +{
-> +	int ret;
-> +
-> +	if (pages == 0 || !mm)
-> +		return 0;
-> +
-> +	down_write(&mm->mmap_sem);
-> +	ret = __account_locked_vm(mm, pages, inc, current,
-> +				  capable(CAP_IPC_LOCK));
-> +	up_write(&mm->mmap_sem);
-> +
-> +	return ret;
-> +}
+This patchset is created on top of these patches from Alan.
+[PATCH 0/4] patches for FPGA - https://lkml.org/lkml/2019/5/9/1002
 
-That's quite a mouthful for an inlined function.  How about uninlining
-the whole thing and fiddling drivers/vfio/vfio_iommu_type1.c to suit. 
-I wonder why it does down_write_killable and whether it really needs
-to...
+Main changes from v2:
+ - move thermal/power management private feature support to another
+   patchset, including hwmon patches and related documentation update.
+ - update sysfs doc for kernel version and date.
+ - replace scnprintf to sprintf for sysfs interfaces.
+ - fix comments for performance reporting support. (patch #16)
+
+Main changes from v1:
+ - split the clean up code in a separated patch (patch #2)
+ - add cpu_feature_enabled check for AVX512 code (patch #4)
+ - improve sysfs return values and also sysfs doc (patch #12 #17)
+ - create a hwmon for thermal management sysfs interfaces (patch #15)
+ - create a hwmon for power management sysfs interfaces (patch #16)
+ - update docmentation according to above changes (patch #5)
+ - improve sysfs doc for performance reporting support (patch #18)
+
+Wu Hao (16):
+  fpga: dfl-fme-mgr: fix FME_PR_INTFC_ID register address.
+  fpga: dfl: fme: remove copy_to_user() in ioctl for PR
+  fpga: dfl: fme: align PR buffer size per PR datawidth
+  fpga: dfl: fme: support 512bit data width PR
+  Documentation: fpga: dfl: add descriptions for virtualization and new
+    interfaces.
+  fpga: dfl: fme: add DFL_FPGA_FME_PORT_RELEASE/ASSIGN ioctl support.
+  fpga: dfl: pci: enable SRIOV support.
+  fpga: dfl: afu: add AFU state related sysfs interfaces
+  fpga: dfl: afu: add userclock sysfs interfaces.
+  fpga: dfl: add id_table for dfl private feature driver
+  fpga: dfl: afu: export __port_enable/disable function.
+  fpga: dfl: afu: add error reporting support.
+  fpga: dfl: afu: add STP (SignalTap) support
+  fpga: dfl: fme: add capability sysfs interfaces
+  fpga: dfl: fme: add global error reporting support
+  fpga: dfl: fme: add performance reporting support
+
+ Documentation/ABI/testing/sysfs-platform-dfl-fme  | 191 +++++
+ Documentation/ABI/testing/sysfs-platform-dfl-port | 104 +++
+ Documentation/fpga/dfl.txt                        | 105 +++
+ drivers/fpga/Makefile                             |   4 +-
+ drivers/fpga/dfl-afu-error.c                      | 225 +++++
+ drivers/fpga/dfl-afu-main.c                       | 330 +++++++-
+ drivers/fpga/dfl-afu.h                            |   7 +
+ drivers/fpga/dfl-fme-error.c                      | 385 +++++++++
+ drivers/fpga/dfl-fme-main.c                       | 124 ++-
+ drivers/fpga/dfl-fme-mgr.c                        | 117 ++-
+ drivers/fpga/dfl-fme-perf.c                       | 962 ++++++++++++++++++++++
+ drivers/fpga/dfl-fme-pr.c                         |  65 +-
+ drivers/fpga/dfl-fme.h                            |   9 +-
+ drivers/fpga/dfl-pci.c                            |  40 +
+ drivers/fpga/dfl.c                                | 170 +++-
+ drivers/fpga/dfl.h                                |  56 +-
+ include/uapi/linux/fpga-dfl.h                     |  32 +
+ 17 files changed, 2846 insertions(+), 80 deletions(-)
+ create mode 100644 drivers/fpga/dfl-afu-error.c
+ create mode 100644 drivers/fpga/dfl-fme-error.c
+ create mode 100644 drivers/fpga/dfl-fme-perf.c
+
+-- 
+1.8.3.1
 
