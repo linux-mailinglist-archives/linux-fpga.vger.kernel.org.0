@@ -2,87 +2,244 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 033CC3871D
-	for <lists+linux-fpga@lfdr.de>; Fri,  7 Jun 2019 11:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C8A3A34E
+	for <lists+linux-fpga@lfdr.de>; Sun,  9 Jun 2019 04:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727246AbfFGJdK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 7 Jun 2019 05:33:10 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:46609 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727134AbfFGJdK (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 7 Jun 2019 05:33:10 -0400
-Received: by mail-ot1-f66.google.com with SMTP id z23so1223191ote.13
-        for <linux-fpga@vger.kernel.org>; Fri, 07 Jun 2019 02:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ZR386RP0zmY1WufasmAUSyc96jZxUzDsX+jXk1VKJzY=;
-        b=eovWEvxiYAnIVtnshN6IXRdk/nHURUcrKPyZyDhTvOXuw066Ymdl/Dutf229HUJBao
-         H3rpA4VSfQBxftH2yNtt3KZeYJLuTs2SoILn0niSAMhUgj1jN4O5NY4OBiUMeYrTXiQs
-         08yWO30GrUC7AnsUZ++2nHsS2DdoK5WhLh/qeZ8ioJlKOXtjvumQh5eseLGKp4F+AW4y
-         gg+1KylE5XSriupwaTizLMG9aKobJJG2sXfLh8Cd0b7CGi9m9cb3cmCCyzmx20rfLisT
-         dbh6yxUOX2rtx4e0SMXGXuZl8e+IAQdoMR0ABOlmMY9QEo943ANziDVc2Oe2skMmEIRa
-         uu0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ZR386RP0zmY1WufasmAUSyc96jZxUzDsX+jXk1VKJzY=;
-        b=bG/zoWp8momEePWc7JQ2Cdr/vHHANtdxWSFSTF83ht9tWSEdle4fcNzvjTP3TdQ59y
-         2m/4wEV2UYuUy29j7/iaNVve23V5q3VCDdYcZfTVlbtL6gx5A/wiTRDHB7VCHXX/RK6V
-         IOAvxWJB7p3SDnfNUYW6UFPdZ0FwvJXlMVOOveZ4sYcR5hWTl5ftLpLUtU2fsHR80hgN
-         SA2hf5hg3ititxMrg9qrbLKvlS+21te8TJhZdqzDvmi9kdcfS34FrKpq7eEhzMqdzeZ3
-         RF+0Dkw1rb9c/n5QUhi2eWynYyNGft92VYgq69bnDMrl7a2H/ArlagtGyHgbeDBOVuKx
-         nGhg==
-X-Gm-Message-State: APjAAAUAv9S6HtLUfP9x4BXCHJLJaNbHMVFoos2ICP3DjLT8bq1bYUQN
-        uf9TWFGsRd5tPmPWlerAilQGwBGZmf6RFQMRZoM=
-X-Google-Smtp-Source: APXvYqx9pErt1ZZUx/laEjS0db5uqwT62k9/HQ+bW8DHNobHPkCrHLjOVHO6oSIw5QQpVKr7N2G07sXPX6AVLzFHZzw=
-X-Received: by 2002:a05:6830:10c2:: with SMTP id z2mr8416349oto.149.1559899989305;
- Fri, 07 Jun 2019 02:33:09 -0700 (PDT)
+        id S1728132AbfFICa0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 8 Jun 2019 22:30:26 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:55560 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727604AbfFIC1a (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 8 Jun 2019 22:27:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=SDR7qUoUW3OOydWD3PxnnYybyVsU8Py0MMCE2+ZCvAU=; b=tjbvaMeZ/NxWuNKsHblZvDlUlW
+        biTNDISX6sh0Dg9QeZk9M3viyfUT+95UQsrN3c3UtKLUvmFB5LuyJYdlyB/xqPE+4dSPOoo+ZvAO1
+        A8y5ozdOOkdqzo5rHnikQRwrUSobCv2ZTPUuMWViF8i2wNc482EbG8sg9mqi4bJ1VqRE0R6nCGr7q
+        fbLElzavWqqhR1b5BExRuXx5nSiOFqJd7NPcq6dwTXThcE7M+8opWKZ02FQmzTBDTzJjb/9KyCR9+
+        MSznhV+298DugTcyjAMHOHhM+0vDzKBZ02vuqbZ2HdqbaCspQQJ3H4G+9FNYApl3F1RCsruKp0d/b
+        PRNBoaYQ==;
+Received: from 179.176.115.133.dynamic.adsl.gvt.net.br ([179.176.115.133] helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hZnYO-0001mo-1t; Sun, 09 Jun 2019 02:27:28 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hZnYL-0000Ir-2j; Sat, 08 Jun 2019 23:27:25 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Wu Hao <hao.wu@intel.com>, Alan Tull <atull@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org
+Subject: [PATCH v3 11/33] docs: fpga: convert docs to ReST and rename to *.rst
+Date:   Sat,  8 Jun 2019 23:27:01 -0300
+Message-Id: <e8073245ef832f21223ba335192e785d69b8b1cf.1560045490.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1560045490.git.mchehab+samsung@kernel.org>
+References: <cover.1560045490.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:ac9:5f89:0:0:0:0:0 with HTTP; Fri, 7 Jun 2019 02:33:08 -0700 (PDT)
-From:   fatima ibrahim <fi644780@gmail.com>
-Date:   Fri, 7 Jun 2019 10:33:08 +0100
-Message-ID: <CAEhvXQ_K5NM=uTXjfABP6GDfqEh4J4jwmZm6GzdNcG4RPk2Oiw@mail.gmail.com>
-Subject: Assalamu Alaikum//
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Assalamu Alaikum
-I will be happy if you can accepted my request I am sorry I don=E2=80=99t k=
-now
-you to discusses this with  you on internet which I don=E2=80=99t like   bu=
-t
-just allow me to do this  because of the condition I am in now .
-my name  is  Mrs. Fatima Ibrahim I am from Mauritius but I and family
-has been in IVORY COAST WEST AFRICA as my late father work here with
-Mobil oil before his death as a contract.
- We are all Christians in my family.  but after seeming Muslim  As a
-religion of love no matter what people feels   about them because of
-some terrorist groups I still have my love and proud to be a Muslim
-but my family refuse me to be one of them  .
- And this has been my problem with them, as My   father left some good
-things for me like  cars houses  and some money(AS HIS ONLY CHILD ) in
-the bank But  my uncles  has sized all that I got from my father
-because of this , because I refuse to come back to Christianity.
-This only thing that I am having now is the certificate of deposit
-which my father use to deposit some money with a commercial bank here
-in Abidjan and my uncle is looking for  away to take this funds out
-from  me and now I am sick I want to transfer this funds out to your
-country come over there and start a new life I have discuses with the
-bank they told me that since I want to relocate to your country that I
-need to get a bank account there for the transfer  please it is urgent
-so that  I move this money and come over for my security please if you
-are interested contact me so that I will give you the bank contact so
-that you will contact the bank manager Mr Philip Huma for the transfer
-Please get back to me
-Mr Fatima Ibrahim
+The dfl.txt file is almost there. It needs just a few
+adjustments to be properly parsed.
 
-Mrs Fatima Ibrahim
-Abidjan Ivory coast
+The conversion is actually:
+  - add blank lines and identation in order to identify paragraphs;
+  - fix tables markups;
+  - add some lists markups;
+  - mark literal blocks;
+  - adjust title markups.
+
+At its new index.rst, let's add a :orphan: while this is not linked to
+the main index.rst file, in order to avoid build warnings.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ Documentation/fpga/{dfl.txt => dfl.rst} | 58 ++++++++++++++-----------
+ Documentation/fpga/index.rst            | 17 ++++++++
+ MAINTAINERS                             |  2 +-
+ 3 files changed, 50 insertions(+), 27 deletions(-)
+ rename Documentation/fpga/{dfl.txt => dfl.rst} (89%)
+ create mode 100644 Documentation/fpga/index.rst
+
+diff --git a/Documentation/fpga/dfl.txt b/Documentation/fpga/dfl.rst
+similarity index 89%
+rename from Documentation/fpga/dfl.txt
+rename to Documentation/fpga/dfl.rst
+index 6df4621c3f2a..2f125abd777f 100644
+--- a/Documentation/fpga/dfl.txt
++++ b/Documentation/fpga/dfl.rst
+@@ -1,9 +1,12 @@
+-===============================================================================
+-              FPGA Device Feature List (DFL) Framework Overview
+--------------------------------------------------------------------------------
+-                Enno Luebbers <enno.luebbers@intel.com>
+-                Xiao Guangrong <guangrong.xiao@linux.intel.com>
+-                Wu Hao <hao.wu@intel.com>
++=================================================
++FPGA Device Feature List (DFL) Framework Overview
++=================================================
++
++Authors:
++
++- Enno Luebbers <enno.luebbers@intel.com>
++- Xiao Guangrong <guangrong.xiao@linux.intel.com>
++- Wu Hao <hao.wu@intel.com>
+ 
+ The Device Feature List (DFL) FPGA framework (and drivers according to this
+ this framework) hides the very details of low layer hardwares and provides
+@@ -19,7 +22,7 @@ Device Feature List (DFL) defines a linked list of feature headers within the
+ device MMIO space to provide an extensible way of adding features. Software can
+ walk through these predefined data structures to enumerate FPGA features:
+ FPGA Interface Unit (FIU), Accelerated Function Unit (AFU) and Private Features,
+-as illustrated below:
++as illustrated below::
+ 
+     Header            Header            Header            Header
+  +----------+  +-->+----------+  +-->+----------+  +-->+----------+
+@@ -81,9 +84,9 @@ and release it using close().
+ 
+ The following functions are exposed through ioctls:
+ 
+- Get driver API version (DFL_FPGA_GET_API_VERSION)
+- Check for extensions (DFL_FPGA_CHECK_EXTENSION)
+- Program bitstream (DFL_FPGA_FME_PORT_PR)
++- Get driver API version (DFL_FPGA_GET_API_VERSION)
++- Check for extensions (DFL_FPGA_CHECK_EXTENSION)
++- Program bitstream (DFL_FPGA_FME_PORT_PR)
+ 
+ More functions are exposed through sysfs
+ (/sys/class/fpga_region/regionX/dfl-fme.n/):
+@@ -118,18 +121,19 @@ port by using open() on the port device node and release it using close().
+ 
+ The following functions are exposed through ioctls:
+ 
+- Get driver API version (DFL_FPGA_GET_API_VERSION)
+- Check for extensions (DFL_FPGA_CHECK_EXTENSION)
+- Get port info (DFL_FPGA_PORT_GET_INFO)
+- Get MMIO region info (DFL_FPGA_PORT_GET_REGION_INFO)
+- Map DMA buffer (DFL_FPGA_PORT_DMA_MAP)
+- Unmap DMA buffer (DFL_FPGA_PORT_DMA_UNMAP)
+- Reset AFU (*DFL_FPGA_PORT_RESET)
++- Get driver API version (DFL_FPGA_GET_API_VERSION)
++- Check for extensions (DFL_FPGA_CHECK_EXTENSION)
++- Get port info (DFL_FPGA_PORT_GET_INFO)
++- Get MMIO region info (DFL_FPGA_PORT_GET_REGION_INFO)
++- Map DMA buffer (DFL_FPGA_PORT_DMA_MAP)
++- Unmap DMA buffer (DFL_FPGA_PORT_DMA_UNMAP)
++- Reset AFU (DFL_FPGA_PORT_RESET)
+ 
+-*DFL_FPGA_PORT_RESET: reset the FPGA Port and its AFU. Userspace can do Port
+-reset at any time, e.g. during DMA or Partial Reconfiguration. But it should
+-never cause any system level issue, only functional failure (e.g. DMA or PR
+-operation failure) and be recoverable from the failure.
++DFL_FPGA_PORT_RESET:
++  reset the FPGA Port and its AFU. Userspace can do Port
++  reset at any time, e.g. during DMA or Partial Reconfiguration. But it should
++  never cause any system level issue, only functional failure (e.g. DMA or PR
++  operation failure) and be recoverable from the failure.
+ 
+ User-space applications can also mmap() accelerator MMIO regions.
+ 
+@@ -143,6 +147,8 @@ More functions are exposed through sysfs:
+ DFL Framework Overview
+ ======================
+ 
++::
++
+          +----------+    +--------+ +--------+ +--------+
+          |   FME    |    |  AFU   | |  AFU   | |  AFU   |
+          |  Module  |    | Module | | Module | | Module |
+@@ -151,7 +157,7 @@ DFL Framework Overview
+                  | FPGA Container Device |    Device Feature List
+                  |  (FPGA Base Region)   |         Framework
+                  +-----------------------+
+---------------------------------------------------------------------
++  ------------------------------------------------------------------
+                +----------------------------+
+                |   FPGA DFL Device Module   |
+                | (e.g. PCIE/Platform Device)|
+@@ -220,7 +226,7 @@ the sysfs hierarchy under /sys/class/fpga_region.
+ In the example below, two DFL based FPGA devices are installed in the host. Each
+ fpga device has one FME and two ports (AFUs).
+ 
+-FPGA regions are created under /sys/class/fpga_region/
++FPGA regions are created under /sys/class/fpga_region/::
+ 
+ 	/sys/class/fpga_region/region0
+ 	/sys/class/fpga_region/region1
+@@ -231,7 +237,7 @@ Application needs to search each regionX folder, if feature device is found,
+ (e.g. "dfl-port.n" or "dfl-fme.m" is found), then it's the base
+ fpga region which represents the FPGA device.
+ 
+-Each base region has one FME and two ports (AFUs) as child devices:
++Each base region has one FME and two ports (AFUs) as child devices::
+ 
+ 	/sys/class/fpga_region/region0/dfl-fme.0
+ 	/sys/class/fpga_region/region0/dfl-port.0
+@@ -243,7 +249,7 @@ Each base region has one FME and two ports (AFUs) as child devices:
+ 	/sys/class/fpga_region/region3/dfl-port.3
+ 	...
+ 
+-In general, the FME/AFU sysfs interfaces are named as follows:
++In general, the FME/AFU sysfs interfaces are named as follows::
+ 
+ 	/sys/class/fpga_region/<regionX>/<dfl-fme.n>/
+ 	/sys/class/fpga_region/<regionX>/<dfl-port.m>/
+@@ -251,7 +257,7 @@ In general, the FME/AFU sysfs interfaces are named as follows:
+ with 'n' consecutively numbering all FMEs and 'm' consecutively numbering all
+ ports.
+ 
+-The device nodes used for ioctl() or mmap() can be referenced through:
++The device nodes used for ioctl() or mmap() can be referenced through::
+ 
+ 	/sys/class/fpga_region/<regionX>/<dfl-fme.n>/dev
+ 	/sys/class/fpga_region/<regionX>/<dfl-port.n>/dev
+diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
+new file mode 100644
+index 000000000000..2c87d1ea084f
+--- /dev/null
++++ b/Documentation/fpga/index.rst
+@@ -0,0 +1,17 @@
++:orphan:
++
++====
++fpga
++====
++
++.. toctree::
++    :maxdepth: 1
++
++    dfl
++
++.. only::  subproject and html
++
++   Indices
++   =======
++
++   * :ref:`genindex`
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9f83a79fdfdb..cc11aea722c8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6270,7 +6270,7 @@ FPGA DFL DRIVERS
+ M:	Wu Hao <hao.wu@intel.com>
+ L:	linux-fpga@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/fpga/dfl.txt
++F:	Documentation/fpga/dfl.rst
+ F:	include/uapi/linux/fpga-dfl.h
+ F:	drivers/fpga/dfl*
+ 
+-- 
+2.21.0
+
