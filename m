@@ -2,33 +2,33 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C8A3A34E
-	for <lists+linux-fpga@lfdr.de>; Sun,  9 Jun 2019 04:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8816842E1C
+	for <lists+linux-fpga@lfdr.de>; Wed, 12 Jun 2019 19:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728132AbfFICa0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 8 Jun 2019 22:30:26 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:55560 "EHLO
+        id S2388662AbfFLRxN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 12 Jun 2019 13:53:13 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:40418 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727604AbfFIC1a (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 8 Jun 2019 22:27:30 -0400
+        with ESMTP id S2388437AbfFLRxM (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 12 Jun 2019 13:53:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=SDR7qUoUW3OOydWD3PxnnYybyVsU8Py0MMCE2+ZCvAU=; b=tjbvaMeZ/NxWuNKsHblZvDlUlW
-        biTNDISX6sh0Dg9QeZk9M3viyfUT+95UQsrN3c3UtKLUvmFB5LuyJYdlyB/xqPE+4dSPOoo+ZvAO1
-        A8y5ozdOOkdqzo5rHnikQRwrUSobCv2ZTPUuMWViF8i2wNc482EbG8sg9mqi4bJ1VqRE0R6nCGr7q
-        fbLElzavWqqhR1b5BExRuXx5nSiOFqJd7NPcq6dwTXThcE7M+8opWKZ02FQmzTBDTzJjb/9KyCR9+
-        MSznhV+298DugTcyjAMHOHhM+0vDzKBZ02vuqbZ2HdqbaCspQQJ3H4G+9FNYApl3F1RCsruKp0d/b
-        PRNBoaYQ==;
-Received: from 179.176.115.133.dynamic.adsl.gvt.net.br ([179.176.115.133] helo=bombadil.infradead.org)
+        bh=sNvByV52uc+MaQkRr7F96stNMeGQp5gKRcBoThdNU4s=; b=CxpR0gKGGpbuxQIE2JLuNl/Row
+        yOoAiDq5+6IWUIrYEOE2p3pIlrDXcYy7VBktxra4k5qNcdv/LCJowjiBLFoxymGQc8SJjyXEIUQD5
+        XVIC/C1RMKtvnV5dLGKaVJROQ3umhuZRj6LPquyX1PqDuKfBHSNbThXcc8LCdAUhPksPCawH8OwyN
+        NWLIW/CyRkV089XQn61sWvEIxIiivYETZBnC4naurvwDGwbnbKNZgazqgxnVFW9yjdKOdpOAkoqHp
+        WOXWJIk9cSqMVERKkFJw7qPMAcEOTT9EourxGSCeSqgOQ4qL5+zewqGcUECMIse0g2INt7oNYBnAn
+        VleXBBhA==;
+Received: from 201.86.169.251.dynamic.adsl.gvt.net.br ([201.86.169.251] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hZnYO-0001mo-1t; Sun, 09 Jun 2019 02:27:28 +0000
+        id 1hb7Qt-0002DZ-3O; Wed, 12 Jun 2019 17:53:11 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hZnYL-0000Ir-2j; Sat, 08 Jun 2019 23:27:25 -0300
+        id 1hb7Qq-0001gG-89; Wed, 12 Jun 2019 14:53:08 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -36,12 +36,12 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Wu Hao <hao.wu@intel.com>, Alan Tull <atull@kernel.org>,
         Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org
-Subject: [PATCH v3 11/33] docs: fpga: convert docs to ReST and rename to *.rst
-Date:   Sat,  8 Jun 2019 23:27:01 -0300
-Message-Id: <e8073245ef832f21223ba335192e785d69b8b1cf.1560045490.git.mchehab+samsung@kernel.org>
+Subject: [PATCH v4 10/28] docs: fpga: convert docs to ReST and rename to *.rst
+Date:   Wed, 12 Jun 2019 14:52:46 -0300
+Message-Id: <2794fa9c29b085c346561d620a891e3e979fdf3b.1560361364.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1560045490.git.mchehab+samsung@kernel.org>
-References: <cover.1560045490.git.mchehab+samsung@kernel.org>
+In-Reply-To: <cover.1560361364.git.mchehab+samsung@kernel.org>
+References: <cover.1560361364.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-fpga-owner@vger.kernel.org
@@ -228,10 +228,10 @@ index 000000000000..2c87d1ea084f
 +
 +   * :ref:`genindex`
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 9f83a79fdfdb..cc11aea722c8 100644
+index 5ed1fc93969a..5fdbf6e78d46 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -6270,7 +6270,7 @@ FPGA DFL DRIVERS
+@@ -6283,7 +6283,7 @@ FPGA DFL DRIVERS
  M:	Wu Hao <hao.wu@intel.com>
  L:	linux-fpga@vger.kernel.org
  S:	Maintained
