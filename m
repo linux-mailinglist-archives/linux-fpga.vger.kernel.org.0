@@ -2,97 +2,87 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B96054FDDC
-	for <lists+linux-fpga@lfdr.de>; Sun, 23 Jun 2019 21:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D523504A4
+	for <lists+linux-fpga@lfdr.de>; Mon, 24 Jun 2019 10:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbfFWT07 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 23 Jun 2019 15:26:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35582 "EHLO mail.kernel.org"
+        id S1728116AbfFXIep (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 24 Jun 2019 04:34:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:43688 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726119AbfFWT06 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sun, 23 Jun 2019 15:26:58 -0400
-Received: from localhost (unknown [107.242.116.126])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 77FBA20645;
-        Sun, 23 Jun 2019 19:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561318017;
-        bh=Qk84AQXyLsM0Q715iByu0Urs776YIzdFYFvfNBzaHSQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nvyWq0tGWxoBQWi1U8yw0GrSEkKGf9Ep8x5Mzd/lvnjUaj/tNarFybHick6q4z6r3
-         CSp9qsNHB+WS2E64s8Df+Zepy2dC1lYlLwV7iqvfMZooIdAwElf2I9lw7JjCE1l//A
-         c+QaMlPr6TDTUPIbb1suKEJ196kigSoZ4+ARTdiI=
-Date:   Sun, 23 Jun 2019 15:26:52 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Chengguang Xu <cgxu519@gmx.com>, Wu Hao <hao.wu@intel.com>,
-        Alan Tull <atull@kernel.org>, linux-fpga@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.1 17/59] fpga: dfl: expand minor range when
- registering chrdev region
-Message-ID: <20190623192652.GM2226@sasha-vm>
-References: <20190614202843.26941-1-sashal@kernel.org>
- <20190614202843.26941-17-sashal@kernel.org>
- <20190615054806.GB23883@kroah.com>
+        id S1725916AbfFXIep (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 24 Jun 2019 04:34:45 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E42722B;
+        Mon, 24 Jun 2019 01:34:44 -0700 (PDT)
+Received: from [10.1.196.93] (en101.cambridge.arm.com [10.1.196.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B41B3F71E;
+        Mon, 24 Jun 2019 01:34:43 -0700 (PDT)
+Subject: Re: [PATCH v2 13/28] drivers: Introduce
+ class_find_device_by_of_node() helper
+To:     peda@axentia.se, linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org, atull@kernel.org,
+        mdf@kernel.org, linux-fpga@vger.kernel.org, broonie@kernel.org,
+        f.fainelli@gmail.com, hkallweit1@gmail.com, davem@davemloft.net,
+        andrew@lunn.ch, lgirdwood@gmail.com, jslaby@suse.com
+References: <1560534863-15115-1-git-send-email-suzuki.poulose@arm.com>
+ <1560534863-15115-14-git-send-email-suzuki.poulose@arm.com>
+ <325e46fd-a480-78ed-81fd-55e993fbc06f@axentia.se>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+Message-ID: <5cf1a8e2-bb1e-b6bc-32fe-93db0a6b5efd@arm.com>
+Date:   Mon, 24 Jun 2019 09:34:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190615054806.GB23883@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <325e46fd-a480-78ed-81fd-55e993fbc06f@axentia.se>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Sat, Jun 15, 2019 at 07:48:06AM +0200, Greg Kroah-Hartman wrote:
->On Fri, Jun 14, 2019 at 04:28:01PM -0400, Sasha Levin wrote:
->> From: Chengguang Xu <cgxu519@gmx.com>
->>
->> [ Upstream commit de9a7f6f5f1967d275311cca9163b4a3ffe9b0ae ]
->>
->> Actually, total amount of available minor number
->> for a single major is MINORMASK + 1. So expand
->> minor range when registering chrdev region.
->>
->> Signed-off-by: Chengguang Xu <cgxu519@gmx.com>
->> Acked-by: Wu Hao <hao.wu@intel.com>
->> Acked-by: Alan Tull <atull@kernel.org>
->> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->>  drivers/fpga/dfl.c | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
->> index c25217cde5ca..4b66aaa32b5a 100644
->> --- a/drivers/fpga/dfl.c
->> +++ b/drivers/fpga/dfl.c
->> @@ -322,7 +322,7 @@ static void dfl_chardev_uinit(void)
->>  	for (i = 0; i < DFL_FPGA_DEVT_MAX; i++)
->>  		if (MAJOR(dfl_chrdevs[i].devt)) {
->>  			unregister_chrdev_region(dfl_chrdevs[i].devt,
->> -						 MINORMASK);
->> +						 MINORMASK + 1);
->>  			dfl_chrdevs[i].devt = MKDEV(0, 0);
->>  		}
->>  }
->> @@ -332,8 +332,8 @@ static int dfl_chardev_init(void)
->>  	int i, ret;
->>
->>  	for (i = 0; i < DFL_FPGA_DEVT_MAX; i++) {
->> -		ret = alloc_chrdev_region(&dfl_chrdevs[i].devt, 0, MINORMASK,
->> -					  dfl_chrdevs[i].name);
->> +		ret = alloc_chrdev_region(&dfl_chrdevs[i].devt, 0,
->> +					  MINORMASK + 1, dfl_chrdevs[i].name);
->>  		if (ret)
->>  			goto exit;
->>  	}
->
->Not a bugfix, so not needed for stable kernels, thanks.
+Hi Peter,
 
-Dropped, thanks!
+On 22/06/2019 06:25, Peter Rosin wrote:
+> On 2019-06-14 19:54, Suzuki K Poulose wrote:
+>> Add a wrapper to class_find_device() to search for a device
+>> by the of_node pointer, reusing the generic match function.
+>> Also convert the existing users to make use of the new helper.
+>>
+>> Cc: Alan Tull <atull@kernel.org>
+>> Cc: Moritz Fischer <mdf@kernel.org>
+>> Cc: linux-fpga@vger.kernel.org
+>> Cc: Peter Rosin <peda@axentia.se>
+>> Cc: Mark Brown <broonie@kernel.org>
+>> Cc: Florian Fainelli <f.fainelli@gmail.com>
+>> Cc: Heiner Kallweit <hkallweit1@gmail.com>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Andrew Lunn <andrew@lunn.ch>
+>> Cc: Liam Girdwood <lgirdwood@gmail.com>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+>> Cc: Jiri Slaby <jslaby@suse.com>
+>> Acked-by: Mark Brown <broonie@kernel.org>
+>> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+>> Reviewed-by: Peter Rosin <peda@axentia.se>
+> 
+> Whoooa! I reviewed only the drivers/mux/core.c changes when this was done
+> in a series of much smaller patches. This tag makes it seem as if I have
+> reviewed the whole thing, which I had not done when you added this tag out
+> of the blue.
 
---
-Thanks,
-Sasha
+Apologies for the surprise. The patch was simply squashed with the change that
+introduced the "helper" to better aid the reviewers, based on suggestions on the
+list. I kept your tags, only because there were no changes, but some additional
+context on the core driver.
+
+> 
+> Now, this stuff is trivial and by now I have looked at the other files
+> and it all seems simple enough. So, you can keep the tag, but it is NOT
+> ok to handle tags like you have done here.
+
+Sure, I will keep that in mind.
+
+Cheers
+Suzuki
