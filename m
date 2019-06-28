@@ -2,45 +2,47 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4986558F3D
-	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2019 02:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98CF58F40
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2019 02:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbfF1AuW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 27 Jun 2019 20:50:22 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:45540 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726827AbfF1AuV (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 27 Jun 2019 20:50:21 -0400
-Received: by mail-pl1-f194.google.com with SMTP id bi6so2195296plb.12
-        for <linux-fpga@vger.kernel.org>; Thu, 27 Jun 2019 17:50:21 -0700 (PDT)
+        id S1726849AbfF1Au0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 27 Jun 2019 20:50:26 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38337 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726838AbfF1AuY (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 27 Jun 2019 20:50:24 -0400
+Received: by mail-pl1-f193.google.com with SMTP id 9so1432491ple.5
+        for <linux-fpga@vger.kernel.org>; Thu, 27 Jun 2019 17:50:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OncWFB2MqnR1/OaJA7wEfh0+edJpgnnSs9Q1oS9q/ZA=;
-        b=KOskxktMS4fHj+/EGJnwDNpTwcJqN+uKdyWoCxRORVMI+p6OdZ0rtUumxENc/oyKkN
-         UIg/LFMzRCj7dNe1V9IOVNDs13i+H/o8rl6pvMEat7jhGD70kFHw9Y0NMAw77365AozG
-         UsqnPc7k/sYOBH7u34h4Oul+FG5a+VOEXwRf4IitDzo8EyrQkd0xd5iPTrOMAByPRoEj
-         LxFKG36Ay4/gRrPRNdq2glrf59OFdVyeb8jDIYL6/xopRJcxz2n5DdbKXLEsh4WjUGXl
-         qJSuc6L90nr8M7PTrHnDsItwtjyUT1ex1pnj65Hi+YhvFi363HMOdUsRoqx8liermhtt
-         C8LA==
-X-Gm-Message-State: APjAAAWvfR+Kxpf/fwVjitCL+25r2tcNsxjv+gcOeHH6ToXHhzBaKV8K
-        iIBXNI9SJNeayMkMuJZd5CreU0iCGP4=
-X-Google-Smtp-Source: APXvYqwmsB/Afp0fu+EJ8gtQSSN8OqTgLlckMMG2rd5xQt9eDMf1WOOOJ9gTdMpZ6Bc4ueW3IvOaLw==
-X-Received: by 2002:a17:902:e490:: with SMTP id cj16mr7942734plb.136.1561683020604;
-        Thu, 27 Jun 2019 17:50:20 -0700 (PDT)
+        bh=0S7kgPx1KYzrSrLiUfW5FRR4pscpKEZJRVl1wr9uJjs=;
+        b=cX7J3TbqiMQxbKNE/poyozG/Yx7uE7kJvMyUfrILKwByiFVNC6jrC/pw7usMBI+exe
+         I5aYBhK8+PoZDsgBR/QMQGMPinMLI2OxFnAm/goOHrHLRQMPOYnG41oE3tqAkGnlKG07
+         bxzL6Qodg2XWC/NJg4tgscGAkLHt0jpxE20b/wslA9Hht1RwTlX6Qr6gqlc3Gz4oN3xq
+         hMLRIHjE/5i1ytrRyMa0Rrb0EAazi0sMZoUwpCqbqQijy/gHNdKhFxBFzBjHOoV5BvsP
+         Elw9HFuUoYuQ+Gs8Ms9TixyLWLrA/uNMm/fVPFf/v738/NfqqDE7wjNQw30dN1FVr8N1
+         xTEg==
+X-Gm-Message-State: APjAAAXMdPqoApsglioHjiKtKeIIqMW6RvOZUQd2Th051Ol0CjAaqQnm
+        U4OSaUDzEiB6yKwzjz22s0wKSc23ReM=
+X-Google-Smtp-Source: APXvYqzC18qD/gRqOrLofZft7/WCD/6QI5fFykZ9mCSTRYa0wCwtGOTGQ/V6+eZapbfsPhtkekpZnw==
+X-Received: by 2002:a17:902:86:: with SMTP id a6mr8158015pla.244.1561683022713;
+        Thu, 27 Jun 2019 17:50:22 -0700 (PDT)
 Received: from localhost (c-76-21-109-208.hsd1.ca.comcast.net. [76.21.109.208])
-        by smtp.gmail.com with ESMTPSA id h2sm269882pgs.17.2019.06.27.17.50.19
+        by smtp.gmail.com with ESMTPSA id j24sm267293pgg.86.2019.06.27.17.50.21
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 27 Jun 2019 17:50:19 -0700 (PDT)
+        Thu, 27 Jun 2019 17:50:21 -0700 (PDT)
 From:   Moritz Fischer <mdf@kernel.org>
 To:     linux-fpga@vger.kernel.org, gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        Alan Tull <atull@kernel.org>, Moritz Fischer <mdf@kernel.org>
-Subject: [PATCH 03/15] fpga: dfl: fme: align PR buffer size per PR datawidth
-Date:   Thu, 27 Jun 2019 17:49:39 -0700
-Message-Id: <20190628004951.6202-4-mdf@kernel.org>
+        Wu Hao <hao.wu@intel.com>,
+        Ananda Ravuri <ananda.ravuri@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Alan Tull <atull@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>
+Subject: [PATCH 04/15] fpga: dfl: fme: support 512bit data width PR
+Date:   Thu, 27 Jun 2019 17:49:40 -0700
+Message-Id: <20190628004951.6202-5-mdf@kernel.org>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190628004951.6202-1-mdf@kernel.org>
 References: <20190628004951.6202-1-mdf@kernel.org>
@@ -53,72 +55,371 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Wu Hao <hao.wu@intel.com>
 
-Current driver checks if input bitstream file size is aligned or
-not per PR data width (default 32bits). It requires one additional
-step for end user when they generate the bitstream file, padding
-extra zeros to bitstream file to align its size per PR data width,
-but they don't have to as hardware will drop extra padding bytes
-automatically.
+In early partial reconfiguration private feature, it only
+supports 32bit data width when writing data to hardware for
+PR. 512bit data width PR support is an important optimization
+for some specific solutions (e.g. XEON with FPGA integrated),
+it allows driver to use AVX512 instruction to improve the
+performance of partial reconfiguration. e.g. programming one
+100MB bitstream image via this 512bit data width PR hardware
+only takes ~300ms, but 32bit revision requires ~3s per test
+result.
 
-In order to simplify the user steps, this patch aligns PR buffer
-size per PR data width in driver, to allow user to pass unaligned
-size bitstream files to driver.
+Please note now this optimization is only done on revision 2
+of this PR private feature which is only used in integrated
+solution that AVX512 is always supported. This revision 2
+hardware doesn't support 32bit PR.
 
+Signed-off-by: Ananda Ravuri <ananda.ravuri@intel.com>
 Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 Signed-off-by: Wu Hao <hao.wu@intel.com>
 Acked-by: Alan Tull <atull@kernel.org>
-Acked-by: Moritz Fischer <mdf@kernel.org>
 Signed-off-by: Moritz Fischer <mdf@kernel.org>
 ---
- drivers/fpga/dfl-fme-pr.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/fpga/dfl-fme-main.c |   3 +
+ drivers/fpga/dfl-fme-mgr.c  | 113 +++++++++++++++++++++++++++++++-----
+ drivers/fpga/dfl-fme-pr.c   |  43 +++++++++-----
+ drivers/fpga/dfl-fme.h      |   2 +
+ drivers/fpga/dfl.h          |   5 ++
+ 5 files changed, 135 insertions(+), 31 deletions(-)
 
+diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
+index 086ad2420ade..076d74f6416d 100644
+--- a/drivers/fpga/dfl-fme-main.c
++++ b/drivers/fpga/dfl-fme-main.c
+@@ -21,6 +21,8 @@
+ #include "dfl.h"
+ #include "dfl-fme.h"
+ 
++#define DRV_VERSION	"0.8"
++
+ static ssize_t ports_num_show(struct device *dev,
+ 			      struct device_attribute *attr, char *buf)
+ {
+@@ -277,3 +279,4 @@ MODULE_DESCRIPTION("FPGA Management Engine driver");
+ MODULE_AUTHOR("Intel Corporation");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("platform:dfl-fme");
++MODULE_VERSION(DRV_VERSION);
+diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
+index b3f7eee3c93f..d1a4ba5d1d3d 100644
+--- a/drivers/fpga/dfl-fme-mgr.c
++++ b/drivers/fpga/dfl-fme-mgr.c
+@@ -22,14 +22,18 @@
+ #include <linux/io-64-nonatomic-lo-hi.h>
+ #include <linux/fpga/fpga-mgr.h>
+ 
++#include "dfl.h"
+ #include "dfl-fme-pr.h"
+ 
++#define DRV_VERSION	"0.8"
++
+ /* FME Partial Reconfiguration Sub Feature Register Set */
+ #define FME_PR_DFH		0x0
+ #define FME_PR_CTRL		0x8
+ #define FME_PR_STS		0x10
+ #define FME_PR_DATA		0x18
+ #define FME_PR_ERR		0x20
++#define FME_PR_512_DATA		0x40 /* Data Register for 512bit datawidth PR */
+ #define FME_PR_INTFC_ID_L	0xA8
+ #define FME_PR_INTFC_ID_H	0xB0
+ 
+@@ -67,8 +71,43 @@
+ #define PR_WAIT_TIMEOUT   8000000
+ #define PR_HOST_STATUS_IDLE	0
+ 
++#if defined(CONFIG_X86) && defined(CONFIG_AS_AVX512)
++
++#include <linux/cpufeature.h>
++#include <asm/fpu/api.h>
++
++static inline int is_cpu_avx512_enabled(void)
++{
++	return cpu_feature_enabled(X86_FEATURE_AVX512F);
++}
++
++static inline void copy512(const void *src, void __iomem *dst)
++{
++	kernel_fpu_begin();
++
++	asm volatile("vmovdqu64 (%0), %%zmm0;"
++		     "vmovntdq %%zmm0, (%1);"
++		     :
++		     : "r"(src), "r"(dst)
++		     : "memory");
++
++	kernel_fpu_end();
++}
++#else
++static inline int is_cpu_avx512_enabled(void)
++{
++	return 0;
++}
++
++static inline void copy512(const void *src, void __iomem *dst)
++{
++	WARN_ON_ONCE(1);
++}
++#endif
++
+ struct fme_mgr_priv {
+ 	void __iomem *ioaddr;
++	unsigned int pr_datawidth;
+ 	u64 pr_error;
+ };
+ 
+@@ -169,7 +208,7 @@ static int fme_mgr_write(struct fpga_manager *mgr,
+ 	struct fme_mgr_priv *priv = mgr->priv;
+ 	void __iomem *fme_pr = priv->ioaddr;
+ 	u64 pr_ctrl, pr_status, pr_data;
+-	int delay = 0, pr_credit, i = 0;
++	int ret = 0, delay = 0, pr_credit;
+ 
+ 	dev_dbg(dev, "start request\n");
+ 
+@@ -181,9 +220,9 @@ static int fme_mgr_write(struct fpga_manager *mgr,
+ 
+ 	/*
+ 	 * driver can push data to PR hardware using PR_DATA register once HW
+-	 * has enough pr_credit (> 1), pr_credit reduces one for every 32bit
+-	 * pr data write to PR_DATA register. If pr_credit <= 1, driver needs
+-	 * to wait for enough pr_credit from hardware by polling.
++	 * has enough pr_credit (> 1), pr_credit reduces one for every pr data
++	 * width write to PR_DATA register. If pr_credit <= 1, driver needs to
++	 * wait for enough pr_credit from hardware by polling.
+ 	 */
+ 	pr_status = readq(fme_pr + FME_PR_STS);
+ 	pr_credit = FIELD_GET(FME_PR_STS_PR_CREDIT, pr_status);
+@@ -192,7 +231,8 @@ static int fme_mgr_write(struct fpga_manager *mgr,
+ 		while (pr_credit <= 1) {
+ 			if (delay++ > PR_WAIT_TIMEOUT) {
+ 				dev_err(dev, "PR_CREDIT timeout\n");
+-				return -ETIMEDOUT;
++				ret = -ETIMEDOUT;
++				goto done;
+ 			}
+ 			udelay(1);
+ 
+@@ -200,21 +240,27 @@ static int fme_mgr_write(struct fpga_manager *mgr,
+ 			pr_credit = FIELD_GET(FME_PR_STS_PR_CREDIT, pr_status);
+ 		}
+ 
+-		if (count < 4) {
+-			dev_err(dev, "Invalid PR bitstream size\n");
+-			return -EINVAL;
++		WARN_ON(count < priv->pr_datawidth);
++
++		switch (priv->pr_datawidth) {
++		case 4:
++			pr_data = FIELD_PREP(FME_PR_DATA_PR_DATA_RAW,
++					     *(u32 *)buf);
++			writeq(pr_data, fme_pr + FME_PR_DATA);
++			break;
++		case 64:
++			copy512(buf, fme_pr + FME_PR_512_DATA);
++			break;
++		default:
++			WARN_ON_ONCE(1);
+ 		}
+-
+-		pr_data = 0;
+-		pr_data |= FIELD_PREP(FME_PR_DATA_PR_DATA_RAW,
+-				      *(((u32 *)buf) + i));
+-		writeq(pr_data, fme_pr + FME_PR_DATA);
+-		count -= 4;
++		buf += priv->pr_datawidth;
++		count -= priv->pr_datawidth;
+ 		pr_credit--;
+-		i++;
+ 	}
+ 
+-	return 0;
++done:
++	return ret;
+ }
+ 
+ static int fme_mgr_write_complete(struct fpga_manager *mgr,
+@@ -279,6 +325,36 @@ static void fme_mgr_get_compat_id(void __iomem *fme_pr,
+ 	id->id_h = readq(fme_pr + FME_PR_INTFC_ID_H);
+ }
+ 
++static u8 fme_mgr_get_pr_datawidth(struct device *dev, void __iomem *fme_pr)
++{
++	u8 revision = dfl_feature_revision(fme_pr);
++
++	if (revision < 2) {
++		/*
++		 * revision 0 and 1 only support 32bit data width partial
++		 * reconfiguration, so pr_datawidth is 4 (Byte).
++		 */
++		return 4;
++	} else if (revision == 2) {
++		/*
++		 * revision 2 hardware has optimization to support 512bit data
++		 * width partial reconfiguration with AVX512 instructions. So
++		 * pr_datawidth is 64 (Byte). As revision 2 hardware is only
++		 * used in integrated solution, CPU supports AVX512 instructions
++		 * for sure, but it still needs to check here as AVX512 could be
++		 * disabled in kernel (e.g. using clearcpuid boot option).
++		 */
++		if (is_cpu_avx512_enabled())
++			return 64;
++
++		dev_err(dev, "revision 2: AVX512 is disabled\n");
++		return 0;
++	}
++
++	dev_err(dev, "revision %d is not supported yet\n", revision);
++	return 0;
++}
++
+ static int fme_mgr_probe(struct platform_device *pdev)
+ {
+ 	struct dfl_fme_mgr_pdata *pdata = dev_get_platdata(&pdev->dev);
+@@ -302,6 +378,10 @@ static int fme_mgr_probe(struct platform_device *pdev)
+ 			return PTR_ERR(priv->ioaddr);
+ 	}
+ 
++	priv->pr_datawidth = fme_mgr_get_pr_datawidth(dev, priv->ioaddr);
++	if (!priv->pr_datawidth)
++		return -ENODEV;
++
+ 	compat_id = devm_kzalloc(dev, sizeof(*compat_id), GFP_KERNEL);
+ 	if (!compat_id)
+ 		return -ENOMEM;
+@@ -342,3 +422,4 @@ MODULE_DESCRIPTION("FPGA Manager for DFL FPGA Management Engine");
+ MODULE_AUTHOR("Intel Corporation");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("platform:dfl-fme-mgr");
++MODULE_VERSION(DRV_VERSION);
 diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
-index 6ec0f09e5994..3c71dc3faaf5 100644
+index 3c71dc3faaf5..cd94ba870094 100644
 --- a/drivers/fpga/dfl-fme-pr.c
 +++ b/drivers/fpga/dfl-fme-pr.c
-@@ -74,6 +74,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
- 	struct dfl_fme *fme;
- 	unsigned long minsz;
- 	void *buf = NULL;
-+	size_t length;
- 	int ret = 0;
- 	u64 v;
+@@ -83,7 +83,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
+ 	if (copy_from_user(&port_pr, argp, minsz))
+ 		return -EFAULT;
  
-@@ -85,9 +86,6 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
- 	if (port_pr.argsz < minsz || port_pr.flags)
+-	if (port_pr.argsz < minsz || port_pr.flags)
++	if (port_pr.argsz < minsz || port_pr.flags || !port_pr.buffer_size)
  		return -EINVAL;
  
--	if (!IS_ALIGNED(port_pr.buffer_size, 4))
--		return -EINVAL;
--
  	/* get fme header region */
- 	fme_hdr = dfl_get_feature_ioaddr_by_id(&pdev->dev,
- 					       FME_FEATURE_ID_HEADER);
-@@ -103,7 +101,13 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
+@@ -101,15 +101,25 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
  		       port_pr.buffer_size))
  		return -EFAULT;
  
--	buf = vmalloc(port_pr.buffer_size);
-+	/*
-+	 * align PR buffer per PR bandwidth, as HW ignores the extra padding
-+	 * data automatically.
-+	 */
-+	length = ALIGN(port_pr.buffer_size, 4);
++	mutex_lock(&pdata->lock);
++	fme = dfl_fpga_pdata_get_private(pdata);
++	/* fme device has been unregistered. */
++	if (!fme) {
++		ret = -EINVAL;
++		goto unlock_exit;
++	}
 +
-+	buf = vmalloc(length);
- 	if (!buf)
- 		return -ENOMEM;
+ 	/*
+ 	 * align PR buffer per PR bandwidth, as HW ignores the extra padding
+ 	 * data automatically.
+ 	 */
+-	length = ALIGN(port_pr.buffer_size, 4);
++	length = ALIGN(port_pr.buffer_size, fme->pr_datawidth);
  
-@@ -140,7 +144,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
+ 	buf = vmalloc(length);
+-	if (!buf)
+-		return -ENOMEM;
++	if (!buf) {
++		ret = -ENOMEM;
++		goto unlock_exit;
++	}
+ 
+ 	if (copy_from_user(buf,
+ 			   (void __user *)(unsigned long)port_pr.buffer_address,
+@@ -127,18 +137,10 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
+ 
+ 	info->flags |= FPGA_MGR_PARTIAL_RECONFIG;
+ 
+-	mutex_lock(&pdata->lock);
+-	fme = dfl_fpga_pdata_get_private(pdata);
+-	/* fme device has been unregistered. */
+-	if (!fme) {
+-		ret = -EINVAL;
+-		goto unlock_exit;
+-	}
+-
+ 	region = dfl_fme_region_find(fme, port_pr.port_id);
+ 	if (!region) {
+ 		ret = -EINVAL;
+-		goto unlock_exit;
++		goto free_exit;
+ 	}
+ 
  	fpga_image_info_free(region->info);
+@@ -159,10 +161,10 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
+ 		fpga_bridges_put(&region->bridge_list);
  
- 	info->buf = buf;
--	info->count = port_pr.buffer_size;
-+	info->count = length;
- 	info->region_id = port_pr.port_id;
- 	region->info = info;
+ 	put_device(&region->dev);
+-unlock_exit:
+-	mutex_unlock(&pdata->lock);
+ free_exit:
+ 	vfree(buf);
++unlock_exit:
++	mutex_unlock(&pdata->lock);
+ 	return ret;
+ }
  
+@@ -388,6 +390,17 @@ static int pr_mgmt_init(struct platform_device *pdev,
+ 	mutex_lock(&pdata->lock);
+ 	priv = dfl_fpga_pdata_get_private(pdata);
+ 
++	/*
++	 * Initialize PR data width.
++	 * Only revision 2 supports 512bit datawidth for better performance,
++	 * other revisions use default 32bit datawidth. This is used for
++	 * buffer alignment.
++	 */
++	if (dfl_feature_revision(feature->ioaddr) == 2)
++		priv->pr_datawidth = 64;
++	else
++		priv->pr_datawidth = 4;
++
+ 	/* Initialize the region and bridge sub device list */
+ 	INIT_LIST_HEAD(&priv->region_list);
+ 	INIT_LIST_HEAD(&priv->bridge_list);
+diff --git a/drivers/fpga/dfl-fme.h b/drivers/fpga/dfl-fme.h
+index 5394a216c5c0..de207556b70a 100644
+--- a/drivers/fpga/dfl-fme.h
++++ b/drivers/fpga/dfl-fme.h
+@@ -21,12 +21,14 @@
+ /**
+  * struct dfl_fme - dfl fme private data
+  *
++ * @pr_datawidth: data width for partial reconfiguration.
+  * @mgr: FME's FPGA manager platform device.
+  * @region_list: linked list of FME's FPGA regions.
+  * @bridge_list: linked list of FME's FPGA bridges.
+  * @pdata: fme platform device's pdata.
+  */
+ struct dfl_fme {
++	int pr_datawidth;
+ 	struct platform_device *mgr;
+ 	struct list_head region_list;
+ 	struct list_head bridge_list;
+diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+index a8b869e9e5b7..8851c6c893fc 100644
+--- a/drivers/fpga/dfl.h
++++ b/drivers/fpga/dfl.h
+@@ -331,6 +331,11 @@ static inline bool dfl_feature_is_port(void __iomem *base)
+ 		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_PORT);
+ }
+ 
++static inline u8 dfl_feature_revision(void __iomem *base)
++{
++	return (u8)FIELD_GET(DFH_REVISION, readq(base + DFH));
++}
++
+ /**
+  * struct dfl_fpga_enum_info - DFL FPGA enumeration information
+  *
 -- 
 2.22.0
 
