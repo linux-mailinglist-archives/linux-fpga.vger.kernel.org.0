@@ -2,74 +2,63 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2F55BCD6
-	for <lists+linux-fpga@lfdr.de>; Mon,  1 Jul 2019 15:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3325C84E
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Jul 2019 06:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728239AbfGANZM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 1 Jul 2019 09:25:12 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35867 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727009AbfGANZM (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 1 Jul 2019 09:25:12 -0400
-Received: by mail-pg1-f193.google.com with SMTP id c13so6061404pgg.3;
-        Mon, 01 Jul 2019 06:25:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=BolpC+dvtytKXBbmWUIWGyQQJiFM1T9QVGgjh2h+lAo=;
-        b=TxlqhtvXlBkFShE/qZ8R9tm4M3nUuRiTjrYLm75CyhKIhhjXqb+XF5m/QlU6L+14vj
-         sYfiDhy+wjHZ9xgpWYmjlxscArq7ukM0x17EGGMfhYP2SGCNmKs3cIjdf4DO9hYoIfgi
-         LK6fD0GL+Idt5W7wmHXdED0HS4Zzi3nY8v1RY2zBGSYxdKgLGyuQWEc89wt72oClaptC
-         IarTvPRPvyKLqWgCYSjWtpaotDyZL8qGPveBKBUhLUHax2Nn43hltTURPuX2Zlax44X1
-         x4vmmY8BR6lAW99uRfWkqIuhlXR+lOHVsKU+D+KWL6qMTIdC12oO4IXCkvmbGay3BPdX
-         Vo1Q==
+        id S1725922AbfGBEZz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 2 Jul 2019 00:25:55 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35371 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725780AbfGBEZz (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 2 Jul 2019 00:25:55 -0400
+Received: by mail-pl1-f195.google.com with SMTP id w24so8442963plp.2;
+        Mon, 01 Jul 2019 21:25:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BolpC+dvtytKXBbmWUIWGyQQJiFM1T9QVGgjh2h+lAo=;
-        b=E8d7jxpi6FelVhZVzGWHRdwON7vg4H8IRWsVVGfAKDPnS1QtSmoVbfJSLhRHutMZcD
-         ecwMuH8gtFR+N41YrpnDtxn/vq8hxfuv9E1XKZUtKG/SWD1smKJnwnfwCiKyxhGeIu/d
-         wXoqG2QUR01iOWWcADn49QipIeKO+cmBM+6N1uwo2kladdYh10kohCCqchaTquO4u9dS
-         9AC8mFetQvBb4Vy1OPNXfuZEJlIHKaidEpSY903DzJ+EKEtL8OJ1LMLEAtufY7tI3e+a
-         iZL2gFYcCXRjAmpg6esTAZoC7CPQjr40dZx9KIfEapffZedKnhBqebfR12+bh9Mkg5g/
-         e+uA==
-X-Gm-Message-State: APjAAAXq6e0VKf4NRAICKDlYVfaRNFvCsXguZ84wvRW92m0/hc/zby1C
-        oXa0vIbgjB0TjZBwaRmQpOs=
-X-Google-Smtp-Source: APXvYqwIzQ+pX6RKn7hsE9FVpbH8GC+fPYeUoyuhg5wMqA0a5MF9CJbPvm2ZsnOp/shT/hBLjN00KA==
-X-Received: by 2002:a17:90a:ba94:: with SMTP id t20mr32463290pjr.116.1561987511013;
-        Mon, 01 Jul 2019 06:25:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s20sm10260979pfe.169.2019.07.01.06.25.09
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Jul 2019 06:25:10 -0700 (PDT)
-Subject: Re: [PATCH v5 3/3] fpga: dfl: fme: add power management support
-To:     Wu Hao <hao.wu@intel.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linux-api@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        jdelvare@suse.com, atull@kernel.org, gregkh@linuxfoundation.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TK4L+e1p7WfqMPjmIlIO9/gCwaje8g7TPeddL9H98rM=;
+        b=Wac8ZGt9JJeHk7TAuAGU/bULIIxeBf0eJsfkU3zFFSSaG8yM1l3fVdtJXXfJ0vu/li
+         m5QfLN4/oW3ruPoetsZ5xzlUzCgd6hNT26GDrrf0yHY+/to+6kkeySYk+iJjE628DO4q
+         UGFEeXoT8ugDKcCr4Qlz4FYYDYuEVskdyaCB6YWxkb6IsbI15zKsS8hx51L2kUPgx5Gm
+         4TlHhgcClqGerJ/QbhPxGGSTPwnCMOcVBxnmGT8b+tpevWEDcNyMNCb3YMInko0ka8G6
+         sj/aYnfoDGy4a6NQfJi9lRgrX2fwr2Nf28UeDVsOhIIx6tGmZu1VIfF1T0l9QfyC/P4U
+         X5UA==
+X-Gm-Message-State: APjAAAUr/iHubSx4RcxxHA2lN/sH70dreGEe5w4hQcnRXkKHE+jxbt4e
+        98FuBgS9HlTc2i6+0WrazSc=
+X-Google-Smtp-Source: APXvYqwsSlrc4moRfO+seqKCTcNnGB17m3ptLmEiDHyh29CmfWA+pj6Sn1dXWcpG1xqRz3210e6Vkg==
+X-Received: by 2002:a17:902:2865:: with SMTP id e92mr32440638plb.264.1562041554118;
+        Mon, 01 Jul 2019 21:25:54 -0700 (PDT)
+Received: from localhost ([2601:647:5b80:29f7:aba9:7dd5:dfa6:e012])
+        by smtp.gmail.com with ESMTPSA id s66sm4170200pfs.8.2019.07.01.21.25.52
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 01 Jul 2019 21:25:53 -0700 (PDT)
+Date:   Mon, 1 Jul 2019 21:25:50 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Wu Hao <hao.wu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        atull@kernel.org, gregkh@linuxfoundation.org,
         Luwei Kang <luwei.kang@intel.com>,
         Xu Yilun <yilun.xu@intel.com>
+Subject: Re: [PATCH v5 3/3] fpga: dfl: fme: add power management support
+Message-ID: <20190702042550.GA21853@archbook>
 References: <1561963027-4213-1-git-send-email-hao.wu@intel.com>
  <1561963027-4213-4-git-send-email-hao.wu@intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <af2d0724-ac7d-c35a-b640-3f8c3fb35ad4@roeck-us.net>
-Date:   Mon, 1 Jul 2019 06:25:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <1561963027-4213-4-git-send-email-hao.wu@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 6/30/19 11:37 PM, Wu Hao wrote:
+Hi Hao,
+
+On Mon, Jul 01, 2019 at 02:37:07PM +0800, Wu Hao wrote:
 > This patch adds support for power management private feature under
 > FPGA Management Engine (FME). This private feature driver registers
 > a hwmon for power (power1_input), thresholds information, e.g.
@@ -81,52 +70,51 @@ On 6/30/19 11:37 PM, Wu Hao wrote:
 > Signed-off-by: Luwei Kang <luwei.kang@intel.com>
 > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 > Signed-off-by: Wu Hao <hao.wu@intel.com>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Moritz Fischer <mdf@kernel.org>
 
 > ---
 > v2: create a dfl_fme_power hwmon to expose power sysfs interfaces.
->      move all sysfs interfaces under hwmon
->          consumed          --> hwmon power1_input
->          threshold1        --> hwmon power1_cap
->          threshold2        --> hwmon power1_crit
->          threshold1_status --> hwmon power1_cap_status
->          threshold2_status --> hwmon power1_crit_status
->          xeon_limit        --> hwmon power1_xeon_limit
->          fpga_limit        --> hwmon power1_fpga_limit
->          ltr               --> hwmon power1_ltr
+>     move all sysfs interfaces under hwmon
+>         consumed          --> hwmon power1_input
+>         threshold1        --> hwmon power1_cap
+>         threshold2        --> hwmon power1_crit
+>         threshold1_status --> hwmon power1_cap_status
+>         threshold2_status --> hwmon power1_crit_status
+>         xeon_limit        --> hwmon power1_xeon_limit
+>         fpga_limit        --> hwmon power1_fpga_limit
+>         ltr               --> hwmon power1_ltr
 > v3: rename some hwmon sysfs interfaces to follow hwmon ABI.
 > 	power1_cap         --> power1_max
 > 	power1_cap_status  --> power1_max_alarm
 > 	power1_crit_status --> power1_crit_alarm
->      update sysfs doc for above sysfs interface changes.
->      replace scnprintf with sprintf in sysfs interface.
+>     update sysfs doc for above sysfs interface changes.
+>     replace scnprintf with sprintf in sysfs interface.
 > v4: use HWMON_CHANNEL_INFO.
->      update date in sysfs doc.
+>     update date in sysfs doc.
 > v5: clamp threshold inputs in power_hwmon_write function.
->      update sysfs doc as threshold inputs are clamped now.
->      add more descriptions to ltr sysfs interface.
+>     update sysfs doc as threshold inputs are clamped now.
+>     add more descriptions to ltr sysfs interface.
 > ---
->   Documentation/ABI/testing/sysfs-platform-dfl-fme |  68 +++++++
->   drivers/fpga/dfl-fme-main.c                      | 216 +++++++++++++++++++++++
->   2 files changed, 284 insertions(+)
+>  Documentation/ABI/testing/sysfs-platform-dfl-fme |  68 +++++++
+>  drivers/fpga/dfl-fme-main.c                      | 216 +++++++++++++++++++++++
+>  2 files changed, 284 insertions(+)
 > 
 > diff --git a/Documentation/ABI/testing/sysfs-platform-dfl-fme b/Documentation/ABI/testing/sysfs-platform-dfl-fme
 > index 2cd17dc..5c2e49d 100644
 > --- a/Documentation/ABI/testing/sysfs-platform-dfl-fme
 > +++ b/Documentation/ABI/testing/sysfs-platform-dfl-fme
 > @@ -127,6 +127,7 @@ Contact:	Wu Hao <hao.wu@intel.com>
->   Description:	Read-Only. Read this file to get the name of hwmon device, it
->   		supports values:
->   		    'dfl_fme_thermal' - thermal hwmon device name
+>  Description:	Read-Only. Read this file to get the name of hwmon device, it
+>  		supports values:
+>  		    'dfl_fme_thermal' - thermal hwmon device name
 > +		    'dfl_fme_power'   - power hwmon device name
->   
->   What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_input
->   Date:		June 2019
+>  
+>  What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_input
+>  Date:		June 2019
 > @@ -183,3 +184,70 @@ Description:	Read-Only. Read this file to get the policy of hardware threshold1
->   		(see 'temp1_max'). It only supports two values (policies):
->   		    0 - AP2 state (90% throttling)
->   		    1 - AP1 state (50% throttling)
+>  		(see 'temp1_max'). It only supports two values (policies):
+>  		    0 - AP2 state (90% throttling)
+>  		    1 - AP1 state (50% throttling)
 > +
 > +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_input
 > +Date:		June 2019
@@ -199,9 +187,9 @@ Acked-by: Guenter Roeck <linux@roeck-us.net>
 > --- a/drivers/fpga/dfl-fme-main.c
 > +++ b/drivers/fpga/dfl-fme-main.c
 > @@ -400,6 +400,218 @@ static void fme_thermal_mgmt_uinit(struct platform_device *pdev,
->   	.uinit = fme_thermal_mgmt_uinit,
->   };
->   
+>  	.uinit = fme_thermal_mgmt_uinit,
+>  };
+>  
 > +#define FME_PWR_STATUS		0x8
 > +#define FME_LATENCY_TOLERANCE	BIT_ULL(18)
 > +#define PWR_CONSUMED		GENMASK_ULL(17, 0)
@@ -414,19 +402,22 @@ Acked-by: Guenter Roeck <linux@roeck-us.net>
 > +	.uinit = fme_power_mgmt_uinit,
 > +};
 > +
->   static struct dfl_feature_driver fme_feature_drvs[] = {
->   	{
->   		.id_table = fme_hdr_id_table,
+>  static struct dfl_feature_driver fme_feature_drvs[] = {
+>  	{
+>  		.id_table = fme_hdr_id_table,
 > @@ -418,6 +630,10 @@ static void fme_thermal_mgmt_uinit(struct platform_device *pdev,
->   		.ops = &fme_thermal_mgmt_ops,
->   	},
->   	{
+>  		.ops = &fme_thermal_mgmt_ops,
+>  	},
+>  	{
 > +		.id_table = fme_power_mgmt_id_table,
 > +		.ops = &fme_power_mgmt_ops,
 > +	},
 > +	{
->   		.ops = NULL,
->   	},
->   };
+>  		.ops = NULL,
+>  	},
+>  };
+> -- 
+> 1.8.3.1
 > 
-
+Thanks,
+Moritz
