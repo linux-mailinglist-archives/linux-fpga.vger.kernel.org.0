@@ -2,86 +2,103 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F167D62CDE
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jul 2019 02:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40D06409F
+	for <lists+linux-fpga@lfdr.de>; Wed, 10 Jul 2019 07:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725912AbfGIAFa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 8 Jul 2019 20:05:30 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:45924 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725889AbfGIAFa (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 8 Jul 2019 20:05:30 -0400
-Received: by mail-pg1-f193.google.com with SMTP id o13so8459706pgp.12;
-        Mon, 08 Jul 2019 17:05:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CYSKPajnikQfrdnXRZykFulg5ENG+KCQGBUGtfPGZlg=;
-        b=XySjreBKv+XusN+hkcVisz9az8El9Zu66L6f9mfkraPNdKikw7BMMDAioD5TVC0fJI
-         KnQf7tbBAmZB41FIaQRSUfoYi2Ct9rsrAVYbjBAAUOqHE71qDDL439VN3DKcEf7Rbfur
-         aiQxmsyfdAjSH4RH18iLdyRPAZaMCJSR2yWRupqx9QF8Yo6BSgw1AGGPsNnYjkm8EQTt
-         E3Oi5GOoYux9mihB+u4sZgjOvGbBEA5tcDN3z3I0O6bLXY/ujQCn/ierw+1OK2/Gk5Kp
-         529sJG+QHblIgqJP9dG72BMd2E0/PXTMKC5tOFlg3P0CVGA5h/9ha9bbknBhkewMgzRg
-         0HKg==
-X-Gm-Message-State: APjAAAVbot9LRdohtFUoZMS+qBXXkIDuM8xZAEF+AGEmmDXJaRoN6aTU
-        eNDYmQseW7nhapeHQTcz3wM=
-X-Google-Smtp-Source: APXvYqw4OK/VNHzcsYf5IVMszz6XiUhKsoIQPlbh1mptNrGz8PLaicjkWYPvmUMoTQX4f7gMRu5fDA==
-X-Received: by 2002:a17:90a:ab01:: with SMTP id m1mr27995286pjq.69.1562630729425;
-        Mon, 08 Jul 2019 17:05:29 -0700 (PDT)
-Received: from localhost ([2601:647:5b80:29f7:aba9:7dd5:dfa6:e012])
-        by smtp.gmail.com with ESMTPSA id i6sm15938258pgi.40.2019.07.08.17.05.28
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 08 Jul 2019 17:05:28 -0700 (PDT)
-Date:   Mon, 8 Jul 2019 17:05:27 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     mdf@kernel.org, stillcompiling@gmail.com, atull@kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        id S1726188AbfGJFYg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 10 Jul 2019 01:24:36 -0400
+Received: from mga18.intel.com ([134.134.136.126]:11139 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725932AbfGJFYg (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 10 Jul 2019 01:24:36 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jul 2019 22:24:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,473,1557212400"; 
+   d="scan'208";a="364363437"
+Received: from hao-dev.bj.intel.com (HELO localhost) ([10.238.157.65])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Jul 2019 22:24:33 -0700
+Date:   Wed, 10 Jul 2019 13:07:46 +0800
+From:   Wu Hao <hao.wu@intel.com>
+To:     gregkh@linuxfoundation.org, mdf@kernel.org,
         linux-fpga@vger.kernel.org
-Subject: Re: [PATCH] fpga-manager: altera-ps-spi: Fix build error
-Message-ID: <20190709000527.GA1587@archbook>
-References: <20190708071356.50928-1-yuehaibing@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        atull@kernel.org
+Subject: Re: [PATCH v2 00/11] FPGA DFL updates
+Message-ID: <20190710050746.GA28620@hao-dev>
+References: <1562286238-11413-1-git-send-email-hao.wu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190708071356.50928-1-yuehaibing@huawei.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <1562286238-11413-1-git-send-email-hao.wu@intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Jul 08, 2019 at 03:13:56PM +0800, YueHaibing wrote:
-> If BITREVERSE is m and FPGA_MGR_ALTERA_PS_SPI is y,
-> build fails:
+On Fri, Jul 05, 2019 at 08:23:47AM +0800, Wu Hao wrote:
+> Hi Greg / Moritz
 > 
-> drivers/fpga/altera-ps-spi.o: In function `altera_ps_write':
-> altera-ps-spi.c:(.text+0x4ec): undefined reference to `byte_rev_table'
+> This is v2 patchset which adds more features to FPGA DFL. This patchset
+> is made on top of patch[1] and char-misc-next tree. Documentation patch
+> for DFL is dropped from this patchset, and will resubmit it later to
+> avoid conflict.
+
+Hi Greg,
+
+Did you get a chance to take a look at this new version to see if these
+patches are good to take?
+
+Hope we can catch up with the merge window.
+
+Thanks
+Hao
+
 > 
-> Select BITREVERSE to fix this.
+> Main changes from v1:
+>   - remove DRV/MODULE_VERSION modifications. (patch #1, #3, #4, #6)
+>   - remove argsz from new ioctls. (patch #2)
+>   - replace sysfs_create/remove_* with device_add/remove_* for sysfs entries.
+>     (patch #5, #8, #11)
 > 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: fcfe18f885f6 ("fpga-manager: altera-ps-spi: use bitrev8x4")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  drivers/fpga/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+> [1] [PATCH] fpga: dfl: use driver core functions, not sysfs ones.
+>     https://lkml.org/lkml/2019/7/4/36
 > 
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 474f304..cdd4f73 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -40,6 +40,7 @@ config ALTERA_PR_IP_CORE_PLAT
->  config FPGA_MGR_ALTERA_PS_SPI
->  	tristate "Altera FPGA Passive Serial over SPI"
->  	depends on SPI
-> +	select BITREVERSE
->  	help
->  	  FPGA manager driver support for Altera Arria/Cyclone/Stratix
->  	  using the passive serial interface over SPI.
+> Wu Hao (11):
+>   fpga: dfl: fme: support 512bit data width PR
+>   fpga: dfl: fme: add DFL_FPGA_FME_PORT_RELEASE/ASSIGN ioctl support.
+>   fpga: dfl: pci: enable SRIOV support.
+>   fpga: dfl: afu: add AFU state related sysfs interfaces
+>   fpga: dfl: afu: add userclock sysfs interfaces.
+>   fpga: dfl: add id_table for dfl private feature driver
+>   fpga: dfl: afu: export __port_enable/disable function.
+>   fpga: dfl: afu: add error reporting support.
+>   fpga: dfl: afu: add STP (SignalTap) support
+>   fpga: dfl: fme: add capability sysfs interfaces
+>   fpga: dfl: fme: add global error reporting support
+> 
+>  Documentation/ABI/testing/sysfs-platform-dfl-fme  |  98 ++++++
+>  Documentation/ABI/testing/sysfs-platform-dfl-port | 104 ++++++
+>  drivers/fpga/Makefile                             |   3 +-
+>  drivers/fpga/dfl-afu-error.c                      | 225 +++++++++++++
+>  drivers/fpga/dfl-afu-main.c                       | 328 +++++++++++++++++-
+>  drivers/fpga/dfl-afu.h                            |   7 +
+>  drivers/fpga/dfl-fme-error.c                      | 385 ++++++++++++++++++++++
+>  drivers/fpga/dfl-fme-main.c                       |  93 +++++-
+>  drivers/fpga/dfl-fme-mgr.c                        | 110 ++++++-
+>  drivers/fpga/dfl-fme-pr.c                         |  50 ++-
+>  drivers/fpga/dfl-fme.h                            |   7 +-
+>  drivers/fpga/dfl-pci.c                            |  39 +++
+>  drivers/fpga/dfl.c                                | 166 +++++++++-
+>  drivers/fpga/dfl.h                                |  54 ++-
+>  include/uapi/linux/fpga-dfl.h                     |  19 ++
+>  15 files changed, 1617 insertions(+), 71 deletions(-)
+>  create mode 100644 drivers/fpga/dfl-afu-error.c
+>  create mode 100644 drivers/fpga/dfl-fme-error.c
+> 
 > -- 
-> 2.7.4
-> 
-> 
-Acked-by: Moritz Fischer <mdf@kernel.org>
+> 1.8.3.1
