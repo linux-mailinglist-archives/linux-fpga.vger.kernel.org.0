@@ -2,188 +2,93 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7186F6D9
-	for <lists+linux-fpga@lfdr.de>; Mon, 22 Jul 2019 02:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF129710CF
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Jul 2019 07:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728352AbfGVA7k (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 21 Jul 2019 20:59:40 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:34371 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728342AbfGVA7k (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 21 Jul 2019 20:59:40 -0400
-Received: by mail-pg1-f193.google.com with SMTP id n9so10598000pgc.1;
-        Sun, 21 Jul 2019 17:59:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pUVIHMC+qU6cGfGTmxWkAdd322WxxOroxdblKZHZ2h4=;
-        b=qDbIHinQcCGUB1mEms/T1lrtvY5SAAXiqQBTW2liDMt5RylF+yMJpxKksHX65AxHIS
-         ZpjzqKIfVxpD3evv5T28XpCwQLDcyQ+CeysY7iNnKgyILPPHd+4Vw//b9pacyROMOkkV
-         D2wuVeYoowZnC9zpp97SAESitxVBYKXPfdKYTMWntcUM9Uadu5R1iyXr5E1aBhV2LMpE
-         lbK/TAGhRvAXB83USK4evRhi67SvAxIJ6jMnTt8DDVW4zxaNhgX0C2pA+wsGc2mVuUBt
-         IuGnSBwMv4dXX1FBXlfJm05FHmzHoFd7BPrah/s554g/9S8Rim4G2btxLUze18yzIcZK
-         ir8g==
-X-Gm-Message-State: APjAAAXhjv3CNljrQA00+WTWNJTcOHPf/An4Webr1l8ff3ppgVTqyCEv
-        teiwr872158U+Z7ozmJaG6o=
-X-Google-Smtp-Source: APXvYqzkYPIOfim9Sgsf8uoSSlevl6wj/Gav4RnLWZBllAVWYqwWyMNOHhMI4wfYeyEYKyk6gxktiQ==
-X-Received: by 2002:a63:d301:: with SMTP id b1mr61366797pgg.379.1563757179509;
-        Sun, 21 Jul 2019 17:59:39 -0700 (PDT)
-Received: from localhost ([2601:647:5b80:29f7:aba9:7dd5:dfa6:e012])
-        by smtp.gmail.com with ESMTPSA id b29sm63225519pfr.159.2019.07.21.17.59.38
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 21 Jul 2019 17:59:38 -0700 (PDT)
-Date:   Sun, 21 Jul 2019 17:59:38 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     thor.thayer@linux.intel.com
-Cc:     mdf@kernel.org, richard.gong@linux.intel.com, agust@denx.de,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 2/3] fpga: altera-cvp: Preparation for V2 parts.
-Message-ID: <20190722005938.GB2583@archbook>
-References: <1563317287-18834-1-git-send-email-thor.thayer@linux.intel.com>
- <1563317287-18834-3-git-send-email-thor.thayer@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1563317287-18834-3-git-send-email-thor.thayer@linux.intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1731977AbfGWFJ4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 23 Jul 2019 01:09:56 -0400
+Received: from mga05.intel.com ([192.55.52.43]:1853 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731849AbfGWFJz (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 23 Jul 2019 01:09:55 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jul 2019 22:09:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,297,1559545200"; 
+   d="scan'208";a="196992280"
+Received: from hao-dev.bj.intel.com ([10.238.157.65])
+  by fmsmga002.fm.intel.com with ESMTP; 22 Jul 2019 22:09:54 -0700
+From:   Wu Hao <hao.wu@intel.com>
+To:     gregkh@linuxfoundation.org, mdf@kernel.org,
+        linux-fpga@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, atull@kernel.org,
+        Wu Hao <hao.wu@intel.com>
+Subject: [PATCH v3 00/12] FPGA DFL updates
+Date:   Tue, 23 Jul 2019 12:51:23 +0800
+Message-Id: <1563857495-26692-1-git-send-email-hao.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Thor,
+Hi Greg
 
-On Tue, Jul 16, 2019 at 05:48:06PM -0500, thor.thayer@linux.intel.com wrote:
-> From: Thor Thayer <thor.thayer@linux.intel.com>
-> 
-> In preparation for adding newer V2 parts that use a FIFO,
-> reorganize altera_cvp_chk_error() and change the write
-> function to block based.
-> V2 parts have a block size matching the FIFO while older
-> V1 parts write a 32 bit word at a time.
-> 
-> Signed-off-by: Thor Thayer <thor.thayer@linux.intel.com>
-> ---
-> v2 Remove inline function declaration
->    Reverse Christmas Tree format for local variables
-> ---
->  drivers/fpga/altera-cvp.c | 72 ++++++++++++++++++++++++++++++-----------------
->  1 file changed, 46 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-> index b78c90580071..37419d6b9915 100644
-> --- a/drivers/fpga/altera-cvp.c
-> +++ b/drivers/fpga/altera-cvp.c
-> @@ -140,6 +140,41 @@ static int altera_cvp_wait_status(struct altera_cvp_conf *conf, u32 status_mask,
->  	return -ETIMEDOUT;
->  }
->  
-> +static int altera_cvp_chk_error(struct fpga_manager *mgr, size_t bytes)
-> +{
-> +	struct altera_cvp_conf *conf = mgr->priv;
-> +	u32 val;
-> +
-> +	/* STEP 10 (optional) - check CVP_CONFIG_ERROR flag */
-> +	altera_read_config_dword(conf, VSE_CVP_STATUS, &val);
-Same as in the other email, why can we ignore return values here. I
-think the original code probably did that already.
-> +	if (val & VSE_CVP_STATUS_CFG_ERR) {
-> +		dev_err(&mgr->dev, "CVP_CONFIG_ERROR after %zu bytes!\n",
-> +			bytes);
-> +		return -EPROTO;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int altera_cvp_send_block(struct altera_cvp_conf *conf,
-> +				 const u32 *data, size_t len)
-> +{
-> +	u32 mask, words = len / sizeof(u32);
-> +	int i, remainder;
-> +
-> +	for (i = 0; i < words; i++)
-> +		conf->write_data(conf, *data++);
-> +
-> +	/* write up to 3 trailing bytes, if any */
-> +	remainder = len % sizeof(u32);
-> +	if (remainder) {
-> +		mask = BIT(remainder * 8) - 1;
-> +		if (mask)
-> +			conf->write_data(conf, *data & mask);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int altera_cvp_teardown(struct fpga_manager *mgr,
->  			       struct fpga_image_info *info)
->  {
-> @@ -262,39 +297,29 @@ static int altera_cvp_write_init(struct fpga_manager *mgr,
->  	return 0;
->  }
->  
-> -static inline int altera_cvp_chk_error(struct fpga_manager *mgr, size_t bytes)
-> -{
-> -	struct altera_cvp_conf *conf = mgr->priv;
-> -	u32 val;
-> -
-> -	/* STEP 10 (optional) - check CVP_CONFIG_ERROR flag */
-> -	altera_read_config_dword(conf, VSE_CVP_STATUS, &val);
-> -	if (val & VSE_CVP_STATUS_CFG_ERR) {
-> -		dev_err(&mgr->dev, "CVP_CONFIG_ERROR after %zu bytes!\n",
-> -			bytes);
-> -		return -EPROTO;
-> -	}
-> -	return 0;
-> -}
-> -
->  static int altera_cvp_write(struct fpga_manager *mgr, const char *buf,
->  			    size_t count)
->  {
->  	struct altera_cvp_conf *conf = mgr->priv;
-> +	size_t done, remaining, len;
->  	const u32 *data;
-> -	size_t done, remaining;
->  	int status = 0;
-> -	u32 mask;
->  
->  	/* STEP 9 - write 32-bit data from RBF file to CVP data register */
->  	data = (u32 *)buf;
->  	remaining = count;
->  	done = 0;
->  
-> -	while (remaining >= 4) {
-> -		conf->write_data(conf, *data++);
-> -		done += 4;
-> -		remaining -= 4;
-> +	while (remaining) {
-> +		if (remaining >= sizeof(u32))
-> +			len = sizeof(u32);
-> +		else
-> +			len = remaining;
-> +
-> +		altera_cvp_send_block(conf, data, len);
-> +		data++;
-> +		done += len;
-> +		remaining -= len;
->  
->  		/*
->  		 * STEP 10 (optional) and STEP 11
-> @@ -312,11 +337,6 @@ static int altera_cvp_write(struct fpga_manager *mgr, const char *buf,
->  		}
->  	}
->  
-> -	/* write up to 3 trailing bytes, if any */
-> -	mask = BIT(remaining * 8) - 1;
-> -	if (mask)
-> -		conf->write_data(conf, *data & mask);
-> -
->  	if (altera_cvp_chkcfg)
->  		status = altera_cvp_chk_error(mgr, count);
->  
-> -- 
-> 2.7.4
-> 
-Cheers,
-Moritz
+This is v3 patchset which adds more features to FPGA DFL. This patchset
+is made on top of patch[1] and 5.3-rc1 tree. Documentation patch for DFL
+is added back to this patchset
+
+Main changes from v2:
+  - update kernel version/date in sysfs doc (patch #4, #5, #8, #10, #11).
+  - add back Documentation patch (patch #12).
+
+Main changes from v1:
+  - remove DRV/MODULE_VERSION modifications. (patch #1, #3, #4, #6)
+  - remove argsz from new ioctls. (patch #2)
+  - replace sysfs_create/remove_* with device_add/remove_* for sysfs entries.
+    (patch #5, #8, #11)
+
+[1] [PATCH] fpga: dfl: use driver core functions, not sysfs ones.
+    https://lkml.org/lkml/2019/7/4/36
+
+Wu Hao (12):
+  fpga: dfl: fme: support 512bit data width PR
+  fpga: dfl: fme: add DFL_FPGA_FME_PORT_RELEASE/ASSIGN ioctl support.
+  fpga: dfl: pci: enable SRIOV support.
+  fpga: dfl: afu: add AFU state related sysfs interfaces
+  fpga: dfl: afu: add userclock sysfs interfaces.
+  fpga: dfl: add id_table for dfl private feature driver
+  fpga: dfl: afu: export __port_enable/disable function.
+  fpga: dfl: afu: add error reporting support.
+  fpga: dfl: afu: add STP (SignalTap) support
+  fpga: dfl: fme: add capability sysfs interfaces
+  fpga: dfl: fme: add global error reporting support
+  Documentation: fpga: dfl: add descriptions for virtualization and new
+    interfaces.
+
+ Documentation/ABI/testing/sysfs-platform-dfl-fme  |  98 ++++++
+ Documentation/ABI/testing/sysfs-platform-dfl-port | 104 ++++++
+ Documentation/fpga/dfl.rst                        | 105 ++++++
+ drivers/fpga/Makefile                             |   3 +-
+ drivers/fpga/dfl-afu-error.c                      | 225 +++++++++++++
+ drivers/fpga/dfl-afu-main.c                       | 328 +++++++++++++++++-
+ drivers/fpga/dfl-afu.h                            |   7 +
+ drivers/fpga/dfl-fme-error.c                      | 385 ++++++++++++++++++++++
+ drivers/fpga/dfl-fme-main.c                       |  93 +++++-
+ drivers/fpga/dfl-fme-mgr.c                        | 110 ++++++-
+ drivers/fpga/dfl-fme-pr.c                         |  50 ++-
+ drivers/fpga/dfl-fme.h                            |   7 +-
+ drivers/fpga/dfl-pci.c                            |  39 +++
+ drivers/fpga/dfl.c                                | 166 +++++++++-
+ drivers/fpga/dfl.h                                |  54 ++-
+ include/uapi/linux/fpga-dfl.h                     |  19 ++
+ 16 files changed, 1722 insertions(+), 71 deletions(-)
+ create mode 100644 drivers/fpga/dfl-afu-error.c
+ create mode 100644 drivers/fpga/dfl-fme-error.c
+
+-- 
+1.8.3.1
+
