@@ -2,173 +2,99 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B54E731DB
-	for <lists+linux-fpga@lfdr.de>; Wed, 24 Jul 2019 16:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B60A73249
+	for <lists+linux-fpga@lfdr.de>; Wed, 24 Jul 2019 16:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbfGXOjg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 24 Jul 2019 10:39:36 -0400
-Received: from mga18.intel.com ([134.134.136.126]:37257 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725870AbfGXOjg (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 24 Jul 2019 10:39:36 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Jul 2019 07:39:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,303,1559545200"; 
-   d="scan'208";a="197519558"
-Received: from hao-dev.bj.intel.com (HELO localhost) ([10.238.157.65])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jul 2019 07:39:32 -0700
-Date:   Wed, 24 Jul 2019 22:22:35 +0800
-From:   Wu Hao <hao.wu@intel.com>
+        id S1728318AbfGXOzQ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 24 Jul 2019 10:55:16 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:41506 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728069AbfGXOzQ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 24 Jul 2019 10:55:16 -0400
+Received: by mail-pl1-f195.google.com with SMTP id m9so22020356pls.8
+        for <linux-fpga@vger.kernel.org>; Wed, 24 Jul 2019 07:55:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=AnMjYMyYNOp0m8tnXIZkBUykehYk+b+OcZJQjrPSv9E=;
+        b=fsKb9MEvofOYhzt8Z1z2gshVCC8uon5km8YYDfORKgwpI94egI9WCAggvNEFebd7zA
+         QDGfS9kiMrqg/CEBwbkZ9xY08XjQYSIwi0A8O4qBNfDAFMZHc0737dO0hDz8aVKuhXVE
+         VSLtOA8Vph8aegnRqVtfdbBoi9R5muViLuUFk1d+ExEfmakqBCPFZaG9bxSk/mRcjABH
+         y66IvrPs6NsYMC7UNSzgfdIeI9BEN6YRh20ldqY9QHn7SfWzcOS89uGqn1qy//XSzUKO
+         CniCn5c9BNBzUYzJNn/x2lzYnMsSIy4II5Sx3eDQKxs2DTzgOFjDw9jzJDjud4GNz7vZ
+         3n2Q==
+X-Gm-Message-State: APjAAAXhRn69U3OzP60Tg0LGlgkz+LMIOwr/9AUry0+Rx61/FuqrDHDK
+        C8pe9UsPkda0wD7yBesZZHreNA==
+X-Google-Smtp-Source: APXvYqwjv64SetaHu6CfG+LpB6Vaz6OsESW8kZgLdikVzQVkAutUKDOV4fTrsfrAwv7QU0vnyUrZxA==
+X-Received: by 2002:a17:902:9a84:: with SMTP id w4mr84048626plp.160.1563980114929;
+        Wed, 24 Jul 2019 07:55:14 -0700 (PDT)
+Received: from localhost ([2601:647:5b80:29f7:1bdd:d748:9a4e:8083])
+        by smtp.gmail.com with ESMTPSA id u7sm41658770pgr.94.2019.07.24.07.55.13
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 24 Jul 2019 07:55:14 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 07:55:13 -0700
+From:   Moritz Fischer <mdf@kernel.org>
 To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, atull@kernel.org,
-        Ananda Ravuri <ananda.ravuri@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>
-Subject: Re: [PATCH v3 01/12] fpga: dfl: fme: support 512bit data width PR
-Message-ID: <20190724142235.GE8463@hao-dev>
-References: <1563857495-26692-1-git-send-email-hao.wu@intel.com>
- <1563857495-26692-2-git-send-email-hao.wu@intel.com>
- <20190724093532.GB29532@kroah.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, broonie@kernel.org
+Subject: Re: [GIT PULL] FPGA Manager fix for 5.3
+Message-ID: <20190724145513.GA24455@archbox>
+References: <20190724052012.GA3140@archbox>
+ <20190724072056.GA27472@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190724093532.GB29532@kroah.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190724072056.GA27472@kroah.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Jul 24, 2019 at 11:35:32AM +0200, Greg KH wrote:
-> On Tue, Jul 23, 2019 at 12:51:24PM +0800, Wu Hao wrote:
-> > In early partial reconfiguration private feature, it only
-> > supports 32bit data width when writing data to hardware for
-> > PR. 512bit data width PR support is an important optimization
-> > for some specific solutions (e.g. XEON with FPGA integrated),
-> > it allows driver to use AVX512 instruction to improve the
-> > performance of partial reconfiguration. e.g. programming one
-> > 100MB bitstream image via this 512bit data width PR hardware
-> > only takes ~300ms, but 32bit revision requires ~3s per test
-> > result.
+On Wed, Jul 24, 2019 at 09:20:56AM +0200, Greg KH wrote:
+> On Tue, Jul 23, 2019 at 10:20:12PM -0700, Moritz Fischer wrote:
+> > The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b:
 > > 
-> > Please note now this optimization is only done on revision 2
-> > of this PR private feature which is only used in integrated
-> > solution that AVX512 is always supported. This revision 2
-> > hardware doesn't support 32bit PR.
+> >   Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
 > > 
-> > Signed-off-by: Ananda Ravuri <ananda.ravuri@intel.com>
-> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Wu Hao <hao.wu@intel.com>
-> > Acked-by: Alan Tull <atull@kernel.org>
+> > are available in the Git repository at:
+> > 
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git tags/fixes-for-5.3
+> > 
+> > for you to fetch changes up to c3aefa0b8f54e8c7967191e546a11019bc060fe6:
+> > 
+> >   fpga-manager: altera-ps-spi: Fix build error (2019-07-23 17:29:17 -0700)
+> > 
+> > ----------------------------------------------------------------
+> > FPGA Manager fixes for 5.3
+> > 
+> > Hi Greg,
+> > 
+> > this is only one (late) bugfix for 5.3 that fixes a build error,
+> > when altera-ps-spi is built as builtin while a dependency is built as a
+> > module.
+> > 
+> > This has been on the list for a while and I've reviewed it.
+> > 
 > > Signed-off-by: Moritz Fischer <mdf@kernel.org>
-> > ---
-> > v2: remove DRV/MODULE_VERSION modifications
-> > ---
-> >  drivers/fpga/dfl-fme-mgr.c | 110 ++++++++++++++++++++++++++++++++++++++-------
-> >  drivers/fpga/dfl-fme-pr.c  |  43 +++++++++++-------
-> >  drivers/fpga/dfl-fme.h     |   2 +
-> >  drivers/fpga/dfl.h         |   5 +++
-> >  4 files changed, 129 insertions(+), 31 deletions(-)
-> > 
-> > diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
-> > index b3f7eee..46e17f0 100644
-> > --- a/drivers/fpga/dfl-fme-mgr.c
-> > +++ b/drivers/fpga/dfl-fme-mgr.c
-> > @@ -22,6 +22,7 @@
-> >  #include <linux/io-64-nonatomic-lo-hi.h>
-> >  #include <linux/fpga/fpga-mgr.h>
-> >  
-> > +#include "dfl.h"
-> >  #include "dfl-fme-pr.h"
-> >  
-> >  /* FME Partial Reconfiguration Sub Feature Register Set */
-> > @@ -30,6 +31,7 @@
-> >  #define FME_PR_STS		0x10
-> >  #define FME_PR_DATA		0x18
-> >  #define FME_PR_ERR		0x20
-> > +#define FME_PR_512_DATA		0x40 /* Data Register for 512bit datawidth PR */
-> >  #define FME_PR_INTFC_ID_L	0xA8
-> >  #define FME_PR_INTFC_ID_H	0xB0
-> >  
-> > @@ -67,8 +69,43 @@
-> >  #define PR_WAIT_TIMEOUT   8000000
-> >  #define PR_HOST_STATUS_IDLE	0
-> >  
-> > +#if defined(CONFIG_X86) && defined(CONFIG_AS_AVX512)
-> > +
-> > +#include <linux/cpufeature.h>
-> > +#include <asm/fpu/api.h>
-> > +
-> > +static inline int is_cpu_avx512_enabled(void)
-> > +{
-> > +	return cpu_feature_enabled(X86_FEATURE_AVX512F);
-> > +}
 > 
-> That's a very arch specific function, why would a driver ever care about
-> this?
-
-Yes, this is only applied to a specific FPGA solution, which FPGA
-has been integrated with XEON. Hardware indicates this using register
-to software. As it's cpu integrated solution, so CPU always has this
-AVX512 capability. The only check we do, is make sure this is not
-manually disabled by kernel.
-
-With this hardware, software could use AVX512 to accelerate the FPGA
-partial reconfiguration as mentioned in the patch commit message.
-It brings performance benifits to people who uses it. This is only one
-optimization (512 vs 32bit data write to hw) for a specific hardware.
-
-For other discrete solutions, e.g. FPGA PCIe Card, this is not used
-at all as driver does check hardware register to avoid any AVX512 code.
-
+> This message is not in the signed tag in the repo, are you sure you make
+> this correctly?  All I see is the first line:
+> 	FPGA Manager fixes for 5.3
 > 
-> > +
-> > +static inline void copy512(const void *src, void __iomem *dst)
-> > +{
-> > +	kernel_fpu_begin();
-> > +
-> > +	asm volatile("vmovdqu64 (%0), %%zmm0;"
-> > +		     "vmovntdq %%zmm0, (%1);"
-> > +		     :
-> > +		     : "r"(src), "r"(dst)
-> > +		     : "memory");
-> > +
-> > +	kernel_fpu_end();
-> > +}
-> 
-> Shouldn't this be an arch-specific function somewhere?  Burying this in
-> a random driver is not ok.  Please make this generic for all systems.
+> And it's a singluar "fix" :)
 
-If more people need the same avx operation like this in kernel, then maybe
-this can be moved to some arch-specific lib code somewhere as some common
-functions to everybody, but i am not very sure if this is the case. Let me
-think about this more.
+Yeah, over the top. I wanted to figure out the workflow with an easy
+example ... and ... learned something again :)
 
-> 
-> > +#else
-> > +static inline int is_cpu_avx512_enabled(void)
-> > +{
-> > +	return 0;
-> > +}
-> > +
-> > +static inline void copy512(const void *src, void __iomem *dst)
-> > +{
-> > +	WARN_ON_ONCE(1);
-> 
-> Are you trying to get reports from syzbot?  :)
+So basically the message above is what is supposed to go into the tag
+message?
 
-Oh.. no.. I will remove it. :)
+> Care to fix this up and resend, or, just send the single patch as email,
+> as that's probably easier here.
 
-Thank you very much!
+I've seen you've queued it up the patch by hand, so next time.
 
-Hao
-
-> 
-> Please fix this all up.
-> 
-> greg k-h
+Thanks,
+Moritz
