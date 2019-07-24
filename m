@@ -2,145 +2,184 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D185672B81
-	for <lists+linux-fpga@lfdr.de>; Wed, 24 Jul 2019 11:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC66D72B8D
+	for <lists+linux-fpga@lfdr.de>; Wed, 24 Jul 2019 11:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbfGXJff (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 24 Jul 2019 05:35:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35052 "EHLO mail.kernel.org"
+        id S1726703AbfGXJhs (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 24 Jul 2019 05:37:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36034 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726351AbfGXJff (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 24 Jul 2019 05:35:35 -0400
+        id S1726351AbfGXJhs (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 24 Jul 2019 05:37:48 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0181D21926;
-        Wed, 24 Jul 2019 09:35:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 83925229F3;
+        Wed, 24 Jul 2019 09:37:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563960934;
-        bh=u3fLxCqoYEzLtx7mnMt6QJnsljDN0DTqmQi0kpcJWX4=;
+        s=default; t=1563961067;
+        bh=iakW1iQlWEzMo9Qp203TppZRMjPZ0rM13b2GeBSp6UM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YQdW87uTeCavnpBBnSMCkfEnRcNrQpRxKUB1Er6v2sYpRV1ZSQNph+QTf/uPjD9d0
-         62mNhwJ/2I+cgug0PoCy19/2IVEHZPNcRdxMe++yIpcz8SYuI/izE2mAme+DaBeFvp
-         ob34XC0cYxVn/S0MwoGpRJc89mToJZ/llvV6JfZE=
-Date:   Wed, 24 Jul 2019 11:35:32 +0200
+        b=U76qhAHOn8AKbXB73cTEQAKMnWL2NTYjLWylckWWhSjZDWV/bqxNuudiHvrPIrElH
+         rL0mEqAfVpBmxWsO7nsKtg2c716dhm8Eo1zMlbHxvevEL5lIC1fgB18MOHSVh2N/7D
+         yEgLo1iiJZsGwBfTkFTzBMqr5Ju5+jbgyzEy/XJE=
+Date:   Wed, 24 Jul 2019 11:37:44 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Wu Hao <hao.wu@intel.com>
 Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
         linux-doc@vger.kernel.org, atull@kernel.org,
-        Ananda Ravuri <ananda.ravuri@intel.com>,
+        Zhang Yi Z <yi.z.zhang@intel.com>,
         Xu Yilun <yilun.xu@intel.com>
-Subject: Re: [PATCH v3 01/12] fpga: dfl: fme: support 512bit data width PR
-Message-ID: <20190724093532.GB29532@kroah.com>
+Subject: Re: [PATCH v3 03/12] fpga: dfl: pci: enable SRIOV support.
+Message-ID: <20190724093744.GC29532@kroah.com>
 References: <1563857495-26692-1-git-send-email-hao.wu@intel.com>
- <1563857495-26692-2-git-send-email-hao.wu@intel.com>
+ <1563857495-26692-4-git-send-email-hao.wu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1563857495-26692-2-git-send-email-hao.wu@intel.com>
+In-Reply-To: <1563857495-26692-4-git-send-email-hao.wu@intel.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 12:51:24PM +0800, Wu Hao wrote:
-> In early partial reconfiguration private feature, it only
-> supports 32bit data width when writing data to hardware for
-> PR. 512bit data width PR support is an important optimization
-> for some specific solutions (e.g. XEON with FPGA integrated),
-> it allows driver to use AVX512 instruction to improve the
-> performance of partial reconfiguration. e.g. programming one
-> 100MB bitstream image via this 512bit data width PR hardware
-> only takes ~300ms, but 32bit revision requires ~3s per test
-> result.
+On Tue, Jul 23, 2019 at 12:51:26PM +0800, Wu Hao wrote:
+> This patch enables the standard sriov support. It allows user to
+> enable SRIOV (and VFs), then user could pass through accelerators
+> (VFs) into virtual machine or use VFs directly in host.
 > 
-> Please note now this optimization is only done on revision 2
-> of this PR private feature which is only used in integrated
-> solution that AVX512 is always supported. This revision 2
-> hardware doesn't support 32bit PR.
-> 
-> Signed-off-by: Ananda Ravuri <ananda.ravuri@intel.com>
+> Signed-off-by: Zhang Yi Z <yi.z.zhang@intel.com>
 > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 > Signed-off-by: Wu Hao <hao.wu@intel.com>
 > Acked-by: Alan Tull <atull@kernel.org>
+> Acked-by: Moritz Fischer <mdf@kernel.org>
 > Signed-off-by: Moritz Fischer <mdf@kernel.org>
 > ---
-> v2: remove DRV/MODULE_VERSION modifications
+> v2: remove DRV/MODULE_VERSION modifications.
 > ---
->  drivers/fpga/dfl-fme-mgr.c | 110 ++++++++++++++++++++++++++++++++++++++-------
->  drivers/fpga/dfl-fme-pr.c  |  43 +++++++++++-------
->  drivers/fpga/dfl-fme.h     |   2 +
->  drivers/fpga/dfl.h         |   5 +++
->  4 files changed, 129 insertions(+), 31 deletions(-)
+>  drivers/fpga/dfl-pci.c | 39 +++++++++++++++++++++++++++++++++++++++
+>  drivers/fpga/dfl.c     | 41 +++++++++++++++++++++++++++++++++++++++++
+>  drivers/fpga/dfl.h     |  1 +
+>  3 files changed, 81 insertions(+)
 > 
-> diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
-> index b3f7eee..46e17f0 100644
-> --- a/drivers/fpga/dfl-fme-mgr.c
-> +++ b/drivers/fpga/dfl-fme-mgr.c
-> @@ -22,6 +22,7 @@
->  #include <linux/io-64-nonatomic-lo-hi.h>
->  #include <linux/fpga/fpga-mgr.h>
+> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> index 66b5720..0e65d81 100644
+> --- a/drivers/fpga/dfl-pci.c
+> +++ b/drivers/fpga/dfl-pci.c
+> @@ -223,8 +223,46 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
+>  	return ret;
+>  }
 >  
-> +#include "dfl.h"
->  #include "dfl-fme-pr.h"
->  
->  /* FME Partial Reconfiguration Sub Feature Register Set */
-> @@ -30,6 +31,7 @@
->  #define FME_PR_STS		0x10
->  #define FME_PR_DATA		0x18
->  #define FME_PR_ERR		0x20
-> +#define FME_PR_512_DATA		0x40 /* Data Register for 512bit datawidth PR */
->  #define FME_PR_INTFC_ID_L	0xA8
->  #define FME_PR_INTFC_ID_H	0xB0
->  
-> @@ -67,8 +69,43 @@
->  #define PR_WAIT_TIMEOUT   8000000
->  #define PR_HOST_STATUS_IDLE	0
->  
-> +#if defined(CONFIG_X86) && defined(CONFIG_AS_AVX512)
-> +
-> +#include <linux/cpufeature.h>
-> +#include <asm/fpu/api.h>
-> +
-> +static inline int is_cpu_avx512_enabled(void)
+> +static int cci_pci_sriov_configure(struct pci_dev *pcidev, int num_vfs)
 > +{
-> +	return cpu_feature_enabled(X86_FEATURE_AVX512F);
-> +}
-
-That's a very arch specific function, why would a driver ever care about
-this?
-
+> +	struct cci_drvdata *drvdata = pci_get_drvdata(pcidev);
+> +	struct dfl_fpga_cdev *cdev = drvdata->cdev;
+> +	int ret = 0;
 > +
-> +static inline void copy512(const void *src, void __iomem *dst)
-> +{
-> +	kernel_fpu_begin();
+> +	mutex_lock(&cdev->lock);
 > +
-> +	asm volatile("vmovdqu64 (%0), %%zmm0;"
-> +		     "vmovntdq %%zmm0, (%1);"
-> +		     :
-> +		     : "r"(src), "r"(dst)
-> +		     : "memory");
+> +	if (!num_vfs) {
+> +		/*
+> +		 * disable SRIOV and then put released ports back to default
+> +		 * PF access mode.
+> +		 */
+> +		pci_disable_sriov(pcidev);
 > +
-> +	kernel_fpu_end();
-> +}
-
-Shouldn't this be an arch-specific function somewhere?  Burying this in
-a random driver is not ok.  Please make this generic for all systems.
-
-> +#else
-> +static inline int is_cpu_avx512_enabled(void)
-> +{
-> +	return 0;
+> +		__dfl_fpga_cdev_config_port_vf(cdev, false);
+> +
+> +	} else if (cdev->released_port_num == num_vfs) {
+> +		/*
+> +		 * only enable SRIOV if cdev has matched released ports, put
+> +		 * released ports into VF access mode firstly.
+> +		 */
+> +		__dfl_fpga_cdev_config_port_vf(cdev, true);
+> +
+> +		ret = pci_enable_sriov(pcidev, num_vfs);
+> +		if (ret)
+> +			__dfl_fpga_cdev_config_port_vf(cdev, false);
+> +	} else {
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	mutex_unlock(&cdev->lock);
+> +	return ret;
 > +}
 > +
-> +static inline void copy512(const void *src, void __iomem *dst)
+>  static void cci_pci_remove(struct pci_dev *pcidev)
+>  {
+> +	if (dev_is_pf(&pcidev->dev))
+> +		cci_pci_sriov_configure(pcidev, 0);
+> +
+>  	cci_remove_feature_devs(pcidev);
+>  	pci_disable_pcie_error_reporting(pcidev);
+>  }
+> @@ -234,6 +272,7 @@ static void cci_pci_remove(struct pci_dev *pcidev)
+>  	.id_table = cci_pcie_id_tbl,
+>  	.probe = cci_pci_probe,
+>  	.remove = cci_pci_remove,
+> +	.sriov_configure = cci_pci_sriov_configure,
+>  };
+>  
+>  module_pci_driver(cci_pci_driver);
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index e04ed45..c3a8e1d 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -1112,6 +1112,47 @@ int dfl_fpga_cdev_config_port(struct dfl_fpga_cdev *cdev, int port_id,
+>  }
+>  EXPORT_SYMBOL_GPL(dfl_fpga_cdev_config_port);
+>  
+> +static void config_port_vf(struct device *fme_dev, int port_id, bool is_vf)
 > +{
-> +	WARN_ON_ONCE(1);
+> +	void __iomem *base;
+> +	u64 v;
+> +
+> +	base = dfl_get_feature_ioaddr_by_id(fme_dev, FME_FEATURE_ID_HEADER);
+> +
+> +	v = readq(base + FME_HDR_PORT_OFST(port_id));
+> +
+> +	v &= ~FME_PORT_OFST_ACC_CTRL;
+> +	v |= FIELD_PREP(FME_PORT_OFST_ACC_CTRL,
+> +			is_vf ? FME_PORT_OFST_ACC_VF : FME_PORT_OFST_ACC_PF);
+> +
+> +	writeq(v, base + FME_HDR_PORT_OFST(port_id));
+> +}
+> +
+> +/**
+> + * __dfl_fpga_cdev_config_port_vf - configure port to VF access mode
+> + *
+> + * @cdev: parent container device.
+> + * @if_vf: true for VF access mode, and false for PF access mode
+> + *
+> + * Return: 0 on success, negative error code otherwise.
+> + *
+> + * This function is needed in sriov configuration routine. It could be used to
+> + * configures the released ports access mode to VF or PF.
+> + * The caller needs to hold lock for protection.
+> + */
+> +void __dfl_fpga_cdev_config_port_vf(struct dfl_fpga_cdev *cdev, bool is_vf)
+> +{
+> +	struct dfl_feature_platform_data *pdata;
+> +
+> +	list_for_each_entry(pdata, &cdev->port_dev_list, node) {
+> +		if (device_is_registered(&pdata->dev->dev))
+> +			continue;
+> +
+> +		config_port_vf(cdev->fme_dev, pdata->id, is_vf);
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(__dfl_fpga_cdev_config_port_vf);
 
-Are you trying to get reports from syzbot?  :)
+Why are you exporting a function with a leading __?
 
-Please fix this all up.
+You are expecting someone else, in who knows what code, to do locking
+correctly?  If so, and the caller always has to have a local lock, then
+it's not a big deal, just drop the '__', otherwise if you have to have a
+specific lock for a specific device, then you have a really complex and
+probably broken api here :(
+
+thanks,
 
 greg k-h
