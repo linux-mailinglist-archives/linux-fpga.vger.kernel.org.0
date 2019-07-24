@@ -2,82 +2,80 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C54E72B5F
-	for <lists+linux-fpga@lfdr.de>; Wed, 24 Jul 2019 11:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEFE72B78
+	for <lists+linux-fpga@lfdr.de>; Wed, 24 Jul 2019 11:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbfGXJ3M (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 24 Jul 2019 05:29:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60722 "EHLO mail.kernel.org"
+        id S1726794AbfGXJeB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 24 Jul 2019 05:34:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34318 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726539AbfGXJ3M (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 24 Jul 2019 05:29:12 -0400
+        id S1726351AbfGXJeB (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 24 Jul 2019 05:34:01 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4856920651;
-        Wed, 24 Jul 2019 09:29:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AAFB421926;
+        Wed, 24 Jul 2019 09:33:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563960551;
-        bh=di95QMpzOVnd1w0M+lrR15A6sABXPrhp6Jm9zb+E5CE=;
+        s=default; t=1563960840;
+        bh=3cSIO9EZDi3J13tYyRv3TfjK0zuvMILYluyj3HtRV7U=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zdSovAqyKbrcXVdq5u7+OIG8/jJqg2Ma0XQhIbhOUkogwkF/f/ZAVSvW/36muO+WT
-         LTHJtvhtsrNaSHfy3V31S9yOHTZXUdvuaT40uiiG93fKica3ZQj/VtX8i6C3J9oOYH
-         SRTb83L2yv+1sfkGq+OvYZNqjTpvHKFgIBU6nGvU=
-Date:   Wed, 24 Jul 2019 11:29:09 +0200
+        b=R+lCRxoLNB76QsKlZeG7tXK7idALbdmsQiHPTlBdK8ON/1oNMKvuA6QEXrxEaCROc
+         0Gh5shjqnao27yA/FVidF5XwQLpjoCcpG967kMPkZQc3QCo5DmnlhrJYfYZPu+RTHO
+         trlrCDn2h8x9MqDb4AqRSE67jRlcFE6u4QVtSqtQ=
+Date:   Wed, 24 Jul 2019 11:33:57 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     YueHaibing <yuehaibing@huawei.com>, stillcompiling@gmail.com,
-        atull@kernel.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH] fpga-manager: altera-ps-spi: Fix build error
-Message-ID: <20190724092909.GA15423@kroah.com>
-References: <20190708071356.50928-1-yuehaibing@huawei.com>
- <20190709000527.GA1587@archbook>
+To:     Wu Hao <hao.wu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, atull@kernel.org,
+        Zhang Yi Z <yi.z.zhang@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>
+Subject: Re: [PATCH v3 02/12] fpga: dfl: fme: add
+ DFL_FPGA_FME_PORT_RELEASE/ASSIGN ioctl support.
+Message-ID: <20190724093357.GA29532@kroah.com>
+References: <1563857495-26692-1-git-send-email-hao.wu@intel.com>
+ <1563857495-26692-3-git-send-email-hao.wu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190709000527.GA1587@archbook>
+In-Reply-To: <1563857495-26692-3-git-send-email-hao.wu@intel.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Jul 08, 2019 at 05:05:27PM -0700, Moritz Fischer wrote:
-> On Mon, Jul 08, 2019 at 03:13:56PM +0800, YueHaibing wrote:
-> > If BITREVERSE is m and FPGA_MGR_ALTERA_PS_SPI is y,
-> > build fails:
-> > 
-> > drivers/fpga/altera-ps-spi.o: In function `altera_ps_write':
-> > altera-ps-spi.c:(.text+0x4ec): undefined reference to `byte_rev_table'
-> > 
-> > Select BITREVERSE to fix this.
-> > 
-> > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > Fixes: fcfe18f885f6 ("fpga-manager: altera-ps-spi: use bitrev8x4")
-> > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> > ---
-> >  drivers/fpga/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> > index 474f304..cdd4f73 100644
-> > --- a/drivers/fpga/Kconfig
-> > +++ b/drivers/fpga/Kconfig
-> > @@ -40,6 +40,7 @@ config ALTERA_PR_IP_CORE_PLAT
-> >  config FPGA_MGR_ALTERA_PS_SPI
-> >  	tristate "Altera FPGA Passive Serial over SPI"
-> >  	depends on SPI
-> > +	select BITREVERSE
-> >  	help
-> >  	  FPGA manager driver support for Altera Arria/Cyclone/Stratix
-> >  	  using the passive serial interface over SPI.
-> > -- 
-> > 2.7.4
-> > 
-> > 
-> Acked-by: Moritz Fischer <mdf@kernel.org>
+On Tue, Jul 23, 2019 at 12:51:25PM +0800, Wu Hao wrote:
+> +/**
+> + * dfl_fpga_cdev_config_port - configure a port feature dev
+> + * @cdev: parent container device.
+> + * @port_id: id of the port feature device.
+> + * @release: release port or assign port back.
+> + *
+> + * This function allows user to release port platform device or assign it back.
+> + * e.g. to safely turn one port from PF into VF for PCI device SRIOV support,
+> + * release port platform device is one necessary step.
+> + */
+> +int dfl_fpga_cdev_config_port(struct dfl_fpga_cdev *cdev, int port_id,
+> +			      bool release)
+> +{
+> +	return release ? detach_port_dev(cdev, port_id) :
+> +			 attach_port_dev(cdev, port_id);
+> +}
+> +EXPORT_SYMBOL_GPL(dfl_fpga_cdev_config_port);
 
-I've queued this up directly now, thanks.
+That's a horrible api.  Every time you see this call in code, you have
+to go and look up what "bool" means here.  There's no reason for it.
+
+Just have 2 different functions, one that attaches a port, and one that
+detaches it.  That way when you read the code that calls this function,
+you know what it does instantly without having to go look up some api
+function somewhere else.
+
+Write code for people to read first.  And you are saving nothing here by
+trying to do two different things in the same exact function.
+
+thanks,
 
 greg k-h
