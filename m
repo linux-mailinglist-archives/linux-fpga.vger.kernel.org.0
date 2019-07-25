@@ -2,82 +2,166 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5AAC74386
-	for <lists+linux-fpga@lfdr.de>; Thu, 25 Jul 2019 04:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF00975045
+	for <lists+linux-fpga@lfdr.de>; Thu, 25 Jul 2019 15:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389442AbfGYCzc (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 24 Jul 2019 22:55:32 -0400
-Received: from anchovy3.45ru.net.au ([203.30.46.155]:55232 "EHLO
-        anchovy3.45ru.net.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389463AbfGYCzc (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 24 Jul 2019 22:55:32 -0400
-X-Greylist: delayed 401 seconds by postgrey-1.27 at vger.kernel.org; Wed, 24 Jul 2019 22:55:31 EDT
-Received: (qmail 26082 invoked by uid 5089); 25 Jul 2019 02:48:49 -0000
-Received: by simscan 1.2.0 ppid: 26041, pid: 26042, t: 0.0345s
-         scanners: regex: 1.2.0 attach: 1.2.0 clamav: 0.88.3/m:40/d:1950
-X-RBL:  $rbltext
-Received: from unknown (HELO preid-c7.electromag.com.au) (preid@electromag.com.au@203.59.235.95)
-  by anchovy2.45ru.net.au with ESMTPA; 25 Jul 2019 02:48:48 -0000
-Received: by preid-c7.electromag.com.au (Postfix, from userid 1000)
-        id 7524420208D6B; Thu, 25 Jul 2019 10:48:47 +0800 (AWST)
-From:   Phil Reid <preid@electromag.com.au>
-To:     atull@kernel.org, mdf@kernel.org, colin.king@canonical.com,
-        agust@denx.de, preid@electromag.com.au, linux-fpga@vger.kernel.org
-Subject: [PATCH 1/1] fpga: altera-ps-spi: Fix getting of optional confd gpio
-Date:   Thu, 25 Jul 2019 10:48:45 +0800
-Message-Id: <1564022925-40402-1-git-send-email-preid@electromag.com.au>
-X-Mailer: git-send-email 1.8.3.1
+        id S1728230AbfGYNyc (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 25 Jul 2019 09:54:32 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34590 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728962AbfGYNyc (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 25 Jul 2019 09:54:32 -0400
+Received: by mail-wr1-f66.google.com with SMTP id 31so50944388wrm.1
+        for <linux-fpga@vger.kernel.org>; Thu, 25 Jul 2019 06:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=kiGD59LaW0LszoAZzmVLJ1Hft59fIaEtybxXjg0U4OU=;
+        b=sQQDJiby1lR9rJnYwpFayBJL1RCmEUHrXJL5ktfkxstXcB1e72/IJ+7W0b7G/ZBDE7
+         l2/Oe7WGAKBlaplOUnR9eKLvijJm+yqgNtv1e2Xt94tpqVPUHg4DEcD9UGsRs0szMquI
+         gd0SnX7mYKDLhjJOaB+OD74kiTzZcmfgGeIajBjxHk8HORwabuVH5qYZ14shV48okQcq
+         oV1q3+hmkLuRmabQQ4N1s3WbE9w1LtffyarQQhGJ98ItiO4babxYtOZPj/d8HElgIXh3
+         +7ifv5dKadFG/B1N65t8KG2r29CwpiyOZg/YA0MfSDcC9TY3HZioK4MipWty6YP9bw5P
+         6xWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=kiGD59LaW0LszoAZzmVLJ1Hft59fIaEtybxXjg0U4OU=;
+        b=Z7uhw9bVgh+CJa0/gRcj6Y9dGXeLS9IrjF+wg5zW+BEkb0t2vTc+q/ImRzm+CRsTc5
+         SJgbXKK2z+wdNFIXPtsgwIhRT/QD2IoueX2qhHdTUTel9bErgLuQl8tu6BGFgpsT1oir
+         MvvmR0OOOEdqJ8+sR4IcidrypD7SM1izmDn41PwMHVtucUHms8BVt3M573qQIyZDtP8P
+         EMvIkClNn6swup1QrtCXJTV1RDMcgidrSMwakb3mkBzzQJ1izKEhnLs+0kSWfRGaTt6b
+         ZRNu/nGa/q0KQnvMx+4m1O0aBkcU3LFEyGpSQpQSzUEKh285wrNMjbUXgj90n8hi7gqQ
+         OfyA==
+X-Gm-Message-State: APjAAAV2X/7nys7SHp7v4T5ZUQWruKgPqpeHVAlX325HBxduWhvp5H5f
+        YPH4nRkrLNRu9aD/mS+4PFs17g==
+X-Google-Smtp-Source: APXvYqyi+7SaHwgU0aK/nQJij+0evagD7L54rP/lc55M34rnwnlBR+KX1Ln1iOdMtsPd3Xr0XJt2kw==
+X-Received: by 2002:adf:f3d1:: with SMTP id g17mr64650717wrp.38.1564062869954;
+        Thu, 25 Jul 2019 06:54:29 -0700 (PDT)
+Received: from dell ([2.27.35.164])
+        by smtp.gmail.com with ESMTPSA id c9sm40786310wml.41.2019.07.25.06.54.08
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 25 Jul 2019 06:54:29 -0700 (PDT)
+Date:   Thu, 25 Jul 2019 14:54:02 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Wolfram Sang <wsa@the-dreams.de>, Alan Tull <atull@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Mark Brown <broonie@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: Re: [PATCH v3 2/7] drivers: Introduce device lookup variants by
+ of_node
+Message-ID: <20190725135402.GL23883@dell>
+References: <20190723221838.12024-1-suzuki.poulose@arm.com>
+ <20190723221838.12024-3-suzuki.poulose@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190723221838.12024-3-suzuki.poulose@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Currently the driver does not handle EPROBE_DEFER for the confd gpio.
-Use devm_gpiod_get_optional() instead of devm_gpiod_get() and return
-error codes from altera_ps_probe().
+On Tue, 23 Jul 2019, Suzuki K Poulose wrote:
 
-Fixes: 5692fae0742d ("fpga manager: Add altera-ps-spi driver for Altera FPGAs")
-Signed-off-by: Phil Reid <preid@electromag.com.au>
----
+> Introduce wrappers for {bus/driver/class}_find_device() to
+> locate devices by its of_node.
+> 
+> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: devicetree@vger.kernel.org
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-rockchip@lists.infradead.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Cc: Takashi Iwai <tiwai@suse.com>
+> Cc: Wolfram Sang <wsa@the-dreams.de>
+> Cc: Alan Tull <atull@kernel.org>
+> Cc: Moritz Fischer <mdf@kernel.org>
+> Cc: linux-fpga@vger.kernel.org
+> Cc: Peter Rosin <peda@axentia.se>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Heiner Kallweit <hkallweit1@gmail.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Thor Thayer <thor.thayer@linux.intel.com>
+> Cc: Jiri Slaby <jslaby@suse.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Peter Rosin <peda@axentia.se>
+> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> ---
+>  - Dropped the reviewed-by tags from Thor, Mark, Andrew and Peter as the
+>    patches are mereged, though there are no functional changes.
+> ---
+>  drivers/amba/tegra-ahb.c              | 11 +-------
+>  drivers/fpga/fpga-bridge.c            |  8 +-----
+>  drivers/fpga/fpga-mgr.c               |  8 +-----
+>  drivers/gpu/drm/drm_mipi_dsi.c        |  7 +----
+>  drivers/i2c/i2c-core-of.c             |  7 +----
+>  drivers/mfd/altera-sysmgr.c           | 14 ++--------
 
-Notes:
-    Compile tested only. I currently don't have hardware to test.
-    I was reviewing the driver prior to a board design and noticed
-    the problem.
+For my own reference:
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
- drivers/fpga/altera-ps-spi.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+What's the merge plan for this patch?
 
-diff --git a/drivers/fpga/altera-ps-spi.c b/drivers/fpga/altera-ps-spi.c
-index 678d0115f840..a02b88d63f89 100644
---- a/drivers/fpga/altera-ps-spi.c
-+++ b/drivers/fpga/altera-ps-spi.c
-@@ -213,7 +213,7 @@ static int altera_ps_write_complete(struct fpga_manager *mgr,
- 		return -EIO;
- 	}
- 
--	if (!IS_ERR(conf->confd)) {
-+	if (conf->confd) {
- 		if (!gpiod_get_raw_value_cansleep(conf->confd)) {
- 			dev_err(&mgr->dev, "CONF_DONE is inactive!\n");
- 			return -EIO;
-@@ -292,10 +292,13 @@ static int altera_ps_probe(struct spi_device *spi)
- 		return PTR_ERR(conf->status);
- 	}
- 
--	conf->confd = devm_gpiod_get(&spi->dev, "confd", GPIOD_IN);
-+	conf->confd = devm_gpiod_get_optional(&spi->dev, "confd", GPIOD_IN);
- 	if (IS_ERR(conf->confd)) {
--		dev_warn(&spi->dev, "Not using confd gpio: %ld\n",
--			 PTR_ERR(conf->confd));
-+		dev_err(&spi->dev, "Failed to get confd gpio: %ld\n",
-+			PTR_ERR(conf->confd));
-+		return PTR_ERR(conf->confd);
-+	} else if (!conf->confd) {
-+		dev_warn(&spi->dev, "Not using confd gpio");
- 	}
- 
- 	/* Register manager with unique name */
+Is anyone prepared to create an immutable branch for us to pull from?
+I'm happy to do it if no one else steps up.
+
+>  drivers/mux/core.c                    |  7 +----
+>  drivers/net/phy/mdio_bus.c            |  9 +------
+>  drivers/nvmem/core.c                  |  7 +----
+>  drivers/of/of_mdio.c                  |  8 +-----
+>  drivers/of/platform.c                 |  7 +----
+>  drivers/regulator/of_regulator.c      |  7 +----
+>  drivers/spi/spi.c                     | 20 +++------------
+>  include/linux/device.h                | 37 +++++++++++++++++++++++++++
+>  sound/soc/rockchip/rk3399_gru_sound.c |  9 ++-----
+>  15 files changed, 56 insertions(+), 110 deletions(-)
+
 -- 
-1.8.3.1
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
