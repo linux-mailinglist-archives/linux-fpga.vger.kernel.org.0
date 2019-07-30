@@ -2,134 +2,124 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 695EF7A66A
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jul 2019 13:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91527B1C3
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jul 2019 20:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729973AbfG3LDu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 30 Jul 2019 07:03:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46556 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725974AbfG3LDu (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 30 Jul 2019 07:03:50 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C5A4206E0;
-        Tue, 30 Jul 2019 11:03:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564484629;
-        bh=m7dX//3pP3+FR/k30u2LZ08eMNQLWPNMDC/X3b/BoIk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KMur5BSVhiHRRxRO7wuNTmwbmOspluKLLcMqQiSBI6R7I/hFrZiXflMDNkswhbTtv
-         EtfxkIXJJq6sth6CVf9ItRiCuP0D4xoZNWRDgBMa+C9ci6Q/RzCOpg0pkrmiDgRQ+R
-         3Gg+K/+v70+FPzWyiJ5B9GhEpGfyM7rsXoIoSgX0=
-Date:   Tue, 30 Jul 2019 13:03:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Wolfram Sang <wsa@the-dreams.de>, Alan Tull <atull@kernel.org>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Mark Brown <broonie@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Thor Thayer <thor.thayer@linux.intel.com>,
-        Jiri Slaby <jslaby@suse.com>
-Subject: Re: [PATCH v3 2/7] drivers: Introduce device lookup variants by
- of_node
-Message-ID: <20190730110315.GA31631@kroah.com>
-References: <20190723221838.12024-1-suzuki.poulose@arm.com>
- <20190723221838.12024-3-suzuki.poulose@arm.com>
- <20190725135402.GL23883@dell>
+        id S1726805AbfG3SUR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 30 Jul 2019 14:20:17 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41951 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728940AbfG3SQL (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 30 Jul 2019 14:16:11 -0400
+Received: by mail-pf1-f193.google.com with SMTP id m30so30270990pff.8
+        for <linux-fpga@vger.kernel.org>; Tue, 30 Jul 2019 11:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=pSxaD1cvDX0l0dBtzAMeJgIp940IH2B46uMy0iM1GB4=;
+        b=dVuSDzMLTviKBGZ53KKiOY0XqYsOyAgG25J621ZBW6qyaxu0WMuC8HeQIxZkmWGKhh
+         /EdV7NmqaIEZRNmikoQx4MADMjjEpHXudU1KTzY2LyXQu5ugIjzuQeTcWX5PgXyiVUEo
+         4j3e25Qx8a+r6/FIMt2T10YU0KCfd/Gw/6R84=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=pSxaD1cvDX0l0dBtzAMeJgIp940IH2B46uMy0iM1GB4=;
+        b=EJrgjodL5Nxi9dpMb0cecI1snQ5o4R5bsszryARqbc8gzFmpHlvhrqormTl62HvKpb
+         nucj/S3WMMBU83ee7+RFqovQ0mhNk3CKlxLxwbBEszKl8XtZE78hOMWG2l4mQvtJE9QC
+         ZWXODdXKNqfPDPrgx1EVcW9BMIqq1r8HBeuK451OygX/3YuE90tFz7w1LIoq/xVOOKKN
+         buWpegBUr9cNdba/e2eLuRMc8pMW5U4Kf/TbMDNX+AlxCrzg5A//qZfps5wx6wPCuF1o
+         vmuxDARluDBEoJ7CpfGiWnxamJ4nuuARq6r1YTnZfKVBaFK6QZnAyymXrRmzE+P8wZ4V
+         AqyA==
+X-Gm-Message-State: APjAAAWb2Ehp6Datj7oleq4PMZEL8gc8EFmTBEapXSZveBjCH+7SeB58
+        M4X4SSkvTmDgLixOWjqHiSg32g==
+X-Google-Smtp-Source: APXvYqxSiEVJeXi09dB4/iinN17Ab01YAZHjh+BReb6f6qTSeScWj6ZV6UNPwu5NIoes1J0qimKkKA==
+X-Received: by 2002:a62:1bd1:: with SMTP id b200mr42338409pfb.210.1564510571326;
+        Tue, 30 Jul 2019 11:16:11 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id g1sm106744083pgg.27.2019.07.30.11.16.10
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 30 Jul 2019 11:16:10 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v6 14/57] fpga: Remove dev_err() usage after platform_get_irq()
+Date:   Tue, 30 Jul 2019 11:15:14 -0700
+Message-Id: <20190730181557.90391-15-swboyd@chromium.org>
+X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
+In-Reply-To: <20190730181557.90391-1-swboyd@chromium.org>
+References: <20190730181557.90391-1-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190725135402.GL23883@dell>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Jul 25, 2019 at 02:54:02PM +0100, Lee Jones wrote:
-> On Tue, 23 Jul 2019, Suzuki K Poulose wrote:
-> 
-> > Introduce wrappers for {bus/driver/class}_find_device() to
-> > locate devices by its of_node.
-> > 
-> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> > Cc: Maxime Ripard <maxime.ripard@bootlin.com>
-> > Cc: dri-devel@lists.freedesktop.org
-> > Cc: David Airlie <airlied@linux.ie>
-> > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > Cc: devicetree@vger.kernel.org
-> > Cc: Florian Fainelli <f.fainelli@gmail.com>
-> > Cc: Frank Rowand <frowand.list@gmail.com>
-> > Cc: Heiko Stuebner <heiko@sntech.de>
-> > Cc: Liam Girdwood <lgirdwood@gmail.com>
-> > Cc: linux-i2c@vger.kernel.org
-> > Cc: linux-rockchip@lists.infradead.org
-> > Cc: linux-spi@vger.kernel.org
-> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> > Cc: Takashi Iwai <tiwai@suse.com>
-> > Cc: Wolfram Sang <wsa@the-dreams.de>
-> > Cc: Alan Tull <atull@kernel.org>
-> > Cc: Moritz Fischer <mdf@kernel.org>
-> > Cc: linux-fpga@vger.kernel.org
-> > Cc: Peter Rosin <peda@axentia.se>
-> > Cc: Mark Brown <broonie@kernel.org>
-> > Cc: Florian Fainelli <f.fainelli@gmail.com>
-> > Cc: Heiner Kallweit <hkallweit1@gmail.com>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Andrew Lunn <andrew@lunn.ch>
-> > Cc: Liam Girdwood <lgirdwood@gmail.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Lee Jones <lee.jones@linaro.org>
-> > Cc: Thor Thayer <thor.thayer@linux.intel.com>
-> > Cc: Jiri Slaby <jslaby@suse.com>
-> > Cc: Mark Brown <broonie@kernel.org>
-> > Cc: Andrew Lunn <andrew@lunn.ch>
-> > Cc: Peter Rosin <peda@axentia.se>
-> > Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> > ---
-> >  - Dropped the reviewed-by tags from Thor, Mark, Andrew and Peter as the
-> >    patches are mereged, though there are no functional changes.
-> > ---
-> >  drivers/amba/tegra-ahb.c              | 11 +-------
-> >  drivers/fpga/fpga-bridge.c            |  8 +-----
-> >  drivers/fpga/fpga-mgr.c               |  8 +-----
-> >  drivers/gpu/drm/drm_mipi_dsi.c        |  7 +----
-> >  drivers/i2c/i2c-core-of.c             |  7 +----
-> >  drivers/mfd/altera-sysmgr.c           | 14 ++--------
-> 
-> For my own reference:
->   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> 
-> What's the merge plan for this patch?
-> 
-> Is anyone prepared to create an immutable branch for us to pull from?
-> I'm happy to do it if no one else steps up.
+We don't need dev_err() messages when platform_get_irq() fails now that
+platform_get_irq() prints an error message itself when something goes
+wrong. Let's remove these prints with a simple semantic patch.
 
-I'll take it, and create a branch for everyone to pull from.
+// <smpl>
+@@
+expression ret;
+struct platform_device *E;
+@@
 
-thanks,
+ret =
+(
+platform_get_irq(E, ...)
+|
+platform_get_irq_byname(E, ...)
+);
 
-greg k-h
+if ( \( ret < 0 \| ret <= 0 \) )
+{
+(
+-if (ret != -EPROBE_DEFER)
+-{ ...
+-dev_err(...);
+-... }
+|
+...
+-dev_err(...);
+)
+...
+}
+// </smpl>
+
+While we're here, remove braces on if statements that only have one
+statement (manually).
+
+Cc: Moritz Fischer <mdf@kernel.org>
+Cc: linux-fpga@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+
+Please apply directly to subsystem trees
+
+ drivers/fpga/zynq-fpga.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+index 31ef38e38537..ee7765049607 100644
+--- a/drivers/fpga/zynq-fpga.c
++++ b/drivers/fpga/zynq-fpga.c
+@@ -578,10 +578,8 @@ static int zynq_fpga_probe(struct platform_device *pdev)
+ 	init_completion(&priv->dma_done);
+ 
+ 	priv->irq = platform_get_irq(pdev, 0);
+-	if (priv->irq < 0) {
+-		dev_err(dev, "No IRQ available\n");
++	if (priv->irq < 0)
+ 		return priv->irq;
+-	}
+ 
+ 	priv->clk = devm_clk_get(dev, "ref_clk");
+ 	if (IS_ERR(priv->clk)) {
+-- 
+Sent by a computer through tubes
+
