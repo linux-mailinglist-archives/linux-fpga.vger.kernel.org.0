@@ -2,31 +2,31 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D93AD7C8EB
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jul 2019 18:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED027C8E9
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jul 2019 18:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730069AbfGaQkL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 31 Jul 2019 12:40:11 -0400
-Received: from mga18.intel.com ([134.134.136.126]:31397 "EHLO mga18.intel.com"
+        id S1729389AbfGaQkH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 31 Jul 2019 12:40:07 -0400
+Received: from mga18.intel.com ([134.134.136.126]:31403 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729951AbfGaQkC (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 31 Jul 2019 12:40:02 -0400
+        id S1729977AbfGaQkD (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 31 Jul 2019 12:40:03 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Jul 2019 09:40:02 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,330,1559545200"; 
-   d="scan'208";a="174219980"
+   d="scan'208";a="174220022"
 Received: from tthayer-hp-z620.an.intel.com ([10.122.105.146])
-  by fmsmga007.fm.intel.com with ESMTP; 31 Jul 2019 09:40:00 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 31 Jul 2019 09:40:02 -0700
 From:   thor.thayer@linux.intel.com
 To:     mdf@kernel.org, richard.gong@linux.intel.com, agust@denx.de
 Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         Thor Thayer <thor.thayer@linux.intel.com>
-Subject: [PATCHv4 2/3] fpga: altera-cvp: Preparation for V2 parts.
-Date:   Wed, 31 Jul 2019 11:42:00 -0500
-Message-Id: <1564591321-19037-3-git-send-email-thor.thayer@linux.intel.com>
+Subject: [PATCHv4 3/3] fpga: altera-cvp: Add Stratix10 (V2) Support
+Date:   Wed, 31 Jul 2019 11:42:01 -0500
+Message-Id: <1564591321-19037-4-git-send-email-thor.thayer@linux.intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1564591321-19037-1-git-send-email-thor.thayer@linux.intel.com>
 References: <1564591321-19037-1-git-send-email-thor.thayer@linux.intel.com>
@@ -37,128 +37,346 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Thor Thayer <thor.thayer@linux.intel.com>
 
-In preparation for adding newer V2 parts that use a FIFO,
-reorganize altera_cvp_chk_error() and change the write
-function to block based.
-V2 parts have a block size matching the FIFO while older
-V1 parts write a 32 bit word at a time.
+Add Stratix10 specific functions that use a credit mechanism
+to throttle data to the CvP FIFOs. Add a private structure
+with function pointers for V1 vs V2 functions.
 
 Signed-off-by: Thor Thayer <thor.thayer@linux.intel.com>
 ---
 v2 Remove inline function declaration
    Reverse Christmas Tree format for local variables
-v3 Add return code check in altera_cvp_chk_error()
-v4 Use min() function to determine block length
+   Remove mask from credit calculation
+   Add commment for the delay(1) function in wait_for_credit()
+v3 Fix return code of abstraction function
+   Move reset of current_credit_byte to clear_state().
+   Check return code of credit register read in wait_for_credit()
+   Check return code of clear_state read/write register.
+v4 Implement changes suggested by maintainer.
+      Rename delta_credit to space
+      Simplify credit do-while loop.
+      Change from udelay() to usleep_range()
+      Remove NULL initialization from private structure
+      Use name for Version1 offsets
+   Change current_credit_byte to u32 sent_packets.
+   Changes to Kconfig title and description to support Stratix10.
 ---
- drivers/fpga/altera-cvp.c | 69 +++++++++++++++++++++++++++++------------------
- 1 file changed, 43 insertions(+), 26 deletions(-)
+ drivers/fpga/Kconfig      |   6 +-
+ drivers/fpga/altera-cvp.c | 187 ++++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 176 insertions(+), 17 deletions(-)
 
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 474f304ec109..f50956ec1300 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -45,11 +45,11 @@ config FPGA_MGR_ALTERA_PS_SPI
+ 	  using the passive serial interface over SPI.
+ 
+ config FPGA_MGR_ALTERA_CVP
+-	tristate "Altera Arria-V/Cyclone-V/Stratix-V CvP FPGA Manager"
++	tristate "Altera CvP FPGA Manager"
+ 	depends on PCI
+ 	help
+-	  FPGA manager driver support for Arria-V, Cyclone-V, Stratix-V
+-	  and Arria 10 Altera FPGAs using the CvP interface over PCIe.
++	  FPGA manager driver support for Arria-V, Cyclone-V, Stratix-V,
++	  Arria 10 and Stratix10 Altera FPGAs using the CvP interface over PCIe.
+ 
+ config FPGA_MGR_ZYNQ_FPGA
+ 	tristate "Xilinx Zynq FPGA"
 diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-index 9df2073331cb..3b8386fd32e7 100644
+index 3b8386fd32e7..4e0edb60bfba 100644
 --- a/drivers/fpga/altera-cvp.c
 +++ b/drivers/fpga/altera-cvp.c
-@@ -143,6 +143,42 @@ static int altera_cvp_wait_status(struct altera_cvp_conf *conf, u32 status_mask,
- 	return -ETIMEDOUT;
- }
+@@ -43,16 +43,34 @@
+ #define VSE_CVP_PROG_CTRL		0x2c	/* 32bit */
+ #define VSE_CVP_PROG_CTRL_CONFIG	BIT(0)
+ #define VSE_CVP_PROG_CTRL_START_XFER	BIT(1)
++#define VSE_CVP_PROG_CTRL_MASK		GENMASK(1, 0)
  
-+static int altera_cvp_chk_error(struct fpga_manager *mgr, size_t bytes)
-+{
-+	struct altera_cvp_conf *conf = mgr->priv;
-+	u32 val;
-+	int ret;
+ #define VSE_UNCOR_ERR_STATUS		0x34	/* 32bit */
+ #define VSE_UNCOR_ERR_CVP_CFG_ERR	BIT(5)	/* CVP_CONFIG_ERROR_LATCHED */
+ 
++#define V1_VSEC_OFFSET			0x200	/* Vendor Specific Offset V1 */
++/* V2 Defines */
++#define VSE_CVP_TX_CREDITS		0x49	/* 8bit */
 +
-+	/* STEP 10 (optional) - check CVP_CONFIG_ERROR flag */
-+	ret = altera_read_config_dword(conf, VSE_CVP_STATUS, &val);
-+	if (ret || (val & VSE_CVP_STATUS_CFG_ERR)) {
-+		dev_err(&mgr->dev, "CVP_CONFIG_ERROR after %zu bytes!\n",
-+			bytes);
-+		return -EPROTO;
-+	}
-+	return 0;
++#define V2_CREDIT_TIMEOUT_US		20000
++#define V2_CHECK_CREDIT_US		10
++#define V2_POLL_TIMEOUT_US		1000000
++#define V2_USER_TIMEOUT_US		500000
++
++#define V1_POLL_TIMEOUT_US		10
++
+ #define DRV_NAME		"altera-cvp"
+ #define ALTERA_CVP_MGR_NAME	"Altera CvP FPGA Manager"
+ 
++/* Write block sizes */
++#define ALTERA_CVP_V1_SIZE	4
++#define ALTERA_CVP_V2_SIZE	4096
++
+ /* Optional CvP config error status check for debugging */
+ static bool altera_cvp_chkcfg;
+ 
++struct cvp_priv;
++
+ struct altera_cvp_conf {
+ 	struct fpga_manager	*mgr;
+ 	struct pci_dev		*pci_dev;
+@@ -61,9 +79,27 @@ struct altera_cvp_conf {
+ 					      u32 data);
+ 	char			mgr_name[64];
+ 	u8			numclks;
++	u32			sent_packets;
+ 	u32			vsec_offset;
++	const struct cvp_priv	*priv;
+ };
+ 
++struct cvp_priv {
++	void	(*switch_clk)(struct altera_cvp_conf *conf);
++	int	(*clear_state)(struct altera_cvp_conf *conf);
++	int	(*wait_credit)(struct fpga_manager *mgr, u32 blocks);
++	size_t	block_size;
++	int	poll_time_us;
++	int	user_time_us;
++};
++
++static int altera_read_config_byte(struct altera_cvp_conf *conf,
++				   int where, u8 *val)
++{
++	return pci_read_config_byte(conf->pci_dev, conf->vsec_offset + where,
++				    val);
 +}
 +
-+static int altera_cvp_send_block(struct altera_cvp_conf *conf,
-+				 const u32 *data, size_t len)
-+{
-+	u32 mask, words = len / sizeof(u32);
-+	int i, remainder;
-+
-+	for (i = 0; i < words; i++)
-+		conf->write_data(conf, *data++);
-+
-+	/* write up to 3 trailing bytes, if any */
-+	remainder = len % sizeof(u32);
-+	if (remainder) {
-+		mask = BIT(remainder * 8) - 1;
-+		if (mask)
-+			conf->write_data(conf, *data & mask);
-+	}
-+
-+	return 0;
-+}
-+
- static int altera_cvp_teardown(struct fpga_manager *mgr,
- 			       struct fpga_image_info *info)
+ static int altera_read_config_dword(struct altera_cvp_conf *conf,
+ 				    int where, u32 *val)
  {
-@@ -265,39 +301,25 @@ static int altera_cvp_write_init(struct fpga_manager *mgr,
+@@ -159,6 +195,73 @@ static int altera_cvp_chk_error(struct fpga_manager *mgr, size_t bytes)
  	return 0;
  }
  
--static inline int altera_cvp_chk_error(struct fpga_manager *mgr, size_t bytes)
--{
--	struct altera_cvp_conf *conf = mgr->priv;
--	u32 val;
--
--	/* STEP 10 (optional) - check CVP_CONFIG_ERROR flag */
--	altera_read_config_dword(conf, VSE_CVP_STATUS, &val);
--	if (val & VSE_CVP_STATUS_CFG_ERR) {
--		dev_err(&mgr->dev, "CVP_CONFIG_ERROR after %zu bytes!\n",
--			bytes);
--		return -EPROTO;
--	}
--	return 0;
--}
--
- static int altera_cvp_write(struct fpga_manager *mgr, const char *buf,
- 			    size_t count)
++/*
++ * CvP Version2 Functions
++ * Recent Intel FPGAs use a credit mechanism to throttle incoming
++ * bitstreams and a different method of clearing the state.
++ */
++
++static int altera_cvp_v2_clear_state(struct altera_cvp_conf *conf)
++{
++	u32 val;
++	int ret;
++
++	/* Clear the START_XFER and CVP_CONFIG bits */
++	ret = altera_read_config_dword(conf, VSE_CVP_PROG_CTRL, &val);
++	if (ret) {
++		dev_err(&conf->pci_dev->dev,
++			"Error reading CVP Program Control Register\n");
++		return ret;
++	}
++
++	val &= ~VSE_CVP_PROG_CTRL_MASK;
++	ret = altera_write_config_dword(conf, VSE_CVP_PROG_CTRL, val);
++	if (ret) {
++		dev_err(&conf->pci_dev->dev,
++			"Error writing CVP Program Control Register\n");
++		return ret;
++	}
++
++	return altera_cvp_wait_status(conf, VSE_CVP_STATUS_CFG_RDY, 0,
++				      conf->priv->poll_time_us);
++}
++
++static int altera_cvp_v2_wait_for_credit(struct fpga_manager *mgr,
++					 u32 blocks)
++{
++	u32 timeout = V2_CREDIT_TIMEOUT_US / V2_CHECK_CREDIT_US;
++	struct altera_cvp_conf *conf = mgr->priv;
++	int ret;
++	u8 val;
++
++	do {
++		ret = altera_read_config_byte(conf, VSE_CVP_TX_CREDITS, &val);
++		if (ret) {
++			dev_err(&conf->pci_dev->dev,
++				"Error reading CVP Credit Register\n");
++			return ret;
++		}
++
++		/* Return if there is space in FIFO */
++		if (val - (u8)conf->sent_packets)
++			return 0;
++
++		ret = altera_cvp_chk_error(mgr, blocks * ALTERA_CVP_V2_SIZE);
++		if (ret) {
++			dev_err(&conf->pci_dev->dev,
++				"CE Bit error credit reg[0x%x]:sent[0x%x]\n",
++				val, conf->sent_packets);
++			return -EAGAIN;
++		}
++
++		/* Limit the check credit byte traffic */
++		usleep_range(V2_CHECK_CREDIT_US, V2_CHECK_CREDIT_US + 1);
++	} while (timeout--);
++
++	dev_err(&conf->pci_dev->dev, "Timeout waiting for credit\n");
++	return -ETIMEDOUT;
++}
++
+ static int altera_cvp_send_block(struct altera_cvp_conf *conf,
+ 				 const u32 *data, size_t len)
  {
- 	struct altera_cvp_conf *conf = mgr->priv;
-+	size_t done, remaining, len;
- 	const u32 *data;
--	size_t done, remaining;
- 	int status = 0;
--	u32 mask;
+@@ -200,10 +303,12 @@ static int altera_cvp_teardown(struct fpga_manager *mgr,
+ 	 * - set CVP_NUMCLKS to 1 and then issue CVP_DUMMY_WR dummy
+ 	 *   writes to the HIP
+ 	 */
+-	altera_cvp_dummy_write(conf); /* from CVP clock to internal clock */
++	if (conf->priv->switch_clk)
++		conf->priv->switch_clk(conf);
  
- 	/* STEP 9 - write 32-bit data from RBF file to CVP data register */
- 	data = (u32 *)buf;
- 	remaining = count;
+ 	/* STEP 15 - poll CVP_CONFIG_READY bit for 0 with 10us timeout */
+-	ret = altera_cvp_wait_status(conf, VSE_CVP_STATUS_CFG_RDY, 0, 10);
++	ret = altera_cvp_wait_status(conf, VSE_CVP_STATUS_CFG_RDY, 0,
++				     conf->priv->poll_time_us);
+ 	if (ret)
+ 		dev_err(&mgr->dev, "CFG_RDY == 0 timeout\n");
+ 
+@@ -265,7 +370,18 @@ static int altera_cvp_write_init(struct fpga_manager *mgr,
+ 	 * STEP 3
+ 	 * - set CVP_NUMCLKS to 1 and issue CVP_DUMMY_WR dummy writes to the HIP
+ 	 */
+-	altera_cvp_dummy_write(conf);
++	if (conf->priv->switch_clk)
++		conf->priv->switch_clk(conf);
++
++	if (conf->priv->clear_state) {
++		ret = conf->priv->clear_state(conf);
++		if (ret) {
++			dev_err(&mgr->dev, "Problem clearing out state\n");
++			return ret;
++		}
++	}
++
++	conf->sent_packets = 0;
+ 
+ 	/* STEP 4 - set CVP_CONFIG bit */
+ 	altera_read_config_dword(conf, VSE_CVP_PROG_CTRL, &val);
+@@ -273,9 +389,10 @@ static int altera_cvp_write_init(struct fpga_manager *mgr,
+ 	val |= VSE_CVP_PROG_CTRL_CONFIG;
+ 	altera_write_config_dword(conf, VSE_CVP_PROG_CTRL, val);
+ 
+-	/* STEP 5 - poll CVP_CONFIG READY for 1 with 10us timeout */
++	/* STEP 5 - poll CVP_CONFIG READY for 1 with timeout */
+ 	ret = altera_cvp_wait_status(conf, VSE_CVP_STATUS_CFG_RDY,
+-				     VSE_CVP_STATUS_CFG_RDY, 10);
++				     VSE_CVP_STATUS_CFG_RDY,
++				     conf->priv->poll_time_us);
+ 	if (ret) {
+ 		dev_warn(&mgr->dev, "CFG_RDY == 1 timeout\n");
+ 		return ret;
+@@ -285,7 +402,16 @@ static int altera_cvp_write_init(struct fpga_manager *mgr,
+ 	 * STEP 6
+ 	 * - set CVP_NUMCLKS to 1 and issue CVP_DUMMY_WR dummy writes to the HIP
+ 	 */
+-	altera_cvp_dummy_write(conf);
++	if (conf->priv->switch_clk)
++		conf->priv->switch_clk(conf);
++
++	if (altera_cvp_chkcfg) {
++		ret = altera_cvp_chk_error(mgr, 0);
++		if (ret) {
++			dev_warn(&mgr->dev, "CFG_RDY == 1 timeout\n");
++			return ret;
++		}
++	}
+ 
+ 	/* STEP 7 - set START_XFER */
+ 	altera_read_config_dword(conf, VSE_CVP_PROG_CTRL, &val);
+@@ -293,11 +419,12 @@ static int altera_cvp_write_init(struct fpga_manager *mgr,
+ 	altera_write_config_dword(conf, VSE_CVP_PROG_CTRL, val);
+ 
+ 	/* STEP 8 - start transfer (set CVP_NUMCLKS for bitstream) */
+-	altera_read_config_dword(conf, VSE_CVP_MODE_CTRL, &val);
+-	val &= ~VSE_CVP_MODE_CTRL_NUMCLKS_MASK;
+-	val |= conf->numclks << VSE_CVP_MODE_CTRL_NUMCLKS_OFF;
+-	altera_write_config_dword(conf, VSE_CVP_MODE_CTRL, val);
+-
++	if (conf->priv->switch_clk) {
++		altera_read_config_dword(conf, VSE_CVP_MODE_CTRL, &val);
++		val &= ~VSE_CVP_MODE_CTRL_NUMCLKS_MASK;
++		val |= conf->numclks << VSE_CVP_MODE_CTRL_NUMCLKS_OFF;
++		altera_write_config_dword(conf, VSE_CVP_MODE_CTRL, val);
++	}
+ 	return 0;
+ }
+ 
+@@ -315,11 +442,22 @@ static int altera_cvp_write(struct fpga_manager *mgr, const char *buf,
  	done = 0;
  
--	while (remaining >= 4) {
--		conf->write_data(conf, *data++);
--		done += 4;
--		remaining -= 4;
-+	while (remaining) {
-+		len = min(sizeof(u32), remaining);
-+		altera_cvp_send_block(conf, data, len);
-+		data++;
-+		done += len;
-+		remaining -= len;
+ 	while (remaining) {
+-		len = min(sizeof(u32), remaining);
++		/* Use credit throttling if available */
++		if (conf->priv->wait_credit) {
++			status = conf->priv->wait_credit(mgr, done);
++			if (status) {
++				dev_err(&conf->pci_dev->dev,
++					"Wait Credit ERR: 0x%x\n", status);
++				return status;
++			}
++		}
++
++		len = min(conf->priv->block_size, remaining);
+ 		altera_cvp_send_block(conf, data, len);
+-		data++;
++		data += len / sizeof(u32);
+ 		done += len;
+ 		remaining -= len;
++		conf->sent_packets++;
  
  		/*
  		 * STEP 10 (optional) and STEP 11
-@@ -315,11 +337,6 @@ static int altera_cvp_write(struct fpga_manager *mgr, const char *buf,
- 		}
- 	}
+@@ -369,7 +507,8 @@ static int altera_cvp_write_complete(struct fpga_manager *mgr,
  
--	/* write up to 3 trailing bytes, if any */
--	mask = BIT(remaining * 8) - 1;
--	if (mask)
--		conf->write_data(conf, *data & mask);
--
- 	if (altera_cvp_chkcfg)
- 		status = altera_cvp_chk_error(mgr, count);
+ 	/* STEP 18 - poll PLD_CLK_IN_USE and USER_MODE bits */
+ 	mask = VSE_CVP_STATUS_PLD_CLK_IN_USE | VSE_CVP_STATUS_USERMODE;
+-	ret = altera_cvp_wait_status(conf, mask, mask, TIMEOUT_US);
++	ret = altera_cvp_wait_status(conf, mask, mask,
++				     conf->priv->user_time_us);
+ 	if (ret)
+ 		dev_err(&mgr->dev, "PLD_CLK_IN_USE|USERMODE timeout\n");
  
+@@ -383,6 +522,21 @@ static const struct fpga_manager_ops altera_cvp_ops = {
+ 	.write_complete	= altera_cvp_write_complete,
+ };
+ 
++static const struct cvp_priv cvp_priv_v1 = {
++	.switch_clk	= altera_cvp_dummy_write,
++	.block_size	= ALTERA_CVP_V1_SIZE,
++	.poll_time_us	= V1_POLL_TIMEOUT_US,
++	.user_time_us	= TIMEOUT_US,
++};
++
++static const struct cvp_priv cvp_priv_v2 = {
++	.clear_state	= altera_cvp_v2_clear_state,
++	.wait_credit	= altera_cvp_v2_wait_for_credit,
++	.block_size	= ALTERA_CVP_V2_SIZE,
++	.poll_time_us	= V2_POLL_TIMEOUT_US,
++	.user_time_us	= V2_USER_TIMEOUT_US,
++};
++
+ static ssize_t chkcfg_show(struct device_driver *dev, char *buf)
+ {
+ 	return snprintf(buf, 3, "%d\n", altera_cvp_chkcfg);
+@@ -484,6 +638,11 @@ static int altera_cvp_probe(struct pci_dev *pdev,
+ 	conf->pci_dev = pdev;
+ 	conf->write_data = altera_cvp_write_data_iomem;
+ 
++	if (conf->vsec_offset == V1_VSEC_OFFSET)
++		conf->priv = &cvp_priv_v1;
++	else
++		conf->priv = &cvp_priv_v2;
++
+ 	conf->map = pci_iomap(pdev, CVP_BAR, 0);
+ 	if (!conf->map) {
+ 		dev_warn(&pdev->dev, "Mapping CVP BAR failed\n");
 -- 
 2.7.4
 
