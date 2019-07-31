@@ -2,124 +2,101 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B91527B1C3
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jul 2019 20:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F2D7B99F
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jul 2019 08:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726805AbfG3SUR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 30 Jul 2019 14:20:17 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:41951 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728940AbfG3SQL (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 30 Jul 2019 14:16:11 -0400
-Received: by mail-pf1-f193.google.com with SMTP id m30so30270990pff.8
-        for <linux-fpga@vger.kernel.org>; Tue, 30 Jul 2019 11:16:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pSxaD1cvDX0l0dBtzAMeJgIp940IH2B46uMy0iM1GB4=;
-        b=dVuSDzMLTviKBGZ53KKiOY0XqYsOyAgG25J621ZBW6qyaxu0WMuC8HeQIxZkmWGKhh
-         /EdV7NmqaIEZRNmikoQx4MADMjjEpHXudU1KTzY2LyXQu5ugIjzuQeTcWX5PgXyiVUEo
-         4j3e25Qx8a+r6/FIMt2T10YU0KCfd/Gw/6R84=
+        id S1727420AbfGaG00 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 31 Jul 2019 02:26:26 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33591 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727417AbfGaG0Z (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 31 Jul 2019 02:26:25 -0400
+Received: by mail-pg1-f195.google.com with SMTP id f20so22179844pgj.0
+        for <linux-fpga@vger.kernel.org>; Tue, 30 Jul 2019 23:26:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pSxaD1cvDX0l0dBtzAMeJgIp940IH2B46uMy0iM1GB4=;
-        b=EJrgjodL5Nxi9dpMb0cecI1snQ5o4R5bsszryARqbc8gzFmpHlvhrqormTl62HvKpb
-         nucj/S3WMMBU83ee7+RFqovQ0mhNk3CKlxLxwbBEszKl8XtZE78hOMWG2l4mQvtJE9QC
-         ZWXODdXKNqfPDPrgx1EVcW9BMIqq1r8HBeuK451OygX/3YuE90tFz7w1LIoq/xVOOKKN
-         buWpegBUr9cNdba/e2eLuRMc8pMW5U4Kf/TbMDNX+AlxCrzg5A//qZfps5wx6wPCuF1o
-         vmuxDARluDBEoJ7CpfGiWnxamJ4nuuARq6r1YTnZfKVBaFK6QZnAyymXrRmzE+P8wZ4V
-         AqyA==
-X-Gm-Message-State: APjAAAWb2Ehp6Datj7oleq4PMZEL8gc8EFmTBEapXSZveBjCH+7SeB58
-        M4X4SSkvTmDgLixOWjqHiSg32g==
-X-Google-Smtp-Source: APXvYqxSiEVJeXi09dB4/iinN17Ab01YAZHjh+BReb6f6qTSeScWj6ZV6UNPwu5NIoes1J0qimKkKA==
-X-Received: by 2002:a62:1bd1:: with SMTP id b200mr42338409pfb.210.1564510571326;
-        Tue, 30 Jul 2019 11:16:11 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id g1sm106744083pgg.27.2019.07.30.11.16.10
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=HAOLv596ncbzrxFqsd5j/5xyKL5UaQEyvWTJoC/mZ44=;
+        b=NwVBMl17fhCNf5C+q8AyDXqOYvINZYWJxgGgPqJLNoG4b3h+rwX35ANAy6J81PH3WS
+         6RSombD8inngtd074ICxpzmbBi6vBwPTAdp6GTjAbn9zNzwMLWGForFkYx59a5AVvyZZ
+         nxIal9bf0/wCleAJZZRIs7dAm7mA9hsrjMyPwLrz94hb9DqHu6QLFARkH/etZf/Nx+u8
+         H1sOQvBArPo3RCNNv+LNr30tEe6xWE9HkmXVLP8CKcBkZXTts3bWSFVP30Bu9geIwqQF
+         4WnhkrLZFSDI1a4wcNkmFkETklEI41AGhJbgkW89nX5rI3bEwLmI2xBZRnN43r6xURd1
+         vP/w==
+X-Gm-Message-State: APjAAAWFRL/wP3V5y1Wn6n+Lo4gddE9SFzu4fCckj7H3MTaEsGBKPR0R
+        8y96IK3lvsb76NeKqEFBTCh+RQ==
+X-Google-Smtp-Source: APXvYqwDsSubnNZNyJ4UIWSL8jTDvtUjH2IsV9rDHBvTWREnA0QhTeTktmXz4xrWr1N3323jQKOdnA==
+X-Received: by 2002:a63:fd57:: with SMTP id m23mr47036013pgj.204.1564554384881;
+        Tue, 30 Jul 2019 23:26:24 -0700 (PDT)
+Received: from localhost ([2601:647:5b80:29f7:1bdd:d748:9a4e:8083])
+        by smtp.gmail.com with ESMTPSA id q126sm23915950pfb.56.2019.07.30.23.26.22
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 30 Jul 2019 11:16:10 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v6 14/57] fpga: Remove dev_err() usage after platform_get_irq()
-Date:   Tue, 30 Jul 2019 11:15:14 -0700
-Message-Id: <20190730181557.90391-15-swboyd@chromium.org>
-X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
-In-Reply-To: <20190730181557.90391-1-swboyd@chromium.org>
-References: <20190730181557.90391-1-swboyd@chromium.org>
+        Tue, 30 Jul 2019 23:26:23 -0700 (PDT)
+Date:   Tue, 30 Jul 2019 23:26:22 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        broonie@kernel.org
+Subject: [GIT PULL] Please pull FPGA Manager changes for 5.4
+Message-ID: <20190731062622.GA4414@archbox>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-We don't need dev_err() messages when platform_get_irq() fails now that
-platform_get_irq() prints an error message itself when something goes
-wrong. Let's remove these prints with a simple semantic patch.
+The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b:
 
-// <smpl>
-@@
-expression ret;
-struct platform_device *E;
-@@
+  Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
 
-ret =
-(
-platform_get_irq(E, ...)
-|
-platform_get_irq_byname(E, ...)
-);
+are available in the Git repository at:
 
-if ( \( ret < 0 \| ret <= 0 \) )
-{
-(
--if (ret != -EPROBE_DEFER)
--{ ...
--dev_err(...);
--... }
-|
-...
--dev_err(...);
-)
-...
-}
-// </smpl>
+  git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git tags/fpga-for-5.4
 
-While we're here, remove braces on if statements that only have one
-statement (manually).
+for you to fetch changes up to 2949dc443116a66fd1a92d9ef107be16cdd197cd:
 
-Cc: Moritz Fischer <mdf@kernel.org>
-Cc: linux-fpga@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
+  dt-bindings: fpga: Consolidate bridge properties (2019-07-24 14:19:15 -0700)
 
-Please apply directly to subsystem trees
+----------------------------------------------------------------
+FPGA Manager changes for 5.4-rc1
 
- drivers/fpga/zynq-fpga.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Here is the first set of changes for the 5.4-rc1 merge window.
 
-diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-index 31ef38e38537..ee7765049607 100644
---- a/drivers/fpga/zynq-fpga.c
-+++ b/drivers/fpga/zynq-fpga.c
-@@ -578,10 +578,8 @@ static int zynq_fpga_probe(struct platform_device *pdev)
- 	init_completion(&priv->dma_done);
- 
- 	priv->irq = platform_get_irq(pdev, 0);
--	if (priv->irq < 0) {
--		dev_err(dev, "No IRQ available\n");
-+	if (priv->irq < 0)
- 		return priv->irq;
--	}
- 
- 	priv->clk = devm_clk_get(dev, "ref_clk");
- 	if (IS_ERR(priv->clk)) {
--- 
-Sent by a computer through tubes
+They're all more or less cleanup patches:
 
+- Carlos' patch addresses a checkpatch warning
+- My first patch changes the return type of a function to align it with
+  the fact that nothing checks the return value and it uncoditionally
+  returned 0 anyways
+- My second patch somehow fell through the cracks before and cleans up
+  the FPGA bridge bindings by consolidating them instead of repeating
+  the same paragraph over and over again.
+
+All of these patches have been in the last few linux-next releases
+without issues.
+
+Signed-off-by: Moritz Fischer <mdf@kernel.org>
+
+----------------------------------------------------------------
+Carlos A Petry (1):
+      fpga: altera-cvp: Fix function definition argument
+
+Moritz Fischer (2):
+      fpga: altera-pr-ip: Make alt_pr_unregister function void
+      dt-bindings: fpga: Consolidate bridge properties
+
+ .../devicetree/bindings/fpga/altera-fpga2sdram-bridge.txt   |  5 +----
+ .../devicetree/bindings/fpga/altera-freeze-bridge.txt       |  5 +----
+ .../devicetree/bindings/fpga/altera-hps2fpga-bridge.txt     |  5 +----
+ Documentation/devicetree/bindings/fpga/fpga-bridge.txt      | 13 +++++++++++++
+ .../devicetree/bindings/fpga/xilinx-pr-decoupler.txt        |  8 ++------
+ drivers/fpga/altera-cvp.c                                   |  3 ++-
+ drivers/fpga/altera-pr-ip-core-plat.c                       |  4 +++-
+ drivers/fpga/altera-pr-ip-core.c                            |  4 +---
+ include/linux/fpga/altera-pr-ip-core.h                      |  2 +-
+ 9 files changed, 25 insertions(+), 24 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/fpga/fpga-bridge.txt
