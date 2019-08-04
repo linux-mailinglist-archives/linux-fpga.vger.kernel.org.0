@@ -2,36 +2,33 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 984AE80A82
-	for <lists+linux-fpga@lfdr.de>; Sun,  4 Aug 2019 12:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3E280AA3
+	for <lists+linux-fpga@lfdr.de>; Sun,  4 Aug 2019 12:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726369AbfHDKh4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 4 Aug 2019 06:37:56 -0400
+        id S1726688AbfHDKib (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 4 Aug 2019 06:38:31 -0400
 Received: from mga01.intel.com ([192.55.52.88]:31912 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726342AbfHDKhz (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sun, 4 Aug 2019 06:37:55 -0400
+        id S1726394AbfHDKh5 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 4 Aug 2019 06:37:57 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Aug 2019 03:37:55 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Aug 2019 03:37:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,345,1559545200"; 
-   d="scan'208";a="167678942"
+   d="scan'208";a="167678953"
 Received: from hao-dev.bj.intel.com ([10.238.157.65])
-  by orsmga008.jf.intel.com with ESMTP; 04 Aug 2019 03:37:52 -0700
+  by orsmga008.jf.intel.com with ESMTP; 04 Aug 2019 03:37:55 -0700
 From:   Wu Hao <hao.wu@intel.com>
 To:     gregkh@linuxfoundation.org, mdf@kernel.org,
         linux-fpga@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
         linux-doc@vger.kernel.org, atull@kernel.org,
-        Wu Hao <hao.wu@intel.com>,
-        Ananda Ravuri <ananda.ravuri@intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>
-Subject: [PATCH v4 04/12] fpga: dfl: afu: add userclock sysfs interfaces.
-Date:   Sun,  4 Aug 2019 18:20:14 +0800
-Message-Id: <1564914022-3710-5-git-send-email-hao.wu@intel.com>
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>
+Subject: [PATCH v4 05/12] fpga: dfl: add id_table for dfl private feature driver
+Date:   Sun,  4 Aug 2019 18:20:15 +0800
+Message-Id: <1564914022-3710-6-git-send-email-hao.wu@intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1564914022-3710-1-git-send-email-hao.wu@intel.com>
 References: <1564914022-3710-1-git-send-email-hao.wu@intel.com>
@@ -40,253 +37,209 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This patch introduces userclock sysfs interfaces for AFU, user
-could use these interfaces for clock setting to AFU.
+This patch adds id_table for each dfl private feature driver,
+it allows to reuse same private feature driver to match and support
+multiple dfl private features.
 
-Please note that, this is only working for port header feature
-with revision 0, for later revisions, userclock setting is moved
-to a separated private feature, so one revision sysfs interface
-is exposed to userspace application for this purpose too.
-
-Signed-off-by: Ananda Ravuri <ananda.ravuri@intel.com>
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 Signed-off-by: Wu Hao <hao.wu@intel.com>
+Acked-by: Moritz Fischer <mdf@kernel.org>
 Acked-by: Alan Tull <atull@kernel.org>
 Signed-off-by: Moritz Fischer <mdf@kernel.org>
 ---
-v2: rebased, and switched to use device_add/remove_groups for sysfs
-v3: update kernel version and date in sysfs doc
-v4: rebased.
+v2: rebased, remove DRV/MODULE_VERSION modifications
 ---
- Documentation/ABI/testing/sysfs-platform-dfl-port |  35 +++++++
- drivers/fpga/dfl-afu-main.c                       | 114 +++++++++++++++++++++-
- drivers/fpga/dfl.h                                |   9 ++
- 3 files changed, 157 insertions(+), 1 deletion(-)
+ drivers/fpga/dfl-afu-main.c | 14 ++++++++++++--
+ drivers/fpga/dfl-fme-main.c | 11 ++++++++---
+ drivers/fpga/dfl-fme-pr.c   |  7 ++++++-
+ drivers/fpga/dfl-fme.h      |  3 ++-
+ drivers/fpga/dfl.c          | 18 ++++++++++++++++--
+ drivers/fpga/dfl.h          | 21 +++++++++++++++------
+ 6 files changed, 59 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-dfl-port b/Documentation/ABI/testing/sysfs-platform-dfl-port
-index 1ab3e6f..5663441 100644
---- a/Documentation/ABI/testing/sysfs-platform-dfl-port
-+++ b/Documentation/ABI/testing/sysfs-platform-dfl-port
-@@ -46,3 +46,38 @@ Contact:	Wu Hao <hao.wu@intel.com>
- Description:	Read-write. Read or set AFU latency tolerance reporting value.
- 		Set ltr to 1 if the AFU can tolerate latency >= 40us or set it
- 		to 0 if it is latency sensitive.
-+
-+What:		/sys/bus/platform/devices/dfl-port.0/revision
-+Date:		August 2019
-+KernelVersion:	5.4
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-only. Read this file to get the revision of port header
-+		feature.
-+
-+What:		/sys/bus/platform/devices/dfl-port.0/userclk_freqcmd
-+Date:		August 2019
-+KernelVersion:	5.4
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Write-only. User writes command to this interface to set
-+		userclock to AFU.
-+
-+What:		/sys/bus/platform/devices/dfl-port.0/userclk_freqsts
-+Date:		August 2019
-+KernelVersion:	5.4
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-only. Read this file to get the status of issued command
-+		to userclck_freqcmd.
-+
-+What:		/sys/bus/platform/devices/dfl-port.0/userclk_freqcntrcmd
-+Date:		August 2019
-+KernelVersion:	5.4
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Write-only. User writes command to this interface to set
-+		userclock counter.
-+
-+What:		/sys/bus/platform/devices/dfl-port.0/userclk_freqcntrsts
-+Date:		August 2019
-+KernelVersion:	5.4
-+Contact:	Wu Hao <hao.wu@intel.com>
-+Description:	Read-only. Read this file to get the status of issued command
-+		to userclck_freqcntrcmd.
 diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index 12175bb..407c97d 100644
+index 407c97d..e013afb 100644
 --- a/drivers/fpga/dfl-afu-main.c
 +++ b/drivers/fpga/dfl-afu-main.c
-@@ -142,6 +142,17 @@ static int port_get_id(struct platform_device *pdev)
- static DEVICE_ATTR_RO(id);
+@@ -435,6 +435,11 @@ static void port_hdr_uinit(struct platform_device *pdev,
+ 	return ret;
+ }
  
- static ssize_t
-+revision_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	void __iomem *base;
-+
-+	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
-+
-+	return sprintf(buf, "%x\n", dfl_feature_revision(base));
-+}
-+static DEVICE_ATTR_RO(revision);
-+
-+static ssize_t
- ltr_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
- 	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-@@ -276,6 +287,7 @@ static int port_get_id(struct platform_device *pdev)
- 
- static struct attribute *port_hdr_attrs[] = {
- 	&dev_attr_id.attr,
-+	&dev_attr_revision.attr,
- 	&dev_attr_ltr.attr,
- 	&dev_attr_ap1_event.attr,
- 	&dev_attr_ap2_event.attr,
-@@ -284,14 +296,113 @@ static int port_get_id(struct platform_device *pdev)
- };
- ATTRIBUTE_GROUPS(port_hdr);
- 
-+static ssize_t
-+userclk_freqcmd_store(struct device *dev, struct device_attribute *attr,
-+		      const char *buf, size_t count)
-+{
-+	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-+	u64 userclk_freq_cmd;
-+	void __iomem *base;
-+
-+	if (kstrtou64(buf, 0, &userclk_freq_cmd))
-+		return -EINVAL;
-+
-+	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
-+
-+	mutex_lock(&pdata->lock);
-+	writeq(userclk_freq_cmd, base + PORT_HDR_USRCLK_CMD0);
-+	mutex_unlock(&pdata->lock);
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(userclk_freqcmd);
-+
-+static ssize_t
-+userclk_freqcntrcmd_store(struct device *dev, struct device_attribute *attr,
-+			  const char *buf, size_t count)
-+{
-+	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-+	u64 userclk_freqcntr_cmd;
-+	void __iomem *base;
-+
-+	if (kstrtou64(buf, 0, &userclk_freqcntr_cmd))
-+		return -EINVAL;
-+
-+	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
-+
-+	mutex_lock(&pdata->lock);
-+	writeq(userclk_freqcntr_cmd, base + PORT_HDR_USRCLK_CMD1);
-+	mutex_unlock(&pdata->lock);
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(userclk_freqcntrcmd);
-+
-+static ssize_t
-+userclk_freqsts_show(struct device *dev, struct device_attribute *attr,
-+		     char *buf)
-+{
-+	u64 userclk_freqsts;
-+	void __iomem *base;
-+
-+	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
-+
-+	userclk_freqsts = readq(base + PORT_HDR_USRCLK_STS0);
-+
-+	return sprintf(buf, "0x%llx\n", (unsigned long long)userclk_freqsts);
-+}
-+static DEVICE_ATTR_RO(userclk_freqsts);
-+
-+static ssize_t
-+userclk_freqcntrsts_show(struct device *dev, struct device_attribute *attr,
-+			 char *buf)
-+{
-+	u64 userclk_freqcntrsts;
-+	void __iomem *base;
-+
-+	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
-+
-+	userclk_freqcntrsts = readq(base + PORT_HDR_USRCLK_STS1);
-+
-+	return sprintf(buf, "0x%llx\n",
-+		       (unsigned long long)userclk_freqcntrsts);
-+}
-+static DEVICE_ATTR_RO(userclk_freqcntrsts);
-+
-+static struct attribute *port_hdr_userclk_attrs[] = {
-+	&dev_attr_userclk_freqcmd.attr,
-+	&dev_attr_userclk_freqcntrcmd.attr,
-+	&dev_attr_userclk_freqsts.attr,
-+	&dev_attr_userclk_freqcntrsts.attr,
-+	NULL,
++static const struct dfl_feature_id port_hdr_id_table[] = {
++	{.id = PORT_FEATURE_ID_HEADER,},
++	{0,}
 +};
-+ATTRIBUTE_GROUPS(port_hdr_userclk);
 +
- static int port_hdr_init(struct platform_device *pdev,
- 			 struct dfl_feature *feature)
- {
-+	int ret;
-+
- 	dev_dbg(&pdev->dev, "PORT HDR Init.\n");
- 
- 	port_reset(pdev);
- 
--	return device_add_groups(&pdev->dev, port_hdr_groups);
-+	ret = device_add_groups(&pdev->dev, port_hdr_groups);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * if revision > 0, the userclock will be moved from port hdr register
-+	 * region to a separated private feature.
-+	 */
-+	if (dfl_feature_revision(feature->ioaddr) > 0)
-+		return 0;
-+
-+	ret = device_add_groups(&pdev->dev, port_hdr_userclk_groups);
-+	if (ret)
-+		device_remove_groups(&pdev->dev, port_hdr_groups);
-+
-+	return ret;
+ static const struct dfl_feature_ops port_hdr_ops = {
+ 	.init = port_hdr_init,
+ 	.uinit = port_hdr_uinit,
+@@ -496,6 +501,11 @@ static void port_afu_uinit(struct platform_device *pdev,
+ 	device_remove_groups(&pdev->dev, port_afu_groups);
  }
  
- static void port_hdr_uinit(struct platform_device *pdev,
-@@ -299,6 +410,7 @@ static void port_hdr_uinit(struct platform_device *pdev,
- {
- 	dev_dbg(&pdev->dev, "PORT HDR UInit.\n");
++static const struct dfl_feature_id port_afu_id_table[] = {
++	{.id = PORT_FEATURE_ID_AFU,},
++	{0,}
++};
++
+ static const struct dfl_feature_ops port_afu_ops = {
+ 	.init = port_afu_init,
+ 	.uinit = port_afu_uinit,
+@@ -503,11 +513,11 @@ static void port_afu_uinit(struct platform_device *pdev,
  
-+	device_remove_groups(&pdev->dev, port_hdr_userclk_groups);
- 	device_remove_groups(&pdev->dev, port_hdr_groups);
+ static struct dfl_feature_driver port_feature_drvs[] = {
+ 	{
+-		.id = PORT_FEATURE_ID_HEADER,
++		.id_table = port_hdr_id_table,
+ 		.ops = &port_hdr_ops,
+ 	},
+ 	{
+-		.id = PORT_FEATURE_ID_AFU,
++		.id_table = port_afu_id_table,
+ 		.ops = &port_afu_ops,
+ 	},
+ 	{
+diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
+index dfea2de..5fdce54 100644
+--- a/drivers/fpga/dfl-fme-main.c
++++ b/drivers/fpga/dfl-fme-main.c
+@@ -145,6 +145,11 @@ static long fme_hdr_ioctl(struct platform_device *pdev,
+ 	return -ENODEV;
  }
  
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index 6625d73..c65ab29 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -120,6 +120,10 @@
- #define PORT_HDR_CAP		0x30
- #define PORT_HDR_CTRL		0x38
- #define PORT_HDR_STS		0x40
-+#define PORT_HDR_USRCLK_CMD0	0x50
-+#define PORT_HDR_USRCLK_CMD1	0x58
-+#define PORT_HDR_USRCLK_STS0	0x60
-+#define PORT_HDR_USRCLK_STS1	0x68
++static const struct dfl_feature_id fme_hdr_id_table[] = {
++	{.id = FME_FEATURE_ID_HEADER,},
++	{0,}
++};
++
+ static const struct dfl_feature_ops fme_hdr_ops = {
+ 	.init = fme_hdr_init,
+ 	.uinit = fme_hdr_uinit,
+@@ -153,12 +158,12 @@ static long fme_hdr_ioctl(struct platform_device *pdev,
  
- /* Port Capability Register Bitfield */
- #define PORT_CAP_PORT_NUM	GENMASK_ULL(1, 0)	/* ID of this port */
-@@ -346,6 +350,11 @@ static inline bool dfl_feature_is_port(void __iomem *base)
- 		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_PORT);
+ static struct dfl_feature_driver fme_feature_drvs[] = {
+ 	{
+-		.id = FME_FEATURE_ID_HEADER,
++		.id_table = fme_hdr_id_table,
+ 		.ops = &fme_hdr_ops,
+ 	},
+ 	{
+-		.id = FME_FEATURE_ID_PR_MGMT,
+-		.ops = &pr_mgmt_ops,
++		.id_table = fme_pr_mgmt_id_table,
++		.ops = &fme_pr_mgmt_ops,
+ 	},
+ 	{
+ 		.ops = NULL,
+diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
+index 3c71dc3..a233a53 100644
+--- a/drivers/fpga/dfl-fme-pr.c
++++ b/drivers/fpga/dfl-fme-pr.c
+@@ -470,7 +470,12 @@ static long fme_pr_ioctl(struct platform_device *pdev,
+ 	return ret;
  }
  
-+static inline u8 dfl_feature_revision(void __iomem *base)
+-const struct dfl_feature_ops pr_mgmt_ops = {
++const struct dfl_feature_id fme_pr_mgmt_id_table[] = {
++	{.id = FME_FEATURE_ID_PR_MGMT,},
++	{0}
++};
++
++const struct dfl_feature_ops fme_pr_mgmt_ops = {
+ 	.init = pr_mgmt_init,
+ 	.uinit = pr_mgmt_uinit,
+ 	.ioctl = fme_pr_ioctl,
+diff --git a/drivers/fpga/dfl-fme.h b/drivers/fpga/dfl-fme.h
+index 5394a21..e4131e8 100644
+--- a/drivers/fpga/dfl-fme.h
++++ b/drivers/fpga/dfl-fme.h
+@@ -33,6 +33,7 @@ struct dfl_fme {
+ 	struct dfl_feature_platform_data *pdata;
+ };
+ 
+-extern const struct dfl_feature_ops pr_mgmt_ops;
++extern const struct dfl_feature_ops fme_pr_mgmt_ops;
++extern const struct dfl_feature_id fme_pr_mgmt_id_table[];
+ 
+ #endif /* __DFL_FME_H */
+diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+index b913704..87eaef6 100644
+--- a/drivers/fpga/dfl.c
++++ b/drivers/fpga/dfl.c
+@@ -281,6 +281,21 @@ static int dfl_feature_instance_init(struct platform_device *pdev,
+ 	return ret;
+ }
+ 
++static bool dfl_feature_drv_match(struct dfl_feature *feature,
++				  struct dfl_feature_driver *driver)
 +{
-+	return (u8)FIELD_GET(DFH_REVISION, readq(base + DFH));
++	const struct dfl_feature_id *ids = driver->id_table;
++
++	if (ids) {
++		while (ids->id) {
++			if (ids->id == feature->id)
++				return true;
++			ids++;
++		}
++	}
++	return false;
 +}
 +
  /**
-  * struct dfl_fpga_enum_info - DFL FPGA enumeration information
+  * dfl_fpga_dev_feature_init - init for sub features of dfl feature device
+  * @pdev: feature device.
+@@ -301,8 +316,7 @@ int dfl_fpga_dev_feature_init(struct platform_device *pdev,
+ 
+ 	while (drv->ops) {
+ 		dfl_fpga_dev_for_each_feature(pdata, feature) {
+-			/* match feature and drv using id */
+-			if (feature->id == drv->id) {
++			if (dfl_feature_drv_match(feature, drv)) {
+ 				ret = dfl_feature_instance_init(pdev, pdata,
+ 								feature, drv);
+ 				if (ret)
+diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+index c65ab29..9f0e656 100644
+--- a/drivers/fpga/dfl.h
++++ b/drivers/fpga/dfl.h
+@@ -30,8 +30,8 @@
+ /* plus one for fme device */
+ #define MAX_DFL_FEATURE_DEV_NUM    (MAX_DFL_FPGA_PORT_NUM + 1)
+ 
+-/* Reserved 0x0 for Header Group Register and 0xff for AFU */
+-#define FEATURE_ID_FIU_HEADER		0x0
++/* Reserved 0xfe for Header Group Register and 0xff for AFU */
++#define FEATURE_ID_FIU_HEADER		0xfe
+ #define FEATURE_ID_AFU			0xff
+ 
+ #define FME_FEATURE_ID_HEADER		FEATURE_ID_FIU_HEADER
+@@ -169,13 +169,22 @@ struct dfl_fpga_port_ops {
+ int dfl_fpga_check_port_id(struct platform_device *pdev, void *pport_id);
+ 
+ /**
+- * struct dfl_feature_driver - sub feature's driver
++ * struct dfl_feature_id - dfl private feature id
   *
+- * @id: sub feature id.
+- * @ops: ops of this sub feature.
++ * @id: unique dfl private feature id.
+  */
+-struct dfl_feature_driver {
++struct dfl_feature_id {
+ 	u64 id;
++};
++
++/**
++ * struct dfl_feature_driver - dfl private feature driver
++ *
++ * @id_table: id_table for dfl private features supported by this driver.
++ * @ops: ops of this dfl private feature driver.
++ */
++struct dfl_feature_driver {
++	const struct dfl_feature_id *id_table;
+ 	const struct dfl_feature_ops *ops;
+ };
+ 
 -- 
 1.8.3.1
 
