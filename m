@@ -2,262 +2,280 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0C580AD0
-	for <lists+linux-fpga@lfdr.de>; Sun,  4 Aug 2019 14:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4040820BE
+	for <lists+linux-fpga@lfdr.de>; Mon,  5 Aug 2019 17:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726063AbfHDMI3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 4 Aug 2019 08:08:29 -0400
-Received: from mga14.intel.com ([192.55.52.115]:31288 "EHLO mga14.intel.com"
+        id S1728885AbfHEPvR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 5 Aug 2019 11:51:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726039AbfHDMI3 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sun, 4 Aug 2019 08:08:29 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Aug 2019 05:08:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,345,1559545200"; 
-   d="scan'208";a="185051003"
-Received: from hao-dev.bj.intel.com (HELO localhost) ([10.238.157.65])
-  by orsmga002.jf.intel.com with ESMTP; 04 Aug 2019 05:08:22 -0700
-Date:   Sun, 4 Aug 2019 19:51:16 +0800
-From:   Wu Hao <hao.wu@intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-pci@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: Add sysfs attribute for disabling PCIe link to
- downstream component
-Message-ID: <20190804115116.GA5452@hao-dev>
-References: <20190529104942.74991-1-mika.westerberg@linux.intel.com>
- <20190703133953.GK128603@google.com>
- <20190703150341.GW2640@lahna.fi.intel.com>
- <20190801215339.GF151852@google.com>
+        id S1728801AbfHEPvR (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 5 Aug 2019 11:51:17 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 44B6F2086D;
+        Mon,  5 Aug 2019 15:51:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565020275;
+        bh=ufgCmu/A4v9haBJGKFuBmcxYVPFmVGeakr48qjqK+Yc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xUWLnLBPL8KE/lcN1CXZ4WeUISjEgnqhDH+TY5l3Kr1hDyI+2lkBgxim7ey1t1omv
+         t02giwwFl7XCYGDUvL5H+/SvpE1iS8wCTB2ERd21FVs36HcX2OOPLAVb+Mo1Pt27me
+         PDyWNHerWRQ/pKrc1MEFDn8iZzfGHycXEC9x8FCQ=
+Date:   Mon, 5 Aug 2019 17:51:13 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wu Hao <hao.wu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, atull@kernel.org,
+        Ananda Ravuri <ananda.ravuri@intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>
+Subject: Re: [PATCH v4 04/12] fpga: dfl: afu: add userclock sysfs interfaces.
+Message-ID: <20190805155113.GA8107@kroah.com>
+References: <1564914022-3710-1-git-send-email-hao.wu@intel.com>
+ <1564914022-3710-5-git-send-email-hao.wu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190801215339.GF151852@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <1564914022-3710-5-git-send-email-hao.wu@intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Aug 01, 2019 at 04:53:39PM -0500, Bjorn Helgaas wrote:
-> [+cc FPGA folks, just FYI; I'm pretty sure PCI could do a much better
-> job supporting FPGAs, so any input is welcome!]
+On Sun, Aug 04, 2019 at 06:20:14PM +0800, Wu Hao wrote:
+> This patch introduces userclock sysfs interfaces for AFU, user
+> could use these interfaces for clock setting to AFU.
 > 
-> On Wed, Jul 03, 2019 at 06:03:41PM +0300, Mika Westerberg wrote:
-> > On Wed, Jul 03, 2019 at 08:39:53AM -0500, Bjorn Helgaas wrote:
-> > > On Wed, May 29, 2019 at 01:49:42PM +0300, Mika Westerberg wrote:
-> > > > PCIe root and downstream ports have link control register that can be
-> > > > used disable the link from software. This can be useful for instance
-> > > > when performing "software" hotplug on systems that do not support real
-> > > > PCIe/ACPI hotplug.
-> > > > 
-> > > > For example when used with FPGA card we can burn a new FPGA image
-> > > > without need to reboot the system.
-> > > > 
-> > > > First we remove the FGPA device from Linux PCI stack:
-> > > > 
-> > > >   # echo 1 > /sys/bus/pci/devices/0000:00:01.1/0000:02:00.0/remove
-> > > > 
-> > > > Then we disable the link:
-> > > > 
-> > > >   # echo 1 > /sys/bus/pci/devices/0000:00:01.1/link_disable
-> > > > 
-> > > > By doing this we prevent the kernel from accessing the hardware while we
-> > > > burn the new FPGA image. 
-> > > 
-> > > What is the case where the kernel accesses the hardware?  You've
-> > > already done the remove, so the pci_dev is gone.  Is this to protect
-> > > against another user doing a rescan?  Or is there some spurious event
-> > > during the FPGA update that causes an interrupt that causes pciehp to
-> > > rescan?  Something else?
-> > 
-> > Protect against another user doing rescan.
+> Please note that, this is only working for port header feature
+> with revision 0, for later revisions, userclock setting is moved
+> to a separated private feature, so one revision sysfs interface
+> is exposed to userspace application for this purpose too.
 > 
-> I'm not 100% sure this is enough of an issue to warrant a new sysfs
-> file.  The file is visible all the time to everybody, but it only
-> protects root from shooting him/herself in the foot.
+> Signed-off-by: Ananda Ravuri <ananda.ravuri@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Wu Hao <hao.wu@intel.com>
+> Acked-by: Alan Tull <atull@kernel.org>
+> Signed-off-by: Moritz Fischer <mdf@kernel.org>
+> ---
+> v2: rebased, and switched to use device_add/remove_groups for sysfs
+> v3: update kernel version and date in sysfs doc
+> v4: rebased.
+> ---
+>  Documentation/ABI/testing/sysfs-platform-dfl-port |  35 +++++++
+>  drivers/fpga/dfl-afu-main.c                       | 114 +++++++++++++++++++++-
+>  drivers/fpga/dfl.h                                |   9 ++
+>  3 files changed, 157 insertions(+), 1 deletion(-)
 > 
-> > > I guess this particular FPGA update must be done via some side channel
-> > > (not the PCIe link)?  I assume there are other FPGA arrangements where
-> > > the update *would* be done via the PCIe link, and we would just do a
-> > > reset to make the update take effect.
-> > 
-> > In this setup the FPGA is programmed using side channel. I haven't seen
-> > the actual system but I think it is some sort of FPGA programmer
-> > connected to another system.
+> diff --git a/Documentation/ABI/testing/sysfs-platform-dfl-port b/Documentation/ABI/testing/sysfs-platform-dfl-port
+> index 1ab3e6f..5663441 100644
+> --- a/Documentation/ABI/testing/sysfs-platform-dfl-port
+> +++ b/Documentation/ABI/testing/sysfs-platform-dfl-port
+> @@ -46,3 +46,38 @@ Contact:	Wu Hao <hao.wu@intel.com>
+>  Description:	Read-write. Read or set AFU latency tolerance reporting value.
+>  		Set ltr to 1 if the AFU can tolerate latency >= 40us or set it
+>  		to 0 if it is latency sensitive.
+> +
+> +What:		/sys/bus/platform/devices/dfl-port.0/revision
+> +Date:		August 2019
+> +KernelVersion:	5.4
+> +Contact:	Wu Hao <hao.wu@intel.com>
+> +Description:	Read-only. Read this file to get the revision of port header
+> +		feature.
 
-One example is, FPGA image is stored in flash on the PCIe card, and the
-board management controller loads the image from flash to FPGA during
-power up or any time requested by software/user.
+What does "revision" mean?
 
-Actually I used several PCIe FPGA cards, they can do partial reconfiguration
-with inband method, but they are all using side channel to do full FPGA
-reconfiguration. Partial reconfiguration doesn't touch the PCIe logics
-inside FPGA, but full reconfiguration case really does. So we do need some
-protection for full reconfiguration case from PCIe device level.
+It feels like you are creating a different set of sysfs files depending
+on the revision field.  Which is fine, sysfs is one-value-per-file and
+userspace needs to handle if the file is present or not.  So why not
+just rely on that and not have to mess with 'revision' at all?  What is
+userspace going to do with that information?
 
-Actually we are using the similar method as above to remove/rescan pcie dev
-to make sure nobody see it during full reconfiguration. For sure we need
-to make sure nobody does the rescan at the same time, and another thing is
-we have to mask AER on the root port, otherwise it's easy to see system
-hang/reboot. I just did some qucik tests, with this patch, after link_disable
-I don't need to mask AER any more, so this patch does help on this case,
-and I should be able to try more next week.
+> +
+> +What:		/sys/bus/platform/devices/dfl-port.0/userclk_freqcmd
+> +Date:		August 2019
+> +KernelVersion:	5.4
+> +Contact:	Wu Hao <hao.wu@intel.com>
+> +Description:	Write-only. User writes command to this interface to set
+> +		userclock to AFU.
+> +
+> +What:		/sys/bus/platform/devices/dfl-port.0/userclk_freqsts
+> +Date:		August 2019
+> +KernelVersion:	5.4
+> +Contact:	Wu Hao <hao.wu@intel.com>
+> +Description:	Read-only. Read this file to get the status of issued command
+> +		to userclck_freqcmd.
+> +
+> +What:		/sys/bus/platform/devices/dfl-port.0/userclk_freqcntrcmd
+> +Date:		August 2019
+> +KernelVersion:	5.4
+> +Contact:	Wu Hao <hao.wu@intel.com>
+> +Description:	Write-only. User writes command to this interface to set
+> +		userclock counter.
+> +
+> +What:		/sys/bus/platform/devices/dfl-port.0/userclk_freqcntrsts
+> +Date:		August 2019
+> +KernelVersion:	5.4
+> +Contact:	Wu Hao <hao.wu@intel.com>
+> +Description:	Read-only. Read this file to get the status of issued command
+> +		to userclck_freqcntrcmd.
+> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
+> index 12175bb..407c97d 100644
+> --- a/drivers/fpga/dfl-afu-main.c
+> +++ b/drivers/fpga/dfl-afu-main.c
+> @@ -142,6 +142,17 @@ static int port_get_id(struct platform_device *pdev)
+>  static DEVICE_ATTR_RO(id);
+>  
+>  static ssize_t
+> +revision_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	void __iomem *base;
+> +
+> +	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
+> +
+> +	return sprintf(buf, "%x\n", dfl_feature_revision(base));
+> +}
+> +static DEVICE_ATTR_RO(revision);
+> +
+> +static ssize_t
+>  ltr_show(struct device *dev, struct device_attribute *attr, char *buf)
+>  {
+>  	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
+> @@ -276,6 +287,7 @@ static int port_get_id(struct platform_device *pdev)
+>  
+>  static struct attribute *port_hdr_attrs[] = {
+>  	&dev_attr_id.attr,
+> +	&dev_attr_revision.attr,
+>  	&dev_attr_ltr.attr,
+>  	&dev_attr_ap1_event.attr,
+>  	&dev_attr_ap2_event.attr,
+> @@ -284,14 +296,113 @@ static int port_get_id(struct platform_device *pdev)
+>  };
+>  ATTRIBUTE_GROUPS(port_hdr);
+>  
+> +static ssize_t
+> +userclk_freqcmd_store(struct device *dev, struct device_attribute *attr,
+> +		      const char *buf, size_t count)
+> +{
+> +	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
+> +	u64 userclk_freq_cmd;
+> +	void __iomem *base;
+> +
+> +	if (kstrtou64(buf, 0, &userclk_freq_cmd))
+> +		return -EINVAL;
+> +
+> +	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
+> +
+> +	mutex_lock(&pdata->lock);
+> +	writeq(userclk_freq_cmd, base + PORT_HDR_USRCLK_CMD0);
+> +	mutex_unlock(&pdata->lock);
+> +
+> +	return count;
+> +}
+> +static DEVICE_ATTR_WO(userclk_freqcmd);
+> +
+> +static ssize_t
+> +userclk_freqcntrcmd_store(struct device *dev, struct device_attribute *attr,
+> +			  const char *buf, size_t count)
+> +{
+> +	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
+> +	u64 userclk_freqcntr_cmd;
+> +	void __iomem *base;
+> +
+> +	if (kstrtou64(buf, 0, &userclk_freqcntr_cmd))
+> +		return -EINVAL;
+> +
+> +	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
+> +
+> +	mutex_lock(&pdata->lock);
+> +	writeq(userclk_freqcntr_cmd, base + PORT_HDR_USRCLK_CMD1);
+> +	mutex_unlock(&pdata->lock);
+> +
+> +	return count;
+> +}
+> +static DEVICE_ATTR_WO(userclk_freqcntrcmd);
+> +
+> +static ssize_t
+> +userclk_freqsts_show(struct device *dev, struct device_attribute *attr,
+> +		     char *buf)
+> +{
+> +	u64 userclk_freqsts;
+> +	void __iomem *base;
+> +
+> +	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
+> +
+> +	userclk_freqsts = readq(base + PORT_HDR_USRCLK_STS0);
+> +
+> +	return sprintf(buf, "0x%llx\n", (unsigned long long)userclk_freqsts);
+> +}
+> +static DEVICE_ATTR_RO(userclk_freqsts);
+> +
+> +static ssize_t
+> +userclk_freqcntrsts_show(struct device *dev, struct device_attribute *attr,
+> +			 char *buf)
+> +{
+> +	u64 userclk_freqcntrsts;
+> +	void __iomem *base;
+> +
+> +	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
+> +
+> +	userclk_freqcntrsts = readq(base + PORT_HDR_USRCLK_STS1);
+> +
+> +	return sprintf(buf, "0x%llx\n",
+> +		       (unsigned long long)userclk_freqcntrsts);
+> +}
+> +static DEVICE_ATTR_RO(userclk_freqcntrsts);
+> +
+> +static struct attribute *port_hdr_userclk_attrs[] = {
+> +	&dev_attr_userclk_freqcmd.attr,
+> +	&dev_attr_userclk_freqcntrcmd.attr,
+> +	&dev_attr_userclk_freqsts.attr,
+> +	&dev_attr_userclk_freqcntrsts.attr,
+> +	NULL,
+> +};
+> +ATTRIBUTE_GROUPS(port_hdr_userclk);
+> +
+>  static int port_hdr_init(struct platform_device *pdev,
+>  			 struct dfl_feature *feature)
+>  {
+> +	int ret;
+> +
+>  	dev_dbg(&pdev->dev, "PORT HDR Init.\n");
+>  
+>  	port_reset(pdev);
+>  
+> -	return device_add_groups(&pdev->dev, port_hdr_groups);
+> +	ret = device_add_groups(&pdev->dev, port_hdr_groups);
 
-Thanks a lot for adding us to this thread. :)
+This all needs to be reworked based on the ability for devices to
+properly add groups when they are bound on probe (the core does it for
+you, no need for the driver to do it.)  But until then, you should at
+least consider:
 
-Hao
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * if revision > 0, the userclock will be moved from port hdr register
+> +	 * region to a separated private feature.
+> +	 */
+> +	if (dfl_feature_revision(feature->ioaddr) > 0)
+> +		return 0;
+> +
+> +	ret = device_add_groups(&pdev->dev, port_hdr_userclk_groups);
+> +	if (ret)
+> +		device_remove_groups(&pdev->dev, port_hdr_groups);
 
-> > 
-> > > > Once the new FPGA is burned we can re-enable
-> > > > the link and rescan the new and possibly different device:
-> > > > 
-> > > >   # echo 0 > /sys/bus/pci/devices/0000:00:01.1/link_disable
-> > > >   # echo 1 > /sys/bus/pci/devices/0000:00:01.1/rescan
-> > > > 
-> > > > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > > ---
-> > > >  Documentation/ABI/testing/sysfs-bus-pci |  8 +++
-> > > >  drivers/pci/pci-sysfs.c                 | 65 ++++++++++++++++++++++++-
-> > > >  2 files changed, 72 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/Documentation/ABI/testing/sysfs-bus-pci b/Documentation/ABI/testing/sysfs-bus-pci
-> > > > index 8bfee557e50e..c93d6b9ab580 100644
-> > > > --- a/Documentation/ABI/testing/sysfs-bus-pci
-> > > > +++ b/Documentation/ABI/testing/sysfs-bus-pci
-> > > > @@ -324,6 +324,14 @@ Description:
-> > > >  		This is similar to /sys/bus/pci/drivers_autoprobe, but
-> > > >  		affects only the VFs associated with a specific PF.
-> > > >  
-> > > > +What:		/sys/bus/pci/devices/.../link_disable
-> > > > +Date:		September 2019
-> > > > +Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > > +Description:
-> > > > +		PCIe root and downstream ports have this attribute. Writing
-> > > > +		1 causes the link to downstream component be disabled.
-> > > > +		Re-enabling the link happens by writing 0 instead.
-> > > > +
-> > > >  What:		/sys/bus/pci/devices/.../p2pmem/size
-> > > >  Date:		November 2017
-> > > >  Contact:	Logan Gunthorpe <logang@deltatee.com>
-> > > > diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> > > > index 6d27475e39b2..dfcd21745192 100644
-> > > > --- a/drivers/pci/pci-sysfs.c
-> > > > +++ b/drivers/pci/pci-sysfs.c
-> > > > @@ -218,6 +218,56 @@ static ssize_t current_link_width_show(struct device *dev,
-> > > >  }
-> > > >  static DEVICE_ATTR_RO(current_link_width);
-> > > >  
-> > > > +static ssize_t link_disable_show(struct device *dev,
-> > > > +				 struct device_attribute *attr, char *buf)
-> > > > +{
-> > > > +	struct pci_dev *pci_dev = to_pci_dev(dev);
-> > > > +	u16 linkctl;
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = pcie_capability_read_word(pci_dev, PCI_EXP_LNKCTL, &linkctl);
-> > > > +	if (ret)
-> > > > +		return -EINVAL;
-> > > > +
-> > > > +	return sprintf(buf, "%d\n", !!(linkctl & PCI_EXP_LNKCTL_LD));
-> > > > +}
-> > > > +
-> > > > +static ssize_t link_disable_store(struct device *dev,
-> > > > +				  struct device_attribute *attr,
-> > > > +				  const char *buf, size_t count)
-> > > > +{
-> > > > +	struct pci_dev *pci_dev = to_pci_dev(dev);
-> > > > +	u16 linkctl;
-> > > > +	bool disable;
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = kstrtobool(buf, &disable);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	ret = pcie_capability_read_word(pci_dev, PCI_EXP_LNKCTL, &linkctl);
-> > > > +	if (ret)
-> > > > +		return -EINVAL;
-> > > > +
-> > > > +	if (disable) {
-> > > > +		if (linkctl & PCI_EXP_LNKCTL_LD)
-> > > > +			goto out;
-> > > > +		linkctl |= PCI_EXP_LNKCTL_LD;
-> > > > +	} else {
-> > > > +		if (!(linkctl & PCI_EXP_LNKCTL_LD))
-> > > > +			goto out;
-> > > > +		linkctl &= ~PCI_EXP_LNKCTL_LD;
-> > > > +	}
-> > > > +
-> > > > +	ret = pcie_capability_write_word(pci_dev, PCI_EXP_LNKCTL, linkctl);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +out:
-> > > > +	return count;
-> > > > +}
-> > > > +static DEVICE_ATTR_RW(link_disable);
-> > > > +
-> > > >  static ssize_t secondary_bus_number_show(struct device *dev,
-> > > >  					 struct device_attribute *attr,
-> > > >  					 char *buf)
-> > > > @@ -785,6 +835,7 @@ static struct attribute *pcie_dev_attrs[] = {
-> > > >  	&dev_attr_current_link_width.attr,
-> > > >  	&dev_attr_max_link_width.attr,
-> > > >  	&dev_attr_max_link_speed.attr,
-> > > > +	&dev_attr_link_disable.attr,
-> > > >  	NULL,
-> > > >  };
-> > > >  
-> > > > @@ -1656,8 +1707,20 @@ static umode_t pcie_dev_attrs_are_visible(struct kobject *kobj,
-> > > >  	struct device *dev = kobj_to_dev(kobj);
-> > > >  	struct pci_dev *pdev = to_pci_dev(dev);
-> > > >  
-> > > > -	if (pci_is_pcie(pdev))
-> > > > +	if (pci_is_pcie(pdev)) {
-> > > > +		if (a == &dev_attr_link_disable.attr) {
-> > > > +			switch (pci_pcie_type(pdev)) {
-> > > > +			case PCI_EXP_TYPE_ROOT_PORT:
-> > > > +			case PCI_EXP_TYPE_DOWNSTREAM:
-> > > 
-> > > This is actually not completely reliable because there are weird
-> > > systems that don't identify upstream/downstream ports correctly, e.g.,
-> > > see d0751b98dfa3 ("PCI: Add dev->has_secondary_link to track
-> > > downstream PCIe links") and c8fc9339409d ("PCI/ASPM: Use
-> > > dev->has_secondary_link to find downstream links").
-> > 
-> > D'oh!
-> > 
-> > It never came to my mind that using pci_pcie_type() would not be
-> > reliable. Thanks for pointing it out.
-> > 
-> > > I think I suggested the dev->has_secondary_link approach, but I now
-> > > think that was a mistake because it means we have to remember to look
-> > > at has_secondary_link instead of doing the obvious thing like your
-> > > code.
-> > > 
-> > > set_pcie_port_type() detects those unusual topologies, and I think it
-> > > would probably be better for it to just change the cached caps reg
-> > > used by pci_pcie_type() so checking for PCI_EXP_TYPE_DOWNSTREAM does
-> > > the right thing.
-> > 
-> > You mean modify set_pcie_port_type() to correct the type if it finds:
-> > 
-> >   type == PCI_EXP_TYPE_UPSTREAM && !pdev->has_secondary_link => type = PCI_EXP_TYPE_DOWNSTREAM
-> > 
-> > or
-> > 
-> >   type == PCI_EXP_TYPE_DOWNSTREAM && pdev->has_secondary_link => type = PCI_EXP_TYPE_UPSTREAM
-> > 
-> > ? Assuming my understanding of pdev->has_secondary_link is correct.
-> 
-> I was hoping we could get rid of "has_secondary_link" completely if we
-> corrected the type, but I'm not sure that's possible.
-> 
-> Bjorn
+struct attribute_group has is_visible() as a callback to have the core
+show or not show, individual attributes when they are created.  So no
+need for a second group of attributes and you needing to add/remove
+them, just add them all and let the callback handle the "is visible"
+logic.  Makes cleanup _so_ much easier (i.e. you don't have to do it.)
+
+thanks,
+
+greg k-h
