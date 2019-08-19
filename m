@@ -2,75 +2,116 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC6091A86
-	for <lists+linux-fpga@lfdr.de>; Mon, 19 Aug 2019 02:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F0A91CBB
+	for <lists+linux-fpga@lfdr.de>; Mon, 19 Aug 2019 07:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbfHSArr (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 18 Aug 2019 20:47:47 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:46006 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726120AbfHSArr (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 18 Aug 2019 20:47:47 -0400
-Received: by mail-pf1-f194.google.com with SMTP id w26so102590pfq.12
-        for <linux-fpga@vger.kernel.org>; Sun, 18 Aug 2019 17:47:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=0ucN8dYY5G9i42DmmhmlfEYMDNGfWkl/1N/uulaX63U=;
-        b=tbmi07e56axffVhqAXnGFVArpcDc6z1j3/p/YeFv0Viho0vtruqX8rDhBlxSvP6CzO
-         2tSAh7AFNXYel2rl/wFTwzAeHg0IPHvbD+VLUXKP010Swt6w1u1f5+EYPGlnibKXe6kO
-         QB9bZ0tKZy2m6DpdVRYem7I/Vpa07ZlFbzeAdOq2jHl+inWi0FFANoIpUaq5gmRHFrLg
-         b899h1eWwwpv2/veyblXYpP4/Y8V4wO16ce8gn8YiWRgHyRrnbq8PMaEg35LTNL3slyL
-         984ZndIOzWaPO9l+IFmSRqyXgdSUP9jHwwKGa6zq/ngeIOrmHWmb9/UrIvOdhqvTbBj9
-         zzCg==
-X-Gm-Message-State: APjAAAXotd7evkliCkbIn6u8UeHmg+8l3R/24AezbW9h2VkEzKFr/5Un
-        yqCS0A6MZxGQ+BZ0p6wXc+rrAA==
-X-Google-Smtp-Source: APXvYqxMs72RnwgANqr3dH5Y1saPOVPhoQD5u0UW/JUzUOvCIYa+ZK8lo+IMPiTgIZeWq7k/640c4A==
-X-Received: by 2002:a63:2043:: with SMTP id r3mr17661312pgm.311.1566175666535;
-        Sun, 18 Aug 2019 17:47:46 -0700 (PDT)
-Received: from localhost ([2601:647:5b80:29f7:1bdd:d748:9a4e:8083])
-        by smtp.gmail.com with ESMTPSA id b5sm13488960pfo.149.2019.08.18.17.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Aug 2019 17:47:45 -0700 (PDT)
-Date:   Sun, 18 Aug 2019 17:47:44 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-Subject: [GIT PULL] FPGA Manager (late) change for 5.3-rc6
-Message-ID: <20190819004744.GA20155@archbox>
+        id S1726522AbfHSFsx (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 19 Aug 2019 01:48:53 -0400
+Received: from mga17.intel.com ([192.55.52.151]:30107 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725536AbfHSFsx (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 19 Aug 2019 01:48:53 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Aug 2019 22:48:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,403,1559545200"; 
+   d="scan'208";a="206898449"
+Received: from hao-dev.bj.intel.com (HELO localhost) ([10.238.157.65])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Aug 2019 22:48:51 -0700
+Date:   Mon, 19 Aug 2019 13:31:33 +0800
+From:   Wu Hao <hao.wu@intel.com>
+To:     gregkh@linuxfoundation.org, mdf@kernel.org,
+        linux-fpga@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, atull@kernel.org
+Subject: Re: [PATCH v5 0/9] FPGA DFL updates
+Message-ID: <20190819053133.GA31244@hao-dev>
+References: <1565578204-13969-1-git-send-email-hao.wu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <1565578204-13969-1-git-send-email-hao.wu@intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b:
+On Mon, Aug 12, 2019 at 10:49:55AM +0800, Wu Hao wrote:
+> Hi Greg,
+> 
+> This is v5 patchset which adds more features to FPGA DFL. Marjor changes
+> against v4 are sysfs related code rework to address comments on v4.
+> 
+> Please help to take a look. Thanks!
 
-  Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
+Hi Greg,
 
-are available in the Git repository at:
+Did you get a chance to take a look at this new version patchset? :)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git/ tags/fpga-fixes-for-5.3
+Thanks
+Hao
 
-for you to fetch changes up to dec43da46f63eb71f519d963ba6832838e4262a3:
-
-  fpga: altera-ps-spi: Fix getting of optional confd gpio (2019-08-18 17:40:02 -0700)
-
-----------------------------------------------------------------
-FPGA Manager fixes for 5.3
-
-A single fix for the altera-ps-spi driver that fixes the behavior when
-the driver receives -EPROBE_DEFER when trying to obtain a GPIO desc.
-
-Signed-off-by: Moritz Fischer <mdf@kernel.org>
-
-----------------------------------------------------------------
-Phil Reid (1):
-      fpga: altera-ps-spi: Fix getting of optional confd gpio
-
- drivers/fpga/altera-ps-spi.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> Main changes from v4:
+>   - convert code to use dev_groups for sysfs entries (#2, #3, #4, #6, #8).
+>   - clean up for empty init function after remove sysfs add/remove (#1).
+>   - introduce is_visible for sysfs groups (#3, #4, #6, #8).
+>   - remove revision sysfs entries (#4, #6, #8).
+>   - improve naming on shared functions (#5).
+>   - reorganize sysfs entries for port and fme error reporting (#6, #8).
+> 
+> Main changes from v3:
+>   - drop avx512 partail reconfiguration patch for now.
+>   - split dfl_fpga_cdev_config_port to 2 functions *_release/assign_port
+>     (#1).
+>   - split __dfl_fpga_cdev_config_port_vf into 2 functions with locking
+>     added (#2).
+>   - improve description in sysfs doc to avoid misunderstanding (#3).
+>   - switch to boolean in sysfs entry store function (#3).
+>   - remove dev_dbg in init/uinit callback function (#7, #9, #11).
+>   - remove uinit callback which does does nothing (#8, #9)
+> 
+> Main changes from v2:
+>   - update kernel version/date in sysfs doc (patch #4, #5, #8, #10, #11).
+>   - add back Documentation patch (patch #12).
+> 
+> Main changes from v1:
+>   - remove DRV/MODULE_VERSION modifications. (patch #1, #3, #4, #6)
+>   - remove argsz from new ioctls. (patch #2)
+>   - replace sysfs_create/remove_* with device_add/remove_* for sysfs entries.
+>     (patch #5, #8, #11)
+> 
+> Wu Hao (9):
+>   fpga: dfl: make init callback optional
+>   fpga: dfl: fme: convert platform_driver to use dev_groups
+>   fpga: dfl: afu: convert platform_driver to use dev_groups
+>   fpga: dfl: afu: add userclock sysfs interfaces.
+>   fpga: dfl: afu: expose __afu_port_enable/disable function.
+>   fpga: dfl: afu: add error reporting support.
+>   fpga: dfl: afu: add STP (SignalTap) support
+>   fpga: dfl: fme: add global error reporting support
+>   Documentation: fpga: dfl: add descriptions for virtualization and new
+>     interfaces.
+> 
+>  Documentation/ABI/testing/sysfs-platform-dfl-fme  |  62 ++++
+>  Documentation/ABI/testing/sysfs-platform-dfl-port |  53 ++++
+>  Documentation/fpga/dfl.rst                        | 105 +++++++
+>  drivers/fpga/Makefile                             |   3 +-
+>  drivers/fpga/dfl-afu-error.c                      | 230 ++++++++++++++
+>  drivers/fpga/dfl-afu-main.c                       | 230 +++++++++++---
+>  drivers/fpga/dfl-afu.h                            |   9 +
+>  drivers/fpga/dfl-fme-error.c                      | 359 ++++++++++++++++++++++
+>  drivers/fpga/dfl-fme-main.c                       |  42 +--
+>  drivers/fpga/dfl-fme.h                            |   3 +
+>  drivers/fpga/dfl.c                                |  10 +-
+>  drivers/fpga/dfl.h                                |   9 +
+>  12 files changed, 1041 insertions(+), 74 deletions(-)
+>  create mode 100644 drivers/fpga/dfl-afu-error.c
+>  create mode 100644 drivers/fpga/dfl-fme-error.c
+> 
+> -- 
+> 1.8.3.1
