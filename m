@@ -2,105 +2,108 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 520419718F
-	for <lists+linux-fpga@lfdr.de>; Wed, 21 Aug 2019 07:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E15F97357
+	for <lists+linux-fpga@lfdr.de>; Wed, 21 Aug 2019 09:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbfHUF30 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 21 Aug 2019 01:29:26 -0400
-Received: from mga04.intel.com ([192.55.52.120]:44343 "EHLO mga04.intel.com"
+        id S1727917AbfHUH2i (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 21 Aug 2019 03:28:38 -0400
+Received: from mga17.intel.com ([192.55.52.151]:9558 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725385AbfHUF30 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 21 Aug 2019 01:29:26 -0400
+        id S1727478AbfHUH2i (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 21 Aug 2019 03:28:38 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Aug 2019 22:29:25 -0700
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Aug 2019 00:28:37 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,411,1559545200"; 
-   d="scan'208";a="190088616"
-Received: from hao-dev.bj.intel.com (HELO localhost) ([10.238.157.65])
-  by orsmga002.jf.intel.com with ESMTP; 20 Aug 2019 22:29:23 -0700
-Date:   Wed, 21 Aug 2019 13:12:04 +0800
-From:   Wu Hao <hao.wu@intel.com>
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, atull@kernel.org
-Subject: Re: [PATCH v5 1/9] fpga: dfl: make init callback optional
-Message-ID: <20190821051204.GA27866@hao-dev>
-References: <1565578204-13969-1-git-send-email-hao.wu@intel.com>
- <1565578204-13969-2-git-send-email-hao.wu@intel.com>
- <20190821032406.GA28625@archbox>
+   d="scan'208";a="195942515"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 21 Aug 2019 00:28:34 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 21 Aug 2019 10:28:33 +0300
+Date:   Wed, 21 Aug 2019 10:28:33 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Logan Gunthorpe <logang@deltatee.com>, linux-pci@vger.kernel.org,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: Add sysfs attribute for disabling PCIe link to
+ downstream component
+Message-ID: <20190821072833.GM19908@lahna.fi.intel.com>
+References: <20190529104942.74991-1-mika.westerberg@linux.intel.com>
+ <20190703133953.GK128603@google.com>
+ <20190703150341.GW2640@lahna.fi.intel.com>
+ <20190801215339.GF151852@google.com>
+ <20190806101230.GI2548@lahna.fi.intel.com>
+ <20190819235245.GX253360@google.com>
+ <20190820095820.GD19908@lahna.fi.intel.com>
+ <20190820141717.GA14450@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190821032406.GA28625@archbox>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190820141717.GA14450@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Aug 20, 2019 at 08:24:06PM -0700, Moritz Fischer wrote:
-> Hi,
-> 
-> On Mon, Aug 12, 2019 at 10:49:56AM +0800, Wu Hao wrote:
-> > This patch makes init callback of sub features optional. With
-> > this change, people don't need to prepare any empty init callback.
+On Tue, Aug 20, 2019 at 09:17:17AM -0500, Bjorn Helgaas wrote:
+> On Tue, Aug 20, 2019 at 12:58:20PM +0300, Mika Westerberg wrote:
+> > On Mon, Aug 19, 2019 at 06:52:45PM -0500, Bjorn Helgaas wrote:
+> > > > Right, it looks like we need some sort of flag there anyway.
+> > > 
+> > > Does this mean you're looking at getting rid of "has_secondary_link",
+> > > you think it's impossible, or you think it's not worth trying?
 > > 
-> > Signed-off-by: Wu Hao <hao.wu@intel.com>
-> 
-> Acked-by: Moritz Fischer <mdf@kernel.org>
-> > ---
-> >  drivers/fpga/dfl.c | 10 ++++++----
-> >  1 file changed, 6 insertions(+), 4 deletions(-)
+> > I was of thinking that we need some flag anyway for the downstream port
+> > (such as has_secondary_link) that tells us the which side of the port
+> > the link is.
 > > 
-> > diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> > index c0512af..96a2b82 100644
-> > --- a/drivers/fpga/dfl.c
-> > +++ b/drivers/fpga/dfl.c
-> > @@ -271,11 +271,13 @@ static int dfl_feature_instance_init(struct platform_device *pdev,
-> >  				     struct dfl_feature *feature,
-> >  				     struct dfl_feature_driver *drv)
-> >  {
-> > -	int ret;
-> > +	int ret = 0;
-> >  
-> > -	ret = drv->ops->init(pdev, feature);
-> > -	if (ret)
-> > -		return ret;
-> > +	if (drv->ops->init) {
-> > +		ret = drv->ops->init(pdev, feature);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> >  
-> >  	feature->ops = drv->ops;
+> > > I'm pretty sure we could get rid of it by looking upstream, but I
+> > > haven't actually tried it.
+> > 
+> > So if we are downstream port, look at the parent and if it is also
+> > downstream port (or root port) we change the type to upstream port
+> > accordingly? That might work.
 > 
-> You could swap it around maybe like so:
+> If we see a type of PCI_EXP_TYPE_ROOT_PORT or
+> PCI_EXP_TYPE_PCIE_BRIDGE, I think we have to assume that's accurate
+> (which we already do today -- for those types, we assume the device
+> has a secondary link).
 > 
-> int dfl_feature_instance_init() ...
-> {
-> 	feature->ops = drv->ops;
-> 	if (drv->ops->init)
-> 		return drv->ops->init(pdev, feature);
+> For a device that claims to be PCI_EXP_TYPE_DOWNSTREAM, if a parent
+> device exists and is a Downstream Port (Root Port, Switch Downstream
+> Port, and I suppose a PCI-to-PCIe bridge (this is basically
+> pcie_downstream_port()), this device must actually be acting as a
+> PCI_EXP_TYPE_UPSTREAM device.
 > 
-> 	return 0;
-> }
+> If a device claiming to be PCI_EXP_TYPE_UPSTREAM has a parent that is
+> PCI_EXP_TYPE_UPSTREAM, this device must actually be a
+> PCI_EXP_TYPE_DOWNSTREAM port.
 > 
-> With the caveat that feature->ops gets always set ...
-> 
-> Your call.
+> For PCI_EXP_TYPE_DOWNSTREAM and PCI_EXP_TYPE_UPSTREAM devices that
+> don't have parents, we just have to assume they advertise the correct
+> type (as we do today).  There are sparc and virtualization configs
+> like this.
 
-Hi Moritz,
+OK, thanks for the details. I'll try to make patch based on the above.
 
-Thanks a lot for the review and comments. It does simplify the code,
-will modify it.
-
-Thanks
-Hao
-
+> > Another option may be to just add a quirk for these ports.
 > 
-> Thanks,
-> Moritz
+> I don't really like the quirk approach because then we have to rely on
+> user reports of something being broken.
+> 
+> > Only concern for both is that we have functions that rely on the type
+> > such as pcie_capability_read_word() so if we change the type do we end
+> > up breaking something? I did not check too closely, though.
+> 
+> I don't think we'll break anything that's not already broken because
+> the type will reflect exactly what has_secondary_link now tells us.
+> In fact, we might *fix* some things, e.g., pcie_capability_read_word()
+> should work better if we fix the type that pcie_downstream_port()
+> checks.
+
+Fair enough :)
