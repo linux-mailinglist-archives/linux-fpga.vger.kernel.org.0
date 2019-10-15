@@ -2,69 +2,63 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5662ED774F
-	for <lists+linux-fpga@lfdr.de>; Tue, 15 Oct 2019 15:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5E5D7EF9
+	for <lists+linux-fpga@lfdr.de>; Tue, 15 Oct 2019 20:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731061AbfJONSp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 15 Oct 2019 09:18:45 -0400
-Received: from mga18.intel.com ([134.134.136.126]:16623 "EHLO mga18.intel.com"
+        id S1729110AbfJOS13 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 15 Oct 2019 14:27:29 -0400
+Received: from ms.lwn.net ([45.79.88.28]:36136 "EHLO ms.lwn.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729551AbfJONSp (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 15 Oct 2019 09:18:45 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Oct 2019 06:18:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,300,1566889200"; 
-   d="scan'208";a="208181089"
-Received: from mcretu-mobl.ger.corp.intel.com (HELO localhost) ([10.252.56.150])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Oct 2019 06:18:38 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Tim.Bird@sony.com, changbin.du@gmail.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        id S1726405AbfJOS12 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 15 Oct 2019 14:27:28 -0400
+Received: from lwn.net (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id AA813316;
+        Tue, 15 Oct 2019 18:27:27 +0000 (UTC)
+Date:   Tue, 15 Oct 2019 12:27:26 -0600
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
         intel-gfx@lists.freedesktop.org
-Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions' to 'specific'
-In-Reply-To: <20191015115439.GE32665@bombadil.infradead.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20191013055359.23312-1-changbin.du@gmail.com> <875zkrd7nq.fsf@intel.com> <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com> <7e7557b5-469f-3e63-6254-53dab2d7234a@suse.de> <20191015115439.GE32665@bombadil.infradead.org>
-Date:   Tue, 15 Oct 2019 16:19:36 +0300
-Message-ID: <8736fub0yf.fsf@intel.com>
+Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
+ to 'specific'
+Message-ID: <20191015122726.7e12f551@lwn.net>
+In-Reply-To: <20191013055359.23312-1-changbin.du@gmail.com>
+References: <20191013055359.23312-1-changbin.du@gmail.com>
+Organization: LWN.net
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, 15 Oct 2019, Matthew Wilcox <willy@infradead.org> wrote:
-> On Tue, Oct 15, 2019 at 11:25:53AM +0200, Thomas Zimmermann wrote:
->> > My preference would be to use 'symbols'.  I tried to come up with something
->> > but 'symbols' is better than anything I came up with.
->> 
->> Maybe 'interfaces' or 'artifacts'. The term 'symbols' is just as
->> imprecise as 'functions'.
->
-> I suggested 'identifier' because that's the term used in the C spec (6.2.1):
->
-> : An identifier can denote an object; a function; a tag or a member
-> : of a structure, union, or enumeration; a typedef name; a label name;
-> : a macro name; or a macro parameter.
->
-> We don't allow documenting all those things separately, but it does cover
-> all the things we do allow to be individually documented.
+On Sun, 13 Oct 2019 13:53:59 +0800
+Changbin Du <changbin.du@gmail.com> wrote:
 
-Agreed.
+> The 'functions' directive is not only for functions, but also works for
+> structs/unions. So the name is misleading. This patch renames it to
+> 'specific', so now we have export/internal/specific directives to limit
+> the functions/types to be included in documentation. Meanwhile we improved
+> the warning message.
 
-BR,
-Jani.
+I agree with the others that "specific" doesn't really make things
+better.  "Interfaces" maybe; otherwise we could go for something like
+"filter" or "select".
 
+Paint mine green :)
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Whatever we end up with, I think it should be added as a synonym for
+"functions".  Then the various selectors that are actually pulling out
+docs for functions could be changed at leisure - or not at all.  I'd
+rather not see a big patch changing everything at once.
+
+Thanks,
+
+jon
