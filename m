@@ -2,267 +2,163 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3E8FFDCB
-	for <lists+linux-fpga@lfdr.de>; Mon, 18 Nov 2019 06:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5C4100EF5
+	for <lists+linux-fpga@lfdr.de>; Mon, 18 Nov 2019 23:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725816AbfKRFW1 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 18 Nov 2019 00:22:27 -0500
-Received: from mga17.intel.com ([192.55.52.151]:64966 "EHLO mga17.intel.com"
+        id S1726769AbfKRWu0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 18 Nov 2019 17:50:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725208AbfKRFW1 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 18 Nov 2019 00:22:27 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Nov 2019 21:22:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,319,1569308400"; 
-   d="scan'208";a="405964318"
-Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Nov 2019 21:22:25 -0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>
-Subject: [PATCH] fpga: dfl: support multiple opens on feature device node.
-Date:   Mon, 18 Nov 2019 13:20:41 +0800
-Message-Id: <1574054441-1568-1-git-send-email-yilun.xu@intel.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726705AbfKRWu0 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 18 Nov 2019 17:50:26 -0500
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 706A22071C;
+        Mon, 18 Nov 2019 22:50:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574117424;
+        bh=zy7GHNSCslRqCL9U8ZLW7DxverHNkLIN0Q8AALTtovA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=XB7/hZqU3Yts8vu9yUNr24LvUGay10U06K9ZC7epOi/rTjO62S+oWRegdTepBa3St
+         TEIeq3HHH5xYLeCwmszL5ODkCMhxHwc56/A+gILZ5c8RjZWpYvB2JHd/wbcXcF0/Uk
+         2dpP1DdZ3xasa7I95NztCFOkdj3Z/Gq3qKTLf18Y=
+Date:   Mon, 18 Nov 2019 16:50:22 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ranran <ranshalit@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linux-fpga@vger.kernel.org,
+        Alex Williamson <alex.williamson@redhat.com>
+Subject: Re: FPGA device behaves strangely with Linux
+Message-ID: <20191118225022.GA69921@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ2oMhJh_itMXcZJ0Qxe1emrRXwYSGmVowm8gqipj6-8i0CNOA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Each DFL functional block, e.g. AFU (Accelerated Function Unit) and FME
-(FPGA Management Engine), could implement more than one function within
-its region, but current driver only allows one user application to access
-it by exclusive open on device node. So this is not convenient and
-flexible for userspace applications, as they have to combine lots of
-different functions into one single application.
+[+cc Alex, linux-fpga]
 
-This patch removes the limitation here to allow multiple opens to each
-feature device node for AFU and FME from userspace applications. If user
-still needs exclusive access to these device node, O_EXCL flag must be
-issued together with open.
+Hi Ran, sorry for the delay; I overlooked this until now.
 
-Signed-off-by: Wu Hao <hao.wu@intel.com>
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
----
- drivers/fpga/dfl-afu-main.c | 26 +++++++++++++++-----------
- drivers/fpga/dfl-fme-main.c | 19 ++++++++++++-------
- drivers/fpga/dfl.c          | 15 +++++++++++++--
- drivers/fpga/dfl.h          | 35 +++++++++++++++++++++++++++--------
- 4 files changed, 67 insertions(+), 28 deletions(-)
+On Mon, Nov 04, 2019 at 04:35:00PM +0200, Ranran wrote:
+> Hello,
+> 
+> I use x86 device with FPGA device.
+> The FPGA device acts strangely with Linux, while with vother OS on
+> same HW there is no issue.
+> The Other PCIe device acts find without any issues.
 
-diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index e4a34dc..c6e0e07 100644
---- a/drivers/fpga/dfl-afu-main.c
-+++ b/drivers/fpga/dfl-afu-main.c
-@@ -561,14 +561,16 @@ static int afu_open(struct inode *inode, struct file *filp)
- 	if (WARN_ON(!pdata))
- 		return -ENODEV;
- 
--	ret = dfl_feature_dev_use_begin(pdata);
--	if (ret)
--		return ret;
--
--	dev_dbg(&fdev->dev, "Device File Open\n");
--	filp->private_data = fdev;
-+	mutex_lock(&pdata->lock);
-+	ret = dfl_feature_dev_use_begin(pdata, filp->f_flags & O_EXCL);
-+	if (!ret) {
-+		dev_dbg(&fdev->dev, "Device File Opened %d Times\n",
-+			dfl_feature_dev_use_count(pdata));
-+		filp->private_data = fdev;
-+	}
-+	mutex_unlock(&pdata->lock);
- 
--	return 0;
-+	return ret;
- }
- 
- static int afu_release(struct inode *inode, struct file *filp)
-@@ -581,12 +583,14 @@ static int afu_release(struct inode *inode, struct file *filp)
- 	pdata = dev_get_platdata(&pdev->dev);
- 
- 	mutex_lock(&pdata->lock);
--	__port_reset(pdev);
--	afu_dma_region_destroy(pdata);
--	mutex_unlock(&pdata->lock);
--
- 	dfl_feature_dev_use_end(pdata);
- 
-+	if (!dfl_feature_dev_use_count(pdata)) {
-+		__port_reset(pdev);
-+		afu_dma_region_destroy(pdata);
-+	}
-+	mutex_unlock(&pdata->lock);
-+
- 	return 0;
- }
- 
-diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
-index 7c930e6..fda8623 100644
---- a/drivers/fpga/dfl-fme-main.c
-+++ b/drivers/fpga/dfl-fme-main.c
-@@ -600,14 +600,16 @@ static int fme_open(struct inode *inode, struct file *filp)
- 	if (WARN_ON(!pdata))
- 		return -ENODEV;
- 
--	ret = dfl_feature_dev_use_begin(pdata);
--	if (ret)
--		return ret;
--
--	dev_dbg(&fdev->dev, "Device File Open\n");
--	filp->private_data = pdata;
-+	mutex_lock(&pdata->lock);
-+	ret = dfl_feature_dev_use_begin(pdata, filp->f_flags & O_EXCL);
-+	if (!ret) {
-+		dev_dbg(&fdev->dev, "Device File Opened %d Times\n",
-+			dfl_feature_dev_use_count(pdata));
-+		filp->private_data = pdata;
-+	}
-+	mutex_unlock(&pdata->lock);
- 
--	return 0;
-+	return ret;
- }
- 
- static int fme_release(struct inode *inode, struct file *filp)
-@@ -616,7 +618,10 @@ static int fme_release(struct inode *inode, struct file *filp)
- 	struct platform_device *pdev = pdata->dev;
- 
- 	dev_dbg(&pdev->dev, "Device File Release\n");
-+
-+	mutex_lock(&pdata->lock);
- 	dfl_feature_dev_use_end(pdata);
-+	mutex_unlock(&pdata->lock);
- 
- 	return 0;
- }
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index 96a2b82..9909948 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -1079,6 +1079,7 @@ static int __init dfl_fpga_init(void)
-  */
- int dfl_fpga_cdev_release_port(struct dfl_fpga_cdev *cdev, int port_id)
- {
-+	struct dfl_feature_platform_data *pdata;
- 	struct platform_device *port_pdev;
- 	int ret = -ENODEV;
- 
-@@ -1093,7 +1094,11 @@ int dfl_fpga_cdev_release_port(struct dfl_fpga_cdev *cdev, int port_id)
- 		goto put_dev_exit;
- 	}
- 
--	ret = dfl_feature_dev_use_begin(dev_get_platdata(&port_pdev->dev));
-+	pdata = dev_get_platdata(&port_pdev->dev);
-+
-+	mutex_lock(&pdata->lock);
-+	ret = dfl_feature_dev_use_begin(pdata, true);
-+	mutex_unlock(&pdata->lock);
- 	if (ret)
- 		goto put_dev_exit;
- 
-@@ -1120,6 +1125,7 @@ EXPORT_SYMBOL_GPL(dfl_fpga_cdev_release_port);
-  */
- int dfl_fpga_cdev_assign_port(struct dfl_fpga_cdev *cdev, int port_id)
- {
-+	struct dfl_feature_platform_data *pdata;
- 	struct platform_device *port_pdev;
- 	int ret = -ENODEV;
- 
-@@ -1138,7 +1144,12 @@ int dfl_fpga_cdev_assign_port(struct dfl_fpga_cdev *cdev, int port_id)
- 	if (ret)
- 		goto put_dev_exit;
- 
--	dfl_feature_dev_use_end(dev_get_platdata(&port_pdev->dev));
-+	pdata = dev_get_platdata(&port_pdev->dev);
-+
-+	mutex_lock(&pdata->lock);
-+	dfl_feature_dev_use_end(pdata);
-+	mutex_unlock(&pdata->lock);
-+
- 	cdev->released_port_num--;
- put_dev_exit:
- 	put_device(&port_pdev->dev);
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index 9f0e656..4a9a33c 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -205,8 +205,6 @@ struct dfl_feature {
- 	const struct dfl_feature_ops *ops;
- };
- 
--#define DEV_STATUS_IN_USE	0
--
- #define FEATURE_DEV_ID_UNUSED	(-1)
- 
- /**
-@@ -219,8 +217,9 @@ struct dfl_feature {
-  * @dfl_cdev: ptr to container device.
-  * @id: id used for this feature device.
-  * @disable_count: count for port disable.
-+ * @excl_open: set on feature device exclusive open.
-+ * @open_count: count for feature device open.
-  * @num: number for sub features.
-- * @dev_status: dev status (e.g. DEV_STATUS_IN_USE).
-  * @private: ptr to feature dev private data.
-  * @features: sub features of this feature dev.
-  */
-@@ -232,26 +231,46 @@ struct dfl_feature_platform_data {
- 	struct dfl_fpga_cdev *dfl_cdev;
- 	int id;
- 	unsigned int disable_count;
--	unsigned long dev_status;
-+	bool excl_open;
-+	int open_count;
- 	void *private;
- 	int num;
- 	struct dfl_feature features[0];
- };
- 
- static inline
--int dfl_feature_dev_use_begin(struct dfl_feature_platform_data *pdata)
-+int dfl_feature_dev_use_begin(struct dfl_feature_platform_data *pdata,
-+			      bool excl)
- {
--	/* Test and set IN_USE flags to ensure file is exclusively used */
--	if (test_and_set_bit_lock(DEV_STATUS_IN_USE, &pdata->dev_status))
-+	if (pdata->excl_open)
- 		return -EBUSY;
- 
-+	if (excl) {
-+		if (pdata->open_count)
-+			return -EBUSY;
-+
-+		pdata->excl_open = true;
-+	}
-+	pdata->open_count++;
-+
- 	return 0;
- }
- 
- static inline
- void dfl_feature_dev_use_end(struct dfl_feature_platform_data *pdata)
- {
--	clear_bit_unlock(DEV_STATUS_IN_USE, &pdata->dev_status);
-+	pdata->excl_open = false;
-+
-+	if (WARN_ON(pdata->open_count <= 0))
-+		return;
-+
-+	pdata->open_count--;
-+}
-+
-+static inline
-+int dfl_feature_dev_use_count(struct dfl_feature_platform_data *pdata)
-+{
-+	return pdata->open_count;
- }
- 
- static inline
--- 
-2.7.4
+If I understand correctly, there is no issue with other PCIe devices
+in the system, but the FPGA device doesn't work correctly.
 
+How long does it take the FPGA to initialize after reset?
+
+> Doing lspci after reset, sometimes the device appear and other times
+> not enumerated at all.
+
+How are you doing the reset?  Writing to "1"  to
+/sys/bus/pci/devices/.../reset?  Can you tell what kind of reset we're
+doing (maybe you can instrument __pci_reset_function_locked()?)
+
+It's possible we're missing a delay after doing the reset and before
+restoring the device state, e.g., before calling pci_dev_restore() in
+pci_reset_function().  You could add "msleep(5000)" there to see if it
+makes any difference.
+
+If we do config reads or MMIO reads to a device too soon after reset
+and the device isn't ready to respond yet, we'll get 0xffffffff data,
+which could explain some of what you're seeing.
+
+> After reset it is almost always missing.
+> Then I force rescan several times, until it appears in lspci:
+> 03:00.0 RAM memory: Xilinx Corporation Default PCIe endpoint ID (rev ff)
+> 
+> After it appears there is still inconsistency when reading
+> configuration BAR with lspci -vv:
+
+What specific inconsistencies are you seeing here?  I see that "lspci
+-xx" doesn't show anything in BAR 0, but the "lspci -vv" says it's
+"virtual", which means it isn't a real BAR (I can't remember exactly
+what it *does* mean, but the lspci source would tell you).
+
+> 03:00.0 RAM memory: Xilinx Corporation Default PCIe endpoint ID
+>         Subsystem: Xilinx Corporation Default PCIe endpoint ID
+>         Control: I/O- Mem- BusMaster- SpecCycle- MemWINV- VGASnoop-
+> ParErr- Stepping- SERR- FastB2B- DisINTx-
+>         Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
+> <TAbort- <MAbort- >SERR- <PERR- INTx-
+>         Interrupt: pin A routed to IRQ 255
+>         Region 0: [virtual] Memory at 91500000 (32-bit,
+> non-prefetchable) [size=1M]
+>         Capabilities: [40] Power Management version 3
+>                 Flags: PMEClk- DSI+ D1- D2- AuxCurrent=0mA
+> PME(D0-,D1-,D2-,D3hot-,D3cold-)
+>                 Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+>         Capabilities: [48] MSI: Enable- Count=1/1 Maskable- 64bit+
+>                 Address: 0000000000000000  Data: 0000
+>         Capabilities: [58] Express (v1) Endpoint, MSI 00
+>                 DevCap: MaxPayload 256 bytes, PhantFunc 1, Latency L0s
+> <64ns, L1 <1us
+>                         ExtTag+ AttnBtn- AttnInd- PwrInd- RBE+
+> FLReset- SlotPowerLimit 10.000W
+>                 DevCtl: Report errors: Correctable- Non-Fatal- Fatal-
+> Unsupported-
+>                         RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+
+>                         MaxPayload 128 bytes, MaxReadReq 512 bytes
+>                 DevSta: CorrErr+ UncorrErr- FatalErr- UnsuppReq-
+> AuxPwr- TransPend-
+>                 LnkCap: Port #0, Speed 2.5GT/s, Width x1, ASPM L0s,
+> Exit Latency L0s unlimited
+>                         ClockPM- Surprise- LLActRep- BwNot- ASPMOptComp-
+>                 LnkCtl: ASPM Disabled; RCB 64 bytes Disabled- CommClk-
+>                         ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+>                 LnkSta: Speed 2.5GT/s, Width x1, TrErr- Train-
+> SlotClk+ DLActive- BWMgmt- ABWMgmt-
+>         Capabilities: [100 v1] Device Serial Number 00-00-00-00-00-00-00-00
+> 
+> [root@localhost ~]# lspci -xx -s 03:00.00
+> 03:00.0 RAM memory: Xilinx Corporation Default PCIe endpoint ID
+> 00: ee 10 07 00 00 00 10 00 00 00 00 05 00 00 00 00
+> 10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 20: 00 00 00 00 00 00 00 00 00 00 00 00 ee 10 07 00
+> 30: 00 00 00 00 40 00 00 00 00 00 00 00 ff 01 00 00
+> 
+> 
+> Other tries of reading (without reseting in between):
+> =========
+> 03:00.0 RAM memory: Xilinx Corporation Default PCIe endpoint ID (rev
+> ff) (prog-if ff)
+>         !!! Unknown header type 7f
+> 
+> root@localhost ~]# lspci -xx -s 03:00.00
+> 03:00.0 RAM memory: Xilinx Corporation Default PCIe endpoint ID (rev ff)
+> 00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> 10: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> 20: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> 30: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> 
+> 
+> [root@localhost pcimem]# ./pcimem
+> /sys/bus/pci/devices/0000\:03\:00.0/resource0  0 w*100
+> /sys/bus/pci/devices/0000:03:00.0/resource0 opened.
+> Target offset is 0x0, page size is 4096
+> mmap(0, 4096, 0x3, 0x1, 3, 0x0)
+> PCI Memory mapped to address 0x7faf91256000.
+> 0x0000: 0xFFFFFFFF
+> ...
+> 
+> The BIOS is also different between Linux and the other OS on same HW.
+
+Not sure what this means.  Are you saying you need a different BIOS to
+run Linux than the BIOS you need for the other OS?
+
+> Any idea what configuration can cause this behavior ?
+
+Most likely the device isn't responding for some reason, and we get ~0
+data (0xffffffff) in that error case.
+
+Bjorn
