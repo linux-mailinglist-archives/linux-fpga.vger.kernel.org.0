@@ -2,61 +2,83 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A07A115A25
-	for <lists+linux-fpga@lfdr.de>; Sat,  7 Dec 2019 01:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F32116532
+	for <lists+linux-fpga@lfdr.de>; Mon,  9 Dec 2019 04:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbfLGA3b (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 6 Dec 2019 19:29:31 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55011 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726535AbfLGA3b (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 6 Dec 2019 19:29:31 -0500
-Received: by mail-wm1-f65.google.com with SMTP id b11so9575062wmj.4
-        for <linux-fpga@vger.kernel.org>; Fri, 06 Dec 2019 16:29:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
-        b=UAczeQ0cY+yX9guoET55ezclAqEIwgyAMzPt2ZKBWIbIEt/pMnh3AM4wfp6V+VJf5N
-         /t6chYtkaELTCMsYIAwEqK7Ua++MAsqMO7EBu71mj4Fnlls+x4upb8tVoG2CKNwhblXl
-         GZWv+vxa+pk1bnKGno8f6HZ0ZmxLsefDKEHUp1ThC1gheUMLLO9GE4KYBuoyxwVDBQHN
-         +TWbv9hzxOJ/nyPcm2o6z2SaO7Kv5KPSrhGMjlDOWxjvXF61G6B8vS09UDIp3Kqr/FVJ
-         bo7yk/PV6MjG5BE7V9e+BVzlMyDYxzemK0FCoiLj7UmqPUvOwHSq+EWh2p0uz94KzjFK
-         8hKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
-        b=OCRiN0oOzfXyrw8Bw+Rp0MPMZv6FqqXLYKXAhChH1Pb+nc0tgrvOSknC+hslQEh0bx
-         UFThSb/alLmqZ65dQ60LDNNO5mPYvxbU+jF/zFv7Jj0xk5TZS0w152pukf/Gg885C9iz
-         8+QXFogzy/u/lNitawvTdBSoeSiKpgqaa8cXkbnGioXnS4XiyPcl2O2hIIGEVxuhHCsK
-         v4r16BgOsPOrzoom4E/A9DQg74eAytosuR96Xb/0d7wEyasFWGUc+vxIKM5cJ59EMaoV
-         voqF/ryaRoDgi2mDjgxuuJZ/hUdE4P8wtsedRgft5RuTwYQMesjtcV/l5HLJjes5vrPW
-         N5WQ==
-X-Gm-Message-State: APjAAAWRWSFTYkfsIg0wdLVGGQ5J61HOXY7x/Jho46+nfcxFr2/P6PRI
-        SfIu5LHapoltbl9QsJlmoYeJ2qAzsDFDr7Hs9U4=
-X-Google-Smtp-Source: APXvYqyph35gV3V54gW4I7K644Z0gktlmZ+TXi6PJ8di3vm3dUTlaeyqr+FE+GZusDLWVMAtrDQhs4P9pROrLOxshFQ=
-X-Received: by 2002:a1c:96c4:: with SMTP id y187mr13234108wmd.112.1575678569910;
- Fri, 06 Dec 2019 16:29:29 -0800 (PST)
+        id S1726877AbfLIDFP (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 8 Dec 2019 22:05:15 -0500
+Received: from mga01.intel.com ([192.55.52.88]:31796 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726748AbfLIDFO (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 8 Dec 2019 22:05:14 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Dec 2019 19:05:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,294,1571727600"; 
+   d="scan'208";a="412614427"
+Received: from hao-dev.bj.intel.com (HELO localhost) ([10.238.157.65])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Dec 2019 19:05:12 -0800
+Date:   Mon, 9 Dec 2019 10:45:27 +0800
+From:   Wu Hao <hao.wu@intel.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     mdf@kernel.org, mark.rutland@arm.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        atull@kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v6 0/2] add performance reporting support to FPGA DFL
+ drivers
+Message-ID: <20191209024527.GA22625@hao-dev>
+References: <1573622695-25607-1-git-send-email-hao.wu@intel.com>
+ <20191125033412.GB890@hao-dev>
+ <20191125080127.GC1809@willie-the-truck>
+ <20191125080839.GA6227@hao-dev>
 MIME-Version: 1.0
-Received: by 2002:a5d:678e:0:0:0:0:0 with HTTP; Fri, 6 Dec 2019 16:29:29 -0800 (PST)
-Reply-To: mrs.aalia.ahmed@gmail.com
-From:   "Mrs.Aalia.Ahmed" <adamhana1907@gmail.com>
-Date:   Sat, 7 Dec 2019 00:29:29 +0000
-Message-ID: <CAOGreOkqZQY02Qc7dHVxdRFWYrTLKw3DvePG3mBc3_8d8rdvmw@mail.gmail.com>
-Subject: OK
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191125080839.GA6227@hao-dev>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Greetings My Dearest One.
+On Mon, Nov 25, 2019 at 04:08:39PM +0800, Wu Hao wrote:
+> On Mon, Nov 25, 2019 at 08:01:28AM +0000, Will Deacon wrote:
+> > On Mon, Nov 25, 2019 at 11:34:12AM +0800, Wu Hao wrote:
+> > > Hi Will and Mark,
+> > > 
+> > > Could you please help us on review this patchset? as this patchset mainly 
+> > > introduced a new perf driver following the similar way as drivers/perf/*.
+> > 
+> > Why is it not under drivers/perf/, then?
+> 
+> Hi Will
+> 
+> Thanks for the quick response. This is one sub feature for DFL based FPGAs,
+> and we plan to put this sub feature together with others, including related
+> documentation. It only registers a standard perf pmu for its userspace
+> interfaces.
+> 
+> > 
+> > > This patchset has been submitted for a long time but didn't receive any
+> > > comment after v4. we appreciate any review comments! thanks in advance. :)
+> > 
+> > Hmm, not sure I saw the previous versions. Guessing I wasn't on cc?
+> 
+> We switched to perf API from v4, and started ccing you and Mark from v5. :)
 
-My name is Mrs.Aalia.Ahmed, i saw your profile and became interested
-in you, please contact me through my email address
-(mrs.aalia.ahmed@gmail.com) to know each other and i have something
-very important to tell you, i wait for your response to my email ID.
-(mrs.aalia.ahmed@gmail.com
+Hi Will
+
+Did you get a chance to look into this patchset?
+
+Thanks
+Hao
+
+> 
+> Thanks
+> Hao
+> 
+> > 
+> > Will
