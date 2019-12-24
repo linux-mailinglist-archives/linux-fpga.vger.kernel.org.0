@@ -2,95 +2,58 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB3011FC6B
-	for <lists+linux-fpga@lfdr.de>; Mon, 16 Dec 2019 02:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 510FD129F27
+	for <lists+linux-fpga@lfdr.de>; Tue, 24 Dec 2019 09:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbfLPBDR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 15 Dec 2019 20:03:17 -0500
-Received: from mga09.intel.com ([134.134.136.24]:38868 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726373AbfLPBDR (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sun, 15 Dec 2019 20:03:17 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Dec 2019 17:03:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,319,1571727600"; 
-   d="scan'208";a="297536793"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga001.jf.intel.com with ESMTP; 15 Dec 2019 17:03:14 -0800
-Date:   Mon, 16 Dec 2019 09:01:04 +0800
-From:   Xu Yilum <yilun.xu@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Wu Hao <hao.wu@intel.com>, mdf@kernel.org, mark.rutland@arm.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, atull@kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v6 0/2] add performance reporting support to FPGA DFL
-  drivers
-Message-ID: <20191216010104.GA32154@yilunxu-OptiPlex-7050>
-References: <1573622695-25607-1-git-send-email-hao.wu@intel.com>
- <20191125033412.GB890@hao-dev>
- <20191125080127.GC1809@willie-the-truck>
- <20191125080839.GA6227@hao-dev>
- <20191209024527.GA22625@hao-dev>
+        id S1726287AbfLXIh0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 24 Dec 2019 03:37:26 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:38261 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbfLXIhX (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 24 Dec 2019 03:37:23 -0500
+Received: by mail-qt1-f194.google.com with SMTP id n15so17616958qtp.5
+        for <linux-fpga@vger.kernel.org>; Tue, 24 Dec 2019 00:37:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
+        b=eygDl7YBOCWWlQe5JjF71GUH0MxM2GnwKjuCnN7TJql3Th2giuJ6whXX6bgil+EExJ
+         9q7jYtqcvwBdzX9QmcdS5Or8CwSEfjU/0/6EcB0lhs2iKt4PXI5gP8H4utHkg0jLU9pY
+         B3mJ64Fh1mzjTJR24vDJfgXQy9lm4sSOGyTAmophO5wmGAx5nYj7rGjQfi7P3LAErQ+9
+         nhoHpZhHZfmEvsP3QBOkQ8v7+CQPKZ7xdr5PRDvAs49FpgCEc+DOuULzYeX+h2ST5GXh
+         R1VWtI5/q+jGX0u6pDRVuuLWSSgz7y4RrZwwTh9WgOyOHzfF2l/9tXjgijxyMV1XszYE
+         /ocA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
+        b=EX+OwK3Nmhf7ekolhdFiK5ytT4y6ufdoV00GyplGYOORpjTymoK6KBbOHUe7jrjJVC
+         0LwUdDFj1ImpRq4h782KHCvE+BI8RbRAhDtGwfur5iQfE8YC/NOBK/MY+A7eE0lveQY5
+         DdFIyEHa4c4eQnaujhMPbyfevtBj71I9iAZeXv8ZRr+6IWh3N176py+QzRVlz5Tty4hv
+         l34Vo6sqRS+tCpaen2VhGvf/dImUpnVYUZaqS1HSQW3mLlK3QxC7ad6gRqjecuFZ4+er
+         6HgHeB0YP9vsfRJygrzyVf2z/bFo7Xje38ZLko96HlJjJWrE8dvzWYcRhz1jrXnp8nVx
+         Y8YQ==
+X-Gm-Message-State: APjAAAWlXHLdJM4LPmHpQ7iTTcwjTfwc5aMiVXwbggZVnHlmzQILIx0E
+        F7UxhEtyQAzXwY5Vre4hfYNou9qjP1uML+HQvys=
+X-Google-Smtp-Source: APXvYqyA2n44646Wl9JB8Imy9OLLzJdjXN8GcJmUl6KzhAVYFQ3YkgwqF66v+1Fe8G1X849TvuFmMEcglRF1JWQ82U4=
+X-Received: by 2002:ac8:2b26:: with SMTP id 35mr26070705qtu.341.1577176642769;
+ Tue, 24 Dec 2019 00:37:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191209024527.GA22625@hao-dev>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Received: by 2002:ad4:530a:0:0:0:0:0 with HTTP; Tue, 24 Dec 2019 00:37:22
+ -0800 (PST)
+Reply-To: bethnatividad9@gmail.com
+From:   Beth Nat <anthonymoore105@gmail.com>
+Date:   Tue, 24 Dec 2019 08:37:22 +0000
+Message-ID: <CAKqrdYA5V4KZX0c4sA1FEJYxSJKRN5oMbBm3OFwOCwGFzixGXg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Dec 09, 2019 at 10:45:27AM +0800, Wu Hao wrote:
-> On Mon, Nov 25, 2019 at 04:08:39PM +0800, Wu Hao wrote:
-> > On Mon, Nov 25, 2019 at 08:01:28AM +0000, Will Deacon wrote:
-> > > On Mon, Nov 25, 2019 at 11:34:12AM +0800, Wu Hao wrote:
-> > > > Hi Will and Mark,
-> > > > 
-> > > > Could you please help us on review this patchset? as this patchset mainly 
-> > > > introduced a new perf driver following the similar way as drivers/perf/*.
-> > > 
-> > > Why is it not under drivers/perf/, then?
-> > 
-> > Hi Will
-> > 
-> > Thanks for the quick response. This is one sub feature for DFL based FPGAs,
-> > and we plan to put this sub feature together with others, including related
-> > documentation. It only registers a standard perf pmu for its userspace
-> > interfaces.
-> > 
-> > > 
-> > > > This patchset has been submitted for a long time but didn't receive any
-> > > > comment after v4. we appreciate any review comments! thanks in advance. :)
-> > > 
-> > > Hmm, not sure I saw the previous versions. Guessing I wasn't on cc?
-> > 
-> > We switched to perf API from v4, and started ccing you and Mark from v5. :)
-> 
-> Hi Will
-> 
-> Did you get a chance to look into this patchset?
-> 
-> Thanks
-> Hao
-
-Hi Will
-
-Did you have time to look into this patchset? We have done review work
-for FPGA part. And as a perf driver, we appreciate your comments.
-
-Thanks
-Yilun
-
-> 
-> > 
-> > Thanks
-> > Hao
-> > 
-> > > 
-> > > Will
+How are you today my dear? i saw your profile and it interests me, i
+am a Military nurse from USA. Can we be friend? I want to know more
+about you.
