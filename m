@@ -2,103 +2,84 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F7B12F3E4
-	for <lists+linux-fpga@lfdr.de>; Fri,  3 Jan 2020 05:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C5F12F3F4
+	for <lists+linux-fpga@lfdr.de>; Fri,  3 Jan 2020 05:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726219AbgACEt0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 2 Jan 2020 23:49:26 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:54238 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725972AbgACEt0 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 2 Jan 2020 23:49:26 -0500
-Received: by mail-pj1-f68.google.com with SMTP id n96so4125760pjc.3;
-        Thu, 02 Jan 2020 20:49:26 -0800 (PST)
+        id S1726478AbgACE7G (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 2 Jan 2020 23:59:06 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:42845 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725890AbgACE7G (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 2 Jan 2020 23:59:06 -0500
+Received: by mail-pl1-f193.google.com with SMTP id p9so18630889plk.9;
+        Thu, 02 Jan 2020 20:59:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=c7vB/owjAGocjJkQyceIEpdT371hvlmQPecB01G/CHI=;
-        b=sME+BpFtQRuc4tKfCnxfCV7aOcQLSy+O/5xanIJJPV5iof9iizE18sTL5CkzNhZoxC
-         w+0HkyVctxbJONtbb9hoXHtwqid6C6Yf7sTWnRV24tvMg4q6CwIl9lOlMlnZBS60FT/a
-         QM0VX/HXozO4gUN70cqzkM0ciYw/rwSEesegANe80mZkjAneyrRf+0AL30PQ5yIoVvYb
-         tbIHfS9gQCkpKLBtWfDrq1W7TUwn7MRZQySmzorU+QPwRn9hCbW3Xr+RK95RwJ5Clzjl
-         OwklaAN9ieWVp6X3/qI7MBvU/i/02MHf5yC49trq2RUkMX64DhNRZ1VTNig+NxOmiUBu
-         vsow==
-X-Gm-Message-State: APjAAAU0Eh7GggBn9Xrk5YV1eFgeioDtxISFT9l49RZv6bySqZTv8YeI
-        q4BF+NwEdId9lY3U32nXjoc=
-X-Google-Smtp-Source: APXvYqzRsftPC0MUnG1KprOXPr0Rm0qBCGlylIkz3RsUISL+i1SrgO62IeFC+LTOWbQ+GMdkNnK0cA==
-X-Received: by 2002:a17:90a:8584:: with SMTP id m4mr24523979pjn.123.1578026965718;
-        Thu, 02 Jan 2020 20:49:25 -0800 (PST)
+         :mime-version:content-disposition:in-reply-to;
+        bh=aI+2u/HpPBiuykMreYIKZGWs5PKmJVun0XNlugn6rAc=;
+        b=CHHPPY+9q0N3Tle6VrCE1JCQ3wS+ROf23CNoSGVrX7gs4+uUqR/ysZWr0WA6EME1Fl
+         QfO785HCs0PBLaVevL+IkfMkYKODs4tsTijNekJyqJv6DfFgYvxTmbYh6BB33JzcAHYV
+         ePVsucS5NKdSuP4QRNr4zFeebB+VPCGBTVv1iJUAFsDho/4bKVMx8RUfEucaVYWhJwxa
+         3pQLO37WN32xMRKSER81GOF0FwE7xNTLEkVnq3kGn6PfnVHi4Eo7fXVVAB9XUusQgy3R
+         ZnbbKAcPd+tkIV2S81aa8kWqgdih452lAU7lE4YYBzOiIY68KWvVcPtF8PPcY3iMRVOS
+         DjNA==
+X-Gm-Message-State: APjAAAUqDJBvWecT3E4nCSWfKdjCo7BzecHieMj5fgmObIEi21BRw/TL
+        NYBV8XiIY8jESq7gWJAoRhc=
+X-Google-Smtp-Source: APXvYqw+LOTJQhZtHCaB+kTJjJDJIYZsr3DehvC+jKvor7K4ZfgEIQnO7Bcd6kEMP1QjxKXdUuS9hg==
+X-Received: by 2002:a17:902:fe05:: with SMTP id g5mr90583596plj.3.1578027545630;
+        Thu, 02 Jan 2020 20:59:05 -0800 (PST)
 Received: from localhost ([2601:647:5b00:710:ffa7:88dc:9c39:76d9])
-        by smtp.gmail.com with ESMTPSA id z26sm34911250pfa.90.2020.01.02.20.49.24
+        by smtp.gmail.com with ESMTPSA id 189sm67628996pfw.73.2020.01.02.20.59.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2020 20:49:24 -0800 (PST)
-Date:   Thu, 2 Jan 2020 20:49:24 -0800
+        Thu, 02 Jan 2020 20:59:04 -0800 (PST)
+Date:   Thu, 2 Jan 2020 20:59:03 -0800
 From:   Moritz Fischer <mdf@kernel.org>
-To:     Wu Hao <hao.wu@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, yu kuai <yukuai3@huawei.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawe.com, zhengbin13@huawei.com
-Subject: Re: [PATCH] fpga: dfl: fme: remove set but not used variable 'fme'
-Message-ID: <20200103044924.GB20838@epycbox.lan>
-References: <20191226121638.10507-1-yukuai3@huawei.com>
- <20191227225726.GA1643@archbook>
- <20191230015140.GA6839@hao-dev>
+To:     Ding Xiang <dingxiang@cmss.chinamobile.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: remove redundant dev_err message
+Message-ID: <20200103045903.GA21472@epycbox.lan>
+References: <1568107616-12755-1-git-send-email-dingxiang@cmss.chinamobile.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191230015140.GA6839@hao-dev>
+In-Reply-To: <1568107616-12755-1-git-send-email-dingxiang@cmss.chinamobile.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Dec 30, 2019 at 09:51:40AM +0800, Wu Hao wrote:
-> On Fri, Dec 27, 2019 at 02:57:26PM -0800, Moritz Fischer wrote:
-> > On Thu, Dec 26, 2019 at 08:16:38PM +0800, yu kuai wrote:
-> > > Fixes gcc '-Wunused-but-set-variable' warning:
-> > > 
-> > > drivers/fpga/dfl-fme-main.c: In function ‘fme_dev_destroy’:
-> > > drivers/fpga/dfl-fme-main.c:678:18: warning: variable ‘fme’ set but not
-> > > used [-Wunused-but-set-variable]
-> > > 
-> > > It is never used and so can be removed.
-> > > 
-> > > Signed-off-by: yu kuai <yukuai3@huawei.com>
-> > > ---
-> > >  drivers/fpga/dfl-fme-main.c | 2 --
-> > >  1 file changed, 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
-> > > index 7c930e6b314d..1d4690c99268 100644
-> > > --- a/drivers/fpga/dfl-fme-main.c
-> > > +++ b/drivers/fpga/dfl-fme-main.c
-> > > @@ -675,10 +675,8 @@ static int fme_dev_init(struct platform_device *pdev)
-> > >  static void fme_dev_destroy(struct platform_device *pdev)
-> > >  {
-> > >  	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
-> > > -	struct dfl_fme *fme;
-> > >  
-> > >  	mutex_lock(&pdata->lock);
-> > > -	fme = dfl_fpga_pdata_get_private(pdata);
-> > >  	dfl_fpga_pdata_set_private(pdata, NULL);
-> > >  	mutex_unlock(&pdata->lock);
-> > >  }
-> > > -- 
-> > > 2.17.2
-> > > 
-> > Acked-by: Moritz Fischer <mdf@kernel.org>
+On Tue, Sep 10, 2019 at 05:26:56PM +0800, Ding Xiang wrote:
+> devm_ioremap_resource already contains error message, so remove
+> the redundant dev_err message
 > 
-> Acked-by: Wu Hao <hao.wu@intel.com>
+> Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
+> ---
+>  drivers/fpga/ts73xx-fpga.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> Thanks
-> Hao
+> diff --git a/drivers/fpga/ts73xx-fpga.c b/drivers/fpga/ts73xx-fpga.c
+> index 9a17fe9..2888ff0 100644
+> --- a/drivers/fpga/ts73xx-fpga.c
+> +++ b/drivers/fpga/ts73xx-fpga.c
+> @@ -119,10 +119,8 @@ static int ts73xx_fpga_probe(struct platform_device *pdev)
+>  
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	priv->io_base = devm_ioremap_resource(kdev, res);
+> -	if (IS_ERR(priv->io_base)) {
+> -		dev_err(kdev, "unable to remap registers\n");
+> +	if (IS_ERR(priv->io_base))
+>  		return PTR_ERR(priv->io_base);
+> -	}
+>  
+>  	mgr = devm_fpga_mgr_create(kdev, "TS-73xx FPGA Manager",
+>  				   &ts73xx_fpga_ops, priv);
+> -- 
+> 1.9.1
 > 
-> > 
-> > Thanks,
-> > Moritz
+> 
+> 
 
 Applied to for-next.
 
