@@ -2,72 +2,119 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96154138B30
-	for <lists+linux-fpga@lfdr.de>; Mon, 13 Jan 2020 06:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15B813A0E7
+	for <lists+linux-fpga@lfdr.de>; Tue, 14 Jan 2020 07:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733256AbgAMFw0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 13 Jan 2020 00:52:26 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:44865 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728748AbgAMFw0 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 13 Jan 2020 00:52:26 -0500
-Received: by mail-oi1-f196.google.com with SMTP id d62so7173347oia.11
-        for <linux-fpga@vger.kernel.org>; Sun, 12 Jan 2020 21:52:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=El5YZgtDEXJCHEtZrRB1ujEJT5GnrR9nqQvx3oNXkD1KXWKAy5lE4fahagwXmNRBuY
-         Z373bCStdjZZAvrcMmyjZhqXNYKD7qS8gpQ1uKt4Zm/CJYofbOmd6y2KCfdaIf8lu4gx
-         e04Qq2Wd5k0QzXhgODgXLh9+BTAbr7mIJG1kvrHD2cB5892G2QaMtoQjZ8YbwAsn/v/R
-         qN1ulSwy8kLJzDOOwwvDkEa6g0paOaNUUW6lO8NcaOsOsQMTh2eV34LXY/bnRxfyDcL+
-         OFIAYoYpyWTxvo4nB11oXa8J2BNLiFXnr18VfN4DCPOmpXqWPT8f/9GzmZX8VWLxs4VK
-         s+8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=NfUmS2pImKB/AzuydO0J53uEZs1QcjIm0lYnw6Mzs0Cp/39c3raveiTa6DCxBasWTA
-         Ep4HU/VhZOoDaKsSGyw5LbJmhzVaLkxGT3tsgHZ4VAXkWUrW36dRT3vmncCvwBgH6s8O
-         e6fV+ICylSWGxE2JgasMqXY/pC/RJvMxF3qx0CE3lwOd8NGo6fyFSI+NL+h63GhcT7Ry
-         9Zl0I9AZLAa9WZrnrn5FUKtUacT1etyQ2mOD7nzBg6YFHVS9tkH50QowR1E4wQOqBrqw
-         zA1DoiZd7c768eA+t2YXNt58Xq5cAAwqx723p6Dyk/pXgwMHtVn7DUiHFv+YbcTaSQrW
-         pYqQ==
-X-Gm-Message-State: APjAAAVxMOjBmGO7aWZY3nAtd07V5lobq/fx+PdQpuJwM3JRKaRx/jdf
-        BiNF8piu45bi5ilPQDA+Tt+QBo+tUhtqIJpaenU=
-X-Google-Smtp-Source: APXvYqy7JhGBt0ZjJ/1t4CT74GIhTuvbOMnCynReBbsGRcTAfZPwoiLBCe9XiPA9xaK1JAPmy14eucUMWI9DLkbKsUo=
-X-Received: by 2002:a54:4713:: with SMTP id k19mr11513430oik.113.1578894745174;
- Sun, 12 Jan 2020 21:52:25 -0800 (PST)
+        id S1726995AbgANGQY (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 14 Jan 2020 01:16:24 -0500
+Received: from mga14.intel.com ([192.55.52.115]:11960 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726121AbgANGQY (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 14 Jan 2020 01:16:24 -0500
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jan 2020 22:16:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,431,1571727600"; 
+   d="scan'208";a="242352844"
+Received: from hao-dev.bj.intel.com (HELO localhost) ([10.238.157.65])
+  by orsmga002.jf.intel.com with ESMTP; 13 Jan 2020 22:16:21 -0800
+Date:   Tue, 14 Jan 2020 13:56:05 +0800
+From:   Wu Hao <hao.wu@intel.com>
+To:     mdf@kernel.org, Will Deacon <will@kernel.org>
+Cc:     mark.rutland@arm.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        atull@kernel.org, gregkh@linuxfoundation.org, yilun.xu@intel.com
+Subject: Re: [PATCH v6 0/2] add performance reporting support to FPGA DFL
+ drivers
+Message-ID: <20200114055605.GA13574@hao-dev>
+References: <1573622695-25607-1-git-send-email-hao.wu@intel.com>
+ <20191125033412.GB890@hao-dev>
+ <20191125080127.GC1809@willie-the-truck>
+ <20191125080839.GA6227@hao-dev>
+ <20191209024527.GA22625@hao-dev>
+ <20191216010104.GA32154@yilunxu-OptiPlex-7050>
+ <20200106023742.GA3980@hao-dev>
 MIME-Version: 1.0
-Received: by 2002:a4a:41cb:0:0:0:0:0 with HTTP; Sun, 12 Jan 2020 21:52:24
- -0800 (PST)
-Reply-To: rickschaech@gmail.com
-From:   Rick Schaech <cathben72@gmail.com>
-Date:   Mon, 13 Jan 2020 01:52:24 -0400
-Message-ID: <CAEcBxO=TAnFn5LzizHa22hUC0Db5FuiZJF28m=yX3_9m--jRqg@mail.gmail.com>
-Subject: I wait for your swift response,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200106023742.GA3980@hao-dev>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Dear, I'm Mr Rick Schaech, I am the General Account Auditor, Though i
-know we have not meet each other before but sometimes in life God have
-a reason of bringing two people from two different countries together
-as business partners or life partners.
+On Mon, Jan 06, 2020 at 10:37:42AM +0800, Wu Hao wrote:
+> On Mon, Dec 16, 2019 at 09:01:04AM +0800, Xu Yilum wrote:
+> > On Mon, Dec 09, 2019 at 10:45:27AM +0800, Wu Hao wrote:
+> > > On Mon, Nov 25, 2019 at 04:08:39PM +0800, Wu Hao wrote:
+> > > > On Mon, Nov 25, 2019 at 08:01:28AM +0000, Will Deacon wrote:
+> > > > > On Mon, Nov 25, 2019 at 11:34:12AM +0800, Wu Hao wrote:
+> > > > > > Hi Will and Mark,
+> > > > > > 
+> > > > > > Could you please help us on review this patchset? as this patchset mainly 
+> > > > > > introduced a new perf driver following the similar way as drivers/perf/*.
+> > > > > 
+> > > > > Why is it not under drivers/perf/, then?
+> > > > 
+> > > > Hi Will
+> > > > 
+> > > > Thanks for the quick response. This is one sub feature for DFL based FPGAs,
+> > > > and we plan to put this sub feature together with others, including related
+> > > > documentation. It only registers a standard perf pmu for its userspace
+> > > > interfaces.
+> > > > 
+> > > > > 
+> > > > > > This patchset has been submitted for a long time but didn't receive any
+> > > > > > comment after v4. we appreciate any review comments! thanks in advance. :)
+> > > > > 
+> > > > > Hmm, not sure I saw the previous versions. Guessing I wasn't on cc?
+> > > > 
+> > > > We switched to perf API from v4, and started ccing you and Mark from v5. :)
+> > > 
+> > > Hi Will
+> > > 
+> > > Did you get a chance to look into this patchset?
+> > > 
+> > > Thanks
+> > > Hao
+> > 
+> > Hi Will
+> > 
+> > Did you have time to look into this patchset? We have done review work
+> > for FPGA part. And as a perf driver, we appreciate your comments.
+> > 
+> > Thanks
+> > Yilun
+> 
+> Hi Will
+> 
+> Did you get a chance to look into this patchset these days? 
+> 
+> Actually we didn't receive any comments for a long time, if you are busy and
+> don't have enough time on this, do you know if someone else could help with
+> review and ack from perf driver point of view, or any other things we can do
+> to speed up this? Thanks in advance! 
 
-My dear friend, I have the sum of 15.7 Million USD i wish to put in
-your name due to the death of my late client who died several years
-ago as his next of kin column still remain blank. Though the internet
-medium is highly abuse these days but am assuring you that this
-transaction is legitimate and I am contacting you that we may have a
-deal, note for your cooperation and collaboration 40% of the sum will
-be for you while the other 60% will be for me as well. I wait for your
-swift response for more details. please forward your response to my
-personal E-mail: rickschaech@gmail.com
+Hi Moritz
 
-Yours sincerely,
-Rick Schaech.
+Looks like still no response from Will. :(
+
+Do you know someone else could help?
+
+Thanks
+Hao
+
+> 
+> Hao
+> 
+> > 
+> > > 
+> > > > 
+> > > > Thanks
+> > > > Hao
+> > > > 
+> > > > > 
+> > > > > Will
