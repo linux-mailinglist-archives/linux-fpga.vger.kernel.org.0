@@ -2,91 +2,88 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB67C16913C
-	for <lists+linux-fpga@lfdr.de>; Sat, 22 Feb 2020 19:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82FB169B47
+	for <lists+linux-fpga@lfdr.de>; Mon, 24 Feb 2020 01:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbgBVSVt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 22 Feb 2020 13:21:49 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:37895 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726550AbgBVSVt (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 22 Feb 2020 13:21:49 -0500
-Received: by mail-pj1-f65.google.com with SMTP id j17so2208119pjz.3;
-        Sat, 22 Feb 2020 10:21:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iCwcVv4xnWxcWa1WsgaUhoEXl3ZCR2vSZR6hr5gWHNc=;
-        b=qn/j0hsTDGj5g1hdy+11qB9A07uT+P3d3rAzVRn7MD6aFqzDvLxR5a7CC6njCrOMwj
-         zrCaXS8fNHAWQG8ADogGQXzIzib18/3w4Ptqo57efJ0aryRaBg/t10WLRaAWuHGDtYIC
-         ++rC3Ol/S9in7qcCWU33wUgOfM0Jo8QfbvTbj8ixwkvp676t5KUEIux+s2TjtzL7VDav
-         DnBVe6ts4cQxB5Rt6ktGq5uLlP9CbToeYkRhKytEFDBHSBBp4mOjt4cCFoQ6Ps8HIvWn
-         SrWYViJMZVrmT6JWmrW5Ixd7faUDoTB7zvuZDIUndERRJwPr7nr/cC63AJ2XAcoiOZl4
-         8ukA==
-X-Gm-Message-State: APjAAAW1HNDMdeWd4VPjyMzpeybAFJD+0ozGBSpwf85kUa0OIbhX9nDx
-        h8df/Sl6OHODE7b7i1/NiaU=
-X-Google-Smtp-Source: APXvYqwGViPPPxaNS7z+K4MXgi0LZN0EVHaNC8Lcr39w9C6uZBgZpJBc7aRJ3CH2jofuSwKjOzKP/Q==
-X-Received: by 2002:a17:90a:9dc3:: with SMTP id x3mr10376777pjv.45.1582395707660;
-        Sat, 22 Feb 2020 10:21:47 -0800 (PST)
-Received: from localhost ([2601:647:5b00:710:ffa7:88dc:9c39:76d9])
-        by smtp.gmail.com with ESMTPSA id z3sm7012747pfz.155.2020.02.22.10.21.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Feb 2020 10:21:46 -0800 (PST)
-Date:   Sat, 22 Feb 2020 10:21:45 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-fpga@vger.kernel.org
-Subject: Re: [PATCH] fpga: zynq: Remove clk_get error message for probe defer
-Message-ID: <20200222182145.GA4905@epycbox.lan>
-References: <0060e55f0b8d3a57e129d7eb096267cc96eae846.1581517026.git.michal.simek@xilinx.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0060e55f0b8d3a57e129d7eb096267cc96eae846.1581517026.git.michal.simek@xilinx.com>
+        id S1727170AbgBXAmz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 23 Feb 2020 19:42:55 -0500
+Received: from mga11.intel.com ([192.55.52.93]:23673 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727151AbgBXAmy (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 23 Feb 2020 19:42:54 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Feb 2020 16:42:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,478,1574150400"; 
+   d="scan'208";a="349809813"
+Received: from hao-dev.bj.intel.com ([10.238.157.65])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2020 16:42:52 -0800
+From:   Wu Hao <hao.wu@intel.com>
+To:     mdf@kernel.org, will@kernel.org, mark.rutland@arm.com,
+        gregkh@linuxfoundation.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-api@vger.kernel.org, atull@kernel.org, yilun.xu@intel.com,
+        Wu Hao <hao.wu@intel.com>
+Subject: [PATCH v8 0/2] add performance reporting support to FPGA DFL drivers
+Date:   Mon, 24 Feb 2020 08:21:45 +0800
+Message-Id: <1582503707-10737-1-git-send-email-hao.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 03:17:08PM +0100, Michal Simek wrote:
-> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> 
-> In probe, the driver checks for devm_clk_get return and print error
-> message in the failing case. However for -EPROBE_DEFER this message is
-> confusing so avoid it.
-> 
-> The similar change was done also by commit 28910cee898c
-> ("fpga: xilinx-pr-decoupler: Remove clk_get error message for probe defer")
-> 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> ---
-> 
->  drivers/fpga/zynq-fpga.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-> index ee7765049607..07fa8d9ec675 100644
-> --- a/drivers/fpga/zynq-fpga.c
-> +++ b/drivers/fpga/zynq-fpga.c
-> @@ -583,7 +583,8 @@ static int zynq_fpga_probe(struct platform_device *pdev)
->  
->  	priv->clk = devm_clk_get(dev, "ref_clk");
->  	if (IS_ERR(priv->clk)) {
-> -		dev_err(dev, "input clock not found\n");
-> +		if (PTR_ERR(priv->clk) != -EPROBE_DEFER)
-> +			dev_err(dev, "input clock not found\n");
->  		return PTR_ERR(priv->clk);
->  	}
->  
-> -- 
-> 2.25.0
-> 
-Applied to for-next.
+Hi all,
 
-Thanks,
-Moritz
+This patchset adds performance reporting support for FPGA DFL drivers. It
+introduces one pmu to expose userspace interfaces via standard perf API.
+User could use standard perf tool to access perf events exposed via pmu.
+
+This patchset is generated based on 5.6-rc2.
+
+Main changes from v7:
+ - rename pmu name from "fme%d" to "dfl_fme%d".
+ - monitor cpu hotplug for cpumask sysfs and update cpumask sysfs doc.
+ - add extra read for 64bit counter registers to avoid 2-32bit readl issue.
+
+Main changes from v6:
+ - add a new ABI/testing/ sysfs documentation in patch #2.
+ - fix a warning reported by kbuild in patch #2.
+
+Main changes from v5:
+ - use dev_ext_attribute instead of fme_perf_event_attr.
+ - use is_visible function to decide which events to expose per
+   hardware capability, and add event_init checking for all events.
+
+Main changes from v4:
+ - rebase and clean up.
+ - update Kconfig for PERF_EVENTS dependency.
+
+Main changes from v3:
+ - add more descriptions in doc, including how to use perf tool for these
+   hardware counters. (patch #1)
+ - use standard perf API instead of sysfs entries. (patch #2)
+
+Wu Hao (1):
+  fpga: dfl: fme: add performance reporting support
+
+Xu Yilun (1):
+  Documentation: fpga: dfl: add description for performance reporting
+    support
+
+ .../testing/sysfs-bus-event_source-devices-dfl_fme |  104 ++
+ Documentation/fpga/dfl.rst                         |   84 ++
+ drivers/fpga/Kconfig                               |    2 +-
+ drivers/fpga/Makefile                              |    1 +
+ drivers/fpga/dfl-fme-main.c                        |    4 +
+ drivers/fpga/dfl-fme-perf.c                        | 1021 ++++++++++++++++++++
+ drivers/fpga/dfl-fme.h                             |    2 +
+ drivers/fpga/dfl.h                                 |    2 +
+ 8 files changed, 1219 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-event_source-devices-dfl_fme
+ create mode 100644 drivers/fpga/dfl-fme-perf.c
+
+-- 
+1.8.3.1
