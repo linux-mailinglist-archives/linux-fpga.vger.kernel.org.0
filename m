@@ -2,85 +2,95 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E420174E63
-	for <lists+linux-fpga@lfdr.de>; Sun,  1 Mar 2020 17:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7648174E6B
+	for <lists+linux-fpga@lfdr.de>; Sun,  1 Mar 2020 17:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726627AbgCAQX2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 1 Mar 2020 11:23:28 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:36729 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726448AbgCAQX2 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 1 Mar 2020 11:23:28 -0500
-Received: by mail-pj1-f66.google.com with SMTP id d7so391544pjw.1;
-        Sun, 01 Mar 2020 08:23:27 -0800 (PST)
+        id S1726946AbgCAQYZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 1 Mar 2020 11:24:25 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:43129 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbgCAQYZ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 1 Mar 2020 11:24:25 -0500
+Received: by mail-pg1-f194.google.com with SMTP id u12so4141269pgb.10;
+        Sun, 01 Mar 2020 08:24:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=sGDHMYa2zIpllxKVtEh6fLENFNHlRZiC8UQBM60H7b0=;
-        b=NpXGjNkGyJSNnzBo+zk0JcCiUR07a2PzjbAkD2mJKwMczazoUHOjAOSpaYDW74vUV5
-         2nnKUS2PAILHxBPXlGpuxF5IO0nmYO+7f5937WPjIAAyOIH6GROaxK8WXTXuyJ1dbSxB
-         rXkC/hOpvFE8mK9vbrJqzBjfsjR7X3mO9zpwlKpt28pkjDydb8CjhqKUp9yd5fUJDwFm
-         7TQ3A46bHn7/DAbId8uWJz+Q/j/DAigFptDV8erVaybRtirC5wcLXfJIcJF2bYhtfu1j
-         Ugy5U08jIUopbyg1lcu7hj/f5sPcNbXyMKzrsUGL5FCnhdQGU2d+U9tU72icXLfQ1aIB
-         nOuQ==
-X-Gm-Message-State: APjAAAXUYfKH40DSeN4fdtXBxbRbC31BoqHIl2Sf2MLkLwoU1ygtH9gl
-        q+1pop2WV0k9r5s7Am4Vd18=
-X-Google-Smtp-Source: APXvYqwszWP0QkrO80UloQcOBsxCtbGfjx/E89FFLPOTlDqev5jXQxxJpaxFcvO4gaQxDMdd79/Avw==
-X-Received: by 2002:a17:90a:a005:: with SMTP id q5mr15884127pjp.103.1583079807151;
-        Sun, 01 Mar 2020 08:23:27 -0800 (PST)
+        bh=b9zTyAU7BXmkEe7ugpwVE5c9UwWjYoVXP/URLOq0tQ4=;
+        b=AuDjDuNjYV+gcG+Bx7ABOuHm8+x8ftx8EOeFqbSxF4qIhKTGWCt21YNfNzmfvUbKr6
+         Xt+TMD/HM7q8juPH5fkkdyVyHBQJ0ZqRi5QRWQGewFogEWCdVmO+G1kWBdWC80VCaDPq
+         bW3yUGNW2UittcVWkRPQlgRSZ40c5kkMcBHyYvg+HHwQzLnaMLaomDZQFZokcuqOfQMx
+         7DDG/xjVX3GhsOi6/nVpscg50+kQagX8b5aDs0W64VWQLQu9+HgkYEeOgLIRymNeXpKz
+         p8EsgPSGvF0qhaVK504dzan3+7FFj3gQpXafPSj6KFFPhetrogGG3MQjTswsRNMM48CR
+         xvWQ==
+X-Gm-Message-State: APjAAAWNk54EEK9quXko+ayEScd3/vhNL0l677ydbizzs+86KY/vlCiQ
+        OA47+TwW0yXH+CegVDswUTA=
+X-Google-Smtp-Source: APXvYqxWX+PrxH14LmuPjZnJ/EeloN1ii+LgDFRMue3c1Vi+GQT4MhSGFu6Y1Xq17Txwcnj8byPCHg==
+X-Received: by 2002:a63:1926:: with SMTP id z38mr14678948pgl.303.1583079864452;
+        Sun, 01 Mar 2020 08:24:24 -0800 (PST)
 Received: from localhost ([2601:647:5b00:710:c2fa:3aa3:193c:db86])
-        by smtp.gmail.com with ESMTPSA id z13sm17768824pge.29.2020.03.01.08.23.26
+        by smtp.gmail.com with ESMTPSA id y1sm17303083pgi.56.2020.03.01.08.24.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Mar 2020 08:23:26 -0800 (PST)
-Date:   Sun, 1 Mar 2020 08:23:25 -0800
+        Sun, 01 Mar 2020 08:24:23 -0800 (PST)
+Date:   Sun, 1 Mar 2020 08:24:22 -0800
 From:   Moritz Fischer <mdf@kernel.org>
-To:     richard.gong@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, mdf@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, dinguyen@kernel.org,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Richard Gong <richard.gong@intel.com>
-Subject: Re: [PATCHv1 2/7] arm64: dts: agilex: correct FPGA manager driver's
- compatible value
-Message-ID: <20200301162325.GE7593@epycbox.lan>
-References: <1581696052-11540-1-git-send-email-richard.gong@linux.intel.com>
- <1581696052-11540-3-git-send-email-richard.gong@linux.intel.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wu Hao <hao.wu@intel.com>
+Subject: Re: [PATCH] fpga: dfl: pci: fix return value of
+ cci_pci_sriov_configure
+Message-ID: <20200301162422.GF7593@epycbox.lan>
+References: <1582610838-7019-1-git-send-email-yilun.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1581696052-11540-3-git-send-email-richard.gong@linux.intel.com>
+In-Reply-To: <1582610838-7019-1-git-send-email-yilun.xu@intel.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 10:00:47AM -0600, richard.gong@linux.intel.com wrote:
-> From: Richard Gong <richard.gong@intel.com>
+On Tue, Feb 25, 2020 at 02:07:18PM +0800, Xu Yilun wrote:
+> pci_driver.sriov_configure should return negative value on error and
+> number of enabled VFs on success. But now the driver returns 0 on
+> success. The sriov configure still works but will cause a warning
+> message:
 > 
-> Correct the compatible property value for FPGA manager driver on
-> Intel Agilex SoC platform.
+>   XX VFs requested; only 0 enabled
 > 
-> Signed-off-by: Richard Gong <richard.gong@intel.com>
+> This patch changes the return value accordingly.
+> 
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Wu Hao <hao.wu@intel.com>
 > ---
->  arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/fpga/dfl-pci.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-> index e1d357e..8c29853 100644
-> --- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-> +++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-> @@ -544,7 +544,7 @@
->  				memory-region = <&service_reserved>;
+> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> index 89ca292..5387550 100644
+> --- a/drivers/fpga/dfl-pci.c
+> +++ b/drivers/fpga/dfl-pci.c
+> @@ -248,11 +248,13 @@ static int cci_pci_sriov_configure(struct pci_dev *pcidev, int num_vfs)
+>  			return ret;
 >  
->  				fpga_mgr: fpga-mgr {
-> -					compatible = "intel,stratix10-soc-fpga-mgr";
-> +					compatible = "intel,agilex-soc-fpga-mgr";
->  				};
->  			};
->  		};
+>  		ret = pci_enable_sriov(pcidev, num_vfs);
+> -		if (ret)
+> +		if (ret) {
+>  			dfl_fpga_cdev_config_ports_pf(cdev);
+> +			return ret;
+> +		}
+>  	}
+>  
+> -	return ret;
+> +	return num_vfs;
+>  }
+>  
+>  static void cci_pci_remove(struct pci_dev *pcidev)
 > -- 
 > 2.7.4
 > 
+
 Applied to for-next,
 
 Thanks
