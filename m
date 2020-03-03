@@ -2,82 +2,82 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67731174E7D
-	for <lists+linux-fpga@lfdr.de>; Sun,  1 Mar 2020 17:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DE9177396
+	for <lists+linux-fpga@lfdr.de>; Tue,  3 Mar 2020 11:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726359AbgCAQba (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 1 Mar 2020 11:31:30 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34788 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725945AbgCAQb3 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 1 Mar 2020 11:31:29 -0500
-Received: by mail-pf1-f195.google.com with SMTP id y21so820164pfp.1;
-        Sun, 01 Mar 2020 08:31:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hF9aq/Io9bovStuf4wtcdOmPjzW4yrdQMyk+A3d5xnM=;
-        b=bPMSRZuw3q6OS/GsS7are2EOShrfBRiAOoqGhPG/pDxEgiBZNGYY/bL+EO5fVYX7i2
-         9jaEPCnM2iuGaRKn+MjpOPxzhGd5Tzm3qf19eeQjBTYbI9CvcPA3Txx9gN41YdZuOwxQ
-         ncMiGVGAG2wbUvTpeK+9lixanKg7hPcEx8J4NyaycopE4QVBTzW9HSZw6j1zovxsUk0Z
-         MJeXkNnKoPVpG60zi7ki21yxZ1tmF2mBY38WhPLVGLA6nUVKLo+yWqvHWzQewG/xA37I
-         e2E07lvnOkBZwAMo2zRIcxxdu5bkg51kl8mOuvZohJkW0fXr3LEoVaRrGgiHmcxXS7Hc
-         bQag==
-X-Gm-Message-State: APjAAAWQVyNgOVadCLyt8aEdaV47WT9dKiDSS6M5dH2v64fkqlMwKbdo
-        kAk+1ZpkCCbF+vr8qTlnrzM=
-X-Google-Smtp-Source: APXvYqwEzOceSVbWacHwehKTSrTHhWIPujXAvb+qMDIhrfhBgj3owTtwM3qyOJcT1YLUTKHsyoAaGQ==
-X-Received: by 2002:a63:1044:: with SMTP id 4mr15499647pgq.412.1583080288534;
-        Sun, 01 Mar 2020 08:31:28 -0800 (PST)
-Received: from localhost ([2601:647:5b00:710:c2fa:3aa3:193c:db86])
-        by smtp.gmail.com with ESMTPSA id g9sm9043227pfi.37.2020.03.01.08.31.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Mar 2020 08:31:27 -0800 (PST)
-Date:   Sun, 1 Mar 2020 08:31:26 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     richard.gong@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, mdf@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, dinguyen@kernel.org,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Richard Gong <richard.gong@intel.com>
-Subject: Re: [PATCHv1 7/7] firmware: intel_stratix10_service: add depend on
- agilex
-Message-ID: <20200301163126.GB7992@epycbox.lan>
-References: <1581696052-11540-1-git-send-email-richard.gong@linux.intel.com>
- <1581696052-11540-8-git-send-email-richard.gong@linux.intel.com>
+        id S1727121AbgCCKNk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 3 Mar 2020 05:13:40 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2501 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728102AbgCCKNk (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 3 Mar 2020 05:13:40 -0500
+Received: from LHREML714-CAH.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 1BD9D9119670BA0EB938;
+        Tue,  3 Mar 2020 10:13:38 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ LHREML714-CAH.china.huawei.com (10.201.108.37) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Tue, 3 Mar 2020 10:13:37 +0000
+Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 3 Mar 2020
+ 10:13:37 +0000
+Subject: Re: LPC Bus Driver
+To:     Luis Tanica <luis.f.tanica@seagate.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        <linux-fpga@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <6daf1bb266a24c239aed34d8661fc5eaMW2PR20MB210660F6B17CB90ACD0B6E7CA0E70@MW2PR20MB2106.namprd20.prod.outlook.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <797cec65-5504-ee85-3fe4-fe2b4c90991f@huawei.com>
+Date:   Tue, 3 Mar 2020 10:13:36 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1581696052-11540-8-git-send-email-richard.gong@linux.intel.com>
+In-Reply-To: <6daf1bb266a24c239aed34d8661fc5eaMW2PR20MB210660F6B17CB90ACD0B6E7CA0E70@MW2PR20MB2106.namprd20.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.45]
+X-ClientProxiedBy: lhreml725-chm.china.huawei.com (10.201.108.76) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 10:00:52AM -0600, richard.gong@linux.intel.com wrote:
-> From: Richard Gong <richard.gong@intel.com>
++ add fpga list and Greg+Arnd for misc drivers
+
+Hi Luis,
+
 > 
-> Add depend on Agilex for Intel Agilex SoC platform.
+> We have this board with our own SoC, which is connected to an external CPLD (FPGA) via LPC (low pin count) bus.
+> I've been doing some research to see what the best way of designing the drivers for it would be, and came across the Hisilicon LPC driver stuff (which I believe you're the maintainer for).
 > 
-Acked-by: Moritz Fischer <mdf@kernel.org>
-> Signed-off-by: Richard Gong <richard.gong@intel.com>
-> ---
->  drivers/firmware/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Just a little background. Let's say our host (ARM) has a custom LPC controller. The LPC controller let's us perform reads/writes of CPLD registers via LPC bus. This CPLD is the only slave device attached to that bus and we only use it for reading/writing certain
+>   registers (e.g., we use it to access some system information and for resetting the ARM during reboot).
 > 
-> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-> index ea869ad..8007d4a 100644
-> --- a/drivers/firmware/Kconfig
-> +++ b/drivers/firmware/Kconfig
-> @@ -206,7 +206,7 @@ config FW_CFG_SYSFS_CMDLINE
->  
->  config INTEL_STRATIX10_SERVICE
->  	tristate "Intel Stratix10 Service Layer"
-> -	depends on ARCH_STRATIX10 && HAVE_ARM_SMCCC
-> +	depends on (ARCH_STRATIX10 || ARCH_AGILEX) && HAVE_ARM_SMCCC
->  	default n
->  	help
->  	  Intel Stratix10 service layer runs at privileged exception level,
-> -- 
-> 2.7.4
-> 
+> I was looking at the regmap framework and that seemed a good way to go. 
+
+I thought that regmap only allows mapping in MMIO regions for 
+multiplexing access from multiple drivers or accessing registers outside 
+the device HW registers, but you seem to need to manually generate the 
+LPC bus accesses to access registers on the slave device.
+
+If this FPGA is the only device which will ever be on this LPC bus, then 
+could you encode the LPC accesses directly in the FPGA driver?
+
+ > But then I saw the logic_pio stuff as well and now I'm not sure what 
+the best approach would be anymore
+
+Logic PIO is for IO Port accesses. It could serve your purpose, but you 
+would need to use IO port accesses for your slave driver, like inb and outb.
+
+As another alternative, it might be worth considering writing an I2C 
+controller driver for your LPC host, i.e. model as an I2C bus, and have 
+an I2C client driver for the LPC slave (FPGA). I think that there are 
+examples of this in the kernel.
+
+All the best,
+john
