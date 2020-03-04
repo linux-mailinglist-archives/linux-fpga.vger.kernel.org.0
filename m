@@ -2,94 +2,217 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DCE178A80
-	for <lists+linux-fpga@lfdr.de>; Wed,  4 Mar 2020 07:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0E3178DD1
+	for <lists+linux-fpga@lfdr.de>; Wed,  4 Mar 2020 10:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725774AbgCDGON (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 4 Mar 2020 01:14:13 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:44742 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725773AbgCDGON (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 4 Mar 2020 01:14:13 -0500
-Received: by mail-qk1-f195.google.com with SMTP id f198so510936qke.11
-        for <linux-fpga@vger.kernel.org>; Tue, 03 Mar 2020 22:14:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=+Q06ydP/oVUWISQnfAf79Y8zcGSgEU7zPSQ0P5PbknA=;
-        b=LJSvdX8fIOKBxQpNj5F9sgfJp4h4w+F6knzAUd/2LWLXVY2PD8eddQs3LQRepARwdz
-         Nm59wC544retoP7Kjb47ZNLhUB3Q4Mu1kYgBAl/IpeUocoM+dY8NZIbiBFzO74c4QbrT
-         qA/ZbosxLxAcXxR9QYHQOYn4Y1FSulRUt0aoBiuF3mWZZYaO5u61Z6rgjJ/S2rfYNz/b
-         Ew/7ldGK9KknOsP6Wa6Edm39fJTWBxbSV9CGcQndZnxNqnvXthVLTfpap+X4L/ivqcKm
-         McnUqaSPN+0ri4RehNdolHo+HHVcoM1XwKbukvNZvKm5MWkcB2R8k1MFc16WmAsiTo2x
-         0bcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+Q06ydP/oVUWISQnfAf79Y8zcGSgEU7zPSQ0P5PbknA=;
-        b=rIk38oVbrIv1iQto4UjKF322L0xv7gc+zdLfCGwaZmTH3dtbeyz/WIFikLmEaG7KEg
-         FrnXZj/25iksOkEvltPAwMmHSBLGb2BGGkpxAokPll8z7k2j7ATOgnZ2MPkHSvwcOxCN
-         np2lc+pFURpaTr/3ucsPMZsGRSAZfQheCuFk+eCXiaeHwvqfMVdzFXAOWCGNACDYNwDO
-         68ZGXTf7gNArWSS1NyiVV9MDexnOzkhNfRNnlGpY1P/WNR9JlIvZOsY+NJEoBSeX5S72
-         uBgKpi2tkmdAjdG70qJiG8xvtOQaYpJwJdO7mkaazW8BmMn8AlVRk7nRUcRldNgPOe1f
-         rR4Q==
-X-Gm-Message-State: ANhLgQ0i2bXD84angz6gd9wuLKp6jFqcXkibR4DadokyL8jJm6UVRPbs
-        oIQFIxJDdlMAM+xM08G9nrl9KiN4
-X-Google-Smtp-Source: ADFU+vtmutJLofjgSTbqnlFg+piNRq8YIafn6kZruwLwT77a9RXlaftRHHbB217ktP4HJsyc1Nozaw==
-X-Received: by 2002:a37:b842:: with SMTP id i63mr1478976qkf.451.1583302452608;
-        Tue, 03 Mar 2020 22:14:12 -0800 (PST)
-Received: from localhost.localdomain (pool-71-182-232-12.pitbpa.fios.verizon.net. [71.182.232.12])
-        by smtp.gmail.com with ESMTPSA id o127sm13561676qke.92.2020.03.03.22.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 22:14:11 -0800 (PST)
-From:   Dominic Chen <d.c.ddcc@gmail.com>
-To:     hao.wu@intel.com, mdf@kernel.org, linux-fpga@vger.kernel.org
-Cc:     Dominic Chen <d.c.ddcc@gmail.com>
-Subject: [Resend] [PATCH] fpga: support debug access to memory-mapped afu regions
-Date:   Wed,  4 Mar 2020 01:14:06 -0500
-Message-Id: <20200304061406.98865-1-d.c.ddcc@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1729023AbgCDJvx (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 4 Mar 2020 04:51:53 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2508 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728955AbgCDJvx (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 4 Mar 2020 04:51:53 -0500
+Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id B0E1580813A97E8700DA;
+        Wed,  4 Mar 2020 09:51:51 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ LHREML712-CAH.china.huawei.com (10.201.108.35) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Wed, 4 Mar 2020 09:51:51 +0000
+Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Wed, 4 Mar 2020
+ 09:51:50 +0000
+Subject: Re: LPC Bus Driver
+To:     Luis Tanica <luis.f.tanica@seagate.com>,
+        Arnd Bergmann <arnd@arndb.de>, "Xu Yilun" <yilun.xu@intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        gregkh <gregkh@linuxfoundation.org>
+References: <6daf1bb266a24c239aed34d8661fc5eaMW2PR20MB210660F6B17CB90ACD0B6E7CA0E70@MW2PR20MB2106.namprd20.prod.outlook.com>
+ <797cec65-5504-ee85-3fe4-fe2b4c90991f@huawei.com>
+ <20200303154522.GA24568@yilunxu-OptiPlex-7050>
+ <CAK8P3a01vYfqvj4eRQQsqC9FrUTr=q6ZRF-EuYV0iGC7AV7UBQ@mail.gmail.com>
+ <3992844da4534804ade896dd5ba4dfcbMW2PR20MB2106669451CA09B579ECB973A0E40@MW2PR20MB2106.namprd20.prod.outlook.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <8e410a65-5e48-7c25-d3e5-319dec12858f@huawei.com>
+Date:   Wed, 4 Mar 2020 09:51:49 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
+MIME-Version: 1.0
+In-Reply-To: <3992844da4534804ade896dd5ba4dfcbMW2PR20MB2106669451CA09B579ECB973A0E40@MW2PR20MB2106.namprd20.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.202.226.45]
+X-ClientProxiedBy: lhreml725-chm.china.huawei.com (10.201.108.76) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Allow debug access to memory-mapped regions using e.g. gdb.
+On 03/03/2020 18:07, Luis Tanica wrote:
+> Thank you all for the help. This is the gist of what I got from your responses.
+> 
+>   - if CPLD is the only thing on LPC bus, consider creating a single driver for it
+>   - if not, then creating the LPC bus layer would be ideal
+>   - could also consider I2C framework and treat it like an I2C device
+> 
+> I believe for us we'll only ever have that one CPLD on the LPC bus, so a single driver could be a good idea.
+> The only reason I like regmap though, is that I could define a regmap bus that would implement all the LPC read/write operations (by implementing the .reg_read and .reg_write for regmap_bus) nd then I could use those registers as I pleased from different places.
+> For instance, we could have a CPLD driver that exposes all the registers/fields via sysfs but then I could also have an arm-reset driver that only maps the register it needs for the arm reset.
+> 
+> I actually started implementing the LPC bus, and then having 2 devices (reset and cpld) implemented as LPC devices.
+> Even though it seems a bit more logical overall, it's a lot of overhead for what I need.
+> 
+> I would like to take a look at the I2C option, since that's the only idea here I haven't explored. If you could point me in the right direction on how to do it (or some examples in the kernel) I'd appreciate.
 
-Signed-off-by: Dominic Chen <d.c.ddcc@gmail.com>
----
- drivers/fpga/dfl-afu-main.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Arnd originally gave me this idea for modelling the HiSilicon LPC driver 
+as an I2C host, so he may know.
 
-diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index 02baa6a227c0..38983f9dde98 100644
---- a/drivers/fpga/dfl-afu-main.c
-+++ b/drivers/fpga/dfl-afu-main.c
-@@ -459,6 +459,12 @@ static long afu_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 	return -EINVAL;
- }
- 
-+#ifdef CONFIG_HAVE_IOREMAP_PROT
-+const struct vm_operations_struct afu_vma_ops = {
-+	.access = generic_access_phys,
-+};
-+#endif /* CONFIG_HAVE_IOREMAP_PROT */
-+
- static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
- {
- 	struct platform_device *pdev = filp->private_data;
-@@ -488,6 +494,11 @@ static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
- 	    !(region.flags & DFL_PORT_REGION_WRITE))
- 		return -EPERM;
- 
-+	// Support debug access to the mapping
-+#ifdef CONFIG_HAVE_IOREMAP_PROT
-+	vma->vm_ops = &afu_vma_ops;
-+#endif /* CONFIG_HAVE_IOREMAP_PROT */
-+
- 	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
- 
- 	return remap_pfn_range(vma, vma->vm_start,
--- 
-2.17.1
+ From checking drivers/i2c/busses/Kconfig, maybe I2C_CROS_EC_TUNNEL 
+could support LPC.
+
+> I should be able to make a decision after that, but I'm tempted to create a single driver and keep it simple for now.
+> 
+> P.S.: This is my first time using the mailing list and I'm guessing Outlook is not the best client to use. Any tips on that end?
+
+Maybe this will help:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/email-clients.rst
+
+I use firefox in windows, since outlook cannot be configured for kernel 
+posting style, AFAIK.
+
+> 
+>     Luis
+> 
+> 
+> 
+> 
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Sent: Tuesday, March 3, 2020 09:24
+> 
+> To: Xu Yilun <yilun.xu@intel.com>
+> 
+> Cc: John Garry <john.garry@huawei.com>; Luis Tanica <luis.f.tanica@seagate.com>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; linux-fpga@vger.kernel.org <linux-fpga@vger.kernel.org>; gregkh <gregkh@linuxfoundation.org>
+> 
+> Subject: Re: LPC Bus Driver
+> 
+>   
+> 
+> 
+> On Tue, Mar 3, 2020 at 4:47 PM Xu Yilun <yilun.xu@intel.com> wrote:
+> 
+>> On Tue, Mar 03, 2020 at 10:13:36AM +0000, John Garry wrote:
+> 
+>>> + add fpga list and Greg+Arnd for misc drivers
+> 
+>>>> We have this board with our own SoC, which is connected to an external CPLD (FPGA) via LPC (low pin count) bus.
+> 
+>>>> I've been doing some research to see what the best way of designing the drivers for it would be, and came across the Hisilicon LPC driver stuff (which I believe you're the maintainer for).
+> 
+>>>>
+> 
+>>>> Just a little background. Let's say our host (ARM) has a custom LPC controller. The LPC controller let's us perform reads/writes of CPLD registers via LPC bus. This CPLD is the only slave device attached to that bus and we only use it for reading/writing
+>   certain
+> 
+>>>>    registers (e.g., we use it to access some system information and for resetting the ARM during reboot).
+> 
+>>>>
+> 
+>>>> I was looking at the regmap framework and that seemed a good way to go.
+> 
+>>>
+> 
+>>> I thought that regmap only allows mapping in MMIO regions for multiplexing
+> 
+>>> access from multiple drivers or accessing registers outside the device HW
+> 
+>>> registers, but you seem to need to manually generate the LPC bus accesses to
+> 
+>>> access registers on the slave device.
+> 
+>>
+> 
+>> I'm not familar with LPC controller, but seems it could not perform
+> 
+>> read/write by one memory access or io access instruction
+> 
+>>
+> 
+>> I didn't find an existing bus_type for LPC bus, so I think regmap is a
+> 
+>> good way. When you have implemented the regmap for LPC bus, you need to
+> 
+>> access the CPLD registers by regmap_read/write, and just pass CPLD local
+> 
+>> register addr as parameter.
+> 
+> 
+> 
+> LPC uses the same software abstraction as the old ISA bus, providing
+> 
+> port (inb/outb) and mmio (readl/writel) style register access as well as
+> 
+> interrupts and a crude form of DMA access.
+> 
+> 
+> 
+> Whether regmap or something else works depends on which of these
+> 
+> communication options the CPLD uses.
+> 
+> 
+> 
+>>> If this FPGA is the only device which will ever be on this LPC bus, then
+> 
+>>> could you encode the LPC accesses directly in the FPGA driver?
+> 
+> 
+> 
+> I think this is the most important question. If the same SoC is used
+> 
+> in systems that connect something else on the same LPC bus, then
+> 
+> making it look like a normal ISA/LPC bus to Linux is probably best,
+> 
+> but if the CPLD and SoC are only ever used in this one combination,
+> 
+> there is nothing wrong with pretending that the LPC MMIO interface
+> 
+> on this chip part of the driver for the CPLD.
+> 
+> 
+> 
+>>> As another alternative, it might be worth considering writing an I2C
+> 
+>>> controller driver for your LPC host, i.e. model as an I2C bus, and have an
+> 
+>>> I2C client driver for the LPC slave (FPGA). I think that there are examples
+> 
+>>> of this in the kernel.
+> 
+>>
+> 
+>> How the host cpu is connected to LPC host?
+> 
+>> Why an I2C controller driver for LPC host? The LPC bus is compatible to i2c bus?
+> 
+> 
+> 
+> i2c is a simple bus that allows multiple devices to share a bus
+> 
+> and perform read/write operations on numbered registers. If the device
+> 
+> attached to the LPC bus fits into that, it might be even easier than
+> 
+> regmap.
+> 
+> 
+> 
+>         Arnd
+> 
+> .
+> 
 
