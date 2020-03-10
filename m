@@ -2,501 +2,226 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FB417F540
-	for <lists+linux-fpga@lfdr.de>; Tue, 10 Mar 2020 11:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5B417F550
+	for <lists+linux-fpga@lfdr.de>; Tue, 10 Mar 2020 11:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbgCJKmn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 10 Mar 2020 06:42:43 -0400
-Received: from mga12.intel.com ([192.55.52.136]:44089 "EHLO mga12.intel.com"
+        id S1726100AbgCJKrb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 10 Mar 2020 06:47:31 -0400
+Received: from mga09.intel.com ([134.134.136.24]:4660 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726100AbgCJKmn (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 10 Mar 2020 06:42:43 -0400
+        id S1725937AbgCJKrb (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 10 Mar 2020 06:47:31 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Mar 2020 03:42:41 -0700
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Mar 2020 03:47:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,536,1574150400"; 
-   d="scan'208";a="276904607"
+X-IronPort-AV: E=Sophos;i="5.70,518,1574150400"; 
+   d="scan'208";a="260743273"
 Received: from hao-dev.bj.intel.com (HELO localhost) ([10.238.157.65])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Mar 2020 03:42:39 -0700
-Date:   Tue, 10 Mar 2020 18:21:43 +0800
+  by orsmga002.jf.intel.com with ESMTP; 10 Mar 2020 03:47:29 -0700
+Date:   Tue, 10 Mar 2020 18:26:33 +0800
 From:   Wu Hao <hao.wu@intel.com>
 To:     Xu Yilun <yilun.xu@intel.com>
 Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org, Luwei Kang <luwei.kang@intel.com>
-Subject: Re: [PATCH 1/7] fpga: dfl: parse interrupt info for feature devices
- on enumeration
-Message-ID: <20200310102143.GA28396@hao-dev>
+Subject: Re: [PATCH 2/7] fpga: dfl: pci: add irq info for feature devices
+ enumeration
+Message-ID: <20200310102633.GB28396@hao-dev>
 References: <1583749790-10837-1-git-send-email-yilun.xu@intel.com>
- <1583749790-10837-2-git-send-email-yilun.xu@intel.com>
- <20200310022649.GA11861@hao-dev>
- <20200310092531.GA30868@yilunxu-OptiPlex-7050>
+ <1583749790-10837-3-git-send-email-yilun.xu@intel.com>
+ <20200310024626.GB11861@hao-dev>
+ <20200310094143.GB30868@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200310092531.GA30868@yilunxu-OptiPlex-7050>
+In-Reply-To: <20200310094143.GB30868@yilunxu-OptiPlex-7050>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Mar 10, 2020 at 05:25:31PM +0800, Xu Yilun wrote:
-> On Tue, Mar 10, 2020 at 10:26:49AM +0800, Wu Hao wrote:
+On Tue, Mar 10, 2020 at 05:41:43PM +0800, Xu Yilun wrote:
+> On Tue, Mar 10, 2020 at 10:46:26AM +0800, Wu Hao wrote:
 > > Hi Yilun
 > > 
-> > Some comments inline.
+> > Some comments inline. : )
 > > 
-> > On Mon, Mar 09, 2020 at 06:29:44PM +0800, Xu Yilun wrote:
-> > > DFL based FPGA devices could support interrupts for different purposes,
-> > > but current DFL framework only supports feature device enumeration with
-> > > given MMIO resources information via common DFL headers. This patch
-> > > introduces one new API dfl_fpga_enum_info_add_irq for low level bus
-> > > drivers (e.g. PCIe device driver) to pass its interrupt resources
-> > > information to DFL framework for enumeration, and also adds interrupt
-> > > enumeration code in framework to parse and assign interrupt resources
-> > > for enumerated feature devices and their own sub features.
-> > > 
-> > > With this patch, DFL framework enumerates interrupt resources for core
-> > > features, including PORT Error Reporting, FME (FPGA Management Engine)
-> > > Error Reporting and also AFU User Interrupts.
+> > On Mon, Mar 09, 2020 at 06:29:45PM +0800, Xu Yilun wrote:
+> > > Some DFL FPGA PCIe cards (e.g. Intel FPGA Programmable Acceleration
+> > > Card) support MSI-X based interrupts. This patch allows PCIe driver
+> > > to prepare and pass interrupt resources to DFL via enumeration API.
+> > > These interrupt resources could then be assigned to actual features
+> > > which use them.
 > > > 
 > > > Signed-off-by: Luwei Kang <luwei.kang@intel.com>
 > > > Signed-off-by: Wu Hao <hao.wu@intel.com>
 > > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 > > > ---
-> > >  drivers/fpga/dfl.c | 140 +++++++++++++++++++++++++++++++++++++++++++++++++++--
-> > >  drivers/fpga/dfl.h |  40 +++++++++++++++
-> > >  2 files changed, 176 insertions(+), 4 deletions(-)
+> > >  drivers/fpga/dfl-pci.c | 66 ++++++++++++++++++++++++++++++++++++++++++++++----
+> > >  1 file changed, 61 insertions(+), 5 deletions(-)
 > > > 
-> > > diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> > > index 9909948..493822d 100644
-> > > --- a/drivers/fpga/dfl.c
-> > > +++ b/drivers/fpga/dfl.c
-> > > @@ -11,6 +11,7 @@
-> > >   *   Xiao Guangrong <guangrong.xiao@linux.intel.com>
-> > >   */
-> > >  #include <linux/module.h>
-> > > +#include <asm/irq.h>
-> > >  
-> > >  #include "dfl.h"
-> > >  
-> > > @@ -421,6 +422,9 @@ EXPORT_SYMBOL_GPL(dfl_fpga_dev_ops_unregister);
-> > >   *
-> > >   * @dev: device to enumerate.
-> > >   * @cdev: the container device for all feature devices.
-> > > + * @nr_irqs: number of irqs for all feature devices.
-> > > + * @irq_table: Linux IRQ numbers for all irqs, indexed by local irq index of
-> > > + *	       this device.
-> > >   * @feature_dev: current feature device.
-> > >   * @ioaddr: header register region address of feature device in enumeration.
-> > >   * @sub_features: a sub features linked list for feature device in enumeration.
-> > > @@ -429,6 +433,9 @@ EXPORT_SYMBOL_GPL(dfl_fpga_dev_ops_unregister);
-> > >  struct build_feature_devs_info {
-> > >  	struct device *dev;
-> > >  	struct dfl_fpga_cdev *cdev;
-> > > +	unsigned int nr_irqs;
-> > > +	int *irq_table;
-> > > +
-> > >  	struct platform_device *feature_dev;
-> > >  	void __iomem *ioaddr;
-> > >  	struct list_head sub_features;
-> > > @@ -442,12 +449,16 @@ struct build_feature_devs_info {
-> > >   * @mmio_res: mmio resource of this sub feature.
-> > >   * @ioaddr: mapped base address of mmio resource.
-> > >   * @node: node in sub_features linked list.
-> > > + * @irq_base: start of irq index in this sub feature.
-> > > + * @nr_irqs: number of irqs of this sub feature.
-> > >   */
-> > >  struct dfl_feature_info {
-> > >  	u64 fid;
-> > >  	struct resource mmio_res;
-> > >  	void __iomem *ioaddr;
-> > >  	struct list_head node;
-> > > +	unsigned int irq_base;
-> > > +	unsigned int nr_irqs;
-> > >  };
-> > >  
-> > >  static void dfl_fpga_cdev_add_port_dev(struct dfl_fpga_cdev *cdev,
-> > > @@ -520,6 +531,8 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
-> > >  	/* fill features and resource information for feature dev */
-> > >  	list_for_each_entry_safe(finfo, p, &binfo->sub_features, node) {
-> > >  		struct dfl_feature *feature = &pdata->features[index];
-> > > +		struct dfl_feature_irq_ctx *ctx;
-> > > +		int i, virq;
-> > >  
-> > >  		/* save resource information for each feature */
-> > >  		feature->id = finfo->fid;
-> > > @@ -527,6 +540,24 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
-> > >  		feature->ioaddr = finfo->ioaddr;
-> > >  		fdev->resource[index++] = finfo->mmio_res;
-> > >  
-> > > +		if (finfo->nr_irqs) {
-> > > +			ctx = devm_kcalloc(binfo->dev, finfo->nr_irqs,
-> > > +					   sizeof(*ctx), GFP_KERNEL);
-> > > +			if (!ctx)
-> > > +				return -ENOMEM;
-> > > +
-> > > +			for (i = 0; i < finfo->nr_irqs; i++) {
-> > > +				virq = binfo->irq_table[finfo->irq_base + i];
-> > 
-> > Looks like it checks the irq_table input in commit_dev which is the last step
-> > of enumeration. I feel that maybe it's better to check the input earlier, e.g.
-> > in dfl_fpga_enum_info_add_irq() function below.
-> 
-> Yes the check could be done earlier. But maybe too early checking in
-> dfl_fpga_enum_info_add_irq(). I think dfl should allow holes in
-> irq_table. We make sure sub features get valid irq numbers for
-> each of its irq line, that should be enough.
-
-Ok. Understand that it's possible that table may have holes. A multiple function
-device may only want to hand part of its irq resources to DFL.
-
-> 
-> So maybe do this check in parse_feature_irqs() is better?
-
-Yes. Sounds better.
-
-> 
-> > 
-> > BTW: why it's named as virq? any specific meaning?
-> 
-> I'm just trying to indicate it's a linux irq number, not a hardware
-> local irq number. I see the name also used as linux irq number in other
-> drivers.
-> 
-> > 
-> > > +				if (virq < 0 || virq > NR_IRQS)
-> > > +					return -EINVAL;
-> > > +
-> > > +				ctx[i].irq = virq;
-> > > +			}
-> > > +
-> > > +			feature->irq_ctx = ctx;
-> > > +			feature->nr_irqs = finfo->nr_irqs;
-> > > +		}
-> > > +
-> > >  		list_del(&finfo->node);
-> > >  		kfree(finfo);
-> > >  	}
-> > > @@ -648,7 +679,8 @@ static u64 feature_id(void __iomem *start)
-> > >  static int
-> > >  create_feature_instance(struct build_feature_devs_info *binfo,
-> > >  			struct dfl_fpga_enum_dfl *dfl, resource_size_t ofst,
-> > > -			resource_size_t size, u64 fid)
-> > > +			resource_size_t size, u64 fid, unsigned int irq_base,
-> > > +			unsigned int nr_irqs)
-> > >  {
-> > >  	struct dfl_feature_info *finfo;
-> > >  
-> > > @@ -667,6 +699,8 @@ create_feature_instance(struct build_feature_devs_info *binfo,
-> > >  	finfo->mmio_res.start = dfl->start + ofst;
-> > >  	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
-> > >  	finfo->mmio_res.flags = IORESOURCE_MEM;
-> > > +	finfo->irq_base = irq_base;
-> > > +	finfo->nr_irqs = nr_irqs;
-> > >  	finfo->ioaddr = dfl->ioaddr + ofst;
-> > >  
-> > >  	list_add_tail(&finfo->node, &binfo->sub_features);
-> > > @@ -684,7 +718,8 @@ static int parse_feature_port_afu(struct build_feature_devs_info *binfo,
-> > >  
-> > >  	WARN_ON(!size);
-> > >  
-> > > -	return create_feature_instance(binfo, dfl, ofst, size, FEATURE_ID_AFU);
-> > > +	return create_feature_instance(binfo, dfl, ofst, size, FEATURE_ID_AFU,
-> > > +				       0, 0);
+> > > diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> > > index 5387550..a3370e5 100644
+> > > --- a/drivers/fpga/dfl-pci.c
+> > > +++ b/drivers/fpga/dfl-pci.c
+> > > @@ -80,8 +80,23 @@ static void cci_remove_feature_devs(struct pci_dev *pcidev)
+> > >  	dfl_fpga_feature_devs_remove(drvdata->cdev);
 > > >  }
 > > >  
-> > >  static int parse_feature_afu(struct build_feature_devs_info *binfo,
-> > > @@ -724,7 +759,7 @@ static int parse_feature_fiu(struct build_feature_devs_info *binfo,
-> > >  	if (ret)
-> > >  		return ret;
+> > > +static int *cci_pci_create_irq_table(struct pci_dev *pcidev, unsigned int nvec)
+> > > +{
+> > > +	int *table, i;
+> > > +
+> > > +	table = kcalloc(nvec, sizeof(int), GFP_KERNEL);
+> > 
+> > Maybe devm_ version is better?
+> 
+> This table will be freed right after dfl_fpga_enum_info_add_irq(). Maybe
+> don't need devm_ version.
+> 
+> > 
+> > > +	if (!table)
+> > > +		return NULL;
+> > > +
+> > > +	for (i = 0; i < nvec; i++)
+> > 
+> > i should be unsigned int as well?
+> 
+> Yes I should change it.
+> 
+> > 
+> > > +		table[i] = pci_irq_vector(pcidev, i);
+
+Hi Yilun,
+
+one more place here.
+
+
+table = kcalloc(nevc, sizeof(int), GFP_KERNEL);
+if (table) {
+	...
+}	
+
+return table;
+
+Thanks
+Hao
+
+> > > +
+> > > +	return table;
+> > > +}
+> > > +
+> > >  /* enumerate feature devices under pci device */
+> > > -static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
+> > > +static int cci_enumerate_feature_devs(struct pci_dev *pcidev,
+> > > +				      unsigned int nvec)
+> > >  {
+> > >  	struct cci_drvdata *drvdata = pci_get_drvdata(pcidev);
+> > >  	struct dfl_fpga_enum_info *info;
+> > > @@ -89,6 +104,7 @@ static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
+> > >  	resource_size_t start, len;
+> > >  	int port_num, bar, i, ret = 0;
+> > >  	void __iomem *base;
+> > > +	int *irq_table;
+> > >  	u32 offset;
+> > >  	u64 v;
 > > >  
-> > > -	ret = create_feature_instance(binfo, dfl, ofst, 0, 0);
-> > > +	ret = create_feature_instance(binfo, dfl, ofst, 0, 0, 0, 0);
-> > >  	if (ret)
-> > >  		return ret;
-> > >  	/*
-> > > @@ -742,17 +777,72 @@ static int parse_feature_fiu(struct build_feature_devs_info *binfo,
+> > > @@ -97,6 +113,18 @@ static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
+> > >  	if (!info)
+> > >  		return -ENOMEM;
+> > >  
+> > > +	/* add irq info for enumeration if really needed */
+> > > +	if (nvec) {
+> > > +		irq_table = cci_pci_create_irq_table(pcidev, nvec);
+> > > +		if (irq_table) {
+> > > +			dfl_fpga_enum_info_add_irq(info, nvec, irq_table);
+> > > +			kfree(irq_table);
+> > > +		} else {
+> > > +			ret = -ENOMEM;
+> > > +			goto enum_info_free_exit;
+> > > +		}
+> > > +	}
+> > > +
+> > >  	/* start to find Device Feature List from Bar 0 */
+> > >  	base = cci_pci_ioremap_bar(pcidev, 0);
+> > >  	if (!base) {
+> > > @@ -173,6 +201,28 @@ static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
 > > >  	return ret;
 > > >  }
 > > >  
-> > > +static void parse_feature_irqs(struct build_feature_devs_info *binfo,
-> > > +			       struct dfl_fpga_enum_dfl *dfl,
-> > > +			       resource_size_t ofst,
-> > > +			       unsigned int *irq_base, unsigned int *nr_irqs)
+> > > +static int cci_pci_alloc_irq(struct pci_dev *pcidev)
 > > > +{
-> > > +	u64 id, v;
+> > > +	int nvec = pci_msix_vec_count(pcidev);
+> > > +	int ret;
 > > > +
-> > > +	/*
-> > > +	 * Ideally DFL framework should only read info from DFL header, but
-> > > +	 * current version DFL only provides mmio resources information for
-> > > +	 * each feature in DFL Header, no field for interrupt resources.
-> > > +	 * Some interrupt resources information are provided by specific
-> > > +	 * mmio registers of each components(e.g. different private features)
-> > > +	 * which supports interrupt. So in order to parse and assign irq
-> > > +	 * resources to different components, DFL framework has to look into
-> > > +	 * specific capability registers of these core private features.
-> > > +	 *
-> > > +	 * Once future DFL version supports generic interrupt resources
-> > > +	 * information in common DFL headers, below code could be replaced by
-> > > +	 * some generic interrupt parsing code.
-> > 
-> > Per my understanding, even later version hardware uses common DFL Header Field
-> > for interrupt resources enumeration, but we still keep this quirk for old
-> > version hardware, right?
-> 
-> Yes, later version hardware will introduce the common DFL description of
-> interrupt, which should override these quirks. But to be compatible to
-> old version hardware, driver should fallback to these quirks for these 3
-> sub feature if common interrupt description is not provided.
-
-So please update above comments, below code is still needed later, and
-won't be replaced. Thanks!
-
-Hao
-
-> 
-> > 
-> > > +	 */
-> > > +
-> > > +	id = feature_id((dfl->ioaddr + ofst));
-> > > +
-> > > +	if (id == PORT_FEATURE_ID_UINT) {
-> > > +		v = readq(dfl->ioaddr + ofst + PORT_UINT_CAP);
-> > > +		*irq_base = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> > > +		*nr_irqs = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> > > +	} else if (id == PORT_FEATURE_ID_ERROR) {
-> > > +		v = readq(dfl->ioaddr + ofst + PORT_ERROR_CAP);
-> > > +		*irq_base = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> > > +		*nr_irqs = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> > > +	} else if (id == FME_FEATURE_ID_GLOBAL_ERR) {
-> > > +		v = readq(dfl->ioaddr + ofst + FME_ERROR_CAP);
-> > > +		*irq_base = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> > > +		*nr_irqs = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> > > +	} else {
-> > > +		return;
+> > > +	if (nvec <= 0) {
+> > > +		dev_dbg(&pcidev->dev, "fpga interrupt not supported\n");
+> > > +		return 0;
 > > > +	}
 > > > +
-> > > +	dev_dbg(binfo->dev, "feature: 0x%llx, nr_irqs: %u, irq_base: %u\n",
-> > > +		(unsigned long long)id, *nr_irqs, *irq_base);
+> > > +	ret = pci_alloc_irq_vectors(pcidev, nvec, nvec, PCI_IRQ_MSIX);
+> > > +	if (ret < 0)
+> > > +		return ret;
 > > > +
-> > > +	if (*irq_base + *nr_irqs > binfo->nr_irqs) {
-> > > +		*irq_base = 0;
-> > > +		*nr_irqs = 0;
-> > > +		dev_err(binfo->dev, "Inconsistent interrupt number on HW\n");
-> > 
-> > Maybe you want to print feature id as well in this error case.
-> 
-> OK. Print feature_id should be helpful when we hit the error.
-> 
-> > 
-> > > +	}
+> > > +	return nvec;
 > > > +}
 > > > +
-> > >  static int parse_feature_private(struct build_feature_devs_info *binfo,
-> > >  				 struct dfl_fpga_enum_dfl *dfl,
-> > >  				 resource_size_t ofst)
-> > >  {
-> > > +	unsigned int irq_base = 0, nr_irqs = 0;
-> > > +
-> > >  	if (!binfo->feature_dev) {
-> > >  		dev_err(binfo->dev, "the private feature %llx does not belong to any AFU.\n",
-> > >  			(unsigned long long)feature_id(dfl->ioaddr + ofst));
-> > >  		return -EINVAL;
-> > >  	}
-> > >  
-> > > -	return create_feature_instance(binfo, dfl, ofst, 0, 0);
-> > > +	parse_feature_irqs(binfo, dfl, ofst, &irq_base, &nr_irqs);
-> > > +
-> > > +	return create_feature_instance(binfo, dfl, ofst, 0, 0, irq_base,
-> > > +				       nr_irqs);
-> > >  }
-> > >  
-> > >  /**
-> > > @@ -853,6 +943,10 @@ void dfl_fpga_enum_info_free(struct dfl_fpga_enum_info *info)
-> > >  		devm_kfree(dev, dfl);
-> > >  	}
-> > >  
-> > > +	/* remove irq table */
-> > > +	if (info->irq_table)
-> > > +		devm_kfree(dev, info->irq_table);
-> > > +
-> > >  	devm_kfree(dev, info);
-> > >  	put_device(dev);
-> > >  }
-> > > @@ -892,6 +986,40 @@ int dfl_fpga_enum_info_add_dfl(struct dfl_fpga_enum_info *info,
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(dfl_fpga_enum_info_add_dfl);
-> > >  
-> > > +/**
-> > > + * dfl_fpga_enum_info_add_irq - add irq table to enum info
-> > > + *
-> > > + * @info: ptr to dfl_fpga_enum_info
-> > > + * @nr_irqs: number of irqs for all feature devices.
-> > 
-> > It's better to say, number of irqs of the dfl fpga device to be enumerated.
-> > This function needs to be used before enumerate API.
-> 
-> Yes, I'll change it.
-> 
-> > 
-> > > + * @irq_table: Linux IRQ numbers for all irqs, indexed by local irq index of
-> > > + *	       this device.
-> > > + *
-> > > + * One FPGA device may have several interrupts. This function adds irq
-> > > + * information of all feature devices to enumeration info for next step
-> > 
-> > Same here.
-> 
-> Yes.
-> 
-> > 
-> > > + * enumeration.
-> > > + *
-> > > + * Return: 0 on success, negative error code otherwise.
-> > > + */
-> > > +int dfl_fpga_enum_info_add_irq(struct dfl_fpga_enum_info *info,
-> > > +			       unsigned int nr_irqs, int *irq_table)
+> > > +static void cci_pci_free_irq(struct pci_dev *pcidev)
 > > > +{
-> > > +	if (!nr_irqs)
-> > > +		return -EINVAL;
+> > > +	pci_free_irq_vectors(pcidev);
+> > > +}
 > > > +
+> > >  static
+> > >  int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
+> > >  {
+> > > @@ -210,14 +260,19 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
+> > >  		goto disable_error_report_exit;
+> > >  	}
+> > >  
+> > > -	ret = cci_enumerate_feature_devs(pcidev);
+> > > -	if (ret) {
+> > > -		dev_err(&pcidev->dev, "enumeration failure %d.\n", ret);
+> > > +	ret = cci_pci_alloc_irq(pcidev);
+> > > +	if (ret < 0) {
+> > > +		dev_err(&pcidev->dev, "Fail to alloc irq %d.\n", ret);
 > > 
-> > Looks like currently it only allows add irq table once, so please document
-> > this as it doesn't support users adding multiple irq tables.
+> > we prepare mmio resources in side cci_enumerate_feature_devs.
+> > 
+> > maybe we could put irq resources code in side cce_enumerate_feature_devs too?
 > 
-> Sure.
+> Yes I will try to change it in patch v2.
 > 
+> Thanks for your quick response.
+> 
+> > 
 > > 
 > > Thanks
 > > Hao
 > > 
-> > > +	if (info->irq_table)
-> > > +		return -EEXIST;
-> > > +
-> > > +	info->irq_table = devm_kmemdup(info->dev, irq_table,
-> > > +				       sizeof(int) * nr_irqs, GFP_KERNEL);
-> > > +	if (!info->irq_table)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	info->nr_irqs = nr_irqs;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(dfl_fpga_enum_info_add_irq);
-> > > +
-> > >  static int remove_feature_dev(struct device *dev, void *data)
-> > >  {
-> > >  	struct platform_device *pdev = to_platform_device(dev);
-> > > @@ -959,6 +1087,10 @@ dfl_fpga_feature_devs_enumerate(struct dfl_fpga_enum_info *info)
-> > >  	binfo->dev = info->dev;
-> > >  	binfo->cdev = cdev;
+> > >  		goto disable_error_report_exit;
+> > >  	}
 > > >  
-> > > +	binfo->nr_irqs = info->nr_irqs;
-> > > +	if (info->nr_irqs)
-> > > +		binfo->irq_table = info->irq_table;
+> > > -	return ret;
+> > > +	ret = cci_enumerate_feature_devs(pcidev, (unsigned int)ret);
+> > > +	if (!ret)
+> > > +		return ret;
 > > > +
-> > >  	/*
-> > >  	 * start enumeration for all feature devices based on Device Feature
-> > >  	 * Lists.
-> > > diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> > > index 4a9a33c..6a498cd 100644
-> > > --- a/drivers/fpga/dfl.h
-> > > +++ b/drivers/fpga/dfl.h
-> > > @@ -112,6 +112,13 @@
-> > >  #define FME_PORT_OFST_ACC_VF	1
-> > >  #define FME_PORT_OFST_IMP	BIT_ULL(60)
+> > > +	dev_err(&pcidev->dev, "enumeration failure %d.\n", ret);
 > > >  
-> > > +/* FME Error Capability Register */
-> > > +#define FME_ERROR_CAP		0x70
-> > > +
-> > > +/* FME Error Capability Register Bitfield */
-> > > +#define FME_ERROR_CAP_SUPP_INT	BIT_ULL(0)		/* Interrupt Support */
-> > > +#define FME_ERROR_CAP_INT_VECT	GENMASK_ULL(12, 1)	/* Interrupt vector */
-> > > +
-> > >  /* PORT Header Register Set */
-> > >  #define PORT_HDR_DFH		DFH
-> > >  #define PORT_HDR_GUID_L		GUID_L
-> > > @@ -145,6 +152,20 @@
-> > >  #define PORT_STS_PWR_STATE_AP2	2			/* 90% throttling */
-> > >  #define PORT_STS_PWR_STATE_AP6	6			/* 100% throttling */
+> > > +	cci_pci_free_irq(pcidev);
+> > >  disable_error_report_exit:
+> > >  	pci_disable_pcie_error_reporting(pcidev);
+> > >  	return ret;
+> > > @@ -263,6 +318,7 @@ static void cci_pci_remove(struct pci_dev *pcidev)
+> > >  		cci_pci_sriov_configure(pcidev, 0);
 > > >  
-> > > +/* Port Error Capability Register */
-> > > +#define PORT_ERROR_CAP		0x38
-> > > +
-> > > +/* Port Error Capability Register Bitfield */
-> > > +#define PORT_ERROR_CAP_SUPP_INT	BIT_ULL(0)		/* Interrupt Support */
-> > > +#define PORT_ERROR_CAP_INT_VECT	GENMASK_ULL(12, 1)	/* Interrupt vector */
-> > > +
-> > > +/* Port Uint Capability Register */
-> > > +#define PORT_UINT_CAP		0x8
-> > > +
-> > > +/* Port Uint Capability Register Bitfield */
-> > > +#define PORT_UINT_CAP_INT_NUM	GENMASK_ULL(11, 0)	/* Interrupts num */
-> > > +#define PORT_UINT_CAP_FST_VECT	GENMASK_ULL(23, 12)	/* First Vector */
-> > > +
-> > >  /**
-> > >   * struct dfl_fpga_port_ops - port ops
-> > >   *
-> > > @@ -189,6 +210,15 @@ struct dfl_feature_driver {
-> > >  };
+> > >  	cci_remove_feature_devs(pcidev);
+> > > +	cci_pci_free_irq(pcidev);
+> > >  	pci_disable_pcie_error_reporting(pcidev);
+> > >  }
 > > >  
-> > >  /**
-> > > + * struct dfl_feature_irq_ctx - dfl private feature interrupt context
-> > > + *
-> > > + * @irq: Linux IRQ number of this interrupt.
-> > > + */
-> > > +struct dfl_feature_irq_ctx {
-> > > +	int irq;
-> > > +};
-> > > +
-> > > +/**
-> > >   * struct dfl_feature - sub feature of the feature devices
-> > >   *
-> > >   * @id: sub feature id.
-> > > @@ -196,12 +226,16 @@ struct dfl_feature_driver {
-> > >   *		    this index is used to find its mmio resource from the
-> > >   *		    feature dev (platform device)'s reources.
-> > >   * @ioaddr: mapped mmio resource address.
-> > > + * @irq_ctx: interrupt context list.
-> > > + * @nr_irqs: number of interrupt contexts.
-> > >   * @ops: ops of this sub feature.
-> > >   */
-> > >  struct dfl_feature {
-> > >  	u64 id;
-> > >  	int resource_index;
-> > >  	void __iomem *ioaddr;
-> > > +	struct dfl_feature_irq_ctx *irq_ctx;
-> > > +	unsigned int nr_irqs;
-> > >  	const struct dfl_feature_ops *ops;
-> > >  };
-> > >  
-> > > @@ -388,10 +422,14 @@ static inline u8 dfl_feature_revision(void __iomem *base)
-> > >   *
-> > >   * @dev: parent device.
-> > >   * @dfls: list of device feature lists.
-> > > + * @nr_irqs: number of irqs for all feature devices.
-> > > + * @irq_table: Linux IRQ numbers for all irqs, indexed by hw irq numbers.
-> > >   */
-> > >  struct dfl_fpga_enum_info {
-> > >  	struct device *dev;
-> > >  	struct list_head dfls;
-> > > +	unsigned int nr_irqs;
-> > > +	int *irq_table;
-> > >  };
-> > >  
-> > >  /**
-> > > @@ -415,6 +453,8 @@ struct dfl_fpga_enum_info *dfl_fpga_enum_info_alloc(struct device *dev);
-> > >  int dfl_fpga_enum_info_add_dfl(struct dfl_fpga_enum_info *info,
-> > >  			       resource_size_t start, resource_size_t len,
-> > >  			       void __iomem *ioaddr);
-> > > +int dfl_fpga_enum_info_add_irq(struct dfl_fpga_enum_info *info,
-> > > +			       unsigned int nr_irqs, int *irq_table);
-> > >  void dfl_fpga_enum_info_free(struct dfl_fpga_enum_info *info);
-> > >  
-> > >  /**
 > > > -- 
 > > > 2.7.4
