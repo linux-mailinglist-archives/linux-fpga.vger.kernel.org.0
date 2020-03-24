@@ -2,93 +2,96 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 560E318E42C
-	for <lists+linux-fpga@lfdr.de>; Sat, 21 Mar 2020 21:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F411907AD
+	for <lists+linux-fpga@lfdr.de>; Tue, 24 Mar 2020 09:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbgCUUPj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 21 Mar 2020 16:15:39 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:39927 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726146AbgCUUPj (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 21 Mar 2020 16:15:39 -0400
-Received: by mail-pf1-f195.google.com with SMTP id d25so5230351pfn.6
-        for <linux-fpga@vger.kernel.org>; Sat, 21 Mar 2020 13:15:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PHiqQPtpGNP4KNWRUz2lkIAcgJ/TjQ7GhqsouuwbTEo=;
-        b=hqRfOGOSdync715tsGSsmkzW7bTjq6hC44DMO4dOwq1obDTM9Sux3Iu3A+bNS8nnA5
-         h1I71N6NSgOQrGoWCjlgpwiMr6pD23kbjBBx+/PJIqYOI2+muEZ8ZC5Cd4zFtdSDslwo
-         rCpAsmTwGXt2qxOl3SsAL56ZYtObdoovei4WbqsgL3LVWqwvNnu4bODd+q0NCR6nhLmi
-         FNDHXNxkzmVVfOz9CpoTX4IhXav0mj8KRHU4n6rGeml7VY511NBNF3hX0FAd4LqR8nyr
-         S4mnftC/Qbh6ZbnvnkIIqYW4Y4Dd39/JYOh2xrdFyfyyRhxp1w6CBXkN3kU4G5i3l0nd
-         nvyg==
-X-Gm-Message-State: ANhLgQ2EW6VtXf0oeHycPz0jcnnVaTgfrqYpylZv+7FB1D+BbUXc0moX
-        7ukrND8zYQPwFErHYW6+7BE=
-X-Google-Smtp-Source: ADFU+vtIPlbpqsC6bHkMEhDTH8MP8I6MUBcL1mRvfDdcDwOKLsC9sSgYhJx2tK8EQ7g/B2igGaZ2pg==
-X-Received: by 2002:a62:7cc9:: with SMTP id x192mr17496639pfc.176.1584821738676;
-        Sat, 21 Mar 2020 13:15:38 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:710:c2fa:3aa3:193c:db86])
-        by smtp.gmail.com with ESMTPSA id x3sm8796691pfp.167.2020.03.21.13.15.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Mar 2020 13:15:37 -0700 (PDT)
-Date:   Sat, 21 Mar 2020 13:15:36 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Dominic Chen <d.c.ddcc@gmail.com>
-Cc:     hao.wu@intel.com, mdf@kernel.org, linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v3] fpga: dfl: afu: support debug access to memory-mapped
- afu regions
-Message-ID: <20200321201536.GA7275@epycbox.lan>
-References: <20200305033310.117030-1-d.c.ddcc@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200305033310.117030-1-d.c.ddcc@gmail.com>
+        id S1726166AbgCXIfT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 24 Mar 2020 04:35:19 -0400
+Received: from mga03.intel.com ([134.134.136.65]:53578 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726091AbgCXIfT (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 24 Mar 2020 04:35:19 -0400
+IronPort-SDR: NudQ/OQCVe21AGxaIH9hizRlgbzNEDAb/9olviE3c3fLRYbySM6ZOmQ0WK+fv0o47sD62wAeiK
+ 29TtAtoB0IjA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 01:35:18 -0700
+IronPort-SDR: 5DLwAK13oF57xWwonRdbYtGIs6r2XC9aiQs6K0SCgQdxSlbHMoUoRG10xmbUx3nPXLH4N0MVZ9
+ 3IW1su62Hy1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,299,1580803200"; 
+   d="scan'208";a="446143738"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Mar 2020 01:35:17 -0700
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, bhu@redhat.com, Xu Yilun <yilun.xu@intel.com>
+Subject: [PATCH v3 0/7] Add interrupt support to FPGA DFL drivers
+Date:   Tue, 24 Mar 2020 16:32:36 +0800
+Message-Id: <1585038763-22944-1-git-send-email-yilun.xu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Mar 04, 2020 at 10:33:10PM -0500, Dominic Chen wrote:
-> Allow debug access to memory-mapped regions using e.g. gdb.
-> 
-> Signed-off-by: Dominic Chen <d.c.ddcc@gmail.com>
-> ---
->  drivers/fpga/dfl-afu-main.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-> index 02baa6a227c0..8fa1666b5b20 100644
-> --- a/drivers/fpga/dfl-afu-main.c
-> +++ b/drivers/fpga/dfl-afu-main.c
-> @@ -459,6 +459,12 @@ static long afu_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->  	return -EINVAL;
->  }
->  
-> +static const struct vm_operations_struct afu_vma_ops = {
-> +#ifdef CONFIG_HAVE_IOREMAP_PROT
-> +	.access = generic_access_phys,
-> +#endif /* CONFIG_HAVE_IOREMAP_PROT */
-> +};
-> +
->  static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
->  {
->  	struct platform_device *pdev = filp->private_data;
-> @@ -488,6 +494,9 @@ static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
->  	    !(region.flags & DFL_PORT_REGION_WRITE))
->  		return -EPERM;
->  
-> +	/* Support debug access to the mapping */
-> +	vma->vm_ops = &afu_vma_ops;
-> +
->  	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
->  
->  	return remap_pfn_range(vma, vma->vm_start,
-> -- 
-> 2.17.1
-> 
+This patchset add interrupt support to FPGA DFL drivers.
 
-Applied to for-next.
+With these patches, DFL driver will parse and assign interrupt resources
+for enumerated feature devices and their sub features.
 
-Thanks
+This patchset also introduces a set of APIs for user to monitor DFL
+interrupts. Three sub features (DFL FME error, DFL AFU error and user
+interrupt) drivers now support these APIs.
+
+Patch #1: DFL framework change. Accept interrupt info input from DFL bus
+          driver, and add interrupt parsing and assignment for feature
+          sub devices.
+Patch #2: DFL pci driver change, add interrupt info on DFL enumeration.
+Patch #3: DFL framework change. Add helper functions for feature sub
+          device drivers to handle interrupt and notify users.
+Patch #4: Add interrupt support for AFU error reporting sub feature.
+Patch #5: Add interrupt support for FME global error reporting sub
+          feature.
+Patch #6: Add interrupt support for a new sub feature, to handle user
+          interrupts implemented in AFU.
+Patch #7: Documentation for DFL interrupt handling.
+
+Main changes from v1:
+ - Early validating irq table for each feature in parse_feature_irq()
+   in Patch #1.
+ - Changes IOCTL interfaces. use DFL_FPGA_FME/PORT_XXX_GET_IRQ_NUM
+   instead of DFL_FPGA_FME/PORT_XXX_GET_INFO, delete flag field for
+   DFL_FPGA_FME/PORT_XXX_SET_IRQ param
+
+Main changes from v2:
+ - put parse_feature_irqs() inside create_feature_instance().
+ - refines code for dfl_fpga_set_irq_triggers, delete local variable j.
+ - put_user() instead of copy_to_user() for DFL_FPGA_XXX_GET_IRQ_NUM IOCTL
+
+Xu Yilun (7):
+  fpga: dfl: parse interrupt info for feature devices on enumeration
+  fpga: dfl: pci: add irq info for feature devices enumeration
+  fpga: dfl: introduce interrupt trigger setting API
+  fpga: dfl: afu: add interrupt support for error reporting
+  fpga: dfl: fme: add interrupt support for global error reporting
+  fpga: dfl: afu: add user interrupt support
+  Documentation: fpga: dfl: add descriptions for interrupt related
+    interfaces.
+
+ Documentation/fpga/dfl.rst    |  17 +++
+ drivers/fpga/dfl-afu-error.c  |  60 +++++++++++
+ drivers/fpga/dfl-afu-main.c   |  74 +++++++++++++
+ drivers/fpga/dfl-fme-error.c  |  62 +++++++++++
+ drivers/fpga/dfl-fme-main.c   |   6 ++
+ drivers/fpga/dfl-pci.c        |  76 +++++++++++--
+ drivers/fpga/dfl.c            | 245 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/fpga/dfl.h            |  51 +++++++++
+ include/uapi/linux/fpga-dfl.h |  75 +++++++++++++
+ 9 files changed, 657 insertions(+), 9 deletions(-)
+
+-- 
+2.7.4
+
