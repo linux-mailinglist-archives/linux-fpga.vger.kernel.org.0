@@ -2,99 +2,117 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D3A1907BD
-	for <lists+linux-fpga@lfdr.de>; Tue, 24 Mar 2020 09:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D63195B16
+	for <lists+linux-fpga@lfdr.de>; Fri, 27 Mar 2020 17:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727305AbgCXIfs (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 24 Mar 2020 04:35:48 -0400
-Received: from mga06.intel.com ([134.134.136.31]:64108 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727304AbgCXIfs (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 24 Mar 2020 04:35:48 -0400
-IronPort-SDR: /WxXdnUmKd8EV1GoTOSeV0lh384rTGudnUrGv/h7wlfZ6TVvlbZdaMxthylm7TB8syM4pST3IJ
- FeBr/Yd+VmSQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 01:35:47 -0700
-IronPort-SDR: Td2KVo9U8e4p6PW7oezlqYDjQHn0/Ij93Zk0Hq3/C4Kedbe4UBOnAjYmD4kfsKzMfvhqx2/h1B
- FmoJazbN042A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,299,1580803200"; 
-   d="scan'208";a="446143859"
-Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Mar 2020 01:35:45 -0700
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, bhu@redhat.com, Xu Yilun <yilun.xu@intel.com>,
-        Luwei Kang <luwei.kang@intel.com>, Wu Hao <hao.wu@intel.com>
-Subject: [PATCH v3 7/7] Documentation: fpga: dfl: add descriptions for interrupt related interfaces.
-Date:   Tue, 24 Mar 2020 16:32:43 +0800
-Message-Id: <1585038763-22944-8-git-send-email-yilun.xu@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1585038763-22944-1-git-send-email-yilun.xu@intel.com>
-References: <1585038763-22944-1-git-send-email-yilun.xu@intel.com>
+        id S1727593AbgC0QaC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 27 Mar 2020 12:30:02 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:33157 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbgC0QaC (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 27 Mar 2020 12:30:02 -0400
+Received: by mail-pl1-f194.google.com with SMTP id g18so3653551plq.0
+        for <linux-fpga@vger.kernel.org>; Fri, 27 Mar 2020 09:30:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=SJvWFjZDOe1lgiVVdLFGLPbmS0CAKvI/u5kx3H2WLgY=;
+        b=BQmSNFS8PJ6cL6uxkhvI7dZEPEtXRQh8jzPrc+jP877Q0P8JYkS5bqZA8HCiVt2jwc
+         q73WDJuBRXUf17ddxPdk+NCgSFGUax1/vK8lRq/CvF3w6veYaeFYXxuS6ndfZ961wCgx
+         YYGlg8l+j+iBW1BiMUgmQAYQwDfrhbljpG0F8rD1IeyxU0K7qruOIQitJxltvgFxWFAJ
+         qUObwjb9i+ZAdHNURgq4AkSJfWL9++BwY+BM1inwmQzaC3yMIdr/8uGdByHvQOx6J58W
+         SB1em85qWsZtO+M91aHnl9Me988AWoJ7pie4JutZVFgt0q+IwEkmLwSx/7+FnJyP0LNU
+         A6Gg==
+X-Gm-Message-State: ANhLgQ06ByV6TQ4WC8tal1B3fIdyRI2d4iiZHyVjt4nUe6skMhVxLvVP
+        DUOuly/k6ugWpdpGmPz5pXp48PQPvSY=
+X-Google-Smtp-Source: ADFU+vuhCIpSA5J71HOnf06/piQUnCIRneWVwEDL6SYOx4ogPKJNJH5U8++9yN/20yDhpv6ItBvucg==
+X-Received: by 2002:a17:90a:30c3:: with SMTP id h61mr277689pjb.18.1585326601187;
+        Fri, 27 Mar 2020 09:30:01 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:1160:3ae1:1f56:6f77:5f9e])
+        by smtp.gmail.com with ESMTPSA id e9sm4485846pfl.179.2020.03.27.09.30.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2020 09:30:00 -0700 (PDT)
+Date:   Fri, 27 Mar 2020 09:29:44 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     moritzf@google.com, linux-fpga@vger.kernel.org
+Subject: [GIT PULL] FPGA Manager changes for 5.7
+Message-ID: <20200327162944.GA4118@epycbox.lan>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This patch adds introductions of interrupt related interfaces for FME
-error reporting, port error reporting and AFU user interrupts features.
+The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
 
-Signed-off-by: Luwei Kang <luwei.kang@intel.com>
-Signed-off-by: Wu Hao <hao.wu@intel.com>
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-----
-v2: Update Documents cause change of irq ioctl interfaces.
-v3: No change
----
- Documentation/fpga/dfl.rst | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index 094fc8a..c7ed3e4 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -89,6 +89,8 @@ The following functions are exposed through ioctls:
- - Program bitstream (DFL_FPGA_FME_PORT_PR)
- - Assign port to PF (DFL_FPGA_FME_PORT_ASSIGN)
- - Release port from PF (DFL_FPGA_FME_PORT_RELEASE)
-+- Get number of irqs of FME global error (DFL_FPGA_FME_ERR_GET_IRQ_NUM)
-+- Set interrupt trigger for FME error (DFL_FPGA_FME_ERR_SET_IRQ)
- 
- More functions are exposed through sysfs
- (/sys/class/fpga_region/regionX/dfl-fme.n/):
-@@ -144,6 +146,10 @@ The following functions are exposed through ioctls:
- - Map DMA buffer (DFL_FPGA_PORT_DMA_MAP)
- - Unmap DMA buffer (DFL_FPGA_PORT_DMA_UNMAP)
- - Reset AFU (DFL_FPGA_PORT_RESET)
-+- Get number of irqs of port error (DFL_FPGA_PORT_ERR_GET_IRQ_NUM)
-+- Set interrupt trigger for port error (DFL_FPGA_PORT_ERR_SET_IRQ)
-+- Get number of irqs of UINT (DFL_FPGA_PORT_UINT_GET_IRQ_NUM)
-+- Set interrupt trigger for UINT (DFL_FPGA_PORT_UINT_SET_IRQ)
- 
- DFL_FPGA_PORT_RESET:
-   reset the FPGA Port and its AFU. Userspace can do Port
-@@ -378,6 +384,17 @@ The device nodes used for ioctl() or mmap() can be referenced through::
- 	/sys/class/fpga_region/<regionX>/<dfl-port.n>/dev
- 
- 
-+Interrupt support
-+=================
-+Some FME and AFU private features are able to generate interrupts. As mentioned
-+above, users could call ioctl (DFL_FPGA_*_GET_IRQ_NUM) to know whether or how
-+many interrupts are supported for this private feature. Drivers also implement
-+an eventfd based interrupt handling mechanism for users to get notified when
-+interrupt happens. Users could set eventfds to driver via
-+ioctl (DFL_FPGA_*_SET_IRQ), and then poll/select on these eventfds waiting for
-+notification.
-+
-+
- Add new FIUs support
- ====================
- It's possible that developers made some new function blocks (FIUs) under this
--- 
-2.7.4
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git/ tags/fpga-for-5.7
+
+for you to fetch changes up to 3d5a5417ad064a6ca64a33f0c554d917311c79f4:
+
+  fpga: dfl: afu: support debug access to memory-mapped afu regions (2020-03-21 13:14:30 -0700)
+
+----------------------------------------------------------------
+FPGA Manager changes for 5.7
+
+Here's the first set of changes for the 5.7-rc1 merge window.
+
+Dominic's change adds support for accessing AFU regions with gdb.
+Gustavo's change is a cleanup patch regarding variable lenght arrays.
+Richard's changes update dt-bindings and add support for stratix and agilex.
+Sergiu's changes update spi transfers with the new delay field.
+Xu's change addresses an issue with a wrong return value.
+Shubhrajyoti's change makes the Zynq FPGA driver return -EPROBE_DEFER on
+check of devm_clk_get failure.
+Xu's change for DFL enables multiple opens.
+
+All of these patches have been reviewed, have appropriate Acked-by's and
+have been in the last few linux-next releases without issues.
+
+Signed-off-by: Moritz Fischer <mdf@kernel.org>
+
+----------------------------------------------------------------
+Dominic Chen (1):
+      fpga: dfl: afu: support debug access to memory-mapped afu regions
+
+Gustavo A. R. Silva (1):
+      fpga: dfl.h: Replace zero-length array with flexible-array member
+
+Richard Gong (5):
+      dt-bindings: fpga: add compatible value to Stratix10 SoC FPGA manager binding
+      arm64: dts: agilex: correct FPGA manager driver's compatible value
+      fpga: stratix10-soc: add compatible property value for intel agilex
+      dt-bindings, firmware: add compatible value Intel Stratix10 service layer binding
+      arm64: dts: agilex: correct service layer driver's compatible value
+
+Sergiu Cuciurean (2):
+      fpga: ice40-spi: Use new structure for SPI transfer delays
+      fpga: machxo2-spi: Use new structure for SPI transfer delays
+
+Shubhrajyoti Datta (1):
+      fpga: zynq: Remove clk_get error message for probe defer
+
+Xu Yilun (2):
+      fpga: dfl: support multiple opens on feature device node.
+      fpga: dfl: pci: fix return value of cci_pci_sriov_configure
+
+ .../bindings/firmware/intel,stratix10-svc.txt      |  2 +-
+ .../bindings/fpga/intel-stratix10-soc-fpga-mgr.txt |  3 +-
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |  4 +--
+ drivers/fpga/dfl-afu-main.c                        | 35 +++++++++++++-------
+ drivers/fpga/dfl-fme-main.c                        | 19 +++++++----
+ drivers/fpga/dfl-pci.c                             |  6 ++--
+ drivers/fpga/dfl.c                                 | 15 +++++++--
+ drivers/fpga/dfl.h                                 | 37 ++++++++++++++++------
+ drivers/fpga/ice40-spi.c                           | 10 ++++--
+ drivers/fpga/machxo2-spi.c                         | 12 ++++---
+ drivers/fpga/stratix10-soc.c                       |  3 +-
+ drivers/fpga/zynq-fpga.c                           |  3 +-
+ 12 files changed, 106 insertions(+), 43 deletions(-)
