@@ -2,114 +2,106 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F269198BB4
-	for <lists+linux-fpga@lfdr.de>; Tue, 31 Mar 2020 07:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA1C198BC3
+	for <lists+linux-fpga@lfdr.de>; Tue, 31 Mar 2020 07:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbgCaFcF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 31 Mar 2020 01:32:05 -0400
-Received: from mga03.intel.com ([134.134.136.65]:55437 "EHLO mga03.intel.com"
+        id S1726299AbgCaFhK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 31 Mar 2020 01:37:10 -0400
+Received: from mga12.intel.com ([192.55.52.136]:53458 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726001AbgCaFcF (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 31 Mar 2020 01:32:05 -0400
-IronPort-SDR: I3u6n3m4xSzq3L/iOKcRpbqSnMpCaV3/ELfFltvGXcdcXiFlpT/IO4bturFwIraeEwvDeaGFbz
- theEZVlnZOrw==
+        id S1726236AbgCaFhK (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 31 Mar 2020 01:37:10 -0400
+IronPort-SDR: UKCIs8ZDTQJMdR3SA3OIPM4MX+7Bm8PjNR6KacFKA7LGPQejE53bUiuOB+ZN5xfS8LOWVZyX4u
+ 8CZbxUWGVsIA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 22:32:04 -0700
-IronPort-SDR: SBkuA8p6OeShhufll+XxCy0kKHHejl7vhjrXSvL6B2Ghv6rC1xEIQB+AWCt2r0WHZv5AoeIRAH
- WeAESTGWhqhg==
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 22:37:09 -0700
+IronPort-SDR: TXGEI3hxGd5bYIrxUwKqjAN1IWb/WolMsgW5slK7TTzDOvE+L0hDjPNYt2eTORXaFifU70Anzy
+ Qfr8xIcucoEw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.72,327,1580803200"; 
-   d="scan'208";a="237592794"
+   d="scan'208";a="267163647"
 Received: from hao-dev.bj.intel.com (HELO localhost) ([10.238.157.65])
-  by orsmga007.jf.intel.com with ESMTP; 30 Mar 2020 22:32:02 -0700
-Date:   Tue, 31 Mar 2020 13:10:45 +0800
+  by orsmga002.jf.intel.com with ESMTP; 30 Mar 2020 22:37:07 -0700
+Date:   Tue, 31 Mar 2020 13:15:50 +0800
 From:   Wu Hao <hao.wu@intel.com>
 To:     Xu Yilun <yilun.xu@intel.com>
 Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org, trix@redhat.com, bhu@redhat.com,
         Luwei Kang <luwei.kang@intel.com>
-Subject: Re: [PATCH v3 4/7] fpga: dfl: afu: add interrupt support for error
- reporting
-Message-ID: <20200331051045.GD8468@hao-dev>
+Subject: Re: [PATCH v3 6/7] fpga: dfl: afu: add user interrupt support
+Message-ID: <20200331051550.GE8468@hao-dev>
 References: <1585038763-22944-1-git-send-email-yilun.xu@intel.com>
- <1585038763-22944-5-git-send-email-yilun.xu@intel.com>
+ <1585038763-22944-7-git-send-email-yilun.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1585038763-22944-5-git-send-email-yilun.xu@intel.com>
+In-Reply-To: <1585038763-22944-7-git-send-email-yilun.xu@intel.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 04:32:40PM +0800, Xu Yilun wrote:
-> Error reporting interrupt is very useful to notify users that some
-> errors are detected by the hardware. Once users are notified, they
-> could query hardware logged error states, no need to continuously
-> poll on these states.
-> 
-> This patch follows the common DFL interrupt notification and handling
-> mechanism, implements two ioctl commands below for user to query
-> number of irqs supported, and set/unset interrupt triggers.
+On Tue, Mar 24, 2020 at 04:32:42PM +0800, Xu Yilun wrote:
+> AFU (Accelerated Function Unit) is dynamic region of the DFL based FPGA,
+> and always defined by users. Some DFL based FPGA cards allow users to
+> implement their own interrupts in AFU. In order to support this,
+> hardware implements a new UINT (User Interrupt) private feature with
+
+User Interrupt seems a little confusing, maybe we can just call it
+AFU Interrupt whenever possible. How do you think?
+
+Thanks
+Hao
+
+> related capability register which describes the number of supported
+> user interrupts as well as the local index of the interrupts for
+> software enumeration, and from software side, driver follows the common
+> DFL interrupt notification and handling mechanism, and it implements
+> two ioctls below for user to query number of irqs supported and set/unset
+> interrupt triggers.
 > 
 >  Ioctls:
->  * DFL_FPGA_PORT_ERR_GET_IRQ_NUM
->    get the number of irqs, which is used to determine whether/how many
->    interrupts error reporting feature supports.
+>  * DFL_FPGA_PORT_UINT_GET_IRQ_NUM
+>    get the number of irqs, which is used to determine how many interrupts
+>    UINT feature supports.
 > 
->  * DFL_FPGA_PORT_ERR_SET_IRQ
->    set/unset given eventfds as error interrupt triggers.
+>  * DFL_FPGA_PORT_UINT_SET_IRQ
+>    set/unset eventfds as AFU user interrupt triggers.
 > 
 > Signed-off-by: Luwei Kang <luwei.kang@intel.com>
 > Signed-off-by: Wu Hao <hao.wu@intel.com>
 > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 > ----
-> v2: use DFL_FPGA_PORT_ERR_GET_IRQ_NUM instead of
->     DFL_FPGA_PORT_ERR_GET_INFO
->     Delete flag field for DFL_FPGA_PORT_ERR_SET_IRQ param
+> v2: use DFL_FPGA_PORT_UINT_GET_IRQ_NUM instead of
+>     DFL_FPGA_PORT_UINT_GET_INFO
+>     Delete flags field for DFL_FPGA_PORT_UINT_SET_IRQ
 > v3: put_user() instead of copy_to_user()
 >     improves comments
 > ---
->  drivers/fpga/dfl-afu-error.c  | 60 +++++++++++++++++++++++++++++++++++++++++++
->  drivers/fpga/dfl-afu-main.c   |  4 +++
->  include/uapi/linux/fpga-dfl.h | 29 +++++++++++++++++++++
->  3 files changed, 93 insertions(+)
+>  drivers/fpga/dfl-afu-main.c   | 70 +++++++++++++++++++++++++++++++++++++++++++
+>  include/uapi/linux/fpga-dfl.h | 23 ++++++++++++++
+>  2 files changed, 93 insertions(+)
 > 
-> diff --git a/drivers/fpga/dfl-afu-error.c b/drivers/fpga/dfl-afu-error.c
-> index c1467ae..757f9f5 100644
-> --- a/drivers/fpga/dfl-afu-error.c
-> +++ b/drivers/fpga/dfl-afu-error.c
-> @@ -15,6 +15,7 @@
->   */
->  
->  #include <linux/uaccess.h>
-> +#include <linux/fpga-dfl.h>
->  
->  #include "dfl-afu.h"
->  
-> @@ -219,6 +220,64 @@ static void port_err_uinit(struct platform_device *pdev,
->  	afu_port_err_mask(&pdev->dev, true);
->  }
+> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
+> index 357cd5d..d2db5b6 100644
+> --- a/drivers/fpga/dfl-afu-main.c
+> +++ b/drivers/fpga/dfl-afu-main.c
+> @@ -529,6 +529,72 @@ static const struct dfl_feature_ops port_stp_ops = {
+>  	.init = port_stp_init,
+>  };
 >  
 > +static long
-> +port_err_get_num_irqs(struct platform_device *pdev,
-> +		      struct dfl_feature *feature, unsigned long arg)
+> +port_uint_get_num_irqs(struct platform_device *pdev,
+> +		       struct dfl_feature *feature, unsigned long arg)
 > +{
 > +	return put_user(feature->nr_irqs, (__u32 __user *)arg);
 > +}
-
-Looks like this function is same in patch 5 and 6 too. Is it possible, we can
-share the common code? same case for below set irq function, right?
-
-Thanks
-Hao
-
 > +
-> +static long port_err_set_irq(struct platform_device *pdev,
-> +			     struct dfl_feature *feature, unsigned long arg)
+> +static long port_uint_set_irq(struct platform_device *pdev,
+> +			      struct dfl_feature *feature, unsigned long arg)
 > +{
 > +	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
 > +	struct dfl_fpga_irq_set hdr;
@@ -140,91 +132,76 @@ Hao
 > +}
 > +
 > +static long
-> +port_err_ioctl(struct platform_device *pdev, struct dfl_feature *feature,
-> +	       unsigned int cmd, unsigned long arg)
+> +port_uint_ioctl(struct platform_device *pdev, struct dfl_feature *feature,
+> +		unsigned int cmd, unsigned long arg)
 > +{
 > +	long ret = -ENODEV;
 > +
 > +	switch (cmd) {
-> +	case DFL_FPGA_PORT_ERR_GET_IRQ_NUM:
-> +		ret = port_err_get_num_irqs(pdev, feature, arg);
+> +	case DFL_FPGA_PORT_UINT_GET_IRQ_NUM:
+> +		ret = port_uint_get_num_irqs(pdev, feature, arg);
 > +		break;
-> +	case DFL_FPGA_PORT_ERR_SET_IRQ:
-> +		ret = port_err_set_irq(pdev, feature, arg);
+> +	case DFL_FPGA_PORT_UINT_SET_IRQ:
+> +		ret = port_uint_set_irq(pdev, feature, arg);
 > +		break;
 > +	default:
 > +		dev_dbg(&pdev->dev, "%x cmd not handled", cmd);
 > +	}
-> +
 > +	return ret;
 > +}
 > +
->  const struct dfl_feature_id port_err_id_table[] = {
->  	{.id = PORT_FEATURE_ID_ERROR,},
->  	{0,}
-> @@ -227,4 +286,5 @@ const struct dfl_feature_id port_err_id_table[] = {
->  const struct dfl_feature_ops port_err_ops = {
->  	.init = port_err_init,
->  	.uinit = port_err_uinit,
-> +	.ioctl = port_err_ioctl,
->  };
-> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-> index b0c3178..357cd5d 100644
-> --- a/drivers/fpga/dfl-afu-main.c
-> +++ b/drivers/fpga/dfl-afu-main.c
-> @@ -577,6 +577,7 @@ static int afu_release(struct inode *inode, struct file *filp)
->  {
->  	struct platform_device *pdev = filp->private_data;
->  	struct dfl_feature_platform_data *pdata;
-> +	struct dfl_feature *feature;
->  
->  	dev_dbg(&pdev->dev, "Device File Release\n");
->  
-> @@ -586,6 +587,9 @@ static int afu_release(struct inode *inode, struct file *filp)
->  	dfl_feature_dev_use_end(pdata);
->  
->  	if (!dfl_feature_dev_use_count(pdata)) {
-> +		dfl_fpga_dev_for_each_feature(pdata, feature)
-> +			dfl_fpga_set_irq_triggers(feature, 0,
-> +						  feature->nr_irqs, NULL);
->  		__port_reset(pdev);
->  		afu_dma_region_destroy(pdata);
+> +static const struct dfl_feature_id port_uint_id_table[] = {
+> +	{.id = PORT_FEATURE_ID_UINT,},
+> +	{0,}
+> +};
+> +
+> +static const struct dfl_feature_ops port_uint_ops = {
+> +	.ioctl = port_uint_ioctl,
+> +};
+> +
+>  static struct dfl_feature_driver port_feature_drvs[] = {
+>  	{
+>  		.id_table = port_hdr_id_table,
+> @@ -547,6 +613,10 @@ static struct dfl_feature_driver port_feature_drvs[] = {
+>  		.ops = &port_stp_ops,
+>  	},
+>  	{
+> +		.id_table = port_uint_id_table,
+> +		.ops = &port_uint_ops,
+> +	},
+> +	{
+>  		.ops = NULL,
 >  	}
+>  };
 > diff --git a/include/uapi/linux/fpga-dfl.h b/include/uapi/linux/fpga-dfl.h
-> index ec70a0746..9ade943 100644
+> index 206bad9..5f885a8 100644
 > --- a/include/uapi/linux/fpga-dfl.h
 > +++ b/include/uapi/linux/fpga-dfl.h
-> @@ -151,6 +151,35 @@ struct dfl_fpga_port_dma_unmap {
->  
->  #define DFL_FPGA_PORT_DMA_UNMAP		_IO(DFL_FPGA_MAGIC, DFL_PORT_BASE + 4)
+> @@ -180,6 +180,29 @@ struct dfl_fpga_irq_set {
+>  					     DFL_PORT_BASE + 6,	\
+>  					     struct dfl_fpga_irq_set)
 >  
 > +/**
-> + * DFL_FPGA_PORT_ERR_GET_IRQ_NUM - _IOR(DFL_FPGA_MAGIC, DFL_PORT_BASE + 5,
+> + * DFL_FPGA_PORT_UINT_GET_IRQ_NUM - _IOR(DFL_FPGA_MAGIC, DFL_PORT_BASE + 7,
 > + *								__u32 num_irqs)
 > + *
-> + * Get the number of irqs supported by the fpga port error reporting private
-> + * feature. Currently hardware supports up to 1 irq.
+> + * Get the number of irqs supported by the fpga AFU user interrupt private
+> + * feature.
 > + * Return: 0 on success, -errno on failure.
 > + */
-> +#define DFL_FPGA_PORT_ERR_GET_IRQ_NUM	_IOR(DFL_FPGA_MAGIC,	\
-> +					     DFL_PORT_BASE + 5, __u32)
+> +#define DFL_FPGA_PORT_UINT_GET_IRQ_NUM	_IOR(DFL_FPGA_MAGIC,	\
+> +					     DFL_PORT_BASE + 7, __u32)
 > +
 > +/**
-> + * DFL_FPGA_PORT_ERR_SET_IRQ - _IOW(DFL_FPGA_MAGIC, DFL_PORT_BASE + 6,
+> + * DFL_FPGA_PORT_UINT_SET_IRQ - _IOW(DFL_FPGA_MAGIC, DFL_PORT_BASE + 8,
 > + *						struct dfl_fpga_irq_set)
 > + *
-> + * Set fpga port error reporting interrupt trigger if evtfds[n] is valid.
+> + * Set fpga afu user interrupt trigger if evtfds[n] is valid.
 > + * Unset related interrupt trigger if evtfds[n] is a negative value.
 > + * Return: 0 on success, -errno on failure.
 > + */
-> +struct dfl_fpga_irq_set {
-> +	__u32 start;		/* Index of the first irq */
-> +	__u32 count;		/* The number of eventfd handler */
-> +	__s32 evtfds[];		/* Eventfd handler */
-> +};
-> +
-> +#define DFL_FPGA_PORT_ERR_SET_IRQ	_IOW(DFL_FPGA_MAGIC,	\
-> +					     DFL_PORT_BASE + 6,	\
+> +#define DFL_FPGA_PORT_UINT_SET_IRQ	_IOW(DFL_FPGA_MAGIC,	\
+> +					     DFL_PORT_BASE + 8,	\
 > +					     struct dfl_fpga_irq_set)
 > +
 >  /* IOCTLs for FME file descriptor */
