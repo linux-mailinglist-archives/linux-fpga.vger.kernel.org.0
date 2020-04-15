@@ -1,81 +1,103 @@
 Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2061A064C
-	for <lists+linux-fpga@lfdr.de>; Tue,  7 Apr 2020 07:12:58 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 5828B1A9A03
+	for <lists+linux-fpga@lfdr.de>; Wed, 15 Apr 2020 12:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbgDGFM4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 7 Apr 2020 01:12:56 -0400
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:33973 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726876AbgDGFMm (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 7 Apr 2020 01:12:42 -0400
-Received: by mail-ua1-f66.google.com with SMTP id d23so850905uak.1
-        for <linux-fpga@vger.kernel.org>; Mon, 06 Apr 2020 22:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
-        b=m9m/DCsFRus/zRmIuphflM5sHyenmkMN/TOEnECOGthbLJHVg8u2+iqtFZpNbyb2/k
-         2tLF//qwyXGtNVJKRleGUy+KbEtVjN+06Aw6FbGL98d5M/QEqB9c9SHaIsBPFlQYoUCh
-         Lj+P9EPUGdvyQRip4KeH3oSvDVhqDTV0IJcbcI66BzYP/b9Y/1y4LF++1q0teLhPl3GM
-         v15gBTxOBB8qvH4CNaCnwdm2sugBL+St8qIlm7SqBWweWj6hdsos1F0mjeWO8qJt64R9
-         xl3tya8AfljNAFdSOkZ4tC7INitomO8JQPFHHcp+JAODUsaup01At9KIYDntXEoTQZb0
-         DmdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
-        b=sbGfv3GvJ40dsy3qurwk5N4wPN6kP5lSf5wVL8xxezntUPTLunDsn+ihBc7g1nky2e
-         a/zCII2ePWOJgdqntNQYoWGx0o6O9KhNpYxLBZsMbuSzZ5Gz397Is4QkUaf7Z95q2dIT
-         knx7kgeB/gd/TzEWN7jon8CjkKZPNET43hv8PdM60Wr4GvSxtc79AdKgU72axOI5Cd6S
-         FU1uCEEChtCetfCrK4/xopGs+rbHbExLG04sDxbQI/1RDmrNbCP1frcTtNsdYvhf9eZP
-         yl8Me2qJ+qsh0YENkTB5TBkwInyZqxlpousPbSJ+F6u4snucsETd4o33wo3MneMOBgw6
-         le/g==
-X-Gm-Message-State: AGi0PuZwn+OW6nSj8WRp/4lyuwngSbulhI49Ui1Hmop8RCvsw3DD2syK
-        /yQF33W5sdRdi7FWnweKyQhamvFDnmlX70mkvks=
-X-Google-Smtp-Source: APiQypIYXniGQUHEpASwiGNjKth4Cu9ElCz4yjrJ2uXbYBYunhfz0887D/TRydUbTstl7MwaeVftG8QxF1P80ST3qos=
-X-Received: by 2002:ab0:a9:: with SMTP id 38mr504317uaj.61.1586236361040; Mon,
- 06 Apr 2020 22:12:41 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab0:4929:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 22:12:40 -0700 (PDT)
-From:   SANDRA DEWI <dewisandra154@gmail.com>
-Date:   Tue, 7 Apr 2020 05:12:40 +0000
-Message-ID: <CABRVPWys0xe4CWBkaU0ZXQW+4d=tjDOjyo8cKohc5-VFkWPkcA@mail.gmail.com>
-Subject: whether this is your correct email address or not
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S2896238AbgDOKK2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 15 Apr 2020 06:10:28 -0400
+Received: from mga03.intel.com ([134.134.136.65]:27969 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2896221AbgDOKKS (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 15 Apr 2020 06:10:18 -0400
+IronPort-SDR: 7Uewr7cbYjd3+VfwGxh2UPNtlKM9Th2Mv8OMRO/vxxSe6dgNw/suE8ILHROXRKs+KP6KQ7qgU5
+ AoTzBNAGg1jg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2020 03:10:16 -0700
+IronPort-SDR: aId59wJtQvTdJVURjpuzjsl1e0DTZ33paKQgcXPpmz6CSWPmo9nLWko1C0YtQI/B5nMddxu6ib
+ qYokxNtlvjKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,386,1580803200"; 
+   d="scan'208";a="253482866"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
+  by orsmga003.jf.intel.com with ESMTP; 15 Apr 2020 03:10:14 -0700
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, bhu@redhat.com, Xu Yilun <yilun.xu@intel.com>
+Subject: [PATCH v4 0/7] Add interrupt support to FPGA DFL drivers
+Date:   Wed, 15 Apr 2020 18:07:28 +0800
+Message-Id: <1586945255-30823-1-git-send-email-yilun.xu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Dear ,Pastor
+This patchset add interrupt support to FPGA DFL drivers.
 
+With these patches, DFL driver will parse and assign interrupt resources
+for enumerated feature devices and their sub features.
 
+This patchset also introduces a set of APIs for user to monitor DFL
+interrupts. Three sub features (DFL FME error, DFL AFU error and user
+interrupt) drivers now support these APIs.
 
-I have a client who is an oil business man and he made a fixed deposit
-of $26 million USD in my bank, where I am the director of the branch,
-My client died with his entire family in Jordanian
+Patch #1: DFL framework change. Accept interrupt info input from DFL bus
+          driver, and add interrupt parsing and assignment for feature
+          sub devices.
+Patch #2: DFL pci driver change, add interrupt info on DFL enumeration.
+Patch #3: DFL framework change. Add helper functions for feature sub
+          device drivers to handle interrupt and notify users.
+Patch #4: Add interrupt support for AFU error reporting sub feature.
+Patch #5: Add interrupt support for FME global error reporting sub
+          feature.
+Patch #6: Add interrupt support for a new sub feature, to handle user
+          interrupts implemented in AFU.
+Patch #7: Documentation for DFL interrupt handling.
 
-50% of the fund will be for the church  for the work of God,the
-balance 50% we share it in the ratio of 50/50. Meaning 50% to you and
-50% for me
+Main changes from v1:
+ - Early validating irq table for each feature in parse_feature_irq()
+   in Patch #1.
+ - Changes IOCTL interfaces. use DFL_FPGA_FME/PORT_XXX_GET_IRQ_NUM
+   instead of DFL_FPGA_FME/PORT_XXX_GET_INFO, delete flag field for
+   DFL_FPGA_FME/PORT_XXX_SET_IRQ param
 
-intervention in the Syrian Civil War 2014 leaving behind no next of
-kin. I Propose to present you as next of kin to claim the funds, if
-interested reply me for full details and how we are to
+Main changes from v2:
+ - put parse_feature_irqs() inside create_feature_instance().
+ - refines code for dfl_fpga_set_irq_triggers, delete local variable j.
+ - put_user() instead of copy_to_user() for DFL_FPGA_XXX_GET_IRQ_NUM IOCTL
 
+Main changes from v3:
+ - rebased to 5.7-rc1.
+ - fail the dfl enumeration when irq parsing error happens.
+ - Add 2 helper functions in dfl.c to handle generic irq ioctls in feature
+   drivers.
 
+Xu Yilun (7):
+  fpga: dfl: parse interrupt info for feature devices on enumeration
+  fpga: dfl: pci: add irq info for feature devices enumeration
+  fpga: dfl: introduce interrupt trigger setting API
+  fpga: dfl: afu: add interrupt support for port error reporting
+  fpga: dfl: fme: add interrupt support for global error reporting
+  fpga: dfl: afu: add AFU interrupt support
+  Documentation: fpga: dfl: add descriptions for interrupt related
+    interfaces.
 
-proceed to close this deal.
+ Documentation/fpga/dfl.rst    |  19 +++
+ drivers/fpga/dfl-afu-error.c  |  22 +++
+ drivers/fpga/dfl-afu-main.c   |  36 +++++
+ drivers/fpga/dfl-fme-error.c  |  23 ++++
+ drivers/fpga/dfl-fme-main.c   |   6 +
+ drivers/fpga/dfl-pci.c        |  80 +++++++++--
+ drivers/fpga/dfl.c            | 311 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/fpga/dfl.h            |  57 ++++++++
+ include/uapi/linux/fpga-dfl.h |  82 +++++++++++
+ 9 files changed, 627 insertions(+), 9 deletions(-)
 
+-- 
+2.7.4
 
-
-
-Mrs. Sandra Dewi
-
-
-
-Email  mrsdewi@gmx.com
