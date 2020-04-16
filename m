@@ -2,87 +2,54 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 994401AAF7C
-	for <lists+linux-fpga@lfdr.de>; Wed, 15 Apr 2020 19:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E271AB61C
+	for <lists+linux-fpga@lfdr.de>; Thu, 16 Apr 2020 05:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410958AbgDORZK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 15 Apr 2020 13:25:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39334 "EHLO mail.kernel.org"
+        id S2389486AbgDPDOw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 15 Apr 2020 23:14:52 -0400
+Received: from mga09.intel.com ([134.134.136.24]:45062 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2410926AbgDORZJ (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 15 Apr 2020 13:25:09 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7B03A20787;
-        Wed, 15 Apr 2020 17:25:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586971508;
-        bh=FkuOn46zboCeaH/kC7OTYEmrjuYmf/mObtZLVHd0mLQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2EGgI2oXgl1tefayxMrDf20ma/E+k8hzgWkV832YPqkrOKAx0VGpyGTRl9uWvKF0b
-         Hkcxj8i57WNmExGt497020XdbUXFg4ATiYtR9DVGYXwwjvlouac8aehtOXja75jDox
-         3AdQ/iBbk4i67KTWRKmf72YPOscKVL8R7ERUX15Y=
-Date:   Wed, 15 Apr 2020 19:25:06 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Moritz Fischer <moritz.fischer.private@gmail.com>
-Cc:     Moritz Fischer <moritzf@google.com>, linux-fpga@vger.kernel.org
-Subject: Re: [GIT PULL] FPGA Manager (late) fixes for 5.7
-Message-ID: <20200415172506.GB3661754@kroah.com>
-References: <20200331035459.GA3472@epycbox.lan>
- <CAJYdmeP+wwLN7fc_6UgFAKOk5yR=OradHtH0MXVhR_TBQD7M5A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJYdmeP+wwLN7fc_6UgFAKOk5yR=OradHtH0MXVhR_TBQD7M5A@mail.gmail.com>
+        id S2388679AbgDPDOv (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 15 Apr 2020 23:14:51 -0400
+IronPort-SDR: F06HSfcxpCFziuiOXigMC8AN3C+UBXwX5BkCRORk2pxEr7Wm19dexJ+TfM+O9HwJnj3ikIvM0y
+ mghUC/qpKjDg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2020 20:14:50 -0700
+IronPort-SDR: jfqe3rJ67J0FjNStNU/0AsNiQBGadcTk2qyNyUL/1vNXdV1kicHh2Twt3FNnleGEVwT1OgQDfI
+ 8ntQbVjC+LUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,388,1580803200"; 
+   d="scan'208";a="454164515"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Apr 2020 20:14:48 -0700
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, bhu@redhat.com, Xu Yilun <yilun.xu@intel.com>
+Subject: [PATCH 0/2] Bug fixes for FPGA DFL
+Date:   Thu, 16 Apr 2020 11:11:50 +0800
+Message-Id: <1587006712-22696-1-git-send-email-yilun.xu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 09:05:50AM -0700, Moritz Fischer wrote:
-> On Mon, Mar 30, 2020 at 8:55 PM Moritz Fischer <mdf@kernel.org> wrote:
-> >
-> > The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
-> >
-> >   Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
-> >
-> > are available in the Git repository at:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git/ fpga-fixes-for-5.7
-> >
-> > for you to fetch changes up to 3c2760b78f90db874401d97e3c17829e2e36f400:
-> >
-> >   fpga: dfl: pci: fix return value of cci_pci_sriov_configure (2020-03-30 20:45:30 -0700)
-> >
-> > ----------------------------------------------------------------
-> > FPGA Manager fixes for 5.7-rc1
-> >
-> > Here are two (late) fixes for 5.7-rc1 merge window.
-> >
-> > Xu's change addresses an issue with a wrong return value.
-> >
-> > Shubhrajyoti's change makes the Zynq FPGA driver return -EPROBE_DEFER on
-> >
-> > All patches have been reviewed on the mailing list, and have been in the
-> > last few linux-next releases (as part of my for-next branch) without issues.
-> >
-> > Signed-off-by: Moritz Fischer <mdf@kernel.org>
-> >
-> > ----------------------------------------------------------------
-> > Shubhrajyoti Datta (1):
-> >       fpga: zynq: Remove clk_get error message for probe defer
-> >
-> > Xu Yilun (1):
-> >       fpga: dfl: pci: fix return value of cci_pci_sriov_configure
-> >
-> >  drivers/fpga/dfl-pci.c   | 6 ++++--
-> >  drivers/fpga/zynq-fpga.c | 3 ++-
-> >  2 files changed, 6 insertions(+), 3 deletions(-)
-> 
-> Ping
+Patch #1 fixes lkp cppcheck warnings in dfl-pci.c
+Patch #2 fixes bug in dfl port reset handshake
 
-I couldn't do anything until after -rc1 came out, and now I'm working on
-catching up.  Don't worry, it's not lost...
+Matthew Gerlach (1):
+  fpga: dfl: fix bug in port reset handshake
 
-greg k-h
+Xu Yilun (1):
+  fpga: dfl: pci: reduce the scope of variable 'ret'
+
+ drivers/fpga/dfl-afu-main.c | 3 ++-
+ drivers/fpga/dfl-pci.c      | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+-- 
+2.7.4
+
