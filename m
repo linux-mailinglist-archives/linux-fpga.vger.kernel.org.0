@@ -2,122 +2,96 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B53D31AD4D4
-	for <lists+linux-fpga@lfdr.de>; Fri, 17 Apr 2020 05:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30AF1AD5E0
+	for <lists+linux-fpga@lfdr.de>; Fri, 17 Apr 2020 08:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728654AbgDQDYO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 16 Apr 2020 23:24:14 -0400
-Received: from mga04.intel.com ([192.55.52.120]:22715 "EHLO mga04.intel.com"
+        id S1726500AbgDQGBw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 17 Apr 2020 02:01:52 -0400
+Received: from mga01.intel.com ([192.55.52.88]:54126 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728444AbgDQDYO (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 16 Apr 2020 23:24:14 -0400
-IronPort-SDR: uRabRcaaOmb+cf1MiuROWjs7h8iT0TDopivNXN8HK7fJixhXf3x2w0WDXGbGKq78/nFT2fx9rk
- b5+qb1bOWYHA==
+        id S1726065AbgDQGBv (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 17 Apr 2020 02:01:51 -0400
+IronPort-SDR: YXBbX3P8Exyf17PXjrDl0/WT6gneLcwTB7i51FP1Zw9F5p74CCqqwZYOj6Caw4O0W1K3GIYRzK
+ 1LWBY35TWbrQ==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 20:24:14 -0700
-IronPort-SDR: vm7kEmXJN0BsDyOFZzfPgeTZf2QaefCY0zx1kjPSt7pVlPucMluF6jzrfE1Y6kcew5SMLDtqeZ
- f0IdLxZxxWtA==
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 23:01:51 -0700
+IronPort-SDR: qs/5JrKYhI5fjKMKNid/BnUiMqTRYtpN7CI4cWdzotGHs1aG5KkPVKMMBIatdivZOOVpGG0uHk
+ S8pw/ojxwjKA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.72,393,1580803200"; 
-   d="scan'208";a="254081720"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga003.jf.intel.com with ESMTP; 16 Apr 2020 20:24:11 -0700
-Date:   Fri, 17 Apr 2020 11:21:32 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     "Wu, Hao" <hao.wu@intel.com>
-Cc:     Tom Rix <trix@redhat.com>, "mdf@kernel.org" <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bhu@redhat.com" <bhu@redhat.com>
-Subject: Re: [PATCH 1/2] fpga: dfl: pci: reduce the scope of variable 'ret'
-Message-ID: <20200417032132.GA25293@yilunxu-OptiPlex-7050>
-References: <1587006712-22696-1-git-send-email-yilun.xu@intel.com>
- <1587006712-22696-2-git-send-email-yilun.xu@intel.com>
- <DM6PR11MB3819619E9B2C7326218247E385D80@DM6PR11MB3819.namprd11.prod.outlook.com>
- <9b1d85e0-4f44-179b-c847-af858fcc212a@redhat.com>
- <20200417015605.GA30618@yilunxu-OptiPlex-7050>
- <DM6PR11MB381919B83DB49F937E3EDEEA85D90@DM6PR11MB3819.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB381919B83DB49F937E3EDEEA85D90@DM6PR11MB3819.namprd11.prod.outlook.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+   d="scan'208";a="272318270"
+Received: from hao-dev.bj.intel.com ([10.238.157.65])
+  by orsmga002.jf.intel.com with ESMTP; 16 Apr 2020 23:01:48 -0700
+From:   Wu Hao <hao.wu@intel.com>
+To:     will@kernel.org, mdf@kernel.org, mark.rutland@arm.com,
+        gregkh@linuxfoundation.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-api@vger.kernel.org, atull@kernel.org, yilun.xu@intel.com,
+        trix@redhat.com, bhu@redhat.com, Wu Hao <hao.wu@intel.com>
+Subject: [PATCH v9 0/2] add performance reporting support to FPGA DFL drivers
+Date:   Fri, 17 Apr 2020 13:39:58 +0800
+Message-Id: <1587102000-18262-1-git-send-email-hao.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Apr 17, 2020 at 11:05:16AM +0800, Wu, Hao wrote:
-> > -----Original Message-----
-> > From: Xu, Yilun <yilun.xu@intel.com>
-> > Sent: Friday, April 17, 2020 9:56 AM
-> > To: Tom Rix <trix@redhat.com>
-> > Cc: Wu, Hao <hao.wu@intel.com>; mdf@kernel.org; linux-
-> > fpga@vger.kernel.org; linux-kernel@vger.kernel.org; bhu@redhat.com
-> > Subject: Re: [PATCH 1/2] fpga: dfl: pci: reduce the scope of variable 'ret'
-> >
-> > Hi Rix:
-> >
-> > This patch is based on linux-next. There is an preceding patch
-> > (3c2760b78f90 "fpga: dfl: pci: fix return value of cci_pci_sriov_configure",
-> > Also see Fixes:) in linux-next but not merged in 5.7-rc1 yet.
-> > This patch is to fix the lkp warning brought by the previous one.
-> 
-> Yilun
-> 
-> Is it possible that commit id may be different for master then?
+Hi all,
 
-It is possible if the previous patch need a little change when merging
-to master.
+This patchset adds performance reporting support for FPGA DFL drivers. It
+introduces one pmu to expose userspace interfaces via standard perf API.
+User could use standard perf tool to access perf events exposed via pmu.
 
-I'm not sure how to handle this then. But the previous patch is simple
-and is unlikely to change.
+This patchset is generated based on 5.7-rc1.
 
-> 
-> Thanks
-> Hao
-> 
-> >
-> > Thanks.
-> >
-> > On Thu, Apr 16, 2020 at 09:56:47AM -0700, Tom Rix wrote:
-> > > Please check the scope.
-> > >
-> > > On linus/master, the result of this change looks like
-> > >
-> > > static int cci_pci_sriov_configure(struct pci_dev *pcidev, int num_vfs)
-> > > {
-> > >     struct cci_drvdata *drvdata = pci_get_drvdata(pcidev);
-> > >     struct dfl_fpga_cdev *cdev = drvdata->cdev;
-> > >
-> > >     if (!num_vfs) {
-> > >         /*
-> > >          * disable SRIOV and then put released ports back to default
-> > >          * PF access mode.
-> > >          */
-> > >         pci_disable_sriov(pcidev);
-> > >
-> > >         dfl_fpga_cdev_config_ports_pf(cdev);
-> > >
-> > >     } else {
-> > >         int ret; <--- defined here
-> > >
-> > >         /*
-> > >          * before enable SRIOV, put released ports into VF access mode
-> > >          * first of all.
-> > >          */
-> > >         ret = dfl_fpga_cdev_config_ports_vf(cdev, num_vfs);
-> > >         if (ret)
-> > >             return ret;
-> > >
-> > >         ret = pci_enable_sriov(pcidev, num_vfs);
-> > >         if (ret)
-> > >             dfl_fpga_cdev_config_ports_pf(cdev);
-> > >     }
-> > >
-> > >     return ret;  <---- not in scope, not defined here
-> > > }
-> > >
-> > > Tom
+Main changes from v8:
+ - rebase against 5.7-rc1.
+
+Main changes from v7:
+ - rename pmu name from "fme%d" to "dfl_fme%d".
+ - monitor cpu hotplug for cpumask sysfs and update cpumask sysfs doc.
+ - add extra read for 64bit counter registers to avoid 2-32bit readl issue.
+
+Main changes from v6:
+ - add a new ABI/testing/ sysfs documentation in patch #2.
+ - fix a warning reported by kbuild in patch #2.
+
+Main changes from v5:
+ - use dev_ext_attribute instead of fme_perf_event_attr.
+ - use is_visible function to decide which events to expose per
+   hardware capability, and add event_init checking for all events.
+
+Main changes from v4:
+ - rebase and clean up.
+ - update Kconfig for PERF_EVENTS dependency.
+
+Main changes from v3:
+ - add more descriptions in doc, including how to use perf tool for these
+   hardware counters. (patch #1)
+ - use standard perf API instead of sysfs entries. (patch #2)
+
+Wu Hao (1):
+  fpga: dfl: fme: add performance reporting support
+
+Xu Yilun (1):
+  Documentation: fpga: dfl: add description for performance reporting
+    support
+
+ .../testing/sysfs-bus-event_source-devices-dfl_fme |  104 ++
+ Documentation/fpga/dfl.rst                         |   84 ++
+ drivers/fpga/Kconfig                               |    2 +-
+ drivers/fpga/Makefile                              |    1 +
+ drivers/fpga/dfl-fme-main.c                        |    4 +
+ drivers/fpga/dfl-fme-perf.c                        | 1020 ++++++++++++++++++++
+ drivers/fpga/dfl-fme.h                             |    2 +
+ drivers/fpga/dfl.h                                 |    2 +
+ 8 files changed, 1218 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-event_source-devices-dfl_fme
+ create mode 100644 drivers/fpga/dfl-fme-perf.c
+
+-- 
+1.8.3.1
+
