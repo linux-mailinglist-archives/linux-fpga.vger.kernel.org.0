@@ -2,91 +2,68 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CF61B4C9F
-	for <lists+linux-fpga@lfdr.de>; Wed, 22 Apr 2020 20:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C632D1B51F6
+	for <lists+linux-fpga@lfdr.de>; Thu, 23 Apr 2020 03:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726158AbgDVSY6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 22 Apr 2020 14:24:58 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:55450 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725648AbgDVSY5 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 22 Apr 2020 14:24:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587579895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fxIemATZr+Jj72Sq0gv/Y8Y0CxRoIaNtcDCWp0Bqo4s=;
-        b=E1A4uzto6IDptQIgb2dILXCDEK6LFQP8DQis91yb2A/2zgbNiX+zXFhiaBf6Z+0p56K6Mx
-        moqHUDE0W3j8lqNgwZYOrOE87oYNy2tBgd5oRWoOpJLovANW7CIFobcG8+MT+s+7+PBgp7
-        eGcwDn+nNH/aVrmxqSQcUUREm4npxYw=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-198-YrdaDg8QM8i7b_6S-DjdBg-1; Wed, 22 Apr 2020 14:24:52 -0400
-X-MC-Unique: YrdaDg8QM8i7b_6S-DjdBg-1
-Received: by mail-qt1-f199.google.com with SMTP id e44so3695905qta.9
-        for <linux-fpga@vger.kernel.org>; Wed, 22 Apr 2020 11:24:52 -0700 (PDT)
+        id S1726477AbgDWBgw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 22 Apr 2020 21:36:52 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:52126 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725961AbgDWBgv (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 22 Apr 2020 21:36:51 -0400
+Received: by mail-pj1-f67.google.com with SMTP id mq3so1730021pjb.1;
+        Wed, 22 Apr 2020 18:36:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=fxIemATZr+Jj72Sq0gv/Y8Y0CxRoIaNtcDCWp0Bqo4s=;
-        b=UtdhBKXrjUdhH3cK+toKcWDFdvmXyRFmMmElc+uWmGowZUCWH3W1+pb8nWtAbZAOqc
-         +gmiCGKsNVOhFChBewlZT8M7tD2lC9QVc7wX0gRbILQJsmJscsdKKZSH5HHCDJkA1GkG
-         KeG+E4cbXvh7flM8dWUg/6yXNyq7yIzZozsi9yOaRoJ5Z/cf9RYIqbhxe3h/fgQugvgW
-         ssfz2yebplUa7VgeiKb4kbg28nL9/c2S4shGhKnaUijT+W5bLuRZd2MzLkzY3lF0mjsl
-         TccyYY+/mK83Pl82plQ3iWake5KZWP76XCkeSSzx8uice6/FxK2mLtMf99DOs1iDses4
-         HAaA==
-X-Gm-Message-State: AGi0PuZqRCqqJ/tfNRORAX9inWNipgbu8yLhl36x1QGstmlXwQf2b9az
-        N/SuLfd7GfKs3N9x5rOvavxk8oX+35roriG2G9lYpX71s76y6Pojs+kToX8AOWtJLLV0v3JYfVl
-        PD9xL+4/4Bds5c/DT/aP4GQ==
-X-Received: by 2002:aed:2d27:: with SMTP id h36mr27910751qtd.228.1587579891774;
-        Wed, 22 Apr 2020 11:24:51 -0700 (PDT)
-X-Google-Smtp-Source: APiQypLz+UUmoUr3xJ6cMh3LxzwsvUl02i/MbCJdPL1/ZO5RxgnrNGWmZWlAI4BqK7ytrWMDLRWivw==
-X-Received: by 2002:aed:2d27:: with SMTP id h36mr27910724qtd.228.1587579891410;
-        Wed, 22 Apr 2020 11:24:51 -0700 (PDT)
-Received: from trix.remote.csb ([75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id o22sm4509050qtm.90.2020.04.22.11.24.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Apr 2020 11:24:50 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TZq6bba/Za2cfM2s4UaUYLj7V0czmPB9F3lz7Q2Lzpo=;
+        b=jK+kKWGF+kN55gPscY/Ah/q7nVK+ddvmipd43rPh8nBRM8K6TbUGdqwf2yudnetSCK
+         Q4h8hi2StCM4LQXdYfhCtzcaL6YO13jUjNlwKEh/7nOQYJ1Wu7rSJtwGZud92u8j95+N
+         f4uSk7O/0QEOkJea3mDvA0RnnHc2hzzaaOJmDDIyiy879mZeldq4ecMSEjAFuGMyOf7I
+         tHfKMb1TOkc4wEQySn0LhS051eE7w/6UwyMKix7r685kmw1u1brzqrnbjkDjmxanfDKZ
+         ZUvqRzVZdXnSYXIzuhrssX0JpLHGADumHB/8Pxns7NVVJ95rASS9dvU3Kcp/9739hZFC
+         6V9w==
+X-Gm-Message-State: AGi0PuZoxgxO9OgGtjpsjhGuWb/58m+Bltc06qMS+e1Ous7d8jSQ2ueQ
+        RBIzwQl4SoiozeCs5d5H4OE=
+X-Google-Smtp-Source: APiQypLuZz9AxyqwFKbFjw5IcxAxKPR30Avx26+5vdiyhCp6KpPp1XaR6f09JwbRqlC61ZgLJQLSzA==
+X-Received: by 2002:a17:902:a40e:: with SMTP id p14mr1410819plq.297.1587605810907;
+        Wed, 22 Apr 2020 18:36:50 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id 135sm786680pfu.125.2020.04.22.18.36.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Apr 2020 18:36:49 -0700 (PDT)
+Date:   Wed, 22 Apr 2020 18:36:48 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Moritz Fischer <mdf@kernel.org>
 Subject: Re: How to upload fpga firmware
-To:     Sascha Hauer <s.hauer@pengutronix.de>, linux-fpga@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Moritz Fischer <mdf@kernel.org>
+Message-ID: <20200423013648.GA2430@epycbox.lan>
 References: <20200422114432.GM1694@pengutronix.de>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <cba38c9a-4f13-ce6b-1705-0266b991261f@redhat.com>
-Date:   Wed, 22 Apr 2020 11:24:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20200422114432.GM1694@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-I believe you need to use OPAE, user level interface to the kernel.
+Hi Sascha,
 
-Here is a good starting point.
-
-https://opae.github.io/latest/docs/fpga_tools/fpgaconf/fpgaconf.html
-
-Tom
-
-On 4/22/20 4:44 AM, Sascha Hauer wrote:
+On Wed, Apr 22, 2020 at 01:44:32PM +0200, Sascha Hauer wrote:
 > Hi,
->
+> 
 > I wonder what can be done with the mainline state of drivers/fpga/. The
 > entry to the framework seems to be fpga_mgr_load(). The only user of
 > this function is fpga_region_program_fpga(). This in turn is only called
 > in response of applying a device tree overlay. A device tree overlay is
 > applied with of_overlay_fdt_apply() which has no users in the Kernel.
->
+
+Yes. It is waiting for dt_overlays one way or another. I personally
+don't currently have the bandwidth to work actively on this.
+
 > My current task is to load a firmware to a FPGA. The code all seems to
 > be there in the Kernel, it only lacks a way to trigger it. I am not very
 > interested in device tree overlays since the FPGA appears as a PCI
@@ -94,40 +71,36 @@ On 4/22/20 4:44 AM, Sascha Hauer wrote:
 > tree node). Is there some mainline way to upload FPGA firmware? At the
 > moment we are using the attached patch to trigger loading the firmware
 > from userspace. Would something like this be acceptable for mainline?
->
-> Sascha
->
-> ---------------------------8<----------------------------------
->
-> From 71a5ea845dd673d4011391f9e57fdaf427767ed5 Mon Sep 17 00:00:00 2001
-> From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> Date: Tue, 2 Oct 2018 17:13:40 +0200
-> Subject: [PATCH] fpga: region: Add sysfs attribute for loading firmware
->
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> ---
->  drivers/fpga/fpga-region.c | 50 +++++++++++++++++++++++++++++++++++++-
->  1 file changed, 49 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
-> index bde5a9d460c5..ca6dc830fadf 100644
-> --- a/drivers/fpga/fpga-region.c
-> +++ b/drivers/fpga/fpga-region.c
-> @@ -5,6 +5,7 @@
->   *  Copyright (C) 2013-2016 Altera Corporation
->   *  Copyright (C) 2017 Intel Corporation
->   */
-> +#include <linux/device.h>
->  #include <linux/fpga/fpga-bridge.h>
->  #include <linux/fpga/fpga-mgr.h>
->  #include <linux/fpga/fpga-region.h>
-> @@ -170,11 +171,58 @@ static ssize_t compat_id_show(struct device *dev,
->  		       (unsigned long long)region->compat_id->id_h,
->  		       (unsigned long long)region->compat_id->id_l);
->  }
-> -
->  static DEVICE_ATTR_RO(compat_id);
->  
+
+We've looked into this sort of patches over the years and never came to
+a general interface that really works.
+
+The OPAE folks (and other users I know of) usually use FPGA Manager with
+a higher layer on top of it that moves the bitstream into the kernel via
+an ioctl().
+
+One concept I had toyed with mentally, but haven't really gotten around
+to implement is a 'discoverable' region, that would deal with the
+necessary re-enumeration via a callback and have a sysfs interface
+similar to what the patch below has.
+This would essentially cover use-cases where you have a discoverable
+device implemented in FPGA logic, such as say an FPGA hanging off of
+PCIe bus that can get loaded over USB, a CPLD or some other side-band
+mechanism. After loading the image you'd have to rescan the PCIe bus -
+which - imho is the kernel's job.
+
+What I really wanna avoid is creating another /dev/fpga0 / /dev/xdevcfg
+that completely leaves the kernel in the dark about the fact that it
+reconfigures a bit of hardware hanging off the bus.
+
+In my ideal world you'd create a pci driver that binds to your device,
+and creates mfd style subdevices for whatever you'd want your design to
+do. One of these devices would be an FPGA and a FPGA region attached to
+that FPGA manager. Your top level driver would co-ordinate the fact that
+you are re-programming parts of the FPGA and create / destroy devices as
+needed for the hardware contained in the bitstream.
+
+[..]
 > +static ssize_t firmware_name_show(struct device *dev,
 > +				  struct device_attribute *attr,
 > +				  char *buf)
@@ -172,13 +145,6 @@ On 4/22/20 4:44 AM, Sascha Hauer wrote:
 > +
 > +	return error ? error : count;
 > +}
-> +
-> +static DEVICE_ATTR_RW(firmware_name);
-> +
->  static struct attribute *fpga_region_attrs[] = {
->  	&dev_attr_compat_id.attr,
-> +	&dev_attr_firmware_name.attr,
->  	NULL,
->  };
->  ATTRIBUTE_GROUPS(fpga_region);
 
+Cheers,
+Moritz
