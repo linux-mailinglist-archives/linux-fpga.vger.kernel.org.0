@@ -2,48 +2,57 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1081B5402
-	for <lists+linux-fpga@lfdr.de>; Thu, 23 Apr 2020 07:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555261B54A9
+	for <lists+linux-fpga@lfdr.de>; Thu, 23 Apr 2020 08:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725854AbgDWFMW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 23 Apr 2020 01:12:22 -0400
-Received: from mga11.intel.com ([192.55.52.93]:37814 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725961AbgDWFMV (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 23 Apr 2020 01:12:21 -0400
-IronPort-SDR: WrhYc+t6JOklM1PUaz60L6OKaRrTcVjckYaBWBGx7BZJjlvDplEinWkHLxDnQgIQhTcpC4XtnV
- 3vzqHIQliPQQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2020 22:12:21 -0700
-IronPort-SDR: CaLeYimjrE1X7uWVc9FtYpX1vYLIdIO3dWZk/8E64x85IpEKhr0IbiEnZ4StGXbr+va5BgiGpm
- 84jyyHJAt8tQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,305,1583222400"; 
-   d="scan'208";a="365895105"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Apr 2020 22:12:19 -0700
-Date:   Thu, 23 Apr 2020 13:09:34 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
+        id S1725854AbgDWGXe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 23 Apr 2020 02:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725562AbgDWGXd (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 23 Apr 2020 02:23:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCDCC03C1AB
+        for <linux-fpga@vger.kernel.org>; Wed, 22 Apr 2020 23:23:33 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jRVGl-0002OR-Tz; Thu, 23 Apr 2020 08:23:31 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jRVGl-0003UA-Il; Thu, 23 Apr 2020 08:23:31 +0200
+Date:   Thu, 23 Apr 2020 08:23:31 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     Moritz Fischer <mdf@kernel.org>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: How to upload fpga firmware
-Message-ID: <20200423050934.GC30060@yilunxu-OptiPlex-7050>
+Message-ID: <20200423062331.GR1694@pengutronix.de>
 References: <20200422114432.GM1694@pengutronix.de>
  <20200423013648.GA2430@epycbox.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20200423013648.GA2430@epycbox.lan>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 07:30:23 up 63 days, 13:00, 78 users,  load average: 0.29, 0.13,
+ 0.10
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Moritz:
+Hi Moritz,
 
 On Wed, Apr 22, 2020 at 06:36:48PM -0700, Moritz Fischer wrote:
 > Hi Sascha,
@@ -84,33 +93,13 @@ On Wed, Apr 22, 2020 at 06:36:48PM -0700, Moritz Fischer wrote:
 > PCIe bus that can get loaded over USB, a CPLD or some other side-band
 > mechanism. After loading the image you'd have to rescan the PCIe bus -
 > which - imho is the kernel's job.
-
-Seems you mentioned the static region update. I have the pcie based FPGA
-card, and the pcie endpoint is implemented in FPGA static region. So after
-I have written image into Flash (over USB or other ways), and trying to
-load it to FPGA, the pcie endpoint is also disfunctional, the pcie device
-is actually lost. We need to rescan the pcie bus after loading is finished.
-
-The concern is that when the pcie device lost, the 'discoverable' region
-created by the pcie driver is also destroyed. When you rescaned the pcie
-device back, it is like everything is start over again (pci probe, fpga
-region creation, subdev enumeration ...) rather than just a re-enumeration
-callback for discoverable region.
-
-How do you think about it?
-
 > 
 > What I really wanna avoid is creating another /dev/fpga0 / /dev/xdevcfg
 > that completely leaves the kernel in the dark about the fact that it
 > reconfigures a bit of hardware hanging off the bus.
 
-I have the FPGA board whose image binary for static region is stored in Flash.
-I was able to enumerate the Flash as MTD device and update it directly, (now
-switch to another interface for security support). 
-Do you mean I should avoid doing that cause FPGA region device is unaware of
-the update? Some interface in FPGA region would be better choice?
-
-Thanks!
+Yes, makes sense. While this would suffice my needs at the moment it
+really sounds like a dead end.
 
 > 
 > In my ideal world you'd create a pci driver that binds to your device,
@@ -119,52 +108,19 @@ Thanks!
 > that FPGA manager. Your top level driver would co-ordinate the fact that
 > you are re-programming parts of the FPGA and create / destroy devices as
 > needed for the hardware contained in the bitstream.
-> 
-> [..]
-> > +static ssize_t firmware_name_show(struct device *dev,
-> > +				  struct device_attribute *attr,
-> > +				  char *buf)
-> > +{
-> > +	struct fpga_region *region = to_fpga_region(dev);
-> > +
-> > +	if (!region->info || !region->info->firmware_name)
-> > +		return 0;
-> > +
-> > +	return sprintf(buf, "%s\n", region->info->firmware_name);
-> > +}
-> > +
-> > +static ssize_t firmware_name_store(struct device *dev,
-> > +				   struct device_attribute *attr,
-> > +				   const char *firmware_name, size_t count)
-> > +{
-> > +	struct fpga_region *region = to_fpga_region(dev);
-> > +	struct fpga_image_info *info = region->info;
-> > +	int error;
-> > +
-> > +	if (!info) {
-> > +		info = fpga_image_info_alloc(dev);
-> > +		if (!info)
-> > +			return -ENOMEM;
-> > +	} else if (info->firmware_name) {
-> > +		devm_kfree(dev, info->firmware_name);
-> > +	}
-> > +
-> > +	info->firmware_name = devm_kstrdup(dev, firmware_name, GFP_KERNEL);
-> > +	if (!info->firmware_name)
-> > +		return -ENOMEM;
-> > +
-> > +	if (count >  0 && info->firmware_name[count - 1] == '\n')
-> > +		info->firmware_name[count - 1] = '\0';
-> > +
-> > +	region->info = info;
-> > +	error = fpga_region_program_fpga(region);
-> > +	if (error) {
-> > +		devm_kfree(dev, info->firmware_name);
-> > +		info->firmware_name = NULL;
-> > +	}
-> > +
-> > +	return error ? error : count;
-> > +}
-> 
-> Cheers,
-> Moritz
+
+In my case there is no pci device visible before loading the firmware,
+so creating a pci driver is not an option. Maybe pci host controllers
+could register themselves as fpga-bridges. With this we could put the
+pci host controller (or the pci device, AFAIK there is a PCI device tree
+binding) where the fpga is connected into the fpga-bridges phandles list
+of the fpga-region.
+
+Regards,
+  Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
