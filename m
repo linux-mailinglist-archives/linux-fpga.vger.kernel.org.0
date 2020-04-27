@@ -2,28 +2,28 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF831B94F1
-	for <lists+linux-fpga@lfdr.de>; Mon, 27 Apr 2020 03:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D88D1B94EB
+	for <lists+linux-fpga@lfdr.de>; Mon, 27 Apr 2020 03:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbgD0B2l (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        id S1726387AbgD0B2l (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
         Sun, 26 Apr 2020 21:28:41 -0400
 Received: from mga01.intel.com ([192.55.52.88]:7235 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726186AbgD0B2l (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        id S1726316AbgD0B2l (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
         Sun, 26 Apr 2020 21:28:41 -0400
-IronPort-SDR: sdfhW7e5DVaNfpK9ALhIw1kR1t9/vGKWZOdL7/qyRGp5dcNla9wonJP4Bvsl9MRba38gl5bJMc
- Tq3aedzKVzOQ==
+IronPort-SDR: nSyTS8TgP9U9UJb6VgEWwy0/D4QkKDkPcgwZxwd1eARsWLFhbmUjNqxlxfQqPhAogfUuf41UR2
+ nb+XnZR/Yjhg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2020 18:28:40 -0700
-IronPort-SDR: jhm8ZNG/VEGtwVKT4QNRNsKMaqzmn7DEYKZUp+4A3ZUQvdUU4zZbBrIoloGIrKsFg7C900ps5B
- 3EVmfHEu8MsQ==
+IronPort-SDR: b51KUHewyZjdZ/fePBgDQv3zlVNuShzLv/2JB/dy/YE4NzLmjS9MRiby4IQcsXOsqEU9dLXIRW
+ RitizkW6VBDw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,321,1583222400"; 
-   d="scan'208";a="257060223"
+   d="scan'208";a="257060231"
 Received: from hao-dev.bj.intel.com ([10.238.157.66])
-  by orsmga003.jf.intel.com with ESMTP; 26 Apr 2020 18:28:21 -0700
+  by orsmga003.jf.intel.com with ESMTP; 26 Apr 2020 18:28:24 -0700
 From:   Wu Hao <hao.wu@intel.com>
 To:     will@kernel.org, mdf@kernel.org, mark.rutland@arm.com,
         gregkh@linuxfoundation.org, linux-fpga@vger.kernel.org,
@@ -31,71 +31,135 @@ To:     will@kernel.org, mdf@kernel.org, mark.rutland@arm.com,
 Cc:     linux-api@vger.kernel.org, atull@kernel.org, yilun.xu@intel.com,
         trix@redhat.com, bhu@redhat.com, rdunlap@infradead.org,
         Wu Hao <hao.wu@intel.com>
-Subject: [PATCH v10 0/2] add performance reporting support to FPGA DFL drivers
-Date:   Mon, 27 Apr 2020 09:06:21 +0800
-Message-Id: <1587949583-12058-1-git-send-email-hao.wu@intel.com>
+Subject: [PATCH v10 1/2] Documentation: fpga: dfl: add description for performance reporting support
+Date:   Mon, 27 Apr 2020 09:06:22 +0800
+Message-Id: <1587949583-12058-2-git-send-email-hao.wu@intel.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1587949583-12058-1-git-send-email-hao.wu@intel.com>
+References: <1587949583-12058-1-git-send-email-hao.wu@intel.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi all,
+From: Xu Yilun <yilun.xu@intel.com>
 
-This patchset adds performance reporting support for FPGA DFL drivers. It
-introduces one pmu to expose userspace interfaces via standard perf API.
-User could use standard perf tool to access perf events exposed via pmu.
+This patch adds description for performance reporting support for
+Device Feature List (DFL) based FPGA.
 
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+Signed-off-by: Wu Hao <hao.wu@intel.com>
+---
+v5:  rebase due to format change (txt->rst).
+v8:  rename pmu "fmeX" to "dfl-fmeX".
+     update cpumask sysfs description.
+v10: fix comments from Randy.
+---
+ Documentation/fpga/dfl.rst | 84 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
-Main changes from v9:
- - fix Randy's comments on documentation in patch #1.
-
-Main changes from v8:
- - rebase against 5.7-rc1.
-
-Main changes from v7:
- - rename pmu name from "fme%d" to "dfl_fme%d".
- - monitor cpu hotplug for cpumask sysfs and update cpumask sysfs doc.
- - add extra read for 64bit counter registers to avoid 2-32bit readl issue.
-
-Main changes from v6:
- - add a new ABI/testing/ sysfs documentation in patch #2.
- - fix a warning reported by kbuild in patch #2.
-
-Main changes from v5:
- - use dev_ext_attribute instead of fme_perf_event_attr.
- - use is_visible function to decide which events to expose per
-   hardware capability, and add event_init checking for all events.
-
-Main changes from v4:
- - rebase and clean up.
- - update Kconfig for PERF_EVENTS dependency.
-
-Main changes from v3:
- - add more descriptions in doc, including how to use perf tool for these
-   hardware counters. (patch #1)
- - use standard perf API instead of sysfs entries. (patch #2)
-
-
-Wu Hao (1):
-  fpga: dfl: fme: add performance reporting support
-
-Xu Yilun (1):
-  Documentation: fpga: dfl: add description for performance reporting
-    support
-
- .../testing/sysfs-bus-event_source-devices-dfl_fme |  104 ++
- Documentation/fpga/dfl.rst                         |   84 ++
- drivers/fpga/Kconfig                               |    2 +-
- drivers/fpga/Makefile                              |    1 +
- drivers/fpga/dfl-fme-main.c                        |    4 +
- drivers/fpga/dfl-fme-perf.c                        | 1020 ++++++++++++++++++++
- drivers/fpga/dfl-fme.h                             |    2 +
- drivers/fpga/dfl.h                                 |    2 +
- 8 files changed, 1218 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-event_source-devices-dfl_fme
- create mode 100644 drivers/fpga/dfl-fme-perf.c
-
+diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+index 094fc8a..0de7f89 100644
+--- a/Documentation/fpga/dfl.rst
++++ b/Documentation/fpga/dfl.rst
+@@ -118,6 +118,11 @@ More functions are exposed through sysfs
+      management information (current temperature, thresholds, threshold status,
+      etc.).
+ 
++ Performance reporting
++     performance counters are exposed through perf PMU APIs. Standard perf tool
++     can be used to monitor all available perf events. Please see performance
++     counter section below for more detailed information.
++
+ 
+ FIU - PORT
+ ==========
+@@ -378,6 +383,85 @@ The device nodes used for ioctl() or mmap() can be referenced through::
+ 	/sys/class/fpga_region/<regionX>/<dfl-port.n>/dev
+ 
+ 
++Performance Counters
++====================
++Performance reporting is one private feature implemented in FME. It could
++supports several independent, system-wide, device counter sets in hardware to
++monitor and count for performance events, including "basic", "cache", "fabric",
++"vtd" and "vtd_sip" counters. Users could use standard perf tool to monitor
++FPGA cache hit/miss rate, transaction number, interface clock counter of AFU
++and other FPGA performance events.
++
++Different FPGA devices may have different counter sets, depending on hardware
++implementation. E.g., some discrete FPGA cards don't have any cache. User could
++use "perf list" to check which perf events are supported by target hardware.
++
++In order to allow user to use standard perf API to access these performance
++counters, driver creates a perf PMU, and related sysfs interfaces in
++/sys/bus/event_source/devices/dfl_fme* to describe available perf events and
++configuration options.
++
++The "format" directory describes the format of the config field of struct
++perf_event_attr. There are 3 bitfields for config: "evtype" defines which type
++the perf event belongs to; "event" is the identity of the event within its
++category; "portid" is introduced to decide counters set to monitor on FPGA
++overall data or a specific port.
++
++The "events" directory describes the configuration templates for all available
++events which can be used with perf tool directly. For example, fab_mmio_read
++has the configuration "event=0x06,evtype=0x02,portid=0xff", which shows this
++event belongs to fabric type (0x02), the local event id is 0x06 and it is for
++overall monitoring (portid=0xff).
++
++Example usage of perf::
++
++  $# perf list |grep dfl_fme
++
++  dfl_fme0/fab_mmio_read/                              [Kernel PMU event]
++  <...>
++  dfl_fme0/fab_port_mmio_read,portid=?/                [Kernel PMU event]
++  <...>
++
++  $# perf stat -a -e dfl_fme0/fab_mmio_read/ <command>
++  or
++  $# perf stat -a -e dfl_fme0/event=0x06,evtype=0x02,portid=0xff/ <command>
++  or
++  $# perf stat -a -e dfl_fme0/config=0xff2006/ <command>
++
++Another example, fab_port_mmio_read monitors mmio read of a specific port. So
++its configuration template is "event=0x06,evtype=0x01,portid=?". The portid
++should be explicitly set.
++
++Its usage of perf::
++
++  $# perf stat -a -e dfl_fme0/fab_port_mmio_read,portid=0x0/ <command>
++  or
++  $# perf stat -a -e dfl_fme0/event=0x06,evtype=0x02,portid=0x0/ <command>
++  or
++  $# perf stat -a -e dfl_fme0/config=0x2006/ <command>
++
++Please note for fabric counters, overall perf events (fab_*) and port perf
++events (fab_port_*) actually share one set of counters in hardware, so it can't
++monitor both at the same time. If this set of counters is configured to monitor
++overall data, then per port perf data is not supported. See below example::
++
++  $# perf stat -e dfl_fme0/fab_mmio_read/,dfl_fme0/fab_port_mmio_write,\
++                                                    portid=0/ sleep 1
++
++  Performance counter stats for 'system wide':
++
++                 3      dfl_fme0/fab_mmio_read/
++   <not supported>      dfl_fme0/fab_port_mmio_write,portid=0x0/
++
++       1.001750904 seconds time elapsed
++
++The driver also provides a "cpumask" sysfs attribute, which contains only one
++CPU id used to access these perf events. Counting on multiple CPU is not allowed
++since they are system-wide counters on FPGA device.
++
++The current driver does not support sampling. So "perf record" is unsupported.
++
++
+ Add new FIUs support
+ ====================
+ It's possible that developers made some new function blocks (FIUs) under this
 -- 
 1.8.3.1
 
