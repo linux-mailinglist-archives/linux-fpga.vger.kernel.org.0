@@ -2,136 +2,100 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1261B8388
-	for <lists+linux-fpga@lfdr.de>; Sat, 25 Apr 2020 05:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF831B94F1
+	for <lists+linux-fpga@lfdr.de>; Mon, 27 Apr 2020 03:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726040AbgDYD7w (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 24 Apr 2020 23:59:52 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:39120 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726038AbgDYD7w (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 24 Apr 2020 23:59:52 -0400
-Received: by mail-pl1-f193.google.com with SMTP id k18so4504639pll.6;
-        Fri, 24 Apr 2020 20:59:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dDEQdduqyEgfM9DImQqMjrWboE5jm0ENHVrvQ2k14Ak=;
-        b=njzXqWfJCj+wc+WMmGrOn2jp2aO24qURuI7EoBL3akUHZCbu/zWm7QO+2+yoB1dVuu
-         9NuMX6jvkBmn06DqD37Bmc/wXenNZOQRnsGUwOcK5PBmjmDmLZvrX3BM6oB6MkdrQpUs
-         //PQKKLyKdu2RZYwejieLX+lF6siWZ+iWMjJORrE1ONg8ZHZu6Jvj+igg8Tz1cyaSSz2
-         3fateCoWQV5BV+erZ3dbZSFzJ6LQ0WBUqcR3ZqIttPlVxEhqlK9d60SOAQ1Ij+b8wzqR
-         Z5MZhugaXZ62qZCwb69k7xkKD+mFoXyilurh2Pza+UKj8IZNptAfbBUae8rLUYgGuc5C
-         6/wg==
-X-Gm-Message-State: AGi0Pub76yOnAurl6inqj5+EakzAmj9WN4U18i169ryBL9jPdTCSvkZZ
-        uOkmOgL3dZ2BGXUnJBJCZgw=
-X-Google-Smtp-Source: APiQypJSVI8J39Hhgtl8VpG+V/GfyNQ951YeD7kqLw3i7+qv25guwQSz5A2LEeMHm9/d3rz2heg4pQ==
-X-Received: by 2002:a17:90a:d0c3:: with SMTP id y3mr3994426pjw.25.1587787191386;
-        Fri, 24 Apr 2020 20:59:51 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id 7sm6270235pga.15.2020.04.24.20.59.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Apr 2020 20:59:50 -0700 (PDT)
-Date:   Fri, 24 Apr 2020 20:59:49 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        id S1726323AbgD0B2l (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 26 Apr 2020 21:28:41 -0400
+Received: from mga01.intel.com ([192.55.52.88]:7235 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726186AbgD0B2l (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 26 Apr 2020 21:28:41 -0400
+IronPort-SDR: sdfhW7e5DVaNfpK9ALhIw1kR1t9/vGKWZOdL7/qyRGp5dcNla9wonJP4Bvsl9MRba38gl5bJMc
+ Tq3aedzKVzOQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2020 18:28:40 -0700
+IronPort-SDR: jhm8ZNG/VEGtwVKT4QNRNsKMaqzmn7DEYKZUp+4A3ZUQvdUU4zZbBrIoloGIrKsFg7C900ps5B
+ 3EVmfHEu8MsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,321,1583222400"; 
+   d="scan'208";a="257060223"
+Received: from hao-dev.bj.intel.com ([10.238.157.66])
+  by orsmga003.jf.intel.com with ESMTP; 26 Apr 2020 18:28:21 -0700
+From:   Wu Hao <hao.wu@intel.com>
+To:     will@kernel.org, mdf@kernel.org, mark.rutland@arm.com,
+        gregkh@linuxfoundation.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: How to upload fpga firmware
-Message-ID: <20200425035949.GA11710@epycbox.lan>
-References: <20200422114432.GM1694@pengutronix.de>
- <20200423013648.GA2430@epycbox.lan>
- <20200423062331.GR1694@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200423062331.GR1694@pengutronix.de>
+Cc:     linux-api@vger.kernel.org, atull@kernel.org, yilun.xu@intel.com,
+        trix@redhat.com, bhu@redhat.com, rdunlap@infradead.org,
+        Wu Hao <hao.wu@intel.com>
+Subject: [PATCH v10 0/2] add performance reporting support to FPGA DFL drivers
+Date:   Mon, 27 Apr 2020 09:06:21 +0800
+Message-Id: <1587949583-12058-1-git-send-email-hao.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Sascha,
+Hi all,
 
-On Thu, Apr 23, 2020 at 08:23:31AM +0200, Sascha Hauer wrote:
-> Hi Moritz,
-> 
-> On Wed, Apr 22, 2020 at 06:36:48PM -0700, Moritz Fischer wrote:
-> > Hi Sascha,
-> > 
-> > On Wed, Apr 22, 2020 at 01:44:32PM +0200, Sascha Hauer wrote:
-> > > Hi,
-> > > 
-> > > I wonder what can be done with the mainline state of drivers/fpga/. The
-> > > entry to the framework seems to be fpga_mgr_load(). The only user of
-> > > this function is fpga_region_program_fpga(). This in turn is only called
-> > > in response of applying a device tree overlay. A device tree overlay is
-> > > applied with of_overlay_fdt_apply() which has no users in the Kernel.
-> > 
-> > Yes. It is waiting for dt_overlays one way or another. I personally
-> > don't currently have the bandwidth to work actively on this.
-> > 
-> > > My current task is to load a firmware to a FPGA. The code all seems to
-> > > be there in the Kernel, it only lacks a way to trigger it. I am not very
-> > > interested in device tree overlays since the FPGA appears as a PCI
-> > > device (although applying a dtbo could enable the PCIe controller device
-> > > tree node). Is there some mainline way to upload FPGA firmware? At the
-> > > moment we are using the attached patch to trigger loading the firmware
-> > > from userspace. Would something like this be acceptable for mainline?
-> > 
-> > We've looked into this sort of patches over the years and never came to
-> > a general interface that really works.
-> > 
-> > The OPAE folks (and other users I know of) usually use FPGA Manager with
-> > a higher layer on top of it that moves the bitstream into the kernel via
-> > an ioctl().
-> > 
-> > One concept I had toyed with mentally, but haven't really gotten around
-> > to implement is a 'discoverable' region, that would deal with the
-> > necessary re-enumeration via a callback and have a sysfs interface
-> > similar to what the patch below has.
-> > This would essentially cover use-cases where you have a discoverable
-> > device implemented in FPGA logic, such as say an FPGA hanging off of
-> > PCIe bus that can get loaded over USB, a CPLD or some other side-band
-> > mechanism. After loading the image you'd have to rescan the PCIe bus -
-> > which - imho is the kernel's job.
-> > 
-> > What I really wanna avoid is creating another /dev/fpga0 / /dev/xdevcfg
-> > that completely leaves the kernel in the dark about the fact that it
-> > reconfigures a bit of hardware hanging off the bus.
-> 
-> Yes, makes sense. While this would suffice my needs at the moment it
-> really sounds like a dead end.
-> 
-> > 
-> > In my ideal world you'd create a pci driver that binds to your device,
-> > and creates mfd style subdevices for whatever you'd want your design to
-> > do. One of these devices would be an FPGA and a FPGA region attached to
-> > that FPGA manager. Your top level driver would co-ordinate the fact that
-> > you are re-programming parts of the FPGA and create / destroy devices as
-> > needed for the hardware contained in the bitstream.
-> 
-> In my case there is no pci device visible before loading the firmware,
-> so creating a pci driver is not an option. Maybe pci host controllers
-> could register themselves as fpga-bridges. With this we could put the
-> pci host controller (or the pci device, AFAIK there is a PCI device tree
-> binding) where the fpga is connected into the fpga-bridges phandles list
-> of the fpga-region.
+This patchset adds performance reporting support for FPGA DFL drivers. It
+introduces one pmu to expose userspace interfaces via standard perf API.
+User could use standard perf tool to access perf events exposed via pmu.
 
-Can you talk a bit more about the system you're working with? Is there
-some sort of sideband mechanism to load the image? What exposes the
-image loading capaibility? A CPLD, an ASIC, USB device, JTAG?
 
-What does the topology look like?
+Main changes from v9:
+ - fix Randy's comments on documentation in patch #1.
 
-Sideband  -----> FPGA
-PCIe      -----> FPGA
+Main changes from v8:
+ - rebase against 5.7-rc1.
 
-It also depends a bit on the use-case: After you program the bitstream,
-do you need to runtime re-program it? Does it do partial
-reconfiguration? Are there subdevices inside your device, or is the
-whole thing a discoverable PCI device afterwards?
+Main changes from v7:
+ - rename pmu name from "fme%d" to "dfl_fme%d".
+ - monitor cpu hotplug for cpumask sysfs and update cpumask sysfs doc.
+ - add extra read for 64bit counter registers to avoid 2-32bit readl issue.
 
-Cheers,
-Moritz
+Main changes from v6:
+ - add a new ABI/testing/ sysfs documentation in patch #2.
+ - fix a warning reported by kbuild in patch #2.
+
+Main changes from v5:
+ - use dev_ext_attribute instead of fme_perf_event_attr.
+ - use is_visible function to decide which events to expose per
+   hardware capability, and add event_init checking for all events.
+
+Main changes from v4:
+ - rebase and clean up.
+ - update Kconfig for PERF_EVENTS dependency.
+
+Main changes from v3:
+ - add more descriptions in doc, including how to use perf tool for these
+   hardware counters. (patch #1)
+ - use standard perf API instead of sysfs entries. (patch #2)
+
+
+Wu Hao (1):
+  fpga: dfl: fme: add performance reporting support
+
+Xu Yilun (1):
+  Documentation: fpga: dfl: add description for performance reporting
+    support
+
+ .../testing/sysfs-bus-event_source-devices-dfl_fme |  104 ++
+ Documentation/fpga/dfl.rst                         |   84 ++
+ drivers/fpga/Kconfig                               |    2 +-
+ drivers/fpga/Makefile                              |    1 +
+ drivers/fpga/dfl-fme-main.c                        |    4 +
+ drivers/fpga/dfl-fme-perf.c                        | 1020 ++++++++++++++++++++
+ drivers/fpga/dfl-fme.h                             |    2 +
+ drivers/fpga/dfl.h                                 |    2 +
+ 8 files changed, 1218 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-event_source-devices-dfl_fme
+ create mode 100644 drivers/fpga/dfl-fme-perf.c
+
+-- 
+1.8.3.1
+
