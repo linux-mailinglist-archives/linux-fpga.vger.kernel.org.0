@@ -2,130 +2,99 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D60501BF0EB
-	for <lists+linux-fpga@lfdr.de>; Thu, 30 Apr 2020 09:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C521C25A4
+	for <lists+linux-fpga@lfdr.de>; Sat,  2 May 2020 15:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726575AbgD3HL7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 30 Apr 2020 03:11:59 -0400
-Received: from mga17.intel.com ([192.55.52.151]:62850 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726337AbgD3HL7 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 30 Apr 2020 03:11:59 -0400
-IronPort-SDR: zIhMdhHpwuhMbIax0Hc/mkjk0Aa6hPeSl1PYaY2VJABA3Pxk1/4BM9ahyMzvAaAVdc8ZDzA3Yv
- DHlmC8YuCDSg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2020 00:11:58 -0700
-IronPort-SDR: C0A6tRiBbpq82fp2h6tIIO/ByrLbb/xDotajYFIx7MY7VuRtVYhIhdzXbXsJEjuNjfvnXsKQQ3
- cdhohQm9uDCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,334,1583222400"; 
-   d="scan'208";a="261681955"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga006.jf.intel.com with ESMTP; 30 Apr 2020 00:11:56 -0700
-Date:   Thu, 30 Apr 2020 15:09:03 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     matthew.gerlach@linux.intel.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: How to update a piece of flash for FPGA firmware?
-Message-ID: <20200430070903.GA31302@yilunxu-OptiPlex-7050>
-References: <20200428050135.GA27416@yilunxu-OptiPlex-7050>
- <alpine.LFD.2.21.2004281434001.59524@psera2-dell24.ra.intel.com>
- <20200430031210.GA6168@epycbox.lan>
+        id S1727972AbgEBN0W (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 2 May 2020 09:26:22 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:52364 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727963AbgEBN0V (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 2 May 2020 09:26:21 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 042DP6WI041766;
+        Sat, 2 May 2020 13:26:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=ZZ8bfzNv3DAbWH7wZiRzKhCuWhVGiU4tF73LU5lVl1M=;
+ b=fjxSnyXdlEWVki/DUdnfaLl4zHh+qNI1ovI32WfctclrxMRJbcHf/+vU880ETk04Tj/v
+ pqdKX/a3GMrSLxt36YzAmOuV2UafaVc4dUAVUTsRD4jJkS7ebG1SFXP9ofrCELi0KFB/
+ s+NIp2+Ih4ha0su6xGH6HOiwUmCXx5p6EbaHTARcau06LI8jqoNx3pORStjMIlKAPE//
+ zWB3Kd+fKIqQHoS+xx7QVUG1k5by6PUIeoDJ3W0vsZeZrDMzLMsBNHQSomwHvAgYe3yd
+ NUtQY0nhvztlqyLTUkwOOaK0/vPejRzj7hVOCNU7L8sZjpM79pbkgo47qYxEdYAd/xM4 6w== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 30s1gmryv8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 02 May 2020 13:26:19 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 042DMWDs045926;
+        Sat, 2 May 2020 13:26:18 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 30rxw9btp1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 02 May 2020 13:26:18 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 042DQHV4011839;
+        Sat, 2 May 2020 13:26:17 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sat, 02 May 2020 06:24:24 -0700
+Date:   Sat, 2 May 2020 16:24:19 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     hao.wu@intel.com
+Cc:     linux-fpga@vger.kernel.org
+Subject: [bug report] fpga: dfl: fme: add performance reporting support
+Message-ID: <20200502132419.GA41486@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200430031210.GA6168@epycbox.lan>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9608 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=3 adultscore=0
+ phishscore=0 mlxlogscore=999 bulkscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005020120
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9608 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=3 mlxscore=0
+ spamscore=0 clxscore=1011 priorityscore=1501 bulkscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005020120
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Moritz & Matthew:
+Hello Wu Hao,
 
-Thanks a lot for the comments! It helps a lot so we could keep working on
-right direction. 
+The patch 724142f8c42a: "fpga: dfl: fme: add performance reporting
+support" from Apr 27, 2020, leads to the following static checker
+warning:
 
-For "next boot" or "rescan" case, it cause rebuild the fpga-region. So
-maybe we don't have to model it in fpga class.
+	drivers/fpga/dfl-fme-perf.c:948 fme_perf_offline_cpu()
+	error: potential NULL dereference 'priv'.
 
-Yilun
+drivers/fpga/dfl-fme-perf.c
+   941  static int fme_perf_offline_cpu(unsigned int cpu, struct hlist_node *node)
+   942  {
+   943          struct fme_perf_priv *priv;
+   944          int target;
+   945  
+   946          priv = hlist_entry_safe(node, struct fme_perf_priv, node);
+                                  ^^^^^
+It doesn't make sense to use the _safe() version if we're not going to
+check for NULL.
 
-On Wed, Apr 29, 2020 at 08:12:10PM -0700, Moritz Fischer wrote:
-> Hi Matthew, Yilun
-> 
-> On Tue, Apr 28, 2020 at 03:06:07PM -0700, matthew.gerlach@linux.intel.com wrote:
-> > Hi Yilun,
-> > 
-> > You raise some very interesting questions. Please see
-> > my comments below.
-> > 
-> > Matthew
-> > 
-> > On Tue, 28 Apr 2020, Xu Yilun wrote:
-> > 
-> > > Hi,
-> > > 
-> > > I wonder if an updating of FPGA Flash (but cannot reload) could be
-> > > implemented as fpga-mgr?
-> > > 
-> > > I have the pcie based FPGA card. The bitstream for FPGA static region is
-> > > stored on flash chip. Board will load the bitstream to FPGA on system
-> > > power cycle. The flash chip could be accessed through "PCIE -> ... ->
-> > > Flash update engine -> Flash". So the update of the FPGA static region is
-> > > basicly updating the flash chip through PCIE and rebooting system.
-> > 
-> > I think you mean power cycle when you say "rebooting system" above, but
-> > your point is worth highlighting.  During this flash update the
-> > FPGA is actually fully configured and running its application.  Typically,
-> > during a fpga-mgr update of the static region or partial reconfiguration
-> > region, the actual contents of the fpga region is "changing" during the
-> > update.
-> 
-> Yeah, this sounds more like a flash driver with MTD or maybe NVMEM?
-> That's probably how I'd do it. Depending on your (Q)SPI controller you
-> might already have a driver for that, and you'd just have to instantiate
-> it as a sub-device.
-> 
-> > 
-> > > 
-> > > Should I implement the flash update engine as a fpga-mgr device? On one
-> > > hand it is just a flash write, FPGA functionality is actually not
-> > > changed before reboot. Does fpga-mgr requires bitstream takes function
-> > > immediately after write_complete()? On the other hand, the flash write
-> > > do affects FPGA static region on next boot. Operating on the
-> > > corresponding fpga region makes kernel fully aware of what is being
-> > > done.
-> > 
-> > When an fpga-mgr is used in a device tree overlay flow, one gains
-> > the benefit the enumeration of the nodes in the overlay after the
-> > update has completed.
-> 
-> I'm not sure how to model 'on next reboot' part.
-> > 
-> > > 
-> > > Actually the FPGA card do has the capability to reload bitstream at
-> > > runtime. But it will cause the whole PCIE device lost, static region is
-> > > also destroyed. We need to rescan PCI to get it back. So I think
-> > > basically this is the same case as system reboot from FPGA's
-> > > perspective.
-> > 
-> > Yes, on those cards that have the ability to power cycle themselves (i.e.
-> > fully reconfigure the FPGA from flash), the PCIe connection to the card
-> > is broken because of a surprise link down PCIe error.  As you say a PCI
-> > rescan (i.e. re-enumeration of the entire card) is required.  Since
-> > the card has to be re-scanned at the PCI level anyway, there may not be much
-> > benefit to using the fpga-mgr in this flow.
-> 
-> Agreed.
-> > 
-> > I wonder if these kinds of more disruptive updates are better suited to
-> > something firmware updates rather than fpga updates?
-> 
-> Yeah.
-> 
-> Cheers,
-> Moritz
+   947  
+   948          if (cpu != priv->cpu)
+   949                  return 0;
+   950  
+   951          target = cpumask_any_but(cpu_online_mask, cpu);
+   952          if (target >= nr_cpu_ids)
+   953                  return 0;
+   954  
+   955          priv->cpu = target;
+   956          return 0;
+   957  }
+
+regards,
+dan carpenter
