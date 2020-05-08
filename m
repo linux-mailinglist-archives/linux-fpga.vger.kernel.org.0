@@ -2,93 +2,107 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 265DC1C99B0
-	for <lists+linux-fpga@lfdr.de>; Thu,  7 May 2020 20:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A822D1CB6F5
+	for <lists+linux-fpga@lfdr.de>; Fri,  8 May 2020 20:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728595AbgEGSsa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 7 May 2020 14:48:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49450 "EHLO mail.kernel.org"
+        id S1726863AbgEHSTD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 8 May 2020 14:19:03 -0400
+Received: from mga02.intel.com ([134.134.136.20]:49234 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728110AbgEGSsa (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 7 May 2020 14:48:30 -0400
-Received: from embeddedor (unknown [189.207.59.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6B87724955;
-        Thu,  7 May 2020 18:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588877309;
-        bh=71KkHS6CWvgF2ZJ7u+HnXKXGjPAZKfm5qx6YYtMLnTw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JLkZyB3N4vnxXrFo3L5FiN1MB37vTxsslqhBShcfEL5rIUTeAElYnta0RTMuH0HGd
-         eqxRKWN/4X/6iY+An1GAKYyxho06AWLXoUsLbzzbpQx+lPZzs2X5O2ZHsLeHsfW2a1
-         XgXtODNFxYJvXtelTpt2r466QcAoHAmpszNM6188=
-Date:   Thu, 7 May 2020 13:52:56 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Wu Hao <hao.wu@intel.com>
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] fpga: dfl: Replace zero-length array with flexible-array
-Message-ID: <20200507185256.GA14313@embeddedor>
+        id S1726817AbgEHSTD (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 8 May 2020 14:19:03 -0400
+IronPort-SDR: 4gap54/c3/wJ2YMABrGV5VFMhjJPubJCXmSCLa77noz3fRhPMLuDN179NcycSKokBYMnTZLI5P
+ oz+38AVacMBw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 11:19:02 -0700
+IronPort-SDR: xlG+pLTjJtooALYiHtqcjda0K1mogzg/hqYZSjlOPN4zE8NGrkTayHKqmNGQq3VnJFUXwHxF64
+ dDrDtRvAHXzA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,368,1583222400"; 
+   d="scan'208";a="297033545"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.140])
+  by orsmga008.jf.intel.com with ESMTP; 08 May 2020 11:19:02 -0700
+Date:   Fri, 8 May 2020 11:20:50 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+cc:     Wu Hao <hao.wu@intel.com>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: dfl: Replace zero-length array with
+ flexible-array
+In-Reply-To: <20200507185256.GA14313@embeddedor>
+Message-ID: <alpine.DEB.2.21.2005081119420.7209@rhweight-WRK1>
+References: <20200507185256.GA14313@embeddedor>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The current codebase makes use of the zero-length array language
-extension to the C90 standard, but the preferred mechanism to declare
-variable-length types such as these ones is a flexible array member[1][2],
-introduced in C99:
 
-struct foo {
-        int stuff;
-        struct boo array[];
-};
 
-By making use of the mechanism above, we will get a compiler warning
-in case the flexible array does not occur last in the structure, which
-will help us prevent some kind of undefined behavior bugs from being
-inadvertently introduced[3] to the codebase from now on.
+This looks like a a good change to me.
 
-Also, notice that, dynamic memory allocations won't be affected by
-this change:
+Tested-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-"Flexible array members have incomplete type, and so the sizeof operator
-may not be applied. As a quirk of the original implementation of
-zero-length arrays, sizeof evaluates to zero."[1]
+On Thu, 7 May 2020, Gustavo A. R. Silva wrote:
 
-sizeof(flexible-array-member) triggers a warning because flexible array
-members have incomplete type[1]. There are some instances of code in
-which the sizeof operator is being incorrectly/erroneously applied to
-zero-length arrays and the result is zero. Such instances may be hiding
-some bugs. So, this work (flexible-array member conversions) will also
-help to get completely rid of those sorts of issues.
-
-This issue was found with the help of Coccinelle.
-
-[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-[2] https://github.com/KSPP/linux/issues/21
-[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/fpga/dfl.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index 9f0e656de720..1cd51ea52ce1 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -235,7 +235,7 @@ struct dfl_feature_platform_data {
- 	unsigned long dev_status;
- 	void *private;
- 	int num;
--	struct dfl_feature features[0];
-+	struct dfl_feature features[];
- };
- 
- static inline
-
+> The current codebase makes use of the zero-length array language
+> extension to the C90 standard, but the preferred mechanism to declare
+> variable-length types such as these ones is a flexible array member[1][2],
+> introduced in C99:
+>
+> struct foo {
+>        int stuff;
+>        struct boo array[];
+> };
+>
+> By making use of the mechanism above, we will get a compiler warning
+> in case the flexible array does not occur last in the structure, which
+> will help us prevent some kind of undefined behavior bugs from being
+> inadvertently introduced[3] to the codebase from now on.
+>
+> Also, notice that, dynamic memory allocations won't be affected by
+> this change:
+>
+> "Flexible array members have incomplete type, and so the sizeof operator
+> may not be applied. As a quirk of the original implementation of
+> zero-length arrays, sizeof evaluates to zero."[1]
+>
+> sizeof(flexible-array-member) triggers a warning because flexible array
+> members have incomplete type[1]. There are some instances of code in
+> which the sizeof operator is being incorrectly/erroneously applied to
+> zero-length arrays and the result is zero. Such instances may be hiding
+> some bugs. So, this work (flexible-array member conversions) will also
+> help to get completely rid of those sorts of issues.
+>
+> This issue was found with the help of Coccinelle.
+>
+> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> [2] https://github.com/KSPP/linux/issues/21
+> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+>
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+> drivers/fpga/dfl.h |    2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 9f0e656de720..1cd51ea52ce1 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -235,7 +235,7 @@ struct dfl_feature_platform_data {
+> 	unsigned long dev_status;
+> 	void *private;
+> 	int num;
+> -	struct dfl_feature features[0];
+> +	struct dfl_feature features[];
+> };
+>
+> static inline
+>
+>
