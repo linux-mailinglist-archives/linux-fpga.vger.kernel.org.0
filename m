@@ -2,111 +2,92 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 186371CC3A3
-	for <lists+linux-fpga@lfdr.de>; Sat,  9 May 2020 20:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C5C1CC3D3
+	for <lists+linux-fpga@lfdr.de>; Sat,  9 May 2020 20:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728554AbgEISN6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 9 May 2020 14:13:58 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:43732 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727106AbgEISN6 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 9 May 2020 14:13:58 -0400
-Received: by mail-pl1-f193.google.com with SMTP id z6so2102620plk.10
-        for <linux-fpga@vger.kernel.org>; Sat, 09 May 2020 11:13:57 -0700 (PDT)
+        id S1728025AbgEIS5x (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 9 May 2020 14:57:53 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:43766 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728011AbgEIS5x (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 9 May 2020 14:57:53 -0400
+Received: by mail-pg1-f193.google.com with SMTP id l12so2472409pgr.10;
+        Sat, 09 May 2020 11:57:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=exaZNX1WCg7hSSzMc4qoC8PFjTdNDt78Vaq5EVnTeig=;
-        b=CKwXelYfVrJU8Cnk1AGUL9GNv4Gc7rE6oe5SUlQZ5lEbp0QMYqZ5+lbaTkDVuEg9LQ
-         5UMK4+2WsyG698sr4vn3ZXKUT7FedQUNyh9ePpN1pfKZnbpAFJztTmUF4iG9xWlMlSCQ
-         +mOzhBuNTcHU7gTv2pm64kYRd2EfU04s3jGUve/PZKXQET4vJdOzKoRBLXJPs1iaw/su
-         tjHctr6H15ujiFv4KKy+CqcWG/2VKGdN2CTUggL984QYCITV0Yj5q8Ih46y+AMqkeqzb
-         cp9gauAteZl+AaRi/nuT5Uci9Zmtm/zCxdKrqF4s6a0lKzJhjzwBemiQJvtWN/4vbEjA
-         Gypg==
-X-Gm-Message-State: AGi0PuZEBWypeZqwpM+VkMfBrkab9SjIF/BvLWk2r+IbhsywPwWZjiPy
-        +LnwgcPnldeCyLmKcRO+4w0=
-X-Google-Smtp-Source: APiQypLv38+E0XV4Ly9VvzJdhUtQ8b1e88f/d/WLjYg0/jjidtrrT7DpxsxC5RwajfyIDzjR9CM7QA==
-X-Received: by 2002:a17:90b:2388:: with SMTP id mr8mr11997369pjb.97.1589048037210;
-        Sat, 09 May 2020 11:13:57 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zttBbKYVFPa2BZUCkTkRSn2zjIPdo5XhSTTLcAliYr8=;
+        b=fDgzplDwWLQQnxTV4/Qsn/JAswsgDQA/F/3ngC3sJhOnaNl9dy1GVZoAL/xFRkAoBv
+         n2cUw6tlXytHj7W82sZ+dokw5xpKpQ7c2GVsCAx7L5HkQEIMKmkvBjtO91GH6gf/ee/B
+         oESTjXxWZDJAz+ofSiX63nXUntJA2/jclolXK5NgP99v7edyvPKRcfcbpPRg5NT7jUf7
+         6Ptobj60E4G+PFmMh+nY8wCuQXxIz4WzVbrhdvcXk/k3r0k29aoPiDi1SvwhP+frSUdm
+         3M6Uzaf+WKtMkCvTL0BzmZHzgz6Q4kd+cleZsndjE3Q3AaAV4hehw1ZHStattOeVMIVd
+         Vcog==
+X-Gm-Message-State: AGi0PubARbPJwx3zKKBzXyfXqOVttMtUfpPu0DiXfT44YJCPlj3VvWuD
+        wL6/uO6S/ScYhmv5mZsK0ZI=
+X-Google-Smtp-Source: APiQypJx3+0uZ1IpoYh4IC9se3roW9MvXg0k4n7h7/YW0Z1BmiIRawK/Yh/RGSY0146BWzhWH34lcw==
+X-Received: by 2002:aa7:8dc1:: with SMTP id j1mr9059840pfr.285.1589050672360;
+        Sat, 09 May 2020 11:57:52 -0700 (PDT)
 Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id j186sm5167174pfb.220.2020.05.09.11.13.55
+        by smtp.gmail.com with ESMTPSA id c10sm4995523pfm.50.2020.05.09.11.57.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 May 2020 11:13:56 -0700 (PDT)
-Date:   Sat, 9 May 2020 11:13:55 -0700
+        Sat, 09 May 2020 11:57:51 -0700 (PDT)
+Date:   Sat, 9 May 2020 11:57:50 -0700
 From:   Moritz Fischer <mdf@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     moritzf@google.com, linux-fpga@vger.kernel.org
-Subject: [GIT PULL] FPGA Manager changes for 5.8
-Message-ID: <20200509181355.GA3828@epycbox.lan>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Moritz Fischer <mdf@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Jolly Shah <jolly.shah@xilinx.com>, Wu Hao <hao.wu@intel.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: zynqmp: fix modular build
+Message-ID: <20200509185750.GA6715@epycbox.lan>
+References: <20200505140041.231844-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20200505140041.231844-1-arnd@arndb.de>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
+On Tue, May 05, 2020 at 04:00:11PM +0200, Arnd Bergmann wrote:
+> Two symbols need to be exported to allow the zynqmp-fpga module
+> to get loaded dynamically:
+> 
+> ERROR: modpost: "zynqmp_pm_fpga_load" [drivers/fpga/zynqmp-fpga.ko] undefined!
+> ERROR: modpost: "zynqmp_pm_fpga_get_status" [drivers/fpga/zynqmp-fpga.ko] undefined!
+> 
+> To ensure this is done correctly, also fix the Kconfig dependency
+> to only allow building the fpga driver when the firmware driver is
+> either disabled, or when it is reachable. With that, the dependency
+> on the SoC itself can be removed, and there are no surprises when
+> the fpga driver is built-in but the firmware a module.
+> 
+> Fixes: 4db8180ffe7c ("firmware: xilinx: Remove eemi ops for fpga related APIs")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/fpga/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index b2408a710662..7cd5a29fc437 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -208,7 +208,7 @@ config FPGA_DFL_PCI
+>  
+>  config FPGA_MGR_ZYNQMP_FPGA
+>  	tristate "Xilinx ZynqMP FPGA"
+> -	depends on ARCH_ZYNQMP || COMPILE_TEST
+> +	depends on ZYNQMP_FIRMWARE || (!ZYNQMP_FIRMWARE && COMPILE_TEST)
+>  	help
+>  	  FPGA manager driver support for Xilinx ZynqMP FPGAs.
+>  	  This driver uses the processor configuration port(PCAP)
+> -- 
+> 2.26.0
+> 
+Applied to fixes,
 
-  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git tags/fpga-for-5.8
-
-for you to fetch changes up to a2b9d4eadb7727772698d06e4cbeb1a1e2538675:
-
-  fpga: dfl: afu: support debug access to memory-mapped afu regions (2020-04-29 20:37:12 -0700)
-
-----------------------------------------------------------------
-FPGA Manager changes for 5.8
-
-Here's the first set of changes for the 5.8-rc1 merge window.
-
-Dominic's change adds support for accessing AFU regions with gdb.
-Gustavo's change is a cleanup patch regarding variable lenght arrays.
-Richard's changes update dt-bindings and add support for stratix and agilex.
-Sergiu's changes update spi transfers with the new delay field.
-Xu's change addresses an issue with a wrong return value.
-Shubhrajyoti's change makes the Zynq FPGA driver return -EPROBE_DEFER on
-check of devm_clk_get failure.
-Xu's change for DFL enables multiple opens.
-
-All of these patches have been reviewed, have appropriate Acked-by's and
-have been in the last few linux-next releases without issues.
-
-Signed-off-by: Moritz Fischer <mdf@kernel.org>
-
-----------------------------------------------------------------
-Dominic Chen (1):
-      fpga: dfl: afu: support debug access to memory-mapped afu regions
-
-Gustavo A. R. Silva (1):
-      fpga: dfl.h: Replace zero-length array with flexible-array member
-
-Richard Gong (5):
-      dt-bindings: fpga: add compatible value to Stratix10 SoC FPGA manager binding
-      arm64: dts: agilex: correct FPGA manager driver's compatible value
-      fpga: stratix10-soc: add compatible property value for intel agilex
-      dt-bindings, firmware: add compatible value Intel Stratix10 service layer binding
-      arm64: dts: agilex: correct service layer driver's compatible value
-
-Sergiu Cuciurean (2):
-      fpga: ice40-spi: Use new structure for SPI transfer delays
-      fpga: machxo2-spi: Use new structure for SPI transfer delays
-
-Xu Yilun (1):
-      fpga: dfl: support multiple opens on feature device node.
-
- .../bindings/firmware/intel,stratix10-svc.txt      |  2 +-
- .../bindings/fpga/intel-stratix10-soc-fpga-mgr.txt |  3 +-
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |  4 +--
- drivers/fpga/dfl-afu-main.c                        | 35 +++++++++++++-------
- drivers/fpga/dfl-fme-main.c                        | 19 +++++++----
- drivers/fpga/dfl.c                                 | 15 +++++++--
- drivers/fpga/dfl.h                                 | 37 ++++++++++++++++------
- drivers/fpga/ice40-spi.c                           | 10 ++++--
- drivers/fpga/machxo2-spi.c                         | 12 ++++---
- drivers/fpga/stratix10-soc.c                       |  3 +-
- 10 files changed, 100 insertions(+), 40 deletions(-)
+Thanks
