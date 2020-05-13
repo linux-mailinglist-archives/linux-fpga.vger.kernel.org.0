@@ -2,361 +2,89 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D699D1D0E86
-	for <lists+linux-fpga@lfdr.de>; Wed, 13 May 2020 12:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF32D1D1EBD
+	for <lists+linux-fpga@lfdr.de>; Wed, 13 May 2020 21:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388093AbgEMKAt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 13 May 2020 06:00:49 -0400
-Received: from mga11.intel.com ([192.55.52.93]:33870 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387689AbgEMKAs (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 13 May 2020 06:00:48 -0400
-IronPort-SDR: HwvDS/QLyD/2UYlOV5PudqeN2rZY33dOsxiOe68tEb2+C95rzoJWjr67cEElgRF/P1ZXgY8bDh
- R+zeiEYuGQLg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 03:00:47 -0700
-IronPort-SDR: hT4iCcYoBFM1EufMqgyATwPDL1lwa3HXO8NcV6iHcw1WooIRiWg1uIlYG3HvkiIbY7HPFJS8XK
- pqz1dk1sE5SA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,387,1583222400"; 
-   d="scan'208";a="262429680"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga003.jf.intel.com with ESMTP; 13 May 2020 03:00:44 -0700
-Date:   Wed, 13 May 2020 17:57:39 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Moritz Fischer <mdf@kernel.org>
+        id S1733166AbgEMTOI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 13 May 2020 15:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2387469AbgEMTOH (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 13 May 2020 15:14:07 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E374C061A0C;
+        Wed, 13 May 2020 12:14:06 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id r22so156331pga.12;
+        Wed, 13 May 2020 12:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=c4MBhFXOZtr5piYHjKdaYmafG5GWt17HP85GQ80yZ6A=;
+        b=jfWQvgy9ENnwG5CcetrHoZhWpOg0qxn9CCtOg7/r5BIUuHmE9sjz1OGtTvOBNhVT82
+         f61YDuBaA+0tSxjOGTT5lQWaGu6Gqmvn41AKPHBTUVi3Pr93LuVOy254Uk0cLfetbZ9W
+         t6bQFlh/BSDg2G9rRW1qdDV3/0HI+hQO9vLyfoWfZhYPoeXNpuEz2SxqwmH83rr32gjL
+         UjeESdgKhtOuhMtyDhkq0GKsGo0wMBNBA0CpW8wrVqatmhwWCYOSwkFBEyyC7037WiEv
+         8Bd3PT1XiH+UhWaKzq1FfhGnocGZHQC49TIGtYAKZZn3qQR5cQvlDg4p+JSL+thHAc6t
+         cW7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=c4MBhFXOZtr5piYHjKdaYmafG5GWt17HP85GQ80yZ6A=;
+        b=j2Q3WtowwajRMGjenxzF/lSMUmKcLe9U5f2ZfF6sFTLaya3Y3zIIagnn3wGAGriNYx
+         6SOsD4qVhZdQdkAw3EjtlJaCqOjiyLgMQbo2ZtMtCMd5CqcXIRAh3NqW1uwAp09mEwj6
+         bxPjBgVNz/fZNa2VHFLhHbpcnRyE/eoUV2fv2yhhw2SjeqeikohSJwBM7lIgsBPPchAJ
+         mTKN6GPsPgOkj/VbNaxapn9OLAf8tYe/sT71KlJpkDbLyBDXsPaUo/qgx0m1kz3+/cYt
+         tbjXfgonKEyLZUmqbC68I7Gc01tR/1q9jxGh7CLaJnzdiWG3zg60IBhhXp0j+5dCmc5P
+         nVdQ==
+X-Gm-Message-State: AOAM532VIl5oylgd5VU8lIV7BDji+3rEzhjN66nm+JdN8gXn/urgfQ1s
+        CD6jwDWbkkPzz1p499LOPmX9O3D0
+X-Google-Smtp-Source: ABdhPJxNEH6+i12BxVCz0Pgw2eTsEWUsYCIJFOLPQE4CLdonkT30/A05utKJZBsJG12RKdExCn+XqQ==
+X-Received: by 2002:a63:c306:: with SMTP id c6mr729118pgd.311.1589397245758;
+        Wed, 13 May 2020 12:14:05 -0700 (PDT)
+Received: from jordon-HP-15-Notebook-PC.domain.name ([122.167.196.79])
+        by smtp.gmail.com with ESMTPSA id b16sm277986pfp.89.2020.05.13.12.14.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 May 2020 12:14:04 -0700 (PDT)
+From:   Souptick Joarder <jrdr.linux@gmail.com>
+To:     hao.wu@intel.com, mdf@kernel.org
 Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com, bhu@redhat.com, Luwei Kang <luwei.kang@intel.com>,
-        Wu Hao <hao.wu@intel.com>
-Subject: Re: [PATCH v5 3/7] fpga: dfl: introduce interrupt trigger setting API
-Message-ID: <20200513095739.GC25114@yilunxu-OptiPlex-7050>
-References: <1587370303-25568-1-git-send-email-yilun.xu@intel.com>
- <1587370303-25568-4-git-send-email-yilun.xu@intel.com>
- <20200512041634.GC110219@epycbox.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200512041634.GC110219@epycbox.lan>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        Souptick Joarder <jrdr.linux@gmail.com>
+Subject: [PATCH] fpga: dfl: afu: Corrected error handling levels
+Date:   Thu, 14 May 2020 00:52:05 +0530
+Message-Id: <1589397725-29697-1-git-send-email-jrdr.linux@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, May 11, 2020 at 09:16:34PM -0700, Moritz Fischer wrote:
-> On Mon, Apr 20, 2020 at 04:11:39PM +0800, Xu Yilun wrote:
-> > FPGA user applications may be interested in interrupts generated by
-> > DFL features. For example, users can implement their own FPGA
-> > logics with interrupts enabled in AFU (Accelerated Function Unit,
-> > dynamic region of DFL based FPGA). So user applications need to be
-> > notified to handle these interrupts.
-> > 
-> > In order to allow userspace applications to monitor interrupts,
-> > driver requires userspace to provide eventfds as interrupt
-> > notification channels. Applications then poll/select on the eventfds
-> > to get notified.
-> > 
-> > This patch introduces a generic helper functions to do eventfds binding
-> > with given interrupts.
-> > 
-> > Sub feature drivers are expected to use XXX_GET_IRQ_NUM to query irq
-> > info, and XXX_SET_IRQ to set eventfds for interrupts. This patch also
-> > introduces helper functions for these 2 ioctls.
-> > 
-> > Signed-off-by: Luwei Kang <luwei.kang@intel.com>
-> > Signed-off-by: Wu Hao <hao.wu@intel.com>
-> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > Acked-by: Wu Hao <hao.wu@intel.com>
-> > ----
-> > v2: use unsigned int instead of int for irq array indexes in
-> >     dfl_fpga_set_irq_triggers()
-> >     Improves comments for NULL fds param in dfl_fpga_set_irq_triggers()
-> > v3: Improve comments of dfl_fpga_set_irq_triggers()
-> >     refines code for dfl_fpga_set_irq_triggers, delete local variable j
-> > v4: Introduce 2 helper functions to help handle the XXX_GET_IRQ_NUM &
-> >     XXX_SET_IRQ ioctls for sub feature drivers.
-> > v5: Some minor fix for Hao's comments
-> > ---
-> >  drivers/fpga/dfl.c            | 156 ++++++++++++++++++++++++++++++++++++++++++
-> >  drivers/fpga/dfl.h            |  17 +++++
-> >  include/uapi/linux/fpga-dfl.h |  13 ++++
-> >  3 files changed, 186 insertions(+)
-> > 
-> > diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> > index b49fbed..208d8f0 100644
-> > --- a/drivers/fpga/dfl.c
-> > +++ b/drivers/fpga/dfl.c
-> > @@ -10,7 +10,9 @@
-> >   *   Wu Hao <hao.wu@intel.com>
-> >   *   Xiao Guangrong <guangrong.xiao@linux.intel.com>
-> >   */
-> > +#include <linux/fpga-dfl.h>
-> >  #include <linux/module.h>
-> > +#include <linux/uaccess.h>
-> >  
-> >  #include "dfl.h"
-> >  
-> > @@ -534,6 +536,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
-> >  		unsigned int i;
-> >  
-> >  		/* save resource information for each feature */
-> > +		feature->dev = fdev;
-> >  		feature->id = finfo->fid;
-> >  		feature->resource_index = index;
-> >  		feature->ioaddr = finfo->ioaddr;
-> > @@ -1395,6 +1398,159 @@ int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vfs)
-> >  }
-> >  EXPORT_SYMBOL_GPL(dfl_fpga_cdev_config_ports_vf);
-> >  
-> > +static irqreturn_t dfl_irq_handler(int irq, void *arg)
-> > +{
-> > +	struct eventfd_ctx *trigger = arg;
-> > +
-> > +	eventfd_signal(trigger, 1);
-> > +	return IRQ_HANDLED;
-> > +}
-> > +
-> > +static int do_set_irq_trigger(struct dfl_feature *feature, unsigned int idx,
-> > +			      int fd)
-> > +{
-> > +	struct platform_device *pdev = feature->dev;
-> > +	struct eventfd_ctx *trigger;
-> > +	int irq, ret;
-> > +
-> > +	if (idx >= feature->nr_irqs)
-> > +		return -EINVAL;
-> > +
-> > +	irq = feature->irq_ctx[idx].irq;
-> > +
-> > +	if (feature->irq_ctx[idx].trigger) {
-> > +		free_irq(irq, feature->irq_ctx[idx].trigger);
-> > +		kfree(feature->irq_ctx[idx].name);
-> > +		eventfd_ctx_put(feature->irq_ctx[idx].trigger);
-> > +		feature->irq_ctx[idx].trigger = NULL;
-> > +	}
-> > +
-> > +	if (fd < 0)
-> > +		return 0;
-> > +
-> > +	feature->irq_ctx[idx].name =
-> > +		kasprintf(GFP_KERNEL, "fpga-irq[%u](%s-%llx)", idx,
-> > +			  dev_name(&pdev->dev),
-> > +			  (unsigned long long)feature->id);
-> > +	if (!feature->irq_ctx[idx].name)
-> > +		return -ENOMEM;
-> > +
-> > +	trigger = eventfd_ctx_fdget(fd);
-> > +	if (IS_ERR(trigger)) {
-> > +		ret = PTR_ERR(trigger);
-> > +		goto free_name;
-> > +	}
-> > +
-> > +	ret = request_irq(irq, dfl_irq_handler, 0,
-> > +			  feature->irq_ctx[idx].name, trigger);
-> > +	if (!ret) {
-> > +		feature->irq_ctx[idx].trigger = trigger;
-> > +		return ret;
-> > +	}
-> > +
-> > +	eventfd_ctx_put(trigger);
-> > +free_name:
-> > +	kfree(feature->irq_ctx[idx].name);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +/**
-> > + * dfl_fpga_set_irq_triggers - set eventfd triggers for dfl feature interrupts
-> > + *
-> > + * @feature: dfl sub feature.
-> > + * @start: start of irq index in this dfl sub feature.
-> > + * @count: number of irqs.
-> > + * @fds: eventfds to bind with irqs. unbind related irq if fds[n] is negative.
-> > + *	 unbind "count" specified number of irqs if fds ptr is NULL.
-> > + *
-> > + * Bind given eventfds with irqs in this dfl sub feature. Unbind related irq if
-> > + * fds[n] is negative. Unbind "count" specified number of irqs if fds ptr is
-> > + * NULL.
-> > + *
-> > + * Return: 0 on success, negative error code otherwise.
-> > + */
-> > +int dfl_fpga_set_irq_triggers(struct dfl_feature *feature, unsigned int start,
-> > +			      unsigned int count, int32_t *fds)
-> > +{
-> > +	unsigned int i;
-> > +	int ret = 0;
-> > +
-> > +	if (start + count < start || start + count > feature->nr_irqs)
-> > +		return -EINVAL;
-> Up to you, but have you considered to break up the condition above into
-> two if () ?
+Corrected error handling goto sequnece. Level put_pages should
+be called when pinned pages >= 0 && pinned != npages. Level
+free_pages should be called when pinned pages < 0.
 
-I think maybe we could keep this. The 2 conditions are all for start &
-count check, that's why I prefer to put them in one code block.
+Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
+---
+ drivers/fpga/dfl-afu-dma-region.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Yilun.
+diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
+index 62f9244..5942343 100644
+--- a/drivers/fpga/dfl-afu-dma-region.c
++++ b/drivers/fpga/dfl-afu-dma-region.c
+@@ -61,10 +61,10 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
+ 				     region->pages);
+ 	if (pinned < 0) {
+ 		ret = pinned;
+-		goto put_pages;
++		goto free_pages;
+ 	} else if (pinned != npages) {
+ 		ret = -EFAULT;
+-		goto free_pages;
++		goto put_pages;
+ 	}
+ 
+ 	dev_dbg(dev, "%d pages pinned\n", pinned);
+-- 
+1.9.1
 
-> > +
-> > +	for (i = 0; i < count; i++) {
-> > +		int fd = fds ? fds[i] : -1;
-> > +
-> > +		ret = do_set_irq_trigger(feature, start + i, fd);
-> > +		if (ret) {
-> > +			while (i--)
-> > +				do_set_irq_trigger(feature, start + i, -1);
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(dfl_fpga_set_irq_triggers);
-> > +
-> > +/**
-> > + * dfl_feature_ioctl_get_num_irqs - dfl feature _GET_IRQ_NUM ioctl interface.
-> > + * @pdev: the feature device which has the sub feature
-> > + * @feature: the dfl sub feature
-> > + * @arg: ioctl argument
-> > + *
-> > + * Return: 0 on success, negative error code otherwise.
-> > + */
-> > +long dfl_feature_ioctl_get_num_irqs(struct platform_device *pdev,
-> > +				    struct dfl_feature *feature,
-> > +				    unsigned long arg)
-> > +{
-> > +	return put_user(feature->nr_irqs, (__u32 __user *)arg);
-> > +}
-> > +EXPORT_SYMBOL_GPL(dfl_feature_ioctl_get_num_irqs);
-> > +
-> > +/**
-> > + * dfl_feature_ioctl_set_irq - dfl feature _SET_IRQ ioctl interface.
-> > + * @pdev: the feature device which has the sub feature
-> > + * @feature: the dfl sub feature
-> > + * @arg: ioctl argument
-> > + *
-> > + * Return: 0 on success, negative error code otherwise.
-> > + */
-> > +long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
-> > +			       struct dfl_feature *feature,
-> > +			       unsigned long arg)
-> > +{
-> > +	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
-> > +	struct dfl_fpga_irq_set hdr;
-> > +	s32 *fds;
-> > +	long ret;
-> > +
-> > +	if (!feature->nr_irqs)
-> > +		return -ENOENT;
-> > +
-> > +	if (copy_from_user(&hdr, (void __user *)arg, sizeof(hdr)))
-> > +		return -EFAULT;
-> > +
-> > +	if (!hdr.count || (hdr.start + hdr.count > feature->nr_irqs) ||
-> > +	    (hdr.start + hdr.count < hdr.start))
-> > +		return -EINVAL;
-> > +
-> > +	fds = memdup_user((void __user *)(arg + sizeof(hdr)),
-> > +			  hdr.count * sizeof(s32));
-> > +	if (IS_ERR(fds))
-> > +		return PTR_ERR(fds);
-> > +
-> > +	mutex_lock(&pdata->lock);
-> > +	ret = dfl_fpga_set_irq_triggers(feature, hdr.start, hdr.count, fds);
-> > +	mutex_unlock(&pdata->lock);
-> > +
-> > +	kfree(fds);
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(dfl_feature_ioctl_set_irq);
-> > +
-> >  static void __exit dfl_fpga_exit(void)
-> >  {
-> >  	dfl_chardev_uinit();
-> > diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> > index 4bc165f..f7a8c59 100644
-> > --- a/drivers/fpga/dfl.h
-> > +++ b/drivers/fpga/dfl.h
-> > @@ -17,7 +17,9 @@
-> >  #include <linux/bitfield.h>
-> >  #include <linux/cdev.h>
-> >  #include <linux/delay.h>
-> > +#include <linux/eventfd.h>
-> >  #include <linux/fs.h>
-> > +#include <linux/interrupt.h>
-> >  #include <linux/iopoll.h>
-> >  #include <linux/io-64-nonatomic-lo-hi.h>
-> >  #include <linux/platform_device.h>
-> > @@ -213,14 +215,19 @@ struct dfl_feature_driver {
-> >   * struct dfl_feature_irq_ctx - dfl private feature interrupt context
-> >   *
-> >   * @irq: Linux IRQ number of this interrupt.
-> > + * @trigger: eventfd context to signal when interrupt happens.
-> > + * @name: irq name needed when requesting irq.
-> >   */
-> >  struct dfl_feature_irq_ctx {
-> >  	int irq;
-> > +	struct eventfd_ctx *trigger;
-> > +	char *name;
-> >  };
-> >  
-> >  /**
-> >   * struct dfl_feature - sub feature of the feature devices
-> >   *
-> > + * @dev: ptr to pdev of the feature device which has the sub feature.
-> >   * @id: sub feature id.
-> >   * @resource_index: each sub feature has one mmio resource for its registers.
-> >   *		    this index is used to find its mmio resource from the
-> > @@ -231,6 +238,7 @@ struct dfl_feature_irq_ctx {
-> >   * @ops: ops of this sub feature.
-> >   */
-> >  struct dfl_feature {
-> > +	struct platform_device *dev;
-> >  	u64 id;
-> >  	int resource_index;
-> >  	void __iomem *ioaddr;
-> > @@ -506,4 +514,13 @@ int dfl_fpga_cdev_release_port(struct dfl_fpga_cdev *cdev, int port_id);
-> >  int dfl_fpga_cdev_assign_port(struct dfl_fpga_cdev *cdev, int port_id);
-> >  void dfl_fpga_cdev_config_ports_pf(struct dfl_fpga_cdev *cdev);
-> >  int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vf);
-> > +int dfl_fpga_set_irq_triggers(struct dfl_feature *feature, unsigned int start,
-> > +			      unsigned int count, int32_t *fds);
-> > +long dfl_feature_ioctl_get_num_irqs(struct platform_device *pdev,
-> > +				    struct dfl_feature *feature,
-> > +				    unsigned long arg);
-> > +long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
-> > +			       struct dfl_feature *feature,
-> > +			       unsigned long arg);
-> > +
-> >  #endif /* __FPGA_DFL_H */
-> > diff --git a/include/uapi/linux/fpga-dfl.h b/include/uapi/linux/fpga-dfl.h
-> > index ec70a0746..7331350 100644
-> > --- a/include/uapi/linux/fpga-dfl.h
-> > +++ b/include/uapi/linux/fpga-dfl.h
-> > @@ -151,6 +151,19 @@ struct dfl_fpga_port_dma_unmap {
-> >  
-> >  #define DFL_FPGA_PORT_DMA_UNMAP		_IO(DFL_FPGA_MAGIC, DFL_PORT_BASE + 4)
-> >  
-> > +/**
-> > + * struct dfl_fpga_irq_set - the argument for DFL_FPGA_XXX_SET_IRQ ioctl.
-> > + *
-> > + * @start: Index of the first irq.
-> > + * @count: The number of eventfd handler.
-> > + * @evtfds: Eventfd handlers.
-> > + */
-> > +struct dfl_fpga_irq_set {
-> > +	__u32 start;
-> > +	__u32 count;
-> > +	__s32 evtfds[];
-> > +};
-> > +
-> >  /* IOCTLs for FME file descriptor */
-> >  
-> >  /**
-> > -- 
-> > 2.7.4
-> > 
-> Thanks,
-> Moritz
