@@ -2,126 +2,133 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E574C1D63F3
-	for <lists+linux-fpga@lfdr.de>; Sat, 16 May 2020 22:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448A31D650B
+	for <lists+linux-fpga@lfdr.de>; Sun, 17 May 2020 03:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726591AbgEPUWn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 16 May 2020 16:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726528AbgEPUWn (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Sat, 16 May 2020 16:22:43 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDB2C061A0C;
-        Sat, 16 May 2020 13:22:42 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id w10so5816603ljo.0;
-        Sat, 16 May 2020 13:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6KqPhCBNJhZ1XRzaZS7zC4GjdNL+qb+xQbQdcmNhs0M=;
-        b=EiI9YTaVS3MkuyxxITMvw6mWfcC6HBmzsyG3q8W7vachz5iKebbbH97iymAqUx5a/4
-         3ZmcKmqCWzxiw0fMAY3U2XX/F1t/smtxadCVakkR3geX9ln1MTmrovISOAZvOQ9SvOgq
-         aRl2e2+t60xBcQRWEyeFyDR/HvA1FsXjMQlvWWnRI9slpksEonINcTxB1lMi5C2h/kty
-         +lXWvPyci8ZScnWB2Yo8I+WN95MZbbT/qHmutFLRtLW66ovPSIvvskI3+l63VDebxOaG
-         +ZKEqU6tWXooDENA+AMiFpbB08Pt9q2UQB5q5vu3xgvViBbzIu0fpDWaS3D8GGwQLRcb
-         Uppw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6KqPhCBNJhZ1XRzaZS7zC4GjdNL+qb+xQbQdcmNhs0M=;
-        b=IneRWqxjq+6gPwQYwBR0sJfRVCtWKTPpyhz7GaNgoD78unHiMGa9Z7R+1ev4UtDg+u
-         tCDBEp5Lzk1ahVKoIwiB8/RdzJuW+dBwsGvFyR2cmXyt7HTOxaVFOwQLXbZVAAdM9a1e
-         xCXiSPSbbobUmkWGte+b3EHBswxogIvQOmCKGhTSZQ3TNHdew6fM894IERadTc+ynL9M
-         3kgGh/8IooLZjTMv3iccdwuShDBlclaBR2gbWAiRdNhFqWDoTG97/0QCJXRom91mkiln
-         PCpi8NIOPhIj2JL9IlUQcHlvQt9WGPT9tE3JB6X0xCo2qmZwS75ZMDIwgioLkv0a8wm7
-         UJ0A==
-X-Gm-Message-State: AOAM530sMvowb0+a9giRK+QLgvwoFqUg1HiBga1WR0jORW/1VNU0GjCb
-        ahxcG7Y3WSXo4MshxARJVlEVaQBDqw1hlA+is0g=
-X-Google-Smtp-Source: ABdhPJwbQnCHHyI6TTUkG6NNih+ZVsupRNirwqpWKtXQ6347NTxaWGCCWSGQ4HFwhZtrOPwr8p2iO8hpPgK2dPTRwf4=
-X-Received: by 2002:a05:651c:50e:: with SMTP id o14mr6092901ljp.52.1589660561294;
- Sat, 16 May 2020 13:22:41 -0700 (PDT)
+        id S1726946AbgEQBSk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 16 May 2020 21:18:40 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:15880 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726891AbgEQBSk (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 16 May 2020 21:18:40 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ec090640000>; Sat, 16 May 2020 18:16:20 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Sat, 16 May 2020 18:18:39 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Sat, 16 May 2020 18:18:39 -0700
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 17 May
+ 2020 01:18:39 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Sun, 17 May 2020 01:18:39 +0000
+Received: from sandstorm.nvidia.com (Not Verified[10.2.48.175]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5ec090ef0001>; Sat, 16 May 2020 18:18:39 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+CC:     John Hubbard <jhubbard@nvidia.com>, Wu Hao <hao.wu@intel.com>,
+        Moritz Fischer <mdf@kernel.org>, <linux-fpga@vger.kernel.org>
+Subject: [PATCH] fpga: dfl: afu: convert get_user_pages() --> pin_user_pages()
+Date:   Sat, 16 May 2020 18:18:37 -0700
+Message-ID: <20200517011837.382189-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <1589397725-29697-1-git-send-email-jrdr.linux@gmail.com>
- <20200514022935.GE29933@yilunxu-OptiPlex-7050> <DM6PR11MB38193B495FB1DB4697F0094F85BC0@DM6PR11MB3819.namprd11.prod.outlook.com>
-In-Reply-To: <DM6PR11MB38193B495FB1DB4697F0094F85BC0@DM6PR11MB3819.namprd11.prod.outlook.com>
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-Date:   Sun, 17 May 2020 01:52:29 +0530
-Message-ID: <CAFqt6zYA1EotyQSeBa19mC_Az8MbPUyfYZvjYWb01bm927FH4A@mail.gmail.com>
-Subject: Re: [PATCH] fpga: dfl: afu: Corrected error handling levels
-To:     "Wu, Hao" <hao.wu@intel.com>
-Cc:     "mdf@kernel.org" <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1589678180; bh=sy5Ui646d3AglpuvJNOHEZAV8PuLDjy03kGDT/+711M=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=DgTc3wEMsvu2GAVTe6yofPjfTj/tyiextWIZRdMbPXhkzSY/yAA5OoUXktRiPhoRv
+         0BjkGKWXewSnc4RMorHErEMcKvvNQgDvZQtsgaEE/BovLIivQKFw8gsC7HCnuPkzYO
+         ER8kWAXH14Cz3Zs9HExShG40WMtQvLEnXOHurO6aCcvFSpPo3gvt574Bp4EYm4I0Ag
+         AbnypOmDR8lEtyb5oNrCosXh0MuW//q7GGNn4ZORbCW4iNRjpXotitBIzqibmIjeFY
+         u5yMkyQnjhr10tRkhT7g+1BoJrqeEPw6KUYSF9yiK62Xj5aPW96xhMLgaDASfZdyAd
+         AnEs8xyOkoO1A==
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, May 14, 2020 at 11:36 AM Wu, Hao <hao.wu@intel.com> wrote:
->
-> > -----Original Message-----
-> > From: Xu, Yilun <yilun.xu@intel.com>
-> > Sent: Thursday, May 14, 2020 10:30 AM
-> > To: Souptick Joarder <jrdr.linux@gmail.com>
-> > Cc: Wu, Hao <hao.wu@intel.com>; mdf@kernel.org; linux-
-> > fpga@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH] fpga: dfl: afu: Corrected error handling levels
-> >
-> > The patch looks good to me.
-> >
-> > Maybe we could add the Fixes tag:
-> >   Fixes: fa8dda1edef9 (fpga: dfl: afu: add
-> > DFL_FPGA_PORT_DMA_MAP/UNMAP ioctls support)
->
-> Thanks for catching this problem.
->
-> With this line,
-> Acked-by: Wu Hao <hao.wu@intel.com>
+This code was using get_user_pages_fast(), in a "Case 2" scenario
+(DMA/RDMA), using the categorization from [1]. That means that it's
+time to convert the get_user_pages_fast() + put_page() calls to
+pin_user_pages_fast() + unpin_user_pages() calls.
 
-Thanks. Will post v2.
+There is some helpful background in [2]: basically, this is a small
+part of fixing a long-standing disconnect between pinning pages, and
+file systems' use of those pages.
 
->
-> Thanks!
-> Hao
->
-> >
-> > Thanks,
-> > Yilun
-> >
-> > On Thu, May 14, 2020 at 12:52:05AM +0530, Souptick Joarder wrote:
-> > > Corrected error handling goto sequnece. Level put_pages should
-> > > be called when pinned pages >= 0 && pinned != npages. Level
-> > > free_pages should be called when pinned pages < 0.
-> > >
-> > > Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
-> > > ---
-> > >  drivers/fpga/dfl-afu-dma-region.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-
-> > region.c
-> > > index 62f9244..5942343 100644
-> > > --- a/drivers/fpga/dfl-afu-dma-region.c
-> > > +++ b/drivers/fpga/dfl-afu-dma-region.c
-> > > @@ -61,10 +61,10 @@ static int afu_dma_pin_pages(struct
-> > dfl_feature_platform_data *pdata,
-> > >                                  region->pages);
-> > >     if (pinned < 0) {
-> > >             ret = pinned;
-> > > -           goto put_pages;
-> > > +           goto free_pages;
-> > >     } else if (pinned != npages) {
-> > >             ret = -EFAULT;
-> > > -           goto free_pages;
-> > > +           goto put_pages;
-> > >     }
-> > >
-> > >     dev_dbg(dev, "%d pages pinned\n", pinned);
-> > > --
-> > > 1.9.1
+[1] Documentation/core-api/pin_user_pages.rst
+
+[2] "Explicit pinning of user-space pages":
+    https://lwn.net/Articles/807108/
+
+Cc: Wu Hao <hao.wu@intel.com>
+Cc: Moritz Fischer <mdf@kernel.org>
+Cc: linux-fpga@vger.kernel.org
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ drivers/fpga/dfl-afu-dma-region.c | 15 +++------------
+ 1 file changed, 3 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-r=
+egion.c
+index 62f924489db5..84f696d5ba82 100644
+--- a/drivers/fpga/dfl-afu-dma-region.c
++++ b/drivers/fpga/dfl-afu-dma-region.c
+@@ -16,15 +16,6 @@
+=20
+ #include "dfl-afu.h"
+=20
+-static void put_all_pages(struct page **pages, int npages)
+-{
+-	int i;
+-
+-	for (i =3D 0; i < npages; i++)
+-		if (pages[i])
+-			put_page(pages[i]);
+-}
+-
+ void afu_dma_region_init(struct dfl_feature_platform_data *pdata)
+ {
+ 	struct dfl_afu *afu =3D dfl_fpga_pdata_get_private(pdata);
+@@ -57,7 +48,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_=
+data *pdata,
+ 		goto unlock_vm;
+ 	}
+=20
+-	pinned =3D get_user_pages_fast(region->user_addr, npages, FOLL_WRITE,
++	pinned =3D pin_user_pages_fast(region->user_addr, npages, FOLL_WRITE,
+ 				     region->pages);
+ 	if (pinned < 0) {
+ 		ret =3D pinned;
+@@ -72,7 +63,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_=
+data *pdata,
+ 	return 0;
+=20
+ put_pages:
+-	put_all_pages(region->pages, pinned);
++	unpin_user_pages(region->pages, pinned);
+ free_pages:
+ 	kfree(region->pages);
+ unlock_vm:
+@@ -94,7 +85,7 @@ static void afu_dma_unpin_pages(struct dfl_feature_platfo=
+rm_data *pdata,
+ 	long npages =3D region->length >> PAGE_SHIFT;
+ 	struct device *dev =3D &pdata->dev->dev;
+=20
+-	put_all_pages(region->pages, npages);
++	unpin_user_pages(region->pages, npages);
+ 	kfree(region->pages);
+ 	account_locked_vm(current->mm, npages, false);
+=20
+
+base-commit: 3d1c1e5931ce45b3a3f309385bbc00c78e9951c6
+--=20
+2.26.2
+
