@@ -2,126 +2,79 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3A31D9AE8
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 May 2020 17:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397DF1D9E08
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 May 2020 19:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728968AbgESPNw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 19 May 2020 11:13:52 -0400
-Received: from mga17.intel.com ([192.55.52.151]:60703 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728925AbgESPNv (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 19 May 2020 11:13:51 -0400
-IronPort-SDR: gvdY28cjukvsI+9FlFvyoo9xkiFj5WPYUJ20jjNp+R5LM5RsEqCm440nImlT4z+laqvDzHsf+y
- 136GLBeSXqvg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2020 08:13:51 -0700
-IronPort-SDR: Vpe3eHKOvhQqH4ewDJZngfreOqTS2mISQf6urRsVZT86gyUjg/WgVxBFm/Xv9rYx5EPlBTBIn9
- DTQn0Vp1TkYA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,410,1583222400"; 
-   d="scan'208";a="253269820"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga007.jf.intel.com with ESMTP; 19 May 2020 08:13:49 -0700
-Date:   Tue, 19 May 2020 23:10:37 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org
+        id S1729001AbgESRjD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 19 May 2020 13:39:03 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:16978 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726059AbgESRjD (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 19 May 2020 13:39:03 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ec419280003>; Tue, 19 May 2020 10:36:40 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 19 May 2020 10:39:03 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 19 May 2020 10:39:03 -0700
+Received: from [10.2.55.90] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 May
+ 2020 17:39:03 +0000
 Subject: Re: [PATCH] fpga: dfl: afu: convert get_user_pages() -->
  pin_user_pages()
-Message-ID: <20200519151037.GA20726@yilunxu-OptiPlex-7050>
+To:     Xu Yilun <yilun.xu@intel.com>
+CC:     LKML <linux-kernel@vger.kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Moritz Fischer <mdf@kernel.org>, <linux-fpga@vger.kernel.org>
 References: <20200517011837.382189-1-jhubbard@nvidia.com>
+ <20200519151037.GA20726@yilunxu-OptiPlex-7050>
+X-Nvconfidentiality: public
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <2e9e6c4e-296d-b0cd-88ce-1b300b9e2e0f@nvidia.com>
+Date:   Tue, 19 May 2020 10:39:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200517011837.382189-1-jhubbard@nvidia.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20200519151037.GA20726@yilunxu-OptiPlex-7050>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1589909800; bh=xaoEgoCHnVQjnzVlZcdR0OFGUhzt1FfKdnkkdl3fyII=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=eCnCl8ej/a+dubGQt/M1eDAXqkCPp41qd7x0+oSo1SeUyUfm46JGguGD4T0w4re4q
+         ni5mQ8j0NKgUx9RydyNxzpFZuwJ+o3QNwG9Y7NELTtEcW/4N+SA+ZMySmg8Spb3Ixi
+         W4vlzLPO+qELePyHUMrUu6lXY7NR9t1ZbRrXqbfATRuektif7yc/aqFyJfUeJ0LvPT
+         LvM48tb4S+azJg9NMji7BVODQmFin2lYqva0ekD83OzOetCp5O4uzbLxMiVmyOiie5
+         8LWsnPWR4/WVLpX0STfZfg0klXdtsj6BWTeYm5p7nsICvcj0cygju6NZiKdYudAsv3
+         KDVaHU5VJEHmQ==
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Sat, May 16, 2020 at 06:18:37PM -0700, John Hubbard wrote:
-> This code was using get_user_pages_fast(), in a "Case 2" scenario
-> (DMA/RDMA), using the categorization from [1]. That means that it's
-> time to convert the get_user_pages_fast() + put_page() calls to
-> pin_user_pages_fast() + unpin_user_pages() calls.
+On 2020-05-19 08:10, Xu Yilun wrote:
+...
+>> @@ -72,7 +63,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
+>>   	return 0;
+>>   
+>>   put_pages:
 > 
-> There is some helpful background in [2]: basically, this is a small
-> part of fixing a long-standing disconnect between pinning pages, and
-> file systems' use of those pages.
+> How about we also change the tag to "unpin_pages"?
 > 
-> [1] Documentation/core-api/pin_user_pages.rst
+> Others look good to me.
 > 
-> [2] "Explicit pinning of user-space pages":
->     https://lwn.net/Articles/807108/
-> 
-> Cc: Wu Hao <hao.wu@intel.com>
-> Cc: Moritz Fischer <mdf@kernel.org>
-> Cc: linux-fpga@vger.kernel.org
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->  drivers/fpga/dfl-afu-dma-region.c | 15 +++------------
->  1 file changed, 3 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
-> index 62f924489db5..84f696d5ba82 100644
-> --- a/drivers/fpga/dfl-afu-dma-region.c
-> +++ b/drivers/fpga/dfl-afu-dma-region.c
-> @@ -16,15 +16,6 @@
->  
->  #include "dfl-afu.h"
->  
-> -static void put_all_pages(struct page **pages, int npages)
-> -{
-> -	int i;
-> -
-> -	for (i = 0; i < npages; i++)
-> -		if (pages[i])
-> -			put_page(pages[i]);
-> -}
-> -
->  void afu_dma_region_init(struct dfl_feature_platform_data *pdata)
->  {
->  	struct dfl_afu *afu = dfl_fpga_pdata_get_private(pdata);
-> @@ -57,7 +48,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
->  		goto unlock_vm;
->  	}
->  
-> -	pinned = get_user_pages_fast(region->user_addr, npages, FOLL_WRITE,
-> +	pinned = pin_user_pages_fast(region->user_addr, npages, FOLL_WRITE,
->  				     region->pages);
->  	if (pinned < 0) {
->  		ret = pinned;
-> @@ -72,7 +63,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
->  	return 0;
->  
->  put_pages:
 
-How about we also change the tag to "unpin_pages"?
+Sure, I'll send a v2 with that.
 
-Others look good to me.
 
-Thanks,
-Yilun.
-
-> -	put_all_pages(region->pages, pinned);
-> +	unpin_user_pages(region->pages, pinned);
->  free_pages:
->  	kfree(region->pages);
->  unlock_vm:
-> @@ -94,7 +85,7 @@ static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
->  	long npages = region->length >> PAGE_SHIFT;
->  	struct device *dev = &pdata->dev->dev;
->  
-> -	put_all_pages(region->pages, npages);
-> +	unpin_user_pages(region->pages, npages);
->  	kfree(region->pages);
->  	account_locked_vm(current->mm, npages, false);
->  
-> 
-> base-commit: 3d1c1e5931ce45b3a3f309385bbc00c78e9951c6
-> -- 
-> 2.26.2
+thanks,
+-- 
+John Hubbard
+NVIDIA
