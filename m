@@ -2,166 +2,65 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C76C1DF418
-	for <lists+linux-fpga@lfdr.de>; Sat, 23 May 2020 03:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C211E1DF9DE
+	for <lists+linux-fpga@lfdr.de>; Sat, 23 May 2020 20:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387490AbgEWBwf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 22 May 2020 21:52:35 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:1583 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387481AbgEWBwf (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 22 May 2020 21:52:35 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ec881920000>; Fri, 22 May 2020 18:51:14 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 22 May 2020 18:52:34 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 22 May 2020 18:52:34 -0700
-Received: from [10.2.52.1] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 23 May
- 2020 01:52:34 +0000
-Subject: Re: [PATCH v2] fpga: dfl: afu: convert get_user_pages() -->
- pin_user_pages()
-To:     LKML <linux-kernel@vger.kernel.org>
-CC:     Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Moritz Fischer <mdf@kernel.org>, <linux-fpga@vger.kernel.org>
-References: <20200519201449.3136033-1-jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <64aa1494-7570-5319-b096-ea354ff20431@nvidia.com>
-Date:   Fri, 22 May 2020 18:52:34 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S2387945AbgEWSAa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 23 May 2020 14:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387960AbgEWSAV (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 23 May 2020 14:00:21 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD09C02A19F
+        for <linux-fpga@vger.kernel.org>; Sat, 23 May 2020 11:00:20 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id x13so6693561pfn.11
+        for <linux-fpga@vger.kernel.org>; Sat, 23 May 2020 11:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=DLUdlLdqK1bsV3DbEuTTyBWxouo7TOwyxri4APWQD3NqiMSIjirU+KuWgkxjC+SPXd
+         U5bKcUrFxXkujPWjXtLFF/k/nfilKzP5EjBajrS/8510fneO07cpMqdcHCxwrpi40/q7
+         /O0e1HoJlTbh5NB1junI0CHT5u7OlL96wLc3EVtoU1jy6h6mu/94Ij3+HmmWjDrdLWVh
+         jTwO4Rc/jE6wel14tPJDJsn6k0/UDkI9Or/XCFS691xyvyogoxyI2h7yK06Suh6ePv/U
+         +lZz7VywgsFgSxYL/B5mLPOXcZ0fktkIkUnyPxHg9tbmvqat4Bb8GZAodniIxvBVB3XB
+         mJxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=FNjar5fo0oM6GrFe3X8HL6xyCcoFpTon2UfxSAuXubHs7tTJRwiDGYzp7WWx9holFB
+         vxsWZhySqPsSQYwSNGkLrw6akZv5YQM9f9Si2ujtqt0kLPKnH5+RJ8rU4QeeOVXpG1fi
+         A7Vy1YBEshZnm42oYPfnnapxFwMrD2CHDvtygqh5FfpfdbDY+pwE2RE3qrzGLipSXvrV
+         PP+jW1MaO9ww8JqQAUUtKi1+f9taTuCwKC9kZqpb6T2wMyg2iHaVvwG/IajnCrhfScWC
+         HZOhZbV8+WW6oLPeJ5NnE49kiifk4b8IT3R8QX3DAKKSRlM6HEoOfM9cVPkGx7pq6EVS
+         PgXw==
+X-Gm-Message-State: AOAM532Eq1kiVSf0O8vz8D5yUFLLuFsJj2I2fOPa4oUJYkXRcWOM3CSD
+        rTlqsOafVwtsfFSksGuGrTdub8rvIkXC9uYpIO84iGvz
+X-Google-Smtp-Source: ABdhPJxI0GNvtYFRzubiNKehFnBmeNa8IdxO7hQ3TxAldsg7mTxyy0v9X6v2Fayhxp/lnxt7tCbB9QFJVJ60H98MgEQ=
+X-Received: by 2002:a0c:ed4b:: with SMTP id v11mr9120627qvq.179.1590256818769;
+ Sat, 23 May 2020 11:00:18 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200519201449.3136033-1-jhubbard@nvidia.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1590198674; bh=H0H4bnfmZctAlDk5DLSVcRpTFSw3qTsKUJh0ZTZurr0=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=X2SnSaT7Sre/ZYhMC6y2b6BWRFVOldzacF6lVvqQ6bEN1JPnOQM4Pr8en2VFy77DJ
-         bu48Qgw92YsFEu3twD2Zlq5M1hRCuvLBcu8WmT+mPDWqVkfK/lYqqp5hjG16VzwFRt
-         9aXkfPEVxjvv//sTJZ5f3RQCkNiRMKhbunRzMyNub4PD4hzEGKUAGGDiOcQq3hSKAG
-         LMffZkVrCKRB4ERw+wSd3szU5l07qmea/t20Bolj5+p2z/LqECpvcEPsRwLcO19voP
-         ACBwxvYV0Yrz3KrnfmlljYgoOyFdwSVOH39ctMSHlaqCDqeR75vouuLaLMKn+nHHFD
-         GZPSf0WA92Rcg==
+Received: by 2002:aed:3ac5:0:0:0:0:0 with HTTP; Sat, 23 May 2020 11:00:18
+ -0700 (PDT)
+Reply-To: mrs.chantala2055@gmail.com
+From:   mrs chantal <mrs.chantaltwo@gmail.com>
+Date:   Sat, 23 May 2020 18:00:18 +0000
+Message-ID: <CAGVwK0UnqGdMqCxvjeR06i5Ca=SScOHB3E1kfQEUa4_tgZN-cQ@mail.gmail.com>
+Subject: jjCompliment
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2020-05-19 13:14, John Hubbard wrote:
-> This code was using get_user_pages_fast(), in a "Case 2" scenario
-> (DMA/RDMA), using the categorization from [1]. That means that it's
-> time to convert the get_user_pages_fast() + put_page() calls to
-> pin_user_pages_fast() + unpin_user_pages() calls.
-> 
-> There is some helpful background in [2]: basically, this is a small
-> part of fixing a long-standing disconnect between pinning pages, and
-> file systems' use of those pages.
-> 
-> [1] Documentation/core-api/pin_user_pages.rst
-> 
-> [2] "Explicit pinning of user-space pages":
->      https://lwn.net/Articles/807108/
-> 
-> Cc: Xu Yilun <yilun.xu@intel.com>
-> Cc: Wu Hao <hao.wu@intel.com>
-> Cc: Moritz Fischer <mdf@kernel.org>
-> Cc: linux-fpga@vger.kernel.org
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-
-
-Hi Moritz and FPGA developers,
-
-Is this OK? And if so, is it going into your git tree? Or should I
-send it up through a different tree? (I'm new to the FPGA development
-model).
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
-
-
-
-> ---
-> 
-> Hi,
-> 
-> Changes since v1:
-> 
-> Changed the label from "put_pages", to "unpin_pages".
-> 
-> thanks,
-> John Hubbard
-> NVIDIA
->   
->   drivers/fpga/dfl-afu-dma-region.c | 19 +++++--------------
->   1 file changed, 5 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
-> index 62f924489db5..a31dd3a7e581 100644
-> --- a/drivers/fpga/dfl-afu-dma-region.c
-> +++ b/drivers/fpga/dfl-afu-dma-region.c
-> @@ -16,15 +16,6 @@
->   
->   #include "dfl-afu.h"
->   
-> -static void put_all_pages(struct page **pages, int npages)
-> -{
-> -	int i;
-> -
-> -	for (i = 0; i < npages; i++)
-> -		if (pages[i])
-> -			put_page(pages[i]);
-> -}
-> -
->   void afu_dma_region_init(struct dfl_feature_platform_data *pdata)
->   {
->   	struct dfl_afu *afu = dfl_fpga_pdata_get_private(pdata);
-> @@ -57,11 +48,11 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
->   		goto unlock_vm;
->   	}
->   
-> -	pinned = get_user_pages_fast(region->user_addr, npages, FOLL_WRITE,
-> +	pinned = pin_user_pages_fast(region->user_addr, npages, FOLL_WRITE,
->   				     region->pages);
->   	if (pinned < 0) {
->   		ret = pinned;
-> -		goto put_pages;
-> +		goto unpin_pages;
->   	} else if (pinned != npages) {
->   		ret = -EFAULT;
->   		goto free_pages;
-> @@ -71,8 +62,8 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
->   
->   	return 0;
->   
-> -put_pages:
-> -	put_all_pages(region->pages, pinned);
-> +unpin_pages:
-> +	unpin_user_pages(region->pages, pinned);
->   free_pages:
->   	kfree(region->pages);
->   unlock_vm:
-> @@ -94,7 +85,7 @@ static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
->   	long npages = region->length >> PAGE_SHIFT;
->   	struct device *dev = &pdata->dev->dev;
->   
-> -	put_all_pages(region->pages, npages);
-> +	unpin_user_pages(region->pages, npages);
->   	kfree(region->pages);
->   	account_locked_vm(current->mm, npages, false);
->   
-> 
-
+     Compliment of the day to you. I am Mrs.CHANTAL I am sending this brief
+    letter to solicit your partnership to transfer $13.5 Million US
+    Dollars.I shall send you more information and procedures when I receive
+    positive response From you. Please send me a message in My private
+    email address is ( mrschantal066@gmail.com  )
+    Best Regards
+    MrS.Chantal
