@@ -2,227 +2,360 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D75D51E14D2
-	for <lists+linux-fpga@lfdr.de>; Mon, 25 May 2020 21:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C381E14DC
+	for <lists+linux-fpga@lfdr.de>; Mon, 25 May 2020 21:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390144AbgEYThz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 25 May 2020 15:37:55 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:60730 "EHLO
+        id S2390148AbgEYTiA (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 25 May 2020 15:38:00 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:35275 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390070AbgEYThy (ORCPT
+        by vger.kernel.org with ESMTP id S2390159AbgEYTh7 (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 25 May 2020 15:37:54 -0400
+        Mon, 25 May 2020 15:37:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590435473;
+        s=mimecast20190719; t=1590435477;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=oJJ94T5U0nF5zDOdHPSu7XgYfIG/RMOB3z2gAmLQyQ4=;
-        b=UNgrNcP53Er8bYwU81bLk+vFB4aSqV0GRVmYIF2Mvh9Hw6WQJAUjFtcqRCwTf9hJs0Skcn
-        Z74+y5J+1d0UXpjsf6D8uipaXbnM5sQ1qObgbvGXtOUHda+dfOyXbWU9dfGEHvY7DNXR8q
-        zVlOPrk67f+wWKwTarVc7UMVofPls9s=
+        bh=oZA8LoFoO10uX5CNpxtAT8yX4KF7q5rq3fPBJqvahDU=;
+        b=LEs8y02co+Nphx+lqHRJgJ2hJPqekMSD8W88td1X4ElCbl51xZdGLST+7KtGWxtUAuqt8S
+        q9UerRK61/z7UvE3JpIMssbMyXiOv710cyLHFfWAsJUekRA9QVeA64joOZIhxh2rJdJHWl
+        Zp9G7BGNeBWCX/fzWb3498LHphjlMY8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-242-zgp5rzVLO0ei3XSVomTbmg-1; Mon, 25 May 2020 15:37:51 -0400
-X-MC-Unique: zgp5rzVLO0ei3XSVomTbmg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+ us-mta-208-ItJ5kBRjO6K7eqj4-iQPMA-1; Mon, 25 May 2020 15:37:53 -0400
+X-MC-Unique: ItJ5kBRjO6K7eqj4-iQPMA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A6698015D2;
-        Mon, 25 May 2020 19:37:50 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3ADED107ACF3;
+        Mon, 25 May 2020 19:37:52 +0000 (UTC)
 Received: from fuller.cnet (ovpn-116-16.gru2.redhat.com [10.97.116.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A93375C1BB;
-        Mon, 25 May 2020 19:37:49 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C0AB119D7E;
+        Mon, 25 May 2020 19:37:51 +0000 (UTC)
 Received: by fuller.cnet (Postfix, from userid 1000)
-        id E51DA416CE4A; Mon, 25 May 2020 16:21:23 -0300 (-03)
-Date:   Mon, 25 May 2020 16:21:23 -0300
+        id 6A1DE416CE4B; Mon, 25 May 2020 16:22:39 -0300 (-03)
+Date:   Mon, 25 May 2020 16:22:39 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     Xu Yilun <yilun.xu@intel.com>
 Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org, trix@redhat.com, bhu@redhat.com,
         Luwei Kang <luwei.kang@intel.com>, Wu Hao <hao.wu@intel.com>
-Subject: Re: [PATCH v5 2/7] fpga: dfl: pci: add irq info for feature devices
- enumeration
-Message-ID: <20200525192123.GB22266@fuller.cnet>
+Subject: Re: [PATCH v5 3/7] fpga: dfl: introduce interrupt trigger setting API
+Message-ID: <20200525192239.GC22266@fuller.cnet>
 References: <1587370303-25568-1-git-send-email-yilun.xu@intel.com>
- <1587370303-25568-3-git-send-email-yilun.xu@intel.com>
+ <1587370303-25568-4-git-send-email-yilun.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1587370303-25568-3-git-send-email-yilun.xu@intel.com>
+In-Reply-To: <1587370303-25568-4-git-send-email-yilun.xu@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Apr 20, 2020 at 04:11:38PM +0800, Xu Yilun wrote:
-> Some DFL FPGA PCIe cards (e.g. Intel FPGA Programmable Acceleration
-> Card) support MSI-X based interrupts. This patch allows PCIe driver
-> to prepare and pass interrupt resources to DFL via enumeration API.
-> These interrupt resources could then be assigned to actual features
-> which use them.
+On Mon, Apr 20, 2020 at 04:11:39PM +0800, Xu Yilun wrote:
+> FPGA user applications may be interested in interrupts generated by
+> DFL features. For example, users can implement their own FPGA
+> logics with interrupts enabled in AFU (Accelerated Function Unit,
+> dynamic region of DFL based FPGA). So user applications need to be
+> notified to handle these interrupts.
+> 
+> In order to allow userspace applications to monitor interrupts,
+> driver requires userspace to provide eventfds as interrupt
+> notification channels. Applications then poll/select on the eventfds
+> to get notified.
+> 
+> This patch introduces a generic helper functions to do eventfds binding
+> with given interrupts.
+> 
+> Sub feature drivers are expected to use XXX_GET_IRQ_NUM to query irq
+> info, and XXX_SET_IRQ to set eventfds for interrupts. This patch also
+> introduces helper functions for these 2 ioctls.
 > 
 > Signed-off-by: Luwei Kang <luwei.kang@intel.com>
 > Signed-off-by: Wu Hao <hao.wu@intel.com>
 > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 > Acked-by: Wu Hao <hao.wu@intel.com>
 > ----
-> v2: put irq resources init code inside cce_enumerate_feature_dev()
->     Some minor changes for Hao's comments.
-> v3: Some minor fix for Hao's comments for v2.
-> v4: Some minor fix for Hao's comments for v3.
-> v5: No change.
+> v2: use unsigned int instead of int for irq array indexes in
+>     dfl_fpga_set_irq_triggers()
+>     Improves comments for NULL fds param in dfl_fpga_set_irq_triggers()
+> v3: Improve comments of dfl_fpga_set_irq_triggers()
+>     refines code for dfl_fpga_set_irq_triggers, delete local variable j
+> v4: Introduce 2 helper functions to help handle the XXX_GET_IRQ_NUM &
+>     XXX_SET_IRQ ioctls for sub feature drivers.
+> v5: Some minor fix for Hao's comments
 > ---
->  drivers/fpga/dfl-pci.c | 80 ++++++++++++++++++++++++++++++++++++++++++++------
->  1 file changed, 71 insertions(+), 9 deletions(-)
+>  drivers/fpga/dfl.c            | 156 ++++++++++++++++++++++++++++++++++++++++++
+>  drivers/fpga/dfl.h            |  17 +++++
+>  include/uapi/linux/fpga-dfl.h |  13 ++++
+>  3 files changed, 186 insertions(+)
 > 
-> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-> index a78c409..2ff1274 100644
-> --- a/drivers/fpga/dfl-pci.c
-> +++ b/drivers/fpga/dfl-pci.c
-> @@ -39,6 +39,27 @@ static void __iomem *cci_pci_ioremap_bar(struct pci_dev *pcidev, int bar)
->  	return pcim_iomap_table(pcidev)[bar];
->  }
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index b49fbed..208d8f0 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -10,7 +10,9 @@
+>   *   Wu Hao <hao.wu@intel.com>
+>   *   Xiao Guangrong <guangrong.xiao@linux.intel.com>
+>   */
+> +#include <linux/fpga-dfl.h>
+>  #include <linux/module.h>
+> +#include <linux/uaccess.h>
 >  
-> +static int cci_pci_alloc_irq(struct pci_dev *pcidev)
+>  #include "dfl.h"
+>  
+> @@ -534,6 +536,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
+>  		unsigned int i;
+>  
+>  		/* save resource information for each feature */
+> +		feature->dev = fdev;
+>  		feature->id = finfo->fid;
+>  		feature->resource_index = index;
+>  		feature->ioaddr = finfo->ioaddr;
+> @@ -1395,6 +1398,159 @@ int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vfs)
+>  }
+>  EXPORT_SYMBOL_GPL(dfl_fpga_cdev_config_ports_vf);
+>  
+> +static irqreturn_t dfl_irq_handler(int irq, void *arg)
 > +{
-> +	int ret, nvec = pci_msix_vec_count(pcidev);
+> +	struct eventfd_ctx *trigger = arg;
 > +
-> +	if (nvec <= 0) {
-> +		dev_dbg(&pcidev->dev, "fpga interrupt not supported\n");
-> +		return 0;
+> +	eventfd_signal(trigger, 1);
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int do_set_irq_trigger(struct dfl_feature *feature, unsigned int idx,
+> +			      int fd)
+> +{
+> +	struct platform_device *pdev = feature->dev;
+> +	struct eventfd_ctx *trigger;
+> +	int irq, ret;
+> +
+> +	if (idx >= feature->nr_irqs)
+> +		return -EINVAL;
+> +
+> +	irq = feature->irq_ctx[idx].irq;
+> +
+> +	if (feature->irq_ctx[idx].trigger) {
+> +		free_irq(irq, feature->irq_ctx[idx].trigger);
+> +		kfree(feature->irq_ctx[idx].name);
+> +		eventfd_ctx_put(feature->irq_ctx[idx].trigger);
+> +		feature->irq_ctx[idx].trigger = NULL;
 > +	}
 > +
-> +	ret = pci_alloc_irq_vectors(pcidev, nvec, nvec, PCI_IRQ_MSIX);
-> +	if (ret < 0)
+> +	if (fd < 0)
+> +		return 0;
+> +
+> +	feature->irq_ctx[idx].name =
+> +		kasprintf(GFP_KERNEL, "fpga-irq[%u](%s-%llx)", idx,
+> +			  dev_name(&pdev->dev),
+> +			  (unsigned long long)feature->id);
+> +	if (!feature->irq_ctx[idx].name)
+> +		return -ENOMEM;
+> +
+> +	trigger = eventfd_ctx_fdget(fd);
+> +	if (IS_ERR(trigger)) {
+> +		ret = PTR_ERR(trigger);
+> +		goto free_name;
+> +	}
+> +
+> +	ret = request_irq(irq, dfl_irq_handler, 0,
+> +			  feature->irq_ctx[idx].name, trigger);
+> +	if (!ret) {
+> +		feature->irq_ctx[idx].trigger = trigger;
 > +		return ret;
+> +	}
 > +
-> +	return nvec;
+> +	eventfd_ctx_put(trigger);
+> +free_name:
+> +	kfree(feature->irq_ctx[idx].name);
+> +
+> +	return ret;
 > +}
 > +
-> +static void cci_pci_free_irq(struct pci_dev *pcidev)
-> +{
-> +	pci_free_irq_vectors(pcidev);
-> +}
-> +
->  /* PCI Device ID */
->  #define PCIE_DEVICE_ID_PF_INT_5_X	0xBCBD
->  #define PCIE_DEVICE_ID_PF_INT_6_X	0xBCC0
-> @@ -78,17 +99,38 @@ static void cci_remove_feature_devs(struct pci_dev *pcidev)
->  
->  	/* remove all children feature devices */
->  	dfl_fpga_feature_devs_remove(drvdata->cdev);
-> +	cci_pci_free_irq(pcidev);
-> +}
-> +
-> +static int *cci_pci_create_irq_table(struct pci_dev *pcidev, unsigned int nvec)
+> +/**
+> + * dfl_fpga_set_irq_triggers - set eventfd triggers for dfl feature interrupts
+> + *
+> + * @feature: dfl sub feature.
+> + * @start: start of irq index in this dfl sub feature.
+> + * @count: number of irqs.
+> + * @fds: eventfds to bind with irqs. unbind related irq if fds[n] is negative.
+> + *	 unbind "count" specified number of irqs if fds ptr is NULL.
+> + *
+> + * Bind given eventfds with irqs in this dfl sub feature. Unbind related irq if
+> + * fds[n] is negative. Unbind "count" specified number of irqs if fds ptr is
+> + * NULL.
+> + *
+> + * Return: 0 on success, negative error code otherwise.
+> + */
+> +int dfl_fpga_set_irq_triggers(struct dfl_feature *feature, unsigned int start,
+> +			      unsigned int count, int32_t *fds)
 > +{
 > +	unsigned int i;
-> +	int *table;
+> +	int ret = 0;
 > +
-> +	table = kcalloc(nvec, sizeof(int), GFP_KERNEL);
-> +	if (table) {
-> +		for (i = 0; i < nvec; i++)
-> +			table[i] = pci_irq_vector(pcidev, i);
-> +	}
+> +	if (start + count < start || start + count > feature->nr_irqs)
+> +		return -EINVAL;
 > +
-> +	return table;
-> +}
+> +	for (i = 0; i < count; i++) {
+> +		int fd = fds ? fds[i] : -1;
 > +
-> +static void cci_pci_free_irq_table(int *table)
-> +{
-> +	kfree(table);
->  }
->  
->  /* enumerate feature devices under pci device */
->  static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
->  {
->  	struct cci_drvdata *drvdata = pci_get_drvdata(pcidev);
-> +	int port_num, bar, i, nvec, ret = 0;
->  	struct dfl_fpga_enum_info *info;
->  	struct dfl_fpga_cdev *cdev;
->  	resource_size_t start, len;
-> -	int port_num, bar, i, ret = 0;
->  	void __iomem *base;
-> +	int *irq_table;
->  	u32 offset;
->  	u64 v;
->  
-> @@ -97,11 +139,30 @@ static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
->  	if (!info)
->  		return -ENOMEM;
->  
-> +	/* add irq info for enumeration if the device support irq */
-> +	nvec = cci_pci_alloc_irq(pcidev);
-> +	if (nvec < 0) {
-> +		dev_err(&pcidev->dev, "Fail to alloc irq %d.\n", nvec);
-> +		ret = nvec;
-> +		goto enum_info_free_exit;
-> +	} else if (nvec) {
-> +		irq_table = cci_pci_create_irq_table(pcidev, nvec);
-> +		if (!irq_table) {
-> +			ret = -ENOMEM;
-> +			goto irq_free_exit;
+> +		ret = do_set_irq_trigger(feature, start + i, fd);
+> +		if (ret) {
+> +			while (i--)
+> +				do_set_irq_trigger(feature, start + i, -1);
+> +			break;
 > +		}
-> +
-> +		ret = dfl_fpga_enum_info_add_irq(info, nvec, irq_table);
-> +		cci_pci_free_irq_table(irq_table);
-> +		if (ret)
-> +			goto irq_free_exit;
 > +	}
 > +
->  	/* start to find Device Feature List from Bar 0 */
->  	base = cci_pci_ioremap_bar(pcidev, 0);
->  	if (!base) {
->  		ret = -ENOMEM;
-> -		goto enum_info_free_exit;
-> +		goto irq_free_exit;
->  	}
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(dfl_fpga_set_irq_triggers);
+> +
+> +/**
+> + * dfl_feature_ioctl_get_num_irqs - dfl feature _GET_IRQ_NUM ioctl interface.
+> + * @pdev: the feature device which has the sub feature
+> + * @feature: the dfl sub feature
+> + * @arg: ioctl argument
+> + *
+> + * Return: 0 on success, negative error code otherwise.
+> + */
+> +long dfl_feature_ioctl_get_num_irqs(struct platform_device *pdev,
+> +				    struct dfl_feature *feature,
+> +				    unsigned long arg)
+> +{
+> +	return put_user(feature->nr_irqs, (__u32 __user *)arg);
+> +}
+> +EXPORT_SYMBOL_GPL(dfl_feature_ioctl_get_num_irqs);
+> +
+> +/**
+> + * dfl_feature_ioctl_set_irq - dfl feature _SET_IRQ ioctl interface.
+> + * @pdev: the feature device which has the sub feature
+> + * @feature: the dfl sub feature
+> + * @arg: ioctl argument
+> + *
+> + * Return: 0 on success, negative error code otherwise.
+> + */
+> +long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
+> +			       struct dfl_feature *feature,
+> +			       unsigned long arg)
+> +{
+> +	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
+> +	struct dfl_fpga_irq_set hdr;
+> +	s32 *fds;
+> +	long ret;
+> +
+> +	if (!feature->nr_irqs)
+> +		return -ENOENT;
+> +
+> +	if (copy_from_user(&hdr, (void __user *)arg, sizeof(hdr)))
+> +		return -EFAULT;
+> +
+> +	if (!hdr.count || (hdr.start + hdr.count > feature->nr_irqs) ||
+> +	    (hdr.start + hdr.count < hdr.start))
+> +		return -EINVAL;
+> +
+> +	fds = memdup_user((void __user *)(arg + sizeof(hdr)),
+> +			  hdr.count * sizeof(s32));
+> +	if (IS_ERR(fds))
+> +		return PTR_ERR(fds);
+> +
+> +	mutex_lock(&pdata->lock);
+> +	ret = dfl_fpga_set_irq_triggers(feature, hdr.start, hdr.count, fds);
+> +	mutex_unlock(&pdata->lock);
+> +
+> +	kfree(fds);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(dfl_feature_ioctl_set_irq);
+> +
+>  static void __exit dfl_fpga_exit(void)
+>  {
+>  	dfl_chardev_uinit();
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 4bc165f..f7a8c59 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -17,7 +17,9 @@
+>  #include <linux/bitfield.h>
+>  #include <linux/cdev.h>
+>  #include <linux/delay.h>
+> +#include <linux/eventfd.h>
+>  #include <linux/fs.h>
+> +#include <linux/interrupt.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/io-64-nonatomic-lo-hi.h>
+>  #include <linux/platform_device.h>
+> @@ -213,14 +215,19 @@ struct dfl_feature_driver {
+>   * struct dfl_feature_irq_ctx - dfl private feature interrupt context
+>   *
+>   * @irq: Linux IRQ number of this interrupt.
+> + * @trigger: eventfd context to signal when interrupt happens.
+> + * @name: irq name needed when requesting irq.
+>   */
+>  struct dfl_feature_irq_ctx {
+>  	int irq;
+> +	struct eventfd_ctx *trigger;
+> +	char *name;
+>  };
 >  
->  	/*
-> @@ -154,7 +215,7 @@ static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
->  		dfl_fpga_enum_info_add_dfl(info, start, len, base);
->  	} else {
->  		ret = -ENODEV;
-> -		goto enum_info_free_exit;
-> +		goto irq_free_exit;
->  	}
+>  /**
+>   * struct dfl_feature - sub feature of the feature devices
+>   *
+> + * @dev: ptr to pdev of the feature device which has the sub feature.
+>   * @id: sub feature id.
+>   * @resource_index: each sub feature has one mmio resource for its registers.
+>   *		    this index is used to find its mmio resource from the
+> @@ -231,6 +238,7 @@ struct dfl_feature_irq_ctx {
+>   * @ops: ops of this sub feature.
+>   */
+>  struct dfl_feature {
+> +	struct platform_device *dev;
+>  	u64 id;
+>  	int resource_index;
+>  	void __iomem *ioaddr;
+> @@ -506,4 +514,13 @@ int dfl_fpga_cdev_release_port(struct dfl_fpga_cdev *cdev, int port_id);
+>  int dfl_fpga_cdev_assign_port(struct dfl_fpga_cdev *cdev, int port_id);
+>  void dfl_fpga_cdev_config_ports_pf(struct dfl_fpga_cdev *cdev);
+>  int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vf);
+> +int dfl_fpga_set_irq_triggers(struct dfl_feature *feature, unsigned int start,
+> +			      unsigned int count, int32_t *fds);
+> +long dfl_feature_ioctl_get_num_irqs(struct platform_device *pdev,
+> +				    struct dfl_feature *feature,
+> +				    unsigned long arg);
+> +long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
+> +			       struct dfl_feature *feature,
+> +			       unsigned long arg);
+> +
+>  #endif /* __FPGA_DFL_H */
+> diff --git a/include/uapi/linux/fpga-dfl.h b/include/uapi/linux/fpga-dfl.h
+> index ec70a0746..7331350 100644
+> --- a/include/uapi/linux/fpga-dfl.h
+> +++ b/include/uapi/linux/fpga-dfl.h
+> @@ -151,6 +151,19 @@ struct dfl_fpga_port_dma_unmap {
 >  
->  	/* start enumeration with prepared enumeration information */
-> @@ -162,11 +223,14 @@ static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
->  	if (IS_ERR(cdev)) {
->  		dev_err(&pcidev->dev, "Enumeration failure\n");
->  		ret = PTR_ERR(cdev);
-> -		goto enum_info_free_exit;
-> +		goto irq_free_exit;
->  	}
+>  #define DFL_FPGA_PORT_DMA_UNMAP		_IO(DFL_FPGA_MAGIC, DFL_PORT_BASE + 4)
 >  
->  	drvdata->cdev = cdev;
+> +/**
+> + * struct dfl_fpga_irq_set - the argument for DFL_FPGA_XXX_SET_IRQ ioctl.
+> + *
+> + * @start: Index of the first irq.
+> + * @count: The number of eventfd handler.
+> + * @evtfds: Eventfd handlers.
+> + */
+> +struct dfl_fpga_irq_set {
+> +	__u32 start;
+> +	__u32 count;
+> +	__s32 evtfds[];
+> +};
+> +
+>  /* IOCTLs for FME file descriptor */
 >  
-> +irq_free_exit:
-> +	if (ret)
-> +		cci_pci_free_irq(pcidev);
->  enum_info_free_exit:
->  	dfl_fpga_enum_info_free(info);
->  
-> @@ -211,12 +275,10 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
->  	}
->  
->  	ret = cci_enumerate_feature_devs(pcidev);
-> -	if (ret) {
-> -		dev_err(&pcidev->dev, "enumeration failure %d.\n", ret);
-> -		goto disable_error_report_exit;
-> -	}
-> +	if (!ret)
-> +		return ret;
->  
-> -	return ret;
-> +	dev_err(&pcidev->dev, "enumeration failure %d.\n", ret);
->  
->  disable_error_report_exit:
->  	pci_disable_pcie_error_reporting(pcidev);
+>  /**
 > -- 
 > 2.7.4
 
