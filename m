@@ -2,178 +2,155 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3847F1E9A88
-	for <lists+linux-fpga@lfdr.de>; Sun, 31 May 2020 23:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815CF1EA5D5
+	for <lists+linux-fpga@lfdr.de>; Mon,  1 Jun 2020 16:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728255AbgEaV1w (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 31 May 2020 17:27:52 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:35920 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727000AbgEaV1w (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 31 May 2020 17:27:52 -0400
-Received: by mail-pl1-f194.google.com with SMTP id bg4so3434805plb.3;
-        Sun, 31 May 2020 14:27:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hSOr62Pti0vEw1YzTDDTts/kxJMfS9EuWHitDhWO+T0=;
-        b=NIJrmWaSA9wWYa888tSjzvI9B3GQWQggKavvU7A+eS63tE8gcNilt0LzE256qDluwc
-         +VozLjULmYs8gREP0Cn1fB0nzeCUtHnsszAaSLpBQ00PmJfrPlklkXP3apya98uhixAG
-         GupZMy9RS0uY2sjgPZy/L6pAv811sET+b2eVLr42eGmDIQGFZVsFZFsN+GbPChA/p51e
-         9l6CyKWv0x8Iui1S7cS/a2hHGoeFqjJEvccs3YS8Yfv4rhzek4c7yeKxNgQTRDF1qOkf
-         nK3LMxd4pEBIQF1v302EbXCbpy/jKvDYEwwO49HqThUTVyKiX+RYAWoSiZtk6Lrmzal1
-         RO1A==
-X-Gm-Message-State: AOAM530SZdFHnH0kbTHlHg5ri1GtvnZNM6UBP6777G9K40uCvUZNHsPd
-        cyOHUoxPVcVoPb7NXhrNvW8=
-X-Google-Smtp-Source: ABdhPJy2uOew4a9wWNqGNAMGAoog2/HwHEsbhyxDssTfKTnbTyqc50Bysae+22gLDC/88EjnhDP/Ag==
-X-Received: by 2002:a17:902:b484:: with SMTP id y4mr17813090plr.21.1590960471357;
-        Sun, 31 May 2020 14:27:51 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id q185sm12360634pfb.82.2020.05.31.14.27.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 May 2020 14:27:50 -0700 (PDT)
-Date:   Sun, 31 May 2020 14:27:49 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     "Wu, Hao" <hao.wu@intel.com>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>, Moritz Fischer <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
-Subject: Re: [PATCH v3] fpga: dfl: afu: convert get_user_pages() -->
- pin_user_pages()
-Message-ID: <20200531212749.GA7770@epycbox.lan>
-References: <20200525221754.433023-1-jhubbard@nvidia.com>
- <DM6PR11MB3819416F353D38A57131F0A385B10@DM6PR11MB3819.namprd11.prod.outlook.com>
+        id S1727900AbgFAO3D (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 1 Jun 2020 10:29:03 -0400
+Received: from mga03.intel.com ([134.134.136.65]:62426 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726232AbgFAO3C (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 1 Jun 2020 10:29:02 -0400
+IronPort-SDR: eDnQCW1ZJPylzRy/PZuasH8kUYZ2RezGGxuekTl02sUWtosyzedY+VF2cH6JCipIFBr1YxKeJQ
+ owslxdDmX2Yw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2020 07:29:02 -0700
+IronPort-SDR: m/qf58auNm/mbSFh5gqhgm3GvgebuupukiYVAL7YLqPllovK0QNpUp2ND0KOmQlCX5S2vV0QsF
+ fpToKSsG/JHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,461,1583222400"; 
+   d="scan'208";a="268336293"
+Received: from marshy.an.intel.com (HELO [10.122.105.159]) ([10.122.105.159])
+  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2020 07:29:01 -0700
+Subject: Re: [PATCHv2] fpga: stratix10-soc: remove the pre-set reconfiguration
+ condition
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dinguyen@kernel.org, Richard Gong <richard.gong@intel.com>
+References: <1589553303-7341-1-git-send-email-richard.gong@linux.intel.com>
+ <1d9b21df-7421-b25e-5139-f297e24d99d4@linux.intel.com>
+ <20200531194927.GA1622@epycbox.lan>
+From:   Richard Gong <richard.gong@linux.intel.com>
+Message-ID: <de692e12-5f50-8235-5af9-2d3f5e659ddb@linux.intel.com>
+Date:   Mon, 1 Jun 2020 09:44:47 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB3819416F353D38A57131F0A385B10@DM6PR11MB3819.namprd11.prod.outlook.com>
+In-Reply-To: <20200531194927.GA1622@epycbox.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, May 27, 2020 at 12:10:21AM +0000, Wu, Hao wrote:
-> > -----Original Message-----
-> > From: John Hubbard <jhubbard@nvidia.com>
-> > Sent: Tuesday, May 26, 2020 6:18 AM
-> > To: LKML <linux-kernel@vger.kernel.org>
-> > Cc: John Hubbard <jhubbard@nvidia.com>; Xu, Yilun <yilun.xu@intel.com>;
-> > Wu, Hao <hao.wu@intel.com>; Moritz Fischer <mdf@kernel.org>; linux-
-> > fpga@vger.kernel.org
-> > Subject: [PATCH v3] fpga: dfl: afu: convert get_user_pages() -->
-> > pin_user_pages()
-> > 
-> > This code was using get_user_pages_fast(), in a "Case 2" scenario
-> > (DMA/RDMA), using the categorization from [1]. That means that it's
-> > time to convert the get_user_pages_fast() + put_page() calls to
-> > pin_user_pages_fast() + unpin_user_pages() calls.
-> > 
-> > There is some helpful background in [2]: basically, this is a small
-> > part of fixing a long-standing disconnect between pinning pages, and
-> > file systems' use of those pages.
-> > 
-> > [1] Documentation/core-api/pin_user_pages.rst
-> > 
-> > [2] "Explicit pinning of user-space pages":
-> >     https://lwn.net/Articles/807108/
-> > 
-> > Cc: Xu Yilun <yilun.xu@intel.com>
-> > Cc: Wu Hao <hao.wu@intel.com>
-> > Cc: Moritz Fischer <mdf@kernel.org>
-> > Cc: linux-fpga@vger.kernel.org
-> > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> > ---
-> > 
-> > Hi,
-> > 
-> > This is the same logical change as in v2, but it is applied to
-> > char-misc-next, in order to avoid a merge problem with Souptick's
-> > commit c9d7e3da1f3c ("fpga: dfl: afu: Corrected error handling levels
-> > <Souptick Joarder>")
-> 
-> Thanks a lot! 
-> 
-> Acked-by: Wu Hao <hao.wu@intel.com>
-> 
-> Thanks
-> Hao
-> 
-> > 
-> > thanks,
-> > John Hubbard
-> > NVIDIA
-> > 
-> > 
-> >  drivers/fpga/dfl-afu-dma-region.c | 19 +++++--------------
-> >  1 file changed, 5 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-
-> > region.c
-> > index 5942343a5d6e..0b817b722920 100644
-> > --- a/drivers/fpga/dfl-afu-dma-region.c
-> > +++ b/drivers/fpga/dfl-afu-dma-region.c
-> > @@ -16,15 +16,6 @@
-> > 
-> >  #include "dfl-afu.h"
-> > 
-> > -static void put_all_pages(struct page **pages, int npages)
-> > -{
-> > -	int i;
-> > -
-> > -	for (i = 0; i < npages; i++)
-> > -		if (pages[i])
-> > -			put_page(pages[i]);
-> > -}
-> > -
-> >  void afu_dma_region_init(struct dfl_feature_platform_data *pdata)
-> >  {
-> >  	struct dfl_afu *afu = dfl_fpga_pdata_get_private(pdata);
-> > @@ -57,22 +48,22 @@ static int afu_dma_pin_pages(struct
-> > dfl_feature_platform_data *pdata,
-> >  		goto unlock_vm;
-> >  	}
-> > 
-> > -	pinned = get_user_pages_fast(region->user_addr, npages,
-> > FOLL_WRITE,
-> > +	pinned = pin_user_pages_fast(region->user_addr, npages,
-> > FOLL_WRITE,
-> >  				     region->pages);
-> >  	if (pinned < 0) {
-> >  		ret = pinned;
-> >  		goto free_pages;
-> >  	} else if (pinned != npages) {
-> >  		ret = -EFAULT;
-> > -		goto put_pages;
-> > +		goto unpin_pages;
-> >  	}
-> > 
-> >  	dev_dbg(dev, "%d pages pinned\n", pinned);
-> > 
-> >  	return 0;
-> > 
-> > -put_pages:
-> > -	put_all_pages(region->pages, pinned);
-> > +unpin_pages:
-> > +	unpin_user_pages(region->pages, pinned);
-> >  free_pages:
-> >  	kfree(region->pages);
-> >  unlock_vm:
-> > @@ -94,7 +85,7 @@ static void afu_dma_unpin_pages(struct
-> > dfl_feature_platform_data *pdata,
-> >  	long npages = region->length >> PAGE_SHIFT;
-> >  	struct device *dev = &pdata->dev->dev;
-> > 
-> > -	put_all_pages(region->pages, npages);
-> > +	unpin_user_pages(region->pages, npages);
-> >  	kfree(region->pages);
-> >  	account_locked_vm(current->mm, npages, false);
-> > 
-> > --
-> > 2.26.2
-> 
-Applied to for-next.
+Hi Moritz,
 
-Thanks,
-Moritz
+
+On 5/31/20 2:49 PM, Moritz Fischer wrote:
+> On Fri, May 29, 2020 at 08:15:15AM -0500, Richard Gong wrote:
+>> Hi Moritz,
+>>
+>> Sorry for asking.
+>>
+>> When you get chance, can you review my version 2 patch submitted on
+>> 05/15/20?
+>>
+>> Regards,
+>> Richard
+>>
+>> On 5/15/20 9:35 AM, richard.gong@linux.intel.com wrote:
+>>> From: Richard Gong <richard.gong@intel.com>
+>>>
+>>> The reconfiguration mode is pre-set by driver as the full reconfiguration.
+>>> As a result, user have to change code and recompile the drivers if he or
+>>> she wants to perform a partial reconfiguration. Removing the pre-set
+>>> reconfiguration condition so that user can select full or partial
+>>> reconfiguration via overlay device tree without recompiling the drivers.
+> 
+> Can you help me understand? See comment below, I'm not sure how this
+> change changes the behavior.
+
+Flag COMMAND_RECONFIG_FLAG_PARTIAL is defined in Intel service layer 
+driver (include/linux/firmware/intel/stratix10-svc-client.h) and the 
+default value is zero. It is obvious that COMMAND_RECONFIG_FLAG_PARTIAL 
+should be set to 1 to support partial reconfiguration.
+
+Please discard this FPGA patch, I will submit a patch on Intel service 
+layer driver.
+
+Regards,
+Richard
+
+>>>
+>>> Also add an error message if the configuration request is failure.
+>>>
+>>> Signed-off-by: Richard Gong <richard.gong@intel.com>
+>>> ---
+>>> v2: define and use constant values
+>>> ---
+>>>    drivers/fpga/stratix10-soc.c | 9 +++++++--
+>>>    1 file changed, 7 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+>>> index 44b7c56..4d52a80 100644
+>>> --- a/drivers/fpga/stratix10-soc.c
+>>> +++ b/drivers/fpga/stratix10-soc.c
+>>> @@ -14,9 +14,13 @@
+>>>    /*
+>>>     * FPGA programming requires a higher level of privilege (EL3), per the SoC
+>>>     * design.
+>>> + * SoC firmware supports full and partial reconfiguration.
+> Consider:
+> "The SoC firmware supports full and partial reconfiguration."
+>>>     */
+>>>    #define NUM_SVC_BUFS	4
+>>>    #define SVC_BUF_SIZE	SZ_512K
+>>> +#define FULL_RECONFIG_FLAG	0
+>>> +#define PARTIAL_RECONFIG_FLAG	1
+>>> +
+>>>    /* Indicates buffer is in use if set */
+>>>    #define SVC_BUF_LOCK	0
+>>> @@ -182,12 +186,12 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
+>>>    	uint i;
+>>>    	int ret;
+>>> -	ctype.flags = 0;
+>>>    	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
+>>>    		dev_dbg(dev, "Requesting partial reconfiguration.\n");
+>>> -		ctype.flags |= BIT(COMMAND_RECONFIG_FLAG_PARTIAL);
+>>> +		ctype.flags = PARTIAL_RECONFIG_FLAG;
+>>>    	} else {
+>>>    		dev_dbg(dev, "Requesting full reconfiguration.\n");
+>>> +		ctype.flags = FULL_RECONFIG_FLAG;
+>>>    	}
+> Am I missing something here: Doesn't this do the same as before?
+> 
+> Before:
+> If info->flags & FPGA_MGR_PARTIAL_RECONFIG -> ctype.flags = 0 |
+> BIT(COMMAND_RECONFIG_FLAG_PARTIAL) -> 1
+> and ctype->flags = FULL_RECONFIG -> 0 else.
+> 
+> Now:
+> If info->flags & FPGA_MGR_PARTIAL_RECONFIG -> ctype.flags = PARTIAL_RECONFIG_FLAG -> 1
+> ctype->flags = FULL_REECONFIG_FLAG -> 0 else.
+> 
+> Am I missing something here? If I don't set the flag for partial
+> reconfig I'd end up with full reconfiguration in both cases?
+> If I do set the flag, I get partial reconfiguration in both cases?
+> 
+>>>    	reinit_completion(&priv->status_return_completion);
+>>> @@ -210,6 +214,7 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
+>>>    	ret = 0;
+>>>    	if (!test_and_clear_bit(SVC_STATUS_OK, &priv->status)) {
+>>> +		dev_err(dev, "RECONFIG_REQUEST failed\n");
+>>>    		ret = -ETIMEDOUT;
+>>>    		goto init_done;
+>>>    	}
+>>>
+> 
+> Thanks,
+> Moritz
+> 
