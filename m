@@ -2,120 +2,77 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4271EE07C
-	for <lists+linux-fpga@lfdr.de>; Thu,  4 Jun 2020 11:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD201F08D7
+	for <lists+linux-fpga@lfdr.de>; Sat,  6 Jun 2020 23:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728178AbgFDJFX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 4 Jun 2020 05:05:23 -0400
-Received: from mga03.intel.com ([134.134.136.65]:17895 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726664AbgFDJFW (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 4 Jun 2020 05:05:22 -0400
-IronPort-SDR: BkG9audbXH0Q7wDp9MGIArZWnhRhMsVX2J7xviMCdUpeJjwl4b1QJC9QhQUZ+wo+AqOj+YGXxi
- 56+JQfpUaCfw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 02:05:20 -0700
-IronPort-SDR: lGWk+CCUCdOR70V4sjK0oQFGaloxTVzUi5nUADrIKYP+gEPX0IEIgsg1wyHyEChiyyFFEZLdIQ
- EVBzvpSpMRCw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,471,1583222400"; 
-   d="scan'208";a="294264505"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Jun 2020 02:05:17 -0700
-Date:   Thu, 4 Jun 2020 17:01:50 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     mfd@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, bhu@redhat.com, mtosatti@redhat.com,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v6 0/7] Add interrupt support to FPGA DFL drivers
-Message-ID: <20200604090150.GA15317@yilunxu-OptiPlex-7050>
-References: <1591260388-15128-1-git-send-email-yilun.xu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1591260388-15128-1-git-send-email-yilun.xu@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        id S1728352AbgFFVCx (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 6 Jun 2020 17:02:53 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:27552 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727994AbgFFVCw (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 6 Jun 2020 17:02:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591477371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=+D2GdxTX6b6hA1PHo0qrCmyz04ljiq/Wrl6lhJ+DuTY=;
+        b=FmvQs2qlTWRI+KURV8JS/qJbECne/0SQiapAZ5PFETOgxwFnGTs12etUVifxkXbK+PIsrI
+        fqy0wzzOe9JP+9eaiz3FNsIG9CCzLewJATEknclX+oBIJC5vICiflxQQK1hBp5SBggeIbs
+        pzIQkNjIt4s0J+CAboyMX2Ck3K1ko8o=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-297-0VwGttfrPgaPK4Ncq2I5SA-1; Sat, 06 Jun 2020 17:02:49 -0400
+X-MC-Unique: 0VwGttfrPgaPK4Ncq2I5SA-1
+Received: by mail-qv1-f72.google.com with SMTP id k35so10634385qva.18
+        for <linux-fpga@vger.kernel.org>; Sat, 06 Jun 2020 14:02:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+D2GdxTX6b6hA1PHo0qrCmyz04ljiq/Wrl6lhJ+DuTY=;
+        b=IOtOfdgZeuXvQqxVl5N5BZVgEP4tGXkfgFWI2XTkBiz9Ppbwgz8QUDoeTzBkeEvdj4
+         a+v6r6K6OyBWQNnS++vKJZJEBe+u/O3vy62HnCgDulI6T3dbpn1a7uDkOlWVojTVa/zb
+         F6LuMXImCJENLO+SPllbpub5VlROGb3Nzx5AupuNi2EJHjjE8BUDsBKk9xc6ctFPmbYB
+         0Ls9+y+W0AIc5mZ9NaDKxfpFib8Cl4WAP3wLlf8+hsDZQ02yGLchOzAEuwYwZiEJgi7w
+         ybSkMmiZ3QONB2qlLvH8f1vDrDkoSMA9cIfyDIhURpO+/l695hYKexPgyLzYxZR5+Guq
+         faaw==
+X-Gm-Message-State: AOAM5302UfTAxkSM482QKdFe9ElW+XsHh/W6pe7hH2GnIe1SuAKjZ9YY
+        htZrseWTmYxHGCRty9CyQdJ0YsxgfNMmPp4jQggik4ZpXk5rLludHaEX+PSXRBH+uCa51EdPNqR
+        nlum31VOrmqdrihoBwZC3ew==
+X-Received: by 2002:a05:620a:2158:: with SMTP id m24mr7472246qkm.310.1591477369486;
+        Sat, 06 Jun 2020 14:02:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw65D2mGOUIJtzIY7DgEMQIIow8keOsqE+PTJD5okzf/CUeT0JbIh3nJd4smxJsAU+Cg+2Sug==
+X-Received: by 2002:a05:620a:2158:: with SMTP id m24mr7472221qkm.310.1591477369152;
+        Sat, 06 Jun 2020 14:02:49 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id d14sm3025299qkg.25.2020.06.06.14.02.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Jun 2020 14:02:48 -0700 (PDT)
+From:   trix@redhat.com
+To:     mdf@kernel.org
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH 0/1] fpga: dfl: Fix dead store
+Date:   Sat,  6 Jun 2020 14:02:40 -0700
+Message-Id: <20200606210241.7459-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-I misspelled Moritz's mail address. I'll resent the patchset. Please
-ignore this set.
+From: Tom Rix <trix@redhat.com>
 
-Sorry for inconvenience.
+Repo linux-next
+Tag next-20200605
 
-On Thu, Jun 04, 2020 at 04:46:21PM +0800, Xu Yilun wrote:
-> This patchset add interrupt support to FPGA DFL drivers.
-> 
-> With these patches, DFL driver will parse and assign interrupt resources
-> for enumerated feature devices and their sub features.
-> 
-> This patchset also introduces a set of APIs for user to monitor DFL
-> interrupts. Three sub features (DFL FME error, DFL AFU error and user
-> interrupt) drivers now support these APIs.
-> 
-> Patch #1: DFL framework change. Accept interrupt info input from DFL bus
->           driver, and add interrupt parsing and assignment for feature
->           sub devices.
-> Patch #2: DFL pci driver change, add interrupt info on DFL enumeration.
-> Patch #3: DFL framework change. Add helper functions for feature sub
->           device drivers to handle interrupt and notify users.
-> Patch #4: Add interrupt support for AFU error reporting sub feature.
-> Patch #5: Add interrupt support for FME global error reporting sub
->           feature.
-> Patch #6: Add interrupt support for a new sub feature, to handle user
->           interrupts implemented in AFU.
-> Patch #7: Documentation for DFL interrupt handling.
-> 
-> Main changes from v1: 
->  - Early validating irq table for each feature in parse_feature_irq()
->    in Patch #1. 
->  - Changes IOCTL interfaces. use DFL_FPGA_FME/PORT_XXX_GET_IRQ_NUM
->    instead of DFL_FPGA_FME/PORT_XXX_GET_INFO, delete flag field for 
->    DFL_FPGA_FME/PORT_XXX_SET_IRQ param
-> 
-> Main changes from v2:
->  - put parse_feature_irqs() inside create_feature_instance().
->  - refines code for dfl_fpga_set_irq_triggers, delete local variable j.
->  - put_user() instead of copy_to_user() for DFL_FPGA_XXX_GET_IRQ_NUM IOCTL
-> 
-> Main changes from v3:
->  - rebased to 5.7-rc1.
->  - fail the dfl enumeration when irq parsing error happens.
->  - Add 2 helper functions in dfl.c to handle generic irq ioctls in feature
->    drivers.
-> 
-> Main changes from v4:
->  - Minor fixes for Hao's comments.
-> 
-> Main changes from v5:
->  - Remove unnecessary type casting in Patch #1 & #3.
->  - Minor fixes for Moritz's comments.
-> 
-> Xu Yilun (7):
->   fpga: dfl: parse interrupt info for feature devices on enumeration
->   fpga: dfl: pci: add irq info for feature devices enumeration
->   fpga: dfl: introduce interrupt trigger setting API
->   fpga: dfl: afu: add interrupt support for port error reporting
->   fpga: dfl: fme: add interrupt support for global error reporting
->   fpga: dfl: afu: add AFU interrupt support
->   Documentation: fpga: dfl: add descriptions for interrupt related
->     interfaces.
-> 
->  Documentation/fpga/dfl.rst    |  19 +++
->  drivers/fpga/dfl-afu-error.c  |  17 +++
->  drivers/fpga/dfl-afu-main.c   |  32 +++++
->  drivers/fpga/dfl-fme-error.c  |  18 +++
->  drivers/fpga/dfl-fme-main.c   |   6 +
->  drivers/fpga/dfl-pci.c        |  81 +++++++++--
->  drivers/fpga/dfl.c            | 308 ++++++++++++++++++++++++++++++++++++++++++
->  drivers/fpga/dfl.h            |  57 ++++++++
->  include/uapi/linux/fpga-dfl.h |  82 +++++++++++
->  9 files changed, 611 insertions(+), 9 deletions(-)
-> 
-> -- 
-> 2.7.4
+A couple of fixes for dead stores found by clang's sa tool scan-build
+
+Tom Rix (1):
+  Fix dead store
+
+ drivers/fpga/fpga-bridge.c | 6 ++----
+ drivers/fpga/fpga-mgr.c    | 4 +---
+ 2 files changed, 3 insertions(+), 7 deletions(-)
+
+-- 
+2.26.0
+
