@@ -2,58 +2,62 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD201F08D7
-	for <lists+linux-fpga@lfdr.de>; Sat,  6 Jun 2020 23:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464791F08D9
+	for <lists+linux-fpga@lfdr.de>; Sat,  6 Jun 2020 23:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728352AbgFFVCx (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 6 Jun 2020 17:02:53 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:27552 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727994AbgFFVCw (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 6 Jun 2020 17:02:52 -0400
+        id S1728686AbgFFVDC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 6 Jun 2020 17:03:02 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:27527 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728399AbgFFVC4 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 6 Jun 2020 17:02:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591477371;
+        s=mimecast20190719; t=1591477374;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=+D2GdxTX6b6hA1PHo0qrCmyz04ljiq/Wrl6lhJ+DuTY=;
-        b=FmvQs2qlTWRI+KURV8JS/qJbECne/0SQiapAZ5PFETOgxwFnGTs12etUVifxkXbK+PIsrI
-        fqy0wzzOe9JP+9eaiz3FNsIG9CCzLewJATEknclX+oBIJC5vICiflxQQK1hBp5SBggeIbs
-        pzIQkNjIt4s0J+CAboyMX2Ck3K1ko8o=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-297-0VwGttfrPgaPK4Ncq2I5SA-1; Sat, 06 Jun 2020 17:02:49 -0400
-X-MC-Unique: 0VwGttfrPgaPK4Ncq2I5SA-1
-Received: by mail-qv1-f72.google.com with SMTP id k35so10634385qva.18
-        for <linux-fpga@vger.kernel.org>; Sat, 06 Jun 2020 14:02:49 -0700 (PDT)
+         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
+        bh=EhPcZ8ZKsOGQJhM7Y4SG5KeIBZOSBJJrvqPyygwuVxE=;
+        b=XAyTi1vVUcIz9+0mn4VjYmYwKY8xXXJaOU0XA2yojAnzzd1Ra+HQMjQZhC6ao8fXj/vpzq
+        xhF8LgWnWO9pCdq+7qktFiKShBwbLA9Uccp0/W5pmDBZoeojeyDDp9RMBx9Kc5f+uPxiof
+        Qoohf4Dalg3M0p/QbBWfIMAC+k56YrE=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-412-JRCDn5xWNYKKV0E5o6pAvA-1; Sat, 06 Jun 2020 17:02:53 -0400
+X-MC-Unique: JRCDn5xWNYKKV0E5o6pAvA-1
+Received: by mail-qk1-f197.google.com with SMTP id x22so10781508qkj.6
+        for <linux-fpga@vger.kernel.org>; Sat, 06 Jun 2020 14:02:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+D2GdxTX6b6hA1PHo0qrCmyz04ljiq/Wrl6lhJ+DuTY=;
-        b=IOtOfdgZeuXvQqxVl5N5BZVgEP4tGXkfgFWI2XTkBiz9Ppbwgz8QUDoeTzBkeEvdj4
-         a+v6r6K6OyBWQNnS++vKJZJEBe+u/O3vy62HnCgDulI6T3dbpn1a7uDkOlWVojTVa/zb
-         F6LuMXImCJENLO+SPllbpub5VlROGb3Nzx5AupuNi2EJHjjE8BUDsBKk9xc6ctFPmbYB
-         0Ls9+y+W0AIc5mZ9NaDKxfpFib8Cl4WAP3wLlf8+hsDZQ02yGLchOzAEuwYwZiEJgi7w
-         ybSkMmiZ3QONB2qlLvH8f1vDrDkoSMA9cIfyDIhURpO+/l695hYKexPgyLzYxZR5+Guq
-         faaw==
-X-Gm-Message-State: AOAM5302UfTAxkSM482QKdFe9ElW+XsHh/W6pe7hH2GnIe1SuAKjZ9YY
-        htZrseWTmYxHGCRty9CyQdJ0YsxgfNMmPp4jQggik4ZpXk5rLludHaEX+PSXRBH+uCa51EdPNqR
-        nlum31VOrmqdrihoBwZC3ew==
-X-Received: by 2002:a05:620a:2158:: with SMTP id m24mr7472246qkm.310.1591477369486;
-        Sat, 06 Jun 2020 14:02:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw65D2mGOUIJtzIY7DgEMQIIow8keOsqE+PTJD5okzf/CUeT0JbIh3nJd4smxJsAU+Cg+2Sug==
-X-Received: by 2002:a05:620a:2158:: with SMTP id m24mr7472221qkm.310.1591477369152;
-        Sat, 06 Jun 2020 14:02:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=EhPcZ8ZKsOGQJhM7Y4SG5KeIBZOSBJJrvqPyygwuVxE=;
+        b=mmxVPjYfdGp0jfDKLm+kaUTC/1DeTcIW5Sc2gQLz4Hf43Glxir4mAJJ6EqROtvdepV
+         PLtYQIzJoVVQhlNifEqbx4owEYLwJ5nwgtC/yHZYRkOWeluCkxtKInDvLLNdAzv5DYMC
+         tDVmntKkLKSJ5tuDzNgg0n0AWLHVsHSyHbiLGJ3SAjO0lsm62SLXWbyPhgGCt5BgliX2
+         /DqOehtjRSd76cqpGsjpGTiY7dDfRG20vF3TAbQZIS0e/xzxj5Nr4JLhTrRtMPtAbibL
+         QCtiisElVB3pyg86nCLX64WOrUOyjKsL5rAGQPCGB9gLe/P/uAPYzLYBYibh3QFlU4vo
+         3aKQ==
+X-Gm-Message-State: AOAM533QxUd1JxZutZ3B/kuQ3BOg6cJltsPV7ycuNMyCjANon1NM7w7N
+        9BeYSwW0DDUEzesfVhsTWrYUtPTR6WjzApFh7nHjYdW9iDiAtAPGBcMqY2DRFOiJ9eQV2grn/Oo
+        XWgPhR2KxVyzyi/cWx8WxIA==
+X-Received: by 2002:a37:9586:: with SMTP id x128mr15600404qkd.312.1591477372798;
+        Sat, 06 Jun 2020 14:02:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyYQc7ymCPetr6UGIR95AVlYji722MSUFRWkqI3a0x/xyB9N/48Flho6ybhZRR4Y2xAEwQyIA==
+X-Received: by 2002:a37:9586:: with SMTP id x128mr15600393qkd.312.1591477372591;
+        Sat, 06 Jun 2020 14:02:52 -0700 (PDT)
 Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id d14sm3025299qkg.25.2020.06.06.14.02.46
+        by smtp.gmail.com with ESMTPSA id d14sm3025299qkg.25.2020.06.06.14.02.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Jun 2020 14:02:48 -0700 (PDT)
+        Sat, 06 Jun 2020 14:02:51 -0700 (PDT)
 From:   trix@redhat.com
 To:     mdf@kernel.org
 Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tom Rix <trix@redhat.com>
-Subject: [PATCH 0/1] fpga: dfl: Fix dead store
-Date:   Sat,  6 Jun 2020 14:02:40 -0700
-Message-Id: <20200606210241.7459-1-trix@redhat.com>
+Subject: [PATCH 1/1] fpga: dfl: Fix dead store
+Date:   Sat,  6 Jun 2020 14:02:41 -0700
+Message-Id: <20200606210241.7459-2-trix@redhat.com>
 X-Mailer: git-send-email 2.18.1
+In-Reply-To: <20200606210241.7459-1-trix@redhat.com>
+References: <20200606210241.7459-1-trix@redhat.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
@@ -61,18 +65,62 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Tom Rix <trix@redhat.com>
 
-Repo linux-next
-Tag next-20200605
+Using clang's scan-build/view this issue was flagged in fpga-mgr.c
 
-A couple of fixes for dead stores found by clang's sa tool scan-build
+  drivers/fpga/fpga-mgr.c:585:3: warning: Value stored to 'ret' is never read [deadcode.DeadStores]
+                  ret = id;
 
-Tom Rix (1):
-  Fix dead store
+A similar issue was flagged in fpga-bridge.
 
+So remove the unused stores.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
  drivers/fpga/fpga-bridge.c | 6 ++----
  drivers/fpga/fpga-mgr.c    | 4 +---
  2 files changed, 3 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+index 4bab9028940a..2deccacc3aa7 100644
+--- a/drivers/fpga/fpga-bridge.c
++++ b/drivers/fpga/fpga-bridge.c
+@@ -328,7 +328,7 @@ struct fpga_bridge *fpga_bridge_create(struct device *dev, const char *name,
+ 				       void *priv)
+ {
+ 	struct fpga_bridge *bridge;
+-	int id, ret = 0;
++	int id, ret;
+ 
+ 	if (!name || !strlen(name)) {
+ 		dev_err(dev, "Attempt to register with no name!\n");
+@@ -340,10 +340,8 @@ struct fpga_bridge *fpga_bridge_create(struct device *dev, const char *name,
+ 		return NULL;
+ 
+ 	id = ida_simple_get(&fpga_bridge_ida, 0, 0, GFP_KERNEL);
+-	if (id < 0) {
+-		ret = id;
++	if (id < 0)
+ 		goto error_kfree;
+-	}
+ 
+ 	mutex_init(&bridge->mutex);
+ 	INIT_LIST_HEAD(&bridge->node);
+diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+index e05104f5e40c..f38bab01432e 100644
+--- a/drivers/fpga/fpga-mgr.c
++++ b/drivers/fpga/fpga-mgr.c
+@@ -581,10 +581,8 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
+ 		return NULL;
+ 
+ 	id = ida_simple_get(&fpga_mgr_ida, 0, 0, GFP_KERNEL);
+-	if (id < 0) {
+-		ret = id;
++	if (id < 0)
+ 		goto error_kfree;
+-	}
+ 
+ 	mutex_init(&mgr->ref_mutex);
+ 
 -- 
 2.26.0
 
