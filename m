@@ -2,92 +2,79 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 345CA1F3EC9
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jun 2020 17:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4374C1F3FC7
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jun 2020 17:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730110AbgFIPBs (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 9 Jun 2020 11:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730639AbgFIPBl (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 9 Jun 2020 11:01:41 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F905C05BD1E
-        for <linux-fpga@vger.kernel.org>; Tue,  9 Jun 2020 08:01:38 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id 69so16849637otv.2
-        for <linux-fpga@vger.kernel.org>; Tue, 09 Jun 2020 08:01:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fV8ZFDB43FV3g5g5fZTxYLi7vsPxA13YSgKOxxB6Lc4=;
-        b=ifgMqLNaEDoJ3ggtZ+CDKXlxlAhzRY618v/+r51qXTg5XTFIpLHDYpOowMjKcjIxfH
-         TS9NlRSEADUBQ12AB25ifuTk2OIXnmtJ5PptilvJ0j8B/+B1Y69m5jA7/p0DkP1IjQ6+
-         yEOpkGL/mNoOp/IWAhjZxONzJuJU9Z3p8hbNg=
+        id S1730870AbgFIPsD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 9 Jun 2020 11:48:03 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44760 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730067AbgFIPsC (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 9 Jun 2020 11:48:02 -0400
+Received: by mail-pg1-f196.google.com with SMTP id r18so4204671pgk.11
+        for <linux-fpga@vger.kernel.org>; Tue, 09 Jun 2020 08:48:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fV8ZFDB43FV3g5g5fZTxYLi7vsPxA13YSgKOxxB6Lc4=;
-        b=BO8KvwcH9jkumLZEJSREoe1c/udpqvZcBIBJ7sFhlXGmqsWikRRv/aEeV43rWvjMGj
-         lyKTdjNUbx6A3uDeQXZq8YYgMP3yarcJA4MILQfbz7X+4+4YQGID26wnZWolRUiGL8Ne
-         AcdU7McP+zsUGflTC8cA+anX2Dz2s1M5MEWGcuXk5unaO2xjitFmER3mNzUdvHZC2pHr
-         H1s6C6pyl93CpprNlkNaTaGx/UfHMuVYwN+ksCWhAqm0XLZQnuP9J5g54jMR4qvCN/oA
-         2woBwEb+hLDxe8y2UdMiYYElQ9eO770m1sDVMQ3cZqVd0I+cqR4gvs1AgSWQzCBbwu3t
-         4Oig==
-X-Gm-Message-State: AOAM533kK91BduqCMyj+m4jyKEvbPRcRHHLu8sZXIcwr14B/1gXvLrxb
-        HOqkeYWjADgS7Du23S+5js1tJg==
-X-Google-Smtp-Source: ABdhPJxGmnoepX29AANMk4+Z5b3vk+XlqO9YIXrRdoke3DisNE70ra7JK0DqrOFn056B0XzmgUHgGQ==
-X-Received: by 2002:a9d:969:: with SMTP id 96mr15323599otp.319.1591714897141;
-        Tue, 09 Jun 2020 08:01:37 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id s124sm3209070oig.19.2020.06.09.08.01.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2020 08:01:36 -0700 (PDT)
-Subject: Re: [PATCH 1/1] selftests: fpga: dfl: A test for afu interrupt
- support
-To:     Tom Rix <trix@redhat.com>, Greg KH <gregkh@linuxfoundation.org>
-Cc:     stable <stable@vger.kernel.org>, linux-fpga@vger.kernel.org,
-        shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200609130208.27390-1-trix@redhat.com>
- <20200609130208.27390-2-trix@redhat.com> <20200609142007.GA831428@kroah.com>
- <d3d8e518-0760-8cbe-cf74-191f70329a46@redhat.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <340c25e4-579b-a06b-49ae-63937dc0fbf0@linuxfoundation.org>
-Date:   Tue, 9 Jun 2020 09:01:35 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=xkCzaihkRY4I2MM9xpjR+NNHS2QRjkGBcv6Fc7BR+mk=;
+        b=J/NQjTfQ+hJz+kan1WusDwQGF4jicWqwZQrun/IhVb1Xh4Xb+jF99JAtcMpXICRQhW
+         BWxFwneHQ6t0TNhXo4YxsdunFHTWKxdZ2gcOyKxXktkOiZeG0TZ4fT0MpAfDU39QgtsI
+         Bvj9VMgUo2NBqmvZfwqkQivEI+zUbX0N9ov6Etu7W/UOltWbWxolgbHGjq21tw46LxHs
+         8/HuX8TDPn5iTZMOP1q9o5acTne9cKpTE2dAxWn6/uVnLT+eI64x8ZZebBCOql4KryQ1
+         KjE9Lt1VliE+CT5LiLgIbLM/pVFuTsdlnFcpEfaB26EMkeNQyzEy8+3RB7Ub1x/LoNnX
+         yvMQ==
+X-Gm-Message-State: AOAM532CBVKJYxR+WvtuYfFfX16ufn7NgaQ/1X1MhKcX+RFrsMG0ldIK
+        0cXGYwd1++FQbR07pAy9Db8=
+X-Google-Smtp-Source: ABdhPJwx5Xe4zpzh3hoy1hBB76Go2w/M38QHk0fmejm/CSxgcDd5pbCaHKEKNsoid4/B7/46rDl4Uw==
+X-Received: by 2002:a63:7f09:: with SMTP id a9mr23243649pgd.400.1591717682272;
+        Tue, 09 Jun 2020 08:48:02 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id s21sm6213204pgg.8.2020.06.09.08.48.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2020 08:48:01 -0700 (PDT)
+Date:   Tue, 9 Jun 2020 08:48:00 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-fpga@vger.kernel.org, moritzf@google.com
+Subject: [GIT PULL] FPGA Manager (late) fixes for 5.8
+Message-ID: <20200609154800.GA16679@epycbox.lan>
 MIME-Version: 1.0
-In-Reply-To: <d3d8e518-0760-8cbe-cf74-191f70329a46@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 6/9/20 8:45 AM, Tom Rix wrote:
-> 
->> Why not use the ksft_* functions and frameworks to properly print out
->> the test status and results so that tools can correctly parse it?
->>
->> It's generally bad-form to make up your own format.
-> 
-> I used the the drivers/dma-buf test a basis example.  Can you point me at a better example ?
-> 
+The following changes since commit 3d77e6a8804abcc0504c904bd6e5cdf3a5cf8162:
 
-A few examples to choose from as a reference:
+  Linux 5.7 (2020-05-31 16:49:15 -0700)
 
-tools/testing/selftests/breakpoints
-tools/testing/selftests/timens
+are available in the Git repository at:
 
-Please reach out to me if you have any questions.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git tags/fpga-fixes-for-5.8
 
-thanks,
--- Shuah
+for you to fetch changes up to 6a47d6efc6931b02d10163de2fb85ec9953c4f5e:
 
+  fpga: zynqmp: fix modular build (2020-06-09 08:27:01 -0700)
+
+----------------------------------------------------------------
+FPGA Manager fixes for 5.8-rc1
+
+Here is one (late) fix for 5.8-rc1 merge window.
+
+Arnd's change addresses a missing build dependency.
+
+All patches have been reviewed on the mailing list, and have been in the
+last few linux-next releases (as part of my fixes branch) without issues.
+
+Signed-off-by: Moritz Fischer <mdf@kernel.org>
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      fpga: zynqmp: fix modular build
+
+ drivers/fpga/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
