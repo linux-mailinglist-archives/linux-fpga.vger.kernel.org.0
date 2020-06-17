@@ -2,87 +2,68 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 610C71FD852
-	for <lists+linux-fpga@lfdr.de>; Thu, 18 Jun 2020 00:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEBC1FD901
+	for <lists+linux-fpga@lfdr.de>; Thu, 18 Jun 2020 00:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726958AbgFQWFT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 17 Jun 2020 18:05:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50974 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726864AbgFQWFT (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 17 Jun 2020 18:05:19 -0400
-Received: from embeddedor (unknown [189.207.59.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B32CF206F7;
-        Wed, 17 Jun 2020 22:05:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592431519;
-        bh=cvtMTkB4hmn7ysFCDP83MIFxOHZl/oXXu23w2BuLqh4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IGma0ImoEm26f9+Bxg+i9NvHEA81DYTAje110vZX2rDU1u0AsyoPZnR2hGfNjpNKo
-         5+jySRj2JtrrddUpcyGVUbbuSSdGv1IRRSZBkn/R5E22r/NMEK0n4lG4D5n/sXSe0Q
-         nD0bcNrzuWzZ7GUjQKyWUdS18XVdwMeyUNnC4Oeo=
-Date:   Wed, 17 Jun 2020 17:10:39 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH][next] fpga: dfl: Use struct_size() in kzalloc()
-Message-ID: <20200617221039.GA21877@embeddedor>
+        id S1727053AbgFQWio (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 17 Jun 2020 18:38:44 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:42402 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726761AbgFQWin (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 17 Jun 2020 18:38:43 -0400
+Received: by mail-io1-f65.google.com with SMTP id x189so4838389iof.9;
+        Wed, 17 Jun 2020 15:38:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zvm6Wi/JhfHZije2TzVP/BE8Hn0bB8Py76ZIIBYPOgw=;
+        b=Si4UXLksSwbPfgm16FNIn1VFO4N614aZ8ylouk8VSjyI6F2wXll++8Dvkso6CuCcIs
+         tg1qXnBkeAyfHjBs3JiWsPLcmaS+2MGw+EffI/GRTjVbJOzPqAz0AB2jE3EhdwsQfJ0z
+         ABOwbsJ/Z7IsROCf68liwapOMKCCbbhz6cuRFjj4CRobNdkaW65Q1pH0C3ZaOT5RI7yP
+         lTIxHOh41pZ+IQAvXapGhQTLXlLJaG7x/xM+H6PFcXJV9sFGoi5iKiB153u4inlb5Hge
+         QcpL7565Uc+zAV2Qh42Huk/jO6I+s/CB7XicboI/KYF0HwUt/TNZ3FkFESdycupF9YlP
+         uZvA==
+X-Gm-Message-State: AOAM531sTlHEJxCyFVSXGFweJrfkXhaB5XHb1C9UO8NyYMX2dKtnlgZm
+        MuKB7NTN+/9iuOviDMs5RQ==
+X-Google-Smtp-Source: ABdhPJwRjmmjDo55yNTup3etyMo8kIw88xo+I0teA6HCDNX/YZbUsYSz1qb0GmfH4mDQpVpYEEtbLg==
+X-Received: by 2002:a02:29ca:: with SMTP id p193mr1530021jap.129.1592433522665;
+        Wed, 17 Jun 2020 15:38:42 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id t14sm488074ilp.73.2020.06.17.15.38.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 15:38:42 -0700 (PDT)
+Received: (nullmailer pid 2967167 invoked by uid 1000);
+        Wed, 17 Jun 2020 22:38:41 -0000
+Date:   Wed, 17 Jun 2020 16:38:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-fpga@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        linux-kernel@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Moritz Fischer <mdf@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: fpga: xilinx-slave-serial: valid for
+ the 7 Series too
+Message-ID: <20200617223841.GA2967136@bogus>
+References: <20200611211144.9421-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200611211144.9421-1-luca@lucaceresoli.net>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version
-in order to avoid any potential type mistakes. Also, remove unnecessary
-function dfl_feature_platform_data_size().
+On Thu, 11 Jun 2020 23:11:40 +0200, Luca Ceresoli wrote:
+> The Xilinx 7-series uses the same protocol, mention that.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  .../devicetree/bindings/fpga/xilinx-slave-serial.txt     | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
 
-This code was detected with the help of Coccinelle and, audited and
-fixed manually.
-
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/fpga/dfl.c | 3 +--
- drivers/fpga/dfl.h | 6 ------
- 2 files changed, 1 insertion(+), 8 deletions(-)
-
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index 990994874bf1..2dd13e036d45 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -487,8 +487,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
- 	 * it will be automatically freed by device's release() callback,
- 	 * platform_device_release().
- 	 */
--	pdata = kzalloc(dfl_feature_platform_data_size(binfo->feature_num),
--			GFP_KERNEL);
-+	pdata = kzalloc(struct_size(pdata, features, binfo->feature_num), GFP_KERNEL);
- 	if (!pdata)
- 		return -ENOMEM;
- 
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index 2f5d3052e36e..044b0e88e5a8 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -299,12 +299,6 @@ struct dfl_feature_ops {
- #define DFL_FPGA_FEATURE_DEV_FME		"dfl-fme"
- #define DFL_FPGA_FEATURE_DEV_PORT		"dfl-port"
- 
--static inline int dfl_feature_platform_data_size(const int num)
--{
--	return sizeof(struct dfl_feature_platform_data) +
--		num * sizeof(struct dfl_feature);
--}
--
- void dfl_fpga_dev_feature_uinit(struct platform_device *pdev);
- int dfl_fpga_dev_feature_init(struct platform_device *pdev,
- 			      struct dfl_feature_driver *feature_drvs);
--- 
-2.27.0
-
+Acked-by: Rob Herring <robh@kernel.org>
