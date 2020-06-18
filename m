@@ -2,39 +2,39 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA811FE232
-	for <lists+linux-fpga@lfdr.de>; Thu, 18 Jun 2020 04:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4E61FE448
+	for <lists+linux-fpga@lfdr.de>; Thu, 18 Jun 2020 04:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731223AbgFRBYa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 17 Jun 2020 21:24:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59066 "EHLO mail.kernel.org"
+        id S1730249AbgFRBUE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 17 Jun 2020 21:20:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52138 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731218AbgFRBY3 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:24:29 -0400
+        id S1730235AbgFRBUC (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:20:02 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B9D2A214DB;
-        Thu, 18 Jun 2020 01:24:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D2545221F9;
+        Thu, 18 Jun 2020 01:20:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443469;
-        bh=MVhU5zkhG5b/Q2B4cYtTgvolFxl8/j1TSsTffv+AOJw=;
+        s=default; t=1592443201;
+        bh=qtyltuemiJrZa14Mx2YGmVNcLZew22FaS3WdPlAAHf4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FQtvTkJTjkDTaLmqpo9nVBgH3F30D5szk9YpMLQev0xdWbfSqBizp75//lkWeSaVT
-         SwHjHFKt6PMR3POZ+tKlO8VqzIUp7BPe2CP8dDToaX85epuGWXJJhSeFDKTzdJAN+e
-         W1vWrMPsJGaaBjcyg35QDrOGbwKt7oMuvp49rJUk=
+        b=wU2SbNsVQ1nx/GNM0tcQpbk3WBR2lAlLxD3ZU7IJR8m3sUlJ2kZHyeSptB2hKI3ml
+         GY3voLEjQIAuJWR+Tevaxa0sQwEgdSxpbsl2/dfquSQkevDhWDnWSA2x4zpkEAUwJW
+         d7/GTrg3NtZz5WBmJmS9lJ2NXEnLMFvvg7gUo41s=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Souptick Joarder <jrdr.linux@gmail.com>, Wu Hao <hao.wu@intel.com>,
         Xu Yilun <yilun.xu@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-fpga@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 101/172] fpga: dfl: afu: Corrected error handling levels
-Date:   Wed, 17 Jun 2020 21:21:07 -0400
-Message-Id: <20200618012218.607130-101-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 160/266] fpga: dfl: afu: Corrected error handling levels
+Date:   Wed, 17 Jun 2020 21:14:45 -0400
+Message-Id: <20200618011631.604574-160-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
-References: <20200618012218.607130-1-sashal@kernel.org>
+In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
+References: <20200618011631.604574-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,10 +64,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
-index c9a613dc9eb7..e056965ef97b 100644
+index 62f924489db5..5942343a5d6e 100644
 --- a/drivers/fpga/dfl-afu-dma-region.c
 +++ b/drivers/fpga/dfl-afu-dma-region.c
-@@ -106,10 +106,10 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
+@@ -61,10 +61,10 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
  				     region->pages);
  	if (pinned < 0) {
  		ret = pinned;
