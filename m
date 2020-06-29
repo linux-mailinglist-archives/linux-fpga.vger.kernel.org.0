@@ -2,125 +2,72 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B689720D772
-	for <lists+linux-fpga@lfdr.de>; Mon, 29 Jun 2020 22:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E153E20D5FE
+	for <lists+linux-fpga@lfdr.de>; Mon, 29 Jun 2020 22:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732794AbgF2TaF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 29 Jun 2020 15:30:05 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:46609 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1732692AbgF2TaF (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 29 Jun 2020 15:30:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1593459003;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/rozIRZd2Z+z5ejQC/EdCJboYjDdy+vJEupYT4pSKo0=;
-        b=E4zY2/l8tSL/sUsqGHzCmUy2h9/YGRY360wGDOpUn6HEvdpEewVXksPYClYZeC+z5bYvOx
-        KYkEou1YIyBtPO93jyrDNQoGNI6g+bIweAIsqBipXtt47XEQXQuxiOloUVkIvD09ElKV59
-        Jss2CJnVuIq7K14PDhTrZUmrvQZVGZY=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-178-l5Wzzcl7OIa-t3xBiuXAMg-1; Mon, 29 Jun 2020 09:28:07 -0400
-X-MC-Unique: l5Wzzcl7OIa-t3xBiuXAMg-1
-Received: by mail-qv1-f72.google.com with SMTP id g17so10024285qvw.0
-        for <linux-fpga@vger.kernel.org>; Mon, 29 Jun 2020 06:28:07 -0700 (PDT)
+        id S1730992AbgF2TQw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 29 Jun 2020 15:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731878AbgF2TQC (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 29 Jun 2020 15:16:02 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2117C08C5EF
+        for <linux-fpga@vger.kernel.org>; Mon, 29 Jun 2020 12:16:01 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id 67so4234746pfg.5
+        for <linux-fpga@vger.kernel.org>; Mon, 29 Jun 2020 12:16:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=E57soH+fAZU9oM/uuDn4bCNx2wALmvA7rwFsDeo/VdmyR4hSt+vRDMPW0qpAcJ9V/h
+         UbYJ9fIR9BUAZrS+1TfrEzBoFSxbLFUBB/IIzj7rfy4Y1SyxPmM/cs9fEremwVWV5m5u
+         b9v38myIgTBJNjasjLIOUO/K2CJS7vPJsURIlWBEC7RA0ax+vZbkexDjvFbqaAUgNm/w
+         yj4NkgHNxXLdKOO4AZsIv5vnXx8YMl4s3e1fTXh2Hp6rhwVI9k4nzVvvlc/OSvXrfpbl
+         +6DOlsrKa8IKCRxKxdcbetpm2uz+ZUKJBnziwlMhGJ11qW6bGQPIDGjYXF06+gry04Zz
+         3NGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=/rozIRZd2Z+z5ejQC/EdCJboYjDdy+vJEupYT4pSKo0=;
-        b=DlT3P7a4wcBt/O2xIkhc5s5Z/OXwspurISv+AGrKqhCxFGAyF3zHfme9fDbcoaJ16d
-         tay7JDnrt7qyy15Z4VhLZ+L6E08SCpd7fJ41qw5uZAfm0gfQciKQXH2aQC3zRjYQ5quJ
-         ZF8CTFxNl33YadN2N3JrFj7XQ9NGHmV/+AzSNwfCNhWmxnjFUakrX2QJLrSc3GNSxSHI
-         PxcXQeXj7TFtYO7rhE4QlgPnYkT4QeIRgZmdHgvwa9PI0GlShtClDpswSwqiERn3ECtJ
-         ivs91wL2qgVm8RpIBajt10rj3KFsCMnJ1xnXD5PLFjkT2AKlBCasnTOrmpzuPfnWi4JL
-         V4VA==
-X-Gm-Message-State: AOAM531nZ9PaFpMYserRMUmAdyHJarus+rKWHjMgKyXQNCY+fbCE9KmD
-        XsLVIFdd9dHmWGIYRD34FL2zVRsiKyaYvMd227HQhVMZAdM6VEykkbS4FJ4Vltl+B1N5/rEj9K5
-        TVWViHLjzW4HZNOFseCuO9g==
-X-Received: by 2002:a0c:b246:: with SMTP id k6mr15065269qve.146.1593437287343;
-        Mon, 29 Jun 2020 06:28:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwms1o8tyqQwrkXCJ8cIREd5x9uNk+bPTzS0ou0s1jv5IQbRinAHtIoLnXqHLMHBn8uHQRMvg==
-X-Received: by 2002:a0c:b246:: with SMTP id k6mr15065252qve.146.1593437287140;
-        Mon, 29 Jun 2020 06:28:07 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id x13sm17008095qts.57.2020.06.29.06.28.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jun 2020 06:28:06 -0700 (PDT)
-Subject: Re: [PATCH] fpga: dfl: improve configuration of dfl pci devices
-To:     "Wu, Hao" <hao.wu@intel.com>, "Xu, Yilun" <yilun.xu@intel.com>
-Cc:     "mdf@kernel.org" <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
-References: <20200628151813.7679-1-trix@redhat.com>
- <20200629021924.GB2620@yilunxu-OptiPlex-7050>
- <DM6PR11MB38196ED29A3E0BBAD7B246C1856E0@DM6PR11MB3819.namprd11.prod.outlook.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <26b7c920-7b9f-b753-4a49-258e09b771fa@redhat.com>
-Date:   Mon, 29 Jun 2020 06:28:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=AK21zrCiEk5AGstMPTDfGt8zZUUm6N9pa+UmLy2hJHNX+rfg+0LiR8P3kZ79FdwJuE
+         iMLTB7VLX1+1h4BAgz/IzeL701R+d7LLPo6ZqG0RJV+NOD3ySoTAOBxT828iueVkWXyU
+         0TmwCEjkeCLLfMPbJ+LzCAu/i/YjXqKSCJNt5xa35D8MfO5FvFnuZhM78km4ljRflBYo
+         DEkMaWhORrHLXg4On9lXBlfkmltkvKNyv8vN70SZHbh58d3HtSyh09poV3+WRORsm3SC
+         ZLrOF8ey/SJxfs9KufpDTKwI+i3x4d71d89plsTRcrStHNuDnooDFKt/nnMS6a54zCif
+         v/OA==
+X-Gm-Message-State: AOAM531stkvPAHwZPOnwxDZY9mv8yQUkdxgT3hS5TajFLvMc9LVgVFFG
+        v/t0+L79Rc5HVEEo8vpIaBHb77d6VBKQlrJ5AVUQWE0mJvs=
+X-Google-Smtp-Source: ABdhPJyNR5zXZ8o09DSJzsSA3OSccnAxM/c9AxKQjYYOZlXvOMCiHs1YW/1gQi1Sa70TQ2VOPtabshfviWRkV7+ICnM=
+X-Received: by 2002:a6b:db17:: with SMTP id t23mr18236117ioc.4.1593458159284;
+ Mon, 29 Jun 2020 12:15:59 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <DM6PR11MB38196ED29A3E0BBAD7B246C1856E0@DM6PR11MB3819.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:15:58
+ -0700 (PDT)
+Reply-To: mrs.victoria.alexander2@gmail.com
+From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
+Date:   Mon, 29 Jun 2020 12:15:58 -0700
+Message-ID: <CAP7XNCwEGQ+-Q==u4yk4yvJdk1X+gsfSU6pUV_hROjmF=p-DHw@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Dear friend,
 
-On 6/28/20 8:12 PM, Wu, Hao wrote:
->> -----Original Message-----
->> From: linux-fpga-owner@vger.kernel.org <linux-fpga-owner@vger.kernel.org>
->> On Behalf Of Xu Yilun
->> Sent: Monday, June 29, 2020 10:19 AM
->> To: trix@redhat.com
->> Cc: mdf@kernel.org; linux-fpga@vger.kernel.org; linux-
->> kernel@vger.kernel.org; Wu, Hao <hao.wu@intel.com>;
->> matthew.gerlach@linux.intel.com
->> Subject: Re: [PATCH] fpga: dfl: improve configuration of dfl pci devices
->>
->> I think maybe we don't have to select them all. It is now possible for
->> FPGA DFL boards to work without FME or AFU, providing limited
->> functionality. It is possible designers trim the bitstream for their
->> purpose, and also need a smaller driver set.
->>
-> Yes, we hope that this dfl-pci could be a common module shared by
-> different cards. Some device doesn't have FME, e.g. some VF device
-> with AFU only, some device has FME, but no PR support, and in the
-> future, it's possible to add new modules, or something replacing AFU
-> or FME, so we don't have to select all here.
->
->> I think we may add "default FPGA_DFL" for FPGA_DFL_FME,
->> FPGA_DFL_FME_MGR and others to make life easier.
-> It's hard to say it's easier for everybody, e.g. I am a user of N3000, but
-> I have to unselect the PR modules, as they are default Yes as proposed?
-> Maybe it's better to let user select what they want, unless we find
-> something really common needed under DFL framework.
 
-I get your point about n3000, but that card is not currently supported in the public. Currently there is really only pac10, the 0x9c4 device.  Once n3000 (and d5005) is out, it will have several sub devices that will also so need to be manually configured.  While a developer of the n3000 will know which subdevices are needed, someone just building the kernel will not.  So would expect there to be something like
+I have a business container transaction what that some of( $13million dollars)
 
-CONFIG_FPGA_DFL_N3000
+ I would like to discuss with you. If you are interested, please
+contact my email
 
-select CONFIG_DFL_PCI
+address (mrs.victoria.alexander2@gmail.com)
 
-select CONFIG_DFL_SUBDEV_1
+My WhatsApp number but only message (+19293737780)
 
-..
-
-On PF vs FP, yes only afu parts are needed.  But i doubt anyone builds a VF specific kernel. And if folks wanted to not use the fme parts they would not have to load it's module at run time.
-
-I would like a top level config what auto selects all of the submodules needed based on the card. I think maybe that is CONFIG_FPGA_DFL_PAC10. so we will be ready for CONFIG_FPGA_DFL_N3000 and CONFIG_FPGA_DFL_D5005 and what ever comes later.
-
-Tom
-
-> Hao
->
-
+Please do not reply if you are not ready
+Thanks
