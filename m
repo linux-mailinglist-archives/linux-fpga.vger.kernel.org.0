@@ -2,154 +2,125 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C04120CC09
-	for <lists+linux-fpga@lfdr.de>; Mon, 29 Jun 2020 05:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B689720D772
+	for <lists+linux-fpga@lfdr.de>; Mon, 29 Jun 2020 22:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725998AbgF2DND (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 28 Jun 2020 23:13:03 -0400
-Received: from mga09.intel.com ([134.134.136.24]:24054 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725976AbgF2DND (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sun, 28 Jun 2020 23:13:03 -0400
-IronPort-SDR: xzrnEASyAopVXjjZ1OC8JFnqj0tVXQvxAHNiTSZW/omR+Q9IHaxoKt/jEEiYK6td/S23AeMKw7
- oQFRvUiVatkw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="147447392"
-X-IronPort-AV: E=Sophos;i="5.75,293,1589266800"; 
-   d="scan'208";a="147447392"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2020 20:13:02 -0700
-IronPort-SDR: wKZBbqRu1UP5EZE0obY9cRYkJ4cXkLWIsxqdMRsLq7EPzNsGpj/PuBm26fuczNRjhvgf2R5YZi
- /MuDBLyAMi5g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,293,1589266800"; 
-   d="scan'208";a="280726667"
-Received: from fmsmsx106.amr.corp.intel.com ([10.18.124.204])
-  by orsmga006.jf.intel.com with ESMTP; 28 Jun 2020 20:13:01 -0700
-Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
- FMSMSX106.amr.corp.intel.com (10.18.124.204) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Sun, 28 Jun 2020 20:13:01 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sun, 28 Jun 2020 20:13:01 -0700
-Received: from FMSEDG001.ED.cps.intel.com (10.1.192.133) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
- via Frontend Transport; Sun, 28 Jun 2020 20:13:01 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.36.50) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server (TLS) id
- 14.3.439.0; Sun, 28 Jun 2020 20:12:58 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FWYkF+tiGkABi4FjX0bViKZ8cewjAzXqVki+0Ng+3xU525U+U6hxoD449x+ZF6me4XaibDGVm/EhqtvEMYyjudRT13nu2eAMm0K4gObqakt7l6c8aa6KiVug7SQ27u6VOjbGXhEShya9sFEpJ9agLHlQ67aVS103IcywAwbai7pNv6o0kbFyyiBB2pLu9DhR1yGvwz3ao7JS8xSoowWOuQKKaWnTQU0nse3/tSDgeo35/fbPS4zhceAgEf7OLkBNLWz/mmJUP9LtbU9ij9OrMTE3dHCDfDvU7XlnbQJIbheF+EilucDEeYWGIOP9yKPUAAs+6rNE1xki9wUzget0wQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=53hvZBG4WTi80KKRIXmtZOMIZ4bS6Rkw6LFZCGkXIZM=;
- b=A/whJ+xA9iOY4ViDSjmkdPzAmX/bN0823M0CMn6Y6yFlkpcxyn3F7xeyMSqvawdtqpwUsyFpl8Nb/1ZBodlaJWCSdLeds3kraQFN3lNEpEV5Kzx5IiWvtTqdiTfDButvVRrdqGkiJ1jef8R+CaZlz5dxkOcN15xOyUzdSWXaKROb2sDKAa6DMrDxR6rNehxp7MVUBzZ7PVzeZOMUiSpvhuiOireRKRRF41XFU5tAntZu1oveGt1hRXG/L274YyaHbDRN8nfwAvwTQnqCrLlwUAUxkBX+sXM/GQa/HkRO/YEC4b/+EcARbUeL0GFEluXToqr9q2HYhxIvFyLxRVvhLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=53hvZBG4WTi80KKRIXmtZOMIZ4bS6Rkw6LFZCGkXIZM=;
- b=n16erAUtNKEXBjf+sW5dEwR1n/+KTkbhFmC8scowrxtlDd8I8yCiVspGTQofMzmf3sb/dTSGWiF9ZytGNNdCr5cj9aXUic8xZj0+1YEey3m1cYtPEP9dZTZNlNV6K/z0MaefmsJoTwig59xNNYCB4Q/6bRXknqs9a+m/UHbikoE=
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by DM6PR11MB4628.namprd11.prod.outlook.com (2603:10b6:5:28f::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.23; Mon, 29 Jun
- 2020 03:12:53 +0000
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::c1c1:6930:f17d:a80a]) by DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::c1c1:6930:f17d:a80a%4]) with mapi id 15.20.3131.026; Mon, 29 Jun 2020
- 03:12:53 +0000
-From:   "Wu, Hao" <hao.wu@intel.com>
-To:     "Xu, Yilun" <yilun.xu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>
-CC:     "mdf@kernel.org" <mdf@kernel.org>,
+        id S1732794AbgF2TaF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 29 Jun 2020 15:30:05 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:46609 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1732692AbgF2TaF (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 29 Jun 2020 15:30:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1593459003;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/rozIRZd2Z+z5ejQC/EdCJboYjDdy+vJEupYT4pSKo0=;
+        b=E4zY2/l8tSL/sUsqGHzCmUy2h9/YGRY360wGDOpUn6HEvdpEewVXksPYClYZeC+z5bYvOx
+        KYkEou1YIyBtPO93jyrDNQoGNI6g+bIweAIsqBipXtt47XEQXQuxiOloUVkIvD09ElKV59
+        Jss2CJnVuIq7K14PDhTrZUmrvQZVGZY=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-178-l5Wzzcl7OIa-t3xBiuXAMg-1; Mon, 29 Jun 2020 09:28:07 -0400
+X-MC-Unique: l5Wzzcl7OIa-t3xBiuXAMg-1
+Received: by mail-qv1-f72.google.com with SMTP id g17so10024285qvw.0
+        for <linux-fpga@vger.kernel.org>; Mon, 29 Jun 2020 06:28:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=/rozIRZd2Z+z5ejQC/EdCJboYjDdy+vJEupYT4pSKo0=;
+        b=DlT3P7a4wcBt/O2xIkhc5s5Z/OXwspurISv+AGrKqhCxFGAyF3zHfme9fDbcoaJ16d
+         tay7JDnrt7qyy15Z4VhLZ+L6E08SCpd7fJ41qw5uZAfm0gfQciKQXH2aQC3zRjYQ5quJ
+         ZF8CTFxNl33YadN2N3JrFj7XQ9NGHmV/+AzSNwfCNhWmxnjFUakrX2QJLrSc3GNSxSHI
+         PxcXQeXj7TFtYO7rhE4QlgPnYkT4QeIRgZmdHgvwa9PI0GlShtClDpswSwqiERn3ECtJ
+         ivs91wL2qgVm8RpIBajt10rj3KFsCMnJ1xnXD5PLFjkT2AKlBCasnTOrmpzuPfnWi4JL
+         V4VA==
+X-Gm-Message-State: AOAM531nZ9PaFpMYserRMUmAdyHJarus+rKWHjMgKyXQNCY+fbCE9KmD
+        XsLVIFdd9dHmWGIYRD34FL2zVRsiKyaYvMd227HQhVMZAdM6VEykkbS4FJ4Vltl+B1N5/rEj9K5
+        TVWViHLjzW4HZNOFseCuO9g==
+X-Received: by 2002:a0c:b246:: with SMTP id k6mr15065269qve.146.1593437287343;
+        Mon, 29 Jun 2020 06:28:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwms1o8tyqQwrkXCJ8cIREd5x9uNk+bPTzS0ou0s1jv5IQbRinAHtIoLnXqHLMHBn8uHQRMvg==
+X-Received: by 2002:a0c:b246:: with SMTP id k6mr15065252qve.146.1593437287140;
+        Mon, 29 Jun 2020 06:28:07 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id x13sm17008095qts.57.2020.06.29.06.28.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jun 2020 06:28:06 -0700 (PDT)
+Subject: Re: [PATCH] fpga: dfl: improve configuration of dfl pci devices
+To:     "Wu, Hao" <hao.wu@intel.com>, "Xu, Yilun" <yilun.xu@intel.com>
+Cc:     "mdf@kernel.org" <mdf@kernel.org>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
-Subject: RE: [PATCH] fpga: dfl: improve configuration of dfl pci devices
-Thread-Topic: [PATCH] fpga: dfl: improve configuration of dfl pci devices
-Thread-Index: AQHWTV9tEB8rGujJlkC0kwtfRn41f6ju3KoAgAAFiMA=
-Date:   Mon, 29 Jun 2020 03:12:53 +0000
-Message-ID: <DM6PR11MB38196ED29A3E0BBAD7B246C1856E0@DM6PR11MB3819.namprd11.prod.outlook.com>
 References: <20200628151813.7679-1-trix@redhat.com>
  <20200629021924.GB2620@yilunxu-OptiPlex-7050>
-In-Reply-To: <20200629021924.GB2620@yilunxu-OptiPlex-7050>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.2.0.6
-authentication-results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
-x-originating-ip: [192.198.147.195]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2704990d-153b-47de-2885-08d81bda504d
-x-ms-traffictypediagnostic: DM6PR11MB4628:
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR11MB462817962765567DCB07260F856E0@DM6PR11MB4628.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 044968D9E1
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: d/EtReSQZmzlknT8Y7ZzqSxR48EWasBAdRXgc64cKreIZgWKH5I2JQyqORsnIeGlHSu1wUQ79rnM6vfWNRYJGYdIO76fLn/d+Nd3ZV7UKpW6tmZJ5clpAQoKFKsi+27JpfiRNsqXQuiQ+wBjO94G513kW2Sokyl4ZXNBvCnKPEhPEyThTGmmVQxlxDCqLC9fQI3nKEnk1KSCJwxf5gPI3ImMxXeTwMfPPxLvZ81UeBDhrB5a68E6t9wQQZsVRnM1/By4l6AGkI5Mvcewguq7me0VShI4vtL9d+9CGeSWWbq9+C4TcmfdQiNdxLN8suJoTdcSQzWy2ugEiCWaZsx5bw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(376002)(366004)(396003)(136003)(39860400002)(71200400001)(83380400001)(7696005)(55016002)(4326008)(86362001)(9686003)(110136005)(53546011)(8936002)(316002)(478600001)(54906003)(6506007)(8676002)(66556008)(76116006)(66446008)(64756008)(66476007)(186003)(2906002)(33656002)(66946007)(26005)(52536014)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: Rkh1H4Wau7FYQXoZXymwdT/3qgDE7BlCy51u2LIDpHE45b+/VAfJxhK56kRMmuoeKQvIup/xKjjir2jedE0n7wVp+Z+KeJoqofY8XwAWFCIe7ibW9XiQf0GeyiKPd0ZFjGzOq/0sKec1041S5YmjU3jQH2Rowgu541TeWR2I86UgNwuOPc5AGshmXn9ZvHpV2Aump6Y/i4G8GO9KRq23kfsCEMHFsjmjuM4stUcowsPD36uSM7Nro5/HANLXhL8F+JIeKhadWk/3Zr9krxiJdZJRczZsG3YY+YLmGwopmnK8WdOhQ6HNek1f/5rBbh7Q958DAxahJ0ezElHaJW+RJKb2a2rP9VuEv87eOtsr9zJVL/UibZGTopwE8FM09LjRVcw6mHfKJrsAqO2n1CM9LNhTKzk02Qf88vQuqqCWoBo8MJLgDiXfQuOPo5cTG0rQhrhrWNMTeodQLgJJ3BIGu2xWEJATWeiJePsASnxrsC3/zu0odybeOi0t+hsxDJgb
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <DM6PR11MB38196ED29A3E0BBAD7B246C1856E0@DM6PR11MB3819.namprd11.prod.outlook.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <26b7c920-7b9f-b753-4a49-258e09b771fa@redhat.com>
+Date:   Mon, 29 Jun 2020 06:28:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2704990d-153b-47de-2885-08d81bda504d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2020 03:12:53.5930
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UL6sV9THIBPhEYY2E47RUUp3jQvNHw7YzuDzHniRlwrxR0i1t6u42ukzln7CvRoVTywjnfgS+qgRSbrENo+Ciw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4628
-X-OriginatorOrg: intel.com
+In-Reply-To: <DM6PR11MB38196ED29A3E0BBAD7B246C1856E0@DM6PR11MB3819.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-> -----Original Message-----
-> From: linux-fpga-owner@vger.kernel.org <linux-fpga-owner@vger.kernel.org>
-> On Behalf Of Xu Yilun
-> Sent: Monday, June 29, 2020 10:19 AM
-> To: trix@redhat.com
-> Cc: mdf@kernel.org; linux-fpga@vger.kernel.org; linux-
-> kernel@vger.kernel.org; Wu, Hao <hao.wu@intel.com>;
-> matthew.gerlach@linux.intel.com
-> Subject: Re: [PATCH] fpga: dfl: improve configuration of dfl pci devices
->=20
-> I think maybe we don't have to select them all. It is now possible for
-> FPGA DFL boards to work without FME or AFU, providing limited
-> functionality. It is possible designers trim the bitstream for their
-> purpose, and also need a smaller driver set.
->=20
 
-Yes, we hope that this dfl-pci could be a common module shared by
-different cards. Some device doesn't have FME, e.g. some VF device
-with AFU only, some device has FME, but no PR support, and in the
-future, it's possible to add new modules, or something replacing AFU
-or FME, so we don't have to select all here.
+On 6/28/20 8:12 PM, Wu, Hao wrote:
+>> -----Original Message-----
+>> From: linux-fpga-owner@vger.kernel.org <linux-fpga-owner@vger.kernel.org>
+>> On Behalf Of Xu Yilun
+>> Sent: Monday, June 29, 2020 10:19 AM
+>> To: trix@redhat.com
+>> Cc: mdf@kernel.org; linux-fpga@vger.kernel.org; linux-
+>> kernel@vger.kernel.org; Wu, Hao <hao.wu@intel.com>;
+>> matthew.gerlach@linux.intel.com
+>> Subject: Re: [PATCH] fpga: dfl: improve configuration of dfl pci devices
+>>
+>> I think maybe we don't have to select them all. It is now possible for
+>> FPGA DFL boards to work without FME or AFU, providing limited
+>> functionality. It is possible designers trim the bitstream for their
+>> purpose, and also need a smaller driver set.
+>>
+> Yes, we hope that this dfl-pci could be a common module shared by
+> different cards. Some device doesn't have FME, e.g. some VF device
+> with AFU only, some device has FME, but no PR support, and in the
+> future, it's possible to add new modules, or something replacing AFU
+> or FME, so we don't have to select all here.
+>
+>> I think we may add "default FPGA_DFL" for FPGA_DFL_FME,
+>> FPGA_DFL_FME_MGR and others to make life easier.
+> It's hard to say it's easier for everybody, e.g. I am a user of N3000, but
+> I have to unselect the PR modules, as they are default Yes as proposed?
+> Maybe it's better to let user select what they want, unless we find
+> something really common needed under DFL framework.
 
-> I think we may add "default FPGA_DFL" for FPGA_DFL_FME,
-> FPGA_DFL_FME_MGR and others to make life easier.
+I get your point about n3000, but that card is not currently supported in the public. Currently there is really only pac10, the 0x9c4 device.  Once n3000 (and d5005) is out, it will have several sub devices that will also so need to be manually configured.  While a developer of the n3000 will know which subdevices are needed, someone just building the kernel will not.  So would expect there to be something like
 
-It's hard to say it's easier for everybody, e.g. I am a user of N3000, but
-I have to unselect the PR modules, as they are default Yes as proposed?
-Maybe it's better to let user select what they want, unless we find
-something really common needed under DFL framework.
+CONFIG_FPGA_DFL_N3000
 
-Hao
+select CONFIG_DFL_PCI
+
+select CONFIG_DFL_SUBDEV_1
+
+..
+
+On PF vs FP, yes only afu parts are needed.  But i doubt anyone builds a VF specific kernel. And if folks wanted to not use the fme parts they would not have to load it's module at run time.
+
+I would like a top level config what auto selects all of the submodules needed based on the card. I think maybe that is CONFIG_FPGA_DFL_PAC10. so we will be ready for CONFIG_FPGA_DFL_N3000 and CONFIG_FPGA_DFL_D5005 and what ever comes later.
+
+Tom
+
+> Hao
+>
+
