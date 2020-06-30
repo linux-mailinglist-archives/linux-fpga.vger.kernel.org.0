@@ -2,92 +2,158 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE4E20FBF1
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jun 2020 20:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB95A20FC2D
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jun 2020 20:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbgF3SoZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 30 Jun 2020 14:44:25 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:43508 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726122AbgF3SoY (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 30 Jun 2020 14:44:24 -0400
+        id S1726654AbgF3SuE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 30 Jun 2020 14:50:04 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:25770 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726119AbgF3SuD (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 30 Jun 2020 14:50:03 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1593542663;
+        s=mimecast20190719; t=1593543001;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PedFDc2DtQMOIGWMojnCcvUFPVJqYYNEpNxS2Hp4sso=;
-        b=EFn8cT6dDaB6Uu63xxx2rR0V6V0oMUUl/Q2avEONN2SOaiURSpg0M52NlFF1q1SEqc5OhM
-        i91LWo3HUVf4OxUkCs31Dfnr2TSlaAJ3ogV+mngCNmCN9WyHuQh6fFROcoMRs3N6RpPdKf
-        rX0bp42upZ9UwDQeeInrhmfXXtBogyk=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-401-axgPZrYNNjCCe82wlREZSw-1; Tue, 30 Jun 2020 14:44:20 -0400
-X-MC-Unique: axgPZrYNNjCCe82wlREZSw-1
-Received: by mail-qk1-f197.google.com with SMTP id q192so5015675qka.13
-        for <linux-fpga@vger.kernel.org>; Tue, 30 Jun 2020 11:44:20 -0700 (PDT)
+         to:to:cc:cc; bh=ILNVKniPuWCOaWJSWnYpx92u7nfQ4dnGhDKgu/Th5Fo=;
+        b=DkOSO0+zdLoaIzqnP35bIgprRZ0Cbv7T5ACVP3rcmZnL0BEHuLyKLedIXaqM7WkFJ+Pcix
+        gLmAqXJ1xZQ0tXJhHwUUt2yKAEMOitdoXwMYNDmcu+2Dx5bkvzBHC0yOAfvI9wlfaQ/hDL
+        ojsjbGTXL0zLWuyo3y1RpzQVS248wbk=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-87-_FhOcECqPiOdi18y6KDsrg-1; Tue, 30 Jun 2020 14:50:00 -0400
+X-MC-Unique: _FhOcECqPiOdi18y6KDsrg-1
+Received: by mail-qv1-f69.google.com with SMTP id em19so8731157qvb.14
+        for <linux-fpga@vger.kernel.org>; Tue, 30 Jun 2020 11:50:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=PedFDc2DtQMOIGWMojnCcvUFPVJqYYNEpNxS2Hp4sso=;
-        b=R65sPM517X6d/vc0yDGHb/tkT6Ff8XC/nEHd5IZkfjzGPaN5YZBASNp26eZ91Zyc15
-         gdvHHWgUyvtj/QN+Ye2szAQ92OKAzuXVDUvL6yNWuvbedvfp3EJLYHmCaoBeMYfyka9y
-         CV0MOYgjslDTh8h4D3lplvXjx6vWsim8rhE3dgBIZ9/vUcufQAe4TP76Q19vBh0G9XOu
-         o5tLonqmoX814Gaoa9CXfKbdp9wtrIYh3Ml6LHqt03YKPodYYvwJSO2GGRS5is8A4VjU
-         pqb5SdYFkWkV0OYBXaTDC4o451fwJ9K4VWZMuCKpogw2TAUWeEyY9oFg07lAqvvhuH5W
-         4haw==
-X-Gm-Message-State: AOAM530s4Nk8fmzrdR1BtSSgTmjLJx8VSiq2HOLHXbuBDBs5h17THDVy
-        8v0wwSTbVRNzF3yidTt4r6NG30WyxVZSr4pF4WzwjoZMlbVP66RCOpv6YQ5hqBgPY7O0DFxHIQU
-        tzOhhIWf89uLsUpP9Z8y62Q==
-X-Received: by 2002:a37:a14c:: with SMTP id k73mr21323498qke.145.1593542659929;
-        Tue, 30 Jun 2020 11:44:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzwBx2LZuulFWLqg/mQP1Ihml2J1c5LqD4NJxngK+OBmKCXx8SAyvZunhLXcfXhUVrRNoRbpA==
-X-Received: by 2002:a37:a14c:: with SMTP id k73mr21323479qke.145.1593542659736;
-        Tue, 30 Jun 2020 11:44:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ILNVKniPuWCOaWJSWnYpx92u7nfQ4dnGhDKgu/Th5Fo=;
+        b=gzkzrjPbyzdoPwJWrMVxO+cMp8yJus/Pcxsvsh4h9axGWNtEzPUH7N2Jo42LBYssmB
+         sIyM1nF1D/GMlH6qfT8jhic0JwUZmjRwdEMAbTB6Mg5CfU+0y56CJv+smE690BD2daFV
+         m2a17r/0eULqV4K/3Wtgy5CCfC0wN2hwXtxfSApp9PUxRA+L7psF5kQAQfQYdjrlUYIn
+         kx2X4GTNC2PFABAMnh1I5dMENhXGGa9j3kHm6VKBbOfcyoTzhWpVpHXrB0+4/XSIghnb
+         UhmXwJB4tWO7QrNn/PpQJSN6bX4woM+oeQwFx0L1cBCYPUyqhIxcXQpsgEUSCGeJiQ3i
+         knlw==
+X-Gm-Message-State: AOAM5308ZyVgWk+Mz5Otu63PD4qqE3FbxtXMEpfKeM/xZTl8qTmovqzi
+        4csKjdiDatW0zL2TVUVRA1/XCMtPW5OBPuiXiL5P5PxPBwOuGhi81oITwFJHnQ6xCCAgeXadxxw
+        PRdcjzaBDCMnsywdJbdGPTw==
+X-Received: by 2002:ac8:774d:: with SMTP id g13mr21842273qtu.317.1593542999898;
+        Tue, 30 Jun 2020 11:49:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzOfMipnw5vbBXdCY5Q+BjXTkajzbWmU1TAYr4mNpQfWkuqZDJBk6gfVOWRsXKjiG1BhXvUJQ==
+X-Received: by 2002:ac8:774d:: with SMTP id g13mr21842251qtu.317.1593542999620;
+        Tue, 30 Jun 2020 11:49:59 -0700 (PDT)
 Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id a11sm3208689qkh.103.2020.06.30.11.44.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2020 11:44:18 -0700 (PDT)
-Subject: Re: [RFC 1/1] fpga: dfl: RFC PCI config
-To:     Randy Dunlap <rdunlap@infradead.org>, hao.wu@intel.com,
-        mdf@kernel.org, corbet@lwn.net
+        by smtp.gmail.com with ESMTPSA id b10sm3410280qkh.124.2020.06.30.11.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2020 11:49:59 -0700 (PDT)
+From:   trix@redhat.com
+To:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net
 Cc:     linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200630171656.20151-1-trix@redhat.com>
- <20200630171656.20151-2-trix@redhat.com>
- <67f7f2b8-3567-aadd-30d6-4cfbc0bc8ce5@infradead.org>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <78a250ab-29ad-f7cb-3fa2-482e76db207a@redhat.com>
-Date:   Tue, 30 Jun 2020 11:44:16 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-MIME-Version: 1.0
-In-Reply-To: <67f7f2b8-3567-aadd-30d6-4cfbc0bc8ce5@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [RFC v2] fpga: dfl: RFC PCI config
+Date:   Tue, 30 Jun 2020 11:49:50 -0700
+Message-Id: <20200630184950.950-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-> I haven't tested this, but in general it's not safe to select something like
-> SENSORS* or HWMON* unless you first check that CONFIG_HWMON is enabled.
-> Otherwise this would usually cause kconfig warning(s).
->
-> But don't add things like
-> 	select HWMON
-> 	select SPI
-> 	select SPI_MASTER
->
-> because we don't enable subsystems (like HWMON or SPI) just inside one
-> driver's kconfig entry.
-> The driver(s) should instead depend on HWMON, SPI, SPI_MASTER etc.
+From: Tom Rix <trix@redhat.com>
 
-Yes, I thought this was ugly. The next rev addresses this issue.  The config will not be fully automagic.  User will have enough information in the doc to figure out the other subsystems.  
+Create some top level configs the map to dfl pci cards.
 
-Tom
+Autoselect the parts of fpga that are needed to run these cards
+as well as the defining the other subsystem dependencies.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ v1 change subsystem selects to depends
+
+ Documentation/fpga/dfl.rst | 30 ++++++++++++++++++++++++++++++
+ drivers/fpga/Kconfig       | 27 +++++++++++++++++++++++++++
+ 2 files changed, 57 insertions(+)
+
+diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+index d7648d7c7eee..c1ae6b539f08 100644
+--- a/Documentation/fpga/dfl.rst
++++ b/Documentation/fpga/dfl.rst
+@@ -500,6 +500,36 @@ Developer only needs to provide a sub feature driver with matched feature id.
+ FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
+ could be a reference.
+ 
++Kernel configuration
++====================
++
++While it is possible to manually setup a configuration to match your device,
++there are some top level configurations that collect configurations for
++some reference PCI cards.  Below describes these configuration as well as
++what other kernel configs are needed for proper configuration.
++
++FPGA_DFL_PAC10
++Intel Arria 10 GX PCI card, PCI id 0X09C4
++Depends on
++  SPI_ALTERA
++  MFD_INTEL_M10_BMC
++  SENSORS_INTEL_M10_BMC_HWMON
++
++FPGA_DFL_D5005
++Intel Stratix 10, D5005 PCI card, PCI id 0X0B2B
++Depends on
++  SPI_ALTERA
++  MFD_INTEL_M10_BMC
++  SENSORS_INTEL_M10_BMC_HWMON
++  INTEL_S10_PHY
++
++FPGA_DFL_N3000
++Intel Network Accelerator, N3000 PCI card, PCI id 0X0B30
++Depends on
++  SPI_ALTERA
++  MFD_INTEL_M10_BMC
++  SENSORS_INTEL_M10_BMC_HWMON
++  INTEL_LL_10G_MAC
+ 
+ Open discussion
+ ===============
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 9d53bd9094e2..96603b1f6ff5 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -138,6 +138,33 @@ config OF_FPGA_REGION
+ 	  Support for loading FPGA images by applying a Device Tree
+ 	  overlay.
+ 
++config FPGA_DFL_PAC10
++	tristate "Intel Arria 10 GX PCI card"
++	depends on SPI_ALTERA
++	depends on SENSORS_INTEL_M10_BMC_HWMON
++	depends on MFD_INTEL_M10_BMC
++	select FPGA_DFL
++	select FPGA_DFL_FME
++	select FPGA_DFL_FME_MGR
++	select FPGA_DFL_FME_BRIDGE
++	select FPGA_DFL_FME_REGION
++	select FPGA_DFL_AFU
++	select FPGA_DFL_SPI_ALTERA
++	select FPGA_DFL_PCI
++	select IFPGA_SEC_MGR
++
++config FPGA_DFL_D5005
++	tristate "Intel Stratix 10, D5005 PCI card"
++	depends on INTEL_S10_PHY
++	select FPGA_DFL_PAC10
++	select FPGA_DFl_HSSI
++
++config FPGA_DFL_N3000
++	tristate "Intel Network Accelerator, N3000 PCI card"
++	depends on INTEL_LL_10G_MAC
++	select FPGA_DFL_PAC10
++	select FPGA_DFL_N3000_NIOS
++
+ config FPGA_DFL
+ 	tristate "FPGA Device Feature List (DFL) support"
+ 	select FPGA_BRIDGE
+-- 
+2.18.1
 
