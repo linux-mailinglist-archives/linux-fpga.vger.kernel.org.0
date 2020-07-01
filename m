@@ -2,39 +2,39 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBCF21033A
-	for <lists+linux-fpga@lfdr.de>; Wed,  1 Jul 2020 07:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9E3210351
+	for <lists+linux-fpga@lfdr.de>; Wed,  1 Jul 2020 07:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725862AbgGAFN6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 1 Jul 2020 01:13:58 -0400
-Received: from mga05.intel.com ([192.55.52.43]:40178 "EHLO mga05.intel.com"
+        id S1725875AbgGAFdf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 1 Jul 2020 01:33:35 -0400
+Received: from mga03.intel.com ([134.134.136.65]:33732 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725272AbgGAFN5 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 1 Jul 2020 01:13:57 -0400
-IronPort-SDR: FrOupgk0aZPtpX4g5J6s96ga3/caaS2vICRzimdxcByjXxOMQESmWeiXwM+dklOXaXRWXf9Rc7
- IQM3L7rD5phQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9668"; a="231341669"
+        id S1725812AbgGAFde (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 1 Jul 2020 01:33:34 -0400
+IronPort-SDR: UkMtU6NRt+QSjEqSutHnlz2A/hEFIUvDM5W2ijaRP2aAGh7Im5FauqrtsqRtSBWZGkKApLMWbj
+ by4FylVjpzeg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9668"; a="146477597"
 X-IronPort-AV: E=Sophos;i="5.75,299,1589266800"; 
-   d="scan'208";a="231341669"
+   d="scan'208";a="146477597"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2020 22:13:57 -0700
-IronPort-SDR: yv1Cv+80ENnsiQv0DiBrCwOM7EKpeVooc0x/4vko/SFtfqtXNRtjHvsc23rzWZWZosB+ufdHL2
- bvP+9UNUOLuA==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2020 22:33:34 -0700
+IronPort-SDR: Li5TmMT7kF2lM0eAqalhLBXvz2qWsIrS98ocwsKDKcs/3xrM/jwK83DnivuFvcsh3Uj5JjPu7q
+ jL5owpcv51zw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,299,1589266800"; 
-   d="scan'208";a="277656338"
+   d="scan'208";a="266671399"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga003.jf.intel.com with ESMTP; 30 Jun 2020 22:13:54 -0700
-Date:   Wed, 1 Jul 2020 13:10:01 +0800
+  by fmsmga008.fm.intel.com with ESMTP; 30 Jun 2020 22:33:32 -0700
+Date:   Wed, 1 Jul 2020 13:29:38 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     trix@redhat.com
 Cc:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net,
         linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [RFC v2] fpga: dfl: RFC PCI config
-Message-ID: <20200701051000.GB2186@yilunxu-OptiPlex-7050>
+Message-ID: <20200701052938.GC2186@yilunxu-OptiPlex-7050>
 References: <20200630184950.950-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -118,23 +118,17 @@ On Tue, Jun 30, 2020 at 11:49:50AM -0700, trix@redhat.com wrote:
 > +	depends on MFD_INTEL_M10_BMC
 > +	select FPGA_DFL
 > +	select FPGA_DFL_FME
+
+The FPGA_DFL_FME depends on HWMON & PERF_EVENTS, seems we cannot select
+it either.
+
 > +	select FPGA_DFL_FME_MGR
 > +	select FPGA_DFL_FME_BRIDGE
 > +	select FPGA_DFL_FME_REGION
 > +	select FPGA_DFL_AFU
 > +	select FPGA_DFL_SPI_ALTERA
 > +	select FPGA_DFL_PCI
-
-FPGA_DFL_PCI depends on PCI, seems we also cannot select it.
-
 > +	select IFPGA_SEC_MGR
-
-Since there is concern we cannot select all the configs, and now we have
-some "depends on"s, some "select"s. It means people should manually
-find and select the "depends on"s, then the helper config could appear
-and be selected to finish the rest of selection.
-IMHO seems this config is not as valuable as expected ...
-
 > +
 > +config FPGA_DFL_D5005
 > +	tristate "Intel Stratix 10, D5005 PCI card"
