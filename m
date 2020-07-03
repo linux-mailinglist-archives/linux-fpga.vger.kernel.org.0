@@ -2,148 +2,99 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9E3210351
-	for <lists+linux-fpga@lfdr.de>; Wed,  1 Jul 2020 07:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33702136C4
+	for <lists+linux-fpga@lfdr.de>; Fri,  3 Jul 2020 10:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725875AbgGAFdf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 1 Jul 2020 01:33:35 -0400
-Received: from mga03.intel.com ([134.134.136.65]:33732 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725812AbgGAFde (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 1 Jul 2020 01:33:34 -0400
-IronPort-SDR: UkMtU6NRt+QSjEqSutHnlz2A/hEFIUvDM5W2ijaRP2aAGh7Im5FauqrtsqRtSBWZGkKApLMWbj
- by4FylVjpzeg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9668"; a="146477597"
-X-IronPort-AV: E=Sophos;i="5.75,299,1589266800"; 
-   d="scan'208";a="146477597"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2020 22:33:34 -0700
-IronPort-SDR: Li5TmMT7kF2lM0eAqalhLBXvz2qWsIrS98ocwsKDKcs/3xrM/jwK83DnivuFvcsh3Uj5JjPu7q
- jL5owpcv51zw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,299,1589266800"; 
-   d="scan'208";a="266671399"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Jun 2020 22:33:32 -0700
-Date:   Wed, 1 Jul 2020 13:29:38 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     trix@redhat.com
-Cc:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net,
-        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC v2] fpga: dfl: RFC PCI config
-Message-ID: <20200701052938.GC2186@yilunxu-OptiPlex-7050>
-References: <20200630184950.950-1-trix@redhat.com>
+        id S1725984AbgGCI4U (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 3 Jul 2020 04:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725764AbgGCI4T (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 3 Jul 2020 04:56:19 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D70C08C5C1
+        for <linux-fpga@vger.kernel.org>; Fri,  3 Jul 2020 01:56:19 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id 22so31305178wmg.1
+        for <linux-fpga@vger.kernel.org>; Fri, 03 Jul 2020 01:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=r7BjWiHF5iYlX2CVgTeV2f/a1gA2UGUMeK1lcaxyUj0=;
+        b=lhf7FRCgOdl3W3PX38x3CN2gEjJEBTyXb+Oh8vv+/MB2/FNLqmpK03jqgQy+Ildsjp
+         cGcIaD7nzKUtTrzMp+In9qJKvvLPRYyUowt/f8D2axAj8/gbIlYkWUW931xjw4j6p+9t
+         ZhqXgxECyiqwkBvGnz67+luZvB6NciJ8E5L4sfChw3kkFXMHOqJ06o8p+1eqdnkWyrso
+         R5JkZPxT0sFKhvwEF0e/gNg6HBaXrMB4n5BGRW9CMKOyU/IyUyZWCPfa9sLSTvGwcs5i
+         JZ0Vk4E0Av9rArNiyCXRez58Y6hyqjo8+0Ukg39BDVTHgIcN+CIIQ/XUn9H4rIECNHn6
+         36EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=r7BjWiHF5iYlX2CVgTeV2f/a1gA2UGUMeK1lcaxyUj0=;
+        b=ndCZUlJK6MOz+0QrO6rYDQZGK2LLVHFDV33X8UK0DkKOKRF5Cda9i8nl5L5HQobnbY
+         aozQ5Rc5dBiJwjPtWMN5PQw4+ozMzZLTUZPdab7DSZ8x0y/Oaw6WDbUS//QrHqvLLLO3
+         kzlKlTo3slpBm/GcHB+nwBDDIm5nh6mP5MJvoFU0tXG76anBiN3MlKMWflLFGy2fCDLi
+         zyD2x6K7fx2SlH8B4Mq0nxJA6zNhl2jkW0FGWp50z9S87F66E+9a0opkhcIkmwEKrPPZ
+         qg0R+GXBRjjsP+1BI+zcHQzn2EgCz4+SpLRvJkETEzXSwT4/1PXi8Qq6BnCRbVWAbaMx
+         xjdQ==
+X-Gm-Message-State: AOAM531Z+uudk18jB3qHIXzVihLVEdfCU0MwqRu1GuplSM51B4qWiMcp
+        LrqWL55Pk5r8wCYT8wRAptt+Qq05He6SSX/t+0A=
+X-Google-Smtp-Source: ABdhPJzgORi87NHQeSWoew07rDuo30GVcIqmubSIYlFMiX+BeEHq6YHoo8b7i502eZJss/jjIBhtzSC3bUKy5z/2/hk=
+X-Received: by 2002:a7b:cc92:: with SMTP id p18mr36802359wma.4.1593766578242;
+ Fri, 03 Jul 2020 01:56:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200630184950.950-1-trix@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Received: by 2002:adf:f109:0:0:0:0:0 with HTTP; Fri, 3 Jul 2020 01:56:17 -0700 (PDT)
+Reply-To: mrs.sophia202@list.ru
+From:   "Mrs. Sophia Robin" <mrs.aishamuammar.gaddafi@gmail.com>
+Date:   Fri, 3 Jul 2020 01:56:17 -0700
+Message-ID: <CAKDKtgzJoJ58NQHx9qjA1yAmEbzSQeCVNjbfbkAP_8QRUhwsYw@mail.gmail.com>
+Subject: Hello My Dearest
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 11:49:50AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Create some top level configs the map to dfl pci cards.
-> 
-> Autoselect the parts of fpga that are needed to run these cards
-> as well as the defining the other subsystem dependencies.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  v1 change subsystem selects to depends
-> 
->  Documentation/fpga/dfl.rst | 30 ++++++++++++++++++++++++++++++
->  drivers/fpga/Kconfig       | 27 +++++++++++++++++++++++++++
->  2 files changed, 57 insertions(+)
-> 
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index d7648d7c7eee..c1ae6b539f08 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -500,6 +500,36 @@ Developer only needs to provide a sub feature driver with matched feature id.
->  FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
->  could be a reference.
->  
-> +Kernel configuration
-> +====================
-> +
-> +While it is possible to manually setup a configuration to match your device,
-> +there are some top level configurations that collect configurations for
-> +some reference PCI cards.  Below describes these configuration as well as
-> +what other kernel configs are needed for proper configuration.
-> +
-> +FPGA_DFL_PAC10
-> +Intel Arria 10 GX PCI card, PCI id 0X09C4
-> +Depends on
-> +  SPI_ALTERA
-> +  MFD_INTEL_M10_BMC
-> +  SENSORS_INTEL_M10_BMC_HWMON
-> +
-> +FPGA_DFL_D5005
-> +Intel Stratix 10, D5005 PCI card, PCI id 0X0B2B
-> +Depends on
-> +  SPI_ALTERA
-> +  MFD_INTEL_M10_BMC
-> +  SENSORS_INTEL_M10_BMC_HWMON
-> +  INTEL_S10_PHY
-> +
-> +FPGA_DFL_N3000
-> +Intel Network Accelerator, N3000 PCI card, PCI id 0X0B30
-> +Depends on
-> +  SPI_ALTERA
-> +  MFD_INTEL_M10_BMC
-> +  SENSORS_INTEL_M10_BMC_HWMON
-> +  INTEL_LL_10G_MAC
->  
->  Open discussion
->  ===============
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 9d53bd9094e2..96603b1f6ff5 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -138,6 +138,33 @@ config OF_FPGA_REGION
->  	  Support for loading FPGA images by applying a Device Tree
->  	  overlay.
->  
-> +config FPGA_DFL_PAC10
-> +	tristate "Intel Arria 10 GX PCI card"
-> +	depends on SPI_ALTERA
-> +	depends on SENSORS_INTEL_M10_BMC_HWMON
-> +	depends on MFD_INTEL_M10_BMC
-> +	select FPGA_DFL
-> +	select FPGA_DFL_FME
+Hello My Dearest
 
-The FPGA_DFL_FME depends on HWMON & PERF_EVENTS, seems we cannot select
-it either.
+Please I appeal to you to exercise a little patience and read through
+my mail carefully, I am contacting you personally for investment
+assistance and a long term business relationship in your Country.
 
-> +	select FPGA_DFL_FME_MGR
-> +	select FPGA_DFL_FME_BRIDGE
-> +	select FPGA_DFL_FME_REGION
-> +	select FPGA_DFL_AFU
-> +	select FPGA_DFL_SPI_ALTERA
-> +	select FPGA_DFL_PCI
-> +	select IFPGA_SEC_MGR
-> +
-> +config FPGA_DFL_D5005
-> +	tristate "Intel Stratix 10, D5005 PCI card"
-> +	depends on INTEL_S10_PHY
-> +	select FPGA_DFL_PAC10
-> +	select FPGA_DFl_HSSI
-> +
-> +config FPGA_DFL_N3000
-> +	tristate "Intel Network Accelerator, N3000 PCI card"
-> +	depends on INTEL_LL_10G_MAC
-> +	select FPGA_DFL_PAC10
-> +	select FPGA_DFL_N3000_NIOS
-> +
->  config FPGA_DFL
->  	tristate "FPGA Device Feature List (DFL) support"
->  	select FPGA_BRIDGE
-> -- 
-> 2.18.1
+I am Mrs. Sophia Robin a citizen of the united state of America, I
+work in HSBC Bank in Milan Italy as a Telex Manager charge of wire
+transfer department.
+
+I am contacting you for an important and  urgent business transaction,
+I  want the bank to transfer the money left by Dr. Cheng Chao,  A
+Chinese  Politicians who  died, March 17th 2020 without any trace of
+his family member,  he used our bank to launder money overseas through
+the help of their Political advisers. And most of the funds which they
+transferred out of the shores of China were gold and oil money that
+was supposed to have been used to develop the continent.
+
+Can you invest this money and also help the poor? The amount value at
+($15.5million Dollars), left in his account still unclaimed, if you
+know that you are capable to invest this fund into any  profitable
+business in your country kindly send me your details information as
+listed below to enable me draft you an application form of claim along
+with the deposit certificate which you are going to fill with your
+bank account detail necessary and contact the HSBC Bank in Italy  for
+immediate transfer of the Amounted sum into your bank account direct.
+
+Percentage share will be 60, for me/ 40, for you.
+
+(1) Your full name..................................................
+(2) Your address....................................................
+(3) Your Nationality.................................................
+(4) Your Age / Sex.....................................................
+(5) Your Occupation............................................
+(6) Your marital status......................................
+(7) Your direct telephone number..................
+(8) your ID Card.......................................
+
+Thanks with my best regards.
+Mrs. Sophia Robin
+Telex Manager
+Milan Italy  (H.S.B.C)
