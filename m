@@ -2,182 +2,197 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8380B216477
-	for <lists+linux-fpga@lfdr.de>; Tue,  7 Jul 2020 05:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E733F216570
+	for <lists+linux-fpga@lfdr.de>; Tue,  7 Jul 2020 06:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728162AbgGGDJv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 6 Jul 2020 23:09:51 -0400
-Received: from mga09.intel.com ([134.134.136.24]:5200 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726961AbgGGDJu (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 6 Jul 2020 23:09:50 -0400
-IronPort-SDR: TQm/fi7DYbovaN8KqyDZCtV8TIf7/n6TONRzoggmLcFZF9Mn5O7Tnf/FMRsr1AwFJBPwsq5pz8
- WRlbDd/K+dyw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9674"; a="149042851"
-X-IronPort-AV: E=Sophos;i="5.75,321,1589266800"; 
-   d="scan'208";a="149042851"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2020 20:09:50 -0700
-IronPort-SDR: QOBbccHx1aQWhYm4vM6O5Jh355QaPW+M95I3Om9ZPIhH1OYcxJX7ao+H1c/TlU8NDOY9IUiDEO
- Whua9BRXgMEA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,321,1589266800"; 
-   d="scan'208";a="283244650"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga006.jf.intel.com with ESMTP; 06 Jul 2020 20:09:47 -0700
-Date:   Tue, 7 Jul 2020 11:05:47 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Moritz Fischer <moritz.fischer.private@gmail.com>
-Cc:     Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bhu@redhat.com, mtosatti@redhat.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        jun.j.tian@intel.com, Wu Hao <hao.wu@intel.com>
-Subject: Re: [PATCH v7 0/7] Add interrupt support to FPGA DFL drivers
-Message-ID: <20200707030547.GA6688@yilunxu-OptiPlex-7050>
+        id S1726805AbgGGEjV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 7 Jul 2020 00:39:21 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:33282 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725766AbgGGEjU (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 7 Jul 2020 00:39:20 -0400
+Received: by mail-io1-f66.google.com with SMTP id i25so41886788iog.0;
+        Mon, 06 Jul 2020 21:39:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NxpEwq9mbq0+9ATQbbHFMl9ZoocJtg8kDZ9e52j2Ceg=;
+        b=S9pOS/pkNMBzyuBjgiGHJohseRE2DcfdFY9VKG1kC7PGNMZ6TngP3lkht0JkRbyx/9
+         pT5SIhZFJzWpLG5T84T4fYxZR66jLtNGcqyaeBSMIM60N7Ui2tZ+l++BIG8vD7VywFug
+         TLSnC7SoOKGNRb8nYwnzDJByxf49rIAIa5nZ/6m03GDfFjkSj4+w9TPwdRgDxQ/bEjFe
+         exjqllV6NhQgsgQOCWW3h4dzbKd04v3PpacuqbJh87lKXDtdCV4wGGTEzoJ+KRztkeau
+         +/9hOpKXEHd+IDyeEZmrHVO4dkUwd6WwNAMjWxDG6RluTSQlo0ODkGjk30Ruj/TqRyPY
+         cnuQ==
+X-Gm-Message-State: AOAM5331zj4un49iziGWX+oQxp8SIk6eg3KmROfb2n5j2pLFTnMJylZx
+        fIMnKg+Oh9DsTBxHrRkMbjxOv5MP
+X-Google-Smtp-Source: ABdhPJxazzQ8sC4AdFLvu9i5HWsaVnSHzABeqtGK6D1Jod+TIbFUG25PPmldkuhBcQXWgXsRDQHpuw==
+X-Received: by 2002:a6b:e20b:: with SMTP id z11mr28257474ioc.2.1594096759075;
+        Mon, 06 Jul 2020 21:39:19 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id q15sm12174586ilt.60.2020.07.06.21.39.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2020 21:39:18 -0700 (PDT)
+Date:   Mon, 6 Jul 2020 21:39:17 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, trix@redhat.com, bhu@redhat.com,
+        mtosatti@redhat.com, gregkh@linuxfoundation.org,
+        Luwei Kang <luwei.kang@intel.com>, Wu Hao <hao.wu@intel.com>
+Subject: Re: [PATCH v7 4/7] fpga: dfl: afu: add interrupt support for port
+ error reporting
+Message-ID: <20200707043917.GA10464@epycbox.lan>
 References: <1592280528-6350-1-git-send-email-yilun.xu@intel.com>
- <20200622064806.GA5101@yilunxu-OptiPlex-7050>
- <c9a33ee6-67f2-36b8-0870-ebc038b929ce@redhat.com>
- <20200623052613.GB23037@yilunxu-OptiPlex-7050>
- <CAJYdmeM7ec4PMtRV+qJrMDA9V+yCEv-zPAnSCFjx1V2Ca-aw9g@mail.gmail.com>
+ <1592280528-6350-5-git-send-email-yilun.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJYdmeM7ec4PMtRV+qJrMDA9V+yCEv-zPAnSCFjx1V2Ca-aw9g@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <1592280528-6350-5-git-send-email-yilun.xu@intel.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Moritz:
-
-Do you have more concern on the last 4 patches?
-
-Thanks in advance.
-
-On Tue, Jun 23, 2020 at 03:42:07PM -0700, Moritz Fischer wrote:
-> Will look at it this week.
+On Tue, Jun 16, 2020 at 12:08:45PM +0800, Xu Yilun wrote:
+> Error reporting interrupt is very useful to notify users that some
+> errors are detected by the hardware. Once users are notified, they
+> could query hardware logged error states, no need to continuously
+> poll on these states.
 > 
-> - Moritz
+> This patch adds interrupt support for port error reporting sub feature.
+> It follows the common DFL interrupt notification and handling mechanism,
+> implements two ioctl commands below for user to query number of irqs
+> supported, and set/unset interrupt triggers.
 > 
-> On Mon, Jun 22, 2020 at 10:30 PM Xu Yilun <yilun.xu@intel.com> wrote:
-> >
-> > On Mon, Jun 22, 2020 at 05:27:20AM -0700, Tom Rix wrote:
-> > > In addition to reviewing, I have run these changes on the pac a10 card and while i do not have an afu using interrupts, I have exercised some of the new interfaces.
-> > >
-> > > The most useful i have submitted to selftests drivers/fpga.  In the future, this would be a good place to put other fpga unit tests.
-> > >
-> > > The selftest patch depends on this change.
-> > >
-> > > So you can also add
-> > >
-> > > Tested-by: Tom Rix <trix@redhat.com>
-> >
-> > Yes I'll add your Tested-by tag.
-> >
-> > Thanks,
-> > Yilun
-> >
-> > >
-> > > Tom
-> > >
-> > > On 6/21/20 11:48 PM, Xu Yilun wrote:
-> > > > Hi Moritz:
-> > > >
-> > > > Could you please help review the patchset when you have time?
-> > > >
-> > > > You have already reviewed the first 3 patches some time ago. The
-> > > > comments are all fixed. Hao and Redhat guys also have done several
-> > > > rounds of review. The patches are all Acked-by Hao, reviewed by
-> > > > Marcelo & Tom.
-> > > >
-> > > > There is little change to the code for several months, seems it stays
-> > > > ready and just need your final Ack.
-> > > >
-> > > > Actually this is the last feature for our first generation PAC A10 Card,
-> > > > and is important for users to have the full support.
-> > > >
-> > > > We really need your help on code review ...
-> > > >
-> > > > Many thanks!
-> > > > Yilun
-> > > >
-> > > > On Tue, Jun 16, 2020 at 12:08:41PM +0800, Xu Yilun wrote:
-> > > >> This patchset add interrupt support to FPGA DFL drivers.
-> > > >>
-> > > >> With these patches, DFL driver will parse and assign interrupt resources
-> > > >> for enumerated feature devices and their sub features.
-> > > >>
-> > > >> This patchset also introduces a set of APIs for user to monitor DFL
-> > > >> interrupts. Three sub features (DFL FME error, DFL AFU error and user
-> > > >> interrupt) drivers now support these APIs.
-> > > >>
-> > > >> Patch #1: DFL framework change. Accept interrupt info input from DFL bus
-> > > >>           driver, and add interrupt parsing and assignment for feature
-> > > >>           sub devices.
-> > > >> Patch #2: DFL pci driver change, add interrupt info on DFL enumeration.
-> > > >> Patch #3: DFL framework change. Add helper functions for feature sub
-> > > >>           device drivers to handle interrupt and notify users.
-> > > >> Patch #4: Add interrupt support for AFU error reporting sub feature.
-> > > >> Patch #5: Add interrupt support for FME global error reporting sub
-> > > >>           feature.
-> > > >> Patch #6: Add interrupt support for a new sub feature, to handle user
-> > > >>           interrupts implemented in AFU.
-> > > >> Patch #7: Documentation for DFL interrupt handling.
-> > > >>
-> > > >> Main changes from v1:
-> > > >>  - Early validating irq table for each feature in parse_feature_irq()
-> > > >>    in Patch #1.
-> > > >>  - Changes IOCTL interfaces. use DFL_FPGA_FME/PORT_XXX_GET_IRQ_NUM
-> > > >>    instead of DFL_FPGA_FME/PORT_XXX_GET_INFO, delete flag field for
-> > > >>    DFL_FPGA_FME/PORT_XXX_SET_IRQ param
-> > > >>
-> > > >> Main changes from v2:
-> > > >>  - put parse_feature_irqs() inside create_feature_instance().
-> > > >>  - refines code for dfl_fpga_set_irq_triggers, delete local variable j.
-> > > >>  - put_user() instead of copy_to_user() for DFL_FPGA_XXX_GET_IRQ_NUM IOCTL
-> > > >>
-> > > >> Main changes from v3:
-> > > >>  - rebased to 5.7-rc1.
-> > > >>  - fail the dfl enumeration when irq parsing error happens.
-> > > >>  - Add 2 helper functions in dfl.c to handle generic irq ioctls in feature
-> > > >>    drivers.
-> > > >>
-> > > >> Main changes from v4:
-> > > >>  - Minor fixes for Hao's comments.
-> > > >>
-> > > >> Main changes from v5:
-> > > >>  - Remove unnecessary type casting in Patch #1 & #3.
-> > > >>  - Minor fixes for Moritz's comments.
-> > > >>
-> > > >> Main changes from v6:
-> > > >>  - Add the header file <linux/interrupt.h> for Patch #1, to fix build
-> > > >>    error on ARCH=xtensa
-> > > >>  - Minor fixes in Patch #2 & #3.
-> > > >>
-> > > >> Xu Yilun (7):
-> > > >>   fpga: dfl: parse interrupt info for feature devices on enumeration
-> > > >>   fpga: dfl: pci: add irq info for feature devices enumeration
-> > > >>   fpga: dfl: introduce interrupt trigger setting API
-> > > >>   fpga: dfl: afu: add interrupt support for port error reporting
-> > > >>   fpga: dfl: fme: add interrupt support for global error reporting
-> > > >>   fpga: dfl: afu: add AFU interrupt support
-> > > >>   Documentation: fpga: dfl: add descriptions for interrupt related
-> > > >>     interfaces.
-> > > >>
-> > > >>  Documentation/fpga/dfl.rst    |  19 +++
-> > > >>  drivers/fpga/dfl-afu-error.c  |  17 +++
-> > > >>  drivers/fpga/dfl-afu-main.c   |  32 +++++
-> > > >>  drivers/fpga/dfl-fme-error.c  |  18 +++
-> > > >>  drivers/fpga/dfl-fme-main.c   |   6 +
-> > > >>  drivers/fpga/dfl-pci.c        |  76 +++++++++--
-> > > >>  drivers/fpga/dfl.c            | 310 ++++++++++++++++++++++++++++++++++++++++++
-> > > >>  drivers/fpga/dfl.h            |  57 ++++++++
-> > > >>  include/uapi/linux/fpga-dfl.h |  82 +++++++++++
-> > > >>  9 files changed, 608 insertions(+), 9 deletions(-)
-> > > >>
-> > > >> --
-> > > >> 2.7.4
+>  Ioctls:
+>  * DFL_FPGA_PORT_ERR_GET_IRQ_NUM
+>    get the number of irqs, which is used to determine whether/how many
+>    interrupts error reporting feature supports.
+> 
+>  * DFL_FPGA_PORT_ERR_SET_IRQ
+>    set/unset given eventfds as error interrupt triggers.
+> 
+> Signed-off-by: Luwei Kang <luwei.kang@intel.com>
+> Signed-off-by: Wu Hao <hao.wu@intel.com>
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> Reviewed-by: Marcelo Tosatti <mtosatti@redhat.com>
+> Acked-by: Wu Hao <hao.wu@intel.com>
+> ---
+> v2: use DFL_FPGA_PORT_ERR_GET_IRQ_NUM instead of
+>     DFL_FPGA_PORT_ERR_GET_INFO
+>     Delete flag field for DFL_FPGA_PORT_ERR_SET_IRQ param
+> v3: put_user() instead of copy_to_user()
+>     improves comments
+> v4: use common functions to handle irq ioctls
+> v5: minor fixes for Hao's comments
+> v6: No change
+> v7: No change
+> ---
+>  drivers/fpga/dfl-afu-error.c  | 17 +++++++++++++++++
+>  drivers/fpga/dfl-afu-main.c   |  4 ++++
+>  include/uapi/linux/fpga-dfl.h | 23 +++++++++++++++++++++++
+>  3 files changed, 44 insertions(+)
+> 
+> diff --git a/drivers/fpga/dfl-afu-error.c b/drivers/fpga/dfl-afu-error.c
+> index c1467ae..c469118 100644
+> --- a/drivers/fpga/dfl-afu-error.c
+> +++ b/drivers/fpga/dfl-afu-error.c
+> @@ -14,6 +14,7 @@
+>   *   Mitchel Henry <henry.mitchel@intel.com>
+>   */
+>  
+> +#include <linux/fpga-dfl.h>
+>  #include <linux/uaccess.h>
+>  
+>  #include "dfl-afu.h"
+> @@ -219,6 +220,21 @@ static void port_err_uinit(struct platform_device *pdev,
+>  	afu_port_err_mask(&pdev->dev, true);
+>  }
+>  
+> +static long
+> +port_err_ioctl(struct platform_device *pdev, struct dfl_feature *feature,
+> +	       unsigned int cmd, unsigned long arg)
+> +{
+> +	switch (cmd) {
+> +	case DFL_FPGA_PORT_ERR_GET_IRQ_NUM:
+> +		return dfl_feature_ioctl_get_num_irqs(pdev, feature, arg);
+> +	case DFL_FPGA_PORT_ERR_SET_IRQ:
+> +		return dfl_feature_ioctl_set_irq(pdev, feature, arg);
+> +	default:
+> +		dev_dbg(&pdev->dev, "%x cmd not handled", cmd);
+> +		return -ENODEV;
+> +	}
+> +}
+> +
+>  const struct dfl_feature_id port_err_id_table[] = {
+>  	{.id = PORT_FEATURE_ID_ERROR,},
+>  	{0,}
+> @@ -227,4 +243,5 @@ const struct dfl_feature_id port_err_id_table[] = {
+>  const struct dfl_feature_ops port_err_ops = {
+>  	.init = port_err_init,
+>  	.uinit = port_err_uinit,
+> +	.ioctl = port_err_ioctl,
+>  };
+> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
+> index b0c3178..357cd5d 100644
+> --- a/drivers/fpga/dfl-afu-main.c
+> +++ b/drivers/fpga/dfl-afu-main.c
+> @@ -577,6 +577,7 @@ static int afu_release(struct inode *inode, struct file *filp)
+>  {
+>  	struct platform_device *pdev = filp->private_data;
+>  	struct dfl_feature_platform_data *pdata;
+> +	struct dfl_feature *feature;
+>  
+>  	dev_dbg(&pdev->dev, "Device File Release\n");
+>  
+> @@ -586,6 +587,9 @@ static int afu_release(struct inode *inode, struct file *filp)
+>  	dfl_feature_dev_use_end(pdata);
+>  
+>  	if (!dfl_feature_dev_use_count(pdata)) {
+> +		dfl_fpga_dev_for_each_feature(pdata, feature)
+> +			dfl_fpga_set_irq_triggers(feature, 0,
+> +						  feature->nr_irqs, NULL);
+>  		__port_reset(pdev);
+>  		afu_dma_region_destroy(pdata);
+>  	}
+> diff --git a/include/uapi/linux/fpga-dfl.h b/include/uapi/linux/fpga-dfl.h
+> index 7331350..6c71c9d 100644
+> --- a/include/uapi/linux/fpga-dfl.h
+> +++ b/include/uapi/linux/fpga-dfl.h
+> @@ -164,6 +164,29 @@ struct dfl_fpga_irq_set {
+>  	__s32 evtfds[];
+>  };
+>  
+> +/**
+> + * DFL_FPGA_PORT_ERR_GET_IRQ_NUM - _IOR(DFL_FPGA_MAGIC, DFL_PORT_BASE + 5,
+> + *								__u32 num_irqs)
+> + *
+> + * Get the number of irqs supported by the fpga port error reporting private
+> + * feature. Currently hardware supports up to 1 irq.
+> + * Return: 0 on success, -errno on failure.
+> + */
+> +#define DFL_FPGA_PORT_ERR_GET_IRQ_NUM	_IOR(DFL_FPGA_MAGIC,	\
+> +					     DFL_PORT_BASE + 5, __u32)
+> +
+> +/**
+> + * DFL_FPGA_PORT_ERR_SET_IRQ - _IOW(DFL_FPGA_MAGIC, DFL_PORT_BASE + 6,
+> + *						struct dfl_fpga_irq_set)
+> + *
+> + * Set fpga port error reporting interrupt trigger if evtfds[n] is valid.
+> + * Unset related interrupt trigger if evtfds[n] is a negative value.
+> + * Return: 0 on success, -errno on failure.
+> + */
+> +#define DFL_FPGA_PORT_ERR_SET_IRQ	_IOW(DFL_FPGA_MAGIC,	\
+> +					     DFL_PORT_BASE + 6,	\
+> +					     struct dfl_fpga_irq_set)
+> +
+>  /* IOCTLs for FME file descriptor */
+>  
+>  /**
+> -- 
+> 2.7.4
+> 
+Applied to for-next,
+
+Thanks!
