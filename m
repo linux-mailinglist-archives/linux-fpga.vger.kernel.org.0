@@ -2,126 +2,127 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0912216575
-	for <lists+linux-fpga@lfdr.de>; Tue,  7 Jul 2020 06:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375D0217324
+	for <lists+linux-fpga@lfdr.de>; Tue,  7 Jul 2020 17:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727999AbgGGEkU (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 7 Jul 2020 00:40:20 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:46724 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725766AbgGGEkU (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 7 Jul 2020 00:40:20 -0400
-Received: by mail-pl1-f196.google.com with SMTP id k5so370296plk.13;
-        Mon, 06 Jul 2020 21:40:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tTyDwQZyfS5JdKrzuL5HMoSjcvei51XSPWAcVQngrio=;
-        b=S+gsPFaLmgvn5zfIf8ta9heHR7r4JBDO48RdfwbpzWVatgwSYeIJcrBlKZtOZGueYz
-         fOZmTQ1i0fU2GiV2CvOLP3cN8Qm9CLADiQJw7VKNJstRW9ki7HijmIIxE5tOSZS77HG8
-         ddFWlhxNqAjKWU6sbnVaK5cMKWPA0PJ6r9kIoFyRS5mYsnLx3+x2LE0O0oonBCqiaPj4
-         kXkHltIXOGdUVcB9s1R+HWbNiI4sVl53bfFKo2h+pE88+u7gc1SkTfR8AitXjuNxgB+n
-         PrtoAj9QqiqhD5IbYzbX8F84fQI9TPA7eKNLEtCg2W9mwwtnSnJTXmkdYC1EKfSLO/87
-         cIKA==
-X-Gm-Message-State: AOAM530S7fYcmmJr6SE9P27UwnzUYV65ekL8yEEhFrGOK91iugPusevv
-        RzawSfMJYWXd/w0dfDCLHVlqdtwp99E=
-X-Google-Smtp-Source: ABdhPJy0Co7XTeBeQ9IOJ5MIlhOHFJG9zTbKYrKXl+IQLWuvrTxbhTCRXH8pp75tuXWxNm7tF2zX9w==
-X-Received: by 2002:a17:90a:e618:: with SMTP id j24mr2359572pjy.41.1594096819717;
-        Mon, 06 Jul 2020 21:40:19 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id c12sm21232908pfn.162.2020.07.06.21.40.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 21:40:19 -0700 (PDT)
-Date:   Mon, 6 Jul 2020 21:40:18 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, trix@redhat.com, bhu@redhat.com,
-        mtosatti@redhat.com, gregkh@linuxfoundation.org,
-        Luwei Kang <luwei.kang@intel.com>, Wu Hao <hao.wu@intel.com>
-Subject: Re: [PATCH v7 7/7] Documentation: fpga: dfl: add descriptions for
- interrupt related interfaces.
-Message-ID: <20200707044018.GD10464@epycbox.lan>
-References: <1592280528-6350-1-git-send-email-yilun.xu@intel.com>
- <1592280528-6350-8-git-send-email-yilun.xu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1592280528-6350-8-git-send-email-yilun.xu@intel.com>
+        id S1728266AbgGGP7H (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 7 Jul 2020 11:59:07 -0400
+Received: from mga18.intel.com ([134.134.136.126]:27064 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728110AbgGGP7H (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 7 Jul 2020 11:59:07 -0400
+IronPort-SDR: zIx8mHwfzqnmQ8rGu5OH4gtH/3rAEqEwh8w7IAxA0US8qmc/ndCsYX2ifffv6/6/N+VL2d8gyc
+ bwDE5xwx+YAg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9675"; a="135098093"
+X-IronPort-AV: E=Sophos;i="5.75,324,1589266800"; 
+   d="scan'208";a="135098093"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2020 08:59:05 -0700
+IronPort-SDR: ecctsqBL/nqF2OifVsSD3NjgWHb+/wN5P/fusefWSqr4U/+mBUlM7rxByfUJhOdF32llWvorQm
+ SfiCuUYNT1Sw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,324,1589266800"; 
+   d="scan'208";a="305709944"
+Received: from marshy.an.intel.com ([10.122.105.159])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Jul 2020 08:59:04 -0700
+From:   richard.gong@linux.intel.com
+To:     mdf@kernel.org
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dinguyen@kernel.org, richard.gong@linux.intel.com,
+        richard.gong@intel.com
+Subject: [PATCH] fpga: stratix10-soc: make FPGA task un-interruptible
+Date:   Tue,  7 Jul 2020 11:14:07 -0500
+Message-Id: <1594138447-21488-1-git-send-email-richard.gong@linux.intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 12:08:48PM +0800, Xu Yilun wrote:
-> This patch adds introductions of interrupt related interfaces for FME
-> error reporting, port error reporting and AFU user interrupts features.
-> 
-> Signed-off-by: Luwei Kang <luwei.kang@intel.com>
-> Signed-off-by: Wu Hao <hao.wu@intel.com>
-> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> Reviewed-by: Marcelo Tosatti <mtosatti@redhat.com>
-> Acked-by: Wu Hao <hao.wu@intel.com>
-> ---
-> v2: Update Documents cause change of irq ioctl interfaces.
-> v3: No change
-> v4: Update interrupt support part.
-> v5: No change
-> v6: No change
-> v7: No change
-> ---
->  Documentation/fpga/dfl.rst | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index 978c4af..2df9a0a 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -89,6 +89,8 @@ The following functions are exposed through ioctls:
->  - Program bitstream (DFL_FPGA_FME_PORT_PR)
->  - Assign port to PF (DFL_FPGA_FME_PORT_ASSIGN)
->  - Release port from PF (DFL_FPGA_FME_PORT_RELEASE)
-> +- Get number of irqs of FME global error (DFL_FPGA_FME_ERR_GET_IRQ_NUM)
-> +- Set interrupt trigger for FME error (DFL_FPGA_FME_ERR_SET_IRQ)
->  
->  More functions are exposed through sysfs
->  (/sys/class/fpga_region/regionX/dfl-fme.n/):
-> @@ -149,6 +151,10 @@ The following functions are exposed through ioctls:
->  - Map DMA buffer (DFL_FPGA_PORT_DMA_MAP)
->  - Unmap DMA buffer (DFL_FPGA_PORT_DMA_UNMAP)
->  - Reset AFU (DFL_FPGA_PORT_RESET)
-> +- Get number of irqs of port error (DFL_FPGA_PORT_ERR_GET_IRQ_NUM)
-> +- Set interrupt trigger for port error (DFL_FPGA_PORT_ERR_SET_IRQ)
-> +- Get number of irqs of UINT (DFL_FPGA_PORT_UINT_GET_IRQ_NUM)
-> +- Set interrupt trigger for UINT (DFL_FPGA_PORT_UINT_SET_IRQ)
->  
->  DFL_FPGA_PORT_RESET:
->    reset the FPGA Port and its AFU. Userspace can do Port
-> @@ -462,6 +468,19 @@ since they are system-wide counters on FPGA device.
->  The current driver does not support sampling. So "perf record" is unsupported.
->  
->  
-> +Interrupt support
-> +=================
-> +Some FME and AFU private features are able to generate interrupts. As mentioned
-> +above, users could call ioctl (DFL_FPGA_*_GET_IRQ_NUM) to know whether or how
-> +many interrupts are supported for this private feature. Drivers also implement
-> +an eventfd based interrupt handling mechanism for users to get notified when
-> +interrupt happens. Users could set eventfds to driver via
-> +ioctl (DFL_FPGA_*_SET_IRQ), and then poll/select on these eventfds waiting for
-> +notification.
-> +In Current DFL, 3 sub features (Port error, FME global error and AFU interrupt)
-> +support interrupts.
-> +
-> +
->  Add new FIUs support
->  ====================
->  It's possible that developers made some new function blocks (FIUs) under this
-> -- 
-> 2.7.4
-> 
+From: Richard Gong <richard.gong@intel.com>
 
-Applied to for-next,
+When CTRL+C occurs during the process of FPGA reconfiguration, the FPGA
+reconfiguration process stops and the user can't perform a new FPGA
+reconfiguration properly.
 
-Thanks!
+Set FPGA complete task to be not interruptible so that the user can
+properly perform FPGA reconfiguration after CTRL+C event.
+
+Signed-off-by: Richard Gong <richard.gong@intel.com>
+---
+ drivers/fpga/stratix10-soc.c | 23 +++--------------------
+ 1 file changed, 3 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+index 44b7c56..657a70c 100644
+--- a/drivers/fpga/stratix10-soc.c
++++ b/drivers/fpga/stratix10-soc.c
+@@ -196,17 +196,13 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
+ 	if (ret < 0)
+ 		goto init_done;
+ 
+-	ret = wait_for_completion_interruptible_timeout(
++	ret = wait_for_completion_timeout(
+ 		&priv->status_return_completion, S10_RECONFIG_TIMEOUT);
+ 	if (!ret) {
+ 		dev_err(dev, "timeout waiting for RECONFIG_REQUEST\n");
+ 		ret = -ETIMEDOUT;
+ 		goto init_done;
+ 	}
+-	if (ret < 0) {
+-		dev_err(dev, "error (%d) waiting for RECONFIG_REQUEST\n", ret);
+-		goto init_done;
+-	}
+ 
+ 	ret = 0;
+ 	if (!test_and_clear_bit(SVC_STATUS_OK, &priv->status)) {
+@@ -318,7 +314,7 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
+ 		 */
+ 		wait_status = 1; /* not timed out */
+ 		if (!priv->status)
+-			wait_status = wait_for_completion_interruptible_timeout(
++			wait_status = wait_for_completion_timeout(
+ 				&priv->status_return_completion,
+ 				S10_BUFFER_TIMEOUT);
+ 
+@@ -340,13 +336,6 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
+ 			ret = -ETIMEDOUT;
+ 			break;
+ 		}
+-		if (wait_status < 0) {
+-			ret = wait_status;
+-			dev_err(dev,
+-				"error (%d) waiting for svc layer buffers\n",
+-				ret);
+-			break;
+-		}
+ 	}
+ 
+ 	if (!s10_free_buffers(mgr))
+@@ -372,7 +361,7 @@ static int s10_ops_write_complete(struct fpga_manager *mgr,
+ 		if (ret < 0)
+ 			break;
+ 
+-		ret = wait_for_completion_interruptible_timeout(
++		ret = wait_for_completion_timeout(
+ 			&priv->status_return_completion, timeout);
+ 		if (!ret) {
+ 			dev_err(dev,
+@@ -380,12 +369,6 @@ static int s10_ops_write_complete(struct fpga_manager *mgr,
+ 			ret = -ETIMEDOUT;
+ 			break;
+ 		}
+-		if (ret < 0) {
+-			dev_err(dev,
+-				"error (%d) waiting for RECONFIG_COMPLETED\n",
+-				ret);
+-			break;
+-		}
+ 		/* Not error or timeout, so ret is # of jiffies until timeout */
+ 		timeout = ret;
+ 		ret = 0;
+-- 
+2.7.4
+
