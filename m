@@ -2,75 +2,77 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D28219A9C
-	for <lists+linux-fpga@lfdr.de>; Thu,  9 Jul 2020 10:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC95219AB4
+	for <lists+linux-fpga@lfdr.de>; Thu,  9 Jul 2020 10:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726357AbgGIIRH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 9 Jul 2020 04:17:07 -0400
-Received: from mga03.intel.com ([134.134.136.65]:32538 "EHLO mga03.intel.com"
+        id S1726228AbgGIIWx (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 9 Jul 2020 04:22:53 -0400
+Received: from mga04.intel.com ([192.55.52.120]:28547 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726124AbgGIIRH (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 9 Jul 2020 04:17:07 -0400
-IronPort-SDR: +a+eELCkLkUIIPLx+MWpM2lsL7j3nUESNalSkk7tIRS+u1grET9Imql88v7VkILAir0ziLcY8c
- GjHyP0JQV92Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9676"; a="147950937"
+        id S1726151AbgGIIWx (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 9 Jul 2020 04:22:53 -0400
+IronPort-SDR: 8GVPbMB/TdwT+YzEHdBm+9aiWW9xqji+Klf1ic9BYV/Xe1pz2bWUk3MOztgBVKrsIqExZxB9Xe
+ RJI4xHNsYStg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9676"; a="145450275"
 X-IronPort-AV: E=Sophos;i="5.75,331,1589266800"; 
-   d="scan'208";a="147950937"
+   d="scan'208";a="145450275"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 01:17:06 -0700
-IronPort-SDR: tl157UJ5Lokz2tGjMlFsd+rRse5OqowuhlpbDRKzp4jhSmRw1oQmUjeEYl3oICwdp/G0Zwa5XM
- 1MUTkTbLgJVw==
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 01:22:48 -0700
+IronPort-SDR: HgabUgEHzhTKJMlrn/f8oWUal2Nu61e4o4VL+Ip5I4+SZcY8NUctaTZmQUF6D2mKgcyCSWeRYl
+ CXHaC/+qylrw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,331,1589266800"; 
-   d="scan'208";a="268698048"
+   d="scan'208";a="483714216"
 Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Jul 2020 01:17:04 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 09 Jul 2020 01:22:46 -0700
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     trix@redhat.com, lgoncalv@redhat.com,
+        Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
         Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Xu Yilun <yilun.xu@intel.com>
-Subject: [RESEND PATCH 2/2] fpga: dfl: fix bug in port reset handshake
-Date:   Thu,  9 Jul 2020 16:12:17 +0800
-Message-Id: <1594282337-32125-3-git-send-email-yilun.xu@intel.com>
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH] fpga: dfl: pci: add device id for Intel FPGA PAC N3000
+Date:   Thu,  9 Jul 2020 16:18:25 +0800
+Message-Id: <1594282705-32289-1-git-send-email-yilun.xu@intel.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1594282337-32125-1-git-send-email-yilun.xu@intel.com>
-References: <1594282337-32125-1-git-send-email-yilun.xu@intel.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Add PCIe Device ID for Intel FPGA PAC N3000.
 
-When putting the port in reset, driver must wait for the soft reset
-acknowledgment bit instead of the soft reset bit.
-
-Fixes: 47c1b19c160f (fpga: dfl: afu: add port ops support)
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Signed-off-by: Wu Hao <hao.wu@intel.com>
 Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-Acked-by: Wu Hao <hao.wu@intel.com>
+Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 ---
- drivers/fpga/dfl-afu-main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/fpga/dfl-pci.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index 7c84fee..753cda4 100644
---- a/drivers/fpga/dfl-afu-main.c
-+++ b/drivers/fpga/dfl-afu-main.c
-@@ -83,7 +83,8 @@ int __afu_port_disable(struct platform_device *pdev)
- 	 * on this port and minimum soft reset pulse width has elapsed.
- 	 * Driver polls port_soft_reset_ack to determine if reset done by HW.
- 	 */
--	if (readq_poll_timeout(base + PORT_HDR_CTRL, v, v & PORT_CTRL_SFTRST,
-+	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
-+			       v & PORT_CTRL_SFTRST_ACK,
- 			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
- 		dev_err(&pdev->dev, "timeout, fail to reset device\n");
- 		return -ETIMEDOUT;
+diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+index 73b5153..824aecf 100644
+--- a/drivers/fpga/dfl-pci.c
++++ b/drivers/fpga/dfl-pci.c
+@@ -64,6 +64,7 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
+ #define PCIE_DEVICE_ID_PF_INT_5_X	0xBCBD
+ #define PCIE_DEVICE_ID_PF_INT_6_X	0xBCC0
+ #define PCIE_DEVICE_ID_PF_DSC_1_X	0x09C4
++#define PCIE_DEVICE_ID_PF_PAC_N3000	0x0B30
+ /* VF Device */
+ #define PCIE_DEVICE_ID_VF_INT_5_X	0xBCBF
+ #define PCIE_DEVICE_ID_VF_INT_6_X	0xBCC1
+@@ -76,6 +77,7 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
+ 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_VF_INT_6_X),},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_PF_DSC_1_X),},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_VF_DSC_1_X),},
++	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_PF_PAC_N3000),},
+ 	{0,}
+ };
+ MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
 -- 
 2.7.4
 
