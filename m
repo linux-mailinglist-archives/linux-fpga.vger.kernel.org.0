@@ -2,119 +2,177 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E2F21B9CA
-	for <lists+linux-fpga@lfdr.de>; Fri, 10 Jul 2020 17:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597DF21C52A
+	for <lists+linux-fpga@lfdr.de>; Sat, 11 Jul 2020 18:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbgGJPqT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 10 Jul 2020 11:46:19 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:37495 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726820AbgGJPqT (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 10 Jul 2020 11:46:19 -0400
-Received: by mail-pf1-f195.google.com with SMTP id s26so2707990pfm.4;
-        Fri, 10 Jul 2020 08:46:19 -0700 (PDT)
+        id S1728532AbgGKQVP (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 11 Jul 2020 12:21:15 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:42114 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728412AbgGKQVO (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 11 Jul 2020 12:21:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594484472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9AlA+cIFYWbndb4gFwhFTCTPyhe+yp/zlSC3gYYxBKw=;
+        b=eX3WnpAnSA1qOQHZg2Rfn2yFfm6d9g2hGjLlmHIyVgjvGBDscFIjrrQpRxuSx5QWDNNEfs
+        GH5SJzW5loBOmxnQYII/Un4O3yFgReHmtnPxTNcxj6RC3aRlglSEl974wmGBCNJl8pVRar
+        GqNaIVpNSpfcVEkPV98pt46GMLQKHt8=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-359-ZtKP3IjRPDSJ7ZOE_xpIaw-1; Sat, 11 Jul 2020 12:21:10 -0400
+X-MC-Unique: ZtKP3IjRPDSJ7ZOE_xpIaw-1
+Received: by mail-qk1-f198.google.com with SMTP id q192so6998938qka.13
+        for <linux-fpga@vger.kernel.org>; Sat, 11 Jul 2020 09:21:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yhTtJRTJXOvcoXVeEriil9VP131no0hEgltA/Dirf4w=;
-        b=sFdnvmQpyiIRigGTtkAokRm67w1E+0OjAeXUUC6q+imb7MlHMDYT1lXRx+o2HL/wC3
-         eMJuSUNd/jBOqQQ1IBzrwcPj2ev82fQYfS48Dv4g9sRreGz2bE8bnr+OOiXJVItXJpEd
-         o+0RpecNglrwhYh322QxykIrjGftGs25l8wsspqZUVaZOgspwDgati6x9Cz5yVp2WsCQ
-         iaGJH+sATzM0H1kh4zZ1KmnaMCWpInPmvteRSnQkpuVlnvTdg5hRkCyUpl5m1WRl4ljj
-         dZPO31tLjJstJIsQSPVnMVuxmsKrHdmvnadyacWwcfKiSitidSekKywB2siI6OTo7jdX
-         v8Ug==
-X-Gm-Message-State: AOAM533i4G110HG+jVRYzd6H4KQektO7CgmmO6bSLigoZIqTz3H/9JQ7
-        60hXK5AAxCuKhnL5i4i7q0Q=
-X-Google-Smtp-Source: ABdhPJxNBJS20J2XnwaWY7SBoEH0afToq2nuqUFeImqSskMnzcdKItU72mJCXWho82jrh2RBs74ctA==
-X-Received: by 2002:aa7:930b:: with SMTP id 11mr60057545pfj.320.1594395978749;
-        Fri, 10 Jul 2020 08:46:18 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id c27sm6130825pfj.163.2020.07.10.08.46.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2020 08:46:18 -0700 (PDT)
-Date:   Fri, 10 Jul 2020 08:46:16 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     "Wu, Hao" <hao.wu@intel.com>
-Cc:     "Xu, Yilun" <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        "Weight, Russell H" <russell.h.weight@intel.com>
-Subject: Re: [PATCH] fpga: dfl: pci: add device id for Intel FPGA PAC N3000
-Message-ID: <20200710154616.GA130068@epycbox.lan>
-References: <1594282705-32289-1-git-send-email-yilun.xu@intel.com>
- <DM6PR11MB3819117029F124067F7EA8B985640@DM6PR11MB3819.namprd11.prod.outlook.com>
- <20200709093527.GA32541@yilunxu-OptiPlex-7050>
- <DM6PR11MB3819D07348C347B5BB8F86C085640@DM6PR11MB3819.namprd11.prod.outlook.com>
- <2d7919d5-a320-58f4-5c9d-7ef868ad8676@redhat.com>
- <20200710052443.GB8689@yilunxu-OptiPlex-7050>
- <DM6PR11MB3819BF1B54D64AD706BF832E85650@DM6PR11MB3819.namprd11.prod.outlook.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=9AlA+cIFYWbndb4gFwhFTCTPyhe+yp/zlSC3gYYxBKw=;
+        b=R1fmBS+D15gCIDX3AmZVzR3PHv5qg/09UxU0jmfXr1+6R8GjRX96FeXE4Q4pbJCyQg
+         xffUBkBStatLgIV+FFdL+6A+6urdpJ7InHQ7STwdMp36jLn4ItJlamcJdosqbSJgDvl7
+         fEfIuBqrjodfQ3V0cKxiNVcF9T4ynODM67qnH/Putp92f9h3nmW0zRa7hdkFahJPiEIE
+         +gcpmlBgQHLYRoIlS9UQ9r3ChwK/E6xwtM55KzAGR/8rsj1g9zJ70TijUUdgBhihMUQ1
+         90hjVtGZbZPdjbra2q2kIXRo0k4Sb1YYyyBv6N6UqU/T4Dhr/LX5R0+QfzbKEKbYzbpS
+         PLbQ==
+X-Gm-Message-State: AOAM5328zZUEw8h+naSf+PVZDldmu/lMSBQUUYpMMs/6gkN+ZIhwBiEA
+        zJdSYi+2uw3EX7yJUqucFk0DAjWCcGcNHLcb1zTr5WrKKofCyd08h9NDlhz31Vong/BBk4Ymt2c
+        YVfMJqicEwk+j5TrXr/dHwg==
+X-Received: by 2002:a37:e217:: with SMTP id g23mr75325306qki.108.1594484470233;
+        Sat, 11 Jul 2020 09:21:10 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx5DY2i09z0u+FCwttgEkruzUkoO/ggYfkUMxtuYfMOw2/k500kdqt2X/WRJu192QZGWyek8Q==
+X-Received: by 2002:a37:e217:: with SMTP id g23mr75325283qki.108.1594484469913;
+        Sat, 11 Jul 2020 09:21:09 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id d135sm11795610qkg.117.2020.07.11.09.21.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Jul 2020 09:21:08 -0700 (PDT)
+Subject: Re: [RESEND PATCH 1/2] fpga: dfl: pci: reduce the scope of variable
+ 'ret'
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lgoncalv@redhat.com
+References: <1594282337-32125-1-git-send-email-yilun.xu@intel.com>
+ <1594282337-32125-2-git-send-email-yilun.xu@intel.com>
+ <ef506ec6-d857-736b-e9e2-46077ab7d778@redhat.com>
+ <20200710051600.GA8689@yilunxu-OptiPlex-7050>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <85d84892-14d0-3097-c4f9-cbb9092c9a5f@redhat.com>
+Date:   Sat, 11 Jul 2020 09:21:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB3819BF1B54D64AD706BF832E85650@DM6PR11MB3819.namprd11.prod.outlook.com>
+In-Reply-To: <20200710051600.GA8689@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 06:14:19AM +0000, Wu, Hao wrote:
-> > On Thu, Jul 09, 2020 at 06:00:40AM -0700, Tom Rix wrote:
-> > >
-> > > On 7/9/20 3:14 AM, Wu, Hao wrote:
-> > > >> On Thu, Jul 09, 2020 at 05:10:49PM +0800, Wu, Hao wrote:
-> > > >>>> Subject: [PATCH] fpga: dfl: pci: add device id for Intel FPGA PAC N3000
-> > > >>>>
-> > > >>>> Add PCIe Device ID for Intel FPGA PAC N3000.
-> > > >>>>
-> > > >>>> Signed-off-by: Wu Hao <hao.wu@intel.com>
-> > > >>>> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > > >>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > >>>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > > >>>> ---
-> > > >>>>  drivers/fpga/dfl-pci.c | 2 ++
-> > > >>>>  1 file changed, 2 insertions(+)
-> > > >>>>
-> > > >>>> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-> > > >>>> index 73b5153..824aecf 100644
-> > > >>>> --- a/drivers/fpga/dfl-pci.c
-> > > >>>> +++ b/drivers/fpga/dfl-pci.c
-> > > >>>> @@ -64,6 +64,7 @@ static void cci_pci_free_irq(struct pci_dev
-> > *pcidev)
-> > > >>>>  #define PCIE_DEVICE_ID_PF_INT_5_X0xBCBD
-> > > >>>>  #define PCIE_DEVICE_ID_PF_INT_6_X0xBCC0
-> > > >>>>  #define PCIE_DEVICE_ID_PF_DSC_1_X0x09C4
-> > > >>>> +#define PCIE_DEVICE_ID_PF_PAC_N3000 0x0B30
-> > > >>> Should we drop _PF_ here? and also do you want _INTEL_ here?
-> > > >> I think we could keep _PF_, also there is no need to support VF of pac
-> > > >> n3000 in product now, but it does exist (ID: 0x0b31).
-> > >
-> > > I was wondering about the vf id, thanks!
-> > >
-> > > >>
-> > > >> And add _INTEL_ is good to me.
-> > > >>
-> > > >> Then how about this one:
-> > > >>   #define PCIE_DEVICE_ID_PF_INTEL_PAC_N3000	0x0B30
-> > > > I am just considering the alignment with ids defined in
-> > include/linux/pci_ids.h
-> > > > So drop _PF_ before _INTEL_ would be better? : )
-> > >
-> > > To be consistent, all the id's are intel and all could drop pf.
-> > 
-> > That's good to me after checking the pci_ids.h. So we have:
-> > 
-> > #define PCIE_DEVICE_ID_INTEL_PAC_N3000        0x0B30
-> 
-> Sounds good to me.
-> 
-> Hao
+Ok, i take your point on the api.
 
-Heads up I was gonna send out the PR early next week. I can fix this up
-myself if you want if you want or you can resend it?
+However I still feel that this change should be improved so the return is not defined inside a block.
 
-Thanks,
-Moritz
+I think this could be done better with
+
+int ret = num_vfs;
+
+...
+
+return ret;
+
+There is no consistency on this check with the other drivers' sriov_configure.
+
+I do not feel strongly about this change, your original change will work. So you may add.
+
+Reviewed-by: Tom Rix <trix@redhat.com>
+
+Tom
+
+On 7/9/20 10:16 PM, Xu Yilun wrote:
+> On Thu, Jul 09, 2020 at 06:18:18AM -0700, Tom Rix wrote:
+>> I think a better change is to use the ret variable, like this
+>>
+>> --- a/drivers/fpga/dfl-pci.c
+>> +++ b/drivers/fpga/dfl-pci.c
+>> @@ -312,7 +312,7 @@ static int cci_pci_sriov_configure(struct pci_dev *pcidev, int num_vfs)
+>> Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â  }
+>> Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â  }
+>> Ã‚Â 
+>> -Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â  return num_vfs;
+>> +Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â Ã‚Â  return ret;
+>> Ã‚Â }
+>>
+>> The existing use of returning num_vfs is not right, the function should return 0/err not num_vfs. currently it is reusing the 0 passed in with num_vfs to mean disable as the 0 return status.Ã‚Â  it should be properly returning ret.
+> The sriov_configure callback should return negative value for error, and
+> return num_vfs if success.
+>
+> See the Documentation/PCI/pci-iov-howto.rst
+>
+> also in drivers/pci/iov.c:
+>
+>   static ssize_t sriov_numvfs_store(struct device *dev, ...)
+>   {
+> 	...
+>
+>         ret = pdev->driver->sriov_configure(pdev, num_vfs);
+>         if (ret < 0) 
+>                 goto exit;
+>
+>         if (ret != num_vfs)
+>                 pci_warn(pdev, "%d VFs requested; only %d enabled\n",
+>                          num_vfs, ret);
+>
+> 	...
+>   }
+>
+>> Tom
+>>
+>> On 7/9/20 1:12 AM, Xu Yilun wrote:
+>>> This is to fix lkp cppcheck warnings:
+>>>
+>>>  drivers/fpga/dfl-pci.c:230:6: warning: The scope of the variable 'ret' can be reduced. [variableScope]
+>>>     int ret = 0;
+>>>         ^
+>>>
+>>>  drivers/fpga/dfl-pci.c:230:10: warning: Variable 'ret' is assigned a value that is never used. [unreadVariable]
+>>>     int ret = 0;
+>>>             ^
+>>>
+>>> Fixes: 3c2760b78f90 ("fpga: dfl: pci: fix return value of cci_pci_sriov_configure")
+>>> Reported-by: kbuild test robot <lkp@intel.com>
+>>> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+>>> Acked-by: Wu Hao <hao.wu@intel.com>
+>>> ---
+>>>  drivers/fpga/dfl-pci.c | 3 ++-
+>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+>>> index 4a14a24..73b5153 100644
+>>> --- a/drivers/fpga/dfl-pci.c
+>>> +++ b/drivers/fpga/dfl-pci.c
+>>> @@ -285,7 +285,6 @@ static int cci_pci_sriov_configure(struct pci_dev *pcidev, int num_vfs)
+>>>  {
+>>>  	struct cci_drvdata *drvdata = pci_get_drvdata(pcidev);
+>>>  	struct dfl_fpga_cdev *cdev = drvdata->cdev;
+>>> -	int ret = 0;
+>>>  
+>>>  	if (!num_vfs) {
+>>>  		/*
+>>> @@ -297,6 +296,8 @@ static int cci_pci_sriov_configure(struct pci_dev *pcidev, int num_vfs)
+>>>  		dfl_fpga_cdev_config_ports_pf(cdev);
+>>>  
+>>>  	} else {
+>>> +		int ret;
+>>> +
+>>>  		/*
+>>>  		 * before enable SRIOV, put released ports into VF access mode
+>>>  		 * first of all.
+
