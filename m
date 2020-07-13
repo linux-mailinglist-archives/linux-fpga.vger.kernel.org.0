@@ -2,62 +2,93 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E1821D858
-	for <lists+linux-fpga@lfdr.de>; Mon, 13 Jul 2020 16:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EC821D8AA
+	for <lists+linux-fpga@lfdr.de>; Mon, 13 Jul 2020 16:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729776AbgGMOZZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 13 Jul 2020 10:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729659AbgGMOZY (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 13 Jul 2020 10:25:24 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A2CC061755
-        for <linux-fpga@vger.kernel.org>; Mon, 13 Jul 2020 07:25:24 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id o3so11282258ilo.12
-        for <linux-fpga@vger.kernel.org>; Mon, 13 Jul 2020 07:25:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5YLgrmmw9m+sKzPxDNVWcpKGfVmpcHCuvOPpLM6AIJg=;
-        b=EgracL4AMuv8hTFdGzyFGIph67ni4xBcpY/wipUHttuvzurTWdY85H0mPdT20NGvco
-         BeGlY1nMzVtYmen2N3Q/+4R5hyf6T7cpUyvLu6/TMkDd/w65QtS+Jx4cRNOB/bx46XJV
-         jlCg4/6DSZAEcQWog4xiOp9EqsP6jezo1YPVZd8O3b7JQLP24RzXA+4hJ8xFdTK2SAFS
-         wQEBua38yWymzy9XCqvvqsljVz8Y3bYmLy7/MQT8IMOuwOgycCKinBfvhWnOwvWvTnT8
-         4vET++9ad2KaMt9oZpTLIfNFQ9Slua7LRvySS5iO2vzYa5AsGtLKvtGw70YFqsJ/pgcV
-         D/zA==
+        id S1729700AbgGMOgc (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 13 Jul 2020 10:36:32 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:24522 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729681AbgGMOgc (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 13 Jul 2020 10:36:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594650991;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=utDsxiJbHEkm2Fob90PfdlUV1I68F8zwYkv/4x3NbvE=;
+        b=Z9nkb3sv/6SfKD1iioN/w6ugrRbxyP8xTZurh4Iyc53k2OJaBqkZC3SvSITvzspq7vOOMb
+        1AbL7lq7n1QhPjJCD6kDfG6JJZElKQWynUTNPg4jThXiKXOvkvobM6ltrE5OkO/MJCX13d
+        KmsoA0ZR3ncOm+HYRH+WzVO/JKMoV2A=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-384-yN4MofmoOJiTOecFqY429Q-1; Mon, 13 Jul 2020 10:36:29 -0400
+X-MC-Unique: yN4MofmoOJiTOecFqY429Q-1
+Received: by mail-qt1-f200.google.com with SMTP id q7so10274162qtq.14
+        for <linux-fpga@vger.kernel.org>; Mon, 13 Jul 2020 07:36:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5YLgrmmw9m+sKzPxDNVWcpKGfVmpcHCuvOPpLM6AIJg=;
-        b=NlmVswj8svWd3IxUinkzw/B/dZyc9lWmzn07f33ejZCIuA6pwODFuwaI99Z/2DaBUo
-         j1USTCdLtq3gizW643C53saewQrwtsdXvy8x54ypS5w5AnPN1l7d6JeqaB5HFtApeG8u
-         hxier6VVZwXUicgDPEnIiJE6lYENZ/HpxSM5wsUvUZSfkIhdD1C/Y3yV/Q788cE6WZi3
-         RWPXwfxWEvWVZ052TweVqnbDLyOEDHuUyfY+iKS7JBTvA0yMLZelt455iOUWPATmBLk1
-         Qokrt3BNg1lQ2cCeIKeBqEeBsjZNosP939chdqgY6o1SmsUFlilly99loAjEgSXHbU+P
-         VufA==
-X-Gm-Message-State: AOAM531hvNdhMMRvV4FGM4nviqY/iT4VkpE+sgXCLyWwkElTi8jh/9DS
-        ZWjzwYquAqBseltMUBvjJNO68v779bOEHclFtm0=
-X-Google-Smtp-Source: ABdhPJy/UC3erwHFtgXKkL1GVVONscodnwP0o4i9VZOPS3L5PWzoj4GBeMXF0QVBYi+zF23NivfIWIi5ClgD14AKumo=
-X-Received: by 2002:a92:cf42:: with SMTP id c2mr20875926ilr.13.1594650323985;
- Mon, 13 Jul 2020 07:25:23 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=utDsxiJbHEkm2Fob90PfdlUV1I68F8zwYkv/4x3NbvE=;
+        b=D3SvQ3n705uTwHkwxXfSEeM8RGiBuG1x7qz9oid2J0W86V3gzve8mGZc4GVDO19PbC
+         Ma2bE9uIKsaVDSzUcnjGeunB6muOlWNeuq2++tuwdZNq5SedQbGelfRKIj3jrtGfgGtj
+         Mx0CY3iCVpYs3DtnUr/OvOFutlZ3HFTJJqU+S9/ax7NapOOrelSDIKt5EkUf/+DZ/c8i
+         fjUqD1AxCKMvmPjyrCV7WH0Q2NOqvMGskHt3TR6IDEV1cDSYARDR5e28GkZ4O45NpHhm
+         tnMg1CC2IctDB19topBWo50BxWt+bUx7HpF02CA3mbG7ofpd1eh4YdnkBG+/zuNpFnvk
+         d0JQ==
+X-Gm-Message-State: AOAM5331VLzVpabZH86pEi/tR5N8v5Ig5Dv2XgjkJvLfxHcFHDHBO6QT
+        bnguwiRB6ncqlzNRAVVnLVtb5/5XaPuHWIesj8s5nJjSbcMdM6JRJKFZ+Imy1nNatrHbfLhi+ai
+        RE1MG4G4CJswmedjNz6kflQ==
+X-Received: by 2002:a37:6503:: with SMTP id z3mr78457622qkb.439.1594650989243;
+        Mon, 13 Jul 2020 07:36:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyntha6qH4OqLYs+Aw/+Ul63oVHCE5s/a6MbC4bAbOEfy0jDN0mdDBf5bhWChHo+7pbRt1Y/Q==
+X-Received: by 2002:a37:6503:: with SMTP id z3mr78457606qkb.439.1594650989040;
+        Mon, 13 Jul 2020 07:36:29 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id k6sm17845686qki.123.2020.07.13.07.36.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2020 07:36:28 -0700 (PDT)
+Subject: Re: [PATCH v2] fpga: dfl: pci: add device id for Intel FPGA PAC N3000
+To:     Xu Yilun <yilun.xu@intel.com>, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lgoncalv@redhat.com, Wu Hao <hao.wu@intel.com>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>
+References: <1594604866-30877-1-git-send-email-yilun.xu@intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <4efe6ee9-4e88-5b31-01a2-414f752a3d2e@redhat.com>
+Date:   Mon, 13 Jul 2020 07:36:26 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Received: by 2002:a6b:7c46:0:0:0:0:0 with HTTP; Mon, 13 Jul 2020 07:25:23
- -0700 (PDT)
-Reply-To: sodikamond147@gmx.com
-From:   Sodik Amond <ibrahimshagari@gmail.com>
-Date:   Mon, 13 Jul 2020 02:25:23 -1200
-Message-ID: <CAKK88xThx0Yq4HSSvGuy9tTzLfahqDEgB_0V_=XPObrkbvNT4w@mail.gmail.com>
-Subject: Gooday To You
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1594604866-30877-1-git-send-email-yilun.xu@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Please i need your kind Assistance. I will be very glad if you can
-assist me to receive this sum of ( $22. Million US dollars.) into your
-bank account for the benefit of our both families, reply me if you are
-ready to receive this fund.
+
+> @@ -64,6 +64,7 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
+>  #define PCIE_DEVICE_ID_PF_INT_5_X	0xBCBD
+>  #define PCIE_DEVICE_ID_PF_INT_6_X	0xBCC0
+>  #define PCIE_DEVICE_ID_PF_DSC_1_X	0x09C4
+> +#define PCIE_DEVICE_ID_INTEL_PAC_N3000	0x0B30
+
+My point about consistency.  These are all intel  and all should have their pf parts removed.
+
+ #define PCIE_DEVICE_ID_INTEL_INT_5_X	0xBCBD
+ #define PCIE_DEVICE_ID_INTEL_INT_6_X	0xBCC0
+ #define PCIE_DEVICE_ID_INTEL_DSC_1_X	0x09C4
+
+Let's revisit this for the d5005.
+
+trix
+
+
