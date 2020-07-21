@@ -2,553 +2,150 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7D1227B48
-	for <lists+linux-fpga@lfdr.de>; Tue, 21 Jul 2020 10:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE8C227F26
+	for <lists+linux-fpga@lfdr.de>; Tue, 21 Jul 2020 13:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728714AbgGUI5o (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 21 Jul 2020 04:57:44 -0400
-Received: from mga07.intel.com ([134.134.136.100]:27363 "EHLO mga07.intel.com"
+        id S1727991AbgGULlc (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 21 Jul 2020 07:41:32 -0400
+Received: from mga05.intel.com ([192.55.52.43]:5680 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726607AbgGUI5n (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 21 Jul 2020 04:57:43 -0400
-IronPort-SDR: o/O2+CfefRTSrmscrJwWrGidFxXJVspmJDaApLIy4DOLIyaHHpKkWNbTGM5qhfpndia5apRamw
- u0ju+5o/B5cg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9688"; a="214752785"
+        id S1727103AbgGULlb (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 21 Jul 2020 07:41:31 -0400
+IronPort-SDR: LFeodUKz/mg7n+RaBZhK6Ki0TabItj7aI3G9IYDBPe5nnweaLt3oWmGhihY4vHFqL7sOFe2YPw
+ 02WbQ2z8ghNg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9688"; a="234963238"
 X-IronPort-AV: E=Sophos;i="5.75,378,1589266800"; 
-   d="scan'208";a="214752785"
+   d="scan'208";a="234963238"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 01:57:39 -0700
-IronPort-SDR: r8iCbvbsfk7xMtuRvAeJpEiaTiDwC+BOVIsKZ/HCR39QsFCT2dOOmFYHiGFY3i7AQ7vObGHO3G
- 91vqVe4mupUg==
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 04:41:30 -0700
+IronPort-SDR: TxkpDLuKn1mRjpOxDk4sa/4rmD3EpO130GWtRXmaIRxuYCBAAyvflYiIyhptApujYZ6wopUuBm
+ IdWYZMLnOrfA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,378,1589266800"; 
-   d="scan'208";a="283798393"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga003.jf.intel.com with ESMTP; 21 Jul 2020 01:57:37 -0700
-Date:   Tue, 21 Jul 2020 16:54:29 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgoncalv@redhat.com,
-        Wu Hao <hao.wu@intel.com>,
+   d="scan'208";a="301588655"
+Received: from fmsmsx103.amr.corp.intel.com ([10.18.124.201])
+  by orsmga002.jf.intel.com with ESMTP; 21 Jul 2020 04:41:30 -0700
+Received: from fmsmsx111.amr.corp.intel.com (10.18.116.5) by
+ FMSMSX103.amr.corp.intel.com (10.18.124.201) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Tue, 21 Jul 2020 04:41:29 -0700
+Received: from FMSEDG002.ED.cps.intel.com (10.1.192.134) by
+ fmsmsx111.amr.corp.intel.com (10.18.116.5) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Tue, 21 Jul 2020 04:41:29 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.170)
+ by edgegateway.intel.com (192.55.55.69) with Microsoft SMTP Server (TLS) id
+ 14.3.439.0; Tue, 21 Jul 2020 04:41:29 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Up9QTmDcxF8/t9jYiIIkV/bddzUirOhM/3I95SMP9TE/tTsV21grb9ktN+cCLGG85bWJwVKjkM1HK+igJ5hihBP8/0el43TCK5lE2KgDuAMne0y6OLCSF0joZxOmIAlLqxtDynPzeK361Iq0xJV8/yUGG+TITOxvIOUjq59ENp60kbj6Brw0kseavbHmOohP1t6ss3AZuw9U/2lVOazjUKGfYScofcHFE6ZWJNriL2t2G20i5U8fetCCeFiWoVrca+aKDs1LiAta5NRh9bqbRZgkP+WF5Zqt/ghLE2lf72qp9oXSe4398fsH1G6iUdx0QPj1/Ofo2Qq8k7nwwAK9rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HBai5RVIHKYcE2nHilB5YUNnhfAYOetzZg91O39R+hU=;
+ b=KNktaqv1QeOe3pxfotBwv2b9A4zVjvK0IGi4A5YYVdp/++PcrBgg+EPKsQwbk6KtC6ztL7kAYbi5QShDxnQy8CjJZT1hcQTMVBK8HIDQ4oMituytb5JC01l9h7O0qX7xtSCzheK1GDkq+FzHWmLQqgf5g2LBTNpPgNI+4wScMthw/dgcPVeFVr+4jAXCf2zl4KenEDg4r6OvmQIBV+LMhDGOH3cwv5QFfnXTp+Hs+5Lom416Xuus/pNoMfUAYhMojGMZPasSC2aphDkXvpKUZMlpYgrh0MfeqxqlN5fcWLN1azwzDkT2KJ0wsDqEhUNVwOyLLxxij0tuoFgz8rWkBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HBai5RVIHKYcE2nHilB5YUNnhfAYOetzZg91O39R+hU=;
+ b=sR08FXN7zKU/Kz7GK3SQJjtfbCTGsJaBGlS92wYRbkhTPK37yQ1nWn+M94arq6qWQvZN9mOPwtgK4ufL2Rj3uCMGjxzsjsvd4YFksXTBwm5yumPYUiLFhCBQbvukO4pNhfkX8lfao1jQOSgkYzTal7xWG5Xz/kUCoHe3vnNskDw=
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
+ by DM6PR11MB4628.namprd11.prod.outlook.com (2603:10b6:5:28f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.25; Tue, 21 Jul
+ 2020 11:41:28 +0000
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::c1c1:6930:f17d:a80a]) by DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::c1c1:6930:f17d:a80a%4]) with mapi id 15.20.3195.025; Tue, 21 Jul 2020
+ 11:41:28 +0000
+From:   "Wu, Hao" <hao.wu@intel.com>
+To:     "Xu, Yilun" <yilun.xu@intel.com>
+CC:     "mdf@kernel.org" <mdf@kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
         Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: Re: [PATCH 2/2] fpga: dfl: create a dfl bus type to support DFL
+        "Weight, Russell H" <russell.h.weight@intel.com>
+Subject: RE: [PATCH 2/2] fpga: dfl: create a dfl bus type to support DFL
   devices
-Message-ID: <20200721085429.GH17091@yilunxu-OptiPlex-7050>
+Thread-Topic: [PATCH 2/2] fpga: dfl: create a dfl bus type to support DFL
+  devices
+Thread-Index: AQHWXzmp9uIumsmhBUK9nlK2uTc5gKkR25Ug
+Date:   Tue, 21 Jul 2020 11:41:27 +0000
+Message-ID: <DM6PR11MB381958D370FD3BF0173BBD5685780@DM6PR11MB3819.namprd11.prod.outlook.com>
 References: <1594791498-14495-1-git-send-email-yilun.xu@intel.com>
  <1594791498-14495-3-git-send-email-yilun.xu@intel.com>
- <0776e674-d94d-da97-342a-b043c5dc24f3@redhat.com>
+ <DM6PR11MB38195AA712F8089090695CE5857C0@DM6PR11MB3819.namprd11.prod.outlook.com>
+ <20200721083030.GG17091@yilunxu-OptiPlex-7050>
+In-Reply-To: <20200721083030.GG17091@yilunxu-OptiPlex-7050>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.2.0.6
+authentication-results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [192.102.204.38]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 71eaaa28-f545-4937-357b-08d82d6b0165
+x-ms-traffictypediagnostic: DM6PR11MB4628:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR11MB4628D45CC69A94BC236E537D85780@DM6PR11MB4628.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: knWg+HC7/1Wcfr7eFqbYHpMUXHSkj7ks97FJLzdi829kFvCXaWOrXVaxqtPlHk7o4qboVJS4FiqyQvqjKABGJa/grZBi3sqRp76SQov7aNEy1Saa4LUifTC+VyssihNvLT+WyOKIGO1B9wmgNvn2RiqlNlJ2CdaSCyaNSOTjptDUQSTRUulNtYaYTMekUxPcAyJskb1Ca07/Xfds6nL6sb8PPHMH0T0PTN/3/lTZUUK/51+tEbsCXykCvnhE4ijKPvO6TD0a/tmQljOHIylftspIoVBvyiBo1db7GELrfjZ+9eP84lfFHiPyZv0UP0Sme+A4q2+d3/nBY9F+xbcFyg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(376002)(366004)(346002)(39860400002)(136003)(9686003)(186003)(26005)(316002)(6862004)(6636002)(7696005)(55016002)(33656002)(6506007)(4326008)(52536014)(64756008)(8676002)(2906002)(71200400001)(8936002)(54906003)(66476007)(4744005)(5660300002)(86362001)(76116006)(66446008)(66946007)(478600001)(66556008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: cwDoUbe37U7csCh5/IaBKd7rMbtR+kQIkHqWKcyHgZvkhy+S1KFxu9EWuB8xYC/T8jahh7qB3W27gS3imy3lGmqmlAvFB9IvqNz2vwLB5WHTylrelhyJ8UUKM2FfC5wKtYEPj20qDBZaVh3es7Sijcowv1o3cOmn/lRWEmmd7JBcep9Pe3f3NdY3lwj429sl0uHDGqt9k/zEH5sd5JJAy2QnHssWAgJQJ+iTnsNy5124Y13eT/pklaKhrDjBSSLaW29PjruwrBuHJbT4N57kFA8xgzDn6RfayGj7kfO5lca3fDR0AAsAb36JJtQot+OwReGu0LnpfNthiQchbDl6/CyzoIvUOtwUcVnVOcH0rQ0muZIUxCW38Vg/eQs5orj675QYay5E6AOJsOR7zQASgRlTFT+FNtTyyzHTnT9MsntXZWpf/aO3MF+0fLzCkj46aM9yIcA7L0G2tRYnEdN8OQAWgC7Fs1dHKF4yvG9w+lSl2XG2RKXiKcCZ569bKXHa
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0776e674-d94d-da97-342a-b043c5dc24f3@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71eaaa28-f545-4937-357b-08d82d6b0165
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2020 11:41:27.7507
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UluOILRf3FhzJzTCzSbFKH88YoEHjxWo+9x9ZPbUvAHi3A18Gl4RjCsTrlBInLh7VW6q/zbD1X9eMPTC2v9vmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4628
+X-OriginatorOrg: intel.com
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 12:47:14PM -0700, Tom Rix wrote:
-> More small stuff.
-> 
-> Refactoring for feature_id conflict covered in other email.
-> 
-> Tom
-> 
-> 
-> On 7/14/20 10:38 PM, Xu Yilun wrote:
-> > A new bus type "dfl" is introduced for private features which are not
-> > initialized by DFL feature drivers (dfl-fme & dfl-afu drivers). So these
-> > private features could be handled by separate driver modules.
+> > > +}
+> > > +
+> > > +dfl_dev->type =3D feature_dev_id_type(pdev);
+> > > +dfl_dev->feature_id =3D (unsigned long long)feature->id;
+> > > +
+> > > +dfl_dev->dev.parent  =3D &pdev->dev;
+> > > +dfl_dev->dev.bus     =3D &dfl_bus_type;
+> > > +dfl_dev->dev.release =3D release_dfl_dev;
+> > > +dev_set_name(&dfl_dev->dev, "%s.%d", dev_name(&pdev->dev),
+> > > +     feature->index);
 > >
-> > DFL framework will create DFL devices on enumeration. DFL drivers could
-> > be registered on this bus to match these DFL devices. They are matched by
-> > dfl type & feature_id.
-> >
-> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Wu Hao <hao.wu@intel.com>
-> > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-bus-dfl |  15 ++
-> >  drivers/fpga/dfl.c                      | 248 ++++++++++++++++++++++++++++++--
-> >  drivers/fpga/dfl.h                      |  85 +++++++++++
-> >  3 files changed, 340 insertions(+), 8 deletions(-)
-> >  create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-bus-dfl b/Documentation/ABI/testing/sysfs-bus-dfl
-> > new file mode 100644
-> > index 0000000..cd00abc
-> > --- /dev/null
-> > +++ b/Documentation/ABI/testing/sysfs-bus-dfl
-> > @@ -0,0 +1,15 @@
-> > +What:		/sys/bus/dfl/devices/.../type
-> > +Date:		March 2020
-> > +KernelVersion:	5.7
-> 5.8
+> > Or it's better to have a generic name for the device on the bus.
+>=20
+> mm.. It is good suggestion, we should have a unified name for dfl
+> devices.
+>=20
+> How about ("dfl.%d.%d", pdev->id, feature->index)
 
-Yes, think it should be 5.9 for now.
+It's quite difficult for people to use related information from these magic=
+=20
+numbers. They are not ids defined in the spec, so just dfl_dev.x with one
+unique id seems to be better. If you really need to expose some id
+information, maybe you can consider adding some standard sysfs entry
+to all dfl_dev, I think that will be easier for users. How do you think?
 
-> > +Contact:	Xu Yilun <yilun.xu@intel.com>
-> > +Description:	Read-only. It returns type of DFL FIU of the device. Now DFL
-> > +		supports 2 FIU types, 0 for FME, 1 for PORT.
-> > +		Format: 0x%x
-> > +
-> > +What:		/sys/bus/dfl/devices/.../feature_id
-> > +Date:		March 2020
-> > +KernelVersion:	5.7
-> > +Contact:	Xu Yilun <yilun.xu@intel.com>
-> > +Description:	Read-only. It returns feature identifier local to its DFL FIU
-> > +		type.
-> > +		Format: 0x%llx
-> > diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> > index 7dc6411..93f9d6d 100644
-> > --- a/drivers/fpga/dfl.c
-> > +++ b/drivers/fpga/dfl.c
-> > @@ -30,12 +30,6 @@ static DEFINE_MUTEX(dfl_id_mutex);
-> >   * index to dfl_chardevs table. If no chardev support just set devt_type
-> >   * as one invalid index (DFL_FPGA_DEVT_MAX).
-> >   */
-> > -enum dfl_id_type {
-> > -	FME_ID,		/* fme id allocation and mapping */
-> > -	PORT_ID,	/* port id allocation and mapping */
-> > -	DFL_ID_MAX,
-> > -};
-> > -
-> >  enum dfl_fpga_devt_type {
-> >  	DFL_FPGA_DEVT_FME,
-> >  	DFL_FPGA_DEVT_PORT,
-> > @@ -255,6 +249,228 @@ static bool is_header_feature(struct dfl_feature *feature)
-> >  	return feature->id == FEATURE_ID_FIU_HEADER;
-> >  }
-> >  
-> > +static const struct dfl_device_id *
-> > +dfl_match_one_device(const struct dfl_device_id *id,
-> > +		     struct dfl_device *dfl_dev)
-> > +{
-> > +	if (id->type == dfl_dev->type &&
-> > +	    id->feature_id == dfl_dev->feature_id)
-> > +		return id;
-> > +
-> > +	return NULL;
-> > +}
-> > +
-> > +static int dfl_bus_match(struct device *dev, struct device_driver *drv)
-> > +{
-> > +	struct dfl_device *dfl_dev = to_dfl_dev(dev);
-> > +	struct dfl_driver *dfl_drv = to_dfl_drv(drv);
-> > +	const struct dfl_device_id *id_entry = dfl_drv->id_table;
-> Null check ?
-
-Yes. Thanks for catching this.
-
-> > +
-> > +	while (id_entry->feature_id) {
-> Null check or document table has a sentinel.
-
-I'll document that table needs a sentinel.
-
-> > +		if (dfl_match_one_device(id_entry, dfl_dev)) {
-> > +			dfl_dev->id_entry = id_entry;
-> > +			return 1;
-> > +		}
-> > +		id_entry++;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int dfl_bus_probe(struct device *dev)
-> > +{
-> > +	struct dfl_device *dfl_dev = to_dfl_dev(dev);
-> > +	struct dfl_driver *dfl_drv = to_dfl_drv(dev->driver);
-> > +
-> > +	return dfl_drv->probe(dfl_dev);
-> > +}
-> > +
-> > +static int dfl_bus_remove(struct device *dev)
-> > +{
-> > +	struct dfl_device *dfl_dev = to_dfl_dev(dev);
-> > +	struct dfl_driver *dfl_drv = to_dfl_drv(dev->driver);
-> > +
-> > +	if (dfl_drv->remove)
-> > +		dfl_drv->remove(dfl_dev);
-> return dfl_drv->remove()
-
-I think we could define  void (*remove)(struct dfl_device *dfl_dev) for
-dfl_driver.remove
-
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int dfl_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
-> > +{
-> > +	struct dfl_device *dfl_dev = to_dfl_dev(dev);
-> > +
-> > +	if (add_uevent_var(env, "MODALIAS=dfl:%08x:%016llx",
-> > +			   dfl_dev->type, dfl_dev->feature_id))
-> > +		return -ENOMEM;
-> 
-> can simplify, change to
-> 
-> return add_uevent_var(...)
-
-Yes
-
-> 
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/* show dfl info fields */
-> > +#define dfl_info_attr(field, format_string)				\
-> > +static ssize_t								\
-> > +field##_show(struct device *dev, struct device_attribute *attr,		\
-> > +	     char *buf)							\
-> > +{									\
-> > +	struct dfl_device *dfl_dev = to_dfl_dev(dev);			\
-> > +									\
-> > +	return sprintf(buf, format_string, dfl_dev->field);		\
-> > +}									\
-> > +static DEVICE_ATTR_RO(field)
-> > +
-> > +dfl_info_attr(type, "0x%x\n");
-> > +dfl_info_attr(feature_id, "0x%llx\n");
-> > +
-> > +static struct attribute *dfl_dev_attrs[] = {
-> > +	&dev_attr_type.attr,
-> > +	&dev_attr_feature_id.attr,
-> > +	NULL,
-> > +};
-> > +
-> > +ATTRIBUTE_GROUPS(dfl_dev);
-> > +
-> > +static struct bus_type dfl_bus_type = {
-> > +	.name		= "dfl",
-> > +	.match		= dfl_bus_match,
-> > +	.probe		= dfl_bus_probe,
-> > +	.remove		= dfl_bus_remove,
-> > +	.uevent		= dfl_bus_uevent,
-> > +	.dev_groups	= dfl_dev_groups,
-> > +};
-> > +
-> > +static void release_dfl_dev(struct device *dev)
-> > +{
-> > +	struct dfl_device *dfl_dev = to_dfl_dev(dev);
-> > +
-> > +	release_resource(&dfl_dev->mmio_res);
-> Where is request_resource, shouldn't it be in dfl_dev_add ?
-
-insert_resource() is used in dfl_dev_add
-
-> > +	kfree(dfl_dev->irqs);
-> > +	kfree(dfl_dev);
-> > +}
-> > +
-> > +static struct dfl_device *
-> > +dfl_dev_add(struct dfl_feature_platform_data *pdata,
-> > +	    struct dfl_feature *feature)
-> > +{
-> > +	struct platform_device *pdev = pdata->dev;
-> > +	struct dfl_device *dfl_dev;
-> > +	int i, ret;
-> > +
-> > +	dfl_dev = kzalloc(sizeof(*dfl_dev), GFP_KERNEL);
-> > +	if (!dfl_dev)
-> > +		return ERR_PTR(-ENOMEM);
-> > +
-> > +	dfl_dev->cdev = pdata->dfl_cdev;
-> > +
-> > +	dfl_dev->mmio_res.parent = &pdev->resource[feature->resource_index];
-> > +	dfl_dev->mmio_res.flags = IORESOURCE_MEM;
-> > +	dfl_dev->mmio_res.start =
-> > +		pdev->resource[feature->resource_index].start;
-> > +	dfl_dev->mmio_res.end = pdev->resource[feature->resource_index].end;
-> > +
-> > +	/* then add irq resource */
-> > +	if (feature->nr_irqs) {
-> > +		dfl_dev->irqs = kcalloc(feature->nr_irqs,
-> > +					sizeof(*dfl_dev->irqs), GFP_KERNEL);
-> > +		if (!dfl_dev->irqs) {
-> > +			ret = -ENOMEM;
-> > +			goto free_dfl_dev;
-> > +		}
-> > +
-> > +		for (i = 0; i < feature->nr_irqs; i++)
-> > +			dfl_dev->irqs[i] = feature->irq_ctx[i].irq;
-> > +
-> > +		dfl_dev->num_irqs = feature->nr_irqs;
-> > +	}
-> > +
-> > +	dfl_dev->type = feature_dev_id_type(pdev);
-> > +	dfl_dev->feature_id = (unsigned long long)feature->id;
-> > +
-> > +	dfl_dev->dev.parent  = &pdev->dev;
-> > +	dfl_dev->dev.bus     = &dfl_bus_type;
-> > +	dfl_dev->dev.release = release_dfl_dev;
-> > +	dev_set_name(&dfl_dev->dev, "%s.%d", dev_name(&pdev->dev),
-> > +		     feature->index);
-> this can fail
-
-Yes, I could add the check.
-
-> > +
-> > +	dfl_dev->mmio_res.name = dev_name(&dfl_dev->dev);
-> > +	ret = insert_resource(dfl_dev->mmio_res.parent, &dfl_dev->mmio_res);
-> > +	if (ret) {
-> > +		dev_err(&pdev->dev, "%s failed to claim resource: %pR\n",
-> > +			dev_name(&dfl_dev->dev), &dfl_dev->mmio_res);
-> > +		goto free_irqs;
-> > +	}
-> > +
-> > +	ret = device_register(&dfl_dev->dev);
-> > +	if (ret) {
-> > +		put_device(&dfl_dev->dev);
-> > +		return ERR_PTR(ret);
-> > +	}
-> > +
-> > +	dev_info(&pdev->dev, "add dfl_dev: %s\n",
-> > +		 dev_name(&dfl_dev->dev));
-> > +	return dfl_dev;
-> > +
-> > +free_irqs:
-> > +	kfree(dfl_dev->irqs);
-> > +free_dfl_dev:
-> > +	kfree(dfl_dev);
-> > +	return ERR_PTR(ret);
-> > +}
-> > +
-> > +static void dfl_devs_uinit(struct dfl_feature_platform_data *pdata)
-> > +{
-> > +	struct dfl_device *dfl_dev;
-> > +	struct dfl_feature *feature;
-> > +
-> > +	dfl_fpga_dev_for_each_feature(pdata, feature) {
-> > +		if (!feature->ioaddr && feature->priv) {
-> > +			dfl_dev = feature->priv;
-> > +			device_unregister(&dfl_dev->dev);
-> > +			feature->priv = NULL;
-> > +		}
-> > +	}
-> > +}
-> > +
-> > +static int dfl_devs_init(struct platform_device *pdev)
-> > +{
-> > +	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
-> > +	struct dfl_feature *feature;
-> > +	struct dfl_device *dfl_dev;
-> > +
-> > +	dfl_fpga_dev_for_each_feature(pdata, feature) {
-> > +		if (feature->ioaddr || feature->priv)
-> > +			continue;
-> > +
-> > +		dfl_dev = dfl_dev_add(pdata, feature);
-> > +		if (IS_ERR(dfl_dev)) {
-> > +			dfl_devs_uinit(pdata);
-> > +			return PTR_ERR(dfl_dev);
-> What happens to dfl_dev's that were successful. Need a clean up ?
-> > +		}
-> > +
-> > +		feature->priv = dfl_dev;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *owner)
-> > +{
-> > +	if (!dfl_drv || !dfl_drv->probe || !dfl_drv->id_table)
-> > +		return -EINVAL;
-> > +
-> > +	dfl_drv->drv.owner = owner;
-> > +	dfl_drv->drv.bus = &dfl_bus_type;
-> > +
-> > +	return driver_register(&dfl_drv->drv);
-> > +}
-> > +EXPORT_SYMBOL(__dfl_driver_register);
-> > +
-> > +void dfl_driver_unregister(struct dfl_driver *dfl_drv)
-> > +{
-> > +	driver_unregister(&dfl_drv->drv);
-> > +}
-> > +EXPORT_SYMBOL(dfl_driver_unregister);
-> > +
-> >  /**
-> >   * dfl_fpga_dev_feature_uinit - uinit for sub features of dfl feature device
-> >   * @pdev: feature device.
-> > @@ -264,12 +480,15 @@ void dfl_fpga_dev_feature_uinit(struct platform_device *pdev)
-> >  	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
-> >  	struct dfl_feature *feature;
-> >  
-> > -	dfl_fpga_dev_for_each_feature(pdata, feature)
-> > +	dfl_devs_uinit(pdata);
-> > +
-> > +	dfl_fpga_dev_for_each_feature(pdata, feature) {
-> >  		if (feature->ops) {
-> >  			if (feature->ops->uinit)
-> >  				feature->ops->uinit(pdev, feature);
-> >  			feature->ops = NULL;
-> >  		}
-> > +	}
-> >  }
-> >  EXPORT_SYMBOL_GPL(dfl_fpga_dev_feature_uinit);
-> >  
-> > @@ -348,6 +567,10 @@ int dfl_fpga_dev_feature_init(struct platform_device *pdev,
-> >  		drv++;
-> >  	}
-> >  
-> > +	ret = dfl_devs_init(pdev);
-> > +	if (ret)
-> > +		goto exit;
-> > +
-> >  	return 0;
-> >  exit:
-> >  	dfl_fpga_dev_feature_uinit(pdev);
-> > @@ -553,6 +776,8 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
-> >  		struct dfl_feature_irq_ctx *ctx;
-> >  		unsigned int i;
-> >  
-> > +		feature->index = index;
-> > +
-> >  		/* save resource information for each feature */
-> >  		feature->dev = fdev;
-> >  		feature->id = finfo->fid;
-> > @@ -1295,11 +1520,17 @@ static int __init dfl_fpga_init(void)
-> >  {
-> >  	int ret;
-> >  
-> > +	ret = bus_register(&dfl_bus_type);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> >  	dfl_ids_init();
-> >  
-> >  	ret = dfl_chardev_init();
-> > -	if (ret)
-> > +	if (ret) {
-> >  		dfl_ids_destroy();
-> > +		bus_unregister(&dfl_bus_type);
-> > +	}
-> >  
-> >  	return ret;
-> >  }
-> > @@ -1637,6 +1868,7 @@ static void __exit dfl_fpga_exit(void)
-> >  {
-> >  	dfl_chardev_uinit();
-> >  	dfl_ids_destroy();
-> > +	bus_unregister(&dfl_bus_type);
-> >  }
-> >  
-> >  module_init(dfl_fpga_init);
-> > diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> > index f605c28..d00aa1c 100644
-> > --- a/drivers/fpga/dfl.h
-> > +++ b/drivers/fpga/dfl.h
-> > @@ -229,6 +229,10 @@ struct dfl_feature_irq_ctx {
-> >   *
-> >   * @dev: ptr to pdev of the feature device which has the sub feature.
-> >   * @id: sub feature id.
-> > + * @index: unique identifier for an sub feature within the feature device.
-> > + *	   It is possible that multiply sub features with same feature id are
-> > + *	   listed in one feature device. So an incremental index (start from 0)
-> > + *	   is needed to identify each sub feature.
-> >   * @resource_index: each sub feature has one mmio resource for its registers.
-> >   *		    this index is used to find its mmio resource from the
-> >   *		    feature dev (platform device)'s reources.
-> > @@ -241,6 +245,7 @@ struct dfl_feature_irq_ctx {
-> >  struct dfl_feature {
-> >  	struct platform_device *dev;
-> >  	u64 id;
-> > +	int index;
-> >  	int resource_index;
-> >  	void __iomem *ioaddr;
-> >  	struct dfl_feature_irq_ctx *irq_ctx;
-> > @@ -515,4 +520,84 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
-> >  			       struct dfl_feature *feature,
-> >  			       unsigned long arg);
-> >  
-> > +/**
-> > + * enum dfl_id_type - define the DFL FIU types
-> > + */
-> > +enum dfl_id_type {
-> > +	FME_ID,
-> > +	PORT_ID,
-> > +	DFL_ID_MAX,
-> > +};
-> > +
-> > +/**
-> > + * struct dfl_device_id -  dfl device identifier
-> > + * @type: Type of DFL FIU of the device. See enum dfl_id_type.
-> > + * @feature_id: 64 bits feature identifier local to its DFL FIU type.
-> > + * @driver_data: Driver specific data
-> > + */
-> > +struct dfl_device_id {
-> > +	unsigned int type;
-> > +	unsigned long long feature_id;
-> > +	unsigned long driver_data;
-> > +};
-> > +
-> > +/**
-> > + * struct dfl_device - represent an dfl device on dfl bus
-> > + *
-> > + * @dev: Generic device interface.
-> > + * @type: Type of DFL FIU of the device. See enum dfl_id_type.
-> > + * @feature_id: 64 bits feature identifier local to its DFL FIU type.
-> > + * @mmio_res: MMIO resource of this dfl device.
-> > + * @irqs: List of Linux IRQ numbers of this dfl device.
-> > + * @num_irqs: number of IRQs supported by this dfl device.
-> > + * @cdev: pointer to DFL FPGA container device this dfl device belongs to.
-> > + * @id_entry: matched id entry in dfl driver's id table.
-> > + */
-> > +struct dfl_device {
-> > +	struct device dev;
-> > +	unsigned int type;
-> > +	unsigned long long feature_id;
-> > +	struct resource mmio_res;
-> > +	int *irqs;
-> > +	unsigned int num_irqs;
-> > +	struct dfl_fpga_cdev *cdev;
-> > +	const struct dfl_device_id *id_entry;
-> > +};
-> > +
-> > +/**
-> > + * struct dfl_driver - represent an dfl device driver
-> > + *
-> > + * @drv: Driver model structure.
-> > + * @id_table: Pointer to table of device IDs the driver is interested in.
-> > + * @probe: Callback for device binding.
-> > + * @remove: Callback for device unbinding.
-> > + */
-> > +struct dfl_driver {
-> > +	struct device_driver drv;
-> > +	const struct dfl_device_id *id_table;
-> > +
-> > +	int (*probe)(struct dfl_device *dfl_dev);
-> > +	int (*remove)(struct dfl_device *dfl_dev);
-> > +};
-> > +
-> > +#define to_dfl_dev(d) container_of(d, struct dfl_device, dev)
-> > +#define to_dfl_drv(d) container_of(d, struct dfl_driver, drv)
-> > +
-> > +/*
-> > + * use a macro to avoid include chaining to get THIS_MODULE
-> > + */
-> > +#define dfl_driver_register(drv) \
-> > +	__dfl_driver_register(drv, THIS_MODULE)
-> > +int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *owner);
-> > +void dfl_driver_unregister(struct dfl_driver *dfl_drv);
-> > +
-> > +/* module_dfl_driver() - Helper macro for drivers that don't do
-> > + * anything special in module init/exit.  This eliminates a lot of
-> > + * boilerplate.  Each module may only use this macro once, and
-> > + * calling it replaces module_init() and module_exit()
-> > + */
-> > +#define module_dfl_driver(__dfl_driver) \
-> > +	module_driver(__dfl_driver, dfl_driver_register, \
-> > +		      dfl_driver_unregister)
-> > +
-> >  #endif /* __FPGA_DFL_H */
+Thanks
+Hao
