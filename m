@@ -2,97 +2,135 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AF62274F9
-	for <lists+linux-fpga@lfdr.de>; Tue, 21 Jul 2020 03:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C3E227899
+	for <lists+linux-fpga@lfdr.de>; Tue, 21 Jul 2020 08:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726068AbgGUBue (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 20 Jul 2020 21:50:34 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:45537 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726042AbgGUBuc (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 20 Jul 2020 21:50:32 -0400
-Received: by mail-io1-f68.google.com with SMTP id e64so19703047iof.12;
-        Mon, 20 Jul 2020 18:50:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z0RtKcdyckbxGpXUZiPyULk/wC7VcBbNcE6b2WWP54w=;
-        b=ENhG0AQfCSisUHyr38D4GFmPIsuYwMsD6cJVwSA9nQIGSVj5wHu6yLMhwuQ3u1M6it
-         vNRAiQMU5T38w0PWDdAq/bNr+miZdJTSvcQfX+2X+WBQE/3HvZye7LCkky8vVpix1mIt
-         TKQHs5zk5ElxZfb0+3rAyN7PIcPrjfi7hsQW7eDUmcQ/BYl5GLgI/kK517RgfP/x8/n3
-         HmeUizTKRijC9T6xHpJ64Dsdy2srppRX2sX9t7lOUHi2nsmVeO1RzURZ28m79X3wUyTS
-         NuuJY9L3lT8nS/ZXl5t78i5wJV1YQSAIP31RUmWOtP4f8lfyCE52i0G+ExEOghWWkKfG
-         J6jg==
-X-Gm-Message-State: AOAM531tZr9wa01ZfIRg0/f6G1lDs8/6LN9ALIJjL3xaDqIFPMSQXKfZ
-        FEx4s1lI3QQqyoClLy1OBqlAC2Zlow==
-X-Google-Smtp-Source: ABdhPJzw06llVzkYmXpskxvWBiqRX9FwFqisQCpl8aErcTHmJfS/t6vIgGR48kFPGf7Gp6hqg/4niA==
-X-Received: by 2002:a6b:d301:: with SMTP id s1mr25337667iob.146.1595296231874;
-        Mon, 20 Jul 2020 18:50:31 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id b14sm10027977ilg.86.2020.07.20.18.50.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 18:50:29 -0700 (PDT)
-Received: (nullmailer pid 3358581 invoked by uid 1000);
-        Tue, 21 Jul 2020 01:50:27 -0000
-Date:   Mon, 20 Jul 2020 19:50:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        mdf@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH] fpga: region: Replace HTTP links with HTTPS ones
-Message-ID: <20200721015027.GA3358506@bogus>
-References: <20200713134008.34635-1-grandmaster@al2klimov.de>
+        id S1726310AbgGUGH5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 21 Jul 2020 02:07:57 -0400
+Received: from mga03.intel.com ([134.134.136.65]:35784 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725294AbgGUGH5 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 21 Jul 2020 02:07:57 -0400
+IronPort-SDR: e2saD8L0YkKwEcQ0eCwASga0tTEnkyzrHRglS5+Sb1w1aClQdkFzy7a44dNN926EeiXZtr20n8
+ iIF8cHnsYJkg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9688"; a="150055683"
+X-IronPort-AV: E=Sophos;i="5.75,377,1589266800"; 
+   d="scan'208";a="150055683"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2020 23:07:56 -0700
+IronPort-SDR: ZBa2I9rHxxMN6wzwKYTfntR4kstZg/MXfkLRjQDaZ5XRO2OfLRedZSwEk9NzTbvotAwOZhlrvT
+ A4IBfiZJIA5w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,377,1589266800"; 
+   d="scan'208";a="431869766"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by orsmga004.jf.intel.com with ESMTP; 20 Jul 2020 23:07:54 -0700
+Date:   Tue, 21 Jul 2020 14:04:46 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     "Wu, Hao" <hao.wu@intel.com>
+Cc:     Tom Rix <trix@redhat.com>, "mdf@kernel.org" <mdf@kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH 0/2] Modularization of DFL private feature drivers
+Message-ID: <20200721060446.GC17091@yilunxu-OptiPlex-7050>
+References: <1594791498-14495-1-git-send-email-yilun.xu@intel.com>
+ <0c7c63b8-5444-2deb-9fed-18956a5ad938@redhat.com>
+ <DM6PR11MB38194C448ECCF1E6BF386D3F857C0@DM6PR11MB3819.namprd11.prod.outlook.com>
+ <237c776b-8746-421d-26ad-eea7242a9172@redhat.com>
+ <DM6PR11MB3819828C1C193087AC6A4629857B0@DM6PR11MB3819.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200713134008.34635-1-grandmaster@al2klimov.de>
+In-Reply-To: <DM6PR11MB3819828C1C193087AC6A4629857B0@DM6PR11MB3819.namprd11.prod.outlook.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, 13 Jul 2020 15:40:08 +0200, Alexander A. Klimov wrote:
-> Rationale:
-> Reduces attack surface on kernel devs opening the links for MITM
-> as HTTPS traffic is much harder to manipulate.
+On Mon, Jul 20, 2020 at 05:21:43PM +0800, Wu, Hao wrote:
+> > On 7/16/20 8:48 PM, Wu, Hao wrote:
+> > >> Subject: Re: [PATCH 0/2] Modularization of DFL private feature drivers
+> > >>
+> > >> Generally i think this is a good approach.
+> > >>
+> > >> However I do have concern.
+> > >>
+> > >> The feature_id in dfl is magic number, similar to pci id but without a
+> > vendor
+> > >> id.
+> > >>
+> > >> Is it possible to add something like a vendor id so different vendors would
+> > >> not have to be so careful to use a unique id ?
+> > > Hi Tom,
+> > >
+> > > Thanks for the comments.
+> > >
+> > > Here is only one field defined in spec, that is feature id to distinguish one
+> > > feature with another one. There is no vendor id here I think, and several
+> > > cards are using this for now and seems not possible to change DFH format
+> > > for these products. : (
+> >
+> > There looks like some unused bits in the first word, how about
+> >
+> > #define DFH_EOL            BIT_ULL(40)        /* End of list */
+> >
+> > +define DFH_VENDOR    GENMAKE_ULL(49,41) /* Vendor ID */
+> >
+> > #define DFH_TYPE        GENMASK_ULL(63, 60)    /* Feature type */
+> >
+> > And Intel gets id 0.
+> >
+> > >
+> > > I fully understand the concern is the feature id management, and potential
+> > > conflicts there from different vendors. One possible method to resolve this
+> > > is managing the ids in a public place (web? Or just the driver header file for
+> > > feature id definition), all vendors can request some feature ids, and other
+> > > people can see which feature ids have been used so that they can avoid
+> > > using conflict ones with other people.
+> >
+> > The conflict will come in development when two vendors use the same
+> > unpublished feature id.
+> >
+> > Also keeping the truth of id's in the kernel source isn't that great because the
+> > public kernel always lags development repositories.
 > 
-> Deterministic algorithm:
-> For each file:
->   If not .svg:
->     For each line:
->       If doesn't contain `\bxmlns\b`:
->         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
->             If both the HTTP and HTTPS versions
->             return 200 OK and serve the same content:
->               Replace HTTP with HTTPS.
+> I fully understand your point, and it's a good idea to me, but I am not sure if
+> we can update the spec for DFHv0 at this moment. Let me check with spec
+> owner about this. Actually I believe we don't want to add anything in driver
+> code which is not defined in the spec at all. : (
 > 
-> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
-> ---
->  Continuing my work started at 93431e0607e5.
->  See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
->  (Actually letting a shell for loop submit all this stuff for me.)
+> >
+> > >
+> > > And in the later version DFH, this feature id will be replaced with GUID
+> > > I think, so it can resolve the conflict problems from different vendors?
+> > > But now, we still need to handle the existing ones. : )
+> >
+> > This is why I proposed needing to generalize the matching.
 > 
->  If there are any URLs to be removed completely or at least not just HTTPSified:
->  Just clearly say so and I'll *undo my change*.
->  See also: https://lkml.org/lkml/2020/6/27/64
+> Personally I prefer that we can have standard matching functions per DFH
+> specs.
 > 
->  If there are any valid, but yet not changed URLs:
->  See: https://lkml.org/lkml/2020/6/26/837
-> 
->  If you apply the patch, please let me know.
-> 
->  Sorry again to all maintainers who complained about subject lines.
->  Now I realized that you want an actually perfect prefixes,
->  not just subsystem ones.
->  I tried my best...
->  And yes, *I could* (at least half-)automate it.
->  Impossible is nothing! :)
-> 
-> 
->  Documentation/devicetree/bindings/fpga/fpga-region.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+> Yilun, how do you think about this?
 
-Applied, thanks!
+I also prefer we don't add anything now before DFL spec is updated.
+
+The idea of extending the DFLv0 is good, but I'm not sure if it is necessary
+now. It depends on how the customer is using the card, are they
+developing more FME features themselves on current cards and want to make
+them public.
+
+I think we could discuss about the strategy. And we could add another
+patchset if we finally decide and update the DFLv0 spec.
+
+Thanks
+Yilun
+
+> 
+> Thanks
+> Hao
+> 
