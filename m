@@ -2,143 +2,97 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 989CD226E82
-	for <lists+linux-fpga@lfdr.de>; Mon, 20 Jul 2020 20:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02AF62274F9
+	for <lists+linux-fpga@lfdr.de>; Tue, 21 Jul 2020 03:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729506AbgGTSpb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 20 Jul 2020 14:45:31 -0400
-Received: from mga04.intel.com ([192.55.52.120]:44580 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729027AbgGTSpa (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 20 Jul 2020 14:45:30 -0400
-IronPort-SDR: vXvXqmC98jNakaw+hx0yhYB0dX0vVRUJiNDwhdIKJrnF2pq+p00Hb571nzmewCJqFYUA3zcheC
- 6ieiGweipztA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9688"; a="147488360"
-X-IronPort-AV: E=Sophos;i="5.75,375,1589266800"; 
-   d="scan'208";a="147488360"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2020 11:45:29 -0700
-IronPort-SDR: 6y0+z5FCdr67qB+S3GoCrAC1V6JRCXFlZ69T8s7zVBxahrLjAvBdH0Sh/700l+jV+n2rx6p3K+
- H4b6cRG4Y+JQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,375,1589266800"; 
-   d="scan'208";a="283607960"
-Received: from marshy.an.intel.com (HELO [10.122.105.159]) ([10.122.105.159])
-  by orsmga003.jf.intel.com with ESMTP; 20 Jul 2020 11:45:28 -0700
-Subject: Re: [PATCH] fpga: stratix10-soc: make FPGA task un-interruptible
-To:     mdf@kernel.org
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dinguyen@kernel.org, richard.gong@intel.com
-References: <1594138447-21488-1-git-send-email-richard.gong@linux.intel.com>
-From:   Richard Gong <richard.gong@linux.intel.com>
-Message-ID: <d678df9e-7f1d-8f50-e2c9-a734b60e6c9a@linux.intel.com>
-Date:   Mon, 20 Jul 2020 14:00:22 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726068AbgGUBue (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 20 Jul 2020 21:50:34 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:45537 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726042AbgGUBuc (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 20 Jul 2020 21:50:32 -0400
+Received: by mail-io1-f68.google.com with SMTP id e64so19703047iof.12;
+        Mon, 20 Jul 2020 18:50:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z0RtKcdyckbxGpXUZiPyULk/wC7VcBbNcE6b2WWP54w=;
+        b=ENhG0AQfCSisUHyr38D4GFmPIsuYwMsD6cJVwSA9nQIGSVj5wHu6yLMhwuQ3u1M6it
+         vNRAiQMU5T38w0PWDdAq/bNr+miZdJTSvcQfX+2X+WBQE/3HvZye7LCkky8vVpix1mIt
+         TKQHs5zk5ElxZfb0+3rAyN7PIcPrjfi7hsQW7eDUmcQ/BYl5GLgI/kK517RgfP/x8/n3
+         HmeUizTKRijC9T6xHpJ64Dsdy2srppRX2sX9t7lOUHi2nsmVeO1RzURZ28m79X3wUyTS
+         NuuJY9L3lT8nS/ZXl5t78i5wJV1YQSAIP31RUmWOtP4f8lfyCE52i0G+ExEOghWWkKfG
+         J6jg==
+X-Gm-Message-State: AOAM531tZr9wa01ZfIRg0/f6G1lDs8/6LN9ALIJjL3xaDqIFPMSQXKfZ
+        FEx4s1lI3QQqyoClLy1OBqlAC2Zlow==
+X-Google-Smtp-Source: ABdhPJzw06llVzkYmXpskxvWBiqRX9FwFqisQCpl8aErcTHmJfS/t6vIgGR48kFPGf7Gp6hqg/4niA==
+X-Received: by 2002:a6b:d301:: with SMTP id s1mr25337667iob.146.1595296231874;
+        Mon, 20 Jul 2020 18:50:31 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id b14sm10027977ilg.86.2020.07.20.18.50.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2020 18:50:29 -0700 (PDT)
+Received: (nullmailer pid 3358581 invoked by uid 1000);
+        Tue, 21 Jul 2020 01:50:27 -0000
+Date:   Mon, 20 Jul 2020 19:50:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        mdf@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH] fpga: region: Replace HTTP links with HTTPS ones
+Message-ID: <20200721015027.GA3358506@bogus>
+References: <20200713134008.34635-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
-In-Reply-To: <1594138447-21488-1-git-send-email-richard.gong@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200713134008.34635-1-grandmaster@al2klimov.de>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-
-Hi Moritz,
-
-Sorry for asking.
-
-When you get chance, can you review this FPGA patch?
-
-Regards,
-Richard
-
-
-On 7/7/20 11:14 AM, richard.gong@linux.intel.com wrote:
-> From: Richard Gong <richard.gong@intel.com>
+On Mon, 13 Jul 2020 15:40:08 +0200, Alexander A. Klimov wrote:
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
 > 
-> When CTRL+C occurs during the process of FPGA reconfiguration, the FPGA
-> reconfiguration process stops and the user can't perform a new FPGA
-> reconfiguration properly.
+> Deterministic algorithm:
+> For each file:
+>   If not .svg:
+>     For each line:
+>       If doesn't contain `\bxmlns\b`:
+>         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+>             If both the HTTP and HTTPS versions
+>             return 200 OK and serve the same content:
+>               Replace HTTP with HTTPS.
 > 
-> Set FPGA complete task to be not interruptible so that the user can
-> properly perform FPGA reconfiguration after CTRL+C event.
-> 
-> Signed-off-by: Richard Gong <richard.gong@intel.com>
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 > ---
->   drivers/fpga/stratix10-soc.c | 23 +++--------------------
->   1 file changed, 3 insertions(+), 20 deletions(-)
+>  Continuing my work started at 93431e0607e5.
+>  See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+>  (Actually letting a shell for loop submit all this stuff for me.)
 > 
-> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-> index 44b7c56..657a70c 100644
-> --- a/drivers/fpga/stratix10-soc.c
-> +++ b/drivers/fpga/stratix10-soc.c
-> @@ -196,17 +196,13 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
->   	if (ret < 0)
->   		goto init_done;
->   
-> -	ret = wait_for_completion_interruptible_timeout(
-> +	ret = wait_for_completion_timeout(
->   		&priv->status_return_completion, S10_RECONFIG_TIMEOUT);
->   	if (!ret) {
->   		dev_err(dev, "timeout waiting for RECONFIG_REQUEST\n");
->   		ret = -ETIMEDOUT;
->   		goto init_done;
->   	}
-> -	if (ret < 0) {
-> -		dev_err(dev, "error (%d) waiting for RECONFIG_REQUEST\n", ret);
-> -		goto init_done;
-> -	}
->   
->   	ret = 0;
->   	if (!test_and_clear_bit(SVC_STATUS_OK, &priv->status)) {
-> @@ -318,7 +314,7 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
->   		 */
->   		wait_status = 1; /* not timed out */
->   		if (!priv->status)
-> -			wait_status = wait_for_completion_interruptible_timeout(
-> +			wait_status = wait_for_completion_timeout(
->   				&priv->status_return_completion,
->   				S10_BUFFER_TIMEOUT);
->   
-> @@ -340,13 +336,6 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
->   			ret = -ETIMEDOUT;
->   			break;
->   		}
-> -		if (wait_status < 0) {
-> -			ret = wait_status;
-> -			dev_err(dev,
-> -				"error (%d) waiting for svc layer buffers\n",
-> -				ret);
-> -			break;
-> -		}
->   	}
->   
->   	if (!s10_free_buffers(mgr))
-> @@ -372,7 +361,7 @@ static int s10_ops_write_complete(struct fpga_manager *mgr,
->   		if (ret < 0)
->   			break;
->   
-> -		ret = wait_for_completion_interruptible_timeout(
-> +		ret = wait_for_completion_timeout(
->   			&priv->status_return_completion, timeout);
->   		if (!ret) {
->   			dev_err(dev,
-> @@ -380,12 +369,6 @@ static int s10_ops_write_complete(struct fpga_manager *mgr,
->   			ret = -ETIMEDOUT;
->   			break;
->   		}
-> -		if (ret < 0) {
-> -			dev_err(dev,
-> -				"error (%d) waiting for RECONFIG_COMPLETED\n",
-> -				ret);
-> -			break;
-> -		}
->   		/* Not error or timeout, so ret is # of jiffies until timeout */
->   		timeout = ret;
->   		ret = 0;
+>  If there are any URLs to be removed completely or at least not just HTTPSified:
+>  Just clearly say so and I'll *undo my change*.
+>  See also: https://lkml.org/lkml/2020/6/27/64
 > 
+>  If there are any valid, but yet not changed URLs:
+>  See: https://lkml.org/lkml/2020/6/26/837
+> 
+>  If you apply the patch, please let me know.
+> 
+>  Sorry again to all maintainers who complained about subject lines.
+>  Now I realized that you want an actually perfect prefixes,
+>  not just subsystem ones.
+>  I tried my best...
+>  And yes, *I could* (at least half-)automate it.
+>  Impossible is nothing! :)
+> 
+> 
+>  Documentation/devicetree/bindings/fpga/fpga-region.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+
+Applied, thanks!
