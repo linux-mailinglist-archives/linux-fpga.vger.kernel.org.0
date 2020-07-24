@@ -2,31 +2,31 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C45A22BBE7
-	for <lists+linux-fpga@lfdr.de>; Fri, 24 Jul 2020 04:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4339D22BBE9
+	for <lists+linux-fpga@lfdr.de>; Fri, 24 Jul 2020 04:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726710AbgGXCMs (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 23 Jul 2020 22:12:48 -0400
+        id S1726728AbgGXCMv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 23 Jul 2020 22:12:51 -0400
 Received: from mga01.intel.com ([192.55.52.88]:14547 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726284AbgGXCMq (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 23 Jul 2020 22:12:46 -0400
-IronPort-SDR: PYdFc0NNSoGx+AJnZolnBOaUeFqB8ThzWdHUVmuijDBQoZKSrI9BVVMJsLypeNAnVgBQ8W80Gl
- wDwg8ennMNhw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9691"; a="168780087"
+        id S1726284AbgGXCMu (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 23 Jul 2020 22:12:50 -0400
+IronPort-SDR: QOklvWE2Ik9w2CK72NfFrFvgwEXXZu94sZ9MPC/BTLOlMu14SFed6DSbDlx4r7D24h7Vp7Fe5B
+ mr0GUSrmjSLA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9691"; a="168780091"
 X-IronPort-AV: E=Sophos;i="5.75,388,1589266800"; 
-   d="scan'208";a="168780087"
+   d="scan'208";a="168780091"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 19:12:46 -0700
-IronPort-SDR: FjkAXItHTDObxZMZjI71hGK6njKdoRh6bQTSnHXdshDBPu0kQH1Pha1p21XS4/ItYT0lpnoZfJ
- 84RWXyXP7YTg==
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 19:12:49 -0700
+IronPort-SDR: 5xMEoJ9sU8tLkawCK3F6lZu10669ObZFZCkv6/TdsfvCXg3GvxkzOCpgJAxigJDSrM1X+zpQTI
+ R5ok7qx/G5oQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,388,1589266800"; 
-   d="scan'208";a="271216030"
+   d="scan'208";a="271216038"
 Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Jul 2020 19:12:43 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 23 Jul 2020 19:12:47 -0700
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -34,9 +34,9 @@ Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
         Wu Hao <hao.wu@intel.com>,
         Matthew Gerlach <matthew.gerlach@linux.intel.com>,
         Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v2 3/4] fpga: dfl: create a dfl bus type to support DFL devices
-Date:   Fri, 24 Jul 2020 10:09:14 +0800
-Message-Id: <1595556555-9903-4-git-send-email-yilun.xu@intel.com>
+Subject: [PATCH v2 4/4] fpga: dfl: add support for N3000 nios private feature
+Date:   Fri, 24 Jul 2020 10:09:15 +0800
+Message-Id: <1595556555-9903-5-git-send-email-yilun.xu@intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1595556555-9903-1-git-send-email-yilun.xu@intel.com>
 References: <1595556555-9903-1-git-send-email-yilun.xu@intel.com>
@@ -45,453 +45,580 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-A new bus type "dfl" is introduced for private features which are not
-initialized by DFL feature drivers (dfl-fme & dfl-afu drivers). So these
-private features could be handled by separate driver modules.
+This patch adds support for the nios handshake private feature on Intel
+N3000 FPGA Card. This private feature provides a handshake interface to
+FPGA NIOS firmware, which receives retimer configuration command from host
+and executes via an internal SPI master. When nios finished the
+configuration, host takes over the ownership of the SPI master to control
+an Intel MAX10 BMC Chip on the SPI bus.
 
-DFL feature drivers (dfl-fme, dfl-port) will create DFL devices on
-enumeration. DFL drivers could be registered on this bus to match these
-DFL devices. They are matched by dfl type & feature_id.
+For NIOS firmware handshake part, this driver requests the retimer
+configuration for NIOS with parameters from module param, and adds some
+sysfs nodes for user to query NIOS state.
+
+For SPI part, this driver adds a spi-altera platform device as well as
+the MAX10 BMC spi slave info. A spi-altera driver will be matched to
+handle following the SPI work.
 
 Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 Signed-off-by: Wu Hao <hao.wu@intel.com>
 Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-----
-v2: change the bus uevent format.
-    change the dfl device's sysfs name format.
-    refactor dfl_dev_add().
-    minor fixes for comments from Hao and Tom.
 ---
- Documentation/ABI/testing/sysfs-bus-dfl |  15 ++
- drivers/fpga/dfl.c                      | 254 +++++++++++++++++++++++++++++++-
- drivers/fpga/dfl.h                      |  84 +++++++++++
- 3 files changed, 345 insertions(+), 8 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl
+ .../ABI/testing/sysfs-bus-dfl-devices-n3000-nios   |  16 +
+ drivers/fpga/Kconfig                               |  12 +
+ drivers/fpga/Makefile                              |   2 +
+ drivers/fpga/dfl-n3000-nios.c                      | 483 +++++++++++++++++++++
+ 4 files changed, 513 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl-devices-n3000-nios
+ create mode 100644 drivers/fpga/dfl-n3000-nios.c
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-dfl b/Documentation/ABI/testing/sysfs-bus-dfl
+diff --git a/Documentation/ABI/testing/sysfs-bus-dfl-devices-n3000-nios b/Documentation/ABI/testing/sysfs-bus-dfl-devices-n3000-nios
 new file mode 100644
-index 0000000..b1eea30
+index 0000000..8346b74
 --- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-dfl
-@@ -0,0 +1,15 @@
-+What:		/sys/bus/dfl/devices/.../type
++++ b/Documentation/ABI/testing/sysfs-bus-dfl-devices-n3000-nios
+@@ -0,0 +1,16 @@
++What:		/sys/bus/dfl/devices/dfl-fme.X.X/fec_mode
 +Date:		July 2020
 +KernelVersion:	5.9
 +Contact:	Xu Yilun <yilun.xu@intel.com>
-+Description:	Read-only. It returns type of DFL FIU of the device. Now DFL
-+		supports 2 FIU types, 0 for FME, 1 for PORT.
-+		Format: 0x%x
++Description:	Read-only. It returns the FEC mode of the ethernet retimer
++		configured by NIOS firmware. "rs" for RS FEC mode, "kr" for
++		KR FEC mode, "no" FOR NO FEC mode.
++		Format: string
 +
-+What:		/sys/bus/dfl/devices/.../feature_id
++What:		/sys/bus/dfl/devices/dfl-fme.X.X/nios_fw_version
 +Date:		July 2020
 +KernelVersion:	5.9
 +Contact:	Xu Yilun <yilun.xu@intel.com>
-+Description:	Read-only. It returns feature identifier local to its DFL FIU
-+		type.
-+		Format: 0x%x
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index b675957..c437053 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -30,12 +30,6 @@ static DEFINE_MUTEX(dfl_id_mutex);
-  * index to dfl_chardevs table. If no chardev support just set devt_type
-  * as one invalid index (DFL_FPGA_DEVT_MAX).
-  */
--enum dfl_id_type {
--	FME_ID,		/* fme id allocation and mapping */
--	PORT_ID,	/* port id allocation and mapping */
--	DFL_ID_MAX,
--};
--
- enum dfl_fpga_devt_type {
- 	DFL_FPGA_DEVT_FME,
- 	DFL_FPGA_DEVT_PORT,
-@@ -250,6 +244,236 @@ int dfl_fpga_check_port_id(struct platform_device *pdev, void *pport_id)
- }
- EXPORT_SYMBOL_GPL(dfl_fpga_check_port_id);
++Description:	Read-only. It returns the NIOS firmware version in FPGA. Its
++		format is "major.minor.patch".
++		Format: %x.%x.%x
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index b2408a7..fa5f3ab 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -191,6 +191,18 @@ config FPGA_DFL_AFU
+ 	  to the FPGA infrastructure via a Port. There may be more than one
+ 	  Port/AFU per DFL based FPGA device.
  
-+static DEFINE_IDA(dfl_device_ida);
++config FPGA_DFL_N3000_NIOS
++        tristate "FPGA DFL N3000 NIOS Driver"
++        depends on FPGA_DFL
++        select REGMAP
++        help
++	  This is the driver for the nios handshake private feature on Intel
++	  N3000 FPGA Card. This private feature provides a handshake interface
++	  to FPGA NIOS firmware, which receives retimer configuration command
++	  from host and executes via an internal SPI master. When nios finished
++	  the configuration, host takes over the ownership of the SPI master to
++	  control an Intel MAX10 BMC Chip on the SPI bus.
 +
-+static const struct dfl_device_id *
-+dfl_match_one_device(const struct dfl_device_id *id, struct dfl_device *ddev)
-+{
-+	if (id->type == ddev->type && id->feature_id == ddev->feature_id)
-+		return id;
+ config FPGA_DFL_PCI
+ 	tristate "FPGA DFL PCIe Device Driver"
+ 	depends on PCI && FPGA_DFL
+diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+index d8e21df..27f20f2 100644
+--- a/drivers/fpga/Makefile
++++ b/drivers/fpga/Makefile
+@@ -44,5 +44,7 @@ dfl-fme-objs += dfl-fme-perf.o
+ dfl-afu-objs := dfl-afu-main.o dfl-afu-region.o dfl-afu-dma-region.o
+ dfl-afu-objs += dfl-afu-error.o
+ 
++obj-$(CONFIG_FPGA_DFL_N3000_NIOS)      += dfl-n3000-nios.o
 +
-+	return NULL;
-+}
+ # Drivers for FPGAs which implement DFL
+ obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
+diff --git a/drivers/fpga/dfl-n3000-nios.c b/drivers/fpga/dfl-n3000-nios.c
+new file mode 100644
+index 0000000..d098a10
+--- /dev/null
++++ b/drivers/fpga/dfl-n3000-nios.c
+@@ -0,0 +1,483 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Driver for DFL N3000 NIOS private feature
++ *
++ * Copyright (C) 2019-2020 Intel Corporation, Inc.
++ *
++ * Authors:
++ *   Wu Hao <hao.wu@intel.com>
++ *   Xu Yilun <yilun.xu@intel.com>
++ */
++#include <linux/bitfield.h>
++#include <linux/errno.h>
++#include <linux/io.h>
++#include <linux/io-64-nonatomic-lo-hi.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/stddef.h>
++#include <linux/spi/altera.h>
++#include <linux/spi/spi.h>
++#include <linux/types.h>
 +
-+static int dfl_bus_match(struct device *dev, struct device_driver *drv)
-+{
-+	struct dfl_device *ddev = to_dfl_dev(dev);
-+	struct dfl_driver *ddrv = to_dfl_drv(drv);
-+	const struct dfl_device_id *id_entry = ddrv->id_table;
++#include "dfl.h"
 +
-+	if (id_entry) {
-+		while (id_entry->feature_id) {
-+			if (dfl_match_one_device(id_entry, ddev)) {
-+				ddev->id_entry = id_entry;
-+				return 1;
-+			}
-+			id_entry++;
-+		}
-+	}
++static char *fec_mode = "rs";
++module_param(fec_mode, charp, 0444);
++MODULE_PARM_DESC(child, "FEC mode");
 +
-+	return 0;
-+}
++/* N3000 NIOS private feature registers */
++#define NIOS_SPI_PARAM		0x8
++#define SHIFT_MODE		BIT_ULL(1)
++#define SHIFT_MODE_MSB		0
++#define SHIFT_MODE_LSB		1
++#define DATA_WIDTH		GENMASK_ULL(7, 2)
++#define NUM_CHIPSELECT		GENMASK_ULL(13, 8)
++#define CLK_POLARITY		BIT_ULL(14)
++#define CLK_PHASE		BIT_ULL(15)
++#define PERIPHERAL_ID		GENMASK_ULL(47, 32)
 +
-+static int dfl_bus_probe(struct device *dev)
-+{
-+	struct dfl_device *ddev = to_dfl_dev(dev);
-+	struct dfl_driver *ddrv = to_dfl_drv(dev->driver);
++#define NIOS_SPI_CTRL		0x10
++#define CTRL_WR_DATA		GENMASK_ULL(31, 0)
++#define CTRL_ADDR		GENMASK_ULL(44, 32)
++#define CTRL_CMD		GENMASK_ULL(63, 62)
++#define CMD_NOP			0
++#define CMD_RD			1
++#define CMD_WR			2
 +
-+	return ddrv->probe(ddev);
-+}
++#define NIOS_SPI_STAT		0x18
++#define STAT_RD_DATA		GENMASK_ULL(31, 0)
++#define STAT_RW_VAL		BIT_ULL(32)
 +
-+static int dfl_bus_remove(struct device *dev)
-+{
-+	struct dfl_device *ddev = to_dfl_dev(dev);
-+	struct dfl_driver *ddrv = to_dfl_drv(dev->driver);
++/* nios handshake registers, indirect access */
++#define NIOS_INIT		0x1000
++#define NIOS_INIT_DONE		BIT(0)
++#define NIOS_INIT_START		BIT(1)
++/* Mode for PKVL A, link 0, the same below */
++#define REQ_FEC_MODE_A0		GENMASK(9, 8)
++#define REQ_FEC_MODE_A1		GENMASK(11, 10)
++#define REQ_FEC_MODE_A2		GENMASK(13, 12)
++#define REQ_FEC_MODE_A3		GENMASK(15, 14)
++#define REQ_FEC_MODE_B0		GENMASK(17, 16)
++#define REQ_FEC_MODE_B1		GENMASK(19, 18)
++#define REQ_FEC_MODE_B2		GENMASK(21, 20)
++#define REQ_FEC_MODE_B3		GENMASK(23, 22)
++#define FEC_MODE_NO		0x0
++#define FEC_MODE_KR		0x1
++#define FEC_MODE_RS		0x2
 +
-+	if (ddrv->remove)
-+		ddrv->remove(ddev);
++#define NIOS_FW_VERSION		0x1004
++#define NIOS_FW_VERSION_PATCH	GENMASK(23, 20)
++#define NIOS_FW_VERSION_MINOR	GENMASK(27, 24)
++#define NIOS_FW_VERSION_MAJOR	GENMASK(31, 28)
 +
-+	return 0;
-+}
++#define PKVL_A_MODE_STS		0x1020
++#define PKVL_B_MODE_STS		0x1024
 +
-+static int dfl_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
-+{
-+	struct dfl_device *ddev = to_dfl_dev(dev);
++#define NS_REGBUS_WAIT_TIMEOUT	10000		/* loop count */
++#define NIOS_INIT_TIMEOUT	10000000	/* usec */
++#define NIOS_INIT_TIME_INTV	100000		/* usec */
 +
-+	return add_uevent_var(env, "MODALIAS=dfl:t%08Xf%04X",
-+			      ddev->type, ddev->feature_id);
-+}
-+
-+/* show dfl info fields */
-+#define dfl_info_attr(field, format_string)				\
-+static ssize_t								\
-+field##_show(struct device *dev, struct device_attribute *attr,		\
-+	     char *buf)							\
-+{									\
-+	struct dfl_device *ddev = to_dfl_dev(dev);			\
-+									\
-+	return sprintf(buf, format_string, ddev->field);		\
-+}									\
-+static DEVICE_ATTR_RO(field)
-+
-+dfl_info_attr(type, "0x%x\n");
-+dfl_info_attr(feature_id, "0x%x\n");
-+
-+static struct attribute *dfl_dev_attrs[] = {
-+	&dev_attr_type.attr,
-+	&dev_attr_feature_id.attr,
-+	NULL,
++struct dfl_n3000_nios {
++	void __iomem *base;
++	struct regmap *regmap;
++	struct device *dev;
++	struct platform_device *altr_spi;
 +};
 +
-+ATTRIBUTE_GROUPS(dfl_dev);
-+
-+static struct bus_type dfl_bus_type = {
-+	.name		= "dfl",
-+	.match		= dfl_bus_match,
-+	.probe		= dfl_bus_probe,
-+	.remove		= dfl_bus_remove,
-+	.uevent		= dfl_bus_uevent,
-+	.dev_groups	= dfl_dev_groups,
-+};
-+
-+static void release_dfl_dev(struct device *dev)
++static int n3000_nios_writel(struct dfl_n3000_nios *ns, unsigned int reg,
++			     unsigned int val)
 +{
-+	struct dfl_device *ddev = to_dfl_dev(dev);
++	int ret;
 +
-+	if (ddev->mmio_res.parent)
-+		release_resource(&ddev->mmio_res);
-+
-+	ida_simple_remove(&dfl_device_ida, ddev->id);
-+	kfree(ddev->irqs);
-+	kfree(ddev);
-+}
-+
-+static struct dfl_device *
-+dfl_dev_add(struct dfl_feature_platform_data *pdata,
-+	    struct dfl_feature *feature)
-+{
-+	struct platform_device *pdev = pdata->dev;
-+	struct resource *parent_res;
-+	struct dfl_device *ddev;
-+	int id, i, ret;
-+
-+	ddev = kzalloc(sizeof(*ddev), GFP_KERNEL);
-+	if (!ddev)
-+		return ERR_PTR(-ENOMEM);
-+
-+	id = ida_simple_get(&dfl_device_ida, 0, 0, GFP_KERNEL);
-+	if (id < 0) {
-+		dev_err(&pdev->dev, "unable to get id\n");
-+		kfree(ddev);
-+		return ERR_PTR(id);
-+	}
-+
-+	/* freeing resources by put_device() after device_initialize() */
-+	device_initialize(&ddev->dev);
-+	ddev->dev.parent = &pdev->dev;
-+	ddev->dev.bus = &dfl_bus_type;
-+	ddev->dev.release = release_dfl_dev;
-+	ddev->id = id;
-+	ret = dev_set_name(&ddev->dev, "dfl_dev.%d", id);
++	ret = regmap_write(ns->regmap, reg, val);
 +	if (ret)
-+		goto put_dev;
++		dev_err(ns->dev, "fail to write reg 0x%x val 0x%x: %d\n",
++			reg, val, ret);
 +
-+	ddev->type = feature_dev_id_type(pdev);
-+	ddev->feature_id = feature->id;
-+	ddev->cdev = pdata->dfl_cdev;
++	return ret;
++}
 +
-+	/* add mmio resource */
-+	parent_res = &pdev->resource[feature->resource_index];
-+	ddev->mmio_res.flags = IORESOURCE_MEM;
-+	ddev->mmio_res.start = parent_res->start;
-+	ddev->mmio_res.end = parent_res->end;
-+	ddev->mmio_res.name = dev_name(&ddev->dev);
-+	ret = insert_resource(parent_res, &ddev->mmio_res);
-+	if (ret) {
-+		dev_err(&pdev->dev, "%s failed to claim resource: %pR\n",
-+			dev_name(&ddev->dev), &ddev->mmio_res);
-+		goto put_dev;
-+	}
++static int n3000_nios_readl(struct dfl_n3000_nios *ns, unsigned int reg,
++			    unsigned int *val)
++{
++	int ret;
 +
-+	/* then add irq resource */
-+	if (feature->nr_irqs) {
-+		ddev->irqs = kcalloc(feature->nr_irqs,
-+				     sizeof(*ddev->irqs), GFP_KERNEL);
-+		if (!ddev->irqs) {
-+			ret = -ENOMEM;
-+			goto put_dev;
-+		}
-+
-+		for (i = 0; i < feature->nr_irqs; i++)
-+			ddev->irqs[i] = feature->irq_ctx[i].irq;
-+
-+		ddev->num_irqs = feature->nr_irqs;
-+	}
-+
-+	ret = device_add(&ddev->dev);
++	ret = regmap_read(ns->regmap, reg, val);
 +	if (ret)
-+		goto put_dev;
++		dev_err(ns->dev, "fail to read reg 0x%x: %d\n", reg, ret);
 +
-+	dev_info(&pdev->dev, "add dfl_dev: %s\n", dev_name(&ddev->dev));
-+	return ddev;
-+
-+put_dev:
-+	/* calls release_dfl_dev() which does the clean up  */
-+	put_device(&ddev->dev);
-+	return ERR_PTR(ret);
++	return ret;
 +}
 +
-+static void dfl_devs_uinit(struct dfl_feature_platform_data *pdata)
++static ssize_t nios_fw_version_show(struct device *dev,
++				    struct device_attribute *attr, char *buf)
 +{
-+	struct dfl_device *ddev;
-+	struct dfl_feature *feature;
++	struct dfl_n3000_nios *ns = dev_get_drvdata(dev);
++	unsigned int val;
++	int ret;
 +
-+	dfl_fpga_dev_for_each_feature(pdata, feature) {
-+		if (!feature->ioaddr && feature->priv) {
-+			ddev = feature->priv;
-+			device_unregister(&ddev->dev);
-+			feature->priv = NULL;
-+		}
-+	}
-+}
-+
-+static int dfl_devs_init(struct platform_device *pdev)
-+{
-+	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
-+	struct dfl_feature *feature;
-+	struct dfl_device *ddev;
-+
-+	dfl_fpga_dev_for_each_feature(pdata, feature) {
-+		if (feature->ioaddr || feature->priv)
-+			continue;
-+
-+		ddev = dfl_dev_add(pdata, feature);
-+		if (IS_ERR(ddev)) {
-+			dfl_devs_uinit(pdata);
-+			return PTR_ERR(ddev);
-+		}
-+
-+		feature->priv = ddev;
-+	}
-+
-+	return 0;
-+}
-+
-+int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *owner)
-+{
-+	if (!dfl_drv || !dfl_drv->probe || !dfl_drv->id_table)
-+		return -EINVAL;
-+
-+	dfl_drv->drv.owner = owner;
-+	dfl_drv->drv.bus = &dfl_bus_type;
-+
-+	return driver_register(&dfl_drv->drv);
-+}
-+EXPORT_SYMBOL(__dfl_driver_register);
-+
-+void dfl_driver_unregister(struct dfl_driver *dfl_drv)
-+{
-+	driver_unregister(&dfl_drv->drv);
-+}
-+EXPORT_SYMBOL(dfl_driver_unregister);
-+
- #define is_header_feature(feature) ((feature)->id == FEATURE_ID_FIU_HEADER)
- 
- /**
-@@ -261,12 +485,15 @@ void dfl_fpga_dev_feature_uinit(struct platform_device *pdev)
- 	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
- 	struct dfl_feature *feature;
- 
--	dfl_fpga_dev_for_each_feature(pdata, feature)
-+	dfl_devs_uinit(pdata);
-+
-+	dfl_fpga_dev_for_each_feature(pdata, feature) {
- 		if (feature->ops) {
- 			if (feature->ops->uinit)
- 				feature->ops->uinit(pdev, feature);
- 			feature->ops = NULL;
- 		}
-+	}
- }
- EXPORT_SYMBOL_GPL(dfl_fpga_dev_feature_uinit);
- 
-@@ -347,6 +574,10 @@ int dfl_fpga_dev_feature_init(struct platform_device *pdev,
- 		drv++;
- 	}
- 
-+	ret = dfl_devs_init(pdev);
-+	if (ret)
-+		goto exit;
-+
- 	return 0;
- exit:
- 	dfl_fpga_dev_feature_uinit(pdev);
-@@ -1285,11 +1516,17 @@ static int __init dfl_fpga_init(void)
- {
- 	int ret;
- 
-+	ret = bus_register(&dfl_bus_type);
++	ret = n3000_nios_readl(ns, NIOS_FW_VERSION, &val);
 +	if (ret)
 +		return ret;
 +
- 	dfl_ids_init();
- 
- 	ret = dfl_chardev_init();
--	if (ret)
-+	if (ret) {
- 		dfl_ids_destroy();
-+		bus_unregister(&dfl_bus_type);
++	return sprintf(buf, "%x.%x.%x\n",
++		       (u8)FIELD_GET(NIOS_FW_VERSION_MAJOR, val),
++		       (u8)FIELD_GET(NIOS_FW_VERSION_MINOR, val),
++		       (u8)FIELD_GET(NIOS_FW_VERSION_PATCH, val));
++}
++static DEVICE_ATTR_RO(nios_fw_version);
++
++static ssize_t fec_mode_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
++{
++	struct dfl_n3000_nios *ns = dev_get_drvdata(dev);
++	unsigned int val, mode;
++	int ret;
++
++	ret = n3000_nios_readl(ns, NIOS_INIT, &val);
++	if (ret)
++		return ret;
++
++	/*
++	 * FEC mode should always be the same for all links, as we set them
++	 * in this way.
++	 */
++	mode = FIELD_GET(REQ_FEC_MODE_A0, val);
++	if (mode != FIELD_GET(REQ_FEC_MODE_A1, val) ||
++	    mode != FIELD_GET(REQ_FEC_MODE_A2, val) ||
++	    mode != FIELD_GET(REQ_FEC_MODE_A3, val) ||
++	    mode != FIELD_GET(REQ_FEC_MODE_B0, val) ||
++	    mode != FIELD_GET(REQ_FEC_MODE_B1, val) ||
++	    mode != FIELD_GET(REQ_FEC_MODE_B2, val) ||
++	    mode != FIELD_GET(REQ_FEC_MODE_B3, val))
++		return -EFAULT;
++
++	switch (mode) {
++	case FEC_MODE_NO:
++		return sprintf(buf, "no\n");
++	case FEC_MODE_KR:
++		return sprintf(buf, "kr\n");
++	case FEC_MODE_RS:
++		return sprintf(buf, "rs\n");
 +	}
- 
- 	return ret;
- }
-@@ -1627,6 +1864,7 @@ static void __exit dfl_fpga_exit(void)
- {
- 	dfl_chardev_uinit();
- 	dfl_ids_destroy();
-+	bus_unregister(&dfl_bus_type);
- }
- 
- module_init(dfl_fpga_init);
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index 704efec..7b196867 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -520,4 +520,88 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
- 			       struct dfl_feature *feature,
- 			       unsigned long arg);
- 
-+/**
-+ * enum dfl_id_type - define the DFL FIU types
-+ */
-+enum dfl_id_type {
-+	FME_ID,
-+	PORT_ID,
-+	DFL_ID_MAX,
++
++	return -EFAULT;
++}
++static DEVICE_ATTR_RO(fec_mode);
++
++static struct attribute *n3000_nios_attrs[] = {
++	&dev_attr_nios_fw_version.attr,
++	&dev_attr_fec_mode.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(n3000_nios);
++
++static int init_error_detected(struct dfl_n3000_nios *ns)
++{
++	unsigned int val;
++
++	if (n3000_nios_readl(ns, PKVL_A_MODE_STS, &val))
++		return true;
++
++	if (val >= 0x100)
++		return true;
++
++	if (n3000_nios_readl(ns, PKVL_B_MODE_STS, &val))
++		return true;
++
++	if (val >= 0x100)
++		return true;
++
++	return false;
++}
++
++static void dump_error_stat(struct dfl_n3000_nios *ns)
++{
++	unsigned int val;
++
++	if (n3000_nios_readl(ns, PKVL_A_MODE_STS, &val))
++		return;
++
++	dev_info(ns->dev, "PKVL_A_MODE_STS %x\n", val);
++
++	if (n3000_nios_readl(ns, PKVL_B_MODE_STS, &val))
++		return;
++
++	dev_info(ns->dev, "PKVL_B_MODE_STS %x\n", val);
++}
++
++static int n3000_nios_init_done_check(struct dfl_n3000_nios *ns)
++{
++	struct device *dev = ns->dev;
++	unsigned int val, mode;
++	int ret;
++
++	/*
++	 * this SPI is shared by NIOS core inside FPGA, NIOS will use this SPI
++	 * master to do some one time initialization after power up, and then
++	 * release the control to OS. driver needs to poll on INIT_DONE to
++	 * see when driver could take the control.
++	 *
++	 * Please note that after 3.x.x version, INIT_START is introduced, so
++	 * driver needs to trigger START firstly and then check INIT_DONE.
++	 */
++
++	ret = n3000_nios_readl(ns, NIOS_FW_VERSION, &val);
++	if (ret)
++		return ret;
++
++	/*
++	 * If NIOS version register is totally uninitialized(== 0x0), then the
++	 * NIOS firmware is missing. So host could take control of SPI master
++	 * safely, but initialization work for NIOS is not done. This is an
++	 * issue of FPGA image. We didn't error out because we need SPI master
++	 * to reprogram a new image.
++	 */
++	if (val == 0) {
++		dev_warn(dev, "NIOS version reg = 0x%x, skip INIT_DONE check, but PKVL may be uninitialized\n",
++			 val);
++		return 0;
++	}
++
++	if (FIELD_GET(NIOS_FW_VERSION_MAJOR, val) >= 3) {
++		/* read NIOS_INIT to check if PKVL INIT done or not */
++		ret = n3000_nios_readl(ns, NIOS_INIT, &val);
++		if (ret)
++			return ret;
++
++		/* check if PKVLs are initialized already */
++		if (val & NIOS_INIT_DONE || val & NIOS_INIT_START)
++			goto nios_init_done;
++
++		/* configure FEC mode per module param */
++		val = NIOS_INIT_START;
++
++		/* FEC mode will be ignored by hardware in 10G mode */
++		if (!strcmp(fec_mode, "no"))
++			mode = FEC_MODE_NO;
++		else if (!strcmp(fec_mode, "kr"))
++			mode = FEC_MODE_KR;
++		else if (!strcmp(fec_mode, "rs"))
++			mode = FEC_MODE_RS;
++		else
++			return -EINVAL;
++
++		/* set the same FEC mode for all links */
++		val |= FIELD_PREP(REQ_FEC_MODE_A0, mode) |
++		       FIELD_PREP(REQ_FEC_MODE_A1, mode) |
++		       FIELD_PREP(REQ_FEC_MODE_A2, mode) |
++		       FIELD_PREP(REQ_FEC_MODE_A3, mode) |
++		       FIELD_PREP(REQ_FEC_MODE_B0, mode) |
++		       FIELD_PREP(REQ_FEC_MODE_B1, mode) |
++		       FIELD_PREP(REQ_FEC_MODE_B2, mode) |
++		       FIELD_PREP(REQ_FEC_MODE_B3, mode);
++
++		ret = n3000_nios_writel(ns, NIOS_INIT, val);
++		if (ret)
++			return ret;
++	}
++
++nios_init_done:
++	/* polls on NIOS_INIT_DONE */
++	ret = regmap_read_poll_timeout(ns->regmap, NIOS_INIT, val,
++				       val & NIOS_INIT_DONE,
++				       NIOS_INIT_TIME_INTV,
++				       NIOS_INIT_TIMEOUT);
++	if (ret) {
++		dev_err(dev, "NIOS_INIT_DONE %s\n",
++			(ret == -ETIMEDOUT) ? "timed out" : "check error");
++		goto dump_sts;
++	}
++
++	/*
++	 * after INIT_DONE is detected, it still needs to check if any ERR
++	 * detected.
++	 * We won't error out here even if error detected. Nios will release
++	 * spi controller when INIT_DONE is set, so driver could continue to
++	 * initialize spi controller device.
++	 */
++	if (init_error_detected(ns)) {
++		dev_warn(dev, "NIOS_INIT_DONE OK, but err found during init\n");
++		goto dump_sts;
++	}
++	return 0;
++
++dump_sts:
++	dump_error_stat(ns);
++
++	return ret;
++}
++
++struct spi_board_info m10_n3000_info = {
++	.modalias = "m10-n3000",
++	.max_speed_hz = 12500000,
++	.bus_num = 0,
++	.chip_select = 0,
 +};
 +
-+/**
-+ * struct dfl_device_id -  dfl device identifier
-+ * @type: Type of DFL FIU of the device. See enum dfl_id_type.
-+ * @feature_id: 16 bits feature identifier local to its DFL FIU type.
-+ * @driver_data: Driver specific data
-+ */
-+struct dfl_device_id {
-+	unsigned int type;
-+	u16 feature_id;
-+	unsigned long driver_data;
++static int create_altr_spi_controller(struct dfl_n3000_nios *ns)
++{
++	struct altera_spi_platform_data pdata = { 0 };
++	struct platform_device_info pdevinfo = { 0 };
++	void __iomem *base = ns->base;
++	u64 v;
++
++	v = readq(base + NIOS_SPI_PARAM);
++
++	pdata.mode_bits = SPI_CS_HIGH;
++	if (FIELD_GET(CLK_POLARITY, v))
++		pdata.mode_bits |= SPI_CPOL;
++	if (FIELD_GET(CLK_PHASE, v))
++		pdata.mode_bits |= SPI_CPHA;
++
++	pdata.num_chipselect = FIELD_GET(NUM_CHIPSELECT, v);
++	pdata.bits_per_word_mask =
++		SPI_BPW_RANGE_MASK(1, FIELD_GET(DATA_WIDTH, v));
++
++	pdata.num_devices = 1;
++	pdata.devices = &m10_n3000_info;
++
++	dev_dbg(ns->dev, "%s cs %u bpm 0x%x mode 0x%x\n", __func__,
++		pdata.num_chipselect, pdata.bits_per_word_mask,
++		pdata.mode_bits);
++
++	pdevinfo.name = "subdev_spi_altera";
++	pdevinfo.id = PLATFORM_DEVID_AUTO;
++	pdevinfo.parent = ns->dev;
++	pdevinfo.data = &pdata;
++	pdevinfo.size_data = sizeof(pdata);
++
++	ns->altr_spi = platform_device_register_full(&pdevinfo);
++	return PTR_ERR_OR_ZERO(ns->altr_spi);
++}
++
++static void destroy_altr_spi_controller(struct dfl_n3000_nios *ns)
++{
++	platform_device_unregister(ns->altr_spi);
++}
++
++static int ns_bus_poll_stat_timeout(void __iomem *base, u64 *v)
++{
++	int loops = NS_REGBUS_WAIT_TIMEOUT;
++
++	/*
++	 * Usually the state changes in few loops, so we try to be simple here
++	 * for performance.
++	 */
++	do {
++		*v = readq(base + NIOS_SPI_STAT);
++		if (*v & STAT_RW_VAL)
++			break;
++		cpu_relax();
++	} while (--loops);
++
++	return loops ? 0 : -ETIMEDOUT;
++}
++
++static int ns_bus_reg_write(void *context, unsigned int reg, unsigned int val)
++{
++	void __iomem *base = context;
++	u64 v = 0;
++
++	v |= FIELD_PREP(CTRL_CMD, CMD_WR);
++	v |= FIELD_PREP(CTRL_ADDR, reg);
++	v |= FIELD_PREP(CTRL_WR_DATA, val);
++	writeq(v, base + NIOS_SPI_CTRL);
++
++	return ns_bus_poll_stat_timeout(base, &v);
++}
++
++static int ns_bus_reg_read(void *context, unsigned int reg, unsigned int *val)
++{
++	void __iomem *base = context;
++	u64 v = 0;
++	int ret;
++
++	v |= FIELD_PREP(CTRL_CMD, CMD_RD);
++	v |= FIELD_PREP(CTRL_ADDR, reg);
++	writeq(v, base + NIOS_SPI_CTRL);
++
++	ret = ns_bus_poll_stat_timeout(base, &v);
++	if (!ret)
++		*val = FIELD_GET(STAT_RD_DATA, v);
++
++	return ret;
++}
++
++static const struct regmap_config ns_regbus_cfg = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.fast_io = true,
++
++	.reg_write = ns_bus_reg_write,
++	.reg_read = ns_bus_reg_read,
 +};
 +
-+/**
-+ * struct dfl_device - represent an dfl device on dfl bus
-+ *
-+ * @dev: Generic device interface.
-+ * @id: id of the dfl device
-+ * @type: Type of DFL FIU of the device. See enum dfl_id_type.
-+ * @feature_id: 16 bits feature identifier local to its DFL FIU type.
-+ * @mmio_res: MMIO resource of this dfl device.
-+ * @irqs: List of Linux IRQ numbers of this dfl device.
-+ * @num_irqs: number of IRQs supported by this dfl device.
-+ * @cdev: pointer to DFL FPGA container device this dfl device belongs to.
-+ * @id_entry: matched id entry in dfl driver's id table.
-+ */
-+struct dfl_device {
-+	struct device dev;
-+	int id;
-+	unsigned int type;
-+	u16 feature_id;
-+	struct resource mmio_res;
-+	int *irqs;
-+	unsigned int num_irqs;
-+	struct dfl_fpga_cdev *cdev;
-+	const struct dfl_device_id *id_entry;
++static int dfl_n3000_nios_probe(struct dfl_device *dfl_dev)
++{
++	struct device *dev = &dfl_dev->dev;
++	struct dfl_n3000_nios *ns;
++	int ret;
++
++	ns = devm_kzalloc(dev, sizeof(*ns), GFP_KERNEL);
++	if (!ns)
++		return -ENOMEM;
++
++	dev_set_drvdata(&dfl_dev->dev, ns);
++
++	ns->dev = dev;
++
++	ns->base = devm_ioremap_resource(&dfl_dev->dev, &dfl_dev->mmio_res);
++	if (IS_ERR(ns->base)) {
++		dev_err(dev, "get mem resource fail!\n");
++		return PTR_ERR(ns->base);
++	}
++
++	ns->regmap = devm_regmap_init(dev, NULL, ns->base, &ns_regbus_cfg);
++	if (IS_ERR(ns->regmap))
++		return PTR_ERR(ns->regmap);
++
++	ret = n3000_nios_init_done_check(ns);
++	if (ret)
++		return ret;
++
++	ret = create_altr_spi_controller(ns);
++	if (ret)
++		dev_err(dev, "altr spi controller create failed: %d\n", ret);
++
++	return ret;
++}
++
++static void dfl_n3000_nios_remove(struct dfl_device *dfl_dev)
++{
++	struct dfl_n3000_nios *ns = dev_get_drvdata(&dfl_dev->dev);
++
++	destroy_altr_spi_controller(ns);
++}
++
++#define FME_FEATURE_ID_N3000_NIOS	0xd
++
++static const struct dfl_device_id dfl_n3000_nios_ids[] = {
++	{ FME_ID, FME_FEATURE_ID_N3000_NIOS },
++	{ }
 +};
 +
-+/**
-+ * struct dfl_driver - represent an dfl device driver
-+ *
-+ * @drv: Driver model structure.
-+ * @id_table: Pointer to table of device IDs the driver is interested in.
-+ *	      { } member terminated.
-+ * @probe: Callback for device binding.
-+ * @remove: Callback for device unbinding.
-+ */
-+struct dfl_driver {
-+	struct device_driver drv;
-+	const struct dfl_device_id *id_table;
-+
-+	int (*probe)(struct dfl_device *dfl_dev);
-+	void (*remove)(struct dfl_device *dfl_dev);
++static struct dfl_driver dfl_n3000_nios_driver = {
++	.drv	= {
++		.name       = "dfl-n3000-nios",
++		.dev_groups = n3000_nios_groups,
++	},
++	.id_table = dfl_n3000_nios_ids,
++	.probe   = dfl_n3000_nios_probe,
++	.remove  = dfl_n3000_nios_remove,
 +};
 +
-+#define to_dfl_dev(d) container_of(d, struct dfl_device, dev)
-+#define to_dfl_drv(d) container_of(d, struct dfl_driver, drv)
++module_dfl_driver(dfl_n3000_nios_driver);
 +
-+/*
-+ * use a macro to avoid include chaining to get THIS_MODULE
-+ */
-+#define dfl_driver_register(drv) \
-+	__dfl_driver_register(drv, THIS_MODULE)
-+int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *owner);
-+void dfl_driver_unregister(struct dfl_driver *dfl_drv);
-+
-+/*
-+ * module_dfl_driver() - Helper macro for drivers that don't do
-+ * anything special in module init/exit.  This eliminates a lot of
-+ * boilerplate.  Each module may only use this macro once, and
-+ * calling it replaces module_init() and module_exit()
-+ */
-+#define module_dfl_driver(__dfl_driver) \
-+	module_driver(__dfl_driver, dfl_driver_register, \
-+		      dfl_driver_unregister)
-+
- #endif /* __FPGA_DFL_H */
++MODULE_DEVICE_TABLE(dfl, dfl_n3000_nios_ids);
++MODULE_DESCRIPTION("DFL N3000 NIOS driver");
++MODULE_AUTHOR("Intel Corporation");
++MODULE_LICENSE("GPL v2");
 -- 
 2.7.4
 
