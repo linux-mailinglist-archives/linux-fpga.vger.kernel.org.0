@@ -2,84 +2,133 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 431E32308E9
-	for <lists+linux-fpga@lfdr.de>; Tue, 28 Jul 2020 13:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E280234083
+	for <lists+linux-fpga@lfdr.de>; Fri, 31 Jul 2020 09:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729172AbgG1LiV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 28 Jul 2020 07:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729178AbgG1LiS (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 28 Jul 2020 07:38:18 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFF4C0619E1
-        for <linux-fpga@vger.kernel.org>; Tue, 28 Jul 2020 04:38:16 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id r2so12874472wrs.8
-        for <linux-fpga@vger.kernel.org>; Tue, 28 Jul 2020 04:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=z88eUg589kIPbwfcJkBbHKFa4QR0wOZWGk2diK1jFPM=;
-        b=b8/14qSmtpua6DExDbiZQujm3FVCJQWOEnGYc8m39CT4QhCFHb7H/8m/Mr+GJhki5y
-         D26KeL8e5wwIhpqswED7Iyj8LNXjLx29RYfhZ1pPRjvkmM3zHNDeTF1tCFcQE9cmRh/R
-         raunFxUrBwUmVbHiIcNmDsAsXlg0feXUzfnq5cUO9m3PCR65DPFX0ENqSsff92XlzdML
-         2lZ1DHEdMBJRJ7G/JmLQNbN9a0xCfCCdIavasCRbfc1GMLbxrWB9YQiD4Jx827i+wgQH
-         uvPy2fXgy98qEeiaY5zYJY4YAm1gQLhdwyYSQS3qfKNnqXIVHUgDrgxJy+XFocnlCNnt
-         WweQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=z88eUg589kIPbwfcJkBbHKFa4QR0wOZWGk2diK1jFPM=;
-        b=jI/+LyTxWOzpU82tPw59GYU/TEV63Ut/ZX7zCGOchjgv2GuIUqb+OgD8fcsneglntd
-         39p+Wj2tXtkjkusNI8cVpA0Le3sq5mHapaXoDBvymLRAjHpQQlpttip2tu2k//U0peSP
-         sg5Ltfl7bPgYxG56h+O5DxJBofKr6WK3+pSWGqooRWNPaOqavHhwPAqZbYhoLwRlfogK
-         9yj5nqjCBIfrqCWcd3kbaPS8XoWgHUKzsJeHtRoFDVCnn+hEb+B3utwzjMKhJhMnYBsU
-         urDzjtOWIU5RNVVvE+DANg5NvIxbuyYBgOv9fbhCQ3mUeO2ET7EV5/WcSOU9nEVICoVj
-         HyDA==
-X-Gm-Message-State: AOAM5301WWKmhIl9AhHtuv7louJd+oZ/zVC+DAZ5dyZgqd7AWFMN+NC7
-        mGQtOduDB/wJzkDr02+uQD7ie4uW2oD3IWuvshY=
-X-Google-Smtp-Source: ABdhPJxf3Z6j28ZJZ91yE+38HygJgiTtZMyB/VSeYng0agg0J+nv4s0qzz48SwEN7D8BizofBLS128ELYqeZWTC2zc4=
-X-Received: by 2002:a5d:5746:: with SMTP id q6mr24649773wrw.59.1595936294234;
- Tue, 28 Jul 2020 04:38:14 -0700 (PDT)
+        id S1731706AbgGaHwB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 31 Jul 2020 03:52:01 -0400
+Received: from mga17.intel.com ([192.55.52.151]:13718 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731644AbgGaHwB (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 31 Jul 2020 03:52:01 -0400
+IronPort-SDR: 6F57SUpNbWNTm40CXnJtdn1M05WFAUOtrSL0Ul1g4cvc2uwA5hJXTwr3MBxhEMHHmJs5+1FrVM
+ scSaeswrG8fA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9698"; a="131814521"
+X-IronPort-AV: E=Sophos;i="5.75,417,1589266800"; 
+   d="scan'208";a="131814521"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2020 00:52:01 -0700
+IronPort-SDR: M8ti5At6xlNbOSGTKMfP8IK/cxxE22unkj68z36ICBUkGC8VCRBD0WThjuxVIbb1ml6gDxvL8k
+ 1zdznFCc+EMA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,417,1589266800"; 
+   d="scan'208";a="490942058"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Jul 2020 00:51:59 -0700
+Date:   Fri, 31 Jul 2020 15:48:37 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lgoncalv@redhat.com
+Subject: Re: [PATCH v2 1/4] fpga: dfl: change data type of feature id to u16
+Message-ID: <20200731074837.GE1781@yilunxu-OptiPlex-7050>
+References: <1595556555-9903-1-git-send-email-yilun.xu@intel.com>
+ <1595556555-9903-2-git-send-email-yilun.xu@intel.com>
+ <316f86d4-7bba-f0c7-3dde-794df80d32e7@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a5d:65cb:0:0:0:0:0 with HTTP; Tue, 28 Jul 2020 04:38:13
- -0700 (PDT)
-From:   Rashid Al-Wahaibi <pdlarsen550@gmail.com>
-Date:   Tue, 28 Jul 2020 12:38:13 +0100
-Message-ID: <CAE00X2F5SUiQf0qCZYq3Yx353S0Esu1hA3RH4THqOM0WZMKHFQ@mail.gmail.com>
-Subject: Your Partnership
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <316f86d4-7bba-f0c7-3dde-794df80d32e7@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
--- 
-Good day,
-My name is Rashid Al-Wahaibi, I am from Oman but base here in the UK
-and a Managing Partner of BP Partnership Ltd, a Financial Consultancy
-Firm with office in the United Kingdom. I am contacting you based on
-the request of Ms Rosmah Mansor Najib Razak, wife of Najib Razak, the
-immediate past Malaysian Prime Minister.
+On Sat, Jul 25, 2020 at 06:29:53AM -0700, Tom Rix wrote:
+> It would be good if the variable or element for the feature id had a consistent name.
+> 
+> 
+> > @@ -197,7 +197,7 @@ int dfl_fpga_check_port_id(struct platform_device *pdev, void *pport_id);
+> >   * @id: unique dfl private feature id.
+> >   */
+> >  struct dfl_feature_id {
+> > -	u64 id;
+> > +	u16 id;
+> >  };
+> 
+> Is this structure needed ?
+> 
+> Here is how it could be changed to 
+> 
+> struct dfl_feature_driver {
+> 
+> -    const dfl_feature_id *
+> 
+> +    const u16 *id_table;
 
-I found your profile satisfying and decided to contact you based on Ms
-Rosmah Mansor Najib Razak desire to invest in any viable project in
-your region.
+This structure is to represent an id type, which is used to match
+fme/port owned features. It could be extended if some feature drivers
+needs driver_data.
 
-I need you to guide me on the type of investment that will be of best
-interest and provide good return on investment in your country and
-also act as her investment manager. She is ready to invest $25m to
-$50m USD
+Actually I see some example of device_ids with similar structure, like:
 
-I will explain further detail of this business proposal when you reply
-to this email indicating your interest.
+  struct mips_cdmm_device_id {
+  	__u8	type;
+  };
+
+  struct tee_client_device_id {
+	uuid_t uuid;
+  };
 
 
-Regards,
+Thanks,
+Yilun.
 
-Rashid Al-Wahaibi,
-Bp Partnership Ltd
-60 Raglan Road
-Reigate, ENG RH2 0HN,
-United Kingdom
+> 
+> ...
+> 
+> Tom
+> 
+> 
+> >  
+> >  /**
+> > @@ -240,7 +240,7 @@ struct dfl_feature_irq_ctx {
+> >   */
+> >  struct dfl_feature {
+> >  	struct platform_device *dev;
+> > -	u64 id;
+> > +	u16 id;
+> >  	int resource_index;
+> >  	void __iomem *ioaddr;
+> >  	struct dfl_feature_irq_ctx *irq_ctx;
+> > @@ -371,7 +371,7 @@ struct platform_device *dfl_fpga_inode_to_feature_dev(struct inode *inode)
+> >  	   (feature) < (pdata)->features + (pdata)->num; (feature)++)
+> >  
+> >  static inline
+> > -struct dfl_feature *dfl_get_feature_by_id(struct device *dev, u64 id)
+> > +struct dfl_feature *dfl_get_feature_by_id(struct device *dev, u16 id)
+> >  {
+> >  	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
+> >  	struct dfl_feature *feature;
+> > @@ -384,7 +384,7 @@ struct dfl_feature *dfl_get_feature_by_id(struct device *dev, u64 id)
+> >  }
+> >  
+> >  static inline
+> > -void __iomem *dfl_get_feature_ioaddr_by_id(struct device *dev, u64 id)
+> > +void __iomem *dfl_get_feature_ioaddr_by_id(struct device *dev, u16 id)
+> >  {
+> >  	struct dfl_feature *feature = dfl_get_feature_by_id(dev, id);
+> >  
+> > @@ -395,7 +395,7 @@ void __iomem *dfl_get_feature_ioaddr_by_id(struct device *dev, u64 id)
+> >  	return NULL;
+> >  }
+> >  
+> > -static inline bool is_dfl_feature_present(struct device *dev, u64 id)
+> > +static inline bool is_dfl_feature_present(struct device *dev, u16 id)
+> >  {
+> >  	return !!dfl_get_feature_ioaddr_by_id(dev, id);
+> >  }
