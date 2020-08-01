@@ -2,111 +2,90 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83780235235
-	for <lists+linux-fpga@lfdr.de>; Sat,  1 Aug 2020 14:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F3323527F
+	for <lists+linux-fpga@lfdr.de>; Sat,  1 Aug 2020 14:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729250AbgHAMZ3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 1 Aug 2020 08:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
+        id S1728746AbgHAM4r (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 1 Aug 2020 08:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729012AbgHAMYe (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 1 Aug 2020 08:24:34 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75374C06179E;
-        Sat,  1 Aug 2020 05:24:34 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id l4so33946565ejd.13;
-        Sat, 01 Aug 2020 05:24:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=I8dAqn3oyLTlTqhf29Z52aIjqvD0eEwBI3IdJNmTAKE=;
-        b=P98yQ73QpNAHyJH0DhgL+VteQsL8cJWvez4VBskT+6Zy0ViH186MuBu4nRvGYARUqd
-         PDUMf38OLCl5PvGAT/41B7GiPvDcOBsaM4Y1R+BKMYY18/LuAuqv44mpAEG6r1fYWcfY
-         QMKLZygpMvWntgZg8e/oF7zNlaPq9OSG4dNlG19C7ej6vNjo4PPJFjvpXAMHr399/xBl
-         DpMbGY848f6RaiM4HfSP1a5QFTkzZ4mmVUxFUE7Gz2pAIE0+Lq9sZeuQW4ZeMeTnwEFo
-         1ZSzd6yuE5ADI8ephhkCQ2Wubpv7kQZm+Cihm/tzF0n0DyDFoVPmGuUYNiBglsxS6GpR
-         f1fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=I8dAqn3oyLTlTqhf29Z52aIjqvD0eEwBI3IdJNmTAKE=;
-        b=r7xOiiXnrp1GqNkyZZUCZd041mhMXrTUzS5SRHaX3kS8TLomgPuNYX9/qNTGercbBU
-         DK7ksOUBQjJd4gcFc855O7qi8HAAWXAiGiiwSwTh/yGY9DVa4zM58i7NR1VSPrCx8FVN
-         K3zOf2m0OtEYso9dT5AdNX99y7Pzw2hPf/gVYCZg+J+ub7L/WwO0RLsi8gE8SERgoQlX
-         vo7bx9j7BO15t+dEF9Ry257Kghtvn0aZ1Dc1yhDOvyRmpEhFbcOELeO1La94lXVaaCv5
-         n6uN1CKTPsW997QrlUO/bXQ0ed+CFqknnwiGh0IwYVPVlaD0GwoXxjX+d4ACIVr50/MZ
-         yUYQ==
-X-Gm-Message-State: AOAM532ElYbnRbZaFLQcLaL+CKuBEutbB4eGTpn+m0E8g+poqmAnnKMD
-        j63gSkDqLNa6W5wqwm797BM=
-X-Google-Smtp-Source: ABdhPJyaQUgDgaB0qqpXNRYm/8ED4kbE0a2gf50gNexDXYKCzC2jeZw2r4pLhpg9owqfBDJdG1DmpA==
-X-Received: by 2002:a17:906:6a5b:: with SMTP id n27mr8123629ejs.221.1596284673233;
-        Sat, 01 Aug 2020 05:24:33 -0700 (PDT)
-Received: from net.saheed (95C84E0A.dsl.pool.telekom.hu. [149.200.78.10])
-        by smtp.gmail.com with ESMTPSA id a101sm12083131edf.76.2020.08.01.05.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2020 05:24:32 -0700 (PDT)
-From:   "Saheed O. Bolarinwa" <refactormyself@gmail.com>
-To:     helgaas@kernel.org, Moritz Fischer <mdf@kernel.org>
-Cc:     "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        bjorn@helgaas.com, skhan@linuxfoundation.org,
+        with ESMTP id S1726471AbgHAM4q (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 1 Aug 2020 08:56:46 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666AAC06174A;
+        Sat,  1 Aug 2020 05:56:46 -0700 (PDT)
+Received: from nazgul.tnic (unknown [78.130.214.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B8CAE1EC02FA;
+        Sat,  1 Aug 2020 14:56:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1596286602;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=NfmlZOrLaBmBGlzbXE5z6x4RKpqqJJmlzC4+91fmYUA=;
+        b=n/7VNWjNwrVYldmM5JNyqQEVZd3Vp3hpjJSMuFhfSkrW8mQhIHtpfasKy9w1BEromsKKyZ
+        /CdJ8nlcvZTCqyn05aBVgUH+WGtmqEhe61zMEoDcH8PmujGuHYORgBg9sVbSuZSh5qLljK
+        uihuEhdcnAWg6tPbjyrRXoOKhqTEw/0=
+Date:   Sat, 1 Aug 2020 14:56:57 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Saheed O. Bolarinwa" <refactormyself@gmail.com>
+Cc:     helgaas@kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Joerg Roedel <joro@8bytes.org>, bjorn@helgaas.com,
+        skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: [RFC PATCH 07/17] fpga: altera-cvp: Drop uses of pci_read_config_*() return value
-Date:   Sat,  1 Aug 2020 13:24:36 +0200
-Message-Id: <20200801112446.149549-8-refactormyself@gmail.com>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <20200801112446.149549-1-refactormyself@gmail.com>
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mtd@lists.infradead.org, iommu@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-edac@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net
+Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
+Message-ID: <20200801125657.GA25391@nazgul.tnic>
 References: <20200801112446.149549-1-refactormyself@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200801112446.149549-1-refactormyself@gmail.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The return value of pci_read_config_*() may not indicate a device error.
-However, the value read by these functions is more likely to indicate
-this kind of error. This presents two overlapping ways of reporting
-errors and complicates error checking.
+On Sat, Aug 01, 2020 at 01:24:29PM +0200, Saheed O. Bolarinwa wrote:
+> The return value of pci_read_config_*() may not indicate a device error.
+> However, the value read by these functions is more likely to indicate
+> this kind of error. This presents two overlapping ways of reporting
+> errors and complicates error checking.
 
-It is possible to move to one single way of checking for error if the
-dependency on the return value of these functions is removed, then it
-can later be made to return void.
+So why isn't the *value check done in the pci_read_config_* functions
+instead of touching gazillion callers?
 
-Remove all uses of the return value of pci_read_config_*().
-Check the actual value read for ~0. In this case, ~0 is an invalid
-value thus it indicates some kind of error.
+For example, pci_conf{1,2}_read() could check whether the u32 *value it
+just read depending on the access method, whether that value is ~0 and
+return proper PCIBIOS_ error in that case.
 
-Suggested-by: Bjorn Helgaas <bjorn@helgaas.com>
-Signed-off-by: Saheed O. Bolarinwa <refactormyself@gmail.com>
----
- drivers/fpga/altera-cvp.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+The check you're replicating
 
-diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-index 4e0edb60bfba..99c6e0754f8b 100644
---- a/drivers/fpga/altera-cvp.c
-+++ b/drivers/fpga/altera-cvp.c
-@@ -96,15 +96,15 @@ struct cvp_priv {
- static int altera_read_config_byte(struct altera_cvp_conf *conf,
- 				   int where, u8 *val)
- {
--	return pci_read_config_byte(conf->pci_dev, conf->vsec_offset + where,
--				    val);
-+	pci_read_config_byte(conf->pci_dev, conf->vsec_offset + where, val);
-+	return (val == (u8)~0) ? -ENODEV : 0;
- }
- 
- static int altera_read_config_dword(struct altera_cvp_conf *conf,
- 				    int where, u32 *val)
- {
--	return pci_read_config_dword(conf->pci_dev, conf->vsec_offset + where,
--				     val);
-+	pci_read_config_dword(conf->pci_dev, conf->vsec_offset + where, val);
-+	return (val == (u32)~0) ? -ENODEV : 0;
- }
- 
- static int altera_write_config_dword(struct altera_cvp_conf *conf,
+	if (val32 == (u32)~0)
+
+everywhere, instead, is just ugly and tests a naked value ~0 which
+doesn't mean anything...
+
 -- 
-2.18.4
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
