@@ -2,110 +2,93 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 141EB23BCBD
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Aug 2020 16:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC6A23BDFC
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Aug 2020 18:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728478AbgHDO4N (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Aug 2020 10:56:13 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:23170 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726556AbgHDO4M (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Aug 2020 10:56:12 -0400
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 074B4tG1006974;
-        Tue, 4 Aug 2020 07:05:42 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com with ESMTP id 32n69ehhxu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Aug 2020 07:05:42 -0400
-Received: from SCSQMBX11.ad.analog.com (scsqmbx11.ad.analog.com [10.77.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 074B5eca065013
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Tue, 4 Aug 2020 07:05:41 -0400
-Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
- SCSQMBX11.ad.analog.com (10.77.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Tue, 4 Aug 2020 04:05:39 -0700
-Received: from zeus.spd.analog.com (10.64.82.11) by SCSQMBX11.ad.analog.com
- (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Tue, 4 Aug 2020 04:05:39 -0700
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 074B5VDu005208;
-        Tue, 4 Aug 2020 07:05:36 -0400
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linux-clk@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>, <mdf@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH 2/6] clk: axi-clkgen: Set power bits for fractional mode
-Date:   Tue, 4 Aug 2020 14:06:54 +0300
-Message-ID: <20200804110658.40911-3-alexandru.ardelean@analog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200804110658.40911-1-alexandru.ardelean@analog.com>
-References: <20200804110658.40911-1-alexandru.ardelean@analog.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRoutedOnPrem: True
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-04_03:2020-08-03,2020-08-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 spamscore=0 clxscore=1015
- mlxscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008040084
+        id S1729510AbgHDQUb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 Aug 2020 12:20:31 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:39091 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727101AbgHDQU1 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Aug 2020 12:20:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596558025;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=39irOBPTe9Z0kK4c/lNul+h0tOKXYZQuoF/1ateEpJQ=;
+        b=SY+S0LMyti9W1bPkXsnQd93HVjteqaMimIGEjxFNwiImQ2TYC/twu/+cvxQdk6VwuctnfY
+        d8ke8wjT8CfdNDigk76FV56BCOPfRD+foz0WCLUHD1wtiDf2vZ4KmR+fhyBo6skvAr9UZk
+        fn6Re2lKNnT7Am8EFnQbgPez1ACv0F0=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-245-haskusoIMx-sR_FvFle2ZQ-1; Tue, 04 Aug 2020 12:20:20 -0400
+X-MC-Unique: haskusoIMx-sR_FvFle2ZQ-1
+Received: by mail-qk1-f199.google.com with SMTP id n128so28473097qke.2
+        for <linux-fpga@vger.kernel.org>; Tue, 04 Aug 2020 09:20:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=39irOBPTe9Z0kK4c/lNul+h0tOKXYZQuoF/1ateEpJQ=;
+        b=uJUL3d2EGr/zfXUGbjg8L84bhOLlxttugcun5oF8Ptn26urVoJSvHJLCYhEdH/CP9R
+         U15vmyobCzrIgtfarTEQ5A6KVFFo+BHNNfWmLSfHTk0BnC0I1bCqqt2mdyQB4YNP3gIh
+         rs/vrcFuAjW5jFYj5SAV/EJDEdX9VZSWx1F1SER9OfPJB7vx9+Dct95m+ujPgYp5KKWE
+         PJt3pBfGGT24k3cufwmkFpTVyWooeP2t1Dy9PSs5NmTJdtK5pPwKvPyQY8b+Kuc3C0J/
+         VDIR3AC6TejwH+yxA6FDkcR5U9kO//FWLEPV/EK4BfFcH7JOjh4gBD5enBjUYzfsLd+D
+         QXUw==
+X-Gm-Message-State: AOAM532OUvSpNI5DBkj5GElscHuHISqPwigz7Y1jFNDOgOAlBVfCMyMo
+        RV9aH7+PWc1xE0UEWMTol4OAdqhs60PUing6HSBxW5mXGpARMpeqgzg70LDTH0oK2zfHfNYr36y
+        wq7gCq2cc0vjBO5IO/JGe3Q==
+X-Received: by 2002:a37:7245:: with SMTP id n66mr10663970qkc.83.1596558019627;
+        Tue, 04 Aug 2020 09:20:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxB2lI38hkDboBDEtEVKpNlRUIDwbzgotiwqvt2H3cRPNRNgNz0BxpvsW5JbymjJ6lMBaoT3g==
+X-Received: by 2002:a37:7245:: with SMTP id n66mr10663944qkc.83.1596558019290;
+        Tue, 04 Aug 2020 09:20:19 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id q4sm21922585qkm.78.2020.08.04.09.20.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Aug 2020 09:20:18 -0700 (PDT)
+From:   trix@redhat.com
+To:     hao.wu@intel.com, mdf@kernel.org
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] MAINTAINERS: Add Tom Rix as fpga reviewer
+Date:   Tue,  4 Aug 2020 09:20:03 -0700
+Message-Id: <20200804162003.19402-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Tom Rix <trix@redhat.com>
 
-Using the fractional dividers requires some additional power bits to be
-set.
+I take care of fpga kernel and userspace for Red Hat and would
+like help out more with the mainline kernel.
 
-The fractional power bits are not documented and the current heuristic
-for setting them seems be insufficient for some cases. Just always set all
-the fractional power bits when in fractional mode.
-
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/clk/clk-axi-clkgen.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
-index 1df03cc6d089..14d803e6af62 100644
---- a/drivers/clk/clk-axi-clkgen.c
-+++ b/drivers/clk/clk-axi-clkgen.c
-@@ -37,6 +37,7 @@
- #define MMCM_REG_LOCK1		0x18
- #define MMCM_REG_LOCK2		0x19
- #define MMCM_REG_LOCK3		0x1a
-+#define MMCM_REG_POWER		0x28
- #define MMCM_REG_FILTER1	0x4e
- #define MMCM_REG_FILTER2	0x4f
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ce2737b1feb5..6fdb01776413 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6805,6 +6805,7 @@ F:	drivers/net/ethernet/nvidia/*
  
-@@ -320,6 +321,7 @@ static int axi_clkgen_set_rate(struct clk_hw *clk_hw,
- 	struct axi_clkgen *axi_clkgen = clk_hw_to_axi_clkgen(clk_hw);
- 	unsigned int d, m, dout;
- 	struct axi_clkgen_div_params params;
-+	uint32_t power = 0;
- 	uint32_t filter;
- 	uint32_t lock;
+ FPGA DFL DRIVERS
+ M:	Wu Hao <hao.wu@intel.com>
++R:	Tom Rix <trix@redhat.com>
+ L:	linux-fpga@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/fpga/dfl.rst
+@@ -6813,6 +6814,7 @@ F:	include/uapi/linux/fpga-dfl.h
  
-@@ -331,6 +333,11 @@ static int axi_clkgen_set_rate(struct clk_hw *clk_hw,
- 	if (d == 0 || dout == 0 || m == 0)
- 		return -EINVAL;
- 
-+	if ((dout & 0x7) != 0 || (m & 0x7) != 0)
-+		power |= 0x9800;
-+
-+	axi_clkgen_mmcm_write(axi_clkgen, MMCM_REG_POWER, power, 0x9800);
-+
- 	filter = axi_clkgen_lookup_filter(m - 1);
- 	lock = axi_clkgen_lookup_lock(m - 1);
- 
+ FPGA MANAGER FRAMEWORK
+ M:	Moritz Fischer <mdf@kernel.org>
++R:	Tom Rix <trix@redhat.com>
+ L:	linux-fpga@vger.kernel.org
+ S:	Maintained
+ W:	http://www.rocketboards.org
 -- 
-2.17.1
+2.18.1
 
