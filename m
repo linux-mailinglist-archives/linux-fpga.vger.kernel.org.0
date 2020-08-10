@@ -2,101 +2,240 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8CB2400FB
-	for <lists+linux-fpga@lfdr.de>; Mon, 10 Aug 2020 04:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6FD2400FE
+	for <lists+linux-fpga@lfdr.de>; Mon, 10 Aug 2020 04:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbgHJCov (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 9 Aug 2020 22:44:51 -0400
+        id S1726406AbgHJCoz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 9 Aug 2020 22:44:55 -0400
 Received: from mga17.intel.com ([192.55.52.151]:50123 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726219AbgHJCov (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sun, 9 Aug 2020 22:44:51 -0400
-IronPort-SDR: hoQqZv8h8dqX5xUm+ZsCFYii6BbvOKgCEqwvLFCv9bThEPVqCam2XE0B95P0ZTd7S0PxW84RyE
- FXHmYgr5fF9Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9708"; a="133523424"
+        id S1726219AbgHJCox (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 9 Aug 2020 22:44:53 -0400
+IronPort-SDR: lNEgNQ5c6bzD7B1OXbGZuhWP+FxNZS8H+jz5e4GUMcblwGE6vfTClcILeUWPX1MvELWRpcQlXH
+ Ei4JB7w2mGEw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9708"; a="133523425"
 X-IronPort-AV: E=Sophos;i="5.75,456,1589266800"; 
-   d="scan'208";a="133523424"
+   d="scan'208";a="133523425"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2020 19:44:50 -0700
-IronPort-SDR: Oy26DasJQD+oaegknq9Gv3D04qyEIcONcY5vOzu7XfKoSBICZy7w8222EjAsX3sTZxfkjdgV2g
- vNF3kjhYlkKA==
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2020 19:44:53 -0700
+IronPort-SDR: Othn8N2yo35vByBupxJP9btY7ENk/0oMz54N7njYa07CeeZvzU4wnFbjtm+22/lqGkQxjPHbQt
+ WrW5oSHKLLhg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,456,1589266800"; 
-   d="scan'208";a="334095052"
+   d="scan'208";a="334095055"
 Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by orsmga007.jf.intel.com with ESMTP; 09 Aug 2020 19:44:48 -0700
+  by orsmga007.jf.intel.com with ESMTP; 09 Aug 2020 19:44:51 -0700
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com
-Subject: [PATCH v4 0/4] Modularization of DFL private feature drivers
-Date:   Mon, 10 Aug 2020 10:41:09 +0800
-Message-Id: <1597027273-25288-1-git-send-email-yilun.xu@intel.com>
+Subject: [PATCH v4 1/4] fpga: dfl: change data type of feature id to u16
+Date:   Mon, 10 Aug 2020 10:41:10 +0800
+Message-Id: <1597027273-25288-2-git-send-email-yilun.xu@intel.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1597027273-25288-1-git-send-email-yilun.xu@intel.com>
+References: <1597027273-25288-1-git-send-email-yilun.xu@intel.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This patchset makes it possible to develop independent driver modules
-for DFL private features. It also helps to leverage existing kernel
-drivers to enable some IP blocks in DFL.
+The feature id is stored in a 12 bit field in DFH. So a u16 variable is
+enough for feature id.
 
-Patch #1: An improvement of feature id definition. The feature id will be
-          used as the key field for dfl device/driver matching.
-Patch #2: Release the dfl mmio regions after enumeration, so that private
-          feature drivers could request mmio region in their own drivers.
-Patch #3: Introduce the dfl bus, then dfl devices could be supported by
-          independent dfl drivers.
-Patch #4: An example of the dfl driver for N3000 nios private feature.
+This patch changes all feature id related places to fit u16.
 
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+Reviewed-by: Tom Rix <trix@redhat.com>
+Acked-by: Wu Hao <hao.wu@intel.com>
+---
+v3: no change.
+v4: no change.
+---
+ drivers/fpga/dfl-fme-perf.c |  2 +-
+ drivers/fpga/dfl.c          | 29 +++++++++++++++--------------
+ drivers/fpga/dfl.h          | 10 +++++-----
+ 3 files changed, 21 insertions(+), 20 deletions(-)
 
-Main changes from v1:
-- Add the new Patch #1, to improve the feature id definition.
-- Change the dfl bus uevent format.
-- Change the dfl device's sysfs name format.
-- refactor dfl_dev_add()
-- Add the Patch #4 as an example of the dfl driver.
-- A lot of minor fixes for comments from Hao and Tom.
-
-Main changes from v2:
-- Add the doc for dfl-n3000-nios driver.
-- Minor fixes for comments from Tom.
-
-Main changes from v3:
-- improve the dfl devices' uevent format, 4 bits for type & 12 bits for id
-- change dfl_device->type to u8
-- A dedicate field in struct dfl_feature for dfl device instance.
-- error out if dfl_device already exist on dfl_devs_init().
-- Move the err log in regmap implementation, and delete
-  n3000_nios_writel/readl(), they have nothing to wrapper now.
-- Minor fixes and comments improvement.
-
-Xu Yilun (4):
-  fpga: dfl: change data type of feature id to u16
-  fpga: dfl: map feature mmio resources in their own feature drivers
-  fpga: dfl: create a dfl bus type to support DFL devices
-  fpga: dfl: add support for N3000 Nios private feature
-
- Documentation/ABI/testing/sysfs-bus-dfl            |  15 +
- .../ABI/testing/sysfs-bus-dfl-devices-n3000-nios   |  18 +
- Documentation/fpga/dfl-n3000-nios.rst              |  41 ++
- Documentation/fpga/index.rst                       |   1 +
- drivers/fpga/Kconfig                               |  12 +
- drivers/fpga/Makefile                              |   2 +
- drivers/fpga/dfl-fme-perf.c                        |   2 +-
- drivers/fpga/dfl-n3000-nios.c                      | 475 +++++++++++++++++++++
- drivers/fpga/dfl-pci.c                             |  24 +-
- drivers/fpga/dfl.c                                 | 473 ++++++++++++++++----
- drivers/fpga/dfl.h                                 | 102 ++++-
- 11 files changed, 1062 insertions(+), 103 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl
- create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl-devices-n3000-nios
- create mode 100644 Documentation/fpga/dfl-n3000-nios.rst
- create mode 100644 drivers/fpga/dfl-n3000-nios.c
-
+diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
+index 6ce1ed2..5312662 100644
+--- a/drivers/fpga/dfl-fme-perf.c
++++ b/drivers/fpga/dfl-fme-perf.c
+@@ -148,7 +148,7 @@ struct fme_perf_priv {
+ 	struct device *dev;
+ 	void __iomem *ioaddr;
+ 	struct pmu pmu;
+-	u64 id;
++	u16 id;
+ 
+ 	u32 fab_users;
+ 	u32 fab_port_id;
+diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+index 649958a..18575d9 100644
+--- a/drivers/fpga/dfl.c
++++ b/drivers/fpga/dfl.c
+@@ -58,7 +58,7 @@ static const char *dfl_pdata_key_strings[DFL_ID_MAX] = {
+  */
+ struct dfl_dev_info {
+ 	const char *name;
+-	u32 dfh_id;
++	u16 dfh_id;
+ 	struct idr id;
+ 	enum dfl_fpga_devt_type devt_type;
+ };
+@@ -134,7 +134,7 @@ static enum dfl_id_type feature_dev_id_type(struct platform_device *pdev)
+ 	return DFL_ID_MAX;
+ }
+ 
+-static enum dfl_id_type dfh_id_to_type(u32 id)
++static enum dfl_id_type dfh_id_to_type(u16 id)
+ {
+ 	int i;
+ 
+@@ -454,7 +454,7 @@ struct build_feature_devs_info {
+  * @nr_irqs: number of irqs of this sub feature.
+  */
+ struct dfl_feature_info {
+-	u64 fid;
++	u16 fid;
+ 	struct resource mmio_res;
+ 	void __iomem *ioaddr;
+ 	struct list_head node;
+@@ -649,7 +649,7 @@ static inline u32 feature_size(void __iomem *start)
+ 	return ofst ? ofst : 4096;
+ }
+ 
+-static u64 feature_id(void __iomem *start)
++static u16 feature_id(void __iomem *start)
+ {
+ 	u64 v = readq(start + DFH);
+ 	u16 id = FIELD_GET(DFH_ID, v);
+@@ -667,7 +667,7 @@ static u64 feature_id(void __iomem *start)
+ }
+ 
+ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
+-			      resource_size_t ofst, u64 fid,
++			      resource_size_t ofst, u16 fid,
+ 			      unsigned int *irq_base, unsigned int *nr_irqs)
+ {
+ 	void __iomem *base = binfo->ioaddr + ofst;
+@@ -713,12 +713,12 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
+ 		return 0;
+ 	}
+ 
+-	dev_dbg(binfo->dev, "feature: 0x%llx, irq_base: %u, nr_irqs: %u\n",
++	dev_dbg(binfo->dev, "feature: 0x%x, irq_base: %u, nr_irqs: %u\n",
+ 		fid, ibase, inr);
+ 
+ 	if (ibase + inr > binfo->nr_irqs) {
+ 		dev_err(binfo->dev,
+-			"Invalid interrupt number in feature 0x%llx\n", fid);
++			"Invalid interrupt number in feature 0x%x\n", fid);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -726,7 +726,7 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
+ 		virq = binfo->irq_table[ibase + i];
+ 		if (virq < 0 || virq > NR_IRQS) {
+ 			dev_err(binfo->dev,
+-				"Invalid irq table entry for feature 0x%llx\n",
++				"Invalid irq table entry for feature 0x%x\n",
+ 				fid);
+ 			return -EINVAL;
+ 		}
+@@ -748,7 +748,7 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
+ static int
+ create_feature_instance(struct build_feature_devs_info *binfo,
+ 			struct dfl_fpga_enum_dfl *dfl, resource_size_t ofst,
+-			resource_size_t size, u64 fid)
++			resource_size_t size, u16 fid)
+ {
+ 	unsigned int irq_base, nr_irqs;
+ 	struct dfl_feature_info *finfo;
+@@ -819,9 +819,10 @@ static int parse_feature_fiu(struct build_feature_devs_info *binfo,
+ 			     struct dfl_fpga_enum_dfl *dfl,
+ 			     resource_size_t ofst)
+ {
+-	u32 id, offset;
+-	u64 v;
+ 	int ret = 0;
++	u32 offset;
++	u16 id;
++	u64 v;
+ 
+ 	v = readq(dfl->ioaddr + ofst + DFH);
+ 	id = FIELD_GET(DFH_ID, v);
+@@ -855,8 +856,8 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
+ 				 resource_size_t ofst)
+ {
+ 	if (!binfo->feature_dev) {
+-		dev_err(binfo->dev, "the private feature %llx does not belong to any AFU.\n",
+-			(unsigned long long)feature_id(dfl->ioaddr + ofst));
++		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
++			feature_id(dfl->ioaddr + ofst));
+ 		return -EINVAL;
+ 	}
+ 
+@@ -1424,7 +1425,7 @@ static int do_set_irq_trigger(struct dfl_feature *feature, unsigned int idx,
+ 		return 0;
+ 
+ 	feature->irq_ctx[idx].name =
+-		kasprintf(GFP_KERNEL, "fpga-irq[%u](%s-%llx)", idx,
++		kasprintf(GFP_KERNEL, "fpga-irq[%u](%s-%x)", idx,
+ 			  dev_name(&pdev->dev), feature->id);
+ 	if (!feature->irq_ctx[idx].name)
+ 		return -ENOMEM;
+diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+index a32dfba..bc61942 100644
+--- a/drivers/fpga/dfl.h
++++ b/drivers/fpga/dfl.h
+@@ -197,7 +197,7 @@ int dfl_fpga_check_port_id(struct platform_device *pdev, void *pport_id);
+  * @id: unique dfl private feature id.
+  */
+ struct dfl_feature_id {
+-	u64 id;
++	u16 id;
+ };
+ 
+ /**
+@@ -240,7 +240,7 @@ struct dfl_feature_irq_ctx {
+  */
+ struct dfl_feature {
+ 	struct platform_device *dev;
+-	u64 id;
++	u16 id;
+ 	int resource_index;
+ 	void __iomem *ioaddr;
+ 	struct dfl_feature_irq_ctx *irq_ctx;
+@@ -365,7 +365,7 @@ struct platform_device *dfl_fpga_inode_to_feature_dev(struct inode *inode)
+ 	   (feature) < (pdata)->features + (pdata)->num; (feature)++)
+ 
+ static inline
+-struct dfl_feature *dfl_get_feature_by_id(struct device *dev, u64 id)
++struct dfl_feature *dfl_get_feature_by_id(struct device *dev, u16 id)
+ {
+ 	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
+ 	struct dfl_feature *feature;
+@@ -378,7 +378,7 @@ struct dfl_feature *dfl_get_feature_by_id(struct device *dev, u64 id)
+ }
+ 
+ static inline
+-void __iomem *dfl_get_feature_ioaddr_by_id(struct device *dev, u64 id)
++void __iomem *dfl_get_feature_ioaddr_by_id(struct device *dev, u16 id)
+ {
+ 	struct dfl_feature *feature = dfl_get_feature_by_id(dev, id);
+ 
+@@ -389,7 +389,7 @@ void __iomem *dfl_get_feature_ioaddr_by_id(struct device *dev, u64 id)
+ 	return NULL;
+ }
+ 
+-static inline bool is_dfl_feature_present(struct device *dev, u64 id)
++static inline bool is_dfl_feature_present(struct device *dev, u16 id)
+ {
+ 	return !!dfl_get_feature_ioaddr_by_id(dev, id);
+ }
 -- 
 2.7.4
 
