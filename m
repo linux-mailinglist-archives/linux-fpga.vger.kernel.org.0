@@ -2,70 +2,66 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BE32401CF
-	for <lists+linux-fpga@lfdr.de>; Mon, 10 Aug 2020 07:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A293240205
+	for <lists+linux-fpga@lfdr.de>; Mon, 10 Aug 2020 08:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725862AbgHJF5B (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 10 Aug 2020 01:57:01 -0400
-Received: from mga07.intel.com ([134.134.136.100]:11431 "EHLO mga07.intel.com"
+        id S1725808AbgHJGhD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 10 Aug 2020 02:37:03 -0400
+Received: from mga01.intel.com ([192.55.52.88]:60676 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725849AbgHJF5A (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 10 Aug 2020 01:57:00 -0400
-IronPort-SDR: KqY1KxWZMvEfiaMg08wy2W6iSRDoC5fn5T5f1NyEe2WdUENHdyzaC7XHXfP82Smf5CtomhEl02
- XXAh6xErY7qQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9708"; a="217822973"
+        id S1725763AbgHJGhB (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 10 Aug 2020 02:37:01 -0400
+IronPort-SDR: jXcnSC8rdbQOKBQ3JInjrmlc0d0Wi9Pet8B9LV2+6xUdQS5VENkSbcjxNYXEv6+ojWRQ6XRFBa
+ bJqL5wDl611w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9708"; a="171526513"
 X-IronPort-AV: E=Sophos;i="5.75,456,1589266800"; 
-   d="scan'208";a="217822973"
+   d="scan'208";a="171526513"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2020 22:56:54 -0700
-IronPort-SDR: 7kXuhKaOGrkcZA2jBx6qu/I56Qt26tAtvkLlYO7gzjV5g5J9fZE89I9bd2ng94Yr9T/OoeXClS
- 3W/4cuS8nLxg==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2020 23:36:59 -0700
+IronPort-SDR: ky81klgMQu9DY/wSeEWf7JCZeAJ/JIeMCfhMSwTYmkGjHDRIXp/NOn3AbwFYLdqlihJs+MJorf
+ 0k5bXjeudRXQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,456,1589266800"; 
-   d="scan'208";a="317234135"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Aug 2020 22:56:54 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+   d="scan'208";a="277201221"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Aug 2020 23:36:59 -0700
+Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sun, 9 Aug 2020 22:56:54 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sun, 9 Aug 2020 22:56:53 -0700
-Received: from ORSEDG002.ED.cps.intel.com (10.7.248.5) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ 15.1.1713.5; Sun, 9 Aug 2020 23:36:58 -0700
+Received: from FMSEDG002.ED.cps.intel.com (10.1.192.134) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
- via Frontend Transport; Sun, 9 Aug 2020 22:56:53 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
- by edgegateway.intel.com (134.134.137.101) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Sun, 9 Aug 2020 22:56:50 -0700
+ via Frontend Transport; Sun, 9 Aug 2020 23:36:58 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
+ by edgegateway.intel.com (192.55.55.69) with Microsoft SMTP Server (TLS) id
+ 14.3.439.0; Sun, 9 Aug 2020 23:36:53 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N6w2yeRiDWsNTKRoyeZRyI/D3cw0kAoFrAyHqdpY56cSJa54TuiQguYm/v/KzebT9/rWD1aW2TbkV2UwS8+Ggd8rTWzXXaaxeIcwdoz3F71DjjN0tIXyS9uuU1ZcL1s9phwralVVziIeB6Tf4JSk8m53AeXu2QWk3DTSBW5NEzxyerzq9FjRdI1d0dYzE0QRR1agsTJUhRPaovQNd6nzXY8ciwCvPhBl7HnoDhh1bOrImJvjaBL8h2hWvKNGliQWtH95dqZKhsXgkxvkbDzHKPHzK8kyJNIlYWg12Cvm9kRZ6M1wMB5ZzzcQI4Go59Kcmnk5476M5n6XNulJYz75iA==
+ b=Kz8c4d6M46WdF92JQhyhoA6RwgtZhy+2qZ/ClL0MIvtkW9OcDm4exUD9Gs7axz+nzZWO3ziuf1kasUqOcJEL8Bd3YIGyEGYWCGJV7R/NV+bUcfaDbWfJIVEEI2mr+QCIlAGCRy4a515NECucYnRh7NAxVVJTZ7DZES7RiXNyx/bEhcx+H8PHF6lF0+QLlX7hmKjbs9DwSos1tDRWBeiHxPue8ZVKIUMPMKnvxYa5HbWNNljGNMMlA/drn8nyf7cv0Q5FY7VxLQo216+3+M39c8+h6cz2oKweRHYSlOUtoRk9oH/veBNc7/7WhREHXwdPLtIeXHfVkVtGW6JM2E/g6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=boG8nwbTENmwQu+8DxVRjX3/i1AYjvUhQtTNIcq0kTE=;
- b=HhyHN/UR0ycDFkyxJSMJir/UTncMBoee3q+gx/D1m3NTi9jSEy6a5J6Yli/fsuCuUYkwnQn1yYYkXXJGrVHlXnv0UmiIm92MR+clxfCF2xQ550XZoLWI/et0/rlLJGZDwAQudZi2RURwqcS3HlofkHXePXdmyAuUjxgGYJW29qoP/38R6TNVtQDHef9JlSVwcGOyi7dqChsuf/OcGXalaWEOk87BtvegrDZ/Rpi4tFGwsA6IwURus9X2s5TRP3MUTBCJyXyXN1NZc6jELEet8khYodpc3qSW9ySREZI82tc/VzFB/U0aK4fJ4qj3yE3euxdhy5S27TdjgHyhEOumjA==
+ bh=j5WWQbKvIPTz7Wooj8BQwO+ucLWpix6f+dY5NuDjw9Y=;
+ b=aMYuWPLBjJe5lwK5SljXXdfWjUiHNPAkPhkkIsOD0ojaeqmTrQ1Z/Z1CHSFmV/JaO8RwW8m5pGdqH6TPVT7mEJpmR+/qtUX875gzEftCW4+xjSDiEM1dQ9qqT6+Maiphca2CDRRGNRAun8EBlpg/gr1O4P2NY3P9tdJmOQEM79sVWgnE6bVC+IcPDGuakMWHeQfaaq1JLDtzE0eh0s8WpIfWthIWrFiDx0gVCZAE96FhMu+x/P4rj4pQ1p3Oeic65CTdGxB6hWugba9Rn7/mnauwwnc2lIaEOXJ8iKkachCsw1e+q4LxazhdwWqu2n74xeNC6Qkvt0sNf5ClE8uIVw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
  s=selector2-intel-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=boG8nwbTENmwQu+8DxVRjX3/i1AYjvUhQtTNIcq0kTE=;
- b=D8IK8vSqSuMZgau6PUIhgp8KJrwFdsF5P54RpaLyOyVniZKOJBjtUk27KxkdGISxHy1HoBleyiuwONThf/JS5JdeaRMc+Y9VFcTud9+A9p//zlX8VwARJzSb/IE3/rMRx282t8UyDQmdyyinADwXAmjKkvCuAK+8U9ue7GCO1b8=
+ bh=j5WWQbKvIPTz7Wooj8BQwO+ucLWpix6f+dY5NuDjw9Y=;
+ b=OIY3iyJDnOx/HWARngcbOuVsOIFyYONmhV0hLGWWjqSUgLi4yv5RJ9rrbc6xQBGl7g5PZgeaZtjX7Vy5f4CzNlqMysdsSS6N5xzhkUM29KpoMz1evw9LyXicCc0nDUb7sZ7iz3eNU5wsNqM7cR972AR5gMEv+HMznArd1pcGFX4=
 Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by DM6PR11MB3545.namprd11.prod.outlook.com (2603:10b6:5:141::18) with
+ by DM6PR11MB3913.namprd11.prod.outlook.com (2603:10b6:5:193::33) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.15; Mon, 10 Aug
- 2020 05:56:44 +0000
+ 2020 06:36:45 +0000
 Received: from DM6PR11MB3819.namprd11.prod.outlook.com
  ([fe80::7823:516e:1ec4:a60d]) by DM6PR11MB3819.namprd11.prod.outlook.com
  ([fe80::7823:516e:1ec4:a60d%5]) with mapi id 15.20.3261.024; Mon, 10 Aug 2020
- 05:56:44 +0000
+ 06:36:45 +0000
 From:   "Wu, Hao" <hao.wu@intel.com>
 To:     "Xu, Yilun" <yilun.xu@intel.com>,
         "mdf@kernel.org" <mdf@kernel.org>,
@@ -73,19 +69,18 @@ To:     "Xu, Yilun" <yilun.xu@intel.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 CC:     "trix@redhat.com" <trix@redhat.com>,
         "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
         Matthew Gerlach <matthew.gerlach@linux.intel.com>,
         "Weight, Russell H" <russell.h.weight@intel.com>
-Subject: RE: [PATCH v4 2/4] fpga: dfl: map feature mmio resources in their own
- feature drivers
-Thread-Topic: [PATCH v4 2/4] fpga: dfl: map feature mmio resources in their
- own feature drivers
-Thread-Index: AQHWbsBEbYzrJw6Rv0alN+GwOJnyNKkw080Q
-Date:   Mon, 10 Aug 2020 05:56:44 +0000
-Message-ID: <DM6PR11MB381930E9699B086D37C27C4585440@DM6PR11MB3819.namprd11.prod.outlook.com>
+Subject: RE: [PATCH v4 3/4] fpga: dfl: create a dfl bus type to support DFL
+ devices
+Thread-Topic: [PATCH v4 3/4] fpga: dfl: create a dfl bus type to support DFL
+ devices
+Thread-Index: AQHWbsBfCMkFdjAqdEmc0Wr7wZ+Ib6kw2iPQ
+Date:   Mon, 10 Aug 2020 06:36:44 +0000
+Message-ID: <DM6PR11MB3819E2036BA04CC8B89FDB0C85440@DM6PR11MB3819.namprd11.prod.outlook.com>
 References: <1597027273-25288-1-git-send-email-yilun.xu@intel.com>
- <1597027273-25288-3-git-send-email-yilun.xu@intel.com>
-In-Reply-To: <1597027273-25288-3-git-send-email-yilun.xu@intel.com>
+ <1597027273-25288-4-git-send-email-yilun.xu@intel.com>
+In-Reply-To: <1597027273-25288-4-git-send-email-yilun.xu@intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -97,470 +92,546 @@ authentication-results: intel.com; dkim=none (message not signed)
  header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
 x-originating-ip: [192.102.204.38]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 27b47806-dd85-426a-a31b-08d83cf22944
-x-ms-traffictypediagnostic: DM6PR11MB3545:
+x-ms-office365-filtering-correlation-id: 6202eba6-68fc-42e4-e4c8-08d83cf7c014
+x-ms-traffictypediagnostic: DM6PR11MB3913:
 x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR11MB3545016F536E538945AC068F85440@DM6PR11MB3545.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-microsoft-antispam-prvs: <DM6PR11MB39130E1FBFB21EFBF5FD270185440@DM6PR11MB3913.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2399;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MP9EL8K3ntB7e0ovgsQhKpDSPt6GvDOrHNa9XlRmdJInSzY4VfUFIJQvv1UcH/uWPaH0jaIqXgdkZXpfmd3KS8iI321z/zfVEAZFR8TeSXn+Ja6zgK2g7DARyeEb4FRGiZIoPwPLslm6etm3kqFqz3KqeNwbtFvzMUEfc/am9jnFDii0sPahpKvF0KoNnff2+3lh7xrNZeOZIxRp4ZXO6x7UMHnhF+9FGIyGImB4jurt7sVTVFtAza81wXKIYurA8+UcmnXmqynVrrqqf9Vckw32gZkwoXHoLB2mzUgvpC7dDbCTVBAll6T75BFAGI3Ic/nysn2fOU6L+UI0cYVyWzIFopzrDTWsHyoGI/yo5tYsAfafc8HORnKL9sXqmNp1
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(376002)(136003)(366004)(346002)(39860400002)(5660300002)(55016002)(4326008)(9686003)(52536014)(8936002)(26005)(64756008)(66556008)(66446008)(66946007)(186003)(76116006)(33656002)(71200400001)(316002)(66476007)(30864003)(54906003)(110136005)(478600001)(86362001)(7696005)(2906002)(83380400001)(6506007)(53546011)(8676002)(21314003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: FyS56pJjBil4regA19Mq0NHvkJm9cA/bMYwokGTejUIHfx3J09tK8qE3jFD8XulibZcR6+1AYP89t+9l9gpxbO7EqogoYBlzhl68adpBLiszWVMBsMeIqDSqtTSJjthA35Dg0SDxdgg2iEV3KOqR5M86I5UsxxlRgl3dLPxcKaAga42uk1FWMQywukSwBkSFlJftDKpQj6tOl62HxVJSpYBMOrMEYXHeeRwx8qfrC8aORukXnDmsfUSjSQxioQPRoYkcWdLR8H+SvKHvLObx78mJGDjbRKLU2oq9+1EgMMuwIxc7QglIwdPvb/UdrhpTjDRzOcz0y+d58Uuzh8iG27upHMJi/nVV8fTlyWreK6Ab14S8+dS35gdcNjhYZGlkOJcr+fur+yvmp6OZwFnWrWPvco37LZtxKhXAcshNhu3Ke3W2KhnjfS/k6lY4EPmtK5b/cdlLdhO6xs6vDIQDmjqwTsjZdF6o+aEJ+d7+kV44dp4NA6tiVGGm98Ktk8RpMajKSPIHOMTD8BC50fjYga5xvGZuC1QA0yUP7NU7p+xyPhcn+RDJLAVQPRZ4T4ffon8VXdMmvAHq3yYa5Ab3h2syn06fLXDhAMVx6Np367nzcYxjAaqQ+/ZNf/WhyWLKI1ByLL1wUNCkKV7PQX8sPg==
+x-microsoft-antispam-message-info: ZzVTuwBfGL+A4XVuRJRCTkUThi4h61ZgGkYA+7f5+ann4Nox/XrjczAQohBvEoSjGRRuqGEJzVfdb2LmcILJPlHK+wMGGUCgujzcX6pff+CkBu5P5YA46g+tKU9Au92RNsOaqR9PrpjBocuxqokZc/5DYa91qG/G7RyYpOt+4jPGlUUFksrPPFcUZDzRPadlzBKcKImkHDu6/06N1e3RZkXCQ7CLYPgWFzAIRcest6+JL6UMYLZHFHu7EQZL5YghnMuogGEUvvWE9D2gb6jfrirAiiCDnc8IUfrH6gjfRxyo5NKGXZmD/WfVv8sBH6ywk6MbIrrpES729KmE/OckFg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(376002)(39860400002)(136003)(366004)(396003)(186003)(55016002)(9686003)(8936002)(33656002)(26005)(4326008)(52536014)(30864003)(110136005)(86362001)(5660300002)(54906003)(6506007)(7696005)(8676002)(316002)(66476007)(66556008)(64756008)(66446008)(71200400001)(478600001)(76116006)(66946007)(2906002)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: 6zuebmNC9WjihndCF9T41WHxy2eCdIc4XoWGv4Xv/kwyTEqb3HgbZlE/I1zJGAV6V/OXNlyjxXskcLu4MeFldTnqRWnAXlBpNHHjo6saxTMmpqY+zv6HB5GxiPL6YS3+VYLREF0Vk8pkCn91UYa025Qichj1r+XaIUCTbQwunmEp0jZz7h3Me2VfP2EsRb/eBcg1nMSkYJjQ+YSIB5zewvfOapZ+xGFUPkVdm8hafvj63F3uaYjt9x91598oVxbwPu+XnfxRryDEhY166B4sVqCducY35kRvwJpYMXY8dPFBO1VNgzu3/Et3MikcqLor4zDsFmaPC3VW3T0khaTSIS+EgPaehnGK9jP98YiMIrrIweIbJTdBOldtEuFho48Qqxup1Iwu8ICihg9L7M8Pe8vZEAOgLa9ZWl/1IqzV6FLyzvtAcxGAD9X85Lj1wpPLwvHyzUxC+VBwdk+LSJB9ELBtvvrn/aKBZrVFLM8TQCiGoBQY7f8pQ46B8+0fYNbHcextF+jOthEMmRa4kJHwcSTV1TD/bZ42/fXg7EQ1lQtZOW++siXdvj0ic3HhL86W7kO7W0wKODj6kv0vqD5+x39kdHJnkAHa00zRArgNzm/zHJ1eQ+nXmitdHQwto0Z9RRmtlguAzoxryYgA3FlMFg==
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27b47806-dd85-426a-a31b-08d83cf22944
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2020 05:56:44.3882
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6202eba6-68fc-42e4-e4c8-08d83cf7c014
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2020 06:36:44.9269
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WYLCNNKzI602Uw2avsDNcpnXhBtyhpBNDaGxLEVW5iMNLqfXNBqG85BP8v8ayXFeqV1WAAV7xoTp2wLzqH51GA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3545
+X-MS-Exchange-CrossTenant-userprincipalname: i8EAwoXBlQbRp+GdToTis0/bg23ZWiumL/6X+B8VZqqAXPZMufwFVraMtLWAkk6wuAEWHLxVMSgbf375pKnHxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3913
 X-OriginatorOrg: intel.com
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-> -----Original Message-----
-> From: linux-fpga-owner@vger.kernel.org <linux-fpga-owner@vger.kernel.org>
-> On Behalf Of Xu Yilun
-> Sent: Monday, August 10, 2020 10:41 AM
-> To: mdf@kernel.org; linux-fpga@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Cc: trix@redhat.com; lgoncalv@redhat.com; Xu, Yilun <yilun.xu@intel.com>;
-> Wu, Hao <hao.wu@intel.com>; Matthew Gerlach
-> <matthew.gerlach@linux.intel.com>; Weight, Russell H
-> <russell.h.weight@intel.com>
-> Subject: [PATCH v4 2/4] fpga: dfl: map feature mmio resources in their ow=
-n
-> feature drivers
 >=20
-> This patch makes preparation for modularization of DFL sub feature
-> drivers.
+> A new bus type "dfl" is introduced for private features which are not
+> initialized by DFL feature drivers (dfl-fme & dfl-afu drivers). So these
+> private features could be handled by separate driver modules.
 >=20
-> Currently, if we need to support a new DFL sub feature, an entry should
-> be added to fme/port_feature_drvs[] in dfl-fme/port-main.c. And we need
-
-I think it's afu-main.c
-
-> to re-compile the whole DFL modules. That make the DFL drivers hard to be
-> extended.
-
-And maybe we can drop this description or move it to cover letter as it's n=
-ot
-the problem this patch is going to resolve.
-
->=20
-> Another consideration is that DFL may contain some IP blocks which are
-> already supported by kernel, most of them are supported by platform
-> device drivers. We could create platform devices for these IP blocks and
-> get them supported by these drivers.
->=20
-> An important issue is that platform device drivers usually requests mmio
-> resources on probe. But now dfl mmio is mapped in dfl bus driver (e.g.
-> dfl-pci) as a whole region. Then platform device drivers for sub features
-> can't request their own mmio resources again. This is what the patch
-> trying to resolve.
->=20
-> This patch changes the DFL enumeration. DFL bus driver will unmap mmio
-> resources after first step enumeration and pass enumeration info to DFL
-> framework. Then DFL framework will map the mmio resources again, do 2nd
-> step enumeration, and also unmap the mmio resources. In this way, sub
-> feature drivers could then request their own mmio resources as needed.
->=20
-> An exception is that mmio resource of FIU headers are still mapped in dfl
-> bus driver. The FIU headers have some fundamental functions (sriov set,
-> port enable/disable) needed for dfl bus devices and other sub features.
-> They should not be unmapped as long as dfl bus device is alive.
+> DFL feature drivers (dfl-fme, dfl-port) will create DFL devices on
+> enumeration. DFL drivers could be registered on this bus to match these
+> DFL devices. They are matched by dfl type & feature_id.
 >=20
 > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 > Signed-off-by: Wu Hao <hao.wu@intel.com>
 > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 > Reviewed-by: Tom Rix <trix@redhat.com>
-> Acked-by: Wu Hao <hao.wu@intel.com>
 > ---
-> v2: delete dfl_binfo_shift() cause no shift is possible for FIU parsing.
->     Only map bar0 for first phase enumeration in dfl-pci, we can find
->       all dfl mmio resource info in bar0.
->     Some minor fixes for comments from Hao & Tom.
-> v3: no change
-> v4: minor fixes for Hao's comments.
+> v2: change the bus uevent format.
+>     change the dfl device's sysfs name format.
+>     refactor dfl_dev_add().
+>     minor fixes for comments from Hao and Tom.
+> v3: no change.
+> v4: improve the uevent format, 4 bits for type & 12 bits for id.
+>     change dfl_device->type to u8.
+>     A dedicate field in struct dfl_feature for dfl device instance.
+>     error out if dfl_device already exist on dfl_devs_init().
 > ---
->  drivers/fpga/dfl-pci.c |  24 +++----
->  drivers/fpga/dfl.c     | 185 +++++++++++++++++++++++++++++++++----------=
-----
-> --
->  drivers/fpga/dfl.h     |   7 +-
->  3 files changed, 139 insertions(+), 77 deletions(-)
+>  Documentation/ABI/testing/sysfs-bus-dfl |  15 ++
+>  drivers/fpga/dfl.c                      | 263 ++++++++++++++++++++++++++=
++++++-
+>  drivers/fpga/dfl.h                      |  85 +++++++++++
+>  3 files changed, 355 insertions(+), 8 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl
 >=20
-> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-> index e220bec..a2203d0 100644
-> --- a/drivers/fpga/dfl-pci.c
-> +++ b/drivers/fpga/dfl-pci.c
-> @@ -31,12 +31,12 @@ struct cci_drvdata {
->  	struct dfl_fpga_cdev *cdev;	/* container device */
->  };
->=20
-> -static void __iomem *cci_pci_ioremap_bar(struct pci_dev *pcidev, int bar=
-)
-> +static void __iomem *cci_pci_ioremap_bar0(struct pci_dev *pcidev)
->  {
-> -	if (pcim_iomap_regions(pcidev, BIT(bar), DRV_NAME))
-> +	if (pcim_iomap_regions(pcidev, BIT(0), DRV_NAME))
->  		return NULL;
->=20
-> -	return pcim_iomap_table(pcidev)[bar];
-> +	return pcim_iomap_table(pcidev)[0];
->  }
->=20
->  static int cci_pci_alloc_irq(struct pci_dev *pcidev)
-> @@ -156,8 +156,8 @@ static int cci_enumerate_feature_devs(struct pci_dev
-> *pcidev)
->  			goto irq_free_exit;
->  	}
->=20
-> -	/* start to find Device Feature List from Bar 0 */
-> -	base =3D cci_pci_ioremap_bar(pcidev, 0);
-> +	/* start to find Device Feature List in Bar 0 */
-> +	base =3D cci_pci_ioremap_bar0(pcidev);
->  	if (!base) {
->  		ret =3D -ENOMEM;
->  		goto irq_free_exit;
-> @@ -172,7 +172,7 @@ static int cci_enumerate_feature_devs(struct pci_dev
-> *pcidev)
->  		start =3D pci_resource_start(pcidev, 0);
->  		len =3D pci_resource_len(pcidev, 0);
->=20
-> -		dfl_fpga_enum_info_add_dfl(info, start, len, base);
-> +		dfl_fpga_enum_info_add_dfl(info, start, len);
->=20
->  		/*
->  		 * find more Device Feature Lists (e.g. Ports) per information
-> @@ -196,26 +196,24 @@ static int cci_enumerate_feature_devs(struct
-> pci_dev *pcidev)
->  			 */
->  			bar =3D FIELD_GET(FME_PORT_OFST_BAR_ID, v);
->  			offset =3D FIELD_GET(FME_PORT_OFST_DFH_OFST, v);
-> -			base =3D cci_pci_ioremap_bar(pcidev, bar);
-> -			if (!base)
-> -				continue;
-> -
->  			start =3D pci_resource_start(pcidev, bar) + offset;
->  			len =3D pci_resource_len(pcidev, bar) - offset;
->=20
-> -			dfl_fpga_enum_info_add_dfl(info, start, len,
-> -						   base + offset);
-> +			dfl_fpga_enum_info_add_dfl(info, start, len);
->  		}
->  	} else if (dfl_feature_is_port(base)) {
->  		start =3D pci_resource_start(pcidev, 0);
->  		len =3D pci_resource_len(pcidev, 0);
->=20
-> -		dfl_fpga_enum_info_add_dfl(info, start, len, base);
-> +		dfl_fpga_enum_info_add_dfl(info, start, len);
->  	} else {
->  		ret =3D -ENODEV;
->  		goto irq_free_exit;
->  	}
->=20
-> +	/* release I/O mappings for next step enumeration */
-> +	pcim_iounmap_regions(pcidev, BIT(0));
+> diff --git a/Documentation/ABI/testing/sysfs-bus-dfl
+> b/Documentation/ABI/testing/sysfs-bus-dfl
+> new file mode 100644
+> index 0000000..4d74cc0
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-dfl
+> @@ -0,0 +1,15 @@
+> +What:		/sys/bus/dfl/devices/dfl_dev.X/type
+> +Date:		July 2020
+> +KernelVersion:	5.10
+> +Contact:	Xu Yilun <yilun.xu@intel.com>
+> +Description:	Read-only. It returns type of DFL FIU of the device. Now DF=
+L
+> +		supports 2 FIU types, 0 for FME, 1 for PORT.
+> +		Format: 0x%x
 > +
->  	/* start enumeration with prepared enumeration information */
->  	cdev =3D dfl_fpga_feature_devs_enumerate(info);
->  	if (IS_ERR(cdev)) {
+> +What:		/sys/bus/dfl/devices/dfl_dev.X/feature_id
+> +Date:		July 2020
+> +KernelVersion:	5.10
+> +Contact:	Xu Yilun <yilun.xu@intel.com>
+> +Description:	Read-only. It returns feature identifier local to its DFL F=
+IU
+> +		type.
+> +		Format: 0x%x
 > diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 18575d9..b5257d7 100644
+> index b5257d7..51cef85 100644
 > --- a/drivers/fpga/dfl.c
 > +++ b/drivers/fpga/dfl.c
-> @@ -250,6 +250,8 @@ int dfl_fpga_check_port_id(struct platform_device
+> @@ -30,12 +30,6 @@ static DEFINE_MUTEX(dfl_id_mutex);
+>   * index to dfl_chardevs table. If no chardev support just set devt_type
+>   * as one invalid index (DFL_FPGA_DEVT_MAX).
+>   */
+> -enum dfl_id_type {
+> -	FME_ID,		/* fme id allocation and mapping */
+> -	PORT_ID,	/* port id allocation and mapping */
+> -	DFL_ID_MAX,
+> -};
+> -
+>  enum dfl_fpga_devt_type {
+>  	DFL_FPGA_DEVT_FME,
+>  	DFL_FPGA_DEVT_PORT,
+> @@ -250,6 +244,245 @@ int dfl_fpga_check_port_id(struct platform_device
 > *pdev, void *pport_id)
 >  }
 >  EXPORT_SYMBOL_GPL(dfl_fpga_check_port_id);
 >=20
-> +#define is_header_feature(feature) ((feature)->id =3D=3D
-> FEATURE_ID_FIU_HEADER)
+> +static DEFINE_IDA(dfl_device_ida);
 > +
->  /**
->   * dfl_fpga_dev_feature_uinit - uinit for sub features of dfl feature de=
-vice
->   * @pdev: feature device.
-> @@ -273,8 +275,22 @@ static int dfl_feature_instance_init(struct
-> platform_device *pdev,
->  				     struct dfl_feature *feature,
->  				     struct dfl_feature_driver *drv)
->  {
-> +	void __iomem *base;
->  	int ret =3D 0;
->=20
-> +	if (!is_header_feature(feature)) {
-> +		base =3D devm_platform_ioremap_resource(pdev,
-> +						      feature->resource_index);
-> +		if (IS_ERR(base)) {
-> +			dev_err(&pdev->dev,
-> +				"ioremap failed for feature 0x%x!\n",
-> +				feature->id);
-> +			return PTR_ERR(base);
-> +		}
-> +
-> +		feature->ioaddr =3D base;
-> +	}
-> +
->  	if (drv->ops->init) {
->  		ret =3D drv->ops->init(pdev, feature);
->  		if (ret)
-> @@ -427,7 +443,9 @@ EXPORT_SYMBOL_GPL(dfl_fpga_dev_ops_unregister);
->   * @irq_table: Linux IRQ numbers for all irqs, indexed by local irq inde=
-x of
->   *	       this device.
->   * @feature_dev: current feature device.
-> - * @ioaddr: header register region address of feature device in enumerat=
-ion.
-> + * @ioaddr: header register region address of current FIU in enumeration=
-.
-> + * @start: register resource start of current FIU.
-> + * @len: max register resource length of current FIU.
->   * @sub_features: a sub features linked list for feature device in
-> enumeration.
->   * @feature_num: number of sub features for feature device in
-> enumeration.
->   */
-> @@ -439,6 +457,8 @@ struct build_feature_devs_info {
->=20
->  	struct platform_device *feature_dev;
->  	void __iomem *ioaddr;
-> +	resource_size_t start;
-> +	resource_size_t len;
->  	struct list_head sub_features;
->  	int feature_num;
->  };
-> @@ -484,10 +504,7 @@ static int build_info_commit_dev(struct
-> build_feature_devs_info *binfo)
->  	struct dfl_feature_platform_data *pdata;
->  	struct dfl_feature_info *finfo, *p;
->  	enum dfl_id_type type;
-> -	int ret, index =3D 0;
-> -
-> -	if (!fdev)
-> -		return 0;
-> +	int ret, index =3D 0, res_idx =3D 0;
->=20
->  	type =3D feature_dev_id_type(fdev);
->  	if (WARN_ON_ONCE(type >=3D DFL_ID_MAX))
-> @@ -530,16 +547,30 @@ static int build_info_commit_dev(struct
-> build_feature_devs_info *binfo)
->=20
->  	/* fill features and resource information for feature dev */
->  	list_for_each_entry_safe(finfo, p, &binfo->sub_features, node) {
-> -		struct dfl_feature *feature =3D &pdata->features[index];
-> +		struct dfl_feature *feature =3D &pdata->features[index++];
->  		struct dfl_feature_irq_ctx *ctx;
->  		unsigned int i;
->=20
->  		/* save resource information for each feature */
->  		feature->dev =3D fdev;
->  		feature->id =3D finfo->fid;
-> -		feature->resource_index =3D index;
-> -		feature->ioaddr =3D finfo->ioaddr;
-> -		fdev->resource[index++] =3D finfo->mmio_res;
-> +
-> +		/*
-> +		 * map header resource for dfl bus device. Don't add header
-> +		 * resource to feature devices, or the resource tree will be
-> +		 * disordered and cause warning on resource release
-
-I didn't get this description well, could you please explain it a little mo=
-re
-here?
-
-> +		 */
-> +		if (is_header_feature(feature)) {
-> +			feature->resource_index =3D -1;
-> +			feature->ioaddr =3D
-> +				devm_ioremap_resource(binfo->dev,
-> +						      &finfo->mmio_res);
-> +			if (IS_ERR(feature->ioaddr))
-> +				return PTR_ERR(feature->ioaddr);
-> +		} else {
-> +			feature->resource_index =3D res_idx;
-> +			fdev->resource[res_idx++] =3D finfo->mmio_res;
-> +		}
->=20
->  		if (finfo->nr_irqs) {
->  			ctx =3D devm_kcalloc(binfo->dev, finfo->nr_irqs,
-> @@ -582,19 +613,13 @@ static int build_info_commit_dev(struct
-> build_feature_devs_info *binfo)
->=20
->  static int
->  build_info_create_dev(struct build_feature_devs_info *binfo,
-> -		      enum dfl_id_type type, void __iomem *ioaddr)
-> +		      enum dfl_id_type type)
->  {
->  	struct platform_device *fdev;
-> -	int ret;
->=20
->  	if (type >=3D DFL_ID_MAX)
->  		return -EINVAL;
->=20
-> -	/* we will create a new device, commit current device first */
-> -	ret =3D build_info_commit_dev(binfo);
-> -	if (ret)
-> -		return ret;
-> -
->  	/*
->  	 * we use -ENODEV as the initialization indicator which indicates
->  	 * whether the id need to be reclaimed
-> @@ -605,7 +630,7 @@ build_info_create_dev(struct
-> build_feature_devs_info *binfo,
->=20
->  	binfo->feature_dev =3D fdev;
->  	binfo->feature_num =3D 0;
-> -	binfo->ioaddr =3D ioaddr;
-> +
->  	INIT_LIST_HEAD(&binfo->sub_features);
->=20
->  	fdev->id =3D dfl_id_alloc(type, &fdev->dev);
-> @@ -747,18 +772,17 @@ static int parse_feature_irqs(struct
-> build_feature_devs_info *binfo,
->   */
->  static int
->  create_feature_instance(struct build_feature_devs_info *binfo,
-> -			struct dfl_fpga_enum_dfl *dfl, resource_size_t ofst,
-> -			resource_size_t size, u16 fid)
-> +			resource_size_t ofst, resource_size_t size, u16 fid)
->  {
->  	unsigned int irq_base, nr_irqs;
->  	struct dfl_feature_info *finfo;
->  	int ret;
->=20
->  	/* read feature size and id if inputs are invalid */
-> -	size =3D size ? size : feature_size(dfl->ioaddr + ofst);
-> -	fid =3D fid ? fid : feature_id(dfl->ioaddr + ofst);
-> +	size =3D size ? size : feature_size(binfo->ioaddr + ofst);
-> +	fid =3D fid ? fid : feature_id(binfo->ioaddr + ofst);
->=20
-> -	if (dfl->len - ofst < size)
-> +	if (binfo->len - ofst < size)
->  		return -EINVAL;
->=20
->  	ret =3D parse_feature_irqs(binfo, ofst, fid, &irq_base, &nr_irqs);
-> @@ -770,12 +794,11 @@ create_feature_instance(struct
-> build_feature_devs_info *binfo,
->  		return -ENOMEM;
->=20
->  	finfo->fid =3D fid;
-> -	finfo->mmio_res.start =3D dfl->start + ofst;
-> +	finfo->mmio_res.start =3D binfo->start + ofst;
->  	finfo->mmio_res.end =3D finfo->mmio_res.start + size - 1;
->  	finfo->mmio_res.flags =3D IORESOURCE_MEM;
->  	finfo->irq_base =3D irq_base;
->  	finfo->nr_irqs =3D nr_irqs;
-> -	finfo->ioaddr =3D dfl->ioaddr + ofst;
->=20
->  	list_add_tail(&finfo->node, &binfo->sub_features);
->  	binfo->feature_num++;
-> @@ -784,7 +807,6 @@ create_feature_instance(struct
-> build_feature_devs_info *binfo,
->  }
->=20
->  static int parse_feature_port_afu(struct build_feature_devs_info *binfo,
-> -				  struct dfl_fpga_enum_dfl *dfl,
->  				  resource_size_t ofst)
->  {
->  	u64 v =3D readq(binfo->ioaddr + PORT_HDR_CAP);
-> @@ -792,21 +814,22 @@ static int parse_feature_port_afu(struct
-> build_feature_devs_info *binfo,
->=20
->  	WARN_ON(!size);
->=20
-> -	return create_feature_instance(binfo, dfl, ofst, size,
-> FEATURE_ID_AFU);
-> +	return create_feature_instance(binfo, ofst, size, FEATURE_ID_AFU);
->  }
->=20
-> +#define is_feature_dev_detected(binfo) (!!(binfo)->feature_dev)
-> +
->  static int parse_feature_afu(struct build_feature_devs_info *binfo,
-> -			     struct dfl_fpga_enum_dfl *dfl,
->  			     resource_size_t ofst)
->  {
-> -	if (!binfo->feature_dev) {
-> +	if (!is_feature_dev_detected(binfo)) {
->  		dev_err(binfo->dev, "this AFU does not belong to any
-> FIU.\n");
->  		return -EINVAL;
->  	}
->=20
->  	switch (feature_dev_id_type(binfo->feature_dev)) {
->  	case PORT_ID:
-> -		return parse_feature_port_afu(binfo, dfl, ofst);
-> +		return parse_feature_port_afu(binfo, ofst);
->  	default:
->  		dev_info(binfo->dev, "AFU belonging to FIU %s is not
-> supported yet.\n",
->  			 binfo->feature_dev->name);
-> @@ -815,8 +838,39 @@ static int parse_feature_afu(struct
-> build_feature_devs_info *binfo,
->  	return 0;
->  }
->=20
-> +static int dfl_binfo_prepare(struct build_feature_devs_info *binfo,
-> +			     resource_size_t start, resource_size_t len)
+> +static const struct dfl_device_id *
+> +dfl_match_one_device(const struct dfl_device_id *id, struct dfl_device
+> *ddev)
 > +{
-> +	struct device *dev =3D binfo->dev;
-> +	void __iomem *ioaddr;
+> +	if (id->type =3D=3D ddev->type && id->feature_id =3D=3D ddev->feature_i=
+d)
+> +		return id;
 > +
-> +	if (!devm_request_mem_region(dev, start, len, dev_name(dev))) {
-> +		dev_err(dev, "request region fail, start:%pa, len:%pa\n",
-> +			&start, &len);
-> +		return -EBUSY;
+> +	return NULL;
+> +}
+> +
+> +static int dfl_bus_match(struct device *dev, struct device_driver *drv)
+> +{
+> +	struct dfl_device *ddev =3D to_dfl_dev(dev);
+> +	struct dfl_driver *ddrv =3D to_dfl_drv(drv);
+> +	const struct dfl_device_id *id_entry =3D ddrv->id_table;
+> +
+> +	if (id_entry) {
+> +		while (id_entry->feature_id) {
+> +			if (dfl_match_one_device(id_entry, ddev)) {
+> +				ddev->id_entry =3D id_entry;
+> +				return 1;
+> +			}
+> +			id_entry++;
+> +		}
 > +	}
-> +
-> +	ioaddr =3D devm_ioremap(dev, start, len);
-> +	if (!ioaddr) {
-> +		dev_err(dev, "ioremap region fail, start:%pa, len:%pa\n",
-> +			&start, &len);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	binfo->start =3D start;
-> +	binfo->len =3D len;
-> +	binfo->ioaddr =3D ioaddr;
 > +
 > +	return 0;
 > +}
 > +
-> +static void dfl_binfo_complete(struct build_feature_devs_info *binfo)
+> +static int dfl_bus_probe(struct device *dev)
 > +{
-> +	devm_iounmap(binfo->dev, binfo->ioaddr);
-> +	devm_release_mem_region(binfo->dev, binfo->start, binfo->len);
+> +	struct dfl_device *ddev =3D to_dfl_dev(dev);
+> +	struct dfl_driver *ddrv =3D to_dfl_drv(dev->driver);
+> +
+> +	return ddrv->probe(ddev);
 > +}
 > +
->  static int parse_feature_fiu(struct build_feature_devs_info *binfo,
-> -			     struct dfl_fpga_enum_dfl *dfl,
->  			     resource_size_t ofst)
->  {
->  	int ret =3D 0;
-> @@ -824,27 +878,39 @@ static int parse_feature_fiu(struct
-> build_feature_devs_info *binfo,
->  	u16 id;
->  	u64 v;
+> +static int dfl_bus_remove(struct device *dev)
+> +{
+> +	struct dfl_device *ddev =3D to_dfl_dev(dev);
+> +	struct dfl_driver *ddrv =3D to_dfl_drv(dev->driver);
+> +
+> +	if (ddrv->remove)
+> +		ddrv->remove(ddev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int dfl_bus_uevent(struct device *dev, struct kobj_uevent_env *en=
+v)
+> +{
+> +	struct dfl_device *ddev =3D to_dfl_dev(dev);
+> +
+> +	/* The type has 4 valid bits and feature_id has 12 valid bits */
+> +	return add_uevent_var(env, "MODALIAS=3Ddfl:t%01Xf%03X",
+> +			      ddev->type, ddev->feature_id);
+> +}
+> +
+> +/* show dfl info fields */
+> +#define dfl_info_attr(field, format_string)				\
+> +static ssize_t								\
+> +field##_show(struct device *dev, struct device_attribute *attr,
+> 	\
+> +	     char *buf)							\
+> +{									\
+> +	struct dfl_device *ddev =3D to_dfl_dev(dev);			\
+> +									\
+> +	return sprintf(buf, format_string, ddev->field);		\
+> +}									\
+> +static DEVICE_ATTR_RO(field)
+> +
+> +dfl_info_attr(type, "0x%x\n");
+> +dfl_info_attr(feature_id, "0x%x\n");
+> +
+> +static struct attribute *dfl_dev_attrs[] =3D {
+> +	&dev_attr_type.attr,
+> +	&dev_attr_feature_id.attr,
+> +	NULL,
+> +};
+> +
+> +ATTRIBUTE_GROUPS(dfl_dev);
+> +
+> +static struct bus_type dfl_bus_type =3D {
+> +	.name		=3D "dfl",
+> +	.match		=3D dfl_bus_match,
+> +	.probe		=3D dfl_bus_probe,
+> +	.remove		=3D dfl_bus_remove,
+> +	.uevent		=3D dfl_bus_uevent,
+> +	.dev_groups	=3D dfl_dev_groups,
+> +};
+> +
+> +static void release_dfl_dev(struct device *dev)
+> +{
+> +	struct dfl_device *ddev =3D to_dfl_dev(dev);
+> +
+> +	if (ddev->mmio_res.parent)
+> +		release_resource(&ddev->mmio_res);
+> +
+> +	ida_simple_remove(&dfl_device_ida, ddev->id);
+> +	kfree(ddev->irqs);
+> +	kfree(ddev);
+> +}
+> +
+> +static struct dfl_device *
+> +dfl_dev_add(struct dfl_feature_platform_data *pdata,
+> +	    struct dfl_feature *feature)
+> +{
+> +	struct platform_device *pdev =3D pdata->dev;
+> +	struct resource *parent_res;
+> +	struct dfl_device *ddev;
+> +	int id, i, ret;
+> +
+> +	ddev =3D kzalloc(sizeof(*ddev), GFP_KERNEL);
+> +	if (!ddev)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	id =3D ida_simple_get(&dfl_device_ida, 0, 0, GFP_KERNEL);
+> +	if (id < 0) {
+> +		dev_err(&pdev->dev, "unable to get id\n");
+> +		kfree(ddev);
+> +		return ERR_PTR(id);
+> +	}
+> +
+> +	/* freeing resources by put_device() after device_initialize() */
+> +	device_initialize(&ddev->dev);
+> +	ddev->dev.parent =3D &pdev->dev;
+> +	ddev->dev.bus =3D &dfl_bus_type;
+> +	ddev->dev.release =3D release_dfl_dev;
+> +	ddev->id =3D id;
+> +	ret =3D dev_set_name(&ddev->dev, "dfl_dev.%d", id);
+> +	if (ret)
+> +		goto put_dev;
+> +
+> +	ddev->type =3D feature_dev_id_type(pdev);
+> +	ddev->feature_id =3D feature->id;
+> +	ddev->cdev =3D pdata->dfl_cdev;
+> +
+> +	/* add mmio resource */
+> +	parent_res =3D &pdev->resource[feature->resource_index];
+> +	ddev->mmio_res.flags =3D IORESOURCE_MEM;
+> +	ddev->mmio_res.start =3D parent_res->start;
+> +	ddev->mmio_res.end =3D parent_res->end;
+> +	ddev->mmio_res.name =3D dev_name(&ddev->dev);
+
+It doesn't reuse the pdev->resource only because it wants a more proper nam=
+e
+here?
+
+> +	ret =3D insert_resource(parent_res, &ddev->mmio_res);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "%s failed to claim resource: %pR\n",
+> +			dev_name(&ddev->dev), &ddev->mmio_res);
+> +		goto put_dev;
+> +	}
+> +
+> +	/* then add irq resource */
+> +	if (feature->nr_irqs) {
+> +		ddev->irqs =3D kcalloc(feature->nr_irqs,
+> +				     sizeof(*ddev->irqs), GFP_KERNEL);
+> +		if (!ddev->irqs) {
+> +			ret =3D -ENOMEM;
+> +			goto put_dev;
+> +		}
+> +
+> +		for (i =3D 0; i < feature->nr_irqs; i++)
+> +			ddev->irqs[i] =3D feature->irq_ctx[i].irq;
+> +
+> +		ddev->num_irqs =3D feature->nr_irqs;
+> +	}
+> +
+> +	ret =3D device_add(&ddev->dev);
+> +	if (ret)
+> +		goto put_dev;
+> +
+> +	dev_info(&pdev->dev, "add dfl_dev: %s\n", dev_name(&ddev->dev));
+> +	return ddev;
+> +
+> +put_dev:
+> +	/* calls release_dfl_dev() which does the clean up  */
+> +	put_device(&ddev->dev);
+> +	return ERR_PTR(ret);
+> +}
+> +
+> +static void dfl_devs_uinit(struct dfl_feature_platform_data *pdata)
+> +{
+> +	struct dfl_feature *feature;
+> +
+> +	dfl_fpga_dev_for_each_feature(pdata, feature) {
+> +		if (feature->ddev) {
+> +			device_unregister(&feature->ddev->dev);
+> +			feature->ddev =3D NULL;
+> +		}
+> +	}
+> +}
+> +
+> +static int dfl_devs_init(struct platform_device *pdev)
+> +{
+> +	struct dfl_feature_platform_data *pdata =3D dev_get_platdata(&pdev-
+> >dev);
+> +	struct dfl_feature *feature;
+> +	struct dfl_device *ddev;
+> +	int ret;
+> +
+> +	dfl_fpga_dev_for_each_feature(pdata, feature) {
+> +		if (feature->ioaddr)
+> +			continue;
+> +
+> +		if (feature->ddev) {
+> +			ret =3D -EBUSY;
+
+or -EEXIST
+
+> +			goto err;
+> +		}
+> +
+> +		ddev =3D dfl_dev_add(pdata, feature);
+> +		if (IS_ERR(ddev)) {
+> +			ret =3D PTR_ERR(ddev);
+> +			goto err;
+> +		}
+> +
+> +		feature->ddev =3D ddev;
+> +	}
+> +
+> +	return 0;
+> +
+> +err:
+> +	dfl_devs_uinit(pdata);
+> +	return ret;
+> +}
+> +
+> +int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *own=
+er)
+> +{
+> +	if (!dfl_drv || !dfl_drv->probe || !dfl_drv->id_table)
+> +		return -EINVAL;
+> +
+> +	dfl_drv->drv.owner =3D owner;
+> +	dfl_drv->drv.bus =3D &dfl_bus_type;
+> +
+> +	return driver_register(&dfl_drv->drv);
+> +}
+> +EXPORT_SYMBOL(__dfl_driver_register);
+> +
+> +void dfl_driver_unregister(struct dfl_driver *dfl_drv)
+> +{
+> +	driver_unregister(&dfl_drv->drv);
+> +}
+> +EXPORT_SYMBOL(dfl_driver_unregister);
+> +
+>  #define is_header_feature(feature) ((feature)->id =3D=3D
+> FEATURE_ID_FIU_HEADER)
 >=20
-> -	v =3D readq(dfl->ioaddr + ofst + DFH);
-> +	if (is_feature_dev_detected(binfo)) {
-> +		dfl_binfo_complete(binfo);
+>  /**
+> @@ -261,12 +494,15 @@ void dfl_fpga_dev_feature_uinit(struct
+> platform_device *pdev)
+>  	struct dfl_feature_platform_data *pdata =3D dev_get_platdata(&pdev-
+> >dev);
+>  	struct dfl_feature *feature;
+>=20
+> -	dfl_fpga_dev_for_each_feature(pdata, feature)
+> +	dfl_devs_uinit(pdata);
 
-Some functions are dfl_bind_xxxx but other are build_info_xxxx.
-If possible, could we unify them using same format? E.g.
-build_info_prepare/complete_xxx
+Or it's better to rename as dfl_devs_remove(pdata) or something?
 
-Thanks
+> +
+> +	dfl_fpga_dev_for_each_feature(pdata, feature) {
+>  		if (feature->ops) {
+>  			if (feature->ops->uinit)
+>  				feature->ops->uinit(pdev, feature);
+>  			feature->ops =3D NULL;
+>  		}
+> +	}
+>  }
+>  EXPORT_SYMBOL_GPL(dfl_fpga_dev_feature_uinit);
+>=20
+> @@ -347,6 +583,10 @@ int dfl_fpga_dev_feature_init(struct
+> platform_device *pdev,
+>  		drv++;
+>  	}
+>=20
+> +	ret =3D dfl_devs_init(pdev);
+> +	if (ret)
+> +		goto exit;
+> +
+>  	return 0;
+>  exit:
+>  	dfl_fpga_dev_feature_uinit(pdev);
+> @@ -1282,11 +1522,17 @@ static int __init dfl_fpga_init(void)
+>  {
+>  	int ret;
+>=20
+> +	ret =3D bus_register(&dfl_bus_type);
+> +	if (ret)
+> +		return ret;
+> +
+>  	dfl_ids_init();
+>=20
+>  	ret =3D dfl_chardev_init();
+> -	if (ret)
+> +	if (ret) {
+>  		dfl_ids_destroy();
+> +		bus_unregister(&dfl_bus_type);
+> +	}
+>=20
+>  	return ret;
+>  }
+> @@ -1624,6 +1870,7 @@ static void __exit dfl_fpga_exit(void)
+>  {
+>  	dfl_chardev_uinit();
+>  	dfl_ids_destroy();
+> +	bus_unregister(&dfl_bus_type);
+>  }
+>=20
+>  module_init(dfl_fpga_init);
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 5973769..d7fd03a 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -246,6 +246,7 @@ struct dfl_feature {
+>  	struct dfl_feature_irq_ctx *irq_ctx;
+>  	unsigned int nr_irqs;
+>  	const struct dfl_feature_ops *ops;
+> +	struct dfl_device *ddev;
+
+Add some description please.
+
+>  	void *priv;
+>  };
+>=20
+> @@ -514,4 +515,88 @@ long dfl_feature_ioctl_set_irq(struct
+> platform_device *pdev,
+>  			       struct dfl_feature *feature,
+>  			       unsigned long arg);
+>=20
+> +/**
+> + * enum dfl_id_type - define the DFL FIU types
+> + */
+> +enum dfl_id_type {
+> +	FME_ID,
+> +	PORT_ID,
+> +	DFL_ID_MAX,
+> +};
+> +
+> +/**
+> + * struct dfl_device_id -  dfl device identifier
+> + * @type: Type of DFL FIU of the device. See enum dfl_id_type.
+
+Only 4 bits used.
+
 Hao
+
+> + * @feature_id: contains 12 bits feature identifier local to its DFL FIU=
+ type.
+> + * @driver_data: Driver specific data
+> + */
+> +struct dfl_device_id {
+> +	u8 type;
+> +	u16 feature_id;
+> +	unsigned long driver_data;
+> +};
+> +
+> +/**
+> + * struct dfl_device - represent an dfl device on dfl bus
+> + *
+> + * @dev: Generic device interface.
+> + * @id: id of the dfl device
+> + * @type: Type of DFL FIU of the device. See enum dfl_id_type.
+> + * @feature_id: 16 bits feature identifier local to its DFL FIU type.
+> + * @mmio_res: MMIO resource of this dfl device.
+> + * @irqs: List of Linux IRQ numbers of this dfl device.
+> + * @num_irqs: number of IRQs supported by this dfl device.
+> + * @cdev: pointer to DFL FPGA container device this dfl device belongs t=
+o.
+> + * @id_entry: matched id entry in dfl driver's id table.
+> + */
+> +struct dfl_device {
+> +	struct device dev;
+> +	int id;
+> +	u8 type;
+> +	u16 feature_id;
+> +	struct resource mmio_res;
+> +	int *irqs;
+> +	unsigned int num_irqs;
+> +	struct dfl_fpga_cdev *cdev;
+> +	const struct dfl_device_id *id_entry;
+> +};
+> +
+> +/**
+> + * struct dfl_driver - represent an dfl device driver
+> + *
+> + * @drv: Driver model structure.
+> + * @id_table: Pointer to table of device IDs the driver is interested in=
+.
+> + *	      { } member terminated.
+> + * @probe: Mandatory callback for device binding.
+> + * @remove: Callback for device unbinding.
+> + */
+> +struct dfl_driver {
+> +	struct device_driver drv;
+> +	const struct dfl_device_id *id_table;
+> +
+> +	int (*probe)(struct dfl_device *dfl_dev);
+> +	void (*remove)(struct dfl_device *dfl_dev);
+> +};
+> +
+> +#define to_dfl_dev(d) container_of(d, struct dfl_device, dev)
+> +#define to_dfl_drv(d) container_of(d, struct dfl_driver, drv)
+> +
+> +/*
+> + * use a macro to avoid include chaining to get THIS_MODULE
+> + */
+> +#define dfl_driver_register(drv) \
+> +	__dfl_driver_register(drv, THIS_MODULE)
+> +int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *own=
+er);
+> +void dfl_driver_unregister(struct dfl_driver *dfl_drv);
+> +
+> +/*
+> + * module_dfl_driver() - Helper macro for drivers that don't do
+> + * anything special in module init/exit.  This eliminates a lot of
+> + * boilerplate.  Each module may only use this macro once, and
+> + * calling it replaces module_init() and module_exit()
+> + */
+> +#define module_dfl_driver(__dfl_driver) \
+> +	module_driver(__dfl_driver, dfl_driver_register, \
+> +		      dfl_driver_unregister)
+> +
+>  #endif /* __FPGA_DFL_H */
+> --
+> 2.7.4
 
