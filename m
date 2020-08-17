@@ -2,96 +2,116 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E6E245802
-	for <lists+linux-fpga@lfdr.de>; Sun, 16 Aug 2020 16:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD5C24608B
+	for <lists+linux-fpga@lfdr.de>; Mon, 17 Aug 2020 10:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729529AbgHPObD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 16 Aug 2020 10:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbgHPO3g (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 16 Aug 2020 10:29:36 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3295C061366
-        for <linux-fpga@vger.kernel.org>; Sun, 16 Aug 2020 07:28:36 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id g75so11860033wme.4
-        for <linux-fpga@vger.kernel.org>; Sun, 16 Aug 2020 07:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=NAKDDu3zYGlp6/1rTFA3zLXzfLNUWElMFpld1DGXTqZ3f2C1G5vMMGgQBtzYdv61gR
-         j0gW2VjYzcAEQEK9JcrA+yGSHFEXNhE9RNkaz3uxkanP37gacJrIVytgT7/c7zGkA2Dy
-         XJB3L8ToVDoWAD9Rvm7U849RIrxncLk9xI9S/Uu5ZGT/cXsim2IUQmYeZsKFSBsv6kJT
-         3kDR9KLYjND6JPpx0YTAndrQaTelzP3558OkivI4ykhj79/nak1F6z80uX1/EQIXmTKV
-         I+kUa6Zt2XAbNuMItIuLndMdaWWyo32PYvWKoOywYCMLUV2UDlYdbpJ66arhF+MiPCa0
-         yMKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=Am+RXZGgVKRpLXgtNcz8nYf2sWlrAEQzPutpAzm1x7Cnp14YXyo1JvHHjixONZuzRI
-         x5mRtyImAVkR0yxMySXzJMN3u8OiewQj+PggsP6gUtBIFMBvxN+1GX7Dpve5qn9p/07e
-         RdvRElbAoTXb9kle7YEn4nfsSScWY6ngzGy9G/O6WaS7n9HOL1ZN5VZNWjf5OtXFTlAp
-         Jpfyl1Esfc7wSCNI+rCnoAfVV/3CW9JVHIDJGEwz8UBbVyFMVE05xAljVO3rsxvLaOiH
-         70d4ITt5eBMFtmxgqmKSZAsLuaZWtYcHtq0L5UVdIF/OQYHs7HgzHzntqt8qhl66MT7f
-         ZPfw==
-X-Gm-Message-State: AOAM532Wy3z0eAe/a5w8tbo+tnrS90ogAAIrcQ4hTwziSBhwoBnWpvWF
-        yOVH4ZANdJdClXmmiBc2m3IWCc0Km60U295BDTA=
-X-Google-Smtp-Source: ABdhPJydZZ8FQlFGmrB/EDLy0Z8gH5X03F6EFXypW4K1vf8iv94WhLhI3iwPKgeJEaRZZocHWED4lUmYPOBkTFPeX+4=
-X-Received: by 2002:a1c:a1c7:: with SMTP id k190mr10461870wme.1.1597588111746;
- Sun, 16 Aug 2020 07:28:31 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a5d:6cd3:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:28:30
- -0700 (PDT)
-Reply-To: sctnld11170@tlen.pl
-From:   "Mr. Scott Donald" <confianzayrentabilidad@gmail.com>
-Date:   Sun, 16 Aug 2020 07:28:30 -0700
-Message-ID: <CANrrfX7wwL97G=jb--8nb9jH8oRO8T90L6NGSfg1HfnzMyyHcw@mail.gmail.com>
-Subject: Hello, Please
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1727882AbgHQIoz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 17 Aug 2020 04:44:55 -0400
+Received: from mga01.intel.com ([192.55.52.88]:18713 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726779AbgHQIoz (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 17 Aug 2020 04:44:55 -0400
+IronPort-SDR: rgabjZv8SN7MQJ+bWgjTE5heWDkXochQwmvMBmB9O0qFUr76CXx6Qn6TSs9QWZWRzrC0auJsj0
+ vQG0P7GtYXag==
+X-IronPort-AV: E=McAfee;i="6000,8403,9715"; a="172714574"
+X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
+   d="scan'208";a="172714574"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 01:44:54 -0700
+IronPort-SDR: 5cM4pTxsYwjSNtKYD83oXLf5sIZeqLFnVy+wYgruJvkNg7QlR3pEB1qGknk63QcvdqygLnhut+
+ ziHIoHDyic3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
+   d="scan'208";a="471350658"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
+  by orsmga005.jf.intel.com with ESMTP; 17 Aug 2020 01:44:52 -0700
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com
+Subject: [PATCH v6 0/3] Modularization of DFL private feature drivers
+Date:   Mon, 17 Aug 2020 16:40:09 +0800
+Message-Id: <1597653612-5064-1-git-send-email-yilun.xu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
---=20
-Dear Friend,
+This patchset makes it possible to develop independent driver modules
+for DFL private features. It also helps to leverage existing kernel
+drivers to enable some IP blocks in DFL.
 
-I'm Mr. Scott Donald a Successful businessMan dealing with
-Exportation, I got your mail contact through search to let you know my
-intension and my Ugly Situation Am a dying Man here in Los Angeles
-California Hospital Bed in (USA), I Lost my Wife and my only Daughter
-for Covid-19 and I also have a problem in my Health and I can die
-anytime I Know,
+Patch #1: Release the dfl mmio regions after enumeration, so that private
+          feature drivers could request mmio region in their own drivers.
+Patch #2: Introduce the dfl bus, then dfl devices could be supported by
+          independent dfl drivers.
+Patch #3: An example of the dfl driver for N3000 nios private feature.
 
-I have a project that I am about to hand over to you. and I already
-instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
-of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
-able you
-to give 50% of this fund to Charitable Home in your State and take 50%
-don't think otherwise and why would anybody send someone you barely
-know to help you deliver a message, help me do this for the happiness
-of my soul and for God to mercy me and my Family and give Us a good
-place.
 
-please, do as I said there was someone from your State that I deeply
-love so very very much and I miss her so badly I have no means to
-reach any Charitable Home there. that is why I go for a personal
-search of the Country and State and I got your mail contact through
-search to let you know my Bitterness and please, help me is getting
-Dark I ask my Doctor to help me keep you notice failure for me to
-reach you in person Your urgent Response, here is my Doctor Whats-app
-Number for urgent notice +13019692737
+Main changes from v1:
+- Add the new Patch #1, to improve the feature id definition.
+- Change the dfl bus uevent format.
+- Change the dfl device's sysfs name format.
+- refactor dfl_dev_add()
+- Add the Patch #4 as an example of the dfl driver.
+- A lot of minor fixes for comments from Hao and Tom.
 
-Hope To Hear From You. I'm sending this email to you for the second
-time yet no response from you.
+Main changes from v2:
+- Add the doc for dfl-n3000-nios driver.
+- Minor fixes for comments from Tom.
 
-My Regards.
+Main changes from v3:
+- improve the dfl devices' uevent format, 4 bits for type & 12 bits for id
+- change dfl_device->type to u8
+- A dedicate field in struct dfl_feature for dfl device instance.
+- error out if dfl_device already exist on dfl_devs_init().
+- Move the err log in regmap implementation, and delete
+   n3000_nios_writel/readl(), they have nothing to wrapper now.
+- Minor fixes and comments improvement.
 
-Mr. Scott Donald
-CEO
+Main changes from v4:
+- The patch "fpga: dfl: change data type of feature id to u16" is already
+   applied to for-next
+- Unify the naming of some functions in dfl.c
+- Fix the output of fec_mode sysfs inf to "no" on 10G configuration, cause
+   no FEC mode could be configured for 10G.
+- Change the N3000 Nios driver name from "dfl-n3000-nios" to "n3000-nios",
+   and also rename some structures and functions from dfl_n3000_nios_* to
+   n3000_nios_*
+- Minor fixes and comments improvement.
+
+Main changes from v5:
+- Fix the output of fec_mode sysfs inf to "not supported" if in 10G,
+   or the firmware version major < 3.
+- The input param of dfl_devs_add() changes to
+   struct dfl_feature_platform_data.
+- Minor fixes and improves comments.
+
+
+Xu Yilun (3):
+  fpga: dfl: map feature mmio resources in their own feature drivers
+  fpga: dfl: create a dfl bus type to support DFL devices
+  fpga: dfl: add support for N3000 Nios private feature
+
+ Documentation/ABI/testing/sysfs-bus-dfl            |  15 +
+ .../ABI/testing/sysfs-bus-dfl-devices-n3000-nios   |  21 +
+ Documentation/fpga/dfl-n3000-nios.rst              |  79 +++
+ Documentation/fpga/index.rst                       |   1 +
+ drivers/fpga/Kconfig                               |  11 +
+ drivers/fpga/Makefile                              |   2 +
+ drivers/fpga/dfl-n3000-nios.c                      | 539 +++++++++++++++++++++
+ drivers/fpga/dfl-pci.c                             |  24 +-
+ drivers/fpga/dfl.c                                 | 449 ++++++++++++++---
+ drivers/fpga/dfl.h                                 |  93 +++-
+ 10 files changed, 1149 insertions(+), 85 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl-devices-n3000-nios
+ create mode 100644 Documentation/fpga/dfl-n3000-nios.rst
+ create mode 100644 drivers/fpga/dfl-n3000-nios.c
+
+-- 
+2.7.4
+
