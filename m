@@ -2,94 +2,126 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A086A254E03
-	for <lists+linux-fpga@lfdr.de>; Thu, 27 Aug 2020 21:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610EA254E33
+	for <lists+linux-fpga@lfdr.de>; Thu, 27 Aug 2020 21:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727835AbgH0TJJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 27 Aug 2020 15:09:09 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:58571 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727115AbgH0TJJ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 27 Aug 2020 15:09:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1598555348;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KAEZo/YE9GEddiVed/r0hHvLBr62Nk6jQkAItPMa1zw=;
-        b=UIfBQrxMXqA4B85wcBiH/4ozRF4L7hC2+Q8HKKy7R7r9IepLH8Qzll0WERa7ldMwXl1TTP
-        9jQ42xJSho2QbF0OpqfqFlT9WKgWF7nw9ORkhZh2mIIRwdrfoF/HJEH4atNYTQCLOHZGA6
-        Wlbh6IEmiRmNwv3ISrC497/kJ5yNsh8=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-205-xWoE4v9EPaa9B3r-ls9ZXw-1; Thu, 27 Aug 2020 15:09:06 -0400
-X-MC-Unique: xWoE4v9EPaa9B3r-ls9ZXw-1
-Received: by mail-qv1-f70.google.com with SMTP id d9so5364674qvl.10
-        for <linux-fpga@vger.kernel.org>; Thu, 27 Aug 2020 12:09:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=KAEZo/YE9GEddiVed/r0hHvLBr62Nk6jQkAItPMa1zw=;
-        b=L7pTV3MOjfjtyxbYFvZElg4/ULQhe71ffjYEqjBpC3fm2/+eZjfAk/Zz1lLOGkQ/v0
-         ztcct0yN7saXaOeNhdPZM+EzW6dUXlFfcFXBKjP+1Wg/M7fUbAYMUwPT379D3K8x9rFh
-         2oYi9fI732Cvq5F6pX0GTih3MefIybbGgleJFB194pVDfnEavmRpy2iMjLfGiQ2cMviV
-         x5C4MhtCzIT0/OfpdTj+H3SfFwuVn2Z6nOAwNrvGQDs4gjyhgREY0lOVLc3haXJuzkIa
-         Kfbh5jsRZFnNfPUGhJbzqwthKvI1eYH7i2UhTRuvzSwAWkNlABUJFMpMrBNKDPV0wlaG
-         uTNg==
-X-Gm-Message-State: AOAM5302+/4zxcR4u630BQWRYA/SCVvhXFVVu8cBw7dx+wnlsQzehDG9
-        t2gq7vH12XCNGuEXOBTdh8w376UeHgBzu7mFxzfH+zhT1X+ruljPrWC42bNrjPEhrb0EOrqkfbD
-        4bf+ayy3jraUrZMgjQusiVw==
-X-Received: by 2002:ac8:6a07:: with SMTP id t7mr20257281qtr.1.1598555345821;
-        Thu, 27 Aug 2020 12:09:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwuHQT71lwx6nYLk2qBAQLkclZ4rkI4WcjiaeOHy8y0S6Fv5A6mtp3yabGqDWLQs3wAdEI9YA==
-X-Received: by 2002:ac8:6a07:: with SMTP id t7mr20257253qtr.1.1598555345605;
-        Thu, 27 Aug 2020 12:09:05 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 7sm2553032qkp.57.2020.08.27.12.09.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Aug 2020 12:09:05 -0700 (PDT)
-Subject: Re: [PATCH v2 5/5] fpga manager: xilinx-spi: provide better
- diagnostics on programming failure
-To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-fpga@vger.kernel.org
+        id S1726246AbgH0T0H (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 27 Aug 2020 15:26:07 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:48502 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726236AbgH0T0H (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 27 Aug 2020 15:26:07 -0400
+Received: from [78.134.86.56] (port=44256 helo=[192.168.77.62])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1kBNX9-0008JP-Ii; Thu, 27 Aug 2020 21:26:03 +0200
+Subject: Re: [PATCH v2 3/5] fpga manager: xilinx-spi: rework write_complete
+ loop implementation
+To:     Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org
 Cc:     Moritz Fischer <mdf@kernel.org>,
         Michal Simek <michal.simek@xilinx.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Anatolij Gustschin <agust@denx.de>
 References: <20200827143249.10973-1-luca@lucaceresoli.net>
- <20200827143249.10973-5-luca@lucaceresoli.net>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <aa201535-a5f6-04b1-1444-35b68ed47281@redhat.com>
-Date:   Thu, 27 Aug 2020 12:09:03 -0700
+ <20200827143249.10973-3-luca@lucaceresoli.net>
+ <2b8d9ed7-0468-9001-2f8e-386312aae6cb@redhat.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <bc35f12e-6ff2-94a7-d519-94616f6dfc6c@lucaceresoli.net>
+Date:   Thu, 27 Aug 2020 21:26:02 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200827143249.10973-5-luca@lucaceresoli.net>
+In-Reply-To: <2b8d9ed7-0468-9001-2f8e-386312aae6cb@redhat.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Hi Tom,
 
-On 8/27/20 7:32 AM, Luca Ceresoli wrote:
-> When the DONE pin does not go high after programming to confirm programming
-> success, the INIT_B pin provides some info on the reason. Use it if
-> available to provide a more explanatory error message.
->
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->
-> ---
->
-> Changes in v2:
->  - also check for gpiod_get_value() errors (Tom Rix)
+thanks for the prompt feedback!
 
-This looks fine.
+On 27/08/20 20:59, Tom Rix wrote:
+> 
+> On 8/27/20 7:32 AM, Luca Ceresoli wrote:
+>> In preparation to add error checking for gpiod_get_value(), rework
+>> the loop to avoid the duplication of these lines:
+>>
+>> 	if (gpiod_get_value(conf->done))
+>> 		return xilinx_spi_apply_cclk_cycles(conf);
+>>
+>> There is little advantage in this rework with current code. However
+>> error checking will expand these two lines to five, making code
+>> duplication more annoying.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>>
+>> ---
+>>
+>> This patch is new in v2
+>> ---
+>>  drivers/fpga/xilinx-spi.c | 15 ++++++---------
+>>  1 file changed, 6 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/fpga/xilinx-spi.c b/drivers/fpga/xilinx-spi.c
+>> index 01f494172379..cfc933d70f52 100644
+>> --- a/drivers/fpga/xilinx-spi.c
+>> +++ b/drivers/fpga/xilinx-spi.c
+>> @@ -151,22 +151,19 @@ static int xilinx_spi_write_complete(struct fpga_manager *mgr,
+>>  				     struct fpga_image_info *info)
+>>  {
+>>  	struct xilinx_spi_conf *conf = mgr->priv;
+>> -	unsigned long timeout;
+>> +	unsigned long timeout = jiffies + usecs_to_jiffies(info->config_complete_timeout_us);
+>>  	int ret;
+>>  
+>> -	if (gpiod_get_value(conf->done))
+>> -		return xilinx_spi_apply_cclk_cycles(conf);
+>> -
+>> -	timeout = jiffies + usecs_to_jiffies(info->config_complete_timeout_us);
+>> +	while (true) {
+>> +		if (gpiod_get_value(conf->done))
+>> +			return xilinx_spi_apply_cclk_cycles(conf);
+>>  
+>> -	while (time_before(jiffies, timeout)) {
+>> +		if (time_after(jiffies, timeout))
+>> +			break;
+>>  
+>>  		ret = xilinx_spi_apply_cclk_cycles(conf);
+>>  		if (ret)
+>>  			return ret;
+>> -
+>> -		if (gpiod_get_value(conf->done))
+>> -			return xilinx_spi_apply_cclk_cycles(conf);
+>>  	} 
+> 
+> Do you need another
+> 
+> 	if (gpiod_get_value(conf->done))
+> 		return xilinx_spi_apply_cclk_cycles(conf);
+> 
+> here to cover the chance of sleeping in the loop ?
 
-Reviewed-by: Tom Rix <trix@redhat.com>
+If I got your question correctly: if we get here it's because of a
+timeout, thus programming has failed (DONE didn't come up after some
+time), and checking it one more here seems pointless.
 
+Does this reply your question?
 
+-- 
+Luca
