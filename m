@@ -2,126 +2,115 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 610EA254E33
-	for <lists+linux-fpga@lfdr.de>; Thu, 27 Aug 2020 21:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB6725542A
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Aug 2020 08:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726246AbgH0T0H (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 27 Aug 2020 15:26:07 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:48502 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726236AbgH0T0H (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 27 Aug 2020 15:26:07 -0400
-Received: from [78.134.86.56] (port=44256 helo=[192.168.77.62])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1kBNX9-0008JP-Ii; Thu, 27 Aug 2020 21:26:03 +0200
-Subject: Re: [PATCH v2 3/5] fpga manager: xilinx-spi: rework write_complete
- loop implementation
-To:     Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org
-Cc:     Moritz Fischer <mdf@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anatolij Gustschin <agust@denx.de>
-References: <20200827143249.10973-1-luca@lucaceresoli.net>
- <20200827143249.10973-3-luca@lucaceresoli.net>
- <2b8d9ed7-0468-9001-2f8e-386312aae6cb@redhat.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <bc35f12e-6ff2-94a7-d519-94616f6dfc6c@lucaceresoli.net>
-Date:   Thu, 27 Aug 2020 21:26:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726450AbgH1GAI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 28 Aug 2020 02:00:08 -0400
+Received: from mga17.intel.com ([192.55.52.151]:35794 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725849AbgH1GAH (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 28 Aug 2020 02:00:07 -0400
+IronPort-SDR: RvNbL0lzqj8HYRC6ReaFedLaBQkRQev0btJZ3bBMCiu/VE+SCqKJ7FPlSEqGjHqo5ufsGB3lLQ
+ /k0aa4X1+bag==
+X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="136677957"
+X-IronPort-AV: E=Sophos;i="5.76,362,1592895600"; 
+   d="scan'208";a="136677957"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2020 23:00:04 -0700
+IronPort-SDR: McsTh8G5D3tbZMqZlooEqwZTeP1Uyb5WLzaHsn6IM/SQPxe/wRQqU9dcd9Qrwpd32yBG1b+lUb
+ OtfWWPNgvdeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,362,1592895600"; 
+   d="scan'208";a="300117330"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by orsmga006.jf.intel.com with ESMTP; 27 Aug 2020 23:00:02 -0700
+Date:   Fri, 28 Aug 2020 13:56:03 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>
+Subject: Re: [PATCH v4 1/4] fpga: dfl: change data type of feature id to u16
+Message-ID: <20200828055603.GA5814@yilunxu-OptiPlex-7050>
+References: <1597027273-25288-1-git-send-email-yilun.xu@intel.com>
+ <1597027273-25288-2-git-send-email-yilun.xu@intel.com>
+ <20200812035604.GA2544@epycbox.lan>
+ <3810fb75b42e45928a39a97449a01520@AcuMS.aculab.com>
+ <20200813075843.GB7383@yilunxu-OptiPlex-7050>
+ <54216e492cec4f84bc43dee176130e89@AcuMS.aculab.com>
+ <20200813090409.GA1080@yilunxu-OptiPlex-7050>
+ <20200820041431.GB4022@epycbox.lan>
 MIME-Version: 1.0
-In-Reply-To: <2b8d9ed7-0468-9001-2f8e-386312aae6cb@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200820041431.GB4022@epycbox.lan>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Tom,
-
-thanks for the prompt feedback!
-
-On 27/08/20 20:59, Tom Rix wrote:
+On Wed, Aug 19, 2020 at 09:14:31PM -0700, Moritz Fischer wrote:
+> On Thu, Aug 13, 2020 at 05:04:09PM +0800, Xu Yilun wrote:
+> > On Thu, Aug 13, 2020 at 08:28:05AM +0000, David Laight wrote:
+> > > From: Xu Yilun
+> > > > Sent: 13 August 2020 08:59
+> > > > On Wed, Aug 12, 2020 at 08:52:39AM +0000, David Laight wrote:
+> > > > > From: Moritz Fischer
+> > > > > > Sent: 12 August 2020 04:56
+> > > > > >
+> > > > > > On Mon, Aug 10, 2020 at 10:41:10AM +0800, Xu Yilun wrote:
+> > > > > > > The feature id is stored in a 12 bit field in DFH. So a u16 variable is
+> > > > > > > enough for feature id.
+> > > > > > >
+> > > > > > > This patch changes all feature id related places to fit u16.
+> > > > >
+> > > > > How much bigger does it make the kernel?
+> > > > 
+> > > > The patch changes the definition of feature id from u64 to u16, and will
+> > > > make the kernel slightly smaller.
+> > > 
+> > > Unlikely.
+> > > Most of the structures will gain a 'pad' field.
+> > > Using u16 for function parameters and results almost certainly
+> > > requires instructions to mask the value.
+> > > Any arithmetic on u16 will require masking instructions on
+> > > (probably) all architectures except x86.
+> > > 
+> > > Using 'unsigned int' is probably best.
+> > > 
+> > > u16 is never a good idea unless you are defining enough
+> > > of them in a structure (eg as an array) to reduce the
+> > > structure size below some threshold.
+> > > (Or are matching some hardware layout.)
+> > 
+> > I got it. Thanks for your detailed explanation. I think we may change them to
+> > u32. Is it the same case for u8? Think we may also change the dfl_device_id.type.
+> > 
+> > 
+> > Hi Moritz:
+> > 
+> > The patch is applied to for-next, is it possible we recall it, or we
+> > make another fix after it?
+> > 
+> > Thanks,
+> > Yilun.
 > 
-> On 8/27/20 7:32 AM, Luca Ceresoli wrote:
->> In preparation to add error checking for gpiod_get_value(), rework
->> the loop to avoid the duplication of these lines:
->>
->> 	if (gpiod_get_value(conf->done))
->> 		return xilinx_spi_apply_cclk_cycles(conf);
->>
->> There is little advantage in this rework with current code. However
->> error checking will expand these two lines to five, making code
->> duplication more annoying.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>
->> ---
->>
->> This patch is new in v2
->> ---
->>  drivers/fpga/xilinx-spi.c | 15 ++++++---------
->>  1 file changed, 6 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/fpga/xilinx-spi.c b/drivers/fpga/xilinx-spi.c
->> index 01f494172379..cfc933d70f52 100644
->> --- a/drivers/fpga/xilinx-spi.c
->> +++ b/drivers/fpga/xilinx-spi.c
->> @@ -151,22 +151,19 @@ static int xilinx_spi_write_complete(struct fpga_manager *mgr,
->>  				     struct fpga_image_info *info)
->>  {
->>  	struct xilinx_spi_conf *conf = mgr->priv;
->> -	unsigned long timeout;
->> +	unsigned long timeout = jiffies + usecs_to_jiffies(info->config_complete_timeout_us);
->>  	int ret;
->>  
->> -	if (gpiod_get_value(conf->done))
->> -		return xilinx_spi_apply_cclk_cycles(conf);
->> -
->> -	timeout = jiffies + usecs_to_jiffies(info->config_complete_timeout_us);
->> +	while (true) {
->> +		if (gpiod_get_value(conf->done))
->> +			return xilinx_spi_apply_cclk_cycles(conf);
->>  
->> -	while (time_before(jiffies, timeout)) {
->> +		if (time_after(jiffies, timeout))
->> +			break;
->>  
->>  		ret = xilinx_spi_apply_cclk_cycles(conf);
->>  		if (ret)
->>  			return ret;
->> -
->> -		if (gpiod_get_value(conf->done))
->> -			return xilinx_spi_apply_cclk_cycles(conf);
->>  	} 
-> 
-> Do you need another
-> 
-> 	if (gpiod_get_value(conf->done))
-> 		return xilinx_spi_apply_cclk_cycles(conf);
-> 
-> here to cover the chance of sleeping in the loop ?
+> Sorry for the delay, can you send a follow-up please?
 
-If I got your question correctly: if we get here it's because of a
-timeout, thus programming has failed (DONE didn't come up after some
-time), and checking it one more here seems pointless.
+Hi moritz:
 
-Does this reply your question?
+I think I don't have to change it now. As discussed with David, these
+fields aren't often accessed. So it should be OK.
 
--- 
-Luca
+Thanks,
+Yilun.
+
+> 
+> Cheers,
+> Moritz
