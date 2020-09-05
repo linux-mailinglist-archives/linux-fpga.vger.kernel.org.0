@@ -2,726 +2,559 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC8125E499
-	for <lists+linux-fpga@lfdr.de>; Sat,  5 Sep 2020 02:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B294425E4A1
+	for <lists+linux-fpga@lfdr.de>; Sat,  5 Sep 2020 02:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726277AbgIEAX2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 4 Sep 2020 20:23:28 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35839 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbgIEAX1 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 4 Sep 2020 20:23:27 -0400
-Received: by mail-pg1-f193.google.com with SMTP id g29so5133298pgl.2;
-        Fri, 04 Sep 2020 17:23:26 -0700 (PDT)
+        id S1726277AbgIEAcf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 4 Sep 2020 20:32:35 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36299 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726208AbgIEAce (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 4 Sep 2020 20:32:34 -0400
+Received: by mail-pg1-f196.google.com with SMTP id p37so5139985pgl.3;
+        Fri, 04 Sep 2020 17:32:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=QykgBce4bU9sw+JzCjVzIowFDe78+I3jMIsH2EPqPr4=;
-        b=eB7qDB0LD7zRA2OXjQIqKh7NiAi3tpZ8j3gVL/fNg2hXw7d7ZopVEGxsGWPJtNqjBp
-         O7GkIhlo/1aTiPCT647j7xHbbC9eK6Uern8b6JolZ9aEymSeaDGqpc/KlDeJGY+wkceD
-         DCySORf9gPIG1YBJRv/U1Q1BKTw0voco5sAIFifPon496MzM+1LKv/9z9fsdnKBp/nBH
-         I5C5jjSfxKJVAzJMo7bgZaKLkNByQIblb7SM9cRC7qvNsd4ilzjHyR2UyM38PkuMdY8B
-         8YUXW8uSicLXVNJ07wmYbYNhmGBKf0PA5y0jZkbPjPv/EnUfzfvBXPfnt84CiE8wKINT
-         Delw==
-X-Gm-Message-State: AOAM5319YS05ZiDgM04KSIdd7RI9XS3IaZUosd+Z0Bm8YFwCmSFXx/la
-        jOhTOkt9Mp8wWFYa2ta07aY=
-X-Google-Smtp-Source: ABdhPJzPBNchWcV54/DkVRrIYrS72HHE9JYGzicp0OVGl7e0ZRLEDwPYljlfeaP4Kg1hemnfe3gjdA==
-X-Received: by 2002:a65:5a0b:: with SMTP id y11mr2849047pgs.395.1599265406007;
-        Fri, 04 Sep 2020 17:23:26 -0700 (PDT)
+        bh=g4tViWJurInNJW6j1i2BR3GFwck5EH43I9Jofii8+Cc=;
+        b=X3dHUfmlrLIBMQmaxho8D2VNseDwHme34tILktiQ3pgOdN18qEFAedjScLuIwazRvU
+         jvyNvHdrtTGs13Yr2K06vwVCfo1JltRI5WVWDCtvaXtym5S+w32+AWUmItOhHPvq0J6H
+         P4pjHgxHIzih4GzpLfmSieyGViZ2DI6tXRSvedlKRIm23ecSIawQskE91FPX/amCGkrx
+         qnRLR2sgfiInGXzds06g5Z0lyxhl+XIEPkQc5ykgNm87vKCxJ/Qh2y/oQLE5iPYltUT1
+         HwskV+nTA4UqvmliT9Rvk9/MjHC1HxFooVo81Y3e3HWPey+VH4zjqfovWkcs5dSkg6kf
+         7NVw==
+X-Gm-Message-State: AOAM531oY9kW/H6Y0VvJkcq8MjHS8u2YRe9X9MC+AAAER+RJmyEexYTg
+        of4lc1ggbMAi3GpDx/wT49DFOaNnBmU=
+X-Google-Smtp-Source: ABdhPJzZHAJ7rFX4lvEJSjJGCWVD0MqPIuUA8gaVy+4mAgeZyFtVUngfOG/JUuiO0LFf3hN2Lq1sbQ==
+X-Received: by 2002:a65:679a:: with SMTP id e26mr9424036pgr.167.1599265952458;
+        Fri, 04 Sep 2020 17:32:32 -0700 (PDT)
 Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id 143sm7801576pfc.66.2020.09.04.17.23.25
+        by smtp.gmail.com with ESMTPSA id z22sm11804089pjq.2.2020.09.04.17.32.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2020 17:23:25 -0700 (PDT)
-Date:   Fri, 4 Sep 2020 17:23:24 -0700
+        Fri, 04 Sep 2020 17:32:31 -0700 (PDT)
+Date:   Fri, 4 Sep 2020 17:32:31 -0700
 From:   Moritz Fischer <mdf@kernel.org>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     mdf@kernel.org, lee.jones@linaro.org, linux-fpga@vger.kernel.org,
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
-        yilun.xu@intel.com, hao.wu@intel.com, matthew.gerlach@intel.com
-Subject: Re: [PATCH v1 01/12] fpga: fpga security manager class driver
-Message-ID: <20200905002324.GA3157@epycbox.lan>
-References: <20200904235305.6254-1-russell.h.weight@intel.com>
- <20200904235305.6254-2-russell.h.weight@intel.com>
+        Wu Hao <hao.wu@intel.com>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: Re: [PATCH v7 2/3] fpga: dfl: create a dfl bus type to support DFL
+ devices
+Message-ID: <20200905003231.GB3157@epycbox.lan>
+References: <1597823121-26424-1-git-send-email-yilun.xu@intel.com>
+ <1597823121-26424-3-git-send-email-yilun.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200904235305.6254-2-russell.h.weight@intel.com>
+In-Reply-To: <1597823121-26424-3-git-send-email-yilun.xu@intel.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Russ,
+Hi Xu,
 
-On Fri, Sep 04, 2020 at 04:52:54PM -0700, Russ Weight wrote:
-> Create the Intel Security Manager class driver. The security
-> manager provides interfaces to manage secure updates for the
-> FPGA and BMC images that are stored in FLASH. The driver can
-> also be used to update root entry hashes and to cancel code
-> signing keys.
+On Wed, Aug 19, 2020 at 03:45:20PM +0800, Xu Yilun wrote:
+> A new bus type "dfl" is introduced for private features which are not
+> initialized by DFL feature drivers (dfl-fme & dfl-afu drivers). So these
+> private features could be handled by separate driver modules.
 > 
-> This patch creates the class driver and provides sysfs
-> interfaces for displaying root entry hashes, canceled code
-> signing keys and flash counts.
+> DFL feature drivers (dfl-fme, dfl-port) will create DFL devices on
+> enumeration. DFL drivers could be registered on this bus to match these
+> DFL devices. They are matched by dfl type & feature_id.
 > 
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-
-As for Reviewed-by tags I had seen on other patches in the series, I'd
-prefer for that to happen on public mailing lists. If Hao reviewed
-patches on some internal Intel list I won't know about it, so please
-have him properly Ack/Reviewed-by tag things on a public mailing list.
-
+> Signed-off-by: Wu Hao <hao.wu@intel.com>
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> Acked-by: Wu Hao <hao.wu@intel.com>
 > ---
->  .../ABI/testing/sysfs-class-ifpga-sec-mgr     |  75 ++++
->  MAINTAINERS                                   |   8 +
->  drivers/fpga/Kconfig                          |   9 +
->  drivers/fpga/Makefile                         |   3 +
->  drivers/fpga/ifpga-sec-mgr.c                  | 339 ++++++++++++++++++
->  include/linux/fpga/ifpga-sec-mgr.h            | 145 ++++++++
->  6 files changed, 579 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-class-ifpga-sec-mgr
->  create mode 100644 drivers/fpga/ifpga-sec-mgr.c
->  create mode 100644 include/linux/fpga/ifpga-sec-mgr.h
+> v2: change the bus uevent format.
+>     change the dfl device's sysfs name format.
+>     refactor dfl_dev_add().
+>     minor fixes for comments from Hao and Tom.
+> v3: no change.
+> v4: improve the uevent format, 4 bits for type & 12 bits for id.
+>     change dfl_device->type to u8.
+>     A dedicate field in struct dfl_feature for dfl device instance.
+>     error out if dfl_device already exist on dfl_devs_init().
+> v5: minor fixes for Hao's comments
+> v6: the input param of dfl_devs_add() changes to struct
+>     dfl_feature_platform_data.
+>     improve the comments.
+> v7: no change.
+> ---
+>  Documentation/ABI/testing/sysfs-bus-dfl |  15 ++
+>  drivers/fpga/dfl.c                      | 262 +++++++++++++++++++++++++++++++-
+>  drivers/fpga/dfl.h                      |  86 +++++++++++
+>  3 files changed, 355 insertions(+), 8 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-class-ifpga-sec-mgr b/Documentation/ABI/testing/sysfs-class-ifpga-sec-mgr
+> diff --git a/Documentation/ABI/testing/sysfs-bus-dfl b/Documentation/ABI/testing/sysfs-bus-dfl
 > new file mode 100644
-> index 000000000000..86f8992559bf
+> index 0000000..23543be
 > --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-class-ifpga-sec-mgr
-> @@ -0,0 +1,75 @@
-> +What: 		/sys/class/ifpga_sec_mgr/ifpga_secX/name
-> +Date:		Sep 2020
-> +KernelVersion:  5.10
-> +Contact:	Russ Weight <russell.h.weight@intel.com>
-> +Description:	Name of low level fpga security manager driver.
+> +++ b/Documentation/ABI/testing/sysfs-bus-dfl
+> @@ -0,0 +1,15 @@
+> +What:		/sys/bus/dfl/devices/dfl_dev.X/type
+> +Date:		Aug 2020
+> +KernelVersion:	5.10
+> +Contact:	Xu Yilun <yilun.xu@intel.com>
+> +Description:	Read-only. It returns type of DFL FIU of the device. Now DFL
+> +		supports 2 FIU types, 0 for FME, 1 for PORT.
+> +		Format: 0x%x
 > +
-> +What: 		/sys/class/ifpga_sec_mgr/ifpga_secX/security/sr_root_entry_hash
-> +Date:		Sep 2020
-> +KernelVersion:  5.10
-> +Contact:	Russ Weight <russell.h.weight@intel.com>
-> +Description:	Read only. Returns the root entry hash for the static
-> +		region if one is programmed, else it returns the
-> +		string: "hash not programmed".  This file is only
-> +		visible if the underlying device supports it.
-> +		Format: "0x%x".
-> +
-> +What: 		/sys/class/ifpga_sec_mgr/ifpga_secX/security/pr_root_entry_hash
-> +Date:		Sep 2020
-> +KernelVersion:  5.10
-> +Contact:	Russ Weight <russell.h.weight@intel.com>
-> +Description:	Read only. Returns the root entry hash for the partial
-> +		reconfiguration region if one is programmed, else it
-> +		returns the string: "hash not programmed".  This file
-> +		is only visible if the underlying device supports it.
-> +		Format: "0x%x".
-> +
-> +What: 		/sys/class/ifpga_sec_mgr/ifpga_secX/security/bmc_root_entry_hash
-> +Date:		Sep 2020
-> +KernelVersion:  5.10
-> +Contact:	Russ Weight <russell.h.weight@intel.com>
-> +Description:	Read only. Returns the root entry hash for the BMC image
-> +		if one is programmed, else it returns the string:
-> +		"hash not programmed".  This file is only visible if the
-> +		underlying device supports it.
-> +		Format: "0x%x".
-> +
-> +What: 		/sys/class/ifpga_sec_mgr/ifpga_secX/security/sr_canceled_csks
-> +Date:		Sep 2020
-> +KernelVersion:  5.10
-> +Contact:	Russ Weight <russell.h.weight@intel.com>
-> +Description:	Read only. Returns a list of indices for canceled code
-> +		signing keys for the static region. The standard bitmap
-> +		list format is used (e.g. "1,2-6,9").
-> +
-> +What: 		/sys/class/ifpga_sec_mgr/ifpga_secX/security/pr_canceled_csks
-> +Date:		Sep 2020
-> +KernelVersion:  5.10
-> +Contact:	Russ Weight <russell.h.weight@intel.com>
-> +Description:	Read only. Returns a list of indices for canceled code
-> +		signing keys for the partial reconfiguration region. The
-> +		standard bitmap list format is used (e.g. "1,2-6,9").
-> +
-> +What: 		/sys/class/ifpga_sec_mgr/ifpga_secX/security/bmc_canceled_csks
-> +Date:		Sep 2020
-> +KernelVersion:  5.10
-> +Contact:	Russ Weight <russell.h.weight@intel.com>
-> +Description:	Read only. Returns a list of indices for canceled code
-> +		signing keys for the BMC.  The standard bitmap list format
-> +		is used (e.g. "1,2-6,9").
-> +
-> +What: 		/sys/class/ifpga_sec_mgr/ifpga_secX/security/user_flash_count
-> +Date:		Sep 2020
-> +KernelVersion:  5.10
-> +Contact:	Russ Weight <russell.h.weight@intel.com>
-> +Description:	Read only. Returns number of times the user image for the
-> +		static region has been flashed.
-> +		Format: "%d".
-> +
-> +What: 		/sys/class/ifpga_sec_mgr/ifpga_secX/security/bmc_flash_count
-> +Date:		Sep 2020
-> +KernelVersion:  5.10
-> +Contact:	Russ Weight <russell.h.weight@intel.com>
-> +Description:	Read only. Returns number of times the BMC image has been
-> +		flashed.
-> +		Format: "%d".
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index deaafb617361..4a2ebe6b120d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6830,6 +6830,14 @@ F:	Documentation/fpga/
->  F:	drivers/fpga/
->  F:	include/linux/fpga/
+> +What:		/sys/bus/dfl/devices/dfl_dev.X/feature_id
+> +Date:		Aug 2020
+> +KernelVersion:	5.10
+> +Contact:	Xu Yilun <yilun.xu@intel.com>
+> +Description:	Read-only. It returns feature identifier local to its DFL FIU
+> +		type.
+> +		Format: 0x%x
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index 52cafa2..c5ba4ac9 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -30,12 +30,6 @@ static DEFINE_MUTEX(dfl_id_mutex);
+>   * index to dfl_chardevs table. If no chardev support just set devt_type
+>   * as one invalid index (DFL_FPGA_DEVT_MAX).
+>   */
+> -enum dfl_id_type {
+> -	FME_ID,		/* fme id allocation and mapping */
+> -	PORT_ID,	/* port id allocation and mapping */
+> -	DFL_ID_MAX,
+> -};
+> -
+>  enum dfl_fpga_devt_type {
+>  	DFL_FPGA_DEVT_FME,
+>  	DFL_FPGA_DEVT_PORT,
+> @@ -250,6 +244,244 @@ int dfl_fpga_check_port_id(struct platform_device *pdev, void *pport_id)
+>  }
+>  EXPORT_SYMBOL_GPL(dfl_fpga_check_port_id);
 >  
-> +INTEL FPGA SECURITY MANAGER DRIVERS
-> +M:	Russ Weight <russell.h.weight@intel.com>
-> +L:	linux-fpga@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/ABI/testing/sysfs-class-ifpga-sec-mgr
-> +F:	drivers/fpga/ifpga-sec-mgr.c
-> +F:	include/linux/fpga/ifpga-sec-mgr.h
-
-Generally not against having more people help out, but do we need a
-per driver maintainer?
-
+> +static DEFINE_IDA(dfl_device_ida);
 > +
->  FPU EMULATOR
->  M:	Bill Metzenthen <billm@melbpc.org.au>
->  S:	Maintained
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 88f64fbf55e3..97c0a6cc2ba7 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -235,4 +235,13 @@ config FPGA_MGR_ZYNQMP_FPGA
->  	  to configure the programmable logic(PL) through PS
->  	  on ZynqMP SoC.
->  
-> +config IFPGA_SEC_MGR
-> +	tristate "Intel Security Manager for FPGA"
-> +        help
-> +	  The Intel Security Manager class driver presents a common
-> +	  user API for managing secure updates for Intel FPGA
-> +	  devices, including flash images for the FPGA static
-> +	  region and for the BMC. Select this option to enable
-> +	  updates for secure FPGA devices.
-> +
->  endif # FPGA
-> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> index c69bfc931519..ec9fbacdedd8 100644
-> --- a/drivers/fpga/Makefile
-> +++ b/drivers/fpga/Makefile
-> @@ -21,6 +21,9 @@ obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
->  
-> +# Intel FPGA Security Manager Framework
-> +obj-$(CONFIG_IFPGA_SEC_MGR)		+= ifpga-sec-mgr.o
-> +
->  # FPGA Bridge Drivers
->  obj-$(CONFIG_FPGA_BRIDGE)		+= fpga-bridge.o
->  obj-$(CONFIG_SOCFPGA_FPGA_BRIDGE)	+= altera-hps2fpga.o altera-fpga2sdram.o
-> diff --git a/drivers/fpga/ifpga-sec-mgr.c b/drivers/fpga/ifpga-sec-mgr.c
-> new file mode 100644
-> index 000000000000..97bf80277ed2
-> --- /dev/null
-> +++ b/drivers/fpga/ifpga-sec-mgr.c
-> @@ -0,0 +1,339 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Intel Security Manager for FPGA
-> + *
-> + * Copyright (C) 2019-2020 Intel Corporation, Inc.
-> + */
-> +
-> +#include <linux/fpga/ifpga-sec-mgr.h>
-> +#include <linux/idr.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/vmalloc.h>
-> +
-> +static DEFINE_IDA(ifpga_sec_mgr_ida);
-> +static struct class *ifpga_sec_mgr_class;
-> +
-> +static ssize_t show_canceled_csk(struct ifpga_sec_mgr *imgr,
-> +				 sysfs_csk_hndlr_t get_csk,
-> +				 sysfs_csk_nbits_t get_csk_nbits,
-> +				 char *buf)
+> +static const struct dfl_device_id *
+> +dfl_match_one_device(const struct dfl_device_id *id, struct dfl_device *ddev)
 > +{
-> +	unsigned long *csk_map = NULL;
-> +	unsigned int nbits;
-> +	int cnt, ret;
+> +	if (id->type == ddev->type && id->feature_id == ddev->feature_id)
+> +		return id;
 > +
-> +	ret = get_csk_nbits(imgr);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	nbits = (unsigned int)ret;
-> +	csk_map = vmalloc(sizeof(unsigned long) * BITS_TO_LONGS(nbits));
-> +	if (!csk_map)
-> +		return -ENOMEM;
-> +
-> +	ret = get_csk(imgr, csk_map, nbits);
-> +	if (ret)
-> +		goto vfree_exit;
-> +
-> +	cnt = bitmap_print_to_pagebuf(1, buf, csk_map, nbits);
-> +
-> +vfree_exit:
-> +	vfree(csk_map);
-> +	return ret ? : cnt;
+> +	return NULL;
 > +}
 > +
-> +static ssize_t show_root_entry_hash(struct ifpga_sec_mgr *imgr,
-> +				    sysfs_reh_hndlr_t get_reh,
-> +				    sysfs_reh_size_t get_reh_size,
-> +				    char *buf)
+> +static int dfl_bus_match(struct device *dev, struct device_driver *drv)
 > +{
-> +	unsigned int size, i;
-> +	int ret, cnt = 0;
-> +	u8 *hash;
+> +	struct dfl_device *ddev = to_dfl_dev(dev);
+> +	struct dfl_driver *ddrv = to_dfl_drv(drv);
+> +	const struct dfl_device_id *id_entry = ddrv->id_table;
 > +
-> +	ret = get_reh_size(imgr);
-> +	if (ret < 0)
-> +		return ret;
-> +	else if (!ret)
-> +		return sprintf(buf, "hash not programmed\n");
-> +
-> +	size = (unsigned int)ret;
-> +	hash = vmalloc(size);
-> +	if (!hash)
-> +		return -ENOMEM;
-> +
-> +	ret = get_reh(imgr, hash, size);
-> +	if (ret)
-> +		goto vfree_exit;
-> +
-> +	cnt += sprintf(buf, "0x");
-> +	for (i = 0; i < size; i++)
-> +		cnt += sprintf(buf + cnt, "%02x", hash[i]);
-> +	cnt += sprintf(buf + cnt, "\n");
-> +
-> +vfree_exit:
-> +	vfree(hash);
-> +	return ret ? : cnt;
-> +}
-> +
-> +#define to_sec_mgr(d) container_of(d, struct ifpga_sec_mgr, dev)
-> +
-> +#define DEVICE_ATTR_SEC_CSK(_name) \
-> +static ssize_t _name##_canceled_csks_show(struct device *dev, \
-> +					  struct device_attribute *attr, \
-> +					  char *buf) \
-> +{ \
-> +	struct ifpga_sec_mgr *imgr = to_sec_mgr(dev); \
-> +	return show_canceled_csk(imgr, \
-> +	       imgr->iops->_name##_canceled_csks, \
-> +	       imgr->iops->_name##_canceled_csk_nbits, buf); \
-> +} \
-> +static DEVICE_ATTR_RO(_name##_canceled_csks)
-> +
-> +#define DEVICE_ATTR_SEC_ROOT_ENTRY_HASH(_name) \
-> +static ssize_t _name##_root_entry_hash_show(struct device *dev, \
-> +				     struct device_attribute *attr, \
-> +				     char *buf) \
-> +{ \
-> +	struct ifpga_sec_mgr *imgr = to_sec_mgr(dev); \
-> +	return show_root_entry_hash(imgr, \
-> +	       imgr->iops->_name##_root_entry_hash, \
-> +	       imgr->iops->_name##_reh_size, buf); \
-> +} \
-> +static DEVICE_ATTR_RO(_name##_root_entry_hash)
-> +
-> +#define DEVICE_ATTR_SEC_FLASH_CNT(_name) \
-> +static ssize_t _name##_flash_count_show(struct device *dev, \
-> +		    struct device_attribute *attr, char *buf) \
-> +{ \
-> +	struct ifpga_sec_mgr *imgr = to_sec_mgr(dev); \
-> +	int cnt = imgr->iops->_name##_flash_count(imgr); \
-> +	return cnt < 0 ? cnt : sprintf(buf, "%d\n", cnt); \
-> +} \
-> +static DEVICE_ATTR_RO(_name##_flash_count)
-> +
-> +DEVICE_ATTR_SEC_ROOT_ENTRY_HASH(sr);
-> +DEVICE_ATTR_SEC_ROOT_ENTRY_HASH(pr);
-> +DEVICE_ATTR_SEC_ROOT_ENTRY_HASH(bmc);
-> +DEVICE_ATTR_SEC_FLASH_CNT(user);
-> +DEVICE_ATTR_SEC_FLASH_CNT(bmc);
-> +DEVICE_ATTR_SEC_CSK(sr);
-> +DEVICE_ATTR_SEC_CSK(pr);
-> +DEVICE_ATTR_SEC_CSK(bmc);
-> +
-> +static struct attribute *sec_mgr_security_attrs[] = {
-> +	&dev_attr_user_flash_count.attr,
-> +	&dev_attr_bmc_flash_count.attr,
-> +	&dev_attr_bmc_root_entry_hash.attr,
-> +	&dev_attr_sr_root_entry_hash.attr,
-> +	&dev_attr_pr_root_entry_hash.attr,
-> +	&dev_attr_sr_canceled_csks.attr,
-> +	&dev_attr_pr_canceled_csks.attr,
-> +	&dev_attr_bmc_canceled_csks.attr,
-> +	NULL,
-> +};
-> +
-> +#define check_attr(attribute, _name) \
-> +	((attribute) == &dev_attr_##_name.attr && imgr->iops->_name)
-> +
-> +static umode_t sec_mgr_visible(struct kobject *kobj,
-> +			       struct attribute *attr, int n)
-> +{
-> +	struct ifpga_sec_mgr *imgr = to_sec_mgr(kobj_to_dev(kobj));
-> +
-> +	if (check_attr(attr, user_flash_count) ||
-> +	    check_attr(attr, bmc_flash_count) ||
-> +	    check_attr(attr, bmc_root_entry_hash) ||
-> +	    check_attr(attr, sr_root_entry_hash) ||
-> +	    check_attr(attr, pr_root_entry_hash) ||
-> +	    check_attr(attr, sr_canceled_csks) ||
-> +	    check_attr(attr, pr_canceled_csks) ||
-> +	    check_attr(attr, bmc_canceled_csks))
-> +		return attr->mode;
+> +	if (id_entry) {
+> +		while (id_entry->feature_id) {
+> +			if (dfl_match_one_device(id_entry, ddev)) {
+> +				ddev->id_entry = id_entry;
+> +				return 1;
+> +			}
+> +			id_entry++;
+> +		}
+> +	}
 > +
 > +	return 0;
 > +}
 > +
-> +static struct attribute_group sec_mgr_security_attr_group = {
-> +	.name = "security",
-> +	.attrs = sec_mgr_security_attrs,
-> +	.is_visible = sec_mgr_visible,
-> +};
-> +
-> +static ssize_t name_show(struct device *dev,
-> +			 struct device_attribute *attr, char *buf)
+> +static int dfl_bus_probe(struct device *dev)
 > +{
-> +	struct ifpga_sec_mgr *imgr = to_sec_mgr(dev);
+> +	struct dfl_device *ddev = to_dfl_dev(dev);
+> +	struct dfl_driver *ddrv = to_dfl_drv(dev->driver);
+Can you swap those for reverse x-mas tree where possible?
+
+        struct dfl_driver *ddrv = to_dfl_drv(dev->driver);
+        struct dfl_device *ddev = to_dfl_dev(dev);
+	...
+
 > +
-> +	return sprintf(buf, "%s\n", imgr->name);
+> +	return ddrv->probe(ddev);
 > +}
-> +static DEVICE_ATTR_RO(name);
 > +
-> +static struct attribute *sec_mgr_attrs[] = {
-> +	&dev_attr_name.attr,
+> +static int dfl_bus_remove(struct device *dev)
+> +{
+> +	struct dfl_device *ddev = to_dfl_dev(dev);
+> +	struct dfl_driver *ddrv = to_dfl_drv(dev->driver);
+
+Same here.
+> +
+> +	if (ddrv->remove)
+> +		ddrv->remove(ddev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int dfl_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
+> +{
+> +	struct dfl_device *ddev = to_dfl_dev(dev);
+> +
+> +	/* The type has 4 valid bits and feature_id has 12 valid bits */
+> +	return add_uevent_var(env, "MODALIAS=dfl:t%01Xf%03X",
+> +			      ddev->type, ddev->feature_id);
+> +}
+> +
+> +/* show dfl info fields */
+> +#define dfl_info_attr(field, format_string)				\
+> +static ssize_t								\
+> +field##_show(struct device *dev, struct device_attribute *attr,		\
+> +	     char *buf)							\
+> +{									\
+> +	struct dfl_device *ddev = to_dfl_dev(dev);			\
+> +									\
+> +	return sprintf(buf, format_string, ddev->field);		\
+> +}									\
+> +static DEVICE_ATTR_RO(field)
+> +
+> +dfl_info_attr(type, "0x%x\n");
+> +dfl_info_attr(feature_id, "0x%x\n");
+Can you either caplitalize those or if it's just two fields, keep them
+without a macro?
+> +
+> +static struct attribute *dfl_dev_attrs[] = {
+> +	&dev_attr_type.attr,
+> +	&dev_attr_feature_id.attr,
 > +	NULL,
 > +};
 > +
-> +static struct attribute_group sec_mgr_attr_group = {
-> +	.attrs = sec_mgr_attrs,
+> +ATTRIBUTE_GROUPS(dfl_dev);
+> +
+> +static struct bus_type dfl_bus_type = {
+> +	.name		= "dfl",
+> +	.match		= dfl_bus_match,
+> +	.probe		= dfl_bus_probe,
+> +	.remove		= dfl_bus_remove,
+> +	.uevent		= dfl_bus_uevent,
+> +	.dev_groups	= dfl_dev_groups,
 > +};
 > +
-> +static const struct attribute_group *ifpga_sec_mgr_attr_groups[] = {
-> +	&sec_mgr_attr_group,
-> +	&sec_mgr_security_attr_group,
-> +	NULL,
-> +};
-> +
-> +static bool check_sysfs_handler(struct device *dev,
-> +				void *sysfs_handler, void *size_handler,
-> +				const char *sysfs_handler_name,
-> +				const char *size_handler_name)
+> +static void release_dfl_dev(struct device *dev)
 > +{
-> +	if (sysfs_handler) {
-> +		if (!size_handler) {
-> +			dev_err(dev, "%s registered without %s\n",
-> +				sysfs_handler_name, size_handler_name);
-> +			return false;
-> +		}
-> +	} else if (size_handler) {
-> +		dev_err(dev, "%s registered without %s\n",
-> +			size_handler_name, sysfs_handler_name);
-> +		return false;
-> +	}
-> +	return true;
+> +	struct dfl_device *ddev = to_dfl_dev(dev);
+> +
+> +	if (ddev->mmio_res.parent)
+> +		release_resource(&ddev->mmio_res);
+> +
+> +	ida_simple_remove(&dfl_device_ida, ddev->id);
+> +	kfree(ddev->irqs);
+> +	kfree(ddev);
 > +}
 > +
-> +#define check_reh_handler(_dev, _iops, _name) \
-> +	check_sysfs_handler(_dev, (_iops)->_name##_root_entry_hash, \
-> +			    (_iops)->_name##_reh_size, \
-> +			    __stringify(_name##_root_entry_hash), \
-> +			    __stringify(_name##_reh_size))
-> +
-> +#define check_csk_handler(_dev, _iops, _name) \
-> +	check_sysfs_handler(_dev, (_iops)->_name##_canceled_csks, \
-> +			    (_iops)->_name##_canceled_csk_nbits, \
-> +			    __stringify(_name##_canceled_csks), \
-> +			    __stringify(_name##_canceled_csk_nbits))
-> +
-> +/**
-> + * ifpga_sec_mgr_register - register an IFPGA security manager struct
-> + *
-> + * @dev:  create ifpga security manager device from pdev
-> + * @name: ifpga security manager name
-> + * @iops: pointer to a structure of ifpga callback functions
-> + * @priv: ifpga security manager private data
-> + *
-> + * Returns &struct ifpga_sec_mgr pointer on success, or ERR_PTR() on error.
-> + */
-> +struct ifpga_sec_mgr *
-> +ifpga_sec_mgr_register(struct device *dev, const char *name,
-> +		       const struct ifpga_sec_mgr_ops *iops, void *priv)
+> +static struct dfl_device *
+> +dfl_dev_add(struct dfl_feature_platform_data *pdata,
+> +	    struct dfl_feature *feature)
 > +{
-> +	struct ifpga_sec_mgr *imgr;
-> +	int id, ret;
+> +	struct platform_device *pdev = pdata->dev;
+> +	struct resource *parent_res;
+> +	struct dfl_device *ddev;
+> +	int id, i, ret;
 > +
-> +	if (!check_reh_handler(dev, iops, bmc) ||
-> +	    !check_reh_handler(dev, iops, sr) ||
-> +	    !check_reh_handler(dev, iops, pr) ||
-> +	    !check_csk_handler(dev, iops, bmc) ||
-> +	    !check_csk_handler(dev, iops, sr) ||
-> +	    !check_csk_handler(dev, iops, pr)) {
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	if (!name || !strlen(name)) {
-> +		dev_err(dev, "Attempt to register with no name!\n");
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	imgr = kzalloc(sizeof(*imgr), GFP_KERNEL);
-> +	if (!imgr)
+> +	ddev = kzalloc(sizeof(*ddev), GFP_KERNEL);
+> +	if (!ddev)
 > +		return ERR_PTR(-ENOMEM);
 > +
-> +	imgr->name = name;
-> +	imgr->priv = priv;
-> +	imgr->iops = iops;
-> +	mutex_init(&imgr->lock);
-> +
-> +	id = ida_simple_get(&ifpga_sec_mgr_ida, 0, 0, GFP_KERNEL);
+> +	id = ida_simple_get(&dfl_device_ida, 0, 0, GFP_KERNEL);
 > +	if (id < 0) {
-> +		ret = id;
-> +		goto exit_free;
+> +		dev_err(&pdev->dev, "unable to get id\n");
+> +		kfree(ddev);
+> +		return ERR_PTR(id);
 > +	}
 > +
-> +	imgr->dev.class = ifpga_sec_mgr_class;
-> +	imgr->dev.parent = dev;
-> +	imgr->dev.id = id;
+> +	/* freeing resources by put_device() after device_initialize() */
+> +	device_initialize(&ddev->dev);
+> +	ddev->dev.parent = &pdev->dev;
+> +	ddev->dev.bus = &dfl_bus_type;
+> +	ddev->dev.release = release_dfl_dev;
+> +	ddev->id = id;
+> +	ret = dev_set_name(&ddev->dev, "dfl_dev.%d", id);
+> +	if (ret)
+> +		goto put_dev;
 > +
-> +	ret = dev_set_name(&imgr->dev, "ifpga_sec%d", id);
+> +	ddev->type = feature_dev_id_type(pdev);
+> +	ddev->feature_id = feature->id;
+> +	ddev->cdev = pdata->dfl_cdev;
+> +
+> +	/* add mmio resource */
+> +	parent_res = &pdev->resource[feature->resource_index];
+> +	ddev->mmio_res.flags = IORESOURCE_MEM;
+> +	ddev->mmio_res.start = parent_res->start;
+> +	ddev->mmio_res.end = parent_res->end;
+> +	ddev->mmio_res.name = dev_name(&ddev->dev);
+> +	ret = insert_resource(parent_res, &ddev->mmio_res);
 > +	if (ret) {
-> +		dev_err(dev, "Failed to set device name: ifpga_sec%d\n", id);
-> +		ida_simple_remove(&ifpga_sec_mgr_ida, id);
-> +		goto exit_free;
+> +		dev_err(&pdev->dev, "%s failed to claim resource: %pR\n",
+> +			dev_name(&ddev->dev), &ddev->mmio_res);
+> +		goto put_dev;
 > +	}
 > +
-> +	ret = device_register(&imgr->dev);
-> +	if (ret) {
-> +		put_device(&imgr->dev);
-> +		return ERR_PTR(ret);
+> +	/* then add irq resource */
+> +	if (feature->nr_irqs) {
+> +		ddev->irqs = kcalloc(feature->nr_irqs,
+> +				     sizeof(*ddev->irqs), GFP_KERNEL);
+> +		if (!ddev->irqs) {
+> +			ret = -ENOMEM;
+> +			goto put_dev;
+> +		}
+> +
+> +		for (i = 0; i < feature->nr_irqs; i++)
+> +			ddev->irqs[i] = feature->irq_ctx[i].irq;
+> +
+> +		ddev->num_irqs = feature->nr_irqs;
 > +	}
 > +
-> +	return imgr;
+> +	ret = device_add(&ddev->dev);
+> +	if (ret)
+> +		goto put_dev;
 > +
-> +exit_free:
-> +	kfree(dev);
+> +	dev_info(&pdev->dev, "add dfl_dev: %s\n", dev_name(&ddev->dev));
+Consider making this dev_dbg().
+> +	return ddev;
+> +
+> +put_dev:
+> +	/* calls release_dfl_dev() which does the clean up  */
+> +	put_device(&ddev->dev);
 > +	return ERR_PTR(ret);
 > +}
-> +EXPORT_SYMBOL_GPL(ifpga_sec_mgr_register);
 > +
-> +/**
-> + * ifpga_sec_mgr_unregister - unregister a IFPGA security manager
-> + *
-> + * @mgr: fpga manager struct
-> + *
-> + * This function is intended for use in a IFPGA security manager
-> + * driver's remove() function.
-> + */
-> +void ifpga_sec_mgr_unregister(struct ifpga_sec_mgr *imgr)
+> +static void dfl_devs_remove(struct dfl_feature_platform_data *pdata)
 > +{
-> +	dev_info(&imgr->dev, "%s %s\n", __func__, imgr->name);
+> +	struct dfl_feature *feature;
 > +
-> +	device_unregister(&imgr->dev);
-> +}
-> +EXPORT_SYMBOL_GPL(ifpga_sec_mgr_unregister);
-> +
-> +static void ifpga_sec_mgr_dev_release(struct device *dev)
-> +{
-> +	struct ifpga_sec_mgr *imgr = to_sec_mgr(dev);
-> +
-> +	mutex_destroy(&imgr->lock);
-> +	ida_simple_remove(&ifpga_sec_mgr_ida, imgr->dev.id);
-> +	kfree(imgr);
+> +	dfl_fpga_dev_for_each_feature(pdata, feature) {
+> +		if (feature->ddev) {
+> +			device_unregister(&feature->ddev->dev);
+> +			feature->ddev = NULL;
+> +		}
+> +	}
 > +}
 > +
-> +static int __init ifpga_sec_mgr_class_init(void)
+> +static int dfl_devs_add(struct dfl_feature_platform_data *pdata)
 > +{
-> +	pr_info("Intel FPGA Security Manager\n");
+> +	struct dfl_feature *feature;
+> +	struct dfl_device *ddev;
+> +	int ret;
 > +
-> +	ifpga_sec_mgr_class = class_create(THIS_MODULE, "ifpga_sec_mgr");
-> +	if (IS_ERR(ifpga_sec_mgr_class))
-> +		return PTR_ERR(ifpga_sec_mgr_class);
+> +	dfl_fpga_dev_for_each_feature(pdata, feature) {
+> +		if (feature->ioaddr)
+> +			continue;
 > +
-> +	ifpga_sec_mgr_class->dev_groups = ifpga_sec_mgr_attr_groups;
-> +	ifpga_sec_mgr_class->dev_release = ifpga_sec_mgr_dev_release;
+> +		if (feature->ddev) {
+> +			ret = -EEXIST;
+> +			goto err;
+> +		}
+> +
+> +		ddev = dfl_dev_add(pdata, feature);
+> +		if (IS_ERR(ddev)) {
+> +			ret = PTR_ERR(ddev);
+> +			goto err;
+> +		}
+> +
+> +		feature->ddev = ddev;
+> +	}
 > +
 > +	return 0;
+> +
+> +err:
+> +	dfl_devs_remove(pdata);
+> +	return ret;
 > +}
 > +
-> +static void __exit ifpga_sec_mgr_class_exit(void)
+> +int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *owner)
 > +{
-> +	class_destroy(ifpga_sec_mgr_class);
-> +	ida_destroy(&ifpga_sec_mgr_ida);
+> +	if (!dfl_drv || !dfl_drv->probe || !dfl_drv->id_table)
+> +		return -EINVAL;
+> +
+> +	dfl_drv->drv.owner = owner;
+> +	dfl_drv->drv.bus = &dfl_bus_type;
+> +
+> +	return driver_register(&dfl_drv->drv);
 > +}
+> +EXPORT_SYMBOL(__dfl_driver_register);
 > +
-> +MODULE_DESCRIPTION("Intel FPGA Security Manager Driver");
-> +MODULE_LICENSE("GPL v2");
+> +void dfl_driver_unregister(struct dfl_driver *dfl_drv)
+> +{
+> +	driver_unregister(&dfl_drv->drv);
+> +}
+> +EXPORT_SYMBOL(dfl_driver_unregister);
 > +
-> +subsys_initcall(ifpga_sec_mgr_class_init);
-> +module_exit(ifpga_sec_mgr_class_exit)
-> diff --git a/include/linux/fpga/ifpga-sec-mgr.h b/include/linux/fpga/ifpga-sec-mgr.h
-> new file mode 100644
-> index 000000000000..e391b0c8f448
-> --- /dev/null
-> +++ b/include/linux/fpga/ifpga-sec-mgr.h
-> @@ -0,0 +1,145 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Header file for Intel FPGA Security Manager
-> + *
-> + * Copyright (C) 2019-2020 Intel Corporation, Inc.
-> + */
-> +#ifndef _LINUX_IFPGA_SEC_MGR_H
-> +#define _LINUX_IFPGA_SEC_MGR_H
+>  #define is_header_feature(feature) ((feature)->id == FEATURE_ID_FIU_HEADER)
+>  
+>  /**
+> @@ -261,12 +493,15 @@ void dfl_fpga_dev_feature_uinit(struct platform_device *pdev)
+>  	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
+>  	struct dfl_feature *feature;
+>  
+> -	dfl_fpga_dev_for_each_feature(pdata, feature)
+> +	dfl_devs_remove(pdata);
 > +
-> +#include <linux/device.h>
-> +#include <linux/mutex.h>
-> +#include <linux/types.h>
+> +	dfl_fpga_dev_for_each_feature(pdata, feature) {
+>  		if (feature->ops) {
+>  			if (feature->ops->uinit)
+>  				feature->ops->uinit(pdev, feature);
+>  			feature->ops = NULL;
+>  		}
+> +	}
+>  }
+>  EXPORT_SYMBOL_GPL(dfl_fpga_dev_feature_uinit);
+>  
+> @@ -347,6 +582,10 @@ int dfl_fpga_dev_feature_init(struct platform_device *pdev,
+>  		drv++;
+>  	}
+>  
+> +	ret = dfl_devs_add(pdata);
+> +	if (ret)
+> +		goto exit;
 > +
-> +struct ifpga_sec_mgr;
+>  	return 0;
+>  exit:
+>  	dfl_fpga_dev_feature_uinit(pdev);
+> @@ -1284,11 +1523,17 @@ static int __init dfl_fpga_init(void)
+>  {
+>  	int ret;
+>  
+> +	ret = bus_register(&dfl_bus_type);
+> +	if (ret)
+> +		return ret;
 > +
+>  	dfl_ids_init();
+>  
+>  	ret = dfl_chardev_init();
+> -	if (ret)
+> +	if (ret) {
+>  		dfl_ids_destroy();
+> +		bus_unregister(&dfl_bus_type);
+> +	}
+>  
+>  	return ret;
+>  }
+> @@ -1626,6 +1871,7 @@ static void __exit dfl_fpga_exit(void)
+>  {
+>  	dfl_chardev_uinit();
+>  	dfl_ids_destroy();
+> +	bus_unregister(&dfl_bus_type);
+>  }
+>  
+>  module_init(dfl_fpga_init);
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 5973769..5dc758f 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -236,6 +236,7 @@ struct dfl_feature_irq_ctx {
+>   * @irq_ctx: interrupt context list.
+>   * @nr_irqs: number of interrupt contexts.
+>   * @ops: ops of this sub feature.
+> + * @ddev: ptr to the dfl device of this sub feature.
+>   * @priv: priv data of this feature.
+>   */
+>  struct dfl_feature {
+> @@ -246,6 +247,7 @@ struct dfl_feature {
+>  	struct dfl_feature_irq_ctx *irq_ctx;
+>  	unsigned int nr_irqs;
+>  	const struct dfl_feature_ops *ops;
+> +	struct dfl_device *ddev;
+>  	void *priv;
+>  };
+>  
+> @@ -514,4 +516,88 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
+>  			       struct dfl_feature *feature,
+>  			       unsigned long arg);
+>  
 > +/**
-> + * typedef sysfs_reh_size_t - Function to return byte size of root entry hash
-> + *
-> + * @imgr:      pointer to security manager structure
-> + *
-> + * This datatype is used to define a function that returns the byte size of a
-> + * root entry hash.
-> + *
-> + * Context: No locking requirements are imposed by the security manager.
-> + * Return:  Byte count on success, negative errno on failure
+> + * enum dfl_id_type - define the DFL FIU types
 > + */
-> +typedef int (*sysfs_reh_size_t)(struct ifpga_sec_mgr *imgr);
-> +
-> +/**
-> + * typedef sysfs_reh_hndlr_t - Function pointer to sysfs file handler
-> + *			       for root entry hashes
-> + * @imgr:      pointer to security manager structure
-> + * @hash:      pointer to an array of bytes in which to store the hash
-> + * @size:      byte size of root entry hash
-> + *
-> + * This datatype is used to define a sysfs file handler function to
-> + * return root entry hash data to be displayed via sysfs.
-> + *
-> + * Context: No locking requirements are imposed by the security manager.
-> + * Return:  0 on success, negative errno on failure
-> + */
-> +typedef int (*sysfs_reh_hndlr_t)(struct ifpga_sec_mgr *imgr, u8 *hash,
-> +				 unsigned int size);
-> +
-> +/**
-> + * typedef sysfs_cnt_hndlr_t - Function pointer to sysfs file handler
-> + *			       for flash counts
-> + * @imgr: pointer to security manager structure
-> + *
-> + * This datatype is used to define a sysfs file handler function to
-> + * return a flash count to be displayed via sysfs.
-> + *
-> + * Context: No locking requirements are imposed by the security manager
-> + * Return: flash count or negative errno
-> + */
-> +typedef int (*sysfs_cnt_hndlr_t)(struct ifpga_sec_mgr *imgr);
-> +
-> +/**
-> + * typedef sysfs_csk_nbits_t - Function to return the number of bits in
-> + *				      a Code Signing Key cancellation vector
-> + *
-> + * @imgr:      pointer to security manager structure
-> + *
-> + * This datatype is used to define a function that returns the number of bits
-> + * in a Code Signing Key cancellation vector.
-> + *
-> + * Context: No locking requirements are imposed by the security manager.
-> + * Return:  Number of bits on success, negative errno on failure
-> + */
-> +typedef int (*sysfs_csk_nbits_t)(struct ifpga_sec_mgr *imgr);
-> +
-> +/**
-> + * typedef sysfs_csk_hndlr_t - Function pointer to sysfs file handler
-> + *			       bit vector of canceled keys
-> + *
-> + * @imgr:    pointer to security manager structure
-> + * @csk_map: pointer to a bitmap to contain cancellation key vector
-> + * @nbits:   number of bits in CSK vector
-> + *
-> + * This datatype is used to define a sysfs file handler function to
-> + * return a bitmap of canceled keys to be displayed via sysfs.
-> + *
-> + * Context: No locking requirements are imposed by the security manager.
-> + * Return:  0 on success, negative errno on failure
-> + */
-> +typedef int (*sysfs_csk_hndlr_t)(struct ifpga_sec_mgr *imgr,
-> +				 unsigned long *csk_map, unsigned int nbits);
-> +
-> +/**
-> + * struct ifpga_sec_mgr_ops - device specific operations
-> + * @user_flash_count:	    Optional: Return sysfs string output for FPGA
-> + *			    image flash count
-> + * @bmc_flash_count:	    Optional: Return sysfs string output for BMC
-> + *			    image flash count
-> + * @sr_root_entry_hash:	    Optional: Return sysfs string output for static
-> + *			    region root entry hash
-> + * @pr_root_entry_hash:	    Optional: Return sysfs string output for partial
-> + *			    reconfiguration root entry hash
-> + * @bmc_root_entry_hash:    Optional: Return sysfs string output for BMC
-> + *			    root entry hash
-> + * @sr_canceled_csks:	    Optional: Return sysfs string output for static
-> + *			    region canceled keys
-> + * @pr_canceled_csks:	    Optional: Return sysfs string output for partial
-> + *			    reconfiguration canceled keys
-> + * @bmc_canceled_csks:	    Optional: Return sysfs string output for bmc
-> + *			    canceled keys
-> + * @bmc_canceled_csk_nbits: Optional: Return BMC canceled csk vector bit count
-> + * @sr_canceled_csk_nbits:  Optional: Return SR canceled csk vector bit count
-> + * @pr_canceled_csk_nbits:  Optional: Return PR canceled csk vector bit count
-> + * @bmc_reh_size:	    Optional: Return byte size for BMC root entry hash
-> + * @sr_reh_size:	    Optional: Return byte size for SR root entry hash
-> + * @pr_reh_size:	    Optional: Return byte size for PR root entry hash
-> + */
-> +struct ifpga_sec_mgr_ops {
-> +	sysfs_cnt_hndlr_t user_flash_count;
-> +	sysfs_cnt_hndlr_t bmc_flash_count;
-> +	sysfs_cnt_hndlr_t smbus_flash_count;
-> +	sysfs_reh_hndlr_t sr_root_entry_hash;
-> +	sysfs_reh_hndlr_t pr_root_entry_hash;
-> +	sysfs_reh_hndlr_t bmc_root_entry_hash;
-> +	sysfs_csk_hndlr_t sr_canceled_csks;
-> +	sysfs_csk_hndlr_t pr_canceled_csks;
-> +	sysfs_csk_hndlr_t bmc_canceled_csks;
-> +	sysfs_reh_size_t bmc_reh_size;
-> +	sysfs_reh_size_t sr_reh_size;
-> +	sysfs_reh_size_t pr_reh_size;
-> +	sysfs_csk_nbits_t bmc_canceled_csk_nbits;
-> +	sysfs_csk_nbits_t sr_canceled_csk_nbits;
-> +	sysfs_csk_nbits_t pr_canceled_csk_nbits;
+> +enum dfl_id_type {
+> +	FME_ID,
+> +	PORT_ID,
+> +	DFL_ID_MAX,
 > +};
 > +
-> +struct ifpga_sec_mgr {
-> +	const char *name;
+> +/**
+> + * struct dfl_device_id -  dfl device identifier
+> + * @type: contains 4 bits DFL FIU type of the device. See enum dfl_id_type.
+> + * @feature_id: contains 12 bits feature identifier local to its DFL FIU type.
+> + * @driver_data: driver specific data.
+> + */
+> +struct dfl_device_id {
+> +	u8 type;
+> +	u16 feature_id;
+> +	unsigned long driver_data;
+> +};
+> +
+> +/**
+> + * struct dfl_device - represent an dfl device on dfl bus
+> + *
+> + * @dev: generic device interface.
+> + * @id: id of the dfl device.
+> + * @type: type of DFL FIU of the device. See enum dfl_id_type.
+> + * @feature_id: 16 bits feature identifier local to its DFL FIU type.
+> + * @mmio_res: mmio resource of this dfl device.
+> + * @irqs: list of Linux IRQ numbers of this dfl device.
+> + * @num_irqs: number of IRQs supported by this dfl device.
+> + * @cdev: pointer to DFL FPGA container device this dfl device belongs to.
+> + * @id_entry: matched id entry in dfl driver's id table.
+> + */
+> +struct dfl_device {
 > +	struct device dev;
-> +	const struct ifpga_sec_mgr_ops *iops;
-> +	struct mutex lock;		/* protect data structure contents */
-> +	void *priv;
+> +	int id;
+> +	u8 type;
+> +	u16 feature_id;
+> +	struct resource mmio_res;
+> +	int *irqs;
+> +	unsigned int num_irqs;
+> +	struct dfl_fpga_cdev *cdev;
+> +	const struct dfl_device_id *id_entry;
 > +};
 > +
-> +struct ifpga_sec_mgr *
-> +ifpga_sec_mgr_register(struct device *dev, const char *name,
-> +		       const struct ifpga_sec_mgr_ops *iops, void *priv);
-> +void ifpga_sec_mgr_unregister(struct ifpga_sec_mgr *imgr);
+> +/**
+> + * struct dfl_driver - represent an dfl device driver
+> + *
+> + * @drv: driver model structure.
+> + * @id_table: pointer to table of device IDs the driver is interested in.
+> + *	      { } member terminated.
+> + * @probe: mandatory callback for device binding.
+> + * @remove: callback for device unbinding.
+> + */
+> +struct dfl_driver {
+> +	struct device_driver drv;
+> +	const struct dfl_device_id *id_table;
 > +
-> +#endif
+> +	int (*probe)(struct dfl_device *dfl_dev);
+> +	void (*remove)(struct dfl_device *dfl_dev);
+> +};
+> +
+> +#define to_dfl_dev(d) container_of(d, struct dfl_device, dev)
+> +#define to_dfl_drv(d) container_of(d, struct dfl_driver, drv)
+> +
+> +/*
+> + * use a macro to avoid include chaining to get THIS_MODULE.
+> + */
+> +#define dfl_driver_register(drv) \
+> +	__dfl_driver_register(drv, THIS_MODULE)
+> +int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *owner);
+> +void dfl_driver_unregister(struct dfl_driver *dfl_drv);
+> +
+> +/*
+> + * module_dfl_driver() - Helper macro for drivers that don't do
+> + * anything special in module init/exit.  This eliminates a lot of
+> + * boilerplate.  Each module may only use this macro once, and
+> + * calling it replaces module_init() and module_exit().
+> + */
+> +#define module_dfl_driver(__dfl_driver) \
+> +	module_driver(__dfl_driver, dfl_driver_register, \
+> +		      dfl_driver_unregister)
+> +
+>  #endif /* __FPGA_DFL_H */
 > -- 
-> 2.17.1
+> 2.7.4
 > 
-
-This will take me a while,
 
 Thanks,
 Moritz
