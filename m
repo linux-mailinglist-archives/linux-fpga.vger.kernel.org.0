@@ -2,88 +2,138 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F01B260BC6
-	for <lists+linux-fpga@lfdr.de>; Tue,  8 Sep 2020 09:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA34260D05
+	for <lists+linux-fpga@lfdr.de>; Tue,  8 Sep 2020 10:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729339AbgIHHSW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 8 Sep 2020 03:18:22 -0400
-Received: from mga09.intel.com ([134.134.136.24]:30606 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729319AbgIHHSP (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 8 Sep 2020 03:18:15 -0400
-IronPort-SDR: +5hr4C9uP+aTZfLMkLPgtox2Zb0RtjaKTJYl6v5jMfcCuspBCCqZm/uI7RYVthehR00zyeMa4q
- xGX/98AprNCQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9737"; a="159058785"
-X-IronPort-AV: E=Sophos;i="5.76,404,1592895600"; 
-   d="scan'208";a="159058785"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2020 00:18:09 -0700
-IronPort-SDR: 8JSwMJ6Tjug/3Tsn0DNYD/WMK5ydlgPjxoYidbQBmcwW4Uf7eMF9cw/PgMI4uR/ao3qqcX18Id
- CskrK1evAVwQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,404,1592895600"; 
-   d="scan'208";a="448677754"
-Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by orsmga004.jf.intel.com with ESMTP; 08 Sep 2020 00:18:07 -0700
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     mdf@kernel.org, alex.williamson@redhat.com, kwankhede@nvidia.com,
-        linux-fpga@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH 3/3] Documentation: fpga: dfl: Add description for VFIO Mdev support
-Date:   Tue,  8 Sep 2020 15:13:32 +0800
-Message-Id: <1599549212-24253-4-git-send-email-yilun.xu@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1599549212-24253-1-git-send-email-yilun.xu@intel.com>
-References: <1599549212-24253-1-git-send-email-yilun.xu@intel.com>
+        id S1729751AbgIHIFj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 8 Sep 2020 04:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729941AbgIHIFc (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Sep 2020 04:05:32 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8A8C061755
+        for <linux-fpga@vger.kernel.org>; Tue,  8 Sep 2020 01:05:31 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id e16so18073824wrm.2
+        for <linux-fpga@vger.kernel.org>; Tue, 08 Sep 2020 01:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=9xS1qxTrk5w2leSEAb55AaGpZPSKhkXCh3kYqDPUYtY=;
+        b=h/h4OwcLP26KVA/9s8DbQLUkvMl4Nru0AIGX2uQjdP9XlF6hFhcYVwbCW4MnKyISRG
+         lMFa6h5GEcyeCgUlgLZq2R89hjknmHA5V1jRy9ZcRCwgZyV/XcXyvodv7+luZlrMd/9Y
+         Jw3RYtP8l+MAH6l3Pr5qZ1aQYH8TPvxcsoCfw8PMY47XmBCPWOL31DTcEyfW1rSmyUPK
+         00rIwqQsNzuGuxyHUGm8KsABKzetoxUaUMCkAsIBqIASpSjn4lO9USQOM1EAfH99E4n4
+         6f2Cl1gmBS/XpzD+wSXEBcjbgQj86rJ1CBydBP3UqfazBWm1Veayp/VdMVgViiqWAXRi
+         gJlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=9xS1qxTrk5w2leSEAb55AaGpZPSKhkXCh3kYqDPUYtY=;
+        b=MtIajOFo2dxlGDEOT+uFSPJ1ltHKQRxBRZD+S/u6MGGuXTkzIm09/qySEU3gKHqhBg
+         iiBGUaJh+W6zEONUXjIRph4XK84DN1RIW2ZLKugyMoYP3ViuKS6k970S8f4Umx4E68c0
+         Zj0/hNPrU3AWCoswW95JIESZiZU5PxCiXdcFhqvjW01otaYL2PCWWsxzjz0nJEjd6KTO
+         9WYs7qgAzAvfYeTW57O8o3SSmCACpREmORlYGJENBVG7G17i01bFo2Oh3PN8AW+i4oXy
+         Owgon1c9WcIKUwbOx5k8aLYhJS3haYENAG8J9jlpVHWxtNoVAgorZV1OJqO5quehG0w9
+         4xYA==
+X-Gm-Message-State: AOAM532Z66XYBkpy4UpEIRSZZMryK2Jg7gd3OkJQLxgwW3jTVZf9siwS
+        VyeeULi3Pbw486itgzWHpKKJMw==
+X-Google-Smtp-Source: ABdhPJy7iT+aXYQS5Qv/0d1oAB6vhdudjmRSMbjy/usOabwtMe6jTUIQB1OeUGYM3RMIMaRTqbhzlA==
+X-Received: by 2002:a5d:6946:: with SMTP id r6mr26188827wrw.308.1599552329975;
+        Tue, 08 Sep 2020 01:05:29 -0700 (PDT)
+Received: from dell ([91.110.221.204])
+        by smtp.gmail.com with ESMTPSA id s11sm33312005wrt.43.2020.09.08.01.05.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 01:05:29 -0700 (PDT)
+Date:   Tue, 8 Sep 2020 09:05:27 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
+        yilun.xu@intel.com, hao.wu@intel.com, matthew.gerlach@intel.com
+Subject: Re: [PATCH v1 06/12] fpga: add max10 secure update functions
+Message-ID: <20200908080527.GB4400@dell>
+References: <20200904235305.6254-1-russell.h.weight@intel.com>
+ <20200904235305.6254-7-russell.h.weight@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200904235305.6254-7-russell.h.weight@intel.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This patch adds description for VFIO Mdev support for dfl devices on
-dfl bus.
+On Fri, 04 Sep 2020, Russ Weight wrote:
 
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
----
- Documentation/fpga/dfl.rst | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+> Extend the MAX10 BMC Security Engine driver to include
+> the functions that enable secure updates of BMC images,
+> FPGA images, etc.
+> 
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Reviewed-by: Wu Hao <hao.wu@intel.com>
+> ---
+>  drivers/fpga/intel-m10-bmc-secure.c | 272 +++++++++++++++++++++++++++-
+>  include/linux/mfd/intel-m10-bmc.h   | 101 +++++++++++
+>  2 files changed, 372 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index 0404fe6..f077754 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -502,6 +502,26 @@ FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
- could be a reference.
- 
- 
-+VFIO Mdev support for DFL devices
-+=================================
-+As we introduced a dfl bus for private features, they could be added to dfl bus
-+as independent dfl devices. There is a requirement to handle these devices
-+either by kernel drivers or by direct access from userspace. Usually we bind
-+the kernel drivers to devices which provide board management functions, and
-+gives user direct access to devices which cooperate closely with user
-+controlled Accelerated Function Unit (AFU). We realize this with a VFIO Mdev
-+implementation. When we bind the vfio-mdev-dfl driver to a dfl device, it
-+realizes a group of callbacks and registers to the Mdev framework as a
-+parent (physical) device. It could then create one (available_instances == 1)
-+mdev device.
-+Since dfl devices are sub devices of FPGA DFL physical devices (e.g. PCIE
-+device), which provide no DMA isolation for each sub device, this may leads to
-+DMA isolation problem if a private feature is designed to be capable of DMA.
-+The AFU user could potentially access the whole device addressing space and
-+impact the private feature. So now the general HW design rule is, no DMA
-+capability for private features. It eliminates the DMA isolation problem.
-+
-+
- Open discussion
- ===============
- FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
+>  /**
+>   * struct intel_m10bmc_retimer_pdata - subdev retimer platform data
+>   *
+> @@ -64,7 +131,10 @@ struct intel_m10bmc {
+>   *
+>   * m10bmc_raw_read - read m10bmc register per addr
+>   * m10bmc_raw_bulk_read - bulk_read max10 registers per addr
+> + * m10bmc_raw_bulk_write - bulk_write max10 registers per addr
+> + * m10bmc_raw_update_bits - update max10 register per addr
+>   * m10bmc_sys_read - read m10bmc system register per offset
+> + * m10bmc_sys_update_bits - update max10 system register per offset
+>   */
+>  static inline int
+>  m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
+> @@ -94,7 +164,38 @@ m10bmc_raw_bulk_read(struct intel_m10bmc *m10bmc, unsigned int addr,
+>  	return ret;
+>  }
+>  
+> +static inline int
+> +m10bmc_raw_bulk_write(struct intel_m10bmc *m10bmc, unsigned int addr,
+> +		      void *val, size_t cnt)
+> +{
+> +	int ret;
+> +
+> +	ret = regmap_bulk_write(m10bmc->regmap, addr, val, cnt);
+> +	if (ret)
+> +		dev_err(m10bmc->dev, "fail to write raw reg %x cnt %zx: %d\n",
+> +			addr, cnt, ret);
+> +
+> +	return ret;
+> +}
+> +
+> +static inline int
+> +m10bmc_raw_update_bits(struct intel_m10bmc *m10bmc, unsigned int addr,
+> +		       unsigned int msk, unsigned int val)
+> +{
+> +	int ret;
+> +
+> +	ret = regmap_update_bits(m10bmc->regmap, addr, msk, val);
+> +	if (ret)
+> +		dev_err(m10bmc->dev, "fail to update raw reg %x: %d\n",
+> +			addr, ret);
+> +
+> +	return ret;
+> +}
+> +
+
+I really do dislike abstraction for abstraction's sake.
+
+What's stopping you from just using the Regmap API in-place?
+
 -- 
-2.7.4
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
