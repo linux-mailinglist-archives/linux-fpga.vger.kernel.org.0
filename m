@@ -2,70 +2,69 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4464262F7B
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Sep 2020 16:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039B2263842
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Sep 2020 23:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729913AbgIIOGF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 9 Sep 2020 10:06:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22008 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730227AbgIINM5 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 9 Sep 2020 09:12:57 -0400
+        id S1726414AbgIIVOS (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 9 Sep 2020 17:14:18 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:43630 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730030AbgIIVOK (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 9 Sep 2020 17:14:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599657179;
+        s=mimecast20190719; t=1599686046;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0Ss0bDyzSRTte7sY8TzaKQQKHaTIs8r9CpS8l9G6wR4=;
-        b=c7lcW8BUNP6Fqw25Gb8/wXQQMv95dfor96TGb9rTRUyosCJsnsaSvYYzTbMw9S/dYfwMBF
-        RhH2Bl8ZdlgQ/lloFvugYDaF4JNDTglRjhuehoJJaeK2mhHAK4Jj/6cSE1Yw6MgsnQKPTC
-        4h28iB1HRcvNqdrPRECMRX/0Y047/ZQ=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-267-9n7JU5kDPTunUcbnY1Emuw-1; Wed, 09 Sep 2020 09:12:56 -0400
-X-MC-Unique: 9n7JU5kDPTunUcbnY1Emuw-1
-Received: by mail-qt1-f200.google.com with SMTP id r22so1740421qtc.9
-        for <linux-fpga@vger.kernel.org>; Wed, 09 Sep 2020 06:12:56 -0700 (PDT)
+        bh=flt0vZjtupO4BhZTnrF4cJuXNpxXUArPDdGRHgaQJh8=;
+        b=CzuGjdSUJSLmkTU5b/gRMoxmyOFnCuFpYqJbIHu3sH9Lntn3VQSkfASCgyFmxyoDkbn2eF
+        DoBiMdZVUAo6nRIW+S+Od8+oVdWDAH21OpqSCfLFblhU2dEgbzHYNn5Gb/tuLKKiwJF7wd
+        obpKf/Ga7EB0p+z2WsayNqxuHpVts+Q=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-229-i-OUcKpeOBy406feKRMayQ-1; Wed, 09 Sep 2020 17:14:05 -0400
+X-MC-Unique: i-OUcKpeOBy406feKRMayQ-1
+Received: by mail-qt1-f199.google.com with SMTP id j35so2706706qtk.14
+        for <linux-fpga@vger.kernel.org>; Wed, 09 Sep 2020 14:14:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=0Ss0bDyzSRTte7sY8TzaKQQKHaTIs8r9CpS8l9G6wR4=;
-        b=UGmLFj+L8ZDHF1GXGls7pCiHtIzA6WfDdOmLKgnddeTHIRGL/3NhSLynYTvbU4kYP+
-         QAEfbLj3duecaScwmWtgVehLSUc54yU7npBuyZB/oh3F5fXxB8ZG0QwOJU97DiMWDO7J
-         5c2tzn87fQSP+GlVXStOOo362o8DvXMAxj8PcyTiCDA0AdlSXVfHo3eY5dr4YPILRAqW
-         Y/l5RK7ejYdbU7H66R6/k50hIVQXHUqUEDsn9h6IsRQ2kJVVXyO8j3fiTIoyvENyr4/P
-         pHgC5eFgpIEfqFe9QYQgjERfUpHm5hm4c/zvv3t0ifSiblpsqjZoaMFWMrex7LmsAPyY
-         nXqA==
-X-Gm-Message-State: AOAM531PUtMfVmtIFc1+9/WsFvfox7SnRuBrGzGjTYBkKdqeNjyXgpS7
-        pzUeaRvh+gERtXKqveVZ3MtLX1ycXxdwALy6ceAYbiF7wFB/AMhraYowA3cteg4bR68eVO9GHTs
-        VdILgxCkm1GHHnfKuM8G+lg==
-X-Received: by 2002:ac8:24f1:: with SMTP id t46mr3009728qtt.93.1599657175771;
-        Wed, 09 Sep 2020 06:12:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzf/mAz+SaluP1QMj9fytTHvaqzIRm5F01RDCfwdBH2et1fDFWzU4ENV3g1kpfW219he82AqQ==
-X-Received: by 2002:ac8:24f1:: with SMTP id t46mr3009695qtt.93.1599657175366;
-        Wed, 09 Sep 2020 06:12:55 -0700 (PDT)
+        bh=flt0vZjtupO4BhZTnrF4cJuXNpxXUArPDdGRHgaQJh8=;
+        b=DkjaVkUIscvkkTAUMOGtTPsK/Csr1vZdHLjoi6iLz7kIzYfyWQCucNywhhDoWEkjBu
+         0353uNE3g8qQWdJiszghYOL5dSx53z4TWsanU+1zooc2dP9se8w8D6NmCkrnCppX5aPp
+         hEgfM/Yx2Ahw5fsFZHZXTuoRh7inSkcfKdg4IdKh/3OG5OIHrNETnxvb4Eit67zrG1a5
+         t2W6JU8lQBZcigYS+jSd2Hwj1zl4jC/x24elRXoJT0OHEp87qNqbkMKdPko/SBMIV0jK
+         +fm839ff3sfJIuPHI+HYE8sxQ15uZZb1LIq1k1Xsx3VQprMNuLkZM8nz//M/gI5vQrtS
+         WDKA==
+X-Gm-Message-State: AOAM532BMvuaxmvM4+nYqDWwfI+U47BTg3Jv0JYxMXCFpC7GXh1Jar0n
+        tfTDHy52ZRZXpJ+HGlo/3iIKMmpVxpuErmAOPnhwY2Ic8A16ADqvdP8hO/QAlyyx6snRWWzyWNS
+        dl1OyPiNCTkBq5OAc5/+zbQ==
+X-Received: by 2002:a05:620a:567:: with SMTP id p7mr5307792qkp.164.1599686042139;
+        Wed, 09 Sep 2020 14:14:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxelahEbXCJiVWCSYD1eRWMhxmTJwjtxCSAXIXQuZh3Dl5ebQkWRsonB1gBL69zicWzPYE1UA==
+X-Received: by 2002:a05:620a:567:: with SMTP id p7mr5307772qkp.164.1599686041865;
+        Wed, 09 Sep 2020 14:14:01 -0700 (PDT)
 Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id u18sm2923943qtk.61.2020.09.09.06.12.53
+        by smtp.gmail.com with ESMTPSA id m68sm2009028qkd.105.2020.09.09.14.14.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 06:12:54 -0700 (PDT)
-Subject: Re: [PATCH 3/3] fpga: dfl: move dfl-bus related APIs to
- include/linux/fpga/dfl-bus.h
+        Wed, 09 Sep 2020 14:14:01 -0700 (PDT)
+Subject: Re: [PATCH 0/3] add VFIO mdev support for DFL devices
 To:     Xu Yilun <yilun.xu@intel.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        masahiroy@kernel.org
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        linux-fpga@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     lgoncalv@redhat.com
-References: <1599544129-17594-1-git-send-email-yilun.xu@intel.com>
- <1599544129-17594-4-git-send-email-yilun.xu@intel.com>
+References: <1599549212-24253-1-git-send-email-yilun.xu@intel.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <b8242b42-6db1-63ae-6207-ac85766a7c9c@redhat.com>
-Date:   Wed, 9 Sep 2020 06:12:53 -0700
+Message-ID: <93200a4f-55a3-0798-3ef2-e0467288d5ba@redhat.com>
+Date:   Wed, 9 Sep 2020 14:13:59 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <1599544129-17594-4-git-send-email-yilun.xu@intel.com>
+In-Reply-To: <1599549212-24253-1-git-send-email-yilun.xu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -74,247 +73,46 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+This is a new interface, the documentation needs to go
 
-On 9/7/20 10:48 PM, Xu Yilun wrote:
-> The patch moves dfl-bus related APIs to include/linux/fpga/dfl-bus.h
+into greater detail. I am particularly interested in the user workflow.
 
-Should add a line in the MAINTAINERS under FPGA DFL DRIVERS
+This seems like it would work only for kernel modules. 
 
-F:      include/linux/fpga/dfl-bus.h
+Please describe both in the documentation.
 
-Otherwise a straight forward move.
+A sample of a user mode driver would be helpful.
 
-Looks good to me.
+Is putting driver_override using sysfs for each device scalable ? would a list sets of {feature id,files}'s the vfio driver respond to better ? 
 
-Reviewed-by: Tom Rix <trix@redhat.com>
+To be consistent the mdev driver file name should be dfl-vfio-mdev.c
 
+There should be an opt-in flag for drivers being overridden instead of blanket approval of all drivers.
+
+Tom
+
+On 9/8/20 12:13 AM, Xu Yilun wrote:
+> These patches depend on the patchset: "Modularization of DFL private
+> feature drivers" & "add dfl bus support to MODULE_DEVICE_TABLE()"
 >
-> Now the DFL sub feature drivers could be made as independent modules and
-> put in different folders according to their functionality. In order for
-> scattered sub feature drivers to include dfl bus APIs, move the dfl bus
-> APIs to a new header file in the public folder.
+> https://lore.kernel.org/linux-fpga/1599488581-16386-1-git-send-email-yilun.xu@intel.com/
 >
-> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> ---
->  drivers/fpga/dfl-n3000-nios.c |  3 +-
->  drivers/fpga/dfl.c            |  1 +
->  drivers/fpga/dfl.h            | 73 ------------------------------------
->  include/linux/fpga/dfl-bus.h  | 86 +++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 88 insertions(+), 75 deletions(-)
->  create mode 100644 include/linux/fpga/dfl-bus.h
+> This patchset provides an VFIO Mdev driver for dfl devices. It makes
+> possible for dfl devices be direct accessed from userspace.
 >
-> diff --git a/drivers/fpga/dfl-n3000-nios.c b/drivers/fpga/dfl-n3000-nios.c
-> index 70b44c3..d5f8b5b 100644
-> --- a/drivers/fpga/dfl-n3000-nios.c
-> +++ b/drivers/fpga/dfl-n3000-nios.c
-> @@ -11,6 +11,7 @@
->   */
->  #include <linux/bitfield.h>
->  #include <linux/errno.h>
-> +#include <linux/fpga/dfl-bus.h>
->  #include <linux/io.h>
->  #include <linux/io-64-nonatomic-lo-hi.h>
->  #include <linux/kernel.h>
-> @@ -22,8 +23,6 @@
->  #include <linux/spi/spi.h>
->  #include <linux/types.h>
->  
-> -#include "dfl.h"
-> -
->  static char *fec_mode = "rs";
->  module_param(fec_mode, charp, 0444);
->  MODULE_PARM_DESC(fec_mode, "FEC mode of the ethernet retimer on Intel PAC N3000");
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index b450870..02a6780 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -11,6 +11,7 @@
->   *   Xiao Guangrong <guangrong.xiao@linux.intel.com>
->   */
->  #include <linux/fpga-dfl.h>
-> +#include <linux/fpga/dfl-bus.h>
->  #include <linux/module.h>
->  #include <linux/uaccess.h>
->  
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index d5b0760..03f73d9 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -26,7 +26,6 @@
->  #include <linux/slab.h>
->  #include <linux/uuid.h>
->  #include <linux/fpga/fpga-region.h>
-> -#include <linux/mod_devicetable.h>
->  
->  /* maximum supported number of ports */
->  #define MAX_DFL_FPGA_PORT_NUM 4
-> @@ -517,76 +516,4 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
->  			       struct dfl_feature *feature,
->  			       unsigned long arg);
->  
-> -/**
-> - * enum dfl_id_type - define the DFL FIU types
-> - */
-> -enum dfl_id_type {
-> -	FME_ID,
-> -	PORT_ID,
-> -	DFL_ID_MAX,
-> -};
-> -
-> -/**
-> - * struct dfl_device - represent an dfl device on dfl bus
-> - *
-> - * @dev: generic device interface.
-> - * @id: id of the dfl device.
-> - * @type: type of DFL FIU of the device. See enum dfl_id_type.
-> - * @feature_id: 16 bits feature identifier local to its DFL FIU type.
-> - * @mmio_res: mmio resource of this dfl device.
-> - * @irqs: list of Linux IRQ numbers of this dfl device.
-> - * @num_irqs: number of IRQs supported by this dfl device.
-> - * @cdev: pointer to DFL FPGA container device this dfl device belongs to.
-> - * @id_entry: matched id entry in dfl driver's id table.
-> - */
-> -struct dfl_device {
-> -	struct device dev;
-> -	int id;
-> -	u8 type;
-> -	u16 feature_id;
-> -	struct resource mmio_res;
-> -	int *irqs;
-> -	unsigned int num_irqs;
-> -	struct dfl_fpga_cdev *cdev;
-> -	const struct dfl_device_id *id_entry;
-> -};
-> -
-> -/**
-> - * struct dfl_driver - represent an dfl device driver
-> - *
-> - * @drv: driver model structure.
-> - * @id_table: pointer to table of device IDs the driver is interested in.
-> - *	      { } member terminated.
-> - * @probe: mandatory callback for device binding.
-> - * @remove: callback for device unbinding.
-> - */
-> -struct dfl_driver {
-> -	struct device_driver drv;
-> -	const struct dfl_device_id *id_table;
-> -
-> -	int (*probe)(struct dfl_device *dfl_dev);
-> -	void (*remove)(struct dfl_device *dfl_dev);
-> -};
-> -
-> -#define to_dfl_dev(d) container_of(d, struct dfl_device, dev)
-> -#define to_dfl_drv(d) container_of(d, struct dfl_driver, drv)
-> -
-> -/*
-> - * use a macro to avoid include chaining to get THIS_MODULE.
-> - */
-> -#define dfl_driver_register(drv) \
-> -	__dfl_driver_register(drv, THIS_MODULE)
-> -int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *owner);
-> -void dfl_driver_unregister(struct dfl_driver *dfl_drv);
-> -
-> -/*
-> - * module_dfl_driver() - Helper macro for drivers that don't do
-> - * anything special in module init/exit.  This eliminates a lot of
-> - * boilerplate.  Each module may only use this macro once, and
-> - * calling it replaces module_init() and module_exit().
-> - */
-> -#define module_dfl_driver(__dfl_driver) \
-> -	module_driver(__dfl_driver, dfl_driver_register, \
-> -		      dfl_driver_unregister)
-> -
->  #endif /* __FPGA_DFL_H */
-> diff --git a/include/linux/fpga/dfl-bus.h b/include/linux/fpga/dfl-bus.h
-> new file mode 100644
-> index 0000000..2a2b283
-> --- /dev/null
-> +++ b/include/linux/fpga/dfl-bus.h
-> @@ -0,0 +1,86 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Header File for DFL driver and device API
-> + *
-> + * Copyright (C) 2020 Intel Corporation, Inc.
-> + */
-> +
-> +#ifndef __FPGA_DFL_BUS_H
-> +#define __FPGA_DFL_BUS_H
-> +
-> +#include <linux/device.h>
-> +#include <linux/mod_devicetable.h>
-> +
-> +/**
-> + * enum dfl_id_type - define the DFL FIU types
-> + */
-> +enum dfl_id_type {
-> +	FME_ID,
-> +	PORT_ID,
-> +	DFL_ID_MAX,
-> +};
-> +
-> +/**
-> + * struct dfl_device - represent an dfl device on dfl bus
-> + *
-> + * @dev: generic device interface.
-> + * @id: id of the dfl device.
-> + * @type: type of DFL FIU of the device. See enum dfl_id_type.
-> + * @feature_id: 16 bits feature identifier local to its DFL FIU type.
-> + * @mmio_res: mmio resource of this dfl device.
-> + * @irqs: list of Linux IRQ numbers of this dfl device.
-> + * @num_irqs: number of IRQs supported by this dfl device.
-> + * @cdev: pointer to DFL FPGA container device this dfl device belongs to.
-> + * @id_entry: matched id entry in dfl driver's id table.
-> + */
-> +struct dfl_device {
-> +	struct device dev;
-> +	int id;
-> +	u8 type;
-> +	u16 feature_id;
-> +	struct resource mmio_res;
-> +	int *irqs;
-> +	unsigned int num_irqs;
-> +	struct dfl_fpga_cdev *cdev;
-> +	const struct dfl_device_id *id_entry;
-> +};
-> +
-> +/**
-> + * struct dfl_driver - represent an dfl device driver
-> + *
-> + * @drv: driver model structure.
-> + * @id_table: pointer to table of device IDs the driver is interested in.
-> + *	      { } member terminated.
-> + * @probe: mandatory callback for device binding.
-> + * @remove: callback for device unbinding.
-> + */
-> +struct dfl_driver {
-> +	struct device_driver drv;
-> +	const struct dfl_device_id *id_table;
-> +
-> +	int (*probe)(struct dfl_device *dfl_dev);
-> +	void (*remove)(struct dfl_device *dfl_dev);
-> +};
-> +
-> +#define to_dfl_dev(d) container_of(d, struct dfl_device, dev)
-> +#define to_dfl_drv(d) container_of(d, struct dfl_driver, drv)
-> +
-> +/*
-> + * use a macro to avoid include chaining to get THIS_MODULE.
-> + */
-> +#define dfl_driver_register(drv) \
-> +	__dfl_driver_register(drv, THIS_MODULE)
-> +int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *owner);
-> +void dfl_driver_unregister(struct dfl_driver *dfl_drv);
-> +
-> +/*
-> + * module_dfl_driver() - Helper macro for drivers that don't do
-> + * anything special in module init/exit.  This eliminates a lot of
-> + * boilerplate.  Each module may only use this macro once, and
-> + * calling it replaces module_init() and module_exit().
-> + */
-> +#define module_dfl_driver(__dfl_driver) \
-> +	module_driver(__dfl_driver, dfl_driver_register, \
-> +		      dfl_driver_unregister)
-> +
-> +#endif /* __FPGA_DFL_BUS_H */
+> Xu Yilun (3):
+>   fpga: dfl: add driver_override support
+>   fpga: dfl: VFIO mdev support for DFL devices
+>   Documentation: fpga: dfl: Add description for VFIO Mdev support
+>
+>  Documentation/ABI/testing/sysfs-bus-dfl |  20 ++
+>  Documentation/fpga/dfl.rst              |  20 ++
+>  drivers/fpga/Kconfig                    |   9 +
+>  drivers/fpga/Makefile                   |   1 +
+>  drivers/fpga/dfl.c                      |  54 ++++-
+>  drivers/fpga/vfio-mdev-dfl.c            | 391 ++++++++++++++++++++++++++++++++
+>  include/linux/fpga/dfl-bus.h            |   2 +
+>  7 files changed, 496 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/fpga/vfio-mdev-dfl.c
+>
 
