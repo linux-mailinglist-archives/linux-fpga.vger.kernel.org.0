@@ -2,148 +2,142 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E7626AF0B
-	for <lists+linux-fpga@lfdr.de>; Tue, 15 Sep 2020 23:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CF326AFA1
+	for <lists+linux-fpga@lfdr.de>; Tue, 15 Sep 2020 23:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbgIOU7t (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 15 Sep 2020 16:59:49 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:50330 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728013AbgIOU7E (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 15 Sep 2020 16:59:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600203537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I0aDUxBLFKv9E20TqWjOT54E53N5hHeWOp6ztaYdO9w=;
-        b=W1ah5UClV6ICo/Dl2ag2f3MuW2Qk+XAaWJC6zM+25NYdX3qK/oOYyFsbwVmlRDyjVugRYL
-        jPHyr0CZYE61zw/2Cy/L8WVm2stvlL6nYKK1ZbVsWHr2nvyzCHuHDlfrzvBm3CCnvRLirG
-        kUdwKO0YHHpUAnU1Bz4VHv4ape7Yyug=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-582-WgR4CDWhMymQsDa21Ehs0A-1; Tue, 15 Sep 2020 16:58:55 -0400
-X-MC-Unique: WgR4CDWhMymQsDa21Ehs0A-1
-Received: by mail-qt1-f200.google.com with SMTP id m13so3946334qtu.10
-        for <linux-fpga@vger.kernel.org>; Tue, 15 Sep 2020 13:58:55 -0700 (PDT)
+        id S1727785AbgIOVek (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 15 Sep 2020 17:34:40 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:33671 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728055AbgIOVd0 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 15 Sep 2020 17:33:26 -0400
+Received: by mail-pj1-f66.google.com with SMTP id md22so511793pjb.0
+        for <linux-fpga@vger.kernel.org>; Tue, 15 Sep 2020 14:33:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=I0aDUxBLFKv9E20TqWjOT54E53N5hHeWOp6ztaYdO9w=;
-        b=kq5HmSmrnVdgDOW6SFd0k+qe/nx6+Y/3EHudksVZLy/vTHrJ8N7NV+L7ocvtzz7knU
-         HqRW98RLdYddg6NOQTufDJLysp5z+FkHZBOCKxC7pKhDm6n4QvRMd+GLLXJ1wbNlPJjK
-         n426iW92CsyItZfGT+YxtTtpuTkiMZ4OyNLf+Ckfpi/Yixpyd5sXqT+vPru/rGD2gvcy
-         r/JlSMsOxxXloc1PBBgCvuP3rnsyWfDCd6pRQnL6T3r5nzwkFG4Ff8GclyrZHFuJ63SY
-         PryVJVGJwVcTdsj2svYf62GRyJwBb/7kYFuizWIYY0UPwvv9yklJ5JWSdV+Efy9e0qT+
-         Y/BQ==
-X-Gm-Message-State: AOAM530F5gLxzBz2jp3ppXXuYvcqlDZpmLlkD+lnTYzBCH2rnjNzO2qY
-        UlORRvN73lqqlOrwhgdi9ejOKyHTHdf+5f+5zbwtc6g0d40onlcXcfV+007LSHXmbuSpY9/Ynwm
-        y1/8DbB7eWZUlZLu6uZJvGw==
-X-Received: by 2002:ac8:376d:: with SMTP id p42mr7532909qtb.288.1600203535140;
-        Tue, 15 Sep 2020 13:58:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyoUWBwILfcbq44b/NzgBu4vV3Odm37q08bGQlQCVDiqSd2mi2OGjRLlXKv/r/C1L5nVphYJA==
-X-Received: by 2002:ac8:376d:: with SMTP id p42mr7532893qtb.288.1600203534855;
-        Tue, 15 Sep 2020 13:58:54 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 18sm17686150qkd.120.2020.09.15.13.58.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2020 13:58:54 -0700 (PDT)
-Subject: Re: RFC improving amount of content in 5.11
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     Wu Hao <hao.wu@intel.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GFh7ajfbWSuS+rfbWz8fNYVYIhfjalw39XaWjJq7j3c=;
+        b=lD3AYyu/Am1KPvdmiSVUttPSoA0iI/UKxxE/vDqTs/IhXgMWTAxkciuVSjwXYgrp1s
+         ESm4/2tMgIUi6Cwu8t/xuDwjr0qSZAWAAx8RiLt/UNb/4l4iZsXKNowBH8SVMarc8s1p
+         h+HKRkbAiwDGaO4XY65tfqWK2WBJl9d/ohz02exvp53tLN97ITe0o9o01Ig+GKwzKAQc
+         22guXRtiCl4aBtmk85qKkxcacAol910B9Qf8dj0ZoOqKrbjbodAvcHmucjN4llyzm5xf
+         d/Lwr9wAtha7mrSdcElQSkTESHyJQMHiIwqsq6mqrXPM2FktnJ7WoOWLOP7Y/Nt1jmIU
+         W49Q==
+X-Gm-Message-State: AOAM533lnJHU/7eKK7zrmdVfEmG6kbWGYHYFjwX1r78IwXWJ8jQjyWH8
+        gWYWbPBX9JesRxFi3XTW9qg=
+X-Google-Smtp-Source: ABdhPJzTaYcuAh3DR2nfkt5FzJ+d5XAqVKWpj6Pa2O2iafX5Gb7/tQC97u1veXUJHCRjDpEs3h7DsA==
+X-Received: by 2002:a17:90a:a78d:: with SMTP id f13mr1191936pjq.69.1600205605959;
+        Tue, 15 Sep 2020 14:33:25 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id g26sm881610pfr.105.2020.09.15.14.33.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2020 14:33:25 -0700 (PDT)
+Date:   Tue, 15 Sep 2020 14:33:24 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
+Subject: Re: RFC improving amount of content in 5.11
+Message-ID: <20200915213324.GA29697@epycbox.lan>
 References: <3295710c-5e82-7b97-43de-99b9870a8c8c@redhat.com>
  <20200914211012.GA22855@archbook>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <0e51e17e-691f-04ef-699a-e0816c216375@redhat.com>
-Date:   Tue, 15 Sep 2020 13:58:52 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ <0e51e17e-691f-04ef-699a-e0816c216375@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20200914211012.GA22855@archbook>
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <0e51e17e-691f-04ef-699a-e0816c216375@redhat.com>
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Tom,
 
-On 9/14/20 2:10 PM, Moritz Fischer wrote:
-> Hi Tom,
->
-> On Mon, Sep 14, 2020 at 01:29:47PM -0700, Tom Rix wrote:
->> I am disappointed with how little content is making it into 5.10
-> One comment I've gotten from Greg in the past is to not hold on to
-> patches so long, so the pull request this weekend was me trying to a
-> first set of changes out there. This doesn't mean it has to be the only
-> content that goes into 5.10 (Note how the pull request said: "First set
-> of changes for the 5.10 merge window").
+On Tue, Sep 15, 2020 at 01:58:52PM -0700, Tom Rix wrote:
 
+> A non trival change takes 8 revisions, with about 1 week per revision.
 
-Let me try to explain why I am asking for input on how to improve the amount of content.
+I don't consider that to be out of the norm, especially if you want
+multiple people to give feedback on a changeset. This is a result of the
+distributed nature of people working across several timezones.
 
-The rough planning i do in my head.  A release is about 2-3 months.
+I generally prefer to go a bit slower and get it right rather than
+having to redo or realize we got the interfaces wrong -- some of which
+have to stay stable.
 
-A non trival change takes 8 revisions, with about 1 week per revision.
+> Gives us 1 or 2 changes per release.
+> 
+> In the easy case, a new card is in the same family, will have 4 new ip blocks
+> 
+> and a change to glue it all together change, 5 patch sets.
 
-Gives us 1 or 2 changes per release.
+So far I haven't seen that happen that many times.
 
-In the easy case, a new card is in the same family, will have 4 new ip blocks
+> So we can handle 1 or 2 cards year.
 
-and a change to glue it all together change, 5 patch sets.
+Again I haven't seen more than that in the past.
+> 
+> But if we can cut the review down to 2 weeks, we could do maybe 5-10 cards per year.
+> 
+> 
+> Then the downside if we do not keep up.
+> 
+> every card has a custom out of tree driver available on a limited set of distros.
+> 
+> which i believe is the current state of things.
 
-So we can handle 1 or 2 cards year.
+Tbh, this is easy to fix as vendor by just submitting the code earlier
+and in smaller chunks. People can send out RFCs early and then we can
+discuss designs and not just show up with 20+ patch series and expect them
+to be merged as is (ideally within 2-3 revisions) even more so if they
+span several subsystems.
 
-But if we can cut the review down to 2 weeks, we could do maybe 5-10 cards per year.
+The kernel never has cared about corporate timelines, and as vendor if
+you care about timely hardware support (and want to avoid out-of-tree
+nightmares) start early with your upstreaming efforts. That has always
+been the case.
 
+> >> So I was wondering what we can do generally and i can do specifically
+> >> to improve this.
+> >>
+> >> My comment
+> >> Though we are a low volume list, anything non trivial takes about 8 revisions.
+> >> My suggestion is that we all try to give the developer our big first
+> >> pass review within a week of the patch landing and try to cut the
+> >> revisions down to 3.
+> > It's unfortunate that it takes so long to get things moving, I agree,
+> > but with everything that's going on - bear in mind people deal different
+> > with situations like the present - it is what it is.
+> >
+> > My current dayjob doesn't pay me for working on this so the time I dedicate
+> > to this comes out of my spare time and weekends - Personally I'd rather
+> > not burn out and keep functioning in the long run.
+> 
+> I understand, in the past i have worked as a maintainer when it was not my day job, it's hard.
+> 
+> I am fortunate, fpga kernel and userspace is my day job.� Over the last couple of months, i have been
+> 
+> consistently spending a couple hours a day fixing random kernel problems as well as getting linux-fpga
+> 
+> reviews out within a day or two so i know i have the bandwidth to devote.
+> 
+> 
+> So I am asking what else can I do ?
+> 
+> Would helping out with staging the PR's be help ?
 
-Then the downside if we do not keep up.
+As you pointed out above, the bottleneck is review velocity, I don't
+know what staging PRs helps with that.
 
-every card has a custom out of tree driver available on a limited set of distros.
+> 
+> Could i move up to a maintainer ?
 
-which i believe is the current state of things.
+The problem is I'd still like to review the patches that go into my
+subsystem. I appreciate your help with the reviews, and it's been
+helpful so far. I don't think having an addtional maintainer will help
+with that at this point.
 
-
->
->> So I was wondering what we can do generally and i can do specifically
->> to improve this.
->>
->> My comment
->> Though we are a low volume list, anything non trivial takes about 8 revisions.
->> My suggestion is that we all try to give the developer our big first
->> pass review within a week of the patch landing and try to cut the
->> revisions down to 3.
-> It's unfortunate that it takes so long to get things moving, I agree,
-> but with everything that's going on - bear in mind people deal different
-> with situations like the present - it is what it is.
->
-> My current dayjob doesn't pay me for working on this so the time I dedicate
-> to this comes out of my spare time and weekends - Personally I'd rather
-> not burn out and keep functioning in the long run.
-
-I understand, in the past i have worked as a maintainer when it was not my day job, it's hard.
-
-I am fortunate, fpga kernel and userspace is my day job.  Over the last couple of months, i have been
-
-consistently spending a couple hours a day fixing random kernel problems as well as getting linux-fpga
-
-reviews out within a day or two so i know i have the bandwidth to devote.
-
-
-So I am asking what else can I do ?
-
-Would helping out with staging the PR's be help ?
-
-Could i move up to a maintainer ?
-
-Tom
-
-> Thanks,
-> Moritz
->
-
+- Moritz
