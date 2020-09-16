@@ -2,196 +2,170 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B27626B7C7
-	for <lists+linux-fpga@lfdr.de>; Wed, 16 Sep 2020 02:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C2D26C5DB
+	for <lists+linux-fpga@lfdr.de>; Wed, 16 Sep 2020 19:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727056AbgIPA3a (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 15 Sep 2020 20:29:30 -0400
-Received: from mga18.intel.com ([134.134.136.126]:64608 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726780AbgIPA3Z (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 15 Sep 2020 20:29:25 -0400
-IronPort-SDR: mMLr+s1a5HGdwbkck8gd8nD2MLd6LwhsXtD8tF8FxhHLeNrgo4+BpxOi3L+PUQdUwWDOTBmeD6
- mrsIqwZehUQg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9745"; a="147127009"
-X-IronPort-AV: E=Sophos;i="5.76,430,1592895600"; 
-   d="scan'208";a="147127009"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 17:29:24 -0700
-IronPort-SDR: isOkeQWRIriQfz2XHlRw4RgNA0C5U/TrxLMuEgAX/XMAX+Z4RkAWoEXYMfjSnGqHvvfrJTQoj/
- P6+k6358ZsLw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,430,1592895600"; 
-   d="scan'208";a="507795288"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Sep 2020 17:29:22 -0700
-Date:   Wed, 16 Sep 2020 08:24:59 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
+        id S1726896AbgIPRVi (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 16 Sep 2020 13:21:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31936 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726682AbgIPRV1 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 16 Sep 2020 13:21:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600276864;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HzLLHZVSV72vvlADhNXOViL8Ty89JaFD8mYPv4rGjzc=;
+        b=OQbkQFhlWSrnqtM/wD0/7BsMEOIqS0akns6av89DFSUoaQEsk6N8aka511cE45GfH2RKyX
+        p5lLneM41T2VJXFLAHpWtV4hzIcLVTAE+RYTxWblZg6ACmNHQwYGhYeArPIzuawdm84Lc+
+        N11qbCfsbu3lerris6zV4EPRyLrcYwk=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-398-nBve9nL7MZC9sUtYln6i1Q-1; Wed, 16 Sep 2020 11:07:45 -0400
+X-MC-Unique: nBve9nL7MZC9sUtYln6i1Q-1
+Received: by mail-qt1-f200.google.com with SMTP id a14so6228138qtp.15
+        for <linux-fpga@vger.kernel.org>; Wed, 16 Sep 2020 08:07:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=HzLLHZVSV72vvlADhNXOViL8Ty89JaFD8mYPv4rGjzc=;
+        b=qUhA1RWtTMYdXKvg5Tb3D0Z4THp3Ztlo1ScTGYeW7yXzEiMU6e4xWs6WLszCBNltLZ
+         8GGI3TEqrL7BZIRbLzWST+fCFUoSpF75xab3fl6ljg5I76e9T2YUcnYokhm5lJSCmug9
+         cPy+u//MynzWedc6QU+NWX1RxmJsCX3RGMELCNButnJU8ztGmjgzNmo0XZ41Ays7mWPK
+         etlX/JLVhGkSt6zCzAaGNgh5Z/2/OnISwAp/OB4/hwY69/n/a+si9do1faYlEZJvXdB2
+         QDM3fijJpedR51B9cq/iycbVg0/HDnMoPnsYRnaS1ct597NTUF0epGiB0PtAWY9iqpUx
+         SXPg==
+X-Gm-Message-State: AOAM530xpPalv2CSQnVih23FBGNW+Cm9MmcIL3AIxaWyu9R/XW4DW4Qq
+        el2qjy0roPW5UBFi6DdiD8CteCAAnxcopXUTLGw0GFPhNAQ+7T5xTIvaVfujvWasbK9NZd4/wvG
+        GBPwSEL4jyt+I8UOREu2V7Q==
+X-Received: by 2002:a05:6214:d6b:: with SMTP id 11mr23678203qvs.30.1600268865068;
+        Wed, 16 Sep 2020 08:07:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyWN21X4CZRf9yrgu+X9BdFXtX9aNaENXZ2/bUqmRnZusfMO04Dp9KE9mH9QVWJlW4GBay9Ew==
+X-Received: by 2002:a05:6214:d6b:: with SMTP id 11mr23678157qvs.30.1600268864680;
+        Wed, 16 Sep 2020 08:07:44 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id i5sm19573735qko.86.2020.09.16.08.07.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Sep 2020 08:07:44 -0700 (PDT)
+Subject: Re: RFC improving amount of content in 5.11
 To:     Moritz Fischer <mdf@kernel.org>
-Cc:     "Wu, Hao" <hao.wu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        "Weight, Russell H" <russell.h.weight@intel.com>
-Subject: Re: [PATCH v2 2/4] dfl: add dfl bus support to MODULE_DEVICE_TABLE()
-Message-ID: <20200916002458.GA30711@yilunxu-OptiPlex-7050>
-References: <1600140473-12351-1-git-send-email-yilun.xu@intel.com>
- <1600140473-12351-3-git-send-email-yilun.xu@intel.com>
- <20200915035927.GB2217@epycbox.lan>
- <DM6PR11MB381970CD3C77534AA3E4C76385200@DM6PR11MB3819.namprd11.prod.outlook.com>
- <20200915051933.GA13516@yilunxu-OptiPlex-7050>
- <DM6PR11MB3819106F9D50E39F7CC7837D85200@DM6PR11MB3819.namprd11.prod.outlook.com>
- <20200915180755.GA11862@epycbox.lan>
+Cc:     Wu Hao <hao.wu@intel.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
+References: <3295710c-5e82-7b97-43de-99b9870a8c8c@redhat.com>
+ <20200914211012.GA22855@archbook>
+ <0e51e17e-691f-04ef-699a-e0816c216375@redhat.com>
+ <20200915213324.GA29697@epycbox.lan>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <be3844bc-8f5a-6e29-1ecb-debe51739eb0@redhat.com>
+Date:   Wed, 16 Sep 2020 08:07:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200915180755.GA11862@epycbox.lan>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20200915213324.GA29697@epycbox.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-fpga-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 11:07:55AM -0700, Moritz Fischer wrote:
-> Hi Hao, Xu,
-> 
-> On Tue, Sep 15, 2020 at 05:58:46AM +0000, Wu, Hao wrote:
-> > > On Tue, Sep 15, 2020 at 12:08:38PM +0800, Wu, Hao wrote:
-> > > > > On Tue, Sep 15, 2020 at 11:27:51AM +0800, Xu Yilun wrote:
-> > > > > > Device Feature List (DFL) is a linked list of feature headers within the
-> > > > > > device MMIO space. It is used by FPGA to enumerate multiple sub
-> > > features
-> > > > > > within it. Each feature can be uniquely identified by DFL type and
-> > > > > > feature id, which can be read out from feature headers.
-> > > > > >
-> > > > > > A dfl bus helps DFL framework modularize DFL device drivers for
-> > > different
-> > > > > > sub features. The dfl bus matches its devices and drivers by DFL type
-> > > and
-> > > > > > feature id.
-> > > > > >
-> > > > > > This patch add dfl bus support to MODULE_DEVICE_TABLE() by adding
-> > > info
-> > > > > > about struct dfl_device_id in devicetable-offsets.c and add a dfl entry
-> > > > > > point in file2alias.c.
-> > > > > >
-> > > > > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > > > > > Signed-off-by: Wu Hao <hao.wu@intel.com>
-> > > > > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > > > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > > > > > Acked-by: Wu Hao <hao.wu@intel.com>
-> > > >
-> > > > Yilun,
-> > > >
-> > > > I haven't acked-by this patch as it doesn't modify any dfl files, ideally you
-> > > 
-> > > Sorry, I misunderstood your comments "Acked-by: xxx for DFL related
-> > > changes after this fix".
-> 
-> Yeah it wasn't entirely clear to me either :)
-> > 
-> > Because the first patch contains changes to non-dfl files as well. : )
-> > 
-> > Hao
-> > 
-> > > 
-> > > > need acked-by from real maintainer of scripts/mod code, right?
-> > > 
-> > > Ideally yes. From the MAINTAINERS it is Masahiro Yamada, I added him on
-> > > the "to"
-> > > list. But I see some other patches (also for devtable entries) in kernel
-> > > don't have his acked-by.
-> 
-> Yeah, I've looked at that and most patches for those files seem to be
-> from subsystem maintainers. So I *think* it should be fine?
 
-I see you have applied the patch. I'm very fine. :)
+On 9/15/20 2:33 PM, Moritz Fischer wrote:
+> Tom,
+>
+> On Tue, Sep 15, 2020 at 01:58:52PM -0700, Tom Rix wrote:
+>
+>> A non trival change takes 8 revisions, with about 1 week per revision.
+> I don't consider that to be out of the norm, especially if you want
+> multiple people to give feedback on a changeset. This is a result of the
+> distributed nature of people working across several timezones.
+>
+> I generally prefer to go a bit slower and get it right rather than
+> having to redo or realize we got the interfaces wrong -- some of which
+> have to stay stable.
+>
+>> Gives us 1 or 2 changes per release.
+>>
+>> In the easy case, a new card is in the same family, will have 4 new ip blocks
+>>
+>> and a change to glue it all together change, 5 patch sets.
+> So far I haven't seen that happen that many times.
+>
+>> So we can handle 1 or 2 cards year.
+> Again I haven't seen more than that in the past.
+>> But if we can cut the review down to 2 weeks, we could do maybe 5-10 cards per year.
+>>
+>>
+>> Then the downside if we do not keep up.
+>>
+>> every card has a custom out of tree driver available on a limited set of distros.
+>>
+>> which i believe is the current state of things.
+> Tbh, this is easy to fix as vendor by just submitting the code earlier
+> and in smaller chunks. People can send out RFCs early and then we can
+> discuss designs and not just show up with 20+ patch series and expect them
+> to be merged as is (ideally within 2-3 revisions) even more so if they
+> span several subsystems.
+>
+> The kernel never has cared about corporate timelines, and as vendor if
+> you care about timely hardware support (and want to avoid out-of-tree
+> nightmares) start early with your upstreaming efforts. That has always
+> been the case.
+>
+>>>> So I was wondering what we can do generally and i can do specifically
+>>>> to improve this.
+>>>>
+>>>> My comment
+>>>> Though we are a low volume list, anything non trivial takes about 8 revisions.
+>>>> My suggestion is that we all try to give the developer our big first
+>>>> pass review within a week of the patch landing and try to cut the
+>>>> revisions down to 3.
+>>> It's unfortunate that it takes so long to get things moving, I agree,
+>>> but with everything that's going on - bear in mind people deal different
+>>> with situations like the present - it is what it is.
+>>>
+>>> My current dayjob doesn't pay me for working on this so the time I dedicate
+>>> to this comes out of my spare time and weekends - Personally I'd rather
+>>> not burn out and keep functioning in the long run.
+>> I understand, in the past i have worked as a maintainer when it was not my day job, it's hard.
+>>
+>> I am fortunate, fpga kernel and userspace is my day job.Ã‚Â  Over the last couple of months, i have been
+>>
+>> consistently spending a couple hours a day fixing random kernel problems as well as getting linux-fpga
+>>
+>> reviews out within a day or two so i know i have the bandwidth to devote.
+>>
+>>
+>> So I am asking what else can I do ?
+>>
+>> Would helping out with staging the PR's be help ?
+> As you pointed out above, the bottleneck is review velocity, I don't
+> know what staging PRs helps with that.
+>
+>> Could i move up to a maintainer ?
+> The problem is I'd still like to review the patches that go into my
+> subsystem. I appreciate your help with the reviews, and it's been
+> helpful so far. I don't think having an addtional maintainer will help
+> with that at this point.
 
-> 
-> > > 
-> > > Hi Moritz:
-> > > 
-> > > Do you have any ideas on that?
-> > > 
-> > > Thanks,
-> > > Yilun.
-> > > 
-> > > >
-> > > > Thanks
-> > > > Hao
-> > > >
-> > > > > > ---
-> > > > > > v2: add comments for the format of modalias
-> > > > > > ---
-> > > > > >  scripts/mod/devicetable-offsets.c |  4 ++++
-> > > > > >  scripts/mod/file2alias.c          | 17 +++++++++++++++++
-> > > > > >  2 files changed, 21 insertions(+)
-> > > > > >
-> > > > > > diff --git a/scripts/mod/devicetable-offsets.c
-> > > b/scripts/mod/devicetable-
-> > > > > offsets.c
-> > > > > > index 27007c1..d8350ee 100644
-> > > > > > --- a/scripts/mod/devicetable-offsets.c
-> > > > > > +++ b/scripts/mod/devicetable-offsets.c
-> > > > > > @@ -243,5 +243,9 @@ int main(void)
-> > > > > >  DEVID(mhi_device_id);
-> > > > > >  DEVID_FIELD(mhi_device_id, chan);
-> > > > > >
-> > > > > > +DEVID(dfl_device_id);
-> > > > > > +DEVID_FIELD(dfl_device_id, type);
-> > > > > > +DEVID_FIELD(dfl_device_id, feature_id);
-> > > > > > +
-> > > > > >  return 0;
-> > > > > >  }
-> > > > > > diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-> > > > > > index 2417dd1..9fd2e60 100644
-> > > > > > --- a/scripts/mod/file2alias.c
-> > > > > > +++ b/scripts/mod/file2alias.c
-> > > > > > @@ -1368,6 +1368,22 @@ static int do_mhi_entry(const char
-> > > *filename,
-> > > > > void *symval, char *alias)
-> > > > > >  return 1;
-> > > > > >  }
-> > > > > >
-> > > > > > +/* Looks like: dfl:tNfN */
-> > > > > > +static int do_dfl_entry(const char *filename, void *symval, char *alias)
-> > > > > > +{
-> > > > > > +DEF_FIELD(symval, dfl_device_id, type);
-> > > > > > +DEF_FIELD(symval, dfl_device_id, feature_id);
-> > > > > > +
-> > > > > > +/*
-> > > > > > + * type contains 4 valid bits and feature_id contains 12 valid bits
-> > > > > > + * according to DFL specification.
-> > > > > > + */
-> > > > > > +sprintf(alias, "dfl:t%01Xf%03X", type, feature_id);
-> > > > > > +
-> > > > > > +add_wildcard(alias);
-> > > > > > +return 1;
-> > > > > > +}
-> > > > > > +
-> > > > > >  /* Does namelen bytes of name exactly match the symbol? */
-> > > > > >  static bool sym_is(const char *name, unsigned namelen, const char
-> > > > > *symbol)
-> > > > > >  {
-> > > > > > @@ -1442,6 +1458,7 @@ static const struct devtable devtable[] = {
-> > > > > >  {"tee", SIZE_tee_client_device_id, do_tee_entry},
-> > > > > >  {"wmi", SIZE_wmi_device_id, do_wmi_entry},
-> > > > > >  {"mhi", SIZE_mhi_device_id, do_mhi_entry},
-> > > > > > +{"dfl", SIZE_dfl_device_id, do_dfl_entry},
-> > > > > >  };
-> > > > > >
-> > > > > >  /* Create MODULE_ALIAS() statements.
-> > > > > > --
-> > > > > > 2.7.4
-> > > > > >
-> > > > > Applied to for-next,
-> > > > >
-> > > > > Thanks
-> 
-> Cheers,
-> Moritz
+We agree slow reviews are throttling the content in the releases.
+
+Is this a temporary situation with your work or is it steady state?
+
+
+Are slow reviews the only problem ?
+
+Which is getting back to my original RFC on how can we improve the amount of content in the releases ?
+
+Tom
+
+>
+> - Moritz
+>
+
