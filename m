@@ -2,47 +2,46 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D106E26E3B5
-	for <lists+linux-fpga@lfdr.de>; Thu, 17 Sep 2020 20:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEF426E3C8
+	for <lists+linux-fpga@lfdr.de>; Thu, 17 Sep 2020 20:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbgIQSem (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 17 Sep 2020 14:34:42 -0400
-Received: from mga14.intel.com ([192.55.52.115]:48063 "EHLO mga14.intel.com"
+        id S1726416AbgIQScq (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 17 Sep 2020 14:32:46 -0400
+Received: from mga06.intel.com ([134.134.136.31]:26670 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726390AbgIQSdf (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 17 Sep 2020 14:33:35 -0400
-X-Greylist: delayed 442 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 14:33:19 EDT
-IronPort-SDR: 1T0qoYjdEwUQSs2nTKZnO7D29FpHSCbozdDbA8lF0SLG2efHyAIsgbY3f7CX6vitxw0XbQs2mX
- sJZCSCwLFUkQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="159075370"
+        id S1726468AbgIQScW (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 17 Sep 2020 14:32:22 -0400
+IronPort-SDR: 4LLZDr/gwwWyouxMSZpcjoKd81CWfTR6L7d5ILGkEDndx5eFT/ZVl3i2lbr6k01yxUNGrREi4o
+ LkrQLlIYFZMg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="221324686"
 X-IronPort-AV: E=Sophos;i="5.77,271,1596524400"; 
-   d="scan'208";a="159075370"
+   d="scan'208";a="221324686"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 11:25:48 -0700
-IronPort-SDR: N9BazKDdduRVcRT5MP4sYPA66mLeTpWQiF2tVqdVqHPMZ/xqe2+tPzyqIkYm3RYLWMdJUEpRfV
- 9MWzmKfn/c7w==
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 11:32:21 -0700
+IronPort-SDR: as+CxmLANJA19hGEGEyDYIA2S8iZZQNm8I4EaDjKRwzs408vtoi2KNZ0hfgmWnMMyyC3RqtK8w
+ Vx149JEhvMiQ==
 X-IronPort-AV: E=Sophos;i="5.77,271,1596524400"; 
-   d="scan'208";a="287679792"
+   d="scan'208";a="346713850"
 Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.212.91.84])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 11:25:48 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 11:32:21 -0700
 From:   Russ Weight <russell.h.weight@intel.com>
 To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
         hao.wu@intel.com, matthew.gerlach@intel.com,
         Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH 1/1] fpga: dfl: afu: harden port enable logic
-Date:   Thu, 17 Sep 2020 11:25:45 -0700
-Message-Id: <20200917182546.1788-1-russell.h.weight@intel.com>
+Subject: [PATCH v2 1/1] fpga: dfl: afu: harden port enable logic
+Date:   Thu, 17 Sep 2020 11:32:19 -0700
+Message-Id: <20200917183219.3603-1-russell.h.weight@intel.com>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 Port enable is not complete until ACK = 0. Change
-__afu_port_enable() guarantee that the enable process
+__afu_port_enable() to guarantee that the enable process
 is complete by polling for ACK == 0.
 
 Signed-off-by: Russ Weight <russell.h.weight@intel.com>
