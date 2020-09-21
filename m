@@ -2,166 +2,427 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E41D272A4F
-	for <lists+linux-fpga@lfdr.de>; Mon, 21 Sep 2020 17:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AAB2732E0
+	for <lists+linux-fpga@lfdr.de>; Mon, 21 Sep 2020 21:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727196AbgIUPgJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 21 Sep 2020 11:36:09 -0400
-Received: from mga17.intel.com ([192.55.52.151]:14365 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726720AbgIUPgJ (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 21 Sep 2020 11:36:09 -0400
-IronPort-SDR: l9NNHBS5tCx5RQKnVtB8UJQv90hIXDA+L0Eg5AWrBE6xOmTwxJyn0t8LVf2kD0dCT9j+nbP5CH
- JP75pwT6jdIQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9751"; a="140412176"
-X-IronPort-AV: E=Sophos;i="5.77,286,1596524400"; 
-   d="scan'208";a="140412176"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2020 08:36:08 -0700
-IronPort-SDR: 7ad+1nVDeDsYLl6lKHH1rGCwQwYKodf6VPRjBm/yFyFSLtsis/mfLXUp/eAVjyVUeMIpo3IS3N
- KGIFQ3VA2HrQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,286,1596524400"; 
-   d="scan'208";a="290030759"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Sep 2020 08:36:08 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 21 Sep 2020 08:36:08 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Mon, 21 Sep 2020 08:36:08 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.1713.5; Mon, 21 Sep 2020 08:36:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KuPw/bCKG+dBb5VyB9USFI1Jx+DErhb6+BDKgOLLg0DFvW1S07zky6/48a/KR7wWQwr+51aiwtQSVICDyME8AJV6NFkXfTI0g+T+oSPKLxPZH06Rpeutjft+lP+28BxHCFaNILnfbbcUZ/7s/HcpfKHQ9YGtg5OM7f5YxPNcbNs2i0wcFhAgqJmqq39F6mvriZa79cAF1axRdZkixRM+ivZ6+jfB2PXJ3VVlrQ7jt3vL7yJjNfbNtgoOWeG/U4rKL13fc/j7xhKiiL8c4jhy144NpHE8SwbwBLdqzQL4lX4Bkeg+Fz3/DUNWUNMYxKGNVaHmQo1q4MVt73AUa20b4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kVjG0io+Qg4tuV7D96afQI+wfdt1aTUuu1Pl8McnNhg=;
- b=ZiabBcZnAf09/aoZ1ccIETpFYr02lrb0O1/sKMqfd6KDXnOaavhiZdE5pzZ1h2NaK0P9xzvEGEsP6tm9JZMJVks4uvuSWjInXlsFy3iH3HGQupcPJhg3a01Bk+96uiyuxf2LUHMD6svaufGuE3VLS0gdIWjnQd8nFagCLrNj/exz+g9neUMLz+WVCWPVXrwCQhF4RTSSuHpYacDTaJLHGGHM6xOc+JiuWr/G6XWUlt0Co39fOb2UGvGwRcO0CeC7WhPS271o9ROiH/kOkv3URXF3y5EMf3MOLs+Kpoj2E01b/msBDPVtoT45s2BHsX/5gJiaocONvDMcv3oZTz5Mfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kVjG0io+Qg4tuV7D96afQI+wfdt1aTUuu1Pl8McnNhg=;
- b=UQv+WP34YXHFVlyhRiyqNHLVyGbW51pPgmMTBmDZYfkBDGD2Byn53zz0YNpsX+/gf4YHfdXIGRXiyxUXS7U2ppVrZ+zgt1+npEcTDupM6yRXxO56rhYq72HmEXrnuJ9S1WCo0Doc0RQolkQdkiLbkt9cq3HccxOydqqA+g5VKcw=
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by DM6PR11MB4644.namprd11.prod.outlook.com (2603:10b6:5:28f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.14; Mon, 21 Sep
- 2020 15:36:03 +0000
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::7823:516e:1ec4:a60d]) by DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::7823:516e:1ec4:a60d%5]) with mapi id 15.20.3391.026; Mon, 21 Sep 2020
- 15:36:03 +0000
-From:   "Wu, Hao" <hao.wu@intel.com>
-To:     Liu Shixin <liushixin2@huawei.com>, Tom Rix <trix@redhat.com>,
-        "Moritz Fischer" <mdf@kernel.org>
-CC:     "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH -next] fpga: dfl: simplify the return expression of
- fme_perf_pmu_register
-Thread-Topic: [PATCH -next] fpga: dfl: simplify the return expression of
- fme_perf_pmu_register
-Thread-Index: AQHWj+2UJse7LCHF60irHtKEohVbWKlzOYfg
-Date:   Mon, 21 Sep 2020 15:36:03 +0000
-Message-ID: <DM6PR11MB3819DE1E7F2FF14DF12C5D48853A0@DM6PR11MB3819.namprd11.prod.outlook.com>
-References: <20200921082433.2591305-1-liushixin2@huawei.com>
-In-Reply-To: <20200921082433.2591305-1-liushixin2@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.5.1.3
-authentication-results: huawei.com; dkim=none (message not signed)
- header.d=none;huawei.com; dmarc=none action=none header.from=intel.com;
-x-originating-ip: [192.198.147.217]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fa2f4b0a-af52-4ee0-79b3-08d85e440c8a
-x-ms-traffictypediagnostic: DM6PR11MB4644:
-x-microsoft-antispam-prvs: <DM6PR11MB46441C3F8F12114D2D7D7891853A0@DM6PR11MB4644.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2331;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0KDhtwRlnMgZm3VmVO8sj/C4S0q6YurAX5JrWzZd3teOidRytzb+GX4TENWdivuiim6BcatWHBvEHOhZuX0epL6NQAYUFPf4WjQoOkKRC5LyPm0Kr3HteE25MASGXX+1clMaU/J4r/M53ZEE7aahWZ6KtCbHuMAfEHn6sjN/GNY4vB1LCk76DGe2pM1SczddggOu3RAhg6Ljxs/HhG59Nle4ycb2Tvi4dmk5UIfz7t7wf+mGyV7OIAxaSKyh+2dbmMtW6Q+TkIFwQddJLVWXp+UIPW/y40cH0THkoMPGqVCvoPbNEgAbdDO9lICOXlWd2hR+NVJf7cXa02qPex3EAg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(346002)(366004)(39860400002)(376002)(136003)(7696005)(4326008)(26005)(33656002)(54906003)(110136005)(316002)(186003)(478600001)(76116006)(2906002)(66476007)(55016002)(83380400001)(52536014)(8936002)(71200400001)(6506007)(86362001)(5660300002)(66446008)(66556008)(9686003)(66946007)(64756008)(8676002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: ksaAD6GSGn56wGhSDBuuxQS/QNwiBgvFNPAAT1KagIR5EI3JoQfuJPGMCVcNVuiCg5n3jocycc2QrqSjr3LlrA75+/rhQJ3X0kKgWRS7aFLJfNy/VCTRzV4nWmWjf6aiebWmap++WkYOhklpI2CA/h3pbGZhMuAxKARZPTIe5CLY7qS+AXjttdBr7jVGVtCZiX6x3w+ES7eeWe7bx8cm9QiU1Srq/MY/46yTCrr5k4b4m5eoJRKmVqtczUIowDw5iP9GnW698BwtoN5IX+DL4QYcTfx7OJfXhqa9dcDod4ZRLdDTIpvL4zLzwJibZdEvH7ufFRvtViaGXpooyNiOHPFNgMb2NW+HNoJYOFAN85yRA05DXaTO2dxhpMArx0VhFCCdJNdmfu+v958wn3K9QWlnq+Znq//tw8bWFv5YgbIeqltsnWIA3T7A2prNtTal6s2vuaSYfjMzUs1wI5OC13UQu3HVd2LG2ERC98ypUS0NskLsUuG1pbfqWdd9yNo3mm5egYodIbv7OlgDflsyZj4e8IautdmnH0lMqDV9KPnLpFr1GXX9aXfnO+tTLRoim2cCl6eEgFH0+DOnuEo4kpX6+7FiEfvXsnRlbCFWemIbXHMtE5BOqPz69tFjKokq8WWeeV544ULuezUv7QQKuw==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1728014AbgIUTcZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 21 Sep 2020 15:32:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54942 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726471AbgIUTcZ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 21 Sep 2020 15:32:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600716741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gzHjmKkRB5xXtyj0IK0vJChPTnNHlTEIiHsaOyaJtbM=;
+        b=UaytJBeLPSxhD8ayzCAPuLNROwEzeHEEtzrbB8mjRdWDUA92i88Ay9vL3u+nNKlaCMJD+M
+        m6g6TZ9lmPyitnc+xJQ1RI8MddYBt54dK/1WCsm2BDiOBaiRG8c2P6sgr89zmVYven5j18
+        xVA1HefnSgcvh6SIsjsbQjf8FW9M9/g=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-189-4Lpv2A3IOGyN0kmTWAjDgA-1; Mon, 21 Sep 2020 15:32:20 -0400
+X-MC-Unique: 4Lpv2A3IOGyN0kmTWAjDgA-1
+Received: by mail-qv1-f72.google.com with SMTP id k14so9863363qvw.20
+        for <linux-fpga@vger.kernel.org>; Mon, 21 Sep 2020 12:32:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=gzHjmKkRB5xXtyj0IK0vJChPTnNHlTEIiHsaOyaJtbM=;
+        b=Bnv/FAksQf0wwL5girvBsYRch2l2gqW8Vcl0IdRro8jkyKTwolcKv8PzY3gtl9OhAn
+         yY9grygZLTuK2pzewlGtYC5dzyBD2PKFiTdd+NTEIide7vfnYMFrOsjeIH1dxWZ0lsNc
+         HftLQDwQ2mMI3PObKwOiRpF255dGGdBrNT8AzYOWuDjv9d5Csmgdl4Hi2tpKK21zkO3V
+         37yx9b18nbtIwuHbenv9rBAR01n4fAqNhwaNH1YDYwdNSExyiJU6+oBO4rZPAbydZ0Qx
+         85pA9WbXyYfHKU201Xobwv3bfSUERkcAHWVvRrg+2Hza+KP1tBtzcB5oLqXi5MS/0qnb
+         HsOg==
+X-Gm-Message-State: AOAM532oRXLaxdWXfzPv63ch44iKF4ijjy3GYLTB0cpFQv6RmtL4uJe+
+        +1Kp7Ky0rDnzQDL0nBgR+6DOw1DUoM67pdRr+X8LBoCmp3S3v97uNkx6Gm/zDbVK3/o+/6kzd9N
+        iv69L7dHxQ2ow03tikqkk2g==
+X-Received: by 2002:a37:990:: with SMTP id 138mr1341803qkj.53.1600716739195;
+        Mon, 21 Sep 2020 12:32:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxmkuQb0Jtfl6DfMMaCmsX2tRrqyBSB/2MNPhebuWHGhW6gXBubPUOThBfh5/EGS1sEK6FknA==
+X-Received: by 2002:a37:990:: with SMTP id 138mr1341784qkj.53.1600716738832;
+        Mon, 21 Sep 2020 12:32:18 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id k5sm9409665qkc.45.2020.09.21.12.32.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2020 12:32:18 -0700 (PDT)
+Subject: Re: [RFC] fpga: dfl: a prototype uio driver
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     alex.williamson@redhat.com, hao.wu@intel.com, mdf@kernel.org,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
+References: <20200919165113.5219-1-trix@redhat.com>
+ <20200921085553.GA8796@yilunxu-OptiPlex-7050>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <a95906c3-1960-e753-e306-74a90045269e@redhat.com>
+Date:   Mon, 21 Sep 2020 12:32:16 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa2f4b0a-af52-4ee0-79b3-08d85e440c8a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Sep 2020 15:36:03.2155
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: p3XXqRptSA6GesVIES4/fGjSQurc1nAEqQq/+VP/oyA3R9hLQyE7dMbNY2lJjUh4yaQ4lVJfp0zx6ncvO4Y2jA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4644
-X-OriginatorOrg: intel.com
+In-Reply-To: <20200921085553.GA8796@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-> Subject: [PATCH -next] fpga: dfl: simplify the return expression of
-> fme_perf_pmu_register
->=20
-> Simplify the return expression.
->=20
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 
-Looks good to me.
+On 9/21/20 1:55 AM, Xu Yilun wrote:
+> On Sat, Sep 19, 2020 at 09:51:13AM -0700, trix@redhat.com wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> I following up on Moritz asking for early RFC's by showing how this
+>> could be done with the concrete example of around
+>>
+>> [PATCH 0/3] add VFIO mdev support for DFL devices
+>>
+>> I hacked this together, it barely works. Do not expect that this
+>> patch to apply anywhere.  It has enough to show where I want
+>> to go and people can comment without me having invested a lot of
+>> effort.  I am not expecting to carry this forward, it only
+>> addresses the issues I had with the origin patch.
+>>
+>> This change adds a uio driver for any unclaimed dfl feature
+>>
+>> During the normal matching of feature id's to drivers, some
+>> of the features are not claimed because there neither a
+>> builtin driver nor a module driver that matches the feature
+>> id.  For these unclaimed features, provide a uio driver to a
+>> possible user space driver.
+> I think we don't have to setup UIO interfaces for all unclaimed 
+> features. It could be the decision of the user whether the UIO
+> device is needed for a feature. My opinion is that, the
+> driver_override sysfs is still generic enough for user's to switch
+> between kernel device drivers and dfl uio driver.
 
-Acked-by: Wu Hao <hao.wu@intel.com>
+Instead of a string, could there just be a 'use_uio' flag ?
 
-Thanks
-Hao
+How does the 'driver_override' work when there is no starting driver ?
 
-> ---
->  drivers/fpga/dfl-fme-perf.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
->=20
-> diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
-> index 531266287eee..e881fbe6d838 100644
-> --- a/drivers/fpga/dfl-fme-perf.c
-> +++ b/drivers/fpga/dfl-fme-perf.c
-> @@ -906,7 +906,6 @@ static int fme_perf_pmu_register(struct
-> platform_device *pdev,
->  {
->  	struct pmu *pmu =3D &priv->pmu;
->  	char *name;
-> -	int ret;
->=20
->  	spin_lock_init(&priv->fab_lock);
->=20
-> @@ -926,11 +925,7 @@ static int fme_perf_pmu_register(struct
-> platform_device *pdev,
->=20
->  	name =3D devm_kasprintf(priv->dev, GFP_KERNEL, "dfl_fme%d", pdev-
-> >id);
->=20
-> -	ret =3D perf_pmu_register(pmu, name, -1);
-> -	if (ret)
-> -		return ret;
-> -
-> -	return 0;
-> +	return perf_pmu_register(pmu, name, -1);
->  }
->=20
->  static void fme_perf_pmu_unregister(struct fme_perf_priv *priv)
-> --
-> 2.25.1
+>
+> There may be cases the dfl device driver modules are not inserted
+> during dfl-fme/port initialization, but they are to be inserted
+> manually. If the features are all registered to uio, then there will
+> be problems when dfl device drivers module are inserted.
+
+How does this manual loading work ? The driver list for the features
+
+seems to only be used during the card probe time.
+
+To change the order the dfl-pci needs to be unloaded and that will
+
+destroy all the uio devices as well as usual feature drivers attached to
+
+the pci driver.
+
+
+>
+>
+>> I have doubts that a uio for an afu feature is approptiate as these
+>> can be any device.
+> I think generally afu could also be as uio device if we don't concern
+> about dma isolation.
+
+I am thinking about afu with its own pci id.
+
+So there could be a conflict with some other driver that responds to the pci id.
+
+>
+> But now seems not possible to match afu to uio driver, cause now in DFL
+> framework AFU is managed by dfl-afu.ko
+>
+>> Another possible problem is if the number of interrupts for the
+>> feature is greater than 1.  Uio seems to only support 1. My guess
+>> is this would need some hackery in the open() to add to the
+>> interrupt handler.
+> I think it may not possible for UIO to support multiple interrupts if
+> user cannot access the interrupt enable/pending registers. The uio
+> device have just one /dev/uioX node for interrupt. So I tend to
+> accept the limitation. And for now we don't have board specific
+> features that needs multiple interrupts. For PAC N3000, no interrupt is
+> needed.
+Maybe uio needs to change to support multiple interrupts ?
+>
+>> It is for this type of reason I think a dfl-uio driver is needed
+>> rather than reusing an existing generic uio driver.
+> So if we don't try to change interrupt, the implementation of dfl-uio is
+> just a subset of generic uio platform driver, so why not we just use it?
+
+Its a toss up.
+
+Maybe there some dfl only constraints like write/read is a multiple 4 bytes
+
+Or just why have another layer in the setup.
+
+Tom
+
+>
+> Thanks,
+> Yilun
+>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>  drivers/fpga/dfl-fme-main.c |   9 ++-
+>>  drivers/fpga/dfl-uio.c      | 107 ++++++++++++++++++++++++++++++++++++
+>>  drivers/fpga/dfl.c          |  47 +++++++++++++++-
+>>  drivers/fpga/dfl.h          |   8 +++
+>>  4 files changed, 169 insertions(+), 2 deletions(-)
+>>  create mode 100644 drivers/fpga/dfl-uio.c
+>>
+>> diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
+>> index 037dc4f..3323e90 100644
+>> --- a/drivers/fpga/dfl-fme-main.c
+>> +++ b/drivers/fpga/dfl-fme-main.c
+>> @@ -709,12 +709,18 @@ static int fme_probe(struct platform_device *pdev)
+>>  	if (ret)
+>>  		goto dev_destroy;
+>>  
+>> -	ret = dfl_fpga_dev_ops_register(pdev, &fme_fops, THIS_MODULE);
+>> +	ret = dfl_fpga_dev_feature_init_uio(pdev, DFH_TYPE_FIU);
+>>  	if (ret)
+>>  		goto feature_uinit;
+>>  
+>> +	ret = dfl_fpga_dev_ops_register(pdev, &fme_fops, THIS_MODULE);
+>> +	if (ret)
+>> +		goto feature_uinit_uio;
+>> +
+>>  	return 0;
+>>  
+>> +feature_uinit_uio:
+>> +	dfl_fpga_dev_feature_uinit_uio(pdev, DFH_TYPE_FIU);
+>>  feature_uinit:
+>>  	dfl_fpga_dev_feature_uinit(pdev);
+>>  dev_destroy:
+>> @@ -726,6 +732,7 @@ exit:
+>>  static int fme_remove(struct platform_device *pdev)
+>>  {
+>>  	dfl_fpga_dev_ops_unregister(pdev);
+>> +	dfl_fpga_dev_feature_uinit_uio(pdev, DFH_TYPE_FIU);
+>>  	dfl_fpga_dev_feature_uinit(pdev);
+>>  	fme_dev_destroy(pdev);
+>>  
+>> diff --git a/drivers/fpga/dfl-uio.c b/drivers/fpga/dfl-uio.c
+>> new file mode 100644
+>> index 0000000..185fbab
+>> --- /dev/null
+>> +++ b/drivers/fpga/dfl-uio.c
+>> @@ -0,0 +1,107 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * prototype dfl uio driver
+>> + *
+>> + * Copyright Tom Rix 2020
+>> + */
+>> +#include <linux/module.h>
+>> +#include "dfl.h"
+>> +
+>> +static irqreturn_t dfl_uio_handler(int irq, struct uio_info *dev_info)
+>> +{
+>> +	return IRQ_HANDLED;
+>> +}
+>> +
+>> +static int dfl_uio_mmap(struct uio_info *info, struct vm_area_struct *vma)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static int dfl_uio_open(struct uio_info *info, struct inode *inode)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static int dfl_uio_release(struct uio_info *info, struct inode *inode)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static int dfl_uio_irqcontrol(struct uio_info *info, s32 irq_on)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +int dfl_uio_add(struct dfl_feature *feature)
+>> +{
+>> +	struct uio_info *uio;
+>> +	struct resource *res =
+>> +		&feature->dev->resource[feature->resource_index];
+>> +	int ret = 0;
+>> +
+>> +	uio = kzalloc(sizeof(struct uio_info), GFP_KERNEL);
+>> +	if (!uio) {
+>> +		ret = -ENOMEM;
+>> +		goto exit;
+>> +	}
+>> +
+>> +	uio->name = kasprintf(GFP_KERNEL, "dfl-uio-%llx", feature->id);
+>> +	if (!uio->name) {
+>> +		ret = -ENOMEM;
+>> +		goto err_name;
+>> +	}
+>> +
+>> +	uio->version = "0.1";
+>> +	uio->mem[0].memtype = UIO_MEM_PHYS;
+>> +	uio->mem[0].addr = res->start & PAGE_MASK;
+>> +	uio->mem[0].offs = res->start & ~PAGE_MASK;
+>> +	uio->mem[0].size = (uio->mem[0].offs + resource_size(res)
+>> +			    + PAGE_SIZE - 1) & PAGE_MASK;
+>> +	/* How are nr_irqs > 1 handled ??? */
+>> +	if (feature->nr_irqs == 1)
+>> +		uio->irq = feature->irq_ctx[0].irq;
+>> +	uio->handler = dfl_uio_handler;
+>> +	uio->mmap = dfl_uio_mmap;
+>> +	uio->open = dfl_uio_open;
+>> +	uio->release = dfl_uio_release;
+>> +	uio->irqcontrol = dfl_uio_irqcontrol;
+>> +
+>> +	ret = uio_register_device(&feature->dev->dev, uio);
+>> +	if (ret)
+>> +		goto err_register;
+>> +
+>> +	feature->uio = uio;
+>> +exit:
+>> +	return ret;
+>> +err_register:
+>> +	kfree(uio->name);
+>> +err_name:
+>> +	kfree(uio);
+>> +	goto exit;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfl_uio_add);
+>> +
+>> +int dfl_uio_remove(struct dfl_feature *feature)
+>> +{
+>> +	uio_unregister_device(feature->uio);
+>> +	kfree(feature->uio->name);
+>> +	kfree(feature->uio);
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfl_uio_remove);
+>> +
+>> +static int __init dfl_uio_init(void)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static void __exit dfl_uio_exit(void)
+>> +{
+>> +}
+>> +
+>> +module_init(dfl_uio_init);
+>> +module_exit(dfl_uio_exit);
+>> +
+>> +MODULE_DESCRIPTION("DFL UIO prototype driver");
+>> +MODULE_AUTHOR("Tom");
+>> +MODULE_LICENSE("GPL v2");
+>> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+>> index 1305be4..26de8e1 100644
+>> --- a/drivers/fpga/dfl.c
+>> +++ b/drivers/fpga/dfl.c
+>> @@ -663,10 +664,57 @@ exit:
+>>  }
+>>  EXPORT_SYMBOL_GPL(dfl_fpga_dev_feature_init);
+>>  
+>> +int dfl_fpga_dev_feature_init_uio(struct platform_device *pdev, int dfh_type)
+>> +{
+>> +	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
+>> +	struct dfl_feature *feature;
+>> +	int ret;
+>> +
+>> +	dfl_fpga_dev_for_each_feature(pdata, feature) {
+>> +		if (dfh_type == DFH_TYPE_FIU) {
+>> +			if (feature->id == FEATURE_ID_FIU_HEADER ||
+>> +			    feature->id == FEATURE_ID_AFU)
+>> +			continue;
+>> +
+>> +			/* give the unclamined feature to uio */
+>> +			if (!feature->ioaddr) {
+>> +				ret = dfl_uio_add(feature);
+>> +				if (ret)
+>> +					goto exit;
+>> +			}
+>> +		}
+>> +	}
+>> +
+>> +	return 0;
+>> +exit:
+>> +	dfl_fpga_dev_feature_uinit_uio(pdev, dfh_type);
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfl_fpga_dev_feature_init_uio);
+>> +
+>> +int dfl_fpga_dev_feature_uinit_uio(struct platform_device *pdev, int dfh_type)
+>> +{
+>> +	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
+>> +	struct dfl_feature *feature;
+>> +	int ret = 0;
+>> +
+>> +	dfl_fpga_dev_for_each_feature(pdata, feature) {
+>> +		if (dfh_type == DFH_TYPE_FIU) {
+>> +			if (feature->id == FEATURE_ID_FIU_HEADER ||
+>> +			    feature->id == FEATURE_ID_AFU)
+>> +				continue;
+>> +
+>> +			if (feature->uio)
+>> +				ret |= dfl_uio_remove(feature);
+>> +		}
+>> +	}
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfl_fpga_dev_feature_uinit_uio);
+>> +
+>>  static void dfl_chardev_uinit(void)
+>>  {
+>>  	int i;
+>> -
+>>  	for (i = 0; i < DFL_FPGA_DEVT_MAX; i++)
+>>  		if (MAJOR(dfl_chrdevs[i].devt)) {
+>>  			unregister_chrdev_region(dfl_chrdevs[i].devt,
+>> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+>> index a85d1cd..6e37aef 100644
+>> --- a/drivers/fpga/dfl.h
+>> +++ b/drivers/fpga/dfl.h
+>> @@ -26,6 +26,7 @@
+>>  #include <linux/platform_device.h>
+>>  #include <linux/slab.h>
+>>  #include <linux/uuid.h>
+>> +#include <linux/uio_driver.h>
+>>  #include <linux/fpga/fpga-region.h>
+>>  
+>>  /* maximum supported number of ports */
+>> @@ -232,6 +233,7 @@ struct dfl_feature_irq_ctx {
+>>   * struct dfl_feature - sub feature of the feature devices
+>>   *
+>>   * @dev: ptr to pdev of the feature device which has the sub feature.
+>> + * @uio: for fallback uio driver.
+>>   * @id: sub feature id.
+>>   * @index: unique identifier for an sub feature within the feature device.
+>>   *	   It is possible that multiply sub features with same feature id are
+>> @@ -248,6 +250,7 @@ struct dfl_feature_irq_ctx {
+>>   */
+>>  struct dfl_feature {
+>>  	struct platform_device *dev;
+>> +	struct uio_info *uio;
+>>  	u64 id;
+>>  	int index;
+>>  	int resource_index;
+>> @@ -360,6 +363,11 @@ void dfl_fpga_dev_feature_uinit(struct platform_device *pdev);
+>>  int dfl_fpga_dev_feature_init(struct platform_device *pdev,
+>>  			      struct dfl_feature_driver *feature_drvs);
+>>  
+>> +int dfl_fpga_dev_feature_init_uio(struct platform_device *pdev, int dfh_type);
+>> +int dfl_fpga_dev_feature_uinit_uio(struct platform_device *pdev, int dfh_type);
+>> +int dfl_uio_add(struct dfl_feature *feature);
+>> +int dfl_uio_remove(struct dfl_feature *feature);
+>> +
+>>  int dfl_fpga_dev_ops_register(struct platform_device *pdev,
+>>  			      const struct file_operations *fops,
+>>  			      struct module *owner);
+>> -- 
+>> 2.18.1
 
