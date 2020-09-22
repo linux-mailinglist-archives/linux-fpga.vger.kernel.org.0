@@ -2,192 +2,67 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 171F527471B
-	for <lists+linux-fpga@lfdr.de>; Tue, 22 Sep 2020 19:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70919274955
+	for <lists+linux-fpga@lfdr.de>; Tue, 22 Sep 2020 21:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbgIVRCi (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 22 Sep 2020 13:02:38 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43625 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726563AbgIVRCi (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 22 Sep 2020 13:02:38 -0400
-Received: by mail-pf1-f193.google.com with SMTP id f18so13017631pfa.10
-        for <linux-fpga@vger.kernel.org>; Tue, 22 Sep 2020 10:02:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z9ae4m6x3ZAzWh1U5RllQaFaWeLmUaSl001dnkjzXxM=;
-        b=MVBbdwZLOHnYkn/+3wEbUqehg7Jt50/1nzheQNr6j7Rr0Avnr3kqbXlsVwBY/SgGcR
-         1N0B7I3SQChXQRmIzoelX6ZoRuLLi7rlkpZ2I7jS8dL8pCUSh4+ly2ezvbLfHp0k1W3P
-         zRAE2yE9o325sravZ7pwGvPIPr2F54nbOJ3VMWlVEzoXXGX0Efa4PL8Lkhek6uZrH2Mo
-         1BvYtm5jPDZ96j+fCwByZVjn2ZMYpi0wWYgjLK1LdkN7aaB/EiZH8J+DozBTM7HYizgF
-         /Zz9wmiHuRlkT1dOcXHZakBRM/cSH4idVc6bRP1LE7tznIKM4Oarb7RYTuMgdzUUAksx
-         uW7A==
-X-Gm-Message-State: AOAM530DK+EEVFnre3zJ3yseLUb4L6EhKGIZzu+hCjy2ds1D7LXDh1Bu
-        4+fyClxWBHSY2FpydHUixHs=
-X-Google-Smtp-Source: ABdhPJyUoQA5pUJT2NDhyhVw2/LrX4O/e+htiNGGCxoXsG+sUpYEHqMV0yL8+VZqZv2neKOI3no2Fw==
-X-Received: by 2002:a63:1d60:: with SMTP id d32mr1716701pgm.327.1600794157121;
-        Tue, 22 Sep 2020 10:02:37 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id bx22sm2916946pjb.23.2020.09.22.10.02.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 10:02:36 -0700 (PDT)
-Date:   Tue, 22 Sep 2020 10:02:35 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        moritzf@google.com
-Subject: Re: [GIT PULL] FPGA Manager additional changes for 5.10
-Message-ID: <20200922170235.GA55789@epycbox.lan>
-References: <20200921000855.GA15612@epycbox.lan>
- <20200922081339.GA1972786@kroah.com>
+        id S1726567AbgIVTm0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 22 Sep 2020 15:42:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57434 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726550AbgIVTm0 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 22 Sep 2020 15:42:26 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EAE27221E8;
+        Tue, 22 Sep 2020 19:42:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600803746;
+        bh=GFRBsj9K7jrHHePKuRmNnXLW6wr/JMGePhL8WYlgtko=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=13Orbs9cEwMpmMPmQXfUFPwwxuZciWYS8B1xzgTL97uRAuTRIa4OCQpC5MkH13NeD
+         AKvgSg1Wun1Yd4wiHYxwQoIdS3AqO/Kkkd4V/MZXcx8pmpzvMHCl97fJSbFUkpBPFM
+         +BxxBnAhuF69FPOxS2jUbxvrPX50u+Vzfoq4ycR8=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200922081339.GA1972786@kroah.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200915024138.GA1827@epycbox.lan>
+References: <20200810134252.68614-1-alexandru.ardelean@analog.com> <20200810134252.68614-8-alexandru.ardelean@analog.com> <CA+U=Dsr41kKGXmgE1KjdTzAso3rwtNXAEoSy+Li=uym7G=D=Jw@mail.gmail.com> <20200915024138.GA1827@epycbox.lan>
+Subject: Re: [PATCH v2 0/6] clk: axi-clk-gen: misc updates to the driver
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, mturquette@baylibre.com,
+        Moritz Fischer <mdf@kernel.org>
+To:     Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Moritz Fischer <mdf@kernel.org>
+Date:   Tue, 22 Sep 2020 12:42:24 -0700
+Message-ID: <160080374459.310579.14438590389388419207@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Everyone,
+Quoting Moritz Fischer (2020-09-14 19:41:38)
+> On Mon, Sep 14, 2020 at 11:11:05AM +0300, Alexandru Ardelean wrote:
+> > On Mon, Aug 10, 2020 at 4:41 PM Alexandru Ardelean
+> > <alexandru.ardelean@analog.com> wrote:
+> > >
+> > > These patches synchronize the driver with the current state in the
+> > > Analog Devices Linux tree:
+> > >   https://github.com/analogdevicesinc/linux/
+> > >
+> > > They have been in the tree for about 2-3, so they did receive some
+> > > testing.
+> >=20
+> > Ping on this series.
+> > Do I need to do a re-send?
 
-On Tue, Sep 22, 2020 at 10:13:39AM +0200, Greg KH wrote:
-> On Sun, Sep 20, 2020 at 05:08:55PM -0700, Moritz Fischer wrote:
-> > The following changes since commit 9ba3a0aa09fe505540a3bdd11f0da3b8e9d73055:
-> > 
-> >   fpga: dfl: create a dfl bus type to support DFL devices (2020-09-09 20:28:16 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git tags/fpga-extra-for-5.10
-> > 
-> > for you to fetch changes up to 41b9b36fe986e15eba0a4220c18d72fa5eb9f0dd:
-> > 
-> >   fpga: dfl: n3000-nios: Make m10_n3000_info static (2020-09-16 19:16:58 -0700)
-> > 
-> > ----------------------------------------------------------------
-> > FPGA Manager changes for 5.10-rc1
-> > 
-> > Here is the second set of FPGA changes for the 5.10 merge window.
-> > 
-> > Mircea's changes are part of a changeset to add support for FPGA based
-> > clock drivers.
-> > 
-> > My change fixed a whitespace error in that patch that I missed when
-> > initially applying it.
-> > 
-> > Xu's changes contain additional changes to support the new DFL bus,
-> > including some clean ups, refactoring as well as its first user, the
-> > NIOS 3000 driver.
-> > 
-> > YueHaibing's change addresses a sparse warning.
-> > 
-> > All patches have been reviewed on the mailing list, and have been in the
-> > last few linux-next releases (as part of my for-next branch) without issues.
-> > 
-> > Signed-off-by: Moritz Fischer <mdf@kernel.org>
-> > 
-> > ----------------------------------------------------------------
-> > Mircea Caprioru (1):
-> >       include: fpga: adi-axi-common.h: add definitions for supported FPGAs
-> > 
-> > Moritz Fischer (1):
-> >       include: fpga: adi-axi-common: Fix leading whitespace in header
-> > 
-> > Xu Yilun (5):
-> >       fpga: dfl: move dfl_device_id to mod_devicetable.h
-> >       dfl: add dfl bus support to MODULE_DEVICE_TABLE()
-> >       fpga: dfl: fix the comments of type & feature_id fields
-> >       fpga: dfl: add support for N3000 Nios private feature
-> >       fpga: dfl: move dfl bus related APIs to include/linux/fpga/dfl.h
-> > 
-> > YueHaibing (1):
-> >       fpga: dfl: n3000-nios: Make m10_n3000_info static
-> > 
-> >  .../ABI/testing/sysfs-bus-dfl-devices-n3000-nios   |  49 ++
-> >  Documentation/fpga/dfl-n3000-nios.rst              |  73 +++
-> >  Documentation/fpga/index.rst                       |   1 +
-> >  MAINTAINERS                                        |   3 +-
-> >  drivers/fpga/Kconfig                               |  11 +
-> >  drivers/fpga/Makefile                              |   2 +
-> >  drivers/fpga/dfl-n3000-nios.c                      | 573 +++++++++++++++++++++
-> >  drivers/fpga/dfl.c                                 |   1 +
-> >  drivers/fpga/dfl.h                                 |  85 +--
-> >  include/linux/fpga/adi-axi-common.h                | 103 ++++
-> >  include/linux/fpga/dfl.h                           |  86 ++++
-> >  include/linux/mod_devicetable.h                    |  12 +
-> >  scripts/mod/devicetable-offsets.c                  |   4 +
-> >  scripts/mod/file2alias.c                           |  17 +
-> 
-> It's hard to comment on patches on a pull request, but this series still
-> needs some work.
-> 
-> I'll try to list the patch names here and comments, but really, patches
-> would be best to make it easier to review:
-> 
-> 	0001-include-fpga-adi-axi-common.h-add-definitions-for-su.patch
-> 		- no users of any of these things you added, why is this
-> 		  patch needed?
-> 
-> 	0002-fpga-dfl-move-dfl_device_id-to-mod_devicetable.h.patch
-> 		- dfl_device_id is not descriptive, it means nothing to
-> 		  anyone outside of the fpga subsystem.
-> 		- fpga_dfl_device_id perhaps instead?  That gives people
-> 		  a chance to know where to look for this
-> 
-> 	0003-dfl-add-dfl-bus-support-to-MODULE_DEVICE_TABLE.patch
-> 		- same "prefix" issues as patch 0002, make it "fpga_dfl"
-> 		  please.
-> 
-> 	0004-fpga-dfl-fix-the-comments-of-type-feature_id-fields.patch
-> 		- You talk about 4 bits here, and then point to an
-> 		  enumerated type with no actual values set for them at
-> 		  all.  How is that possible???
-> 
-> 	0005-include-fpga-adi-axi-common-Fix-leading-whitespace-i.patch
-> 		- wrong usage of "Fixes" in a signed-off-by area, please
-> 		  see the submitting patches documentation for the
-> 		  correct format.  My scripts, and linux-next's scripts
-> 		  would have caught this, making this pull request not
-> 		  be able to be accepted anyway...
-> 
-> 	0006-fpga-dfl-add-support-for-N3000-Nios-private-feature.patch
-> 		- module parameters are for drivers written in the
-> 		  1990's.  Please just "do the right thing" and make the
-> 		  code work properly without having to have custom
-> 		  options.  Note this option does not really work if you
-> 		  have multiple devices in the system at once, which is
-> 		  one reason why we don't use module parameters anymore.
-> 
-> 	0007-fpga-dfl-move-dfl-bus-related-APIs-to-include-linux-.patch
-> 		- no one uses this header file move, so don't do it
-> 		  until it is required.
+I got this patch series twice. Not sure why.
 
-This patch will be the first user:
-https://lore.kernel.org/lkml/1600666280-25651-1-git-send-email-yilun.xu@intel.com/
+>=20
+> I've applied the FPGA one, the other ones should go through the clock
+> tree I think?
 
-Krzysztof has since explained that this patch should have been on a separate
-branch with a tag from me, so he can pull it in.
-
-> 
-> 	0008-fpga-dfl-n3000-nios-Make-m10_n3000_info-static.patch
-> 		- as patch 0006 is going to be redone, this can be
-> 		  merged into that when completed.  Why the original
-> 		  developer didn't run sparse on the file to start with,
-> 		  I don't know :(
-> 
-> 
-> Wow, 8 out of 8 patches rejected, I think that's a new record!  :)
-> 
-> thanks,
-> 
-> greg k-h
-
-Everyone: I've reverted the patches. You've seen the comments, so
-if one of the patches above is yours please address the comments and
-resend them.
-
-Thanks and sorry for messing this up ...
-
-- Moritz
+Doesn't patch 6 rely on the FPGA patch? How can that driver build
+without the header file?
