@@ -2,493 +2,153 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0CB274EB9
-	for <lists+linux-fpga@lfdr.de>; Wed, 23 Sep 2020 03:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 526BC27507B
+	for <lists+linux-fpga@lfdr.de>; Wed, 23 Sep 2020 07:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgIWByW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 22 Sep 2020 21:54:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55624 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726960AbgIWByU (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 22 Sep 2020 21:54:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600826058;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QRKTlS1GkMekcVpYm/+9Cj+hAa/FOrkhgmiuWKUjGJ0=;
-        b=TuxfOO3VkcmnXQkbOZrZ/lOpfaX8u6rkiObSbfZ3msEqJzg4Xj6/5uREQ7plJ23Ua2uGRl
-        rr7KfprpCUzr7KMIx1YpjsU8BToeOiptQIqSb7jmpNYdBcP3nV0AwrTVbO26sUdqgl0EjT
-        SKLkcBk/SAaEhM6TRMjHv4yV6NQy9Fg=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-267-4HV2MoqrMoClC2LM-9lfuQ-1; Tue, 22 Sep 2020 21:54:16 -0400
-X-MC-Unique: 4HV2MoqrMoClC2LM-9lfuQ-1
-Received: by mail-oi1-f200.google.com with SMTP id r16so8539343oij.20
-        for <linux-fpga@vger.kernel.org>; Tue, 22 Sep 2020 18:54:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=QRKTlS1GkMekcVpYm/+9Cj+hAa/FOrkhgmiuWKUjGJ0=;
-        b=NqoPVFTPxxvShuj/5VVRPnTSS0b7yFXzqBUDmanmqkPUnUIC3o5Mf0j59mUMXvh3Js
-         fy/ho+g/cZz+0Xolj/0QZYZRU2osKVuclKvbZ0CJoqFhfNMs/B48vbGWnMr8A0smFwzQ
-         D7Y1p/N3yPg7yBHKzaLnwUc44PAxENl1phDa23rn6QAwlCyxaGX4ck/QK31YCxEHHI25
-         0LleN68Kx95QBnKt5LCJXd3eHbOGLhNg084yciU212GgsfnsA5waSUXhbZtWtKGk36we
-         6WKIXU6woJUwrpvx63QV880CX2H8XW/nU3ZU56W3LvOJnkVDuSyMvKLc+R9j81e/y7M8
-         4ftQ==
-X-Gm-Message-State: AOAM532zOCDkboB0u0fzY9Anvk3X4ipFoTsMrPe2zJcx3ow2Vn3rLdJX
-        BDK4aZzuWgnsB6ebH3L5DD3atE6xSQ/4544FgIxHHnZYXjijcaLoRwdlFz/octDbrO+6EBRQPPE
-        WyR2vmpw2Uz8dnmPNuZR/MQ==
-X-Received: by 2002:a05:6808:b03:: with SMTP id s3mr4504961oij.28.1600826054881;
-        Tue, 22 Sep 2020 18:54:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyp5yRb1cyomQTDywKdXsSKsT4fHQWipGvgYUwGOH6lQ2H5UBWpLGmX8zO1bB+lLxI1uL3rXA==
-X-Received: by 2002:a05:6808:b03:: with SMTP id s3mr4504949oij.28.1600826054440;
-        Tue, 22 Sep 2020 18:54:14 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id w7sm9043705oon.2.2020.09.22.18.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Sep 2020 18:54:13 -0700 (PDT)
-Subject: Re: [RFC] fpga: dfl: a prototype uio driver
+        id S1726647AbgIWFyS (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 23 Sep 2020 01:54:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60916 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726557AbgIWFyS (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 23 Sep 2020 01:54:18 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E807C206A5;
+        Wed, 23 Sep 2020 05:54:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600840457;
+        bh=pZRfuCYxFbYkhQlZ/4BZiyLOOFGJsGsp/GXKahz7wwQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lq5LCXIci8R8mfcUy3ddg3r0vDhU2gUcestNN9E7g25/+zlJY/Kn7hL4DpTDb2Pjo
+         LYV/JQ4n6k7zr6tumIEiZGfmLpV/UUdMk5ZT9L/zobJF9sy7BPhOXeej8B3TXHFvLU
+         TwdmaHtnIi4Yb+qwG2RmlpNB38mMPZjIfJ/gED70=
+Date:   Wed, 23 Sep 2020 07:54:36 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     alex.williamson@redhat.com, hao.wu@intel.com, mdf@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-References: <20200919165113.5219-1-trix@redhat.com>
- <20200921085553.GA8796@yilunxu-OptiPlex-7050>
- <a95906c3-1960-e753-e306-74a90045269e@redhat.com>
- <20200922031837.GA8768@yilunxu-OptiPlex-7050>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <7c1df84b-1a23-f8f6-cfea-0c744330e3f9@redhat.com>
-Date:   Tue, 22 Sep 2020 18:54:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+Cc:     Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        moritzf@google.com
+Subject: Re: [GIT PULL] FPGA Manager additional changes for 5.10
+Message-ID: <20200923055436.GA2629915@kroah.com>
+References: <20200921000855.GA15612@epycbox.lan>
+ <20200922081339.GA1972786@kroah.com>
+ <20200922194908.GA29964@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-In-Reply-To: <20200922031837.GA8768@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200922194908.GA29964@yilunxu-OptiPlex-7050>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Wed, Sep 23, 2020 at 03:49:08AM +0800, Xu Yilun wrote:
+> On Tue, Sep 22, 2020 at 10:13:39AM +0200, Greg KH wrote:
+> > 	0002-fpga-dfl-move-dfl_device_id-to-mod_devicetable.h.patch
+> > 		- dfl_device_id is not descriptive, it means nothing to
+> > 		  anyone outside of the fpga subsystem.
+> > 		- fpga_dfl_device_id perhaps instead?  That gives people
+> > 		  a chance to know where to look for this
+> 
+> Yes, I could change to fpga_dfl_device_id.
+> And do we also need to change the naming of other dfl bus objects & APIs?
+> I tend to not change them because the names would become too long. The
+> clue of fpga_dfl_device_id would be enough for people to know where they
+> are.
 
-On 9/21/20 8:18 PM, Xu Yilun wrote:
-> On Mon, Sep 21, 2020 at 12:32:16PM -0700, Tom Rix wrote:
->> On 9/21/20 1:55 AM, Xu Yilun wrote:
->>> On Sat, Sep 19, 2020 at 09:51:13AM -0700, trix@redhat.com wrote:
->>>> From: Tom Rix <trix@redhat.com>
->>>>
->>>> I following up on Moritz asking for early RFC's by showing how this
->>>> could be done with the concrete example of around
->>>>
->>>> [PATCH 0/3] add VFIO mdev support for DFL devices
->>>>
->>>> I hacked this together, it barely works. Do not expect that this
->>>> patch to apply anywhere.  It has enough to show where I want
->>>> to go and people can comment without me having invested a lot of
->>>> effort.  I am not expecting to carry this forward, it only
->>>> addresses the issues I had with the origin patch.
->>>>
->>>> This change adds a uio driver for any unclaimed dfl feature
->>>>
->>>> During the normal matching of feature id's to drivers, some
->>>> of the features are not claimed because there neither a
->>>> builtin driver nor a module driver that matches the feature
->>>> id.  For these unclaimed features, provide a uio driver to a
->>>> possible user space driver.
->>> I think we don't have to setup UIO interfaces for all unclaimed 
->>> features. It could be the decision of the user whether the UIO
->>> device is needed for a feature. My opinion is that, the
->>> driver_override sysfs is still generic enough for user's to switch
->>> between kernel device drivers and dfl uio driver.
->> Instead of a string, could there just be a 'use_uio' flag ?
->>
->> How does the 'driver_override' work when there is no starting driver ?
-> Now we have a dfl bus_type, we could add the 'driver_override' to each
-> dfl device on dfl bus. It is the same as 'feature_id' & 'type'.
->
-> Actually the 'driver_override' also exists in various bus type (platform,
-> pci ...).
->
->>> There may be cases the dfl device driver modules are not inserted
->>> during dfl-fme/port initialization, but they are to be inserted
->>> manually. If the features are all registered to uio, then there will
->>> be problems when dfl device drivers module are inserted.
->> How does this manual loading work ? The driver list for the features
->>
->> seems to only be used during the card probe time.
->>
->> To change the order the dfl-pci needs to be unloaded and that will
->>
->> destroy all the uio devices as well as usual feature drivers attached to
->>
->> the pci driver.
-> After we have introduced the dfl bus patches. The initialization flow
-> is:
->
-> 1. dfl-fme/port initializes its core private features (listed in
->    fme/port_feature_drvs array), these private features are part of
->    the dfl-fme/port module. They cannot be exposed as uio devices cause
->    they are managed by the dfl-fme/afu kernel driver.
->
->
-> 2. The rest of the private features are added as dfl devices. They can
->    be matched by independent dfl driver modules. dfl-n3000-nios is the
->    first use case. The dfl-n3000-nios.ko may not be loaded when dfl-fme
->    probe, but later user loads the module manually by
->    "insmod drivers/fpga/dfl-n3000-nios.ko".
->
->    If we create uio interfaces for all unclaimed features on
->    dfl-fme/port probe, then I can see problem when user insmod
->    dfl-n3000-nios.ko
->
->
-> For these dfl devices, we could give users an option to manage them
-> by userspace I/O access. The flow I suggest is like:
-> a) load the uio-dfl.ko, it will not match any dfl device now.
->    # modprobe uio-dfl   
->
-> b) unbind the kernel driver for the specific dfl device
->    # echo dfl_dev.0 > /sys/bus/dfl/drivers/n3000-nios/unbind
->
-> c) assign the uio driver for the dfl device. Please note this will
->    not trigger any driver matching.
->    # echo uio-dfl > /sys/bus/dfl/devices/dfl_dev.0/driver_override
->
-> d) actually trigger the driver matching, then the uio-dfl module takes
->    function.
->    # echo dfl_dev.0 > /sys/bus/dfl/drivers_probe
->
->>
->>>
->>>> I have doubts that a uio for an afu feature is approptiate as these
->>>> can be any device.
->>> I think generally afu could also be as uio device if we don't concern
->>> about dma isolation.
->> I am thinking about afu with its own pci id.
->>
->> So there could be a conflict with some other driver that responds to the pci id.
-> I think 'driver_override' mechanism solves the problem, it ensures no
-> other driver could be matched to the device except your assigned one.
->
->>> But now seems not possible to match afu to uio driver, cause now in DFL
->>> framework AFU is managed by dfl-afu.ko
->>>
->>>> Another possible problem is if the number of interrupts for the
->>>> feature is greater than 1.  Uio seems to only support 1. My guess
->>>> is this would need some hackery in the open() to add to the
->>>> interrupt handler.
->>> I think it may not possible for UIO to support multiple interrupts if
->>> user cannot access the interrupt enable/pending registers. The uio
->>> device have just one /dev/uioX node for interrupt. So I tend to
->>> accept the limitation. And for now we don't have board specific
->>> features that needs multiple interrupts. For PAC N3000, no interrupt is
->>> needed.
->> Maybe uio needs to change to support multiple interrupts ?
-> I could expect a big change for uio, especially the change of APIs to
-> userspace, which would make much impact.
->
-> For now I didn't see the demand of multiple interrupts for dfl. And for
-> PAC N3000, no interrupt is needed. So this could be considered later.
->
-> Actually, to meet our current need, the only changes for dfl framework could
-> be the common 'driver_override'. We could try to improve the other part
-> if there is a clear request.
->
->>>> It is for this type of reason I think a dfl-uio driver is needed
->>>> rather than reusing an existing generic uio driver.
->>> So if we don't try to change interrupt, the implementation of dfl-uio is
->>> just a subset of generic uio platform driver, so why not we just use it?
->> Its a toss up.
-> I agree. I also hesitate at this for sometime.
->
->> Maybe there some dfl only constraints like write/read is a multiple 4 bytes
-> When you mmap your IO to users, you cannot limit the way they access the
-> registers. It is the user's responsibility to keep it right.
->
->> Or just why have another layer in the setup.
-> It's mainly about reusing the code. DFL devices are mainly the same as
-> platform devices (except the way they are enumerated). Actually people
-> may integrates IP blocks in FPGA which are already widely used on other
-> systems and implemented as platform devices. So I think we may get more
-> benifit leveraging uio platform.
->
-> Thanks,
-> Yilun
+You are now "playing in the namespace of the whole kernel", so yes, you
+need to be as descriptive as possible so that everyone knows what is
+happening as all subsystems touch these files.
 
-Thanks for the detailed explanation!
+No one knows what "dfl_" means.  Heck, I have no idea, I keep thinking
+"Device Firmware Loader" or something like that.
 
-I look forward to your next rev.
+So making it obvious, and unique, and "short enough" is the requirement.
 
-Tom
+Naming is hard :)
 
+And there is no problem with having "long" names in your drivers, we
+have no max numbers of characters that the compiler can accept, this
+isn't the 1960's anymore...
 
->
->> Tom
->>
->>> Thanks,
->>> Yilun
->>>
->>>> Signed-off-by: Tom Rix <trix@redhat.com>
->>>> ---
->>>>  drivers/fpga/dfl-fme-main.c |   9 ++-
->>>>  drivers/fpga/dfl-uio.c      | 107 ++++++++++++++++++++++++++++++++++++
->>>>  drivers/fpga/dfl.c          |  47 +++++++++++++++-
->>>>  drivers/fpga/dfl.h          |   8 +++
->>>>  4 files changed, 169 insertions(+), 2 deletions(-)
->>>>  create mode 100644 drivers/fpga/dfl-uio.c
->>>>
->>>> diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
->>>> index 037dc4f..3323e90 100644
->>>> --- a/drivers/fpga/dfl-fme-main.c
->>>> +++ b/drivers/fpga/dfl-fme-main.c
->>>> @@ -709,12 +709,18 @@ static int fme_probe(struct platform_device *pdev)
->>>>  	if (ret)
->>>>  		goto dev_destroy;
->>>>  
->>>> -	ret = dfl_fpga_dev_ops_register(pdev, &fme_fops, THIS_MODULE);
->>>> +	ret = dfl_fpga_dev_feature_init_uio(pdev, DFH_TYPE_FIU);
->>>>  	if (ret)
->>>>  		goto feature_uinit;
->>>>  
->>>> +	ret = dfl_fpga_dev_ops_register(pdev, &fme_fops, THIS_MODULE);
->>>> +	if (ret)
->>>> +		goto feature_uinit_uio;
->>>> +
->>>>  	return 0;
->>>>  
->>>> +feature_uinit_uio:
->>>> +	dfl_fpga_dev_feature_uinit_uio(pdev, DFH_TYPE_FIU);
->>>>  feature_uinit:
->>>>  	dfl_fpga_dev_feature_uinit(pdev);
->>>>  dev_destroy:
->>>> @@ -726,6 +732,7 @@ exit:
->>>>  static int fme_remove(struct platform_device *pdev)
->>>>  {
->>>>  	dfl_fpga_dev_ops_unregister(pdev);
->>>> +	dfl_fpga_dev_feature_uinit_uio(pdev, DFH_TYPE_FIU);
->>>>  	dfl_fpga_dev_feature_uinit(pdev);
->>>>  	fme_dev_destroy(pdev);
->>>>  
->>>> diff --git a/drivers/fpga/dfl-uio.c b/drivers/fpga/dfl-uio.c
->>>> new file mode 100644
->>>> index 0000000..185fbab
->>>> --- /dev/null
->>>> +++ b/drivers/fpga/dfl-uio.c
->>>> @@ -0,0 +1,107 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/*
->>>> + * prototype dfl uio driver
->>>> + *
->>>> + * Copyright Tom Rix 2020
->>>> + */
->>>> +#include <linux/module.h>
->>>> +#include "dfl.h"
->>>> +
->>>> +static irqreturn_t dfl_uio_handler(int irq, struct uio_info *dev_info)
->>>> +{
->>>> +	return IRQ_HANDLED;
->>>> +}
->>>> +
->>>> +static int dfl_uio_mmap(struct uio_info *info, struct vm_area_struct *vma)
->>>> +{
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int dfl_uio_open(struct uio_info *info, struct inode *inode)
->>>> +{
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int dfl_uio_release(struct uio_info *info, struct inode *inode)
->>>> +{
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int dfl_uio_irqcontrol(struct uio_info *info, s32 irq_on)
->>>> +{
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +int dfl_uio_add(struct dfl_feature *feature)
->>>> +{
->>>> +	struct uio_info *uio;
->>>> +	struct resource *res =
->>>> +		&feature->dev->resource[feature->resource_index];
->>>> +	int ret = 0;
->>>> +
->>>> +	uio = kzalloc(sizeof(struct uio_info), GFP_KERNEL);
->>>> +	if (!uio) {
->>>> +		ret = -ENOMEM;
->>>> +		goto exit;
->>>> +	}
->>>> +
->>>> +	uio->name = kasprintf(GFP_KERNEL, "dfl-uio-%llx", feature->id);
->>>> +	if (!uio->name) {
->>>> +		ret = -ENOMEM;
->>>> +		goto err_name;
->>>> +	}
->>>> +
->>>> +	uio->version = "0.1";
->>>> +	uio->mem[0].memtype = UIO_MEM_PHYS;
->>>> +	uio->mem[0].addr = res->start & PAGE_MASK;
->>>> +	uio->mem[0].offs = res->start & ~PAGE_MASK;
->>>> +	uio->mem[0].size = (uio->mem[0].offs + resource_size(res)
->>>> +			    + PAGE_SIZE - 1) & PAGE_MASK;
->>>> +	/* How are nr_irqs > 1 handled ??? */
->>>> +	if (feature->nr_irqs == 1)
->>>> +		uio->irq = feature->irq_ctx[0].irq;
->>>> +	uio->handler = dfl_uio_handler;
->>>> +	uio->mmap = dfl_uio_mmap;
->>>> +	uio->open = dfl_uio_open;
->>>> +	uio->release = dfl_uio_release;
->>>> +	uio->irqcontrol = dfl_uio_irqcontrol;
->>>> +
->>>> +	ret = uio_register_device(&feature->dev->dev, uio);
->>>> +	if (ret)
->>>> +		goto err_register;
->>>> +
->>>> +	feature->uio = uio;
->>>> +exit:
->>>> +	return ret;
->>>> +err_register:
->>>> +	kfree(uio->name);
->>>> +err_name:
->>>> +	kfree(uio);
->>>> +	goto exit;
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(dfl_uio_add);
->>>> +
->>>> +int dfl_uio_remove(struct dfl_feature *feature)
->>>> +{
->>>> +	uio_unregister_device(feature->uio);
->>>> +	kfree(feature->uio->name);
->>>> +	kfree(feature->uio);
->>>> +	return 0;
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(dfl_uio_remove);
->>>> +
->>>> +static int __init dfl_uio_init(void)
->>>> +{
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static void __exit dfl_uio_exit(void)
->>>> +{
->>>> +}
->>>> +
->>>> +module_init(dfl_uio_init);
->>>> +module_exit(dfl_uio_exit);
->>>> +
->>>> +MODULE_DESCRIPTION("DFL UIO prototype driver");
->>>> +MODULE_AUTHOR("Tom");
->>>> +MODULE_LICENSE("GPL v2");
->>>> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
->>>> index 1305be4..26de8e1 100644
->>>> --- a/drivers/fpga/dfl.c
->>>> +++ b/drivers/fpga/dfl.c
->>>> @@ -663,10 +664,57 @@ exit:
->>>>  }
->>>>  EXPORT_SYMBOL_GPL(dfl_fpga_dev_feature_init);
->>>>  
->>>> +int dfl_fpga_dev_feature_init_uio(struct platform_device *pdev, int dfh_type)
->>>> +{
->>>> +	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
->>>> +	struct dfl_feature *feature;
->>>> +	int ret;
->>>> +
->>>> +	dfl_fpga_dev_for_each_feature(pdata, feature) {
->>>> +		if (dfh_type == DFH_TYPE_FIU) {
->>>> +			if (feature->id == FEATURE_ID_FIU_HEADER ||
->>>> +			    feature->id == FEATURE_ID_AFU)
->>>> +			continue;
->>>> +
->>>> +			/* give the unclamined feature to uio */
->>>> +			if (!feature->ioaddr) {
->>>> +				ret = dfl_uio_add(feature);
->>>> +				if (ret)
->>>> +					goto exit;
->>>> +			}
->>>> +		}
->>>> +	}
->>>> +
->>>> +	return 0;
->>>> +exit:
->>>> +	dfl_fpga_dev_feature_uinit_uio(pdev, dfh_type);
->>>> +	return ret;
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(dfl_fpga_dev_feature_init_uio);
->>>> +
->>>> +int dfl_fpga_dev_feature_uinit_uio(struct platform_device *pdev, int dfh_type)
->>>> +{
->>>> +	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
->>>> +	struct dfl_feature *feature;
->>>> +	int ret = 0;
->>>> +
->>>> +	dfl_fpga_dev_for_each_feature(pdata, feature) {
->>>> +		if (dfh_type == DFH_TYPE_FIU) {
->>>> +			if (feature->id == FEATURE_ID_FIU_HEADER ||
->>>> +			    feature->id == FEATURE_ID_AFU)
->>>> +				continue;
->>>> +
->>>> +			if (feature->uio)
->>>> +				ret |= dfl_uio_remove(feature);
->>>> +		}
->>>> +	}
->>>> +	return ret;
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(dfl_fpga_dev_feature_uinit_uio);
->>>> +
->>>>  static void dfl_chardev_uinit(void)
->>>>  {
->>>>  	int i;
->>>> -
->>>>  	for (i = 0; i < DFL_FPGA_DEVT_MAX; i++)
->>>>  		if (MAJOR(dfl_chrdevs[i].devt)) {
->>>>  			unregister_chrdev_region(dfl_chrdevs[i].devt,
->>>> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
->>>> index a85d1cd..6e37aef 100644
->>>> --- a/drivers/fpga/dfl.h
->>>> +++ b/drivers/fpga/dfl.h
->>>> @@ -26,6 +26,7 @@
->>>>  #include <linux/platform_device.h>
->>>>  #include <linux/slab.h>
->>>>  #include <linux/uuid.h>
->>>> +#include <linux/uio_driver.h>
->>>>  #include <linux/fpga/fpga-region.h>
->>>>  
->>>>  /* maximum supported number of ports */
->>>> @@ -232,6 +233,7 @@ struct dfl_feature_irq_ctx {
->>>>   * struct dfl_feature - sub feature of the feature devices
->>>>   *
->>>>   * @dev: ptr to pdev of the feature device which has the sub feature.
->>>> + * @uio: for fallback uio driver.
->>>>   * @id: sub feature id.
->>>>   * @index: unique identifier for an sub feature within the feature device.
->>>>   *	   It is possible that multiply sub features with same feature id are
->>>> @@ -248,6 +250,7 @@ struct dfl_feature_irq_ctx {
->>>>   */
->>>>  struct dfl_feature {
->>>>  	struct platform_device *dev;
->>>> +	struct uio_info *uio;
->>>>  	u64 id;
->>>>  	int index;
->>>>  	int resource_index;
->>>> @@ -360,6 +363,11 @@ void dfl_fpga_dev_feature_uinit(struct platform_device *pdev);
->>>>  int dfl_fpga_dev_feature_init(struct platform_device *pdev,
->>>>  			      struct dfl_feature_driver *feature_drvs);
->>>>  
->>>> +int dfl_fpga_dev_feature_init_uio(struct platform_device *pdev, int dfh_type);
->>>> +int dfl_fpga_dev_feature_uinit_uio(struct platform_device *pdev, int dfh_type);
->>>> +int dfl_uio_add(struct dfl_feature *feature);
->>>> +int dfl_uio_remove(struct dfl_feature *feature);
->>>> +
->>>>  int dfl_fpga_dev_ops_register(struct platform_device *pdev,
->>>>  			      const struct file_operations *fops,
->>>>  			      struct module *owner);
->>>> -- 
->>>> 2.18.1
+> > 	0003-dfl-add-dfl-bus-support-to-MODULE_DEVICE_TABLE.patch
+> > 		- same "prefix" issues as patch 0002, make it "fpga_dfl"
+> > 		  please.
+> > 
+> > 	0004-fpga-dfl-fix-the-comments-of-type-feature_id-fields.patch
+> > 		- You talk about 4 bits here, and then point to an
+> > 		  enumerated type with no actual values set for them at
+> > 		  all.  How is that possible???
+> 
+> I'm sorry I didn't fully understand the issue. Actually the
+> enum dfl_id_type is introduced in previous patchset, it contains the
+> implied values FME_ID == 0, PORT_ID == 1.
 
+You say "implied", that's the problem.
+
+If you really are going to guarantee that these values are only 4 bits
+big, then explicitly set them to that value so we all know what is going
+on.
+
+But the bigger question is "why"?  Who cares it's only 4 bits, we have
+room in the kernel to have it be a full 8 bits or 32 or whatever, right?
+
+If this is a value shared by hardware or a spec, then you HAVE TO
+explicitly set the values of an enumerated type.  Otherwise the compiler
+is in its right to do whatever it wants with them (well, within
+reason...)
+
+> > 	0005-include-fpga-adi-axi-common-Fix-leading-whitespace-i.patch
+> > 		- wrong usage of "Fixes" in a signed-off-by area, please
+> > 		  see the submitting patches documentation for the
+> > 		  correct format.  My scripts, and linux-next's scripts
+> > 		  would have caught this, making this pull request not
+> > 		  be able to be accepted anyway...
+> > 
+> > 	0006-fpga-dfl-add-support-for-N3000-Nios-private-feature.patch
+> > 		- module parameters are for drivers written in the
+> > 		  1990's.  Please just "do the right thing" and make the
+> > 		  code work properly without having to have custom
+> > 		  options.  Note this option does not really work if you
+> > 		  have multiple devices in the system at once, which is
+> > 		  one reason why we don't use module parameters anymore.
+> 
+> I'm wondering which is the better way to handle the case, but let me
+> first describe it.
+> 
+> The n3000-nios driver will first require the embedded firmware to
+> finish some netdev configuration (via the SPI controller) according to
+> user's option, then the driver takes over the control of the SPI
+> controller and continue to enumerate various devices behind the SPI bus.
+> The firmware will never be active again after the first configuration on
+> power cycle. So I tend to let the driver finish the configuration
+> requirement at probe, then the following drivers for SPI devices could be
+> autoloaded. This is why I choose the module parameter.
+
+Remember, module parameters affect ALL devices the driver controls, you
+just broke the ability for this driver to handle multiple devices per a
+single driver, with no way of ever fixing that (module parameters are
+userspace apis...)
+
+> I was considering the sysfs interface option to trigger this one-time
+> configuration. But this makes the SPI devices unavailable until user
+> inputs something to this sysfs node. We may need to add some specific
+> udev rules to make the whole functionalities of the FPGA card enabled
+> automatically.
+
+Why can't you figure out the state of the device without having to worry
+about a module option?  No one will know how to set that thing, and if
+they do, it will get baked into a bootloader somewhere and no one can
+ever turn it off.
+
+Be dynamic and make things "just work" so that the user does not have to
+configure anything at all please.
+
+> And our customers don't expect different configurations between
+> multiple cards on one system, which also influences my decision.
+
+They might not say that today, but you just forced them to never be able
+to do that ever, in the next 20+ years :(
+
+thanks,
+
+greg k-h
