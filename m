@@ -2,65 +2,100 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5192777C1
-	for <lists+linux-fpga@lfdr.de>; Thu, 24 Sep 2020 19:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4762778E3
+	for <lists+linux-fpga@lfdr.de>; Thu, 24 Sep 2020 21:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728553AbgIXR1E (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 24 Sep 2020 13:27:04 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:42408 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727988AbgIXR1E (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 24 Sep 2020 13:27:04 -0400
-Received: by mail-pl1-f193.google.com with SMTP id y6so83459plt.9;
-        Thu, 24 Sep 2020 10:27:03 -0700 (PDT)
+        id S1728678AbgIXTCG (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 24 Sep 2020 15:02:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:40619 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726596AbgIXTCF (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 24 Sep 2020 15:02:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600974122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V9mLFxNt8BdTHSmuFqr0fMLXeKKH7GA6Iah6wfpl6SY=;
+        b=BEvgWu7n5GA0HQgN8r38cqD5XXF2cIBdtzgVt3bkxPEIDWKW/pFxbJEG4ZxCq8XLsTebcU
+        nJgjYNS/fOWY0B5vPE/u1Kx7uMC4E1ZfYKoUNpkNhXz2blSNyN0+f0C6XMumchjuCcX8EQ
+        8nNj0L4DWKIvz9LvOzu64CZXZbdBRq4=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-278-cbXX4u2aOQeoDwGK09yQ7A-1; Thu, 24 Sep 2020 15:01:59 -0400
+X-MC-Unique: cbXX4u2aOQeoDwGK09yQ7A-1
+Received: by mail-oi1-f198.google.com with SMTP id j13so1193488oij.11
+        for <linux-fpga@vger.kernel.org>; Thu, 24 Sep 2020 12:01:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jv6lRXt6vHTPNq82K5WncQSwxDI2Mr6QEyTD+IVsGGY=;
-        b=HjASKSWfSUzUJEWPnG9lmwSgRPYnX7dvcUVgSvblEd0dnzwZy/TMU0F7v6yywYb7oe
-         65jm1oHQqMR7Ohg8hc+2VWyXli0JhOyq5JzqqrLjailTdfuiqmtSyBR4EPDCF6kud7x9
-         bmbY/Im8cDjd5pR8QmntWatRqSc5nUUxjm1JFrV9aynbZhQRL+Tm7wkiJQAwTwtVZUMN
-         C5AInYUUz3R5zdB//3Sd6vj+NK3Tzc4ipU+3EYz+2OWfNdOa+NJMP4ZX9BlKcd0E0M21
-         fyPpNmOU/IeW6nKUvT6puY8F1VU3GAWu/LurR4FYB25xDdCzEWfqZUIgpVra1u5LC0sI
-         4c4A==
-X-Gm-Message-State: AOAM532P1bgcW31/XzHcK+5LKquTjhF+24SkLKlQ8MfNB9QNw8Pgpoj4
-        tJFGtqyMJobd6FxhwDUbwQ8=
-X-Google-Smtp-Source: ABdhPJwWLVkCC4RRfO0jDgG7YUI47eeyr/SFhnPdfBSVg0TQy1J3mJo0IYIIy3DsKDSMeksYkhf5Kg==
-X-Received: by 2002:a17:902:6a88:b029:d2:4365:304e with SMTP id n8-20020a1709026a88b02900d24365304emr232510plk.9.1600968422478;
-        Thu, 24 Sep 2020 10:27:02 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
-        by smtp.gmail.com with ESMTPSA id w192sm89131pfd.156.2020.09.24.10.27.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2020 10:27:01 -0700 (PDT)
-Date:   Thu, 24 Sep 2020 10:27:00 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
-        hao.wu@intel.com, gregkh@linuxfoundation.org
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=V9mLFxNt8BdTHSmuFqr0fMLXeKKH7GA6Iah6wfpl6SY=;
+        b=tQoGyrMQiGjzfyXTXOL9FAcj7C8Ew/WOmDKCXU59AWpOUUdmf+/VM4Bu7a3vYl4SGB
+         UV5voZRxW+hfOfWPYzIXlulH8iYM2hRR2dOu3iWxQ/23aQLdKblcAa23RqIMD3gJLfMP
+         n5/Twpl/cXDpoPYZmeMsc4MT+UdE2iwjl2cDyh1x2DjlRboUgwiVTo6UZxE9Pmz3mXt5
+         kX65UpNbfoPUlr2DW16hqkk8LtaTMElSdJJZSrvqRzvh16NGIe9J0B+ZBPqoGY56PhEs
+         SBP4ggHJYRbmE1myBaVqdQZKKrp3pcNXfxFpIeJLQ8r2sbhwoVe23B2froia02fFVFgx
+         hm5w==
+X-Gm-Message-State: AOAM532Aw4+dMnvj/40Kjt+H8lgIpgQIzUmIESGo3JFgdQnHwxKCwQas
+        R8HK4jevyw5q8mULtFvN7k9Ib6rVEtwRDILmUKtk6JeBLOM8KNius+T9qS600jMsyVoKnx5F6mK
+        Cbx+6hxpHhYWiiKtOXlwaTg==
+X-Received: by 2002:aca:f40a:: with SMTP id s10mr157314oih.126.1600974118598;
+        Thu, 24 Sep 2020 12:01:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxnP2/7FO/Th2/PXqqzr+tXWIBzjy4qIxFw5fo2TNuE1fej61VSiPFVx7LnxK6FGGe/C87ENw==
+X-Received: by 2002:aca:f40a:: with SMTP id s10mr157272oih.126.1600974117848;
+        Thu, 24 Sep 2020 12:01:57 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id v20sm32366oiv.47.2020.09.24.12.01.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2020 12:01:57 -0700 (PDT)
 Subject: Re: [PATCH v3 1/5] fpga: dfl: rename the bus type "dfl" to "fpga-dfl"
-Message-ID: <20200924172700.GA79736@archbook>
+To:     Xu Yilun <yilun.xu@intel.com>, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     lgoncalv@redhat.com, hao.wu@intel.com
 References: <1600966801-30586-1-git-send-email-yilun.xu@intel.com>
  <1600966801-30586-2-git-send-email-yilun.xu@intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <1c3e4af1-d44e-935c-f66c-85d3509c9d18@redhat.com>
+Date:   Thu, 24 Sep 2020 12:01:55 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <1600966801-30586-2-git-send-email-yilun.xu@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Xu,
 
-On Fri, Sep 25, 2020 at 12:59:57AM +0800, Xu Yilun wrote:
+On 9/24/20 9:59 AM, Xu Yilun wrote:
 > Now the DFL device drivers could be made as independent modules and put
 > in different subsystems according to their functionalities. So the name
 > should be descriptive and unique in the whole kernel.
-> 
+>
 > The patch changes the naming of dfl bus related structures, functions,
 > APIs and documentations.
-> 
+
+This set is largely a mechanical change, it looks ok.
+
+
+The big thing i would recommend giving some thought is
+
+include/uabi/linux/fpga-dfl.h uses the prefix DFL_FPGA
+
+this change uses fpga_dfl.
+
+I do not think it matters where 'fpga' is in the internal names,
+
+so for consistency with the external interface the prefix should dfl_fpga.
+
+>
 > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 > ---
 >  Documentation/ABI/testing/sysfs-bus-dfl      |  15 --
@@ -71,7 +106,7 @@ On Fri, Sep 25, 2020 at 12:59:57AM +0800, Xu Yilun wrote:
 >  5 files changed, 184 insertions(+), 179 deletions(-)
 >  delete mode 100644 Documentation/ABI/testing/sysfs-bus-dfl
 >  create mode 100644 Documentation/ABI/testing/sysfs-bus-fpga-dfl
-> 
+>
 > diff --git a/Documentation/ABI/testing/sysfs-bus-dfl b/Documentation/ABI/testing/sysfs-bus-dfl
 > deleted file mode 100644
 > index 23543be..0000000
@@ -93,10 +128,6 @@ On Fri, Sep 25, 2020 at 12:59:57AM +0800, Xu Yilun wrote:
 > -Description:	Read-only. It returns feature identifier local to its DFL FIU
 > -		type.
 > -		Format: 0x%x
-
-You're changing userland facing ABI. I think that's something to avoid,
-please check with Greg on the rules since this hasn't been in a release yet.
-
 > diff --git a/Documentation/ABI/testing/sysfs-bus-fpga-dfl b/Documentation/ABI/testing/sysfs-bus-fpga-dfl
 > new file mode 100644
 > index 0000000..072decf
@@ -112,6 +143,22 @@ please check with Greg on the rules since this hasn't been in a release yet.
 > +		Format: 0x%x
 > +
 > +What:		/sys/bus/fpga-dfl/devices/fpga_dfl_dev.X/feature_id
+
+fpga-dfl and fpga_dfl, the prefix needs to be consistent or..
+
+sys/bus/fpga-dfl/ already has the fpga, dfl info and the second one is redundant so could be
+
+/sys/bus/fpga-dfl/devices/dev.X/feature_id
+
+
+re: mfd's comment.
+
+This is a new, unreleased interface, now is the only we can change it, so lets do it now.
+
+I'd even suggest splitting the patch to get the change into 5.10.
+
+Tom
+
 > +Date:		Aug 2020
 > +KernelVersion:	5.10
 > +Contact:	Xu Yilun <yilun.xu@intel.com>
@@ -819,8 +866,4 @@ please check with Greg on the rules since this hasn't been in a release yet.
 > +		      fpga_dfl_driver_unregister)
 >  
 >  #endif /* __FPGA_DFL_H */
-> -- 
-> 2.7.4
-> 
-Thanks,
-Moritz
+
