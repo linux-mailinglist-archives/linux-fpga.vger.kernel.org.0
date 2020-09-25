@@ -2,46 +2,40 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CAE277E09
-	for <lists+linux-fpga@lfdr.de>; Fri, 25 Sep 2020 04:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA33277E7C
+	for <lists+linux-fpga@lfdr.de>; Fri, 25 Sep 2020 05:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726925AbgIYClK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 24 Sep 2020 22:41:10 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:41117 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726676AbgIYClK (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 24 Sep 2020 22:41:10 -0400
-Received: by mail-pg1-f195.google.com with SMTP id 197so1270396pge.8;
-        Thu, 24 Sep 2020 19:41:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vK/P/Y9S+Yl6RYBl9jl3p0asLbEwmAXfcUuhsRFp1d0=;
-        b=AecqcTuw39syKrNZfenYI5BifaTSaNkXleEZfrryYpHUWSfmIzia7J+PNSWUAFGAFF
-         x8+ZZ8GBnW9DOCgvSpCxxeNBSbw30UFXANy65ey2htSBB6VPHKEZKBr+rW2qCAl6DTN5
-         lcJ2DpCQT3ITOStk8oIfhGY2dSH+brZdjhAlTBKC8xIRcXMimZfYK4OqsGSMAnfAKv4+
-         8yIQel2ySR7aqeE1lzCLhhERKydOg+n6xrWN/Eo1trMNypR5wd4GSgJ44aAszC2DNnCt
-         iWuhS51F5YOynAQOuV3WNJBZVUXaIMmjBEjAoxB/IFwMdIfAnTIaT8BNHab9PW4Emw1M
-         TXyg==
-X-Gm-Message-State: AOAM5326+QPQwmu1x1Bq39O5FkRAVOv2tEmBrPsfHPxBo6wzMJ9tAlKD
-        dITZGSPt6rhIECvAQrBHqeyeszgwa29XLA==
-X-Google-Smtp-Source: ABdhPJy/XHzwVDma4FZUHKWo82KeOSHrXaTgeoPTTqiVhIWZJ1X4Y2KPM0vlpMRK08/bXtcux0r+TQ==
-X-Received: by 2002:a63:f107:: with SMTP id f7mr1638462pgi.155.1601001667764;
-        Thu, 24 Sep 2020 19:41:07 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id o19sm764621pfp.64.2020.09.24.19.41.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2020 19:41:07 -0700 (PDT)
-Date:   Thu, 24 Sep 2020 19:41:06 -0700
-From:   Moritz Fischer <mdf@kernel.org>
+        id S1726773AbgIYDUI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 24 Sep 2020 23:20:08 -0400
+Received: from mga11.intel.com ([192.55.52.93]:20715 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726704AbgIYDUH (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 24 Sep 2020 23:20:07 -0400
+IronPort-SDR: evd6sZBv5FsBsKKqLJzZ5vSkr4SW4kQT+eCNBf/1es1Sj/mpjCC+FHCXnsDY42LpUbiAbmRiNi
+ zlzNq4pu5K9w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9754"; a="158770454"
+X-IronPort-AV: E=Sophos;i="5.77,300,1596524400"; 
+   d="scan'208";a="158770454"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2020 20:20:07 -0700
+IronPort-SDR: TgyX/2O+fJqyApe91NKT2FoudLUE8tfHONOZG5GbzxDmuR9aj+mK3pvIjgtxdxTraed2DIQw8y
+ VDyGg3jDflnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,300,1596524400"; 
+   d="scan'208";a="306120010"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by orsmga003.jf.intel.com with ESMTP; 24 Sep 2020 20:20:04 -0700
+Date:   Fri, 25 Sep 2020 11:15:29 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
 To:     Tom Rix <trix@redhat.com>
-Cc:     Xu Yilun <yilun.xu@intel.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        lgoncalv@redhat.com, hao.wu@intel.com
+        lgoncalv@redhat.com, hao.wu@intel.com, yilun.xu@intel.com
 Subject: Re: [PATCH v3 1/5] fpga: dfl: rename the bus type "dfl" to "fpga-dfl"
-Message-ID: <20200925024106.GA114820@epycbox.lan>
+Message-ID: <20200925031529.GA16433@yilunxu-OptiPlex-7050>
 References: <1600966801-30586-1-git-send-email-yilun.xu@intel.com>
  <1600966801-30586-2-git-send-email-yilun.xu@intel.com>
  <1c3e4af1-d44e-935c-f66c-85d3509c9d18@redhat.com>
@@ -49,6 +43,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <1c3e4af1-d44e-935c-f66c-85d3509c9d18@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
@@ -75,6 +70,15 @@ On Thu, Sep 24, 2020 at 12:01:55PM -0700, Tom Rix wrote:
 > I do not think it matters where 'fpga' is in the internal names,
 > 
 > so for consistency with the external interface the prefix should dfl_fpga.
+
+I think fpga_dfl should be a more descriptive name from the perspective
+of other subsystem. Usually the biger namespace comes first. Actually I
+see we are so far consistent on stuff for the whole kernel namespace,
+Kconfig, head file names, they all have prefix FPGA_DFL or fpga_dfl
+
+Thanks,
+Yilun
+
 > 
 > >
 > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
@@ -135,19 +139,8 @@ On Thu, Sep 24, 2020 at 12:01:55PM -0700, Tom Rix wrote:
 > re: mfd's comment.
 > 
 > This is a new, unreleased interface, now is the only we can change it, so lets do it now.
-
-Imho the question is more whether it is worth the churn on the sysfs
-part or not ...
-
-I think changing the stuff that touches files where other subsystems are
-involved is more critical, and that's how I read Greg's comment.
 > 
 > I'd even suggest splitting the patch to get the change into 5.10.
-
-If we think that's enough of a big deal that this needs to happen, then
-yes, splitting the sysfs part out into a separate patch will increase
-the likelihood of it actually happening.
-
 > 
 > Tom
 > 
@@ -858,5 +851,3 @@ the likelihood of it actually happening.
 > > +		      fpga_dfl_driver_unregister)
 > >  
 > >  #endif /* __FPGA_DFL_H */
-> 
-- Moritz
