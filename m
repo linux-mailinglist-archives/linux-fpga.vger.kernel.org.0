@@ -2,46 +2,50 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA8327D16A
-	for <lists+linux-fpga@lfdr.de>; Tue, 29 Sep 2020 16:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2815027D194
+	for <lists+linux-fpga@lfdr.de>; Tue, 29 Sep 2020 16:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731085AbgI2OkF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 29 Sep 2020 10:40:05 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:39408 "EHLO
+        id S1731216AbgI2Ok5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 29 Sep 2020 10:40:57 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:2612 "EHLO
         mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730884AbgI2OkF (ORCPT
+        by vger.kernel.org with ESMTP id S1731244AbgI2OkU (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 29 Sep 2020 10:40:05 -0400
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08TEbPG6004157;
-        Tue, 29 Sep 2020 10:40:03 -0400
+        Tue, 29 Sep 2020 10:40:20 -0400
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08TEdLsL008168;
+        Tue, 29 Sep 2020 10:40:12 -0400
 Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com with ESMTP id 33t2j4kegm-1
+        by mx0a-00128a01.pphosted.com with ESMTP id 33syg63kkf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Sep 2020 10:40:02 -0400
-Received: from ASHBMBX9.ad.analog.com (ashbmbx9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 08TEe17v041885
+        Tue, 29 Sep 2020 10:40:12 -0400
+Received: from SCSQMBX11.ad.analog.com (scsqmbx11.ad.analog.com [10.77.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 08TEeAqv041924
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Tue, 29 Sep 2020 10:40:01 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Tue, 29 Sep
- 2020 10:39:54 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Tue, 29 Sep 2020 10:39:54 -0400
+        Tue, 29 Sep 2020 10:40:11 -0400
+Received: from SCSQCASHYB6.ad.analog.com (10.77.17.132) by
+ SCSQMBX11.ad.analog.com (10.77.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Tue, 29 Sep 2020 07:40:03 -0700
+Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
+ SCSQCASHYB6.ad.analog.com (10.77.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Tue, 29 Sep 2020 07:39:53 -0700
+Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX11.ad.analog.com
+ (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Tue, 29 Sep 2020 07:39:57 -0700
 Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 08TEdkbv028450;
-        Tue, 29 Sep 2020 10:39:56 -0400
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 08TEdkbw028450;
+        Tue, 29 Sep 2020 10:39:58 -0400
 From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
 To:     <linux-clk@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>, <mdf@kernel.org>,
-        <ardeleanalex@gmail.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH v4 4/7] clk: axi-clkgen: wrap limits in a struct and keep copy on the state object
-Date:   Tue, 29 Sep 2020 17:44:06 +0300
-Message-ID: <20200929144417.89816-5-alexandru.ardelean@analog.com>
+        <ardeleanalex@gmail.com>, Mathias Tausen <mta@gomspace.com>,
+        "Alexandru Ardelean" <alexandru.ardelean@analog.com>
+Subject: [PATCH v4 5/7] clk: axi-clkgen: Respect ZYNQMP PFD/VCO frequency limits
+Date:   Tue, 29 Sep 2020 17:44:07 +0300
+Message-ID: <20200929144417.89816-6-alexandru.ardelean@analog.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200929144417.89816-1-alexandru.ardelean@analog.com>
 References: <20200929144417.89816-1-alexandru.ardelean@analog.com>
@@ -50,133 +54,52 @@ Content-Type: text/plain
 X-ADIRoutedOnPrem: True
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-29_07:2020-09-29,2020-09-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 priorityscore=1501 phishscore=0 spamscore=0 malwarescore=0
- bulkscore=0 clxscore=1015 mlxlogscore=999 mlxscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ spamscore=0 bulkscore=0 mlxscore=0 clxscore=1015 mlxlogscore=743
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2009290130
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Up until the these limits were global/hard-coded, since they are typically
-limits of the fabric.
+From: Mathias Tausen <mta@gomspace.com>
 
-However, since this is an FPGA generated clock, this may run on setups
-where one clock is on a fabric, and another one synthesized on another
-fabric connected via PCIe, and then these limits need to be adjusted for
-each instance of the AXI clock.
+Since axi-clkgen is now supported on ZYNQMP, make sure the max/min
+frequencies of the PFD and VCO are respected.
 
-This change wraps the current constants in 'axi_clkgen_limits' struct and
-the 'axi_clkgen' instance keeps a copy of these limits, which is
-initialized at probe from the default limits.
-
+Signed-off-by: Mathias Tausen <mta@gomspace.com>
 Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 ---
- drivers/clk/clk-axi-clkgen.c | 39 ++++++++++++++++++++++++++----------
- 1 file changed, 28 insertions(+), 11 deletions(-)
+ drivers/clk/clk-axi-clkgen.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
-index 14d803e6af62..4342b7735590 100644
+index 4342b7735590..2319bb1c5c08 100644
 --- a/drivers/clk/clk-axi-clkgen.c
 +++ b/drivers/clk/clk-axi-clkgen.c
-@@ -46,9 +46,17 @@
- #define MMCM_CLK_DIV_DIVIDE	BIT(11)
- #define MMCM_CLK_DIV_NOCOUNT	BIT(12)
- 
-+struct axi_clkgen_limits {
-+	unsigned int fpfd_min;
-+	unsigned int fpfd_max;
-+	unsigned int fvco_min;
-+	unsigned int fvco_max;
-+};
-+
- struct axi_clkgen {
- 	void __iomem *base;
- 	struct clk_hw clk_hw;
-+	struct axi_clkgen_limits limits;
- };
- 
- static uint32_t axi_clkgen_lookup_filter(unsigned int m)
-@@ -100,12 +108,15 @@ static uint32_t axi_clkgen_lookup_lock(unsigned int m)
+@@ -108,12 +108,21 @@ static uint32_t axi_clkgen_lookup_lock(unsigned int m)
  	return 0x1f1f00fa;
  }
  
--static const unsigned int fpfd_min = 10000;
--static const unsigned int fpfd_max = 300000;
--static const unsigned int fvco_min = 600000;
--static const unsigned int fvco_max = 1200000;
++#ifdef ARCH_ZYNQMP
 +static const struct axi_clkgen_limits axi_clkgen_default_limits = {
 +	.fpfd_min = 10000,
-+	.fpfd_max = 300000,
-+	.fvco_min = 600000,
-+	.fvco_max = 1200000,
++	.fpfd_max = 450000,
++	.fvco_min = 800000,
++	.fvco_max = 1600000,
 +};
++#else
+ static const struct axi_clkgen_limits axi_clkgen_default_limits = {
+ 	.fpfd_min = 10000,
+ 	.fpfd_max = 300000,
+ 	.fvco_min = 600000,
+ 	.fvco_max = 1200000,
+ };
++#endif
  
--static void axi_clkgen_calc_params(unsigned long fin, unsigned long fout,
-+static void axi_clkgen_calc_params(const struct axi_clkgen_limits *limits,
-+	unsigned long fin, unsigned long fout,
- 	unsigned int *best_d, unsigned int *best_m, unsigned int *best_dout)
- {
- 	unsigned long d, d_min, d_max, _d_min, _d_max;
-@@ -122,12 +133,12 @@ static void axi_clkgen_calc_params(unsigned long fin, unsigned long fout,
- 	*best_m = 0;
- 	*best_dout = 0;
- 
--	d_min = max_t(unsigned long, DIV_ROUND_UP(fin, fpfd_max), 1);
--	d_max = min_t(unsigned long, fin / fpfd_min, 80);
-+	d_min = max_t(unsigned long, DIV_ROUND_UP(fin, limits->fpfd_max), 1);
-+	d_max = min_t(unsigned long, fin / limits->fpfd_min, 80);
- 
- again:
--	fvco_min_fract = fvco_min << fract_shift;
--	fvco_max_fract = fvco_max << fract_shift;
-+	fvco_min_fract = limits->fvco_min << fract_shift;
-+	fvco_max_fract = limits->fvco_max << fract_shift;
- 
- 	m_min = max_t(unsigned long, DIV_ROUND_UP(fvco_min_fract, fin) * d_min, 1);
- 	m_max = min_t(unsigned long, fvco_max_fract * d_max / fin, 64 << fract_shift);
-@@ -319,6 +330,7 @@ static int axi_clkgen_set_rate(struct clk_hw *clk_hw,
- 	unsigned long rate, unsigned long parent_rate)
- {
- 	struct axi_clkgen *axi_clkgen = clk_hw_to_axi_clkgen(clk_hw);
-+	const struct axi_clkgen_limits *limits = &axi_clkgen->limits;
- 	unsigned int d, m, dout;
- 	struct axi_clkgen_div_params params;
- 	uint32_t power = 0;
-@@ -328,7 +340,7 @@ static int axi_clkgen_set_rate(struct clk_hw *clk_hw,
- 	if (parent_rate == 0 || rate == 0)
- 		return -EINVAL;
- 
--	axi_clkgen_calc_params(parent_rate, rate, &d, &m, &dout);
-+	axi_clkgen_calc_params(limits, parent_rate, rate, &d, &m, &dout);
- 
- 	if (d == 0 || dout == 0 || m == 0)
- 		return -EINVAL;
-@@ -368,10 +380,12 @@ static int axi_clkgen_set_rate(struct clk_hw *clk_hw,
- static long axi_clkgen_round_rate(struct clk_hw *hw, unsigned long rate,
- 	unsigned long *parent_rate)
- {
-+	struct axi_clkgen *axi_clkgen = clk_hw_to_axi_clkgen(hw);
-+	const struct axi_clkgen_limits *limits = &axi_clkgen->limits;
- 	unsigned int d, m, dout;
- 	unsigned long long tmp;
- 
--	axi_clkgen_calc_params(*parent_rate, rate, &d, &m, &dout);
-+	axi_clkgen_calc_params(limits, *parent_rate, rate, &d, &m, &dout);
- 
- 	if (d == 0 || dout == 0 || m == 0)
- 		return -EINVAL;
-@@ -527,6 +541,9 @@ static int axi_clkgen_probe(struct platform_device *pdev)
- 			return -EINVAL;
- 	}
- 
-+	memcpy(&axi_clkgen->limits, &axi_clkgen_default_limits,
-+	       sizeof(axi_clkgen->limits));
-+
- 	clk_name = pdev->dev.of_node->name;
- 	of_property_read_string(pdev->dev.of_node, "clock-output-names",
- 		&clk_name);
+ static void axi_clkgen_calc_params(const struct axi_clkgen_limits *limits,
+ 	unsigned long fin, unsigned long fout,
 -- 
 2.17.1
 
