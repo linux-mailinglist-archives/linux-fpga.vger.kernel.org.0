@@ -2,77 +2,154 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CC427EFA3
-	for <lists+linux-fpga@lfdr.de>; Wed, 30 Sep 2020 18:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1883327F00E
+	for <lists+linux-fpga@lfdr.de>; Wed, 30 Sep 2020 19:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730632AbgI3Qu7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 30 Sep 2020 12:50:59 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51136 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgI3Qu7 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 30 Sep 2020 12:50:59 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 4FDA729CD77
-Subject: Re: [PATCH v4 22/52] docs: get rid of :c:type explicit declarations
- for structs
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        id S1731428AbgI3RQL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 30 Sep 2020 13:16:11 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:35699 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbgI3RQK (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 30 Sep 2020 13:16:10 -0400
+Received: by mail-pj1-f68.google.com with SMTP id jw11so145985pjb.0;
+        Wed, 30 Sep 2020 10:16:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OGfKT1EdeRTBLMCIHN7iAx+JlnH5xpvcS0HZxF9GOsQ=;
+        b=uMEhp22e234gCvLQz0NJEhFEq9bR4hVhqmb+qhQ0uvQh56RJaFzF5Aj1hayXv62+aP
+         49s1yig7uE3uU/5yOG9nrcDGzQIN18hyGM3m+pBdU3zTvFf8JEDE84hKsVAy3vpoa2pa
+         Ds/tnxbbNp+KbgosOv2eerRgIxc6f6eZO0gM+DDpRFj75QIV5dDj6gWYxM2DAK/BRqQA
+         uChfah2/24P3jgebwdfFHuUL50rhM9TGTv01clLH5p4WspDhhGMXZ3SfdyagRonSora9
+         a7JJ1ezXKKkgXYZHApk59FO7tiFgNiuSl8I79Pz95ExRn7i9/0klpiJhrI7+4P4Eeo93
+         Fivw==
+X-Gm-Message-State: AOAM5337b4ZZteOYC3JwROAHFkQGZB6EUSJmrIjlA/Mb3XbYMtAY+LSj
+        +KZimj3nSZ6JtvNutz65w9ZvyEHbno8=
+X-Google-Smtp-Source: ABdhPJwEuROhR3I5JOUYNFleBppzLex1izWU+bZnlnUSUKRMoA/k7aUAB+6w81q0vi0AR3xvfFJ+bQ==
+X-Received: by 2002:a17:902:eb03:b029:d1:8c50:aafb with SMTP id l3-20020a170902eb03b02900d18c50aafbmr583117plb.29.1601486169726;
+        Wed, 30 Sep 2020 10:16:09 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
+        by smtp.gmail.com with ESMTPSA id ih12sm2836512pjb.24.2020.09.30.10.16.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2020 10:16:09 -0700 (PDT)
+Date:   Wed, 30 Sep 2020 10:16:07 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Alexandru Ardelean <ardeleanalex@gmail.com>
+Cc:     Moritz Fischer <mdf@kernel.org>,
         Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Moritz Fischer <mdf@kernel.org>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Satya Tangirala <satyat@google.com>,
-        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
-        alsa-devel@alsa-project.org, linux-fpga@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mm@kvack.org
-References: <cover.1601467849.git.mchehab+huawei@kernel.org>
- <f74a2b4e1c8c475b5a053f5edd9da5a818be4b1f.1601467849.git.mchehab+huawei@kernel.org>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-Message-ID: <fd8bf973-3c22-a492-39e5-2164ce6724db@collabora.com>
-Date:   Wed, 30 Sep 2020 13:50:46 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mathias Tausen <mta@gomspace.com>
+Subject: Re: [PATCH v4 5/7] clk: axi-clkgen: Respect ZYNQMP PFD/VCO frequency
+ limits
+Message-ID: <20200930171607.GA121420@archbook>
+References: <20200929144417.89816-1-alexandru.ardelean@analog.com>
+ <20200929144417.89816-14-alexandru.ardelean@analog.com>
+ <20200929153040.GA114067@archbook>
+ <CA+U=DspZ8cZzDDJWdbS=RkLifJRr7sjwQ9-ytMWkCqpfoCX6=w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <f74a2b4e1c8c475b5a053f5edd9da5a818be4b1f.1601467849.git.mchehab+huawei@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+U=DspZ8cZzDDJWdbS=RkLifJRr7sjwQ9-ytMWkCqpfoCX6=w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 9/30/20 10:24 AM, Mauro Carvalho Chehab wrote:
-> The :c:type:`foo` only works properly with structs before
-> Sphinx 3.x.
+On Wed, Sep 30, 2020 at 08:22:23AM +0300, Alexandru Ardelean wrote:
+> On Tue, Sep 29, 2020 at 6:30 PM Moritz Fischer <mdf@kernel.org> wrote:
+> >
+> > Hi Alexandru,
+> >
+> > On Tue, Sep 29, 2020 at 05:44:15PM +0300, Alexandru Ardelean wrote:
+> > > From: Mathias Tausen <mta@gomspace.com>
+> > >
+> > > Since axi-clkgen is now supported on ZYNQMP, make sure the max/min
+> > > frequencies of the PFD and VCO are respected.
+> > >
+> > > Signed-off-by: Mathias Tausen <mta@gomspace.com>
+> > > Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+> >
+> > This patch still does not cover the PCIe Zynq plugged into ZynqMP linux
+> > machine case.
+> >
+> > > ---
+> > >  drivers/clk/clk-axi-clkgen.c | 9 +++++++++
+> > >  1 file changed, 9 insertions(+)
+> > >
+> > > diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
+> > > index 4342b7735590..2319bb1c5c08 100644
+> > > --- a/drivers/clk/clk-axi-clkgen.c
+> > > +++ b/drivers/clk/clk-axi-clkgen.c
+> > > @@ -108,12 +108,21 @@ static uint32_t axi_clkgen_lookup_lock(unsigned int m)
+> > >       return 0x1f1f00fa;
+> > >  }
+> > >
+> > > +#ifdef ARCH_ZYNQMP
+> > > +static const struct axi_clkgen_limits axi_clkgen_default_limits = {
+> > > +     .fpfd_min = 10000,
+> > > +     .fpfd_max = 450000,
+> > > +     .fvco_min = 800000,
+> > > +     .fvco_max = 1600000,
+> > > +};
+> > > +#else
+> > >  static const struct axi_clkgen_limits axi_clkgen_default_limits = {
+> > >       .fpfd_min = 10000,
+> > >       .fpfd_max = 300000,
+> > >       .fvco_min = 600000,
+> > >       .fvco_max = 1200000,
+> > >  };
+> > > +#endif
+> >
+> > I still don't understand this. You have a way to determine which fabric
+> > you are looking at with the FPGA info. Why not:
+> >
+> > [..] axi_clkgen_zynqmp_default_limits = {
+> > };
+> >
+> > [..] axi_clkgen_default_limits = {
+> > };
+> >
+> > Set them based on what you read back, i.e. determine which fabric you
+> > are looking at *per clock gen* and use that info, rather than making a
+> > compile time decision to support only one of them.
+> >
+> > Generally speaking #ifdef $ARCH should be a last resort solution.
 > 
-> On Sphinx 3.x, structs should now be declared using the
-> .. c:struct, and referenced via :c:struct tag.
+> The support for reading back the fabric parameters is implemented in
+> the AXI CLKGEN PCORE version starting with 5.0.a
+> Links:
+> https://github.com/analogdevicesinc/hdl/commits/master/library/common/up_clkgen.v
+> https://github.com/analogdevicesinc/hdl/commit/66823682b63c1037abdc3fc1dd4d4e63d3cfbc1a
+> https://github.com/analogdevicesinc/hdl/commit/7dcb2050c7946fab5ea5a273eda7c53ea7b969a6
 > 
-> As we now have the automarkup.py macro, that automatically
-> convert:
-> 	struct foo
-> 
-> into cross-references, let's get rid of that, solving
-> several warnings when building docs with Sphinx 3.x.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/block/blk-mq.rst                |  8 +++----
+> Before that version, these details aren't there, so the best you can
+> do is assume compile-time ARCH defaults.
 
-Regarding blk-mq.rst:
+This is a property of the instance and not of the driver. If you can't
+query the hardware to figure out what you're looking at, but have
+different behaviours, please use different compatible strings and make
+the default limits platform data.
 
-Reviewed-by: André Almeida <andrealmeid@collabora.com>
+Something like this:
+
+static const struct of_device_id axi_clkgen_ids[] = {
+	{
+		.compatible = "foo-zynqmp",
+		.data = &zynqmp_default_limits,
+	},
+	{
+		.compatible = "bar-zynq",
+		.data = &zynq_default_limits,
+	},
+
+	{ },
+};
+
+And pull the info out in your probe function, then you can have both
+configurations and select via device-tree.
+
+Thanks,
+Moritz
