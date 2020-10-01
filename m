@@ -2,161 +2,156 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEDA280788
-	for <lists+linux-fpga@lfdr.de>; Thu,  1 Oct 2020 21:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD2E280894
+	for <lists+linux-fpga@lfdr.de>; Thu,  1 Oct 2020 22:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729927AbgJATIz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 1 Oct 2020 15:08:55 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:54661 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729418AbgJATIz (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 1 Oct 2020 15:08:55 -0400
-Received: by mail-pj1-f67.google.com with SMTP id j19so2521096pjl.4;
-        Thu, 01 Oct 2020 12:08:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/ZLkWSujX7jWnugEZQTqIhwyIUES1ySLBrdFnfFWe2Y=;
-        b=RHr9uc/IUQKIQP6csQQ+b1rv/cTACiLcO8waNroP6RjIBfFkgE+IjxFCwVXCCFm5HR
-         31C3MWpMMVhKYYH9myldwpOnk2cHyscGxWk5Dj/kDR5Wq0xsj9td/5Lw0W65H5z9GbSZ
-         jVy3X6MUObjB6vehnQMMkDrQ0DSseIj7a6YFxUvQ1lNC+bOfnCB/YYYNoFsf0NVgbr0a
-         ZACK5Al3bcmfXnGwkn31v/aEhfAnWsxy2xB0pCmarp2TeGAypKBa1c3afd4RMylt8Dxz
-         gGmBN1bLqu9paubcGaKiO/+yyYh6rAor0DK03t+pC1eLU5K4OOM7PqwnKadMjKV2VrUa
-         6jvg==
-X-Gm-Message-State: AOAM530CUprg6wPcTa3dGfRuYYZGuDCd2D2EIt81djITgMX8k8Oq6I2h
-        qZjkeVnzTKED7q6csGqUhpU=
-X-Google-Smtp-Source: ABdhPJxzY2rHqgv6i+7QwwFXStNiGA11JiUI+CplH1qGeVnrhKi67tLaYkDY6T4NY9EIk0ce4/SyWA==
-X-Received: by 2002:a17:90a:6b04:: with SMTP id v4mr1362413pjj.101.1601579334156;
-        Thu, 01 Oct 2020 12:08:54 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
-        by smtp.gmail.com with ESMTPSA id i36sm6084425pgm.43.2020.10.01.12.08.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2020 12:08:53 -0700 (PDT)
-Date:   Thu, 1 Oct 2020 12:08:52 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Alexandru Ardelean <ardeleanalex@gmail.com>
-Cc:     Moritz Fischer <mdf@kernel.org>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mathias Tausen <mta@gomspace.com>
-Subject: Re: [PATCH v4 5/7] clk: axi-clkgen: Respect ZYNQMP PFD/VCO frequency
- limits
-Message-ID: <20201001190852.GE121420@archbook>
-References: <20200929144417.89816-1-alexandru.ardelean@analog.com>
- <20200929144417.89816-14-alexandru.ardelean@analog.com>
- <20200929153040.GA114067@archbook>
- <CA+U=DspZ8cZzDDJWdbS=RkLifJRr7sjwQ9-ytMWkCqpfoCX6=w@mail.gmail.com>
- <20200930171607.GA121420@archbook>
- <CA+U=DsruOC=uyDVDLz0HCO06_7AGfQEpD=YoYddf3S-3Gs3QiA@mail.gmail.com>
+        id S1730045AbgJAUm6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 1 Oct 2020 16:42:58 -0400
+Received: from mga03.intel.com ([134.134.136.65]:24474 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728382AbgJAUm5 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 1 Oct 2020 16:42:57 -0400
+IronPort-SDR: puIv/AE/V4w2a4QY6oYmfwuIZCgrs4SyhZSlblG97ehHiXKPa77dz22eYB/V8I7MgBi9O+RA64
+ UNCngPQdCj5A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9761"; a="162909323"
+X-IronPort-AV: E=Sophos;i="5.77,325,1596524400"; 
+   d="scan'208";a="162909323"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2020 13:42:52 -0700
+IronPort-SDR: CQ/Q/+qz4wwFCOWyHQMccNqlRzLsoAnc01s1ZZwtzRRqX+CSx96hWaA23AqlOzSIVUkGV2Im6B
+ Ya+cL5WF6Xtg==
+X-IronPort-AV: E=Sophos;i="5.77,325,1596524400"; 
+   d="scan'208";a="458307814"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.15]) ([10.212.37.220])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2020 13:42:51 -0700
+Subject: Re: [PATCH v1 00/12] Intel FPGA Security Manager Class Driver
+To:     "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "trix@redhat.com" <trix@redhat.com>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "Gerlach, Matthew" <matthew.gerlach@intel.com>
+References: <20200904235305.6254-1-russell.h.weight@intel.com>
+ <DM6PR11MB38198EC62FA2C63B3E5BC8D0852A0@DM6PR11MB3819.namprd11.prod.outlook.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <f8815af0-96cb-f223-ca1f-6158bae34c42@intel.com>
+Date:   Thu, 1 Oct 2020 13:42:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+U=DsruOC=uyDVDLz0HCO06_7AGfQEpD=YoYddf3S-3Gs3QiA@mail.gmail.com>
+In-Reply-To: <DM6PR11MB38198EC62FA2C63B3E5BC8D0852A0@DM6PR11MB3819.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Oct 01, 2020 at 08:18:59AM +0300, Alexandru Ardelean wrote:
-> On Wed, Sep 30, 2020 at 8:16 PM Moritz Fischer <mdf@kernel.org> wrote:
-> >
-> > On Wed, Sep 30, 2020 at 08:22:23AM +0300, Alexandru Ardelean wrote:
-> > > On Tue, Sep 29, 2020 at 6:30 PM Moritz Fischer <mdf@kernel.org> wrote:
-> > > >
-> > > > Hi Alexandru,
-> > > >
-> > > > On Tue, Sep 29, 2020 at 05:44:15PM +0300, Alexandru Ardelean wrote:
-> > > > > From: Mathias Tausen <mta@gomspace.com>
-> > > > >
-> > > > > Since axi-clkgen is now supported on ZYNQMP, make sure the max/min
-> > > > > frequencies of the PFD and VCO are respected.
-> > > > >
-> > > > > Signed-off-by: Mathias Tausen <mta@gomspace.com>
-> > > > > Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
-> > > >
-> > > > This patch still does not cover the PCIe Zynq plugged into ZynqMP linux
-> > > > machine case.
-> > > >
-> > > > > ---
-> > > > >  drivers/clk/clk-axi-clkgen.c | 9 +++++++++
-> > > > >  1 file changed, 9 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
-> > > > > index 4342b7735590..2319bb1c5c08 100644
-> > > > > --- a/drivers/clk/clk-axi-clkgen.c
-> > > > > +++ b/drivers/clk/clk-axi-clkgen.c
-> > > > > @@ -108,12 +108,21 @@ static uint32_t axi_clkgen_lookup_lock(unsigned int m)
-> > > > >       return 0x1f1f00fa;
-> > > > >  }
-> > > > >
-> > > > > +#ifdef ARCH_ZYNQMP
-> > > > > +static const struct axi_clkgen_limits axi_clkgen_default_limits = {
-> > > > > +     .fpfd_min = 10000,
-> > > > > +     .fpfd_max = 450000,
-> > > > > +     .fvco_min = 800000,
-> > > > > +     .fvco_max = 1600000,
-> > > > > +};
-> > > > > +#else
-> > > > >  static const struct axi_clkgen_limits axi_clkgen_default_limits = {
-> > > > >       .fpfd_min = 10000,
-> > > > >       .fpfd_max = 300000,
-> > > > >       .fvco_min = 600000,
-> > > > >       .fvco_max = 1200000,
-> > > > >  };
-> > > > > +#endif
-> > > >
-> > > > I still don't understand this. You have a way to determine which fabric
-> > > > you are looking at with the FPGA info. Why not:
-> > > >
-> > > > [..] axi_clkgen_zynqmp_default_limits = {
-> > > > };
-> > > >
-> > > > [..] axi_clkgen_default_limits = {
-> > > > };
-> > > >
-> > > > Set them based on what you read back, i.e. determine which fabric you
-> > > > are looking at *per clock gen* and use that info, rather than making a
-> > > > compile time decision to support only one of them.
-> > > >
-> > > > Generally speaking #ifdef $ARCH should be a last resort solution.
-> > >
-> > > The support for reading back the fabric parameters is implemented in
-> > > the AXI CLKGEN PCORE version starting with 5.0.a
-> > > Links:
-> > > https://github.com/analogdevicesinc/hdl/commits/master/library/common/up_clkgen.v
-> > > https://github.com/analogdevicesinc/hdl/commit/66823682b63c1037abdc3fc1dd4d4e63d3cfbc1a
-> > > https://github.com/analogdevicesinc/hdl/commit/7dcb2050c7946fab5ea5a273eda7c53ea7b969a6
-> > >
-> > > Before that version, these details aren't there, so the best you can
-> > > do is assume compile-time ARCH defaults.
-> >
-> > This is a property of the instance and not of the driver. If you can't
-> > query the hardware to figure out what you're looking at, but have
-> > different behaviours, please use different compatible strings and make
-> > the default limits platform data.
-> >
-> > Something like this:
-> >
-> > static const struct of_device_id axi_clkgen_ids[] = {
-> >         {
-> >                 .compatible = "foo-zynqmp",
-> >                 .data = &zynqmp_default_limits,
-> >         },
-> >         {
-> >                 .compatible = "bar-zynq",
-> >                 .data = &zynq_default_limits,
-> >         },
-> >
-> >         { },
-> > };
-> >
-> 
-> oh, apologies for not thinking about this;
-> i'll spin this up
 
-No worries :) 
 
-Moritz
+On 9/5/20 7:13 AM, Wu, Hao wrote:
+>> Subject: [PATCH v1 00/12] Intel FPGA Security Manager Class Driver
+>>
+>>
+>> These patches depend on the patchset: "add regmap-spi-avmm & Intel
+>> Max10 BMC chip support" which is currently under review.
+>>
+>>            --------------------------------------------------
+>>
+>> This patchset introduces the Intel Security Manager class driver
+>> for managing secure updates on Intel FPGA Cards. It also provides
+>> the n3000bmc-secure mfd sub-driver for the MAX10 BMC for the n3000
+>> Programmable Acceleration Cards (PAC). The n3000bmc-secure driver
+>> is implemented using the Intel Security Manager class driver.
+> So this patchset contains two parts
+> (1) adding a new class driver for Intel FPGA secure update.
+> (2) a new driver which uses (1) to implement secure update for n3000 PAC.
+Yes - that is correct
+>
+> And only part (2) depends on "Intel MAX10 BMC chip support" patchset.
+> (Maybe you can provide a link to that thread).
+>
+> Is my understanding correct? If yes, is it possible to reorder these patches?
+> At least there is no dependency on the class driver patches, right?
+Yes - I'm splitting the patch set, and I'll provide links for the dependencies
+on the MAX10 BMC Secure Engine patch set.
+>
+>> The Intel Security Manager class driver provides a common API for
+>> user-space tools to manage updates for Secure FPGA devices. Device
+>> drivers that instantiate the Intel Security Manager class driver will
+>> interact with the HW secure update engine in order to transfer
+>> new FPGA and BMC images to FLASH so that they will be automatically
+>> loaded when the FPGA card reboots.
+>>
+>> The API consists of sysfs nodes and supports the following functions:
+>>
+>> (1) Instantiate and monitor a secure update
+>> (2) Display security information including: Root Entry Hashes (REH),
+>>     Cancelled Code Signing Keys (CSK), and flash update counts for
+>>     both BMC and FPGA images.
+>>
+>> Secure updates make use of the request_firmware framework, which
+>> requires that image files are accessible under /lib/firmware. A request
+>> for a secure update returns immediately, while the update itself
+>> proceeds in the context of a kernel worker thread. Sysfs files provide
+>> a means for monitoring the progress of a secure update and for
+>> retrieving error information in the event of a failure.
+> Maybe you can explain a little more on why we need to have this done
+> via a class driver not just some internal code in max10 driver? This class
+> driver will be reused in different cases? And why adding a new class
+> driver not just reuse or extend fpga manager (existing fpga mgr is used
+> to update fpga too).
+Yes - I'll so that in the next patch set.
+>
+>> The n3000bmc-secure driver instantiates the Intel Security Manager
+>> class driver and provides the callback functions required to support
+>> secure updates on Intel n3000 PAC devices.
+>>
+>> Russ Weight (12):
+>>   fpga: fpga security manager class driver
+> Intel FPGA Security Manager?
+Yes - I'll make that change
+>
+>>   fpga: create intel max10 bmc security engine
+>>   fpga: expose max10 flash update counts in sysfs
+>>   fpga: expose max10 canceled keys in sysfs
+>>   fpga: enable secure updates
+>>   fpga: add max10 secure update functions
+>>   fpga: expose sec-mgr update status
+>>   fpga: expose sec-mgr update errors
+>>   fpga: expose sec-mgr update size
+>>   fpga: enable sec-mgr update cancel
+>>   fpga: expose hardware error info in sysfs
+> For these patches, is it possible to have a better title for these patches.
+> Then it will be easier to know which component this patch is going to modify.
+> e.g. fpga: ifpga-sec-mgr: xxxxxx
+Yes. Thanks for the comments.
+
+- Russ
+>
+> Thanks
+> Hao
+>
+>>   fpga: add max10 get_hw_errinfo callback func
+>>
+>>  .../ABI/testing/sysfs-class-ifpga-sec-mgr     | 151 ++++
+>>  MAINTAINERS                                   |   8 +
+>>  drivers/fpga/Kconfig                          |  20 +
+>>  drivers/fpga/Makefile                         |   6 +
+>>  drivers/fpga/ifpga-sec-mgr.c                  | 669 ++++++++++++++++++
+>>  drivers/fpga/intel-m10-bmc-secure.c           | 557 +++++++++++++++
+>>  include/linux/fpga/ifpga-sec-mgr.h            | 201 ++++++
+>>  include/linux/mfd/intel-m10-bmc.h             | 116 +++
+>>  8 files changed, 1728 insertions(+)
+>>  create mode 100644 Documentation/ABI/testing/sysfs-class-ifpga-sec-mgr
+>>  create mode 100644 drivers/fpga/ifpga-sec-mgr.c
+>>  create mode 100644 drivers/fpga/intel-m10-bmc-secure.c
+>>  create mode 100644 include/linux/fpga/ifpga-sec-mgr.h
+>>
+>> --
+>> 2.17.1
+
