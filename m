@@ -2,106 +2,89 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A75428200D
-	for <lists+linux-fpga@lfdr.de>; Sat,  3 Oct 2020 03:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3022820BA
+	for <lists+linux-fpga@lfdr.de>; Sat,  3 Oct 2020 05:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725808AbgJCBY3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 2 Oct 2020 21:24:29 -0400
-Received: from mga14.intel.com ([192.55.52.115]:5546 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725768AbgJCBYV (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 2 Oct 2020 21:24:21 -0400
-IronPort-SDR: o9Jt8knZv65T1NXSA9TA6hA5ncWC8c2OqNKs0r1k5t4ju5RM50FKHHgVWd5SZw/HHpY0IdcyUN
- s9PmYg9y0vfA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9762"; a="162363112"
-X-IronPort-AV: E=Sophos;i="5.77,329,1596524400"; 
-   d="scan'208";a="162363112"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2020 18:24:21 -0700
-IronPort-SDR: 2C0Dn41qRn11VF3IhoCN0qz2i61xDdc6HQYCRzl95CH3dsgyq/yyEhLILk+jU7Qsh90qV+cLkl
- C5xetxOUExrw==
-X-IronPort-AV: E=Sophos;i="5.77,329,1596524400"; 
-   d="scan'208";a="516097873"
-Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.254.5.53])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2020 18:24:21 -0700
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     mdf@kernel.org, lee.jones@linaro.org, linux-fpga@vger.kernel.org,
+        id S1725833AbgJCDPS (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 2 Oct 2020 23:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725772AbgJCDPS (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 2 Oct 2020 23:15:18 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5676C0613D0;
+        Fri,  2 Oct 2020 20:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=wDKUxlcya9naUV0UUfQqQb+yB0tpX4ZGEqkBZBtNiOM=; b=Rc/5pEYHyYsfQRSxE1J+0ThmAh
+        voTB+SlPTbiwjVg4cgfEEAH52oKElXMj0xgph1dWt/JxxTX5yqbaf3d+nocox2YStHLDJf2fn7uVW
+        pefAXSKTXQJnPANSMIRjcOfljk5veun8RS1IA+mtoqTFhzdk1Q2xWLXMFhf9qaAngqy73fk/Rteru
+        U4CHEYRKTr5CKmIi8GM/TlNnruogGE3HxamOaDtSIT2GLY+1T/Y5092TENjso2B8d3mny+sNIErsg
+        tFKi+QivUS4ACyrOX8gqlEhmbt27W7XlWnM417Byifmy1EAhgqQBG23Rbh9DNQNLEnn5lcXAm0Pw0
+        ICpxZw1w==;
+Received: from [2601:1c0:6280:3f0::2c9a]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kOY0o-0000O4-KM; Sat, 03 Oct 2020 03:15:06 +0000
+Subject: Re: [PATCH v2 2/6] fpga: m10bmc-sec: create max10 bmc security engine
+To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
+        lee.jones@linaro.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-        hao.wu@intel.com, matthew.gerlach@intel.com,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v2 6/6] fpga: m10bmc-sec: add max10 get_hw_errinfo callback func
-Date:   Fri,  2 Oct 2020 18:24:12 -0700
-Message-Id: <20201003012412.16831-7-russell.h.weight@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201003012412.16831-1-russell.h.weight@intel.com>
+        hao.wu@intel.com, matthew.gerlach@intel.com
 References: <20201003012412.16831-1-russell.h.weight@intel.com>
+ <20201003012412.16831-3-russell.h.weight@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <6854e626-e21b-d3b6-fa31-f150edba6f66@infradead.org>
+Date:   Fri, 2 Oct 2020 20:15:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <20201003012412.16831-3-russell.h.weight@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Extend the MAX10 BMC Security Engine driver to include
-a function that returns 64 bits of additional HW specific
-data for errors that require additional information.
-This callback function enables the hw_errinfo sysfs
-node in the Intel Security Manager class driver.
+On 10/2/20 6:24 PM, Russ Weight wrote:
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index c534cc80f398..2380d36b08c7 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -235,4 +235,15 @@ config IFPGA_SEC_MGR
+>  	  region and for the BMC. Select this option to enable
+>  	  updates for secure FPGA devices.
+>  
+> +config IFPGA_M10_BMC_SECURE
+> +        tristate "Intel MAX10 BMC security engine"
+> +	depends on MFD_INTEL_M10_BMC && IFPGA_SEC_MGR
+> +        help
+> +          Secure update support for the Intel MAX10 board management
+> +	  controller.
+> +
+> +	  This is a subdriver of the Intel MAX10 board management controller
+> +	  (BMC) and provides support for secure updates for the BMC image,
+> +	  the FPGA image, the Root Entry Hashes, etc.
+> +
+>  endif # FPGA
 
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
----
-v2:
-  - Implemented HW_ERRINFO_POISON for m10bmc_sec_hw_errinfo() to
-    ensure that corresponding bits are set to 1 if we are unable
-    to read the doorbell or auth_result registers.
-  - Added m10bmc_ prefix to functions in m10bmc_iops structure
----
- drivers/fpga/intel-m10-bmc-secure.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+Dagnabit, I need a bot to do this.
 
-diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
-index a9617c5b3845..9edc39439c97 100644
---- a/drivers/fpga/intel-m10-bmc-secure.c
-+++ b/drivers/fpga/intel-m10-bmc-secure.c
-@@ -495,6 +495,30 @@ static enum ifpga_sec_err m10bmc_sec_cancel(struct ifpga_sec_mgr *imgr)
- 	return ret ? IFPGA_SEC_ERR_RW_ERROR : IFPGA_SEC_ERR_NONE;
- }
- 
-+#define HW_ERRINFO_POISON	GENMASK(31, 0)
-+static u64 m10bmc_sec_hw_errinfo(struct ifpga_sec_mgr *imgr)
-+{
-+	struct m10bmc_sec *sec = imgr->priv;
-+	u32 doorbell, auth_result;
-+
-+	switch (imgr->err_code) {
-+	case IFPGA_SEC_ERR_HW_ERROR:
-+	case IFPGA_SEC_ERR_TIMEOUT:
-+	case IFPGA_SEC_ERR_BUSY:
-+	case IFPGA_SEC_ERR_WEAROUT:
-+		if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell))
-+			doorbell = HW_ERRINFO_POISON;
-+
-+		if (m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT,
-+				     &auth_result))
-+			auth_result = HW_ERRINFO_POISON;
-+
-+		return (u64)doorbell << 32 | (u64)auth_result;
-+	default:
-+		return 0;
-+	}
-+}
-+
- static const struct ifpga_sec_mgr_ops m10bmc_iops = {
- 	.user_flash_count = m10bmc_user_flash_count,
- 	.bmc_root_entry_hash = m10bmc_bmc_root_entry_hash,
-@@ -513,6 +537,7 @@ static const struct ifpga_sec_mgr_ops m10bmc_iops = {
- 	.write_blk = m10bmc_sec_write_blk,
- 	.poll_complete = m10bmc_sec_poll_complete,
- 	.cancel = m10bmc_sec_cancel,
-+	.get_hw_errinfo = m10bmc_sec_hw_errinfo,
- };
- 
- static int m10bmc_secure_probe(struct platform_device *pdev)
+Clean up the indentation in the Kconfig file.
+
+From Documentation/process/coding-style.rst, section 10:
+
+Lines under a ``config`` definition
+are indented with one tab, while help text is indented an additional two
+spaces.
+
+checkpatch should have found that issue. Did it not?
+
+
+thanks.
 -- 
-2.17.1
+~Randy
 
