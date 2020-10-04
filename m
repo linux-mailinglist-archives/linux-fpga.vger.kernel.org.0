@@ -2,141 +2,93 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1743282907
-	for <lists+linux-fpga@lfdr.de>; Sun,  4 Oct 2020 07:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B797282C25
+	for <lists+linux-fpga@lfdr.de>; Sun,  4 Oct 2020 20:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725849AbgJDFPH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 4 Oct 2020 01:15:07 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33144 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725857AbgJDFPA (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 4 Oct 2020 01:15:00 -0400
-Received: by mail-pg1-f194.google.com with SMTP id o25so3629311pgm.0;
-        Sat, 03 Oct 2020 22:15:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KEIkOfJmCkr+mhT8bgXa4RUyoZrWLuARarkprMlR8hc=;
-        b=OzyP89KzGNiBMLR3F+3dCT7FyS+OwNtCiVu+9jMaLZg5yUROePP+fc/2nR6SlFwQ5n
-         b6XtfjpFv55EGkWdMN3EA5JPN23zHZIiZ7as5ZUjrPf7UYRcwVMJv0FR6X+CTuarRVbd
-         IbUQuXUFgV1/dNnc/16PSanT0hlcBFwoiviOjaTsOzqw2iS3OxNVYhOyUsOuDRLoGhZQ
-         gUCxZ5Ntv8qcfdfs3h1ilGcnVVn1rvdEZST0npugvcp/sFrejV8BmGy4/Ee6rWtQHD94
-         ad/OpS9UJQ7IHtat1E6Fga82w4PzBAqqyXsCCLCUA0T+4Kpkeh6AbOyiLc5DXLAe2D8T
-         ZRYw==
-X-Gm-Message-State: AOAM532gSo/BM8ViewjwC210iDSy5TFrjVKArJ1ToQkUoVDNsSQgn8aw
-        jYbF3m7Y9SOJhNJdeZwmuvdOUdK8KPs=
-X-Google-Smtp-Source: ABdhPJxBFvc18Vo2CntFUWWe0qTHBP6EsWSvDe3RC70HKzn/p+q5e49ivi4n+Rtv76OD8E2enCUyiQ==
-X-Received: by 2002:a62:2581:0:b029:13f:ba38:b113 with SMTP id l123-20020a6225810000b029013fba38b113mr10296040pfl.15.1601788499350;
-        Sat, 03 Oct 2020 22:14:59 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id q15sm6177964pjp.26.2020.10.03.22.14.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Oct 2020 22:14:58 -0700 (PDT)
-From:   Moritz Fischer <mdf@kernel.org>
-To:     linux-fpga@vger.kernel.org
-Cc:     trix@redhat.com, hao.wu@intel.com, michal.simek@xilinx.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        russell.h.weight@intel.com, matthew.gerlach@intel.com,
-        Moritz Fischer <mdf@kernel.org>
-Subject: [PATCH 10/10] fpga: fpga-mgr: altera-pr-ip: Simplify registration
-Date:   Sat,  3 Oct 2020 22:14:23 -0700
-Message-Id: <20201004051423.75879-11-mdf@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201004051423.75879-1-mdf@kernel.org>
-References: <20201004051423.75879-1-mdf@kernel.org>
+        id S1726237AbgJDSBl (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 4 Oct 2020 14:01:41 -0400
+Received: from mga05.intel.com ([192.55.52.43]:49108 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726125AbgJDSBl (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 4 Oct 2020 14:01:41 -0400
+IronPort-SDR: tAz2xgDEJAX9Ydfw4FISevPnqmwhxBSccj4bbEvbAFPo8CzyptQSgA70nu6fq4zIs3S/K9l0FF
+ 4na60yDr7A/A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9764"; a="248035853"
+X-IronPort-AV: E=Sophos;i="5.77,335,1596524400"; 
+   d="scan'208";a="248035853"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2020 11:01:41 -0700
+IronPort-SDR: ww/8GPGIPsP88baz4R2/7X8dbWw6Dp+VxxanYo0ZoMgBtUSRZFcwP4VvBFn//voPNA9SqdtRVM
+ LC5bGEtZZC4w==
+X-IronPort-AV: E=Sophos;i="5.77,335,1596524400"; 
+   d="scan'208";a="459205023"
+Received: from cmcgee-mobl.amr.corp.intel.com (HELO [10.0.2.15]) ([10.212.16.107])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2020 11:01:40 -0700
+Subject: Re: [PATCH v2 2/6] fpga: m10bmc-sec: create max10 bmc security engine
+To:     Randy Dunlap <rdunlap@infradead.org>, mdf@kernel.org,
+        lee.jones@linaro.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com
+References: <20201003012412.16831-1-russell.h.weight@intel.com>
+ <20201003012412.16831-3-russell.h.weight@intel.com>
+ <6854e626-e21b-d3b6-fa31-f150edba6f66@infradead.org>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <17d32b30-dab5-c8cd-9ce3-fafe847fa846@intel.com>
+Date:   Sun, 4 Oct 2020 11:01:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <6854e626-e21b-d3b6-fa31-f150edba6f66@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Simplify registration using new devm_fpga_mgr_register() API.
-Remove the now obsolete altera_pr_unregister() function.
 
-Signed-off-by: Moritz Fischer <mdf@kernel.org>
----
 
-We should take another look at this, IIRC correctly the point of
-splitting this up into a separate driver was to make it useable by a
-different (pci?) driver later on.
+On 10/2/20 8:15 PM, Randy Dunlap wrote:
+> On 10/2/20 6:24 PM, Russ Weight wrote:
+>> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+>> index c534cc80f398..2380d36b08c7 100644
+>> --- a/drivers/fpga/Kconfig
+>> +++ b/drivers/fpga/Kconfig
+>> @@ -235,4 +235,15 @@ config IFPGA_SEC_MGR
+>>  	  region and for the BMC. Select this option to enable
+>>  	  updates for secure FPGA devices.
+>>  
+>> +config IFPGA_M10_BMC_SECURE
+>> +        tristate "Intel MAX10 BMC security engine"
+>> +	depends on MFD_INTEL_M10_BMC && IFPGA_SEC_MGR
+>> +        help
+>> +          Secure update support for the Intel MAX10 board management
+>> +	  controller.
+>> +
+>> +	  This is a subdriver of the Intel MAX10 board management controller
+>> +	  (BMC) and provides support for secure updates for the BMC image,
+>> +	  the FPGA image, the Root Entry Hashes, etc.
+>> +
+>>  endif # FPGA
+> Dagnabit, I need a bot to do this.
+>
+> Clean up the indentation in the Kconfig file.
+>
+> From Documentation/process/coding-style.rst, section 10:
+>
+> Lines under a ``config`` definition
+> are indented with one tab, while help text is indented an additional two
+> spaces.
+>
+> checkpatch should have found that issue. Did it not?
+Sorry - I thought I had addressed the indentation errors after the first submission.
+I'll fix it.
 
-It doesn't seem like this happened, and I think we should just make this
-a platform driver?
-
----
- drivers/fpga/altera-pr-ip-core-plat.c  | 10 ----------
- drivers/fpga/altera-pr-ip-core.c       | 14 +-------------
- include/linux/fpga/altera-pr-ip-core.h |  1 -
- 3 files changed, 1 insertion(+), 24 deletions(-)
-
-diff --git a/drivers/fpga/altera-pr-ip-core-plat.c b/drivers/fpga/altera-pr-ip-core-plat.c
-index 99b9cc0e70f0..b008a6b8d2d3 100644
---- a/drivers/fpga/altera-pr-ip-core-plat.c
-+++ b/drivers/fpga/altera-pr-ip-core-plat.c
-@@ -28,15 +28,6 @@ static int alt_pr_platform_probe(struct platform_device *pdev)
- 	return alt_pr_register(dev, reg_base);
- }
- 
--static int alt_pr_platform_remove(struct platform_device *pdev)
--{
--	struct device *dev = &pdev->dev;
--
--	alt_pr_unregister(dev);
--
--	return 0;
--}
--
- static const struct of_device_id alt_pr_of_match[] = {
- 	{ .compatible = "altr,a10-pr-ip", },
- 	{},
-@@ -46,7 +37,6 @@ MODULE_DEVICE_TABLE(of, alt_pr_of_match);
- 
- static struct platform_driver alt_pr_platform_driver = {
- 	.probe = alt_pr_platform_probe,
--	.remove = alt_pr_platform_remove,
- 	.driver = {
- 		.name	= "alt_a10_pr_ip",
- 		.of_match_table = alt_pr_of_match,
-diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
-index 2cf25fd5e897..dfdf21ed34c4 100644
---- a/drivers/fpga/altera-pr-ip-core.c
-+++ b/drivers/fpga/altera-pr-ip-core.c
-@@ -195,22 +195,10 @@ int alt_pr_register(struct device *dev, void __iomem *reg_base)
- 	if (!mgr)
- 		return -ENOMEM;
- 
--	dev_set_drvdata(dev, mgr);
--
--	return fpga_mgr_register(mgr);
-+	return devm_fpga_mgr_register(dev, mgr);
- }
- EXPORT_SYMBOL_GPL(alt_pr_register);
- 
--void alt_pr_unregister(struct device *dev)
--{
--	struct fpga_manager *mgr = dev_get_drvdata(dev);
--
--	dev_dbg(dev, "%s\n", __func__);
--
--	fpga_mgr_unregister(mgr);
--}
--EXPORT_SYMBOL_GPL(alt_pr_unregister);
--
- MODULE_AUTHOR("Matthew Gerlach <matthew.gerlach@linux.intel.com>");
- MODULE_DESCRIPTION("Altera Partial Reconfiguration IP Core");
- MODULE_LICENSE("GPL v2");
-diff --git a/include/linux/fpga/altera-pr-ip-core.h b/include/linux/fpga/altera-pr-ip-core.h
-index 0b08ac20ab16..a6b4c07858cc 100644
---- a/include/linux/fpga/altera-pr-ip-core.h
-+++ b/include/linux/fpga/altera-pr-ip-core.h
-@@ -13,6 +13,5 @@
- #include <linux/io.h>
- 
- int alt_pr_register(struct device *dev, void __iomem *reg_base);
--void alt_pr_unregister(struct device *dev);
- 
- #endif /* _ALT_PR_IP_CORE_H */
--- 
-2.28.0
+I am running checkpatch.pl --strict, and I did not see a warning/error for this.
+>
+>
+> thanks.
 
