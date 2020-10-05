@@ -2,46 +2,46 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBB4283D90
-	for <lists+linux-fpga@lfdr.de>; Mon,  5 Oct 2020 19:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1B3283D8C
+	for <lists+linux-fpga@lfdr.de>; Mon,  5 Oct 2020 19:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729001AbgJERi1 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 5 Oct 2020 13:38:27 -0400
-Received: from mail-pg1-f180.google.com ([209.85.215.180]:40447 "EHLO
-        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728151AbgJERht (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 5 Oct 2020 13:37:49 -0400
-Received: by mail-pg1-f180.google.com with SMTP id i2so2736196pgh.7;
-        Mon, 05 Oct 2020 10:37:49 -0700 (PDT)
+        id S1729125AbgJERiO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 5 Oct 2020 13:38:14 -0400
+Received: from mail-pj1-f45.google.com ([209.85.216.45]:33453 "EHLO
+        mail-pj1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729085AbgJERhu (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 5 Oct 2020 13:37:50 -0400
+Received: by mail-pj1-f45.google.com with SMTP id t23so346919pji.0;
+        Mon, 05 Oct 2020 10:37:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IjZwZs24cnHRvJI8qZINqO75sV6sdKQ+viQiqkSfwzU=;
-        b=Sd5XuzoTha9nyBqUoeIvW1Hqii4b6B8Lxd54RzjKfoEXRISA9x6BXyh/88T9LtAOey
-         9F4RbsC/0r4ToR+zZEbpWLcr4JPm1n8JDv+EJc2Tpvoh32y0cmtDBT1lTKrG6Vqfmitm
-         6uVoOMHR8mbVDoKp0ZQ70/ew3htohEPC/MUkPf/mw09yDJi3hERr9oH/OkkGMlGupbAI
-         WXEGXLYzbguS55KX9U/zgN1592mV8H2+gZjHeDcl4FhbepA3wlFtfaA7UpVHNqU3NM+1
-         HvtblsjJYCkLFD916cy1LPDOUMq1uF86zJU9koUwWLkYDntKbYRJVYUrU8o+ewn0Rjr4
-         ccVQ==
-X-Gm-Message-State: AOAM530uwrY2/+VD1s29tNhaUQM77H26nNND6qGImXogyk3YOjOZ8Dt8
-        im6h6OZxk0F67E+5CSytkuq4qlBFJ/E=
-X-Google-Smtp-Source: ABdhPJz+xTZGsV+G9I/y4Tu5r6e6ngwl1Wdi2JL23ASYEWVc9SGhzTOe+58nfh7bc/SlSiNneHHtCw==
-X-Received: by 2002:a62:52ce:0:b029:13e:50c8:499b with SMTP id g197-20020a6252ce0000b029013e50c8499bmr905498pfb.14.1601919468616;
-        Mon, 05 Oct 2020 10:37:48 -0700 (PDT)
+        bh=PJinqLCKTDe+aRSItigFp/wrvpdMWTGVdNBIcRnfBzA=;
+        b=VE/0o6BDpOLu9ao59vZ3LCuk1IajfIR/w+lYnL2ZEi4wUdhWdfd9g+tRvr9pEs3OB8
+         j/FY72XvaaKtRmSFk+8AFAu793nojdTGjv6gS6OwGVRWCPq0WjvHAGQqQ9bRBJWSkJHa
+         64Pc2rgw2Ay2wj9+loPj+TM9y4q7yAN07sD6p7BkWNBgqDMS9Yt6znTC+fGxd7l7OJRb
+         UB6KeIJt/GI9TytrIOPrLhyr7RcmG5m5xWtTAPEPYwDo48XCsHUEZP+xr+Lx9Km9vW5I
+         OvwUxP/6ncjbCfnaySmMsD9lUqajwKXReCpKG5NJ+EO227emT7AgfoCYT8kOTMl8VIQJ
+         +K+w==
+X-Gm-Message-State: AOAM531c2uoVF/aEA8sZjaIym6OU6V3iMmeZz/Uy2GSWviLWl7ZcfFsV
+        NhgcPp0+QqLDfoyonB9hdoNw3Ac83b8=
+X-Google-Smtp-Source: ABdhPJwdvnEtZIDBh4qK3r1xDzccd0E4i+usLvtnb/8vdfe8iRjZfHrJt9UaCm9t4fceQLtH0RmFZA==
+X-Received: by 2002:a17:90b:f8b:: with SMTP id ft11mr544364pjb.8.1601919469830;
+        Mon, 05 Oct 2020 10:37:49 -0700 (PDT)
 Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id q16sm486765pfu.206.2020.10.05.10.37.47
+        by smtp.gmail.com with ESMTPSA id az18sm181250pjb.35.2020.10.05.10.37.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 10:37:48 -0700 (PDT)
+        Mon, 05 Oct 2020 10:37:49 -0700 (PDT)
 From:   Moritz Fischer <mdf@kernel.org>
 To:     linux-fpga@vger.kernel.org
 Cc:     trix@redhat.com, hao.wu@intel.com, michal.simek@xilinx.com,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         russell.h.weight@intel.com, matthew.gerlach@intel.com,
         Moritz Fischer <mdf@kernel.org>
-Subject: [PATCH v2 04/10] fpga: fpga-mgr: ice40-spi: Simplify registration
-Date:   Mon,  5 Oct 2020 10:37:29 -0700
-Message-Id: <20201005173735.162408-5-mdf@kernel.org>
+Subject: [PATCH v2 05/10] fpga: fpga-mgr: machxo2-spi: Simplify registration
+Date:   Mon,  5 Oct 2020 10:37:30 -0700
+Message-Id: <20201005173735.162408-6-mdf@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201005173735.162408-1-mdf@kernel.org>
 References: <20201005173735.162408-1-mdf@kernel.org>
@@ -56,14 +56,14 @@ Simplify registration using new devm_fpga_mgr_register() API.
 Reviewed-by: Tom Rix <trix@redhat.com>
 Signed-off-by: Moritz Fischer <mdf@kernel.org>
 ---
- drivers/fpga/ice40-spi.c | 14 +-------------
+ drivers/fpga/machxo2-spi.c | 14 +-------------
  1 file changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
-index 8d689fea0dab..69dec5af23c3 100644
---- a/drivers/fpga/ice40-spi.c
-+++ b/drivers/fpga/ice40-spi.c
-@@ -183,18 +183,7 @@ static int ice40_fpga_probe(struct spi_device *spi)
+diff --git a/drivers/fpga/machxo2-spi.c b/drivers/fpga/machxo2-spi.c
+index b316369156fe..114a64d2b7a4 100644
+--- a/drivers/fpga/machxo2-spi.c
++++ b/drivers/fpga/machxo2-spi.c
+@@ -371,18 +371,7 @@ static int machxo2_spi_probe(struct spi_device *spi)
  	if (!mgr)
  		return -ENOMEM;
  
@@ -72,7 +72,7 @@ index 8d689fea0dab..69dec5af23c3 100644
 -	return fpga_mgr_register(mgr);
 -}
 -
--static int ice40_fpga_remove(struct spi_device *spi)
+-static int machxo2_spi_remove(struct spi_device *spi)
 -{
 -	struct fpga_manager *mgr = spi_get_drvdata(spi);
 -
@@ -82,15 +82,15 @@ index 8d689fea0dab..69dec5af23c3 100644
 +	return devm_fpga_mgr_register(dev, mgr);
  }
  
- static const struct of_device_id ice40_fpga_of_match[] = {
-@@ -205,7 +194,6 @@ MODULE_DEVICE_TABLE(of, ice40_fpga_of_match);
+ static const struct of_device_id of_match[] = {
+@@ -403,7 +392,6 @@ static struct spi_driver machxo2_spi_driver = {
+ 		.of_match_table = of_match_ptr(of_match),
+ 	},
+ 	.probe = machxo2_spi_probe,
+-	.remove = machxo2_spi_remove,
+ 	.id_table = lattice_ids,
+ };
  
- static struct spi_driver ice40_fpga_driver = {
- 	.probe = ice40_fpga_probe,
--	.remove = ice40_fpga_remove,
- 	.driver = {
- 		.name = "ice40spi",
- 		.of_match_table = of_match_ptr(ice40_fpga_of_match),
 -- 
 2.28.0
 
