@@ -2,96 +2,142 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F0A283DA4
-	for <lists+linux-fpga@lfdr.de>; Mon,  5 Oct 2020 19:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B244E284072
+	for <lists+linux-fpga@lfdr.de>; Mon,  5 Oct 2020 22:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727896AbgJERkA (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 5 Oct 2020 13:40:00 -0400
-Received: from mail-pj1-f54.google.com ([209.85.216.54]:37673 "EHLO
-        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727716AbgJERkA (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 5 Oct 2020 13:40:00 -0400
-Received: by mail-pj1-f54.google.com with SMTP id kk9so216204pjb.2;
-        Mon, 05 Oct 2020 10:40:00 -0700 (PDT)
+        id S1729619AbgJEUNk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 5 Oct 2020 16:13:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:28686 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729424AbgJEUNj (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 5 Oct 2020 16:13:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1601928818;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5BvD0x1LGXOPbfpL7zHAR3R8a6UNGvp1JCYrSTWMOaE=;
+        b=LU8DQhofLh/8sv+KNTsYsZdoho5PGdjKaBdYKtOLtq/krhFb719zkguTV/VQ0umzzLMJH3
+        O+uXGY/NfSajwlzbmCUMxJISUGtj51jkhLIuuipdtZqacJTRxmL0F5kPjl9VZBOUWtCF+v
+        X/rBtSU0NJW8pNp64SsrbvZynZptIs4=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-332-MPH1rcaTOeiaTpU_eJE-iA-1; Mon, 05 Oct 2020 16:13:37 -0400
+X-MC-Unique: MPH1rcaTOeiaTpU_eJE-iA-1
+Received: by mail-qk1-f197.google.com with SMTP id 196so7574452qkn.6
+        for <linux-fpga@vger.kernel.org>; Mon, 05 Oct 2020 13:13:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GDA9XWEwfWUACRI3I02tabmvwJriNb6PloGbU7B9IZA=;
-        b=ZT97kNfIjo2nYxC9gdT9VBU9H1aD0kPYx1ewD3HhJWDzsUesm+rmg9xmnpEBRgOdTC
-         nsxeG3b3zO/Tc2LTpExAG+Q8d6Op1zq98UDbThsIDNB2NsA00AGD3ttzMqOm2xG3oVym
-         T+zihNNRfLNMn161xvMCa4jabc/ZValBQjJbWBuz+RCi/+9Z1JOfHN10GE8cGMQ8cqJg
-         KKOiYW4BPMtT54vpCDnvpFSwVbiPVhFIJEmgsA6NoIga+oWckhDCRh5QLU7+JCuKU7jx
-         Orefl7PxNJXhaxLobiZluNV0jRpVE4oyQKOM/T82oecVoZxMUYsOX5sAaLfD2/j0dbKk
-         FLDQ==
-X-Gm-Message-State: AOAM533BRuuLyzq/YVPxZMiLBMxcwQDfYTIwUHrGflq0hyn6VRDFAfkZ
-        TU1tLtJnlyMlxq19F+ONoECIE/7ckcA=
-X-Google-Smtp-Source: ABdhPJyP4uenJIHIL9ii7ZS1fb84Bg/SQbJU69tmKcumhfod92ZA08l23qgg+AiiuyheK4VfYa/h3w==
-X-Received: by 2002:a17:90a:8585:: with SMTP id m5mr488991pjn.69.1601919599534;
-        Mon, 05 Oct 2020 10:39:59 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id y12sm238029pga.53.2020.10.05.10.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 10:39:58 -0700 (PDT)
-From:   Moritz Fischer <mdf@kernel.org>
-To:     linux-fpga@vger.kernel.org
-Cc:     trix@redhat.com, hao.wu@intel.com, michal.simek@xilinx.com,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=5BvD0x1LGXOPbfpL7zHAR3R8a6UNGvp1JCYrSTWMOaE=;
+        b=BdQ5wVt26UUSWTLV4qU/BFWBOKZdbrvVjzO8PcuUpwUFy6NrVLPLjqGCnOPPrTq9Me
+         neDqHWSYmtCp0n5FrLFct/MG5SYGT+yOUUj0LDZy7ynUStJQgsEFskHP/w/yJA7XNV12
+         PVlaDtMn5xj9/DYvuR2c6Uh3OekDz9yNcbb/yYPRZ51/ZEUfTPxuZ4b9Ee9dwrbiQ76u
+         PS1+hz3MvXp9qNRK3qJsZUwltFwtYwuFjgCSuapw2LHc4HHR8HZfDM0tzomPbcMmFaHZ
+         4EgXiAzr0IHoYImpNKys5f5fJUk6kHZ792NJ8xjyEXKWCOAvjL6GT8ex8/H9CLlWJ/Tq
+         nyfA==
+X-Gm-Message-State: AOAM5302fla9D1gt9az3W1UQ3SGb07jfV5xmWs0l4/UdO+VOcCIxjix8
+        nL6qH3uF9qxY9i9p5aulefMNjsBcQ8NIdC6XR2n4ij1RInVg1exIx3WxvH+4o/1Vl4YPkuJX3jF
+        KxxIWT1e/qbXgO1pxr5Ji2g==
+X-Received: by 2002:aed:2489:: with SMTP id t9mr1658733qtc.358.1601928816606;
+        Mon, 05 Oct 2020 13:13:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzIkeczNA3zabL1KGQ5svsN/WDxZgNZb02q2MIfAkohl7n+auh0JUVGTFSaFYKRlVl3FU0Mfw==
+X-Received: by 2002:aed:2489:: with SMTP id t9mr1658711qtc.358.1601928816372;
+        Mon, 05 Oct 2020 13:13:36 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id z69sm920748qkb.7.2020.10.05.13.13.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Oct 2020 13:13:35 -0700 (PDT)
+Subject: Re: [PATCH v2 10/10] fpga: fpga-mgr: altera-pr-ip: Simplify
+ registration
+To:     Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org
+Cc:     hao.wu@intel.com, michal.simek@xilinx.com,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        russell.h.weight@intel.com, matthew.gerlach@intel.com,
-        Moritz Fischer <mdf@kernel.org>
-Subject: [PATCH v2 00/10] Introduce devm_fpga_mgr_register()
-Date:   Mon,  5 Oct 2020 10:39:57 -0700
-Message-Id: <20201005173957.162690-1-mdf@kernel.org>
-X-Mailer: git-send-email 2.28.0
+        russell.h.weight@intel.com, matthew.gerlach@intel.com
+References: <20201005173735.162408-1-mdf@kernel.org>
+ <20201005173735.162408-11-mdf@kernel.org>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <3c9f78f1-a4b0-c1b8-61a1-93e9b7b57999@redhat.com>
+Date:   Mon, 5 Oct 2020 13:13:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201005173735.162408-11-mdf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This patchset introduces the devm_fpga_mgr_register API,
-a devres managed version of fpga_mgr_register().
 
-It reduces boilerplate being repeated literally in every
-single driver by moving it to the fpga-mgr core.
+On 10/5/20 10:37 AM, Moritz Fischer wrote:
+> Simplify registration using new devm_fpga_mgr_register() API.
 
-Changes from v1:
-- Addressed Hao's feedback
-   - priv -> res
-   - comment style
-   - use fpga_mgr_devres consistently
+Should change old commit message to something about removing symbol
 
-- Addressed Tom's feedback
-   - err -> ret
-   - removed removal of deprecated API
-   - added Reviewed-by: tags
+alt_pr_platform_remove
 
-Moritz Fischer (10):
-  fpga: fpga-mgr: Add devm_fpga_mgr_register() API
-  fpga: fpga-mgr: altera-ps-spi: Simplify registration
-  fpga: fpga-mgr: dfl-fme-mgr: Simplify registration
-  fpga: fpga-mgr: ice40-spi: Simplify registration
-  fpga: fpga-mgr: machxo2-spi: Simplify registration
-  fpga: fpga-mgr: socfpga: Simplify registration
-  fpga: fpga-mgr: ts73xx: Simplify registration
-  fpga: fpga-mgr: xilinx-spi: Simplify registration
-  fpga: fpga-mgr: zynqmp: Simplify registration
-  fpga: fpga-mgr: altera-pr-ip: Simplify registration
+Otherwise fine.
 
- drivers/fpga/altera-pr-ip-core-plat.c  | 10 ----
- drivers/fpga/altera-pr-ip-core.c       | 14 +----
- drivers/fpga/altera-ps-spi.c           | 14 +----
- drivers/fpga/dfl-fme-mgr.c             | 12 +---
- drivers/fpga/fpga-mgr.c                | 76 ++++++++++++++++++++++----
- drivers/fpga/ice40-spi.c               | 14 +----
- drivers/fpga/machxo2-spi.c             | 14 +----
- drivers/fpga/socfpga.c                 | 14 +----
- drivers/fpga/ts73xx-fpga.c             | 14 +----
- drivers/fpga/xilinx-spi.c              | 14 +----
- drivers/fpga/zynqmp-fpga.c             | 21 +------
- include/linux/fpga/altera-pr-ip-core.h |  1 -
- include/linux/fpga/fpga-mgr.h          |  2 +
- 13 files changed, 77 insertions(+), 143 deletions(-)
+Reviewed-by: Tom Rix <trix@redhat.com>
 
--- 
-2.28.0
+>
+> Signed-off-by: Moritz Fischer <mdf@kernel.org>
+> ---
+>
+> Changes from v1:
+> - Removed part that removes unused symbol
+>
+> ---
+>  drivers/fpga/altera-pr-ip-core-plat.c | 10 ----------
+>  drivers/fpga/altera-pr-ip-core.c      |  4 +---
+>  2 files changed, 1 insertion(+), 13 deletions(-)
+>
+> diff --git a/drivers/fpga/altera-pr-ip-core-plat.c b/drivers/fpga/altera-pr-ip-core-plat.c
+> index 99b9cc0e70f0..b008a6b8d2d3 100644
+> --- a/drivers/fpga/altera-pr-ip-core-plat.c
+> +++ b/drivers/fpga/altera-pr-ip-core-plat.c
+> @@ -28,15 +28,6 @@ static int alt_pr_platform_probe(struct platform_device *pdev)
+>  	return alt_pr_register(dev, reg_base);
+>  }
+>  
+> -static int alt_pr_platform_remove(struct platform_device *pdev)
+> -{
+> -	struct device *dev = &pdev->dev;
+> -
+> -	alt_pr_unregister(dev);
+> -
+> -	return 0;
+> -}
+> -
+>  static const struct of_device_id alt_pr_of_match[] = {
+>  	{ .compatible = "altr,a10-pr-ip", },
+>  	{},
+> @@ -46,7 +37,6 @@ MODULE_DEVICE_TABLE(of, alt_pr_of_match);
+>  
+>  static struct platform_driver alt_pr_platform_driver = {
+>  	.probe = alt_pr_platform_probe,
+> -	.remove = alt_pr_platform_remove,
+>  	.driver = {
+>  		.name	= "alt_a10_pr_ip",
+>  		.of_match_table = alt_pr_of_match,
+> diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
+> index 2cf25fd5e897..5b130c4d9882 100644
+> --- a/drivers/fpga/altera-pr-ip-core.c
+> +++ b/drivers/fpga/altera-pr-ip-core.c
+> @@ -195,9 +195,7 @@ int alt_pr_register(struct device *dev, void __iomem *reg_base)
+>  	if (!mgr)
+>  		return -ENOMEM;
+>  
+> -	dev_set_drvdata(dev, mgr);
+> -
+> -	return fpga_mgr_register(mgr);
+> +	return devm_fpga_mgr_register(dev, mgr);
+>  }
+>  EXPORT_SYMBOL_GPL(alt_pr_register);
+>  
+
