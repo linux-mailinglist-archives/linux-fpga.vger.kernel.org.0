@@ -2,447 +2,211 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DD0285216
-	for <lists+linux-fpga@lfdr.de>; Tue,  6 Oct 2020 21:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16A62852A2
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 Oct 2020 21:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbgJFTIP (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Oct 2020 15:08:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:21387 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726791AbgJFTIP (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Oct 2020 15:08:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602011292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RevYVsbERAU0vBJwORHZL9hegXbMLC0q1pXNIfp90Ns=;
-        b=hSO6wKc3qVnU7iX4oJi/uIXVD/rsEvoSMqCxrXbQaLPG969VJ4qVbH1F12Z2x7DFxSbbHo
-        3FOwkOpBTEqwWxlQMGvo2duTn4l5lSN1d5USm4ekD/s3qn5D9PFeeTSdlVs6uDbPWN+S4K
-        Vw2i+rbfybrlWKf2QyNaoe038zycyVI=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-318-_sCb2jW1OYynLLRRe0ISnA-1; Tue, 06 Oct 2020 15:08:11 -0400
-X-MC-Unique: _sCb2jW1OYynLLRRe0ISnA-1
-Received: by mail-qt1-f198.google.com with SMTP id b39so9825097qta.0
-        for <linux-fpga@vger.kernel.org>; Tue, 06 Oct 2020 12:08:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=RevYVsbERAU0vBJwORHZL9hegXbMLC0q1pXNIfp90Ns=;
-        b=YhBcBp9LdUXXrsPzEZJa4hfoHZ89Q6ViJvpoVXH1Rgjjsgn4sTJ9alT+p8Vz0D34kc
-         6LivuXKymM9P77wfNeZPkKhU3fANHdKjBiv5nqjLERJKeVY4Ran7XdJ5d+9rUEfg9y6i
-         m6uGhbB6xr4KnrnY7+1L8r9jDIMdhtO2hr80khtRnjzJZY8hA35xWy/p8UbAapmVE+pI
-         B2RwNvKoy5MR5ysbNuS2HWm8w3wHHMr/2UdRu1ou/hoJpvcz52PyPIIzdE8Crb5lJURA
-         NEuvMFZVJUtBdqaoArueMcI59NtqDvLTolWAmj9o/S96SBBaJt1QraKaUPtDyloQRTVD
-         SLGQ==
-X-Gm-Message-State: AOAM5323A0aYUSzeQRT98pHtGbjmahpBUO3hOAZprn5N8y2u6ivyBGaA
-        6fkOlM6huwntufXAuJDmyw9PEhhPXVNTaDWXGqXg83TcPoVd6UoNio1cCQZh/yLUyNXtV56Jkdh
-        QKl2Dl8lFwyf2/hLyOdztzg==
-X-Received: by 2002:a05:620a:2442:: with SMTP id h2mr6811435qkn.225.1602011290864;
-        Tue, 06 Oct 2020 12:08:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy3EXG9AL1E7NTtxZSNiYwJC1toVePHswZ6gscnLSztSyHisnn8/2AW9eOfS/qvuV9atstzmA==
-X-Received: by 2002:a05:620a:2442:: with SMTP id h2mr6811400qkn.225.1602011290488;
-        Tue, 06 Oct 2020 12:08:10 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id s123sm3178196qkd.128.2020.10.06.12.08.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Oct 2020 12:08:09 -0700 (PDT)
-Subject: Re: [PATCH v2 5/6] fpga: m10bmc-sec: add max10 secure update
- functions
-To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        lee.jones@linaro.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@intel.com
-References: <20201003012412.16831-1-russell.h.weight@intel.com>
- <20201003012412.16831-6-russell.h.weight@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <aca99ba5-ed85-b563-02c8-c4b21a9978fb@redhat.com>
-Date:   Tue, 6 Oct 2020 12:08:07 -0700
+        id S1726073AbgJFTqX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Oct 2020 15:46:23 -0400
+Received: from mga11.intel.com ([192.55.52.93]:31832 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725943AbgJFTqX (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 6 Oct 2020 15:46:23 -0400
+IronPort-SDR: It7d7Bysmc78BMF06I4VxWuz4Wu0W+8PsxyhGt/D17vGmIbUNeHuEwZxvIaKjSixOntke2yY3c
+ awbI09gHMUCg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9766"; a="161265745"
+X-IronPort-AV: E=Sophos;i="5.77,343,1596524400"; 
+   d="scan'208";a="161265745"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2020 12:46:18 -0700
+IronPort-SDR: /tUAKzQGwEZhCztATXCidW/jYmxRoaCsb0hLkIMivOsZ/syrZ/TAXVBbRT2oxF7C9zKVFGZse2
+ 4vSXgkntEgXQ==
+X-IronPort-AV: E=Sophos;i="5.77,343,1596524400"; 
+   d="scan'208";a="460958848"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.15]) ([10.212.2.223])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2020 12:46:16 -0700
+Subject: Re: [PATCH v2 3/7] fpga: sec-mgr: expose sec-mgr update status
+To:     "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "trix@redhat.com" <trix@redhat.com>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "Gerlach, Matthew" <matthew.gerlach@intel.com>
+References: <20201002223701.1317-1-russell.h.weight@intel.com>
+ <20201002223701.1317-4-russell.h.weight@intel.com>
+ <DM6PR11MB3819276C0C4F12E3CEF33F3E850C0@DM6PR11MB3819.namprd11.prod.outlook.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <0a7c51ea-a905-eaf6-0915-10d93423b5d7@intel.com>
+Date:   Tue, 6 Oct 2020 12:46:15 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201003012412.16831-6-russell.h.weight@intel.com>
+In-Reply-To: <DM6PR11MB3819276C0C4F12E3CEF33F3E850C0@DM6PR11MB3819.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
-On 10/2/20 6:24 PM, Russ Weight wrote:
-> Extend the MAX10 BMC Security Engine driver to include
-> the functions that enable secure updates of BMC images,
-> FPGA images, etc.
+
+On 10/5/20 1:41 AM, Wu, Hao wrote:
+>> Subject: [PATCH v2 3/7] fpga: sec-mgr: expose sec-mgr update status
+>>
+>> Extend the Intel Security Manager class driver to
+>> include an update/status sysfs node that can be polled
+>> and read to monitor the progress of an ongoing secure
+>> update. Sysfs_notify() is used to signal transitions
+>> between different phases of the update process.
+>>
+>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>> ---
+>> v2:
+>>   - Bumped documentation date and version
+>>   - Changed progress state "read_file" to "reading"
+>> ---
+>>  .../ABI/testing/sysfs-class-ifpga-sec-mgr     | 11 +++++
+>>  drivers/fpga/ifpga-sec-mgr.c                  | 40 +++++++++++++++++--
+>>  2 files changed, 47 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-class-ifpga-sec-mgr
+>> b/Documentation/ABI/testing/sysfs-class-ifpga-sec-mgr
+>> index 4f375f132c34..73a5246fea1b 100644
+>> --- a/Documentation/ABI/testing/sysfs-class-ifpga-sec-mgr
+>> +++ b/Documentation/ABI/testing/sysfs-class-ifpga-sec-mgr
+>> @@ -78,3 +78,14 @@ Description:Write only. Write the filename of an
+>> Intel image
+>>  BMC images, BMC firmware, Static Region images,
+>>  and Root Entry Hashes, and to cancel Code Signing
+>>  Keys (CSK).
+>> +
+>> +What: /sys/class/ifpga_sec_mgr/ifpga_secX/update/status
+>> +Date:Oct 2020
+>> +KernelVersion:  5.11
+>> +Contact:Russ Weight <russell.h.weight@intel.com>
+>> +Description:Read-only. Returns a string describing the current
+>> +status of an update. The string will be one of the
+>> +following: idle, reading, preparing, writing,
+>> +programming. Userspace code can poll on this file,
+>> +as it will be signaled by sysfs_notify() on each
+>> +state change.
+>> diff --git a/drivers/fpga/ifpga-sec-mgr.c b/drivers/fpga/ifpga-sec-mgr.c
+>> index 7d5a4979554b..ad918fb42dc2 100644
+>> --- a/drivers/fpga/ifpga-sec-mgr.c
+>> +++ b/drivers/fpga/ifpga-sec-mgr.c
+>> @@ -139,6 +139,13 @@ static struct attribute *sec_mgr_security_attrs[] = {
+>>  NULL,
+>>  };
+>>
+>> +static void update_progress(struct ifpga_sec_mgr *imgr,
+>> +    enum ifpga_sec_prog new_progress)
+>> +{
+>> +imgr->progress = new_progress;
+>> +sysfs_notify(&imgr->dev.kobj, "update", "status");
+>> +}
+>> +
+>>  static void ifpga_sec_dev_error(struct ifpga_sec_mgr *imgr,
+>>  enum ifpga_sec_err err_code)
+>>  {
+>> @@ -149,7 +156,7 @@ static void ifpga_sec_dev_error(struct ifpga_sec_mgr
+>> *imgr,
+>>  static void progress_complete(struct ifpga_sec_mgr *imgr)
+>>  {
+>>  mutex_lock(&imgr->lock);
+>> -imgr->progress = IFPGA_SEC_PROG_IDLE;
+>> +update_progress(imgr, IFPGA_SEC_PROG_IDLE);
+>>  complete_all(&imgr->update_done);
+>>  mutex_unlock(&imgr->lock);
+>>  }
+>> @@ -177,14 +184,14 @@ static void ifpga_sec_mgr_update(struct
+>> work_struct *work)
+>>  goto release_fw_exit;
+>>  }
+>>
+>> -imgr->progress = IFPGA_SEC_PROG_PREPARING;
+>> +update_progress(imgr, IFPGA_SEC_PROG_PREPARING);
+>>  ret = imgr->iops->prepare(imgr);
+>>  if (ret) {
+>>  ifpga_sec_dev_error(imgr, ret);
+>>  goto modput_exit;
+>>  }
+>>
+>> -imgr->progress = IFPGA_SEC_PROG_WRITING;
+>> +update_progress(imgr, IFPGA_SEC_PROG_WRITING);
+>>  size = imgr->remaining_size;
+>>  while (size) {
+>>  blk_size = min_t(u32, size, WRITE_BLOCK_SIZE);
+>> @@ -199,7 +206,7 @@ static void ifpga_sec_mgr_update(struct work_struct
+>> *work)
+>>  offset += blk_size;
+>>  }
+>>
+>> -imgr->progress = IFPGA_SEC_PROG_PROGRAMMING;
+>> +update_progress(imgr, IFPGA_SEC_PROG_PROGRAMMING);
+>>  ret = imgr->iops->poll_complete(imgr);
+>>  if (ret) {
+>>  ifpga_sec_dev_error(imgr, ret);
+>> @@ -259,6 +266,30 @@ static struct attribute_group
+>> sec_mgr_security_attr_group = {
+>>  .is_visible = sec_mgr_visible,
+>>  };
+>>
+>> +static const char * const sec_mgr_prog_str[] = {
+>> +"idle",/* IFPGA_SEC_PROG_IDLE */
+>> +"reading",/* IFPGA_SEC_PROG_READING */
+>> +"preparing",/* IFPGA_SEC_PROG_PREPARING */
+>> +"writing",/* IFPGA_SEC_PROG_WRITING */
+>> +"programming"/* IFPGA_SEC_PROG_PROGRAMMING */
+>> +};
+>> +
+>> +static ssize_t
+>> +status_show(struct device *dev, struct device_attribute *attr, char *buf)
+>> +{
+>> +struct ifpga_sec_mgr *imgr = to_sec_mgr(dev);
+>> +const char *status = "unknown-status";
+>> +
+>> +if (imgr->progress < IFPGA_SEC_PROG_MAX)
+>> +status = sec_mgr_prog_str[imgr->progress];
+> I am not sure if this would be a problem that as there is no lock protection for
+> the progress value. If someone changes imgr->progress into a bad value just
+> after the first check imgr->progress < IFPGA_SEC_PROG_MAX passed.
+I'll read imgr->progress into a local variable and operate off of that so that I
+am using a consistent value.
+
+We really should never see an invalid value. These values are set explicitly (not
+incremented or decremented) during the update process. If we do see an invalid
+value, it would indicate a driver bug.
 >
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> ---
-> v2:
->   - Reworked the rsu_start_done() function to make it more readable
->   - Reworked while-loop condition/content in rsu_prog_ready()
->   - Minor code cleanup per review comments
->   - Added a comment to the m10bmc_sec_poll_complete() function to
->     explain the context (could take 30+ minutes to complete).
->   - Added m10bmc_ prefix to functions in m10bmc_iops structure
->   - Moved MAX10 BMC address and function definitions to a separate
->     patch.
-> ---
->  drivers/fpga/intel-m10-bmc-secure.c | 298 ++++++++++++++++++++++++++++
->  1 file changed, 298 insertions(+)
+>> +else
+>> +dev_warn(dev, "Invalid status during secure update: %d\n",
+>> + imgr->progress);
+> One minor thing, dev_err or even WARN_ON should be better, and I think
+> if it hits this, that will be a critical issue in the driver, isn't it?
+Yes. I'll switch to dev_err(). A stack trace probably wouldn't be useful
+since the error would be happening in a different kernel thread.
 >
-> diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
-> index 5bb45499b332..a9617c5b3845 100644
-> --- a/drivers/fpga/intel-m10-bmc-secure.c
-> +++ b/drivers/fpga/intel-m10-bmc-secure.c
-> @@ -201,6 +201,300 @@ static int m10bmc_pr_canceled_csks(struct ifpga_sec_mgr *imgr,
->  			      csk_map, nbits);
->  }
->  
-> +static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
-> +{
-> +	u32 auth_result;
-> +
-> +	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
-> +
-> +	if (!m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result))
-> +		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
-> +}
-> +
-> +static enum ifpga_sec_err rsu_check_idle(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret)
-> +		return IFPGA_SEC_ERR_RW_ERROR;
-> +
-> +	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
-> +	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE) {
-> +		log_error_regs(sec, doorbell);
-> +		return IFPGA_SEC_ERR_BUSY;
-> +	}
-> +
-> +	return IFPGA_SEC_ERR_NONE;
-> +}
-> +
-> +static inline bool rsu_start_done(u32 doorbell)
-> +{
-> +	u32 status, progress;
-> +
-> +	if (doorbell & DRBL_RSU_REQUEST)
-> +		return false;
-> +
-> +	status = rsu_stat(doorbell);
-> +	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
-> +		return true;
-> +
-> +	progress = rsu_prog(doorbell);
-> +	if (progress != RSU_PROG_IDLE && progress != RSU_PROG_RSU_DONE)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
-> +static enum ifpga_sec_err rsu_update_init(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell, status;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_update_bits(sec->m10bmc, M10BMC_DOORBELL,
-> +				     DRBL_RSU_REQUEST | DRBL_HOST_STATUS,
-> +				     DRBL_RSU_REQUEST |
-> +				     FIELD_PREP(DRBL_HOST_STATUS,
-> +						HOST_STATUS_IDLE));
-> +	if (ret)
-> +		return IFPGA_SEC_ERR_RW_ERROR;
-> +
-> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				       doorbell,
-> +				       rsu_start_done(doorbell),
-> +				       NIOS_HANDSHAKE_INTERVAL_US,
-> +				       NIOS_HANDSHAKE_TIMEOUT_US);
-> +
-> +	if (ret == -ETIMEDOUT) {
-> +		log_error_regs(sec, doorbell);
-> +		return IFPGA_SEC_ERR_TIMEOUT;
-> +	} else if (ret) {
-> +		return IFPGA_SEC_ERR_RW_ERROR;
-> +	}
-> +
-> +	status = rsu_stat(doorbell);
-> +	if (status == RSU_STAT_WEAROUT) {
-> +		dev_warn(sec->dev, "Excessive flash update count detected\n");
-
-Device is permanently failing, dev_err or higher is more appropriate than dev_warn.
-
-warn once to limit noisy logs.
-
-> +		return IFPGA_SEC_ERR_WEAROUT;
-> +	} else if (status == RSU_STAT_ERASE_FAIL) {
-> +		log_error_regs(sec, doorbell);
-> +		return IFPGA_SEC_ERR_HW_ERROR;
-> +	}
-> +
-> +	return IFPGA_SEC_ERR_NONE;
-> +}
-> +
-> +static enum ifpga_sec_err (struct m10bmc_sec *sec)
-> +{
-> +	unsigned long poll_timeout;
-> +	u32 doorbell, progress;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret)
-> +		return IFPGA_SEC_ERR_RW_ERROR;
-> +
-> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_PREP_TIMEOUT_MS);
-> +	while (rsu_prog(doorbell) == RSU_PROG_PREPARE) {
-> +		msleep(RSU_PREP_INTERVAL_MS);
-> +		if (time_after(jiffies, poll_timeout))
-> +			break;
-> +
-> +		ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +		if (ret)
-> +			return IFPGA_SEC_ERR_RW_ERROR;
-> +	}
-> +
-> +	progress = rsu_prog(doorbell);
-> +	if (progress == RSU_PROG_PREPARE) {
-> +		log_error_regs(sec, doorbell);
-> +		return IFPGA_SEC_ERR_TIMEOUT;
-> +	} else if (progress != RSU_PROG_READY) {
-> +		log_error_regs(sec, doorbell);
-> +		return IFPGA_SEC_ERR_HW_ERROR;
-> +	}
-> +
-> +	return IFPGA_SEC_ERR_NONE;
-> +}
-> +
-> +static enum ifpga_sec_err rsu_send_data(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_update_bits(sec->m10bmc, M10BMC_DOORBELL,
-> +				     DRBL_HOST_STATUS,
-> +				     FIELD_PREP(DRBL_HOST_STATUS,
-> +						HOST_STATUS_WRITE_DONE));
-> +	if (ret)
-> +		return IFPGA_SEC_ERR_RW_ERROR;
-> +
-> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				       doorbell,
-> +				       rsu_prog(doorbell) != RSU_PROG_READY,
-> +				       NIOS_HANDSHAKE_INTERVAL_US,
-> +				       NIOS_HANDSHAKE_TIMEOUT_US);
-> +
-> +	if (ret == -ETIMEDOUT) {
-> +		log_error_regs(sec, doorbell);
-> +		return IFPGA_SEC_ERR_TIMEOUT;
-> +	} else if (ret) {
-> +		return IFPGA_SEC_ERR_RW_ERROR;
-> +	}
-> +
-> +	switch (rsu_stat(doorbell)) {
-> +	case RSU_STAT_NORMAL:
-> +	case RSU_STAT_NIOS_OK:
-> +	case RSU_STAT_USER_OK:
-> +	case RSU_STAT_FACTORY_OK:
-> +		break;
-> +	default:
-> +		log_error_regs(sec, doorbell);
-> +		return IFPGA_SEC_ERR_HW_ERROR;
-> +	}
-
-This and similar below..
-
-switch can be converted to
-
-if (!rsu_stat(doorbell) & (RSU_STAT_NORMAL | ... ))
-
-  fail
-
-> +
-> +	return IFPGA_SEC_ERR_NONE;
-> +}
-> +
-> +static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
-> +{
-> +	if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, doorbell))
-> +		return -EIO;
-> +
-> +	switch (rsu_stat(*doorbell)) {
-> +	case RSU_STAT_NORMAL:
-> +	case RSU_STAT_NIOS_OK:
-> +	case RSU_STAT_USER_OK:
-> +	case RSU_STAT_FACTORY_OK:
-> +	case RSU_STAT_WEAROUT:
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	switch (rsu_prog(*doorbell)) {
-> +	case RSU_PROG_IDLE:
-> +	case RSU_PROG_RSU_DONE:
-> +		return 0;
-> +	case RSU_PROG_AUTHENTICATING:
-> +	case RSU_PROG_COPYING:
-> +	case RSU_PROG_UPDATE_CANCEL:
-> +	case RSU_PROG_PROGRAM_KEY_HASH:
-> +		return -EAGAIN;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static enum ifpga_sec_err m10bmc_sec_prepare(struct ifpga_sec_mgr *imgr)
-> +{
-> +	struct m10bmc_sec *sec = imgr->priv;
-> +	enum ifpga_sec_err ret;
-> +
-> +	if (imgr->remaining_size > M10BMC_STAGING_SIZE)
-> +		return IFPGA_SEC_ERR_INVALID_SIZE;
-> +
-> +	ret = rsu_check_idle(sec);
-> +	if (ret)
-
-This needs to change, generally, to
-
-if (ret != IFPGA_SEC_ERR_NONE)
-
-> +		return ret;
-> +
-> +	ret = rsu_update_init(sec);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return rsu_prog_ready(sec);
-> +}
-> +
-> +static enum ifpga_sec_err
-> +m10bmc_sec_write_blk(struct ifpga_sec_mgr *imgr, u32 offset, u32 size)
-> +{
-> +	struct m10bmc_sec *sec = imgr->priv;
-> +	unsigned int stride = regmap_get_reg_stride(sec->m10bmc->regmap);
-> +	u32 doorbell;
-> +	int ret;
-> +
-size check here.
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-
-Wondering about the use of m10bmc_sys_read generally.
-
-If secure writing depends on new mmio region why not use the raw_read ?
-
-wondering if mixing old door bell regs with new sec regs would even work.
-
-> +	if (ret) {
-> +		return IFPGA_SEC_ERR_RW_ERROR;
-> +	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
-> +		log_error_regs(sec, doorbell);
-> +		return IFPGA_SEC_ERR_HW_ERROR;
-> +	}
-> +
-> +	ret = m10bmc_raw_bulk_write(sec->m10bmc, M10BMC_STAGING_BASE + offset,
-> +				    (void *)imgr->data + offset, size / stride);
-> +
-> +	return ret ? IFPGA_SEC_ERR_RW_ERROR : IFPGA_SEC_ERR_NONE;
-> +}
-> +
-> +/*
-> + * m10bmc_sec_poll_complete() is called after handing things off to
-> + * the BMC firmware. Depending on the type of update, it could be
-> + * 30+ minutes before the BMC firmware completes the update. The
-> + * imgr->driver_unload check allows the driver to be unloaded,
-> + * but the BMC firmware will continue the update and no further
-> + * secure updates can be started for this device until the update
-> + * is complete.
-> + */
-> +static enum ifpga_sec_err m10bmc_sec_poll_complete(struct ifpga_sec_mgr *imgr)
-> +{
-> +	struct m10bmc_sec *sec = imgr->priv;
-> +	unsigned long poll_timeout;
-> +	enum ifpga_sec_err result;
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	result = rsu_send_data(sec);
-> +	if (result)
-> +		return result;
-> +
-> +	ret = rsu_check_complete(sec, &doorbell);
-> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_COMPLETE_TIMEOUT_MS);
-> +
-> +	while (ret == -EAGAIN && !time_after(jiffies, poll_timeout)) {
-> +		msleep(RSU_COMPLETE_INTERVAL_MS);
-> +		ret = rsu_check_complete(sec, &doorbell);
-> +		if (imgr->driver_unload)
-> +			return IFPGA_SEC_ERR_CANCELED;
-
-Instead of checking for complete could you check the progress ?
-
-hate for it to fail with 90% done.
-
-Tom
-
-> +	}
-> +
-> +	if (ret == -EAGAIN) {
-> +		log_error_regs(sec, doorbell);
-> +		return IFPGA_SEC_ERR_TIMEOUT;
-> +	} else if (ret == -EIO) {
-> +		return IFPGA_SEC_ERR_RW_ERROR;
-> +	} else if (ret) {
-> +		log_error_regs(sec, doorbell);
-> +		return IFPGA_SEC_ERR_HW_ERROR;
-> +	}
-> +
-> +	return IFPGA_SEC_ERR_NONE;
-> +}
-> +
-> +static enum ifpga_sec_err m10bmc_sec_cancel(struct ifpga_sec_mgr *imgr)
-> +{
-> +	struct m10bmc_sec *sec = imgr->priv;
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret)
-> +		return IFPGA_SEC_ERR_RW_ERROR;
-> +
-> +	if (rsu_prog(doorbell) != RSU_PROG_READY)
-> +		return IFPGA_SEC_ERR_BUSY;
-> +
-> +	ret = m10bmc_sys_update_bits(sec->m10bmc, M10BMC_DOORBELL,
-> +				     DRBL_HOST_STATUS,
-> +				     FIELD_PREP(DRBL_HOST_STATUS,
-> +						HOST_STATUS_ABORT_RSU));
-> +
-> +	return ret ? IFPGA_SEC_ERR_RW_ERROR : IFPGA_SEC_ERR_NONE;
-> +}
-> +
->  static const struct ifpga_sec_mgr_ops m10bmc_iops = {
->  	.user_flash_count = m10bmc_user_flash_count,
->  	.bmc_root_entry_hash = m10bmc_bmc_root_entry_hash,
-> @@ -215,6 +509,10 @@ static const struct ifpga_sec_mgr_ops m10bmc_iops = {
->  	.bmc_canceled_csk_nbits = m10bmc_csk_cancel_nbits,
->  	.sr_canceled_csk_nbits = m10bmc_csk_cancel_nbits,
->  	.pr_canceled_csk_nbits = m10bmc_csk_cancel_nbits,
-> +	.prepare = m10bmc_sec_prepare,
-> +	.write_blk = m10bmc_sec_write_blk,
-> +	.poll_complete = m10bmc_sec_poll_complete,
-> +	.cancel = m10bmc_sec_cancel,
->  };
->  
->  static int m10bmc_secure_probe(struct platform_device *pdev)
+> Thanks
+> Hao
+>
+>> +
+>> +return sprintf(buf, "%s\n", status);
+>> +}
+>> +static DEVICE_ATTR_RO(status);
+>> +
+>>  static ssize_t filename_store(struct device *dev, struct device_attribute *attr,
+>>        const char *buf, size_t count)
+>>  {
+>> @@ -293,6 +324,7 @@ static DEVICE_ATTR_WO(filename);
+>>
+>>  static struct attribute *sec_mgr_update_attrs[] = {
+>>  &dev_attr_filename.attr,
+>> +&dev_attr_status.attr,
+>>  NULL,
+>>  };
+>>
+>> --
+>> 2.17.1
 
