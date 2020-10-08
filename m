@@ -2,47 +2,46 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1EA287EF4
-	for <lists+linux-fpga@lfdr.de>; Fri,  9 Oct 2020 01:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4D2287EF8
+	for <lists+linux-fpga@lfdr.de>; Fri,  9 Oct 2020 01:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729973AbgJHXDR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 8 Oct 2020 19:03:17 -0400
-Received: from mga17.intel.com ([192.55.52.151]:3176 "EHLO mga17.intel.com"
+        id S1730307AbgJHXGF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 8 Oct 2020 19:06:05 -0400
+Received: from mga18.intel.com ([134.134.136.126]:7076 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727324AbgJHXDR (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 8 Oct 2020 19:03:17 -0400
-IronPort-SDR: DjveMciltHLd9t9pIu6J98p9snBLOGF2dPOSH8otv72oIB6S7b+8E6TNFuq4fV2wZ5zQffM5fx
- O6Tm7+g0Oyww==
-X-IronPort-AV: E=McAfee;i="6000,8403,9768"; a="145282980"
+        id S1727324AbgJHXGF (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 8 Oct 2020 19:06:05 -0400
+IronPort-SDR: UPDDTE8+sO3ODUUxNC1lZMfAnQjsH4ZYgcBPJNce01Eb/UlWKYBxxZKsDVB95wCw7EJd5V3TvO
+ g2ZrzGE7WCjw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9768"; a="153251793"
 X-IronPort-AV: E=Sophos;i="5.77,352,1596524400"; 
-   d="scan'208";a="145282980"
+   d="scan'208";a="153251793"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 16:03:16 -0700
-IronPort-SDR: LOPogIk0y36j6+ilVR3IsDGlsoNtLvWLruS08DX7Qw0BSxVJ8bUPhAqfu4JANKfXHlBtYiTj6R
- nW5e3Gf2cGuA==
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 16:06:03 -0700
+IronPort-SDR: 3mQc0i0cqV3Y6Wqah+PCW7QRTHVFJpGlZp85WozBtO8MTdXZOp3MF1plF5c4y8ozN72VJwR89W
+ LK6p37888+Tg==
 X-IronPort-AV: E=Sophos;i="5.77,352,1596524400"; 
-   d="scan'208";a="461973934"
+   d="scan'208";a="461974895"
 Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.15]) ([10.254.33.152])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 16:03:15 -0700
-Subject: Re: [PATCH v2 1/6] mfd: intel-m10-bmc: support for MAX10 BMC Security
- Engine
-From:   Russ Weight <russell.h.weight@intel.com>
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 16:06:01 -0700
+Subject: Re: [PATCH v2 5/6] fpga: m10bmc-sec: add max10 secure update
+ functions
 To:     Tom Rix <trix@redhat.com>, mdf@kernel.org, lee.jones@linaro.org,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
         matthew.gerlach@intel.com
 References: <20201003012412.16831-1-russell.h.weight@intel.com>
- <20201003012412.16831-2-russell.h.weight@intel.com>
- <6eef3a9a-ffc9-7e93-e3ef-69e755fbf8cc@redhat.com>
- <53a712e8-63e5-8b75-a2a4-6bf7fa327462@intel.com>
-Message-ID: <9e5b012d-c8e4-2c01-26e0-a6bf6dce6679@intel.com>
-Date:   Thu, 8 Oct 2020 16:03:14 -0700
+ <20201003012412.16831-6-russell.h.weight@intel.com>
+ <aca99ba5-ed85-b563-02c8-c4b21a9978fb@redhat.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <47d9e54c-ae23-4d73-4441-79c1b31b38ea@intel.com>
+Date:   Thu, 8 Oct 2020 16:06:01 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <53a712e8-63e5-8b75-a2a4-6bf7fa327462@intel.com>
+In-Reply-To: <aca99ba5-ed85-b563-02c8-c4b21a9978fb@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -50,227 +49,416 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-I just realized that I missed a few questions on my first reply.
-Please see my responses below.
 
-On 10/7/20 5:52 PM, Russ Weight wrote:
+
+On 10/6/20 12:08 PM, Tom Rix wrote:
+> On 10/2/20 6:24 PM, Russ Weight wrote:
+>> Extend the MAX10 BMC Security Engine driver to include
+>> the functions that enable secure updates of BMC images,
+>> FPGA images, etc.
+>>
+>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>> ---
+>> v2:
+>>   - Reworked the rsu_start_done() function to make it more readable
+>>   - Reworked while-loop condition/content in rsu_prog_ready()
+>>   - Minor code cleanup per review comments
+>>   - Added a comment to the m10bmc_sec_poll_complete() function to
+>>     explain the context (could take 30+ minutes to complete).
+>>   - Added m10bmc_ prefix to functions in m10bmc_iops structure
+>>   - Moved MAX10 BMC address and function definitions to a separate
+>>     patch.
+>> ---
+>>  drivers/fpga/intel-m10-bmc-secure.c | 298 ++++++++++++++++++++++++++++
+>>  1 file changed, 298 insertions(+)
+>>
+>> diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
+>> index 5bb45499b332..a9617c5b3845 100644
+>> --- a/drivers/fpga/intel-m10-bmc-secure.c
+>> +++ b/drivers/fpga/intel-m10-bmc-secure.c
+>> @@ -201,6 +201,300 @@ static int m10bmc_pr_canceled_csks(struct ifpga_sec_mgr *imgr,
+>>  			      csk_map, nbits);
+>>  }
+>>  
+>> +static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
+>> +{
+>> +	u32 auth_result;
+>> +
+>> +	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
+>> +
+>> +	if (!m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result))
+>> +		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
+>> +}
+>> +
+>> +static enum ifpga_sec_err rsu_check_idle(struct m10bmc_sec *sec)
+>> +{
+>> +	u32 doorbell;
+>> +	int ret;
+>> +
+>> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
+>> +	if (ret)
+>> +		return IFPGA_SEC_ERR_RW_ERROR;
+>> +
+>> +	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
+>> +	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE) {
+>> +		log_error_regs(sec, doorbell);
+>> +		return IFPGA_SEC_ERR_BUSY;
+>> +	}
+>> +
+>> +	return IFPGA_SEC_ERR_NONE;
+>> +}
+>> +
+>> +static inline bool rsu_start_done(u32 doorbell)
+>> +{
+>> +	u32 status, progress;
+>> +
+>> +	if (doorbell & DRBL_RSU_REQUEST)
+>> +		return false;
+>> +
+>> +	status = rsu_stat(doorbell);
+>> +	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
+>> +		return true;
+>> +
+>> +	progress = rsu_prog(doorbell);
+>> +	if (progress != RSU_PROG_IDLE && progress != RSU_PROG_RSU_DONE)
+>> +		return true;
+>> +
+>> +	return false;
+>> +}
+>> +
+>> +static enum ifpga_sec_err rsu_update_init(struct m10bmc_sec *sec)
+>> +{
+>> +	u32 doorbell, status;
+>> +	int ret;
+>> +
+>> +	ret = m10bmc_sys_update_bits(sec->m10bmc, M10BMC_DOORBELL,
+>> +				     DRBL_RSU_REQUEST | DRBL_HOST_STATUS,
+>> +				     DRBL_RSU_REQUEST |
+>> +				     FIELD_PREP(DRBL_HOST_STATUS,
+>> +						HOST_STATUS_IDLE));
+>> +	if (ret)
+>> +		return IFPGA_SEC_ERR_RW_ERROR;
+>> +
+>> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
+>> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
+>> +				       doorbell,
+>> +				       rsu_start_done(doorbell),
+>> +				       NIOS_HANDSHAKE_INTERVAL_US,
+>> +				       NIOS_HANDSHAKE_TIMEOUT_US);
+>> +
+>> +	if (ret == -ETIMEDOUT) {
+>> +		log_error_regs(sec, doorbell);
+>> +		return IFPGA_SEC_ERR_TIMEOUT;
+>> +	} else if (ret) {
+>> +		return IFPGA_SEC_ERR_RW_ERROR;
+>> +	}
+>> +
+>> +	status = rsu_stat(doorbell);
+>> +	if (status == RSU_STAT_WEAROUT) {
+>> +		dev_warn(sec->dev, "Excessive flash update count detected\n");
+> Device is permanently failing, dev_err or higher is more appropriate than dev_warn.
 >
-> On 10/6/20 9:34 AM, Tom Rix wrote:
->> On 10/2/20 6:24 PM, Russ Weight wrote:
->>> Add macros and definitions required by the MAX10 BMC
->>> Security Engine driver.
->>>
->>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
->>> ---
->>> v2:
->>>   - These functions and macros were previously distributed among
->>>     the patches that needed them. They are now grouped together
->>>     in a single patch containing changes to the Intel MAX10 BMC
->>>     driver.
->>>   - Added DRBL_ prefix to some definitions
->>>   - Some address definitions were moved here from the .c files that
->>>     use them.
->>> ---
->>>  include/linux/mfd/intel-m10-bmc.h | 134 ++++++++++++++++++++++++++++++
->>>  1 file changed, 134 insertions(+)
->>>
->>> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
->>> index c8ef2f1654a4..880f907302eb 100644
->>> --- a/include/linux/mfd/intel-m10-bmc.h
->>> +++ b/include/linux/mfd/intel-m10-bmc.h
->>> @@ -13,6 +13,9 @@
->>>  #define M10BMC_SYS_BASE			0x300800
->>>  #define M10BMC_MEM_END			0x200000fc
->>>  
->>> +#define M10BMC_STAGING_BASE		0x18000000
->>> +#define M10BMC_STAGING_SIZE		0x3800000
->> The staging size is not used, please use it in m10bmc_sec_write_blk to
->>
->> check the input parameter 'size'
-> It is used to check the input size in the prepare function:
-> m10bmc_sec_prepare()
+> warn once to limit noisy logs.
+This is not a permanent/hard failure. When the flash count (for the staging area)
+exceeds 1000, a 30 second delay is imposed on subsequent flashes. When the count
+hits 2000, the delay goes to 60 seconds.
+
+Also, flash events shouldn't that often, so I don't think they are going to create
+a lot of noise in the logs.
+
+I think this is OK as is?
+
 >
->         if (smgr->remaining_size > M10BMC_STAGING_SIZE)
->                 return FPGA_SEC_ERR_INVALID_SIZE;
+>> +		return IFPGA_SEC_ERR_WEAROUT;
+>> +	} else if (status == RSU_STAT_ERASE_FAIL) {
+>> +		log_error_regs(sec, doorbell);
+>> +		return IFPGA_SEC_ERR_HW_ERROR;
+>> +	}
+>> +
+>> +	return IFPGA_SEC_ERR_NONE;
+>> +}
+>> +
+>> +static enum ifpga_sec_err (struct m10bmc_sec *sec)
+>> +{
+>> +	unsigned long poll_timeout;
+>> +	u32 doorbell, progress;
+>> +	int ret;
+>> +
+>> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
+>> +	if (ret)
+>> +		return IFPGA_SEC_ERR_RW_ERROR;
+>> +
+>> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_PREP_TIMEOUT_MS);
+>> +	while (rsu_prog(doorbell) == RSU_PROG_PREPARE) {
+>> +		msleep(RSU_PREP_INTERVAL_MS);
+>> +		if (time_after(jiffies, poll_timeout))
+>> +			break;
+>> +
+>> +		ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
+>> +		if (ret)
+>> +			return IFPGA_SEC_ERR_RW_ERROR;
+>> +	}
+>> +
+>> +	progress = rsu_prog(doorbell);
+>> +	if (progress == RSU_PROG_PREPARE) {
+>> +		log_error_regs(sec, doorbell);
+>> +		return IFPGA_SEC_ERR_TIMEOUT;
+>> +	} else if (progress != RSU_PROG_READY) {
+>> +		log_error_regs(sec, doorbell);
+>> +		return IFPGA_SEC_ERR_HW_ERROR;
+>> +	}
+>> +
+>> +	return IFPGA_SEC_ERR_NONE;
+>> +}
+>> +
+>> +static enum ifpga_sec_err rsu_send_data(struct m10bmc_sec *sec)
+>> +{
+>> +	u32 doorbell;
+>> +	int ret;
+>> +
+>> +	ret = m10bmc_sys_update_bits(sec->m10bmc, M10BMC_DOORBELL,
+>> +				     DRBL_HOST_STATUS,
+>> +				     FIELD_PREP(DRBL_HOST_STATUS,
+>> +						HOST_STATUS_WRITE_DONE));
+>> +	if (ret)
+>> +		return IFPGA_SEC_ERR_RW_ERROR;
+>> +
+>> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
+>> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
+>> +				       doorbell,
+>> +				       rsu_prog(doorbell) != RSU_PROG_READY,
+>> +				       NIOS_HANDSHAKE_INTERVAL_US,
+>> +				       NIOS_HANDSHAKE_TIMEOUT_US);
+>> +
+>> +	if (ret == -ETIMEDOUT) {
+>> +		log_error_regs(sec, doorbell);
+>> +		return IFPGA_SEC_ERR_TIMEOUT;
+>> +	} else if (ret) {
+>> +		return IFPGA_SEC_ERR_RW_ERROR;
+>> +	}
+>> +
+>> +	switch (rsu_stat(doorbell)) {
+>> +	case RSU_STAT_NORMAL:
+>> +	case RSU_STAT_NIOS_OK:
+>> +	case RSU_STAT_USER_OK:
+>> +	case RSU_STAT_FACTORY_OK:
+>> +		break;
+>> +	default:
+>> +		log_error_regs(sec, doorbell);
+>> +		return IFPGA_SEC_ERR_HW_ERROR;
+>> +	}
+> This and similar below..
 >
-> - Russ
+> switch can be converted to
 >
->>> +
->>>  /* Register offset of system registers */
->>>  #define NIOS2_FW_VERSION		0x0
->>>  #define M10BMC_TEST_REG			0x3c
->>> @@ -21,6 +24,88 @@
->>>  #define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
->>>  #define M10BMC_VER_LEGACY_INVALID	0xffffffff
->>>  
->>> +/* Secure update doorbell register, in system register region */
->>> +#define M10BMC_DOORBELL			0x400
->>> +
->>> +/* Authorization Result register, in system register region */
->>> +#define M10BMC_AUTH_RESULT		0x404
->>> +
->>> +/* Doorbell register fields */
->>> +#define DRBL_RSU_REQUEST		BIT(0)
->>> +#define DRBL_RSU_PROGRESS		GENMASK(7, 4)
->>> +#define DRBL_HOST_STATUS		GENMASK(11, 8)
->>> +#define DRBL_RSU_STATUS			GENMASK(23, 16)
->>> +#define DRBL_PKVL_EEPROM_LOAD_SEC	BIT(24)
->>> +#define DRBL_PKVL1_POLL_EN		BIT(25)
->>> +#define DRBL_PKVL2_POLL_EN		BIT(26)
->> PKVL seems like it would be n3000 specific.
->>
->> For this and similar it may be good to add a _N3000_ in the name.
-I'm hoping Yilun and Hao might chime in here. We have substituted PKVL
-for Retimer in some places in the code.
->>
->>> +#define DRBL_CONFIG_SEL			BIT(28)
->>> +#define DRBL_REBOOT_REQ			BIT(29)
->>> +#define DRBL_REBOOT_DISABLED		BIT(30)
->>> +
->>> +/* Progress states */
->>> +#define RSU_PROG_IDLE			0x0
->>> +#define RSU_PROG_PREPARE		0x1
->>> +#define RSU_PROG_READY			0x3
->>> +#define RSU_PROG_AUTHENTICATING		0x4
->>> +#define RSU_PROG_COPYING		0x5
->>> +#define RSU_PROG_UPDATE_CANCEL		0x6
->>> +#define RSU_PROG_PROGRAM_KEY_HASH	0x7
->>> +#define RSU_PROG_RSU_DONE		0x8
->>> +#define RSU_PROG_PKVL_PROM_DONE		0x9
->>> +
->>> +/* Device and error states */
->>> +#define RSU_STAT_NORMAL			0x0
->>> +#define RSU_STAT_TIMEOUT		0x1
->>> +#define RSU_STAT_AUTH_FAIL		0x2
->>> +#define RSU_STAT_COPY_FAIL		0x3
->>> +#define RSU_STAT_FATAL			0x4
->>> +#define RSU_STAT_PKVL_REJECT		0x5
->>> +#define RSU_STAT_NON_INC		0x6
->>> +#define RSU_STAT_ERASE_FAIL		0x7
->>> +#define RSU_STAT_WEAROUT		0x8
->>> +#define RSU_STAT_NIOS_OK		0x80
->>> +#define RSU_STAT_USER_OK		0x81
->>> +#define RSU_STAT_FACTORY_OK		0x82
->>> +#define RSU_STAT_USER_FAIL		0x83
->>> +#define RSU_STAT_FACTORY_FAIL		0x84
->>> +#define RSU_STAT_NIOS_FLASH_ERR		0x85
->>> +#define RSU_STAT_FPGA_FLASH_ERR		0x86
->>> +
->>> +#define HOST_STATUS_IDLE		0x0
->>> +#define HOST_STATUS_WRITE_DONE		0x1
->>> +#define HOST_STATUS_ABORT_RSU		0x2
->>> +
->>> +#define rsu_prog(doorbell)	FIELD_GET(DRBL_RSU_PROGRESS, doorbell)
->>> +#define rsu_stat(doorbell)	FIELD_GET(DRBL_RSU_STATUS, doorbell)
->>> +
->>> +/* interval 100ms and timeout 5s */
->>> +#define NIOS_HANDSHAKE_INTERVAL_US	(100 * 1000)
->>> +#define NIOS_HANDSHAKE_TIMEOUT_US	(5 * 1000 * 1000)
->>> +
->>> +/* RSU PREP Timeout (2 minutes) to erase flash staging area */
->>> +#define RSU_PREP_INTERVAL_MS		100
->>> +#define RSU_PREP_TIMEOUT_MS		(2 * 60 * 1000)
->>> +
->>> +/* RSU Complete Timeout (40 minutes) for full flash update */
->>> +#define RSU_COMPLETE_INTERVAL_MS	1000
->>> +#define RSU_COMPLETE_TIMEOUT_MS		(40 * 60 * 1000)
->> minutes is an unusual timeout unit.
->>
->> It may be worthwhile to spell out MINUTES to avoid confusing with micro seconds.
-The _MS at the end of the constants means milliseconds. That is pretty
-standard, isn't it? Although the wait is 40 minutes, the constant is a
-millisecond count that corresponds to 40 minutes. I expanded the definition
-to make things more clear: 40 (minutes) * 60 (seconds) * 1000 milliseconds =
-(40 minutes expressed in milliseconds).
->> Tom
->>
->>> +
->>> +/* Addresses for security related data in FLASH */
->>> +#define BMC_REH_ADDR	0x17ffc004
->>> +#define BMC_PROG_ADDR	0x17ffc000
->>> +#define BMC_PROG_MAGIC	0x5746
->>> +
->>> +#define SR_REH_ADDR	0x17ffd004
->>> +#define SR_PROG_ADDR	0x17ffd000
->>> +#define SR_PROG_MAGIC	0x5253
->>> +
->>> +#define PR_REH_ADDR	0x17ffe004
->>> +#define PR_PROG_ADDR	0x17ffe000
->>> +#define PR_PROG_MAGIC	0x5250
->>> +
->>> +/* Address of inverted bit vector containing user the image FLASH count */
->>> +#define USER_FLASH_COUNT 0x17ffb000
->>> +
->>>  /**
->>>   * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
->>>   * @dev: this device
->>> @@ -35,7 +120,11 @@ struct intel_m10bmc {
->>>   * register access helper functions.
->>>   *
->>>   * m10bmc_raw_read - read m10bmc register per addr
->>> + * m10bmc_raw_bulk_read - bulk read max10 registers per addr
->>> + * m10bmc_raw_bulk_write - bulk write max10 registers per addr
->>> + * m10bmc_raw_update_bits - update max10 register per addr
->>>   * m10bmc_sys_read - read m10bmc system register per offset
->>> + * m10bmc_sys_update_bits - update max10 system register per offset
->>>   */
->>>  static inline int
->>>  m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
->>> @@ -51,6 +140,48 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
->>>  	return ret;
->>>  }
->>>  
->>> +static inline int
->>> +m10bmc_raw_bulk_read(struct intel_m10bmc *m10bmc, unsigned int addr,
->>> +		     void *val, size_t cnt)
->>> +{
->>> +	int ret;
->>> +
->>> +	ret = regmap_bulk_read(m10bmc->regmap, addr, val, cnt);
->>> +	if (ret)
->>> +		dev_err(m10bmc->dev, "fail to read raw reg %x cnt %zx: %d\n",
->>> +			addr, cnt, ret);
->>> +
->>> +	return ret;
->>> +}
->>> +
->>> +static inline int
->>> +m10bmc_raw_bulk_write(struct intel_m10bmc *m10bmc, unsigned int addr,
->>> +		      void *val, size_t cnt)
->>> +{
->>> +	int ret;
->>> +
->>> +	ret = regmap_bulk_write(m10bmc->regmap, addr, val, cnt);
->>> +	if (ret)
->>> +		dev_err(m10bmc->dev, "fail to write raw reg %x cnt %zx: %d\n",
->>> +			addr, cnt, ret);
->>> +
->>> +	return ret;
->>> +}
->>> +
->>> +static inline int
->>> +m10bmc_raw_update_bits(struct intel_m10bmc *m10bmc, unsigned int addr,
->>> +		       unsigned int msk, unsigned int val)
->>> +{
->>> +	int ret;
->>> +
->>> +	ret = regmap_update_bits(m10bmc->regmap, addr, msk, val);
->>> +	if (ret)
->>> +		dev_err(m10bmc->dev, "fail to update raw reg %x: %d\n",
->>> +			addr, ret);
->>> +
->>> +	return ret;
->>> +}
->>> +
->>>  /*
->>>   * The base of the system registers could be configured by HW developers, and
->>>   * in HW SPEC, the base is not added to the addresses of the system registers.
->>> @@ -62,4 +193,7 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
->>>  #define m10bmc_sys_read(m10bmc, offset, val) \
->>>  	m10bmc_raw_read(m10bmc, M10BMC_SYS_BASE + (offset), val)
->>>  
->>> +#define m10bmc_sys_update_bits(m10bmc, offset, msk, val) \
->>> +	m10bmc_raw_update_bits(m10bmc, M10BMC_SYS_BASE + (offset), msk, val)
->>> +
->>>  #endif /* __MFD_INTEL_M10_BMC_H */
+> if (!rsu_stat(doorbell) & (RSU_STAT_NORMAL | ... ))
+>
+>   fail
+
+These are not bit-flags. The rsu_stat() macro extracts an 8-bit field from
+the doorbell register. The current supported values run from 0 to 9.
+To do this with if-statements would require something like this:
+
+status = rsu_stat(doorbell);
+
+if ((status != RSU_STAT_NORMAL) && (status != RSU_STAT_NIOS_OK) && ... To me, the switch statement seems cleaner, but I'm willing to change it if you think the if statements are better.
+
+>> +
+>> +	return IFPGA_SEC_ERR_NONE;
+>> +}
+>> +
+>> +static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
+>> +{
+>> +	if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, doorbell))
+>> +		return -EIO;
+>> +
+>> +	switch (rsu_stat(*doorbell)) {
+>> +	case RSU_STAT_NORMAL:
+>> +	case RSU_STAT_NIOS_OK:
+>> +	case RSU_STAT_USER_OK:
+>> +	case RSU_STAT_FACTORY_OK:
+>> +	case RSU_STAT_WEAROUT:
+>> +		break;
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	switch (rsu_prog(*doorbell)) {
+>> +	case RSU_PROG_IDLE:
+>> +	case RSU_PROG_RSU_DONE:
+>> +		return 0;
+>> +	case RSU_PROG_AUTHENTICATING:
+>> +	case RSU_PROG_COPYING:
+>> +	case RSU_PROG_UPDATE_CANCEL:
+>> +	case RSU_PROG_PROGRAM_KEY_HASH:
+>> +		return -EAGAIN;
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +}
+>> +
+>> +static enum ifpga_sec_err m10bmc_sec_prepare(struct ifpga_sec_mgr *imgr)
+>> +{
+>> +	struct m10bmc_sec *sec = imgr->priv;
+>> +	enum ifpga_sec_err ret;
+>> +
+>> +	if (imgr->remaining_size > M10BMC_STAGING_SIZE)
+>> +		return IFPGA_SEC_ERR_INVALID_SIZE;
+>> +
+>> +	ret = rsu_check_idle(sec);
+>> +	if (ret)
+> This needs to change, generally, to
+>
+> if (ret != IFPGA_SEC_ERR_NONE)
+Yes, I'll make this change. There are also a couple of places in the
+class driver where the same changes need to be made (for the update ops).
+I'll take care of that as well.
+
+>
+>> +		return ret;
+>> +
+>> +	ret = rsu_update_init(sec);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	return rsu_prog_ready(sec);
+>> +}
+>> +
+>> +static enum ifpga_sec_err
+>> +m10bmc_sec_write_blk(struct ifpga_sec_mgr *imgr, u32 offset, u32 size)
+>> +{
+>> +	struct m10bmc_sec *sec = imgr->priv;
+>> +	unsigned int stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+>> +	u32 doorbell;
+>> +	int ret;
+>> +
+> size check here.
+The size check is done in the prepare function above at the beginning of
+the update process.
+>> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
+> Wondering about the use of m10bmc_sys_read generally.
+>
+> If secure writing depends on new mmio region why not use the raw_read ?
+>
+> wondering if mixing old door bell regs with new sec regs would even work.
+
+We were able to share code between non-secure and secure hardware by using this
+approach. Instead of having a constant for the base address, the base address
+was determined based on the hardware. The register offsets were the same, so the
+code was generally the same for both secure and non-secure hardware - with a few
+exceptions.
+
+You are correct that the doorbell register has no application in the non-secure
+hardware, but it could potentially have meaning for a future device with a
+different base address for the register space.
+
+>
+>> +	if (ret) {
+>> +		return IFPGA_SEC_ERR_RW_ERROR;
+>> +	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
+>> +		log_error_regs(sec, doorbell);
+>> +		return IFPGA_SEC_ERR_HW_ERROR;
+>> +	}
+>> +
+>> +	ret = m10bmc_raw_bulk_write(sec->m10bmc, M10BMC_STAGING_BASE + offset,
+>> +				    (void *)imgr->data + offset, size / stride);
+>> +
+>> +	return ret ? IFPGA_SEC_ERR_RW_ERROR : IFPGA_SEC_ERR_NONE;
+>> +}
+>> +
+>> +/*
+>> + * m10bmc_sec_poll_complete() is called after handing things off to
+>> + * the BMC firmware. Depending on the type of update, it could be
+>> + * 30+ minutes before the BMC firmware completes the update. The
+>> + * imgr->driver_unload check allows the driver to be unloaded,
+>> + * but the BMC firmware will continue the update and no further
+>> + * secure updates can be started for this device until the update
+>> + * is complete.
+>> + */
+>> +static enum ifpga_sec_err m10bmc_sec_poll_complete(struct ifpga_sec_mgr *imgr)
+>> +{
+>> +	struct m10bmc_sec *sec = imgr->priv;
+>> +	unsigned long poll_timeout;
+>> +	enum ifpga_sec_err result;
+>> +	u32 doorbell;
+>> +	int ret;
+>> +
+>> +	result = rsu_send_data(sec);
+>> +	if (result)
+>> +		return result;
+>> +
+>> +	ret = rsu_check_complete(sec, &doorbell);
+>> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_COMPLETE_TIMEOUT_MS);
+>> +
+>> +	while (ret == -EAGAIN && !time_after(jiffies, poll_timeout)) {
+>> +		msleep(RSU_COMPLETE_INTERVAL_MS);
+>> +		ret = rsu_check_complete(sec, &doorbell);
+>> +		if (imgr->driver_unload)
+>> +			return IFPGA_SEC_ERR_CANCELED;
+> Instead of checking for complete could you check the progress ?
+>
+> hate for it to fail with 90% done.
+I'm not sure I'm understanding the question. Once the hardwarehas received the
+image data and begun the update process, there is no ability to handshake with
+the HW until the process is complete. All we can do is monitor the progress field,
+which is what the rsu_check_complete() function does. As long as there are no
+errors and the status looks OK, we continue to wait up to 40 minutes for the
+process to complete.
+
+Thanks for the comments!
+- Russ
+
+>
+> Tom
+>
+>> +	}
+>> +
+>> +	if (ret == -EAGAIN) {
+>> +		log_error_regs(sec, doorbell);
+>> +		return IFPGA_SEC_ERR_TIMEOUT;
+>> +	} else if (ret == -EIO) {
+>> +		return IFPGA_SEC_ERR_RW_ERROR;
+>> +	} else if (ret) {
+>> +		log_error_regs(sec, doorbell);
+>> +		return IFPGA_SEC_ERR_HW_ERROR;
+>> +	}
+>> +
+>> +	return IFPGA_SEC_ERR_NONE;
+>> +}
+>> +
+>> +static enum ifpga_sec_err m10bmc_sec_cancel(struct ifpga_sec_mgr *imgr)
+>> +{
+>> +	struct m10bmc_sec *sec = imgr->priv;
+>> +	u32 doorbell;
+>> +	int ret;
+>> +
+>> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
+>> +	if (ret)
+>> +		return IFPGA_SEC_ERR_RW_ERROR;
+>> +
+>> +	if (rsu_prog(doorbell) != RSU_PROG_READY)
+>> +		return IFPGA_SEC_ERR_BUSY;
+>> +
+>> +	ret = m10bmc_sys_update_bits(sec->m10bmc, M10BMC_DOORBELL,
+>> +				     DRBL_HOST_STATUS,
+>> +				     FIELD_PREP(DRBL_HOST_STATUS,
+>> +						HOST_STATUS_ABORT_RSU));
+>> +
+>> +	return ret ? IFPGA_SEC_ERR_RW_ERROR : IFPGA_SEC_ERR_NONE;
+>> +}
+>> +
+>>  static const struct ifpga_sec_mgr_ops m10bmc_iops = {
+>>  	.user_flash_count = m10bmc_user_flash_count,
+>>  	.bmc_root_entry_hash = m10bmc_bmc_root_entry_hash,
+>> @@ -215,6 +509,10 @@ static const struct ifpga_sec_mgr_ops m10bmc_iops = {
+>>  	.bmc_canceled_csk_nbits = m10bmc_csk_cancel_nbits,
+>>  	.sr_canceled_csk_nbits = m10bmc_csk_cancel_nbits,
+>>  	.pr_canceled_csk_nbits = m10bmc_csk_cancel_nbits,
+>> +	.prepare = m10bmc_sec_prepare,
+>> +	.write_blk = m10bmc_sec_write_blk,
+>> +	.poll_complete = m10bmc_sec_poll_complete,
+>> +	.cancel = m10bmc_sec_cancel,
+>>  };
+>>  
+>>  static int m10bmc_secure_probe(struct platform_device *pdev)
 
