@@ -2,494 +2,206 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D1E289997
-	for <lists+linux-fpga@lfdr.de>; Fri,  9 Oct 2020 22:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B185289A8D
+	for <lists+linux-fpga@lfdr.de>; Fri,  9 Oct 2020 23:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390851AbgJIUPQ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 9 Oct 2020 16:15:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46269 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733248AbgJIUPQ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 9 Oct 2020 16:15:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602274512;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O5brLw1W5dzyZEyP8//8PLbV22HZw2B+QlaXDxE2CQY=;
-        b=SrlO0En8c7pwi0oBup7gJ5FsqdFUhwv6o+81VRgTrGD9JgZlGIp32Qvub4sn9zeoZXUDFZ
-        6WV0taOGII40XvGEVq1FieiP+Ru3hL6rJ8OmP+Adw79x6PAHlWuEheYnK1WwcU/EtHSvhQ
-        ebtDX8jyD4n1U7d4SUqQntgNS+k5Qag=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-115-HS7hEFv9P-yA8XKomzyXxw-1; Fri, 09 Oct 2020 16:15:11 -0400
-X-MC-Unique: HS7hEFv9P-yA8XKomzyXxw-1
-Received: by mail-oo1-f69.google.com with SMTP id h23so4491604oof.6
-        for <linux-fpga@vger.kernel.org>; Fri, 09 Oct 2020 13:15:10 -0700 (PDT)
+        id S2388941AbgJIVZZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 9 Oct 2020 17:25:25 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:46115 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731982AbgJIVZZ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 9 Oct 2020 17:25:25 -0400
+Received: by mail-pf1-f195.google.com with SMTP id y14so7894227pfp.13;
+        Fri, 09 Oct 2020 14:25:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=O5brLw1W5dzyZEyP8//8PLbV22HZw2B+QlaXDxE2CQY=;
-        b=O6SbTjY0BOQFex5zSKEPjW+SidIUahVVsM2wLajf9mYT0r52Iyuv4kU7F9f/HmhvMq
-         j7sRetQaLFaBWoS4iGCn2VoWxiHWucCEzFExSlf5xceB1BlkQEzp4GNoucS4ffiS2F3j
-         lC+K1C3E2bzfzgZ/Kwiw8xAtCNK+Tf9VeivgiadJKGXAFx0ZoJYz9zbHnCAAVCOL/Sj4
-         0gJh3aOPuEE1r7Umj4fseDANIjseO3cll04k+y3SM70Ze4Pr9aNQehk2URSZ5P24hFOe
-         e0chqPZM0OsNdxHWc6skKznes/PdtC9tUnrc/AVk/SKlQgiUqOKRUq5m+mcOgK2Q63tb
-         Begg==
-X-Gm-Message-State: AOAM531u8g9jbtOITEiYVByIT1Wfn2UQbCM1hn8wlsGd7Jdn1vreZVVz
-        OJRlfLNwz8CaQTx12fpPTg3MoDaLW2w8GbKNwqiPbJ6cfqnowRU1oxRVOoWxfnouHD/5s6uOsIe
-        dVNc3CqDYL13yl+vxUMyFFg==
-X-Received: by 2002:a05:6830:1de6:: with SMTP id b6mr5238177otj.37.1602274509967;
-        Fri, 09 Oct 2020 13:15:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwX+dB33ZnwAq6FrvwfzdAjW9EucNHX0w9cEQQmcUF+gNKL3MZjFdaD9MjWDuowNDY3u+PdIQ==
-X-Received: by 2002:a05:6830:1de6:: with SMTP id b6mr5238149otj.37.1602274509588;
-        Fri, 09 Oct 2020 13:15:09 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id k23sm7151068ool.5.2020.10.09.13.15.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Oct 2020 13:15:08 -0700 (PDT)
-Subject: Re: [PATCH v2 5/6] fpga: m10bmc-sec: add max10 secure update
- functions
-To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        lee.jones@linaro.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VuIDL2vCnAGQNGHUE6fH+BEg+Zmqgz3ue4CRX3IQE8g=;
+        b=L3bF/wkCsSK/n/SMuvguPHI9Qfg7bfxnho3NTcbNfgjLnlQ0v8rSxDeGlvoJOzN22u
+         UkVWNyaoZsgtNhJQ+2o87bPBX04uB8nlS6kN4CrR5cXZcXU6cpL9Tay+8pY7wW6cPcXl
+         Y31ys18GACZMT04ek8qGpG5GTYnZ7s/s+p8uMQMfNTXLE87+68yCPI9juwCsDxXymYA7
+         VljCbxYIC4+IQi+M5CkpTvqH6kE743CFaGJpxV4s8Ir0QsTTGCqmydecP638c+VXnrB7
+         +trPkZzbmWdrk2XhdNLDDxqttu0yc69DJDHKSAxL+7azGslGOfZKhN3HGGUynngHObG5
+         s44A==
+X-Gm-Message-State: AOAM533O41wxNj252TnoAx/IE9sXL1CB3PZKzPRlcKke8JD6ncKo7GmW
+        rn9FhPv6j5pjfg+oOCKpkis=
+X-Google-Smtp-Source: ABdhPJw/TDwtzIN+iaGT3qzzcQu2RGeIY0US8EnqzL9JIgNJdYJ+mL8WoXIqNZ8TSJWAAzd7rlZFoQ==
+X-Received: by 2002:a17:90a:cb05:: with SMTP id z5mr6791694pjt.92.1602278724324;
+        Fri, 09 Oct 2020 14:25:24 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id cu5sm4270883pjb.49.2020.10.09.14.25.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2020 14:25:23 -0700 (PDT)
+Date:   Fri, 9 Oct 2020 14:25:21 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     linux-fpga@vger.kernel.org, trix@redhat.com, hao.wu@intel.com,
+        michal.simek@xilinx.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, russell.h.weight@intel.com,
         matthew.gerlach@intel.com
-References: <20201003012412.16831-1-russell.h.weight@intel.com>
- <20201003012412.16831-6-russell.h.weight@intel.com>
- <aca99ba5-ed85-b563-02c8-c4b21a9978fb@redhat.com>
- <47d9e54c-ae23-4d73-4441-79c1b31b38ea@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <419f7ba9-374d-f683-3a99-bc9bb2996ff8@redhat.com>
-Date:   Fri, 9 Oct 2020 13:15:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+Subject: Re: [PATCH v2 01/10] fpga: fpga-mgr: Add devm_fpga_mgr_register() API
+Message-ID: <20201009212521.GA2531@epycbox.lan>
+References: <20201005173735.162408-1-mdf@kernel.org>
+ <20201005173735.162408-2-mdf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <47d9e54c-ae23-4d73-4441-79c1b31b38ea@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201005173735.162408-2-mdf@kernel.org>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Mon, Oct 05, 2020 at 10:37:26AM -0700, Moritz Fischer wrote:
+> Add a devm_fpga_mgr_register() API that can be used to register a FPGA
+> Manager that was created using devm_fpga_mgr_create().
+> 
+> Introduce a struct fpga_mgr_devres that makes the devres
+> allocation a little bit more readable and gets reused for
+> devm_fpga_mgr_create() devm_fpga_mgr_register().
+> 
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Moritz Fischer <mdf@kernel.org>
+> ---
+>  drivers/fpga/fpga-mgr.c       | 81 +++++++++++++++++++++++++++++------
+>  include/linux/fpga/fpga-mgr.h |  2 +
+>  2 files changed, 71 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> index f38bab01432e..b85bc47c91a9 100644
+> --- a/drivers/fpga/fpga-mgr.c
+> +++ b/drivers/fpga/fpga-mgr.c
+> @@ -21,6 +21,10 @@
+>  static DEFINE_IDA(fpga_mgr_ida);
+>  static struct class *fpga_mgr_class;
+>  
+> +struct fpga_mgr_devres {
+> +	struct fpga_manager *mgr;
+> +};
+> +
+>  /**
+>   * fpga_image_info_alloc - Allocate a FPGA image info struct
+>   * @dev: owning device
+> @@ -625,9 +629,9 @@ EXPORT_SYMBOL_GPL(fpga_mgr_free);
+>  
+>  static void devm_fpga_mgr_release(struct device *dev, void *res)
+>  {
+> -	struct fpga_manager *mgr = *(struct fpga_manager **)res;
+> +	struct fpga_mgr_devres *dr = res;
+>  
+> -	fpga_mgr_free(mgr);
+> +	fpga_mgr_free(dr->mgr);
+>  }
+>  
+>  /**
+> @@ -651,21 +655,21 @@ struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
+>  					  const struct fpga_manager_ops *mops,
+>  					  void *priv)
+>  {
+> -	struct fpga_manager **ptr, *mgr;
+> +	struct fpga_mgr_devres *dr;
+>  
+> -	ptr = devres_alloc(devm_fpga_mgr_release, sizeof(*ptr), GFP_KERNEL);
+> -	if (!ptr)
+> +	dr = devres_alloc(devm_fpga_mgr_release, sizeof(*dr), GFP_KERNEL);
+> +	if (!dr)
+>  		return NULL;
+>  
+> -	mgr = fpga_mgr_create(dev, name, mops, priv);
+> -	if (!mgr) {
+> -		devres_free(ptr);
+> -	} else {
+> -		*ptr = mgr;
+> -		devres_add(dev, ptr);
+> +	dr->mgr = fpga_mgr_create(dev, name, mops, priv);
+> +	if (!dr->mgr) {
+> +		devres_free(dr);
+> +		return NULL;
+>  	}
+>  
+> -	return mgr;
+> +	devres_add(dev, dr);
+> +
+> +	return dr->mgr;
+>  }
+>  EXPORT_SYMBOL_GPL(devm_fpga_mgr_create);
+>  
+> @@ -722,6 +726,59 @@ void fpga_mgr_unregister(struct fpga_manager *mgr)
+>  }
+>  EXPORT_SYMBOL_GPL(fpga_mgr_unregister);
+>  
+> +static int fpga_mgr_devres_match(struct device *dev, void *res,
+> +				 void *match_data)
+> +{
+> +	struct fpga_mgr_devres *dr = res;
+> +
+> +	return match_data == dr->mgr;
+> +}
+> +
+> +static void devm_fpga_mgr_unregister(struct device *dev, void *res)
+> +{
+> +	struct fpga_mgr_devres *dr = res;
+> +
+> +	fpga_mgr_unregister(dr->mgr);
+> +}
+> +
+> +/**
+> + * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
+> + * @dev: managing device for this FPGA manager
+> + * @mgr: fpga manager struct
+> + *
+> + * This is the devres variant of fpga_mgr_register() for which the unregister
+> + * function will be called automatically when the managing device is detached.
+> + */
+> +int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr)
+> +{
+> +	struct fpga_mgr_devres *dr;
+> +	int ret;
+> +
+> +	/*
+> +	 * Make sure that the struct fpga_manager * that is passed in is
+> +	 * managed itself.
+> +	 */
+> +	if (WARN_ON(!devres_find(dev, devm_fpga_mgr_release,
+> +				 fpga_mgr_devres_match, mgr)))
+> +		return -EINVAL;
+> +
+> +	dr = devres_alloc(devm_fpga_mgr_unregister, sizeof(*dr), GFP_KERNEL);
+> +	if (!dr)
+> +		return -ENOMEM;
+> +
+> +	ret = fpga_mgr_register(mgr);
+> +	if (ret) {
+> +		devres_free(dr);
+> +		return ret;
+> +	}
+> +
+> +	dr->mgr = mgr;
+> +	devres_add(dev, dr);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_fpga_mgr_register);
+> +
+>  static void fpga_mgr_dev_release(struct device *dev)
+>  {
+>  }
+> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+> index e8ca62b2cb5b..2bc3030a69e5 100644
+> --- a/include/linux/fpga/fpga-mgr.h
+> +++ b/include/linux/fpga/fpga-mgr.h
+> @@ -198,6 +198,8 @@ void fpga_mgr_free(struct fpga_manager *mgr);
+>  int fpga_mgr_register(struct fpga_manager *mgr);
+>  void fpga_mgr_unregister(struct fpga_manager *mgr);
+>  
+> +int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr);
+> +
+>  struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
+>  					  const struct fpga_manager_ops *mops,
+>  					  void *priv);
+> -- 
+> 2.28.0
+> 
+Applied series to for-next,
 
-On 10/8/20 4:06 PM, Russ Weight wrote:
->
-> On 10/6/20 12:08 PM, Tom Rix wrote:
->> On 10/2/20 6:24 PM, Russ Weight wrote:
->>> Extend the MAX10 BMC Security Engine driver to include
->>> the functions that enable secure updates of BMC images,
->>> FPGA images, etc.
->>>
->>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
->>> ---
->>> v2:
->>>   - Reworked the rsu_start_done() function to make it more readable
->>>   - Reworked while-loop condition/content in rsu_prog_ready()
->>>   - Minor code cleanup per review comments
->>>   - Added a comment to the m10bmc_sec_poll_complete() function to
->>>     explain the context (could take 30+ minutes to complete).
->>>   - Added m10bmc_ prefix to functions in m10bmc_iops structure
->>>   - Moved MAX10 BMC address and function definitions to a separate
->>>     patch.
->>> ---
->>>  drivers/fpga/intel-m10-bmc-secure.c | 298 ++++++++++++++++++++++++++++
->>>  1 file changed, 298 insertions(+)
->>>
->>> diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
->>> index 5bb45499b332..a9617c5b3845 100644
->>> --- a/drivers/fpga/intel-m10-bmc-secure.c
->>> +++ b/drivers/fpga/intel-m10-bmc-secure.c
->>> @@ -201,6 +201,300 @@ static int m10bmc_pr_canceled_csks(struct ifpga_sec_mgr *imgr,
->>>  			      csk_map, nbits);
->>>  }
->>>  
->>> +static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
->>> +{
->>> +	u32 auth_result;
->>> +
->>> +	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
->>> +
->>> +	if (!m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result))
->>> +		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
->>> +}
->>> +
->>> +static enum ifpga_sec_err rsu_check_idle(struct m10bmc_sec *sec)
->>> +{
->>> +	u32 doorbell;
->>> +	int ret;
->>> +
->>> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
->>> +	if (ret)
->>> +		return IFPGA_SEC_ERR_RW_ERROR;
->>> +
->>> +	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
->>> +	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE) {
->>> +		log_error_regs(sec, doorbell);
->>> +		return IFPGA_SEC_ERR_BUSY;
->>> +	}
->>> +
->>> +	return IFPGA_SEC_ERR_NONE;
->>> +}
->>> +
->>> +static inline bool rsu_start_done(u32 doorbell)
->>> +{
->>> +	u32 status, progress;
->>> +
->>> +	if (doorbell & DRBL_RSU_REQUEST)
->>> +		return false;
->>> +
->>> +	status = rsu_stat(doorbell);
->>> +	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
->>> +		return true;
->>> +
->>> +	progress = rsu_prog(doorbell);
->>> +	if (progress != RSU_PROG_IDLE && progress != RSU_PROG_RSU_DONE)
->>> +		return true;
->>> +
->>> +	return false;
->>> +}
->>> +
->>> +static enum ifpga_sec_err rsu_update_init(struct m10bmc_sec *sec)
->>> +{
->>> +	u32 doorbell, status;
->>> +	int ret;
->>> +
->>> +	ret = m10bmc_sys_update_bits(sec->m10bmc, M10BMC_DOORBELL,
->>> +				     DRBL_RSU_REQUEST | DRBL_HOST_STATUS,
->>> +				     DRBL_RSU_REQUEST |
->>> +				     FIELD_PREP(DRBL_HOST_STATUS,
->>> +						HOST_STATUS_IDLE));
->>> +	if (ret)
->>> +		return IFPGA_SEC_ERR_RW_ERROR;
->>> +
->>> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
->>> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
->>> +				       doorbell,
->>> +				       rsu_start_done(doorbell),
->>> +				       NIOS_HANDSHAKE_INTERVAL_US,
->>> +				       NIOS_HANDSHAKE_TIMEOUT_US);
->>> +
->>> +	if (ret == -ETIMEDOUT) {
->>> +		log_error_regs(sec, doorbell);
->>> +		return IFPGA_SEC_ERR_TIMEOUT;
->>> +	} else if (ret) {
->>> +		return IFPGA_SEC_ERR_RW_ERROR;
->>> +	}
->>> +
->>> +	status = rsu_stat(doorbell);
->>> +	if (status == RSU_STAT_WEAROUT) {
->>> +		dev_warn(sec->dev, "Excessive flash update count detected\n");
->> Device is permanently failing, dev_err or higher is more appropriate than dev_warn.
->>
->> warn once to limit noisy logs.
-> This is not a permanent/hard failure. When the flash count (for the staging area)
-> exceeds 1000, a 30 second delay is imposed on subsequent flashes. When the count
-> hits 2000, the delay goes to 60 seconds.
->
-> Also, flash events shouldn't that often, so I don't think they are going to create
-> a lot of noise in the logs.
->
-> I think this is OK as is?
-
-If the extra, worse case time is accounted for in the current timeout, yes this is fine.
-
->
->>> +		return IFPGA_SEC_ERR_WEAROUT;
->>> +	} else if (status == RSU_STAT_ERASE_FAIL) {
->>> +		log_error_regs(sec, doorbell);
->>> +		return IFPGA_SEC_ERR_HW_ERROR;
->>> +	}
->>> +
->>> +	return IFPGA_SEC_ERR_NONE;
->>> +}
->>> +
->>> +static enum ifpga_sec_err (struct m10bmc_sec *sec)
->>> +{
->>> +	unsigned long poll_timeout;
->>> +	u32 doorbell, progress;
->>> +	int ret;
->>> +
->>> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
->>> +	if (ret)
->>> +		return IFPGA_SEC_ERR_RW_ERROR;
->>> +
->>> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_PREP_TIMEOUT_MS);
->>> +	while (rsu_prog(doorbell) == RSU_PROG_PREPARE) {
->>> +		msleep(RSU_PREP_INTERVAL_MS);
->>> +		if (time_after(jiffies, poll_timeout))
->>> +			break;
->>> +
->>> +		ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
->>> +		if (ret)
->>> +			return IFPGA_SEC_ERR_RW_ERROR;
->>> +	}
->>> +
->>> +	progress = rsu_prog(doorbell);
->>> +	if (progress == RSU_PROG_PREPARE) {
->>> +		log_error_regs(sec, doorbell);
->>> +		return IFPGA_SEC_ERR_TIMEOUT;
->>> +	} else if (progress != RSU_PROG_READY) {
->>> +		log_error_regs(sec, doorbell);
->>> +		return IFPGA_SEC_ERR_HW_ERROR;
->>> +	}
->>> +
->>> +	return IFPGA_SEC_ERR_NONE;
->>> +}
->>> +
->>> +static enum ifpga_sec_err rsu_send_data(struct m10bmc_sec *sec)
->>> +{
->>> +	u32 doorbell;
->>> +	int ret;
->>> +
->>> +	ret = m10bmc_sys_update_bits(sec->m10bmc, M10BMC_DOORBELL,
->>> +				     DRBL_HOST_STATUS,
->>> +				     FIELD_PREP(DRBL_HOST_STATUS,
->>> +						HOST_STATUS_WRITE_DONE));
->>> +	if (ret)
->>> +		return IFPGA_SEC_ERR_RW_ERROR;
->>> +
->>> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
->>> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
->>> +				       doorbell,
->>> +				       rsu_prog(doorbell) != RSU_PROG_READY,
->>> +				       NIOS_HANDSHAKE_INTERVAL_US,
->>> +				       NIOS_HANDSHAKE_TIMEOUT_US);
->>> +
->>> +	if (ret == -ETIMEDOUT) {
->>> +		log_error_regs(sec, doorbell);
->>> +		return IFPGA_SEC_ERR_TIMEOUT;
->>> +	} else if (ret) {
->>> +		return IFPGA_SEC_ERR_RW_ERROR;
->>> +	}
->>> +
->>> +	switch (rsu_stat(doorbell)) {
->>> +	case RSU_STAT_NORMAL:
->>> +	case RSU_STAT_NIOS_OK:
->>> +	case RSU_STAT_USER_OK:
->>> +	case RSU_STAT_FACTORY_OK:
->>> +		break;
->>> +	default:
->>> +		log_error_regs(sec, doorbell);
->>> +		return IFPGA_SEC_ERR_HW_ERROR;
->>> +	}
->> This and similar below..
->>
->> switch can be converted to
->>
->> if (!rsu_stat(doorbell) & (RSU_STAT_NORMAL | ... ))
->>
->>   fail
-> These are not bit-flags. The rsu_stat() macro extracts an 8-bit field from
-> the doorbell register. The current supported values run from 0 to 9.
-> To do this with if-statements would require something like this:
->
-> status = rsu_stat(doorbell);
->
-> if ((status != RSU_STAT_NORMAL) && (status != RSU_STAT_NIOS_OK) && ... To me, the switch statement seems cleaner, but I'm willing to change it if you think the if statements are better.
-Ah. ok fine as-is
->>> +
->>> +	return IFPGA_SEC_ERR_NONE;
->>> +}
->>> +
->>> +static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
->>> +{
->>> +	if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, doorbell))
->>> +		return -EIO;
->>> +
->>> +	switch (rsu_stat(*doorbell)) {
->>> +	case RSU_STAT_NORMAL:
->>> +	case RSU_STAT_NIOS_OK:
->>> +	case RSU_STAT_USER_OK:
->>> +	case RSU_STAT_FACTORY_OK:
->>> +	case RSU_STAT_WEAROUT:
->>> +		break;
->>> +	default:
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	switch (rsu_prog(*doorbell)) {
->>> +	case RSU_PROG_IDLE:
->>> +	case RSU_PROG_RSU_DONE:
->>> +		return 0;
->>> +	case RSU_PROG_AUTHENTICATING:
->>> +	case RSU_PROG_COPYING:
->>> +	case RSU_PROG_UPDATE_CANCEL:
->>> +	case RSU_PROG_PROGRAM_KEY_HASH:
->>> +		return -EAGAIN;
->>> +	default:
->>> +		return -EINVAL;
->>> +	}
->>> +}
->>> +
->>> +static enum ifpga_sec_err m10bmc_sec_prepare(struct ifpga_sec_mgr *imgr)
->>> +{
->>> +	struct m10bmc_sec *sec = imgr->priv;
->>> +	enum ifpga_sec_err ret;
->>> +
->>> +	if (imgr->remaining_size > M10BMC_STAGING_SIZE)
->>> +		return IFPGA_SEC_ERR_INVALID_SIZE;
->>> +
->>> +	ret = rsu_check_idle(sec);
->>> +	if (ret)
->> This needs to change, generally, to
->>
->> if (ret != IFPGA_SEC_ERR_NONE)
-> Yes, I'll make this change. There are also a couple of places in the
-> class driver where the same changes need to be made (for the update ops).
-> I'll take care of that as well.
->
->>> +		return ret;
->>> +
->>> +	ret = rsu_update_init(sec);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	return rsu_prog_ready(sec);
->>> +}
->>> +
->>> +static enum ifpga_sec_err
->>> +m10bmc_sec_write_blk(struct ifpga_sec_mgr *imgr, u32 offset, u32 size)
->>> +{
->>> +	struct m10bmc_sec *sec = imgr->priv;
->>> +	unsigned int stride = regmap_get_reg_stride(sec->m10bmc->regmap);
->>> +	u32 doorbell;
->>> +	int ret;
->>> +
->> size check here.
-> The size check is done in the prepare function above at the beginning of
-> the update process.
-ok
->>> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
->> Wondering about the use of m10bmc_sys_read generally.
->>
->> If secure writing depends on new mmio region why not use the raw_read ?
->>
->> wondering if mixing old door bell regs with new sec regs would even work.
-> We were able to share code between non-secure and secure hardware by using this
-> approach. Instead of having a constant for the base address, the base address
-> was determined based on the hardware. The register offsets were the same, so the
-> code was generally the same for both secure and non-secure hardware - with a few
-> exceptions.
->
-> You are correct that the doorbell register has no application in the non-secure
-> hardware, but it could potentially have meaning for a future device with a
-> different base address for the register space.
->
->>> +	if (ret) {
->>> +		return IFPGA_SEC_ERR_RW_ERROR;
->>> +	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
->>> +		log_error_regs(sec, doorbell);
->>> +		return IFPGA_SEC_ERR_HW_ERROR;
->>> +	}
->>> +
->>> +	ret = m10bmc_raw_bulk_write(sec->m10bmc, M10BMC_STAGING_BASE + offset,
->>> +				    (void *)imgr->data + offset, size / stride);
->>> +
->>> +	return ret ? IFPGA_SEC_ERR_RW_ERROR : IFPGA_SEC_ERR_NONE;
->>> +}
->>> +
->>> +/*
->>> + * m10bmc_sec_poll_complete() is called after handing things off to
->>> + * the BMC firmware. Depending on the type of update, it could be
->>> + * 30+ minutes before the BMC firmware completes the update. The
->>> + * imgr->driver_unload check allows the driver to be unloaded,
->>> + * but the BMC firmware will continue the update and no further
->>> + * secure updates can be started for this device until the update
->>> + * is complete.
->>> + */
->>> +static enum ifpga_sec_err m10bmc_sec_poll_complete(struct ifpga_sec_mgr *imgr)
->>> +{
->>> +	struct m10bmc_sec *sec = imgr->priv;
->>> +	unsigned long poll_timeout;
->>> +	enum ifpga_sec_err result;
->>> +	u32 doorbell;
->>> +	int ret;
->>> +
->>> +	result = rsu_send_data(sec);
->>> +	if (result)
->>> +		return result;
->>> +
->>> +	ret = rsu_check_complete(sec, &doorbell);
->>> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_COMPLETE_TIMEOUT_MS);
->>> +
->>> +	while (ret == -EAGAIN && !time_after(jiffies, poll_timeout)) {
->>> +		msleep(RSU_COMPLETE_INTERVAL_MS);
->>> +		ret = rsu_check_complete(sec, &doorbell);
->>> +		if (imgr->driver_unload)
->>> +			return IFPGA_SEC_ERR_CANCELED;
->> Instead of checking for complete could you check the progress ?
->>
->> hate for it to fail with 90% done.
-> I'm not sure I'm understanding the question. Once the hardwarehas received the
-> image data and begun the update process, there is no ability to handshake with
-> the HW until the process is complete. All we can do is monitor the progress field,
-> which is what the rsu_check_complete() function does. As long as there are no
-> errors and the status looks OK, we continue to wait up to 40 minutes for the
-> process to complete.
->
-> Thanks for the comments!
-
-ok, update is a reallly long atomic.
-
-Tom
-
-> - Russ
->
->> Tom
->>
->>> +	}
->>> +
->>> +	if (ret == -EAGAIN) {
->>> +		log_error_regs(sec, doorbell);
->>> +		return IFPGA_SEC_ERR_TIMEOUT;
->>> +	} else if (ret == -EIO) {
->>> +		return IFPGA_SEC_ERR_RW_ERROR;
->>> +	} else if (ret) {
->>> +		log_error_regs(sec, doorbell);
->>> +		return IFPGA_SEC_ERR_HW_ERROR;
->>> +	}
->>> +
->>> +	return IFPGA_SEC_ERR_NONE;
->>> +}
->>> +
->>> +static enum ifpga_sec_err m10bmc_sec_cancel(struct ifpga_sec_mgr *imgr)
->>> +{
->>> +	struct m10bmc_sec *sec = imgr->priv;
->>> +	u32 doorbell;
->>> +	int ret;
->>> +
->>> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
->>> +	if (ret)
->>> +		return IFPGA_SEC_ERR_RW_ERROR;
->>> +
->>> +	if (rsu_prog(doorbell) != RSU_PROG_READY)
->>> +		return IFPGA_SEC_ERR_BUSY;
->>> +
->>> +	ret = m10bmc_sys_update_bits(sec->m10bmc, M10BMC_DOORBELL,
->>> +				     DRBL_HOST_STATUS,
->>> +				     FIELD_PREP(DRBL_HOST_STATUS,
->>> +						HOST_STATUS_ABORT_RSU));
->>> +
->>> +	return ret ? IFPGA_SEC_ERR_RW_ERROR : IFPGA_SEC_ERR_NONE;
->>> +}
->>> +
->>>  static const struct ifpga_sec_mgr_ops m10bmc_iops = {
->>>  	.user_flash_count = m10bmc_user_flash_count,
->>>  	.bmc_root_entry_hash = m10bmc_bmc_root_entry_hash,
->>> @@ -215,6 +509,10 @@ static const struct ifpga_sec_mgr_ops m10bmc_iops = {
->>>  	.bmc_canceled_csk_nbits = m10bmc_csk_cancel_nbits,
->>>  	.sr_canceled_csk_nbits = m10bmc_csk_cancel_nbits,
->>>  	.pr_canceled_csk_nbits = m10bmc_csk_cancel_nbits,
->>> +	.prepare = m10bmc_sec_prepare,
->>> +	.write_blk = m10bmc_sec_write_blk,
->>> +	.poll_complete = m10bmc_sec_poll_complete,
->>> +	.cancel = m10bmc_sec_cancel,
->>>  };
->>>  
->>>  static int m10bmc_secure_probe(struct platform_device *pdev)
-
+Thanks
