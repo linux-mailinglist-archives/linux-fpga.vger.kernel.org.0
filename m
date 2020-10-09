@@ -2,125 +2,171 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CC3287FDA
-	for <lists+linux-fpga@lfdr.de>; Fri,  9 Oct 2020 03:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0396B287FDC
+	for <lists+linux-fpga@lfdr.de>; Fri,  9 Oct 2020 03:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725997AbgJIBO2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 8 Oct 2020 21:14:28 -0400
+        id S1730101AbgJIBO3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 8 Oct 2020 21:14:29 -0400
 Received: from mga17.intel.com ([192.55.52.151]:13068 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725979AbgJIBO2 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 8 Oct 2020 21:14:28 -0400
-IronPort-SDR: N1dx9tLbMqbSoZiXSmOvrjs4W3ezUtd70iLfn86GwXvrTsU9UzziAUZqIUwLw7vbQIVBwDY2Hk
- pW7NrSFpiXGg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9768"; a="145294127"
+        id S1725979AbgJIBO3 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 8 Oct 2020 21:14:29 -0400
+IronPort-SDR: 6ghLz+FQVBrbg19MPiYOQ6U+y3ZljTfWQ0gz/IRi6e/LgrbZM4BJzPu/Uqx79wgGK7TMopct1j
+ 5PYKyWqZU5MA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9768"; a="145294132"
 X-IronPort-AV: E=Sophos;i="5.77,353,1596524400"; 
-   d="scan'208";a="145294127"
+   d="scan'208";a="145294132"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 18:14:27 -0700
-IronPort-SDR: 6VyLAW55I+cYbkuBpxHirYb5qJCBBjBz2kxOLt6JE0Yq60E1E/dQvdR/uOROjL/QHcBGW/PenI
- Er3jYu3TRYDA==
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 18:14:28 -0700
+IronPort-SDR: FiSr4/2I0GdiRRY63ihsvkaCss5/GUb+8p7x9Rp05tpinJUs7JKjSQYiLlofwClGTBtWw7/UyV
+ UnzP6bw4Erlw==
 X-IronPort-AV: E=Sophos;i="5.77,353,1596524400"; 
-   d="scan'208";a="462002339"
+   d="scan'208";a="462002344"
 Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.254.33.152])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 18:14:26 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 18:14:27 -0700
 From:   Russ Weight <russell.h.weight@intel.com>
 To:     mdf@kernel.org, lee.jones@linaro.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
         hao.wu@intel.com, matthew.gerlach@intel.com,
         Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v3 0/6] Intel MAX10 BMC Secure Update Driver
-Date:   Thu,  8 Oct 2020 18:14:17 -0700
-Message-Id: <20201009011423.22741-1-russell.h.weight@intel.com>
+Subject: [PATCH v3 1/6] mfd: intel-m10-bmc: support for MAX10 BMC Secure Updates
+Date:   Thu,  8 Oct 2020 18:14:18 -0700
+Message-Id: <20201009011423.22741-2-russell.h.weight@intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201009011423.22741-1-russell.h.weight@intel.com>
+References: <20201009011423.22741-1-russell.h.weight@intel.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The Intel MAX10 BMC Secure Update driver instantiates the FPGA
-Security Manager class driver and provides the callback functions
-required to support secure updates on Intel n3000 PAC devices.
-This driver is implemented as a sub-driver of the Intel MAX10 BMC
-mfd driver. Future instances of the MAX10 BMC will support other
-devices as well (e.g. d5005) and this same MAX10 BMC Secure
-Update driver will receive modifications to support that device.
+Add macros and definitions required by the MAX10 BMC
+Secure Update driver.
 
-This driver interacts with the HW secure update engine of the
-BMC in order to transfer new FPGA and BMC images to FLASH so
-that they will be automatically loaded when the FPGA card reboots.
-Security is enforced by hardware and firmware. The MAX10 BMC
-Secure Update driver interacts with the firmware to initiate
-an update, pass in the necessary data, and collect status on
-the update.
-
-This driver passes call-back function pointers to the FPGA
-Security Manager Class Driver to support the following functions:
-
-(1) Instantiate and monitor a secure update
-(2) Display security information including: Root Entry Hashes (REH),
-    Canceled Code Signing Keys (CSK), and flash update counts for
-    both BMC and FPGA images.
-
-These patches are dependent on other patches that are under
-review. If you want to apply these patches on linux-next,
-please apply these patches first, in the following order:
-
-(1 patch)   https://marc.info/?l=linux-fpga&m=159782339732362&w=2
-(4 patches) https://marc.info/?l=linux-fpga&m=160014074806950&w=2
-(7 patches) https://marc.info/?l=linux-fpga&m=160211621032687&w=2
-
-Changelog v2 -> v3:
-  - Changed "MAX10 BMC Security Engine driver" to "MAX10 BMC Secure
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+---
+v3:
+  - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure
     Update driver"
-  - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
-  - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
-    underlying functions are now called directly.
-  - Changed "_root_entry_hash" to "_reh", with a comment explaining
-    what reh is.
-  - Renamed get_csk_vector() to m10bmc_csk_vector()
-  - Changed calling functions of functions that return "enum fpga_sec_err"
-    to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
+    underlying functions will be called directly.
+v2:
+  - These functions and macros were previously distributed among
+    the patches that needed them. They are now grouped together
+    in a single patch containing changes to the Intel MAX10 BMC
+    driver.
+  - Added DRBL_ prefix to some definitions
+  - Some address definitions were moved here from the .c files that
+    use them.
+---
+ include/linux/mfd/intel-m10-bmc.h | 85 +++++++++++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-Changelog v1 -> v2:
-  - These patches were previously submitted as part of a larger V1
-    patch set under the title "Intel FPGA Security Manager Class Driver".
-  - Grouped all changes to include/linux/mfd/intel-m10-bmc.h into a
-    single patch: "mfd: intel-m10-bmc: support for MAX10 BMC Security
-    Engine".
-  - Removed ifpga_sec_mgr_init() and ifpga_sec_mgr_uinit() functions.
-  - Adapted to changes in the Intel FPGA Security Manager by splitting
-    the single call to ifpga_sec_mgr_register() into two function
-    calls: devm_ifpga_sec_mgr_create() and ifpga_sec_mgr_register().
-  - Replaced small function-creation macros for explicit function
-    declarations.
-  - Bug fix for the get_csk_vector() function to properly apply the
-    stride variable in calls to m10bmc_raw_bulk_read().
-  - Added m10bmc_ prefix to functions in m10bmc_iops structure
-  - Implemented HW_ERRINFO_POISON for m10bmc_sec_hw_errinfo() to
-    ensure that corresponding bits are set to 1 if we are unable
-    to read the doorbell or auth_result registers.
-  - Added comments and additional code cleanup per V1 review.
-
-Russ Weight (6):
-  mfd: intel-m10-bmc: support for MAX10 BMC Secure Updates
-  fpga: m10bmc-sec: create max10 bmc secure update driver
-  fpga: m10bmc-sec: expose max10 flash update counts
-  fpga: m10bmc-sec: expose max10 canceled keys in sysfs
-  fpga: m10bmc-sec: add max10 secure update functions
-  fpga: m10bmc-sec: add max10 get_hw_errinfo callback func
-
- MAINTAINERS                         |   1 +
- drivers/fpga/Kconfig                |  11 +
- drivers/fpga/Makefile               |   3 +
- drivers/fpga/intel-m10-bmc-secure.c | 599 ++++++++++++++++++++++++++++
- include/linux/mfd/intel-m10-bmc.h   |  85 ++++
- 5 files changed, 699 insertions(+)
- create mode 100644 drivers/fpga/intel-m10-bmc-secure.c
-
+diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+index c8ef2f1654a4..151b034fd59e 100644
+--- a/include/linux/mfd/intel-m10-bmc.h
++++ b/include/linux/mfd/intel-m10-bmc.h
+@@ -13,6 +13,9 @@
+ #define M10BMC_SYS_BASE			0x300800
+ #define M10BMC_MEM_END			0x200000fc
+ 
++#define M10BMC_STAGING_BASE		0x18000000
++#define M10BMC_STAGING_SIZE		0x3800000
++
+ /* Register offset of system registers */
+ #define NIOS2_FW_VERSION		0x0
+ #define M10BMC_TEST_REG			0x3c
+@@ -21,6 +24,88 @@
+ #define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
+ #define M10BMC_VER_LEGACY_INVALID	0xffffffff
+ 
++/* Secure update doorbell register, in system register region */
++#define M10BMC_DOORBELL			0x400
++
++/* Authorization Result register, in system register region */
++#define M10BMC_AUTH_RESULT		0x404
++
++/* Doorbell register fields */
++#define DRBL_RSU_REQUEST		BIT(0)
++#define DRBL_RSU_PROGRESS		GENMASK(7, 4)
++#define DRBL_HOST_STATUS		GENMASK(11, 8)
++#define DRBL_RSU_STATUS			GENMASK(23, 16)
++#define DRBL_PKVL_EEPROM_LOAD_SEC	BIT(24)
++#define DRBL_PKVL1_POLL_EN		BIT(25)
++#define DRBL_PKVL2_POLL_EN		BIT(26)
++#define DRBL_CONFIG_SEL			BIT(28)
++#define DRBL_REBOOT_REQ			BIT(29)
++#define DRBL_REBOOT_DISABLED		BIT(30)
++
++/* Progress states */
++#define RSU_PROG_IDLE			0x0
++#define RSU_PROG_PREPARE		0x1
++#define RSU_PROG_READY			0x3
++#define RSU_PROG_AUTHENTICATING		0x4
++#define RSU_PROG_COPYING		0x5
++#define RSU_PROG_UPDATE_CANCEL		0x6
++#define RSU_PROG_PROGRAM_KEY_HASH	0x7
++#define RSU_PROG_RSU_DONE		0x8
++#define RSU_PROG_PKVL_PROM_DONE		0x9
++
++/* Device and error states */
++#define RSU_STAT_NORMAL			0x0
++#define RSU_STAT_TIMEOUT		0x1
++#define RSU_STAT_AUTH_FAIL		0x2
++#define RSU_STAT_COPY_FAIL		0x3
++#define RSU_STAT_FATAL			0x4
++#define RSU_STAT_PKVL_REJECT		0x5
++#define RSU_STAT_NON_INC		0x6
++#define RSU_STAT_ERASE_FAIL		0x7
++#define RSU_STAT_WEAROUT		0x8
++#define RSU_STAT_NIOS_OK		0x80
++#define RSU_STAT_USER_OK		0x81
++#define RSU_STAT_FACTORY_OK		0x82
++#define RSU_STAT_USER_FAIL		0x83
++#define RSU_STAT_FACTORY_FAIL		0x84
++#define RSU_STAT_NIOS_FLASH_ERR		0x85
++#define RSU_STAT_FPGA_FLASH_ERR		0x86
++
++#define HOST_STATUS_IDLE		0x0
++#define HOST_STATUS_WRITE_DONE		0x1
++#define HOST_STATUS_ABORT_RSU		0x2
++
++#define rsu_prog(doorbell)	FIELD_GET(DRBL_RSU_PROGRESS, doorbell)
++#define rsu_stat(doorbell)	FIELD_GET(DRBL_RSU_STATUS, doorbell)
++
++/* interval 100ms and timeout 5s */
++#define NIOS_HANDSHAKE_INTERVAL_US	(100 * 1000)
++#define NIOS_HANDSHAKE_TIMEOUT_US	(5 * 1000 * 1000)
++
++/* RSU PREP Timeout (2 minutes) to erase flash staging area */
++#define RSU_PREP_INTERVAL_MS		100
++#define RSU_PREP_TIMEOUT_MS		(2 * 60 * 1000)
++
++/* RSU Complete Timeout (40 minutes) for full flash update */
++#define RSU_COMPLETE_INTERVAL_MS	1000
++#define RSU_COMPLETE_TIMEOUT_MS		(40 * 60 * 1000)
++
++/* Addresses for security related data in FLASH */
++#define BMC_REH_ADDR	0x17ffc004
++#define BMC_PROG_ADDR	0x17ffc000
++#define BMC_PROG_MAGIC	0x5746
++
++#define SR_REH_ADDR	0x17ffd004
++#define SR_PROG_ADDR	0x17ffd000
++#define SR_PROG_MAGIC	0x5253
++
++#define PR_REH_ADDR	0x17ffe004
++#define PR_PROG_ADDR	0x17ffe000
++#define PR_PROG_MAGIC	0x5250
++
++/* Address of inverted bit vector containing user the image FLASH count */
++#define USER_FLASH_COUNT 0x17ffb000
++
+ /**
+  * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
+  * @dev: this device
 -- 
 2.17.1
 
