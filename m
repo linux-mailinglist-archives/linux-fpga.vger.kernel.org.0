@@ -2,121 +2,95 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7452928BAE0
-	for <lists+linux-fpga@lfdr.de>; Mon, 12 Oct 2020 16:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31E628BE29
+	for <lists+linux-fpga@lfdr.de>; Mon, 12 Oct 2020 18:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389158AbgJLObW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 12 Oct 2020 10:31:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52888 "EHLO mail.kernel.org"
+        id S2403844AbgJLQlB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 12 Oct 2020 12:41:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37308 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389080AbgJLObW (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 12 Oct 2020 10:31:22 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2403821AbgJLQlB (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 12 Oct 2020 12:41:01 -0400
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3ABEF20776;
-        Mon, 12 Oct 2020 14:31:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1F88020757;
+        Mon, 12 Oct 2020 16:41:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602513081;
-        bh=HoQ6jCcZERGyCgIF7IrKDgnBvt+I6UIdmddbNkeKkrQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MZbQUhaIACrhi1G1r0geY3IANqcCehdRVrfr3fRlqtX3tWibSGlRg7Yp18vfKFhu3
-         Y4UQ8Wr118O9yNUO55R7BnGe/fiI2+z6X1KAAcp8bkdyLEwGGlVpXkyLZiMVwgyszF
-         sqOhUi/kma12wQozL1yuVmUYG7pQ7EBC3ydsiQzY=
-Date:   Mon, 12 Oct 2020 16:32:00 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     Xu Yilun <yilun.xu@intel.com>, mdf@kernel.org, krzk@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lgoncalv@redhat.com, hao.wu@intel.com
-Subject: Re: [PATCH v9 1/6] fpga: dfl: fix the definitions of type &
- feature_id for dfl devices
-Message-ID: <20201012143200.GA1544154@kroah.com>
-References: <1602313793-21421-1-git-send-email-yilun.xu@intel.com>
- <1602313793-21421-2-git-send-email-yilun.xu@intel.com>
- <8786ca8f-7edd-d7b1-7eca-6447814c6e5e@redhat.com>
- <20201012024100.GC29436@yilunxu-OptiPlex-7050>
- <440b7d06-426f-86c6-cf3f-396a9cc6bff7@redhat.com>
+        s=default; t=1602520860;
+        bh=PSchTMYAZGm4XlRhk503Scny9jN8e6gp5pDF0YJQMjA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=xBVivPSdx4gG1vfdVp+SCjKOZSg/tYMNlg81eQ7gqgrqE2auz6YeFrZt4T99eyt9N
+         TZIYci1UljYO4K9P/4DLq68MphR8VnqYpmeHLJQ+EPIcq3EzCt9KPTBmd9CLCFhiRZ
+         U3YMl1FxX7TbSe+R9LMxUw4iOF3NUaTMyQ3uWDVM=
+Received: by mail-ed1-f48.google.com with SMTP id l24so17699527edj.8;
+        Mon, 12 Oct 2020 09:41:00 -0700 (PDT)
+X-Gm-Message-State: AOAM531h6cCm9py4KNzcnnpgLp8Uq5S5jpmDF/vzjDIVFnlW6SnL8qut
+        6fyGWpnFQN7lB8J3HjFiU95WB/LpxiZ5mq16xvw=
+X-Google-Smtp-Source: ABdhPJwbDxzW+aOToT1vhKutyZ5JIiHEPZCuXxZ7lSkdvp4lGrrSP9KM6nhy4LYqTY2ASPsOgqG7cdwob5MUJdcgf/I=
+X-Received: by 2002:a50:d0d0:: with SMTP id g16mr15002684edf.18.1602520858740;
+ Mon, 12 Oct 2020 09:40:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <440b7d06-426f-86c6-cf3f-396a9cc6bff7@redhat.com>
+References: <1602313793-21421-1-git-send-email-yilun.xu@intel.com> <1602313793-21421-7-git-send-email-yilun.xu@intel.com>
+In-Reply-To: <1602313793-21421-7-git-send-email-yilun.xu@intel.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Mon, 12 Oct 2020 18:40:46 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPcLbnvXJLa6G8Rpa8tLv4v22dDVPBDx4DrakPnbGdK4QA@mail.gmail.com>
+Message-ID: <CAJKOXPcLbnvXJLa6G8Rpa8tLv4v22dDVPBDx4DrakPnbGdK4QA@mail.gmail.com>
+Subject: Re: [PATCH v9 6/6] memory: dfl-emif: add the DFL EMIF private feature driver
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        gregkh@linuxfoundation.org, trix@redhat.com, lgoncalv@redhat.com,
+        hao.wu@intel.com, Russ Weight <russell.h.weight@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 07:07:55AM -0700, Tom Rix wrote:
-> 
-> On 10/11/20 7:41 PM, Xu Yilun wrote:
-> > On Sat, Oct 10, 2020 at 08:07:07AM -0700, Tom Rix wrote:
-> >> On 10/10/20 12:09 AM, Xu Yilun wrote:
-> >>> The value of the field dfl_device.type comes from the 12 bits register
-> >>> field DFH_ID according to DFL spec. So this patch changes the definition
-> >>> of the type field to u16.
-> >>>
-> >>> Also it is not necessary to illustrate the valid bits of the type field
-> >>> in comments. Instead we should explicitly define the possible values in
-> >>> the enumeration type for it, because they are shared by hardware spec.
-> >>> We should not let the compiler decide these values.
-> >>>
-> >>> Similar changes are also applied to dfl_device.feature_id.
-> >>>
-> >>> This patch also fixed the MODALIAS format according to the changes
-> >>> above.
-> >>>
-> >>> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> >>> ---
-> >>> v9: no change
-> >>> ---
-> >>>  drivers/fpga/dfl.c |  3 +--
-> >>>  drivers/fpga/dfl.h | 14 +++++++-------
-> >>>  2 files changed, 8 insertions(+), 9 deletions(-)
-> >>>
-> >>> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> >>> index b450870..5a6ba3b 100644
-> >>> --- a/drivers/fpga/dfl.c
-> >>> +++ b/drivers/fpga/dfl.c
-> >>> @@ -298,8 +298,7 @@ static int dfl_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
-> >>>  {
-> >>>  	struct dfl_device *ddev = to_dfl_dev(dev);
-> >>>  
-> >>> -	/* The type has 4 valid bits and feature_id has 12 valid bits */
-> >>> -	return add_uevent_var(env, "MODALIAS=dfl:t%01Xf%03X",
-> >>> +	return add_uevent_var(env, "MODALIAS=dfl:t%04Xf%04X",
-> >>>  			      ddev->type, ddev->feature_id);
-> >>>  }
-> >>>  
-> >>> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> >>> index 5dc758f..ac373b1 100644
-> >>> --- a/drivers/fpga/dfl.h
-> >>> +++ b/drivers/fpga/dfl.h
-> >>> @@ -520,19 +520,19 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
-> >>>   * enum dfl_id_type - define the DFL FIU types
-> >>>   */
-> >>>  enum dfl_id_type {
-> >>> -	FME_ID,
-> >>> -	PORT_ID,
-> >>> +	FME_ID = 0,
-> >>> +	PORT_ID = 1,
-> >> This is redundant, why make this change ?
-> > These values are shared by hardware spec, so it is suggested that the
-> > values of the enum type should be explicitly set, otherwise the compiler
-> > is in its right to do whatever it wants with them (within reason...)
-> >
-> > Please see the original discussion:
-> > https://lore.kernel.org/linux-fpga/20200923055436.GA2629915@kroah.com/
-> 
-> I don't believe this is undefined behavior for the compiler
-> 
-> from c11 6.7.2.2,3
-> 
-> The identifiers in an enumerator list are declared as constants that have type int and may appear wherever such are permitted.127) An enumerator with = defines its enumeration constant as the value of the constant expression. If the first enumerator has no =, the value of its enumeration constant is 0. Each subsequent enumerator with no = defines its enumeration constant as the value of the constant expression obtained by adding 1 to the value of the previous enumeration constant. (The use of enumerators with = may produce enumeration constants with values that duplicate other values in the same enumeration.) The enumerators of an enumeration are also known as its members.
-> 
-> setting them again has some use for documentation so this change is ok if you have strong feeling for it.
+On Sat, 10 Oct 2020 at 09:15, Xu Yilun <yilun.xu@intel.com> wrote:
+>
+> This driver is for the EMIF private feature implemented under FPGA
+> Device Feature List (DFL) framework. It is used to expose memory
+> interface status information as well as memory clearing control.
+>
+> The purpose of memory clearing block is to zero out all private memory
+> when FPGA is to be reprogrammed. This gives users a reliable method to
+> prevent potential data leakage.
+>
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+> v2: Adjust the position of this driver in Kconfig.
+>     Improves the name of the Kconfig option.
+>     Change the include dfl-bus.h to dfl.h, cause the previous patchset
+>      renames the file.
+>     Some minor fixes and comment improvement.
+> v3: Adjust the position of the driver in Makefile.
+> v9: Add static prefix for emif attributes macro
+>     Update the kernel version of the sysfs interfaces in Doc.
+> ---
+>  .../ABI/testing/sysfs-bus-dfl-devices-emif         |  25 +++
+>  drivers/memory/Kconfig                             |   9 +
+>  drivers/memory/Makefile                            |   2 +
+>  drivers/memory/dfl-emif.c                          | 207 +++++++++++++++++++++
+>  4 files changed, 243 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl-devices-emif
+>  create mode 100644 drivers/memory/dfl-emif.c
+>
 
-The kernel developer community has "strong feelings" for this, please be
-specific and list the values when they matter.
+I am confused now. This was already taken by Moritz, wasn't it? And
+the dependencies were already taken, weren't they? Previously it was
+depending on "Modularization of DFL private feature drivers" and "add
+dfl bus support to MODULE_DEVICE_TABLE()"... now this is here so did
+the dependencies change? What is the reason to include this patch
+here?
 
-thanks,
+My ack was for the purpose of taking it via Moritz tree, because of
+the dependencies. If this is not the case, then probably better to
+take it via memory controllers tree to avoid any conflicts (it's not a
+small change).
 
-greg k-h
+Best regards,
+Krzysztof
