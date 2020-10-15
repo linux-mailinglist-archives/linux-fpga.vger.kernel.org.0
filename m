@@ -2,122 +2,114 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F7B28CD7F
-	for <lists+linux-fpga@lfdr.de>; Tue, 13 Oct 2020 14:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84BE28ED83
+	for <lists+linux-fpga@lfdr.de>; Thu, 15 Oct 2020 09:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728410AbgJMMAV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 13 Oct 2020 08:00:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58150 "EHLO mail.kernel.org"
+        id S1727183AbgJOHVr (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 15 Oct 2020 03:21:47 -0400
+Received: from mga03.intel.com ([134.134.136.65]:36090 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727474AbgJMLyn (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 13 Oct 2020 07:54:43 -0400
-Received: from mail.kernel.org (ip5f5ad5b2.dynamic.kabel-deutschland.de [95.90.213.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB6C2223BD;
-        Tue, 13 Oct 2020 11:54:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602590081;
-        bh=i1ehfJ5a+ArhUT+7IpeOP77r+VemFZ1XPuELZc8RizM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O7AGre3eWrnkcM4mXQibvxErJanrmuHiCacF82DcZQ1YwgeVh2Vs99iCx6eqlPQ7l
-         bTg2TeQbiUlPDNz2DFO6iR186eJTFjSX4VTzP6bzhkhay5EnGtECzHgR4OsAUrcJZY
-         XfGR4X5xk20cZ7V8mctuKAcc9jFr1CenMlwnGA3k=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kSIt4-006CV1-QN; Tue, 13 Oct 2020 13:54:38 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 40/80] docs: fpga: replace :c:member: macros
-Date:   Tue, 13 Oct 2020 13:53:55 +0200
-Message-Id: <bc213cf5197fc2d7f0c8e5f331189991536222be.1602589096.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1602589096.git.mchehab+huawei@kernel.org>
-References: <cover.1602589096.git.mchehab+huawei@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+        id S1726462AbgJOHVo (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 15 Oct 2020 03:21:44 -0400
+IronPort-SDR: 9aPL7KCXpOiiS4NSJTVY1QsBZ7osy16G2p+ixZFb4jN4hh4DFYMXRGf0J5C/qsRF7c0ClIfYwK
+ 87CKB00ibOaw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9774"; a="166344269"
+X-IronPort-AV: E=Sophos;i="5.77,378,1596524400"; 
+   d="scan'208";a="166344269"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 00:21:43 -0700
+IronPort-SDR: xGHhHI41xz1cTqP9navgwRABNt3JcGOwnKy2Dgq4syOh1ePa2sFauPFuJLX8B8JaWzJDXEb5UZ
+ j96IqdBWkWLg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,378,1596524400"; 
+   d="scan'208";a="531145047"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
+  by orsmga005.jf.intel.com with ESMTP; 15 Oct 2020 00:21:39 -0700
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     mdf@kernel.org, krzk@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, trix@redhat.com, lgoncalv@redhat.com,
+        yilun.xu@intel.com, hao.wu@intel.com
+Subject: [PATCH v10 0/6] add DFL bus support to MODULE_DEVICE_TABLE()
+Date:   Thu, 15 Oct 2020 15:16:27 +0800
+Message-Id: <1602746193-10626-1-git-send-email-yilun.xu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Those macros are not doing the right thing with Sphinx 3,
-causing parse errors:
+Patch #1 is a fix of the fields in struct dfl_device & dfl_device_id.
 
-	./Documentation/driver-api/fpga/fpga-mgr.rst:104: WARNING: Unparseable C cross-reference: 'fpga_manager->state'
-	Invalid C declaration: Expected end of definition. [error at 12]
-	  fpga_manager->state
-	  ------------^
-	./Documentation/driver-api/fpga/fpga-programming.rst:18: WARNING: Unparseable C cross-reference: 'fpga_region->info'
-	Invalid C declaration: Expected end of definition. [error at 11]
-	  fpga_region->info
-	  -----------^
-	./Documentation/driver-api/fpga/fpga-region.rst:62: WARNING: Unparseable C cross-reference: 'fpga_region->bridge_list'
-	Invalid C declaration: Expected end of definition. [error at 11]
-	  fpga_region->bridge_list
-	  -----------^
-	./Documentation/driver-api/fpga/fpga-region.rst:62: WARNING: Unparseable C cross-reference: 'fpga_region->get_bridges'
-	Invalid C declaration: Expected end of definition. [error at 11]
-	  fpga_region->get_bridges
-	  -----------^
+Patch #2, 3, 4 add dfl bus support to MODULE_DEVICE_TABLE(), they also
+move the necessary definitions in head file to public folders so that
+scatter dfl drivers could use them.
 
-Replace them by :c:expr:, with does what's desired.
+Patch #5 is the dfl driver for N3000 Nios private feature, this is the
+first use case of dfl bus.
 
-Reviewed-by: Moritz Fischer <mdf@kernel.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/driver-api/fpga/fpga-mgr.rst         | 2 +-
- Documentation/driver-api/fpga/fpga-programming.rst | 2 +-
- Documentation/driver-api/fpga/fpga-region.rst      | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Patch #6 is the dfl driver for DFL EMIF private feature.
 
-diff --git a/Documentation/driver-api/fpga/fpga-mgr.rst b/Documentation/driver-api/fpga/fpga-mgr.rst
-index 22f7885b32c9..917ee22db429 100644
---- a/Documentation/driver-api/fpga/fpga-mgr.rst
-+++ b/Documentation/driver-api/fpga/fpga-mgr.rst
-@@ -101,7 +101,7 @@ in state.
- API for implementing a new FPGA Manager driver
- ----------------------------------------------
- 
--* ``fpga_mgr_states`` —  Values for :c:member:`fpga_manager->state`.
-+* ``fpga_mgr_states`` —  Values for :c:expr:`fpga_manager->state`.
- * struct fpga_manager —  the FPGA manager struct
- * struct fpga_manager_ops —  Low level FPGA manager driver ops
- * devm_fpga_mgr_create() —  Allocate and init a manager struct
-diff --git a/Documentation/driver-api/fpga/fpga-programming.rst b/Documentation/driver-api/fpga/fpga-programming.rst
-index f487ad64dfb9..002392dab04f 100644
---- a/Documentation/driver-api/fpga/fpga-programming.rst
-+++ b/Documentation/driver-api/fpga/fpga-programming.rst
-@@ -15,7 +15,7 @@ the FPGA manager and bridges.  It will:
-  * lock the mutex of the region's FPGA manager
-  * build a list of FPGA bridges if a method has been specified to do so
-  * disable the bridges
-- * program the FPGA using info passed in :c:member:`fpga_region->info`.
-+ * program the FPGA using info passed in :c:expr:`fpga_region->info`.
-  * re-enable the bridges
-  * release the locks
- 
-diff --git a/Documentation/driver-api/fpga/fpga-region.rst b/Documentation/driver-api/fpga/fpga-region.rst
-index 3e52be7e2968..363a8171ab0a 100644
---- a/Documentation/driver-api/fpga/fpga-region.rst
-+++ b/Documentation/driver-api/fpga/fpga-region.rst
-@@ -61,9 +61,9 @@ during the region's probe function.
- 
- The FPGA region will need to specify which bridges to control while programming
- the FPGA.  The region driver can build a list of bridges during probe time
--(:c:member:`fpga_region->bridge_list`) or it can have a function that creates
-+(:c:expr:`fpga_region->bridge_list`) or it can have a function that creates
- the list of bridges to program just before programming
--(:c:member:`fpga_region->get_bridges`).  The FPGA bridge framework supplies the
-+(:c:expr:`fpga_region->get_bridges`).  The FPGA bridge framework supplies the
- following APIs to handle building or tearing down that list.
- 
- * fpga_bridge_get_to_list() — Get a ref of an FPGA bridge, add it to a
+
+Main changes from v1:
+- A new patch (Patch #3) to fix the description.
+- Rename the dfl-bus.h to dfl.h
+- Updated the MAINTAINERS under FPGA DFL DRIVERS.
+- Improve comments and minor fixes.
+
+Main changes from v2:
+- Change the bus name from "dfl" to "fpga-dfl", also rename related
+  variables, functions ...
+- Changes the data type of fpga_dfl_device_id.type from u8 to u16
+- Explicitly defines the values of enum fpga_dfl_id_type
+- Delete the comments for the valid bits of type & feature_id
+- changes MODALIAS format for fpga dfl devices
+
+Main changes from v3:
+- Change the bus name back to "dfl".
+- Add 2 patches (#5, 6) for dfl drivers.
+- Delete the retimer FEC mode configuration via module_parameter for
+  Patch #5
+- Merge the patch "Make m10_n3000_info static" (https://lore.kernel.org/linux-fpga/52d8411e-13d8-1e91-756d-131802f5f445@huawei.com/T/#t)
+  into Patch #5
+- Add static prefix for emif attributes macro for Patch #6
+
+Main changes from v9:
+- Add the description for struct dfl_device_id in mod_devicetable.h
+- Move the dfl.h from include/linux/fpga to include/linux
+- some code refactor and minor fixes for dfl-n3000-nios
+
+Xu Yilun (6):
+  fpga: dfl: fix the definitions of type & feature_id for dfl devices
+  fpga: dfl: move dfl_device_id to mod_devicetable.h
+  fpga: dfl: add dfl bus support to MODULE_DEVICE_TABLE()
+  fpga: dfl: move dfl bus related APIs to include/linux/dfl.h
+  fpga: dfl: add support for N3000 Nios private feature
+  memory: dfl-emif: add the DFL EMIF private feature driver
+
+ .../ABI/testing/sysfs-bus-dfl-devices-emif         |  25 +
+ .../ABI/testing/sysfs-bus-dfl-devices-n3000-nios   |  47 ++
+ MAINTAINERS                                        |   3 +-
+ drivers/fpga/Kconfig                               |  11 +
+ drivers/fpga/Makefile                              |   2 +
+ drivers/fpga/dfl-n3000-nios.c                      | 588 +++++++++++++++++++++
+ drivers/fpga/dfl.c                                 |   4 +-
+ drivers/fpga/dfl.h                                 |  85 +--
+ drivers/memory/Kconfig                             |   9 +
+ drivers/memory/Makefile                            |   2 +
+ drivers/memory/dfl-emif.c                          | 207 ++++++++
+ include/linux/dfl.h                                |  86 +++
+ include/linux/mod_devicetable.h                    |  24 +
+ scripts/mod/devicetable-offsets.c                  |   4 +
+ scripts/mod/file2alias.c                           |  13 +
+ 15 files changed, 1023 insertions(+), 87 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl-devices-emif
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl-devices-n3000-nios
+ create mode 100644 drivers/fpga/dfl-n3000-nios.c
+ create mode 100644 drivers/memory/dfl-emif.c
+ create mode 100644 include/linux/dfl.h
+
 -- 
-2.26.2
+2.7.4
 
