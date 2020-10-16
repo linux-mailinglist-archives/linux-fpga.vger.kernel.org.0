@@ -2,69 +2,70 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 823A329099B
-	for <lists+linux-fpga@lfdr.de>; Fri, 16 Oct 2020 18:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6372909C2
+	for <lists+linux-fpga@lfdr.de>; Fri, 16 Oct 2020 18:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395433AbgJPQV6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 16 Oct 2020 12:21:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:37371 "EHLO
+        id S2410799AbgJPQgH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 16 Oct 2020 12:36:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:53973 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2409973AbgJPQV6 (ORCPT
+        by vger.kernel.org with ESMTP id S2410753AbgJPQgH (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 16 Oct 2020 12:21:58 -0400
+        Fri, 16 Oct 2020 12:36:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602865316;
+        s=mimecast20190719; t=1602866166;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BajeG0H3hZ4V02rr1iFzTLXk1wIf+0ghZOJ/ATOsswE=;
-        b=CsMqELv9+Dy46MjIA0Fblp2N/HxeydFtHbv+CDUTjhU1vy5kZ7j4NwWyJLgwSMxVKuRVdu
-        P/GcN0FCyT+fPIViaVcFLWW4hyxr2UmNgWoG6T+eKsmZMwbKs6xnoar6lW7zsP+2JSJGGk
-        awio9eiiYr0Q69sDcRDX2q4BJ2f63Ck=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-548-NWEwN3zGN8ighiD8chTd8g-1; Fri, 16 Oct 2020 12:21:54 -0400
-X-MC-Unique: NWEwN3zGN8ighiD8chTd8g-1
-Received: by mail-oi1-f197.google.com with SMTP id b22so1245769oib.8
-        for <linux-fpga@vger.kernel.org>; Fri, 16 Oct 2020 09:21:53 -0700 (PDT)
+        bh=rHirm0QjVOLIduO3/OBhyNE0q0zYdGhVKCP/DslpnEQ=;
+        b=M1IQRwyJRHlJTqTE/R0N6cUKYPaPoKV5VPwog/VKqFOGQD90h7osscylBDZfPbw1eJpkCy
+        J/KJVlXbIbNoBDjoLlb08cbNdIfz1PoMNLkD+WeTAq5KOGXEDtSpfvJEIelTmeRQ9LKLvy
+        /mAWSYHAG+G3ACSbmONXVtMqSC9JYFM=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-554-s0yo09nSMNqN9NtwVJYhHg-1; Fri, 16 Oct 2020 12:36:03 -0400
+X-MC-Unique: s0yo09nSMNqN9NtwVJYhHg-1
+Received: by mail-ot1-f71.google.com with SMTP id x12so985457otq.11
+        for <linux-fpga@vger.kernel.org>; Fri, 16 Oct 2020 09:36:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=BajeG0H3hZ4V02rr1iFzTLXk1wIf+0ghZOJ/ATOsswE=;
-        b=nximggFE7Xr7X/U0ywKZQ0pGgs529L1vlJKIPPE5Vx8J3cTSjO2eDuCdAEmFIrYSIs
-         rqous42xUGMGhRAnrgApcxWgNSFO5pfHNf9NIfKg3+MJ7n+6IyiwGqFJ1J4dntdLDhfp
-         Hm7+QsQsxpuVOotelQEcj1owthrDmxPGFM79EBnQkjMrxVUakKt0jxfNCQWjTWM5P21z
-         s9mnj1HExK8I0XqQciyqzf0RTw8COrYr0gNUm3Zfd285F++WqOZNHvnKVoHT1LFw7Gk4
-         4gQKjXt9EDTOgz2Go02VTo9GNXrmyyuxr9PTBww31nfzlliH9kKPi0Zn1cDW9Uq6FheF
-         LOjg==
-X-Gm-Message-State: AOAM533bwtHOvkEOa3Mz9rglnq30T4+DsAGhQ0C5jqAQJvrgPu4En6Xn
-        BZOLalI8Hcwl6HCcLinV9PNmE/YkCb+M8kU8LHsjDvG65Lq5Bx9rpyMz4UJKML0JElRNh7q/j0h
-        nZI94Z2sYKtps9AkgEFFaJQ==
-X-Received: by 2002:a05:6830:3141:: with SMTP id c1mr3018504ots.212.1602865313200;
-        Fri, 16 Oct 2020 09:21:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJze7UmuOKJdOpIe5ED8n63O/1ZRrVP3XI3z37mnRGkHOQwcLOW0jpEWBkiF+TcP1H9dwTQVdg==
-X-Received: by 2002:a05:6830:3141:: with SMTP id c1mr3018473ots.212.1602865312823;
-        Fri, 16 Oct 2020 09:21:52 -0700 (PDT)
+        bh=rHirm0QjVOLIduO3/OBhyNE0q0zYdGhVKCP/DslpnEQ=;
+        b=ruwu3ZECc59DYYpex8oMWwu+hLwj3mSKhnn1K5RHc+bD8SkR2lpyApABeAj0mmjS3S
+         Yp5o3AT03a1xbtEP8PfYAIq+mY82QzjpYmy0G8o0Qxh/bRdR5Djdnd5of7f8YnEDtG+r
+         Ii4BZFV2k3PtH64H8+sUavXfrQf6cMnl5hGGfcqRU3EqoMFAB4Pi4bReZfCsKs4cxtmu
+         tpYWGIveBpa+4i6W9ZmyuLAmFItho4v8pM93v+4aN/HpbakF6gz10UQ6UhHs1NMwyJQQ
+         JGOsZ61H5YNCVK7wRq6hTbjZMzwaRQSIbv4YSIJ7MIc8X+elDDYbLlVf1CwbH749zegh
+         DLGA==
+X-Gm-Message-State: AOAM5319RzRMceAvB8zlbFuwRTWWuFHS/CEjfiWpswrUo29mhj5GbmQb
+        LA/Qe9myAnRBYGMPHnyhaL5XBUMh2f56A8rPb26GC+ni0FeTcSuemiZLT+KlFZo+zsBSXThDs1F
+        r40sI1k/HOr2JX1JQ0kWWVA==
+X-Received: by 2002:a05:6830:2436:: with SMTP id k22mr3339023ots.185.1602866162884;
+        Fri, 16 Oct 2020 09:36:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxbfNADlp4FQryac4k3gYT4DINIBC63zGgPiwDCxauhYn2KAaUYsBlzwg/0ZMELMGeOYa/N9A==
+X-Received: by 2002:a05:6830:2436:: with SMTP id k22mr3339011ots.185.1602866162634;
+        Fri, 16 Oct 2020 09:36:02 -0700 (PDT)
 Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id d64sm1155593oia.11.2020.10.16.09.21.51
+        by smtp.gmail.com with ESMTPSA id p17sm1252186oov.1.2020.10.16.09.36.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Oct 2020 09:21:52 -0700 (PDT)
-Subject: Re: [PATCH 1/2] fpga: dfl: add driver_override support
+        Fri, 16 Oct 2020 09:36:01 -0700 (PDT)
+Subject: Re: [PATCH 2/2] fpga: dfl: add the userspace I/O device support for
+ DFL devices
 To:     Xu Yilun <yilun.xu@intel.com>, mdf@kernel.org,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     gregkh@linuxfoundation.org, lgoncalv@redhat.com, hao.wu@intel.com
 References: <1602828151-24784-1-git-send-email-yilun.xu@intel.com>
- <1602828151-24784-2-git-send-email-yilun.xu@intel.com>
+ <1602828151-24784-3-git-send-email-yilun.xu@intel.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <63d7730b-d9b8-c75d-16f6-3ebb507aabaa@redhat.com>
-Date:   Fri, 16 Oct 2020 09:21:50 -0700
+Message-ID: <cba18e8f-009b-0732-c91e-88bd58445271@redhat.com>
+Date:   Fri, 16 Oct 2020 09:36:00 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <1602828151-24784-2-git-send-email-yilun.xu@intel.com>
+In-Reply-To: <1602828151-24784-3-git-send-email-yilun.xu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -74,189 +75,151 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 On 10/15/20 11:02 PM, Xu Yilun wrote:
-> Add support for overriding the default matching of a dfl device to a dfl
-> driver. It follows the same way that can be used for PCI and platform
-> devices. This patch adds the 'driver_override' sysfs file.
+> This patch supports the DFL drivers be written in userspace. This is
+> realized by exposing the userspace I/O device interfaces. The driver
+> leverages the uio_pdrv_genirq, it adds the uio_pdrv_genirq platform
+> device with the DFL device's resources, and let the generic UIO platform
+> device driver provide support to userspace access to kernel interrupts
+> and memory locations.
 >
 > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 > ---
->  Documentation/ABI/testing/sysfs-bus-dfl | 28 ++++++++++++++---
->  drivers/fpga/dfl.c                      | 54 ++++++++++++++++++++++++++++++++-
->  include/linux/dfl.h                     |  2 ++
->  3 files changed, 79 insertions(+), 5 deletions(-)
+>  drivers/fpga/Kconfig        | 10 ++++++
+>  drivers/fpga/Makefile       |  1 +
+>  drivers/fpga/dfl-uio-pdev.c | 83 +++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 94 insertions(+)
+>  create mode 100644 drivers/fpga/dfl-uio-pdev.c
 >
-> diff --git a/Documentation/ABI/testing/sysfs-bus-dfl b/Documentation/ABI/testing/sysfs-bus-dfl
-> index 23543be..db7e8d3 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-dfl
-> +++ b/Documentation/ABI/testing/sysfs-bus-dfl
-> @@ -1,15 +1,35 @@
->  What:		/sys/bus/dfl/devices/dfl_dev.X/type
-> -Date:		Aug 2020
-> -KernelVersion:	5.10
-> +Date:		Oct 2020
-> +KernelVersion:	5.11
->  Contact:	Xu Yilun <yilun.xu@intel.com>
->  Description:	Read-only. It returns type of DFL FIU of the device. Now DFL
->  		supports 2 FIU types, 0 for FME, 1 for PORT.
->  		Format: 0x%x
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 5d7f0ae..e054722 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -202,6 +202,16 @@ config FPGA_DFL_NIOS_INTEL_PAC_N3000
+>  	  the card. It also instantiates the SPI master (spi-altera) for
+>  	  the card's BMC (Board Management Controller).
 >  
->  What:		/sys/bus/dfl/devices/dfl_dev.X/feature_id
-> -Date:		Aug 2020
-> -KernelVersion:	5.10
-> +Date:		Oct 2020
-> +KernelVersion:	5.11
->  Contact:	Xu Yilun <yilun.xu@intel.com>
->  Description:	Read-only. It returns feature identifier local to its DFL FIU
->  		type.
->  		Format: 0x%x
-
-These updates, do not match the comment.
-
-Consider splitting this out.
-
+> +config FPGA_DFL_UIO_PDEV
+> +	tristate "FPGA DFL Driver for Userspace I/O platform devices"
+> +	depends on FPGA_DFL && UIO_PDRV_GENIRQ
+> +	help
+> +	  Enable this to allow some DFL drivers be written in userspace. It
+> +	  adds the uio_pdrv_genirq platform device with the DFL device's
+> +	  resources, and let the generic UIO platform device driver provide
+'and lets the'
+> +	  support to userspace access to kernel interrupts and memory
+> +	  locations.
 > +
-> +What:           /sys/bus/dfl/devices/.../driver_override
-> +Date:           Oct 2020
-> +KernelVersion:  5.11
-> +Contact:        Xu Yilun <yilun.xu@intel.com>
-I am looking at description and trying to make it consistent with sysfs-bus-pci
-> +Description:    This file allows the driver for a device to be specified.
-
-'to be specified which will override the standard dfl bus feature id to driver mapping.'
-
-
->  When
-> +                specified, only a driver with a name matching the value written
-> +                to driver_override will have an opportunity to bind to the
-> +                device. The override is specified by writing a string to the
-> +                driver_override file (echo dfl-uio-pdev > driver_override) and
-> +                may be cleared with an empty string (echo > driver_override).
-> +                This returns the device to standard matching rules binding.
-> +                Writing to driver_override does not automatically unbind the
-> +                device from its current driver or make any attempt to
-> +                automatically load the specified driver.  If no driver with a
-> +                matching name is currently loaded in the kernel, the device
-> +                will not bind to any driver.  This also allows devices to
-> +                opt-out of driver binding using a driver_override name such as
-> +                "none".  Only a single driver may be specified in the override,
-> +                there is no support for parsing delimiters.
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 511b20f..bc35750 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -262,6 +262,10 @@ static int dfl_bus_match(struct device *dev, struct device_driver *drv)
->  	struct dfl_driver *ddrv = to_dfl_drv(drv);
->  	const struct dfl_device_id *id_entry;
+>  config FPGA_DFL_PCI
+>  	tristate "FPGA DFL PCIe Device Driver"
+>  	depends on PCI && FPGA_DFL
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 18dc9885..e07b3d5 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -45,6 +45,7 @@ dfl-afu-objs := dfl-afu-main.o dfl-afu-region.o dfl-afu-dma-region.o
+>  dfl-afu-objs += dfl-afu-error.o
 >  
-> +	/* When driver_override is set, only bind to the matching driver */
-> +	if (ddev->driver_override)
-> +		return !strcmp(ddev->driver_override, drv->name);
+>  obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+> +obj-$(CONFIG_FPGA_DFL_UIO_PDEV)	+= dfl-uio-pdev.o
+>  
+>  # Drivers for FPGAs which implement DFL
+>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
+> diff --git a/drivers/fpga/dfl-uio-pdev.c b/drivers/fpga/dfl-uio-pdev.c
+> new file mode 100644
+> index 0000000..d35b846
+> --- /dev/null
+> +++ b/drivers/fpga/dfl-uio-pdev.c
+> @@ -0,0 +1,83 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * DFL driver for Userspace I/O platform devices
+> + *
+> + * Copyright (C) 2020 Intel Corporation, Inc.
+> + */
+> +#include <linux/dfl.h>
+> +#include <linux/errno.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/uio_driver.h>
 > +
->  	id_entry = ddrv->id_table;
->  	if (id_entry) {
->  		while (id_entry->feature_id) {
-> @@ -303,6 +307,53 @@ static int dfl_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
->  			      ddev->type, ddev->feature_id);
->  }
->  
-
-I am looking at other implementations of driver_override* and looking for consistency.
-
-> +static ssize_t driver_override_show(struct device *dev,
-> +				    struct device_attribute *attr, char *buf)
+> +#define DRIVER_NAME "dfl-uio-pdev"
+> +
+> +static int dfl_uio_pdev_probe(struct dfl_device *ddev)
 > +{
-> +	struct dfl_device *ddev = to_dfl_dev(dev);
-> +	ssize_t len;
+> +	struct device *dev = &ddev->dev;
+> +	struct platform_device_info pdevinfo = { 0 };
+> +	struct uio_info uio_pdata = { 0 };
+> +	struct platform_device *uio_pdev;
+> +	struct resource *res;
+> +	int i, idx = 0;
+
+idx is not needed.
+
 > +
-> +	device_lock(dev);
-> +	len = sprintf(buf, "%s\n", ddev->driver_override);
-len = snprintf(buf, PAGE_SIZE ...
-> +	device_unlock(dev);
-> +	return len;
-> +}
+> +	pdevinfo.name = "uio_pdrv_genirq";
 > +
-> +static ssize_t driver_override_store(struct device *dev,
-> +				     struct device_attribute *attr,
-> +				     const char *buf, size_t count)
-> +{
-> +	struct dfl_device *ddev = to_dfl_dev(dev);
-> +	char *driver_override, *old, *cp;
-> +
-> +	/* We need to keep extra room for a newline */
-> +	if (count >= (PAGE_SIZE - 1))
-> +		return -EINVAL;
-> +
-> +	driver_override = kstrndup(buf, count, GFP_KERNEL);
-> +	if (!driver_override)
+> +	res = kcalloc(ddev->num_irqs + 1, sizeof(*res), GFP_KERNEL);
+> +	if (!res)
 > +		return -ENOMEM;
 > +
-> +	cp = strchr(driver_override, '\n');
-> +	if (cp)
-> +		*cp = '\0';
+> +	res[idx].parent = &ddev->mmio_res;
+res[0].parent =
+> +	res[idx].flags = IORESOURCE_MEM;
+> +	res[idx].start = ddev->mmio_res.start;
+> +	res[idx].end = ddev->mmio_res.end;
+> +	++idx;
 > +
-> +	device_lock(dev);
-> +	old = ddev->driver_override;
-> +	if (strlen(driver_override)) {
-> +		ddev->driver_override = driver_override;
-> +	} else {
-> +		kfree(driver_override);
-> +		ddev->driver_override = NULL;
-> +	}
-> +	device_unlock(dev);
-> +
-> +	kfree(old);
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RW(driver_override);
-> +
->  static ssize_t
->  type_show(struct device *dev, struct device_attribute *attr, char *buf)
->  {
-> @@ -324,6 +375,7 @@ static DEVICE_ATTR_RO(feature_id);
->  static struct attribute *dfl_dev_attrs[] = {
->  	&dev_attr_type.attr,
->  	&dev_attr_feature_id.attr,
-> +	&dev_attr_driver_override.attr,
->  	NULL,
->  };
->  ATTRIBUTE_GROUPS(dfl_dev);
-> @@ -469,7 +521,7 @@ static int dfl_devs_add(struct dfl_feature_platform_data *pdata)
->  
->  int __dfl_driver_register(struct dfl_driver *dfl_drv, struct module *owner)
->  {
-> -	if (!dfl_drv || !dfl_drv->probe || !dfl_drv->id_table)
-> +	if (!dfl_drv || !dfl_drv->probe)
+> +	/* then add irq resource */
+> +	for (i = 0; i < ddev->num_irqs; i++) {
+> +		res[idx].flags = IORESOURCE_IRQ;
 
-id_table is still needed for the normal case.
-
-Instead of removing this check, could you add something like
-
-|| (!dfl_drv->is_override && !dfl_drv->id_table)
+res[i+1].flags =
 
 Tom
 
->  		return -EINVAL;
->  
->  	dfl_drv->drv.owner = owner;
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 7affba2f..e1b2471 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -32,6 +32,7 @@ enum dfl_id_type {
->   * @num_irqs: number of IRQs supported by this dfl device.
->   * @cdev: pointer to DFL FPGA container device this dfl device belongs to.
->   * @id_entry: matched id entry in dfl driver's id table.
-> + * @driver_override: driver name to force a match
->   */
->  struct dfl_device {
->  	struct device dev;
-> @@ -43,6 +44,7 @@ struct dfl_device {
->  	unsigned int num_irqs;
->  	struct dfl_fpga_cdev *cdev;
->  	const struct dfl_device_id *id_entry;
-> +	char *driver_override;
->  };
->  
->  /**
+> +		res[idx].start = ddev->irqs[i];
+> +		res[idx].end = ddev->irqs[i];
+> +		++idx;
+> +	}
+> +
+> +	uio_pdata.name = DRIVER_NAME;
+> +	uio_pdata.version = "0";
+> +
+> +	pdevinfo.res = res;
+> +	pdevinfo.num_res = idx;
+> +	pdevinfo.parent = &ddev->dev;
+> +	pdevinfo.id = PLATFORM_DEVID_AUTO;
+> +	pdevinfo.data = &uio_pdata;
+> +	pdevinfo.size_data = sizeof(uio_pdata);
+> +
+> +	uio_pdev = platform_device_register_full(&pdevinfo);
+> +	if (!IS_ERR(uio_pdev))
+> +		dev_set_drvdata(dev, uio_pdev);
+> +
+> +	kfree(res);
+> +
+> +	return PTR_ERR_OR_ZERO(uio_pdev);
+> +}
+> +
+> +static void dfl_uio_pdev_remove(struct dfl_device *ddev)
+> +{
+> +	struct platform_device *uio_pdev = dev_get_drvdata(&ddev->dev);
+> +
+> +	platform_device_unregister(uio_pdev);
+> +}
+> +
+> +static struct dfl_driver dfl_uio_pdev_driver = {
+> +	.drv	= {
+> +		.name       = DRIVER_NAME,
+> +	},
+> +	.probe	= dfl_uio_pdev_probe,
+> +	.remove	= dfl_uio_pdev_remove,
+> +};
+> +module_dfl_driver(dfl_uio_pdev_driver);
+> +
+> +MODULE_DESCRIPTION("DFL driver for Userspace I/O platform devices");
+> +MODULE_AUTHOR("Intel Corporation");
+> +MODULE_LICENSE("GPL v2");
 
