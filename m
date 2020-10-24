@@ -2,72 +2,72 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F8B297CD7
-	for <lists+linux-fpga@lfdr.de>; Sat, 24 Oct 2020 16:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D7E297CFA
+	for <lists+linux-fpga@lfdr.de>; Sat, 24 Oct 2020 17:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1762051AbgJXOjh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 24 Oct 2020 10:39:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:37444 "EHLO
+        id S1758509AbgJXPEB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 24 Oct 2020 11:04:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:28553 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1762048AbgJXOjg (ORCPT
+        by vger.kernel.org with ESMTP id S1758441AbgJXPEB (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Sat, 24 Oct 2020 10:39:36 -0400
+        Sat, 24 Oct 2020 11:04:01 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603550375;
+        s=mimecast20190719; t=1603551837;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ry89cem/wTBCz8O1darsRTxCLuVRm4xCsyF08Cu2Qe8=;
-        b=ZvZG9JrzW2Tpr7+P+EITLoIg1IoQ6537CIuKPIXI2S/EGS+FD+IgXCoU2uJ4VRAhPu+A+7
-        rEqMGAIvWQA8l17QdzrKqq4TdnLEXc3F8YFHpzUNAz/O1oP+PtZlKnN/+D3Ibh/fu5sXjj
-        mFnqpLAoe+JmINaJQ4mvZVR70mYil8U=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-472-JTIMFSl3ODitC2p1dXawnA-1; Sat, 24 Oct 2020 10:39:33 -0400
-X-MC-Unique: JTIMFSl3ODitC2p1dXawnA-1
-Received: by mail-oo1-f69.google.com with SMTP id e142so3308766oob.2
-        for <linux-fpga@vger.kernel.org>; Sat, 24 Oct 2020 07:39:33 -0700 (PDT)
+        bh=H9MFfO8od2aiFCz3CMwI5BriTDlUJh0SREwJpQ4f9ng=;
+        b=dqz/5Nr+qRnPmBNrIt9muPt3bP/JJYAjAqrTRUWQL9UniFqf3IblI8bj8LzLvKSqVyRASI
+        GIGLek38jgrbQ94RA7kOurBhJtw9nZ0TNaZZpndX7ppBu+rvIp+R0vZ75V3ubFKZz415iu
+        LOgUty1kSo/ZjL20ZI1N6HDR24hx8tA=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-580-RnVHTSFyNmGjQTnfJRpApw-1; Sat, 24 Oct 2020 11:03:55 -0400
+X-MC-Unique: RnVHTSFyNmGjQTnfJRpApw-1
+Received: by mail-oi1-f198.google.com with SMTP id 65so3248237oii.10
+        for <linux-fpga@vger.kernel.org>; Sat, 24 Oct 2020 08:03:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=Ry89cem/wTBCz8O1darsRTxCLuVRm4xCsyF08Cu2Qe8=;
-        b=O01LV58VCBqRg8S5K8QBNuA5ziHh2sncPxV8HXxsSrKbDYXQxAcLTV8K1h9HbUgbsd
-         byg51V+bul4NF9LjyhFfCrl5vMdKplmmSibWBNPAAfm0TEEgNWU4ceCuGFYV74JXpx/K
-         0HArC1nphTAKA1o81+raBaAoOQ5Jc2kc5AIRztlVj0EL/XoeQWIrpLHnbCv1/RO1Ogto
-         2qLO8r56fDDFnWl46lVbW/s0NiZcKoNkRp7XeU44i280AT+hzWTnL6vTeh75r7mAJo1m
-         fe+dj8xbL2XVB5yaZyp1srgVzLcEOoulDJ0Ekk3TWmyRo2DOwFQDghKHo8mQhIHlgrvA
-         dsfg==
-X-Gm-Message-State: AOAM532frPJqdKaR/yKs9I+RTvM9uvZ26UzetXg8rr5gm7U9bvkzU092
-        Uvd8hqbVzQ5X/7d6ueY38iCKdfBujGGSt6N3RKGwApgku1UM0GDSw9duEkjmig2Ca7QpNMlXR9g
-        RY2sPYB7J7BqmVHNjc+FZug==
-X-Received: by 2002:a54:4588:: with SMTP id z8mr6416248oib.147.1603550372504;
-        Sat, 24 Oct 2020 07:39:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyo9STt2IooDvh0rYe35QbKRqdfyDKG60v+c/fhEIX+0Tr5CXgeE7ZQwDtyl0G/VLxHkDsaIA==
-X-Received: by 2002:a54:4588:: with SMTP id z8mr6416231oib.147.1603550372279;
-        Sat, 24 Oct 2020 07:39:32 -0700 (PDT)
+        bh=H9MFfO8od2aiFCz3CMwI5BriTDlUJh0SREwJpQ4f9ng=;
+        b=TFHweRSzDgRdhDZuu+UYi4XnOQ79wQouOl0ICuYgsMhr+ruIiQivWnzIxTgx+0A4F/
+         XsypelIIGlXCn+ck0XGqlT9rujXIMR4kUAXhV5eKXCsuQqQ0mteySN7OygqNi2TON2Jy
+         l7edE/Q4RSzZ5LmhdF4NAuuEFDIbKwuWMZ/NriKuYCixmNiy6TnE5LArvZEKikUb48G/
+         iE6W5PNHAGdzcw7Cq6D2Pz9sIx6739w5aGnPmAPGP+rUikqxE5B8sKrt05NQk52fVHld
+         xQpk8rz4WmlybgI/ihoIyfz8DSIErCf+1bG8lIDquO48Ye6nQP15XsAAfIhTkB8pjSQZ
+         SG3w==
+X-Gm-Message-State: AOAM532ysVMLJck10lkGcLXqA4L5Mt4UY4mpfThflVnj+1Unt8vhWbrm
+        FsJWszhwHGc+4ktL/O4TbavizeFYFzHGDF+eg2AzFp3chgqOVQSPDFO8h8UfW4kAjsQLAljEKQV
+        NMiPCo1KFYMK2Md6yfY0lfw==
+X-Received: by 2002:aca:f557:: with SMTP id t84mr5127849oih.13.1603551834732;
+        Sat, 24 Oct 2020 08:03:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxekjvzUfY2oWS++ceFKMHvtDCgNIiUJNJXWgfcROoUeFyKHxSbDVw1kQoSKAy1bq9C/M3oaQ==
+X-Received: by 2002:aca:f557:: with SMTP id t84mr5127820oih.13.1603551834447;
+        Sat, 24 Oct 2020 08:03:54 -0700 (PDT)
 Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id h25sm1225130otj.41.2020.10.24.07.39.30
+        by smtp.gmail.com with ESMTPSA id f2sm1268532ots.64.2020.10.24.08.03.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Oct 2020 07:39:31 -0700 (PDT)
-Subject: Re: [RFC PATCH 3/6] fpga: dfl: add an API to get the base device for
- dfl device
+        Sat, 24 Oct 2020 08:03:53 -0700 (PDT)
+Subject: Re: [RFC PATCH 4/6] ethernet: m10-retimer: add support for retimers
+ on Intel MAX 10 BMC
 To:     Xu Yilun <yilun.xu@intel.com>, jesse.brandeburg@intel.com,
         anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
         mdf@kernel.org, lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
         netdev@vger.kernel.org, lgoncalv@redhat.com, hao.wu@intel.com
 References: <1603442745-13085-1-git-send-email-yilun.xu@intel.com>
- <1603442745-13085-4-git-send-email-yilun.xu@intel.com>
+ <1603442745-13085-5-git-send-email-yilun.xu@intel.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <32af36de-3ac5-ea7b-4d81-bccf4de3f11d@redhat.com>
-Date:   Sat, 24 Oct 2020 07:39:29 -0700
+Message-ID: <dbc77c18-8076-bcfd-b4f7-03e62dc46a97@redhat.com>
+Date:   Sat, 24 Oct 2020 08:03:51 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <1603442745-13085-4-git-send-email-yilun.xu@intel.com>
+In-Reply-To: <1603442745-13085-5-git-send-email-yilun.xu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -77,65 +77,429 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 On 10/23/20 1:45 AM, Xu Yilun wrote:
-> This patch adds an API for dfl devices to find which physical device
-> owns the DFL.
->
-> This patch makes preparation for supporting DFL Ether Group private
-> feature driver. It uses this information to determine which retimer
-> device physically connects to which ether group.
-device is physically
->
-> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> ---
->  drivers/fpga/dfl.c  | 9 +++++++++
->  include/linux/dfl.h | 1 +
->  2 files changed, 10 insertions(+)
->
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index ca3c678..52d18e6 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -558,6 +558,15 @@ int dfl_dev_get_vendor_net_cfg(struct dfl_device *dfl_dev)
->  }
->  EXPORT_SYMBOL_GPL(dfl_dev_get_vendor_net_cfg);
->  
-> +struct device *dfl_dev_get_base_dev(struct dfl_device *dfl_dev)
-> +{
-> +	if (!dfl_dev || !dfl_dev->cdev)
-> +		return NULL;
-> +
-> +	return dfl_dev->cdev->parent;
-> +}
-> +EXPORT_SYMBOL_GPL(dfl_dev_get_base_dev);
+> This driver supports the ethernet retimers (Parkvale) for the Intel PAC
+> (Programmable Acceleration Card) N3000, which is a FPGA based Smart NIC.
 
-This name is awkward. maybe
+Parkvale is a code name, it would be better if the public name was used.
 
-dfl_dev_parent() or dfl_dev_base()
+As this is a physical chip that could be used on other cards,
 
+I think the generic parts should be split out of intel-m10-bmc-retimer.c
 
-> +
->  #define is_header_feature(feature) ((feature)->id == FEATURE_ID_FIU_HEADER)
->  
->  /**
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 5ee2b1e..dd313f2 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -68,6 +68,7 @@ struct dfl_driver {
->  #define to_dfl_drv(d) container_of(d, struct dfl_driver, drv)
->  
->  int dfl_dev_get_vendor_net_cfg(struct dfl_device *dfl_dev);
-> +struct device *dfl_dev_get_base_dev(struct dfl_device *dfl_dev);
-
-Because this is an external interface these should have comments
-
-This is another generic change and should be split out of the patchset.
-
-I believe the generic changes would have an easier time being accepted and could be done in parallel as the harder part of the private features is worked out.
+into a separate file, maybe retimer-c827.c
 
 Tom
 
+>
+> Parkvale is an Intel(R) Ethernet serdes transceiver chip that supports up
+> to 100G transfer. On Intel PAC N3000 there are 2 Parkvale chips managed
+> by the Intel MAX 10 BMC firmware. They are configured in 4 ports 10G/25G
+> retimer mode. Host could query their link status via retimer interfaces
+> (Shared registers) on Intel MAX 10 BMC.
+>
+> The driver adds the phy device for each port of the 2 retimer chips.
+> Since the phys are not accessed by the real MDIO bus, it creates a virtual
+> mdio bus for each NIC device instance, and a dedicated phy driver which
+> only provides the supported features and link state.
+>
+> A DFL Ether Group driver will create net devices and connect to these
+> phys.
+>
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> ---
+>  drivers/fpga/dfl-n3000-nios.c                      |  11 +-
+>  drivers/mfd/intel-m10-bmc.c                        |  18 ++
+>  drivers/net/ethernet/intel/Kconfig                 |  12 ++
+>  drivers/net/ethernet/intel/Makefile                |   2 +
+>  drivers/net/ethernet/intel/intel-m10-bmc-retimer.c | 229 +++++++++++++++++++++
+>  include/linux/mfd/intel-m10-bmc.h                  |  16 ++
+>  6 files changed, 286 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/net/ethernet/intel/intel-m10-bmc-retimer.c
+>
+> diff --git a/drivers/fpga/dfl-n3000-nios.c b/drivers/fpga/dfl-n3000-nios.c
+> index 4983a2b..096931a 100644
+> --- a/drivers/fpga/dfl-n3000-nios.c
+> +++ b/drivers/fpga/dfl-n3000-nios.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/io-64-nonatomic-lo-hi.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <linux/mfd/intel-m10-bmc.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/stddef.h>
+> @@ -159,6 +160,8 @@ struct n3000_nios {
+>  	struct regmap *regmap;
+>  	struct device *dev;
+>  	struct platform_device *altera_spi;
+> +	struct intel_m10bmc_platdata m10bmc_pdata;
+> +	struct intel_m10bmc_retimer_pdata m10bmc_retimer_pdata;
+>  };
 >  
->  /*
->   * use a macro to avoid include chaining to get THIS_MODULE.
+>  static ssize_t nios_fw_version_show(struct device *dev,
+> @@ -412,7 +415,8 @@ static struct spi_board_info m10_n3000_info = {
+>  	.chip_select = 0,
+>  };
+>  
+> -static int create_altera_spi_controller(struct n3000_nios *nn)
+> +static int create_altera_spi_controller(struct n3000_nios *nn,
+> +					struct device *retimer_master)
+>  {
+>  	struct altera_spi_platform_data pdata = { 0 };
+>  	struct platform_device_info pdevinfo = { 0 };
+> @@ -431,6 +435,9 @@ static int create_altera_spi_controller(struct n3000_nios *nn)
+>  	pdata.bits_per_word_mask =
+>  		SPI_BPW_RANGE_MASK(1, FIELD_GET(N3000_NS_PARAM_DATA_WIDTH, v));
+>  
+> +	nn->m10bmc_retimer_pdata.retimer_master = retimer_master;
+> +	nn->m10bmc_pdata.retimer = &nn->m10bmc_retimer_pdata;
+> +	m10_n3000_info.platform_data = &nn->m10bmc_pdata;
+>  	pdata.num_devices = 1;
+>  	pdata.devices = &m10_n3000_info;
+>  
+> @@ -549,7 +556,7 @@ static int n3000_nios_probe(struct dfl_device *ddev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = create_altera_spi_controller(nn);
+> +	ret = create_altera_spi_controller(nn, dfl_dev_get_base_dev(ddev));
+>  	if (ret)
+>  		dev_err(dev, "altera spi controller create failed: %d\n", ret);
+>  
+> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> index b84579b..adbfb177 100644
+> --- a/drivers/mfd/intel-m10-bmc.c
+> +++ b/drivers/mfd/intel-m10-bmc.c
+> @@ -23,6 +23,21 @@ static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
+>  	{ .name = "n3000bmc-secure" },
+>  };
+>  
+> +static void
+> +m10bmc_init_cells_platdata(struct intel_m10bmc_platdata *pdata,
+> +			   struct mfd_cell *cells, int n_cell)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < n_cell; i++) {
+> +		if (!strcmp(cells[i].name, "n3000bmc-retimer")) {
+> +			cells[i].platform_data = pdata->retimer;
+> +			cells[i].pdata_size =
+> +				pdata->retimer ? sizeof(*pdata->retimer) : 0;
+> +		}
+> +	}
+> +}
+> +
+>  static struct regmap_config intel_m10bmc_regmap_config = {
+>  	.reg_bits = 32,
+>  	.val_bits = 32,
+> @@ -97,6 +112,7 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+>  
+>  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  {
+> +	struct intel_m10bmc_platdata *pdata = dev_get_platdata(&spi->dev);
+>  	const struct spi_device_id *id = spi_get_device_id(spi);
+>  	struct device *dev = &spi->dev;
+>  	struct mfd_cell *cells;
+> @@ -134,6 +150,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  		return -ENODEV;
+>  	}
+>  
+> +	m10bmc_init_cells_platdata(pdata, cells, n_cell);
+> +
+>  	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
+>  				   NULL, 0, NULL);
+>  	if (ret)
+> diff --git a/drivers/net/ethernet/intel/Kconfig b/drivers/net/ethernet/intel/Kconfig
+> index 5aa8631..81c43d4 100644
+> --- a/drivers/net/ethernet/intel/Kconfig
+> +++ b/drivers/net/ethernet/intel/Kconfig
+> @@ -343,4 +343,16 @@ config IGC
+>  	  To compile this driver as a module, choose M here. The module
+>  	  will be called igc.
+>  
+> +config INTEL_M10_BMC_RETIMER
+> +	tristate "Intel(R) MAX 10 BMC ethernet retimer support"
+> +	depends on MFD_INTEL_M10_BMC
+> +	select PHYLIB
+> +        help
+> +          This driver supports the ethernet retimer (Parkvale) on
+> +	  Intel(R) MAX 10 BMC, which is used by Intel PAC N3000 FPGA based
+> +	  Smart NIC.
+> +
+> +	  To compile this driver as a module, choose M here. The module
+> +	  will be called intel-m10-bmc-retimer.
+> +
+>  endif # NET_VENDOR_INTEL
+> diff --git a/drivers/net/ethernet/intel/Makefile b/drivers/net/ethernet/intel/Makefile
+> index 3075290..5965447 100644
+> --- a/drivers/net/ethernet/intel/Makefile
+> +++ b/drivers/net/ethernet/intel/Makefile
+> @@ -16,3 +16,5 @@ obj-$(CONFIG_IXGB) += ixgb/
+>  obj-$(CONFIG_IAVF) += iavf/
+>  obj-$(CONFIG_FM10K) += fm10k/
+>  obj-$(CONFIG_ICE) += ice/
+> +
+> +obj-$(CONFIG_INTEL_M10_BMC_RETIMER) += intel-m10-bmc-retimer.o
+> diff --git a/drivers/net/ethernet/intel/intel-m10-bmc-retimer.c b/drivers/net/ethernet/intel/intel-m10-bmc-retimer.c
+> new file mode 100644
+> index 0000000..c7b0558
+> --- /dev/null
+> +++ b/drivers/net/ethernet/intel/intel-m10-bmc-retimer.c
+> @@ -0,0 +1,229 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Intel Max10 BMC Retimer Interface Driver
+> + *
+> + * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
+> + *
+> + */
+> +#include <linux/device.h>
+> +#include <linux/mfd/intel-m10-bmc.h>
+> +#include <linux/module.h>
+> +#include <linux/phy.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define NUM_CHIP	2
+> +#define MAX_LINK	4
+> +
+> +#define BITS_MASK(nbits)	((1 << (nbits)) - 1)
+> +
+> +#define N3000BMC_RETIMER_DEV_NAME "n3000bmc-retimer"
+> +#define M10BMC_RETIMER_MII_NAME "m10bmc retimer mii"
+> +
+> +struct m10bmc_retimer {
+> +	struct device *dev;
+> +	struct intel_m10bmc *m10bmc;
+> +	int num_devs;
+> +	struct device *base_dev;
+> +	struct mii_bus *retimer_mii_bus;
+> +};
+> +
+> +#define RETIMER_LINK_STAT_BIT(retimer_id, link_id) \
+> +	BIT(((retimer_id) << 2) + (link_id))
+> +
+> +static u32 retimer_get_link(struct m10bmc_retimer *retimer, int index)
+> +{
+> +	unsigned int val;
+> +
+> +	if (m10bmc_sys_read(retimer->m10bmc, PKVL_LINK_STATUS, &val)) {
+> +		dev_err(retimer->dev, "fail to read PKVL_LINK_STATUS\n");
+> +		return 0;
+> +	}
+> +
+> +	if (val & BIT(index))
+> +		return 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int m10bmc_retimer_phy_match(struct phy_device *phydev)
+> +{
+> +	if (phydev->mdio.bus->name &&
+> +	    !strcmp(phydev->mdio.bus->name, M10BMC_RETIMER_MII_NAME)) {
+> +		return 1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int m10bmc_retimer_phy_probe(struct phy_device *phydev)
+> +{
+> +	struct m10bmc_retimer *retimer = phydev->mdio.bus->priv;
+> +
+> +	phydev->priv = retimer;
+> +
+> +	return 0;
+> +}
+> +
+> +static void m10bmc_retimer_phy_remove(struct phy_device *phydev)
+> +{
+> +	if (phydev->attached_dev)
+> +		phy_disconnect(phydev);
+> +}
+> +
+> +static int m10bmc_retimer_read_status(struct phy_device *phydev)
+> +{
+> +	struct m10bmc_retimer *retimer = phydev->priv;
+> +
+> +	phydev->link = retimer_get_link(retimer, phydev->mdio.addr);
+> +
+> +	phydev->duplex = DUPLEX_FULL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int m10bmc_retimer_get_features(struct phy_device *phydev)
+> +{
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_10000baseT_Full_BIT,
+> +			 phydev->supported);
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_10000baseSR_Full_BIT,
+> +			 phydev->supported);
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_10000baseLR_Full_BIT,
+> +			 phydev->supported);
+> +
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_25000baseCR_Full_BIT,
+> +			 phydev->supported);
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_25000baseSR_Full_BIT,
+> +			 phydev->supported);
+> +
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_40000baseCR4_Full_BIT,
+> +			 phydev->supported);
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_40000baseSR4_Full_BIT,
+> +			 phydev->supported);
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_40000baseLR4_Full_BIT,
+> +			 phydev->supported);
+> +
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT, phydev->supported);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct phy_driver m10bmc_retimer_phy_driver = {
+> +	.phy_id			= 0xffffffff,
+> +	.phy_id_mask		= 0xffffffff,
+> +	.name			= "m10bmc retimer PHY",
+> +	.match_phy_device	= m10bmc_retimer_phy_match,
+> +	.probe			= m10bmc_retimer_phy_probe,
+> +	.remove			= m10bmc_retimer_phy_remove,
+> +	.read_status		= m10bmc_retimer_read_status,
+> +	.get_features		= m10bmc_retimer_get_features,
+> +	.read_mmd		= genphy_read_mmd_unsupported,
+> +	.write_mmd		= genphy_write_mmd_unsupported,
+> +};
+> +
+> +static int m10bmc_retimer_read(struct mii_bus *bus, int addr, int regnum)
+> +{
+> +	struct m10bmc_retimer *retimer = bus->priv;
+> +
+> +	if (addr < retimer->num_devs &&
+> +	    (regnum == MII_PHYSID1 || regnum == MII_PHYSID2))
+> +		return 0;
+> +
+> +	return 0xffff;
+> +}
+> +
+> +static int m10bmc_retimer_write(struct mii_bus *bus, int addr, int regnum, u16 val)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int m10bmc_retimer_mii_bus_init(struct m10bmc_retimer *retimer)
+> +{
+> +	struct mii_bus *bus;
+> +	int ret;
+> +
+> +	bus = devm_mdiobus_alloc(retimer->dev);
+> +	if (!bus)
+> +		return -ENOMEM;
+> +
+> +	bus->priv = (void *)retimer;
+> +	bus->name = M10BMC_RETIMER_MII_NAME;
+> +	bus->read = m10bmc_retimer_read;
+> +	bus->write = m10bmc_retimer_write;
+> +	snprintf(bus->id, MII_BUS_ID_SIZE, "%s-mii",
+> +		 dev_name(retimer->base_dev));
+> +	bus->parent = retimer->dev;
+> +	bus->phy_mask = ~(BITS_MASK(retimer->num_devs));
+> +
+> +	ret = mdiobus_register(bus);
+> +	if (ret)
+> +		return ret;
+> +
+> +	retimer->retimer_mii_bus = bus;
+> +
+> +	return 0;
+> +}
+> +
+> +static void m10bmc_retimer_mii_bus_uinit(struct m10bmc_retimer *retimer)
+> +{
+> +	mdiobus_unregister(retimer->retimer_mii_bus);
+> +}
+> +
+> +static int intel_m10bmc_retimer_probe(struct platform_device *pdev)
+> +{
+> +	struct intel_m10bmc_retimer_pdata *pdata = dev_get_platdata(&pdev->dev);
+> +	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
+> +	struct m10bmc_retimer *retimer;
+> +
+> +	retimer = devm_kzalloc(&pdev->dev, sizeof(*retimer), GFP_KERNEL);
+> +	if (!retimer)
+> +		return -ENOMEM;
+> +
+> +	dev_set_drvdata(&pdev->dev, retimer);
+> +
+> +	retimer->dev = &pdev->dev;
+> +	retimer->m10bmc = m10bmc;
+> +	retimer->base_dev = pdata->retimer_master;
+> +	retimer->num_devs = NUM_CHIP * MAX_LINK;
+> +
+> +	return m10bmc_retimer_mii_bus_init(retimer);
+> +}
+> +
+> +static int intel_m10bmc_retimer_remove(struct platform_device *pdev)
+> +{
+> +	struct m10bmc_retimer *retimer = dev_get_drvdata(&pdev->dev);
+> +
+> +	m10bmc_retimer_mii_bus_uinit(retimer);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver intel_m10bmc_retimer_driver = {
+> +	.probe = intel_m10bmc_retimer_probe,
+> +	.remove = intel_m10bmc_retimer_remove,
+> +	.driver = {
+> +		.name = N3000BMC_RETIMER_DEV_NAME,
+> +	},
+> +};
+> +
+> +static int __init intel_m10bmc_retimer_init(void)
+> +{
+> +	int ret;
+> +
+> +	ret = phy_driver_register(&m10bmc_retimer_phy_driver, THIS_MODULE);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return platform_driver_register(&intel_m10bmc_retimer_driver);
+> +}
+> +module_init(intel_m10bmc_retimer_init);
+> +
+> +static void __exit intel_m10bmc_retimer_exit(void)
+> +{
+> +	platform_driver_unregister(&intel_m10bmc_retimer_driver);
+> +	phy_driver_unregister(&m10bmc_retimer_phy_driver);
+> +}
+> +module_exit(intel_m10bmc_retimer_exit);
+> +
+> +MODULE_ALIAS("platform:" N3000BMC_RETIMER_DEV_NAME);
+> +MODULE_AUTHOR("Intel Corporation");
+> +MODULE_DESCRIPTION("Intel MAX 10 BMC retimer driver");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> index c8ef2f1..3d9d22c 100644
+> --- a/include/linux/mfd/intel-m10-bmc.h
+> +++ b/include/linux/mfd/intel-m10-bmc.h
+> @@ -21,6 +21,22 @@
+>  #define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
+>  #define M10BMC_VER_LEGACY_INVALID	0xffffffff
+>  
+> +/* PKVL related registers, in system register region */
+> +#define PKVL_LINK_STATUS		0x164
+> +
+> +/**
+> + * struct intel_m10bmc_retimer_pdata - subdev retimer platform data
+> + *
+> + * @retimer_master: the NIC device which connects to the retimers on m10bmc
+> + */
+> +struct intel_m10bmc_retimer_pdata {
+> +	struct device *retimer_master;
+> +};
+> +
+> +struct intel_m10bmc_platdata {
+> +	struct intel_m10bmc_retimer_pdata *retimer;
+> +};
+> +
+>  /**
+>   * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
+>   * @dev: this device
 
