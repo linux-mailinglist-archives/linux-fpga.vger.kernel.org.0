@@ -2,194 +2,189 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5F82988DE
-	for <lists+linux-fpga@lfdr.de>; Mon, 26 Oct 2020 09:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214FA298D5A
+	for <lists+linux-fpga@lfdr.de>; Mon, 26 Oct 2020 14:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1772363AbgJZI6J (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 26 Oct 2020 04:58:09 -0400
-Received: from mga04.intel.com ([192.55.52.120]:36628 "EHLO mga04.intel.com"
+        id S1775977AbgJZNAK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 26 Oct 2020 09:00:10 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:44488 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1770820AbgJZI6J (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 26 Oct 2020 04:58:09 -0400
-IronPort-SDR: CE+i1vRpv5G5BS4PWLq4YZZkPmB3tX0+/ahsG50rPTS0lvtldQKyws6wN5WQPAShvPAp45JfOA
- P8RBSn7LlxTw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9785"; a="165302367"
-X-IronPort-AV: E=Sophos;i="5.77,417,1596524400"; 
-   d="scan'208";a="165302367"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 01:58:07 -0700
-IronPort-SDR: W5gqznAoEYdXPhT1hfswbhbOJWaWO0JSF5mkzVqtcjuivJadlDvifzxH9rZ5BQ+aWfD0ul+flM
- +d0d7L7clkcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,417,1596524400"; 
-   d="scan'208";a="360925113"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga007.jf.intel.com with ESMTP; 26 Oct 2020 01:58:04 -0700
-Date:   Mon, 26 Oct 2020 16:52:47 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
+        id S1773559AbgJZNAK (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 26 Oct 2020 09:00:10 -0400
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94)
+        (envelope-from <andrew@lunn.ch>)
+        id 1kX26T-003bac-Ue; Mon, 26 Oct 2020 14:00:01 +0100
+Date:   Mon, 26 Oct 2020 14:00:01 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Xu Yilun <yilun.xu@intel.com>
 Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
         davem@davemloft.net, kuba@kernel.org, mdf@kernel.org,
         lee.jones@linaro.org, linux-kernel@vger.kernel.org,
         linux-fpga@vger.kernel.org, netdev@vger.kernel.org,
-        trix@redhat.com, lgoncalv@redhat.com, hao.wu@intel.com,
-        yilun.xu@intel.com
+        trix@redhat.com, lgoncalv@redhat.com, hao.wu@intel.com
 Subject: Re: [RFC PATCH 1/6] docs: networking: add the document for DFL Ether
-  Group driver
-Message-ID: <20201026085246.GC25281@yilunxu-OptiPlex-7050>
+ Group driver
+Message-ID: <20201026130001.GC836546@lunn.ch>
 References: <1603442745-13085-1-git-send-email-yilun.xu@intel.com>
  <1603442745-13085-2-git-send-email-yilun.xu@intel.com>
  <20201023153731.GC718124@lunn.ch>
+ <20201026085246.GC25281@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201023153731.GC718124@lunn.ch>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20201026085246.GC25281@yilunxu-OptiPlex-7050>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Andrew
-
-Thanks for your fast response, see comments inline.
-
-On Fri, Oct 23, 2020 at 05:37:31PM +0200, Andrew Lunn wrote:
-> Hi Xu
+> > > +The Intel(R) PAC N3000 is a FPGA based SmartNIC platform for multi-workload
+> > > +networking application acceleration. A simple diagram below to for the board:
+> > > +
+> > > +                     +----------------------------------------+
+> > > +                     |                  FPGA                  |
+> > > ++----+   +-------+   +-----------+  +----------+  +-----------+   +----------+
+> > > +|QSFP|---|retimer|---|Line Side  |--|User logic|--|Host Side  |---|XL710     |
+> > > ++----+   +-------+   |Ether Group|  |          |  |Ether Group|   |Ethernet  |
+> > > +                     |(PHY + MAC)|  |wiring &  |  |(MAC + PHY)|   |Controller|
+> > > +                     +-----------+  |offloading|  +-----------+   +----------+
+> > > +                     |              +----------+              |
+> > > +                     |                                        |
+> > > +                     +----------------------------------------+
+> > 
+> > Is XL710 required? I assume any MAC with the correct MII interface
+> > will work?
 > 
-> Before i look at the other patches, i want to understand the
-> architecture properly.
-
-I have a doc to describe the architecture:
-
-https://www.intel.com/content/www/us/en/programmable/documentation/xgz1560360700260.html
-
-The "Figure 1" is a more detailed figure for the arch. It should be
-helpful.
-
+> The XL710 is required for this implementation, in which we have the Host
+> Side Ether Group facing the host.  The Host Side Ether Group actually
+> contains the same IP blocks as Line Side. It contains the compacted MAC &
+> PHY functionalities for 25G/40G case. The 25G MAC-PHY soft IP SPEC can
+> be found at:
 > 
-> > +=======================================================================
-> > +DFL device driver for Ether Group private feature on Intel(R) PAC N3000
-> > +=======================================================================
-> > +
-> > +This is the driver for Ether Group private feature on Intel(R)
-> > +PAC (Programmable Acceleration Card) N3000.
+> https://www.intel.com/content/www/us/en/programmable/documentation/ewo1447742896786.html
 > 
-> I assume this is just one implementation. The FPGA could be placed on
-> other boards. So some of the limitations you talk about with the BMC
-> artificial, and the overall architecture of the drivers is more
-> generic?
+> So raw serial data is output from Host Side FPGA, and XL710 is good to
+> handle this.
 
-I could see if the retimer management is changed, e.g. access the retimer
-through a host controlled MDIO, maybe I need a more generic way to find the
-MDIO bus.
+What i have seen working with Marvell Ethernet switches, is that
+Marvell normally recommends connecting them to the Ethernet interfaces
+of Marvell SoCs. But the switch just needs a compatible MII interface,
+and lots of boards make use of non-Marvell MAC chips. Freescale FEC is
+very popular.
 
-Do you have other suggestions?
+What i'm trying to say is that ideally we need a collection of generic
+drivers for the different major components on the board, and a board
+driver which glues it all together. That then allows somebody to build
+other boards, or integrate the FPGA directly into an embedded system
+directly connected to a SoC, etc.
 
+> > Do you really mean PHY? I actually expect it is PCS? 
 > 
-> > +The Intel(R) PAC N3000 is a FPGA based SmartNIC platform for multi-workload
-> > +networking application acceleration. A simple diagram below to for the board:
-> > +
-> > +                     +----------------------------------------+
-> > +                     |                  FPGA                  |
-> > ++----+   +-------+   +-----------+  +----------+  +-----------+   +----------+
-> > +|QSFP|---|retimer|---|Line Side  |--|User logic|--|Host Side  |---|XL710     |
-> > ++----+   +-------+   |Ether Group|  |          |  |Ether Group|   |Ethernet  |
-> > +                     |(PHY + MAC)|  |wiring &  |  |(MAC + PHY)|   |Controller|
-> > +                     +-----------+  |offloading|  +-----------+   +----------+
-> > +                     |              +----------+              |
-> > +                     |                                        |
-> > +                     +----------------------------------------+
+> For this implementation, yes.
+
+Yes, you have a PHY? Or Yes, it is PCS?
+
+To me, the phylib maintainer, having a PHY means you have a base-T
+interface, 25Gbase-T, 40Gbase-T?  That would be an odd and expensive
+architecture when you should be able to just connect SERDES interfaces
+together.
+
+> > > +The DFL Ether Group driver registers netdev for each line side link. Users
+> > > +could use standard commands (ethtool, ip, ifconfig) for configuration and
+> > > +link state/statistics reading. For host side links, they are always connected
+> > > +to the host ethernet controller, so they should always have same features as
+> > > +the host ethernet controller. There is no need to register netdevs for them.
+> > 
+> > So lets say the XL710 is eth0. The line side netif is eth1. Where do i
+> > put the IP address? What interface do i add to quagga OSPF? 
 > 
-> Is XL710 required? I assume any MAC with the correct MII interface
-> will work?
+> The IP address should be put in eth0. eth0 should always be used for the
+> tools.
 
-The XL710 is required for this implementation, in which we have the Host
-Side Ether Group facing the host.  The Host Side Ether Group actually
-contains the same IP blocks as Line Side. It contains the compacted MAC &
-PHY functionalities for 25G/40G case. The 25G MAC-PHY soft IP SPEC can
-be found at:
-
-https://www.intel.com/content/www/us/en/programmable/documentation/ewo1447742896786.html
-
-So raw serial data is output from Host Side FPGA, and XL710 is good to
-handle this.
-
-> 
-> Do you really mean PHY? I actually expect it is PCS? 
-
-For this implementation, yes.
-
-I guess if you program another IP block on FPGA host side, e.g. a PCS interface,
-and replace XL710 with another MAC, it may also work. But I think there should
-be other drivers to handle this.
-
-I may contact with our Hardware designer if there is some concern we
-don't use MII for connection of FPGA & Host.
-
-The FPGA User is mainly concerned about the user logic part. The Ether
-Groups in FIU and Board components are not expected to be re-designed by
-the user. So I think I should still focus on the driver for this
-implementation.
+That was what i was afraid of :-)
 
 > 
-> > +The DFL Ether Group driver registers netdev for each line side link. Users
-> > +could use standard commands (ethtool, ip, ifconfig) for configuration and
-> > +link state/statistics reading. For host side links, they are always connected
-> > +to the host ethernet controller, so they should always have same features as
-> > +the host ethernet controller. There is no need to register netdevs for them.
+> The line/host side Ether Group is not the terminal of the network data stream.
+> Eth1 will not paticipate in the network data exchange to host.
 > 
-> So lets say the XL710 is eth0. The line side netif is eth1. Where do i
-> put the IP address? What interface do i add to quagga OSPF? 
-
-The IP address should be put in eth0. eth0 should always be used for the
-tools.
-
-The line/host side Ether Group is not the terminal of the network data stream.
-Eth1 will not paticipate in the network data exchange to host.
-
-The main purposes for eth1 are:
-1. For users to monitor the network statistics on Line Side, and by comparing the
-statistics between eth0 & eth1, users could get some knowledge of how the User
-logic is taking function.
-
-2. Get the link state of the front panel. The XL710 is now connected to
-Host Side of the FPGA and the its link state would be always on. So to
-check the link state of the front panel, we need to query eth1.
-
+> The main purposes for eth1 are:
+> 1. For users to monitor the network statistics on Line Side, and by comparing the
+> statistics between eth0 & eth1, users could get some knowledge of how the User
+> logic is taking function.
 > 
-> > +The driver just enables these links on probe.
-> > +
-> > +The retimer chips are managed by onboard BMC (Board Management Controller)
-> > +firmware, host driver is not capable to access them directly.
+> 2. Get the link state of the front panel. The XL710 is now connected to
+> Host Side of the FPGA and the its link state would be always on. So to
+> check the link state of the front panel, we need to query eth1.
+
+This is very non-intuitive. We try to avoid this in the kernel and the
+API to userspace. Ethernet switches are always modelled as
+accelerators for what the Linux network stack can already do. You
+configure an Ethernet switch port in just the same way configure any
+other netdev. You add an IP address to the switch port, you get the
+Ethernet statistics from the switch port, routing protocols use the
+switch port.
+
+You design needs to be the same. All configuration needs to happen via
+eth1.
+
+Please look at the DSA architecture. What you have here is very
+similar to a two port DSA switch. In DSA terminology, we would call
+eth0 the master interface.  It needs to be up, but otherwise the user
+does not configure it. eth1 is the slave interface. It is the user
+facing interface of the switch. All configuration happens on this
+interface. Linux can also send/receive packets on this netdev. The
+slave TX function forwards the frame to the master interface netdev,
+via a DSA tagger. Frames which eth0 receive are passed through the
+tagger and then passed to the slave interface.
+
+All the infrastructure you need is already in place. Please use
+it. I'm not saying you need to write a DSA driver, but you should make
+use of the same ideas and low level hooks in the network stack which
+DSA uses.
+
+> > What about the QSPF socket? Can the host get access to the I2C bus?
+> > The pins for TX enable, etc. ethtool -m?
 > 
-> What about the QSPF socket? Can the host get access to the I2C bus?
-> The pins for TX enable, etc. ethtool -m?
+> No, the QSPF/I2C are also managed by the BMC firmware, and host doesn't
+> have interface to talk to BMC firmware about QSPF.
 
-No, the QSPF/I2C are also managed by the BMC firmware, and host doesn't
-have interface to talk to BMC firmware about QSPF.
+So can i even tell what SFP is in the socket? 
 
+> > > +Speed/Duplex
+> > > +------------
+> > > +The Ether Group doesn't support auto-negotiation. The link speed is fixed to
+> > > +10G, 25G or 40G full duplex according to which Ether Group IP is programmed.
+> > 
+> > So that means, if i pop out the SFP and put in a different one which
+> > supports a different speed, it is expected to be broken until the FPGA
+> > is reloaded?
 > 
-> > +Speed/Duplex
-> > +------------
-> > +The Ether Group doesn't support auto-negotiation. The link speed is fixed to
-> > +10G, 25G or 40G full duplex according to which Ether Group IP is programmed.
+> It is expected to be broken.
+
+And since i have no access to the SFP information, i have no idea what
+is actually broken? How i should configure the various layers?
+
+> Now the line side is expected to be configured to 4x10G, 4x25G, 2x25G, 1x25G.
+> host side is expected to be 4x10G or 2x40G for XL710.
 > 
-> So that means, if i pop out the SFP and put in a different one which
-> supports a different speed, it is expected to be broken until the FPGA
-> is reloaded?
+> So 4 channel SFP is expected to be inserted to front panel. And we should use
+> 4x25G SFP, which is compatible to 4x10G connection.
 
-It is expected to be broken.
+So if you had exported the SFP to linux, phylink could of handled some
+of this for you. Probably with some extensions to phylink, but Russell
+King would of probably helped you. phylink has a good idea how to
+decode the SFP EEPROM and figure out the link mode. It has interfaces
+to configure PCS blocks, So it could probably deal with the line side
+and host side PCS. And it would of been easy to send a udev
+notification that the SFP has changed, maybe user space needs to
+download a different FPGA bit file? So the user would not see a broken
+interface, the hardware could be reconfigured on the fly.
 
-Now the line side is expected to be configured to 4x10G, 4x25G, 2x25G, 1x25G.
-host side is expected to be 4x10G or 2x40G for XL710.
+This is one problem i have with this driver. It is based around this
+somewhat broken reference design. phylib, along with the hacks you
+have, are enough for this reference design. But really you want to
+make use of phylink in order to support less limited designs which
+will follow. Or you need to push a lot more into the BMC, and don't
+use phylib at all.
 
-So 4 channel SFP is expected to be inserted to front panel. And we should use
-4x25G SFP, which is compatible to 4x10G connection.
+    Andrew
 
-Thanks,
-Yilun
-
-> 
->      Andrew
