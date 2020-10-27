@@ -2,130 +2,123 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E05029A2B6
-	for <lists+linux-fpga@lfdr.de>; Tue, 27 Oct 2020 03:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031FC29A35D
+	for <lists+linux-fpga@lfdr.de>; Tue, 27 Oct 2020 04:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728460AbgJ0CjE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 26 Oct 2020 22:39:04 -0400
-Received: from mga06.intel.com ([134.134.136.31]:53965 "EHLO mga06.intel.com"
+        id S2504917AbgJ0Dcz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 26 Oct 2020 23:32:55 -0400
+Received: from mga11.intel.com ([192.55.52.93]:58213 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725870AbgJ0CjE (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 26 Oct 2020 22:39:04 -0400
-IronPort-SDR: iM/8/tU0pEVZlMwTRkqLxcZQBfXgitxTa8y55HCCzAZnDyvmq8kLMVfa3X+iOTA9G7H3qx53Zq
- nDlHJP+PyTag==
-X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="229654143"
+        id S2442737AbgJ0Dcz (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 26 Oct 2020 23:32:55 -0400
+IronPort-SDR: +ZKM+gL9xpdpaHRd6e42OXbvAXaKXAnS8MTkVMkchcd2Gh/eRNyRflG2rmi/t0Lz2RcuzIPDi5
+ IKWvJ+Fibhpw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="164522268"
 X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
-   d="scan'208";a="229654143"
+   d="scan'208";a="164522268"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 19:39:03 -0700
-IronPort-SDR: dGxjWQwCTVLj1uQPrbtsN/moj71jVwos+OHzw9al21xHLh17oCZJ00hL0PB7nt2roPy6VkHY3c
- YDARziN33ykQ==
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 20:32:54 -0700
+IronPort-SDR: gDdf5aD0cVHkx3dm0A1nTvfc2YB+fIPjcoCHhXHmO8rJUkNHKa5BLGO5D2NyAOIr+Cud45heXx
+ S04aoJCfIZcA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
-   d="scan'208";a="361219355"
+   d="scan'208";a="361229685"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga007.jf.intel.com with ESMTP; 26 Oct 2020 19:38:59 -0700
-Date:   Tue, 27 Oct 2020 10:33:41 +0800
+  by orsmga007.jf.intel.com with ESMTP; 26 Oct 2020 20:32:51 -0700
+Date:   Tue, 27 Oct 2020 11:27:32 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, mdf@kernel.org,
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, mdf@kernel.org,
         lee.jones@linaro.org, linux-kernel@vger.kernel.org,
         linux-fpga@vger.kernel.org, netdev@vger.kernel.org,
-        trix@redhat.com, lgoncalv@redhat.com, hao.wu@intel.com,
-        yilun.xu@intel.com
-Subject: Re: [RFC PATCH 1/6] docs: networking: add the document for DFL
-  Ether  Group driver
-Message-ID: <20201027023341.GB10743@yilunxu-OptiPlex-7050>
+        trix@redhat.com, lgoncalv@redhat.com, hao.wu@intel.com
+Subject: Re: [RFC PATCH 1/6] docs: networking: add the document for DFL Ether
+  Group driver
+Message-ID: <20201027032732.GC10743@yilunxu-OptiPlex-7050>
 References: <1603442745-13085-1-git-send-email-yilun.xu@intel.com>
  <1603442745-13085-2-git-send-email-yilun.xu@intel.com>
  <20201023153731.GC718124@lunn.ch>
  <20201026085246.GC25281@yilunxu-OptiPlex-7050>
  <20201026130001.GC836546@lunn.ch>
  <20201026173803.GA10743@yilunxu-OptiPlex-7050>
- <20201026113552.78e7a2b4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <20201026191400.GO752111@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201026113552.78e7a2b4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20201026191400.GO752111@lunn.ch>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 11:35:52AM -0700, Jakub Kicinski wrote:
-> On Tue, 27 Oct 2020 01:38:04 +0800 Xu Yilun wrote:
-> > > > The line/host side Ether Group is not the terminal of the network data stream.
-> > > > Eth1 will not paticipate in the network data exchange to host.
+On Mon, Oct 26, 2020 at 08:14:00PM +0100, Andrew Lunn wrote:
+> > > > > Do you really mean PHY? I actually expect it is PCS? 
 > > > > 
-> > > > The main purposes for eth1 are:
-> > > > 1. For users to monitor the network statistics on Line Side, and by comparing the
-> > > > statistics between eth0 & eth1, users could get some knowledge of how the User
-> > > > logic is taking function.
-> > > > 
-> > > > 2. Get the link state of the front panel. The XL710 is now connected to
-> > > > Host Side of the FPGA and the its link state would be always on. So to
-> > > > check the link state of the front panel, we need to query eth1.  
+> > > > For this implementation, yes.
 > > > 
-> > > This is very non-intuitive. We try to avoid this in the kernel and the
-> > > API to userspace. Ethernet switches are always modelled as
-> > > accelerators for what the Linux network stack can already do. You
-> > > configure an Ethernet switch port in just the same way configure any
-> > > other netdev. You add an IP address to the switch port, you get the
-> > > Ethernet statistics from the switch port, routing protocols use the
-> > > switch port.
-> > > 
-> > > You design needs to be the same. All configuration needs to happen via
-> > > eth1.
-> > > 
-> > > Please look at the DSA architecture. What you have here is very
-> > > similar to a two port DSA switch. In DSA terminology, we would call
-> > > eth0 the master interface.  It needs to be up, but otherwise the user
-> > > does not configure it. eth1 is the slave interface. It is the user
-> > > facing interface of the switch. All configuration happens on this
-> > > interface. Linux can also send/receive packets on this netdev. The
-> > > slave TX function forwards the frame to the master interface netdev,
-> > > via a DSA tagger. Frames which eth0 receive are passed through the
-> > > tagger and then passed to the slave interface.
-> > > 
-> > > All the infrastructure you need is already in place. Please use
-> > > it. I'm not saying you need to write a DSA driver, but you should make
-> > > use of the same ideas and low level hooks in the network stack which
-> > > DSA uses.  
+> > > Yes, you have a PHY? Or Yes, it is PCS?
 > > 
+> > Sorry, I mean I have a PHY.
+> > 
+> > > 
+> > > To me, the phylib maintainer, having a PHY means you have a base-T
+> > > interface, 25Gbase-T, 40Gbase-T?  That would be an odd and expensive
+> > > architecture when you should be able to just connect SERDES interfaces
+> > > together.
+> 
+> You really have 25Gbase-T, 40Gbase-T? Between the FPGA & XL710?
+> What copper PHYs are using? 
+
+Sorry for the confusing. I'll check with our board designer and reply
+later.
+
+> 
+> > I see your concerns about the SERDES interface between FPGA & XL710.
+> 
+> I have no concerns about direct SERDES connections. That is the normal
+> way of doing this. It keeps it a lot simpler, since you don't have to
+> worry about driving the PHYs.
+> 
 > > I did some investigation about the DSA, and actually I wrote a
 > > experimental DSA driver. It works and almost meets my need, I can make
 > > configuration, run pktgen on slave inf.
-> > 
-> > A main concern for dsa is the wiring from slave inf to master inf depends
-> > on the user logic. If FPGA users want to make their own user logic, they
-> > may need a new driver. But our original design for the FPGA is, kernel
-> > drivers support the fundamental parts - FPGA FIU (where Ether Group is in)
-> > & other peripherals on board, and userspace direct I/O access for User
-> > logic. Then FPGA user don't have to write & compile a driver for their
-> > user logic change.
-> > It seems not that case for netdev. The user logic is a part of the whole
-> > functionality of the netdev, we cannot split part of the hardware
-> > component to userspace and the rest in kernel. I really need to
-> > reconsider this.
 > 
-> This is obviously on purpose. Your design as it stands will not fly
-> upstream, sorry.
+> Cool. As i said, I don't know if this actually needs to be a DSA
+> driver. It might just need to borrow some ideas from DSA.
 > 
-> >From netdev perspective the user should not care how many hardware
-> blocks are in the pipeline, and on which piece of silicon. You have 
-> a 2 port (modulo port splitting) card, there should be 2 netdevs, and
-> the link config and forwarding should be configured through those.
+> > Mm.. seems the hardware should be changed, either let host directly
+> > access the QSFP, or re-design the BMC to provide more info for QSFP.
 > 
-> Please let folks at Intel know that we don't like the "SDK in user
-> space with reuse [/abuse] of parts of netdev infra" architecture.
-> This is a second of those we see in a short time. Kernel is not a
-> library for your SDK to use. 
+> At a minimum, you need to support ethtool -m. It could be a firmware
+> call to the BMC, our you expose the i2c bus somehow. There are plenty
+> of MAC drivers which implement eththool -m without using phylink.
+> 
+> But i think you need to take a step back first, and look at the bigger
+> picture. What is Intel's goal? Are they just going to sell complete
+> cards? Or do they also want to sell the FPGA as a components anybody
+> get put onto their own board?
+> 
+> If there are only ever going to be compete cards, then you can go the
+> firmware direction, push a lot of functionality into the BMC, and have
+> the card driver make firmware calls to control the SFP, retimer,
+> etc. You can then throw away your mdio and phy driver hacks.
+> 
+> If however, the FPGA is going to be available as a component, can you
+> also assume there is a BMC? Running Intel firmware? Can the customer
+> also modify this firmware for their own needs? I think that is going
+> to be difficult. So you need to push as much as possible towards
+> linux, and let Linux drive all the hardware, the SFP, retimer, FPGA,
+> etc.
 
-I get your point. I'll share the information internally and reconsider
-the design.
+This is a very helpful. I'll share with our team and reconsider about the
+design.
 
 Thanks,
 Yilun
+
+> 
+> 	Andrew
+> 
