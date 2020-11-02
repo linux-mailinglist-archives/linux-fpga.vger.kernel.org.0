@@ -2,86 +2,100 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBC52A12FF
-	for <lists+linux-fpga@lfdr.de>; Sat, 31 Oct 2020 03:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4672A2325
+	for <lists+linux-fpga@lfdr.de>; Mon,  2 Nov 2020 03:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726221AbgJaCjK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 30 Oct 2020 22:39:10 -0400
-Received: from server.msgroupspa.com ([185.149.113.111]:35286 "EHLO
-        server.msgroupspa.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725536AbgJaCjI (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 30 Oct 2020 22:39:08 -0400
-X-Greylist: delayed 66465 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Oct 2020 22:38:58 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=msgroupspa.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gOeEglh1DIJatPKqyvOsPs4e0Zw8Lzg9wwjnNfQdiM8=; b=nK3IDYT+DT+afspoRk1vnh030x
-        JBANriWCpwGFqkJTHXsxgXz4zPu7XOm+ROYW+1LhSp6Xws1Wm9Gxv0Soi++3fpbt9358vEM1Vilpv
-        5xlCNIs/Y8Yak5vs3SvhE9OTE/TC6Vf04ze0iphAaRgUliWRhAsWS8s68bwFyUv4tdChHxOH/JwR2
-        Vv+jWIv637j1UH3aZ6QLvXZrjdEmRucUTVxZtH4VnCDjrc4XZi9EwE5rzVsYDmyiNG+eYB+1QY+/8
-        bPWWeacOm9DyYRD9g3bLyiVv0uincEH4/sdJ6fuUSabQfGsi095GX6rsmNCONVo4/rhE4INecsjOZ
-        9QdrBN4A==;
-Received: from [::1] (port=55352 helo=server.msgroupspa.com)
-        by server.msgroupspa.com with esmtpa (Exim 4.93)
-        (envelope-from <no-reply@msgroupspa.com>)
-        id 1kYPRU-0006Ky-OT; Fri, 30 Oct 2020 16:07:24 +0800
+        id S1727461AbgKBCni (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 1 Nov 2020 21:43:38 -0500
+Received: from mga04.intel.com ([192.55.52.120]:51322 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727450AbgKBCni (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 1 Nov 2020 21:43:38 -0500
+IronPort-SDR: bYx3XcfmK0ZNstbAk5hL2ukxJxHGGu/jUeGns9VBHceeZowr3D97XsFgO65Z/vjUJm63qhouPW
+ uFW/Qi5ySrAA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9792"; a="166236334"
+X-IronPort-AV: E=Sophos;i="5.77,443,1596524400"; 
+   d="scan'208";a="166236334"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2020 18:43:38 -0800
+IronPort-SDR: ULPce4o1gTVqveAMyWhF84RLXE1LKUTUd9JBJfaPvsKciCjS4GlK1I6inejs+27DXk/Jqow3nA
+ PGiJZ4EhiD6A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,443,1596524400"; 
+   d="scan'208";a="526535655"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Nov 2020 18:43:35 -0800
+Date:   Mon, 2 Nov 2020 10:38:09 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, mdf@kernel.org,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, netdev@vger.kernel.org,
+        trix@redhat.com, lgoncalv@redhat.com, hao.wu@intel.com,
+        yilun.xu@intel.com
+Subject: Re: [RFC PATCH 1/6] docs: networking: add the document for DFL Ether
+  Group driver
+Message-ID: <20201102023809.GA10673@yilunxu-OptiPlex-7050>
+References: <1603442745-13085-1-git-send-email-yilun.xu@intel.com>
+ <1603442745-13085-2-git-send-email-yilun.xu@intel.com>
+ <20201023153731.GC718124@lunn.ch>
+ <20201026085246.GC25281@yilunxu-OptiPlex-7050>
+ <20201026130001.GC836546@lunn.ch>
+ <20201026173803.GA10743@yilunxu-OptiPlex-7050>
+ <20201026191400.GO752111@lunn.ch>
 MIME-Version: 1.0
-Date:   Fri, 30 Oct 2020 16:07:24 +0800
-From:   "Mr. John Galvan" <no-reply@msgroupspa.com>
-To:     undisclosed-recipients:;
-Subject: Hello/Hallo
-Reply-To: galvan.johnny@outlook.com
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <8970d4ac30f8022b0ae628d9b69a2d43@msgroupspa.com>
-X-Sender: no-reply@msgroupspa.com
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server.msgroupspa.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - msgroupspa.com
-X-Get-Message-Sender-Via: server.msgroupspa.com: authenticated_id: no-reply@msgroupspa.com
-X-Authenticated-Sender: server.msgroupspa.com: no-reply@msgroupspa.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201026191400.GO752111@lunn.ch>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Hi Andrew:
 
+On Mon, Oct 26, 2020 at 08:14:00PM +0100, Andrew Lunn wrote:
+> > > > > Do you really mean PHY? I actually expect it is PCS? 
+> > > > 
+> > > > For this implementation, yes.
+> > > 
+> > > Yes, you have a PHY? Or Yes, it is PCS?
+> > 
+> > Sorry, I mean I have a PHY.
+> > 
+> > > 
+> > > To me, the phylib maintainer, having a PHY means you have a base-T
+> > > interface, 25Gbase-T, 40Gbase-T?  That would be an odd and expensive
+> > > architecture when you should be able to just connect SERDES interfaces
+> > > together.
+> 
+> You really have 25Gbase-T, 40Gbase-T? Between the FPGA & XL710?
+> What copper PHYs are using? 
+> 
+> > I see your concerns about the SERDES interface between FPGA & XL710.
+> 
+> I have no concerns about direct SERDES connections. That is the normal
+> way of doing this. It keeps it a lot simpler, since you don't have to
+> worry about driving the PHYs.
+>
 
--- 
-Sir/Madam,
+I did some investigation and now I have some details.
+The term 'PHY' described in Ether Group Spec should be the PCS + PMA, a figure
+below for one configuration:
 
-I have access to very vital information that can be used to move a huge 
-amount of money. I have done my homework very well and I have the 
-machineries in place to get it done since I am still in active service. 
-If it was possible for me to do it alone I would not have bothered 
-contacting you. Ultimately I need an honest foreigner to play an 
-important role in the completion of this business transaction. Send 
-responds to this email: galvan.johnny@outlook.com
+ +------------------------+          +-----------------+
+ | Host Side Ether Group  |          |      XL710      |
+ |                        |          |                 |
+ | +--------------------+ |          |                 |
+ | | 40G Ether IP       | |          |                 |
+ | |                    | |          |                 |
+ | |       +---------+  | |  XLAUI   |                 |
+ | | MAC - |PCS - PMA|  | |----------| PMA - PCS - MAC |
+ | |       +---------+  | |          |                 |
+ +-+--------------------+-+          +-----------------+
 
-Regards,
-John Galvan
-
----------------------------------------------------------------
-
-Sir / Madam,
-
-Ich habe Zugang zu sehr wichtigen Informationen, mit denen ich eine 
-große Menge Geld bewegen kann. Ich habe meine Hausaufgaben sehr gut 
-gemacht und ich habe die Maschinen, um sie zu erledigen, da ich immer 
-noch im aktiven Dienst bin. Wenn es mir möglich gewesen wäre, es alleine 
-zu tun, hätte ich mich nicht darum gekümmert, Sie zu kontaktieren. 
-Letztendlich brauche ich einen ehrlichen Ausländer, der eine wichtige 
-Rolle beim Abschluss dieses Geschäftsvorgangs spielt. Senden Sie 
-Antworten auf diese E-Mail: galvan.johnny@outlook.com
-
-Grüße,
-John Galvan
+Thanks,
+Yilun
