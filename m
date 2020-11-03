@@ -2,130 +2,66 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A6F2A3DD0
-	for <lists+linux-fpga@lfdr.de>; Tue,  3 Nov 2020 08:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090102A3DE0
+	for <lists+linux-fpga@lfdr.de>; Tue,  3 Nov 2020 08:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727760AbgKCHkC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 3 Nov 2020 02:40:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58436 "EHLO mail.kernel.org"
+        id S1725997AbgKCHmQ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 3 Nov 2020 02:42:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59374 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725958AbgKCHkC (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 3 Nov 2020 02:40:02 -0500
+        id S1725968AbgKCHmQ (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 3 Nov 2020 02:42:16 -0500
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8B9AC2222B;
-        Tue,  3 Nov 2020 07:39:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 964212222B;
+        Tue,  3 Nov 2020 07:42:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604389200;
-        bh=68e0Vnu+CK8B/azleFfgALzJ4Qv/7o7FExD2eTflWFI=;
+        s=default; t=1604389334;
+        bh=xUAAmwqjsB6YkrnTk4cWT7lghj/evr/qwh/eg5SuiMk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ak+Z5GJF6dpgJbLaAOKqC+77mK+lknB2t1cRB/svjvsnMVeZu2SQFd7vJ1NwFz8MN
-         BBv844pTekTiWrzlE3LGncBJnCcQUC4vu1Odyj4MWElWHJt3F9yr1SzSNFRkloDx7E
-         mnGWr+d7uu88UJ8b3Y5IfGNAFUWQt2guXoxhlcLg=
-Date:   Tue, 3 Nov 2020 08:40:53 +0100
+        b=ENJ7EMAUvS4YPAhES9YY0AspQ5x5cyO7Na/mvK+08g0k+rdFot/XSi7vZvg/5B/iA
+         rNrifV8LkNrYo2PK14r2qZFSt5QlC63ac7affnVnKZf8aMfWV34OtTO5T9ObB7/9ck
+         nBTiMtVELQ5NKImrtsH2krYE3O2Hj7sccc7EkkY8=
+Date:   Tue, 3 Nov 2020 08:43:07 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Moritz Fischer <mdf@kernel.org>
 Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH 2/4] fpga: dfl: move dfl_device_id to mod_devicetable.h
-Message-ID: <20201103074053.GC2500572@kroah.com>
+        Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>
+Subject: Re: [PATCH 4/4] fpga: dfl: move dfl bus related APIs to
+ include/linux/dfl.h
+Message-ID: <20201103074307.GD2500572@kroah.com>
 References: <20201103072104.12361-1-mdf@kernel.org>
- <20201103072104.12361-3-mdf@kernel.org>
+ <20201103072104.12361-5-mdf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201103072104.12361-3-mdf@kernel.org>
+In-Reply-To: <20201103072104.12361-5-mdf@kernel.org>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Nov 02, 2020 at 11:21:02PM -0800, Moritz Fischer wrote:
+On Mon, Nov 02, 2020 at 11:21:04PM -0800, Moritz Fischer wrote:
 > From: Xu Yilun <yilun.xu@intel.com>
 > 
-> In order to support MODULE_DEVICE_TABLE() for dfl device driver, this
-> patch moves struct dfl_device_id to mod_devicetable.h
+> Now the dfl drivers could be made as independent modules and put in
+> different folders according to their functionalities. In order for
+> scattered dfl device drivers to include dfl bus APIs, move the
+> dfl bus APIs to a new header file in the public folder.
 > 
-> Some brief description for DFL (Device Feature List) is added to make
-> the DFL known to the whole kernel.
-> 
+> [mdf@kernel.org: Fixed up header guards to match filename]
 > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> Signed-off-by: Wu Hao <hao.wu@intel.com>
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 > Reviewed-by: Tom Rix <trix@redhat.com>
 > Acked-by: Wu Hao <hao.wu@intel.com>
 > Signed-off-by: Moritz Fischer <mdf@kernel.org>
 > ---
->  drivers/fpga/dfl.h              | 13 +------------
->  include/linux/mod_devicetable.h | 24 ++++++++++++++++++++++++
->  2 files changed, 25 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index ac373b1fcff9..549c7900dcfd 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -22,6 +22,7 @@
->  #include <linux/interrupt.h>
->  #include <linux/iopoll.h>
->  #include <linux/io-64-nonatomic-lo-hi.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->  #include <linux/uuid.h>
-> @@ -525,18 +526,6 @@ enum dfl_id_type {
->  	DFL_ID_MAX,
->  };
->  
-> -/**
-> - * struct dfl_device_id -  dfl device identifier
-> - * @type: DFL FIU type of the device. See enum dfl_id_type.
-> - * @feature_id: feature identifier local to its DFL FIU type.
-> - * @driver_data: driver specific data.
-> - */
-> -struct dfl_device_id {
-> -	u16 type;
-> -	u16 feature_id;
-> -	unsigned long driver_data;
-> -};
-> -
->  /**
->   * struct dfl_device - represent an dfl device on dfl bus
->   *
-> diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
-> index 5b08a473cdba..e4870e5d3ea8 100644
-> --- a/include/linux/mod_devicetable.h
-> +++ b/include/linux/mod_devicetable.h
-> @@ -838,4 +838,28 @@ struct mhi_device_id {
->  	kernel_ulong_t driver_data;
->  };
->  
-> +/*
-> + * DFL (Device Feature List)
-> + *
-> + * DFL defines a linked list of feature headers within the device MMIO space to
-> + * provide an extensible way of adding features. Software can walk through these
-> + * predefined data structures to enumerate features. It is now used in the FPGA.
-> + * See Documentation/fpga/dfl.rst for more information.
-> + *
-> + * The dfl bus type is introduced to match the individual feature devices (dfl
-> + * devices) for specific dfl drivers.
-> + */
-> +
-> +/**
-> + * struct dfl_device_id -  dfl device identifier
-> + * @type: DFL FIU type of the device. See enum dfl_id_type.
-> + * @feature_id: feature identifier local to its DFL FIU type.
-> + * @driver_data: driver specific data.
-> + */
-> +struct dfl_device_id {
-> +	__u16 type;
-> +	__u16 feature_id;
-> +	unsigned long driver_data;
+>  MAINTAINERS         |  1 +
+>  drivers/fpga/dfl.c  |  1 +
+>  drivers/fpga/dfl.h  | 72 -------------------------------------
+>  include/linux/dfl.h | 86 +++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 88 insertions(+), 72 deletions(-)
+>  create mode 100644 include/linux/dfl.h
 
-This is the wrong type for driver_data now that it goes to userspace :(
+Why move this if there is no in-kernel users?
 
-{sigh}
+greg k-h
