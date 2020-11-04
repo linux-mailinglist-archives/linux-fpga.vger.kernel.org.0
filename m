@@ -2,83 +2,111 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3931A2A497B
-	for <lists+linux-fpga@lfdr.de>; Tue,  3 Nov 2020 16:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D092A5BD9
+	for <lists+linux-fpga@lfdr.de>; Wed,  4 Nov 2020 02:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728300AbgKCPYe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 3 Nov 2020 10:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728299AbgKCPY3 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 3 Nov 2020 10:24:29 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A1BC061A47
-        for <linux-fpga@vger.kernel.org>; Tue,  3 Nov 2020 07:24:27 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id n2so4286788ooo.8
-        for <linux-fpga@vger.kernel.org>; Tue, 03 Nov 2020 07:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=N71Zs4qg4W+XUXzJvJITvEfPb9AWspIlQairrp1whfg=;
-        b=rrVlj56yk2trpBYSpi4k2yd1xCK2bo7zfyPwMRTDKgj2zJFZf+rsg3l64hS6mNlXsJ
-         /lsnCjsBYlscUhZQjxreix9yr1FDyyJ44isM98ku6PfR5nfH8ewfPGTyJoG+z8DaKf3B
-         GC0lFyYci0jWLRuivuAjfzCGQfauYD+FIBoJ65Z0ysgZFvM7r9APNUcj/A/ERVF2MbLf
-         yty4WBGjCP2WpSIZHr96/NF2lvOu9gyd0kH5dNJE6T16tbnf8/wDcP2ZEnVaZTeW+uv8
-         AOywb/DHyLh7Si/JMqeCh4eS5XqaKQQMWQhjlysMgge2i4X83N4I6vLqLPfg4x7OeC6p
-         Yirg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N71Zs4qg4W+XUXzJvJITvEfPb9AWspIlQairrp1whfg=;
-        b=Cy0YUB+tP0Y3SbpdaAnmZiJU4d1ZpVoEr7mILPp4biIGEiF1ElOv8NTQRrFsUe63hM
-         XVyAZtlfqsRqWhhq+kyYkvsRv9B9kV+HQMi+DT5LcQu7sSfcmgamOlj+a8pJlDe8cnG4
-         vPMvwScDSOfiEfU0XGhkgPKV0z4TNnLrKO8qlNY+tRmwcj9Gggkgx4l51OqES8s56PH+
-         WmiAP2HykYgjGoebsCU5GH0fpQ4wPxQb0y4wg1RLAE70EUojz8PHx1NERXbyWF4Duofn
-         nGsNtRMPZexaK/diaUBL2a335F3EguH+AkZJBrATfUFEil2DLHPYxVey4baH+V5Fyij6
-         HHPQ==
-X-Gm-Message-State: AOAM5319j3xLW+7UopBrRRWDIlEPrXNl8+BJLhZmFpAiEsbIXLgc9lhT
-        HHBrcNdLKEtY4Xp0SKcOJdEMuQ==
-X-Google-Smtp-Source: ABdhPJwU2NP+qjv7T5X33Bc5Qb64pjBRUiEN1Yk0nWz/TQ1GhwOuIu9xrFu+5vjm7/EyqQJ1LvpBNw==
-X-Received: by 2002:a4a:6b1a:: with SMTP id g26mr10661391ooc.13.1604417066733;
-        Tue, 03 Nov 2020 07:24:26 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id v5sm4548511otb.44.2020.11.03.07.24.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2020 07:24:25 -0800 (PST)
-Date:   Tue, 3 Nov 2020 09:24:23 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        coresight@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 30/33] docs: ABI: cleanup several ABI documents
-Message-ID: <20201103004241.GD223412@builder.lan>
-References: <cover.1603893146.git.mchehab+huawei@kernel.org>
- <95ef2cf3a58f4e50f17d9e58e0d9440ad14d0427.1603893146.git.mchehab+huawei@kernel.org>
+        id S1729858AbgKDBZB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 3 Nov 2020 20:25:01 -0500
+Received: from mga14.intel.com ([192.55.52.115]:64432 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729246AbgKDBZA (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 3 Nov 2020 20:25:00 -0500
+IronPort-SDR: ZJoeo41UYP2vFJZQuXUKTpdVyd4yV65t5nLm6bMolRhwBJ2bw/g5CH15M/UC1CGTJmCOo0yHEA
+ cMoq+wp9S46Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9794"; a="168364494"
+X-IronPort-AV: E=Sophos;i="5.77,449,1596524400"; 
+   d="scan'208";a="168364494"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2020 17:25:00 -0800
+IronPort-SDR: 4lhc+gr/MxSQUiCkMfV+zmEKzxysAtC3JOS+VPFrL/KD+6kMDKa+VajYAE8+MvG9BVON0/RDwB
+ fbqb2aDAMMtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,449,1596524400"; 
+   d="scan'208";a="320631856"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by orsmga003.jf.intel.com with ESMTP; 03 Nov 2020 17:24:58 -0800
+Date:   Wed, 4 Nov 2020 09:19:29 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>,
+        yilun.xu@intel.com
+Subject: Re: [PATCH 4/4] fpga: dfl: move dfl bus related APIs to
+  include/linux/dfl.h
+Message-ID: <20201104011929.GD10673@yilunxu-OptiPlex-7050>
+References: <20201103072104.12361-1-mdf@kernel.org>
+ <20201103072104.12361-5-mdf@kernel.org>
+ <20201103074307.GD2500572@kroah.com>
+ <20201103104317.GB23473@yilunxu-OptiPlex-7050>
+ <20201103110817.GA2680561@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <95ef2cf3a58f4e50f17d9e58e0d9440ad14d0427.1603893146.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20201103110817.GA2680561@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed 28 Oct 09:23 CDT 2020, Mauro Carvalho Chehab wrote:
-[..]
->  .../ABI/testing/sysfs-class-remoteproc        |  14 +-
+On Tue, Nov 03, 2020 at 12:08:17PM +0100, Greg KH wrote:
+> On Tue, Nov 03, 2020 at 06:43:17PM +0800, Xu Yilun wrote:
+> > On Tue, Nov 03, 2020 at 08:43:07AM +0100, Greg KH wrote:
+> > > On Mon, Nov 02, 2020 at 11:21:04PM -0800, Moritz Fischer wrote:
+> > > > From: Xu Yilun <yilun.xu@intel.com>
+> > > > 
+> > > > Now the dfl drivers could be made as independent modules and put in
+> > > > different folders according to their functionalities. In order for
+> > > > scattered dfl device drivers to include dfl bus APIs, move the
+> > > > dfl bus APIs to a new header file in the public folder.
+> > > > 
+> > > > [mdf@kernel.org: Fixed up header guards to match filename]
+> > > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> > > > Reviewed-by: Tom Rix <trix@redhat.com>
+> > > > Acked-by: Wu Hao <hao.wu@intel.com>
+> > > > Signed-off-by: Moritz Fischer <mdf@kernel.org>
+> > > > ---
+> > > >  MAINTAINERS         |  1 +
+> > > >  drivers/fpga/dfl.c  |  1 +
+> > > >  drivers/fpga/dfl.h  | 72 -------------------------------------
+> > > >  include/linux/dfl.h | 86 +++++++++++++++++++++++++++++++++++++++++++++
+> > > >  4 files changed, 88 insertions(+), 72 deletions(-)
+> > > >  create mode 100644 include/linux/dfl.h
+> > > 
+> > > Why move this if there is no in-kernel users?
+> > 
+> > The DFL emif driver in driver/memory is the first user, see:
+> > 
+> > https://lore.kernel.org/linux-fpga/20201027105545.GB20676@kozik-lap/T/#m6b72f043ecf266c6305bf43db88cddcaf3f9f73d
+> > 
+> > It is not in this patchset, but the memory controller maintainer is already
+> > acked this patch.
+> 
+> How am I, or anyone else, supposed to know this?
+> 
+> Again, don't include patches that are not actually used, that's a huge
+> red flag to any reviewer and it just makes them grumpy and sad and
+> less-likely to ever want to review code from the submitter again...
 
-for this:
+Sorry, I didn't explain it clearly.
 
-Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+The DFL emif driver was in this patchset before v11. All the maintainers
+are on the maillist, see the v10:
+https://lore.kernel.org/linux-fpga/20201015162812.GA251058@epycbox.lan/T/#m64f61e205ed0ea1fd65e30e24bea55da40f8881d
+
+In v10, the first 4 patches are DFL bus related, the same as you can see
+in this pull request. The 5th is the dfl-n3000-nios driver and the 6th is
+the dfl-emif, they are the in-kernel users of dfl bus.
+
+In v11, I didn't include the first 4 patches because Moritz has already
+queued them to his branch, I just send the remaining ones in order to
+save time for the reviewers.
 
 Thanks,
-Bjorn
+Yilun
+
+> 
+> {sigh}
+> 
+> greg k-h
