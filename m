@@ -2,357 +2,339 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BCE2A8F5B
-	for <lists+linux-fpga@lfdr.de>; Fri,  6 Nov 2020 07:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2331C2A9A8A
+	for <lists+linux-fpga@lfdr.de>; Fri,  6 Nov 2020 18:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726267AbgKFGPg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 6 Nov 2020 01:15:36 -0500
-Received: from mga07.intel.com ([134.134.136.100]:36328 "EHLO mga07.intel.com"
+        id S1726034AbgKFRNO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 6 Nov 2020 12:13:14 -0500
+Received: from mga18.intel.com ([134.134.136.126]:12461 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726477AbgKFGPf (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 6 Nov 2020 01:15:35 -0500
-IronPort-SDR: PXyk+eYP0WHEcoWZTMa136nhoq/mrSfvRsGRKQvC8oRcoqRckp7HJrqSr8mILOnafFKZYaX+LR
- hGnvcByzVsRA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9796"; a="233673848"
-X-IronPort-AV: E=Sophos;i="5.77,455,1596524400"; 
-   d="scan'208";a="233673848"
+        id S1726010AbgKFRNO (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 6 Nov 2020 12:13:14 -0500
+IronPort-SDR: sZ0J6D0PvG+1XDIM6fJGM8ro4+jgpSbeGyqXOKNSrNcyKk9WNVHJkFwCulKMgb02tmviKLOtpf
+ FDI7WWL5+syg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9797"; a="157352876"
+X-IronPort-AV: E=Sophos;i="5.77,457,1596524400"; 
+   d="scan'208";a="157352876"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 22:15:34 -0800
-IronPort-SDR: 5RqF37MZunDapSbn7eH1BWdmr+djAdug4yGIvDeq6hsJrNPZFIZvs2Gx0yBYUQwJ5vwnvZeLpo
- S13N2vIcnIHQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,455,1596524400"; 
-   d="scan'208";a="529700593"
-Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Nov 2020 22:15:32 -0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     mdf@kernel.org, krzk@kernel.org, gregkh@linuxfoundation.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 09:13:13 -0800
+IronPort-SDR: HlJ8MNFCXMzCD3uabcoJGn7TGCq757t1T+sC+rgB5XDWzJSX9F2zN9kFa06dQLoL+gXc6TUFRY
+ cqmhhEsWJ7hA==
+X-IronPort-AV: E=Sophos;i="5.77,457,1596524400"; 
+   d="scan'208";a="539911642"
+Received: from adhjerms-mobl1.amr.corp.intel.com (HELO [10.0.2.4]) ([10.212.18.221])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 09:13:12 -0800
+Subject: Re: [PATCH v4 2/6] fpga: m10bmc-sec: create max10 bmc secure update
+ driver
+To:     mdf@kernel.org, lee.jones@linaro.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-        hao.wu@intel.com, Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v12 6/6] memory: dfl-emif: add the DFL EMIF private feature driver
-Date:   Fri,  6 Nov 2020 14:09:34 +0800
-Message-Id: <1604642974-9541-7-git-send-email-yilun.xu@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1604642974-9541-1-git-send-email-yilun.xu@intel.com>
-References: <1604642974-9541-1-git-send-email-yilun.xu@intel.com>
+        hao.wu@intel.com, matthew.gerlach@intel.com
+References: <20201106022319.13991-1-russell.h.weight@intel.com>
+ <20201106022319.13991-3-russell.h.weight@intel.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <1a0ddead-9683-f23d-2494-79aba3ffb5b0@intel.com>
+Date:   Fri, 6 Nov 2020 09:12:58 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20201106022319.13991-3-russell.h.weight@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This driver is for the EMIF private feature implemented under FPGA
-Device Feature List (DFL) framework. It is used to expose memory
-interface status information as well as memory clearing control.
 
-The purpose of memory clearing block is to zero out all private memory
-when FPGA is to be reprogrammed. This gives users a reliable method to
-prevent potential data leakage.
 
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-Reviewed-by: Tom Rix <trix@redhat.com>
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
----
-v2: Adjust the position of this driver in Kconfig.
-    Improves the name of the Kconfig option.
-    Change the include dfl-bus.h to dfl.h, cause the previous patchset
-     renames the file.
-    Some minor fixes and comment improvement.
-v3: Adjust the position of the driver in Makefile.
-v9: Add static prefix for emif attributes macro.
-    Update the kernel version of the sysfs interfaces in Doc.
-v10: Rebase due to the dfl head file moves to include/linux.
-v11: Use sysfs_emit instead of sprintf.
-     Rebase to rebase to 5.10-rc1.
-v12: no change.
----
- .../ABI/testing/sysfs-bus-dfl-devices-emif         |  25 +++
- drivers/memory/Kconfig                             |   9 +
- drivers/memory/Makefile                            |   2 +
- drivers/memory/dfl-emif.c                          | 207 +++++++++++++++++++++
- 4 files changed, 243 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl-devices-emif
- create mode 100644 drivers/memory/dfl-emif.c
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-dfl-devices-emif b/Documentation/ABI/testing/sysfs-bus-dfl-devices-emif
-new file mode 100644
-index 0000000..1ae8ebd
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-dfl-devices-emif
-@@ -0,0 +1,25 @@
-+What:		/sys/bus/dfl/devices/dfl_dev.X/infX_cal_fail
-+Date:		Oct 2020
-+KernelVersion:	5.11
-+Contact:	Xu Yilun <yilun.xu@intel.com>
-+Description:	Read-only. It indicates if the calibration failed on this
-+		memory interface. "1" for calibration failure, "0" for OK.
-+		Format: %u
-+
-+What:		/sys/bus/dfl/devices/dfl_dev.X/infX_init_done
-+Date:		Oct 2020
-+KernelVersion:	5.11
-+Contact:	Xu Yilun <yilun.xu@intel.com>
-+Description:	Read-only. It indicates if the initialization completed on
-+		this memory interface. "1" for initialization complete, "0"
-+		for not yet.
-+		Format: %u
-+
-+What:		/sys/bus/dfl/devices/dfl_dev.X/infX_clear
-+Date:		Oct 2020
-+KernelVersion:	5.11
-+Contact:	Xu Yilun <yilun.xu@intel.com>
-+Description:	Write-only. Writing "1" to this file will zero out all memory
-+		data in this memory interface. Writing of other values is
-+		invalid.
-+		Format: %u
-diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
-index 00e013b..2495bc4 100644
---- a/drivers/memory/Kconfig
-+++ b/drivers/memory/Kconfig
-@@ -137,6 +137,15 @@ config TI_EMIF_SRAM
- 	  sequence so this driver provides several relocatable PM functions
- 	  for the SoC PM code to use.
- 
-+config FPGA_DFL_EMIF
-+	tristate "FPGA DFL EMIF Driver"
-+	depends on FPGA_DFL && HAS_IOMEM
-+	help
-+	  This driver is for the EMIF private feature implemented under
-+	  FPGA Device Feature List (DFL) framework. It is used to expose
-+	  memory interface status information as well as memory clearing
-+	  control.
-+
- config MVEBU_DEVBUS
- 	bool "Marvell EBU Device Bus Controller"
- 	default y if PLAT_ORION
-diff --git a/drivers/memory/Makefile b/drivers/memory/Makefile
-index e71cf7b..bc7663e 100644
---- a/drivers/memory/Makefile
-+++ b/drivers/memory/Makefile
-@@ -28,6 +28,8 @@ obj-$(CONFIG_STM32_FMC2_EBI)	+= stm32-fmc2-ebi.o
- obj-$(CONFIG_SAMSUNG_MC)	+= samsung/
- obj-$(CONFIG_TEGRA_MC)		+= tegra/
- obj-$(CONFIG_TI_EMIF_SRAM)	+= ti-emif-sram.o
-+obj-$(CONFIG_FPGA_DFL_EMIF)	+= dfl-emif.o
-+
- ti-emif-sram-objs		:= ti-emif-pm.o ti-emif-sram-pm.o
- 
- AFLAGS_ti-emif-sram-pm.o	:=-Wa,-march=armv7-a
-diff --git a/drivers/memory/dfl-emif.c b/drivers/memory/dfl-emif.c
-new file mode 100644
-index 0000000..3f71981
---- /dev/null
-+++ b/drivers/memory/dfl-emif.c
-@@ -0,0 +1,207 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * DFL device driver for EMIF private feature
-+ *
-+ * Copyright (C) 2020 Intel Corporation, Inc.
-+ *
-+ */
-+#include <linux/bitfield.h>
-+#include <linux/dfl.h>
-+#include <linux/errno.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/io-64-nonatomic-lo-hi.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/spinlock.h>
-+#include <linux/types.h>
-+
-+#define FME_FEATURE_ID_EMIF		0x9
-+
-+#define EMIF_STAT			0x8
-+#define EMIF_STAT_INIT_DONE_SFT		0
-+#define EMIF_STAT_CALC_FAIL_SFT		8
-+#define EMIF_STAT_CLEAR_BUSY_SFT	16
-+#define EMIF_CTRL			0x10
-+#define EMIF_CTRL_CLEAR_EN_SFT		0
-+#define EMIF_CTRL_CLEAR_EN_MSK		GENMASK_ULL(3, 0)
-+
-+#define EMIF_POLL_INVL			10000 /* us */
-+#define EMIF_POLL_TIMEOUT		5000000 /* us */
-+
-+struct dfl_emif {
-+	struct device *dev;
-+	void __iomem *base;
-+	spinlock_t lock;	/* Serialises access to EMIF_CTRL reg */
-+};
-+
-+struct emif_attr {
-+	struct device_attribute attr;
-+	u32 shift;
-+	u32 index;
-+};
-+
-+#define to_emif_attr(dev_attr) \
-+	container_of(dev_attr, struct emif_attr, attr)
-+
-+static ssize_t emif_state_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	struct emif_attr *eattr = to_emif_attr(attr);
-+	struct dfl_emif *de = dev_get_drvdata(dev);
-+	u64 val;
-+
-+	val = readq(de->base + EMIF_STAT);
-+
-+	return sysfs_emit(buf, "%u\n",
-+			  !!(val & BIT_ULL(eattr->shift + eattr->index)));
-+}
-+
-+static ssize_t emif_clear_store(struct device *dev,
-+				struct device_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	struct emif_attr *eattr = to_emif_attr(attr);
-+	struct dfl_emif *de = dev_get_drvdata(dev);
-+	u64 clear_busy_msk, clear_en_msk, val;
-+	void __iomem *base = de->base;
-+
-+	if (!sysfs_streq(buf, "1"))
-+		return -EINVAL;
-+
-+	clear_busy_msk = BIT_ULL(EMIF_STAT_CLEAR_BUSY_SFT + eattr->index);
-+	clear_en_msk = BIT_ULL(EMIF_CTRL_CLEAR_EN_SFT + eattr->index);
-+
-+	spin_lock(&de->lock);
-+	/* The CLEAR_EN field is WO, but other fields are RW */
-+	val = readq(base + EMIF_CTRL);
-+	val &= ~EMIF_CTRL_CLEAR_EN_MSK;
-+	val |= clear_en_msk;
-+	writeq(val, base + EMIF_CTRL);
-+	spin_unlock(&de->lock);
-+
-+	if (readq_poll_timeout(base + EMIF_STAT, val,
-+			       !(val & clear_busy_msk),
-+			       EMIF_POLL_INVL, EMIF_POLL_TIMEOUT)) {
-+		dev_err(de->dev, "timeout, fail to clear\n");
-+		return -ETIMEDOUT;
-+	}
-+
-+	return count;
-+}
-+
-+#define emif_state_attr(_name, _shift, _index)				\
-+	static struct emif_attr emif_attr_##inf##_index##_##_name =	\
-+		{ .attr = __ATTR(inf##_index##_##_name, 0444,		\
-+				 emif_state_show, NULL),		\
-+		  .shift = (_shift), .index = (_index) }
-+
-+#define emif_clear_attr(_index)						\
-+	static struct emif_attr emif_attr_##inf##_index##_clear =	\
-+		{ .attr = __ATTR(inf##_index##_clear, 0200,		\
-+				 NULL, emif_clear_store),		\
-+		  .index = (_index) }
-+
-+emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 0);
-+emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 1);
-+emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 2);
-+emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 3);
-+
-+emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 0);
-+emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 1);
-+emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 2);
-+emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 3);
-+
-+emif_clear_attr(0);
-+emif_clear_attr(1);
-+emif_clear_attr(2);
-+emif_clear_attr(3);
-+
-+static struct attribute *dfl_emif_attrs[] = {
-+	&emif_attr_inf0_init_done.attr.attr,
-+	&emif_attr_inf0_cal_fail.attr.attr,
-+	&emif_attr_inf0_clear.attr.attr,
-+
-+	&emif_attr_inf1_init_done.attr.attr,
-+	&emif_attr_inf1_cal_fail.attr.attr,
-+	&emif_attr_inf1_clear.attr.attr,
-+
-+	&emif_attr_inf2_init_done.attr.attr,
-+	&emif_attr_inf2_cal_fail.attr.attr,
-+	&emif_attr_inf2_clear.attr.attr,
-+
-+	&emif_attr_inf3_init_done.attr.attr,
-+	&emif_attr_inf3_cal_fail.attr.attr,
-+	&emif_attr_inf3_clear.attr.attr,
-+
-+	NULL,
-+};
-+
-+static umode_t dfl_emif_visible(struct kobject *kobj,
-+				struct attribute *attr, int n)
-+{
-+	struct dfl_emif *de = dev_get_drvdata(kobj_to_dev(kobj));
-+	struct emif_attr *eattr = container_of(attr, struct emif_attr,
-+					       attr.attr);
-+	u64 val;
-+
-+	/*
-+	 * This device supports upto 4 memory interfaces, but not all
-+	 * interfaces are used on different platforms. The read out value of
-+	 * CLEAN_EN field (which is a bitmap) could tell how many interfaces
-+	 * are available.
-+	 */
-+	val = FIELD_GET(EMIF_CTRL_CLEAR_EN_MSK, readq(de->base + EMIF_CTRL));
-+
-+	return (val & BIT_ULL(eattr->index)) ? attr->mode : 0;
-+}
-+
-+static const struct attribute_group dfl_emif_group = {
-+	.is_visible = dfl_emif_visible,
-+	.attrs = dfl_emif_attrs,
-+};
-+
-+static const struct attribute_group *dfl_emif_groups[] = {
-+	&dfl_emif_group,
-+	NULL,
-+};
-+
-+static int dfl_emif_probe(struct dfl_device *ddev)
-+{
-+	struct device *dev = &ddev->dev;
-+	struct dfl_emif *de;
-+
-+	de = devm_kzalloc(dev, sizeof(*de), GFP_KERNEL);
-+	if (!de)
-+		return -ENOMEM;
-+
-+	de->base = devm_ioremap_resource(dev, &ddev->mmio_res);
-+	if (IS_ERR(de->base))
-+		return PTR_ERR(de->base);
-+
-+	de->dev = dev;
-+	spin_lock_init(&de->lock);
-+	dev_set_drvdata(dev, de);
-+
-+	return 0;
-+}
-+
-+static const struct dfl_device_id dfl_emif_ids[] = {
-+	{ FME_ID, FME_FEATURE_ID_EMIF },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(dfl, dfl_emif_ids);
-+
-+static struct dfl_driver dfl_emif_driver = {
-+	.drv	= {
-+		.name       = "dfl-emif",
-+		.dev_groups = dfl_emif_groups,
-+	},
-+	.id_table = dfl_emif_ids,
-+	.probe   = dfl_emif_probe,
-+};
-+module_dfl_driver(dfl_emif_driver);
-+
-+MODULE_DESCRIPTION("DFL EMIF driver");
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL v2");
--- 
-2.7.4
+On 11/5/20 6:23 PM, Russ Weight wrote:
+> Create a platform driver that can be invoked as a sub
+> driver for the Intel MAX10 BMC in order to support
+> secure updates. This sub-driver will invoke an
+> instance of the FPGA Security Manager class driver
+> in order to expose sysfs interfaces for managing and
+> monitoring secure updates to FPGA and BMC images.
+>
+> This patch creates the MAX10 BMC Secure Update driver and
+> provides sysfs files for displaying the current root entry hashes
+> for the FPGA static region, the FPGA PR region, and the MAX10
+> BMC.
+>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> ---
+> v4:
+>   - Moved sysfs files for displaying the root entry hashes (REH)
+>     from the FPGA Security Manager class driver to here. The
+>     m10bmc_reh() and m10bmc_reh_size() functions are removed and
+>     the functionality from these functions is moved into a
+>     show_root_entry_hash() function for displaying the REHs.
+FYI: although the show_root_entry_has() function mostly consists
+of a reorganization of existing code, one significant change is
+that the memory for the REH is now on the stack in stead of the
+heap.
+>   - Added ABI documentation for the new sysfs entries:
+>     sysfs-driver-intel-m10-bmc-secure
+>   - Updated the MAINTAINERS file to add the new ABI documentation
+>     file: sysfs-driver-intel-m10-bmc-secure
+>   - Removed unnecessary ret variable from m10bmc_secure_probe()
+>   - Incorporated new devm_fpga_sec_mgr_register() function into
+>     m10bmc_secure_probe() and removed the m10bmc_secure_remove()
+>     function.
+> v3:
+>   - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+>   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure
+>     Update driver"
+>   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
+>     underlying functions are now called directly.
+>   - Changed "_root_entry_hash" to "_reh", with a comment explaining
+>     what reh is.
+> v2:
+>   - Added drivers/fpga/intel-m10-bmc-secure.c file to MAINTAINERS.
+>   - Switched to GENMASK(31, 16) for a couple of mask definitions.
+>   - Moved MAX10 BMC address and function definitions to a separate
+>     patch.
+>   - Replaced small function-creation macros with explicit function
+>     declarations.
+>   - Removed ifpga_sec_mgr_init() and ifpga_sec_mgr_uinit() functions.
+>   - Adapted to changes in the Intel FPGA Security Manager by splitting
+>     the single call to ifpga_sec_mgr_register() into two function
+>     calls: devm_ifpga_sec_mgr_create() and ifpga_sec_mgr_register().
+> ---
+>  .../testing/sysfs-driver-intel-m10-bmc-secure |  29 ++++
+>  MAINTAINERS                                   |   2 +
+>  drivers/fpga/Kconfig                          |  11 ++
+>  drivers/fpga/Makefile                         |   3 +
+>  drivers/fpga/intel-m10-bmc-secure.c           | 134 ++++++++++++++++++
+>  5 files changed, 179 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
+>  create mode 100644 drivers/fpga/intel-m10-bmc-secure.c
+>
+> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
+> new file mode 100644
+> index 000000000000..2992488b717a
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
+> @@ -0,0 +1,29 @@
+> +What:		/sys/bus/platform/devices/n3000bmc-secure.*.auto/security/sr_root_entry_hash
+> +Date:		Oct 2020
+> +KernelVersion:  5.11
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Read only. Returns the root entry hash for the static
+> +		region if one is programmed, else it returns the
+> +		string: "hash not programmed".  This file is only
+> +		visible if the underlying device supports it.
+> +		Format: "0x%x".
+> +
+> +What:		/sys/bus/platform/devices/n3000bmc-secure.*.auto/security/pr_root_entry_hash
+> +Date:		Oct 2020
+> +KernelVersion:  5.11
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Read only. Returns the root entry hash for the partial
+> +		reconfiguration region if one is programmed, else it
+> +		returns the string: "hash not programmed".  This file
+> +		is only visible if the underlying device supports it.
+> +		Format: "0x%x".
+> +
+> +What:		/sys/bus/platform/devices/n3000bmc-secure.*.auto/security/bmc_root_entry_hash
+> +Date:		Oct 2020
+> +KernelVersion:  5.11
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Read only. Returns the root entry hash for the BMC image
+> +		if one is programmed, else it returns the string:
+> +		"hash not programmed".  This file is only visible if the
+> +		underlying device supports it.
+> +		Format: "0x%x".
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 301cffb43c73..464d22fec2b7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6924,8 +6924,10 @@ M:	Russ Weight <russell.h.weight@intel.com>
+>  L:	linux-fpga@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
+> +F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
+>  F:	Documentation/fpga/fpga-sec-mgr.rst
+>  F:	drivers/fpga/fpga-sec-mgr.c
+> +F:	drivers/fpga/intel-m10-bmc-secure.c
+>  F:	include/linux/fpga/fpga-sec-mgr.h
+>  
+>  FPU EMULATOR
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 03e9a3b16e3e..a102ab1df7ae 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -235,4 +235,15 @@ config FPGA_SEC_MGR
+>  	  region and for the BMC. Select this option to enable
+>  	  updates for secure FPGA devices.
+>  
+> +config IFPGA_M10_BMC_SECURE
+> +	tristate "Intel MAX10 BMC Secure Update driver"
+> +	depends on MFD_INTEL_M10_BMC && FPGA_SEC_MGR
+> +	help
+> +	  Secure update support for the Intel MAX10 board management
+> +	  controller.
+> +
+> +	  This is a subdriver of the Intel MAX10 board management controller
+> +	  (BMC) and provides support for secure updates for the BMC image,
+> +	  the FPGA image, the Root Entry Hashes, etc.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 22576d1a3996..7259f1ab2531 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -24,6 +24,9 @@ obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
+>  # FPGA Security Manager Framework
+>  obj-$(CONFIG_FPGA_SEC_MGR)		+= fpga-sec-mgr.o
+>  
+> +# FPGA Secure Update Drivers
+> +obj-$(CONFIG_IFPGA_M10_BMC_SECURE)	+= intel-m10-bmc-secure.o
+> +
+>  # FPGA Bridge Drivers
+>  obj-$(CONFIG_FPGA_BRIDGE)		+= fpga-bridge.o
+>  obj-$(CONFIG_SOCFPGA_FPGA_BRIDGE)	+= altera-hps2fpga.o altera-fpga2sdram.o
+> diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
+> new file mode 100644
+> index 000000000000..198bc8273d6b
+> --- /dev/null
+> +++ b/drivers/fpga/intel-m10-bmc-secure.c
+> @@ -0,0 +1,134 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Intel Max10 Board Management Controller Secure Update Driver
+> + *
+> + * Copyright (C) 2019-2020 Intel Corporation. All rights reserved.
+> + *
+> + */
+> +#include <linux/bitfield.h>
+> +#include <linux/device.h>
+> +#include <linux/fpga/fpga-sec-mgr.h>
+> +#include <linux/mfd/intel-m10-bmc.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +
+> +struct m10bmc_sec {
+> +	struct device *dev;
+> +	struct intel_m10bmc *m10bmc;
+> +};
+> +
+> +/* Root Entry Hash (REH) support */
+> +#define REH_SHA256_SIZE		32
+> +#define REH_SHA384_SIZE		48
+> +#define REH_MAGIC		GENMASK(15, 0)
+> +#define REH_SHA_NUM_BYTES	GENMASK(31, 16)
+> +
+> +static ssize_t
+> +show_root_entry_hash(struct device *dev, u32 exp_magic,
+> +		     u32 prog_addr, u32 reh_addr, char *buf)
+> +{
+> +	struct m10bmc_sec *sec = dev_get_drvdata(dev);
+> +	unsigned int stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> +	int sha_num_bytes, i, cnt, ret;
+> +	u8 hash[REH_SHA384_SIZE];
+> +	u32 magic;
+> +
+> +	ret = m10bmc_raw_read(sec->m10bmc, prog_addr, &magic);
+> +	if (ret)
+> +		return ret;
+> +
+> +	dev_dbg(dev, "%s magic 0x%08x\n", __func__, magic);
+> +
+> +	if (FIELD_GET(REH_MAGIC, magic) != exp_magic)
+> +		return sysfs_emit(buf, "hash not programmed\n");
+> +
+> +	sha_num_bytes = FIELD_GET(REH_SHA_NUM_BYTES, magic) / 8;
+> +	if (sha_num_bytes != REH_SHA256_SIZE &&
+> +	    sha_num_bytes != REH_SHA384_SIZE)   {
+> +		dev_err(sec->dev, "%s bad sha num bytes %d\n", __func__,
+> +			sha_num_bytes);
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = regmap_bulk_read(sec->m10bmc->regmap, reh_addr,
+> +			       hash, sha_num_bytes / stride);
+> +	if (ret) {
+> +		dev_err(dev, "failed to read root entry hash: %x cnt %x: %d\n",
+> +			reh_addr, sha_num_bytes / stride, ret);
+> +		return ret;
+> +	}
+> +
+> +	cnt = sprintf(buf, "0x");
+> +	for (i = 0; i < sha_num_bytes; i++)
+> +		cnt += sprintf(buf + cnt, "%02x", hash[i]);
+> +	cnt += sprintf(buf + cnt, "\n");
+> +
+> +	return cnt;
+> +}
+> +
+> +#define DEVICE_ATTR_SEC_REH_RO(_name, _magic, _prog_addr, _reh_addr) \
+> +static ssize_t _name##_root_entry_hash_show(struct device *dev, \
+> +					    struct device_attribute *attr, \
+> +					    char *buf) \
+> +{ return show_root_entry_hash(dev, _magic, _prog_addr, _reh_addr, buf); } \
+> +static DEVICE_ATTR_RO(_name##_root_entry_hash)
+> +
+> +DEVICE_ATTR_SEC_REH_RO(bmc, BMC_PROG_MAGIC, BMC_PROG_ADDR, BMC_REH_ADDR);
+> +DEVICE_ATTR_SEC_REH_RO(sr, SR_PROG_MAGIC, SR_PROG_ADDR, SR_REH_ADDR);
+> +DEVICE_ATTR_SEC_REH_RO(pr, PR_PROG_MAGIC, PR_PROG_ADDR, PR_REH_ADDR);
+> +
+> +static struct attribute *m10bmc_security_attrs[] = {
+> +	&dev_attr_bmc_root_entry_hash.attr,
+> +	&dev_attr_sr_root_entry_hash.attr,
+> +	&dev_attr_pr_root_entry_hash.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group m10bmc_security_attr_group = {
+> +	.name = "security",
+> +	.attrs = m10bmc_security_attrs,
+> +};
+> +
+> +static const struct attribute_group *m10bmc_sec_attr_groups[] = {
+> +	&m10bmc_security_attr_group,
+> +	NULL,
+> +};
+> +
+> +static const struct fpga_sec_mgr_ops m10bmc_sops = { };
+> +
+> +static int m10bmc_secure_probe(struct platform_device *pdev)
+> +{
+> +	struct fpga_sec_mgr *smgr;
+> +	struct m10bmc_sec *sec;
+> +
+> +	sec = devm_kzalloc(&pdev->dev, sizeof(*sec), GFP_KERNEL);
+> +	if (!sec)
+> +		return -ENOMEM;
+> +
+> +	sec->dev = &pdev->dev;
+> +	sec->m10bmc = dev_get_drvdata(pdev->dev.parent);
+> +	dev_set_drvdata(&pdev->dev, sec);
+> +
+> +	smgr = devm_fpga_sec_mgr_create(sec->dev, "Max10 BMC Secure Update",
+> +					&m10bmc_sops, sec);
+> +	if (!smgr) {
+> +		dev_err(sec->dev, "Security manager failed to start\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	return devm_fpga_sec_mgr_register(sec->dev, smgr);
+> +}
+> +
+> +static struct platform_driver intel_m10bmc_secure_driver = {
+> +	.probe = m10bmc_secure_probe,
+> +	.driver = {
+> +		.name = "n3000bmc-secure",
+> +		.dev_groups = m10bmc_sec_attr_groups,
+> +	},
+> +};
+> +module_platform_driver(intel_m10bmc_secure_driver);
+> +
+> +MODULE_ALIAS("platform:n3000bmc-secure");
+> +MODULE_AUTHOR("Intel Corporation");
+> +MODULE_DESCRIPTION("Intel MAX10 BMC Secure Update");
+> +MODULE_LICENSE("GPL v2");
 
