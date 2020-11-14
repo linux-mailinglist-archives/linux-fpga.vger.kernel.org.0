@@ -2,102 +2,115 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A34692B2DAB
-	for <lists+linux-fpga@lfdr.de>; Sat, 14 Nov 2020 15:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC9F2B2E3F
+	for <lists+linux-fpga@lfdr.de>; Sat, 14 Nov 2020 16:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726522AbgKNOes (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 14 Nov 2020 09:34:48 -0500
-Received: from mga02.intel.com ([134.134.136.20]:64967 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726307AbgKNOer (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sat, 14 Nov 2020 09:34:47 -0500
-IronPort-SDR: t9hiBMKz+9PTl9Dqf/UpMIHkdhnmVWj14h0pN4XSDmJ94bCdQU+inmKlHvHtBbjg0k/TpdDdbD
- WxIMiTPKipMw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9804"; a="157602708"
-X-IronPort-AV: E=Sophos;i="5.77,478,1596524400"; 
-   d="scan'208";a="157602708"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2020 06:34:47 -0800
-IronPort-SDR: yJ7JU88zcYyAw1ufi+xlJsgMY/2IZwCz24IAgY+/GfJBynjZxcYDJ95BRa687+q1at2G+Y4MrC
- L8tQsbIkZ6fA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,478,1596524400"; 
-   d="scan'208";a="324307226"
-Received: from marshy.an.intel.com (HELO [10.122.105.143]) ([10.122.105.143])
-  by orsmga003.jf.intel.com with ESMTP; 14 Nov 2020 06:34:46 -0800
-Subject: Re: [PATCHv1 4/4] fpga: stratix10-soc: entend driver for bitstream
- authentication
-To:     Tom Rix <trix@redhat.com>, mdf@kernel.org,
+        id S1727104AbgKNPyB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 14 Nov 2020 10:54:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:21865 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727013AbgKNPyB (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 14 Nov 2020 10:54:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605369239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WdylbP2NfyT0+ghuXLqODU9fXbydrot5yDDVn5EPhdA=;
+        b=KaAgVvXtTzDEsDj3VDMOSHtH28uhnRMqn0oIOCo+CRg7WGfk/c+0mWQQ6Xu6F2hmvuVR1/
+        P/jwm7gldxJasH93OxuZQTqpaqz5jKpkkOzZ+D2/OOGKhv6xU7tld8RsamX7PpAMSIX3d6
+        43gxvEMPgbF8Zye4PvZQkUt0Hq/ICBA=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-224-z9N5RynYOyG6PD85hPl5GA-1; Sat, 14 Nov 2020 10:53:57 -0500
+X-MC-Unique: z9N5RynYOyG6PD85hPl5GA-1
+Received: by mail-qv1-f72.google.com with SMTP id y21so197880qve.7
+        for <linux-fpga@vger.kernel.org>; Sat, 14 Nov 2020 07:53:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=WdylbP2NfyT0+ghuXLqODU9fXbydrot5yDDVn5EPhdA=;
+        b=Okxg9uowLExAcipaVVC4poUapgOY9AYBuzopKJuq9sao4dOoGKRywVoN7JaUZvQRXY
+         W2Lq803G2gIEBouAp+duruHEwPqHv/BIspsaQADJbJuQ+aY1rrIy1btsMKQmVAj5j3Oa
+         m/2+SaEjQsgyi091lecj86Xav975Yj7HAjvWtUEvV9bqecJk4nOI9bddoY9FtG4Zes0U
+         LPfMDgwLSzQp94sQZi85yUTKWXXnWeej6jHzxaOB0kZ4FcfSJHBR8FOhEj76YPfrurtq
+         usVve1vnPDLjFkDMmtx2wgc2CdBEzo3nCre5sgHdU8ZnGDjjhcSAGon5ZeRcEgthXjun
+         cUgQ==
+X-Gm-Message-State: AOAM531kyqudojUFzcuhf47C3a5v7YmN9+xxPcfUPQiLNqLcuJWX21p7
+        eXZcGyIf/dv6kPyYn4M+/1tQkE3dQGX9WSaR6fqy7QLo76nzoVMALuRDoru1Py3jGrPIyjv3bh+
+        bNrdRKStuKIuzpcML9RnfHQ==
+X-Received: by 2002:a37:e12:: with SMTP id 18mr4265874qko.179.1605369237482;
+        Sat, 14 Nov 2020 07:53:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz4r1WeR6yUrgT85N7nd2d0YiKq5XInRkccXpaBEvTZ7tazPNx+ZgS7E0GahK+l8SJ4hcyh8g==
+X-Received: by 2002:a37:e12:: with SMTP id 18mr4265861qko.179.1605369237249;
+        Sat, 14 Nov 2020 07:53:57 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id c199sm506723qke.111.2020.11.14.07.53.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 Nov 2020 07:53:56 -0800 (PST)
+Subject: Re: [PATCHv1 1/4] fpga: fpga-mgr: add
+ FPGA_MGR_BITSTREM_AUTHENTICATION flag
+To:     Richard Gong <richard.gong@linux.intel.com>, mdf@kernel.org,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     dinguyen@kernel.org, sridhar.rajagopal@intel.com,
         Richard Gong <richard.gong@intel.com>
 References: <1605204403-6663-1-git-send-email-richard.gong@linux.intel.com>
- <1605204403-6663-5-git-send-email-richard.gong@linux.intel.com>
- <9bb29416-65fe-85e8-b960-23abc49352f2@redhat.com>
-From:   Richard Gong <richard.gong@linux.intel.com>
-Message-ID: <6ec8b5ee-9505-7863-fcb6-7e5bbe2aa963@linux.intel.com>
-Date:   Sat, 14 Nov 2020 08:55:50 -0600
+ <1605204403-6663-2-git-send-email-richard.gong@linux.intel.com>
+ <a71b7a9c-effa-ad01-4fde-3e1a1e517e2d@redhat.com>
+ <4dd9a747-05f3-1cca-22a6-35681677223d@linux.intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <28d2ace8-315a-3eaf-75da-88a4e90ea045@redhat.com>
+Date:   Sat, 14 Nov 2020 07:53:54 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <9bb29416-65fe-85e8-b960-23abc49352f2@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <4dd9a747-05f3-1cca-22a6-35681677223d@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
-Hi Tom.
-
-On 11/13/20 2:31 PM, Tom Rix wrote:
-> 
-> On 11/12/20 10:06 AM, richard.gong@linux.intel.com wrote:
->> From: Richard Gong <richard.gong@intel.com>
+On 11/14/20 6:30 AM, Richard Gong wrote:
+>
+>> A whitespace issue, the new BIT(5) should align with the others, so add two spaces to the others.
 >>
->> Exten FPGA manager driver to support FPGA bitstream authentication on
->> Intel SocFPGA platforms.
+>
+> There is only one space, also I ran checkpatch with strict option and didn't see any whitespace issue.
+>
+> In the original patch, BIT(0) to BIT(4) align themselves. I am not sure why we see differently in email.
+>
+>  #define FPGA_MGR_PARTIAL_RECONFIG      BIT(0)
+>  #define FPGA_MGR_EXTERNAL_CONFIG       BIT(1)
+>  #define FPGA_MGR_ENCRYPTED_BITSTREAM   BIT(2)
+>  #define FPGA_MGR_BITSTREAM_LSB_FIRST   BIT(3)
+>  #define FPGA_MGR_COMPRESSED_BITSTREAM  BIT(4)
+> +#define FPGA_MGR_BITSTREM_AUTHENTICATION BIT(5)
+>
+> To align BIT(5) with others, I have to use additional tab to BIT(0) to BIT(4). But I don't think I should make such change on them, agree?
+
+The existing table of #defines has aligned values for BIT(0) to BIT(4)
+
+Your addition of BIT(5) value has an inconsistent alignment with the others BIT(0) to BIT(4)
+
+The alignment of all the values should be consistent.
+
+Tom
+
+>
+> Regards,
+> Richard
+>
+>> Tom
 >>
->> Signed-off-by: Richard Gong <richard.gong@intel.com>
->> ---
->>   drivers/fpga/stratix10-soc.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>>     /**
+>>>    * struct fpga_image_info - information specific to a FPGA image
 >>
->> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
->> index 657a70c..8a59365 100644
->> --- a/drivers/fpga/stratix10-soc.c
->> +++ b/drivers/fpga/stratix10-soc.c
->> @@ -185,7 +185,10 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
->>   	ctype.flags = 0;
->>   	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
->>   		dev_dbg(dev, "Requesting partial reconfiguration.\n");
->> -		ctype.flags |= BIT(COMMAND_RECONFIG_FLAG_PARTIAL);
->> +		ctype.flags |= FPGA_MGR_PARTIAL_RECONFIG;
-> 
-> The change does not match the commit log.
-> 
-> Add some comment like..
-> 
-> 'Cleanup setting of partial reconfig flag'
-> 
-> to cover the change.
+>
 
-I will make the cleanup change separately in a different patch.
-
-Regards,
-Richard
-
-
-> 
-> Tom
-> 
->> +	} else if (info->flags & FPGA_MGR_BITSTREM_AUTHENTICATION) {
->> +		dev_dbg(dev, "Requesting bitstream authentication.\n");
->> +		ctype.flags |= FPGA_MGR_BITSTREM_AUTHENTICATION;
->>   	} else {
->>   		dev_dbg(dev, "Requesting full reconfiguration.\n");
->>   	}
-> 
