@@ -2,89 +2,87 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8E22B5C78
-	for <lists+linux-fpga@lfdr.de>; Tue, 17 Nov 2020 11:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8360A2B5C99
+	for <lists+linux-fpga@lfdr.de>; Tue, 17 Nov 2020 11:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727608AbgKQKAt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 17 Nov 2020 05:00:49 -0500
-Received: from mga03.intel.com ([134.134.136.65]:26338 "EHLO mga03.intel.com"
+        id S1727590AbgKQKFe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 17 Nov 2020 05:05:34 -0500
+Received: from mga17.intel.com ([192.55.52.151]:10093 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725770AbgKQKAs (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 17 Nov 2020 05:00:48 -0500
-IronPort-SDR: sjl3Tv2m8m4M3MbkLnyOnL7rG1cQ2aJwc35NGghSAbl0uChN6HtolML2qwUuLtq+TSFSy17B1J
- cMQpk1T2PghQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="170996783"
+        id S1727494AbgKQKFe (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 17 Nov 2020 05:05:34 -0500
+IronPort-SDR: FWz7vykoDyo/hV8RDQWsYWXTophoQBsENcVLOKQxNUbQ/CofYU7bGb8WtfVbG67Qb9CnCuW7Jn
+ f58FXQra2ilQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="150745665"
 X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
-   d="scan'208";a="170996783"
+   d="scan'208";a="150745665"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 02:00:26 -0800
-IronPort-SDR: 1kANeuKaO+0oIvx3f59wlBRhWpgrvf1cttPvTPSZuoW75qRncAPP+S/ZiTMMVOxG+Q3KJ42qpY
- xfgyFS9rOAXw==
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 02:05:34 -0800
+IronPort-SDR: s8pur6JPQq5cjmBk5u4xXUYTBkosZD2Et7JGzAhIADIUXVwP2OOPagZFBIfpzFCgTa3aId3SNA
+ Y74FBYfFsJzQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
-   d="scan'208";a="543978452"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga005.jf.intel.com with ESMTP; 17 Nov 2020 02:00:25 -0800
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+   d="scan'208";a="367815009"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Nov 2020 02:05:33 -0800
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 17 Nov 2020 02:00:25 -0800
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ 15.1.1713.5; Tue, 17 Nov 2020 02:05:33 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 17 Nov 2020 02:00:25 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ 15.1.1713.5; Tue, 17 Nov 2020 02:05:32 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Tue, 17 Nov 2020 02:00:25 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.172)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ via Frontend Transport; Tue, 17 Nov 2020 02:05:32 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.171)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.1713.5; Tue, 17 Nov 2020 02:00:25 -0800
+ 15.1.1713.5; Tue, 17 Nov 2020 02:05:32 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YlgVlxTaXetZ7cZY8ntMjyNdG6UU68VGX/3Kg7ZWXdnQ/ZajqC+TrtsqgYVlopfEwzvff3jwhG+J/nlYa7SHVOYfQ/XB5tH9EK4OYWw4aoRp1/vV+Riy1e1frm2IxOH+WaU0qKAggzvxPKyRgW3qNrY/RWLvznfWVgosD33BEJLXLi+K7agr4V0IQiMWXA1BLui+XA85cXpghiUd4XWzhCDLkbpUb3Drbx4ABNZ3vI54yFB8TfGwc0xjs8wwk/ib4SpSNVmjot30HXqvPmTVh53ztkiiAVCMlfbKGNScLaDE7bCVClCWSy1EcjWwcpOcp61Ox58MM442OLMWwQUSmw==
+ b=DpeKe+nHOTtWuMh1mPd3dyLvAhgMDUeroD4w9SXXVtdgfI5ut8VvvLNRIuW1RMN7IbPsDN4czKLAueVJBzjdk2cHohdQs0+LMg7dvw76VfalBvIH1nIKEaz+RykezVeWIgQ1ZNXALMfDiVUvVZpQLvuldcJO8Tc3mOpF1e+eY3CYlR8Z7JtAEo3Vw4yVMaGKWpbHKzRNco4caFo/5BdZIVjsj6vxpyrc/jP5qXVQEy4Vf3dIkc/ncvZfFLwXbjgaYl5vhpgiis6lqwgItGCc08gQW17YRc6Qy7ytc1rTMfTUC4Do8j61HkfwLJsWwt5KBgYs3uN6TgRAQGyvuzIlhw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EWNkBqwRQ73YFf4f6l5nJHVvCMwTxSh1DWE9jNoLVgs=;
- b=K7oYIvEFsdfqVQMC5KMdmSh9zvXNkfL4PtxF5TZ1HG3M8TS9sASe2i1CiC9cKCZlwUNGLggObQjAa47ZItkTGwDQKwQC7uLJ3G1R+3bfOyfschnvXUkrUSj3a5hj74hWRdgxjz/1IfFa/QvHZl2g/IdlfbeWZ+ReLJWqyqV+yx9NJ6ZCgOuSs+5R+e5NUS+ZUFwKPpQwmtsc/38cFHCGXGvF6G/tv30NgAiAbQGkAJ1pa55BJ6GtsQAhvJOteYkEt5FMwGrVcmzyr5LZL94mP+7UFqi+fNnNXmnfnwkVauc6aKVsipxy/TFStY1w+VM5qxB3LKpHESRpyXVvfp2mMQ==
+ bh=QB8H68Vz031GqcVLa7SJdS6jUE4JztC8fbdTyv3z/4c=;
+ b=guAZY23LqRIpfEcXh4rBhxsudX39dAkBvowWXDybT34YZLBlk6lfgYp0P5F+T4B9ReO4N6iT+e+we3HlpJhwssuCPG/cQG0aHVNeDyXMXKS3HQ9ZGkg9a9uKr6+A85tTgW2ebu9Wq3IM1lxdx4lVTTY52cQT9ktQUbK1zKxPyq2JS6umi0aDmhr2C/Ln3kQ1jGyZH3LHulbyy+9waejfOz8nCbOEC5L9QWyfVWD8qSL2+MM7mx5/kVWNtn6n9ytrzj2W5KLiqf9UKGmv0+WZnXqFK61CF58mQL84brgJ3jkw1TQI9711+Nhddv6PlliX8yrufMdSHvUdVA365YHmAg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
  s=selector2-intel-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EWNkBqwRQ73YFf4f6l5nJHVvCMwTxSh1DWE9jNoLVgs=;
- b=ztFnqOJS2zuUUSkkFYn9hA/V+hypnxdmYU6kGQK296/dlUGRQhyobKako/ybv0beSleC+D86bwd8+NbvBZTuITOJDol8o6l3LPjs+5Jy651zTvBpmCDq2TlKJJR5Ngc7sALdDxZQogr/nTsKmYu2A3Z326VpIovfBCULrkWwh3w=
+ bh=QB8H68Vz031GqcVLa7SJdS6jUE4JztC8fbdTyv3z/4c=;
+ b=p7c+jlirf4fNuZt5NyJQ5a9qB2W4+IgPpoC9tDMPUkNNzqO+deQI+jqPsxcNwElbfQtXPwqus3kHN9qfF8wNc8p06/8l2Gakz6oeYiCuRCj2i+JNDsqjzmsKkwENYX7COyV3aEXlNK/j7tbNJw8le+4A8NL1daAg8Uhh1L8aXHI=
 Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by DM5PR11MB1947.namprd11.prod.outlook.com (2603:10b6:3:110::15) with
+ by DM6PR11MB2571.namprd11.prod.outlook.com (2603:10b6:5:c7::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.28; Tue, 17 Nov
- 2020 10:00:22 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Tue, 17 Nov
+ 2020 10:05:32 +0000
 Received: from DM6PR11MB3819.namprd11.prod.outlook.com
  ([fe80::69e0:a898:de56:337c]) by DM6PR11MB3819.namprd11.prod.outlook.com
  ([fe80::69e0:a898:de56:337c%7]) with mapi id 15.20.3564.028; Tue, 17 Nov 2020
- 10:00:22 +0000
+ 10:05:32 +0000
 From:   "Wu, Hao" <hao.wu@intel.com>
-To:     "Xu, Yilun" <yilun.xu@intel.com>,
-        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
-CC:     "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+To:     "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "mdf@kernel.org" <mdf@kernel.org>,
         "trix@redhat.com" <trix@redhat.com>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "Xu, Yilun" <yilun.xu@intel.com>
-Subject: RE: [PATCH 2/2] fpga: dfl: look for vendor specific capability
-Thread-Topic: [PATCH 2/2] fpga: dfl: look for vendor specific capability
-Thread-Index: AQHWvIBxykoMIcZrHUW2ir3zzcjKk6nL9UsAgAAf7jA=
-Date:   Tue, 17 Nov 2020 10:00:22 +0000
-Message-ID: <DM6PR11MB381900B67DE65EEBF936CA6885E20@DM6PR11MB3819.namprd11.prod.outlook.com>
+        "corbet@lwn.net" <corbet@lwn.net>
+Subject: RE: [PATCH 1/2] fpga: dfl: refactor cci_enumerate_feature_devs()
+Thread-Topic: [PATCH 1/2] fpga: dfl: refactor cci_enumerate_feature_devs()
+Thread-Index: AQHWvIBxozGsy0BNp0CzNAbUV8wEW6nMGFow
+Date:   Tue, 17 Nov 2020 10:05:31 +0000
+Message-ID: <DM6PR11MB3819F764DE20B0050A548C1F85E20@DM6PR11MB3819.namprd11.prod.outlook.com>
 References: <20201117012552.262149-1-matthew.gerlach@linux.intel.com>
- <20201117012552.262149-3-matthew.gerlach@linux.intel.com>
- <20201117075626.GA14665@yilunxu-OptiPlex-7050>
-In-Reply-To: <20201117075626.GA14665@yilunxu-OptiPlex-7050>
+ <20201117012552.262149-2-matthew.gerlach@linux.intel.com>
+In-Reply-To: <20201117012552.262149-2-matthew.gerlach@linux.intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -92,117 +90,178 @@ X-MS-TNEF-Correlator:
 dlp-product: dlpe-windows
 dlp-reaction: no-action
 dlp-version: 11.5.1.3
-authentication-results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none header.from=intel.com;
 x-originating-ip: [192.198.147.207]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 61ffc74f-a6cd-4f3b-a6f6-08d88adf9924
-x-ms-traffictypediagnostic: DM5PR11MB1947:
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM5PR11MB1947D41988810F9D62C7945E85E20@DM5PR11MB1947.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-office365-filtering-correlation-id: b0a1d2a5-f52a-41c5-1525-08d88ae051ac
+x-ms-traffictypediagnostic: DM6PR11MB2571:
+x-microsoft-antispam-prvs: <DM6PR11MB2571A0E0CDC562E45BEE09F485E20@DM6PR11MB2571.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:166;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: olhvXjUJcsBF+4b8VvaXZHzI6FqGf13HCGQ262fiYObltFRKqn2kFxfqXlot35oy2PLUagC6cStn8RXWOZ2lNcVqSQTV9HYZ/fEczIh6uqkjs3zmAUjK63kavoBwhDcJmL6bxwmrv8AeKTWTAPBPFruVa99llkWwYk3X/Zol2o8U4T+eJrhK4FE+vhfwAyfkRBHoI45ynh4ga+wiYQ/SCeFWseneCNeB3Tiv3gWIQU0TqdXU+phU5EdJb9VRnPM3H50Xm1ekqwKxbFQdHn0Hixd1KpInjjjFb4SPs0leAntXyFGF6cbKMYzCgz4NIQ5ucycJFViNVEVI3ZMOjJK9vA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(366004)(39860400002)(396003)(346002)(136003)(9686003)(4326008)(5660300002)(66446008)(64756008)(55016002)(54906003)(478600001)(66476007)(52536014)(66556008)(8936002)(86362001)(66946007)(2906002)(8676002)(33656002)(76116006)(186003)(71200400001)(7696005)(110136005)(83380400001)(26005)(316002)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: dofraMg6ZBaHdMd/G1Aq0MSp/eZHgmxptWF6BIUIqubkyYf5PhXNFG5LdT/VjVinFyAF9exbQGeKmTWZljFj+heGa0xPx7HOjKV4yGWWSVKZMHnxfc9Jsj0j+/nQJrwk53eAJNzF6Ag3PO7xX3JN3FZneJGzW/4cHpzKXNUycFKrPhPGreSE/dPVhEqtxD4AjSz55HBE5KsC8hlFkdaVdTTyKZAgpZEKG0Y4O1XFfDItEpLrW72vbUkaL3Yah2NYHQ0oWlZQgUO4Cn8QlIe+Ga/vjqUtUAmPgDsedWcDs8u6sev7l8wg3XldN8XzKrdhuZ4O2cQk8GKSCViCQm6cNoHR/WSqiEbfAOp5lg6dd3GD3RWZ/QiKnEReTTTQc5RytztNP6g7uTYUWlSHht1lFvBEv03m+0M1YYWGspFz5CwhO3+3/4bBh9qaHGG7+Z1jVoYWWkIxP+YdC+UE10nZEPJQW9/iaMGCGLQYMsLApGvg2Au7/Jn3rfr70GJN6J15pvErN4ynnX+pYicron5tyyzJ5ND5pgnQ5upLtLz4YBzB4/b3GuMmDRJRgb+MDy8yBPXPsG3lTDeIGAZPmhmga6/BVWSdJyBqC5bHujIHznUgLOH+Q3pdbtakHQAX8YSDfmYgqyz59PBe8vD5DnoIiQ==
+x-microsoft-antispam-message-info: xBiC/X3PE48Qk9SwFgu1wrz0fsi+s9r7ADkQZBpWgHOfp7sQNTz4gmf7U0UJLd/vzdNU4kI0tJMao29c7S0bOy1ofpy62oal7OUhLGqqEhdDC2jb3+KurtVaZSHcb3IbUcsCffcIowqxqtNGurxv/iFhV+3to9JDjIaMQDOmQp14ez7ahXMcap1DFOwOTGWb6u+0NTKdl+5RWpSo3m0Obf1nVsJwxdeFbkesRACfbCQhajSrQG3/FxLJTdHiqxY9YTVl5dJaqi8WFVAAxomZSs4rOiD9FHlci58yYoLCoHKi8Bro5tAIShu7LnK3hScZlwarmulfGQrbodsNKlSjcA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(136003)(346002)(396003)(366004)(5660300002)(110136005)(8676002)(9686003)(478600001)(33656002)(83380400001)(66946007)(7696005)(316002)(64756008)(66556008)(66446008)(66476007)(76116006)(71200400001)(8936002)(6506007)(86362001)(55016002)(2906002)(186003)(26005)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: hhrYeGaFfUktjzEltfz8JBT97DM/kbj2p2Lzla4IRFZPdEKOihDyRQ72n8GlLSwi/WaX2WinpLMs/F4C5Nu2hi2P648bm1tfDEhMI0MjtzDcyIrJ1gUKLwOF1SL4GRxRKh+3NcPwRrDQ6ZnqozyN/LtDJkMLoQYgE2z8PaXgYDQ/Ub1I4JCF+NMTQRfjPit0N627DzBvqmke2RcwHrFqMBtziWk1gH8MV22504mrkXv5ej9Id4F68XpMMW/OZEJVqbdTgmA4aZ7qJfJYCke4cANIL7j/+Hv+XV29HDC+YtYupdj3b6DwQuSWKJu/tJGIkNEIzej2eTRAx2lwBHa93u1KP9Jl+VNqJtZk8H1WUwZaJGeX/InRjOLHDm7ETUyKf388DdVxclKI8E/F4eDsCoVlXlionvPcF06nFfxjQqa+9t8ncwyYTR9U8GWTO3ulL3WDXa8qDhEwS/Zs3G8yVsiZs6csJovZhIYzYMKPPdsNdPjGpyaC0+qp4PQpjNX6P3wPgSzSdhukDcBxdkMkPutkNn8MM5Ej64lSkq+lasggjTXPcZKyxL/RFjtcIZJXqblKsdpJ1mbUjiGYRH2115J9iFv9jWRKJxhai5ALT+Pb5MlVIJizpl5dXQjtqX7RTmhlfspcfbtaiK7UBg2t6g==
+x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61ffc74f-a6cd-4f3b-a6f6-08d88adf9924
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2020 10:00:22.3641
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0a1d2a5-f52a-41c5-1525-08d88ae051ac
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2020 10:05:31.8705
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ozyFfL6E3dmBM7VZXhaKaRToBgnLAhCmUL1k8CYE0peP+oqBoIhjuWN/KI8MAx2D5zgbqp0qzPkC4ji6LT6Evg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1947
+X-MS-Exchange-CrossTenant-userprincipalname: esB+GgmOv573SPQVpqE/iioDU/vl0Jx+hSD08Au48xa4QuulnBprgAM8zytKOnPI5XPZr7IIMOsSWEOVMgM60g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2571
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-> > +
-> > +		start =3D pci_resource_start(pcidev, bar) + offset;
-> > +		len -=3D offset;
+> Subject: [PATCH 1/2] fpga: dfl: refactor cci_enumerate_feature_devs()
 >=20
-> With these code, I have the following assumption:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 >=20
-> 1. There is only one DFL in one bar, multiple DFLs requires multiple
-> bars.
+> In preparation of looking for dfls based on a vendor
+> specific pcie capability, move code that assumes
+> Bar0/offset0 as start of DFL to its own function.
 >=20
-> 2. The DFL region is from the "offset" to the end of the bar.
-
-I think we should not have such kind of limitation, but at least it=20
-requires user clearly from spec, to make sure no overlap case could
-happen. We all know that BAR number is small, but we won't limit
-DFL numbers by BAR number here.
-
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+>  drivers/fpga/dfl-pci.c | 86 ++++++++++++++++++++++++------------------
+>  1 file changed, 49 insertions(+), 37 deletions(-)
 >=20
-> Are they correct? If yes maybe we should specify them clearly in Doc.
+> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> index a2203d03c9e2..b1b157b41942 100644
+> --- a/drivers/fpga/dfl-pci.c
+> +++ b/drivers/fpga/dfl-pci.c
+> @@ -119,49 +119,20 @@ static int *cci_pci_create_irq_table(struct pci_dev
+> *pcidev, unsigned int nvec)
+>  	return table;
+>  }
 >=20
-> > +
-> > +		if (!PAGE_ALIGNED(start)) {
-> > +			dev_err(&pcidev->dev, "%s unaliged start 0x%llx\n",
-> > +				__func__, start);
-> > +			return -EINVAL;
-> > +		}
-> > +
-> > +		dfl_fpga_enum_info_add_dfl(info, start, len);
+> -/* enumerate feature devices under pci device */
+> -static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
+> +static int find_dfl_in_bar0(struct pci_dev *pcidev,
+> +			    struct dfl_fpga_enum_info *info)
+>  {
+> -	struct cci_drvdata *drvdata =3D pci_get_drvdata(pcidev);
+> -	int port_num, bar, i, nvec, ret =3D 0;
+> -	struct dfl_fpga_enum_info *info;
+> -	struct dfl_fpga_cdev *cdev;
+>  	resource_size_t start, len;
+> +	int port_num, bar, i;
+>  	void __iomem *base;
+> -	int *irq_table;
+> +	int ret =3D 0;
+>  	u32 offset;
+>  	u64 v;
 >=20
-> Do we need some region overlapping check in this func? So we could find
-> the HW problem (e.g. same bar num for multiple DFLs) in early stage.
-
-Not sure if VSEC can add a length field for this purpose, otherwise overlap=
-ping
-check only can be done after enumeration (walk the DFL to know the end).
-
+> -	/* allocate enumeration info via pci_dev */
+> -	info =3D dfl_fpga_enum_info_alloc(&pcidev->dev);
+> -	if (!info)
+> -		return -ENOMEM;
+> -
+> -	/* add irq info for enumeration if the device support irq */
+> -	nvec =3D cci_pci_alloc_irq(pcidev);
+> -	if (nvec < 0) {
+> -		dev_err(&pcidev->dev, "Fail to alloc irq %d.\n", nvec);
+> -		ret =3D nvec;
+> -		goto enum_info_free_exit;
+> -	} else if (nvec) {
+> -		irq_table =3D cci_pci_create_irq_table(pcidev, nvec);
+> -		if (!irq_table) {
+> -			ret =3D -ENOMEM;
+> -			goto irq_free_exit;
+> -		}
+> -
+> -		ret =3D dfl_fpga_enum_info_add_irq(info, nvec, irq_table);
+> -		kfree(irq_table);
+> -		if (ret)
+> -			goto irq_free_exit;
+> -	}
+> -
+> -	/* start to find Device Feature List in Bar 0 */
+> +	/* start to find Device Feature List from Bar 0 */
+>  	base =3D cci_pci_ioremap_bar0(pcidev);
+> -	if (!base) {
+> -		ret =3D -ENOMEM;
+> -		goto irq_free_exit;
+> -	}
+> +	if (!base)
+> +		return -ENOMEM;
 >=20
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int find_dfl_in_bar0(struct pci_dev *pcidev,
-> >  			    struct dfl_fpga_enum_info *info)
-> >  {
-> > @@ -221,7 +304,10 @@ static int cci_enumerate_feature_devs(struct
+>  	/*
+>  	 * PF device has FME and Ports/AFUs, and VF device only has one
+> @@ -208,12 +179,53 @@ static int cci_enumerate_feature_devs(struct
 > pci_dev *pcidev)
-> >  			goto irq_free_exit;
-> >  	}
-> >
-> > -	ret =3D find_dfl_in_bar0(pcidev, info);
-> > +	ret =3D find_dfl_in_cfg(pcidev, info);
-> > +
-> > +	if (ret)
-> > +		ret =3D find_dfl_in_bar0(pcidev, info);
+>  		dfl_fpga_enum_info_add_dfl(info, start, len);
+>  	} else {
+>  		ret =3D -ENODEV;
+> -		goto irq_free_exit;
+>  	}
 >=20
-> The patch is more than the relocation support for DFL. Actually it
-> introduced a different way of DFL finding.
+>  	/* release I/O mappings for next step enumeration */
+>  	pcim_iounmap_regions(pcidev, BIT(0));
 >=20
-> Previously it starts at bar0 offset 0, find dfl fme first, then find
-> dfl port according to fme header registers. Now it enumerates every DFL
-> by PCIe VSEC.
+> +
 
-Yes, the name is a little confusing, maybe we can rename them.
+We don't need 2 blank line here, remove one please.
 
-find_dfls_by_default or find_dfls - to handle original cases.
-find_dfls_by_vsec - to handle vsec case.
+> +	return ret;
+> +}
+> +
+> +/* enumerate feature devices under pci device */
+> +static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
+> +{
+> +	struct cci_drvdata *drvdata =3D pci_get_drvdata(pcidev);
+> +	struct dfl_fpga_enum_info *info;
+> +	struct dfl_fpga_cdev *cdev;
+> +	int nvec, ret =3D 0;
+> +	int *irq_table;
+> +
+> +	/* allocate enumeration info via pci_dev */
+> +	info =3D dfl_fpga_enum_info_alloc(&pcidev->dev);
+> +	if (!info)
+> +		return -ENOMEM;
+> +
+> +	/* add irq info for enumeration if the device support irq */
+> +	nvec =3D cci_pci_alloc_irq(pcidev);
+> +	if (nvec < 0) {
+> +		dev_err(&pcidev->dev, "Fail to alloc irq %d.\n", nvec);
+> +		ret =3D nvec;
+> +		goto enum_info_free_exit;
+> +	} else if (nvec) {
+> +		irq_table =3D cci_pci_create_irq_table(pcidev, nvec);
+> +		if (!irq_table) {
+> +			ret =3D -ENOMEM;
+> +			goto irq_free_exit;
+> +		}
+> +
+> +		ret =3D dfl_fpga_enum_info_add_irq(info, nvec, irq_table);
+> +		kfree(irq_table);
+> +		if (ret)
+> +			goto irq_free_exit;
+> +	}
+> +
+> +	ret =3D find_dfl_in_bar0(pcidev, info);
+> +
+
+Remove this blank line, and maybe switch to a better function name here.
 
 Thanks
 Hao
 
->=20
-> Maybe we should add more description about the change and why.
->=20
-> Thanks,
-> Yilun
->=20
-> >
-> >  	if (ret)
-> >  		goto irq_free_exit;
-> > --
-> > 2.25.2
+> +	if (ret)
+> +		goto irq_free_exit;
+> +
+>  	/* start enumeration with prepared enumeration information */
+>  	cdev =3D dfl_fpga_feature_devs_enumerate(info);
+>  	if (IS_ERR(cdev)) {
+> --
+> 2.25.2
+
