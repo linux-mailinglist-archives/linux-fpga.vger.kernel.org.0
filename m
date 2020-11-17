@@ -2,193 +2,124 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 835072B563E
-	for <lists+linux-fpga@lfdr.de>; Tue, 17 Nov 2020 02:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD4C2B56B7
+	for <lists+linux-fpga@lfdr.de>; Tue, 17 Nov 2020 03:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731557AbgKQBYo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 16 Nov 2020 20:24:44 -0500
-Received: from mga07.intel.com ([134.134.136.100]:34910 "EHLO mga07.intel.com"
+        id S1726361AbgKQC3N (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 16 Nov 2020 21:29:13 -0500
+Received: from mga18.intel.com ([134.134.136.126]:19890 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730966AbgKQBYm (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 16 Nov 2020 20:24:42 -0500
-IronPort-SDR: q+kKG6HR9kG7altedAT1zNCCSZA4fULqBURvAQg81cEDxez/Lkpa7VhG0ybZIEeZZgioK+8MVb
- KJyDF/IAT0gw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="234994420"
+        id S1726085AbgKQC3N (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 16 Nov 2020 21:29:13 -0500
+IronPort-SDR: Vo16YMykxqZOAGwG5BxUt95COAAVHopNRSaOH3NS5iWHlhc/hu/FY/z1KTbFUHs41jSO7he+vU
+ YAlqm+20H2ng==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="158624643"
 X-IronPort-AV: E=Sophos;i="5.77,484,1596524400"; 
-   d="scan'208";a="234994420"
+   d="scan'208";a="158624643"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 17:24:37 -0800
-IronPort-SDR: 0E3Y+YDZawR6b97yT7g10NIIhdek4kwRYDLUBKBhsQDiZzNlKkYkgZLwUhpDzLjYQt//mczPKm
- p1HkM4caH3MA==
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 18:29:05 -0800
+IronPort-SDR: Aj04aXMVaFnJd12GjLocklNkx3hmw2yvyRkKElVAxBE4+7ci5C0P0L89EL2lULxCpp1HPhGIlL
+ fCdoTHq6BZAw==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,484,1596524400"; 
-   d="scan'208";a="310060653"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.140])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 17:24:36 -0800
-From:   matthew.gerlach@linux.intel.com
-To:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        linux-doc@vger.kernel.org, corbet@lwn.net
-Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH 2/2] fpga: dfl: look for vendor specific capability
-Date:   Mon, 16 Nov 2020 17:25:52 -0800
-Message-Id: <20201117012552.262149-3-matthew.gerlach@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201117012552.262149-1-matthew.gerlach@linux.intel.com>
-References: <20201117012552.262149-1-matthew.gerlach@linux.intel.com>
+   d="scan'208";a="533638321"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Nov 2020 18:29:02 -0800
+Date:   Tue, 17 Nov 2020 10:24:54 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Richard Gong <richard.gong@linux.intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, trix@redhat.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dinguyen@kernel.org, sridhar.rajagopal@intel.com,
+        Richard Gong <richard.gong@intel.com>, yilun.xu@intel.com
+Subject: Re: [PATCHv1 3/4] dt-bindings: fpga: add authenticate-fpga-config
+  property
+Message-ID: <20201117022453.GA12837@yilunxu-OptiPlex-7050>
+References: <1605204403-6663-1-git-send-email-richard.gong@linux.intel.com>
+ <1605204403-6663-4-git-send-email-richard.gong@linux.intel.com>
+ <20201115192106.GB283592@epycbox.lan>
+ <20201116024758.GA6810@yilunxu-OptiPlex-7050>
+ <d83b37c2-2baa-b366-8ca4-bb2924bcd4f9@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d83b37c2-2baa-b366-8ca4-bb2924bcd4f9@linux.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On Mon, Nov 16, 2020 at 08:14:52AM -0600, Richard Gong wrote:
+> 
+> Hi Yilun,
+> 
+> On 11/15/20 8:47 PM, Xu Yilun wrote:
+> >On Sun, Nov 15, 2020 at 11:21:06AM -0800, Moritz Fischer wrote:
+> >>Hi Richard,
+> >>
+> >>On Thu, Nov 12, 2020 at 12:06:42PM -0600, richard.gong@linux.intel.com wrote:
+> >>>From: Richard Gong <richard.gong@intel.com>
+> >>>
+> >>>Add authenticate-fpga-config property for FPGA bitstream authentication.
+> >>>
+> >>>Signed-off-by: Richard Gong <richard.gong@intel.com>
+> >>>---
+> >>>  Documentation/devicetree/bindings/fpga/fpga-region.txt | 1 +
+> >>>  1 file changed, 1 insertion(+)
+> >>>
+> >>>diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> >>>index e811cf8..7a512bc 100644
+> >>>--- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> >>>+++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> >>>@@ -187,6 +187,7 @@ Optional properties:
+> >>>  - external-fpga-config : boolean, set if the FPGA has already been configured
+> >>>  	prior to OS boot up.
+> >>>  - encrypted-fpga-config : boolean, set if the bitstream is encrypted
+> >>>+- authenticate-fpga-config : boolean, set if do bitstream authentication
+> >>It is unclear to me from the description whether this entails
+> >>authentication + reconfiguration or just authentication.
+> >>
+> >>If the latter is the case this should probably be described as such.
+> >
+> >If it is just authentication, do we still need to disable bridges in
+> >fpga_region_program_fpga?
+> >
+> 
+> Yes.
+> 
+> Except for the actual configuration of the device, the authentication
+> feature is the same as FPGA configuration.
 
-A DFL may not begin at offset 0 of BAR 0.  A PCIe vendor
-specific capability can be used to specify the start of a
-number of DFLs.
+FPGA Bridges gate bus signals between a host and FPGA. So the FPGA
+region could not be accessed by host when doing configuration. But for
+this authentication, we are just writing the flash, we don't actually
+touch the FPGA soft logic. The host should still be able to operate on
+the old logic before reboot, is it?
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
----
- Documentation/fpga/dfl.rst | 10 +++++
- drivers/fpga/dfl-pci.c     | 88 +++++++++++++++++++++++++++++++++++++-
- 2 files changed, 97 insertions(+), 1 deletion(-)
+Thanks,
+Yilun
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index 0404fe6ffc74..c81ceb1e79e2 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -501,6 +501,16 @@ Developer only needs to provide a sub feature driver with matched feature id.
- FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
- could be a reference.
- 
-+Location of DFLs on PCI bus
-+===========================
-+The start of the DFL is assumed to be offset 0 of bar 0.
-+Alternatively, a vendor specific capability structure can be used to
-+specify the location of one or more DFLs.  Intel has reserved the
-+vendor specific id of 0x43 for this purpose.  The vendor specific
-+data begins with a 4 byte count of the number of DFLs followed 4 byte
-+Offset/BIR fields for each DFL. Bits 2:0 of Offset/BIR field indicates
-+the BAR, and bits 31:3 form the 8 byte aligned offset where bits 2:0 are
-+zero.
- 
- Open discussion
- ===============
-diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-index b1b157b41942..5418e8bf2496 100644
---- a/drivers/fpga/dfl-pci.c
-+++ b/drivers/fpga/dfl-pci.c
-@@ -27,6 +27,13 @@
- #define DRV_VERSION	"0.8"
- #define DRV_NAME	"dfl-pci"
- 
-+#define PCI_VNDR_ID_DFLS 0x43
-+
-+#define PCI_VNDR_DFLS_CNT_OFFSET 8
-+#define PCI_VNDR_DFLS_RES_OFFSET 0x0c
-+
-+#define PCI_VND_DFLS_RES_BAR_MASK 0x7
-+
- struct cci_drvdata {
- 	struct dfl_fpga_cdev *cdev;	/* container device */
- };
-@@ -119,6 +126,82 @@ static int *cci_pci_create_irq_table(struct pci_dev *pcidev, unsigned int nvec)
- 	return table;
- }
- 
-+static int find_dfl_in_cfg(struct pci_dev *pcidev,
-+			   struct dfl_fpga_enum_info *info)
-+{
-+	u32 bar, offset, vndr_hdr, dfl_cnt, dfl_res;
-+	int dfl_res_off, i, voff = 0;
-+	resource_size_t start, len;
-+
-+	while ((voff = pci_find_next_ext_capability(pcidev, voff, PCI_EXT_CAP_ID_VNDR))) {
-+
-+		pci_read_config_dword(pcidev, voff + PCI_VNDR_HEADER, &vndr_hdr);
-+
-+		dev_dbg(&pcidev->dev,
-+			"vendor-specific capability id 0x%x, rev 0x%x len 0x%x\n",
-+			PCI_VNDR_HEADER_ID(vndr_hdr),
-+			PCI_VNDR_HEADER_REV(vndr_hdr),
-+			PCI_VNDR_HEADER_LEN(vndr_hdr));
-+
-+		if (PCI_VNDR_HEADER_ID(vndr_hdr) == PCI_VNDR_ID_DFLS)
-+			break;
-+	}
-+
-+	if (!voff) {
-+		dev_dbg(&pcidev->dev, "%s no VSEC found\n", __func__);
-+		return -ENODEV;
-+	}
-+
-+	pci_read_config_dword(pcidev, voff + PCI_VNDR_DFLS_CNT_OFFSET, &dfl_cnt);
-+	dev_info(&pcidev->dev, "dfl_cnt %d\n", dfl_cnt);
-+	for (i = 0; i < dfl_cnt; i++) {
-+		dfl_res_off = voff + PCI_VNDR_DFLS_RES_OFFSET +
-+				      (i * sizeof(dfl_res));
-+		pci_read_config_dword(pcidev, dfl_res_off, &dfl_res);
-+
-+		dev_dbg(&pcidev->dev, "dfl_res 0x%x\n", dfl_res);
-+
-+		bar = dfl_res & PCI_VND_DFLS_RES_BAR_MASK;
-+
-+		if (bar >= PCI_STD_NUM_BARS) {
-+			dev_err(&pcidev->dev, "%s bad bar number %d\n",
-+				__func__, bar);
-+			return -EINVAL;
-+		}
-+
-+		len = pci_resource_len(pcidev, bar);
-+
-+		if (len == 0) {
-+			dev_err(&pcidev->dev, "%s unmapped bar number %d\n",
-+				__func__, bar);
-+			return -EINVAL;
-+		}
-+
-+		offset = dfl_res & ~PCI_VND_DFLS_RES_BAR_MASK;
-+
-+		if (offset >= len) {
-+			dev_err(&pcidev->dev, "%s bad offset %u >= %llu\n",
-+				__func__, offset, len);
-+			return -EINVAL;
-+		}
-+
-+		dev_info(&pcidev->dev, "%s BAR %d offset 0x%x\n", __func__, bar, offset);
-+
-+		start = pci_resource_start(pcidev, bar) + offset;
-+		len -= offset;
-+
-+		if (!PAGE_ALIGNED(start)) {
-+			dev_err(&pcidev->dev, "%s unaliged start 0x%llx\n",
-+				__func__, start);
-+			return -EINVAL;
-+		}
-+
-+		dfl_fpga_enum_info_add_dfl(info, start, len);
-+	}
-+
-+	return 0;
-+}
-+
- static int find_dfl_in_bar0(struct pci_dev *pcidev,
- 			    struct dfl_fpga_enum_info *info)
- {
-@@ -221,7 +304,10 @@ static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
- 			goto irq_free_exit;
- 	}
- 
--	ret = find_dfl_in_bar0(pcidev, info);
-+	ret = find_dfl_in_cfg(pcidev, info);
-+
-+	if (ret)
-+		ret = find_dfl_in_bar0(pcidev, info);
- 
- 	if (ret)
- 		goto irq_free_exit;
--- 
-2.25.2
-
+> 
+> Regards,
+> Richard
+> 
+> >I'm wondering if the FPGA functionalities could still be working when
+> >the authenticating is ongoing, or when the authenticating is failed.
+> >
+> 
+> 
+> 
+> >Thanks,
+> >Yilun
+> >
+> >>
+> >>>  - region-unfreeze-timeout-us : The maximum time in microseconds to wait for
+> >>>  	bridges to successfully become enabled after the region has been
+> >>>  	programmed.
+> >>>-- 
+> >>>2.7.4
+> >>>
+> >>
+> >>Thanks
