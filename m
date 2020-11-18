@@ -2,296 +2,47 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C372B7641
-	for <lists+linux-fpga@lfdr.de>; Wed, 18 Nov 2020 07:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA742B7777
+	for <lists+linux-fpga@lfdr.de>; Wed, 18 Nov 2020 08:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726089AbgKRGXs (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 18 Nov 2020 01:23:48 -0500
-Received: from mga14.intel.com ([192.55.52.115]:32179 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725794AbgKRGXs (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 18 Nov 2020 01:23:48 -0500
-IronPort-SDR: k1z4gyI+XeQxSIcbZDyYzxeySGk6A3CCE5cC6ai65TzMKF1yMJbpZtHx18Jzz3rUPavrnM11Vs
- ctZ6uOLS4NSA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="170290719"
-X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
-   d="scan'208";a="170290719"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 22:23:46 -0800
-IronPort-SDR: 4XAn/oDKxWs44dPnVAOZVKfp1rgtd2+MRAykiGWpLUAR7tGtq8eEfCfy+bYJhUnorST5z7QffV
- u3wSZ/DtCBhQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
-   d="scan'208";a="359197704"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Nov 2020 22:23:43 -0800
-Date:   Wed, 18 Nov 2020 14:19:32 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        linux-doc@vger.kernel.org, corbet@lwn.net, yilun.xu@intel.com
-Subject: Re: [PATCH 2/2] fpga: dfl: look for vendor specific capability
-Message-ID: <20201118061932.GC14665@yilunxu-OptiPlex-7050>
-References: <20201117012552.262149-1-matthew.gerlach@linux.intel.com>
- <20201117012552.262149-3-matthew.gerlach@linux.intel.com>
- <20201117075626.GA14665@yilunxu-OptiPlex-7050>
- <alpine.DEB.2.22.394.2011171114570.296481@rhweight-WRK1>
+        id S1727001AbgKRHwF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-fpga@lfdr.de>); Wed, 18 Nov 2020 02:52:05 -0500
+Received: from sw73-70-41.adsl.seed.net.tw ([203.73.70.41]:43344 "EHLO
+        oa.trendtek.com.tw" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1725794AbgKRHwF (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 18 Nov 2020 02:52:05 -0500
+Received: from [156.96.44.214] ([156.96.44.214])
+        (authenticated bits=0)
+        by oa.trendtek.com.tw (8.13.8/8.13.1) with ESMTP id 0AI7pefk021237
+        for <linux-fpga@vger.kernel.org>; Wed, 18 Nov 2020 15:52:02 +0800
+Message-Id: <202011180752.0AI7pefk021237@oa.trendtek.com.tw>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2011171114570.296481@rhweight-WRK1>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Corporate and Personal Loan *
+To:     linux-fpga@vger.kernel.org
+From:   "Investment  Corporate" <financialcapability6@gmail.com>
+Date:   Tue, 17 Nov 2020 23:51:52 -0800
+Reply-To: hmurrah39@gmail.com
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 11:41:32AM -0800, matthew.gerlach@linux.intel.com wrote:
-> 
-> 
-> On Tue, 17 Nov 2020, Xu Yilun wrote:
-> 
-> >On Mon, Nov 16, 2020 at 05:25:52PM -0800, matthew.gerlach@linux.intel.com wrote:
-> >>From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> >>
-> >>A DFL may not begin at offset 0 of BAR 0.  A PCIe vendor
-> >>specific capability can be used to specify the start of a
-> >>number of DFLs.
-> >>
-> >>Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> >>---
-> >> Documentation/fpga/dfl.rst | 10 +++++
-> >> drivers/fpga/dfl-pci.c     | 88 +++++++++++++++++++++++++++++++++++++-
-> >> 2 files changed, 97 insertions(+), 1 deletion(-)
-> >>
-> >>diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> >>index 0404fe6ffc74..c81ceb1e79e2 100644
-> >>--- a/Documentation/fpga/dfl.rst
-> >>+++ b/Documentation/fpga/dfl.rst
-> >>@@ -501,6 +501,16 @@ Developer only needs to provide a sub feature driver with matched feature id.
-> >> FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
-> >> could be a reference.
-> >>
-> >>+Location of DFLs on PCI bus
-> >>+===========================
-> >>+The start of the DFL is assumed to be offset 0 of bar 0.
-> >>+Alternatively, a vendor specific capability structure can be used to
-> >>+specify the location of one or more DFLs.  Intel has reserved the
-> >>+vendor specific id of 0x43 for this purpose.  The vendor specific
-> >>+data begins with a 4 byte count of the number of DFLs followed 4 byte
-> >>+Offset/BIR fields for each DFL. Bits 2:0 of Offset/BIR field indicates
-> >>+the BAR, and bits 31:3 form the 8 byte aligned offset where bits 2:0 are
-> >>+zero.
-> >>
-> >> Open discussion
-> >> ===============
-> >>diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-> >>index b1b157b41942..5418e8bf2496 100644
-> >>--- a/drivers/fpga/dfl-pci.c
-> >>+++ b/drivers/fpga/dfl-pci.c
-> >>@@ -27,6 +27,13 @@
-> >> #define DRV_VERSION	"0.8"
-> >> #define DRV_NAME	"dfl-pci"
-> >>
-> >>+#define PCI_VNDR_ID_DFLS 0x43
-> >>+
-> >>+#define PCI_VNDR_DFLS_CNT_OFFSET 8
-> >>+#define PCI_VNDR_DFLS_RES_OFFSET 0x0c
-> >>+
-> >>+#define PCI_VND_DFLS_RES_BAR_MASK 0x7
-> >
-> >We could define the mask by GENMASK().
-> >
-> >Also another macro PCI_VND_DFLS_RES_OFFSET_MASK is needed.
-> 
-> I will use GENMASK and and add PCI_VND_DFLS_RES_OFFSET_MASK in v2.
-> >
-> >>+
-> >> struct cci_drvdata {
-> >> 	struct dfl_fpga_cdev *cdev;	/* container device */
-> >> };
-> >>@@ -119,6 +126,82 @@ static int *cci_pci_create_irq_table(struct pci_dev *pcidev, unsigned int nvec)
-> >> 	return table;
-> >> }
-> >>
-> >>+static int find_dfl_in_cfg(struct pci_dev *pcidev,
-> >>+			   struct dfl_fpga_enum_info *info)
-> >>+{
-> >>+	u32 bar, offset, vndr_hdr, dfl_cnt, dfl_res;
-> >>+	int dfl_res_off, i, voff = 0;
-> >>+	resource_size_t start, len;
-> >>+
-> >>+	while ((voff = pci_find_next_ext_capability(pcidev, voff, PCI_EXT_CAP_ID_VNDR))) {
-> >>+
-> >>+		pci_read_config_dword(pcidev, voff + PCI_VNDR_HEADER, &vndr_hdr);
-> >>+
-> >>+		dev_dbg(&pcidev->dev,
-> >>+			"vendor-specific capability id 0x%x, rev 0x%x len 0x%x\n",
-> >>+			PCI_VNDR_HEADER_ID(vndr_hdr),
-> >>+			PCI_VNDR_HEADER_REV(vndr_hdr),
-> >>+			PCI_VNDR_HEADER_LEN(vndr_hdr));
-> >>+
-> >>+		if (PCI_VNDR_HEADER_ID(vndr_hdr) == PCI_VNDR_ID_DFLS)
-> >>+			break;
-> >>+	}
-> >>+
-> >>+	if (!voff) {
-> >>+		dev_dbg(&pcidev->dev, "%s no VSEC found\n", __func__);
-> >>+		return -ENODEV;
-> >>+	}
-> >>+
-> >>+	pci_read_config_dword(pcidev, voff + PCI_VNDR_DFLS_CNT_OFFSET, &dfl_cnt);
-> >>+	dev_info(&pcidev->dev, "dfl_cnt %d\n", dfl_cnt);
-> >
-> >dev_dbg() is better?
-> 
-> I will change to dev_dbg in v2.
-> 
-> >
-> >>+	for (i = 0; i < dfl_cnt; i++) {
-> >>+		dfl_res_off = voff + PCI_VNDR_DFLS_RES_OFFSET +
-> >>+				      (i * sizeof(dfl_res));
-> >>+		pci_read_config_dword(pcidev, dfl_res_off, &dfl_res);
-> >>+
-> >>+		dev_dbg(&pcidev->dev, "dfl_res 0x%x\n", dfl_res);
-> >>+
-> >>+		bar = dfl_res & PCI_VND_DFLS_RES_BAR_MASK;
-> >
-> >FIELD_GET is better?
-> 
-> I think & will the GENMASK will be better because it will be
-> symetrical to the & below for the offset.
+Hello linux-fpga@vger.kernel.org
 
-Fine.
 
-> 
-> >
-> >>+
-> >>+		if (bar >= PCI_STD_NUM_BARS) {
-> >>+			dev_err(&pcidev->dev, "%s bad bar number %d\n",
-> >>+				__func__, bar);
-> >>+			return -EINVAL;
-> >>+		}
-> >>+
-> >>+		len = pci_resource_len(pcidev, bar);
-> >>+
-> >>+		if (len == 0) {
-> >>+			dev_err(&pcidev->dev, "%s unmapped bar number %d\n",
-> >>+				__func__, bar);
-> >>+			return -EINVAL;
-> >>+		}
-> >>+
-> >>+		offset = dfl_res & ~PCI_VND_DFLS_RES_BAR_MASK;
-> >
-> >ditto
-> We don't want to use FIELD_GET here because we don't the shifting.
+We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
 
-That's correct.
 
-> 
-> >
-> >>+
-> >>+		if (offset >= len) {
-> >>+			dev_err(&pcidev->dev, "%s bad offset %u >= %llu\n",
-> >>+				__func__, offset, len);
-> >>+			return -EINVAL;
-> >>+		}
-> >>+
-> >>+		dev_info(&pcidev->dev, "%s BAR %d offset 0x%x\n", __func__, bar, offset);
-> >
-> >dev_dbg()?
-> 
-> I will change to dev_dbg in v2.
-> 
-> >
-> >>+
-> >>+		start = pci_resource_start(pcidev, bar) + offset;
-> >>+		len -= offset;
-> >
-> >With these code, I have the following assumption:
-> >
-> >1. There is only one DFL in one bar, multiple DFLs requires multiple
-> >bars.
-> >
-> >2. The DFL region is from the "offset" to the end of the bar.
-> >
-> >Are they correct? If yes maybe we should specify them clearly in Doc.
-> >
-> 
-> This code would have the same assumptions as the existing code for finding
-> the dfls.  The len value is only used during the walk of the DFL to prevent
-> walking too far.  So I think one could have more than one DFL
-> on a particular bar as long as the start of the DFLs are different.
+We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
 
-OK, I understand.
 
-It is a little different. Previously all the DFL nodes are chained in
-one bar. So we have only one DFL in one bar. In no chance we could have
-overlapped regions.
+Please get back to me if you are interested for more
 
-Now we can have more DFLs in one bar, so I think it could be better we
-know their boundaries earlier.
+details.
 
-> 
-> >>+
-> >>+		if (!PAGE_ALIGNED(start)) {
-> >>+			dev_err(&pcidev->dev, "%s unaliged start 0x%llx\n",
-> >>+				__func__, start);
-> >>+			return -EINVAL;
-> >>+		}
-> >>+
-> >>+		dfl_fpga_enum_info_add_dfl(info, start, len);
-> >
-> >Do we need some region overlapping check in this func? So we could find
-> >the HW problem (e.g. same bar num for multiple DFLs) in early stage.
-> >
-> 
-> I think whatever overlapping check would also need to be in the existing
-> code because the logic is the same.
 
-Yes.
+Yours faithfully,
 
-Thanks,
-Yilun
-
-> 
-> >>+	}
-> >>+
-> >>+	return 0;
-> >>+}
-> >>+
-> >> static int find_dfl_in_bar0(struct pci_dev *pcidev,
-> >> 			    struct dfl_fpga_enum_info *info)
-> >> {
-> >>@@ -221,7 +304,10 @@ static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
-> >> 			goto irq_free_exit;
-> >> 	}
-> >>
-> >>-	ret = find_dfl_in_bar0(pcidev, info);
-> >>+	ret = find_dfl_in_cfg(pcidev, info);
-> >>+
-> >>+	if (ret)
-> >>+		ret = find_dfl_in_bar0(pcidev, info);
-> >
-> >The patch is more than the relocation support for DFL. Actually it
-> >introduced a different way of DFL finding.
-> >
-> >Previously it starts at bar0 offset 0, find dfl fme first, then find
-> >dfl port according to fme header registers. Now it enumerates every DFL
-> >by PCIe VSEC.
-> >
-> >Maybe we should add more description about the change and why.
-> 
-> I will highlight this difference in the documentation in v2.
-> >
-> >Thanks,
-> >Yilun
-> >
-> >>
-> >> 	if (ret)
-> >> 		goto irq_free_exit;
-> >>--
-> >>2.25.2
-> >
+Hashim Murrah
