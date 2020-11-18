@@ -2,129 +2,107 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E0F2B72EC
-	for <lists+linux-fpga@lfdr.de>; Wed, 18 Nov 2020 01:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951572B73C5
+	for <lists+linux-fpga@lfdr.de>; Wed, 18 Nov 2020 02:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbgKRARD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 17 Nov 2020 19:17:03 -0500
-Received: from mga04.intel.com ([192.55.52.120]:54467 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726202AbgKRARC (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 17 Nov 2020 19:17:02 -0500
-IronPort-SDR: b8bA3KtzE/S/4QUXTeLhqhmt8yqcgsYscoVdTaQI3TJ1uhqoMpgr8Xp4zP/dthyyFbKxD9+aoF
- 4ovZvc1EAKeg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="168466272"
-X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
-   d="scan'208";a="168466272"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 16:17:02 -0800
-IronPort-SDR: DClsseHVbLjb7Cvh9XQq7XZQwYxjsVM4Y8Czp/d1BXkRsDuYYwS+VuNiX+yFdJQeRSnYZX4ifL
- /v5jh9uhvSrw==
-X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
-   d="scan'208";a="544268385"
-Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.212.81.41])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 16:17:01 -0800
-Subject: Re: [PATCH v5 6/6] fpga: m10bmc-sec: add max10 get_hw_errinfo
- callback func
-To:     Tom Rix <trix@redhat.com>, mdf@kernel.org, lee.jones@linaro.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@intel.com
-References: <20201114005559.90860-1-russell.h.weight@intel.com>
- <20201114005559.90860-7-russell.h.weight@intel.com>
- <d0e4819b-87b8-ef6f-9ede-adc28e10b2f8@redhat.com>
-From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <be5ecb61-2cfd-a179-3f29-36af8bd69855@intel.com>
-Date:   Tue, 17 Nov 2020 16:16:57 -0800
+        id S1726411AbgKRB36 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 17 Nov 2020 20:29:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56188 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727246AbgKRB36 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 17 Nov 2020 20:29:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605662996;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5y9d1mDFu+1IAn4UKYshZB62u1n5Z+noiYA1PqcdhCk=;
+        b=PfQCA4cwGft1kIrM88CZ+KZ1BincKYvjIkt7mdeyk55xAm9AZ6OspEj+6WHaxsNk10S9hk
+        3Xi7y3fJG8Prp2uxfmSLuzdAS5Ad/5+fY2G2yIsaYEycJip/BgPqI5th9dPpbcE9P8wTVp
+        bx0CKM96V8oiVNfJxUU0Wz9ATN3BFwg=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-241-J4IlT1YpOGesZEDOv6S6RA-1; Tue, 17 Nov 2020 20:29:55 -0500
+X-MC-Unique: J4IlT1YpOGesZEDOv6S6RA-1
+Received: by mail-qt1-f199.google.com with SMTP id i20so381136qtr.0
+        for <linux-fpga@vger.kernel.org>; Tue, 17 Nov 2020 17:29:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=5y9d1mDFu+1IAn4UKYshZB62u1n5Z+noiYA1PqcdhCk=;
+        b=rJzW8bcByYysajLVbDyFJco78wdNkj5R+VVawEu8iqS+QCg3CTZtuMp0UwLnm6+Vk1
+         vIJbRfWRnEmRR2+vXFXFlu77nNfV3qVnqTAU8eo/f/7H3Y04QHE7WLCXSZy7BZlf/dw2
+         umcAl3E3lWCwnkTj82oIyju2BuDab4qdlSERw8oDjih9/+wSbtz2tV23UKjPWeUZ2Q6D
+         s1EzlCx+ovORwukueovep2CILZRi/fcB9zrwNkCWf3hKxhsNMVkXi7VBV2OmpEAOBFcI
+         N+71uWGH+LyW3Ihy5G5fai6Gpsowi0D+Hx8aNxAoLdrG7xm1zRuAcvh+s0hHGWr3KlDw
+         RU1Q==
+X-Gm-Message-State: AOAM533jH1eVtNdDsSVggptKOXVItimzSL5P+kE9mLPS6oEgZlbRkN17
+        XYDRIMkP8kl5gFrAlkUj1Mmv7Cl7USHxx+5WpJwUC4GH+syDAahFWMp2X5BJe8zPhZGZPQG2K1h
+        iFwwecfMMluPlynYYNWa0xA==
+X-Received: by 2002:a0c:9bac:: with SMTP id o44mr2630011qve.43.1605662994570;
+        Tue, 17 Nov 2020 17:29:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxmxm5sTloYaS7lk1Nby+l3Pt4GRZsecKIapPOdPkL0PKYvK5KZOWnsOoSdlJa8/b2h2bRjjA==
+X-Received: by 2002:a0c:9bac:: with SMTP id o44mr2630000qve.43.1605662994342;
+        Tue, 17 Nov 2020 17:29:54 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id c27sm15395005qkk.57.2020.11.17.17.29.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Nov 2020 17:29:53 -0800 (PST)
+Subject: Re: [PATCH 2/2] fpga: dfl: look for vendor specific capability
+To:     matthew.gerlach@linux.intel.com
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mdf@kernel.org, hao.wu@intel.com, linux-doc@vger.kernel.org,
+        corbet@lwn.net
+References: <20201117012552.262149-1-matthew.gerlach@linux.intel.com>
+ <20201117012552.262149-3-matthew.gerlach@linux.intel.com>
+ <53b9cb12-8002-5737-ba8b-7c59687ead5a@redhat.com>
+ <alpine.DEB.2.22.394.2011171457150.312724@rhweight-WRK1>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <2a81ac9c-482e-c0ec-ea71-d811fdf8a01a@redhat.com>
+Date:   Tue, 17 Nov 2020 17:29:51 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <d0e4819b-87b8-ef6f-9ede-adc28e10b2f8@redhat.com>
+In-Reply-To: <alpine.DEB.2.22.394.2011171457150.312724@rhweight-WRK1>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
-
-On 11/15/20 6:20 AM, Tom Rix wrote:
-> On 11/13/20 4:55 PM, Russ Weight wrote:
->> Extend the MAX10 BMC Secure Update driver to include
->> a function that returns 64 bits of additional HW specific
->> data for errors that require additional information.
->> This callback function enables the hw_errinfo sysfs
->> node in the Intel Security Manager class driver.
+>> Is this really an either/or ?
 >>
->> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
->> ---
->> v5:
->>   - No change
->> v4:
->>   - No change
->> v3:
->>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
->>   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
->>     driver"
->> v2:
->>   - Implemented HW_ERRINFO_POISON for m10bmc_sec_hw_errinfo() to
->>     ensure that corresponding bits are set to 1 if we are unable
->>     to read the doorbell or auth_result registers.
->>   - Added m10bmc_ prefix to functions in m10bmc_iops structure
->> ---
->>  drivers/fpga/intel-m10-bmc-secure.c | 25 +++++++++++++++++++++++++
->>  1 file changed, 25 insertions(+)
+>> Could there be a base functionality on bar0 and a skew functionality on vendor bars?
+>
+> For simplicity I think either or is better.  If skew functionality is in vendor bars, why not just use the vendor bars all the time.
+>
 >>
->> diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
->> index 4fa8a2256088..a024efb173d3 100644
->> --- a/drivers/fpga/intel-m10-bmc-secure.c
->> +++ b/drivers/fpga/intel-m10-bmc-secure.c
->> @@ -472,11 +472,36 @@ static enum fpga_sec_err m10bmc_sec_cancel(struct fpga_sec_mgr *smgr)
->>  	return ret ? FPGA_SEC_ERR_RW_ERROR : FPGA_SEC_ERR_NONE;
->>  }
->>  
->> +#define HW_ERRINFO_POISON	GENMASK(31, 0)
->> +static u64 m10bmc_sec_hw_errinfo(struct fpga_sec_mgr *smgr)
->> +{
->> +	struct m10bmc_sec *sec = smgr->priv;
->> +	u32 doorbell, auth_result;
-> If doorbell and auth_result were poisoned at initialization, the if-checks could be skipped.
-
-Yes - I'll make this change.
-
-- Russ
+>> If vendor is going to completely override, why not use bar0 ?
 >
-> Tom
+> I'm not sure I understand the question, but in v2 the legacy DFL search will only occur if there is no VSEC found.
 >
->> +
->> +	switch (smgr->err_code) {
->> +	case FPGA_SEC_ERR_HW_ERROR:
->> +	case FPGA_SEC_ERR_TIMEOUT:
->> +	case FPGA_SEC_ERR_BUSY:
->> +	case FPGA_SEC_ERR_WEAROUT:
->> +		if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell))
->> +			doorbell = HW_ERRINFO_POISON;
->> +
->> +		if (m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT,
->> +				    &auth_result))
->> +			auth_result = HW_ERRINFO_POISON;
->> +
->> +		return (u64)doorbell << 32 | (u64)auth_result;
->> +	default:
->> +		return 0;
->> +	}
->> +}
->> +
->>  static const struct fpga_sec_mgr_ops m10bmc_sops = {
->>  	.prepare = m10bmc_sec_prepare,
->>  	.write_blk = m10bmc_sec_write_blk,
->>  	.poll_complete = m10bmc_sec_poll_complete,
->>  	.cancel = m10bmc_sec_cancel,
->> +	.get_hw_errinfo = m10bmc_sec_hw_errinfo,
->>  };
->>  
->>  static int m10bmc_secure_probe(struct platform_device *pdev)
+Wondering if vsec was ignored, would the bar0 work ?
+
+Or another way, how badly would an old driver behave.
+
+consider incrementing the driver version if it would be bad.
+
+Tom
+
+
+>>
+>> Tom
+>>
+>>>
+>>>      if (ret)
+>>>          goto irq_free_exit;
+>>
+>>
+>
 
