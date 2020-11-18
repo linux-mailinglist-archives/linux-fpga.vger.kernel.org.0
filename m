@@ -2,134 +2,296 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E23E2B760C
-	for <lists+linux-fpga@lfdr.de>; Wed, 18 Nov 2020 06:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C372B7641
+	for <lists+linux-fpga@lfdr.de>; Wed, 18 Nov 2020 07:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725970AbgKRFvd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 18 Nov 2020 00:51:33 -0500
-Received: from mga06.intel.com ([134.134.136.31]:11645 "EHLO mga06.intel.com"
+        id S1726089AbgKRGXs (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 18 Nov 2020 01:23:48 -0500
+Received: from mga14.intel.com ([192.55.52.115]:32179 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725355AbgKRFvd (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 18 Nov 2020 00:51:33 -0500
-IronPort-SDR: SWkXhgLaMutfjDVsGUfSKQ94kf6q3C/+BRBkeufyCRtFUC/y+RbjZ14L+CnKiNFuUsF/xjlM5U
- GbSGr8D72dVA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="232683318"
+        id S1725794AbgKRGXs (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 18 Nov 2020 01:23:48 -0500
+IronPort-SDR: k1z4gyI+XeQxSIcbZDyYzxeySGk6A3CCE5cC6ai65TzMKF1yMJbpZtHx18Jzz3rUPavrnM11Vs
+ ctZ6uOLS4NSA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="170290719"
 X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
-   d="scan'208";a="232683318"
+   d="scan'208";a="170290719"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 21:51:32 -0800
-IronPort-SDR: 3y4xws2q4Zsz/zxIrUBmg7A1tXFbX1MmQFZwlMG2MFILlsunXgeYRExF38w9eQJ2xthh01yfsK
- 8Nwt6MY4Fsgg==
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 22:23:46 -0800
+IronPort-SDR: 4XAn/oDKxWs44dPnVAOZVKfp1rgtd2+MRAykiGWpLUAR7tGtq8eEfCfy+bYJhUnorST5z7QffV
+ u3wSZ/DtCBhQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
-   d="scan'208";a="430691834"
+   d="scan'208";a="359197704"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Nov 2020 21:51:29 -0800
-Date:   Wed, 18 Nov 2020 13:47:18 +0800
+  by fmsmga004.fm.intel.com with ESMTP; 17 Nov 2020 22:23:43 -0800
+Date:   Wed, 18 Nov 2020 14:19:32 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Richard Gong <richard.gong@linux.intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, trix@redhat.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dinguyen@kernel.org, sridhar.rajagopal@intel.com,
-        Richard Gong <richard.gong@intel.com>, yilun.xu@intel.com
-Subject: Re: [PATCHv1 3/4] dt-bindings: fpga: add authenticate-fpga-config
-  property
-Message-ID: <20201118054718.GB14665@yilunxu-OptiPlex-7050>
-References: <1605204403-6663-1-git-send-email-richard.gong@linux.intel.com>
- <1605204403-6663-4-git-send-email-richard.gong@linux.intel.com>
- <20201115192106.GB283592@epycbox.lan>
- <20201116024758.GA6810@yilunxu-OptiPlex-7050>
- <d83b37c2-2baa-b366-8ca4-bb2924bcd4f9@linux.intel.com>
- <20201117022453.GA12837@yilunxu-OptiPlex-7050>
- <e9492bbf-f3c5-41a7-0a08-8de142700880@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        linux-doc@vger.kernel.org, corbet@lwn.net, yilun.xu@intel.com
+Subject: Re: [PATCH 2/2] fpga: dfl: look for vendor specific capability
+Message-ID: <20201118061932.GC14665@yilunxu-OptiPlex-7050>
+References: <20201117012552.262149-1-matthew.gerlach@linux.intel.com>
+ <20201117012552.262149-3-matthew.gerlach@linux.intel.com>
+ <20201117075626.GA14665@yilunxu-OptiPlex-7050>
+ <alpine.DEB.2.22.394.2011171114570.296481@rhweight-WRK1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e9492bbf-f3c5-41a7-0a08-8de142700880@linux.intel.com>
+In-Reply-To: <alpine.DEB.2.22.394.2011171114570.296481@rhweight-WRK1>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 09:39:55AM -0600, Richard Gong wrote:
+On Tue, Nov 17, 2020 at 11:41:32AM -0800, matthew.gerlach@linux.intel.com wrote:
 > 
 > 
-> On 11/16/20 8:24 PM, Xu Yilun wrote:
-> >On Mon, Nov 16, 2020 at 08:14:52AM -0600, Richard Gong wrote:
+> On Tue, 17 Nov 2020, Xu Yilun wrote:
+> 
+> >On Mon, Nov 16, 2020 at 05:25:52PM -0800, matthew.gerlach@linux.intel.com wrote:
+> >>From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > >>
-> >>Hi Yilun,
+> >>A DFL may not begin at offset 0 of BAR 0.  A PCIe vendor
+> >>specific capability can be used to specify the start of a
+> >>number of DFLs.
 > >>
-> >>On 11/15/20 8:47 PM, Xu Yilun wrote:
-> >>>On Sun, Nov 15, 2020 at 11:21:06AM -0800, Moritz Fischer wrote:
-> >>>>Hi Richard,
-> >>>>
-> >>>>On Thu, Nov 12, 2020 at 12:06:42PM -0600, richard.gong@linux.intel.com wrote:
-> >>>>>From: Richard Gong <richard.gong@intel.com>
-> >>>>>
-> >>>>>Add authenticate-fpga-config property for FPGA bitstream authentication.
-> >>>>>
-> >>>>>Signed-off-by: Richard Gong <richard.gong@intel.com>
-> >>>>>---
-> >>>>>  Documentation/devicetree/bindings/fpga/fpga-region.txt | 1 +
-> >>>>>  1 file changed, 1 insertion(+)
-> >>>>>
-> >>>>>diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt b/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> >>>>>index e811cf8..7a512bc 100644
-> >>>>>--- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> >>>>>+++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> >>>>>@@ -187,6 +187,7 @@ Optional properties:
-> >>>>>  - external-fpga-config : boolean, set if the FPGA has already been configured
-> >>>>>  	prior to OS boot up.
-> >>>>>  - encrypted-fpga-config : boolean, set if the bitstream is encrypted
-> >>>>>+- authenticate-fpga-config : boolean, set if do bitstream authentication
-> >>>>It is unclear to me from the description whether this entails
-> >>>>authentication + reconfiguration or just authentication.
-> >>>>
-> >>>>If the latter is the case this should probably be described as such.
-> >>>
-> >>>If it is just authentication, do we still need to disable bridges in
-> >>>fpga_region_program_fpga?
-> >>>
+> >>Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> >>---
+> >> Documentation/fpga/dfl.rst | 10 +++++
+> >> drivers/fpga/dfl-pci.c     | 88 +++++++++++++++++++++++++++++++++++++-
+> >> 2 files changed, 97 insertions(+), 1 deletion(-)
 > >>
-> >>Yes.
+> >>diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> >>index 0404fe6ffc74..c81ceb1e79e2 100644
+> >>--- a/Documentation/fpga/dfl.rst
+> >>+++ b/Documentation/fpga/dfl.rst
+> >>@@ -501,6 +501,16 @@ Developer only needs to provide a sub feature driver with matched feature id.
+> >> FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
+> >> could be a reference.
 > >>
-> >>Except for the actual configuration of the device, the authentication
-> >>feature is the same as FPGA configuration.
+> >>+Location of DFLs on PCI bus
+> >>+===========================
+> >>+The start of the DFL is assumed to be offset 0 of bar 0.
+> >>+Alternatively, a vendor specific capability structure can be used to
+> >>+specify the location of one or more DFLs.  Intel has reserved the
+> >>+vendor specific id of 0x43 for this purpose.  The vendor specific
+> >>+data begins with a 4 byte count of the number of DFLs followed 4 byte
+> >>+Offset/BIR fields for each DFL. Bits 2:0 of Offset/BIR field indicates
+> >>+the BAR, and bits 31:3 form the 8 byte aligned offset where bits 2:0 are
+> >>+zero.
+> >>
+> >> Open discussion
+> >> ===============
+> >>diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> >>index b1b157b41942..5418e8bf2496 100644
+> >>--- a/drivers/fpga/dfl-pci.c
+> >>+++ b/drivers/fpga/dfl-pci.c
+> >>@@ -27,6 +27,13 @@
+> >> #define DRV_VERSION	"0.8"
+> >> #define DRV_NAME	"dfl-pci"
+> >>
+> >>+#define PCI_VNDR_ID_DFLS 0x43
+> >>+
+> >>+#define PCI_VNDR_DFLS_CNT_OFFSET 8
+> >>+#define PCI_VNDR_DFLS_RES_OFFSET 0x0c
+> >>+
+> >>+#define PCI_VND_DFLS_RES_BAR_MASK 0x7
 > >
-> >FPGA Bridges gate bus signals between a host and FPGA. So the FPGA
-> >region could not be accessed by host when doing configuration. But for
-> >this authentication, we are just writing the flash, we don't actually
-> >touch the FPGA soft logic. The host should still be able to operate on
-> >the old logic before reboot, is it?
+> >We could define the mask by GENMASK().
 > >
-> Yes, it's feasible in theory but doesn't make much sense in practice. I
-> prefer to keep fpga_region_program_fpga() unchanged.
+> >Also another macro PCI_VND_DFLS_RES_OFFSET_MASK is needed.
+> 
+> I will use GENMASK and and add PCI_VND_DFLS_RES_OFFSET_MASK in v2.
+> >
+> >>+
+> >> struct cci_drvdata {
+> >> 	struct dfl_fpga_cdev *cdev;	/* container device */
+> >> };
+> >>@@ -119,6 +126,82 @@ static int *cci_pci_create_irq_table(struct pci_dev *pcidev, unsigned int nvec)
+> >> 	return table;
+> >> }
+> >>
+> >>+static int find_dfl_in_cfg(struct pci_dev *pcidev,
+> >>+			   struct dfl_fpga_enum_info *info)
+> >>+{
+> >>+	u32 bar, offset, vndr_hdr, dfl_cnt, dfl_res;
+> >>+	int dfl_res_off, i, voff = 0;
+> >>+	resource_size_t start, len;
+> >>+
+> >>+	while ((voff = pci_find_next_ext_capability(pcidev, voff, PCI_EXT_CAP_ID_VNDR))) {
+> >>+
+> >>+		pci_read_config_dword(pcidev, voff + PCI_VNDR_HEADER, &vndr_hdr);
+> >>+
+> >>+		dev_dbg(&pcidev->dev,
+> >>+			"vendor-specific capability id 0x%x, rev 0x%x len 0x%x\n",
+> >>+			PCI_VNDR_HEADER_ID(vndr_hdr),
+> >>+			PCI_VNDR_HEADER_REV(vndr_hdr),
+> >>+			PCI_VNDR_HEADER_LEN(vndr_hdr));
+> >>+
+> >>+		if (PCI_VNDR_HEADER_ID(vndr_hdr) == PCI_VNDR_ID_DFLS)
+> >>+			break;
+> >>+	}
+> >>+
+> >>+	if (!voff) {
+> >>+		dev_dbg(&pcidev->dev, "%s no VSEC found\n", __func__);
+> >>+		return -ENODEV;
+> >>+	}
+> >>+
+> >>+	pci_read_config_dword(pcidev, voff + PCI_VNDR_DFLS_CNT_OFFSET, &dfl_cnt);
+> >>+	dev_info(&pcidev->dev, "dfl_cnt %d\n", dfl_cnt);
+> >
+> >dev_dbg() is better?
+> 
+> I will change to dev_dbg in v2.
+> 
+> >
+> >>+	for (i = 0; i < dfl_cnt; i++) {
+> >>+		dfl_res_off = voff + PCI_VNDR_DFLS_RES_OFFSET +
+> >>+				      (i * sizeof(dfl_res));
+> >>+		pci_read_config_dword(pcidev, dfl_res_off, &dfl_res);
+> >>+
+> >>+		dev_dbg(&pcidev->dev, "dfl_res 0x%x\n", dfl_res);
+> >>+
+> >>+		bar = dfl_res & PCI_VND_DFLS_RES_BAR_MASK;
+> >
+> >FIELD_GET is better?
+> 
+> I think & will the GENMASK will be better because it will be
+> symetrical to the & below for the offset.
 
-I'm thinking of the case of inband reprograming, that the QSPI flash
-controller itself is embedded in FPGA soft logic, then maybe host still
-need to access FPGA on authentication.
+Fine.
+
+> 
+> >
+> >>+
+> >>+		if (bar >= PCI_STD_NUM_BARS) {
+> >>+			dev_err(&pcidev->dev, "%s bad bar number %d\n",
+> >>+				__func__, bar);
+> >>+			return -EINVAL;
+> >>+		}
+> >>+
+> >>+		len = pci_resource_len(pcidev, bar);
+> >>+
+> >>+		if (len == 0) {
+> >>+			dev_err(&pcidev->dev, "%s unmapped bar number %d\n",
+> >>+				__func__, bar);
+> >>+			return -EINVAL;
+> >>+		}
+> >>+
+> >>+		offset = dfl_res & ~PCI_VND_DFLS_RES_BAR_MASK;
+> >
+> >ditto
+> We don't want to use FIELD_GET here because we don't the shifting.
+
+That's correct.
+
+> 
+> >
+> >>+
+> >>+		if (offset >= len) {
+> >>+			dev_err(&pcidev->dev, "%s bad offset %u >= %llu\n",
+> >>+				__func__, offset, len);
+> >>+			return -EINVAL;
+> >>+		}
+> >>+
+> >>+		dev_info(&pcidev->dev, "%s BAR %d offset 0x%x\n", __func__, bar, offset);
+> >
+> >dev_dbg()?
+> 
+> I will change to dev_dbg in v2.
+> 
+> >
+> >>+
+> >>+		start = pci_resource_start(pcidev, bar) + offset;
+> >>+		len -= offset;
+> >
+> >With these code, I have the following assumption:
+> >
+> >1. There is only one DFL in one bar, multiple DFLs requires multiple
+> >bars.
+> >
+> >2. The DFL region is from the "offset" to the end of the bar.
+> >
+> >Are they correct? If yes maybe we should specify them clearly in Doc.
+> >
+> 
+> This code would have the same assumptions as the existing code for finding
+> the dfls.  The len value is only used during the walk of the DFL to prevent
+> walking too far.  So I think one could have more than one DFL
+> on a particular bar as long as the start of the DFLs are different.
+
+OK, I understand.
+
+It is a little different. Previously all the DFL nodes are chained in
+one bar. So we have only one DFL in one bar. In no chance we could have
+overlapped regions.
+
+Now we can have more DFLs in one bar, so I think it could be better we
+know their boundaries earlier.
+
+> 
+> >>+
+> >>+		if (!PAGE_ALIGNED(start)) {
+> >>+			dev_err(&pcidev->dev, "%s unaliged start 0x%llx\n",
+> >>+				__func__, start);
+> >>+			return -EINVAL;
+> >>+		}
+> >>+
+> >>+		dfl_fpga_enum_info_add_dfl(info, start, len);
+> >
+> >Do we need some region overlapping check in this func? So we could find
+> >the HW problem (e.g. same bar num for multiple DFLs) in early stage.
+> >
+> 
+> I think whatever overlapping check would also need to be in the existing
+> code because the logic is the same.
+
+Yes.
 
 Thanks,
 Yilun
 
+> 
+> >>+	}
+> >>+
+> >>+	return 0;
+> >>+}
+> >>+
+> >> static int find_dfl_in_bar0(struct pci_dev *pcidev,
+> >> 			    struct dfl_fpga_enum_info *info)
+> >> {
+> >>@@ -221,7 +304,10 @@ static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
+> >> 			goto irq_free_exit;
+> >> 	}
 > >>
-> >>>I'm wondering if the FPGA functionalities could still be working when
-> >>>the authenticating is ongoing, or when the authenticating is failed.
-> >>>
+> >>-	ret = find_dfl_in_bar0(pcidev, info);
+> >>+	ret = find_dfl_in_cfg(pcidev, info);
+> >>+
+> >>+	if (ret)
+> >>+		ret = find_dfl_in_bar0(pcidev, info);
+> >
+> >The patch is more than the relocation support for DFL. Actually it
+> >introduced a different way of DFL finding.
+> >
+> >Previously it starts at bar0 offset 0, find dfl fme first, then find
+> >dfl port according to fme header registers. Now it enumerates every DFL
+> >by PCIe VSEC.
+> >
+> >Maybe we should add more description about the change and why.
+> 
+> I will highlight this difference in the documentation in v2.
+> >
+> >Thanks,
+> >Yilun
+> >
 > >>
-> >>
-> >>
-> >>>Thanks,
-> >>>Yilun
-> >>>
-> >>>>
-> >>>>>  - region-unfreeze-timeout-us : The maximum time in microseconds to wait for
-> >>>>>  	bridges to successfully become enabled after the region has been
-> >>>>>  	programmed.
-> >>>>>-- 
-> >>>>>2.7.4
-> >>>>>
-> >>>>
-> >>>>Thanks
+> >> 	if (ret)
+> >> 		goto irq_free_exit;
+> >>--
+> >>2.25.2
+> >
