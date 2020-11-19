@@ -2,207 +2,161 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3702B8449
-	for <lists+linux-fpga@lfdr.de>; Wed, 18 Nov 2020 20:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D532B897E
+	for <lists+linux-fpga@lfdr.de>; Thu, 19 Nov 2020 02:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbgKRTAh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 18 Nov 2020 14:00:37 -0500
-Received: from mga11.intel.com ([192.55.52.93]:61024 "EHLO mga11.intel.com"
+        id S1727019AbgKSBZn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 18 Nov 2020 20:25:43 -0500
+Received: from mga04.intel.com ([192.55.52.120]:47676 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727068AbgKRTAh (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 18 Nov 2020 14:00:37 -0500
-IronPort-SDR: gocfy7zmU2SSJaI0i2qRHY5tGsCwV0+AM0jkeNc5pCU9Qw2g28OwTHgLKo5XrLDtiQ//id4bQG
- T40HZD+JlpkQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9809"; a="167658900"
-X-IronPort-AV: E=Sophos;i="5.77,488,1596524400"; 
-   d="scan'208";a="167658900"
+        id S1726098AbgKSBZn (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 18 Nov 2020 20:25:43 -0500
+IronPort-SDR: aEhSSkEvW9YeXxGHPjuUsbjV3jDL4qU7UFXJ5+GJgt9pKvH3EYaJ2P7chWlLeDtWAdp9YSObq0
+ He2vlJc8DKTA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9809"; a="168642111"
+X-IronPort-AV: E=Sophos;i="5.77,489,1596524400"; 
+   d="scan'208";a="168642111"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 11:00:35 -0800
-IronPort-SDR: 6l2o5cyRNAbcz3TV1vIdaX2GrjdafBBOVdLUbGLgyurHVzF1ThVjgkUsa9YQFdUHL8HKzH4ERs
- Nl3Os1hRYzqw==
-X-IronPort-AV: E=Sophos;i="5.77,488,1596524400"; 
-   d="scan'208";a="544665317"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.140])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 11:00:35 -0800
-From:   matthew.gerlach@linux.intel.com
-To:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        linux-doc@vger.kernel.org, corbet@lwn.net
-Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v2 2/2] fpga: dfl: look for vendor specific capability
-Date:   Wed, 18 Nov 2020 11:01:51 -0800
-Message-Id: <20201118190151.365564-3-matthew.gerlach@linux.intel.com>
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 17:25:42 -0800
+IronPort-SDR: eqlskG+OvYZqrQOE+iYqPXNfqxX1mzhCQ5cRYUi9VTjayovUBU9f2Cg7dMiQP+Ay5dbVTprkx5
+ icPK0Ec1RG9A==
+X-IronPort-AV: E=Sophos;i="5.77,489,1596524400"; 
+   d="scan'208";a="532968592"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.212.246.14])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 17:25:42 -0800
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, lee.jones@linaro.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v6 0/6] Intel MAX10 BMC Secure Update Driver
+Date:   Wed, 18 Nov 2020 17:25:26 -0800
+Message-Id: <20201119012532.138517-1-russell.h.weight@intel.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201118190151.365564-1-matthew.gerlach@linux.intel.com>
-References: <20201118190151.365564-1-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+The Intel MAX10 BMC Secure Update driver instantiates the FPGA
+Security Manager class driver and provides the callback functions
+required to support secure updates on Intel n3000 PAC devices.
+This driver is implemented as a sub-driver of the Intel MAX10 BMC
+mfd driver. Future instances of the MAX10 BMC will support other
+devices as well (e.g. d5005) and this same MAX10 BMC Secure
+Update driver will receive modifications to support that device.
 
-A DFL may not begin at offset 0 of BAR 0.  A PCIe vendor
-specific capability can be used to specify the start of a
-number of DFLs.
+This driver interacts with the HW secure update engine of the
+BMC in order to transfer new FPGA and BMC images to FLASH so
+that they will be automatically loaded when the FPGA card reboots.
+Security is enforced by hardware and firmware. The MAX10 BMC
+Secure Update driver interacts with the firmware to initiate
+an update, pass in the necessary data, and collect status on
+the update.
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
----
-v2: Update documentation for clarity.
-    Clean up  macro names.
-    Use GENMASK.
-    Removed spurious blank lines.
-    Changed some calls from dev_info to dev_dbg.
-    Specifically check for VSEC not found, -ENODEV.
-    Ensure correct pci vendor id.
-    Remove check for page alignment.
-    Rename find_dfl_in_cfg to find_dfls_by_vsec.
-    Initialize target memory of pci_read_config_dword to invalid values before use.
----
- Documentation/fpga/dfl.rst | 13 ++++++
- drivers/fpga/dfl-pci.c     | 87 +++++++++++++++++++++++++++++++++++++-
- 2 files changed, 98 insertions(+), 2 deletions(-)
+This driver provides sysfs files for displaying the flash count,
+the root entry hashes (REH), and the code-signing-key (CSK)
+cancellation vectors.
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index 0404fe6ffc74..37016ff35a90 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -501,6 +501,19 @@ Developer only needs to provide a sub feature driver with matched feature id.
- FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
- could be a reference.
- 
-+Location of DFLs on PCI Device
-+===========================
-+The start of the first DFL is assumed to be offset 0 of bar 0.
-+If the first node of the DFL is an FME, then further DFLs
-+in the port(s) are specified in FME header registers.
-+Alternatively, a vendor specific capability structure can be used to
-+specify the location of all the DFLs on the device, providing flexibility
-+for the type of starting node in the DFL.  Intel has reserved the
-+VSEC ID of 0x43 for this purpose.  The vendor specific
-+data begins with a 4 byte vendor specific register for the number of DFLs followed 4 byte
-+Offset/BIR vendor specific registers for each DFL. Bits 2:0 of Offset/BIR register
-+indicates the BAR, and bits 31:3 form the 8 byte aligned offset where bits 2:0 are
-+zero.
- 
- Open discussion
- ===============
-diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-index b27fae045536..3a6807e3e10c 100644
---- a/drivers/fpga/dfl-pci.c
-+++ b/drivers/fpga/dfl-pci.c
-@@ -27,6 +27,14 @@
- #define DRV_VERSION	"0.8"
- #define DRV_NAME	"dfl-pci"
- 
-+#define PCI_VSEC_ID_INTEL_DFLS 0x43
-+
-+#define PCI_VNDR_DFLS_CNT 8
-+#define PCI_VNDR_DFLS_RES 0x0c
-+
-+#define PCI_VNDR_DFLS_RES_BAR_MASK GENMASK(2, 0)
-+#define PCI_VNDR_DFLS_RES_OFF_MASK GENMASK(31, 3)
-+
- struct cci_drvdata {
- 	struct dfl_fpga_cdev *cdev;	/* container device */
- };
-@@ -119,8 +127,80 @@ static int *cci_pci_create_irq_table(struct pci_dev *pcidev, unsigned int nvec)
- 	return table;
- }
- 
-+static int find_dfls_by_vsec(struct pci_dev *pcidev, struct dfl_fpga_enum_info *info)
-+{
-+	u32 bar, offset, vndr_hdr, dfl_cnt, dfl_res;
-+	int dfl_res_off, i, voff = 0;
-+	resource_size_t start, len;
-+
-+	if (pcidev->vendor != PCI_VENDOR_ID_INTEL)
-+		return -ENODEV;
-+
-+	while ((voff = pci_find_next_ext_capability(pcidev, voff, PCI_EXT_CAP_ID_VNDR))) {
-+		vndr_hdr = 0;
-+		pci_read_config_dword(pcidev, voff + PCI_VNDR_HEADER, &vndr_hdr);
-+
-+		dev_dbg(&pcidev->dev,
-+			"vendor-specific capability id 0x%x, rev 0x%x len 0x%x\n",
-+			PCI_VNDR_HEADER_ID(vndr_hdr),
-+			PCI_VNDR_HEADER_REV(vndr_hdr),
-+			PCI_VNDR_HEADER_LEN(vndr_hdr));
-+
-+		if (PCI_VNDR_HEADER_ID(vndr_hdr) == PCI_VSEC_ID_INTEL_DFLS)
-+			break;
-+	}
-+
-+	if (!voff) {
-+		dev_dbg(&pcidev->dev, "%s no VSEC found\n", __func__);
-+		return -ENODEV;
-+	}
-+
-+	dfl_cnt = 0;
-+	pci_read_config_dword(pcidev, voff + PCI_VNDR_DFLS_CNT, &dfl_cnt);
-+	dev_dbg(&pcidev->dev, "dfl_cnt %d\n", dfl_cnt);
-+	for (i = 0; i < dfl_cnt; i++) {
-+		dfl_res_off = voff + PCI_VNDR_DFLS_RES +
-+				      (i * sizeof(dfl_res));
-+		dfl_res = GENMASK(31, 0);
-+		pci_read_config_dword(pcidev, dfl_res_off, &dfl_res);
-+
-+		dev_dbg(&pcidev->dev, "dfl_res 0x%x\n", dfl_res);
-+
-+		bar = dfl_res & PCI_VNDR_DFLS_RES_BAR_MASK;
-+		if (bar >= PCI_STD_NUM_BARS) {
-+			dev_err(&pcidev->dev, "%s bad bar number %d\n",
-+				__func__, bar);
-+			return -EINVAL;
-+		}
-+
-+		len = pci_resource_len(pcidev, bar);
-+		if (len == 0) {
-+			dev_err(&pcidev->dev, "%s unmapped bar number %d\n",
-+				__func__, bar);
-+			return -EINVAL;
-+		}
-+
-+		offset = dfl_res & PCI_VNDR_DFLS_RES_OFF_MASK;
-+		if (offset >= len) {
-+			dev_err(&pcidev->dev, "%s bad offset %u >= %pa\n",
-+				__func__, offset, &len);
-+			return -EINVAL;
-+		}
-+
-+		dev_dbg(&pcidev->dev, "%s BAR %d offset 0x%x\n", __func__, bar, offset);
-+
-+		len -= offset;
-+
-+		start = pci_resource_start(pcidev, bar) + offset;
-+
-+		dfl_fpga_enum_info_add_dfl(info, start, len);
-+	}
-+
-+	return 0;
-+}
-+
- static int find_dfls_by_default(struct pci_dev *pcidev,
--				struct dfl_fpga_enum_info *info)
-+			       struct dfl_fpga_enum_info *info)
- {
- 	resource_size_t start, len;
- 	int port_num, bar, i;
-@@ -220,7 +300,10 @@ static int cci_enumerate_feature_devs(struct pci_dev *pcidev)
- 			goto irq_free_exit;
- 	}
- 
--	ret = find_dfls_by_default(pcidev, info);
-+	ret = find_dfls_by_vsec(pcidev, info);
-+	if (ret == -ENODEV)
-+		ret = find_dfls_by_default(pcidev, info);
-+
- 	if (ret)
- 		goto irq_free_exit;
- 
+These patches are dependent on other patches that are under
+review. If you want to apply and compile these patches on
+linux-next, please apply these patches first:
+
+(7 patches) https://marc.info/?l=linux-fpga&m=160462501901359&w=2
+
+If you have an n3000 PAC card and want to test this driver, you
+will also need this patch:
+
+(1 patch) https://marc.info/?l=linux-fpga&m=160379607703940&w=2
+
+Changelog v5 -> v6:
+  - Added WARN_ON() prior to several calls to regmap_bulk_read()
+    to assert that the (SIZE / stride) calculations did not result
+    in remainders.
+  - Changed the (size / stride) calculation in regmap_bulk_write()
+    call to ensure that we don't write one less than intended.
+  - Changed flash_count_show() parameter list to achieve
+    reverse-christmas tree format.
+  - Removed unnecessary call to rsu_check_complete() in
+    m10bmc_sec_poll_complete() and changed while loop to
+    do/while loop.
+  - Initialized auth_result and doorbell to HW_ERRINFO_POISON
+    in m10bmc_sec_hw_errinfo() and removed unnecessary if statements.
+
+Changelog v4 -> v5:
+  - Renamed sysfs node user_flash_count to flash_count and updated
+    the sysfs documentation accordingly to more accurately descirbe
+    the purpose of the count.
+
+Changelog v3 -> v4:
+  - Moved sysfs files for displaying the flash count, the root
+    entry hashes (REH), and the code-signing-key (CSK) cancellation
+    vectors from the FPGA Security Manager class driver to this
+    driver (as they are not generic enough for the class driver).
+  - Added a new ABI documentation file with informtaion about the
+    new sysfs entries: sysfs-driver-intel-m10-bmc-secure
+  - Updated the MAINTAINERS file to add the new ABI documentation
+    file: sysfs-driver-intel-m10-bmc-secure
+  - Removed unnecessary ret variable from m10bmc_secure_probe()
+  - Incorporated new devm_fpga_sec_mgr_register() function into
+    m10bmc_secure_probe() and removed the m10bmc_secure_remove()
+    function.
+
+Changelog v2 -> v3:
+  - Changed "MAX10 BMC Security Engine driver" to "MAX10 BMC Secure
+    Update driver"
+  - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+  - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+  - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
+    underlying functions are now called directly.
+  - Changed "_root_entry_hash" to "_reh", with a comment explaining
+    what reh is.
+  - Renamed get_csk_vector() to m10bmc_csk_vector()
+  - Changed calling functions of functions that return "enum fpga_sec_err"
+    to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
+
+Changelog v1 -> v2:
+  - These patches were previously submitted as part of a larger V1
+    patch set under the title "Intel FPGA Security Manager Class Driver".
+  - Grouped all changes to include/linux/mfd/intel-m10-bmc.h into a
+    single patch: "mfd: intel-m10-bmc: support for MAX10 BMC Security
+    Engine".
+  - Removed ifpga_sec_mgr_init() and ifpga_sec_mgr_uinit() functions.
+  - Adapted to changes in the Intel FPGA Security Manager by splitting
+    the single call to ifpga_sec_mgr_register() into two function
+    calls: devm_ifpga_sec_mgr_create() and ifpga_sec_mgr_register().
+  - Replaced small function-creation macros for explicit function
+    declarations.
+  - Bug fix for the get_csk_vector() function to properly apply the
+    stride variable in calls to m10bmc_raw_bulk_read().
+  - Added m10bmc_ prefix to functions in m10bmc_iops structure
+  - Implemented HW_ERRINFO_POISON for m10bmc_sec_hw_errinfo() to
+    ensure that corresponding bits are set to 1 if we are unable
+    to read the doorbell or auth_result registers.
+  - Added comments and additional code cleanup per V1 review.
+
+Russ Weight (6):
+  mfd: intel-m10-bmc: support for MAX10 BMC Secure Updates
+  fpga: m10bmc-sec: create max10 bmc secure update driver
+  fpga: m10bmc-sec: expose max10 flash update count
+  fpga: m10bmc-sec: expose max10 canceled keys in sysfs
+  fpga: m10bmc-sec: add max10 secure update functions
+  fpga: m10bmc-sec: add max10 get_hw_errinfo callback func
+
+ .../testing/sysfs-driver-intel-m10-bmc-secure |  61 ++
+ MAINTAINERS                                   |   2 +
+ drivers/fpga/Kconfig                          |  11 +
+ drivers/fpga/Makefile                         |   3 +
+ drivers/fpga/intel-m10-bmc-secure.c           | 543 ++++++++++++++++++
+ include/linux/mfd/intel-m10-bmc.h             |  85 +++
+ 6 files changed, 705 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
+ create mode 100644 drivers/fpga/intel-m10-bmc-secure.c
+
 -- 
-2.25.2
+2.25.1
 
