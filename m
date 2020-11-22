@@ -2,94 +2,135 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E1D2BC2D7
-	for <lists+linux-fpga@lfdr.de>; Sun, 22 Nov 2020 01:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 025132BC2F2
+	for <lists+linux-fpga@lfdr.de>; Sun, 22 Nov 2020 02:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726431AbgKVASG (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 21 Nov 2020 19:18:06 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33152 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726398AbgKVASG (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 21 Nov 2020 19:18:06 -0500
-Received: by mail-pl1-f196.google.com with SMTP id t18so6958081plo.0;
-        Sat, 21 Nov 2020 16:18:12 -0800 (PST)
+        id S1727021AbgKVBKa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 21 Nov 2020 20:10:30 -0500
+Received: from mail-pl1-f172.google.com ([209.85.214.172]:35310 "EHLO
+        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726983AbgKVBKa (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 21 Nov 2020 20:10:30 -0500
+Received: by mail-pl1-f172.google.com with SMTP id x15so6988355pll.2;
+        Sat, 21 Nov 2020 17:10:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=x0pPjDLS6VLvuxC5onraIQ2o57wzPveKWzsW70aJDNY=;
-        b=dtVnyd2I+1pImf6aNLVXglkoaUnG6yQXhn2t71Kutjvy8Cou3mAZ+y7wnu5+/Z73kp
-         HIoNAezem67P+NTulJClNK5yrpLFrYBExQa/xniFmmRpEZMqMqPQWazbxuJvgJXbTmA6
-         MBWCvNN7dZnWX4YYdz2z0lie/Bx14Qb/Bm8TKbvm+C8BZUhttOxXyjZ3hKQUP2hYv9+D
-         RDMRUy/9SxWp/9VuULvJMNdPchAyRfrzEWL9FDpH7x9+bJ754v6dVbQZoEFBXGMse/Es
-         XmVxkD4LqwPtCeZtfFiVJesPaHQhwzurlLpT8vW4Fb/OFu9mkx5TMfaFEiyl7tH71sBp
-         sVyg==
-X-Gm-Message-State: AOAM532ceskVlKuIAMvebq5JkC4tm1yZUBgOLSz9b0j3877jh/XPwfvW
-        8skF0KXV8tY6Xt70E4Y3pSo=
-X-Google-Smtp-Source: ABdhPJwKnZ8ZFeHwlGIoZfe1NPZ41lvSD2uuhy9D/l189s3q4blm4nu2KaQ+A3uh2n3Fw0lM8lyZjw==
-X-Received: by 2002:a17:902:b717:b029:d9:e816:fd0b with SMTP id d23-20020a170902b717b02900d9e816fd0bmr7902956pls.50.1606004291693;
-        Sat, 21 Nov 2020 16:18:11 -0800 (PST)
+        bh=Ae0calUOjvPkp6ha8pgWGw2TNcP0JKP+g/EOrJg9VdY=;
+        b=R39etN//gqatwjd5x18mWLLjI7X6fivZ6Q35QMh7LRPT35n+FhuXYQBLAQZ9x/i14C
+         T5gBDJecC6N2XFt7nkn00g05JDzesY+0WrYcHXJDmZahbl/oXh8B3xCc4xJs5y0d5y5J
+         ifcjYjp7l2Ym3jiwnU4a+YkqHg9DX4uvI5RDMkrQ6OveWuQqIU3V5ezCN2IV5nEzpZiY
+         k93KJrLW0K1F5wAjrh+VlAnLfvdJmVlpbNP/xYlOidEakFG5khNMkZEA9CHTlMC/qMuQ
+         FAL7vLxut+EnTLgx2UGOyzCRMniwfiSyT884ZNjIEzkKPh3WHQfbzVEgflG9Kb9eC59T
+         Ri2w==
+X-Gm-Message-State: AOAM531/s+EMWuAol03s5TH6Et0nOZuuWQ2+/fCBtNnJrTcGPAclKQ49
+        Jq396Sq2dRklxlaD5dJVTAWgebrbxFDhXw==
+X-Google-Smtp-Source: ABdhPJxNPX7NNKVKFOXP3cyH6wqv8vKHN7ZyoZICcmDm9iWuJFv17Hn1ZtW0CJO4oYWe1M4Z90qpZg==
+X-Received: by 2002:a17:902:bc83:b029:d8:ec6e:5e0f with SMTP id bb3-20020a170902bc83b02900d8ec6e5e0fmr18133720plb.1.1606007429708;
+        Sat, 21 Nov 2020 17:10:29 -0800 (PST)
 Received: from localhost (c-73-235-149-126.hsd1.ca.comcast.net. [73.235.149.126])
-        by smtp.gmail.com with ESMTPSA id v1sm8918721pjs.16.2020.11.21.16.18.11
+        by smtp.gmail.com with ESMTPSA id k4sm8531850pjo.54.2020.11.21.17.10.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Nov 2020 16:18:11 -0800 (PST)
-Date:   Sat, 21 Nov 2020 16:18:10 -0800
+        Sat, 21 Nov 2020 17:10:28 -0800 (PST)
+Date:   Sat, 21 Nov 2020 17:10:27 -0800
 From:   Moritz Fischer <mdf@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Subject: Re: [PATCH v2] drivers: fpga: Specify HAS_IOMEM dependency for
- FPGA_DFL
-Message-ID: <X7muQm+0089dbLS9@archbook>
-References: <20201120234648.4050910-1-davidgow@google.com>
+To:     Richard Gong <richard.gong@linux.intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, gregkh@linuxfoundation.org,
+        trix@redhat.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dinguyen@kernel.org,
+        sridhar.rajagopal@intel.com, richard.gong@intel.com
+Subject: Re: [PATCHv2 1/5] firmware: stratix10-svc: add
+ COMMAND_AUTHENTICATE_BITSTREAM flag
+Message-ID: <X7m6gy/B8DiafyYQ@archbook>
+References: <1605709753-7800-1-git-send-email-richard.gong@linux.intel.com>
+ <1605709753-7800-2-git-send-email-richard.gong@linux.intel.com>
+ <X7U+BTkW7ZmsMByV@epycbox.lan>
+ <d8b58b40-63c6-115e-8e61-f092e3f050b3@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201120234648.4050910-1-davidgow@google.com>
+In-Reply-To: <d8b58b40-63c6-115e-8e61-f092e3f050b3@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 03:46:48PM -0800, David Gow wrote:
-> Because dfl.c uses the 'devm_ioremap', 'devm_iounmap',
-> 'devm_ioremap_resource', and 'devm_platform_ioremap_resource'
-> functions, it should depend on HAS_IOMEM.
-> 
-> This fixes make allyesconfig under UML (ARCH=um), which doesn't provide
-> HAS_IOMEM.
-> 
-> Fixes: 89eb35e810a8 ("fpga: dfl: map feature mmio resources in their own feature drivers")
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
-> 
-> Changes since v1:
-> ( https://lore.kernel.org/linux-fpga/20201119082209.3598354-1-davidgow@google.com/ )
-> - Add Fixes tag
-> 
->  drivers/fpga/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 7cd5a29fc437..5645226ca3ce 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -142,6 +142,7 @@ config FPGA_DFL
->  	tristate "FPGA Device Feature List (DFL) support"
->  	select FPGA_BRIDGE
->  	select FPGA_REGION
-> +	depends on HAS_IOMEM
->  	help
->  	  Device Feature List (DFL) defines a feature list structure that
->  	  creates a linked list of feature headers within the MMIO space
-> -- 
-> 2.29.2.454.gaff20da3a2-goog
-> 
+Richard,
 
-Applied to for-5.10,
+On Wed, Nov 18, 2020 at 12:16:09PM -0600, Richard Gong wrote:
 
-I fixed up your commit message (dropped the drivers:)
+> > > -#define COMMAND_RECONFIG_FLAG_PARTIAL	1
+> > > +#define COMMAND_RECONFIG_FLAG_PARTIAL	0
+> > > +#define COMMAND_AUTHENTICATE_BITSTREAM	1
+> > 
+> > Can you explain how this commit by itself doesn't break things?
+> > 
+> > Before this change firmware expected BIT(0) to be set for partial
+> > reconfiguration, now BIT(0) suddenly means authentication? How doest his
+> > work? :)
+> >  > Was there a firmware version change? Did this never work before?
+> > 
+> > If this is version depenedent for firmware, then this might need a
+> > different compatible string / id / some form of probing?
+> > 
+> > Entirely possible that I'm missing something, but it doesn't *seem*
+> > right.
+> 
+> It did work before.
+> 
+> Before this change, firmware only checks if the received flag value is zero.
+> If the value is zero, it preforms full reconfiguration. Otherwise it does
+> partial reconfiguration.
+> 
+> To support bitstream authentication feature, firmware is updated to check
+> the received flag value as below:
+> 	0	--- full reconfiguration
+> 	BIT(0) 	--- partial reconfiguration
+> 	BIT(1) 	--- bitstream authentication
 
-- Moritz
+So there are two different versions of firmware involved that behave
+differently? 
+
+Old firmware:
+- ctype.flags  = 0x0 -> Full reconfig
+- ctype.flags != 0 -> Partial reconfig
+
+New firmware:
+- ctype.flags = 0x0 -> Full reconfig
+- ctype.flags = 0x1 -> Partial reconfig
+- ctype.flags = 0x2 -> Authenticate
+
+Old software:
+- Send 0x0 for Full
+- Send 0x1 for Partial
+
+New software:
+- Send 0x0 for Full
+- Send 0x1 for Partial
+- Send 0x2 for Auth
+
+If I send request for authentication BIT(1) (new software) to old
+firmware it'd try and attempt a partial reconfiguration with the data I
+send? Is that safe?
+
+Is there a way for software to figure out the firmware version and do
+the right thing?
+
+> Therefore I have updated the command flag setting at Intel service layer
+> driver to align with firmware.
+> 
+> Regards,
+> Richard
+> 
+> > >   /**
+> > >    * Timeout settings for service clients:
+> > > -- 
+> > > 2.7.4
+> > > 
+> > 
+> > Cheers,
+> > Moritz
+> > 
+
+Thanks,
+Moritz
