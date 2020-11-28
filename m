@@ -2,160 +2,136 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 307B12C5699
-	for <lists+linux-fpga@lfdr.de>; Thu, 26 Nov 2020 15:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9042C76A6
+	for <lists+linux-fpga@lfdr.de>; Sun, 29 Nov 2020 00:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390054AbgKZOCz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 26 Nov 2020 09:02:55 -0500
-Received: from mail-eopbgr80110.outbound.protection.outlook.com ([40.107.8.110]:23425
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        id S1726021AbgK1X70 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 28 Nov 2020 18:59:26 -0500
+Received: from mail-bn7nam10on2041.outbound.protection.outlook.com ([40.107.92.41]:12256
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389434AbgKZOCy (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 26 Nov 2020 09:02:54 -0500
+        id S1725839AbgK1X7Z (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 28 Nov 2020 18:59:25 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gzV7r+EKmUIfe1xDKFgX0I0ObCYytvJLHhdva0U4Wo1cw3Uq2POUsafrOJTPX1kTuGxTNi1L4+8FHDSs9yn9dmv2pW+PPW9D7BQEtsN0ioANUmILHkiWwUB/OxpfsoZxQnMpUB2E0lyZQ+CFYdxl8jrT75Xwh2x9Xs5Bcf/T3XARcAFsHKFI1GxfQhybsb3yrXzmgCYA37Vp7YKJRqJ3PUOZ3YSXUsclz+aAS8Qs+P80SSCKeCAjV0JkMi+eSHf/p3GuE7QcB4Ac35FNFUpqe1P58hTtZ8JDGZlwQ5zbQ8CZZduAxaXceAVOvmchaMrPFZkVDFoT/N8wyqP1qV/kQA==
+ b=DdmnaxheaPO85dvdOv+61SYM3C94SNTPxbddV6QB8C+VmSqkf5stQi3uHzijOZ594hYrkJq8VEc93GhniZqgop7ggLCO7QBJWVAAE7YGjd6frgFVGqBj6YWNe2qdKpQE/J4AjsYUkmH6J0gNYf/jw0Mpz9hXjR4RSjjMoEnjpplmPqsr/Uu1784meJaExHf2CCOLYNsikg75kyjzq4oGtG4YQkVdJt2evYG2AccmLiPrJvMvrbLPqt8McA344IvQ3JJ1+yo2yoq7dmJm3HdGNK1mgr4fecQLxjr2t1bZWc5lVnYqYYvDZRzF2g4nqj4VFP9mvgd2HLq0y9r6nKY2Yw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C0mVguaJSeyooPy1Xmz6PW0bYnE+qF7j6KRAs6YvNWw=;
- b=E3hBNu1XJPgGT2yyoT89kChHiguoqXCsOsQE1jgylcKJl949XKod/klzJP8CnytyV84QyikiLJrnX94GgO5yWCUSASQGp/HUwLlNorZl0HQY1sXWi3aMp23oh1dU2j4x+dAAzgnA4z1GcTQLNPn0hYQHQF+hrVjBqJD19s5NsuibX/6AbVIAlMXFtdBNkgxv5WTD8nC5UjZc6GRyCpliXpzYy0bNfhrjBUnaLD8Ivoty1eczWumK8j8z/fxSNgu1vBqxsVomHvn4MtFizu0NJth1zE6HSTWJZU5ogXr+9IHweykJtxy3LDwuqu+sJPzdndfJntTt2o8n28q4nfu/IQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=silicom.dk; dmarc=pass action=none header.from=silicom.dk;
- dkim=pass header.d=silicom.dk; arc=none
+ bh=YYre+S/xmjNEQDh5NviP1JHeBjetdhNSAxTUo6dlpXc=;
+ b=Dm7pDX7APgvI64lR4KbxN8UnvoVoqnE4VJ3X+WhcimzUnns4/se/6DNzRoIJO+bxG5kgtS5ZC3E7L6vOLq/jJ8ndOjvhx1yj4p4HfVyhSakgtK2a9Z+NPABYHQc84vFBiKYfAWoQd517jRhsxI/kg4d6Ub6GmN3b8kIUslzSanWq+8QIElGLgjIMWjePfWejm87i2yDtGAya4gQti4LbQNIsYS0p4k/Z3xrUZ5ypV/qEJbmgE2EMO3ae1/ozeCRAcVbIEMBXrq+w232J9vBQG3gTIuBkvJM4/xChllAumBI2mUQnoCXugYbhUGUk16AunZKY00ckmRztPh/q7QN0TQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C0mVguaJSeyooPy1Xmz6PW0bYnE+qF7j6KRAs6YvNWw=;
- b=qeinjyFEHZqARsSJTSkvY/V1eGD4MovTU1GZW9tvzjBtqwm80iPz2GLpVUMRsaKSv0XqCVn5WE5smeEh5/x16lvF66pUudccJd681EKCz6iLHJIA+mmcZryUm+m3SVsCChIyrPlhyrrmwvyNK2OzbixtW/ex2zpC1b3SQ+5+w+w=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=silicom.dk;
-Received: from AM0PR0402MB3426.eurprd04.prod.outlook.com
- (2603:10a6:208:22::15) by AM0PR04MB5779.eurprd04.prod.outlook.com
- (2603:10a6:208:131::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.21; Thu, 26 Nov
- 2020 14:02:50 +0000
-Received: from AM0PR0402MB3426.eurprd04.prod.outlook.com
- ([fe80::bdca:6651:1054:423b]) by AM0PR0402MB3426.eurprd04.prod.outlook.com
- ([fe80::bdca:6651:1054:423b%5]) with mapi id 15.20.3589.030; Thu, 26 Nov 2020
- 14:02:50 +0000
-Subject: Re: [PATCH v6 2/7] fpga: sec-mgr: enable secure updates
-To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-        hao.wu@intel.com, matthew.gerlach@intel.com
-References: <20201106010905.11935-1-russell.h.weight@intel.com>
- <20201106010905.11935-3-russell.h.weight@intel.com>
-From:   =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>
-Message-ID: <9dd75daf-eb73-4008-ca65-6f7ea3923e35@silicom.dk>
-Date:   Thu, 26 Nov 2020 15:02:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.3
-In-Reply-To: <20201106010905.11935-3-russell.h.weight@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [85.184.138.169]
-X-ClientProxiedBy: AM7PR04CA0011.eurprd04.prod.outlook.com
- (2603:10a6:20b:110::21) To AM0PR0402MB3426.eurprd04.prod.outlook.com
- (2603:10a6:208:22::15)
+ bh=YYre+S/xmjNEQDh5NviP1JHeBjetdhNSAxTUo6dlpXc=;
+ b=OlsztzzK8al5me/pcSZ9hmbeLx2RKMBsapUHTeSjExRNKJt5uHFXj+U0DNZW5Kpa0Z7onI32jksukuoO+AZiN9DtU9yA2LYOzSdwKzZ0FhnfzAnxcHr6UV21HYG0IW2MT9tiECRQGJ9Cp1BWN87njcBWioOLTxI+p7smFrtT3xE=
+Received: from MN2PR03CA0030.namprd03.prod.outlook.com (2603:10b6:208:23a::35)
+ by BYAPR02MB6006.namprd02.prod.outlook.com (2603:10b6:a03:120::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Sat, 28 Nov
+ 2020 23:58:32 +0000
+Received: from BL2NAM02FT044.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:23a:cafe::5d) by MN2PR03CA0030.outlook.office365.com
+ (2603:10b6:208:23a::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend
+ Transport; Sat, 28 Nov 2020 23:58:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BL2NAM02FT044.mail.protection.outlook.com (10.152.77.35) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3611.27 via Frontend Transport; Sat, 28 Nov 2020 23:58:32 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Sat, 28 Nov 2020 15:58:29 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Sat, 28 Nov 2020 15:58:29 -0800
+Envelope-to: michal.simek@xilinx.com,
+ lizhih@xilinx.com,
+ maxz@xilinx.com,
+ sonals@xilinx.com,
+ stefanos@xilinx.com,
+ devicetree@vger.kernel.org,
+ linux-fpga@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Received: from [172.19.72.212] (port=45038 helo=xsj-xw9400.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <sonal.santan@xilinx.com>)
+        id 1kjA6n-0003Rn-G4; Sat, 28 Nov 2020 15:58:29 -0800
+Received: by xsj-xw9400.xilinx.com (Postfix, from userid 6354)
+        id 2517760010C; Sat, 28 Nov 2020 15:57:35 -0800 (PST)
+From:   Sonal Santan <sonal.santan@xilinx.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Sonal Santan <sonals@xilinx.com>, <linux-fpga@vger.kernel.org>,
+        <maxz@xilinx.com>, <lizhih@xilinx.com>, <michal.simek@xilinx.com>,
+        <stefanos@xilinx.com>, <devicetree@vger.kernel.org>
+Subject: [PATCH Xilinx Alveo libfdt prep 0/1] Expose libfdt for use by Alveo/XRT
+Date:   Sat, 28 Nov 2020 15:56:58 -0800
+Message-ID: <20201128235659.24679-1-sonals@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.8.20] (85.184.138.169) by AM7PR04CA0011.eurprd04.prod.outlook.com (2603:10a6:20b:110::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend Transport; Thu, 26 Nov 2020 14:02:49 +0000
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f94449d4-5b49-4d90-0d38-08d89213f5d2
-X-MS-TrafficTypeDiagnostic: AM0PR04MB5779:
-X-Microsoft-Antispam-PRVS: <AM0PR04MB577988C984EF293354EF7C6BD5F90@AM0PR04MB5779.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Office365-Filtering-Correlation-Id: c6bb234a-c002-4c84-19c6-08d893f982da
+X-MS-TrafficTypeDiagnostic: BYAPR02MB6006:
+X-Microsoft-Antispam-PRVS: <BYAPR02MB6006647107A56F16B48C6793BBF70@BYAPR02MB6006.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cQkr1iM5UzW+u8m96XZVOyGycKZ2SBeOlg3ipL/KDCAKNIw09Y5iP5Qd36nwxdu6qoygMc5FoqQ24OIqpfu7vfVNgWA+rT0RhozG7OPiq0SOrrwQh8G8qttWbiRAYquDDaISdFnEtQ1b4FU8hDA5FwzWsASygx+E8UbhH6/aoye5LkgcB8KAsbhSF4xzs07kbwoB8k+kFDjxx+NgpXMvGlCFJf4w7LXurD3m3qtn5LpUF79U9GWMU9UZasTLkdeKaVgdnEAbVadiDbSiY8td4iBM7IBAgexIhlGg5nUe0bDMXc82Gqi4KpgO4c9hS173Gs4ez7sqQh/GLBYGHnUOw4WfOUrssBidkZmq/szkSdw2MPY5QWzHLz0PEhnHUNX1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3426.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(136003)(346002)(39850400004)(366004)(376002)(52116002)(8976002)(4326008)(83380400001)(8676002)(2906002)(26005)(8936002)(86362001)(2616005)(956004)(6486002)(31696002)(16576012)(316002)(66556008)(16526019)(36756003)(478600001)(15650500001)(66946007)(66476007)(186003)(5660300002)(31686004)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?elh2OVY2L1E4UmVoRitBSmxLUmF6MkhVSDJnOVk0YndsQ0RZQk9uMEdCVmhB?=
- =?utf-8?B?ZUJCT2liT084UW9Sa2JGK1oyQld6b0FYVE5UeHFlUmJ0bXlaYlljUlh1S3BD?=
- =?utf-8?B?T1krMGdwOUZWQlU0YXYweENKQzlCbU1OcGFUMy9OclVUSzN3SHZBY2lya1NL?=
- =?utf-8?B?Zy83cExQWi9idm83MktnMDl0K3hlWWdEV1g2S0ttZGtwTno2a2hsTmtpTmQ1?=
- =?utf-8?B?eFVaaWttaUpobVVUR1ZMVldLQ0xGRHpOT0toUXBEeUx4VXRkY1hBQkxZenJT?=
- =?utf-8?B?eFN0ZCtaS2ROOERnb1BhKy8vTmpKWGdGT1ZhMmVWL3ZKZElrdE1YV2FBSTV0?=
- =?utf-8?B?MVA2bXNTZ2NzcTNMYVBaeVo0enBXNWllcitYUTlDcnBoejBqdGFldWFwN2lh?=
- =?utf-8?B?NDlwcnRWNFZybjBuRzAzODlZMlJzeWxYb1FHUmRpK0RtL0RDRUdjRm5PSWpy?=
- =?utf-8?B?eEYvZGFSS3g3bTRJb1daempQcUFTTkZwTVY3Y0tRMzVadVgrU3lSNUMrNGdH?=
- =?utf-8?B?cWVoa3RIT3FnL0hkVjZwOVNFSFFnQlRWUVdYc0RyeE1vUXlXNk1YeS9hWEw3?=
- =?utf-8?B?c0RpK2ZxOWVobjdZOXVsS2NmRGkwNXM2RHUrOE84eDBDUUxYTlJCVEFZSjEy?=
- =?utf-8?B?TGdSTzR1dEFvYzNrVklVVnM2bUE4cG0wUU9oTEg5cXVRcC9yN1F0U3NiRm9h?=
- =?utf-8?B?M0ZoMHJrQUh2amNFZkQrQ0EzQStDWjJGbUpIZ2h2OVJLUWU1RnBiRStQMEdr?=
- =?utf-8?B?TU5ObHUrbTZqR2JzZi9zZmdsRVkvY09QZkxFcjJxbktoYWdzcTR3U1JOQzRC?=
- =?utf-8?B?cnNRUEZ6WTg5c2I4OUxjRXQxQkkyM0JueGpmTnZtMGlISnFINjFieXB6dFdG?=
- =?utf-8?B?OXB3S0J1RlF3UzhkSzhqRlY3TDJ2UHRCQ3pQdlZDT0VxeW5ldTJxbVhid0RK?=
- =?utf-8?B?VExpWmRpMFhVcWh6SGR3aU1CUHp1NjVzWXJ3dkxPLzlJanZxSTlmZ0d4MGZy?=
- =?utf-8?B?cWxiVW1ZVXdKV2JtMmZJR3dTYUVNN0haU2dTOTBla0EwSlFZUlIzcmtmdWh1?=
- =?utf-8?B?bFdFa01PaFlockgvTm1sdDQ5aURoZHpwN2pSeTYyVEdQM2pIeCtBb2xZN3R5?=
- =?utf-8?B?ejVxTWpPTnl2eGFmVlhGbTdxQnJUaTRRSnBqNUxrN2pURlNrVlIzTU9zZVhJ?=
- =?utf-8?B?QlA3WUpKcUM2VTRERXBtUGNIK244OUM3UkU1STBuMDBqbmIwYlF1TitwZldZ?=
- =?utf-8?B?aGVhZG94eXhTSGxRb1RNVHV0eE00Uks4d1cwQXRHOUlxM0svNTdqYnpPMkRy?=
- =?utf-8?Q?+dllRxTnVbFyLGsw2cVCmCHeQ8b99SvS3/?=
-X-OriginatorOrg: silicom.dk
-X-MS-Exchange-CrossTenant-Network-Message-Id: f94449d4-5b49-4d90-0d38-08d89213f5d2
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3426.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2020 14:02:50.3570
+X-Microsoft-Antispam-Message-Info: DUZRWGJdWDjI3jAt9nNBIzn4fHuzS6vQq8EsbnPXDoDoWkXSfKS2JEkxJz0q9GQUQel9xmZR6YZmmIWRLxP4xey0Rqv1UbuxwQmsRo/o/uYANnN6nPOdwTyEp/KXqu+p1MeEchLs8iGvqvMAD15EJ+35UbCjCPy9uSDJVUe8ME5vTvb/Qzr2CKl9wx2IbfxMi7vFNOgXBb6HONh6yZQ8O7M/nuHH1l+STUiG33Vn90SmxiawcrhVoFEpbQbQjtP9owzNr45bljEVoykIaCp8Mdpuv5EXIDdGArfJ8HDuuJxbt9A7D813EBi/qid5nkaUKh7p+DzmQJnOTIUVBbafyU/xyQOgvjXJiK7AXAC4HzZMLfDe5kwBfxRI286bOThraQ+8+JjCnpSXkicpZvpxWA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(346002)(396003)(136003)(39850400004)(46966005)(336012)(4326008)(5660300002)(6916009)(8676002)(8936002)(2906002)(83380400001)(6266002)(82310400003)(47076004)(36756003)(450100002)(1076003)(2616005)(186003)(356005)(82740400003)(7636003)(70206006)(426003)(26005)(478600001)(70586007)(316002)(6666004)(42186006)(36906005)(54906003)(4744005)(44832011);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2020 23:58:32.2977
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1A4T36ds9my4RXqP0htES7+wWoWDrsxq1l23+FqthkOGmqfyhmDRcTVyYPN0DXBY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5779
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6bb234a-c002-4c84-19c6-08d893f982da
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT044.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB6006
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Russ,
+Hello,
 
-I found another thing while testing this...
+This patch series adds support for exporting limited set of libfdt symbols from
+Linux kernel. It enables drivers and other kernel modules to use libfdt for
+working with device trees. This may be used by platform vendors to describe HW
+features inside a PCIe device to its driver in a data driven manner.
 
-On 06/11/2020 02.09, Russ Weight wrote:
 
-<snip>
-
-> +static ssize_t filename_store(struct device *dev, struct device_attribute *attr,
-> +			      const char *buf, size_t count)
-> +{
-> +	struct fpga_sec_mgr *smgr = to_sec_mgr(dev);
-> +	int ret = count;
-> +
-> +	if (count == 0 || count >= PATH_MAX)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&smgr->lock);
-> +	if (smgr->driver_unload || smgr->progress != FPGA_SEC_PROG_IDLE) {
-> +		ret = -EBUSY;
-> +		goto unlock_exit;
-> +	}
-> +
-> +	smgr->filename = kstrndup(buf, count - 1, GFP_KERNEL);
-
-The `count - 1` is meant to remove a trailing newline, but opae-sdk 
-writes the filename without newline, so better do it conditionally...
-
-> +	if (!smgr->filename) {
-> +		ret = -ENOMEM;
-> +		goto unlock_exit;
-> +	}
-> +
-> +	smgr->err_code = FPGA_SEC_ERR_NONE;
-> +	smgr->progress = FPGA_SEC_PROG_READING;
-> +	reinit_completion(&smgr->update_done);
-> +	schedule_work(&smgr->work);
-> +
-> +unlock_exit:
-> +	mutex_unlock(&smgr->lock);
-> +	return ret;
-> +}
-> +static DEVICE_ATTR_WO(filename);
-> +
-> +static struct attribute *sec_mgr_update_attrs[] = {
-> +	&dev_attr_filename.attr,
-> +	NULL,
-> +};
+"Xilinx Alveo" PCIe accelerator card driver patch series which follows this patch
+makes use of device tree to advertise HW subsystems sitting behind PCIe BARs.
+The use of device trees makes the driver data driven and overall solution more
+scalable.
 
 Thanks,
-Martin
+-Sonal
+
+Sonal Santan (1):
+  Export subset of libfdt symbols for use by other drivers.
+
+ lib/fdt.c            |  6 ++++++
+ lib/fdt_empty_tree.c |  3 +++
+ lib/fdt_ro.c         | 11 +++++++++++
+ lib/fdt_rw.c         |  6 ++++++
+ 4 files changed, 26 insertions(+)
+
+-- 
+2.17.1
+
