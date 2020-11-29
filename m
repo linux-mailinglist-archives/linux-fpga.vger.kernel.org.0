@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C122C76A9
-	for <lists+linux-fpga@lfdr.de>; Sun, 29 Nov 2020 00:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DF72C76B2
+	for <lists+linux-fpga@lfdr.de>; Sun, 29 Nov 2020 01:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725839AbgK1X7g (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 28 Nov 2020 18:59:36 -0500
-Received: from mail-bn8nam12on2080.outbound.protection.outlook.com ([40.107.237.80]:50048
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S1726280AbgK2ACd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 28 Nov 2020 19:02:33 -0500
+Received: from mail-mw2nam10on2086.outbound.protection.outlook.com ([40.107.94.86]:56672
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727281AbgK1X7g (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sat, 28 Nov 2020 18:59:36 -0500
+        id S1725852AbgK2ACd (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 28 Nov 2020 19:02:33 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bPLj0+uop1uXC7EO9IlUttfzd3C/gB0tRju+yV7moCyxmAZMp8/Rhv+ISaHgzhNv1PUp9V70KItBsn5DuMR+v2B4zTmscWFPkK5WDjnAfV58EMYbGHrr9lljDjqNEbJQ7xE+NP2aaZk3Ra4GlYzOP5sIqkJbM0i1ZQbrufFg6qV1+RWVJ3LwLwUjiq9iBttOscGSjz7MIpl/5VKzHSX/NIYS4ikHOfVD4Dl5HKbGobHqTyLoA5TBOwCUJo0rL+WkJbXVklV98mG3zW+0tJUs7n1eAP+iFLT4C1ShMVXya+UgsXjcW9ehK4kewl71QLMSdhL9IPw/Hvz1My9Ld2AKIA==
+ b=OfMJqWoPHkkrBBpfcCfgiH6Dh70GqKL7T4hRu5jfGOXGaqBGy0GD3KwmgK14zhlADlmrugqQM55KuNU59T2svl7S7HTPkGp5CNNgV56Pe2Qn4Ja5htyfOVNAcOeEclP4/iCUoyWWbUOyrgbE4fjh932PHQ+tis+cj4DzpPLBjz4ecr/k1plhRZAh/BkHR7S7zziOLEo/xrruQVoeIHr/UwcTnthncWYvsVS95qoMTLwlzK+AYKfbwzlF8TXCxE8qte6M8CTJ22nKL+wtlx8WfTkEBqbtrfiT2cNahxGSLMiXttciCVc/d4kiZa2alxE3VzsesPfBTk9h6tksbzW4Ww==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/IaLdn4I0OC3CxvpS5Ab3JG/+igJLoj/oHs9GxEfuDY=;
- b=Kr+ddj3D0BX4PknWHO7LSp65qIurWL524x3yJY7w0DcT7527g6ZyOLZbuOLEaWiy1OCJ7dDhFQXK/766NoDFbM454I/0OOxs3uZOG3fk3oAHIRoCAirmS40KaEcpwEpwuYMShDvz4k0upOCTdIzIU6Yn6N4duB+0//CE/8qNiltORpOHgS3WfO/o+YVCCs5ZRrwFoHGmqAVuIG9dxXnjK2qaZCGocsrg17otTUjPAF1MpALMIdsvpypDgsnJ8RzMHEZW18W4yVFmFq4b7++fDTmoE8ob8K8f12a9tuaLX8COpU2hcpGcM1aqW8LOX3ET6drIiBFX+vVzM2xeQXHVRw==
+ bh=m4x/9h3IRmnE4xImE9iZZl98dU9et7O0tYfp3x+XiNQ=;
+ b=Ba0X/g1xiqVPX5BIrDzhmyi41hmGgmr7NrAsfVDq0Qjil3Uz/sSWGsKKKI4qhPVbersJnb1fcVEa+1jHlnfpMkv2KjsYfPwGw+qOz/kksm1ugZ1Yz1uMeFR6qboSxO1+zAwc0DXze2txpJHlaCmzr/Fr35ZIpkk2vvClLH4c5WOfQqMgKvHwFSRlxFP0Pg/1Ob3WMzB7tmdKb4cQ55TxCqurvpuILYpHDaHrikRXuGX2L/Lzsrgt2vFkSyge5g2F0MVqEX7Umy3Hihy/2d0aAtBChytqenzNIOg6KXrc7lfMRcP9J8xBCmN0GnYqngsXEFzKMblNpOtSqDO2cwR3lw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
  dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
@@ -26,158 +26,304 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/IaLdn4I0OC3CxvpS5Ab3JG/+igJLoj/oHs9GxEfuDY=;
- b=nu7fogrgBi/8xyZPl1YV0nCVRgtCR8YVeFpH0bns8toBr45BU3JUlqBIUoR9jXgTEVaVtfSNuhA11H3M35eTBSZZ1+mPC0bkWBi5JHcD/3IhbHSJWTMHWx+Y+FKqfPuV0MezbTozs5XIQM0Qvnjd85R+EBBEoLc/yOFJMbCL638=
-Received: from BL1PR13CA0453.namprd13.prod.outlook.com (2603:10b6:208:2c4::8)
- by DM6PR02MB6057.namprd02.prod.outlook.com (2603:10b6:5:1fe::25) with
+ bh=m4x/9h3IRmnE4xImE9iZZl98dU9et7O0tYfp3x+XiNQ=;
+ b=dipDdEOZByzpDRZ38yVQo+HBrKS+oEVs/UuvvWalR7DWqEuhl5IBv+hzTaVW2zWLpZGj/w8IaSQU74MyPKd2Mryc4oPhTrwwKfx9GmwNo8PUuPzXjHQuwfTPpKWLYlhYw5QjoSUCl5NvwpXKe5l0Gubm8a2+wjWtkhhVwModEP0=
+Received: from MN2PR20CA0016.namprd20.prod.outlook.com (2603:10b6:208:e8::29)
+ by MW4PR02MB7345.namprd02.prod.outlook.com (2603:10b6:303:7c::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Sat, 28 Nov
- 2020 23:58:42 +0000
-Received: from BL2NAM02FT053.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:2c4:cafe::c2) by BL1PR13CA0453.outlook.office365.com
- (2603:10b6:208:2c4::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.8 via Frontend
- Transport; Sat, 28 Nov 2020 23:58:42 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Sun, 29 Nov
+ 2020 00:01:40 +0000
+Received: from BL2NAM02FT052.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:e8:cafe::7e) by MN2PR20CA0016.outlook.office365.com
+ (2603:10b6:208:e8::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend
+ Transport; Sun, 29 Nov 2020 00:01:40 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
  header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BL2NAM02FT053.mail.protection.outlook.com (10.152.76.225) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BL2NAM02FT052.mail.protection.outlook.com (10.152.77.0) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3611.27 via Frontend Transport; Sat, 28 Nov 2020 23:58:42 +0000
-Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ 15.20.3611.27 via Frontend Transport; Sun, 29 Nov 2020 00:01:40 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Sat, 28 Nov 2020 15:58:41 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Sat, 28 Nov 2020 15:58:41 -0800
+ 15.1.1913.5; Sat, 28 Nov 2020 16:01:39 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Sat, 28 Nov 2020 16:01:39 -0800
 Envelope-to: michal.simek@xilinx.com,
- sonal.santan@xilinx.com,
  lizhih@xilinx.com,
  maxz@xilinx.com,
+ sonals@xilinx.com,
  stefanos@xilinx.com,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.212] (port=45040 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.212] (port=45046 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <sonal.santan@xilinx.com>)
-        id 1kjA6z-0003SQ-IU; Sat, 28 Nov 2020 15:58:41 -0800
+        id 1kjA9r-0000B4-6s; Sat, 28 Nov 2020 16:01:39 -0800
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 6354)
-        id 32B03600039; Sat, 28 Nov 2020 15:57:35 -0800 (PST)
+        id D36C060010C; Sat, 28 Nov 2020 16:00:44 -0800 (PST)
 From:   Sonal Santan <sonal.santan@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
-CC:     Sonal Santan <sonal.santan@xilinx.com>,
-        <linux-fpga@vger.kernel.org>, <maxz@xilinx.com>,
-        <lizhih@xilinx.com>, <michal.simek@xilinx.com>,
+CC:     Sonal Santan <sonals@xilinx.com>, <linux-fpga@vger.kernel.org>,
+        <maxz@xilinx.com>, <lizhih@xilinx.com>, <michal.simek@xilinx.com>,
         <stefanos@xilinx.com>, <devicetree@vger.kernel.org>
-Subject: [PATCH Xilinx Alveo libfdt prep 1/1] Export subset of libfdt symbols for use by other drivers.
-Date:   Sat, 28 Nov 2020 15:56:59 -0800
-Message-ID: <20201128235659.24679-2-sonals@xilinx.com>
+Subject: [PATCH Xilinx Alveo 0/8] Xilinx Alveo/XRT patch overview 
+Date:   Sat, 28 Nov 2020 16:00:32 -0800
+Message-ID: <20201129000040.24777-1-sonals@xilinx.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201128235659.24679-1-sonals@xilinx.com>
-References: <20201128235659.24679-1-sonals@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1c91561f-7835-43af-f83a-08d893f988f1
-X-MS-TrafficTypeDiagnostic: DM6PR02MB6057:
-X-Microsoft-Antispam-PRVS: <DM6PR02MB60578BC56B1598194BE4146BBBF70@DM6PR02MB6057.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: df7c4b36-8b0d-4ec3-d4cb-08d893f9f2cf
+X-MS-TrafficTypeDiagnostic: MW4PR02MB7345:
+X-Microsoft-Antispam-PRVS: <MW4PR02MB7345E253791491A1FFFA0A65BBF60@MW4PR02MB7345.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:2331;
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /H6tPKWRkhcpy4aSHfB9xzygxDa/xamFE6ZrlvU3LbImkM1AvPpvEpaiXNwvTEPo7iuespWveOrkBNzBc7Rt66ERIT8C6veoWxZwA7oL2newb5df+QSBWqM/iqDrl2vCkmejYjHv87B7UgZd8Op76hXVM7ah27s6pql8YU3C8yicyMV4Faux8J/ymMoZ9+O0TyyIePnL/iONZVETaP3UKUkHvcZxRS51LVoIzAx4hIEh0a/gOupG7y9tDVc63CUT7i4mfF+q1X1Wg2Rfi+h1WFaKo+YxAmhgc0c+ske6ktoj0EK/GraCHWZeCm/zGwbYUUGLeuuT53FtdaJasA5jEtvE7ZRe76bi7+LRlCXLcFr/MAqmI1uxpNtD69Fb48EprPlC8V9E3FVK9CYHgklhDA==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(346002)(396003)(136003)(39850400004)(46966005)(42186006)(82740400003)(2906002)(54906003)(36906005)(450100002)(1076003)(316002)(6266002)(47076004)(82310400003)(36756003)(356005)(7636003)(70206006)(5660300002)(6666004)(478600001)(70586007)(336012)(6916009)(26005)(8936002)(186003)(4326008)(44832011)(8676002)(2616005)(426003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: h6J/mVIaS7bHar0VnhqjarW6AVBn4+2EF2/9TZZnWkp2+SFQ+QwV2z5qwGa3iD3HeSccQCyfe3RKd6r1bW87O1hjmb+yhWvSVZGWHf0eeBzfKPPwSaH772DIv2b7n3kbT6+9L/ssdBSNfOj5Zsta/zyNEVfWlreXbbWDhR3Xg3kDhZNo4Z8TDhV8DJ9jFf/tXwB1VCEWs1ryP0yKds9bJM9/L8ArUNXjs+tbzcIXi/Mn5EfDMAmpDGvPg3y8jFdLxxspkMHT78Vf7xJdvyz88XS7mruhQNdVvebfWHRP2ETKNXnzrpwGefiN0ZZy7MbUA378nDl4sGOwYn0d70GpxKE1ZkonIQNttuosiK4ws/NXsB2u+PdtxP57UAZ7n2k/Iy3DTXqRCD6kSgPU8Pz+rx66x7m0r3os/4B6VcB/vGrHXi/47V5TgE+HaStJBU/BdvKmLOPZzQ7pYebj2HMNfA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(396003)(39850400004)(46966005)(316002)(44832011)(42186006)(8676002)(54906003)(36906005)(186003)(1076003)(336012)(426003)(2906002)(26005)(2616005)(966005)(4743002)(6916009)(478600001)(4326008)(450100002)(8936002)(6666004)(70586007)(82740400003)(47076004)(7636003)(5660300002)(82310400003)(356005)(30864003)(83380400001)(6266002)(36756003)(70206006);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2020 23:58:42.5204
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2020 00:01:40.1362
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c91561f-7835-43af-f83a-08d893f988f1
+X-MS-Exchange-CrossTenant-Network-Message-Id: df7c4b36-8b0d-4ec3-d4cb-08d893f9f2cf
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT053.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT052.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6057
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR02MB7345
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Sonal Santan <sonal.santan@xilinx.com>
+Hello,
 
-Some drivers may want to use device tree as metadata format to discover HW
-subsystems behind PCIe BAR. This is particularly useful for PCIe FPGA
-devices.
+This patch series adds management physical function driver for Xilinx Alveo PCIe
+accelerator cards, https://www.xilinx.com/products/boards-and-kits/alveo.html
+This driver is part of Xilinx Runtime (XRT) open source stack.
 
-Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
----
- lib/fdt.c            |  6 ++++++
- lib/fdt_empty_tree.c |  3 +++
- lib/fdt_ro.c         | 11 +++++++++++
- lib/fdt_rw.c         |  6 ++++++
- 4 files changed, 26 insertions(+)
+The patch depends on the "PATCH Xilinx Alveo libfdt prep" which was posted
+before.
 
-diff --git a/lib/fdt.c b/lib/fdt.c
-index 97f20069fc37..9747513b50e7 100644
---- a/lib/fdt.c
-+++ b/lib/fdt.c
-@@ -1,2 +1,8 @@
- #include <linux/libfdt_env.h>
-+#include <linux/export.h>
- #include "../scripts/dtc/libfdt/fdt.c"
-+
-+EXPORT_SYMBOL_GPL(fdt_next_node);
-+EXPORT_SYMBOL_GPL(fdt_first_subnode);
-+EXPORT_SYMBOL_GPL(fdt_next_subnode);
-+EXPORT_SYMBOL_GPL(fdt_subnode_offset);
-diff --git a/lib/fdt_empty_tree.c b/lib/fdt_empty_tree.c
-index 5d30c58150ad..3dab578c9d22 100644
---- a/lib/fdt_empty_tree.c
-+++ b/lib/fdt_empty_tree.c
-@@ -1,2 +1,5 @@
- #include <linux/libfdt_env.h>
-+#include <linux/export.h>
- #include "../scripts/dtc/libfdt/fdt_empty_tree.c"
-+
-+EXPORT_SYMBOL_GPL(fdt_create_empty_tree);
-diff --git a/lib/fdt_ro.c b/lib/fdt_ro.c
-index f73c04ea7be4..ec96cf3d0d7a 100644
---- a/lib/fdt_ro.c
-+++ b/lib/fdt_ro.c
-@@ -1,2 +1,13 @@
- #include <linux/libfdt_env.h>
-+#include <linux/export.h>
- #include "../scripts/dtc/libfdt/fdt_ro.c"
-+
-+EXPORT_SYMBOL_GPL(fdt_getprop_by_offset);
-+EXPORT_SYMBOL_GPL(fdt_node_check_compatible);
-+EXPORT_SYMBOL_GPL(fdt_get_name);
-+EXPORT_SYMBOL_GPL(fdt_next_property_offset);
-+EXPORT_SYMBOL_GPL(fdt_getprop);
-+EXPORT_SYMBOL_GPL(fdt_node_offset_by_compatible);
-+EXPORT_SYMBOL_GPL(fdt_parent_offset);
-+EXPORT_SYMBOL_GPL(fdt_stringlist_get);
-+EXPORT_SYMBOL_GPL(fdt_first_property_offset);
-diff --git a/lib/fdt_rw.c b/lib/fdt_rw.c
-index 0c1f0f4a4b13..ec3939ed3d7d 100644
---- a/lib/fdt_rw.c
-+++ b/lib/fdt_rw.c
-@@ -1,2 +1,8 @@
- #include <linux/libfdt_env.h>
-+#include <linux/export.h>
- #include "../scripts/dtc/libfdt/fdt_rw.c"
-+
-+EXPORT_SYMBOL_GPL(fdt_del_node);
-+EXPORT_SYMBOL_GPL(fdt_add_subnode);
-+EXPORT_SYMBOL_GPL(fdt_pack);
-+EXPORT_SYMBOL_GPL(fdt_setprop);
--- 
+ALVEO PLATFORM ARCHITECTURE
+
+Alveo PCIe FPGA based platforms have a static *shell* partition and a partial
+re-configurable *user* partition. The shell partition is automatically loaded from
+flash when host is booted and PCIe is enumerated by BIOS. Shell cannot be changed
+till the next cold reboot. The shell exposes two PCIe physical functions:
+
+1. management physical function
+2. user physical function
+
+The patch series includes Documentation/xrt.rst which describes Alveo
+platform, xmgmt driver architecture and deployment model in more more detail.
+
+Users compile their high level design in C/C++/OpenCL or RTL into FPGA image
+using Vitis https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html
+tools. The image is packaged as xclbin and contains partial bitstream for the
+user partition and necessary metadata. Users can dynamically swap the image
+running on the user partition in order to switch between different workloads.
+
+ALVEO DRIVERS
+
+Alveo Linux kernel driver *xmgmt* binds to management physical function of
+Alveo platform. The modular driver framework is organized into several
+platform drivers which primarily handle the following functionality:
+
+1.  Loading firmware container also called xsabin at driver attach time
+2.  Loading of user compiled xclbin with FPGA Manager integration
+3.  Clock scaling of image running on user partition
+4.  In-band sensors: temp, voltage, power, etc.
+5.  Device reset and rescan
+6.  Flashing static *shell* partition
+
+The platform drivers are packaged into *xrt-lib* helper module with a well
+defined interfaces the details of which can be found in Documentation/xrt.rst.
+
+xmgmt driver is second generation Alveo management driver and evolution of
+the first generation (out of tree) Alveo management driver, xclmgmt. The
+sources of the first generation drivers were posted on LKML last year--
+https://lore.kernel.org/lkml/20190319215401.6562-1-sonal.santan@xilinx.com/
+
+Changes since the first generation driver include the following: the driver
+has been re-architected as data driven modular driver; the driver has been
+split into xmgmt and xrt-lib; user physical function driver has been removed
+from the patch series.
+
+Alveo/XRT security and platform architecture is documented on the following 
+GitHub pages:
+https://xilinx.github.io/XRT/master/html/security.html
+https://xilinx.github.io/XRT/master/html/platforms_partitions.html
+
+User physical function driver is not included in this patch series.
+
+TESTING AND VALIDATION
+
+xmgmt driver can be tested with full XRT open source stack which includes
+user space libraries, board utilities and (out of tree) first generation
+user physical function driver xocl. XRT open source runtime stack is
+available at https://github.com/Xilinx/XRT. This patch series has been
+validated on Alveo U50 platform.
+
+Complete documentation for XRT open source stack can be found here--
+https://xilinx.github.io/XRT/master/html/index.html
+
+Thanks,
+-Sonal
+
+Sonal Santan (8):
+  Documentation: fpga: Add a document describing Alveo XRT drivers
+  fpga: xrt: Add UAPI header files
+  fpga: xrt: infrastructure support for xmgmt driver
+  fpga: xrt: core infrastructure for xrt-lib module
+  fpga: xrt: platform drivers for subsystems in shell partition
+  fpga: xrt: header file for platform and parent drivers
+  fpga: xrt: Alveo management physical function driver
+  fpga: xrt: Kconfig and Makefile updates for XRT drivers
+
+ Documentation/fpga/index.rst                  |    1 +
+ Documentation/fpga/xrt.rst                    |  588 +++++
+ drivers/fpga/Kconfig                          |    2 +
+ drivers/fpga/Makefile                         |    3 +
+ drivers/fpga/alveo/Kconfig                    |    7 +
+ drivers/fpga/alveo/common/xrt-metadata.c      |  590 +++++
+ drivers/fpga/alveo/common/xrt-root.c          |  744 +++++++
+ drivers/fpga/alveo/common/xrt-root.h          |   24 +
+ drivers/fpga/alveo/common/xrt-xclbin.c        |  387 ++++
+ drivers/fpga/alveo/common/xrt-xclbin.h        |   46 +
+ drivers/fpga/alveo/include/xmgmt-main.h       |   34 +
+ drivers/fpga/alveo/include/xrt-axigate.h      |   31 +
+ drivers/fpga/alveo/include/xrt-calib.h        |   28 +
+ drivers/fpga/alveo/include/xrt-clkfreq.h      |   21 +
+ drivers/fpga/alveo/include/xrt-clock.h        |   29 +
+ drivers/fpga/alveo/include/xrt-cmc.h          |   23 +
+ drivers/fpga/alveo/include/xrt-ddr-srsr.h     |   29 +
+ drivers/fpga/alveo/include/xrt-flash.h        |   28 +
+ drivers/fpga/alveo/include/xrt-gpio.h         |   41 +
+ drivers/fpga/alveo/include/xrt-icap.h         |   27 +
+ drivers/fpga/alveo/include/xrt-mailbox.h      |   44 +
+ drivers/fpga/alveo/include/xrt-metadata.h     |  184 ++
+ drivers/fpga/alveo/include/xrt-parent.h       |  103 +
+ drivers/fpga/alveo/include/xrt-partition.h    |   33 +
+ drivers/fpga/alveo/include/xrt-subdev.h       |  333 +++
+ drivers/fpga/alveo/include/xrt-ucs.h          |   22 +
+ drivers/fpga/alveo/lib/Kconfig                |   11 +
+ drivers/fpga/alveo/lib/Makefile               |   42 +
+ drivers/fpga/alveo/lib/subdevs/xrt-axigate.c  |  298 +++
+ drivers/fpga/alveo/lib/subdevs/xrt-calib.c    |  291 +++
+ drivers/fpga/alveo/lib/subdevs/xrt-clkfreq.c  |  214 ++
+ drivers/fpga/alveo/lib/subdevs/xrt-clock.c    |  638 ++++++
+ .../fpga/alveo/lib/subdevs/xrt-cmc-bdinfo.c   |  343 +++
+ drivers/fpga/alveo/lib/subdevs/xrt-cmc-ctrl.c |  322 +++
+ drivers/fpga/alveo/lib/subdevs/xrt-cmc-impl.h |  135 ++
+ .../fpga/alveo/lib/subdevs/xrt-cmc-mailbox.c  |  320 +++
+ drivers/fpga/alveo/lib/subdevs/xrt-cmc-sc.c   |  361 ++++
+ .../fpga/alveo/lib/subdevs/xrt-cmc-sensors.c  |  445 ++++
+ drivers/fpga/alveo/lib/subdevs/xrt-cmc.c      |  239 +++
+ drivers/fpga/alveo/lib/subdevs/xrt-gpio.c     |  198 ++
+ drivers/fpga/alveo/lib/subdevs/xrt-icap.c     |  306 +++
+ drivers/fpga/alveo/lib/subdevs/xrt-mailbox.c  | 1905 +++++++++++++++++
+ .../fpga/alveo/lib/subdevs/xrt-partition.c    |  261 +++
+ drivers/fpga/alveo/lib/subdevs/xrt-qspi.c     | 1347 ++++++++++++
+ drivers/fpga/alveo/lib/subdevs/xrt-srsr.c     |  322 +++
+ drivers/fpga/alveo/lib/subdevs/xrt-test.c     |  274 +++
+ drivers/fpga/alveo/lib/subdevs/xrt-ucs.c      |  238 ++
+ .../fpga/alveo/lib/subdevs/xrt-vsec-golden.c  |  238 ++
+ drivers/fpga/alveo/lib/subdevs/xrt-vsec.c     |  337 +++
+ drivers/fpga/alveo/lib/xrt-cdev.c             |  234 ++
+ drivers/fpga/alveo/lib/xrt-main.c             |  275 +++
+ drivers/fpga/alveo/lib/xrt-main.h             |   46 +
+ drivers/fpga/alveo/lib/xrt-subdev.c           | 1007 +++++++++
+ drivers/fpga/alveo/mgmt/Kconfig               |   11 +
+ drivers/fpga/alveo/mgmt/Makefile              |   28 +
+ drivers/fpga/alveo/mgmt/xmgmt-fmgr-drv.c      |  194 ++
+ drivers/fpga/alveo/mgmt/xmgmt-fmgr.h          |   29 +
+ drivers/fpga/alveo/mgmt/xmgmt-main-impl.h     |   36 +
+ drivers/fpga/alveo/mgmt/xmgmt-main-mailbox.c  |  930 ++++++++
+ drivers/fpga/alveo/mgmt/xmgmt-main-ulp.c      |  190 ++
+ drivers/fpga/alveo/mgmt/xmgmt-main.c          |  843 ++++++++
+ drivers/fpga/alveo/mgmt/xmgmt-root.c          |  375 ++++
+ include/uapi/linux/xrt/flash_xrt_data.h       |   67 +
+ include/uapi/linux/xrt/mailbox_proto.h        |  394 ++++
+ include/uapi/linux/xrt/mailbox_transport.h    |   74 +
+ include/uapi/linux/xrt/xclbin.h               |  418 ++++
+ include/uapi/linux/xrt/xmgmt-ioctl.h          |   72 +
+ 67 files changed, 17710 insertions(+)
+ create mode 100644 Documentation/fpga/xrt.rst
+ create mode 100644 drivers/fpga/alveo/Kconfig
+ create mode 100644 drivers/fpga/alveo/common/xrt-metadata.c
+ create mode 100644 drivers/fpga/alveo/common/xrt-root.c
+ create mode 100644 drivers/fpga/alveo/common/xrt-root.h
+ create mode 100644 drivers/fpga/alveo/common/xrt-xclbin.c
+ create mode 100644 drivers/fpga/alveo/common/xrt-xclbin.h
+ create mode 100644 drivers/fpga/alveo/include/xmgmt-main.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-axigate.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-calib.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-clkfreq.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-clock.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-cmc.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-ddr-srsr.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-flash.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-gpio.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-icap.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-mailbox.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-metadata.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-parent.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-partition.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-subdev.h
+ create mode 100644 drivers/fpga/alveo/include/xrt-ucs.h
+ create mode 100644 drivers/fpga/alveo/lib/Kconfig
+ create mode 100644 drivers/fpga/alveo/lib/Makefile
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-axigate.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-calib.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-clkfreq.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-clock.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-bdinfo.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-ctrl.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-impl.h
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-mailbox.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-sc.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-sensors.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-gpio.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-icap.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-mailbox.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-partition.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-qspi.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-srsr.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-test.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-ucs.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-vsec-golden.c
+ create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-vsec.c
+ create mode 100644 drivers/fpga/alveo/lib/xrt-cdev.c
+ create mode 100644 drivers/fpga/alveo/lib/xrt-main.c
+ create mode 100644 drivers/fpga/alveo/lib/xrt-main.h
+ create mode 100644 drivers/fpga/alveo/lib/xrt-subdev.c
+ create mode 100644 drivers/fpga/alveo/mgmt/Kconfig
+ create mode 100644 drivers/fpga/alveo/mgmt/Makefile
+ create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-fmgr-drv.c
+ create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-fmgr.h
+ create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-main-impl.h
+ create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-main-mailbox.c
+ create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-main-ulp.c
+ create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-main.c
+ create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-root.c
+ create mode 100644 include/uapi/linux/xrt/flash_xrt_data.h
+ create mode 100644 include/uapi/linux/xrt/mailbox_proto.h
+ create mode 100644 include/uapi/linux/xrt/mailbox_transport.h
+ create mode 100644 include/uapi/linux/xrt/xclbin.h
+ create mode 100644 include/uapi/linux/xrt/xmgmt-ioctl.h
+
+--
 2.17.1
-
