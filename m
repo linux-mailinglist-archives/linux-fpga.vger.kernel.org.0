@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DF72C76B2
-	for <lists+linux-fpga@lfdr.de>; Sun, 29 Nov 2020 01:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9AF2C76B6
+	for <lists+linux-fpga@lfdr.de>; Sun, 29 Nov 2020 01:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726280AbgK2ACd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 28 Nov 2020 19:02:33 -0500
-Received: from mail-mw2nam10on2086.outbound.protection.outlook.com ([40.107.94.86]:56672
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        id S1728891AbgK2ACs (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 28 Nov 2020 19:02:48 -0500
+Received: from mail-bn7nam10on2084.outbound.protection.outlook.com ([40.107.92.84]:10880
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725852AbgK2ACd (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sat, 28 Nov 2020 19:02:33 -0500
+        id S1725852AbgK2ACs (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 28 Nov 2020 19:02:48 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OfMJqWoPHkkrBBpfcCfgiH6Dh70GqKL7T4hRu5jfGOXGaqBGy0GD3KwmgK14zhlADlmrugqQM55KuNU59T2svl7S7HTPkGp5CNNgV56Pe2Qn4Ja5htyfOVNAcOeEclP4/iCUoyWWbUOyrgbE4fjh932PHQ+tis+cj4DzpPLBjz4ecr/k1plhRZAh/BkHR7S7zziOLEo/xrruQVoeIHr/UwcTnthncWYvsVS95qoMTLwlzK+AYKfbwzlF8TXCxE8qte6M8CTJ22nKL+wtlx8WfTkEBqbtrfiT2cNahxGSLMiXttciCVc/d4kiZa2alxE3VzsesPfBTk9h6tksbzW4Ww==
+ b=REnVCN6rhq5uAMD4klu8/lvorhVvJvK9w1fDAxOcxqVwn6zqvN5MklWihhRow91Ffv3wOyQxe27aRxKHi9A9K/R+1NM/ExMaf8SzF3qzQg8sZ+fCWz2SeED/UiPxzUnkuRPVIukNOi69MopvEdMkVkE5DnIW3vs4U/f/0X6lQc/6X7Zsar77R25Yka1Tx0gHHI6OKCLzRwDqzpdIPBnRg+A1PiXJTZQyh9Uq0gEeyfRsUY5NgyRWGCRK8bYZMhoeeK1/B26kD0HIAWA3C4PrUkizbyw2Qk1iNXyBAplWSpoDdU2NhfjyQji4N6YgVdSwN0D2cgFQKn48YBES5pI+oA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m4x/9h3IRmnE4xImE9iZZl98dU9et7O0tYfp3x+XiNQ=;
- b=Ba0X/g1xiqVPX5BIrDzhmyi41hmGgmr7NrAsfVDq0Qjil3Uz/sSWGsKKKI4qhPVbersJnb1fcVEa+1jHlnfpMkv2KjsYfPwGw+qOz/kksm1ugZ1Yz1uMeFR6qboSxO1+zAwc0DXze2txpJHlaCmzr/Fr35ZIpkk2vvClLH4c5WOfQqMgKvHwFSRlxFP0Pg/1Ob3WMzB7tmdKb4cQ55TxCqurvpuILYpHDaHrikRXuGX2L/Lzsrgt2vFkSyge5g2F0MVqEX7Umy3Hihy/2d0aAtBChytqenzNIOg6KXrc7lfMRcP9J8xBCmN0GnYqngsXEFzKMblNpOtSqDO2cwR3lw==
+ bh=fgTte9g69e/xg3RhQP0SGPf5yDytH9ngIQxiCKdvNiY=;
+ b=h1Xoerzt5k2kKpPvEjx73OOZTzC5oYXEeUdKUrBe3gHsCg9S7nj5KX1xTHZDG1WnHzL7zIqF9RdjPvv6L5foYF0kiM4FGZ50+SP1oePN3F0woTyuUn5NgBg4iOJiS02qowlPZWOpx3vFS2PBmhUx1fdmqY6/tRqcJUKAI+YU3R0Faa53jpm0uiCzSjfVooLcL4yXIrhpxx7LAt6oLcdfpbSWjAcBlPzo1Ipi6KuKx6fc55iGfAmxaZPrNHtlSlvrS1g0N7n9Xe/IGsfOYpIZGqs16WUV2MYMMbOsZDK84Dz11l6ar5ZlBvIi1dcx1E0oADvmt8wUm0WHtptSu4r0bA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
  dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
@@ -26,304 +26,708 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m4x/9h3IRmnE4xImE9iZZl98dU9et7O0tYfp3x+XiNQ=;
- b=dipDdEOZByzpDRZ38yVQo+HBrKS+oEVs/UuvvWalR7DWqEuhl5IBv+hzTaVW2zWLpZGj/w8IaSQU74MyPKd2Mryc4oPhTrwwKfx9GmwNo8PUuPzXjHQuwfTPpKWLYlhYw5QjoSUCl5NvwpXKe5l0Gubm8a2+wjWtkhhVwModEP0=
-Received: from MN2PR20CA0016.namprd20.prod.outlook.com (2603:10b6:208:e8::29)
- by MW4PR02MB7345.namprd02.prod.outlook.com (2603:10b6:303:7c::10) with
+ bh=fgTte9g69e/xg3RhQP0SGPf5yDytH9ngIQxiCKdvNiY=;
+ b=slZiJjyFXsrJkP26ayQHE3YGrNcj3xIiulsBzZr9L3m+nj9TUCmO4R63SHQJDYD0JrWj4LqKyg9nl4oHf4kQEe8lhnn8b0wRmuIY6thgZnDG6bL654AS6LMGhhyrPVksjwVlN3XxrqffHwgEzi9o41ez9E7Zrb+Ti6NB5b41kPM=
+Received: from SA9PR13CA0006.namprd13.prod.outlook.com (2603:10b6:806:21::11)
+ by CH2PR02MB6917.namprd02.prod.outlook.com (2603:10b6:610:88::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Sun, 29 Nov
- 2020 00:01:40 +0000
-Received: from BL2NAM02FT052.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:e8:cafe::7e) by MN2PR20CA0016.outlook.office365.com
- (2603:10b6:208:e8::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend
- Transport; Sun, 29 Nov 2020 00:01:40 +0000
+ 2020 00:01:51 +0000
+Received: from SN1NAM02FT008.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:21:cafe::4) by SA9PR13CA0006.outlook.office365.com
+ (2603:10b6:806:21::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.9 via Frontend
+ Transport; Sun, 29 Nov 2020 00:01:51 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
  header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BL2NAM02FT052.mail.protection.outlook.com (10.152.77.0) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT008.mail.protection.outlook.com (10.152.72.119) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3611.27 via Frontend Transport; Sun, 29 Nov 2020 00:01:40 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ 15.20.3611.27 via Frontend Transport; Sun, 29 Nov 2020 00:01:51 +0000
+Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Sat, 28 Nov 2020 16:01:39 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Sat, 28 Nov 2020 16:01:39 -0800
+ 15.1.1913.5; Sat, 28 Nov 2020 16:01:50 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Sat, 28 Nov 2020 16:01:50 -0800
 Envelope-to: michal.simek@xilinx.com,
+ sonal.santan@xilinx.com,
  lizhih@xilinx.com,
  maxz@xilinx.com,
- sonals@xilinx.com,
  stefanos@xilinx.com,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.212] (port=45046 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.212] (port=45048 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <sonal.santan@xilinx.com>)
-        id 1kjA9r-0000B4-6s; Sat, 28 Nov 2020 16:01:39 -0800
+        id 1kjAA2-0004XR-Qg; Sat, 28 Nov 2020 16:01:50 -0800
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 6354)
-        id D36C060010C; Sat, 28 Nov 2020 16:00:44 -0800 (PST)
+        id E04BB600039; Sat, 28 Nov 2020 16:00:44 -0800 (PST)
 From:   Sonal Santan <sonal.santan@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
-CC:     Sonal Santan <sonals@xilinx.com>, <linux-fpga@vger.kernel.org>,
-        <maxz@xilinx.com>, <lizhih@xilinx.com>, <michal.simek@xilinx.com>,
+CC:     Sonal Santan <sonal.santan@xilinx.com>,
+        <linux-fpga@vger.kernel.org>, <maxz@xilinx.com>,
+        <lizhih@xilinx.com>, <michal.simek@xilinx.com>,
         <stefanos@xilinx.com>, <devicetree@vger.kernel.org>
-Subject: [PATCH Xilinx Alveo 0/8] Xilinx Alveo/XRT patch overview 
-Date:   Sat, 28 Nov 2020 16:00:32 -0800
-Message-ID: <20201129000040.24777-1-sonals@xilinx.com>
+Subject: [PATCH Xilinx Alveo 1/8] Documentation: fpga: Add a document describing Alveo XRT drivers
+Date:   Sat, 28 Nov 2020 16:00:33 -0800
+Message-ID: <20201129000040.24777-2-sonals@xilinx.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201129000040.24777-1-sonals@xilinx.com>
+References: <20201129000040.24777-1-sonals@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: df7c4b36-8b0d-4ec3-d4cb-08d893f9f2cf
-X-MS-TrafficTypeDiagnostic: MW4PR02MB7345:
-X-Microsoft-Antispam-PRVS: <MW4PR02MB7345E253791491A1FFFA0A65BBF60@MW4PR02MB7345.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: f9021649-d629-4d74-10cd-08d893f9f964
+X-MS-TrafficTypeDiagnostic: CH2PR02MB6917:
+X-Microsoft-Antispam-PRVS: <CH2PR02MB691715A8466FCE36C1F279ACBBF60@CH2PR02MB6917.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h6J/mVIaS7bHar0VnhqjarW6AVBn4+2EF2/9TZZnWkp2+SFQ+QwV2z5qwGa3iD3HeSccQCyfe3RKd6r1bW87O1hjmb+yhWvSVZGWHf0eeBzfKPPwSaH772DIv2b7n3kbT6+9L/ssdBSNfOj5Zsta/zyNEVfWlreXbbWDhR3Xg3kDhZNo4Z8TDhV8DJ9jFf/tXwB1VCEWs1ryP0yKds9bJM9/L8ArUNXjs+tbzcIXi/Mn5EfDMAmpDGvPg3y8jFdLxxspkMHT78Vf7xJdvyz88XS7mruhQNdVvebfWHRP2ETKNXnzrpwGefiN0ZZy7MbUA378nDl4sGOwYn0d70GpxKE1ZkonIQNttuosiK4ws/NXsB2u+PdtxP57UAZ7n2k/Iy3DTXqRCD6kSgPU8Pz+rx66x7m0r3os/4B6VcB/vGrHXi/47V5TgE+HaStJBU/BdvKmLOPZzQ7pYebj2HMNfA==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(396003)(39850400004)(46966005)(316002)(44832011)(42186006)(8676002)(54906003)(36906005)(186003)(1076003)(336012)(426003)(2906002)(26005)(2616005)(966005)(4743002)(6916009)(478600001)(4326008)(450100002)(8936002)(6666004)(70586007)(82740400003)(47076004)(7636003)(5660300002)(82310400003)(356005)(30864003)(83380400001)(6266002)(36756003)(70206006);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 6nIsSpABtLQNeVsVL8OCwIILZDCJP1KGVxz//6ixIrSw66wnR4UFityGxK6FZAN7QR6q29cMOV5Yw9j9kGDfuBKSp1keX9mwpXWReb7gohJSZYxHqvR5hP6Sahr2fE74TjJeUyYJwyfguTFJIMXTkN2vay4MY2nkVPCHWh9qoJzQ2+Uy/rPsRC2yx1mgM6G5O+AhqYJnnMJGeQe2y0whPq6BkuJkmAsIGXwtjpEy9XTVQ7IyHh3BbKg0uFcGW9TCFi6rCOR9gC6sAOnuOwNdn0Iys6x2x8+2vAz2GjpFu0hcpd+FErNoZ7Hu3VzzGOgfZXcQLBF43SxMzMNamGILRAPoNV24HU+Fx6AMFG5KrNDYO8cQsKy7DQ+rjQ3PjfTibrUZC/cp95rgh9k6lKQR6zoulVWMWGyI0yg93cFOvz2d794g/jcQUQnOsMDqzS+YkUYnqam9jnrq8gdCvtDdGg==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(39850400004)(376002)(346002)(136003)(396003)(46966005)(44832011)(83380400001)(2906002)(966005)(82310400003)(478600001)(82740400003)(47076004)(26005)(4326008)(54906003)(316002)(450100002)(42186006)(36906005)(36756003)(8936002)(8676002)(1076003)(30864003)(5660300002)(186003)(6916009)(356005)(70586007)(6266002)(70206006)(7636003)(426003)(336012)(6666004)(2616005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2020 00:01:40.1362
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2020 00:01:51.2140
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: df7c4b36-8b0d-4ec3-d4cb-08d893f9f2cf
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9021649-d629-4d74-10cd-08d893f9f964
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT052.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT008.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR02MB7345
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6917
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hello,
+From: Sonal Santan <sonal.santan@xilinx.com>
 
-This patch series adds management physical function driver for Xilinx Alveo PCIe
-accelerator cards, https://www.xilinx.com/products/boards-and-kits/alveo.html
-This driver is part of Xilinx Runtime (XRT) open source stack.
+Describe Alveo XRT driver architecture and provide basic overview
+of Xilinx Alveo platform.
 
-The patch depends on the "PATCH Xilinx Alveo libfdt prep" which was posted
-before.
-
-ALVEO PLATFORM ARCHITECTURE
-
-Alveo PCIe FPGA based platforms have a static *shell* partition and a partial
-re-configurable *user* partition. The shell partition is automatically loaded from
-flash when host is booted and PCIe is enumerated by BIOS. Shell cannot be changed
-till the next cold reboot. The shell exposes two PCIe physical functions:
-
-1. management physical function
-2. user physical function
-
-The patch series includes Documentation/xrt.rst which describes Alveo
-platform, xmgmt driver architecture and deployment model in more more detail.
-
-Users compile their high level design in C/C++/OpenCL or RTL into FPGA image
-using Vitis https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html
-tools. The image is packaged as xclbin and contains partial bitstream for the
-user partition and necessary metadata. Users can dynamically swap the image
-running on the user partition in order to switch between different workloads.
-
-ALVEO DRIVERS
-
-Alveo Linux kernel driver *xmgmt* binds to management physical function of
-Alveo platform. The modular driver framework is organized into several
-platform drivers which primarily handle the following functionality:
-
-1.  Loading firmware container also called xsabin at driver attach time
-2.  Loading of user compiled xclbin with FPGA Manager integration
-3.  Clock scaling of image running on user partition
-4.  In-band sensors: temp, voltage, power, etc.
-5.  Device reset and rescan
-6.  Flashing static *shell* partition
-
-The platform drivers are packaged into *xrt-lib* helper module with a well
-defined interfaces the details of which can be found in Documentation/xrt.rst.
-
-xmgmt driver is second generation Alveo management driver and evolution of
-the first generation (out of tree) Alveo management driver, xclmgmt. The
-sources of the first generation drivers were posted on LKML last year--
-https://lore.kernel.org/lkml/20190319215401.6562-1-sonal.santan@xilinx.com/
-
-Changes since the first generation driver include the following: the driver
-has been re-architected as data driven modular driver; the driver has been
-split into xmgmt and xrt-lib; user physical function driver has been removed
-from the patch series.
-
-Alveo/XRT security and platform architecture is documented on the following 
-GitHub pages:
-https://xilinx.github.io/XRT/master/html/security.html
-https://xilinx.github.io/XRT/master/html/platforms_partitions.html
-
-User physical function driver is not included in this patch series.
-
-TESTING AND VALIDATION
-
-xmgmt driver can be tested with full XRT open source stack which includes
-user space libraries, board utilities and (out of tree) first generation
-user physical function driver xocl. XRT open source runtime stack is
-available at https://github.com/Xilinx/XRT. This patch series has been
-validated on Alveo U50 platform.
-
-Complete documentation for XRT open source stack can be found here--
-https://xilinx.github.io/XRT/master/html/index.html
-
-Thanks,
--Sonal
-
-Sonal Santan (8):
-  Documentation: fpga: Add a document describing Alveo XRT drivers
-  fpga: xrt: Add UAPI header files
-  fpga: xrt: infrastructure support for xmgmt driver
-  fpga: xrt: core infrastructure for xrt-lib module
-  fpga: xrt: platform drivers for subsystems in shell partition
-  fpga: xrt: header file for platform and parent drivers
-  fpga: xrt: Alveo management physical function driver
-  fpga: xrt: Kconfig and Makefile updates for XRT drivers
-
- Documentation/fpga/index.rst                  |    1 +
- Documentation/fpga/xrt.rst                    |  588 +++++
- drivers/fpga/Kconfig                          |    2 +
- drivers/fpga/Makefile                         |    3 +
- drivers/fpga/alveo/Kconfig                    |    7 +
- drivers/fpga/alveo/common/xrt-metadata.c      |  590 +++++
- drivers/fpga/alveo/common/xrt-root.c          |  744 +++++++
- drivers/fpga/alveo/common/xrt-root.h          |   24 +
- drivers/fpga/alveo/common/xrt-xclbin.c        |  387 ++++
- drivers/fpga/alveo/common/xrt-xclbin.h        |   46 +
- drivers/fpga/alveo/include/xmgmt-main.h       |   34 +
- drivers/fpga/alveo/include/xrt-axigate.h      |   31 +
- drivers/fpga/alveo/include/xrt-calib.h        |   28 +
- drivers/fpga/alveo/include/xrt-clkfreq.h      |   21 +
- drivers/fpga/alveo/include/xrt-clock.h        |   29 +
- drivers/fpga/alveo/include/xrt-cmc.h          |   23 +
- drivers/fpga/alveo/include/xrt-ddr-srsr.h     |   29 +
- drivers/fpga/alveo/include/xrt-flash.h        |   28 +
- drivers/fpga/alveo/include/xrt-gpio.h         |   41 +
- drivers/fpga/alveo/include/xrt-icap.h         |   27 +
- drivers/fpga/alveo/include/xrt-mailbox.h      |   44 +
- drivers/fpga/alveo/include/xrt-metadata.h     |  184 ++
- drivers/fpga/alveo/include/xrt-parent.h       |  103 +
- drivers/fpga/alveo/include/xrt-partition.h    |   33 +
- drivers/fpga/alveo/include/xrt-subdev.h       |  333 +++
- drivers/fpga/alveo/include/xrt-ucs.h          |   22 +
- drivers/fpga/alveo/lib/Kconfig                |   11 +
- drivers/fpga/alveo/lib/Makefile               |   42 +
- drivers/fpga/alveo/lib/subdevs/xrt-axigate.c  |  298 +++
- drivers/fpga/alveo/lib/subdevs/xrt-calib.c    |  291 +++
- drivers/fpga/alveo/lib/subdevs/xrt-clkfreq.c  |  214 ++
- drivers/fpga/alveo/lib/subdevs/xrt-clock.c    |  638 ++++++
- .../fpga/alveo/lib/subdevs/xrt-cmc-bdinfo.c   |  343 +++
- drivers/fpga/alveo/lib/subdevs/xrt-cmc-ctrl.c |  322 +++
- drivers/fpga/alveo/lib/subdevs/xrt-cmc-impl.h |  135 ++
- .../fpga/alveo/lib/subdevs/xrt-cmc-mailbox.c  |  320 +++
- drivers/fpga/alveo/lib/subdevs/xrt-cmc-sc.c   |  361 ++++
- .../fpga/alveo/lib/subdevs/xrt-cmc-sensors.c  |  445 ++++
- drivers/fpga/alveo/lib/subdevs/xrt-cmc.c      |  239 +++
- drivers/fpga/alveo/lib/subdevs/xrt-gpio.c     |  198 ++
- drivers/fpga/alveo/lib/subdevs/xrt-icap.c     |  306 +++
- drivers/fpga/alveo/lib/subdevs/xrt-mailbox.c  | 1905 +++++++++++++++++
- .../fpga/alveo/lib/subdevs/xrt-partition.c    |  261 +++
- drivers/fpga/alveo/lib/subdevs/xrt-qspi.c     | 1347 ++++++++++++
- drivers/fpga/alveo/lib/subdevs/xrt-srsr.c     |  322 +++
- drivers/fpga/alveo/lib/subdevs/xrt-test.c     |  274 +++
- drivers/fpga/alveo/lib/subdevs/xrt-ucs.c      |  238 ++
- .../fpga/alveo/lib/subdevs/xrt-vsec-golden.c  |  238 ++
- drivers/fpga/alveo/lib/subdevs/xrt-vsec.c     |  337 +++
- drivers/fpga/alveo/lib/xrt-cdev.c             |  234 ++
- drivers/fpga/alveo/lib/xrt-main.c             |  275 +++
- drivers/fpga/alveo/lib/xrt-main.h             |   46 +
- drivers/fpga/alveo/lib/xrt-subdev.c           | 1007 +++++++++
- drivers/fpga/alveo/mgmt/Kconfig               |   11 +
- drivers/fpga/alveo/mgmt/Makefile              |   28 +
- drivers/fpga/alveo/mgmt/xmgmt-fmgr-drv.c      |  194 ++
- drivers/fpga/alveo/mgmt/xmgmt-fmgr.h          |   29 +
- drivers/fpga/alveo/mgmt/xmgmt-main-impl.h     |   36 +
- drivers/fpga/alveo/mgmt/xmgmt-main-mailbox.c  |  930 ++++++++
- drivers/fpga/alveo/mgmt/xmgmt-main-ulp.c      |  190 ++
- drivers/fpga/alveo/mgmt/xmgmt-main.c          |  843 ++++++++
- drivers/fpga/alveo/mgmt/xmgmt-root.c          |  375 ++++
- include/uapi/linux/xrt/flash_xrt_data.h       |   67 +
- include/uapi/linux/xrt/mailbox_proto.h        |  394 ++++
- include/uapi/linux/xrt/mailbox_transport.h    |   74 +
- include/uapi/linux/xrt/xclbin.h               |  418 ++++
- include/uapi/linux/xrt/xmgmt-ioctl.h          |   72 +
- 67 files changed, 17710 insertions(+)
+Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+---
+ Documentation/fpga/index.rst |   1 +
+ Documentation/fpga/xrt.rst   | 588 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 589 insertions(+)
  create mode 100644 Documentation/fpga/xrt.rst
- create mode 100644 drivers/fpga/alveo/Kconfig
- create mode 100644 drivers/fpga/alveo/common/xrt-metadata.c
- create mode 100644 drivers/fpga/alveo/common/xrt-root.c
- create mode 100644 drivers/fpga/alveo/common/xrt-root.h
- create mode 100644 drivers/fpga/alveo/common/xrt-xclbin.c
- create mode 100644 drivers/fpga/alveo/common/xrt-xclbin.h
- create mode 100644 drivers/fpga/alveo/include/xmgmt-main.h
- create mode 100644 drivers/fpga/alveo/include/xrt-axigate.h
- create mode 100644 drivers/fpga/alveo/include/xrt-calib.h
- create mode 100644 drivers/fpga/alveo/include/xrt-clkfreq.h
- create mode 100644 drivers/fpga/alveo/include/xrt-clock.h
- create mode 100644 drivers/fpga/alveo/include/xrt-cmc.h
- create mode 100644 drivers/fpga/alveo/include/xrt-ddr-srsr.h
- create mode 100644 drivers/fpga/alveo/include/xrt-flash.h
- create mode 100644 drivers/fpga/alveo/include/xrt-gpio.h
- create mode 100644 drivers/fpga/alveo/include/xrt-icap.h
- create mode 100644 drivers/fpga/alveo/include/xrt-mailbox.h
- create mode 100644 drivers/fpga/alveo/include/xrt-metadata.h
- create mode 100644 drivers/fpga/alveo/include/xrt-parent.h
- create mode 100644 drivers/fpga/alveo/include/xrt-partition.h
- create mode 100644 drivers/fpga/alveo/include/xrt-subdev.h
- create mode 100644 drivers/fpga/alveo/include/xrt-ucs.h
- create mode 100644 drivers/fpga/alveo/lib/Kconfig
- create mode 100644 drivers/fpga/alveo/lib/Makefile
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-axigate.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-calib.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-clkfreq.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-clock.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-bdinfo.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-ctrl.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-impl.h
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-mailbox.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-sc.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc-sensors.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-cmc.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-gpio.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-icap.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-mailbox.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-partition.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-qspi.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-srsr.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-test.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-ucs.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-vsec-golden.c
- create mode 100644 drivers/fpga/alveo/lib/subdevs/xrt-vsec.c
- create mode 100644 drivers/fpga/alveo/lib/xrt-cdev.c
- create mode 100644 drivers/fpga/alveo/lib/xrt-main.c
- create mode 100644 drivers/fpga/alveo/lib/xrt-main.h
- create mode 100644 drivers/fpga/alveo/lib/xrt-subdev.c
- create mode 100644 drivers/fpga/alveo/mgmt/Kconfig
- create mode 100644 drivers/fpga/alveo/mgmt/Makefile
- create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-fmgr-drv.c
- create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-fmgr.h
- create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-main-impl.h
- create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-main-mailbox.c
- create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-main-ulp.c
- create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-main.c
- create mode 100644 drivers/fpga/alveo/mgmt/xmgmt-root.c
- create mode 100644 include/uapi/linux/xrt/flash_xrt_data.h
- create mode 100644 include/uapi/linux/xrt/mailbox_proto.h
- create mode 100644 include/uapi/linux/xrt/mailbox_transport.h
- create mode 100644 include/uapi/linux/xrt/xclbin.h
- create mode 100644 include/uapi/linux/xrt/xmgmt-ioctl.h
 
+diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
+index f80f95667ca2..30134357b70d 100644
+--- a/Documentation/fpga/index.rst
++++ b/Documentation/fpga/index.rst
+@@ -8,6 +8,7 @@ fpga
+     :maxdepth: 1
+
+     dfl
++    xrt
+
+ .. only::  subproject and html
+
+diff --git a/Documentation/fpga/xrt.rst b/Documentation/fpga/xrt.rst
+new file mode 100644
+index 000000000000..9f37d46459b0
+--- /dev/null
++++ b/Documentation/fpga/xrt.rst
+@@ -0,1 +1,588 @@
++==================================
++XRTV2 Linux Kernel Driver Overview
++==================================
++
++XRTV2 drivers are second generation `XRT <https://github.com/Xilinx/XRT>`_ drivers which
++support `Alveo <https://www.xilinx.com/products/boards-and-kits/alveo.html>`_ PCIe platforms
++from Xilinx.
++
++XRTV2 drivers support *subsystem* style data driven platforms where driver's configuration
++and behavior is determined by meta data provided by platform (in *device tree* format).
++Primary management physical function (MPF) driver is called **xmgmt**. Primary user physical
++function (UPF) driver is called **xuser** and HW subsystem drivers are packaged into a library
++module called **xrt-lib**, which is shared by **xmgmt** and **xuser** (WIP).
++
++Alveo Platform Overview
++=======================
++
++Alveo platforms are architected as two physical FPGA partitions: *Shell* and *User*. Shell
++provides basic infrastructure for the Alveo platform like PCIe connectivity, board management,
++Dynamic Function Exchange (DFX), sensors, clocking, reset, and security. User partition contains
++user compiled binary which is loaded by a process called DFX also known as partial reconfiguration.
++
++Physical partitions require strict HW compatibility with each other for DFX to work properly.
++Every physical partition has two interface UUIDs: *parent* UUID and *child* UUID. For simple
++single stage platforms Shell → User forms parent child relationship. For complex two stage
++platforms Base → Shell → User forms the parent child relationship chain.
++
++.. note::
++   Partition compatibility matching is key design component of Alveo platforms and XRT. Partitions
++   have child and parent relationship. A loaded partition exposes child partition UUID to advertise
++   its compatibility requirement for child partition. When loading a child partition the xmgmt
++   management driver matches parent UUID of the child partition against child UUID exported by the
++   parent. Parent and child partition UUIDs are stored in the *xclbin* (for user) or *xsabin* (for
++   base and shell). Except for root UUID, VSEC, hardware itself does not know about UUIDs. UUIDs are
++   stored in xsabin and xclbin.
++
++
++The physical partitions and their loading is illustrated below::
++
++            SHELL                               USER
++        +-----------+                  +-------------------+
++        |           |                  |                   |
++        | VSEC UUID | CHILD     PARENT |    LOGIC UUID     |
++        |           o------->|<--------o                   |
++        |           | UUID       UUID  |                   |
++        +-----+-----+                  +--------+----------+
++              |                                 |
++              .                                 .
++              |                                 |
++          +---+---+                      +------+--------+
++          |  POR  |                      | USER COMPILED |
++          | FLASH |                      |    XCLBIN     |
++          +-------+                      +---------------+
++
++
++Loading Sequence
++----------------
++
++Shell partition is loaded from flash at system boot time. It establishes the PCIe link and exposes
++two physical functions to the BIOS. After OS boot, xmgmt driver attaches to PCIe physical function
++0 exposed by the Shell and then looks for VSEC in PCIe extended configuration space. Using VSEC it
++determines the logic UUID of Shell and uses the UUID to load matching *xsabin* file from Linux
++firmware directory. The xsabin file contains metadata to discover peripherals that are part of Shell
++and firmware(s) for any embedded soft processors in Shell.
++
++Shell exports child interface UUID which is used for compatibility check when loading user compiled
++xclbin over the User partition as part of DFX. When a user requests loading of a specific xclbin the
++xmgmt management driver reads the parent interface UUID specified in the xclbin and matches it with
++child interface UUID exported by Shell to determine if xclbin is compatible with the Shell. If match
++fails loading of xclbin is denied.
++
++xclbin loading is requested using ICAP_DOWNLOAD_AXLF ioctl command. When loading xclbin xmgmt driver
++performs the following operations:
++
++1. Sanity check the xclbin contents
++2. Isolate the User partition
++3. Download the bitstream using the FPGA config engine (ICAP)
++4. De-isolate the User partition
++5. Program the clocks (ClockWiz) driving the User partition
++6. Wait for memory controller (MIG) calibration
++
++`Platform Loading Overview <https://xilinx.github.io/XRT/master/html/platforms_partitions.html>`_
++provides more detailed information on platform loading.
++
++xsabin
++------
++
++Each Alveo platform comes packaged with its own xsabin. The xsabin is trusted component of the
++platform. For format details refer to :ref:`xsabin/xclbin Container Format`. xsabin contains
++basic information like UUIDs, platform name and metadata in the form of device tree. See
++:ref:`Device Tree Usage` for details and example.
++
++xclbin
++------
++
++xclbin is compiled by end user using
++`Vitis <https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html>`_ tool set from
++Xilinx. The xclbin contains sections describing user compiled acceleration engines/kernels, memory
++subsystems, clocking information etc. It also contains bitstream for the user partition, UUIDs,
++platform name, etc. xclbin uses the same container format as xsabin which is described below.
++
++
++xsabin/xclbin Container Format
++------------------------------
++
++xclbin/xsabin is ELF-like binary container format. It is structured as series of sections.
++There is a file header followed by several section headers which is followed by sections.
++A section header points to an actual section. There is an optional signature at the end.
++The format is defined by header file ``xclbin.h``. The following figure illustrates a
++typical xclbin::
++
++
++          +---------------------+
++          |                     |
++          |       HEADER        |
++          +---------------------+
++          |   SECTION  HEADER   |
++          |                     |
++          +---------------------+
++          |         ...         |
++          |                     |
++          +---------------------+
++          |   SECTION  HEADER   |
++          |                     |
++          +---------------------+
++          |       SECTION       |
++          |                     |
++          +---------------------+
++          |         ...         |
++          |                     |
++          +---------------------+
++          |       SECTION       |
++          |                     |
++          +---------------------+
++          |      SIGNATURE      |
++          |      (OPTIONAL)     |
++          +---------------------+
++
++
++xclbin/xsabin files can be packaged, un-packaged and inspected using XRT utility called
++**xclbinutil**. xclbinutil is part of XRT open source software stack. The source code for
++xclbinutil can be found at https://github.com/Xilinx/XRT/tree/master/src/runtime_src/tools/xclbinutil
++
++For example to enumerate the contents of a xclbin/xsabin use the *--info* switch as shown
++below::
++
++  xclbinutil --info --input /opt/xilinx/firmware/u50/gen3x16-xdma/blp/test/bandwidth.xclbin
++  xclbinutil --info --input /lib/firmware/xilinx/862c7020a250293e32036f19956669e5/partition.xsabin
++
++
++Device Tree Usage
++-----------------
++
++As mentioned previously xsabin stores metadata which advertise HW subsystems present in a partition.
++The metadata is stored in device tree format with well defined schema. Subsystem instantiations are
++captured as children of ``addressable_endpoints`` node. Subsystem nodes have standard attributes like
++``reg``, ``interrupts`` etc. Additionally the nodes also have PCIe specific attributes:
++``pcie_physical_function`` and ``pcie_bar_mapping``. These identify which PCIe physical function and
++which BAR space in that physical function the subsystem resides. XRT management driver uses this
++information to bind *platform drivers* to the subsystem instantiations. The platform drivers are
++found in **xrt-lib.ko** kernel module defined later. Below is an example of device tree for Alveo U50
++platform::
++
++  /dts-v1/;
++
++  /{
++	logic_uuid = "f465b0a3ae8c64f619bc150384ace69b";
++
++	schema_version {
++		major = <0x01>;
++		minor = <0x00>;
++	};
++
++	interfaces {
++
++		@0 {
++			interface_uuid = "862c7020a250293e32036f19956669e5";
++		};
++	};
++
++	addressable_endpoints {
++
++		ep_blp_rom_00 {
++			reg = <0x00 0x1f04000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
++		};
++
++		ep_card_flash_program_00 {
++			reg = <0x00 0x1f06000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_quad_spi-1.0\0axi_quad_spi";
++			interrupts = <0x03 0x03>;
++		};
++
++		ep_cmc_firmware_mem_00 {
++			reg = <0x00 0x1e20000 0x00 0x20000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
++
++			firmware {
++				firmware_product_name = "cmc";
++				firmware_branch_name = "u50";
++				firmware_version_major = <0x01>;
++				firmware_version_minor = <0x00>;
++			};
++		};
++
++		ep_cmc_intc_00 {
++			reg = <0x00 0x1e03000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_intc-1.0\0axi_intc";
++			interrupts = <0x04 0x04>;
++		};
++
++		ep_cmc_mutex_00 {
++			reg = <0x00 0x1e02000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
++		};
++
++		ep_cmc_regmap_00 {
++			reg = <0x00 0x1e08000 0x00 0x2000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
++
++			firmware {
++				firmware_product_name = "sc-fw";
++				firmware_branch_name = "u50";
++				firmware_version_major = <0x05>;
++			};
++		};
++
++		ep_cmc_reset_00 {
++			reg = <0x00 0x1e01000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
++		};
++
++		ep_ddr_mem_calib_00 {
++			reg = <0x00 0x63000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
++		};
++
++		ep_debug_bscan_mgmt_00 {
++			reg = <0x00 0x1e90000 0x00 0x10000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-debug_bridge-1.0\0debug_bridge";
++		};
++
++		ep_ert_base_address_00 {
++			reg = <0x00 0x21000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
++		};
++
++		ep_ert_command_queue_mgmt_00 {
++			reg = <0x00 0x40000 0x00 0x10000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-ert_command_queue-1.0\0ert_command_queue";
++		};
++
++		ep_ert_command_queue_user_00 {
++			reg = <0x00 0x40000 0x00 0x10000>;
++			pcie_physical_function = <0x01>;
++			compatible = "xilinx.com,reg_abs-ert_command_queue-1.0\0ert_command_queue";
++		};
++
++		ep_ert_firmware_mem_00 {
++			reg = <0x00 0x30000 0x00 0x8000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
++
++			firmware {
++				firmware_product_name = "ert";
++				firmware_branch_name = "v20";
++				firmware_version_major = <0x01>;
++			};
++		};
++
++		ep_ert_intc_00 {
++			reg = <0x00 0x23000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_intc-1.0\0axi_intc";
++			interrupts = <0x05 0x05>;
++		};
++
++		ep_ert_reset_00 {
++			reg = <0x00 0x22000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
++		};
++
++		ep_ert_sched_00 {
++			reg = <0x00 0x50000 0x00 0x1000>;
++			pcie_physical_function = <0x01>;
++			compatible = "xilinx.com,reg_abs-ert_sched-1.0\0ert_sched";
++			interrupts = <0x09 0x0c>;
++		};
++
++		ep_fpga_configuration_00 {
++			reg = <0x00 0x1e88000 0x00 0x8000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_hwicap-1.0\0axi_hwicap";
++			interrupts = <0x02 0x02>;
++		};
++
++		ep_icap_reset_00 {
++			reg = <0x00 0x1f07000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
++		};
++
++		ep_mailbox_mgmt_00 {
++			reg = <0x00 0x1f10000 0x00 0x10000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-mailbox-1.0\0mailbox";
++			interrupts = <0x00 0x00>;
++		};
++
++		ep_mailbox_user_00 {
++			reg = <0x00 0x1f00000 0x00 0x10000>;
++			pcie_physical_function = <0x01>;
++			compatible = "xilinx.com,reg_abs-mailbox-1.0\0mailbox";
++			interrupts = <0x08 0x08>;
++		};
++
++		ep_msix_00 {
++			reg = <0x00 0x00 0x00 0x20000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-msix-1.0\0msix";
++			pcie_bar_mapping = <0x02>;
++		};
++
++		ep_pcie_link_mon_00 {
++			reg = <0x00 0x1f05000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
++		};
++
++		ep_pr_isolate_plp_00 {
++			reg = <0x00 0x1f01000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
++		};
++
++		ep_pr_isolate_ulp_00 {
++			reg = <0x00 0x1000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
++		};
++
++		ep_uuid_rom_00 {
++			reg = <0x00 0x64000 0x00 0x1000>;
++			pcie_physical_function = <0x00>;
++			compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
++		};
++
++		ep_xdma_00 {
++			reg = <0x00 0x00 0x00 0x10000>;
++			pcie_physical_function = <0x01>;
++			compatible = "xilinx.com,reg_abs-xdma-1.0\0xdma";
++			pcie_bar_mapping = <0x02>;
++		};
++	};
++
++  }
++
++
++
++Deployment Models
++=================
++
++Baremetal
++---------
++
++In bare-metal deployments both MPF and UPF are visible and accessible. xmgmt driver binds to
++MPF. xmgmt driver operations are privileged and available to system administrator. The full
++stack is illustrated below::
++
++
++                            HOST
++
++                 [XMGMT]            [XUSER]
++                    |                  |
++                    |                  |
++                 +-----+            +-----+
++                 | MPF |            | UPF |
++                 |     |            |     |
++                 | PF0 |            | PF1 |
++                 +--+--+            +--+--+
++          ......... ^................. ^..........
++                    |                  |
++                    |   PCIe DEVICE    |
++                    |                  |
++                 +--+------------------+--+
++                 |         SHELL          |
++                 |                        |
++                 +------------------------+
++                 |         USER           |
++                 |                        |
++                 |                        |
++                 |                        |
++                 |                        |
++                 +------------------------+
++
++
++
++Virtualized
++-----------
++
++In virtualized deployments privileged MPF is assigned to host but unprivileged UPF
++is assigned to guest VM via PCIe pass-through. xmgmt driver in host binds to MPF.
++xmgmt driver operations are privileged and only accessible by hosting service provider.
++The full stack is illustrated below::
++
++
++                                 .............
++                  HOST           .    VM     .
++                                 .           .
++                 [XMGMT]         .  [XUSER]  .
++                    |            .     |     .
++                    |            .     |     .
++                 +-----+         .  +-----+  .
++                 | MPF |         .  | UPF |  .
++                 |     |         .  |     |  .
++                 | PF0 |         .  | PF1 |  .
++                 +--+--+         .  +--+--+  .
++          ......... ^................. ^..........
++                    |                  |
++                    |   PCIe DEVICE    |
++                    |                  |
++                 +--+------------------+--+
++                 |         SHELL          |
++                 |                        |
++                 +------------------------+
++                 |         USER           |
++                 |                        |
++                 |                        |
++                 |                        |
++                 |                        |
++                 +------------------------+
++
++
++
++Driver Modules
++==============
++
++xrt-lib.ko
++----------
++
++Repository of all subsystem drivers and pure software modules that can potentially
++be shared between xmgmt and xuser. All these drivers are structured as Linux
++*platform driver* and are instantiated by xmgmt (or xuser in future) based on meta
++data associated with hardware. The metadata is in the form of device tree as
++explained before.
++
++xmgmt.ko
++--------
++
++The xmgmt driver is a PCIe device driver driving MPF found on Xilinx's Alveo
++PCIE device. It consists of one *root* driver, one or more *partition* drivers
++and one or more *leaf* drivers. The root and MPF specific leaf drivers are in
++xmgmt.ko. The partition driver and other leaf drivers are in xrt-lib.ko.
++
++The instantiation of specific partition driver or leaf driver is completely data
++driven based on meta data (mostly in device tree format) found through VSEC
++capability and inside firmware files, such as xsabin or xclbin file. The root
++driver manages life cycle of multiple partition drivers, which, in turn, manages
++multiple leaf drivers. This allows a single set of driver code to support all
++kinds of subsystems exposed by different shells. The difference among all
++these subsystems will be handled in leaf drivers with root and partition drivers
++being part of the infrastructure and provide common services for all leaves found
++on all platforms.
++
++
++xmgmt-root
++^^^^^^^^^^
++
++The xmgmt-root driver is a PCIe device driver attaches to MPF. It's part of the
++infrastructure of the MPF driver and resides in xmgmt.ko. This driver
++
++* manages one or more partition drivers
++* provides access to functionalities that requires pci_dev, such as PCIE config
++  space access, to other leaf drivers through parent calls
++* together with partition driver, facilities event callbacks for other leaf drivers
++* together with partition driver, facilities inter-leaf driver calls for other leaf
++  drivers
++
++When root driver starts, it will explicitly create an initial partition instance,
++which contains leaf drivers that will trigger the creation of other partition
++instances. The root driver will wait for all partitions and leaves to be created
++before it returns from it's probe routine and claim success of the initialization
++of the entire xmgmt driver.
++
++partition
++^^^^^^^^^
++
++The partition driver is a platform device driver whose life cycle is managed by
++root and does not have real IO mem or IRQ resources. It's part of the
++infrastructure of the MPF driver and resides in xrt-lib.ko. This driver
++
++* manages one or more leaf drivers so that multiple leaves can be managed as a group
++* provides access to root from leaves, so that parent calls, event notifications
++  and inter-leaf calls can happen
++
++In xmgmt, an initial partition driver instance will be created by root, which
++contains leaves that will trigger partition instances to be created to manage
++groups of leaves found on different partitions on hardware, such as VSEC, Shell,
++and User.
++
++leaves
++^^^^^^
++
++The leaf driver is a platform device driver whose life cycle is managed by
++a partition driver and may or may not have real IO mem or IRQ resources. They
++are the real meat of xmgmt and contains platform specific code to Shell and User
++found on a MPF.
++
++A leaf driver may not have real hardware resources when it merely acts as a driver
++that manages certain in-memory states for xmgmt. These in-memory states could be
++shared by multiple other leaves.
++
++Leaf drivers assigned to specific hardware resources drive specific subsystem in
++the device. To manipulate the subsystem or carry out a task, a leaf driver may ask
++help from root via parent calls and/or from other leaves via inter-leaf calls.
++
++A leaf can also broadcast events through infrastructure code for other leaves
++to process. It can also receive event notification from infrastructure about certain
++events, such as post-creation or pre-exit of a particular leaf.
++
++
++Driver Interfaces
++=================
++
++xmgmt Driver Ioctls
++-------------------
++
++Ioctls exposed by xmgmt driver to user space are enumerated in the following table:
++
++== ===================== ============================= ===========================
++#  Functionality         ioctl request code            data format
++== ===================== ============================= ===========================
++1  FPGA image download   XMGMT_IOCICAPDOWNLOAD_AXLF    xmgmt_ioc_bitstream_axlf
++2  CL frequency scaling  XMGMT_IOCFREQSCALE            xmgmt_ioc_freqscaling
++== ===================== ============================= ===========================
++
++xmgmt Driver Sysfs
++------------------
++
++xmgmt driver exposes a rich set of sysfs interfaces. Subsystem platform drivers
++export sysfs node for every platform instance.
++
++Every partition also exports its UUIDs. See below for examples::
++
++  /sys/bus/pci/devices/0000:06:00.0/xmgmt_main.0/interface_uuids
++  /sys/bus/pci/devices/0000:06:00.0/xmgmt_main.0/logic_uuids
++
++
++hwmon
++-----
++
++xmgmt driver exposes standard hwmon interface to report voltage, current, temperature,
++power, etc. These can easily be viewed using *sensors* command line utility.
++
++
++mailbox
++-------
++
++xmgmt communicates with user physical function driver via HW mailbox. Mailbox opcodes
++are defined in ``mailbox_proto.h``. `Mailbox Inter-domain Communication Protocol
++<https://xilinx.github.io/XRT/master/html/mailbox.proto.html>`_ defines the full
++specification. xmgmt implements subset of the specification. It provides the following
++services to the UPF driver:
++
++1.  Responding to *are you there* request including determining if the two drivers are
++    running in the same OS domain
++2.  Provide sensor readings, loaded xclbin UUID, clock frequency, shell information, etc.
++3.  Perform PCIe hot reset
++4.  Download user compiled xclbin
++
++
++Platform Security Considerations
++================================
++
++`Security of Alveo Platform <https://xilinx.github.io/XRT/master/html/security.html>`_
++discusses the deployment options and security implications in great detail.
 --
 2.17.1
