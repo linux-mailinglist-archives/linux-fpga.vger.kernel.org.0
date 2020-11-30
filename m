@@ -2,286 +2,132 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E597A2C76C6
-	for <lists+linux-fpga@lfdr.de>; Sun, 29 Nov 2020 01:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DCB2C8C39
+	for <lists+linux-fpga@lfdr.de>; Mon, 30 Nov 2020 19:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729708AbgK2AEg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 28 Nov 2020 19:04:36 -0500
-Received: from mail-dm6nam10on2054.outbound.protection.outlook.com ([40.107.93.54]:10112
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729696AbgK2AEg (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sat, 28 Nov 2020 19:04:36 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SaZSvD/2CfpbDJW4EMWS81QptryhChDo7AnWqIgEDytJvPkWRUumlcSm6Jr1wJn870Ibne3Yf1yLABeofKWIFJ5BabPZfnsvwUgOidPbkoqVA+erqPYVinYhLSu2pFAIuJ5CYohFySTLkMjoYC2tzeD8sUG6BSc7lg7/e7By0/bxnmUvCqc00K1KvpK4KG3Wb8Kqjo2nr6itJIfdgUqiAvOCf6pMvaa6QdBJrPsViP8aQ7t8y6qPNdGn1Zu1B/8ttulMThrwKmFVO5U2DQX1e3eeVo1cqPoXi7wzh53PD5M3LLoitqEhn8ZDT0orn/5FEKLcJDb3xH6Q5CSeEs1FYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9OqiRMscmrD13Cd4jwI5dNfOD3ZIK8YoKkRqpIlFRoo=;
- b=doYMa1R+3ifTPz8jbHBGBs7lNuMvUQKynft8KF3cYYZAvPj3qurcb6Wy2Ba49mNL4Ufges9OH3wQp4MsYA6EFJFkS3jlYgqGNL3igyWGpY2UHuy9x/vgOvikmOePgM+gRiQRCBd5eFpcbfCN8YElTnKJc3fXB6UuVqvGlpfeAEpYEY7cX23rkJLEdJrc5cnNbFyOwjfjIj8vQtXZfv3m4uLorfqUESHGnsBBSDIjvLRd8xkhcLkzbdCxO/dwhPGwmqlbL/4wveRatMLFwkDOG06sx1J6XYnmMW9hxYqXGf0Cdp6mI/6s5EgtNSM43byqEROWMrl4pV4zBzzEU6yb9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9OqiRMscmrD13Cd4jwI5dNfOD3ZIK8YoKkRqpIlFRoo=;
- b=kzd2T41jKjLOfhch5x8r5EPoaegvUoHACnj1cfs6d6Jg6X0vdKPS7RAuohGSjzUsVi5+/49jkszw8ohUmwbudqzGMZra1fYsyJleF23CyJ+vo+EVaZ72m75NjvoT1FiBeAu/8d+12WB86FJErzQvGBfqzI8RTfLv8x69QGMmL54=
-Received: from BL0PR02CA0003.namprd02.prod.outlook.com (2603:10b6:207:3c::16)
- by MN2PR02MB6719.namprd02.prod.outlook.com (2603:10b6:208:1d8::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Sun, 29 Nov
- 2020 00:03:43 +0000
-Received: from BL2NAM02FT047.eop-nam02.prod.protection.outlook.com
- (2603:10b6:207:3c:cafe::d8) by BL0PR02CA0003.outlook.office365.com
- (2603:10b6:207:3c::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend
- Transport; Sun, 29 Nov 2020 00:03:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BL2NAM02FT047.mail.protection.outlook.com (10.152.77.9) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3611.27 via Frontend Transport; Sun, 29 Nov 2020 00:03:42 +0000
-Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Sat, 28 Nov 2020 16:03:15 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Sat, 28 Nov 2020 16:03:15 -0800
-Envelope-to: michal.simek@xilinx.com,
- sonal.santan@xilinx.com,
- lizhih@xilinx.com,
- maxz@xilinx.com,
- stefanos@xilinx.com,
- devicetree@vger.kernel.org,
- linux-fpga@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Received: from [172.19.72.212] (port=45062 helo=xsj-xw9400.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <sonal.santan@xilinx.com>)
-        id 1kjABP-0004cK-4f; Sat, 28 Nov 2020 16:03:15 -0800
-Received: by xsj-xw9400.xilinx.com (Postfix, from userid 6354)
-        id 7014060011B; Sat, 28 Nov 2020 16:00:45 -0800 (PST)
-From:   Sonal Santan <sonal.santan@xilinx.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Sonal Santan <sonal.santan@xilinx.com>,
-        <linux-fpga@vger.kernel.org>, <maxz@xilinx.com>,
-        <lizhih@xilinx.com>, <michal.simek@xilinx.com>,
-        <stefanos@xilinx.com>, <devicetree@vger.kernel.org>
-Subject: [PATCH Xilinx Alveo 8/8] fpga: xrt: Kconfig and Makefile updates for XRT drivers
-Date:   Sat, 28 Nov 2020 16:00:40 -0800
-Message-ID: <20201129000040.24777-9-sonals@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201129000040.24777-1-sonals@xilinx.com>
-References: <20201129000040.24777-1-sonals@xilinx.com>
+        id S2387992AbgK3SJb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 30 Nov 2020 13:09:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54848 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387935AbgK3SJb (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 30 Nov 2020 13:09:31 -0500
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DCE702074A;
+        Mon, 30 Nov 2020 18:08:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606759730;
+        bh=d9yV1lEnxveUgluSCBhCoa0hj6naPZXSjmqKjTGnqZM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=N6+Rb6NqtVzTm7cj5nI5LTYGHTw+f/9KD7YKEhPTp37nUluml0326Lt9AYPNb+7v+
+         FKZ91iOd6v2r6MJOe0s7i80u/YQeZv+o3IoGk5PcckK1us/9Kk+dBplNZKTnYfjm2i
+         VAONbr7C48ySDw3DgZBh9Z+iGkLQDOgFZafyRKH0=
+Received: by mail-ed1-f46.google.com with SMTP id m16so17445596edr.3;
+        Mon, 30 Nov 2020 10:08:49 -0800 (PST)
+X-Gm-Message-State: AOAM532MxsZQDJFA/Q43fF7V4LeW5X7YoVibF+5TqE1gFrFC9fdYwAdm
+        HoBUpRg3polj2mTJLtEgS8+NLN3hY9ZUVHJRCQ==
+X-Google-Smtp-Source: ABdhPJyalbIM7zr/ARvNlPV82k6Cgt37L4bcmR5TSLk5r69qVnqord2DUkoKhs5fFIwJgGOnz5KCzKqjvzYlAfk1W3c=
+X-Received: by 2002:aa7:c80c:: with SMTP id a12mr13080489edt.165.1606759728286;
+ Mon, 30 Nov 2020 10:08:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b1bcd916-1a71-495f-0106-08d893fa3bf7
-X-MS-TrafficTypeDiagnostic: MN2PR02MB6719:
-X-Microsoft-Antispam-PRVS: <MN2PR02MB67191213516926B0414E58AFBBF60@MN2PR02MB6719.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I7Ec+UiYrxwiECsE2j/hkfzqKALU9Nc4FcbhKBgf6pZgw4es81aA8yE/F9mXEBl28ENaANPGVQvbz//aN+x4XL8crd3t6FH07YCUexJzQDXXz8T68Ws0Wu3l/gbTww/0FFlyYgGxwfC6Nx5oAScsE5VnOyEXsenrQvfCz/qUkLRUQdTaDMAlTP2S7Ux4Bi/fN7MVc92XkFbT1dkUkp70SrSF3K36j7y4nMpewOLJwWZnGC8cQ7ZsOLTpb21bwkdxj81MnJ9KsydaMiSgflbFnC4651SgbuFvPd52490OwFTHI/pklM2pFI6cHEtbgUCcB3CkLk12aeJ5qnYJFnQBjlzef27BkwQfhRJKQsRc2JgjLZToj6MGhZ/c+iL7ebQ5WPxfMO9NFhkFZz61TYuvqg==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(376002)(396003)(136003)(39850400004)(46966005)(70586007)(70206006)(36756003)(83380400001)(5660300002)(7636003)(6916009)(47076004)(6666004)(82740400003)(82310400003)(356005)(2616005)(4326008)(15650500001)(42186006)(316002)(1076003)(54906003)(36906005)(44832011)(450100002)(186003)(478600001)(26005)(336012)(8676002)(426003)(2906002)(8936002)(6266002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2020 00:03:42.8626
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1bcd916-1a71-495f-0106-08d893fa3bf7
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT047.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6719
+References: <20201129000040.24777-1-sonals@xilinx.com>
+In-Reply-To: <20201129000040.24777-1-sonals@xilinx.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 30 Nov 2020 11:08:36 -0700
+X-Gmail-Original-Message-ID: <CAL_JsqLod6FBGFhu7WXtMrB_z7wj8-up0EetM1QS9M3gjm8d7Q@mail.gmail.com>
+Message-ID: <CAL_JsqLod6FBGFhu7WXtMrB_z7wj8-up0EetM1QS9M3gjm8d7Q@mail.gmail.com>
+Subject: Re: [PATCH Xilinx Alveo 0/8] Xilinx Alveo/XRT patch overview
+To:     Sonal Santan <sonal.santan@xilinx.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sonal Santan <sonals@xilinx.com>, linux-fpga@vger.kernel.org,
+        maxz@xilinx.com, lizhih@xilinx.com,
+        Michal Simek <michal.simek@xilinx.com>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Sonal Santan <sonal.santan@xilinx.com>
+On Sat, Nov 28, 2020 at 5:02 PM Sonal Santan <sonal.santan@xilinx.com> wrote:
+>
+> Hello,
+>
+> This patch series adds management physical function driver for Xilinx Alveo PCIe
+> accelerator cards, https://www.xilinx.com/products/boards-and-kits/alveo.html
+> This driver is part of Xilinx Runtime (XRT) open source stack.
+>
+> The patch depends on the "PATCH Xilinx Alveo libfdt prep" which was posted
+> before.
+>
+> ALVEO PLATFORM ARCHITECTURE
+>
+> Alveo PCIe FPGA based platforms have a static *shell* partition and a partial
+> re-configurable *user* partition. The shell partition is automatically loaded from
+> flash when host is booted and PCIe is enumerated by BIOS. Shell cannot be changed
+> till the next cold reboot. The shell exposes two PCIe physical functions:
+>
+> 1. management physical function
+> 2. user physical function
+>
+> The patch series includes Documentation/xrt.rst which describes Alveo
+> platform, xmgmt driver architecture and deployment model in more more detail.
+>
+> Users compile their high level design in C/C++/OpenCL or RTL into FPGA image
+> using Vitis https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html
+> tools. The image is packaged as xclbin and contains partial bitstream for the
+> user partition and necessary metadata. Users can dynamically swap the image
+> running on the user partition in order to switch between different workloads.
+>
+> ALVEO DRIVERS
+>
+> Alveo Linux kernel driver *xmgmt* binds to management physical function of
+> Alveo platform. The modular driver framework is organized into several
+> platform drivers which primarily handle the following functionality:
+>
+> 1.  Loading firmware container also called xsabin at driver attach time
+> 2.  Loading of user compiled xclbin with FPGA Manager integration
+> 3.  Clock scaling of image running on user partition
+> 4.  In-band sensors: temp, voltage, power, etc.
+> 5.  Device reset and rescan
+> 6.  Flashing static *shell* partition
+>
+> The platform drivers are packaged into *xrt-lib* helper module with a well
+> defined interfaces the details of which can be found in Documentation/xrt.rst.
+>
+> xmgmt driver is second generation Alveo management driver and evolution of
+> the first generation (out of tree) Alveo management driver, xclmgmt. The
+> sources of the first generation drivers were posted on LKML last year--
+> https://lore.kernel.org/lkml/20190319215401.6562-1-sonal.santan@xilinx.com/
+>
+> Changes since the first generation driver include the following: the driver
+> has been re-architected as data driven modular driver; the driver has been
+> split into xmgmt and xrt-lib; user physical function driver has been removed
+> from the patch series.
+>
+> Alveo/XRT security and platform architecture is documented on the following
+> GitHub pages:
+> https://xilinx.github.io/XRT/master/html/security.html
+> https://xilinx.github.io/XRT/master/html/platforms_partitions.html
+>
+> User physical function driver is not included in this patch series.
+>
+> TESTING AND VALIDATION
+>
+> xmgmt driver can be tested with full XRT open source stack which includes
+> user space libraries, board utilities and (out of tree) first generation
+> user physical function driver xocl. XRT open source runtime stack is
+> available at https://github.com/Xilinx/XRT. This patch series has been
+> validated on Alveo U50 platform.
+>
+> Complete documentation for XRT open source stack can be found here--
+> https://xilinx.github.io/XRT/master/html/index.html
 
-Update fpga Kconfig/Makefile and add Kconfig/Makefile for
-new drivers.
+I've not gotten into the patch details, but I'm not clear on what the
+lifecycle of the DT looks like here. What's the starting point and
+what manipulations to the DT are being done? I'm trying to understand
+if using libfdt is the right way versus operating on an unflattened
+tree.
 
-Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
----
- drivers/fpga/Kconfig             |  2 ++
- drivers/fpga/Makefile            |  3 +++
- drivers/fpga/alveo/Kconfig       |  7 ++++++
- drivers/fpga/alveo/lib/Kconfig   | 11 +++++++++
- drivers/fpga/alveo/lib/Makefile  | 42 ++++++++++++++++++++++++++++++++
- drivers/fpga/alveo/mgmt/Kconfig  | 11 +++++++++
- drivers/fpga/alveo/mgmt/Makefile | 28 +++++++++++++++++++++
- 7 files changed, 104 insertions(+)
- create mode 100644 drivers/fpga/alveo/Kconfig
- create mode 100644 drivers/fpga/alveo/lib/Kconfig
- create mode 100644 drivers/fpga/alveo/lib/Makefile
- create mode 100644 drivers/fpga/alveo/mgmt/Kconfig
- create mode 100644 drivers/fpga/alveo/mgmt/Makefile
-
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index 7cd5a29fc437..8687ef231308 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -215,4 +215,6 @@ config FPGA_MGR_ZYNQMP_FPGA
- 	  to configure the programmable logic(PL) through PS
- 	  on ZynqMP SoC.
- 
-+source "drivers/fpga/alveo/Kconfig"
-+
- endif # FPGA
-diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-index d8e21dfc6778..59943dccf405 100644
---- a/drivers/fpga/Makefile
-+++ b/drivers/fpga/Makefile
-@@ -46,3 +46,6 @@ dfl-afu-objs += dfl-afu-error.o
- 
- # Drivers for FPGAs which implement DFL
- obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
-+
-+obj-$(CONFIG_FPGA_ALVEO_LIB)		+= alveo/lib/
-+obj-$(CONFIG_FPGA_ALVEO_XMGMT)		+= alveo/mgmt/
-diff --git a/drivers/fpga/alveo/Kconfig b/drivers/fpga/alveo/Kconfig
-new file mode 100644
-index 000000000000..a583c3543945
---- /dev/null
-+++ b/drivers/fpga/alveo/Kconfig
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Xilinx Alveo FPGA device configuration
-+#
-+
-+source "drivers/fpga/alveo/lib/Kconfig"
-+source "drivers/fpga/alveo/mgmt/Kconfig"
-diff --git a/drivers/fpga/alveo/lib/Kconfig b/drivers/fpga/alveo/lib/Kconfig
-new file mode 100644
-index 000000000000..62175af2108e
---- /dev/null
-+++ b/drivers/fpga/alveo/lib/Kconfig
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Xilinx Alveo FPGA device configuration
-+#
-+
-+config FPGA_ALVEO_LIB
-+	tristate "Xilinx Alveo Driver Library"
-+	depends on HWMON && PCI 
-+	select LIBFDT
-+	help
-+	  Xilinx Alveo FPGA PCIe device driver common library.
-diff --git a/drivers/fpga/alveo/lib/Makefile b/drivers/fpga/alveo/lib/Makefile
-new file mode 100644
-index 000000000000..a14204dc489d
---- /dev/null
-+++ b/drivers/fpga/alveo/lib/Makefile
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (C) 2020 Xilinx, Inc. All rights reserved.
-+#
-+# Authors: Sonal.Santan@xilinx.com
-+#
-+
-+FULL_ALVEO_PATH=$(srctree)/$(src)/..
-+FULL_DTC_PATH=$(srctree)/scripts/dtc/libfdt
-+
-+obj-$(CONFIG_FPGA_ALVEO_LIB) := xrt-lib.o
-+
-+xrt-lib-objs := 			\
-+	xrt-main.o			\
-+	xrt-subdev.o			\
-+	xrt-cdev.o			\
-+	../common/xrt-metadata.o	\
-+	subdevs/xrt-partition.o	\
-+	subdevs/xrt-test.o		\
-+	subdevs/xrt-vsec.o		\
-+	subdevs/xrt-vsec-golden.o	\
-+	subdevs/xrt-axigate.o		\
-+	subdevs/xrt-qspi.o		\
-+	subdevs/xrt-gpio.o		\
-+	subdevs/xrt-mailbox.o		\
-+	subdevs/xrt-icap.o		\
-+	subdevs/xrt-cmc.o		\
-+	subdevs/xrt-cmc-ctrl.o		\
-+	subdevs/xrt-cmc-sensors.o	\
-+	subdevs/xrt-cmc-mailbox.o	\
-+	subdevs/xrt-cmc-bdinfo.o	\
-+	subdevs/xrt-cmc-sc.o		\
-+	subdevs/xrt-srsr.o		\
-+	subdevs/xrt-clock.o		\
-+	subdevs/xrt-clkfreq.o		\
-+	subdevs/xrt-ucs.o		\
-+	subdevs/xrt-calib.o
-+
-+
-+ccflags-y := -I$(FULL_ALVEO_PATH)/include \
-+	-I$(FULL_ALVEO_PATH)/common \
-+	-I$(FULL_DTC_PATH)
-diff --git a/drivers/fpga/alveo/mgmt/Kconfig b/drivers/fpga/alveo/mgmt/Kconfig
-new file mode 100644
-index 000000000000..8a5590842dad
---- /dev/null
-+++ b/drivers/fpga/alveo/mgmt/Kconfig
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Xilinx Alveo FPGA device configuration
-+#
-+
-+config FPGA_ALVEO_XMGMT
-+	tristate "Xilinx Alveo Management Driver"
-+	depends on HWMON && PCI && FPGA_ALVEO_LIB
-+	select LIBFDT
-+	help
-+	  Xilinx Alveo FPGA PCIe device driver for Management Physical Function.
-diff --git a/drivers/fpga/alveo/mgmt/Makefile b/drivers/fpga/alveo/mgmt/Makefile
-new file mode 100644
-index 000000000000..08be7952a832
---- /dev/null
-+++ b/drivers/fpga/alveo/mgmt/Makefile
-@@ -0,0 +1,28 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (C) 2019-2020 Xilinx, Inc. All rights reserved.
-+#
-+# Authors: Sonal.Santan@xilinx.com
-+#
-+
-+FULL_ALVEO_PATH=$(srctree)/$(src)/..
-+FULL_DTC_PATH=$(srctree)/scripts/dtc/libfdt
-+
-+obj-$(CONFIG_FPGA_ALVEO_XMGMT)	+= xmgmt.o
-+
-+commondir := ../common
-+
-+xmgmt-objs := xmgmt-root.o			\
-+	   xmgmt-main.o				\
-+	   xmgmt-fmgr-drv.o      		\
-+	   xmgmt-main-ulp.o			\
-+	   xmgmt-main-mailbox.o			\
-+	   $(commondir)/xrt-root.o		\
-+	   $(commondir)/xrt-metadata.o		\
-+	   $(commondir)/xrt-xclbin.o
-+
-+
-+
-+ccflags-y := -I$(FULL_ALVEO_PATH)/include \
-+	-I$(FULL_ALVEO_PATH)/common \
-+	-I$(FULL_DTC_PATH)
--- 
-2.17.1
-
+Rob
