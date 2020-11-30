@@ -2,132 +2,166 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DCB2C8C39
-	for <lists+linux-fpga@lfdr.de>; Mon, 30 Nov 2020 19:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6805F2C8CEE
+	for <lists+linux-fpga@lfdr.de>; Mon, 30 Nov 2020 19:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387992AbgK3SJb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 30 Nov 2020 13:09:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54848 "EHLO mail.kernel.org"
+        id S1729647AbgK3Sgj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 30 Nov 2020 13:36:39 -0500
+Received: from mga06.intel.com ([134.134.136.31]:18345 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387935AbgK3SJb (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 30 Nov 2020 13:09:31 -0500
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCE702074A;
-        Mon, 30 Nov 2020 18:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606759730;
-        bh=d9yV1lEnxveUgluSCBhCoa0hj6naPZXSjmqKjTGnqZM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=N6+Rb6NqtVzTm7cj5nI5LTYGHTw+f/9KD7YKEhPTp37nUluml0326Lt9AYPNb+7v+
-         FKZ91iOd6v2r6MJOe0s7i80u/YQeZv+o3IoGk5PcckK1us/9Kk+dBplNZKTnYfjm2i
-         VAONbr7C48ySDw3DgZBh9Z+iGkLQDOgFZafyRKH0=
-Received: by mail-ed1-f46.google.com with SMTP id m16so17445596edr.3;
-        Mon, 30 Nov 2020 10:08:49 -0800 (PST)
-X-Gm-Message-State: AOAM532MxsZQDJFA/Q43fF7V4LeW5X7YoVibF+5TqE1gFrFC9fdYwAdm
-        HoBUpRg3polj2mTJLtEgS8+NLN3hY9ZUVHJRCQ==
-X-Google-Smtp-Source: ABdhPJyalbIM7zr/ARvNlPV82k6Cgt37L4bcmR5TSLk5r69qVnqord2DUkoKhs5fFIwJgGOnz5KCzKqjvzYlAfk1W3c=
-X-Received: by 2002:aa7:c80c:: with SMTP id a12mr13080489edt.165.1606759728286;
- Mon, 30 Nov 2020 10:08:48 -0800 (PST)
+        id S1727952AbgK3Sgj (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 30 Nov 2020 13:36:39 -0500
+IronPort-SDR: PWvcGSKmvorEao3Xj9sDAJn9Yf7OTM7Rd0Efl82M8axHN4WYqn/5urVdu9uLPWpOYd/b2F5cOD
+ tQtWHNdertog==
+X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="234293138"
+X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
+   d="scan'208";a="234293138"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 10:34:58 -0800
+IronPort-SDR: xX8pAokTZQ0by/OWyYuiZnRxDCsiivurak+f9Xio3lW5hHeX3PJBzd1v964Jp8IInY4mofl8d4
+ qRQYh4IGYIMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
+   d="scan'208";a="537100801"
+Received: from marshy.an.intel.com (HELO [10.122.105.143]) ([10.122.105.143])
+  by fmsmga006.fm.intel.com with ESMTP; 30 Nov 2020 10:34:57 -0800
+Subject: Re: [PATCHv2 1/5] firmware: stratix10-svc: add
+ COMMAND_AUTHENTICATE_BITSTREAM flag
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     gregkh@linuxfoundation.org, trix@redhat.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dinguyen@kernel.org, sridhar.rajagopal@intel.com,
+        richard.gong@intel.com
+References: <1605709753-7800-1-git-send-email-richard.gong@linux.intel.com>
+ <1605709753-7800-2-git-send-email-richard.gong@linux.intel.com>
+ <X7U+BTkW7ZmsMByV@epycbox.lan>
+ <d8b58b40-63c6-115e-8e61-f092e3f050b3@linux.intel.com>
+ <X7m6gy/B8DiafyYQ@archbook>
+From:   Richard Gong <richard.gong@linux.intel.com>
+Message-ID: <771ba4f4-59e1-74b0-ba55-3f65914e2bc7@linux.intel.com>
+Date:   Mon, 30 Nov 2020 12:55:44 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20201129000040.24777-1-sonals@xilinx.com>
-In-Reply-To: <20201129000040.24777-1-sonals@xilinx.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 30 Nov 2020 11:08:36 -0700
-X-Gmail-Original-Message-ID: <CAL_JsqLod6FBGFhu7WXtMrB_z7wj8-up0EetM1QS9M3gjm8d7Q@mail.gmail.com>
-Message-ID: <CAL_JsqLod6FBGFhu7WXtMrB_z7wj8-up0EetM1QS9M3gjm8d7Q@mail.gmail.com>
-Subject: Re: [PATCH Xilinx Alveo 0/8] Xilinx Alveo/XRT patch overview
-To:     Sonal Santan <sonal.santan@xilinx.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sonal Santan <sonals@xilinx.com>, linux-fpga@vger.kernel.org,
-        maxz@xilinx.com, lizhih@xilinx.com,
-        Michal Simek <michal.simek@xilinx.com>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <X7m6gy/B8DiafyYQ@archbook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Sat, Nov 28, 2020 at 5:02 PM Sonal Santan <sonal.santan@xilinx.com> wrote:
->
-> Hello,
->
-> This patch series adds management physical function driver for Xilinx Alveo PCIe
-> accelerator cards, https://www.xilinx.com/products/boards-and-kits/alveo.html
-> This driver is part of Xilinx Runtime (XRT) open source stack.
->
-> The patch depends on the "PATCH Xilinx Alveo libfdt prep" which was posted
-> before.
->
-> ALVEO PLATFORM ARCHITECTURE
->
-> Alveo PCIe FPGA based platforms have a static *shell* partition and a partial
-> re-configurable *user* partition. The shell partition is automatically loaded from
-> flash when host is booted and PCIe is enumerated by BIOS. Shell cannot be changed
-> till the next cold reboot. The shell exposes two PCIe physical functions:
->
-> 1. management physical function
-> 2. user physical function
->
-> The patch series includes Documentation/xrt.rst which describes Alveo
-> platform, xmgmt driver architecture and deployment model in more more detail.
->
-> Users compile their high level design in C/C++/OpenCL or RTL into FPGA image
-> using Vitis https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html
-> tools. The image is packaged as xclbin and contains partial bitstream for the
-> user partition and necessary metadata. Users can dynamically swap the image
-> running on the user partition in order to switch between different workloads.
->
-> ALVEO DRIVERS
->
-> Alveo Linux kernel driver *xmgmt* binds to management physical function of
-> Alveo platform. The modular driver framework is organized into several
-> platform drivers which primarily handle the following functionality:
->
-> 1.  Loading firmware container also called xsabin at driver attach time
-> 2.  Loading of user compiled xclbin with FPGA Manager integration
-> 3.  Clock scaling of image running on user partition
-> 4.  In-band sensors: temp, voltage, power, etc.
-> 5.  Device reset and rescan
-> 6.  Flashing static *shell* partition
->
-> The platform drivers are packaged into *xrt-lib* helper module with a well
-> defined interfaces the details of which can be found in Documentation/xrt.rst.
->
-> xmgmt driver is second generation Alveo management driver and evolution of
-> the first generation (out of tree) Alveo management driver, xclmgmt. The
-> sources of the first generation drivers were posted on LKML last year--
-> https://lore.kernel.org/lkml/20190319215401.6562-1-sonal.santan@xilinx.com/
->
-> Changes since the first generation driver include the following: the driver
-> has been re-architected as data driven modular driver; the driver has been
-> split into xmgmt and xrt-lib; user physical function driver has been removed
-> from the patch series.
->
-> Alveo/XRT security and platform architecture is documented on the following
-> GitHub pages:
-> https://xilinx.github.io/XRT/master/html/security.html
-> https://xilinx.github.io/XRT/master/html/platforms_partitions.html
->
-> User physical function driver is not included in this patch series.
->
-> TESTING AND VALIDATION
->
-> xmgmt driver can be tested with full XRT open source stack which includes
-> user space libraries, board utilities and (out of tree) first generation
-> user physical function driver xocl. XRT open source runtime stack is
-> available at https://github.com/Xilinx/XRT. This patch series has been
-> validated on Alveo U50 platform.
->
-> Complete documentation for XRT open source stack can be found here--
-> https://xilinx.github.io/XRT/master/html/index.html
 
-I've not gotten into the patch details, but I'm not clear on what the
-lifecycle of the DT looks like here. What's the starting point and
-what manipulations to the DT are being done? I'm trying to understand
-if using libfdt is the right way versus operating on an unflattened
-tree.
+Hi Moritz,
 
-Rob
+Sorry for late reply, I was out last week.
+
+On 11/21/20 7:10 PM, Moritz Fischer wrote:
+> Richard,
+> 
+> On Wed, Nov 18, 2020 at 12:16:09PM -0600, Richard Gong wrote:
+> 
+>>>> -#define COMMAND_RECONFIG_FLAG_PARTIAL	1
+>>>> +#define COMMAND_RECONFIG_FLAG_PARTIAL	0
+>>>> +#define COMMAND_AUTHENTICATE_BITSTREAM	1
+>>>
+>>> Can you explain how this commit by itself doesn't break things?
+>>>
+>>> Before this change firmware expected BIT(0) to be set for partial
+>>> reconfiguration, now BIT(0) suddenly means authentication? How doest his
+>>> work? :)
+>>>   > Was there a firmware version change? Did this never work before?
+>>>
+>>> If this is version depenedent for firmware, then this might need a
+>>> different compatible string / id / some form of probing?
+>>>
+>>> Entirely possible that I'm missing something, but it doesn't *seem*
+>>> right.
+>>
+>> It did work before.
+>>
+>> Before this change, firmware only checks if the received flag value is zero.
+>> If the value is zero, it preforms full reconfiguration. Otherwise it does
+>> partial reconfiguration.
+>>
+>> To support bitstream authentication feature, firmware is updated to check
+>> the received flag value as below:
+>> 	0	--- full reconfiguration
+>> 	BIT(0) 	--- partial reconfiguration
+>> 	BIT(1) 	--- bitstream authentication
+> 
+> So there are two different versions of firmware involved that behave
+> differently?
+> 
+> Old firmware:
+> - ctype.flags  = 0x0 -> Full reconfig
+> - ctype.flags != 0 -> Partial reconfig
+> 
+> New firmware:
+> - ctype.flags = 0x0 -> Full reconfig
+> - ctype.flags = 0x1 -> Partial reconfig
+> - ctype.flags = 0x2 -> Authenticate
+> 
+> Old software:
+> - Send 0x0 for Full
+> - Send 0x1 for Partial
+> 
+> New software:
+> - Send 0x0 for Full
+> - Send 0x1 for Partial
+> - Send 0x2 for Auth
+> 
+> If I send request for authentication BIT(1) (new software) to old
+> firmware it'd try and attempt a partial reconfiguration with the data I
+> send? Is that safe?
+> 
+
+Yes, it is possible and it is not safe. But we will inform our customers 
+they should update to the latest firmware (SDM firmware and ATF) if they 
+want to have authentication feature.
+
+We are migrating boot loader boot flow to the new ATF boot flow, which 
+is SDM firmware -> SPL -> ATF -> U-boot proper -> Linux. The new 
+authentication feature is supported only in the new ATF boot flow. ATF 
+communicates with SDM firmware via mailbox, and SDM firmware performs 
+the actual full/partial reconfiguration and bitstream authentication. 
+ATF sets up EL3 environment and initializes PSCI services.
+
+The old boot flow is SDM firmware -> SPL -> U-boot proper -> Linux, 
+which SPL/U-boot handles PSCI services and communicates with SDM 
+firmware via mailbox. SDM firmware performs the actual full/partial 
+reconfiguration.
+
+ATF = Arm Trust Firmware, SDM = Secure Device Manager
+
+> Is there a way for software to figure out the firmware version and do
+> the right thing?
+
+It is not feasible for kernel driver to get the firmware version per 
+current designs and implementations. I don't think there is other way 
+around this.
+
+> 
+>> Therefore I have updated the command flag setting at Intel service layer
+>> driver to align with firmware.
+>>
+>> Regards,
+>> Richard
+>>
+>>>>    /**
+>>>>     * Timeout settings for service clients:
+>>>> -- 
+>>>> 2.7.4
+>>>>
+>>>
+>>> Cheers,
+>>> Moritz
+>>>
+> 
+> Thanks,
+> Moritz
+> 
+Regards,
+Richard
