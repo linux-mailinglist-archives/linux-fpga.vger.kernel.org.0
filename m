@@ -2,108 +2,129 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B082CAD6A
-	for <lists+linux-fpga@lfdr.de>; Tue,  1 Dec 2020 21:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1E72CB0CB
+	for <lists+linux-fpga@lfdr.de>; Wed,  2 Dec 2020 00:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728138AbgLAUdM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 1 Dec 2020 15:33:12 -0500
-Received: from mga03.intel.com ([134.134.136.65]:4314 "EHLO mga03.intel.com"
+        id S1726997AbgLAXbY (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 1 Dec 2020 18:31:24 -0500
+Received: from mga05.intel.com ([192.55.52.43]:57103 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727165AbgLAUdL (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 1 Dec 2020 15:33:11 -0500
-IronPort-SDR: Flst2d54Dk6E3m+hBHIP0zpSMkE50KaHJpnj2QWuW7DzestaXsNuarjvx5fUpwuf5gI7YdNl/V
- mhDwI7BwX+9A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="172999292"
+        id S1726071AbgLAXbX (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 1 Dec 2020 18:31:23 -0500
+IronPort-SDR: WZSWPhxBra9pP+ftUaXprhW334TjQZYD4J+xsTZgSCUnGLbHTu6845lPRSz0qyaqsWPSNZysCT
+ u3PJFPcwpBIw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="257634759"
 X-IronPort-AV: E=Sophos;i="5.78,385,1599548400"; 
-   d="scan'208";a="172999292"
+   d="scan'208";a="257634759"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 12:31:26 -0800
-IronPort-SDR: EiOcC6sky8HhCK41YcXxgYjV4u9CVgQIj0nOazVFwOWG5DB73cMWW2cQaOtY+6WZaSUaN28Q4A
- 35ZpzHBomEAA==
-X-ExtLoop1: 1
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 15:30:43 -0800
+IronPort-SDR: mEjNizPwsa5Xa8gB8/7KDCBUubNUNqUOfipfUunmzdf8Sff0y6prwzy7yoXnTCASl0fGO3k5bd
+ /Sy8cIklZQFg==
 X-IronPort-AV: E=Sophos;i="5.78,385,1599548400"; 
-   d="scan'208";a="537675914"
-Received: from marshy.an.intel.com (HELO [10.122.105.143]) ([10.122.105.143])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Dec 2020 12:31:25 -0800
-Subject: Re: [PATCHv2 1/5] firmware: stratix10-svc: add
- COMMAND_AUTHENTICATE_BITSTREAM flag
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     gregkh@linuxfoundation.org, trix@redhat.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dinguyen@kernel.org, sridhar.rajagopal@intel.com,
-        richard.gong@intel.com
-References: <1605709753-7800-1-git-send-email-richard.gong@linux.intel.com>
- <1605709753-7800-2-git-send-email-richard.gong@linux.intel.com>
- <X7U+BTkW7ZmsMByV@epycbox.lan>
- <d8b58b40-63c6-115e-8e61-f092e3f050b3@linux.intel.com>
- <X7m6gy/B8DiafyYQ@archbook>
- <771ba4f4-59e1-74b0-ba55-3f65914e2bc7@linux.intel.com>
- <X8XHJimPDaE/lNx0@archbook>
- <e67a2abe-2c97-fe1c-9dc7-100b8a20381b@linux.intel.com>
- <X8aXNKNIPl+piFO+@archbook>
-From:   Richard Gong <richard.gong@linux.intel.com>
-Message-ID: <48b61d87-331a-6dba-212e-8b6748429afe@linux.intel.com>
-Date:   Tue, 1 Dec 2020 14:52:11 -0600
+   d="scan'208";a="481299500"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.212.174.43])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 15:30:42 -0800
+Subject: Re: [PATCH v6 2/7] fpga: sec-mgr: enable secure updates
+To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com
+References: <20201106010905.11935-1-russell.h.weight@intel.com>
+ <20201106010905.11935-3-russell.h.weight@intel.com>
+ <9dd75daf-eb73-4008-ca65-6f7ea3923e35@silicom.dk>
+ <c6dc2edb-9639-9c4f-c065-18cade768fb6@intel.com>
+ <5b49ef38-2c03-02bc-6a1e-5b663180acf3@silicom.dk>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <25ee1ab1-3d81-d9b9-240d-143a9936d0f8@intel.com>
+Date:   Tue, 1 Dec 2020 15:30:38 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <X8aXNKNIPl+piFO+@archbook>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <5b49ef38-2c03-02bc-6a1e-5b663180acf3@silicom.dk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Moritz,
 
-On 12/1/20 1:19 PM, Moritz Fischer wrote:
-> Hi Richard,
-> 
-> On Tue, Dec 01, 2020 at 01:30:16PM -0600, Richard Gong wrote:
-> 
->>> Can U-Boot determine whether it's the new or old flow? Can you set a
->>> different compatible value in your device-tree, to disambiguate
->>> behaviors?
+
+On 12/1/20 12:47 AM, Martin Hundebøll wrote:
+> Hi Russ,
+>
+> On 01/12/2020 00.54, Russ Weight wrote:
+>> Thanks Martin. I'll work on a fix for this.
+>
+> Attached is my in-house fix.
+>
+> // Martin
+>
+>> On 11/26/20 6:02 AM, Martin Hundebøll wrote:
+>>> Hi Russ,
 >>>
+>>> I found another thing while testing this...
+>>>
+>>> On 06/11/2020 02.09, Russ Weight wrote:
+>>>
+>>> <snip>
+>>>
+>>>> +static ssize_t filename_store(struct device *dev, struct device_attribute *attr,
+>>>> +                  const char *buf, size_t count)
+>>>> +{
+>>>> +    struct fpga_sec_mgr *smgr = to_sec_mgr(dev);
+>>>> +    int ret = count;
+>>>> +
+>>>> +    if (count == 0 || count >= PATH_MAX)
+>>>> +        return -EINVAL;
+>>>> +
+>>>> +    mutex_lock(&smgr->lock);
+>>>> +    if (smgr->driver_unload || smgr->progress != FPGA_SEC_PROG_IDLE) {
+>>>> +        ret = -EBUSY;
+>>>> +        goto unlock_exit;
+>>>> +    }
+>>>> +
+>>>> +    smgr->filename = kstrndup(buf, count - 1, GFP_KERNEL);
+>>>
+>>> The `count - 1` is meant to remove a trailing newline, but opae-sdk writes the filename without newline, so better do it conditionally...
+
+After looking at how kstrndup() is used elsewhere, and after
+doing some experimentation, I think the best fix may be to just
+remove the "- 1":
+
+    smgr->filename = kstrndup(buf, count, GFP_KERNEL);
+
+The code shouldn't have assumed a "\n", and I don't think the
+kernel should be required to do white-space cleanup.
+
+Does this fix seem OK to you?
+
+- Russ
+>>>
+>>>> +    if (!smgr->filename) {
+>>>> +        ret = -ENOMEM;
+>>>> +        goto unlock_exit;
+>>>> +    }
+>>>> +
+>>>> +    smgr->err_code = FPGA_SEC_ERR_NONE;
+>>>> +    smgr->progress = FPGA_SEC_PROG_READING;
+>>>> +    reinit_completion(&smgr->update_done);
+>>>> +    schedule_work(&smgr->work);
+>>>> +
+>>>> +unlock_exit:
+>>>> +    mutex_unlock(&smgr->lock);
+>>>> +    return ret;
+>>>> +}
+>>>> +static DEVICE_ATTR_WO(filename);
+>>>> +
+>>>> +static struct attribute *sec_mgr_update_attrs[] = {
+>>>> +    &dev_attr_filename.attr,
+>>>> +    NULL,
+>>>> +};
+>>>
+>>> Thanks,
+>>> Martin
 >>
->> The boot flow is determined by defconfig during compilation, which means
->> each boot flow will have its own defconfig.
->>
->> SDM firmware loads SPL into OCRAM, then SPL will load the apporiate ATF or
->> U-boot into the DRAM according to the setting of CONFIG_SPL_ATF. If
->> CONFIG_SPL_ATF=y, SPL loads ATF and then jumps to ATF. ATF setups EL3
->> environment and initialize the PSCI services.
->>
->> CONFIG_SPL_ATF is not set for the old boot flow.
-> 
-> So you know at (U-Boot) build time? Can you just pass a different DT to
-> the kernel in that case?
-> 
 
-Yes, we have decided the boot flow at build time. Starting from the next 
-release, our U-boot will use the ATF boot flow.
-
-Per my limited knowledge in U-boot, I don't think we can follow your 
-suggestion. Or it will take a lot of efforts to achieve.
-
-I think that back compatibility is your main concern, correct? the issue 
-does exist with the old boot flow and old firmware, whenever the 
-customers try to use authentication. Unfortunately we can't update 
-U-boot or firmware that has been released.
-
-The authentication feature is supported only at the ATF boot flow, 
-updated kernel and firmware. We will have a well-documented document to 
-inform our customers that if they want to have authentication feature, 
-they need to upgrade the latest U-boot, kernel and firmware.
-
-We always encourage our customers to take the latest U-boot, kernel and 
-firmware releases in their developments.
-
-> - Moritz
-> 
-
-Regards,
-Richard
