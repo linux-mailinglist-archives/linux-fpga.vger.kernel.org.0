@@ -2,60 +2,62 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C032CD173
-	for <lists+linux-fpga@lfdr.de>; Thu,  3 Dec 2020 09:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C182CDC31
+	for <lists+linux-fpga@lfdr.de>; Thu,  3 Dec 2020 18:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729959AbgLCIlt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 3 Dec 2020 03:41:49 -0500
-Received: from mail.boldwhite24.com ([80.211.42.67]:45132 "EHLO
-        mail.boldwhite24.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728873AbgLCIls (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 3 Dec 2020 03:41:48 -0500
-Received: by mail.boldwhite24.com (Postfix, from userid 1001)
-        id 65CEFA2D9E; Thu,  3 Dec 2020 08:40:26 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=boldwhite24.com;
-        s=mail; t=1606984837;
-        bh=hS3ibs4caZkahrzgcMN2TAJo2B2H5Muwb2NidDYlIzQ=;
-        h=Date:From:To:Subject:From;
-        b=3gW/Jry42xZ278Sko3E8A6mmnGlJeAuHtIsBq6ZPxxwa9Zec/40TmbwAJp+ehrb+h
-         RIEPZgetkpF3sXvUZU0prKcQJz3KCvpgDy2WVDIRv43onmJmIPCzVi7NafU59osOYl
-         TnnmJxSnGTq0D2pzj5/Rij0YVMbqHhgIwQzcX50FU+GrOLO6pCViK7Wn8uddr5reu7
-         V4yMKuENj4hTVewFnHLgcgutpMwFYwzeWmkiM+YF4Mxr/gYH/yCVjCEhO2xAVYByow
-         eP8leg3IfWUMPTeRETb3PyiUEE9SZBUvzdNuFyytzgkDEtULqqDOG1lZR/nmRUFLZe
-         A0HrDo9J0/21g==
-Received: by mail.boldwhite24.com for <linux-fpga@vger.kernel.org>; Thu,  3 Dec 2020 08:40:11 GMT
-Message-ID: <20201203074501-0.1.2m.am8q.0.q3bkk416px@boldwhite24.com>
-Date:   Thu,  3 Dec 2020 08:40:11 GMT
-From:   =?UTF-8?Q? "Diego_S=C3=A1nchez" ?= <diego.sanchez@boldwhite24.com>
-To:     <linux-fpga@vger.kernel.org>
-Subject: Disinfection
-X-Mailer: mail.boldwhite24.com
+        id S2501906AbgLCRQR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 3 Dec 2020 12:16:17 -0500
+Received: from mga17.intel.com ([192.55.52.151]:55799 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726167AbgLCRQR (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 3 Dec 2020 12:16:17 -0500
+IronPort-SDR: 7KDHfi9/ySp4R7wlc0bbL5eQ/MbDfxT/YXyCemr+cu+Eu+LNG0F5H0OXsOAeCes/lxuVEoy2sI
+ RshKjVoGOg1g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9824"; a="153060631"
+X-IronPort-AV: E=Sophos;i="5.78,389,1599548400"; 
+   d="scan'208";a="153060631"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2020 09:14:35 -0800
+IronPort-SDR: TePtxIs3Xiq3kq95pCH+PyG1AdMx4hMud//tHp0wt57v46xM4gHxja3UmI4LRHgRsB5vuV4sGc
+ oqvCdxw2Jdug==
+X-IronPort-AV: E=Sophos;i="5.78,390,1599548400"; 
+   d="scan'208";a="336032783"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.140])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2020 09:14:35 -0800
+From:   matthew.gerlach@linux.intel.com
+To:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        linux-doc@vger.kernel.org, corbet@lwn.net
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v4 0/2] fpga: dfl: optional VSEC for start of dfl
+Date:   Thu,  3 Dec 2020 09:15:46 -0800
+Message-Id: <20201203171548.1538178-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Good morning,
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-looking for companies interested in raising additional capital by diversi=
-fying their offer in soaps, liquids and gels for hand disinfection and co=
-smetics for body and hair care.
+The start of a Device Feature List (DFL) is currently assumed to be at
+Bar0/Offset 0 on the PCIe bus by drivers/fpga/dfl-pci.c.  This patchset
+adds support for the start one or more DFLs to be specified in a
+Vendor-Specific Capability (VSEC) structure in PCIe config space.  If no
+such VSEC structure exists, then the start is assumed to be
+Bar0/Offset 0 for backward compatibility.
 
-The distribution of innovative products corresponding to the current pref=
-erences of customers in the field of hygiene and preventive healthcare al=
-lows our partners to gain new markets and achieve better economic results=
-=2E
+Matthew Gerlach (2):
+  fpga: dfl: refactor cci_enumerate_feature_devs()
+  fpga: dfl-pci: locate DFLs by PCIe vendor specific capability
 
-In addition to products with bactericidal action, our range includes show=
-er gels, shampoos and hair conditioners, as well as efficient, concentrat=
-ed detergents.
+ Documentation/fpga/dfl.rst |  27 ++++++
+ drivers/fpga/dfl-pci.c     | 165 +++++++++++++++++++++++++++++--------
+ 2 files changed, 157 insertions(+), 35 deletions(-)
 
-The versatility (suitable for all skin types) combined with an affordable=
- price means that customers make an informed choice of a product among ot=
-hers available on the market.
+-- 
+2.25.2
 
-Are you interested in cooperation?
-
-Diego S=C3=A1nchez
