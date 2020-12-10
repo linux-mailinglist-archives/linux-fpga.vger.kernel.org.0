@@ -2,46 +2,46 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9545B2D62C4
-	for <lists+linux-fpga@lfdr.de>; Thu, 10 Dec 2020 17:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA90C2D62C0
+	for <lists+linux-fpga@lfdr.de>; Thu, 10 Dec 2020 17:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392373AbgLJQ7T (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 10 Dec 2020 11:59:19 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40148 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392369AbgLJQ7F (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 10 Dec 2020 11:59:05 -0500
-Received: by mail-pf1-f193.google.com with SMTP id t7so4655495pfh.7
-        for <linux-fpga@vger.kernel.org>; Thu, 10 Dec 2020 08:58:50 -0800 (PST)
+        id S2391024AbgLJQ7L (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 10 Dec 2020 11:59:11 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:46113 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387776AbgLJQ7J (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 10 Dec 2020 11:59:09 -0500
+Received: by mail-pl1-f195.google.com with SMTP id v3so3058891plz.13
+        for <linux-fpga@vger.kernel.org>; Thu, 10 Dec 2020 08:58:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=X2GZ+ePoFiu9QiVFXfkzqTqbUH2vMpi+ch5sofOIR7Q=;
-        b=dzplKMQTvDRzZz/ldQGN9+0wHPRPVUmDG81sbJ8OqUsFlQZf03/unwVWl3TojR7j1n
-         Tv/xTpMUynvd/BtUDcvgejPBCd926X6J8luyMz6UXirDLMlCrWGVEI0QSsClj2IwperI
-         CQ2+pS6jGa+Zqc6axZGAGssl0xQkPqyUzEzu9sA9FspKx2vGOGXSgU0X4p7oQ6Lxt8zc
-         P6teUUTechDJFp34rS0CbvaN+EAtDC2Om698BA6XK356bTcaqqoJgokR/YJI/tYG59OW
-         5B7e9eJLgWTJTjYOgPmJZWjf1+QKAYgMyUh+6OjVts935621XdfSv9ctmOQIUDsPbDFX
-         8bGg==
-X-Gm-Message-State: AOAM5305yjKpmVacPFs6gTY6GWSwnJsz6fJt3cD7fSpRdj2SaQY/pY/z
-        A1yXV5YDLqG510kCTu/9/8M=
-X-Google-Smtp-Source: ABdhPJxYn72jlzshOuLIRhMdbvr/rsQ2gyHpHPcLykN9hYEGAxbP2oGzr58b7EGoXj3hZHIdKMRbdg==
-X-Received: by 2002:a62:7b86:0:b029:19d:f996:44f3 with SMTP id w128-20020a627b860000b029019df99644f3mr7591086pfc.65.1607619505042;
-        Thu, 10 Dec 2020 08:58:25 -0800 (PST)
+        bh=3RjWYFS0t1qwCCykWF+LwjjyJCld4uAnADZtHP/eQeo=;
+        b=CKwvGYNwc0tHKJKGJkRaOBjsKG3jpp4DhX+eKdXfbqC6M6N8D6ehJKfuLXWgt4Tvh7
+         Y7W6crIvo8GGqwJH3RF1bQouAmXl9E/tBhxm1rj1MfDAwI9tqOw8P+C4Fua2/U5z71+i
+         +1HqsJb1yR8tYUcGVxTbVvDDkgbbZ6EWicFMy+p9dUQpXlbx4VqWyWjkdLHlksXyToZY
+         1jtjFNAyVOxpagOeoEsbD9fZrK6KL6sh1H2XNA9jwkAUpai6COVdfhNtu181HkMzG+1F
+         hCWu0z/RGickf62AT4ZhXhFAtBHUce8pPO4ykIqCuLjaFtwwgivb1Z9Avgg68yBIrlkr
+         9+Nw==
+X-Gm-Message-State: AOAM530TEvMiJWW4bj2DMwRk+8uETA3hzoZtJOfm7gFvCkMNhWEgzRFj
+        hmdWVB/2rUJUZzz+I8lnzu4=
+X-Google-Smtp-Source: ABdhPJww3r/MMhIvblrkwmJMxMP5jc9E/FBTV0hiZXleYhZVSa8+7DDBJXvz7/5xB9hN2OMynfMiIg==
+X-Received: by 2002:a17:902:a9c1:b029:da:8227:65f7 with SMTP id b1-20020a170902a9c1b02900da822765f7mr7216439plr.49.1607619508699;
+        Thu, 10 Dec 2020 08:58:28 -0800 (PST)
 Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
-        by smtp.gmail.com with ESMTPSA id k14sm6842070pfp.132.2020.12.10.08.58.23
+        by smtp.gmail.com with ESMTPSA id b20sm6235969pfi.218.2020.12.10.08.58.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Dec 2020 08:58:24 -0800 (PST)
+        Thu, 10 Dec 2020 08:58:27 -0800 (PST)
 From:   Moritz Fischer <mdf@kernel.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-fpga@vger.kernel.org, trix@redhat.com, hao.wu@intel.com,
         yilun.xu@intel.com, russell.h.weight@intel.com,
         Matthew Gerlach <matthew.gerlach@linux.intel.com>,
         Moritz Fischer <mdf@kernel.org>
-Subject: [PATCH 4/8] fpga: dfl: move dfl_device_id to mod_devicetable.h
-Date:   Thu, 10 Dec 2020 08:58:00 -0800
-Message-Id: <20201210165804.44234-5-mdf@kernel.org>
+Subject: [PATCH 5/8] fpga: dfl: add dfl bus support to MODULE_DEVICE_TABLE()
+Date:   Thu, 10 Dec 2020 08:58:01 -0800
+Message-Id: <20201210165804.44234-6-mdf@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201210165804.44234-1-mdf@kernel.org>
 References: <20201210165804.44234-1-mdf@kernel.org>
@@ -53,88 +53,75 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Xu Yilun <yilun.xu@intel.com>
 
-In order to support MODULE_DEVICE_TABLE() for dfl device driver, this
-patch moves struct dfl_device_id to mod_devicetable.h
+Device Feature List (DFL) is a linked list of feature headers within the
+device MMIO space. It is used by FPGA to enumerate multiple sub features
+within it. Each feature can be uniquely identified by DFL type and
+feature id, which can be read out from feature headers.
 
-Some brief description for DFL (Device Feature List) is added to make
-the DFL known to the whole kernel.
+A dfl bus helps DFL framework modularize DFL device drivers for
+different sub features. The dfl bus matches its devices and drivers by
+DFL type and feature id.
+
+This patch adds dfl bus support to MODULE_DEVICE_TABLE() by adding info
+about struct dfl_device_id in devicetable-offsets.c and add a dfl entry
+point in file2alias.c.
 
 Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 Signed-off-by: Wu Hao <hao.wu@intel.com>
 Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 Signed-off-by: Moritz Fischer <mdf@kernel.org>
-Reviewed-by: Tom Rix <trix@redhat.com>
 Acked-by: Wu Hao <hao.wu@intel.com>
 ---
- drivers/fpga/dfl.h              | 13 +------------
- include/linux/mod_devicetable.h | 24 ++++++++++++++++++++++++
- 2 files changed, 25 insertions(+), 12 deletions(-)
+ scripts/mod/devicetable-offsets.c |  4 ++++
+ scripts/mod/file2alias.c          | 13 +++++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index ac373b1fcff9..549c7900dcfd 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -22,6 +22,7 @@
- #include <linux/interrupt.h>
- #include <linux/iopoll.h>
- #include <linux/io-64-nonatomic-lo-hi.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/uuid.h>
-@@ -525,18 +526,6 @@ enum dfl_id_type {
- 	DFL_ID_MAX,
+diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
+index 27007c18e754..d8350eea6d1a 100644
+--- a/scripts/mod/devicetable-offsets.c
++++ b/scripts/mod/devicetable-offsets.c
+@@ -243,5 +243,9 @@ int main(void)
+ 	DEVID(mhi_device_id);
+ 	DEVID_FIELD(mhi_device_id, chan);
+ 
++	DEVID(dfl_device_id);
++	DEVID_FIELD(dfl_device_id, type);
++	DEVID_FIELD(dfl_device_id, feature_id);
++
+ 	return 0;
+ }
+diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+index 2417dd1dee33..8a438c94dcd9 100644
+--- a/scripts/mod/file2alias.c
++++ b/scripts/mod/file2alias.c
+@@ -1368,6 +1368,18 @@ static int do_mhi_entry(const char *filename, void *symval, char *alias)
+ 	return 1;
+ }
+ 
++/* Looks like: dfl:tNfN */
++static int do_dfl_entry(const char *filename, void *symval, char *alias)
++{
++	DEF_FIELD(symval, dfl_device_id, type);
++	DEF_FIELD(symval, dfl_device_id, feature_id);
++
++	sprintf(alias, "dfl:t%04Xf%04X", type, feature_id);
++
++	add_wildcard(alias);
++	return 1;
++}
++
+ /* Does namelen bytes of name exactly match the symbol? */
+ static bool sym_is(const char *name, unsigned namelen, const char *symbol)
+ {
+@@ -1442,6 +1454,7 @@ static const struct devtable devtable[] = {
+ 	{"tee", SIZE_tee_client_device_id, do_tee_entry},
+ 	{"wmi", SIZE_wmi_device_id, do_wmi_entry},
+ 	{"mhi", SIZE_mhi_device_id, do_mhi_entry},
++	{"dfl", SIZE_dfl_device_id, do_dfl_entry},
  };
  
--/**
-- * struct dfl_device_id -  dfl device identifier
-- * @type: DFL FIU type of the device. See enum dfl_id_type.
-- * @feature_id: feature identifier local to its DFL FIU type.
-- * @driver_data: driver specific data.
-- */
--struct dfl_device_id {
--	u16 type;
--	u16 feature_id;
--	unsigned long driver_data;
--};
--
- /**
-  * struct dfl_device - represent an dfl device on dfl bus
-  *
-diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
-index 5b08a473cdba..7d36c8c0fdc2 100644
---- a/include/linux/mod_devicetable.h
-+++ b/include/linux/mod_devicetable.h
-@@ -838,4 +838,28 @@ struct mhi_device_id {
- 	kernel_ulong_t driver_data;
- };
- 
-+/*
-+ * DFL (Device Feature List)
-+ *
-+ * DFL defines a linked list of feature headers within the device MMIO space to
-+ * provide an extensible way of adding features. Software can walk through these
-+ * predefined data structures to enumerate features. It is now used in the FPGA.
-+ * See Documentation/fpga/dfl.rst for more information.
-+ *
-+ * The dfl bus type is introduced to match the individual feature devices (dfl
-+ * devices) for specific dfl drivers.
-+ */
-+
-+/**
-+ * struct dfl_device_id -  dfl device identifier
-+ * @type: DFL FIU type of the device. See enum dfl_id_type.
-+ * @feature_id: feature identifier local to its DFL FIU type.
-+ * @driver_data: driver specific data.
-+ */
-+struct dfl_device_id {
-+	__u16 type;
-+	__u16 feature_id;
-+	kernel_ulong_t driver_data;
-+};
-+
- #endif /* LINUX_MOD_DEVICETABLE_H */
+ /* Create MODULE_ALIAS() statements.
 -- 
 2.29.2
 
