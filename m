@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B48A2DCD2B
-	for <lists+linux-fpga@lfdr.de>; Thu, 17 Dec 2020 08:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4BE2DCD34
+	for <lists+linux-fpga@lfdr.de>; Thu, 17 Dec 2020 08:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727543AbgLQHxk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 17 Dec 2020 02:53:40 -0500
-Received: from mail-bn8nam12on2043.outbound.protection.outlook.com ([40.107.237.43]:16993
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S1727848AbgLQHyC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 17 Dec 2020 02:54:02 -0500
+Received: from mail-dm6nam11on2087.outbound.protection.outlook.com ([40.107.223.87]:23201
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727151AbgLQHxj (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 17 Dec 2020 02:53:39 -0500
+        id S1727781AbgLQHyB (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 17 Dec 2020 02:54:01 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cGGlqje9AXKXOOUIC3RGjxuIfhG9jo7NNaisCnC3uvhQhnFdpLcQLPAjRXcl4SofyDkXnIGiizFq75rZDItpU3ZeuOP2JnHAU8Fk4WgIfrGf0d6yt64WcCYVio7jGcTuef1QiQEpscKRrQhRFANdb8YDvL4b4FSyVP9p8WKBkidjdch9hC0UFf1MZMa61zO/4pVqtazW0Kf3ikUk5u5XDSYHEhADmQ8ojHWGknbmCmXIKHxMgc3aBQP8cI+80PmFlDSf6OTJkIEU2g66g3QDP4L8R7Us0iBWEU9IDj+PmMwQQ9mM1j0jdUM0BwZPrRcMpVaHD5mqWcY52H5BMRebSQ==
+ b=lYg3lMWrBKJoC4S3XcNd9k5TzIOAy7tG7MbnIuJocruruBR19Qiil6flHzNDyBBDpMk7TMA18bkoIf6FZTJ7v8EnB+FD3ESTWiWXe0NawX8vCXp7Ft7qP2svk1Gutp/pZ769dIOxDhJYKrr2ZAWkLvJlqnIoTZD45vAtyufm3V5dR8pcVjvPiVn0Ig3JuhBNLMdLKelpEdlTgSQyqYbix55kp6ootAmv/RFhW1x6mX+D0otrDjq+bcqoy61bdok+YI/7+qvjyjzfwA61eRdJ99VqYvhDWNGJIga11MZzJTDmkhx+h9f9fqkhVxGGPffQ5OeoP3qi/EUn/nIbssa+ew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PPs5IulGt1ppE0l8vRiUkY1fSFnE60s/PISB0QHqosA=;
- b=dgwZi5qQHzBe4XtP/YC1pfzq2PoFU4zNyNKfwa7RZC0u3e7hAxNQkBhzky9jnxZdL//XwHAbaoVA9P+132aOlYmI2ja0pLxF/Pi2oIXqCojRaMLVgB/eP8BTvp9HMmegVi4ajNnjKEoLV8jw0+rbzfv44+dDu9HaYPOMp4CBOe4luH1tT62ri1yMcMFLLgHUoj411YOoM3RYgKIR+RyB9RZsRYEA0rXk36lQM1aRQQ65+lIumO8oTcDZDQL/VnQsQQrCYJ1f1t7wOQfETNBsBYRrSK5dF5j8EEDu8MPQCIxlzEkfYtaLcuzGn7FcZuN9tWtdDzyuEr6cI2MUITf9YQ==
+ bh=AhEooTP3opGVvGYtbQl5xjSh+KVh0IF1zOcrgOJbing=;
+ b=mdgaN5WyNpos3r+vjuYfpsEMzy4f+jUiMMz4RDo5IQhSPnibbkk0BdBIIoMS8WKqAqZv/5jC6rqODVFucYnXMHYWPKxPkYkw5aGWjKR69hUVTS+t9LJqol3uoekOdKo+9MNvd8VOcgCWD7CfNKxUVTfq4AgwPoHwEB+XuRlqc4hN6YxoVs7nO29lG9Zq/alFLUFuezhV8XLshSZEriz2bfecqp4Ujf8Nc6V2A4EQFzsNUzShfFGG4NcxN0AZ7BtkGtBQG9TzZjAvXSZbQWQyuaHTx0kTk3mtbeHMUQhxSp9cXyJ42fsGSHp+CueNKjeNhp1pb6yt06R6STuTxT2wxQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PPs5IulGt1ppE0l8vRiUkY1fSFnE60s/PISB0QHqosA=;
- b=hlBiYw+3SNemPjwFDjVwyDeRbuSSUx0n+eMnJRruv0xONghicv9k6vtLCYRPGt6NtlZdKuEpFmnidZGdgigsmUf9HTpRtMeRKcnPXfQS9EBdn416BIr0Gx0jM7vRv0Vzp0pYX2PaRTPx/FlMiTnNsuA6wS2SgkGupFM0UJ80ThA=
-Received: from BLAPR03CA0174.namprd03.prod.outlook.com (2603:10b6:208:32c::29)
- by SN6PR02MB4799.namprd02.prod.outlook.com (2603:10b6:805:a0::11) with
+ bh=AhEooTP3opGVvGYtbQl5xjSh+KVh0IF1zOcrgOJbing=;
+ b=KOWWqxePWBA45ABKdy0Q8DZFNKyNGBRC+cvHpPatu719IO0fWreMoWMJFflpG4DlaHbBFLyOXZdJgZL8n8btLgRccSJzBxhH8VGvCa2IVsYp4OhDtyZHMBUCjdV5Gs8mfJ6bxK9rrv/9sfnBErFklPm4GLtYXY5vSJDePZk8oGs=
+Received: from MN2PR03CA0024.namprd03.prod.outlook.com (2603:10b6:208:23a::29)
+ by CH2PR02MB6280.namprd02.prod.outlook.com (2603:10b6:610:f::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17; Thu, 17 Dec
- 2020 07:52:42 +0000
-Received: from BL2NAM02FT003.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:32c:cafe::77) by BLAPR03CA0174.outlook.office365.com
- (2603:10b6:208:32c::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.17 via Frontend
- Transport; Thu, 17 Dec 2020 07:52:41 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12; Thu, 17 Dec
+ 2020 07:52:57 +0000
+Received: from BL2NAM02FT050.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:23a:cafe::5e) by MN2PR03CA0024.outlook.office365.com
+ (2603:10b6:208:23a::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12 via Frontend
+ Transport; Thu, 17 Dec 2020 07:52:57 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=bestguesspass action=none
@@ -46,16 +46,16 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
  client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
 Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BL2NAM02FT003.mail.protection.outlook.com (10.152.76.204) with Microsoft SMTP
+ BL2NAM02FT050.mail.protection.outlook.com (10.152.77.101) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3654.12 via Frontend Transport; Thu, 17 Dec 2020 07:52:40 +0000
+ 15.20.3654.12 via Frontend Transport; Thu, 17 Dec 2020 07:52:55 +0000
 Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Wed, 16 Dec 2020 23:52:39 -0800
+ 15.1.1913.5; Wed, 16 Dec 2020 23:52:51 -0800
 Received: from smtp.xilinx.com (172.19.127.95) by
  xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Wed, 16 Dec 2020 23:52:39 -0800
+ 15.1.1913.5 via Frontend Transport; Wed, 16 Dec 2020 23:52:51 -0800
 Envelope-to: michal.simek@xilinx.com,
  sonal.santan@xilinx.com,
  lizhih@xilinx.com,
@@ -66,12 +66,12 @@ Envelope-to: michal.simek@xilinx.com,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.212] (port=42038 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.212] (port=42040 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <sonal.santan@xilinx.com>)
-        id 1kpo5X-0007Xr-DZ; Wed, 16 Dec 2020 23:52:39 -0800
+        id 1kpo5i-0007Yx-Vj; Wed, 16 Dec 2020 23:52:51 -0800
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 6354)
-        id 9752860010B; Wed, 16 Dec 2020 23:51:10 -0800 (PST)
+        id 673C5600115; Wed, 16 Dec 2020 23:51:14 -0800 (PST)
 From:   Sonal Santan <sonal.santan@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Sonal Santan <sonal.santan@xilinx.com>,
@@ -79,720 +79,2273 @@ CC:     Sonal Santan <sonal.santan@xilinx.com>,
         <lizhih@xilinx.com>, <michal.simek@xilinx.com>,
         <stefanos@xilinx.com>, <devicetree@vger.kernel.org>,
         <trix@redhat.com>, <mdf@kernel.org>
-Subject: [PATCH V2 XRT Alveo 1/6] Documentation: fpga: Add a document describing XRT Alveo drivers
-Date:   Wed, 16 Dec 2020 23:50:41 -0800
-Message-ID: <20201217075046.28553-2-sonals@xilinx.com>
+Subject: [PATCH V2 XRT Alveo 2/6] fpga: xrt: infrastructure support for xmgmt driver
+Date:   Wed, 16 Dec 2020 23:50:42 -0800
+Message-ID: <20201217075046.28553-3-sonals@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201217075046.28553-1-sonals@xilinx.com>
 References: <20201217075046.28553-1-sonals@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 64808781-c932-49f9-6fb0-08d8a260ba8a
-X-MS-TrafficTypeDiagnostic: SN6PR02MB4799:
-X-Microsoft-Antispam-PRVS: <SN6PR02MB4799A3DA37D34193BF94FBADBBC40@SN6PR02MB4799.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 86f8214b-80f8-41f4-d4b6-08d8a260c3f7
+X-MS-TrafficTypeDiagnostic: CH2PR02MB6280:
+X-Microsoft-Antispam-PRVS: <CH2PR02MB628068B6F01821A69A437796BBC40@CH2PR02MB6280.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Oob-TLC-OOBClassifiers: OLM:103;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gVPpf3gFHEzqcCOksQC6p/IpqiveAm+DamqOjQ2M2/XSKU6hwHyDyq3rZer+cGvjIFI1V5/5gg1ItHz8lbTCFPqpORCWB92nCv9kEA3EVJcGVf9Anz2/gDZIPvWMK+bFyxxeX2Q6UJsv9iAjcCRMvsg7+MYB3eOhso8EZKfMUtC0fTqCLh5A1MmW1yB6i2KHDRIEFWzlwFf/1fKy5eLWsY/XkNANaLHKQUVTXkHNzuehX8TX1/pSXAJM6216fK3vEurzzguIN1tDoQtaP76iEYK4Dzyh9y3ocG/C9RCXK/r1IhW4l8e0FN+RvZqQbhmoPYW7cI2pVwBCBVZk/jrmZfJ2ooUqWhrXx6YdYmQW2ubZ7OHSkB5K0wo24B423YcVF0eWJzGf49PRQ3Duvb1Wxo4VU+QQt/Z3exU50muBXF2O4w3bjezyyjVFJRavU7oPR9GTvV8Le2OxM3nGRvW4Mw==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(39860400002)(396003)(346002)(376002)(46966005)(30864003)(70586007)(70206006)(47076004)(478600001)(336012)(6916009)(186003)(2616005)(316002)(6266002)(44832011)(36756003)(82310400003)(82740400003)(1076003)(5660300002)(2906002)(7636003)(8676002)(8936002)(4326008)(42186006)(26005)(426003)(6666004)(356005)(54906003)(83380400001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: QMHi1XdTAe5khJV0xsXnU+ISfQoOPqe+IndZtKcyLyAfgVlRtnpRMANg6FICJzP4bXOfA8baTgzNqyzMypNZynYQXznQ8EN6u07UNTbd1UPV0Jo2jBuTXsFlCKsa6SiZmyWOhybpOV201IogyRozY/CwG/PowTatoncC4uq6zFjS8bF84wCGflj6lDv/qfft+Ue2+0zVWfrikR8TvJF9icFKir0za38Q9D79yyR16ha4JmU8GGhjQapFgsdNT8e+srZ7oaAV95E5Noej2pSY3IJvioe3oz9aUACHRFa/yOerrEfwPHOLvM/P9sMl93RTzRo5uiqxzxbJf5WPFg8ggzNdyL9dG8gUAehjXLRyhPZMcVEx/B79Xex52tdl0pJqpL0EvLKHNvQCK336pD1H8g==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(376002)(346002)(136003)(39860400002)(46966005)(70206006)(316002)(2616005)(44832011)(5660300002)(6916009)(186003)(70586007)(1076003)(2906002)(426003)(478600001)(82740400003)(30864003)(54906003)(7636003)(6266002)(83380400001)(4326008)(47076004)(336012)(6666004)(356005)(36756003)(42186006)(8936002)(8676002)(82310400003)(26005)(559001)(579004);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2020 07:52:40.1690
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2020 07:52:55.9881
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64808781-c932-49f9-6fb0-08d8a260ba8a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86f8214b-80f8-41f4-d4b6-08d8a260c3f7
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT003.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT050.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB4799
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6280
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Sonal Santan <sonal.santan@xilinx.com>
 
-Describe XRT driver architecture and provide basic overview of
-Xilinx Alveo platform.
+Add infrastructure code for XRT management physical function
+driver. This provides support for enumerating and extracting
+sections from xclbin files, interacting with device tree nodes
+found in xclbin and working with Alveo partitions.
 
 Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 ---
- Documentation/fpga/index.rst |   1 +
- Documentation/fpga/xrt.rst   | 649 +++++++++++++++++++++++++++++++++++
- 2 files changed, 650 insertions(+)
- create mode 100644 Documentation/fpga/xrt.rst
+ drivers/fpga/xrt/common/xrt-metadata.c | 590 ++++++++++++++++++++
+ drivers/fpga/xrt/common/xrt-root.c     | 737 +++++++++++++++++++++++++
+ drivers/fpga/xrt/common/xrt-root.h     |  26 +
+ drivers/fpga/xrt/common/xrt-xclbin.c   | 387 +++++++++++++
+ drivers/fpga/xrt/common/xrt-xclbin.h   |  48 ++
+ include/uapi/linux/xrt/xclbin.h        | 386 +++++++++++++
+ 6 files changed, 2174 insertions(+)
+ create mode 100644 drivers/fpga/xrt/common/xrt-metadata.c
+ create mode 100644 drivers/fpga/xrt/common/xrt-root.c
+ create mode 100644 drivers/fpga/xrt/common/xrt-root.h
+ create mode 100644 drivers/fpga/xrt/common/xrt-xclbin.c
+ create mode 100644 drivers/fpga/xrt/common/xrt-xclbin.h
+ create mode 100644 include/uapi/linux/xrt/xclbin.h
 
-diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
-index f80f95667ca2..30134357b70d 100644
---- a/Documentation/fpga/index.rst
-+++ b/Documentation/fpga/index.rst
-@@ -8,6 +8,7 @@ fpga
-     :maxdepth: 1
- 
-     dfl
-+    xrt
- 
- .. only::  subproject and html
- 
-diff --git a/Documentation/fpga/xrt.rst b/Documentation/fpga/xrt.rst
+diff --git a/drivers/fpga/xrt/common/xrt-metadata.c b/drivers/fpga/xrt/common/xrt-metadata.c
 new file mode 100644
-index 000000000000..8faf259be1c3
+index 000000000000..2a5b1ee9e37c
 --- /dev/null
-+++ b/Documentation/fpga/xrt.rst
-@@ -0,0 +1,649 @@
-+==================================
-+XRTV2 Linux Kernel Driver Overview
-+==================================
-+
-+Authors:
-+
-+* Sonal Santan <sonal.santan@xilinx.com>
-+* Max Zhen <max.zhen@xilinx.com>
-+* Lizhi Hou <lizhi.hou@xilinx.com>
-+
-+XRTV2 drivers are second generation `XRT <https://github.com/Xilinx/XRT>`_
-+drivers which support `Alveo <https://www.xilinx.com/products/boards-and-kits/alveo.html>`_
-+PCIe platforms from Xilinx.
-+
-+XRTV2 drivers support *subsystem* style data driven platforms where driver's
-+configuration and behavior is determined by meta data provided by the platform
-+(in *device tree* format). Primary management physical function (MPF) driver
-+is called **xmgmt**. Primary user physical function (UPF) driver is called
-+**xuser** and HW subsystem drivers are packaged into a library module called
-+**xrt-lib**, which is shared by **xmgmt** and **xuser** (under development).
-+
-+Alveo Platform Overview
-+=======================
-+
-+Alveo platforms are architected as two physical FPGA partitions: *Shell* and
-+*User*. The Shell provides basic infrastructure for the Alveo platform like
-+PCIe connectivity, board management, Dynamic Function Exchange (DFX), sensors,
-+clocking, reset, and security. User partition contains user compiled FPGA
-+binary which is loaded by a process called DFX also known as partial
-+reconfiguration.
-+
-+Physical partitions require strict HW compatibility with each other for DFX to
-+work properly. Every physical partition has two interface UUIDs: *parent* UUID
-+and *child* UUID. For simple single stage platforms, Shell → User forms parent
-+child relationship. For complex two stage platforms, Base → Shell → User forms
-+the parent child relationship chain.
-+
-+.. note::
-+   Partition compatibility matching is key design component of Alveo platforms
-+   and XRT. Partitions have child and parent relationship. A loaded partition
-+   exposes child partition UUID to advertise its compatibility requirement for
-+   child partition. When loading a child partition the xmgmt management driver
-+   matches parent UUID of the child partition against child UUID exported by
-+   the parent. Parent and child partition UUIDs are stored in the *xclbin*
-+   (for user) or *xsabin* (for base and shell). Except for root UUID, VSEC,
-+   hardware itself does not know about UUIDs. UUIDs are stored in xsabin and
-+   xclbin.
-+
-+
-+The physical partitions and their loading is illustrated below::
-+
-+           SHELL                               USER
-+        +-----------+                  +-------------------+
-+        |           |                  |                   |
-+        | VSEC UUID | CHILD     PARENT |    LOGIC UUID     |
-+        |           o------->|<--------o                   |
-+        |           | UUID       UUID  |                   |
-+        +-----+-----+                  +--------+----------+
-+              |                                 |
-+              .                                 .
-+              |                                 |
-+          +---+---+                      +------+--------+
-+          |  POR  |                      | USER COMPILED |
-+          | FLASH |                      |    XCLBIN     |
-+          +-------+                      +---------------+
-+
-+
-+Loading Sequence
-+----------------
-+
-+The Shell partition is loaded from flash at system boot time. It establishes the
-+PCIe link and exposes two physical functions to the BIOS. After OS boot, xmgmt
-+driver attaches to PCIe physical function 0 exposed by the Shell and then looks
-+for VSEC in PCIe extended configuration space. Using VSEC it determines the logic
-+UUID of Shell and uses the UUID to load matching *xsabin* file from Linux firmware
-+directory. The xsabin file contains metadata to discover peripherals that are part
-+of Shell and firmware(s) for any embedded soft processors in Shell.
-+
-+The Shell exports child interface UUID which is used for compatibility check when
-+loading user compiled xclbin over the User partition as part of DFX. When a user
-+requests loading of a specific xclbin the xmgmt management driver reads the parent
-+interface UUID specified in the xclbin and matches it with child interface UUID
-+exported by Shell to determine if xclbin is compatible with the Shell. If match
-+fails loading of xclbin is denied.
-+
-+xclbin loading is requested using ICAP_DOWNLOAD_AXLF ioctl command. When loading
-+xclbin, xmgmt driver performs the following *logical* operations:
-+
-+1. Sanity check the xclbin contents
-+2. Isolate the User partition
-+3. Download the bitstream using the FPGA config engine (ICAP)
-+4. De-isolate the User partition
-+5. Program the clocks (ClockWiz) driving the User partition
-+6. Wait for memory controller (MIG) calibration
-+
-+`Platform Loading Overview <https://xilinx.github.io/XRT/master/html/platforms_partitions.html>`_
-+provides more detailed information on platform loading.
-+
-+
-+xsabin
-+------
-+
-+Each Alveo platform comes packaged with its own xsabin. The xsabin is trusted
-+component of the platform. For format details refer to :ref:`xsabin/xclbin Container Format`.
-+xsabin contains basic information like UUIDs, platform name and metadata in the
-+form of device tree. See :ref:`Device Tree Usage` for details and example.
-+
-+xclbin
-+------
-+
-+xclbin is compiled by end user using
-+`Vitis <https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html>`_
-+tool set from Xilinx. The xclbin contains sections describing user compiled
-+acceleration engines/kernels, memory subsystems, clocking information etc. It also
-+contains bitstream for the user partition, UUIDs, platform name, etc. xclbin uses
-+the same container format as xsabin which is described below.
-+
-+
-+xsabin/xclbin Container Format
-+------------------------------
-+
-+xclbin/xsabin is ELF-like binary container format. It is structured as series of sections.
-+There is a file header followed by several section headers which is followed by sections.
-+A section header points to an actual section. There is an optional signature at the end.
-+The format is defined by header file ``xclbin.h``. The following figure illustrates a
-+typical xclbin::
-+
-+
-+           +---------------------+
-+           |                     |
-+           |       HEADER        |
-+           +---------------------+
-+           |   SECTION  HEADER   |
-+           |                     |
-+           +---------------------+
-+           |         ...         |
-+           |                     |
-+           +---------------------+
-+           |   SECTION  HEADER   |
-+           |                     |
-+           +---------------------+
-+           |       SECTION       |
-+           |                     |
-+           +---------------------+
-+           |         ...         |
-+           |                     |
-+           +---------------------+
-+           |       SECTION       |
-+           |                     |
-+           +---------------------+
-+           |      SIGNATURE      |
-+           |      (OPTIONAL)     |
-+           +---------------------+
-+
-+
-+xclbin/xsabin files can be packaged, un-packaged and inspected using XRT utility
-+called **xclbinutil**. xclbinutil is part of XRT open source software stack. The
-+source code for xclbinutil can be found at
-+https://github.com/Xilinx/XRT/tree/master/src/runtime_src/tools/xclbinutil
-+
-+For example to enumerate the contents of a xclbin/xsabin use the *--info* switch
-+as shown below::
-+
-+  xclbinutil --info --input /opt/xilinx/firmware/u50/gen3x16-xdma/blp/test/bandwidth.xclbin
-+  xclbinutil --info --input /lib/firmware/xilinx/862c7020a250293e32036f19956669e5/partition.xsabin
-+
-+
-+Device Tree Usage
-+-----------------
-+
-+As mentioned previously xsabin stores metadata which advertise HW subsystems present
-+in a partition. The metadata is stored in device tree format with well defined schema.
-+Subsystem instantiations are captured as children of ``addressable_endpoints`` node.
-+Subsystem nodes have standard attributes like ``reg``, ``interrupts`` etc. Additionally
-+the nodes also have PCIe specific attributes: ``pcie_physical_function`` and
-+``pcie_bar_mapping``. These identify which PCIe physical function and which BAR space
-+in that physical function the subsystem resides. XRT management driver uses this
-+information to bind *platform drivers* to the subsystem instantiations. The platform
-+drivers are found in **xrt-lib.ko** kernel module defined later. Below is an example
-+of device tree for Alveo U50 platform::
-+
-+  /dts-v1/;
-+
-+  /{
-+        logic_uuid = "f465b0a3ae8c64f619bc150384ace69b";
-+
-+        schema_version {
-+                major = <0x01>;
-+                minor = <0x00>;
-+        };
-+
-+        interfaces {
-+
-+                @0 {
-+                        interface_uuid = "862c7020a250293e32036f19956669e5";
-+                };
-+        };
-+
-+        addressable_endpoints {
-+
-+                ep_blp_rom_00 {
-+                        reg = <0x00 0x1f04000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
-+                };
-+
-+                ep_card_flash_program_00 {
-+                        reg = <0x00 0x1f06000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_quad_spi-1.0\0axi_quad_spi";
-+                        interrupts = <0x03 0x03>;
-+                };
-+
-+                ep_cmc_firmware_mem_00 {
-+                        reg = <0x00 0x1e20000 0x00 0x20000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
-+
-+                        firmware {
-+                                firmware_product_name = "cmc";
-+                                firmware_branch_name = "u50";
-+                                firmware_version_major = <0x01>;
-+                                firmware_version_minor = <0x00>;
-+                        };
-+                };
-+
-+                ep_cmc_intc_00 {
-+                        reg = <0x00 0x1e03000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_intc-1.0\0axi_intc";
-+                        interrupts = <0x04 0x04>;
-+                };
-+
-+                ep_cmc_mutex_00 {
-+                        reg = <0x00 0x1e02000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_cmc_regmap_00 {
-+                        reg = <0x00 0x1e08000 0x00 0x2000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
-+
-+                        firmware {
-+                                firmware_product_name = "sc-fw";
-+                                firmware_branch_name = "u50";
-+                                firmware_version_major = <0x05>;
-+                        };
-+                };
-+
-+                ep_cmc_reset_00 {
-+                        reg = <0x00 0x1e01000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_ddr_mem_calib_00 {
-+                        reg = <0x00 0x63000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_debug_bscan_mgmt_00 {
-+                        reg = <0x00 0x1e90000 0x00 0x10000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-debug_bridge-1.0\0debug_bridge";
-+                };
-+
-+                ep_ert_base_address_00 {
-+                        reg = <0x00 0x21000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_ert_command_queue_mgmt_00 {
-+                        reg = <0x00 0x40000 0x00 0x10000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-ert_command_queue-1.0\0ert_command_queue";
-+                };
-+
-+                ep_ert_command_queue_user_00 {
-+                        reg = <0x00 0x40000 0x00 0x10000>;
-+                        pcie_physical_function = <0x01>;
-+                        compatible = "xilinx.com,reg_abs-ert_command_queue-1.0\0ert_command_queue";
-+                };
-+
-+                ep_ert_firmware_mem_00 {
-+                        reg = <0x00 0x30000 0x00 0x8000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
-+
-+                        firmware {
-+                                firmware_product_name = "ert";
-+                                firmware_branch_name = "v20";
-+                                firmware_version_major = <0x01>;
-+                        };
-+                };
-+
-+                ep_ert_intc_00 {
-+                        reg = <0x00 0x23000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_intc-1.0\0axi_intc";
-+                        interrupts = <0x05 0x05>;
-+                };
-+
-+                ep_ert_reset_00 {
-+                        reg = <0x00 0x22000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_ert_sched_00 {
-+                        reg = <0x00 0x50000 0x00 0x1000>;
-+                        pcie_physical_function = <0x01>;
-+                        compatible = "xilinx.com,reg_abs-ert_sched-1.0\0ert_sched";
-+                        interrupts = <0x09 0x0c>;
-+                };
-+
-+                ep_fpga_configuration_00 {
-+                        reg = <0x00 0x1e88000 0x00 0x8000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_hwicap-1.0\0axi_hwicap";
-+                        interrupts = <0x02 0x02>;
-+                };
-+
-+                ep_icap_reset_00 {
-+                        reg = <0x00 0x1f07000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_msix_00 {
-+                        reg = <0x00 0x00 0x00 0x20000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-msix-1.0\0msix";
-+                        pcie_bar_mapping = <0x02>;
-+                };
-+
-+                ep_pcie_link_mon_00 {
-+                        reg = <0x00 0x1f05000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_pr_isolate_plp_00 {
-+                        reg = <0x00 0x1f01000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_pr_isolate_ulp_00 {
-+                        reg = <0x00 0x1000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_uuid_rom_00 {
-+                        reg = <0x00 0x64000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
-+                };
-+
-+                ep_xdma_00 {
-+                        reg = <0x00 0x00 0x00 0x10000>;
-+                        pcie_physical_function = <0x01>;
-+                        compatible = "xilinx.com,reg_abs-xdma-1.0\0xdma";
-+                        pcie_bar_mapping = <0x02>;
-+                };
-+        };
-+
-+  }
-+
-+
-+
-+Deployment Models
-+=================
-+
-+Baremetal
-+---------
-+
-+In bare-metal deployments both MPF and UPF are visible and accessible. xmgmt
-+driver binds to MPF. xmgmt driver operations are privileged and available to
-+system administrator. The full stack is illustrated below::
-+
-+                            HOST
-+
-+                 [XMGMT]            [XUSER]
-+                    |                  |
-+                    |                  |
-+                 +-----+            +-----+
-+                 | MPF |            | UPF |
-+                 |     |            |     |
-+                 | PF0 |            | PF1 |
-+                 +--+--+            +--+--+
-+          ......... ^................. ^..........
-+                    |                  |
-+                    |   PCIe DEVICE    |
-+                    |                  |
-+                 +--+------------------+--+
-+                 |         SHELL          |
-+                 |                        |
-+                 +------------------------+
-+                 |         USER           |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 +------------------------+
-+
-+
-+
-+Virtualized
-+-----------
-+
-+In virtualized deployments privileged MPF is assigned to host but unprivileged
-+UPF is assigned to guest VM via PCIe pass-through. xmgmt driver in host binds
-+to MPF. xmgmt driver operations are privileged and only accessible by hosting
-+service provider. The full stack is illustrated below::
-+
-+
-+                                 .............
-+                  HOST           .    VM     .
-+                                 .           .
-+                 [XMGMT]         .  [XUSER]  .
-+                    |            .     |     .
-+                    |            .     |     .
-+                 +-----+         .  +-----+  .
-+                 | MPF |         .  | UPF |  .
-+                 |     |         .  |     |  .
-+                 | PF0 |         .  | PF1 |  .
-+                 +--+--+         .  +--+--+  .
-+          ......... ^................. ^..........
-+                    |                  |
-+                    |   PCIe DEVICE    |
-+                    |                  |
-+                 +--+------------------+--+
-+                 |         SHELL          |
-+                 |                        |
-+                 +------------------------+
-+                 |         USER           |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 +------------------------+
-+
-+
-+
-+Driver Modules
-+==============
-+
-+xrt-lib.ko
-+----------
-+
-+Repository of all subsystem drivers and pure software modules that can potentially
-+be shared between xmgmt and xuser. All these drivers are structured as Linux
-+*platform driver* and are instantiated by xmgmt (or xuser in future) based on meta
-+data associated with hardware. The metadata is in the form of device tree as
-+explained before.
-+
-+xmgmt.ko
-+--------
-+
-+The xmgmt driver is a PCIe device driver driving MPF found on Xilinx's Alveo
-+PCIE device. It consists of one *root* driver, one or more *partition* drivers
-+and one or more *leaf* drivers. The root and MPF specific leaf drivers are in
-+xmgmt.ko. The partition driver and other leaf drivers are in xrt-lib.ko.
-+
-+The instantiation of specific partition driver or leaf driver is completely data
-+driven based on meta data (mostly in device tree format) found through VSEC
-+capability and inside firmware files, such as xsabin or xclbin file. The root
-+driver manages life cycle of multiple partition drivers, which, in turn, manages
-+multiple leaf drivers. This allows a single set of driver code to support all
-+kinds of subsystems exposed by different shells. The difference among all
-+these subsystems will be handled in leaf drivers with root and partition drivers
-+being part of the infrastructure and provide common services for all leaves found
-+on all platforms.
-+
-+The driver object model looks like the following::
-+
-+                    +-----------+
-+                    |   root    |
-+                    +-----+-----+
-+                          |
-+              +-----------+-----------+
-+              |                       |
-+              v                       v
-+        +-----------+          +-----------+
-+        | partition |    ...   | partition |
-+        +-----+-----+          +------+----+
-+              |                       |
-+              |                       |
-+        +-----+----+            +-----+----+
-+        |          |            |          |
-+        v          v            v          v
-+    +------+   +------+     +------+   +------+
-+    | leaf |...| leaf |     | leaf |...| leaf |
-+    +------+   +------+     +------+   +------+
-+
-+
-+xmgmt-root
-+^^^^^^^^^^
-+
-+The xmgmt-root driver is a PCIe device driver attached to MPF. It's part of the
-+infrastructure of the MPF driver and resides in xmgmt.ko. This driver
-+
-+* manages one or more partition drivers
-+* provides access to functionalities that requires pci_dev, such as PCIE config
-+  space access, to other leaf drivers through parent calls
-+* together with partition driver, facilities event callbacks for other leaf drivers
-+* together with partition driver, facilities inter-leaf driver calls for other leaf
-+  drivers
-+
-+When root driver starts, it will explicitly create an initial partition instance,
-+which contains leaf drivers that will trigger the creation of other partition
-+instances. The root driver will wait for all partitions and leaves to be created
-+before it returns from it's probe routine and claim success of the initialization
-+of the entire xmgmt driver.
-+
-+.. note::
-+   See code in ``common/xrt-root.c`` and ``mgmt/xmgmt-root.c``
-+
-+
-+partition
-+^^^^^^^^^
-+
-+The partition driver is a platform device driver whose life cycle is managed by
-+root and does not have real IO mem or IRQ resources. It's part of the
-+infrastructure of the MPF driver and resides in xrt-lib.ko. This driver
-+
-+* manages one or more leaf drivers so that multiple leaves can be managed as a
-+  group
-+* provides access to root from leaves, so that parent calls, event notifications
-+  and inter-leaf calls can happen
-+
-+In xmgmt, an initial partition driver instance will be created by root, which
-+contains leaves that will trigger partition instances to be created to manage
-+groups of leaves found on different partitions on hardware, such as VSEC, Shell,
-+and User.
-+
-+Every *fpga_region* has a partition object associated with it. The partition is
-+created when xclbin image is loaded on the fpga_region. The existing partition
-+is destroyed when a new xclbin image is loaded. The fpga_region persists
-+across xclbin downloads.
-+
-+.. note::
-+   See code in ``lib/subdevs/xrt-partition.c``
-+
-+
-+leaves
-+^^^^^^
-+
-+The leaf driver is a platform device driver whose life cycle is managed by
-+a partition driver and may or may not have real IO mem or IRQ resources. They
-+are the real meat of xmgmt and contains platform specific code to Shell and
-+User found on a MPF.
-+
-+A leaf driver may not have real hardware resources when it merely acts as a
-+driver that manages certain in-memory states for xmgmt. These in-memory states
-+could be shared by multiple other leaves.
-+
-+Leaf drivers assigned to specific hardware resources drive specific subsystem in
-+the device. To manipulate the subsystem or carry out a task, a leaf driver may
-+ask help from root via parent calls and/or from other leaves via inter-leaf calls.
-+
-+A leaf can also broadcast events through infrastructure code for other leaves
-+to process. It can also receive event notification from infrastructure about
-+certain events, such as post-creation or pre-exit of a particular leaf.
-+
-+.. note::
-+   See code in ``lib/subdevs/*.c``
-+
-+
-+FPGA Manager Interaction
-+========================
-+
-+fpga_manager
-+------------
-+
-+An instance of fpga_manager is created by xmgmt_main and is used for xclbin
-+image download. fpga_manager requires the full xclbin image before it can
-+start programming the FPGA configuration engine via ICAP subdev driver.
-+
-+fpga_region
-+-----------
-+
-+A new instance of fpga_region is created like a *child* region for every
-+interface exposed by currently loaded xclbin or xsabin in the *parent*
-+fpga_region. The device tree of the *parent* fpga_region defines the
-+resources for a new instance of fpga_bridge which isolates the parent from
-+child fpga_region. This new instance of fpga_bridge will be used when a
-+xclbin image is loaded on the child fpga_region. After the xclbin image is
-+downloaded to the fpga_region, a partition instance is created for the
-+fpga_region using the device tree obtained as part of xclbin. This device
-+tree defines any child interfaces then it can trigger the creation of
-+fpga_bridge and fpga_region for the next region in the chain.
-+
-+fpga_bridge
-+-----------
-+
-+Like fpga_region, matching fpga_bridge is also created by walking the device
-+tree of the parent partition.
-+
-+Driver Interfaces
-+=================
-+
-+xmgmt Driver Ioctls
-+-------------------
-+
-+Ioctls exposed by xmgmt driver to user space are enumerated in the following table:
-+
-+== ===================== ============================= ===========================
-+#  Functionality         ioctl request code            data format
-+== ===================== ============================= ===========================
-+1  FPGA image download   XMGMT_IOCICAPDOWNLOAD_AXLF    xmgmt_ioc_bitstream_axlf
-+2  CL frequency scaling  XMGMT_IOCFREQSCALE            xmgmt_ioc_freqscaling
-+== ===================== ============================= ===========================
-+
-+A xclbin can be downloaded by using xbmgmt tool from XRT open source suite. See
-+example usage below ::
-+
-+  xbmgmt partition --program --path /lib/firmware/xilinx/862c7020a250293e32036f19956669e5/test/verify.xclbin --force
-+
-+xmgmt Driver Sysfs
-+------------------
-+
-+xmgmt driver exposes a rich set of sysfs interfaces. Subsystem platform
-+drivers export sysfs node for every platform instance.
-+
-+Every partition also exports its UUIDs. See below for examples::
-+
-+  /sys/bus/pci/devices/0000:06:00.0/xmgmt_main.0/interface_uuids
-+  /sys/bus/pci/devices/0000:06:00.0/xmgmt_main.0/logic_uuids
-+
-+
-+hwmon
-+-----
-+
-+xmgmt driver exposes standard hwmon interface to report voltage, current,
-+temperature, power, etc. These can easily be viewed using *sensors* command
-+line utility.
-+
-+
-+Platform Security Considerations
-+================================
-+
-+`Security of Alveo Platform <https://xilinx.github.io/XRT/master/html/security.html>`_
-+discusses the deployment options and security implications in great detail.
++++ b/drivers/fpga/xrt/common/xrt-metadata.c
+@@ -0,0 +1,590 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Xilinx Alveo FPGA Metadata parse APIs
++ *
++ * Copyright (C) 2020 Xilinx, Inc.
++ *
++ * Authors:
++ *      Lizhi Hou <Lizhi.Hou@xilinx.com>
++ */
++
++#include <linux/libfdt_env.h>
++#include "libfdt.h"
++#include "metadata.h"
++
++#define MAX_BLOB_SIZE	(4096 * 25)
++
++#define md_err(dev, fmt, args...)			\
++	dev_err(dev, "%s: "fmt, __func__, ##args)
++#define md_warn(dev, fmt, args...)			\
++	dev_warn(dev, "%s: "fmt, __func__, ##args)
++#define md_info(dev, fmt, args...)			\
++	dev_info(dev, "%s: "fmt, __func__, ##args)
++#define md_dbg(dev, fmt, args...)			\
++	dev_dbg(dev, "%s: "fmt, __func__, ##args)
++
++static int xrt_md_setprop(struct device *dev, char *blob, int offset,
++	const char *prop, const void *val, int size);
++static int xrt_md_overlay(struct device *dev, char *blob, int target,
++	const char *overlay_blob, int overlay_offset);
++static int xrt_md_get_endpoint(struct device *dev, const char *blob,
++	const char *ep_name, const char *regmap_name, int *ep_offset);
++
++long xrt_md_size(struct device *dev, const char *blob)
++{
++	long len = (long) fdt_totalsize(blob);
++
++	return (len > MAX_BLOB_SIZE) ? -EINVAL : len;
++}
++
++int xrt_md_create(struct device *dev, char **blob)
++{
++	int ret = 0;
++
++	WARN_ON(!blob);
++
++	*blob = vmalloc(MAX_BLOB_SIZE);
++	if (!*blob)
++		return -ENOMEM;
++
++	ret = fdt_create_empty_tree(*blob, MAX_BLOB_SIZE);
++	if (ret) {
++		md_err(dev, "format blob failed, ret = %d", ret);
++		goto failed;
++	}
++
++	ret = fdt_next_node(*blob, -1, NULL);
++	if (ret < 0) {
++		md_err(dev, "No Node, ret = %d", ret);
++		goto failed;
++	}
++
++	ret = fdt_add_subnode(*blob, ret, NODE_ENDPOINTS);
++	if (ret < 0)
++		md_err(dev, "add node failed, ret = %d", ret);
++
++failed:
++	if (ret < 0) {
++		vfree(*blob);
++		*blob = NULL;
++	} else
++		ret = 0;
++
++	return ret;
++}
++
++int xrt_md_add_node(struct device *dev, char *blob, int parent_offset,
++	const char *ep_name)
++{
++	int ret;
++
++	ret = fdt_add_subnode(blob, parent_offset, ep_name);
++	if (ret < 0 && ret != -FDT_ERR_EXISTS)
++		md_err(dev, "failed to add node %s. %d", ep_name, ret);
++
++	return ret;
++}
++
++int xrt_md_del_endpoint(struct device *dev, char *blob, const char *ep_name,
++	char *regmap_name)
++{
++	int ret;
++	int ep_offset;
++
++	ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name, &ep_offset);
++	if (ret) {
++		md_err(dev, "can not find ep %s", ep_name);
++		return -EINVAL;
++	}
++
++	ret = fdt_del_node(blob, ep_offset);
++	if (ret)
++		md_err(dev, "delete node %s failed, ret %d", ep_name, ret);
++
++	return ret;
++}
++
++static int __xrt_md_add_endpoint(struct device *dev, char *blob,
++	struct xrt_md_endpoint *ep, int *offset, bool root)
++{
++	int ret = 0;
++	int ep_offset;
++	u32 val, count = 0;
++	u64 io_range[2];
++	char comp[128];
++
++	if (!ep->ep_name) {
++		md_err(dev, "empty name");
++		return -EINVAL;
++	}
++
++	if (!root) {
++		ret = xrt_md_get_endpoint(dev, blob, NODE_ENDPOINTS, NULL,
++			&ep_offset);
++		if (ret) {
++			md_err(dev, "invalid blob, ret = %d", ret);
++			return -EINVAL;
++		}
++	} else {
++		ep_offset = 0;
++	}
++
++	ep_offset = xrt_md_add_node(dev, blob, ep_offset, ep->ep_name);
++	if (ep_offset < 0) {
++		md_err(dev, "add endpoint failed, ret = %d", ret);
++		return -EINVAL;
++	}
++	if (offset)
++		*offset = ep_offset;
++
++	if (ep->size != 0) {
++		val = cpu_to_be32(ep->bar);
++		ret = xrt_md_setprop(dev, blob, ep_offset, PROP_BAR_IDX,
++				&val, sizeof(u32));
++		if (ret) {
++			md_err(dev, "set %s failed, ret %d",
++				PROP_BAR_IDX, ret);
++			goto failed;
++		}
++		io_range[0] = cpu_to_be64((u64)ep->bar_off);
++		io_range[1] = cpu_to_be64((u64)ep->size);
++		ret = xrt_md_setprop(dev, blob, ep_offset, PROP_IO_OFFSET,
++			io_range, sizeof(io_range));
++		if (ret) {
++			md_err(dev, "set %s failed, ret %d",
++				PROP_IO_OFFSET, ret);
++			goto failed;
++		}
++	}
++
++	if (ep->regmap) {
++		if (ep->regmap_ver) {
++			count = snprintf(comp, sizeof(comp),
++				"%s-%s", ep->regmap, ep->regmap_ver);
++			count++;
++		}
++
++		count += snprintf(comp + count, sizeof(comp) - count,
++			"%s", ep->regmap);
++		count++;
++
++		ret = xrt_md_setprop(dev, blob, ep_offset, PROP_COMPATIBLE,
++			comp, count);
++		if (ret) {
++			md_err(dev, "set %s failed, ret %d",
++				PROP_COMPATIBLE, ret);
++			goto failed;
++		}
++	}
++
++failed:
++	if (ret)
++		xrt_md_del_endpoint(dev, blob, ep->ep_name, NULL);
++
++	return ret;
++}
++
++int xrt_md_add_endpoint(struct device *dev, char *blob,
++	struct xrt_md_endpoint *ep)
++{
++	return __xrt_md_add_endpoint(dev, blob, ep, NULL, false);
++}
++
++static int xrt_md_get_endpoint(struct device *dev, const char *blob,
++	const char *ep_name, const char *regmap_name, int *ep_offset)
++{
++	int offset;
++	const char *name;
++
++	for (offset = fdt_next_node(blob, -1, NULL);
++	    offset >= 0;
++	    offset = fdt_next_node(blob, offset, NULL)) {
++		name = fdt_get_name(blob, offset, NULL);
++		if (!name || strncmp(name, ep_name, strlen(ep_name) + 1))
++			continue;
++		if (!regmap_name ||
++		    !fdt_node_check_compatible(blob, offset, regmap_name))
++			break;
++	}
++	if (offset < 0)
++		return -ENODEV;
++
++	*ep_offset = offset;
++
++	return 0;
++}
++
++int xrt_md_get_epname_pointer(struct device *dev, const char *blob,
++	 const char *ep_name, const char *regmap_name, const char **epname)
++{
++	int offset;
++	int ret;
++
++	ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name,
++		&offset);
++	if (!ret && epname && offset >= 0)
++		*epname = fdt_get_name(blob, offset, NULL);
++
++	return ret;
++}
++
++int xrt_md_get_prop(struct device *dev, const char *blob, const char *ep_name,
++	const char *regmap_name, const char *prop, const void **val, int *size)
++{
++	int offset;
++	int ret;
++
++	if (val)
++		*val = NULL;
++	if (ep_name) {
++		ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name,
++			&offset);
++		if (ret) {
++			md_err(dev, "cannot get ep %s, regmap %s, ret = %d",
++				ep_name, regmap_name, ret);
++			return -EINVAL;
++		}
++	} else {
++		offset = fdt_next_node(blob, -1, NULL);
++		if (offset < 0) {
++			md_err(dev, "internal error, ret = %d", offset);
++			return -EINVAL;
++		}
++	}
++
++	if (val) {
++		*val = fdt_getprop(blob, offset, prop, size);
++		if (!*val) {
++			md_dbg(dev, "get ep %s, prop %s failed", ep_name, prop);
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
++static int xrt_md_setprop(struct device *dev, char *blob, int offset,
++	 const char *prop, const void *val, int size)
++{
++	int ret;
++
++	ret = fdt_setprop(blob, offset, prop, val, size);
++	if (ret)
++		md_err(dev, "failed to set prop %d", ret);
++
++	return ret;
++}
++
++int xrt_md_set_prop(struct device *dev, char *blob,
++	const char *ep_name, const char *regmap_name,
++	const char *prop, const void *val, int size)
++{
++	int offset;
++	int ret;
++
++	if (ep_name) {
++		ret = xrt_md_get_endpoint(dev, blob, ep_name,
++			regmap_name, &offset);
++		if (ret) {
++			md_err(dev, "cannot get node %s, ret = %d",
++				ep_name, ret);
++			return -EINVAL;
++		}
++	} else {
++		offset = fdt_next_node(blob, -1, NULL);
++		if (offset < 0) {
++			md_err(dev, "internal error, ret = %d", offset);
++			return -EINVAL;
++		}
++	}
++
++	ret = xrt_md_setprop(dev, blob, offset, prop, val, size);
++	if (ret)
++		md_err(dev, "set prop %s failed, ret = %d", prop, ret);
++
++	return ret;
++}
++
++int xrt_md_copy_endpoint(struct device *dev, char *blob, const char *src_blob,
++	const char *ep_name, const char *regmap_name, const char *new_ep_name)
++{
++	int offset, target;
++	int ret;
++	struct xrt_md_endpoint ep = {0};
++	const char *newepnm = new_ep_name ? new_ep_name : ep_name;
++
++	ret = xrt_md_get_endpoint(dev, src_blob, ep_name, regmap_name,
++		&offset);
++	if (ret)
++		return -EINVAL;
++
++	ret = xrt_md_get_endpoint(dev, blob, newepnm, regmap_name, &target);
++	if (ret) {
++		ep.ep_name = newepnm;
++		ret = __xrt_md_add_endpoint(dev, blob, &ep, &target,
++			fdt_parent_offset(src_blob, offset) == 0);
++		if (ret)
++			return -EINVAL;
++	}
++
++	ret = xrt_md_overlay(dev, blob, target, src_blob, offset);
++	if (ret)
++		md_err(dev, "overlay failed, ret = %d", ret);
++
++	return ret;
++}
++
++int xrt_md_copy_all_eps(struct device *dev, char *blob, const char *src_blob)
++{
++	return xrt_md_copy_endpoint(dev, blob, src_blob, NODE_ENDPOINTS,
++		NULL, NULL);
++}
++
++char *xrt_md_dup(struct device *dev, const char *blob)
++{
++	int ret;
++	char *dup_blob;
++
++	ret = xrt_md_create(dev, &dup_blob);
++	if (ret)
++		return NULL;
++	ret = xrt_md_overlay(dev, dup_blob, -1, blob, -1);
++	if (ret) {
++		vfree(dup_blob);
++		return NULL;
++	}
++
++	return dup_blob;
++}
++
++static int xrt_md_overlay(struct device *dev, char *blob, int target,
++	const char *overlay_blob, int overlay_offset)
++{
++	int	property, subnode;
++	int	ret;
++
++	WARN_ON(!blob || !overlay_blob);
++
++	if (!blob) {
++		md_err(dev, "blob is NULL");
++		return -EINVAL;
++	}
++
++	if (target < 0) {
++		target = fdt_next_node(blob, -1, NULL);
++		if (target < 0) {
++			md_err(dev, "invalid target");
++			return -EINVAL;
++		}
++	}
++	if (overlay_offset < 0) {
++		overlay_offset = fdt_next_node(overlay_blob, -1, NULL);
++		if (overlay_offset < 0) {
++			md_err(dev, "invalid overlay");
++			return -EINVAL;
++		}
++	}
++
++	fdt_for_each_property_offset(property, overlay_blob, overlay_offset) {
++		const char *name;
++		const void *prop;
++		int prop_len;
++
++		prop = fdt_getprop_by_offset(overlay_blob, property, &name,
++			&prop_len);
++		if (!prop || prop_len >= MAX_BLOB_SIZE) {
++			md_err(dev, "internal error");
++			return -EINVAL;
++		}
++
++		ret = xrt_md_setprop(dev, blob, target, name, prop,
++			prop_len);
++		if (ret) {
++			md_err(dev, "setprop failed, ret = %d", ret);
++			return ret;
++		}
++	}
++
++	fdt_for_each_subnode(subnode, overlay_blob, overlay_offset) {
++		const char *name = fdt_get_name(overlay_blob, subnode, NULL);
++		int nnode;
++
++		nnode = xrt_md_add_node(dev, blob, target, name);
++		if (nnode == -FDT_ERR_EXISTS)
++			nnode = fdt_subnode_offset(blob, target, name);
++		if (nnode < 0) {
++			md_err(dev, "add node failed, ret = %d", nnode);
++			return nnode;
++		}
++
++		ret = xrt_md_overlay(dev, blob, nnode, overlay_blob, subnode);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++int xrt_md_get_next_endpoint(struct device *dev, const char *blob,
++	const char *ep_name, const char *regmap_name,
++	char **next_ep, char **next_regmap)
++{
++	int offset, ret;
++
++	if (!ep_name) {
++		ret = xrt_md_get_endpoint(dev, blob, NODE_ENDPOINTS, NULL,
++			&offset);
++	} else {
++		ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name,
++			&offset);
++	}
++
++	if (ret) {
++		*next_ep = NULL;
++		*next_regmap = NULL;
++		return -EINVAL;
++	}
++
++	offset = ep_name ? fdt_next_subnode(blob, offset) :
++		fdt_first_subnode(blob, offset);
++	if (offset < 0) {
++		*next_ep = NULL;
++		*next_regmap = NULL;
++		return -EINVAL;
++	}
++
++	*next_ep = (char *)fdt_get_name(blob, offset, NULL);
++	*next_regmap = (char *)fdt_stringlist_get(blob, offset, PROP_COMPATIBLE,
++		0, NULL);
++
++	return 0;
++}
++
++int xrt_md_get_compatible_epname(struct device *dev, const char *blob,
++	const char *regmap_name, const char **ep_name)
++{
++	int ep_offset;
++
++	ep_offset = fdt_node_offset_by_compatible(blob, -1, regmap_name);
++	if (ep_offset < 0) {
++		*ep_name = NULL;
++		return -ENOENT;
++	}
++
++	*ep_name = (char *)fdt_get_name(blob, ep_offset, NULL);
++
++	return 0;
++}
++
++int xrt_md_uuid_strtoid(struct device *dev, const char *uuidstr, uuid_t *p_uuid)
++{
++	char *p;
++	const char *str;
++	char tmp[3] = { 0 };
++	int i, ret;
++
++	memset(p_uuid, 0, sizeof(*p_uuid));
++	p = (char *)p_uuid;
++	str = uuidstr + strlen(uuidstr) - 2;
++
++	for (i = 0; i < sizeof(*p_uuid) && str >= uuidstr; i++) {
++		tmp[0] = *str;
++		tmp[1] = *(str + 1);
++		ret = kstrtou8(tmp, 16, p);
++		if (ret) {
++			md_err(dev, "Invalid uuid %s", uuidstr);
++			return -EINVAL;
++		}
++		p++;
++		str -= 2;
++	}
++
++	return 0;
++}
++
++void xrt_md_pack(struct device *dev, char *blob)
++{
++	int ret;
++
++	ret = fdt_pack(blob);
++	if (ret)
++		md_err(dev, "pack failed %d", ret);
++}
++
++int xrt_md_get_intf_uuids(struct device *dev, const char *blob,
++	u32 *num_uuids, uuid_t *intf_uuids)
++{
++	int offset, count = 0;
++	int ret;
++	const char *uuid_str;
++
++	ret = xrt_md_get_endpoint(dev, blob, NODE_INTERFACES, NULL, &offset);
++	if (ret)
++		return -ENOENT;
++
++	for (offset = fdt_first_subnode(blob, offset);
++	    offset >= 0;
++	    offset = fdt_next_subnode(blob, offset)) {
++		uuid_str = fdt_getprop(blob, offset, PROP_INTERFACE_UUID,
++			NULL);
++		if (!uuid_str) {
++			md_err(dev, "empty intf uuid node");
++			return -EINVAL;
++		}
++
++		if (intf_uuids && count < *num_uuids) {
++			ret = xrt_md_uuid_strtoid(dev, uuid_str,
++				&intf_uuids[count]);
++			if (ret)
++				return -EINVAL;
++		}
++		count++;
++	}
++
++	*num_uuids = count;
++
++	return 0;
++}
++
++int xrt_md_check_uuids(struct device *dev, const char *blob, char *subset_blob)
++{
++	const char *subset_int_uuid = NULL;
++	const char *int_uuid = NULL;
++	int offset, subset_offset, off;
++	int ret;
++
++	ret = xrt_md_get_endpoint(dev, subset_blob, NODE_INTERFACES, NULL,
++		&subset_offset);
++	if (ret)
++		return -EINVAL;
++
++	ret = xrt_md_get_endpoint(dev, blob, NODE_INTERFACES, NULL,
++		&offset);
++	if (ret)
++		return -EINVAL;
++
++	for (subset_offset = fdt_first_subnode(subset_blob, subset_offset);
++	    subset_offset >= 0;
++	    subset_offset = fdt_next_subnode(subset_blob, subset_offset)) {
++		subset_int_uuid = fdt_getprop(subset_blob, subset_offset,
++			PROP_INTERFACE_UUID, NULL);
++		if (!subset_int_uuid)
++			return -EINVAL;
++		off = offset;
++
++		for (off = fdt_first_subnode(blob, off);
++		    off >= 0;
++		    off = fdt_next_subnode(blob, off)) {
++			int_uuid = fdt_getprop(blob, off,
++				PROP_INTERFACE_UUID, NULL);
++			if (!int_uuid)
++				return -EINVAL;
++			if (!strcmp(int_uuid, subset_int_uuid))
++				break;
++		}
++		if (off < 0)
++			return -ENOENT;
++	}
++
++	return 0;
++}
+diff --git a/drivers/fpga/xrt/common/xrt-root.c b/drivers/fpga/xrt/common/xrt-root.c
+new file mode 100644
+index 000000000000..325686547ee8
+--- /dev/null
++++ b/drivers/fpga/xrt/common/xrt-root.c
+@@ -0,0 +1,737 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ *
++ * Copyright (C) 2020 Xilinx, Inc.
++ *
++ * Authors:
++ *	Cheng Zhen <maxz@xilinx.com>
++ */
++
++#include <linux/module.h>
++#include <linux/pci.h>
++#include <linux/hwmon.h>
++#include "subdev.h"
++#include "parent.h"
++#include "partition.h"
++#include "xrt-root.h"
++#include "metadata.h"
++#include "xrt-root.h"
++
++#define	XROOT_PDEV(xr)		((xr)->pdev)
++#define	XROOT_DEV(xr)		(&(XROOT_PDEV(xr)->dev))
++#define xroot_err(xr, fmt, args...)	\
++	dev_err(XROOT_DEV(xr), "%s: " fmt, __func__, ##args)
++#define xroot_warn(xr, fmt, args...)	\
++	dev_warn(XROOT_DEV(xr), "%s: " fmt, __func__, ##args)
++#define xroot_info(xr, fmt, args...)	\
++	dev_info(XROOT_DEV(xr), "%s: " fmt, __func__, ##args)
++#define xroot_dbg(xr, fmt, args...)	\
++	dev_dbg(XROOT_DEV(xr), "%s: " fmt, __func__, ##args)
++
++#define XRT_VSEC_ID	0x20
++#define	XROOT_PART_FIRST	(-1)
++#define	XROOT_PART_LAST		(-2)
++
++static int xroot_parent_cb(struct device *, void *, u32, void *);
++
++struct xroot_async_evt {
++	struct list_head list;
++	struct xrt_parent_ioctl_async_broadcast_evt evt;
++};
++
++struct xroot_event_cb {
++	struct list_head list;
++	bool initialized;
++	struct xrt_parent_ioctl_evt_cb cb;
++};
++
++struct xroot_events {
++	struct list_head cb_list;
++	struct mutex cb_lock;
++	struct work_struct cb_init_work;
++	struct mutex async_evt_lock;
++	struct list_head async_evt_list;
++	struct work_struct async_evt_work;
++};
++
++struct xroot_parts {
++	struct xrt_subdev_pool pool;
++	struct work_struct bringup_work;
++	atomic_t bringup_pending;
++	atomic_t bringup_failed;
++	struct completion bringup_comp;
++};
++
++struct xroot {
++	struct pci_dev *pdev;
++	struct xroot_events events;
++	struct xroot_parts parts;
++};
++
++struct xroot_part_match_arg {
++	enum xrt_subdev_id id;
++	int instance;
++};
++
++static bool xroot_part_match(enum xrt_subdev_id id,
++	struct platform_device *pdev, void *arg)
++{
++	struct xroot_part_match_arg *a = (struct xroot_part_match_arg *)arg;
++	return id == a->id && pdev->id == a->instance;
++}
++
++static int xroot_get_partition(struct xroot *xr, int instance,
++	struct platform_device **partp)
++{
++	int rc = 0;
++	struct xrt_subdev_pool *parts = &xr->parts.pool;
++	struct device *dev = DEV(xr->pdev);
++	struct xroot_part_match_arg arg = { XRT_SUBDEV_PART, instance };
++
++	if (instance == XROOT_PART_LAST) {
++		rc = xrt_subdev_pool_get(parts, XRT_SUBDEV_MATCH_NEXT,
++			*partp, dev, partp);
++	} else if (instance == XROOT_PART_FIRST) {
++		rc = xrt_subdev_pool_get(parts, XRT_SUBDEV_MATCH_PREV,
++			*partp, dev, partp);
++	} else {
++		rc = xrt_subdev_pool_get(parts, xroot_part_match,
++			&arg, dev, partp);
++	}
++
++	if (rc && rc != -ENOENT)
++		xroot_err(xr, "failed to hold partition %d: %d", instance, rc);
++	return rc;
++}
++
++static void xroot_put_partition(struct xroot *xr, struct platform_device *part)
++{
++	int inst = part->id;
++	int rc = xrt_subdev_pool_put(&xr->parts.pool, part, DEV(xr->pdev));
++
++	if (rc)
++		xroot_err(xr, "failed to release partition %d: %d", inst, rc);
++}
++
++static int
++xroot_partition_trigger_evt(struct xroot *xr, struct xroot_event_cb *cb,
++	struct platform_device *part, enum xrt_events evt)
++{
++	xrt_subdev_match_t match = cb->cb.xevt_match_cb;
++	xrt_event_cb_t evtcb = cb->cb.xevt_cb;
++	void *arg = cb->cb.xevt_match_arg;
++	struct xrt_partition_ioctl_event e = { evt, &cb->cb };
++	struct xrt_event_arg_subdev esd = { XRT_SUBDEV_PART, part->id };
++	int rc;
++
++	if (match(XRT_SUBDEV_PART, part, arg)) {
++		rc = evtcb(cb->cb.xevt_pdev, evt, &esd);
++		if (rc)
++			return rc;
++	}
++
++	return xrt_subdev_ioctl(part, XRT_PARTITION_EVENT, &e);
++}
++
++static void
++xroot_event_partition(struct xroot *xr, int instance, enum xrt_events evt)
++{
++	int ret;
++	struct platform_device *pdev = NULL;
++	const struct list_head *ptr, *next;
++	struct xroot_event_cb *tmp;
++
++	BUG_ON(instance < 0);
++	ret = xroot_get_partition(xr, instance, &pdev);
++	if (ret)
++		return;
++
++	mutex_lock(&xr->events.cb_lock);
++	list_for_each_safe(ptr, next, &xr->events.cb_list) {
++		int rc;
++
++		tmp = list_entry(ptr, struct xroot_event_cb, list);
++		if (!tmp->initialized)
++			continue;
++
++		rc = xroot_partition_trigger_evt(xr, tmp, pdev, evt);
++		if (rc) {
++			list_del(&tmp->list);
++			vfree(tmp);
++		}
++	}
++	mutex_unlock(&xr->events.cb_lock);
++
++	(void) xroot_put_partition(xr, pdev);
++}
++
++int xroot_create_partition(struct xroot *xr, char *dtb)
++{
++	int ret;
++
++	atomic_inc(&xr->parts.bringup_pending);
++	ret = xrt_subdev_pool_add(&xr->parts.pool,
++		XRT_SUBDEV_PART, xroot_parent_cb, xr, dtb);
++	if (ret >= 0) {
++		schedule_work(&xr->parts.bringup_work);
++	} else {
++		atomic_dec(&xr->parts.bringup_pending);
++		atomic_inc(&xr->parts.bringup_failed);
++		xroot_err(xr, "failed to create partition: %d", ret);
++	}
++	return ret;
++}
++
++static int xroot_destroy_single_partition(struct xroot *xr, int instance)
++{
++	struct platform_device *pdev = NULL;
++	int ret;
++
++	BUG_ON(instance < 0);
++	ret = xroot_get_partition(xr, instance, &pdev);
++	if (ret)
++		return ret;
++
++	xroot_event_partition(xr, instance, XRT_EVENT_PRE_REMOVAL);
++
++	/* Now tear down all children in this partition. */
++	ret = xrt_subdev_ioctl(pdev, XRT_PARTITION_FINI_CHILDREN, NULL);
++	(void) xroot_put_partition(xr, pdev);
++	if (!ret) {
++		ret = xrt_subdev_pool_del(&xr->parts.pool,
++			XRT_SUBDEV_PART, instance);
++	}
++
++	return ret;
++}
++
++static int xroot_destroy_partition(struct xroot *xr, int instance)
++{
++	struct platform_device *target = NULL;
++	struct platform_device *deps = NULL;
++	int ret;
++
++	BUG_ON(instance < 0);
++	/*
++	 * Make sure target partition exists and can't go away before
++	 * we remove it's dependents
++	 */
++	ret = xroot_get_partition(xr, instance, &target);
++	if (ret)
++		return ret;
++
++	/*
++	 * Remove all partitions depend on target one.
++	 * Assuming subdevs in higher partition ID can depend on ones in
++	 * lower ID partitions, we remove them in the reservse order.
++	 */
++	while (xroot_get_partition(xr, XROOT_PART_LAST, &deps) != -ENOENT) {
++		int inst = deps->id;
++
++		xroot_put_partition(xr, deps);
++		if (instance == inst)
++			break;
++		(void) xroot_destroy_single_partition(xr, inst);
++		deps = NULL;
++	}
++
++	/* Now we can remove the target partition. */
++	xroot_put_partition(xr, target);
++	return xroot_destroy_single_partition(xr, instance);
++}
++
++static int xroot_lookup_partition(struct xroot *xr,
++	struct xrt_parent_ioctl_lookup_partition *arg)
++{
++	int rc = -ENOENT;
++	struct platform_device *part = NULL;
++
++	while (rc < 0 && xroot_get_partition(xr, XROOT_PART_LAST,
++		&part) != -ENOENT) {
++		if (arg->xpilp_match_cb(XRT_SUBDEV_PART, part,
++			arg->xpilp_match_arg)) {
++			rc = part->id;
++		}
++		xroot_put_partition(xr, part);
++	}
++	return rc;
++}
++
++static void xroot_evt_cb_init_work(struct work_struct *work)
++{
++	const struct list_head *ptr, *next;
++	struct xroot_event_cb *tmp;
++	struct platform_device *part = NULL;
++	struct xroot *xr =
++		container_of(work, struct xroot, events.cb_init_work);
++
++	mutex_lock(&xr->events.cb_lock);
++
++	list_for_each_safe(ptr, next, &xr->events.cb_list) {
++		tmp = list_entry(ptr, struct xroot_event_cb, list);
++		if (tmp->initialized)
++			continue;
++
++		while (xroot_get_partition(xr, XROOT_PART_LAST,
++			&part) != -ENOENT) {
++			int rc = xroot_partition_trigger_evt(xr, tmp, part,
++				XRT_EVENT_POST_CREATION);
++
++			(void) xroot_put_partition(xr, part);
++			if (rc & XRT_EVENT_CB_STOP) {
++				list_del(&tmp->list);
++				vfree(tmp);
++				tmp = NULL;
++				break;
++			}
++		}
++
++		if (tmp)
++			tmp->initialized = true;
++	}
++
++	mutex_unlock(&xr->events.cb_lock);
++}
++
++static bool xroot_evt(struct xroot *xr, enum xrt_events evt)
++{
++	const struct list_head *ptr, *next;
++	struct xroot_event_cb *tmp;
++	int rc;
++	bool success = true;
++
++	mutex_lock(&xr->events.cb_lock);
++	list_for_each_safe(ptr, next, &xr->events.cb_list) {
++		tmp = list_entry(ptr, struct xroot_event_cb, list);
++		rc = tmp->cb.xevt_cb(tmp->cb.xevt_pdev, evt, NULL);
++		if (rc & XRT_EVENT_CB_ERR)
++			success = false;
++		if (rc & XRT_EVENT_CB_STOP) {
++			list_del(&tmp->list);
++			vfree(tmp);
++		}
++	}
++	mutex_unlock(&xr->events.cb_lock);
++
++	return success;
++}
++
++static void xroot_evt_async_evt_work(struct work_struct *work)
++{
++	struct xroot_async_evt *tmp;
++	struct xroot *xr =
++		container_of(work, struct xroot, events.async_evt_work);
++	bool success;
++
++	mutex_lock(&xr->events.async_evt_lock);
++	while (!list_empty(&xr->events.async_evt_list)) {
++		tmp = list_first_entry(&xr->events.async_evt_list,
++			struct xroot_async_evt, list);
++		list_del(&tmp->list);
++		mutex_unlock(&xr->events.async_evt_lock);
++
++		success = xroot_evt(xr, tmp->evt.xaevt_event);
++		if (tmp->evt.xaevt_cb) {
++			tmp->evt.xaevt_cb(tmp->evt.xaevt_pdev,
++				tmp->evt.xaevt_event, tmp->evt.xaevt_arg,
++				success);
++		}
++		vfree(tmp);
++
++		mutex_lock(&xr->events.async_evt_lock);
++	}
++	mutex_unlock(&xr->events.async_evt_lock);
++}
++
++static void xroot_evt_init(struct xroot *xr)
++{
++	INIT_LIST_HEAD(&xr->events.cb_list);
++	INIT_LIST_HEAD(&xr->events.async_evt_list);
++	mutex_init(&xr->events.async_evt_lock);
++	mutex_init(&xr->events.cb_lock);
++	INIT_WORK(&xr->events.cb_init_work, xroot_evt_cb_init_work);
++	INIT_WORK(&xr->events.async_evt_work, xroot_evt_async_evt_work);
++}
++
++static void xroot_evt_fini(struct xroot *xr)
++{
++	const struct list_head *ptr, *next;
++	struct xroot_event_cb *tmp;
++
++	flush_scheduled_work();
++
++	BUG_ON(!list_empty(&xr->events.async_evt_list));
++
++	mutex_lock(&xr->events.cb_lock);
++	list_for_each_safe(ptr, next, &xr->events.cb_list) {
++		tmp = list_entry(ptr, struct xroot_event_cb, list);
++		list_del(&tmp->list);
++		vfree(tmp);
++	}
++	mutex_unlock(&xr->events.cb_lock);
++}
++
++static int xroot_evt_cb_add(struct xroot *xr,
++	struct xrt_parent_ioctl_evt_cb *cb)
++{
++	struct xroot_event_cb *new = vzalloc(sizeof(*new));
++
++	if (!new)
++		return -ENOMEM;
++
++	cb->xevt_hdl = new;
++	new->cb = *cb;
++	new->initialized = false;
++
++	mutex_lock(&xr->events.cb_lock);
++	list_add(&new->list, &xr->events.cb_list);
++	mutex_unlock(&xr->events.cb_lock);
++
++	schedule_work(&xr->events.cb_init_work);
++	return 0;
++}
++
++static int xroot_async_evt_add(struct xroot *xr,
++	struct xrt_parent_ioctl_async_broadcast_evt *arg)
++{
++	struct xroot_async_evt *new = vzalloc(sizeof(*new));
++
++	if (!new)
++		return -ENOMEM;
++
++	new->evt = *arg;
++
++	mutex_lock(&xr->events.async_evt_lock);
++	list_add(&new->list, &xr->events.async_evt_list);
++	mutex_unlock(&xr->events.async_evt_lock);
++
++	schedule_work(&xr->events.async_evt_work);
++	return 0;
++}
++
++static void xroot_evt_cb_del(struct xroot *xr, void *hdl)
++{
++	struct xroot_event_cb *cb = (struct xroot_event_cb *)hdl;
++	const struct list_head *ptr;
++	struct xroot_event_cb *tmp;
++
++	mutex_lock(&xr->events.cb_lock);
++	list_for_each(ptr, &xr->events.cb_list) {
++		tmp = list_entry(ptr, struct xroot_event_cb, list);
++		if (tmp == cb)
++			break;
++	}
++	list_del(&cb->list);
++	mutex_unlock(&xr->events.cb_lock);
++	vfree(cb);
++}
++
++static int xroot_get_leaf(struct xroot *xr,
++	struct xrt_parent_ioctl_get_leaf *arg)
++{
++	int rc = -ENOENT;
++	struct platform_device *part = NULL;
++
++	while (rc && xroot_get_partition(xr, XROOT_PART_LAST,
++		&part) != -ENOENT) {
++		rc = xrt_subdev_ioctl(part, XRT_PARTITION_GET_LEAF, arg);
++		xroot_put_partition(xr, part);
++	}
++	return rc;
++}
++
++static int xroot_put_leaf(struct xroot *xr,
++	struct xrt_parent_ioctl_put_leaf *arg)
++{
++	int rc = -ENOENT;
++	struct platform_device *part = NULL;
++
++	while (rc && xroot_get_partition(xr, XROOT_PART_LAST,
++		&part) != -ENOENT) {
++		rc = xrt_subdev_ioctl(part, XRT_PARTITION_PUT_LEAF, arg);
++		xroot_put_partition(xr, part);
++	}
++	return rc;
++}
++
++static int xroot_parent_cb(struct device *dev, void *parg, u32 cmd, void *arg)
++{
++	struct xroot *xr = (struct xroot *)parg;
++	int rc = 0;
++
++	switch (cmd) {
++	/* Leaf actions. */
++	case XRT_PARENT_GET_LEAF: {
++		struct xrt_parent_ioctl_get_leaf *getleaf =
++			(struct xrt_parent_ioctl_get_leaf *)arg;
++		rc = xroot_get_leaf(xr, getleaf);
++		break;
++	}
++	case XRT_PARENT_PUT_LEAF: {
++		struct xrt_parent_ioctl_put_leaf *putleaf =
++			(struct xrt_parent_ioctl_put_leaf *)arg;
++		rc = xroot_put_leaf(xr, putleaf);
++		break;
++	}
++	case XRT_PARENT_GET_LEAF_HOLDERS: {
++		struct xrt_parent_ioctl_get_holders *holders =
++			(struct xrt_parent_ioctl_get_holders *)arg;
++		rc = xrt_subdev_pool_get_holders(&xr->parts.pool,
++			holders->xpigh_pdev, holders->xpigh_holder_buf,
++			holders->xpigh_holder_buf_len);
++		break;
++	}
++
++
++	/* Partition actions. */
++	case XRT_PARENT_CREATE_PARTITION:
++		rc = xroot_create_partition(xr, (char *)arg);
++		break;
++	case XRT_PARENT_REMOVE_PARTITION:
++		rc = xroot_destroy_partition(xr, (int)(uintptr_t)arg);
++		break;
++	case XRT_PARENT_LOOKUP_PARTITION: {
++		struct xrt_parent_ioctl_lookup_partition *getpart =
++			(struct xrt_parent_ioctl_lookup_partition *)arg;
++		rc = xroot_lookup_partition(xr, getpart);
++		break;
++	}
++	case XRT_PARENT_WAIT_PARTITION_BRINGUP:
++		rc = xroot_wait_for_bringup(xr) ? 0 : -EINVAL;
++		break;
++
++
++	/* Event actions. */
++	case XRT_PARENT_ADD_EVENT_CB: {
++		struct xrt_parent_ioctl_evt_cb *cb =
++			(struct xrt_parent_ioctl_evt_cb *)arg;
++		rc = xroot_evt_cb_add(xr, cb);
++		break;
++	}
++	case XRT_PARENT_REMOVE_EVENT_CB:
++		xroot_evt_cb_del(xr, arg);
++		rc = 0;
++		break;
++	case XRT_PARENT_ASYNC_BOARDCAST_EVENT:
++		rc = xroot_async_evt_add(xr,
++			(struct xrt_parent_ioctl_async_broadcast_evt *)arg);
++		break;
++
++
++	/* Device info. */
++	case XRT_PARENT_GET_RESOURCE: {
++		struct xrt_parent_ioctl_get_res *res =
++			(struct xrt_parent_ioctl_get_res *)arg;
++		res->xpigr_res = xr->pdev->resource;
++		break;
++	}
++	case XRT_PARENT_GET_ID: {
++		struct xrt_parent_ioctl_get_id *id =
++			(struct xrt_parent_ioctl_get_id *)arg;
++
++		id->xpigi_vendor_id = xr->pdev->vendor;
++		id->xpigi_device_id = xr->pdev->device;
++		id->xpigi_sub_vendor_id = xr->pdev->subsystem_vendor;
++		id->xpigi_sub_device_id = xr->pdev->subsystem_device;
++		break;
++	}
++
++
++	case XRT_PARENT_HOT_RESET: {
++		xroot_hot_reset(xr->pdev);
++		break;
++	}
++
++	case XRT_PARENT_HWMON: {
++		struct xrt_parent_ioctl_hwmon *hwmon =
++			(struct xrt_parent_ioctl_hwmon *)arg;
++
++		if (hwmon->xpih_register) {
++			hwmon->xpih_hwmon_dev =
++				hwmon_device_register_with_info(DEV(xr->pdev),
++				hwmon->xpih_name, hwmon->xpih_drvdata, NULL,
++				hwmon->xpih_groups);
++		} else {
++			(void) hwmon_device_unregister(hwmon->xpih_hwmon_dev);
++		}
++		break;
++	}
++
++	default:
++		xroot_err(xr, "unknown IOCTL cmd %d", cmd);
++		rc = -EINVAL;
++		break;
++	}
++
++	return rc;
++}
++
++static void xroot_bringup_partition_work(struct work_struct *work)
++{
++	struct platform_device *pdev = NULL;
++	struct xroot *xr = container_of(work, struct xroot, parts.bringup_work);
++
++	while (xroot_get_partition(xr, XROOT_PART_LAST, &pdev) != -ENOENT) {
++		int r, i;
++
++		i = pdev->id;
++		r = xrt_subdev_ioctl(pdev, XRT_PARTITION_INIT_CHILDREN, NULL);
++		(void) xroot_put_partition(xr, pdev);
++		if (r == -EEXIST)
++			continue; /* Already brough up, nothing to do. */
++		if (r)
++			atomic_inc(&xr->parts.bringup_failed);
++
++		xroot_event_partition(xr, i, XRT_EVENT_POST_CREATION);
++
++		if (atomic_dec_and_test(&xr->parts.bringup_pending))
++			complete(&xr->parts.bringup_comp);
++	}
++}
++
++static void xroot_parts_init(struct xroot *xr)
++{
++	xrt_subdev_pool_init(DEV(xr->pdev), &xr->parts.pool);
++	INIT_WORK(&xr->parts.bringup_work, xroot_bringup_partition_work);
++	atomic_set(&xr->parts.bringup_pending, 0);
++	atomic_set(&xr->parts.bringup_failed, 0);
++	init_completion(&xr->parts.bringup_comp);
++}
++
++static void xroot_parts_fini(struct xroot *xr)
++{
++	flush_scheduled_work();
++	(void) xrt_subdev_pool_fini(&xr->parts.pool);
++}
++
++int xroot_add_vsec_node(struct xroot *xr, char *dtb)
++{
++	struct device *dev = DEV(xr->pdev);
++	struct xrt_md_endpoint ep = { 0 };
++	int cap = 0, ret = 0;
++	u32 off_low, off_high, vsec_bar, header;
++	u64 vsec_off;
++
++	while ((cap = pci_find_next_ext_capability(xr->pdev, cap,
++	    PCI_EXT_CAP_ID_VNDR))) {
++		pci_read_config_dword(xr->pdev, cap + PCI_VNDR_HEADER, &header);
++		if (PCI_VNDR_HEADER_ID(header) == XRT_VSEC_ID)
++			break;
++	}
++	if (!cap) {
++		xroot_info(xr, "No Vendor Specific Capability.");
++		return -ENOENT;
++	}
++
++	if (pci_read_config_dword(xr->pdev, cap+8, &off_low) ||
++	    pci_read_config_dword(xr->pdev, cap+12, &off_high)) {
++		xroot_err(xr, "pci_read vendor specific failed.");
++		return -EINVAL;
++	}
++
++	ep.ep_name = NODE_VSEC;
++	ret = xrt_md_add_endpoint(dev, dtb, &ep);
++	if (ret) {
++		xroot_err(xr, "add vsec metadata failed, ret %d", ret);
++		goto failed;
++	}
++
++	vsec_bar = cpu_to_be32(off_low & 0xf);
++	ret = xrt_md_set_prop(dev, dtb, NODE_VSEC,
++		NULL, PROP_BAR_IDX, &vsec_bar, sizeof(vsec_bar));
++	if (ret) {
++		xroot_err(xr, "add vsec bar idx failed, ret %d", ret);
++		goto failed;
++	}
++
++	vsec_off = cpu_to_be64(((u64)off_high << 32) | (off_low & ~0xfU));
++	ret = xrt_md_set_prop(dev, dtb, NODE_VSEC,
++		NULL, PROP_OFFSET, &vsec_off, sizeof(vsec_off));
++	if (ret) {
++		xroot_err(xr, "add vsec offset failed, ret %d", ret);
++		goto failed;
++	}
++
++failed:
++	return ret;
++}
++
++int xroot_add_simple_node(struct xroot *xr, char *dtb, const char *endpoint)
++{
++	struct device *dev = DEV(xr->pdev);
++	struct xrt_md_endpoint ep = { 0 };
++	int ret = 0;
++
++	ep.ep_name = endpoint;
++	ret = xrt_md_add_endpoint(dev, dtb, &ep);
++	if (ret)
++		xroot_err(xr, "add %s failed, ret %d", endpoint, ret);
++
++	return ret;
++}
++
++bool xroot_wait_for_bringup(struct xroot *xr)
++{
++	wait_for_completion(&xr->parts.bringup_comp);
++	return atomic_xchg(&xr->parts.bringup_failed, 0) == 0;
++}
++
++int xroot_probe(struct pci_dev *pdev, struct xroot **root)
++{
++	struct device *dev = DEV(pdev);
++	struct xroot *xr = NULL;
++
++	dev_info(dev, "%s: probing...", __func__);
++
++	xr = devm_kzalloc(dev, sizeof(*xr), GFP_KERNEL);
++	if (!xr)
++		return -ENOMEM;
++
++	xr->pdev = pdev;
++	xroot_parts_init(xr);
++	xroot_evt_init(xr);
++
++	*root = xr;
++	return 0;
++}
++
++void xroot_remove(struct xroot *xr)
++{
++	struct platform_device *part = NULL;
++
++	xroot_info(xr, "leaving...");
++
++	if (xroot_get_partition(xr, XROOT_PART_FIRST, &part) == 0) {
++		int instance = part->id;
++
++		xroot_put_partition(xr, part);
++		(void) xroot_destroy_partition(xr, instance);
++	}
++
++	xroot_evt_fini(xr);
++	xroot_parts_fini(xr);
++}
++
++static void xroot_broadcast_event_cb(struct platform_device *pdev,
++	enum xrt_events evt, void *arg, bool success)
++{
++	struct completion *comp = (struct completion *)arg;
++
++	complete(comp);
++}
++
++void xroot_broadcast(struct xroot *xr, enum xrt_events evt)
++{
++	struct completion comp;
++	struct xrt_parent_ioctl_async_broadcast_evt e = {
++		NULL, evt, xroot_broadcast_event_cb, &comp
++	};
++	int rc;
++
++	init_completion(&comp);
++	rc = xroot_async_evt_add(xr, &e);
++	if (rc == 0)
++		wait_for_completion(&comp);
++	else
++		xroot_err(xr, "can't broadcast event (%d): %d", evt, rc);
++}
+diff --git a/drivers/fpga/xrt/common/xrt-root.h b/drivers/fpga/xrt/common/xrt-root.h
+new file mode 100644
+index 000000000000..7745afa60c95
+--- /dev/null
++++ b/drivers/fpga/xrt/common/xrt-root.h
+@@ -0,0 +1,26 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020 Xilinx, Inc.
++ *
++ * Authors:
++ *	Cheng Zhen <maxz@xilinx.com>
++ */
++
++#ifndef	_XRT_ROOT_H_
++#define	_XRT_ROOT_H_
++
++#include <linux/pci.h>
++#include "subdev.h"
++
++struct xroot;
++
++int xroot_probe(struct pci_dev *pdev, struct xroot **root);
++void xroot_remove(struct xroot *root);
++bool xroot_wait_for_bringup(struct xroot *root);
++int xroot_add_vsec_node(struct xroot *root, char *dtb);
++int xroot_create_partition(struct xroot *xr, char *dtb);
++int xroot_add_simple_node(struct xroot *root, char *dtb, const char *endpoint);
++void xroot_hot_reset(struct pci_dev *pdev);
++void xroot_broadcast(struct xroot *root, enum xrt_events evt);
++
++#endif	/* _XRT_ROOT_H_ */
+diff --git a/drivers/fpga/xrt/common/xrt-xclbin.c b/drivers/fpga/xrt/common/xrt-xclbin.c
+new file mode 100644
+index 000000000000..3b1b52445009
+--- /dev/null
++++ b/drivers/fpga/xrt/common/xrt-xclbin.c
+@@ -0,0 +1,387 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Xilinx Kernel Driver XCLBIN parser
++ *
++ * Copyright (C) 2020 Xilinx, Inc.
++ *
++ * Authors: David Zhang <davidzha@xilinx.com>
++ */
++
++#include <asm/errno.h>
++#include <linux/vmalloc.h>
++#include <linux/device.h>
++#include "xrt-xclbin.h"
++#include "metadata.h"
++
++/* Used for parsing bitstream header */
++#define XHI_EVEN_MAGIC_BYTE     0x0f
++#define XHI_ODD_MAGIC_BYTE      0xf0
++
++/* Extra mode for IDLE */
++#define XHI_OP_IDLE  -1
++#define XHI_BIT_HEADER_FAILURE -1
++
++/* The imaginary module length register */
++#define XHI_MLR                  15
++
++const char *xrt_xclbin_kind_to_string(enum axlf_section_kind kind)
++{
++	switch (kind) {
++	case BITSTREAM:			return "BITSTREAM";
++	case CLEARING_BITSTREAM:	return "CLEARING_BITSTREAM";
++	case EMBEDDED_METADATA:		return "EMBEDDED_METADATA";
++	case FIRMWARE:			return "FIRMWARE";
++	case DEBUG_DATA:		return "DEBUG_DATA";
++	case SCHED_FIRMWARE:		return "SCHED_FIRMWARE";
++	case MEM_TOPOLOGY:		return "MEM_TOPOLOGY";
++	case CONNECTIVITY:		return "CONNECTIVITY";
++	case IP_LAYOUT:			return "IP_LAYOUT";
++	case DEBUG_IP_LAYOUT:		return "DEBUG_IP_LAYOUT";
++	case DESIGN_CHECK_POINT:	return "DESIGN_CHECK_POINT";
++	case CLOCK_FREQ_TOPOLOGY:	return "CLOCK_FREQ_TOPOLOGY";
++	case MCS:			return "MCS";
++	case BMC:			return "BMC";
++	case BUILD_METADATA:		return "BUILD_METADATA";
++	case KEYVALUE_METADATA:		return "KEYVALUE_METADATA";
++	case USER_METADATA:		return "USER_METADATA";
++	case DNA_CERTIFICATE:		return "DNA_CERTIFICATE";
++	case PDI:			return "PDI";
++	case BITSTREAM_PARTIAL_PDI:	return "BITSTREAM_PARTIAL_PDI";
++	case PARTITION_METADATA:	return "PARTITION_METADATA";
++	case EMULATION_DATA:		return "EMULATION_DATA";
++	case SYSTEM_METADATA:		return "SYSTEM_METADATA";
++	case SOFT_KERNEL:		return "SOFT_KERNEL";
++	case ASK_FLASH:			return "ASK_FLASH";
++	case AIE_METADATA:		return "AIE_METADATA";
++	case ASK_GROUP_TOPOLOGY:	return "ASK_GROUP_TOPOLOGY";
++	case ASK_GROUP_CONNECTIVITY:	return "ASK_GROUP_CONNECTIVITY";
++	default:			return "UNKNOWN";
++	}
++}
++
++static const struct axlf_section_header *
++xrt_xclbin_get_section_hdr(const struct axlf *xclbin,
++	enum axlf_section_kind kind)
++{
++	int i = 0;
++
++	for (i = 0; i < xclbin->m_header.m_numSections; i++) {
++		if (xclbin->m_sections[i].m_sectionKind == kind)
++			return &xclbin->m_sections[i];
++	}
++
++	return NULL;
++}
++
++static int
++xrt_xclbin_check_section_hdr(const struct axlf_section_header *header,
++	uint64_t xclbin_len)
++{
++	return (header->m_sectionOffset + header->m_sectionSize) > xclbin_len ?
++		-EINVAL : 0;
++}
++
++static int xrt_xclbin_section_info(const struct axlf *xclbin,
++	enum axlf_section_kind kind,
++	uint64_t *offset, uint64_t *size)
++{
++	const struct axlf_section_header *memHeader = NULL;
++	uint64_t xclbin_len;
++	int err = 0;
++
++	memHeader = xrt_xclbin_get_section_hdr(xclbin, kind);
++	if (!memHeader)
++		return -EINVAL;
++
++	xclbin_len = xclbin->m_header.m_length;
++	err = xrt_xclbin_check_section_hdr(memHeader, xclbin_len);
++	if (err)
++		return err;
++
++	*offset = memHeader->m_sectionOffset;
++	*size = memHeader->m_sectionSize;
++
++	return 0;
++}
++
++/* caller should free the allocated memory for **data */
++int xrt_xclbin_get_section(const struct axlf *buf,
++	enum axlf_section_kind kind, void **data, uint64_t *len)
++{
++	const struct axlf *xclbin = (const struct axlf *)buf;
++	void *section = NULL;
++	int err = 0;
++	uint64_t offset = 0;
++	uint64_t size = 0;
++
++	err = xrt_xclbin_section_info(xclbin, kind, &offset, &size);
++	if (err)
++		return err;
++
++	section = vmalloc(size);
++	if (section == NULL)
++		return -ENOMEM;
++
++	memcpy(section, ((const char *)xclbin) + offset, size);
++
++	*data = section;
++	if (len)
++		*len = size;
++
++	return 0;
++}
++
++/* parse bitstream header */
++int xrt_xclbin_parse_header(const unsigned char *data,
++	unsigned int size, struct XHwIcap_Bit_Header *header)
++{
++	unsigned int i;
++	unsigned int len;
++	unsigned int tmp;
++	unsigned int index;
++
++	/* Start Index at start of bitstream */
++	index = 0;
++
++	/* Initialize HeaderLength.  If header returned early inidicates
++	 * failure.
++	 */
++	header->HeaderLength = XHI_BIT_HEADER_FAILURE;
++
++	/* Get "Magic" length */
++	header->MagicLength = data[index++];
++	header->MagicLength = (header->MagicLength << 8) | data[index++];
++
++	/* Read in "magic" */
++	for (i = 0; i < header->MagicLength - 1; i++) {
++		tmp = data[index++];
++		if (i % 2 == 0 && tmp != XHI_EVEN_MAGIC_BYTE)
++			return -1;	/* INVALID_FILE_HEADER_ERROR */
++
++		if (i % 2 == 1 && tmp != XHI_ODD_MAGIC_BYTE)
++			return -1;	/* INVALID_FILE_HEADER_ERROR */
++	}
++
++	/* Read null end of magic data. */
++	tmp = data[index++];
++
++	/* Read 0x01 (short) */
++	tmp = data[index++];
++	tmp = (tmp << 8) | data[index++];
++
++	/* Check the "0x01" half word */
++	if (tmp != 0x01)
++		return -1;	/* INVALID_FILE_HEADER_ERROR */
++
++	/* Read 'a' */
++	tmp = data[index++];
++	if (tmp != 'a')
++		return -1;	/* INVALID_FILE_HEADER_ERROR	*/
++
++	/* Get Design Name length */
++	len = data[index++];
++	len = (len << 8) | data[index++];
++
++	/* allocate space for design name and final null character. */
++	header->DesignName = vmalloc(len);
++
++	/* Read in Design Name */
++	for (i = 0; i < len; i++)
++		header->DesignName[i] = data[index++];
++
++	if (header->DesignName[len-1] != '\0')
++		return -1;
++
++	/* Read 'b' */
++	tmp = data[index++];
++	if (tmp != 'b')
++		return -1;	/* INVALID_FILE_HEADER_ERROR */
++
++	/* Get Part Name length */
++	len = data[index++];
++	len = (len << 8) | data[index++];
++
++	/* allocate space for part name and final null character. */
++	header->PartName = vmalloc(len);
++
++	/* Read in part name */
++	for (i = 0; i < len; i++)
++		header->PartName[i] = data[index++];
++
++	if (header->PartName[len-1] != '\0')
++		return -1;
++
++	/* Read 'c' */
++	tmp = data[index++];
++	if (tmp != 'c')
++		return -1;	/* INVALID_FILE_HEADER_ERROR */
++
++	/* Get date length */
++	len = data[index++];
++	len = (len << 8) | data[index++];
++
++	/* allocate space for date and final null character. */
++	header->Date = vmalloc(len);
++
++	/* Read in date name */
++	for (i = 0; i < len; i++)
++		header->Date[i] = data[index++];
++
++	if (header->Date[len - 1] != '\0')
++		return -1;
++
++	/* Read 'd' */
++	tmp = data[index++];
++	if (tmp != 'd')
++		return -1;	/* INVALID_FILE_HEADER_ERROR  */
++
++	/* Get time length */
++	len = data[index++];
++	len = (len << 8) | data[index++];
++
++	/* allocate space for time and final null character. */
++	header->Time = vmalloc(len);
++
++	/* Read in time name */
++	for (i = 0; i < len; i++)
++		header->Time[i] = data[index++];
++
++	if (header->Time[len - 1] != '\0')
++		return -1;
++
++	/* Read 'e' */
++	tmp = data[index++];
++	if (tmp != 'e')
++		return -1;	/* INVALID_FILE_HEADER_ERROR */
++
++	/* Get byte length of bitstream */
++	header->BitstreamLength = data[index++];
++	header->BitstreamLength = (header->BitstreamLength << 8) | data[index++];
++	header->BitstreamLength = (header->BitstreamLength << 8) | data[index++];
++	header->BitstreamLength = (header->BitstreamLength << 8) | data[index++];
++	header->HeaderLength = index;
++
++	return 0;
++}
++
++void xrt_xclbin_free_header(struct XHwIcap_Bit_Header *header)
++{
++	vfree(header->DesignName);
++	vfree(header->PartName);
++	vfree(header->Date);
++	vfree(header->Time);
++}
++
++struct xrt_clock_desc {
++	char	*clock_ep_name;
++	u32	clock_xclbin_type;
++	char	*clkfreq_ep_name;
++} clock_desc[] = {
++	{
++		.clock_ep_name = NODE_CLK_KERNEL1,
++		.clock_xclbin_type = CT_DATA,
++		.clkfreq_ep_name = NODE_CLKFREQ_K1,
++	},
++	{
++		.clock_ep_name = NODE_CLK_KERNEL2,
++		.clock_xclbin_type = CT_KERNEL,
++		.clkfreq_ep_name = NODE_CLKFREQ_K2,
++	},
++	{
++		.clock_ep_name = NODE_CLK_KERNEL3,
++		.clock_xclbin_type = CT_SYSTEM,
++		.clkfreq_ep_name = NODE_CLKFREQ_HBM,
++	},
++};
++
++const char *clock_type2epname(enum CLOCK_TYPE type)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(clock_desc); i++) {
++		if (clock_desc[i].clock_xclbin_type == type)
++			return clock_desc[i].clock_ep_name;
++	}
++	return NULL;
++}
++
++static const char *clock_type2clkfreq_name(u32 type)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(clock_desc); i++) {
++		if (clock_desc[i].clock_xclbin_type == type)
++			return clock_desc[i].clkfreq_ep_name;
++	}
++	return NULL;
++}
++
++static int xrt_xclbin_add_clock_metadata(struct device *dev,
++	const struct axlf *xclbin, char *dtb)
++{
++	int i;
++	u16 freq;
++	struct clock_freq_topology *clock_topo;
++	int rc = xrt_xclbin_get_section(xclbin,
++		CLOCK_FREQ_TOPOLOGY, (void **)&clock_topo, NULL);
++
++	if (rc)
++		return 0;
++
++	for (i = 0; i < clock_topo->m_count; i++) {
++		u8 type = clock_topo->m_clock_freq[i].m_type;
++		const char *ep_name = clock_type2epname(type);
++		const char *counter_name = clock_type2clkfreq_name(type);
++
++		if (!ep_name || !counter_name)
++			continue;
++
++		freq = cpu_to_be16(clock_topo->m_clock_freq[i].m_freq_Mhz);
++		rc = xrt_md_set_prop(dev, dtb, ep_name,
++			NULL, PROP_CLK_FREQ, &freq, sizeof(freq));
++		if (rc)
++			break;
++
++		rc = xrt_md_set_prop(dev, dtb, ep_name,
++			NULL, PROP_CLK_CNT, counter_name, strlen(counter_name) + 1);
++		if (rc)
++			break;
++	}
++
++	vfree(clock_topo);
++
++	return rc;
++}
++
++int xrt_xclbin_get_metadata(struct device *dev, const struct axlf *xclbin, char **dtb)
++{
++	char *md = NULL, *newmd = NULL;
++	u64 len;
++	int rc = xrt_xclbin_get_section(xclbin, PARTITION_METADATA,
++		(void **)&md, &len);
++
++	if (rc)
++		goto done;
++
++	/* Sanity check the dtb section. */
++	if (xrt_md_size(dev, md) > len) {
++		rc = -EINVAL;
++		goto done;
++	}
++
++	newmd = xrt_md_dup(dev, md);
++	if (!newmd) {
++		rc = -EFAULT;
++		goto done;
++	}
++	/* Convert various needed xclbin sections into dtb. */
++	rc = xrt_xclbin_add_clock_metadata(dev, xclbin, newmd);
++
++done:
++	if (rc == 0)
++		*dtb = newmd;
++	else
++		vfree(newmd);
++	vfree(md);
++	return rc;
++}
+diff --git a/drivers/fpga/xrt/common/xrt-xclbin.h b/drivers/fpga/xrt/common/xrt-xclbin.h
+new file mode 100644
+index 000000000000..a8676f214c10
+--- /dev/null
++++ b/drivers/fpga/xrt/common/xrt-xclbin.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: Apache-2.0 OR GPL-2.0 */
++/*
++ * Xilinx Kernel Driver XCLBIN parser
++ *
++ * Copyright (C) 2020 Xilinx, Inc.
++ *
++ * Authors: David Zhang <davidzha@xilinx.com>
++ */
++
++#ifndef _XRT_XCLBIN_H
++#define _XRT_XCLBIN_H
++
++#include <linux/types.h>
++#include <linux/device.h>
++#include <linux/xrt/xclbin.h>
++
++#define	ICAP_XCLBIN_V2	"xclbin2"
++#define DMA_HWICAP_BITFILE_BUFFER_SIZE 1024
++#define MAX_XCLBIN_SIZE (1024 * 1024 * 1024) /* Assuming xclbin <= 1G, always */
++
++enum axlf_section_kind;
++struct axlf;
++
++/**
++ * Bitstream header information as defined by Xilinx tools.
++ * Please note that this struct definition is not owned by the driver and
++ * hence it does not use Linux coding style.
++ */
++struct XHwIcap_Bit_Header {
++	unsigned int HeaderLength;     /* Length of header in 32 bit words */
++	unsigned int BitstreamLength;  /* Length of bitstream to read in bytes*/
++	unsigned char *DesignName;     /* Design name get from bitstream */
++	unsigned char *PartName;       /* Part name read from bitstream */
++	unsigned char *Date;           /* Date read from bitstream header */
++	unsigned char *Time;           /* Bitstream creation time*/
++	unsigned int MagicLength;      /* Length of the magic numbers*/
++};
++
++const char *xrt_xclbin_kind_to_string(enum axlf_section_kind kind);
++int xrt_xclbin_get_section(const struct axlf *xclbin,
++	enum axlf_section_kind kind, void **data, uint64_t *len);
++int xrt_xclbin_get_metadata(struct device *dev, const struct axlf *xclbin, char **dtb);
++int xrt_xclbin_parse_header(const unsigned char *data,
++	unsigned int size, struct XHwIcap_Bit_Header *header);
++void xrt_xclbin_free_header(struct XHwIcap_Bit_Header *header);
++const char *clock_type2epname(enum CLOCK_TYPE type);
++
++#endif /* _XRT_XCLBIN_H */
+diff --git a/include/uapi/linux/xrt/xclbin.h b/include/uapi/linux/xrt/xclbin.h
+new file mode 100644
+index 000000000000..630d45597bd1
+--- /dev/null
++++ b/include/uapi/linux/xrt/xclbin.h
+@@ -0,0 +1,386 @@
++/* SPDX-License-Identifier: Apache-2.0 OR GPL-2.0 */
++/*
++ *  Xilinx FPGA compiled binary container format
++ *
++ *  Copyright (C) 2015-2020, Xilinx Inc
++ */
++
++
++#ifndef _XCLBIN_H_
++#define _XCLBIN_H_
++
++#ifdef _WIN32
++  #include <cstdint>
++  #include <algorithm>
++  #include "windows/uuid.h"
++#else
++  #if defined(__KERNEL__)
++    #include <linux/types.h>
++    #include <linux/uuid.h>
++    #include <linux/version.h>
++  #elif defined(__cplusplus)
++    #include <cstdlib>
++    #include <cstdint>
++    #include <algorithm>
++    #include <uuid/uuid.h>
++  #else
++    #include <stdlib.h>
++    #include <stdint.h>
++    #include <uuid/uuid.h>
++  #endif
++#endif
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++/**
++ * DOC: Container format for Xilinx FPGA images
++ * The container stores bitstreams, metadata and firmware images.
++ * xclbin/xsabin is ELF-like binary container format. It is structured
++ * series of sections. There is a file header followed by several section
++ * headers which is followed by sections. A section header points to an
++ * actual section. There is an optional signature at the end. The
++ * following figure illustrates a typical xclbin:
++ *
++ *     +---------------------+
++ *     |		     |
++ *     |       HEADER	     |
++ *     +---------------------+
++ *     |   SECTION  HEADER   |
++ *     |		     |
++ *     +---------------------+
++ *     |	 ...	     |
++ *     |		     |
++ *     +---------------------+
++ *     |   SECTION  HEADER   |
++ *     |		     |
++ *     +---------------------+
++ *     |       SECTION	     |
++ *     |		     |
++ *     +---------------------+
++ *     |	 ...	     |
++ *     |		     |
++ *     +---------------------+
++ *     |       SECTION	     |
++ *     |		     |
++ *     +---------------------+
++ *     |      SIGNATURE	     |
++ *     |      (OPTIONAL)     |
++ *     +---------------------+
++ */
++
++enum XCLBIN_MODE {
++	XCLBIN_FLAT,
++	XCLBIN_PR,
++	XCLBIN_TANDEM_STAGE2,
++	XCLBIN_TANDEM_STAGE2_WITH_PR,
++	XCLBIN_HW_EMU,
++	XCLBIN_SW_EMU,
++	XCLBIN_MODE_MAX
++};
++
++enum axlf_section_kind {
++	BITSTREAM = 0,
++	CLEARING_BITSTREAM,
++	EMBEDDED_METADATA,
++	FIRMWARE,
++	DEBUG_DATA,
++	SCHED_FIRMWARE,
++	MEM_TOPOLOGY,
++	CONNECTIVITY,
++	IP_LAYOUT,
++	DEBUG_IP_LAYOUT,
++	DESIGN_CHECK_POINT,
++	CLOCK_FREQ_TOPOLOGY,
++	MCS,
++	BMC,
++	BUILD_METADATA,
++	KEYVALUE_METADATA,
++	USER_METADATA,
++	DNA_CERTIFICATE,
++	PDI,
++	BITSTREAM_PARTIAL_PDI,
++	PARTITION_METADATA,
++	EMULATION_DATA,
++	SYSTEM_METADATA,
++	SOFT_KERNEL,
++	ASK_FLASH,
++	AIE_METADATA,
++	ASK_GROUP_TOPOLOGY,
++	ASK_GROUP_CONNECTIVITY
++};
++
++enum MEM_TYPE {
++	MEM_DDR3,
++	MEM_DDR4,
++	MEM_DRAM,
++	MEM_STREAMING,
++	MEM_PREALLOCATED_GLOB,
++	MEM_ARE,
++	MEM_HBM,
++	MEM_BRAM,
++	MEM_URAM,
++	MEM_STREAMING_CONNECTION
++};
++
++enum IP_TYPE {
++	IP_MB = 0,
++	IP_KERNEL,
++	IP_DNASC,
++	IP_DDR4_CONTROLLER,
++	IP_MEM_DDR4,
++	IP_MEM_HBM
++};
++
++struct axlf_section_header {
++	uint32_t m_sectionKind;		    /* Section type */
++	char m_sectionName[16];		    /* Examples: "stage2", "clear1", "clear2", "ocl1", "ocl2, "ublaze", "sched" */
++	uint64_t m_sectionOffset;	    /* File offset of section data */
++	uint64_t m_sectionSize;		    /* Size of section data */
++};
++
++struct axlf_header {
++	uint64_t m_length;		    /* Total size of the xclbin file */
++	uint64_t m_timeStamp;		    /* Number of seconds since epoch when xclbin was created */
++	uint64_t m_featureRomTimeStamp;	    /* TimeSinceEpoch of the featureRom */
++	uint16_t m_versionPatch;	    /* Patch Version */
++	uint8_t m_versionMajor;		    /* Major Version - Version: 2.1.0*/
++	uint8_t m_versionMinor;		    /* Minor Version */
++	uint32_t m_mode;		    /* XCLBIN_MODE */
++	union {
++		struct {
++			uint64_t m_platformId;	/* 64 bit platform ID: vendor-device-subvendor-subdev */
++			uint64_t m_featureId;	/* 64 bit feature id */
++		} rom;
++		unsigned char rom_uuid[16];	/* feature ROM UUID for which this xclbin was generated */
++	};
++	unsigned char m_platformVBNV[64];	/* e.g. xilinx:xil-accel-rd-ku115:4ddr-xpr:3.4: null terminated */
++	union {
++		char m_next_axlf[16];		/* Name of next xclbin file in the daisy chain */
++		uuid_t uuid;			/* uuid of this xclbin*/
++	};
++	char m_debug_bin[16];			/* Name of binary with debug information */
++	uint32_t m_numSections;			/* Number of section headers */
++};
++
++struct axlf {
++	char m_magic[8];			    /* Should be "xclbin2\0"  */
++	int32_t m_signature_length;		    /* Length of the signature. -1 indicates no signature */
++	unsigned char reserved[28];		    /* Note: Initialized to 0xFFs */
++
++	unsigned char m_keyBlock[256];		    /* Signature for validation of binary */
++	uint64_t m_uniqueId;			    /* axlf's uniqueId, use it to skip redownload etc */
++	struct axlf_header m_header;		    /* Inline header */
++	struct axlf_section_header m_sections[1];   /* One or more section headers follow */
++};
++
++/* bitstream information */
++struct xlnx_bitstream {
++	uint8_t m_freq[8];
++	char bits[1];
++};
++
++/****	MEMORY TOPOLOGY SECTION ****/
++struct mem_data {
++	uint8_t m_type; //enum corresponding to mem_type.
++	uint8_t m_used; //if 0 this bank is not present
++	union {
++		uint64_t m_size; //if mem_type DDR, then size in KB;
++		uint64_t route_id; //if streaming then "route_id"
++	};
++	union {
++		uint64_t m_base_address;//if DDR then the base address;
++		uint64_t flow_id; //if streaming then "flow id"
++	};
++	unsigned char m_tag[16]; //DDR: BANK0,1,2,3, has to be null terminated; if streaming then stream0, 1 etc
++};
++
++struct mem_topology {
++	int32_t m_count; //Number of mem_data
++	struct mem_data m_mem_data[1]; //Should be sorted on mem_type
++};
++
++/****	CONNECTIVITY SECTION ****/
++/* Connectivity of each argument of Kernel. It will be in terms of argument
++ * index associated. For associating kernel instances with arguments and
++ * banks, start at the connectivity section. Using the m_ip_layout_index
++ * access the ip_data.m_name. Now we can associate this kernel instance
++ * with its original kernel name and get the connectivity as well. This
++ * enables us to form related groups of kernel instances.
++ */
++
++struct connection {
++	int32_t arg_index; //From 0 to n, may not be contiguous as scalars skipped
++	int32_t m_ip_layout_index; //index into the ip_layout section. ip_layout.m_ip_data[index].m_type == IP_KERNEL
++	int32_t mem_data_index; //index of the m_mem_data . Flag error is m_used false.
++};
++
++struct connectivity {
++	int32_t m_count;
++	struct connection m_connection[1];
++};
++
++
++/****	IP_LAYOUT SECTION ****/
++
++// IP Kernel
++#define IP_INT_ENABLE_MASK	  0x0001
++#define IP_INTERRUPT_ID_MASK  0x00FE
++#define IP_INTERRUPT_ID_SHIFT 0x1
++
++enum IP_CONTROL {
++	AP_CTRL_HS = 0,
++	AP_CTRL_CHAIN = 1,
++	AP_CTRL_NONE = 2,
++	AP_CTRL_ME = 3,
++	ACCEL_ADAPTER = 4
++};
++
++#define IP_CONTROL_MASK	 0xFF00
++#define IP_CONTROL_SHIFT 0x8
++
++/* IPs on AXI lite - their types, names, and base addresses.*/
++struct ip_data {
++	uint32_t m_type; //map to IP_TYPE enum
++	union {
++		uint32_t properties; // Default: 32-bits to indicate ip specific property.
++		// m_type: IP_KERNEL
++		//	    m_int_enable   : Bit  - 0x0000_0001;
++		//	    m_interrupt_id : Bits - 0x0000_00FE;
++		//	    m_ip_control   : Bits = 0x0000_FF00;
++		struct {		 // m_type: IP_MEM_*
++			uint16_t m_index;
++			uint8_t m_pc_index;
++			uint8_t unused;
++		} indices;
++	};
++	uint64_t m_base_address;
++	uint8_t m_name[64]; //eg Kernel name corresponding to KERNEL instance, can embed CU name in future.
++};
++
++struct ip_layout {
++	int32_t m_count;
++	struct ip_data m_ip_data[1]; //All the ip_data needs to be sorted by m_base_address.
++};
++
++/*** Debug IP section layout ****/
++enum DEBUG_IP_TYPE {
++	UNDEFINED = 0,
++	LAPC,
++	ILA,
++	AXI_MM_MONITOR,
++	AXI_TRACE_FUNNEL,
++	AXI_MONITOR_FIFO_LITE,
++	AXI_MONITOR_FIFO_FULL,
++	ACCEL_MONITOR,
++	AXI_STREAM_MONITOR,
++	AXI_STREAM_PROTOCOL_CHECKER,
++	TRACE_S2MM,
++	AXI_DMA,
++	TRACE_S2MM_FULL
++};
++
++struct debug_ip_data {
++	uint8_t m_type; // type of enum DEBUG_IP_TYPE
++	uint8_t m_index_lowbyte;
++	uint8_t m_properties;
++	uint8_t m_major;
++	uint8_t m_minor;
++	uint8_t m_index_highbyte;
++	uint8_t m_reserved[2];
++	uint64_t m_base_address;
++	char	m_name[128];
++};
++
++struct debug_ip_layout {
++	uint16_t m_count;
++	struct debug_ip_data m_debug_ip_data[1];
++};
++
++/* Supported clock frequency types */
++enum CLOCK_TYPE {
++	CT_UNUSED = 0,			   /* Initialized value */
++	CT_DATA	  = 1,			   /* Data clock */
++	CT_KERNEL = 2,			   /* Kernel clock */
++	CT_SYSTEM = 3			   /* System Clock */
++};
++
++/* Clock Frequency Entry */
++struct clock_freq {
++	uint16_t m_freq_Mhz;		   /* Frequency in MHz */
++	uint8_t m_type;			   /* Clock type (enum CLOCK_TYPE) */
++	uint8_t m_unused[5];		   /* Not used - padding */
++	char m_name[128];		   /* Clock Name */
++};
++
++/* Clock frequency section */
++struct clock_freq_topology {
++	int16_t m_count;		   /* Number of entries */
++	struct clock_freq m_clock_freq[1]; /* Clock array */
++};
++
++/* Supported MCS file types */
++enum MCS_TYPE {
++	MCS_UNKNOWN = 0,		   /* Initialized value */
++	MCS_PRIMARY = 1,		   /* The primary mcs file data */
++	MCS_SECONDARY = 2,		   /* The secondary mcs file data */
++};
++
++/* One chunk of MCS data */
++struct mcs_chunk {
++	uint8_t m_type;			   /* MCS data type */
++	uint8_t m_unused[7];		   /* padding */
++	uint64_t m_offset;		   /* data offset from the start of the section */
++	uint64_t m_size;		   /* data size */
++};
++
++/* MCS data section */
++struct mcs {
++	int8_t m_count;			   /* Number of chunks */
++	int8_t m_unused[7];		   /* padding */
++	struct mcs_chunk m_chunk[1];	   /* MCS chunks followed by data */
++};
++
++/* bmc data section */
++struct bmc {
++	uint64_t m_offset;		   /* data offset from the start of the section */
++	uint64_t m_size;		   /* data size (bytes)*/
++	char m_image_name[64];		   /* Name of the image (e.g., MSP432P401R) */
++	char m_device_name[64];		   /* Device ID		(e.g., VCU1525)	 */
++	char m_version[64];
++	char m_md5value[33];		   /* MD5 Expected Value(e.g., 56027182079c0bd621761b7dab5a27ca)*/
++	char m_padding[7];		   /* Padding */
++};
++
++/* soft kernel data section, used by classic driver */
++struct soft_kernel {
++	/** Prefix Syntax:
++	 *  mpo - member, pointer, offset
++	 *  This variable represents a zero terminated string
++	 *  that is offseted from the beginning of the section.
++	 *  The pointer to access the string is initialized as follows:
++	 *  char * pCharString = (address_of_section) + (mpo value)
++	 */
++	uint32_t mpo_name;	   /* Name of the soft kernel */
++	uint32_t m_image_offset;   /* Image offset */
++	uint32_t m_image_size;	   /* Image size */
++	uint32_t mpo_version;	   /* Version */
++	uint32_t mpo_md5_value;	   /* MD5 checksum */
++	uint32_t mpo_symbol_name;  /* Symbol name */
++	uint32_t m_num_instances;  /* Number of instances */
++	uint8_t padding[36];	   /* Reserved for future use */
++	uint8_t reservedExt[16];   /* Reserved for future extended data */
++};
++
++enum CHECKSUM_TYPE {
++	CST_UNKNOWN = 0,
++	CST_SDBM = 1,
++	CST_LAST
++};
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif
 -- 
 2.17.1
 
