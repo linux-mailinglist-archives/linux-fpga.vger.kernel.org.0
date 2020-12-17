@@ -2,70 +2,68 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B92A52DD225
-	for <lists+linux-fpga@lfdr.de>; Thu, 17 Dec 2020 14:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773C92DD23C
+	for <lists+linux-fpga@lfdr.de>; Thu, 17 Dec 2020 14:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727723AbgLQN2E (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 17 Dec 2020 08:28:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:35713 "EHLO
+        id S1727385AbgLQNhX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 17 Dec 2020 08:37:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53692 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728116AbgLQN2D (ORCPT
+        by vger.kernel.org with ESMTP id S1726983AbgLQNhX (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 17 Dec 2020 08:28:03 -0500
+        Thu, 17 Dec 2020 08:37:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1608211596;
+        s=mimecast20190719; t=1608212156;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5U7NOPUCjPUEQjTgtfUNAxSeMjqPb4vJZBLZCIjKxDY=;
-        b=TwZ2Ja3//gr80AcoMk+7UCVgi2a44cGQG10aqTbywZHsbSRzBSyzfhuLBZ96KnBRUWLmmS
-        eWtvN7sUamQngH6bl2OEe6orxSV6rOxSu4G4yCPTpC80UYtIyu0qdCyuPm3Il1UR1bf1/q
-        yGi6aaAb/0a1+keYQLrLo1AQ4w4wAHI=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-458-RszlX6YeNPK9F7tNxjnJEA-1; Thu, 17 Dec 2020 08:26:32 -0500
-X-MC-Unique: RszlX6YeNPK9F7tNxjnJEA-1
-Received: by mail-qt1-f200.google.com with SMTP id a22so20683485qtx.20
-        for <linux-fpga@vger.kernel.org>; Thu, 17 Dec 2020 05:26:32 -0800 (PST)
+        bh=SgJOBcxRN4tEtPumxdF20iYY88fFb0qgiurqky0v6BE=;
+        b=FQbBuYZ4cSHEj3r0F3D1uJU1sSaajuDHxkXnkUbyeVizfothBKEayzHLFzIRPPJYfIuOQM
+        YYK9YQmZqxtXNknieQFY4rSRHeCS7wz4h50RSQsugfulYzLpExR1NX1X57/iUT0AgFDm3p
+        6NYHYXD1/fmx8GYNFMDB9GmxgzHTt74=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-459-xMf2zK8AOkCDGtpHWqnl8A-1; Thu, 17 Dec 2020 08:35:55 -0500
+X-MC-Unique: xMf2zK8AOkCDGtpHWqnl8A-1
+Received: by mail-qk1-f197.google.com with SMTP id k126so4842307qkf.8
+        for <linux-fpga@vger.kernel.org>; Thu, 17 Dec 2020 05:35:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=5U7NOPUCjPUEQjTgtfUNAxSeMjqPb4vJZBLZCIjKxDY=;
-        b=JDGpOMiekPmMg0w50wFJWKHi9aecACctSN5SKaogw52GVPctcQiwGaDc82UzujpW8v
-         6glNheZDIrJVMAa9Rz/FmKV1I2MwnjwUdedXLW3tBVVaohr7QDdNVeY0R8nc3iYUIJdA
-         k/ZbDAMpLxarURZ282ZAkanO6H7DPBvYuYxYSGWnRs/2Np30BgzT6SSBvr10469cAPZV
-         detuw5eNFvZnajGCAdlE/GPo/CFHXkglcxF9qxLs8wycEwKSyQWtZiM/winuPjH/f3u1
-         kSRYmoxaArZX0gDOWJuVYd0V43xGGucmiVIddXKHXe/sqeKlYanLUzX19lllnw4KcV1m
-         XkAw==
-X-Gm-Message-State: AOAM530/lHeq3mZjBrmmxSS6qerATwz4Xu2+Ooyjdpu9vuip4Lnjm8tG
-        45fc5yxtccPIsexZpZd5NDhK6I2ThrGjxSV8msV3iW1FIgJynIlzgSi2Sjzbjnb95jh89/HA5Jj
-        3rMtYv2jOmPzjPl+nn0IWkA==
-X-Received: by 2002:a05:622a:18d:: with SMTP id s13mr48353449qtw.306.1608211591962;
-        Thu, 17 Dec 2020 05:26:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxkro5zJ3CnJHz/PKvHRth687yzRn6OxoU9hVf5JGCVNJCettD54oSrTd6l6OyPySJ3gnv+Dg==
-X-Received: by 2002:a05:622a:18d:: with SMTP id s13mr48353435qtw.306.1608211591752;
-        Thu, 17 Dec 2020 05:26:31 -0800 (PST)
+        bh=SgJOBcxRN4tEtPumxdF20iYY88fFb0qgiurqky0v6BE=;
+        b=HjqjHviH4nl35yp7Z27SDAp4R/Ge8j1nIyHol11raBNsDyWmF6h12n6eu7jC7wbqjl
+         XQulFoWqWSxX6e07mYKgsknhR8+Ivuzth7nAnkIeVG25LDTkmE0NiOvdIyNYUGwYruRq
+         Yqr4Y/oKBAGnLAxhxQnzsR7E51V+oRTTaissYkgR/mwmBqMKMTPfzjJNaUGadnm/jWdE
+         23OvZIy7ihb7drp7vji6RaosY9eWYyFgtkFVRJMY0G3NnqIdFmlREnl4bpld9ppEKgZw
+         ejxzsnnNzHVphF28+lcijWxHtT9Raz0QvWjJSZnCj6rATJpZgOEaMzPKZyAEwEgsh946
+         ElVQ==
+X-Gm-Message-State: AOAM5310+eJh5bKrhmJWvvatndY802B6CsctA+h//7QxXh+9/3q0N585
+        Pd0ViAN8enBrZCOn/QoagU2P2wUm72vqFD5aH1Rd0y/EVdWB8/W3Jbuy1gHhwFxP10fO+qIzhR8
+        SFROErF2zUaGbzm9yK/SpyA==
+X-Received: by 2002:a05:620a:ec7:: with SMTP id x7mr48049240qkm.405.1608212154532;
+        Thu, 17 Dec 2020 05:35:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxPs+dQeJxIwLKOCxSjTEM23FpThc6Rq1C2Qh0/YIA30/RVV77JmZbVHRRLj3GBEXH8+F6uGw==
+X-Received: by 2002:a05:620a:ec7:: with SMTP id x7mr48049217qkm.405.1608212154332;
+        Thu, 17 Dec 2020 05:35:54 -0800 (PST)
 Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id f19sm1699010qta.80.2020.12.17.05.26.30
+        by smtp.gmail.com with ESMTPSA id s19sm53162qta.35.2020.12.17.05.35.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Dec 2020 05:26:31 -0800 (PST)
-Subject: Re: [PATCH v3 3/3] Documentation: fpga: dfl: Add description for DFL
- UIO support
+        Thu, 17 Dec 2020 05:35:53 -0800 (PST)
+Subject: Re: [PATCH v3 0/3] UIO support for dfl devices
 To:     Xu Yilun <yilun.xu@intel.com>, mdf@kernel.org,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     gregkh@linuxfoundation.org, lgoncalv@redhat.com, hao.wu@intel.com
 References: <1608183881-18692-1-git-send-email-yilun.xu@intel.com>
- <1608183881-18692-4-git-send-email-yilun.xu@intel.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <994de3b8-0374-40d1-2644-5604742a264e@redhat.com>
-Date:   Thu, 17 Dec 2020 05:26:29 -0800
+Message-ID: <85d48e41-0185-0938-b0ed-93d0f825e761@redhat.com>
+Date:   Thu, 17 Dec 2020 05:35:51 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <1608183881-18692-4-git-send-email-yilun.xu@intel.com>
+In-Reply-To: <1608183881-18692-1-git-send-email-yilun.xu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -75,64 +73,52 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 On 12/16/20 9:44 PM, Xu Yilun wrote:
-> This patch adds description for UIO support for dfl devices on DFL
-> bus.
-
-Thanks for the changes.
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
-> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> ---
-> v2: no doc in v1, add it for v2.
-> v3: some documentation fixes.
-> ---
->  Documentation/fpga/dfl.rst | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
+> This patchset supports some dfl device drivers written in userspace.
 >
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index 0404fe6..b298ad9 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -7,6 +7,7 @@ Authors:
->  - Enno Luebbers <enno.luebbers@intel.com>
->  - Xiao Guangrong <guangrong.xiao@linux.intel.com>
->  - Wu Hao <hao.wu@intel.com>
-> +- Xu Yilun <yilun.xu@intel.com>
->  
->  The Device Feature List (DFL) FPGA framework (and drivers according to
->  this framework) hides the very details of low layer hardwares and provides
-> @@ -502,6 +503,32 @@ FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
->  could be a reference.
->  
->  
-> +UIO support for DFL devices
-> +===========================
-> +The purpose of an FPGA is to be reprogrammed with newly developed hardware
-> +components. New hardware can instantiate a new private feature in the DFL, and
-> +then get a DFL device in their system. In some cases users may need a userspace
-> +driver for the DFL device:
-> +
-> +* Users may need to run some diagnostic test for their hardwares.
-> +* Users may prototype the kernel driver in user space.
-> +* Some hardware is designed for specific purposes and does not fit into one of
-> +  the standard kernel subsystems.
-> +
-> +This requires the direct access to the MMIO space and interrupt handling in
-> +userspace. The dfl-uio-pdev module exposes the UIO device interfaces for this
-> +purpose. It adds the uio_pdrv_genirq platform device with the resources of
-> +the DFL feature, and lets the generic UIO platform device driver provide UIO
-> +support to userspace.
-> +
-> +FPGA_DFL_UIO_PDEV should be selected to enable this feature.
-> +
-> +The DFL UIO driver has a special matching algorithem. It will match any DFL
-> +device which could not be handled by other DFL drivers. In this way, it will
-> +not impact the functionality of the features which are already supported by the
-> +system.
-> +
-> +
->  Open discussion
->  ===============
->  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
+> In the patchset v1, the "driver_override" interface should be used to bind
+> the DFL UIO driver to DFL devices. But there is concern that the
+> "driver_override" interface is not OK itself. So in v2, we use a new
+> matching algorithem. The "driver_override" interface is abandoned, the DFL
+> UIO driver matches any DFL device which could not be handled by other DFL
+> drivers. So the DFL UIO driver could be used for new DFL devices which are
+> not supported by kernel, also it will not impact the devices which are
+> already got supported.
+
+This set looks good to me.
+
+Moritz,
+
+Is it possible to get this into 5.11 ?
+
+Tom
+
+>
+> Main changes from v1:
+> - switch to the new matching algorithem. It matches DFL devices which could
+>   not be handled by other DFL drivers.
+> - refacor the code about device resources filling.
+> - add the documentation.
+>
+> Main changes from v2:
+> - split the match ops changes in dfl.c to an independent patch.
+> - move the declarations needed for dfl-uio-pdev from include/linux/dfl.h
+>   to driver/fpga/dfl.h
+> - some minor fixes.
+>
+>
+> Xu Yilun (3):
+>   fpga: dfl: add the match() ops for dfl driver
+>   fpga: dfl: add the userspace I/O device support for DFL devices
+>   Documentation: fpga: dfl: Add description for DFL UIO support
+>
+>  Documentation/fpga/dfl.rst  |  27 +++++++++++
+>  drivers/fpga/Kconfig        |  10 ++++
+>  drivers/fpga/Makefile       |   1 +
+>  drivers/fpga/dfl-uio-pdev.c | 110 ++++++++++++++++++++++++++++++++++++++++++++
+>  drivers/fpga/dfl.c          |  22 +++++++--
+>  drivers/fpga/dfl.h          |   5 ++
+>  include/linux/dfl.h         |   3 ++
+>  7 files changed, 173 insertions(+), 5 deletions(-)
+>  create mode 100644 drivers/fpga/dfl-uio-pdev.c
+>
 
