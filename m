@@ -2,33 +2,33 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9132DF953
-	for <lists+linux-fpga@lfdr.de>; Mon, 21 Dec 2020 07:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7362DFAE2
+	for <lists+linux-fpga@lfdr.de>; Mon, 21 Dec 2020 11:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727891AbgLUGmc (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 21 Dec 2020 01:42:32 -0500
-Received: from mga09.intel.com ([134.134.136.24]:8501 "EHLO mga09.intel.com"
+        id S1726417AbgLUKLa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 21 Dec 2020 05:11:30 -0500
+Received: from mga03.intel.com ([134.134.136.65]:51000 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727224AbgLUGmc (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 21 Dec 2020 01:42:32 -0500
-IronPort-SDR: m4JOTaFbTxp4u7652tlr0aBPilEnKQLVSPHGSZOXtA7B41DflV+8lMusQzmsfazib3n4Cql4qd
- cYEAqF88KXbg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9841"; a="175835803"
+        id S1726320AbgLUKL3 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 21 Dec 2020 05:11:29 -0500
+IronPort-SDR: y1oquq4Za0LsF0AaP+WUj4SRpLmrNvg6/BcMVn1MaNeogMgPrXsn3XgX5jPYxfjnbF+QbWWDpx
+ 0u4DOXS+i+SQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9841"; a="175799159"
 X-IronPort-AV: E=Sophos;i="5.78,436,1599548400"; 
-   d="gz'50?scan'50,208,50";a="175835803"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2020 22:41:44 -0800
-IronPort-SDR: 6SDr0nnPtOJ991DtagCC6RXHqJDmNLgD17Vnm8+U8vUoKIsz8xkjd0bHvq2ZFwT7wJALVHW147
- bb+df4YVfyaA==
+   d="gz'50?scan'50,208,50";a="175799159"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2020 01:03:41 -0800
+IronPort-SDR: ObREufzGIySfYRSKiL8Uc5wsGx0PLpkzuiQsmnmo7Ezc+wPSIX53KNVb2SFqYk8JxZRW8jxFgg
+ mM8waERapExA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.78,436,1599548400"; 
-   d="gz'50?scan'50,208,50";a="381777062"
+   d="gz'50?scan'50,208,50";a="391060728"
 Received: from lkp-server01.sh.intel.com (HELO 65587561063d) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 20 Dec 2020 22:41:41 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 21 Dec 2020 01:03:38 -0800
 Received: from kbuild by 65587561063d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1krEt2-0000HV-J4; Mon, 21 Dec 2020 06:41:40 +0000
-Date:   Mon, 21 Dec 2020 14:41:31 +0800
+        id 1krH6M-0000OB-JR; Mon, 21 Dec 2020 09:03:34 +0000
+Date:   Mon, 21 Dec 2020 17:03:13 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Sonal Santan <sonal.santan@xilinx.com>,
         linux-kernel@vger.kernel.org
@@ -36,21 +36,21 @@ Cc:     kbuild-all@lists.01.org, Sonal Santan <sonal.santan@xilinx.com>,
         linux-fpga@vger.kernel.org, maxz@xilinx.com, lizhih@xilinx.com,
         michal.simek@xilinx.com, stefanos@xilinx.com,
         devicetree@vger.kernel.org, trix@redhat.com, mdf@kernel.org
-Subject: Re: [PATCH V2 XRT Alveo 2/6] fpga: xrt: infrastructure support for
- xmgmt driver
-Message-ID: <202012211428.eqNcd1yS-lkp@intel.com>
-References: <20201217075046.28553-3-sonals@xilinx.com>
+Subject: Re: [PATCH V2 XRT Alveo 4/6] fpga: xrt: XRT Alveo management
+ physical function driver
+Message-ID: <202012211710.AMNZCBmu-lkp@intel.com>
+References: <20201217075046.28553-5-sonals@xilinx.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="tKW2IUtsqtDRztdT"
+Content-Type: multipart/mixed; boundary="sdtB3X0nJg68CQEu"
 Content-Disposition: inline
-In-Reply-To: <20201217075046.28553-3-sonals@xilinx.com>
+In-Reply-To: <20201217075046.28553-5-sonals@xilinx.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
---tKW2IUtsqtDRztdT
+--sdtB3X0nJg68CQEu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -59,7 +59,7 @@ Hi Sonal,
 Thank you for the patch! Yet something to improve:
 
 [auto build test ERROR on linux/master]
-[also build test ERROR on linus/master v5.10 next-20201218]
+[also build test ERROR on linus/master v5.10 next-20201221]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
@@ -69,10 +69,10 @@ base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 09162
 config: x86_64-rhel (attached as .config)
 compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
 reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/40454bdc15831407c2041bec3d4f389816916ed6
+        # https://github.com/0day-ci/linux/commit/ec70cdb9cc3612eec369754db4ae631a05f4a325
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Sonal-Santan/XRT-Alveo-driver-overview/20201217-160048
-        git checkout 40454bdc15831407c2041bec3d4f389816916ed6
+        git checkout ec70cdb9cc3612eec369754db4ae631a05f4a325
         # save the attached .config to linux build tree
         make W=1 ARCH=x86_64 
 
@@ -81,8 +81,10 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> error: include/uapi/linux/xrt/xclbin.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
+   error: include/uapi/linux/xrt/xclbin.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
    make[2]: *** [scripts/Makefile.headersinst:63: usr/include/linux/xrt/xclbin.h] Error 1
+>> error: include/uapi/linux/xrt/xmgmt-ioctl.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
+   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/linux/xrt/xmgmt-ioctl.h] Error 1
    make[2]: Target '__headers' not remade because of errors.
    make[1]: *** [Makefile:1288: headers] Error 2
    make[1]: Target 'headers_install' not remade because of errors.
@@ -93,12 +95,12 @@ All errors (new ones prefixed by >>):
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---tKW2IUtsqtDRztdT
+--sdtB3X0nJg68CQEu
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICOk74F8AAy5jb25maWcAlDxLc9w20vf9FVPOJTkkK8m2yqmvdMCQIAcekmAAcDSjC0uR
+H4sICM1b4F8AAy5jb25maWcAlDxLc9w20vf9FVPOJTkkK8m2yqmvdMCQIAcekmAAcDSjC0uR
 x45qbcmfHrv2v9/uBkgCIKh4c4g13Y13o9/gT//4acWen+6/XD/d3lx//vx99el4d3y4fjp+
 WH28/Xz8v1UuV400K54L8xsQV7d3z9/++e3deX/+ZvX2t9OT305+fbh5s9oeH+6On1fZ/d3H
 20/P0MHt/d0/fvpHJptClH2W9TuutJBNb/jeXLz6dHPz6++rn/Pjn7fXd6vff3sN3Zy+/cX+
@@ -945,4 +947,4 @@ GPIOI5JV/RBb047dsRglZYGpgivteIMAxCAW9hXLI8kApp+IAo6fMvgNK5tpD6DdnahAzJQ5
 6O2caeXFTPSjkMwpoSQ95ggXe9f1VbLamEIJzPbs+aI3D0rwjkWSB6CkUijpMiTUKK5DQK4b
 Lbdw5q8taxcVnqx2k2Ss4lC1/wD1e8iZoeYCAA==
 
---tKW2IUtsqtDRztdT--
+--sdtB3X0nJg68CQEu--
