@@ -2,172 +2,238 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3148E2DF7B7
-	for <lists+linux-fpga@lfdr.de>; Mon, 21 Dec 2020 03:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B872DF80E
+	for <lists+linux-fpga@lfdr.de>; Mon, 21 Dec 2020 04:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725902AbgLUCpr (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 20 Dec 2020 21:45:47 -0500
-Received: from mga07.intel.com ([134.134.136.100]:11438 "EHLO mga07.intel.com"
+        id S1725497AbgLUDiv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 20 Dec 2020 22:38:51 -0500
+Received: from mga02.intel.com ([134.134.136.20]:9441 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725497AbgLUCpq (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sun, 20 Dec 2020 21:45:46 -0500
-IronPort-SDR: Py71TY7MlboVXUvAeAPXLf55hAwCVpoNx1YeiAxsXWQ/uf4fTON3EVkPs57hbDA+qsVBDSE9vk
- jpy4CbOFzSEg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9841"; a="239758217"
+        id S1725308AbgLUDiv (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 20 Dec 2020 22:38:51 -0500
+IronPort-SDR: /QZ+yMIHYFMzW8OHwbgXL71rj2bwfuHJS2OmikUOKvECJb3YKOC7Yr+ANpwR/yYqhkUa6HwlRD
+ 0PUh/ayw/nvA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9841"; a="162729648"
 X-IronPort-AV: E=Sophos;i="5.78,436,1599548400"; 
-   d="scan'208";a="239758217"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2020 18:45:04 -0800
-IronPort-SDR: xU+HjV6XKATRs9WPGxsDdoEbSR6gVwtPi1H5uC4veHnK8x64PbFP5mCvBRyk58jXZGPecbToh8
- EHcY9vUCWZtw==
+   d="scan'208";a="162729648"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2020 19:38:11 -0800
+IronPort-SDR: 7sVttmY8nnPVY6zZbIUzG7ZGryPNO4JyJYMVMSqPznypG0B4qFG0/MKzm9TIndFr9KLS+bvUYs
+ laWEUbsRLeOA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.78,436,1599548400"; 
-   d="scan'208";a="455787890"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2020 18:45:03 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sun, 20 Dec 2020 18:45:03 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Sun, 20 Dec 2020 18:45:03 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.1713.5; Sun, 20 Dec 2020 18:45:02 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L+5Ks88psd+szG4cIjcq3PayH6ArszprVAIrrhjfDui3XQnqQ6ToSC2cxVjCI4tLledvv2H9+tC+hqIKaSY7fVKG1A1Hl0jJDgK+5WtfZYkEfWvBxteCPLqvFb/CoLLIx7lwrYHqaS7YGJiR1Nuxsgku4euMKVlNFGCkHB/xQOS+0Gmm2MtrhAGFFQb30BBbbVED+Gca99mK+qjbIoWvg6DGSDn+asIJy0+GveF50ZO41WNFZ+QcExr6tlVOSFRWJn0PkmIwM2AGPwd0UwbNL+hxqmBMeQCAmxXOrrNh0enZQONiH/DXKf/ytxo0YLJehePv1A9GQtocPNvHzcvcrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ufVv7RVrsZSGG+zUO5OewjXgg1fTNsRtPBdNoCGvbJc=;
- b=ZGm+bK9eo4A8HRJum/IIwvKUsDF05XAjR30QW0KsqWNfnulolVCv/75kc3kRArhh1bJzLkr6SpmkKpKoO2yVDJjzTO+WOTdwQyUryeZ0rAeCoJ1duw/SvYqc4EXrfol+A8i5mZsZIKGvHKOkCVdJ+FIDEDk+tM73wGyker4rYOXHVSUnDAYsHM501MQ975dRcX4zD2V9HqbtpzEERkjVScwxGKzkuq/R6ZAK4I85XN3+rE6LVfUSe7gilvFPhm6HGMOJ391SWDmGsf0DJY5e3H2EUdacXZDRvuVrgFcJPGCct9uB6e6BacJVsu2ows7f/fvnPgssBgoicuFl+mCwug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ufVv7RVrsZSGG+zUO5OewjXgg1fTNsRtPBdNoCGvbJc=;
- b=RbacTxIJSGv8UYq4AKrlN5CH53NH9ewadWMzDDgsEqpCsTrXrtzcBrcERr9RWN/Qt355cv2zTFWlihuDNthCEQZaPtWgnztWw0AbZH84nH4u8VpLDS2fcjjF/buAM8Br5tfOB+mkU53kgMKoxgHLJjOG7gGToCOsHOh8BbZT0x0=
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by DM6PR11MB3817.namprd11.prod.outlook.com (2603:10b6:5:13a::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3676.25; Mon, 21 Dec
- 2020 02:44:59 +0000
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::a52f:f4c:3a9d:28a5]) by DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::a52f:f4c:3a9d:28a5%4]) with mapi id 15.20.3676.033; Mon, 21 Dec 2020
- 02:44:58 +0000
-From:   "Wu, Hao" <hao.wu@intel.com>
-To:     Tom Rix <trix@redhat.com>, "Xu, Yilun" <yilun.xu@intel.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
+   d="scan'208";a="340478915"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by orsmga003.jf.intel.com with ESMTP; 20 Dec 2020 19:38:09 -0800
+Date:   Mon, 21 Dec 2020 11:33:46 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "lgoncalv@redhat.com" <lgoncalv@redhat.com>
-Subject: RE: [PATCH v3 2/3] fpga: dfl: add the userspace I/O device support
- for DFL devices
-Thread-Topic: [PATCH v3 2/3] fpga: dfl: add the userspace I/O device support
- for DFL devices
-Thread-Index: AQHW1DhiFXQvRNubJU6hP8U7m1i7W6n8ewGggABogYCAA/gPMA==
-Date:   Mon, 21 Dec 2020 02:44:58 +0000
-Message-ID: <DM6PR11MB38194D88C20FDFC33CC5BDDB85C00@DM6PR11MB3819.namprd11.prod.outlook.com>
+Subject: Re: [PATCH v3 2/3] fpga: dfl: add the userspace I/O device support
+  for DFL devices
+Message-ID: <20201221033346.GE14854@yilunxu-OptiPlex-7050>
 References: <1608183881-18692-1-git-send-email-yilun.xu@intel.com>
  <1608183881-18692-3-git-send-email-yilun.xu@intel.com>
  <DM6PR11MB381997F5E297408A68BF5F2185C30@DM6PR11MB3819.namprd11.prod.outlook.com>
  <0d3f1f40-9f89-0ec2-96c4-b8b087f31382@redhat.com>
-In-Reply-To: <0d3f1f40-9f89-0ec2-96c4-b8b087f31382@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.5.1.3
-authentication-results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=intel.com;
-x-originating-ip: [192.198.147.192]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 743636b0-91c1-4c62-dce9-08d8a55a6853
-x-ms-traffictypediagnostic: DM6PR11MB3817:
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR11MB381716BD9C7383A0BCAD260785C00@DM6PR11MB3817.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wdcgO/+XYLYcA/VEXM1s1JumhK0pkNusAx2tPQEqK/tcEanq4LKaboH/QSCPkP589l/zJqHkEEzi5GbV+HEYQOrlo1nVqaSm4R41sgjuKsr9ZueUfha6QYAeLfZQc6JNiNBi9GTzI5UT2qXZwRuxXfl9tiGHHM86+cqHbylmHv+R+WoR6ephtwY3mJYkh8RNdWlsz9GCYJI9PuBiBeT+A1hOZmaYVTGuiQD3GoYJI9p8Hl1bHmxniZCrvDJe92cKiM3HI3B/5uYMwRhrA49YrxNxJrtGxPw3V9/64gau/Y+UdXK3XswuqzSqdRjbLP5izy0NQ77Q0u3exJ18tTqZk8wjWJGNim3fjvmOgRPIxobvqU5Mew8EYzjXs8mbIrIo8BP7EDCBxpNbuJYkrETwYw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(376002)(396003)(39860400002)(346002)(33656002)(316002)(76116006)(8936002)(2906002)(52536014)(83380400001)(53546011)(478600001)(110136005)(5660300002)(54906003)(6506007)(71200400001)(7696005)(86362001)(8676002)(9686003)(26005)(4326008)(186003)(66446008)(66476007)(66556008)(64756008)(55016002)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?cEJNQ2xzbGY1ZmR6MjhBK1FtaG5ZWFBVVzg2L0kxVllzM21qa09wcHdBV1ZG?=
- =?utf-8?B?OFV0SnZsVjdvdUovd1lKTVZGTmlpbUZBSXlOQzViUHB4bG1HY3k1ZGpEdWRm?=
- =?utf-8?B?S3hVWmNsMUgwalFQQ2ZuMkZSM3p0WkhwS2RjMDRQL0FEb2FBcGQ5dVZzeUF6?=
- =?utf-8?B?Y0NRMUZHOStqdFMwL01UakFHTGY0WWlHUThGdTZNVkdFenplVWE3MGp0MDdE?=
- =?utf-8?B?WUhGTGxub2pocEtydWtkT1RmSWJZQ3o2VU50NFVlUWQzb25Fem5OdGZveE9C?=
- =?utf-8?B?VW53bUhRTHRYS0p4NFAxamx6SkRobSt1TFYzcEU5amJIR1pQMldGQXVGUDhH?=
- =?utf-8?B?N3pqSm5EcXdjZTJOS0h3S2NRMlpxQVhCOFB0ZGZySkZtWWRVcUxLOXI0bFNG?=
- =?utf-8?B?RWVvTm5RWncwT3BKZWtxUzlDalJxbTgxblJ2dnVOL04yQUJHTFdYZ3IxRDho?=
- =?utf-8?B?dHQrb1hqVGFIUTJKTjc1WFRjeHZQUlZwWWFnZzdlRWRVRUtwL3JFZG8yNWd2?=
- =?utf-8?B?MDlPKzJIRUlGSXdVaUVjMEtpQkVaSVRZZmUzOHRHbmRLSThyU1dvazVlZnlQ?=
- =?utf-8?B?cU53Z2JFcWx1UmhRdWYwOElzY3JzN1ZPd0ZyM21mUncvQ0FaQlh5V0k1ZVV0?=
- =?utf-8?B?ZlFoMjRVSEdPS3MxQlVqYUdsQ2M5azJKRC9pTFlnOThhcFBHOUljUGt0ZGZV?=
- =?utf-8?B?SGZyYUEzTGYxK0JpV2pZTjRodFRDSnpndXFISnRCWlc5ajJUeVovU1FPWVpu?=
- =?utf-8?B?UThZbHI3QWhmVnlDYU9hZWxUcVlQWHY4RWJEa0JsWmZXczJLdllvc2kwcVdn?=
- =?utf-8?B?YzhMSGw4dEgrdjlFMzdrNk9VQ1JaYi9ycHBrRDlpa25vbTVDSmtockFHQVZV?=
- =?utf-8?B?Q2w3OUFNMzc3a2hwOGRtT2FNTThqbTllYXFRdDNWR09xTzVjSENBVzdaK2Uw?=
- =?utf-8?B?amxjS3JYSWZmMmxmK2FWNGp0aHphTllIcVk4M0lsa0J5VUxKRGU2cW1MblJC?=
- =?utf-8?B?TDZQNzlWaXdjYUkrclNpM3lqQjRFaHkzWTZpdGU1M0YvTjcyQmJBOHF2SzRX?=
- =?utf-8?B?NFV2UmlEWVk5ZElBRjBNc2k1S1V0NGNvWU0zNkx0dEoyWWFSUHYzRE9vRWt5?=
- =?utf-8?B?a0EzYUZiSXF0bXNnbnlnMjZlaHBqSG5HemxlNmNobGpZWjZMZlp4MTVOY2ll?=
- =?utf-8?B?QTJPYzQ4cUJCMW9qVUtMZ3Q0SlFJd1UwbUNFWEpXNk5qYWlSUlMvWWpaYktH?=
- =?utf-8?B?U1gvaURvaCs4KzJha0Vqc0dhOWFRQ0Mzck0rV3UwNVo5cldtcUdVcktScUJS?=
- =?utf-8?Q?cnBTwBY0NAlBE=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 743636b0-91c1-4c62-dce9-08d8a55a6853
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2020 02:44:58.7572
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Spg7n5r4O5VVN4ZeTbHTGaZgE2TDyy7KVJhvyoLsjN2U7dEcT6pAO2LnInegOnPOM1Be/V0S2nM6F98HUBPlRQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3817
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d3f1f40-9f89-0ec2-96c4-b8b087f31382@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjMgMi8zXSBmcGdhOiBkZmw6IGFkZCB0aGUgdXNlcnNw
-YWNlIEkvTyBkZXZpY2Ugc3VwcG9ydA0KPiBmb3IgREZMIGRldmljZXMNCj4gDQo+IE9uIDEyLzE4
-LzIwIDEyOjA1IEFNLCBXdSwgSGFvIHdyb3RlOg0KPiA+PiBTdWJqZWN0OiBbUEFUQ0ggdjMgMi8z
-XSBmcGdhOiBkZmw6IGFkZCB0aGUgdXNlcnNwYWNlIEkvTyBkZXZpY2Ugc3VwcG9ydA0KPiBmb3IN
-Cj4gPj4gREZMIGRldmljZXMNCj4gPj4NCj4gPj4gVGhpcyBwYXRjaCBzdXBwb3J0cyB0aGUgREZM
-IGRyaXZlcnMgYmUgd3JpdHRlbiBpbiB1c2Vyc3BhY2UuIFRoaXMgaXMNCj4gPj4gcmVhbGl6ZWQg
-YnkgZXhwb3NpbmcgdGhlIHVzZXJzcGFjZSBJL08gZGV2aWNlIGludGVyZmFjZXMuDQo+ID4+DQo+
-ID4+IFRoZSBkcml2ZXIgbGV2ZXJhZ2VzIHRoZSB1aW9fcGRydl9nZW5pcnEsIGl0IGFkZHMgdGhl
-IHVpb19wZHJ2X2dlbmlycQ0KPiA+PiBwbGF0Zm9ybSBkZXZpY2Ugd2l0aCB0aGUgREZMIGRldmlj
-ZSdzIHJlc291cmNlcywgYW5kIGxldCB0aGUgZ2VuZXJpYyBVSU8NCj4gPj4gcGxhdGZvcm0gZGV2
-aWNlIGRyaXZlciBwcm92aWRlIHN1cHBvcnQgdG8gdXNlcnNwYWNlIGFjY2VzcyB0byBrZXJuZWwN
-Cj4gPj4gaW50ZXJydXB0cyBhbmQgbWVtb3J5IGxvY2F0aW9ucy4NCj4gPj4NCj4gPj4gVGhlIGRy
-aXZlciBtYXRjaGVzIERGTCBkZXZpY2VzIGluIGEgZGlmZmVyZW50IHdheS4gSXQgaGFzIG5vIGRl
-dmljZSBpZA0KPiA+PiB0YWJsZSwgaW5zdGVhZCBpdCBtYXRjaGVzIGFueSBERkwgZGV2aWNlIHdo
-aWNoIGNvdWxkIG5vdCBiZSBoYW5kbGVkIGJ5DQo+ID4+IG90aGVyIERGTCBkcml2ZXJzLg0KPiA+
-IExvb2tzIGxpa2Ugd2Ugd2FudCB0byBidWlsZCBVSU8gZHJpdmVyIGFzIHRoZSBkZWZhdWx0L2dl
-bmVyaWMgZHJpdmVyIGZvciBERkwsDQo+ID4gaXQgc2VlbXMgZmluZSBidXQgbXkgY29uY2VybiBp
-cyB0aGF0IFVJTyBoYXMgaXRzIG93biBsaW1pdGF0aW9uLCBpZiBzb21lIGRheSwNCj4gPiBkZmwg
-ZGV2aWNlIGlzIGV4dGVuZGVkLCBidXQgVUlPIGhhcyBsaW1pdGF0aW9uLCB0aGVuIHdlIG1heSBu
-ZWVkIHRvIHNlbGVjdA0KPiA+IGFub3RoZXIgb25lIGFzIHRoZSBkZWZhdWx0IGRyaXZlci4uIG9y
-IHdlIGNhbiBqdXN0IG1hdGNoIHRoZW0gdXNpbmcNCj4gPiBpZF90YWJsZSBhcyB3ZSBrbm93IFVJ
-TyBtZWV0cyB0aGUgcmVxdWlyZW1lbnQgZm9yIHRob3NlIERGTCBkZXZpY2VzPw0KPiANCj4gV2hl
-biB3ZSBoYXZlIG11bHRpcGxlIGRlZmF1bHRzLCBjb3VsZCB0aGlzIGJlIGhhbmRsZWQgaW4gdGhl
-IGNvbmZpZ3VyeSA/DQoNCkRvIHlvdSBtZWFuIHNlbGVjdCBpdCB1c2luZyBjb25maWd1cmF0aW9u
-IG9wdGlvbnM/IEJ1dCBpZiBwZW9wbGUgaGF2ZSBhbHJlYWR5DQpjcmVhdGVkIHRoZSBzb2Z0d2Fy
-ZSBzdGFjayBvbiB0aGUgb2xkIG9uZSwgdGhlbiBpdCdzIGEgdmFsaWQgcmVxdWlyZW1lbnQgdGhh
-dA0Kd2UgbmVlZCBib3RoIG9sZCBhbmQgbmV3IGRlZmF1bHRzIHdvcmtpbmcgYXQgdGhlIHNhbWUg
-dGltZS4uLiBpdCdzIGhhcmQgdG8NCmFzayBldmVyeWJvZHkgdG8gc3dpdGNoIHRvIHRoZSBuZXcg
-b25lLg0KDQpIYW8NCg0KPiANCj4gVG9tDQo+IA0K
+On Fri, Dec 18, 2020 at 05:59:17AM -0800, Tom Rix wrote:
+> 
+> On 12/18/20 12:05 AM, Wu, Hao wrote:
+> >> Subject: [PATCH v3 2/3] fpga: dfl: add the userspace I/O device support for
+> >> DFL devices
+> >>
+> >> This patch supports the DFL drivers be written in userspace. This is
+> >> realized by exposing the userspace I/O device interfaces.
+> >>
+> >> The driver leverages the uio_pdrv_genirq, it adds the uio_pdrv_genirq
+> >> platform device with the DFL device's resources, and let the generic UIO
+> >> platform device driver provide support to userspace access to kernel
+> >> interrupts and memory locations.
+> >>
+> >> The driver matches DFL devices in a different way. It has no device id
+> >> table, instead it matches any DFL device which could not be handled by
+> >> other DFL drivers.
+> > Looks like we want to build UIO driver as the default/generic driver for DFL,
+
+I'm not going to make UIO as the default driver for DFL devs, the driver
+module will not be autoloaded. I want to provide a choice to operate on
+the unhandled devs in userspace. Insmod it if it helps otherwise leave
+it.
+
+> > it seems fine but my concern is that UIO has its own limitation, if some day,
+> > dfl device is extended, but UIO has limitation, then we may need to select 
+> > another one as the default driver.. or we can just match them using 
+
+I think we may not have to select a "default" driver, if we have a
+better way for userspace accessing, we could load that module, leave
+UIO.
+
+> > id_table as we know UIO meets the requirement for those DFL devices?
+
+As we discussed, the drawback is that we should always change the code to
+support a new dfl device for user accessing. But it is OK to me if the
+generic UIO match rule is not considered proper.
+
+> 
+> When we have multiple defaults, could this be handled in the configury ?
+
+I think we don't have to select a "default".
+
+> 
+> Tom
+> 
+> >
+> >> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> >> ---
+> >> v2: switch to the new matching algorithem. It matches DFL devices which
+> >>      could not be handled by other DFL drivers.
+> >>     refacor the code about device resources filling.
+> >>     fix some comments.
+> >> v3: split the dfl.c changes out of this patch.
+> >>     some minor fixes
+> >> ---
+> >>  drivers/fpga/Kconfig        |  10 ++++
+> >>  drivers/fpga/Makefile       |   1 +
+> >>  drivers/fpga/dfl-uio-pdev.c | 110
+> >> ++++++++++++++++++++++++++++++++++++++++++++
+> >>  3 files changed, 121 insertions(+)
+> >>  create mode 100644 drivers/fpga/dfl-uio-pdev.c
+> >>
+> >> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> >> index 5d7f0ae..7a88af9 100644
+> >> --- a/drivers/fpga/Kconfig
+> >> +++ b/drivers/fpga/Kconfig
+> >> @@ -202,6 +202,16 @@ config FPGA_DFL_NIOS_INTEL_PAC_N3000
+> >>  	  the card. It also instantiates the SPI master (spi-altera) for
+> >>  	  the card's BMC (Board Management Controller).
+> >>
+> >> +config FPGA_DFL_UIO_PDEV
+> >> +	tristate "FPGA DFL Driver for Userspace I/O platform devices"
+> >> +	depends on FPGA_DFL && UIO_PDRV_GENIRQ
+> >> +	help
+> >> +	  Enable this to allow some DFL drivers be written in userspace. It
+> >> +	  adds the uio_pdrv_genirq platform device with the DFL feature's
+> >> +	  resources, and lets the generic UIO platform device driver provide
+> >> +	  support for userspace access to kernel interrupts and memory
+> >> +	  locations.
+> > If we consider this as a default driver for everybody in DFL, then we could
+> > consider build it into the core, otherwise it always requires to be loaded
+> > manually, right?
+
+It should be loaded manually. I don't want to make this as default.
+
+> >
+> >> +
+> >>  config FPGA_DFL_PCI
+> >>  	tristate "FPGA DFL PCIe Device Driver"
+> >>  	depends on PCI && FPGA_DFL
+> >> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> >> index 18dc9885..8847fe0 100644
+> >> --- a/drivers/fpga/Makefile
+> >> +++ b/drivers/fpga/Makefile
+> >> @@ -45,6 +45,7 @@ dfl-afu-objs := dfl-afu-main.o dfl-afu-region.o dfl-afu-
+> >> dma-region.o
+> >>  dfl-afu-objs += dfl-afu-error.o
+> >>
+> >>  obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+> >> +obj-$(CONFIG_FPGA_DFL_UIO_PDEV)		+= dfl-uio-pdev.o
+> >>
+> >>  # Drivers for FPGAs which implement DFL
+> >>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
+> >> diff --git a/drivers/fpga/dfl-uio-pdev.c b/drivers/fpga/dfl-uio-pdev.c
+> >> new file mode 100644
+> >> index 0000000..8c57233
+> >> --- /dev/null
+> >> +++ b/drivers/fpga/dfl-uio-pdev.c
+> >> @@ -0,0 +1,110 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +/*
+> >> + * DFL driver for Userspace I/O platform devices
+> >> + *
+> >> + * Copyright (C) 2020 Intel Corporation, Inc.
+> >> + */
+> >> +#include <linux/dfl.h>
+> >> +#include <linux/errno.h>
+> >> +#include <linux/kernel.h>
+> >> +#include <linux/module.h>
+> >> +#include <linux/platform_device.h>
+> >> +#include <linux/slab.h>
+> >> +#include <linux/uio_driver.h>
+> >> +
+> >> +#include "dfl.h"
+> >> +
+> >> +#define DRIVER_NAME "dfl-uio-pdev"
+> >> +
+> >> +static struct dfl_driver dfl_uio_pdev_driver;
+> >> +
+> >> +static int check_for_other_drv_match(struct device_driver *drv, void *data)
+> >> +{
+> >> +	struct dfl_driver *ddrv = to_dfl_drv(drv);
+> >> +	struct dfl_device *ddev = data;
+> >> +
+> >> +	/* skip myself */
+> >> +	if (ddrv == &dfl_uio_pdev_driver)
+> >> +		return 0;
+> >> +
+> >> +	return dfl_match_device(ddev, ddrv);
+> >> +}
+> >> +
+> >> +static int dfl_uio_pdev_match(struct dfl_device *ddev)
+> >> +{
+> >> +	/*
+> >> +	 * If any other driver wants the device, leave the device to this other
+> >> +	 * driver.
+> >> +	 */
+> >> +	if (bus_for_each_drv(&dfl_bus_type, NULL, ddev,
+> >> check_for_other_drv_match))
+> >> +		return 0;
+> >> +
+> >> +	return 1;
+> >> +}
+> >> +
+> >> +static int dfl_uio_pdev_probe(struct dfl_device *ddev)
+> >> +{
+> >> +	struct device *dev = &ddev->dev;
+> >> +	struct platform_device_info pdevinfo = { 0 };
+> >> +	struct uio_info uio_pdata = { 0 };
+> >> +	struct platform_device *uio_pdev;
+> >> +	struct resource *res;
+> >> +	int i;
+> >> +
+> >> +	pdevinfo.name = "uio_pdrv_genirq";
+> >> +
+> >> +	res = kcalloc(ddev->num_irqs + 1, sizeof(*res), GFP_KERNEL);
+> >> +	if (!res)
+> >> +		return -ENOMEM;
+> >> +
+> >> +	res[0].parent = &ddev->mmio_res;
+> >> +	res[0].flags = IORESOURCE_MEM;
+> >> +	res[0].start = ddev->mmio_res.start;
+> >> +	res[0].end = ddev->mmio_res.end;
+> >> +
+> >> +	/* then add irq resource */
+> >> +	for (i = 0; i < ddev->num_irqs; i++) {
+> >> +		res[i + 1].flags = IORESOURCE_IRQ;
+> >> +		res[i + 1].start = ddev->irqs[i];
+> >> +		res[i + 1].end = ddev->irqs[i];
+> >> +	}
+> > How many interrupts UIO could support? or we need some
+> > warning or just even return error here?
+
+Yes, I can add some warning here.
+
+Thanks,
+Yilun
