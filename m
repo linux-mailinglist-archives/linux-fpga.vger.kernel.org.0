@@ -2,95 +2,78 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BEF2DFCF1
-	for <lists+linux-fpga@lfdr.de>; Mon, 21 Dec 2020 15:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46A02E114D
+	for <lists+linux-fpga@lfdr.de>; Wed, 23 Dec 2020 02:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726429AbgLUOkN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 21 Dec 2020 09:40:13 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:53028 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726214AbgLUOkM (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 21 Dec 2020 09:40:12 -0500
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BLEZCLI006619;
-        Mon, 21 Dec 2020 09:39:19 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com with ESMTP id 35hfa9w8gj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Dec 2020 09:39:19 -0500
-Received: from SCSQMBX11.ad.analog.com (SCSQMBX11.ad.analog.com [10.77.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 0BLEdHbQ049459
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 21 Dec 2020 09:39:17 -0500
-Received: from SCSQCASHYB6.ad.analog.com (10.77.17.132) by
- SCSQMBX11.ad.analog.com (10.77.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Mon, 21 Dec 2020 06:39:16 -0800
-Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
- SCSQCASHYB6.ad.analog.com (10.77.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.721.2;
- Mon, 21 Dec 2020 06:39:16 -0800
-Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX11.ad.analog.com
- (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Mon, 21 Dec 2020 06:39:16 -0800
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0BLEd9nG031672;
-        Mon, 21 Dec 2020 09:39:13 -0500
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <lars@metafoo.de>,
-        <linux-fpga@vger.kernel.org>, <mdf@kernel.org>,
-        <dragos.bogdan@analog.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH 2/2] dt-bindings: clock: adi,axi-clkgen: add Zynq & ZynqMP compatible strings
-Date:   Mon, 21 Dec 2020 16:42:24 +0200
-Message-ID: <20201221144224.50814-2-alexandru.ardelean@analog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201221144224.50814-1-alexandru.ardelean@analog.com>
-References: <20201221144224.50814-1-alexandru.ardelean@analog.com>
+        id S1726683AbgLWBUY (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 22 Dec 2020 20:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725985AbgLWBUX (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 22 Dec 2020 20:20:23 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270EDC0613D3;
+        Tue, 22 Dec 2020 17:19:43 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id c12so9428112pfo.10;
+        Tue, 22 Dec 2020 17:19:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=sh+f0OQIJac0vHlzJ912CDuEKoFfDRc2vYNfYgcFedM=;
+        b=By+C5Rg0iMuR+8eNBcMxkTiv6hsbzEyuwUDvoIfsF+lF+BR8uiC4J1dO22/oU/kbzs
+         qWeREFnJfrgrwUMpxWtsQs6Q1Rr0sIaAqoGvHmh/DX5cCaNpb+wAiGBpDZJK8SDe9isD
+         9ZyeQnUlgbfNlDT0NX1QWSPznH/+mjkxTc3gdYPyGY1GoNas5qJaLbU8lvtjlfpe4Hy3
+         zimBNuattNet/whmcsI5u3sKP7R8NMr6LGk0vvO8GgbdUB4q8onuaKG9wA5v/X5CAJAK
+         lpMbEm/yX+Lf1OuNZ7MjeA8hSxGWNKDnVwoVBlUg4YYzZo67vdvcVnnxG3+3sbBLCxxx
+         cQZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=sh+f0OQIJac0vHlzJ912CDuEKoFfDRc2vYNfYgcFedM=;
+        b=M+i+dF6s4Kz9TGCnb6EpTRz3uUtDOYCFIwQErlVPWEQswJbnImUNX98ildzqaTqfzF
+         /z8cU1drtcs9j3j9mzrwndDx54pNfELvw+s8IekOkvfPmHHMLCZflWBuUFnn9Jw4cTOW
+         knSyIbtxXrdHWFUnFPgQyD4MjYJMMK+PWr6LMyThO/bsjXmI3pT31AmBzHwlZzfGASIw
+         fZHMYzHT5wDWy9OJ3jUf3JS7B/0nud7E2/cf+KlY8q80rj9MRI/L6DlzYzNZXMPpKkoJ
+         5vwAT1Z4FITv9FDE3Q+RHjz+28ZjiIN6qyEerpQLywxksu985+2dtQngQcpyYGzAoZ6Z
+         ptRw==
+X-Gm-Message-State: AOAM533AhXfpJx+uRDRLlgIZxwOlrXMHXK0BCC0e/lY28dlldFrmMROY
+        5kYuz8DTb7im97e4hSzGO/pqwOBf/fGw13hDVovr2Q0CK20rNg==
+X-Google-Smtp-Source: ABdhPJxLIby81dh+ty3F1cUbhJkPv65atOIUZVuBsTg1WvjwQHR6bzmGRFIAj6JjWDkqw/ZFt7xjk1lkcF+ISGPI+Iw=
+X-Received: by 2002:a62:7715:0:b029:19e:26e7:7c87 with SMTP id
+ s21-20020a6277150000b029019e26e77c87mr1502305pfc.18.1608686382618; Tue, 22
+ Dec 2020 17:19:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-21_08:2020-12-21,2020-12-21 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- bulkscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 suspectscore=0
- priorityscore=1501 mlxlogscore=999 malwarescore=0 mlxscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012210104
+From:   =?UTF-8?B?5b6Q5aSp5a6H?= <xu2tianyu@gmail.com>
+Date:   Wed, 23 Dec 2020 09:19:31 +0800
+Message-ID: <CA+tJOF9VqCC1y5RtN-i=zN5QHpPQddXg6JR6FDL3d3BrCmBfiA@mail.gmail.com>
+Subject: SDHCI: problem of RV_BOOT.bin run on pynq
+To:     linux-fpga@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The axi-clkgen driver now supports ZynqMP (UltraScale) as well, however the
-driver needs to use different PFD & VCO limits.
+When I run the RV_BOOT.bin, which is generated by riscv-pk with
+linux-5.9.4 as payload, on xilinx pynq-z2, I met the problem below:
 
-For ZynqMP, these needs to be selected by using the
-'adi,zynqmp-axi-clkgen-2.00.a' string. For consistency a
-'adi,zynq-axi-clkgen-2.00.a' has been added which should behave as the
-original compatible string (i.e. 'adi,axi-clkgen-2.00.a').
+mmc0: Timeout waiting for hardware cmd interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00000000 | Blk cnt:  0x00000000
+mmc0: sdhci: Argument:  0x00000c00 | Trn mode: 0x00000000
+mmc0: sdhci: Present:   0x01ff0001 | Host ctl: 0x00000001
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x00000000 | Int stat: 0x00018000
+mmc0: sdhci: Int enab:  0x00ff0083 | Sig enab: 0x00ff0083
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000001
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000341a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000000 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000000 | ADMA Ptr: 0x00000000
+mmc0: sdhci:
 
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
----
- Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml b/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
-index 0d06387184d6..398954ec6767 100644
---- a/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
-+++ b/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
-@@ -20,6 +20,8 @@ properties:
-   compatible:
-     enum:
-       - adi,axi-clkgen-2.00.a
-+      - adi,zynq-axi-clkgen-2.00.a
-+      - adi,zynqmp-axi-clkgen-2.00.a
- 
-   clocks:
-     description:
--- 
-2.17.1
-
+Does anyone have any idea about this problem? Thanks a lot.
