@@ -2,78 +2,179 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C46A02E114D
-	for <lists+linux-fpga@lfdr.de>; Wed, 23 Dec 2020 02:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4602B2E278E
+	for <lists+linux-fpga@lfdr.de>; Thu, 24 Dec 2020 15:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbgLWBUY (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 22 Dec 2020 20:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725985AbgLWBUX (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 22 Dec 2020 20:20:23 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270EDC0613D3;
-        Tue, 22 Dec 2020 17:19:43 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id c12so9428112pfo.10;
-        Tue, 22 Dec 2020 17:19:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=sh+f0OQIJac0vHlzJ912CDuEKoFfDRc2vYNfYgcFedM=;
-        b=By+C5Rg0iMuR+8eNBcMxkTiv6hsbzEyuwUDvoIfsF+lF+BR8uiC4J1dO22/oU/kbzs
-         qWeREFnJfrgrwUMpxWtsQs6Q1Rr0sIaAqoGvHmh/DX5cCaNpb+wAiGBpDZJK8SDe9isD
-         9ZyeQnUlgbfNlDT0NX1QWSPznH/+mjkxTc3gdYPyGY1GoNas5qJaLbU8lvtjlfpe4Hy3
-         zimBNuattNet/whmcsI5u3sKP7R8NMr6LGk0vvO8GgbdUB4q8onuaKG9wA5v/X5CAJAK
-         lpMbEm/yX+Lf1OuNZ7MjeA8hSxGWNKDnVwoVBlUg4YYzZo67vdvcVnnxG3+3sbBLCxxx
-         cQZw==
+        id S1727144AbgLXOEM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 24 Dec 2020 09:04:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31951 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727372AbgLXOEM (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 24 Dec 2020 09:04:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1608818565;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KBihBeE7FaK4G7GPAOp0NUP3AloiGzKbKb/E0jog36A=;
+        b=Yu+Ot/IfsbgC+Hh316xoYOmt8lPM5G02aO+q8QmCW6sDXXDexFhR+F9gM4WXwTzBA6mYhL
+        OyapVHC3mMxX/n73nxnz7YHYB+P4rSULWqRqDWCmh+3ZCRenoQWEFdQMSxpKImxq0vJDkg
+        Pim35bEUQvOsT8iDqqMo1sMtaoHLJVw=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-57-Qir5Am4yMf2CfvOBpBn-9g-1; Thu, 24 Dec 2020 09:02:43 -0500
+X-MC-Unique: Qir5Am4yMf2CfvOBpBn-9g-1
+Received: by mail-ot1-f72.google.com with SMTP id q5so1044989otc.11
+        for <linux-fpga@vger.kernel.org>; Thu, 24 Dec 2020 06:02:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=sh+f0OQIJac0vHlzJ912CDuEKoFfDRc2vYNfYgcFedM=;
-        b=M+i+dF6s4Kz9TGCnb6EpTRz3uUtDOYCFIwQErlVPWEQswJbnImUNX98ildzqaTqfzF
-         /z8cU1drtcs9j3j9mzrwndDx54pNfELvw+s8IekOkvfPmHHMLCZflWBuUFnn9Jw4cTOW
-         knSyIbtxXrdHWFUnFPgQyD4MjYJMMK+PWr6LMyThO/bsjXmI3pT31AmBzHwlZzfGASIw
-         fZHMYzHT5wDWy9OJ3jUf3JS7B/0nud7E2/cf+KlY8q80rj9MRI/L6DlzYzNZXMPpKkoJ
-         5vwAT1Z4FITv9FDE3Q+RHjz+28ZjiIN6qyEerpQLywxksu985+2dtQngQcpyYGzAoZ6Z
-         ptRw==
-X-Gm-Message-State: AOAM533AhXfpJx+uRDRLlgIZxwOlrXMHXK0BCC0e/lY28dlldFrmMROY
-        5kYuz8DTb7im97e4hSzGO/pqwOBf/fGw13hDVovr2Q0CK20rNg==
-X-Google-Smtp-Source: ABdhPJxLIby81dh+ty3F1cUbhJkPv65atOIUZVuBsTg1WvjwQHR6bzmGRFIAj6JjWDkqw/ZFt7xjk1lkcF+ISGPI+Iw=
-X-Received: by 2002:a62:7715:0:b029:19e:26e7:7c87 with SMTP id
- s21-20020a6277150000b029019e26e77c87mr1502305pfc.18.1608686382618; Tue, 22
- Dec 2020 17:19:42 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=KBihBeE7FaK4G7GPAOp0NUP3AloiGzKbKb/E0jog36A=;
+        b=RSGONXjex169GNYzyP9EIcuMcL84yWQ3KBoBrhC3VSk1VA/r0HL1WSTayqGej1PhQx
+         u3Kz82gZPjNBN8PptoQhCu7rA2mA2hfMdLo6dw6U8KG8ZB09QGX/YM4B5jHqQHg1xL3a
+         xBXNBlkGcNEgEuA+uIBUvCupM/kvNFaeDdcaSv8eENHC/uw2GkBpKF4+6olFvoU97P2C
+         2NVwR5F7Z8kksSdhwzfQnJ6BGUn5okO1kF6Zis7PadE+HuqA7fxhsfx+GTWYjmiDgTew
+         3PqDqLBS+WQg8qRislUawwcteCDN/+5ph+9VyCSK+qR6mKc0Pmn5Gob5wxFGaLtMluCZ
+         vVzQ==
+X-Gm-Message-State: AOAM531NOm9YHBLhLP4gAGKiFuZ5YE8Cu54fWaS8pz/ve/XW0pMjwEvg
+        9Cui+nwE3JLca2UiBc/a03Q9VQqhMBCzgCDfSDGih/TL1rk0hXqHgD38KbOguy6ufBupRXNA36Q
+        pRFeNe7OjcsU8jZbkkjUsew==
+X-Received: by 2002:a9d:5c8b:: with SMTP id a11mr22357619oti.126.1608818562305;
+        Thu, 24 Dec 2020 06:02:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy5TuK4g70Wa7LQ5fkxYOJAqadcOmmttNzmJip+R7fCyD06vTogTSKVmSmRkNY9QCefp2bAug==
+X-Received: by 2002:a9d:5c8b:: with SMTP id a11mr22357606oti.126.1608818562059;
+        Thu, 24 Dec 2020 06:02:42 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id g12sm6838873oos.8.2020.12.24.06.02.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Dec 2020 06:02:41 -0800 (PST)
+Subject: Re: [PATCH 1/2] clk: axi-clkgen: add support for ZynqMP (UltraScale)
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        lars@metafoo.de, linux-fpga@vger.kernel.org, mdf@kernel.org,
+        dragos.bogdan@analog.com, Mathias Tausen <mta@gomspace.com>
+References: <20201221144224.50814-1-alexandru.ardelean@analog.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <58111fcc-d4c7-4b26-e038-2882b636e17f@redhat.com>
+Date:   Thu, 24 Dec 2020 06:02:39 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-From:   =?UTF-8?B?5b6Q5aSp5a6H?= <xu2tianyu@gmail.com>
-Date:   Wed, 23 Dec 2020 09:19:31 +0800
-Message-ID: <CA+tJOF9VqCC1y5RtN-i=zN5QHpPQddXg6JR6FDL3d3BrCmBfiA@mail.gmail.com>
-Subject: SDHCI: problem of RV_BOOT.bin run on pynq
-To:     linux-fpga@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201221144224.50814-1-alexandru.ardelean@analog.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-When I run the RV_BOOT.bin, which is generated by riscv-pk with
-linux-5.9.4 as payload, on xilinx pynq-z2, I met the problem below:
 
-mmc0: Timeout waiting for hardware cmd interrupt.
-mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
-mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
-mmc0: sdhci: Blk size:  0x00000000 | Blk cnt:  0x00000000
-mmc0: sdhci: Argument:  0x00000c00 | Trn mode: 0x00000000
-mmc0: sdhci: Present:   0x01ff0001 | Host ctl: 0x00000001
-mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
-mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
-mmc0: sdhci: Timeout:   0x00000000 | Int stat: 0x00018000
-mmc0: sdhci: Int enab:  0x00ff0083 | Sig enab: 0x00ff0083
-mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000001
-mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
-mmc0: sdhci: Cmd:       0x0000341a | Max curr: 0x00000001
-mmc0: sdhci: Resp[0]:   0x00000000 | Resp[1]:  0x00000000
-mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
-mmc0: sdhci: Host ctl2: 0x00000000
-mmc0: sdhci: ADMA Err:  0x00000000 | ADMA Ptr: 0x00000000
-mmc0: sdhci:
+On 12/21/20 6:42 AM, Alexandru Ardelean wrote:
+> From: Dragos Bogdan <dragos.bogdan@analog.com>
+>
+> This IP core also works and is supported on the Xilinx ZynqMP (UltraScale)
+> FPGA boards.
+> This patch enables the driver to be available on these platforms as well.
+>
+> Since axi-clkgen is now supported on ZYNQMP, we need to make sure the
+> max/min frequencies of the PFD and VCO are respected.
+>
+> This change adds two new compatible strings to select limits for Zynq or
+> ZynqMP from the device data (in the OF table). The old compatible string
+> (i.e. adi,axi-clkgen-2.00.a) is the same as adi,zynq-axi-clkgen-2.00.a,
+> since the original version of this driver was designed on top of that
+> platform.
+>
+> Signed-off-by: Dragos Bogdan <dragos.bogdan@analog.com>
+> Signed-off-by: Mathias Tausen <mta@gomspace.com>
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+> ---
+>
+> This is a re-spin of an older series.
+> It needed to wait a txt -> yaml dt conversion:
+> https://patchwork.kernel.org/project/linux-clk/patch/20201013143421.84188-1-alexandru.ardelean@analog.com/
+>
+> It's 2 patches squashed into one:
+> https://patchwork.kernel.org/project/linux-clk/patch/20200929144417.89816-12-alexandru.ardelean@analog.com/
+> https://patchwork.kernel.org/project/linux-clk/patch/20200929144417.89816-14-alexandru.ardelean@analog.com/
+>
+> The series from where all this started is:
+> https://lore.kernel.org/linux-clk/20200929144417.89816-1-alexandru.ardelean@analog.com/
+>
+> Well, v4 was the point where I decided to split this into smaller
+> series, and also do the conversion of the binding to yaml.
+>
+>  drivers/clk/Kconfig          |  2 +-
+>  drivers/clk/clk-axi-clkgen.c | 15 +++++++++++++++
+>  2 files changed, 16 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index 85856cff506c..252333e585e7 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -247,7 +247,7 @@ config CLK_TWL6040
+>  
+>  config COMMON_CLK_AXI_CLKGEN
+>  	tristate "AXI clkgen driver"
+> -	depends on ARCH_ZYNQ || MICROBLAZE || COMPILE_TEST
+> +	depends on ARCH_ZYNQ || ARCH_ZYNQMP || MICROBLAZE || COMPILE_TEST
+>  	help
+>  	  Support for the Analog Devices axi-clkgen pcore clock generator for Xilinx
+>  	  FPGAs. It is commonly used in Analog Devices' reference designs.
+> diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
+> index ad86e031ba3e..a413c13334ff 100644
+> --- a/drivers/clk/clk-axi-clkgen.c
+> +++ b/drivers/clk/clk-axi-clkgen.c
+> @@ -108,6 +108,13 @@ static uint32_t axi_clkgen_lookup_lock(unsigned int m)
+>  	return 0x1f1f00fa;
+>  }
+>  
 
-Does anyone have any idea about this problem? Thanks a lot.
+Could something like
+
+#ifdef ARCH_ZYNQMP
+
+> +static const struct axi_clkgen_limits axi_clkgen_zynqmp_default_limits = {
+> +	.fpfd_min = 10000,
+> +	.fpfd_max = 450000,
+> +	.fvco_min = 800000,
+> +	.fvco_max = 1600000,
+> +};
+
+#endif
+
+be added here and similar places to limit unused code ?
+
+> +
+>  static const struct axi_clkgen_limits axi_clkgen_zynq_default_limits = {
+>  	.fpfd_min = 10000,
+>  	.fpfd_max = 300000,
+> @@ -560,6 +567,14 @@ static int axi_clkgen_remove(struct platform_device *pdev)
+>  }
+>  
+>  static const struct of_device_id axi_clkgen_ids[] = {
+> +	{
+> +		.compatible = "adi,zynqmp-axi-clkgen-2.00.a",
+> +		.data = &axi_clkgen_zynqmp_default_limits,
+> +	},
+> +	{
+> +		.compatible = "adi,zynq-axi-clkgen-2.00.a",
+> +		.data = &axi_clkgen_zynq_default_limits,
+> +	},
+
+This looks like zynqmp AND zynq are being added.
+
+Is this a mistake ?
+
+Tom
+
+>  	{
+>  		.compatible = "adi,axi-clkgen-2.00.a",
+>  		.data = &axi_clkgen_zynq_default_limits,
+
