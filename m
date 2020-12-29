@@ -2,68 +2,115 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C94DF2E3B93
-	for <lists+linux-fpga@lfdr.de>; Mon, 28 Dec 2020 14:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9792E6D38
+	for <lists+linux-fpga@lfdr.de>; Tue, 29 Dec 2020 03:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406990AbgL1Nvs (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 28 Dec 2020 08:51:48 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:9939 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406981AbgL1Nvr (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 28 Dec 2020 08:51:47 -0500
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4D4JpV5yKNzhyRP;
-        Mon, 28 Dec 2020 21:50:26 +0800 (CST)
-Received: from ubuntu.network (10.175.138.68) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 28 Dec 2020 21:50:56 +0800
-From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <mdf@kernel.org>, <linux-fpga@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <trix@redhat.com>, Zheng Yongjun <zhengyongjun3@huawei.com>
-Subject: [PATCH -next] fpga: Use DEFINE_SPINLOCK() for spinlock
-Date:   Mon, 28 Dec 2020 21:51:35 +0800
-Message-ID: <20201228135135.28788-1-zhengyongjun3@huawei.com>
-X-Mailer: git-send-email 2.22.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.138.68]
-X-CFilter-Loop: Reflected
+        id S1727217AbgL2CWM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 28 Dec 2020 21:22:12 -0500
+Received: from mga14.intel.com ([192.55.52.115]:61435 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727213AbgL2CWM (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 28 Dec 2020 21:22:12 -0500
+IronPort-SDR: WFuB7dVkneKz5TKG4lpaFqj40Uj1SbsDYQukyXEv96Gm+mkosjtSydFKWCFSNC0LRJvn69WiFV
+ /+q1F6nPbXRA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9848"; a="175672159"
+X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
+   d="scan'208";a="175672159"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 18:21:31 -0800
+IronPort-SDR: 6v1FP23WRj3IXNCDP4lNIB7ejLIBkLRjkk8ditc1hOeKz9lWBAyRsx2Pqea6dQ2Iqv+GDNA8J/
+ y0sqf30B8iQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
+   d="scan'208";a="419006047"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
+  by orsmga001.jf.intel.com with ESMTP; 28 Dec 2020 18:21:29 -0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     mdf@kernel.org, krzk@kernel.org, gregkh@linuxfoundation.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com
+Subject: [PATCH v14 0/6] add DFL bus support to MODULE_DEVICE_TABLE()
+Date:   Tue, 29 Dec 2020 10:16:42 +0800
+Message-Id: <1609208208-6697-1-git-send-email-yilun.xu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-spinlock can be initialized automatically with DEFINE_SPINLOCK()
-rather than explicitly calling spin_lock_init().
+Main changes from v1:
+- A new patch (Patch #3) to fix the description.
+- Rename the dfl-bus.h to dfl.h
+- Updated the MAINTAINERS under FPGA DFL DRIVERS.
+- Improve comments and minor fixes.
 
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
----
- drivers/fpga/fpga-bridge.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Main changes from v2:
+- Change the bus name from "dfl" to "fpga-dfl", also rename related
+  variables, functions ...
+- Changes the data type of fpga_dfl_device_id.type from u8 to u16
+- Explicitly defines the values of enum fpga_dfl_id_type
+- Delete the comments for the valid bits of type & feature_id
+- changes MODALIAS format for fpga dfl devices
 
-diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-index 2deccacc3aa7..e9266b2a357f 100644
---- a/drivers/fpga/fpga-bridge.c
-+++ b/drivers/fpga/fpga-bridge.c
-@@ -17,7 +17,7 @@ static DEFINE_IDA(fpga_bridge_ida);
- static struct class *fpga_bridge_class;
- 
- /* Lock for adding/removing bridges to linked lists*/
--static spinlock_t bridge_list_lock;
-+static DEFINE_SPINLOCK(bridge_list_lock);
- 
- /**
-  * fpga_bridge_enable - Enable transactions on the bridge
-@@ -479,8 +479,6 @@ static void fpga_bridge_dev_release(struct device *dev)
- 
- static int __init fpga_bridge_dev_init(void)
- {
--	spin_lock_init(&bridge_list_lock);
--
- 	fpga_bridge_class = class_create(THIS_MODULE, "fpga_bridge");
- 	if (IS_ERR(fpga_bridge_class))
- 		return PTR_ERR(fpga_bridge_class);
+Main changes from v3:
+- Change the bus name back to "dfl".
+- Add 2 patches (#5, 6) for dfl drivers.
+- Delete the retimer FEC mode configuration via module_parameter for
+  Patch #5
+- Merge the patch "Make m10_n3000_info static" (https://lore.kernel.org/linux-fpga/52d8411e-13d8-1e91-756d-131802f5f445@huawei.com/T/#t)
+  into Patch #5
+- Add static prefix for emif attributes macro for Patch #6
+
+Main changes from v9:
+- Add the description for struct dfl_device_id in mod_devicetable.h
+- Move the dfl.h from include/linux/fpga to include/linux
+- some code refactor and minor fixes for dfl-n3000-nios
+
+Main changes from v10:
+- use sysfs_emit instead of sprintf for both patches
+- rebase to 5.10-rc1
+
+Main changes from v11:
+- Fix the type of driver_data from unsigned long to kernel_ulong_t
+- Fixed up header guards to match filename by Moritz
+- move the MODULE_DEVICE_TABLE() right after its definition
+
+Main changes from v12:
+- For patch #5, fix the wrong use of logical'||', should use '|'
+
+Main changes from v13:
+- Rebase to 5.11-rc1
+
+Xu Yilun (6):
+  fpga: dfl: fix the definitions of type & feature_id for dfl devices
+  fpga: dfl: move dfl_device_id to mod_devicetable.h
+  fpga: dfl: add dfl bus support to MODULE_DEVICE_TABLE()
+  fpga: dfl: move dfl bus related APIs to include/linux/dfl.h
+  fpga: dfl: add support for N3000 Nios private feature
+  memory: dfl-emif: add the DFL EMIF private feature driver
+
+ .../ABI/testing/sysfs-bus-dfl-devices-emif         |  25 +
+ .../ABI/testing/sysfs-bus-dfl-devices-n3000-nios   |  47 ++
+ MAINTAINERS                                        |   3 +-
+ drivers/fpga/Kconfig                               |  11 +
+ drivers/fpga/Makefile                              |   2 +
+ drivers/fpga/dfl-n3000-nios.c                      | 588 +++++++++++++++++++++
+ drivers/fpga/dfl.c                                 |   4 +-
+ drivers/fpga/dfl.h                                 |  85 +--
+ drivers/memory/Kconfig                             |   9 +
+ drivers/memory/Makefile                            |   2 +
+ drivers/memory/dfl-emif.c                          | 207 ++++++++
+ include/linux/dfl.h                                |  86 +++
+ include/linux/mod_devicetable.h                    |  24 +
+ scripts/mod/devicetable-offsets.c                  |   4 +
+ scripts/mod/file2alias.c                           |  13 +
+ 15 files changed, 1023 insertions(+), 87 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl-devices-emif
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-dfl-devices-n3000-nios
+ create mode 100644 drivers/fpga/dfl-n3000-nios.c
+ create mode 100644 drivers/memory/dfl-emif.c
+ create mode 100644 include/linux/dfl.h
+
 -- 
-2.22.0
+2.7.4
 
