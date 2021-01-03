@@ -2,99 +2,96 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C172E8637
-	for <lists+linux-fpga@lfdr.de>; Sat,  2 Jan 2021 04:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5024F2E8D29
+	for <lists+linux-fpga@lfdr.de>; Sun,  3 Jan 2021 17:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727369AbhABDS5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 1 Jan 2021 22:18:57 -0500
-Received: from mga14.intel.com ([192.55.52.115]:61870 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727133AbhABDS5 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 1 Jan 2021 22:18:57 -0500
-IronPort-SDR: O2YgumPmjJ2Vb4qkXHiovgQTl9s3ftzjlnp5tfTWWaThdu4sD9TJENZdq8TEaQ7BDdT5T7LLeQ
- fqRKE7mqYMrA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9851"; a="176026815"
-X-IronPort-AV: E=Sophos;i="5.78,469,1599548400"; 
-   d="scan'208";a="176026815"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2021 19:17:51 -0800
-IronPort-SDR: +V6gPm97kcYBHH1v/MzMSPYsID6tQC3aB/LPUyJApk+nDsuRT6cHcHH/5/xatCVzklW1OeSMja
- gJScGCPb1H5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,469,1599548400"; 
-   d="scan'208";a="349085244"
-Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Jan 2021 19:17:50 -0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, trix@redhat.com, lgoncalv@redhat.com,
-        yilun.xu@intel.com, hao.wu@intel.com
-Subject: [PATCH v5 2/2] Documentation: fpga: dfl: Add description for DFL UIO support
-Date:   Sat,  2 Jan 2021 11:13:02 +0800
-Message-Id: <1609557182-20787-3-git-send-email-yilun.xu@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1609557182-20787-1-git-send-email-yilun.xu@intel.com>
-References: <1609557182-20787-1-git-send-email-yilun.xu@intel.com>
+        id S1727168AbhACQaq (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 3 Jan 2021 11:30:46 -0500
+Received: from mail-io1-f45.google.com ([209.85.166.45]:42060 "EHLO
+        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726962AbhACQaq (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 3 Jan 2021 11:30:46 -0500
+Received: by mail-io1-f45.google.com with SMTP id q137so22824920iod.9;
+        Sun, 03 Jan 2021 08:30:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=86i+Dk92lWWCyD4iVoVNNMNzfrvFDGHE0Q+u7Pv1tAg=;
+        b=BnshLM5DI3x/zFyh+cH8bnbsKOENfPM2CYRv/VA96kBxLGuJod5/N6OTxEvNP4xKwV
+         MLtthZXDotLtN4Isj4iAMROJZKVdP1/VXuysbe/eK5f/rW0Nm4kWZejQ0aja/kGCvNdw
+         ATDlBI/Su9fORTQZqFli1pD+C65VGzfpIEGVuC31t1Sbj6S/BrYN1F/Spv5pEJLdRziT
+         /0hH566TznW2v3lKCZhec7c8x4RYc80p9fxTVOMZCUsz2FbiN7rAfSvK5LTJoXpWCT98
+         LA+MppjOmmZ5P1urVrSPQDIwKBs2QrxqLtyWp/YkUblLDC2OaInWimY1dXIBnAd/6rah
+         8kWA==
+X-Gm-Message-State: AOAM533kUJi4yntfHuUAtl+JS1YpCrKhWY9677w3FnVWjx0UUNyZd6ll
+        YvJKKnPb2+WtWpx19wn2pRydX3rVHw==
+X-Google-Smtp-Source: ABdhPJwbqg/++dfS2HqoOG718/oumLOl4T5g1ipEFEAmCd+vT/JgXsxqDnYrVQNU3eFKCHV9q4arbw==
+X-Received: by 2002:a02:9f8b:: with SMTP id a11mr60036063jam.108.1609691404905;
+        Sun, 03 Jan 2021 08:30:04 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id 9sm41318898iob.28.2021.01.03.08.30.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jan 2021 08:30:03 -0800 (PST)
+Received: (nullmailer pid 3994326 invoked by uid 1000);
+        Sun, 03 Jan 2021 16:30:00 -0000
+Date:   Sun, 3 Jan 2021 09:30:00 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, lars@metafoo.de, linux-fpga@vger.kernel.org,
+        mdf@kernel.org, dragos.bogdan@analog.com
+Subject: Re: [PATCH 2/2] dt-bindings: clock: adi,axi-clkgen: add Zynq &
+ ZynqMP compatible strings
+Message-ID: <20210103163000.GA3986534@robh.at.kernel.org>
+References: <20201221144224.50814-1-alexandru.ardelean@analog.com>
+ <20201221144224.50814-2-alexandru.ardelean@analog.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201221144224.50814-2-alexandru.ardelean@analog.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This patch adds description for UIO support for dfl devices on DFL
-bus.
+On Mon, Dec 21, 2020 at 04:42:24PM +0200, Alexandru Ardelean wrote:
+> The axi-clkgen driver now supports ZynqMP (UltraScale) as well, however the
+> driver needs to use different PFD & VCO limits.
+> 
+> For ZynqMP, these needs to be selected by using the
+> 'adi,zynqmp-axi-clkgen-2.00.a' string. For consistency a
+> 'adi,zynq-axi-clkgen-2.00.a' has been added which should behave as the
+> original compatible string (i.e. 'adi,axi-clkgen-2.00.a').
 
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
----
-v2: no doc in v1, add it for v2.
-v3: some documentation fixes.
-v4: documentation change since the driver matching is changed.
-v5: no change.
----
- Documentation/fpga/dfl.rst | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Version numbers and SoC are kind of rendundant.
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index 0404fe6..b8497f3 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -7,6 +7,7 @@ Authors:
- - Enno Luebbers <enno.luebbers@intel.com>
- - Xiao Guangrong <guangrong.xiao@linux.intel.com>
- - Wu Hao <hao.wu@intel.com>
-+- Xu Yilun <yilun.xu@intel.com>
- 
- The Device Feature List (DFL) FPGA framework (and drivers according to
- this framework) hides the very details of low layer hardwares and provides
-@@ -502,6 +503,29 @@ FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
- could be a reference.
- 
- 
-+UIO support for DFL devices
-+===========================
-+The purpose of an FPGA is to be reprogrammed with newly developed hardware
-+components. New hardware can instantiate a new private feature in the DFL, and
-+then get a DFL device in their system. In some cases users may need a userspace
-+driver for the DFL device:
-+
-+* Users may need to run some diagnostic test for their hardwares.
-+* Users may prototype the kernel driver in user space.
-+* Some hardware is designed for specific purposes and does not fit into one of
-+  the standard kernel subsystems.
-+
-+This requires the direct access to the MMIO space and interrupt handling in
-+userspace. The dfl-uio-pdev module exposes the UIO device interfaces for this
-+purpose. It adds the uio_pdrv_genirq platform device with the resources of
-+the DFL feature, and lets the generic UIO platform device driver provide UIO
-+support to userspace.
-+
-+FPGA_DFL_UIO_PDEV should be selected to enable the dfl-uio-pdev module driver.
-+To support a new DFL feature been directly accessed via UIO, its feature id
-+should be added to the driver's id_table.
-+
-+
- Open discussion
- ===============
- FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
--- 
-2.7.4
+Does 'adi,axi-clkgen-2.00.a' apply to anything other than Zynq? If not, 
+you don't really need a new string. If so, you really want it to be:
 
+compatible = "adi,zynq-axi-clkgen-2.00.a", "adi,axi-clkgen-2.00.a";
+
+To be forwards and backwards compatible.
+
+> 
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+> ---
+>  Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml b/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
+> index 0d06387184d6..398954ec6767 100644
+> --- a/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
+> +++ b/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
+> @@ -20,6 +20,8 @@ properties:
+>    compatible:
+>      enum:
+>        - adi,axi-clkgen-2.00.a
+> +      - adi,zynq-axi-clkgen-2.00.a
+> +      - adi,zynqmp-axi-clkgen-2.00.a
+>  
+>    clocks:
+>      description:
+> -- 
+> 2.17.1
+> 
