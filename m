@@ -2,94 +2,106 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9522ED4F6
-	for <lists+linux-fpga@lfdr.de>; Thu,  7 Jan 2021 18:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE332EFBE1
+	for <lists+linux-fpga@lfdr.de>; Sat,  9 Jan 2021 00:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728118AbhAGRCn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 7 Jan 2021 12:02:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:32910 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726326AbhAGRCg (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 7 Jan 2021 12:02:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610038870;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tYC79LNk2nzU1Q3GB47wy9Gu7cJ3IMZGWrzODwHrOJw=;
-        b=FqXECTG5A6gri8+PGIzC/elVBefzx+3dzSJ0V5KHHCH9ao/NofS0eoR793bG8XuhXsajja
-        vv5zqaamPCSO2KAPNfnKRQLXoFyyL4tvn5mX/PKjRnUdbfEzpqVrgThnX9OFd5GvWWx5ve
-        2g0Q18Ta8Gd/vRJV92lIrZCfN+v6uHI=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-586-aDYXMQFbOHKl_2Nuxxyh0g-1; Thu, 07 Jan 2021 12:01:08 -0500
-X-MC-Unique: aDYXMQFbOHKl_2Nuxxyh0g-1
-Received: by mail-pg1-f199.google.com with SMTP id z20so5174979pgh.18
-        for <linux-fpga@vger.kernel.org>; Thu, 07 Jan 2021 09:01:08 -0800 (PST)
+        id S1725775AbhAHXzM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 8 Jan 2021 18:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725306AbhAHXzM (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 8 Jan 2021 18:55:12 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F65C061573;
+        Fri,  8 Jan 2021 15:54:31 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id u25so6223776lfc.2;
+        Fri, 08 Jan 2021 15:54:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RKx8kUKUP9gXgJeIqsNauIlg2svK4cle8BTuxaul1L4=;
+        b=j3+J4bsxBMa6mvcascbCMtsK0BGll+Uy2kTy/nx1rhFsdKx9PUCGZduReTqRrpNWEM
+         YmiyhXX3uKBE73a2ndFA2XdHOTGt7fvL7zAA2g8fwnBRFy019OVXJtSSe9QXoviwxc/i
+         OLvs2hkQ6BZlOguANf/AsNdEtD4yx5OgUtfNKQ4+GUgcEUxNaftEp7P0t3gr3LkmZjXo
+         2pHvHjAEYYVSWm62m70bZNORb372sRjx1dYCtOByGABf5Ghx6C+RQKAtmOQrUOjwIcnq
+         Pgnh28B9yOtCgCWpktjn868VJf3s2NWNIvioyzu8B/M+bp3XXFdksli/tLZzyeN7r7nM
+         kLDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=tYC79LNk2nzU1Q3GB47wy9Gu7cJ3IMZGWrzODwHrOJw=;
-        b=Nb/qLR/eEHEEL4gpARwLRkmE69KS2j81SHGBmXp16egHL06Am5mmSwJvFbtmPyNx9c
-         AJjUDguhcCWylAObJEExBegfq/JHD72CNE4Do+r9pVxJaQkqTYqc5JerehDVZPuHFNhD
-         JiVnUxe4OWdS9Bb+JumU77GdLsmw5SdPBYkKb8GI3ikBrCGw9U77Uzu+bb9iQ7DLNEHj
-         SHE6I3FYYFhnOd9BKHbxuBV7kEAHN7cLx4DXdIJ90/ZGIV7qZlkqm6ihwlIWXSd3IJVa
-         HNgjKIgNmuULyyR8LZLqQmKLOaW+QHywc5Y2HZ9glQWlvro74hdLrdDBGx/3M1Epu/Xt
-         a+yQ==
-X-Gm-Message-State: AOAM533XVfOpPc92gWoD/24EqDWQAhKqOni2GDMuN4UxyXWKLdovyweV
-        2ZBUibFnMJ5t9ivj4bdGfm5+nlLQ5cRjEPh3GitXnV3mhKgx5KmJ602cCBdcbSb79KmGhbJY/IO
-        LCDqeMUkk3o5bs1RvzNiI9g==
-X-Received: by 2002:a17:902:fe87:b029:da:5d3b:4a84 with SMTP id x7-20020a170902fe87b02900da5d3b4a84mr9876756plm.51.1610038867252;
-        Thu, 07 Jan 2021 09:01:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJysL4EldspCf6rNFwrd0bAyeFEK4JxLwg2+MTt3NtFgM2enXGtOwOvfdPwi2PbRwBbnrn5iAQ==
-X-Received: by 2002:a17:902:fe87:b029:da:5d3b:4a84 with SMTP id x7-20020a170902fe87b02900da5d3b4a84mr9876736plm.51.1610038867052;
-        Thu, 07 Jan 2021 09:01:07 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id b18sm6517233pfi.173.2021.01.07.09.01.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jan 2021 09:01:06 -0800 (PST)
-Subject: Re: [PATCH 0/8] FPGA DFL Changes for 5.12
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, moritzf@google.com
-References: <20210107043714.991646-1-mdf@kernel.org>
- <80b29715-aa0a-b2ac-03af-904fc8f8be98@redhat.com>
- <X/czarr9bXr849p5@kroah.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <51e3350c-00d3-b2fe-cdc5-be64b661c224@redhat.com>
-Date:   Thu, 7 Jan 2021 09:01:05 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RKx8kUKUP9gXgJeIqsNauIlg2svK4cle8BTuxaul1L4=;
+        b=jgm68rm40HBWGStq/5Hj8AsckIazUxgD4EoX2j6Hx2h6VBrTz8FifMv68gxPYFUkud
+         l133UZ2l7t5V4r6zUKuHBqRzwwrivndc145DCMiQHAfz+Xr7mDo3ekTIfuQurHRUjDCL
+         QC8LxzRcvu0eh2uXp742S+AyInJNlvyob/liFHyxWgxve0OpW3vVtyoimfKRoKDeQ+/P
+         7jgSW+bQXiS45S6N2zBk1rtKaXL8Ds0IBuDyY5STMWKRZqNaaHgmxZSduI3uERFcv8Nx
+         bNIllNdTGAJs4G0Tb2JZGTpomX0Lkg897ZrgqR/BpbHKYSJ+uDGiKNHn5Q2Wmst6fa77
+         6izw==
+X-Gm-Message-State: AOAM533qGMfntdl2DKfyxOKq6C61vuA6rJpfKWup7tCXnG91fc6Q1a9C
+        WyIm0LEvm7E6SdCwCqVDN0g=
+X-Google-Smtp-Source: ABdhPJw/S/J4uMe65N85xENgKJoazdDz+2GutARLCI58dizOqBHHTyfZSGvejTMPM7BTmiNwLhx9Gw==
+X-Received: by 2002:a05:651c:2045:: with SMTP id t5mr2367084ljo.462.1610150070383;
+        Fri, 08 Jan 2021 15:54:30 -0800 (PST)
+Received: from localhost.localdomain (h-98-128-228-148.NA.cust.bahnhof.se. [98.128.228.148])
+        by smtp.gmail.com with ESMTPSA id c5sm2233743lfh.160.2021.01.08.15.54.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jan 2021 15:54:29 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] fpga: dfl: fme: Constify static attribute_group structs
+Date:   Sat,  9 Jan 2021 00:54:14 +0100
+Message-Id: <20210108235414.48017-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-In-Reply-To: <X/czarr9bXr849p5@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+The only usage of these is to put their addresses in arrays of pointers
+to const attribute_groups. Make them const to allow the compiler to put
+them in read-only memory.
 
-On 1/7/21 8:14 AM, Greg KH wrote:
-> On Thu, Jan 07, 2021 at 08:09:12AM -0800, Tom Rix wrote:
->> On 1/6/21 8:37 PM, Moritz Fischer wrote:
->>> This is a resend of the previous (unfortunately late) patchset of
->>> changes for FPGA DFL.
->> Is there something I can do to help ?
-> This is all now merged in my tree, so there's not much left to do here
-> :)
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ drivers/fpga/dfl-fme-perf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Yes this patchset is done now.
-
-I am offering to help in an ongoing manner, something like 10hr/week would be easy as i already spend about 30hr/week doing stuff in the kernel in addition to reviewing linux-fpga.
-
-Tom
-
-> thanks,
->
-> greg k-h
->
+diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
+index 531266287eee..4299145ef347 100644
+--- a/drivers/fpga/dfl-fme-perf.c
++++ b/drivers/fpga/dfl-fme-perf.c
+@@ -192,7 +192,7 @@ static struct attribute *fme_perf_cpumask_attrs[] = {
+ 	NULL,
+ };
+ 
+-static struct attribute_group fme_perf_cpumask_group = {
++static const struct attribute_group fme_perf_cpumask_group = {
+ 	.attrs = fme_perf_cpumask_attrs,
+ };
+ 
+@@ -225,7 +225,7 @@ static struct attribute *fme_perf_format_attrs[] = {
+ 	NULL,
+ };
+ 
+-static struct attribute_group fme_perf_format_group = {
++static const struct attribute_group fme_perf_format_group = {
+ 	.name = "format",
+ 	.attrs = fme_perf_format_attrs,
+ };
+@@ -239,7 +239,7 @@ static struct attribute *fme_perf_events_attrs_empty[] = {
+ 	NULL,
+ };
+ 
+-static struct attribute_group fme_perf_events_group = {
++static const struct attribute_group fme_perf_events_group = {
+ 	.name = "events",
+ 	.attrs = fme_perf_events_attrs_empty,
+ };
+-- 
+2.30.0
 
