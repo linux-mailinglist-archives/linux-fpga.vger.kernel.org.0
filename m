@@ -2,106 +2,123 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE332EFBE1
-	for <lists+linux-fpga@lfdr.de>; Sat,  9 Jan 2021 00:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9832F03F3
+	for <lists+linux-fpga@lfdr.de>; Sat,  9 Jan 2021 22:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725775AbhAHXzM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 8 Jan 2021 18:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbhAHXzM (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 8 Jan 2021 18:55:12 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F65C061573;
-        Fri,  8 Jan 2021 15:54:31 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id u25so6223776lfc.2;
-        Fri, 08 Jan 2021 15:54:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RKx8kUKUP9gXgJeIqsNauIlg2svK4cle8BTuxaul1L4=;
-        b=j3+J4bsxBMa6mvcascbCMtsK0BGll+Uy2kTy/nx1rhFsdKx9PUCGZduReTqRrpNWEM
-         YmiyhXX3uKBE73a2ndFA2XdHOTGt7fvL7zAA2g8fwnBRFy019OVXJtSSe9QXoviwxc/i
-         OLvs2hkQ6BZlOguANf/AsNdEtD4yx5OgUtfNKQ4+GUgcEUxNaftEp7P0t3gr3LkmZjXo
-         2pHvHjAEYYVSWm62m70bZNORb372sRjx1dYCtOByGABf5Ghx6C+RQKAtmOQrUOjwIcnq
-         Pgnh28B9yOtCgCWpktjn868VJf3s2NWNIvioyzu8B/M+bp3XXFdksli/tLZzyeN7r7nM
-         kLDA==
+        id S1726336AbhAIV4q (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 9 Jan 2021 16:56:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36648 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726090AbhAIV4p (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 9 Jan 2021 16:56:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1610229318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rBaFxrucQU0ed2RdWwhjfBGkmBAnhqzfC5UaTarB09g=;
+        b=FjGDS0BIuW+NGdH7TISad24yYlrY8RwZGyfp/AKpLp5uYMriPvn+AuU9fQd4jTKQi4RNu3
+        ry4uY6t0DTRWy9O4EfMzNGiKnPY8blh0gJZjfRnv2VtmDGo6IGUq5QKlBKXqfhoT/KXPHY
+        GUK4xPd2ch3mEHtYU1M5xLYcvpw1hBQ=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-5-gjx3JotPOXGsw3lhdZG7kA-1; Sat, 09 Jan 2021 16:55:16 -0500
+X-MC-Unique: gjx3JotPOXGsw3lhdZG7kA-1
+Received: by mail-il1-f200.google.com with SMTP id w3so4595168ilj.17
+        for <linux-fpga@vger.kernel.org>; Sat, 09 Jan 2021 13:55:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RKx8kUKUP9gXgJeIqsNauIlg2svK4cle8BTuxaul1L4=;
-        b=jgm68rm40HBWGStq/5Hj8AsckIazUxgD4EoX2j6Hx2h6VBrTz8FifMv68gxPYFUkud
-         l133UZ2l7t5V4r6zUKuHBqRzwwrivndc145DCMiQHAfz+Xr7mDo3ekTIfuQurHRUjDCL
-         QC8LxzRcvu0eh2uXp742S+AyInJNlvyob/liFHyxWgxve0OpW3vVtyoimfKRoKDeQ+/P
-         7jgSW+bQXiS45S6N2zBk1rtKaXL8Ds0IBuDyY5STMWKRZqNaaHgmxZSduI3uERFcv8Nx
-         bNIllNdTGAJs4G0Tb2JZGTpomX0Lkg897ZrgqR/BpbHKYSJ+uDGiKNHn5Q2Wmst6fa77
-         6izw==
-X-Gm-Message-State: AOAM533qGMfntdl2DKfyxOKq6C61vuA6rJpfKWup7tCXnG91fc6Q1a9C
-        WyIm0LEvm7E6SdCwCqVDN0g=
-X-Google-Smtp-Source: ABdhPJw/S/J4uMe65N85xENgKJoazdDz+2GutARLCI58dizOqBHHTyfZSGvejTMPM7BTmiNwLhx9Gw==
-X-Received: by 2002:a05:651c:2045:: with SMTP id t5mr2367084ljo.462.1610150070383;
-        Fri, 08 Jan 2021 15:54:30 -0800 (PST)
-Received: from localhost.localdomain (h-98-128-228-148.NA.cust.bahnhof.se. [98.128.228.148])
-        by smtp.gmail.com with ESMTPSA id c5sm2233743lfh.160.2021.01.08.15.54.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jan 2021 15:54:29 -0800 (PST)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH] fpga: dfl: fme: Constify static attribute_group structs
-Date:   Sat,  9 Jan 2021 00:54:14 +0100
-Message-Id: <20210108235414.48017-1-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.30.0
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=rBaFxrucQU0ed2RdWwhjfBGkmBAnhqzfC5UaTarB09g=;
+        b=efYkR70OICoRG3tqDjou7OGw2AbTbcEJHPmpNGeZSUa9QL2Q4UF4a7KOAKiaKqUBAq
+         7eqwUqC3ixZ/wYo+mEjrgwbZsYvsTVBodz0hqlFimitIPMpiZpugHqeGJmDyd+46lutT
+         ueDkdiFb/1c6WEj5ftIh42+7QkxKLIwta4vSrjPDRXWnR20Ue3cY84hmHy4xP235KVMv
+         1EJO68HlPdIFV/qMwqG5xgVPTFK5Bg6wQ0/WKyJtSu57wY4PhNCizTffSI8qf4W7iS0J
+         8C/r5uAokzqFijTdc++DV49VndqbaXS/4rcO+PxabMNpOq88WUXV5ytkfz4RZO8p8ut8
+         1CQw==
+X-Gm-Message-State: AOAM530ezyPPEHp9ImXPUdowKCOkLU+037bQyNwxBUEDP8nPOpKdodfv
+        uRWAzsKsdtcNovhOmABAzcfI7Mxx1bFhP5YoAfDB/3cwCesDylEDM4lmiiamKYqUVfCbQNh7tCl
+        P/V2jLedZSkvi14ZBNscr4w==
+X-Received: by 2002:a92:b60a:: with SMTP id s10mr9811677ili.135.1610229316254;
+        Sat, 09 Jan 2021 13:55:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw+mCVuh53hQm4VKsajFBl21NMXoGLddBOIOgeN0Pseuk9+If0YKzpCWZ9TY+TqhDCUXcX5OA==
+X-Received: by 2002:a92:b60a:: with SMTP id s10mr9811669ili.135.1610229316109;
+        Sat, 09 Jan 2021 13:55:16 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id h17sm2334071ilr.56.2021.01.09.13.55.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Jan 2021 13:55:15 -0800 (PST)
+Subject: Re: [PATCH] fpga: dfl: fme: Constify static attribute_group structs
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210108235414.48017-1-rikard.falkeborn@gmail.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <a1c87050-0962-5169-8ed4-c1da0098ff34@redhat.com>
+Date:   Sat, 9 Jan 2021 13:55:13 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210108235414.48017-1-rikard.falkeborn@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The only usage of these is to put their addresses in arrays of pointers
-to const attribute_groups. Make them const to allow the compiler to put
-them in read-only memory.
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
- drivers/fpga/dfl-fme-perf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 1/8/21 3:54 PM, Rikard Falkeborn wrote:
+> The only usage of these is to put their addresses in arrays of pointers
+> to const attribute_groups. Make them const to allow the compiler to put
+> them in read-only memory.
+>
+> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> ---
+>  drivers/fpga/dfl-fme-perf.c | 6 +++---
 
-diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
-index 531266287eee..4299145ef347 100644
---- a/drivers/fpga/dfl-fme-perf.c
-+++ b/drivers/fpga/dfl-fme-perf.c
-@@ -192,7 +192,7 @@ static struct attribute *fme_perf_cpumask_attrs[] = {
- 	NULL,
- };
- 
--static struct attribute_group fme_perf_cpumask_group = {
-+static const struct attribute_group fme_perf_cpumask_group = {
- 	.attrs = fme_perf_cpumask_attrs,
- };
- 
-@@ -225,7 +225,7 @@ static struct attribute *fme_perf_format_attrs[] = {
- 	NULL,
- };
- 
--static struct attribute_group fme_perf_format_group = {
-+static const struct attribute_group fme_perf_format_group = {
- 	.name = "format",
- 	.attrs = fme_perf_format_attrs,
- };
-@@ -239,7 +239,7 @@ static struct attribute *fme_perf_events_attrs_empty[] = {
- 	NULL,
- };
- 
--static struct attribute_group fme_perf_events_group = {
-+static const struct attribute_group fme_perf_events_group = {
- 	.name = "events",
- 	.attrs = fme_perf_events_attrs_empty,
- };
--- 
-2.30.0
+This looks ok.
+
+There are other 'static struct's in drivers/fpga.
+
+Why is the change limited to this file ?
+
+Tom
+
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
+> index 531266287eee..4299145ef347 100644
+> --- a/drivers/fpga/dfl-fme-perf.c
+> +++ b/drivers/fpga/dfl-fme-perf.c
+> @@ -192,7 +192,7 @@ static struct attribute *fme_perf_cpumask_attrs[] = {
+>  	NULL,
+>  };
+>  
+> -static struct attribute_group fme_perf_cpumask_group = {
+> +static const struct attribute_group fme_perf_cpumask_group = {
+>  	.attrs = fme_perf_cpumask_attrs,
+>  };
+>  
+> @@ -225,7 +225,7 @@ static struct attribute *fme_perf_format_attrs[] = {
+>  	NULL,
+>  };
+>  
+> -static struct attribute_group fme_perf_format_group = {
+> +static const struct attribute_group fme_perf_format_group = {
+>  	.name = "format",
+>  	.attrs = fme_perf_format_attrs,
+>  };
+> @@ -239,7 +239,7 @@ static struct attribute *fme_perf_events_attrs_empty[] = {
+>  	NULL,
+>  };
+>  
+> -static struct attribute_group fme_perf_events_group = {
+> +static const struct attribute_group fme_perf_events_group = {
+>  	.name = "events",
+>  	.attrs = fme_perf_events_attrs_empty,
+>  };
 
