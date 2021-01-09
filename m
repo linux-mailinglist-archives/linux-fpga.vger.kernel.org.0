@@ -2,108 +2,129 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 308992F0401
-	for <lists+linux-fpga@lfdr.de>; Sat,  9 Jan 2021 23:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43C92F042B
+	for <lists+linux-fpga@lfdr.de>; Sat,  9 Jan 2021 23:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726251AbhAIWKZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 9 Jan 2021 17:10:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47274 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726245AbhAIWKZ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 9 Jan 2021 17:10:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610230138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qM7Jheprpt1SAQLOKWSi1zo9qIcexhjMy4GDW3sHcww=;
-        b=bcsB+8A/cqs1cmD4n0hWRqyZgKEK1UYNWnjxjMZD7bPnFudq5xoF+0gKsTDfOm+JCFNWgr
-        C/9Lfpj+KwTYOVrSfR/3Y73PZAeYftK+qz8TMUTL8dvi349KyEJw/hbMp3dM9SrIdq63Hn
-        RZ0k+pK1j/GXsMUpytmnbK7ktnmNthM=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-496-Byon0s_gOfm5zRGotmu4LA-1; Sat, 09 Jan 2021 17:08:57 -0500
-X-MC-Unique: Byon0s_gOfm5zRGotmu4LA-1
-Received: by mail-io1-f71.google.com with SMTP id c7so10368742iob.10
-        for <linux-fpga@vger.kernel.org>; Sat, 09 Jan 2021 14:08:56 -0800 (PST)
+        id S1726068AbhAIWx1 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 9 Jan 2021 17:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726062AbhAIWx1 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 9 Jan 2021 17:53:27 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C0EC061786;
+        Sat,  9 Jan 2021 14:52:46 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id s26so31865433lfc.8;
+        Sat, 09 Jan 2021 14:52:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vN30hxhyeC5Ec58tchhlNmFh+S+moOBZF/ui6MMTzYg=;
+        b=fzsavMinEeJg7wgHZS4usSEFjDXVSw+1Jm14Ljta0ZKw1l90c9ZCEMsNTWOpn5V2yp
+         kFVcItk9xEq6YsG2aySeFyrDwiZx2tLK9zihYRnUSGtZWfIviiAZ826sIcHceIXfwo4Y
+         H02LHGCuxeQS8hZiPiF64GWwXzlv7PgTsK/c1duCyi3wgTHwVY61vZOmdlVVDqIiZwDJ
+         PQm1YPcIOT7XukipOrFtvs70+jOhlwJLAyfJsGSAHF3QHNYAAcIn2sRaqFmothyKfH7p
+         V4ZehhlgpmrgsHMnYz9WcyE5E0l6+LQo3Q5EYYoNbCpJNGjHCjgTJC81PNDEM/q2nThB
+         k/4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=qM7Jheprpt1SAQLOKWSi1zo9qIcexhjMy4GDW3sHcww=;
-        b=AQ1dCa2ui3YSe/ebWVbEvJgC6UegapkhwkYZt6qTmk56F256m53f0KSbwAE0VINVBJ
-         zif62ApEZKYICtTRH1VGJ69nGHGFf1dstwfh72ErA7zB5a9GQJrG2zPGv/NXIOpjftfi
-         fj/llRvLd/EuAIsDOUf8eLpELXBj/Yj7HqOgVddxnXa+VfR27IEaoVzpy7shWrtP34Bt
-         Ex6+Rxke3uUPRUp96i453cnuHe+BGURsgKN6QO4v95QqFB0rhHMZPwtOW+J2eHgbpt4h
-         RVb1ZoiqcHWn4iarcjjqmCxZQsgt6Pqw1+4OWr1GH7Z4H2glC83UPMys9kAad9UewL5y
-         8XVA==
-X-Gm-Message-State: AOAM533RWu+ctITHA9hYsPhcZo0MYzVin7H8Q4lN4jEWSPtz3U0RRhkN
-        7bmdZ9RsRjKjKZvdfEQWKpmxnLVa45OnBmZfLLle71CfVn3h1AGTrvNTyMi11IwPPv7cfBB3FA4
-        Mc6vFwesH+YW7+uGnKcIhQg==
-X-Received: by 2002:a02:a60a:: with SMTP id c10mr8904098jam.123.1610230136399;
-        Sat, 09 Jan 2021 14:08:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxm8KJEaPmdFGUKfGLkFLI0QWEZmLtWn7s8d3Am7mLmpNm6S5wLh9ZWZF6kBRaGymEkAcZ0tQ==
-X-Received: by 2002:a02:a60a:: with SMTP id c10mr8904092jam.123.1610230136258;
-        Sat, 09 Jan 2021 14:08:56 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id t17sm7954555ioc.8.2021.01.09.14.08.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Jan 2021 14:08:55 -0800 (PST)
-Subject: Re: [PATCH -next] fpga: Use DEFINE_SPINLOCK() for spinlock
-To:     Zheng Yongjun <zhengyongjun3@huawei.com>, mdf@kernel.org,
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vN30hxhyeC5Ec58tchhlNmFh+S+moOBZF/ui6MMTzYg=;
+        b=XisXi9jRcc1OZ+AOdO/F9VXf84raytk+CXee8oykTjTRCq+vL+90wKO3QZja0obek0
+         XGZDdBTo+pYYouKNibh63VjaLkxmWKl0mCFJz60G8Li0hcGN3yAnFMv68v0LPiwvvZcc
+         Ohp4ItawJFi8rTH1Qvg89G6Jrai2ItyStVwYMieDbfIO5/D3OGK1VN3YWWsZ1MVcltmp
+         9uu115fNnHeeZADsgu00Avg2Dgty+LSmOgqAovygfI8tw7DhZ03GaXtSqWLL2s8+SPwz
+         FHTg3piDrZmfy3lOLQQFF8DvdsO01+GOvEbhKvvzAysR6+S8LmfIYhRrxmUIDAt8Yb8x
+         MySA==
+X-Gm-Message-State: AOAM531V+c28QL4+pGsdrZmy2ohmUyVkuL1FohaZq7NsyYzxzyk9M9Ui
+        PYiYRC64NyAq8UDXOaMEBkQ=
+X-Google-Smtp-Source: ABdhPJzZrGUDVMjLnOkooECI1+sx1bKVX7L9oMm+yaOvC/U2HUZ8tczmel8xz4UeFZsFnzTC6voreQ==
+X-Received: by 2002:a19:6415:: with SMTP id y21mr4130872lfb.120.1610232765196;
+        Sat, 09 Jan 2021 14:52:45 -0800 (PST)
+Received: from rikard (h-98-128-228-148.NA.cust.bahnhof.se. [98.128.228.148])
+        by smtp.gmail.com with ESMTPSA id k20sm2675238ljc.61.2021.01.09.14.52.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Jan 2021 14:52:44 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+X-Google-Original-From: Rikard Falkeborn <rikard.falkeborn>
+Date:   Sat, 9 Jan 2021 23:52:40 +0100
+To:     Tom Rix <trix@redhat.com>
+Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201228135135.28788-1-zhengyongjun3@huawei.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <58fed6b1-dbab-7696-1086-c8d84cff0379@redhat.com>
-Date:   Sat, 9 Jan 2021 14:08:53 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+Subject: Re: [PATCH] fpga: dfl: fme: Constify static attribute_group structs
+Message-ID: <X/ozuAn64pe71rh+@rikard>
+References: <20210108235414.48017-1-rikard.falkeborn@gmail.com>
+ <a1c87050-0962-5169-8ed4-c1da0098ff34@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20201228135135.28788-1-zhengyongjun3@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1c87050-0962-5169-8ed4-c1da0098ff34@redhat.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Sat, Jan 09, 2021 at 01:55:13PM -0800, Tom Rix wrote:
+> 
+> On 1/8/21 3:54 PM, Rikard Falkeborn wrote:
+> > The only usage of these is to put their addresses in arrays of pointers
+> > to const attribute_groups. Make them const to allow the compiler to put
+> > them in read-only memory.
+> >
+> > Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> > ---
+> >  drivers/fpga/dfl-fme-perf.c | 6 +++---
+> 
+> This looks ok.
+> 
+> There are other 'static struct's in drivers/fpga.
+> 
+> Why is the change limited to this file ?
+> 
+> Tom
+> 
 
-On 12/28/20 5:51 AM, Zheng Yongjun wrote:
-> spinlock can be initialized automatically with DEFINE_SPINLOCK()
-> rather than explicitly calling spin_lock_init().
->
-> Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+I have a WIP coccinelle script to constify static struct attribute_group
+and this is the only file in drivers/fpga which has non-const struct
+attribute_group, that's why it's limited to this file. I could have
+mentioned that in the commit message.
 
-This looks fine.
+Rikard
 
-Reviewed-by: Tom Rix <trix@redhat.com>
 
-> ---
->  drivers/fpga/fpga-bridge.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-> index 2deccacc3aa7..e9266b2a357f 100644
-> --- a/drivers/fpga/fpga-bridge.c
-> +++ b/drivers/fpga/fpga-bridge.c
-> @@ -17,7 +17,7 @@ static DEFINE_IDA(fpga_bridge_ida);
->  static struct class *fpga_bridge_class;
->  
->  /* Lock for adding/removing bridges to linked lists*/
-> -static spinlock_t bridge_list_lock;
-> +static DEFINE_SPINLOCK(bridge_list_lock);
->  
->  /**
->   * fpga_bridge_enable - Enable transactions on the bridge
-> @@ -479,8 +479,6 @@ static void fpga_bridge_dev_release(struct device *dev)
->  
->  static int __init fpga_bridge_dev_init(void)
->  {
-> -	spin_lock_init(&bridge_list_lock);
-> -
->  	fpga_bridge_class = class_create(THIS_MODULE, "fpga_bridge");
->  	if (IS_ERR(fpga_bridge_class))
->  		return PTR_ERR(fpga_bridge_class);
-
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
+> > index 531266287eee..4299145ef347 100644
+> > --- a/drivers/fpga/dfl-fme-perf.c
+> > +++ b/drivers/fpga/dfl-fme-perf.c
+> > @@ -192,7 +192,7 @@ static struct attribute *fme_perf_cpumask_attrs[] = {
+> >  	NULL,
+> >  };
+> >  
+> > -static struct attribute_group fme_perf_cpumask_group = {
+> > +static const struct attribute_group fme_perf_cpumask_group = {
+> >  	.attrs = fme_perf_cpumask_attrs,
+> >  };
+> >  
+> > @@ -225,7 +225,7 @@ static struct attribute *fme_perf_format_attrs[] = {
+> >  	NULL,
+> >  };
+> >  
+> > -static struct attribute_group fme_perf_format_group = {
+> > +static const struct attribute_group fme_perf_format_group = {
+> >  	.name = "format",
+> >  	.attrs = fme_perf_format_attrs,
+> >  };
+> > @@ -239,7 +239,7 @@ static struct attribute *fme_perf_events_attrs_empty[] = {
+> >  	NULL,
+> >  };
+> >  
+> > -static struct attribute_group fme_perf_events_group = {
+> > +static const struct attribute_group fme_perf_events_group = {
+> >  	.name = "events",
+> >  	.attrs = fme_perf_events_attrs_empty,
+> >  };
+> 
