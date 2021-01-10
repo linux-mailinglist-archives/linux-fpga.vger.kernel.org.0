@@ -2,137 +2,123 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEEC2F088A
-	for <lists+linux-fpga@lfdr.de>; Sun, 10 Jan 2021 18:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2852F0945
+	for <lists+linux-fpga@lfdr.de>; Sun, 10 Jan 2021 20:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726432AbhAJRGb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 10 Jan 2021 12:06:31 -0500
-Received: from mail-pj1-f53.google.com ([209.85.216.53]:40482 "EHLO
-        mail-pj1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726228AbhAJRGb (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 10 Jan 2021 12:06:31 -0500
-Received: by mail-pj1-f53.google.com with SMTP id m5so9005416pjv.5;
-        Sun, 10 Jan 2021 09:06:15 -0800 (PST)
+        id S1726742AbhAJTH3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 10 Jan 2021 14:07:29 -0500
+Received: from mail-pl1-f173.google.com ([209.85.214.173]:36348 "EHLO
+        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726494AbhAJTH3 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 10 Jan 2021 14:07:29 -0500
+Received: by mail-pl1-f173.google.com with SMTP id j1so8357395pld.3;
+        Sun, 10 Jan 2021 11:07:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=8IY5IQr2pqyggc5i1T5hvG5vgYZ5VEFJnU227WQCvGo=;
-        b=SBzCS/JccWmjcTe4cLmYiviFgmgFO4ON3klbhuwDDNzn2j5q4mUqIGC6JlWyaHPR+1
-         IWPBGrrIOvFf/htSyOttVONw6ZEnjkP5rFSGQ2cdQMfV8CH8VC/31maPdh4ZGllGe3Lj
-         QNhyumOTzMWMkSAkED0TvVxSQrlNx/i9Em5DEX9UfW6pmtibjNYq3DAGC/fN6A1IB1ue
-         Sjk1EhqtHkjEI02yhMVNPZvpcZVyMDwfQjTBH1uYmatYRF8T0h7WBJA7aB0dTCvH77sA
-         dHUdr7zvHJE3h3X5MEvaMDQXM+Z5gI6dFjapnclb/N0OFyAeOH0ISV9vQmaZfOa1he1m
-         wwwQ==
-X-Gm-Message-State: AOAM532RepTGXM6QH7kjudejWpfXJm2319WRZzeMyR1yKTGm6B0tMVIe
-        m25tALN2ccL1Q2nEFf24+Cg=
-X-Google-Smtp-Source: ABdhPJwkKjfYHVQChlHALiGcV6f1DHW5B8GRXokMDMxNTibNUWSmL+CuPMWBl1J6gejsmFYSyM9BuA==
-X-Received: by 2002:a17:902:b213:b029:db:3a3e:d8ad with SMTP id t19-20020a170902b213b02900db3a3ed8admr12964584plr.73.1610298350182;
-        Sun, 10 Jan 2021 09:05:50 -0800 (PST)
+        bh=i2zx80nmm8uLlk3zQRTl/iQoMYyET2eTo5B4q/iK/+U=;
+        b=EYvubh5s/k0NzLi9X3ln1bD+0nUsDJKj+ohGuguvjUmZPKiEMumEiSZe/CoUcQXXgE
+         HHcYEOmkQ5WFDJBwVjhMn02Uw8AzqVKBiJ3dL/62UqWD31HzezTLgC7AFxkKfmiY8Vn4
+         B/ejCtPrqzUJcoboop6cOXvuJRGA9+SlbAM+uIL3FjPch7BC/u8ST3GV4vmdveWbKhRT
+         yJNFTRgW3mEW0qNcnKoUElCKbDP4WGWUbjisknPPnGTmCjwZkC0O1Jdryc1a1OPdNhjR
+         ljLy0MqP3s+yKW9goAvHPDPgWxYFkZfkAwdiqAxr17pwlivBkxlajrVnsUnIGCetwqe2
+         MV8g==
+X-Gm-Message-State: AOAM531KYtcc8sMRUQxAu5LbY/kYAid0/1rlWKhusrBkIYc/iUkzuXrH
+        pYXb/g6u845syD7BO8SXVlk=
+X-Google-Smtp-Source: ABdhPJwREp6OqBjnCtcAwjpX9UxI+Tp3AU6AdhW8qWuhYXQMpwjfFyBz3dxwoq53+SAwMKoNJK8owQ==
+X-Received: by 2002:a17:902:b416:b029:dc:3657:9265 with SMTP id x22-20020a170902b416b02900dc36579265mr13115878plr.24.1610305608449;
+        Sun, 10 Jan 2021 11:06:48 -0800 (PST)
 Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
-        by smtp.gmail.com with ESMTPSA id x23sm16424943pgk.14.2021.01.10.09.05.48
+        by smtp.gmail.com with ESMTPSA id 36sm17146972pgr.56.2021.01.10.11.06.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jan 2021 09:05:49 -0800 (PST)
-Date:   Sun, 10 Jan 2021 09:05:46 -0800
+        Sun, 10 Jan 2021 11:06:47 -0800 (PST)
+Date:   Sun, 10 Jan 2021 11:06:45 -0800
 From:   Moritz Fischer <mdf@kernel.org>
 To:     Tom Rix <trix@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, gregkh@linuxfoundation.org,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, moritzf@google.com,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        "Gerlach, Matthew" <matthew.gerlach@intel.com>,
-        Sonal Santan <sonal.santan@xilinx.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Richard Gong <richard.gong@intel.com>
-Subject: Re: [PATCH 0/8] FPGA DFL Changes for 5.12
-Message-ID: <X/sz6lDq8WFzrRUJ@archbook>
-References: <20210107043714.991646-1-mdf@kernel.org>
- <80b29715-aa0a-b2ac-03af-904fc8f8be98@redhat.com>
- <e1d30642-ce85-b9b7-e8b2-5ad4fe6338e5@redhat.com>
+Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: dfl: fme: Constify static attribute_group structs
+Message-ID: <X/tQRSxcbIoKJuZi@archbook>
+References: <20210108235414.48017-1-rikard.falkeborn@gmail.com>
+ <a1c87050-0962-5169-8ed4-c1da0098ff34@redhat.com>
+ <X/ozuAn64pe71rh+@rikard>
+ <55ca10fc-e52e-af47-609a-edaa65752a38@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e1d30642-ce85-b9b7-e8b2-5ad4fe6338e5@redhat.com>
+In-Reply-To: <55ca10fc-e52e-af47-609a-edaa65752a38@redhat.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Tom,
-
-On Sun, Jan 10, 2021 at 07:46:29AM -0800, Tom Rix wrote:
+On Sat, Jan 09, 2021 at 05:40:38PM -0800, Tom Rix wrote:
 > 
-> On 1/7/21 8:09 AM, Tom Rix wrote:
-> > On 1/6/21 8:37 PM, Moritz Fischer wrote:
-> >> This is a resend of the previous (unfortunately late) patchset of
-> >> changes for FPGA DFL.
-> > Is there something I can do to help ?
+> On 1/9/21 2:52 PM, Rikard Falkeborn wrote:
+> > On Sat, Jan 09, 2021 at 01:55:13PM -0800, Tom Rix wrote:
+> >> On 1/8/21 3:54 PM, Rikard Falkeborn wrote:
+> >>> The only usage of these is to put their addresses in arrays of pointers
+> >>> to const attribute_groups. Make them const to allow the compiler to put
+> >>> them in read-only memory.
+> >>>
+> >>> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> >>> ---
+> >>>  drivers/fpga/dfl-fme-perf.c | 6 +++---
+> >> This looks ok.
+> >>
+> >> There are other 'static struct's in drivers/fpga.
+> >>
+> >> Why is the change limited to this file ?
+> >>
+> >> Tom
+> >>
+> > I have a WIP coccinelle script to constify static struct attribute_group
+> > and this is the only file in drivers/fpga which has non-const struct
+> > attribute_group, that's why it's limited to this file. I could have
+> > mentioned that in the commit message.
+> 
+> No worries, thanks for the change!
+> 
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> 
+> > Rikard
 > >
-> > I am paid to look after linux-fpga, so i have plenty of time.
 > >
-> > Some ideas of what i am doing now privately i can do publicly.
-> >
-> > 1. keep linux-fpga sync-ed to greg's branch so linux-fpga is normally in a pullable state.
+> >>>  1 file changed, 3 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
+> >>> index 531266287eee..4299145ef347 100644
+> >>> --- a/drivers/fpga/dfl-fme-perf.c
+> >>> +++ b/drivers/fpga/dfl-fme-perf.c
+> >>> @@ -192,7 +192,7 @@ static struct attribute *fme_perf_cpumask_attrs[] = {
+> >>>  	NULL,
+> >>>  };
+> >>>  
+> >>> -static struct attribute_group fme_perf_cpumask_group = {
+> >>> +static const struct attribute_group fme_perf_cpumask_group = {
+> >>>  	.attrs = fme_perf_cpumask_attrs,
+> >>>  };
+> >>>  
+> >>> @@ -225,7 +225,7 @@ static struct attribute *fme_perf_format_attrs[] = {
+> >>>  	NULL,
+> >>>  };
+> >>>  
+> >>> -static struct attribute_group fme_perf_format_group = {
+> >>> +static const struct attribute_group fme_perf_format_group = {
+> >>>  	.name = "format",
+> >>>  	.attrs = fme_perf_format_attrs,
+> >>>  };
+> >>> @@ -239,7 +239,7 @@ static struct attribute *fme_perf_events_attrs_empty[] = {
+> >>>  	NULL,
+> >>>  };
+> >>>  
+> >>> -static struct attribute_group fme_perf_events_group = {
+> >>> +static const struct attribute_group fme_perf_events_group = {
+> >>>  	.name = "events",
+> >>>  	.attrs = fme_perf_events_attrs_empty,
+> >>>  };
+> 
+Applied,
 
-Is it not? It currently points to v5.11-rc1. If I start applying patches
-that require the changes that went into Greg's branch I can merge.
-> >
-> > 2. an in-flight dev branch for the outstanding patches 
-> 
-> I have setup these branches based on Greg's char-misc-next
-> 
-> fpga-next, which is char-misc-next base for fpga-testing
-> 
-> fpga-testing, all the in-flight patches that would apply with automatic merge conflict resolution
-> 
-> These are respectively
-> 
-> https://github.com/trixirt/linux-fpga/tree/fpga-next
-> 
-> https://github.com/trixirt/linux-fpga/tree/fpga-testing
-
-Feel free to have your own repos/branches etc, but I'd like to keep the
-offical trees on kernel.org.
-
-Tbh I'd much rather see the patchwork instance be cleaned up if you want
-to do stuff.
-> 
-> 
-> There are two trivial changes, that could go to 5.12 now.
-> 
-> fpga: dfl: fme: Constify static attribute_group structs
-> 
-> fpga: Use DEFINE_SPINLOCK() for spinlock
-> 
-> respectively
-> 
-> https://lore.kernel.org/linux-fpga/20210108235414.48017-1-rikard.falkeborn@gmail.com/
-> 
-> https://lore.kernel.org/linux-fpga/20201228135135.28788-1-zhengyongjun3@huawei.com/
-
-I was going to pick them up monday ...
-> 
-> 
-> There are a couple of patchsets that conflict
-> 
-> https://lore.kernel.org/linux-fpga/20210105230855.15019-7-russell.h.weight@intel.com/
-> 
-> https://lore.kernel.org/linux-fpga/20201203171548.1538178-3-matthew.gerlach@linux.intel.com/
-
-Conflict between what and what?
- 
-> And the xilinx patchset
-> 
-> https://lore.kernel.org/linux-fpga/20201217075046.28553-1-sonals@xilinx.com/
-> 
-> Which is being split/worked on offline.
-
-I'm not sure what that means.
-> 
-> 
-> If I have missed any patchset, poke me.
-> 
-> Tom
-
-- Moritz
+Thanks
