@@ -2,122 +2,90 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 220502F1A83
-	for <lists+linux-fpga@lfdr.de>; Mon, 11 Jan 2021 17:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44A62F1B07
+	for <lists+linux-fpga@lfdr.de>; Mon, 11 Jan 2021 17:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388809AbhAKQJJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 11 Jan 2021 11:09:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40528 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387962AbhAKQJI (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 11 Jan 2021 11:09:08 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 89CB021D7F;
-        Mon, 11 Jan 2021 16:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1610381308;
-        bh=5fZnpwgj10vPRw+LiuHoD3+pb12cQ9s/sMY2kXPo4is=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UuDK2KSpROlsOnFjMtQU+xGSNBANbyERFpXjd4JfEirPRtofCeO5W7gzY9Un3exBB
-         wjOozse6h6bmYcV9Ue8vCxqPRWJoNCXaLU52VqIp0BwVnpUktgi33cH/0L56pPZmpQ
-         znrFdVEzKaefhaL3Lu6vIMX1//hdei748FmXqRV4=
-Date:   Mon, 11 Jan 2021 17:09:38 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, moritzf@google.com,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        "Gerlach, Matthew" <matthew.gerlach@intel.com>,
-        Sonal Santan <sonal.santan@xilinx.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Richard Gong <richard.gong@intel.com>
-Subject: Re: [PATCH 0/8] FPGA DFL Changes for 5.12
-Message-ID: <X/x4QjGyP8ssYUDI@kroah.com>
-References: <20210107043714.991646-1-mdf@kernel.org>
- <80b29715-aa0a-b2ac-03af-904fc8f8be98@redhat.com>
- <e1d30642-ce85-b9b7-e8b2-5ad4fe6338e5@redhat.com>
- <X/sz6lDq8WFzrRUJ@archbook>
- <95af46d6-d123-f610-2f21-6d6de6f248e9@redhat.com>
- <X/v2xs5Rnfw9F18E@kroah.com>
- <9bc01a73-726f-a979-1246-6ea048961670@redhat.com>
- <X/xmi/jJmDHnV5/N@kroah.com>
- <7923d9dc-c503-5318-6e4f-931f8c13c1be@redhat.com>
+        id S1730458AbhAKQfo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 11 Jan 2021 11:35:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726997AbhAKQfo (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 11 Jan 2021 11:35:44 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01291C061786;
+        Mon, 11 Jan 2021 08:35:04 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id r9so185272ioo.7;
+        Mon, 11 Jan 2021 08:35:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KSxKKoTB7p9I30pNhP00kFn1ACWIHU12YNUj/6khzSI=;
+        b=scFMssqAHrdOsn8AL32eTozLU4jibIHnvedDqRIuMQLinPICMZ0/7DPcjLuAZW963I
+         lRgJDUOUZF7jDsov0iVjq7SMyPWh1grgMh+b8Bak8q5j5mx8wWWszAInFoh6/yvEGUSj
+         9aPFCShhzh+CGS9e/4939fv4YB3xs/7IJ8NV2o12iQnzvMIBQN4mVu/soZ34nLG6Ulc/
+         eRUhmoO1/gkRsswdocbhUljNIiIkTHMR4Zh7Xzy1kv0olKWiS0hl82N1HtmRvJIEq9VO
+         BgDCb6vevATFp5uK/IaCuwSSw+VfVRIY63g6hib/pR9/JSj0s/f7fazOv/E/21q0L8q2
+         QhTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KSxKKoTB7p9I30pNhP00kFn1ACWIHU12YNUj/6khzSI=;
+        b=KfdN2me013Zi6GSf8SQWtLVgUTpMxZ22LnfyGr8KVC2z3ISiYF3K9esaJaeKMlcq7L
+         2+Ww5KTZzaTDubYeAGKUneCd0cC3smBNK90LE2UT+2+cjYpsIw4oRYLySjL7wtEpYiMv
+         8rqNoznumMhj9Rf+JEBQ6fbWFv7qXvjZvw44BFGbyFF7Ii9DtrRb0aylaOsOuhoaQxIJ
+         383s0MGO6O6uRQoJj7Jm0cGr02i9FJnso7J+4h0x4Khxe8Y1kLRC8x2lflGNfKtO2OgR
+         TcmilUSNxp+sQNhH39GvcNuLQ5YEdMNtvA7oIm5s4/zvaQSlT1LVNDWLMW8+RHLEr8+n
+         D4Vg==
+X-Gm-Message-State: AOAM532uBFrXx9dt1DRSTBabiDJfkBxJ7NV3NgAqM6kjhJ+Ahyh8TJCD
+        kBp311xO3SPG/Y4VNWWDHs2etf2OECtngFWXzVQ=
+X-Google-Smtp-Source: ABdhPJxTLbsfah3xMGMJDkpJzkOgAe3Jvi3T1bv0QSf54plIZlaHifmkIPgoLiewHWXKQnJ0Kq8KksY8DXm+ffUH0Ik=
+X-Received: by 2002:a6b:6d1a:: with SMTP id a26mr86945iod.158.1610382903261;
+ Mon, 11 Jan 2021 08:35:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7923d9dc-c503-5318-6e4f-931f8c13c1be@redhat.com>
+References: <20210111112113.27242-1-lukas.bulwahn@gmail.com> <X/x0j+hWRdJ6U/MG@kroah.com>
+In-Reply-To: <X/x0j+hWRdJ6U/MG@kroah.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Mon, 11 Jan 2021 17:34:57 +0100
+Message-ID: <CAKXUXMzR2J895_+ZsRqcJ___Pu0HnRfiiFFrGfehQe8J4kQrgg@mail.gmail.com>
+Subject: Re: [PATCH -next] fpga: dfl-pci: rectify ReST formatting
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        linux-fpga@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 07:55:24AM -0800, Tom Rix wrote:
-> 
-> On 1/11/21 6:54 AM, Greg KH wrote:
-> > On Mon, Jan 11, 2021 at 06:40:24AM -0800, Tom Rix wrote:
-> >> On 1/10/21 10:57 PM, Greg KH wrote:
-> >>> On Sun, Jan 10, 2021 at 11:43:54AM -0800, Tom Rix wrote:
-> >>>> On 1/10/21 9:05 AM, Moritz Fischer wrote:
-> >>>>> Tom,
-> >>>>>
-> >>>>> On Sun, Jan 10, 2021 at 07:46:29AM -0800, Tom Rix wrote:
-> >>>>>> On 1/7/21 8:09 AM, Tom Rix wrote:
-> >>>>>>> On 1/6/21 8:37 PM, Moritz Fischer wrote:
-> >>>>>>>> This is a resend of the previous (unfortunately late) patchset of
-> >>>>>>>> changes for FPGA DFL.
-> >>>>>>> Is there something I can do to help ?
-> >>>>>>>
-> >>>>>>> I am paid to look after linux-fpga, so i have plenty of time.
-> >>>>>>>
-> >>>>>>> Some ideas of what i am doing now privately i can do publicly.
-> >>>>>>>
-> >>>>>>> 1. keep linux-fpga sync-ed to greg's branch so linux-fpga is normally in a pullable state.
-> >>>>> Is it not? It currently points to v5.11-rc1. If I start applying patches
-> >>>>> that require the changes that went into Greg's branch I can merge.
-> >>>> I mean the window between when we have staged patches and when they go into Greg's branch.
-> >>>>
-> >>>> We don't have any now, maybe those two trival ones.
-> >>>>
-> >>>> Since Greg's branch moves much faster than ours, our staging branch needs to be rebased regularly until its merge.
-> >>> Ick, no!  NEVER rebase a public branch.  Why does it matter the speed of
-> >>> my branch vs. anyone elses?  Git handles merges very well.
-> >>>
-> >>> Just like Linus's branches move much faster than mine, and I don't
-> >>> rebase my branches, you shouldn't rebase yours.
-> >>>
-> >>> Becides, I'm only taking _PATCHES_ for fpga changes at the moment, no
-> >>> git pulls, so why does it matter at all for any of this?
-> >>>
-> >>> What is the problem you are trying to solve here?
-> >> This 5.12 fpga patchset not making it into 5.11.
-> > Ok, but isn't it the responsibility of the submitter to make sure they
-> > apply properly when sending them out?
+On Mon, Jan 11, 2021 at 4:52 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jan 11, 2021 at 12:21:13PM +0100, Lukas Bulwahn wrote:
+> > Commit fa41d10589be ("fpga: dfl-pci: locate DFLs by PCIe vendor specific
+> > capability") provides documentation to the FPGA Device Feature List (DFL)
+> > Framework Overview, but introduced new documentation warnings:
 > >
-> >> At some point before the 5.11 window, I tried it on next and it failed to merge.
-> >>
-> >> This points to needing some c/i so it does not happen again.
-> > "again"?  Merges and the like are a totally normal thing and happen all
-> > the time, I still fail to understand what you are trying to "solve" for
-> > here...
-> 
-> What can I do to help make your merges as easy as possible ?
+> >   ./Documentation/fpga/dfl.rst:
+> >     505: WARNING: Title underline too short.
+> >     523: WARNING: Unexpected indentation.
+> >     523: WARNING: Blank line required after table.
+> >     524: WARNING: Block quote ends without a blank line; unexpected unindent.
+> >
+> > Rectify ReST formatting in ./Documentation/fpga/dfl.rst.
+> >
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+>
 
-I have not had any problems with merges, I've only had "problems"
-rejecting patches for their content.
+> You forgot a Reported-by: tag for the person who notified you of this :(
 
-Try helping out with patch reviews if you want, finding and fixing
-things before I review them is usually a good idea :)
+Greg, would you believe that I run 'make htmldocs' on linux-next myself?
 
-> Does the patchwork infra Moritz was speaking of earlier need fixing help?
+Of course, Stephen Rothwell reports such documentation warnings as
+well, but I take care independent of Stephen's reporting.
 
-No idea, I don't use it.
-
-> Any other things ?
-
-What problems are you trying to solve here?  What's wrong with how this
-subsystem is working that you are feeling needs to be addressed?
-
-confused,
-
-greg k-h
+Lukas
