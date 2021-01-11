@@ -2,129 +2,59 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB7A2F1944
-	for <lists+linux-fpga@lfdr.de>; Mon, 11 Jan 2021 16:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EB32F1A29
+	for <lists+linux-fpga@lfdr.de>; Mon, 11 Jan 2021 16:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730894AbhAKPNa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 11 Jan 2021 10:13:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35657 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731300AbhAKPNa (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 11 Jan 2021 10:13:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610377923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zH2sY2KFOZF7TSs2Cj/3HvzX9baKiIPNLIu6OGwY2+M=;
-        b=iTZ9Dt3UGCVQ2+XRFE/ePihDxClp91i2MsAPxbXquzHCVVMUJTQKrRybR13eezKOgDMoAv
-        HYCgf1Hu3Rj18s27IdG3TsgeNJSVyPN9y+/i4BT3zI23MSiGE5XDyZgUhn1azcL3xZKaRP
-        +CZV7xKAH6oAlHazgq2rqa4n3DdDDDU=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-253-9IoG1LXjPFqLohjcwiSWbQ-1; Mon, 11 Jan 2021 10:12:02 -0500
-X-MC-Unique: 9IoG1LXjPFqLohjcwiSWbQ-1
-Received: by mail-qt1-f200.google.com with SMTP id h18so5647qtr.2
-        for <linux-fpga@vger.kernel.org>; Mon, 11 Jan 2021 07:12:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=zH2sY2KFOZF7TSs2Cj/3HvzX9baKiIPNLIu6OGwY2+M=;
-        b=OnO2baMzRjDDatOkukoF+54Os2dMTrELRa8q/ulj4YLJFVdHkcAYgGC1EppaEyS8CX
-         vPkPmOH3clywdwpV0CGCMB8DASoyS4GdnFsXoSKO7CmDRSDnBKlodLImEC7BwruHxkK9
-         iwY1JkbPzUuUsV3A+fi1ej9kmfw2eimF4pkXy3njJnaK8XJPpsuCM1Kdg06bKEXTObjz
-         3CeME/loiS9E7qBp8oLqVlCEAgqZSzw77tFMINNHvxdtG6uWTMTnTe5Y0c4LrVrcp2t5
-         3i1bqionEJJiV25WOvnWrGM0k5AdJfZpEMIRsUdr8EKmo8F870PdORFwthvK/LL4J/3G
-         k9+w==
-X-Gm-Message-State: AOAM532loc8VX5HlLnXLNmzJyfBktP3sH10UYPNbsl0kbTliDFundrNJ
-        Ux4/waTdYXkQivmf650QSRFzeT2eoBBGL+sHSMV8HHxQ3uCiIGND7GSG+y30PGtrP5xWeBZ+NEx
-        BOz/ImEMhGNU/TsNd2Pxicw==
-X-Received: by 2002:a0c:a789:: with SMTP id v9mr64913qva.41.1610377921838;
-        Mon, 11 Jan 2021 07:12:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxcAqysHBNs93WJfvR2O2qKdvrvzOgfLz+paIVyIwplHKXl+Trm6gELqe7+VJOEgIEjl7lfig==
-X-Received: by 2002:a0c:a789:: with SMTP id v9mr64894qva.41.1610377921612;
-        Mon, 11 Jan 2021 07:12:01 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id n31sm2516266qtn.66.2021.01.11.07.11.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jan 2021 07:12:01 -0800 (PST)
-Subject: Re: [PATCH -next] fpga: dfl-pci: rectify ReST formatting
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        id S2388225AbhAKPwv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 11 Jan 2021 10:52:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60792 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387665AbhAKPwu (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 11 Jan 2021 10:52:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 88A1022C7E;
+        Mon, 11 Jan 2021 15:52:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1610380330;
+        bh=+BfbvxWW3gaAnOWiAUuWrCcK/xBY9scMJ4oiG/fv7kE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uozSjlnKXGkEb5YPduZdcgBKmGfFObfYPWxbFzmk63Hp+J7wibSPiSjUtg8KCG01l
+         42ttH+GU+7TLvS6e9GMYv4Va35NqOaM4H70o7qZPYxGPovbdT0+L8ot+DirhnWm6sf
+         4QXOKG3NE4lAtJRCEhlq0O15hfkeEWHkTto5FlFE=
+Date:   Mon, 11 Jan 2021 16:53:20 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>, Wu Hao <hao.wu@intel.com>,
+        Moritz Fischer <mdf@kernel.org>,
         Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        linux-fpga@vger.kernel.org
-Cc:     linux-doc@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] fpga: dfl-pci: rectify ReST formatting
+Message-ID: <X/x0cJ2N0/VA81FK@kroah.com>
 References: <20210111112113.27242-1-lukas.bulwahn@gmail.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <d22ccfa1-19a1-d48c-d822-76ea289965ab@redhat.com>
-Date:   Mon, 11 Jan 2021 07:11:59 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+ <d22ccfa1-19a1-d48c-d822-76ea289965ab@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20210111112113.27242-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d22ccfa1-19a1-d48c-d822-76ea289965ab@redhat.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Mon, Jan 11, 2021 at 07:11:59AM -0800, Tom Rix wrote:
+> 
+> On 1/11/21 3:21 AM, Lukas Bulwahn wrote:
+> > Commit fa41d10589be ("fpga: dfl-pci: locate DFLs by PCIe vendor specific
+> > capability") provides documentation to the FPGA Device Feature List (DFL)
+> > Framework Overview, but introduced new documentation warnings:
+> >
+> >   ./Documentation/fpga/dfl.rst:
+> >     505: WARNING: Title underline too short.
+> >     523: WARNING: Unexpected indentation.
+> >     523: WARNING: Blank line required after table.
+> >     524: WARNING: Block quote ends without a blank line; unexpected unindent.
+> >
+> > Rectify ReST formatting in ./Documentation/fpga/dfl.rst.
+> 
+> Can you explain how to reproduce this problem ?
 
-On 1/11/21 3:21 AM, Lukas Bulwahn wrote:
-> Commit fa41d10589be ("fpga: dfl-pci: locate DFLs by PCIe vendor specific
-> capability") provides documentation to the FPGA Device Feature List (DFL)
-> Framework Overview, but introduced new documentation warnings:
->
->   ./Documentation/fpga/dfl.rst:
->     505: WARNING: Title underline too short.
->     523: WARNING: Unexpected indentation.
->     523: WARNING: Blank line required after table.
->     524: WARNING: Block quote ends without a blank line; unexpected unindent.
->
-> Rectify ReST formatting in ./Documentation/fpga/dfl.rst.
-
-Can you explain how to reproduce this problem ?
-
-Tom
-
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> applies cleanly on next-20210111
->
-> Moritz, Matthew, please ack.
->
-> Greg, please pick this doc fixup to your fpga -next tree on top of
-> the commit above.
->
->  Documentation/fpga/dfl.rst | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index ea8cefc18bdb..c41ac76ffaae 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -502,7 +502,7 @@ FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
->  could be a reference.
->  
->  Location of DFLs on a PCI Device
-> -===========================
-> +================================
->  The original method for finding a DFL on a PCI device assumed the start of the
->  first DFL to offset 0 of bar 0.  If the first node of the DFL is an FME,
->  then further DFLs in the port(s) are specified in FME header registers.
-> @@ -514,6 +514,7 @@ data begins with a 4 byte vendor specific register for the number of DFLs follow
->  Offset/BIR vendor specific registers for each DFL. Bits 2:0 of Offset/BIR register
->  indicates the BAR, and bits 31:3 form the 8 byte aligned offset where bits 2:0 are
->  zero.
-> +::
->  
->          +----------------------------+
->          |31     Number of DFLS      0|
-
+'make htmldocs'
