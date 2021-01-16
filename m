@@ -2,101 +2,78 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EBB2F8458
-	for <lists+linux-fpga@lfdr.de>; Fri, 15 Jan 2021 19:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4F42F8AD4
+	for <lists+linux-fpga@lfdr.de>; Sat, 16 Jan 2021 03:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729507AbhAOS1x (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 15 Jan 2021 13:27:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22333 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727711AbhAOS1v (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 15 Jan 2021 13:27:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610735184;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=edpQ9XBa4NxUM42jV640jE0QnzJCtHUWVPa7s08fP6M=;
-        b=Wshpl5KRRd9niSnQ2ICUQmQ2dzz9Qq0xsgXWfBlFS+LY72nKd1bNeaHRCVgqmichD+3jsI
-        oXENPzTD79b/1Ij3rQmBKez/PIzEOE4U0Lqzq/2AM5tJnxpAI5+0820cTYoaySVZjjEdDo
-        mOxmw1oMpSsIVlIYdMSSV9EuiJ3NzjQ=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-363-qMZ784bkMZmd8DeLyKHnLg-1; Fri, 15 Jan 2021 13:26:22 -0500
-X-MC-Unique: qMZ784bkMZmd8DeLyKHnLg-1
-Received: by mail-qv1-f72.google.com with SMTP id i13so8457501qvx.11
-        for <linux-fpga@vger.kernel.org>; Fri, 15 Jan 2021 10:26:22 -0800 (PST)
+        id S1725922AbhAPC7M (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 15 Jan 2021 21:59:12 -0500
+Received: from mail-pj1-f45.google.com ([209.85.216.45]:38934 "EHLO
+        mail-pj1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbhAPC7L (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 15 Jan 2021 21:59:11 -0500
+Received: by mail-pj1-f45.google.com with SMTP id u4so6303859pjn.4;
+        Fri, 15 Jan 2021 18:58:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=edpQ9XBa4NxUM42jV640jE0QnzJCtHUWVPa7s08fP6M=;
-        b=Cn9kTfbivpsbfWXIG3aF67FX+PFlWYkkI5mtGjiGMiQcTMsIOrL0P5DVOYSfTNcl+R
-         9+lGC8JiQHB9LN0gZP3trarqOujFN9rlfEdXtTT5A0yBLQSNisYkOOt5VCr8MtE4yJw1
-         RtziHs5YesVB9iOeHhO4CFqLOQAIfsKF78ywaKB0KerP909A3gWZwhoEC07+jeIoVcZz
-         mJS2WSVdQ5qmj0JzS/zhuvWF8ECGL6zF0kyYhUespNpVpXETKPBZwZCgzCnJYlE7z5Q/
-         vCzgbzxdlFUNuwaXHYZRtXC8OSYqUiZ8dBKRRW3fvOUEk/r7r7cDNqu5muqITV24Un79
-         psrw==
-X-Gm-Message-State: AOAM531WDbxV2IZmGANEX0Nl/IVTiGhcVTjSXWvFmY0Qwqp78b+tFnWW
-        5aqPsFks+zIsDg2HCkrbStFqDO8hcD7OsEKhT0mWJUG0JciafmKD/5DGH45KMTXwMU6OEwEYASW
-        /RHXrYQ4hDc3dGqELcOIXCg==
-X-Received: by 2002:a37:8703:: with SMTP id j3mr13736111qkd.455.1610735182347;
-        Fri, 15 Jan 2021 10:26:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxhh3gcJfS7/iyNYYOy0a2+NqIKUaY7FuPSZFU4sMQT601HHELrIoh6E714w3tQyBxQ+Nw6Lw==
-X-Received: by 2002:a37:8703:: with SMTP id j3mr13736081qkd.455.1610735182105;
-        Fri, 15 Jan 2021 10:26:22 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id q185sm5545762qka.96.2021.01.15.10.26.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jan 2021 10:26:21 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bVsBck0Z5p+UKXwykplK7uSOgMz1NNsO42lw5Jci3JY=;
+        b=BTrolAqnTwmwkshAsYJV9CjEESc9leSh1wIEQ5O/kBNr5uh/naGe5WlUYwAny0rpMY
+         CKjgVaQrazZnCBw3iKSe+3B8NJeLY/FSIFAHAizT0KHjetYHs6fsAj2HqQUD2zDqe1fO
+         SJTne2eSWvLt93rcDzIlL979dxrzIwMo2r5gNh6T38ORrstvi3iRsiBGqBPExK9olHz0
+         ywRvNBVk8TwVAGiqkGxQqM9gtMJVS4hV9hNRD9EYJ+ZehXFVpYtiBvJIayRLL32iQ5+M
+         ez9rf3nBB9a3Kfg4kAdQgIyA7nU0FhcCKQJh0qt3/lBFmdsYocbyR61dbapVMRaz76Gh
+         LnRg==
+X-Gm-Message-State: AOAM531H3OOSr2PMWUWg5PwEAkGT+67fMe80c3HwHdIHSvawfcXfwojj
+        U47r6TXbiozZ3pJQLvMJaQ3RUb1pOKU=
+X-Google-Smtp-Source: ABdhPJxp0lz8bnbGii40+rUGjA1bkL+IfGQ29DnHaOwLGQGHFSMOXwUx1KmpvP5XrSl4XiuaWg/T+w==
+X-Received: by 2002:a17:90b:490c:: with SMTP id kr12mr13990625pjb.227.1610765905053;
+        Fri, 15 Jan 2021 18:58:25 -0800 (PST)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id bx17sm9459544pjb.12.2021.01.15.18.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jan 2021 18:58:24 -0800 (PST)
+Date:   Fri, 15 Jan 2021 18:58:23 -0800
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     mdf@kernel.org, trix@redhat.com, robh+dt@kernel.org,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, git@xilinx.com,
+        chinnikishore369@gmail.com
 Subject: Re: [PATCH 2/2] fpga: Add support for Xilinx DFX AXI Shutdown manager
-To:     Nava kishore Manne <nava.manne@xilinx.com>, mdf@kernel.org,
-        robh+dt@kernel.org, michal.simek@xilinx.com,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     git@xilinx.com, chinnikishore369@gmail.com
+Message-ID: <YAJWT4IDPmHneam1@epycbox.lan>
 References: <20210115013431.27667-1-nava.manne@xilinx.com>
  <20210115013431.27667-2-nava.manne@xilinx.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <2dc469ae-cdf4-0774-c786-7dd01c4914c9@redhat.com>
-Date:   Fri, 15 Jan 2021 10:26:19 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20210115013431.27667-2-nava.manne@xilinx.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Hi,
 
-On 1/14/21 5:34 PM, Nava kishore Manne wrote:
+On Fri, Jan 15, 2021 at 07:04:31AM +0530, Nava kishore Manne wrote:
 > This patch adds support for Xilinx Dynamic Function eXchange(DFX) AXI
 > shutdown manager IP. It can be used to safely handling the AXI traffic
 > on a Reconfigurable Partition when it is undergoing dynamic reconfiguration
 > and there by preventing system deadlock that may occur if AXI transactions
 > are interrupted during reconfiguration.
->
+> 
 > PR-Decoupler and AXI shutdown manager are completely different IPs.
 > But both the IP registers are compatible and also both belong to the
 > same sub-system (fpga-bridge).So using same driver for both IP's.
->
+
+I'm a bit confused, the whole goal here is to give the thing a
+different name?
+> 
 > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
 > ---
 >  drivers/fpga/xilinx-pr-decoupler.c | 35 ++++++++++++++++++++++++++----
-
-It looks like the copyright is wrong, please review spelling of Xilix
-
- * Copyright (c) 2017, Xilix Inc
-
-
 >  1 file changed, 31 insertions(+), 4 deletions(-)
->
+> 
 > diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
 > index 7d69af230567..c95f3d065ccb 100644
 > --- a/drivers/fpga/xilinx-pr-decoupler.c
@@ -113,11 +90,6 @@ It looks like the copyright is wrong, please review spelling of Xilix
 > +struct xlnx_config_data {
 > +	char *name;
 > +};
-
-Move xlnx_config_data above xlnx_pr_decouple_data.
-
-could you 'const' char *name ?
-
 > +
 >  static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
 >  					   u32 offset, u32 val)
@@ -132,12 +104,9 @@ could you 'const' char *name ?
 > +
 > +static const struct xlnx_config_data shutdown_config = {
 > +	.name = "Xilinx DFX AXI shutdown mgr",
-
-To be consistent with decoupler name,
-
-shutdown mgr -> Shutdown Manager
-
 > +};
+
+If it's just the strings, why not store them as is?
 > +
 >  static const struct of_device_id xlnx_pr_decoupler_of_match[] = {
 > -	{ .compatible = "xlnx,pr-decoupler-1.00", },
@@ -191,14 +160,10 @@ shutdown mgr -> Shutdown Manager
 > +			priv->ipconfig->name);
 >  		goto err_clk;
 >  	}
-
-Look at XILINX_PR_DECOUPLER entry in Kconfig, maybe add something like
-
-help
-
-  Say Y to enable drivers for the  ... Decoupler or DFX AIX Shutdown Manager
-
-Tom
-
 >  
+> -- 
+> 2.18.0
+> 
 
+Thanks,
+Moritz
