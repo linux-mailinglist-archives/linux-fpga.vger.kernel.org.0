@@ -2,168 +2,191 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4F42F8AD4
-	for <lists+linux-fpga@lfdr.de>; Sat, 16 Jan 2021 03:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612F62F8EE7
+	for <lists+linux-fpga@lfdr.de>; Sat, 16 Jan 2021 20:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725922AbhAPC7M (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 15 Jan 2021 21:59:12 -0500
-Received: from mail-pj1-f45.google.com ([209.85.216.45]:38934 "EHLO
-        mail-pj1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbhAPC7L (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 15 Jan 2021 21:59:11 -0500
-Received: by mail-pj1-f45.google.com with SMTP id u4so6303859pjn.4;
-        Fri, 15 Jan 2021 18:58:50 -0800 (PST)
+        id S1727119AbhAPTe5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 16 Jan 2021 14:34:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:51265 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726201AbhAPTe4 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 16 Jan 2021 14:34:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1610825609;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Yj5NhUnY31IXNNcNfqCUwM5gTD0on6aNUy582FDT6rU=;
+        b=eXixgf+/04h9nLJkjQC7n3f+UBuqHHdD+BQSZl7qOXLD6JzOeAobSvPgxHaUc55Vg2NzHn
+        +jM2YlX3Rmnj0hzYcfTzHa2v6seQDXaW5rnuU/ENE3GMsnkwy/fWQ4/BKNtGxRVe4TK/4c
+        bLoxxYJ7zU6AzNVMrUZPy4tvow/xca0=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-420-1of-O8QTOyq6CQKiaG77CQ-1; Sat, 16 Jan 2021 14:33:28 -0500
+X-MC-Unique: 1of-O8QTOyq6CQKiaG77CQ-1
+Received: by mail-qv1-f70.google.com with SMTP id t18so11535127qva.6
+        for <linux-fpga@vger.kernel.org>; Sat, 16 Jan 2021 11:33:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bVsBck0Z5p+UKXwykplK7uSOgMz1NNsO42lw5Jci3JY=;
-        b=BTrolAqnTwmwkshAsYJV9CjEESc9leSh1wIEQ5O/kBNr5uh/naGe5WlUYwAny0rpMY
-         CKjgVaQrazZnCBw3iKSe+3B8NJeLY/FSIFAHAizT0KHjetYHs6fsAj2HqQUD2zDqe1fO
-         SJTne2eSWvLt93rcDzIlL979dxrzIwMo2r5gNh6T38ORrstvi3iRsiBGqBPExK9olHz0
-         ywRvNBVk8TwVAGiqkGxQqM9gtMJVS4hV9hNRD9EYJ+ZehXFVpYtiBvJIayRLL32iQ5+M
-         ez9rf3nBB9a3Kfg4kAdQgIyA7nU0FhcCKQJh0qt3/lBFmdsYocbyR61dbapVMRaz76Gh
-         LnRg==
-X-Gm-Message-State: AOAM531H3OOSr2PMWUWg5PwEAkGT+67fMe80c3HwHdIHSvawfcXfwojj
-        U47r6TXbiozZ3pJQLvMJaQ3RUb1pOKU=
-X-Google-Smtp-Source: ABdhPJxp0lz8bnbGii40+rUGjA1bkL+IfGQ29DnHaOwLGQGHFSMOXwUx1KmpvP5XrSl4XiuaWg/T+w==
-X-Received: by 2002:a17:90b:490c:: with SMTP id kr12mr13990625pjb.227.1610765905053;
-        Fri, 15 Jan 2021 18:58:25 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id bx17sm9459544pjb.12.2021.01.15.18.58.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yj5NhUnY31IXNNcNfqCUwM5gTD0on6aNUy582FDT6rU=;
+        b=o7VPBvqKlhDr9eWl+RPNGudshWp15KWR4coS3uQFKnrtCydoYcftSYFm92N0gUJSJr
+         zkwEuSskOhwOKiAprYy2E7mrE+2bsIuhyuGlQw3gU0L2ndyDeI94mAcQhZjSxQgLITtb
+         kjtJ8s/CSXEnquEppsXlDzIl5DpThC+K0LHpdl/7kVqmH0H7CR0fVYFtkJ93nnPzVf9Q
+         zNcyNY0BJzUMreG7qbEpaCLPkOIsShUi/D+yJts/RNqNa/IxTjyH8+/Y/eBYuLNPcPbp
+         CFzJEhkTyGJ3tw2+zyOa7VE3TrhDH7+QanndbRL/oUfohVMQWS0xsETuBcxHif2yy3L2
+         wyuw==
+X-Gm-Message-State: AOAM530isy/vLmMarhQ9EZhB9EUy1u4OBt4vTJrh6FETdpNNURqs4Uzr
+        cNPWtuusH76U6AMseWgUrFGc4JFXrNneGwt0QxWPUrUXv8JLwwyHnEEWVY6gbZwOVpqA2aLeAxz
+        H/+vDPc8pjfQeHbgTv1DgXg==
+X-Received: by 2002:a05:620a:15e3:: with SMTP id p3mr18231694qkm.397.1610825607634;
+        Sat, 16 Jan 2021 11:33:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy2FS9AlMCp0udYXBuPpi6cNGXiFOayQWDvC7TZkO1TObCYmaoVrcOCG7wr5yQApjS3HXL3jQ==
+X-Received: by 2002:a05:620a:15e3:: with SMTP id p3mr18231674qkm.397.1610825607363;
+        Sat, 16 Jan 2021 11:33:27 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id i129sm7483816qkd.114.2021.01.16.11.33.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jan 2021 18:58:24 -0800 (PST)
-Date:   Fri, 15 Jan 2021 18:58:23 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     mdf@kernel.org, trix@redhat.com, robh+dt@kernel.org,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, git@xilinx.com,
-        chinnikishore369@gmail.com
-Subject: Re: [PATCH 2/2] fpga: Add support for Xilinx DFX AXI Shutdown manager
-Message-ID: <YAJWT4IDPmHneam1@epycbox.lan>
-References: <20210115013431.27667-1-nava.manne@xilinx.com>
- <20210115013431.27667-2-nava.manne@xilinx.com>
+        Sat, 16 Jan 2021 11:33:26 -0800 (PST)
+From:   trix@redhat.com
+To:     shuah@kernel.org, mdf@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-fpga@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH v2] selftests: drivers: fpga: A test for interrupt support
+Date:   Sat, 16 Jan 2021 11:33:21 -0800
+Message-Id: <20210116193321.385848-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210115013431.27667-2-nava.manne@xilinx.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi,
+From: Tom Rix <trix@redhat.com>
 
-On Fri, Jan 15, 2021 at 07:04:31AM +0530, Nava kishore Manne wrote:
-> This patch adds support for Xilinx Dynamic Function eXchange(DFX) AXI
-> shutdown manager IP. It can be used to safely handling the AXI traffic
-> on a Reconfigurable Partition when it is undergoing dynamic reconfiguration
-> and there by preventing system deadlock that may occur if AXI transactions
-> are interrupted during reconfiguration.
-> 
-> PR-Decoupler and AXI shutdown manager are completely different IPs.
-> But both the IP registers are compatible and also both belong to the
-> same sub-system (fpga-bridge).So using same driver for both IP's.
+Check that the ioctl DFL_FPGA_PORT_ERR_GET_IRQ_NUM returns
+an expected result.
 
-I'm a bit confused, the whole goal here is to give the thing a
-different name?
-> 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> ---
->  drivers/fpga/xilinx-pr-decoupler.c | 35 ++++++++++++++++++++++++++----
->  1 file changed, 31 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-> index 7d69af230567..c95f3d065ccb 100644
-> --- a/drivers/fpga/xilinx-pr-decoupler.c
-> +++ b/drivers/fpga/xilinx-pr-decoupler.c
-> @@ -19,10 +19,15 @@
->  #define CTRL_OFFSET		0
->  
->  struct xlnx_pr_decoupler_data {
-> +	const struct xlnx_config_data *ipconfig;
->  	void __iomem *io_base;
->  	struct clk *clk;
->  };
->  
-> +struct xlnx_config_data {
-> +	char *name;
-> +};
-> +
->  static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
->  					   u32 offset, u32 val)
->  {
-> @@ -76,15 +81,28 @@ static const struct fpga_bridge_ops xlnx_pr_decoupler_br_ops = {
->  	.enable_show = xlnx_pr_decoupler_enable_show,
->  };
->  
-> +static const struct xlnx_config_data decoupler_config = {
-> +	.name = "Xilinx PR Decoupler",
-> +};
-> +
-> +static const struct xlnx_config_data shutdown_config = {
-> +	.name = "Xilinx DFX AXI shutdown mgr",
-> +};
+Tested on vf device 0xbcc1
 
-If it's just the strings, why not store them as is?
-> +
->  static const struct of_device_id xlnx_pr_decoupler_of_match[] = {
-> -	{ .compatible = "xlnx,pr-decoupler-1.00", },
-> -	{ .compatible = "xlnx,pr-decoupler", },
-> +	{ .compatible = "xlnx,pr-decoupler-1.00", .data = &decoupler_config },
-> +	{ .compatible = "xlnx,pr-decoupler", .data = &decoupler_config },
-> +	{ .compatible = "xlnx,dfx-axi-shutdown-manager-1.00",
-> +					.data = &shutdown_config },
-> +	{ .compatible = "xlnx,dfx-axi-shutdown-manager",
-> +					.data = &shutdown_config },
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, xlnx_pr_decoupler_of_match);
->  
->  static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
->  {
-> +	struct device_node *np = pdev->dev.of_node;
->  	struct xlnx_pr_decoupler_data *priv;
->  	struct fpga_bridge *br;
->  	int err;
-> @@ -94,6 +112,14 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
->  	if (!priv)
->  		return -ENOMEM;
->  
-> +	if (np) {
-> +		const struct of_device_id *match;
-> +
-> +		match = of_match_node(xlnx_pr_decoupler_of_match, np);
-> +		if (match && match->data)
-> +			priv->ipconfig = match->data;
-> +	}
-> +
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	priv->io_base = devm_ioremap_resource(&pdev->dev, res);
->  	if (IS_ERR(priv->io_base))
-> @@ -114,7 +140,7 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
->  
->  	clk_disable(priv->clk);
->  
-> -	br = devm_fpga_bridge_create(&pdev->dev, "Xilinx PR Decoupler",
-> +	br = devm_fpga_bridge_create(&pdev->dev, priv->ipconfig->name,
->  				     &xlnx_pr_decoupler_br_ops, priv);
->  	if (!br) {
->  		err = -ENOMEM;
-> @@ -125,7 +151,8 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
->  
->  	err = fpga_bridge_register(br);
->  	if (err) {
-> -		dev_err(&pdev->dev, "unable to register Xilinx PR Decoupler");
-> +		dev_err(&pdev->dev, "unable to register %s",
-> +			priv->ipconfig->name);
->  		goto err_clk;
->  	}
->  
-> -- 
-> 2.18.0
-> 
+Sample run with
+ # make -C tools/testing/selftests TARGETS=drivers/fpga run_tests
+ ...
+ TAP version 13
+ 1..1
+ # selftests: drivers/fpga: intr
+ # TAP version 13
+ # 1..1
+ # # Starting 1 tests from 1 test cases.
+ # #  RUN           global.afu_intr ...
+ # #            OK  global.afu_intr
+ # ok 1 global.afu_intr
+ # # PASSED: 1 / 1 tests passed.
+ # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+ ok 1 selftests: drivers/fpga: intr
 
-Thanks,
-Moritz
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+v1: Convert to kselftest_harness.h framework
+---
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/drivers/fpga/Makefile |  7 ++++
+ tools/testing/selftests/drivers/fpga/config   |  1 +
+ tools/testing/selftests/drivers/fpga/intr.c   | 36 +++++++++++++++++++
+ 5 files changed, 46 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/fpga/Makefile
+ create mode 100644 tools/testing/selftests/drivers/fpga/config
+ create mode 100644 tools/testing/selftests/drivers/fpga/intr.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index de610a06cb5c..7ed3ce58d95e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6973,6 +6973,7 @@ F:	Documentation/driver-api/fpga/
+ F:	Documentation/fpga/
+ F:	drivers/fpga/
+ F:	include/linux/fpga/
++F:	tools/testing/selftests/drivers/fpga/
+ 
+ FPGA SECURITY MANAGER DRIVERS
+ M:	Russ Weight <russell.h.weight@intel.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index afbab4aeef3c..aad4763ec348 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -9,6 +9,7 @@ TARGETS += core
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
+ TARGETS += drivers/dma-buf
++TARGETS += drivers/fpga
+ TARGETS += efivarfs
+ TARGETS += exec
+ TARGETS += filesystems
+diff --git a/tools/testing/selftests/drivers/fpga/Makefile b/tools/testing/selftests/drivers/fpga/Makefile
+new file mode 100644
+index 000000000000..eba35c405d5b
+--- /dev/null
++++ b/tools/testing/selftests/drivers/fpga/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0-only
++CFLAGS += -I../../../../../usr/include/
++CFLAGS += -I../../../../../include/uapi/
++
++TEST_GEN_PROGS := intr
++
++include ../../lib.mk
+diff --git a/tools/testing/selftests/drivers/fpga/config b/tools/testing/selftests/drivers/fpga/config
+new file mode 100644
+index 000000000000..e2111b81d8d7
+--- /dev/null
++++ b/tools/testing/selftests/drivers/fpga/config
+@@ -0,0 +1 @@
++CONFIG_FPGA_DFL_AFU=m
+diff --git a/tools/testing/selftests/drivers/fpga/intr.c b/tools/testing/selftests/drivers/fpga/intr.c
+new file mode 100644
+index 000000000000..b362fb1f788d
+--- /dev/null
++++ b/tools/testing/selftests/drivers/fpga/intr.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <stdio.h>
++#include <stdlib.h>
++#include <stdint.h>
++#include <string.h>
++#include <sys/fcntl.h>
++#include <sys/ioctl.h>
++#include <linux/fpga-dfl.h>
++
++#include "../../kselftest_harness.h"
++
++TEST(afu_intr)
++{
++	int devfd, status;
++	struct dfl_fpga_port_info port_info;
++	uint32_t irq_num = UINT32_MAX;
++
++	devfd = open("/dev/dfl-port.0", O_RDONLY);
++	if (devfd < 0)
++		SKIP(0, "no fpga afu device 0");
++	/*
++	 * From fpga-dl.h :
++	 * Currently hardware supports up to 1 irq.
++	 * Return: 0 on success, -errno on failure.
++	 */
++	status = ioctl(devfd, DFL_FPGA_PORT_ERR_GET_IRQ_NUM, &irq_num);
++	ASSERT_EQ(0, status) {
++		TH_LOG("ioctl() failed to get the number irqs");
++	}
++	ASSERT_LT(irq_num, 256) {
++		TH_LOG("unexpeced number of irqs");
++	}
++	close(devfd);
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.27.0
+
