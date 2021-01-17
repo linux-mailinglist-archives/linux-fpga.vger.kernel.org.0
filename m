@@ -2,192 +2,106 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B15812F93F1
-	for <lists+linux-fpga@lfdr.de>; Sun, 17 Jan 2021 17:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4752F93F6
+	for <lists+linux-fpga@lfdr.de>; Sun, 17 Jan 2021 17:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729552AbhAQQT5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 17 Jan 2021 11:19:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:42299 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729124AbhAQQTz (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Sun, 17 Jan 2021 11:19:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610900307;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=pd4vHRZ+JWsMgYXJ+/MXzVJZ5dZGqNEtTkFAu8s+Zps=;
-        b=Z+tYm7j4G4Jm9zkVWWnB+j84GfLRzpYXY5pBumBX4IlfSpqVi31yCye4No8meGPS+70jA+
-        69LwMZ3Xz/6f5HU7ptGe/ThogpCZvWQ65MinbnfmazuW9M4+Q6mpwYrLWJioC1DUKgA7z9
-        26NLUljT9qoe5gectsmP4whsewZpgAc=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-230-E0kHYpMLN06XL9xxYv70EQ-1; Sun, 17 Jan 2021 11:18:25 -0500
-X-MC-Unique: E0kHYpMLN06XL9xxYv70EQ-1
-Received: by mail-qk1-f199.google.com with SMTP id p21so14477721qke.6
-        for <linux-fpga@vger.kernel.org>; Sun, 17 Jan 2021 08:18:25 -0800 (PST)
+        id S1728693AbhAQQXW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 17 Jan 2021 11:23:22 -0500
+Received: from mail-pl1-f176.google.com ([209.85.214.176]:46940 "EHLO
+        mail-pl1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729824AbhAQQXV (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 17 Jan 2021 11:23:21 -0500
+Received: by mail-pl1-f176.google.com with SMTP id u11so2990873plg.13;
+        Sun, 17 Jan 2021 08:23:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pd4vHRZ+JWsMgYXJ+/MXzVJZ5dZGqNEtTkFAu8s+Zps=;
-        b=UlXxWiKEJdKlSsBnMdI953HBSE/YhPEflclJDbc9PLo11K9qtGvhru4RdF1mJlTtyc
-         ReSoT1rBCAlJtz9g8Jej6XRx8FQ4cGE24eF3ERQZmB7TOfqV00E4b4P/+P6BnvdPEXMt
-         rH6+QFZdiNw79QjOCLmjAdtTL6hG1atXG0XYYU+nMXJXBwXIM46I48dZnXvHompNaxbC
-         QRA1PY1lBK0pEYW4/vyk1IbOH3uknXs+WrGKmAT8Jvi0L+5oB0vNcnq7+4xGGS3wmbH/
-         SxbjKNULr15/pY0uUOmT5dbZqHP/j5IoCslURGysQxpoje0OmyvEmNM/shgiizzb58kE
-         S/TQ==
-X-Gm-Message-State: AOAM531zFJ8UdwhkCvLlnPhREQLRS+ryn5Y7G6gn5McT5Q7HJlrg2r+b
-        LWo9oqf2JD9KuoPa3JSn3wsOYRWfVVOTgvWqKuA+80vYnm3KOLop2mfGMfPhphp42AnEVnqCwzq
-        fZHEroopFxSp8kAtLkM2C3g==
-X-Received: by 2002:ac8:6b0a:: with SMTP id w10mr19764227qts.224.1610900303862;
-        Sun, 17 Jan 2021 08:18:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz+kM1gexsua9DwpZxib3OZs35p/m5WmKtlUfgtMEYDw+N6CMDgeXGQk41qH5EeAy8ZFkJePQ==
-X-Received: by 2002:ac8:6b0a:: with SMTP id w10mr19764160qts.224.1610900302190;
-        Sun, 17 Jan 2021 08:18:22 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id i17sm8617874qtg.77.2021.01.17.08.18.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VvDskUcTMKO/Knbyega3fwW2CY3W1m4PF63C8ZG/0S4=;
+        b=ZZxC3bW8Ce24IHmxgjFgux53r7w+C1Tnay8DnfKifqH87+DiVWmfsO6BbMyjo6fuJ5
+         F/4MZ3cpVx8xrS1/LIydSM5JRNx0FUIb4akpxhd9zP/6p7+/WmS7Vx8/g5SiHYylHs72
+         Rr1EQgt355ftXTO0YCVNk1gFfuwAdTuCs/BgeP3ABNuB2YYJtsx/xVuHM/BTtZzNQvIU
+         6VXygFBihSwy3DM93USe4t4P3asLH0V5LokbMN07K2NRKuOQYNAIhqCPUTleGYRFPOR8
+         Za7lRk/FzLh/Mea7PYUYqR2ttxe3cYd9SQIK3eJ6YktU0Ml/kvw+JIBveK0fUAFPPYnQ
+         4Pzw==
+X-Gm-Message-State: AOAM532qwaywavzMJeciStnq2vsO2mr9/IKhAaDvXR7ybPqSkpT0Yr+b
+        Vo7ZDaA1gxFymYOxd4gyV/A=
+X-Google-Smtp-Source: ABdhPJzgGqtPs3rM2Y5e0plUZL+BL2vEnRwxkNpNHrNOAkhUK9Rp0iKEmnLvPNoYm5UTyatdzWVxWg==
+X-Received: by 2002:a17:90a:d494:: with SMTP id s20mr22023049pju.178.1610900558700;
+        Sun, 17 Jan 2021 08:22:38 -0800 (PST)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id 73sm13988656pga.26.2021.01.17.08.22.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jan 2021 08:18:21 -0800 (PST)
-From:   trix@redhat.com
-To:     shuah@kernel.org, mdf@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-fpga@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH v3] selftests: drivers: fpga: A test for interrupt support
-Date:   Sun, 17 Jan 2021 08:18:15 -0800
-Message-Id: <20210117161815.514078-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 17 Jan 2021 08:22:37 -0800 (PST)
+Date:   Sun, 17 Jan 2021 08:22:36 -0800
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Xu Yilun <yilun.xu@intel.com>, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com, lgoncalv@redhat.com, hao.wu@intel.com
+Subject: Re: [PATCH v6 1/2] fpga: dfl: add the userspace I/O device support
+ for DFL devices
+Message-ID: <YARkTFMrotPo45ic@epycbox.lan>
+References: <1610502848-30345-1-git-send-email-yilun.xu@intel.com>
+ <1610502848-30345-2-git-send-email-yilun.xu@intel.com>
+ <YARbgGU6lr3zZaKP@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YARbgGU6lr3zZaKP@kroah.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Greg,
 
-Check that the ioctl DFL_FPGA_PORT_ERR_GET_IRQ_NUM returns
-an expected result.
+On Sun, Jan 17, 2021 at 04:45:04PM +0100, Greg KH wrote:
+> On Wed, Jan 13, 2021 at 09:54:07AM +0800, Xu Yilun wrote:
+> > This patch supports the DFL drivers be written in userspace. This is
+> > realized by exposing the userspace I/O device interfaces.
+> > 
+> > The driver leverages the uio_pdrv_genirq, it adds the uio_pdrv_genirq
+> > platform device with the DFL device's resources, and let the generic UIO
+> > platform device driver provide support to userspace access to kernel
+> > interrupts and memory locations.
+> 
+> Why doesn't the existing uio driver work for this, why do you need a new
+> one?
+> 
+> > ---
+> >  drivers/fpga/Kconfig        | 10 +++++
+> >  drivers/fpga/Makefile       |  1 +
+> >  drivers/fpga/dfl-uio-pdev.c | 93 +++++++++++++++++++++++++++++++++++++++++++++
+> 
+> uio drivers traditionally go in drivers/uio/ and start with "uio", so
+> shouldn't this be drivers/uio/uio_dfl_pdev.c to match the same naming
+> scheme?
 
-Tested on vf device 0xbcc1
+I had considered suggesting that, but ultimately this driver only
+creates a 'uio_pdrv_genirq' platform device, so it didn't seem like a
+good fit.
+> 
+> But again, you need to explain in detail, why the existing uio driver
+> doesn't work properly, or why you can't just add a few lines to an
+> existing one.
 
-Sample run with
- # make -C tools/testing/selftests TARGETS=drivers/fpga run_tests
- ...
- TAP version 13
- 1..1
- # selftests: drivers/fpga: intr
- # TAP version 13
- # 1..1
- # # Starting 1 tests from 1 test cases.
- # #  RUN           global.afu_intr ...
- # #            OK  global.afu_intr
- # ok 1 global.afu_intr
- # # PASSED: 1 / 1 tests passed.
- # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
- ok 1 selftests: drivers/fpga: intr
+Ultimately there are three options I see:
+1) Do what Xu does, which is re-use the 'uio_pdrv_genirq' uio driver by
+  creating a platform device for it as sub-device of the dfl device that
+  we bind to uio_pdrv_genirq
+2) Add a module_dfl_driver part to drivers/uio/uio_pdrv_genirq.c and
+  corresponding id table
+3) Create a new uio_dfl_genirq kind of driver that uses the dfl bus and
+  that would make sense to then put into drivers/uio. (This would
+  duplicate code in uio_pdrv_genirq to some extend)
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
-v1: Convert to kselftest_harness.h framework
-v2: reverse xmas tree variables
----
- MAINTAINERS                                   |  1 +
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/drivers/fpga/Makefile |  7 ++++
- tools/testing/selftests/drivers/fpga/config   |  1 +
- tools/testing/selftests/drivers/fpga/intr.c   | 36 +++++++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/fpga/Makefile
- create mode 100644 tools/testing/selftests/drivers/fpga/config
- create mode 100644 tools/testing/selftests/drivers/fpga/intr.c
+Overall I think in terms of code re-use I think Xu's choice might be
+less new code as it simply wraps the uio platform device driver, and
+allows for defining the resources passed to the UIO driver to be defined
+by hardware through a DFL.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index de610a06cb5c..7ed3ce58d95e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6973,6 +6973,7 @@ F:	Documentation/driver-api/fpga/
- F:	Documentation/fpga/
- F:	drivers/fpga/
- F:	include/linux/fpga/
-+F:	tools/testing/selftests/drivers/fpga/
- 
- FPGA SECURITY MANAGER DRIVERS
- M:	Russ Weight <russell.h.weight@intel.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index afbab4aeef3c..aad4763ec348 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -9,6 +9,7 @@ TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-+TARGETS += drivers/fpga
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += filesystems
-diff --git a/tools/testing/selftests/drivers/fpga/Makefile b/tools/testing/selftests/drivers/fpga/Makefile
-new file mode 100644
-index 000000000000..eba35c405d5b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+CFLAGS += -I../../../../../usr/include/
-+CFLAGS += -I../../../../../include/uapi/
-+
-+TEST_GEN_PROGS := intr
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/drivers/fpga/config b/tools/testing/selftests/drivers/fpga/config
-new file mode 100644
-index 000000000000..e2111b81d8d7
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/config
-@@ -0,0 +1 @@
-+CONFIG_FPGA_DFL_AFU=m
-diff --git a/tools/testing/selftests/drivers/fpga/intr.c b/tools/testing/selftests/drivers/fpga/intr.c
-new file mode 100644
-index 000000000000..927dcc757f0b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/intr.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <sys/fcntl.h>
-+#include <sys/ioctl.h>
-+#include <linux/fpga-dfl.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+TEST(afu_intr)
-+{
-+	struct dfl_fpga_port_info port_info;
-+	uint32_t irq_num = UINT32_MAX;
-+	int devfd, status;
-+
-+	devfd = open("/dev/dfl-port.0", O_RDONLY);
-+	if (devfd < 0)
-+		SKIP(0, "no fpga afu device 0");
-+	/*
-+	 * From fpga-dl.h :
-+	 * Currently hardware supports up to 1 irq.
-+	 * Return: 0 on success, -errno on failure.
-+	 */
-+	status = ioctl(devfd, DFL_FPGA_PORT_ERR_GET_IRQ_NUM, &irq_num);
-+	ASSERT_EQ(0, status) {
-+		TH_LOG("ioctl() failed to get the number irqs");
-+	}
-+	ASSERT_LT(irq_num, 256) {
-+		TH_LOG("unexpeced number of irqs");
-+	}
-+	close(devfd);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.27.0
+I've seen the pattern that Xu proposed used in other places like the
+macb network driver where you'd have macb_main (the platform driver) and
+macb_pci that wraps it for a pci usage.
 
+- Moritz
