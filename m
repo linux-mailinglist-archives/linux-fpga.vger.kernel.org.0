@@ -2,191 +2,241 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D11B2F9057
-	for <lists+linux-fpga@lfdr.de>; Sun, 17 Jan 2021 04:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC282F905A
+	for <lists+linux-fpga@lfdr.de>; Sun, 17 Jan 2021 04:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727087AbhAQDnv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 16 Jan 2021 22:43:51 -0500
-Received: from mail-pf1-f173.google.com ([209.85.210.173]:36769 "EHLO
-        mail-pf1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726831AbhAQDnv (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 16 Jan 2021 22:43:51 -0500
-Received: by mail-pf1-f173.google.com with SMTP id b3so8130935pft.3;
-        Sat, 16 Jan 2021 19:43:35 -0800 (PST)
+        id S1726831AbhAQD4x (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 16 Jan 2021 22:56:53 -0500
+Received: from mail-pg1-f171.google.com ([209.85.215.171]:35553 "EHLO
+        mail-pg1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726864AbhAQD4w (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 16 Jan 2021 22:56:52 -0500
+Received: by mail-pg1-f171.google.com with SMTP id n7so8803280pgg.2;
+        Sat, 16 Jan 2021 19:56:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=U+QdVbDm+ZXIHrLWBLuKdDUFMDUi7DR0AIHkMgQp5Ws=;
-        b=VognvNhGs9qHkOnzf617rjxjAVDkT4CKO7qzzsGUgBoxfyS1VwkaitSGvY3qTeh8Um
-         C7W8MCJF6Se4BU/9+7mC7+787dJQxx+dVIk2vsE2OzwJooEAnBpISENT3dc77anOzy2+
-         n8xwakz1T06udc3+2cD2Vz8HSaO+3axehCiKBNGOLscPo97cRr84INBiTs+b3gChYs5d
-         K72BKldxveg7bhUX/bhxA8z67iRS3qZ/qwi172lkfSwMTJjBKSqi3xbtDuiwmTVDvapv
-         rELB0GJInz9eGEV6xClu/sbORSbLTiphYqAdYBC/pYFpXJHkTWMTifqCAoANa0ik0HGC
-         lrIg==
-X-Gm-Message-State: AOAM530f63DnTMikcsit7ZH2LK3/IRTVomwJ9t6fwXtTgewZujnnmwtJ
-        +ZyQXJ6+yjewiBfsuE3JAmA=
-X-Google-Smtp-Source: ABdhPJzoRs4IS77hgxeHqnCI2PGNA8F6FFxZNSJz99WJ+dwd+HHXbjHUc0uD8Mn2dsKfJewfOdVYYg==
-X-Received: by 2002:a62:2bd4:0:b029:1ae:4d9f:60da with SMTP id r203-20020a622bd40000b02901ae4d9f60damr20751041pfr.20.1610854990004;
-        Sat, 16 Jan 2021 19:43:10 -0800 (PST)
+        bh=zL0mAaynA6nRxLJnMHpwyAv/T/0Uk0SnXAzHYCWha18=;
+        b=M12e8ObYzrvEPL566Pm/URYzYLbXvkKwRyznbn3jISbQp7c1mUI2FRzP+LJFilSEw+
+         AE1wjcG84qmAn7QsMm3DGcSGoPzhHj/guQweyPOLY4Sb6ZH2tjocuf7VGl5i9W1sVTLk
+         OnxEQMkVTWzyAlXyTT0V8uZ6ZG1Guvl4q6PLMJtG/xL8IGS7qHEqKOxbRU/d6FWr+sm4
+         y2cGO/SEIRhzZjCVhWTs5XWZA+BGcI3B9Axn3GwD/obE70abK/0mOLDF6gpaOtWCNqUN
+         VfEFmzKePZfFEfoF/STysZm6gM0NRRKEVi+Y7hJdl2XOYyKG514JBu63/K/HZkiizcQM
+         yjiA==
+X-Gm-Message-State: AOAM531lj291NsVdFQA4X3ivZSVp/fBN7E1RboEGRwB6Wrdw7tpdde3J
+        ZitskgAeghRkQZK3anJpoqM=
+X-Google-Smtp-Source: ABdhPJzuCJuBdQNtGv/RZDU819GYtDo2sHNRNS1LpGHhtjxgBojNjWF0Q8lzOJKOGWRX76ZGWuQUPg==
+X-Received: by 2002:a63:597:: with SMTP id 145mr20164257pgf.252.1610855771097;
+        Sat, 16 Jan 2021 19:56:11 -0800 (PST)
 Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id z28sm12592339pfr.140.2021.01.16.19.43.08
+        by smtp.gmail.com with ESMTPSA id k16sm12193778pgg.87.2021.01.16.19.56.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jan 2021 19:43:09 -0800 (PST)
-Date:   Sat, 16 Jan 2021 19:43:08 -0800
+        Sat, 16 Jan 2021 19:56:10 -0800 (PST)
+Date:   Sat, 16 Jan 2021 19:56:08 -0800
 From:   Moritz Fischer <mdf@kernel.org>
-To:     trix@redhat.com
-Cc:     shuah@kernel.org, mdf@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: drivers: fpga: A test for interrupt support
-Message-ID: <YAOyTI0PEclTUUuG@epycbox.lan>
-References: <20210116193321.385848-1-trix@redhat.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        trix@redhat.com, lgoncalv@redhat.com, hao.wu@intel.com
+Subject: Re: [PATCH v6 1/2] fpga: dfl: add the userspace I/O device support
+ for DFL devices
+Message-ID: <YAO1WJGr2EBvF1rd@epycbox.lan>
+References: <1610502848-30345-1-git-send-email-yilun.xu@intel.com>
+ <1610502848-30345-2-git-send-email-yilun.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210116193321.385848-1-trix@redhat.com>
+In-Reply-To: <1610502848-30345-2-git-send-email-yilun.xu@intel.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Tom,
+Hi Xu,
 
-On Sat, Jan 16, 2021 at 11:33:21AM -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On Wed, Jan 13, 2021 at 09:54:07AM +0800, Xu Yilun wrote:
+> This patch supports the DFL drivers be written in userspace. This is
+> realized by exposing the userspace I/O device interfaces.
 > 
-> Check that the ioctl DFL_FPGA_PORT_ERR_GET_IRQ_NUM returns
-> an expected result.
+> The driver leverages the uio_pdrv_genirq, it adds the uio_pdrv_genirq
+> platform device with the DFL device's resources, and let the generic UIO
+> platform device driver provide support to userspace access to kernel
+> interrupts and memory locations.
 > 
-> Tested on vf device 0xbcc1
+> The driver now supports the ether group feature. To support a new DFL
+> feature been directly accessed via UIO, its feature id should be added to
+> the driver's id_table.
 > 
-> Sample run with
->  # make -C tools/testing/selftests TARGETS=drivers/fpga run_tests
->  ...
->  TAP version 13
->  1..1
->  # selftests: drivers/fpga: intr
->  # TAP version 13
->  # 1..1
->  # # Starting 1 tests from 1 test cases.
->  # #  RUN           global.afu_intr ...
->  # #            OK  global.afu_intr
->  # ok 1 global.afu_intr
->  # # PASSED: 1 / 1 tests passed.
->  # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
->  ok 1 selftests: drivers/fpga: intr
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> Acked-by: Wu Hao <hao.wu@intel.com>
 > ---
-> v1: Convert to kselftest_harness.h framework
+> v2: switch to the new matching algorithem. It matches DFL devices which
+>      could not be handled by other DFL drivers.
+>     refacor the code about device resources filling.
+>     fix some comments.
+> v3: split the dfl.c changes out of this patch.
+>     some minor fixes
+> v4: drop the idea of a generic matching algorithem, instead we specify
+>      each matching device in id_table.
+>     to make clear that only one irq is supported, the irq handling code
+>      is refactored.
+> v5: refactor the irq resource code.
+> v6: fix the res[] zero initialization issue.
+>     improve the return code for probe().
 > ---
->  MAINTAINERS                                   |  1 +
->  tools/testing/selftests/Makefile              |  1 +
->  tools/testing/selftests/drivers/fpga/Makefile |  7 ++++
->  tools/testing/selftests/drivers/fpga/config   |  1 +
->  tools/testing/selftests/drivers/fpga/intr.c   | 36 +++++++++++++++++++
->  5 files changed, 46 insertions(+)
->  create mode 100644 tools/testing/selftests/drivers/fpga/Makefile
->  create mode 100644 tools/testing/selftests/drivers/fpga/config
->  create mode 100644 tools/testing/selftests/drivers/fpga/intr.c
+>  drivers/fpga/Kconfig        | 10 +++++
+>  drivers/fpga/Makefile       |  1 +
+>  drivers/fpga/dfl-uio-pdev.c | 93 +++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 104 insertions(+)
+>  create mode 100644 drivers/fpga/dfl-uio-pdev.c
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index de610a06cb5c..7ed3ce58d95e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6973,6 +6973,7 @@ F:	Documentation/driver-api/fpga/
->  F:	Documentation/fpga/
->  F:	drivers/fpga/
->  F:	include/linux/fpga/
-> +F:	tools/testing/selftests/drivers/fpga/
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 5ff9438..61445be 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -203,6 +203,16 @@ config FPGA_DFL_NIOS_INTEL_PAC_N3000
+>  	  the card. It also instantiates the SPI master (spi-altera) for
+>  	  the card's BMC (Board Management Controller).
 >  
->  FPGA SECURITY MANAGER DRIVERS
->  M:	Russ Weight <russell.h.weight@intel.com>
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index afbab4aeef3c..aad4763ec348 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -9,6 +9,7 @@ TARGETS += core
->  TARGETS += cpufreq
->  TARGETS += cpu-hotplug
->  TARGETS += drivers/dma-buf
-> +TARGETS += drivers/fpga
->  TARGETS += efivarfs
->  TARGETS += exec
->  TARGETS += filesystems
-> diff --git a/tools/testing/selftests/drivers/fpga/Makefile b/tools/testing/selftests/drivers/fpga/Makefile
-> new file mode 100644
-> index 000000000000..eba35c405d5b
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/fpga/Makefile
-> @@ -0,0 +1,7 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +CFLAGS += -I../../../../../usr/include/
-> +CFLAGS += -I../../../../../include/uapi/
+> +config FPGA_DFL_UIO_PDEV
+> +	tristate "FPGA DFL Driver for Userspace I/O platform devices"
+> +	depends on FPGA_DFL && UIO_PDRV_GENIRQ
+> +	help
+> +	  Enable this to allow some DFL drivers be written in userspace. It
+Nit: Enable this to allow DFL drivers to be written in userspace.
+> +	  adds the uio_pdrv_genirq platform device with the DFL feature's
+> +	  resources, and lets the generic UIO platform device driver provide
+> +	  support for userspace access to kernel interrupts and memory
+> +	  locations.
 > +
-> +TEST_GEN_PROGS := intr
-> +
-> +include ../../lib.mk
-> diff --git a/tools/testing/selftests/drivers/fpga/config b/tools/testing/selftests/drivers/fpga/config
+>  config FPGA_DFL_PCI
+>  	tristate "FPGA DFL PCIe Device Driver"
+>  	depends on PCI && FPGA_DFL
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 18dc9885..8847fe0 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -45,6 +45,7 @@ dfl-afu-objs := dfl-afu-main.o dfl-afu-region.o dfl-afu-dma-region.o
+>  dfl-afu-objs += dfl-afu-error.o
+>  
+>  obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+> +obj-$(CONFIG_FPGA_DFL_UIO_PDEV)		+= dfl-uio-pdev.o
+>  
+>  # Drivers for FPGAs which implement DFL
+>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
+> diff --git a/drivers/fpga/dfl-uio-pdev.c b/drivers/fpga/dfl-uio-pdev.c
 > new file mode 100644
-> index 000000000000..e2111b81d8d7
+> index 0000000..12b47bf
 > --- /dev/null
-> +++ b/tools/testing/selftests/drivers/fpga/config
-> @@ -0,0 +1 @@
-> +CONFIG_FPGA_DFL_AFU=m
-> diff --git a/tools/testing/selftests/drivers/fpga/intr.c b/tools/testing/selftests/drivers/fpga/intr.c
-> new file mode 100644
-> index 000000000000..b362fb1f788d
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/fpga/intr.c
-> @@ -0,0 +1,36 @@
+> +++ b/drivers/fpga/dfl-uio-pdev.c
+> @@ -0,0 +1,93 @@
 > +// SPDX-License-Identifier: GPL-2.0
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <stdint.h>
-> +#include <string.h>
-> +#include <sys/fcntl.h>
-> +#include <sys/ioctl.h>
-> +#include <linux/fpga-dfl.h>
+> +/*
+> + * DFL driver for Userspace I/O platform devices
+> + *
+> + * Copyright (C) 2020 Intel Corporation, Inc.
+> + */
+> +#include <linux/dfl.h>
+> +#include <linux/errno.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/uio_driver.h>
 > +
-> +#include "../../kselftest_harness.h"
-
-Is that how it works with selftests?
+> +#define DRIVER_NAME "dfl-uio-pdev"
 > +
-> +TEST(afu_intr)
+> +static int dfl_uio_pdev_probe(struct dfl_device *ddev)
 > +{
-> +	int devfd, status;
-> +	struct dfl_fpga_port_info port_info;
-> +	uint32_t irq_num = UINT32_MAX;
-Can you order those?
-
-xxxx
-xx
-x
+> +	struct platform_device_info pdevinfo = { 0 };
+> +	struct resource res[2] = { { 0 } };
+> +	struct uio_info uio_pdata = { 0 };
+> +	struct platform_device *uio_pdev;
+> +	struct device *dev = &ddev->dev;
+> +	unsigned int num_res = 1;
 > +
-> +	devfd = open("/dev/dfl-port.0", O_RDONLY);
-> +	if (devfd < 0)
-> +		SKIP(0, "no fpga afu device 0");
-> +	/*
-> +	 * From fpga-dl.h :
-> +	 * Currently hardware supports up to 1 irq.
-> +	 * Return: 0 on success, -errno on failure.
-> +	 */
-> +	status = ioctl(devfd, DFL_FPGA_PORT_ERR_GET_IRQ_NUM, &irq_num);
-> +	ASSERT_EQ(0, status) {
-> +		TH_LOG("ioctl() failed to get the number irqs");
+> +	res[0].parent = &ddev->mmio_res;
+> +	res[0].flags = IORESOURCE_MEM;
+> +	res[0].start = ddev->mmio_res.start;
+> +	res[0].end = ddev->mmio_res.end;
+> +
+> +	if (ddev->num_irqs) {
+> +		if (ddev->num_irqs > 1)
+> +			dev_warn(&ddev->dev,
+> +				 "%d irqs for %s, but UIO only supports the first one\n",
+> +				 ddev->num_irqs, dev_name(&ddev->dev));
+> +
+> +		res[1].flags = IORESOURCE_IRQ;
+> +		res[1].start = ddev->irqs[0];
+> +		res[1].end = ddev->irqs[0];
+> +		num_res++;
 > +	}
-> +	ASSERT_LT(irq_num, 256) {
-> +		TH_LOG("unexpeced number of irqs");
-> +	}
-> +	close(devfd);
+> +
+> +	uio_pdata.name = DRIVER_NAME;
+> +	uio_pdata.version = "0";
+> +
+> +	pdevinfo.name = "uio_pdrv_genirq";
+> +	pdevinfo.res = res;
+> +	pdevinfo.num_res = num_res;
+> +	pdevinfo.parent = &ddev->dev;
+> +	pdevinfo.id = PLATFORM_DEVID_AUTO;
+> +	pdevinfo.data = &uio_pdata;
+> +	pdevinfo.size_data = sizeof(uio_pdata);
+> +
+> +	uio_pdev = platform_device_register_full(&pdevinfo);
+It looks like:
+	platform_device_register_resndata(&ddev->dev, "uio_pdrv_genirq",
+					  PLATFORM_DEVID_AUTO, res, num_res,
+					  &uio_pdata, sizeof(uio_pdata))
+
+would work?
+
+
+> +	if (IS_ERR(uio_pdev))
+> +		return PTR_ERR(uio_pdev);
+> +
+> +	dev_set_drvdata(dev, uio_pdev);
+> +
+> +	return 0;
 > +}
 > +
-> +TEST_HARNESS_MAIN
+> +static void dfl_uio_pdev_remove(struct dfl_device *ddev)
+> +{
+> +	struct platform_device *uio_pdev = dev_get_drvdata(&ddev->dev);
+> +
+> +	platform_device_unregister(uio_pdev);
+> +}
+> +
+> +#define FME_FEATURE_ID_ETH_GROUP	0x10
+> +
+> +static const struct dfl_device_id dfl_uio_pdev_ids[] = {
+> +	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+> +
+> +	/* Add your new id entries here to support uio for more dfl features */
+This is fairly common, we can maybe drop this comment?
+> +
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(dfl, dfl_uio_pdev_ids);
+> +
+> +static struct dfl_driver dfl_uio_pdev_driver = {
+> +	.drv	= {
+> +		.name       = DRIVER_NAME,
+> +	},
+> +	.id_table = dfl_uio_pdev_ids,
+> +	.probe	= dfl_uio_pdev_probe,
+> +	.remove	= dfl_uio_pdev_remove,
+> +};
+> +module_dfl_driver(dfl_uio_pdev_driver);
+> +
+> +MODULE_DESCRIPTION("DFL driver for Userspace I/O platform devices");
+> +MODULE_AUTHOR("Intel Corporation");
+> +MODULE_LICENSE("GPL v2");
 > -- 
-> 2.27.0
+> 2.7.4
 > 
 
-Thanks for starting this, I don't know a lot about selftests (yet).
-So we probably want to get a look at this from corresponding maintainers.
+Otherwise, looks good to me.
 
 - Moritz
