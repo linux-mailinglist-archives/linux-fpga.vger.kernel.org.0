@@ -2,106 +2,187 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4752F93F6
-	for <lists+linux-fpga@lfdr.de>; Sun, 17 Jan 2021 17:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB042F97F1
+	for <lists+linux-fpga@lfdr.de>; Mon, 18 Jan 2021 03:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728693AbhAQQXW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 17 Jan 2021 11:23:22 -0500
-Received: from mail-pl1-f176.google.com ([209.85.214.176]:46940 "EHLO
-        mail-pl1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729824AbhAQQXV (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 17 Jan 2021 11:23:21 -0500
-Received: by mail-pl1-f176.google.com with SMTP id u11so2990873plg.13;
-        Sun, 17 Jan 2021 08:23:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VvDskUcTMKO/Knbyega3fwW2CY3W1m4PF63C8ZG/0S4=;
-        b=ZZxC3bW8Ce24IHmxgjFgux53r7w+C1Tnay8DnfKifqH87+DiVWmfsO6BbMyjo6fuJ5
-         F/4MZ3cpVx8xrS1/LIydSM5JRNx0FUIb4akpxhd9zP/6p7+/WmS7Vx8/g5SiHYylHs72
-         Rr1EQgt355ftXTO0YCVNk1gFfuwAdTuCs/BgeP3ABNuB2YYJtsx/xVuHM/BTtZzNQvIU
-         6VXygFBihSwy3DM93USe4t4P3asLH0V5LokbMN07K2NRKuOQYNAIhqCPUTleGYRFPOR8
-         Za7lRk/FzLh/Mea7PYUYqR2ttxe3cYd9SQIK3eJ6YktU0Ml/kvw+JIBveK0fUAFPPYnQ
-         4Pzw==
-X-Gm-Message-State: AOAM532qwaywavzMJeciStnq2vsO2mr9/IKhAaDvXR7ybPqSkpT0Yr+b
-        Vo7ZDaA1gxFymYOxd4gyV/A=
-X-Google-Smtp-Source: ABdhPJzgGqtPs3rM2Y5e0plUZL+BL2vEnRwxkNpNHrNOAkhUK9Rp0iKEmnLvPNoYm5UTyatdzWVxWg==
-X-Received: by 2002:a17:90a:d494:: with SMTP id s20mr22023049pju.178.1610900558700;
-        Sun, 17 Jan 2021 08:22:38 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id 73sm13988656pga.26.2021.01.17.08.22.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jan 2021 08:22:37 -0800 (PST)
-Date:   Sun, 17 Jan 2021 08:22:36 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Xu Yilun <yilun.xu@intel.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com, lgoncalv@redhat.com, hao.wu@intel.com
-Subject: Re: [PATCH v6 1/2] fpga: dfl: add the userspace I/O device support
- for DFL devices
-Message-ID: <YARkTFMrotPo45ic@epycbox.lan>
-References: <1610502848-30345-1-git-send-email-yilun.xu@intel.com>
- <1610502848-30345-2-git-send-email-yilun.xu@intel.com>
- <YARbgGU6lr3zZaKP@kroah.com>
+        id S1731152AbhARCuV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 17 Jan 2021 21:50:21 -0500
+Received: from mail-dm6nam10on2044.outbound.protection.outlook.com ([40.107.93.44]:4704
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731128AbhARCuT (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 17 Jan 2021 21:50:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=azxYsee1OCtFQbUriN1zwZAZ6KvqBoI8LamWWSOEelub5UgAMF27IVa+Hv2ua7T1iaCln0HCaCQDoonmslmKc1AVuCQy1ynkOW1XgSo2nA59viAy2vh0Gstt0xJ7yAeNNdwYY2pmcsM/C3ogotz484hsrZVKKbv0MidBZn9fZNduIHDuqR/zcDrT/Be+dkAhEvXHrmicWmJEocTkP1QM/2GmBnhppJ6obuSUqcw4W6tw1jV0w54zRLmQyML4Bkan+kbpmrDVaoRJjfiBIMZcBWH8hmxgm4WpfT8Ne7s18mo1iNeaC5Q0PkLDlPc5R4SjI3Aw1RPcyfrj23PfMlWR9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sewfEWt9Le9uh8w54oN736BzCE/Tb3R3X65VlU/nCLk=;
+ b=hiQm0xA5XBqlAV8WSR1BCv7HVtVRwnyYqe7rvdwW+JvczYQ+hUv0UkxGKpDTEHzN+xevKNXSeROie8NEgktZHBl4FhcTLqY6PpxRwtwYNeDl/9+m+OOq8exoGA8q2gCiag+sGSBPLCkHKoud7QkRVgAPSGu6hc6EyBCt0lQ5+qKXqRv83iapfZGm81tt/Bl35PeOKHTqItw5AoOTQk0asQutYfnJrWS3fZ9QkqlZ5X1sF7vivKWLEg5EUtxLhMNAbu3lpET4I+jy2r2LjSkP3APFfAfyZRyDyBn/Ic32bDBbyg9h0MN7tQPmX6ZrlQ4oatW53wlTxKejQIiCwfhidg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sewfEWt9Le9uh8w54oN736BzCE/Tb3R3X65VlU/nCLk=;
+ b=PV3386yO0JR4yDhn3X35Qi+sFvzpJI8+ZrQgNgx+A1rq+NVP2Qgt1L1s52xy6KmarOoumz+5eJA6citUFoRtb17PG5rc/otRRLVaQ2XMQ9c5e9qgdqfC/ojDqKIbwK+aPcC65jNiKI6Sf1Upx8zacjlMiYE6JoxPLnOJvqwAN5c=
+Received: from SN4PR0501CA0153.namprd05.prod.outlook.com
+ (2603:10b6:803:2c::31) by CH2PR02MB6614.namprd02.prod.outlook.com
+ (2603:10b6:610:a6::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.14; Mon, 18 Jan
+ 2021 02:49:24 +0000
+Received: from SN1NAM02FT029.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:803:2c:cafe::29) by SN4PR0501CA0153.outlook.office365.com
+ (2603:10b6:803:2c::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.6 via Frontend
+ Transport; Mon, 18 Jan 2021 02:49:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT029.mail.protection.outlook.com (10.152.72.110) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3763.12 via Frontend Transport; Mon, 18 Jan 2021 02:49:24 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Sun, 17 Jan 2021 18:49:18 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Sun, 17 Jan 2021 18:49:18 -0800
+Envelope-to: git@xilinx.com,
+ michal.simek@xilinx.com,
+ mdf@kernel.org,
+ trix@redhat.com,
+ robh+dt@kernel.org,
+ linux-fpga@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ chinnikishore369@gmail.com
+Received: from [10.140.6.60] (port=39926 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1l1KbV-0001PD-1j; Sun, 17 Jan 2021 18:49:17 -0800
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <mdf@kernel.org>, <trix@redhat.com>, <robh+dt@kernel.org>,
+        <michal.simek@xilinx.com>, <linux-fpga@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <git@xilinx.com>, <chinnikishore369@gmail.com>,
+        Nava kishore Manne <nava.manne@xilinx.com>
+Subject: [PATCH 1/3] drivers: firmware: Add Pdi load API support
+Date:   Mon, 18 Jan 2021 08:13:16 +0530
+Message-ID: <20210118024318.9530-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YARbgGU6lr3zZaKP@kroah.com>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5a7bb548-df3e-4bc5-4637-08d8bb5baa34
+X-MS-TrafficTypeDiagnostic: CH2PR02MB6614:
+X-Microsoft-Antispam-PRVS: <CH2PR02MB66147C8BE60ACD5A86B97FC3C2A40@CH2PR02MB6614.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:1824;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ai99X6/R8AW40anabKzCtwoI8dPDrYsE0O2ASvao1uXS02uZ4eUMTs3LN0hefDVx40h3YOw57Mqa2pY61kgnmL6nMzundTs08a1opI5RtcJh0Kop5tbKKix0LbaGtq1/yWlwVfMDHcT3D+ZS1N76I8ga6u2Vsk3dnGnWGrjzkEubUYC1Wfnp1/WNU/7PVm03I6TJQp8g4CZvklEQk2e4nf67eVI7DbUn0mDT2gvrwYIQPCdlyBLojVVzc5WpM2C5mgzM6683IquV4+Z0R+2obX9sBh962hpWFNGZ/OuJlfBbjw50VMbtkolM3unexdsgiAzsrXWPDZKc6pK4FEjNxmhO5noPg4Hi625fW6ZCXy395YImhBoC4hzJXI1mbfazTn6EQK5Z8CAVeGJtN0Vv95HqWml1CrNEAHv3u/3PCndCrSeQJRl3TRITnQ6JAsCHL6s2P9Ho8QDd37TIjOnWwDeAMohewE/BiGtVvGjohCadZLJXj5CUsMtyjivyGdeRTummEoLvCK9407xlfAD6Ww==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(346002)(376002)(136003)(39850400004)(46966006)(70586007)(2906002)(70206006)(426003)(9786002)(336012)(36906005)(83380400001)(47076005)(5660300002)(8676002)(316002)(186003)(54906003)(110136005)(356005)(82310400003)(26005)(7636003)(2616005)(8936002)(82740400003)(107886003)(7696005)(1076003)(478600001)(4326008)(36756003)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2021 02:49:24.4106
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a7bb548-df3e-4bc5-4637-08d8bb5baa34
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT029.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6614
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Greg,
+This patch adds load pdi api support to enable pdi/partial loading from
+linux. Programmable Device Image (PDI) is combination of headers, images
+and bitstream files to be loaded. Partial PDI is partial set of image/
+images to be loaded.
 
-On Sun, Jan 17, 2021 at 04:45:04PM +0100, Greg KH wrote:
-> On Wed, Jan 13, 2021 at 09:54:07AM +0800, Xu Yilun wrote:
-> > This patch supports the DFL drivers be written in userspace. This is
-> > realized by exposing the userspace I/O device interfaces.
-> > 
-> > The driver leverages the uio_pdrv_genirq, it adds the uio_pdrv_genirq
-> > platform device with the DFL device's resources, and let the generic UIO
-> > platform device driver provide support to userspace access to kernel
-> > interrupts and memory locations.
-> 
-> Why doesn't the existing uio driver work for this, why do you need a new
-> one?
-> 
-> > ---
-> >  drivers/fpga/Kconfig        | 10 +++++
-> >  drivers/fpga/Makefile       |  1 +
-> >  drivers/fpga/dfl-uio-pdev.c | 93 +++++++++++++++++++++++++++++++++++++++++++++
-> 
-> uio drivers traditionally go in drivers/uio/ and start with "uio", so
-> shouldn't this be drivers/uio/uio_dfl_pdev.c to match the same naming
-> scheme?
+Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+---
+ drivers/firmware/xilinx/zynqmp.c     | 17 +++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h |  9 +++++++++
+ 2 files changed, 26 insertions(+)
 
-I had considered suggesting that, but ultimately this driver only
-creates a 'uio_pdrv_genirq' platform device, so it didn't seem like a
-good fit.
-> 
-> But again, you need to explain in detail, why the existing uio driver
-> doesn't work properly, or why you can't just add a few lines to an
-> existing one.
+diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
+index 7eb9958662dd..a466225b9f9e 100644
+--- a/drivers/firmware/xilinx/zynqmp.c
++++ b/drivers/firmware/xilinx/zynqmp.c
+@@ -897,6 +897,23 @@ int zynqmp_pm_set_requirement(const u32 node, const u32 capabilities,
+ }
+ EXPORT_SYMBOL_GPL(zynqmp_pm_set_requirement);
+ 
++/**
++ * zynqmp_pm_load_pdi - Load and process pdi
++ * @src:       Source device where PDI is located
++ * @address:   Pdi src address
++ *
++ * This function provides support to load pdi from linux
++ *
++ * Return: Returns status, either success or error+reason
++ */
++int zynqmp_pm_load_pdi(const u32 src, const u64 address)
++{
++	return zynqmp_pm_invoke_fn(PM_LOAD_PDI, src,
++				   lower_32_bits(address),
++				   upper_32_bits(address), 0, NULL);
++}
++EXPORT_SYMBOL_GPL(zynqmp_pm_load_pdi);
++
+ /**
+  * zynqmp_pm_aes - Access AES hardware to encrypt/decrypt the data using
+  * AES-GCM core.
+diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
+index 2a0da841c942..87114ee645b1 100644
+--- a/include/linux/firmware/xlnx-zynqmp.h
++++ b/include/linux/firmware/xlnx-zynqmp.h
+@@ -52,6 +52,9 @@
+ #define	ZYNQMP_PM_CAPABILITY_WAKEUP	0x4U
+ #define	ZYNQMP_PM_CAPABILITY_UNUSABLE	0x8U
+ 
++/* Loader commands */
++#define PM_LOAD_PDI	0x701
++
+ /*
+  * Firmware FPGA Manager flags
+  * XILINX_ZYNQMP_PM_FPGA_FULL:	FPGA full reconfiguration
+@@ -354,6 +357,7 @@ int zynqmp_pm_write_pggs(u32 index, u32 value);
+ int zynqmp_pm_read_pggs(u32 index, u32 *value);
+ int zynqmp_pm_system_shutdown(const u32 type, const u32 subtype);
+ int zynqmp_pm_set_boot_health_status(u32 value);
++int zynqmp_pm_load_pdi(const u32 src, const u64 address);
+ #else
+ static inline struct zynqmp_eemi_ops *zynqmp_pm_get_eemi_ops(void)
+ {
+@@ -538,6 +542,11 @@ static inline int zynqmp_pm_set_boot_health_status(u32 value)
+ {
+ 	return -ENODEV;
+ }
++
++static inline int zynqmp_pm_load_pdi(const u32 src, const u64 address)
++{
++	return -ENODEV;
++}
+ #endif
+ 
+ #endif /* __FIRMWARE_ZYNQMP_H__ */
+-- 
+2.18.0
 
-Ultimately there are three options I see:
-1) Do what Xu does, which is re-use the 'uio_pdrv_genirq' uio driver by
-  creating a platform device for it as sub-device of the dfl device that
-  we bind to uio_pdrv_genirq
-2) Add a module_dfl_driver part to drivers/uio/uio_pdrv_genirq.c and
-  corresponding id table
-3) Create a new uio_dfl_genirq kind of driver that uses the dfl bus and
-  that would make sense to then put into drivers/uio. (This would
-  duplicate code in uio_pdrv_genirq to some extend)
-
-Overall I think in terms of code re-use I think Xu's choice might be
-less new code as it simply wraps the uio platform device driver, and
-allows for defining the resources passed to the UIO driver to be defined
-by hardware through a DFL.
-
-I've seen the pattern that Xu proposed used in other places like the
-macb network driver where you'd have macb_main (the platform driver) and
-macb_pci that wraps it for a pci usage.
-
-- Moritz
