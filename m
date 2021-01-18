@@ -2,222 +2,173 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE3C2F97F8
-	for <lists+linux-fpga@lfdr.de>; Mon, 18 Jan 2021 03:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAF52F9800
+	for <lists+linux-fpga@lfdr.de>; Mon, 18 Jan 2021 03:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730362AbhARCxw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 17 Jan 2021 21:53:52 -0500
-Received: from mga11.intel.com ([192.55.52.93]:22551 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729794AbhARCxv (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sun, 17 Jan 2021 21:53:51 -0500
-IronPort-SDR: Tm4jAKlQy6PmkChD9Kwwzii/JR2mKEn1Umpof5H+/f4oeQP12CV3DlOuYCXTSSA/xQNYzVZsdc
- B8osP9Bcys6w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="175246521"
-X-IronPort-AV: E=Sophos;i="5.79,355,1602572400"; 
-   d="scan'208";a="175246521"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2021 18:53:10 -0800
-IronPort-SDR: zvmiLsMvdgYUkatsrYUCGpjP+uNEHGMfZJ/IufESAwsRkv00vTID0TGorc1gwZ+IUyMPstIDw8
- gTKk8jj85ENQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,355,1602572400"; 
-   d="scan'208";a="355033558"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Jan 2021 18:53:08 -0800
-Date:   Mon, 18 Jan 2021 10:48:46 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, trix@redhat.com, lgoncalv@redhat.com,
-        hao.wu@intel.com, yilun.xu@intel.com
-Subject: Re: [PATCH v6 1/2] fpga: dfl: add the userspace I/O device support
-  for DFL devices
-Message-ID: <20210118024846.GA8153@yilunxu-OptiPlex-7050>
-References: <1610502848-30345-1-git-send-email-yilun.xu@intel.com>
- <1610502848-30345-2-git-send-email-yilun.xu@intel.com>
- <YAO1WJGr2EBvF1rd@epycbox.lan>
+        id S1730897AbhARC5v (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 17 Jan 2021 21:57:51 -0500
+Received: from mail-eopbgr750048.outbound.protection.outlook.com ([40.107.75.48]:6007
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730243AbhARC5t (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 17 Jan 2021 21:57:49 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KnpqQpob2tzgpG8Y7qJV2Uhf9ZpY6CwaDwD5xX2wJSJzzIDzv14NHT5X938jP79ttPNjgM1469Fv4u78Be7UXSC2eo9QcZ4B56YYkzRb4K5AYyRxTGkAenn9wownrmRd6I7K6MsNjTsnHLDjbhkZxQddGuUjmmuHxuhTMYRWvS3b26P3+szjqL2Klu74Wby4ppbKmYasqYTMUD7lH3rM5q6WeOWVOY7fX7I9ASN5fcrZnGqjf8el6mXrHz1FRaLF7z5uNDHNBe1ITO34OQjecubBhZJRAZtnS9tQmB0mA8OeyJEd7R3nXG4G8abQnalNpJx/abDdBoD/He85gfnwOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=exHWXFQBR2HE2BILEoHb2FomJA51bb1SXvdhtbmKRRY=;
+ b=S4v/PZOi5oXfA6hypAfmiGNJIqDDLWBZuDwYjjDPimh4Cu+GNK4RMMfx0YWh/7oHWbCwmi4zs+h0ByyzBtCl/rZqu5YbjWlzJlsrZYfmnAGTitjS2PxPJ1r/YcMD6EmQBCcFSMAnl1J5BIjf37LlPhiXPoWeSjIeBk96kAw/z/d7KzqLKimkw+J3yRkR6QI4Fyg9f5gNZqhoNZs3pWvCOr+AWYUGuTwcxiclSq6znyfjf26iqLYS19Tz9UGyDW+UQe5Fxvp8jM/6B7G0exaoFZF0Mi8A/of5tt4bp3TVIIgY6zmgzRr8Qt39P/FL3b3a8CkyjUVI+mJo+G7R6TlaxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=exHWXFQBR2HE2BILEoHb2FomJA51bb1SXvdhtbmKRRY=;
+ b=oC4QpJWK1iOxHTHHjeyPmJ8iuhjRXJHMnLD98o8E1IX3wSXkhv2syU/QacMd2FsHHj8gjqVcNR4ZD9OGEQe+c6j/3NJ1AbQvr0ibCluGjqXB2YjanUQR54wMxGdMzzCpVTMI8ZgYEErjJ4/1hLUUItVNK3hW5EktdyXY5bKRSJ4=
+Received: from CY4PR13CA0008.namprd13.prod.outlook.com (2603:10b6:903:32::18)
+ by SA2PR02MB7660.namprd02.prod.outlook.com (2603:10b6:806:14a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.12; Mon, 18 Jan
+ 2021 02:56:58 +0000
+Received: from CY1NAM02FT020.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:903:32:cafe::c2) by CY4PR13CA0008.outlook.office365.com
+ (2603:10b6:903:32::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.6 via Frontend
+ Transport; Mon, 18 Jan 2021 02:56:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ CY1NAM02FT020.mail.protection.outlook.com (10.152.75.191) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3763.12 via Frontend Transport; Mon, 18 Jan 2021 02:56:58 +0000
+Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Sun, 17 Jan 2021 18:56:57 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Sun, 17 Jan 2021 18:56:57 -0800
+Envelope-to: git@xilinx.com,
+ michal.simek@xilinx.com,
+ mdf@kernel.org,
+ trix@redhat.com,
+ robh+dt@kernel.org,
+ linux-fpga@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ chinnikishore369@gmail.com
+Received: from [10.140.6.60] (port=41770 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1l1Kit-0004GM-Q6; Sun, 17 Jan 2021 18:56:56 -0800
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <mdf@kernel.org>, <trix@redhat.com>, <robh+dt@kernel.org>,
+        <michal.simek@xilinx.com>, <linux-fpga@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <git@xilinx.com>, <chinnikishore369@gmail.com>,
+        Nava kishore Manne <nava.manne@xilinx.com>
+Subject: [PATCH 1/2] fpga: mgr: Adds secure BitStream loading support
+Date:   Mon, 18 Jan 2021 08:20:57 +0530
+Message-ID: <20210118025058.10051-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YAO1WJGr2EBvF1rd@epycbox.lan>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 00ccb55c-0fb1-4cb5-25a9-08d8bb5cb8dd
+X-MS-TrafficTypeDiagnostic: SA2PR02MB7660:
+X-Microsoft-Antispam-PRVS: <SA2PR02MB76600443E285B17B5CD04013C2A40@SA2PR02MB7660.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:169;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hjqLNxkGlnw0AgXd4Ev5kKlmOHd3LognReeSe+T1UKsf/T+zqlH4y12SpPI6MZUhh4uNrxZACYEdM8BWSZvVaV/cWMPO9OY2+ed9cvrQ3m2gXOgl4kchw3AQsVrfhXYfb6DDBWhO4CUOntM/wQzi/i0/aTUkwc7vmlMRQe79KZkuhyz5QR/H8paz+dzvLO72cHgDogOKYIeN+DUa7AwgNlsc778J17SDJO3zbljmbPOUhbkk/CCs1d/yfIEWn/gpFnQpAjAzNIvtovRh7e56k5fTZXku7hvZsSCxhBdEIeqZyIcZbsY6TDIIYfAT8ek2zCzzcYdv/4Kq59I6CNbYZzSeJ72IUtP8xhi/uNzu5kbdBj1OYYmGDkgJiryiz2Vgtwra+SjpcORvVAsuoyMucIl3gsY0wqvtGzs9Xgk7pclOKz3+duGpaLQZUfUxLOcgBUBiRyGhyQmHrvY+LfPAW3uDEzLIKIuS8gbs6aA330CO+HthLYDKSunyVjueCoYDfE3UlYgaGb+t+fY9P2ORQQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(136003)(396003)(39850400004)(346002)(46966006)(70206006)(70586007)(107886003)(83380400001)(82740400003)(82310400003)(356005)(26005)(8936002)(7636003)(9786002)(8676002)(2906002)(54906003)(186003)(7696005)(36906005)(110136005)(47076005)(478600001)(316002)(36756003)(1076003)(5660300002)(4326008)(336012)(2616005)(426003)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2021 02:56:58.5172
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00ccb55c-0fb1-4cb5-25a9-08d8bb5cb8dd
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT020.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR02MB7660
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Sat, Jan 16, 2021 at 07:56:08PM -0800, Moritz Fischer wrote:
-> Hi Xu,
-> 
-> On Wed, Jan 13, 2021 at 09:54:07AM +0800, Xu Yilun wrote:
-> > This patch supports the DFL drivers be written in userspace. This is
-> > realized by exposing the userspace I/O device interfaces.
-> > 
-> > The driver leverages the uio_pdrv_genirq, it adds the uio_pdrv_genirq
-> > platform device with the DFL device's resources, and let the generic UIO
-> > platform device driver provide support to userspace access to kernel
-> > interrupts and memory locations.
-> > 
-> > The driver now supports the ether group feature. To support a new DFL
-> > feature been directly accessed via UIO, its feature id should be added to
-> > the driver's id_table.
-> > 
-> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > Reviewed-by: Tom Rix <trix@redhat.com>
-> > Acked-by: Wu Hao <hao.wu@intel.com>
-> > ---
-> > v2: switch to the new matching algorithem. It matches DFL devices which
-> >      could not be handled by other DFL drivers.
-> >     refacor the code about device resources filling.
-> >     fix some comments.
-> > v3: split the dfl.c changes out of this patch.
-> >     some minor fixes
-> > v4: drop the idea of a generic matching algorithem, instead we specify
-> >      each matching device in id_table.
-> >     to make clear that only one irq is supported, the irq handling code
-> >      is refactored.
-> > v5: refactor the irq resource code.
-> > v6: fix the res[] zero initialization issue.
-> >     improve the return code for probe().
-> > ---
-> >  drivers/fpga/Kconfig        | 10 +++++
-> >  drivers/fpga/Makefile       |  1 +
-> >  drivers/fpga/dfl-uio-pdev.c | 93 +++++++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 104 insertions(+)
-> >  create mode 100644 drivers/fpga/dfl-uio-pdev.c
-> > 
-> > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> > index 5ff9438..61445be 100644
-> > --- a/drivers/fpga/Kconfig
-> > +++ b/drivers/fpga/Kconfig
-> > @@ -203,6 +203,16 @@ config FPGA_DFL_NIOS_INTEL_PAC_N3000
-> >  	  the card. It also instantiates the SPI master (spi-altera) for
-> >  	  the card's BMC (Board Management Controller).
-> >  
-> > +config FPGA_DFL_UIO_PDEV
-> > +	tristate "FPGA DFL Driver for Userspace I/O platform devices"
-> > +	depends on FPGA_DFL && UIO_PDRV_GENIRQ
-> > +	help
-> > +	  Enable this to allow some DFL drivers be written in userspace. It
-> Nit: Enable this to allow DFL drivers to be written in userspace.
+This commit adds secure flags to the framework to support
+secure BitStream Loading.
 
-Yes, will fix it.
+Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+---
+ drivers/fpga/of-fpga-region.c | 10 ++++++++++
+ include/linux/fpga/fpga-mgr.h | 12 ++++++++++++
+ 2 files changed, 22 insertions(+)
 
-> > +	  adds the uio_pdrv_genirq platform device with the DFL feature's
-> > +	  resources, and lets the generic UIO platform device driver provide
-> > +	  support for userspace access to kernel interrupts and memory
-> > +	  locations.
-> > +
-> >  config FPGA_DFL_PCI
-> >  	tristate "FPGA DFL PCIe Device Driver"
-> >  	depends on PCI && FPGA_DFL
-> > diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> > index 18dc9885..8847fe0 100644
-> > --- a/drivers/fpga/Makefile
-> > +++ b/drivers/fpga/Makefile
-> > @@ -45,6 +45,7 @@ dfl-afu-objs := dfl-afu-main.o dfl-afu-region.o dfl-afu-dma-region.o
-> >  dfl-afu-objs += dfl-afu-error.o
-> >  
-> >  obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
-> > +obj-$(CONFIG_FPGA_DFL_UIO_PDEV)		+= dfl-uio-pdev.o
-> >  
-> >  # Drivers for FPGAs which implement DFL
-> >  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
-> > diff --git a/drivers/fpga/dfl-uio-pdev.c b/drivers/fpga/dfl-uio-pdev.c
-> > new file mode 100644
-> > index 0000000..12b47bf
-> > --- /dev/null
-> > +++ b/drivers/fpga/dfl-uio-pdev.c
-> > @@ -0,0 +1,93 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * DFL driver for Userspace I/O platform devices
-> > + *
-> > + * Copyright (C) 2020 Intel Corporation, Inc.
-> > + */
-> > +#include <linux/dfl.h>
-> > +#include <linux/errno.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/uio_driver.h>
-> > +
-> > +#define DRIVER_NAME "dfl-uio-pdev"
-> > +
-> > +static int dfl_uio_pdev_probe(struct dfl_device *ddev)
-> > +{
-> > +	struct platform_device_info pdevinfo = { 0 };
-> > +	struct resource res[2] = { { 0 } };
-> > +	struct uio_info uio_pdata = { 0 };
-> > +	struct platform_device *uio_pdev;
-> > +	struct device *dev = &ddev->dev;
-> > +	unsigned int num_res = 1;
-> > +
-> > +	res[0].parent = &ddev->mmio_res;
-> > +	res[0].flags = IORESOURCE_MEM;
-> > +	res[0].start = ddev->mmio_res.start;
-> > +	res[0].end = ddev->mmio_res.end;
-> > +
-> > +	if (ddev->num_irqs) {
-> > +		if (ddev->num_irqs > 1)
-> > +			dev_warn(&ddev->dev,
-> > +				 "%d irqs for %s, but UIO only supports the first one\n",
-> > +				 ddev->num_irqs, dev_name(&ddev->dev));
-> > +
-> > +		res[1].flags = IORESOURCE_IRQ;
-> > +		res[1].start = ddev->irqs[0];
-> > +		res[1].end = ddev->irqs[0];
-> > +		num_res++;
-> > +	}
-> > +
-> > +	uio_pdata.name = DRIVER_NAME;
-> > +	uio_pdata.version = "0";
-> > +
-> > +	pdevinfo.name = "uio_pdrv_genirq";
-> > +	pdevinfo.res = res;
-> > +	pdevinfo.num_res = num_res;
-> > +	pdevinfo.parent = &ddev->dev;
-> > +	pdevinfo.id = PLATFORM_DEVID_AUTO;
-> > +	pdevinfo.data = &uio_pdata;
-> > +	pdevinfo.size_data = sizeof(uio_pdata);
-> > +
-> > +	uio_pdev = platform_device_register_full(&pdevinfo);
-> It looks like:
-> 	platform_device_register_resndata(&ddev->dev, "uio_pdrv_genirq",
-> 					  PLATFORM_DEVID_AUTO, res, num_res,
-> 					  &uio_pdata, sizeof(uio_pdata))
-> 
-> would work?
+diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
+index e405309baadc..3a5eb4808888 100644
+--- a/drivers/fpga/of-fpga-region.c
++++ b/drivers/fpga/of-fpga-region.c
+@@ -228,6 +228,16 @@ static struct fpga_image_info *of_fpga_region_parse_ov(
+ 	if (of_property_read_bool(overlay, "encrypted-fpga-config"))
+ 		info->flags |= FPGA_MGR_ENCRYPTED_BITSTREAM;
+ 
++	if (of_property_read_bool(overlay, "userkey-encrypted-fpga-config"))
++		info->flags |= FPGA_MGR_USERKEY_ENCRYPTED_BITSTREAM;
++
++	if (of_property_read_bool(overlay, "ddrmem-authenticated-fpga-config"))
++		info->flags |= FPGA_MGR_DDR_MEM_AUTH_BITSTREAM;
++
++	if (of_property_read_bool(overlay,
++				  "securemem-authenticated-fpga-config"))
++		info->flags |= FPGA_MGR_SECURE_MEM_AUTH_BITSTREAM;
++
+ 	if (!of_property_read_string(overlay, "firmware-name",
+ 				     &firmware_name)) {
+ 		info->firmware_name = devm_kstrdup(dev, firmware_name,
+diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+index 2bc3030a69e5..2f7455a60666 100644
+--- a/include/linux/fpga/fpga-mgr.h
++++ b/include/linux/fpga/fpga-mgr.h
+@@ -67,12 +67,24 @@ enum fpga_mgr_states {
+  * %FPGA_MGR_BITSTREAM_LSB_FIRST: SPI bitstream bit order is LSB first
+  *
+  * %FPGA_MGR_COMPRESSED_BITSTREAM: FPGA bitstream is compressed
++ *
++ * %FPGA_MGR_USERKEY_ENCRYPTED_BITSTREAM: indicates bitstream is encrypted with
++ *                                        user key
++ *
++ * %FPGA_MGR_DDR_MEM_AUTH_BITSTREAM: do bitstream authentication using DDR
++ *                                   memory if supported
++ *
++ * %FPGA_MGR_SECURE_MEM_AUTH_BITSTREAM: do bitstream authentication using secure
++ *                                      memory if supported
+  */
+ #define FPGA_MGR_PARTIAL_RECONFIG	BIT(0)
+ #define FPGA_MGR_EXTERNAL_CONFIG	BIT(1)
+ #define FPGA_MGR_ENCRYPTED_BITSTREAM	BIT(2)
+ #define FPGA_MGR_BITSTREAM_LSB_FIRST	BIT(3)
+ #define FPGA_MGR_COMPRESSED_BITSTREAM	BIT(4)
++#define FPGA_MGR_USERKEY_ENCRYPTED_BITSTREAM	BIT(5)
++#define FPGA_MGR_DDR_MEM_AUTH_BITSTREAM		BIT(6)
++#define FPGA_MGR_SECURE_MEM_AUTH_BITSTREAM	BIT(7)
+ 
+ /**
+  * struct fpga_image_info - information specific to a FPGA image
+-- 
+2.18.0
 
-It works. I'll change it.
-
-> 
-> 
-> > +	if (IS_ERR(uio_pdev))
-> > +		return PTR_ERR(uio_pdev);
-> > +
-> > +	dev_set_drvdata(dev, uio_pdev);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void dfl_uio_pdev_remove(struct dfl_device *ddev)
-> > +{
-> > +	struct platform_device *uio_pdev = dev_get_drvdata(&ddev->dev);
-> > +
-> > +	platform_device_unregister(uio_pdev);
-> > +}
-> > +
-> > +#define FME_FEATURE_ID_ETH_GROUP	0x10
-> > +
-> > +static const struct dfl_device_id dfl_uio_pdev_ids[] = {
-> > +	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
-> > +
-> > +	/* Add your new id entries here to support uio for more dfl features */
-> This is fairly common, we can maybe drop this comment?
-
-Yes.
-
-Thanks,
-Yilun
