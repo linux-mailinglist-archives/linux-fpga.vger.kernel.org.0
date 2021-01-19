@@ -2,285 +2,211 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3CF2FAE0F
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Jan 2021 01:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02512FB14C
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Jan 2021 07:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731162AbhASAeM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 18 Jan 2021 19:34:12 -0500
-Received: from mail-pl1-f174.google.com ([209.85.214.174]:40460 "EHLO
-        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730466AbhASAeK (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 18 Jan 2021 19:34:10 -0500
-Received: by mail-pl1-f174.google.com with SMTP id q4so9520520plr.7;
-        Mon, 18 Jan 2021 16:33:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7rDRopC82DR8SCQXLHu8GoZEQ0kPieDkm9TRSwV7rgQ=;
-        b=JflsUfBhE6kxLUilWgzMvx8TmgDMoeaEPcWtb/s7+yrD8UQbS4/59VNRdHrq8yywAE
-         vU6E1YmjfvwORiDqn/qWDtMZVHFp7q4C75sJhGyJQZBm6ESI78l+9tc8iTfQtHKek1zE
-         5wuDPrH2e9agrChBp2EjnGJxuRvw7u2XXY0kNzLBRiqu7HdILxczU7v7IzEAtuklZyNh
-         4S581jai0qvLaQEnEfATq1+rYHd5Ug4NA0sy0WS0zTpc/h6TIZXPzh4uvThgB0VDHeM2
-         zcfBiTPsOsduOM9eYTNwJqe0pryP6Eo6ewU4yZy4OQ3gQvdxZx3tp2a57dTibToy/aNN
-         wSmQ==
-X-Gm-Message-State: AOAM531IaizIRcKKdMXh2MEtxX+BbUMn433MR/uJIA+d00G9cey+Mgsm
-        cmeoVwIVL6jYlZ1o+vvKum8iunU5RRs=
-X-Google-Smtp-Source: ABdhPJyBXIZoQqYjC0C0/6S4LO7EIwuy8qQ6NnQiHWF1V75m5VxXkjNQNn9E7wQwxr++clKqK5IfgQ==
-X-Received: by 2002:a17:90a:5209:: with SMTP id v9mr2126839pjh.8.1611016409366;
-        Mon, 18 Jan 2021 16:33:29 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id x81sm6844446pfc.46.2021.01.18.16.33.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jan 2021 16:33:28 -0800 (PST)
-Date:   Mon, 18 Jan 2021 16:33:26 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     mdf@kernel.org, trix@redhat.com, robh+dt@kernel.org,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, git@xilinx.com,
-        chinnikishore369@gmail.com,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-Subject: Re: [PATCH 3/3] fpga: versal-fpga: Add versal fpga manager driver
-Message-ID: <YAYo1ksLfMMNxPuL@epycbox.lan>
-References: <20210118024318.9530-1-nava.manne@xilinx.com>
- <20210118024318.9530-3-nava.manne@xilinx.com>
+        id S1728650AbhASGXm (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 19 Jan 2021 01:23:42 -0500
+Received: from mail-bn8nam11on2074.outbound.protection.outlook.com ([40.107.236.74]:8973
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729233AbhASGRs (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 19 Jan 2021 01:17:48 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PeE+alDOwV6qI2ZzfbPjVpbxWeN365XeMaVdfav2UqPgvA6PMh8Y49NLse3WDHFRc6mgYg5b9Ki8Tyw1WLd+PG/L4klWDSEvhmVwraFnLRgU14b6E7qfhZqGfdWdZlXPHW86uSZpIsh9Olzxk47vG6AyGQhltc+fgGtzUaCPDdlpRtcvgDJq4lXNoI6Sq0NXwuwKuEQhZUtM/cBili4C0RLPowhaMHPUWP2Af6aMOUV7mqx0u9LBKajUXmCmh0cqV2LRno0JiLsifpf0nNWLnmAG0FjMq7yI4p7a0GrkLGf4/Eq2N+ez96saxlYX8VIAZo05EnL8cYQVKdssUOsV3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=feqv6BmXlbznPtHQstq/x4DVmiDlNmbIHvYVkp5LYmE=;
+ b=CteqxcGLNJQYAgjciJ95EWaDnSRvSZfGjvYIGuXN9ihF9Izx1MAtp0/cova5lXmld24ZEHytQlkiracMil+WwoFqC7PZWiiF+xeeqvQegUpYSQuM+0fh/BD8hjLTAaepfoQ2iLWzkNaiilvNGaCAXlZRZ52lyxQcZ2YW3KsuQJ47QYRm0qsJ2D8B0+0FiCyY/H50+cen8HsiptFm7NQp5xnISN9j9EcxESVgTOtidumEkUX9JuXdog//jyjduCtcMiKZGo+beqNMwvhkXiMAhwdZQVTRlQggkNhZhkEmHbRN9oh/2KTw+S9/32ooMUZHQgos4kfQduJAgM+n5d7lKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=feqv6BmXlbznPtHQstq/x4DVmiDlNmbIHvYVkp5LYmE=;
+ b=fUEHXtzLU9AZ+52l3dufE4D0yVEksAFjoxH9yLu2jv54jiP8wwhxJitKdS2V77mBIepn1q60ZozgON2OqABCAhvgi3fRFWq6FlZwgCAM2thWpREPPWjoQW7e/SuYqCZj3O8EZwvjEkniWQu9YSb/4wY/ULf4/k4UXTGVfPC8Ayg=
+Received: from MWHPR02MB2623.namprd02.prod.outlook.com (2603:10b6:300:44::9)
+ by MWHPR02MB3357.namprd02.prod.outlook.com (2603:10b6:301:61::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.10; Tue, 19 Jan
+ 2021 06:16:50 +0000
+Received: from MWHPR02MB2623.namprd02.prod.outlook.com
+ ([fe80::c4a8:8d45:c13b:9942]) by MWHPR02MB2623.namprd02.prod.outlook.com
+ ([fe80::c4a8:8d45:c13b:9942%3]) with mapi id 15.20.3763.014; Tue, 19 Jan 2021
+ 06:16:50 +0000
+From:   Nava kishore Manne <navam@xilinx.com>
+To:     Tom Rix <trix@redhat.com>, "mdf@kernel.org" <mdf@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Michal Simek <michals@xilinx.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     git <git@xilinx.com>,
+        "chinnikishore369@gmail.com" <chinnikishore369@gmail.com>
+Subject: RE: [PATCH 2/2] fpga: Add support for Xilinx DFX AXI Shutdown manager
+Thread-Topic: [PATCH 2/2] fpga: Add support for Xilinx DFX AXI Shutdown
+ manager
+Thread-Index: AQHW6t9xKUyYsQdkFk2NaePj2u7pYKopAheAgAV8NkA=
+Date:   Tue, 19 Jan 2021 06:16:50 +0000
+Message-ID: <MWHPR02MB26232753E624335632BCE511C2A30@MWHPR02MB2623.namprd02.prod.outlook.com>
+References: <20210115013431.27667-1-nava.manne@xilinx.com>
+ <20210115013431.27667-2-nava.manne@xilinx.com>
+ <2dc469ae-cdf4-0774-c786-7dd01c4914c9@redhat.com>
+In-Reply-To: <2dc469ae-cdf4-0774-c786-7dd01c4914c9@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: redhat.com; dkim=none (message not signed)
+ header.d=none;redhat.com; dmarc=none action=none header.from=xilinx.com;
+x-originating-ip: [149.199.50.128]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: d52d593f-dfec-4708-e45b-08d8bc41cef1
+x-ms-traffictypediagnostic: MWHPR02MB3357:
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR02MB3357EF986C69B3A1356ABB4BC2A30@MWHPR02MB3357.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: p/3b1hirVRH7WcdjSCNicqI11hgsdYAO+ue8m5x8Pr61cOD1mY/7tqWEK+kvYRF4yvuQtXXkJBvRoUsUKde9SIXvbZuqAU7lgs94d1xiLq8tmvpvwJvKstELIXjIWtxpx3KFWfY9KrDYCoAY0n41vuXRZaMpQ4VOlBmHvBEhIrdcL1+xo46VDvHpJs9BPHGPzzOo/+xqYjWl3SMhm1j+tm8P+WkPMp5jFh3G9rE0WcCKzAJ6qe223CAGsg4tLe32LpPwdHZpw9RHnO7LmAql2z5xKR20XlBPGEYc5nGae2gHPzC20aN2bxCxeYusGg40Dr15uS7HU12A+9+KanxLQFXGTp84tJPMMVsjZDFRUdEWLLk8wM7W7+KiWMV6FJ4uq0lFMTkIPl3+sD54klHbXQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR02MB2623.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(39860400002)(396003)(366004)(376002)(71200400001)(66446008)(33656002)(76116006)(64756008)(9686003)(66476007)(66946007)(4326008)(26005)(55016002)(66556008)(52536014)(8676002)(83380400001)(316002)(186003)(7696005)(478600001)(5660300002)(8936002)(54906003)(110136005)(86362001)(2906002)(6506007)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?cWVJb2pKY1dyTy9hSVRJZC83TDRuN05XSlM2NjQvVlBXNVBVVWd3ZUhLTjgz?=
+ =?utf-8?B?d0JoL1h2SXdnZi9QTk1IV3lidGNLc0ZRMWJ1aWRhMDc3eHhuY3Riak12alUw?=
+ =?utf-8?B?ckxVR2wrcC91aElySUMraEp0bVdHWXcxdnZkS0hPdUhBVGowSXB0M2w2Y3Rr?=
+ =?utf-8?B?dS9xR2dBd0lqUHJrcFN2Umt5Y2FOL1h2VjlQTUNpdTRURURxSWlEall3aVVG?=
+ =?utf-8?B?SHNLQXR0ZFZJSzEwN3k4QVgzckkza1FYeE9wTlRDbGxyM1ZFMVVXT1pYbm5X?=
+ =?utf-8?B?Zzk4QkxoUVFKNmdrVmpndmhiREg0SGJwd1A3ak4zTDF4VUc2eW04S2VPd1hW?=
+ =?utf-8?B?eFVxVDd2ZTQvdWszTU1xZTc2QmFDK2J1SjBRdTg1enJTRUszems3R2Z1Z0Za?=
+ =?utf-8?B?QnNldU1uZEhXc0luZlJldWxCMEV1Vk9pTC9aUG1FcXNIOFZ4a1VMa2QzTDIv?=
+ =?utf-8?B?OHBodDB2d1pGK282WUUvRzArRTNyREtxTW0xTUZHcmpUc1R2ZzhCRU5GWHRh?=
+ =?utf-8?B?MFE5eFNSUkFVdHZJWGRHck92eHFaZ0lZWmw2WXlPQmVnczZSVmV4ZUEydUpH?=
+ =?utf-8?B?REszYitXQWpjcEFxT3ZvQm5qbWtzcVhabU9tN3ZPMkhHSVpITUxqTkZCR0lV?=
+ =?utf-8?B?Ni92WG1vdGRTNFloZXk4VWljbkIzVFhJdW5yaGpLUFo0YlpUN1V1N1EvKy9w?=
+ =?utf-8?B?T0d6YXNsNmsrejBNdVdjakoxUGlQMEJ6NUhsQUVwSDkyV2pxODBQc0xKYlpS?=
+ =?utf-8?B?OFo3UXREd09iNjlLZmZ4QjhjYU9lKzJZYUlya3pMai9DRkFrdkNtMWhLTXFQ?=
+ =?utf-8?B?VW45SHJvVGJRakpyTmxobUdabzl4anBFeGRHNExpVzZ5bEtKZVliclkwQ3cy?=
+ =?utf-8?B?Y25hdk5WYVdOK1RjVlh6WkFEdXpZUWhUOHc5Y3B4K3pzYy96MWljOU1Eenp6?=
+ =?utf-8?B?VDdZR1dnb1RjUEVRb2pIcGZCQXhvWnlqcnRoTHpsRDFLaTRuenNQQmZmSlZH?=
+ =?utf-8?B?VldaUXpjVVU0SGRUUzg0cE94MFpvRXZjYUhwL2kvZXFndTluZUs0blcwWmhy?=
+ =?utf-8?B?YVpmL0lITm9ramRwSGdGSThwN0lkbUhqdjhtSFNUVTVoNTZhTXFUSzZ4SWJj?=
+ =?utf-8?B?OVZjSHMvbU1QT1hmL2k4QlVnWnltMTV5MU1uZG40ekgwRzNlS1NCVEhMR3M0?=
+ =?utf-8?B?NjNnU2plNjZKYlo5NHJnQytsMlpyTzhId1RETlc2bzB6R1d0NVhyOE90SStV?=
+ =?utf-8?B?Sy9TZ2tIK0NtV1lLN1Bra0dZdjdxSEk1UllBZkJjc29Ndm5sTElvY3UwVXNp?=
+ =?utf-8?B?cmZCVWc1MFFmaEp6enU1U3g3OCtSUGJNNnhSN1RxSk9IK2FFeWlCUlJYMkpa?=
+ =?utf-8?B?MGFmbCt3ZXVjczNzVEVlMzNWcjBxczRNSkZxRVpyQjlGVEw2K2w2VkQybUZB?=
+ =?utf-8?Q?AsDuXfcP?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210118024318.9530-3-nava.manne@xilinx.com>
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR02MB2623.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d52d593f-dfec-4708-e45b-08d8bc41cef1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2021 06:16:50.2001
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uJTfmPbv5IEGntWak/Iuwbv5xX5xpsRGa6sFPqn3FuT/tteNtzPVr/I2tniWeVoNsDGOPo9S015f18Tff6bQZg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB3357
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Nava,
-
-On Mon, Jan 18, 2021 at 08:13:18AM +0530, Nava kishore Manne wrote:
-> This patch adds driver for versal fpga manager.
-Nit: Add support for Xilinx Versal FPGA manager
-> 
-> PDI source type can be DDR, OCM, QSPI flash etc..
-No idea what PDI is :)
-> But driver allocates memory always from DDR, Since driver supports only
-> DDR source type.
-> 
-> Signed-off-by: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> ---
->  drivers/fpga/Kconfig       |   8 ++
->  drivers/fpga/Makefile      |   1 +
->  drivers/fpga/versal-fpga.c | 149 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 158 insertions(+)
->  create mode 100644 drivers/fpga/versal-fpga.c
-> 
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 5645226ca3ce..9f779c3a6739 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -216,4 +216,12 @@ config FPGA_MGR_ZYNQMP_FPGA
->  	  to configure the programmable logic(PL) through PS
->  	  on ZynqMP SoC.
->  
-> +config FPGA_MGR_VERSAL_FPGA
-> +        tristate "Xilinx Versal FPGA"
-> +        depends on ARCH_ZYNQMP || COMPILE_TEST
-> +        help
-> +          Select this option to enable FPGA manager driver support for
-> +          Xilinx Versal SOC. This driver uses the versal soc firmware
-> +          interface to load programmable logic(PL) images
-> +          on versal soc.
->  endif # FPGA
-> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> index d8e21dfc6778..40c9adb6a644 100644
-> --- a/drivers/fpga/Makefile
-> +++ b/drivers/fpga/Makefile
-> @@ -18,6 +18,7 @@ obj-$(CONFIG_FPGA_MGR_TS73XX)		+= ts73xx-fpga.o
->  obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
->  obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
->  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
-> +obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
->  
-> diff --git a/drivers/fpga/versal-fpga.c b/drivers/fpga/versal-fpga.c
-> new file mode 100644
-> index 000000000000..2a42aa78b182
-> --- /dev/null
-> +++ b/drivers/fpga/versal-fpga.c
-> @@ -0,0 +1,149 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright (C) 2021 Xilinx, Inc.
-> + */
-> +
-> +#include <linux/dma-mapping.h>
-> +#include <linux/fpga/fpga-mgr.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_address.h>
-> +#include <linux/string.h>
-> +#include <linux/firmware/xlnx-zynqmp.h>
-> +
-> +/* Constant Definitions */
-> +#define PDI_SOURCE_TYPE	0xF
-> +
-> +/**
-> + * struct versal_fpga_priv - Private data structure
-> + * @dev:	Device data structure
-> + * @flags:	flags which is used to identify the PL Image type
-> + */
-> +struct versal_fpga_priv {
-> +	struct device *dev;
-> +	u32 flags;
-This seems unused ... please introduce them when/if you start using
-them.
-> +};
-> +
-> +static int versal_fpga_ops_write_init(struct fpga_manager *mgr,
-> +				      struct fpga_image_info *info,
-> +				      const char *buf, size_t size)
-> +{
-> +	struct versal_fpga_priv *priv;
-> +
-> +	priv = mgr->priv;
-> +	priv->flags = info->flags;
-? What uses this ? It seems this function could just be 'return 0' right
-now.
-> +
-> +	return 0;
-> +}
-> +
-> +static int versal_fpga_ops_write(struct fpga_manager *mgr,
-> +				 const char *buf, size_t size)
-> +{
-> +	struct versal_fpga_priv *priv;
-> +	dma_addr_t dma_addr = 0;
-> +	char *kbuf;
-> +	int ret;
-> +
-> +	priv = mgr->priv;
-> +
-> +	kbuf = dma_alloc_coherent(priv->dev, size, &dma_addr, GFP_KERNEL);
-> +	if (!kbuf)
-> +		return -ENOMEM;
-> +
-> +	memcpy(kbuf, buf, size);
-> +
-> +	wmb(); /* ensure all writes are done before initiate FW call */
-> +
-> +	ret = zynqmp_pm_load_pdi(PDI_SOURCE_TYPE, dma_addr);
-> +
-> +	dma_free_coherent(priv->dev, size, kbuf, dma_addr);
-> +
-> +	return ret;
-> +}
-> +
-> +static int versal_fpga_ops_write_complete(struct fpga_manager *mgr,
-> +					  struct fpga_image_info *info)
-> +{
-> +	return 0;
-> +}
-> +
-> +static enum fpga_mgr_states versal_fpga_ops_state(struct fpga_manager *mgr)
-> +{
-> +	return FPGA_MGR_STATE_OPERATING;
-Is that always the case? Shouldn't that be FPGA_MGR_STATE_UNKNOWN?
-> +}
-> +
-> +static const struct fpga_manager_ops versal_fpga_ops = {
-> +	.state = versal_fpga_ops_state,
-> +	.write_init = versal_fpga_ops_write_init,
-> +	.write = versal_fpga_ops_write,
-> +	.write_complete = versal_fpga_ops_write_complete,
-> +};
-> +
-> +static int versal_fpga_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct versal_fpga_priv *priv;
-> +	struct fpga_manager *mgr;
-> +	int err, ret;
-Please pick one, err or ret. 'err' seems unused?
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->dev = dev;
-> +	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-> +	if (ret < 0) {
-> +		dev_err(dev, "no usable DMA configuration");
-Nit: "no usable DMA configuration\n"
-> +		return ret;
-> +	}
-> +
-> +	mgr = devm_fpga_mgr_create(dev, "Xilinx Versal FPGA Manager",
-> +				   &versal_fpga_ops, priv);
-> +	if (!mgr)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, mgr);
-> +
-
-Replace this part:
-> +	err = fpga_mgr_register(mgr);
-> +	if (err) {
-> +		dev_err(dev, "unable to register FPGA manager");
-> +		fpga_mgr_free(mgr);
-> +		return err;
-> +	}
-
-with:
-	return devm_fpga_mgr_register(mgr);
-
-I tried to get rid of the boilerplate, since every driver repeats it
-(and above calling fpga_mgr_free(mgr) on a devm_fpga_mgr_create()
-created FPGA manager is wrong?) :)
-> +
-> +	return 0;
-> +}
-> +
-
-Then
-> +static int versal_fpga_remove(struct platform_device *pdev)
-> +{
-> +	struct fpga_manager *mgr = platform_get_drvdata(pdev);
-> +
-> +	fpga_mgr_unregister(mgr);
-> +	fpga_mgr_free(mgr);
-> +
-> +	return 0;
-> +}
-drop this since cleanup is now automatic.
-> +
-> +static const struct of_device_id versal_fpga_of_match[] = {
-> +	{ .compatible = "xlnx,versal-fpga", },
-> +	{},
-> +};
-> +
-Nit: Drop the newline
-> +MODULE_DEVICE_TABLE(of, versal_fpga_of_match);
-> +
-> +static struct platform_driver versal_fpga_driver = {
-> +	.probe = versal_fpga_probe,
-> +	.remove = versal_fpga_remove,
-> +	.driver = {
-> +		.name = "versal_fpga_manager",
-> +		.of_match_table = of_match_ptr(versal_fpga_of_match),
-> +	},
-> +};
-> +
-Nit: Drop the newline
-> +module_platform_driver(versal_fpga_driver);
-> +
-> +MODULE_AUTHOR("Nava kishore Manne <nava.manne@xilinx.com>");
-> +MODULE_AUTHOR("Appana Durga Kedareswara rao <appanad.durga.rao@xilinx.com>");
-> +MODULE_DESCRIPTION("Xilinx Versal FPGA Manager");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.18.0
-> 
-Thanks,
-Moritz
+SGkgVG9tLA0KDQoJVGhhbmtzIGZvciB0aGUgcmV2aWV3Lg0KUGxlYXNlIGZpbmQgbXkgcmVzcG9u
+c2UgaW5saW5lLg0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFRvbSBS
+aXggPHRyaXhAcmVkaGF0LmNvbT4NCj4gU2VudDogRnJpZGF5LCBKYW51YXJ5IDE1LCAyMDIxIDEx
+OjU2IFBNDQo+IFRvOiBOYXZhIGtpc2hvcmUgTWFubmUgPG5hdmFtQHhpbGlueC5jb20+OyBtZGZA
+a2VybmVsLm9yZzsNCj4gcm9iaCtkdEBrZXJuZWwub3JnOyBNaWNoYWwgU2ltZWsgPG1pY2hhbHNA
+eGlsaW54LmNvbT47IGxpbnV4LQ0KPiBmcGdhQHZnZXIua2VybmVsLm9yZzsgZGV2aWNldHJlZUB2
+Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWFybS0NCj4ga2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc7
+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IGdpdCA8Z2l0QHhpbGlueC5jb20+
+OyBjaGlubmlraXNob3JlMzY5QGdtYWlsLmNvbQ0KPiBTdWJqZWN0OiBSZTogW1BBVENIIDIvMl0g
+ZnBnYTogQWRkIHN1cHBvcnQgZm9yIFhpbGlueCBERlggQVhJIFNodXRkb3duDQo+IG1hbmFnZXIN
+Cj4gDQo+IA0KPiBPbiAxLzE0LzIxIDU6MzQgUE0sIE5hdmEga2lzaG9yZSBNYW5uZSB3cm90ZToN
+Cj4gPiBUaGlzIHBhdGNoIGFkZHMgc3VwcG9ydCBmb3IgWGlsaW54IER5bmFtaWMgRnVuY3Rpb24g
+ZVhjaGFuZ2UoREZYKSBBWEkNCj4gPiBzaHV0ZG93biBtYW5hZ2VyIElQLiBJdCBjYW4gYmUgdXNl
+ZCB0byBzYWZlbHkgaGFuZGxpbmcgdGhlIEFYSSB0cmFmZmljDQo+ID4gb24gYSBSZWNvbmZpZ3Vy
+YWJsZSBQYXJ0aXRpb24gd2hlbiBpdCBpcyB1bmRlcmdvaW5nIGR5bmFtaWMNCj4gPiByZWNvbmZp
+Z3VyYXRpb24gYW5kIHRoZXJlIGJ5IHByZXZlbnRpbmcgc3lzdGVtIGRlYWRsb2NrIHRoYXQgbWF5
+IG9jY3VyDQo+ID4gaWYgQVhJIHRyYW5zYWN0aW9ucyBhcmUgaW50ZXJydXB0ZWQgZHVyaW5nIHJl
+Y29uZmlndXJhdGlvbi4NCj4gPg0KPiA+IFBSLURlY291cGxlciBhbmQgQVhJIHNodXRkb3duIG1h
+bmFnZXIgYXJlIGNvbXBsZXRlbHkgZGlmZmVyZW50IElQcy4NCj4gPiBCdXQgYm90aCB0aGUgSVAg
+cmVnaXN0ZXJzIGFyZSBjb21wYXRpYmxlIGFuZCBhbHNvIGJvdGggYmVsb25nIHRvIHRoZQ0KPiA+
+IHNhbWUgc3ViLXN5c3RlbSAoZnBnYS1icmlkZ2UpLlNvIHVzaW5nIHNhbWUgZHJpdmVyIGZvciBi
+b3RoIElQJ3MuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBOYXZhIGtpc2hvcmUgTWFubmUgPG5h
+dmEubWFubmVAeGlsaW54LmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9mcGdhL3hpbGlueC1w
+ci1kZWNvdXBsZXIuYyB8IDM1DQo+ID4gKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tDQo+
+IA0KPiBJdCBsb29rcyBsaWtlIHRoZSBjb3B5cmlnaHQgaXMgd3JvbmcsIHBsZWFzZSByZXZpZXcg
+c3BlbGxpbmcgb2YgWGlsaXgNCj4gDQo+IMKgKiBDb3B5cmlnaHQgKGMpIDIwMTcsIFhpbGl4IElu
+Yw0KPiANCldpbGwgZml4IGluIHYyLg0KPiANCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDMxIGluc2Vy
+dGlvbnMoKyksIDQgZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9m
+cGdhL3hpbGlueC1wci1kZWNvdXBsZXIuYw0KPiA+IGIvZHJpdmVycy9mcGdhL3hpbGlueC1wci1k
+ZWNvdXBsZXIuYw0KPiA+IGluZGV4IDdkNjlhZjIzMDU2Ny4uYzk1ZjNkMDY1Y2NiIDEwMDY0NA0K
+PiA+IC0tLSBhL2RyaXZlcnMvZnBnYS94aWxpbngtcHItZGVjb3VwbGVyLmMNCj4gPiArKysgYi9k
+cml2ZXJzL2ZwZ2EveGlsaW54LXByLWRlY291cGxlci5jDQo+ID4gQEAgLTE5LDEwICsxOSwxNSBA
+QA0KPiA+ICAjZGVmaW5lIENUUkxfT0ZGU0VUCQkwDQo+ID4NCj4gPiAgc3RydWN0IHhsbnhfcHJf
+ZGVjb3VwbGVyX2RhdGEgew0KPiA+ICsJY29uc3Qgc3RydWN0IHhsbnhfY29uZmlnX2RhdGEgKmlw
+Y29uZmlnOw0KPiA+ICAJdm9pZCBfX2lvbWVtICppb19iYXNlOw0KPiA+ICAJc3RydWN0IGNsayAq
+Y2xrOw0KPiA+ICB9Ow0KPiA+DQo+ID4gK3N0cnVjdCB4bG54X2NvbmZpZ19kYXRhIHsNCj4gPiAr
+CWNoYXIgKm5hbWU7DQo+ID4gK307DQo+IA0KPiBNb3ZlIHhsbnhfY29uZmlnX2RhdGEgYWJvdmUg
+eGxueF9wcl9kZWNvdXBsZV9kYXRhLg0KPiANCldpbGwgZml4IGluIHYyLg0KDQo+IGNvdWxkIHlv
+dSAnY29uc3QnIGNoYXIgKm5hbWUgPw0KPiANCldpbGwgZml4IGluIHYyLg0KPiA+ICsNCj4gPiAg
+c3RhdGljIGlubGluZSB2b2lkIHhsbnhfcHJfZGVjb3VwbGVyX3dyaXRlKHN0cnVjdCB4bG54X3By
+X2RlY291cGxlcl9kYXRhDQo+ICpkLA0KPiA+ICAJCQkJCSAgIHUzMiBvZmZzZXQsIHUzMiB2YWwp
+DQo+ID4gIHsNCj4gPiBAQCAtNzYsMTUgKzgxLDI4IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgZnBn
+YV9icmlkZ2Vfb3BzDQo+IHhsbnhfcHJfZGVjb3VwbGVyX2JyX29wcyA9IHsNCj4gPiAgCS5lbmFi
+bGVfc2hvdyA9IHhsbnhfcHJfZGVjb3VwbGVyX2VuYWJsZV9zaG93LCAgfTsNCj4gPg0KPiA+ICtz
+dGF0aWMgY29uc3Qgc3RydWN0IHhsbnhfY29uZmlnX2RhdGEgZGVjb3VwbGVyX2NvbmZpZyA9IHsN
+Cj4gPiArCS5uYW1lID0gIlhpbGlueCBQUiBEZWNvdXBsZXIiLA0KPiA+ICt9Ow0KPiA+ICsNCj4g
+PiArc3RhdGljIGNvbnN0IHN0cnVjdCB4bG54X2NvbmZpZ19kYXRhIHNodXRkb3duX2NvbmZpZyA9
+IHsNCj4gPiArCS5uYW1lID0gIlhpbGlueCBERlggQVhJIHNodXRkb3duIG1nciIsDQo+IA0KPiBU
+byBiZSBjb25zaXN0ZW50IHdpdGggZGVjb3VwbGVyIG5hbWUsDQo+IA0KPiBzaHV0ZG93biBtZ3Ig
+LT4gU2h1dGRvd24gTWFuYWdlcg0KPiANCg0KV2lsbCBmaXggaW4gdjIuDQoNCj4gPiArfTsNCj4g
+PiArDQo+ID4gIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIHhsbnhfcHJfZGVjb3Vw
+bGVyX29mX21hdGNoW10gPSB7DQo+ID4gLQl7IC5jb21wYXRpYmxlID0gInhsbngscHItZGVjb3Vw
+bGVyLTEuMDAiLCB9LA0KPiA+IC0JeyAuY29tcGF0aWJsZSA9ICJ4bG54LHByLWRlY291cGxlciIs
+IH0sDQo+ID4gKwl7IC5jb21wYXRpYmxlID0gInhsbngscHItZGVjb3VwbGVyLTEuMDAiLCAuZGF0
+YSA9ICZkZWNvdXBsZXJfY29uZmlnDQo+IH0sDQo+ID4gKwl7IC5jb21wYXRpYmxlID0gInhsbngs
+cHItZGVjb3VwbGVyIiwgLmRhdGEgPSAmZGVjb3VwbGVyX2NvbmZpZyB9LA0KPiA+ICsJeyAuY29t
+cGF0aWJsZSA9ICJ4bG54LGRmeC1heGktc2h1dGRvd24tbWFuYWdlci0xLjAwIiwNCj4gPiArCQkJ
+CQkuZGF0YSA9ICZzaHV0ZG93bl9jb25maWcgfSwNCj4gPiArCXsgLmNvbXBhdGlibGUgPSAieGxu
+eCxkZngtYXhpLXNodXRkb3duLW1hbmFnZXIiLA0KPiA+ICsJCQkJCS5kYXRhID0gJnNodXRkb3du
+X2NvbmZpZyB9LA0KPiA+ICAJe30sDQo+ID4gIH07DQo+ID4gIE1PRFVMRV9ERVZJQ0VfVEFCTEUo
+b2YsIHhsbnhfcHJfZGVjb3VwbGVyX29mX21hdGNoKTsNCj4gPg0KPiA+ICBzdGF0aWMgaW50IHhs
+bnhfcHJfZGVjb3VwbGVyX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpICB7DQo+
+ID4gKwlzdHJ1Y3QgZGV2aWNlX25vZGUgKm5wID0gcGRldi0+ZGV2Lm9mX25vZGU7DQo+ID4gIAlz
+dHJ1Y3QgeGxueF9wcl9kZWNvdXBsZXJfZGF0YSAqcHJpdjsNCj4gPiAgCXN0cnVjdCBmcGdhX2Jy
+aWRnZSAqYnI7DQo+ID4gIAlpbnQgZXJyOw0KPiA+IEBAIC05NCw2ICsxMTIsMTQgQEAgc3RhdGlj
+IGludCB4bG54X3ByX2RlY291cGxlcl9wcm9iZShzdHJ1Y3QNCj4gcGxhdGZvcm1fZGV2aWNlICpw
+ZGV2KQ0KPiA+ICAJaWYgKCFwcml2KQ0KPiA+ICAJCXJldHVybiAtRU5PTUVNOw0KPiA+DQo+ID4g
+KwlpZiAobnApIHsNCj4gPiArCQljb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkICptYXRjaDsNCj4g
+PiArDQo+ID4gKwkJbWF0Y2ggPSBvZl9tYXRjaF9ub2RlKHhsbnhfcHJfZGVjb3VwbGVyX29mX21h
+dGNoLCBucCk7DQo+ID4gKwkJaWYgKG1hdGNoICYmIG1hdGNoLT5kYXRhKQ0KPiA+ICsJCQlwcml2
+LT5pcGNvbmZpZyA9IG1hdGNoLT5kYXRhOw0KPiA+ICsJfQ0KPiA+ICsNCj4gPiAgCXJlcyA9IHBs
+YXRmb3JtX2dldF9yZXNvdXJjZShwZGV2LCBJT1JFU09VUkNFX01FTSwgMCk7DQo+ID4gIAlwcml2
+LT5pb19iYXNlID0gZGV2bV9pb3JlbWFwX3Jlc291cmNlKCZwZGV2LT5kZXYsIHJlcyk7DQo+ID4g
+IAlpZiAoSVNfRVJSKHByaXYtPmlvX2Jhc2UpKQ0KPiA+IEBAIC0xMTQsNyArMTQwLDcgQEAgc3Rh
+dGljIGludCB4bG54X3ByX2RlY291cGxlcl9wcm9iZShzdHJ1Y3QNCj4gPiBwbGF0Zm9ybV9kZXZp
+Y2UgKnBkZXYpDQo+ID4NCj4gPiAgCWNsa19kaXNhYmxlKHByaXYtPmNsayk7DQo+ID4NCj4gPiAt
+CWJyID0gZGV2bV9mcGdhX2JyaWRnZV9jcmVhdGUoJnBkZXYtPmRldiwgIlhpbGlueCBQUiBEZWNv
+dXBsZXIiLA0KPiA+ICsJYnIgPSBkZXZtX2ZwZ2FfYnJpZGdlX2NyZWF0ZSgmcGRldi0+ZGV2LCBw
+cml2LT5pcGNvbmZpZy0+bmFtZSwNCj4gPiAgCQkJCSAgICAgJnhsbnhfcHJfZGVjb3VwbGVyX2Jy
+X29wcywgcHJpdik7DQo+ID4gIAlpZiAoIWJyKSB7DQo+ID4gIAkJZXJyID0gLUVOT01FTTsNCj4g
+PiBAQCAtMTI1LDcgKzE1MSw4IEBAIHN0YXRpYyBpbnQgeGxueF9wcl9kZWNvdXBsZXJfcHJvYmUo
+c3RydWN0DQo+ID4gcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiA+DQo+ID4gIAllcnIgPSBmcGdh
+X2JyaWRnZV9yZWdpc3Rlcihicik7DQo+ID4gIAlpZiAoZXJyKSB7DQo+ID4gLQkJZGV2X2Vycigm
+cGRldi0+ZGV2LCAidW5hYmxlIHRvIHJlZ2lzdGVyIFhpbGlueCBQUg0KPiBEZWNvdXBsZXIiKTsN
+Cj4gPiArCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJ1bmFibGUgdG8gcmVnaXN0ZXIgJXMiLA0KPiA+
+ICsJCQlwcml2LT5pcGNvbmZpZy0+bmFtZSk7DQo+ID4gIAkJZ290byBlcnJfY2xrOw0KPiA+ICAJ
+fQ0KPiANCj4gTG9vayBhdCBYSUxJTlhfUFJfREVDT1VQTEVSIGVudHJ5IGluIEtjb25maWcsIG1h
+eWJlIGFkZCBzb21ldGhpbmcgbGlrZQ0KPiANCj4gaGVscA0KPiANCj4gwqAgU2F5IFkgdG8gZW5h
+YmxlIGRyaXZlcnMgZm9yIHRoZcKgIC4uLiBEZWNvdXBsZXIgb3IgREZYIEFJWCBTaHV0ZG93biBN
+YW5hZ2VyDQo+DQoNCldpbGwgaW4gdjIuDQoNClJlZ2FyZHMsDQpOYXZha2lzaG9yZS4NCg==
