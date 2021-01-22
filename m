@@ -2,121 +2,143 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2392FFC06
-	for <lists+linux-fpga@lfdr.de>; Fri, 22 Jan 2021 06:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 572522FFC5D
+	for <lists+linux-fpga@lfdr.de>; Fri, 22 Jan 2021 06:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726103AbhAVFRz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 22 Jan 2021 00:17:55 -0500
-Received: from mail-pj1-f43.google.com ([209.85.216.43]:37317 "EHLO
-        mail-pj1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726014AbhAVFRx (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 22 Jan 2021 00:17:53 -0500
-Received: by mail-pj1-f43.google.com with SMTP id g15so3100443pjd.2;
-        Thu, 21 Jan 2021 21:17:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6N5TXJ6yeDofpR8GczZbN8MhQVoOYTknC4OkzyK0VI0=;
-        b=qtc6SVgYI9JXzfpBB13nYv/e0Nc1/2vUoivc6Dyvw+5z0u/PgnbXiRDS8BdyhcCr2k
-         CoLIl9NwBzZUyfqLCZ68cwFlzGJzzgZYLZFCsOjPanpjjkXQ54rUdD/s/Zr2IKWT2rT2
-         C8flRSdyqNofPYfcbTk4t8x6VllQzRQnzJ00VFABca/MFs/YY3YO6h9aJ3WO6mFN33zi
-         V1akFw6iJP6kqZq5KApdxRS9NbqtTZRuG9QrwQ5FpOb2v6/2Tio3ExWcAPAHRYAll0S6
-         WPy0w/nQVC3mO9Cx7JGWShaaBC6ddalAUtFfAEDshARKLWRgQRfD0+QAK/mhJfTIvWWP
-         xh3g==
-X-Gm-Message-State: AOAM5327fngw0wKQTx15n7IxRJ897RUK9wXokQo+xexxiwnj8eT57ZiF
-        Qun4qrkPDP6OfUTq4064A9M=
-X-Google-Smtp-Source: ABdhPJzZqdfEXnKRH17QQSUd97gL9kLCf7mSygNMIaNfZJoW2mQsbnwaUmDee7o4T0jZcW6cZYyOEA==
-X-Received: by 2002:a17:90a:de97:: with SMTP id n23mr3405825pjv.216.1611292633004;
-        Thu, 21 Jan 2021 21:17:13 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
-        by smtp.gmail.com with ESMTPSA id m195sm7585191pfd.215.2021.01.21.21.17.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jan 2021 21:17:12 -0800 (PST)
-Date:   Thu, 21 Jan 2021 21:17:10 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     mdf@kernel.org, trix@redhat.com, robh+dt@kernel.org,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, git@xilinx.com,
-        chinnikishore369@gmail.com
-Subject: Re: [PATCH 1/2] fpga: mgr: Adds secure BitStream loading support
-Message-ID: <YApf1jlEghbnDFo/@archbook>
-References: <20210118025058.10051-1-nava.manne@xilinx.com>
+        id S1726168AbhAVFvN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 22 Jan 2021 00:51:13 -0500
+Received: from mga18.intel.com ([134.134.136.126]:36489 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726103AbhAVFvN (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 22 Jan 2021 00:51:13 -0500
+IronPort-SDR: w7Ga0/ZUvWeTgh3y3c7j2NaGKydDMjMR3svCaTO48BtYEdtn1Y4c4afNd0x7pWVr2T7btw6kLE
+ aGaErB4u1trA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9871"; a="167072899"
+X-IronPort-AV: E=Sophos;i="5.79,365,1602572400"; 
+   d="scan'208";a="167072899"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 21:50:31 -0800
+IronPort-SDR: XZkSWNq3AXELCUn582T8uPYolhF1zi7yBXVmJ4mdoQbbIVOFduwW2efVYYKn7BIVapXa9ikVXx
+ o1pAW5YYvOVw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,365,1602572400"; 
+   d="scan'208";a="385622504"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by orsmga008.jf.intel.com with ESMTP; 21 Jan 2021 21:50:29 -0800
+Date:   Fri, 22 Jan 2021 13:46:02 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     Tom Rix <trix@redhat.com>, Greg KH <gregkh@linuxfoundation.org>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lgoncalv@redhat.com, hao.wu@intel.com, yilun.xu@intel.com
+Subject: Re: [PATCH v6 1/2] fpga: dfl: add the userspace I/O device support
+  for DFL devices
+Message-ID: <20210122054602.GC1943@yilunxu-OptiPlex-7050>
+References: <1610502848-30345-1-git-send-email-yilun.xu@intel.com>
+ <1610502848-30345-2-git-send-email-yilun.xu@intel.com>
+ <YARbgGU6lr3zZaKP@kroah.com>
+ <YARkTFMrotPo45ic@epycbox.lan>
+ <1d205328-6ffa-0f77-0bdf-0f4b822edc3a@redhat.com>
+ <YAneI4AmuYqqqyUs@epycbox.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210118025058.10051-1-nava.manne@xilinx.com>
+In-Reply-To: <YAneI4AmuYqqqyUs@epycbox.lan>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 08:20:57AM +0530, Nava kishore Manne wrote:
-> This commit adds secure flags to the framework to support
-> secure BitStream Loading.
+On Thu, Jan 21, 2021 at 12:03:47PM -0800, Moritz Fischer wrote:
+> Hi Tom,
 > 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> ---
->  drivers/fpga/of-fpga-region.c | 10 ++++++++++
->  include/linux/fpga/fpga-mgr.h | 12 ++++++++++++
->  2 files changed, 22 insertions(+)
+> On Thu, Jan 21, 2021 at 06:30:20AM -0800, Tom Rix wrote:
+> > 
+> > On 1/17/21 8:22 AM, Moritz Fischer wrote:
+> > > Greg,
+> > >
+> > > On Sun, Jan 17, 2021 at 04:45:04PM +0100, Greg KH wrote:
+> > >> On Wed, Jan 13, 2021 at 09:54:07AM +0800, Xu Yilun wrote:
+> > >>> This patch supports the DFL drivers be written in userspace. This is
+> > >>> realized by exposing the userspace I/O device interfaces.
+> > >>>
+> > >>> The driver leverages the uio_pdrv_genirq, it adds the uio_pdrv_genirq
+> > >>> platform device with the DFL device's resources, and let the generic UIO
+> > >>> platform device driver provide support to userspace access to kernel
+> > >>> interrupts and memory locations.
+> > >> Why doesn't the existing uio driver work for this, why do you need a new
+> > >> one?
+> > >>
+> > >>> ---
+> > >>>  drivers/fpga/Kconfig        | 10 +++++
+> > >>>  drivers/fpga/Makefile       |  1 +
+> > >>>  drivers/fpga/dfl-uio-pdev.c | 93 +++++++++++++++++++++++++++++++++++++++++++++
+> > >> uio drivers traditionally go in drivers/uio/ and start with "uio", so
+> > >> shouldn't this be drivers/uio/uio_dfl_pdev.c to match the same naming
+> > >> scheme?
+> > > I had considered suggesting that, but ultimately this driver only
+> > > creates a 'uio_pdrv_genirq' platform device, so it didn't seem like a
+> > > good fit.
+> > >> But again, you need to explain in detail, why the existing uio driver
+> > >> doesn't work properly, or why you can't just add a few lines to an
+> > >> existing one.
+> > > Ultimately there are three options I see:
+> > > 1) Do what Xu does, which is re-use the 'uio_pdrv_genirq' uio driver by
+> > >   creating a platform device for it as sub-device of the dfl device that
+> > >   we bind to uio_pdrv_genirq
+> > > 2) Add a module_dfl_driver part to drivers/uio/uio_pdrv_genirq.c and
+> > >   corresponding id table
+> > > 3) Create a new uio_dfl_genirq kind of driver that uses the dfl bus and
+> > >   that would make sense to then put into drivers/uio. (This would
+> > >   duplicate code in uio_pdrv_genirq to some extend)
+> > >
+> > > Overall I think in terms of code re-use I think Xu's choice might be
+> > > less new code as it simply wraps the uio platform device driver, and
+> > > allows for defining the resources passed to the UIO driver to be defined
+> > > by hardware through a DFL.
+> > >
+> > > I've seen the pattern that Xu proposed used in other places like the
+> > > macb network driver where you'd have macb_main (the platform driver) and
+> > > macb_pci that wraps it for a pci usage.
+> > >
+> > > - Moritz
+> > 
+> > Thinking of this problem more generally.
+> > 
+> > Every fpga will have a handful of sub devices.
+> > 
+> > Do we want to carry them in the fpga subsystem or carry them in the other subsystems ?
 > 
-> diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
-> index e405309baadc..3a5eb4808888 100644
-> --- a/drivers/fpga/of-fpga-region.c
-> +++ b/drivers/fpga/of-fpga-region.c
-> @@ -228,6 +228,16 @@ static struct fpga_image_info *of_fpga_region_parse_ov(
->  	if (of_property_read_bool(overlay, "encrypted-fpga-config"))
->  		info->flags |= FPGA_MGR_ENCRYPTED_BITSTREAM;
->  
-> +	if (of_property_read_bool(overlay, "userkey-encrypted-fpga-config"))
-> +		info->flags |= FPGA_MGR_USERKEY_ENCRYPTED_BITSTREAM;
+> Yeah no we really don't. I think that was the point of the whole DFL
+> bus :)
+> > 
+> > Consider the short term reviewing and long term maintenance of the sub devices by the subsystem maintainers.
+> > 
+> > It easier for them if the sub devices are in the other subsystems.
+> 
+> Agreed.
+> > 
+> > 
+> > Applying this to specifically for dfl_uio.
+> > 
+> > No one from the uio subsystem reviewing this change is a problem.
+> 
+> Greg will.
+> > I think this change needs to go to the uio subsystem.
+> 
+> Yeah I've thought about this some for the last few days, maybe it's
+> easier that way.
+> 
+> Tbh, there's so little code here even if we went with option 3 above
+> it's probably fairly short. It would set a better prcedent.
+> 
+> Xu, how do you feel about giving that a spin? See if option 3 will be
+> way more code.
 
-Can this just be encrypted-fpga-config/FPGA_MGR_ENCRYPTED?
-> +
-> +	if (of_property_read_bool(overlay, "ddrmem-authenticated-fpga-config"))
-> +		info->flags |= FPGA_MGR_DDR_MEM_AUTH_BITSTREAM;
-> +
-> +	if (of_property_read_bool(overlay,
-> +				  "securemem-authenticated-fpga-config"))
-> +		info->flags |= FPGA_MGR_SECURE_MEM_AUTH_BITSTREAM;
-> +
->  	if (!of_property_read_string(overlay, "firmware-name",
->  				     &firmware_name)) {
->  		info->firmware_name = devm_kstrdup(dev, firmware_name,
-> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
-> index 2bc3030a69e5..2f7455a60666 100644
-> --- a/include/linux/fpga/fpga-mgr.h
-> +++ b/include/linux/fpga/fpga-mgr.h
-> @@ -67,12 +67,24 @@ enum fpga_mgr_states {
->   * %FPGA_MGR_BITSTREAM_LSB_FIRST: SPI bitstream bit order is LSB first
->   *
->   * %FPGA_MGR_COMPRESSED_BITSTREAM: FPGA bitstream is compressed
-> + *
-> + * %FPGA_MGR_USERKEY_ENCRYPTED_BITSTREAM: indicates bitstream is encrypted with
-> + *                                        user key
-> + *
-> + * %FPGA_MGR_DDR_MEM_AUTH_BITSTREAM: do bitstream authentication using DDR
-> + *                                   memory if supported
-> + *
-> + * %FPGA_MGR_SECURE_MEM_AUTH_BITSTREAM: do bitstream authentication using secure
-> + *                                      memory if supported
->   */
->  #define FPGA_MGR_PARTIAL_RECONFIG	BIT(0)
->  #define FPGA_MGR_EXTERNAL_CONFIG	BIT(1)
->  #define FPGA_MGR_ENCRYPTED_BITSTREAM	BIT(2)
->  #define FPGA_MGR_BITSTREAM_LSB_FIRST	BIT(3)
->  #define FPGA_MGR_COMPRESSED_BITSTREAM	BIT(4)
-> +#define FPGA_MGR_USERKEY_ENCRYPTED_BITSTREAM	BIT(5)
-> +#define FPGA_MGR_DDR_MEM_AUTH_BITSTREAM		BIT(6)
-> +#define FPGA_MGR_SECURE_MEM_AUTH_BITSTREAM	BIT(7)
->  
->  /**
->   * struct fpga_image_info - information specific to a FPGA image
-> -- 
-> 2.18.0
-> 
+Yes, I'll try to put it to drivers/uio.
+
+I see the implementation in vfio_platform.c/vfio_amba.c/vfio_platform_common.c.
+I'm wondering if we could handle it in that way.
 
 Thanks,
-Moritz
+yilun
