@@ -2,340 +2,131 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F23F3018E8
-	for <lists+linux-fpga@lfdr.de>; Sun, 24 Jan 2021 00:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 211903018EE
+	for <lists+linux-fpga@lfdr.de>; Sun, 24 Jan 2021 00:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726417AbhAWXef (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 23 Jan 2021 18:34:35 -0500
-Received: from mail-pg1-f171.google.com ([209.85.215.171]:35570 "EHLO
-        mail-pg1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726367AbhAWXeZ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 23 Jan 2021 18:34:25 -0500
-Received: by mail-pg1-f171.google.com with SMTP id n7so6439451pgg.2;
-        Sat, 23 Jan 2021 15:34:07 -0800 (PST)
+        id S1726294AbhAWXfv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 23 Jan 2021 18:35:51 -0500
+Received: from mail-pj1-f52.google.com ([209.85.216.52]:52758 "EHLO
+        mail-pj1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726284AbhAWXft (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 23 Jan 2021 18:35:49 -0500
+Received: by mail-pj1-f52.google.com with SMTP id kx7so6097928pjb.2;
+        Sat, 23 Jan 2021 15:35:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=QAiIP8gQDPwczslWL4ZzqONRkPCYYFJ6gqUffbnV6eM=;
-        b=f2Ll14H+KP8LaVgeLgMKPRqNWBlk/wFHcCewI6UdeLdcNTJaRHNS8JEz97B9iB6oCt
-         6bSJyvBU0t40v1sI2hBP5pHgdFvG8uD0RWO5JKLDyTvoxcGKVQGRwvoG6uvI7nxkHfsi
-         T1hixYCToPOZ945LImyXX2HxCtPx5ZHA2nBlfBZnuFm+3JHZ0AEcNIBsSI+ET5mGsCky
-         Y4f/stA61LWH3Io/rpMjGsRKyd4Fdl5EedWRhoBEl0aQ9u12OKUp6Vaq86NftQm6gjcu
-         E8+z52gg1r4UXTQfsxJwyf9jU30UwsGkAgkEJJkn5Tl5OVRcvm2ORsC7LlhYiPfLYjQg
-         /wRg==
-X-Gm-Message-State: AOAM531Jmm82M6tNHNX3NOYMihh3HTpFU6FubD+VGskNbLXCQWvZJ0lB
-        BFZmv3TJDAbjjPG6hbkpAFo9d0sYhkA=
-X-Google-Smtp-Source: ABdhPJy2ENJOW2QIEdiQN7/uOoLww1B1cg9Ku7TYBwT4NyGrzyHZ9NM59BBFaHrY65oIDcr86ZBVFQ==
-X-Received: by 2002:a63:fc56:: with SMTP id r22mr8420141pgk.3.1611444822071;
-        Sat, 23 Jan 2021 15:33:42 -0800 (PST)
+        bh=y8zqB2yoEzEnz4ItpJSnoy0J2SARkRZOXZyw/BOuwJ4=;
+        b=jwUhQdyt827r6BWcQjoPRD3+RAc9Cik7gABIIM00zwwraDM6fcqx6gijnKs0BVHIhI
+         7MPXAe0p3NW8zj+YObfhBvB5l0GCS2bFbcwbyQyODsUBcTB3agse1icScQIQm0V9EE8/
+         g6Rr/YCgiecrFBqYUhAGJJkgEj5oO9bgjRBpNKNyQ+pwbyAva3P9X54VAmpnxTVRtCFb
+         mIFsziCR9B2IuabSdkmQYH2tHESfmThGviLLrzWnQ+Gd5xRq8bzxSqHIhnMGCNrQUk05
+         HRuhXvnZJXdZ1VOiyFXg/x3oDaDG1zX9k3bSKYTbRQhUjJuZ/wzngicqX18UgVK1y4fU
+         Nb9Q==
+X-Gm-Message-State: AOAM531LTAd4ySiNIwLvdSh9GuAFgbIToKPNGQgcrYscIXZodU6zYJVz
+        q73oy6C6fj6rhi/IcEAtWPDc3Vd5Dy8=
+X-Google-Smtp-Source: ABdhPJz5Sy+oQHLjDwYPnabWkahWhvdFu/1JHZungRkDeU02nO0Ao7JXynLf5zWnRPTRQY+7uO5bdg==
+X-Received: by 2002:a17:90a:245:: with SMTP id t5mr13927912pje.89.1611444908682;
+        Sat, 23 Jan 2021 15:35:08 -0800 (PST)
 Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id y67sm12890498pfb.211.2021.01.23.15.33.40
+        by smtp.gmail.com with ESMTPSA id p13sm13288095pju.20.2021.01.23.15.35.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jan 2021 15:33:40 -0800 (PST)
-Date:   Sat, 23 Jan 2021 15:33:39 -0800
+        Sat, 23 Jan 2021 15:35:07 -0800 (PST)
+Date:   Sat, 23 Jan 2021 15:35:06 -0800
 From:   Moritz Fischer <mdf@kernel.org>
-To:     Nava kishore Manne <navam@xilinx.com>
-Cc:     Moritz Fischer <mdf@kernel.org>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Michal Simek <michals@xilinx.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>,
-        "chinnikishore369@gmail.com" <chinnikishore369@gmail.com>,
-        Appana Durga Kedareswara Rao <appanad@xilinx.com>
-Subject: Re: [PATCH 3/3] fpga: versal-fpga: Add versal fpga manager driver
-Message-ID: <YAyyU9dybSdmOAQL@epycbox.lan>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     mdf@kernel.org, trix@redhat.com, robh+dt@kernel.org,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, git@xilinx.com,
+        chinnikishore369@gmail.com
+Subject: Re: [PATCH 1/3] drivers: firmware: Add Pdi load API support
+Message-ID: <YAyyqnCmYcWGgbom@epycbox.lan>
 References: <20210118024318.9530-1-nava.manne@xilinx.com>
- <20210118024318.9530-3-nava.manne@xilinx.com>
- <YAYo1ksLfMMNxPuL@epycbox.lan>
- <MWHPR02MB26239A3F539DE8E053D512D5C2A09@MWHPR02MB2623.namprd02.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MWHPR02MB26239A3F539DE8E053D512D5C2A09@MWHPR02MB2623.namprd02.prod.outlook.com>
+In-Reply-To: <20210118024318.9530-1-nava.manne@xilinx.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Nava,
-
-On Fri, Jan 22, 2021 at 10:34:15AM +0000, Nava kishore Manne wrote:
-> Hi Moritz,
+On Mon, Jan 18, 2021 at 08:13:16AM +0530, Nava kishore Manne wrote:
+> This patch adds load pdi api support to enable pdi/partial loading from
+> linux. Programmable Device Image (PDI) is combination of headers, images
+> and bitstream files to be loaded. Partial PDI is partial set of image/
+> images to be loaded.
 > 
-> 	Thanks for the review.
-> Please find my response inline.
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> ---
+>  drivers/firmware/xilinx/zynqmp.c     | 17 +++++++++++++++++
+>  include/linux/firmware/xlnx-zynqmp.h |  9 +++++++++
+>  2 files changed, 26 insertions(+)
 > 
-> > -----Original Message-----
-> > From: Moritz Fischer <mdf@kernel.org>
-> > Sent: Tuesday, January 19, 2021 6:03 AM
-> > To: Nava kishore Manne <navam@xilinx.com>
-> > Cc: mdf@kernel.org; trix@redhat.com; robh+dt@kernel.org; Michal Simek
-> > <michals@xilinx.com>; linux-fpga@vger.kernel.org;
-> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> > kernel@vger.kernel.org; git <git@xilinx.com>; chinnikishore369@gmail.com;
-> > Appana Durga Kedareswara Rao <appanad@xilinx.com>
-> > Subject: Re: [PATCH 3/3] fpga: versal-fpga: Add versal fpga manager driver
-> > 
-> > Hi Nava,
-> > 
-> > On Mon, Jan 18, 2021 at 08:13:18AM +0530, Nava kishore Manne wrote:
-> > > This patch adds driver for versal fpga manager.
-> > Nit: Add support for Xilinx Versal FPGA manager
+> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
+> index 7eb9958662dd..a466225b9f9e 100644
+> --- a/drivers/firmware/xilinx/zynqmp.c
+> +++ b/drivers/firmware/xilinx/zynqmp.c
+> @@ -897,6 +897,23 @@ int zynqmp_pm_set_requirement(const u32 node, const u32 capabilities,
+>  }
+>  EXPORT_SYMBOL_GPL(zynqmp_pm_set_requirement);
+>  
+> +/**
+> + * zynqmp_pm_load_pdi - Load and process pdi
+Nit: Is it pdi or PDI. Pick one :)
+> + * @src:       Source device where PDI is located
+> + * @address:   Pdi src address
+> + *
+> + * This function provides support to load pdi from linux
+> + *
+> + * Return: Returns status, either success or error+reason
+> + */
+> +int zynqmp_pm_load_pdi(const u32 src, const u64 address)
+> +{
+> +	return zynqmp_pm_invoke_fn(PM_LOAD_PDI, src,
+> +				   lower_32_bits(address),
+> +				   upper_32_bits(address), 0, NULL);
+> +}
+> +EXPORT_SYMBOL_GPL(zynqmp_pm_load_pdi);
+> +
+>  /**
+>   * zynqmp_pm_aes - Access AES hardware to encrypt/decrypt the data using
+>   * AES-GCM core.
+> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
+> index 2a0da841c942..87114ee645b1 100644
+> --- a/include/linux/firmware/xlnx-zynqmp.h
+> +++ b/include/linux/firmware/xlnx-zynqmp.h
+> @@ -52,6 +52,9 @@
+>  #define	ZYNQMP_PM_CAPABILITY_WAKEUP	0x4U
+>  #define	ZYNQMP_PM_CAPABILITY_UNUSABLE	0x8U
+>  
+> +/* Loader commands */
+> +#define PM_LOAD_PDI	0x701
+> +
+>  /*
+>   * Firmware FPGA Manager flags
+>   * XILINX_ZYNQMP_PM_FPGA_FULL:	FPGA full reconfiguration
+> @@ -354,6 +357,7 @@ int zynqmp_pm_write_pggs(u32 index, u32 value);
+>  int zynqmp_pm_read_pggs(u32 index, u32 *value);
+>  int zynqmp_pm_system_shutdown(const u32 type, const u32 subtype);
+>  int zynqmp_pm_set_boot_health_status(u32 value);
+> +int zynqmp_pm_load_pdi(const u32 src, const u64 address);
+>  #else
+>  static inline struct zynqmp_eemi_ops *zynqmp_pm_get_eemi_ops(void)
+>  {
+> @@ -538,6 +542,11 @@ static inline int zynqmp_pm_set_boot_health_status(u32 value)
+>  {
+>  	return -ENODEV;
+>  }
+> +
+> +static inline int zynqmp_pm_load_pdi(const u32 src, const u64 address)
+> +{
+> +	return -ENODEV;
+> +}
+>  #endif
+>  
+>  #endif /* __FIRMWARE_ZYNQMP_H__ */
+> -- 
+> 2.18.0
 > 
-> Will fix in v2.
-> 
-> > >
-> > > PDI source type can be DDR, OCM, QSPI flash etc..
-> > No idea what PDI is :)
-> 
-> Programmable device image (PDI). 
-> This file is generated by Xilinx Vivado tool and it contains configuration data objects.
-> 
-> > > But driver allocates memory always from DDR, Since driver supports
-> > > only DDR source type.
-> > >
-> > > Signed-off-by: Appana Durga Kedareswara rao
-> > > <appana.durga.rao@xilinx.com>
-> > > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> > > ---
-> > >  drivers/fpga/Kconfig       |   8 ++
-> > >  drivers/fpga/Makefile      |   1 +
-> > >  drivers/fpga/versal-fpga.c | 149
-> > > +++++++++++++++++++++++++++++++++++++
-> > >  3 files changed, 158 insertions(+)
-> > >  create mode 100644 drivers/fpga/versal-fpga.c
-> > >
-> > > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig index
-> > > 5645226ca3ce..9f779c3a6739 100644
-> > > --- a/drivers/fpga/Kconfig
-> > > +++ b/drivers/fpga/Kconfig
-> > > @@ -216,4 +216,12 @@ config FPGA_MGR_ZYNQMP_FPGA
-> > >  	  to configure the programmable logic(PL) through PS
-> > >  	  on ZynqMP SoC.
-> > >
-> > > +config FPGA_MGR_VERSAL_FPGA
-> > > +        tristate "Xilinx Versal FPGA"
-> > > +        depends on ARCH_ZYNQMP || COMPILE_TEST
-> > > +        help
-> > > +          Select this option to enable FPGA manager driver support for
-> > > +          Xilinx Versal SOC. This driver uses the versal soc firmware
-> > > +          interface to load programmable logic(PL) images
-> > > +          on versal soc.
-> > >  endif # FPGA
-> > > diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile index
-> > > d8e21dfc6778..40c9adb6a644 100644
-> > > --- a/drivers/fpga/Makefile
-> > > +++ b/drivers/fpga/Makefile
-> > > @@ -18,6 +18,7 @@ obj-$(CONFIG_FPGA_MGR_TS73XX)		+=
-> > ts73xx-fpga.o
-> > >  obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
-> > >  obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
-> > >  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
-> > > +obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
-> > >  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
-> > >  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
-> > >
-> > > diff --git a/drivers/fpga/versal-fpga.c b/drivers/fpga/versal-fpga.c
-> > > new file mode 100644 index 000000000000..2a42aa78b182
-> > > --- /dev/null
-> > > +++ b/drivers/fpga/versal-fpga.c
-> > > @@ -0,0 +1,149 @@
-> > > +// SPDX-License-Identifier: GPL-2.0+
-> > > +/*
-> > > + * Copyright (C) 2021 Xilinx, Inc.
-> > > + */
-> > > +
-> > > +#include <linux/dma-mapping.h>
-> > > +#include <linux/fpga/fpga-mgr.h>
-> > > +#include <linux/io.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of_address.h>
-> > > +#include <linux/string.h>
-> > > +#include <linux/firmware/xlnx-zynqmp.h>
-> > > +
-> > > +/* Constant Definitions */
-> > > +#define PDI_SOURCE_TYPE	0xF
-> > > +
-> > > +/**
-> > > + * struct versal_fpga_priv - Private data structure
-> > > + * @dev:	Device data structure
-> > > + * @flags:	flags which is used to identify the PL Image type
-> > > + */
-> > > +struct versal_fpga_priv {
-> > > +	struct device *dev;
-> > > +	u32 flags;
-> > This seems unused ... please introduce them when/if you start using them.
-> 
-> Will fix in v2.
-> 
-> > > +};
-> > > +
-> > > +static int versal_fpga_ops_write_init(struct fpga_manager *mgr,
-> > > +				      struct fpga_image_info *info,
-> > > +				      const char *buf, size_t size) {
-> > > +	struct versal_fpga_priv *priv;
-> > > +
-> > > +	priv = mgr->priv;
-> > > +	priv->flags = info->flags;
-> > ? What uses this ? It seems this function could just be 'return 0' right now.
-> 
-> Will fix in v2.
-> 
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int versal_fpga_ops_write(struct fpga_manager *mgr,
-> > > +				 const char *buf, size_t size)
-> > > +{
-> > > +	struct versal_fpga_priv *priv;
-> > > +	dma_addr_t dma_addr = 0;
-> > > +	char *kbuf;
-> > > +	int ret;
-> > > +
-> > > +	priv = mgr->priv;
-> > > +
-> > > +	kbuf = dma_alloc_coherent(priv->dev, size, &dma_addr,
-> > GFP_KERNEL);
-> > > +	if (!kbuf)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	memcpy(kbuf, buf, size);
-> > > +
-> > > +	wmb(); /* ensure all writes are done before initiate FW call */
-> > > +
-> > > +	ret = zynqmp_pm_load_pdi(PDI_SOURCE_TYPE, dma_addr);
-> > > +
-> > > +	dma_free_coherent(priv->dev, size, kbuf, dma_addr);
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +static int versal_fpga_ops_write_complete(struct fpga_manager *mgr,
-> > > +					  struct fpga_image_info *info)
-> > > +{
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static enum fpga_mgr_states versal_fpga_ops_state(struct fpga_manager
-> > > +*mgr) {
-> > > +	return FPGA_MGR_STATE_OPERATING;
-> > Is that always the case? Shouldn't that be FPGA_MGR_STATE_UNKNOWN?
-> 
-> For Versal SoC base PDI is always configured prior to Linux boot up. So I make the fpga state as OPERATING.
-> Please let know if it is not a proper implementation will think about the alternate solution. 
-
-So you're saying I can't boot a Versal SoC without a PDI / Bitstream
-loaded? Interesting :)
-> 
-> > > +}
-> > > +
-> > > +static const struct fpga_manager_ops versal_fpga_ops = {
-> > > +	.state = versal_fpga_ops_state,
-> > > +	.write_init = versal_fpga_ops_write_init,
-> > > +	.write = versal_fpga_ops_write,
-> > > +	.write_complete = versal_fpga_ops_write_complete, };
-> > > +
-> > > +static int versal_fpga_probe(struct platform_device *pdev) {
-> > > +	struct device *dev = &pdev->dev;
-> > > +	struct versal_fpga_priv *priv;
-> > > +	struct fpga_manager *mgr;
-> > > +	int err, ret;
-> > Please pick one, err or ret. 'err' seems unused?
-> 
-> Will fix in v2.
-> 
-> > > +
-> > > +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > > +	if (!priv)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	priv->dev = dev;
-> > > +	ret = dma_set_mask_and_coherent(&pdev->dev,
-> > DMA_BIT_MASK(32));
-> > > +	if (ret < 0) {
-> > > +		dev_err(dev, "no usable DMA configuration");
-> > Nit: "no usable DMA configuration\n"
-> 
-> Will fix in v2.
-> 
-> > > +		return ret;
-> > > +	}
-> > > +
-> > > +	mgr = devm_fpga_mgr_create(dev, "Xilinx Versal FPGA Manager",
-> > > +				   &versal_fpga_ops, priv);
-> > > +	if (!mgr)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	platform_set_drvdata(pdev, mgr);
-> > > +
-> > 
-> > Replace this part:
-> > > +	err = fpga_mgr_register(mgr);
-> > > +	if (err) {
-> > > +		dev_err(dev, "unable to register FPGA manager");
-> > > +		fpga_mgr_free(mgr);
-> > > +		return err;
-> > > +	}
-> > 
-> > with:
-> > 	return devm_fpga_mgr_register(mgr);
-> > 
-> > I tried to get rid of the boilerplate, since every driver repeats it (and above
-> > calling fpga_mgr_free(mgr) on a devm_fpga_mgr_create() created FPGA
-> > manager is wrong?) :)
-> 
-> Thanks for pointing it. Will fix in v2.
-> 
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > 
-> > Then
-> > > +static int versal_fpga_remove(struct platform_device *pdev) {
-> > > +	struct fpga_manager *mgr = platform_get_drvdata(pdev);
-> > > +
-> > > +	fpga_mgr_unregister(mgr);
-> > > +	fpga_mgr_free(mgr);
-> > > +
-> > > +	return 0;
-> > > +}
-> > drop this since cleanup is now automatic.
-> 
-> Thanks for pointing it. Will fix in v2.
-> 
-> > > +
-> > > +static const struct of_device_id versal_fpga_of_match[] = {
-> > > +	{ .compatible = "xlnx,versal-fpga", },
-> > > +	{},
-> > > +};
-> > > +
-> > Nit: Drop the newline
-> 
-> Will fix in v2.
-> 
-> > > +MODULE_DEVICE_TABLE(of, versal_fpga_of_match);
-> > > +
-> > > +static struct platform_driver versal_fpga_driver = {
-> > > +	.probe = versal_fpga_probe,
-> > > +	.remove = versal_fpga_remove,
-> > > +	.driver = {
-> > > +		.name = "versal_fpga_manager",
-> > > +		.of_match_table = of_match_ptr(versal_fpga_of_match),
-> > > +	},
-> > > +};
-> > > +
-> > Nit: Drop the newline
-> 
-> Will fix in v2.
-> 
-> Regards,
-> Navakishore.
-- Moritz
