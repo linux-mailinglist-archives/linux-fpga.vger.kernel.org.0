@@ -2,116 +2,101 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD9730338B
-	for <lists+linux-fpga@lfdr.de>; Tue, 26 Jan 2021 05:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0611030338C
+	for <lists+linux-fpga@lfdr.de>; Tue, 26 Jan 2021 05:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729936AbhAZE6S (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 25 Jan 2021 23:58:18 -0500
-Received: from mga12.intel.com ([192.55.52.136]:15030 "EHLO mga12.intel.com"
+        id S1729957AbhAZE6V (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 25 Jan 2021 23:58:21 -0500
+Received: from mga02.intel.com ([134.134.136.20]:47497 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730961AbhAZBmy (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 25 Jan 2021 20:42:54 -0500
-IronPort-SDR: 2hZBl9ZYwJtE3YDDK3uIkdgpd0rLjiXSBbbgTtUntpC92imeLN0rTvuY/znC9UYluPhNbu7BSb
- x5l/zhyULiew==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="159010474"
+        id S1729149AbhAZCDd (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 25 Jan 2021 21:03:33 -0500
+IronPort-SDR: 2FL3CYhY3uEP/JmRw9FbXnJX5h/W6USOqlvL6CtltOpWqG0ZtE26sPsUFPkyW020rx2+C3kHI8
+ gRk+aX04hmxw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="166933633"
 X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="159010474"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 17:42:01 -0800
-IronPort-SDR: 5MlRWDw70QwTghgTgw6xLgpclTJUgcqtcmx9Wwwl0rkmGHRqKJTpq8D0FsnxmYyFfdT+4MbYJA
- QTZnQA9YnNaQ==
+   d="scan'208";a="166933633"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 17:55:57 -0800
+IronPort-SDR: ZHgMOGhms3lDsGr039E0x4fU1thOqihYdvFLU1PrBvdWAhTdipQqJxInTFCzDdZPiiOYQiJ2xo
+ PWvH24BnMadw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="429512742"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga001.jf.intel.com with ESMTP; 25 Jan 2021 17:41:58 -0800
-Date:   Tue, 26 Jan 2021 09:37:40 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     gregkh@linuxfoundation.org, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lgoncalv@redhat.com, hao.wu@intel.com, yilun.xu@intel.com
-Subject: Re: [PATCH v9 1/2] uio: uio_dfl: add userspace i/o driver for DFL bus
-Message-ID: <20210126013740.GA3907@yilunxu-OptiPlex-7050>
-References: <1611564563-9665-1-git-send-email-yilun.xu@intel.com>
- <1611564563-9665-2-git-send-email-yilun.xu@intel.com>
- <e9bb1ff8-f630-f1a3-985c-7e51369a733f@redhat.com>
+   d="scan'208";a="356565382"
+Received: from marshy.an.intel.com (HELO [10.122.105.143]) ([10.122.105.143])
+  by orsmga006.jf.intel.com with ESMTP; 25 Jan 2021 17:55:56 -0800
+Subject: Re: [PATCHv3 1/6] firmware: stratix10-svc: add
+ COMMAND_AUTHENTICATE_BITSTREAM flag
+To:     Tom Rix <trix@redhat.com>, mdf@kernel.org,
+        gregkh@linuxfoundation.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     dinguyen@kernel.org, sridhar.rajagopal@intel.com,
+        Richard Gong <richard.gong@intel.com>
+References: <1611608188-25621-1-git-send-email-richard.gong@linux.intel.com>
+ <1611608188-25621-2-git-send-email-richard.gong@linux.intel.com>
+ <4e1c60e6-8e6e-d0c6-970f-674958ffe91d@redhat.com>
+From:   Richard Gong <richard.gong@linux.intel.com>
+Message-ID: <f6f90796-c845-4549-741a-cda9b38bd695@linux.intel.com>
+Date:   Mon, 25 Jan 2021 20:16:43 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e9bb1ff8-f630-f1a3-985c-7e51369a733f@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <4e1c60e6-8e6e-d0c6-970f-674958ffe91d@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 11:00:38AM -0800, Tom Rix wrote:
-> 
-> On 1/25/21 12:49 AM, Xu Yilun wrote:
-> > This patch supports the DFL drivers be written in userspace. This is
-> > realized by exposing the userspace I/O device interfaces.
-> >
-> > The driver now only binds the ether group feature, which has no irq. So
-> > the irq support is not implemented yet.
-> >
-> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > ---
-> > v9: switch to add a uio driver in drivers/uio
-> > ---
-> >  drivers/uio/Kconfig   | 13 ++++++++++
-> >  drivers/uio/Makefile  |  1 +
-> >  drivers/uio/uio_dfl.c | 66 +++++++++++++++++++++++++++++++++++++++++++++++++++
-> 
-> You should add this to the MAINTAINERS file.
+Hi Tom,
 
-OK. I could add recored the file under "FPGA DFL DRIVERS"
-
+On 1/25/21 4:56 PM, Tom Rix wrote:
 > 
-> >  3 files changed, 80 insertions(+)
-> >  create mode 100644 drivers/uio/uio_dfl.c
-> >
-> > diff --git a/drivers/uio/Kconfig b/drivers/uio/Kconfig
-> > index 202ee81..44778f8 100644
-> > --- a/drivers/uio/Kconfig
-> > +++ b/drivers/uio/Kconfig
-> > @@ -165,4 +165,17 @@ config UIO_HV_GENERIC
-> >  	  to network and storage devices from userspace.
-> >  
-> >  	  If you compile this as a module, it will be called uio_hv_generic.
-> > +
-> > +config UIO_DFL
-> > +	tristate "Generic driver for DFL bus"
+> On 1/25/21 12:56 PM, richard.gong@linux.intel.com wrote:
+>> From: Richard Gong <richard.gong@intel.com>
+>>
+>> Add COMMAND_AUTHENTICATE_BITSTREAM command flag for new added bitstream
+>> authentication feature. Authenticating a bitstream is to make sure a signed
+>> bitstream has the valid signatures.
+>>
+>> Except for the actual configuration of the device, the bitstream
+>> authentication works the same way as FPGA configuration does. If the
+>> authentication passes, the signed bitstream will be programmed into QSPI
+>> flash memory and will be expected to boot without issues.
+>>
+>> Clean up COMMAND_RECONFIG_FLAG_PARTIAL flag by resetting it to 0, which
+>> aligns with the firmware settings.
+>>
+>> Signed-off-by: Richard Gong <richard.gong@intel.com>
+>> ---
+>> v3: no change
+>> v2: new added
+>> ---
+>>   include/linux/firmware/intel/stratix10-svc-client.h | 11 ++++++++---
+>>   1 file changed, 8 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/linux/firmware/intel/stratix10-svc-client.h b/include/linux/firmware/intel/stratix10-svc-client.h
+>> index ebc2956..7ada1f2 100644
+>> --- a/include/linux/firmware/intel/stratix10-svc-client.h
+>> +++ b/include/linux/firmware/intel/stratix10-svc-client.h
+>> @@ -51,12 +51,17 @@
+>>   #define SVC_STATUS_NO_SUPPORT		6
+>>   
+>>   /*
 > 
-> The term 'DFL' will be unknown to folks in drivers/uio
+> This patch fails to apply, i believe the conflict is because in mainline this is '/**' not '/*'
 > 
-> I think it would be better if DFL was always prefixed 'FPGA DFL'
-
-The bus is named as "DFL bus", how about we add the full name like the
-following help message.
-
-  tristate "Generic driver for DFL (Device Feature List) bus"
-
+> Please check or point me at the branch/tag you are using.
 > 
-> > +	depends on FPGA_DFL
-> > +	help
-> > +	  Generic DFL (Device Feature List) driver for Userspace I/O devices.
-> > +	  It is useful to provide direct access to DFL devices from userspace.
-> > +	  A sample userspace application using this driver is available for
-> > +	  download in a git repository:
-> > +
-> > +	    git clone https://github.com/OPAE/opae-sdk.git
-> > +
-> > +	  If you compile this as a module, it will be called uio_dfl.
-> 
-> opae-sdk is pretty large and uncovered in the Documentation/fpga/dfl.rst.
-> 
-> Where in opae-sdk is this example ?
 
-You can find the example in tools/libopaeuio/. I could add the path in
-help message.
+I am using next-20210125 tag.
 
-Thanks,
-Yilun
-
+> I am using char-misc-next.
 > 
-> If you can point me at the example, I will turn it into a selftest.
+> Tom
+> 
+> Tom
+> 
+Regards,
+Richard
