@@ -2,114 +2,89 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F31303390
-	for <lists+linux-fpga@lfdr.de>; Tue, 26 Jan 2021 05:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 938FA303B1D
+	for <lists+linux-fpga@lfdr.de>; Tue, 26 Jan 2021 12:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730043AbhAZE6d (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 25 Jan 2021 23:58:33 -0500
-Received: from mga14.intel.com ([192.55.52.115]:36862 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732372AbhAZCpJ (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 25 Jan 2021 21:45:09 -0500
-IronPort-SDR: 4FzgPWkLkKrJT5/46yApxVDuWLYoxOZISC7c+FeZ+SFUTJYfsP/gp4Z9mnDUW3DTP0fSFP4ohx
- 91WYDMD24kag==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="179060470"
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="179060470"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 18:44:26 -0800
-IronPort-SDR: 0mLY8EDgJmwlZcGnqrZDfHjQ45RmKp4Li0V8hFPAUp7AlkxFr299tjqBpzpAv9WdtVfRLYETSj
- ilesyGXlUHmA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="368954150"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by orsmga002.jf.intel.com with ESMTP; 25 Jan 2021 18:44:24 -0800
-Date:   Tue, 26 Jan 2021 10:40:05 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     Tom Rix <trix@redhat.com>, gregkh@linuxfoundation.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lgoncalv@redhat.com, hao.wu@intel.com
-Subject: Re: [PATCH v9 1/2] uio: uio_dfl: add userspace i/o driver for DFL bus
-Message-ID: <20210126024005.GB3907@yilunxu-OptiPlex-7050>
-References: <1611564563-9665-1-git-send-email-yilun.xu@intel.com>
- <1611564563-9665-2-git-send-email-yilun.xu@intel.com>
- <e9bb1ff8-f630-f1a3-985c-7e51369a733f@redhat.com>
- <YA98/8r+yOCurHAJ@epycbox.lan>
+        id S2404999AbhAZLHW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 26 Jan 2021 06:07:22 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:61968 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2404978AbhAZLG3 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 26 Jan 2021 06:06:29 -0500
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10QB1JIl001769;
+        Tue, 26 Jan 2021 06:05:33 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com with ESMTP id 368hk9hnpr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Jan 2021 06:05:33 -0500
+Received: from SCSQMBX11.ad.analog.com (SCSQMBX11.ad.analog.com [10.77.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 10QB5V4F032142
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Tue, 26 Jan 2021 06:05:32 -0500
+Received: from SCSQCASHYB6.ad.analog.com (10.77.17.132) by
+ SCSQMBX11.ad.analog.com (10.77.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Tue, 26 Jan 2021 03:05:30 -0800
+Received: from SCSQMBX10.ad.analog.com (10.77.17.5) by
+ SCSQCASHYB6.ad.analog.com (10.77.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.721.2;
+ Tue, 26 Jan 2021 03:05:30 -0800
+Received: from zeus.spd.analog.com (10.66.68.11) by scsqmbx10.ad.analog.com
+ (10.77.17.5) with Microsoft SMTP Server id 15.2.721.2 via Frontend Transport;
+ Tue, 26 Jan 2021 03:05:30 -0800
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 10QB5PQc007159;
+        Tue, 26 Jan 2021 06:05:26 -0500
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <lars@metafoo.de>,
+        <linux-fpga@vger.kernel.org>, <mdf@kernel.org>,
+        "Alexandru Ardelean" <alexandru.ardelean@analog.com>
+Subject: [PATCH v2 0/3] clk: clk-axiclgen: add support for ZynqMP
+Date:   Tue, 26 Jan 2021 13:08:23 +0200
+Message-ID: <20210126110826.24221-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YA98/8r+yOCurHAJ@epycbox.lan>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-26_06:2021-01-25,2021-01-26 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 mlxscore=0 priorityscore=1501 adultscore=0
+ mlxlogscore=717 suspectscore=0 spamscore=0 bulkscore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101260058
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 06:22:55PM -0800, Moritz Fischer wrote:
-> On Mon, Jan 25, 2021 at 11:00:38AM -0800, Tom Rix wrote:
-> > 
-> > On 1/25/21 12:49 AM, Xu Yilun wrote:
-> > > This patch supports the DFL drivers be written in userspace. This is
-> > > realized by exposing the userspace I/O device interfaces.
-> > >
-> > > The driver now only binds the ether group feature, which has no irq. So
-> > > the irq support is not implemented yet.
-> > >
-> > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > > ---
-> > > v9: switch to add a uio driver in drivers/uio
-> > > ---
-> > >  drivers/uio/Kconfig   | 13 ++++++++++
-> > >  drivers/uio/Makefile  |  1 +
-> > >  drivers/uio/uio_dfl.c | 66 +++++++++++++++++++++++++++++++++++++++++++++++++++
-> > 
-> > You should add this to the MAINTAINERS file.
-> 
-> This is covered by MAINTAINERS under drivers/uio.
+Previous set:
+ https://lore.kernel.org/linux-clk/20201221144224.50814-1-alexandru.ardelean@analog.com/
 
-Yes. But is it OK I also add the file in "FPGA DFL DRIVERS"? So DFL
-developers would also be aware if there is change. It is a little
-different from other feature driver, it is like a generic driver for
-DFL bus.
+Changelog v1 -> v2:
+* split patch 'clk: axi-clkgen: add support for ZynqMP (UltraScale)'
+  into:
+   - clk: axi-clkgen: remove ARCH dependency in Kconfig
+   - clk: clk-axiclkgen: add ZynqMP PFD and VCO limits
+* essentially removed the 'adi,zynq-axi-clkgen-2.00.a' compat string
+* removed architecture dependency on build for driver; the driver should
+  be usable also on PCIe setups
 
-> > 
-> > >  3 files changed, 80 insertions(+)
-> > >  create mode 100644 drivers/uio/uio_dfl.c
-> > >
-> > > diff --git a/drivers/uio/Kconfig b/drivers/uio/Kconfig
-> > > index 202ee81..44778f8 100644
-> > > --- a/drivers/uio/Kconfig
-> > > +++ b/drivers/uio/Kconfig
-> > > @@ -165,4 +165,17 @@ config UIO_HV_GENERIC
-> > >  	  to network and storage devices from userspace.
-> > >  
-> > >  	  If you compile this as a module, it will be called uio_hv_generic.
-> > > +
-> > > +config UIO_DFL
-> > > +	tristate "Generic driver for DFL bus"
-> > 
-> > The term 'DFL' will be unknown to folks in drivers/uio
-> > 
-> > I think it would be better if DFL was always prefixed 'FPGA DFL'
-> > 
-> > > +	depends on FPGA_DFL
-> > > +	help
-> > > +	  Generic DFL (Device Feature List) driver for Userspace I/O devices.
-> > > +	  It is useful to provide direct access to DFL devices from userspace.
-> > > +	  A sample userspace application using this driver is available for
-> > > +	  download in a git repository:
-> > > +
-> > > +	    git clone https://github.com/OPAE/opae-sdk.git
-> > > +
-> > > +	  If you compile this as a module, it will be called uio_dfl.
-> 
-> I'm not sure KConfig is the right place for this.
+Alexandru Ardelean (3):
+  clk: axi-clkgen: remove ARCH dependency in Kconfig
+  clk: clk-axiclkgen: add ZynqMP PFD and VCO limits
+  dt-bindings: clock: adi,axi-clkgen: add compatible string for ZynqMP
+    support
 
-Do you mean the OPAE link? I see several uio drivers provide their
-userspace application link in Kconfig. I guess the uio drivers are
-selected for these applications so it may be better pointing out where
-they are.
+ .../devicetree/bindings/clock/adi,axi-clkgen.yaml     |  1 +
+ drivers/clk/Kconfig                                   |  1 -
+ drivers/clk/clk-axi-clkgen.c                          | 11 +++++++++++
+ 3 files changed, 12 insertions(+), 1 deletion(-)
 
-Thanks,
-Yilun
+-- 
+2.17.1
+
