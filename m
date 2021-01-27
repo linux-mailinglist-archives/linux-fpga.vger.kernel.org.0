@@ -2,103 +2,99 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F84305131
-	for <lists+linux-fpga@lfdr.de>; Wed, 27 Jan 2021 05:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCCD30514B
+	for <lists+linux-fpga@lfdr.de>; Wed, 27 Jan 2021 05:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239539AbhA0Epm (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 26 Jan 2021 23:45:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36325 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388525AbhAZXX3 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 26 Jan 2021 18:23:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611703315;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FFsgQkQMHGcNuO7prFnbNLIMkPeBzSiQZrxd3POXfNg=;
-        b=Kihxvzlqq1MbbO//yqVeXlI28T68f/yMLOkgQLQGqwxAr3EC59yoyeuZIJ9ki1NeL6VLbk
-        Jt72GxB8vjukeVG2vsZFYMp/hZYK+W1K1tKwmbwafkvMCQgb0tR2ZI4vaM8cYi9a2x9fZj
-        ZO4KoaXtLKXLUPD2GTa81ZV4ukjrg8Q=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-233-TkUWEMjKMuiI8N7s51Z--g-1; Tue, 26 Jan 2021 18:21:53 -0500
-X-MC-Unique: TkUWEMjKMuiI8N7s51Z--g-1
-Received: by mail-qt1-f197.google.com with SMTP id r18so6535479qta.19
-        for <linux-fpga@vger.kernel.org>; Tue, 26 Jan 2021 15:21:53 -0800 (PST)
+        id S239540AbhA0Epp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 26 Jan 2021 23:45:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231732AbhA0C4H (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 26 Jan 2021 21:56:07 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74161C061356;
+        Tue, 26 Jan 2021 18:38:57 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id u4so410363pjn.4;
+        Tue, 26 Jan 2021 18:38:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=FFsgQkQMHGcNuO7prFnbNLIMkPeBzSiQZrxd3POXfNg=;
-        b=ASx/U/ID6ueJpdbV5YnQ2rtFPLh9uaNSncYdIW7w8YNjompwqdH1GD/uq464BErpme
-         57OS04fL5WtN2ms4Pj3yAnaEvuU8Fw+3NGEKEIN2jmbLJy1QJCdIsAKM2hKvgxDDUnho
-         OldpNzdPMzXuCCHAAF0Meli/woiJvdFLxVMXLRONxKUf2F16oArr8zfUUzTNDY0bmoiZ
-         CJ+OUeSg3xYdi4Je9TW4sUsLoolxaOOc4PeT4u2p1DanvPeSrZDNc1k10BhqNif+wcHW
-         ESjvynhUFlQp2U9hLDv0tLRA0IBAOQj2z8VagxrsXseHCZPJKbIP0oC3YwRCw9q/wsxf
-         ohOA==
-X-Gm-Message-State: AOAM532Pk7Bu9c/3JplwCHbCYEPPtvgy+S9qPvJiU74RG2jeJYqsZolE
-        Y8DxKOkRk4ztmX4nL2Dqq66H27dXr2kUTES2OgPiUKmFk7R9RYTIcsm+yaw1VCsafeT74nlGId+
-        HcsJAMeVpPGK+ZrRMpMPX8A==
-X-Received: by 2002:a0c:c384:: with SMTP id o4mr8011139qvi.21.1611703313446;
-        Tue, 26 Jan 2021 15:21:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyQwxGlyfMcY1NOcyyinpE4uDbuVGu0DgI2XyVdUzWX/kxECSPbaveR0jaQIYaDyMXFFNGuVg==
-X-Received: by 2002:a0c:c384:: with SMTP id o4mr8011119qvi.21.1611703313228;
-        Tue, 26 Jan 2021 15:21:53 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id c12sm154500qtq.76.2021.01.26.15.21.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jan 2021 15:21:52 -0800 (PST)
-Subject: Re: [PATCH v2 0/3] clk: clk-axiclgen: add support for ZynqMP
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        lars@metafoo.de, linux-fpga@vger.kernel.org, mdf@kernel.org
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vklqd1CpSD6MzJLSP3R3zsuOOkfooEPp/iNgXN0T0fo=;
+        b=c5RO3dEx0VxceY8JbhIgRQ/xXMdDVCmThzK2kX8xMsQV2hQzkAuCDGStm3l3mKKZqp
+         NQRfgfBI0Ny71HDkFwn7AMLYPJASdfB7lAkcTq2pRgyaEMBHFIDFvaSJF22mNaX8hasY
+         4pXonnSJRudWfOALOB1C1QLx9ZU6+aJhqBw6olQFZpFWrz8kN6jVwD2tssa16C9jNLps
+         pBRcfFFfOowBMW4pt4hwokzFUiNNoA6sJxokCCxTqQ7EJkDei61PFXKiC/2nF2MJsaD8
+         XRLr4pkITvoejI4Duhg8YFOaFR9lt+vhIKgLti6IuBHgDP4kD0lawhjaAEubTiZSb4ch
+         XAPw==
+X-Gm-Message-State: AOAM5321DbBE6z7BAMYa9k8fh3YdbS2jMr5RMzqu3yWvGhf52f4NfXS4
+        bwOBdIgDsJWUBvotdK/DY5o=
+X-Google-Smtp-Source: ABdhPJzDMFPavXxrd/pehJ8vKuy9+lAOm2D9rjspN+qou+kgmoZiHv+UcypGCMJcjC2bMLbacmaIHA==
+X-Received: by 2002:a17:90a:17c6:: with SMTP id q64mr2992388pja.65.1611715135226;
+        Tue, 26 Jan 2021 18:38:55 -0800 (PST)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id n15sm218388pjk.57.2021.01.26.18.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jan 2021 18:38:54 -0800 (PST)
+Date:   Tue, 26 Jan 2021 18:38:53 -0800
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org, lars@metafoo.de,
+        linux-fpga@vger.kernel.org, mdf@kernel.org,
+        Dragos Bogdan <dragos.bogdan@analog.com>
+Subject: Re: [PATCH v2 1/3] clk: axi-clkgen: remove ARCH dependency in Kconfig
+Message-ID: <YBDSPVgmqD2JvPbk@epycbox.lan>
 References: <20210126110826.24221-1-alexandru.ardelean@analog.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <eba46db2-b528-0f6f-7e23-f61fa3e265b2@redhat.com>
-Date:   Tue, 26 Jan 2021 15:21:50 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ <20210126110826.24221-2-alexandru.ardelean@analog.com>
 MIME-Version: 1.0
-In-Reply-To: <20210126110826.24221-1-alexandru.ardelean@analog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210126110826.24221-2-alexandru.ardelean@analog.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Alexandru,
 
-On 1/26/21 3:08 AM, Alexandru Ardelean wrote:
-> Previous set:
->  https://lore.kernel.org/linux-clk/20201221144224.50814-1-alexandru.ardelean@analog.com/
->
-> Changelog v1 -> v2:
-> * split patch 'clk: axi-clkgen: add support for ZynqMP (UltraScale)'
->   into:
->    - clk: axi-clkgen: remove ARCH dependency in Kconfig
->    - clk: clk-axiclkgen: add ZynqMP PFD and VCO limits
-> * essentially removed the 'adi,zynq-axi-clkgen-2.00.a' compat string
-> * removed architecture dependency on build for driver; the driver should
->   be usable also on PCIe setups
->
-> Alexandru Ardelean (3):
->   clk: axi-clkgen: remove ARCH dependency in Kconfig
->   clk: clk-axiclkgen: add ZynqMP PFD and VCO limits
->   dt-bindings: clock: adi,axi-clkgen: add compatible string for ZynqMP
->     support
->
->  .../devicetree/bindings/clock/adi,axi-clkgen.yaml     |  1 +
->  drivers/clk/Kconfig                                   |  1 -
->  drivers/clk/clk-axi-clkgen.c                          | 11 +++++++++++
->  3 files changed, 12 insertions(+), 1 deletion(-)
+On Tue, Jan 26, 2021 at 01:08:24PM +0200, Alexandru Ardelean wrote:
+> The intent is to be able to run this driver to access the IP core in setups
+> where FPGA board is also connected via a PCIe bus. In such cases the number
+> of combinations explodes, where the host system can be an x86 with Xilinx
+> Zynq/ZynqMP/Microblaze board connected via PCIe.
+> Or even a ZynqMP board with a ZynqMP/Zynq/Microblaze connected via PCIe.
+> 
+> To accommodate for these cases, this change removes the limitation for this
+> driver to be compilable only on Zynq/Microblaze architectures.
+> 
+> Signed-off-by: Dragos Bogdan <dragos.bogdan@analog.com>
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+> ---
+>  drivers/clk/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index 85856cff506c..d8c2d4593926 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -247,7 +247,6 @@ config CLK_TWL6040
+>  
+>  config COMMON_CLK_AXI_CLKGEN
+>  	tristate "AXI clkgen driver"
+> -	depends on ARCH_ZYNQ || MICROBLAZE || COMPILE_TEST
+Umhhh ... no dependencies? How are you accessing your registers? You
+seem to be using device tree, probably:
 
-This whole set looks fine.
+	depends on HAS_IOMEM || COMPILE_TEST
+	depends on OF
 
-Reviewed-by: Tom Rix <trix@redhat.com>
+at least? Please double check your dependencies.
+>  	help
+>  	  Support for the Analog Devices axi-clkgen pcore clock generator for Xilinx
+>  	  FPGAs. It is commonly used in Analog Devices' reference designs.
+> -- 
+> 2.17.1
+> 
 
+- Moritz
