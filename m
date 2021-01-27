@@ -2,164 +2,331 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C31A73056A0
-	for <lists+linux-fpga@lfdr.de>; Wed, 27 Jan 2021 10:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0FA3056B1
+	for <lists+linux-fpga@lfdr.de>; Wed, 27 Jan 2021 10:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbhA0JQM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 27 Jan 2021 04:16:12 -0500
-Received: from mail-dm6nam12on2059.outbound.protection.outlook.com ([40.107.243.59]:38357
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        id S232048AbhA0JTg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 27 Jan 2021 04:19:36 -0500
+Received: from mail-eopbgr690072.outbound.protection.outlook.com ([40.107.69.72]:55837
+        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235139AbhA0JOC (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 27 Jan 2021 04:14:02 -0500
+        id S235094AbhA0JRk (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 27 Jan 2021 04:17:40 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LohmYt2zLd6lFmmvKhQ3nC19chbP1WVOdEH3FsMCbR6gp2uTp5RexPF/+k+WImCBDim0rf+RQz8/NepwMDbjfg2cLLQS8f8UJnYyQOucJKIKbjhfWpmLBhVmK52ttQT0KUPlL+tKQcf4kxJXcAK4jxG1Yhv9WAULXqgtCdVOVN5LLFbYrqn0QXC0w1WPy7FyMzp57jQSN2f93/T3d/LZ8feBqBoI2xFBLDlUKyHy/DjZeb+OlDSmEjKj050+eRrHMGC8zDCas/iAqejsbqiQk1m4aaxLYDCgAM2Qf4coFAkTxfE2f0JIWfcDqIkaaUPEm6HYSgqLapqcQy+N77upcw==
+ b=lsnRlq4thvsvPSTa+wVyb41lV5DKRYo1ClQPm2DGWATXaXTPxJ4Jto6LAM1DF3bsLgykflfEQoF8LnKbcZRtSr+F8jbMqf8OnWHYQB2t9pugxby+5IhiM9E54JHeghJ5kOk4RWN5yPg6ylIKFKkEhF1iVoPq0vzT4VP4H14uUFy4C6zn13xPF+yuKnWIgYUEdVahOBZJlrfBpAm8jvXb746lp14N+t+RsLjQlugbsZkyQtp80afBYny49+Nur/eUo+s8fpKLtN0x9dC84c36qmeQfst/wuXODNQRvxyeFagP2lD3OIuHFgtqH0xoV9cbD7nNj3U6FCHQW+cnr1TiAg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QpUXPHHejkMZch0Ue7H+fUos5ht1izOazQ2shcfH1Fo=;
- b=GZ7QTOYOn5sXEKSFVNC1101dBl6vII8Qys1V98V1tbeSHHgkIxfOsYhlskx1NTEeL+FoOroWJd+wvp3qk/3wUEqfMhBmxo6aXEYMTfpPp2aDfFOuRuEmfV0skz1iiJcpHvPMISovj15hGelHaI0cwCg5O6i/sBfWEn0MyJlkDBBPjJpThSWgG1LLiDZGh/OmirqVIKfo9fJLfF4pF7PlWUcmhs5DS4WGdEdLqoaOP8DFsDkblKPYnVIjoeh5aSRZUgTHfwohYiDw6vkTV8bPk202zgGKIiQc+Ed4Z944dgJC1rit9hPflyqpMVJOq8ZLd98lTEIXIq+ZsHX9RBhJ6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
- dkim=pass header.d=xilinx.com; arc=none
+ bh=pHEd+hDAtX0xz40EGhxOnXO4xkOL0uwewTrfEO3t0uM=;
+ b=kNM+MA/Q6OTmgftE+X2kYihFxPyhc3H7/ye8zoPnJXBW25ACZpoSgqXjWNIafzFNJyrPDcYluBxItBVj+rqBV0cbbCx0gSR5osFaT/iBBaH6Neahhj/j4OQzx2TnlDaSlzR/9L8liLVXIFVSNg2ejXHzxpJYj7QVdtDsyTPixcmF4vCJGwA3kWV55quC8znI0a2SyfLRsuGr5n0vKGsGXzL2mmUhDEpQG2SCwyYAP5sZkg+3cvvKqCuIOc5KcaiAJrGjyW92pcKEDXYaOBKJyO8Uc7+jKXlQzfjFXoB+2IBW/TCk7uKQTXyEA7cc4QlY75DDfHCbn+Qk4UzJzlSU9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=gmail.com smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QpUXPHHejkMZch0Ue7H+fUos5ht1izOazQ2shcfH1Fo=;
- b=PpRTboLm1UbzZCjrVrGZBXnmZdez5k8glAw1utXsPYputt9zXaaG/o1FLSVRVr7d5ll/Qaya9cT5vcRCGKqY0g1xgMW2S5BVUqvsWy71tkSrQUkUdKrPBMZ3E903PCi/DqU49gZo6dnUP7126Qspiq8d2eVSADmsB7GWYfGIbRg=
-Received: from MWHPR02MB2623.namprd02.prod.outlook.com (2603:10b6:300:44::9)
- by MWHPR02MB2381.namprd02.prod.outlook.com (2603:10b6:300:5a::12) with
+ bh=pHEd+hDAtX0xz40EGhxOnXO4xkOL0uwewTrfEO3t0uM=;
+ b=D8OFbJBp8+GvgX/u/Uk/RB/x8U9edhGTyBETp+66nQoTN9ncrpUeqJc6uX8vFRJ/40cpzcjt8fH2p5iGCxlSVuNJ73riSggX9be6p7t4/D0HIOH15fqfXEJ1xJJgPrNvpN0TlaSgh4aqRRvDTCqt+OFBqQ8uO1uVETroeRUVXRU=
+Received: from SN1PR12CA0046.namprd12.prod.outlook.com (2603:10b6:802:20::17)
+ by CY4PR02MB2181.namprd02.prod.outlook.com (2603:10b6:903:e::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.13; Wed, 27 Jan
- 2021 09:13:06 +0000
-Received: from MWHPR02MB2623.namprd02.prod.outlook.com
- ([fe80::c4a8:8d45:c13b:9942]) by MWHPR02MB2623.namprd02.prod.outlook.com
- ([fe80::c4a8:8d45:c13b:9942%3]) with mapi id 15.20.3784.019; Wed, 27 Jan 2021
- 09:13:06 +0000
-From:   Nava kishore Manne <navam@xilinx.com>
-To:     Moritz Fischer <mdf@kernel.org>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.12; Wed, 27 Jan
+ 2021 09:16:50 +0000
+Received: from SN1NAM02FT023.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:802:20:cafe::10) by SN1PR12CA0046.outlook.office365.com
+ (2603:10b6:802:20::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.17 via Frontend
+ Transport; Wed, 27 Jan 2021 09:16:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT023.mail.protection.outlook.com (10.152.72.156) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3784.12 via Frontend Transport; Wed, 27 Jan 2021 09:16:50 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Wed, 27 Jan 2021 01:16:37 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Wed, 27 Jan 2021 01:16:37 -0800
+Envelope-to: git@xilinx.com,
+ chinnikishore369@gmail.com,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org,
+ linux-fpga@vger.kernel.org,
+ robh+dt@kernel.org,
+ trix@redhat.com,
+ mdf@kernel.org
+Received: from [172.30.17.109] (port=53524)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1l4gwG-00072c-3Q; Wed, 27 Jan 2021 01:16:36 -0800
+Subject: Re: [PATCH 3/3] fpga: versal-fpga: Add versal fpga manager driver
+To:     Nava kishore Manne <navam@xilinx.com>,
+        Moritz Fischer <mdf@kernel.org>
 CC:     "trix@redhat.com" <trix@redhat.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Michal Simek <michals@xilinx.com>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         git <git@xilinx.com>,
-        "chinnikishore369@gmail.com" <chinnikishore369@gmail.com>
-Subject: RE: [PATCH 1/2] fpga: mgr: Adds secure BitStream loading support
-Thread-Topic: [PATCH 1/2] fpga: mgr: Adds secure BitStream loading support
-Thread-Index: AQHW7UWZwDiwSbkqzUWMwmmZwUyntqozISAAgAgZmKA=
-Date:   Wed, 27 Jan 2021 09:13:06 +0000
-Message-ID: <MWHPR02MB2623B63A5359BB35B89BF086C2BB9@MWHPR02MB2623.namprd02.prod.outlook.com>
-References: <20210118025058.10051-1-nava.manne@xilinx.com>
- <YApf1jlEghbnDFo/@archbook>
-In-Reply-To: <YApf1jlEghbnDFo/@archbook>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=xilinx.com;
-x-originating-ip: [149.199.50.128]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: cef5470f-ecb8-49aa-ece3-08d8c2a3c1eb
-x-ms-traffictypediagnostic: MWHPR02MB2381:
-x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR02MB2381DF63744BEAB32807104EC2BB9@MWHPR02MB2381.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:612;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2bdy+VEABgmcEHN5WePQMgVPvnys0/uZ7zm3pOAIsAA0WyhpzJjgiDeO9SU6X/EJAkB66EcfJUUxKsh5UEUidEqOOIvhExOfOX4bAfoIM7uBx4yxqGP1mu/C1VVEBD9PqiS+Y+FruzvY+wvesw1GKaBpW0IOIk1lokgHgylP4uNyUFFj6VgSh8ckEh3IaSEUOBrNrWdmfZovXOz/i4zN4oD11CiOZdTaNKkJt2CgQIjBtwKWuXzXbxZ1uVd5CF6m0/5JVrFU/dFxotbowcoY3aQQ/O/qmgDkHf3LlzSQQKRXrke2Bm7ru5WvU4KUVabBY0rd8kLsCXOw2KswQgBegx1JjlxAf4kPaaFF0v/A5zA5QwJ5IlSde0gd87TFvltYYpPUhHcuiCFbVSqM+fJiZ+jC0EStMYxSoMN1wsx7p+aH+6uIjfXYijOfdMz0oa+8aPKWoCAY9poHVQHJQzeOC33/qJm4eKpRjf9JFuweYgOD45Ez9PGIdbek82Grn72sgfzStm6U2Jg5ps1qOJYi3Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR02MB2623.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(396003)(366004)(346002)(136003)(83380400001)(66446008)(66476007)(478600001)(66946007)(76116006)(66556008)(7696005)(64756008)(33656002)(6506007)(186003)(6916009)(26005)(4326008)(8676002)(8936002)(5660300002)(2906002)(53546011)(52536014)(86362001)(54906003)(55016002)(316002)(71200400001)(9686003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?jFRuOpIE15nAbr9TU1rkn2NFWPG3xCRgto5owftopY74DaqaChMVtP9z4ulC?=
- =?us-ascii?Q?/Js74avefxdbFU42qVWEnjgjhplgMRrLQ8XVAzSUGigvCVXIsQmmQ/G6xyg7?=
- =?us-ascii?Q?tzUKThL3hU3hx7/FY9WT5uMYdtPMbNjMTle1GcWFZirwihNBZwhmCH1DxRHT?=
- =?us-ascii?Q?BxmOuk4h0gQyuVu0DpjX7Wk7qU5XcX5O9mSwl0F6HCxvrXIH01WvWDqpxD+f?=
- =?us-ascii?Q?2nnKR+T+6mjWe663aPqXzWjnweFpAkzKP1bqEcM0XRGPPSdklEMegjTRmwAs?=
- =?us-ascii?Q?mxiXbjDlqhV64g5ZO6NMFmQam/lD+dZtd3qmSnloDf+U1VfP0scUZ8J0m7W9?=
- =?us-ascii?Q?UPlQAL3yn+tTeIdoAe0B3R5gF9lgdW2SdV1+UrU4N2B8FRxCyNARYnymk4yH?=
- =?us-ascii?Q?enenhOn8A7EujTizOgR8iJcNEYZOIzB6a24oFWEhVWLJrrN7A2IJq5uaY25z?=
- =?us-ascii?Q?asVJv8Ll+v8EQ3khVqEhueH/gNgezsoTLJ8DHOcTPvI6E+X/VtFROP1nxApf?=
- =?us-ascii?Q?6HjWFXme2+1tW2dxObv/sq2lgVs87X/NKYserQ3oueIQ7oQV8Uoj2ifDI25H?=
- =?us-ascii?Q?GHhDeYmsS1QXYQUuh6dG0jQoiOci0A94hwqkbtqZXQRqg1UdnbkcsEYM015q?=
- =?us-ascii?Q?WhL48pCwD3NvKe1zri5LqpXQ9H1hBpTjeY4LPS+JNxyD4JnVEIun8UjkmHou?=
- =?us-ascii?Q?gmp7S41eO+pEUHqB6QZyRp97mcpu0rgcAHvZtc6sZgqyyVOTGdJYc/oao08e?=
- =?us-ascii?Q?tTHA8lZlRBUyAVFlI4RAk2EeIu7sqM4DepLuSvzrCM3gJv8vKxQTbj9nMAxJ?=
- =?us-ascii?Q?+DXEYIa+MwTQCED12nG2YmRKLSP5Fr79V4m4w/AH0ne8PGsibS9/usAaTMq3?=
- =?us-ascii?Q?BoAQd8AqNblmICTzsbBLIaHQL4r1e0CxdnoiTkZ9aykbSvPq8ah1zoOuZgRP?=
- =?us-ascii?Q?zzchKc5IH1VpvBdIC9a/Pb9//EhmkgKhnQZjaDtKn7Bg8etV7fAiq+jPDVi2?=
- =?us-ascii?Q?M/aFdy1R6IuzkU6PK2PCKLtwH7rMz06YCeVvuy1L6aXbEp5+z8dRRheSU6bd?=
- =?us-ascii?Q?xPlmeDEH?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        "chinnikishore369@gmail.com" <chinnikishore369@gmail.com>,
+        "Appana Durga Kedareswara Rao" <appanad@xilinx.com>
+References: <20210118024318.9530-1-nava.manne@xilinx.com>
+ <20210118024318.9530-3-nava.manne@xilinx.com> <YAYo1ksLfMMNxPuL@epycbox.lan>
+ <MWHPR02MB26239A3F539DE8E053D512D5C2A09@MWHPR02MB2623.namprd02.prod.outlook.com>
+ <YAyyU9dybSdmOAQL@epycbox.lan>
+ <MWHPR02MB26231DAF3A8E2A65EF25A4C3C2BB9@MWHPR02MB2623.namprd02.prod.outlook.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+Message-ID: <5ae6d181-3258-a877-23c5-6ba81c40b10a@xilinx.com>
+Date:   Wed, 27 Jan 2021 10:16:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
+In-Reply-To: <MWHPR02MB26231DAF3A8E2A65EF25A4C3C2BB9@MWHPR02MB2623.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9b2f940a-7ca2-48cb-6903-08d8c2a447a1
+X-MS-TrafficTypeDiagnostic: CY4PR02MB2181:
+X-Microsoft-Antispam-PRVS: <CY4PR02MB21810125EC044FAE7F1C1D4FC6BB9@CY4PR02MB2181.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wJ/jpC3xKhMWPsx4GKtNKlnb48wX9dhX6EIAGsxWsX28s8q+iWO03vOn0mW0/WdhE2qJt/wKhorHEBufR+W/gRFDafvLZDZ1itdJHzGtPnaGTGe8wWbkXxrNjGQ6Jjpd9y2AKeqHhT3JNEJqM+X/bpTkgsFohUUm70NN5Yn7hxXUxV8r1uHlVe8MW7FkQlE8D1tDpCJEsMwNLbCtJ4rlFIUKMZY8wB5DIkZKGr692HBTqJng13kgBm3gTkImEDwvdQw2vobUGmIKdTWTeMkt2l8KAARzRwD9Mw+WE5EJ4bQDVtYhP7UxS4JexPZm3t1ME5jZVPfOpk+VQrPa4WU9+uXsPccTEg+QG5mSlALQNIvudrSXuPHw3j5+mS1hgEdzSa7e0UF1RQqX0eGszDOoOdM4+GKtNYzIImcUIpV82s1/tjr5ITAlXSXQluIfG0NHl5IEjvpLxC8Ae3rn4LUVz6HiwTMrhNOmH0nUq1VFMJZMW8S+pUVKtHg9G7a1pzgH0Kqy5off61abcvEx/SmH68bgqYBSmCHztM/tjniG1KpcML5RByNP7DBrZDGFvyglcWQlsyNEclpbjFTJLwbiX5+NhihOQg2w31lrGS4Qv6zpbZa0KnMoOBpA5KaBabN2IfMvRFwwGdR84sKsqqSJng==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(136003)(376002)(346002)(39860400002)(46966006)(2906002)(5660300002)(54906003)(53546011)(356005)(36756003)(426003)(6666004)(31686004)(8676002)(9786002)(478600001)(336012)(83380400001)(47076005)(7636003)(82310400003)(4326008)(26005)(44832011)(36906005)(110136005)(31696002)(70206006)(107886003)(82740400003)(316002)(186003)(8936002)(70586007)(2616005)(50156003)(43740500002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR02MB2623.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cef5470f-ecb8-49aa-ece3-08d8c2a3c1eb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jan 2021 09:13:06.0517
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2021 09:16:50.4302
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sgR4wdS1jwAt28aRETVDew3QqXCX/zNJNQR3LU59hIw7lLOgdpge/d7jIUkDMBpWTwWvETV30oYXs5qLZwTCuA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2381
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b2f940a-7ca2-48cb-6903-08d8c2a447a1
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT023.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2181
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Moritz,
+Hi
 
-	Thanks for the review.
-Please find my response inline.
+On 1/27/21 9:57 AM, Nava kishore Manne wrote:
+> Hi Moritz,
+> 
+> 	Please find my response inline.
+> 
+>> -----Original Message-----
+>> From: Moritz Fischer <mdf@kernel.org>
+>> Sent: Sunday, January 24, 2021 5:04 AM
+>> To: Nava kishore Manne <navam@xilinx.com>
+>> Cc: Moritz Fischer <mdf@kernel.org>; trix@redhat.com;
+>> robh+dt@kernel.org; Michal Simek <michals@xilinx.com>; linux-
+>> fpga@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+>> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git
+>> <git@xilinx.com>; chinnikishore369@gmail.com; Appana Durga Kedareswara
+>> Rao <appanad@xilinx.com>
+>> Subject: Re: [PATCH 3/3] fpga: versal-fpga: Add versal fpga manager driver
+>>
+>> Hi Nava,
+>>
+>> On Fri, Jan 22, 2021 at 10:34:15AM +0000, Nava kishore Manne wrote:
+>>> Hi Moritz,
+>>>
+>>> 	Thanks for the review.
+>>> Please find my response inline.
+>>>
+>>>> -----Original Message-----
+>>>> From: Moritz Fischer <mdf@kernel.org>
+>>>> Sent: Tuesday, January 19, 2021 6:03 AM
+>>>> To: Nava kishore Manne <navam@xilinx.com>
+>>>> Cc: mdf@kernel.org; trix@redhat.com; robh+dt@kernel.org; Michal
+>>>> Simek <michals@xilinx.com>; linux-fpga@vger.kernel.org;
+>>>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>>>> linux- kernel@vger.kernel.org; git <git@xilinx.com>;
+>>>> chinnikishore369@gmail.com; Appana Durga Kedareswara Rao
+>>>> <appanad@xilinx.com>
+>>>> Subject: Re: [PATCH 3/3] fpga: versal-fpga: Add versal fpga manager
+>>>> driver
+>>>>
+>>>> Hi Nava,
+>>>>
+>>>> On Mon, Jan 18, 2021 at 08:13:18AM +0530, Nava kishore Manne wrote:
+>>>>> This patch adds driver for versal fpga manager.
+>>>> Nit: Add support for Xilinx Versal FPGA manager
+>>>
+>>> Will fix in v2.
+>>>
+>>>>>
+>>>>> PDI source type can be DDR, OCM, QSPI flash etc..
+>>>> No idea what PDI is :)
+>>>
+>>> Programmable device image (PDI).
+>>> This file is generated by Xilinx Vivado tool and it contains configuration data
+>> objects.
+>>>
+>>>>> But driver allocates memory always from DDR, Since driver supports
+>>>>> only DDR source type.
+>>>>>
+>>>>> Signed-off-by: Appana Durga Kedareswara rao
+>>>>> <appana.durga.rao@xilinx.com>
+>>>>> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+>>>>> ---
+>>>>>  drivers/fpga/Kconfig       |   8 ++
+>>>>>  drivers/fpga/Makefile      |   1 +
+>>>>>  drivers/fpga/versal-fpga.c | 149
+>>>>> +++++++++++++++++++++++++++++++++++++
+>>>>>  3 files changed, 158 insertions(+)  create mode 100644
+>>>>> drivers/fpga/versal-fpga.c
+>>>>>
+>>>>> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig index
+>>>>> 5645226ca3ce..9f779c3a6739 100644
+>>>>> --- a/drivers/fpga/Kconfig
+>>>>> +++ b/drivers/fpga/Kconfig
+>>>>> @@ -216,4 +216,12 @@ config FPGA_MGR_ZYNQMP_FPGA
+>>>>>  	  to configure the programmable logic(PL) through PS
+>>>>>  	  on ZynqMP SoC.
+>>>>>
+>>>>> +config FPGA_MGR_VERSAL_FPGA
+>>>>> +        tristate "Xilinx Versal FPGA"
+>>>>> +        depends on ARCH_ZYNQMP || COMPILE_TEST
+>>>>> +        help
+>>>>> +          Select this option to enable FPGA manager driver support for
+>>>>> +          Xilinx Versal SOC. This driver uses the versal soc firmware
+>>>>> +          interface to load programmable logic(PL) images
+>>>>> +          on versal soc.
+>>>>>  endif # FPGA
+>>>>> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile index
+>>>>> d8e21dfc6778..40c9adb6a644 100644
+>>>>> --- a/drivers/fpga/Makefile
+>>>>> +++ b/drivers/fpga/Makefile
+>>>>> @@ -18,6 +18,7 @@ obj-$(CONFIG_FPGA_MGR_TS73XX)		+=
+>>>> ts73xx-fpga.o
+>>>>>  obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
+>>>>>  obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+>>>>>  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+>>>>> +obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
+>>>>>  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
+>>>>>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
+>>>>>
+>>>>> diff --git a/drivers/fpga/versal-fpga.c
+>>>>> b/drivers/fpga/versal-fpga.c new file mode 100644 index
+>>>>> 000000000000..2a42aa78b182
+>>>>> --- /dev/null
+>>>>> +++ b/drivers/fpga/versal-fpga.c
+>>>>> @@ -0,0 +1,149 @@
+>>>>> +// SPDX-License-Identifier: GPL-2.0+
+>>>>> +/*
+>>>>> + * Copyright (C) 2021 Xilinx, Inc.
+>>>>> + */
+>>>>> +
+>>>>> +#include <linux/dma-mapping.h>
+>>>>> +#include <linux/fpga/fpga-mgr.h>
+>>>>> +#include <linux/io.h>
+>>>>> +#include <linux/kernel.h>
+>>>>> +#include <linux/module.h>
+>>>>> +#include <linux/of_address.h>
+>>>>> +#include <linux/string.h>
+>>>>> +#include <linux/firmware/xlnx-zynqmp.h>
+>>>>> +
+>>>>> +/* Constant Definitions */
+>>>>> +#define PDI_SOURCE_TYPE	0xF
+>>>>> +
+>>>>> +/**
+>>>>> + * struct versal_fpga_priv - Private data structure
+>>>>> + * @dev:	Device data structure
+>>>>> + * @flags:	flags which is used to identify the PL Image type
+>>>>> + */
+>>>>> +struct versal_fpga_priv {
+>>>>> +	struct device *dev;
+>>>>> +	u32 flags;
+>>>> This seems unused ... please introduce them when/if you start using
+>> them.
+>>>
+>>> Will fix in v2.
+>>>
+>>>>> +};
+>>>>> +
+>>>>> +static int versal_fpga_ops_write_init(struct fpga_manager *mgr,
+>>>>> +				      struct fpga_image_info *info,
+>>>>> +				      const char *buf, size_t size) {
+>>>>> +	struct versal_fpga_priv *priv;
+>>>>> +
+>>>>> +	priv = mgr->priv;
+>>>>> +	priv->flags = info->flags;
+>>>> ? What uses this ? It seems this function could just be 'return 0' right now.
+>>>
+>>> Will fix in v2.
+>>>
+>>>>> +
+>>>>> +	return 0;
+>>>>> +}
+>>>>> +
+>>>>> +static int versal_fpga_ops_write(struct fpga_manager *mgr,
+>>>>> +				 const char *buf, size_t size) {
+>>>>> +	struct versal_fpga_priv *priv;
+>>>>> +	dma_addr_t dma_addr = 0;
+>>>>> +	char *kbuf;
+>>>>> +	int ret;
+>>>>> +
+>>>>> +	priv = mgr->priv;
+>>>>> +
+>>>>> +	kbuf = dma_alloc_coherent(priv->dev, size, &dma_addr,
+>>>> GFP_KERNEL);
+>>>>> +	if (!kbuf)
+>>>>> +		return -ENOMEM;
+>>>>> +
+>>>>> +	memcpy(kbuf, buf, size);
+>>>>> +
+>>>>> +	wmb(); /* ensure all writes are done before initiate FW call */
+>>>>> +
+>>>>> +	ret = zynqmp_pm_load_pdi(PDI_SOURCE_TYPE, dma_addr);
+>>>>> +
+>>>>> +	dma_free_coherent(priv->dev, size, kbuf, dma_addr);
+>>>>> +
+>>>>> +	return ret;
+>>>>> +}
+>>>>> +
+>>>>> +static int versal_fpga_ops_write_complete(struct fpga_manager *mgr,
+>>>>> +					  struct fpga_image_info *info) {
+>>>>> +	return 0;
+>>>>> +}
+>>>>> +
+>>>>> +static enum fpga_mgr_states versal_fpga_ops_state(struct
+>>>>> +fpga_manager
+>>>>> +*mgr) {
+>>>>> +	return FPGA_MGR_STATE_OPERATING;
+>>>> Is that always the case? Shouldn't that be
+>> FPGA_MGR_STATE_UNKNOWN?
+>>>
+>>> For Versal SoC base PDI is always configured prior to Linux boot up. So I
+>> make the fpga state as OPERATING.
+>>> Please let know if it is not a proper implementation will think about the
+>> alternate solution.
+>>
+>> So you're saying I can't boot a Versal SoC without a PDI / Bitstream loaded?
+>> Interesting :)
+>>>
+> 
+> For Versal SoC Vivado generated base PDI is always needed to bring-up the board. 
 
-> -----Original Message-----
-> From: Moritz Fischer <mdf@kernel.org>
-> Sent: Friday, January 22, 2021 10:47 AM
-> To: Nava kishore Manne <navam@xilinx.com>
-> Cc: mdf@kernel.org; trix@redhat.com; robh+dt@kernel.org; Michal Simek
-> <michals@xilinx.com>; linux-fpga@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> kernel@vger.kernel.org; git <git@xilinx.com>; chinnikishore369@gmail.com
-> Subject: Re: [PATCH 1/2] fpga: mgr: Adds secure BitStream loading support
->=20
-> On Mon, Jan 18, 2021 at 08:20:57AM +0530, Nava kishore Manne wrote:
-> > This commit adds secure flags to the framework to support secure
-> > BitStream Loading.
-> >
-> > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> > ---
-> >  drivers/fpga/of-fpga-region.c | 10 ++++++++++
-> > include/linux/fpga/fpga-mgr.h | 12 ++++++++++++
-> >  2 files changed, 22 insertions(+)
-> >
-> > diff --git a/drivers/fpga/of-fpga-region.c
-> > b/drivers/fpga/of-fpga-region.c index e405309baadc..3a5eb4808888
-> > 100644
-> > --- a/drivers/fpga/of-fpga-region.c
-> > +++ b/drivers/fpga/of-fpga-region.c
-> > @@ -228,6 +228,16 @@ static struct fpga_image_info
-> *of_fpga_region_parse_ov(
-> >  	if (of_property_read_bool(overlay, "encrypted-fpga-config"))
-> >  		info->flags |=3D FPGA_MGR_ENCRYPTED_BITSTREAM;
-> >
-> > +	if (of_property_read_bool(overlay, "userkey-encrypted-fpga-
-> config"))
-> > +		info->flags |=3D
-> FPGA_MGR_USERKEY_ENCRYPTED_BITSTREAM;
->=20
-> Can this just be encrypted-fpga-config/FPGA_MGR_ENCRYPTED?
+Look at PDI as ps7_init/psu_init file but in different format. And
+bitstream is optional part of it (like a one partition).
 
-In Encryption we have two kinds of use case one is Encrypted Bitstream load=
-ing with Device-key and
-Other one is Encrypted Bitstream loading with User-key. To differentiate bo=
-th the use cases this
-Changes are needed.
+Thanks,
+Michal
 
-Regards,
-Navakishore.
