@@ -2,221 +2,85 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 426BB30A969
-	for <lists+linux-fpga@lfdr.de>; Mon,  1 Feb 2021 15:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AB430AAA1
+	for <lists+linux-fpga@lfdr.de>; Mon,  1 Feb 2021 16:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbhBAONz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 1 Feb 2021 09:13:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45603 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231838AbhBAONy (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 1 Feb 2021 09:13:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612188747;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N2E0S/Z5gWA3ccqYSTotfrJuoUUJBHoeOURjhC0S/Jk=;
-        b=DL3NiD6n1LvSrDE7K4RrNO+ptqKpq3CV9VWoQDPnhJ/mAW4j4N4hPN434umJ5li8rCkSD1
-        URPvuO618YDXh/6PvR9FVrhnMSEgSJqAo8koajSOB4zO5CrAvYmqHIGmgGghR6yL8OYDfN
-        udj6EoTP4WayA1g/vAuEZnqWIDdwrKA=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-2-yElgYHGQOHGP3WnedtzkmA-1; Mon, 01 Feb 2021 09:12:24 -0500
-X-MC-Unique: yElgYHGQOHGP3WnedtzkmA-1
-Received: by mail-qt1-f198.google.com with SMTP id r18so10683052qta.19
-        for <linux-fpga@vger.kernel.org>; Mon, 01 Feb 2021 06:12:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=N2E0S/Z5gWA3ccqYSTotfrJuoUUJBHoeOURjhC0S/Jk=;
-        b=KskVFWM99iiOMKZUyrA7uJYwrVsCbpvBVFR561cCFc0hUbfhaqcqUTzBWkjCBBrD4f
-         ZQGyAb7rQXaSn8UHUk7oEkaMNILCX4QSl8opRSeuTQxXdLxuh5NZbfwGBHkuEJYtr6Mm
-         SkLv6CvDVcGqYpQEDOoPOFhJrjIlKpWz5yFxm8JocINMALkQGwpYZOYDYqeZUfgUkKop
-         otlWd7FWK70kiBtyAxXQvEwl/pMc3SLNQ85kNqYsD5LfzPS80HvaOZF+/dy3N4tthCiK
-         R3XVgRTI77Fifur+2NQcvbxrEY/ZS0pGWegINr5dta2dNhU3UhmAEOkcmmcGigEa12LG
-         A4IA==
-X-Gm-Message-State: AOAM531bc2eqJQxofdSufrTFeNISUfM47wOMWHASF7mjroeA9FLAAiZ5
-        a+iZKhXqWGdPPJt1pXJKKwRk1NdDUjvcCgiJy7gXjQWotJcRDSkAek238bLJ5Vd7rCQz+esfK9A
-        younahUfCqNjDZn0SUBklhw==
-X-Received: by 2002:ad4:468c:: with SMTP id bq12mr15285036qvb.11.1612188744313;
-        Mon, 01 Feb 2021 06:12:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzWcu7QMcVQZmTNtkvnH7tBDsAShHJwxhwlpfixBQHLwHGuCEV7aJwrUjirGWN/Nl9k6PIwtA==
-X-Received: by 2002:ad4:468c:: with SMTP id bq12mr15285009qvb.11.1612188744038;
-        Mon, 01 Feb 2021 06:12:24 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id b17sm484952qkh.57.2021.02.01.06.12.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Feb 2021 06:12:23 -0800 (PST)
-Subject: Re: [PATCH v10 1/2] uio: uio_dfl: add userspace i/o driver for DFL
- bus
-To:     Xu Yilun <yilun.xu@intel.com>, gregkh@linuxfoundation.org,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     lgoncalv@redhat.com, hao.wu@intel.com
-References: <1612157883-18616-1-git-send-email-yilun.xu@intel.com>
- <1612157883-18616-2-git-send-email-yilun.xu@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <d100069d-c953-209c-9e74-a336c644887b@redhat.com>
-Date:   Mon, 1 Feb 2021 06:12:21 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S231379AbhBAPLI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 1 Feb 2021 10:11:08 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:43862 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229864AbhBAPK5 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 1 Feb 2021 10:10:57 -0500
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 111F994T000757;
+        Mon, 1 Feb 2021 10:10:01 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com with ESMTP id 36dbucusdr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Feb 2021 10:10:01 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 111FA0ZN061902
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 1 Feb 2021 10:10:00 -0500
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.721.2;
+ Mon, 1 Feb 2021 10:09:59 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.721.2;
+ Mon, 1 Feb 2021 10:09:59 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.721.2 via Frontend Transport;
+ Mon, 1 Feb 2021 10:09:59 -0500
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 111F9uRY028808;
+        Mon, 1 Feb 2021 10:09:57 -0500
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <lars@metafoo.de>,
+        <linux-fpga@vger.kernel.org>, <mdf@kernel.org>,
+        <ardeleanalex@gmail.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH v3 0/4] clk: clk-axiclgen: add support for ZynqMP
+Date:   Mon, 1 Feb 2021 17:12:41 +0200
+Message-ID: <20210201151245.21845-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <1612157883-18616-2-git-send-email-yilun.xu@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-01_06:2021-01-29,2021-02-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 clxscore=1011 suspectscore=0 malwarescore=0 mlxscore=0
+ priorityscore=1501 bulkscore=0 mlxlogscore=987 spamscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102010082
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+https://lore.kernel.org/linux-clk/20210126110826.24221-1-alexandru.ardelean@analog.com/
 
-On 1/31/21 9:38 PM, Xu Yilun wrote:
-> This patch supports the DFL drivers be written in userspace. This is
-> realized by exposing the userspace I/O device interfaces.
->
-> The driver now only binds the ether group feature, which has no irq. So
-> the irq support is not implemented yet.
->
-> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> ---
-> v9: switch to add a uio driver in drivers/uio
-> v10: add the source file in MAINTAINERS
->      more descriptive Kconfig header
->      add detailed path for opae uio example
-> ---
->  MAINTAINERS           |  1 +
->  drivers/uio/Kconfig   | 17 +++++++++++++
->  drivers/uio/Makefile  |  1 +
->  drivers/uio/uio_dfl.c | 66 +++++++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 85 insertions(+)
->  create mode 100644 drivers/uio/uio_dfl.c
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 147d1d9..4d01a21 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6943,6 +6943,7 @@ S:	Maintained
->  F:	Documentation/ABI/testing/sysfs-bus-dfl*
->  F:	Documentation/fpga/dfl.rst
->  F:	drivers/fpga/dfl*
-> +F:	drivers/uio/uio_dfl.c
->  F:	include/linux/dfl.h
->  F:	include/uapi/linux/fpga-dfl.h
->  
-> diff --git a/drivers/uio/Kconfig b/drivers/uio/Kconfig
-> index 202ee81..5531f3a 100644
-> --- a/drivers/uio/Kconfig
-> +++ b/drivers/uio/Kconfig
-> @@ -165,4 +165,21 @@ config UIO_HV_GENERIC
->  	  to network and storage devices from userspace.
->  
->  	  If you compile this as a module, it will be called uio_hv_generic.
-> +
-> +config UIO_DFL
-> +	tristate "Generic driver for DFL (Device Feature List) bus"
-> +	depends on FPGA_DFL
-> +	help
-> +	  Generic DFL (Device Feature List) driver for Userspace I/O devices.
-> +	  It is useful to provide direct access to DFL devices from userspace.
-> +	  A sample userspace application using this driver is available for
-> +	  download in a git repository:
-> +
-> +	    git clone https://github.com/OPAE/opae-sdk.git
-> +
-> +	  It could be found at:
-> +
-> +	    opae-sdk/tools/libopaeuio/
+Changelog v2 -> v3:
+* added HAS_IOMEM || COMPILE_TEST and OF dependencies to driver in
+  Kconfig
+* added patch 'clk: axi-clkgen: use devm_platform_ioremap_resource() short-hand'
 
-Yes, it is there.  Thanks!
+Alexandru Ardelean (4):
+  clk: axi-clkgen: replace ARCH dependencies with driver deps
+  clk: clk-axiclkgen: add ZynqMP PFD and VCO limits
+  dt-bindings: clock: adi,axi-clkgen: add compatible string for ZynqMP
+    support
+  clk: axi-clkgen: use devm_platform_ioremap_resource() short-hand
 
-Reviewed-by: Tom Rix <trix@redhat.com>
+ .../devicetree/bindings/clock/adi,axi-clkgen.yaml |  1 +
+ drivers/clk/Kconfig                               |  3 ++-
+ drivers/clk/clk-axi-clkgen.c                      | 15 ++++++++++++---
+ 3 files changed, 15 insertions(+), 4 deletions(-)
 
-> +
-> +	  If you compile this as a module, it will be called uio_dfl.
->  endif
-> diff --git a/drivers/uio/Makefile b/drivers/uio/Makefile
-> index c285dd2..f2f416a1 100644
-> --- a/drivers/uio/Makefile
-> +++ b/drivers/uio/Makefile
-> @@ -11,3 +11,4 @@ obj-$(CONFIG_UIO_PRUSS)         += uio_pruss.o
->  obj-$(CONFIG_UIO_MF624)         += uio_mf624.o
->  obj-$(CONFIG_UIO_FSL_ELBC_GPCM)	+= uio_fsl_elbc_gpcm.o
->  obj-$(CONFIG_UIO_HV_GENERIC)	+= uio_hv_generic.o
-> +obj-$(CONFIG_UIO_DFL)	+= uio_dfl.o
-> diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
-> new file mode 100644
-> index 0000000..89c0fc7
-> --- /dev/null
-> +++ b/drivers/uio/uio_dfl.c
-> @@ -0,0 +1,66 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Generic DFL driver for Userspace I/O devicess
-> + *
-> + * Copyright (C) 2021 Intel Corporation, Inc.
-> + */
-> +#include <linux/dfl.h>
-> +#include <linux/errno.h>
-> +#include <linux/module.h>
-> +#include <linux/uio_driver.h>
-> +
-> +#define DRIVER_NAME "uio_dfl"
-> +
-> +static int uio_dfl_probe(struct dfl_device *ddev)
-> +{
-> +	struct resource *r = &ddev->mmio_res;
-> +	struct device *dev = &ddev->dev;
-> +	struct uio_info *uioinfo;
-> +	struct uio_mem *uiomem;
-> +	int ret;
-> +
-> +	uioinfo = devm_kzalloc(dev, sizeof(struct uio_info), GFP_KERNEL);
-> +	if (!uioinfo)
-> +		return -ENOMEM;
-> +
-> +	uioinfo->name = DRIVER_NAME;
-> +	uioinfo->version = "0";
-> +
-> +	uiomem = &uioinfo->mem[0];
-> +	uiomem->memtype = UIO_MEM_PHYS;
-> +	uiomem->addr = r->start & PAGE_MASK;
-> +	uiomem->offs = r->start & ~PAGE_MASK;
-> +	uiomem->size = (uiomem->offs + resource_size(r)
-> +			+ PAGE_SIZE - 1) & PAGE_MASK;
-> +	uiomem->name = r->name;
-> +
-> +	/* Irq is yet to be supported */
-> +	uioinfo->irq = UIO_IRQ_NONE;
-> +
-> +	ret = devm_uio_register_device(dev, uioinfo);
-> +	if (ret)
-> +		dev_err(dev, "unable to register uio device\n");
-> +
-> +	return ret;
-> +}
-> +
-> +#define FME_FEATURE_ID_ETH_GROUP	0x10
-> +
-> +static const struct dfl_device_id uio_dfl_ids[] = {
-> +	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
-> +
-> +static struct dfl_driver uio_dfl_driver = {
-> +	.drv = {
-> +		.name = DRIVER_NAME,
-> +	},
-> +	.id_table	= uio_dfl_ids,
-> +	.probe		= uio_dfl_probe,
-> +};
-> +module_dfl_driver(uio_dfl_driver);
-> +
-> +MODULE_DESCRIPTION("Generic DFL driver for Userspace I/O devices");
-> +MODULE_AUTHOR("Intel Corporation");
-> +MODULE_LICENSE("GPL v2");
+-- 
+2.17.1
 
