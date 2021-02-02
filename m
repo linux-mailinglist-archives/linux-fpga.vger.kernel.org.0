@@ -2,205 +2,117 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 915B730AA88
-	for <lists+linux-fpga@lfdr.de>; Mon,  1 Feb 2021 16:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB23C30B500
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Feb 2021 03:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbhBAPIk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 1 Feb 2021 10:08:40 -0500
-Received: from mga06.intel.com ([134.134.136.31]:33905 "EHLO mga06.intel.com"
+        id S229643AbhBBCE4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 1 Feb 2021 21:04:56 -0500
+Received: from mga09.intel.com ([134.134.136.24]:10335 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231423AbhBAPI0 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 1 Feb 2021 10:08:26 -0500
-IronPort-SDR: phvDUMW2mBS2AUWremSqHGyT9chhi8hObLT8FljAjrOnkwPMZp8AO1KQRsDgyov87p25BDSYws
- VZZVNLQGCvXw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="242214691"
-X-IronPort-AV: E=Sophos;i="5.79,392,1602572400"; 
-   d="scan'208";a="242214691"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 07:02:33 -0800
-IronPort-SDR: BGsvKW673ilgXMvy1mKx8OOo8EIcUDcfBRzsnP/z64p7GS1ndIFY4xaxABY4YA28oP4dYVFToD
- H0p4DaAfmSkA==
+        id S229621AbhBBCEz (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 1 Feb 2021 21:04:55 -0500
+IronPort-SDR: 2i9hCs4Rf3a5UCPl0C5Uhr2v9yLu1YITpix/XKj+TC9IEyGiKLngGxbG1UZOdlWbuZAxKFy6Wl
+ DzDeA21eiheQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="180927387"
+X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
+   d="scan'208";a="180927387"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 18:04:14 -0800
+IronPort-SDR: Ya1tBNlSrP/D+LJj+jmlcaG6sbh7cYOKsHxXEOVZ8gVRNVejU+OfKVUA5gmLGcegSFJy8BEKY2
+ CwCEpIhsxyAg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,392,1602572400"; 
-   d="scan'208";a="369891585"
-Received: from marshy.an.intel.com ([10.122.105.143])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Feb 2021 07:02:32 -0800
-From:   richard.gong@linux.intel.com
-To:     mdf@kernel.org, trix@redhat.com, gregkh@linuxfoundation.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Richard Gong <richard.gong@intel.com>
-Subject: [PATCHv4 6/6] fpga: stratix10-soc: extend driver for bitstream authentication
-Date:   Mon,  1 Feb 2021 09:21:59 -0600
-Message-Id: <1612192919-4069-7-git-send-email-richard.gong@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1612192919-4069-1-git-send-email-richard.gong@linux.intel.com>
-References: <1612192919-4069-1-git-send-email-richard.gong@linux.intel.com>
+X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
+   d="scan'208";a="371776200"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by orsmga002.jf.intel.com with ESMTP; 01 Feb 2021 18:04:10 -0800
+Date:   Tue, 2 Feb 2021 09:59:47 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     "Wu, Hao" <hao.wu@intel.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>
+Subject: Re: [PATCH v10 2/2] Documentation: fpga: dfl: Add description for
+ DFL  UIO support
+Message-ID: <20210202015947.GA18237@yilunxu-OptiPlex-7050>
+References: <1612157883-18616-1-git-send-email-yilun.xu@intel.com>
+ <1612157883-18616-3-git-send-email-yilun.xu@intel.com>
+ <DM6PR11MB3819D4E1E69EE4FE405864F685B69@DM6PR11MB3819.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR11MB3819D4E1E69EE4FE405864F685B69@DM6PR11MB3819.namprd11.prod.outlook.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Richard Gong <richard.gong@intel.com>
+On Mon, Feb 01, 2021 at 08:59:06PM +0800, Wu, Hao wrote:
+> > Subject: [PATCH v10 2/2] Documentation: fpga: dfl: Add description for DFL UIO
+> > support
+> >
+> > This patch adds description for UIO support for dfl devices on DFL
+> > bus.
+> >
+> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> > Reviewed-by: Tom Rix <trix@redhat.com>
+> > ---
+> > v2: no doc in v1, add it for v2.
+> > v3: some documentation fixes.
+> > v4: documentation change since the driver matching is changed.
+> > v5: no change.
+> > v6: improve the title of the userspace driver support section.
+> >     some word improvement.
+> > v7: rebased to next-20210119
+> > v8: some doc fixes.
+> > v9: some doc change since we switch to the driver in drivers/uio.
+> > v10: no change.
+> > ---
+> >  Documentation/fpga/dfl.rst | 23 +++++++++++++++++++++++
+> >  1 file changed, 23 insertions(+)
+> >
+> > diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> > index c41ac76..e35cf87 100644
+> > --- a/Documentation/fpga/dfl.rst
+> > +++ b/Documentation/fpga/dfl.rst
+> > @@ -7,6 +7,7 @@ Authors:
+> >  - Enno Luebbers <enno.luebbers@intel.com>
+> >  - Xiao Guangrong <guangrong.xiao@linux.intel.com>
+> >  - Wu Hao <hao.wu@intel.com>
+> > +- Xu Yilun <yilun.xu@intel.com>
+> >
+> >  The Device Feature List (DFL) FPGA framework (and drivers according to
+> >  this framework) hides the very details of low layer hardwares and provides
+> > @@ -530,6 +531,28 @@ Being able to specify more than one DFL per BAR has
+> > been considered, but it
+> >  was determined the use case did not provide value.  Specifying a single DFL
+> >  per BAR simplifies the implementation and allows for extra error checking.
+> >
+> > +
+> > +Userspace driver support for DFL devices
+> > +========================================
+> > +The purpose of an FPGA is to be reprogrammed with newly developed
+> > hardware
+> > +components. New hardware can instantiate a new private feature in the DFL,
+> > and
+> > +then present a DFL device in the system. In some cases users may need a
+> > +userspace driver for the DFL device:
+> > +
+> > +* Users may need to run some diagnostic test for their hardware.
+> > +* Users may prototype the kernel driver in user space.
+> > +* Some hardware is designed for specific purposes and does not fit into one of
+> > +  the standard kernel subsystems.
+> > +
+> > +This requires direct access to MMIO space and interrupt handling from
+> > +userspace. The uio_dfl module exposes the UIO device interfaces for this
+> > +purpose.
+> 
+> Current uio_dfl doesn't have interrupt handling support, right? I guess we need
+> to make sure no confusion on the description here. other place looks good to me.
 
-Extend FPGA manager driver to support FPGA bitstream authentication on
-Intel SocFPGA platforms.
+Will fix it.
 
-Signed-off-by: Richard Gong <richard.gong@intel.com>
----
-v4: s/FPGA_MGR_BITSTREM_AUTHENTICATION/FPGA_MGR_BITSTREAM_AUTHENTICATE
-v3: add handle to retriev the firmware version to keep driver
-    back compatible
-v2: use flag defined in stratix10-svc driver
----
- drivers/fpga/stratix10-soc.c | 62 +++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 56 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-index 657a70c..9ab7afd 100644
---- a/drivers/fpga/stratix10-soc.c
-+++ b/drivers/fpga/stratix10-soc.c
-@@ -24,6 +24,10 @@
- #define S10_BUFFER_TIMEOUT (msecs_to_jiffies(SVC_RECONFIG_BUFFER_TIMEOUT_MS))
- #define S10_RECONFIG_TIMEOUT (msecs_to_jiffies(SVC_RECONFIG_REQUEST_TIMEOUT_MS))
- 
-+#define INVALID_FIRMWARE_VERSION	0xFFFF
-+typedef void (*s10_callback)(struct stratix10_svc_client *client,
-+			     struct stratix10_svc_cb_data *data);
-+
- /*
-  * struct s10_svc_buf
-  * buf:  virtual address of buf provided by service layer
-@@ -40,11 +44,13 @@ struct s10_priv {
- 	struct completion status_return_completion;
- 	struct s10_svc_buf svc_bufs[NUM_SVC_BUFS];
- 	unsigned long status;
-+	unsigned int fw_version;
- };
- 
- static int s10_svc_send_msg(struct s10_priv *priv,
- 			    enum stratix10_svc_command_code command,
--			    void *payload, u32 payload_length)
-+			    void *payload, u32 payload_length,
-+			    s10_callback callback)
- {
- 	struct stratix10_svc_chan *chan = priv->chan;
- 	struct device *dev = priv->client.dev;
-@@ -57,6 +63,7 @@ static int s10_svc_send_msg(struct s10_priv *priv,
- 	msg.command = command;
- 	msg.payload = payload;
- 	msg.payload_length = payload_length;
-+	priv->client.receive_cb = callback;
- 
- 	ret = stratix10_svc_send(chan, &msg);
- 	dev_dbg(dev, "stratix10_svc_send returned status %d\n", ret);
-@@ -134,6 +141,29 @@ static void s10_unlock_bufs(struct s10_priv *priv, void *kaddr)
- }
- 
- /*
-+ * s10_fw_version_callback - callback for the version of running firmware
-+ * @client: service layer client struct
-+ * @data: message from service layer
-+ */
-+static void s10_fw_version_callback(struct stratix10_svc_client *client,
-+				    struct stratix10_svc_cb_data *data)
-+{
-+	struct s10_priv *priv = client->priv;
-+	unsigned int *version = (unsigned int *)data->kaddr1;
-+
-+	if (data->status == BIT(SVC_STATUS_OK))
-+		priv->fw_version = *version;
-+	else if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
-+		dev_warn(client->dev,
-+			 "FW doesn't support bitstream authentication\n");
-+	else
-+		dev_err(client->dev, "Failed to get FW version %lu\n",
-+			BIT(data->status));
-+
-+	complete(&priv->status_return_completion);
-+}
-+
-+/*
-  * s10_receive_callback - callback for service layer to use to provide client
-  * (this driver) messages received through the mailbox.
-  * client: service layer client struct
-@@ -186,13 +216,22 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
- 	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
- 		dev_dbg(dev, "Requesting partial reconfiguration.\n");
- 		ctype.flags |= BIT(COMMAND_RECONFIG_FLAG_PARTIAL);
-+	} else if (info->flags & FPGA_MGR_BITSTREAM_AUTHENTICATE) {
-+		if (priv->fw_version == INVALID_FIRMWARE_VERSION) {
-+			dev_err(dev, "FW doesn't support\n");
-+			return -EINVAL;
-+		}
-+
-+		dev_dbg(dev, "Requesting bitstream authentication.\n");
-+		ctype.flags |= BIT(COMMAND_AUTHENTICATE_BITSTREAM);
- 	} else {
- 		dev_dbg(dev, "Requesting full reconfiguration.\n");
- 	}
- 
- 	reinit_completion(&priv->status_return_completion);
- 	ret = s10_svc_send_msg(priv, COMMAND_RECONFIG,
--			       &ctype, sizeof(ctype));
-+			       &ctype, sizeof(ctype),
-+			       s10_receive_callback);
- 	if (ret < 0)
- 		goto init_done;
- 
-@@ -259,7 +298,7 @@ static int s10_send_buf(struct fpga_manager *mgr, const char *buf, size_t count)
- 	svc_buf = priv->svc_bufs[i].buf;
- 	memcpy(svc_buf, buf, xfer_sz);
- 	ret = s10_svc_send_msg(priv, COMMAND_RECONFIG_DATA_SUBMIT,
--			       svc_buf, xfer_sz);
-+			       svc_buf, xfer_sz, s10_receive_callback);
- 	if (ret < 0) {
- 		dev_err(dev,
- 			"Error while sending data to service layer (%d)", ret);
-@@ -303,7 +342,7 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
- 
- 			ret = s10_svc_send_msg(
- 				priv, COMMAND_RECONFIG_DATA_CLAIM,
--				NULL, 0);
-+				NULL, 0, s10_receive_callback);
- 			if (ret < 0)
- 				break;
- 		}
-@@ -357,7 +396,8 @@ static int s10_ops_write_complete(struct fpga_manager *mgr,
- 	do {
- 		reinit_completion(&priv->status_return_completion);
- 
--		ret = s10_svc_send_msg(priv, COMMAND_RECONFIG_STATUS, NULL, 0);
-+		ret = s10_svc_send_msg(priv, COMMAND_RECONFIG_STATUS,
-+				       NULL, 0, s10_receive_callback);
- 		if (ret < 0)
- 			break;
- 
-@@ -411,8 +451,9 @@ static int s10_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
- 
-+	priv->fw_version = INVALID_FIRMWARE_VERSION;
- 	priv->client.dev = dev;
--	priv->client.receive_cb = s10_receive_callback;
-+	priv->client.receive_cb = NULL;
- 	priv->client.priv = priv;
- 
- 	priv->chan = stratix10_svc_request_channel_byname(&priv->client,
-@@ -440,6 +481,15 @@ static int s10_probe(struct platform_device *pdev)
- 		goto probe_err;
- 	}
- 
-+	/* get the running firmware version */
-+	ret = s10_svc_send_msg(priv, COMMAND_FIRMWARE_VERSION,
-+			       NULL, 0, s10_fw_version_callback);
-+	if (ret) {
-+		dev_err(dev, "couldn't get firmware version\n");
-+		fpga_mgr_free(mgr);
-+		goto probe_err;
-+	}
-+
- 	platform_set_drvdata(pdev, mgr);
- 	return ret;
- 
--- 
-2.7.4
-
+Thanks,
+Yilun
