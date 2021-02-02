@@ -2,218 +2,118 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C49C330CD41
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Feb 2021 21:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8230730CE24
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Feb 2021 22:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbhBBUpp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 2 Feb 2021 15:45:45 -0500
-Received: from mga17.intel.com ([192.55.52.151]:36744 "EHLO mga17.intel.com"
+        id S232088AbhBBVnK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 2 Feb 2021 16:43:10 -0500
+Received: from mga09.intel.com ([134.134.136.24]:64619 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233225AbhBBUpb (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 2 Feb 2021 15:45:31 -0500
-IronPort-SDR: JAeP8lMf26O6JL3XbpG0AqYJsdGigZ+KzJZJqRYGypxRhHJgt+nms8RcEDkzLicWejOBCLIAp+
- IBxpn9/jGVgw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="160693193"
+        id S234114AbhBBVmq (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 2 Feb 2021 16:42:46 -0500
+IronPort-SDR: JcAYSx8dS08FD+BlSjmtlAgeGrVnvrEStZ59bxq/TKikXQG/deoC0XLcaZVY9qp8NlOpxKVQ/V
+ DwDgWz7pk61A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="181081895"
 X-IronPort-AV: E=Sophos;i="5.79,396,1602572400"; 
-   d="scan'208";a="160693193"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 12:44:50 -0800
-IronPort-SDR: zDoitENEs6Y/tdn2EunwMZssChy2S+zungt8lcYgBGANdY6utsij6fQ6aiGmkaOHGvdQLEErxf
- wuN7hI4v63hA==
+   d="scan'208";a="181081895"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 13:40:59 -0800
+IronPort-SDR: asmWp1QY24TIDG7pef9yM7XBm68sR8mtJyGYqbxJfxtwO2nGiDRsrz4Il07yUK/wCjTvZ41CW2
+ VM++/ccXZJ2Q==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,396,1602572400"; 
-   d="scan'208";a="396158499"
-Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.209.22.86])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 12:44:50 -0800
-Subject: Re: [PATCH v2 1/1] fpga: dfl: afu: harden port enable logic
-To:     Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@intel.com
-References: <20200917183219.3603-1-russell.h.weight@intel.com>
- <7f181203-c164-4e6e-c710-1096b0aa13b8@redhat.com>
- <20200917213850.GA30570@archbook>
-From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <07189216-3662-4049-2bed-36fdbed9887e@intel.com>
-Date:   Tue, 2 Feb 2021 12:44:47 -0800
+   d="scan'208";a="370961433"
+Received: from marshy.an.intel.com (HELO [10.122.105.143]) ([10.122.105.143])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Feb 2021 13:40:58 -0800
+Subject: Re: [PATCHv4 5/6] dt-bindings: fpga: add authenticate-fpga-config
+ property
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     trix@redhat.com, gregkh@linuxfoundation.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Gong <richard.gong@intel.com>
+References: <1612192919-4069-1-git-send-email-richard.gong@linux.intel.com>
+ <1612192919-4069-6-git-send-email-richard.gong@linux.intel.com>
+ <YBjUyc2ea51S4Wzp@epycbox.lan>
+From:   Richard Gong <richard.gong@linux.intel.com>
+Message-ID: <9752d0eb-962a-f308-24a3-aedd4fecf25d@linux.intel.com>
+Date:   Tue, 2 Feb 2021 16:01:37 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200917213850.GA30570@archbook>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YBjUyc2ea51S4Wzp@epycbox.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
+Hi Moritz,
 
-On 9/17/20 2:38 PM, Moritz Fischer wrote:
-> On Thu, Sep 17, 2020 at 01:28:22PM -0700, Tom Rix wrote:
->> On 9/17/20 11:32 AM, Russ Weight wrote:
->>> Port enable is not complete until ACK = 0. Change
->>> __afu_port_enable() to guarantee that the enable process
->>> is complete by polling for ACK == 0.
->>>
->>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> General note: Please keep a changelog if you send updated versions of a
-> patch. This can be added here with an extra '---' + Text between Signed-off and
-> diffstat:
->
-> --- 
-> Changes from v1:
-> - FOo
-> - Bar
-Yes - I'll do that on future patch updates. In this case v2 just fixed a typo
-in the commit message, so the patch was essentially the same as v1.
->>> ---
->>>  drivers/fpga/dfl-afu-error.c |  2 +-
->>>  drivers/fpga/dfl-afu-main.c  | 29 +++++++++++++++++++++--------
->>>  drivers/fpga/dfl-afu.h       |  2 +-
->>>  3 files changed, 23 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/drivers/fpga/dfl-afu-error.c b/drivers/fpga/dfl-afu-error.c
->>> index c4691187cca9..0806532a3e9f 100644
->>> --- a/drivers/fpga/dfl-afu-error.c
->>> +++ b/drivers/fpga/dfl-afu-error.c
->>> @@ -103,7 +103,7 @@ static int afu_port_err_clear(struct device *dev, u64 err)
->>>  	__afu_port_err_mask(dev, false);
->>>  
->> There is an earlier bit that sets ret = -EINVAL.
+On 2/1/21 10:27 PM, Moritz Fischer wrote:
+> On Mon, Feb 01, 2021 at 09:21:58AM -0600, richard.gong@linux.intel.com wrote:
+>> From: Richard Gong <richard.gong@intel.com>
 >>
->> This error will be lost or not handled well.
+>> Add authenticate-fpga-config property for FPGA bitstream authentication,
+>> which makes sure a signed bitstream has valid signatures.
 >>
->> Right now it doesn't seem to be handled.
-> Ultimately you'd want to report *at least* one of them, the current code
-> seems to continue and enable the port either case. Is that what it
-> should be doing? 
->
-> Is the timeout more severe than the invalid value? Do you want to print
-> a warning?
->
-> Either way a comment explaining why this is ok would be appreciated :)
-Yes - I'll add a comment explaining how the errors arebeing prioritized.
-I'll give priority to the timeout, asit is likely a HW failure.
+>> Signed-off-by: Richard Gong <richard.gong@intel.com>
+>> ---
+>> v4: explain authenticate-fpga-config flag further
+>> v3: no change
+>> v2: put authenticate-fpga-config above partial-fpga-config
+>>      update commit messages
+>> ---
+>>   Documentation/devicetree/bindings/fpga/fpga-region.txt | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+>> index e811cf8..e2740b6 100644
+>> --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+>> +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+>> @@ -182,6 +182,10 @@ Optional properties:
+>>   	This property is optional if the FPGA Manager handles the bridges.
+>>           If the fpga-region is  the child of a fpga-bridge, the list should not
+>>           contain the parent bridge.
+>> +- authenticate-fpga-config : boolean, set if do bitstream authentication only.
+>> +	flag authenticate-fpga-config is used to first check the integrity of
+>> +	the bitstream. If the authentication is passed, the user can perform
+>> +	other operations.
+>  From the other commits it looks like it *also* writes to QSPI? If so
+> please document that.
+> 
+> If not, feel free to ignore :)
+> 
+> Maybe I would highlight two things:
+> a) If you add 'authenticate-fpga-config' you are not allowed to add new
+>     nodes
+> b) If you add 'authenticate-fpga-config' you are not alllowed to add
+>     other operations
 
->>>  	/* Enable the Port by clear the reset */
->>> -	__afu_port_enable(pdev);
->>> +	ret = __afu_port_enable(pdev);
->>>  
->>>  done:
->>>  	mutex_unlock(&pdata->lock);
->>> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
->>> index 753cda4b2568..f73b06cdf13c 100644
->>> --- a/drivers/fpga/dfl-afu-main.c
->>> +++ b/drivers/fpga/dfl-afu-main.c
->>> @@ -21,6 +21,9 @@
->>>  
->>>  #include "dfl-afu.h"
->>>  
->>> +#define RST_POLL_INVL 10 /* us */
->>> +#define RST_POLL_TIMEOUT 1000 /* us */
->>> +
->>>  /**
->>>   * __afu_port_enable - enable a port by clear reset
->>>   * @pdev: port platform device.
->>> @@ -32,7 +35,7 @@
->>>   *
->>>   * The caller needs to hold lock for protection.
->>>   */
->>> -void __afu_port_enable(struct platform_device *pdev)
->>> +int __afu_port_enable(struct platform_device *pdev)
->>>  {
->>>  	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
->>>  	void __iomem *base;
->>> @@ -41,7 +44,7 @@ void __afu_port_enable(struct platform_device *pdev)
->>>  	WARN_ON(!pdata->disable_count);
->>>  
->>>  	if (--pdata->disable_count != 0)
->>> -		return;
->>> +		return 0;
->> Is this really a success ? Maybe -EBUSY ?
-> Seems like if it's severe enough for a warning you'd probably want to
-> return an error.
-As mentioned by Hao and Yilun, the disable_count is a reference count.The
-WARN_ON() is checking for a different condition - an invalid reference count.
-We should never call port_enable if the port is not disabled. Do you think a
-comment is needed here?
+How about the descriptions below?
 
-Thanks,
-- Russ
+- authenticate-fpga-config : boolean, set if do bitstream authentication 
+only.
+If 'authenticate-fpga-config' is added then adding a new node or another 
+operation is not allowed.
+Flag authenticate-fpga-config is used to check the integrity of the 
+bitstream.
+Except for the actual configuration of the device, the authentication 
+works in the same way as FPGA configuration. If the authentication 
+passes, other operations such as full or partial reconfiguration can be 
+performed. When the bitstream into QSPI flash memory at device is 
+programmed, it is expected that there will be no issue when starting the 
+device.
 
->>>  
->>>  	base = dfl_get_feature_ioaddr_by_id(&pdev->dev, PORT_FEATURE_ID_HEADER);
->>>  
->>> @@ -49,10 +52,20 @@ void __afu_port_enable(struct platform_device *pdev)
->>>  	v = readq(base + PORT_HDR_CTRL);
->>>  	v &= ~PORT_CTRL_SFTRST;
->>>  	writeq(v, base + PORT_HDR_CTRL);
->>> -}
->>>  
->>> -#define RST_POLL_INVL 10 /* us */
->>> -#define RST_POLL_TIMEOUT 1000 /* us */
->>> +	/*
->>> +	 * HW clears the ack bit to indicate that the port is fully out
->>> +	 * of reset.
->>> +	 */
->>> +	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
->>> +			       !(v & PORT_CTRL_SFTRST_ACK),
->>> +			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
->>> +		dev_err(&pdev->dev, "timeout, failure to enable device\n");
->>> +		return -ETIMEDOUT;
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>>  
->>>  /**
->>>   * __afu_port_disable - disable a port by hold reset
->>> @@ -111,7 +124,7 @@ static int __port_reset(struct platform_device *pdev)
->>>  
->>>  	ret = __afu_port_disable(pdev);
->>>  	if (!ret)
->>> -		__afu_port_enable(pdev);
->>> +		ret = __afu_port_enable(pdev);
->>>  
->>>  	return ret;
->>>  }
->>> @@ -872,11 +885,11 @@ static int afu_dev_destroy(struct platform_device *pdev)
->>>  static int port_enable_set(struct platform_device *pdev, bool enable)
->>>  {
->>>  	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
->>> -	int ret = 0;
->>> +	int ret;
->>>  
->>>  	mutex_lock(&pdata->lock);
->>>  	if (enable)
->>> -		__afu_port_enable(pdev);
->>> +		ret = __afu_port_enable(pdev);
->>>  	else
->>>  		ret = __afu_port_disable(pdev);
->>>  	mutex_unlock(&pdata->lock);
->>> diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
->>> index 576e94960086..e5020e2b1f3d 100644
->>> --- a/drivers/fpga/dfl-afu.h
->>> +++ b/drivers/fpga/dfl-afu.h
->>> @@ -80,7 +80,7 @@ struct dfl_afu {
->>>  };
->>>  
->>>  /* hold pdata->lock when call __afu_port_enable/disable */
->>> -void __afu_port_enable(struct platform_device *pdev);
->>> +int __afu_port_enable(struct platform_device *pdev);
->>>  int __afu_port_disable(struct platform_device *pdev);
->> The other functions in this file have afu_*  since the __afu_port_enable/disable
+>>   - partial-fpga-config : boolean, set if partial reconfiguration is to be done,
+>>   	otherwise full reconfiguration is done.
+>>   - external-fpga-config : boolean, set if the FPGA has already been configured
+>> -- 
+>> 2.7.4
 >>
->> are used other places would it make sense to remove the '__' prefix ?
-> The idea on those is to indicate that the caller need to be cautious
-> (often a lock / mutex) is required. I think keeping them as is is fine.
->
->> If you think so, maybe a cleanup patch later.
->>
->> Tom
->>
->>>  
->>>  void afu_mmio_region_init(struct dfl_feature_platform_data *pdata);
 > Thanks,
 > Moritz
-
+> 
+Regards,
+Richard
