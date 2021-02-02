@@ -2,43 +2,43 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB34A30CD2B
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Feb 2021 21:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C49C330CD41
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Feb 2021 21:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbhBBUjF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 2 Feb 2021 15:39:05 -0500
-Received: from mga17.intel.com ([192.55.52.151]:36328 "EHLO mga17.intel.com"
+        id S233480AbhBBUpp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 2 Feb 2021 15:45:45 -0500
+Received: from mga17.intel.com ([192.55.52.151]:36744 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229984AbhBBUjF (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 2 Feb 2021 15:39:05 -0500
-IronPort-SDR: EYUiu4QMsRRfHW1z7aFMsWL1tafx0dOG7U629gzsMiJxR7IzPyzk7LQlQ/wBxFy1vfcx5kluj2
- Ah7aPHRpWsNg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="160692435"
+        id S233225AbhBBUpb (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 2 Feb 2021 15:45:31 -0500
+IronPort-SDR: JAeP8lMf26O6JL3XbpG0AqYJsdGigZ+KzJZJqRYGypxRhHJgt+nms8RcEDkzLicWejOBCLIAp+
+ IBxpn9/jGVgw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="160693193"
 X-IronPort-AV: E=Sophos;i="5.79,396,1602572400"; 
-   d="scan'208";a="160692435"
+   d="scan'208";a="160693193"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 12:38:20 -0800
-IronPort-SDR: 6n7b4GyhtRSAkAJFIhGrchf1hiQMaRkSk0rQ6dsAdFksWwBeTwSlZB/IjleGH4lnA5jkJQgKg7
- JG3RVYxnEMyQ==
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 12:44:50 -0800
+IronPort-SDR: zDoitENEs6Y/tdn2EunwMZssChy2S+zungt8lcYgBGANdY6utsij6fQ6aiGmkaOHGvdQLEErxf
+ wuN7hI4v63hA==
 X-IronPort-AV: E=Sophos;i="5.79,396,1602572400"; 
-   d="scan'208";a="396157626"
+   d="scan'208";a="396158499"
 Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.209.22.86])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 12:38:20 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 12:44:50 -0800
 Subject: Re: [PATCH v2 1/1] fpga: dfl: afu: harden port enable logic
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     Tom Rix <trix@redhat.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
+To:     Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
         matthew.gerlach@intel.com
 References: <20200917183219.3603-1-russell.h.weight@intel.com>
  <7f181203-c164-4e6e-c710-1096b0aa13b8@redhat.com>
- <8c21b52f-7bb7-e1d7-737e-1637adbe343d@intel.com>
-Message-ID: <fac78c3e-3a5f-2931-537d-64504d72fd6e@intel.com>
-Date:   Tue, 2 Feb 2021 12:38:17 -0800
+ <20200917213850.GA30570@archbook>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <07189216-3662-4049-2bed-36fdbed9887e@intel.com>
+Date:   Tue, 2 Feb 2021 12:44:47 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <8c21b52f-7bb7-e1d7-737e-1637adbe343d@intel.com>
+In-Reply-To: <20200917213850.GA30570@archbook>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -48,15 +48,24 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 
-On 2/2/21 12:32 PM, Russ Weight wrote:
->
-> On 9/17/20 1:28 PM, Tom Rix wrote:
+On 9/17/20 2:38 PM, Moritz Fischer wrote:
+> On Thu, Sep 17, 2020 at 01:28:22PM -0700, Tom Rix wrote:
 >> On 9/17/20 11:32 AM, Russ Weight wrote:
 >>> Port enable is not complete until ACK = 0. Change
 >>> __afu_port_enable() to guarantee that the enable process
 >>> is complete by polling for ACK == 0.
 >>>
 >>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> General note: Please keep a changelog if you send updated versions of a
+> patch. This can be added here with an extra '---' + Text between Signed-off and
+> diffstat:
+>
+> --- 
+> Changes from v1:
+> - FOo
+> - Bar
+Yes - I'll do that on future patch updates. In this case v2 just fixed a typo
+in the commit message, so the patch was essentially the same as v1.
 >>> ---
 >>>  drivers/fpga/dfl-afu-error.c |  2 +-
 >>>  drivers/fpga/dfl-afu-main.c  | 29 +++++++++++++++++++++--------
@@ -75,12 +84,17 @@ On 2/2/21 12:32 PM, Russ Weight wrote:
 >> This error will be lost or not handled well.
 >>
 >> Right now it doesn't seem to be handled.
-> Good catch. I'll give priority to -EINVAL in the next version of the
-> patch, as it is more informative in the context of this function.
-Actually - Hao pointed out in his response that the falure to re-enable the port
-is a more serious error, so the code flow OK, but needs a comment.
+> Ultimately you'd want to report *at least* one of them, the current code
+> seems to continue and enable the port either case. Is that what it
+> should be doing? 
+>
+> Is the timeout more severe than the invalid value? Do you want to print
+> a warning?
+>
+> Either way a comment explaining why this is ok would be appreciated :)
+Yes - I'll add a comment explaining how the errors arebeing prioritized.
+I'll give priority to the timeout, asit is likely a HW failure.
 
-- Russ
 >>>  	/* Enable the Port by clear the reset */
 >>> -	__afu_port_enable(pdev);
 >>> +	ret = __afu_port_enable(pdev);
@@ -117,9 +131,16 @@ is a more serious error, so the code flow OK, but needs a comment.
 >>> -		return;
 >>> +		return 0;
 >> Is this really a success ? Maybe -EBUSY ?
-> Yilun addressed this question in his previous response. This isessentially a
-> reference count for nested disable calls. Weonly do the enable if the
-> disable count has gone to zero, so this isn't an error condition.
+> Seems like if it's severe enough for a warning you'd probably want to
+> return an error.
+As mentioned by Hao and Yilun, the disable_count is a reference count.The
+WARN_ON() is checking for a different condition - an invalid reference count.
+We should never call port_enable if the port is not disabled. Do you think a
+comment is needed here?
+
+Thanks,
+- Russ
+
 >>>  
 >>>  	base = dfl_get_feature_ioaddr_by_id(&pdev->dev, PORT_FEATURE_ID_HEADER);
 >>>  
@@ -184,16 +205,15 @@ is a more serious error, so the code flow OK, but needs a comment.
 >> The other functions in this file have afu_*  since the __afu_port_enable/disable
 >>
 >> are used other places would it make sense to remove the '__' prefix ?
->>
->> If you think so, maybe a cleanup patch later.
-> Yilun and Hao addressed this comment in their previous responses. We are using the
-> '__' prefix to indicate highlight the fact caller needs to use care in managing
-> the locking associated with these functions.
+> The idea on those is to indicate that the caller need to be cautious
+> (often a lock / mutex) is required. I think keeping them as is is fine.
 >
-> Thanks,
-> - Russ
+>> If you think so, maybe a cleanup patch later.
+>>
 >> Tom
 >>
 >>>  
 >>>  void afu_mmio_region_init(struct dfl_feature_platform_data *pdata);
+> Thanks,
+> Moritz
 
