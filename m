@@ -2,99 +2,252 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D499930B679
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Feb 2021 05:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9507E30CD08
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Feb 2021 21:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbhBBE2l (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 1 Feb 2021 23:28:41 -0500
-Received: from mail-pg1-f172.google.com ([209.85.215.172]:44575 "EHLO
-        mail-pg1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbhBBE2g (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 1 Feb 2021 23:28:36 -0500
-Received: by mail-pg1-f172.google.com with SMTP id s23so12797055pgh.11;
-        Mon, 01 Feb 2021 20:28:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ePP320up4ONpD3QZFNd5p6W7Ka4tQ6LNbZ7Mki65Nr4=;
-        b=J1FRh86PcC8KV/FLjUecZ4EBYoFDOyGka7i8ddOhAfYnSaNlfRe1wgf79dHyvAUvxU
-         9xzl8DryODZWnxk5dTt+o4l69O0ZG9yMXHgOl4RXsxFNSsLzBe/HspbYLA39705xFhSJ
-         8H3G/WKknRV2SdfDgJpevWl+BPznWimSHADrN6VgOh2WaF4HOEjt+mioZJqOQhTFhNhb
-         7dmHZQqyP6+wA+tLZ4W5ibA8Q5F0xDZH/Zcm4TxAGtvCNz6F+gHtuBFOdeI7FXY6i6z/
-         IAjk47kecCXahYqio658hhipMPRAppUdEPXqvc6VTDEN47D4uLRpb0FBcQ9SAzTYj/qU
-         DVYg==
-X-Gm-Message-State: AOAM531c3Aw+osKabzue3h8hcLA9H1lqgIeCHzN0OyB4klgIiOVT0FnI
-        41SagRm2YrEXqywASaS/8Uw=
-X-Google-Smtp-Source: ABdhPJyxW5YTtzSo0NgAoTywysInHQXePxvks+ErZjHAJTJPyHI9jlLU9IsrlVFs/7BV0puicAAG9g==
-X-Received: by 2002:a62:8749:0:b029:1c4:d1de:3b56 with SMTP id i70-20020a6287490000b02901c4d1de3b56mr19065091pfe.71.1612240075227;
-        Mon, 01 Feb 2021 20:27:55 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id f13sm1475347pjj.1.2021.02.01.20.27.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Feb 2021 20:27:54 -0800 (PST)
-Date:   Mon, 1 Feb 2021 20:27:53 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     richard.gong@linux.intel.com
-Cc:     mdf@kernel.org, trix@redhat.com, gregkh@linuxfoundation.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Gong <richard.gong@intel.com>
-Subject: Re: [PATCHv4 5/6] dt-bindings: fpga: add authenticate-fpga-config
- property
-Message-ID: <YBjUyc2ea51S4Wzp@epycbox.lan>
-References: <1612192919-4069-1-git-send-email-richard.gong@linux.intel.com>
- <1612192919-4069-6-git-send-email-richard.gong@linux.intel.com>
+        id S231851AbhBBU01 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 2 Feb 2021 15:26:27 -0500
+Received: from mga02.intel.com ([134.134.136.20]:33050 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232957AbhBBUVK (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 2 Feb 2021 15:21:10 -0500
+IronPort-SDR: DrHlrOrc0nIC7C59rBAE0WAfdlrcXBCYiko0glVkLBDzfw7ReTPzEdU4zmxxhwruRTLPrzMo6s
+ u2aXarrwcGSQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="168031745"
+X-IronPort-AV: E=Sophos;i="5.79,396,1602572400"; 
+   d="scan'208";a="168031745"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 12:16:22 -0800
+IronPort-SDR: jBxBppq8HVCFQTAYgJDsnV45zWNoYttBI7Ub3Dl/9q3GG1k30Uy3U2emPMgOpDN2EZ7rRVsnim
+ ayE67msGIb+Q==
+X-IronPort-AV: E=Sophos;i="5.79,396,1602572400"; 
+   d="scan'208";a="396153033"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.209.22.86])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 12:16:22 -0800
+Subject: Re: [PATCH v2 1/1] fpga: dfl: afu: harden port enable logic
+To:     "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "trix@redhat.com" <trix@redhat.com>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "Gerlach, Matthew" <matthew.gerlach@intel.com>
+References: <20200917183219.3603-1-russell.h.weight@intel.com>
+ <DM6PR11MB38194BD85854B598F1CD97C5853F0@DM6PR11MB3819.namprd11.prod.outlook.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <8ab0e288-97f0-d167-50f0-624e05d77944@intel.com>
+Date:   Tue, 2 Feb 2021 12:16:18 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1612192919-4069-6-git-send-email-richard.gong@linux.intel.com>
+In-Reply-To: <DM6PR11MB38194BD85854B598F1CD97C5853F0@DM6PR11MB3819.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 09:21:58AM -0600, richard.gong@linux.intel.com wrote:
-> From: Richard Gong <richard.gong@intel.com>
-> 
-> Add authenticate-fpga-config property for FPGA bitstream authentication,
-> which makes sure a signed bitstream has valid signatures.
-> 
-> Signed-off-by: Richard Gong <richard.gong@intel.com>
-> ---
-> v4: explain authenticate-fpga-config flag further
-> v3: no change
-> v2: put authenticate-fpga-config above partial-fpga-config
->     update commit messages
-> ---
->  Documentation/devicetree/bindings/fpga/fpga-region.txt | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt b/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> index e811cf8..e2740b6 100644
-> --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> @@ -182,6 +182,10 @@ Optional properties:
->  	This property is optional if the FPGA Manager handles the bridges.
->          If the fpga-region is  the child of a fpga-bridge, the list should not
->          contain the parent bridge.
-> +- authenticate-fpga-config : boolean, set if do bitstream authentication only.
-> +	flag authenticate-fpga-config is used to first check the integrity of
-> +	the bitstream. If the authentication is passed, the user can perform
-> +	other operations.
-From the other commits it looks like it *also* writes to QSPI? If so
-please document that.
+Sorry for the delay on this patch. It seemed like a lower priority patch than
+others, since we haven't seen any issues with current products. Please my
+responses inline.
 
-If not, feel free to ignore :)
+On 9/17/20 7:08 PM, Wu, Hao wrote:
+>> -----Original Message-----
+>> From: Russ Weight <russell.h.weight@intel.com>
+>> Sent: Friday, September 18, 2020 2:32 AM
+>> To: mdf@kernel.org; linux-fpga@vger.kernel.org; linux-
+>> kernel@vger.kernel.org
+>> Cc: trix@redhat.com; lgoncalv@redhat.com; Xu, Yilun <yilun.xu@intel.com>;
+>> Wu, Hao <hao.wu@intel.com>; Gerlach, Matthew
+>> <matthew.gerlach@intel.com>; Weight, Russell H
+>> <russell.h.weight@intel.com>
+>> Subject: [PATCH v2 1/1] fpga: dfl: afu: harden port enable logic
+>>
+>> Port enable is not complete until ACK = 0. Change
+>> __afu_port_enable() to guarantee that the enable process
+>> is complete by polling for ACK == 0.
+> The description of this port reset ack bit is
+>
+> " After initiating a Port soft reset, SW should monitor this bit. HW
+> will set this bit when all outstanding requests initiated by this port
+> have been drained, and the minimum soft reset pulse width has
+> elapsed. "
+>
+> But no description about what to do when clearing a Port soft reset
+> to enable the port.
+>
+> So we need to understand clearly on why we need this change
+> (e.g. what may happen without this change), and will it apply for all
+> existing DFL devices and future ones, or just for one specific card.
+> Could you please help? : )
+I touched bases with the hardware engineers. The recommendation to wait
+for ACK to be cleared is new with OFS and is documented in the latest
+OFS specification as follows (see step #4):
 
-Maybe I would highlight two things:
-a) If you add 'authenticate-fpga-config' you are not allowed to add new
-   nodes
-b) If you add 'authenticate-fpga-config' you are not alllowed to add
-   other operations
->  - partial-fpga-config : boolean, set if partial reconfiguration is to be done,
->  	otherwise full reconfiguration is done.
->  - external-fpga-config : boolean, set if the FPGA has already been configured
-> -- 
-> 2.7.4
-> 
+> 3.7.1 AFU Soft Resets
+> Software may cause a soft reset to be issued to the AFU as follows:
+> 1. Assert the PortSoftReset field of the PORT_CONTROL register
+> 2. Wait for the Port to acknowledge the soft reset by monitoring the
+> PortSoftResetAck field of the PORT_CONTROL register, i.e. PortSoftResetAck=1
+> 3. Deasserting the PortSoftReset field
+> 4. Wait for the Port to acknowledge the soft reset de-assertion by monitoring the
+> PortSoftResetAck field of the PORT_CONTROL register, i.e. PortSoftResetAck=0
+>
+> This sequence ensures that outstanding transactions are suitably flushed and
+> that the FIM minimum reset pulse width is respected. Failing to follow this 
+> sequence leaves the AFU in an undefined state.
+
+The OFS specification has not been posted publicly, yet.
+
+Also, this is how it was explained to me:
+
+> In most scenario, port will be able to get out of reset soon enough
+> when SW releases the port reset, especially on all the PAC products
+> which have been verified before release.
+>
+> Polling for HW to clear the ACK is meant to handle the following scenarios:
+>
+>   * Different platform can take variable period of time to get out of reset
+>   * Bug in the HW that hold the port in reset
+
+So this change is not required for the currently released PAC cards,
+but it is needed for OFS based products. I don't think there is any reason
+to hold off on the patch, as it is still valid for current products.
+
+>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>> ---
+>>  drivers/fpga/dfl-afu-error.c |  2 +-
+>>  drivers/fpga/dfl-afu-main.c  | 29 +++++++++++++++++++++--------
+>>  drivers/fpga/dfl-afu.h       |  2 +-
+>>  3 files changed, 23 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/fpga/dfl-afu-error.c b/drivers/fpga/dfl-afu-error.c
+>> index c4691187cca9..0806532a3e9f 100644
+>> --- a/drivers/fpga/dfl-afu-error.c
+>> +++ b/drivers/fpga/dfl-afu-error.c
+>> @@ -103,7 +103,7 @@ static int afu_port_err_clear(struct device *dev, u64
+>> err)
+>>  __afu_port_err_mask(dev, false);
+>>
+>>  /* Enable the Port by clear the reset */
+>> -__afu_port_enable(pdev);
+>> +ret = __afu_port_enable(pdev);
+>>
+>>  done:
+>>  mutex_unlock(&pdata->lock);
+>> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
+>> index 753cda4b2568..f73b06cdf13c 100644
+>> --- a/drivers/fpga/dfl-afu-main.c
+>> +++ b/drivers/fpga/dfl-afu-main.c
+>> @@ -21,6 +21,9 @@
+>>
+>>  #include "dfl-afu.h"
+>>
+>> +#define RST_POLL_INVL 10 /* us */
+>> +#define RST_POLL_TIMEOUT 1000 /* us */
+>> +
+>>  /**
+>>   * __afu_port_enable - enable a port by clear reset
+>>   * @pdev: port platform device.
+>> @@ -32,7 +35,7 @@
+>>   *
+>>   * The caller needs to hold lock for protection.
+>>   */
+>> -void __afu_port_enable(struct platform_device *pdev)
+>> +int __afu_port_enable(struct platform_device *pdev)
+>>  {
+>>  struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev-
+>>> dev);
+>>  void __iomem *base;
+>> @@ -41,7 +44,7 @@ void __afu_port_enable(struct platform_device *pdev)
+>>  WARN_ON(!pdata->disable_count);
+>>
+>>  if (--pdata->disable_count != 0)
+>> -return;
+>> +return 0;
+>>
+>>  base = dfl_get_feature_ioaddr_by_id(&pdev->dev,
+>> PORT_FEATURE_ID_HEADER);
+>>
+>> @@ -49,10 +52,20 @@ void __afu_port_enable(struct platform_device
+>> *pdev)
+>>  v = readq(base + PORT_HDR_CTRL);
+>>  v &= ~PORT_CTRL_SFTRST;
+>>  writeq(v, base + PORT_HDR_CTRL);
+>> -}
+>>
+>> -#define RST_POLL_INVL 10 /* us */
+>> -#define RST_POLL_TIMEOUT 1000 /* us */
+>> +/*
+>> + * HW clears the ack bit to indicate that the port is fully out
+>> + * of reset.
+>> + */
+>> +if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
+>> +       !(v & PORT_CTRL_SFTRST_ACK),
+>> +       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
+>> +dev_err(&pdev->dev, "timeout, failure to enable device\n");
+>> +return -ETIMEDOUT;
+>> +}
+>> +
+>> +return 0;
+>> +}
+>>
+>>  /**
+>>   * __afu_port_disable - disable a port by hold reset
+>> @@ -111,7 +124,7 @@ static int __port_reset(struct platform_device *pdev)
+>>
+>>  ret = __afu_port_disable(pdev);
+>>  if (!ret)
+>> -__afu_port_enable(pdev);
+>> +ret = __afu_port_enable(pdev);
+>>
+>>  return ret;
+> What about:
+>
+> ret = __afu_port_disable(pdev);
+> if (ret)
+> return ret;
+>
+> return __afu_port_enable(pdev);
+Sure - I'll make this change.
+
 Thanks,
-Moritz
+- Russ
+>
+> Thanks
+> Hao
+>
+>>  }
+>> @@ -872,11 +885,11 @@ static int afu_dev_destroy(struct platform_device
+>> *pdev)
+>>  static int port_enable_set(struct platform_device *pdev, bool enable)
+>>  {
+>>  struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev-
+>>> dev);
+>> -int ret = 0;
+>> +int ret;
+>>
+>>  mutex_lock(&pdata->lock);
+>>  if (enable)
+>> -__afu_port_enable(pdev);
+>> +ret = __afu_port_enable(pdev);
+>>  else
+>>  ret = __afu_port_disable(pdev);
+>>  mutex_unlock(&pdata->lock);
+>> diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
+>> index 576e94960086..e5020e2b1f3d 100644
+>> --- a/drivers/fpga/dfl-afu.h
+>> +++ b/drivers/fpga/dfl-afu.h
+>> @@ -80,7 +80,7 @@ struct dfl_afu {
+>>  };
+>>
+>>  /* hold pdata->lock when call __afu_port_enable/disable */
+>> -void __afu_port_enable(struct platform_device *pdev);
+>> +int __afu_port_enable(struct platform_device *pdev);
+>>  int __afu_port_disable(struct platform_device *pdev);
+>>
+>>  void afu_mmio_region_init(struct dfl_feature_platform_data *pdata);
+>> --
+>> 2.17.1
+
