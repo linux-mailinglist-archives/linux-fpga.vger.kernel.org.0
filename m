@@ -2,68 +2,47 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C6930DE17
-	for <lists+linux-fpga@lfdr.de>; Wed,  3 Feb 2021 16:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDE530E635
+	for <lists+linux-fpga@lfdr.de>; Wed,  3 Feb 2021 23:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234150AbhBCP1Q (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 3 Feb 2021 10:27:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45356 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232566AbhBCP1N (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 3 Feb 2021 10:27:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612365947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=b+OO0QGxJRxpJr8sMMpFu2qoMc9u5TBcGuWeR7oxI9E=;
-        b=amO6jA/yNCMWNBbizWrwEnDizgNHeLhNiPfxhAvGERbhGsFPVAyShmSibfB2ElnHOCXp+s
-        YVbkb5CNdW0kx8SUiP9lxUooGONbFIVdp3RmHeHmbUwWSZMaay7tE2B+SDrVsXe316DTMy
-        A7d78r7aXpj3ih88WtuwRmNAqQaQR5o=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-295-rRQ6S5ucOf-JsGhL71NTRQ-1; Wed, 03 Feb 2021 10:25:45 -0500
-X-MC-Unique: rRQ6S5ucOf-JsGhL71NTRQ-1
-Received: by mail-qv1-f72.google.com with SMTP id l3so18077565qvz.12
-        for <linux-fpga@vger.kernel.org>; Wed, 03 Feb 2021 07:25:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=b+OO0QGxJRxpJr8sMMpFu2qoMc9u5TBcGuWeR7oxI9E=;
-        b=Z7a0ngIL2SfDFGE7anqMTO8wVK06l26YH6CdZ02Eyqt4j6ZORjXTatWPAXM6xspqKR
-         o4bQfJpAcECDjI7AiafvQ/MRNdWHXykTFACmwVhLwu+q9z1f6QoRHfN7JeEALI6QMJ4d
-         QmwnHSsUjmGS2H/DtCQuacyFBfXMRYrYvrdbiuTQTixJSZiQQ34ZTB9dsCrspoYzpjZ1
-         BNhW7V07EHYRF9yti4/rXKyHTP1peMZuJvOE/eX0zxfxZgJluhmrh29xI6nHN0aCDeqD
-         2i8djb5kkyKhx1hCJfq3KGJgO+YGBib5TYiIzMX47pSC6U+TJqTXxj0BEOkWfrw8LcVl
-         b0IA==
-X-Gm-Message-State: AOAM532iCT2dviS5DoqsDnvVWhXeKDx7YoSMx1A2tcc9OFNeyWV/fhSw
-        +bBS7pBqC59rfoHoV1ro6BWgEBjIJNyGy5kItsgGsU3sjXWxppVke/vmOD3KPOY91k48c9G0tuu
-        E2Ef4lYH5jLiY3BmI256X/Q==
-X-Received: by 2002:a05:620a:9c3:: with SMTP id y3mr2924152qky.327.1612365944738;
-        Wed, 03 Feb 2021 07:25:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZiAJoPsyG/rAEqjnRYQc8ncW+O35t7mvbUzNxC7oC8T/VxmCoGLid3marDzevZGs1K7oJJQ==
-X-Received: by 2002:a05:620a:9c3:: with SMTP id y3mr2924127qky.327.1612365944419;
-        Wed, 03 Feb 2021 07:25:44 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id q11sm478459qtp.49.2021.02.03.07.25.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Feb 2021 07:25:43 -0800 (PST)
-Subject: Re: [PATCH v3 1/1] fpga: dfl: afu: harden port enable logic
-To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@intel.com
-References: <20210202230631.198950-1-russell.h.weight@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <15f90871-170c-3487-0f99-47cf54163bb7@redhat.com>
-Date:   Wed, 3 Feb 2021 07:25:41 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S232201AbhBCWoJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 3 Feb 2021 17:44:09 -0500
+Received: from mga02.intel.com ([134.134.136.20]:23638 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232102AbhBCWoF (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 3 Feb 2021 17:44:05 -0500
+IronPort-SDR: 0PiRG2fXlXiS4ZKs9tNDzCp4V3hcGhd52hwU70WRWyxKw2f0gOLKHYGkjXRvVr5HTbA5yDNAJW
+ lFNgSDH7NftA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="168240570"
+X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
+   d="scan'208";a="168240570"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 14:43:22 -0800
+IronPort-SDR: sFoMAdrNkxTVXmy/YRxe75/aIh5a4ygS21WDWlN7PWYgLnzaGHo4OFTpw74NH6aCUuMp5uVl3i
+ k0XagAOd1PbQ==
+X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
+   d="scan'208";a="396839883"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.212.187.111])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 14:43:21 -0800
+Subject: Re: [PATCH v2 1/1] fpga: dfl: afu: harden port enable logic
+To:     "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "trix@redhat.com" <trix@redhat.com>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "Gerlach, Matthew" <matthew.gerlach@intel.com>
+References: <20200917183219.3603-1-russell.h.weight@intel.com>
+ <DM6PR11MB38194BD85854B598F1CD97C5853F0@DM6PR11MB3819.namprd11.prod.outlook.com>
+ <8ab0e288-97f0-d167-50f0-624e05d77944@intel.com>
+ <DM6PR11MB3819BC4BFE16A9CBE185EB1185B49@DM6PR11MB3819.namprd11.prod.outlook.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <25ada056-e591-4a6d-2e0e-704b099d00bf@intel.com>
+Date:   Wed, 3 Feb 2021 14:43:19 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210202230631.198950-1-russell.h.weight@intel.com>
+In-Reply-To: <DM6PR11MB3819BC4BFE16A9CBE185EB1185B49@DM6PR11MB3819.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -71,27 +50,102 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-..snip..
 
-On 2/2/21 3:06 PM, Russ Weight wrote:
-> diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
-> index 576e94960086..e5020e2b1f3d 100644
-> --- a/drivers/fpga/dfl-afu.h
-> +++ b/drivers/fpga/dfl-afu.h
-> @@ -80,7 +80,7 @@ struct dfl_afu {
->  };
->  
->  /* hold pdata->lock when call __afu_port_enable/disable */
-> -void __afu_port_enable(struct platform_device *pdev);
-> +int __afu_port_enable(struct platform_device *pdev);
->  int __afu_port_disable(struct platform_device *pdev);
->  
 
-Should the '__' prefix be removed from __afu_port* ?
+On 2/3/21 1:28 AM, Wu, Hao wrote:
+>> Subject: Re: [PATCH v2 1/1] fpga: dfl: afu: harden port enable logic
+>>
+>> Sorry for the delay on this patch. It seemed like a lower priority patch than
+>> others, since we haven't seen any issues with current products. Please my
+>> responses inline.
+>>
+>> On 9/17/20 7:08 PM, Wu, Hao wrote:
+>>>> -----Original Message-----
+>>>> From: Russ Weight <russell.h.weight@intel.com>
+>>>> Sent: Friday, September 18, 2020 2:32 AM
+>>>> To: mdf@kernel.org; linux-fpga@vger.kernel.org; linux-
+>>>> kernel@vger.kernel.org
+>>>> Cc: trix@redhat.com; lgoncalv@redhat.com; Xu, Yilun <yilun.xu@intel.com>;
+>>>> Wu, Hao <hao.wu@intel.com>; Gerlach, Matthew
+>>>> <matthew.gerlach@intel.com>; Weight, Russell H
+>>>> <russell.h.weight@intel.com>
+>>>> Subject: [PATCH v2 1/1] fpga: dfl: afu: harden port enable logic
+>>>>
+>>>> Port enable is not complete until ACK = 0. Change
+>>>> __afu_port_enable() to guarantee that the enable process
+>>>> is complete by polling for ACK == 0.
+>>> The description of this port reset ack bit is
+>>>
+>>> " After initiating a Port soft reset, SW should monitor this bit. HW
+>>> will set this bit when all outstanding requests initiated by this port
+>>> have been drained, and the minimum soft reset pulse width has
+>>> elapsed. "
+>>>
+>>> But no description about what to do when clearing a Port soft reset
+>>> to enable the port.
+>>>
+>>> So we need to understand clearly on why we need this change
+>>> (e.g. what may happen without this change), and will it apply for all
+>>> existing DFL devices and future ones, or just for one specific card.
+>>> Could you please help? : )
+>> I touched bases with the hardware engineers. The recommendation to wait
+>> for ACK to be cleared is new with OFS and is documented in the latest
+>> OFS specification as follows (see step #4):
+>>
+>>> 3.7.1 AFU Soft Resets
+>>> Software may cause a soft reset to be issued to the AFU as follows:
+>>> 1. Assert the PortSoftReset field of the PORT_CONTROL register
+>>> 2. Wait for the Port to acknowledge the soft reset by monitoring the
+>>> PortSoftResetAck field of the PORT_CONTROL register, i.e.
+>> PortSoftResetAck=1
+>>> 3. Deasserting the PortSoftReset field
+>>> 4. Wait for the Port to acknowledge the soft reset de-assertion by monitoring
+>> the
+>>> PortSoftResetAck field of the PORT_CONTROL register, i.e.
+>> PortSoftResetAck=0
+>>> This sequence ensures that outstanding transactions are suitably flushed and
+>>> that the FIM minimum reset pulse width is respected. Failing to follow this
+>>> sequence leaves the AFU in an undefined state.
+>> The OFS specification has not been posted publicly, yet.
+>>
+>> Also, this is how it was explained to me:
+>>
+>>> In most scenario, port will be able to get out of reset soon enough
+>>> when SW releases the port reset, especially on all the PAC products
+>>> which have been verified before release.
+>>>
+>>> Polling for HW to clear the ACK is meant to handle the following scenarios:
+>>>
+>>>   * Different platform can take variable period of time to get out of reset
+>>>   * Bug in the HW that hold the port in reset
+>> So this change is not required for the currently released PAC cards,
+>> but it is needed for OFS based products. I don't think there is any reason
+>> to hold off on the patch, as it is still valid for current products.
+> As you know, this driver is used for different cards, and we need to make
+> sure new changes introduced in new version spec, don't break old products
+> as we are sharing the same driver. and we are not sure if in the future some
+> new products but still uses old specs, and then things may be broken if the
+> driver which always perform new flow. Another method is that introduce 1
+> bit in hardware register to tell the driver to perform the additional steps,
+> then it can avoid impacts to the old products. If this can't be done, then
+> we at least need to verify this change on all existing hardware and suggest
+> users to follow new spec only.
 
-This would make the function names consistent with the other decls
+According to the HW engineers, the RTL implementation has not changed; it is
+the same as the RTL in the current PAC products. Polling for HW to clear the
+ACK is something we could have (should have?) been doing all along. The timing
+hasn't been an issue for the current PAC products, as proven by our testing.
+However, with OFS we cannot anticipate what the timing will be for customer
+designed products, so the specification is calling out this requirement as a
+precaution.
 
-Tom
+I am using a development machine that has the older PAC devices installed. I
+cleared port errors on these cards as a quick check, and the reset completes
+without hanging - which indicates that the ACK bit is in fact getting cleared.
+So there is not need for any device-specific conditional statements here.
 
->  void afu_mmio_region_init(struct dfl_feature_platform_data *pdata);
+- Russ
+
+>
+> Hao
 
