@@ -2,96 +2,114 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6088B30F3F7
-	for <lists+linux-fpga@lfdr.de>; Thu,  4 Feb 2021 14:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E33E530F4E6
+	for <lists+linux-fpga@lfdr.de>; Thu,  4 Feb 2021 15:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236381AbhBDNhF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 4 Feb 2021 08:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236366AbhBDNg4 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 4 Feb 2021 08:36:56 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C305C061573
-        for <linux-fpga@vger.kernel.org>; Thu,  4 Feb 2021 05:36:14 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id q7so3462259wre.13
-        for <linux-fpga@vger.kernel.org>; Thu, 04 Feb 2021 05:36:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2wNLIUP4Xf17KhdjtkEwog/CXYEKOouf43hiUeEcDII=;
-        b=Acq3HeMCg6A4IzKWo9Z8JsiKOLxtAiJP8UkpXJL3y3R0x2pfLlYRYei2qibzM+vEGG
-         I3QtwSwf+60HVR3isI6kiGY/lINuuOsSUbi8rFsn8bl83va0jOTvn+BmHkUBwViPVKes
-         HgeKhzIGlGpj3tvhVipCPTy1v0sDKmKcPSivTZo01uEcWYkbBM9AoPxsPoMNLg1pcyIJ
-         QWwunVoC7diVVldqj6/Pj3ocxCpWP16uIqy4Phd0T0qzYP0NE7OzOvhjOePq5XglKtHD
-         J+k3PuwqSashd6tuvX8AH+IlqoKmJ7lrd0dVRxMkeBMMxz1B2gLXSa1viXPc6HuAjLIW
-         +DtQ==
+        id S236518AbhBDO02 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 4 Feb 2021 09:26:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35931 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236681AbhBDO0P (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 4 Feb 2021 09:26:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612448687;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XpXFDxYEEygOiSW0EwEnIt2QyvX50R8LwyF4+V7RRmU=;
+        b=YGqulw1Ut5wecUUKyPa/tk7EgvJkUa4O6IczR272s3GnSSwP6H8ZoPmuXsOZYnet0jfC4R
+        c3ctx9TfDBWsFDJ7J0u5sSA2UffA94m8YEaF2v/iBl0ZqT+CPewl2davwnKw211PS7nIJx
+        jGEb6BVflxnZuyT8Aep503Wa/BR3y6o=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-531-LRpgly5nP5mQegt7hBM7fw-1; Thu, 04 Feb 2021 09:24:43 -0500
+X-MC-Unique: LRpgly5nP5mQegt7hBM7fw-1
+Received: by mail-qv1-f72.google.com with SMTP id e10so2261025qvp.22
+        for <linux-fpga@vger.kernel.org>; Thu, 04 Feb 2021 06:24:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=2wNLIUP4Xf17KhdjtkEwog/CXYEKOouf43hiUeEcDII=;
-        b=niPieKYc48x4SzVj0F+lzQa/TgqcVzMCnEHYYpSf+3cs6UtPAjtSGluwwderTLTJRZ
-         kCXi13C4APkKx6jd5iKipN+ARXul/OXFRWtUQCNhd2kFPILYKXhgmFGXSsSdDyv+akku
-         6xtMP2nV7U0FJj1Y0kMMaAQZSY8pHDRCA/SGbCKBM2pbDaiAbttWu2h9Z+HEHoJIX85H
-         rmRF/fcs9T73gdqqriewMJn2SVHovJ+kPlQCFbzrB98+FkaFqmuOp1DedUU9Plu+R2DG
-         ft1FjcFIAmSi7vduHriaSsOrZ8JuLuhZlUIFL+fJ+3bSZ3qltAU4kXIdyt4uQfrsBSEs
-         B2nA==
-X-Gm-Message-State: AOAM532EsnDZFgQyVFaQoWhT2JCXqDd0iGYSCOrdr9C6D5TVJUlE8N2V
-        BPYfINkpZ7mUb6heZzWithnQEA==
-X-Google-Smtp-Source: ABdhPJz2G4W8/09FQulizSxZSffq8RFw/WyNnPD/E6nEF9+KBGabmxW9VIK0Pbljn9oDZPUqGM9ayw==
-X-Received: by 2002:a5d:49cf:: with SMTP id t15mr9252884wrs.217.1612445773300;
-        Thu, 04 Feb 2021 05:36:13 -0800 (PST)
-Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id c62sm6212065wmd.43.2021.02.04.05.36.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 04 Feb 2021 05:36:12 -0800 (PST)
-Sender: Michal Simek <monstr@monstr.eu>
-From:   Michal Simek <michal.simek@xilinx.com>
-To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com
-Cc:     Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-fpga@vger.kernel.org
-Subject: [PATCH] fpga: xilinx-pr-decoupler: Simplify code by using dev_err_probe()
-Date:   Thu,  4 Feb 2021 14:36:11 +0100
-Message-Id: <666708105c25ae5fa7bb23b5eabd7d12fe9cb1b3.1612445770.git.michal.simek@xilinx.com>
-X-Mailer: git-send-email 2.30.0
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=XpXFDxYEEygOiSW0EwEnIt2QyvX50R8LwyF4+V7RRmU=;
+        b=GZhxIxLVqwTImMLPyiXv2QSs96Lol28lGeydMMBCpNbHGWy+lwRpzBnCBp4E/HfXiW
+         pgNMmLfcmLul7mQfxIPcRf/F4PtrSUCdgX0UOWy4Hb8rybeeNP13HkG+QjZMCZoKH6yt
+         ieIYZC+5ntdctoW/qvSHMHbW5zn4TJRn0IffkxZuKhbWure6YGwn3/XjoRFc8ZH432QS
+         rtqmxvhMma05shXf+FRGHQ9dQF+l3wmOWSjyTa/ogoGkjlCSIkJdybeFVOkPkSm3Xw/G
+         Fpdz+EddLwAjEFUQw+3sRI3Xnp7qHZAZJK6HUa7Ag96h2JIiT3xb359rhzkjUtN/ffET
+         C2/w==
+X-Gm-Message-State: AOAM533WOYtkOmyHhr9i6JRj4f0YLlie37hKA+13VlUBrvp0wHHCJ5NM
+        rC47JB/ykc/GXuVu3yMs0k8Xwu5pYIWw8y/e6olnfrPhYzAPWllKiNPtd6hPN7yeH42IK+WeONM
+        q1CeQDJyffvXHszm+4Q/C4w==
+X-Received: by 2002:a37:60e:: with SMTP id 14mr7606615qkg.60.1612448682906;
+        Thu, 04 Feb 2021 06:24:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzlFRShimnFw8uB0YGrJn4zH7BpK44y33+Whl8wip1+QMHHK9wY+W9WC+2xok1oF9sj/wA8PA==
+X-Received: by 2002:a37:60e:: with SMTP id 14mr7606600qkg.60.1612448682692;
+        Thu, 04 Feb 2021 06:24:42 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id u7sm4350137qta.75.2021.02.04.06.24.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Feb 2021 06:24:42 -0800 (PST)
+Subject: Re: [PATCH v3 1/1] fpga: dfl: afu: harden port enable logic
+To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
+        matthew.gerlach@intel.com
+References: <20210202230631.198950-1-russell.h.weight@intel.com>
+ <15f90871-170c-3487-0f99-47cf54163bb7@redhat.com>
+ <9e53d35b-b1b5-5f21-f771-63ce689dd67e@intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <6751f883-36d1-dad8-7754-bd335fd767a5@redhat.com>
+Date:   Thu, 4 Feb 2021 06:24:40 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <9e53d35b-b1b5-5f21-f771-63ce689dd67e@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Use already prepared dev_err_probe() introduced by commit a787e5400a1c
-("driver core: add device probe log helper").
-It simplifies EPROBE_DEFER handling.
 
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
----
+On 2/3/21 3:06 PM, Russ Weight wrote:
+>
+> On 2/3/21 7:25 AM, Tom Rix wrote:
+>> ..snip..
+>>
+>> On 2/2/21 3:06 PM, Russ Weight wrote:
+>>> diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
+>>> index 576e94960086..e5020e2b1f3d 100644
+>>> --- a/drivers/fpga/dfl-afu.h
+>>> +++ b/drivers/fpga/dfl-afu.h
+>>> @@ -80,7 +80,7 @@ struct dfl_afu {
+>>>  };
+>>>  
+>>>  /* hold pdata->lock when call __afu_port_enable/disable */
+>>> -void __afu_port_enable(struct platform_device *pdev);
+>>> +int __afu_port_enable(struct platform_device *pdev);
+>>>  int __afu_port_disable(struct platform_device *pdev);
+>>>  
+>> Should the '__' prefix be removed from __afu_port* ?
+>>
+>> This would make the function names consistent with the other decls
+> The '__' prefix is used here to help highlight the fact that these functions go not manage
+> the locking themselves and must be called while holding the port mutex. There are additional
+> functions, such as__port_reset(), that are following this same convention. I think these
+> are OK as they are.
 
- drivers/fpga/xilinx-pr-decoupler.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ok
 
-diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-index 7d69af230567..b0eaf26af6e7 100644
---- a/drivers/fpga/xilinx-pr-decoupler.c
-+++ b/drivers/fpga/xilinx-pr-decoupler.c
-@@ -100,11 +100,9 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
- 		return PTR_ERR(priv->io_base);
- 
- 	priv->clk = devm_clk_get(&pdev->dev, "aclk");
--	if (IS_ERR(priv->clk)) {
--		if (PTR_ERR(priv->clk) != -EPROBE_DEFER)
--			dev_err(&pdev->dev, "input clock not found\n");
--		return PTR_ERR(priv->clk);
--	}
-+	if (IS_ERR(priv->clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->clk),
-+				     "input clock not found\n");
- 
- 	err = clk_prepare_enable(priv->clk);
- 	if (err) {
--- 
-2.30.0
+Reviewed-by: Tom Rix <trix@redhat.com>
+
+Tom
+
+>
+> - Russ
+>
+>> Tom
+>>
+>>>  void afu_mmio_region_init(struct dfl_feature_platform_data *pdata);
 
