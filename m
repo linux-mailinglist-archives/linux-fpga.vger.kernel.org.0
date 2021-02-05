@@ -2,37 +2,38 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F1730FF46
-	for <lists+linux-fpga@lfdr.de>; Thu,  4 Feb 2021 22:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592C3310FDC
+	for <lists+linux-fpga@lfdr.de>; Fri,  5 Feb 2021 19:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbhBDV2D (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 4 Feb 2021 16:28:03 -0500
-Received: from mga01.intel.com ([192.55.52.88]:57877 "EHLO mga01.intel.com"
+        id S233231AbhBEQpo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 5 Feb 2021 11:45:44 -0500
+Received: from mga02.intel.com ([134.134.136.20]:21954 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229513AbhBDV2D (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 4 Feb 2021 16:28:03 -0500
-IronPort-SDR: klbbzmHJ/8ZnrIMWRIyj1Z3H0cFqtsxuILBG7UFZlKDqP12ZjyS9ypyqzU7Y3w/oO59J/R7md6
- ymjZSCOjBUUA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="200325995"
-X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
-   d="scan'208";a="200325995"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 13:27:22 -0800
-IronPort-SDR: KCbcfCsMnlaaqAjH1wFixLnEqDQ67GXnHCIqUamMop0TkX0cpx1LsI4xKJkpZBcfO2TKIAnx5e
- 9p1eSSLd8R+Q==
-X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
-   d="scan'208";a="373134751"
-Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.209.87.127])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 13:27:22 -0800
+        id S233256AbhBEQnj (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 5 Feb 2021 11:43:39 -0500
+IronPort-SDR: 8LnX1ddanVWvU8AnSj+ulG0s7GAMYdBS5s4LlwJKw1ExeEr1xvc29kL+vySOX+6DbE1VcmisfZ
+ KFE8Kw4x5FVA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9886"; a="168589030"
+X-IronPort-AV: E=Sophos;i="5.81,155,1610438400"; 
+   d="scan'208";a="168589030"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 10:25:37 -0800
+IronPort-SDR: v2Vegu0BUHECOu6lKImg7NCJXEFAZaxjkBeCgqFiYpdXRYHZyEyRm9sqVMs0GXmzmnvlQjyjUM
+ V2wgIa/1pAvw==
+X-IronPort-AV: E=Sophos;i="5.81,155,1610438400"; 
+   d="scan'208";a="373528676"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.212.156.207])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 10:25:36 -0800
 From:   Russ Weight <russell.h.weight@intel.com>
 To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
         hao.wu@intel.com, matthew.gerlach@intel.com,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v4 1/1] fpga: dfl: afu: harden port enable logic
-Date:   Thu,  4 Feb 2021 13:27:13 -0800
-Message-Id: <20210204212713.256021-1-russell.h.weight@intel.com>
+        Russ Weight <russell.h.weight@intel.com>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v5 1/1] fpga: dfl: afu: harden port enable logic
+Date:   Fri,  5 Feb 2021 10:25:21 -0800
+Message-Id: <20210205182521.275887-1-russell.h.weight@intel.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -45,8 +46,11 @@ __afu_port_enable() to guarantee that the enable process
 is complete by polling for ACK == 0.
 
 Reviewed-by: Tom Rix <trix@redhat.com>
+Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 ---
+v5:
+  - Added Reviewed-by tag to commit message
 v4:
   - Added a dev_warn() call for the -EINVAL case of afu_port_err_clear()
   - Modified dev_err() message in __afu_port_disable() to say "disable"
