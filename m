@@ -2,242 +2,202 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84466313A8E
-	for <lists+linux-fpga@lfdr.de>; Mon,  8 Feb 2021 18:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03B6314203
+	for <lists+linux-fpga@lfdr.de>; Mon,  8 Feb 2021 22:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbhBHRM5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 8 Feb 2021 12:12:57 -0500
-Received: from mga03.intel.com ([134.134.136.65]:40243 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231751AbhBHRLA (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 8 Feb 2021 12:11:00 -0500
-IronPort-SDR: SO/NykpxqBC2cB9DNdeDhvQ8IsjsQNFKqspa4T6zd7aR9C/Z4sNx9mvbGenMR9lI4s7uo3KgTM
- lqrB3Fq5FXGA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9889"; a="181812383"
-X-IronPort-AV: E=Sophos;i="5.81,162,1610438400"; 
-   d="scan'208";a="181812383"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 09:10:13 -0800
-IronPort-SDR: lCIbErkhTTnRzrxOb/bfSV6k3l/arQ7tGPt3/CI1aP+592kMq0VVRsdr7hR/q6ZX4jx9Z5GUAR
- ZcwTI/VnL4vg==
-X-IronPort-AV: E=Sophos;i="5.81,162,1610438400"; 
-   d="scan'208";a="398464226"
-Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.209.12.237])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 09:10:13 -0800
-Subject: Re: [PATCH v5 1/1] fpga: dfl: afu: harden port enable logic
+        id S236873AbhBHVjP (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 8 Feb 2021 16:39:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52879 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235456AbhBHVif (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 8 Feb 2021 16:38:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612820228;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ycwoDuRmQSUAa02t2T1lCK2l3ab7oXwofcurbg2I9u0=;
+        b=JQ3ahV2Wu1PGEAvTGC7nz14IRpdEu6v7o5O4s+lVeqHcZ+G4aUe5WMfr6Ur9tWoujF35kX
+        Z8V1arTRRyCWug2Dm6GaYY6IcGv0QGLcN0CBDTx2TclMBMRCcKTa+7uvR5MVnyILkdtuwy
+        FUD1qX08AM5nkZ9PhsLqv9s5Wf6p23Q=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-440-PGEMc-RvNpOZUajp6RMRDw-1; Mon, 08 Feb 2021 16:37:05 -0500
+X-MC-Unique: PGEMc-RvNpOZUajp6RMRDw-1
+Received: by mail-qk1-f200.google.com with SMTP id r15so4777084qke.5
+        for <linux-fpga@vger.kernel.org>; Mon, 08 Feb 2021 13:37:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=ycwoDuRmQSUAa02t2T1lCK2l3ab7oXwofcurbg2I9u0=;
+        b=PkGCIDUHDv3+sdT1zbW1I3RaZrPYuXpl6Tofzy0+Pxp7K2J6b/s33Rm76CIcZH63wq
+         pw+vpXk1Gk7U+nAj/MOBhDeBMJ5Q3z/o/eFK37MVku7YvcHYMz84EbwfuQZ8+LphHqNY
+         PKU4GkO8PukEWERhTR4Ha+Ki4sR6+sK6dnmioxRLilwKfAPVglZydRlLUd7WAJVUseaO
+         xTIEWU0lbm3uPgHiER2Yfhiy+bjwpdBzofTAx+YCifkbb52p7QtQVHJtWviALa/X+gfI
+         ToIAjE7uJu/y+fLguLlK7o9pd1rY6Pl73pGqjNGxhP281U6Twxp5fWxIihL8a5m2u5VV
+         iE7A==
+X-Gm-Message-State: AOAM533mUhFgNwWae6ZOepJzWKuqKxNx2ISihHTLPZb9gybgTLQtbjlJ
+        PsYSWVDe5B8EVzDGb8vcykmpP62NwNa2nhbnbGY2ZcvL4/+a25gszszAPYMUrtFALZ1iXqBeIuZ
+        BoGfE2vGCL3mNBUcVSsT6TA==
+X-Received: by 2002:a37:5ac6:: with SMTP id o189mr19494969qkb.96.1612820225065;
+        Mon, 08 Feb 2021 13:37:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw5GchTOU3t6fseJcEECu+jS0BmO8fmB4mOulTf4QlzBCOjAv4JWxEpF8n7UZZEJd6pOsbMtA==
+X-Received: by 2002:a37:5ac6:: with SMTP id o189mr19494953qkb.96.1612820224888;
+        Mon, 08 Feb 2021 13:37:04 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id h8sm10824699qtp.56.2021.02.08.13.37.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Feb 2021 13:37:04 -0800 (PST)
+Subject: Re: [PATCH v9 1/2] uio: uio_dfl: add userspace i/o driver for DFL bus
 To:     Moritz Fischer <mdf@kernel.org>
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-        hao.wu@intel.com, matthew.gerlach@intel.com,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-References: <20210205182521.275887-1-russell.h.weight@intel.com>
- <YB8AD46GfmVpC7xh@epycbox.lan>
-From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <546df09e-1702-0b95-bb7d-421933293c30@intel.com>
-Date:   Mon, 8 Feb 2021 09:10:10 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Cc:     Xu Yilun <yilun.xu@intel.com>, gregkh@linuxfoundation.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lgoncalv@redhat.com, hao.wu@intel.com
+References: <1611564563-9665-1-git-send-email-yilun.xu@intel.com>
+ <1611564563-9665-2-git-send-email-yilun.xu@intel.com>
+ <e9bb1ff8-f630-f1a3-985c-7e51369a733f@redhat.com>
+ <YA98/8r+yOCurHAJ@epycbox.lan>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <03ffff75-31d6-24c5-03bf-190a64ab9627@redhat.com>
+Date:   Mon, 8 Feb 2021 13:37:02 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <YB8AD46GfmVpC7xh@epycbox.lan>
+In-Reply-To: <YA98/8r+yOCurHAJ@epycbox.lan>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
-
-On 2/6/21 12:46 PM, Moritz Fischer wrote:
-> Russ,
->
-> On Fri, Feb 05, 2021 at 10:25:21AM -0800, Russ Weight wrote:
->> Port enable is not complete until ACK = 0. Change
->> __afu_port_enable() to guarantee that the enable process
->> is complete by polling for ACK == 0.
+On 1/25/21 6:22 PM, Moritz Fischer wrote:
+> On Mon, Jan 25, 2021 at 11:00:38AM -0800, Tom Rix wrote:
+Snip
 >>
->> Reviewed-by: Tom Rix <trix@redhat.com>
->> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
->> ---
->> v5:
->>   - Added Reviewed-by tag to commit message
->> v4:
->>   - Added a dev_warn() call for the -EINVAL case of afu_port_err_clear()
->>   - Modified dev_err() message in __afu_port_disable() to say "disable"
->>     instead of "reset"
->> v3:
->>   - afu_port_err_clear() changed to prioritize port_enable failure over
->>     other a detected mismatch in port errors.
->>   - reorganized code in port_reset() to be more readable.
->> v2:
->>   - Fixed typo in commit message
->> ---
->>  drivers/fpga/dfl-afu-error.c | 10 ++++++----
->>  drivers/fpga/dfl-afu-main.c  | 33 +++++++++++++++++++++++----------
->>  drivers/fpga/dfl-afu.h       |  2 +-
->>  3 files changed, 30 insertions(+), 15 deletions(-)
+>>> +	depends on FPGA_DFL
+>>> +	help
+>>> +	  Generic DFL (Device Feature List) driver for Userspace I/O devices.
+>>> +	  It is useful to provide direct access to DFL devices from userspace.
+>>> +	  A sample userspace application using this driver is available for
+>>> +	  download in a git repository:
+>>> +
+>>> +	    git clone https://github.com/OPAE/opae-sdk.git
+>>> +
+>>> +	  If you compile this as a module, it will be called uio_dfl.
+> I'm not sure KConfig is the right place for this.
+
+More than half of the other configs do this.
+
+ex/
+
+config UIO_MF624
+    tristate "Humusoft MF624 DAQ PCI card driver"
+    depends on PCI
+    help
+      Userspace I/O interface for the Humusoft MF624 PCI card.
+      A sample userspace application using this driver is available
+      (among other MF624 related information and software components)
+      for download in a git repository:
+
+        git clone git://rtime.felk.cvut.cz/mf6xx.git
+
+      If you compile this as a module, it will be called uio_mf624.
+
+Tom
+
+>> opae-sdk is pretty large and uncovered in the Documentation/fpga/dfl.rst.
 >>
->> diff --git a/drivers/fpga/dfl-afu-error.c b/drivers/fpga/dfl-afu-error.c
->> index c4691187cca9..601e599fc33d 100644
->> --- a/drivers/fpga/dfl-afu-error.c
->> +++ b/drivers/fpga/dfl-afu-error.c
->> @@ -52,7 +52,7 @@ static int afu_port_err_clear(struct device *dev, u64 err)
->>  	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
->>  	struct platform_device *pdev = to_platform_device(dev);
->>  	void __iomem *base_err, *base_hdr;
->> -	int ret = -EBUSY;
->> +	int enable_ret = 0, ret = -EBUSY;
->>  	u64 v;
->>  
->>  	base_err = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_ERROR);
->> @@ -96,18 +96,20 @@ static int afu_port_err_clear(struct device *dev, u64 err)
->>  		v = readq(base_err + PORT_FIRST_ERROR);
->>  		writeq(v, base_err + PORT_FIRST_ERROR);
->>  	} else {
->> +		dev_warn(dev, "__func__: received 0x%llx, expected 0x%llx\n",
->> +			 v, err);
->>  		ret = -EINVAL;
->>  	}
->>  
->>  	/* Clear mask */
->>  	__afu_port_err_mask(dev, false);
->>  
->> -	/* Enable the Port by clear the reset */
->> -	__afu_port_enable(pdev);
->> +	/* Enable the Port by clearing the reset */
->> +	enable_ret = __afu_port_enable(pdev);
->>  
->>  done:
->>  	mutex_unlock(&pdata->lock);
->> -	return ret;
->> +	return enable_ret ? enable_ret : ret;
-> Help me understand (sorry if I'm slow here ...), you set ret to -EINVAL,
-> but then we only care if enabling the port worked?
-Port errors are represented in a bitmask. To clear the errors, the same bitmask is
-expected to be written to the "errors" sysfs node. It is considered an error
-(EINVAL) if the values do not match. This would most likely be a user error.
-
-The second error case is that we fail to enable the port. This is a
-critical/fatal HW error, indicating that the PR region can not be accessed.
-
-The EINVAL still has meaning (I have added an informative warning message for this
-case), but it is not as serious as the inability to re-enable the port. So we are
-prioritizing the more critical error code.
-
-- Russ
->
-> I'm not sure I follow the logic (doesn't mean it's wrong :) ).
->>  }
->>  
->>  static ssize_t errors_show(struct device *dev, struct device_attribute *attr,
->> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
->> index 753cda4b2568..77dadaae5b8f 100644
->> --- a/drivers/fpga/dfl-afu-main.c
->> +++ b/drivers/fpga/dfl-afu-main.c
->> @@ -21,6 +21,9 @@
->>  
->>  #include "dfl-afu.h"
->>  
->> +#define RST_POLL_INVL 10 /* us */
->> +#define RST_POLL_TIMEOUT 1000 /* us */
->> +
->>  /**
->>   * __afu_port_enable - enable a port by clear reset
->>   * @pdev: port platform device.
->> @@ -32,7 +35,7 @@
->>   *
->>   * The caller needs to hold lock for protection.
->>   */
->> -void __afu_port_enable(struct platform_device *pdev)
->> +int __afu_port_enable(struct platform_device *pdev)
->>  {
->>  	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
->>  	void __iomem *base;
->> @@ -41,7 +44,7 @@ void __afu_port_enable(struct platform_device *pdev)
->>  	WARN_ON(!pdata->disable_count);
->>  
->>  	if (--pdata->disable_count != 0)
->> -		return;
->> +		return 0;
->>  
->>  	base = dfl_get_feature_ioaddr_by_id(&pdev->dev, PORT_FEATURE_ID_HEADER);
->>  
->> @@ -49,10 +52,20 @@ void __afu_port_enable(struct platform_device *pdev)
->>  	v = readq(base + PORT_HDR_CTRL);
->>  	v &= ~PORT_CTRL_SFTRST;
->>  	writeq(v, base + PORT_HDR_CTRL);
->> -}
->>  
->> -#define RST_POLL_INVL 10 /* us */
->> -#define RST_POLL_TIMEOUT 1000 /* us */
->> +	/*
->> +	 * HW clears the ack bit to indicate that the port is fully out
->> +	 * of reset.
->> +	 */
->> +	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
->> +			       !(v & PORT_CTRL_SFTRST_ACK),
->> +			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
->> +		dev_err(&pdev->dev, "timeout, failure to enable device\n");
->> +		return -ETIMEDOUT;
->> +	}
->> +
->> +	return 0;
->> +}
->>  
->>  /**
->>   * __afu_port_disable - disable a port by hold reset
->> @@ -86,7 +99,7 @@ int __afu_port_disable(struct platform_device *pdev)
->>  	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
->>  			       v & PORT_CTRL_SFTRST_ACK,
->>  			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
->> -		dev_err(&pdev->dev, "timeout, fail to reset device\n");
->> +		dev_err(&pdev->dev, "timeout, failure to disable device\n");
->>  		return -ETIMEDOUT;
->>  	}
->>  
->> @@ -111,9 +124,9 @@ static int __port_reset(struct platform_device *pdev)
->>  
->>  	ret = __afu_port_disable(pdev);
->>  	if (!ret)
->> -		__afu_port_enable(pdev);
->> +		return ret;
->>  
->> -	return ret;
->> +	return __afu_port_enable(pdev);
->>  }
->>  
->>  static int port_reset(struct platform_device *pdev)
->> @@ -872,11 +885,11 @@ static int afu_dev_destroy(struct platform_device *pdev)
->>  static int port_enable_set(struct platform_device *pdev, bool enable)
->>  {
->>  	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
->> -	int ret = 0;
->> +	int ret;
->>  
->>  	mutex_lock(&pdata->lock);
->>  	if (enable)
->> -		__afu_port_enable(pdev);
->> +		ret = __afu_port_enable(pdev);
->>  	else
->>  		ret = __afu_port_disable(pdev);
->>  	mutex_unlock(&pdata->lock);
->> diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
->> index 576e94960086..e5020e2b1f3d 100644
->> --- a/drivers/fpga/dfl-afu.h
->> +++ b/drivers/fpga/dfl-afu.h
->> @@ -80,7 +80,7 @@ struct dfl_afu {
->>  };
->>  
->>  /* hold pdata->lock when call __afu_port_enable/disable */
->> -void __afu_port_enable(struct platform_device *pdev);
->> +int __afu_port_enable(struct platform_device *pdev);
->>  int __afu_port_disable(struct platform_device *pdev);
->>  
->>  void afu_mmio_region_init(struct dfl_feature_platform_data *pdata);
->> -- 
->> 2.25.1
+>> Where in opae-sdk is this example ?
 >>
-> Thanks,
-> Moritz
+>> If you can point me at the example, I will turn it into a selftest.
+>>
+>> Tom
+>>
+>>>  endif
+>>> diff --git a/drivers/uio/Makefile b/drivers/uio/Makefile
+>>> index c285dd2..f2f416a1 100644
+>>> --- a/drivers/uio/Makefile
+>>> +++ b/drivers/uio/Makefile
+>>> @@ -11,3 +11,4 @@ obj-$(CONFIG_UIO_PRUSS)         += uio_pruss.o
+>>>  obj-$(CONFIG_UIO_MF624)         += uio_mf624.o
+>>>  obj-$(CONFIG_UIO_FSL_ELBC_GPCM)	+= uio_fsl_elbc_gpcm.o
+>>>  obj-$(CONFIG_UIO_HV_GENERIC)	+= uio_hv_generic.o
+>>> +obj-$(CONFIG_UIO_DFL)	+= uio_dfl.o
+>>> diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
+>>> new file mode 100644
+>>> index 0000000..89c0fc7
+>>> --- /dev/null
+>>> +++ b/drivers/uio/uio_dfl.c
+>>> @@ -0,0 +1,66 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Generic DFL driver for Userspace I/O devicess
+>>> + *
+>>> + * Copyright (C) 2021 Intel Corporation, Inc.
+>>> + */
+>>> +#include <linux/dfl.h>
+>>> +#include <linux/errno.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/uio_driver.h>
+>>> +
+>>> +#define DRIVER_NAME "uio_dfl"
+>>> +
+>>> +static int uio_dfl_probe(struct dfl_device *ddev)
+>>> +{
+>>> +	struct resource *r = &ddev->mmio_res;
+>>> +	struct device *dev = &ddev->dev;
+>>> +	struct uio_info *uioinfo;
+>>> +	struct uio_mem *uiomem;
+>>> +	int ret;
+>>> +
+>>> +	uioinfo = devm_kzalloc(dev, sizeof(struct uio_info), GFP_KERNEL);
+>>> +	if (!uioinfo)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	uioinfo->name = DRIVER_NAME;
+>>> +	uioinfo->version = "0";
+>>> +
+>>> +	uiomem = &uioinfo->mem[0];
+>>> +	uiomem->memtype = UIO_MEM_PHYS;
+>>> +	uiomem->addr = r->start & PAGE_MASK;
+>>> +	uiomem->offs = r->start & ~PAGE_MASK;
+>>> +	uiomem->size = (uiomem->offs + resource_size(r)
+>>> +			+ PAGE_SIZE - 1) & PAGE_MASK;
+>>> +	uiomem->name = r->name;
+>>> +
+>>> +	/* Irq is yet to be supported */
+>>> +	uioinfo->irq = UIO_IRQ_NONE;
+>>> +
+>>> +	ret = devm_uio_register_device(dev, uioinfo);
+>>> +	if (ret)
+>>> +		dev_err(dev, "unable to register uio device\n");
+>>> +
+>>> +	return ret;
+>>> +}
+>>> +
+>>> +#define FME_FEATURE_ID_ETH_GROUP	0x10
+>>> +
+>>> +static const struct dfl_device_id uio_dfl_ids[] = {
+>>> +	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+>>> +	{ }
+>>> +};
+>>> +MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
+>>> +
+>>> +static struct dfl_driver uio_dfl_driver = {
+>>> +	.drv = {
+>>> +		.name = DRIVER_NAME,
+>>> +	},
+>>> +	.id_table	= uio_dfl_ids,
+>>> +	.probe		= uio_dfl_probe,
+>>> +};
+>>> +module_dfl_driver(uio_dfl_driver);
+>>> +
+>>> +MODULE_DESCRIPTION("Generic DFL driver for Userspace I/O devices");
+>>> +MODULE_AUTHOR("Intel Corporation");
+>>> +MODULE_LICENSE("GPL v2");
 
