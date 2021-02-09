@@ -2,78 +2,82 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A88D6315636
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Feb 2021 19:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A416315920
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Feb 2021 23:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbhBISmN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-fpga@lfdr.de>); Tue, 9 Feb 2021 13:42:13 -0500
-Received: from spam.auroraoh.com ([24.56.89.101]:41082 "EHLO
-        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233395AbhBIS3o (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 9 Feb 2021 13:29:44 -0500
-X-ASG-Debug-ID: 1612892314-112c0d6a799a280004-cziyHM
-Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id oGNGpPUjGzEf3668; Tue, 09 Feb 2021 12:38:34 -0500 (EST)
-X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
-Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
- (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
- 02:44:47 -0500
-Content-Type: text/plain; charset="iso-8859-1"
-X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-To:     Recipients <januskad@auroraoh.com>
-X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-From:   <januskad@auroraoh.com>
-Date:   Tue, 9 Feb 2021 15:44:01 +0800
-Reply-To: <cfolimiited@gmail.com>
-X-Priority: 1 (High)
-X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <abfae655-38d9-4867-92bb-3c2732a507cb@COASRV-MAIL2.auroraoh.loc>
-X-Originating-IP: [197.210.29.8]
-X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
- COASRV-MAIL2.auroraoh.loc (10.3.1.15)
-X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
-X-Barracuda-Start-Time: 1612892314
-X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at auroraoh.com
-X-Barracuda-Scan-Msg-Size: 755
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 1.61
-X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87865
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.00 NO_REAL_NAME           From: does not include a real name
-        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
-        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
-                                   Address
-        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
+        id S233839AbhBIWIL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 9 Feb 2021 17:08:11 -0500
+Received: from mga04.intel.com ([192.55.52.120]:52949 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233459AbhBIWFd (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 9 Feb 2021 17:05:33 -0500
+IronPort-SDR: IxQEQPumU7EI6B4Tm9zM/3C/NhjINmYZHxi8uT/wwVMahyMTLSZftQkBR0Dn37gdnjh+WFsT2g
+ tlU7Ap90G9nw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9890"; a="179410819"
+X-IronPort-AV: E=Sophos;i="5.81,166,1610438400"; 
+   d="scan'208";a="179410819"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2021 14:02:09 -0800
+IronPort-SDR: P8rcy11YrNR50DbGuM3XiLkdEJR4D92OSOwzmc1bP8va8Nnd79Uzz65qga7zDiHr0oxPUTl8fq
+ iX4cZw6R5pXw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,166,1610438400"; 
+   d="scan'208";a="361959959"
+Received: from marshy.an.intel.com ([10.122.105.143])
+  by orsmga006.jf.intel.com with ESMTP; 09 Feb 2021 14:02:07 -0800
+From:   richard.gong@linux.intel.com
+To:     mdf@kernel.org, trix@redhat.com, gregkh@linuxfoundation.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Richard Gong <richard.gong@intel.com>
+Subject: [PATCHv5 0/7]  Extend Intel service layer, FPGA manager and region
+Date:   Tue,  9 Feb 2021 16:20:26 -0600
+Message-Id: <1612909233-13867-1-git-send-email-richard.gong@linux.intel.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
+From: Richard Gong <richard.gong@intel.com>
 
-We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
+This is 5th submission of Intel service layer and FPGA patches, which
+includes the missing standalone patch in the 4th submission.
 
-Please contact us for more details;
+This submission includes additional changes for Intel service layer driver
+to get the firmware version running at FPGA SoC device. Then FPGA manager
+driver, one of Intel service layer driver's client, can decide whether to
+handle the newly added bitstream authentication function based on the
+retrieved firmware version. So that we can maintain FPGA manager driver
+the back compatible.
 
+Bitstream authentication makes sure a signed bitstream has valid
+signatures.
 
-Kind regards,
+The customer sends the bitstream via FPGA framework and overlay, the
+firmware will authenticate the bitstream but not program the bitstream to
+device. If the authentication passes, the bitstream will be programmed into
+QSPI flash and will be expected to boot without issues.
 
-Paul McCann
+Extend Intel service layer, FPGA manager and region drivers to support the
+bitstream authentication feature. 
+
+Richard Gong (7):
+  firmware: stratix10-svc: reset COMMAND_RECONFIG_FLAG_PARTIAL to 0
+  firmware: stratix10-svc: add COMMAND_AUTHENTICATE_BITSTREAM flag
+  firmware: stratix10-svc: extend SVC driver to get the firmware version
+  fpga: fpga-mgr: add FPGA_MGR_BITSTREAM_AUTHENTICATE flag
+  fpga: of-fpga-region: add authenticate-fpga-config property
+  dt-bindings: fpga: add authenticate-fpga-config property
+  fpga: stratix10-soc: extend driver for bitstream authentication
+
+ .../devicetree/bindings/fpga/fpga-region.txt       | 10 ++++
+ drivers/firmware/stratix10-svc.c                   | 12 ++++-
+ drivers/fpga/of-fpga-region.c                      | 24 ++++++---
+ drivers/fpga/stratix10-soc.c                       | 62 +++++++++++++++++++---
+ include/linux/firmware/intel/stratix10-smc.h       | 21 +++++++-
+ .../linux/firmware/intel/stratix10-svc-client.h    | 11 +++-
+ include/linux/fpga/fpga-mgr.h                      |  3 ++
+ 7 files changed, 125 insertions(+), 18 deletions(-)
 
 -- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+2.7.4
 
