@@ -2,206 +2,216 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD8331595A
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Feb 2021 23:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A436316380
+	for <lists+linux-fpga@lfdr.de>; Wed, 10 Feb 2021 11:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234335AbhBIWWd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 9 Feb 2021 17:22:33 -0500
-Received: from mga01.intel.com ([192.55.52.88]:20938 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233882AbhBIWJB (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 9 Feb 2021 17:09:01 -0500
-IronPort-SDR: IB2j+lJwfkMt5sYzgCrxiwHAEivFcV6mojwQpFFGxSIP+f/Vc0B1bpSlG/LBJphPH0Jl8yi6Sk
- Pc+SE4jRsNzw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9890"; a="201058926"
-X-IronPort-AV: E=Sophos;i="5.81,166,1610438400"; 
-   d="scan'208";a="201058926"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2021 14:02:12 -0800
-IronPort-SDR: VPHwMfgBuAlCwDJCpfUhmnk/C2n2zxmBy/HR2WDRRHn1q8haKLE7wQVbs3QH1lNWfSjPIkA3aX
- LtUhJf3An+ng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,166,1610438400"; 
-   d="scan'208";a="361959989"
-Received: from marshy.an.intel.com ([10.122.105.143])
-  by orsmga006.jf.intel.com with ESMTP; 09 Feb 2021 14:02:11 -0800
-From:   richard.gong@linux.intel.com
-To:     mdf@kernel.org, trix@redhat.com, gregkh@linuxfoundation.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Richard Gong <richard.gong@intel.com>
-Subject: [PATCHv5 7/7] fpga: stratix10-soc: extend driver for bitstream authentication
-Date:   Tue,  9 Feb 2021 16:20:33 -0600
-Message-Id: <1612909233-13867-8-git-send-email-richard.gong@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1612909233-13867-1-git-send-email-richard.gong@linux.intel.com>
-References: <1612909233-13867-1-git-send-email-richard.gong@linux.intel.com>
+        id S230407AbhBJKQZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 10 Feb 2021 05:16:25 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:17902 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229866AbhBJKOG (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 10 Feb 2021 05:14:06 -0500
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11AAAQxK028823;
+        Wed, 10 Feb 2021 05:13:13 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com with ESMTP id 36hr7qc6ff-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Feb 2021 05:13:13 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 11AADCTp026384
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 10 Feb 2021 05:13:12 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.721.2; Wed, 10 Feb 2021
+ 05:13:11 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Wed, 10 Feb 2021 05:13:11 -0500
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 11AAD8UC018370;
+        Wed, 10 Feb 2021 05:13:08 -0500
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>, <lars@metafoo.de>,
+        <linux-fpga@vger.kernel.org>, <mdf@kernel.org>,
+        <ardeleanalex@gmail.com>,
+        Mircea Caprioru <mircea.caprioru@analog.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH 1/2] include: fpga: adi-axi-common.h: add definitions for supported FPGAs
+Date:   Wed, 10 Feb 2021 12:15:34 +0200
+Message-ID: <20210210101535.47979-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-10_03:2021-02-10,2021-02-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 spamscore=0 phishscore=0
+ suspectscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102100099
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Richard Gong <richard.gong@intel.com>
+From: Mircea Caprioru <mircea.caprioru@analog.com>
 
-Extend FPGA manager driver to support FPGA bitstream authentication on
-Intel SocFPGA platforms.
+All (newer) FPGA IP cores supported by Analog Devices, store information in
+the synthesized designs. This information describes various parameters,
+including the family of boards on which this is deployed, speed-grade, and
+so on.
 
-Signed-off-by: Richard Gong <richard.gong@intel.com>
+Currently, some of these definitions are deployed mostly on Xilinx boards,
+but they have been considered also for FPGA boards from other vendors.
+
+The register definitions are described at this link:
+  https://wiki.analog.com/resources/fpga/docs/hdl/regmap
+(the 'Base (common to all cores)' section).
+
+Acked-by: Moritz Fischer <mdf@kernel.org>
+Signed-off-by: Mircea Caprioru <mircea.caprioru@analog.com>
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 ---
-v5: no change
-v4: s/FPGA_MGR_BITSTREM_AUTHENTICATION/FPGA_MGR_BITSTREAM_AUTHENTICATE
-v3: add handle to retriev the firmware version to keep driver
-    back compatible
-v2: use flag defined in stratix10-svc driver
----
- drivers/fpga/stratix10-soc.c | 62 +++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 56 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-index 657a70c..9ab7afd 100644
---- a/drivers/fpga/stratix10-soc.c
-+++ b/drivers/fpga/stratix10-soc.c
-@@ -24,6 +24,10 @@
- #define S10_BUFFER_TIMEOUT (msecs_to_jiffies(SVC_RECONFIG_BUFFER_TIMEOUT_MS))
- #define S10_RECONFIG_TIMEOUT (msecs_to_jiffies(SVC_RECONFIG_REQUEST_TIMEOUT_MS))
+This is a continuation of this old set:
+https://lore.kernel.org/linux-clk/20200929144417.89816-1-alexandru.ardelean@analog.com/
+
+Particularly patches:
+  https://lore.kernel.org/linux-clk/20200929144417.89816-15-alexandru.ardelean@analog.com/
+  https://lore.kernel.org/linux-clk/20200929144417.89816-16-alexandru.ardelean@analog.com/
+
+That was v4, but this patchset was split away from it, to resolve
+discussion on some other patches in that set.
+
+The other patches were accepted here:
+  https://lore.kernel.org/linux-clk/20210201151245.21845-1-alexandru.ardelean@analog.com/
+
+ include/linux/fpga/adi-axi-common.h | 103 ++++++++++++++++++++++++++++
+ 1 file changed, 103 insertions(+)
+
+diff --git a/include/linux/fpga/adi-axi-common.h b/include/linux/fpga/adi-axi-common.h
+index 141ac3f251e6..1a7f18e3a384 100644
+--- a/include/linux/fpga/adi-axi-common.h
++++ b/include/linux/fpga/adi-axi-common.h
+@@ -13,6 +13,9 @@
  
-+#define INVALID_FIRMWARE_VERSION	0xFFFF
-+typedef void (*s10_callback)(struct stratix10_svc_client *client,
-+			     struct stratix10_svc_cb_data *data);
+ #define ADI_AXI_REG_VERSION			0x0000
+ 
++#define ADI_AXI_REG_FPGA_INFO			0x001C
++#define ADI_AXI_REG_FPGA_VOLTAGE		0x0140
 +
- /*
-  * struct s10_svc_buf
-  * buf:  virtual address of buf provided by service layer
-@@ -40,11 +44,13 @@ struct s10_priv {
- 	struct completion status_return_completion;
- 	struct s10_svc_buf svc_bufs[NUM_SVC_BUFS];
- 	unsigned long status;
-+	unsigned int fw_version;
- };
+ #define ADI_AXI_PCORE_VER(major, minor, patch)	\
+ 	(((major) << 16) | ((minor) << 8) | (patch))
  
- static int s10_svc_send_msg(struct s10_priv *priv,
- 			    enum stratix10_svc_command_code command,
--			    void *payload, u32 payload_length)
-+			    void *payload, u32 payload_length,
-+			    s10_callback callback)
- {
- 	struct stratix10_svc_chan *chan = priv->chan;
- 	struct device *dev = priv->client.dev;
-@@ -57,6 +63,7 @@ static int s10_svc_send_msg(struct s10_priv *priv,
- 	msg.command = command;
- 	msg.payload = payload;
- 	msg.payload_length = payload_length;
-+	priv->client.receive_cb = callback;
+@@ -20,4 +23,104 @@
+ #define ADI_AXI_PCORE_VER_MINOR(version)	(((version) >> 8) & 0xff)
+ #define ADI_AXI_PCORE_VER_PATCH(version)	((version) & 0xff)
  
- 	ret = stratix10_svc_send(chan, &msg);
- 	dev_dbg(dev, "stratix10_svc_send returned status %d\n", ret);
-@@ -134,6 +141,29 @@ static void s10_unlock_bufs(struct s10_priv *priv, void *kaddr)
- }
- 
- /*
-+ * s10_fw_version_callback - callback for the version of running firmware
-+ * @client: service layer client struct
-+ * @data: message from service layer
++#define ADI_AXI_INFO_FPGA_VOLTAGE(val)		((val) & 0xffff)
++
++#define ADI_AXI_INFO_FPGA_TECH(info)		(((info) >> 24) & 0xff)
++#define ADI_AXI_INFO_FPGA_FAMILY(info)		(((info) >> 16) & 0xff)
++#define ADI_AXI_INFO_FPGA_SPEED_GRADE(info)	(((info) >> 8) & 0xff)
++#define ADI_AXI_INFO_FPGA_DEV_PACKAGE(info)	((info) & 0xff)
++
++/**
++ * FPGA Technology definitions
 + */
-+static void s10_fw_version_callback(struct stratix10_svc_client *client,
-+				    struct stratix10_svc_cb_data *data)
-+{
-+	struct s10_priv *priv = client->priv;
-+	unsigned int *version = (unsigned int *)data->kaddr1;
++#define ADI_AXI_FPGA_TECH_XILINX_UNKNOWN		0
++#define ADI_AXI_FPGA_TECH_XILINS_SERIES7		1
++#define ADI_AXI_FPGA_TECH_XILINX_ULTRASCALE		2
++#define ADI_AXI_FPGA_TECH_XILINX_ULTRASCALE_PLUS	3
 +
-+	if (data->status == BIT(SVC_STATUS_OK))
-+		priv->fw_version = *version;
-+	else if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
-+		dev_warn(client->dev,
-+			 "FW doesn't support bitstream authentication\n");
-+	else
-+		dev_err(client->dev, "Failed to get FW version %lu\n",
-+			BIT(data->status));
++#define ADI_AXI_FPGA_TECH_INTEL_UNKNOWN			100
++#define ADI_AXI_FPGA_TECH_INTEL_CYCLONE_5		101
++#define ADI_AXI_FPGA_TECH_INTEL_CYCLONE_10		102
++#define ADI_AXI_FPGA_TECH_INTEL_ARRIA_10		103
++#define ADI_AXI_FPGA_TECH_INTEL_STRATIX_10		104
 +
-+	complete(&priv->status_return_completion);
-+}
++/**
++ * FPGA Family definitions
++ */
++#define ADI_AXI_FPGA_FAMILY_UNKNOWN			0
 +
-+/*
-  * s10_receive_callback - callback for service layer to use to provide client
-  * (this driver) messages received through the mailbox.
-  * client: service layer client struct
-@@ -186,13 +216,22 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
- 	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
- 		dev_dbg(dev, "Requesting partial reconfiguration.\n");
- 		ctype.flags |= BIT(COMMAND_RECONFIG_FLAG_PARTIAL);
-+	} else if (info->flags & FPGA_MGR_BITSTREAM_AUTHENTICATE) {
-+		if (priv->fw_version == INVALID_FIRMWARE_VERSION) {
-+			dev_err(dev, "FW doesn't support\n");
-+			return -EINVAL;
-+		}
++#define ADI_AXI_FPGA_FAMILY_XILINX_ARTIX		1
++#define ADI_AXI_FPGA_FAMILY_XILINX_KINTEX		2
++#define ADI_AXI_FPGA_FAMILY_XILINX_VIRTEX		3
++#define ADI_AXI_FPGA_FAMILY_XILINX_ZYNQ			4
 +
-+		dev_dbg(dev, "Requesting bitstream authentication.\n");
-+		ctype.flags |= BIT(COMMAND_AUTHENTICATE_BITSTREAM);
- 	} else {
- 		dev_dbg(dev, "Requesting full reconfiguration.\n");
- 	}
- 
- 	reinit_completion(&priv->status_return_completion);
- 	ret = s10_svc_send_msg(priv, COMMAND_RECONFIG,
--			       &ctype, sizeof(ctype));
-+			       &ctype, sizeof(ctype),
-+			       s10_receive_callback);
- 	if (ret < 0)
- 		goto init_done;
- 
-@@ -259,7 +298,7 @@ static int s10_send_buf(struct fpga_manager *mgr, const char *buf, size_t count)
- 	svc_buf = priv->svc_bufs[i].buf;
- 	memcpy(svc_buf, buf, xfer_sz);
- 	ret = s10_svc_send_msg(priv, COMMAND_RECONFIG_DATA_SUBMIT,
--			       svc_buf, xfer_sz);
-+			       svc_buf, xfer_sz, s10_receive_callback);
- 	if (ret < 0) {
- 		dev_err(dev,
- 			"Error while sending data to service layer (%d)", ret);
-@@ -303,7 +342,7 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
- 
- 			ret = s10_svc_send_msg(
- 				priv, COMMAND_RECONFIG_DATA_CLAIM,
--				NULL, 0);
-+				NULL, 0, s10_receive_callback);
- 			if (ret < 0)
- 				break;
- 		}
-@@ -357,7 +396,8 @@ static int s10_ops_write_complete(struct fpga_manager *mgr,
- 	do {
- 		reinit_completion(&priv->status_return_completion);
- 
--		ret = s10_svc_send_msg(priv, COMMAND_RECONFIG_STATUS, NULL, 0);
-+		ret = s10_svc_send_msg(priv, COMMAND_RECONFIG_STATUS,
-+				       NULL, 0, s10_receive_callback);
- 		if (ret < 0)
- 			break;
- 
-@@ -411,8 +451,9 @@ static int s10_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
- 
-+	priv->fw_version = INVALID_FIRMWARE_VERSION;
- 	priv->client.dev = dev;
--	priv->client.receive_cb = s10_receive_callback;
-+	priv->client.receive_cb = NULL;
- 	priv->client.priv = priv;
- 
- 	priv->chan = stratix10_svc_request_channel_byname(&priv->client,
-@@ -440,6 +481,15 @@ static int s10_probe(struct platform_device *pdev)
- 		goto probe_err;
- 	}
- 
-+	/* get the running firmware version */
-+	ret = s10_svc_send_msg(priv, COMMAND_FIRMWARE_VERSION,
-+			       NULL, 0, s10_fw_version_callback);
-+	if (ret) {
-+		dev_err(dev, "couldn't get firmware version\n");
-+		fpga_mgr_free(mgr);
-+		goto probe_err;
-+	}
++#define ADI_AXI_FPGA_FAMILY_INTEL_SX			1
++#define ADI_AXI_FPGA_FAMILY_INTEL_GX			2
++#define ADI_AXI_FPGA_FAMILY_INTEL_GT			3
++#define ADI_AXI_FPGA_FAMILY_INTEL_GZ			4
 +
- 	platform_set_drvdata(pdev, mgr);
- 	return ret;
- 
++/**
++ * FPGA Speed-grade definitions
++ */
++#define ADI_AXI_FPGA_SPEED_GRADE_UNKNOWN		0
++
++#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_1		10
++#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_1L		11
++#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_1H		12
++#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_1HV		13
++#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_1LV		14
++#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_2		20
++#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_2L		21
++#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_2LV		22
++#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_3		30
++
++#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_1		1
++#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_2		2
++#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_3		3
++#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_4		4
++#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_5		5
++#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_6		6
++#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_7		7
++#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_8		8
++#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_9		9
++
++/**
++ * FPGA Device Package definitions
++ */
++#define ADI_AXI_FPGA_DEV_PACKAGE_UNKNOWN		0
++
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_RF		1
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FL		2
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FF		3
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FB		4
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_HC		5
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FH		6
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_CS		7
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_CP		8
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FT		9
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FG		10
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_SB		11
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_RB		12
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_RS		13
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_CL		14
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_SF		15
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_BA		16
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FA		17
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FS		18
++#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FI		19
++
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_BGA		1
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_PGA		2
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_FBGA		3
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_HBGA		4
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_PDIP		5
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_EQFP		6
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_PLCC		7
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_PQFP		8
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_RQFP		9
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_TQFP		10
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_UBGA		11
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_UFBGA		12
++#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_MBGA		13
++
+ #endif /* ADI_AXI_COMMON_H_ */
 -- 
-2.7.4
+2.17.1
 
