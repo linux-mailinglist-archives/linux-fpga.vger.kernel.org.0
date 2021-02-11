@@ -2,171 +2,123 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6980431842C
-	for <lists+linux-fpga@lfdr.de>; Thu, 11 Feb 2021 05:06:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 959D831848A
+	for <lists+linux-fpga@lfdr.de>; Thu, 11 Feb 2021 06:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbhBKEGk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 10 Feb 2021 23:06:40 -0500
-Received: from mail-pg1-f171.google.com ([209.85.215.171]:37681 "EHLO
-        mail-pg1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbhBKEGi (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 10 Feb 2021 23:06:38 -0500
-Received: by mail-pg1-f171.google.com with SMTP id z21so2916393pgj.4;
-        Wed, 10 Feb 2021 20:06:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YmprhBUucZtKdCmu+LAa/i7gnU89uApOkepqzbffePM=;
-        b=iaNUsbrvkAnxEKNI/suPdo35uWbfrwyvj58EdmyeXtaz2k89NYamqkBJOJxcTCNLP1
-         3m2CdrWRfpfX61DwYK0jkNexmCgNXcL7ZY/8z98Cz/t9hqtYsujKwAqnIPg74Wanld/F
-         Mi5dkAPM7tdZXwlrBWlu8yVAKKw349GLr+dWStsYYwPzzQExNc5YCs16RSlE2e/brA4H
-         nHR89AhH4ECSoGLFy+awlvrEBBpltUZGMM0PG8C0qIM0WNynAlkgdyBMH7qlQBztnz9l
-         GjxeA5xLNG8DS7jorP0GtNPUhCQ5FTjst5cWEh4Q3H2AGweDcmbmjKWKUPdC+LR3uIIJ
-         JJhQ==
-X-Gm-Message-State: AOAM531tJLPJ/9KLYZdrxl90CU/su+ZXr36+kBmOuaoySznquGFN9UXB
-        ZJzSTnZW4ZUbgKGkLcAYFGZdXOYt+aRrrg==
-X-Google-Smtp-Source: ABdhPJwo/ejHlo1FzbyvQYlQmh5g0eMEySpfj3sTg0+aiNhiw864/oHn2Dlv72HCQOUE7clB/FbORA==
-X-Received: by 2002:a63:f74f:: with SMTP id f15mr6320181pgk.186.1613016358110;
-        Wed, 10 Feb 2021 20:05:58 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id z186sm3758954pgb.78.2021.02.10.20.05.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 20:05:57 -0800 (PST)
-Date:   Wed, 10 Feb 2021 20:05:56 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, lars@metafoo.de,
-        linux-fpga@vger.kernel.org, mdf@kernel.org, ardeleanalex@gmail.com,
-        Mircea Caprioru <mircea.caprioru@analog.com>
-Subject: Re: [PATCH 2/2] clk: axi-clkgen: Add support for FPGA info
-Message-ID: <YCStJFVsYIB2ogKU@epycbox.lan>
-References: <20210210101535.47979-1-alexandru.ardelean@analog.com>
- <20210210101535.47979-2-alexandru.ardelean@analog.com>
+        id S229451AbhBKFTh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 11 Feb 2021 00:19:37 -0500
+Received: from mail-bn8nam11on2070.outbound.protection.outlook.com ([40.107.236.70]:4544
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229447AbhBKFTh (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 11 Feb 2021 00:19:37 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PfFOagcnS+T3j0ZTYaFdIiQi9BTMKA6Dzuvm7psbhLX4fHAR+hv/Mb8WlJwvLwwMrFbu8WVdGxABxG+G01gqR6faSRe6ROnHYDPsWhPPaQKbWOVrPOT9WKaPCbp7H3nJCKE+a3rdDdqdJm0NiaFL3pU5AzXT17/nVK8Ku7c/AunSYBpbbRYuHQTtq3p7/7q4HKqHlY9DANeT71X2a+FQ3QjohjqpCeaagR7xXhWw7Q/RRjZ9WwhRP5gLvxp6OTk6ZXNsZVVgD/HALHSatF57yqxoHcl6AUO1OcETuuIauTLrqm+sO/LYc/REZl02b+RRPTSgocNCwZU4pFZnSpdpig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OJwYcOlHsW07yVF2QLrRsjdR3JDAlwlfsI9fkLH4518=;
+ b=h86qOco7EtfJl+fORol/wtTDlNK8n8fTktDUH4y67C928hH4nc2BwjMylqZarW9QHEAEw/0RzvWeULJPZLnoEykSH5KOzKCQgk2kR0TwbAWv4iQ65wxlMG8I4ReEdhbotEGcNX4Sh5gY7Rf1c9vENdA79MswFwM+d8Pb3/J7TsmM4WPmWnt8220Gz0oA0NFavUFuKApaeTDUrPf5r8Bp4r5ocv2s+Lrt1R9cKfUPpLjbDW7dbe6SQPSe+xIEXp0P1ANdU+hifTu/nuZcObw2nXEg2mQA/bIklf+UdRkCmHrxX2dpct4xQ4vLAgpnuTtzPDFe1NeDSG1LA55eRgCsdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OJwYcOlHsW07yVF2QLrRsjdR3JDAlwlfsI9fkLH4518=;
+ b=rSpkN9oJL6vPJY/HNE4oFmdQyhDd1SHxTBBmojfmGxHIaas/4Btr6TZqLJcgO5ZV1HtuPKoGc/vF2X0ejd1hFVjt2aLdDFLP8XKKY4Aul+6ufhkHMPfoBTsm2hsCNG4epMkoXCR4uNSFjwG3snugKf4eZCzdg6ziWSXWDy7IgHk=
+Received: from SA0PR11CA0074.namprd11.prod.outlook.com (2603:10b6:806:d2::19)
+ by SJ0PR02MB7312.namprd02.prod.outlook.com (2603:10b6:a03:29b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.23; Thu, 11 Feb
+ 2021 05:18:44 +0000
+Received: from SN1NAM02FT011.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:d2:cafe::2a) by SA0PR11CA0074.outlook.office365.com
+ (2603:10b6:806:d2::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.27 via Frontend
+ Transport; Thu, 11 Feb 2021 05:18:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT011.mail.protection.outlook.com (10.152.72.82) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3846.25 via Frontend Transport; Thu, 11 Feb 2021 05:18:44 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Wed, 10 Feb 2021 21:18:28 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Wed, 10 Feb 2021 21:18:28 -0800
+Envelope-to: git@xilinx.com,
+ michal.simek@xilinx.com,
+ mdf@kernel.org,
+ trix@redhat.com,
+ robh+dt@kernel.org,
+ linux-fpga@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ chinnikishore369@gmail.com
+Received: from [10.140.6.60] (port=49268 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1lA4N1-0000QK-Pe; Wed, 10 Feb 2021 21:18:28 -0800
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <mdf@kernel.org>, <trix@redhat.com>, <robh+dt@kernel.org>,
+        <michal.simek@xilinx.com>, <linux-fpga@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <chinnikishore369@gmail.com>
+CC:     <git@xilinx.com>, Nava kishore Manne <nava.manne@xilinx.com>
+Subject: [PATCH v2 0/2] Add DFX AXI Shutdown manager IP support for Xilinx
+Date:   Thu, 11 Feb 2021 10:41:46 +0530
+Message-ID: <20210211051148.16722-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210210101535.47979-2-alexandru.ardelean@analog.com>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7e023c88-19f1-4bc5-a34b-08d8ce4c807d
+X-MS-TrafficTypeDiagnostic: SJ0PR02MB7312:
+X-Microsoft-Antispam-PRVS: <SJ0PR02MB73124D1925F335ED8F6A749BC28C9@SJ0PR02MB7312.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i7JQQ2rg+vTKt8r0VXnl/unS/npmLFYjfDMVBCFRAUNYIoJjyOhW04e8M43WahmWN80G4NQDNJIJHF+k1TyMgWd8iHg8kJkoefQgrp/W7XDJ+Axf7vG/LOQXbEO1erXw+R6hd7prpVeqZ+/b6BMKk3NIyh2cXFimYuIYwnaqvAQAaz71f4RytzMfo2jxJf0+KVrb4zdqJulU3s40ij/pRtblxUqC1HnEFOuUwMrG5IeHhGG56ukPY4B//mEo60ZMg0x//alEM52Dhna2X6Vd3MYxVO/LhqMSvMrq/+nHSX/4BV2rTpdmLIBWEvOLJihksSpl/S5E+ZDyT0Mr8yTQcTGNzP6/IXbhoG3g4JykdwfB30JQYM6B5SKeLOAiCLTxamUq8FI4OadP1TvzRvjHtnh5LSywibBOsuCM3WEO1mbf6rdZ8k6p9ASL6fPsarzoMcPQXLQo8hZR7mV/+Ydb3+ganQPM7VA/5d6Cxs5UA11H1ZnvIAQi/dQ2Br2xfIzF7tgVKzx/Udj5O8SjUpp93M09YNqIJQyu5bGFAXr1V7sFBGZ2zTwB3IMcK/q1eS/UZm+Qr1LJYhIZj276l/pgFybm0p79W4hp7Qrh1oRXojNts8hbYZfCn0+H75Z13iFM+bslh6Zxyr6Hdb51l+PmdmZDjAfQ8C31Geehcp9GrnCNn3TJxZ3mCdgGjBJi+VX+6LfGV2wFuVyl38nekgR0fQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(39860400002)(346002)(376002)(396003)(36840700001)(46966006)(4326008)(478600001)(36756003)(70206006)(82740400003)(70586007)(186003)(83380400001)(47076005)(26005)(7696005)(6666004)(7636003)(36860700001)(356005)(82310400003)(9786002)(2906002)(8676002)(8936002)(2616005)(54906003)(110136005)(4744005)(336012)(316002)(1076003)(36906005)(107886003)(426003)(5660300002)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2021 05:18:44.0679
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e023c88-19f1-4bc5-a34b-08d8ce4c807d
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT011.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7312
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 12:15:35PM +0200, Alexandru Ardelean wrote:
-> From: Mircea Caprioru <mircea.caprioru@analog.com>
-> 
-> This patch adds support for vco maximum and minimum ranges in accordance
-VCO
-> with fpga speed grade, voltage, device package, technology and family. This
-FPGA
-> new information is extracted from two new registers implemented in the ip
-> core: ADI_REG_FPGA_INFO and ADI_REG_FPGA_VOLTAGE, which are stored in the
-> 'include/linux/fpga/adi-axi-common.h' file as they are common to all ADI
-> FPGA cores.
-Either all caps FPGA or all non-caps.
-> 
-> Signed-off-by: Mircea Caprioru <mircea.caprioru@analog.com>
-> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
-> ---
->  drivers/clk/clk-axi-clkgen.c | 52 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 51 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
-> index ac6ff736ac8f..e4d6c87f8a07 100644
-> --- a/drivers/clk/clk-axi-clkgen.c
-> +++ b/drivers/clk/clk-axi-clkgen.c
-> @@ -8,6 +8,7 @@
->  
->  #include <linux/platform_device.h>
->  #include <linux/clk-provider.h>
-> +#include <linux/fpga/adi-axi-common.h>
->  #include <linux/slab.h>
->  #include <linux/io.h>
->  #include <linux/of.h>
-> @@ -240,6 +241,50 @@ static void axi_clkgen_read(struct axi_clkgen *axi_clkgen,
->  	*val = readl(axi_clkgen->base + reg);
->  }
->  
-> +static void axi_clkgen_setup_ranges(struct axi_clkgen *axi_clkgen)
-> +{
-> +	struct axi_clkgen_limits *limits = &axi_clkgen->limits;
-> +	unsigned int reg_value;
-> +	unsigned int tech, family, speed_grade, voltage;
-Reverse xmas-tree please.
+Nava kishore Manne (2):
+  dt-bindings: fpga: Add compatible value for Xilinx DFX AXI shutdown
+    manager
+  fpga: Add support for Xilinx DFX AXI Shutdown manager
 
-xxxxxx
-xxx
-x
-> +
-> +	axi_clkgen_read(axi_clkgen, ADI_AXI_REG_FPGA_INFO, &reg_value);
-> +	tech = ADI_AXI_INFO_FPGA_TECH(reg_value);
-> +	family = ADI_AXI_INFO_FPGA_FAMILY(reg_value);
-> +	speed_grade = ADI_AXI_INFO_FPGA_SPEED_GRADE(reg_value);
-> +
-> +	axi_clkgen_read(axi_clkgen, ADI_AXI_REG_FPGA_VOLTAGE, &reg_value);
-> +	voltage = ADI_AXI_INFO_FPGA_VOLTAGE(reg_value);
-> +
-> +	switch (speed_grade) {
-> +	case ADI_AXI_FPGA_SPEED_GRADE_XILINX_1 ... ADI_AXI_FPGA_SPEED_GRADE_XILINX_1LV:
-> +		limits->fvco_max = 1200000;
-> +		limits->fpfd_max = 450000;
-> +		break;
-> +	case ADI_AXI_FPGA_SPEED_GRADE_XILINX_2 ... ADI_AXI_FPGA_SPEED_GRADE_XILINX_2LV:
-> +		limits->fvco_max = 1440000;
-> +		limits->fpfd_max = 500000;
-> +		if ((family == ADI_AXI_FPGA_FAMILY_XILINX_KINTEX) |
-> +		    (family == ADI_AXI_FPGA_FAMILY_XILINX_ARTIX)) {
-> +			if (voltage < 950) {
-> +				limits->fvco_max = 1200000;
-> +				limits->fpfd_max = 450000;
-> +			}
-> +		}
-> +		break;
-> +	case ADI_AXI_FPGA_SPEED_GRADE_XILINX_3:
-> +		limits->fvco_max = 1600000;
-> +		limits->fpfd_max = 550000;
-> +		break;
-> +	default:
-No warning? Does PCORE_VER_MAJOR(ver) > 0x04 not imply this to be known
-or valid?
-> +		break;
-> +	};
-> +
-Maybe:
-"For Ultrascale+ the speedgrades don't matter" or something as a comment?
-> +	if (tech == ADI_AXI_FPGA_TECH_XILINX_ULTRASCALE_PLUS) {
-> +		limits->fvco_max = 1600000;
-> +		limits->fvco_min = 800000;
-> +	}
-> +}
-> +
->  static int axi_clkgen_wait_non_busy(struct axi_clkgen *axi_clkgen)
->  {
->  	unsigned int timeout = 10000;
-> @@ -510,7 +555,7 @@ static int axi_clkgen_probe(struct platform_device *pdev)
->  	struct clk_init_data init;
->  	const char *parent_names[2];
->  	const char *clk_name;
-> -	unsigned int i;
-> +	unsigned int i, ver;
->  	int ret;
->  
->  	dflt_limits = device_get_match_data(&pdev->dev);
-> @@ -537,6 +582,11 @@ static int axi_clkgen_probe(struct platform_device *pdev)
->  
->  	memcpy(&axi_clkgen->limits, dflt_limits, sizeof(axi_clkgen->limits));
->  
-> +	axi_clkgen_read(axi_clkgen, ADI_AXI_REG_VERSION, &ver);
-> +
-> +	if (ADI_AXI_PCORE_VER_MAJOR(ver) > 0x04)
-Nit: 0x4 is fine?
-> +		axi_clkgen_setup_ranges(axi_clkgen);
-> +
->  	clk_name = pdev->dev.of_node->name;
->  	of_property_read_string(pdev->dev.of_node, "clock-output-names",
->  		&clk_name);
-> -- 
-> 2.17.1
-> 
-Thanks,
-Moritz
+ .../bindings/fpga/xilinx-pr-decoupler.txt     | 24 +++++++++++-
+ drivers/fpga/Kconfig                          |  9 ++++-
+ drivers/fpga/xilinx-pr-decoupler.c            | 37 ++++++++++++++++---
+ 3 files changed, 63 insertions(+), 7 deletions(-)
+
+-- 
+2.18.0
+
