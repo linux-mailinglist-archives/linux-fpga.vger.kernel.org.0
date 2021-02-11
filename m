@@ -2,279 +2,130 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D263184EE
-	for <lists+linux-fpga@lfdr.de>; Thu, 11 Feb 2021 06:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED02318517
+	for <lists+linux-fpga@lfdr.de>; Thu, 11 Feb 2021 07:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbhBKFdD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 11 Feb 2021 00:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbhBKFdB (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 11 Feb 2021 00:33:01 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2B3C061574;
-        Wed, 10 Feb 2021 21:32:21 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id f2so4516747ioq.2;
-        Wed, 10 Feb 2021 21:32:21 -0800 (PST)
+        id S229580AbhBKGNT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 11 Feb 2021 01:13:19 -0500
+Received: from mail-dm6nam12on2084.outbound.protection.outlook.com ([40.107.243.84]:25153
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229538AbhBKGNR (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 11 Feb 2021 01:13:17 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XkgdGpQ+vxGHnVEYm3gvhwDHRpFGh05ETIMIOB7tH31LfW4THa3x/LC+suK7IDOLFgGZTzAUrpi65BOblDGFxyWJS3IT6JM1DOxJZKMggRqmnrqSLsMEyk73mWIKcDbXNfU3IkaMNASD3Ltgx59ZYRQ3B80VFAQDCplc8+k+hOQl3SoXLr+n3lK/14jl6L3HNkNW7e9Qywn/QnPxUmQm+KRxNJXgvb5b2OSoxQS5CGU0zqeX6loDKbKuB4/c59WTvOMSTxX9UPLsuTqVuZc2JuRT5arLG8TdLGqvPAsLrIm4MA7fI766CckXR2culKXqVS8WEeEUpVaeF1Jxd6MMxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Edspjjef6Fo9Lmb5sxUo85szKIwl+ew6k68wR7hkMKg=;
+ b=RrSDkmy0eu03GcJBr5ooZX8zodBzn03BwVVZRI7RMR6bUFIzLoPhwnFa66xMNE0DuucWTJSpy6m9nnTxz0T4nQND3yM1WBvORRcdO91W5y9Q4AgqLsnSXiZQdVeUem62Q4x3ae0EKf7bxw26XR/CeGhyCFd1BhbK7GfFLndoodSAn+JDXpOhkIDISskOjtXaN2xa6xNDFpxXFUK2KWGdOnD2eC/tVlhX520tLVvEniKUaBZvU3TOweQbGJZywhZzhY362u51aLAKdn8QM52tbYFjFhdwUo2mSmJ9KLKMXU5ih6PNActRVaObEmnowB/aJJSuzOA5yKgohRPiqEMcbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/bjxWyo8EHZChCtIGa6LfncRDoH9g7vkAZn+7FO1D1k=;
-        b=N3wotLaa/M63+18wddRMT5RQK5r7dNU7CzM2rc1tv244oqqpYspfaapPTcJ1ikbDC4
-         LAli2gwGvpWpgyWLxrpeLVqf4xV3gZACd8skC+aQWKAJ54cZNvclwBjUlMHnkwfIBlg/
-         qwlQBQlZSuyohctqCDrlWdvQzQBADUJYAR0x/f2+Gn6G4jH2BtNM92u+W3enPowTHqp+
-         Dzo9A4c8C7O6BsmjPBhYFDj2xyDmgU0GR5sxOGJkd/ik4k0/WM/YdtGi/6wzsh3GIe6P
-         JZPS9/Vn0d9PMC387ZA4Mijvhu/oVynsYtKKQeSKxh2tLqS1cXazMuwxVpSLYqkW7yO5
-         Nwmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/bjxWyo8EHZChCtIGa6LfncRDoH9g7vkAZn+7FO1D1k=;
-        b=XbpicoP4+yDuCCaG4Rw0/AEpPGLfSpbIYcgyXJf7RISULTSmHVbxy/NpPTFDM805sz
-         cm9rJkn6TVlCUXHMTWQgfoHWNFZYFeZe6iY5mSZ3jWNTaTdB+UeLOMHJMDNqcTzn6PjG
-         iNbl2BUj8VTm+DEYisHBcSI0+TY7fLmRCgF0ZTiAcJhdTdvGyO0EQupzEVVHi1LOG3Y0
-         NxechFFbpM2DafHF+Cw8mx6abJ31GFviwdPHrmIPmZ1nlrj+2fHFPBg2kWDX+Kf5smm6
-         iI93rIab2rcAwyM6Tf/mNFcy+XTQ1wpvfNEi5DCot44w5j2Ejl67vepcRKToqRVbk0XR
-         ZWvQ==
-X-Gm-Message-State: AOAM533TKCCX9afaDzAeqgyRFsYHnxM87MhRGR0BK+XTAtXtgUiwdM1o
-        7dG5S5DDGul6lNDF3XpAkjyziDiH2cVRVYsU6oqQHMDh0QHoyA==
-X-Google-Smtp-Source: ABdhPJyw8DbXMjYDf+mX26hs3wzHYaAOrqDQQKzg02MV+xQLowswFSkaEWhU8MMpKhV4NqEACkrebsp12DOfNYG8pyE=
-X-Received: by 2002:a6b:4003:: with SMTP id k3mr3916301ioa.105.1613021540531;
- Wed, 10 Feb 2021 21:32:20 -0800 (PST)
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Edspjjef6Fo9Lmb5sxUo85szKIwl+ew6k68wR7hkMKg=;
+ b=qwtD2PggYiHhhXGKchpY/hh9FeM3O/tw57rZjGAKsX4T7qqC883IpCN26jUInl/ySySc1iBLpLT+HCxYVvya2Ohf/+MNRy3k3vLpDJ8yPnXgB9w+vQEvZxKsljkOuDDAuQdb9YbmxSL1H8Ae6PT7sGi+JJp1fEEaGCSJvdx+vTQ=
+Received: from SN4PR0501CA0102.namprd05.prod.outlook.com
+ (2603:10b6:803:42::19) by BN6PR02MB3156.namprd02.prod.outlook.com
+ (2603:10b6:405:69::37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.25; Thu, 11 Feb
+ 2021 06:12:22 +0000
+Received: from SN1NAM02FT060.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:803:42:cafe::51) by SN4PR0501CA0102.outlook.office365.com
+ (2603:10b6:803:42::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.11 via Frontend
+ Transport; Thu, 11 Feb 2021 06:12:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT060.mail.protection.outlook.com (10.152.72.192) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3846.25 via Frontend Transport; Thu, 11 Feb 2021 06:12:22 +0000
+Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Wed, 10 Feb 2021 22:12:11 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Wed, 10 Feb 2021 22:12:11 -0800
+Envelope-to: git@xilinx.com,
+ michal.simek@xilinx.com,
+ mdf@kernel.org,
+ trix@redhat.com,
+ robh+dt@kernel.org,
+ linux-fpga@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ chinnikishore369@gmail.com
+Received: from [10.140.6.60] (port=34116 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1lA5Cy-0001Jy-Fp; Wed, 10 Feb 2021 22:12:08 -0800
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <mdf@kernel.org>, <trix@redhat.com>, <robh+dt@kernel.org>,
+        <michal.simek@xilinx.com>, <linux-fpga@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <chinnikishore369@gmail.com>
+CC:     <git@xilinx.com>, Nava kishore Manne <nava.manne@xilinx.com>
+Subject: [PATCH v2 0/3] Add Bitstream configuration support for Versal
+Date:   Thu, 11 Feb 2021 11:35:29 +0530
+Message-ID: <20210211060532.23662-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20210210101535.47979-1-alexandru.ardelean@analog.com> <YCSryh6kOhA+0xHc@epycbox.lan>
-In-Reply-To: <YCSryh6kOhA+0xHc@epycbox.lan>
-From:   Alexandru Ardelean <ardeleanalex@gmail.com>
-Date:   Thu, 11 Feb 2021 07:32:09 +0200
-Message-ID: <CA+U=Dso5uCyjd8v1Xo5iWsUacchfbtuR+6NMgivEAv9TZNezcA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] include: fpga: adi-axi-common.h: add definitions for
- supported FPGAs
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-clk@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-fpga@vger.kernel.org,
-        Mircea Caprioru <mircea.caprioru@analog.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f170eda4-dda5-4446-0b46-08d8ce53fe88
+X-MS-TrafficTypeDiagnostic: BN6PR02MB3156:
+X-Microsoft-Antispam-PRVS: <BN6PR02MB3156078F08B41D2F27C0F85BC28C9@BN6PR02MB3156.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /lS3tAL3jv0tgYkk34OOjNy07xgI0uikfX29x5ttqHs/bXSUEeKVduSzAt28Gs+eeXPAdKn6exJxWmqy0zGDXZuSuhHsu8M9zZmCeHp6wuWMXsk5e53jBohoqrz4JgmiCTkvQK3fXOMB1GZwFTjvHD8ApsrkaHuYcT/MxPun8oL4cd/+m4rk+8in1h6+G3uOs76fQpB+m13hnJV323RXep1eFyV99BM5AGSWIfvVZXWfB8gRThZvg3g6MQdHsIe1RLQprejNig+0eJazGkAEMfuA4t3Vs4rGjjl8PH9cEdspVWHzISpXOAm0aQGf0tVFrGSkuhV+YeSnQTvghM6c74TS1rF6yxN7zgy0xAn4lyEyUyrFViNuKVL46sQq55MPBtLgj33P45LtvWjbZ0TF+musgMLZU2MAzBCCNze2Sr+KqnbP38EtJ3W0MArRnCjIfVcnqe1ClRZLGbs+JvAXvN4l4vIwg8/7lEAssQTuj35v0G4e3wAF/kekUKQuEMhkjQBwP9Hr5ESkipgcgKhokenuPnO4/SN0Y7wXCLmH97902T4UlqD5EosYM6DTdDVy5NON/jWYVLr6JX6D6ilD/XOQ+DTNFc4Nj3jnyJKpvLMvrq4V0XyWgMAJTqJh+YFOazcQD+3MjLZqr8qlgtbtNyhp8CZi9sq11B5TdVxUiiwHUJ01xztje2Ls9Heii3E399xbodzWSzcoqDliyAAREQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(136003)(39860400002)(396003)(346002)(46966006)(36840700001)(47076005)(8676002)(316002)(336012)(70206006)(2906002)(4744005)(70586007)(26005)(356005)(186003)(54906003)(107886003)(5660300002)(8936002)(110136005)(7636003)(36756003)(4326008)(6666004)(2616005)(478600001)(36906005)(7696005)(9786002)(1076003)(426003)(82310400003)(82740400003)(36860700001)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2021 06:12:22.0061
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f170eda4-dda5-4446-0b46-08d8ce53fe88
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT060.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB3156
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Feb 11, 2021 at 6:00 AM Moritz Fischer <mdf@kernel.org> wrote:
->
-> Alexandru,
->
-> On Wed, Feb 10, 2021 at 12:15:34PM +0200, Alexandru Ardelean wrote:
-> > From: Mircea Caprioru <mircea.caprioru@analog.com>
-> >
-> > All (newer) FPGA IP cores supported by Analog Devices, store informatio=
-n in
->
-> Nit: extra ',' ?
-> > the synthesized designs. This information describes various parameters,
-> > including the family of boards on which this is deployed, speed-grade, =
-and
-> > so on.
-> >
-> > Currently, some of these definitions are deployed mostly on Xilinx boar=
-ds,
-> > but they have been considered also for FPGA boards from other vendors.
-> Let's add them together with the code that uses them.
-> >
-> > The register definitions are described at this link:
-> >   https://wiki.analog.com/resources/fpga/docs/hdl/regmap
-> > (the 'Base (common to all cores)' section).
-> >
-> > Acked-by: Moritz Fischer <mdf@kernel.org>
-> This patchset is very different from the reviewed one earlier. Please
-> don't just copy Acked-by's.
+Appana Durga Kedareswara rao (1):
+  dt-bindings: fpga: Add binding doc for versal fpga manager
 
-Apologies
-I think it got some more reviews and I just kept the tag.
-Sloppy on my part.
+Nava kishore Manne (2):
+  drivers: firmware: Add PDI load API support
+  fpga: versal-fpga: Add versal fpga manager driver
 
->
-> > Signed-off-by: Mircea Caprioru <mircea.caprioru@analog.com>
-> > Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
-> > ---
-> >
-> > This is a continuation of this old set:
-> > https://lore.kernel.org/linux-clk/20200929144417.89816-1-alexandru.arde=
-lean@analog.com/
-> >
-> > Particularly patches:
-> >   https://lore.kernel.org/linux-clk/20200929144417.89816-15-alexandru.a=
-rdelean@analog.com/
-> >   https://lore.kernel.org/linux-clk/20200929144417.89816-16-alexandru.a=
-rdelean@analog.com/
-> >
-> > That was v4, but this patchset was split away from it, to resolve
-> > discussion on some other patches in that set.
-> >
-> > The other patches were accepted here:
-> >   https://lore.kernel.org/linux-clk/20210201151245.21845-1-alexandru.ar=
-delean@analog.com/
-> >
-> >  include/linux/fpga/adi-axi-common.h | 103 ++++++++++++++++++++++++++++
-> >  1 file changed, 103 insertions(+)
-> >
-> > diff --git a/include/linux/fpga/adi-axi-common.h b/include/linux/fpga/a=
-di-axi-common.h
-> > index 141ac3f251e6..1a7f18e3a384 100644
-> > --- a/include/linux/fpga/adi-axi-common.h
-> > +++ b/include/linux/fpga/adi-axi-common.h
-> > @@ -13,6 +13,9 @@
-> >
-> >  #define ADI_AXI_REG_VERSION                  0x0000
-> >
-> > +#define ADI_AXI_REG_FPGA_INFO                        0x001C
-> > +#define ADI_AXI_REG_FPGA_VOLTAGE             0x0140
-> > +
-> >  #define ADI_AXI_PCORE_VER(major, minor, patch)       \
-> >       (((major) << 16) | ((minor) << 8) | (patch))
-> >
-> > @@ -20,4 +23,104 @@
-> >  #define ADI_AXI_PCORE_VER_MINOR(version)     (((version) >> 8) & 0xff)
-> >  #define ADI_AXI_PCORE_VER_PATCH(version)     ((version) & 0xff)
-> >
-> > +#define ADI_AXI_INFO_FPGA_VOLTAGE(val)               ((val) & 0xffff)
-> > +
-> > +#define ADI_AXI_INFO_FPGA_TECH(info)         (((info) >> 24) & 0xff)
-> > +#define ADI_AXI_INFO_FPGA_FAMILY(info)               (((info) >> 16) &=
- 0xff)
-> > +#define ADI_AXI_INFO_FPGA_SPEED_GRADE(info)  (((info) >> 8) & 0xff)
-> > +#define ADI_AXI_INFO_FPGA_DEV_PACKAGE(info)  ((info) & 0xff)
->
-> Do we really need all the macros?
+ .../bindings/fpga/xlnx,versal-fpga.yaml       |  33 +++++
+ drivers/firmware/xilinx/zynqmp.c              |  17 +++
+ drivers/fpga/Kconfig                          |   8 ++
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/versal-fpga.c                    | 120 ++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h          |   9 ++
+ 6 files changed, 188 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+ create mode 100644 drivers/fpga/versal-fpga.c
 
-No.
-I can trim them to a minimum.
+-- 
+2.18.0
 
-> > +
-> > +/**
-> > + * FPGA Technology definitions
-> > + */
-> > +#define ADI_AXI_FPGA_TECH_XILINX_UNKNOWN             0
-> > +#define ADI_AXI_FPGA_TECH_XILINS_SERIES7             1
-> > +#define ADI_AXI_FPGA_TECH_XILINX_ULTRASCALE          2
-> > +#define ADI_AXI_FPGA_TECH_XILINX_ULTRASCALE_PLUS     3
-> > +
-> > +#define ADI_AXI_FPGA_TECH_INTEL_UNKNOWN                      100
-> > +#define ADI_AXI_FPGA_TECH_INTEL_CYCLONE_5            101
-> > +#define ADI_AXI_FPGA_TECH_INTEL_CYCLONE_10           102
-> > +#define ADI_AXI_FPGA_TECH_INTEL_ARRIA_10             103
-> > +#define ADI_AXI_FPGA_TECH_INTEL_STRATIX_10           104
-> > +
-> > +/**
-> > + * FPGA Family definitions
-> > + */
-> > +#define ADI_AXI_FPGA_FAMILY_UNKNOWN                  0
-> > +
-> > +#define ADI_AXI_FPGA_FAMILY_XILINX_ARTIX             1
-> > +#define ADI_AXI_FPGA_FAMILY_XILINX_KINTEX            2
-> > +#define ADI_AXI_FPGA_FAMILY_XILINX_VIRTEX            3
-> > +#define ADI_AXI_FPGA_FAMILY_XILINX_ZYNQ                      4
-> > +
-> > +#define ADI_AXI_FPGA_FAMILY_INTEL_SX                 1
-> > +#define ADI_AXI_FPGA_FAMILY_INTEL_GX                 2
-> > +#define ADI_AXI_FPGA_FAMILY_INTEL_GT                 3
-> > +#define ADI_AXI_FPGA_FAMILY_INTEL_GZ                 4
-> > +
-> > +/**
-> > + * FPGA Speed-grade definitions
-> > + */
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_UNKNOWN             0
-> > +
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_1            10
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_1L           11
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_1H           12
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_1HV          13
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_1LV          14
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_2            20
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_2L           21
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_2LV          22
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_XILINX_3            30
-> > +
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_1             1
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_2             2
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_3             3
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_4             4
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_5             5
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_6             6
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_7             7
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_8             8
-> > +#define ADI_AXI_FPGA_SPEED_GRADE_INTEL_9             9
-> > +
-> > +/**
-> > + * FPGA Device Package definitions
-> > + */
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_UNKNOWN             0
-> > +
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_RF           1
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FL           2
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FF           3
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FB           4
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_HC           5
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FH           6
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_CS           7
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_CP           8
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FT           9
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FG           10
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_SB           11
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_RB           12
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_RS           13
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_CL           14
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_SF           15
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_BA           16
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FA           17
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FS           18
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_XILINX_FI           19
-> > +
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_BGA           1
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_PGA           2
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_FBGA          3
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_HBGA          4
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_PDIP          5
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_EQFP          6
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_PLCC          7
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_PQFP          8
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_RQFP          9
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_TQFP          10
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_UBGA          11
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_UFBGA         12
-> > +#define ADI_AXI_FPGA_DEV_PACKAGE_INTEL_MBGA          13
->
-> What is using those? Do these package impact anything behavioral?
-
-So, these should get defined in ADI FPGA projects.
-The initial idea was to be able to read this in drivers and adjust
-behavior (usually speed) according to each parameter.
-Then some drivers could have used this to do some tunings.
-Maybe also pass these in userspace and have the application decide.
-I don't think there was some finalization on the idea (yet).
-
-[I know how this sounds, but] The more I try to explain it, the less I
-get convinced by this patch.
-I pick up some of the patches in our tree and try to make sense of
-them through upstreaming.
-Sometimes when I pick them, it's not always obvious to me whether
-they're worth it or not.
-=C2=AF\_(=E3=83=84)_/=C2=AF
-
-
-> > +
-> >  #endif /* ADI_AXI_COMMON_H_ */
-> > --
-> > 2.17.1
-> >
->
-> - Moritz
->
-> PS: The subject line could use a bit of work, too :)
-
-Will think about it :)
