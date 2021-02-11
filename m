@@ -2,81 +2,90 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB1F318535
-	for <lists+linux-fpga@lfdr.de>; Thu, 11 Feb 2021 07:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C323A3189EF
+	for <lists+linux-fpga@lfdr.de>; Thu, 11 Feb 2021 12:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbhBKGYi (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 11 Feb 2021 01:24:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S229889AbhBKLz3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 11 Feb 2021 06:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbhBKGYf (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 11 Feb 2021 01:24:35 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C040AC06174A;
-        Wed, 10 Feb 2021 22:23:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=ORJIOgAJ2KY93EhL4wb57KAdwo8JGQSLCsh+Dw1LNw4=; b=sACq8E3zfoJh83W1vU2gaOvN03
-        GxtpKW2k+3HQx0oH68bj4NzzVtu5z24lgIdyhNifxrQjvNwGmlneugtl4OSejpgHLudIrETSYed2N
-        6MLi/12H4FsW7Yqvzd3/qcoraSZo/O2Kig+unO2l4JfHb5vOvNbi9KfFvxx0sd5Tw3WbPxXjvgANn
-        8615RYdZXdkzV19zDxP9YtC5JQ6yO702350Kbc82PDkR+m+AQhb9QDE1/Af2XoFwCBrclvAOzQsCG
-        kdg26FbSXMTTn03AHpH3TAncPpmfgvhmUftjJRSX/BEm+VrdE8Axp/RBhbbzfTMObBRpK7Kfd3zjd
-        PgN529zg==;
-Received: from [2601:1c0:6280:3f0::cf3b]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1lA5OH-0007vA-S4; Thu, 11 Feb 2021 06:23:50 +0000
-Subject: Re: [PATCH v2 3/3] fpga: versal-fpga: Add versal fpga manager driver
-To:     Nava kishore Manne <nava.manne@xilinx.com>, mdf@kernel.org,
-        trix@redhat.com, robh+dt@kernel.org, michal.simek@xilinx.com,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        chinnikishore369@gmail.com
-Cc:     git@xilinx.com,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-References: <20210211060532.23662-1-nava.manne@xilinx.com>
- <20210211060532.23662-4-nava.manne@xilinx.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <7016de66-f254-2bd6-ce29-3b44133feaa0@infradead.org>
-Date:   Wed, 10 Feb 2021 22:23:44 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        with ESMTP id S231735AbhBKLx0 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 11 Feb 2021 06:53:26 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3522C06178B
+        for <linux-fpga@vger.kernel.org>; Thu, 11 Feb 2021 03:52:45 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id k4so5295932ybp.6
+        for <linux-fpga@vger.kernel.org>; Thu, 11 Feb 2021 03:52:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=i8u9RAV8Q8baJufeKLMTyy7VC8b/C+u8YoKOUYDsAgw=;
+        b=uDkLbtRozZ1l46LFRo6Ht7damnxVmb8TOEnZyTrLAk5xIRQNYTTETJT5bhxiIcRj7Z
+         OYnZbEHjvx/nG7nuZrdgOx/KihWuEgbbEdpOhrOA5NdGb2TO05cCrsh+gyIVaM2nm0st
+         y2f0o0yrR+pjRwMdIb4Djy2Nk9WS270PKu6LUuJrzIk2U7nG3YZ3nGQizu5D9ElVqXvk
+         XVY1Cnm78G7+ew3Dxq1qty4Rv/b7YF4iIPjK+Ow7HNUv+JNcVadspyz7VY19R5a1J0da
+         OrzQ70nDcCh9ptw6JCQgY3GoVoYhA2c2nNmdZVVdnhvQGiWvMmWuNnM6Rt4uihxPtqd2
+         tRrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=i8u9RAV8Q8baJufeKLMTyy7VC8b/C+u8YoKOUYDsAgw=;
+        b=ttKL6RikitftrDYRVls6Ovm91i0S0/pd8Z3ejWZXXd4BARgL9DAaiHVySVPwhg39Tv
+         gncG/zC6wRKl1ttwTuN4aCiVHjmxlYMsd5ZkTC6C8DGrbtybWVYkT5lZs1GXdsN9XdTt
+         G4yFDuFszmz+bXlY+n4VOU/jaxAILVsFzxPc4jijpoCUkyStZBEhSKaIulbnoh4tP3IN
+         FhRIJyYR3ENfSoHSljyE4KM8wYxXWr4OJ+zUDtSaev0h2XVYQ2mdmCqUpF52lSjPQDiG
+         LMb7M6w4gm1BbJpaE7a8kkb25+9snwoiYJoeTTdAi073/VGJmu2WefwMVJ6D2HD6NLIX
+         gijg==
+X-Gm-Message-State: AOAM532UR6nQVmCX1jXicZ6Jl5qqrF9CAQkbuaYBz/YzXyeeUXirfSfX
+        dJ4jGaUgOT1SQrLWg3h9iP38Ry/9NfcB+kKQwjg=
+X-Google-Smtp-Source: ABdhPJxx1UcozEcxZk6DXwJDCIHvqJoMP2oSNiquWuBmGfBmKSs4b/fLR3MgSdDsJsgTL4vVUlMxMVdBWYDhwT6yrSY=
+X-Received: by 2002:a25:7645:: with SMTP id r66mr11409935ybc.331.1613044365266;
+ Thu, 11 Feb 2021 03:52:45 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210211060532.23662-4-nava.manne@xilinx.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Sender: alidami798@gmail.com
+Received: by 2002:a05:6900:2223:0:0:0:0 with HTTP; Thu, 11 Feb 2021 03:52:44
+ -0800 (PST)
+From:   ali dami <mralidami5@gmail.com>
+Date:   Thu, 11 Feb 2021 03:52:44 -0800
+X-Google-Sender-Auth: 6Qocn6q3sxu64CZezM4nktjjBts
+Message-ID: <CAOT8OOikcVy+Kyo3ckLC=wt__6PwHekMsoegbkeogG5sBwAKJQ@mail.gmail.com>
+Subject: Dear friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi--
-
-On 2/10/21 10:05 PM, Nava kishore Manne wrote:
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index bf85b9a65ec2..dcd2ed5a7956 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -223,4 +223,12 @@ config FPGA_MGR_ZYNQMP_FPGA
->  	  to configure the programmable logic(PL) through PS
->  	  on ZynqMP SoC.
->  
-> +config FPGA_MGR_VERSAL_FPGA
-> +        tristate "Xilinx Versal FPGA"
-> +        depends on ARCH_ZYNQMP || COMPILE_TEST
-> +        help
-> +          Select this option to enable FPGA manager driver support for
-> +          Xilinx Versal SOC. This driver uses the versal soc firmware
-
-How about consistently capitalizing Versal and SOC (above and below)?
-
-> +          interface to load programmable logic(PL) images
-> +          on versal soc.
->  endif # FPGA
-
-
-thanks.
 -- 
-~Randy
+Dear friend,
 
+I am Mr.Huston Ali,from West Africa am sorry to intrude into your
+privacy I got your email address through internet via computerized search
+after my prayers so I bring to you this transaction which I notify
+from our bank an abandon fund which belongs to our late foreign customer who
+deposited the sum 10.2 million USD but he had a treble plane crash
+with his family ever since then no one has applied to claim the fund
+so I write to you with confidence that you can be a help so we can get
+the fund out of the bank I want you to apply to the bank as his
+foreign business partner note that once the fund is been release to
+your wish bank account in your country it will be shared among us in
+the ratio of 60%40 if you are interested please kindly forward your
+details so we can move towards it.
+
+Your full name...........
+
+Your Bank Name:............
+
+Your Telephone Number:............
+
+Your Age And Sex:.......................
+
+Your marital status........
+
+Your Occupation..........
+
+Your Country city............
+
+Thanks
+Mr Huston Ali
