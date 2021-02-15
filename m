@@ -2,127 +2,204 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4A631BB27
-	for <lists+linux-fpga@lfdr.de>; Mon, 15 Feb 2021 15:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7887F31BBAF
+	for <lists+linux-fpga@lfdr.de>; Mon, 15 Feb 2021 15:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbhBOOdu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 15 Feb 2021 09:33:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:34383 "EHLO
+        id S230362AbhBOO6F (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 15 Feb 2021 09:58:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56018 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230117AbhBOOds (ORCPT
+        by vger.kernel.org with ESMTP id S230282AbhBOO5x (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 15 Feb 2021 09:33:48 -0500
+        Mon, 15 Feb 2021 09:57:53 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613399541;
+        s=mimecast20190719; t=1613400979;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=V5iotNNVRDZZFpt9DojBqreSnQL5CMIXscXuC8GHPa8=;
-        b=etvl1tai5dPslsQYmGHjRQwpXK4rw66nb3GW3WhOVzPQI7KVE4QRX3oJ1Cvq0Ilv88mOF4
-        w27BsQb2pSNISujhqaUBOHXTQJkdGwmE7CXUpYQLc4r6dtaH7/3AaGrmzOYv6kN6Z8M/W1
-        +eo8fcs07IKBryZvaOmBClOLpRG6A1Y=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-518-IWT6dPCiPO-IzoluWsE7MQ-1; Mon, 15 Feb 2021 09:32:19 -0500
-X-MC-Unique: IWT6dPCiPO-IzoluWsE7MQ-1
-Received: by mail-qk1-f200.google.com with SMTP id s6so5581305qkg.15
-        for <linux-fpga@vger.kernel.org>; Mon, 15 Feb 2021 06:32:19 -0800 (PST)
+        bh=JrRM1QxfnrMrYFQsps5k5W6ePiGa4SMjmwwhDFeB+aw=;
+        b=d4aeNR5ibW4LJitWEeqgydYRWo+7pz8/NQbCweW2nfr4S80k2wDTvcuD/ZbHKwgjeamlUH
+        /eWyQrxd2lSyT8hcDZ45kFmveUE4yww7JB43v5b4oDdu3OHUJEeASd9Vn9tNX4dL8j2rLD
+        qLQZ8CgUjCfkHQ/rC3/X4hbau305zsI=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-563-cKC23pliMqC0hDPICCPccg-1; Mon, 15 Feb 2021 09:56:18 -0500
+X-MC-Unique: cKC23pliMqC0hDPICCPccg-1
+Received: by mail-qt1-f198.google.com with SMTP id k90so5412222qte.4
+        for <linux-fpga@vger.kernel.org>; Mon, 15 Feb 2021 06:56:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=V5iotNNVRDZZFpt9DojBqreSnQL5CMIXscXuC8GHPa8=;
-        b=puYkYimyFx2/Lxg8SJ2FHi42gN8C5oCTVK4bPWbBeiaF8VipaPOaHRxhdBYCLrjb6w
-         x6fow9d6AnOfp1M7ygtAe6MIyeDBBO0QsPQJsjL9a8mJ5TZo/ZI872Fn9i20nPd4VKI4
-         uUD8kyXSPxsqbrI0N8EUZl5fg0NwYFqywbny5rU4fHS2L41q67O0i/BdfGKFPAKRrxmx
-         NSQw6xzHXsyC0TZT8bgMt/nf9c/vdK876ryrhl9xa+y6P646tWgFmOHVg1FCCdnz9GJP
-         OmEaXbPumVqk+b5ThduVuiZBu71o/F/ZtDsf4x+mbZqvY71zuK+FCc/+RxFrQBtWi3m/
-         JK7w==
-X-Gm-Message-State: AOAM530cObOhLocWgaEnL/sMIKvmM8dSfhg+U11U26kSeWNVW6K/RZXF
-        CG6mizmhltilInQbku3hfn2123jX92LfaNTor9GgjKiUY3V6U0I96FUEKZQ0a7N6CzAeyUOTshZ
-        OPaLTMU77FGk+3uOcp6o9Pg==
-X-Received: by 2002:ac8:4d45:: with SMTP id x5mr14412657qtv.339.1613399539384;
-        Mon, 15 Feb 2021 06:32:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxyzm183aQbQZxgKjyU7MLFXVJ6Mlub05Cm/l5b+A3lD2FZd7RebwG5Xiuj0JTWTj0dd3dV2w==
-X-Received: by 2002:ac8:4d45:: with SMTP id x5mr14412643qtv.339.1613399539207;
-        Mon, 15 Feb 2021 06:32:19 -0800 (PST)
+        bh=JrRM1QxfnrMrYFQsps5k5W6ePiGa4SMjmwwhDFeB+aw=;
+        b=jy2eA81fDDaGa9bmTXUMt4CTAL5RA6qQVklv41A5ES1frBxtaCv0LgAARtouaqksnN
+         Ho0rv2O8gz9E9qdU9QSxvYc3fXnPkhW61nEGgi3NZPbzdP40+spQzu6tk9t+zOMQtWaQ
+         wPNlaR5L/3BAyCjdb4zt/Bh8DPajbC/qgG6uREmJz9a2Ye1azU0OlS/w4ZmOdDbjzmuf
+         tNUjW/amcacQTOeJVR0KqBH4VolF6FnJBwst1qHWfnZmoizKWkgYcWrib2ISrGfU/XEs
+         L5pj4iwOwljVDf0/HEuRDu2kdP5+wLcKdweAVtzRTV52BQCtar5diK8B0Hrll1vtzOcr
+         p2UQ==
+X-Gm-Message-State: AOAM531AsrlPRRTpfGYQr7iHsFyG0gnYaC3wsJ9dpmTI3HBBxze8cvol
+        4epwaDddiSnBANoxAaInYa4eh5pMmrlgWw7t0nzazZnkIzDw9d1khLtF2+9VQyw8t1ppsNYicy8
+        idKqvS2eO3I3HonMDdwqbJg==
+X-Received: by 2002:a37:4c09:: with SMTP id z9mr8851898qka.9.1613400976737;
+        Mon, 15 Feb 2021 06:56:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwAbZIRzXhEKW5+XNMv3+ptZvSCtEfKDkun5PSz6GwXN+Gen4qxjlQDPRfDrdOZ0yYIUswT7g==
+X-Received: by 2002:a37:4c09:: with SMTP id z9mr8851879qka.9.1613400976502;
+        Mon, 15 Feb 2021 06:56:16 -0800 (PST)
 Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id q6sm12083067qkd.41.2021.02.15.06.32.17
+        by smtp.gmail.com with ESMTPSA id d22sm11361098qtp.34.2021.02.15.06.56.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Feb 2021 06:32:18 -0800 (PST)
-Subject: Re: [PATCHv5 1/7] firmware: stratix10-svc: reset
- COMMAND_RECONFIG_FLAG_PARTIAL to 0
-To:     Richard Gong <richard.gong@linux.intel.com>, mdf@kernel.org,
-        gregkh@linuxfoundation.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Richard Gong <richard.gong@intel.com>
-References: <1612909233-13867-1-git-send-email-richard.gong@linux.intel.com>
- <1612909233-13867-2-git-send-email-richard.gong@linux.intel.com>
- <bc43e8ab-b8df-fd2f-31e4-02cdc48cadff@redhat.com>
- <3ff3e9ca-cdca-796e-0b57-5010963e7ee1@linux.intel.com>
+        Mon, 15 Feb 2021 06:56:16 -0800 (PST)
+Subject: Re: [PATCH v9 0/7] FPGA Security Manager Class Driver
+To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
+        matthew.gerlach@intel.com
+References: <20210105225924.14573-1-russell.h.weight@intel.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <12eb2031-db0a-4c00-117e-f3ee8dd15978@redhat.com>
-Date:   Mon, 15 Feb 2021 06:32:16 -0800
+Message-ID: <a9705da0-1ed0-8d9a-8eea-f04d7b9b471c@redhat.com>
+Date:   Mon, 15 Feb 2021 06:56:14 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <3ff3e9ca-cdca-796e-0b57-5010963e7ee1@linux.intel.com>
+In-Reply-To: <20210105225924.14573-1-russell.h.weight@intel.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Russ, Moritz
 
-On 2/15/21 6:41 AM, Richard Gong wrote:
-> Hi Tom,
+This patchset still applies.
+
+Updating the fpga is a fairly important feature.
+
+Are there any dependencies we are waiting on ?
+
+Tom
+
+On 1/5/21 2:59 PM, Russ Weight wrote:
+> The FPGA Security Manager class driver provides a common
+> API for user-space tools to manage updates for secure FPGA
+> devices. Device drivers that instantiate the FPGA Security
+> Manager class driver will interact with a HW secure update
+> engine in order to transfer new FPGA and BMC images to FLASH so
+> that they will be automatically loaded when the FPGA card reboots.
 >
-> On 2/13/21 9:44 AM, Tom Rix wrote:
->>
->> On 2/9/21 2:20 PM, richard.gong@linux.intel.com wrote:
->>> From: Richard Gong <richard.gong@intel.com>
->>>
->>> Clean up COMMAND_RECONFIG_FLAG_PARTIAL flag by resetting it to 0, which
->>> aligns with the firmware settings.
->>>
->>> Fixes: 36847f9e3e56 ("firmware: stratix10-svc: correct reconfig flag and timeout values")
->>> Signed-off-by: Richard Gong <richard.gong@intel.com>
->>> ---
->>> v5: new add, add the missing standalone patch
->>> ---
->>>   include/linux/firmware/intel/stratix10-svc-client.h | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/include/linux/firmware/intel/stratix10-svc-client.h b/include/linux/firmware/intel/stratix10-svc-client.h
->>> index a93d859..f843c6a 100644
->>> --- a/include/linux/firmware/intel/stratix10-svc-client.h
->>> +++ b/include/linux/firmware/intel/stratix10-svc-client.h
->>> @@ -56,7 +56,7 @@
->>>    * COMMAND_RECONFIG_FLAG_PARTIAL:
->>>    * Set to FPGA configuration type (full or partial).
->>>    */
->>> -#define COMMAND_RECONFIG_FLAG_PARTIAL    1
->>> +#define COMMAND_RECONFIG_FLAG_PARTIAL    0
->>
->> Is this the stand alone fix split from v3's patch 1 ?
->>
->> https://lore.kernel.org/linux-fpga/YBFW50LPP%2FyEbvEW@kroah.com/
->> Yes, it is a stand-alone patch.
-
-Thanks.
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
+> A significant difference between the FPGA Manager and the FPGA 
+> Security Manager is that the FPGA Manager does a live update (Partial
+> Reconfiguration) to a device whereas the FPGA Security Manager
+> updates the FLASH images for the Static Region and the BMC so that
+> they will be loaded the next time the FPGA card boots. Security is
+> enforced by hardware and firmware. The security manager interacts
+> with the firmware to initiate an update, pass in the necessary data,
+> and collect status on the update.
 >
->> Tom
->>
->>>     /**
->>>    * Timeout settings for service clients:
->>
-> Regards,
-> Richard
+> The n3000bmc-secure driver is the first driver to use the FPGA
+> Security Manager. This driver was previously submitted in the same
+> patch set, but has been split out into a separate patch set starting
+> with V2. Future devices will also make use of this common API for
+> secure updates.
+>
+> In addition to managing secure updates of the FPGA and BMC images,
+> the FPGA Security Manager update process may also be used to
+> program root entry hashes and cancellation keys for the FPGA static
+> region, the FPGA partial reconfiguration region, and the BMC.
+> The image files are self-describing, and contain a header describing
+> the image type.
+>
+> Secure updates make use of the request_firmware framework, which
+> requires that image files are accessible under /lib/firmware. A request
+> for a secure update returns immediately, while the update itself
+> proceeds in the context of a kernel worker thread. Sysfs files provide
+> a means for monitoring the progress of a secure update and for
+> retrieving error information in the event of a failure.
+>
+> The API includes a "name" sysfs file to export the name of the parent
+> driver. It also includes an "update" sub-directory containing files that
+> that can be used to instantiate and monitor a secure update.
+>
+> Changelog v8 -> v9:
+>   - Rebased patches for 5.11-rc2
+>   - Updated Date and KernelVersion in ABI documentation
+>
+> Changelog v7 -> v8:
+>   - Fixed grammatical error in Documentation/fpga/fpga-sec-mgr.rst
+>
+> Changelog v6 -> v7:
+>   - Changed dates in documentation file to December 2020
+>   - Changed filename_store() to use kmemdup_nul() instead of
+>     kstrndup() and changed the count to not assume a line-return.
+>
+> Changelog v5 -> v6:
+>   - Removed sysfs support and documentation for the display of the
+>     flash count, root entry hashes, and code-signing-key cancelation
+>     vectors from the class driver. This information can vary by device
+>     and will instead be displayed by the device-specific parent driver.
+>
+> Changelog v4 -> v5:
+>   - Added the devm_fpga_sec_mgr_unregister() function, following recent
+>     changes to the fpga_manager() implementation.
+>   - Changed most of the *_show() functions to use sysfs_emit()
+>     instead of sprintf(
+>   - When checking the return values for functions of type enum
+>     fpga_sec_err err_code, test for FPGA_SEC_ERR_NONE instead of 0
+>
+> Changelog v3 -> v4:
+>   - This driver is generic enough that it could be used for non Intel
+>     FPGA devices. Changed from "Intel FPGA Security Manager" to FPGA
+>     Security Manager" and removed unnecessary references to "Intel".
+>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+>     Note that this also affects some filenames.
+>
+> Changelog v2 -> v3:
+>   - Use dev_err() to report invalid progress in sec_progress()
+>   - Use dev_err() to report invalid error code in sec_error()
+>   - Modified sysfs handler check in check_sysfs_handler() to make
+>     it more readable.
+>   - Removed unnecessary "goto done"
+>   - Added a comment to explain imgr->driver_unload in
+>     ifpga_sec_mgr_unregister()
+>
+> Changelog v1 -> v2:
+>   - Separated out the MAX10 BMC Security Engine to be submitted in
+>     a separate patch-set.
+>   - Bumped documentation dates and versions
+>   - Split ifpga_sec_mgr_register() into create() and register() functions
+>   - Added devm_ifpga_sec_mgr_create()
+>   - Added Documentation/fpga/ifpga-sec-mgr.rst 
+>   - Changed progress state "read_file" to "reading"
+>   - Added sec_error() function (similar to sec_progress())
+>   - Removed references to bmc_flash_count & smbus_flash_count (not supported)
+>   - Removed typedefs for imgr ops
+>   - Removed explicit value assignments in enums
+>   - Other minor code cleanup per review comments 
+>
+> Russ Weight (7):
+>   fpga: sec-mgr: fpga security manager class driver
+>   fpga: sec-mgr: enable secure updates
+>   fpga: sec-mgr: expose sec-mgr update status
+>   fpga: sec-mgr: expose sec-mgr update errors
+>   fpga: sec-mgr: expose sec-mgr update size
+>   fpga: sec-mgr: enable cancel of secure update
+>   fpga: sec-mgr: expose hardware error info
+>
+>  .../ABI/testing/sysfs-class-fpga-sec-mgr      |  81 +++
+>  Documentation/fpga/fpga-sec-mgr.rst           |  44 ++
+>  Documentation/fpga/index.rst                  |   1 +
+>  MAINTAINERS                                   |   9 +
+>  drivers/fpga/Kconfig                          |   9 +
+>  drivers/fpga/Makefile                         |   3 +
+>  drivers/fpga/fpga-sec-mgr.c                   | 652 ++++++++++++++++++
+>  include/linux/fpga/fpga-sec-mgr.h             | 100 +++
+>  8 files changed, 899 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
+>  create mode 100644 Documentation/fpga/fpga-sec-mgr.rst
+>  create mode 100644 drivers/fpga/fpga-sec-mgr.c
+>  create mode 100644 include/linux/fpga/fpga-sec-mgr.h
 >
 
