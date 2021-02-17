@@ -2,199 +2,130 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 427BE31D4A3
-	for <lists+linux-fpga@lfdr.de>; Wed, 17 Feb 2021 05:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7479D31E10A
+	for <lists+linux-fpga@lfdr.de>; Wed, 17 Feb 2021 22:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbhBQEgb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 16 Feb 2021 23:36:31 -0500
-Received: from mail-pl1-f173.google.com ([209.85.214.173]:34980 "EHLO
-        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbhBQEfY (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 16 Feb 2021 23:35:24 -0500
-Received: by mail-pl1-f173.google.com with SMTP id g20so6782417plo.2;
-        Tue, 16 Feb 2021 20:34:32 -0800 (PST)
+        id S232339AbhBQVHi (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 17 Feb 2021 16:07:38 -0500
+Received: from mail-oo1-f47.google.com ([209.85.161.47]:41650 "EHLO
+        mail-oo1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231710AbhBQVHh (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 17 Feb 2021 16:07:37 -0500
+Received: by mail-oo1-f47.google.com with SMTP id h38so3394526ooi.8;
+        Wed, 17 Feb 2021 13:07:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=oPAIMKuKvKEaHiQvXAcNDbDQ0OtzKGU/PgY56JPRvao=;
-        b=eRhLulKJHoRvO0HQNePpV6veSQcUWw7OPmM3Gmg9jjBrO54wev/1bSCHWIYGwOjj4E
-         M6m37OtjPBTN7tCcibK5VDe3WPv0M4wUPTiGImnh5aDAYDHH7fm1GXA1zwjkOwNbu84y
-         PUDlO5xgU7N2pdb6zXwL2S28rQY/xesScH0yYT4MyQqUJoODM6uytG0u9yZlCDerpkkw
-         jOb7M7jEjbv4dheMzHSA9O5pOu/HwsAmdWN97RQ8fjcecYLJgif2eyrbGLrw0JRJKXjU
-         9d+Cbvb02E8xh67rDVixNLE6ot5nHg2/wRIHmnuyrfAXsV3vVltg7Ii12jiF5EhRh59O
-         v9/A==
-X-Gm-Message-State: AOAM530ycQZKuWmIo8/vfoJWHzse/KHf+tXadlnA291q0cFQWesghCdh
-        PTfV3ISy1yVIvswm9OZPbZ1BF9m69ncjVQ==
-X-Google-Smtp-Source: ABdhPJzIEwO60oDsi+w5F+xbgSrhdv3fo6P2LXM2ZmEgJLGfdzFj/PdvikKPiHbjkiLaBcwbmXtcAg==
-X-Received: by 2002:a17:90a:c083:: with SMTP id o3mr7392132pjs.30.1613536445705;
-        Tue, 16 Feb 2021 20:34:05 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id y13sm526283pfc.28.2021.02.16.20.34.04
+        bh=hQwMs3U/95KY+I7ERg8afjmtvvQ8j6QtTF7kUMzLV2M=;
+        b=Xjc4nfv4WlgVJaENohief3mL6BTibw4hVugHlPXqxG94fdT0LyZ0KyfuOmYfmqC6te
+         u3K+h6tOoipBxsMWR4EFT1uTXgnOP4C5yQU1xIg2cKLstF8eiN+I6VcA7A/k7Le1du3t
+         FMJe9C6DXs6k9bvMEp8/DEyI1eT862qObfbKJeF4irXjOqzK1tpFtZkGzi2dqgXKMjU+
+         RgQlOZnRfM7TLt/yYnPy+X/UdZwCk4sR88gdZSpiAe+EoLxZ/w1htg6xKnP8DFRBids1
+         WJMBUwz9OL3DdGGt1pyHVGImoN1UnmxdhPQXe6ulPXbFV5UkUlCdlTIN/wediTZ6PJ2l
+         qqMg==
+X-Gm-Message-State: AOAM533AuzYLDkuzMFMxwBx+74EOddvi1JB1myBbJflGcCUipKswXagg
+        dRDD4AwATYC/BPoXTBXxOg==
+X-Google-Smtp-Source: ABdhPJyYBIFwNq4dbzmcj6krkSueeChW11Sp3wHQ9o9KLb/3qxt5qOqTk8DmnMZu4ifCffDXyWoeFw==
+X-Received: by 2002:a4a:b509:: with SMTP id r9mr683682ooo.21.1613596015798;
+        Wed, 17 Feb 2021 13:06:55 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id a28sm618420ook.24.2021.02.17.13.06.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Feb 2021 20:34:05 -0800 (PST)
-Date:   Tue, 16 Feb 2021 20:34:03 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     Tom Rix <trix@redhat.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@intel.com
-Subject: Re: [PATCH v9 0/7] FPGA Security Manager Class Driver
-Message-ID: <YCycu/QvjGxO0s1n@epycbox.lan>
-References: <20210105225924.14573-1-russell.h.weight@intel.com>
- <a9705da0-1ed0-8d9a-8eea-f04d7b9b471c@redhat.com>
- <0a3274a4-607d-cce6-2000-b8ea89f03c48@intel.com>
+        Wed, 17 Feb 2021 13:06:54 -0800 (PST)
+Received: (nullmailer pid 2756132 invoked by uid 1000);
+        Wed, 17 Feb 2021 21:06:53 -0000
+Date:   Wed, 17 Feb 2021 15:06:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nava kishore Manne <navam@xilinx.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        git <git@xilinx.com>,
+        Appana Durga Kedareswara Rao <appanad@xilinx.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "chinnikishore369@gmail.com" <chinnikishore369@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        Michal Simek <michals@xilinx.com>
+Subject: Re: [PATCH v2 2/3] dt-bindings: fpga: Add binding doc for versal
+ fpga manager
+Message-ID: <20210217210653.GA2752472@robh.at.kernel.org>
+References: <20210211060532.23662-1-nava.manne@xilinx.com>
+ <20210211060532.23662-3-nava.manne@xilinx.com>
+ <1613055380.699799.519684.nullmailer@robh.at.kernel.org>
+ <MWHPR02MB2623787A36B389BCF337D8EBC28B9@MWHPR02MB2623.namprd02.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0a3274a4-607d-cce6-2000-b8ea89f03c48@intel.com>
+In-Reply-To: <MWHPR02MB2623787A36B389BCF337D8EBC28B9@MWHPR02MB2623.namprd02.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Russ,
-
-On Tue, Feb 16, 2021 at 09:46:53AM -0800, Russ Weight wrote:
-> I believe all of the dependencies have been accepted now.
+On Fri, Feb 12, 2021 at 06:13:33AM +0000, Nava kishore Manne wrote:
+> Hi Rob,
 > 
-> - Russ
-
-Sorry for dropping the ball on this, I'll get to this ASAP after -rc1 is
-tagged.
-
+> Please find my response inline.
 > 
-> On 2/15/21 6:56 AM, Tom Rix wrote:
-> > Russ, Moritz
-> >
-> > This patchset still applies.
-> >
-> > Updating the fpga is a fairly important feature.
-> >
-> > Are there any dependencies we are waiting on ?
-> >
-> > Tom
-> >
-> > On 1/5/21 2:59 PM, Russ Weight wrote:
-> >> The FPGA Security Manager class driver provides a common
-> >> API for user-space tools to manage updates for secure FPGA
-> >> devices. Device drivers that instantiate the FPGA Security
-> >> Manager class driver will interact with a HW secure update
-> >> engine in order to transfer new FPGA and BMC images to FLASH so
-> >> that they will be automatically loaded when the FPGA card reboots.
-> >>
-> >> A significant difference between the FPGA Manager and the FPGA 
-> >> Security Manager is that the FPGA Manager does a live update (Partial
-> >> Reconfiguration) to a device whereas the FPGA Security Manager
-> >> updates the FLASH images for the Static Region and the BMC so that
-> >> they will be loaded the next time the FPGA card boots. Security is
-> >> enforced by hardware and firmware. The security manager interacts
-> >> with the firmware to initiate an update, pass in the necessary data,
-> >> and collect status on the update.
-> >>
-> >> The n3000bmc-secure driver is the first driver to use the FPGA
-> >> Security Manager. This driver was previously submitted in the same
-> >> patch set, but has been split out into a separate patch set starting
-> >> with V2. Future devices will also make use of this common API for
-> >> secure updates.
-> >>
-> >> In addition to managing secure updates of the FPGA and BMC images,
-> >> the FPGA Security Manager update process may also be used to
-> >> program root entry hashes and cancellation keys for the FPGA static
-> >> region, the FPGA partial reconfiguration region, and the BMC.
-> >> The image files are self-describing, and contain a header describing
-> >> the image type.
-> >>
-> >> Secure updates make use of the request_firmware framework, which
-> >> requires that image files are accessible under /lib/firmware. A request
-> >> for a secure update returns immediately, while the update itself
-> >> proceeds in the context of a kernel worker thread. Sysfs files provide
-> >> a means for monitoring the progress of a secure update and for
-> >> retrieving error information in the event of a failure.
-> >>
-> >> The API includes a "name" sysfs file to export the name of the parent
-> >> driver. It also includes an "update" sub-directory containing files that
-> >> that can be used to instantiate and monitor a secure update.
-> >>
-> >> Changelog v8 -> v9:
-> >>   - Rebased patches for 5.11-rc2
-> >>   - Updated Date and KernelVersion in ABI documentation
-> >>
-> >> Changelog v7 -> v8:
-> >>   - Fixed grammatical error in Documentation/fpga/fpga-sec-mgr.rst
-> >>
-> >> Changelog v6 -> v7:
-> >>   - Changed dates in documentation file to December 2020
-> >>   - Changed filename_store() to use kmemdup_nul() instead of
-> >>     kstrndup() and changed the count to not assume a line-return.
-> >>
-> >> Changelog v5 -> v6:
-> >>   - Removed sysfs support and documentation for the display of the
-> >>     flash count, root entry hashes, and code-signing-key cancelation
-> >>     vectors from the class driver. This information can vary by device
-> >>     and will instead be displayed by the device-specific parent driver.
-> >>
-> >> Changelog v4 -> v5:
-> >>   - Added the devm_fpga_sec_mgr_unregister() function, following recent
-> >>     changes to the fpga_manager() implementation.
-> >>   - Changed most of the *_show() functions to use sysfs_emit()
-> >>     instead of sprintf(
-> >>   - When checking the return values for functions of type enum
-> >>     fpga_sec_err err_code, test for FPGA_SEC_ERR_NONE instead of 0
-> >>
-> >> Changelog v3 -> v4:
-> >>   - This driver is generic enough that it could be used for non Intel
-> >>     FPGA devices. Changed from "Intel FPGA Security Manager" to FPGA
-> >>     Security Manager" and removed unnecessary references to "Intel".
-> >>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
-> >>     Note that this also affects some filenames.
-> >>
-> >> Changelog v2 -> v3:
-> >>   - Use dev_err() to report invalid progress in sec_progress()
-> >>   - Use dev_err() to report invalid error code in sec_error()
-> >>   - Modified sysfs handler check in check_sysfs_handler() to make
-> >>     it more readable.
-> >>   - Removed unnecessary "goto done"
-> >>   - Added a comment to explain imgr->driver_unload in
-> >>     ifpga_sec_mgr_unregister()
-> >>
-> >> Changelog v1 -> v2:
-> >>   - Separated out the MAX10 BMC Security Engine to be submitted in
-> >>     a separate patch-set.
-> >>   - Bumped documentation dates and versions
-> >>   - Split ifpga_sec_mgr_register() into create() and register() functions
-> >>   - Added devm_ifpga_sec_mgr_create()
-> >>   - Added Documentation/fpga/ifpga-sec-mgr.rst 
-> >>   - Changed progress state "read_file" to "reading"
-> >>   - Added sec_error() function (similar to sec_progress())
-> >>   - Removed references to bmc_flash_count & smbus_flash_count (not supported)
-> >>   - Removed typedefs for imgr ops
-> >>   - Removed explicit value assignments in enums
-> >>   - Other minor code cleanup per review comments 
-> >>
-> >> Russ Weight (7):
-> >>   fpga: sec-mgr: fpga security manager class driver
-> >>   fpga: sec-mgr: enable secure updates
-> >>   fpga: sec-mgr: expose sec-mgr update status
-> >>   fpga: sec-mgr: expose sec-mgr update errors
-> >>   fpga: sec-mgr: expose sec-mgr update size
-> >>   fpga: sec-mgr: enable cancel of secure update
-> >>   fpga: sec-mgr: expose hardware error info
-> >>
-> >>  .../ABI/testing/sysfs-class-fpga-sec-mgr      |  81 +++
-> >>  Documentation/fpga/fpga-sec-mgr.rst           |  44 ++
-> >>  Documentation/fpga/index.rst                  |   1 +
-> >>  MAINTAINERS                                   |   9 +
-> >>  drivers/fpga/Kconfig                          |   9 +
-> >>  drivers/fpga/Makefile                         |   3 +
-> >>  drivers/fpga/fpga-sec-mgr.c                   | 652 ++++++++++++++++++
-> >>  include/linux/fpga/fpga-sec-mgr.h             | 100 +++
-> >>  8 files changed, 899 insertions(+)
-> >>  create mode 100644 Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
-> >>  create mode 100644 Documentation/fpga/fpga-sec-mgr.rst
-> >>  create mode 100644 drivers/fpga/fpga-sec-mgr.c
-> >>  create mode 100644 include/linux/fpga/fpga-sec-mgr.h
-> >>
+> > -----Original Message-----
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: Thursday, February 11, 2021 8:26 PM
+> > To: Nava kishore Manne <navam@xilinx.com>
+> > Cc: linux-arm-kernel@lists.infradead.org; mdf@kernel.org; linux-
+> > fpga@vger.kernel.org; git <git@xilinx.com>; Appana Durga Kedareswara Rao
+> > <appanad@xilinx.com>; devicetree@vger.kernel.org; robh+dt@kernel.org;
+> > chinnikishore369@gmail.com; linux-kernel@vger.kernel.org;
+> > trix@redhat.com; Michal Simek <michals@xilinx.com>
+> > Subject: Re: [PATCH v2 2/3] dt-bindings: fpga: Add binding doc for versal fpga
+> > manager
+> > 
+> > On Thu, 11 Feb 2021 11:35:31 +0530, Nava kishore Manne wrote:
+> > > From: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+> > >
+> > > This patch adds binding doc for versal fpga manager driver.
+> > >
+> > > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> > > Signed-off-by: Appana Durga Kedareswara rao
+> > > <appana.durga.rao@xilinx.com>
+> > > ---
+> > > Changes for v2:
+> > >                 -Fixed file format and syntax issues.
+> > >
+> > >  .../bindings/fpga/xlnx,versal-fpga.yaml       | 33 +++++++++++++++++++
+> > >  1 file changed, 33 insertions(+)
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+> > >
+> > 
+> > My bot found errors running 'make dt_binding_check' on your patch:
+> > 
+> > yamllint warnings/errors:
+> > ./Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml:12:14:
+> > [warning] too many spaces after colon (colons)
+> > ./Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml:20:9:
+> > [warning] wrong indentation: expected 10 but found 8 (indentation)
+> > 
+> > dtschema/dtc warnings/errors:
+> > 
+> > See https://patchwork.ozlabs.org/patch/1439305
+> > 
+> > This check can fail if there are any dependencies. The base for a patch series
+> > is generally the most recent rc1.
+> > 
+> > If you already ran 'make dt_binding_check' and didn't see the above error(s),
+> > then make sure 'yamllint' is installed and dt-schema is up to
+> > date:
+> > 
+> > pip3 install dtschema --upgrade
+> > 
+> > Please check and re-submit.
 > 
+> Initially, I couldn't see any issue when I run.
+> After installing yamllint and with upgraded dt-schema, I am able to reproduce the above pointed issues.
+> Is there any prerequisite(Other than yamllint) I need to follow to run dt-schema?
 
-- Moritz
+No, just keeping dtschema up to date.
+
+Rob
