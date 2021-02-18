@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6608331E6BB
-	for <lists+linux-fpga@lfdr.de>; Thu, 18 Feb 2021 08:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF1F31E68D
+	for <lists+linux-fpga@lfdr.de>; Thu, 18 Feb 2021 08:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbhBRHK2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 18 Feb 2021 02:10:28 -0500
-Received: from mail-mw2nam12on2049.outbound.protection.outlook.com ([40.107.244.49]:54913
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        id S229767AbhBRGzy (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 18 Feb 2021 01:55:54 -0500
+Received: from mail-mw2nam08on2056.outbound.protection.outlook.com ([40.107.101.56]:24797
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231169AbhBRHGc (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 18 Feb 2021 02:06:32 -0500
+        id S231205AbhBRGss (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 18 Feb 2021 01:48:48 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CLk5XP/XjtF9eUUcihwrjcEnAZcjzf0oTru/b5zUutCKLxdz2LTVeOPuHLGw/xqYbNHSBiPnPWEG6spn4KzOTbziUttcjxiYYVAJzTXQbIN7kgGmV7xrC91TZ+xwOqNr/HNFuGdfU1wkuerPkDXnoPcn6QB6bwhHJXRokc3vyyx1XJOpnMPhIeuNjUl8cn1PemHIuv/V5lWjioMaxmdg91YtYs5HC/Gh8y9E3UlUAvhIRhpYPpCc4Y3KhzNvMORg05a3LlPspsYUFn2OiM5YeVaqvmEesDaaCLVRFPFYoeSP7wTy6YZi++VVr4xPqup9QsqZAaaAkVKb06jvFN9heg==
+ b=ki5x8StfXT8xppwa9/ujOdm7GK/QESznariyA2mZSxaVWP+E84M08x29Pn0aQe9Ni7Ap0bztNed3/pQUaRjejfIzUL4KZ3kB2un4HkMuMBdcpp67JaHl+wk9BbkTgrEFGy+x8MYW6KizmbxXs0MiFsqA78exCsNaXM0Bwq9g/aMHQNwIsH1XURuTums5KWs2k9immakguKRpb+rxmf4jxPA5MhKgx7eT+gr4PSlW9HK0QSzcgBLTJeD45y8tTsFmITFQO9tF1L6r/86zuD9RYVRHvA06eWdpbNiNPmiUsgzMSupqSgMrbEsW9dEv6/RDjxFVSLEW5JMhKLdH5XY1ew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=53y9HeTzKac5kwas2KBGgX1qiCpxLRxwPL99SGa/fHA=;
- b=k1JKlf5n72My1fOmZCPB2uRQIDkR/hWvGFrAjhwETeI9WUYWsCakbY33RIdS7pnylz0JpuyQB6ty7F48QiskyTB3lQdu/y9PLecYIIRCZbNpHVkb8yxjTlHow0ovPO50gIYN6NtWA5+KAOxeTogQSxFU97FR3YX10vrOg7x5CyuZ9dau2YNJ51bBo/R8Qrcvm5k/sHAg8QenZUpvqvzPsBQi+vb0qU/EukcVRa3fYKGf6ltKrtCpgSSoqC2+1fnKSbMJa+9NnNJRCOVyUT+mlSRj5Vr4/iqGTezQ7lD1KPclG7W4zSLqfyWU4wl/7raBwcckpgyDxfOZVTTtCzgwgQ==
+ bh=O8IlLaKpSzmXAJIhkawUh9MkwRoVNpzyki+5fwb40jw=;
+ b=LCN9NszmGDtL8ffYtLTEzPdVaDESUppBW36qKDc3wqx2LuY0Bmv3bKF62YrKU2bJDhnlQMHkr4RBb/9BafoB/9hqqc3HVeKGR66P9Nyo5Aa/gz+rH/XQRdSjFwdyJWD2kcpP/tKTY85o/aIcGWIl6l4bFDMAUb0wjMDNvp51vTdOdgDGQ8oSk2x0pZQqcBJ/MxHNNSS9lEBEzjAhcacNQyD5h7j+/GYkygdMk5qYeTKVtWLUYMgNWA6jo1oJxejXTRq2C9h0ItSLEgWG3ud/VTlZBEce0KHkKxXuAJViwOJqUmF5CcstRqwBuMxXYWKcNacbX1Pt6kbKFFE7t1ez8Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
@@ -26,36 +26,36 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=53y9HeTzKac5kwas2KBGgX1qiCpxLRxwPL99SGa/fHA=;
- b=dNBxTR5OPfzS4UOUaapEwJPEsW0vAlJF6lPGlGxpWLjNS41SfxNIoMGcUmzokX8tmfnlW0Lz3qoQ/OJ+7cHxDJDWJcADo8cVUhA5veBQjKMRuiiPyDC9w3Ol9+9hXppBICh52yQwZJN6Ius/cdme+M+G8JvtWmMyNLjDfJ5EIHE=
-Received: from BLAPR03CA0058.namprd03.prod.outlook.com (2603:10b6:208:32d::33)
- by MN2PR02MB7039.namprd02.prod.outlook.com (2603:10b6:208:209::8) with
+ bh=O8IlLaKpSzmXAJIhkawUh9MkwRoVNpzyki+5fwb40jw=;
+ b=RIQYeOS/tjI5YRtNeyMzsuHEo8re5A0euOq5eTBdDqxNpM8pEcMAIaeUuFKzZQfscEkjQzJyjN8HEdWygmdQQB7HA1QMgNpMDwAmbF5g6a6JyNs+mSRQ38w9Cok2fgvJGNHxmHsJmv2Sj2Zlsad2s2A3oyX3wJ4Uo5hQMZFa+gA=
+Received: from CY4PR13CA0038.namprd13.prod.outlook.com (2603:10b6:903:99::24)
+ by SN6PR02MB4320.namprd02.prod.outlook.com (2603:10b6:805:a4::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.27; Thu, 18 Feb
- 2021 06:45:08 +0000
-Received: from BL2NAM02FT061.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:32d:cafe::62) by BLAPR03CA0058.outlook.office365.com
- (2603:10b6:208:32d::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.27 via Frontend
- Transport; Thu, 18 Feb 2021 06:45:08 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.34; Thu, 18 Feb
+ 2021 06:45:36 +0000
+Received: from CY1NAM02FT046.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:903:99:cafe::1d) by CY4PR13CA0038.outlook.office365.com
+ (2603:10b6:903:99::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.8 via Frontend
+ Transport; Thu, 18 Feb 2021 06:45:36 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=bestguesspass action=none
  header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BL2NAM02FT061.mail.protection.outlook.com (10.152.77.7) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ CY1NAM02FT046.mail.protection.outlook.com (10.152.74.232) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3868.27 via Frontend Transport; Thu, 18 Feb 2021 06:45:08 +0000
-Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ 15.20.3868.27 via Frontend Transport; Thu, 18 Feb 2021 06:45:35 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Wed, 17 Feb 2021 22:45:04 -0800
+ 15.1.1913.5; Wed, 17 Feb 2021 22:45:16 -0800
 Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Wed, 17 Feb 2021 22:45:04 -0800
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Wed, 17 Feb 2021 22:45:16 -0800
 Envelope-to: maxz@xilinx.com,
  max.zhen@xilinx.com,
  michal.simek@xilinx.com,
@@ -68,12 +68,12 @@ Envelope-to: maxz@xilinx.com,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.212] (port=40182 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.212] (port=40184 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <lizhi.hou@xilinx.com>)
-        id 1lCd3f-0001sR-Uv; Wed, 17 Feb 2021 22:45:03 -0800
+        id 1lCd3r-00022Q-WF; Wed, 17 Feb 2021 22:45:16 -0800
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id 49344600128; Wed, 17 Feb 2021 22:41:06 -0800 (PST)
+        id 6245260012A; Wed, 17 Feb 2021 22:41:06 -0800 (PST)
 From:   Lizhi Hou <lizhi.hou@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Lizhi Hou <lizhih@xilinx.com>, <linux-fpga@vger.kernel.org>,
@@ -81,9 +81,9 @@ CC:     Lizhi Hou <lizhih@xilinx.com>, <linux-fpga@vger.kernel.org>,
         <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
         <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
         <robh@kernel.org>, Max Zhen <max.zhen@xilinx.com>
-Subject: [PATCH V3 XRT Alveo 11/18] fpga: xrt: UCS platform driver
-Date:   Wed, 17 Feb 2021 22:40:12 -0800
-Message-ID: <20210218064019.29189-12-lizhih@xilinx.com>
+Subject: [PATCH V3 XRT Alveo 12/18] fpga: xrt: ICAP platform driver
+Date:   Wed, 17 Feb 2021 22:40:13 -0800
+Message-ID: <20210218064019.29189-13-lizhih@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210218064019.29189-1-lizhih@xilinx.com>
 References: <20210218064019.29189-1-lizhih@xilinx.com>
@@ -92,51 +92,51 @@ Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5eeeff88-51bb-4b93-0447-08d8d3d8bb9b
-X-MS-TrafficTypeDiagnostic: MN2PR02MB7039:
-X-Microsoft-Antispam-PRVS: <MN2PR02MB70396F39B0F6EBF3FA4FEC21A1859@MN2PR02MB7039.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Office365-Filtering-Correlation-Id: da78eea4-0a23-4b1e-43ac-08d8d3d8cbe2
+X-MS-TrafficTypeDiagnostic: SN6PR02MB4320:
+X-Microsoft-Antispam-PRVS: <SN6PR02MB4320780511B3B74524E2997CA1859@SN6PR02MB4320.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U8VfxClfIUO1a9de77Yf2jCm3KfhFQSNVHZnUhsmUbmqa+lVD12zlTLeNctE5LN1AWxlTiObvaERcFJJEjE6y2TT1bwXB1CuojHOd+gN76TXZZWeSc6m7nXlRcn3BaM3M++S1kHUtvXsHhFOPJogebsXQ66ubpZtfuxOoYOlw0LbJb5jeTS3A377OHjOuyKHsZQx+hlzvMMJTBgQGZOKH9xv1EsaxZGBJppHymPjOvqWK6y7pG+y5d7lhRxIaTx2wKzKG4l7oLYGQ2xkRxk/wG87PA0f6yKIZGkB9A94Dbis8shloiZs2VcET4sYCZqhMXdWIQ2rlfIi6eDGdVCZO9ShrjTIt9OW7z/X+l4qz+qx2wHO6GPqGsoH7eNUOnGjcZXKqwSxdW5TsjYBmZakxp1VmHZSix6IkSSEDWuvp0oU8vejv9RvFl9KQJyaDpOKl9xJ8o2eOciAebPvee25Wi96EoKAnVrT76pntU2fj5ahSqHY7iDElxQBfCepV53eb/vUON1kUiOOA2R48fDytekXOodptaL4MpOnSRHOqArz//jgaQEk+fdDOqMr3tUSuWubsXz5Za1jU5YYqfxy3w86OoyS+MQvYCp3jA13tQbQ9oZg/uM4v8Hd07zT7XaCjwuGyfp83K00S4fxylbEPVbQVOKUR0MILlqlDKZ78rk=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(396003)(136003)(39860400002)(376002)(46966006)(36840700001)(8676002)(82740400003)(83380400001)(8936002)(5660300002)(42186006)(54906003)(36906005)(336012)(6666004)(36860700001)(47076005)(2906002)(426003)(82310400003)(70206006)(70586007)(478600001)(6916009)(44832011)(26005)(1076003)(316002)(4326008)(356005)(186003)(7636003)(107886003)(2616005)(6266002)(36756003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: BiFiaEbgwcbu2QoS9l6ptZM5l5NMIjQZeHLvFfxw394A8HeE/uEqVtZklh9rOv3ApGxZMl1l1Zqef/7XKKmWDQGV3sZsRc47IbmoSvjAKRG+aiI8ZBMSeOBVEGj7Ai5UVFRU5CnxwnR57wiwGuBFedA7DVsC/rWTAircjVwidkvwYlvRfUhT5MucRfC6WuTNBg957T3dN7aE1QgQmQ0bAsMoFVf4vC0c67vDksrs4vNCfwPbKK/QzSzy9OMFdRrr6BTPuIbxxDy7Gk7g8y0c+64LJKuBg6LYuL7nDyAWzExCa6GyeAU9n6xIieqv6a7rY6yhCnU7Pi+GFgcBROjW/BH/BT2bbUbUp0p5V9VLq1GwkQWeB9K2N7W2BWT2cv8xQExLTSkCKtAv9P4Xi6/Y/RmupVTIp2jKj3up+neNn8NsyXTYvYuU8rEOVFiziFpvx4SBmyVSrMjVUQyKg4xBRClKLnuBywVAzEEaIoS1/HqKw+4z0CNvO+Nfr1dXj5iv7Wk1m7qXfDtApwf4uv7BuPL70r87wu92WKoQ6MT8hRpd4cVtftsqVbxdkLLZXbvtQxRrQd8lZcqfN5KklZh+zqDIds6WVDDlWZCvPAJNV8Py3l1HuVBq/ELLPe9FAAx5UC2YX5/s3juxJfGbZThVZ1VnZtEl0qpef0tSsGu9Cho=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(39860400002)(136003)(396003)(376002)(46966006)(36840700001)(2616005)(8936002)(426003)(5660300002)(36860700001)(82310400003)(107886003)(186003)(6266002)(336012)(82740400003)(4326008)(70206006)(70586007)(478600001)(6666004)(54906003)(8676002)(36756003)(7636003)(6916009)(83380400001)(26005)(47076005)(1076003)(356005)(36906005)(316002)(44832011)(42186006)(2906002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2021 06:45:08.5391
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2021 06:45:35.9295
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5eeeff88-51bb-4b93-0447-08d8d3d8bb9b
+X-MS-Exchange-CrossTenant-Network-Message-Id: da78eea4-0a23-4b1e-43ac-08d8d3d8cbe2
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT061.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT046.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB7039
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB4320
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add UCS driver. UCS is a hardware function discovered by walking xclbin
-metadata. A platform device node will be created for it.
-UCS enables/disables the dynamic region clocks.
+Add ICAP driver. ICAP is a hardware function discovered by walking
+firmware metadata. A platform device node will be created for it.
+FPGA bitstream is written to hardware through ICAP.
 
 Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
 ---
- drivers/fpga/xrt/include/xleaf/ucs.h |  24 +++
- drivers/fpga/xrt/lib/xleaf/ucs.c     | 235 +++++++++++++++++++++++++++
- 2 files changed, 259 insertions(+)
- create mode 100644 drivers/fpga/xrt/include/xleaf/ucs.h
- create mode 100644 drivers/fpga/xrt/lib/xleaf/ucs.c
+ drivers/fpga/xrt/include/xleaf/icap.h |  29 +++
+ drivers/fpga/xrt/lib/xleaf/icap.c     | 317 ++++++++++++++++++++++++++
+ 2 files changed, 346 insertions(+)
+ create mode 100644 drivers/fpga/xrt/include/xleaf/icap.h
+ create mode 100644 drivers/fpga/xrt/lib/xleaf/icap.c
 
-diff --git a/drivers/fpga/xrt/include/xleaf/ucs.h b/drivers/fpga/xrt/include/xleaf/ucs.h
+diff --git a/drivers/fpga/xrt/include/xleaf/icap.h b/drivers/fpga/xrt/include/xleaf/icap.h
 new file mode 100644
-index 000000000000..a5ef0e100e12
+index 000000000000..a14fc0ffa78f
 --- /dev/null
-+++ b/drivers/fpga/xrt/include/xleaf/ucs.h
-@@ -0,0 +1,24 @@
++++ b/drivers/fpga/xrt/include/xleaf/icap.h
+@@ -0,0 +1,29 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * Header file for XRT UCS Leaf Driver
++ * Header file for XRT ICAP Leaf Driver
 + *
 + * Copyright (C) 2020-2021 Xilinx, Inc.
 + *
@@ -144,34 +144,41 @@ index 000000000000..a5ef0e100e12
 + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
 + */
 +
-+#ifndef _XRT_UCS_H_
-+#define _XRT_UCS_H_
++#ifndef _XRT_ICAP_H_
++#define _XRT_ICAP_H_
 +
 +#include "xleaf.h"
 +
 +/*
-+ * UCS driver IOCTL calls.
++ * ICAP driver IOCTL calls.
 + */
-+enum xrt_ucs_ioctl_cmd {
-+	XRT_UCS_CHECK = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-+	XRT_UCS_ENABLE,
++enum xrt_icap_ioctl_cmd {
++	XRT_ICAP_WRITE = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
++	XRT_ICAP_IDCODE,
 +};
 +
-+#endif	/* _XRT_UCS_H_ */
-diff --git a/drivers/fpga/xrt/lib/xleaf/ucs.c b/drivers/fpga/xrt/lib/xleaf/ucs.c
++struct xrt_icap_ioctl_wr {
++	void	*xiiw_bit_data;
++	u32	xiiw_data_len;
++};
++
++#endif	/* _XRT_ICAP_H_ */
+diff --git a/drivers/fpga/xrt/lib/xleaf/icap.c b/drivers/fpga/xrt/lib/xleaf/icap.c
 new file mode 100644
-index 000000000000..ae762c8fddbb
+index 000000000000..0500a97bdef9
 --- /dev/null
-+++ b/drivers/fpga/xrt/lib/xleaf/ucs.c
-@@ -0,0 +1,235 @@
++++ b/drivers/fpga/xrt/lib/xleaf/icap.c
+@@ -0,0 +1,317 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Xilinx Alveo FPGA UCS Driver
++ * Xilinx Alveo FPGA ICAP Driver
 + *
 + * Copyright (C) 2020-2021 Xilinx, Inc.
 + *
 + * Authors:
 + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
++ *      Sonal Santan <sonals@xilinx.com>
++ *      Max Zhen <maxz@xilinx.com>
 + */
 +
 +#include <linux/mod_devicetable.h>
@@ -181,190 +188,270 @@ index 000000000000..ae762c8fddbb
 +#include <linux/io.h>
 +#include "metadata.h"
 +#include "xleaf.h"
-+#include "xleaf/ucs.h"
-+#include "xleaf/clock.h"
++#include "xleaf/icap.h"
++#include "xclbin-helper.h"
 +
-+#define UCS_ERR(ucs, fmt, arg...)   \
-+	xrt_err((ucs)->pdev, fmt "\n", ##arg)
-+#define UCS_WARN(ucs, fmt, arg...)  \
-+	xrt_warn((ucs)->pdev, fmt "\n", ##arg)
-+#define UCS_INFO(ucs, fmt, arg...)  \
-+	xrt_info((ucs)->pdev, fmt "\n", ##arg)
-+#define UCS_DBG(ucs, fmt, arg...)   \
-+	xrt_dbg((ucs)->pdev, fmt "\n", ##arg)
++#define XRT_ICAP "xrt_icap"
 +
-+#define XRT_UCS		"xrt_ucs"
++#define ICAP_ERR(icap, fmt, arg...)	\
++	xrt_err((icap)->pdev, fmt "\n", ##arg)
++#define ICAP_WARN(icap, fmt, arg...)	\
++	xrt_warn((icap)->pdev, fmt "\n", ##arg)
++#define ICAP_INFO(icap, fmt, arg...)	\
++	xrt_info((icap)->pdev, fmt "\n", ##arg)
++#define ICAP_DBG(icap, fmt, arg...)	\
++	xrt_dbg((icap)->pdev, fmt "\n", ##arg)
 +
-+#define CHANNEL1_OFFSET			0
-+#define CHANNEL2_OFFSET			8
++/*
++ * AXI-HWICAP IP register layout
++ */
++struct icap_reg {
++	u32	ir_rsvd1[7];
++	u32	ir_gier;
++	u32	ir_isr;
++	u32	ir_rsvd2;
++	u32	ir_ier;
++	u32	ir_rsvd3[53];
++	u32	ir_wf;
++	u32	ir_rf;
++	u32	ir_sz;
++	u32	ir_cr;
++	u32	ir_sr;
++	u32	ir_wfv;
++	u32	ir_rfo;
++	u32	ir_asr;
++} __packed;
 +
-+#define CLK_MAX_VALUE			6400
-+
-+struct ucs_control_status_ch1 {
-+	unsigned int shutdown_clocks_latched:1;
-+	unsigned int reserved1:15;
-+	unsigned int clock_throttling_average:14;
-+	unsigned int reserved2:2;
-+};
-+
-+struct xrt_ucs {
++struct icap {
 +	struct platform_device	*pdev;
-+	void __iomem		*ucs_base;
-+	struct mutex		ucs_lock; /* ucs dev lock */
++	struct icap_reg		*icap_regs;
++	struct mutex		icap_lock; /* icap dev lock */
++
++	unsigned int		idcode;
 +};
 +
-+static inline u32 reg_rd(struct xrt_ucs *ucs, u32 offset)
++static inline u32 reg_rd(void __iomem *reg)
 +{
-+	return ioread32(ucs->ucs_base + offset);
++	if (!reg)
++		return -1;
++
++	return ioread32(reg);
 +}
 +
-+static inline void reg_wr(struct xrt_ucs *ucs, u32 val, u32 offset)
++static inline void reg_wr(void __iomem *reg, u32 val)
 +{
-+	iowrite32(val, ucs->ucs_base + offset);
-+}
-+
-+static void xrt_ucs_event_cb(struct platform_device *pdev, void *arg)
-+{
-+	struct platform_device	*leaf;
-+	struct xrt_event *evt = (struct xrt_event *)arg;
-+	enum xrt_events e = evt->xe_evt;
-+	enum xrt_subdev_id id = evt->xe_subdev.xevt_subdev_id;
-+	int instance = evt->xe_subdev.xevt_subdev_instance;
-+
-+	switch (e) {
-+	case XRT_EVENT_POST_CREATION:
-+		break;
-+	default:
-+		xrt_dbg(pdev, "ignored event %d", e);
-+		return;
-+	}
-+
-+	if (id != XRT_SUBDEV_CLOCK)
++	if (!reg)
 +		return;
 +
-+	leaf = xleaf_get_leaf_by_id(pdev, XRT_SUBDEV_CLOCK, instance);
-+	if (!leaf) {
-+		xrt_err(pdev, "does not get clock subdev");
-+		return;
-+	}
-+
-+	xleaf_ioctl(leaf, XRT_CLOCK_VERIFY, NULL);
-+	xleaf_put_leaf(pdev, leaf);
++	iowrite32(val, reg);
 +}
 +
-+static void ucs_check(struct xrt_ucs *ucs, bool *latched)
++static int wait_for_done(struct icap *icap)
 +{
-+	struct ucs_control_status_ch1 *ucs_status_ch1;
-+	u32 status;
++	u32	w;
++	int	i = 0;
 +
-+	mutex_lock(&ucs->ucs_lock);
-+	status = reg_rd(ucs, CHANNEL1_OFFSET);
-+	ucs_status_ch1 = (struct ucs_control_status_ch1 *)&status;
-+	if (ucs_status_ch1->shutdown_clocks_latched) {
-+		UCS_ERR(ucs,
-+			"Critical temperature or power event, kernel clocks have been stopped.");
-+		UCS_ERR(ucs,
-+			"run 'xbutil valiate -q' to continue. See AR 73398 for more details.");
-+		/* explicitly indicate reset should be latched */
-+		*latched = true;
-+	} else if (ucs_status_ch1->clock_throttling_average >
-+	    CLK_MAX_VALUE) {
-+		UCS_ERR(ucs, "kernel clocks %d exceeds expected maximum value %d.",
-+			ucs_status_ch1->clock_throttling_average,
-+			CLK_MAX_VALUE);
-+	} else if (ucs_status_ch1->clock_throttling_average) {
-+		UCS_ERR(ucs, "kernel clocks throttled at %d%%.",
-+			(ucs_status_ch1->clock_throttling_average /
-+			 (CLK_MAX_VALUE / 100)));
++	WARN_ON(!mutex_is_locked(&icap->icap_lock));
++	for (i = 0; i < 10; i++) {
++		udelay(5);
++		w = reg_rd(&icap->icap_regs->ir_sr);
++		ICAP_INFO(icap, "XHWICAP_SR: %x", w);
++		if (w & 0x5)
++			return 0;
 +	}
-+	mutex_unlock(&ucs->ucs_lock);
++
++	ICAP_ERR(icap, "bitstream download timeout");
++	return -ETIMEDOUT;
 +}
 +
-+static void ucs_enable(struct xrt_ucs *ucs)
++static int icap_write(struct icap *icap, const u32 *word_buf, int size)
 +{
-+	reg_wr(ucs, 1, CHANNEL2_OFFSET);
++	int i;
++	u32 value = 0;
++
++	for (i = 0; i < size; i++) {
++		value = be32_to_cpu(word_buf[i]);
++		reg_wr(&icap->icap_regs->ir_wf, value);
++	}
++
++	reg_wr(&icap->icap_regs->ir_cr, 0x1);
++
++	for (i = 0; i < 20; i++) {
++		value = reg_rd(&icap->icap_regs->ir_cr);
++		if ((value & 0x1) == 0)
++			return 0;
++		ndelay(50);
++	}
++
++	ICAP_ERR(icap, "writing %d dwords timeout", size);
++	return -EIO;
++}
++
++static int bitstream_helper(struct icap *icap, const u32 *word_buffer,
++			    u32 word_count)
++{
++	u32 remain_word;
++	u32 word_written = 0;
++	int wr_fifo_vacancy = 0;
++	int err = 0;
++
++	WARN_ON(!mutex_is_locked(&icap->icap_lock));
++	for (remain_word = word_count; remain_word > 0;
++		remain_word -= word_written, word_buffer += word_written) {
++		wr_fifo_vacancy = reg_rd(&icap->icap_regs->ir_wfv);
++		if (wr_fifo_vacancy <= 0) {
++			ICAP_ERR(icap, "no vacancy: %d", wr_fifo_vacancy);
++			err = -EIO;
++			break;
++		}
++		word_written = (wr_fifo_vacancy < remain_word) ?
++			wr_fifo_vacancy : remain_word;
++		if (icap_write(icap, word_buffer, word_written) != 0) {
++			ICAP_ERR(icap, "write failed remain %d, written %d",
++				 remain_word, word_written);
++			err = -EIO;
++			break;
++		}
++	}
++
++	return err;
++}
++
++static int icap_download(struct icap *icap, const char *buffer,
++			 unsigned long length)
++{
++	u32	num_chars_read = DMA_HWICAP_BITFILE_BUFFER_SIZE;
++	u32	byte_read;
++	int	err = 0;
++
++	mutex_lock(&icap->icap_lock);
++	for (byte_read = 0; byte_read < length; byte_read += num_chars_read) {
++		num_chars_read = length - byte_read;
++		if (num_chars_read > DMA_HWICAP_BITFILE_BUFFER_SIZE)
++			num_chars_read = DMA_HWICAP_BITFILE_BUFFER_SIZE;
++
++		err = bitstream_helper(icap, (u32 *)buffer, num_chars_read / sizeof(u32));
++		if (err)
++			goto failed;
++		buffer += num_chars_read;
++	}
++
++	err = wait_for_done(icap);
++
++failed:
++	mutex_unlock(&icap->icap_lock);
++
++	return err;
++}
++
++/*
++ * Run the following sequence of canned commands to obtain IDCODE of the FPGA
++ */
++static void icap_probe_chip(struct icap *icap)
++{
++	u32 w;
++
++	w = reg_rd(&icap->icap_regs->ir_sr);
++	w = reg_rd(&icap->icap_regs->ir_sr);
++	reg_wr(&icap->icap_regs->ir_gier, 0x0);
++	w = reg_rd(&icap->icap_regs->ir_wfv);
++	reg_wr(&icap->icap_regs->ir_wf, 0xffffffff);
++	reg_wr(&icap->icap_regs->ir_wf, 0xaa995566);
++	reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
++	reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
++	reg_wr(&icap->icap_regs->ir_wf, 0x28018001);
++	reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
++	reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
++	w = reg_rd(&icap->icap_regs->ir_cr);
++	reg_wr(&icap->icap_regs->ir_cr, 0x1);
++	w = reg_rd(&icap->icap_regs->ir_cr);
++	w = reg_rd(&icap->icap_regs->ir_cr);
++	w = reg_rd(&icap->icap_regs->ir_sr);
++	w = reg_rd(&icap->icap_regs->ir_cr);
++	w = reg_rd(&icap->icap_regs->ir_sr);
++	reg_wr(&icap->icap_regs->ir_sz, 0x1);
++	w = reg_rd(&icap->icap_regs->ir_cr);
++	reg_wr(&icap->icap_regs->ir_cr, 0x2);
++	w = reg_rd(&icap->icap_regs->ir_rfo);
++	icap->idcode = reg_rd(&icap->icap_regs->ir_rf);
++	w = reg_rd(&icap->icap_regs->ir_cr);
++	(void)w;
 +}
 +
 +static int
-+xrt_ucs_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
++xrt_icap_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
 +{
-+	struct xrt_ucs		*ucs;
-+	int			ret = 0;
++	struct xrt_icap_ioctl_wr	*wr_arg = arg;
++	struct icap			*icap;
++	int				ret = 0;
 +
-+	ucs = platform_get_drvdata(pdev);
++	icap = platform_get_drvdata(pdev);
 +
 +	switch (cmd) {
 +	case XRT_XLEAF_EVENT:
-+		xrt_ucs_event_cb(pdev, arg);
++		/* Does not handle any event. */
 +		break;
-+	case XRT_UCS_CHECK: {
-+		ucs_check(ucs, (bool *)arg);
++	case XRT_ICAP_WRITE:
++		ret = icap_download(icap, wr_arg->xiiw_bit_data,
++				    wr_arg->xiiw_data_len);
 +		break;
-+	}
-+	case XRT_UCS_ENABLE:
-+		ucs_enable(ucs);
++	case XRT_ICAP_IDCODE:
++		*(u64 *)arg = icap->idcode;
 +		break;
 +	default:
-+		xrt_err(pdev, "unsupported cmd %d", cmd);
++		ICAP_ERR(icap, "unknown command %d", cmd);
 +		return -EINVAL;
 +	}
 +
 +	return ret;
 +}
 +
-+static int ucs_remove(struct platform_device *pdev)
++static int xrt_icap_remove(struct platform_device *pdev)
 +{
-+	struct xrt_ucs *ucs;
++	struct icap	*icap;
 +
-+	ucs = platform_get_drvdata(pdev);
-+	if (!ucs) {
-+		xrt_err(pdev, "driver data is NULL");
-+		return -EINVAL;
-+	}
-+
-+	if (ucs->ucs_base)
-+		iounmap(ucs->ucs_base);
++	icap = platform_get_drvdata(pdev);
 +
 +	platform_set_drvdata(pdev, NULL);
-+	devm_kfree(&pdev->dev, ucs);
++	devm_kfree(&pdev->dev, icap);
 +
 +	return 0;
 +}
 +
-+static int ucs_probe(struct platform_device *pdev)
++static int xrt_icap_probe(struct platform_device *pdev)
 +{
-+	struct xrt_ucs *ucs = NULL;
-+	struct resource *res;
-+	int ret;
++	struct icap	*icap;
++	int			ret = 0;
++	struct resource		*res;
 +
-+	ucs = devm_kzalloc(&pdev->dev, sizeof(*ucs), GFP_KERNEL);
-+	if (!ucs)
++	icap = devm_kzalloc(&pdev->dev, sizeof(*icap), GFP_KERNEL);
++	if (!icap)
 +		return -ENOMEM;
 +
-+	platform_set_drvdata(pdev, ucs);
-+	ucs->pdev = pdev;
-+	mutex_init(&ucs->ucs_lock);
++	icap->pdev = pdev;
++	platform_set_drvdata(pdev, icap);
++	mutex_init(&icap->icap_lock);
 +
++	xrt_info(pdev, "probing");
 +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	ucs->ucs_base = ioremap(res->start, res->end - res->start + 1);
-+	if (!ucs->ucs_base) {
-+		UCS_ERR(ucs, "map base %pR failed", res);
-+		ret = -EFAULT;
-+		goto failed;
++	if (res) {
++		icap->icap_regs = ioremap(res->start, res->end - res->start + 1);
++		if (!icap->icap_regs) {
++			xrt_err(pdev, "map base failed %pR", res);
++			ret = -EIO;
++			goto failed;
++		}
 +	}
-+	ucs_enable(ucs);
 +
-+	return 0;
-+
++	icap_probe_chip(icap);
 +failed:
-+	ucs_remove(pdev);
 +	return ret;
 +}
 +
-+static struct xrt_subdev_endpoints xrt_ucs_endpoints[] = {
++static struct xrt_subdev_endpoints xrt_icap_endpoints[] = {
 +	{
 +		.xse_names = (struct xrt_subdev_ep_names[]) {
-+			{ .ep_name = XRT_MD_NODE_UCS_CONTROL_STATUS },
++			{ .ep_name = XRT_MD_NODE_FPGA_CONFIG },
 +			{ NULL },
 +		},
 +		.xse_min_ep = 1,
@@ -372,32 +459,32 @@ index 000000000000..ae762c8fddbb
 +	{ 0 },
 +};
 +
-+static struct xrt_subdev_drvdata xrt_ucs_data = {
++static struct xrt_subdev_drvdata xrt_icap_data = {
 +	.xsd_dev_ops = {
-+		.xsd_ioctl = xrt_ucs_leaf_ioctl,
++		.xsd_ioctl = xrt_icap_leaf_ioctl,
 +	},
 +};
 +
-+static const struct platform_device_id xrt_ucs_table[] = {
-+	{ XRT_UCS, (kernel_ulong_t)&xrt_ucs_data },
++static const struct platform_device_id xrt_icap_table[] = {
++	{ XRT_ICAP, (kernel_ulong_t)&xrt_icap_data },
 +	{ },
 +};
 +
-+static struct platform_driver xrt_ucs_driver = {
++static struct platform_driver xrt_icap_driver = {
 +	.driver = {
-+		.name = XRT_UCS,
++		.name = XRT_ICAP,
 +	},
-+	.probe = ucs_probe,
-+	.remove = ucs_remove,
-+	.id_table = xrt_ucs_table,
++	.probe = xrt_icap_probe,
++	.remove = xrt_icap_remove,
++	.id_table = xrt_icap_table,
 +};
 +
-+void ucs_leaf_init_fini(bool init)
++void icap_leaf_init_fini(bool init)
 +{
 +	if (init)
-+		xleaf_register_driver(XRT_SUBDEV_UCS, &xrt_ucs_driver, xrt_ucs_endpoints);
++		xleaf_register_driver(XRT_SUBDEV_ICAP, &xrt_icap_driver, xrt_icap_endpoints);
 +	else
-+		xleaf_unregister_driver(XRT_SUBDEV_UCS);
++		xleaf_unregister_driver(XRT_SUBDEV_ICAP);
 +}
 -- 
 2.18.4
