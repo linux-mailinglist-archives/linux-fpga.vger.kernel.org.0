@@ -2,38 +2,38 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F20320D93
-	for <lists+linux-fpga@lfdr.de>; Sun, 21 Feb 2021 21:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72860320DA1
+	for <lists+linux-fpga@lfdr.de>; Sun, 21 Feb 2021 21:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbhBUUZf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 21 Feb 2021 15:25:35 -0500
-Received: from mail-pj1-f50.google.com ([209.85.216.50]:39826 "EHLO
-        mail-pj1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbhBUUZe (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 21 Feb 2021 15:25:34 -0500
-Received: by mail-pj1-f50.google.com with SMTP id d2so7443379pjs.4;
-        Sun, 21 Feb 2021 12:25:18 -0800 (PST)
+        id S229780AbhBUUgv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 21 Feb 2021 15:36:51 -0500
+Received: from mail-pg1-f178.google.com ([209.85.215.178]:33619 "EHLO
+        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229761AbhBUUgu (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 21 Feb 2021 15:36:50 -0500
+Received: by mail-pg1-f178.google.com with SMTP id z68so8861417pgz.0;
+        Sun, 21 Feb 2021 12:36:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=e3EF98HcHqv63rz737CQqm7GCGbFsRovjAbHCUjj+vo=;
-        b=GGOJwQl/mZfihO9V3FeEmsq/UAg4mPoeBXWudaO3OVBBq1Aajw3p/73morz+xuuqqp
-         PhqirMlqJmSRnvdrLlBjKf9m3Bhic3GXfxYuAnMve7TQ4+KjIi/OeoERB5Yoczp6WQGn
-         Xo7TUiSndpQBRNZIyFcl5mK2BP7yMCPpMVVhL5qZ56ffj+JlzpVCj2TPX3Pg+GqvTab8
-         c6l5Cm2VZzjJ+48MwI5IDLYyK6dCbinM0rkQmH85o7rA/FAHJDhugDrp4zh4FJAN/M30
-         vUBK4QJH6EkfG3sKnpEmKgFs7s7V9fjXKv9xzT2aemAVomC5qVPoNX2vvG9+rWkyqq9e
-         cx2Q==
-X-Gm-Message-State: AOAM531FIo2OLqDGKcZz0lkZKWBk8fNuIYdMKrY9UcAhn9W/6K9BmP5c
-        cd8xDSxqm5kCl+GiIzOMgjE=
-X-Google-Smtp-Source: ABdhPJzcwsITB1uTOT9oUVAJ78q2QzQjDmuGODUaAaNJz6RneH4tq35lfVRqL+jee/3p82enZzCODA==
-X-Received: by 2002:a17:90a:4092:: with SMTP id l18mr19917740pjg.39.1613939093439;
-        Sun, 21 Feb 2021 12:24:53 -0800 (PST)
+        bh=vHCEZBQ8Zwww1dLO0CiH24OH/UIaB4jYs9CkhxB9x3c=;
+        b=ZAogPoDXl8g4cs3/0tREXcuyXcrrrDBmjs23iYNBpeV83HlhPJma2Dn0HnP9SbmIgu
+         V2FgVaq1kF8nG8qO0oIWNwZQ+dm1RvtOHaqkBvCaoRFgVOAgm2V3d2rXVL4FXUwHwL6C
+         gxDEE9Oj19E3euCju7TIa08PQurFf95MqYIx1VhImc2U7e6Ff0IMMh9/rKZ1GOtWha6N
+         3tD8KaOr94RbWB3tMo43bwjxjjgp8bQE9O9VcsPsL+8AWUYh6Q/lMTlGypBDbE23z1oe
+         bTKeARW1yXPZ40WKUIpF69Oqp/pidlqL5qNeDrkJdUIf6aBOi5UDGm//a4r3e5wyUNyd
+         hPPA==
+X-Gm-Message-State: AOAM533AHv68raMmTLRUHc9jy3ILFccGcdGvTTGpOD8A6ieRcFBP5JJX
+        0BIbMtjAvcZrIfqFQZ5hm0E=
+X-Google-Smtp-Source: ABdhPJxTZ62R6dxwkrfhBHDsVmU6ehjh8fBmM6l0NDGMufzuu7Gm4Cx3scy7PadyiBZ61wa430lhEg==
+X-Received: by 2002:a63:2306:: with SMTP id j6mr17219954pgj.187.1613939769551;
+        Sun, 21 Feb 2021 12:36:09 -0800 (PST)
 Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
-        by smtp.gmail.com with ESMTPSA id g6sm16422638pfi.15.2021.02.21.12.24.52
+        by smtp.gmail.com with ESMTPSA id y123sm9484519pfb.122.2021.02.21.12.36.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Feb 2021 12:24:52 -0800 (PST)
-Date:   Sun, 21 Feb 2021 12:24:55 -0800
+        Sun, 21 Feb 2021 12:36:08 -0800 (PST)
+Date:   Sun, 21 Feb 2021 12:36:11 -0800
 From:   Moritz Fischer <mdf@kernel.org>
 To:     Lizhi Hou <lizhi.hou@xilinx.com>
 Cc:     linux-kernel@vger.kernel.org, Lizhi Hou <lizhih@xilinx.com>,
@@ -41,42 +41,44 @@ Cc:     linux-kernel@vger.kernel.org, Lizhi Hou <lizhih@xilinx.com>,
         sonal.santan@xilinx.com, michal.simek@xilinx.com,
         stefanos@xilinx.com, devicetree@vger.kernel.org, trix@redhat.com,
         mdf@kernel.org, robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
-Subject: Re: [PATCH V3 XRT Alveo 12/18] fpga: xrt: ICAP platform driver
-Message-ID: <YDLBl2GFjSVcxCUe@archbook>
+Subject: Re: [PATCH V3 XRT Alveo 17/18] fpga: xrt: partition isolation
+ platform driver
+Message-ID: <YDLEO6Bg6ySSoupI@archbook>
 References: <20210218064019.29189-1-lizhih@xilinx.com>
- <20210218064019.29189-13-lizhih@xilinx.com>
+ <20210218064019.29189-18-lizhih@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210218064019.29189-13-lizhih@xilinx.com>
+In-Reply-To: <20210218064019.29189-18-lizhih@xilinx.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Feb 17, 2021 at 10:40:13PM -0800, Lizhi Hou wrote:
-> Add ICAP driver. ICAP is a hardware function discovered by walking
-> firmware metadata. A platform device node will be created for it.
-> FPGA bitstream is written to hardware through ICAP.
+On Wed, Feb 17, 2021 at 10:40:18PM -0800, Lizhi Hou wrote:
+> Add partition isolation platform driver. partition isolation is
+> a hardware function discovered by walking firmware metadata.
+> A platform device node will be created for it. Partition isolation
+> function isolate the different fpga regions
 > 
 > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 > Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
 > ---
->  drivers/fpga/xrt/include/xleaf/icap.h |  29 +++
->  drivers/fpga/xrt/lib/xleaf/icap.c     | 317 ++++++++++++++++++++++++++
->  2 files changed, 346 insertions(+)
->  create mode 100644 drivers/fpga/xrt/include/xleaf/icap.h
->  create mode 100644 drivers/fpga/xrt/lib/xleaf/icap.c
+>  drivers/fpga/xrt/include/xleaf/axigate.h |  25 ++
+>  drivers/fpga/xrt/lib/xleaf/axigate.c     | 298 +++++++++++++++++++++++
+>  2 files changed, 323 insertions(+)
+>  create mode 100644 drivers/fpga/xrt/include/xleaf/axigate.h
+>  create mode 100644 drivers/fpga/xrt/lib/xleaf/axigate.c
 > 
-> diff --git a/drivers/fpga/xrt/include/xleaf/icap.h b/drivers/fpga/xrt/include/xleaf/icap.h
+> diff --git a/drivers/fpga/xrt/include/xleaf/axigate.h b/drivers/fpga/xrt/include/xleaf/axigate.h
 > new file mode 100644
-> index 000000000000..a14fc0ffa78f
+> index 000000000000..2cef71e13b30
 > --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/icap.h
-> @@ -0,0 +1,29 @@
+> +++ b/drivers/fpga/xrt/include/xleaf/axigate.h
+> @@ -0,0 +1,25 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
-> + * Header file for XRT ICAP Leaf Driver
+> + * Header file for XRT Axigate Leaf Driver
 > + *
 > + * Copyright (C) 2020-2021 Xilinx, Inc.
 > + *
@@ -84,41 +86,35 @@ On Wed, Feb 17, 2021 at 10:40:13PM -0800, Lizhi Hou wrote:
 > + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
 > + */
 > +
-> +#ifndef _XRT_ICAP_H_
-> +#define _XRT_ICAP_H_
+> +#ifndef _XRT_AXIGATE_H_
+> +#define _XRT_AXIGATE_H_
 > +
 > +#include "xleaf.h"
+> +#include "metadata.h"
 > +
 > +/*
-> + * ICAP driver IOCTL calls.
+> + * AXIGATE driver IOCTL calls.
 > + */
-> +enum xrt_icap_ioctl_cmd {
-> +	XRT_ICAP_WRITE = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-> +	XRT_ICAP_IDCODE,
+> +enum xrt_axigate_ioctl_cmd {
+> +	XRT_AXIGATE_FREEZE = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+> +	XRT_AXIGATE_FREE,
 > +};
 > +
-> +struct xrt_icap_ioctl_wr {
-> +	void	*xiiw_bit_data;
-> +	u32	xiiw_data_len;
-> +};
-> +
-> +#endif	/* _XRT_ICAP_H_ */
-> diff --git a/drivers/fpga/xrt/lib/xleaf/icap.c b/drivers/fpga/xrt/lib/xleaf/icap.c
+> +#endif	/* _XRT_AXIGATE_H_ */
+> diff --git a/drivers/fpga/xrt/lib/xleaf/axigate.c b/drivers/fpga/xrt/lib/xleaf/axigate.c
 > new file mode 100644
-> index 000000000000..0500a97bdef9
+> index 000000000000..382969f9925f
 > --- /dev/null
-> +++ b/drivers/fpga/xrt/lib/xleaf/icap.c
-> @@ -0,0 +1,317 @@
+> +++ b/drivers/fpga/xrt/lib/xleaf/axigate.c
+> @@ -0,0 +1,298 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Xilinx Alveo FPGA ICAP Driver
+> + * Xilinx Alveo FPGA AXI Gate Driver
 > + *
 > + * Copyright (C) 2020-2021 Xilinx, Inc.
 > + *
 > + * Authors:
 > + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
-> + *      Sonal Santan <sonals@xilinx.com>
-> + *      Max Zhen <maxz@xilinx.com>
 > + */
 > +
 > +#include <linux/mod_devicetable.h>
@@ -128,277 +124,282 @@ On Wed, Feb 17, 2021 at 10:40:13PM -0800, Lizhi Hou wrote:
 > +#include <linux/io.h>
 > +#include "metadata.h"
 > +#include "xleaf.h"
-> +#include "xleaf/icap.h"
-> +#include "xclbin-helper.h"
+> +#include "xleaf/axigate.h"
 > +
-> +#define XRT_ICAP "xrt_icap"
+> +#define XRT_AXIGATE "xrt_axigate"
 > +
-> +#define ICAP_ERR(icap, fmt, arg...)	\
-> +	xrt_err((icap)->pdev, fmt "\n", ##arg)
-> +#define ICAP_WARN(icap, fmt, arg...)	\
-> +	xrt_warn((icap)->pdev, fmt "\n", ##arg)
-> +#define ICAP_INFO(icap, fmt, arg...)	\
-> +	xrt_info((icap)->pdev, fmt "\n", ##arg)
-> +#define ICAP_DBG(icap, fmt, arg...)	\
-> +	xrt_dbg((icap)->pdev, fmt "\n", ##arg)
-
-Do we really need two layers of indirection here? What's wrong with
-dev_{info,dbg,...} ?
-> +
-> +/*
-> + * AXI-HWICAP IP register layout
-> + */
-> +struct icap_reg {
-> +	u32	ir_rsvd1[7];
-> +	u32	ir_gier;
-> +	u32	ir_isr;
-> +	u32	ir_rsvd2;
-> +	u32	ir_ier;
-> +	u32	ir_rsvd3[53];
-> +	u32	ir_wf;
-> +	u32	ir_rf;
-> +	u32	ir_sz;
-> +	u32	ir_cr;
-> +	u32	ir_sr;
-> +	u32	ir_wfv;
-> +	u32	ir_rfo;
-> +	u32	ir_asr;
+> +struct axigate_regs {
+> +	u32		iag_wr;
+> +	u32		iag_rvsd;
+> +	u32		iag_rd;
 > +} __packed;
 
-Can we make those #define and just use writel/readl() ? If you want more
-abstraction, use regmap....
+Just make them #defines, even more so if there are only 3 of them.
 > +
-> +struct icap {
+> +struct xrt_axigate {
 > +	struct platform_device	*pdev;
-> +	struct icap_reg		*icap_regs;
-> +	struct mutex		icap_lock; /* icap dev lock */
+> +	void			*base;
+> +	struct mutex		gate_lock; /* gate dev lock */
 > +
-> +	unsigned int		idcode;
+> +	void			*evt_hdl;
+> +	const char		*ep_name;
+> +
+> +	bool			gate_freezed;
 > +};
 > +
-> +static inline u32 reg_rd(void __iomem *reg)
-> +{
-> +	if (!reg)
-> +		return -1;
+> +/* the ep names are in the order of hardware layers */
+> +static const char * const xrt_axigate_epnames[] = {
+> +	XRT_MD_NODE_GATE_PLP,
+> +	XRT_MD_NODE_GATE_ULP,
+> +	NULL
+> +};
 > +
-> +	return ioread32(reg);
+> +#define reg_rd(g, r)						\
+> +	ioread32((void *)(g)->base + offsetof(struct axigate_regs, r))
+> +#define reg_wr(g, v, r)						\
+> +	iowrite32(v, (void *)(g)->base + offsetof(struct axigate_regs, r))
+> +
+> +static inline void freeze_gate(struct xrt_axigate *gate)
+> +{
+> +	reg_wr(gate, 0, iag_wr);
+> +	ndelay(500);
+> +	reg_rd(gate, iag_rd);
 > +}
 > +
-> +static inline void reg_wr(void __iomem *reg, u32 val)
+> +static inline void free_gate(struct xrt_axigate *gate)
 > +{
-> +	if (!reg)
-> +		return;
-> +
-> +	iowrite32(val, reg);
+> +	reg_wr(gate, 0x2, iag_wr);
+> +	ndelay(500);
+Magic constants?
+> +	(void)reg_rd(gate, iag_rd);
+At the very least add a comment on why? Is this for PCI synchronization
+reasons?
+
+> +	reg_wr(gate, 0x3, iag_wr);
+> +	ndelay(500);
+Magic constants?
+> +	reg_rd(gate, iag_rd);
+Does it nead a (void) or not? Be consistent, again, why do we read here
+at all?
 > +}
 > +
-> +static int wait_for_done(struct icap *icap)
+> +static int xrt_axigate_epname_idx(struct platform_device *pdev)
 > +{
-> +	u32	w;
-> +	int	i = 0;
+> +	int			i;
+> +	int			ret;
+> +	struct resource		*res;
+Nope. Indents:
+
+struct resource *res;
+int, i, ret;
+
 > +
-> +	WARN_ON(!mutex_is_locked(&icap->icap_lock));
-> +	for (i = 0; i < 10; i++) {
-> +		udelay(5);
-> +		w = reg_rd(&icap->icap_regs->ir_sr);
-> +		ICAP_INFO(icap, "XHWICAP_SR: %x", w);
-> +		if (w & 0x5)
-> +			return 0;
-> +	}
-> +
-> +	ICAP_ERR(icap, "bitstream download timeout");
-> +	return -ETIMEDOUT;
-> +}
-> +
-> +static int icap_write(struct icap *icap, const u32 *word_buf, int size)
-> +{
-> +	int i;
-> +	u32 value = 0;
-> +
-> +	for (i = 0; i < size; i++) {
-> +		value = be32_to_cpu(word_buf[i]);
-> +		reg_wr(&icap->icap_regs->ir_wf, value);
-> +	}
-> +
-> +	reg_wr(&icap->icap_regs->ir_cr, 0x1);
-> +
-> +	for (i = 0; i < 20; i++) {
-> +		value = reg_rd(&icap->icap_regs->ir_cr);
-> +		if ((value & 0x1) == 0)
-> +			return 0;
-> +		ndelay(50);
-> +	}
-> +
-> +	ICAP_ERR(icap, "writing %d dwords timeout", size);
-> +	return -EIO;
-> +}
-> +
-> +static int bitstream_helper(struct icap *icap, const u32 *word_buffer,
-> +			    u32 word_count)
-> +{
-> +	u32 remain_word;
-> +	u32 word_written = 0;
-> +	int wr_fifo_vacancy = 0;
-> +	int err = 0;
-> +
-> +	WARN_ON(!mutex_is_locked(&icap->icap_lock));
-> +	for (remain_word = word_count; remain_word > 0;
-> +		remain_word -= word_written, word_buffer += word_written) {
-> +		wr_fifo_vacancy = reg_rd(&icap->icap_regs->ir_wfv);
-> +		if (wr_fifo_vacancy <= 0) {
-> +			ICAP_ERR(icap, "no vacancy: %d", wr_fifo_vacancy);
-> +			err = -EIO;
-> +			break;
-> +		}
-> +		word_written = (wr_fifo_vacancy < remain_word) ?
-> +			wr_fifo_vacancy : remain_word;
-> +		if (icap_write(icap, word_buffer, word_written) != 0) {
-> +			ICAP_ERR(icap, "write failed remain %d, written %d",
-> +				 remain_word, word_written);
-> +			err = -EIO;
-> +			break;
-> +		}
-> +	}
-> +
-> +	return err;
-> +}
-> +
-> +static int icap_download(struct icap *icap, const char *buffer,
-> +			 unsigned long length)
-> +{
-> +	u32	num_chars_read = DMA_HWICAP_BITFILE_BUFFER_SIZE;
-> +	u32	byte_read;
-> +	int	err = 0;
-> +
-> +	mutex_lock(&icap->icap_lock);
-> +	for (byte_read = 0; byte_read < length; byte_read += num_chars_read) {
-> +		num_chars_read = length - byte_read;
-> +		if (num_chars_read > DMA_HWICAP_BITFILE_BUFFER_SIZE)
-> +			num_chars_read = DMA_HWICAP_BITFILE_BUFFER_SIZE;
-> +
-> +		err = bitstream_helper(icap, (u32 *)buffer, num_chars_read / sizeof(u32));
-> +		if (err)
-> +			goto failed;
-> +		buffer += num_chars_read;
-> +	}
-> +
-> +	err = wait_for_done(icap);
-> +
-> +failed:
-> +	mutex_unlock(&icap->icap_lock);
-> +
-> +	return err;
-> +}
-> +
-> +/*
-> + * Run the following sequence of canned commands to obtain IDCODE of the FPGA
-> + */
-> +static void icap_probe_chip(struct icap *icap)
-> +{
-> +	u32 w;
-> +
-> +	w = reg_rd(&icap->icap_regs->ir_sr);
-> +	w = reg_rd(&icap->icap_regs->ir_sr);
-> +	reg_wr(&icap->icap_regs->ir_gier, 0x0);
-> +	w = reg_rd(&icap->icap_regs->ir_wfv);
-> +	reg_wr(&icap->icap_regs->ir_wf, 0xffffffff);
-> +	reg_wr(&icap->icap_regs->ir_wf, 0xaa995566);
-> +	reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
-> +	reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
-> +	reg_wr(&icap->icap_regs->ir_wf, 0x28018001);
-> +	reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
-> +	reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
-> +	w = reg_rd(&icap->icap_regs->ir_cr);
-> +	reg_wr(&icap->icap_regs->ir_cr, 0x1);
-> +	w = reg_rd(&icap->icap_regs->ir_cr);
-> +	w = reg_rd(&icap->icap_regs->ir_cr);
-> +	w = reg_rd(&icap->icap_regs->ir_sr);
-> +	w = reg_rd(&icap->icap_regs->ir_cr);
-> +	w = reg_rd(&icap->icap_regs->ir_sr);
-> +	reg_wr(&icap->icap_regs->ir_sz, 0x1);
-> +	w = reg_rd(&icap->icap_regs->ir_cr);
-> +	reg_wr(&icap->icap_regs->ir_cr, 0x2);
-> +	w = reg_rd(&icap->icap_regs->ir_rfo);
-> +	icap->idcode = reg_rd(&icap->icap_regs->ir_rf);
-> +	w = reg_rd(&icap->icap_regs->ir_cr);
-> +	(void)w;
-?!
-> +}
-> +
-> +static int
-> +xrt_icap_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
-> +{
-> +	struct xrt_icap_ioctl_wr	*wr_arg = arg;
-> +	struct icap			*icap;
-> +	int				ret = 0;
-> +
-> +	icap = platform_get_drvdata(pdev);
-> +
-> +	switch (cmd) {
-> +	case XRT_XLEAF_EVENT:
-> +		/* Does not handle any event. */
-> +		break;
-> +	case XRT_ICAP_WRITE:
-> +		ret = icap_download(icap, wr_arg->xiiw_bit_data,
-> +				    wr_arg->xiiw_data_len);
-> +		break;
-> +	case XRT_ICAP_IDCODE:
-> +		*(u64 *)arg = icap->idcode;
-> +		break;
-> +	default:
-> +		ICAP_ERR(icap, "unknown command %d", cmd);
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res) {
+> +		xrt_err(pdev, "Empty Resource!");
 > +		return -EINVAL;
 > +	}
 > +
+> +	for (i = 0; xrt_axigate_epnames[i]; i++) {
+> +		ret = strncmp(xrt_axigate_epnames[i], res->name,
+> +			      strlen(xrt_axigate_epnames[i]) + 1);
+> +		if (!ret)
+> +			break;
+> +	}
+> +
+> +	ret = (xrt_axigate_epnames[i]) ? i : -EINVAL;
+Why not just:
+
+	if (xrt_axigate_epnames[i])
+		return i;
+
+	return -EINVAL;
 > +	return ret;
 > +}
 > +
-> +static int xrt_icap_remove(struct platform_device *pdev)
+> +static void xrt_axigate_freeze(struct platform_device *pdev)
 > +{
-> +	struct icap	*icap;
+> +	struct xrt_axigate	*gate;
+> +	u32			freeze = 0;
+Indents. Fix everywhere.
 > +
-> +	icap = platform_get_drvdata(pdev);
+> +	gate = platform_get_drvdata(pdev);
 > +
-> +	platform_set_drvdata(pdev, NULL);
-> +	devm_kfree(&pdev->dev, icap);
+> +	mutex_lock(&gate->gate_lock);
+> +	freeze = reg_rd(gate, iag_rd);
+> +	if (freeze) {		/* gate is opened */
+> +		xleaf_broadcast_event(pdev, XRT_EVENT_PRE_GATE_CLOSE, false);
+> +		freeze_gate(gate);
+> +	}
+> +
+> +	gate->gate_freezed = true;
+s/freezed/frozen
+> +	mutex_unlock(&gate->gate_lock);
+> +
+> +	xrt_info(pdev, "freeze gate %s", gate->ep_name);
+debug?
+> +}
+> +
+> +static void xrt_axigate_free(struct platform_device *pdev)
+> +{
+> +	struct xrt_axigate	*gate;
+> +	u32			freeze;
+> +
+> +	gate = platform_get_drvdata(pdev);
+> +
+> +	mutex_lock(&gate->gate_lock);
+> +	freeze = reg_rd(gate, iag_rd);
+> +	if (!freeze) {		/* gate is closed */
+> +		free_gate(gate);
+> +		xleaf_broadcast_event(pdev, XRT_EVENT_POST_GATE_OPEN, true);
+> +		/* xrt_axigate_free() could be called in event cb, thus
+> +		 * we can not wait for the completes
+> +		 */
+> +	}
+> +
+> +	gate->gate_freezed = false;
+> +	mutex_unlock(&gate->gate_lock);
+> +
+> +	xrt_info(pdev, "free gate %s", gate->ep_name);
+> +}
+> +
+> +static void xrt_axigate_event_cb(struct platform_device *pdev, void *arg)
+> +{
+> +	struct platform_device *leaf;
+> +	struct xrt_event *evt = (struct xrt_event *)arg;
+> +	enum xrt_events e = evt->xe_evt;
+> +	enum xrt_subdev_id id = evt->xe_subdev.xevt_subdev_id;
+> +	int instance = evt->xe_subdev.xevt_subdev_instance;
+> +	struct xrt_axigate *gate = platform_get_drvdata(pdev);
+> +	struct resource	*res;
+Reverse x-mas tree;
+xxxxxxxxxx
+xxxxxxxxx
+xxxxxxxx
+xxxxxx
+> +
+> +	switch (e) {
+> +	case XRT_EVENT_POST_CREATION:
+> +		break;
+> +	default:
+> +		return;
+> +	}
+> +
+> +	if (id != XRT_SUBDEV_AXIGATE)
+> +		return;
+> +
+> +	leaf = xleaf_get_leaf_by_id(pdev, id, instance);
+> +	if (!leaf)
+> +		return;
+> +
+> +	res = platform_get_resource(leaf, IORESOURCE_MEM, 0);
+> +	if (!res || !strncmp(res->name, gate->ep_name, strlen(res->name) + 1)) {
+> +		(void)xleaf_put_leaf(pdev, leaf);
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * higher level axigate instance created,
+> +	 * make sure the gate is openned. This covers 1RP flow which
+> +	 * has plp gate as well.
+> +	 */
+> +	if (xrt_axigate_epname_idx(leaf) > xrt_axigate_epname_idx(pdev))
+> +		xrt_axigate_free(pdev);
+> +	else
+> +		xleaf_ioctl(leaf, XRT_AXIGATE_FREE, NULL);
+> +
+> +	(void)xleaf_put_leaf(pdev, leaf);
+> +}
+> +
+> +static int
+> +xrt_axigate_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
+> +{
+> +	switch (cmd) {
+> +	case XRT_XLEAF_EVENT:
+> +		xrt_axigate_event_cb(pdev, arg);
+> +		break;
+> +	case XRT_AXIGATE_FREEZE:
+> +		xrt_axigate_freeze(pdev);
+> +		break;
+> +	case XRT_AXIGATE_FREE:
+> +		xrt_axigate_free(pdev);
+> +		break;
+> +	default:
+> +		xrt_err(pdev, "unsupported cmd %d", cmd);
+> +		return -EINVAL;
+> +	}
 > +
 > +	return 0;
 > +}
 > +
-> +static int xrt_icap_probe(struct platform_device *pdev)
+> +static int xrt_axigate_remove(struct platform_device *pdev)
 > +{
-> +	struct icap	*icap;
-> +	int			ret = 0;
-> +	struct resource		*res;
+> +	struct xrt_axigate	*gate;
 > +
-> +	icap = devm_kzalloc(&pdev->dev, sizeof(*icap), GFP_KERNEL);
-> +	if (!icap)
+> +	gate = platform_get_drvdata(pdev);
+> +
+> +	if (gate->base)
+> +		iounmap(gate->base);
+> +
+> +	platform_set_drvdata(pdev, NULL);
+> +	devm_kfree(&pdev->dev, gate);
+No! The point of using devres is so cleanup happens on removal.
+While you're at it, if you move the ioremap to a devres version, this
+function can basically go away entirely.
+> +
+> +	return 0;
+> +}
+> +
+> +static int xrt_axigate_probe(struct platform_device *pdev)
+> +{
+> +	struct xrt_axigate	*gate;
+> +	struct resource		*res;
+> +	int			ret;
+> +
+> +	gate = devm_kzalloc(&pdev->dev, sizeof(*gate), GFP_KERNEL);
+> +	if (!gate)
 > +		return -ENOMEM;
 > +
-> +	icap->pdev = pdev;
-> +	platform_set_drvdata(pdev, icap);
-> +	mutex_init(&icap->icap_lock);
+> +	gate->pdev = pdev;
+> +	platform_set_drvdata(pdev, gate);
 > +
-> +	xrt_info(pdev, "probing");
+> +	xrt_info(pdev, "probing...");
 > +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (res) {
-> +		icap->icap_regs = ioremap(res->start, res->end - res->start + 1);
-> +		if (!icap->icap_regs) {
-> +			xrt_err(pdev, "map base failed %pR", res);
-> +			ret = -EIO;
-> +			goto failed;
-> +		}
+> +	if (!res) {
+> +		xrt_err(pdev, "Empty resource 0");
+> +		ret = -EINVAL;
+> +		goto failed;
 > +	}
 > +
-> +	icap_probe_chip(icap);
+> +	gate->base = ioremap(res->start, res->end - res->start + 1);
+> +	if (!gate->base) {
+> +		xrt_err(pdev, "map base iomem failed");
+> +		ret = -EFAULT;
+> +		goto failed;
+> +	}
+> +
+> +	gate->ep_name = res->name;
+> +
+> +	mutex_init(&gate->gate_lock);
+> +
+> +	return 0;
+> +
 > +failed:
+> +	xrt_axigate_remove(pdev);
 > +	return ret;
 > +}
 > +
-> +static struct xrt_subdev_endpoints xrt_icap_endpoints[] = {
+> +static struct xrt_subdev_endpoints xrt_axigate_endpoints[] = {
 > +	{
 > +		.xse_names = (struct xrt_subdev_ep_names[]) {
-> +			{ .ep_name = XRT_MD_NODE_FPGA_CONFIG },
+> +			{ .ep_name = "ep_pr_isolate_ulp_00" },
+> +			{ NULL },
+> +		},
+> +		.xse_min_ep = 1,
+> +	},
+> +	{
+> +		.xse_names = (struct xrt_subdev_ep_names[]) {
+> +			{ .ep_name = "ep_pr_isolate_plp_00" },
 > +			{ NULL },
 > +		},
 > +		.xse_min_ep = 1,
@@ -406,34 +407,39 @@ abstraction, use regmap....
 > +	{ 0 },
 > +};
 > +
-> +static struct xrt_subdev_drvdata xrt_icap_data = {
+> +static struct xrt_subdev_drvdata xrt_axigate_data = {
 > +	.xsd_dev_ops = {
-> +		.xsd_ioctl = xrt_icap_leaf_ioctl,
+> +		.xsd_ioctl = xrt_axigate_leaf_ioctl,
 > +	},
 > +};
 > +
-> +static const struct platform_device_id xrt_icap_table[] = {
-> +	{ XRT_ICAP, (kernel_ulong_t)&xrt_icap_data },
+> +static const struct platform_device_id xrt_axigate_table[] = {
+> +	{ XRT_AXIGATE, (kernel_ulong_t)&xrt_axigate_data },
 > +	{ },
 > +};
 > +
-> +static struct platform_driver xrt_icap_driver = {
+> +static struct platform_driver xrt_axigate_driver = {
 > +	.driver = {
-> +		.name = XRT_ICAP,
+> +		.name = XRT_AXIGATE,
 > +	},
-> +	.probe = xrt_icap_probe,
-> +	.remove = xrt_icap_remove,
-> +	.id_table = xrt_icap_table,
+> +	.probe = xrt_axigate_probe,
+> +	.remove = xrt_axigate_remove,
+> +	.id_table = xrt_axigate_table,
 > +};
 > +
-> +void icap_leaf_init_fini(bool init)
+> +void axigate_leaf_init_fini(bool init)
 > +{
-> +	if (init)
-> +		xleaf_register_driver(XRT_SUBDEV_ICAP, &xrt_icap_driver, xrt_icap_endpoints);
-> +	else
-> +		xleaf_unregister_driver(XRT_SUBDEV_ICAP);
+> +	if (init) {
+> +		xleaf_register_driver(XRT_SUBDEV_AXIGATE,
+> +				      &xrt_axigate_driver, xrt_axigate_endpoints);
+> +	} else {
+> +		xleaf_unregister_driver(XRT_SUBDEV_AXIGATE);
+> +	}
 > +}
+
+This thing is duplicated in every file, maybe a macro would be an idea.
 > -- 
 > 2.18.4
 > 
+
 - Moritz
