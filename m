@@ -2,432 +2,332 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 295403224B5
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Feb 2021 04:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0795C32257F
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Feb 2021 06:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbhBWDgW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 22 Feb 2021 22:36:22 -0500
-Received: from mail-pf1-f175.google.com ([209.85.210.175]:33824 "EHLO
-        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbhBWDgW (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 22 Feb 2021 22:36:22 -0500
-Received: by mail-pf1-f175.google.com with SMTP id m6so7955005pfk.1;
-        Mon, 22 Feb 2021 19:36:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=H2J5wziZsYc8+BUp4JjXv7YRZAB9ZHjD0cUAu7yvr4o=;
-        b=NG7XbEFIdBWdfxIpg8ow3ndYp//fuA5E2cbeRr0aMsFlaufpdjPjQnYK2XN/K6s+L9
-         r986v4N9EdZeIo2R2Hgjt0UwAH6wr6M6Bi9HoCcRi/woa+oCNA9e3o85ftxuZxlpsgY/
-         5G1AZ6BY2AxzujuI20+vJqryXtNvRE2swtuXd4GXLxztuFzxNhQDLIcq9iDZMLKriM2F
-         c+EiayUGE4j3pgGvq4uIXzxRmqmYsl5zw84izyuFlEghULacZtp5btdbMs1OVHz+DCsn
-         1ONF5WR8nKjoOTGQ/XxW6jKTwzz6v3J6ViriX+sMf9DWD92u2jAwlmFnfs6DhiR9zD4Q
-         sj6A==
-X-Gm-Message-State: AOAM531+qnDdY37UC4WGPob2AP8OU5XDuXP7xpoDs5n3h9osfNoF11qQ
-        dlhbZ6p9CHIH3/VNRmdIOt4=
-X-Google-Smtp-Source: ABdhPJz5mUyby0lU17TuL1ZMo5WT/R7fA8aQWHcQ1iHUzNB21bn8g0HgbIaj4Emf1pMxYp/h5EgxiA==
-X-Received: by 2002:a63:ab4f:: with SMTP id k15mr22190203pgp.280.1614051340723;
-        Mon, 22 Feb 2021 19:35:40 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id h23sm20633441pfn.118.2021.02.22.19.35.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 19:35:40 -0800 (PST)
-Date:   Mon, 22 Feb 2021 19:35:39 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org,
-        Lizhi Hou <lizhih@xilinx.com>, linux-fpga@vger.kernel.org,
-        maxz@xilinx.com, sonal.santan@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
-        robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
-Subject: Re: [PATCH V3 XRT Alveo 04/18] fpga: xrt: xrt-lib platform driver
- manager
-Message-ID: <YDR4CyHu2tum0zIJ@epycbox.lan>
-References: <20210218064019.29189-1-lizhih@xilinx.com>
- <20210218064019.29189-5-lizhih@xilinx.com>
- <b93fb3ad-bbde-81db-d448-72fb8049f323@redhat.com>
+        id S230439AbhBWFof (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 23 Feb 2021 00:44:35 -0500
+Received: from mga02.intel.com ([134.134.136.20]:42360 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230470AbhBWFoe (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 23 Feb 2021 00:44:34 -0500
+IronPort-SDR: zV9duh3sMyG1ZV6IKCgG5/fqb4srZN5Y1X+vDVnqoNxXUZfP6gZKqGRYPLTcZO3Sq7mEtoj2uL
+ 2LDnm4L8T1bg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9903"; a="171835780"
+X-IronPort-AV: E=Sophos;i="5.81,199,1610438400"; 
+   d="scan'208";a="171835780"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2021 21:43:52 -0800
+IronPort-SDR: OEUnwVmbzSDav9xGWk8JlCIcE/fHAvhOh8xAIjIkQe33mmN0+6O+kGPWERJMr0g80s2E7pXAUw
+ m6XqS0MQAHyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,199,1610438400"; 
+   d="scan'208";a="592958463"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga006.fm.intel.com with ESMTP; 22 Feb 2021 21:43:52 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Mon, 22 Feb 2021 21:43:51 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2
+ via Frontend Transport; Mon, 22 Feb 2021 21:43:51 -0800
+Received: from NAM02-CY1-obe.outbound.protection.outlook.com (104.47.37.54) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2106.2; Mon, 22 Feb 2021 21:43:50 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bV3QF3H1sZUUTMN8Umqa1AuiRMRGmazcURLoTNUJp8EgUXeizoRHADKwpChisyoGTk2ECkJaVIwaPTveglfNTgwWm2bsV5MdaZBCB8jEZNxMjwMl+hziNEmuqjZSQsr3tFEaj+l3CXKGflh8fGv+7d4Jull2JSYlucXD3pe+9wgWBTCCK7jmtWwBL5c/nSF9mOGXbZXc3oUwVDZ/TnUCKp+wUhgyJ4mZ4v9DnfCx6WjjfCJ3FmObiwqsevDrkWaMCBOgyv/YQ3tXQkV/Xk6aG8OTcZeYt+gnTAxXBihzP5E3yllWO1tAsEUlYkj62ccHcbYnSMAAAtZ39DQOhGvolg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iVgbhn0n7cVit4+yQDLXPlrteEQlqLD6Puy3JOiDOmo=;
+ b=hazzUa0vUnyKYB6o/SGd85GWTQBa6E8C2hUDUuOohYMcYFXuYGAdZBI3Cxxku1ySbPZlAu7CdURe55SOU01hMxv1ogzNLVjQdG6a/U8IkLiWmfEO2vKoQbkOTq8VvWB0pNM+VTMbn2p5n+4+SPh/7TARDMVMpfA2JNIiapOa5u9DwVbZnwAEnnu777+Tx05upfP9edc99eS87a6T8qgqw/SlGDTM/Jx+4sQlC4EmbI7v9LNMiYrsGjoKzGPGn9S0o9LZMmvPFfeox2bE4otvC44dBItIYYTG3Vz2c+Gh442bLfmBDhca/HmUv5CY9YDKlkwAwnpRymonimNSz4S8aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iVgbhn0n7cVit4+yQDLXPlrteEQlqLD6Puy3JOiDOmo=;
+ b=W+ke2Fv9tsNrt5s0I9VEPmwz8jhCwlmWHI34rgKIZhExDrhTtk2Cjm/FOy0PYOBZWBw9RMpTfZuBOK3kiPffYCNSWxYD+6WOoTAfTUxGA8QTXS2OvdJC9GcmNJExF16UaPDKgyKvL+mWVNtJOhmGvzXMr8465Qc1wSIwjtEHbhY=
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
+ by DM6PR11MB2890.namprd11.prod.outlook.com (2603:10b6:5:63::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.32; Tue, 23 Feb
+ 2021 05:43:48 +0000
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::7843:381e:c91c:f597]) by DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::7843:381e:c91c:f597%6]) with mapi id 15.20.3868.031; Tue, 23 Feb 2021
+ 05:43:48 +0000
+From:   "Wu, Hao" <hao.wu@intel.com>
+To:     "Weight, Russell H" <russell.h.weight@intel.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "trix@redhat.com" <trix@redhat.com>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "Gerlach, Matthew" <matthew.gerlach@intel.com>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: RE: [PATCH v6 1/1] fpga: dfl: afu: harden port enable logic
+Thread-Topic: [PATCH v6 1/1] fpga: dfl: afu: harden port enable logic
+Thread-Index: AQHXCUU14ftS6JTzE0ihdvso8D/6tqplOudA
+Date:   Tue, 23 Feb 2021 05:43:48 +0000
+Message-ID: <DM6PR11MB3819CFF78F88A3C94A54FA2385809@DM6PR11MB3819.namprd11.prod.outlook.com>
+References: <20210222180414.116014-1-russell.h.weight@intel.com>
+In-Reply-To: <20210222180414.116014-1-russell.h.weight@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+authentication-results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [192.198.147.203]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bc2d19a9-bd7f-4676-5673-08d8d7bdfe32
+x-ms-traffictypediagnostic: DM6PR11MB2890:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR11MB28906E70F9518182C7FC8FE785809@DM6PR11MB2890.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:466;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: t81LwkIb8lAbf12WVI4rIXjWcrWl1czeXKU7f5U6YmKiJ/Wb2k+xPIRYdgiYH/FmBf4ZtpS3SDnyVVrmID952+3aoX+HZly4WNEXgB6WHpAIjTv9oZ03R5t3uzcZyzfDt9awfiWRN5A3QlUv2dSMKRSO8bjpNF0NX5WfbAXDbE4gslLXmdQjkkteoGGnse7cWNedhyDpE4nI/d7TVim48M7GvuNCDy6urxfhOVNgko0j4twwFUzz/mzbp+oiXWv02d97PGer5oIVXr40iEQmjdRlTSKLHVDbPCzYhol+QQLZ+sLEyInW6eW1fHQoiEAb7mG58kxWs4pn+eN/2Nzxicyx9Tz42GZP+oXCZoJy7tnOUILUN+7usBjjUygbd8DW3UT9A8lmi7aqNG43EL5KJ8lq4FE/1oE9EgUYnoosVcgP2Uc9AxGQPeA51O7vEUXJC/EnFid1WohUG+4Woa2roVreTzFlwAQjUm7BKa28Q8G/7cVraKn1gjrk6oimnq7+ZcmNGTXINKD9Sc+qoKTOdA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(346002)(39860400002)(376002)(396003)(366004)(8676002)(8936002)(186003)(26005)(71200400001)(110136005)(66556008)(64756008)(316002)(66446008)(66946007)(54906003)(66476007)(86362001)(52536014)(2906002)(7696005)(5660300002)(6506007)(76116006)(4326008)(478600001)(55016002)(9686003)(83380400001)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?BCngFU0pbsQWgEGbnOS5l7kHlLxAS+qrMRoh/6qUDbuhLGF0224IY+D6aQUS?=
+ =?us-ascii?Q?sOJbwtm7Li/hmINPr/MgoV9ppABf4YgFG0pBxiqrWRDGK5+Rbf/+pJ1NLOuX?=
+ =?us-ascii?Q?396GImiUza0W+Um6dZdACmXJ45kmV02O/0eWQ5mZY/PBXTfRfnWz988uNioT?=
+ =?us-ascii?Q?4uHB4FZ+J+OA7XSURS4pk6ik7fnRUR1WR7iACLWcho0sJV93PIVHZcZMOpqO?=
+ =?us-ascii?Q?YMvr83HNvn8oEmtVW80rgPdbm0JmEVqw3gSr381F7TzOVBonOD+A+Potdcsc?=
+ =?us-ascii?Q?/zGkP4CC9A91Tp6xz6WJ2+EcxxLeB2yWxCwtvCkOFwH9fTgM9wsPXXGoR6Xt?=
+ =?us-ascii?Q?b+JegZ8dn37ozn3Wp6bJsbqBAeTQ/v5hJsk9d4qjz3Bxlls9KMJci3NQJx9/?=
+ =?us-ascii?Q?x83pvt8bAvTTyglPHEMBv2rj7LcVjJ6yVwHLYQT2SjFNplkBya7S2xK4eB5P?=
+ =?us-ascii?Q?d7EZiOBCkhuxKWnxlcW2ZwCMv5WehGlTUN8y+8YgL3D4hnCnJ3JPYpb48A3X?=
+ =?us-ascii?Q?CGPsXFuSeDFUeqI8ol/l1jAYKnT0BcfK4rr/BvpIdWFtHaPYcEEaBsiXJ+Dy?=
+ =?us-ascii?Q?G/LVGbWm3s7UugAIpxRr8cWGesGYXt4BwkzPCUYsCMRiQ4oo5ng4+BFZzsHa?=
+ =?us-ascii?Q?jJB0rRPp4Guc4b8AQuy0CRIMQoWX1pGcyU5Xz1CPfJPiWIzv8KAroH09CgUA?=
+ =?us-ascii?Q?D09mK06UHtRUjrAX7fcgT3sEfl4pH2MB9nljm2UKxhmWZXsnbq+JQwAcxqAy?=
+ =?us-ascii?Q?zqWXYiPDS+yUvTlEquR159FiA2yHyz48Gp+nMBMxco3ivdpLuP6zzsT0gMBm?=
+ =?us-ascii?Q?294c1ZXcxzrV8+jSlZtqgqwFdZp02oN2nYW9/JCCEnc/yXYqEEs+Zu0kghDS?=
+ =?us-ascii?Q?GUx78TJ/6KRvmWt9UtfBCn4fhblLqWKQZC4OcVjYy34/brfkZ5P1GewzyEVe?=
+ =?us-ascii?Q?G4LmLgw4Y35+j6u5yOhr7Zi0+NvFY+pPNpKpB6XieZzuv8QRX3gm/sGan+Y2?=
+ =?us-ascii?Q?vP/6qNOPv4l7dZB9Emga7mDGV5c3Cg8VIJ9/Xt4GE91jAWcuoSiSOl/bIG8z?=
+ =?us-ascii?Q?Yu0Kvj5msQGNW8ZOYaMjMQGNqeHD4rarTbnzN0N8FaqfiUniTL9icl7EYRG0?=
+ =?us-ascii?Q?ttQyJlGkPB4EsesaeLhgVYRxXptOTk63j8xaSnlGFX05Vfwc1GZBHfcn/gLU?=
+ =?us-ascii?Q?a3nlkQIC+XRKJ6EZOH/T2T4dR03JmcKhG7OlBC+aSBppKIPePG82vWv/3WfA?=
+ =?us-ascii?Q?/6X6Xei64ZmirJ7CW6RgTvUxp7mAOmpGz0uxpcdYTABhZLtE5xgP1PH670U5?=
+ =?us-ascii?Q?hh1VqHNMgad36pBbkTu+ywxr?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b93fb3ad-bbde-81db-d448-72fb8049f323@redhat.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc2d19a9-bd7f-4676-5673-08d8d7bdfe32
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2021 05:43:48.5488
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 80B3OPketn9AjLLsLJYnOXCCM64wWTynZHBOJhA9mUSjw9dmnD5XHhaqqicRmDa+lI7AsOp8mZ6dKM6VYeMdEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2890
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Feb 22, 2021 at 07:05:29AM -0800, Tom Rix wrote:
-> 
-> On 2/17/21 10:40 PM, Lizhi Hou wrote:
-> > xrt-lib kernel module infrastructure code to register and manage all
-> > leaf driver modules.
-> >
-> > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> > Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
-> > ---
-> >  drivers/fpga/xrt/lib/main.c | 274 ++++++++++++++++++++++++++++++++++++
-> >  drivers/fpga/xrt/lib/main.h |  17 +++
-> >  2 files changed, 291 insertions(+)
-> >  create mode 100644 drivers/fpga/xrt/lib/main.c
-> >  create mode 100644 drivers/fpga/xrt/lib/main.h
-> 
-> Not sure if 'main' is a good base name for something going into a lib.
-> 
-> >
-> > diff --git a/drivers/fpga/xrt/lib/main.c b/drivers/fpga/xrt/lib/main.c
-> > new file mode 100644
-> > index 000000000000..36fb62710843
-> > --- /dev/null
-> > +++ b/drivers/fpga/xrt/lib/main.c
-> > @@ -0,0 +1,274 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Driver for Xilinx Alveo FPGA Support
-> > + *
-> > + * Copyright (C) 2020-2021 Xilinx, Inc.
-> > + *
-> > + * Authors:
-> > + *	Cheng Zhen <maxz@xilinx.com>
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include "xleaf.h"
-> > +#include "xroot.h"
-> > +#include "main.h"
-> > +
-> > +#define XRT_IPLIB_MODULE_NAME		"xrt-lib"
-> > +#define XRT_IPLIB_MODULE_VERSION	"4.0.0"
-> > +#define XRT_MAX_DEVICE_NODES		128
-> > +#define XRT_DRVNAME(drv)		((drv)->driver.name)
-> > +
-> > +/*
-> > + * Subdev driver is known by ID to others. We map the ID to it's
-> by it's ID
-> > + * struct platform_driver, which contains it's binding name and driver/file ops.
-> > + * We also map it to the endpoint name in DTB as well, if it's different
-> > + * than the driver's binding name.
-> > + */
-> > +struct xrt_drv_map {
-> > +	struct list_head list;
-> > +	enum xrt_subdev_id id;
-> > +	struct platform_driver *drv;
-> > +	struct xrt_subdev_endpoints *eps;
-> > +	struct ida ida; /* manage driver instance and char dev minor */
-> > +};
-> > +
-> > +static DEFINE_MUTEX(xrt_lib_lock); /* global lock protecting xrt_drv_maps list */
-> > +static LIST_HEAD(xrt_drv_maps);
-> > +struct class *xrt_class;
-> > +
-> > +static inline struct xrt_subdev_drvdata *
-> > +xrt_drv_map2drvdata(struct xrt_drv_map *map)
-> > +{
-> > +	return (struct xrt_subdev_drvdata *)map->drv->id_table[0].driver_data;
-> > +}
-> > +
-> > +static struct xrt_drv_map *
-> > +xrt_drv_find_map_by_id_nolock(enum xrt_subdev_id id)
-> 
-> name could be by convention
-> 
-> __xrt_drv_find_map_id
-> 
-> > +{
-> > +	const struct list_head *ptr;
-> > +
-> > +	list_for_each(ptr, &xrt_drv_maps) {
-> > +		struct xrt_drv_map *tmap = list_entry(ptr, struct xrt_drv_map, list);
-> > +
-> > +		if (tmap->id == id)
-> > +			return tmap;
-> > +	}
-> > +	return NULL;
-> > +}
-> > +
-> > +static struct xrt_drv_map *
-> > +xrt_drv_find_map_by_id(enum xrt_subdev_id id)
-> > +{
-> > +	struct xrt_drv_map *map;
-> > +
-> > +	mutex_lock(&xrt_lib_lock);
-> > +	map = xrt_drv_find_map_by_id_nolock(id);
-> > +	mutex_unlock(&xrt_lib_lock);
-> > +	/*
-> > +	 * map should remain valid even after lock is dropped since a registered
-> even after the lock
-> > +	 * driver should only be unregistered when driver module is being unloaded,
-> > +	 * which means that the driver should not be used by then.
-> > +	 */
-> > +	return map;
-> > +}
-> > +
-> > +static int xrt_drv_register_driver(struct xrt_drv_map *map)
-> > +{
-> > +	struct xrt_subdev_drvdata *drvdata;
-> > +	int rc = 0;
-> > +	const char *drvname = XRT_DRVNAME(map->drv);
-> > +
-> > +	rc = platform_driver_register(map->drv);
-> > +	if (rc) {
-> > +		pr_err("register %s platform driver failed\n", drvname);
-> > +		return rc;
-> > +	}
-> > +
-> > +	drvdata = xrt_drv_map2drvdata(map);
-> > +	if (drvdata) {
-> > +		/* Initialize dev_t for char dev node. */
-> > +		if (xleaf_devnode_enabled(drvdata)) {
-> > +			rc = alloc_chrdev_region(&drvdata->xsd_file_ops.xsf_dev_t, 0,
-> > +						 XRT_MAX_DEVICE_NODES, drvname);
-> > +			if (rc) {
-> > +				platform_driver_unregister(map->drv);
-> > +				pr_err("failed to alloc dev minor for %s: %d\n", drvname, rc);
-> > +				return rc;
-> > +			}
-> > +		} else {
-> > +			drvdata->xsd_file_ops.xsf_dev_t = (dev_t)-1;
-> > +		}
-> > +	}
-> > +
-> > +	ida_init(&map->ida);
-> > +
-> > +	pr_info("%s registered successfully\n", drvname);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void xrt_drv_unregister_driver(struct xrt_drv_map *map)
-> > +{
-> > +	const char *drvname = XRT_DRVNAME(map->drv);
-> > +	struct xrt_subdev_drvdata *drvdata;
-> > +
-> > +	ida_destroy(&map->ida);
-> > +
-> > +	drvdata = xrt_drv_map2drvdata(map);
-> > +	if (drvdata && drvdata->xsd_file_ops.xsf_dev_t != (dev_t)-1) {
-> > +		unregister_chrdev_region(drvdata->xsd_file_ops.xsf_dev_t,
-> > +					 XRT_MAX_DEVICE_NODES);
-> > +	}
-> > +
-> > +	platform_driver_unregister(map->drv);
-> > +
-> > +	pr_info("%s unregistered successfully\n", drvname);
-> > +}
-> > +
-> > +int xleaf_register_driver(enum xrt_subdev_id id,
-> > +			  struct platform_driver *drv,
-> > +			  struct xrt_subdev_endpoints *eps)
-> > +{
-> > +	struct xrt_drv_map *map;
-> > +
-> > +	mutex_lock(&xrt_lib_lock);
-> 
-> Trying to minimize length of lock being held.
-> 
-> Could holding this lock be split or the alloc moved above ?
-> 
-> > +
-> > +	map = xrt_drv_find_map_by_id_nolock(id);
-> > +	if (map) {
-> > +		mutex_unlock(&xrt_lib_lock);
-> > +		pr_err("Id %d already has a registered driver, 0x%p\n",
-> > +		       id, map->drv);
-> > +		return -EEXIST;
-> > +	}
-> > +
-> > +	map = vzalloc(sizeof(*map));
-> 
-> general issue
-> 
-> map is small, so kzalloc
-> 
-> > +	if (!map) {
-> > +		mutex_unlock(&xrt_lib_lock);
-> > +		return -ENOMEM;
-> > +	}
-> > +	map->id = id;
-> > +	map->drv = drv;
-> > +	map->eps = eps;
-> > +
-> > +	xrt_drv_register_driver(map);
-> 
-> xrt_drv_register_driver failure is unhandled.
-> 
-> This is the only time xrt_drv_register_driver is called, consider expanding the function here and removing the call.
-> 
-> > +
-> > +	list_add(&map->list, &xrt_drv_maps);
-> > +
-> > +	mutex_unlock(&xrt_lib_lock);
-> > +
-> > +	return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(xleaf_register_driver);
-> > +
-> > +void xleaf_unregister_driver(enum xrt_subdev_id id)
-> > +{
-> > +	struct xrt_drv_map *map;
-> > +
-> > +	mutex_lock(&xrt_lib_lock);
-> > +
-> > +	map = xrt_drv_find_map_by_id_nolock(id);
-> > +	if (!map) {
-> > +		mutex_unlock(&xrt_lib_lock);
-> > +		pr_err("Id %d has no registered driver\n", id);
-> > +		return;
-> > +	}
-> > +
-> > +	list_del(&map->list);
-> > +
-> > +	mutex_unlock(&xrt_lib_lock);
-> > +
-> > +	xrt_drv_unregister_driver(map);
-> > +	vfree(map);
-> > +}
-> > +EXPORT_SYMBOL_GPL(xleaf_unregister_driver);
-> > +
-> > +const char *xrt_drv_name(enum xrt_subdev_id id)
-> > +{
-> > +	struct xrt_drv_map *map = xrt_drv_find_map_by_id(id);
-> > +
-> > +	if (map)
-> > +		return XRT_DRVNAME(map->drv);
-> > +	return NULL;
-> > +}
-> > +
-> > +int xrt_drv_get_instance(enum xrt_subdev_id id)
-> > +{
-> > +	struct xrt_drv_map *map = xrt_drv_find_map_by_id(id);
-> > +
-> > +	return ida_alloc_range(&map->ida, 0, XRT_MAX_DEVICE_NODES, GFP_KERNEL);
-> > +}
-> > +
-> > +void xrt_drv_put_instance(enum xrt_subdev_id id, int instance)
-> > +{
-> > +	struct xrt_drv_map *map = xrt_drv_find_map_by_id(id);
-> > +
-> > +	ida_free(&map->ida, instance);
-> > +}
-> > +
-> > +struct xrt_subdev_endpoints *xrt_drv_get_endpoints(enum xrt_subdev_id id)
-> > +{
-> > +	struct xrt_drv_map *map = xrt_drv_find_map_by_id(id);
-> > +	struct xrt_subdev_endpoints *eps;
-> > +
-> > +	eps = map ? map->eps : NULL;
-> > +	return eps;
-> > +}
-> > +
-> > +/* Leaf driver's module init/fini callbacks. */
-> 
-> These constructor/destructor calls needs to be more dynamic.
-> 
-> calls are made even if there are no subdevices to go with the id's.
-> 
-> Also this list can not grow.  How would a new id be added by a module ?
-> 
-> > +static void (*leaf_init_fini_cbs[])(bool) = {
-> > +	group_leaf_init_fini,
-> > +	vsec_leaf_init_fini,
-> > +	devctl_leaf_init_fini,
-> > +	axigate_leaf_init_fini,
-> > +	icap_leaf_init_fini,
-> > +	calib_leaf_init_fini,
-> > +	clkfreq_leaf_init_fini,
-> > +	clock_leaf_init_fini,
-> > +	ucs_leaf_init_fini,
-> > +};
-> > +
-> > +static __init int xrt_lib_init(void)
-> > +{
-> > +	int i;
-> > +
-> > +	xrt_class = class_create(THIS_MODULE, XRT_IPLIB_MODULE_NAME);
-> > +	if (IS_ERR(xrt_class))
-> > +		return PTR_ERR(xrt_class);
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(leaf_init_fini_cbs); i++)
-> > +		leaf_init_fini_cbs[i](true);
-> > +	return 0;
-> > +}
-> > +
-> > +static __exit void xrt_lib_fini(void)
-> > +{
-> > +	struct xrt_drv_map *map;
-> > +	int i;
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(leaf_init_fini_cbs); i++)
-> > +		leaf_init_fini_cbs[i](false);
-> > +
-> > +	mutex_lock(&xrt_lib_lock);
-> > +
-> > +	while (!list_empty(&xrt_drv_maps)) {
-> > +		map = list_first_entry_or_null(&xrt_drv_maps, struct xrt_drv_map, list);
-> > +		pr_err("Unloading module with %s still registered\n", XRT_DRVNAME(map->drv));
-> > +		list_del(&map->list);
-> > +		mutex_unlock(&xrt_lib_lock);
-> > +		xrt_drv_unregister_driver(map);
-> > +		vfree(map);
-> > +		mutex_lock(&xrt_lib_lock);
-> > +	}
-> > +
-> > +	mutex_unlock(&xrt_lib_lock);
-> > +
-> > +	class_destroy(xrt_class);
-> > +}
-> > +
-> > +module_init(xrt_lib_init);
-> > +module_exit(xrt_lib_fini);
-> > +
-> > +MODULE_VERSION(XRT_IPLIB_MODULE_VERSION);
-> > +MODULE_AUTHOR("XRT Team <runtime@xilinx.com>");
-> > +MODULE_DESCRIPTION("Xilinx Alveo IP Lib driver");
-> > +MODULE_LICENSE("GPL v2");
-> > diff --git a/drivers/fpga/xrt/lib/main.h b/drivers/fpga/xrt/lib/main.h
-> > new file mode 100644
-> > index 000000000000..f3bfc87ee614
-> > --- /dev/null
-> > +++ b/drivers/fpga/xrt/lib/main.h
-> > @@ -0,0 +1,17 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2020-2021 Xilinx, Inc.
-> > + *
-> > + * Authors:
-> > + *	Cheng Zhen <maxz@xilinx.com>
-> > + */
-> > +
-> > +#ifndef _XRT_MAIN_H_
-> > +#define _XRT_MAIN_H_
-> > +
-> > +const char *xrt_drv_name(enum xrt_subdev_id id);
-> 
-> To be self contained, the header defining enum xrt_subdev_id should be included.
-> 
-> This is subdev_id.h which comes in with patch 6
-> 
-> A dependency on a future patch breaks bisectablity.
-> 
-> It may make sense to collect these small headers into a single large header for the ip infra lib and bring them all in this patch.
+> Subject: [PATCH v6 1/1] fpga: dfl: afu: harden port enable logic
+>=20
+> Port enable is not complete until ACK =3D 0. Change
+> __afu_port_enable() to guarantee that the enable process
+> is complete by polling for ACK =3D=3D 0.
 
-Please add the headers when you use them, do *not* do header only commits.
+Looks good to me.
 
-It's perfectly fine (and desirable) to add things over time to a header
-as you use them.
+Acked-by: Wu Hao <hao.wu@intel.com>
 
-Note *each* commit must compile and work standing on its own, so yes as
-Tom pointed out, do not depend on future (later commit) files.
+Thanks
+Hao
 
-> 
-> Tom
-> 
-> > +int xrt_drv_get_instance(enum xrt_subdev_id id);
-> > +void xrt_drv_put_instance(enum xrt_subdev_id id, int instance);
-> > +struct xrt_subdev_endpoints *xrt_drv_get_endpoints(enum xrt_subdev_id id);
-> > +
-> > +#endif	/* _XRT_MAIN_H_ */
-> 
+>=20
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> ---
+> v6:
+>   - Fixed the dev_warn statement, which had "__func__" embedded in the
+>     string instead of treated as a parameter to the format string.
+> v5:
+>   - Added Reviewed-by tag to commit message
+> v4:
+>   - Added a dev_warn() call for the -EINVAL case of afu_port_err_clear()
+>   - Modified dev_err() message in __afu_port_disable() to say "disable"
+>     instead of "reset"
+> v3:
+>   - afu_port_err_clear() changed to prioritize port_enable failure over
+>     other a detected mismatch in port errors.
+>   - reorganized code in port_reset() to be more readable.
+> v2:
+>   - Fixed typo in commit message
+> ---
+>  drivers/fpga/dfl-afu-error.c | 10 ++++++----
+>  drivers/fpga/dfl-afu-main.c  | 33 +++++++++++++++++++++++----------
+>  drivers/fpga/dfl-afu.h       |  2 +-
+>  3 files changed, 30 insertions(+), 15 deletions(-)
+>=20
+> diff --git a/drivers/fpga/dfl-afu-error.c b/drivers/fpga/dfl-afu-error.c
+> index c4691187cca9..ab7be6217368 100644
+> --- a/drivers/fpga/dfl-afu-error.c
+> +++ b/drivers/fpga/dfl-afu-error.c
+> @@ -52,7 +52,7 @@ static int afu_port_err_clear(struct device *dev, u64 e=
+rr)
+>  	struct dfl_feature_platform_data *pdata =3D dev_get_platdata(dev);
+>  	struct platform_device *pdev =3D to_platform_device(dev);
+>  	void __iomem *base_err, *base_hdr;
+> -	int ret =3D -EBUSY;
+> +	int enable_ret =3D 0, ret =3D -EBUSY;
+>  	u64 v;
+>=20
+>  	base_err =3D dfl_get_feature_ioaddr_by_id(dev,
+> PORT_FEATURE_ID_ERROR);
+> @@ -96,18 +96,20 @@ static int afu_port_err_clear(struct device *dev, u64=
+ err)
+>  		v =3D readq(base_err + PORT_FIRST_ERROR);
+>  		writeq(v, base_err + PORT_FIRST_ERROR);
+>  	} else {
+> +		dev_warn(dev, "%s: received 0x%llx, expected 0x%llx\n",
+> +			 __func__, v, err);
+>  		ret =3D -EINVAL;
+>  	}
+>=20
+>  	/* Clear mask */
+>  	__afu_port_err_mask(dev, false);
+>=20
+> -	/* Enable the Port by clear the reset */
+> -	__afu_port_enable(pdev);
+> +	/* Enable the Port by clearing the reset */
+> +	enable_ret =3D __afu_port_enable(pdev);
+>=20
+>  done:
+>  	mutex_unlock(&pdata->lock);
+> -	return ret;
+> +	return enable_ret ? enable_ret : ret;
+>  }
+>=20
+>  static ssize_t errors_show(struct device *dev, struct device_attribute *=
+attr,
+> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
+> index 753cda4b2568..77dadaae5b8f 100644
+> --- a/drivers/fpga/dfl-afu-main.c
+> +++ b/drivers/fpga/dfl-afu-main.c
+> @@ -21,6 +21,9 @@
+>=20
+>  #include "dfl-afu.h"
+>=20
+> +#define RST_POLL_INVL 10 /* us */
+> +#define RST_POLL_TIMEOUT 1000 /* us */
+> +
+>  /**
+>   * __afu_port_enable - enable a port by clear reset
+>   * @pdev: port platform device.
+> @@ -32,7 +35,7 @@
+>   *
+>   * The caller needs to hold lock for protection.
+>   */
+> -void __afu_port_enable(struct platform_device *pdev)
+> +int __afu_port_enable(struct platform_device *pdev)
+>  {
+>  	struct dfl_feature_platform_data *pdata =3D dev_get_platdata(&pdev-
+> >dev);
+>  	void __iomem *base;
+> @@ -41,7 +44,7 @@ void __afu_port_enable(struct platform_device *pdev)
+>  	WARN_ON(!pdata->disable_count);
+>=20
+>  	if (--pdata->disable_count !=3D 0)
+> -		return;
+> +		return 0;
+>=20
+>  	base =3D dfl_get_feature_ioaddr_by_id(&pdev->dev,
+> PORT_FEATURE_ID_HEADER);
+>=20
+> @@ -49,10 +52,20 @@ void __afu_port_enable(struct platform_device *pdev)
+>  	v =3D readq(base + PORT_HDR_CTRL);
+>  	v &=3D ~PORT_CTRL_SFTRST;
+>  	writeq(v, base + PORT_HDR_CTRL);
+> -}
+>=20
+> -#define RST_POLL_INVL 10 /* us */
+> -#define RST_POLL_TIMEOUT 1000 /* us */
+> +	/*
+> +	 * HW clears the ack bit to indicate that the port is fully out
+> +	 * of reset.
+> +	 */
+> +	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
+> +			       !(v & PORT_CTRL_SFTRST_ACK),
+> +			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
+> +		dev_err(&pdev->dev, "timeout, failure to enable device\n");
+> +		return -ETIMEDOUT;
+> +	}
+> +
+> +	return 0;
+> +}
+>=20
+>  /**
+>   * __afu_port_disable - disable a port by hold reset
+> @@ -86,7 +99,7 @@ int __afu_port_disable(struct platform_device *pdev)
+>  	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
+>  			       v & PORT_CTRL_SFTRST_ACK,
+>  			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
+> -		dev_err(&pdev->dev, "timeout, fail to reset device\n");
+> +		dev_err(&pdev->dev, "timeout, failure to disable device\n");
+>  		return -ETIMEDOUT;
+>  	}
+>=20
+> @@ -111,9 +124,9 @@ static int __port_reset(struct platform_device *pdev)
+>=20
+>  	ret =3D __afu_port_disable(pdev);
+>  	if (!ret)
+> -		__afu_port_enable(pdev);
+> +		return ret;
+>=20
+> -	return ret;
+> +	return __afu_port_enable(pdev);
+>  }
+>=20
+>  static int port_reset(struct platform_device *pdev)
+> @@ -872,11 +885,11 @@ static int afu_dev_destroy(struct platform_device
+> *pdev)
+>  static int port_enable_set(struct platform_device *pdev, bool enable)
+>  {
+>  	struct dfl_feature_platform_data *pdata =3D dev_get_platdata(&pdev-
+> >dev);
+> -	int ret =3D 0;
+> +	int ret;
+>=20
+>  	mutex_lock(&pdata->lock);
+>  	if (enable)
+> -		__afu_port_enable(pdev);
+> +		ret =3D __afu_port_enable(pdev);
+>  	else
+>  		ret =3D __afu_port_disable(pdev);
+>  	mutex_unlock(&pdata->lock);
+> diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
+> index 576e94960086..e5020e2b1f3d 100644
+> --- a/drivers/fpga/dfl-afu.h
+> +++ b/drivers/fpga/dfl-afu.h
+> @@ -80,7 +80,7 @@ struct dfl_afu {
+>  };
+>=20
+>  /* hold pdata->lock when call __afu_port_enable/disable */
+> -void __afu_port_enable(struct platform_device *pdev);
+> +int __afu_port_enable(struct platform_device *pdev);
+>  int __afu_port_disable(struct platform_device *pdev);
+>=20
+>  void afu_mmio_region_init(struct dfl_feature_platform_data *pdata);
+> --
+> 2.25.1
 
-- Moritz
