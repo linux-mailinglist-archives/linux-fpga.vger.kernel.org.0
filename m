@@ -2,881 +2,432 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEF73223AC
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Feb 2021 02:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 295403224B5
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Feb 2021 04:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbhBWBZz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 22 Feb 2021 20:25:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:36999 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231210AbhBWBZR (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 22 Feb 2021 20:25:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614043429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sMttDdT9KnlpbQXFcJ+I+niuvN1pFmeqGXjoCpLCyco=;
-        b=W0H8QbFQIMtBn8pI/4hrJC9UJ7/aGp+i49sXJ5Ml+8qJvcE0qYCu0kABZK+L22m52n4bCm
-        ZnxCX/VikNx3v43X0bsTn/gBLjcGLzryHyybVv2QzbYP41PK0cSp+vFRzK9TtZKGmCJvqf
-        F2X80H9Tjgy9aXG3SmOZg3jytNqPCb4=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-592-UXBNURqaN62T6Zt39lm9LQ-1; Mon, 22 Feb 2021 20:23:47 -0500
-X-MC-Unique: UXBNURqaN62T6Zt39lm9LQ-1
-Received: by mail-qk1-f197.google.com with SMTP id n68so9721509qke.10
-        for <linux-fpga@vger.kernel.org>; Mon, 22 Feb 2021 17:23:47 -0800 (PST)
+        id S231343AbhBWDgW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 22 Feb 2021 22:36:22 -0500
+Received: from mail-pf1-f175.google.com ([209.85.210.175]:33824 "EHLO
+        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231313AbhBWDgW (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 22 Feb 2021 22:36:22 -0500
+Received: by mail-pf1-f175.google.com with SMTP id m6so7955005pfk.1;
+        Mon, 22 Feb 2021 19:36:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sMttDdT9KnlpbQXFcJ+I+niuvN1pFmeqGXjoCpLCyco=;
-        b=qye6NbycvGqxRYVeUCH5IGQvcpaS0ZBf7LiL7muT10U+HobMm2bbtRa+W38sSLMkhN
-         wfp0xeTMUOhBYBPxhM2ibZRSII99AAHrwBCQoXNASSNxUK/UUNfnsf8ZvQVaQTjKT/uy
-         0B+kWv7HmKerneclh8/6Is4bHztpveRS0HdiXqWwPG1UsGJsivmD9ItBB0ptlzdeKKRW
-         TZ+GfJ1SYlG5XHnyzCAdeTEGxN9tCpN8ggqIIv+f3uBBvkTGwtfgxaAQC3p/3GP7vyyc
-         LgUSl7Xy4aohr+rA38A0QRc+p9k9BOBP94BqVrP5TfInFeLcugQ6ZcIO5MlDBcH2KmCV
-         2XPw==
-X-Gm-Message-State: AOAM533Spy9H2dUcTJMUGcWl/XNSJhkAwQcfEIy3sNTfbKNCMaxeI9hd
-        ytyuK4i8jUMFlfKHETrPFoNKUSw6V7ZDUy1O92vdYTut1QyTdeUWYT4bJpWR7oY839Lxv6LV787
-        7WdOAqTeHlTiTlZdTA9w7xg==
-X-Received: by 2002:a05:6214:262a:: with SMTP id gv10mr23628198qvb.50.1614043426556;
-        Mon, 22 Feb 2021 17:23:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy5j78aZxF6lbQF8anjrFOpfHjjs0Niq/ZkXdgg1/HIWh4C6uBIRW0v6G80PRLKec+asRtbhw==
-X-Received: by 2002:a05:6214:262a:: with SMTP id gv10mr23628168qvb.50.1614043426210;
-        Mon, 22 Feb 2021 17:23:46 -0800 (PST)
-Received: from localhost (cpe-70-95-20-182.san.res.rr.com. [70.95.20.182])
-        by smtp.gmail.com with ESMTPSA id f21sm13172473qka.11.2021.02.22.17.23.45
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=H2J5wziZsYc8+BUp4JjXv7YRZAB9ZHjD0cUAu7yvr4o=;
+        b=NG7XbEFIdBWdfxIpg8ow3ndYp//fuA5E2cbeRr0aMsFlaufpdjPjQnYK2XN/K6s+L9
+         r986v4N9EdZeIo2R2Hgjt0UwAH6wr6M6Bi9HoCcRi/woa+oCNA9e3o85ftxuZxlpsgY/
+         5G1AZ6BY2AxzujuI20+vJqryXtNvRE2swtuXd4GXLxztuFzxNhQDLIcq9iDZMLKriM2F
+         c+EiayUGE4j3pgGvq4uIXzxRmqmYsl5zw84izyuFlEghULacZtp5btdbMs1OVHz+DCsn
+         1ONF5WR8nKjoOTGQ/XxW6jKTwzz6v3J6ViriX+sMf9DWD92u2jAwlmFnfs6DhiR9zD4Q
+         sj6A==
+X-Gm-Message-State: AOAM531+qnDdY37UC4WGPob2AP8OU5XDuXP7xpoDs5n3h9osfNoF11qQ
+        dlhbZ6p9CHIH3/VNRmdIOt4=
+X-Google-Smtp-Source: ABdhPJz5mUyby0lU17TuL1ZMo5WT/R7fA8aQWHcQ1iHUzNB21bn8g0HgbIaj4Emf1pMxYp/h5EgxiA==
+X-Received: by 2002:a63:ab4f:: with SMTP id k15mr22190203pgp.280.1614051340723;
+        Mon, 22 Feb 2021 19:35:40 -0800 (PST)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id h23sm20633441pfn.118.2021.02.22.19.35.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 17:23:45 -0800 (PST)
-Date:   Mon, 22 Feb 2021 17:23:44 -0800
-From:   Fernando Pacheco <fpacheco@redhat.com>
-To:     Lizhi Hou <lizhi.hou@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, Lizhi Hou <lizhih@xilinx.com>,
-        linux-fpga@vger.kernel.org, maxz@xilinx.com,
-        sonal.santan@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, trix@redhat.com,
-        mdf@kernel.org, robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
-Subject: Re: [PATCH V3 XRT Alveo 02/18] fpga: xrt: driver metadata helper
- functions
-Message-ID: <20210223012344.GB746169@mail.gmail.com>
+        Mon, 22 Feb 2021 19:35:40 -0800 (PST)
+Date:   Mon, 22 Feb 2021 19:35:39 -0800
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org,
+        Lizhi Hou <lizhih@xilinx.com>, linux-fpga@vger.kernel.org,
+        maxz@xilinx.com, sonal.santan@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
+        robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
+Subject: Re: [PATCH V3 XRT Alveo 04/18] fpga: xrt: xrt-lib platform driver
+ manager
+Message-ID: <YDR4CyHu2tum0zIJ@epycbox.lan>
 References: <20210218064019.29189-1-lizhih@xilinx.com>
- <20210218064019.29189-3-lizhih@xilinx.com>
+ <20210218064019.29189-5-lizhih@xilinx.com>
+ <b93fb3ad-bbde-81db-d448-72fb8049f323@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210218064019.29189-3-lizhih@xilinx.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b93fb3ad-bbde-81db-d448-72fb8049f323@redhat.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Feb 17, 2021 at 10:40:03PM -0800, Lizhi Hou wrote:
-> XRT drivers use device tree as metadata format to discover HW subsystems
-> behind PCIe BAR. Thus libfdt functions are called for driver to parse
-> device tree blob.
+On Mon, Feb 22, 2021 at 07:05:29AM -0800, Tom Rix wrote:
 > 
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
-> ---
->  drivers/fpga/xrt/include/metadata.h  | 229 ++++++++++++
->  drivers/fpga/xrt/metadata/metadata.c | 524 +++++++++++++++++++++++++++
->  2 files changed, 753 insertions(+)
->  create mode 100644 drivers/fpga/xrt/include/metadata.h
->  create mode 100644 drivers/fpga/xrt/metadata/metadata.c
+> On 2/17/21 10:40 PM, Lizhi Hou wrote:
+> > xrt-lib kernel module infrastructure code to register and manage all
+> > leaf driver modules.
+> >
+> > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> > Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
+> > ---
+> >  drivers/fpga/xrt/lib/main.c | 274 ++++++++++++++++++++++++++++++++++++
+> >  drivers/fpga/xrt/lib/main.h |  17 +++
+> >  2 files changed, 291 insertions(+)
+> >  create mode 100644 drivers/fpga/xrt/lib/main.c
+> >  create mode 100644 drivers/fpga/xrt/lib/main.h
 > 
-> diff --git a/drivers/fpga/xrt/include/metadata.h b/drivers/fpga/xrt/include/metadata.h
-> new file mode 100644
-> index 000000000000..b929bc469b73
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/metadata.h
-> @@ -0,0 +1,229 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Header file for Xilinx Runtime (XRT) driver
-> + *
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *      Lizhi Hou <Lizhi.Hou@xilinx.com>
-> + */
-> +
-> +#ifndef _XRT_METADATA_H
-> +#define _XRT_METADATA_H
-> +
-> +#include <linux/device.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/uuid.h>
-> +
-> +#define XRT_MD_INVALID_LENGTH (~0UL)
-> +
-> +#define XRT_MD_PROP_COMPATIBLE "compatible"
-> +#define XRT_MD_PROP_PF_NUM "pcie_physical_function"
-> +#define XRT_MD_PROP_BAR_IDX "pcie_bar_mapping"
-> +#define XRT_MD_PROP_IO_OFFSET "reg"
-> +#define XRT_MD_PROP_INTERRUPTS "interrupts"
-> +#define XRT_MD_PROP_INTERFACE_UUID "interface_uuid"
-> +#define XRT_MD_PROP_LOGIC_UUID "logic_uuid"
-> +#define XRT_MD_PROP_VERSION_MAJOR "firmware_version_major"
-> +
-> +#define XRT_MD_PROP_HWICAP "axi_hwicap"
-> +#define XRT_MD_PROP_PDI_CONFIG "pdi_config_mem"
-> +
-> +#define XRT_MD_NODE_ENDPOINTS "addressable_endpoints"
-> +#define XRT_MD_INTERFACES_PATH "/interfaces"
-> +
-> +#define XRT_MD_NODE_FIRMWARE "firmware"
-> +#define XRT_MD_NODE_INTERFACES "interfaces"
-> +#define XRT_MD_NODE_PARTITION_INFO "partition_info"
-> +
-> +#define XRT_MD_NODE_FLASH "ep_card_flash_program_00"
-> +#define XRT_MD_NODE_XVC_PUB "ep_debug_bscan_user_00"
-> +#define XRT_MD_NODE_XVC_PRI "ep_debug_bscan_mgmt_00"
-> +#define XRT_MD_NODE_SYSMON "ep_cmp_sysmon_00"
-> +#define XRT_MD_NODE_AF_BLP_CTRL_MGMT "ep_firewall_blp_ctrl_mgmt_00"
-> +#define XRT_MD_NODE_AF_BLP_CTRL_USER "ep_firewall_blp_ctrl_user_00"
-> +#define XRT_MD_NODE_AF_CTRL_MGMT "ep_firewall_ctrl_mgmt_00"
-> +#define XRT_MD_NODE_AF_CTRL_USER "ep_firewall_ctrl_user_00"
-> +#define XRT_MD_NODE_AF_CTRL_DEBUG "ep_firewall_ctrl_debug_00"
-> +#define XRT_MD_NODE_AF_DATA_H2C "ep_firewall_data_h2c_00"
-> +#define XRT_MD_NODE_AF_DATA_C2H "ep_firewall_data_c2h_00"
-> +#define XRT_MD_NODE_AF_DATA_P2P "ep_firewall_data_p2p_00"
-> +#define XRT_MD_NODE_AF_DATA_M2M "ep_firewall_data_m2m_00"
-> +#define XRT_MD_NODE_CMC_REG "ep_cmc_regmap_00"
-> +#define XRT_MD_NODE_CMC_RESET "ep_cmc_reset_00"
-> +#define XRT_MD_NODE_CMC_MUTEX "ep_cmc_mutex_00"
-> +#define XRT_MD_NODE_CMC_FW_MEM "ep_cmc_firmware_mem_00"
-> +#define XRT_MD_NODE_ERT_FW_MEM "ep_ert_firmware_mem_00"
-> +#define XRT_MD_NODE_ERT_CQ_MGMT "ep_ert_command_queue_mgmt_00"
-> +#define XRT_MD_NODE_ERT_CQ_USER "ep_ert_command_queue_user_00"
-> +#define XRT_MD_NODE_MAILBOX_MGMT "ep_mailbox_mgmt_00"
-> +#define XRT_MD_NODE_MAILBOX_USER "ep_mailbox_user_00"
-> +#define XRT_MD_NODE_GATE_PLP "ep_pr_isolate_plp_00"
-> +#define XRT_MD_NODE_GATE_ULP "ep_pr_isolate_ulp_00"
-> +#define XRT_MD_NODE_PCIE_MON "ep_pcie_link_mon_00"
-> +#define XRT_MD_NODE_DDR_CALIB "ep_ddr_mem_calib_00"
-> +#define XRT_MD_NODE_CLK_KERNEL1 "ep_aclk_kernel_00"
-> +#define XRT_MD_NODE_CLK_KERNEL2 "ep_aclk_kernel_01"
-> +#define XRT_MD_NODE_CLK_KERNEL3 "ep_aclk_hbm_00"
-> +#define XRT_MD_NODE_KDMA_CTRL "ep_kdma_ctrl_00"
-> +#define XRT_MD_NODE_FPGA_CONFIG "ep_fpga_configuration_00"
-> +#define XRT_MD_NODE_ERT_SCHED "ep_ert_sched_00"
-> +#define XRT_MD_NODE_XDMA "ep_xdma_00"
-> +#define XRT_MD_NODE_MSIX "ep_msix_00"
-> +#define XRT_MD_NODE_QDMA "ep_qdma_00"
-> +#define XRT_MD_XRT_MD_NODE_QDMA4 "ep_qdma4_00"
-> +#define XRT_MD_NODE_STM "ep_stream_traffic_manager_00"
-> +#define XRT_MD_NODE_STM4 "ep_stream_traffic_manager4_00"
-> +#define XRT_MD_NODE_CLK_SHUTDOWN "ep_aclk_shutdown_00"
-> +#define XRT_MD_NODE_ERT_BASE "ep_ert_base_address_00"
-> +#define XRT_MD_NODE_ERT_RESET "ep_ert_reset_00"
-> +#define XRT_MD_NODE_CLKFREQ_K1 "ep_freq_cnt_aclk_kernel_00"
-> +#define XRT_MD_NODE_CLKFREQ_K2 "ep_freq_cnt_aclk_kernel_01"
-> +#define XRT_MD_NODE_CLKFREQ_HBM "ep_freq_cnt_aclk_hbm_00"
-> +#define XRT_MD_NODE_GAPPING "ep_gapping_demand_00"
-> +#define XRT_MD_NODE_UCS_CONTROL_STATUS "ep_ucs_control_status_00"
-> +#define XRT_MD_NODE_P2P "ep_p2p_00"
-> +#define XRT_MD_NODE_REMAP_P2P "ep_remap_p2p_00"
-> +#define XRT_MD_NODE_DDR4_RESET_GATE "ep_ddr_mem_srsr_gate_00"
-> +#define XRT_MD_NODE_ADDR_TRANSLATOR "ep_remap_data_c2h_00"
-> +#define XRT_MD_NODE_MAILBOX_XRT "ep_mailbox_user_to_ert_00"
-> +#define XRT_MD_NODE_PMC_INTR   "ep_pmc_intr_00"
-> +#define XRT_MD_NODE_PMC_MUX    "ep_pmc_mux_00"
-> +
-> +/* driver defined endpoints */
-> +#define XRT_MD_NODE_VSEC "drv_ep_vsec_00"
-> +#define XRT_MD_NODE_VSEC_GOLDEN "drv_ep_vsec_golden_00"
-> +#define XRT_MD_NODE_BLP_ROM "drv_ep_blp_rom_00"
-> +#define XRT_MD_NODE_MAILBOX_VSEC "ep_mailbox_vsec_00"
+> Not sure if 'main' is a good base name for something going into a lib.
+> 
+> >
+> > diff --git a/drivers/fpga/xrt/lib/main.c b/drivers/fpga/xrt/lib/main.c
+> > new file mode 100644
+> > index 000000000000..36fb62710843
+> > --- /dev/null
+> > +++ b/drivers/fpga/xrt/lib/main.c
+> > @@ -0,0 +1,274 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Driver for Xilinx Alveo FPGA Support
+> > + *
+> > + * Copyright (C) 2020-2021 Xilinx, Inc.
+> > + *
+> > + * Authors:
+> > + *	Cheng Zhen <maxz@xilinx.com>
+> > + */
+> > +
+> > +#include <linux/module.h>
+> > +#include "xleaf.h"
+> > +#include "xroot.h"
+> > +#include "main.h"
+> > +
+> > +#define XRT_IPLIB_MODULE_NAME		"xrt-lib"
+> > +#define XRT_IPLIB_MODULE_VERSION	"4.0.0"
+> > +#define XRT_MAX_DEVICE_NODES		128
+> > +#define XRT_DRVNAME(drv)		((drv)->driver.name)
+> > +
+> > +/*
+> > + * Subdev driver is known by ID to others. We map the ID to it's
+> by it's ID
+> > + * struct platform_driver, which contains it's binding name and driver/file ops.
+> > + * We also map it to the endpoint name in DTB as well, if it's different
+> > + * than the driver's binding name.
+> > + */
+> > +struct xrt_drv_map {
+> > +	struct list_head list;
+> > +	enum xrt_subdev_id id;
+> > +	struct platform_driver *drv;
+> > +	struct xrt_subdev_endpoints *eps;
+> > +	struct ida ida; /* manage driver instance and char dev minor */
+> > +};
+> > +
+> > +static DEFINE_MUTEX(xrt_lib_lock); /* global lock protecting xrt_drv_maps list */
+> > +static LIST_HEAD(xrt_drv_maps);
+> > +struct class *xrt_class;
+> > +
+> > +static inline struct xrt_subdev_drvdata *
+> > +xrt_drv_map2drvdata(struct xrt_drv_map *map)
+> > +{
+> > +	return (struct xrt_subdev_drvdata *)map->drv->id_table[0].driver_data;
+> > +}
+> > +
+> > +static struct xrt_drv_map *
+> > +xrt_drv_find_map_by_id_nolock(enum xrt_subdev_id id)
+> 
+> name could be by convention
+> 
+> __xrt_drv_find_map_id
+> 
+> > +{
+> > +	const struct list_head *ptr;
+> > +
+> > +	list_for_each(ptr, &xrt_drv_maps) {
+> > +		struct xrt_drv_map *tmap = list_entry(ptr, struct xrt_drv_map, list);
+> > +
+> > +		if (tmap->id == id)
+> > +			return tmap;
+> > +	}
+> > +	return NULL;
+> > +}
+> > +
+> > +static struct xrt_drv_map *
+> > +xrt_drv_find_map_by_id(enum xrt_subdev_id id)
+> > +{
+> > +	struct xrt_drv_map *map;
+> > +
+> > +	mutex_lock(&xrt_lib_lock);
+> > +	map = xrt_drv_find_map_by_id_nolock(id);
+> > +	mutex_unlock(&xrt_lib_lock);
+> > +	/*
+> > +	 * map should remain valid even after lock is dropped since a registered
+> even after the lock
+> > +	 * driver should only be unregistered when driver module is being unloaded,
+> > +	 * which means that the driver should not be used by then.
+> > +	 */
+> > +	return map;
+> > +}
+> > +
+> > +static int xrt_drv_register_driver(struct xrt_drv_map *map)
+> > +{
+> > +	struct xrt_subdev_drvdata *drvdata;
+> > +	int rc = 0;
+> > +	const char *drvname = XRT_DRVNAME(map->drv);
+> > +
+> > +	rc = platform_driver_register(map->drv);
+> > +	if (rc) {
+> > +		pr_err("register %s platform driver failed\n", drvname);
+> > +		return rc;
+> > +	}
+> > +
+> > +	drvdata = xrt_drv_map2drvdata(map);
+> > +	if (drvdata) {
+> > +		/* Initialize dev_t for char dev node. */
+> > +		if (xleaf_devnode_enabled(drvdata)) {
+> > +			rc = alloc_chrdev_region(&drvdata->xsd_file_ops.xsf_dev_t, 0,
+> > +						 XRT_MAX_DEVICE_NODES, drvname);
+> > +			if (rc) {
+> > +				platform_driver_unregister(map->drv);
+> > +				pr_err("failed to alloc dev minor for %s: %d\n", drvname, rc);
+> > +				return rc;
+> > +			}
+> > +		} else {
+> > +			drvdata->xsd_file_ops.xsf_dev_t = (dev_t)-1;
+> > +		}
+> > +	}
+> > +
+> > +	ida_init(&map->ida);
+> > +
+> > +	pr_info("%s registered successfully\n", drvname);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void xrt_drv_unregister_driver(struct xrt_drv_map *map)
+> > +{
+> > +	const char *drvname = XRT_DRVNAME(map->drv);
+> > +	struct xrt_subdev_drvdata *drvdata;
+> > +
+> > +	ida_destroy(&map->ida);
+> > +
+> > +	drvdata = xrt_drv_map2drvdata(map);
+> > +	if (drvdata && drvdata->xsd_file_ops.xsf_dev_t != (dev_t)-1) {
+> > +		unregister_chrdev_region(drvdata->xsd_file_ops.xsf_dev_t,
+> > +					 XRT_MAX_DEVICE_NODES);
+> > +	}
+> > +
+> > +	platform_driver_unregister(map->drv);
+> > +
+> > +	pr_info("%s unregistered successfully\n", drvname);
+> > +}
+> > +
+> > +int xleaf_register_driver(enum xrt_subdev_id id,
+> > +			  struct platform_driver *drv,
+> > +			  struct xrt_subdev_endpoints *eps)
+> > +{
+> > +	struct xrt_drv_map *map;
+> > +
+> > +	mutex_lock(&xrt_lib_lock);
+> 
+> Trying to minimize length of lock being held.
+> 
+> Could holding this lock be split or the alloc moved above ?
+> 
+> > +
+> > +	map = xrt_drv_find_map_by_id_nolock(id);
+> > +	if (map) {
+> > +		mutex_unlock(&xrt_lib_lock);
+> > +		pr_err("Id %d already has a registered driver, 0x%p\n",
+> > +		       id, map->drv);
+> > +		return -EEXIST;
+> > +	}
+> > +
+> > +	map = vzalloc(sizeof(*map));
+> 
+> general issue
+> 
+> map is small, so kzalloc
+> 
+> > +	if (!map) {
+> > +		mutex_unlock(&xrt_lib_lock);
+> > +		return -ENOMEM;
+> > +	}
+> > +	map->id = id;
+> > +	map->drv = drv;
+> > +	map->eps = eps;
+> > +
+> > +	xrt_drv_register_driver(map);
+> 
+> xrt_drv_register_driver failure is unhandled.
+> 
+> This is the only time xrt_drv_register_driver is called, consider expanding the function here and removing the call.
+> 
+> > +
+> > +	list_add(&map->list, &xrt_drv_maps);
+> > +
+> > +	mutex_unlock(&xrt_lib_lock);
+> > +
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(xleaf_register_driver);
+> > +
+> > +void xleaf_unregister_driver(enum xrt_subdev_id id)
+> > +{
+> > +	struct xrt_drv_map *map;
+> > +
+> > +	mutex_lock(&xrt_lib_lock);
+> > +
+> > +	map = xrt_drv_find_map_by_id_nolock(id);
+> > +	if (!map) {
+> > +		mutex_unlock(&xrt_lib_lock);
+> > +		pr_err("Id %d has no registered driver\n", id);
+> > +		return;
+> > +	}
+> > +
+> > +	list_del(&map->list);
+> > +
+> > +	mutex_unlock(&xrt_lib_lock);
+> > +
+> > +	xrt_drv_unregister_driver(map);
+> > +	vfree(map);
+> > +}
+> > +EXPORT_SYMBOL_GPL(xleaf_unregister_driver);
+> > +
+> > +const char *xrt_drv_name(enum xrt_subdev_id id)
+> > +{
+> > +	struct xrt_drv_map *map = xrt_drv_find_map_by_id(id);
+> > +
+> > +	if (map)
+> > +		return XRT_DRVNAME(map->drv);
+> > +	return NULL;
+> > +}
+> > +
+> > +int xrt_drv_get_instance(enum xrt_subdev_id id)
+> > +{
+> > +	struct xrt_drv_map *map = xrt_drv_find_map_by_id(id);
+> > +
+> > +	return ida_alloc_range(&map->ida, 0, XRT_MAX_DEVICE_NODES, GFP_KERNEL);
+> > +}
+> > +
+> > +void xrt_drv_put_instance(enum xrt_subdev_id id, int instance)
+> > +{
+> > +	struct xrt_drv_map *map = xrt_drv_find_map_by_id(id);
+> > +
+> > +	ida_free(&map->ida, instance);
+> > +}
+> > +
+> > +struct xrt_subdev_endpoints *xrt_drv_get_endpoints(enum xrt_subdev_id id)
+> > +{
+> > +	struct xrt_drv_map *map = xrt_drv_find_map_by_id(id);
+> > +	struct xrt_subdev_endpoints *eps;
+> > +
+> > +	eps = map ? map->eps : NULL;
+> > +	return eps;
+> > +}
+> > +
+> > +/* Leaf driver's module init/fini callbacks. */
+> 
+> These constructor/destructor calls needs to be more dynamic.
+> 
+> calls are made even if there are no subdevices to go with the id's.
+> 
+> Also this list can not grow.  How would a new id be added by a module ?
+> 
+> > +static void (*leaf_init_fini_cbs[])(bool) = {
+> > +	group_leaf_init_fini,
+> > +	vsec_leaf_init_fini,
+> > +	devctl_leaf_init_fini,
+> > +	axigate_leaf_init_fini,
+> > +	icap_leaf_init_fini,
+> > +	calib_leaf_init_fini,
+> > +	clkfreq_leaf_init_fini,
+> > +	clock_leaf_init_fini,
+> > +	ucs_leaf_init_fini,
+> > +};
+> > +
+> > +static __init int xrt_lib_init(void)
+> > +{
+> > +	int i;
+> > +
+> > +	xrt_class = class_create(THIS_MODULE, XRT_IPLIB_MODULE_NAME);
+> > +	if (IS_ERR(xrt_class))
+> > +		return PTR_ERR(xrt_class);
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(leaf_init_fini_cbs); i++)
+> > +		leaf_init_fini_cbs[i](true);
+> > +	return 0;
+> > +}
+> > +
+> > +static __exit void xrt_lib_fini(void)
+> > +{
+> > +	struct xrt_drv_map *map;
+> > +	int i;
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(leaf_init_fini_cbs); i++)
+> > +		leaf_init_fini_cbs[i](false);
+> > +
+> > +	mutex_lock(&xrt_lib_lock);
+> > +
+> > +	while (!list_empty(&xrt_drv_maps)) {
+> > +		map = list_first_entry_or_null(&xrt_drv_maps, struct xrt_drv_map, list);
+> > +		pr_err("Unloading module with %s still registered\n", XRT_DRVNAME(map->drv));
+> > +		list_del(&map->list);
+> > +		mutex_unlock(&xrt_lib_lock);
+> > +		xrt_drv_unregister_driver(map);
+> > +		vfree(map);
+> > +		mutex_lock(&xrt_lib_lock);
+> > +	}
+> > +
+> > +	mutex_unlock(&xrt_lib_lock);
+> > +
+> > +	class_destroy(xrt_class);
+> > +}
+> > +
+> > +module_init(xrt_lib_init);
+> > +module_exit(xrt_lib_fini);
+> > +
+> > +MODULE_VERSION(XRT_IPLIB_MODULE_VERSION);
+> > +MODULE_AUTHOR("XRT Team <runtime@xilinx.com>");
+> > +MODULE_DESCRIPTION("Xilinx Alveo IP Lib driver");
+> > +MODULE_LICENSE("GPL v2");
+> > diff --git a/drivers/fpga/xrt/lib/main.h b/drivers/fpga/xrt/lib/main.h
+> > new file mode 100644
+> > index 000000000000..f3bfc87ee614
+> > --- /dev/null
+> > +++ b/drivers/fpga/xrt/lib/main.h
+> > @@ -0,0 +1,17 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2020-2021 Xilinx, Inc.
+> > + *
+> > + * Authors:
+> > + *	Cheng Zhen <maxz@xilinx.com>
+> > + */
+> > +
+> > +#ifndef _XRT_MAIN_H_
+> > +#define _XRT_MAIN_H_
+> > +
+> > +const char *xrt_drv_name(enum xrt_subdev_id id);
+> 
+> To be self contained, the header defining enum xrt_subdev_id should be included.
+> 
+> This is subdev_id.h which comes in with patch 6
+> 
+> A dependency on a future patch breaks bisectablity.
+> 
+> It may make sense to collect these small headers into a single large header for the ip infra lib and bring them all in this patch.
 
-Should this be "drv_ep_mailbox_vsec_00"?
+Please add the headers when you use them, do *not* do header only commits.
 
-> +#define XRT_MD_NODE_PLAT_INFO "drv_ep_platform_info_mgmt_00"
-> +#define XRT_MD_NODE_TEST "drv_ep_test_00"
-> +#define XRT_MD_NODE_MGMT_MAIN "drv_ep_mgmt_main_00"
-> +#define XRT_MD_NODE_FLASH_VSEC "drv_ep_card_flash_program_00"
-> +#define XRT_MD_NODE_GOLDEN_VER "drv_ep_golden_ver_00"
-> +#define XRT_MD_XRT_MD_NODE_PARTITION_INFO_BLP "partition_info_0"
-> +#define XRT_MD_XRT_MD_NODE_PARTITION_INFO_PLP "partition_info_1"
-> +
-> +#define XRT_MD_NODE_DDR_SRSR "drv_ep_ddr_srsr"
-> +#define XRT_MD_REGMAP_DDR_SRSR "drv_ddr_srsr"
-> +
-> +#define XRT_MD_PROP_OFFSET "drv_offset"
-> +#define XRT_MD_PROP_CLK_FREQ "drv_clock_frequency"
-> +#define XRT_MD_PROP_CLK_CNT "drv_clock_frequency_counter"
-> +#define XRT_MD_PROP_VBNV "vbnv"
-> +#define XRT_MD_PROP_VROM "vrom"
-> +#define XRT_MD_PROP_PARTITION_LEVEL "partition_level"
-> +
-> +struct xrt_md_endpoint {
-> +	const char	*ep_name;
-> +	u32		bar;
-> +	long		bar_off;
-> +	ulong		size;
-> +	char		*regmap;
-> +	char		*regmap_ver;
-> +};
-> +
-> +/* Note: res_id is defined by leaf driver and must start with 0. */
-> +struct xrt_iores_map {
-> +	char		*res_name;
-> +	int		res_id;
-> +};
-> +
-> +static inline int xrt_md_res_name2id(const struct xrt_iores_map *res_map,
-> +				     int entry_num, const char *res_name)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < entry_num; i++) {
-> +		if (!strcmp(res_name, res_map->res_name))
-> +			return res_map->res_id;
-> +		res_map++;
-> +	}
-> +	return -1;
-> +}
-> +
-> +static inline const char *
-> +xrt_md_res_id2name(const struct xrt_iores_map *res_map, int entry_num, int id)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < entry_num; i++) {
-> +		if (res_map->res_id == id)
-> +			return res_map->res_name;
-> +		res_map++;
-> +	}
-> +	return NULL;
-> +}
-> +
-> +unsigned long xrt_md_size(struct device *dev, const char *blob);
-> +int xrt_md_create(struct device *dev, char **blob);
-> +int xrt_md_add_endpoint(struct device *dev, char *blob,
-> +			struct xrt_md_endpoint *ep);
-> +int xrt_md_del_endpoint(struct device *dev, char *blob, const char *ep_name,
-> +			char *regmap_name);
-> +int xrt_md_get_prop(struct device *dev, const char *blob, const char *ep_name,
-> +		    const char *regmap_name, const char *prop,
-> +		    const void **val, int *size);
-> +int xrt_md_set_prop(struct device *dev, char *blob, const char *ep_name,
-> +		    const char *regmap_name, const char *prop,
-> +		    const void *val, int size);
-> +int xrt_md_copy_endpoint(struct device *dev, char *blob, const char *src_blob,
-> +			 const char *ep_name, const char *regmap_name,
-> +			 const char *new_ep_name);
-> +int xrt_md_get_next_endpoint(struct device *dev, const char *blob,
-> +			     const char *ep_name,  const char *regmap_name,
-> +			     char **next_ep, char **next_regmap);
-> +int xrt_md_get_compatible_endpoint(struct device *dev, const char *blob,
-> +				   const char *regmap_name, const char **ep_name);
-> +int xrt_md_find_endpoint(struct device *dev, const char *blob,
-> +			 const char *ep_name, const char *regmap_name,
-> +			 const char **epname);
-> +void xrt_md_pack(struct device *dev, char *blob);
-> +char *xrt_md_dup(struct device *dev, const char *blob);
-> +int xrt_md_get_intf_uuids(struct device *dev, const char *blob,
-> +			  u32 *num_uuids, uuid_t *intf_uuids);
-> +static inline int xrt_md_copy_all_endpoints(struct device *dev, char *blob, const char *src_blob)
-> +{
-> +	return xrt_md_copy_endpoint(dev, blob, src_blob, XRT_MD_NODE_ENDPOINTS,
-> +				    NULL, NULL);
-> +}
-> +
-> +/*
-> + * Firmware provides 128 bit hash string as unque id of partition/interface.
-> + * This string will be canonical textual representation in the future.
-> + * Before that, introducing these two functions below to translate
-> + * hash string to uuid_t for released hardware.
-> + */
-> +static inline void xrt_md_trans_uuid2str(const uuid_t *uuid, char *uuidstr)
-> +{
-> +	int i, p;
-> +	u8 *u = (u8 *)uuid;
-> +
-> +	for (p = 0, i = sizeof(uuid_t) - 1; i >= 0; p++, i--)
-> +		(void)snprintf(&uuidstr[p * 2], 3, "%02x", u[i]);
-> +}
-> +
-> +static inline int xrt_md_trans_str2uuid(struct device *dev, const char *uuidstr, uuid_t *p_uuid)
-> +{
-> +	char *p;
-> +	const char *str;
-> +	char tmp[3] = { 0 };
-> +	int i, ret;
-> +
-> +	memset(p_uuid, 0, sizeof(*p_uuid));
-> +	p = (char *)p_uuid;
-> +	str = uuidstr + strlen(uuidstr) - 2;
-> +
-> +	for (i = 0; i < sizeof(*p_uuid) && str >= uuidstr; i++) {
-> +		tmp[0] = *str;
-> +		tmp[1] = *(str + 1);
-> +		ret = kstrtou8(tmp, 16, p);
-> +		if (ret)
-> +			return -EINVAL;
-> +		p++;
-> +		str -= 2;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +#endif
-> diff --git a/drivers/fpga/xrt/metadata/metadata.c b/drivers/fpga/xrt/metadata/metadata.c
-> new file mode 100644
-> index 000000000000..5d106396f438
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/metadata/metadata.c
-> @@ -0,0 +1,524 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Xilinx Alveo FPGA Metadata parse APIs
-> + *
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *      Lizhi Hou <Lizhi.Hou@xilinx.com>
-> + */
-> +
-> +#include <linux/libfdt_env.h>
-> +#include "libfdt.h"
-> +#include "metadata.h"
-> +
-> +#define MAX_BLOB_SIZE	(4096 * 25)
-> +
-> +static int xrt_md_setprop(struct device *dev, char *blob, int offset,
-> +			  const char *prop, const void *val, int size);
-> +static int xrt_md_overlay(struct device *dev, char *blob, int target,
-> +			  const char *overlay_blob, int overlay_offset);
-> +static int xrt_md_get_endpoint(struct device *dev, const char *blob,
-> +			       const char *ep_name, const char *regmap_name,
-> +			       int *ep_offset);
-> +
-> +unsigned long xrt_md_size(struct device *dev, const char *blob)
-> +{
-> +	unsigned long len = (long)fdt_totalsize(blob);
-> +
-> +	len = (len > MAX_BLOB_SIZE) ? XRT_MD_INVALID_LENGTH : len;
+It's perfectly fine (and desirable) to add things over time to a header
+as you use them.
 
-how about (avoiding len = len):
+Note *each* commit must compile and work standing on its own, so yes as
+Tom pointed out, do not depend on future (later commit) files.
 
-	if (len > MAX_BLOB_SIZE)
-		return XRT_MD_INVALID_LENGTH;
-
-	return len;
-
-> +	return len;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_size);
-> +
-> +int xrt_md_create(struct device *dev, char **blob)
-> +{
-> +	int ret = 0;
-> +
-> +	WARN_ON(!blob);
-
-Shouldn't this be signaled to caller as a -EINVAL?
-
-> +
-> +	*blob = vmalloc(MAX_BLOB_SIZE);
-> +	if (!*blob)
-> +		return -ENOMEM;
-> +
-> +	ret = fdt_create_empty_tree(*blob, MAX_BLOB_SIZE);
-> +	if (ret) {
-> +		dev_err(dev, "format blob failed, ret = %d", ret);
-> +		goto failed;
-> +	}
-> +
-> +	ret = fdt_next_node(*blob, -1, NULL);
-> +	if (ret < 0) {
-> +		dev_err(dev, "No Node, ret = %d", ret);
-> +		goto failed;
-> +	}
-> +
-> +	ret = fdt_add_subnode(*blob, ret, XRT_MD_NODE_ENDPOINTS);
-> +	if (ret < 0) {
-> +		dev_err(dev, "add node failed, ret = %d", ret);
-> +		goto failed;
-> +	}
-> +
-> +	return 0;
-> +
-> +failed:
-> +	vfree(*blob);
-> +	*blob = NULL;
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_create);
-> +
-> +static int xrt_md_add_node(struct device *dev, char *blob, int parent_offset,
-> +			   const char *ep_name)
-> +{
-> +	int ret;
-> +
-> +	ret = fdt_add_subnode(blob, parent_offset, ep_name);
-> +	if (ret < 0 && ret != -FDT_ERR_EXISTS)
-> +		dev_err(dev, "failed to add node %s. %d", ep_name, ret);
-> +
-> +	return ret;
-> +}
-> +
-> +int xrt_md_del_endpoint(struct device *dev, char *blob, const char *ep_name,
-> +			char *regmap_name)
-> +{
-> +	int ret;
-> +	int ep_offset;
-> +
-> +	ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name, &ep_offset);
-> +	if (ret) {
-> +		dev_err(dev, "can not find ep %s", ep_name);
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = fdt_del_node(blob, ep_offset);
-> +	if (ret)
-> +		dev_err(dev, "delete node %s failed, ret %d", ep_name, ret);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_del_endpoint);
-> +
-> +static int __xrt_md_add_endpoint(struct device *dev, char *blob,
-> +				 struct xrt_md_endpoint *ep, int *offset, bool root)
-> +{
-> +	int ret = 0;
-> +	int ep_offset = 0;
-> +	u32 val, count = 0;
-> +	u64 io_range[2];
-> +	char comp[128];
-> +
-> +	if (!ep->ep_name) {
-> +		dev_err(dev, "empty name");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!root) {
-> +		ret = xrt_md_get_endpoint(dev, blob, XRT_MD_NODE_ENDPOINTS, NULL,
-> +					  &ep_offset);
-> +		if (ret) {
-> +			dev_err(dev, "invalid blob, ret = %d", ret);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	ep_offset = xrt_md_add_node(dev, blob, ep_offset, ep->ep_name);
-
-A little hard to follow when you re-use ep_offset like this. Maybe
-parent_offset to match xrt_md_add_node parameter?
-
-> +	if (ep_offset < 0) {
-> +		dev_err(dev, "add endpoint failed, ret = %d", ret);
-> +		return -EINVAL;
-> +	}
-> +	if (offset)
-> +		*offset = ep_offset;
-> +
-> +	if (ep->size != 0) {
-> +		val = cpu_to_be32(ep->bar);
-> +		ret = xrt_md_setprop(dev, blob, ep_offset, XRT_MD_PROP_BAR_IDX,
-> +				     &val, sizeof(u32));
-> +		if (ret) {
-> +			dev_err(dev, "set %s failed, ret %d",
-> +				XRT_MD_PROP_BAR_IDX, ret);
-> +			goto failed;
-> +		}
-> +		io_range[0] = cpu_to_be64((u64)ep->bar_off);
-> +		io_range[1] = cpu_to_be64((u64)ep->size);
-> +		ret = xrt_md_setprop(dev, blob, ep_offset, XRT_MD_PROP_IO_OFFSET,
-> +				     io_range, sizeof(io_range));
-> +		if (ret) {
-> +			dev_err(dev, "set %s failed, ret %d",
-> +				XRT_MD_PROP_IO_OFFSET, ret);
-> +			goto failed;
-> +		}
-> +	}
-> +
-> +	if (ep->regmap) {
-> +		if (ep->regmap_ver) {
-> +			count = snprintf(comp, sizeof(comp),
-> +					 "%s-%s", ep->regmap, ep->regmap_ver);
-> +			count++;
-> +		}
-> +
-> +		count += snprintf(comp + count, sizeof(comp) - count,
-> +				  "%s", ep->regmap);
-> +		count++;
-> +
-> +		ret = xrt_md_setprop(dev, blob, ep_offset, XRT_MD_PROP_COMPATIBLE,
-> +				     comp, count);
-> +		if (ret) {
-> +			dev_err(dev, "set %s failed, ret %d",
-> +				XRT_MD_PROP_COMPATIBLE, ret);
-> +			goto failed;
-> +		}
-> +	}
-> +
-> +failed:
-> +	if (ret)
-> +		xrt_md_del_endpoint(dev, blob, ep->ep_name, NULL);
-> +
-> +	return ret;
-> +}
-> +
-> +int xrt_md_add_endpoint(struct device *dev, char *blob,
-> +			struct xrt_md_endpoint *ep)
-> +{
-> +	return __xrt_md_add_endpoint(dev, blob, ep, NULL, false);
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_add_endpoint);
-> +
-> +static int xrt_md_get_endpoint(struct device *dev, const char *blob,
-> +			       const char *ep_name, const char *regmap_name,
-> +			       int *ep_offset)
-> +{
-> +	int offset;
-> +	const char *name;
-> +
-> +	for (offset = fdt_next_node(blob, -1, NULL);
-> +	    offset >= 0;
-> +	    offset = fdt_next_node(blob, offset, NULL)) {
-> +		name = fdt_get_name(blob, offset, NULL);
-> +		if (!name || strncmp(name, ep_name, strlen(ep_name) + 1))
-> +			continue;
-> +		if (!regmap_name ||
-> +		    !fdt_node_check_compatible(blob, offset, regmap_name))
-> +			break;
-> +	}
-> +	if (offset < 0)
-> +		return -ENODEV;
-> +
-> +	*ep_offset = offset;
-> +
-> +	return 0;
-> +}
-> +
-> +int xrt_md_find_endpoint(struct device *dev, const char *blob,
-> +			 const char *ep_name, const char *regmap_name,
-> +			 const char **epname)
-> +{
-> +	int offset;
-> +	int ret;
-> +
-> +	ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name,
-> +				  &offset);
-> +	if (!ret && epname && offset >= 0)
-> +		*epname = fdt_get_name(blob, offset, NULL);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_find_endpoint);
-> +
-> +int xrt_md_get_prop(struct device *dev, const char *blob, const char *ep_name,
-> +		    const char *regmap_name, const char *prop,
-> +		    const void **val, int *size)
-> +{
-> +	int offset;
-> +	int ret;
-> +
-> +	if (val)
-> +		*val = NULL;
-> +	if (ep_name) {
-> +		ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name,
-> +					  &offset);
-> +		if (ret) {
-> +			dev_err(dev, "cannot get ep %s, regmap %s, ret = %d",
-> +				ep_name, regmap_name, ret);
-> +			return -EINVAL;
-> +		}
-> +	} else {
-> +		offset = fdt_next_node(blob, -1, NULL);
-> +		if (offset < 0) {
-> +			dev_err(dev, "internal error, ret = %d", offset);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	if (val) {
-> +		*val = fdt_getprop(blob, offset, prop, size);
-> +		if (!*val) {
-> +			dev_dbg(dev, "get ep %s, prop %s failed", ep_name, prop);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_get_prop);
-> +
-> +static int xrt_md_setprop(struct device *dev, char *blob, int offset,
-> +			  const char *prop, const void *val, int size)
-> +{
-> +	int ret;
-> +
-> +	ret = fdt_setprop(blob, offset, prop, val, size);
-> +	if (ret)
-> +		dev_err(dev, "failed to set prop %d", ret);
-> +
-> +	return ret;
-> +}
-> +
-> +int xrt_md_set_prop(struct device *dev, char *blob,
-> +		    const char *ep_name, const char *regmap_name,
-> +		    const char *prop, const void *val, int size)
-> +{
-> +	int offset;
-> +	int ret;
-> +
-> +	if (ep_name) {
-> +		ret = xrt_md_get_endpoint(dev, blob, ep_name,
-> +					  regmap_name, &offset);
-> +		if (ret) {
-> +			dev_err(dev, "cannot get node %s, ret = %d",
-> +				ep_name, ret);
-> +			return -EINVAL;
-> +		}
-> +	} else {
-> +		offset = fdt_next_node(blob, -1, NULL);
-> +		if (offset < 0) {
-> +			dev_err(dev, "internal error, ret = %d", offset);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	ret = xrt_md_setprop(dev, blob, offset, prop, val, size);
-> +	if (ret)
-> +		dev_err(dev, "set prop %s failed, ret = %d", prop, ret);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_set_prop);
-> +
-> +int xrt_md_copy_endpoint(struct device *dev, char *blob, const char *src_blob,
-> +			 const char *ep_name, const char *regmap_name,
-> +			 const char *new_ep_name)
-> +{
-> +	int offset, target;
-> +	int ret;
-> +	struct xrt_md_endpoint ep = {0};
-> +	const char *newepnm = new_ep_name ? new_ep_name : ep_name;
-> +
-> +	ret = xrt_md_get_endpoint(dev, src_blob, ep_name, regmap_name,
-> +				  &offset);
-> +	if (ret)
-> +		return -EINVAL;
-> +
-> +	ret = xrt_md_get_endpoint(dev, blob, newepnm, regmap_name, &target);
-> +	if (ret) {
-> +		ep.ep_name = newepnm;
-> +		ret = __xrt_md_add_endpoint(dev, blob, &ep, &target,
-> +					    fdt_parent_offset(src_blob, offset) == 0);
-> +		if (ret)
-> +			return -EINVAL;
-> +	}
-> +
-> +	ret = xrt_md_overlay(dev, blob, target, src_blob, offset);
-> +	if (ret)
-> +		dev_err(dev, "overlay failed, ret = %d", ret);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_copy_endpoint);
-> +
-> +char *xrt_md_dup(struct device *dev, const char *blob)
-> +{
-> +	int ret;
-> +	char *dup_blob;
-> +
-> +	ret = xrt_md_create(dev, &dup_blob);
-> +	if (ret)
-> +		return NULL;
-> +	ret = xrt_md_overlay(dev, dup_blob, -1, blob, -1);
-> +	if (ret) {
-> +		vfree(dup_blob);
-> +		return NULL;
-> +	}
-> +
-> +	return dup_blob;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_dup);
-> +
-> +static int xrt_md_overlay(struct device *dev, char *blob, int target,
-> +			  const char *overlay_blob, int overlay_offset)
-> +{
-> +	int	property, subnode;
-> +	int	ret;
-> +
-> +	WARN_ON(!blob || !overlay_blob);
-
-Why check !blob twice? Also, is a WARN_ON justified here
-(and in xrt_md_create)?
-
-Fernando
-
-> +
-> +	if (!blob) {
-> +		dev_err(dev, "blob is NULL");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (target < 0) {
-> +		target = fdt_next_node(blob, -1, NULL);
-> +		if (target < 0) {
-> +			dev_err(dev, "invalid target");
-> +			return -EINVAL;
-> +		}
-> +	}
-> +	if (overlay_offset < 0) {
-> +		overlay_offset = fdt_next_node(overlay_blob, -1, NULL);
-> +		if (overlay_offset < 0) {
-> +			dev_err(dev, "invalid overlay");
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	fdt_for_each_property_offset(property, overlay_blob, overlay_offset) {
-> +		const char *name;
-> +		const void *prop;
-> +		int prop_len;
-> +
-> +		prop = fdt_getprop_by_offset(overlay_blob, property, &name,
-> +					     &prop_len);
-> +		if (!prop || prop_len >= MAX_BLOB_SIZE) {
-> +			dev_err(dev, "internal error");
-> +			return -EINVAL;
-> +		}
-> +
-> +		ret = xrt_md_setprop(dev, blob, target, name, prop,
-> +				     prop_len);
-> +		if (ret) {
-> +			dev_err(dev, "setprop failed, ret = %d", ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	fdt_for_each_subnode(subnode, overlay_blob, overlay_offset) {
-> +		const char *name = fdt_get_name(overlay_blob, subnode, NULL);
-> +		int nnode;
-> +
-> +		nnode = xrt_md_add_node(dev, blob, target, name);
-> +		if (nnode == -FDT_ERR_EXISTS)
-> +			nnode = fdt_subnode_offset(blob, target, name);
-> +		if (nnode < 0) {
-> +			dev_err(dev, "add node failed, ret = %d", nnode);
-> +			return nnode;
-> +		}
-> +
-> +		ret = xrt_md_overlay(dev, blob, nnode, overlay_blob, subnode);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int xrt_md_get_next_endpoint(struct device *dev, const char *blob,
-> +			     const char *ep_name, const char *regmap_name,
-> +			     char **next_ep, char **next_regmap)
-> +{
-> +	int offset, ret;
-> +
-> +	if (!ep_name) {
-> +		ret = xrt_md_get_endpoint(dev, blob, XRT_MD_NODE_ENDPOINTS, NULL,
-> +					  &offset);
-> +	} else {
-> +		ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name,
-> +					  &offset);
-> +	}
-> +
-> +	if (ret) {
-> +		*next_ep = NULL;
-> +		*next_regmap = NULL;
-> +		return -EINVAL;
-> +	}
-> +
-> +	offset = ep_name ? fdt_next_subnode(blob, offset) :
-> +		fdt_first_subnode(blob, offset);
-> +	if (offset < 0) {
-> +		*next_ep = NULL;
-> +		*next_regmap = NULL;
-> +		return -EINVAL;
-> +	}
-> +
-> +	*next_ep = (char *)fdt_get_name(blob, offset, NULL);
-> +	*next_regmap = (char *)fdt_stringlist_get(blob, offset, XRT_MD_PROP_COMPATIBLE,
-> +						  0, NULL);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_get_next_endpoint);
-> +
-> +int xrt_md_get_compatible_endpoint(struct device *dev, const char *blob,
-> +				   const char *regmap_name, const char **ep_name)
-> +{
-> +	int ep_offset;
-> +
-> +	ep_offset = fdt_node_offset_by_compatible(blob, -1, regmap_name);
-> +	if (ep_offset < 0) {
-> +		*ep_name = NULL;
-> +		return -ENOENT;
-> +	}
-> +
-> +	*ep_name = (char *)fdt_get_name(blob, ep_offset, NULL);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_get_compatible_endpoint);
-> +
-> +void xrt_md_pack(struct device *dev, char *blob)
-> +{
-> +	int ret;
-> +
-> +	ret = fdt_pack(blob);
-> +	if (ret)
-> +		dev_err(dev, "pack failed %d", ret);
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_pack);
-> +
-> +int xrt_md_get_intf_uuids(struct device *dev, const char *blob,
-> +			  u32 *num_uuids, uuid_t *intf_uuids)
-> +{
-> +	int offset, count = 0;
-> +	int ret;
-> +	const char *uuid_str;
-> +
-> +	ret = xrt_md_get_endpoint(dev, blob, XRT_MD_NODE_INTERFACES, NULL, &offset);
-> +	if (ret)
-> +		return -ENOENT;
-> +
-> +	for (offset = fdt_first_subnode(blob, offset);
-> +	    offset >= 0;
-> +	    offset = fdt_next_subnode(blob, offset)) {
-> +		uuid_str = fdt_getprop(blob, offset, XRT_MD_PROP_INTERFACE_UUID,
-> +				       NULL);
-> +		if (!uuid_str) {
-> +			dev_err(dev, "empty intf uuid node");
-> +			return -EINVAL;
-> +		}
-> +
-> +		if (intf_uuids && count < *num_uuids) {
-> +			ret = xrt_md_trans_str2uuid(dev, uuid_str,
-> +						    &intf_uuids[count]);
-> +			if (ret)
-> +				return -EINVAL;
-> +		}
-> +		count++;
-> +	}
-> +
-> +	*num_uuids = count;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_md_get_intf_uuids);
-> -- 
-> 2.18.4
+> 
+> Tom
+> 
+> > +int xrt_drv_get_instance(enum xrt_subdev_id id);
+> > +void xrt_drv_put_instance(enum xrt_subdev_id id, int instance);
+> > +struct xrt_subdev_endpoints *xrt_drv_get_endpoints(enum xrt_subdev_id id);
+> > +
+> > +#endif	/* _XRT_MAIN_H_ */
 > 
 
+- Moritz
