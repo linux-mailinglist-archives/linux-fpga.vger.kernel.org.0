@@ -2,983 +2,605 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC76326642
-	for <lists+linux-fpga@lfdr.de>; Fri, 26 Feb 2021 18:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E0C326696
+	for <lists+linux-fpga@lfdr.de>; Fri, 26 Feb 2021 18:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbhBZRXk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 26 Feb 2021 12:23:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45366 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229912AbhBZRXj (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 26 Feb 2021 12:23:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614360130;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SN4GG6KsyQ+8q4UOtFLjmgBTGaLpcxVg7xDWtzfRKVw=;
-        b=aRYSqaRxOWYLGWj2kZAHB6kaXatcaltbQe1HjLV9ZCrK9//VuTy3RGYpTYgICUQ+sA5iUS
-        Xl9hoVZx2W5pjc4xm6qLAS8Rscy8h3eKxXZT6XQWnRh/3SDqRVB6tVV3ZehfU9JwW0HqzS
-        a0hyqzJD5UxAv+tLZBfxpGhXyAtCv1Y=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-535-rtj_zdbEOvWGDSlmFCLfwg-1; Fri, 26 Feb 2021 12:22:08 -0500
-X-MC-Unique: rtj_zdbEOvWGDSlmFCLfwg-1
-Received: by mail-qk1-f198.google.com with SMTP id x21so7932506qkm.19
-        for <linux-fpga@vger.kernel.org>; Fri, 26 Feb 2021 09:22:08 -0800 (PST)
+        id S230008AbhBZR5f (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 26 Feb 2021 12:57:35 -0500
+Received: from mail-pl1-f179.google.com ([209.85.214.179]:33199 "EHLO
+        mail-pl1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229586AbhBZR5e (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 26 Feb 2021 12:57:34 -0500
+Received: by mail-pl1-f179.google.com with SMTP id b8so2879694plh.0;
+        Fri, 26 Feb 2021 09:57:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=SN4GG6KsyQ+8q4UOtFLjmgBTGaLpcxVg7xDWtzfRKVw=;
-        b=oehdVkRkXg7QkNQT14l2nBz6xvtcHs/CYsDyI4cn7SwUpYhdgc9XN3vAFysfl51oyK
-         +aXOzvg20LHf9oSqhouc7vBi0Ekrihr625txixtnCpe/B3IBYAIRUG6qiTnoFmuIqHfp
-         kuh5duYgd5MyXXvT2FPPyUlRF79njmvoDU0DBEQOFuxlAcBd0tHiqyqQuomINyJ0doFe
-         l4kfWHTMkWSXd1Mlp/xta6n5et5xsZcl7rzTUsstA54f8rnR/QjoFGRtgXx+3u/UND0q
-         7C8a14HAI8CkndCUnCioLusTvsZZ+iYdk7OYULi8/BgzMcXgr/do+W1dG8S+6QNPR/FA
-         ZA9g==
-X-Gm-Message-State: AOAM532IS94d8kWzR+KzpXjzeufWZ9czpzjSByQDoigQkdplVRt4G8w9
-        6/RZ19iXNUpkXpk4dE3w1i3h5lA4QjyYNV0k0CCOOCOJKH/7LGHBExadA5JXZeNT3TrCVuO2EU0
-        zeZV+z6ZeNdKdWxUSVW6DBw==
-X-Received: by 2002:ad4:5ba3:: with SMTP id 3mr3563059qvq.43.1614360127440;
-        Fri, 26 Feb 2021 09:22:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwVv86DVvEeTwSYGuLoUuPeuGEo3phv7mFQ25yemXZ+RK7JUcOhPBezJdELkUQO8VPchOh9yA==
-X-Received: by 2002:ad4:5ba3:: with SMTP id 3mr3563028qvq.43.1614360126935;
-        Fri, 26 Feb 2021 09:22:06 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 66sm164108qkk.18.2021.02.26.09.22.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Feb 2021 09:22:06 -0800 (PST)
-Subject: Re: [PATCH V3 XRT Alveo 08/18] fpga: xrt: main platform driver for
- management function device
-To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
-Cc:     Lizhi Hou <lizhih@xilinx.com>, linux-fpga@vger.kernel.org,
-        maxz@xilinx.com, sonal.santan@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
-        robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=bgPYSxbnRboRk5YHmaFEvghKVAMuL118KqdRiljlQTE=;
+        b=WBo78sOoie9wUTBjJJn7AJ6/inIvQOTWuHpmy/DUG42vskBTJ+R6hnXo7bSMFtzSua
+         B8FTWqhd0nKGpF2zq0Jz+Jto1qOLVayzelsEycpEsrAB+cGI56qb+GXvAFd2OlaXPHsS
+         Z3Hf1HV9r8aGDPFSgl7DgPvyiOeg8qSkxlrb6nCma+OqGzp0LQG73zHit2MwcJx+CSGo
+         VEch0TRL670PuXgpMvxSYEMptYUG9Qx96fgfbZ01MhIXjjsKxGTK/xKHJ3izfk0I7bgM
+         UXSeNSRlsyFx0eWQ/wdaCXNpR63q5sHO8icnvB6HiaAP/FcOsyIbdtD9XRz44CLRaXQ4
+         ab+A==
+X-Gm-Message-State: AOAM5322twAj5RWyJcGMldCxO1xDo04N5ZGdQLFWzN+obcoU0YT4zjZX
+        r9uZcGJyvMcY+DVnSWk5FDQ=
+X-Google-Smtp-Source: ABdhPJwzcEtYkKHrj77m2Z/GdAJNYNZODfrP6KiZGTelMsUdA9AnqzyGXVh3zKbdaLGf/rzUQES24w==
+X-Received: by 2002:a17:90b:364e:: with SMTP id nh14mr4589800pjb.115.1614362212715;
+        Fri, 26 Feb 2021 09:56:52 -0800 (PST)
+Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
+        by smtp.gmail.com with ESMTPSA id z13sm11013012pfk.178.2021.02.26.09.56.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Feb 2021 09:56:51 -0800 (PST)
+Date:   Fri, 26 Feb 2021 09:56:49 -0800
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org,
+        "mdf@kernel.org" <mdf@kernel.org>, Lizhi Hou <lizhih@xilinx.com>,
+        linux-fpga@vger.kernel.org, maxz@xilinx.com,
+        sonal.santan@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, devicetree@vger.kernel.org, robh@kernel.org,
+        Max Zhen <max.zhen@xilinx.com>
+Subject: Re: [PATCH V3 XRT Alveo 07/18] fpga: xrt: management physical
+ function driver (root)
+Message-ID: <YDk2YT0otybb1+Sg@archbook>
 References: <20210218064019.29189-1-lizhih@xilinx.com>
- <20210218064019.29189-9-lizhih@xilinx.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <73132e5e-aba7-539a-d2fe-170c93387a03@redhat.com>
-Date:   Fri, 26 Feb 2021 09:22:03 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+ <20210218064019.29189-8-lizhih@xilinx.com>
+ <d0057bee-2cf1-b560-c160-636d8e76cbda@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20210218064019.29189-9-lizhih@xilinx.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d0057bee-2cf1-b560-c160-636d8e76cbda@redhat.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Fri, Feb 26, 2021 at 07:01:05AM -0800, Tom Rix wrote:
+> A question i do not know the answer to.
+> 
+> Seems like 'golden' is linked to a manufacturing (diagnostics?) image.
 
-On 2/17/21 10:40 PM, Lizhi Hou wrote:
-> platform driver that handles IOCTLs, such as hot reset and xclbin download.
->
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
-> ---
->  drivers/fpga/xrt/include/xmgmt-main.h |  37 ++
->  drivers/fpga/xrt/mgmt/main-impl.h     |  37 ++
->  drivers/fpga/xrt/mgmt/main.c          | 693 ++++++++++++++++++++++++++
->  include/uapi/linux/xrt/xmgmt-ioctl.h  |  46 ++
->  4 files changed, 813 insertions(+)
->  create mode 100644 drivers/fpga/xrt/include/xmgmt-main.h
->  create mode 100644 drivers/fpga/xrt/mgmt/main-impl.h
->  create mode 100644 drivers/fpga/xrt/mgmt/main.c
->  create mode 100644 include/uapi/linux/xrt/xmgmt-ioctl.h
->
-> diff --git a/drivers/fpga/xrt/include/xmgmt-main.h b/drivers/fpga/xrt/include/xmgmt-main.h
-> new file mode 100644
-> index 000000000000..1216d1881f8e
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xmgmt-main.h
-> @@ -0,0 +1,37 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Header file for Xilinx Runtime (XRT) driver
-> + *
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Cheng Zhen <maxz@xilinx.com>
-> + */
-> +
-> +#ifndef _XMGMT_MAIN_H_
-> +#define _XMGMT_MAIN_H_
-> +
-> +#include <linux/xrt/xclbin.h>
-> +#include "xleaf.h"
-> +
-> +enum xrt_mgmt_main_ioctl_cmd {
-> +	/* section needs to be vfree'd by caller */
-> +	XRT_MGMT_MAIN_GET_AXLF_SECTION = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-the must free instructions should go with the pointer needing freeing
-> +	/* vbnv needs to be kfree'd by caller */
-> +	XRT_MGMT_MAIN_GET_VBNV,
-> +};
-> +
-> +enum provider_kind {
-> +	XMGMT_BLP,
-> +	XMGMT_PLP,
-> +	XMGMT_ULP,
-what do these three mean ?
-> +};
-> +
-> +struct xrt_mgmt_main_ioctl_get_axlf_section {
-> +	enum provider_kind xmmigas_axlf_kind;
-> +	enum axlf_section_kind xmmigas_section_kind;
-> +	void *xmmigas_section;
-> +	u64 xmmigas_section_size;
-> +};
-> +
-> +#endif	/* _XMGMT_MAIN_H_ */
-> diff --git a/drivers/fpga/xrt/mgmt/main-impl.h b/drivers/fpga/xrt/mgmt/main-impl.h
-From prefix used in the functions, a better name for this file would be xmgnt.h
-> new file mode 100644
-> index 000000000000..dd1b3e3773cc
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/mgmt/main-impl.h
-> @@ -0,0 +1,37 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Header file for Xilinx Alveo Management Function Driver
-> + *
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
-> + *	Cheng Zhen <maxz@xilinx.com>
-> + */
-> +
-> +#ifndef _XMGMT_MAIN_IMPL_H_
-> +#define _XMGMT_MAIN_IMPL_H_
-> +
-> +#include <linux/platform_device.h>
-> +#include "xmgmt-main.h"
-> +
-> +struct fpga_manager;
-> +int xmgmt_process_xclbin(struct platform_device *pdev,
-> +			 struct fpga_manager *fmgr,
-> +			 const struct axlf *xclbin,
-> +			 enum provider_kind kind);
-> +void xmgmt_region_cleanup_all(struct platform_device *pdev);
-> +
-> +int bitstream_axlf_mailbox(struct platform_device *pdev, const void *xclbin);
-the prefix should be consistent
-> +int xmgmt_hot_reset(struct platform_device *pdev);
-> +
-> +/* Getting dtb for specified group. Caller should vfree returned dtb .*/
-> +char *xmgmt_get_dtb(struct platform_device *pdev, enum provider_kind kind);
-> +char *xmgmt_get_vbnv(struct platform_device *pdev);
-> +int xmgmt_get_provider_uuid(struct platform_device *pdev,
-> +			    enum provider_kind kind, uuid_t *uuid);
-> +
-> +int xmgmt_main_register_leaf(void);
-> +void xmgmt_main_unregister_leaf(void);
-is _main_ needed ?
-> +
-> +#endif	/* _XMGMT_MAIN_IMPL_H_ */
-> diff --git a/drivers/fpga/xrt/mgmt/main.c b/drivers/fpga/xrt/mgmt/main.c
-> new file mode 100644
-> index 000000000000..66ffb4e7029d
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/mgmt/main.c
-> @@ -0,0 +1,693 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Xilinx Alveo FPGA MGMT PF entry point driver
-> + *
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Sonal Santan <sonals@xilinx.com>
-> + */
-> +
-> +#include <linux/firmware.h>
-> +#include <linux/uaccess.h>
-> +#include "xclbin-helper.h"
-> +#include "metadata.h"
-> +#include "xleaf.h"
-> +#include <linux/xrt/xmgmt-ioctl.h>
-> +#include "xleaf/devctl.h"
-> +#include "xmgmt-main.h"
-> +#include "fmgr.h"
-> +#include "xleaf/icap.h"
-> +#include "xleaf/axigate.h"
-> +#include "main-impl.h"
-> +
-> +#define XMGMT_MAIN "xmgmt_main"
-> +
-> +struct xmgmt_main {
-> +	struct platform_device *pdev;
-> +	struct axlf *firmware_blp;
-> +	struct axlf *firmware_plp;
-> +	struct axlf *firmware_ulp;
-> +	bool flash_ready;
-> +	bool devctl_ready;
-could combine in a bitfield
-> +	struct fpga_manager *fmgr;
-> +	struct mutex busy_mutex; /* busy lock */
-busy_mutex ? maybe just call this 'lock'
-> +
-> +	uuid_t *blp_intf_uuids;
-> +	u32 blp_intf_uuid_num;
-expand intf to interface
-> +};
-> +
-> +/* Caller should be responsible for freeing the returned string. */
-should be -> is
-> +char *xmgmt_get_vbnv(struct platform_device *pdev)
-what is 'vbnv' ?
-> +{
-> +	struct xmgmt_main *xmm = platform_get_drvdata(pdev);
-> +	const char *vbnv;
-> +	char *ret;
-> +	int i;
-> +
-> +	if (xmm->firmware_plp)
-> +		vbnv = xmm->firmware_plp->m_header.m_platformVBNV;
-> +	else if (xmm->firmware_blp)
-> +		vbnv = xmm->firmware_blp->m_header.m_platformVBNV;
-> +	else
-> +		return NULL;
-check usage in at least VBNV_show, this return is not handled
-> +
-> +	ret = kstrdup(vbnv, GFP_KERNEL);
-> +	if (!ret)
-> +		return NULL;
-> +
-> +	for (i = 0; i < strlen(ret); i++) {
-> +		if (ret[i] == ':' || ret[i] == '.')
-> +			ret[i] = '_';
-> +	}
-> +	return ret;
-> +}
-> +
-> +static int get_dev_uuid(struct platform_device *pdev, char *uuidstr, size_t len)
-> +{
-> +	char uuid[16];
-> +	struct platform_device *devctl_leaf;
-> +	struct xrt_devctl_ioctl_rw devctl_arg = { 0 };
-> +	int err, i, count;
-> +
-> +	devctl_leaf = xleaf_get_leaf_by_epname(pdev, XRT_MD_NODE_BLP_ROM);
-> +	if (!devctl_leaf) {
-> +		xrt_err(pdev, "can not get %s", XRT_MD_NODE_BLP_ROM);
-> +		return -EINVAL;
-> +	}
-> +
-> +	devctl_arg.xgir_id = XRT_DEVCTL_ROM_UUID;
-> +	devctl_arg.xgir_buf = uuid;
-> +	devctl_arg.xgir_len = sizeof(uuid);
-> +	devctl_arg.xgir_offset = 0;
-> +	err = xleaf_ioctl(devctl_leaf, XRT_DEVCTL_READ, &devctl_arg);
-> +	xleaf_put_leaf(pdev, devctl_leaf);
-> +	if (err) {
-> +		xrt_err(pdev, "can not get uuid: %d", err);
-> +		return err;
-> +	}
-> +
+From my brief history with Xilinx Ultrascale+ PCI cards I recall the golden
+image being a sort of known good recovery image.
 
-This some strange word swapping, add a comment to explain why it is needed.
+If we can't tell it should probably be explained better :)
+> 
+> If the public will never see it, should handling it here be done ?
 
-Consider if this needs to change on a big endian host.
+Yes. We do want people to run their entire stack using mainline linux,
+not just a part of it, if code is needed to get from recovery image to
+full image or similar, then we should support that.
 
-> +	for (count = 0, i = sizeof(uuid) - sizeof(u32);
-> +		i >= 0 && len > count; i -= sizeof(u32)) {
-> +		count += snprintf(uuidstr + count, len - count, "%08x", *(u32 *)&uuid[i]);
-> +	}
-> +	return 0;
-> +}
-> +
-> +int xmgmt_hot_reset(struct platform_device *pdev)
-> +{
-> +	int ret = xleaf_broadcast_event(pdev, XRT_EVENT_PRE_HOT_RESET, false);
-> +
-> +	if (ret) {
-> +		xrt_err(pdev, "offline failed, hot reset is canceled");
-> +		return ret;
-> +	}
-> +
-> +	xleaf_hot_reset(pdev);
-> +	xleaf_broadcast_event(pdev, XRT_EVENT_POST_HOT_RESET, false);
-> +	return 0;
-> +}
-> +
-> +static ssize_t reset_store(struct device *dev, struct device_attribute *da,
-> +			   const char *buf, size_t count)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +
-> +	xmgmt_hot_reset(pdev);
-> +	return count;
-> +}
-> +static DEVICE_ATTR_WO(reset);
-> +
-> +static ssize_t VBNV_show(struct device *dev, struct device_attribute *da, char *buf)
-> +{
-> +	ssize_t ret;
-> +	char *vbnv;
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +
-> +	vbnv = xmgmt_get_vbnv(pdev);
-> +	ret = sprintf(buf, "%s\n", vbnv);
-null return not handled
-> +	kfree(vbnv);
-> +	return ret;
-> +}
-> +static DEVICE_ATTR_RO(VBNV);
-> +
-> +static ssize_t logic_uuids_show(struct device *dev, struct device_attribute *da, char *buf)
-> +{
-what is a logic uuid ?
-> +	ssize_t ret;
-> +	char uuid[80];
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +
-> +	/* Getting UUID pointed to by VSEC, should be the same as logic UUID of BLP. */
-> +	ret = get_dev_uuid(pdev, uuid, sizeof(uuid));
-> +	if (ret)
-> +		return ret;
-> +	ret = sprintf(buf, "%s\n", uuid);
-> +	return ret;
-> +}
-> +static DEVICE_ATTR_RO(logic_uuids);
-> +
-> +static ssize_t interface_uuids_show(struct device *dev, struct device_attribute *da, char *buf)
-> +{
-> +	ssize_t ret = 0;
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct xmgmt_main *xmm = platform_get_drvdata(pdev);
-> +	u32 i;
-> +
-> +	for (i = 0; i < xmm->blp_intf_uuid_num; i++) {
-> +		char uuidstr[80];
-80 is used several places, consider making this a #define
-> +
-> +		xrt_md_trans_uuid2str(&xmm->blp_intf_uuids[i], uuidstr);
-> +		ret += sprintf(buf + ret, "%s\n", uuidstr);
-> +	}
-> +	return ret;
-> +}
-> +static DEVICE_ATTR_RO(interface_uuids);
-> +
-> +static struct attribute *xmgmt_main_attrs[] = {
-> +	&dev_attr_reset.attr,
-> +	&dev_attr_VBNV.attr,
-> +	&dev_attr_logic_uuids.attr,
-> +	&dev_attr_interface_uuids.attr,
-> +	NULL,
-> +};
-> +
-> +/*
-> + * sysfs hook to load xclbin primarily used for driver debug
-> + */
-> +static ssize_t ulp_image_write(struct file *filp, struct kobject *kobj,
-> +			       struct bin_attribute *attr, char *buffer, loff_t off, size_t count)
-> +{
-
-off is signed, and this function assumes it is unsigned.
-
-this will segfault the memcpy
-
-> +	struct xmgmt_main *xmm = dev_get_drvdata(container_of(kobj, struct device, kobj));
-> +	struct axlf *xclbin;
-> +	ulong len;
-> +
-> +	if (off == 0) {
-> +		if (count < sizeof(*xclbin)) {
-> +			xrt_err(xmm->pdev, "count is too small %zu", count);
-> +			return -EINVAL;
-> +		}
-> +
-> +		if (xmm->firmware_ulp) {
-could check if the current buffer size is less than needed to avoid another alloc
-> +			vfree(xmm->firmware_ulp);
-> +			xmm->firmware_ulp = NULL;
-> +		}
-> +		xclbin = (struct axlf *)buffer;
-> +		xmm->firmware_ulp = vmalloc(xclbin->m_header.m_length);
-> +		if (!xmm->firmware_ulp)
-> +			return -ENOMEM;
-> +	} else {
-> +		xclbin = xmm->firmware_ulp;
-> +	}
-> +
-> +	len = xclbin->m_header.m_length;
-> +	if (off + count >= len && off < len) {
-off + count > is ok ?
-> +		memcpy(xmm->firmware_ulp + off, buffer, len - off);
-> +		xmgmt_process_xclbin(xmm->pdev, xmm->fmgr, xmm->firmware_ulp, XMGMT_ULP);
-> +	} else if (off + count < len) {
-> +		memcpy(xmm->firmware_ulp + off, buffer, count);
-> +	}
-> +
-> +	return count;
-> +}
-> +
-> +static struct bin_attribute ulp_image_attr = {
-> +	.attr = {
-> +		.name = "ulp_image",
-> +		.mode = 0200
-> +	},
-> +	.write = ulp_image_write,
-> +	.size = 0
-> +};
-> +
-> +static struct bin_attribute *xmgmt_main_bin_attrs[] = {
-> +	&ulp_image_attr,
-> +	NULL,
-> +};
-> +
-> +static const struct attribute_group xmgmt_main_attrgroup = {
-> +	.attrs = xmgmt_main_attrs,
-> +	.bin_attrs = xmgmt_main_bin_attrs,
-> +};
-> +
-> +static int load_firmware_from_flash(struct platform_device *pdev, struct axlf **fw_buf, size_t *len)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-
-this function is not needed, it is used only in a direct call from xmgmt_load_firmware.
-
-looks like it is part of an error hander which will return this NOSUPPORT error instead of the real error from load_firmware_from disk
-
-> +
-> +static int load_firmware_from_disk(struct platform_device *pdev, struct axlf **fw_buf, size_t *len)
-> +{
-> +	char uuid[80];
-> +	int err = 0;
-> +	char fw_name[256];
-> +	const struct firmware *fw;
-> +
-> +	err = get_dev_uuid(pdev, uuid, sizeof(uuid));
-> +	if (err)
-> +		return err;
-> +
-> +	(void)snprintf(fw_name, sizeof(fw_name), "xilinx/%s/partition.xsabin", uuid);
-> +	xrt_info(pdev, "try loading fw: %s", fw_name);
-> +
-> +	err = request_firmware(&fw, fw_name, DEV(pdev));
-> +	if (err)
-> +		return err;
-> +
-> +	*fw_buf = vmalloc(fw->size);
-> +	*len = fw->size;
-
-malloc fails but len is set ?
-
-better to set len to 0 on failure
-
-> +	if (*fw_buf)
-> +		memcpy(*fw_buf, fw->data, fw->size);
-> +	else
-> +		err = -ENOMEM;
-> +
-> +	release_firmware(fw);
-> +	return 0;
-> +}
-> +
-> +static const struct axlf *xmgmt_get_axlf_firmware(struct xmgmt_main *xmm, enum provider_kind kind)
-> +{
-> +	switch (kind) {
-> +	case XMGMT_BLP:
-> +		return xmm->firmware_blp;
-> +	case XMGMT_PLP:
-> +		return xmm->firmware_plp;
-> +	case XMGMT_ULP:
-> +		return xmm->firmware_ulp;
-> +	default:
-> +		xrt_err(xmm->pdev, "unknown axlf kind: %d", kind);
-> +		return NULL;
-> +	}
-> +}
-> +
-needs a comment that user is responsible for freeing return
-> +char *xmgmt_get_dtb(struct platform_device *pdev, enum provider_kind kind)
-> +{
-> +	struct xmgmt_main *xmm = platform_get_drvdata(pdev);
-> +	char *dtb = NULL;
-> +	const struct axlf *provider = xmgmt_get_axlf_firmware(xmm, kind);
-> +	int rc;
-> +
-> +	if (!provider)
-> +		return dtb;
-> +
-> +	rc = xrt_xclbin_get_metadata(DEV(pdev), provider, &dtb);
-> +	if (rc)
-> +		xrt_err(pdev, "failed to find dtb: %d", rc);
-> +	return dtb;
-> +}
-> +
-similar caller responsible for freeing
-> +static const char *get_uuid_from_firmware(struct platform_device *pdev, const struct axlf *xclbin)
-> +{
-> +	const void *uuid = NULL;
-> +	const void *uuiddup = NULL;
-> +	void *dtb = NULL;
-> +	int rc;
-> +
-> +	rc = xrt_xclbin_get_section(xclbin, PARTITION_METADATA, &dtb, NULL);
-> +	if (rc)
-> +		return NULL;
-> +
-> +	rc = xrt_md_get_prop(DEV(pdev), dtb, NULL, NULL, XRT_MD_PROP_LOGIC_UUID, &uuid, NULL);
-> +	if (!rc)
-> +		uuiddup = kstrdup(uuid, GFP_KERNEL);
-> +	vfree(dtb);
-> +	return uuiddup;
-> +}
-> +
-> +static bool is_valid_firmware(struct platform_device *pdev,
-> +			      const struct axlf *xclbin, size_t fw_len)
-> +{
-> +	const char *fw_buf = (const char *)xclbin;
-> +	size_t axlflen = xclbin->m_header.m_length;
-> +	const char *fw_uuid;
-> +	char dev_uuid[80];
-> +	int err;
-> +
-> +	err = get_dev_uuid(pdev, dev_uuid, sizeof(dev_uuid));
-> +	if (err)
-> +		return false;
-> +
-> +	if (memcmp(fw_buf, ICAP_XCLBIN_V2, sizeof(ICAP_XCLBIN_V2)) != 0) {
-> +		xrt_err(pdev, "unknown fw format");
-> +		return false;
-> +	}
-> +
-> +	if (axlflen > fw_len) {
-> +		xrt_err(pdev, "truncated fw, length: %zu, expect: %zu", fw_len, axlflen);
-> +		return false;
-> +	}
-> +
-> +	fw_uuid = get_uuid_from_firmware(pdev, xclbin);
-> +	if (!fw_uuid || strcmp(fw_uuid, dev_uuid) != 0) {
-> +		xrt_err(pdev, "bad fw UUID: %s, expect: %s",
-> +			fw_uuid ? fw_uuid : "<none>", dev_uuid);
-> +		kfree(fw_uuid);
-> +		return false;
-> +	}
-> +
-> +	kfree(fw_uuid);
-> +	return true;
-> +}
-> +
-> +int xmgmt_get_provider_uuid(struct platform_device *pdev, enum provider_kind kind, uuid_t *uuid)
-> +{
-> +	struct xmgmt_main *xmm = platform_get_drvdata(pdev);
-> +	const struct axlf *fwbuf;
-> +	const char *fw_uuid;
-> +	int rc = -ENOENT;
-> +
-> +	mutex_lock(&xmm->busy_mutex);
-> +
-> +	fwbuf = xmgmt_get_axlf_firmware(xmm, kind);
-> +	if (!fwbuf)
-> +		goto done;
-> +
-> +	fw_uuid = get_uuid_from_firmware(pdev, fwbuf);
-> +	if (!fw_uuid)
-> +		goto done;
-> +
-> +	rc = xrt_md_trans_str2uuid(DEV(pdev), fw_uuid, uuid);
-should this be &fw_uuid ?
-> +	kfree(fw_uuid);
-> +
-> +done:
-> +	mutex_unlock(&xmm->busy_mutex);
-> +	return rc;
-> +}
-> +
-> +static int xmgmt_create_blp(struct xmgmt_main *xmm)
-> +{
-> +	struct platform_device *pdev = xmm->pdev;
-> +	int rc = 0;
-> +	char *dtb = NULL;
-> +	const struct axlf *provider = xmgmt_get_axlf_firmware(xmm, XMGMT_BLP);
-> +
-> +	dtb = xmgmt_get_dtb(pdev, XMGMT_BLP);
-> +	if (dtb) {
-not doing any work is ok ?
-> +		rc = xmgmt_process_xclbin(xmm->pdev, xmm->fmgr, provider, XMGMT_BLP);
-> +		if (rc) {
-> +			xrt_err(pdev, "failed to process BLP: %d", rc);
-> +			goto failed;
-> +		}
-> +
-> +		rc = xleaf_create_group(pdev, dtb);
-> +		if (rc < 0)
-why not (rc) ?
-> +			xrt_err(pdev, "failed to create BLP group: %d", rc);
-> +		else
-> +			rc = 0;
-> +
-> +		WARN_ON(xmm->blp_intf_uuids);
-warn but not free ?
-> +		xrt_md_get_intf_uuids(&pdev->dev, dtb, &xmm->blp_intf_uuid_num, NULL);
-> +		if (xmm->blp_intf_uuid_num > 0) {
-> +			xmm->blp_intf_uuids = vzalloc(sizeof(uuid_t) * xmm->blp_intf_uuid_num);
-unchecked alloc
-> +			xrt_md_get_intf_uuids(&pdev->dev, dtb, &xmm->blp_intf_uuid_num,
-> +					      xmm->blp_intf_uuids);
-> +		}
-> +	}
-> +
-> +failed:
-> +	vfree(dtb);
-> +	return rc;
-> +}
-> +
-> +static int xmgmt_load_firmware(struct xmgmt_main *xmm)
-> +{
-> +	struct platform_device *pdev = xmm->pdev;
-> +	int rc;
-> +	size_t fwlen;
-> +
-> +	rc = load_firmware_from_disk(pdev, &xmm->firmware_blp, &fwlen);
-> +	if (rc != 0)
-> +		rc = load_firmware_from_flash(pdev, &xmm->firmware_blp, &fwlen);
-this is the function that should be removed
-> +	if (rc == 0 && is_valid_firmware(pdev, xmm->firmware_blp, fwlen))
-> +		(void)xmgmt_create_blp(xmm);
-> +	else
-> +		xrt_err(pdev, "failed to find firmware, giving up: %d", rc);
-> +	return rc;
-> +}
-> +
-> +static void xmgmt_main_event_cb(struct platform_device *pdev, void *arg)
-> +{
-> +	struct xmgmt_main *xmm = platform_get_drvdata(pdev);
-> +	struct xrt_event *evt = (struct xrt_event *)arg;
-> +	enum xrt_events e = evt->xe_evt;
-> +	enum xrt_subdev_id id = evt->xe_subdev.xevt_subdev_id;
-> +	struct platform_device *leaf;
-> +
-> +	switch (e) {
-> +	case XRT_EVENT_POST_CREATION: {
-> +		if (id == XRT_SUBDEV_DEVCTL && !xmm->devctl_ready) {
-> +			leaf = xleaf_get_leaf_by_epname(pdev, XRT_MD_NODE_BLP_ROM);
-> +			if (leaf) {
-> +				xmm->devctl_ready = true;
-> +				xleaf_put_leaf(pdev, leaf);
-> +			}
-> +		} else if (id == XRT_SUBDEV_QSPI && !xmm->flash_ready) {
-> +			xmm->flash_ready = true;
-> +		} else {
-> +			break;
-> +		}
-> +
-> +		if (xmm->devctl_ready)
-> +			(void)xmgmt_load_firmware(xmm);
-> +		break;
-> +	}
-> +	case XRT_EVENT_PRE_REMOVAL:
-> +		break;
-> +	default:
-> +		xrt_dbg(pdev, "ignored event %d", e);
-> +		break;
-> +	}
-> +}
-> +
-> +static int xmgmt_main_probe(struct platform_device *pdev)
-> +{
-> +	struct xmgmt_main *xmm;
-> +
-> +	xrt_info(pdev, "probing...");
-> +
-> +	xmm = devm_kzalloc(DEV(pdev), sizeof(*xmm), GFP_KERNEL);
-> +	if (!xmm)
-> +		return -ENOMEM;
-> +
-> +	xmm->pdev = pdev;
-> +	xmm->fmgr = xmgmt_fmgr_probe(pdev);
-> +	if (IS_ERR(xmm->fmgr))
-> +		return PTR_ERR(xmm->fmgr);
-> +
-> +	platform_set_drvdata(pdev, xmm);
-> +	mutex_init(&xmm->busy_mutex);
-> +
-> +	/* Ready to handle req thru sysfs nodes. */
-> +	if (sysfs_create_group(&DEV(pdev)->kobj, &xmgmt_main_attrgroup))
-> +		xrt_err(pdev, "failed to create sysfs group");
-> +	return 0;
-> +}
-> +
-> +static int xmgmt_main_remove(struct platform_device *pdev)
-> +{
-> +	struct xmgmt_main *xmm = platform_get_drvdata(pdev);
-> +
-> +	/* By now, group driver should prevent any inter-leaf call. */
-> +
-> +	xrt_info(pdev, "leaving...");
-> +
-> +	vfree(xmm->blp_intf_uuids);
-> +	vfree(xmm->firmware_blp);
-> +	vfree(xmm->firmware_plp);
-> +	vfree(xmm->firmware_ulp);
-> +	xmgmt_region_cleanup_all(pdev);
-> +	(void)xmgmt_fmgr_remove(xmm->fmgr);
-> +	(void)sysfs_remove_group(&DEV(pdev)->kobj, &xmgmt_main_attrgroup);
-> +	return 0;
-> +}
-> +
-> +static int
-> +xmgmt_main_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
-> +{
-> +	struct xmgmt_main *xmm = platform_get_drvdata(pdev);
-> +	int ret = 0;
-> +
-> +	switch (cmd) {
-> +	case XRT_XLEAF_EVENT:
-> +		xmgmt_main_event_cb(pdev, arg);
-> +		break;
-> +	case XRT_MGMT_MAIN_GET_AXLF_SECTION: {
-> +		struct xrt_mgmt_main_ioctl_get_axlf_section *get =
-> +			(struct xrt_mgmt_main_ioctl_get_axlf_section *)arg;
-> +		const struct axlf *firmware = xmgmt_get_axlf_firmware(xmm, get->xmmigas_axlf_kind);
-> +
-> +		if (!firmware) {
-> +			ret = -ENOENT;
-> +		} else {
-> +			ret = xrt_xclbin_get_section(firmware, get->xmmigas_section_kind,
-> +						     &get->xmmigas_section,
-> +						     &get->xmmigas_section_size);
-> +		}
-> +		break;
-> +	}
-> +	case XRT_MGMT_MAIN_GET_VBNV: {
-> +		char **vbnv_p = (char **)arg;
-> +
-> +		*vbnv_p = xmgmt_get_vbnv(pdev);
-this can fail
-> +		break;
-> +	}
-> +	default:
-> +		xrt_err(pdev, "unknown cmd: %d", cmd);
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-> +	return ret;
-> +}
-> +
-> +static int xmgmt_main_open(struct inode *inode, struct file *file)
-> +{
-> +	struct platform_device *pdev = xleaf_devnode_open(inode);
-> +
-> +	/* Device may have gone already when we get here. */
-> +	if (!pdev)
-> +		return -ENODEV;
-> +
-> +	xrt_info(pdev, "opened");
-> +	file->private_data = platform_get_drvdata(pdev);
-> +	return 0;
-> +}
-> +
-> +static int xmgmt_main_close(struct inode *inode, struct file *file)
-> +{
-> +	struct xmgmt_main *xmm = file->private_data;
-> +
-> +	xleaf_devnode_close(inode);
-> +
-> +	xrt_info(xmm->pdev, "closed");
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Called for xclbin download xclbin load ioctl.
-> + */
-> +static int xmgmt_bitstream_axlf_fpga_mgr(struct xmgmt_main *xmm, void *axlf, size_t size)
-> +{
-> +	int ret;
-> +
-> +	WARN_ON(!mutex_is_locked(&xmm->busy_mutex));
-> +
-> +	/*
-> +	 * Should any error happens during download, we can't trust
-> +	 * the cached xclbin any more.
-> +	 */
-> +	vfree(xmm->firmware_ulp);
-> +	xmm->firmware_ulp = NULL;
-> +
-> +	ret = xmgmt_process_xclbin(xmm->pdev, xmm->fmgr, axlf, XMGMT_ULP);
-> +	if (ret == 0)
-> +		xmm->firmware_ulp = axlf;
-> +
-> +	return ret;
-> +}
-> +
-> +static int bitstream_axlf_ioctl(struct xmgmt_main *xmm, const void __user *arg)
-> +{
-> +	void *copy_buffer = NULL;
-> +	size_t copy_buffer_size = 0;
-> +	struct xmgmt_ioc_bitstream_axlf ioc_obj = { 0 };
-> +	struct axlf xclbin_obj = { {0} };
-> +	int ret = 0;
-> +
-> +	if (copy_from_user((void *)&ioc_obj, arg, sizeof(ioc_obj)))
-> +		return -EFAULT;
-> +	if (copy_from_user((void *)&xclbin_obj, ioc_obj.xclbin, sizeof(xclbin_obj)))
-> +		return -EFAULT;
-> +	if (memcmp(xclbin_obj.m_magic, ICAP_XCLBIN_V2, sizeof(ICAP_XCLBIN_V2)))
-> +		return -EINVAL;
-> +
-> +	copy_buffer_size = xclbin_obj.m_header.m_length;
-> +	if (copy_buffer_size > MAX_XCLBIN_SIZE)
-> +		return -EINVAL;
-is there a min size ?
-> +	copy_buffer = vmalloc(copy_buffer_size);
-> +	if (!copy_buffer)
-> +		return -ENOMEM;
-> +
-> +	if (copy_from_user(copy_buffer, ioc_obj.xclbin, copy_buffer_size)) {
-> +		vfree(copy_buffer);
-> +		return -EFAULT;
-> +	}
-> +
-> +	ret = xmgmt_bitstream_axlf_fpga_mgr(xmm, copy_buffer, copy_buffer_size);
-> +	if (ret)
-> +		vfree(copy_buffer);
-> +
-> +	return ret;
-> +}
-> +
-> +static long xmgmt_main_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-> +{
-> +	long result = 0;
-> +	struct xmgmt_main *xmm = filp->private_data;
-> +
-> +	if (_IOC_TYPE(cmd) != XMGMT_IOC_MAGIC)
-> +		return -ENOTTY;
-> +
-> +	mutex_lock(&xmm->busy_mutex);
-> +
-> +	xrt_info(xmm->pdev, "ioctl cmd %d, arg %ld", cmd, arg);
-> +	switch (cmd) {
-> +	case XMGMT_IOCICAPDOWNLOAD_AXLF:
-> +		result = bitstream_axlf_ioctl(xmm, (const void __user *)arg);
-> +		break;
-> +	default:
-> +		result = -ENOTTY;
-> +		break;
-> +	}
-> +
-> +	mutex_unlock(&xmm->busy_mutex);
-> +	return result;
-> +}
-> +
-> +static struct xrt_subdev_endpoints xrt_mgmt_main_endpoints[] = {
-> +	{
-> +		.xse_names = (struct xrt_subdev_ep_names []){
-> +			{ .ep_name = XRT_MD_NODE_MGMT_MAIN },
-> +			{ NULL },
-> +		},
-> +		.xse_min_ep = 1,
-> +	},
-> +	{ 0 },
-> +};
-> +
-> +static struct xrt_subdev_drvdata xmgmt_main_data = {
-> +	.xsd_dev_ops = {
-> +		.xsd_ioctl = xmgmt_main_leaf_ioctl,
-> +	},
-> +	.xsd_file_ops = {
-> +		.xsf_ops = {
-> +			.owner = THIS_MODULE,
-> +			.open = xmgmt_main_open,
-> +			.release = xmgmt_main_close,
-> +			.unlocked_ioctl = xmgmt_main_ioctl,
-> +		},
-> +		.xsf_dev_name = "xmgmt",
-> +	},
-> +};
-> +
-> +static const struct platform_device_id xmgmt_main_id_table[] = {
-> +	{ XMGMT_MAIN, (kernel_ulong_t)&xmgmt_main_data },
-> +	{ },
-> +};
-> +
-> +static struct platform_driver xmgmt_main_driver = {
-> +	.driver	= {
-> +		.name    = XMGMT_MAIN,
-> +	},
-> +	.probe   = xmgmt_main_probe,
-> +	.remove  = xmgmt_main_remove,
-> +	.id_table = xmgmt_main_id_table,
-> +};
-> +
-> +int xmgmt_main_register_leaf(void)
-> +{
-> +	return xleaf_register_driver(XRT_SUBDEV_MGMT_MAIN,
-> +				     &xmgmt_main_driver, xrt_mgmt_main_endpoints);
-> +}
-> +
-> +void xmgmt_main_unregister_leaf(void)
-> +{
-> +	xleaf_unregister_driver(XRT_SUBDEV_MGMT_MAIN);
-> +}
-> diff --git a/include/uapi/linux/xrt/xmgmt-ioctl.h b/include/uapi/linux/xrt/xmgmt-ioctl.h
-> new file mode 100644
-> index 000000000000..15834476f3b4
-> --- /dev/null
-> +++ b/include/uapi/linux/xrt/xmgmt-ioctl.h
-> @@ -0,0 +1,46 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +/*
-> + *  Copyright (C) 2015-2021, Xilinx Inc
-> + *
-> + */
-> +
-> +/**
-> + * DOC: PCIe Kernel Driver for Managament Physical Function
-> + * Interfaces exposed by *xclmgmt* driver are defined in file, *mgmt-ioctl.h*.
-> + * Core functionality provided by *xmgmt* driver is described in the following table:
-> + *
-> + * =========== ============================== ==================================
-> + * Functionality           ioctl request code           data format
-> + * =========== ============================== ==================================
-> + * 1 FPGA image download   XMGMT_IOCICAPDOWNLOAD_AXLF xmgmt_ioc_bitstream_axlf
-> + * =========== ============================== ==================================
-> + */
-> +
-> +#ifndef _XMGMT_IOCTL_H_
-> +#define _XMGMT_IOCTL_H_
-> +
-> +#include <linux/ioctl.h>
-> +
-> +#define XMGMT_IOC_MAGIC	'X'
-> +#define XMGMT_IOC_ICAP_DOWNLOAD_AXLF 0x6
-> +
-> +/**
-> + * struct xmgmt_ioc_bitstream_axlf - load xclbin (AXLF) device image
-> + * used with XMGMT_IOCICAPDOWNLOAD_AXLF ioctl
-> + *
-> + * @xclbin:	Pointer to user's xclbin structure in memory
-> + */
-> +struct xmgmt_ioc_bitstream_axlf {
-> +	struct axlf *xclbin;
-
-where is struct axlf defined ?
-
-Tom
-
-> +};
-> +
-> +#define XMGMT_IOCICAPDOWNLOAD_AXLF				\
-> +	_IOW(XMGMT_IOC_MAGIC, XMGMT_IOC_ICAP_DOWNLOAD_AXLF, struct xmgmt_ioc_bitstream_axlf)
-> +
-> +/*
-> + * The following definitions are for binary compatibility with classic XRT management driver
-> + */
-> +#define XCLMGMT_IOCICAPDOWNLOAD_AXLF XMGMT_IOCICAPDOWNLOAD_AXLF
-> +#define xclmgmt_ioc_bitstream_axlf xmgmt_ioc_bitstream_axlf
-> +
-> +#endif
-
+> Moritz, do you know ?
+> 
+> 
+> On 2/17/21 10:40 PM, Lizhi Hou wrote:
+> > The PCIE device driver which attaches to management function on Alveo
+> to the management
+> > devices. It instantiates one or more partition drivers which in turn
+> more fpga partition / group ?
+> > instantiate platform drivers. The instantiation of partition and platform
+> > drivers is completely data driven.
+> data driven ? everything is data driven.  do you mean dtb driven ?
+> >
+> > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> > Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
+> > ---
+> >  drivers/fpga/xrt/include/xroot.h | 114 +++++++++++
+> >  drivers/fpga/xrt/mgmt/root.c     | 342 +++++++++++++++++++++++++++++++
+> >  2 files changed, 456 insertions(+)
+> >  create mode 100644 drivers/fpga/xrt/include/xroot.h
+> >  create mode 100644 drivers/fpga/xrt/mgmt/root.c
+> >
+> > diff --git a/drivers/fpga/xrt/include/xroot.h b/drivers/fpga/xrt/include/xroot.h
+> > new file mode 100644
+> > index 000000000000..752e10daa85e
+> > --- /dev/null
+> > +++ b/drivers/fpga/xrt/include/xroot.h
+> > @@ -0,0 +1,114 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Header file for Xilinx Runtime (XRT) driver
+> > + *
+> > + * Copyright (C) 2020-2021 Xilinx, Inc.
+> > + *
+> > + * Authors:
+> > + *	Cheng Zhen <maxz@xilinx.com>
+> > + */
+> > +
+> > +#ifndef _XRT_ROOT_H_
+> > +#define _XRT_ROOT_H_
+> > +
+> > +#include <linux/pci.h>
+> > +#include "subdev_id.h"
+> > +#include "events.h"
+> > +
+> > +typedef bool (*xrt_subdev_match_t)(enum xrt_subdev_id,
+> > +	struct platform_device *, void *);
+> > +#define XRT_SUBDEV_MATCH_PREV	((xrt_subdev_match_t)-1)
+> > +#define XRT_SUBDEV_MATCH_NEXT	((xrt_subdev_match_t)-2)
+> > +
+> > +/*
+> > + * Root IOCTL calls.
+> > + */
+> > +enum xrt_root_ioctl_cmd {
+> > +	/* Leaf actions. */
+> > +	XRT_ROOT_GET_LEAF = 0,
+> > +	XRT_ROOT_PUT_LEAF,
+> > +	XRT_ROOT_GET_LEAF_HOLDERS,
+> > +
+> > +	/* Group actions. */
+> > +	XRT_ROOT_CREATE_GROUP,
+> > +	XRT_ROOT_REMOVE_GROUP,
+> > +	XRT_ROOT_LOOKUP_GROUP,
+> > +	XRT_ROOT_WAIT_GROUP_BRINGUP,
+> > +
+> > +	/* Event actions. */
+> > +	XRT_ROOT_EVENT,
+> should this be XRT_ROOT_EVENT_SYNC ?
+> > +	XRT_ROOT_EVENT_ASYNC,
+> > +
+> > +	/* Device info. */
+> > +	XRT_ROOT_GET_RESOURCE,
+> > +	XRT_ROOT_GET_ID,
+> > +
+> > +	/* Misc. */
+> > +	XRT_ROOT_HOT_RESET,
+> > +	XRT_ROOT_HWMON,
+> > +};
+> > +
+> > +struct xrt_root_ioctl_get_leaf {
+> > +	struct platform_device *xpigl_pdev; /* caller's pdev */
+> xpigl_ ? unneeded suffix in element names
+> > +	xrt_subdev_match_t xpigl_match_cb;
+> > +	void *xpigl_match_arg;
+> > +	struct platform_device *xpigl_leaf; /* target leaf pdev */
+> > +};
+> > +
+> > +struct xrt_root_ioctl_put_leaf {
+> > +	struct platform_device *xpipl_pdev; /* caller's pdev */
+> > +	struct platform_device *xpipl_leaf; /* target's pdev */
+> 
+> caller_pdev;
+> 
+> target_pdev;
+> 
+> > +};
+> > +
+> > +struct xrt_root_ioctl_lookup_group {
+> > +	struct platform_device *xpilp_pdev; /* caller's pdev */
+> > +	xrt_subdev_match_t xpilp_match_cb;
+> > +	void *xpilp_match_arg;
+> > +	int xpilp_grp_inst;
+> > +};
+> > +
+> > +struct xrt_root_ioctl_get_holders {
+> > +	struct platform_device *xpigh_pdev; /* caller's pdev */
+> > +	char *xpigh_holder_buf;
+> > +	size_t xpigh_holder_buf_len;
+> > +};
+> > +
+> > +struct xrt_root_ioctl_get_res {
+> > +	struct resource *xpigr_res;
+> > +};
+> > +
+> > +struct xrt_root_ioctl_get_id {
+> > +	unsigned short  xpigi_vendor_id;
+> > +	unsigned short  xpigi_device_id;
+> > +	unsigned short  xpigi_sub_vendor_id;
+> > +	unsigned short  xpigi_sub_device_id;
+> > +};
+> > +
+> > +struct xrt_root_ioctl_hwmon {
+> > +	bool xpih_register;
+> > +	const char *xpih_name;
+> > +	void *xpih_drvdata;
+> > +	const struct attribute_group **xpih_groups;
+> > +	struct device *xpih_hwmon_dev;
+> > +};
+> > +
+> > +typedef int (*xrt_subdev_root_cb_t)(struct device *, void *, u32, void *);
+> This function pointer type is important, please add a comment about its use and expected parameters
+> > +int xrt_subdev_root_request(struct platform_device *self, u32 cmd, void *arg);
+> > +
+> > +/*
+> > + * Defines physical function (MPF / UPF) specific operations
+> > + * needed in common root driver.
+> > + */
+> > +struct xroot_pf_cb {
+> > +	void (*xpc_hot_reset)(struct pci_dev *pdev);
+> This is only ever set to xmgmt_root_hot_reset, why is this abstraction needed ?
+> > +};
+> > +
+> > +int xroot_probe(struct pci_dev *pdev, struct xroot_pf_cb *cb, void **root);
+> > +void xroot_remove(void *root);
+> > +bool xroot_wait_for_bringup(void *root);
+> > +int xroot_add_vsec_node(void *root, char *dtb);
+> > +int xroot_create_group(void *xr, char *dtb);
+> > +int xroot_add_simple_node(void *root, char *dtb, const char *endpoint);
+> > +void xroot_broadcast(void *root, enum xrt_events evt);
+> > +
+> > +#endif	/* _XRT_ROOT_H_ */
+> > diff --git a/drivers/fpga/xrt/mgmt/root.c b/drivers/fpga/xrt/mgmt/root.c
+> > new file mode 100644
+> > index 000000000000..583a37c9d30c
+> > --- /dev/null
+> > +++ b/drivers/fpga/xrt/mgmt/root.c
+> > @@ -0,0 +1,342 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Xilinx Alveo Management Function Driver
+> > + *
+> > + * Copyright (C) 2020-2021 Xilinx, Inc.
+> > + *
+> > + * Authors:
+> > + *	Cheng Zhen <maxz@xilinx.com>
+> > + */
+> > +
+> > +#include <linux/module.h>
+> > +#include <linux/pci.h>
+> > +#include <linux/aer.h>
+> > +#include <linux/vmalloc.h>
+> > +#include <linux/delay.h>
+> > +
+> > +#include "xroot.h"
+> > +#include "main-impl.h"
+> > +#include "metadata.h"
+> > +
+> > +#define XMGMT_MODULE_NAME	"xmgmt"
+> The xrt modules would be more easily identified with a 'xrt' prefix instead of 'x'
+> > +#define XMGMT_DRIVER_VERSION	"4.0.0"
+> > +
+> > +#define XMGMT_PDEV(xm)		((xm)->pdev)
+> > +#define XMGMT_DEV(xm)		(&(XMGMT_PDEV(xm)->dev))
+> > +#define xmgmt_err(xm, fmt, args...)	\
+> > +	dev_err(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+> > +#define xmgmt_warn(xm, fmt, args...)	\
+> > +	dev_warn(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+> > +#define xmgmt_info(xm, fmt, args...)	\
+> > +	dev_info(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+> > +#define xmgmt_dbg(xm, fmt, args...)	\
+> > +	dev_dbg(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+> > +#define XMGMT_DEV_ID(_pcidev)			\
+> > +	({ typeof(_pcidev) (pcidev) = (_pcidev);	\
+> > +	((pci_domain_nr((pcidev)->bus) << 16) |	\
+> > +	PCI_DEVID((pcidev)->bus->number, 0)); })
+> > +
+> > +static struct class *xmgmt_class;
+> > +static const struct pci_device_id xmgmt_pci_ids[] = {
+> > +	{ PCI_DEVICE(0x10EE, 0xd020), }, /* Alveo U50 (golden image) */
+> > +	{ PCI_DEVICE(0x10EE, 0x5020), }, /* Alveo U50 */
+> 
+> demagic this table, look at dfl-pci for how to use existing #define for the vendor and create a new on for the device.  If there are vf's add them at the same time.
+> 
+> What is a golden image ?
+> 
+> > +	{ 0, }
+> > +};
+> > +
+> > +struct xmgmt {
+> > +	struct pci_dev *pdev;
+> > +	void *root;
+> > +
+> > +	bool ready;
+> > +};
+> > +
+> > +static int xmgmt_config_pci(struct xmgmt *xm)
+> > +{
+> > +	struct pci_dev *pdev = XMGMT_PDEV(xm);
+> > +	int rc;
+> > +
+> > +	rc = pcim_enable_device(pdev);
+> > +	if (rc < 0) {
+> > +		xmgmt_err(xm, "failed to enable device: %d", rc);
+> > +		return rc;
+> > +	}
+> > +
+> > +	rc = pci_enable_pcie_error_reporting(pdev);
+> > +	if (rc)
+> > +		xmgmt_warn(xm, "failed to enable AER: %d", rc);
+> > +
+> > +	pci_set_master(pdev);
+> > +
+> > +	rc = pcie_get_readrq(pdev);
+> Review this call, it does not go negative
+> > +	if (rc < 0) {
+> > +		xmgmt_err(xm, "failed to read mrrs %d", rc);
+> > +		return rc;
+> > +	}
+> this is a quirk, add a comment.
+> > +	if (rc > 512) {
+> > +		rc = pcie_set_readrq(pdev, 512);
+> > +		if (rc) {
+> > +			xmgmt_err(xm, "failed to force mrrs %d", rc);
+> similar calls do not fail here.
+> > +			return rc;
+> > +		}
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int xmgmt_match_slot_and_save(struct device *dev, void *data)
+> > +{
+> > +	struct xmgmt *xm = data;
+> > +	struct pci_dev *pdev = to_pci_dev(dev);
+> > +
+> > +	if (XMGMT_DEV_ID(pdev) == XMGMT_DEV_ID(xm->pdev)) {
+> > +		pci_cfg_access_lock(pdev);
+> > +		pci_save_state(pdev);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void xmgmt_pci_save_config_all(struct xmgmt *xm)
+> > +{
+> > +	bus_for_each_dev(&pci_bus_type, NULL, xm, xmgmt_match_slot_and_save);
+> 
+> This is a bus call, not a device call.
+> 
+> Can this be changed into something like what hot reset does ?
+> 
+> > +}
+> > +
+> > +static int xmgmt_match_slot_and_restore(struct device *dev, void *data)
+> > +{
+> > +	struct xmgmt *xm = data;
+> > +	struct pci_dev *pdev = to_pci_dev(dev);
+> > +
+> > +	if (XMGMT_DEV_ID(pdev) == XMGMT_DEV_ID(xm->pdev)) {
+> > +		pci_restore_state(pdev);
+> > +		pci_cfg_access_unlock(pdev);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void xmgmt_pci_restore_config_all(struct xmgmt *xm)
+> > +{
+> > +	bus_for_each_dev(&pci_bus_type, NULL, xm, xmgmt_match_slot_and_restore);
+> > +}
+> > +
+> > +static void xmgmt_root_hot_reset(struct pci_dev *pdev)
+> > +{
+> > +	struct xmgmt *xm = pci_get_drvdata(pdev);
+> > +	struct pci_bus *bus;
+> > +	u8 pci_bctl;
+> > +	u16 pci_cmd, devctl;
+> > +	int i, ret;
+> > +
+> > +	xmgmt_info(xm, "hot reset start");
+> > +
+> > +	xmgmt_pci_save_config_all(xm);
+> > +
+> > +	pci_disable_device(pdev);
+> > +
+> > +	bus = pdev->bus;
+> > +
+> > +	/*
+> > +	 * When flipping the SBR bit, device can fall off the bus. This is
+> > +	 * usually no problem at all so long as drivers are working properly
+> > +	 * after SBR. However, some systems complain bitterly when the device
+> > +	 * falls off the bus.
+> > +	 * The quick solution is to temporarily disable the SERR reporting of
+> > +	 * switch port during SBR.
+> > +	 */
+> > +
+> > +	pci_read_config_word(bus->self, PCI_COMMAND, &pci_cmd);
+> > +	pci_write_config_word(bus->self, PCI_COMMAND,
+> > +			      (pci_cmd & ~PCI_COMMAND_SERR));
+> > +	pcie_capability_read_word(bus->self, PCI_EXP_DEVCTL, &devctl);
+> > +	pcie_capability_write_word(bus->self, PCI_EXP_DEVCTL,
+> > +				   (devctl & ~PCI_EXP_DEVCTL_FERE));
+> > +	pci_read_config_byte(bus->self, PCI_BRIDGE_CONTROL, &pci_bctl);
+> > +	pci_bctl |= PCI_BRIDGE_CTL_BUS_RESET;
+> > +	pci_write_config_byte(bus->self, PCI_BRIDGE_CONTROL, pci_bctl);
+> 
+> how the pci config values are set and cleared should be consistent.
+> 
+> this call should be
+> 
+> pci_write_config_byte (... pci_bctl | PCI_BRIDGE_CTL_BUF_RESET )
+> 
+> and the next &= avoided
+> 
+> > +
+> > +	msleep(100);
+> > +	pci_bctl &= ~PCI_BRIDGE_CTL_BUS_RESET;
+> > +	pci_write_config_byte(bus->self, PCI_BRIDGE_CONTROL, pci_bctl);
+> > +	ssleep(1);
+> > +
+> > +	pcie_capability_write_word(bus->self, PCI_EXP_DEVCTL, devctl);
+> > +	pci_write_config_word(bus->self, PCI_COMMAND, pci_cmd);
+> > +
+> > +	ret = pci_enable_device(pdev);
+> > +	if (ret)
+> > +		xmgmt_err(xm, "failed to enable device, ret %d", ret);
+> > +
+> > +	for (i = 0; i < 300; i++) {
+> > +		pci_read_config_word(pdev, PCI_COMMAND, &pci_cmd);
+> > +		if (pci_cmd != 0xffff)
+> what happens with i == 300 and pci_cmd is still 0xffff ?
+> > +			break;
+> > +		msleep(20);
+> > +	}
+> > +
+> > +	xmgmt_info(xm, "waiting for %d ms", i * 20);
+> > +	xmgmt_pci_restore_config_all(xm);
+> > +	xmgmt_config_pci(xm);
+> > +}
+> > +
+> > +static int xmgmt_create_root_metadata(struct xmgmt *xm, char **root_dtb)
+> > +{
+> > +	char *dtb = NULL;
+> > +	int ret;
+> > +
+> > +	ret = xrt_md_create(XMGMT_DEV(xm), &dtb);
+> > +	if (ret) {
+> > +		xmgmt_err(xm, "create metadata failed, ret %d", ret);
+> > +		goto failed;
+> > +	}
+> > +
+> > +	ret = xroot_add_vsec_node(xm->root, dtb);
+> > +	if (ret == -ENOENT) {
+> > +		/*
+> > +		 * We may be dealing with a MFG board.
+> > +		 * Try vsec-golden which will bring up all hard-coded leaves
+> > +		 * at hard-coded offsets.
+> > +		 */
+> > +		ret = xroot_add_simple_node(xm->root, dtb, XRT_MD_NODE_VSEC_GOLDEN);
+> 
+> Manufacturing diagnostics ?
+> 
+> Tom
+> 
+> > +	} else if (ret == 0) {
+> > +		ret = xroot_add_simple_node(xm->root, dtb, XRT_MD_NODE_MGMT_MAIN);
+> > +	}
+> > +	if (ret)
+> > +		goto failed;
+> > +
+> > +	*root_dtb = dtb;
+> > +	return 0;
+> > +
+> > +failed:
+> > +	vfree(dtb);
+> > +	return ret;
+> > +}
+> > +
+> > +static ssize_t ready_show(struct device *dev,
+> > +			  struct device_attribute *da,
+> > +			  char *buf)
+> > +{
+> > +	struct pci_dev *pdev = to_pci_dev(dev);
+> > +	struct xmgmt *xm = pci_get_drvdata(pdev);
+> > +
+> > +	return sprintf(buf, "%d\n", xm->ready);
+> > +}
+> > +static DEVICE_ATTR_RO(ready);
+> > +
+> > +static struct attribute *xmgmt_root_attrs[] = {
+> > +	&dev_attr_ready.attr,
+> > +	NULL
+> > +};
+> > +
+> > +static struct attribute_group xmgmt_root_attr_group = {
+> > +	.attrs = xmgmt_root_attrs,
+> > +};
+> > +
+> > +static struct xroot_pf_cb xmgmt_xroot_pf_cb = {
+> > +	.xpc_hot_reset = xmgmt_root_hot_reset,
+> > +};
+> > +
+> > +static int xmgmt_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> > +{
+> > +	int ret;
+> > +	struct device *dev = &pdev->dev;
+> > +	struct xmgmt *xm = devm_kzalloc(dev, sizeof(*xm), GFP_KERNEL);
+> > +	char *dtb = NULL;
+> > +
+> > +	if (!xm)
+> > +		return -ENOMEM;
+> > +	xm->pdev = pdev;
+> > +	pci_set_drvdata(pdev, xm);
+> > +
+> > +	ret = xmgmt_config_pci(xm);
+> > +	if (ret)
+> > +		goto failed;
+> > +
+> > +	ret = xroot_probe(pdev, &xmgmt_xroot_pf_cb, &xm->root);
+> > +	if (ret)
+> > +		goto failed;
+> > +
+> > +	ret = xmgmt_create_root_metadata(xm, &dtb);
+> > +	if (ret)
+> > +		goto failed_metadata;
+> > +
+> > +	ret = xroot_create_group(xm->root, dtb);
+> > +	vfree(dtb);
+> > +	if (ret)
+> > +		xmgmt_err(xm, "failed to create root group: %d", ret);
+> > +
+> > +	if (!xroot_wait_for_bringup(xm->root))
+> > +		xmgmt_err(xm, "failed to bringup all groups");
+> > +	else
+> > +		xm->ready = true;
+> > +
+> > +	ret = sysfs_create_group(&pdev->dev.kobj, &xmgmt_root_attr_group);
+> > +	if (ret) {
+> > +		/* Warning instead of failing the probe. */
+> > +		xmgmt_warn(xm, "create xmgmt root attrs failed: %d", ret);
+> > +	}
+> > +
+> > +	xroot_broadcast(xm->root, XRT_EVENT_POST_CREATION);
+> > +	xmgmt_info(xm, "%s started successfully", XMGMT_MODULE_NAME);
+> > +	return 0;
+> > +
+> > +failed_metadata:
+> > +	(void)xroot_remove(xm->root);
+> > +failed:
+> > +	pci_set_drvdata(pdev, NULL);
+> > +	return ret;
+> > +}
+> > +
+> > +static void xmgmt_remove(struct pci_dev *pdev)
+> > +{
+> > +	struct xmgmt *xm = pci_get_drvdata(pdev);
+> > +
+> > +	xroot_broadcast(xm->root, XRT_EVENT_PRE_REMOVAL);
+> > +	sysfs_remove_group(&pdev->dev.kobj, &xmgmt_root_attr_group);
+> > +	(void)xroot_remove(xm->root);
+> > +	pci_disable_pcie_error_reporting(xm->pdev);
+> > +	xmgmt_info(xm, "%s cleaned up successfully", XMGMT_MODULE_NAME);
+> > +}
+> > +
+> > +static struct pci_driver xmgmt_driver = {
+> > +	.name = XMGMT_MODULE_NAME,
+> > +	.id_table = xmgmt_pci_ids,
+> > +	.probe = xmgmt_probe,
+> > +	.remove = xmgmt_remove,
+> > +};
+> > +
+> > +static int __init xmgmt_init(void)
+> > +{
+> > +	int res = 0;
+> > +
+> > +	res = xmgmt_main_register_leaf();
+> > +	if (res)
+> > +		return res;
+> > +
+> > +	xmgmt_class = class_create(THIS_MODULE, XMGMT_MODULE_NAME);
+> > +	if (IS_ERR(xmgmt_class))
+> > +		return PTR_ERR(xmgmt_class);
+> > +
+> > +	res = pci_register_driver(&xmgmt_driver);
+> > +	if (res) {
+> > +		class_destroy(xmgmt_class);
+> > +		return res;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static __exit void xmgmt_exit(void)
+> > +{
+> > +	pci_unregister_driver(&xmgmt_driver);
+> > +	class_destroy(xmgmt_class);
+> > +	xmgmt_main_unregister_leaf();
+> > +}
+> > +
+> > +module_init(xmgmt_init);
+> > +module_exit(xmgmt_exit);
+> > +
+> > +MODULE_DEVICE_TABLE(pci, xmgmt_pci_ids);
+> > +MODULE_VERSION(XMGMT_DRIVER_VERSION);
+> > +MODULE_AUTHOR("XRT Team <runtime@xilinx.com>");
+> > +MODULE_DESCRIPTION("Xilinx Alveo management function driver");
+> > +MODULE_LICENSE("GPL v2");
+> 
+- Moritz
