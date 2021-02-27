@@ -2,76 +2,122 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF87326D7A
-	for <lists+linux-fpga@lfdr.de>; Sat, 27 Feb 2021 16:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E58326D95
+	for <lists+linux-fpga@lfdr.de>; Sat, 27 Feb 2021 16:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbhB0PIN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 27 Feb 2021 10:08:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44216 "EHLO mail.kernel.org"
+        id S230018AbhB0Pcg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 27 Feb 2021 10:32:36 -0500
+Received: from mga11.intel.com ([192.55.52.93]:15197 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229953AbhB0PIM (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sat, 27 Feb 2021 10:08:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B6B5164E7A;
-        Sat, 27 Feb 2021 15:07:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1614438452;
-        bh=NtBYbqsqe2ZK9BWLJir8CO6pNkINMOV2L6wftv5KqAI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k01592FcVDYoGQUhSHSfzHjlpwmJLUk5nPyNsqqnMud8lDtT2r7mcYgdHzWWoyV2m
-         eG6VvVzUQUBl6xndffdGcMBaneVFeiVswNsE3quRn5qpIPueiCGhM4yvbKZ+guweLJ
-         dL93pKlc9AZ7F1ubQoXsWxm+x/t00cljWH420Hhw=
-Date:   Sat, 27 Feb 2021 16:07:29 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Tom Rix <trix@redhat.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lgoncalv@redhat.com, hao.wu@intel.com
-Subject: Re: [PATCH v11 0/2] UIO support for dfl devices
-Message-ID: <YDpgMWSzw1nD64Cz@kroah.com>
-References: <1612403971-13291-1-git-send-email-yilun.xu@intel.com>
- <9b5f6e54-7122-8cfb-39f8-a84599e081f1@redhat.com>
- <20210226012237.GA27194@yilunxu-OptiPlex-7050>
- <YDiX+Fl0AiQrdZJL@kroah.com>
- <20210227145733.GA2224@yilunxu-OptiPlex-7050>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210227145733.GA2224@yilunxu-OptiPlex-7050>
+        id S230010AbhB0Pcf (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 27 Feb 2021 10:32:35 -0500
+IronPort-SDR: FX/IoHasWWA84dp/iAVCAaJJC6aSSbIk6WPZE+770FCyOAfV0znf/gFq/BL2Vm5NpRjtqSHVhp
+ H3T0wcCEW9qA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9908"; a="182708874"
+X-IronPort-AV: E=Sophos;i="5.81,211,1610438400"; 
+   d="scan'208";a="182708874"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2021 07:31:53 -0800
+IronPort-SDR: jFcaZOmN4g8jf86UFJNuVAqptW+gezXEsFrqLTFMUYC4J5CtPhJjLG/dkkVSNj1OSux7a/TmwD
+ EWoVSLqud0jw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,211,1610438400"; 
+   d="scan'208";a="382370748"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
+  by orsmga002.jf.intel.com with ESMTP; 27 Feb 2021 07:31:50 -0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     gregkh@linuxfoundation.org, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com
+Subject: [RESEND PATCH v11 0/2] UIO support for dfl devices
+Date:   Sat, 27 Feb 2021 23:27:02 +0800
+Message-Id: <1614439624-3946-1-git-send-email-yilun.xu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Sat, Feb 27, 2021 at 10:57:33PM +0800, Xu Yilun wrote:
-> Hi Greg:
-> 
-> On Fri, Feb 26, 2021 at 07:40:56AM +0100, Greg KH wrote:
-> > On Fri, Feb 26, 2021 at 09:22:37AM +0800, Xu Yilun wrote:
-> > > On Mon, Feb 22, 2021 at 10:56:45AM -0800, Tom Rix wrote:
-> > > > Yilun,
-> > > > 
-> > > > Is there anything outstanding or remaining to be done ?
-> > > 
-> > > Sorry for late reply. No, this is my lastest version now.
-> > > 
-> > > 
-> > > Hi Greg:
-> > > 
-> > > Do you have some comments on this patchset?
-> > 
-> > It's the middle of the merge window, I can't accept anything right
-> > now...
-> > 
-> > But this doesn't even look like it is in my "to review" queue anymore,
-> > which means that there must have been a lot of discussion on it and
-> > others asking for changes, so why not work on that right now while you
-> > can and resubmit it when you have done that?
-> > 
-> > No need to ever wait on me for fixing things up.
-> 
-> I checked the mails again and confirmed all the comments from Moritz,
-> Tom and Hao are fixed. So could you help review it so it could be
-> accepted in next cycle?
+This patchset supports some dfl device drivers written in userspace.
 
-Please resend it, as I said above, it is no longer in my queue.
+In the patchset v1, the "driver_override" interface should be used to bind
+the DFL UIO driver to DFL devices. But there is concern that the
+"driver_override" interface is not OK itself.
 
-greg k-h
+In v2, we use a new matching algorithem. The "driver_override" interface
+is abandoned, the DFL UIO driver matches any DFL device which could not be
+handled by other DFL drivers. So the DFL UIO driver could be used for new
+DFL devices which are not supported by kernel. The concern is the UIO may
+not be suitable as a default/generic driver for all dfl features, such as
+features with multiple interrupts.
+
+In v4, we specify each matching device in the id_table of the UIO driver,
+just the same as other dfl drivers do. Now the UIO driver supports Ether
+Group feature. To support more DFL features, their feature ids should be
+added to the driver's id_table.
+
+Before v9, we create a "uio_pdrv_genirq" platform device using DFL devices'
+resources. Then we leverage the uio_pdrv_genirq driver for UIO support. It
+is suggested that we implement a driver in drivers/uio that directly calls
+UIO framework APIs. So we implement the uio_dfl driver in v9. The driver
+now only binds the ether group feature, which has no irq. So the irq
+support is not implemented yet.
+
+
+Main changes from v1:
+- switch to the new matching algorithem. It matches DFL devices which could
+  not be handled by other DFL drivers.
+- refacor the code about device resources filling.
+- add the documentation.
+
+Main changes from v2:
+- split the match ops changes in dfl.c to an independent patch.
+- move the declarations needed for dfl-uio-pdev from include/linux/dfl.h
+  to driver/fpga/dfl.h
+- some minor fixes.
+
+Main changes from v3:
+- switch to specifying each matching device in the driver's id_table.
+- refactor the irq handling code.
+
+Main changes from v4:
+- refactor the irq handling code.
+
+Main changes from v5:
+- fix the res[] zero initialization issue.
+- improve the return code for probe().
+- some doc improvement.
+
+Main changes from v6:
+- use platform_device_register_resndata() for pdev creation.
+
+Main changes from v7:
+- some doc fixes.
+
+Main changes from v8:
+- switch to add a uio driver in drivers/uio
+
+Main changes from v9:
+- add this source file in MAINTAINERS
+- improve the Kconfig, add more descriptive Kconfig header, add detailed
+  path for opae uio example in Kconfig.
+
+Main changes from v10:
+- add description in doc that interrupt support is not implemented yet.
+
+
+Xu Yilun (2):
+  uio: uio_dfl: add userspace i/o driver for DFL bus
+  Documentation: fpga: dfl: Add description for DFL UIO support
+
+ Documentation/fpga/dfl.rst | 26 ++++++++++++++++++
+ MAINTAINERS                |  1 +
+ drivers/uio/Kconfig        | 17 ++++++++++++
+ drivers/uio/Makefile       |  1 +
+ drivers/uio/uio_dfl.c      | 66 ++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 111 insertions(+)
+ create mode 100644 drivers/uio/uio_dfl.c
+
+-- 
+2.7.4
+
