@@ -2,384 +2,514 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B3532ABD7
+	by mail.lfdr.de (Postfix) with ESMTP id CF8CC32ABD8
 	for <lists+linux-fpga@lfdr.de>; Tue,  2 Mar 2021 21:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241744AbhCBUo6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 2 Mar 2021 15:44:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:42057 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1449114AbhCBQPw (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 2 Mar 2021 11:15:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614701604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xj617NCTkcQlVOBgs3nUDfsN/jKMhqs1NUx4EljorXw=;
-        b=NUTsKroQDTIqYViB7/mlLw0+TkfnK9Glf9jYubjcrM9Vb1ExYr3uHjTHey8CGZywB2VqZ8
-        7Bmd6XqbOauXIR1t7tJCjERiXzaUhMDcqYUSefsswLXzriTc2f0zRZBuVs0nFuyOIwBRhi
-        pwAcz9gdqK3cg/z1J34d7bWisko2aa8=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-159-UgVf-WfLOymNEDljAaSwRQ-1; Tue, 02 Mar 2021 11:09:11 -0500
-X-MC-Unique: UgVf-WfLOymNEDljAaSwRQ-1
-Received: by mail-qt1-f199.google.com with SMTP id w33so4578040qte.11
-        for <linux-fpga@vger.kernel.org>; Tue, 02 Mar 2021 08:09:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Xj617NCTkcQlVOBgs3nUDfsN/jKMhqs1NUx4EljorXw=;
-        b=Xz1Un8m3XWJ8nZ97gUTUWZC0WSmArlGpoHYzXl5/Hi5RpgFtTLrzZ5cKhjC+w+rBSx
-         1PlEFEb7QyB6Ktr3hsuzUOSAvBXm2B+bWBp7AJKQPGGhwnWwGVtgjyxsW3YMtiq7/Kwf
-         LEB6YNkOMigUnQ11Dd04nCD0BRykgPSo3AsUm5Gv6P0Cm5IroKYM+sa8IhsAxnCoHS3a
-         fJiNJG+xywKr5nQ8BcS3p0wIjdbSrDvUEiBoGqE7hEIycBnsSRG62abv9dyUjU56K3z/
-         rNLfoEpEwLB9nqV3KfXx/CAildfqwKWCNbnfkSf3CObi4pHbpuWosW+O7KhatGvEoxLs
-         e/iw==
-X-Gm-Message-State: AOAM531Is8Zmma4/pA+g3tzxCbCcvAeG4evbnM7WvIm1eVZwKN4DnFIM
-        X6RuJo0WHsTQ+Zh+NOM57k6qne4GBJ6nwqMYJYbWgAWY7vhBDgqL4K0RILKzUDtNBLKKPPcJVxN
-        L13NRvorPfLtGSVhi2kWVHg==
-X-Received: by 2002:a05:622a:254:: with SMTP id c20mr19101080qtx.387.1614701350177;
-        Tue, 02 Mar 2021 08:09:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxPgp9285reKXXR5zjKwXh6Fk/hEiFPTHqxCo3e1OBX7LNY5TcUk/WK9fFTfyQiSgC4mCBgVw==
-X-Received: by 2002:a05:622a:254:: with SMTP id c20mr19101057qtx.387.1614701349880;
-        Tue, 02 Mar 2021 08:09:09 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 79sm401850qki.37.2021.03.02.08.09.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Mar 2021 08:09:09 -0800 (PST)
-Subject: Re: [PATCH V3 XRT Alveo 11/18] fpga: xrt: UCS platform driver
-To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
-Cc:     Lizhi Hou <lizhih@xilinx.com>, linux-fpga@vger.kernel.org,
-        maxz@xilinx.com, sonal.santan@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
-        robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
+        id S1344746AbhCBUpL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 2 Mar 2021 15:45:11 -0500
+Received: from mail-co1nam11on2082.outbound.protection.outlook.com ([40.107.220.82]:63968
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1352207AbhCBS3h (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 2 Mar 2021 13:29:37 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l+0dwuHxK/XTDE3ZE35ZBVITSlr8eVzKzCqOVEDkFPJxuD242isNiiRI3BGz4uE+covUNnYabKGCXagG1nRW0gJf1OtR+8k4bhnaW5wMNCDxZGotGt/Z8CKJJvTc6d0PAOk/uK9GnqVtv2cX+7V5OlIKC12QQCOkiEM0Gab7OW7FQL2w0GSsUXKTeOlNCSSo0SVIQi4I8qKbowIGZrJIxP2L4eV5M1RoCQSUspN1jdkcMn6ShEblIa5zr4yyq4GPatsM+Z9pU1n3B7rg5R4UDn+frVxZ9BwRpfOXe4X25CblkSi8AuuMZ7r9WynSEHpNblIk/YqqKSgaFVCpxLIAAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CQfcpPYHfnddIW1YGScSgIDrcIBlvQpLveHCS8izLxs=;
+ b=RgLLboorKIkgd0dYibZyjGnJ35gBT0Sc2NKQ77ASECJTyatHH+I5gi3DsjqLF5+xYVP9TWQZeeZgbFxeYDEoEYDive7rMERZu/QbntMN5a1YHy4vrifjHzAxeByu4xeYRGPtJ7LtQsOD1sbIPFE8qOa7ub5e/h90/NCm//oQBaeI4plhrtDSohiyDP9wAA0PCUvJPboEoVqOKOyd7moE6eh4uq46ulICCM1CF6Ftg9uogZbPM4aRDtnEi83hEVCWIa6bdGMAikgvpZ8l88eJkfVzUG0MCiUNKoAm/kVyoJ8d5J3VEeFgQCwElj1UNfbKQiHmsnFqLRft+uR62Tq44Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CQfcpPYHfnddIW1YGScSgIDrcIBlvQpLveHCS8izLxs=;
+ b=OOm3U7BLYUq/SB2iHg8y0SCNI9dxX6SL/vrPNKfe4L9ZVdjuKMSEqRViZWCFkViHtEdjoWuMD1CzKgsxR0WjXZO3DL2t9BR+eHRJsy59wZxxXGass023L4g+NkbRwktlVYDq9LPXtLIWoXIUhnliG/gazD9p9PYKvdrMlNJxyl4=
+Received: from CY4PR06CA0062.namprd06.prod.outlook.com (2603:10b6:903:13d::24)
+ by MW4PR02MB7378.namprd02.prod.outlook.com (2603:10b6:303:75::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17; Tue, 2 Mar
+ 2021 18:26:22 +0000
+Received: from CY1NAM02FT063.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:903:13d:cafe::d6) by CY4PR06CA0062.outlook.office365.com
+ (2603:10b6:903:13d::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20 via Frontend
+ Transport; Tue, 2 Mar 2021 18:26:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ CY1NAM02FT063.mail.protection.outlook.com (10.152.75.161) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3890.19 via Frontend Transport; Tue, 2 Mar 2021 18:26:22 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Tue, 2 Mar 2021 10:26:21 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Tue, 2 Mar 2021 10:26:21 -0800
+Envelope-to: maxz@xilinx.com,
+ max.zhen@xilinx.com,
+ michal.simek@xilinx.com,
+ sonal.santan@xilinx.com,
+ lizhi.hou@xilinx.com,
+ stefanos@xilinx.com,
+ robh@kernel.org,
+ trix@redhat.com,
+ devicetree@vger.kernel.org,
+ linux-fpga@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ mdf@kernel.org
+Received: from [10.17.2.60] (port=50182)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <lizhi.hou@xilinx.com>)
+        id 1lH9iv-0003UP-M7; Tue, 02 Mar 2021 10:26:21 -0800
+Subject: Re: [PATCH V3 XRT Alveo 12/18] fpga: xrt: ICAP platform driver
+To:     Moritz Fischer <mdf@kernel.org>, Lizhi Hou <lizhi.hou@xilinx.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <maxz@xilinx.com>, <sonal.santan@xilinx.com>,
+        <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
+        <devicetree@vger.kernel.org>, <trix@redhat.com>, <robh@kernel.org>,
+        Max Zhen <max.zhen@xilinx.com>
 References: <20210218064019.29189-1-lizhih@xilinx.com>
- <20210218064019.29189-12-lizhih@xilinx.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <3e4edfaa-e90d-1889-cd05-41107e730c18@redhat.com>
-Date:   Tue, 2 Mar 2021 08:09:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+ <20210218064019.29189-13-lizhih@xilinx.com> <YDLBl2GFjSVcxCUe@archbook>
+From:   Lizhi Hou <lizhi.hou@xilinx.com>
+Message-ID: <5b305195-6515-59b5-03aa-f2714ad6b181@xilinx.com>
+Date:   Tue, 2 Mar 2021 10:26:21 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-In-Reply-To: <20210218064019.29189-12-lizhih@xilinx.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <YDLBl2GFjSVcxCUe@archbook>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5314c191-b707-4a45-76fd-08d8dda8ae59
+X-MS-TrafficTypeDiagnostic: MW4PR02MB7378:
+X-Microsoft-Antispam-PRVS: <MW4PR02MB73786388063E6C569ADB1BD8A1999@MW4PR02MB7378.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Za5TLHsxH9eG0pfr+3JZwQoYzL+V03OCm62LBuZhKobSmA2vMn6PWC1IZEfaYlTYC57w6uhwmubchoUd6W037i+0u8ghXAfDFiFSz6DkaR3Y+/k7bnYfGmBlEiIZ3kXnRJnKoCkb4I/bnbV2Hrk6Lf/4Ec5xYFsEyiyIvkUZsU2HhdQa4X+N7no4jPXINy+ueHP/jRC+ditFVaelyKL15t3KJmnnUXcY554BIE5rgB0WUVSiOuTLJBsfZ7rKHzfODWtjSqil4zlo1cznDRVgwYvdTCpMl4GvRRGN5Ay4AQVO3qKmEKFq+aAktaYv/uy5m+9xRUBiDPgjzkRY2tbRVQjrdkpOkNCnY1r6mtkzqDKk15qex7ctgvi9/c/m6IqPf/sGy3a2wfUknZCN61D6vFte548pb+M7T0ZSvixpD++rgRXpEu7CpRFG/Uljqkw69dGC2Qyi54C36s47tU976Cs7Yhv5vOusoFwDinOC3gnpSAGTfqN7GSBS7FpHKPA9rYZMfArHnz8Zp4dFdZibQavnPRVQHTE1K/0A7qtqm8F7vADeplkLA1N2Y8vtiM/c62NRgIgCc5qzICj/2OsDxN96Ib2eliGCJPmWpf/YNNaf3ltnBXCsXAVEul6MEjYG1IPbqJEcn0O3wHp7JunJVoE36ZvkJgPARAWkOUfd1cI3/gs484fFawdfUNlt3bYDr4/Q0st6QiI0FRocRlxcAg==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(346002)(396003)(39850400004)(136003)(36840700001)(46966006)(70586007)(4326008)(36860700001)(70206006)(44832011)(2616005)(426003)(336012)(53546011)(8676002)(110136005)(9786002)(54906003)(478600001)(83380400001)(316002)(36756003)(356005)(7636003)(5660300002)(82310400003)(2906002)(31696002)(36906005)(82740400003)(107886003)(47076005)(8936002)(30864003)(186003)(26005)(31686004)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2021 18:26:22.1638
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5314c191-b707-4a45-76fd-08d8dda8ae59
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT063.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR02MB7378
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Hi Moritz,
 
-On 2/17/21 10:40 PM, Lizhi Hou wrote:
-> Add UCS driver. UCS is a hardware function discovered by walking xclbin
-What does UCS stand for ? add to commit log
-> metadata. A platform device node will be created for it.
-> UCS enables/disables the dynamic region clocks.
->
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
-> ---
->  drivers/fpga/xrt/include/xleaf/ucs.h |  24 +++
->  drivers/fpga/xrt/lib/xleaf/ucs.c     | 235 +++++++++++++++++++++++++++
->  2 files changed, 259 insertions(+)
->  create mode 100644 drivers/fpga/xrt/include/xleaf/ucs.h
->  create mode 100644 drivers/fpga/xrt/lib/xleaf/ucs.c
->
-> diff --git a/drivers/fpga/xrt/include/xleaf/ucs.h b/drivers/fpga/xrt/include/xleaf/ucs.h
-> new file mode 100644
-> index 000000000000..a5ef0e100e12
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/ucs.h
 
-This header is only used by ucs.c, so is it needed ?
 
-could the enum be defined in ucs.c ?
+On 02/21/2021 12:24 PM, Moritz Fischer wrote:
+> On Wed, Feb 17, 2021 at 10:40:13PM -0800, Lizhi Hou wrote:
+>> Add ICAP driver. ICAP is a hardware function discovered by walking
+>> firmware metadata. A platform device node will be created for it.
+>> FPGA bitstream is written to hardware through ICAP.
+>>
+>> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+>> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+>> Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
+>> ---
+>>   drivers/fpga/xrt/include/xleaf/icap.h |  29 +++
+>>   drivers/fpga/xrt/lib/xleaf/icap.c     | 317 ++++++++++++++++++++++++++
+>>   2 files changed, 346 insertions(+)
+>>   create mode 100644 drivers/fpga/xrt/include/xleaf/icap.h
+>>   create mode 100644 drivers/fpga/xrt/lib/xleaf/icap.c
+>>
+>> diff --git a/drivers/fpga/xrt/include/xleaf/icap.h b/drivers/fpga/xrt/include/xleaf/icap.h
+>> new file mode 100644
+>> index 000000000000..a14fc0ffa78f
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/include/xleaf/icap.h
+>> @@ -0,0 +1,29 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Header file for XRT ICAP Leaf Driver
+>> + *
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *   Lizhi Hou <Lizhi.Hou@xilinx.com>
+>> + */
+>> +
+>> +#ifndef _XRT_ICAP_H_
+>> +#define _XRT_ICAP_H_
+>> +
+>> +#include "xleaf.h"
+>> +
+>> +/*
+>> + * ICAP driver IOCTL calls.
+>> + */
+>> +enum xrt_icap_ioctl_cmd {
+>> +     XRT_ICAP_WRITE = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+>> +     XRT_ICAP_IDCODE,
+>> +};
+>> +
+>> +struct xrt_icap_ioctl_wr {
+>> +     void    *xiiw_bit_data;
+>> +     u32     xiiw_data_len;
+>> +};
+>> +
+>> +#endif       /* _XRT_ICAP_H_ */
+>> diff --git a/drivers/fpga/xrt/lib/xleaf/icap.c b/drivers/fpga/xrt/lib/xleaf/icap.c
+>> new file mode 100644
+>> index 000000000000..0500a97bdef9
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/lib/xleaf/icap.c
+>> @@ -0,0 +1,317 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Xilinx Alveo FPGA ICAP Driver
+>> + *
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
+>> + *      Sonal Santan <sonals@xilinx.com>
+>> + *      Max Zhen <maxz@xilinx.com>
+>> + */
+>> +
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/device.h>
+>> +#include <linux/io.h>
+>> +#include "metadata.h"
+>> +#include "xleaf.h"
+>> +#include "xleaf/icap.h"
+>> +#include "xclbin-helper.h"
+>> +
+>> +#define XRT_ICAP "xrt_icap"
+>> +
+>> +#define ICAP_ERR(icap, fmt, arg...)  \
+>> +     xrt_err((icap)->pdev, fmt "\n", ##arg)
+>> +#define ICAP_WARN(icap, fmt, arg...) \
+>> +     xrt_warn((icap)->pdev, fmt "\n", ##arg)
+>> +#define ICAP_INFO(icap, fmt, arg...) \
+>> +     xrt_info((icap)->pdev, fmt "\n", ##arg)
+>> +#define ICAP_DBG(icap, fmt, arg...)  \
+>> +     xrt_dbg((icap)->pdev, fmt "\n", ##arg)
+> Do we really need two layers of indirection here? What's wrong with
+> dev_{info,dbg,...} ?
+In case that we would change the massage 'fmt' in the future we can 
+change it at one place. And it does not expose any interface or 
+introduce performance issue. Could we just keep these Macros?
+>> +
+>> +/*
+>> + * AXI-HWICAP IP register layout
+>> + */
+>> +struct icap_reg {
+>> +     u32     ir_rsvd1[7];
+>> +     u32     ir_gier;
+>> +     u32     ir_isr;
+>> +     u32     ir_rsvd2;
+>> +     u32     ir_ier;
+>> +     u32     ir_rsvd3[53];
+>> +     u32     ir_wf;
+>> +     u32     ir_rf;
+>> +     u32     ir_sz;
+>> +     u32     ir_cr;
+>> +     u32     ir_sr;
+>> +     u32     ir_wfv;
+>> +     u32     ir_rfo;
+>> +     u32     ir_asr;
+>> +} __packed;
+> Can we make those #define and just use writel/readl() ? If you want more
+> abstraction, use regmap....
+Sure, we will use #define as below and use writel/readl to access them.
+       #define ICAP_REG_ISR(base)    ((base) + 0x20)
+       ....
+>> +
+>> +struct icap {
+>> +     struct platform_device  *pdev;
+>> +     struct icap_reg         *icap_regs;
+>> +     struct mutex            icap_lock; /* icap dev lock */
+>> +
+>> +     unsigned int            idcode;
+>> +};
+>> +
+>> +static inline u32 reg_rd(void __iomem *reg)
+>> +{
+>> +     if (!reg)
+>> +             return -1;
+>> +
+>> +     return ioread32(reg);
+>> +}
+>> +
+>> +static inline void reg_wr(void __iomem *reg, u32 val)
+>> +{
+>> +     if (!reg)
+>> +             return;
+>> +
+>> +     iowrite32(val, reg);
+>> +}
+>> +
+>> +static int wait_for_done(struct icap *icap)
+>> +{
+>> +     u32     w;
+>> +     int     i = 0;
+>> +
+>> +     WARN_ON(!mutex_is_locked(&icap->icap_lock));
+>> +     for (i = 0; i < 10; i++) {
+>> +             udelay(5);
+>> +             w = reg_rd(&icap->icap_regs->ir_sr);
+>> +             ICAP_INFO(icap, "XHWICAP_SR: %x", w);
+>> +             if (w & 0x5)
+>> +                     return 0;
+>> +     }
+>> +
+>> +     ICAP_ERR(icap, "bitstream download timeout");
+>> +     return -ETIMEDOUT;
+>> +}
+>> +
+>> +static int icap_write(struct icap *icap, const u32 *word_buf, int size)
+>> +{
+>> +     int i;
+>> +     u32 value = 0;
+>> +
+>> +     for (i = 0; i < size; i++) {
+>> +             value = be32_to_cpu(word_buf[i]);
+>> +             reg_wr(&icap->icap_regs->ir_wf, value);
+>> +     }
+>> +
+>> +     reg_wr(&icap->icap_regs->ir_cr, 0x1);
+>> +
+>> +     for (i = 0; i < 20; i++) {
+>> +             value = reg_rd(&icap->icap_regs->ir_cr);
+>> +             if ((value & 0x1) == 0)
+>> +                     return 0;
+>> +             ndelay(50);
+>> +     }
+>> +
+>> +     ICAP_ERR(icap, "writing %d dwords timeout", size);
+>> +     return -EIO;
+>> +}
+>> +
+>> +static int bitstream_helper(struct icap *icap, const u32 *word_buffer,
+>> +                         u32 word_count)
+>> +{
+>> +     u32 remain_word;
+>> +     u32 word_written = 0;
+>> +     int wr_fifo_vacancy = 0;
+>> +     int err = 0;
+>> +
+>> +     WARN_ON(!mutex_is_locked(&icap->icap_lock));
+>> +     for (remain_word = word_count; remain_word > 0;
+>> +             remain_word -= word_written, word_buffer += word_written) {
+>> +             wr_fifo_vacancy = reg_rd(&icap->icap_regs->ir_wfv);
+>> +             if (wr_fifo_vacancy <= 0) {
+>> +                     ICAP_ERR(icap, "no vacancy: %d", wr_fifo_vacancy);
+>> +                     err = -EIO;
+>> +                     break;
+>> +             }
+>> +             word_written = (wr_fifo_vacancy < remain_word) ?
+>> +                     wr_fifo_vacancy : remain_word;
+>> +             if (icap_write(icap, word_buffer, word_written) != 0) {
+>> +                     ICAP_ERR(icap, "write failed remain %d, written %d",
+>> +                              remain_word, word_written);
+>> +                     err = -EIO;
+>> +                     break;
+>> +             }
+>> +     }
+>> +
+>> +     return err;
+>> +}
+>> +
+>> +static int icap_download(struct icap *icap, const char *buffer,
+>> +                      unsigned long length)
+>> +{
+>> +     u32     num_chars_read = DMA_HWICAP_BITFILE_BUFFER_SIZE;
+>> +     u32     byte_read;
+>> +     int     err = 0;
+>> +
+>> +     mutex_lock(&icap->icap_lock);
+>> +     for (byte_read = 0; byte_read < length; byte_read += num_chars_read) {
+>> +             num_chars_read = length - byte_read;
+>> +             if (num_chars_read > DMA_HWICAP_BITFILE_BUFFER_SIZE)
+>> +                     num_chars_read = DMA_HWICAP_BITFILE_BUFFER_SIZE;
+>> +
+>> +             err = bitstream_helper(icap, (u32 *)buffer, num_chars_read / sizeof(u32));
+>> +             if (err)
+>> +                     goto failed;
+>> +             buffer += num_chars_read;
+>> +     }
+>> +
+>> +     err = wait_for_done(icap);
+>> +
+>> +failed:
+>> +     mutex_unlock(&icap->icap_lock);
+>> +
+>> +     return err;
+>> +}
+>> +
+>> +/*
+>> + * Run the following sequence of canned commands to obtain IDCODE of the FPGA
+>> + */
+>> +static void icap_probe_chip(struct icap *icap)
+>> +{
+>> +     u32 w;
+>> +
+>> +     w = reg_rd(&icap->icap_regs->ir_sr);
+>> +     w = reg_rd(&icap->icap_regs->ir_sr);
+>> +     reg_wr(&icap->icap_regs->ir_gier, 0x0);
+>> +     w = reg_rd(&icap->icap_regs->ir_wfv);
+>> +     reg_wr(&icap->icap_regs->ir_wf, 0xffffffff);
+>> +     reg_wr(&icap->icap_regs->ir_wf, 0xaa995566);
+>> +     reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
+>> +     reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
+>> +     reg_wr(&icap->icap_regs->ir_wf, 0x28018001);
+>> +     reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
+>> +     reg_wr(&icap->icap_regs->ir_wf, 0x20000000);
+>> +     w = reg_rd(&icap->icap_regs->ir_cr);
+>> +     reg_wr(&icap->icap_regs->ir_cr, 0x1);
+>> +     w = reg_rd(&icap->icap_regs->ir_cr);
+>> +     w = reg_rd(&icap->icap_regs->ir_cr);
+>> +     w = reg_rd(&icap->icap_regs->ir_sr);
+>> +     w = reg_rd(&icap->icap_regs->ir_cr);
+>> +     w = reg_rd(&icap->icap_regs->ir_sr);
+>> +     reg_wr(&icap->icap_regs->ir_sz, 0x1);
+>> +     w = reg_rd(&icap->icap_regs->ir_cr);
+>> +     reg_wr(&icap->icap_regs->ir_cr, 0x2);
+>> +     w = reg_rd(&icap->icap_regs->ir_rfo);
+>> +     icap->idcode = reg_rd(&icap->icap_regs->ir_rf);
+>> +     w = reg_rd(&icap->icap_regs->ir_cr);
+>> +     (void)w;
+> ?!
+Right. 'w' does not make sense here. We will remove 'w'.
 
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Header file for XRT UCS Leaf Driver
-> + *
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
-> + */
-> +
-> +#ifndef _XRT_UCS_H_
-> +#define _XRT_UCS_H_
-> +
-> +#include "xleaf.h"
-> +
-> +/*
-> + * UCS driver IOCTL calls.
-> + */
-> +enum xrt_ucs_ioctl_cmd {
-> +	XRT_UCS_CHECK = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-> +	XRT_UCS_ENABLE,
-no disable ?
-> +};
-> +
-> +#endif	/* _XRT_UCS_H_ */
-> diff --git a/drivers/fpga/xrt/lib/xleaf/ucs.c b/drivers/fpga/xrt/lib/xleaf/ucs.c
-> new file mode 100644
-> index 000000000000..ae762c8fddbb
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/lib/xleaf/ucs.c
-> @@ -0,0 +1,235 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Xilinx Alveo FPGA UCS Driver
-> + *
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
-> + */
-> +
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/delay.h>
-> +#include <linux/device.h>
-> +#include <linux/io.h>
-> +#include "metadata.h"
-> +#include "xleaf.h"
-> +#include "xleaf/ucs.h"
-> +#include "xleaf/clock.h"
-> +
-> +#define UCS_ERR(ucs, fmt, arg...)   \
-> +	xrt_err((ucs)->pdev, fmt "\n", ##arg)
-> +#define UCS_WARN(ucs, fmt, arg...)  \
-> +	xrt_warn((ucs)->pdev, fmt "\n", ##arg)
-> +#define UCS_INFO(ucs, fmt, arg...)  \
-> +	xrt_info((ucs)->pdev, fmt "\n", ##arg)
-> +#define UCS_DBG(ucs, fmt, arg...)   \
-> +	xrt_dbg((ucs)->pdev, fmt "\n", ##arg)
-> +
-> +#define XRT_UCS		"xrt_ucs"
-> +
-> +#define CHANNEL1_OFFSET			0
-> +#define CHANNEL2_OFFSET			8
-> +
-> +#define CLK_MAX_VALUE			6400
-> +
-> +struct ucs_control_status_ch1 {
-> +	unsigned int shutdown_clocks_latched:1;
-> +	unsigned int reserved1:15;
-> +	unsigned int clock_throttling_average:14;
-> +	unsigned int reserved2:2;
-> +};
-Likely needs to be packed and/or the unsigned int changed to u32
-> +
-> +struct xrt_ucs {
-> +	struct platform_device	*pdev;
-> +	void __iomem		*ucs_base;
-> +	struct mutex		ucs_lock; /* ucs dev lock */
-> +};
-> +
-> +static inline u32 reg_rd(struct xrt_ucs *ucs, u32 offset)
-> +{
-> +	return ioread32(ucs->ucs_base + offset);
-> +}
-> +
-> +static inline void reg_wr(struct xrt_ucs *ucs, u32 val, u32 offset)
-> +{
-> +	iowrite32(val, ucs->ucs_base + offset);
-> +}
-> +
-> +static void xrt_ucs_event_cb(struct platform_device *pdev, void *arg)
-> +{
-> +	struct platform_device	*leaf;
-> +	struct xrt_event *evt = (struct xrt_event *)arg;
-> +	enum xrt_events e = evt->xe_evt;
-> +	enum xrt_subdev_id id = evt->xe_subdev.xevt_subdev_id;
-> +	int instance = evt->xe_subdev.xevt_subdev_instance;
-> +
-> +	switch (e) {
-> +	case XRT_EVENT_POST_CREATION:
-> +		break;
-> +	default:
-> +		xrt_dbg(pdev, "ignored event %d", e);
-> +		return;
-> +	}
-this switch is a noop, remove
-> +
-> +	if (id != XRT_SUBDEV_CLOCK)
-> +		return;
-> +
-> +	leaf = xleaf_get_leaf_by_id(pdev, XRT_SUBDEV_CLOCK, instance);
-> +	if (!leaf) {
-> +		xrt_err(pdev, "does not get clock subdev");
-> +		return;
-> +	}
-> +
-> +	xleaf_ioctl(leaf, XRT_CLOCK_VERIFY, NULL);
-> +	xleaf_put_leaf(pdev, leaf);
-> +}
-> +
-> +static void ucs_check(struct xrt_ucs *ucs, bool *latched)
-> +{
-
-checking but not returning status, change to returning int.
-
-this function is called but xrt_ucs_leaf_ioctl which does return status.
-
-> +	struct ucs_control_status_ch1 *ucs_status_ch1;
-> +	u32 status;
-> +
-> +	mutex_lock(&ucs->ucs_lock);
-> +	status = reg_rd(ucs, CHANNEL1_OFFSET);
-> +	ucs_status_ch1 = (struct ucs_control_status_ch1 *)&status;
-> +	if (ucs_status_ch1->shutdown_clocks_latched) {
-> +		UCS_ERR(ucs,
-> +			"Critical temperature or power event, kernel clocks have been stopped.");
-> +		UCS_ERR(ucs,
-> +			"run 'xbutil valiate -q' to continue. See AR 73398 for more details.");
-This error message does not seem like it would be useful, please review.
-> +		/* explicitly indicate reset should be latched */
-> +		*latched = true;
-> +	} else if (ucs_status_ch1->clock_throttling_average >
-> +	    CLK_MAX_VALUE) {
-> +		UCS_ERR(ucs, "kernel clocks %d exceeds expected maximum value %d.",
-> +			ucs_status_ch1->clock_throttling_average,
-> +			CLK_MAX_VALUE);
-> +	} else if (ucs_status_ch1->clock_throttling_average) {
-> +		UCS_ERR(ucs, "kernel clocks throttled at %d%%.",
-> +			(ucs_status_ch1->clock_throttling_average /
-> +			 (CLK_MAX_VALUE / 100)));
-> +	}
-> +	mutex_unlock(&ucs->ucs_lock);
-> +}
-> +
-> +static void ucs_enable(struct xrt_ucs *ucs)
-> +{
-> +	reg_wr(ucs, 1, CHANNEL2_OFFSET);
-lock ?
-> +}
-> +
-> +static int
-> +xrt_ucs_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
-> +{
-> +	struct xrt_ucs		*ucs;
-> +	int			ret = 0;
-> +
-> +	ucs = platform_get_drvdata(pdev);
-> +
-> +	switch (cmd) {
-> +	case XRT_XLEAF_EVENT:
-> +		xrt_ucs_event_cb(pdev, arg);
-> +		break;
-> +	case XRT_UCS_CHECK: {
-brace not needed here
-> +		ucs_check(ucs, (bool *)arg);
-> +		break;
-> +	}
-> +	case XRT_UCS_ENABLE:
-> +		ucs_enable(ucs);
-> +		break;
-> +	default:
-> +		xrt_err(pdev, "unsupported cmd %d", cmd);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int ucs_remove(struct platform_device *pdev)
-> +{
-> +	struct xrt_ucs *ucs;
-> +
-> +	ucs = platform_get_drvdata(pdev);
-> +	if (!ucs) {
-
-is this possible ?
-
-Tom
-
-> +		xrt_err(pdev, "driver data is NULL");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (ucs->ucs_base)
-> +		iounmap(ucs->ucs_base);
-> +
-> +	platform_set_drvdata(pdev, NULL);
-> +	devm_kfree(&pdev->dev, ucs);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ucs_probe(struct platform_device *pdev)
-> +{
-> +	struct xrt_ucs *ucs = NULL;
-> +	struct resource *res;
-> +	int ret;
-> +
-> +	ucs = devm_kzalloc(&pdev->dev, sizeof(*ucs), GFP_KERNEL);
-> +	if (!ucs)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, ucs);
-> +	ucs->pdev = pdev;
-> +	mutex_init(&ucs->ucs_lock);
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	ucs->ucs_base = ioremap(res->start, res->end - res->start + 1);
-> +	if (!ucs->ucs_base) {
-> +		UCS_ERR(ucs, "map base %pR failed", res);
-> +		ret = -EFAULT;
-> +		goto failed;
-> +	}
-> +	ucs_enable(ucs);
-> +
-> +	return 0;
-> +
-> +failed:
-> +	ucs_remove(pdev);
-> +	return ret;
-> +}
-> +
-> +static struct xrt_subdev_endpoints xrt_ucs_endpoints[] = {
-> +	{
-> +		.xse_names = (struct xrt_subdev_ep_names[]) {
-> +			{ .ep_name = XRT_MD_NODE_UCS_CONTROL_STATUS },
-> +			{ NULL },
-> +		},
-> +		.xse_min_ep = 1,
-> +	},
-> +	{ 0 },
-> +};
-> +
-> +static struct xrt_subdev_drvdata xrt_ucs_data = {
-> +	.xsd_dev_ops = {
-> +		.xsd_ioctl = xrt_ucs_leaf_ioctl,
-> +	},
-> +};
-> +
-> +static const struct platform_device_id xrt_ucs_table[] = {
-> +	{ XRT_UCS, (kernel_ulong_t)&xrt_ucs_data },
-> +	{ },
-> +};
-> +
-> +static struct platform_driver xrt_ucs_driver = {
-> +	.driver = {
-> +		.name = XRT_UCS,
-> +	},
-> +	.probe = ucs_probe,
-> +	.remove = ucs_remove,
-> +	.id_table = xrt_ucs_table,
-> +};
-> +
-> +void ucs_leaf_init_fini(bool init)
-> +{
-> +	if (init)
-> +		xleaf_register_driver(XRT_SUBDEV_UCS, &xrt_ucs_driver, xrt_ucs_endpoints);
-> +	else
-> +		xleaf_unregister_driver(XRT_SUBDEV_UCS);
-> +}
+Thanks,
+Lizhi
+>> +}
+>> +
+>> +static int
+>> +xrt_icap_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
+>> +{
+>> +     struct xrt_icap_ioctl_wr        *wr_arg = arg;
+>> +     struct icap                     *icap;
+>> +     int                             ret = 0;
+>> +
+>> +     icap = platform_get_drvdata(pdev);
+>> +
+>> +     switch (cmd) {
+>> +     case XRT_XLEAF_EVENT:
+>> +             /* Does not handle any event. */
+>> +             break;
+>> +     case XRT_ICAP_WRITE:
+>> +             ret = icap_download(icap, wr_arg->xiiw_bit_data,
+>> +                                 wr_arg->xiiw_data_len);
+>> +             break;
+>> +     case XRT_ICAP_IDCODE:
+>> +             *(u64 *)arg = icap->idcode;
+>> +             break;
+>> +     default:
+>> +             ICAP_ERR(icap, "unknown command %d", cmd);
+>> +             return -EINVAL;
+>> +     }
+>> +
+>> +     return ret;
+>> +}
+>> +
+>> +static int xrt_icap_remove(struct platform_device *pdev)
+>> +{
+>> +     struct icap     *icap;
+>> +
+>> +     icap = platform_get_drvdata(pdev);
+>> +
+>> +     platform_set_drvdata(pdev, NULL);
+>> +     devm_kfree(&pdev->dev, icap);
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static int xrt_icap_probe(struct platform_device *pdev)
+>> +{
+>> +     struct icap     *icap;
+>> +     int                     ret = 0;
+>> +     struct resource         *res;
+>> +
+>> +     icap = devm_kzalloc(&pdev->dev, sizeof(*icap), GFP_KERNEL);
+>> +     if (!icap)
+>> +             return -ENOMEM;
+>> +
+>> +     icap->pdev = pdev;
+>> +     platform_set_drvdata(pdev, icap);
+>> +     mutex_init(&icap->icap_lock);
+>> +
+>> +     xrt_info(pdev, "probing");
+>> +     res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> +     if (res) {
+>> +             icap->icap_regs = ioremap(res->start, res->end - res->start + 1);
+>> +             if (!icap->icap_regs) {
+>> +                     xrt_err(pdev, "map base failed %pR", res);
+>> +                     ret = -EIO;
+>> +                     goto failed;
+>> +             }
+>> +     }
+>> +
+>> +     icap_probe_chip(icap);
+>> +failed:
+>> +     return ret;
+>> +}
+>> +
+>> +static struct xrt_subdev_endpoints xrt_icap_endpoints[] = {
+>> +     {
+>> +             .xse_names = (struct xrt_subdev_ep_names[]) {
+>> +                     { .ep_name = XRT_MD_NODE_FPGA_CONFIG },
+>> +                     { NULL },
+>> +             },
+>> +             .xse_min_ep = 1,
+>> +     },
+>> +     { 0 },
+>> +};
+>> +
+>> +static struct xrt_subdev_drvdata xrt_icap_data = {
+>> +     .xsd_dev_ops = {
+>> +             .xsd_ioctl = xrt_icap_leaf_ioctl,
+>> +     },
+>> +};
+>> +
+>> +static const struct platform_device_id xrt_icap_table[] = {
+>> +     { XRT_ICAP, (kernel_ulong_t)&xrt_icap_data },
+>> +     { },
+>> +};
+>> +
+>> +static struct platform_driver xrt_icap_driver = {
+>> +     .driver = {
+>> +             .name = XRT_ICAP,
+>> +     },
+>> +     .probe = xrt_icap_probe,
+>> +     .remove = xrt_icap_remove,
+>> +     .id_table = xrt_icap_table,
+>> +};
+>> +
+>> +void icap_leaf_init_fini(bool init)
+>> +{
+>> +     if (init)
+>> +             xleaf_register_driver(XRT_SUBDEV_ICAP, &xrt_icap_driver, xrt_icap_endpoints);
+>> +     else
+>> +             xleaf_unregister_driver(XRT_SUBDEV_ICAP);
+>> +}
+>> --
+>> 2.18.4
+>>
+> - Moritz
 
