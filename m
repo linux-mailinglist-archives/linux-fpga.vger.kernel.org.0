@@ -2,220 +2,63 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D65732BDAE
-	for <lists+linux-fpga@lfdr.de>; Wed,  3 Mar 2021 23:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E2832BDBF
+	for <lists+linux-fpga@lfdr.de>; Wed,  3 Mar 2021 23:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbhCCQXZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 3 Mar 2021 11:23:25 -0500
-Received: from mga03.intel.com ([134.134.136.65]:10469 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238605AbhCCBrF (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 2 Mar 2021 20:47:05 -0500
-IronPort-SDR: I4SIoP5VZFJcFIjWLqFyeYdQIT/DF02Y/WbIEvMfgKDTCiSb1yfoceQYsqGNQckvCtGblJ+s0M
- BGbsp/fyqLjg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9911"; a="187122511"
-X-IronPort-AV: E=Sophos;i="5.81,218,1610438400"; 
-   d="scan'208";a="187122511"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 17:45:54 -0800
-IronPort-SDR: fOk1mP5/UEwX4oy7jKE9TrAF0X5oa2yUnHKpILKd1dnxsAZAQeaRjbjWAdgMSZs4kIIEF2IrGk
- ootx0dZCzVOw==
-X-IronPort-AV: E=Sophos;i="5.81,218,1610438400"; 
-   d="scan'208";a="399305987"
-Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.212.243.235])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 17:45:52 -0800
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-        hao.wu@intel.com, matthew.gerlach@intel.com,
-        Russ Weight <russell.h.weight@intel.com>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v8 1/1] fpga: dfl: afu: harden port enable logic
-Date:   Tue,  2 Mar 2021 17:45:43 -0800
-Message-Id: <20210303014543.68292-1-russell.h.weight@intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S232355AbhCCQaQ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 3 Mar 2021 11:30:16 -0500
+Received: from smtprelay0220.hostedemail.com ([216.40.44.220]:48364 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1355836AbhCCHBt (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 3 Mar 2021 02:01:49 -0500
+X-Greylist: delayed 670 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Mar 2021 02:01:49 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave06.hostedemail.com (Postfix) with ESMTP id A50018014646
+        for <linux-fpga@vger.kernel.org>; Wed,  3 Mar 2021 06:50:43 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 33F8C100E7B42;
+        Wed,  3 Mar 2021 06:49:46 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:967:973:988:989:1260:1261:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1714:1730:1747:1777:1792:2393:2525:2553:2560:2563:2682:2685:2828:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3351:3622:3743:3865:3866:3868:3871:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:4384:5007:6117:6120:7652:7901:9025:10004:10400:10848:11232:11658:11914:12043:12297:12740:12760:12895:13069:13208:13229:13311:13357:13439:14181:14659:14721:14764:21060:21067:21080:21611:21627:30054:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: thumb56_150e8a6276c3
+X-Filterd-Recvd-Size: 1626
+Received: from [192.168.1.159] (unknown [47.151.137.21])
+        (Authenticated sender: joe@perches.com)
+        by omf02.hostedemail.com (Postfix) with ESMTPA;
+        Wed,  3 Mar 2021 06:49:44 +0000 (UTC)
+Message-ID: <70f35c99165ac4dd1846ea2e30b9a1745c364903.camel@perches.com>
+Subject: Re: [PATCH V3 XRT Alveo 00/18] XRT Alveo driver overview
+From:   Joe Perches <joe@perches.com>
+To:     Moritz Fischer <mdf@kernel.org>, Lizhi Hou <lizhi.hou@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, Lizhi Hou <lizhih@xilinx.com>,
+        linux-fpga@vger.kernel.org, maxz@xilinx.com,
+        sonal.santan@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, devicetree@vger.kernel.org, trix@redhat.com,
+        robh@kernel.org
+Date:   Tue, 02 Mar 2021 22:49:43 -0800
+In-Reply-To: <YDLF2Bi3oEhP6A7Q@archbook>
+References: <20210218064019.29189-1-lizhih@xilinx.com>
+         <YDLF2Bi3oEhP6A7Q@archbook>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Port enable is not complete until ACK = 0. Change
-__afu_port_enable() to guarantee that the enable process
-is complete by polling for ACK == 0.
+On Sun, 2021-02-21 at 12:43 -0800, Moritz Fischer wrote:
+> On Wed, Feb 17, 2021 at 10:40:01PM -0800, Lizhi Hou wrote:
+> > This is V3 of patch series which adds management physical function driver for Xilinx
+> > Alveo PCIe accelerator cards, https://www.xilinx.com/products/boards-and-kits/alveo.html
+> > This driver is part of Xilinx Runtime (XRT) open source stack.
+[]
+> Please fix the indents all across this patchset. Doesn't checkpatch with
+> --strict complain about this?
 
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-Reviewed-by: Tom Rix <trix@redhat.com>
-Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Acked-by: Wu Hao <hao.wu@intel.com>
----
-v8:
-  - Rebased to 5.12-rc1 (there were no conflicts)
-v7:
-  - Added Acked-by tag from Wu Hao
-v6:
-  - Fixed the dev_warn statement, which had "__func__" embedded in the
-    string instead of treated as a parameter to the format string.
-v5:
-  - Added Reviewed-by tag to commit message
-v4:
-  - Added a dev_warn() call for the -EINVAL case of afu_port_err_clear()
-  - Modified dev_err() message in __afu_port_disable() to say "disable"
-    instead of "reset"
-v3:
-  - afu_port_err_clear() changed to prioritize port_enable failure over
-    other a detected mismatch in port errors.
-  - reorganized code in port_reset() to be more readable.
-v2:
-  - Fixed typo in commit message
----
- drivers/fpga/dfl-afu-error.c | 10 ++++++----
- drivers/fpga/dfl-afu-main.c  | 33 +++++++++++++++++++++++----------
- drivers/fpga/dfl-afu.h       |  2 +-
- 3 files changed, 30 insertions(+), 15 deletions(-)
+I glanced at a couple bits of these patches and didn't
+notice any of what I consider poor indentation style.
 
-diff --git a/drivers/fpga/dfl-afu-error.c b/drivers/fpga/dfl-afu-error.c
-index c4691187cca9..ab7be6217368 100644
---- a/drivers/fpga/dfl-afu-error.c
-+++ b/drivers/fpga/dfl-afu-error.c
-@@ -52,7 +52,7 @@ static int afu_port_err_clear(struct device *dev, u64 err)
- 	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
- 	struct platform_device *pdev = to_platform_device(dev);
- 	void __iomem *base_err, *base_hdr;
--	int ret = -EBUSY;
-+	int enable_ret = 0, ret = -EBUSY;
- 	u64 v;
- 
- 	base_err = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_ERROR);
-@@ -96,18 +96,20 @@ static int afu_port_err_clear(struct device *dev, u64 err)
- 		v = readq(base_err + PORT_FIRST_ERROR);
- 		writeq(v, base_err + PORT_FIRST_ERROR);
- 	} else {
-+		dev_warn(dev, "%s: received 0x%llx, expected 0x%llx\n",
-+			 __func__, v, err);
- 		ret = -EINVAL;
- 	}
- 
- 	/* Clear mask */
- 	__afu_port_err_mask(dev, false);
- 
--	/* Enable the Port by clear the reset */
--	__afu_port_enable(pdev);
-+	/* Enable the Port by clearing the reset */
-+	enable_ret = __afu_port_enable(pdev);
- 
- done:
- 	mutex_unlock(&pdata->lock);
--	return ret;
-+	return enable_ret ? enable_ret : ret;
- }
- 
- static ssize_t errors_show(struct device *dev, struct device_attribute *attr,
-diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index 753cda4b2568..77dadaae5b8f 100644
---- a/drivers/fpga/dfl-afu-main.c
-+++ b/drivers/fpga/dfl-afu-main.c
-@@ -21,6 +21,9 @@
- 
- #include "dfl-afu.h"
- 
-+#define RST_POLL_INVL 10 /* us */
-+#define RST_POLL_TIMEOUT 1000 /* us */
-+
- /**
-  * __afu_port_enable - enable a port by clear reset
-  * @pdev: port platform device.
-@@ -32,7 +35,7 @@
-  *
-  * The caller needs to hold lock for protection.
-  */
--void __afu_port_enable(struct platform_device *pdev)
-+int __afu_port_enable(struct platform_device *pdev)
- {
- 	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
- 	void __iomem *base;
-@@ -41,7 +44,7 @@ void __afu_port_enable(struct platform_device *pdev)
- 	WARN_ON(!pdata->disable_count);
- 
- 	if (--pdata->disable_count != 0)
--		return;
-+		return 0;
- 
- 	base = dfl_get_feature_ioaddr_by_id(&pdev->dev, PORT_FEATURE_ID_HEADER);
- 
-@@ -49,10 +52,20 @@ void __afu_port_enable(struct platform_device *pdev)
- 	v = readq(base + PORT_HDR_CTRL);
- 	v &= ~PORT_CTRL_SFTRST;
- 	writeq(v, base + PORT_HDR_CTRL);
--}
- 
--#define RST_POLL_INVL 10 /* us */
--#define RST_POLL_TIMEOUT 1000 /* us */
-+	/*
-+	 * HW clears the ack bit to indicate that the port is fully out
-+	 * of reset.
-+	 */
-+	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
-+			       !(v & PORT_CTRL_SFTRST_ACK),
-+			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
-+		dev_err(&pdev->dev, "timeout, failure to enable device\n");
-+		return -ETIMEDOUT;
-+	}
-+
-+	return 0;
-+}
- 
- /**
-  * __afu_port_disable - disable a port by hold reset
-@@ -86,7 +99,7 @@ int __afu_port_disable(struct platform_device *pdev)
- 	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
- 			       v & PORT_CTRL_SFTRST_ACK,
- 			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
--		dev_err(&pdev->dev, "timeout, fail to reset device\n");
-+		dev_err(&pdev->dev, "timeout, failure to disable device\n");
- 		return -ETIMEDOUT;
- 	}
- 
-@@ -111,9 +124,9 @@ static int __port_reset(struct platform_device *pdev)
- 
- 	ret = __afu_port_disable(pdev);
- 	if (!ret)
--		__afu_port_enable(pdev);
-+		return ret;
- 
--	return ret;
-+	return __afu_port_enable(pdev);
- }
- 
- static int port_reset(struct platform_device *pdev)
-@@ -872,11 +885,11 @@ static int afu_dev_destroy(struct platform_device *pdev)
- static int port_enable_set(struct platform_device *pdev, bool enable)
- {
- 	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
--	int ret = 0;
-+	int ret;
- 
- 	mutex_lock(&pdata->lock);
- 	if (enable)
--		__afu_port_enable(pdev);
-+		ret = __afu_port_enable(pdev);
- 	else
- 		ret = __afu_port_disable(pdev);
- 	mutex_unlock(&pdata->lock);
-diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
-index 576e94960086..e5020e2b1f3d 100644
---- a/drivers/fpga/dfl-afu.h
-+++ b/drivers/fpga/dfl-afu.h
-@@ -80,7 +80,7 @@ struct dfl_afu {
- };
- 
- /* hold pdata->lock when call __afu_port_enable/disable */
--void __afu_port_enable(struct platform_device *pdev);
-+int __afu_port_enable(struct platform_device *pdev);
- int __afu_port_disable(struct platform_device *pdev);
- 
- void afu_mmio_region_init(struct dfl_feature_platform_data *pdata);
--- 
-2.25.1
+What indent is wrong here?
+
 
