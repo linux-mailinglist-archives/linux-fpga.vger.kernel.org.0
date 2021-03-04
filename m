@@ -2,79 +2,140 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C983132C88A
-	for <lists+linux-fpga@lfdr.de>; Thu,  4 Mar 2021 02:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB60332CD5F
+	for <lists+linux-fpga@lfdr.de>; Thu,  4 Mar 2021 08:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240909AbhCDAvF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 3 Mar 2021 19:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353155AbhCDAD2 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 3 Mar 2021 19:03:28 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DCBC061763;
-        Wed,  3 Mar 2021 15:15:10 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id u12so5391490pjr.2;
-        Wed, 03 Mar 2021 15:15:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mt8/q9przhRO9oiYAln8itOH0lx/lQPxaj7HDM76lXE=;
-        b=LVW0ontmptCBzchxvOuz4WAsECT3TwOjZ2yv/RDcPBLknSUvgoScXw+uhmeU4a0dW4
-         AGt8S0pBoCUOzLRIsOCPK6BwpdyEJr+tltC6NvpaLJ1hlwgE3QjC1mrJ8zAikE3Jyctl
-         y7eNjDu3yevSSHbXLGQ4cX/gx442DnAYKMFuowa3JzAj4v87IvYrX1iUjrDpu6njDyV/
-         4us56OOkaSw/2c3wuwQPZUXSOnTEFst/5No4aWrhQP00Gqbh20pzMTUOn+AAqWaSxGLD
-         Z1XK9DT4SpqkCC3O2xj70KBu5/7CSa8VxfbfQg7pwWFt6Zk6M4paONa3HdlNNuNW6NZD
-         SFeg==
-X-Gm-Message-State: AOAM5338z6Fo2GMk+Bl8W2fS7v/x7R5lAKJXDr8plSdjvq2cf5Glw43K
-        7UiSbFKekIRgh+SConJwp++AJrth0EY=
-X-Google-Smtp-Source: ABdhPJwVAU51jdeE3BpJvU5lPgtNpJaSi+tPloqGIpFcULsqq3+Z8+wzo1XXQYiPE/nlEnsyf177gw==
-X-Received: by 2002:a17:90a:4a81:: with SMTP id f1mr1391947pjh.44.1614813310297;
-        Wed, 03 Mar 2021 15:15:10 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
-        by smtp.gmail.com with ESMTPSA id 188sm25463092pfz.119.2021.03.03.15.15.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 15:15:09 -0800 (PST)
-Date:   Wed, 3 Mar 2021 15:15:10 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Lizhi Hou <lizhi.hou@xilinx.com>,
-        linux-kernel@vger.kernel.org, Lizhi Hou <lizhih@xilinx.com>,
-        linux-fpga@vger.kernel.org, maxz@xilinx.com,
-        sonal.santan@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, trix@redhat.com,
-        robh@kernel.org
-Subject: Re: [PATCH V3 XRT Alveo 00/18] XRT Alveo driver overview
-Message-ID: <YEAYfvJk+iyi+G+6@archbook>
-References: <20210218064019.29189-1-lizhih@xilinx.com>
- <YDLF2Bi3oEhP6A7Q@archbook>
- <70f35c99165ac4dd1846ea2e30b9a1745c364903.camel@perches.com>
+        id S235949AbhCDHKy (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 4 Mar 2021 02:10:54 -0500
+Received: from mail-mw2nam08on2048.outbound.protection.outlook.com ([40.107.101.48]:49217
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235947AbhCDHK3 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 4 Mar 2021 02:10:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VNWIX+C+5pltPLvi84zUL5E7Xrr/g6hQp53taqIeQiRy0NyD2EtXXkXEFl5VyuyaPXMyloy3kx0OOGvZOG7Plux/B3KXOCJYWkhrqxsUdDnBsxk9pis4Z9C1tQo2IeMO4AatTzBnMMzmdPvqgcqqGGUixJm/2D7+9GUyVUZ8mHBGOfVcLq6enX4j83bmJEfCe5kTxgIuzc2FyZrJ1e8JJdLTo5nq/bkgql5rJrMXSruJstaP5di160Gu7XyGD7WlXAspk9O0b2FK0CaA26qNwkifbqToN8zgzJ5CkUqeBJsty0UNh8wvFfZWotIZ1KlwbTwGec/kPnGA9YnpN+Ggag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WQlVoOQJPBZ+guW1YDW8jZ2YBHnYoFKjd1sWg9MflAg=;
+ b=OffWgD+Gp/FG35OgGoyB9JgANt63i+XXyYifrplbD6shI0hyiAz/Z3/550DDvgpRmaXKzH72CgKH8YnHzlKKZqZO1djhTQy6f1MWgfvQsXO9ASuU9UeCWQ28SBzctG9wKikcm4fW9B7IOxfWUXgZbvhOAYAGC3E9HY0mw+exkkVmR9uQpgBHyDyaN3eo4av6ZqUCGcMDli62zKcXi/bqymSdcuDtQOiHwISFROy/obIsX5XgPXjB3c+ge4rcr/czsw66ODR/hY6ROad84H2s+WcvpxGppwsGR/6tm7z8q8mMZgucDriYl7UDcg21HW8vXAYkrWil56ISjfP6IMnd7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WQlVoOQJPBZ+guW1YDW8jZ2YBHnYoFKjd1sWg9MflAg=;
+ b=PCPmSBO9o2dcq5rTowKRkoi7UDoIj8SpVl+DzhmE33s5+5hYIFOJ51NAbnNi11NswCnpIyy5rC4xPq5P63o/3axVfL/+MVn6CNLoDqkI/z8rXrcvI8bdrsV1FPs+cOiIJbKDzJtpR3VR6wjj+4cBoYb4KsqsL2/uzdeVNAJaxrQ=
+Received: from MN2PR11CA0005.namprd11.prod.outlook.com (2603:10b6:208:23b::10)
+ by MN2PR02MB6301.namprd02.prod.outlook.com (2603:10b6:208:1bc::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.18; Thu, 4 Mar
+ 2021 07:09:36 +0000
+Received: from BL2NAM02FT004.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:23b:cafe::cc) by MN2PR11CA0005.outlook.office365.com
+ (2603:10b6:208:23b::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17 via Frontend
+ Transport; Thu, 4 Mar 2021 07:09:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BL2NAM02FT004.mail.protection.outlook.com (10.152.76.168) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3890.19 via Frontend Transport; Thu, 4 Mar 2021 07:09:36 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Wed, 3 Mar 2021 23:09:35 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Wed, 3 Mar 2021 23:09:35 -0800
+Envelope-to: michal.simek@xilinx.com,
+ rajan.vaja@xilinx.com,
+ manish.narani@xilinx.com,
+ amit.sunil.dhamne@xilinx.com,
+ nava.manne@xilinx.com,
+ mdf@kernel.org,
+ trix@redhat.com,
+ robh+dt@kernel.org,
+ gregkh@linuxfoundation.org,
+ arnd@arndb.de,
+ linux-fpga@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ chinnikishore369@gmail.com
+Received: from [10.140.6.60] (port=51424 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1lHi74-0003nC-ML; Wed, 03 Mar 2021 23:09:35 -0800
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <mdf@kernel.org>, <trix@redhat.com>, <robh+dt@kernel.org>,
+        <michal.simek@xilinx.com>, <gregkh@linuxfoundation.org>,
+        <jolly.shah@xilinx.com>, <rajan.vaja@xilinx.com>, <arnd@arndb.de>,
+        <manish.narani@xilinx.com>, <amit.sunil.dhamne@xilinx.com>,
+        <tejas.patel@xilinx.com>, <linux-fpga@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <chinnikishore369@gmail.com>
+CC:     Nava kishore Manne <nava.manne@xilinx.com>
+Subject: [PATCH v3 0/3] Add Bitstream configuration support for Versal
+Date:   Thu, 4 Mar 2021 12:32:21 +0530
+Message-ID: <20210304070224.22346-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <70f35c99165ac4dd1846ea2e30b9a1745c364903.camel@perches.com>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: beb3dc02-9fea-4705-bd3a-08d8dedc781c
+X-MS-TrafficTypeDiagnostic: MN2PR02MB6301:
+X-Microsoft-Antispam-PRVS: <MN2PR02MB6301E7AF8699F6249F75A6A5C2979@MN2PR02MB6301.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AQH65MIh5zEjp6qxvYOy/3muFnTE9eKd1yCiNPSu1HlHEVp0JgDfwvDMcPvSutu4MbYADLunL/uh0qWADHXbXDd8ebzTje4HaSTLxp5chkjHZTX+45csR7/OH2UDNimmLZlrS5Tg/QjyZIvllQxEJFBu1atBJNwA8x+LRXNGG3HZED/26G/3sYDDEU10lgndNRLzTDB/nmsENxKPt6ZgK3WeNJ5pPacXCb+RYytfnQwyG4fVov+uYXuNtK5yCyAoYXSy6TUO5HUHJzD4ZHkRRxGEHLxTES8lYMwGResI9BA+/dJJ1BevsaosUN5q8do6AwTc5JNmECeJQqYRTDVXve4IQj1Q8N1/mHOIvRgEcl3yPM9lJ+5CnACqXcA44AjCiWS6aUZWG6MDprH+c8nn3ZPwIAgJ4bbXhWOXueFrw2hqx/iu7v4Z5ayW+q1q6UbefWAz2LD+XiBlGaiUUIro+5Be+DaYVkPYN6YXk16LZY0e/kV9DyMpc5vWv0KsnaqGMhjIw734NdzUNaTsE5FmQ6/aINuPEMYv1Vv3aBq9vUUH9d/a8rx/azAeAKt7J067Swk7ZZzvceR3778cu7dE76P1mNp1Z1PqvgpM3h79D1x7DhIS/MPyCzn/5BFQRQIUxEUFTOw0Q+F2VBQuxKH/MdStB8VDd3TGd/xiHcF9PmYB1VS8214Ah0DhDmDlCfhn8ZAF6KGHyVolTD9U8O/+zj7Smvls7txZCJ6PyEM0BVGljMrkWWM4p8OapwRHlRur
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(396003)(376002)(346002)(39860400002)(46966006)(36840700001)(426003)(4744005)(2616005)(7636003)(336012)(356005)(36906005)(186003)(110136005)(47076005)(82310400003)(26005)(316002)(8676002)(70206006)(70586007)(7416002)(2906002)(478600001)(1076003)(82740400003)(107886003)(6666004)(9786002)(921005)(8936002)(7696005)(36756003)(5660300002)(36860700001)(4326008)(102446001)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2021 07:09:36.0856
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: beb3dc02-9fea-4705-bd3a-08d8dedc781c
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT004.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6301
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Mar 02, 2021 at 10:49:43PM -0800, Joe Perches wrote:
-> On Sun, 2021-02-21 at 12:43 -0800, Moritz Fischer wrote:
-> > On Wed, Feb 17, 2021 at 10:40:01PM -0800, Lizhi Hou wrote:
-> > > This is V3 of patch series which adds management physical function driver for Xilinx
-> > > Alveo PCIe accelerator cards, https://www.xilinx.com/products/boards-and-kits/alveo.html
-> > > This driver is part of Xilinx Runtime (XRT) open source stack.
-> []
-> > Please fix the indents all across this patchset. Doesn't checkpatch with
-> > --strict complain about this?
-> 
-> I glanced at a couple bits of these patches and didn't
-> notice any of what I consider poor indentation style.
-> 
-> What indent is wrong here?
+This series adds FPGA Manager support for the Xilinx
+Versal chip.
 
-Maybe I dreamed it, or confused it with the CamelCase issues instead?
+Appana Durga Kedareswara rao (1):
+  dt-bindings: fpga: Add binding doc for versal fpga manager
 
-Sorry for the noise in that case,
+Nava kishore Manne (2):
+  drivers: firmware: Add PDI load API support
+  fpga: versal-fpga: Add versal fpga manager driver
 
-- Moritz
+ .../bindings/fpga/xlnx,versal-fpga.yaml       |  33 +++++
+ drivers/firmware/xilinx/zynqmp.c              |  17 +++
+ drivers/fpga/Kconfig                          |   9 ++
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/versal-fpga.c                    | 117 ++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h          |  10 ++
+ 6 files changed, 187 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+ create mode 100644 drivers/fpga/versal-fpga.c
+
+-- 
+2.18.0
+
