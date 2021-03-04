@@ -2,145 +2,362 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 598A432CD7F
-	for <lists+linux-fpga@lfdr.de>; Thu,  4 Mar 2021 08:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD16132D45D
+	for <lists+linux-fpga@lfdr.de>; Thu,  4 Mar 2021 14:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236213AbhCDHWh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 4 Mar 2021 02:22:37 -0500
-Received: from mail-dm3nam07on2055.outbound.protection.outlook.com ([40.107.95.55]:42976
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236198AbhCDHWO (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 4 Mar 2021 02:22:14 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nLHdsfG6INAgWVdEbJD/mrLBfxJdRKtqgciegdpOu43R4I3X3gWcvS72n0Zr2ELVzJUsJhQWlCJV+IP9YPBa2iIx+06s3irHX6uYuvVdSQiqx8OrpPjEz6BTYJ4mVQ48ZeyAjDAKQNeXctCXDxR4AxM3hfgDS1pT1LsIhUkPVOK0//6QSsr4FD7ML/wRoPb1ClUao/Q4pxtzQjq4mVoLsXZrIrllzECBXqVm2IqMvfppffDoUyDOGGu+CWP9+8hT9BvEkOhHWSb+i0mXy+gKnXKfRNLz3BdtjYjD+4/5h5CYFmtnfy+E2K9LNqQPZiV/sQnkHXHyz7nx5GKMOBZ/6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mljoC9d9VmQvUKwMmMusbpz4aUvvt4RdbVq1mMJKBB0=;
- b=dZyeKufqPW+tzYewswkm4WekQfAfn+qfpIMa0ZfLFbtRRulX91CDmi/MufB+eYpv9QpHWl666HzfCsEwCGYsX/+M8TpirER3/pbR1KgRBJbnMbRoxmzz6SgxrKkGNs9qndGHkbnrOKQlS9MnhjrDI5q6+go9SQoPNMoWpE37iUejpsL9stNZC2gWL6A7TYPXzx3ux2GdiJdJY6HoBHYP0XFWWzHIgcGeTAI4XnK2ybkRruvwMoYFzp2bpilvdQSvpV7vjNye9Dz4pKsIoaWhqmllaoQpyo3D72FLKN/i8fFnR3pPS37T3bP789rG5XE8ZlnQGp7+fOvWV2oh5oIfOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
- dkim=pass header.d=xilinx.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mljoC9d9VmQvUKwMmMusbpz4aUvvt4RdbVq1mMJKBB0=;
- b=bJ7HKMBVMx8qYqVgtTroHX2SZjnnYJkbEfp1aqPzOreHgv7XpL0v5KXogwKNTrMZbqGHDpX/T9kiFpTIUjFjz31sanCKXq3NSxPeqAam8lVu+YWHn6ed1MvsyRwrLyECjMn32FIsGoK8zHI4I93DKfTxcnnANs5mVFQmHW+g2T0=
-Received: from MWHPR02MB2623.namprd02.prod.outlook.com (2603:10b6:300:44::9)
- by MWHPR02MB2317.namprd02.prod.outlook.com (2603:10b6:300:5a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.18; Thu, 4 Mar
- 2021 07:21:21 +0000
-Received: from MWHPR02MB2623.namprd02.prod.outlook.com
- ([fe80::297d:1fb:ad07:1b26]) by MWHPR02MB2623.namprd02.prod.outlook.com
- ([fe80::297d:1fb:ad07:1b26%9]) with mapi id 15.20.3912.022; Thu, 4 Mar 2021
- 07:21:21 +0000
-From:   Nava kishore Manne <navam@xilinx.com>
-To:     Nava kishore Manne <navam@xilinx.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Michal Simek <michals@xilinx.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chinnikishore369@gmail.com" <chinnikishore369@gmail.com>
-CC:     git <git@xilinx.com>
-Subject: RE: [PATCH v2 0/2] Add DFX AXI Shutdown manager IP support for Xilinx
-Thread-Topic: [PATCH v2 0/2] Add DFX AXI Shutdown manager IP support for
- Xilinx
-Thread-Index: AQHXADVYKfdNXFvF5k+nT8eyko1p1qpzjWAQ
-Date:   Thu, 4 Mar 2021 07:21:21 +0000
-Message-ID: <MWHPR02MB2623671095460019231CB4EDC2979@MWHPR02MB2623.namprd02.prod.outlook.com>
-References: <20210211051148.16722-1-nava.manne@xilinx.com>
-In-Reply-To: <20210211051148.16722-1-nava.manne@xilinx.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-TNEF-Correlator: 
-authentication-results: xilinx.com; dkim=none (message not signed)
- header.d=none;xilinx.com; dmarc=none action=none header.from=xilinx.com;
-x-originating-ip: [149.199.50.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 5eed862c-716d-4c44-0067-08d8dede1c44
-x-ms-traffictypediagnostic: MWHPR02MB2317:
-x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR02MB2317180C3BF3F75CC1468CC1C2979@MWHPR02MB2317.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:792;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dgDtGg82cHCZN30AnM84lJzuT5Tc6s5hOLfpeTAQlFp0YZmXFOhcChYptrZWtfH+c/sZiplHh6xiW6PfRBgY/KxzZPSCo+05P8mPTXErasd/H8OFZY5lzYT0b7oMpiP5epkc19R/1t2SJesAApGoMYD72h249YyC/VKVw9L9hWObpyK9XLbGQ9FfvlBpgyqLsywgRdSuiLAZ274M2pmKBROXrvcFGRqrLQB0dP47woUTsTTiqLfr1RCCrpa/y2ogN/Xyv1m9aS3t6/cFiyleaHjWqYz5rRZQC0FXXBws6FIzKEYRuzE6tro4t7MixBeoaBk7KDg4xB5fsDOgSwupPP1FuyW7KF3R6o6N7gKP9K7oJkgibwLJIzBgLloBbVGmWXLc+dDCIYyeEfafW7Fn/+ZfWxpqBe6GorMfguVjwDDmuNpcl0dzifwJdKMs+CHlR+kauhf9KcuX1nUDEvwVJ3UQ9YfbKJo/OiE4WpKiN0NVZEZhuwXgWleWER+4b9uf39sNqJTvGz5tVkPC6Lgz+viLt34pOEQ4VwPBhSNUbK9/kx94RuOXvCf8ZUVPx2/T
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR02MB2623.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(366004)(346002)(39860400002)(396003)(136003)(83380400001)(110136005)(53546011)(4744005)(26005)(478600001)(186003)(6506007)(7696005)(64756008)(86362001)(316002)(107886003)(8676002)(55016002)(9686003)(66946007)(2906002)(921005)(71200400001)(66476007)(66446008)(76116006)(52536014)(66556008)(8936002)(33656002)(5660300002)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?GME7G3PDHBurxJWAKvBbQ5fhP322FqGQ39tL4/8c0LzzhAiQSeIl78o7FdBn?=
- =?us-ascii?Q?NSiuYCAczDwgqY6mDYFhhrfUuy1wtG9uJ76uEXbbf8bBZRIt++F+++ZKOZB/?=
- =?us-ascii?Q?CUb/wkGNNGCIJqmL8pCI7Hx5j+G6LS0VtruZYiWyhakFxPN6775yKJH1LOlq?=
- =?us-ascii?Q?4azbPZg5/Yj2e3tvhpeltkqrpIBAIt0IbkqbqaRgJ9n/KHv/xcOYcXHDfR6j?=
- =?us-ascii?Q?1LkyaUb8Nf5rMxQpxnnJeDGok0xnUDfyQ3lZlsq1v9sWDZr8jdgP+LFxI4Ri?=
- =?us-ascii?Q?fS8oJMoxz5neyQrfm/dl7A2Sp1taa5A05K4IJUhxXDa1jZ/N896Iz7rNog3e?=
- =?us-ascii?Q?2wq7OYcAkCMS3F5HZ2v1fUiSIn85UuaAbCjnzZwny6n5BfOCQR6qEqkgt6S4?=
- =?us-ascii?Q?8415febcT697fOEef6NJ0tPOQOnOif+MLfRRZbcgjl3njbR4gu0yCAlJ2Ou7?=
- =?us-ascii?Q?0ntU0nWEUpID1kgg608TwVHZVD7YF8hHZgmtnWaYDpqhDBW9+D8mV76YfWDE?=
- =?us-ascii?Q?DuHSQUpORJUfk0kirG2lcu7Y95Ct4+fwuFQ9WT4NgRBB7giQZaKRq8QkCfLN?=
- =?us-ascii?Q?f8dEIIiZk2Yg2dhT1c85TJnV5Ty8iStQ2PQ6TQxFf6HfETextHDTFUqJnNN7?=
- =?us-ascii?Q?T+e0ZZ7tuOEp/XjMupxWbwWWY+AjXBJcxdKUAhs5KI6GerQkrXg23gsaLJ8v?=
- =?us-ascii?Q?Bkxp1+tOutDkAotFu+nslxIofeaSrfURA0SIeEEFgAqyX6Jb5FuGuzqCkWhB?=
- =?us-ascii?Q?QauNAWsS5YyZPOmIYe+ylaBLrRX4BXJy4BOx57XXlLp2Zo5f12OMuCMHNngE?=
- =?us-ascii?Q?L7BGPazEO3sfiKrz262h4zGxw8felHqE8RE4aOC9nw2gfbmtqGRk7engVdMz?=
- =?us-ascii?Q?1MGVPsulrBFwVAmzDUJK5+1FzYxBCG90g8Ap+s9NR8C6FxjpP2gyJTXkdwry?=
- =?us-ascii?Q?CH8X1BJafozjlgeocOWRFLJNUHSbHOLC7dlQNQUgVp0liQUe/mEMOelB22I1?=
- =?us-ascii?Q?QVZkqYsjDTG/nQbxvt+Et7XA5bsa8xjxSSNH3NpFScRa2stkjHAPmdlqpaxK?=
- =?us-ascii?Q?NCf8ZoREVdgZqpmqe5tIZRxW260tOcL2Qwt216wcHc7wsT6MI+qFh6tOJBSa?=
- =?us-ascii?Q?W19QqgV8h8Q4Nz/tBWJAEAoC0HxVJNm5ocCqpPX79Uq4YeD/TMj2avJRLQDU?=
- =?us-ascii?Q?2Kp84Xxxj7Gb/pkGrG9ITOekQx5W446ebWjpxaGkLH0yq+TbDk10dN+9j24O?=
- =?us-ascii?Q?IPG9c+pRZ85NpuLwp6FWlu/8L7pT6Z/taPY18ItBbM+jribF6Ja/TNJNyA4O?=
- =?us-ascii?Q?tzYhCc3hkyjfkTIFxke19qSu?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S241409AbhCDNlj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 4 Mar 2021 08:41:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58278 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241427AbhCDNlQ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 4 Mar 2021 08:41:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1614865191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ekOwjBVLyvG/SdJJ95XbcF+3uVLr94jDQEL8woMHUvs=;
+        b=ZTgxdJTdlUu5B1uRlyw7MhEUwndAqq2N3iV+rJmcNo/wp8Vh7xPdqLlpZY950v1MZUwgDA
+        vImvcOu0U7mxIAvrf2VZmD/AHTYFdrK05z5G5COTvP8V/T4y1BZPP7Ck6sRJ4AGv6O7ojT
+        gA+Qmf9ZLfQ70SQL4Y4o14N6+NnZtVM=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-10-MU0YapP4NZWS2-sw5qTrTg-1; Thu, 04 Mar 2021 08:39:50 -0500
+X-MC-Unique: MU0YapP4NZWS2-sw5qTrTg-1
+Received: by mail-qk1-f197.google.com with SMTP id h134so9601639qke.1
+        for <linux-fpga@vger.kernel.org>; Thu, 04 Mar 2021 05:39:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=ekOwjBVLyvG/SdJJ95XbcF+3uVLr94jDQEL8woMHUvs=;
+        b=hQ9A8xe97nmo/jzYgcnobWISFKfkpZHQiALL8LSpirf1tuZX0MvXxk42cukYUQRyts
+         6OPl3T/KfqYfVW2s3V3VZ1Tuyv13fdPxdG1z+gKR8KfoTj3IUk2sM8ZheTFM/ctKbeyl
+         bfN6u6m+MJA1pjIHNqv8IQofjEvAOY8tRmeXwm83qemvorvuQjsxTgM45+x13kE7KFv7
+         iznkIqEnjtcBkOhzTP6Qr2QIRPeMjnGm1tziB/nQlbd69undpFi6Q6zp8B+SGt4rgmLq
+         ptk8fSdSBuuVmSyorsTXlgdil6vKhh8WK984k1SmOIM0EQGj/sq6uhn8CivWVGtaXm/8
+         kcsQ==
+X-Gm-Message-State: AOAM533n5ZnqV5pnN8d2nZAPrIztJa1rQS0eXYawqLhv62rTRlCl39OF
+        Gj39Mq0S5IeSFJRtkO1GBD3Kkp49v59IDjvt6rPvZIvwo9UGqoWCg2ZuNKrnrzG700b0uxRtOyW
+        sQLA03lwal0DEZTb97gjNSg==
+X-Received: by 2002:a37:5243:: with SMTP id g64mr3889261qkb.376.1614865189434;
+        Thu, 04 Mar 2021 05:39:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz39ia44Xjc22E0lCMnwd++aFVAU2PmF9Dow8C0dnza9IdHZCG92M9XqC1aKWAXeZ+WRWNlKA==
+X-Received: by 2002:a37:5243:: with SMTP id g64mr3889235qkb.376.1614865189156;
+        Thu, 04 Mar 2021 05:39:49 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id b22sm6464402qkk.45.2021.03.04.05.39.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Mar 2021 05:39:48 -0800 (PST)
+Subject: Re: [PATCH V3 XRT Alveo 13/18] fpga: xrt: devctl platform driver
+To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
+Cc:     Lizhi Hou <lizhih@xilinx.com>, linux-fpga@vger.kernel.org,
+        maxz@xilinx.com, sonal.santan@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
+        robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
+References: <20210218064019.29189-1-lizhih@xilinx.com>
+ <20210218064019.29189-14-lizhih@xilinx.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <f32d06bc-1054-eb97-cce1-9b40e9c4442b@redhat.com>
+Date:   Thu, 4 Mar 2021 05:39:46 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR02MB2623.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5eed862c-716d-4c44-0067-08d8dede1c44
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2021 07:21:21.0320
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: utxzwdbxgQX5LopZPK/deFnsrC6DPpU8ed0m8EJ6Eksvz67QTLe1fq+E2a1VmhnWhYtHtYVAde1pl20gZjYn7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2317
+In-Reply-To: <20210218064019.29189-14-lizhih@xilinx.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Ping!
 
-> -----Original Message-----
-> From: Nava kishore Manne <nava.manne@xilinx.com>
-> Sent: Thursday, February 11, 2021 10:42 AM
-> To: mdf@kernel.org; trix@redhat.com; robh+dt@kernel.org; Michal Simek
-> <michals@xilinx.com>; linux-fpga@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> kernel@vger.kernel.org; chinnikishore369@gmail.com
-> Cc: git <git@xilinx.com>; Nava kishore Manne <navam@xilinx.com>
-> Subject: [PATCH v2 0/2] Add DFX AXI Shutdown manager IP support for Xilin=
-x
->=20
-> Nava kishore Manne (2):
->   dt-bindings: fpga: Add compatible value for Xilinx DFX AXI shutdown
->     manager
->   fpga: Add support for Xilinx DFX AXI Shutdown manager
->=20
->  .../bindings/fpga/xilinx-pr-decoupler.txt     | 24 +++++++++++-
->  drivers/fpga/Kconfig                          |  9 ++++-
->  drivers/fpga/xilinx-pr-decoupler.c            | 37 ++++++++++++++++---
->  3 files changed, 63 insertions(+), 7 deletions(-)
->=20
-> --
-> 2.18.0
+On 2/17/21 10:40 PM, Lizhi Hou wrote:
+> Add devctl driver. devctl is a type of hardware function which only has
+> few registers to read or write. They are discovered by walking firmware
+> metadata. A platform device node will be created for them.
+>
+> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
+> ---
+>  drivers/fpga/xrt/include/xleaf/devctl.h |  43 +++++
+>  drivers/fpga/xrt/lib/xleaf/devctl.c     | 206 ++++++++++++++++++++++++
+>  2 files changed, 249 insertions(+)
+>  create mode 100644 drivers/fpga/xrt/include/xleaf/devctl.h
+>  create mode 100644 drivers/fpga/xrt/lib/xleaf/devctl.c
+>
+> diff --git a/drivers/fpga/xrt/include/xleaf/devctl.h b/drivers/fpga/xrt/include/xleaf/devctl.h
+> new file mode 100644
+> index 000000000000..96a40e066f83
+> --- /dev/null
+> +++ b/drivers/fpga/xrt/include/xleaf/devctl.h
+> @@ -0,0 +1,43 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Header file for XRT DEVCTL Leaf Driver
+> + *
+> + * Copyright (C) 2020-2021 Xilinx, Inc.
+> + *
+> + * Authors:
+> + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
+> + */
+> +
+> +#ifndef _XRT_DEVCTL_H_
+> +#define _XRT_DEVCTL_H_
+> +
+> +#include "xleaf.h"
+> +
+> +/*
+> + * DEVCTL driver IOCTL calls.
+> + */
+> +enum xrt_devctl_ioctl_cmd {
+> +	XRT_DEVCTL_READ = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+> +	XRT_DEVCTL_WRITE,
+> +};
+> +
+> +enum xrt_devctl_id {
+> +	XRT_DEVCTL_ROM_UUID,
+Assumes 0, should make this explicit and initialize to 0
+> +	XRT_DEVCTL_DDR_CALIB,
+> +	XRT_DEVCTL_GOLDEN_VER,
+> +	XRT_DEVCTL_MAX
+> +};
+> +
+> +struct xrt_devctl_ioctl_rw {
+> +	u32	xgir_id;
+> +	void	*xgir_buf;
+> +	u32	xgir_len;
+> +	u32	xgir_offset;
+similar to other patches, the xgir_ prefix is not needed
+> +};
+> +
+> +struct xrt_devctl_ioctl_intf_uuid {
+> +	u32	xgir_uuid_num;
+> +	uuid_t	*xgir_uuids;
+> +};
+> +
+> +#endif	/* _XRT_DEVCTL_H_ */
+> diff --git a/drivers/fpga/xrt/lib/xleaf/devctl.c b/drivers/fpga/xrt/lib/xleaf/devctl.c
+> new file mode 100644
+> index 000000000000..caf8c6569f0f
+> --- /dev/null
+> +++ b/drivers/fpga/xrt/lib/xleaf/devctl.c
+> @@ -0,0 +1,206 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Xilinx Alveo FPGA devctl Driver
+> + *
+> + * Copyright (C) 2020-2021 Xilinx, Inc.
+> + *
+> + * Authors:
+> + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
+> + */
+> +
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/io.h>
+> +#include "metadata.h"
+> +#include "xleaf.h"
+> +#include "xleaf/devctl.h"
+> +
+> +#define XRT_DEVCTL "xrt_devctl"
+> +
+> +struct xrt_name_id {
+> +	char *ep_name;
+> +	int id;
+> +};
+> +
+> +static struct xrt_name_id name_id[XRT_DEVCTL_MAX] = {
+> +	{ XRT_MD_NODE_BLP_ROM, XRT_DEVCTL_ROM_UUID },
+> +	{ XRT_MD_NODE_GOLDEN_VER, XRT_DEVCTL_GOLDEN_VER },
+DDR_CALIB is unused ?
+> +};
+> +
+> +struct xrt_devctl {
+> +	struct platform_device	*pdev;
+> +	void		__iomem *base_addrs[XRT_DEVCTL_MAX];
+> +	ulong			sizes[XRT_DEVCTL_MAX];
+> +};
+similar to other patches, why not use regmap ?
+> +
+> +static int xrt_devctl_name2id(struct xrt_devctl *devctl, const char *name)
+> +{
+> +	int	i;
+> +
+> +	for (i = 0; i < XRT_DEVCTL_MAX && name_id[i].ep_name; i++) {
+> +		if (!strncmp(name_id[i].ep_name, name, strlen(name_id[i].ep_name) + 1))
+> +			return name_id[i].id;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int
+> +xrt_devctl_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
+> +{
+> +	struct xrt_devctl	*devctl;
+> +	int			ret = 0;
+> +
+> +	devctl = platform_get_drvdata(pdev);
+> +
+> +	switch (cmd) {
+> +	case XRT_XLEAF_EVENT:
+> +		/* Does not handle any event. */
+> +		break;
+> +	case XRT_DEVCTL_READ: {
+> +		struct xrt_devctl_ioctl_rw	*rw_arg = arg;
+> +		u32				*p_src, *p_dst, i;
+> +
+> +		if (rw_arg->xgir_len & 0x3) {
+> +			xrt_err(pdev, "invalid len %d", rw_arg->xgir_len);
+> +			return -EINVAL;
+> +		}
+> +
+> +		if (rw_arg->xgir_id >= XRT_DEVCTL_MAX) {
+> +			xrt_err(pdev, "invalid id %d", rw_arg->xgir_id);
+> +			return -EINVAL;
+> +		}
+needs a < 0 check ?
+> +
+> +		p_src = devctl->base_addrs[rw_arg->xgir_id];
+> +		if (!p_src) {
+> +			xrt_err(pdev, "io not found, id %d",
+> +				rw_arg->xgir_id);
+> +			return -EINVAL;
+> +		}
+> +		if (rw_arg->xgir_offset + rw_arg->xgir_len >
+> +		    devctl->sizes[rw_arg->xgir_id]) {
+> +			xrt_err(pdev, "invalid argument, off %d, len %d",
+> +				rw_arg->xgir_offset, rw_arg->xgir_len);
+> +			return -EINVAL;
+> +		}
+> +		p_dst = rw_arg->xgir_buf;
+> +		for (i = 0; i < rw_arg->xgir_len / sizeof(u32); i++) {
+> +			u32 val = ioread32(p_src + rw_arg->xgir_offset + i);
+> +
+> +			memcpy(p_dst + i, &val, sizeof(u32));
+> +		}
+> +		break;
+> +	}
+
+The _WRITE msg is not handled Then why have it ?
+
+Tom
+
+> +	default:
+> +		xrt_err(pdev, "unsupported cmd %d", cmd);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int xrt_devctl_remove(struct platform_device *pdev)
+> +{
+> +	struct xrt_devctl	*devctl;
+> +	int			i;
+> +
+> +	devctl = platform_get_drvdata(pdev);
+> +
+> +	for (i = 0; i < XRT_DEVCTL_MAX; i++) {
+> +		if (devctl->base_addrs[i])
+> +			iounmap(devctl->base_addrs[i]);
+> +	}
+> +
+> +	platform_set_drvdata(pdev, NULL);
+> +	devm_kfree(&pdev->dev, devctl);
+> +
+> +	return 0;
+> +}
+> +
+> +static int xrt_devctl_probe(struct platform_device *pdev)
+> +{
+> +	struct xrt_devctl	*devctl;
+> +	int			i, id, ret = 0;
+> +	struct resource		*res;
+> +
+> +	devctl = devm_kzalloc(&pdev->dev, sizeof(*devctl), GFP_KERNEL);
+> +	if (!devctl)
+> +		return -ENOMEM;
+> +
+> +	devctl->pdev = pdev;
+> +	platform_set_drvdata(pdev, devctl);
+> +
+> +	xrt_info(pdev, "probing...");
+> +	for (i = 0, res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	    res;
+> +	    res = platform_get_resource(pdev, IORESOURCE_MEM, ++i)) {
+> +		id = xrt_devctl_name2id(devctl, res->name);
+> +		if (id < 0) {
+> +			xrt_err(pdev, "ep %s not found", res->name);
+> +			continue;
+> +		}
+> +		devctl->base_addrs[id] = ioremap(res->start, res->end - res->start + 1);
+> +		if (!devctl->base_addrs[id]) {
+> +			xrt_err(pdev, "map base failed %pR", res);
+> +			ret = -EIO;
+> +			goto failed;
+> +		}
+> +		devctl->sizes[id] = res->end - res->start + 1;
+> +	}
+> +
+> +failed:
+> +	if (ret)
+> +		xrt_devctl_remove(pdev);
+> +
+> +	return ret;
+> +}
+> +
+> +static struct xrt_subdev_endpoints xrt_devctl_endpoints[] = {
+> +	{
+> +		.xse_names = (struct xrt_subdev_ep_names[]) {
+> +			/* add name if ep is in same partition */
+> +			{ .ep_name = XRT_MD_NODE_BLP_ROM },
+> +			{ NULL },
+> +		},
+> +		.xse_min_ep = 1,
+> +	},
+> +	{
+> +		.xse_names = (struct xrt_subdev_ep_names[]) {
+> +			{ .ep_name = XRT_MD_NODE_GOLDEN_VER },
+> +			{ NULL },
+> +		},
+> +		.xse_min_ep = 1,
+> +	},
+> +	/* adding ep bundle generates devctl device instance */
+> +	{ 0 },
+> +};
+> +
+> +static struct xrt_subdev_drvdata xrt_devctl_data = {
+> +	.xsd_dev_ops = {
+> +		.xsd_ioctl = xrt_devctl_leaf_ioctl,
+> +	},
+> +};
+> +
+> +static const struct platform_device_id xrt_devctl_table[] = {
+> +	{ XRT_DEVCTL, (kernel_ulong_t)&xrt_devctl_data },
+> +	{ },
+> +};
+> +
+> +static struct platform_driver xrt_devctl_driver = {
+> +	.driver = {
+> +		.name = XRT_DEVCTL,
+> +	},
+> +	.probe = xrt_devctl_probe,
+> +	.remove = xrt_devctl_remove,
+> +	.id_table = xrt_devctl_table,
+> +};
+> +
+> +void devctl_leaf_init_fini(bool init)
+> +{
+> +	if (init)
+> +		xleaf_register_driver(XRT_SUBDEV_DEVCTL, &xrt_devctl_driver, xrt_devctl_endpoints);
+> +	else
+> +		xleaf_unregister_driver(XRT_SUBDEV_DEVCTL);
+> +}
 
