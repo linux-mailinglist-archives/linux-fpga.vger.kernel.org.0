@@ -2,158 +2,827 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C016B32D9B0
-	for <lists+linux-fpga@lfdr.de>; Thu,  4 Mar 2021 19:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BFB32EEB7
+	for <lists+linux-fpga@lfdr.de>; Fri,  5 Mar 2021 16:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233080AbhCDSyL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 4 Mar 2021 13:54:11 -0500
-Received: from mail-bn8nam12on2048.outbound.protection.outlook.com ([40.107.237.48]:50016
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231246AbhCDSyC (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 4 Mar 2021 13:54:02 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hlyrMARLz3EHw6LzD51gT9qEbg0h49QP1YEXb9RKNS8+7fZ2kKmL//yVxv8b000W9q2IzkLmuC7SfrZFPEEU8laIAxj1H1arYkmb/r8UKOSbO9kfKl8atA5wMEwqiN6VkjQRLXXk9AifgNz9W07y/r9kHXnj7VxLXwXT9jaQV+yUQnrJndU1/1Hhep7ZG0VAj/oPXKag4spav8YzEuHBSmvKRfXLKnI2EVmQrcqPfWsiO+qMjLAxDWzbEhaie3Po5D0tQZGW+15qLX7+QeUWqeSMB7QJslY5Di1KQt1cLEoFZ8CHLBsXhK4Q+WbrOLldGxIluz1IgqI5I03jwfWO2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C9WFCGarmGfC4gOsnhHfpWxz90jhxjZpQPUsFnLEcDw=;
- b=W3FpHCts1He0dDLKadbE4O71XocE8776Xx/QI8F7wI54Xfg+aVw8afHozvTwU1Jz9QFRACeQn7ZyKEEO92pdpTPc11dgDZ6UeZT67T3R6okQNBhvCeZkyRVeNCCY0btMcbQOJAaS79KMH1ROEmoLmsAlgYZ9HmD7xtsUZjBUcJOwAUZhMtxKqvdj/cPWMx4RFSRY8JdxrHh/y5S4Bs0Hkn7mLbPZv7ytwXA6DiURKSojHizb+zjIY+APOVkK3hglkaWmUs+YGykThWh3QqGjSOTW+40DeOqzIvJCcHXBnzbjlEDdktuBiyo0YoFIYafPYTIxk747tMtutSbHGHAiWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C9WFCGarmGfC4gOsnhHfpWxz90jhxjZpQPUsFnLEcDw=;
- b=ovijQLld4Q8xBUIbcSjtdqwC/SsTKxVNAZSg/KFgsqpdptKhqq0hnNwtkI8rXKDcGvFlePe/JMhHBjnXPAHmjknI5J3VVejy4MPn2qAnlOvxvvyEzn3j5jEAtL/TC14RXebVxQvVjyP75nFp4ZTnHeIxU36TSI6dNkmS/foeTvw=
-Received: from MN2PR20CA0014.namprd20.prod.outlook.com (2603:10b6:208:e8::27)
- by DM6PR02MB3930.namprd02.prod.outlook.com (2603:10b6:5:a4::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17; Thu, 4 Mar
- 2021 18:53:09 +0000
-Received: from BL2NAM02FT016.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:e8:cafe::67) by MN2PR20CA0014.outlook.office365.com
- (2603:10b6:208:e8::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17 via Frontend
- Transport; Thu, 4 Mar 2021 18:53:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BL2NAM02FT016.mail.protection.outlook.com (10.152.77.171) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3890.19 via Frontend Transport; Thu, 4 Mar 2021 18:53:09 +0000
-Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Thu, 4 Mar 2021 10:53:09 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Thu, 4 Mar 2021 10:53:09 -0800
-Envelope-to: maxz@xilinx.com,
- max.zhen@xilinx.com,
- michal.simek@xilinx.com,
- sonal.santan@xilinx.com,
- lizhi.hou@xilinx.com,
- stefanos@xilinx.com,
- robh@kernel.org,
- devicetree@vger.kernel.org,
- linux-fpga@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- trix@redhat.com,
- mdf@kernel.org
-Received: from [10.17.2.60] (port=54790)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <lizhi.hou@xilinx.com>)
-        id 1lHt5x-0000Uu-22; Thu, 04 Mar 2021 10:53:09 -0800
-Subject: Re: [PATCH V3 XRT Alveo 03/18] fpga: xrt: xclbin file helper
- functions
-To:     Moritz Fischer <mdf@kernel.org>, Lizhi Hou <lizhi.hou@xilinx.com>
-CC:     Tom Rix <trix@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-fpga@vger.kernel.org>, <maxz@xilinx.com>,
-        <sonal.santan@xilinx.com>, <michal.simek@xilinx.com>,
-        <stefanos@xilinx.com>, <devicetree@vger.kernel.org>,
-        <robh@kernel.org>, Max Zhen <max.zhen@xilinx.com>
+        id S229493AbhCEPYT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 5 Mar 2021 10:24:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:41636 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230047AbhCEPXq (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 5 Mar 2021 10:23:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1614957825;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nnGAX+fjzFnbIDaleZcJPdFhR8kGf5LM6HgPyg5aJ9g=;
+        b=fnUI7Hu7UVJmpUbmc9z/pI4v4wxCy3A/ovTZnJTOA7y+p+8LQUyQgjLrW8QcLtsCQZkWFO
+        NDpTwZVzM/5mu3nmjK+TPrZIFqZHnjVbUQUEYLLdg1282zmsIXabF/IEBeR5I4A5ncfB8J
+        SvgN++4wsXDgmLX8sTsM9+fNvobrn5Q=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-489-QQ_EOfnQMdOTjHu51hK5cg-1; Fri, 05 Mar 2021 10:23:41 -0500
+X-MC-Unique: QQ_EOfnQMdOTjHu51hK5cg-1
+Received: by mail-qk1-f199.google.com with SMTP id h134so2029731qke.1
+        for <linux-fpga@vger.kernel.org>; Fri, 05 Mar 2021 07:23:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=nnGAX+fjzFnbIDaleZcJPdFhR8kGf5LM6HgPyg5aJ9g=;
+        b=LYAbhdJVyqE7nxPZXew15XGjHI0Tn1BetCYSxM+oMCEDo7CXUKXrvrs25yaH45R8/U
+         iY3UC7LUU9nbaBCRqm27bIgzc+Ua0VeFlER2gzjsXT+F1Wq382sS27nZWYVnQyusmbyj
+         TLL2BcmcGNNlPlAbuDzFbjDBvzOkK/s5F9D4znEMmZNfIcGSmw7dtwHZ9mmgCyrmUqQC
+         G6ZqnbAcl3ovY9LP/fjKKge45pigOSg1CERha0lJI/XA5lHFnVgUINrPpitlTchEbi+R
+         /xaeAMKLwP76jdl71/CaodLmpAPw3IEjxrKTF1WQNJanIepG3Fu4PhBAuVg4qGj1bNRx
+         KylQ==
+X-Gm-Message-State: AOAM531zDxKXq+TTA84f8TxqJn4pDui4vlYCRqoiPfWo3LvxhJ+h5l54
+        sdLX6wz5MjG+meL8RyVf10NC482ITt7TTMHFJrBv3U46SKhK7S+3qGIVCf58P98Miqjq0YobuYM
+        FFNQlj4aLCLUYrM6VQTHDfg==
+X-Received: by 2002:a0c:9e15:: with SMTP id p21mr9137326qve.53.1614957819598;
+        Fri, 05 Mar 2021 07:23:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwTBoMJDLnwl9xkLMBbe0/mJD0RRPA+dU+Bq8yEixd1ZWdtdz2EfhFQjfGFthxWhqEIU3mqbQ==
+X-Received: by 2002:a0c:9e15:: with SMTP id p21mr9137288qve.53.1614957819168;
+        Fri, 05 Mar 2021 07:23:39 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id r2sm2074724qti.4.2021.03.05.07.23.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Mar 2021 07:23:38 -0800 (PST)
+Subject: Re: [PATCH V3 XRT Alveo 14/18] fpga: xrt: clock platform driver
+To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
+Cc:     Lizhi Hou <lizhih@xilinx.com>, linux-fpga@vger.kernel.org,
+        maxz@xilinx.com, sonal.santan@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
+        robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
 References: <20210218064019.29189-1-lizhih@xilinx.com>
- <20210218064019.29189-4-lizhih@xilinx.com>
- <4628ef05-27d1-b92f-9126-27a1f810c608@redhat.com>
- <3b73400c-cca1-60af-4eea-ed85de77a977@xilinx.com>
- <c79176af-8d0c-2300-3e4a-dfa604f10a62@redhat.com>
- <55ed0169-085c-9706-3b17-23ea582c43c3@xilinx.com>
- <YD5WbLCdCTBALQiI@epycbox.lan>
-From:   Lizhi Hou <lizhi.hou@xilinx.com>
-Message-ID: <8d65e7bb-0ffe-dde1-8dce-527131e0bebe@xilinx.com>
-Date:   Thu, 4 Mar 2021 10:53:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+ <20210218064019.29189-15-lizhih@xilinx.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <c872685e-cadb-900f-5a00-929420852c07@redhat.com>
+Date:   Fri, 5 Mar 2021 07:23:36 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <YD5WbLCdCTBALQiI@epycbox.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20210218064019.29189-15-lizhih@xilinx.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c39671a7-d334-4599-0ff3-08d8df3ec16c
-X-MS-TrafficTypeDiagnostic: DM6PR02MB3930:
-X-Microsoft-Antispam-PRVS: <DM6PR02MB3930FBCE8C6C7FDE1F7737ECA1979@DM6PR02MB3930.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3VkABS6piJDPw48cFCKul6QQtLWSKOpidUygCFj1TrML0Ln5IjE2Ie7FjKVAFtqBxpwz226/quMU/IGVtatHkoGLeGD+OgAbaMvYcgxHwIokZXQGyt5HguOaQldtuYzhm9R273lJJbu9lvFwpr8G21ub1T2X7NWSS+TS21yx65kP6AdtE321S/wOAnrs3pyyUokh+PXBq9XS8GuRkHsGPAGQXtBL7cYQ7mXdWGy6c/oajF8F1HvejezT90BeyFQTLTdjVSAYFRVVvJRV5a9J0qRDzGoD5ePTTQRBdQ2FG5FTI7YGRr6+J2tApzEkRk5LXbSYkTIMbWnuoH/BRG0lGI2TH48qmgWEC8ESS3lugmoje3tCVh07zukSG9qtwrWMgFodMtdwEEEBAc1UjPGZVRcB154TWKOSEfoomI/yEMPuSL2oaJG0foxElgQYxkn+v+NQRUt09STaiXHFn83JyqpMflJQxChNuiCgvGszFK0WwwG8l8LsmlizpKhAxv8DxnTXRGFrTKgb1Xi6jEtveC+wSaO7vVGUBRXdhVn4m7VbkdizI39EW8T6DUpcHH01kz8RyFtCDeuPk3gA155+mxfEZGZ0tpCcxarJYjY8n08CQiaV8ZMMd+mHCIg4bh+v3sqdZZSq1Kn1TAqJErLTAJK8t7yOXXy+BRArwulCBH4T28EkEAkG7DVcp0Tp36s7P0EtZRx2Gu3m6zxFEAOycQ==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(136003)(39860400002)(346002)(396003)(46966006)(36840700001)(54906003)(26005)(82740400003)(31686004)(186003)(8676002)(478600001)(44832011)(9786002)(4326008)(110136005)(2616005)(5660300002)(426003)(31696002)(36756003)(107886003)(53546011)(7636003)(2906002)(8936002)(82310400003)(36860700001)(70206006)(47076005)(70586007)(356005)(336012)(36906005)(83380400001)(316002)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2021 18:53:09.7576
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c39671a7-d334-4599-0ff3-08d8df3ec16c
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT016.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB3930
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Moritz,
+why are clock and clkfeq separated ?
 
-
-On 03/02/2021 07:14 AM, Moritz Fischer wrote:
+On 2/17/21 10:40 PM, Lizhi Hou wrote:
+> Add clock driver. Clock is a hardware function discovered by walking
+> xclbin metadata. A platform device node will be created for it. Other
+> part of driver configures clock through clock driver.
 >
-> On Mon, Mar 01, 2021 at 04:25:37PM -0800, Lizhi Hou wrote:
->> Hi Tom，
->>
->>
->> On 02/28/2021 08:54 AM, Tom Rix wrote:
->>> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
->>>
->>>
->>> On 2/26/21 1:23 PM, Lizhi Hou wrote:
->>>> Hi Tom,
->>>>
->>>>
->>> snip
->>>
->>>>> I also do not see a pragma pack, usually this is set of 1 so the compiler does not shuffle elements, increase size etc.
->>>> This data structure is shared with other tools. And the structure is well defined with reasonable alignment. It is compatible with all compilers we have tested. So pragma pack is not necessary.
->>> You can not have possibly tested all the configurations since the kernel supports many arches and compilers.
->>>
->>> If the tested existing alignment is ok, pragma pack should be a noop on your tested configurations.
->>>
->>> And help cover the untested configurations.
->> Got it. I will add pragma pack(1).
-> Please do not use pragma pack(), add __packed to the structs in
-> question.
-Ok, I will use __packed.
-
-Thanks,
-Lizhi
+> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
+> ---
+>  drivers/fpga/xrt/include/xleaf/clock.h |  31 ++
+>  drivers/fpga/xrt/lib/xleaf/clock.c     | 648 +++++++++++++++++++++++++
+>  2 files changed, 679 insertions(+)
+>  create mode 100644 drivers/fpga/xrt/include/xleaf/clock.h
+>  create mode 100644 drivers/fpga/xrt/lib/xleaf/clock.c
 >
-> - Moritz
+> diff --git a/drivers/fpga/xrt/include/xleaf/clock.h b/drivers/fpga/xrt/include/xleaf/clock.h
+> new file mode 100644
+> index 000000000000..a2da59b32551
+> --- /dev/null
+> +++ b/drivers/fpga/xrt/include/xleaf/clock.h
+> @@ -0,0 +1,31 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Header file for XRT Clock Leaf Driver
+> + *
+> + * Copyright (C) 2020-2021 Xilinx, Inc.
+> + *
+> + * Authors:
+> + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
+> + */
+> +
+> +#ifndef _XRT_CLOCK_H_
+> +#define _XRT_CLOCK_H_
+> +
+> +#include "xleaf.h"
+> +#include <linux/xrt/xclbin.h>
+> +
+> +/*
+> + * CLOCK driver IOCTL calls.
+> + */
+> +enum xrt_clock_ioctl_cmd {
+> +	XRT_CLOCK_SET = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+> +	XRT_CLOCK_GET,
+> +	XRT_CLOCK_VERIFY,
+> +};
+> +
+> +struct xrt_clock_ioctl_get {
+> +	u16 freq;
+> +	u32 freq_cnter;
+> +};
+> +
+> +#endif	/* _XRT_CLOCK_H_ */
+> diff --git a/drivers/fpga/xrt/lib/xleaf/clock.c b/drivers/fpga/xrt/lib/xleaf/clock.c
+> new file mode 100644
+> index 000000000000..a067b501a607
+> --- /dev/null
+> +++ b/drivers/fpga/xrt/lib/xleaf/clock.c
+> @@ -0,0 +1,648 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Xilinx Alveo FPGA Clock Wizard Driver
+> + *
+> + * Copyright (C) 2020-2021 Xilinx, Inc.
+> + *
+> + * Authors:
+> + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
+> + *      Sonal Santan <sonals@xilinx.com>
+> + *      David Zhang <davidzha@xilinx.com>
+> + */
+> +
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/io.h>
+> +#include "metadata.h"
+> +#include "xleaf.h"
+> +#include "xleaf/clock.h"
+> +#include "xleaf/clkfreq.h"
+> +
+> +/* CLOCK_MAX_NUM_CLOCKS should be a concept from XCLBIN_ in the future */
+> +#define CLOCK_MAX_NUM_CLOCKS		4
+> +#define OCL_CLKWIZ_STATUS_OFFSET	0x4
+OCL_CLKWIZ does not match the name of this file, change to something like XRT_CLOCK
+> +#define OCL_CLKWIZ_STATUS_MASK		0xffff
+> +#define OCL_CLKWIZ_STATUS_MEASURE_START	0x1
+> +#define OCL_CLKWIZ_STATUS_MEASURE_DONE	0x2
+> +#define OCL_CLKWIZ_CONFIG_OFFSET(n)	(0x200 + 4 * (n))
+
+This should be expanded to logical names of the registers.
+
+It's use below has a magic indexes.
+
+> +#define CLOCK_DEFAULT_EXPIRE_SECS	1
+> +
+> +#define CLOCK_ERR(clock, fmt, arg...)	\
+> +	xrt_err((clock)->pdev, fmt "\n", ##arg)
+> +#define CLOCK_WARN(clock, fmt, arg...)	\
+> +	xrt_warn((clock)->pdev, fmt "\n", ##arg)
+> +#define CLOCK_INFO(clock, fmt, arg...)	\
+> +	xrt_info((clock)->pdev, fmt "\n", ##arg)
+> +#define CLOCK_DBG(clock, fmt, arg...)	\
+> +	xrt_dbg((clock)->pdev, fmt "\n", ##arg)
+> +
+> +#define XRT_CLOCK	"xrt_clock"
+> +
+> +struct clock {
+> +	struct platform_device  *pdev;
+> +	void __iomem		*clock_base;
+> +	struct mutex		clock_lock; /* clock dev lock */
+> +
+> +	const char		*clock_ep_name;
+> +};
+> +
+> +/*
+> + * Precomputed table with config0 and config2 register values together with
+> + * target frequency. The steps are approximately 5 MHz apart. Table is
+> + * generated by wiz.pl.
+where is wiz.pl ? include the script
+> + */
+> +static const struct xmgmt_ocl_clockwiz {
+> +	/* target frequency */
+> +	unsigned short ocl;
+> +	/* config0 register */
+> +	unsigned long config0;
+Should be u32
+> +	/* config2 register */
+> +	unsigned int config2;
+> +} frequency_table[] = {
+> +	{/*1275.000*/	10.000,		0x02EE0C01,	0x0001F47F},
+
+Could clean up this table, to use spaces instead of tabs, move the comment out of branches
+
+/* freq */ { ocl, config0, config2 },
+
+> +	{/*1575.000*/   15.000,		0x02EE0F01,     0x00000069},
+ocl is short, the data if float, change the generator output an integer
+> +	{/*1600.000*/   20.000,		0x00001001,     0x00000050},
+> +	{/*1600.000*/   25.000,		0x00001001,     0x00000040},
+> +	{/*1575.000*/   30.000,		0x02EE0F01,     0x0001F434},
+> +	{/*1575.000*/   35.000,		0x02EE0F01,     0x0000002D},
+> +	{/*1600.000*/   40.000,		0x00001001,     0x00000028},
+> +	{/*1575.000*/   45.000,		0x02EE0F01,     0x00000023},
+> +	{/*1600.000*/   50.000,		0x00001001,     0x00000020},
+> +	{/*1512.500*/   55.000,		0x007D0F01,     0x0001F41B},
+> +	{/*1575.000*/   60.000,		0x02EE0F01,     0x0000FA1A},
+> +	{/*1462.500*/   65.000,		0x02710E01,     0x0001F416},
+> +	{/*1575.000*/   70.000,		0x02EE0F01,     0x0001F416},
+> +	{/*1575.000*/   75.000,		0x02EE0F01,     0x00000015},
+> +	{/*1600.000*/   80.000,		0x00001001,     0x00000014},
+> +	{/*1487.500*/   85.000,		0x036B0E01,     0x0001F411},
+> +	{/*1575.000*/   90.000,		0x02EE0F01,     0x0001F411},
+> +	{/*1425.000*/   95.000,		0x00FA0E01,     0x0000000F},
+> +	{/*1600.000*/   100.000,	0x00001001,     0x00000010},
+> +	{/*1575.000*/   105.000,	0x02EE0F01,     0x0000000F},
+> +	{/*1512.500*/   110.000,	0x007D0F01,     0x0002EE0D},
+> +	{/*1437.500*/   115.000,	0x01770E01,     0x0001F40C},
+> +	{/*1575.000*/   120.000,	0x02EE0F01,     0x00007D0D},
+> +	{/*1562.500*/   125.000,	0x02710F01,     0x0001F40C},
+> +	{/*1462.500*/   130.000,	0x02710E01,     0x0000FA0B},
+> +	{/*1350.000*/   135.000,	0x01F40D01,     0x0000000A},
+> +	{/*1575.000*/   140.000,	0x02EE0F01,     0x0000FA0B},
+> +	{/*1450.000*/   145.000,	0x01F40E01,     0x0000000A},
+> +	{/*1575.000*/   150.000,	0x02EE0F01,     0x0001F40A},
+> +	{/*1550.000*/   155.000,	0x01F40F01,     0x0000000A},
+> +	{/*1600.000*/   160.000,	0x00001001,     0x0000000A},
+> +	{/*1237.500*/   165.000,	0x01770C01,     0x0001F407},
+> +	{/*1487.500*/   170.000,	0x036B0E01,     0x0002EE08},
+> +	{/*1575.000*/   175.000,	0x02EE0F01,     0x00000009},
+> +	{/*1575.000*/   180.000,	0x02EE0F01,     0x0002EE08},
+> +	{/*1387.500*/   185.000,	0x036B0D01,     0x0001F407},
+> +	{/*1425.000*/   190.000,	0x00FA0E01,     0x0001F407},
+> +	{/*1462.500*/   195.000,	0x02710E01,     0x0001F407},
+> +	{/*1600.000*/   200.000,	0x00001001,     0x00000008},
+> +	{/*1537.500*/   205.000,        0x01770F01,     0x0001F407},
+> +	{/*1575.000*/   210.000,        0x02EE0F01,     0x0001F407},
+> +	{/*1075.000*/   215.000,        0x02EE0A01,     0x00000005},
+> +	{/*1512.500*/   220.000,        0x007D0F01,     0x00036B06},
+> +	{/*1575.000*/   225.000,        0x02EE0F01,     0x00000007},
+> +	{/*1437.500*/   230.000,        0x01770E01,     0x0000FA06},
+> +	{/*1175.000*/   235.000,        0x02EE0B01,     0x00000005},
+> +	{/*1500.000*/   240.000,        0x00000F01,     0x0000FA06},
+> +	{/*1225.000*/   245.000,        0x00FA0C01,     0x00000005},
+> +	{/*1562.500*/   250.000,        0x02710F01,     0x0000FA06},
+> +	{/*1275.000*/   255.000,        0x02EE0C01,     0x00000005},
+> +	{/*1462.500*/   260.000,        0x02710E01,     0x00027105},
+> +	{/*1325.000*/   265.000,        0x00FA0D01,     0x00000005},
+> +	{/*1350.000*/   270.000,        0x01F40D01,     0x00000005},
+> +	{/*1512.500*/   275.000,        0x007D0F01,     0x0001F405},
+> +	{/*1575.000*/   280.000,        0x02EE0F01,     0x00027105},
+> +	{/*1425.000*/   285.000,        0x00FA0E01,     0x00000005},
+> +	{/*1450.000*/   290.000,        0x01F40E01,     0x00000005},
+> +	{/*1475.000*/   295.000,        0x02EE0E01,     0x00000005},
+> +	{/*1575.000*/   300.000,        0x02EE0F01,     0x0000FA05},
+> +	{/*1525.000*/   305.000,        0x00FA0F01,     0x00000005},
+> +	{/*1550.000*/   310.000,        0x01F40F01,     0x00000005},
+> +	{/*1575.000*/   315.000,        0x02EE0F01,     0x00000005},
+> +	{/*1600.000*/   320.000,        0x00001001,     0x00000005},
+> +	{/*1462.500*/   325.000,        0x02710E01,     0x0001F404},
+> +	{/*1237.500*/   330.000,        0x01770C01,     0x0002EE03},
+> +	{/*837.500*/    335.000,        0x01770801,     0x0001F402},
+> +	{/*1487.500*/   340.000,        0x036B0E01,     0x00017704},
+> +	{/*862.500*/    345.000,        0x02710801,     0x0001F402},
+> +	{/*1575.000*/   350.000,        0x02EE0F01,     0x0001F404},
+> +	{/*887.500*/    355.000,        0x036B0801,     0x0001F402},
+> +	{/*1575.000*/   360.000,        0x02EE0F01,     0x00017704},
+> +	{/*912.500*/    365.000,        0x007D0901,     0x0001F402},
+> +	{/*1387.500*/   370.000,        0x036B0D01,     0x0002EE03},
+> +	{/*1500.000*/   375.000,        0x00000F01,     0x00000004},
+> +	{/*1425.000*/   380.000,        0x00FA0E01,     0x0002EE03},
+> +	{/*962.500*/    385.000,        0x02710901,     0x0001F402},
+> +	{/*1462.500*/   390.000,        0x02710E01,     0x0002EE03},
+> +	{/*987.500*/    395.000,        0x036B0901,     0x0001F402},
+> +	{/*1600.000*/   400.000,        0x00001001,     0x00000004},
+> +	{/*1012.500*/   405.000,        0x007D0A01,     0x0001F402},
+> +	{/*1537.500*/   410.000,        0x01770F01,     0x0002EE03},
+> +	{/*1037.500*/   415.000,        0x01770A01,     0x0001F402},
+> +	{/*1575.000*/   420.000,        0x02EE0F01,     0x0002EE03},
+> +	{/*1487.500*/   425.000,        0x036B0E01,     0x0001F403},
+> +	{/*1075.000*/   430.000,        0x02EE0A01,     0x0001F402},
+> +	{/*1087.500*/   435.000,        0x036B0A01,     0x0001F402},
+> +	{/*1375.000*/   440.000,        0x02EE0D01,     0x00007D03},
+> +	{/*1112.500*/   445.000,        0x007D0B01,     0x0001F402},
+> +	{/*1575.000*/   450.000,        0x02EE0F01,     0x0001F403},
+> +	{/*1137.500*/   455.000,        0x01770B01,     0x0001F402},
+> +	{/*1437.500*/   460.000,        0x01770E01,     0x00007D03},
+> +	{/*1162.500*/   465.000,        0x02710B01,     0x0001F402},
+> +	{/*1175.000*/   470.000,        0x02EE0B01,     0x0001F402},
+> +	{/*1425.000*/   475.000,        0x00FA0E01,     0x00000003},
+> +	{/*1500.000*/   480.000,        0x00000F01,     0x00007D03},
+> +	{/*1212.500*/   485.000,        0x007D0C01,     0x0001F402},
+> +	{/*1225.000*/   490.000,        0x00FA0C01,     0x0001F402},
+> +	{/*1237.500*/   495.000,        0x01770C01,     0x0001F402},
+> +	{/*1562.500*/   500.000,        0x02710F01,     0x00007D03},
+> +	{/*1262.500*/   505.000,        0x02710C01,     0x0001F402},
+> +	{/*1275.000*/   510.000,        0x02EE0C01,     0x0001F402},
+> +	{/*1287.500*/   515.000,        0x036B0C01,     0x0001F402},
+> +	{/*1300.000*/   520.000,        0x00000D01,     0x0001F402},
+> +	{/*1575.000*/   525.000,        0x02EE0F01,     0x00000003},
+> +	{/*1325.000*/   530.000,        0x00FA0D01,     0x0001F402},
+> +	{/*1337.500*/   535.000,        0x01770D01,     0x0001F402},
+> +	{/*1350.000*/   540.000,        0x01F40D01,     0x0001F402},
+> +	{/*1362.500*/   545.000,        0x02710D01,     0x0001F402},
+> +	{/*1512.500*/   550.000,        0x007D0F01,     0x0002EE02},
+> +	{/*1387.500*/   555.000,        0x036B0D01,     0x0001F402},
+> +	{/*1400.000*/   560.000,        0x00000E01,     0x0001F402},
+> +	{/*1412.500*/   565.000,        0x007D0E01,     0x0001F402},
+> +	{/*1425.000*/   570.000,        0x00FA0E01,     0x0001F402},
+> +	{/*1437.500*/   575.000,        0x01770E01,     0x0001F402},
+> +	{/*1450.000*/   580.000,        0x01F40E01,     0x0001F402},
+> +	{/*1462.500*/   585.000,        0x02710E01,     0x0001F402},
+> +	{/*1475.000*/   590.000,        0x02EE0E01,     0x0001F402},
+> +	{/*1487.500*/   595.000,        0x036B0E01,     0x0001F402},
+> +	{/*1575.000*/   600.000,        0x02EE0F01,     0x00027102},
+> +	{/*1512.500*/   605.000,        0x007D0F01,     0x0001F402},
+> +	{/*1525.000*/   610.000,        0x00FA0F01,     0x0001F402},
+> +	{/*1537.500*/   615.000,        0x01770F01,     0x0001F402},
+> +	{/*1550.000*/   620.000,        0x01F40F01,     0x0001F402},
+> +	{/*1562.500*/   625.000,        0x02710F01,     0x0001F402},
+> +	{/*1575.000*/   630.000,        0x02EE0F01,     0x0001F402},
+> +	{/*1587.500*/   635.000,        0x036B0F01,     0x0001F402},
+> +	{/*1600.000*/   640.000,        0x00001001,     0x0001F402},
+> +	{/*1290.000*/   645.000,        0x01F44005,     0x00000002},
+> +	{/*1462.500*/   650.000,        0x02710E01,     0x0000FA02}
+> +};
+> +
+> +static inline u32 reg_rd(struct clock *clock, u32 offset)
+> +{
+> +	return ioread32(clock->clock_base + offset);
+> +}
+> +
+> +static inline void reg_wr(struct clock *clock, u32 val, u32 offset)
+> +{
+> +	iowrite32(val, clock->clock_base + offset);
+> +}
+> +
+> +static u32 find_matching_freq_config(unsigned short freq,
+> +				     const struct xmgmt_ocl_clockwiz *table,
+> +				     int size)
+> +{
+> +	u32 start = 0;
+> +	u32 end = size - 1;
+> +	u32 idx = size - 1;
+looks like you are doing a binary search, why not start idx at size / 2 ?
+> +
+> +	if (freq < table[0].ocl)
+> +		return 0;
+> +
+> +	if (freq > table[size - 1].ocl)
+> +		return size - 1;
+> +
+What aren't these two conditions errors ?
+> +	while (start < end) {
+> +		if (freq == table[idx].ocl)
+> +			break;
+> +		if (freq < table[idx].ocl)
+> +			end = idx;
+> +		else
+> +			start = idx + 1;
+> +		idx = start + (end - start) / 2;
+> +	}
+> +	if (freq < table[idx].ocl)
+> +		idx--;
+> +
+> +	return idx;
+> +}
+> +
+> +static u32 find_matching_freq(u32 freq,
+> +			      const struct xmgmt_ocl_clockwiz *freq_table,
+> +			      int freq_table_size)
+> +{
+> +	int idx = find_matching_freq_config(freq, freq_table, freq_table_size);
+> +
+> +	return freq_table[idx].ocl;
+> +}
+> +
+> +static inline int clock_wiz_busy(struct clock *clock, int cycle, int interval)
+> +{
+> +	u32 val = 0;
+> +	int count;
+> +
+> +	val = reg_rd(clock, OCL_CLKWIZ_STATUS_OFFSET);
+> +	for (count = 0; val != 1 && count < cycle; count++) {
+> +		mdelay(interval);
+> +		val = reg_rd(clock, OCL_CLKWIZ_STATUS_OFFSET);
+
+if (val == 1)
+
+  break;
+
+Is a bit easier to  follow than putting another condition in the for()
+
+> +	}
+> +	if (val != 1) {
+> +		CLOCK_ERR(clock, "clockwiz is (%u) busy after %d ms",
+> +			  val, cycle * interval);
+> +		return -ETIMEDOUT;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int get_freq(struct clock *clock, u16 *freq)
+> +{
+> +#define XCL_INPUT_FREQ 100
+
+??
+
+If this a real parameter, it needs to go in the clock.h
+
+> +	const u64 input = XCL_INPUT_FREQ;
+> +	u32 val;
+> +	u32 mul0, div0;
+> +	u32 mul_frac0 = 0;
+> +	u32 div1;
+> +	u32 div_frac1 = 0;
+> +
+> +	WARN_ON(!mutex_is_locked(&clock->clock_lock));
+> +
+> +	val = reg_rd(clock, OCL_CLKWIZ_STATUS_OFFSET);
+> +	if ((val & 0x1) == 0) {
+> +		CLOCK_ERR(clock, "clockwiz is busy %x", val);
+> +		*freq = 0;
+> +		return -EBUSY;
+> +	}
+> +
+> +	val = reg_rd(clock, OCL_CLKWIZ_CONFIG_OFFSET(0));
+
+A general problem.
+
+The '0' is magic, convert this to a logically named #define or enum.
+
+> +
+> +	div0 = val & 0xff;
+> +	mul0 = (val & 0xff00) >> 8;
+> +	if (val & BIT(26)) {
+> +		mul_frac0 = val >> 16;
+> +		mul_frac0 &= 0x3ff;
+> +	}
+> +
+> +	/*
+> +	 * Multiply both numerator (mul0) and the denominator (div0) with 1000
+> +	 * to account for fractional portion of multiplier
+> +	 */
+> +	mul0 *= 1000;
+> +	mul0 += mul_frac0;
+> +	div0 *= 1000;
+> +
+> +	val = reg_rd(clock, OCL_CLKWIZ_CONFIG_OFFSET(2));
+> +
+> +	div1 = val & 0xff;
+> +	if (val & BIT(18)) {
+> +		div_frac1 = val >> 8;
+> +		div_frac1 &= 0x3ff;
+> +	}
+> +
+> +	/*
+> +	 * Multiply both numerator (mul0) and the denominator (div1) with
+> +	 * 1000 to account for fractional portion of divider
+> +	 */
+> +
+> +	div1 *= 1000;
+> +	div1 += div_frac1;
+> +	div0 *= div1;
+> +	mul0 *= 1000;
+> +	if (div0 == 0) {
+> +		CLOCK_ERR(clock, "clockwiz 0 divider");
+> +		return 0;
+> +	}
+> +
+> +	*freq = (u16)((input * mul0) / div0);
+> +
+> +	return 0;
+> +}
+> +
+> +static int set_freq(struct clock *clock, u16 freq)
+> +{
+> +	u32 config;
+> +	int err;
+> +	u32 idx = 0;
+> +	u32 val;
+> +
+> +	WARN_ON(!mutex_is_locked(&clock->clock_lock));
+> +
+> +	idx = find_matching_freq_config(freq, frequency_table,
+> +					ARRAY_SIZE(frequency_table));
+> +
+> +	CLOCK_INFO(clock, "New: %d Mhz", freq);
+> +	err = clock_wiz_busy(clock, 20, 50);
+> +	if (err)
+> +		return -EBUSY;
+> +
+> +	config = frequency_table[idx].config0;
+> +	reg_wr(clock, config, OCL_CLKWIZ_CONFIG_OFFSET(0));
+> +
+> +	config = frequency_table[idx].config2;
+> +	reg_wr(clock, config, OCL_CLKWIZ_CONFIG_OFFSET(2));
+> +
+> +	mdelay(10);
+> +	reg_wr(clock, 7, OCL_CLKWIZ_CONFIG_OFFSET(23));
+> +
+> +	mdelay(1);
+> +	reg_wr(clock, 2, OCL_CLKWIZ_CONFIG_OFFSET(23));
+> +
+> +	CLOCK_INFO(clock, "clockwiz waiting for locked signal");
+> +
+> +	err = clock_wiz_busy(clock, 100, 100);
+> +	if (err) {
+> +		CLOCK_ERR(clock, "clockwiz MMCM/PLL did not lock");
+> +		/* restore */
+> +		reg_wr(clock, 4, OCL_CLKWIZ_CONFIG_OFFSET(23));
+> +		mdelay(10);
+> +		reg_wr(clock, 0, OCL_CLKWIZ_CONFIG_OFFSET(23));
+> +		return err;
+> +	}
+> +	val = reg_rd(clock, OCL_CLKWIZ_CONFIG_OFFSET(0));
+> +	CLOCK_INFO(clock, "clockwiz CONFIG(0) 0x%x", val);
+> +	val = reg_rd(clock, OCL_CLKWIZ_CONFIG_OFFSET(2));
+> +	CLOCK_INFO(clock, "clockwiz CONFIG(2) 0x%x", val);
+> +
+> +	return 0;
+> +}
+> +
+> +static int get_freq_counter(struct clock *clock, u32 *freq)
+> +{
+> +	const void *cnter;
+variable name should be easy to read, use 'counter'
+> +	struct platform_device *cnter_leaf;
+> +	struct platform_device *pdev = clock->pdev;
+> +	struct xrt_subdev_platdata *pdata = DEV_PDATA(clock->pdev);
+> +	int err = xrt_md_get_prop(DEV(pdev), pdata->xsp_dtb,
+> +		clock->clock_ep_name, NULL, XRT_MD_PROP_CLK_CNT, &cnter, NULL);
+> +
+> +	WARN_ON(!mutex_is_locked(&clock->clock_lock));
+> +
+> +	if (err) {
+> +		xrt_err(pdev, "no counter specified");
+> +		return err;
+> +	}
+> +
+> +	cnter_leaf = xleaf_get_leaf_by_epname(pdev, cnter);
+> +	if (!cnter_leaf) {
+> +		xrt_err(pdev, "can't find counter");
+> +		return -ENOENT;
+> +	}
+> +
+> +	err = xleaf_ioctl(cnter_leaf, XRT_CLKFREQ_READ, freq);
+> +	if (err)
+> +		xrt_err(pdev, "can't read counter");
+> +	xleaf_put_leaf(clock->pdev, cnter_leaf);
+> +
+> +	return err;
+> +}
+> +
+> +static int clock_get_freq(struct clock *clock, u16 *freq, u32 *freq_cnter)
+> +{
+> +	int err = 0;
+> +
+> +	mutex_lock(&clock->clock_lock);
+> +
+> +	if (err == 0 && freq)
+> +		err = get_freq(clock, freq);
+> +
+> +	if (err == 0 && freq_cnter)
+> +		err = get_freq_counter(clock, freq_cnter);
+> +
+> +	mutex_unlock(&clock->clock_lock);
+> +	return err;
+> +}
+> +
+> +static int clock_set_freq(struct clock *clock, u16 freq)
+> +{
+> +	int err;
+
+Why is this function needed ?
+
+Move the locking into set_freq.
+
+> +
+> +	mutex_lock(&clock->clock_lock);
+> +	err = set_freq(clock, freq);
+> +	mutex_unlock(&clock->clock_lock);
+> +
+> +	return err;
+> +}
+> +
+> +static int clock_verify_freq(struct clock *clock)
+> +{
+> +	int err = 0;
+> +	u16 freq;
+> +	u32 lookup_freq, clock_freq_counter, request_in_khz, tolerance;
+> +
+> +	mutex_lock(&clock->clock_lock);
+> +
+> +	err = get_freq(clock, &freq);
+> +	if (err) {
+> +		xrt_err(clock->pdev, "get freq failed, %d", err);
+> +		goto end;
+> +	}
+> +
+> +	err = get_freq_counter(clock, &clock_freq_counter);
+> +	if (err) {
+> +		xrt_err(clock->pdev, "get freq counter failed, %d", err);
+> +		goto end;
+> +	}
+> +
+> +	lookup_freq = find_matching_freq(freq, frequency_table,
+> +					 ARRAY_SIZE(frequency_table));
+> +	request_in_khz = lookup_freq * 1000;
+> +	tolerance = lookup_freq * 50;
+> +	if (tolerance < abs(clock_freq_counter - request_in_khz)) {
+> +		CLOCK_ERR(clock,
+> +			  "set clock(%s) failed, request %ukhz, actual %dkhz",
+> +			  clock->clock_ep_name, request_in_khz, clock_freq_counter);
+> +		err = -EDOM;
+> +	} else {
+> +		CLOCK_INFO(clock, "verified clock (%s)", clock->clock_ep_name);
+> +	}
+> +
+> +end:
+> +	mutex_unlock(&clock->clock_lock);
+> +	return err;
+> +}
+> +
+> +static int clock_init(struct clock *clock)
+> +{
+> +	struct xrt_subdev_platdata *pdata = DEV_PDATA(clock->pdev);
+> +	int err = 0;
+> +	const u16 *freq;
+> +
+> +	err = xrt_md_get_prop(DEV(clock->pdev), pdata->xsp_dtb,
+> +			      clock->clock_ep_name, NULL, XRT_MD_PROP_CLK_FREQ,
+> +		(const void **)&freq, NULL);
+> +	if (err) {
+> +		xrt_info(clock->pdev, "no default freq");
+> +		return 0;
+> +	}
+> +
+> +	mutex_lock(&clock->clock_lock);
+> +	err = set_freq(clock, be16_to_cpu(*freq));
+> +	mutex_unlock(&clock->clock_lock);
+> +
+> +	return err;
+> +}
+> +
+> +static ssize_t freq_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	struct clock *clock = platform_get_drvdata(to_platform_device(dev));
+> +	u16 freq = 0;
+> +	ssize_t count;
+> +
+> +	count = clock_get_freq(clock, &freq, NULL);
+> +	if (count < 0)
+> +		return count;
+> +
+> +	count = snprintf(buf, 64, "%d\n", freq);
+
+%u ?
+
+Tom
+
+> +
+> +	return count;
+> +}
+> +static DEVICE_ATTR_RO(freq);
+> +
+> +static struct attribute *clock_attrs[] = {
+> +	&dev_attr_freq.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group clock_attr_group = {
+> +	.attrs = clock_attrs,
+> +};
+> +
+> +static int
+> +xrt_clock_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
+> +{
+> +	struct clock		*clock;
+> +	int			ret = 0;
+> +
+> +	clock = platform_get_drvdata(pdev);
+> +
+> +	switch (cmd) {
+> +	case XRT_XLEAF_EVENT:
+> +		/* Does not handle any event. */
+> +		break;
+> +	case XRT_CLOCK_SET: {
+> +		u16	freq = (u16)(uintptr_t)arg;
+> +
+> +		ret = clock_set_freq(clock, freq);
+> +		break;
+> +	}
+> +	case XRT_CLOCK_VERIFY: {
+> +		ret = clock_verify_freq(clock);
+> +		break;
+> +	}
+> +	case XRT_CLOCK_GET: {
+> +		struct xrt_clock_ioctl_get *get =
+> +			(struct xrt_clock_ioctl_get *)arg;
+> +
+> +		ret = clock_get_freq(clock, &get->freq, &get->freq_cnter);
+> +		break;
+> +	}
+> +	default:
+> +		xrt_err(pdev, "unsupported cmd %d", cmd);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int clock_remove(struct platform_device *pdev)
+> +{
+> +	struct clock *clock;
+> +
+> +	clock = platform_get_drvdata(pdev);
+> +	if (!clock) {
+> +		xrt_err(pdev, "driver data is NULL");
+> +		return -EINVAL;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, NULL);
+> +	devm_kfree(&pdev->dev, clock);
+> +
+> +	CLOCK_INFO(clock, "successfully removed Clock subdev");
+> +	return 0;
+> +}
+> +
+> +static int clock_probe(struct platform_device *pdev)
+> +{
+> +	struct clock *clock = NULL;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	clock = devm_kzalloc(&pdev->dev, sizeof(*clock), GFP_KERNEL);
+> +	if (!clock)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, clock);
+> +	clock->pdev = pdev;
+> +	mutex_init(&clock->clock_lock);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	clock->clock_base = ioremap(res->start, res->end - res->start + 1);
+> +	if (!clock->clock_base) {
+> +		CLOCK_ERR(clock, "map base %pR failed", res);
+> +		ret = -EFAULT;
+> +		goto failed;
+> +	}
+> +
+> +	clock->clock_ep_name = res->name;
+> +
+> +	ret = clock_init(clock);
+> +	if (ret)
+> +		goto failed;
+> +
+> +	ret = sysfs_create_group(&pdev->dev.kobj, &clock_attr_group);
+> +	if (ret) {
+> +		CLOCK_ERR(clock, "create clock attrs failed: %d", ret);
+> +		goto failed;
+> +	}
+> +
+> +	CLOCK_INFO(clock, "successfully initialized Clock subdev");
+> +
+> +	return 0;
+> +
+> +failed:
+> +	clock_remove(pdev);
+> +	return ret;
+> +}
+> +
+> +static struct xrt_subdev_endpoints xrt_clock_endpoints[] = {
+> +	{
+> +		.xse_names = (struct xrt_subdev_ep_names[]) {
+> +			{ .regmap_name = "clkwiz" },
+> +			{ NULL },
+> +		},
+> +		.xse_min_ep = 1,
+> +	},
+> +	{ 0 },
+> +};
+> +
+> +static struct xrt_subdev_drvdata xrt_clock_data = {
+> +	.xsd_dev_ops = {
+> +		.xsd_ioctl = xrt_clock_leaf_ioctl,
+> +	},
+> +};
+> +
+> +static const struct platform_device_id xrt_clock_table[] = {
+> +	{ XRT_CLOCK, (kernel_ulong_t)&xrt_clock_data },
+> +	{ },
+> +};
+> +
+> +static struct platform_driver xrt_clock_driver = {
+> +	.driver = {
+> +		.name = XRT_CLOCK,
+> +	},
+> +	.probe = clock_probe,
+> +	.remove = clock_remove,
+> +	.id_table = xrt_clock_table,
+> +};
+> +
+> +void clock_leaf_init_fini(bool init)
+> +{
+> +	if (init)
+> +		xleaf_register_driver(XRT_SUBDEV_CLOCK, &xrt_clock_driver, xrt_clock_endpoints);
+> +	else
+> +		xleaf_unregister_driver(XRT_SUBDEV_CLOCK);
+> +}
 
