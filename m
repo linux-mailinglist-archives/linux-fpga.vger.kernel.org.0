@@ -2,381 +2,118 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA0032FB61
-	for <lists+linux-fpga@lfdr.de>; Sat,  6 Mar 2021 16:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 800D532FB6E
+	for <lists+linux-fpga@lfdr.de>; Sat,  6 Mar 2021 16:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbhCFPfY (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 6 Mar 2021 10:35:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52869 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230489AbhCFPey (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 6 Mar 2021 10:34:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615044893;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R3hQZSQ9MJ2knEb9nSe7iww33RZoQyXEr4sHQKxLqXg=;
-        b=Zcewowf5NIqvZ6AvRxRTzyUBOpDn5t284DHxuzQ/5+xcHLPEEzwbH8ObUJINnafIWnCeJP
-        AQ/6dqRJTuAdTvfXmq5+lwbD4T0o62WT4qMemXjQS1KICkwAiUIdQrfIOCF//CTmoFxk8H
-        j/k7dA5iHF5p66o/9R/5WTk2ITh8W9s=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-508-Yq7o5TutNcaBHC6iPL8n5w-1; Sat, 06 Mar 2021 10:34:52 -0500
-X-MC-Unique: Yq7o5TutNcaBHC6iPL8n5w-1
-Received: by mail-qv1-f72.google.com with SMTP id s16so3893063qvw.3
-        for <linux-fpga@vger.kernel.org>; Sat, 06 Mar 2021 07:34:52 -0800 (PST)
+        id S230429AbhCFPkv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 6 Mar 2021 10:40:51 -0500
+Received: from mail-pl1-f173.google.com ([209.85.214.173]:34676 "EHLO
+        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230426AbhCFPkr (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 6 Mar 2021 10:40:47 -0500
+Received: by mail-pl1-f173.google.com with SMTP id ba1so2898833plb.1;
+        Sat, 06 Mar 2021 07:40:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=R3hQZSQ9MJ2knEb9nSe7iww33RZoQyXEr4sHQKxLqXg=;
-        b=ZylSqHzK49bydzQnthm6DSrWRHx5c1QG+QUbtWbky5kg7sUwt1xBBpvOwGkd9PIWEE
-         8eQFQsEEHi/07wXgPEiw2ozmATrzERxXPZSk1yX9iZlvsnOnO+BbilqyClGka2gru4wb
-         8eBPhFoipza/jiere2o830GeuBGuzLSTrUfld6d91JLhhIBpB/v2is+H+E2Rs2RVBu+n
-         PBVrV2q3lBGUerC+bfCn04HrORsq+pKpz1Jz1n+OXig71txVXrASb6UrfdqBA8lmPihf
-         PXJGpYWV7P4CEYT+jRIycMWWTB9aJ/60MQMLN1iX0BUNfKvfhR6hXsFpUUAeIzHXDl8y
-         YTOQ==
-X-Gm-Message-State: AOAM530sl4CTfNRV1eVQlPIM/APODvHhAXJAeu8AuPKjC/UXUTahofnl
-        8XF81cFNhEAWzn34uoyGbFB7nZvFffX3q+46tXg/D0p6SE2cHka9jLytvqHKNDP73B000AWFee6
-        lNdrvgxqWJaRQA4TiORXHMQ==
-X-Received: by 2002:a37:6115:: with SMTP id v21mr13815997qkb.239.1615044891649;
-        Sat, 06 Mar 2021 07:34:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxNs84qV4rSvCJc2zO7VA6gkRpmtfs+aMA1mbyFBABSgKFo0mgqvdgr5fW9ReJYGv4kUFGqoA==
-X-Received: by 2002:a37:6115:: with SMTP id v21mr13815981qkb.239.1615044891434;
-        Sat, 06 Mar 2021 07:34:51 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id b22sm4133701qkk.45.2021.03.06.07.34.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Mar 2021 07:34:51 -0800 (PST)
-Subject: Re: [PATCH V3 XRT Alveo 16/18] fpga: xrt: DDR calibration platform
- driver
-To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
-Cc:     Lizhi Hou <lizhih@xilinx.com>, linux-fpga@vger.kernel.org,
-        maxz@xilinx.com, sonal.santan@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
-        robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
-References: <20210218064019.29189-1-lizhih@xilinx.com>
- <20210218064019.29189-17-lizhih@xilinx.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <b77ea263-d368-25d8-409e-7cac2601a967@redhat.com>
-Date:   Sat, 6 Mar 2021 07:34:48 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HvMBjB2eThPG5ApAfydPYsmVW1zRQKVcPc7w19OhDdM=;
+        b=jQtaCPqsqHlZ/0+QfqstjaR3Bos7uv3PIIqv52Un19AyXmkAUoGToTLAPaBTgUC5xR
+         qkGBNN/amU6NlehhjP4gUJ+WfzLWqYrYVcI5RNvF8AcC110adOzmKUc09XqjLM7QPUTt
+         tplvJutYgXnLJfqHYD/xAsc6xpGVUUQf6xFhHIy34UomRqR1mXQBMdy2lk7HmSihj4qf
+         +ZIcuTmI/psf/PucT/R9tjj6MORiilAOhJYVGTB4hwEF1Z0uPryS6EFYhRbZseKyI29X
+         eXwDJNEkbiPoJmFb9cmKihKqh7Qz2MMYoVazT/3zHv6JtLb4MYORiCdln3ESycvg9NGZ
+         N9yA==
+X-Gm-Message-State: AOAM531ibl9jSoLpfV9ICG6TOav23j6kvdedU0cAkxJN6XKDdY+GeAR3
+        zkTWiWnLeu2EOrAVI6fBnoyo15BkuLk=
+X-Google-Smtp-Source: ABdhPJz6FFGwIulq1psPxPPiAEeGOd4Ik9ZkNs0Q7MUPjI1TWSpxqL4E6zX6OmGk8ZlMGtHy93reRw==
+X-Received: by 2002:a17:90a:d90a:: with SMTP id c10mr15975073pjv.13.1615045246670;
+        Sat, 06 Mar 2021 07:40:46 -0800 (PST)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id a19sm5529555pff.186.2021.03.06.07.40.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Mar 2021 07:40:45 -0800 (PST)
+Date:   Sat, 6 Mar 2021 07:40:44 -0800
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-fpga@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Alan Tull <atull@kernel.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: fpga-mgr: xilinx-spi: fix error messages on
+ -EPROBE_DEFER
+Message-ID: <YEOifBrTrETFahYN@epycbox.lan>
+References: <20210204121313.24655-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
-In-Reply-To: <20210218064019.29189-17-lizhih@xilinx.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210204121313.24655-1-luca@lucaceresoli.net>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-
-On 2/17/21 10:40 PM, Lizhi Hou wrote:
-> Add DDR calibration driver. DDR calibration is a hardware function
-> discovered by walking firmware metadata. A platform device node will
-> be created for it. Hardware provides DDR calibration status through
-> this function.
->
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
+On Thu, Feb 04, 2021 at 01:13:13PM +0100, Luca Ceresoli wrote:
+> The current code produces an error message on devm_gpiod_get() errors even
+> when the error is -EPROBE_DEFER, which should be silent.
+> 
+> This has been observed producing a significant amount of messages like:
+> 
+>     xlnx-slave-spi spi1.1: Failed to get PROGRAM_B gpio: -517
+> 
+> Fix and simplify code by using the dev_err_probe() helper function.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Fixes: dd2784c01d93 ("fpga manager: xilinx-spi: check INIT_B pin during write_init")
+> Fixes: 061c97d13f1a ("fpga manager: Add Xilinx slave serial SPI driver")
 > ---
->  drivers/fpga/xrt/include/xleaf/calib.h |  30 ++++
->  drivers/fpga/xrt/lib/xleaf/calib.c     | 226 +++++++++++++++++++++++++
->  2 files changed, 256 insertions(+)
->  create mode 100644 drivers/fpga/xrt/include/xleaf/calib.h
->  create mode 100644 drivers/fpga/xrt/lib/xleaf/calib.c
-calib is not descriptive, change filename to ddr_calibration
->
-> diff --git a/drivers/fpga/xrt/include/xleaf/calib.h b/drivers/fpga/xrt/include/xleaf/calib.h
-> new file mode 100644
-> index 000000000000..f8aba4594c58
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/calib.h
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Header file for XRT DDR Calibration Leaf Driver
-> + *
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Cheng Zhen <maxz@xilinx.com>
-> + */
-> +
-> +#ifndef _XRT_CALIB_H_
-> +#define _XRT_CALIB_H_
-> +
-> +#include "xleaf.h"
-> +#include <linux/xrt/xclbin.h>
-> +
-> +/*
-> + * Memory calibration driver IOCTL calls.
-> + */
-> +enum xrt_calib_results {
-> +	XRT_CALIB_UNKNOWN,
-Initialize ?
-> +	XRT_CALIB_SUCCEEDED,
-> +	XRT_CALIB_FAILED,
-> +};
-> +
-> +enum xrt_calib_ioctl_cmd {
-> +	XRT_CALIB_RESULT = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-> +};
-> +
-> +#endif	/* _XRT_CALIB_H_ */
-> diff --git a/drivers/fpga/xrt/lib/xleaf/calib.c b/drivers/fpga/xrt/lib/xleaf/calib.c
-> new file mode 100644
-> index 000000000000..fbb813636e76
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/lib/xleaf/calib.c
-> @@ -0,0 +1,226 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Xilinx Alveo FPGA memory calibration driver
-> + *
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * memory calibration
-> + *
-> + * Authors:
-> + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
-> + */
-> +#include <linux/delay.h>
-> +#include "xclbin-helper.h"
-> +#include "metadata.h"
-> +#include "xleaf/calib.h"
-> +
-> +#define XRT_CALIB	"xrt_calib"
-> +
-> +struct calib_cache {
-> +	struct list_head	link;
-> +	const char		*ep_name;
-> +	char			*data;
-> +	u32			data_size;
-> +};
-> +
-> +struct calib {
-> +	struct platform_device	*pdev;
-> +	void			*calib_base;
-> +	struct mutex		lock; /* calibration dev lock */
-> +	struct list_head	cache_list;
-> +	u32			cache_num;
-> +	enum xrt_calib_results	result;
-> +};
-> +
-> +#define CALIB_DONE(calib)			\
-> +	(ioread32((calib)->calib_base) & BIT(0))
-> +
-> +static void calib_cache_clean_nolock(struct calib *calib)
-> +{
-> +	struct calib_cache *cache, *temp;
-> +
-> +	list_for_each_entry_safe(cache, temp, &calib->cache_list, link) {
-> +		vfree(cache->data);
-> +		list_del(&cache->link);
-> +		vfree(cache);
-> +	}
-> +	calib->cache_num = 0;
-> +}
-> +
-> +static void calib_cache_clean(struct calib *calib)
-> +{
-> +	mutex_lock(&calib->lock);
-> +	calib_cache_clean_nolock(calib);
-No lock functions (i believe) should be prefixed with '__'
-> +	mutex_unlock(&calib->lock);
-> +}
-> +
-> +static int calib_srsr(struct calib *calib, struct platform_device *srsr_leaf)
+>  drivers/fpga/xilinx-spi.c | 24 +++++++++---------------
+>  1 file changed, 9 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/fpga/xilinx-spi.c b/drivers/fpga/xilinx-spi.c
+> index 27defa98092d..fee4d0abf6bf 100644
+> --- a/drivers/fpga/xilinx-spi.c
+> +++ b/drivers/fpga/xilinx-spi.c
+> @@ -233,25 +233,19 @@ static int xilinx_spi_probe(struct spi_device *spi)
+>  
+>  	/* PROGRAM_B is active low */
+>  	conf->prog_b = devm_gpiod_get(&spi->dev, "prog_b", GPIOD_OUT_LOW);
+> -	if (IS_ERR(conf->prog_b)) {
+> -		dev_err(&spi->dev, "Failed to get PROGRAM_B gpio: %ld\n",
+> -			PTR_ERR(conf->prog_b));
+> -		return PTR_ERR(conf->prog_b);
+> -	}
+> +	if (IS_ERR(conf->prog_b))
+> +		return dev_err_probe(&spi->dev, PTR_ERR(conf->prog_b),
+> +				     "Failed to get PROGRAM_B gpio\n");
+>  
+>  	conf->init_b = devm_gpiod_get_optional(&spi->dev, "init-b", GPIOD_IN);
+> -	if (IS_ERR(conf->init_b)) {
+> -		dev_err(&spi->dev, "Failed to get INIT_B gpio: %ld\n",
+> -			PTR_ERR(conf->init_b));
+> -		return PTR_ERR(conf->init_b);
+> -	}
+> +	if (IS_ERR(conf->init_b))
+> +		return dev_err_probe(&spi->dev, PTR_ERR(conf->init_b),
+> +				     "Failed to get INIT_B gpio\n");
+>  
+>  	conf->done = devm_gpiod_get(&spi->dev, "done", GPIOD_IN);
+> -	if (IS_ERR(conf->done)) {
+> -		dev_err(&spi->dev, "Failed to get DONE gpio: %ld\n",
+> -			PTR_ERR(conf->done));
+> -		return PTR_ERR(conf->done);
+> -	}
+> +	if (IS_ERR(conf->done))
+> +		return dev_err_probe(&spi->dev, PTR_ERR(conf->done),
+> +				     "Failed to get DONE gpio\n");
+>  
+>  	mgr = devm_fpga_mgr_create(&spi->dev,
+>  				   "Xilinx Slave Serial FPGA Manager",
+> -- 
+> 2.30.0
+> 
 
-what is srsr ?
+Applied to for-5.13,
 
-Why a noop function ?
-
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static int calib_calibration(struct calib *calib)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < 20; i++) {
-
-20 is a config parameter so should have a #define
-
-There a couple of busy wait blocks in xrt/ some count up, some count down.
-
-It would be good if they were consistent.
-
-> +		if (CALIB_DONE(calib))
-> +			break;
-> +		msleep(500);
-
-500 is another config
-
-Tom
-
-> +	}
-> +
-> +	if (i == 20) {
-> +		xrt_err(calib->pdev,
-> +			"MIG calibration timeout after bitstream download");
-> +		return -ETIMEDOUT;
-> +	}
-> +
-> +	xrt_info(calib->pdev, "took %dms", i * 500);
-> +	return 0;
-> +}
-> +
-> +static void xrt_calib_event_cb(struct platform_device *pdev, void *arg)
-> +{
-> +	struct calib *calib = platform_get_drvdata(pdev);
-> +		struct xrt_event *evt = (struct xrt_event *)arg;
-> +	enum xrt_events e = evt->xe_evt;
-> +	enum xrt_subdev_id id = evt->xe_subdev.xevt_subdev_id;
-> +	int instance = evt->xe_subdev.xevt_subdev_instance;
-> +	struct platform_device *leaf;
-> +	int ret;
-> +
-> +	switch (e) {
-> +	case XRT_EVENT_POST_CREATION: {
-> +		if (id == XRT_SUBDEV_SRSR) {
-> +			leaf = xleaf_get_leaf_by_id(pdev,
-> +						    XRT_SUBDEV_SRSR,
-> +						    instance);
-> +			if (!leaf) {
-> +				xrt_err(pdev, "does not get SRSR subdev");
-> +				return;
-> +			}
-> +			ret = calib_srsr(calib, leaf);
-> +			xleaf_put_leaf(pdev, leaf);
-> +			calib->result =
-> +				ret ? XRT_CALIB_FAILED : XRT_CALIB_SUCCEEDED;
-> +		} else if (id == XRT_SUBDEV_UCS) {
-> +			ret = calib_calibration(calib);
-> +			calib->result =
-> +				ret ? XRT_CALIB_FAILED : XRT_CALIB_SUCCEEDED;
-> +		}
-> +		break;
-> +	}
-> +	default:
-> +		break;
-> +	}
-> +}
-> +
-> +static int xrt_calib_remove(struct platform_device *pdev)
-> +{
-> +	struct calib *calib = platform_get_drvdata(pdev);
-> +
-> +	calib_cache_clean(calib);
-> +
-> +	if (calib->calib_base)
-> +		iounmap(calib->calib_base);
-> +
-> +	platform_set_drvdata(pdev, NULL);
-> +	devm_kfree(&pdev->dev, calib);
-> +
-> +	return 0;
-> +}
-> +
-> +static int xrt_calib_probe(struct platform_device *pdev)
-> +{
-> +	struct calib *calib;
-> +	struct resource *res;
-> +	int err = 0;
-> +
-> +	calib = devm_kzalloc(&pdev->dev, sizeof(*calib), GFP_KERNEL);
-> +	if (!calib)
-> +		return -ENOMEM;
-> +
-> +	calib->pdev = pdev;
-> +	platform_set_drvdata(pdev, calib);
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res)
-> +		goto failed;
-> +
-> +	calib->calib_base = ioremap(res->start, res->end - res->start + 1);
-> +	if (!calib->calib_base) {
-> +		err = -EIO;
-> +		xrt_err(pdev, "Map iomem failed");
-> +		goto failed;
-> +	}
-> +
-> +	mutex_init(&calib->lock);
-> +	INIT_LIST_HEAD(&calib->cache_list);
-> +
-> +	return 0;
-> +
-> +failed:
-> +	xrt_calib_remove(pdev);
-> +	return err;
-> +}
-> +
-> +static int
-> +xrt_calib_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
-> +{
-> +	struct calib *calib = platform_get_drvdata(pdev);
-> +	int ret = 0;
-> +
-> +	switch (cmd) {
-> +	case XRT_XLEAF_EVENT:
-> +		xrt_calib_event_cb(pdev, arg);
-> +		break;
-> +	case XRT_CALIB_RESULT: {
-> +		enum xrt_calib_results *r = (enum xrt_calib_results *)arg;
-> +		*r = calib->result;
-> +		break;
-> +	}
-> +	default:
-> +		xrt_err(pdev, "unsupported cmd %d", cmd);
-> +		ret = -EINVAL;
-> +	}
-> +	return ret;
-> +}
-> +
-> +static struct xrt_subdev_endpoints xrt_calib_endpoints[] = {
-> +	{
-> +		.xse_names = (struct xrt_subdev_ep_names[]) {
-> +			{ .ep_name = XRT_MD_NODE_DDR_CALIB },
-> +			{ NULL },
-> +		},
-> +		.xse_min_ep = 1,
-> +	},
-> +	{ 0 },
-> +};
-> +
-> +static struct xrt_subdev_drvdata xrt_calib_data = {
-> +	.xsd_dev_ops = {
-> +		.xsd_ioctl = xrt_calib_leaf_ioctl,
-> +	},
-> +};
-> +
-> +static const struct platform_device_id xrt_calib_table[] = {
-> +	{ XRT_CALIB, (kernel_ulong_t)&xrt_calib_data },
-> +	{ },
-> +};
-> +
-> +static struct platform_driver xrt_calib_driver = {
-> +	.driver = {
-> +		.name = XRT_CALIB,
-> +	},
-> +	.probe = xrt_calib_probe,
-> +	.remove = xrt_calib_remove,
-> +	.id_table = xrt_calib_table,
-> +};
-> +
-> +void calib_leaf_init_fini(bool init)
-> +{
-> +	if (init)
-> +		xleaf_register_driver(XRT_SUBDEV_CALIB, &xrt_calib_driver, xrt_calib_endpoints);
-> +	else
-> +		xleaf_unregister_driver(XRT_SUBDEV_CALIB);
-> +}
-
+- Moritz
