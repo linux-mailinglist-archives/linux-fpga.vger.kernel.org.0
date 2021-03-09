@@ -2,118 +2,94 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B7D331C18
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Mar 2021 02:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1A7332A02
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Mar 2021 16:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbhCIBLD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 8 Mar 2021 20:11:03 -0500
-Received: from mga12.intel.com ([192.55.52.136]:7462 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229750AbhCIBKw (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 8 Mar 2021 20:10:52 -0500
-IronPort-SDR: Gi6Pbjii3XXSoyC24hoVV6IyzF//763Qbidp3wPtNQEbJrnf29RBBsIgPxmAJWdIRiZN/c4kh4
- CtgnlW94OgAQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9917"; a="167404361"
-X-IronPort-AV: E=Sophos;i="5.81,233,1610438400"; 
-   d="scan'208";a="167404361"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2021 17:10:52 -0800
-IronPort-SDR: HZlH5kRgW/2JvLAjH06w0wCjNTsnoYqU/KlgBxP13zDo4HmE6ks8Js3Oflx07Or7eFVAhtsle/
- RjoQcbe1U7Hw==
-X-IronPort-AV: E=Sophos;i="5.81,233,1610438400"; 
-   d="scan'208";a="409521684"
-Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.209.120.53])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2021 17:10:52 -0800
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-        hao.wu@intel.com, matthew.gerlach@intel.com,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v9 5/5] fpga: m10bmc-sec: add max10 get_hw_errinfo callback func
-Date:   Mon,  8 Mar 2021 17:10:48 -0800
-Message-Id: <20210309011048.200525-6-russell.h.weight@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210309011048.200525-1-russell.h.weight@intel.com>
-References: <20210309011048.200525-1-russell.h.weight@intel.com>
+        id S231838AbhCIPQM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 9 Mar 2021 10:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231904AbhCIPP4 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 9 Mar 2021 10:15:56 -0500
+Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064F8C06175F
+        for <linux-fpga@vger.kernel.org>; Tue,  9 Mar 2021 07:15:56 -0800 (PST)
+Received: by mail-vk1-xa42.google.com with SMTP id g68so3066502vkb.1
+        for <linux-fpga@vger.kernel.org>; Tue, 09 Mar 2021 07:15:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=EF5YdIze2WFfV1jgknWd4TOTU+dZMrYclPwt0u07VrlticJetk+4LTuYP72TY4+x/2
+         I4ZdoD+CgNmEa7g/RDVe09bEqpi5AEmTjN7uEI3tArEmMM5te4HwLnDNKuo3fo79lMu0
+         q/f1K8VGhYNJYB5Yfwlrg0p+ZM+ZqsJ+RFeuVjIMUXX4FfDAkWm1teU5KjLd+cCG3i6L
+         5XYJOvJP9E4ERByjT+wmzDbGyw2D2MS7WyuXKRtX1mPqmnBEfCbV/SnKlDxYpxtuoM1/
+         wnQ58V4lQ8SVpCpQr/C5yEGlHxAgOvhySOAwquzSLBv9gX0ThERtpNYED0HQ75uqH2IX
+         O5pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=AdNOK364OAjf+p3dMDtWxm7MAOJK76fvMZIjpZdwp1FK7zXj114gH6y8v4MEa258lA
+         DbxFRn8WeDkKiAvg1S74TFMXCqXAf+2LP+H4vUiAnOT6xOGcsCm+aFqkiIBJ/IJrn9nQ
+         1pR38sB3E5M/c7OOVb7PaBXYalBso8yUpigmFsTwf19XN7QwUcoNilvXKUQpO1beeZSd
+         w/UmyIQRjWnkeWOq+zsbCd3cObUM2KkAZhyLZSWkTRZnYT5MyUgcupjV7Z7sW6y6ohY7
+         qZ1/cHIjWwngej5pKRlL+F3Yyu1QRUt9bzc0N1NrNPj8oobiymHtSSxhdyhhQWdHXhPw
+         mLHg==
+X-Gm-Message-State: AOAM530w+nAlimATWnHAaD4h5bPICPzNKMN9tpcr9D7SWS1ChXTUnGBq
+        d1E9PMnyg37YUTq4NWs1KUz6zvGkUDvhFYSaUKQ=
+X-Google-Smtp-Source: ABdhPJzQpLMLvMcH1S+jusifBto+jYjijKALeSw3q1b4shr0r6xqnlkuuuJoCy8IrcuYZjk4AQP8Gi+r0A5wQJ3mlkc=
+X-Received: by 2002:a05:6122:1058:: with SMTP id z24mr2566515vkn.5.1615302955143;
+ Tue, 09 Mar 2021 07:15:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Tue, 9 Mar 2021 07:15:54 -0800 (PST)
+Reply-To: ezbtg22@gmail.com
+From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
+Date:   Tue, 9 Mar 2021 07:15:54 -0800
+Message-ID: <CAH16wSPFeNRwXVdp5DKet09vngeZ7b1Wk3PJss1yhi=zHTMN0A@mail.gmail.com>
+Subject: From Mrs.E.Glenn
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Extend the MAX10 BMC Secure Update driver to include
-a function that returns 64 bits of additional HW specific
-data for errors that require additional information.
-This callback function enables the hw_errinfo sysfs
-node in the Intel Security Manager class driver.
-
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
----
-v9:
-  - No change
-v8:
-  - Previously patch 6/6, otherwise no change
-v7:
-  - No change
-v6:
-  - Initialized auth_result and doorbell to HW_ERRINFO_POISON
-    in m10bmc_sec_hw_errinfo() and removed unnecessary if statements.
-v5:
-  - No change
-v4:
-  - No change
-v3:
-  - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
-  - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
-    driver"
-v2:
-  - Implemented HW_ERRINFO_POISON for m10bmc_sec_hw_errinfo() to
-    ensure that corresponding bits are set to 1 if we are unable
-    to read the doorbell or auth_result registers.
-  - Added m10bmc_ prefix to functions in m10bmc_iops structure
----
- drivers/fpga/intel-m10-bmc-secure.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
-index a290fcc4df4a..3a049c98cf43 100644
---- a/drivers/fpga/intel-m10-bmc-secure.c
-+++ b/drivers/fpga/intel-m10-bmc-secure.c
-@@ -476,11 +476,33 @@ static enum fpga_sec_err m10bmc_sec_cancel(struct fpga_sec_mgr *smgr)
- 	return ret ? FPGA_SEC_ERR_RW_ERROR : FPGA_SEC_ERR_NONE;
- }
- 
-+#define HW_ERRINFO_POISON	GENMASK(31, 0)
-+static u64 m10bmc_sec_hw_errinfo(struct fpga_sec_mgr *smgr)
-+{
-+	struct m10bmc_sec *sec = smgr->priv;
-+	u32 auth_result = HW_ERRINFO_POISON;
-+	u32 doorbell = HW_ERRINFO_POISON;
-+
-+	switch (smgr->err_code) {
-+	case FPGA_SEC_ERR_HW_ERROR:
-+	case FPGA_SEC_ERR_TIMEOUT:
-+	case FPGA_SEC_ERR_BUSY:
-+	case FPGA_SEC_ERR_WEAROUT:
-+		m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+		m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result);
-+
-+		return (u64)doorbell << 32 | (u64)auth_result;
-+	default:
-+		return 0;
-+	}
-+}
-+
- static const struct fpga_sec_mgr_ops m10bmc_sops = {
- 	.prepare = m10bmc_sec_prepare,
- 	.write_blk = m10bmc_sec_write_blk,
- 	.poll_complete = m10bmc_sec_poll_complete,
- 	.cancel = m10bmc_sec_cancel,
-+	.get_hw_errinfo = m10bmc_sec_hw_errinfo,
- };
- 
- static int m10bmc_secure_probe(struct platform_device *pdev)
 -- 
-2.25.1
+Dear Beloved,
 
+I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
+in a hospital bed in Israel. I am 59 years and childless; my husband
+is dead. I was diagnosed with terminal cancer. And my doctor just
+predicted that I have but very limited time to live due to damages in
+my system and as a result of that I decided to dispose my 10.5 million
+US dollars to a God-fearing one for the continuation of charitable
+work. This is why I located you.
+
+My guess about you may not be accurate because I came across your
+contact at the humanitarian calendar event of the year but I believe
+in God who divinely directed me to you for this solemn proposal of
+charitable work.
+
+Therefore I wholeheartedly wish to bequeath my fortune to you as a
+God-fearing person for the continuation of charitable work anywhere
+around the world.
+
+I shall be going in for a surgery operations soonest and desire this
+money to be transferred to you as I do not wish to leave this money in
+the bank because bankers might misuse it for their own interest after
+my death.
+
+As soon as I receive your quick reply assuring me that you will
+utilize the money as I instructed you for the benefit of the less
+privilege, I shall give you more details and also instruct my bank to
+release the money to you for the charity project. I hope you receive
+this mail in good health.
+
+Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
+know what will be my situation in next minute,
+
+I am waiting for your reply.
+
+Yours sincerely,
+Mrs Elizabet Glenn.
