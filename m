@@ -2,249 +2,123 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABE13341C8
-	for <lists+linux-fpga@lfdr.de>; Wed, 10 Mar 2021 16:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1500334203
+	for <lists+linux-fpga@lfdr.de>; Wed, 10 Mar 2021 16:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbhCJPm5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 10 Mar 2021 10:42:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:57074 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232808AbhCJPmt (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 10 Mar 2021 10:42:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615390969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dLd7YxuLisgeRUxbPzIFodyEJnYjpZ+Zo18aKecQDow=;
-        b=dSBh7EAKnbAYnkQWQc5fRYS96PNi1zpxjkXYd/EuH2iVd+k2q6OgPQpYjHI7y6Aidovnp9
-        MpqWfM4f4QOOIc9dqcVygDmMjBgfNpxGUhg8UDS/ghNFqih74oIc+ggM86deoZuhuEcjcJ
-        rquhI7CTA2bmiHCNrV8MZ+O1FQ/punQ=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-340-ue_AR_bcPcmImnHCAinJwA-1; Wed, 10 Mar 2021 10:42:44 -0500
-X-MC-Unique: ue_AR_bcPcmImnHCAinJwA-1
-Received: by mail-qt1-f200.google.com with SMTP id t19so13187214qta.2
-        for <linux-fpga@vger.kernel.org>; Wed, 10 Mar 2021 07:42:44 -0800 (PST)
+        id S233367AbhCJPrq (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 10 Mar 2021 10:47:46 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:53694 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233461AbhCJPro (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 10 Mar 2021 10:47:44 -0500
+Received: from mail-wr1-f69.google.com ([209.85.221.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lK13n-0004Ie-4Z
+        for linux-fpga@vger.kernel.org; Wed, 10 Mar 2021 15:47:43 +0000
+Received: by mail-wr1-f69.google.com with SMTP id z6so8143072wrh.11
+        for <linux-fpga@vger.kernel.org>; Wed, 10 Mar 2021 07:47:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=dLd7YxuLisgeRUxbPzIFodyEJnYjpZ+Zo18aKecQDow=;
-        b=YwKPmhcmydsu8PS0xkCWSJWBoKF/6r237WhmYGJJBBVBShA48o9UZFQYvbHndbiZQ8
-         xygW8emn/GqyGeHVhE02WzRbDvWK3IZ5mfWESl1hVEdIwBmYPdDfp0yDIWDP7leg/E8c
-         hr+vaK1G+ZWgys82Qe/OUkqqyn6XPkT7dnjSy8TalMi3VWsvYJXdkIReyIj8KAxPYGpZ
-         HtE5CVJ7n052NVW6GzBmp2ouWy9HzdgPmQLp7wS1u4rMn+4zC2Q5JExepHZbXqdsQ2+2
-         qj84cVzimlXY3oeevRbf23ERBzEG+MjAyvqZY6W2+lBAkuM/7bkoWo5I2ptwJ+07gTgM
-         MEuw==
-X-Gm-Message-State: AOAM530ayKyt447tbUbUTUqieyAdweC92N1XIR30+hd1yLB8tMOh6wj7
-        fl82lSzYHvTY9MyM6CiRjBKiTakMu56/Nt54DjM35Ha0VWUTC60bwDYuQgQnZ/WGyjBcpLQEs7q
-        MiC7E9QHZaHn1rP9I55vldw==
-X-Received: by 2002:a37:a390:: with SMTP id m138mr3072079qke.59.1615390964302;
-        Wed, 10 Mar 2021 07:42:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw4TaXS+E7SGYkRYZ9PXoFjhdjzRUsfb41eGx0DO5ucrDM8EYjgu4Gbh3/zAENKEQwBr/ZsKA==
-X-Received: by 2002:a37:a390:: with SMTP id m138mr3072053qke.59.1615390964000;
-        Wed, 10 Mar 2021 07:42:44 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id w78sm12762078qkb.11.2021.03.10.07.42.42
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yFz6dzZZeHtwfAjkcR+5KOfHHzaYWeftITQqDuozS6s=;
+        b=O8jFD4WEzv8BBrr80S1xFVXvpGXks7q1fMCdpLHeSgkagG4VQ/cVyMbrugVvUBMpEE
+         3jyAEh23Jvp+DkPMkA+JUp7nMKHnrgHaNweNL4YXJ4iqBWfhhTEpYCTTmAFX42JjO0lY
+         18wDnT0W3aNqX8NblICE8v+oe7MIzow5mfvWNjkNDsAY4dHjBFneybG3Mte+ohzaub8H
+         lHxWz51nblter1bUZJAb9nt1rVaBr312f1Ua+8SXwkrdrk/XmC+ueEDp0gOVlWEj5nZ0
+         x+aqfuOXBld+vruJWgFPXhj/h2N6t9obP7GKCyCqnaXAYoAjuPpiZSzSNCYYVDUK4XKA
+         RZbQ==
+X-Gm-Message-State: AOAM532ROPzx3ptKxryzyKoofT9oAsDMTn+qcmcFkQEGVYyI5iellgCh
+        XlStXy4Y9PPCb0VXGAAvl/a/npvwhYTKxf/EOezxw/83AlRiSF2+0PuN+MGuTzNxsIgar3kLXFX
+        EcnMQmQD/fYzkk/HBesEfA81ikA1B8jQIDZEPkmU=
+X-Received: by 2002:a05:6000:245:: with SMTP id m5mr4302689wrz.284.1615391262920;
+        Wed, 10 Mar 2021 07:47:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzOKdQu1Zo+KUna4pwaQZuaYLADylFjwZtUs6uPbYZncoy6CBJ+ZAg4yMoz8Ix7vWin+JBTOQ==
+X-Received: by 2002:a05:6000:245:: with SMTP id m5mr4302666wrz.284.1615391262790;
+        Wed, 10 Mar 2021 07:47:42 -0800 (PST)
+Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id n6sm30989558wrt.1.2021.03.10.07.47.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Mar 2021 07:42:43 -0800 (PST)
-Subject: Re: [PATCH v10 0/7] FPGA Security Manager Class Driver
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     Russ Weight <russell.h.weight@intel.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@intel.com
-References: <20210309003540.197600-1-russell.h.weight@intel.com>
- <6f891032-8f73-5926-c137-279c2dd93041@redhat.com>
- <YEg0FqjHk2icadah@epycbox.lan>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <70d84703-3ad1-7bfa-a480-8aaf42ff4a4a@redhat.com>
-Date:   Wed, 10 Mar 2021 07:42:41 -0800
+        Wed, 10 Mar 2021 07:47:42 -0800 (PST)
+Subject: Re: [RFC v2 3/5] arm64: socfpga: rename ARCH_STRATIX10 to
+ ARCH_SOCFPGA64
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Tom Rix <trix@redhat.com>, Lee Jones <lee.jones@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-edac@vger.kernel.org, linux-fpga@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com, arm-soc <arm@kernel.org>,
+        SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>
+References: <20210310083327.480837-1-krzysztof.kozlowski@canonical.com>
+ <20210310083840.481615-1-krzysztof.kozlowski@canonical.com>
+ <20210310094527.GA701493@dell>
+ <35c39c81-08e4-24c8-f683-2fa7a7ea71de@redhat.com>
+ <1c06cb74-f0b0-66e5-a594-ed1ee9bc876e@canonical.com>
+ <CAK8P3a1CCQwbeH4KiUgif+-HdubVjjZBkMXimEjYkgeh4eJ7cg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <52d0489f-0f77-76a2-3269-e3004c6b6c07@canonical.com>
+Date:   Wed, 10 Mar 2021 16:47:41 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <YEg0FqjHk2icadah@epycbox.lan>
+In-Reply-To: <CAK8P3a1CCQwbeH4KiUgif+-HdubVjjZBkMXimEjYkgeh4eJ7cg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-
-On 3/9/21 6:51 PM, Moritz Fischer wrote:
-> Hi Tom,
-> On Tue, Mar 09, 2021 at 08:03:09AM -0800, Tom Rix wrote:
->> Moritz,
+On 10/03/2021 16:39, Arnd Bergmann wrote:
+> On Wed, Mar 10, 2021 at 4:06 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>> On 10/03/2021 15:45, Tom Rix wrote:
+>>> On 3/10/21 1:45 AM, Lee Jones wrote:
 >>
->> This and the next patchset apply to today's char-misc-next.
->>
->> However they conflicts with other in flight linux-fpga patchsets.
->>
->> Since I believe these patchsets came first, I think they should have preference.
-> I'm not sure what the ask here is, do you expect me to back out the
-> applied patches?
->
-> Conflicts will happen, it's part of working with git.
+>> Many other architectures do not have vendor prefix (TEGRA, EXYNOS,
+>> ZYNQMP etc). I would call it the same as in ARMv7 - ARCH_SOCFPGA - but
+>> the Altera EDAC driver depends on these symbols to be different.
+>> Anyway, I don't mind using something else for the name.
+> 
+> I agree the name SOCFPGA is confusing, since it is really a class of
+> device that is made by multiple manufacturers rather than a brand name,
+> but renaming that now would be equally confusing. If the Intel folks
+> could suggest a better name that describes all products in the platform
+> and is less ambiguous, we could rename it to that. I think ARCH_ALTERA
+> would make sense, but I don't know if that is a name that is getting
+> phased out. (We once renamed the Marvell Orion platform to ARCH_MVEBU,
+> but shortly afterwards, Marvell renamed their embedded business unit (EBU)
+> and the name has no longer made sense since).
 
-When I say in-flight, I mean yet to be accepted patches.
+I wait then for some ideas from Dinh (or anyone else).
 
-I track these here
+> 
+> Regardless of what name we end up with, I do think we should have the
+> same name for 32-bit and 64-bit and instead fix the edac driver to do
+> runtime detection based on the compatible string.
 
-https://github.com/trixirt/linux-fpga/tree/fpga-testing
+I can rename ARCH_SOCFPGA on 32-bit ARM as well, however converting edac
+driver from #ifdef ARCH_SOCFPGA64 to proper compatible string will be
+too much for me: I am not able to test it.
 
+This edac Altera driver is very weird... it uses the same compatible
+differently depending whether this is 32-bit or 64-bit (e.g. Stratix
+10)! On ARMv7 the compatible means for example one IRQ... On ARMv8, we
+have two. It's quite a new code (2019 from Intel), not some ancient
+legacy, so it should never have been accepted...
 
-I am sure everyone wants their patch in 5.13, I am plugging for these because they are oldest and most useful.
-
-This is an old patchset, from the changelog in this patchset it has been rebased for the last 2 releases without change.
-
-AFAIK, the dfl fpga's bitstream can not be updated with the mainline kernel without these patches.
-
-Since updating is why you would use an fpga, this is an important feature.
-
-
-While I am plugging for 5.13
-
-A fix for dfl port enable logic
-
-https://lore.kernel.org/linux-fpga/20210303014543.68292-1-russell.h.weight@intel.com/
-
-A patchset with a fix for stable
-
-https://lore.kernel.org/linux-fpga/8fe75a64-0457-16ac-5049-ee8b756ae1ea@linux.intel.com/
-
-Tom
-
->> This feature of updating is needed for the basic operation of the fpga.
->>
->> Tom
->>
->> On 3/8/21 4:35 PM, Russ Weight wrote:
->>> The FPGA Security Manager class driver provides a common
->>> API for user-space tools to manage updates for secure FPGA
->>> devices. Device drivers that instantiate the FPGA Security
->>> Manager class driver will interact with a HW secure update
->>> engine in order to transfer new FPGA and BMC images to FLASH so
->>> that they will be automatically loaded when the FPGA card reboots.
->>>
->>> A significant difference between the FPGA Manager and the FPGA 
->>> Security Manager is that the FPGA Manager does a live update (Partial
->>> Reconfiguration) to a device whereas the FPGA Security Manager
->>> updates the FLASH images for the Static Region and the BMC so that
->>> they will be loaded the next time the FPGA card boots. Security is
->>> enforced by hardware and firmware. The security manager interacts
->>> with the firmware to initiate an update, pass in the necessary data,
->>> and collect status on the update.
->>>
->>> The n3000bmc-secure driver is the first driver to use the FPGA
->>> Security Manager. This driver was previously submitted in the same
->>> patch set, but has been split out into a separate patch set starting
->>> with V2. Future devices will also make use of this common API for
->>> secure updates.
->>>
->>> In addition to managing secure updates of the FPGA and BMC images,
->>> the FPGA Security Manager update process may also be used to
->>> program root entry hashes and cancellation keys for the FPGA static
->>> region, the FPGA partial reconfiguration region, and the BMC.
->>> The image files are self-describing, and contain a header describing
->>> the image type.
->>>
->>> Secure updates make use of the request_firmware framework, which
->>> requires that image files are accessible under /lib/firmware. A request
->>> for a secure update returns immediately, while the update itself
->>> proceeds in the context of a kernel worker thread. Sysfs files provide
->>> a means for monitoring the progress of a secure update and for
->>> retrieving error information in the event of a failure.
->>>
->>> The API includes a "name" sysfs file to export the name of the parent
->>> driver. It also includes an "update" sub-directory containing files that
->>> that can be used to instantiate and monitor a secure update.
->>>
->>> Changelog v9 -> v10:
->>>   - Rebased to 5.12-rc2 next
->>>   - Updated Date and KernelVersion in ABI documentation
->>>
->>> Changelog v8 -> v9:
->>>   - Rebased patches for 5.11-rc2
->>>   - Updated Date and KernelVersion in ABI documentation
->>>
->>> Changelog v7 -> v8:
->>>   - Fixed grammatical error in Documentation/fpga/fpga-sec-mgr.rst
->>>
->>> Changelog v6 -> v7:
->>>   - Changed dates in documentation file to December 2020
->>>   - Changed filename_store() to use kmemdup_nul() instead of
->>>     kstrndup() and changed the count to not assume a line-return.
->>>
->>> Changelog v5 -> v6:
->>>   - Removed sysfs support and documentation for the display of the
->>>     flash count, root entry hashes, and code-signing-key cancelation
->>>     vectors from the class driver. This information can vary by device
->>>     and will instead be displayed by the device-specific parent driver.
->>>
->>> Changelog v4 -> v5:
->>>   - Added the devm_fpga_sec_mgr_unregister() function, following recent
->>>     changes to the fpga_manager() implementation.
->>>   - Changed most of the *_show() functions to use sysfs_emit()
->>>     instead of sprintf(
->>>   - When checking the return values for functions of type enum
->>>     fpga_sec_err err_code, test for FPGA_SEC_ERR_NONE instead of 0
->>>
->>> Changelog v3 -> v4:
->>>   - This driver is generic enough that it could be used for non Intel
->>>     FPGA devices. Changed from "Intel FPGA Security Manager" to FPGA
->>>     Security Manager" and removed unnecessary references to "Intel".
->>>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
->>>     Note that this also affects some filenames.
->>>
->>> Changelog v2 -> v3:
->>>   - Use dev_err() to report invalid progress in sec_progress()
->>>   - Use dev_err() to report invalid error code in sec_error()
->>>   - Modified sysfs handler check in check_sysfs_handler() to make
->>>     it more readable.
->>>   - Removed unnecessary "goto done"
->>>   - Added a comment to explain imgr->driver_unload in
->>>     ifpga_sec_mgr_unregister()
->>>
->>> Changelog v1 -> v2:
->>>   - Separated out the MAX10 BMC Security Engine to be submitted in
->>>     a separate patch-set.
->>>   - Bumped documentation dates and versions
->>>   - Split ifpga_sec_mgr_register() into create() and register() functions
->>>   - Added devm_ifpga_sec_mgr_create()
->>>   - Added Documentation/fpga/ifpga-sec-mgr.rst 
->>>   - Changed progress state "read_file" to "reading"
->>>   - Added sec_error() function (similar to sec_progress())
->>>   - Removed references to bmc_flash_count & smbus_flash_count (not supported)
->>>   - Removed typedefs for imgr ops
->>>   - Removed explicit value assignments in enums
->>>   - Other minor code cleanup per review comments 
->>>
->>> Russ Weight (7):
->>>   fpga: sec-mgr: fpga security manager class driver
->>>   fpga: sec-mgr: enable secure updates
->>>   fpga: sec-mgr: expose sec-mgr update status
->>>   fpga: sec-mgr: expose sec-mgr update errors
->>>   fpga: sec-mgr: expose sec-mgr update size
->>>   fpga: sec-mgr: enable cancel of secure update
->>>   fpga: sec-mgr: expose hardware error info
->>>
->>>  .../ABI/testing/sysfs-class-fpga-sec-mgr      |  81 +++
->>>  Documentation/fpga/fpga-sec-mgr.rst           |  44 ++
->>>  Documentation/fpga/index.rst                  |   1 +
->>>  MAINTAINERS                                   |   9 +
->>>  drivers/fpga/Kconfig                          |   9 +
->>>  drivers/fpga/Makefile                         |   3 +
->>>  drivers/fpga/fpga-sec-mgr.c                   | 652 ++++++++++++++++++
->>>  include/linux/fpga/fpga-sec-mgr.h             | 100 +++
->>>  8 files changed, 899 insertions(+)
->>>  create mode 100644 Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
->>>  create mode 100644 Documentation/fpga/fpga-sec-mgr.rst
->>>  create mode 100644 drivers/fpga/fpga-sec-mgr.c
->>>  create mode 100644 include/linux/fpga/fpga-sec-mgr.h
->>>
-
+Best regards,
+Krzysztof
