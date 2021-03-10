@@ -2,83 +2,97 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C11E3343A1
-	for <lists+linux-fpga@lfdr.de>; Wed, 10 Mar 2021 17:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330E63344E3
+	for <lists+linux-fpga@lfdr.de>; Wed, 10 Mar 2021 18:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbhCJQt3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 10 Mar 2021 11:49:29 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:41249 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbhCJQtS (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 10 Mar 2021 11:49:18 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MZkxd-1lHRcJ1fzL-00Wn2Y; Wed, 10 Mar 2021 17:49:16 +0100
-Received: by mail-ot1-f44.google.com with SMTP id f8so11962703otp.8;
-        Wed, 10 Mar 2021 08:49:15 -0800 (PST)
-X-Gm-Message-State: AOAM533hQ+xG6dX7imtpVcnOSbp0W3hWw6zAzLLsZI8NK7GV1NugFXuy
-        /3LH8CPE+Kj77hCIr01N9ARXTFDiXytnxeBrR3k=
-X-Google-Smtp-Source: ABdhPJw1kIhr8ttdGXD5g+DpuAzvAToYG1aFxOSVPDl56eSY4x70c4eQdWZH4tiH2ZUpEN9KrRB/9/YZCrDgnKY8YZU=
-X-Received: by 2002:a05:6830:14c1:: with SMTP id t1mr3227502otq.305.1615394954588;
- Wed, 10 Mar 2021 08:49:14 -0800 (PST)
+        id S230270AbhCJRNC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 10 Mar 2021 12:13:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46070 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230508AbhCJRMz (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 10 Mar 2021 12:12:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 702A664FC9;
+        Wed, 10 Mar 2021 17:12:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615396375;
+        bh=D/FvI5/EvO4EQdDa5GWti/ww8XzdvJWo3ytxEGELswA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=aZ9DKgy4t4SQc/wfZY7YNMuardIEG6m6h/L2bxF+Lp3KvFYxPlB+gkQplCI4/pRfP
+         SCpPZKdSvin/oHHjqZfH5U4G3kdS7i/l7tYWx3WxutqvU0negQTgyPzd633UA+H/fN
+         SLZVGsFiyqDfRjnBQZd/DoqrvYyBNZTnw7rISwTvIJrteFRnRH5HTT2CSl2nC0Erny
+         GXVKYjmTm+qFInqS0TRGakzRAy+qyYTVlYTUJfkPDG9ZVO+TlutPZ9Agr4ao31JMHF
+         5+gPE9eeetHzTtrOw3AUJ7OACpXkvmQUnshmecXp9YVBTj28RJO0S5m9ftSSh2ZLPU
+         JfQvo4XjkCV6w==
+Received: by mail-qk1-f178.google.com with SMTP id 130so17561082qkh.11;
+        Wed, 10 Mar 2021 09:12:55 -0800 (PST)
+X-Gm-Message-State: AOAM532Tqz6xMNXGzWMjJ/jIZuO2fiXqEyWJPMwZ9AyGB/FbEiTuacnh
+        3cIMyj5ArC9uz0FLED/AKiYWrmpCxnkf7Lgv8g==
+X-Google-Smtp-Source: ABdhPJyfKgPuAg+Rwsvx7DwP4g0N3ToASB+7PwyV0TZLLMh4KMaYeuKkiqIM9jYP1rGrOPqxQPdORYY86IUq0hFIcd4=
+X-Received: by 2002:a37:d82:: with SMTP id 124mr3599750qkn.311.1615396374676;
+ Wed, 10 Mar 2021 09:12:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20210310083327.480837-1-krzysztof.kozlowski@canonical.com>
- <20210310083840.481615-1-krzysztof.kozlowski@canonical.com> <20210310083840.481615-3-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20210310083840.481615-3-krzysztof.kozlowski@canonical.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 10 Mar 2021 17:48:58 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a27hAExCKtsO7k1HQwLKk-5Q8uxYYt_G2v-Osq8RZv2tg@mail.gmail.com>
-Message-ID: <CAK8P3a27hAExCKtsO7k1HQwLKk-5Q8uxYYt_G2v-Osq8RZv2tg@mail.gmail.com>
-Subject: Re: [RFC v2 5/5] clk: socfpga: allow compile testing of Stratix 10 /
- Agilex clocks
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+References: <20210304070224.22346-1-nava.manne@xilinx.com> <20210304070224.22346-3-nava.manne@xilinx.com>
+ <20210308201944.GA2886704@robh.at.kernel.org> <MWHPR02MB26231DD759D8C9D1CB26EC1EC2919@MWHPR02MB2623.namprd02.prod.outlook.com>
+In-Reply-To: <MWHPR02MB26231DD759D8C9D1CB26EC1EC2919@MWHPR02MB2623.namprd02.prod.outlook.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 10 Mar 2021 10:12:43 -0700
+X-Gmail-Original-Message-ID: <CAL_JsqLDK5pNprA5RJq8VfTbQX=hP-8NUyY6Xsesz3TE6=YYeg@mail.gmail.com>
+Message-ID: <CAL_JsqLDK5pNprA5RJq8VfTbQX=hP-8NUyY6Xsesz3TE6=YYeg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: fpga: Add binding doc for versal fpga manager
+To:     Nava kishore Manne <navam@xilinx.com>
+Cc:     "mdf@kernel.org" <mdf@kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        Michal Simek <michals@xilinx.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Jolly Shah <JOLLYS@xilinx.com>, Rajan Vaja <RAJANV@xilinx.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        Manish Narani <MNARANI@xilinx.com>,
+        Amit Sunil Dhamne <amitsuni@xilinx.com>,
+        Tejas Patel <tejasp@xlnx.xilinx.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-fpga@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com, arm-soc <arm@kernel.org>,
-        SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "chinnikishore369@gmail.com" <chinnikishore369@gmail.com>,
+        Appana Durga Kedareswara Rao <appanad@xilinx.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:UpF+IKYWh1Pc1r65f61MWWUzwAfDePicEmQd6YhxfkvjnX8dOr+
- ICz2/kJDiaAWWb6Lsh6CxGoVmPSVZWfzh2g960mHqUaQRxQ/RBkQbakZt0W8y5R+LtLAYUV
- vDnT39U36yusfTCTbtRHUlR/GtjyIEC5opA8/1Pyy4mqX6sdhMkCJp/HswNg3LYUnpb4Clx
- 6x8zW0wO2ujskcBfKsMAg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BECPo1lR3ZY=:w74Ff2HwUIYjwaEBMZUU4F
- GlYvFmvUchmTeBU1459yu4h4+FmwtrHuouAHEHhyJYn1h2DOqx6yaeJh4/xx/IPdTRyFgjqJW
- Wpo1c02oOks0npEfpemuj+2+gM+six/cN2BzVrDOMOdP4zGa2wzMM1vVfGPztg7A9ZPcce6wO
- o30XlDj9oL4BxqDXVVhqPrYRUx8SS/mLUeSrZzatAP/oL9DRmqYB4WD1vCLbmYeXY6QzXQjlp
- 79hdmOd06JxkTxCWu2G+p5sStoHnqQ64yHro31voae7jiLSumWgPBXq8ofGDiZXbzWUSvJg6n
- /4pXOEvFrITGjVrcIl/eea8d2EXvb3nntxATRuyn9dgbSDbnJM1NX2KEpKhAHGTiqbce3QO+r
- xwTtLiyw7fC8GQXOX2GgbsKqy1wQVMEI9GXFiakfYicvXQDAEdhIt+PERyekQWaaowRFgoSYq
- BnedSwNlIDjy4fbohX+u1Kolx+8UKQHBlb9ieD7egcfpuBz/sbHY5j8HVl+OC+qMyU9nyqWqZ
- v73/pY77FU1caY0ED4QY28X0PqJnAwVmUigamsLmCirCfpUpatEd1LY7TGUrfazrw==
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 9:38 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
-> --- a/drivers/clk/socfpga/Kconfig
-> +++ b/drivers/clk/socfpga/Kconfig
-> @@ -1,6 +1,17 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +config COMMON_CLK_SOCFPGA
-> +       bool "Intel SoCFPGA family clock support" if COMPILE_TEST && !ARCH_SOCFPGA && !ARCH_SOCFPGA64
-> +       depends on ARCH_SOCFPGA || ARCH_SOCFPGA64 || COMPILE_TEST
-> +       default y if ARCH_SOCFPGA || ARCH_SOCFPGA64
+On Wed, Mar 10, 2021 at 3:50 AM Nava kishore Manne <navam@xilinx.com> wrote:
+>
+> Hi Rob,
+>
+>         Thanks for providing the review comments.
+> Please find my response inline.
+>
+> > -----Original Message-----
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: Tuesday, March 9, 2021 1:50 AM
+> > To: Nava kishore Manne <navam@xilinx.com>
+> > Cc: mdf@kernel.org; trix@redhat.com; Michal Simek <michals@xilinx.com>;
+> > gregkh@linuxfoundation.org; Jolly Shah <JOLLYS@xilinx.com>; Rajan Vaja
+> > <RAJANV@xilinx.com>; arnd@arndb.de; Manish Narani
+> > <MNARANI@xilinx.com>; Amit Sunil Dhamne <amitsuni@xilinx.com>; Tejas
+> > Patel <tejasp@xlnx.xilinx.com>; linux-fpga@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
+> > kernel@lists.infradead.org; chinnikishore369@gmail.com; Appana Durga
+> > Kedareswara Rao <appanad@xilinx.com>
+> > Subject: Re: [PATCH v3 2/3] dt-bindings: fpga: Add binding doc for versal fpga
+> > manager
+> >
+> > On Thu, Mar 04, 2021 at 12:32:23PM +0530, Nava kishore Manne wrote:
+> > > From: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+> > >
+> > > This patch adds binding doc for versal fpga manager driver.
+> >
+> > Why do you need a DT entry for this? Can't the Versal firmware driver
+> > instantiate the fpga-mgr device?
+> >
+> This dt entry is need to handle the fpga regions properly for both full and Partial bitstream loading use cases and it cannot be done by Versal firmware driver instantiate.
 
-I think the 'depends on' line here is redundant if you also have the
-'if' line and the default.
+Ah yes, I forgot about that.
 
-        Arnd
+Rob
