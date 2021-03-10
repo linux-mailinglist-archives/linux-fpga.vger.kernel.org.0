@@ -2,60 +2,50 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A50613340A1
-	for <lists+linux-fpga@lfdr.de>; Wed, 10 Mar 2021 15:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF49433411E
+	for <lists+linux-fpga@lfdr.de>; Wed, 10 Mar 2021 16:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbhCJOqR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 10 Mar 2021 09:46:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:46545 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232519AbhCJOp6 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 10 Mar 2021 09:45:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615387558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qe7vnreao5ThhJBhWOb2yAQo6akg/BiUCkUWjObNy9A=;
-        b=UJio361ycv3FfHgO/mmDPV8NnheNq+6b7BM4cir6sh7v9lyIgnHZV5dXntjgjS58IgBwVx
-        skhW+DM+vFerBkOgHL1x1qzXHM5KcDTkxN2ItkAfmsnEMRqu+vlKEdHtS3/tybYh8tsXTR
-        S7dOLRZtgGrsvvX1ItBX4ajqwvTIN8A=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-352-QIsQPzPxNRacDeGfK0lDhA-1; Wed, 10 Mar 2021 09:45:55 -0500
-X-MC-Unique: QIsQPzPxNRacDeGfK0lDhA-1
-Received: by mail-qk1-f200.google.com with SMTP id b78so12880014qkg.13
-        for <linux-fpga@vger.kernel.org>; Wed, 10 Mar 2021 06:45:55 -0800 (PST)
+        id S231272AbhCJPFh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 10 Mar 2021 10:05:37 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:51890 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233204AbhCJPFX (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 10 Mar 2021 10:05:23 -0500
+Received: from mail-wm1-f69.google.com ([209.85.128.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lK0Oo-0000Jj-7s
+        for linux-fpga@vger.kernel.org; Wed, 10 Mar 2021 15:05:22 +0000
+Received: by mail-wm1-f69.google.com with SMTP id m17so1164858wml.3
+        for <linux-fpga@vger.kernel.org>; Wed, 10 Mar 2021 07:05:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Qe7vnreao5ThhJBhWOb2yAQo6akg/BiUCkUWjObNy9A=;
-        b=XF5DQQgw8JXA9pMzldE+3cqexHR1D3TfrKe9jpHNpGctAma03ngOhbXlJV2WdcYZkt
-         cAkiWcxiomelCH1xWghCeWdSwQkdHANMAvzndbl0mJ9FYKLkWXJgeLMyqIZUwPbZkAc6
-         qkpPgSYpkWmIgok1DzJErKO7e3TRSrgyAdutRDXP8Vge2TXOy8WnyezjcGRBCJrqc3BI
-         sEKs/xcoTzTVotVfKyDWDR7E5NVy6l0Lum2E1gqA3QLRnAFzicsd/RlXfYkcpYfyG7G1
-         oz3xdaxXw+KxkuvYwLn3O6btMXpnPrmIZXLeUSNxcOliwHCiPF+SwriRyETvZw7Ck6kO
-         xIhQ==
-X-Gm-Message-State: AOAM533A5PwIgair+nExEEDXz6DWazsXF1pvS0jsKTb00gZlCXaudlWH
-        aGhQzqf84wv18MHJvigJXbyyLMckehC7FDX1LyEGegza9cxIEbm9L1HFtn6F5ZKLF5O3ogDa8rX
-        y24Ud3MpNs+fQHuRHqC77qQ==
-X-Received: by 2002:a0c:8ec7:: with SMTP id y7mr3256297qvb.9.1615387555273;
-        Wed, 10 Mar 2021 06:45:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwlNoVM9BzWQNjpadCXVlfERPTQuROOGObYqvdAhHPCzlyHzhNVdnm6DSobOhCibwSlI7/4+g==
-X-Received: by 2002:a0c:8ec7:: with SMTP id y7mr3256274qvb.9.1615387555052;
-        Wed, 10 Mar 2021 06:45:55 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id d2sm12859520qkk.42.2021.03.10.06.45.52
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6O6+tOduwR48d8zZ29bwhvehUqmwn5KZAJpghN9/ZFw=;
+        b=GBKQCLE9yrjQgsq7Ji7QSe+hsAn1o6XHM/Bzv1giuvayeihpt3PtFPGnc8SlK1wE9C
+         40LS4YNhGUmMHr6bp/7EUFpE2TFXEFdj9SnJT+PNmxxuASRDjZTYwcUR76EIFrTUpJSw
+         PIg2j+SjjjCGBtImgEY2C1Xi5I9rp/ibhB+OMwsi4CpMPRi10loFETMDvSorLvwCiFmk
+         2XDjQ4tmCM6Umqgb+T6OrzxLuc7S7vByETOs+oZ2bDQneMlzst6XOCke7HQcM8vL7ntU
+         FTAEEkViqD4ruvEw1YXE37zGgsJRfAxh4r0hgLjefcl5ZPLKuRG4aTXST8W5B8a9PYM/
+         NNXg==
+X-Gm-Message-State: AOAM533e7p0zkJlls+0YoP5qNLAz52tjEOdX+Gq77PKyuqegqCD+bnuB
+        dg0CMx82hiOdvTlPvV1KVSIkbi1tJPs+d//Q99/6kO4LNdHG2hDqmzWEHoG6/+h17ZXHt5W05LO
+        mgEjLPwHGuUQHWo5hSTz+ifkQP1IOTMDahsdCBVw=
+X-Received: by 2002:adf:f303:: with SMTP id i3mr3936179wro.67.1615388721900;
+        Wed, 10 Mar 2021 07:05:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzGJJurjVb7EYp0bgYqxrECEX4ZhpKbOThOV2/LSr/fZ3VGeNkWRh86xSztb8QWNx4T9B9Jfg==
+X-Received: by 2002:adf:f303:: with SMTP id i3mr3936156wro.67.1615388721715;
+        Wed, 10 Mar 2021 07:05:21 -0800 (PST)
+Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id c26sm32188982wrb.87.2021.03.10.07.05.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Mar 2021 06:45:54 -0800 (PST)
+        Wed, 10 Mar 2021 07:05:21 -0800 (PST)
 Subject: Re: [RFC v2 3/5] arm64: socfpga: rename ARCH_STRATIX10 to
  ARCH_SOCFPGA64
-To:     Lee Jones <lee.jones@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Tom Rix <trix@redhat.com>, Lee Jones <lee.jones@linaro.org>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Dinh Nguyen <dinguyen@kernel.org>,
@@ -72,59 +62,61 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
 References: <20210310083327.480837-1-krzysztof.kozlowski@canonical.com>
  <20210310083840.481615-1-krzysztof.kozlowski@canonical.com>
  <20210310094527.GA701493@dell>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <35c39c81-08e4-24c8-f683-2fa7a7ea71de@redhat.com>
-Date:   Wed, 10 Mar 2021 06:45:50 -0800
+ <35c39c81-08e4-24c8-f683-2fa7a7ea71de@redhat.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <1c06cb74-f0b0-66e5-a594-ed1ee9bc876e@canonical.com>
+Date:   Wed, 10 Mar 2021 16:05:20 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <20210310094527.GA701493@dell>
+In-Reply-To: <35c39c81-08e4-24c8-f683-2fa7a7ea71de@redhat.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-
-On 3/10/21 1:45 AM, Lee Jones wrote:
-> On Wed, 10 Mar 2021, Krzysztof Kozlowski wrote:
->
->> Prepare for merging Stratix 10, Agilex and N5X into one arm64
->> architecture by first renaming the ARCH_STRATIX10 into ARCH_SOCFPGA64.
+On 10/03/2021 15:45, Tom Rix wrote:
+> 
+> On 3/10/21 1:45 AM, Lee Jones wrote:
+>> On Wed, 10 Mar 2021, Krzysztof Kozlowski wrote:
 >>
->> The existing ARCH_SOCFPGA (in ARMv7) Kconfig symbol cannot be used
->> because altera_edac driver builds differently between them (with
->> ifdefs).
+>>> Prepare for merging Stratix 10, Agilex and N5X into one arm64
+>>> architecture by first renaming the ARCH_STRATIX10 into ARCH_SOCFPGA64.
+>>>
+>>> The existing ARCH_SOCFPGA (in ARMv7) Kconfig symbol cannot be used
+>>> because altera_edac driver builds differently between them (with
+>>> ifdefs).
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>> ---
+>>>  arch/arm64/Kconfig.platforms                |  7 ++++---
+>>>  arch/arm64/boot/dts/altera/Makefile         |  2 +-
+>>>  arch/arm64/configs/defconfig                |  2 +-
+>>>  drivers/clk/Makefile                        |  2 +-
+>>>  drivers/clk/socfpga/Kconfig                 |  4 ++--
+>>>  drivers/edac/Kconfig                        |  2 +-
+>>>  drivers/edac/altera_edac.c                  | 10 +++++-----
+>>>  drivers/firmware/Kconfig                    |  2 +-
+>>>  drivers/fpga/Kconfig                        |  2 +-
+>>>  drivers/mfd/Kconfig                         |  2 +-
+>> If it's okay with everyone else, it'll be okay with me:
 >>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> ---
->>  arch/arm64/Kconfig.platforms                |  7 ++++---
->>  arch/arm64/boot/dts/altera/Makefile         |  2 +-
->>  arch/arm64/configs/defconfig                |  2 +-
->>  drivers/clk/Makefile                        |  2 +-
->>  drivers/clk/socfpga/Kconfig                 |  4 ++--
->>  drivers/edac/Kconfig                        |  2 +-
->>  drivers/edac/altera_edac.c                  | 10 +++++-----
->>  drivers/firmware/Kconfig                    |  2 +-
->>  drivers/fpga/Kconfig                        |  2 +-
->>  drivers/mfd/Kconfig                         |  2 +-
-> If it's okay with everyone else, it'll be okay with me:
->
-> Acked-by: Lee Jones <lee.jones@linaro.org>
+>> Acked-by: Lee Jones <lee.jones@linaro.org>
+> 
+> I think the name is too broad, from the description in the config
+> 
+> +	bool "Intel's SoCFPGA ARMv8 Families"
+> 
+> A better name would be ARCH_INTEL_SOCFPGA64
+> 
+> So other vendors like Xilinx could do their own thing.
 
-I think the name is too broad, from the description in the config
+Many other architectures do not have vendor prefix (TEGRA, EXYNOS,
+ZYNQMP etc). I would call it the same as in ARMv7 - ARCH_SOCFPGA - but
+the Altera EDAC driver depends on these symbols to be different.
+Anyway, I don't mind using something else for the name.
 
-+	bool "Intel's SoCFPGA ARMv8 Families"
-
-A better name would be ARCH_INTEL_SOCFPGA64
-
-So other vendors like Xilinx could do their own thing.
-
-Tom
-
->
->>  drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
->>  drivers/reset/Kconfig                       |  2 +-
->>  12 files changed, 21 insertions(+), 20 deletions(-)
-
+Best regards,
+Krzysztof
