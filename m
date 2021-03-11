@@ -2,46 +2,46 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 434523377A9
-	for <lists+linux-fpga@lfdr.de>; Thu, 11 Mar 2021 16:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353AF3377AB
+	for <lists+linux-fpga@lfdr.de>; Thu, 11 Mar 2021 16:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234414AbhCKP2H (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 11 Mar 2021 10:28:07 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:34213 "EHLO
+        id S234421AbhCKP2I (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 11 Mar 2021 10:28:08 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:34265 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234392AbhCKP1f (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 11 Mar 2021 10:27:35 -0500
-Received: from mail-ed1-f72.google.com ([209.85.208.72])
+        with ESMTP id S234273AbhCKP1m (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 11 Mar 2021 10:27:42 -0500
+Received: from mail-ed1-f69.google.com ([209.85.208.69])
         by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lKNDp-0005aS-Mh
-        for linux-fpga@vger.kernel.org; Thu, 11 Mar 2021 15:27:33 +0000
-Received: by mail-ed1-f72.google.com with SMTP id u2so10024110edj.20
-        for <linux-fpga@vger.kernel.org>; Thu, 11 Mar 2021 07:27:33 -0800 (PST)
+        id 1lKNDw-0005el-RC
+        for linux-fpga@vger.kernel.org; Thu, 11 Mar 2021 15:27:40 +0000
+Received: by mail-ed1-f69.google.com with SMTP id a2so10044284edx.0
+        for <linux-fpga@vger.kernel.org>; Thu, 11 Mar 2021 07:27:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UjkBHzEIXy3Qt0KfyB8W+UTqTimKf+/Z4F2P3MBYO1k=;
-        b=Kzjat4otvuPpaNBuGVxxB8HwzGL9ZIwQLCTiFywHJN1FWDcOf2/umwuBx+BJ75JpUV
-         eLwN8qNYkgc8zV+fb5NmvBxLPkijVzLtjH0R/4oSkB6OujCsfV36eiLmn7QabPhNFbBw
-         frsb1abn8cxEzUUWeOAjgwY+UbOwhC3IZiW+Sk9U+U5rj2kcf0hudZIRhoVCunUrN8WH
-         Z0zOGd3A/98TZh2iHzSo54oxbsCvHu6+j796/T5oYrzpUfszWuhvs8IeFZq9dJh4T8dV
-         VGLU7TzrAOFYkmnK7QPiNCzivSHMpx9bdIk9O3BAp98WN3doAJOC5qq+fH3KuYv38eay
-         qUMQ==
-X-Gm-Message-State: AOAM530cTDbK7oHTVDt0/j7/I/73KAgWQJcEriVbbO65pP9iANj3maO/
-        kptmdEY31mwdiW3SUdNY5l+Q0/tYMRa6t2VyWPyZ+NqQbotS01NKAemOxv9z6siBXl4Kot5ow07
-        PHpURQXp243ykZSJWadlmCDX/sF+8NFAzCXFNY44=
-X-Received: by 2002:a05:6402:149:: with SMTP id s9mr9105087edu.247.1615476453451;
-        Thu, 11 Mar 2021 07:27:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy9JEFJOCs9xlVCDjG2l3JIb1sIqxzKP3KekIDHOJltUt18JZjWfClKITi/qC3i9sP0ViNxqQ==
-X-Received: by 2002:a05:6402:149:: with SMTP id s9mr9105059edu.247.1615476453282;
-        Thu, 11 Mar 2021 07:27:33 -0800 (PST)
+        bh=lXB/iL6vA5+sCIUzf2o2vRh/ni0zGUa9h57FfrwufeA=;
+        b=aYHUXPxXy7ibgtBQHplNDA3Qi3/PeLqkFdeuQ8gluSQJpm6wHf7A3sz1Kx+GgXE/AB
+         VrePXMCfxKnm6hP6w8cZyHnzRCtvNtku3UEtg6NiMp8dhAN8f1OUucbgOnfRTLIdiVHJ
+         iO5zR0oDvJyrafICcu3059WXlxaKSiGi9rFvz2zZkUdTdGuGsrBH11IAmpbaqwfknaus
+         04OGN+TqiHujVlfNorWm4npY/4npGGeMBJcmLpNX6tfZ/eH+eQp7GA6cC9UqHwEMHA2v
+         br4jdg6F5o98FviHznir3JR2D3EN6QLvtrGUuwioiXLytwDrxtrrEb+R/rvTNn62w5uR
+         4iuQ==
+X-Gm-Message-State: AOAM531hcVU6e0RB6MKWVVqD1kjfG702F0cbxQ5GPtlgE1/dNoA3HpOc
+        0VHSAdbFrMNXBKGxt6bHVwoRbXzvnmeoMFwwSqXGJTqOrJlU5tV5VfFNvekC7srh6BnvtG5+5IP
+        mSDmnniwA6xY0CJ8bUC3P19f1OXMx8V0osT59OIY=
+X-Received: by 2002:a17:906:753:: with SMTP id z19mr3596712ejb.447.1615476460422;
+        Thu, 11 Mar 2021 07:27:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwn2V3fXBoj0gUy8DLvmPZgdZVpI4oNbBPuRpgJS86sHTABegOHS6FeUR0VFJ6Dqnh8S7uUpw==
+X-Received: by 2002:a17:906:753:: with SMTP id z19mr3596661ejb.447.1615476460220;
+        Thu, 11 Mar 2021 07:27:40 -0800 (PST)
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.gmail.com with ESMTPSA id t15sm1552389edw.84.2021.03.11.07.27.32
+        by smtp.gmail.com with ESMTPSA id g1sm1497413edh.31.2021.03.11.07.27.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 07:27:32 -0800 (PST)
+        Thu, 11 Mar 2021 07:27:39 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
@@ -69,9 +69,9 @@ To:     Russell King <linux@armlinux.org.uk>,
         linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
         netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH v3 11/15] dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
-Date:   Thu, 11 Mar 2021 16:27:31 +0100
-Message-Id: <20210311152731.1318428-1-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 13/15] i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+Date:   Thu, 11 Mar 2021 16:27:38 +0100
+Message-Id: <20210311152738.1318541-1-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
@@ -84,24 +84,27 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 ARCH_SOCFPGA is being renamed to ARCH_INTEL_SOCFPGA so adjust the
 32-bit ARM drivers to rely on new symbol.
 
+The side effect is that the I2C_ALTERA will now be available for both
+32-bit and 64-bit Intel SoCFPGA, even though it is used only for 32-bit.
+
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/dma/Kconfig | 2 +-
+ drivers/i2c/busses/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-index 0c2827fd8c19..a0836ffc22e0 100644
---- a/drivers/dma/Kconfig
-+++ b/drivers/dma/Kconfig
-@@ -100,7 +100,7 @@ config AT_XDMAC
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 05ebf7546e3f..3eec59f1fed3 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -369,7 +369,7 @@ comment "I2C system bus drivers (mostly embedded / system-on-chip)"
  
- config AXI_DMAC
- 	tristate "Analog Devices AXI-DMAC DMA support"
--	depends on MICROBLAZE || NIOS2 || ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_SOCFPGA || COMPILE_TEST
-+	depends on MICROBLAZE || NIOS2 || ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA || COMPILE_TEST
- 	select DMA_ENGINE
- 	select DMA_VIRTUAL_CHANNELS
- 	select REGMAP_MMIO
+ config I2C_ALTERA
+ 	tristate "Altera Soft IP I2C"
+-	depends on ARCH_SOCFPGA || NIOS2 || COMPILE_TEST
++	depends on ARCH_INTEL_SOCFPGA || NIOS2 || COMPILE_TEST
+ 	depends on OF
+ 	help
+ 	  If you say yes to this option, support will be included for the
 -- 
 2.25.1
 
