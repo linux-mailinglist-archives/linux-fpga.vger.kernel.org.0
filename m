@@ -2,504 +2,382 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 561AE339C7A
-	for <lists+linux-fpga@lfdr.de>; Sat, 13 Mar 2021 07:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BA0339EE3
+	for <lists+linux-fpga@lfdr.de>; Sat, 13 Mar 2021 16:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbhCMGx7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 13 Mar 2021 01:53:59 -0500
-Received: from mail-bn8nam12on2070.outbound.protection.outlook.com ([40.107.237.70]:29217
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232627AbhCMGxw (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sat, 13 Mar 2021 01:53:52 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mpZuLWSOSEp8/NJ7IXmv/QTroZE3DhQb3pD125H9dskd9224rSD6Rzq6h5m3gNbgfBKiGdNlSU87Qj3xcZgAQdhGMfWN5a1tQS9W3VjEwFQ6AHCGraFkQPWo0Vif8dj7R2vs21GdkCys7MxJ9/ka8CIOgQ70ZvZqaHxawoCy1l+y8P/CloGVEb5VO5T1Pl0+ZUqyQxZc/huELUtpp5NDDD+sU9Q9c9LZrj1oAFbpHxQdBtlallNx+Dd+oyD/QsfkqzHKq/3LkfoJlWAlZoWz/hM/9QqyXGDLWbpeCdyFx5GSMeJmtO23tCsmqq6jSawBnCx5ZHaJJhIe9y3YWmg0GA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/Wk9yY2+Axn/bLEL6PNpblUs1zD2GtWe0fOvGj6cufU=;
- b=PiqDyjKCGLANs1UmbZ+Mh7m9Gx5qHaUly6vTxAcZgaU83ytbA4FElqY/+gcnVcGy9GJTgiRTF4w+gEAahLsJDrGrefQmr5s8nakWGKTOsX3buI8Xr8TmtwYTLnGovlsj47hpLtPgxlyc53ojrGWfu4J2ysoPZJevH018Cmcq4ByZN4Wj7Vr+V20Z8F2PdZ6XG78b7SdguCOrT+bMKwus7TVJtiPvMYJyTiRP/TkwzxJL8iZdFR+DQlQLYw/v8OpoNmOrEBf1qMqZ4d9mCX75lN9P4NdsdXTGaMuUtuA7WQJvLa/hZQHacUY64F8BcAbccFw8XsglOsGtdqgGQAtZsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/Wk9yY2+Axn/bLEL6PNpblUs1zD2GtWe0fOvGj6cufU=;
- b=VBH61KaaNhTwqwheeGxARS9t7zp9Y5KHiqc1azAnESEIgg7dEwzCS4h30utcMAtKpyCBSbo7yd7mf+32/bUUl1lpskDrAPzQdmeHF1nF3+AvqoO/nIE+VPa1ST6YSef1tA3RzNxuNslPaivwyWNH8OEuQ5ysbLWVQ7wmO5SqNPc=
-Received: from BL0PR02CA0072.namprd02.prod.outlook.com (2603:10b6:207:3d::49)
- by BL0PR02MB5554.namprd02.prod.outlook.com (2603:10b6:208:8d::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.32; Sat, 13 Mar
- 2021 06:53:42 +0000
-Received: from BL2NAM02FT035.eop-nam02.prod.protection.outlook.com
- (2603:10b6:207:3d:cafe::a0) by BL0PR02CA0072.outlook.office365.com
- (2603:10b6:207:3d::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31 via Frontend
- Transport; Sat, 13 Mar 2021 06:53:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BL2NAM02FT035.mail.protection.outlook.com (10.152.77.157) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3912.25 via Frontend Transport; Sat, 13 Mar 2021 06:53:42 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 12 Mar 2021 22:53:41 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2106.2 via Frontend Transport; Fri, 12 Mar 2021 22:53:41 -0800
-Envelope-to: robh@kernel.org,
- mdf@kernel.org,
- devicetree@vger.kernel.org,
- linux-fpga@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- trix@redhat.com
-Received: from [10.17.2.60] (port=46250)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <lizhi.hou@xilinx.com>)
-        id 1lKy9d-0003xQ-ME; Fri, 12 Mar 2021 22:53:41 -0800
-Subject: Re: [PATCH V3 XRT Alveo 17/18] fpga: xrt: partition isolation
- platform driver
-To:     Tom Rix <trix@redhat.com>, Lizhi Hou <lizhi.hou@xilinx.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linux-fpga@vger.kernel.org>, <maxz@xilinx.com>,
-        <sonal.santan@xilinx.com>, <michal.simek@xilinx.com>,
-        <stefanos@xilinx.com>, <devicetree@vger.kernel.org>,
-        <mdf@kernel.org>, <robh@kernel.org>, Max Zhen <max.zhen@xilinx.com>
-References: <20210218064019.29189-1-lizhih@xilinx.com>
- <20210218064019.29189-18-lizhih@xilinx.com>
- <74def489-0a25-f90a-a00c-9d79dcbaf25a@redhat.com>
-From:   Lizhi Hou <lizhi.hou@xilinx.com>
-Message-ID: <41c8a448-ca43-e296-3253-97e24483b0a2@xilinx.com>
-Date:   Fri, 12 Mar 2021 22:53:41 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S230441AbhCMPSp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 13 Mar 2021 10:18:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:22218 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233486AbhCMPSj (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 13 Mar 2021 10:18:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615648718;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QF7jO6IT8/t+3jX6x7N2UyXOlZBnlw8FBgWo0SOA3is=;
+        b=I9F9mdZLeB2lLM/2satFkxpv3wEtvF8Zw+xSyBr7Ri0khgG9uFeDecWGO2VekocHmfpmEi
+        IoitjV5kV+/oDAfPclknfVXbzg9MHhFzXgjCVF0TijCYmeO4u/ikcCAVLCwTUAA+ciGBu+
+        Io9cSUap5+NmpP10gAkHTpD8NhSfgWE=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-290-O9O_lsI8MeaRFpC1JvwaNg-1; Sat, 13 Mar 2021 10:18:36 -0500
+X-MC-Unique: O9O_lsI8MeaRFpC1JvwaNg-1
+Received: by mail-qk1-f199.google.com with SMTP id i188so20420144qkd.7
+        for <linux-fpga@vger.kernel.org>; Sat, 13 Mar 2021 07:18:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=QF7jO6IT8/t+3jX6x7N2UyXOlZBnlw8FBgWo0SOA3is=;
+        b=bajKFSXcPYO991UGxtCO6UDu2yHU0lVj3x7lPuasP8yDsM1+8ud9THxZC1kC40/7qY
+         EP6Ru71dToaugWCc4Y79RN2/qNhSIr8WLC5Sk1smfI9gpFKGkZKDkfXNUZdw0NuGhwXx
+         REU9FNHA7M77KSmVgcptemC77mzt5ArbLaDcNtfZFSLkQQSUI3lTzEs9BsfnAdhOkj5w
+         3zJnXt6T7kxiCMHPyGAOJOrelPam+//6Eg9r5VPzXD00gsSVokX5O28FqFQsj+CBK2GV
+         cTwBXzHk8Qd2IpEEYhmoPLlGriqNpk44ndvbk8B6cZXWQWgSLC0J9V1HZzNO05LlCuKM
+         Y+Kw==
+X-Gm-Message-State: AOAM5307paw2uULpBtVQU/Mb+zHSqLcjBKh+iwr4cLrV4F5DalI+Oxws
+        u3dkj0I8sZLIqdkh6lLPShzcGdZsEV+Z4axyvpCvKaShbpWHZAc5XtSF9Ti/V4jKs/JmPz0lqpQ
+        ocIAmisZEewpByJS7JgcwPA==
+X-Received: by 2002:a37:bd7:: with SMTP id 206mr18446426qkl.284.1615648716223;
+        Sat, 13 Mar 2021 07:18:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzTt4GnXnZMM2zHtqFdM9q9xj0nnMCMSxAzlZXoV3zaENdmviZFZUjt760wJHbKKce66o669A==
+X-Received: by 2002:a37:bd7:: with SMTP id 206mr18446402qkl.284.1615648715859;
+        Sat, 13 Mar 2021 07:18:35 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id b22sm6996434qkk.45.2021.03.13.07.18.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Mar 2021 07:18:35 -0800 (PST)
+Subject: Re: [PATCH v10 1/5] fpga: m10bmc-sec: create max10 bmc secure update
+ driver
+To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
+        matthew.gerlach@intel.com
+References: <20210312193623.326306-1-russell.h.weight@intel.com>
+ <20210312193623.326306-2-russell.h.weight@intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <2634853e-15dd-09c3-ed55-302c6d5b771a@redhat.com>
+Date:   Sat, 13 Mar 2021 07:18:33 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-In-Reply-To: <74def489-0a25-f90a-a00c-9d79dcbaf25a@redhat.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20210312193623.326306-2-russell.h.weight@intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b64262ea-0f54-42a6-7767-08d8e5ecbd29
-X-MS-TrafficTypeDiagnostic: BL0PR02MB5554:
-X-Microsoft-Antispam-PRVS: <BL0PR02MB555462772F2B39C00BBAB9FBA16E9@BL0PR02MB5554.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1060;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9iomgWVo6Y6q1BSin9PuRe2hY/EqrYYUTCc4XepEABxs04Qf7MtC9yu09EpiK6RqpekvWxfeNVBUnhJ9VudSqgYI9IENwrpgF//WsO9hq3iIoTN9+ghe7xFSWVQVajzwmscaGaVGv709QmOzLYjdUL6+2j2cOz0q0qhr9mHibG2KGW+IaF4MxCbdam9470r7ABMtaCe29d3v8wV+hodgoM4+1S8Yikijz4rilOOmPUKJ8/MNgNGWZhuZpOjJPMnyMBrU1YrKAcg1+wb04V2HAnPkCQ30K6t0JikEvjcfD0xzC9KEwILzWf5u91TO/0PG1cENz7i/cDHbYYkrweskiqpmcerIJwSIS/1V/w/cU3pqhmxqIzRiMqKcqK4dx1E4SK8Xjcw3AFQ1TUDoV4Q5MhqFfqTyO6skNJoZqMb1kb9uae+uORgd2oDA8fTHRkFcLUSKUf4ugtkJf8LgzzPn/Z6PjIc+2mV5i7GjU5VWYNurKAkc0MlNE5lDEzrOF5DJeh03hhI6A0+tZjLykbDj7eqHj0POpq5N3PMn9+O9/mL36Nq+uuTHXxoBQ9LhX4SgyvjakE1wJ5dLDXnCnOWQ485gJdx2DHFc7PnNE0rLm4jDZd7xfrWtwd+9X5aGr8ncWws60BuR0BLLj3KfvmOhcEXhP4Z1Zh62qiTjzbHjUFama5/Kmuf87hU3XyQGSjAmQyJV536RIAkNRoOAym4lRbI5WXwou6EUOCxvCwFZrTI=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(39860400002)(346002)(136003)(376002)(46966006)(36840700001)(336012)(356005)(31696002)(110136005)(44832011)(8936002)(316002)(2616005)(8676002)(426003)(36906005)(54906003)(31686004)(26005)(47076005)(53546011)(36860700001)(7636003)(70206006)(70586007)(107886003)(4326008)(9786002)(2906002)(186003)(82310400003)(5660300002)(478600001)(83380400001)(30864003)(36756003)(82740400003)(50156003)(43740500002)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2021 06:53:42.0087
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b64262ea-0f54-42a6-7767-08d8e5ecbd29
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT035.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB5554
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Tom,
 
-On 03/06/2021 07:54 AM, Tom Rix wrote:
-> On 2/17/21 10:40 PM, Lizhi Hou wrote:
->> Add partition isolation platform driver. partition isolation is
->> a hardware function discovered by walking firmware metadata.
->> A platform device node will be created for it. Partition isolation
->> function isolate the different fpga regions
->>
->> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
->> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
->> Signed-off-by: Lizhi Hou <lizhih@xilinx.com>
->> ---
->>   drivers/fpga/xrt/include/xleaf/axigate.h |  25 ++
->>   drivers/fpga/xrt/lib/xleaf/axigate.c     | 298 +++++++++++++++++++++++
->>   2 files changed, 323 insertions(+)
->>   create mode 100644 drivers/fpga/xrt/include/xleaf/axigate.h
->>   create mode 100644 drivers/fpga/xrt/lib/xleaf/axigate.c
->>
->> diff --git a/drivers/fpga/xrt/include/xleaf/axigate.h b/drivers/fpga/xrt/include/xleaf/axigate.h
->> new file mode 100644
->> index 000000000000..2cef71e13b30
->> --- /dev/null
->> +++ b/drivers/fpga/xrt/include/xleaf/axigate.h
->> @@ -0,0 +1,25 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Header file for XRT Axigate Leaf Driver
->> + *
->> + * Copyright (C) 2020-2021 Xilinx, Inc.
->> + *
->> + * Authors:
->> + *   Lizhi Hou <Lizhi.Hou@xilinx.com>
->> + */
->> +
->> +#ifndef _XRT_AXIGATE_H_
->> +#define _XRT_AXIGATE_H_
->> +
->> +#include "xleaf.h"
->> +#include "metadata.h"
->> +
->> +/*
->> + * AXIGATE driver IOCTL calls.
->> + */
->> +enum xrt_axigate_ioctl_cmd {
->> +     XRT_AXIGATE_FREEZE = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
->> +     XRT_AXIGATE_FREE,
-> These are substrings, could change suffix to make it harder for developer to mix up.
-Will change 'freeze' to 'close', 'free' to 'open'.
->> +};
->> +
->> +#endif       /* _XRT_AXIGATE_H_ */
->> diff --git a/drivers/fpga/xrt/lib/xleaf/axigate.c b/drivers/fpga/xrt/lib/xleaf/axigate.c
->> new file mode 100644
->> index 000000000000..382969f9925f
->> --- /dev/null
->> +++ b/drivers/fpga/xrt/lib/xleaf/axigate.c
->> @@ -0,0 +1,298 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Xilinx Alveo FPGA AXI Gate Driver
->> + *
->> + * Copyright (C) 2020-2021 Xilinx, Inc.
->> + *
->> + * Authors:
->> + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
->> + */
->> +
->> +#include <linux/mod_devicetable.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/delay.h>
->> +#include <linux/device.h>
->> +#include <linux/io.h>
->> +#include "metadata.h"
->> +#include "xleaf.h"
->> +#include "xleaf/axigate.h"
->> +
->> +#define XRT_AXIGATE "xrt_axigate"
->> +
->> +struct axigate_regs {
->> +     u32             iag_wr;
->> +     u32             iag_rvsd;
->> +     u32             iag_rd;
->> +} __packed;
-> similar to other patches, prefix of element is not needed.
-Will remove this and use #define and regmap.
->> +
->> +struct xrt_axigate {
->> +     struct platform_device  *pdev;
->> +     void                    *base;
->> +     struct mutex            gate_lock; /* gate dev lock */
->> +
->> +     void                    *evt_hdl;
->> +     const char              *ep_name;
->> +
->> +     bool                    gate_freezed;
->> +};
->> +
->> +/* the ep names are in the order of hardware layers */
->> +static const char * const xrt_axigate_epnames[] = {
->> +     XRT_MD_NODE_GATE_PLP,
->> +     XRT_MD_NODE_GATE_ULP,
-> what are plp, ulp ? it is helpful to comment or expand acronyms
-plp stands for  provider logic partition and ulp stands for user logic 
-partition. Will add comment.
->> +     NULL
->> +};
->> +
->> +#define reg_rd(g, r)                                         \
->> +     ioread32((void *)(g)->base + offsetof(struct axigate_regs, r))
->> +#define reg_wr(g, v, r)                                              \
->> +     iowrite32(v, (void *)(g)->base + offsetof(struct axigate_regs, r))
->> +
->> +static inline void freeze_gate(struct xrt_axigate *gate)
->> +{
->> +     reg_wr(gate, 0, iag_wr);
-> The values written here and below are magic, the need to have #defines
-Will add #defines
->> +     ndelay(500);
->> +     reg_rd(gate, iag_rd);
->> +}
->> +
->> +static inline void free_gate(struct xrt_axigate *gate)
->> +{
->> +     reg_wr(gate, 0x2, iag_wr);
->> +     ndelay(500);
->> +     (void)reg_rd(gate, iag_rd);
->> +     reg_wr(gate, 0x3, iag_wr);
->> +     ndelay(500);
->> +     reg_rd(gate, iag_rd);
->> +}
->> +
->> +static int xrt_axigate_epname_idx(struct platform_device *pdev)
->> +{
->> +     int                     i;
->> +     int                     ret;
-> int i, ret;
-sure.
->> +     struct resource         *res;
->> +
->> +     res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> +     if (!res) {
->> +             xrt_err(pdev, "Empty Resource!");
->> +             return -EINVAL;
->> +     }
->> +
->> +     for (i = 0; xrt_axigate_epnames[i]; i++) {
-> null guarded array is useful with the size isn't know,
+On 3/12/21 11:36 AM, Russ Weight wrote:
+> Create a platform driver that can be invoked as a sub
+> driver for the Intel MAX10 BMC in order to support
+> secure updates. This sub-driver will invoke an
+> instance of the FPGA Security Manager class driver
+> in order to expose sysfs interfaces for managing and
+> monitoring secure updates to FPGA and BMC images.
 >
-> in this case it is, so covert loop to using ARRAY_SIZE
-Will use ARRAY_SIZE.
+> This patch creates the MAX10 BMC Secure Update driver and
+> provides sysfs files for displaying the current root entry hashes
+> for the FPGA static region, the FPGA PR region, and the MAX10
+> BMC.
 >
->> +             ret = strncmp(xrt_axigate_epnames[i], res->name,
->> +                           strlen(xrt_axigate_epnames[i]) + 1);
-> needs a strlen check in case res->name is just a substring
-'strlen() + 1' is used, thus the comparing covers substring as well.
->> +             if (!ret)
->> +                     break;
->> +     }
->> +
->> +     ret = (xrt_axigate_epnames[i]) ? i : -EINVAL;
->> +     return ret;
->> +}
->> +
->> +static void xrt_axigate_freeze(struct platform_device *pdev)
->> +{
->> +     struct xrt_axigate      *gate;
->> +     u32                     freeze = 0;
->> +
->> +     gate = platform_get_drvdata(pdev);
->> +
->> +     mutex_lock(&gate->gate_lock);
->> +     freeze = reg_rd(gate, iag_rd);
->> +     if (freeze) {           /* gate is opened */
->> +             xleaf_broadcast_event(pdev, XRT_EVENT_PRE_GATE_CLOSE, false);
->> +             freeze_gate(gate);
->> +     }
->> +
->> +     gate->gate_freezed = true;
-> Looks like freeze could be 0, so is setting gate_freeze = true correct all the time ?
-added checking for freeze_gate(). if it succeed, gate will be frozen 
-(closed).
->> +     mutex_unlock(&gate->gate_lock);
->> +
->> +     xrt_info(pdev, "freeze gate %s", gate->ep_name);
->> +}
->> +
->> +static void xrt_axigate_free(struct platform_device *pdev)
->> +{
->> +     struct xrt_axigate      *gate;
->> +     u32                     freeze;
->> +
->> +     gate = platform_get_drvdata(pdev);
->> +
->> +     mutex_lock(&gate->gate_lock);
->> +     freeze = reg_rd(gate, iag_rd);
->> +     if (!freeze) {          /* gate is closed */
->> +             free_gate(gate);
->> +             xleaf_broadcast_event(pdev, XRT_EVENT_POST_GATE_OPEN, true);
->> +             /* xrt_axigate_free() could be called in event cb, thus
->> +              * we can not wait for the completes
->> +              */
->> +     }
->> +
->> +     gate->gate_freezed = false;
-> freezed is not a word, the element name should be 'gate_frozen'
-Will change to gate_closed.
->> +     mutex_unlock(&gate->gate_lock);
->> +
->> +     xrt_info(pdev, "free gate %s", gate->ep_name);
->> +}
->> +
->> +static void xrt_axigate_event_cb(struct platform_device *pdev, void *arg)
->> +{
->> +     struct platform_device *leaf;
->> +     struct xrt_event *evt = (struct xrt_event *)arg;
->> +     enum xrt_events e = evt->xe_evt;
->> +     enum xrt_subdev_id id = evt->xe_subdev.xevt_subdev_id;
->> +     int instance = evt->xe_subdev.xevt_subdev_instance;
->> +     struct xrt_axigate *gate = platform_get_drvdata(pdev);
->> +     struct resource *res;
->> +
->> +     switch (e) {
->> +     case XRT_EVENT_POST_CREATION:
->> +             break;
->> +     default:
->> +             return;
->> +     }
-> convert switch() to if ()
-Sure.
->> +
->> +     if (id != XRT_SUBDEV_AXIGATE)
->> +             return;
->> +
->> +     leaf = xleaf_get_leaf_by_id(pdev, id, instance);
->> +     if (!leaf)
->> +             return;
->> +
->> +     res = platform_get_resource(leaf, IORESOURCE_MEM, 0);
->> +     if (!res || !strncmp(res->name, gate->ep_name, strlen(res->name) + 1)) {
->> +             (void)xleaf_put_leaf(pdev, leaf);
->> +             return;
->> +     }
->> +
->> +     /*
->> +      * higher level axigate instance created,
->> +      * make sure the gate is openned. This covers 1RP flow which
-> is openned -> is opened
-sure.
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> ---
+> v10:
+>   - Changed the path expressions in the sysfs documentation to
+>     replace the n3000 reference with something more generic to
+>     accomodate other devices that use the same driver.
+> v9:
+>   - Rebased to 5.12-rc2 next
+>   - Updated Date and KernelVersion in ABI documentation
+> v8:
+>   - Previously patch 2/6, otherwise no change
+> v7:
+>   - Updated Date and KernelVersion in ABI documentation
+> v6:
+>   - Added WARN_ON() call for (sha_num_bytes / stride) to assert
+>     that the proper count is passed to regmap_bulk_read().
+> v5:
+>   - No change
+> v4:
+>   - Moved sysfs files for displaying the root entry hashes (REH)
+>     from the FPGA Security Manager class driver to here. The
+>     m10bmc_reh() and m10bmc_reh_size() functions are removed and
+>     the functionality from these functions is moved into a
+>     show_root_entry_hash() function for displaying the REHs.
+>   - Added ABI documentation for the new sysfs entries:
+>     sysfs-driver-intel-m10-bmc-secure
+>   - Updated the MAINTAINERS file to add the new ABI documentation
+>     file: sysfs-driver-intel-m10-bmc-secure
+>   - Removed unnecessary ret variable from m10bmc_secure_probe()
+>   - Incorporated new devm_fpga_sec_mgr_register() function into
+>     m10bmc_secure_probe() and removed the m10bmc_secure_remove()
+>     function.
+> v3:
+>   - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+>   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure
+>     Update driver"
+>   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
+>     underlying functions are now called directly.
+>   - Changed "_root_entry_hash" to "_reh", with a comment explaining
+>     what reh is.
+> v2:
+>   - Added drivers/fpga/intel-m10-bmc-secure.c file to MAINTAINERS.
+>   - Switched to GENMASK(31, 16) for a couple of mask definitions.
+>   - Moved MAX10 BMC address and function definitions to a separate
+>     patch.
+>   - Replaced small function-creation macros with explicit function
+>     declarations.
+>   - Removed ifpga_sec_mgr_init() and ifpga_sec_mgr_uinit() functions.
+>   - Adapted to changes in the Intel FPGA Security Manager by splitting
+>     the single call to ifpga_sec_mgr_register() into two function
+>     calls: devm_ifpga_sec_mgr_create() and ifpga_sec_mgr_register().
+> ---
+>  .../testing/sysfs-driver-intel-m10-bmc-secure |  29 ++++
+>  MAINTAINERS                                   |   2 +
+>  drivers/fpga/Kconfig                          |  11 ++
+>  drivers/fpga/Makefile                         |   3 +
+>  drivers/fpga/intel-m10-bmc-secure.c           | 135 ++++++++++++++++++
+>  5 files changed, 180 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
+>  create mode 100644 drivers/fpga/intel-m10-bmc-secure.c
 >
-> what is 1RP ?
-1RP flow is one of hardware shell build flow. It is xilinx internal term 
-I will remove this sentence.
+> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
+> new file mode 100644
+> index 000000000000..bd3ee9bc1a92
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
+> @@ -0,0 +1,29 @@
+> +What:		/sys/bus/platform/drivers/intel-m10bmc-secure/.../security/sr_root_entry_hash
 
-Thanks,
-Lizhi
->
-> Tom
->
->> +      * has plp gate as well.
->> +      */
->> +     if (xrt_axigate_epname_idx(leaf) > xrt_axigate_epname_idx(pdev))
->> +             xrt_axigate_free(pdev);
->> +     else
->> +             xleaf_ioctl(leaf, XRT_AXIGATE_FREE, NULL);
->> +
->> +     (void)xleaf_put_leaf(pdev, leaf);
->> +}
->> +
->> +static int
->> +xrt_axigate_leaf_ioctl(struct platform_device *pdev, u32 cmd, void *arg)
->> +{
->> +     switch (cmd) {
->> +     case XRT_XLEAF_EVENT:
->> +             xrt_axigate_event_cb(pdev, arg);
->> +             break;
->> +     case XRT_AXIGATE_FREEZE:
->> +             xrt_axigate_freeze(pdev);
->> +             break;
->> +     case XRT_AXIGATE_FREE:
->> +             xrt_axigate_free(pdev);
->> +             break;
->> +     default:
->> +             xrt_err(pdev, "unsupported cmd %d", cmd);
->> +             return -EINVAL;
->> +     }
->> +
->> +     return 0;
->> +}
->> +
->> +static int xrt_axigate_remove(struct platform_device *pdev)
->> +{
->> +     struct xrt_axigate      *gate;
->> +
->> +     gate = platform_get_drvdata(pdev);
->> +
->> +     if (gate->base)
->> +             iounmap(gate->base);
->> +
->> +     platform_set_drvdata(pdev, NULL);
->> +     devm_kfree(&pdev->dev, gate);
->> +
->> +     return 0;
->> +}
->> +
->> +static int xrt_axigate_probe(struct platform_device *pdev)
->> +{
->> +     struct xrt_axigate      *gate;
->> +     struct resource         *res;
->> +     int                     ret;
->> +
->> +     gate = devm_kzalloc(&pdev->dev, sizeof(*gate), GFP_KERNEL);
->> +     if (!gate)
->> +             return -ENOMEM;
->> +
->> +     gate->pdev = pdev;
->> +     platform_set_drvdata(pdev, gate);
->> +
->> +     xrt_info(pdev, "probing...");
->> +     res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> +     if (!res) {
->> +             xrt_err(pdev, "Empty resource 0");
->> +             ret = -EINVAL;
->> +             goto failed;
->> +     }
->> +
->> +     gate->base = ioremap(res->start, res->end - res->start + 1);
->> +     if (!gate->base) {
->> +             xrt_err(pdev, "map base iomem failed");
->> +             ret = -EFAULT;
->> +             goto failed;
->> +     }
->> +
->> +     gate->ep_name = res->name;
->> +
->> +     mutex_init(&gate->gate_lock);
->> +
->> +     return 0;
->> +
->> +failed:
->> +     xrt_axigate_remove(pdev);
->> +     return ret;
->> +}
->> +
->> +static struct xrt_subdev_endpoints xrt_axigate_endpoints[] = {
->> +     {
->> +             .xse_names = (struct xrt_subdev_ep_names[]) {
->> +                     { .ep_name = "ep_pr_isolate_ulp_00" },
->> +                     { NULL },
->> +             },
->> +             .xse_min_ep = 1,
->> +     },
->> +     {
->> +             .xse_names = (struct xrt_subdev_ep_names[]) {
->> +                     { .ep_name = "ep_pr_isolate_plp_00" },
->> +                     { NULL },
->> +             },
->> +             .xse_min_ep = 1,
->> +     },
->> +     { 0 },
->> +};
->> +
->> +static struct xrt_subdev_drvdata xrt_axigate_data = {
->> +     .xsd_dev_ops = {
->> +             .xsd_ioctl = xrt_axigate_leaf_ioctl,
->> +     },
->> +};
->> +
->> +static const struct platform_device_id xrt_axigate_table[] = {
->> +     { XRT_AXIGATE, (kernel_ulong_t)&xrt_axigate_data },
->> +     { },
->> +};
->> +
->> +static struct platform_driver xrt_axigate_driver = {
->> +     .driver = {
->> +             .name = XRT_AXIGATE,
->> +     },
->> +     .probe = xrt_axigate_probe,
->> +     .remove = xrt_axigate_remove,
->> +     .id_table = xrt_axigate_table,
->> +};
->> +
->> +void axigate_leaf_init_fini(bool init)
->> +{
->> +     if (init) {
->> +             xleaf_register_driver(XRT_SUBDEV_AXIGATE,
->> +                                   &xrt_axigate_driver, xrt_axigate_endpoints);
->> +     } else {
->> +             xleaf_unregister_driver(XRT_SUBDEV_AXIGATE);
->> +     }
->> +}
+This is fine.
+
+Reviewed-by: Tom Rix <trix@redhat.com>
+
+> +Date:		April 2021
+> +KernelVersion:  5.13
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Read only. Returns the root entry hash for the static
+> +		region if one is programmed, else it returns the
+> +		string: "hash not programmed".  This file is only
+> +		visible if the underlying device supports it.
+> +		Format: "0x%x".
+> +
+> +What:		/sys/bus/platform/drivers/intel-m10bmc-secure/.../security/pr_root_entry_hash
+> +Date:		April 2021
+> +KernelVersion:  5.13
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Read only. Returns the root entry hash for the partial
+> +		reconfiguration region if one is programmed, else it
+> +		returns the string: "hash not programmed".  This file
+> +		is only visible if the underlying device supports it.
+> +		Format: "0x%x".
+> +
+> +What:		/sys/bus/platform/drivers/intel-m10bmc-secure/.../security/bmc_root_entry_hash
+> +Date:		April 2021
+> +KernelVersion:  5.13
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Read only. Returns the root entry hash for the BMC image
+> +		if one is programmed, else it returns the string:
+> +		"hash not programmed".  This file is only visible if the
+> +		underlying device supports it.
+> +		Format: "0x%x".
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 63dd900893d0..733248000230 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7029,8 +7029,10 @@ M:	Russ Weight <russell.h.weight@intel.com>
+>  L:	linux-fpga@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
+> +F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
+>  F:	Documentation/fpga/fpga-sec-mgr.rst
+>  F:	drivers/fpga/fpga-sec-mgr.c
+> +F:	drivers/fpga/intel-m10-bmc-secure.c
+>  F:	include/linux/fpga/fpga-sec-mgr.h
+>  
+>  FPU EMULATOR
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index c00a820bd35b..ed308108bbd7 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -243,4 +243,15 @@ config FPGA_SEC_MGR
+>  	  region and for the BMC. Select this option to enable
+>  	  updates for secure FPGA devices.
+>  
+> +config IFPGA_M10_BMC_SECURE
+> +	tristate "Intel MAX10 BMC Secure Update driver"
+> +	depends on MFD_INTEL_M10_BMC && FPGA_SEC_MGR
+> +	help
+> +	  Secure update support for the Intel MAX10 board management
+> +	  controller.
+> +
+> +	  This is a subdriver of the Intel MAX10 board management controller
+> +	  (BMC) and provides support for secure updates for the BMC image,
+> +	  the FPGA image, the Root Entry Hashes, etc.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 22576d1a3996..7259f1ab2531 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -24,6 +24,9 @@ obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
+>  # FPGA Security Manager Framework
+>  obj-$(CONFIG_FPGA_SEC_MGR)		+= fpga-sec-mgr.o
+>  
+> +# FPGA Secure Update Drivers
+> +obj-$(CONFIG_IFPGA_M10_BMC_SECURE)	+= intel-m10-bmc-secure.o
+> +
+>  # FPGA Bridge Drivers
+>  obj-$(CONFIG_FPGA_BRIDGE)		+= fpga-bridge.o
+>  obj-$(CONFIG_SOCFPGA_FPGA_BRIDGE)	+= altera-hps2fpga.o altera-fpga2sdram.o
+> diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
+> new file mode 100644
+> index 000000000000..5ac5f59b5731
+> --- /dev/null
+> +++ b/drivers/fpga/intel-m10-bmc-secure.c
+> @@ -0,0 +1,135 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Intel Max10 Board Management Controller Secure Update Driver
+> + *
+> + * Copyright (C) 2019-2020 Intel Corporation. All rights reserved.
+> + *
+> + */
+> +#include <linux/bitfield.h>
+> +#include <linux/device.h>
+> +#include <linux/fpga/fpga-sec-mgr.h>
+> +#include <linux/mfd/intel-m10-bmc.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +
+> +struct m10bmc_sec {
+> +	struct device *dev;
+> +	struct intel_m10bmc *m10bmc;
+> +};
+> +
+> +/* Root Entry Hash (REH) support */
+> +#define REH_SHA256_SIZE		32
+> +#define REH_SHA384_SIZE		48
+> +#define REH_MAGIC		GENMASK(15, 0)
+> +#define REH_SHA_NUM_BYTES	GENMASK(31, 16)
+> +
+> +static ssize_t
+> +show_root_entry_hash(struct device *dev, u32 exp_magic,
+> +		     u32 prog_addr, u32 reh_addr, char *buf)
+> +{
+> +	struct m10bmc_sec *sec = dev_get_drvdata(dev);
+> +	unsigned int stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> +	int sha_num_bytes, i, cnt, ret;
+> +	u8 hash[REH_SHA384_SIZE];
+> +	u32 magic;
+> +
+> +	ret = m10bmc_raw_read(sec->m10bmc, prog_addr, &magic);
+> +	if (ret)
+> +		return ret;
+> +
+> +	dev_dbg(dev, "%s magic 0x%08x\n", __func__, magic);
+> +
+> +	if (FIELD_GET(REH_MAGIC, magic) != exp_magic)
+> +		return sysfs_emit(buf, "hash not programmed\n");
+> +
+> +	sha_num_bytes = FIELD_GET(REH_SHA_NUM_BYTES, magic) / 8;
+> +	if (sha_num_bytes != REH_SHA256_SIZE &&
+> +	    sha_num_bytes != REH_SHA384_SIZE)   {
+> +		dev_err(sec->dev, "%s bad sha num bytes %d\n", __func__,
+> +			sha_num_bytes);
+> +		return -EINVAL;
+> +	}
+> +
+> +	WARN_ON(sha_num_bytes % stride);
+> +	ret = regmap_bulk_read(sec->m10bmc->regmap, reh_addr,
+> +			       hash, sha_num_bytes / stride);
+> +	if (ret) {
+> +		dev_err(dev, "failed to read root entry hash: %x cnt %x: %d\n",
+> +			reh_addr, sha_num_bytes / stride, ret);
+> +		return ret;
+> +	}
+> +
+> +	cnt = sprintf(buf, "0x");
+> +	for (i = 0; i < sha_num_bytes; i++)
+> +		cnt += sprintf(buf + cnt, "%02x", hash[i]);
+> +	cnt += sprintf(buf + cnt, "\n");
+> +
+> +	return cnt;
+> +}
+> +
+> +#define DEVICE_ATTR_SEC_REH_RO(_name, _magic, _prog_addr, _reh_addr) \
+> +static ssize_t _name##_root_entry_hash_show(struct device *dev, \
+> +					    struct device_attribute *attr, \
+> +					    char *buf) \
+> +{ return show_root_entry_hash(dev, _magic, _prog_addr, _reh_addr, buf); } \
+> +static DEVICE_ATTR_RO(_name##_root_entry_hash)
+> +
+> +DEVICE_ATTR_SEC_REH_RO(bmc, BMC_PROG_MAGIC, BMC_PROG_ADDR, BMC_REH_ADDR);
+> +DEVICE_ATTR_SEC_REH_RO(sr, SR_PROG_MAGIC, SR_PROG_ADDR, SR_REH_ADDR);
+> +DEVICE_ATTR_SEC_REH_RO(pr, PR_PROG_MAGIC, PR_PROG_ADDR, PR_REH_ADDR);
+> +
+> +static struct attribute *m10bmc_security_attrs[] = {
+> +	&dev_attr_bmc_root_entry_hash.attr,
+> +	&dev_attr_sr_root_entry_hash.attr,
+> +	&dev_attr_pr_root_entry_hash.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group m10bmc_security_attr_group = {
+> +	.name = "security",
+> +	.attrs = m10bmc_security_attrs,
+> +};
+> +
+> +static const struct attribute_group *m10bmc_sec_attr_groups[] = {
+> +	&m10bmc_security_attr_group,
+> +	NULL,
+> +};
+> +
+> +static const struct fpga_sec_mgr_ops m10bmc_sops = { };
+> +
+> +static int m10bmc_secure_probe(struct platform_device *pdev)
+> +{
+> +	struct fpga_sec_mgr *smgr;
+> +	struct m10bmc_sec *sec;
+> +
+> +	sec = devm_kzalloc(&pdev->dev, sizeof(*sec), GFP_KERNEL);
+> +	if (!sec)
+> +		return -ENOMEM;
+> +
+> +	sec->dev = &pdev->dev;
+> +	sec->m10bmc = dev_get_drvdata(pdev->dev.parent);
+> +	dev_set_drvdata(&pdev->dev, sec);
+> +
+> +	smgr = devm_fpga_sec_mgr_create(sec->dev, "Max10 BMC Secure Update",
+> +					&m10bmc_sops, sec);
+> +	if (!smgr) {
+> +		dev_err(sec->dev, "Security manager failed to start\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	return devm_fpga_sec_mgr_register(sec->dev, smgr);
+> +}
+> +
+> +static struct platform_driver intel_m10bmc_secure_driver = {
+> +	.probe = m10bmc_secure_probe,
+> +	.driver = {
+> +		.name = "n3000bmc-secure",
+> +		.dev_groups = m10bmc_sec_attr_groups,
+> +	},
+> +};
+> +module_platform_driver(intel_m10bmc_secure_driver);
+> +
+> +MODULE_ALIAS("platform:n3000bmc-secure");
+> +MODULE_AUTHOR("Intel Corporation");
+> +MODULE_DESCRIPTION("Intel MAX10 BMC Secure Update");
+> +MODULE_LICENSE("GPL v2");
 
