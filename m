@@ -2,95 +2,115 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8CBE3425EF
-	for <lists+linux-fpga@lfdr.de>; Fri, 19 Mar 2021 20:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBF4342905
+	for <lists+linux-fpga@lfdr.de>; Sat, 20 Mar 2021 00:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbhCSTOL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 19 Mar 2021 15:14:11 -0400
-Received: from mail-pg1-f180.google.com ([209.85.215.180]:33453 "EHLO
-        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbhCSTNm (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 19 Mar 2021 15:13:42 -0400
-Received: by mail-pg1-f180.google.com with SMTP id r17so4341946pgi.0
-        for <linux-fpga@vger.kernel.org>; Fri, 19 Mar 2021 12:13:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Poqpif1pMoejV53RiA2w1v8foq4NW2FMmOgDZoJXLCI=;
-        b=qbdu90hNeDTF647t3YRljBzV8+jHJ8BDgsvSNUj01b3S097j4rdn1yjWCjlOmL32dH
-         0+9/8RTCrNJdF+E/FDqWvq6BTpxL8tyQ3u8apqALDo7cSQpOsmEzIq6lbAGuk8Ng0TcH
-         U6KDr20o7rBvkrUweN/+q1vOU80VLmBXeBrThsiETJy/rjg6qEFcpBfHzaEkpaCeResY
-         jPi53Hwh8MIvFH3CBvUxyfpFONahwsICyREwtckMGl6IYmDW5wDMtlVN+XXzZ5uShcIo
-         BskkR/JH8KGFIxveZGmu2veopM96y4/1+sGHVoKW+7QEmtFI4Ac15zm3vn8gPRcuulBU
-         ixQw==
-X-Gm-Message-State: AOAM533gh3WjnLkbzeOEjuNQ8I+9zmFdhssP744duJeqA3bpngYeyN9A
-        J8BPl/TKb/qY2L4tZStIqmY=
-X-Google-Smtp-Source: ABdhPJx8E3Yf6eJth/BPELi2ptQW6fCGDUISlOOSU01z/aqHtmJ3mKwgCJHeLYQ0LjEcnkjlW3S/hA==
-X-Received: by 2002:a63:ea4b:: with SMTP id l11mr12637842pgk.61.1616181210865;
-        Fri, 19 Mar 2021 12:13:30 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
-        by smtp.gmail.com with ESMTPSA id 184sm3174323pgd.63.2021.03.19.12.13.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Mar 2021 12:13:29 -0700 (PDT)
-Date:   Fri, 19 Mar 2021 12:13:26 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-fpga@vger.kernel.org, moritzf@google.com
-Subject: [GIT PULL] First set of FPGA Manager changes for 5.13-rc1
-Message-ID: <YFT31lF36GipRKte@archbook>
+        id S229600AbhCSXCa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 19 Mar 2021 19:02:30 -0400
+Received: from mga03.intel.com ([134.134.136.65]:16264 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229845AbhCSXCJ (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 19 Mar 2021 19:02:09 -0400
+IronPort-SDR: oK4UqgX8nC47hxPv7nJh4IIdjma3Hd+NJwS8ZbJyZHvbRtQTMRfRGOxHZCDZ9jVQODaGRiSRsp
+ X0l0hnB6MtjQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9928"; a="190017060"
+X-IronPort-AV: E=Sophos;i="5.81,263,1610438400"; 
+   d="scan'208";a="190017060"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 16:02:08 -0700
+IronPort-SDR: WbKmoz4sUiiKsZfFCtm4prI2NIZY4twXdNZidjUx4LJOEAF5uEbhqkDf7cqil1QvjdV1BsnhEm
+ 9UzkuZFfTOdg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,263,1610438400"; 
+   d="scan'208";a="451030855"
+Received: from marshy.an.intel.com (HELO [10.122.105.143]) ([10.122.105.143])
+  by orsmga001.jf.intel.com with ESMTP; 19 Mar 2021 16:02:07 -0700
+Subject: Re: [PATCHv5 0/7] Extend Intel service layer, FPGA manager and region
+To:     "Gong, Richard" <richard.gong@intel.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1612909233-13867-1-git-send-email-richard.gong@linux.intel.com>
+ <MWHPR11MB001577B17723C8A046398249879E9@MWHPR11MB0015.namprd11.prod.outlook.com>
+From:   Richard Gong <richard.gong@linux.intel.com>
+Message-ID: <21a8817a-e63e-6029-69a6-6bae5398439a@linux.intel.com>
+Date:   Fri, 19 Mar 2021 18:22:00 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <MWHPR11MB001577B17723C8A046398249879E9@MWHPR11MB0015.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+Hi Moritz,
 
-are available in the Git repository at:
+Thanks for approving the 1st patch of my version 5 patchest, which 
+submitted on 02/09/21.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git tags/fpga-for-5.13
+Can you help review the remaining 6 patches from the same version 5 
+patchset? I need your ACKs to move forward, or please let me know if 
+additional work is need.
 
-for you to fetch changes up to 6f1e376cfc6864a2f46538db909bbd5253c3c146:
+Many thanks for your time again!
 
-  fpga: Add support for Xilinx DFX AXI Shutdown manager (2021-03-06 07:54:40 -0800)
+Regards,
+Richard
 
-----------------------------------------------------------------
-First set of FPGA Manager changes for 5.13-rc1
 
-This is the first set of changes for the FPGA Manager 5.13-rc1
-mergewindow.
-
-FPGA manager:
-- Luca improves error handling using dev_err_probe() for the Xilinx SPI FPGA
-  manager.
-
-FPGA bridge:
-- Michal simplifies error path using dev_err_probe() for xilinx-pr-decoupler
-- Nava adds support (binding + driver code) for Xilinx DFX shutdown manager
-  to existing xilinx-pr-decoupler driver
-
-All patches have been reviewed on the mailing list, and have been in the
-last linux-next releases (as part of my for-next branch) without issues.
-
-Signed-off-by: Moritz Fischer <mdf@kernel.org>
-
-----------------------------------------------------------------
-Luca Ceresoli (1):
-      fpga: fpga-mgr: xilinx-spi: fix error messages on -EPROBE_DEFER
-
-Michal Simek (1):
-      fpga: xilinx-pr-decoupler: Simplify code by using dev_err_probe()
-
-Nava kishore Manne (2):
-      dt-bindings: fpga: Add compatible value for Xilinx DFX AXI shutdown manager
-      fpga: Add support for Xilinx DFX AXI Shutdown manager
-
- .../bindings/fpga/xilinx-pr-decoupler.txt          | 24 +++++++++++-
- drivers/fpga/Kconfig                               |  9 ++++-
- drivers/fpga/xilinx-pr-decoupler.c                 | 45 +++++++++++++++++-----
- drivers/fpga/xilinx-spi.c                          | 24 +++++-------
- 4 files changed, 75 insertions(+), 27 deletions(-)
+On 2/25/21 7:07 AM, Gong, Richard wrote:
+> Hi Moritz,
+> 
+> Sorry for asking.
+> 
+> When you have chance, can you help review the version 5 patchset submitted on 02/09/21?
+> 
+> Regards,
+> Richard
+> 
+> -----Original Message-----
+> From: richard.gong@linux.intel.com <richard.gong@linux.intel.com>
+> Sent: Tuesday, February 9, 2021 4:20 PM
+> To: mdf@kernel.org; trix@redhat.com; gregkh@linuxfoundation.org; linux-fpga@vger.kernel.org; linux-kernel@vger.kernel.org
+> Cc: Gong, Richard <richard.gong@intel.com>
+> Subject: [PATCHv5 0/7] Extend Intel service layer, FPGA manager and region
+> 
+> From: Richard Gong <richard.gong@intel.com>
+> 
+> This is 5th submission of Intel service layer and FPGA patches, which includes the missing standalone patch in the 4th submission.
+> 
+> This submission includes additional changes for Intel service layer driver to get the firmware version running at FPGA SoC device. Then FPGA manager driver, one of Intel service layer driver's client, can decide whether to handle the newly added bitstream authentication function based on the retrieved firmware version. So that we can maintain FPGA manager driver the back compatible.
+> 
+> Bitstream authentication makes sure a signed bitstream has valid signatures.
+> 
+> The customer sends the bitstream via FPGA framework and overlay, the firmware will authenticate the bitstream but not program the bitstream to device. If the authentication passes, the bitstream will be programmed into QSPI flash and will be expected to boot without issues.
+> 
+> Extend Intel service layer, FPGA manager and region drivers to support the bitstream authentication feature.
+> 
+> Richard Gong (7):
+>    firmware: stratix10-svc: reset COMMAND_RECONFIG_FLAG_PARTIAL to 0
+>    firmware: stratix10-svc: add COMMAND_AUTHENTICATE_BITSTREAM flag
+>    firmware: stratix10-svc: extend SVC driver to get the firmware version
+>    fpga: fpga-mgr: add FPGA_MGR_BITSTREAM_AUTHENTICATE flag
+>    fpga: of-fpga-region: add authenticate-fpga-config property
+>    dt-bindings: fpga: add authenticate-fpga-config property
+>    fpga: stratix10-soc: extend driver for bitstream authentication
+> 
+>   .../devicetree/bindings/fpga/fpga-region.txt       | 10 ++++
+>   drivers/firmware/stratix10-svc.c                   | 12 ++++-
+>   drivers/fpga/of-fpga-region.c                      | 24 ++++++---
+>   drivers/fpga/stratix10-soc.c                       | 62 +++++++++++++++++++---
+>   include/linux/firmware/intel/stratix10-smc.h       | 21 +++++++-
+>   .../linux/firmware/intel/stratix10-svc-client.h    | 11 +++-
+>   include/linux/fpga/fpga-mgr.h                      |  3 ++
+>   7 files changed, 125 insertions(+), 18 deletions(-)
+> 
+> --
+> 2.7.4
+> 
