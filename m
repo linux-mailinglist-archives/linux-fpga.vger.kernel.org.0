@@ -2,214 +2,113 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE4F34463E
-	for <lists+linux-fpga@lfdr.de>; Mon, 22 Mar 2021 14:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E513448DB
+	for <lists+linux-fpga@lfdr.de>; Mon, 22 Mar 2021 16:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbhCVNxe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 22 Mar 2021 09:53:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57504 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229890AbhCVNxb (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 22 Mar 2021 09:53:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1616421210;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YX43vCy2WUlGP7TvkvyNeq4LZoZxhLjixCZwpawUM0w=;
-        b=cqKitgi4NgCIg/ywX7uyTdp8goPb/sxjRrzq0Hq9MfzCkJKlNecO89Z+mHovRlT/+L/42I
-        Wwfv9o/jbnY6xUMDKLuQVu/BfySNtwcWOBwkcB58b2ABdxzZhOjkc+CaUgD8rde8IrSrTz
-        M41E9PY96ZIwGeBqnXHP9Q9ROnbhIRw=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-216-CfjltmmrMzuf2ui_sKDzvA-1; Mon, 22 Mar 2021 09:53:28 -0400
-X-MC-Unique: CfjltmmrMzuf2ui_sKDzvA-1
-Received: by mail-qv1-f69.google.com with SMTP id iy2so37006025qvb.22
-        for <linux-fpga@vger.kernel.org>; Mon, 22 Mar 2021 06:53:28 -0700 (PDT)
+        id S231366AbhCVPLC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 22 Mar 2021 11:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230204AbhCVPK6 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 22 Mar 2021 11:10:58 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2F4C061574
+        for <linux-fpga@vger.kernel.org>; Mon, 22 Mar 2021 08:10:57 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id b16so19800644eds.7
+        for <linux-fpga@vger.kernel.org>; Mon, 22 Mar 2021 08:10:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=BblDdmrktMK5tFFD4LOpFP77ijBklviaU26xu4C63tQ=;
+        b=IT2iGJQyBA7Y1+dCJvTIJziErQmWcbn0+kMr4Y273pDNqodHvB6Ww7nGeAozLlDj16
+         AaZFlWmlmAzS7zUACjHtiaCrXpOhiRROiQFyU4auZ+13hpjjdqVYNePQ5Cyp/9DkkrQC
+         b91OFvMWYHKs9MAA7wM3CC0WQRuzxtVRw66hiamNYNrYJOlJE43oIsVGuMZ9kLPAqUbQ
+         nynbvcEhIJeX2PlbMuKhnlTT65dd9GDFO83TYP0QzGcN6dLgdO2DDjR1KDBGvGzAifvT
+         3iM6ErE3HQUX/Nd9uR6OnpKDyBISmiXqsi9ileg7sykq6tbAiP06wPIgKKPW7GTaZvHL
+         iZmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=YX43vCy2WUlGP7TvkvyNeq4LZoZxhLjixCZwpawUM0w=;
-        b=RinCLGoWcXh0nTw7OZpCNBHa23qC3R3WAb3PbXG/fnZI6Xog6rzx5Rnw81r/SWSPll
-         G2vpAFJPcion7amAPEHfT0CDJQYWWRmKHdaif6IhbV5iKDXm+pjVrEixUWGvh+a/yIlJ
-         E0aHVgBd3ZUIbfbJUrQZHQxSVMqwYUm66hRQfQ11fYCyCHsnlAS4UwRyVA463Mu4o1Pb
-         v78umi3eDkpsDcJBwSoY4KwQCON1/71webs5505ckCcPWVweL81pkdO48Vq758d4CPY3
-         jKGfwoAxdQs3oWrTcsLM32hfQBQXNepdieG+e1kHllGT5XikfXiidJZYvK14Yy1WeOXN
-         wQgg==
-X-Gm-Message-State: AOAM531xhfQkG1a+EU6asiAaDoLKCwaeJhYSDGUKNr9M5jwVUXS94RiU
-        68FJ+D7PvVJo68mBeA4+CTlv4LEQ8i7i+Phw2vXXrSLtGJOlSGmEHz9N5YpHO4f3F4NAP69FAtA
-        2pML5c0F35TUWADYELVPonw==
-X-Received: by 2002:a05:620a:806:: with SMTP id s6mr152164qks.50.1616421207933;
-        Mon, 22 Mar 2021 06:53:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJygFrO8AcF6UbXAgOCygfrk+do7UcB3lzSBL1CMcFCP6Bt7B9+bXd6RV1hCFS00tg8N4MCheQ==
-X-Received: by 2002:a05:620a:806:: with SMTP id s6mr152139qks.50.1616421207623;
-        Mon, 22 Mar 2021 06:53:27 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id j30sm9086495qtv.90.2021.03.22.06.53.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Mar 2021 06:53:27 -0700 (PDT)
-Subject: Re: FW: [PATCHv5 0/7] Extend Intel service layer, FPGA manager and
- region
-To:     Richard Gong <richard.gong@linux.intel.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <1612909233-13867-1-git-send-email-richard.gong@linux.intel.com>
- <MWHPR11MB001577B17723C8A046398249879E9@MWHPR11MB0015.namprd11.prod.outlook.com>
- <21a8817a-e63e-6029-69a6-6bae5398439a@linux.intel.com>
- <1d7fd02b-4ef2-8d11-fba7-87a698699978@redhat.com>
- <MWHPR11MB0015516D86D02A0FE5423D6387669@MWHPR11MB0015.namprd11.prod.outlook.com>
- <7ef6739f-e2f6-d457-5498-1c6ed8ba2075@linux.intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <f7a0c3fb-84f6-073c-ac41-45ce249cfa1e@redhat.com>
-Date:   Mon, 22 Mar 2021 06:53:25 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=BblDdmrktMK5tFFD4LOpFP77ijBklviaU26xu4C63tQ=;
+        b=rFPgGjS0mdgPD038X+5J+NIxro5mKEld2hhrKaEgFolUqnMGy6ns1MKrvxXoSsm5ix
+         4+9ixI2yJG5bG1ALvXgEjudIHnHVu1kaok7Vynln+L5/Eegh/MLC/iQP+En5f5soWWaz
+         0J4AI7smWWJqVFmSLWc4RNKrubX7bixm1jJXZzDQLVSKILyMMBwZk/w5z0naXKuZrd8+
+         vPSa9Fy/G58lfSI+4HRrAczH1KhPjCqu+vN3m9ERMO+tYlH4aPXcG6Tc5xK/7CnNqzGc
+         sqabxafLPhKbYeMCS+3zs+f9VIWHT5V1qFPexf6JEgDwgNN7UZGxEXkTuJdOkDGJfyyo
+         UI7g==
+X-Gm-Message-State: AOAM530mYk7ItDuCTv5NPgXf3l60usrLws0dch8B1XmLTxZibtMjAkCH
+        zK5lotVXIFKGqXDgvEdFBX5SWw==
+X-Google-Smtp-Source: ABdhPJwxMVa4A4qij3tXD3Epc4EsEgsbfdMWBHLOdKIarJBUoxpk8xvIYdSjs+oVvVNjC/1HEN64aQ==
+X-Received: by 2002:a05:6402:22b5:: with SMTP id cx21mr26421224edb.27.1616425856228;
+        Mon, 22 Mar 2021 08:10:56 -0700 (PDT)
+Received: from dell ([91.110.221.180])
+        by smtp.gmail.com with ESMTPSA id e4sm9768413ejz.4.2021.03.22.08.10.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Mar 2021 08:10:55 -0700 (PDT)
+Date:   Mon, 22 Mar 2021 15:10:53 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v3 03/15] mfd: altera: merge ARCH_SOCFPGA and
+ ARCH_STRATIX10
+Message-ID: <20210322151053.GB2916463@dell>
+References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
+ <20210311152545.1317581-4-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <7ef6739f-e2f6-d457-5498-1c6ed8ba2075@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <20210311152545.1317581-4-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Thu, 11 Mar 2021, Krzysztof Kozlowski wrote:
 
-On 3/21/21 2:05 PM, Richard Gong wrote:
->
-> Hi Tom,
->
->>
->>
->> On 3/19/21 4:22 PM, Richard Gong wrote:
->>>
->>> Hi Moritz,
->>>
->>> Thanks for approving the 1st patch of my version 5 patchest, which submitted on 02/09/21.
->>
->> This change
->>
->> e23bd83368af ("firmware: stratix10-svc: fix kernel-doc markups")
->
-> This patch e23bd83368af is not from my version 5 patch set.
+> Simplify 32-bit and 64-bit Intel SoCFPGA Kconfig options by having only
+> one for both of them.  This the common practice for other platforms.
+> Additionally, the ARCH_SOCFPGA is too generic as SoCFPGA designs come
+> from multiple vendors.
+> 
+> The side effect is that the MFD_ALTERA_A10SR will now be available for
+> both 32-bit and 64-bit Intel SoCFPGA, even though it is used only for
+> 32-bit.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  drivers/mfd/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Correct.
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-But since it is already in char-misc-next, your version 5 patchset will conflict with it.
-
-I could not apply this patchset to my unoffical fpga-testing.
-
-I am suggesting you do a test application of your patchset against char-misc-next.
-
-And if you find there are issues, rebase your patchset. 
-
->>
->> Makes a lot of formatting changes in the same files as this patchset, including the first patch.
->>
->> It would be good to try applying this patchset to char-misc-next and resubmit if there are conflicts.
->>
->>>
->>> Can you help review the remaining 6 patches from the same version 5 patchset? I need your ACKs to move forward, or please let me know if additional work is need.
->>
->> These changes look good to me.
->>
->> I was looking at the patchset again seeing if the firmware/ parts could be split out.
->
-> No, we can't split out the firmware parts.
-
-ok
-
-Tom
-
->>
->> Even though stratix10 is a fpga, from the MAINTAINERS file it is not clear to me if linux-fpga owns them and they come in on Moritz's branch.  I think this change is needed to the MAINTAINERS file to make that clearer.
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index aa84121c5611..1f68e9ff76de 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -9193,7 +9193,8 @@ F:    tools/power/x86/intel-speed-select/
->>     INTEL STRATIX10 FIRMWARE DRIVERS
->>   M:    Richard Gong <richard.gong@linux.intel.com>
->> -L:    linux-kernel@vger.kernel.org
->> +R:    Tom Rix <trix@redhat.com>
->> +L:    linux-fpga@vger.kernel.org
->>   S:    Maintained
->>   F:    Documentation/ABI/testing/sysfs-devices-platform-stratix10-rsu
->>   F:    Documentation/devicetree/bindings/firmware/intel,stratix10-svc.txt
->>
->> I also added myself as a reviewer because I want to help out.
->>
->> Tom
->>
->
-> Regards,
-> Richard
->
->>
->>>
->>> Many thanks for your time again!
->>>
->>> Regards,
->>> Richard
->>>
->>>
->>> On 2/25/21 7:07 AM, Gong, Richard wrote:
->>>> Hi Moritz,
->>>>
->>>> Sorry for asking.
->>>>
->>>> When you have chance, can you help review the version 5 patchset submitted on 02/09/21?
->>>>
->>>> Regards,
->>>> Richard
->>>>
->>>> -----Original Message-----
->>>> From: richard.gong@linux.intel.com <richard.gong@linux.intel.com>
->>>> Sent: Tuesday, February 9, 2021 4:20 PM
->>>> To: mdf@kernel.org; trix@redhat.com; gregkh@linuxfoundation.org; linux-fpga@vger.kernel.org; linux-kernel@vger.kernel.org
->>>> Cc: Gong, Richard <richard.gong@intel.com>
->>>> Subject: [PATCHv5 0/7] Extend Intel service layer, FPGA manager and region
->>>>
->>>> From: Richard Gong <richard.gong@intel.com>
->>>>
->>>> This is 5th submission of Intel service layer and FPGA patches, which includes the missing standalone patch in the 4th submission.
->>>>
->>>> This submission includes additional changes for Intel service layer driver to get the firmware version running at FPGA SoC device. Then FPGA manager driver, one of Intel service layer driver's client, can decide whether to handle the newly added bitstream authentication function based on the retrieved firmware version. So that we can maintain FPGA manager driver the back compatible.
->>>>
->>>> Bitstream authentication makes sure a signed bitstream has valid signatures.
->>>>
->>>> The customer sends the bitstream via FPGA framework and overlay, the firmware will authenticate the bitstream but not program the bitstream to device. If the authentication passes, the bitstream will be programmed into QSPI flash and will be expected to boot without issues.
->>>>
->>>> Extend Intel service layer, FPGA manager and region drivers to support the bitstream authentication feature.
->>>>
->>>> Richard Gong (7):
->>>>     firmware: stratix10-svc: reset COMMAND_RECONFIG_FLAG_PARTIAL to 0
->>>>     firmware: stratix10-svc: add COMMAND_AUTHENTICATE_BITSTREAM flag
->>>>     firmware: stratix10-svc: extend SVC driver to get the firmware version
->>>>     fpga: fpga-mgr: add FPGA_MGR_BITSTREAM_AUTHENTICATE flag
->>>>     fpga: of-fpga-region: add authenticate-fpga-config property
->>>>     dt-bindings: fpga: add authenticate-fpga-config property
->>>>     fpga: stratix10-soc: extend driver for bitstream authentication
->>>>
->>>>    .../devicetree/bindings/fpga/fpga-region.txt       | 10 ++++
->>>>    drivers/firmware/stratix10-svc.c                   | 12 ++++-
->>>>    drivers/fpga/of-fpga-region.c                      | 24 ++++++---
->>>>    drivers/fpga/stratix10-soc.c                       | 62 +++++++++++++++++++---
->>>>    include/linux/firmware/intel/stratix10-smc.h       | 21 +++++++-
->>>>    .../linux/firmware/intel/stratix10-svc-client.h    | 11 +++-
->>>>    include/linux/fpga/fpga-mgr.h                      |  3 ++
->>>>    7 files changed, 125 insertions(+), 18 deletions(-)
->>>>
->>>> -- 
->>>> 2.7.4
->>>>
->>>
->>
->
-
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
