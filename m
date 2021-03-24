@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A80F3470FB
+	by mail.lfdr.de (Postfix) with ESMTP id 7391B3470FC
 	for <lists+linux-fpga@lfdr.de>; Wed, 24 Mar 2021 06:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235322AbhCXFeZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 24 Mar 2021 01:34:25 -0400
-Received: from mail-bn8nam11on2054.outbound.protection.outlook.com ([40.107.236.54]:59104
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S235331AbhCXFe1 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 24 Mar 2021 01:34:27 -0400
+Received: from mail-bn7nam10on2081.outbound.protection.outlook.com ([40.107.92.81]:29857
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235293AbhCXFdy (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 24 Mar 2021 01:33:54 -0400
+        id S235291AbhCXFd6 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 24 Mar 2021 01:33:58 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e/gdB46G7wZ8DRh9TPcMP8yDlmDc+JUMok1jg/NYEUgHtvgTPECfvqsB9LScrC+is2ChwpRdwuW7WboFGHY5If4+lNJ7EO9B+jKkpcGrRKBO4MqiQ/f6bTa7L04G7w5vCuJzrn+nQJcnqtmYDuLv8E2fHu2rcq0k9ZBre3bzpS6GzAhRtbBp0tKum5L0l/7vzLierv2D4LDGkZTzLUZahxxasH5iGFeBXidW2ACM9AhLue+ok6K3LT11GhpI9sW78tN8doedDeluqUDhg5W95zZ24+w3obxZCf5srFVtsDZjpHR8ihpZxLRqcqYK7PmiCDtX6RQF0C8nU8nLts6NWQ==
+ b=leWqiXdPbgloyjDcg2khxitrozTuzB21cj+aZg/MX+5izZ4lWj1P+IFW5lAtvCTzPp4MqIJPsJ1VyjR6dNbW/8WX+EaXvLeUooJapVT0KH7X4HT+vEUlNpDhZI6TPRS7RlNuEiBS7vrlWJEtxiefbDQKdFwLU1MYFqnWdPUGiBoEZDQQfL9WELTbrLxaHX9h5Tja2f+XdyhEpvy3IIzodJgM7E4UifeAeARmxhOzNiaTuoTNnOYPH4wIu+u1sFZaG0g0IzzMXB5JPf2IZrDAYt++cnV9kEHftrXGFr9zaNTr0PXnpBdCMtgdWOOdmtVrssLOj3TDWgIcn6EPQrhVqA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZFXc46KOFg28RMmAOwlf+WAT802d6nzu43fRCR7rwcs=;
- b=hVrtsAqBg/CJAkgwbrryYnUHIrtW8Ga0lqYKuJ2QRkaNxrjQQcLWEwpiSvCJvq+tVvyFoBn6hGcF/XT/lXlCrAw3QhHnXi7SeX3xRFC28JEzx8bBpII/UEbLG2T2FM7Zhm9I/ZKiQdL7mUNOdEFCmB2xYuCjKqBeFaAMfQ0WjIocDXBCPZtq8hyP83YAi4hnvdTx27C5UZ1r+rQ21AXkXfuNTaVPaHGSMiKyPFhxuw+m8NMMm9y3+4Yv1K1gGKVPxzhUjtOBRNt7x7ODZSfi5f0lzJO92eT/OTETbGfjN7rRnJD4WUpxDAKbe3c6nZoYQ/x3Lq9XMgibTxx8sZP8Cg==
+ bh=KIsBt/MhaPGjr7kWa2UifsTuyQ1AGGIdYW0xt/FxRgk=;
+ b=HAgGmyLPQ7mmZLol+jQkEM07DMC/3jmSGxwDXguW/DgC3/+MwNaoqRs9KZeoF50TfZAX+CzvNnQC5jQMTYtF3zFpxe2MUkErX+xibMwZOdt2H4nZc/HFXmVA+4x0LdwwT1ZJRVIfOxPvWWhBrdleMt8doq8OiZsv3B3WYmvaJ/nVBdULtmnFjCfweYy6QuiSQox25+rT3NhNKKuwzYzZKm3g2fZzy5WM2Z9AbZx8bktvwVLqGvc1Blcq0uK8ISvUKS134yrHZ+vQGuV4pcO1NvPph20B0id53vpERm38BPF8MXb4LOwV+W3wlW7UpzpQx+hwIRdLdN2mK6rcOgPlyQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZFXc46KOFg28RMmAOwlf+WAT802d6nzu43fRCR7rwcs=;
- b=QcO9VVBLFcTX1aBIMyD+x96g5k/l1wW0ai8IkPJH3jFNZWvLauAmh5P9gCdeCSzrGux5DNwD9//MPW/fjBEpxtR2/jMqSOVK3fB5/czEYYI5yklMxq6VBp0ptyjFRNO66EhS1vhf4ydVgFTKzYV2R0N8eyh6ziQB1kKpaTdBFQQ=
-Received: from SN6PR16CA0056.namprd16.prod.outlook.com (2603:10b6:805:ca::33)
- by CY4PR02MB3253.namprd02.prod.outlook.com (2603:10b6:910:80::37) with
+ bh=KIsBt/MhaPGjr7kWa2UifsTuyQ1AGGIdYW0xt/FxRgk=;
+ b=RLoelE6LWNlC1SS4Vv0qcNQXCdPmgKz+/8LZAIScSoOfSfVKfnrWLGhaIn9TKnuKGpkwOVFH8n2EWochJGzR6hM4vc/odwb8i3oK7U1eDw0Ja89+PbFcZhzEsIwtmfDRwrU9spzPm4MtsKrmn5TgmuCYf26mD6mH4uHWs6CI5w8=
+Received: from SN6PR16CA0068.namprd16.prod.outlook.com (2603:10b6:805:ca::45)
+ by BY5PR02MB6788.namprd02.prod.outlook.com (2603:10b6:a03:202::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18; Wed, 24 Mar
- 2021 05:33:51 +0000
+ 2021 05:33:56 +0000
 Received: from SN1NAM02FT025.eop-nam02.prod.protection.outlook.com
- (2603:10b6:805:ca:cafe::c) by SN6PR16CA0056.outlook.office365.com
- (2603:10b6:805:ca::33) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:805:ca:cafe::6e) by SN6PR16CA0068.outlook.office365.com
+ (2603:10b6:805:ca::45) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.24 via Frontend
- Transport; Wed, 24 Mar 2021 05:33:50 +0000
+ Transport; Wed, 24 Mar 2021 05:33:56 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
@@ -47,26 +47,26 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
 Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
  SN1NAM02FT025.mail.protection.outlook.com (10.152.72.87) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3977.25 via Frontend Transport; Wed, 24 Mar 2021 05:33:50 +0000
+ 15.20.3977.25 via Frontend Transport; Wed, 24 Mar 2021 05:33:55 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 23 Mar 2021 22:33:34 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
+ 15.1.2106.2; Tue, 23 Mar 2021 22:33:46 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2106.2 via Frontend Transport; Tue, 23 Mar 2021 22:33:34 -0700
+ 15.1.2106.2 via Frontend Transport; Tue, 23 Mar 2021 22:33:46 -0700
 Envelope-to: mdf@kernel.org,
  robh@kernel.org,
  trix@redhat.com,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.212] (port=51032 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.212] (port=51034 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <lizhi.hou@xilinx.com>)
-        id 1lOw98-0005ts-3w; Tue, 23 Mar 2021 22:33:34 -0700
+        id 1lOw9K-0004Vg-5e; Tue, 23 Mar 2021 22:33:46 -0700
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id 1391C600124; Tue, 23 Mar 2021 22:29:56 -0700 (PDT)
+        id 291CD600126; Tue, 23 Mar 2021 22:29:56 -0700 (PDT)
 From:   Lizhi Hou <lizhi.hou@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
@@ -74,9 +74,9 @@ CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
         <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
         <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
         <robh@kernel.org>, Max Zhen <max.zhen@xilinx.com>
-Subject: [PATCH V4 XRT Alveo 06/20] fpga: xrt: char dev node helper functions
-Date:   Tue, 23 Mar 2021 22:29:33 -0700
-Message-ID: <20210324052947.27889-7-lizhi.hou@xilinx.com>
+Subject: [PATCH V4 XRT Alveo 07/20] fpga: xrt: root driver infrastructure
+Date:   Tue, 23 Mar 2021 22:29:34 -0700
+Message-ID: <20210324052947.27889-8-lizhi.hou@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210324052947.27889-1-lizhi.hou@xilinx.com>
 References: <20210324052947.27889-1-lizhi.hou@xilinx.com>
@@ -85,48 +85,287 @@ Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a29ab9d6-6d06-45c9-0237-08d8ee866788
-X-MS-TrafficTypeDiagnostic: CY4PR02MB3253:
-X-Microsoft-Antispam-PRVS: <CY4PR02MB3253BBC8954AC2E26B074971A1639@CY4PR02MB3253.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:67;
+X-MS-Office365-Filtering-Correlation-Id: b75507c1-a08a-4ca3-5997-08d8ee866ae9
+X-MS-TrafficTypeDiagnostic: BY5PR02MB6788:
+X-Microsoft-Antispam-PRVS: <BY5PR02MB678832BB17073E56507BC6AAA1639@BY5PR02MB6788.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:393;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n6G0E/8jGs9wGT15oRDlrDcM1dlCB3PsVVyaYypIur1QN61GSijO0vyEkQb42gOT3Edzy3yBD0YObsqXzrmiBHIxANa+fsivT+7P47DsMf/pLBTmOkNYAtann4rfZHRU7WBtmnnkvP8Mz4QNCUROnG+F7TQkD5SBs/pL469mknAQdo32zrNSrz0fyiSrnEJ7Zu9vPFot+gFOV2o8tZBeT5ZnJYBG/mk6bmebLjuM5Pqqgwr1zK1p5PKMXQJfE5Bgb6ZDEZJyLw4HzstLMR8A8dudOOEe3O6u5qlCBcFG+/Gv32kB2Z0ShGt8/Ak9+2yHa4xpG8pPJIEnNb5LkT85K6g46kQ3I8oW2qdiKstE0FWnORCgJSDOiWsWVaqwTOlDfwSfgKp9AWa6X+bDyEfM9bBx5ogpHug8LHOvp0AentZ/6fnxOshZT09m/wAC3mjv9r0xmrzs0rcG++hP9PySiogTwXb+XPmZHQcwf4GjbeDlbb+AgpVtynZKHQOxVlNF/c2qhCPi5cGFOzDZ1npmU/y8eF8jJkDQGJFC8YVclZEsQ4c5y8zyip2eFhmLzwFb9/WhXycIlPDFl5TSLQFoMq1jfCTJ3mXRSd+I9/uZ7DARER9I0Vl/kyPXUpYXTablgzSkWw6Atelu16JaDyVvv7IR0Tk+uZAg4THX6TSP4d4=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(136003)(346002)(376002)(39860400002)(46966006)(36840700001)(70586007)(70206006)(44832011)(478600001)(36860700001)(8676002)(6916009)(47076005)(356005)(42186006)(186003)(54906003)(336012)(4326008)(1076003)(426003)(83380400001)(36756003)(2616005)(82310400003)(6666004)(82740400003)(36906005)(26005)(8936002)(5660300002)(316002)(107886003)(6266002)(2906002)(7636003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: dRNYcUNAu5jfmhwt35qLJRr4vKTXmFNwLpC4T8ctRl2+iMIGEcfG7taW/7t3qFP3g3i0LKwfs+HTFG90x83ADrOtfJs8ly6UcNusvXtse0gptazkSQjV0gzHnWQCimTqZDMjHWYI++30WocjJzKQPnHGQ8iQUC7btzWp3gehG2+iiR3747DoeSmbxBYP5rhUgJ+OYwPRIhurcWAVoNx5bgLmLNZnxNXHKG3bkOoThtJlIF+uV4D6l27j5+TKpbRKFvhe+hZDDgq4NwE4xDZP/1R3jRSksF3/lgorIJbDcMy32CZv6CO+8yOJhFRhwI5Rb70At2zLPrbguO9mqbYXPqF7oTOeF5S/Br8S0mShvGtsa3NUcFVLdZXadEPQkXe2WH5QBirX2GkfK5BHhQwJXYqVPaOWJieud+zGp97F6fgjQF4Ea7QvBOwU5eZyLSJAdF8aivsJpnJ/PaBk4rJL1W0YeEOaxPAQqOb2mVkXPnGql4UabJ4A4QMv5fV+eTD4J+OM4wel3xLth0s4ACVRsR3VZ2oXTcrfirwqs56MmDYyzSX3IHE7fQL6CiRnC8ZlVpZPE+LYAH1ZJXw7qhxwsDzZ2ZoxmPf4uILrs+MPKBN9BYhEq+oU5UB+hhv7UnCUDa+wpq8mk6yq/N9fUV9sW3ztJEidX1HTsHRmsWghLLo=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(39860400002)(346002)(396003)(136003)(36840700001)(46966006)(8676002)(36860700001)(82310400003)(478600001)(70206006)(36906005)(44832011)(316002)(5660300002)(26005)(107886003)(30864003)(2906002)(70586007)(6916009)(426003)(83380400001)(336012)(7636003)(8936002)(2616005)(186003)(6666004)(47076005)(1076003)(6266002)(54906003)(4326008)(42186006)(356005)(36756003)(82740400003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2021 05:33:50.2120
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2021 05:33:55.8821
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a29ab9d6-6d06-45c9-0237-08d8ee866788
+X-MS-Exchange-CrossTenant-Network-Message-Id: b75507c1-a08a-4ca3-5997-08d8ee866ae9
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
 X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT025.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB3253
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR02MB6788
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Helper functions for char device node creation / removal for platform
-drivers. This is part of platform driver infrastructure.
+Contains common code for all root drivers and handles root calls from
+platform drivers. This is part of root driver infrastructure.
 
 Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 ---
- drivers/fpga/xrt/lib/cdev.c | 232 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 232 insertions(+)
- create mode 100644 drivers/fpga/xrt/lib/cdev.c
+ drivers/fpga/xrt/include/events.h  |  45 +++
+ drivers/fpga/xrt/include/xroot.h   | 117 ++++++
+ drivers/fpga/xrt/lib/subdev_pool.h |  53 +++
+ drivers/fpga/xrt/lib/xroot.c       | 589 +++++++++++++++++++++++++++++
+ 4 files changed, 804 insertions(+)
+ create mode 100644 drivers/fpga/xrt/include/events.h
+ create mode 100644 drivers/fpga/xrt/include/xroot.h
+ create mode 100644 drivers/fpga/xrt/lib/subdev_pool.h
+ create mode 100644 drivers/fpga/xrt/lib/xroot.c
 
-diff --git a/drivers/fpga/xrt/lib/cdev.c b/drivers/fpga/xrt/lib/cdev.c
+diff --git a/drivers/fpga/xrt/include/events.h b/drivers/fpga/xrt/include/events.h
 new file mode 100644
-index 000000000000..38efd24b6e10
+index 000000000000..775171a47c8e
 --- /dev/null
-+++ b/drivers/fpga/xrt/lib/cdev.c
-@@ -0,0 +1,232 @@
++++ b/drivers/fpga/xrt/include/events.h
+@@ -0,0 +1,45 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Xilinx, Inc.
++ *
++ * Authors:
++ *	Cheng Zhen <maxz@xilinx.com>
++ */
++
++#ifndef _XRT_EVENTS_H_
++#define _XRT_EVENTS_H_
++
++#include "subdev_id.h"
++
++/*
++ * Event notification.
++ */
++enum xrt_events {
++	XRT_EVENT_TEST = 0, /* for testing */
++	/*
++	 * Events related to specific subdev
++	 * Callback arg: struct xrt_event_arg_subdev
++	 */
++	XRT_EVENT_POST_CREATION,
++	XRT_EVENT_PRE_REMOVAL,
++	/*
++	 * Events related to change of the whole board
++	 * Callback arg: <none>
++	 */
++	XRT_EVENT_PRE_HOT_RESET,
++	XRT_EVENT_POST_HOT_RESET,
++	XRT_EVENT_PRE_GATE_CLOSE,
++	XRT_EVENT_POST_GATE_OPEN,
++};
++
++struct xrt_event_arg_subdev {
++	enum xrt_subdev_id xevt_subdev_id;
++	int xevt_subdev_instance;
++};
++
++struct xrt_event {
++	enum xrt_events xe_evt;
++	struct xrt_event_arg_subdev xe_subdev;
++};
++
++#endif	/* _XRT_EVENTS_H_ */
+diff --git a/drivers/fpga/xrt/include/xroot.h b/drivers/fpga/xrt/include/xroot.h
+new file mode 100644
+index 000000000000..91c0aeb30bf8
+--- /dev/null
++++ b/drivers/fpga/xrt/include/xroot.h
+@@ -0,0 +1,117 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Xilinx, Inc.
++ *
++ * Authors:
++ *	Cheng Zhen <maxz@xilinx.com>
++ */
++
++#ifndef _XRT_ROOT_H_
++#define _XRT_ROOT_H_
++
++#include <linux/platform_device.h>
++#include <linux/pci.h>
++#include "subdev_id.h"
++#include "events.h"
++
++typedef bool (*xrt_subdev_match_t)(enum xrt_subdev_id,
++	struct platform_device *, void *);
++#define XRT_SUBDEV_MATCH_PREV	((xrt_subdev_match_t)-1)
++#define XRT_SUBDEV_MATCH_NEXT	((xrt_subdev_match_t)-2)
++
++/*
++ * Root calls.
++ */
++enum xrt_root_cmd {
++	/* Leaf actions. */
++	XRT_ROOT_GET_LEAF = 0,
++	XRT_ROOT_PUT_LEAF,
++	XRT_ROOT_GET_LEAF_HOLDERS,
++
++	/* Group actions. */
++	XRT_ROOT_CREATE_GROUP,
++	XRT_ROOT_REMOVE_GROUP,
++	XRT_ROOT_LOOKUP_GROUP,
++	XRT_ROOT_WAIT_GROUP_BRINGUP,
++
++	/* Event actions. */
++	XRT_ROOT_EVENT_SYNC,
++	XRT_ROOT_EVENT_ASYNC,
++
++	/* Device info. */
++	XRT_ROOT_GET_RESOURCE,
++	XRT_ROOT_GET_ID,
++
++	/* Misc. */
++	XRT_ROOT_HOT_RESET,
++	XRT_ROOT_HWMON,
++};
++
++struct xrt_root_get_leaf {
++	struct platform_device *xpigl_caller_pdev;
++	xrt_subdev_match_t xpigl_match_cb;
++	void *xpigl_match_arg;
++	struct platform_device *xpigl_tgt_pdev;
++};
++
++struct xrt_root_put_leaf {
++	struct platform_device *xpipl_caller_pdev;
++	struct platform_device *xpipl_tgt_pdev;
++};
++
++struct xrt_root_lookup_group {
++	struct platform_device *xpilp_pdev; /* caller's pdev */
++	xrt_subdev_match_t xpilp_match_cb;
++	void *xpilp_match_arg;
++	int xpilp_grp_inst;
++};
++
++struct xrt_root_get_holders {
++	struct platform_device *xpigh_pdev; /* caller's pdev */
++	char *xpigh_holder_buf;
++	size_t xpigh_holder_buf_len;
++};
++
++struct xrt_root_get_res {
++	struct resource *xpigr_res;
++};
++
++struct xrt_root_get_id {
++	unsigned short  xpigi_vendor_id;
++	unsigned short  xpigi_device_id;
++	unsigned short  xpigi_sub_vendor_id;
++	unsigned short  xpigi_sub_device_id;
++};
++
++struct xrt_root_hwmon {
++	bool xpih_register;
++	const char *xpih_name;
++	void *xpih_drvdata;
++	const struct attribute_group **xpih_groups;
++	struct device *xpih_hwmon_dev;
++};
++
++/*
++ * Callback for leaf to make a root request. Arguments are: parent device, parent cookie, req,
++ * and arg.
++ */
++typedef int (*xrt_subdev_root_cb_t)(struct device *, void *, u32, void *);
++int xrt_subdev_root_request(struct platform_device *self, u32 cmd, void *arg);
++
++/*
++ * Defines physical function (MPF / UPF) specific operations
++ * needed in common root driver.
++ */
++struct xroot_physical_function_callback {
++	void (*xpc_hot_reset)(struct pci_dev *pdev);
++};
++
++int xroot_probe(struct pci_dev *pdev, struct xroot_physical_function_callback *cb, void **root);
++void xroot_remove(void *root);
++bool xroot_wait_for_bringup(void *root);
++int xroot_add_vsec_node(void *root, char *dtb);
++int xroot_create_group(void *xr, char *dtb);
++int xroot_add_simple_node(void *root, char *dtb, const char *endpoint);
++void xroot_broadcast(void *root, enum xrt_events evt);
++
++#endif	/* _XRT_ROOT_H_ */
+diff --git a/drivers/fpga/xrt/lib/subdev_pool.h b/drivers/fpga/xrt/lib/subdev_pool.h
+new file mode 100644
+index 000000000000..09d148e4e7ea
+--- /dev/null
++++ b/drivers/fpga/xrt/lib/subdev_pool.h
+@@ -0,0 +1,53 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Xilinx, Inc.
++ *
++ * Authors:
++ *	Cheng Zhen <maxz@xilinx.com>
++ */
++
++#ifndef _XRT_SUBDEV_POOL_H_
++#define _XRT_SUBDEV_POOL_H_
++
++#include <linux/device.h>
++#include <linux/mutex.h>
++#include "xroot.h"
++
++/*
++ * The struct xrt_subdev_pool manages a list of xrt_subdevs for root and group drivers.
++ */
++struct xrt_subdev_pool {
++	struct list_head xsp_dev_list;
++	struct device *xsp_owner;
++	struct mutex xsp_lock; /* pool lock */
++	bool xsp_closing;
++};
++
++/*
++ * Subdev pool helper functions for root and group drivers only.
++ */
++void xrt_subdev_pool_init(struct device *dev,
++			  struct xrt_subdev_pool *spool);
++void xrt_subdev_pool_fini(struct xrt_subdev_pool *spool);
++int xrt_subdev_pool_get(struct xrt_subdev_pool *spool,
++			xrt_subdev_match_t match,
++			void *arg, struct device *holder_dev,
++			struct platform_device **pdevp);
++int xrt_subdev_pool_put(struct xrt_subdev_pool *spool,
++			struct platform_device *pdev,
++			struct device *holder_dev);
++int xrt_subdev_pool_add(struct xrt_subdev_pool *spool,
++			enum xrt_subdev_id id, xrt_subdev_root_cb_t pcb,
++			void *pcb_arg, char *dtb);
++int xrt_subdev_pool_del(struct xrt_subdev_pool *spool,
++			enum xrt_subdev_id id, int instance);
++ssize_t xrt_subdev_pool_get_holders(struct xrt_subdev_pool *spool,
++				    struct platform_device *pdev,
++				    char *buf, size_t len);
++
++void xrt_subdev_pool_trigger_event(struct xrt_subdev_pool *spool,
++				   enum xrt_events evt);
++void xrt_subdev_pool_handle_event(struct xrt_subdev_pool *spool,
++				  struct xrt_event *evt);
++
++#endif	/* _XRT_SUBDEV_POOL_H_ */
+diff --git a/drivers/fpga/xrt/lib/xroot.c b/drivers/fpga/xrt/lib/xroot.c
+new file mode 100644
+index 000000000000..03407272650f
+--- /dev/null
++++ b/drivers/fpga/xrt/lib/xroot.c
+@@ -0,0 +1,589 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Xilinx Alveo FPGA device node helper functions.
++ * Xilinx Alveo FPGA Root Functions
 + *
 + * Copyright (C) 2020-2021 Xilinx, Inc.
 + *
@@ -134,228 +373,585 @@ index 000000000000..38efd24b6e10
 + *	Cheng Zhen <maxz@xilinx.com>
 + */
 +
-+#include "xleaf.h"
++#include <linux/module.h>
++#include <linux/pci.h>
++#include <linux/hwmon.h>
++#include "xroot.h"
++#include "subdev_pool.h"
++#include "group.h"
++#include "metadata.h"
 +
-+extern struct class *xrt_class;
++#define XROOT_PDEV(xr)		((xr)->pdev)
++#define XROOT_DEV(xr)		(&(XROOT_PDEV(xr)->dev))
++#define xroot_err(xr, fmt, args...)	\
++	dev_err(XROOT_DEV(xr), "%s: " fmt, __func__, ##args)
++#define xroot_warn(xr, fmt, args...)	\
++	dev_warn(XROOT_DEV(xr), "%s: " fmt, __func__, ##args)
++#define xroot_info(xr, fmt, args...)	\
++	dev_info(XROOT_DEV(xr), "%s: " fmt, __func__, ##args)
++#define xroot_dbg(xr, fmt, args...)	\
++	dev_dbg(XROOT_DEV(xr), "%s: " fmt, __func__, ##args)
 +
-+#define XRT_CDEV_DIR		"xfpga"
-+#define INODE2PDATA(inode)	\
-+	container_of((inode)->i_cdev, struct xrt_subdev_platdata, xsp_cdev)
-+#define INODE2PDEV(inode)	\
-+	to_platform_device(kobj_to_dev((inode)->i_cdev->kobj.parent))
-+#define CDEV_NAME(sysdev)	(strchr((sysdev)->kobj.name, '!') + 1)
++#define XRT_VSEC_ID		0x20
 +
-+/* Allow it to be accessed from cdev. */
-+static void xleaf_devnode_allowed(struct platform_device *pdev)
++#define XROOT_GROUP_FIRST		(-1)
++#define XROOT_GROUP_LAST		(-2)
++
++static int xroot_root_cb(struct device *, void *, u32, void *);
++
++struct xroot_evt {
++	struct list_head list;
++	struct xrt_event evt;
++	struct completion comp;
++	bool async;
++};
++
++struct xroot_events {
++	struct mutex evt_lock; /* event lock */
++	struct list_head evt_list;
++	struct work_struct evt_work;
++};
++
++struct xroot_groups {
++	struct xrt_subdev_pool pool;
++	struct work_struct bringup_work;
++	atomic_t bringup_pending;
++	atomic_t bringup_failed;
++	struct completion bringup_comp;
++};
++
++struct xroot {
++	struct pci_dev *pdev;
++	struct xroot_events events;
++	struct xroot_groups groups;
++	struct xroot_physical_function_callback pf_cb;
++};
++
++struct xroot_group_match_arg {
++	enum xrt_subdev_id id;
++	int instance;
++};
++
++static bool xroot_group_match(enum xrt_subdev_id id, struct platform_device *pdev, void *arg)
 +{
-+	struct xrt_subdev_platdata *pdata = DEV_PDATA(pdev);
++	struct xroot_group_match_arg *a = (struct xroot_group_match_arg *)arg;
 +
-+	/* Allow new opens. */
-+	mutex_lock(&pdata->xsp_devnode_lock);
-+	pdata->xsp_devnode_online = true;
-+	mutex_unlock(&pdata->xsp_devnode_lock);
++	/* pdev->id is the instance of the subdev. */
++	return id == a->id && pdev->id == a->instance;
 +}
 +
-+/* Turn off access from cdev and wait for all existing user to go away. */
-+static int xleaf_devnode_disallowed(struct platform_device *pdev)
++static int xroot_get_group(struct xroot *xr, int instance, struct platform_device **grpp)
 +{
-+	int ret = 0;
-+	struct xrt_subdev_platdata *pdata = DEV_PDATA(pdev);
++	int rc = 0;
++	struct xrt_subdev_pool *grps = &xr->groups.pool;
++	struct device *dev = DEV(xr->pdev);
++	struct xroot_group_match_arg arg = { XRT_SUBDEV_GRP, instance };
 +
-+	mutex_lock(&pdata->xsp_devnode_lock);
-+
-+	/* Prevent new opens. */
-+	pdata->xsp_devnode_online = false;
-+	/* Wait for existing user to close. */
-+	while (!ret && pdata->xsp_devnode_ref) {
-+		int rc;
-+
-+		mutex_unlock(&pdata->xsp_devnode_lock);
-+		rc = wait_for_completion_killable(&pdata->xsp_devnode_comp);
-+		mutex_lock(&pdata->xsp_devnode_lock);
-+
-+		if (rc == -ERESTARTSYS) {
-+			/* Restore online state. */
-+			pdata->xsp_devnode_online = true;
-+			xrt_err(pdev, "%s is in use, ref=%d",
-+				CDEV_NAME(pdata->xsp_sysdev),
-+				pdata->xsp_devnode_ref);
-+			ret = -EBUSY;
-+		}
++	if (instance == XROOT_GROUP_LAST) {
++		rc = xrt_subdev_pool_get(grps, XRT_SUBDEV_MATCH_NEXT,
++					 *grpp, dev, grpp);
++	} else if (instance == XROOT_GROUP_FIRST) {
++		rc = xrt_subdev_pool_get(grps, XRT_SUBDEV_MATCH_PREV,
++					 *grpp, dev, grpp);
++	} else {
++		rc = xrt_subdev_pool_get(grps, xroot_group_match,
++					 &arg, dev, grpp);
 +	}
 +
-+	mutex_unlock(&pdata->xsp_devnode_lock);
++	if (rc && rc != -ENOENT)
++		xroot_err(xr, "failed to hold group %d: %d", instance, rc);
++	return rc;
++}
++
++static void xroot_put_group(struct xroot *xr, struct platform_device *grp)
++{
++	int inst = grp->id;
++	int rc = xrt_subdev_pool_put(&xr->groups.pool, grp, DEV(xr->pdev));
++
++	if (rc)
++		xroot_err(xr, "failed to release group %d: %d", inst, rc);
++}
++
++static int xroot_trigger_event(struct xroot *xr, struct xrt_event *e, bool async)
++{
++	struct xroot_evt *enew = vzalloc(sizeof(*enew));
++
++	if (!enew)
++		return -ENOMEM;
++
++	enew->evt = *e;
++	enew->async = async;
++	init_completion(&enew->comp);
++
++	mutex_lock(&xr->events.evt_lock);
++	list_add(&enew->list, &xr->events.evt_list);
++	mutex_unlock(&xr->events.evt_lock);
++
++	schedule_work(&xr->events.evt_work);
++
++	if (async)
++		return 0;
++
++	wait_for_completion(&enew->comp);
++	vfree(enew);
++	return 0;
++}
++
++static void
++xroot_group_trigger_event(struct xroot *xr, int inst, enum xrt_events e)
++{
++	int ret;
++	struct platform_device *pdev = NULL;
++	struct xrt_event evt = { 0 };
++
++	WARN_ON(inst < 0);
++	/* Only triggers subdev specific events. */
++	if (e != XRT_EVENT_POST_CREATION && e != XRT_EVENT_PRE_REMOVAL) {
++		xroot_err(xr, "invalid event %d", e);
++		return;
++	}
++
++	ret = xroot_get_group(xr, inst, &pdev);
++	if (ret)
++		return;
++
++	/* Triggers event for children, first. */
++	xleaf_call(pdev, XRT_GROUP_TRIGGER_EVENT, (void *)(uintptr_t)e);
++
++	/* Triggers event for itself. */
++	evt.xe_evt = e;
++	evt.xe_subdev.xevt_subdev_id = XRT_SUBDEV_GRP;
++	evt.xe_subdev.xevt_subdev_instance = inst;
++	xroot_trigger_event(xr, &evt, false);
++
++	xroot_put_group(xr, pdev);
++}
++
++int xroot_create_group(void *root, char *dtb)
++{
++	struct xroot *xr = (struct xroot *)root;
++	int ret;
++
++	atomic_inc(&xr->groups.bringup_pending);
++	ret = xrt_subdev_pool_add(&xr->groups.pool, XRT_SUBDEV_GRP, xroot_root_cb, xr, dtb);
++	if (ret >= 0) {
++		schedule_work(&xr->groups.bringup_work);
++	} else {
++		atomic_dec(&xr->groups.bringup_pending);
++		atomic_inc(&xr->groups.bringup_failed);
++		xroot_err(xr, "failed to create group: %d", ret);
++	}
++	return ret;
++}
++EXPORT_SYMBOL_GPL(xroot_create_group);
++
++static int xroot_destroy_single_group(struct xroot *xr, int instance)
++{
++	struct platform_device *pdev = NULL;
++	int ret;
++
++	WARN_ON(instance < 0);
++	ret = xroot_get_group(xr, instance, &pdev);
++	if (ret)
++		return ret;
++
++	xroot_group_trigger_event(xr, instance, XRT_EVENT_PRE_REMOVAL);
++
++	/* Now tear down all children in this group. */
++	ret = xleaf_call(pdev, XRT_GROUP_FINI_CHILDREN, NULL);
++	xroot_put_group(xr, pdev);
++	if (!ret)
++		ret = xrt_subdev_pool_del(&xr->groups.pool, XRT_SUBDEV_GRP, instance);
 +
 +	return ret;
 +}
 +
-+static struct platform_device *
-+__xleaf_devnode_open(struct inode *inode, bool excl)
++static int xroot_destroy_group(struct xroot *xr, int instance)
 +{
-+	struct xrt_subdev_platdata *pdata = INODE2PDATA(inode);
-+	struct platform_device *pdev = INODE2PDEV(inode);
-+	bool opened = false;
++	struct platform_device *target = NULL;
++	struct platform_device *deps = NULL;
++	int ret;
 +
-+	mutex_lock(&pdata->xsp_devnode_lock);
-+
-+	if (pdata->xsp_devnode_online) {
-+		if (excl && pdata->xsp_devnode_ref) {
-+			xrt_err(pdev, "%s has already been opened exclusively",
-+				CDEV_NAME(pdata->xsp_sysdev));
-+		} else if (!excl && pdata->xsp_devnode_excl) {
-+			xrt_err(pdev, "%s has been opened exclusively",
-+				CDEV_NAME(pdata->xsp_sysdev));
-+		} else {
-+			pdata->xsp_devnode_ref++;
-+			pdata->xsp_devnode_excl = excl;
-+			opened = true;
-+			xrt_info(pdev, "opened %s, ref=%d",
-+				 CDEV_NAME(pdata->xsp_sysdev),
-+				 pdata->xsp_devnode_ref);
-+		}
-+	} else {
-+		xrt_err(pdev, "%s is offline", CDEV_NAME(pdata->xsp_sysdev));
-+	}
-+
-+	mutex_unlock(&pdata->xsp_devnode_lock);
-+
-+	pdev = opened ? pdev : NULL;
-+	return pdev;
-+}
-+
-+struct platform_device *
-+xleaf_devnode_open_excl(struct inode *inode)
-+{
-+	return __xleaf_devnode_open(inode, true);
-+}
-+
-+struct platform_device *
-+xleaf_devnode_open(struct inode *inode)
-+{
-+	return __xleaf_devnode_open(inode, false);
-+}
-+EXPORT_SYMBOL_GPL(xleaf_devnode_open);
-+
-+void xleaf_devnode_close(struct inode *inode)
-+{
-+	struct xrt_subdev_platdata *pdata = INODE2PDATA(inode);
-+	struct platform_device *pdev = INODE2PDEV(inode);
-+	bool notify = false;
-+
-+	mutex_lock(&pdata->xsp_devnode_lock);
-+
-+	WARN_ON(pdata->xsp_devnode_ref == 0);
-+	pdata->xsp_devnode_ref--;
-+	if (pdata->xsp_devnode_ref == 0) {
-+		pdata->xsp_devnode_excl = false;
-+		notify = true;
-+	}
-+	if (notify) {
-+		xrt_info(pdev, "closed %s, ref=%d",
-+			 CDEV_NAME(pdata->xsp_sysdev), pdata->xsp_devnode_ref);
-+	} else {
-+		xrt_info(pdev, "closed %s, notifying waiter",
-+			 CDEV_NAME(pdata->xsp_sysdev));
-+	}
-+
-+	mutex_unlock(&pdata->xsp_devnode_lock);
-+
-+	if (notify)
-+		complete(&pdata->xsp_devnode_comp);
-+}
-+EXPORT_SYMBOL_GPL(xleaf_devnode_close);
-+
-+static inline enum xrt_subdev_file_mode
-+devnode_mode(struct xrt_subdev_drvdata *drvdata)
-+{
-+	return drvdata->xsd_file_ops.xsf_mode;
-+}
-+
-+int xleaf_devnode_create(struct platform_device *pdev, const char *file_name,
-+			 const char *inst_name)
-+{
-+	struct xrt_subdev_drvdata *drvdata = DEV_DRVDATA(pdev);
-+	struct xrt_subdev_file_ops *fops = &drvdata->xsd_file_ops;
-+	struct xrt_subdev_platdata *pdata = DEV_PDATA(pdev);
-+	struct cdev *cdevp;
-+	struct device *sysdev;
-+	int ret = 0;
-+	char fname[256];
-+
-+	mutex_init(&pdata->xsp_devnode_lock);
-+	init_completion(&pdata->xsp_devnode_comp);
-+
-+	cdevp = &DEV_PDATA(pdev)->xsp_cdev;
-+	cdev_init(cdevp, &fops->xsf_ops);
-+	cdevp->owner = fops->xsf_ops.owner;
-+	cdevp->dev = MKDEV(MAJOR(fops->xsf_dev_t), pdev->id);
++	WARN_ON(instance < 0);
++	/*
++	 * Make sure target group exists and can't go away before
++	 * we remove it's dependents
++	 */
++	ret = xroot_get_group(xr, instance, &target);
++	if (ret)
++		return ret;
 +
 +	/*
-+	 * Set pdev as parent of cdev so that when pdev (and its platform
-+	 * data) will not be freed when cdev is not freed.
++	 * Remove all groups depend on target one.
++	 * Assuming subdevs in higher group ID can depend on ones in
++	 * lower ID groups, we remove them in the reservse order.
 +	 */
-+	cdev_set_parent(cdevp, &DEV(pdev)->kobj);
++	while (xroot_get_group(xr, XROOT_GROUP_LAST, &deps) != -ENOENT) {
++		int inst = deps->id;
 +
-+	ret = cdev_add(cdevp, cdevp->dev, 1);
++		xroot_put_group(xr, deps);
++		/* Reached the target group instance, stop here. */
++		if (instance == inst)
++			break;
++		xroot_destroy_single_group(xr, inst);
++		deps = NULL;
++	}
++
++	/* Now we can remove the target group. */
++	xroot_put_group(xr, target);
++	return xroot_destroy_single_group(xr, instance);
++}
++
++static int xroot_lookup_group(struct xroot *xr,
++			      struct xrt_root_lookup_group *arg)
++{
++	int rc = -ENOENT;
++	struct platform_device *grp = NULL;
++
++	while (rc < 0 && xroot_get_group(xr, XROOT_GROUP_LAST, &grp) != -ENOENT) {
++		if (arg->xpilp_match_cb(XRT_SUBDEV_GRP, grp, arg->xpilp_match_arg))
++			rc = grp->id;
++		xroot_put_group(xr, grp);
++	}
++	return rc;
++}
++
++static void xroot_event_work(struct work_struct *work)
++{
++	struct xroot_evt *tmp;
++	struct xroot *xr = container_of(work, struct xroot, events.evt_work);
++
++	mutex_lock(&xr->events.evt_lock);
++	while (!list_empty(&xr->events.evt_list)) {
++		tmp = list_first_entry(&xr->events.evt_list, struct xroot_evt, list);
++		list_del(&tmp->list);
++		mutex_unlock(&xr->events.evt_lock);
++
++		xrt_subdev_pool_handle_event(&xr->groups.pool, &tmp->evt);
++
++		if (tmp->async)
++			vfree(tmp);
++		else
++			complete(&tmp->comp);
++
++		mutex_lock(&xr->events.evt_lock);
++	}
++	mutex_unlock(&xr->events.evt_lock);
++}
++
++static void xroot_event_init(struct xroot *xr)
++{
++	INIT_LIST_HEAD(&xr->events.evt_list);
++	mutex_init(&xr->events.evt_lock);
++	INIT_WORK(&xr->events.evt_work, xroot_event_work);
++}
++
++static void xroot_event_fini(struct xroot *xr)
++{
++	flush_scheduled_work();
++	WARN_ON(!list_empty(&xr->events.evt_list));
++}
++
++static int xroot_get_leaf(struct xroot *xr, struct xrt_root_get_leaf *arg)
++{
++	int rc = -ENOENT;
++	struct platform_device *grp = NULL;
++
++	while (rc && xroot_get_group(xr, XROOT_GROUP_LAST, &grp) != -ENOENT) {
++		rc = xleaf_call(grp, XRT_GROUP_GET_LEAF, arg);
++		xroot_put_group(xr, grp);
++	}
++	return rc;
++}
++
++static int xroot_put_leaf(struct xroot *xr, struct xrt_root_put_leaf *arg)
++{
++	int rc = -ENOENT;
++	struct platform_device *grp = NULL;
++
++	while (rc && xroot_get_group(xr, XROOT_GROUP_LAST, &grp) != -ENOENT) {
++		rc = xleaf_call(grp, XRT_GROUP_PUT_LEAF, arg);
++		xroot_put_group(xr, grp);
++	}
++	return rc;
++}
++
++static int xroot_root_cb(struct device *dev, void *parg, enum xrt_root_cmd cmd, void *arg)
++{
++	struct xroot *xr = (struct xroot *)parg;
++	int rc = 0;
++
++	switch (cmd) {
++	/* Leaf actions. */
++	case XRT_ROOT_GET_LEAF: {
++		struct xrt_root_get_leaf *getleaf = (struct xrt_root_get_leaf *)arg;
++
++		rc = xroot_get_leaf(xr, getleaf);
++		break;
++	}
++	case XRT_ROOT_PUT_LEAF: {
++		struct xrt_root_put_leaf *putleaf = (struct xrt_root_put_leaf *)arg;
++
++		rc = xroot_put_leaf(xr, putleaf);
++		break;
++	}
++	case XRT_ROOT_GET_LEAF_HOLDERS: {
++		struct xrt_root_get_holders *holders = (struct xrt_root_get_holders *)arg;
++
++		rc = xrt_subdev_pool_get_holders(&xr->groups.pool,
++						 holders->xpigh_pdev,
++						 holders->xpigh_holder_buf,
++						 holders->xpigh_holder_buf_len);
++		break;
++	}
++
++	/* Group actions. */
++	case XRT_ROOT_CREATE_GROUP:
++		rc = xroot_create_group(xr, (char *)arg);
++		break;
++	case XRT_ROOT_REMOVE_GROUP:
++		rc = xroot_destroy_group(xr, (int)(uintptr_t)arg);
++		break;
++	case XRT_ROOT_LOOKUP_GROUP: {
++		struct xrt_root_lookup_group *getgrp = (struct xrt_root_lookup_group *)arg;
++
++		rc = xroot_lookup_group(xr, getgrp);
++		break;
++	}
++	case XRT_ROOT_WAIT_GROUP_BRINGUP:
++		rc = xroot_wait_for_bringup(xr) ? 0 : -EINVAL;
++		break;
++
++	/* Event actions. */
++	case XRT_ROOT_EVENT_SYNC:
++	case XRT_ROOT_EVENT_ASYNC: {
++		bool async = (cmd == XRT_ROOT_EVENT_ASYNC);
++		struct xrt_event *evt = (struct xrt_event *)arg;
++
++		rc = xroot_trigger_event(xr, evt, async);
++		break;
++	}
++
++	/* Device info. */
++	case XRT_ROOT_GET_RESOURCE: {
++		struct xrt_root_get_res *res = (struct xrt_root_get_res *)arg;
++
++		res->xpigr_res = xr->pdev->resource;
++		break;
++	}
++	case XRT_ROOT_GET_ID: {
++		struct xrt_root_get_id *id = (struct xrt_root_get_id *)arg;
++
++		id->xpigi_vendor_id = xr->pdev->vendor;
++		id->xpigi_device_id = xr->pdev->device;
++		id->xpigi_sub_vendor_id = xr->pdev->subsystem_vendor;
++		id->xpigi_sub_device_id = xr->pdev->subsystem_device;
++		break;
++	}
++
++	/* MISC generic PCIE driver functions. */
++	case XRT_ROOT_HOT_RESET: {
++		xr->pf_cb.xpc_hot_reset(xr->pdev);
++		break;
++	}
++	case XRT_ROOT_HWMON: {
++		struct xrt_root_hwmon *hwmon = (struct xrt_root_hwmon *)arg;
++
++		if (hwmon->xpih_register) {
++			hwmon->xpih_hwmon_dev =
++				hwmon_device_register_with_info(DEV(xr->pdev),
++								hwmon->xpih_name,
++								hwmon->xpih_drvdata,
++								NULL,
++								hwmon->xpih_groups);
++		} else {
++			hwmon_device_unregister(hwmon->xpih_hwmon_dev);
++		}
++		break;
++	}
++
++	default:
++		xroot_err(xr, "unknown IOCTL cmd %d", cmd);
++		rc = -EINVAL;
++		break;
++	}
++
++	return rc;
++}
++
++static void xroot_bringup_group_work(struct work_struct *work)
++{
++	struct platform_device *pdev = NULL;
++	struct xroot *xr = container_of(work, struct xroot, groups.bringup_work);
++
++	while (xroot_get_group(xr, XROOT_GROUP_FIRST, &pdev) != -ENOENT) {
++		int r, i;
++
++		i = pdev->id;
++		r = xleaf_call(pdev, XRT_GROUP_INIT_CHILDREN, NULL);
++		xroot_put_group(xr, pdev);
++		if (r == -EEXIST)
++			continue; /* Already brough up, nothing to do. */
++		if (r)
++			atomic_inc(&xr->groups.bringup_failed);
++
++		xroot_group_trigger_event(xr, i, XRT_EVENT_POST_CREATION);
++
++		if (atomic_dec_and_test(&xr->groups.bringup_pending))
++			complete(&xr->groups.bringup_comp);
++	}
++}
++
++static void xroot_groups_init(struct xroot *xr)
++{
++	xrt_subdev_pool_init(DEV(xr->pdev), &xr->groups.pool);
++	INIT_WORK(&xr->groups.bringup_work, xroot_bringup_group_work);
++	atomic_set(&xr->groups.bringup_pending, 0);
++	atomic_set(&xr->groups.bringup_failed, 0);
++	init_completion(&xr->groups.bringup_comp);
++}
++
++static void xroot_groups_fini(struct xroot *xr)
++{
++	flush_scheduled_work();
++	xrt_subdev_pool_fini(&xr->groups.pool);
++}
++
++int xroot_add_vsec_node(void *root, char *dtb)
++{
++	struct xroot *xr = (struct xroot *)root;
++	struct device *dev = DEV(xr->pdev);
++	struct xrt_md_endpoint ep = { 0 };
++	int cap = 0, ret = 0;
++	u32 off_low, off_high, vsec_bar, header;
++	u64 vsec_off;
++
++	while ((cap = pci_find_next_ext_capability(xr->pdev, cap, PCI_EXT_CAP_ID_VNDR))) {
++		pci_read_config_dword(xr->pdev, cap + PCI_VNDR_HEADER, &header);
++		if (PCI_VNDR_HEADER_ID(header) == XRT_VSEC_ID)
++			break;
++	}
++	if (!cap) {
++		xroot_info(xr, "No Vendor Specific Capability.");
++		return -ENOENT;
++	}
++
++	if (pci_read_config_dword(xr->pdev, cap + 8, &off_low) ||
++	    pci_read_config_dword(xr->pdev, cap + 12, &off_high)) {
++		xroot_err(xr, "pci_read vendor specific failed.");
++		return -EINVAL;
++	}
++
++	ep.ep_name = XRT_MD_NODE_VSEC;
++	ret = xrt_md_add_endpoint(dev, dtb, &ep);
 +	if (ret) {
-+		xrt_err(pdev, "failed to add cdev: %d", ret);
++		xroot_err(xr, "add vsec metadata failed, ret %d", ret);
 +		goto failed;
 +	}
-+	if (!file_name)
-+		file_name = pdev->name;
-+	if (!inst_name) {
-+		if (devnode_mode(drvdata) == XRT_SUBDEV_FILE_MULTI_INST) {
-+			snprintf(fname, sizeof(fname), "%s/%s/%s.%u",
-+				 XRT_CDEV_DIR, DEV_PDATA(pdev)->xsp_root_name,
-+				 file_name, pdev->id);
-+		} else {
-+			snprintf(fname, sizeof(fname), "%s/%s/%s",
-+				 XRT_CDEV_DIR, DEV_PDATA(pdev)->xsp_root_name,
-+				 file_name);
-+		}
-+	} else {
-+		snprintf(fname, sizeof(fname), "%s/%s/%s.%s", XRT_CDEV_DIR,
-+			 DEV_PDATA(pdev)->xsp_root_name, file_name, inst_name);
++
++	vsec_bar = cpu_to_be32(off_low & 0xf);
++	ret = xrt_md_set_prop(dev, dtb, XRT_MD_NODE_VSEC, NULL,
++			      XRT_MD_PROP_BAR_IDX, &vsec_bar, sizeof(vsec_bar));
++	if (ret) {
++		xroot_err(xr, "add vsec bar idx failed, ret %d", ret);
++		goto failed;
 +	}
-+	sysdev = device_create(xrt_class, NULL, cdevp->dev, NULL, "%s", fname);
-+	if (IS_ERR(sysdev)) {
-+		ret = PTR_ERR(sysdev);
-+		xrt_err(pdev, "failed to create device node: %d", ret);
-+		goto failed_cdev_add;
++
++	vsec_off = cpu_to_be64(((u64)off_high << 32) | (off_low & ~0xfU));
++	ret = xrt_md_set_prop(dev, dtb, XRT_MD_NODE_VSEC, NULL,
++			      XRT_MD_PROP_OFFSET, &vsec_off, sizeof(vsec_off));
++	if (ret) {
++		xroot_err(xr, "add vsec offset failed, ret %d", ret);
++		goto failed;
 +	}
-+	pdata->xsp_sysdev = sysdev;
 +
-+	xleaf_devnode_allowed(pdev);
-+
-+	xrt_info(pdev, "created (%d, %d): /dev/%s",
-+		 MAJOR(cdevp->dev), pdev->id, fname);
-+	return 0;
-+
-+failed_cdev_add:
-+	cdev_del(cdevp);
 +failed:
-+	cdevp->owner = NULL;
 +	return ret;
 +}
++EXPORT_SYMBOL_GPL(xroot_add_vsec_node);
 +
-+int xleaf_devnode_destroy(struct platform_device *pdev)
++int xroot_add_simple_node(void *root, char *dtb, const char *endpoint)
 +{
-+	struct xrt_subdev_platdata *pdata = DEV_PDATA(pdev);
-+	struct cdev *cdevp = &pdata->xsp_cdev;
-+	dev_t dev = cdevp->dev;
-+	int rc;
++	struct xroot *xr = (struct xroot *)root;
++	struct device *dev = DEV(xr->pdev);
++	struct xrt_md_endpoint ep = { 0 };
++	int ret = 0;
 +
-+	rc = xleaf_devnode_disallowed(pdev);
-+	if (rc)
-+		return rc;
++	ep.ep_name = endpoint;
++	ret = xrt_md_add_endpoint(dev, dtb, &ep);
++	if (ret)
++		xroot_err(xr, "add %s failed, ret %d", endpoint, ret);
 +
-+	xrt_info(pdev, "removed (%d, %d): /dev/%s/%s", MAJOR(dev), MINOR(dev),
-+		 XRT_CDEV_DIR, CDEV_NAME(pdata->xsp_sysdev));
-+	device_destroy(xrt_class, cdevp->dev);
-+	pdata->xsp_sysdev = NULL;
-+	cdev_del(cdevp);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(xroot_add_simple_node);
++
++bool xroot_wait_for_bringup(void *root)
++{
++	struct xroot *xr = (struct xroot *)root;
++
++	wait_for_completion(&xr->groups.bringup_comp);
++	return atomic_read(&xr->groups.bringup_failed) == 0;
++}
++EXPORT_SYMBOL_GPL(xroot_wait_for_bringup);
++
++int xroot_probe(struct pci_dev *pdev, struct xroot_physical_function_callback *cb, void **root)
++{
++	struct device *dev = DEV(pdev);
++	struct xroot *xr = NULL;
++
++	dev_info(dev, "%s: probing...", __func__);
++
++	xr = devm_kzalloc(dev, sizeof(*xr), GFP_KERNEL);
++	if (!xr)
++		return -ENOMEM;
++
++	xr->pdev = pdev;
++	xr->pf_cb = *cb;
++	xroot_groups_init(xr);
++	xroot_event_init(xr);
++
++	*root = xr;
 +	return 0;
 +}
++EXPORT_SYMBOL_GPL(xroot_probe);
++
++void xroot_remove(void *root)
++{
++	struct xroot *xr = (struct xroot *)root;
++	struct platform_device *grp = NULL;
++
++	xroot_info(xr, "leaving...");
++
++	if (xroot_get_group(xr, XROOT_GROUP_FIRST, &grp) == 0) {
++		int instance = grp->id;
++
++		xroot_put_group(xr, grp);
++		xroot_destroy_group(xr, instance);
++	}
++
++	xroot_event_fini(xr);
++	xroot_groups_fini(xr);
++}
++EXPORT_SYMBOL_GPL(xroot_remove);
++
++void xroot_broadcast(void *root, enum xrt_events evt)
++{
++	struct xroot *xr = (struct xroot *)root;
++	struct xrt_event e = { 0 };
++
++	/* Root pf driver only broadcasts below two events. */
++	if (evt != XRT_EVENT_POST_CREATION && evt != XRT_EVENT_PRE_REMOVAL) {
++		xroot_info(xr, "invalid event %d", evt);
++		return;
++	}
++
++	e.xe_evt = evt;
++	e.xe_subdev.xevt_subdev_id = XRT_ROOT;
++	e.xe_subdev.xevt_subdev_instance = 0;
++	xroot_trigger_event(xr, &e, false);
++}
++EXPORT_SYMBOL_GPL(xroot_broadcast);
 -- 
 2.27.0
 
