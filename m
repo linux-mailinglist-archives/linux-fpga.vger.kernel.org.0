@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E153470E0
-	for <lists+linux-fpga@lfdr.de>; Wed, 24 Mar 2021 06:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E755E3470ED
+	for <lists+linux-fpga@lfdr.de>; Wed, 24 Mar 2021 06:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235247AbhCXFcu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 24 Mar 2021 01:32:50 -0400
-Received: from mail-mw2nam12on2070.outbound.protection.outlook.com ([40.107.244.70]:23777
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        id S235264AbhCXFdW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 24 Mar 2021 01:33:22 -0400
+Received: from mail-bn8nam11on2040.outbound.protection.outlook.com ([40.107.236.40]:46817
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232940AbhCXFcl (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 24 Mar 2021 01:32:41 -0400
+        id S235256AbhCXFcw (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 24 Mar 2021 01:32:52 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RPAuQyGgO0hzj582mPa+10WuamCUXhKIcFNJP5PtVrFeAkUFD4zOlYwPuwBjM7QRUjw+SClhqnPI9g89yb+l2ubeha2cOTZizlPHaunqAxzOmajzjRwNuj4YxrBr1ZVi7ucDN5bCVt3yQoYtIiodcfTih5+kSmDP45my8PJU2NGDTTT7TOCxuYuckiH5EHQimDPtNBXZy8OzqBV1BhPxZxySe0tzWqMFKm3WVNhsTwKGMDy+tszNrNXOadjK5E+gX40bGpRXB0jfPNtPjwAkKJ/Nd8oQfZgcErkirP6f5sdt9507NHU9XyTVikL/VR7NnT15dgeu2wIyX6PxAOnvZQ==
+ b=WGiQaIi5EDBrNS0WnziKK/+z0hfTEzM8NDinvvksiSiW/39knabTmFSPBvIhz2zfkcPLh+gjvWX+ORkta926AFS960FW4ZxlB4cvt40jtq9kDxZDRlBX2x/K6dqcDkbuFs8RIxy23dVOcO9eu2LXG7XJo5mZsSvm/BUMQpuKewTra4NbHmqqqfWpXz8au3myecLfgTykkSmvxKDUVR5iOPLJr/pCESHTBvNbe8uSlGOgIeoisMRfCbtUPRWoT2PoDyx+XqdFbW4ksmQfNr938GaLuRwWIRCFmtalAa81mQryo3TjOidGEDtLt4k3CvnQB0fLNmxdkKPSFrZXHgtx4A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GOal4i2vQS9Sb9KrQ0mOaE5vtC68zkPR0kIESi1vcGI=;
- b=l5rZdZ9gqmJCASAzXcNRCVImvGInolEOvDBfiMQp25wmxqm9FTM6NmJg2J3bE3q6w82sZ7+Za1vBTkKzjn4o7qBnk5qj0I3LD9og8uimyAnbN2FqOJ2tvbBM6K/j4a48DGcg2Yj9Y/IDWsMTWV2hvGWqxhPGyRvhxTSPUyEvmJk5KysxB4rEEvV1FabI3A3W56KEFA7vacMOcHOYCzXe5yEJdHfTALpTQIszdhEDsJqPkXF7BrlJtkQGTiLMzvASHmUvjJh+VardFIdyKsT0CSZQTzjFBURXrZ3imS8oGD4o3iZprWBxMIHSzSQLJE2c/2zyl+UjvuLV6ozYrLw88Q==
+ bh=NayytgDCo7sd0eWzc6k2eNt5Kti1QHC70tpR+cezanI=;
+ b=TrRUko+n+EvtYsJq4CzkzTY/8anxjygEYEE3owxTgCImydMhzogFslmT9NKRN1gRoDZRiv2HN2hQcMN77Us8qIob8AFqgEjnI/Oxzh1WQts9L8oYWRhYTszyRe3Y4HQeigzNL9FVtfkqPNQWTqwdqLyMv+JYxVgymE8gEwJEfZwYQBr9jeAbcFhAcRUzs4TCiBy8lH0v29u7++fqh3ywXYkSsmWxfgwhgK5ivIbpvr0lWVQvOb7u+rLVAVlKW7tAsEP9m4k+iqgS0uW4ErA9c3mu0qY9tjSyBf4gr2wmesihYWj3Qi5Vs+Jz2+3sHUNbyLc9ACB2y3NnWfxotexjjg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,17 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GOal4i2vQS9Sb9KrQ0mOaE5vtC68zkPR0kIESi1vcGI=;
- b=WRxN83Rq+iHL7r6AoUjXBA+heppTKc+ReeA4R1jcEx5+u3BN3d5pDDKr90N4bEd3Sx3/lNUO16ovhCKGLdZqPhF9GFocYhDuPuAWQPUoabGLiYQlNGV7DHolv/u7tGOLRjldw03zPmYzsvlOBUrSXwIGq4gN9WQzeigJnw87uCY=
-Received: from SN6PR16CA0048.namprd16.prod.outlook.com (2603:10b6:805:ca::25)
- by BYAPR02MB4149.namprd02.prod.outlook.com (2603:10b6:a03::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3955.18; Wed, 24 Mar 2021 05:32:39 +0000
+ bh=NayytgDCo7sd0eWzc6k2eNt5Kti1QHC70tpR+cezanI=;
+ b=nhENJNejLyaKFAJlrBjnfeqj7Rvkfg+qHiUFasdOuiNsmQf0AaYyQtPaISwn1bNNozD6Vyaz+z7k3NVlFp69HA2LhJO22BmXmvODTMtgHBbKE9M/s+kkXq5CIbJ3CKgqdlm3P9OHYbXBeQ0Kls4Cpd8i11sdaR3G4Q/5XFoPo9Q=
+Received: from SN6PR16CA0056.namprd16.prod.outlook.com (2603:10b6:805:ca::33)
+ by DM5PR02MB2682.namprd02.prod.outlook.com (2603:10b6:3:108::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18; Wed, 24 Mar
+ 2021 05:32:47 +0000
 Received: from SN1NAM02FT057.eop-nam02.prod.protection.outlook.com
- (2603:10b6:805:ca:cafe::e2) by SN6PR16CA0048.outlook.office365.com
- (2603:10b6:805:ca::25) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:805:ca:cafe::2c) by SN6PR16CA0056.outlook.office365.com
+ (2603:10b6:805:ca::33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.24 via Frontend
- Transport; Wed, 24 Mar 2021 05:32:39 +0000
+ Transport; Wed, 24 Mar 2021 05:32:47 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
@@ -46,26 +47,26 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
 Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
  SN1NAM02FT057.mail.protection.outlook.com (10.152.73.105) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3977.25 via Frontend Transport; Wed, 24 Mar 2021 05:32:39 +0000
+ 15.20.3977.25 via Frontend Transport; Wed, 24 Mar 2021 05:32:47 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 23 Mar 2021 22:32:33 -0700
+ 15.1.2106.2; Tue, 23 Mar 2021 22:32:46 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2106.2 via Frontend Transport; Tue, 23 Mar 2021 22:32:33 -0700
+ 15.1.2106.2 via Frontend Transport; Tue, 23 Mar 2021 22:32:46 -0700
 Envelope-to: mdf@kernel.org,
  robh@kernel.org,
  trix@redhat.com,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.212] (port=51022 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.212] (port=51024 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <lizhi.hou@xilinx.com>)
-        id 1lOw89-0004ME-Sa; Tue, 23 Mar 2021 22:32:33 -0700
+        id 1lOw8L-0004QB-U9; Tue, 23 Mar 2021 22:32:45 -0700
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id 9B2CE60011A; Tue, 23 Mar 2021 22:29:55 -0700 (PDT)
+        id A7C9060011E; Tue, 23 Mar 2021 22:29:55 -0700 (PDT)
 From:   Lizhi Hou <lizhi.hou@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
@@ -73,914 +74,843 @@ CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
         <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
         <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
         <robh@kernel.org>, Max Zhen <max.zhen@xilinx.com>
-Subject: [PATCH V4 XRT Alveo 01/20] Documentation: fpga: Add a document describing XRT Alveo drivers
-Date:   Tue, 23 Mar 2021 22:29:28 -0700
-Message-ID: <20210324052947.27889-2-lizhi.hou@xilinx.com>
+Subject: [PATCH V4 XRT Alveo 02/20] fpga: xrt: driver metadata helper functions
+Date:   Tue, 23 Mar 2021 22:29:29 -0700
+Message-ID: <20210324052947.27889-3-lizhi.hou@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210324052947.27889-1-lizhi.hou@xilinx.com>
 References: <20210324052947.27889-1-lizhi.hou@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 69d2fe96-9e90-4881-eaf3-08d8ee863d1b
-X-MS-TrafficTypeDiagnostic: BYAPR02MB4149:
-X-Microsoft-Antispam-PRVS: <BYAPR02MB41494B4CD964CFDF6F58B940A1639@BYAPR02MB4149.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Office365-Filtering-Correlation-Id: 3980548e-2f99-4831-af82-08d8ee864207
+X-MS-TrafficTypeDiagnostic: DM5PR02MB2682:
+X-Microsoft-Antispam-PRVS: <DM5PR02MB26827EDF3FC935D36FB5F6ADA1639@DM5PR02MB2682.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZJyjvULLi68Ag+6h1IPudYFhPpnAW1v/dLTYxqnSZ5amDbXr3UdqAfwY0ye9VU5KeFpuco49vsI4RhHfWQsJg8p2IeUq6vdnDfxZxEC8ESjIfOOmA92f1W+DhrCfw/atT8+78B7vq553ECtqaqt3TLdzqR9XWhfBoxoFRpDjTfMuZG6niHeeuozoA1NP//px3/dUVqQ7U6k77N2UmhCUwi7VY+Ae5zcFSnFi8pTzsbybo4rUn6JV80KbG9L9tHsvsmm/DxODwPK9dsVTDhYTXkb8kOL/N7V/fe2Tv6pZjKaygQlOWgEIXUpZ0uFA1ROzUy/5HJ+r/BVzApJg4bSA193+RiKpy8rO7q8P4WGyYZx8/SVvwbz1OEgfiJXfe4Ej/lcbvDvfai555cd/WCE97ZG4t7MPdOLxOYfdK/E+CTJMa40phc5ZiEjTAgnJDh5IPdewj4AQMOnJgyWi5q7+GfVxN8eip/XPXurxFt9/8MySHP8jz7LCwr/nk9+OSUk1gMospSC4zLPSd4ZjUBqNnWgdpLIbf8tP6JuhU1u0EHFvYcxlqGrSO8+hvbukhrm3UIbL1q1JAkL6+zCPfpJ2hGk0h4SlYztHqRyQb6qwI2K0WzHNRMbQkrJFdauluj/Eh2v+zIQj/AxfcPmyB7RR9xCZI7bTliZl5WPjN8ZqICpHlVEb+8A+lqz46q+Va9FsFn60cY/9G2OdWdRlhCySEPvzYKjg6tl/UJRliSInO4A=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(39850400004)(346002)(376002)(396003)(136003)(36840700001)(46966006)(7636003)(83380400001)(82310400003)(82740400003)(36906005)(2906002)(26005)(6666004)(42186006)(356005)(186003)(8936002)(478600001)(4326008)(2616005)(1076003)(336012)(8676002)(316002)(36860700001)(107886003)(70206006)(44832011)(426003)(36756003)(5660300002)(30864003)(70586007)(54906003)(47076005)(6266002)(6916009);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: s4V9mMKUxsA16ib73kM0+ur9DjFYMel69AT/wtONEYYRIZPPtsoTD5l8pI+9dwcq7X1FSRXCKDnn8OF/nkxdLOZTsj7/eqnaFDM/NiJ0PoiaGDqIsL+8Arg5cWtU9lf6UV9EEk5qxKjzfx0K2yCPlfmsh2HZNnvFGOG1yubWFb8ksBxTeH7wLoc5OKdXKkHVOrcm4cCcM3pnJcW18hEB89Fo0RwKHFgU2u/flQrJ87NUrdtdHQX20b+iUilh3N/LKTbD86zrGgqBhfaPkvjmJhbm4IwIZWUeutzebcdIZ7py1vJoxO3RRvbJLaVHnGnxdlbIrj5XswIKu2OZUSlbf+rzGdJPr0PvbzdwiV9jJd+gDV93TEHOqFpwoLT4ThDU3AWACHTyhLIGMYOGn9UuET2d25WA3NV9Bi2ChZAuOiO5GbX5zECk1lqykFKxr4Hrgmb2/6S8e3r4aw4Gjq+hG5DQPCYAUwE0uF2PLcGzOqnsvHavC/3V3rm2yRInj+gjjYOOoJEZMqpEsE8ZvcZSf6vvYCK8zIBR+5L6oYGVW3ICdpiFWm1gK/9iwxgt/saoI/rmWu38P+3AqIsJI2PqwuFbfzFnrHhfwp8NL9xLAT3d3iEYyg3lTWPzx6vD48HkxT5kUPm8xPCKiPkOdYysVOEsz6OjiIB5JksbCemygwY=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(376002)(396003)(39860400002)(136003)(46966006)(36840700001)(426003)(8676002)(70586007)(356005)(44832011)(30864003)(8936002)(316002)(36860700001)(2906002)(7636003)(83380400001)(42186006)(36906005)(70206006)(54906003)(2616005)(1076003)(82740400003)(82310400003)(107886003)(6666004)(26005)(6266002)(47076005)(478600001)(6916009)(336012)(4326008)(186003)(36756003)(5660300002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2021 05:32:39.0383
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2021 05:32:47.2953
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69d2fe96-9e90-4881-eaf3-08d8ee863d1b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3980548e-2f99-4831-af82-08d8ee864207
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
 X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT057.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4149
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB2682
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Describe XRT driver architecture and provide basic overview of
-Xilinx Alveo platform.
+XRT drivers use device tree as metadata format to discover HW subsystems
+behind PCIe BAR. Thus libfdt functions are called for the driver to parse
+device tree blob.
 
 Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 ---
- Documentation/fpga/index.rst |   1 +
- Documentation/fpga/xrt.rst   | 844 +++++++++++++++++++++++++++++++++++
- 2 files changed, 845 insertions(+)
- create mode 100644 Documentation/fpga/xrt.rst
+ drivers/fpga/xrt/include/metadata.h  | 233 ++++++++++++
+ drivers/fpga/xrt/metadata/metadata.c | 545 +++++++++++++++++++++++++++
+ 2 files changed, 778 insertions(+)
+ create mode 100644 drivers/fpga/xrt/include/metadata.h
+ create mode 100644 drivers/fpga/xrt/metadata/metadata.c
 
-diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
-index f80f95667ca2..30134357b70d 100644
---- a/Documentation/fpga/index.rst
-+++ b/Documentation/fpga/index.rst
-@@ -8,6 +8,7 @@ fpga
-     :maxdepth: 1
- 
-     dfl
-+    xrt
- 
- .. only::  subproject and html
- 
-diff --git a/Documentation/fpga/xrt.rst b/Documentation/fpga/xrt.rst
+diff --git a/drivers/fpga/xrt/include/metadata.h b/drivers/fpga/xrt/include/metadata.h
 new file mode 100644
-index 000000000000..0f7977464270
+index 000000000000..479e47960c61
 --- /dev/null
-+++ b/Documentation/fpga/xrt.rst
-@@ -0,0 +1,844 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==================================
-+XRTV2 Linux Kernel Driver Overview
-+==================================
-+
-+Authors:
-+
-+* Sonal Santan <sonal.santan@xilinx.com>
-+* Max Zhen <max.zhen@xilinx.com>
-+* Lizhi Hou <lizhi.hou@xilinx.com>
-+
-+XRTV2 drivers are second generation `XRT <https://github.com/Xilinx/XRT>`_
-+drivers which support `Alveo <https://www.xilinx.com/products/boards-and-kits/alveo.html>`_
-+PCIe platforms from Xilinx.
-+
-+XRTV2 drivers support *subsystem* style data driven platforms where driver's
-+configuration and behavior is determined by meta data provided by the platform
-+(in *device tree* format). Primary management physical function (MPF) driver
-+is called **xmgmt**. Primary user physical function (UPF) driver is called
-+**xuser** and is under development. xrt driver framework and HW subsystem
-+drivers are packaged into a library module called **xrt-lib**, which is
-+shared by **xmgmt** and **xuser** (under development). The xrt driver framework
-+implements a pseudo-bus which is used to discover HW subsystems and facilitate
-+inter HW subsystem interaction.
-+
-+Driver Modules
-+==============
-+
-+xrt-lib.ko
-+----------
-+
-+Repository of all subsystem drivers and pure software modules that can potentially
-+be shared between xmgmt and xuser. All these drivers are structured as Linux
-+*platform driver* and are instantiated by xmgmt (or xuser under development) based
-+on meta data associated with the hardware. The metadata is in the form of a device
-+tree as mentioned before. Each platform driver statically defines a subsystem node
-+array by using node name or a string in its ``compatible`` property. And this
-+array is eventually translated to IOMEM resources of the platform device.
-+
-+The xrt-lib core infrastructure provides hooks to platform drivers for device node
-+management, user file operations and ioctl callbacks. The core infrastructure also
-+provides pseudo-bus functionality for platform driver registration, discovery and
-+inter platform driver ioctl calls.
-+
-+.. note::
-+   See code in ``include/xleaf.h``
-+
-+
-+xmgmt.ko
-+--------
-+
-+The xmgmt driver is a PCIe device driver driving MPF found on Xilinx's Alveo
-+PCIE device. It consists of one *root* driver, one or more *group* drivers
-+and one or more *xleaf* drivers. The root and MPF specific xleaf drivers are
-+in xmgmt.ko. The group driver and other xleaf drivers are in xrt-lib.ko.
-+
-+The instantiation of specific group driver or xleaf driver is completely data
-+driven based on meta data (mostly in device tree format) found through VSEC
-+capability and inside firmware files, such as platform xsabin or user xclbin file.
-+The root driver manages the life cycle of multiple group drivers, which, in turn,
-+manages multiple xleaf drivers. This allows a single set of drivers to support
-+all kinds of subsystems exposed by different shells. The difference among all
-+these subsystems will be handled in xleaf drivers with root and group drivers
-+being part of the infrastructure and provide common services for all leaves
-+found on all platforms.
-+
-+The driver object model looks like the following::
-+
-+                    +-----------+
-+                    |   xroot   |
-+                    +-----+-----+
-+                          |
-+              +-----------+-----------+
-+              |                       |
-+              v                       v
-+        +-----------+          +-----------+
-+        |   group   |    ...   |   group   |
-+        +-----+-----+          +------+----+
-+              |                       |
-+              |                       |
-+        +-----+----+            +-----+----+
-+        |          |            |          |
-+        v          v            v          v
-+    +-------+  +-------+    +-------+  +-------+
-+    | xleaf |..| xleaf |    | xleaf |..| xleaf |
-+    +-------+  +-------+    +-------+  +-------+
-+
-+As an example for Xilinx Alveo U50 before user xclbin download, the tree
-+looks like the following::
-+
-+                                +-----------+
-+                                |   xmgmt   |
-+                                +-----+-----+
-+                                      |
-+            +-------------------------+--------------------+
-+            |                         |                    |
-+            v                         v                    v
-+       +--------+                +--------+            +--------+
-+       | group0 |                | group1 |            | group2 |
-+       +----+---+                +----+---+            +---+----+
-+            |                         |                    |
-+            |                         |                    |
-+      +-----+-----+        +----+-----+---+    +-----+-----+----+--------+
-+      |           |        |    |         |    |     |          |        |
-+      v           v        |    v         v    |     v          v        |
-+ +------------+  +------+  | +------+ +------+ |  +------+ +-----------+ |
-+ | xmgmt_main |  | VSEC |  | | GPIO | | QSPI | |  |  CMC | | AXI-GATE0 | |
-+ +------------+  +------+  | +------+ +------+ |  +------+ +-----------+ |
-+                           | +---------+       |  +------+ +-----------+ |
-+                           +>| MAILBOX |       +->| ICAP | | AXI-GATE1 |<+
-+                             +---------+       |  +------+ +-----------+
-+                                               |  +-------+
-+                                               +->| CALIB |
-+                                                  +-------+
-+
-+After an xclbin is download, group3 will be added and the tree looks like the
-+following::
-+
-+                                +-----------+
-+                                |   xmgmt   |
-+                                +-----+-----+
-+                                      |
-+            +-------------------------+--------------------+-----------------+
-+            |                         |                    |                 |
-+            v                         v                    v                 |
-+       +--------+                +--------+            +--------+            |
-+       | group0 |                | group1 |            | group2 |            |
-+       +----+---+                +----+---+            +---+----+            |
-+            |                         |                    |                 |
-+            |                         |                    |                 |
-+      +-----+-----+       +-----+-----+---+    +-----+-----+----+--------+   |
-+      |           |       |     |         |    |     |          |        |   |
-+      v           v       |     v         v    |     v          v        |   |
-+ +------------+  +------+ | +------+ +------+  |  +------+ +-----------+ |   |
-+ | xmgmt_main |  | VSEC | | | GPIO | | QSPI |  |  |  CMC | | AXI-GATE0 | |   |
-+ +------------+  +------+ | +------+ +------+  |  +------+ +-----------+ |   |
-+                          | +---------+        |  +------+ +-----------+ |   |
-+                          +>| MAILBOX |        +->| ICAP | | AXI-GATE1 |<+   |
-+                            +---------+        |  +------+ +-----------+     |
-+                                               |  +-------+                  |
-+                                               +->| CALIB |                  |
-+                                                  +-------+                  |
-+                      +---+----+                                             |
-+                      | group3 |<--------------------------------------------+
-+                      +--------+
-+                          |
-+                          |
-+     +-------+--------+---+--+--------+------+-------+
-+     |       |        |      |        |      |       |
-+     v       |        v      |        v      |       v
-+ +--------+  |   +--------+  |   +--------+  |    +-----+
-+ | CLOCK0 |  |   | CLOCK1 |  |   | CLOCK2 |  |    | UCS |
-+ +--------+  v   +--------+  v   +--------+  v    +-----+
-+ +-------------+ +-------------+ +-------------+
-+ | CLOCK-FREQ0 | | CLOCK-FREQ1 | | CLOCK-FREQ2 |
-+ +-------------+ +-------------+ +-------------+
-+
-+
-+xmgmt-root
-+^^^^^^^^^^
-+
-+The xmgmt-root driver is a PCIe device driver attached to MPF. It's part of the
-+infrastructure of the MPF driver and resides in xmgmt.ko. This driver
-+
-+* manages one or more group drivers
-+* provides access to functionalities that requires pci_dev, such as PCIE config
-+  space access, to other xleaf drivers through root calls
-+* facilities event callbacks for other xleaf drivers
-+* facilities inter-leaf driver calls for other xleaf drivers
-+
-+When root driver starts, it will explicitly create an initial group instance,
-+which contains xleaf drivers that will trigger the creation of other group
-+instances. The root driver will wait for all group and leaves to be created
-+before it returns from it's probe routine and claim success of the
-+initialization of the entire xmgmt driver. If any leaf fails to initialize the
-+xmgmt driver will still come online but with limited functionality.
-+
-+.. note::
-+   See code in ``lib/xroot.c`` and ``mgmt/root.c``
-+
-+
-+group
-+^^^^^
-+
-+The group driver represents a pseudo device whose life cycle is managed by
-+root and does not have real IO mem or IRQ resources. It's part of the
-+infrastructure of the MPF driver and resides in xrt-lib.ko. This driver
-+
-+* manages one or more xleaf drivers
-+* provides access to root from leaves, so that root calls, event notifications
-+  and inter-leaf calls can happen
-+
-+In xmgmt, an initial group driver instance will be created by the root. This
-+instance contains leaves that will trigger group instances to be created to
-+manage groups of leaves found on different partitions on hardware, such as
-+VSEC, Shell, and User.
-+
-+Every *fpga_region* has a group object associated with it. The group is
-+created when xclbin image is loaded on the fpga_region. The existing group
-+is destroyed when a new xclbin image is loaded. The fpga_region persists
-+across xclbin downloads.
-+
-+.. note::
-+   See code in ``lib/group.c``
-+
-+
-+xleaf
-+^^^^^
-+
-+The xleaf driver is a platform device driver whose life cycle is managed by
-+a group driver and may or may not have real IO mem or IRQ resources. They
-+are the real meat of xmgmt and contains platform specific code to Shell and
-+User found on a MPF.
-+
-+A xleaf driver may not have real hardware resources when it merely acts as a
-+driver that manages certain in-memory states for xmgmt. These in-memory states
-+could be shared by multiple other leaves.
-+
-+Leaf drivers assigned to specific hardware resources drive specific subsystem in
-+the device. To manipulate the subsystem or carry out a task, a xleaf driver may
-+ask help from root via root calls and/or from other leaves via inter-leaf calls.
-+
-+A xleaf can also broadcast events through infrastructure code for other leaves
-+to process. It can also receive event notification from infrastructure about
-+certain events, such as post-creation or pre-exit of a particular xleaf.
-+
-+.. note::
-+   See code in ``lib/xleaf/*.c``
-+
-+
-+FPGA Manager Interaction
-+========================
-+
-+fpga_manager
-+------------
-+
-+An instance of fpga_manager is created by xmgmt_main and is used for xclbin
-+image download. fpga_manager requires the full xclbin image before it can
-+start programming the FPGA configuration engine via Internal Configuration
-+Access Port (ICAP) platform driver.
-+
-+fpga_region
-+-----------
-+
-+For every interface exposed by the currently loaded xclbin/xsabin in the
-+*parent* fpga_region a new instance of fpga_region is created like a *child*
-+fpga_region. The device tree of the *parent* fpga_region defines the
-+resources for a new instance of fpga_bridge which isolates the parent from
-+child fpga_region. This new instance of fpga_bridge will be used when a
-+xclbin image is loaded on the child fpga_region. After the xclbin image is
-+downloaded to the fpga_region, an instance of group is created for the
-+fpga_region using the device tree obtained as part of the xclbin. If this
-+device tree defines any child interfaces then it can trigger the creation of
-+fpga_bridge and fpga_region for the next region in the chain.
-+
-+fpga_bridge
-+-----------
-+
-+Like the fpga_region, matching fpga_bridge is also created by walking the
-+device tree of the parent group.
-+
-+Driver Interfaces
-+=================
-+
-+xmgmt Driver Ioctls
-+-------------------
-+
-+Ioctls exposed by xmgmt driver to user space are enumerated in the following
-+table:
-+
-+== ===================== ============================ ==========================
-+#  Functionality         ioctl request code            data format
-+== ===================== ============================ ==========================
-+1  FPGA image download   XMGMT_IOCICAPDOWNLOAD_AXLF    xmgmt_ioc_bitstream_axlf
-+== ===================== ============================ ==========================
-+
-+A user xclbin can be downloaded by using the xbmgmt tool from the XRT open source
-+suite. See example usage below::
-+
-+  xbmgmt partition --program --path /lib/firmware/xilinx/862c7020a250293e32036f19956669e5/test/verify.xclbin --force
-+
-+xmgmt Driver Sysfs
-+------------------
-+
-+xmgmt driver exposes a rich set of sysfs interfaces. Subsystem platform
-+drivers export sysfs node for every platform instance.
-+
-+Every partition also exports its UUIDs. See below for examples::
-+
-+  /sys/bus/pci/devices/0000:06:00.0/xmgmt_main.0/interface_uuids
-+  /sys/bus/pci/devices/0000:06:00.0/xmgmt_main.0/logic_uuids
-+
-+
-+hwmon
-+-----
-+
-+xmgmt driver exposes standard hwmon interface to report voltage, current,
-+temperature, power, etc. These can easily be viewed using *sensors* command
-+line utility.
-+
-+Alveo Platform Overview
-+=======================
-+
-+Alveo platforms are architected as two physical FPGA partitions: *Shell* and
-+*User*. The Shell provides basic infrastructure for the Alveo platform like
-+PCIe connectivity, board management, Dynamic Function Exchange (DFX), sensors,
-+clocking, reset, and security. User partition contains user compiled FPGA
-+binary which is loaded by a process called DFX also known as partial
-+reconfiguration.
-+
-+For DFX to work properly physical partitions require strict HW compatibility
-+with each other. Every physical partition has two interface UUIDs: *parent* UUID
-+and *child* UUID. For simple single stage platforms, Shell → User forms parent
-+child relationship.
-+
-+.. note::
-+   Partition compatibility matching is key design component of Alveo platforms
-+   and XRT. Partitions have child and parent relationship. A loaded partition
-+   exposes child partition UUID to advertise its compatibility requirement.When
-+   loading a child partition the xmgmt management driver matches parent UUID of
-+   the child partition against child UUID exported by the parent. Parent and
-+   child partition UUIDs are stored in the *xclbin* (for user) or *xsabin* (for
-+   shell). Except for root UUID exported by VSEC, hardware itself does not know
-+   about UUIDs. UUIDs are stored in xsabin and xclbin. The image format has a
-+   special node called Partition UUIDs which define the compatibility UUIDs. See
-+   :ref:`partition_uuids`.
-+
-+
-+The physical partitions and their loading is illustrated below::
-+
-+           SHELL                               USER
-+        +-----------+                  +-------------------+
-+        |           |                  |                   |
-+        | VSEC UUID | CHILD     PARENT |    LOGIC UUID     |
-+        |           o------->|<--------o                   |
-+        |           | UUID       UUID  |                   |
-+        +-----+-----+                  +--------+----------+
-+              |                                 |
-+              .                                 .
-+              |                                 |
-+          +---+---+                      +------+--------+
-+          |  POR  |                      | USER COMPILED |
-+          | FLASH |                      |    XCLBIN     |
-+          +-------+                      +---------------+
-+
-+
-+Loading Sequence
-+----------------
-+
-+The Shell partition is loaded from flash at system boot time. It establishes the
-+PCIe link and exposes two physical functions to the BIOS. After the OS boots, xmgmt
-+driver attaches to the PCIe physical function 0 exposed by the Shell and then looks
-+for VSEC in PCIe extended configuration space. Using VSEC it determines the logic
-+UUID of Shell and uses the UUID to load matching *xsabin* file from Linux firmware
-+directory. The xsabin file contains metadata to discover peripherals that are part
-+of Shell and firmware(s) for any embedded soft processors in Shell. The xsabin file
-+also contains Partition UUIDs as described here :ref:`partition_uuids`.
-+
-+The Shell exports a child interface UUID which is used for the compatibility check
-+when loading user compiled xclbin over the User partition as part of DFX. When a user
-+requests loading of a specific xclbin the xmgmt management driver reads the parent
-+interface UUID specified in the xclbin and matches it with child interface UUID
-+exported by Shell to determine if xclbin is compatible with the Shell. If match
-+fails loading of xclbin is denied.
-+
-+xclbin loading is requested using ICAP_DOWNLOAD_AXLF ioctl command. When loading
-+xclbin, xmgmt driver performs the following *logical* operations:
-+
-+1. Copy xclbin from user to kernel memory
-+2. Sanity check the xclbin contents
-+3. Isolate the User partition
-+4. Download the bitstream using the FPGA config engine (ICAP)
-+5. De-isolate the User partition
-+6. Program the clocks (ClockWiz) driving the User partition
-+7. Wait for memory controller (MIG) calibration
-+8. Return the loading status back to the caller
-+
-+`Platform Loading Overview <https://xilinx.github.io/XRT/master/html/platforms_partitions.html>`_
-+provides more detailed information on platform loading.
-+
-+
-+xsabin
-+------
-+
-+Each Alveo platform comes packaged with its own xsabin. The xsabin is a trusted
-+component of the platform. For format details refer to :ref:`xsabin_xclbin_container_format`
-+below. xsabin contains basic information like UUIDs, platform name and metadata in the
-+form of device tree. See :ref:`device_tree_usage` below for details and example.
-+
-+xclbin
-+------
-+
-+xclbin is compiled by end user using
-+`Vitis <https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html>`_
-+tool set from Xilinx. The xclbin contains sections describing user compiled
-+acceleration engines/kernels, memory subsystems, clocking information etc. It also
-+contains FPGA bitstream for the user partition, UUIDs, platform name, etc.
-+
-+
-+.. _xsabin_xclbin_container_format:
-+
-+xsabin/xclbin Container Format
-+------------------------------
-+
-+xclbin/xsabin is ELF-like binary container format. It is structured as series of
-+sections. There is a file header followed by several section headers which is
-+followed by sections. A section header points to an actual section. There is an
-+optional signature at the end. The format is defined by header file ``xclbin.h``.
-+The following figure illustrates a typical xclbin::
-+
-+
-+           +---------------------+
-+           |                     |
-+           |       HEADER        |
-+           +---------------------+
-+           |   SECTION  HEADER   |
-+           |                     |
-+           +---------------------+
-+           |         ...         |
-+           |                     |
-+           +---------------------+
-+           |   SECTION  HEADER   |
-+           |                     |
-+           +---------------------+
-+           |       SECTION       |
-+           |                     |
-+           +---------------------+
-+           |         ...         |
-+           |                     |
-+           +---------------------+
-+           |       SECTION       |
-+           |                     |
-+           +---------------------+
-+           |      SIGNATURE      |
-+           |      (OPTIONAL)     |
-+           +---------------------+
-+
-+
-+xclbin/xsabin files can be packaged, un-packaged and inspected using XRT utility
-+called **xclbinutil**. xclbinutil is part of XRT open source software stack. The
-+source code for xclbinutil can be found at
-+https://github.com/Xilinx/XRT/tree/master/src/runtime_src/tools/xclbinutil
-+
-+For example to enumerate the contents of a xclbin/xsabin use the *--info* switch
-+as shown below::
-+
-+
-+  xclbinutil --info --input /opt/xilinx/firmware/u50/gen3x16-xdma/blp/test/bandwidth.xclbin
-+  xclbinutil --info --input /lib/firmware/xilinx/862c7020a250293e32036f19956669e5/partition.xsabin
-+
-+
-+.. _device_tree_usage:
-+
-+Device Tree Usage
-+-----------------
-+
-+As mentioned previously xsabin stores metadata which advertise HW subsystems present
-+in a partition. The metadata is stored in device tree format with a well defined schema.
-+XRT management driver uses this information to bind *platform drivers* to the subsystem
-+instantiations. The platform drivers are found in **xrt-lib.ko** kernel module defined
-+later.
-+
-+Logic UUID
-+^^^^^^^^^^
-+A partition is identified uniquely through ``logic_uuid`` property::
-+
-+  /dts-v1/;
-+  / {
-+      logic_uuid = "0123456789abcdef0123456789abcdef";
-+      ...
-+    }
-+
-+Schema Version
-+^^^^^^^^^^^^^^
-+Schema version is defined through ``schema_version`` node. And it contains ``major``
-+and ``minor`` properties as below::
-+
-+  /dts-v1/;
-+  / {
-+       schema_version {
-+           major = <0x01>;
-+           minor = <0x00>;
-+       };
-+       ...
-+    }
-+
-+.. _partition_uuids:
-+
-+Partition UUIDs
-+^^^^^^^^^^^^^^^
-+As mentioned earlier, each partition may have parent and child UUIDs. These UUIDs are
-+defined by ``interfaces`` node and ``interface_uuid`` property::
-+
-+  /dts-v1/;
-+  / {
-+       interfaces {
-+           @0 {
-+                  interface_uuid = "0123456789abcdef0123456789abcdef";
-+           };
-+           @1 {
-+                  interface_uuid = "fedcba9876543210fedcba9876543210";
-+           };
-+           ...
-+        };
-+       ...
-+    }
-+
-+
-+Subsystem Instantiations
-+^^^^^^^^^^^^^^^^^^^^^^^^
-+Subsystem instantiations are captured as children of ``addressable_endpoints``
-+node::
-+
-+  /dts-v1/;
-+  / {
-+       addressable_endpoints {
-+           abc {
-+               ...
-+           };
-+           def {
-+               ...
-+           };
-+           ...
-+       }
-+  }
-+
-+Subnode 'abc' and 'def' are the name of subsystem nodes
-+
-+Subsystem Node
-+^^^^^^^^^^^^^^
-+Each subsystem node and its properties define a hardware instance::
-+
-+
-+  addressable_endpoints {
-+      abc {
-+          reg = <0xa 0xb>
-+          pcie_physical_function = <0x0>;
-+          pcie_bar_mapping = <0x2>;
-+          compatible = "abc def";
-+          firmware {
-+              firmware_product_name = "abc"
-+              firmware_branch_name = "def"
-+              firmware_version_major = <1>
-+              firmware_version_minor = <2>
-+          };
-+      }
-+      ...
-+  }
-+
-+:reg:
-+ Property defines address range. '<0xa 0xb>' is BAR offset and length pair, both
-+ are 64-bit integer.
-+:pcie_physical_function:
-+ Property specifies which PCIe physical function the subsystem node resides.
-+:pcie_bar_mapping:
-+ Property specifies which PCIe BAR the subsystem node resides. '<0x2>' is BAR
-+ index and it is 0 if this property is not defined.
-+:compatible:
-+ Property is a list of strings. The first string in the list specifies the exact
-+ subsystem node. The following strings represent other devices that the device
-+ is compatible with.
-+:firmware:
-+ Subnode defines the firmware required by this subsystem node.
-+
-+Alveo U50 Platform Example
-+^^^^^^^^^^^^^^^^^^^^^^^^^^
-+::
-+
-+  /dts-v1/;
-+
-+  /{
-+        logic_uuid = "f465b0a3ae8c64f619bc150384ace69b";
-+
-+        schema_version {
-+                major = <0x01>;
-+                minor = <0x00>;
-+        };
-+
-+        interfaces {
-+
-+                @0 {
-+                        interface_uuid = "862c7020a250293e32036f19956669e5";
-+                };
-+        };
-+
-+        addressable_endpoints {
-+
-+                ep_blp_rom_00 {
-+                        reg = <0x00 0x1f04000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
-+                };
-+
-+                ep_card_flash_program_00 {
-+                        reg = <0x00 0x1f06000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_quad_spi-1.0\0axi_quad_spi";
-+                        interrupts = <0x03 0x03>;
-+                };
-+
-+                ep_cmc_firmware_mem_00 {
-+                        reg = <0x00 0x1e20000 0x00 0x20000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
-+
-+                        firmware {
-+                                firmware_product_name = "cmc";
-+                                firmware_branch_name = "u50";
-+                                firmware_version_major = <0x01>;
-+                                firmware_version_minor = <0x00>;
-+                        };
-+                };
-+
-+                ep_cmc_intc_00 {
-+                        reg = <0x00 0x1e03000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_intc-1.0\0axi_intc";
-+                        interrupts = <0x04 0x04>;
-+                };
-+
-+                ep_cmc_mutex_00 {
-+                        reg = <0x00 0x1e02000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_cmc_regmap_00 {
-+                        reg = <0x00 0x1e08000 0x00 0x2000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
-+
-+                        firmware {
-+                                firmware_product_name = "sc-fw";
-+                                firmware_branch_name = "u50";
-+                                firmware_version_major = <0x05>;
-+                        };
-+                };
-+
-+                ep_cmc_reset_00 {
-+                        reg = <0x00 0x1e01000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_ddr_mem_calib_00 {
-+                        reg = <0x00 0x63000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_debug_bscan_mgmt_00 {
-+                        reg = <0x00 0x1e90000 0x00 0x10000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-debug_bridge-1.0\0debug_bridge";
-+                };
-+
-+                ep_ert_base_address_00 {
-+                        reg = <0x00 0x21000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_ert_command_queue_mgmt_00 {
-+                        reg = <0x00 0x40000 0x00 0x10000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-ert_command_queue-1.0\0ert_command_queue";
-+                };
-+
-+                ep_ert_command_queue_user_00 {
-+                        reg = <0x00 0x40000 0x00 0x10000>;
-+                        pcie_physical_function = <0x01>;
-+                        compatible = "xilinx.com,reg_abs-ert_command_queue-1.0\0ert_command_queue";
-+                };
-+
-+                ep_ert_firmware_mem_00 {
-+                        reg = <0x00 0x30000 0x00 0x8000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
-+
-+                        firmware {
-+                                firmware_product_name = "ert";
-+                                firmware_branch_name = "v20";
-+                                firmware_version_major = <0x01>;
-+                        };
-+                };
-+
-+                ep_ert_intc_00 {
-+                        reg = <0x00 0x23000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_intc-1.0\0axi_intc";
-+                        interrupts = <0x05 0x05>;
-+                };
-+
-+                ep_ert_reset_00 {
-+                        reg = <0x00 0x22000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_ert_sched_00 {
-+                        reg = <0x00 0x50000 0x00 0x1000>;
-+                        pcie_physical_function = <0x01>;
-+                        compatible = "xilinx.com,reg_abs-ert_sched-1.0\0ert_sched";
-+                        interrupts = <0x09 0x0c>;
-+                };
-+
-+                ep_fpga_configuration_00 {
-+                        reg = <0x00 0x1e88000 0x00 0x8000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_hwicap-1.0\0axi_hwicap";
-+                        interrupts = <0x02 0x02>;
-+                };
-+
-+                ep_icap_reset_00 {
-+                        reg = <0x00 0x1f07000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_msix_00 {
-+                        reg = <0x00 0x00 0x00 0x20000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-msix-1.0\0msix";
-+                        pcie_bar_mapping = <0x02>;
-+                };
-+
-+                ep_pcie_link_mon_00 {
-+                        reg = <0x00 0x1f05000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_pr_isolate_plp_00 {
-+                        reg = <0x00 0x1f01000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_pr_isolate_ulp_00 {
-+                        reg = <0x00 0x1000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_gpio-1.0\0axi_gpio";
-+                };
-+
-+                ep_uuid_rom_00 {
-+                        reg = <0x00 0x64000 0x00 0x1000>;
-+                        pcie_physical_function = <0x00>;
-+                        compatible = "xilinx.com,reg_abs-axi_bram_ctrl-1.0\0axi_bram_ctrl";
-+                };
-+
-+                ep_xdma_00 {
-+                        reg = <0x00 0x00 0x00 0x10000>;
-+                        pcie_physical_function = <0x01>;
-+                        compatible = "xilinx.com,reg_abs-xdma-1.0\0xdma";
-+                        pcie_bar_mapping = <0x02>;
-+                };
-+        };
-+
-+  }
-+
-+
-+
-+Deployment Models
-+=================
-+
-+Baremetal
-+---------
-+
-+In bare-metal deployments, both MPF and UPF are visible and accessible. xmgmt
-+driver binds to MPF. xmgmt driver operations are privileged and available to
-+system administrator. The full stack is illustrated below::
-+
-+                            HOST
-+
-+                 [XMGMT]            [XUSER]
-+                    |                  |
-+                    |                  |
-+                 +-----+            +-----+
-+                 | MPF |            | UPF |
-+                 |     |            |     |
-+                 | PF0 |            | PF1 |
-+                 +--+--+            +--+--+
-+          ......... ^................. ^..........
-+                    |                  |
-+                    |   PCIe DEVICE    |
-+                    |                  |
-+                 +--+------------------+--+
-+                 |         SHELL          |
-+                 |                        |
-+                 +------------------------+
-+                 |         USER           |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 +------------------------+
-+
-+
-+
-+Virtualized
-+-----------
-+
-+In virtualized deployments, privileged MPF is assigned to host but unprivileged
-+UPF is assigned to guest VM via PCIe pass-through. xmgmt driver in host binds
-+to MPF. xmgmt driver operations are privileged and only accessible to the MPF.
-+The full stack is illustrated below::
-+
-+
-+                                 .............
-+                  HOST           .    VM     .
-+                                 .           .
-+                 [XMGMT]         .  [XUSER]  .
-+                    |            .     |     .
-+                    |            .     |     .
-+                 +-----+         .  +-----+  .
-+                 | MPF |         .  | UPF |  .
-+                 |     |         .  |     |  .
-+                 | PF0 |         .  | PF1 |  .
-+                 +--+--+         .  +--+--+  .
-+          ......... ^................. ^..........
-+                    |                  |
-+                    |   PCIe DEVICE    |
-+                    |                  |
-+                 +--+------------------+--+
-+                 |         SHELL          |
-+                 |                        |
-+                 +------------------------+
-+                 |         USER           |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 +------------------------+
-+
-+
-+
-+
-+
-+Platform Security Considerations
-+================================
-+
-+`Security of Alveo Platform <https://xilinx.github.io/XRT/master/html/security.html>`_
-+discusses the deployment options and security implications in great detail.
++++ b/drivers/fpga/xrt/include/metadata.h
+@@ -0,0 +1,233 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Xilinx, Inc.
++ *
++ * Authors:
++ *      Lizhi Hou <Lizhi.Hou@xilinx.com>
++ */
++
++#ifndef _XRT_METADATA_H
++#define _XRT_METADATA_H
++
++#include <linux/device.h>
++#include <linux/vmalloc.h>
++#include <linux/uuid.h>
++
++#define XRT_MD_INVALID_LENGTH (~0UL)
++
++/* metadata properties */
++#define XRT_MD_PROP_BAR_IDX "pcie_bar_mapping"
++#define XRT_MD_PROP_COMPATIBLE "compatible"
++#define XRT_MD_PROP_HWICAP "axi_hwicap"
++#define XRT_MD_PROP_INTERFACE_UUID "interface_uuid"
++#define XRT_MD_PROP_INTERRUPTS "interrupts"
++#define XRT_MD_PROP_IO_OFFSET "reg"
++#define XRT_MD_PROP_LOGIC_UUID "logic_uuid"
++#define XRT_MD_PROP_PDI_CONFIG "pdi_config_mem"
++#define XRT_MD_PROP_PF_NUM "pcie_physical_function"
++#define XRT_MD_PROP_VERSION_MAJOR "firmware_version_major"
++
++/* non IP nodes */
++#define XRT_MD_NODE_ENDPOINTS "addressable_endpoints"
++#define XRT_MD_NODE_FIRMWARE "firmware"
++#define XRT_MD_NODE_INTERFACES "interfaces"
++#define XRT_MD_NODE_PARTITION_INFO "partition_info"
++
++/*
++ * IP nodes
++ * AF:  AXI Firewall
++ * CMC: Card Management Controller
++ * ERT: Embedded Runtime
++ * PLP: Provider Reconfigurable Partition
++ * ULP: User Reconfigurable Partition
++ */
++#define XRT_MD_NODE_ADDR_TRANSLATOR "ep_remap_data_c2h_00"
++#define XRT_MD_NODE_AF_BLP_CTRL_MGMT "ep_firewall_blp_ctrl_mgmt_00"
++#define XRT_MD_NODE_AF_BLP_CTRL_USER "ep_firewall_blp_ctrl_user_00"
++#define XRT_MD_NODE_AF_CTRL_DEBUG "ep_firewall_ctrl_debug_00"
++#define XRT_MD_NODE_AF_CTRL_MGMT "ep_firewall_ctrl_mgmt_00"
++#define XRT_MD_NODE_AF_CTRL_USER "ep_firewall_ctrl_user_00"
++#define XRT_MD_NODE_AF_DATA_C2H "ep_firewall_data_c2h_00"
++#define XRT_MD_NODE_AF_DATA_H2C "ep_firewall_data_h2c_00"
++#define XRT_MD_NODE_AF_DATA_M2M "ep_firewall_data_m2m_00"
++#define XRT_MD_NODE_AF_DATA_P2P "ep_firewall_data_p2p_00"
++#define XRT_MD_NODE_CLKFREQ_HBM "ep_freq_cnt_aclk_hbm_00"
++#define XRT_MD_NODE_CLKFREQ_K1 "ep_freq_cnt_aclk_kernel_00"
++#define XRT_MD_NODE_CLKFREQ_K2 "ep_freq_cnt_aclk_kernel_01"
++#define XRT_MD_NODE_CLK_KERNEL1 "ep_aclk_kernel_00"
++#define XRT_MD_NODE_CLK_KERNEL2 "ep_aclk_kernel_01"
++#define XRT_MD_NODE_CLK_KERNEL3 "ep_aclk_hbm_00"
++#define XRT_MD_NODE_CLK_SHUTDOWN "ep_aclk_shutdown_00"
++#define XRT_MD_NODE_CMC_FW_MEM "ep_cmc_firmware_mem_00"
++#define XRT_MD_NODE_CMC_MUTEX "ep_cmc_mutex_00"
++#define XRT_MD_NODE_CMC_REG "ep_cmc_regmap_00"
++#define XRT_MD_NODE_CMC_RESET "ep_cmc_reset_00"
++#define XRT_MD_NODE_DDR_CALIB "ep_ddr_mem_calib_00"
++#define XRT_MD_NODE_DDR4_RESET_GATE "ep_ddr_mem_srsr_gate_00"
++#define XRT_MD_NODE_ERT_BASE "ep_ert_base_address_00"
++#define XRT_MD_NODE_ERT_CQ_MGMT "ep_ert_command_queue_mgmt_00"
++#define XRT_MD_NODE_ERT_CQ_USER "ep_ert_command_queue_user_00"
++#define XRT_MD_NODE_ERT_FW_MEM "ep_ert_firmware_mem_00"
++#define XRT_MD_NODE_ERT_RESET "ep_ert_reset_00"
++#define XRT_MD_NODE_ERT_SCHED "ep_ert_sched_00"
++#define XRT_MD_NODE_FLASH "ep_card_flash_program_00"
++#define XRT_MD_NODE_FPGA_CONFIG "ep_fpga_configuration_00"
++#define XRT_MD_NODE_GAPPING "ep_gapping_demand_00"
++#define XRT_MD_NODE_GATE_PLP "ep_pr_isolate_plp_00"
++#define XRT_MD_NODE_GATE_ULP "ep_pr_isolate_ulp_00"
++#define XRT_MD_NODE_KDMA_CTRL "ep_kdma_ctrl_00"
++#define XRT_MD_NODE_MAILBOX_MGMT "ep_mailbox_mgmt_00"
++#define XRT_MD_NODE_MAILBOX_USER "ep_mailbox_user_00"
++#define XRT_MD_NODE_MAILBOX_XRT "ep_mailbox_user_to_ert_00"
++#define XRT_MD_NODE_MSIX "ep_msix_00"
++#define XRT_MD_NODE_P2P "ep_p2p_00"
++#define XRT_MD_NODE_PCIE_MON "ep_pcie_link_mon_00"
++#define XRT_MD_NODE_PMC_INTR   "ep_pmc_intr_00"
++#define XRT_MD_NODE_PMC_MUX    "ep_pmc_mux_00"
++#define XRT_MD_NODE_QDMA "ep_qdma_00"
++#define XRT_MD_NODE_QDMA4 "ep_qdma4_00"
++#define XRT_MD_NODE_REMAP_P2P "ep_remap_p2p_00"
++#define XRT_MD_NODE_STM "ep_stream_traffic_manager_00"
++#define XRT_MD_NODE_STM4 "ep_stream_traffic_manager4_00"
++#define XRT_MD_NODE_SYSMON "ep_cmp_sysmon_00"
++#define XRT_MD_NODE_XDMA "ep_xdma_00"
++#define XRT_MD_NODE_XVC_PUB "ep_debug_bscan_user_00"
++#define XRT_MD_NODE_XVC_PRI "ep_debug_bscan_mgmt_00"
++#define XRT_MD_NODE_UCS_CONTROL_STATUS "ep_ucs_control_status_00"
++
++/* endpoint regmaps */
++#define XRT_MD_REGMAP_DDR_SRSR "drv_ddr_srsr"
++#define XRT_MD_REGMAP_CLKFREQ "freq_cnt"
++
++/* driver defined endpoints */
++#define XRT_MD_NODE_BLP_ROM "drv_ep_blp_rom_00"
++#define XRT_MD_NODE_DDR_SRSR "drv_ep_ddr_srsr"
++#define XRT_MD_NODE_FLASH_VSEC "drv_ep_card_flash_program_00"
++#define XRT_MD_NODE_GOLDEN_VER "drv_ep_golden_ver_00"
++#define XRT_MD_NODE_MAILBOX_VSEC "drv_ep_mailbox_vsec_00"
++#define XRT_MD_NODE_MGMT_MAIN "drv_ep_mgmt_main_00"
++#define XRT_MD_NODE_PLAT_INFO "drv_ep_platform_info_mgmt_00"
++#define XRT_MD_NODE_PARTITION_INFO_BLP "partition_info_0"
++#define XRT_MD_NODE_PARTITION_INFO_PLP "partition_info_1"
++#define XRT_MD_NODE_TEST "drv_ep_test_00"
++#define XRT_MD_NODE_VSEC "drv_ep_vsec_00"
++#define XRT_MD_NODE_VSEC_GOLDEN "drv_ep_vsec_golden_00"
++
++/* driver defined properties */
++#define XRT_MD_PROP_OFFSET "drv_offset"
++#define XRT_MD_PROP_CLK_FREQ "drv_clock_frequency"
++#define XRT_MD_PROP_CLK_CNT "drv_clock_frequency_counter"
++#define XRT_MD_PROP_VBNV "vbnv"
++#define XRT_MD_PROP_VROM "vrom"
++#define XRT_MD_PROP_PARTITION_LEVEL "partition_level"
++
++struct xrt_md_endpoint {
++	const char	*ep_name;
++	u32		bar;
++	u64		bar_off;
++	ulong		size;
++	char		*regmap;
++	char		*regmap_ver;
++};
++
++/* Note: res_id is defined by leaf driver and must start with 0. */
++struct xrt_iores_map {
++	char		*res_name;
++	int		res_id;
++};
++
++static inline int xrt_md_res_name2id(const struct xrt_iores_map *res_map,
++				     int entry_num, const char *res_name)
++{
++	int i;
++
++	for (i = 0; i < entry_num; i++) {
++		if (!strncmp(res_name, res_map->res_name, strlen(res_map->res_name) + 1))
++			return res_map->res_id;
++		res_map++;
++	}
++	return -1;
++}
++
++static inline const char *
++xrt_md_res_id2name(const struct xrt_iores_map *res_map, int entry_num, int id)
++{
++	int i;
++
++	for (i = 0; i < entry_num; i++) {
++		if (res_map->res_id == id)
++			return res_map->res_name;
++		res_map++;
++	}
++	return NULL;
++}
++
++unsigned long xrt_md_size(struct device *dev, const char *blob);
++int xrt_md_create(struct device *dev, char **blob);
++char *xrt_md_dup(struct device *dev, const char *blob);
++int xrt_md_add_endpoint(struct device *dev, char *blob,
++			struct xrt_md_endpoint *ep);
++int xrt_md_del_endpoint(struct device *dev, char *blob, const char *ep_name,
++			const char *regmap_name);
++int xrt_md_get_prop(struct device *dev, const char *blob, const char *ep_name,
++		    const char *regmap_name, const char *prop,
++		    const void **val, int *size);
++int xrt_md_set_prop(struct device *dev, char *blob, const char *ep_name,
++		    const char *regmap_name, const char *prop,
++		    const void *val, int size);
++int xrt_md_copy_endpoint(struct device *dev, char *blob, const char *src_blob,
++			 const char *ep_name, const char *regmap_name,
++			 const char *new_ep_name);
++int xrt_md_get_next_endpoint(struct device *dev, const char *blob,
++			     const char *ep_name,  const char *regmap_name,
++			     char **next_ep, char **next_regmap);
++int xrt_md_get_compatible_endpoint(struct device *dev, const char *blob,
++				   const char *regmap_name, const char **ep_name);
++int xrt_md_find_endpoint(struct device *dev, const char *blob,
++			 const char *ep_name, const char *regmap_name,
++			 const char **epname);
++int xrt_md_pack(struct device *dev, char *blob);
++int xrt_md_get_interface_uuids(struct device *dev, const char *blob,
++			       u32 num_uuids, uuid_t *intf_uuids);
++
++/*
++ * The firmware provides a 128 bit hash string as a unique id to the
++ * partition/interface.
++ * Existing hw does not yet use the cononical form, so it is necessary to
++ * use a translation function.
++ */
++static inline void xrt_md_trans_uuid2str(const uuid_t *uuid, char *uuidstr)
++{
++	int i, p;
++	u8 tmp[UUID_SIZE];
++
++	BUILD_BUG_ON(UUID_SIZE != 16);
++	export_uuid(tmp, uuid);
++	for (p = 0, i = UUID_SIZE - 1; i >= 0; p++, i--)
++		snprintf(&uuidstr[p * 2], 3, "%02x", tmp[i]);
++}
++
++static inline int xrt_md_trans_str2uuid(struct device *dev, const char *uuidstr, uuid_t *p_uuid)
++{
++	u8 p[UUID_SIZE];
++	const char *str;
++	char tmp[3] = { 0 };
++	int i, ret;
++
++	BUILD_BUG_ON(UUID_SIZE != 16);
++	str = uuidstr + strlen(uuidstr) - 2;
++
++	for (i = 0; i < sizeof(*p_uuid) && str >= uuidstr; i++) {
++		tmp[0] = *str;
++		tmp[1] = *(str + 1);
++		ret = kstrtou8(tmp, 16, &p[i]);
++		if (ret)
++			return -EINVAL;
++		str -= 2;
++	}
++	import_uuid(p_uuid, p);
++
++	return 0;
++}
++
++#endif
+diff --git a/drivers/fpga/xrt/metadata/metadata.c b/drivers/fpga/xrt/metadata/metadata.c
+new file mode 100644
+index 000000000000..3b2be50fcb02
+--- /dev/null
++++ b/drivers/fpga/xrt/metadata/metadata.c
+@@ -0,0 +1,545 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Xilinx Alveo FPGA Metadata parse APIs
++ *
++ * Copyright (C) 2020-2021 Xilinx, Inc.
++ *
++ * Authors:
++ *      Lizhi Hou <Lizhi.Hou@xilinx.com>
++ */
++
++#include <linux/libfdt_env.h>
++#include "libfdt.h"
++#include "metadata.h"
++
++#define MAX_BLOB_SIZE	(4096 * 25)
++#define MAX_DEPTH 5
++
++static int xrt_md_setprop(struct device *dev, char *blob, int offset,
++			  const char *prop, const void *val, int size)
++{
++	int ret;
++
++	ret = fdt_setprop(blob, offset, prop, val, size);
++	if (ret)
++		dev_err(dev, "failed to set prop %d", ret);
++
++	return ret;
++}
++
++static int xrt_md_add_node(struct device *dev, char *blob, int parent_offset,
++			   const char *ep_name)
++{
++	int ret;
++
++	ret = fdt_add_subnode(blob, parent_offset, ep_name);
++	if (ret < 0 && ret != -FDT_ERR_EXISTS)
++		dev_err(dev, "failed to add node %s. %d", ep_name, ret);
++
++	return ret;
++}
++
++static int xrt_md_get_endpoint(struct device *dev, const char *blob,
++			       const char *ep_name, const char *regmap_name,
++			       int *ep_offset)
++{
++	const char *name;
++	int offset;
++
++	for (offset = fdt_next_node(blob, -1, NULL);
++	    offset >= 0;
++	    offset = fdt_next_node(blob, offset, NULL)) {
++		name = fdt_get_name(blob, offset, NULL);
++		if (!name || strncmp(name, ep_name, strlen(ep_name) + 1))
++			continue;
++		if (!regmap_name ||
++		    !fdt_node_check_compatible(blob, offset, regmap_name))
++			break;
++	}
++	if (offset < 0)
++		return -ENODEV;
++
++	*ep_offset = offset;
++
++	return 0;
++}
++
++static inline int xrt_md_get_node(struct device *dev, const char *blob,
++				  const char *name, const char *regmap_name,
++				  int *offset)
++{
++	int ret = 0;
++
++	if (name) {
++		ret = xrt_md_get_endpoint(dev, blob, name, regmap_name,
++					  offset);
++		if (ret) {
++			dev_err(dev, "cannot get node %s, regmap %s, ret = %d",
++				name, regmap_name, ret);
++			return -EINVAL;
++		}
++	} else {
++		ret = fdt_next_node(blob, -1, NULL);
++		if (ret < 0) {
++			dev_err(dev, "internal error, ret = %d", ret);
++			return -EINVAL;
++		}
++		*offset = ret;
++	}
++
++	return 0;
++}
++
++static int xrt_md_overlay(struct device *dev, char *blob, int target,
++			  const char *overlay_blob, int overlay_offset,
++			  int depth)
++{
++	int	property, subnode;
++	int	ret;
++
++	if (!blob || !overlay_blob) {
++		dev_err(dev, "blob is NULL");
++		return -EINVAL;
++	}
++
++	if (depth > MAX_DEPTH) {
++		dev_err(dev, "meta data depth beyond %d", MAX_DEPTH);
++		return -EINVAL;
++	}
++
++	if (target < 0) {
++		target = fdt_next_node(blob, -1, NULL);
++		if (target < 0) {
++			dev_err(dev, "invalid target");
++			return -EINVAL;
++		}
++	}
++	if (overlay_offset < 0) {
++		overlay_offset = fdt_next_node(overlay_blob, -1, NULL);
++		if (overlay_offset < 0) {
++			dev_err(dev, "invalid overlay");
++			return -EINVAL;
++		}
++	}
++
++	fdt_for_each_property_offset(property, overlay_blob, overlay_offset) {
++		const char *name;
++		const void *prop;
++		int prop_len;
++
++		prop = fdt_getprop_by_offset(overlay_blob, property, &name,
++					     &prop_len);
++		if (!prop || prop_len >= MAX_BLOB_SIZE || prop_len < 0) {
++			dev_err(dev, "internal error");
++			return -EINVAL;
++		}
++
++		ret = xrt_md_setprop(dev, blob, target, name, prop,
++				     prop_len);
++		if (ret) {
++			dev_err(dev, "setprop failed, ret = %d", ret);
++			return ret;
++		}
++	}
++
++	fdt_for_each_subnode(subnode, overlay_blob, overlay_offset) {
++		const char *name = fdt_get_name(overlay_blob, subnode, NULL);
++		int nnode;
++
++		nnode = xrt_md_add_node(dev, blob, target, name);
++		if (nnode == -FDT_ERR_EXISTS)
++			nnode = fdt_subnode_offset(blob, target, name);
++		if (nnode < 0) {
++			dev_err(dev, "add node failed, ret = %d", nnode);
++			return nnode;
++		}
++
++		ret = xrt_md_overlay(dev, blob, nnode, overlay_blob, subnode, depth + 1);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++unsigned long xrt_md_size(struct device *dev, const char *blob)
++{
++	unsigned long len = (long)fdt_totalsize(blob);
++
++	if (len > MAX_BLOB_SIZE)
++		return XRT_MD_INVALID_LENGTH;
++
++	return len;
++}
++EXPORT_SYMBOL_GPL(xrt_md_size);
++
++int xrt_md_create(struct device *dev, char **blob)
++{
++	int ret = 0;
++
++	if (!blob) {
++		dev_err(dev, "blob is NULL");
++		return -EINVAL;
++	}
++
++	*blob = vzalloc(MAX_BLOB_SIZE);
++	if (!*blob)
++		return -ENOMEM;
++
++	ret = fdt_create_empty_tree(*blob, MAX_BLOB_SIZE);
++	if (ret) {
++		dev_err(dev, "format blob failed, ret = %d", ret);
++		goto failed;
++	}
++
++	ret = fdt_next_node(*blob, -1, NULL);
++	if (ret < 0) {
++		dev_err(dev, "No Node, ret = %d", ret);
++		goto failed;
++	}
++
++	ret = fdt_add_subnode(*blob, 0, XRT_MD_NODE_ENDPOINTS);
++	if (ret < 0) {
++		dev_err(dev, "add node failed, ret = %d", ret);
++		goto failed;
++	}
++
++	return 0;
++
++failed:
++	vfree(*blob);
++	*blob = NULL;
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(xrt_md_create);
++
++char *xrt_md_dup(struct device *dev, const char *blob)
++{
++	char *dup_blob;
++	int ret;
++
++	ret = xrt_md_create(dev, &dup_blob);
++	if (ret)
++		return NULL;
++	ret = xrt_md_overlay(dev, dup_blob, -1, blob, -1, 0);
++	if (ret) {
++		vfree(dup_blob);
++		return NULL;
++	}
++
++	return dup_blob;
++}
++EXPORT_SYMBOL_GPL(xrt_md_dup);
++
++int xrt_md_del_endpoint(struct device *dev, char *blob, const char *ep_name,
++			const char *regmap_name)
++{
++	int ep_offset;
++	int ret;
++
++	ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name, &ep_offset);
++	if (ret) {
++		dev_err(dev, "can not find ep %s", ep_name);
++		return -EINVAL;
++	}
++
++	ret = fdt_del_node(blob, ep_offset);
++	if (ret)
++		dev_err(dev, "delete node %s failed, ret %d", ep_name, ret);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(xrt_md_del_endpoint);
++
++static int __xrt_md_add_endpoint(struct device *dev, char *blob,
++				 struct xrt_md_endpoint *ep, int *offset,
++				 const char *parent)
++{
++	int parent_offset = 0;
++	u32 val, count = 0;
++	int ep_offset = 0;
++	u64 io_range[2];
++	char comp[128];
++	int ret = 0;
++
++	if (!ep->ep_name) {
++		dev_err(dev, "empty name");
++		return -EINVAL;
++	}
++
++	if (parent) {
++		ret = xrt_md_get_endpoint(dev, blob, parent, NULL, &parent_offset);
++		if (ret) {
++			dev_err(dev, "invalid blob, ret = %d", ret);
++			return -EINVAL;
++		}
++	}
++
++	ep_offset = xrt_md_add_node(dev, blob, parent_offset, ep->ep_name);
++	if (ep_offset < 0) {
++		dev_err(dev, "add endpoint failed, ret = %d", ret);
++		return -EINVAL;
++	}
++	if (offset)
++		*offset = ep_offset;
++
++	if (ep->size != 0) {
++		val = cpu_to_be32(ep->bar);
++		ret = xrt_md_setprop(dev, blob, ep_offset, XRT_MD_PROP_BAR_IDX,
++				     &val, sizeof(u32));
++		if (ret) {
++			dev_err(dev, "set %s failed, ret %d",
++				XRT_MD_PROP_BAR_IDX, ret);
++			goto failed;
++		}
++		io_range[0] = cpu_to_be64((u64)ep->bar_off);
++		io_range[1] = cpu_to_be64((u64)ep->size);
++		ret = xrt_md_setprop(dev, blob, ep_offset, XRT_MD_PROP_IO_OFFSET,
++				     io_range, sizeof(io_range));
++		if (ret) {
++			dev_err(dev, "set %s failed, ret %d",
++				XRT_MD_PROP_IO_OFFSET, ret);
++			goto failed;
++		}
++	}
++
++	if (ep->regmap) {
++		if (ep->regmap_ver) {
++			count = snprintf(comp, sizeof(comp) - 1,
++					 "%s-%s", ep->regmap, ep->regmap_ver);
++			count++;
++		}
++		if (count > sizeof(comp)) {
++			ret = -EINVAL;
++			goto failed;
++		}
++
++		count += snprintf(comp + count, sizeof(comp) - count - 1,
++				  "%s", ep->regmap);
++		count++;
++		if (count > sizeof(comp)) {
++			ret = -EINVAL;
++			goto failed;
++		}
++
++		ret = xrt_md_setprop(dev, blob, ep_offset, XRT_MD_PROP_COMPATIBLE,
++				     comp, count);
++		if (ret) {
++			dev_err(dev, "set %s failed, ret %d",
++				XRT_MD_PROP_COMPATIBLE, ret);
++			goto failed;
++		}
++	}
++
++failed:
++	if (ret)
++		xrt_md_del_endpoint(dev, blob, ep->ep_name, NULL);
++
++	return ret;
++}
++
++int xrt_md_add_endpoint(struct device *dev, char *blob,
++			struct xrt_md_endpoint *ep)
++{
++	return __xrt_md_add_endpoint(dev, blob, ep, NULL, XRT_MD_NODE_ENDPOINTS);
++}
++EXPORT_SYMBOL_GPL(xrt_md_add_endpoint);
++
++int xrt_md_find_endpoint(struct device *dev, const char *blob,
++			 const char *ep_name, const char *regmap_name,
++			 const char **epname)
++{
++	int offset;
++	int ret;
++
++	ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name,
++				  &offset);
++	if (!ret && epname)
++		*epname = fdt_get_name(blob, offset, NULL);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(xrt_md_find_endpoint);
++
++int xrt_md_get_prop(struct device *dev, const char *blob, const char *ep_name,
++		    const char *regmap_name, const char *prop,
++		    const void **val, int *size)
++{
++	int offset;
++	int ret;
++
++	if (!val) {
++		dev_err(dev, "val is null");
++		return -EINVAL;
++	}
++
++	*val = NULL;
++	ret = xrt_md_get_node(dev, blob, ep_name, regmap_name, &offset);
++	if (ret)
++		return ret;
++
++	*val = fdt_getprop(blob, offset, prop, size);
++	if (!*val) {
++		dev_dbg(dev, "get ep %s, prop %s failed", ep_name, prop);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xrt_md_get_prop);
++
++int xrt_md_set_prop(struct device *dev, char *blob,
++		    const char *ep_name, const char *regmap_name,
++		    const char *prop, const void *val, int size)
++{
++	int offset;
++	int ret;
++
++	ret = xrt_md_get_node(dev, blob, ep_name, regmap_name, &offset);
++	if (ret)
++		return ret;
++
++	ret = xrt_md_setprop(dev, blob, offset, prop, val, size);
++	if (ret)
++		dev_err(dev, "set prop %s failed, ret = %d", prop, ret);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(xrt_md_set_prop);
++
++int xrt_md_copy_endpoint(struct device *dev, char *blob, const char *src_blob,
++			 const char *ep_name, const char *regmap_name,
++			 const char *new_ep_name)
++{
++	const char *newepnm = new_ep_name ? new_ep_name : ep_name;
++	struct xrt_md_endpoint ep = {0};
++	int offset, target;
++	const char *parent;
++	int ret;
++
++	ret = xrt_md_get_endpoint(dev, src_blob, ep_name, regmap_name,
++				  &offset);
++	if (ret)
++		return -EINVAL;
++
++	ret = xrt_md_get_endpoint(dev, blob, newepnm, regmap_name, &target);
++	if (ret) {
++		ep.ep_name = newepnm;
++		parent = fdt_parent_offset(src_blob, offset) == 0 ? NULL : XRT_MD_NODE_ENDPOINTS;
++		ret = __xrt_md_add_endpoint(dev, blob, &ep, &target, parent);
++		if (ret)
++			return -EINVAL;
++	}
++
++	ret = xrt_md_overlay(dev, blob, target, src_blob, offset, 0);
++	if (ret)
++		dev_err(dev, "overlay failed, ret = %d", ret);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(xrt_md_copy_endpoint);
++
++int xrt_md_get_next_endpoint(struct device *dev, const char *blob,
++			     const char *ep_name, const char *regmap_name,
++			     char **next_ep, char **next_regmap)
++{
++	int offset, ret;
++
++	*next_ep = NULL;
++	*next_regmap = NULL;
++	if (!ep_name) {
++		ret = xrt_md_get_endpoint(dev, blob, XRT_MD_NODE_ENDPOINTS, NULL,
++					  &offset);
++	} else {
++		ret = xrt_md_get_endpoint(dev, blob, ep_name, regmap_name,
++					  &offset);
++	}
++
++	if (ret)
++		return -EINVAL;
++
++	offset = ep_name ? fdt_next_subnode(blob, offset) :
++		fdt_first_subnode(blob, offset);
++	if (offset < 0)
++		return -EINVAL;
++
++	*next_ep = (char *)fdt_get_name(blob, offset, NULL);
++	*next_regmap = (char *)fdt_stringlist_get(blob, offset, XRT_MD_PROP_COMPATIBLE,
++						  0, NULL);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xrt_md_get_next_endpoint);
++
++int xrt_md_get_compatible_endpoint(struct device *dev, const char *blob,
++				   const char *regmap_name, const char **ep_name)
++{
++	int ep_offset;
++
++	ep_offset = fdt_node_offset_by_compatible(blob, -1, regmap_name);
++	if (ep_offset < 0) {
++		*ep_name = NULL;
++		return -ENOENT;
++	}
++
++	*ep_name = fdt_get_name(blob, ep_offset, NULL);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xrt_md_get_compatible_endpoint);
++
++int xrt_md_pack(struct device *dev, char *blob)
++{
++	int ret;
++
++	ret = fdt_pack(blob);
++	if (ret)
++		dev_err(dev, "pack failed %d", ret);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(xrt_md_pack);
++
++int xrt_md_get_interface_uuids(struct device *dev, const char *blob,
++			       u32 num_uuids, uuid_t *interface_uuids)
++{
++	int offset, count = 0;
++	const char *uuid_str;
++	int ret;
++
++	ret = xrt_md_get_endpoint(dev, blob, XRT_MD_NODE_INTERFACES, NULL, &offset);
++	if (ret)
++		return -ENOENT;
++
++	for (offset = fdt_first_subnode(blob, offset);
++	    offset >= 0;
++	    offset = fdt_next_subnode(blob, offset), count++) {
++		uuid_str = fdt_getprop(blob, offset, XRT_MD_PROP_INTERFACE_UUID,
++				       NULL);
++		if (!uuid_str) {
++			dev_err(dev, "empty interface uuid node");
++			return -EINVAL;
++		}
++
++		if (!num_uuids)
++			continue;
++
++		if (count == num_uuids) {
++			dev_err(dev, "too many interface uuid in blob");
++			return -EINVAL;
++		}
++
++		if (interface_uuids && count < num_uuids) {
++			ret = xrt_md_trans_str2uuid(dev, uuid_str,
++						    &interface_uuids[count]);
++			if (ret)
++				return -EINVAL;
++		}
++	}
++	if (!count)
++		count = -ENOENT;
++
++	return count;
++}
++EXPORT_SYMBOL_GPL(xrt_md_get_interface_uuids);
 -- 
 2.27.0
 
