@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5953B34711D
-	for <lists+linux-fpga@lfdr.de>; Wed, 24 Mar 2021 06:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F23E7347126
+	for <lists+linux-fpga@lfdr.de>; Wed, 24 Mar 2021 06:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235397AbhCXFgg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 24 Mar 2021 01:36:36 -0400
-Received: from mail-dm6nam08on2072.outbound.protection.outlook.com ([40.107.102.72]:26209
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        id S235340AbhCXFhG (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 24 Mar 2021 01:37:06 -0400
+Received: from mail-mw2nam12on2077.outbound.protection.outlook.com ([40.107.244.77]:58373
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235254AbhCXFgY (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 24 Mar 2021 01:36:24 -0400
+        id S235333AbhCXFgq (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 24 Mar 2021 01:36:46 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Te0PavZOOL4pr0u1a8eQ9Ht4EaI/yFWCKmvpuX/9x9/qCImKF3nxKI9H/J1lUtQddor1rdcET1uT73TJEKz4ICPA/VO02KCsuV6OBn0Z6jqpBydNvrKvSw7eXvfG6SKdQvbwLgfiQQ42u/hl5QftTJmqmy0mXvEGHKkqIjHHTAoxla1Fkxmr26EYSj6cC7mhZVtTmmc3WzaDK+RFEbpGKU/BB6tx12Q/dGY0nLHNAJ8ee2gicLHS03TyZEWzvwiuctckMGmfoOSWrXFuKmmHsjzVieuT7vjlPMnqqOisaFBdjNdWxb7telM6vslcMAXTF/VEktBWgcyT0SFbEzKcug==
+ b=eQ9OEast/OLLwY26+oK0ahtnoL8reQx+FQwQNFpDuX27hiRu9CFEBw7RJg6W+ZmRgMdomWSY/6A0RGUPJKa3F9+DMpUPHcVIVGdJetAw1GGzwWn2bF9yY0pUDaUVtohZ+zjHzV7krOR0TSVFmgwLq/bpixSDAvW1eL1nf63R31XxdDWC2pQZex34APVPrUfsP17g0+omHrua76YyyYE3oAHhhIyErzdOxkCzcvXQOlgQq79ZKo232f2AOXNC6+mHpP0OopMOmprp+bu/WhQeLLy/9rna/roqezyMb5gYjmwg1aGbyZbodPwMS0WRTjnkj04GeshXVNj1X3wla8glbQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v8WP/KkCLZxwVQkpfFcRZGd05Bh18d86s5fws/sL8o8=;
- b=F+oYRhmZtFCTTD9CUKR7lTx6sCV3ZcBY/C1tA2t8S4gyCUyY4EVcdtngt6Kmk9wmxbfULkt97Yie4IWHy0JSjYbEUFKkD+4XiH4EOxrrERUIKUOLLP1BgIc56LPzjJjG1Cxi8PVKnQ5RiOWes/Xc3Bw20V/3b/tid7wvqWf9CxoR1ihd+QW5XcpMu3fECwP1HbSXKgCJNYnwcBHJ+5+TdZZ4K6AQM0521GxvDGSi6zoFmsAv3QSWhEW7z0ujoYH5ZixZcU7tTkGHKUjPOB5LFYJplfSb0ECNiAUqGiJCJJAiB0xCPU1CLah28Ta0xLRE5H44EoJfp0wrTJQ9D80U5Q==
+ bh=FgnY9B0r73HcZ2CrK9u/ksYWo0wPjWRHZMjnJ/YvmCc=;
+ b=feDGU9DGKynv5uC5mR1rdc3K6mmxiWzEKvVrh8CjAyugUA6JpKUCuRzBABqoBd+RZezzodgI/EZpjSxst5naYCSdQR395vPTzyusAS903inL13H+tslQT+b3ERfKYCe2ZSCQs3k7JnhumQpPRpJgj/xkagHZdfpmD+TrO+ySrHeUG50ukFUaWyl3Y34tag17FgcbkLL6fhUjeOGN6R3E8TMOV6s+ZBDeqWpwNLGBhz8W8Z3SkO/bmMetDy1KzAZMQWoDlLddq8duGSUIao2R2u9xLk408eeZLwOgNcIXrYBImhIW5wvGcpF+ByeB/In2XWC/kHnpAd/iR4u4jo/ghA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,46 +26,47 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v8WP/KkCLZxwVQkpfFcRZGd05Bh18d86s5fws/sL8o8=;
- b=IptPHZHBVoMgM7dik8Ycr6gHVz2dIHzeK2udl1y3UJXK0zNreQp5z5wVOC8t7Q7Pn9rkl9pHQztM2uSearw9s4ifBpSC57H9iIsXjrvlTJns1BFIfvd1t6vrDZsh9p0QBERNZnNF82imCR3dzbNQAWYSEmWxM/GQs5f0PRtL1mg=
-Received: from DM5PR08CA0027.namprd08.prod.outlook.com (2603:10b6:4:60::16) by
- DM6PR02MB4457.namprd02.prod.outlook.com (2603:10b6:5:1f::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3955.23; Wed, 24 Mar 2021 05:36:22 +0000
-Received: from DM3NAM02FT061.eop-nam02.prod.protection.outlook.com
- (2603:10b6:4:60:cafe::cb) by DM5PR08CA0027.outlook.office365.com
- (2603:10b6:4:60::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.25 via Frontend
- Transport; Wed, 24 Mar 2021 05:36:22 +0000
+ bh=FgnY9B0r73HcZ2CrK9u/ksYWo0wPjWRHZMjnJ/YvmCc=;
+ b=aYVOUzQ4lhZL91StFAtD8Axdt5eOaKATaqA0Se9DxIfuoDoj+jhdLp0as475ZH2+DlBaAf/nuY/aEe+D784CWmd6024vMBOZIBYuC81QNN9R+YOM9lZ/0FA7ezga2wAEkD8Sw48sPtETr2tYHus5GsELHTUrZCKEja91DB3BmxY=
+Received: from SN7PR04CA0212.namprd04.prod.outlook.com (2603:10b6:806:127::7)
+ by DM6PR02MB5801.namprd02.prod.outlook.com (2603:10b6:5:17c::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.23; Wed, 24 Mar
+ 2021 05:36:43 +0000
+Received: from SN1NAM02FT046.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:127:cafe::1a) by SN7PR04CA0212.outlook.office365.com
+ (2603:10b6:806:127::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.24 via Frontend
+ Transport; Wed, 24 Mar 2021 05:36:43 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT061.mail.protection.outlook.com (10.13.4.230) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT046.mail.protection.outlook.com (10.152.72.191) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3955.24 via Frontend Transport; Wed, 24 Mar 2021 05:36:22 +0000
+ 15.20.3977.25 via Frontend Transport; Wed, 24 Mar 2021 05:36:43 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 23 Mar 2021 22:36:11 -0700
+ 15.1.2106.2; Tue, 23 Mar 2021 22:36:23 -0700
 Received: from smtp.xilinx.com (172.19.127.95) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2106.2 via Frontend Transport; Tue, 23 Mar 2021 22:36:11 -0700
+ 15.1.2106.2 via Frontend Transport; Tue, 23 Mar 2021 22:36:23 -0700
 Envelope-to: mdf@kernel.org,
  robh@kernel.org,
  trix@redhat.com,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.212] (port=51058 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.212] (port=51060 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <lizhi.hou@xilinx.com>)
-        id 1lOwBe-0006Gj-Vn; Tue, 23 Mar 2021 22:36:11 -0700
+        id 1lOwBr-0006HP-1B; Tue, 23 Mar 2021 22:36:23 -0700
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id 38E63600131; Tue, 23 Mar 2021 22:29:57 -0700 (PDT)
+        id 4D9C0600133; Tue, 23 Mar 2021 22:29:57 -0700 (PDT)
 From:   Lizhi Hou <lizhi.hou@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
@@ -73,9 +74,9 @@ CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
         <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
         <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
         <robh@kernel.org>, Max Zhen <max.zhen@xilinx.com>
-Subject: [PATCH V4 XRT Alveo 19/20] fpga: xrt: partition isolation platform driver
-Date:   Tue, 23 Mar 2021 22:29:46 -0700
-Message-ID: <20210324052947.27889-20-lizhi.hou@xilinx.com>
+Subject: [PATCH V4 XRT Alveo 20/20] fpga: xrt: Kconfig and Makefile updates for XRT drivers
+Date:   Tue, 23 Mar 2021 22:29:47 -0700
+Message-ID: <20210324052947.27889-21-lizhi.hou@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210324052947.27889-1-lizhi.hou@xilinx.com>
 References: <20210324052947.27889-1-lizhi.hou@xilinx.com>
@@ -84,420 +85,271 @@ Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8b40adce-244b-4789-e78a-08d8ee86c228
-X-MS-TrafficTypeDiagnostic: DM6PR02MB4457:
-X-Microsoft-Antispam-PRVS: <DM6PR02MB44578CD81D405B4CABF14AB8A1639@DM6PR02MB4457.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:245;
+X-MS-Office365-Filtering-Correlation-Id: a3a26724-e1a7-4ea6-f583-08d8ee86ce8b
+X-MS-TrafficTypeDiagnostic: DM6PR02MB5801:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB58012737FC8DF69D088DE778A1639@DM6PR02MB5801.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NAygoAGrJ9t1tEXhWNq9ui/RxDHAN+bclttgZTaRnVBQdHX2MyzdSjwsErZB1YSuRzFGCnTnd7eboNisghH77dUcmsZzUMETzfZ56GfvSjD0ULwTjxvDzQK8qrR8EssI/D29myQf4k2Zv8ge+5h3fLiYwSamleKUruWrh/oIqAkLnzlXoVPOs/B477FotrWgE+oAn1XywygGgb0+KvNt+Fy6nZGFw7hQOB35wxi7CiRY26heBJc/94ZgNiB09m+iyTLMZcpZ1cXEdO+/Xdzyr/UvUS5EUlciHfYs/s/5En+fMyR3ttwoOXoURwmIYlSQ5aV4zDsFVrR25Xt8AUoZO0QL+dlf9DWmOvPyrcr2g9qCrERXRYHNomSesGbD3cxGaIF3LF9aSMDclEXbi+QxCbyHSV3m/gKYvdIyonqtflIrjE0n7MmbXzu6qsjzYlvdOV2IBCpNft30afuiFdqcMUxwb1VzmvwW2UF3dYXLBfuDIbXKOuJZixsE80hnJjPk9dNFj/mRWF49rmu3aOrkwsVEwWpma63Y7DJUeDb+1+gSnOf8y1wis8XZVkHfvtbA6w6y+6Dcmi7C8ZdD1OuZXbz3imlYPVlbhpyYY8m3UhDvx9RJcttn8Mhzc9I47kEZ++vbw4Tq5VP8YcgB/OaOjJLySyC9gvZekg0ic7meS7Q=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(346002)(136003)(39860400002)(376002)(36840700001)(46966006)(6266002)(6666004)(44832011)(478600001)(36906005)(8936002)(1076003)(2616005)(36860700001)(8676002)(107886003)(2906002)(426003)(6916009)(5660300002)(54906003)(336012)(70206006)(47076005)(82310400003)(316002)(36756003)(42186006)(186003)(83380400001)(26005)(356005)(82740400003)(4326008)(7636003)(70586007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: V4uvT96kKhiUQQR6QYV/PcqhnfX2xRSTSLRGkOp/0DZ2CP13FrmEc6IGghc9FzpU+x3B+xpO+2dik3ECAjhz9cdS/CrHnFy8RzB7Xi94Aq264El914N3P8RNdSuj/6YlZpygLXcPhkncDtCx00cH/NUaDBAirbG6OqyZajKyfW7+D68VtMGuhwZXAo4Rmoxk64cU+tasBaPXfJ1oQTqU0s7Wj++C+jZ0q9AMbqyEn8EzaO50rgqQr/By3YUm86/Qy24hvJDHMC+Bhj4HXC8+PWlItTVb6cPnJpfkWYDEjretYp/rnH5xouxPUupvV50SnU0GRYKRdJj1LE7c13g3G47Hpvjscr4vgyMs8W1L6cR7XMNA2UweeqISw1hiknVh1M5O+bj6duCtHvV2enET4YfFD2NkfyZ8AJFJ+/nwXOTQpi6yVQdnpgXvHmaMd03pIxvHOYtu77YJxQdiOXZDiFzXKH4l0DWaiWEy6KCPIWR0aFw8rfh5FMcqjEgHMmvSDgBntiEgKmulNqsYKRNacYupMOPMijhEV798sdNot9AYB2+BS5wHaZq42n7f5AG4ostPUcosKKqIYrQyztOtvAGlTZ/y/kf5Ya7sFgTNizqzXz2Mcfr5EWBmjpf45aJpBxhWYFc4blX6ilUvtkEBIda5U7GvLfuy3pYWaCZjKzTG3LNUvKoaVOD8ub18xI818iQwcc0viFYJJ1rr3ZrPzKQNPB776tU7WtAMH5YMaRU=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(39860400002)(396003)(346002)(376002)(46966006)(36840700001)(426003)(6916009)(36860700001)(7636003)(6266002)(356005)(5660300002)(47076005)(2906002)(8676002)(2616005)(966005)(15650500001)(82310400003)(1076003)(186003)(6666004)(82740400003)(26005)(70586007)(36756003)(42186006)(478600001)(8936002)(36906005)(336012)(70206006)(54906003)(83380400001)(4326008)(316002)(44832011)(107886003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2021 05:36:22.2524
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2021 05:36:43.0432
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b40adce-244b-4789-e78a-08d8ee86c228
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3a26724-e1a7-4ea6-f583-08d8ee86ce8b
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT061.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT046.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4457
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5801
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add partition isolation platform driver. partition isolation is
-a hardware function discovered by walking firmware metadata.
-A platform device node will be created for it. Partition isolation
-function isolate the different fpga regions
+Update fpga Kconfig/Makefile and add Kconfig/Makefile for new drivers.
 
 Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 ---
- drivers/fpga/xrt/include/xleaf/axigate.h |  23 ++
- drivers/fpga/xrt/lib/xleaf/axigate.c     | 342 +++++++++++++++++++++++
- 2 files changed, 365 insertions(+)
- create mode 100644 drivers/fpga/xrt/include/xleaf/axigate.h
- create mode 100644 drivers/fpga/xrt/lib/xleaf/axigate.c
+ MAINTAINERS                        | 11 +++++++++++
+ drivers/Makefile                   |  1 +
+ drivers/fpga/Kconfig               |  2 ++
+ drivers/fpga/Makefile              |  5 +++++
+ drivers/fpga/xrt/Kconfig           |  8 ++++++++
+ drivers/fpga/xrt/lib/Kconfig       | 17 +++++++++++++++++
+ drivers/fpga/xrt/lib/Makefile      | 30 ++++++++++++++++++++++++++++++
+ drivers/fpga/xrt/metadata/Kconfig  | 12 ++++++++++++
+ drivers/fpga/xrt/metadata/Makefile | 16 ++++++++++++++++
+ drivers/fpga/xrt/mgmt/Kconfig      | 15 +++++++++++++++
+ drivers/fpga/xrt/mgmt/Makefile     | 19 +++++++++++++++++++
+ 11 files changed, 136 insertions(+)
+ create mode 100644 drivers/fpga/xrt/Kconfig
+ create mode 100644 drivers/fpga/xrt/lib/Kconfig
+ create mode 100644 drivers/fpga/xrt/lib/Makefile
+ create mode 100644 drivers/fpga/xrt/metadata/Kconfig
+ create mode 100644 drivers/fpga/xrt/metadata/Makefile
+ create mode 100644 drivers/fpga/xrt/mgmt/Kconfig
+ create mode 100644 drivers/fpga/xrt/mgmt/Makefile
 
-diff --git a/drivers/fpga/xrt/include/xleaf/axigate.h b/drivers/fpga/xrt/include/xleaf/axigate.h
+diff --git a/MAINTAINERS b/MAINTAINERS
+index aa84121c5611..44ccc52987ac 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7009,6 +7009,17 @@ F:	Documentation/fpga/
+ F:	drivers/fpga/
+ F:	include/linux/fpga/
+ 
++FPGA XRT DRIVERS
++M:	Lizhi Hou <lizhi.hou@xilinx.com>
++R:	Max Zhen <max.zhen@xilinx.com>
++R:	Sonal Santan <sonal.santan@xilinx.com>
++L:	linux-fpga@vger.kernel.org
++S:	Maintained
++W:	https://github.com/Xilinx/XRT
++F:	Documentation/fpga/xrt.rst
++F:	drivers/fpga/xrt/
++F:	include/uapi/linux/xrt/
++
+ FPU EMULATOR
+ M:	Bill Metzenthen <billm@melbpc.org.au>
+ S:	Maintained
+diff --git a/drivers/Makefile b/drivers/Makefile
+index 6fba7daba591..dbb3b727fc7a 100644
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -179,6 +179,7 @@ obj-$(CONFIG_STM)		+= hwtracing/stm/
+ obj-$(CONFIG_ANDROID)		+= android/
+ obj-$(CONFIG_NVMEM)		+= nvmem/
+ obj-$(CONFIG_FPGA)		+= fpga/
++obj-$(CONFIG_FPGA_XRT_METADATA) += fpga/
+ obj-$(CONFIG_FSI)		+= fsi/
+ obj-$(CONFIG_TEE)		+= tee/
+ obj-$(CONFIG_MULTIPLEXER)	+= mux/
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 5ff9438b7b46..01410ff000b9 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -227,4 +227,6 @@ config FPGA_MGR_ZYNQMP_FPGA
+ 	  to configure the programmable logic(PL) through PS
+ 	  on ZynqMP SoC.
+ 
++source "drivers/fpga/xrt/Kconfig"
++
+ endif # FPGA
+diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+index 18dc9885883a..4b887bf95cb3 100644
+--- a/drivers/fpga/Makefile
++++ b/drivers/fpga/Makefile
+@@ -48,3 +48,8 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+ 
+ # Drivers for FPGAs which implement DFL
+ obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
++
++# XRT drivers for Alveo
++obj-$(CONFIG_FPGA_XRT_METADATA)		+= xrt/metadata/
++obj-$(CONFIG_FPGA_XRT_LIB)		+= xrt/lib/
++obj-$(CONFIG_FPGA_XRT_XMGMT)		+= xrt/mgmt/
+diff --git a/drivers/fpga/xrt/Kconfig b/drivers/fpga/xrt/Kconfig
 new file mode 100644
-index 000000000000..58f32c76dca1
+index 000000000000..0e2c59589ddd
 --- /dev/null
-+++ b/drivers/fpga/xrt/include/xleaf/axigate.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Xilinx, Inc.
-+ *
-+ * Authors:
-+ *	Lizhi Hou <Lizhi.Hou@xilinx.com>
-+ */
++++ b/drivers/fpga/xrt/Kconfig
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Xilinx Alveo FPGA device configuration
++#
 +
-+#ifndef _XRT_AXIGATE_H_
-+#define _XRT_AXIGATE_H_
-+
-+#include "xleaf.h"
-+#include "metadata.h"
-+
-+/*
-+ * AXIGATE driver leaf calls.
-+ */
-+enum xrt_axigate_leaf_cmd {
-+	XRT_AXIGATE_CLOSE = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-+	XRT_AXIGATE_OPEN,
-+};
-+
-+#endif	/* _XRT_AXIGATE_H_ */
-diff --git a/drivers/fpga/xrt/lib/xleaf/axigate.c b/drivers/fpga/xrt/lib/xleaf/axigate.c
++source "drivers/fpga/xrt/metadata/Kconfig"
++source "drivers/fpga/xrt/lib/Kconfig"
++source "drivers/fpga/xrt/mgmt/Kconfig"
+diff --git a/drivers/fpga/xrt/lib/Kconfig b/drivers/fpga/xrt/lib/Kconfig
 new file mode 100644
-index 000000000000..231bb0335278
+index 000000000000..935369fad570
 --- /dev/null
-+++ b/drivers/fpga/xrt/lib/xleaf/axigate.c
-@@ -0,0 +1,342 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Xilinx Alveo FPGA AXI Gate Driver
-+ *
-+ * Copyright (C) 2020-2021 Xilinx, Inc.
-+ *
-+ * Authors:
-+ *      Lizhi Hou<Lizhi.Hou@xilinx.com>
-+ */
++++ b/drivers/fpga/xrt/lib/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# XRT Alveo FPGA device configuration
++#
 +
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/regmap.h>
-+#include <linux/io.h>
-+#include "metadata.h"
-+#include "xleaf.h"
-+#include "xleaf/axigate.h"
++config FPGA_XRT_LIB
++	tristate "XRT Alveo Driver Library"
++	depends on HWMON && PCI && HAS_IOMEM
++	select FPGA_XRT_METADATA
++	select REGMAP_MMIO
++	help
++	  Select this option to enable Xilinx XRT Alveo driver library. This
++	  library is core infrastructure of XRT Alveo FPGA drivers which
++	  provides functions for working with device nodes, iteration and
++	  lookup of platform devices, common interfaces for platform devices,
++	  plumbing of function call and ioctls between platform devices and
++	  parent partitions.
+diff --git a/drivers/fpga/xrt/lib/Makefile b/drivers/fpga/xrt/lib/Makefile
+new file mode 100644
+index 000000000000..58563416efbf
+--- /dev/null
++++ b/drivers/fpga/xrt/lib/Makefile
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (C) 2020-2021 Xilinx, Inc. All rights reserved.
++#
++# Authors: Sonal.Santan@xilinx.com
++#
 +
-+#define XRT_AXIGATE "xrt_axigate"
++FULL_XRT_PATH=$(srctree)/$(src)/..
++FULL_DTC_PATH=$(srctree)/scripts/dtc/libfdt
 +
-+#define XRT_AXIGATE_WRITE_REG		0
-+#define XRT_AXIGATE_READ_REG		8
++obj-$(CONFIG_FPGA_XRT_LIB) += xrt-lib.o
 +
-+#define XRT_AXIGATE_CTRL_CLOSE		0
-+#define XRT_AXIGATE_CTRL_OPEN_BIT0	1
-+#define XRT_AXIGATE_CTRL_OPEN_BIT1	2
++xrt-lib-objs :=			\
++	lib-drv.o		\
++	xroot.o			\
++	xclbin.o		\
++	subdev.o		\
++	cdev.o			\
++	group.o			\
++	xleaf/vsec.o		\
++	xleaf/axigate.o		\
++	xleaf/devctl.o		\
++	xleaf/icap.o		\
++	xleaf/clock.o		\
++	xleaf/clkfreq.o		\
++	xleaf/ucs.o		\
++	xleaf/ddr_calibration.o
 +
-+#define XRT_AXIGATE_INTERVAL		500 /* ns */
++ccflags-y := -I$(FULL_XRT_PATH)/include	 \
++	-I$(FULL_DTC_PATH)
+diff --git a/drivers/fpga/xrt/metadata/Kconfig b/drivers/fpga/xrt/metadata/Kconfig
+new file mode 100644
+index 000000000000..129adda47e94
+--- /dev/null
++++ b/drivers/fpga/xrt/metadata/Kconfig
+@@ -0,0 +1,12 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# XRT Alveo FPGA device configuration
++#
 +
-+struct xrt_axigate {
-+	struct platform_device	*pdev;
-+	struct regmap		*regmap;
-+	struct mutex		gate_lock; /* gate dev lock */
++config FPGA_XRT_METADATA
++	bool "XRT Alveo Driver Metadata Parser"
++	select LIBFDT
++	help
++	  This option provides helper functions to parse Xilinx Alveo FPGA
++	  firmware metadata. The metadata is in device tree format and the
++	  XRT driver uses it to discover the HW subsystems behind PCIe BAR.
+diff --git a/drivers/fpga/xrt/metadata/Makefile b/drivers/fpga/xrt/metadata/Makefile
+new file mode 100644
+index 000000000000..14f65ef1595c
+--- /dev/null
++++ b/drivers/fpga/xrt/metadata/Makefile
+@@ -0,0 +1,16 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (C) 2020-2021 Xilinx, Inc. All rights reserved.
++#
++# Authors: Sonal.Santan@xilinx.com
++#
 +
-+	void			*evt_hdl;
-+	const char		*ep_name;
++FULL_XRT_PATH=$(srctree)/$(src)/..
++FULL_DTC_PATH=$(srctree)/scripts/dtc/libfdt
 +
-+	bool			gate_closed;
-+};
++obj-$(CONFIG_FPGA_XRT_METADATA) += xrt-md.o
 +
-+static const struct regmap_config axigate_regmap_config = {
-+	.reg_bits = 32,
-+	.val_bits = 32,
-+	.reg_stride = 4,
-+	.max_register = 0x1000,
-+};
++xrt-md-objs := metadata.o
 +
-+/* the ep names are in the order of hardware layers */
-+static const char * const xrt_axigate_epnames[] = {
-+	XRT_MD_NODE_GATE_PLP, /* PLP: Provider Logic Partition */
-+	XRT_MD_NODE_GATE_ULP  /* ULP: User Logic Partition */
-+};
++ccflags-y := -I$(FULL_XRT_PATH)/include	\
++	-I$(FULL_DTC_PATH)
+diff --git a/drivers/fpga/xrt/mgmt/Kconfig b/drivers/fpga/xrt/mgmt/Kconfig
+new file mode 100644
+index 000000000000..31e9e19fffb8
+--- /dev/null
++++ b/drivers/fpga/xrt/mgmt/Kconfig
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Xilinx XRT FPGA device configuration
++#
 +
-+static inline int close_gate(struct xrt_axigate *gate)
-+{
-+	u32 val;
-+	int ret;
++config FPGA_XRT_XMGMT
++	tristate "Xilinx Alveo Management Driver"
++	depends on FPGA_XRT_LIB
++	select FPGA_XRT_METADATA
++	select FPGA_BRIDGE
++	select FPGA_REGION
++	help
++	  Select this option to enable XRT PCIe driver for Xilinx Alveo FPGA.
++	  This driver provides interfaces for userspace application to access
++	  Alveo FPGA device.
+diff --git a/drivers/fpga/xrt/mgmt/Makefile b/drivers/fpga/xrt/mgmt/Makefile
+new file mode 100644
+index 000000000000..acabd811f3fd
+--- /dev/null
++++ b/drivers/fpga/xrt/mgmt/Makefile
+@@ -0,0 +1,19 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (C) 2020-2021 Xilinx, Inc. All rights reserved.
++#
++# Authors: Sonal.Santan@xilinx.com
++#
 +
-+	ret = regmap_write(gate->regmap, XRT_AXIGATE_WRITE_REG, XRT_AXIGATE_CTRL_CLOSE);
-+	if (ret) {
-+		xrt_err(gate->pdev, "write gate failed %d", ret);
-+		return ret;
-+	}
-+	ndelay(XRT_AXIGATE_INTERVAL);
-+	/*
-+	 * Legacy hardware requires extra read work properly.
-+	 * This is not on critical path, thus the extra read should not impact performance much.
-+	 */
-+	ret = regmap_read(gate->regmap, XRT_AXIGATE_READ_REG, &val);
-+	if (ret) {
-+		xrt_err(gate->pdev, "read gate failed %d", ret);
-+		return ret;
-+	}
++FULL_XRT_PATH=$(srctree)/$(src)/..
++FULL_DTC_PATH=$(srctree)/scripts/dtc/libfdt
 +
-+	return 0;
-+}
++obj-$(CONFIG_FPGA_XRT_XMGMT)	+= xrt-mgmt.o
 +
-+static inline int open_gate(struct xrt_axigate *gate)
-+{
-+	u32 val;
-+	int ret;
++xrt-mgmt-objs := root.o		\
++	   main.o		\
++	   fmgr-drv.o		\
++	   main-region.o
 +
-+	ret = regmap_write(gate->regmap, XRT_AXIGATE_WRITE_REG, XRT_AXIGATE_CTRL_OPEN_BIT1);
-+	if (ret) {
-+		xrt_err(gate->pdev, "write 2 failed %d", ret);
-+		return ret;
-+	}
-+	ndelay(XRT_AXIGATE_INTERVAL);
-+	/*
-+	 * Legacy hardware requires extra read work properly.
-+	 * This is not on critical path, thus the extra read should not impact performance much.
-+	 */
-+	ret = regmap_read(gate->regmap, XRT_AXIGATE_READ_REG, &val);
-+	if (ret) {
-+		xrt_err(gate->pdev, "read 2 failed %d", ret);
-+		return ret;
-+	}
-+	ret = regmap_write(gate->regmap, XRT_AXIGATE_WRITE_REG,
-+			   XRT_AXIGATE_CTRL_OPEN_BIT0 | XRT_AXIGATE_CTRL_OPEN_BIT1);
-+	if (ret) {
-+		xrt_err(gate->pdev, "write 3 failed %d", ret);
-+		return ret;
-+	}
-+	ndelay(XRT_AXIGATE_INTERVAL);
-+	ret = regmap_read(gate->regmap, XRT_AXIGATE_READ_REG, &val);
-+	if (ret) {
-+		xrt_err(gate->pdev, "read 3 failed %d", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int xrt_axigate_epname_idx(struct platform_device *pdev)
-+{
-+	struct resource	*res;
-+	int ret, i;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res) {
-+		xrt_err(pdev, "Empty Resource!");
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(xrt_axigate_epnames); i++) {
-+		ret = strncmp(xrt_axigate_epnames[i], res->name,
-+			      strlen(xrt_axigate_epnames[i]) + 1);
-+		if (!ret)
-+			return i;
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int xrt_axigate_close(struct platform_device *pdev)
-+{
-+	struct xrt_axigate *gate;
-+	u32 status = 0;
-+	int ret;
-+
-+	gate = platform_get_drvdata(pdev);
-+
-+	mutex_lock(&gate->gate_lock);
-+	ret = regmap_read(gate->regmap, XRT_AXIGATE_READ_REG, &status);
-+	if (ret) {
-+		xrt_err(pdev, "read gate failed %d", ret);
-+		goto failed;
-+	}
-+	if (status) {		/* gate is opened */
-+		xleaf_broadcast_event(pdev, XRT_EVENT_PRE_GATE_CLOSE, false);
-+		ret = close_gate(gate);
-+		if (ret)
-+			goto failed;
-+	}
-+
-+	gate->gate_closed = true;
-+
-+failed:
-+	mutex_unlock(&gate->gate_lock);
-+
-+	xrt_info(pdev, "close gate %s", gate->ep_name);
-+	return ret;
-+}
-+
-+static int xrt_axigate_open(struct platform_device *pdev)
-+{
-+	struct xrt_axigate *gate;
-+	u32 status;
-+	int ret;
-+
-+	gate = platform_get_drvdata(pdev);
-+
-+	mutex_lock(&gate->gate_lock);
-+	ret = regmap_read(gate->regmap, XRT_AXIGATE_READ_REG, &status);
-+	if (ret) {
-+		xrt_err(pdev, "read gate failed %d", ret);
-+		goto failed;
-+	}
-+	if (!status) {		/* gate is closed */
-+		ret = open_gate(gate);
-+		if (ret)
-+			goto failed;
-+		xleaf_broadcast_event(pdev, XRT_EVENT_POST_GATE_OPEN, true);
-+		/* xrt_axigate_open() could be called in event cb, thus
-+		 * we can not wait for the completes
-+		 */
-+	}
-+
-+	gate->gate_closed = false;
-+
-+failed:
-+	mutex_unlock(&gate->gate_lock);
-+
-+	xrt_info(pdev, "open gate %s", gate->ep_name);
-+	return ret;
-+}
-+
-+static void xrt_axigate_event_cb(struct platform_device *pdev, void *arg)
-+{
-+	struct xrt_axigate *gate = platform_get_drvdata(pdev);
-+	struct xrt_event *evt = (struct xrt_event *)arg;
-+	enum xrt_events e = evt->xe_evt;
-+	struct platform_device *leaf;
-+	enum xrt_subdev_id id;
-+	struct resource	*res;
-+	int instance;
-+
-+	if (e != XRT_EVENT_POST_CREATION)
-+		return;
-+
-+	instance = evt->xe_subdev.xevt_subdev_instance;
-+	id = evt->xe_subdev.xevt_subdev_id;
-+	if (id != XRT_SUBDEV_AXIGATE)
-+		return;
-+
-+	leaf = xleaf_get_leaf_by_id(pdev, id, instance);
-+	if (!leaf)
-+		return;
-+
-+	res = platform_get_resource(leaf, IORESOURCE_MEM, 0);
-+	if (!res || !strncmp(res->name, gate->ep_name, strlen(res->name) + 1)) {
-+		xleaf_put_leaf(pdev, leaf);
-+		return;
-+	}
-+
-+	/* higher level axigate instance created, make sure the gate is opened. */
-+	if (xrt_axigate_epname_idx(leaf) > xrt_axigate_epname_idx(pdev))
-+		xrt_axigate_open(pdev);
-+	else
-+		xleaf_call(leaf, XRT_AXIGATE_OPEN, NULL);
-+
-+	xleaf_put_leaf(pdev, leaf);
-+}
-+
-+static int
-+xrt_axigate_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
-+{
-+	int ret = 0;
-+
-+	switch (cmd) {
-+	case XRT_XLEAF_EVENT:
-+		xrt_axigate_event_cb(pdev, arg);
-+		break;
-+	case XRT_AXIGATE_CLOSE:
-+		ret = xrt_axigate_close(pdev);
-+		break;
-+	case XRT_AXIGATE_OPEN:
-+		ret = xrt_axigate_open(pdev);
-+		break;
-+	default:
-+		xrt_err(pdev, "unsupported cmd %d", cmd);
-+		return -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int xrt_axigate_probe(struct platform_device *pdev)
-+{
-+	struct xrt_axigate *gate = NULL;
-+	void __iomem *base = NULL;
-+	struct resource *res;
-+	int ret;
-+
-+	gate = devm_kzalloc(&pdev->dev, sizeof(*gate), GFP_KERNEL);
-+	if (!gate)
-+		return -ENOMEM;
-+
-+	gate->pdev = pdev;
-+	platform_set_drvdata(pdev, gate);
-+
-+	xrt_info(pdev, "probing...");
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res) {
-+		xrt_err(pdev, "Empty resource 0");
-+		ret = -EINVAL;
-+		goto failed;
-+	}
-+
-+	base = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(base)) {
-+		xrt_err(pdev, "map base iomem failed");
-+		ret = PTR_ERR(base);
-+		goto failed;
-+	}
-+
-+	gate->regmap = devm_regmap_init_mmio(&pdev->dev, base, &axigate_regmap_config);
-+	if (IS_ERR(gate->regmap)) {
-+		xrt_err(pdev, "regmap %pR failed", res);
-+		ret = PTR_ERR(gate->regmap);
-+		goto failed;
-+	}
-+	gate->ep_name = res->name;
-+
-+	mutex_init(&gate->gate_lock);
-+
-+	return 0;
-+
-+failed:
-+	return ret;
-+}
-+
-+static struct xrt_subdev_endpoints xrt_axigate_endpoints[] = {
-+	{
-+		.xse_names = (struct xrt_subdev_ep_names[]) {
-+			{ .ep_name = XRT_MD_NODE_GATE_ULP },
-+			{ NULL },
-+		},
-+		.xse_min_ep = 1,
-+	},
-+	{
-+		.xse_names = (struct xrt_subdev_ep_names[]) {
-+			{ .ep_name = XRT_MD_NODE_GATE_PLP },
-+			{ NULL },
-+		},
-+		.xse_min_ep = 1,
-+	},
-+	{ 0 },
-+};
-+
-+static struct xrt_subdev_drvdata xrt_axigate_data = {
-+	.xsd_dev_ops = {
-+		.xsd_leaf_call = xrt_axigate_leaf_call,
-+	},
-+};
-+
-+static const struct platform_device_id xrt_axigate_table[] = {
-+	{ XRT_AXIGATE, (kernel_ulong_t)&xrt_axigate_data },
-+	{ },
-+};
-+
-+static struct platform_driver xrt_axigate_driver = {
-+	.driver = {
-+		.name = XRT_AXIGATE,
-+	},
-+	.probe = xrt_axigate_probe,
-+	.id_table = xrt_axigate_table,
-+};
-+
-+XRT_LEAF_INIT_FINI_FUNC(XRT_SUBDEV_AXIGATE, axigate);
++ccflags-y := -I$(FULL_XRT_PATH)/include		\
++	-I$(FULL_DTC_PATH)
 -- 
 2.27.0
 
