@@ -2,70 +2,71 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0A0355CBD
-	for <lists+linux-fpga@lfdr.de>; Tue,  6 Apr 2021 22:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25E6355CEC
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 Apr 2021 22:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234697AbhDFUMG (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Apr 2021 16:12:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29861 "EHLO
+        id S238487AbhDFUcj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Apr 2021 16:32:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59492 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232685AbhDFUMG (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Apr 2021 16:12:06 -0400
+        by vger.kernel.org with ESMTP id S241558AbhDFUci (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Apr 2021 16:32:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617739917;
+        s=mimecast20190719; t=1617741149;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dDMbym+gcIHauWd8PLihhn251HnUOmYiBGfNa+GBcCs=;
-        b=WiVOMlm24VhUgovxX2640Liv7ziJRFGTrBjWSDcVrxYOpXQEup1/bj9vqdsxWQAEpDDThK
-        JJu6gZKx8/5UHpVJunFbFrqnCcPkEe9NeXIH31RtKJ+9jJfAnbfRsiw8PNvNzeVejoPfbP
-        KG8NdyheHIBc4SwUUa7NKbXCPjdL/jo=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-187-pcdvJ4kjOU6qHu-SRTyAkQ-1; Tue, 06 Apr 2021 16:11:56 -0400
-X-MC-Unique: pcdvJ4kjOU6qHu-SRTyAkQ-1
-Received: by mail-qv1-f69.google.com with SMTP id n3so11229177qvr.8
-        for <linux-fpga@vger.kernel.org>; Tue, 06 Apr 2021 13:11:56 -0700 (PDT)
+        bh=y5AiEX2xm7mUi1RVcdN7OMtElv1auQNpFMNuLEK6CfA=;
+        b=I5mSnGChzUCe10MR3MEW4EaYUalGWPiQzH0vzoN51A8i1sXiOcpj02Gtry5xvMWhtGQPsR
+        dbad3GK5kExfR0vAUvBND9HUrbfJmzZLrA8O9WNhRSlOhzt3C5NsBUQIiK2AaXXy/Tc6ym
+        tzZLg9cpD9QWGTSo9uecN+bmcEAW3a0=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-201-F5ASJ5YPOdaTOLnXS9LHOw-1; Tue, 06 Apr 2021 16:32:10 -0400
+X-MC-Unique: F5ASJ5YPOdaTOLnXS9LHOw-1
+Received: by mail-qv1-f72.google.com with SMTP id p2so11215883qvi.6
+        for <linux-fpga@vger.kernel.org>; Tue, 06 Apr 2021 13:32:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=dDMbym+gcIHauWd8PLihhn251HnUOmYiBGfNa+GBcCs=;
-        b=FXejrRtKCITxlbGAHo04qZ31dKONdcnpblAgmL+hot22rO4pOIdPvm4BYn4tzmBXTS
-         uRTCxLaA2ZUAdaRBeNlwmeGXbCF3GAgNF7C1IFXhBdHW8SUPCihaJAwWD+eHllNuj9GW
-         3es3KjJElcLhKRdEz7AvHH8HlsH4682DI0tXePhAwmT+YO8PakL/JVyBnrWpyiWzNMHk
-         W7LASZ4RFGCZLJUba6UTyO+hBTruBED/SzpZuMSlrsnfQO6p9XU+y/4eJn1l9aUkUvGs
-         PDirXjycNocASWG+rotTttdbiv0GNAA0oFCdBfjvoaQiAlRWvdntVd0YYV/eHF1mzuyE
-         pbrg==
-X-Gm-Message-State: AOAM533XLAuWfXNmBup4skojPrSaiZznDQ/6JKtWchAsFM3tA6DSDbdP
-        hrVkNZ/rMuXTLcaJwRjY2MscoKjzJKEHUD4B8Y/Gbp5BvMEANrSZ65XG3oDbx40/K3L3M7cXqfa
-        dk0d/agkNKSE/z8hZWTwQyQ==
-X-Received: by 2002:ac8:4508:: with SMTP id q8mr28199963qtn.48.1617739915063;
-        Tue, 06 Apr 2021 13:11:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzEQJFL7g48DsPnyyjZK17NAdnzI59zs6YK97/yx6GfuuC01W8umdifU3DJmXIu0kDNL12ULQ==
-X-Received: by 2002:ac8:4508:: with SMTP id q8mr28199946qtn.48.1617739914713;
-        Tue, 06 Apr 2021 13:11:54 -0700 (PDT)
+        bh=y5AiEX2xm7mUi1RVcdN7OMtElv1auQNpFMNuLEK6CfA=;
+        b=EkACcCTfdSbCi94p9pzYlDAa3UvM556oNEiMjzGrShL5A7mdfIWslStw9iBbG0sM6T
+         hH2i9tiTt8Lt6qJlbm4cxearYInr5PAVFxOw6HBZRMfuX7Q14bVQPnjiDR/GLgJttyEL
+         TIyd64zz3WWqkZH7WiBjTM/OPgasYPXBVOwWnM8b4z2MMxSN5KYMz7itPd8Qj3klq4rr
+         PsGgvKhHuvMUBL2g9tr2lfWnegyLriy9iGLC9xUvUhKwYmqkxEVDYcQk2N6MGUpZ537g
+         lRFmY29qMaHqXvFE39b40GkBfgdwcPTtsT0EyBl4GXvyjcsbGGyvD+1Qi1FSZ1f5ItPi
+         41Qg==
+X-Gm-Message-State: AOAM533ZU+LXyuzAOJegLdR0rOMiWNdVq/THLIUTpdmzWsSmD7l/WntL
+        tH1WQU9UowkQN1KI6Uv92ojPLESMLoQ2pxjSwQ12O2kTEz3rYfZ15oCw2PugA6PQPWN5tj5sKtA
+        +FwQGzigxLJy5OrwO5oleqA==
+X-Received: by 2002:ac8:4f4b:: with SMTP id i11mr28830324qtw.284.1617741129567;
+        Tue, 06 Apr 2021 13:32:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx7sLqUq5cANZ1kwhajOaTsNAUz4EiDlSnyYp1An3TL4fwvTZK2F1iywiIsZZ48SG5iW9ozcg==
+X-Received: by 2002:ac8:4f4b:: with SMTP id i11mr28830309qtw.284.1617741129293;
+        Tue, 06 Apr 2021 13:32:09 -0700 (PDT)
 Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id v66sm16903014qkd.113.2021.04.06.13.11.50
+        by smtp.gmail.com with ESMTPSA id 17sm16297016qky.7.2021.04.06.13.32.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 13:11:54 -0700 (PDT)
-Subject: Re: [PATCH V4 XRT Alveo 16/20] fpga: xrt: clock platform driver
+        Tue, 06 Apr 2021 13:32:09 -0700 (PDT)
+Subject: Re: [PATCH V4 XRT Alveo 17/20] fpga: xrt: clock frequency counter
+ platform driver
 To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
 Cc:     linux-fpga@vger.kernel.org, maxz@xilinx.com,
         sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
         stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
         robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
 References: <20210324052947.27889-1-lizhi.hou@xilinx.com>
- <20210324052947.27889-17-lizhi.hou@xilinx.com>
+ <20210324052947.27889-18-lizhi.hou@xilinx.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <4d39d462-a75b-abd3-34c0-1d583185e550@redhat.com>
-Date:   Tue, 6 Apr 2021 13:11:47 -0700
+Message-ID: <ee717a18-bfec-6962-39cd-2efb223d577b@redhat.com>
+Date:   Tue, 6 Apr 2021 13:32:04 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210324052947.27889-17-lizhi.hou@xilinx.com>
+In-Reply-To: <20210324052947.27889-18-lizhi.hou@xilinx.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -75,26 +76,27 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 On 3/23/21 10:29 PM, Lizhi Hou wrote:
-> Add clock driver. Clock is a hardware function discovered by walking
-> xclbin metadata. A platform device node will be created for it. Other
-> part of driver configures clock through clock driver.
+> Add clock frequency counter driver. Clock frequency counter is
+> a hardware function discovered by walking xclbin metadata. A platform
+> device node will be created for it. Other part of driver can read the
+> actual clock frequency through clock frequency counter driver.
 >
 > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 > Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 > ---
->   drivers/fpga/xrt/include/xleaf/clock.h |  29 ++
->   drivers/fpga/xrt/lib/xleaf/clock.c     | 669 +++++++++++++++++++++++++
->   2 files changed, 698 insertions(+)
->   create mode 100644 drivers/fpga/xrt/include/xleaf/clock.h
->   create mode 100644 drivers/fpga/xrt/lib/xleaf/clock.c
+>   drivers/fpga/xrt/include/xleaf/clkfreq.h |  21 ++
+>   drivers/fpga/xrt/lib/xleaf/clkfreq.c     | 240 +++++++++++++++++++++++
+>   2 files changed, 261 insertions(+)
+>   create mode 100644 drivers/fpga/xrt/include/xleaf/clkfreq.h
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/clkfreq.c
 >
-> diff --git a/drivers/fpga/xrt/include/xleaf/clock.h b/drivers/fpga/xrt/include/xleaf/clock.h
+> diff --git a/drivers/fpga/xrt/include/xleaf/clkfreq.h b/drivers/fpga/xrt/include/xleaf/clkfreq.h
 > new file mode 100644
-> index 000000000000..6858473fd096
+> index 000000000000..005441d5df78
 > --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/clock.h
-> @@ -0,0 +1,29 @@
+> +++ b/drivers/fpga/xrt/include/xleaf/clkfreq.h
+> @@ -0,0 +1,21 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
 > + * Copyright (C) 2020-2021 Xilinx, Inc.
@@ -103,43 +105,33 @@ On 3/23/21 10:29 PM, Lizhi Hou wrote:
 > + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
 > + */
 > +
-> +#ifndef _XRT_CLOCK_H_
-> +#define _XRT_CLOCK_H_
+> +#ifndef _XRT_CLKFREQ_H_
+> +#define _XRT_CLKFREQ_H_
 > +
 > +#include "xleaf.h"
-> +#include <linux/xrt/xclbin.h>
 > +
 > +/*
-> + * CLOCK driver leaf calls.
+> + * CLKFREQ driver leaf calls.
 > + */
-> +enum xrt_clock_leaf_cmd {
-> +	XRT_CLOCK_SET = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-> +	XRT_CLOCK_GET,
-> +	XRT_CLOCK_VERIFY,
+> +enum xrt_clkfreq_leaf_cmd {
+> +	XRT_CLKFREQ_READ = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
 > +};
 > +
-> +struct xrt_clock_get {
-> +	u16 freq;
-> +	u32 freq_cnter;
-> +};
-> +
-> +#endif	/* _XRT_CLOCK_H_ */
-> diff --git a/drivers/fpga/xrt/lib/xleaf/clock.c b/drivers/fpga/xrt/lib/xleaf/clock.c
+> +#endif	/* _XRT_CLKFREQ_H_ */
+> diff --git a/drivers/fpga/xrt/lib/xleaf/clkfreq.c b/drivers/fpga/xrt/lib/xleaf/clkfreq.c
 > new file mode 100644
-> index 000000000000..071485e4bf65
+> index 000000000000..49473adde3fd
 > --- /dev/null
-> +++ b/drivers/fpga/xrt/lib/xleaf/clock.c
-> @@ -0,0 +1,669 @@
+> +++ b/drivers/fpga/xrt/lib/xleaf/clkfreq.c
+> @@ -0,0 +1,240 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Xilinx Alveo FPGA Clock Wizard Driver
+> + * Xilinx Alveo FPGA Clock Frequency Counter Driver
 > + *
 > + * Copyright (C) 2020-2021 Xilinx, Inc.
 > + *
 > + * Authors:
 > + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
-> + *      Sonal Santan <sonals@xilinx.com>
-> + *      David Zhang <davidzha@xilinx.com>
 > + */
 > +
 > +#include <linux/mod_devicetable.h>
@@ -150,572 +142,141 @@ On 3/23/21 10:29 PM, Lizhi Hou wrote:
 > +#include <linux/io.h>
 > +#include "metadata.h"
 > +#include "xleaf.h"
-> +#include "xleaf/clock.h"
 > +#include "xleaf/clkfreq.h"
 > +
-> +/* XRT_CLOCK_MAX_NUM_CLOCKS should be a concept from XCLBIN_ in the future */
-> +#define XRT_CLOCK_MAX_NUM_CLOCKS	4
-> +#define XRT_CLOCK_STATUS_MASK		0xffff
-> +#define XRT_CLOCK_STATUS_MEASURE_START	0x1
-> +#define XRT_CLOCK_STATUS_MEASURE_DONE	0x2
-ok
+> +#define CLKFREQ_ERR(clkfreq, fmt, arg...)   \
+> +	xrt_err((clkfreq)->pdev, fmt "\n", ##arg)
+> +#define CLKFREQ_WARN(clkfreq, fmt, arg...)  \
+> +	xrt_warn((clkfreq)->pdev, fmt "\n", ##arg)
+> +#define CLKFREQ_INFO(clkfreq, fmt, arg...)  \
+> +	xrt_info((clkfreq)->pdev, fmt "\n", ##arg)
+> +#define CLKFREQ_DBG(clkfreq, fmt, arg...)   \
+> +	xrt_dbg((clkfreq)->pdev, fmt "\n", ##arg)
 > +
-> +#define XRT_CLOCK_STATUS_REG		0x4
-> +#define XRT_CLOCK_CLKFBOUT_REG		0x200
-> +#define XRT_CLOCK_CLKOUT0_REG		0x208
-> +#define XRT_CLOCK_LOAD_SADDR_SEN_REG	0x25C
-> +#define XRT_CLOCK_DEFAULT_EXPIRE_SECS	1
+> +#define XRT_CLKFREQ		"xrt_clkfreq"
 > +
-> +#define CLOCK_ERR(clock, fmt, arg...)	\
-> +	xrt_err((clock)->pdev, fmt "\n", ##arg)
-> +#define CLOCK_WARN(clock, fmt, arg...)	\
-> +	xrt_warn((clock)->pdev, fmt "\n", ##arg)
-> +#define CLOCK_INFO(clock, fmt, arg...)	\
-> +	xrt_info((clock)->pdev, fmt "\n", ##arg)
-> +#define CLOCK_DBG(clock, fmt, arg...)	\
-> +	xrt_dbg((clock)->pdev, fmt "\n", ##arg)
+> +#define XRT_CLKFREQ_CONTROL_STATUS_MASK		0xffff
 > +
-> +#define XRT_CLOCK	"xrt_clock"
+> +#define XRT_CLKFREQ_CONTROL_START	0x1
+> +#define XRT_CLKFREQ_CONTROL_DONE	0x2
+> +#define XRT_CLKFREQ_V5_CLK0_ENABLED	0x10000
 > +
-> +static const struct regmap_config clock_regmap_config = {
+> +#define XRT_CLKFREQ_CONTROL_REG		0
+> +#define XRT_CLKFREQ_COUNT_REG		0x8
+> +#define XRT_CLKFREQ_V5_COUNT_REG	0x10
+> +
+> +#define XRT_CLKFREQ_READ_RETRIES	10
+> +
+> +static const struct regmap_config clkfreq_regmap_config = {
 > +	.reg_bits = 32,
 > +	.val_bits = 32,
 > +	.reg_stride = 4,
 > +	.max_register = 0x1000,
+ok
 > +};
 > +
-> +struct clock {
-> +	struct platform_device  *pdev;
+> +struct clkfreq {
+> +	struct platform_device	*pdev;
 > +	struct regmap		*regmap;
-> +	struct mutex		clock_lock; /* clock dev lock */
-> +
-> +	const char		*clock_ep_name;
+> +	const char		*clkfreq_ep_name;
+> +	struct mutex		clkfreq_lock; /* clock counter dev lock */
 > +};
 > +
-> +/*
-> + * Precomputed table with config0 and config2 register values together with
-> + * target frequency. The steps are approximately 5 MHz apart. Table is
-> + * generated by platform creation tool.
+> +static int clkfreq_read(struct clkfreq *clkfreq, u32 *freq)
 ok
-> + */
-> +static const struct xmgmt_ocl_clockwiz {
-> +	/* target frequency */
-> +	u16 ocl;
-> +	/* config0 register */
-> +	u32 config0;
-> +	/* config2 register */
-> +	u32 config2;
-> +} frequency_table[] = {
-> +	/*1275.000*/ { 10, 0x02EE0C01, 0x0001F47F },
-ok
-> +	/*1575.000*/ { 15, 0x02EE0F01, 0x00000069},
-> +	/*1600.000*/ { 20, 0x00001001, 0x00000050},
-> +	/*1600.000*/ { 25, 0x00001001, 0x00000040},
-> +	/*1575.000*/ { 30, 0x02EE0F01, 0x0001F434},
-> +	/*1575.000*/ { 35, 0x02EE0F01, 0x0000002D},
-> +	/*1600.000*/ { 40, 0x00001001, 0x00000028},
-> +	/*1575.000*/ { 45, 0x02EE0F01, 0x00000023},
-> +	/*1600.000*/ { 50, 0x00001001, 0x00000020},
-> +	/*1512.500*/ { 55, 0x007D0F01, 0x0001F41B},
-> +	/*1575.000*/ { 60, 0x02EE0F01, 0x0000FA1A},
-> +	/*1462.500*/ { 65, 0x02710E01, 0x0001F416},
-> +	/*1575.000*/ { 70, 0x02EE0F01, 0x0001F416},
-> +	/*1575.000*/ { 75, 0x02EE0F01, 0x00000015},
-> +	/*1600.000*/ { 80, 0x00001001, 0x00000014},
-> +	/*1487.500*/ { 85, 0x036B0E01, 0x0001F411},
-> +	/*1575.000*/ { 90, 0x02EE0F01, 0x0001F411},
-> +	/*1425.000*/ { 95, 0x00FA0E01, 0x0000000F},
-> +	/*1600.000*/ { 100, 0x00001001, 0x00000010},
-> +	/*1575.000*/ { 105, 0x02EE0F01, 0x0000000F},
-> +	/*1512.500*/ { 110, 0x007D0F01, 0x0002EE0D},
-> +	/*1437.500*/ { 115, 0x01770E01, 0x0001F40C},
-> +	/*1575.000*/ { 120, 0x02EE0F01, 0x00007D0D},
-> +	/*1562.500*/ { 125, 0x02710F01, 0x0001F40C},
-> +	/*1462.500*/ { 130, 0x02710E01, 0x0000FA0B},
-> +	/*1350.000*/ { 135, 0x01F40D01, 0x0000000A},
-> +	/*1575.000*/ { 140, 0x02EE0F01, 0x0000FA0B},
-> +	/*1450.000*/ { 145, 0x01F40E01, 0x0000000A},
-> +	/*1575.000*/ { 150, 0x02EE0F01, 0x0001F40A},
-> +	/*1550.000*/ { 155, 0x01F40F01, 0x0000000A},
-> +	/*1600.000*/ { 160, 0x00001001, 0x0000000A},
-> +	/*1237.500*/ { 165, 0x01770C01, 0x0001F407},
-> +	/*1487.500*/ { 170, 0x036B0E01, 0x0002EE08},
-> +	/*1575.000*/ { 175, 0x02EE0F01, 0x00000009},
-> +	/*1575.000*/ { 180, 0x02EE0F01, 0x0002EE08},
-> +	/*1387.500*/ { 185, 0x036B0D01, 0x0001F407},
-> +	/*1425.000*/ { 190, 0x00FA0E01, 0x0001F407},
-> +	/*1462.500*/ { 195, 0x02710E01, 0x0001F407},
-> +	/*1600.000*/ { 200, 0x00001001, 0x00000008},
-> +	/*1537.500*/ { 205, 0x01770F01, 0x0001F407},
-> +	/*1575.000*/ { 210, 0x02EE0F01, 0x0001F407},
-> +	/*1075.000*/ { 215, 0x02EE0A01, 0x00000005},
-> +	/*1512.500*/ { 220, 0x007D0F01, 0x00036B06},
-> +	/*1575.000*/ { 225, 0x02EE0F01, 0x00000007},
-> +	/*1437.500*/ { 230, 0x01770E01, 0x0000FA06},
-> +	/*1175.000*/ { 235, 0x02EE0B01, 0x00000005},
-> +	/*1500.000*/ { 240, 0x00000F01, 0x0000FA06},
-> +	/*1225.000*/ { 245, 0x00FA0C01, 0x00000005},
-> +	/*1562.500*/ { 250, 0x02710F01, 0x0000FA06},
-> +	/*1275.000*/ { 255, 0x02EE0C01, 0x00000005},
-> +	/*1462.500*/ { 260, 0x02710E01, 0x00027105},
-> +	/*1325.000*/ { 265, 0x00FA0D01, 0x00000005},
-> +	/*1350.000*/ { 270, 0x01F40D01, 0x00000005},
-> +	/*1512.500*/ { 275, 0x007D0F01, 0x0001F405},
-> +	/*1575.000*/ { 280, 0x02EE0F01, 0x00027105},
-> +	/*1425.000*/ { 285, 0x00FA0E01, 0x00000005},
-> +	/*1450.000*/ { 290, 0x01F40E01, 0x00000005},
-> +	/*1475.000*/ { 295, 0x02EE0E01, 0x00000005},
-> +	/*1575.000*/ { 300, 0x02EE0F01, 0x0000FA05},
-> +	/*1525.000*/ { 305, 0x00FA0F01, 0x00000005},
-> +	/*1550.000*/ { 310, 0x01F40F01, 0x00000005},
-> +	/*1575.000*/ { 315, 0x02EE0F01, 0x00000005},
-> +	/*1600.000*/ { 320, 0x00001001, 0x00000005},
-> +	/*1462.500*/ { 325, 0x02710E01, 0x0001F404},
-> +	/*1237.500*/ { 330, 0x01770C01, 0x0002EE03},
-> +	/* 837.500*/ { 335, 0x01770801, 0x0001F402},
-> +	/*1487.500*/ { 340, 0x036B0E01, 0x00017704},
-> +	/* 862.500*/ { 345, 0x02710801, 0x0001F402},
-> +	/*1575.000*/ { 350, 0x02EE0F01, 0x0001F404},
-> +	/* 887.500*/ { 355, 0x036B0801, 0x0001F402},
-> +	/*1575.000*/ { 360, 0x02EE0F01, 0x00017704},
-> +	/* 912.500*/ { 365, 0x007D0901, 0x0001F402},
-> +	/*1387.500*/ { 370, 0x036B0D01, 0x0002EE03},
-> +	/*1500.000*/ { 375, 0x00000F01, 0x00000004},
-> +	/*1425.000*/ { 380, 0x00FA0E01, 0x0002EE03},
-> +	/* 962.500*/ { 385, 0x02710901, 0x0001F402},
-> +	/*1462.500*/ { 390, 0x02710E01, 0x0002EE03},
-> +	/* 987.500*/ { 395, 0x036B0901, 0x0001F402},
-> +	/*1600.000*/ { 400, 0x00001001, 0x00000004},
-> +	/*1012.500*/ { 405, 0x007D0A01, 0x0001F402},
-> +	/*1537.500*/ { 410, 0x01770F01, 0x0002EE03},
-> +	/*1037.500*/ { 415, 0x01770A01, 0x0001F402},
-> +	/*1575.000*/ { 420, 0x02EE0F01, 0x0002EE03},
-> +	/*1487.500*/ { 425, 0x036B0E01, 0x0001F403},
-> +	/*1075.000*/ { 430, 0x02EE0A01, 0x0001F402},
-> +	/*1087.500*/ { 435, 0x036B0A01, 0x0001F402},
-> +	/*1375.000*/ { 440, 0x02EE0D01, 0x00007D03},
-> +	/*1112.500*/ { 445, 0x007D0B01, 0x0001F402},
-> +	/*1575.000*/ { 450, 0x02EE0F01, 0x0001F403},
-> +	/*1137.500*/ { 455, 0x01770B01, 0x0001F402},
-> +	/*1437.500*/ { 460, 0x01770E01, 0x00007D03},
-> +	/*1162.500*/ { 465, 0x02710B01, 0x0001F402},
-> +	/*1175.000*/ { 470, 0x02EE0B01, 0x0001F402},
-> +	/*1425.000*/ { 475, 0x00FA0E01, 0x00000003},
-> +	/*1500.000*/ { 480, 0x00000F01, 0x00007D03},
-> +	/*1212.500*/ { 485, 0x007D0C01, 0x0001F402},
-> +	/*1225.000*/ { 490, 0x00FA0C01, 0x0001F402},
-> +	/*1237.500*/ { 495, 0x01770C01, 0x0001F402},
-> +	/*1562.500*/ { 500, 0x02710F01, 0x00007D03},
-> +	/*1262.500*/ { 505, 0x02710C01, 0x0001F402},
-> +	/*1275.000*/ { 510, 0x02EE0C01, 0x0001F402},
-> +	/*1287.500*/ { 515, 0x036B0C01, 0x0001F402},
-> +	/*1300.000*/ { 520, 0x00000D01, 0x0001F402},
-> +	/*1575.000*/ { 525, 0x02EE0F01, 0x00000003},
-> +	/*1325.000*/ { 530, 0x00FA0D01, 0x0001F402},
-> +	/*1337.500*/ { 535, 0x01770D01, 0x0001F402},
-> +	/*1350.000*/ { 540, 0x01F40D01, 0x0001F402},
-> +	/*1362.500*/ { 545, 0x02710D01, 0x0001F402},
-> +	/*1512.500*/ { 550, 0x007D0F01, 0x0002EE02},
-> +	/*1387.500*/ { 555, 0x036B0D01, 0x0001F402},
-> +	/*1400.000*/ { 560, 0x00000E01, 0x0001F402},
-> +	/*1412.500*/ { 565, 0x007D0E01, 0x0001F402},
-> +	/*1425.000*/ { 570, 0x00FA0E01, 0x0001F402},
-> +	/*1437.500*/ { 575, 0x01770E01, 0x0001F402},
-> +	/*1450.000*/ { 580, 0x01F40E01, 0x0001F402},
-> +	/*1462.500*/ { 585, 0x02710E01, 0x0001F402},
-> +	/*1475.000*/ { 590, 0x02EE0E01, 0x0001F402},
-> +	/*1487.500*/ { 595, 0x036B0E01, 0x0001F402},
-> +	/*1575.000*/ { 600, 0x02EE0F01, 0x00027102},
-> +	/*1512.500*/ { 605, 0x007D0F01, 0x0001F402},
-> +	/*1525.000*/ { 610, 0x00FA0F01, 0x0001F402},
-> +	/*1537.500*/ { 615, 0x01770F01, 0x0001F402},
-> +	/*1550.000*/ { 620, 0x01F40F01, 0x0001F402},
-> +	/*1562.500*/ { 625, 0x02710F01, 0x0001F402},
-> +	/*1575.000*/ { 630, 0x02EE0F01, 0x0001F402},
-> +	/*1587.500*/ { 635, 0x036B0F01, 0x0001F402},
-> +	/*1600.000*/ { 640, 0x00001001, 0x0001F402},
-> +	/*1290.000*/ { 645, 0x01F44005, 0x00000002},
-> +	/*1462.500*/ { 650, 0x02710E01, 0x0000FA02}
-> +};
-> +
-> +static u32 find_matching_freq_config(unsigned short freq,
-> +				     const struct xmgmt_ocl_clockwiz *table,
-> +				     int size)
 > +{
-> +	u32 end = size - 1;
-> +	u32 start = 0;
-> +	u32 idx;
-> +
-> +	if (freq < table[0].ocl)
-> +		return 0;
-> +
-> +	if (freq > table[size - 1].ocl)
-> +		return size - 1;
+> +	int times = XRT_CLKFREQ_READ_RETRIES;
 ok
-> +
-> +	while (start < end) {
-> +		idx = (start + end) / 2;
-ok
-> +		if (freq == table[idx].ocl)
-> +			break;
-> +		if (freq < table[idx].ocl)
-> +			end = idx;
-> +		else
-> +			start = idx + 1;
-> +	}
-> +	if (freq < table[idx].ocl)
-> +		idx--;
-> +
-> +	return idx;
-> +}
-> +
-> +static u32 find_matching_freq(u32 freq,
-> +			      const struct xmgmt_ocl_clockwiz *freq_table,
-> +			      int freq_table_size)
-> +{
-> +	int idx = find_matching_freq_config(freq, freq_table, freq_table_size);
-> +
-> +	return freq_table[idx].ocl;
-> +}
-> +
-> +static inline int clock_wiz_busy(struct clock *clock, int cycle, int interval)
-> +{
-> +	u32 val = 0;
-> +	int count;
+> +	u32 status;
 > +	int ret;
 > +
-> +	for (count = 0; count < cycle; count++) {
-> +		ret = regmap_read(clock->regmap, XRT_CLOCK_STATUS_REG, &val);
+> +	*freq = 0;
+> +	mutex_lock(&clkfreq->clkfreq_lock);
+> +	ret = regmap_write(clkfreq->regmap, XRT_CLKFREQ_CONTROL_REG, XRT_CLKFREQ_CONTROL_START);
+> +	if (ret) {
+> +		CLKFREQ_INFO(clkfreq, "write start to control reg failed %d", ret);
+> +		goto failed;
+> +	}
+> +	while (times != 0) {
+> +		ret = regmap_read(clkfreq->regmap, XRT_CLKFREQ_CONTROL_REG, &status);
 > +		if (ret) {
-> +			CLOCK_ERR(clock, "read status failed %d", ret);
-> +			return ret;
+> +			CLKFREQ_INFO(clkfreq, "read control reg failed %d", ret);
+> +			goto failed;
 > +		}
-> +		if (val == 1)
+> +		if ((status & XRT_CLKFREQ_CONTROL_STATUS_MASK) == XRT_CLKFREQ_CONTROL_DONE)
 > +			break;
+> +		mdelay(1);
+> +		times--;
+> +	};
+> +
+> +	if (!times) {
+> +		ret = -ETIMEDOUT;
+> +		goto failed;
+> +	}
+> +
+> +	if (status & XRT_CLKFREQ_V5_CLK0_ENABLED)
+> +		ret = regmap_read(clkfreq->regmap, XRT_CLKFREQ_V5_COUNT_REG, freq);
+> +	else
+> +		ret = regmap_read(clkfreq->regmap, XRT_CLKFREQ_COUNT_REG, freq);
+> +	if (ret) {
+> +		CLKFREQ_INFO(clkfreq, "read count failed %d", ret);
+> +		goto failed;
+> +	}
 ok
 > +
-> +		mdelay(interval);
-> +	}
-> +	if (val != 1) {
-> +		CLOCK_ERR(clock, "clockwiz is (%u) busy after %d ms",
-> +			  val, cycle * interval);
-> +		return -EBUSY;
-> +	}
+> +	mutex_unlock(&clkfreq->clkfreq_lock);
 > +
 > +	return 0;
-> +}
 > +
-> +static int get_freq(struct clock *clock, u16 *freq)
-> +{
-ok, #define removed
-> +	u32 mul_frac0 = 0;
-> +	u32 div_frac1 = 0;
-> +	u32 mul0, div0;
-> +	u64 input;
-> +	u32 div1;
-> +	u32 val;
-> +	int ret;
+> +failed:
+> +	mutex_unlock(&clkfreq->clkfreq_lock);
 > +
-> +	WARN_ON(!mutex_is_locked(&clock->clock_lock));
-> +
-> +	ret = regmap_read(clock->regmap, XRT_CLOCK_STATUS_REG, &val);
-ok, regs defined above
-> +	if (ret) {
-> +		CLOCK_ERR(clock, "read status failed %d", ret);
-> +		return ret;
-> +	}
-> +
-> +	if ((val & 0x1) == 0) {
-> +		CLOCK_ERR(clock, "clockwiz is busy %x", val);
-> +		*freq = 0;
-> +		return -EBUSY;
-> +	}
-> +
-> +	ret = regmap_read(clock->regmap, XRT_CLOCK_CLKFBOUT_REG, &val);
-> +	if (ret) {
-> +		CLOCK_ERR(clock, "read clkfbout failed %d", ret);
-> +		return ret;
-> +	}
-> +
-> +	div0 = val & 0xff;
-> +	mul0 = (val & 0xff00) >> 8;
-> +	if (val & BIT(26)) {
-> +		mul_frac0 = val >> 16;
-> +		mul_frac0 &= 0x3ff;
-> +	}
-> +
-> +	/*
-> +	 * Multiply both numerator (mul0) and the denominator (div0) with 1000
-> +	 * to account for fractional portion of multiplier
-> +	 */
-> +	mul0 *= 1000;
-> +	mul0 += mul_frac0;
-> +	div0 *= 1000;
-> +
-> +	ret = regmap_read(clock->regmap, XRT_CLOCK_CLKOUT0_REG, &val);
-> +	if (ret) {
-> +		CLOCK_ERR(clock, "read clkout0 failed %d", ret);
-> +		return ret;
-> +	}
-> +
-> +	div1 = val & 0xff;
-> +	if (val & BIT(18)) {
-> +		div_frac1 = val >> 8;
-> +		div_frac1 &= 0x3ff;
-> +	}
-> +
-> +	/*
-> +	 * Multiply both numerator (mul0) and the denominator (div1) with
-> +	 * 1000 to account for fractional portion of divider
-> +	 */
-> +
-> +	div1 *= 1000;
-> +	div1 += div_frac1;
-> +	div0 *= div1;
-> +	mul0 *= 1000;
-> +	if (div0 == 0) {
-> +		CLOCK_ERR(clock, "clockwiz 0 divider");
-> +		return 0;
-> +	}
-> +
-> +	input = mul0 * 100;
-> +	do_div(input, div0);
-> +	*freq = (u16)input;
-> +
-> +	return 0;
-> +}
-> +
-> +static int set_freq(struct clock *clock, u16 freq)
-> +{
-> +	int err = 0;
-> +	u32 idx = 0;
-> +	u32 val = 0;
-> +	u32 config;
-> +
-> +	mutex_lock(&clock->clock_lock);
-> +	idx = find_matching_freq_config(freq, frequency_table,
-> +					ARRAY_SIZE(frequency_table));
-> +
-> +	CLOCK_INFO(clock, "New: %d Mhz", freq);
-> +	err = clock_wiz_busy(clock, 20, 50);
-> +	if (err)
-> +		goto fail;
-> +
-> +	config = frequency_table[idx].config0;
-> +	err = regmap_write(clock->regmap, XRT_CLOCK_CLKFBOUT_REG, config);
-> +	if (err) {
-> +		CLOCK_ERR(clock, "write clkfbout failed %d", err);
-> +		goto fail;
-> +	}
-> +
-> +	config = frequency_table[idx].config2;
-> +	err = regmap_write(clock->regmap, XRT_CLOCK_CLKOUT0_REG, config);
-> +	if (err) {
-> +		CLOCK_ERR(clock, "write clkout0 failed %d", err);
-> +		goto fail;
-> +	}
-> +
-> +	mdelay(10);
-> +	err = regmap_write(clock->regmap, XRT_CLOCK_LOAD_SADDR_SEN_REG, 7);
-> +	if (err) {
-> +		CLOCK_ERR(clock, "write load_saddr_sen failed %d", err);
-> +		goto fail;
-> +	}
-> +
-> +	mdelay(1);
-> +	err = regmap_write(clock->regmap, XRT_CLOCK_LOAD_SADDR_SEN_REG, 2);
-> +	if (err) {
-> +		CLOCK_ERR(clock, "write saddr failed %d", err);
-> +		goto fail;
-> +	}
-> +
-> +	CLOCK_INFO(clock, "clockwiz waiting for locked signal");
-> +
-> +	err = clock_wiz_busy(clock, 100, 100);
-> +	if (err) {
-> +		CLOCK_ERR(clock, "clockwiz MMCM/PLL did not lock");
-> +		/* restore */
-> +		regmap_write(clock->regmap, XRT_CLOCK_LOAD_SADDR_SEN_REG, 4);
-> +		mdelay(10);
-> +		regmap_write(clock->regmap, XRT_CLOCK_LOAD_SADDR_SEN_REG, 0);
-> +		goto fail;
-> +	}
-> +	regmap_read(clock->regmap, XRT_CLOCK_CLKFBOUT_REG, &val);
-> +	CLOCK_INFO(clock, "clockwiz CONFIG(0) 0x%x", val);
-> +	regmap_read(clock->regmap, XRT_CLOCK_CLKOUT0_REG, &val);
-> +	CLOCK_INFO(clock, "clockwiz CONFIG(2) 0x%x", val);
-> +
-> +fail:
-> +	mutex_unlock(&clock->clock_lock);
-> +	return err;
-> +}
-> +
-> +static int get_freq_counter(struct clock *clock, u32 *freq)
-> +{
-> +	struct xrt_subdev_platdata *pdata = DEV_PDATA(clock->pdev);
-> +	struct platform_device *pdev = clock->pdev;
-> +	struct platform_device *counter_leaf;
-> +	const void *counter;
-ok
-> +	int err;
-> +
-> +	WARN_ON(!mutex_is_locked(&clock->clock_lock));
-> +
-> +	err = xrt_md_get_prop(DEV(pdev), pdata->xsp_dtb, clock->clock_ep_name,
-> +			      NULL, XRT_MD_PROP_CLK_CNT, &counter, NULL);
-> +	if (err) {
-> +		xrt_err(pdev, "no counter specified");
-> +		return err;
-> +	}
-> +
-> +	counter_leaf = xleaf_get_leaf_by_epname(pdev, counter);
-> +	if (!counter_leaf) {
-> +		xrt_err(pdev, "can't find counter");
-> +		return -ENOENT;
-> +	}
-> +
-> +	err = xleaf_call(counter_leaf, XRT_CLKFREQ_READ, freq);
-> +	if (err)
-> +		xrt_err(pdev, "can't read counter");
-> +	xleaf_put_leaf(clock->pdev, counter_leaf);
-> +
-> +	return err;
-> +}
-> +
-> +static int clock_get_freq(struct clock *clock, u16 *freq, u32 *freq_cnter)
-> +{
-> +	int err = 0;
-> +
-> +	mutex_lock(&clock->clock_lock);
-> +
-> +	if (err == 0 && freq)
-> +		err = get_freq(clock, freq);
-> +
-> +	if (err == 0 && freq_cnter)
-> +		err = get_freq_counter(clock, freq_cnter);
-> +
-> +	mutex_unlock(&clock->clock_lock);
-> +	return err;
-> +}
-> +
-ok, clock_set_freq removed
-> +static int clock_verify_freq(struct clock *clock)
-> +{
-> +	u32 lookup_freq, clock_freq_counter, request_in_khz, tolerance;
-> +	int err = 0;
-> +	u16 freq;
-> +
-> +	mutex_lock(&clock->clock_lock);
-> +
-> +	err = get_freq(clock, &freq);
-> +	if (err) {
-> +		xrt_err(clock->pdev, "get freq failed, %d", err);
-> +		goto end;
-> +	}
-> +
-> +	err = get_freq_counter(clock, &clock_freq_counter);
-> +	if (err) {
-> +		xrt_err(clock->pdev, "get freq counter failed, %d", err);
-> +		goto end;
-> +	}
-> +
-> +	lookup_freq = find_matching_freq(freq, frequency_table,
-> +					 ARRAY_SIZE(frequency_table));
-> +	request_in_khz = lookup_freq * 1000;
-> +	tolerance = lookup_freq * 50;
-> +	if (tolerance < abs(clock_freq_counter - request_in_khz)) {
-> +		CLOCK_ERR(clock,
-> +			  "set clock(%s) failed, request %ukhz, actual %dkhz",
-> +			  clock->clock_ep_name, request_in_khz, clock_freq_counter);
-> +		err = -EDOM;
-> +	} else {
-> +		CLOCK_INFO(clock, "verified clock (%s)", clock->clock_ep_name);
-> +	}
-> +
-> +end:
-> +	mutex_unlock(&clock->clock_lock);
-> +	return err;
-> +}
-> +
-> +static int clock_init(struct clock *clock)
-> +{
-> +	struct xrt_subdev_platdata *pdata = DEV_PDATA(clock->pdev);
-> +	const u16 *freq;
-> +	int err = 0;
-> +
-> +	err = xrt_md_get_prop(DEV(clock->pdev), pdata->xsp_dtb,
-> +			      clock->clock_ep_name, NULL, XRT_MD_PROP_CLK_FREQ,
-> +		(const void **)&freq, NULL);
-> +	if (err) {
-> +		xrt_info(clock->pdev, "no default freq");
-> +		return 0;
-> +	}
-> +
-> +	err = set_freq(clock, be16_to_cpu(*freq));
-> +
-> +	return err;
+> +	return ret;
 > +}
 > +
 > +static ssize_t freq_show(struct device *dev, struct device_attribute *attr, char *buf)
 > +{
-> +	struct clock *clock = platform_get_drvdata(to_platform_device(dev));
+> +	struct clkfreq *clkfreq = platform_get_drvdata(to_platform_device(dev));
 > +	ssize_t count;
-> +	u16 freq = 0;
+> +	u32 freq;
 > +
-> +	count = clock_get_freq(clock, &freq, NULL);
-> +	if (count < 0)
-> +		return count;
+> +	if (clkfreq_read(clkfreq, &freq))
+> +		return -EINVAL;
+ok
 > +
 > +	count = snprintf(buf, 64, "%u\n", freq);
-
 ok
-
-Thanks for the changes
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
 > +
 > +	return count;
 > +}
 > +static DEVICE_ATTR_RO(freq);
 > +
-> +static struct attribute *clock_attrs[] = {
+> +static struct attribute *clkfreq_attrs[] = {
 > +	&dev_attr_freq.attr,
 > +	NULL,
 > +};
 > +
-> +static struct attribute_group clock_attr_group = {
-> +	.attrs = clock_attrs,
+> +static struct attribute_group clkfreq_attr_group = {
+> +	.attrs = clkfreq_attrs,
 > +};
 > +
 > +static int
-> +xrt_clock_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
+> +xrt_clkfreq_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
 > +{
-> +	struct clock *clock;
+> +	struct clkfreq *clkfreq;
 > +	int ret = 0;
 > +
-> +	clock = platform_get_drvdata(pdev);
+> +	clkfreq = platform_get_drvdata(pdev);
 > +
 > +	switch (cmd) {
 > +	case XRT_XLEAF_EVENT:
 > +		/* Does not handle any event. */
 > +		break;
-> +	case XRT_CLOCK_SET: {
-> +		u16	freq = (u16)(uintptr_t)arg;
-> +
-> +		ret = set_freq(clock, freq);
+> +	case XRT_CLKFREQ_READ:
+ok
+> +		ret = clkfreq_read(clkfreq, arg);
+ok
 > +		break;
-> +	}
-> +	case XRT_CLOCK_VERIFY:
-> +		ret = clock_verify_freq(clock);
-> +		break;
-> +	case XRT_CLOCK_GET: {
-> +		struct xrt_clock_get *get =
-> +			(struct xrt_clock_get *)arg;
-> +
-> +		ret = clock_get_freq(clock, &get->freq, &get->freq_cnter);
-> +		break;
-> +	}
 > +	default:
 > +		xrt_err(pdev, "unsupported cmd %d", cmd);
 > +		return -EINVAL;
@@ -724,59 +285,54 @@ Reviewed-by: Tom Rix <trix@redhat.com>
 > +	return ret;
 > +}
 > +
-> +static int clock_remove(struct platform_device *pdev)
+> +static int clkfreq_remove(struct platform_device *pdev)
 > +{
-> +	sysfs_remove_group(&pdev->dev.kobj, &clock_attr_group);
+> +	sysfs_remove_group(&pdev->dev.kobj, &clkfreq_attr_group);
 > +
 > +	return 0;
 > +}
 > +
-> +static int clock_probe(struct platform_device *pdev)
+> +static int clkfreq_probe(struct platform_device *pdev)
 > +{
-> +	struct clock *clock = NULL;
+> +	struct clkfreq *clkfreq = NULL;
 > +	void __iomem *base = NULL;
 > +	struct resource *res;
 > +	int ret;
 > +
-> +	clock = devm_kzalloc(&pdev->dev, sizeof(*clock), GFP_KERNEL);
-> +	if (!clock)
+> +	clkfreq = devm_kzalloc(&pdev->dev, sizeof(*clkfreq), GFP_KERNEL);
+> +	if (!clkfreq)
 > +		return -ENOMEM;
 > +
-> +	platform_set_drvdata(pdev, clock);
-> +	clock->pdev = pdev;
-> +	mutex_init(&clock->clock_lock);
+> +	platform_set_drvdata(pdev, clkfreq);
+> +	clkfreq->pdev = pdev;
+> +	mutex_init(&clkfreq->clkfreq_lock);
 > +
 > +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 > +	if (!res) {
 > +		ret = -EINVAL;
 > +		goto failed;
 > +	}
-> +
 > +	base = devm_ioremap_resource(&pdev->dev, res);
 > +	if (IS_ERR(base)) {
 > +		ret = PTR_ERR(base);
 > +		goto failed;
 > +	}
 > +
-> +	clock->regmap = devm_regmap_init_mmio(&pdev->dev, base, &clock_regmap_config);
-> +	if (IS_ERR(clock->regmap)) {
-> +		CLOCK_ERR(clock, "regmap %pR failed", res);
-> +		ret = PTR_ERR(clock->regmap);
+> +	clkfreq->regmap = devm_regmap_init_mmio(&pdev->dev, base, &clkfreq_regmap_config);
+> +	if (IS_ERR(clkfreq->regmap)) {
+> +		CLKFREQ_ERR(clkfreq, "regmap %pR failed", res);
+> +		ret = PTR_ERR(clkfreq->regmap);
 > +		goto failed;
 > +	}
-> +	clock->clock_ep_name = res->name;
+> +	clkfreq->clkfreq_ep_name = res->name;
 > +
-> +	ret = clock_init(clock);
-> +	if (ret)
-> +		goto failed;
-> +
-> +	ret = sysfs_create_group(&pdev->dev.kobj, &clock_attr_group);
+> +	ret = sysfs_create_group(&pdev->dev.kobj, &clkfreq_attr_group);
 > +	if (ret) {
-> +		CLOCK_ERR(clock, "create clock attrs failed: %d", ret);
+> +		CLKFREQ_ERR(clkfreq, "create clkfreq attrs failed: %d", ret);
 > +		goto failed;
 > +	}
 > +
-> +	CLOCK_INFO(clock, "successfully initialized Clock subdev");
+> +	CLKFREQ_INFO(clkfreq, "successfully initialized clkfreq subdev");
 > +
 > +	return 0;
 > +
@@ -784,10 +340,17 @@ Reviewed-by: Tom Rix <trix@redhat.com>
 > +	return ret;
 > +}
 > +
-> +static struct xrt_subdev_endpoints xrt_clock_endpoints[] = {
+> +static struct xrt_subdev_endpoints xrt_clkfreq_endpoints[] = {
 > +	{
 > +		.xse_names = (struct xrt_subdev_ep_names[]) {
-> +			{ .regmap_name = "clkwiz" },
+> +			{ .regmap_name = XRT_MD_REGMAP_CLKFREQ },
+
+ok
+
+Looks good to me
+
+Reviewed-by: Tom Rix <trix@redhat.com>
+
 > +			{ NULL },
 > +		},
 > +		.xse_min_ep = 1,
@@ -795,25 +358,25 @@ Reviewed-by: Tom Rix <trix@redhat.com>
 > +	{ 0 },
 > +};
 > +
-> +static struct xrt_subdev_drvdata xrt_clock_data = {
+> +static struct xrt_subdev_drvdata xrt_clkfreq_data = {
 > +	.xsd_dev_ops = {
-> +		.xsd_leaf_call = xrt_clock_leaf_call,
+> +		.xsd_leaf_call = xrt_clkfreq_leaf_call,
 > +	},
 > +};
 > +
-> +static const struct platform_device_id xrt_clock_table[] = {
-> +	{ XRT_CLOCK, (kernel_ulong_t)&xrt_clock_data },
+> +static const struct platform_device_id xrt_clkfreq_table[] = {
+> +	{ XRT_CLKFREQ, (kernel_ulong_t)&xrt_clkfreq_data },
 > +	{ },
 > +};
 > +
-> +static struct platform_driver xrt_clock_driver = {
+> +static struct platform_driver xrt_clkfreq_driver = {
 > +	.driver = {
-> +		.name = XRT_CLOCK,
+> +		.name = XRT_CLKFREQ,
 > +	},
-> +	.probe = clock_probe,
-> +	.remove = clock_remove,
-> +	.id_table = xrt_clock_table,
+> +	.probe = clkfreq_probe,
+> +	.remove = clkfreq_remove,
+> +	.id_table = xrt_clkfreq_table,
 > +};
 > +
-> +XRT_LEAF_INIT_FINI_FUNC(XRT_SUBDEV_CLOCK, clock);
+> +XRT_LEAF_INIT_FINI_FUNC(XRT_SUBDEV_CLKFREQ, clkfreq);
 
