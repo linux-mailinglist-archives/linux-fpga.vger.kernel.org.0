@@ -2,70 +2,70 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6429E3555B6
-	for <lists+linux-fpga@lfdr.de>; Tue,  6 Apr 2021 15:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F9E355654
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 Apr 2021 16:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244243AbhDFNut (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Apr 2021 09:50:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:30686 "EHLO
+        id S1345022AbhDFOSr (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Apr 2021 10:18:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46824 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238092AbhDFNus (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Apr 2021 09:50:48 -0400
+        by vger.kernel.org with ESMTP id S1345012AbhDFOSj (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Apr 2021 10:18:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617717040;
+        s=mimecast20190719; t=1617718710;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fg7MZeMyO05OLe8WY/MWvjkatYFZ0OXBdmW1J6v6yDg=;
-        b=dyLm+k5LxH8iZO2jkmFZ3+aCbEj2XPS9PWsKXDERNImvBJoZr8oZS676N8vHxeYec8at5o
-        UIFVgKwplf1ayJJ6l1j83udzJVlrFMebgBnOJIO9UfWBgfk+eDIlJyIqjuF9Lnsi01VFg8
-        cGIvMd9sNNN4ZocWXyiG6AxF3jysOEA=
+        bh=M5mbJXjeN3hfYRqWOXyJ/7mfMosPMWxzqRmSmdI+Zk0=;
+        b=Mat5YF4OmKmbycnVykAXk+wed333LgdpRQ6ASfiX7Hz1prMNocAjKENz1OGVtE44tPs6aL
+        U4torhaA3F06xxeD779brmtQ8VJQS196mZLwmrWkWHviYhF4IalbxGRRvqa1p47hhKqoaL
+        MwYYR6f6ER07DK8UcdCDucR5xI6IRPM=
 Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
  [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-139-N7OwvHuUMRCWBOVVdLq7nw-1; Tue, 06 Apr 2021 09:50:36 -0400
-X-MC-Unique: N7OwvHuUMRCWBOVVdLq7nw-1
-Received: by mail-qv1-f71.google.com with SMTP id ek16so1474734qvb.3
-        for <linux-fpga@vger.kernel.org>; Tue, 06 Apr 2021 06:50:36 -0700 (PDT)
+ us-mta-410-rjsZLZ03NkO8uGDvih5OUQ-1; Tue, 06 Apr 2021 10:18:28 -0400
+X-MC-Unique: rjsZLZ03NkO8uGDvih5OUQ-1
+Received: by mail-qv1-f71.google.com with SMTP id s8so3452565qve.16
+        for <linux-fpga@vger.kernel.org>; Tue, 06 Apr 2021 07:18:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=fg7MZeMyO05OLe8WY/MWvjkatYFZ0OXBdmW1J6v6yDg=;
-        b=X7u7lP85BoHa1ZzhnPMWh36mF78JvRbR9I0gmCAsVrXcLVBKyFdmm3aUQeuT2gOQ42
-         5EAZxEUu7y2E5I+mHuCZi1MaiVbVt8loi24K1f11yeZhay10opzLcLAyygS85eUXmiza
-         NtfdEPbF5i8xPOZ4qlAZTrRWb4s21RdUhXFXjrD9/PSf0y77LpMcfrqqG2GzjVNna5gy
-         F3TiusWT5BwFJLWYxk53U1/wUVTk1O+tYHkwZfhMmS2CinGclr5/metIuWHt8hwzL/+x
-         TnvCSgio7h2K99zLM+dOMAGFz/L/MYwaChy1QFjAVKglSv5TMk4hcqQxo5dlr2DpAB1I
-         Y2DQ==
-X-Gm-Message-State: AOAM531lYkKzvnPu+nfDx92A1f4F2A12yUdYRUryL0LGS47abCjIgii8
-        iOaHyFgDDrJTsQe03CtxH4LV/FkbJVqT7xKRhuAiDCLsA6/cNsf177uwqz0qeITUJIGyfshlLPe
-        Z3Gj1EYUwJnhIPteSNoVjEQ==
-X-Received: by 2002:ac8:a4c:: with SMTP id f12mr28257963qti.329.1617717036114;
-        Tue, 06 Apr 2021 06:50:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwh7w1EXFTzZxsrG8pZN3dZ4EWmVucXWzozuTk2yQKMSyVgUUErsMuyBULUkiWA1j0avpy6rA==
-X-Received: by 2002:ac8:a4c:: with SMTP id f12mr28257944qti.329.1617717035837;
-        Tue, 06 Apr 2021 06:50:35 -0700 (PDT)
+        bh=M5mbJXjeN3hfYRqWOXyJ/7mfMosPMWxzqRmSmdI+Zk0=;
+        b=rwqIkBCHSjZc2D1G9U+mlWMiMfqZeCVMum7reI1h3lw97TIBHXyB0H3bxDl3zkjZKD
+         tRVO1y0pTpCG46IRL2sMQeRBfu+jgy6mvnfJyczXJgSrBmT4EBbvvTzQ0kwIshsj2crb
+         Tb5iA4vU2LHNCbVWKpDge/Fl/36/VZ+Xmr7YQ8ZP0QKCcokX/W3IG7ngWUZ6SGgxRzh+
+         y2pkX5PiCDS/ag6ay+Amyfwxe7KP/kg+Tn2EdtVLHR7Y5xgn/rFb5HRfPPVP05zwNXfy
+         oPQZy6MewhPZCSuar51sYW4vDXfrHDTFKHmuEOYzdlKffQ3zhgdzYjQiRhFZapk1xk10
+         MBNA==
+X-Gm-Message-State: AOAM530bDjzNHiRxjjN77mvZJS/Q1Y39sWPcW2put+wvbUX1EVIYQu7l
+        xcbQ3syBBeUEOFGRGkCIIQGtPNye5vFat1bWmvkk8eQLD1GouWsiERDIJ2HRgYqQPaEXCtHv30x
+        VVlwtO1V4AP6sf0UIgur8FQ==
+X-Received: by 2002:a0c:9b82:: with SMTP id o2mr29256595qve.47.1617718707987;
+        Tue, 06 Apr 2021 07:18:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzloBXKd22M9Q0Zf5q1jsljUgJfBVpOfoAKbi6na9kFVhAEF76+smWaeZR7LlDpWXjCSKfLYA==
+X-Received: by 2002:a0c:9b82:: with SMTP id o2mr29256573qve.47.1617718707755;
+        Tue, 06 Apr 2021 07:18:27 -0700 (PDT)
 Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id o125sm15756762qkf.87.2021.04.06.06.50.33
+        by smtp.gmail.com with ESMTPSA id j18sm15596346qtl.83.2021.04.06.07.18.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 06:50:35 -0700 (PDT)
-Subject: Re: [PATCH V4 XRT Alveo 14/20] fpga: xrt: ICAP platform driver
+        Tue, 06 Apr 2021 07:18:27 -0700 (PDT)
+Subject: Re: [PATCH V4 XRT Alveo 15/20] fpga: xrt: devctl platform driver
 To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
 Cc:     linux-fpga@vger.kernel.org, maxz@xilinx.com,
         sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
         stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
         robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
 References: <20210324052947.27889-1-lizhi.hou@xilinx.com>
- <20210324052947.27889-15-lizhi.hou@xilinx.com>
+ <20210324052947.27889-16-lizhi.hou@xilinx.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <cff70244-5eb7-7620-da08-2324f3ba26d7@redhat.com>
-Date:   Tue, 6 Apr 2021 06:50:30 -0700
+Message-ID: <019c4124-3dc1-340e-3473-fa4582b3ae71@redhat.com>
+Date:   Tue, 6 Apr 2021 07:18:20 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210324052947.27889-15-lizhi.hou@xilinx.com>
+In-Reply-To: <20210324052947.27889-16-lizhi.hou@xilinx.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -75,27 +75,26 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 On 3/23/21 10:29 PM, Lizhi Hou wrote:
-> ICAP stands for Hardware Internal Configuration Access Port. ICAP is
-> discovered by walking firmware metadata. A platform device node will be
-by walking the firmware
-> created for it. FPGA bitstream is written to hardware through ICAP.
+> Add devctl driver. devctl is a type of hardware function which only has
+> few registers to read or write. They are discovered by walking firmware
+> metadata. A platform device node will be created for them.
 >
 > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 > Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 > ---
->   drivers/fpga/xrt/include/xleaf/icap.h |  27 ++
->   drivers/fpga/xrt/lib/xleaf/icap.c     | 344 ++++++++++++++++++++++++++
->   2 files changed, 371 insertions(+)
->   create mode 100644 drivers/fpga/xrt/include/xleaf/icap.h
->   create mode 100644 drivers/fpga/xrt/lib/xleaf/icap.c
+>   drivers/fpga/xrt/include/xleaf/devctl.h |  40 ++++++
+>   drivers/fpga/xrt/lib/xleaf/devctl.c     | 183 ++++++++++++++++++++++++
+>   2 files changed, 223 insertions(+)
+>   create mode 100644 drivers/fpga/xrt/include/xleaf/devctl.h
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/devctl.c
 >
-> diff --git a/drivers/fpga/xrt/include/xleaf/icap.h b/drivers/fpga/xrt/include/xleaf/icap.h
+> diff --git a/drivers/fpga/xrt/include/xleaf/devctl.h b/drivers/fpga/xrt/include/xleaf/devctl.h
 > new file mode 100644
-> index 000000000000..96d39a8934fa
+> index 000000000000..b97f3b6d9326
 > --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/icap.h
-> @@ -0,0 +1,27 @@
+> +++ b/drivers/fpga/xrt/include/xleaf/devctl.h
+> @@ -0,0 +1,40 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
 > + * Copyright (C) 2020-2021 Xilinx, Inc.
@@ -104,42 +103,53 @@ by walking the firmware
 > + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
 > + */
 > +
-> +#ifndef _XRT_ICAP_H_
-> +#define _XRT_ICAP_H_
+> +#ifndef _XRT_DEVCTL_H_
+> +#define _XRT_DEVCTL_H_
 > +
 > +#include "xleaf.h"
 > +
 > +/*
-> + * ICAP driver leaf calls.
+> + * DEVCTL driver leaf calls.
 > + */
-> +enum xrt_icap_leaf_cmd {
-> +	XRT_ICAP_WRITE = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-> +	XRT_ICAP_GET_IDCODE,
+> +enum xrt_devctl_leaf_cmd {
+> +	XRT_DEVCTL_READ = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+> +};
+> +
+> +enum xrt_devctl_id {
+> +	XRT_DEVCTL_ROM_UUID = 0,
 ok
+> +	XRT_DEVCTL_DDR_CALIB,
+> +	XRT_DEVCTL_GOLDEN_VER,
+> +	XRT_DEVCTL_MAX
 > +};
 > +
-> +struct xrt_icap_wr {
-> +	void	*xiiw_bit_data;
-> +	u32	xiiw_data_len;
+> +struct xrt_devctl_rw {
+> +	u32	xdr_id;
+> +	void	*xdr_buf;
+> +	u32	xdr_len;
+> +	u32	xdr_offset;
 > +};
 > +
-> +#endif	/* _XRT_ICAP_H_ */
-> diff --git a/drivers/fpga/xrt/lib/xleaf/icap.c b/drivers/fpga/xrt/lib/xleaf/icap.c
+> +struct xrt_devctl_intf_uuid {
+> +	u32	uuid_num;
+> +	uuid_t	*uuids;
+> +};
+> +
+> +#endif	/* _XRT_DEVCTL_H_ */
+> diff --git a/drivers/fpga/xrt/lib/xleaf/devctl.c b/drivers/fpga/xrt/lib/xleaf/devctl.c
 > new file mode 100644
-> index 000000000000..13db2b759138
+> index 000000000000..ae086d7c431d
 > --- /dev/null
-> +++ b/drivers/fpga/xrt/lib/xleaf/icap.c
-> @@ -0,0 +1,344 @@
+> +++ b/drivers/fpga/xrt/lib/xleaf/devctl.c
+> @@ -0,0 +1,183 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Xilinx Alveo FPGA ICAP Driver
+> + * Xilinx Alveo FPGA devctl Driver
 > + *
 > + * Copyright (C) 2020-2021 Xilinx, Inc.
 > + *
 > + * Authors:
 > + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
-> + *      Sonal Santan <sonals@xilinx.com>
-> + *      Max Zhen <maxz@xilinx.com>
 > + */
 > +
 > +#include <linux/mod_devicetable.h>
@@ -150,341 +160,178 @@ ok
 > +#include <linux/io.h>
 > +#include "metadata.h"
 > +#include "xleaf.h"
-> +#include "xleaf/icap.h"
-> +#include "xclbin-helper.h"
+> +#include "xleaf/devctl.h"
 > +
-> +#define XRT_ICAP "xrt_icap"
+> +#define XRT_DEVCTL "xrt_devctl"
 > +
-> +#define ICAP_ERR(icap, fmt, arg...)	\
-> +	xrt_err((icap)->pdev, fmt "\n", ##arg)
-> +#define ICAP_WARN(icap, fmt, arg...)	\
-> +	xrt_warn((icap)->pdev, fmt "\n", ##arg)
-> +#define ICAP_INFO(icap, fmt, arg...)	\
-> +	xrt_info((icap)->pdev, fmt "\n", ##arg)
-> +#define ICAP_DBG(icap, fmt, arg...)	\
-> +	xrt_dbg((icap)->pdev, fmt "\n", ##arg)
-> +
-> +/*
-> + * AXI-HWICAP IP register layout. Please see
-> + * https://www.xilinx.com/support/documentation/ip_documentation/axi_hwicap/v3_0/pg134-axi-hwicap.pdf
-url works, looks good
-> + */
-> +#define ICAP_REG_GIER		0x1C
-> +#define ICAP_REG_ISR		0x20
-> +#define ICAP_REG_IER		0x28
-> +#define ICAP_REG_WF		0x100
-> +#define ICAP_REG_RF		0x104
-> +#define ICAP_REG_SZ		0x108
-> +#define ICAP_REG_CR		0x10C
-> +#define ICAP_REG_SR		0x110
-> +#define ICAP_REG_WFV		0x114
-> +#define ICAP_REG_RFO		0x118
-> +#define ICAP_REG_ASR		0x11C
-> +
-> +#define ICAP_STATUS_EOS		0x4
-> +#define ICAP_STATUS_DONE	0x1
-> +
-> +/*
-> + * Canned command sequence to obtain IDCODE of the FPGA
-> + */
-> +static const u32 idcode_stream[] = {
-> +	/* dummy word */
-> +	cpu_to_be32(0xffffffff),
-> +	/* sync word */
-> +	cpu_to_be32(0xaa995566),
-> +	/* NOP word */
-> +	cpu_to_be32(0x20000000),
-> +	/* NOP word */
-> +	cpu_to_be32(0x20000000),
-> +	/* ID code */
-> +	cpu_to_be32(0x28018001),
-> +	/* NOP word */
-> +	cpu_to_be32(0x20000000),
-> +	/* NOP word */
-> +	cpu_to_be32(0x20000000),
+> +struct xrt_name_id {
+> +	char *ep_name;
+> +	int id;
 > +};
 > +
-> +static const struct regmap_config icap_regmap_config = {
-ok
+> +static struct xrt_name_id name_id[XRT_DEVCTL_MAX] = {
+> +	{ XRT_MD_NODE_BLP_ROM, XRT_DEVCTL_ROM_UUID },
+> +	{ XRT_MD_NODE_GOLDEN_VER, XRT_DEVCTL_GOLDEN_VER },
+> +};
+> +
+> +static const struct regmap_config devctl_regmap_config = {
 > +	.reg_bits = 32,
 > +	.val_bits = 32,
 > +	.reg_stride = 4,
-> +	.max_register = 0x1000,
+ok
 > +};
 > +
-> +struct icap {
+> +struct xrt_devctl {
 > +	struct platform_device	*pdev;
-> +	struct regmap		*regmap;
-> +	struct mutex		icap_lock; /* icap dev lock */
-> +
-whitespace, remove extra nl
-> +	u32			idcode;
+> +	struct regmap		*regmap[XRT_DEVCTL_MAX];
+> +	ulong			sizes[XRT_DEVCTL_MAX];
 > +};
 > +
-> +static int wait_for_done(const struct icap *icap)
+> +static int xrt_devctl_name2id(struct xrt_devctl *devctl, const char *name)
 > +{
-> +	int i = 0;
-> +	int ret;
-> +	u32 w;
-> +
-> +	for (i = 0; i < 10; i++) {
-> +		/*
-> +		 * it requires few micro seconds for ICAP to process incoming data.
-> +		 * Polling every 5us for 10 times would be good enough.
-ok
-> +		 */
-> +		udelay(5);
-> +		ret = regmap_read(icap->regmap, ICAP_REG_SR, &w);
-> +		if (ret)
-> +			return ret;
-> +		ICAP_INFO(icap, "XHWICAP_SR: %x", w);
-> +		if (w & (ICAP_STATUS_EOS | ICAP_STATUS_DONE))
-ok
-> +			return 0;
-> +	}
-> +
-> +	ICAP_ERR(icap, "bitstream download timeout");
-> +	return -ETIMEDOUT;
-> +}
-> +
-> +static int icap_write(const struct icap *icap, const u32 *word_buf, int size)
-> +{
-> +	u32 value = 0;
-> +	int ret;
 > +	int i;
 > +
-> +	for (i = 0; i < size; i++) {
-> +		value = be32_to_cpu(word_buf[i]);
-> +		ret = regmap_write(icap->regmap, ICAP_REG_WF, value);
-> +		if (ret)
-> +			return ret;
+> +	for (i = 0; i < XRT_DEVCTL_MAX && name_id[i].ep_name; i++) {
+> +		if (!strncmp(name_id[i].ep_name, name, strlen(name_id[i].ep_name) + 1))
+> +			return name_id[i].id;
 > +	}
 > +
-> +	ret = regmap_write(icap->regmap, ICAP_REG_CR, 0x1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i = 0; i < 20; i++) {
-> +		ret = regmap_read(icap->regmap, ICAP_REG_CR, &value);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if ((value & 0x1) == 0)
-> +			return 0;
-> +		ndelay(50);
-> +	}
-> +
-> +	ICAP_ERR(icap, "writing %d dwords timeout", size);
-> +	return -EIO;
-> +}
-> +
-> +static int bitstream_helper(struct icap *icap, const u32 *word_buffer,
-> +			    u32 word_count)
-> +{
-> +	int wr_fifo_vacancy = 0;
-> +	u32 word_written = 0;
-> +	u32 remain_word;
-> +	int err = 0;
-> +
-> +	WARN_ON(!mutex_is_locked(&icap->icap_lock));
-> +	for (remain_word = word_count; remain_word > 0;
-> +	     remain_word -= word_written, word_buffer += word_written) {
-> +		err = regmap_read(icap->regmap, ICAP_REG_WFV, &wr_fifo_vacancy);
-> +		if (err) {
-> +			ICAP_ERR(icap, "read wr_fifo_vacancy failed %d", err);
-> +			break;
-> +		}
-> +		if (wr_fifo_vacancy <= 0) {
-> +			ICAP_ERR(icap, "no vacancy: %d", wr_fifo_vacancy);
-> +			err = -EIO;
-> +			break;
-> +		}
-> +		word_written = (wr_fifo_vacancy < remain_word) ?
-> +			wr_fifo_vacancy : remain_word;
-> +		if (icap_write(icap, word_buffer, word_written) != 0) {
-> +			ICAP_ERR(icap, "write failed remain %d, written %d",
-> +				 remain_word, word_written);
-> +			err = -EIO;
-> +			break;
-> +		}
-> +	}
-> +
-> +	return err;
-> +}
-> +
-> +static int icap_download(struct icap *icap, const char *buffer,
-> +			 unsigned long length)
-> +{
-> +	u32	num_chars_read = XCLBIN_HWICAP_BITFILE_BUF_SZ;
-> +	u32	byte_read;
-> +	int	err = 0;
-> +
-> +	if (length % sizeof(u32)) {
-ok
-> +		ICAP_ERR(icap, "invalid bitstream length %ld", length);
-> +		return -EINVAL;
-> +	}
-> +
-> +	mutex_lock(&icap->icap_lock);
-> +	for (byte_read = 0; byte_read < length; byte_read += num_chars_read) {
-> +		num_chars_read = length - byte_read;
-> +		if (num_chars_read > XCLBIN_HWICAP_BITFILE_BUF_SZ)
-> +			num_chars_read = XCLBIN_HWICAP_BITFILE_BUF_SZ;
-> +
-> +		err = bitstream_helper(icap, (u32 *)buffer, num_chars_read / sizeof(u32));
-> +		if (err)
-> +			goto failed;
-> +		buffer += num_chars_read;
-> +	}
-> +
-> +	/* there is not any cleanup needs to be done if writing ICAP timeout. */
-> +	err = wait_for_done(icap);
-> +
-> +failed:
-> +	mutex_unlock(&icap->icap_lock);
-> +
-> +	return err;
-> +}
-> +
-> +/*
-> + * Discover the FPGA IDCODE using special sequence of canned commands
-> + */
-> +static int icap_probe_chip(struct icap *icap)
-> +{
-> +	int err;
-> +	u32 val = 0;
-
-ok, thanks for demagic-ing this function.
-
-Looks good overall, only a few minor things.
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
-> +
-> +	regmap_read(icap->regmap, ICAP_REG_SR, &val);
-> +	if (val != ICAP_STATUS_DONE)
-> +		return -ENODEV;
-> +	/* Read ICAP FIFO vacancy */
-> +	regmap_read(icap->regmap, ICAP_REG_WFV, &val);
-> +	if (val < 8)
-> +		return -ENODEV;
-> +	err = icap_write(icap, idcode_stream, ARRAY_SIZE(idcode_stream));
-> +	if (err)
-> +		return err;
-> +	err = wait_for_done(icap);
-> +	if (err)
-> +		return err;
-> +
-> +	/* Tell config engine how many words to transfer to read FIFO */
-> +	regmap_write(icap->regmap, ICAP_REG_SZ, 0x1);
-> +	/* Switch the ICAP to read mode */
-> +	regmap_write(icap->regmap, ICAP_REG_CR, 0x2);
-> +	err = wait_for_done(icap);
-> +	if (err)
-> +		return err;
-> +
-> +	/* Read IDCODE from Read FIFO */
-> +	regmap_read(icap->regmap, ICAP_REG_RF, &icap->idcode);
-> +	return 0;
+> +	return -EINVAL;
 > +}
 > +
 > +static int
-> +xrt_icap_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
+> +xrt_devctl_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
 > +{
-> +	struct xrt_icap_wr *wr_arg = arg;
-> +	struct icap *icap;
+> +	struct xrt_devctl *devctl;
 > +	int ret = 0;
 > +
-> +	icap = platform_get_drvdata(pdev);
+> +	devctl = platform_get_drvdata(pdev);
 > +
 > +	switch (cmd) {
 > +	case XRT_XLEAF_EVENT:
 > +		/* Does not handle any event. */
 > +		break;
-> +	case XRT_ICAP_WRITE:
-> +		ret = icap_download(icap, wr_arg->xiiw_bit_data,
-> +				    wr_arg->xiiw_data_len);
+> +	case XRT_DEVCTL_READ: {
+> +		struct xrt_devctl_rw *rw_arg = arg;
+> +
+> +		if (rw_arg->xdr_len & 0x3) {
+> +			xrt_err(pdev, "invalid len %d", rw_arg->xdr_len);
+> +			return -EINVAL;
+> +		}
+> +
+> +		if (rw_arg->xdr_id >= XRT_DEVCTL_MAX) {
+ok
+> +			xrt_err(pdev, "invalid id %d", rw_arg->xdr_id);
+> +			return -EINVAL;
+> +		}
+> +
+> +		if (!devctl->regmap[rw_arg->xdr_id]) {
+> +			xrt_err(pdev, "io not found, id %d",
+> +				rw_arg->xdr_id);
+> +			return -EINVAL;
+> +		}
+> +
+> +		ret = regmap_bulk_read(devctl->regmap[rw_arg->xdr_id], rw_arg->xdr_offset,
+> +				       rw_arg->xdr_buf,
+> +				       rw_arg->xdr_len / devctl_regmap_config.reg_stride);
 > +		break;
-> +	case XRT_ICAP_GET_IDCODE:
-> +		*(u32 *)arg = icap->idcode;
-> +		break;
+> +	}
+
+ok, *_WRITE removed.
+
+Thanks for the changes
+
+Reviewed-by: Tom Rix <trix@redhat.com>
+
 > +	default:
-> +		ICAP_ERR(icap, "unknown command %d", cmd);
+> +		xrt_err(pdev, "unsupported cmd %d", cmd);
 > +		return -EINVAL;
 > +	}
 > +
 > +	return ret;
 > +}
 > +
-> +static int xrt_icap_probe(struct platform_device *pdev)
+> +static int xrt_devctl_probe(struct platform_device *pdev)
 > +{
+> +	struct xrt_devctl *devctl = NULL;
 > +	void __iomem *base = NULL;
 > +	struct resource *res;
-> +	struct icap *icap;
-> +	int result = 0;
+> +	int i, id, ret = 0;
 > +
-> +	icap = devm_kzalloc(&pdev->dev, sizeof(*icap), GFP_KERNEL);
-> +	if (!icap)
+> +	devctl = devm_kzalloc(&pdev->dev, sizeof(*devctl), GFP_KERNEL);
+> +	if (!devctl)
 > +		return -ENOMEM;
 > +
-> +	icap->pdev = pdev;
-> +	platform_set_drvdata(pdev, icap);
-> +	mutex_init(&icap->icap_lock);
+> +	devctl->pdev = pdev;
+> +	platform_set_drvdata(pdev, devctl);
 > +
-> +	xrt_info(pdev, "probing");
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res)
-> +		return -EINVAL;
+> +	xrt_info(pdev, "probing...");
+> +	for (i = 0, res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	    res;
+> +	    res = platform_get_resource(pdev, IORESOURCE_MEM, ++i)) {
+> +		struct regmap_config config = devctl_regmap_config;
 > +
-> +	base = devm_ioremap_resource(&pdev->dev, res);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	icap->regmap = devm_regmap_init_mmio(&pdev->dev, base, &icap_regmap_config);
-> +	if (IS_ERR(icap->regmap)) {
-> +		ICAP_ERR(icap, "init mmio failed");
-> +		return PTR_ERR(icap->regmap);
+> +		id = xrt_devctl_name2id(devctl, res->name);
+> +		if (id < 0) {
+> +			xrt_err(pdev, "ep %s not found", res->name);
+> +			continue;
+> +		}
+> +		base = devm_ioremap_resource(&pdev->dev, res);
+> +		if (IS_ERR(base)) {
+> +			ret = PTR_ERR(base);
+> +			break;
+> +		}
+> +		config.max_register = res->end - res->start + 1;
+> +		devctl->regmap[id] = devm_regmap_init_mmio(&pdev->dev, base, &config);
+> +		if (IS_ERR(devctl->regmap[id])) {
+> +			xrt_err(pdev, "map base failed %pR", res);
+> +			ret = PTR_ERR(devctl->regmap[id]);
+> +			break;
+> +		}
+> +		devctl->sizes[id] = res->end - res->start + 1;
 > +	}
-> +	/* Disable ICAP interrupts */
-> +	regmap_write(icap->regmap, ICAP_REG_GIER, 0);
 > +
-> +	result = icap_probe_chip(icap);
-> +	if (result)
-> +		xrt_err(pdev, "Failed to probe FPGA");
-> +	else
-> +		xrt_info(pdev, "Discovered FPGA IDCODE %x", icap->idcode);
-> +	return result;
+> +	return ret;
 > +}
 > +
-> +static struct xrt_subdev_endpoints xrt_icap_endpoints[] = {
+> +static struct xrt_subdev_endpoints xrt_devctl_endpoints[] = {
 > +	{
 > +		.xse_names = (struct xrt_subdev_ep_names[]) {
-> +			{ .ep_name = XRT_MD_NODE_FPGA_CONFIG },
+> +			/* add name if ep is in same partition */
+> +			{ .ep_name = XRT_MD_NODE_BLP_ROM },
 > +			{ NULL },
 > +		},
 > +		.xse_min_ep = 1,
 > +	},
+> +	{
+> +		.xse_names = (struct xrt_subdev_ep_names[]) {
+> +			{ .ep_name = XRT_MD_NODE_GOLDEN_VER },
+> +			{ NULL },
+> +		},
+> +		.xse_min_ep = 1,
+> +	},
+> +	/* adding ep bundle generates devctl device instance */
 > +	{ 0 },
 > +};
 > +
-> +static struct xrt_subdev_drvdata xrt_icap_data = {
+> +static struct xrt_subdev_drvdata xrt_devctl_data = {
 > +	.xsd_dev_ops = {
-> +		.xsd_leaf_call = xrt_icap_leaf_call,
+> +		.xsd_leaf_call = xrt_devctl_leaf_call,
 > +	},
 > +};
 > +
-> +static const struct platform_device_id xrt_icap_table[] = {
-> +	{ XRT_ICAP, (kernel_ulong_t)&xrt_icap_data },
+> +static const struct platform_device_id xrt_devctl_table[] = {
+> +	{ XRT_DEVCTL, (kernel_ulong_t)&xrt_devctl_data },
 > +	{ },
 > +};
 > +
-> +static struct platform_driver xrt_icap_driver = {
+> +static struct platform_driver xrt_devctl_driver = {
 > +	.driver = {
-> +		.name = XRT_ICAP,
+> +		.name = XRT_DEVCTL,
 > +	},
-> +	.probe = xrt_icap_probe,
-> +	.id_table = xrt_icap_table,
+> +	.probe = xrt_devctl_probe,
+> +	.id_table = xrt_devctl_table,
 > +};
 > +
-> +XRT_LEAF_INIT_FINI_FUNC(XRT_SUBDEV_ICAP, icap);
+> +XRT_LEAF_INIT_FINI_FUNC(XRT_SUBDEV_DEVCTL, devctl);
 
