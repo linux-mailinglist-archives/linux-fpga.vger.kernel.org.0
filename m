@@ -2,71 +2,71 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E25E6355CEC
-	for <lists+linux-fpga@lfdr.de>; Tue,  6 Apr 2021 22:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E88355CFF
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 Apr 2021 22:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238487AbhDFUcj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Apr 2021 16:32:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59492 "EHLO
+        id S235205AbhDFUho (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Apr 2021 16:37:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31982 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241558AbhDFUci (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Apr 2021 16:32:38 -0400
+        by vger.kernel.org with ESMTP id S245476AbhDFUhn (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Apr 2021 16:37:43 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617741149;
+        s=mimecast20190719; t=1617741454;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=y5AiEX2xm7mUi1RVcdN7OMtElv1auQNpFMNuLEK6CfA=;
-        b=I5mSnGChzUCe10MR3MEW4EaYUalGWPiQzH0vzoN51A8i1sXiOcpj02Gtry5xvMWhtGQPsR
-        dbad3GK5kExfR0vAUvBND9HUrbfJmzZLrA8O9WNhRSlOhzt3C5NsBUQIiK2AaXXy/Tc6ym
-        tzZLg9cpD9QWGTSo9uecN+bmcEAW3a0=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-201-F5ASJ5YPOdaTOLnXS9LHOw-1; Tue, 06 Apr 2021 16:32:10 -0400
-X-MC-Unique: F5ASJ5YPOdaTOLnXS9LHOw-1
-Received: by mail-qv1-f72.google.com with SMTP id p2so11215883qvi.6
-        for <linux-fpga@vger.kernel.org>; Tue, 06 Apr 2021 13:32:10 -0700 (PDT)
+        bh=SHiiDAoRDKlSpF5W2fiqmIZUSD2zT3WhpbrUrOmekT8=;
+        b=hip1QzYAFvzeK6yy4OpikIXyWvyJ9NU91Fj1ttO7D664C0hFnoQTVOo+lH8B2uhkc8/JbX
+        U+iJUCz66M8rssqK0iPGH8QDR9KY/rtNthfd0YqDHUgi4eZMRC0e07lNI8b28+RfVQkgMi
+        mKLvow0UJZDV+j8+aUyWtx69s7NmREs=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-212-1nKF71jhNiuqpxZzcC0F-g-1; Tue, 06 Apr 2021 16:37:33 -0400
+X-MC-Unique: 1nKF71jhNiuqpxZzcC0F-g-1
+Received: by mail-qk1-f197.google.com with SMTP id c1so13421515qke.8
+        for <linux-fpga@vger.kernel.org>; Tue, 06 Apr 2021 13:37:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=y5AiEX2xm7mUi1RVcdN7OMtElv1auQNpFMNuLEK6CfA=;
-        b=EkACcCTfdSbCi94p9pzYlDAa3UvM556oNEiMjzGrShL5A7mdfIWslStw9iBbG0sM6T
-         hH2i9tiTt8Lt6qJlbm4cxearYInr5PAVFxOw6HBZRMfuX7Q14bVQPnjiDR/GLgJttyEL
-         TIyd64zz3WWqkZH7WiBjTM/OPgasYPXBVOwWnM8b4z2MMxSN5KYMz7itPd8Qj3klq4rr
-         PsGgvKhHuvMUBL2g9tr2lfWnegyLriy9iGLC9xUvUhKwYmqkxEVDYcQk2N6MGUpZ537g
-         lRFmY29qMaHqXvFE39b40GkBfgdwcPTtsT0EyBl4GXvyjcsbGGyvD+1Qi1FSZ1f5ItPi
-         41Qg==
-X-Gm-Message-State: AOAM533ZU+LXyuzAOJegLdR0rOMiWNdVq/THLIUTpdmzWsSmD7l/WntL
-        tH1WQU9UowkQN1KI6Uv92ojPLESMLoQ2pxjSwQ12O2kTEz3rYfZ15oCw2PugA6PQPWN5tj5sKtA
-        +FwQGzigxLJy5OrwO5oleqA==
-X-Received: by 2002:ac8:4f4b:: with SMTP id i11mr28830324qtw.284.1617741129567;
-        Tue, 06 Apr 2021 13:32:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx7sLqUq5cANZ1kwhajOaTsNAUz4EiDlSnyYp1An3TL4fwvTZK2F1iywiIsZZ48SG5iW9ozcg==
-X-Received: by 2002:ac8:4f4b:: with SMTP id i11mr28830309qtw.284.1617741129293;
-        Tue, 06 Apr 2021 13:32:09 -0700 (PDT)
+        bh=SHiiDAoRDKlSpF5W2fiqmIZUSD2zT3WhpbrUrOmekT8=;
+        b=YxERG1dsGlKLZa56UlYT0hz8oGLGP5BvzV/ugrNCUdEqDAKvO40BU1hvkjpZJlGDhd
+         C2gpMnAFzpiaW7TPJE0bWCvRDsl26mYMAm/SEXVG/clSyEZ4vMit8zKXkYHsGyHXDHTD
+         XYno4VIU+ohGZuF/E5uGemWfywbYx5JCNQ9xdD2vu/Qv/q//Q7cWfOWKkTXw68FPxYGc
+         qlSEkl7Rz743IlG6pUHlwMJlHmYFc95gDzCj05aleLEW3VJPU8ssNE5P0MxTW2jDbfv2
+         dtgUv5FZC0FQYLvLlFUy9iY3EtZpOVZmy1l+jLU3d6A8fx9U/KH2LsruivxhYmYAQL1F
+         +8uQ==
+X-Gm-Message-State: AOAM530w+KTkvMbTw/SfXQfVEUc5nUpG9OtNjOPEoLJZZnxL77vV4a3g
+        tQ7jWGErVa++IA/NTgCVNpLPOrO0MCGq2dZccB5zvrFOWIknZGqISxDrR2krffFJBBEOIMAqx30
+        7iQ1omdsMVpce0AJk/Ul2GA==
+X-Received: by 2002:a37:886:: with SMTP id 128mr32868771qki.430.1617741452686;
+        Tue, 06 Apr 2021 13:37:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyLZhl4CZ/pjvsSTD4KFAyWmQlrZ0/IFXc0KJjTWwwbI8yN5HySIRFXvGe6WMCCxmPU46vnmQ==
+X-Received: by 2002:a37:886:: with SMTP id 128mr32868749qki.430.1617741452457;
+        Tue, 06 Apr 2021 13:37:32 -0700 (PDT)
 Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 17sm16297016qky.7.2021.04.06.13.32.06
+        by smtp.gmail.com with ESMTPSA id c17sm14751116qtd.71.2021.04.06.13.37.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 13:32:09 -0700 (PDT)
-Subject: Re: [PATCH V4 XRT Alveo 17/20] fpga: xrt: clock frequency counter
- platform driver
+        Tue, 06 Apr 2021 13:37:31 -0700 (PDT)
+Subject: Re: [PATCH V4 XRT Alveo 18/20] fpga: xrt: DDR calibration platform
+ driver
 To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
 Cc:     linux-fpga@vger.kernel.org, maxz@xilinx.com,
         sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
         stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
         robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
 References: <20210324052947.27889-1-lizhi.hou@xilinx.com>
- <20210324052947.27889-18-lizhi.hou@xilinx.com>
+ <20210324052947.27889-19-lizhi.hou@xilinx.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <ee717a18-bfec-6962-39cd-2efb223d577b@redhat.com>
-Date:   Tue, 6 Apr 2021 13:32:04 -0700
+Message-ID: <e529c014-f2d5-a0d2-dba9-4325af41c425@redhat.com>
+Date:   Tue, 6 Apr 2021 13:37:28 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210324052947.27889-18-lizhi.hou@xilinx.com>
+In-Reply-To: <20210324052947.27889-19-lizhi.hou@xilinx.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -76,98 +76,87 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 On 3/23/21 10:29 PM, Lizhi Hou wrote:
-> Add clock frequency counter driver. Clock frequency counter is
-> a hardware function discovered by walking xclbin metadata. A platform
-> device node will be created for it. Other part of driver can read the
-> actual clock frequency through clock frequency counter driver.
+> Add DDR calibration driver. DDR calibration is a hardware function
+> discovered by walking firmware metadata. A platform device node will
+> be created for it. Hardware provides DDR calibration status through
+> this function.
 >
 > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 > Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 > ---
->   drivers/fpga/xrt/include/xleaf/clkfreq.h |  21 ++
->   drivers/fpga/xrt/lib/xleaf/clkfreq.c     | 240 +++++++++++++++++++++++
->   2 files changed, 261 insertions(+)
->   create mode 100644 drivers/fpga/xrt/include/xleaf/clkfreq.h
->   create mode 100644 drivers/fpga/xrt/lib/xleaf/clkfreq.c
+>   .../fpga/xrt/include/xleaf/ddr_calibration.h  |  28 +++
+>   drivers/fpga/xrt/lib/xleaf/ddr_calibration.c  | 226 ++++++++++++++++++
+ok
+>   2 files changed, 254 insertions(+)
+>   create mode 100644 drivers/fpga/xrt/include/xleaf/ddr_calibration.h
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
 >
-> diff --git a/drivers/fpga/xrt/include/xleaf/clkfreq.h b/drivers/fpga/xrt/include/xleaf/clkfreq.h
+> diff --git a/drivers/fpga/xrt/include/xleaf/ddr_calibration.h b/drivers/fpga/xrt/include/xleaf/ddr_calibration.h
 > new file mode 100644
-> index 000000000000..005441d5df78
+> index 000000000000..878740c26ca2
 > --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/clkfreq.h
-> @@ -0,0 +1,21 @@
+> +++ b/drivers/fpga/xrt/include/xleaf/ddr_calibration.h
+> @@ -0,0 +1,28 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
 > + * Copyright (C) 2020-2021 Xilinx, Inc.
 > + *
 > + * Authors:
-> + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
+> + *	Cheng Zhen <maxz@xilinx.com>
 > + */
 > +
-> +#ifndef _XRT_CLKFREQ_H_
-> +#define _XRT_CLKFREQ_H_
+> +#ifndef _XRT_DDR_CALIBRATION_H_
+> +#define _XRT_DDR_CALIBRATION_H_
 > +
 > +#include "xleaf.h"
+> +#include <linux/xrt/xclbin.h>
 > +
 > +/*
-> + * CLKFREQ driver leaf calls.
+> + * Memory calibration driver leaf calls.
 > + */
-> +enum xrt_clkfreq_leaf_cmd {
-> +	XRT_CLKFREQ_READ = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+> +enum xrt_calib_results {
+> +	XRT_CALIB_UNKNOWN = 0,
+ok
+> +	XRT_CALIB_SUCCEEDED,
+> +	XRT_CALIB_FAILED,
 > +};
 > +
-> +#endif	/* _XRT_CLKFREQ_H_ */
-> diff --git a/drivers/fpga/xrt/lib/xleaf/clkfreq.c b/drivers/fpga/xrt/lib/xleaf/clkfreq.c
+> +enum xrt_calib_leaf_cmd {
+> +	XRT_CALIB_RESULT = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+> +};
+> +
+> +#endif	/* _XRT_DDR_CALIBRATION_H_ */
+> diff --git a/drivers/fpga/xrt/lib/xleaf/ddr_calibration.c b/drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
 > new file mode 100644
-> index 000000000000..49473adde3fd
+> index 000000000000..5a9fa82946cb
 > --- /dev/null
-> +++ b/drivers/fpga/xrt/lib/xleaf/clkfreq.c
-> @@ -0,0 +1,240 @@
+> +++ b/drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
+> @@ -0,0 +1,226 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Xilinx Alveo FPGA Clock Frequency Counter Driver
+> + * Xilinx Alveo FPGA memory calibration driver
 > + *
 > + * Copyright (C) 2020-2021 Xilinx, Inc.
+> + *
+> + * memory calibration
 > + *
 > + * Authors:
 > + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
 > + */
-> +
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/platform_device.h>
 > +#include <linux/delay.h>
-> +#include <linux/device.h>
 > +#include <linux/regmap.h>
-> +#include <linux/io.h>
+> +#include "xclbin-helper.h"
 > +#include "metadata.h"
-> +#include "xleaf.h"
-> +#include "xleaf/clkfreq.h"
+> +#include "xleaf/ddr_calibration.h"
 > +
-> +#define CLKFREQ_ERR(clkfreq, fmt, arg...)   \
-> +	xrt_err((clkfreq)->pdev, fmt "\n", ##arg)
-> +#define CLKFREQ_WARN(clkfreq, fmt, arg...)  \
-> +	xrt_warn((clkfreq)->pdev, fmt "\n", ##arg)
-> +#define CLKFREQ_INFO(clkfreq, fmt, arg...)  \
-> +	xrt_info((clkfreq)->pdev, fmt "\n", ##arg)
-> +#define CLKFREQ_DBG(clkfreq, fmt, arg...)   \
-> +	xrt_dbg((clkfreq)->pdev, fmt "\n", ##arg)
+> +#define XRT_CALIB	"xrt_calib"
 > +
-> +#define XRT_CLKFREQ		"xrt_clkfreq"
+> +#define XRT_CALIB_STATUS_REG		0
+> +#define XRT_CALIB_READ_RETRIES		20
+> +#define XRT_CALIB_READ_INTERVAL		500 /* ms */
 > +
-> +#define XRT_CLKFREQ_CONTROL_STATUS_MASK		0xffff
-> +
-> +#define XRT_CLKFREQ_CONTROL_START	0x1
-> +#define XRT_CLKFREQ_CONTROL_DONE	0x2
-> +#define XRT_CLKFREQ_V5_CLK0_ENABLED	0x10000
-> +
-> +#define XRT_CLKFREQ_CONTROL_REG		0
-> +#define XRT_CLKFREQ_COUNT_REG		0x8
-> +#define XRT_CLKFREQ_V5_COUNT_REG	0x10
-> +
-> +#define XRT_CLKFREQ_READ_RETRIES	10
-> +
-> +static const struct regmap_config clkfreq_regmap_config = {
+> +static const struct regmap_config calib_regmap_config = {
 > +	.reg_bits = 32,
 > +	.val_bits = 32,
 > +	.reg_stride = 4,
@@ -175,182 +164,181 @@ On 3/23/21 10:29 PM, Lizhi Hou wrote:
 ok
 > +};
 > +
-> +struct clkfreq {
-> +	struct platform_device	*pdev;
-> +	struct regmap		*regmap;
-> +	const char		*clkfreq_ep_name;
-> +	struct mutex		clkfreq_lock; /* clock counter dev lock */
+> +struct calib_cache {
+> +	struct list_head	link;
+> +	const char		*ep_name;
+> +	char			*data;
+> +	u32			data_size;
 > +};
 > +
-> +static int clkfreq_read(struct clkfreq *clkfreq, u32 *freq)
+> +struct calib {
+> +	struct platform_device	*pdev;
+> +	struct regmap		*regmap;
+> +	struct mutex		lock; /* calibration dev lock */
+> +	struct list_head	cache_list;
+> +	u32			cache_num;
+> +	enum xrt_calib_results	result;
+> +};
+> +
+> +static void __calib_cache_clean_nolock(struct calib *calib)
 ok
 > +{
-> +	int times = XRT_CLKFREQ_READ_RETRIES;
+> +	struct calib_cache *cache, *temp;
+> +
+> +	list_for_each_entry_safe(cache, temp, &calib->cache_list, link) {
+> +		vfree(cache->data);
+> +		list_del(&cache->link);
+> +		vfree(cache);
+> +	}
+> +	calib->cache_num = 0;
+> +}
+> +
+> +static void calib_cache_clean(struct calib *calib)
+> +{
+> +	mutex_lock(&calib->lock);
+> +	__calib_cache_clean_nolock(calib);
+> +	mutex_unlock(&calib->lock);
+> +}
+> +
+> +static int calib_calibration(struct calib *calib)
+> +{
+> +	u32 times = XRT_CALIB_READ_RETRIES;
 ok
 > +	u32 status;
 > +	int ret;
 > +
-> +	*freq = 0;
-> +	mutex_lock(&clkfreq->clkfreq_lock);
-> +	ret = regmap_write(clkfreq->regmap, XRT_CLKFREQ_CONTROL_REG, XRT_CLKFREQ_CONTROL_START);
-> +	if (ret) {
-> +		CLKFREQ_INFO(clkfreq, "write start to control reg failed %d", ret);
-> +		goto failed;
-> +	}
 > +	while (times != 0) {
-> +		ret = regmap_read(clkfreq->regmap, XRT_CLKFREQ_CONTROL_REG, &status);
+> +		ret = regmap_read(calib->regmap, XRT_CALIB_STATUS_REG, &status);
 > +		if (ret) {
-> +			CLKFREQ_INFO(clkfreq, "read control reg failed %d", ret);
-> +			goto failed;
+> +			xrt_err(calib->pdev, "failed to read status reg %d", ret);
+> +			return ret;
 > +		}
-> +		if ((status & XRT_CLKFREQ_CONTROL_STATUS_MASK) == XRT_CLKFREQ_CONTROL_DONE)
+> +
+> +		if (status & BIT(0))
 > +			break;
-> +		mdelay(1);
-> +		times--;
-> +	};
-> +
-> +	if (!times) {
-> +		ret = -ETIMEDOUT;
-> +		goto failed;
-> +	}
-> +
-> +	if (status & XRT_CLKFREQ_V5_CLK0_ENABLED)
-> +		ret = regmap_read(clkfreq->regmap, XRT_CLKFREQ_V5_COUNT_REG, freq);
-> +	else
-> +		ret = regmap_read(clkfreq->regmap, XRT_CLKFREQ_COUNT_REG, freq);
-> +	if (ret) {
-> +		CLKFREQ_INFO(clkfreq, "read count failed %d", ret);
-> +		goto failed;
-> +	}
-ok
-> +
-> +	mutex_unlock(&clkfreq->clkfreq_lock);
-> +
-> +	return 0;
-> +
-> +failed:
-> +	mutex_unlock(&clkfreq->clkfreq_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static ssize_t freq_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	struct clkfreq *clkfreq = platform_get_drvdata(to_platform_device(dev));
-> +	ssize_t count;
-> +	u32 freq;
-> +
-> +	if (clkfreq_read(clkfreq, &freq))
-> +		return -EINVAL;
-ok
-> +
-> +	count = snprintf(buf, 64, "%u\n", freq);
-ok
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RO(freq);
-> +
-> +static struct attribute *clkfreq_attrs[] = {
-> +	&dev_attr_freq.attr,
-> +	NULL,
-> +};
-> +
-> +static struct attribute_group clkfreq_attr_group = {
-> +	.attrs = clkfreq_attrs,
-> +};
-> +
-> +static int
-> +xrt_clkfreq_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
-> +{
-> +	struct clkfreq *clkfreq;
-> +	int ret = 0;
-> +
-> +	clkfreq = platform_get_drvdata(pdev);
-> +
-> +	switch (cmd) {
-> +	case XRT_XLEAF_EVENT:
-> +		/* Does not handle any event. */
-> +		break;
-> +	case XRT_CLKFREQ_READ:
-ok
-> +		ret = clkfreq_read(clkfreq, arg);
-ok
-> +		break;
-> +	default:
-> +		xrt_err(pdev, "unsupported cmd %d", cmd);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int clkfreq_remove(struct platform_device *pdev)
-> +{
-> +	sysfs_remove_group(&pdev->dev.kobj, &clkfreq_attr_group);
-> +
-> +	return 0;
-> +}
-> +
-> +static int clkfreq_probe(struct platform_device *pdev)
-> +{
-> +	struct clkfreq *clkfreq = NULL;
-> +	void __iomem *base = NULL;
-> +	struct resource *res;
-> +	int ret;
-> +
-> +	clkfreq = devm_kzalloc(&pdev->dev, sizeof(*clkfreq), GFP_KERNEL);
-> +	if (!clkfreq)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, clkfreq);
-> +	clkfreq->pdev = pdev;
-> +	mutex_init(&clkfreq->clkfreq_lock);
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res) {
-> +		ret = -EINVAL;
-> +		goto failed;
-> +	}
-> +	base = devm_ioremap_resource(&pdev->dev, res);
-> +	if (IS_ERR(base)) {
-> +		ret = PTR_ERR(base);
-> +		goto failed;
-> +	}
-> +
-> +	clkfreq->regmap = devm_regmap_init_mmio(&pdev->dev, base, &clkfreq_regmap_config);
-> +	if (IS_ERR(clkfreq->regmap)) {
-> +		CLKFREQ_ERR(clkfreq, "regmap %pR failed", res);
-> +		ret = PTR_ERR(clkfreq->regmap);
-> +		goto failed;
-> +	}
-> +	clkfreq->clkfreq_ep_name = res->name;
-> +
-> +	ret = sysfs_create_group(&pdev->dev.kobj, &clkfreq_attr_group);
-> +	if (ret) {
-> +		CLKFREQ_ERR(clkfreq, "create clkfreq attrs failed: %d", ret);
-> +		goto failed;
-> +	}
-> +
-> +	CLKFREQ_INFO(clkfreq, "successfully initialized clkfreq subdev");
-> +
-> +	return 0;
-> +
-> +failed:
-> +	return ret;
-> +}
-> +
-> +static struct xrt_subdev_endpoints xrt_clkfreq_endpoints[] = {
-> +	{
-> +		.xse_names = (struct xrt_subdev_ep_names[]) {
-> +			{ .regmap_name = XRT_MD_REGMAP_CLKFREQ },
+> +		msleep(XRT_CALIB_READ_INTERVAL);
 
 ok
-
-Looks good to me
 
 Reviewed-by: Tom Rix <trix@redhat.com>
 
+> +		times--;
+> +	}
+> +
+> +	if (!times) {
+> +		xrt_err(calib->pdev,
+> +			"MIG calibration timeout after bitstream download");
+> +		return -ETIMEDOUT;
+> +	}
+> +
+> +	xrt_info(calib->pdev, "took %dms", (XRT_CALIB_READ_RETRIES - times) *
+> +		 XRT_CALIB_READ_INTERVAL);
+> +	return 0;
+> +}
+> +
+> +static void xrt_calib_event_cb(struct platform_device *pdev, void *arg)
+> +{
+> +	struct calib *calib = platform_get_drvdata(pdev);
+> +	struct xrt_event *evt = (struct xrt_event *)arg;
+> +	enum xrt_events e = evt->xe_evt;
+> +	enum xrt_subdev_id id;
+> +	int ret;
+> +
+> +	id = evt->xe_subdev.xevt_subdev_id;
+> +
+> +	switch (e) {
+> +	case XRT_EVENT_POST_CREATION:
+> +		if (id == XRT_SUBDEV_UCS) {
+> +			ret = calib_calibration(calib);
+> +			if (ret)
+> +				calib->result = XRT_CALIB_FAILED;
+> +			else
+> +				calib->result = XRT_CALIB_SUCCEEDED;
+> +		}
+> +		break;
+> +	default:
+> +		xrt_dbg(pdev, "ignored event %d", e);
+> +		break;
+> +	}
+> +}
+> +
+> +static int xrt_calib_remove(struct platform_device *pdev)
+> +{
+> +	struct calib *calib = platform_get_drvdata(pdev);
+> +
+> +	calib_cache_clean(calib);
+> +
+> +	return 0;
+> +}
+> +
+> +static int xrt_calib_probe(struct platform_device *pdev)
+> +{
+> +	void __iomem *base = NULL;
+> +	struct resource *res;
+> +	struct calib *calib;
+> +	int err = 0;
+> +
+> +	calib = devm_kzalloc(&pdev->dev, sizeof(*calib), GFP_KERNEL);
+> +	if (!calib)
+> +		return -ENOMEM;
+> +
+> +	calib->pdev = pdev;
+> +	platform_set_drvdata(pdev, calib);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res) {
+> +		err = -EINVAL;
+> +		goto failed;
+> +	}
+> +
+> +	base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(base)) {
+> +		err = PTR_ERR(base);
+> +		goto failed;
+> +	}
+> +
+> +	calib->regmap = devm_regmap_init_mmio(&pdev->dev, base, &calib_regmap_config);
+> +	if (IS_ERR(calib->regmap)) {
+> +		xrt_err(pdev, "Map iomem failed");
+> +		err = PTR_ERR(calib->regmap);
+> +		goto failed;
+> +	}
+> +
+> +	mutex_init(&calib->lock);
+> +	INIT_LIST_HEAD(&calib->cache_list);
+> +
+> +	return 0;
+> +
+> +failed:
+> +	return err;
+> +}
+> +
+> +static int
+> +xrt_calib_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
+> +{
+> +	struct calib *calib = platform_get_drvdata(pdev);
+> +	int ret = 0;
+> +
+> +	switch (cmd) {
+> +	case XRT_XLEAF_EVENT:
+> +		xrt_calib_event_cb(pdev, arg);
+> +		break;
+> +	case XRT_CALIB_RESULT: {
+> +		enum xrt_calib_results *r = (enum xrt_calib_results *)arg;
+> +		*r = calib->result;
+> +		break;
+> +	}
+> +	default:
+> +		xrt_err(pdev, "unsupported cmd %d", cmd);
+> +		ret = -EINVAL;
+> +	}
+> +	return ret;
+> +}
+> +
+> +static struct xrt_subdev_endpoints xrt_calib_endpoints[] = {
+> +	{
+> +		.xse_names = (struct xrt_subdev_ep_names[]) {
+> +			{ .ep_name = XRT_MD_NODE_DDR_CALIB },
 > +			{ NULL },
 > +		},
 > +		.xse_min_ep = 1,
@@ -358,25 +346,25 @@ Reviewed-by: Tom Rix <trix@redhat.com>
 > +	{ 0 },
 > +};
 > +
-> +static struct xrt_subdev_drvdata xrt_clkfreq_data = {
+> +static struct xrt_subdev_drvdata xrt_calib_data = {
 > +	.xsd_dev_ops = {
-> +		.xsd_leaf_call = xrt_clkfreq_leaf_call,
+> +		.xsd_leaf_call = xrt_calib_leaf_call,
 > +	},
 > +};
 > +
-> +static const struct platform_device_id xrt_clkfreq_table[] = {
-> +	{ XRT_CLKFREQ, (kernel_ulong_t)&xrt_clkfreq_data },
+> +static const struct platform_device_id xrt_calib_table[] = {
+> +	{ XRT_CALIB, (kernel_ulong_t)&xrt_calib_data },
 > +	{ },
 > +};
 > +
-> +static struct platform_driver xrt_clkfreq_driver = {
+> +static struct platform_driver xrt_calib_driver = {
 > +	.driver = {
-> +		.name = XRT_CLKFREQ,
+> +		.name = XRT_CALIB,
 > +	},
-> +	.probe = clkfreq_probe,
-> +	.remove = clkfreq_remove,
-> +	.id_table = xrt_clkfreq_table,
+> +	.probe = xrt_calib_probe,
+> +	.remove = xrt_calib_remove,
+> +	.id_table = xrt_calib_table,
 > +};
 > +
-> +XRT_LEAF_INIT_FINI_FUNC(XRT_SUBDEV_CLKFREQ, clkfreq);
+> +XRT_LEAF_INIT_FINI_FUNC(XRT_SUBDEV_CALIB, calib);
 
