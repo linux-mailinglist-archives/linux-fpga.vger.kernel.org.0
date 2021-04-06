@@ -2,71 +2,71 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E88355CFF
-	for <lists+linux-fpga@lfdr.de>; Tue,  6 Apr 2021 22:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB71F355D1F
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 Apr 2021 22:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235205AbhDFUho (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Apr 2021 16:37:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31982 "EHLO
+        id S238398AbhDFUqW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Apr 2021 16:46:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28268 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245476AbhDFUhn (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Apr 2021 16:37:43 -0400
+        by vger.kernel.org with ESMTP id S231676AbhDFUqV (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Apr 2021 16:46:21 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617741454;
+        s=mimecast20190719; t=1617741973;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SHiiDAoRDKlSpF5W2fiqmIZUSD2zT3WhpbrUrOmekT8=;
-        b=hip1QzYAFvzeK6yy4OpikIXyWvyJ9NU91Fj1ttO7D664C0hFnoQTVOo+lH8B2uhkc8/JbX
-        U+iJUCz66M8rssqK0iPGH8QDR9KY/rtNthfd0YqDHUgi4eZMRC0e07lNI8b28+RfVQkgMi
-        mKLvow0UJZDV+j8+aUyWtx69s7NmREs=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-212-1nKF71jhNiuqpxZzcC0F-g-1; Tue, 06 Apr 2021 16:37:33 -0400
-X-MC-Unique: 1nKF71jhNiuqpxZzcC0F-g-1
-Received: by mail-qk1-f197.google.com with SMTP id c1so13421515qke.8
-        for <linux-fpga@vger.kernel.org>; Tue, 06 Apr 2021 13:37:33 -0700 (PDT)
+        bh=9jF6SBpkkUkARcJvBrW5Yv44iq+0zRMq+xdTHI1J2Vs=;
+        b=HYC5aO0fTUS0ADAQh0D+tBinXvVTnaDqFqISzGOsoMvKchgYNHO4J05wN6q6ej4sHZ7FNV
+        eH+xx9Q88Xj0Ov+BZOaYyNGld6PbDKasMkJNh1wXg5GuahbSkB40XdB7Sgl9bLXkA3OdJE
+        BphWeEi9OEKd6FF6FH4qkar/Sj+zwF0=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-108-y9s5o__zMM-HuyQ9qhiKVw-1; Tue, 06 Apr 2021 16:46:11 -0400
+X-MC-Unique: y9s5o__zMM-HuyQ9qhiKVw-1
+Received: by mail-qv1-f69.google.com with SMTP id p2so11236593qvi.6
+        for <linux-fpga@vger.kernel.org>; Tue, 06 Apr 2021 13:46:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=SHiiDAoRDKlSpF5W2fiqmIZUSD2zT3WhpbrUrOmekT8=;
-        b=YxERG1dsGlKLZa56UlYT0hz8oGLGP5BvzV/ugrNCUdEqDAKvO40BU1hvkjpZJlGDhd
-         C2gpMnAFzpiaW7TPJE0bWCvRDsl26mYMAm/SEXVG/clSyEZ4vMit8zKXkYHsGyHXDHTD
-         XYno4VIU+ohGZuF/E5uGemWfywbYx5JCNQ9xdD2vu/Qv/q//Q7cWfOWKkTXw68FPxYGc
-         qlSEkl7Rz743IlG6pUHlwMJlHmYFc95gDzCj05aleLEW3VJPU8ssNE5P0MxTW2jDbfv2
-         dtgUv5FZC0FQYLvLlFUy9iY3EtZpOVZmy1l+jLU3d6A8fx9U/KH2LsruivxhYmYAQL1F
-         +8uQ==
-X-Gm-Message-State: AOAM530w+KTkvMbTw/SfXQfVEUc5nUpG9OtNjOPEoLJZZnxL77vV4a3g
-        tQ7jWGErVa++IA/NTgCVNpLPOrO0MCGq2dZccB5zvrFOWIknZGqISxDrR2krffFJBBEOIMAqx30
-        7iQ1omdsMVpce0AJk/Ul2GA==
-X-Received: by 2002:a37:886:: with SMTP id 128mr32868771qki.430.1617741452686;
-        Tue, 06 Apr 2021 13:37:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyLZhl4CZ/pjvsSTD4KFAyWmQlrZ0/IFXc0KJjTWwwbI8yN5HySIRFXvGe6WMCCxmPU46vnmQ==
-X-Received: by 2002:a37:886:: with SMTP id 128mr32868749qki.430.1617741452457;
-        Tue, 06 Apr 2021 13:37:32 -0700 (PDT)
+        bh=9jF6SBpkkUkARcJvBrW5Yv44iq+0zRMq+xdTHI1J2Vs=;
+        b=V/BD0Qayzrjli9ijWwPncb2yBPXQhq7GxIa+WPZ2emKnwqTg4SnqievH3uvWTWP2PW
+         l2vb38lkSFQ5W1Ou6sI/jpMYLu4eHLA1lCxO2yGi5+H2QbBrhPZzOazV4PvaFyNrNSp9
+         15C1NeO9HXZgN2uByFnVwjHoMkmMwGIWKWPVZ3J7xP/umGTaE/gc+vgzfGLus/ZL7b3Z
+         KvQdsOiCETpUqPwXUFTYa0q0w8PYPUYIE4Hf+FFoqcaaq/l7sWj04CAGYjW0eS9jqvuo
+         mECpAeHGo8keqVBJ0jm0RVX/6EIK6P0yF1UPlO3Um+uxx/ZyNaFGDHzTtiafj8n5rKml
+         h2Ag==
+X-Gm-Message-State: AOAM531iRsAGCPGeD9lXup7GrmhX9NaY0m3YevLBFx/02hPKPDMg0Qea
+        CIapL/Ajg0uOKR282BsTmWjqW0ehETqStmiqI/LcaYi4rWV5GChTNocmRq1dqXcRTw/162uRDcQ
+        uK3Ww2ntl+rjsGo+caE4uXw==
+X-Received: by 2002:ad4:4c83:: with SMTP id bs3mr30440626qvb.41.1617741971164;
+        Tue, 06 Apr 2021 13:46:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy0VnL+exA7RU+abGL9Cqt4ZUPE4i0OrQRW+KnkIReqpOvj+jPAKt5SZzCRXT3wt26vn3ennw==
+X-Received: by 2002:ad4:4c83:: with SMTP id bs3mr30440605qvb.41.1617741970928;
+        Tue, 06 Apr 2021 13:46:10 -0700 (PDT)
 Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id c17sm14751116qtd.71.2021.04.06.13.37.29
+        by smtp.gmail.com with ESMTPSA id a187sm16475449qkd.69.2021.04.06.13.46.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 13:37:31 -0700 (PDT)
-Subject: Re: [PATCH V4 XRT Alveo 18/20] fpga: xrt: DDR calibration platform
- driver
+        Tue, 06 Apr 2021 13:46:10 -0700 (PDT)
+Subject: Re: [PATCH V4 XRT Alveo 19/20] fpga: xrt: partition isolation
+ platform driver
 To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
 Cc:     linux-fpga@vger.kernel.org, maxz@xilinx.com,
         sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
         stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
         robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
 References: <20210324052947.27889-1-lizhi.hou@xilinx.com>
- <20210324052947.27889-19-lizhi.hou@xilinx.com>
+ <20210324052947.27889-20-lizhi.hou@xilinx.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <e529c014-f2d5-a0d2-dba9-4325af41c425@redhat.com>
-Date:   Tue, 6 Apr 2021 13:37:28 -0700
+Message-ID: <a0ecd4aa-718d-5099-4861-37be9b2e7b4f@redhat.com>
+Date:   Tue, 6 Apr 2021 13:46:07 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210324052947.27889-19-lizhi.hou@xilinx.com>
+In-Reply-To: <20210324052947.27889-20-lizhi.hou@xilinx.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -76,87 +76,101 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 On 3/23/21 10:29 PM, Lizhi Hou wrote:
-> Add DDR calibration driver. DDR calibration is a hardware function
-> discovered by walking firmware metadata. A platform device node will
-> be created for it. Hardware provides DDR calibration status through
-> this function.
+> Add partition isolation platform driver. partition isolation is
+> a hardware function discovered by walking firmware metadata.
+> A platform device node will be created for it. Partition isolation
+> function isolate the different fpga regions
 >
 > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 > Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 > ---
->   .../fpga/xrt/include/xleaf/ddr_calibration.h  |  28 +++
->   drivers/fpga/xrt/lib/xleaf/ddr_calibration.c  | 226 ++++++++++++++++++
-ok
->   2 files changed, 254 insertions(+)
->   create mode 100644 drivers/fpga/xrt/include/xleaf/ddr_calibration.h
->   create mode 100644 drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
+>   drivers/fpga/xrt/include/xleaf/axigate.h |  23 ++
+>   drivers/fpga/xrt/lib/xleaf/axigate.c     | 342 +++++++++++++++++++++++
+>   2 files changed, 365 insertions(+)
+>   create mode 100644 drivers/fpga/xrt/include/xleaf/axigate.h
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/axigate.c
 >
-> diff --git a/drivers/fpga/xrt/include/xleaf/ddr_calibration.h b/drivers/fpga/xrt/include/xleaf/ddr_calibration.h
+> diff --git a/drivers/fpga/xrt/include/xleaf/axigate.h b/drivers/fpga/xrt/include/xleaf/axigate.h
 > new file mode 100644
-> index 000000000000..878740c26ca2
+> index 000000000000..58f32c76dca1
 > --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/ddr_calibration.h
-> @@ -0,0 +1,28 @@
+> +++ b/drivers/fpga/xrt/include/xleaf/axigate.h
+> @@ -0,0 +1,23 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
 > + * Copyright (C) 2020-2021 Xilinx, Inc.
 > + *
 > + * Authors:
-> + *	Cheng Zhen <maxz@xilinx.com>
+> + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
 > + */
 > +
-> +#ifndef _XRT_DDR_CALIBRATION_H_
-> +#define _XRT_DDR_CALIBRATION_H_
+> +#ifndef _XRT_AXIGATE_H_
+> +#define _XRT_AXIGATE_H_
 > +
 > +#include "xleaf.h"
-> +#include <linux/xrt/xclbin.h>
+> +#include "metadata.h"
 > +
 > +/*
-> + * Memory calibration driver leaf calls.
+> + * AXIGATE driver leaf calls.
 > + */
-> +enum xrt_calib_results {
-> +	XRT_CALIB_UNKNOWN = 0,
+> +enum xrt_axigate_leaf_cmd {
+> +	XRT_AXIGATE_CLOSE = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+> +	XRT_AXIGATE_OPEN,
 ok
-> +	XRT_CALIB_SUCCEEDED,
-> +	XRT_CALIB_FAILED,
 > +};
 > +
-> +enum xrt_calib_leaf_cmd {
-> +	XRT_CALIB_RESULT = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-> +};
-> +
-> +#endif	/* _XRT_DDR_CALIBRATION_H_ */
-> diff --git a/drivers/fpga/xrt/lib/xleaf/ddr_calibration.c b/drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
+> +#endif	/* _XRT_AXIGATE_H_ */
+> diff --git a/drivers/fpga/xrt/lib/xleaf/axigate.c b/drivers/fpga/xrt/lib/xleaf/axigate.c
 > new file mode 100644
-> index 000000000000..5a9fa82946cb
+> index 000000000000..231bb0335278
 > --- /dev/null
-> +++ b/drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
-> @@ -0,0 +1,226 @@
+> +++ b/drivers/fpga/xrt/lib/xleaf/axigate.c
+> @@ -0,0 +1,342 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Xilinx Alveo FPGA memory calibration driver
+> + * Xilinx Alveo FPGA AXI Gate Driver
 > + *
 > + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * memory calibration
 > + *
 > + * Authors:
 > + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
 > + */
+> +
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
 > +#include <linux/delay.h>
+> +#include <linux/device.h>
 > +#include <linux/regmap.h>
-> +#include "xclbin-helper.h"
+> +#include <linux/io.h>
 > +#include "metadata.h"
-> +#include "xleaf/ddr_calibration.h"
+> +#include "xleaf.h"
+> +#include "xleaf/axigate.h"
 > +
-> +#define XRT_CALIB	"xrt_calib"
+> +#define XRT_AXIGATE "xrt_axigate"
 > +
-> +#define XRT_CALIB_STATUS_REG		0
-> +#define XRT_CALIB_READ_RETRIES		20
-> +#define XRT_CALIB_READ_INTERVAL		500 /* ms */
+> +#define XRT_AXIGATE_WRITE_REG		0
+> +#define XRT_AXIGATE_READ_REG		8
 > +
-> +static const struct regmap_config calib_regmap_config = {
+> +#define XRT_AXIGATE_CTRL_CLOSE		0
+> +#define XRT_AXIGATE_CTRL_OPEN_BIT0	1
+> +#define XRT_AXIGATE_CTRL_OPEN_BIT1	2
+> +
+> +#define XRT_AXIGATE_INTERVAL		500 /* ns */
+> +
+> +struct xrt_axigate {
+> +	struct platform_device	*pdev;
+> +	struct regmap		*regmap;
+> +	struct mutex		gate_lock; /* gate dev lock */
+> +
+> +	void			*evt_hdl;
+> +	const char		*ep_name;
+> +
+> +	bool			gate_closed;
+white space, extra nl's are not needed
+> +};
+> +
+> +static const struct regmap_config axigate_regmap_config = {
 > +	.reg_bits = 32,
 > +	.val_bits = 32,
 > +	.reg_stride = 4,
@@ -164,181 +178,287 @@ ok
 ok
 > +};
 > +
-> +struct calib_cache {
-> +	struct list_head	link;
-> +	const char		*ep_name;
-> +	char			*data;
-> +	u32			data_size;
+> +/* the ep names are in the order of hardware layers */
+> +static const char * const xrt_axigate_epnames[] = {
+> +	XRT_MD_NODE_GATE_PLP, /* PLP: Provider Logic Partition */
+> +	XRT_MD_NODE_GATE_ULP  /* ULP: User Logic Partition */
+ok
 > +};
 > +
-> +struct calib {
-> +	struct platform_device	*pdev;
-> +	struct regmap		*regmap;
-> +	struct mutex		lock; /* calibration dev lock */
-> +	struct list_head	cache_list;
-> +	u32			cache_num;
-> +	enum xrt_calib_results	result;
-> +};
-> +
-> +static void __calib_cache_clean_nolock(struct calib *calib)
-ok
+> +static inline int close_gate(struct xrt_axigate *gate)
 > +{
-> +	struct calib_cache *cache, *temp;
-> +
-> +	list_for_each_entry_safe(cache, temp, &calib->cache_list, link) {
-> +		vfree(cache->data);
-> +		list_del(&cache->link);
-> +		vfree(cache);
-> +	}
-> +	calib->cache_num = 0;
-> +}
-> +
-> +static void calib_cache_clean(struct calib *calib)
-> +{
-> +	mutex_lock(&calib->lock);
-> +	__calib_cache_clean_nolock(calib);
-> +	mutex_unlock(&calib->lock);
-> +}
-> +
-> +static int calib_calibration(struct calib *calib)
-> +{
-> +	u32 times = XRT_CALIB_READ_RETRIES;
-ok
-> +	u32 status;
+> +	u32 val;
 > +	int ret;
 > +
-> +	while (times != 0) {
-> +		ret = regmap_read(calib->regmap, XRT_CALIB_STATUS_REG, &status);
-> +		if (ret) {
-> +			xrt_err(calib->pdev, "failed to read status reg %d", ret);
-> +			return ret;
-> +		}
-> +
-> +		if (status & BIT(0))
-> +			break;
-> +		msleep(XRT_CALIB_READ_INTERVAL);
-
-ok
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
-> +		times--;
+> +	ret = regmap_write(gate->regmap, XRT_AXIGATE_WRITE_REG, XRT_AXIGATE_CTRL_CLOSE);
+ok, regs defined
+> +	if (ret) {
+> +		xrt_err(gate->pdev, "write gate failed %d", ret);
+> +		return ret;
 > +	}
-> +
-> +	if (!times) {
-> +		xrt_err(calib->pdev,
-> +			"MIG calibration timeout after bitstream download");
-> +		return -ETIMEDOUT;
+> +	ndelay(XRT_AXIGATE_INTERVAL);
+> +	/*
+> +	 * Legacy hardware requires extra read work properly.
+> +	 * This is not on critical path, thus the extra read should not impact performance much.
+> +	 */
+> +	ret = regmap_read(gate->regmap, XRT_AXIGATE_READ_REG, &val);
+> +	if (ret) {
+> +		xrt_err(gate->pdev, "read gate failed %d", ret);
+> +		return ret;
 > +	}
-> +
-> +	xrt_info(calib->pdev, "took %dms", (XRT_CALIB_READ_RETRIES - times) *
-> +		 XRT_CALIB_READ_INTERVAL);
-> +	return 0;
-> +}
-> +
-> +static void xrt_calib_event_cb(struct platform_device *pdev, void *arg)
-> +{
-> +	struct calib *calib = platform_get_drvdata(pdev);
-> +	struct xrt_event *evt = (struct xrt_event *)arg;
-> +	enum xrt_events e = evt->xe_evt;
-> +	enum xrt_subdev_id id;
-> +	int ret;
-> +
-> +	id = evt->xe_subdev.xevt_subdev_id;
-> +
-> +	switch (e) {
-> +	case XRT_EVENT_POST_CREATION:
-> +		if (id == XRT_SUBDEV_UCS) {
-> +			ret = calib_calibration(calib);
-> +			if (ret)
-> +				calib->result = XRT_CALIB_FAILED;
-> +			else
-> +				calib->result = XRT_CALIB_SUCCEEDED;
-> +		}
-> +		break;
-> +	default:
-> +		xrt_dbg(pdev, "ignored event %d", e);
-> +		break;
-> +	}
-> +}
-> +
-> +static int xrt_calib_remove(struct platform_device *pdev)
-> +{
-> +	struct calib *calib = platform_get_drvdata(pdev);
-> +
-> +	calib_cache_clean(calib);
 > +
 > +	return 0;
 > +}
 > +
-> +static int xrt_calib_probe(struct platform_device *pdev)
+> +static inline int open_gate(struct xrt_axigate *gate)
 > +{
-> +	void __iomem *base = NULL;
-> +	struct resource *res;
-> +	struct calib *calib;
-> +	int err = 0;
+> +	u32 val;
+> +	int ret;
 > +
-> +	calib = devm_kzalloc(&pdev->dev, sizeof(*calib), GFP_KERNEL);
-> +	if (!calib)
-> +		return -ENOMEM;
+> +	ret = regmap_write(gate->regmap, XRT_AXIGATE_WRITE_REG, XRT_AXIGATE_CTRL_OPEN_BIT1);
+> +	if (ret) {
+> +		xrt_err(gate->pdev, "write 2 failed %d", ret);
+> +		return ret;
+> +	}
+> +	ndelay(XRT_AXIGATE_INTERVAL);
+> +	/*
+> +	 * Legacy hardware requires extra read work properly.
+> +	 * This is not on critical path, thus the extra read should not impact performance much.
+> +	 */
+> +	ret = regmap_read(gate->regmap, XRT_AXIGATE_READ_REG, &val);
+> +	if (ret) {
+> +		xrt_err(gate->pdev, "read 2 failed %d", ret);
+> +		return ret;
+> +	}
+> +	ret = regmap_write(gate->regmap, XRT_AXIGATE_WRITE_REG,
+> +			   XRT_AXIGATE_CTRL_OPEN_BIT0 | XRT_AXIGATE_CTRL_OPEN_BIT1);
+> +	if (ret) {
+> +		xrt_err(gate->pdev, "write 3 failed %d", ret);
+> +		return ret;
+> +	}
+> +	ndelay(XRT_AXIGATE_INTERVAL);
+> +	ret = regmap_read(gate->regmap, XRT_AXIGATE_READ_REG, &val);
+> +	if (ret) {
+> +		xrt_err(gate->pdev, "read 3 failed %d", ret);
+> +		return ret;
+> +	}
 > +
-> +	calib->pdev = pdev;
-> +	platform_set_drvdata(pdev, calib);
+> +	return 0;
+> +}
+> +
+> +static int xrt_axigate_epname_idx(struct platform_device *pdev)
+> +{
+> +	struct resource	*res;
+> +	int ret, i;
+ok
 > +
 > +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 > +	if (!res) {
-> +		err = -EINVAL;
+> +		xrt_err(pdev, "Empty Resource!");
+> +		return -EINVAL;
+> +	}
+> +
+> +	for (i = 0; i < ARRAY_SIZE(xrt_axigate_epnames); i++) {
+ok
+> +		ret = strncmp(xrt_axigate_epnames[i], res->name,
+> +			      strlen(xrt_axigate_epnames[i]) + 1);
+ok
+> +		if (!ret)
+> +			return i;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int xrt_axigate_close(struct platform_device *pdev)
+> +{
+> +	struct xrt_axigate *gate;
+> +	u32 status = 0;
+> +	int ret;
+> +
+> +	gate = platform_get_drvdata(pdev);
+> +
+> +	mutex_lock(&gate->gate_lock);
+> +	ret = regmap_read(gate->regmap, XRT_AXIGATE_READ_REG, &status);
+> +	if (ret) {
+> +		xrt_err(pdev, "read gate failed %d", ret);
+> +		goto failed;
+> +	}
+> +	if (status) {		/* gate is opened */
+> +		xleaf_broadcast_event(pdev, XRT_EVENT_PRE_GATE_CLOSE, false);
+> +		ret = close_gate(gate);
+ok
+> +		if (ret)
+> +			goto failed;
+> +	}
+> +
+> +	gate->gate_closed = true;
+ok
+> +
+> +failed:
+> +	mutex_unlock(&gate->gate_lock);
+> +
+> +	xrt_info(pdev, "close gate %s", gate->ep_name);
+> +	return ret;
+> +}
+> +
+> +static int xrt_axigate_open(struct platform_device *pdev)
+> +{
+> +	struct xrt_axigate *gate;
+> +	u32 status;
+> +	int ret;
+> +
+> +	gate = platform_get_drvdata(pdev);
+> +
+> +	mutex_lock(&gate->gate_lock);
+> +	ret = regmap_read(gate->regmap, XRT_AXIGATE_READ_REG, &status);
+> +	if (ret) {
+> +		xrt_err(pdev, "read gate failed %d", ret);
+> +		goto failed;
+> +	}
+> +	if (!status) {		/* gate is closed */
+> +		ret = open_gate(gate);
+> +		if (ret)
+> +			goto failed;
+> +		xleaf_broadcast_event(pdev, XRT_EVENT_POST_GATE_OPEN, true);
+> +		/* xrt_axigate_open() could be called in event cb, thus
+> +		 * we can not wait for the completes
+> +		 */
+> +	}
+> +
+> +	gate->gate_closed = false;
+> +
+> +failed:
+> +	mutex_unlock(&gate->gate_lock);
+> +
+> +	xrt_info(pdev, "open gate %s", gate->ep_name);
+> +	return ret;
+> +}
+> +
+> +static void xrt_axigate_event_cb(struct platform_device *pdev, void *arg)
+> +{
+> +	struct xrt_axigate *gate = platform_get_drvdata(pdev);
+> +	struct xrt_event *evt = (struct xrt_event *)arg;
+> +	enum xrt_events e = evt->xe_evt;
+> +	struct platform_device *leaf;
+> +	enum xrt_subdev_id id;
+> +	struct resource	*res;
+> +	int instance;
+> +
+> +	if (e != XRT_EVENT_POST_CREATION)
+> +		return;
+> +
+> +	instance = evt->xe_subdev.xevt_subdev_instance;
+> +	id = evt->xe_subdev.xevt_subdev_id;
+> +	if (id != XRT_SUBDEV_AXIGATE)
+> +		return;
+ok
+> +
+> +	leaf = xleaf_get_leaf_by_id(pdev, id, instance);
+> +	if (!leaf)
+> +		return;
+> +
+> +	res = platform_get_resource(leaf, IORESOURCE_MEM, 0);
+> +	if (!res || !strncmp(res->name, gate->ep_name, strlen(res->name) + 1)) {
+> +		xleaf_put_leaf(pdev, leaf);
+> +		return;
+> +	}
+> +
+> +	/* higher level axigate instance created, make sure the gate is opened. */
+
+ok
+
+only minor ws issue, otherwise good to go
+
+Reviewed-by: Tom Rix <trix@redhat.com>
+
+> +	if (xrt_axigate_epname_idx(leaf) > xrt_axigate_epname_idx(pdev))
+> +		xrt_axigate_open(pdev);
+> +	else
+> +		xleaf_call(leaf, XRT_AXIGATE_OPEN, NULL);
+> +
+> +	xleaf_put_leaf(pdev, leaf);
+> +}
+> +
+> +static int
+> +xrt_axigate_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
+> +{
+> +	int ret = 0;
+> +
+> +	switch (cmd) {
+> +	case XRT_XLEAF_EVENT:
+> +		xrt_axigate_event_cb(pdev, arg);
+> +		break;
+> +	case XRT_AXIGATE_CLOSE:
+> +		ret = xrt_axigate_close(pdev);
+> +		break;
+> +	case XRT_AXIGATE_OPEN:
+> +		ret = xrt_axigate_open(pdev);
+> +		break;
+> +	default:
+> +		xrt_err(pdev, "unsupported cmd %d", cmd);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int xrt_axigate_probe(struct platform_device *pdev)
+> +{
+> +	struct xrt_axigate *gate = NULL;
+> +	void __iomem *base = NULL;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	gate = devm_kzalloc(&pdev->dev, sizeof(*gate), GFP_KERNEL);
+> +	if (!gate)
+> +		return -ENOMEM;
+> +
+> +	gate->pdev = pdev;
+> +	platform_set_drvdata(pdev, gate);
+> +
+> +	xrt_info(pdev, "probing...");
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res) {
+> +		xrt_err(pdev, "Empty resource 0");
+> +		ret = -EINVAL;
 > +		goto failed;
 > +	}
 > +
 > +	base = devm_ioremap_resource(&pdev->dev, res);
 > +	if (IS_ERR(base)) {
-> +		err = PTR_ERR(base);
+> +		xrt_err(pdev, "map base iomem failed");
+> +		ret = PTR_ERR(base);
 > +		goto failed;
 > +	}
 > +
-> +	calib->regmap = devm_regmap_init_mmio(&pdev->dev, base, &calib_regmap_config);
-> +	if (IS_ERR(calib->regmap)) {
-> +		xrt_err(pdev, "Map iomem failed");
-> +		err = PTR_ERR(calib->regmap);
+> +	gate->regmap = devm_regmap_init_mmio(&pdev->dev, base, &axigate_regmap_config);
+> +	if (IS_ERR(gate->regmap)) {
+> +		xrt_err(pdev, "regmap %pR failed", res);
+> +		ret = PTR_ERR(gate->regmap);
 > +		goto failed;
 > +	}
+> +	gate->ep_name = res->name;
 > +
-> +	mutex_init(&calib->lock);
-> +	INIT_LIST_HEAD(&calib->cache_list);
+> +	mutex_init(&gate->gate_lock);
 > +
 > +	return 0;
 > +
 > +failed:
-> +	return err;
-> +}
-> +
-> +static int
-> +xrt_calib_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
-> +{
-> +	struct calib *calib = platform_get_drvdata(pdev);
-> +	int ret = 0;
-> +
-> +	switch (cmd) {
-> +	case XRT_XLEAF_EVENT:
-> +		xrt_calib_event_cb(pdev, arg);
-> +		break;
-> +	case XRT_CALIB_RESULT: {
-> +		enum xrt_calib_results *r = (enum xrt_calib_results *)arg;
-> +		*r = calib->result;
-> +		break;
-> +	}
-> +	default:
-> +		xrt_err(pdev, "unsupported cmd %d", cmd);
-> +		ret = -EINVAL;
-> +	}
 > +	return ret;
 > +}
 > +
-> +static struct xrt_subdev_endpoints xrt_calib_endpoints[] = {
+> +static struct xrt_subdev_endpoints xrt_axigate_endpoints[] = {
 > +	{
 > +		.xse_names = (struct xrt_subdev_ep_names[]) {
-> +			{ .ep_name = XRT_MD_NODE_DDR_CALIB },
+> +			{ .ep_name = XRT_MD_NODE_GATE_ULP },
+> +			{ NULL },
+> +		},
+> +		.xse_min_ep = 1,
+> +	},
+> +	{
+> +		.xse_names = (struct xrt_subdev_ep_names[]) {
+> +			{ .ep_name = XRT_MD_NODE_GATE_PLP },
 > +			{ NULL },
 > +		},
 > +		.xse_min_ep = 1,
@@ -346,25 +466,24 @@ Reviewed-by: Tom Rix <trix@redhat.com>
 > +	{ 0 },
 > +};
 > +
-> +static struct xrt_subdev_drvdata xrt_calib_data = {
+> +static struct xrt_subdev_drvdata xrt_axigate_data = {
 > +	.xsd_dev_ops = {
-> +		.xsd_leaf_call = xrt_calib_leaf_call,
+> +		.xsd_leaf_call = xrt_axigate_leaf_call,
 > +	},
 > +};
 > +
-> +static const struct platform_device_id xrt_calib_table[] = {
-> +	{ XRT_CALIB, (kernel_ulong_t)&xrt_calib_data },
+> +static const struct platform_device_id xrt_axigate_table[] = {
+> +	{ XRT_AXIGATE, (kernel_ulong_t)&xrt_axigate_data },
 > +	{ },
 > +};
 > +
-> +static struct platform_driver xrt_calib_driver = {
+> +static struct platform_driver xrt_axigate_driver = {
 > +	.driver = {
-> +		.name = XRT_CALIB,
+> +		.name = XRT_AXIGATE,
 > +	},
-> +	.probe = xrt_calib_probe,
-> +	.remove = xrt_calib_remove,
-> +	.id_table = xrt_calib_table,
+> +	.probe = xrt_axigate_probe,
+> +	.id_table = xrt_axigate_table,
 > +};
 > +
-> +XRT_LEAF_INIT_FINI_FUNC(XRT_SUBDEV_CALIB, calib);
+> +XRT_LEAF_INIT_FINI_FUNC(XRT_SUBDEV_AXIGATE, axigate);
 
