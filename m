@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E82355D5C
-	for <lists+linux-fpga@lfdr.de>; Tue,  6 Apr 2021 23:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55770355E15
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 Apr 2021 23:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238037AbhDFVBi (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Apr 2021 17:01:38 -0400
-Received: from mail-eopbgr680056.outbound.protection.outlook.com ([40.107.68.56]:1413
-        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
+        id S234662AbhDFVm7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Apr 2021 17:42:59 -0400
+Received: from mail-mw2nam12on2064.outbound.protection.outlook.com ([40.107.244.64]:47585
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S243168AbhDFVBi (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 6 Apr 2021 17:01:38 -0400
+        id S234334AbhDFVm7 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 6 Apr 2021 17:42:59 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V6VXMJgO0c2adtgJWMvBdXP1PMFYinem+51pRir0zRBaj+ymglPvyJOB0tiiaIaRswhvchWip1h8fhmXZnqlbskWUkwc18mKKhuoOJXfNhqBtHy8AW9yhmKc4OgQhIsU58CV7j1khSKRMSCCwwM3XRtTmQ1Hm1FBy7zIkyH/5wuMta+w6pS2KPArOEPAszQH/15UYIsUolfMQ538vpcZgCNo6Shd20VxIbOBVZgoTNsN2Dx54/i5Ouxd6eCNb/U6tXi30dT0rNolyZtbjk3VxjHO/zV7VaEUHL/Tcs6qOvSUPSqWc/S1E9sJGuNrdES4uDR4qCBiNST+Py2z4su3IQ==
+ b=lTXUw+c1EM0PP57W+3cOcq+BhxZzsoWPSBdKi7aUwjb5tIzgu7z+zhHYJq+TkMUYbLEAUAWwTTw1MPMdNHxVmb7B+3hmuv+V8lfRo0rFBCr4VmojbedSWfXeq9lNHjpVvevjboBk59lKpVd0GGz1+c5dGaSjdItEcQi1KvHTlSIc2nuNdgbUs7QYHgWPUNTz6FjAlmOl1TQUn7J9by+af71NvppBtf0QLgQUPyPGea5YqqR5Umam3SQY9K/M0bNfD8bCyDVig+0cWmyVdymlaC841qdm5jHr7XkhQxYigbuNE+XWbWI80/h4H3eS2BjCwPcl7QuXrT8gnDhch3mADg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xkl0g1c/LrHId8AEd3BS2jgwALvjee25pk5q1OaveF4=;
- b=Y0PdNzGmN1wLnF1ezwV08AaawqEg64STvv2VX7N/aWqt55S/4R2IYq7KsJPShhz4s/8dDSRgsGTPa11qEl+DerC14aB1ZLJb1JHGmdGsFTWCNK+0vG3BZhUNNX65WaS2Dtd3DYRwhnc/jPvR9t7rhT7fSuZul7vwlG/wWNuyTiHeLWudPnS92OHM6Jrf2r7WGBSLp5td/pFnNz0wjlsMcvtnAiIqt4OjTb6iXkC0vVmMhC3IT4n7cEJEvy0J6VvbmunqACCsmFzP0Ceb6ddEJ1JDWDb/Lly5O91abNG9419WouiAWtJ4qUjek5DW7m2D4/UIv999HQCbjD3aWPWGjA==
+ bh=IZKsy+/YgGYuvZET4VUJ1+KnFvomoN8yYDOEg2ulp4M=;
+ b=cctK6H5YLy/jA0JJQvF4/UD0PVRzLv0E6L0ZX9x3CEJmvmBBBqIUk+nk5smT977YNdG/av496LDmJisqQ8CjgmCVrQMH8zdDQ3tCY5zHuBV2CBZov3+Mg+V7fLn7ifDV9VEbqT7/GlfI9Kn8/y2O1E737pQupHtz50XrPbTvAg1a5r2LBMFfXdcPlakvQ4Za5DOnHidQVwGk/ck3gca2uvZ51z053fXILTqablMHdImF6hOMpB9ue1PcXYy+/fo9PX1NYwE7ynCHiJvsedwxANXDBv3L7GyX3rJ5zDLFcy5IBxPjCnrgvJl+4zHuq1sQ+zqZ2B5sNBAKIpO1FdRLjg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,527 +26,460 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xkl0g1c/LrHId8AEd3BS2jgwALvjee25pk5q1OaveF4=;
- b=m/KYoxuS2Ybp20YzZ/OEwTxgLzOZL33ljZlA9YMzfsSvKp0TImbgbpeULrcHsa5LVRhnF75Luup4487SyY9R+ZbEDqFWiOx4u6UHOexlWTw0BzNS/UP3Omtm1cCh3S8WyHY9j14etVxQziEu70Wx1qqxVCm7IG3UCPEyHyL7NK8=
-Received: from SA0PR11CA0210.namprd11.prod.outlook.com (2603:10b6:806:1bc::35)
- by MWHPR0201MB3609.namprd02.prod.outlook.com (2603:10b6:301:78::26) with
+ bh=IZKsy+/YgGYuvZET4VUJ1+KnFvomoN8yYDOEg2ulp4M=;
+ b=FtRDuI07+rFylkTrAa3FzQPATRqhjf5VbBz0+Gp754jV47wOl8JmCB9UKzjJDYIY4coHi4TdIuhwKA3elgpkPeWa1HSvex8Xjd3xrKVReaYgDBT6eTeTRD43n9Rt5QbZNOU6e6+FzLv3wcmPfwKvJwFKD2SweLxrGq3gTk8NAEQ=
+Received: from BL1PR13CA0251.namprd13.prod.outlook.com (2603:10b6:208:2ba::16)
+ by CY4PR02MB2789.namprd02.prod.outlook.com (2603:10b6:903:11b::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.26; Tue, 6 Apr
- 2021 21:01:26 +0000
-Received: from SN1NAM02FT029.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:1bc:cafe::97) by SA0PR11CA0210.outlook.office365.com
- (2603:10b6:806:1bc::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.16 via Frontend
- Transport; Tue, 6 Apr 2021 21:01:26 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.27; Tue, 6 Apr
+ 2021 21:42:43 +0000
+Received: from BL2NAM02FT004.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:2ba:cafe::fe) by BL1PR13CA0251.outlook.office365.com
+ (2603:10b6:208:2ba::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.8 via Frontend
+ Transport; Tue, 6 Apr 2021 21:42:43 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT029.mail.protection.outlook.com (10.152.72.110) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BL2NAM02FT004.mail.protection.outlook.com (10.152.76.168) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3999.28 via Frontend Transport; Tue, 6 Apr 2021 21:01:26 +0000
+ 15.20.3999.28 via Frontend Transport; Tue, 6 Apr 2021 21:42:43 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 6 Apr 2021 14:01:22 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
+ 15.1.2106.2; Tue, 6 Apr 2021 14:42:42 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2106.2 via Frontend Transport; Tue, 6 Apr 2021 14:01:22 -0700
+ 15.1.2106.2 via Frontend Transport; Tue, 6 Apr 2021 14:42:42 -0700
 Envelope-to: robh@kernel.org,
  mdf@kernel.org,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org,
  trix@redhat.com
-Received: from [10.17.2.60] (port=41110)
+Received: from [10.17.3.3] (port=49290)
         by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <lizhi.hou@xilinx.com>)
-        id 1lTsp8-00031m-0B; Tue, 06 Apr 2021 14:01:22 -0700
-Subject: Re: [PATCH V4 XRT Alveo 12/20] fpga: xrt: VSEC platform driver
+        (envelope-from <max.zhen@xilinx.com>)
+        id 1lTtT8-0007kj-Lp; Tue, 06 Apr 2021 14:42:42 -0700
+Subject: Re: [PATCH V4 XRT Alveo 05/20] fpga: xrt: group platform driver
 To:     Tom Rix <trix@redhat.com>, Lizhi Hou <lizhi.hou@xilinx.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linux-fpga@vger.kernel.org>, <maxz@xilinx.com>,
-        <sonal.santan@xilinx.com>, <yliu@xilinx.com>,
-        <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
-        <devicetree@vger.kernel.org>, <mdf@kernel.org>, <robh@kernel.org>,
-        Max Zhen <max.zhen@xilinx.com>
+        <linux-kernel@vger.kernel.org>, Max Zhen <max.zhen@xilinx.com>
+CC:     <linux-fpga@vger.kernel.org>, <sonal.santan@xilinx.com>,
+        <yliu@xilinx.com>, <michal.simek@xilinx.com>,
+        <stefanos@xilinx.com>, <devicetree@vger.kernel.org>,
+        <mdf@kernel.org>, <robh@kernel.org>
 References: <20210324052947.27889-1-lizhi.hou@xilinx.com>
- <20210324052947.27889-13-lizhi.hou@xilinx.com>
- <d26476fc-e559-72eb-0e6f-decb06ca7227@redhat.com>
-From:   Lizhi Hou <lizhi.hou@xilinx.com>
-Message-ID: <f9d72ff8-a641-2a51-6c5a-3f774e948e2f@xilinx.com>
-Date:   Tue, 6 Apr 2021 14:01:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+ <20210324052947.27889-6-lizhi.hou@xilinx.com>
+ <692776f1-ed9f-5013-a0bf-d6c97d355369@redhat.com>
+From:   Max Zhen <max.zhen@xilinx.com>
+Message-ID: <d69f6b53-31dc-a749-a1f5-b198561db860@xilinx.com>
+Date:   Tue, 6 Apr 2021 14:42:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <d26476fc-e559-72eb-0e6f-decb06ca7227@redhat.com>
+In-Reply-To: <692776f1-ed9f-5013-a0bf-d6c97d355369@redhat.com>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f56c3a15-8e26-4455-aafe-08d8f93f249d
-X-MS-TrafficTypeDiagnostic: MWHPR0201MB3609:
-X-Microsoft-Antispam-PRVS: <MWHPR0201MB3609EA673659A46B617C52E6A1769@MWHPR0201MB3609.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Office365-Filtering-Correlation-Id: 9f45b3b2-f5f8-46de-8459-08d8f944e905
+X-MS-TrafficTypeDiagnostic: CY4PR02MB2789:
+X-Microsoft-Antispam-PRVS: <CY4PR02MB2789B6A1DFE641DC8F635DD9B9769@CY4PR02MB2789.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:46;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h1d9P/Zec+2C+ixa0i7kswNw9dshYzIjn3abTGH5ce4d981CoofAh5X9Vws2r/eCAZe+tf+/8ExpgH4oWEmzj1rANdg6qSXZAkI/2mbrHygrcP7gUaMMjinrivPsjEsWrofIv320VeKXItt6qggTp9zIAatrnTGlWCJ0B0+zxpiqmghbKwABqB75l3reApTBjeZojFJOph/djaWpw/jgSA+DACALgz+cEjzi1QXUu4YuAEN1OwWtqUpRD+Q7Z79VpxlWaTirT0aVUD3C7Mlu3wb4F2CCt8B/XbtAvRmdsosD4ZoXxD2hNJInmVMMlnV03nsO/ksH/g2I9SYb72uYhdL9vest2u0hDuHfnhISCxeWEVmAVFv5YA7oW0aXqyayCTymlnbmCXpSslOJcbc0YwvtIhg9Mpb1CRPJffswt74WIUbbktB6KOiEjC/WVUE25uRJi42lj920WIiRf/4/hqYA9HOYh/676TwpiPIhSnSBSIt55WR4EACrfUvLNi0gHQz4/TRW1fVxyQYLauuDs5sqf64KDJLx/MsfRBr8DpASnIjkVyCv4xgRcDOQmyHT94wp2dyQDvs8xDPWG9WKUsvaxxbw3blCmMX8UgZq9MmiIxoIl4PWVAKMwj+MFrt7UPYqv4N5MtfgE6jAVbnQxQDWoplE8hGoP+DpSDCXRrriXK75KXiI9abkbnnBMZwd6A8E3hCqUqFpuJslbByaj4XeYVLqyY+bwphYBPcp+f9ACySbEaG80GL6nHqd5eFy
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(396003)(376002)(136003)(39860400002)(46966006)(36840700001)(7636003)(5660300002)(426003)(356005)(186003)(31686004)(110136005)(83380400001)(2616005)(47076005)(36756003)(8676002)(70206006)(82740400003)(31696002)(4326008)(36906005)(9786002)(316002)(54906003)(53546011)(44832011)(2906002)(478600001)(107886003)(26005)(336012)(82310400003)(70586007)(8936002)(36860700001)(30864003)(76704002)(50156003)(43740500002)(2101003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: LYW0912HQSRMsGAf/FmSCYBeiBU4LZbQS2RgsAN32LOV0SdFzWyHbtAf6wxD0HNOI52h8p716a1Ux9aOWEOBKvGZK6woys5yqVSmj4Br6dUYfjpNbgQlSR0SgEoIUzKhjOF4+2LMU6DMke+8hrSTR9usP1k6/tRFcDyCiAYwVQEaFLvJGEpRVuu0sjrklnTqq4phpdW+c23vlLXzIcvd0ebA8e3TvkLDF3UnLyaK8nQ9RTuxMiqmrIuplLKs5nXaWeaJPjbKbrVl8qToaB6B1t23S7bEgruzZr0IrScr7Gs75tJ1qsTINOKDUoYzePeTCA5+hn3iRQGuGsMwNU9wBVT7Vfk1zFfc+QEemrCjYgnIrKhLAudrY3FE+WpwcaIgErss+kAb2V8PBDqU+yd8m3kHmKFKwyTxs7aj1Nrj96lcpyftVOIjSlb/5IDJN2+ZkCA2JAAgPjH6OfQXh7UIS2Wjj4mqf+e1Lx7Owy107huCos12IvY7gimYyU8tSApdf5O4gHj5nOLif2vkOzOqfIZ9oc+LhjiIHKZ9VsTRStdTIpiRo6XRW1uBJt4QyAdHrJeSyszXlZeioYEt/RW2h523Wfh01cau9YJYeFCVRPut6qq2oTu9JjrRagMs1y3hZzjpJL1BACIvlLi/6TmWf1lgCTBVKdlK4Efko4O4ryFxfWpIFF8f4fx9MNayglot9DLolq3G3xD2tsdyei5Ql+RSV7euN5AAWJdWCfbDlSc=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(8936002)(498600001)(2616005)(82310400003)(5660300002)(356005)(4326008)(8676002)(7636003)(31686004)(44832011)(2906002)(70586007)(70206006)(36860700001)(31696002)(26005)(110136005)(9786002)(36906005)(53546011)(426003)(47076005)(336012)(186003)(36756003)(54906003)(83380400001)(50156003)(2101003)(43740500002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2021 21:01:26.4694
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2021 21:42:43.4061
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f56c3a15-8e26-4455-aafe-08d8f93f249d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f45b3b2-f5f8-46de-8459-08d8f944e905
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT029.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT004.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0201MB3609
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2789
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Hi Tom,
 
 
-On 04/02/2021 07:12 AM, Tom Rix wrote:
-> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
->
->
-> local use of 'regmap' conflicts with global meaning.
->
-> reword local regmap to something else.
-Will change local regmap to 'compat'.
->
+On 3/30/21 5:52 AM, Tom Rix wrote:
 > On 3/23/21 10:29 PM, Lizhi Hou wrote:
->> Add VSEC driver. VSEC is a hardware function discovered by walking
->> PCI Express configure space. A platform device node will be created
->> for it. VSEC provides board logic UUID and few offset of other hardware
->> functions.
+>> group driver that manages life cycle of a bunch of leaf driver instances
+>> and bridges them with root.
 >>
 >> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 >> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 >> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 >> ---
->>   drivers/fpga/xrt/lib/xleaf/vsec.c | 388 ++++++++++++++++++++++++++++++
->>   1 file changed, 388 insertions(+)
->>   create mode 100644 drivers/fpga/xrt/lib/xleaf/vsec.c
+>>   drivers/fpga/xrt/include/group.h |  25 +++
+>>   drivers/fpga/xrt/lib/group.c     | 286 +++++++++++++++++++++++++++++++
+>>   2 files changed, 311 insertions(+)
+>>   create mode 100644 drivers/fpga/xrt/include/group.h
+>>   create mode 100644 drivers/fpga/xrt/lib/group.c
 >>
->> diff --git a/drivers/fpga/xrt/lib/xleaf/vsec.c b/drivers/fpga/xrt/lib/xleaf/vsec.c
+>> diff --git a/drivers/fpga/xrt/include/group.h b/drivers/fpga/xrt/include/group.h
 >> new file mode 100644
->> index 000000000000..8595d23f5710
+>> index 000000000000..09e9d03f53fe
 >> --- /dev/null
->> +++ b/drivers/fpga/xrt/lib/xleaf/vsec.c
->> @@ -0,0 +1,388 @@
+>> +++ b/drivers/fpga/xrt/include/group.h
+>> @@ -0,0 +1,25 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+> ok, removed generic boilerplate
+>> + * Authors:
+>> + *   Cheng Zhen <maxz@xilinx.com>
+>> + */
+>> +
+>> +#ifndef _XRT_GROUP_H_
+>> +#define _XRT_GROUP_H_
+>> +
+>> +#include "xleaf.h"
+> move header to another patch
+
+
+Yes, the header is moved to 04/20 patch.
+
+
+>> +
+>> +/*
+>> + * Group driver leaf calls.
+> ok
+>> + */
+>> +enum xrt_group_leaf_cmd {
+>> +     XRT_GROUP_GET_LEAF = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+> ok
+>> +     XRT_GROUP_PUT_LEAF,
+>> +     XRT_GROUP_INIT_CHILDREN,
+>> +     XRT_GROUP_FINI_CHILDREN,
+>> +     XRT_GROUP_TRIGGER_EVENT,
+>> +};
+>> +
+>> +#endif       /* _XRT_GROUP_H_ */
+>> diff --git a/drivers/fpga/xrt/lib/group.c b/drivers/fpga/xrt/lib/group.c
+>> new file mode 100644
+>> index 000000000000..7b8716569641
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/lib/group.c
+>> @@ -0,0 +1,286 @@
 >> +// SPDX-License-Identifier: GPL-2.0
 >> +/*
->> + * Xilinx Alveo FPGA VSEC Driver
+>> + * Xilinx Alveo FPGA Group Driver
 >> + *
 >> + * Copyright (C) 2020-2021 Xilinx, Inc.
 >> + *
 >> + * Authors:
->> + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
+>> + *   Cheng Zhen <maxz@xilinx.com>
 >> + */
 >> +
+>> +#include <linux/mod_devicetable.h>
 >> +#include <linux/platform_device.h>
->> +#include <linux/regmap.h>
->> +#include "metadata.h"
 >> +#include "xleaf.h"
+>> +#include "subdev_pool.h"
+>> +#include "group.h"
+>> +#include "metadata.h"
+>> +#include "lib-drv.h"
 >> +
->> +#define XRT_VSEC "xrt_vsec"
+>> +#define XRT_GRP "xrt_group"
 >> +
->> +#define VSEC_TYPE_UUID               0x50
->> +#define VSEC_TYPE_FLASH              0x51
->> +#define VSEC_TYPE_PLATINFO   0x52
->> +#define VSEC_TYPE_MAILBOX    0x53
->> +#define VSEC_TYPE_END                0xff
->> +
->> +#define VSEC_UUID_LEN                16
->> +
->> +#define VSEC_REG_FORMAT              0x0
->> +#define VSEC_REG_LENGTH              0x4
->> +#define VSEC_REG_ENTRY               0x8
->> +
->> +struct xrt_vsec_header {
->> +     u32             format;
->> +     u32             length;
->> +     u32             entry_sz;
->> +     u32             rsvd;
->> +} __packed;
->> +
->> +struct xrt_vsec_entry {
->> +     u8              type;
->> +     u8              bar_rev;
->> +     u16             off_lo;
->> +     u32             off_hi;
->> +     u8              ver_type;
->> +     u8              minor;
->> +     u8              major;
->> +     u8              rsvd0;
->> +     u32             rsvd1;
->> +} __packed;
->> +
->> +struct vsec_device {
->> +     u8              type;
->> +     char            *ep_name;
->> +     ulong           size;
->> +     char            *regmap;
-> This element should be 'char *name;' as regmap is a different thing.
-Will change to 'compat'.
->
+>> +struct xrt_group {
+>> +     struct platform_device *pdev;
+>> +     struct xrt_subdev_pool leaves;
+>> +     bool leaves_created;
+>> +     struct mutex lock; /* lock for group */
 >> +};
 >> +
->> +static struct vsec_device vsec_devs[] = {
->> +     {
->> +             .type = VSEC_TYPE_UUID,
->> +             .ep_name = XRT_MD_NODE_BLP_ROM,
->> +             .size = VSEC_UUID_LEN,
->> +             .regmap = "vsec-uuid",
->> +     },
->> +     {
->> +             .type = VSEC_TYPE_FLASH,
->> +             .ep_name = XRT_MD_NODE_FLASH_VSEC,
->> +             .size = 4096,
->> +             .regmap = "vsec-flash",
->> +     },
->> +     {
->> +             .type = VSEC_TYPE_PLATINFO,
->> +             .ep_name = XRT_MD_NODE_PLAT_INFO,
->> +             .size = 4,
->> +             .regmap = "vsec-platinfo",
->> +     },
->> +     {
->> +             .type = VSEC_TYPE_MAILBOX,
->> +             .ep_name = XRT_MD_NODE_MAILBOX_VSEC,
->> +             .size = 48,
->> +             .regmap = "vsec-mbx",
->> +     },
->> +};
->> +
->> +static const struct regmap_config vsec_regmap_config = {
->> +     .reg_bits = 32,
->> +     .val_bits = 32,
->> +     .reg_stride = 4,
->> +     .max_register = 0x1000,
-> At least 0x1000 could be #define, maybe all.
-Will #define all of them.
->> +};
->> +
->> +struct xrt_vsec {
->> +     struct platform_device  *pdev;
->> +     struct regmap           *regmap;
->> +     u32                     length;
->> +
->> +     char                    *metadata;
->> +     char                    uuid[VSEC_UUID_LEN];
->> +     int                     group;
->> +};
->> +
->> +static inline int vsec_read_entry(struct xrt_vsec *vsec, u32 index, struct xrt_vsec_entry *entry)
->> +{
->> +     int ret;
->> +
->> +     ret = regmap_bulk_read(vsec->regmap, sizeof(struct xrt_vsec_header) +
->> +                            index * sizeof(struct xrt_vsec_entry), entry,
->> +                            sizeof(struct xrt_vsec_entry) /
->> +                            vsec_regmap_config.reg_stride);
->> +
->> +     return ret;
->> +}
->> +
->> +static inline u32 vsec_get_bar(struct xrt_vsec_entry *entry)
->> +{
->> +     return ((entry)->bar_rev >> 4) & 0xf;
-> The extra () were needed when this was a macro, they aren't now.
->
-> remove here and the next 2 functions.
-will remove ().
->
->> +}
->> +
->> +static inline u64 vsec_get_bar_off(struct xrt_vsec_entry *entry)
->> +{
->> +     return (entry)->off_lo | ((u64)(entry)->off_hi << 16);
->> +}
->> +
->> +static inline u32 vsec_get_rev(struct xrt_vsec_entry *entry)
->> +{
->> +     return (entry)->bar_rev & 0xf;
->> +}
->> +
->> +static char *type2epname(u32 type)
->> +{
->> +     int i;
->> +
->> +     for (i = 0; i < ARRAY_SIZE(vsec_devs); i++) {
->> +             if (vsec_devs[i].type == type)
->> +                     return (vsec_devs[i].ep_name);
->> +     }
->> +
->> +     return NULL;
->> +}
->> +
->> +static ulong type2size(u32 type)
->> +{
->> +     int i;
->> +
->> +     for (i = 0; i < ARRAY_SIZE(vsec_devs); i++) {
->> +             if (vsec_devs[i].type == type)
->> +                     return (vsec_devs[i].size);
->> +     }
->> +
->> +     return 0;
->> +}
->> +
->> +static char *type2regmap(u32 type)
->> +{
->> +     int i;
->> +
->> +     for (i = 0; i < ARRAY_SIZE(vsec_devs); i++) {
->> +             if (vsec_devs[i].type == type)
->> +                     return (vsec_devs[i].regmap);
->> +     }
->> +
->> +     return NULL;
->> +}
->> +
->> +static int xrt_vsec_add_node(struct xrt_vsec *vsec,
->> +                          void *md_blob, struct xrt_vsec_entry *p_entry)
->> +{
->> +     struct xrt_md_endpoint ep;
->> +     char regmap_ver[64];
->> +     int ret;
->> +
->> +     if (!type2epname(p_entry->type))
->> +             return -EINVAL;
->> +
->> +     /*
->> +      * VSEC may have more than 1 mailbox instance for the card
->> +      * which has more than 1 physical function.
->> +      * This is not supported for now. Assuming only one mailbox
->> +      */
->> +
->> +     snprintf(regmap_ver, sizeof(regmap_ver) - 1, "%d-%d.%d.%d",
->> +              p_entry->ver_type, p_entry->major, p_entry->minor,
->> +              vsec_get_rev(p_entry));
->> +     ep.ep_name = type2epname(p_entry->type);
->> +     ep.bar = vsec_get_bar(p_entry);
->> +     ep.bar_off = vsec_get_bar_off(p_entry);
+>> +static int xrt_grp_root_cb(struct device *dev, void *parg,
+>> +                        enum xrt_root_cmd cmd, void *arg)
 > ok
->> +     ep.size = type2size(p_entry->type);
->> +     ep.regmap = type2regmap(p_entry->type);
->> +     ep.regmap_ver = regmap_ver;
->> +     ret = xrt_md_add_endpoint(DEV(vsec->pdev), vsec->metadata, &ep);
->> +     if (ret)
->> +             xrt_err(vsec->pdev, "add ep failed, ret %d", ret);
->> +
->> +     return ret;
->> +}
->> +
->> +static int xrt_vsec_create_metadata(struct xrt_vsec *vsec)
 >> +{
->> +     struct xrt_vsec_entry entry;
->> +     int i, ret;
->> +
->> +     ret = xrt_md_create(&vsec->pdev->dev, &vsec->metadata);
->> +     if (ret) {
->> +             xrt_err(vsec->pdev, "create metadata failed");
->> +             return ret;
->> +     }
->> +
->> +     for (i = 0; i * sizeof(entry) < vsec->length -
->> +         sizeof(struct xrt_vsec_header); i++) {
->> +             ret = vsec_read_entry(vsec, i, &entry);
->> +             if (ret) {
->> +                     xrt_err(vsec->pdev, "failed read entry %d, ret %d", i, ret);
->> +                     goto fail;
->> +             }
->> +
->> +             if (entry.type == VSEC_TYPE_END)
->> +                     break;
->> +             ret = xrt_vsec_add_node(vsec, vsec->metadata, &entry);
->> +             if (ret)
->> +                     goto fail;
-> ok
->> +     }
->> +
->> +     return 0;
->> +
->> +fail:
->> +     vfree(vsec->metadata);
->> +     vsec->metadata = NULL;
->> +     return ret;
->> +}
->> +
->> +static int xrt_vsec_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
->> +{
->> +     int ret = 0;
+>> +     int rc;
+>> +     struct platform_device *pdev =
+>> +             container_of(dev, struct platform_device, dev);
+>> +     struct xrt_group *xg = (struct xrt_group *)parg;
 >> +
 >> +     switch (cmd) {
->> +     case XRT_XLEAF_EVENT:
->> +             /* Does not handle any event. */
+>> +     case XRT_ROOT_GET_LEAF_HOLDERS: {
+>> +             struct xrt_root_get_holders *holders =
+>> +                     (struct xrt_root_get_holders *)arg;
+>> +             rc = xrt_subdev_pool_get_holders(&xg->leaves,
+>> +                                              holders->xpigh_pdev,
+>> +                                              holders->xpigh_holder_buf,
+>> +                                              holders->xpigh_holder_buf_len);
 >> +             break;
+>> +     }
 >> +     default:
->> +             ret = -EINVAL;
->> +             xrt_err(pdev, "should never been called");
+>> +             /* Forward parent call to root. */
+>> +             rc = xrt_subdev_root_request(pdev, cmd, arg);
 >> +             break;
 >> +     }
 >> +
->> +     return ret;
+>> +     return rc;
 >> +}
 >> +
->> +static int xrt_vsec_mapio(struct xrt_vsec *vsec)
+>> +/*
+>> + * Cut subdev's dtb from group's dtb based on passed-in endpoint descriptor.
+>> + * Return the subdev's dtb through dtbp, if found.
+>> + */
+>> +static int xrt_grp_cut_subdev_dtb(struct xrt_group *xg, struct xrt_subdev_endpoints *eps,
+>> +                               char *grp_dtb, char **dtbp)
 >> +{
->> +     struct xrt_subdev_platdata *pdata = DEV_PDATA(vsec->pdev);
->> +     struct resource *res = NULL;
->> +     void __iomem *base = NULL;
->> +     const u64 *bar_off;
->> +     const u32 *bar;
->> +     u64 addr;
-> ok
->> +     int ret;
+>> +     int ret, i, ep_count = 0;
+>> +     char *dtb = NULL;
 >> +
->> +     if (!pdata || xrt_md_size(DEV(vsec->pdev), pdata->xsp_dtb) == XRT_MD_INVALID_LENGTH) {
->> +             xrt_err(vsec->pdev, "empty metadata");
->> +             return -EINVAL;
->> +     }
->> +
->> +     ret = xrt_md_get_prop(DEV(vsec->pdev), pdata->xsp_dtb, XRT_MD_NODE_VSEC,
->> +                           NULL, XRT_MD_PROP_BAR_IDX, (const void **)&bar, NULL);
->> +     if (ret) {
->> +             xrt_err(vsec->pdev, "failed to get bar idx, ret %d", ret);
->> +             return -EINVAL;
->> +     }
->> +
->> +     ret = xrt_md_get_prop(DEV(vsec->pdev), pdata->xsp_dtb, XRT_MD_NODE_VSEC,
->> +                           NULL, XRT_MD_PROP_OFFSET, (const void **)&bar_off, NULL);
->> +     if (ret) {
->> +             xrt_err(vsec->pdev, "failed to get bar off, ret %d", ret);
->> +             return -EINVAL;
->> +     }
->> +
->> +     xrt_info(vsec->pdev, "Map vsec at bar %d, offset 0x%llx",
->> +              be32_to_cpu(*bar), be64_to_cpu(*bar_off));
->> +
->> +     xleaf_get_barres(vsec->pdev, &res, be32_to_cpu(*bar));
->> +     if (!res) {
->> +             xrt_err(vsec->pdev, "failed to get bar addr");
->> +             return -EINVAL;
->> +     }
->> +
->> +     addr = res->start + be64_to_cpu(*bar_off);
->> +
->> +     base = devm_ioremap(&vsec->pdev->dev, addr, vsec_regmap_config.max_register);
->> +     if (!base) {
->> +             xrt_err(vsec->pdev, "Map failed");
->> +             return -EIO;
->> +     }
->> +
->> +     vsec->regmap = devm_regmap_init_mmio(&vsec->pdev->dev, base, &vsec_regmap_config);
->> +     if (IS_ERR(vsec->regmap)) {
->> +             xrt_err(vsec->pdev, "regmap %pR failed", res);
->> +             return PTR_ERR(vsec->regmap);
->> +     }
->> +
->> +     ret = regmap_read(vsec->regmap, VSEC_REG_LENGTH, &vsec->length);
->> +     if (ret) {
->> +             xrt_err(vsec->pdev, "failed to read length %d", ret);
->> +             return ret;
->> +     }
->> +
->> +     return 0;
->> +}
->> +
->> +static int xrt_vsec_remove(struct platform_device *pdev)
->> +{
->> +     struct xrt_vsec *vsec;
->> +
->> +     vsec = platform_get_drvdata(pdev);
->> +
->> +     if (vsec->group >= 0)
->> +             xleaf_destroy_group(pdev, vsec->group);
->> +     vfree(vsec->metadata);
->> +
->> +     return 0;
->> +}
->> +
->> +static int xrt_vsec_probe(struct platform_device *pdev)
->> +{
->> +     struct xrt_vsec *vsec;
->> +     int ret = 0;
->> +
->> +     vsec = devm_kzalloc(&pdev->dev, sizeof(*vsec), GFP_KERNEL);
->> +     if (!vsec)
->> +             return -ENOMEM;
->> +
->> +     vsec->pdev = pdev;
->> +     vsec->group = -1;
->> +     platform_set_drvdata(pdev, vsec);
->> +
->> +     ret = xrt_vsec_mapio(vsec);
+>> +     ret = xrt_md_create(DEV(xg->pdev), &dtb);
 >> +     if (ret)
->> +             goto failed;
+>> +             return ret;
 >> +
->> +     ret = xrt_vsec_create_metadata(vsec);
->> +     if (ret) {
->> +             xrt_err(pdev, "create metadata failed, ret %d", ret);
->> +             goto failed;
+>> +     for (i = 0; eps->xse_names[i].ep_name || eps->xse_names[i].regmap_name; i++) {
+>> +             const char *ep_name = eps->xse_names[i].ep_name;
+>> +             const char *reg_name = eps->xse_names[i].regmap_name;
+>> +
+>> +             if (!ep_name)
+>> +                     xrt_md_get_compatible_endpoint(DEV(xg->pdev), grp_dtb, reg_name, &ep_name);
+>> +             if (!ep_name)
+>> +                     continue;
+>> +
+>> +             ret = xrt_md_copy_endpoint(DEV(xg->pdev), dtb, grp_dtb, ep_name, reg_name, NULL);
+>> +             if (ret)
+>> +                     continue;
+>> +             xrt_md_del_endpoint(DEV(xg->pdev), grp_dtb, ep_name, reg_name);
+>> +             ep_count++;
 >> +     }
->> +     vsec->group = xleaf_create_group(pdev, vsec->metadata);
->> +     if (ret < 0) {
-> this is a bug, ret is not set by xleaf_create_group
-Will fix it.
+>> +     /* Found enough endpoints, return the subdev's dtb. */
+>> +     if (ep_count >= eps->xse_min_ep) {
+>> +             *dtbp = dtb;
+>> +             return 0;
+>> +     }
+>> +
+>> +     /* Cleanup - Restore all endpoints that has been deleted, if any. */
+>> +     if (ep_count > 0) {
+>> +             xrt_md_copy_endpoint(DEV(xg->pdev), grp_dtb, dtb,
+>> +                                  XRT_MD_NODE_ENDPOINTS, NULL, NULL);
+>> +     }
+>> +     vfree(dtb);
+>> +     *dtbp = NULL;
+>> +     return 0;
+>> +}
+>> +
+>> +static int xrt_grp_create_leaves(struct xrt_group *xg)
+>> +{
+>> +     struct xrt_subdev_platdata *pdata = DEV_PDATA(xg->pdev);
+>> +     struct xrt_subdev_endpoints *eps = NULL;
+>> +     int ret = 0, failed = 0;
+>> +     enum xrt_subdev_id did;
+>> +     char *grp_dtb = NULL;
+>> +     unsigned long mlen;
+>> +
+>> +     if (!pdata)
+>> +             return -EINVAL;
+> ok
+>> +
+>> +     mlen = xrt_md_size(DEV(xg->pdev), pdata->xsp_dtb);
+>> +     if (mlen == XRT_MD_INVALID_LENGTH) {
+>> +             xrt_err(xg->pdev, "invalid dtb, len %ld", mlen);
+>> +             return -EINVAL;
+>> +     }
+>> +
+>> +     mutex_lock(&xg->lock);
+>> +
+>> +     if (xg->leaves_created) {
+>> +             mutex_unlock(&xg->lock);
+> add a comment that this is not an error and/or error is handled elsewhere
 
-Lizhi
+
+Will do.
+
+
+>> +             return -EEXIST;
+>> +     }
+>> +
+>> +     grp_dtb = vmalloc(mlen);
+>> +     if (!grp_dtb) {
+>> +             mutex_unlock(&xg->lock);
+>> +             return -ENOMEM;
+> ok
+>> +     }
+>> +
+>> +     /* Create all leaves based on dtb. */
+>> +     xrt_info(xg->pdev, "bringing up leaves...");
+>> +     memcpy(grp_dtb, pdata->xsp_dtb, mlen);
+>> +     for (did = 0; did < XRT_SUBDEV_NUM; did++) {
+> ok
+>> +             eps = xrt_drv_get_endpoints(did);
+>> +             while (eps && eps->xse_names) {
+>> +                     char *dtb = NULL;
+>> +
+>> +                     ret = xrt_grp_cut_subdev_dtb(xg, eps, grp_dtb, &dtb);
+>> +                     if (ret) {
+>> +                             failed++;
+>> +                             xrt_err(xg->pdev, "failed to cut subdev dtb for drv %s: %d",
+>> +                                     xrt_drv_name(did), ret);
+>> +                     }
+>> +                     if (!dtb) {
+>> +                             /*
+>> +                              * No more dtb to cut or bad things happened for this instance,
+>> +                              * switch to the next one.
+>> +                              */
+>> +                             eps++;
+>> +                             continue;
+>> +                     }
+>> +
+>> +                     /* Found a dtb for this instance, let's add it. */
+>> +                     ret = xrt_subdev_pool_add(&xg->leaves, did, xrt_grp_root_cb, xg, dtb);
+>> +                     if (ret < 0) {
+>> +                             failed++;
+>> +                             xrt_err(xg->pdev, "failed to add %s: %d", xrt_drv_name(did), ret);
+> add a comment that this is not a fatal error and cleanup happens elsewhere
+
+
+Will do.
+
+
+Thanks,
+
+Max
+
+
 >
 > Tom
 >
->> +             xrt_err(pdev, "create group failed, ret %d", vsec->group);
->> +             ret = vsec->group;
->> +             goto failed;
+>> +                     }
+>> +                     vfree(dtb);
+>> +                     /* Continue searching for the same instance from grp_dtb. */
+>> +             }
 >> +     }
 >> +
->> +     return 0;
->> +
->> +failed:
->> +     xrt_vsec_remove(pdev);
->> +
->> +     return ret;
+>> +     xg->leaves_created = true;
+>> +     vfree(grp_dtb);
+>> +     mutex_unlock(&xg->lock);
+>> +     return failed == 0 ? 0 : -ECHILD;
 >> +}
 >> +
->> +static struct xrt_subdev_endpoints xrt_vsec_endpoints[] = {
->> +     {
->> +             .xse_names = (struct xrt_subdev_ep_names []){
->> +                     { .ep_name = XRT_MD_NODE_VSEC },
->> +                     { NULL },
->> +             },
->> +             .xse_min_ep = 1,
->> +     },
->> +     { 0 },
->> +};
+>> +static void xrt_grp_remove_leaves(struct xrt_group *xg)
+>> +{
+>> +     mutex_lock(&xg->lock);
 >> +
->> +static struct xrt_subdev_drvdata xrt_vsec_data = {
+>> +     if (!xg->leaves_created) {
+>> +             mutex_unlock(&xg->lock);
+>> +             return;
+>> +     }
+>> +
+>> +     xrt_info(xg->pdev, "tearing down leaves...");
+>> +     xrt_subdev_pool_fini(&xg->leaves);
+>> +     xg->leaves_created = false;
+>> +
+>> +     mutex_unlock(&xg->lock);
+>> +}
+>> +
+>> +static int xrt_grp_probe(struct platform_device *pdev)
+>> +{
+>> +     struct xrt_group *xg;
+>> +
+>> +     xrt_info(pdev, "probing...");
+>> +
+>> +     xg = devm_kzalloc(&pdev->dev, sizeof(*xg), GFP_KERNEL);
+>> +     if (!xg)
+>> +             return -ENOMEM;
+>> +
+>> +     xg->pdev = pdev;
+>> +     mutex_init(&xg->lock);
+>> +     xrt_subdev_pool_init(DEV(pdev), &xg->leaves);
+>> +     platform_set_drvdata(pdev, xg);
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static int xrt_grp_remove(struct platform_device *pdev)
+>> +{
+>> +     struct xrt_group *xg = platform_get_drvdata(pdev);
+>> +
+>> +     xrt_info(pdev, "leaving...");
+>> +     xrt_grp_remove_leaves(xg);
+>> +     return 0;
+>> +}
+>> +
+>> +static int xrt_grp_leaf_call(struct platform_device *pdev, u32 cmd, void *arg)
+>> +{
+>> +     int rc = 0;
+>> +     struct xrt_group *xg = platform_get_drvdata(pdev);
+>> +
+>> +     switch (cmd) {
+>> +     case XRT_XLEAF_EVENT:
+>> +             /* Simply forward to every child. */
+>> +             xrt_subdev_pool_handle_event(&xg->leaves,
+>> +                                          (struct xrt_event *)arg);
+>> +             break;
+>> +     case XRT_GROUP_GET_LEAF: {
+>> +             struct xrt_root_get_leaf *get_leaf =
+>> +                     (struct xrt_root_get_leaf *)arg;
+>> +
+>> +             rc = xrt_subdev_pool_get(&xg->leaves, get_leaf->xpigl_match_cb,
+>> +                                      get_leaf->xpigl_match_arg,
+>> +                                      DEV(get_leaf->xpigl_caller_pdev),
+>> +                                      &get_leaf->xpigl_tgt_pdev);
+>> +             break;
+>> +     }
+>> +     case XRT_GROUP_PUT_LEAF: {
+>> +             struct xrt_root_put_leaf *put_leaf =
+>> +                     (struct xrt_root_put_leaf *)arg;
+>> +
+>> +             rc = xrt_subdev_pool_put(&xg->leaves, put_leaf->xpipl_tgt_pdev,
+>> +                                      DEV(put_leaf->xpipl_caller_pdev));
+>> +             break;
+>> +     }
+>> +     case XRT_GROUP_INIT_CHILDREN:
+>> +             rc = xrt_grp_create_leaves(xg);
+>> +             break;
+>> +     case XRT_GROUP_FINI_CHILDREN:
+>> +             xrt_grp_remove_leaves(xg);
+>> +             break;
+>> +     case XRT_GROUP_TRIGGER_EVENT:
+>> +             xrt_subdev_pool_trigger_event(&xg->leaves, (enum xrt_events)(uintptr_t)arg);
+>> +             break;
+>> +     default:
+>> +             xrt_err(pdev, "unknown IOCTL cmd %d", cmd);
+>> +             rc = -EINVAL;
+>> +             break;
+>> +     }
+>> +     return rc;
+>> +}
+>> +
+>> +static struct xrt_subdev_drvdata xrt_grp_data = {
 >> +     .xsd_dev_ops = {
->> +             .xsd_leaf_call = xrt_vsec_leaf_call,
+>> +             .xsd_leaf_call = xrt_grp_leaf_call,
 >> +     },
 >> +};
 >> +
->> +static const struct platform_device_id xrt_vsec_table[] = {
->> +     { XRT_VSEC, (kernel_ulong_t)&xrt_vsec_data },
+>> +static const struct platform_device_id xrt_grp_id_table[] = {
+>> +     { XRT_GRP, (kernel_ulong_t)&xrt_grp_data },
 >> +     { },
 >> +};
 >> +
->> +static struct platform_driver xrt_vsec_driver = {
+>> +static struct platform_driver xrt_group_driver = {
 >> +     .driver = {
->> +             .name = XRT_VSEC,
+>> +             .name    = XRT_GRP,
 >> +     },
->> +     .probe = xrt_vsec_probe,
->> +     .remove = xrt_vsec_remove,
->> +     .id_table = xrt_vsec_table,
+>> +     .probe   = xrt_grp_probe,
+>> +     .remove  = xrt_grp_remove,
+>> +     .id_table = xrt_grp_id_table,
 >> +};
 >> +
->> +XRT_LEAF_INIT_FINI_FUNC(XRT_SUBDEV_VSEC, vsec);
-
+>> +void group_leaf_init_fini(bool init)
+>> +{
+>> +     if (init)
+>> +             xleaf_register_driver(XRT_SUBDEV_GRP, &xrt_group_driver, NULL);
+>> +     else
+>> +             xleaf_unregister_driver(XRT_SUBDEV_GRP);
+>> +}
