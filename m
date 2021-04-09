@@ -2,41 +2,33 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 190C9358CFA
-	for <lists+linux-fpga@lfdr.de>; Thu,  8 Apr 2021 20:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FB335918D
+	for <lists+linux-fpga@lfdr.de>; Fri,  9 Apr 2021 03:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbhDHSxV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 8 Apr 2021 14:53:21 -0400
-Received: from mail-pg1-f174.google.com ([209.85.215.174]:41684 "EHLO
-        mail-pg1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbhDHSxU (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 8 Apr 2021 14:53:20 -0400
-Received: by mail-pg1-f174.google.com with SMTP id f29so2043818pgm.8;
-        Thu, 08 Apr 2021 11:53:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=h49KcBd5xHhKT6A+MHvhKtJ6y1rV0GAACbv3hOLpipg=;
-        b=IcjgX/JjFa3Xva2CGdyM6qYxCNj/g7a6b2O1w920voEMn7PgdKJt710anCve1ss2Qr
-         sym3s+TxJ6xug/CxCe5K5GgZj48m69XIf8/1kQ11XUuGnM6L1ispC6dO8P0R7eLnFTbs
-         ePZX56MSvsYwfl+w5DEg9q1mGd0tp9hKHdsUFWOsxg+ZSOgwu2rL5ZW0eJyLiAxm4Tvu
-         Y6cyWMKpe2Vct+G5xE6s6y8A9GEpUCy4t2fQ/jdT6RNfs4b5kdogBVu6KZgdxlUaXvYT
-         M1jQZ00TVkfxadGcYS1EWoN/b9YHuJ3diM1goHRoQx7moCD5YNhCEcXJdUdFnf7rOoX0
-         R4Lg==
-X-Gm-Message-State: AOAM531J+TNO4lBmOdBVezyQWJGj0IJcj17REd0XKGlUj6e5AN0l8jO/
-        S6DG95D77Mcw31GkgmNe5e0=
-X-Google-Smtp-Source: ABdhPJzBe01GxB/GWlJFtZWCiM+i1cMOBBsP48lhU5f8tagsfcedli8OKNojSTz16WBxdZ00iBRbUw==
-X-Received: by 2002:a63:4c5d:: with SMTP id m29mr9081742pgl.366.1617907988613;
-        Thu, 08 Apr 2021 11:53:08 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id x18sm201791pfu.32.2021.04.08.11.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Apr 2021 11:53:07 -0700 (PDT)
-Date:   Thu, 8 Apr 2021 11:53:06 -0700
-From:   Moritz Fischer <mdf@kernel.org>
+        id S233158AbhDIBmY (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 8 Apr 2021 21:42:24 -0400
+Received: from mga17.intel.com ([192.55.52.151]:30281 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233153AbhDIBmX (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 8 Apr 2021 21:42:23 -0400
+IronPort-SDR: VsVZGgrtVMEYhP6ZTFXJP9tI/ukoojSmbIe3AKWnxBVDJBDOTfARqu8h+SBsgi3jBTyOuRgo9F
+ 8rPYF6Pt2LQQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="173752574"
+X-IronPort-AV: E=Sophos;i="5.82,208,1613462400"; 
+   d="scan'208";a="173752574"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 18:42:11 -0700
+IronPort-SDR: Fp8ubvMUMoaHCQX+InVbY6t4Pn57uvosX6hKT6kE5GKG3+ys4KHB8zpTLRG1fmgpar0XRq3Nvz
+ FI2OXcB5cKpg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,208,1613462400"; 
+   d="scan'208";a="416043217"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Apr 2021 18:42:08 -0700
+Date:   Fri, 9 Apr 2021 09:37:30 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
 To:     "Wu, Hao" <hao.wu@intel.com>
-Cc:     "Xu, Yilun" <yilun.xu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+Cc:     Moritz Fischer <mdf@kernel.org>,
         "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
         "trix@redhat.com" <trix@redhat.com>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
@@ -47,7 +39,7 @@ Cc:     "Xu, Yilun" <yilun.xu@intel.com>, Moritz Fischer <mdf@kernel.org>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "russell.h.weight@linux.intel.com" <russell.h.weight@linux.intel.com>
 Subject: Re: [PATCH 2/3] fpga: dfl: Add DFL bus driver for Altera SPI Master
-Message-ID: <YG9REtNPi4e2hyJK@epycbox.lan>
+Message-ID: <20210409013730.GB2713@yilunxu-OptiPlex-7050>
 References: <20210405235301.187542-1-matthew.gerlach@linux.intel.com>
  <20210405235301.187542-3-matthew.gerlach@linux.intel.com>
  <YGuvFYvJTMPPm2Jy@epycbox.lan>
@@ -64,7 +56,7 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 09:20:19AM +0000, Wu, Hao wrote:
+On Thu, Apr 08, 2021 at 05:20:19PM +0800, Wu, Hao wrote:
 > > On Thu, Apr 08, 2021 at 03:30:15PM +0800, Wu, Hao wrote:
 > > > > > On Mon, 5 Apr 2021, Moritz Fischer wrote:
 > > > > >
@@ -375,13 +367,13 @@ On Thu, Apr 08, 2021 at 09:20:19AM +0000, Wu, Hao wrote:
 > > >
 > > > I understand that for FPGA case, it may have some additional logics for specific
 > > > purposes based on common altera spi master IP, then additional code for
-> > 
+> >
 > > I'm wondering if the additional logics are extensions for common spi-altera. Like
 > > the
 > > SPI_CORE_PARAMETER register, it is not within the register space of
 > > spi-altera,
-> > 
-> > 
+> >
+> >
 > >   |   |      +-------------+
 > >   |DFL|------| +--------+  |
 > >   |BUS|      | |SPI CORE|  |
@@ -395,7 +387,7 @@ On Thu, Apr 08, 2021 at 09:20:19AM +0000, Wu, Hao wrote:
 > >              | +--------+  |
 > >              +-------------+
 > > > a specific product still can be put into altera-spi-xxxx.c or altera-spi-dfl-xxxx.c
-> > 
+> >
 > > So is it proper we integrate this feature into spi-altera? Previously
 > > we have merged the dfl-n3000-nios, its spi part is very similar as
 > > this driver. The dfl-n3000-nios make the spi-altera as a sub device.
@@ -403,30 +395,42 @@ On Thu, Apr 08, 2021 at 09:20:19AM +0000, Wu, Hao wrote:
 > > dfl-n3000-nios?
 > 
 > Looks like those are enhancements of the IP. They can be applied even
+
+I don't think the extra registers are the enhancement of the IP. They
+are not part of the IP because they are not within the IP's register
+space. They are like some external way of describing the IP like
+Devicetree or ACPI.
+
 > other buses are used, not only for DFL, like PCI device or platform device,
 > right? then why not put related code together with the original IP?
 
-Do you maybe need to extend struct dfl_device to have multiple mmio_res,
-then?
-
-Can DFL describe such a scenario?
-
-That seems the logical step to support what's been drawn up there?
+The code of devicetree or ACPI parsing are integrated in the IP drivers,
+but for this case, it may not be proper for now, cause this style is not
+formally introduced by any standard. IP specific parameters description
+are not within the scope of DFL now.
 
 > 
 > The reason I suggested that function drivers which use DFL bus, still need
 > to go to related subsystem, because we know DFL quite well but may
-> not be the experts for every subsystem (e.g. SPI), and every IPs (e.g. 
+> not be the experts for every subsystem (e.g. SPI), and every IPs (e.g.
 > Altera SPI Master). Altera SPI Master driver maintainer could give more
 > valuable suggestions on your question if this feature can be integrated
 > into spi-altera or not. : )
+
+I agree that we put drivers to their related subsystem. I'm just
+wondering if drivers/spi is the proper domain for it. Anyway getting
+some inputs from SPI maintainers is a good suggestion.
+
+Thanks,
+Yilun
+
 > 
 > Hao
 > 
-> > 
+> >
 > > Thanks,
 > > Yilun
-> > 
+> >
 > > >
 > > > Thanks
 > > > Hao
@@ -434,6 +438,3 @@ That seems the logical step to support what's been drawn up there?
 > > > >
 > > > > Cheers,
 > > > > Moritz
-
-Cheers,
-Moritz
