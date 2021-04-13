@@ -2,227 +2,173 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6775535D415
-	for <lists+linux-fpga@lfdr.de>; Tue, 13 Apr 2021 01:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD6435D4BD
+	for <lists+linux-fpga@lfdr.de>; Tue, 13 Apr 2021 03:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239269AbhDLXpH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 12 Apr 2021 19:45:07 -0400
-Received: from mga04.intel.com ([192.55.52.120]:30725 "EHLO mga04.intel.com"
+        id S243119AbhDMBWh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 12 Apr 2021 21:22:37 -0400
+Received: from mga07.intel.com ([134.134.136.100]:37026 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238646AbhDLXpH (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 12 Apr 2021 19:45:07 -0400
-IronPort-SDR: D0qAYcRd3wQ9ON8jZIBvHZFud0VYSgP7Wz5jdxzb1e7mLYUufqkbwiPqxo7h3oufIr0hHSl8hx
- wMou/sIXzj/w==
-X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="192170186"
+        id S235837AbhDMBWg (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 12 Apr 2021 21:22:36 -0400
+IronPort-SDR: M0qZKOUr+WRb++ck8ErLZIT2URnQ/yVs8zmyNz2+4C7iUKAYV50NmtlFlv05pgtneyuTzb+5NU
+ uRrsXDwwfpGw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="258286504"
 X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
-   d="scan'208";a="192170186"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 16:44:43 -0700
-IronPort-SDR: NY65vNL7gMbTsL7ebvY+8mSC4gJ4V9LdqdQzuoeT12E/Yx6yVBw8oRh+dFFQacwY2+rylFL9DV
- OqIVzhaRMPrg==
+   d="scan'208";a="258286504"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 18:22:16 -0700
+IronPort-SDR: WgKI/MS8CYjT9EOaRVP21ODABMPhTbLn5dBCj+QNV9HVq2OGrDGvG7FQxhumNKavry00KhFNST
+ TAS7RGfcfWvg==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
-   d="scan'208";a="424014978"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 16:44:43 -0700
-Date:   Mon, 12 Apr 2021 16:46:10 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     "Wu, Hao" <hao.wu@intel.com>
-cc:     "Xu, Yilun" <yilun.xu@intel.com>, Moritz Fischer <mdf@kernel.org>,
-        "trix@redhat.com" <trix@redhat.com>,
+   d="scan'208";a="521403712"
+Received: from marshy.an.intel.com (HELO [10.122.105.143]) ([10.122.105.143])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Apr 2021 18:22:14 -0700
+Subject: Re: [PATCHv5 0/7] Extend Intel service layer, FPGA manager and region
+To:     Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>
+Cc:     "Gong, Richard" <richard.gong@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "russell.h.weight@linux.intel.com" <russell.h.weight@linux.intel.com>
-Subject: RE: [PATCH 2/3] fpga: dfl: Add DFL bus driver for Altera SPI
- Master
-In-Reply-To: <DM6PR11MB381916140583F3C31D66EFC385739@DM6PR11MB3819.namprd11.prod.outlook.com>
-Message-ID: <alpine.DEB.2.22.394.2104121610040.413249@rhweight-WRK1>
-References: <20210405235301.187542-1-matthew.gerlach@linux.intel.com> <20210405235301.187542-3-matthew.gerlach@linux.intel.com> <YGuvFYvJTMPPm2Jy@epycbox.lan> <alpine.DEB.2.22.394.2104060847030.208844@rhweight-WRK1> <YGyQdN9uS/niyFDP@epycbox.lan>
- <DM6PR11MB3819E0FC4F735C72746CE54785749@DM6PR11MB3819.namprd11.prod.outlook.com> <20210408081152.GA2713@yilunxu-OptiPlex-7050> <DM6PR11MB3819317A55FD7798E778EC4D85749@DM6PR11MB3819.namprd11.prod.outlook.com> <20210409013730.GB2713@yilunxu-OptiPlex-7050>
- <DM6PR11MB381912BD810637E0CDA1885F85739@DM6PR11MB3819.namprd11.prod.outlook.com> <20210409054118.GA7986@yilunxu-OptiPlex-7050> <DM6PR11MB381916140583F3C31D66EFC385739@DM6PR11MB3819.namprd11.prod.outlook.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        russell.h.weight@intel.com
+References: <1612909233-13867-1-git-send-email-richard.gong@linux.intel.com>
+ <MWHPR11MB001577B17723C8A046398249879E9@MWHPR11MB0015.namprd11.prod.outlook.com>
+ <YF90y3Di4RbuJvr0@epycbox.lan>
+ <496aa871-cfb0-faf4-4b1c-b53e56b58030@redhat.com>
+ <YGC619DmLM0AAQ5p@epycbox.lan>
+From:   Richard Gong <richard.gong@linux.intel.com>
+Message-ID: <8c0fcdde-540b-2ae3-01f2-30cdb87ac037@linux.intel.com>
+Date:   Mon, 12 Apr 2021 20:41:42 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+In-Reply-To: <YGC619DmLM0AAQ5p@epycbox.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
+Hi Moritz,
 
-On Fri, 9 Apr 2021, Wu, Hao wrote:
-
->> On Fri, Apr 09, 2021 at 12:02:47PM +0800, Wu, Hao wrote:
->>>>>>>>>>> +
->>>>>>>>>>> +static void dfl_spi_altera_remove(struct dfl_device *dfl_dev)
->>>>>>>>>>> +{
->>>>>>>>>>> +struct dfl_altera_spi *aspi = dev_get_drvdata(&dfl_dev->dev);
->>>>>>>>>>> +
->>>>>>>>>>> +platform_device_unregister(aspi->altr_spi);
->>>>>>>>>>> +}
->>>>>>>>>>> +
->>>>>>>>>>> +#define FME_FEATURE_ID_MAX10_SPI        0xe
->>>>>>>>>>> +
->>>>>>>>>>> +static const struct dfl_device_id dfl_spi_altera_ids[] = {
->>>>>>>>>>> +{ FME_ID, FME_FEATURE_ID_MAX10_SPI },
->>>>>>>>>>> +{ }
->>>>>>>>>>> +};
->>>>>>>>>>
->>>>>>>>>> Maybe you can extend the Altera SPI driver with this part?
->>>>>>>>>
->>>>>>>>> The file, drivers/spi/spi-altera.c, already has platform MODULE_
->>>> related
->>>>>>>>> code.  Wouldn't moving this code to that file produce conflicts?
->>>>>>>>
->>>>>>>> I've seen other drivers support multiple busses, so it should be
->>>>>>>> possible, there might be nuances I'm missing in my brief look at this,
->>>>>>>> though.
->>>>>>>>
->>>>>>>> I think one of them would be MODULE_DEVICE_TABLE(platform, ...)
->>>>>>>> and the other one MODULE_DEVICE_TABLE(dfl, ...)
->>>>>>>>
->>>>>>>> See drivers/i2c/busses/i2c-designware-platdrv.c for an example
->> (though
->>>>>>>> they might be guarding against what you describe with CONFIG_OF vs
->>>>>>>> CONFIG_ACPI)
->>>>>>>>
->>>>>>>> If that doesn't work we could split it up into
->>>>>>>>
->>>>>>>> altera-spi-plat.c and altera-spi-dfl.c and altera-spi-core.c
->>>>>>>> or something of that sort?
->>>>>>>>
->>>>>>>> My point being, now that we have a bus, let's use it and develop
->> drivers
->>>>>>>> according to the Linux device model where possible :)
->>>>>>>
->>>>>>> Agree. This does make sense from my side too. DFL core provides the
->>>>>> mechanism
->>>>>>> to enumerate different IPs on FPGA, but each function driver needs to
->> go
->>>> to
->>>>>>> related subsystem for review.  : )
->>>>>>>
->>>>>>> I understand that for FPGA case, it may have some additional logics for
->>>> specific
->>>>>>> purposes based on common altera spi master IP, then additional code
->> for
->>>>>>
->>>>>> I'm wondering if the additional logics are extensions for common spi-
->> altera.
->>>> Like
->>>>>> the
->>>>>> SPI_CORE_PARAMETER register, it is not within the register space of
->>>>>> spi-altera,
->>>>>>
->>>>>>
->>>>>>   |   |      +-------------+
->>>>>>   |DFL|------| +--------+  |
->>>>>>   |BUS|      | |SPI CORE|  |
->>>>>>   |   |      | |PARAM   |  |
->>>>>>   |   |      | +--------+  |
->>>>>>   |   |      |             |
->>>>>>   |   |      | +--------+  |   +-------+
->>>>>>              | |Indirect|  |   |spi    |
->>>>>>              | |access  +--+---|altera |
->>>>>>              | |master  |  |   +-------+
->>>>>>              | +--------+  |
->>>>>>              +-------------+
->>>>>>> a specific product still can be put into altera-spi-xxxx.c or altera-spi-dfl-
->>>> xxxx.c
->>>>>>
->>>>>> So is it proper we integrate this feature into spi-altera? Previously
->>>>>> we have merged the dfl-n3000-nios, its spi part is very similar as
->>>>>> this driver. The dfl-n3000-nios make the spi-altera as a sub device.
->>>>>> Could we borrow the idea, or could we just integrate this driver in
->>>>>> dfl-n3000-nios?
->>>>>
->>>>> Looks like those are enhancements of the IP. They can be applied even
+On 3/28/21 12:20 PM, Moritz Fischer wrote:
+> Tom,
+> 
+> On Sun, Mar 28, 2021 at 08:40:24AM -0700, Tom Rix wrote:
+>>
+>> On 3/27/21 11:09 AM, Moritz Fischer wrote:
+>>> Hi Richard, Russ,
+>>>
+>>> On Thu, Feb 25, 2021 at 01:07:14PM +0000, Gong, Richard wrote:
+>>>> Hi Moritz,
 >>>>
->>>> I don't think the extra registers are the enhancement of the IP. They
->>>> are not part of the IP because they are not within the IP's register
->>>> space. They are like some external way of describing the IP like
->>>> Devicetree or ACPI.
->>>
->>> Why adding new registers can't be consider as enhancement, those
->>> changes serve the original IP and make it better, right? small mmio
->>> footprint and parameter registers?
->>>
+>>>> Sorry for asking.
 >>>>
->>>>> other buses are used, not only for DFL, like PCI device or platform device,
->>>>> right? then why not put related code together with the original IP?
+>>>> When you have chance, can you help review the version 5 patchset submitted on 02/09/21?
 >>>>
->>>> The code of devicetree or ACPI parsing are integrated in the IP drivers,
->>>> but for this case, it may not be proper for now, cause this style is not
->>>> formally introduced by any standard. IP specific parameters description
->>>> are not within the scope of DFL now.
+>>>> Regards,
+>>>> Richard
+>>>>
+>>>> -----Original Message-----
+>>>> From: richard.gong@linux.intel.com <richard.gong@linux.intel.com>
+>>>> Sent: Tuesday, February 9, 2021 4:20 PM
+>>>> To: mdf@kernel.org; trix@redhat.com; gregkh@linuxfoundation.org; linux-fpga@vger.kernel.org; linux-kernel@vger.kernel.org
+>>>> Cc: Gong, Richard <richard.gong@intel.com>
+>>>> Subject: [PATCHv5 0/7] Extend Intel service layer, FPGA manager and region
+>>>>
+>>>> From: Richard Gong <richard.gong@intel.com>
+>>>>
+>>>> This is 5th submission of Intel service layer and FPGA patches, which includes the missing standalone patch in the 4th submission.
+>>>>
+>>>> This submission includes additional changes for Intel service layer driver to get the firmware version running at FPGA SoC device. Then FPGA manager driver, one of Intel service layer driver's client, can decide whether to handle the newly added bitstream authentication function based on the retrieved firmware version. So that we can maintain FPGA manager driver the back compatible.
+>>>>
+>>>> Bitstream authentication makes sure a signed bitstream has valid signatures.
+>>>>
+>>>> The customer sends the bitstream via FPGA framework and overlay, the firmware will authenticate the bitstream but not program the bitstream to device. If the authentication passes, the bitstream will be programmed into QSPI flash and will be expected to boot without issues.
+>>>>
+>>>> Extend Intel service layer, FPGA manager and region drivers to support the bitstream authentication feature.
+>>>>
+>>>> Richard Gong (7):
+>>>>    firmware: stratix10-svc: reset COMMAND_RECONFIG_FLAG_PARTIAL to 0
+>>>>    firmware: stratix10-svc: add COMMAND_AUTHENTICATE_BITSTREAM flag
+>>>>    firmware: stratix10-svc: extend SVC driver to get the firmware version
+>>>>    fpga: fpga-mgr: add FPGA_MGR_BITSTREAM_AUTHENTICATE flag
+>>>>    fpga: of-fpga-region: add authenticate-fpga-config property
+>>>>    dt-bindings: fpga: add authenticate-fpga-config property
+>>>>    fpga: stratix10-soc: extend driver for bitstream authentication
+>>>>
+>>>>   .../devicetree/bindings/fpga/fpga-region.txt       | 10 ++++
+>>>>   drivers/firmware/stratix10-svc.c                   | 12 ++++-
+>>>>   drivers/fpga/of-fpga-region.c                      | 24 ++++++---
+>>>>   drivers/fpga/stratix10-soc.c                       | 62 +++++++++++++++++++---
+>>>>   include/linux/firmware/intel/stratix10-smc.h       | 21 +++++++-
+>>>>   .../linux/firmware/intel/stratix10-svc-client.h    | 11 +++-
+>>>>   include/linux/fpga/fpga-mgr.h                      |  3 ++
+>>>>   7 files changed, 125 insertions(+), 18 deletions(-)
+>>>>
+>>>> --
+>>>> 2.7.4
+>>>>
+>>> Apologies for the epic delay in getting back to this, I took another
+>>> look at this patchset and Russ' patchset.
 >>>
->>> Not sure if I get your point, but it's possible that we add some enhancements
->>> to one IP then driver could be simplified and doesn't need devicetree any more.
->>> For sure, it's IP specific thing, not the scope of DFL.
+>>> TL;DR I'm not really a fan of using device-tree overlays for this (and
+>>> again, apologies, I should've voiced this earlier ...).
 >>>
->>> Then things become this: extension to IP to allow this IP to be used without
->>> device tree, so that this IP can be used in DFL or PCI or other buses without
->>> device tree?
+>>> Anyways, let's find a common API for this and Russ' work, they're trying
+>>> to achieve the same / similar thing, they should use the same API.
+>>>
+>>> I'd like to re-invetigate the possiblity to extend FPGA Manager with
+>>> 'secure update' ops that work for both these use-cases (and I susspect
+>>> hte XRT patchset will follow with a similar requirement, right after).
 >>
->> It's good to extend an IP, but it needs a published SPEC and stable
->> register interfaces. For now, the spi-altera driver conforms to the
->> "SPI Core" chapter of the following spec:
+>> The xrt patchset makes heavy use of device trees.
 >>
->> https://www.intel.com/content/www/us/en/programmable/documentation/sf
->> o1400787952932.html
->>
->> There is no info about the core parameter register and this specific
->> indirect access bus. That's why I don't see these additional parts as
->> the enhancements to spi-altera. This DFL feature is like a wrapper for
->> the spi-altera sub device.
+>> What is the general guidance for device tree usage ?
+> 
+> I'm not generally against using device tree, it has its place. To
+> describe hardware (and hardware *changes* with overlays) :)
+> 
+> What I don't like about this particular implementation w.r.t device-tree
+> usage is that it uses DT overlays as a mechanism to program the flash --
+> in place of having an API to do so.
+> 
+> One could add device-nodes during the DT overlay application, while the
+> FPGA doesn't actually get programmed with a new runtime image -- meaning
+> live DT and actual hardware state diverged -- worst case it'd crash.
+> 
+> So when roughly at the same time (from the same company even) we have two
+> patchsets that do similar things with radically different APIs I think
+> we should pause, and reflect on whether we can come up with something
+> that works for both :)
 >
-> It really doesn't matter, even if you consider this as an new IP, it's still a SPI
-> Master, it's driver still need to be reviewed in drivers/spi subsystem. The
-> worst case is that we need to write a new spi-xxx.c driver, that's it.
->
-> From DFL part, DFL only can enumerate the common hardware resources,
-> but no good way to help thing like this, specific IP parameters (which handle
-> by devicetree in platform driver). So for some IPs , they still need some
-> extensions to avoid such dependency (on device tree for parameters). I guess
-> we may see more similar cases in the future.
->
-> Anyway, I think we reached agreement that for device drivers on DFL bus, it
-> needs to be reviewed in its own subsystem. : )
 
-Yes, I agree that device drivers on the DFL bus should go in the 
-appropriate the directory of the appropriate  framework.  As Moritz has 
-pointed out there are already examples bus specific driver code, for 
-multiple buses, being the driver framework directory (e.g. Designware 
-I2C).
+I discussed with Russ and studies his patches, came to realize that the 
+work we had to accomplish was not same or similar. What I want to 
+achieve is to verify the identity of the bitstream, which is like doing 
+a "dry-run" to FPGA configuration.
 
-In this particular case, the Device Feature is wraps a particular 
-instantiation of an Altera SPI Master controller.  As Yilun pointed out, this 
-wrapper has a SPI_CORE_PARAMETER register which contains the values 
-of all the configuration parameters of the Altera SPI Master IP block. 
-This kind of information would also be included in a Device Tree 
-description of the instantiation. The Device Feature also implements 
-indirect register access to the actual registers of the Altera SPI Master 
-that provides a bridge from the PCIe bus to the Avalon Slave containing 
-the registers of the Altera SPI Master.
+Performing FPGA configuration (full or partial) through the device tree 
+overlay is a method widely used by our customers.
 
-Given the Device Feature wraps an Altera SPI Master, it might still make 
-sense for the DFL driver to instantiate a sub driver instance for the 
-Altera SPI Master.  I will resubmit the current patches with 
-drivers/fpga/dfl-spi-altera.c moved to drivers/spi/spi-altera-dfl.c for 
-feedback from the SPI maintainers and continue investigating collapsing 
-the DFL driver and the platform sub-driver into a single DFL driver.  My 
-first attempt did not go well.
+Russ's approach utilizes a different user API which is a set of sysfs files.
 
-Matthew
+If we depart from device tree overlay, then the end-user must utilize 2 
+different mechanism or APIs (device tree overlay is used for 
+full/partial configuration, and sysfs is used for bitstream 
+authentication). Similarly low-level FPGA manager driver also needs to 
+add additional codes. For the end-user the single and simple mechanism 
+is always better choice, device tree overlay should be a better way to 
+achieve that goal.
 
-directory of the app >
-> Thanks
-> Hao
->
->>
->> Thanks
->> Yilun
->
+Regards,
+Richard
+
+> TL;DR the firmware parts to authenticate the bitstream look fine to me, the
+> way we tie it into the FPGA region I'm not a fan of.
+> 
+> - Moritz
+> 
