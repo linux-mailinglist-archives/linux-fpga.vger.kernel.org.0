@@ -2,116 +2,74 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E35F335E1C0
-	for <lists+linux-fpga@lfdr.de>; Tue, 13 Apr 2021 16:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA7335E952
+	for <lists+linux-fpga@lfdr.de>; Wed, 14 Apr 2021 00:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343989AbhDMOmB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 13 Apr 2021 10:42:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25430 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344179AbhDMOmB (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 13 Apr 2021 10:42:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618324900;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TViGrSHXxRTqM3saQJnRZcxR43Mym++wZTJJ2EWtIto=;
-        b=WMWELS9DQh5aEI23JowwUCwWAwuB2cQd0dJHcLS2kW1pag4+QRt7HRe8UZfAvRBd71HjYO
-        N4UwOxGHg5rK9YvqHzaPezgaPK0ZTlzmqxhOtv0isUWJyCxw0Q10yb+67MfZ9XxKQBana1
-        C3KglPFeBZfvbVe9QPiSVQSEKv4+q80=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-357-L0R05639MaqfJ4UFHJmkJA-1; Tue, 13 Apr 2021 10:41:38 -0400
-X-MC-Unique: L0R05639MaqfJ4UFHJmkJA-1
-Received: by mail-qk1-f200.google.com with SMTP id c9so4524433qkm.11
-        for <linux-fpga@vger.kernel.org>; Tue, 13 Apr 2021 07:41:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=TViGrSHXxRTqM3saQJnRZcxR43Mym++wZTJJ2EWtIto=;
-        b=mda7qv0AaDq5ykYDorqWEva5IDCLQGeVfwEdWZu98QVT2wjaqHqEfcyVBMD8YHplEG
-         7nl3jHeiXQ7WmWgSQYgfzFg+mad8jIIstf6LRrJw2YGWk0270XxkzkgE4cl+q2ToUjjk
-         ZjhgdR4z1KEjj5G/EkY4TAN/KsE8vbUtzvLhiezXgiT1Ih9erFws4yS0Pr2wq4UmsXoP
-         Xpzw5b/+u1g3hvdvNgL9dn7p7UKQr02t5gSObnuhcg68AyhHOUdSQQcz5CAOv5ZSSLby
-         6b4sulYiwaKNvtAfGTENUkQmHskNAftK3wkJHD/c4u5PAOz5SUO6pqtBHvHEn6yZZUhk
-         JOJg==
-X-Gm-Message-State: AOAM530cH0GaZkMk32XWsx1HDfB30/8tIEiOMd62KR3QKMfod23Q0RJt
-        26i2H0+OM70FkpCBcjb+P5a73elwqa6x9Ikl76nTUC7aBxsZOHMvExbhUjFqL3/JZfSpzMqPSir
-        +LYQoFTA1LJ1gjwTczWYD/A==
-X-Received: by 2002:a37:ae86:: with SMTP id x128mr32631306qke.427.1618324898269;
-        Tue, 13 Apr 2021 07:41:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxV2RTDXFsn/MqdWIiA0uOrBI4PKyyvlH52vYsv5jFW+FN5kErFac+ntPs/2hsIVEymw4vR/Q==
-X-Received: by 2002:a37:ae86:: with SMTP id x128mr32631289qke.427.1618324898074;
-        Tue, 13 Apr 2021 07:41:38 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id k17sm3577246qtp.26.2021.04.13.07.41.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Apr 2021 07:41:37 -0700 (PDT)
-Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove useless function
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, mdf@kernel.org
-Cc:     michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1618285894-111432-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <40a0449f-37c4-6b3a-5a34-d865db971f9f@redhat.com>
-Date:   Tue, 13 Apr 2021 07:41:35 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S232959AbhDMW50 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 13 Apr 2021 18:57:26 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32275 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231318AbhDMW5Z (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 13 Apr 2021 18:57:25 -0400
+IronPort-SDR: gXJYxn60sWaA8CXI/d6XGIUG6avMHdeJfljSRl14M1R4xKkG78evHP+I29q8d4dmUeRKrK3NMV
+ 7MxCnXkspjww==
+X-IronPort-AV: E=McAfee;i="6200,9189,9953"; a="182028999"
+X-IronPort-AV: E=Sophos;i="5.82,220,1613462400"; 
+   d="scan'208";a="182028999"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 15:57:04 -0700
+IronPort-SDR: YntJX6u7pJkd03PR56tI7/A/oJX7Xtt1vjhlaSB0JZ9EjdQ4UTTsjg6KinzO0gLjT5a7Az0I0E
+ i+sI//e6xNlQ==
+X-IronPort-AV: E=Sophos;i="5.82,220,1613462400"; 
+   d="scan'208";a="398943218"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 15:57:04 -0700
+From:   matthew.gerlach@linux.intel.com
+To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yilun.xu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
+        lee.jones@linaro.org, linux-hwmon@vger.kernel.org,
+        russell.h.weight@intel.com, broonie@kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v2 0/2] spi: add BMC support for Intel D5005 card
+Date:   Tue, 13 Apr 2021 15:58:33 -0700
+Message-Id: <20210413225835.459662-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1618285894-111432-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-On 4/12/21 8:51 PM, Jiapeng Chong wrote:
-> Fix the following gcc warning:
->
-> drivers/fpga/xilinx-pr-decoupler.c:32:19: warning: unused function
-> 'xlnx_pr_decouple_read' [-Wunused-function].
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->   drivers/fpga/xilinx-pr-decoupler.c | 6 ------
->   1 file changed, 6 deletions(-)
->
-> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-> index 7d69af2..f407cb2 100644
-> --- a/drivers/fpga/xilinx-pr-decoupler.c
-> +++ b/drivers/fpga/xilinx-pr-decoupler.c
-> @@ -29,12 +29,6 @@ static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
->   	writel(val, d->io_base + offset);
->   }
->   
-> -static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
-> -					u32 offset)
-> -{
-> -	return readl(d->io_base + offset);
-> -}
-> -
+This patch set adds support for the Board Management Controller (BMC)
+of an Intel D5005 card.  The BMC support requires a Device Feature
+List (DFL) bus driver for the Altera SPI Master controller and hwmon
+support for the sensors monitored by the BMC.
 
-I am not in favor of removing this function.
+Patch 1 adds a dfl driver for the Altera SPI Master which is connected
+to the board's BMC.
 
-It should have been used in xlnx_pr_decoupler_enable_show() instead of 
-the bare readl().
+Patch 2 adds hwmon support for the sensors monitored by the board's BMC.
+---
+v2: move drivers/fpga/dfl-spi-altera.c to drivers/spi/spi-altera-dfl.c
+    change variable name from m10bmc_bmc_subdevs to m10bmc_d5005_subdevs
+    added Acked-by: Lee Jones
 
-So use it in this function, and for consistency rename to 
-xlnx_pr_decoupler_read()
+Matthew Gerlach (2):
+  spi: Add DFL bus driver for Altera SPI Master
+  hwmon: intel-m10-bmc-hwmon: add sensor support of Intel D5005 card
 
-that is 'decouple' -> 'decoupler'
+ drivers/hwmon/intel-m10-bmc-hwmon.c | 122 ++++++++++++++++++++
+ drivers/mfd/intel-m10-bmc.c         |  10 ++
+ drivers/spi/Kconfig                 |   9 ++
+ drivers/spi/Makefile                |   1 +
+ drivers/spi/spi-altera-dfl.c        | 221 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 363 insertions(+)
+ create mode 100644 drivers/spi/spi-altera-dfl.c
 
-Tom
-
->   static int xlnx_pr_decoupler_enable_set(struct fpga_bridge *bridge, bool enable)
->   {
->   	int err;
+-- 
+1.8.3.1
 
