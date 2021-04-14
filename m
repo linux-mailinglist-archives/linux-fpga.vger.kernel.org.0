@@ -2,105 +2,93 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A106235F35D
-	for <lists+linux-fpga@lfdr.de>; Wed, 14 Apr 2021 14:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B5335F60F
+	for <lists+linux-fpga@lfdr.de>; Wed, 14 Apr 2021 16:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350810AbhDNMTV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 14 Apr 2021 08:19:21 -0400
-Received: from elektron.elka.pw.edu.pl ([194.29.160.103]:39776 "EHLO
-        elektron.elka.pw.edu.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbhDNMTV (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 14 Apr 2021 08:19:21 -0400
-X-Greylist: delayed 1253 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Apr 2021 08:19:20 EDT
-Received: from [172.19.1.1] (095160103141.warszawa.vectranet.pl [95.160.103.141])
-        (Authenticated sender: wzabolot@elektron.elka.pw.edu.pl)
-        by elektron.elka.pw.edu.pl (Postfix) with ESMTPSA id 7DBCF68005B;
-        Wed, 14 Apr 2021 13:58:03 +0200 (CEST)
-To:     LKML <linux-kernel@vger.kernel.org>
-From:   wzab@ise.pw.edu.pl
-Subject: Proposal of improvement for DMA - direct passing of hugepages to the
- SG list
-Cc:     linux-fpga@vger.kernel.org
-Message-ID: <6c7a1cff-3ad6-0a75-c45b-ce437ea156ef@elektron.elka.pw.edu.pl>
-Date:   Wed, 14 Apr 2021 13:58:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S1347390AbhDNOTA (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 14 Apr 2021 10:19:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60444 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348303AbhDNOTA (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 14 Apr 2021 10:19:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0BAFA61019;
+        Wed, 14 Apr 2021 14:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618409918;
+        bh=3+BEa1WIe58IawQ6VmmJOzqBr5VUedP15td9Yp8Hja8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=feFFbNfOb3QXsKWsPk5qK67Fa/JDO38PJ0hTsOQQDTVm2vzZJorf+dx9KnXdGttx2
+         BqVxz+jkwyvDxrpbueTxNYalvNf/sDyFrt41EACC2a43y9zJN1cIdcwwmiZ5Tt5QQD
+         cTsTTdn5tadgscWz9VU1Rv6czywdfdGkBZyL7uWEnR5S0MDKv2bUBfIoU0F4pgvBlM
+         i095pHpIZcAVpWVEKuXP+dFwkQM4ZqS4EDFNbsNd1T0SgL4S0ic3MyzehZ/Oi/9Q2y
+         LTAnxz5LAYHOEOgD/D7gEh7ihzy7xltXj6X/QcAqwGlcs7+A9jAGACM7FSBnNrqj4f
+         CeAlPmcNbx4SQ==
+Date:   Wed, 14 Apr 2021 15:18:16 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yilun.xu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
+        lee.jones@linaro.org, linux-hwmon@vger.kernel.org,
+        russell.h.weight@intel.com, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] spi: Add DFL bus driver for Altera SPI Master
+Message-ID: <20210414141816.GD4535@sirena.org.uk>
+References: <20210413225835.459662-1-matthew.gerlach@linux.intel.com>
+ <20210413225835.459662-2-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zbGR4y+acU1DwHSi"
+Content-Disposition: inline
+In-Reply-To: <20210413225835.459662-2-matthew.gerlach@linux.intel.com>
+X-Cookie: George Orwell was an optimist.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi,
 
-I'm working both on DMA engines implementations in FPGA and their Linux 
-drivers.
-Now I need to create an engine that takes the hugepages-backed buffer 
-allocated
-by the user-space application and passes it to the device.
-My current solution:
+--zbGR4y+acU1DwHSi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://forums.xilinx.com/t5/Embedded-Linux/How-to-pass-efficiently-the-hugepages-backed-buffer-to-the-BM/m-p/1229340/highlight/true#M49777
-or https://stackoverflow.com/a/67065962/1735409
+On Tue, Apr 13, 2021 at 03:58:34PM -0700, matthew.gerlach@linux.intel.com wrote:
 
-uses the get_user_pages_fast function, to create the kernel mapping,
-and then uses sg_alloc_table_from_pages to build sg_table for it.
+> +++ b/drivers/spi/spi-altera-dfl.c
+> @@ -0,0 +1,222 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * DFL bus driver for Altera SPI Master
+> + *
 
-I have verified that the created sg_table has one entry for each individual
-hugepage (so I can efficiently map it for my SG-capable DMA device).
+Please make the entire comment a C++ one so things look more
+intentional.
 
-The disadvantage of that solution is that I need to create and keep a 
-huge set
-of standard-size pages. Because the "struct page" occupies between 56 and 80
-bytes, I get the overhead up to 80/4096 which is approx. 2%.
+> +	memset(&pdevinfo, 0, sizeof(pdevinfo));
+> +
+> +	pdevinfo.name = "subdev_spi_altera";
+> +	pdevinfo.id = PLATFORM_DEVID_AUTO;
+> +	pdevinfo.parent = dev;
+> +	pdevinfo.data = &pdata;
+> +	pdevinfo.size_data = sizeof(pdata);
+> +
+> +	return platform_device_register_full(&pdevinfo);
 
-The open question is if I can free those pages as soon as the sg_table
-is created? (As far as I know, the hugepages are locked automatically).
-Of course it is unclear what happens if the application crashes and its 
-mmaped
-hugepage-based buffer gets freed. Will the driver be notified about 
-closing the
-file so that it can disable DMA before that memory can be taken for other
-purposes?
+Don't create a platform device here, extend the spi-altera driver to
+register with both DFL and platform buses.
 
-To be sure that it doesn't happen maybe it is good to keep those pages 
-locked
-in the kernel as well.
-The big improvement would be if we could have the get_user_hugepages_fast
-function. The user should be allowed to create a smaller number of page 
-structs.
-The function should check if the requested region really consists of 
-hugepages
-and return an error if it doesn't.
+--zbGR4y+acU1DwHSi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Another important fact is that we don't need a kernel mapping for those 
-pages
-at all. So it would be good to have yet another function:
-sg_alloc_table_from_user_pages
-which should take an additional "flag" argument enabling the user to decide
-if the area used consists of normal pages or of hugepages.
+-----BEGIN PGP SIGNATURE-----
 
-The function should return an error in  case if the flag does not match the
-properties of the region. Of course the function should also lock the pages,
-and sg_free_table should unlock them (protecting against the danger
-of application crash, that I described above).
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmB2+acACgkQJNaLcl1U
+h9AI6gf+NS9LzXREWWKJsIJdM7epyzoLnZtHG1CXXEPLU7ng5Ii9GchDNM6fJMyt
+4F48+okJW2olNPq03QY8LHEPCjXGMqGbIoWMSUH4F/L+sUfNKyDHg6lCWLgYzkHk
+qhjIMFuZflh0WEFJbWAUNWm2WTJEgEFgyf6fNOgoReaOkOfE5T8foZgEd54FSbxB
+EifEY/L+VSTZXBOlDibAEiMizeKXjIBvQ4g8la4lJesFmQcgDJg/4qr+400WJM/s
+Cy2G2gN15tB2mDYr7gcQkUy50r2Vx4kgXbePBF3cGFoRBLq4wnuRqMf4zGsZKA/n
+ehLYl0S92Jzn94vcINKp8J2HN1cGiQ==
+=eB6p
+-----END PGP SIGNATURE-----
 
-As a temporary workaround, is it possible to "manually" walk the pages
-creating the application-delivered buffer, verify that they are hugepages,
-lock them and create the sg_table?
-What functions/macros should be used for that to ensure that the implemented
-solution be portable and keeps working in a reasonable number of future 
-versions
-of the Linux kernel?
-
-I'll appreciate comments, suggestions and considering of the above proposal.
-With best regards,
-Wojtek
-
--- 
-Wojciech M Zabolotny, PhD, DSc
-Institute of Electronic Systems
-Faculty of Electronics and Information Technology
-Warsaw University of Technology
+--zbGR4y+acU1DwHSi--
