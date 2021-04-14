@@ -2,285 +2,540 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6967A35F7EF
-	for <lists+linux-fpga@lfdr.de>; Wed, 14 Apr 2021 17:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2F735F7FC
+	for <lists+linux-fpga@lfdr.de>; Wed, 14 Apr 2021 17:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236853AbhDNPgd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 14 Apr 2021 11:36:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29996 "EHLO
+        id S233568AbhDNPkq (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 14 Apr 2021 11:40:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28783 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233194AbhDNPgc (ORCPT
+        by vger.kernel.org with ESMTP id S233539AbhDNPkj (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 14 Apr 2021 11:36:32 -0400
+        Wed, 14 Apr 2021 11:40:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618414571;
+        s=mimecast20190719; t=1618414816;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Qx3/iLYPrCC/uAPin88FDvO6p98LMRUdvHQ9Rn3q//E=;
-        b=TZFKkG+N90DBIehrGjQy5lGMVDe3/hUS8YISq/O3Nw9v9yeYvF79Qws1zRnqaFuhSJ53ff
-        vXa/q6aqi/dW5V6zDFUUCqeq6fnsOzai4s6xHIK6p86tW/VkodIc9z5aDYmkC0d6sCXSsS
-        Sbw4ndAaZV/JmSbwIOQWYJGZkpUgFBU=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-549-5T0NeIpRMlmFHlqJjYKWCA-1; Wed, 14 Apr 2021 11:36:09 -0400
-X-MC-Unique: 5T0NeIpRMlmFHlqJjYKWCA-1
-Received: by mail-qk1-f200.google.com with SMTP id c9so6598399qkm.11
-        for <linux-fpga@vger.kernel.org>; Wed, 14 Apr 2021 08:36:09 -0700 (PDT)
+        bh=Pi5yOQUDoReZsXwr9Sn8UurhM0qHhwzfJF8qj5AgWWw=;
+        b=H3ATlCx3dBob+Tp/rXe+DYWWc1LUicIGUj7oX+60HCkYEm9VLaHGDTfDK6KoEqrqr2XV9b
+        PxqU5TcjauU32fAruIULVLoZeiyUYjwLpmjkOdE9/nN6CjecVR2ciRwuWRtFR3Iwm94KmY
+        yrTcAXPN/dPwMZGMSIkYxjYyQlWV1rU=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-240-Xfj_6L8GOuGafxbgGF62tA-1; Wed, 14 Apr 2021 11:40:14 -0400
+X-MC-Unique: Xfj_6L8GOuGafxbgGF62tA-1
+Received: by mail-qt1-f199.google.com with SMTP id o15-20020ac872cf0000b02901b358afcd96so2168341qtp.1
+        for <linux-fpga@vger.kernel.org>; Wed, 14 Apr 2021 08:40:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=Qx3/iLYPrCC/uAPin88FDvO6p98LMRUdvHQ9Rn3q//E=;
-        b=tTCtk8W65BsMrKgxzbubPKvolNNSIHeUoAUAUCzkNTuzjkBcE8wgHOcQHyZckERQho
-         42iXBczxrSPyCBrWzm6HJUmOgvQdENllBqB95oXKah5jMXqGA0maS5+iFnI/rosakpvy
-         8ozKf7TNuO5uVYXzIYzTZrplIZHSKfm00wnrkJkYTsr98I4T1CwcIsZBvJa4zS34QCpa
-         kvTWaBUQifCzjJwmyqCqRgI+QzPKiYyilTR6V7AIiClDF8UB27fn7zSJxRQ9NC8tfEOu
-         K8NOpphE+ZjXnblB3sUrgTKrvv9DyuseZGe8+jnDrL3cW2/L+np3G/tpopwY7+mDLN2N
-         hmyg==
-X-Gm-Message-State: AOAM533WEIRqCySqHJW2dk67hYkAIPSJ9dsw5Y2gh71bKHAh3ZdhLNqa
-        kvMWbscQA3PvD0kDo755kNC1yOLoAypLVMHj6fCC2LgNvwJKSAr1cSuV1Kp/DOX9vh8K6gsCfj3
-        AuLQgMyouK2vPyw8huLKkiw==
-X-Received: by 2002:ac8:4802:: with SMTP id g2mr5361833qtq.210.1618414568976;
-        Wed, 14 Apr 2021 08:36:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyVQwQDicZSgbLuYxjpagAqgn3QoywjmdVPa0hzhR27d7BS25kP7uXoSWCKwrKfVVF3ZEzWdg==
-X-Received: by 2002:ac8:4802:: with SMTP id g2mr5361816qtq.210.1618414568756;
-        Wed, 14 Apr 2021 08:36:08 -0700 (PDT)
+        bh=Pi5yOQUDoReZsXwr9Sn8UurhM0qHhwzfJF8qj5AgWWw=;
+        b=WKXLRwXOzAH/tFLvN+fO554SHXOjMHfSkvmb+w3Mzw2pUqF8CRBcds1oN0mrSZHbXV
+         9JcRN0u7f9AIbZ3/8VXvQmPzkRwrMy2dTn2v1QGOhCk1ONq71nJtCkA2TH30Ywgy/irk
+         efRC7vjwcSz1L2Zyq2+0YY6wsXtWvpEG1ghRqpEleIHQzq+Ey61lLDEMDFYAvbFJGixR
+         JybCPaBmzH+OnMBrmvJQ5k4Tu6WW0L5QvzE0H/Z95qAUoGMmJLem+IpkApFgKq0QUqUa
+         82EUJzHRG0BHKaNa9vmI6lb9ujpW04smm7lKuoTY89TX8wj1QJsojOODZBODkfK2lMnH
+         Fi9A==
+X-Gm-Message-State: AOAM531pKQwdDW7DfP6trHIfHrorv6obMcXkbEh/1xoEdjwWW9Rvtlsj
+        hTLQUYx5l2PGX868SPyBrY3ZQlkz70LP2fDOV8yIL5P8SWTtMxxFuSkJX7dY/s9+W3vuLpy/uRI
+        T+px+lm+rbGqGQHlVfa54Zw==
+X-Received: by 2002:a37:9cd8:: with SMTP id f207mr23703956qke.230.1618414813905;
+        Wed, 14 Apr 2021 08:40:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyY35VesErlxzK/29gR2uI8QR4WnSYD4fBVsD2tb8c8xNAedUoKAwTr+GjfzS/O/zwQqRPunQ==
+X-Received: by 2002:a37:9cd8:: with SMTP id f207mr23703929qke.230.1618414813622;
+        Wed, 14 Apr 2021 08:40:13 -0700 (PDT)
 Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id x82sm9743300qkb.0.2021.04.14.08.36.06
+        by smtp.gmail.com with ESMTPSA id s19sm12311648qks.130.2021.04.14.08.40.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Apr 2021 08:36:08 -0700 (PDT)
-Subject: Re: [PATCH v2 2/2] hwmon: intel-m10-bmc-hwmon: add sensor support of
- Intel D5005 card
-To:     matthew.gerlach@linux.intel.com, hao.wu@intel.com, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yilun.xu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
-        lee.jones@linaro.org, linux-hwmon@vger.kernel.org,
-        russell.h.weight@intel.com, broonie@kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     Russ Weight <russell.h.weight@linux.intel.com>
-References: <20210413225835.459662-1-matthew.gerlach@linux.intel.com>
- <20210413225835.459662-3-matthew.gerlach@linux.intel.com>
+        Wed, 14 Apr 2021 08:40:13 -0700 (PDT)
+Subject: Re: [PATCH V4 XRT Alveo 09/20] fpga: xrt: management physical
+ function driver (root)
+To:     Max Zhen <max.zhen@xilinx.com>, Lizhi Hou <lizhi.hou@xilinx.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-fpga@vger.kernel.org, sonal.santan@xilinx.com,
+        yliu@xilinx.com, michal.simek@xilinx.com, stefanos@xilinx.com,
+        devicetree@vger.kernel.org, mdf@kernel.org, robh@kernel.org
+References: <20210324052947.27889-1-lizhi.hou@xilinx.com>
+ <20210324052947.27889-10-lizhi.hou@xilinx.com>
+ <5ac8ef15-87b4-358b-0835-d41e3b88592b@redhat.com>
+ <f38c7210-85aa-09af-9a52-ebb13ca3442e@xilinx.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <b2d402b9-0f48-b945-c47d-3fdb45a3cd45@redhat.com>
-Date:   Wed, 14 Apr 2021 08:36:05 -0700
+Message-ID: <9a1a3d6e-3a5d-2272-7235-d46d09589cf8@redhat.com>
+Date:   Wed, 14 Apr 2021 08:40:10 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210413225835.459662-3-matthew.gerlach@linux.intel.com>
+In-Reply-To: <f38c7210-85aa-09af-9a52-ebb13ca3442e@xilinx.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
-On 4/13/21 3:58 PM, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On 4/9/21 11:50 AM, Max Zhen wrote:
+> Hi Tom,
 >
-> Like the Intel N3000 card, the Intel D5005 has a MAX10 based
-> BMC.  This commit adds support for the D5005 sensors that are
-> monitored by the MAX10 BMC.
 >
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@linux.intel.com>
-> Acked-by: Lee Jones <lee.jones@linaro.org>
-
-lgtm
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
-> ---
-> v2: change variable name from m10bmc_bmc_subdevs to m10bmc_d5005_subdevs
->      added Acked-by: Lee Jones
-> ---
->   drivers/hwmon/intel-m10-bmc-hwmon.c | 122 ++++++++++++++++++++++++++++++++++++
->   drivers/mfd/intel-m10-bmc.c         |  10 +++
->   2 files changed, 132 insertions(+)
+> On 3/31/21 6:03 AM, Tom Rix wrote:
+>> On 3/23/21 10:29 PM, Lizhi Hou wrote:
+>>> The PCIE device driver which attaches to management function on Alveo
+>>> devices. It instantiates one or more group drivers which, in turn,
+>>> instantiate platform drivers. The instantiation of group and platform
+>>> drivers is completely dtb driven.
+>>>
+>>> Signed-off-by: Sonal Santan<sonal.santan@xilinx.com>
+>>> Signed-off-by: Max Zhen<max.zhen@xilinx.com>
+>>> Signed-off-by: Lizhi Hou<lizhi.hou@xilinx.com>
+>>> ---
+>>>   drivers/fpga/xrt/mgmt/root.c | 333 
+>>> +++++++++++++++++++++++++++++++++++
+>>>   1 file changed, 333 insertions(+)
+>>>   create mode 100644 drivers/fpga/xrt/mgmt/root.c
+>>>
+>>> diff --git a/drivers/fpga/xrt/mgmt/root.c 
+>>> b/drivers/fpga/xrt/mgmt/root.c
+>>> new file mode 100644
+>>> index 000000000000..f97f92807c01
+>>> --- /dev/null
+>>> +++ b/drivers/fpga/xrt/mgmt/root.c
+>>> @@ -0,0 +1,333 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Xilinx Alveo Management Function Driver
+>>> + *
+>>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>>> + *
+>>> + * Authors:
+>>> + *   Cheng Zhen<maxz@xilinx.com>
+>>> + */
+>>> +
+>>> +#include <linux/module.h>
+>>> +#include <linux/pci.h>
+>>> +#include <linux/aer.h>
+>>> +#include <linux/vmalloc.h>
+>>> +#include <linux/delay.h>
+>>> +
+>>> +#include "xroot.h"
+>>> +#include "xmgnt.h"
+>>> +#include "metadata.h"
+>>> +
+>>> +#define XMGMT_MODULE_NAME    "xrt-mgmt"
+>> ok
+>>> +#define XMGMT_DRIVER_VERSION "4.0.0"
+>>> +
+>>> +#define XMGMT_PDEV(xm)               ((xm)->pdev)
+>>> +#define XMGMT_DEV(xm) (&(XMGMT_PDEV(xm)->dev))
+>>> +#define xmgmt_err(xm, fmt, args...)  \
+>>> +     dev_err(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+>>> +#define xmgmt_warn(xm, fmt, args...) \
+>>> +     dev_warn(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+>>> +#define xmgmt_info(xm, fmt, args...) \
+>>> +     dev_info(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+>>> +#define xmgmt_dbg(xm, fmt, args...)  \
+>>> +     dev_dbg(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+>>> +#define XMGMT_DEV_ID(_pcidev)                        \
+>>> +     ({ typeof(_pcidev) (pcidev) = (_pcidev);        \
+>>> +     ((pci_domain_nr((pcidev)->bus) << 16) | \
+>>> +     PCI_DEVID((pcidev)->bus->number, 0)); })
+>>> +
+>>> +static struct class *xmgmt_class;
+>>> +
+>>> +/* PCI Device IDs */
+>> add a comment on what a golden image is here something like
+>>
+>> /*
+>>
+>> * Golden image is preloaded on the device when it is shipped to 
+>> customer.
+>>
+>> * Then, customer can load other shells (from Xilinx or some other 
+>> vendor).
+>>
+>> * If something goes wrong with the shell, customer can always go back to
+>>
+>> * golden and start over again.
+>>
+>> */
+>>
 >
-> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> index 17d5e6b..bd7ed2e 100644
-> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> @@ -99,6 +99,50 @@ struct m10bmc_hwmon {
->   	NULL
->   };
->   
-> +static const struct m10bmc_sdata d5005bmc_temp_tbl[] = {
-> +	{ 0x100, 0x104, 0x108, 0x10c, 0x0, 500, "Board Inlet Air Temperature" },
-> +	{ 0x110, 0x114, 0x118, 0x0, 0x0, 500, "FPGA Core Temperature" },
-> +	{ 0x11c, 0x120, 0x124, 0x128, 0x0, 500, "Board Exhaust Air Temperature" },
-> +	{ 0x12c, 0x130, 0x134, 0x0, 0x0, 500, "FPGA Transceiver Temperature" },
-> +	{ 0x138, 0x13c, 0x140, 0x144, 0x0, 500, "RDIMM0 Temperature" },
-> +	{ 0x148, 0x14c, 0x150, 0x154, 0x0, 500, "RDIMM1 Temperature" },
-> +	{ 0x158, 0x15c, 0x160, 0x164, 0x0, 500, "RDIMM2 Temperature" },
-> +	{ 0x168, 0x16c, 0x170, 0x174, 0x0, 500, "RDIMM3 Temperature" },
-> +	{ 0x178, 0x17c, 0x180, 0x0, 0x0, 500, "QSFP0 Temperature" },
-> +	{ 0x188, 0x18c, 0x190, 0x0, 0x0, 500, "QSFP1 Temperature" },
-> +	{ 0x1a0, 0x1a4, 0x1a8, 0x0, 0x0, 500, "3.3v Temperature" },
-> +	{ 0x1bc, 0x1c0, 0x1c4, 0x0, 0x0, 500, "VCCERAM Temperature" },
-> +	{ 0x1d8, 0x1dc, 0x1e0, 0x0, 0x0, 500, "VCCR Temperature" },
-> +	{ 0x1f4, 0x1f8, 0x1fc, 0x0, 0x0, 500, "VCCT Temperature" },
-> +	{ 0x210, 0x214, 0x218, 0x0, 0x0, 500, "1.8v Temperature" },
-> +	{ 0x22c, 0x230, 0x234, 0x0, 0x0, 500, "12v Backplane Temperature" },
-> +	{ 0x248, 0x24c, 0x250, 0x0, 0x0, 500, "12v AUX Temperature" },
-> +};
-> +
-> +static const struct m10bmc_sdata d5005bmc_in_tbl[] = {
-> +	{ 0x184, 0x0, 0x0, 0x0, 0x0, 1, "QSFP0 Supply Voltage" },
-> +	{ 0x194, 0x0, 0x0, 0x0, 0x0, 1, "QSFP1 Supply Voltage" },
-> +	{ 0x198, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Voltage" },
-> +	{ 0x1ac, 0x1b0, 0x1b4, 0x0, 0x0, 1, "3.3v Voltage" },
-> +	{ 0x1c8, 0x1cc, 0x1d0, 0x0, 0x0, 1, "VCCERAM Voltage" },
-> +	{ 0x1e4, 0x1e8, 0x1ec, 0x0, 0x0, 1, "VCCR Voltage" },
-> +	{ 0x200, 0x204, 0x208, 0x0, 0x0, 1, "VCCT Voltage" },
-> +	{ 0x21c, 0x220, 0x224, 0x0, 0x0, 1, "1.8v Voltage" },
-> +	{ 0x238, 0x0, 0x0, 0x0, 0x23c, 1, "12v Backplane Voltage" },
-> +	{ 0x254, 0x0, 0x0, 0x0, 0x258, 1, "12v AUX Voltage" },
-> +};
-> +
-> +static const struct m10bmc_sdata d5005bmc_curr_tbl[] = {
-> +	{ 0x19c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Current" },
-> +	{ 0x1b8, 0x0, 0x0, 0x0, 0x0, 1, "3.3v Current" },
-> +	{ 0x1d4, 0x0, 0x0, 0x0, 0x0, 1, "VCCERAM Current" },
-> +	{ 0x1f0, 0x0, 0x0, 0x0, 0x0, 1, "VCCR Current" },
-> +	{ 0x20c, 0x0, 0x0, 0x0, 0x0, 1, "VCCT Current" },
-> +	{ 0x228, 0x0, 0x0, 0x0, 0x0, 1, "1.8v Current" },
-> +	{ 0x240, 0x244, 0x0, 0x0, 0x0, 1, "12v Backplane Current" },
-> +	{ 0x25c, 0x260, 0x0, 0x0, 0x0, 1, "12v AUX Current" },
-> +};
-> +
->   static const struct m10bmc_hwmon_board_data n3000bmc_hwmon_bdata = {
->   	.tables = {
->   		[hwmon_temp] = n3000bmc_temp_tbl,
-> @@ -110,6 +154,80 @@ struct m10bmc_hwmon {
->   	.hinfo = n3000bmc_hinfo,
->   };
->   
-> +static const struct hwmon_channel_info *d5005bmc_hinfo[] = {
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL),
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_LABEL),
-> +	HWMON_CHANNEL_INFO(curr,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_LABEL),
-> +	NULL
-> +};
-> +
-> +static const struct m10bmc_hwmon_board_data d5005bmc_hwmon_bdata = {
-> +	.tables = {
-> +		[hwmon_temp] = d5005bmc_temp_tbl,
-> +		[hwmon_in] = d5005bmc_in_tbl,
-> +		[hwmon_curr] = d5005bmc_curr_tbl,
-> +	},
-> +
-> +	.hinfo = d5005bmc_hinfo,
-> +};
-> +
->   static umode_t
->   m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
->   			u32 attr, int channel)
-> @@ -316,6 +434,10 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->   		.name = "n3000bmc-hwmon",
->   		.driver_data = (unsigned long)&n3000bmc_hwmon_bdata,
->   	},
-> +	{
-> +		.name = "d5005bmc-hwmon",
-> +		.driver_data = (unsigned long)&d5005bmc_hwmon_bdata,
-> +	},
->   	{ }
->   };
->   
-> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-> index 1161933..1a9bfb7 100644
-> --- a/drivers/mfd/intel-m10-bmc.c
-> +++ b/drivers/mfd/intel-m10-bmc.c
-> @@ -15,6 +15,11 @@
->   
->   enum m10bmc_type {
->   	M10_N3000,
-> +	M10_D5005
-> +};
-> +
-> +static struct mfd_cell m10bmc_d5005_subdevs[] = {
-> +	{ .name = "d5005bmc-hwmon" },
->   };
->   
->   static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
-> @@ -183,6 +188,10 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
->   		cells = m10bmc_pacn3000_subdevs;
->   		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
->   		break;
-> +	case M10_D5005:
-> +		cells = m10bmc_d5005_subdevs;
-> +		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
-> +		break;
->   	default:
->   		return -ENODEV;
->   	}
-> @@ -197,6 +206,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
->   
->   static const struct spi_device_id m10bmc_spi_id[] = {
->   	{ "m10-n3000", M10_N3000 },
-> +	{ "m10-d5005", M10_D5005 },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+> Will do.
+>
+>
+>>> +#define PCI_DEVICE_ID_U50_GOLDEN 0xD020
+>>> +#define PCI_DEVICE_ID_U50            0x5020
+>>> +static const struct pci_device_id xmgmt_pci_ids[] = {
+>>> +     { PCI_DEVICE(PCI_VENDOR_ID_XILINX, PCI_DEVICE_ID_U50_GOLDEN), 
+>>> }, /* Alveo U50 (golden) */
+>>> +     { PCI_DEVICE(PCI_VENDOR_ID_XILINX, PCI_DEVICE_ID_U50), }, /* 
+>>> Alveo U50 */
+>>> +     { 0, }
+>>> +};
+>>> +
+>>> +struct xmgmt {
+>>> +     struct pci_dev *pdev;
+>>> +     void *root;
+>>> +
+>>> +     bool ready;
+>>> +};
+>>> +
+>>> +static int xmgmt_config_pci(struct xmgmt *xm)
+>>> +{
+>>> +     struct pci_dev *pdev = XMGMT_PDEV(xm);
+>>> +     int rc;
+>>> +
+>>> +     rc = pcim_enable_device(pdev);
+>>> +     if (rc < 0) {
+>>> +             xmgmt_err(xm, "failed to enable device: %d", rc);
+>>> +             return rc;
+>>> +     }
+>>> +
+>>> +     rc = pci_enable_pcie_error_reporting(pdev);
+>>> +     if (rc)
+>> ok
+>>> +             xmgmt_warn(xm, "failed to enable AER: %d", rc);
+>>> +
+>>> +     pci_set_master(pdev);
+>>> +
+>>> +     rc = pcie_get_readrq(pdev);
+>>> +     if (rc > 512)
+>> 512 is magic number, change this to a #define
+>
+>
+> Will do.
+>
+>
+>>> +             pcie_set_readrq(pdev, 512);
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int xmgmt_match_slot_and_save(struct device *dev, void *data)
+>>> +{
+>>> +     struct xmgmt *xm = data;
+>>> +     struct pci_dev *pdev = to_pci_dev(dev);
+>>> +
+>>> +     if (XMGMT_DEV_ID(pdev) == XMGMT_DEV_ID(xm->pdev)) {
+>>> +             pci_cfg_access_lock(pdev);
+>>> +             pci_save_state(pdev);
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static void xmgmt_pci_save_config_all(struct xmgmt *xm)
+>>> +{
+>>> +     bus_for_each_dev(&pci_bus_type, NULL, xm, 
+>>> xmgmt_match_slot_and_save);
+>> refactor expected in v5 when pseudo bus change happens.
+>
+>
+> There might be some mis-understanding here...
+>
+> No matter how we reorganize our code (using platform_device bus type 
+> or defining our own bus type), it's a driver that drives a PCIE device 
+> after all. So, this mgmt/root.c must be a PCIE driver, which may 
+> interact with a whole bunch of IP drivers through a pseudo bus we are 
+> about to create.
+>
+> What this code is doing here is completely of PCIE business (PCIE 
+> config space access). So, I think it is appropriate code in a PCIE 
+> driver.
+>
+> The PCIE device we are driving is a multi-function device. The mgmt pf 
+> is of function 0, which, according to PCIE spec, can manage other 
+> functions on the same device. So, I think it's appropriate for mgmt pf 
+> driver (this root driver) to find it's peer function (through PCIE bus 
+> type) on the same device and do something about it in certain special 
+> cases.
+>
+> Please let me know why you expect this code to be refactored and how 
+> you want it to be refactored. I might have missed something here...
+>
+ok, i get it.
+
+thanks for the explanation.
+
+Tom
+
+>
+>>> +}
+>>> +
+>>> +static int xmgmt_match_slot_and_restore(struct device *dev, void 
+>>> *data)
+>>> +{
+>>> +     struct xmgmt *xm = data;
+>>> +     struct pci_dev *pdev = to_pci_dev(dev);
+>>> +
+>>> +     if (XMGMT_DEV_ID(pdev) == XMGMT_DEV_ID(xm->pdev)) {
+>>> +             pci_restore_state(pdev);
+>>> +             pci_cfg_access_unlock(pdev);
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static void xmgmt_pci_restore_config_all(struct xmgmt *xm)
+>>> +{
+>>> +     bus_for_each_dev(&pci_bus_type, NULL, xm, 
+>>> xmgmt_match_slot_and_restore);
+>>> +}
+>>> +
+>>> +static void xmgmt_root_hot_reset(struct pci_dev *pdev)
+>>> +{
+>>> +     struct xmgmt *xm = pci_get_drvdata(pdev);
+>>> +     struct pci_bus *bus;
+>>> +     u8 pci_bctl;
+>>> +     u16 pci_cmd, devctl;
+>>> +     int i, ret;
+>>> +
+>>> +     xmgmt_info(xm, "hot reset start");
+>>> +
+>>> +     xmgmt_pci_save_config_all(xm);
+>>> +
+>>> +     pci_disable_device(pdev);
+>>> +
+>>> +     bus = pdev->bus;
+>> whitespace, all these nl's are not needed
+>
+>
+> Will remove them.
+>
+>
+>>> +
+>>> +     /*
+>>> +      * When flipping the SBR bit, device can fall off the bus. 
+>>> This is
+>>> +      * usually no problem at all so long as drivers are working 
+>>> properly
+>>> +      * after SBR. However, some systems complain bitterly when the 
+>>> device
+>>> +      * falls off the bus.
+>>> +      * The quick solution is to temporarily disable the SERR 
+>>> reporting of
+>>> +      * switch port during SBR.
+>>> +      */
+>>> +
+>>> +     pci_read_config_word(bus->self, PCI_COMMAND, &pci_cmd);
+>>> +     pci_write_config_word(bus->self, PCI_COMMAND, (pci_cmd & 
+>>> ~PCI_COMMAND_SERR));
+>>> +     pcie_capability_read_word(bus->self, PCI_EXP_DEVCTL, &devctl);
+>>> +     pcie_capability_write_word(bus->self, PCI_EXP_DEVCTL, (devctl 
+>>> & ~PCI_EXP_DEVCTL_FERE));
+>>> +     pci_read_config_byte(bus->self, PCI_BRIDGE_CONTROL, &pci_bctl);
+>>> +     pci_write_config_byte(bus->self, PCI_BRIDGE_CONTROL, pci_bctl 
+>>> | PCI_BRIDGE_CTL_BUS_RESET);
+>> ok
+>>> +     msleep(100);
+>>> +     pci_write_config_byte(bus->self, PCI_BRIDGE_CONTROL, pci_bctl);
+>>> +     ssleep(1);
+>>> +
+>>> +     pcie_capability_write_word(bus->self, PCI_EXP_DEVCTL, devctl);
+>>> +     pci_write_config_word(bus->self, PCI_COMMAND, pci_cmd);
+>>> +
+>>> +     ret = pci_enable_device(pdev);
+>>> +     if (ret)
+>>> +             xmgmt_err(xm, "failed to enable device, ret %d", ret);
+>>> +
+>>> +     for (i = 0; i < 300; i++) {
+>>> +             pci_read_config_word(pdev, PCI_COMMAND, &pci_cmd);
+>>> +             if (pci_cmd != 0xffff)
+>>> +                     break;
+>>> +             msleep(20);
+>>> +     }
+>>> +     if (i == 300)
+>>> +             xmgmt_err(xm, "time'd out waiting for device to be 
+>>> online after reset");
+>> time'd -> timed
+>
+>
+> Will do.
+>
+>
+> Thanks,
+>
+> Max
+>
+>> Tom
+>>
+>>> +
+>>> +     xmgmt_info(xm, "waiting for %d ms", i * 20);
+>>> +     xmgmt_pci_restore_config_all(xm);
+>>> +     xmgmt_config_pci(xm);
+>>> +}
+>>> +
+>>> +static int xmgmt_create_root_metadata(struct xmgmt *xm, char 
+>>> **root_dtb)
+>>> +{
+>>> +     char *dtb = NULL;
+>>> +     int ret;
+>>> +
+>>> +     ret = xrt_md_create(XMGMT_DEV(xm), &dtb);
+>>> +     if (ret) {
+>>> +             xmgmt_err(xm, "create metadata failed, ret %d", ret);
+>>> +             goto failed;
+>>> +     }
+>>> +
+>>> +     ret = xroot_add_vsec_node(xm->root, dtb);
+>>> +     if (ret == -ENOENT) {
+>>> +             /*
+>>> +              * We may be dealing with a MFG board.
+>>> +              * Try vsec-golden which will bring up all hard-coded 
+>>> leaves
+>>> +              * at hard-coded offsets.
+>>> +              */
+>>> +             ret = xroot_add_simple_node(xm->root, dtb, 
+>>> XRT_MD_NODE_VSEC_GOLDEN);
+>>> +     } else if (ret == 0) {
+>>> +             ret = xroot_add_simple_node(xm->root, dtb, 
+>>> XRT_MD_NODE_MGMT_MAIN);
+>>> +     }
+>>> +     if (ret)
+>>> +             goto failed;
+>>> +
+>>> +     *root_dtb = dtb;
+>>> +     return 0;
+>>> +
+>>> +failed:
+>>> +     vfree(dtb);
+>>> +     return ret;
+>>> +}
+>>> +
+>>> +static ssize_t ready_show(struct device *dev,
+>>> +                       struct device_attribute *da,
+>>> +                       char *buf)
+>>> +{
+>>> +     struct pci_dev *pdev = to_pci_dev(dev);
+>>> +     struct xmgmt *xm = pci_get_drvdata(pdev);
+>>> +
+>>> +     return sprintf(buf, "%d\n", xm->ready);
+>>> +}
+>>> +static DEVICE_ATTR_RO(ready);
+>>> +
+>>> +static struct attribute *xmgmt_root_attrs[] = {
+>>> +     &dev_attr_ready.attr,
+>>> +     NULL
+>>> +};
+>>> +
+>>> +static struct attribute_group xmgmt_root_attr_group = {
+>>> +     .attrs = xmgmt_root_attrs,
+>>> +};
+>>> +
+>>> +static struct xroot_physical_function_callback xmgmt_xroot_pf_cb = {
+>>> +     .xpc_hot_reset = xmgmt_root_hot_reset,
+>>> +};
+>>> +
+>>> +static int xmgmt_probe(struct pci_dev *pdev, const struct 
+>>> pci_device_id *id)
+>>> +{
+>>> +     int ret;
+>>> +     struct device *dev = &pdev->dev;
+>>> +     struct xmgmt *xm = devm_kzalloc(dev, sizeof(*xm), GFP_KERNEL);
+>>> +     char *dtb = NULL;
+>>> +
+>>> +     if (!xm)
+>>> +             return -ENOMEM;
+>>> +     xm->pdev = pdev;
+>>> +     pci_set_drvdata(pdev, xm);
+>>> +
+>>> +     ret = xmgmt_config_pci(xm);
+>>> +     if (ret)
+>>> +             goto failed;
+>>> +
+>>> +     ret = xroot_probe(pdev, &xmgmt_xroot_pf_cb, &xm->root);
+>>> +     if (ret)
+>>> +             goto failed;
+>>> +
+>>> +     ret = xmgmt_create_root_metadata(xm, &dtb);
+>>> +     if (ret)
+>>> +             goto failed_metadata;
+>>> +
+>>> +     ret = xroot_create_group(xm->root, dtb);
+>>> +     vfree(dtb);
+>>> +     if (ret)
+>>> +             xmgmt_err(xm, "failed to create root group: %d", ret);
+>>> +
+>>> +     if (!xroot_wait_for_bringup(xm->root))
+>>> +             xmgmt_err(xm, "failed to bringup all groups");
+>>> +     else
+>>> +             xm->ready = true;
+>>> +
+>>> +     ret = sysfs_create_group(&pdev->dev.kobj, 
+>>> &xmgmt_root_attr_group);
+>>> +     if (ret) {
+>>> +             /* Warning instead of failing the probe. */
+>>> +             xmgmt_warn(xm, "create xmgmt root attrs failed: %d", 
+>>> ret);
+>>> +     }
+>>> +
+>>> +     xroot_broadcast(xm->root, XRT_EVENT_POST_CREATION);
+>>> +     xmgmt_info(xm, "%s started successfully", XMGMT_MODULE_NAME);
+>>> +     return 0;
+>>> +
+>>> +failed_metadata:
+>>> +     xroot_remove(xm->root);
+>>> +failed:
+>>> +     pci_set_drvdata(pdev, NULL);
+>>> +     return ret;
+>>> +}
+>>> +
+>>> +static void xmgmt_remove(struct pci_dev *pdev)
+>>> +{
+>>> +     struct xmgmt *xm = pci_get_drvdata(pdev);
+>>> +
+>>> +     xroot_broadcast(xm->root, XRT_EVENT_PRE_REMOVAL);
+>>> +     sysfs_remove_group(&pdev->dev.kobj, &xmgmt_root_attr_group);
+>>> +     xroot_remove(xm->root);
+>>> +     pci_disable_pcie_error_reporting(xm->pdev);
+>>> +     xmgmt_info(xm, "%s cleaned up successfully", XMGMT_MODULE_NAME);
+>>> +}
+>>> +
+>>> +static struct pci_driver xmgmt_driver = {
+>>> +     .name = XMGMT_MODULE_NAME,
+>>> +     .id_table = xmgmt_pci_ids,
+>>> +     .probe = xmgmt_probe,
+>>> +     .remove = xmgmt_remove,
+>>> +};
+>>> +
+>>> +static int __init xmgmt_init(void)
+>>> +{
+>>> +     int res = 0;
+>>> +
+>>> +     res = xmgmt_register_leaf();
+>>> +     if (res)
+>>> +             return res;
+>>> +
+>>> +     xmgmt_class = class_create(THIS_MODULE, XMGMT_MODULE_NAME);
+>>> +     if (IS_ERR(xmgmt_class))
+>>> +             return PTR_ERR(xmgmt_class);
+>>> +
+>>> +     res = pci_register_driver(&xmgmt_driver);
+>>> +     if (res) {
+>>> +             class_destroy(xmgmt_class);
+>>> +             return res;
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static __exit void xmgmt_exit(void)
+>>> +{
+>>> +     pci_unregister_driver(&xmgmt_driver);
+>>> +     class_destroy(xmgmt_class);
+>>> +     xmgmt_unregister_leaf();
+>>> +}
+>>> +
+>>> +module_init(xmgmt_init);
+>>> +module_exit(xmgmt_exit);
+>>> +
+>>> +MODULE_DEVICE_TABLE(pci, xmgmt_pci_ids);
+>>> +MODULE_VERSION(XMGMT_DRIVER_VERSION);
+>>> +MODULE_AUTHOR("XRT Team<runtime@xilinx.com>");
+>>> +MODULE_DESCRIPTION("Xilinx Alveo management function driver");
+>>> +MODULE_LICENSE("GPL v2");
+>
 
