@@ -2,96 +2,83 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF62365E8C
-	for <lists+linux-fpga@lfdr.de>; Tue, 20 Apr 2021 19:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A48D365F7F
+	for <lists+linux-fpga@lfdr.de>; Tue, 20 Apr 2021 20:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbhDTR0o (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 20 Apr 2021 13:26:44 -0400
-Received: from mga14.intel.com ([192.55.52.115]:7203 "EHLO mga14.intel.com"
+        id S233544AbhDTSgg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 20 Apr 2021 14:36:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60322 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233141AbhDTR0n (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 20 Apr 2021 13:26:43 -0400
-IronPort-SDR: Z+ATFwTB2/uOA9KSEKyIkixCiTTK53IKSHdMWoAjJuPWTRQeAQef6VegYK6PwrTLNhcmYLzcxz
- sdZ4nvrlNFmw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9960"; a="195107727"
-X-IronPort-AV: E=Sophos;i="5.82,237,1613462400"; 
-   d="scan'208";a="195107727"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 10:26:11 -0700
-IronPort-SDR: KNMRWjGS+12WxeI0yq5GQZwuxcu3JyTCGaepSnAqDMAukITru09Lfa8hUwE23W+FpwAJM3Eeps
- O5p3Lq2ib4Hw==
-X-IronPort-AV: E=Sophos;i="5.82,237,1613462400"; 
-   d="scan'208";a="420544380"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 10:26:11 -0700
-From:   matthew.gerlach@linux.intel.com
-To:     hao.wu@intel.com, trix@redhat.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yilun.xu@intel.com,
-        russell.h.weight@intel.com, mdf@kernel.org
-Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH] fpga: dfl: pci: gracefully handle misconfigured port entries
-Date:   Tue, 20 Apr 2021 10:27:40 -0700
-Message-Id: <20210420172740.707259-1-matthew.gerlach@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S233532AbhDTSgf (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 20 Apr 2021 14:36:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5E88613D0;
+        Tue, 20 Apr 2021 18:36:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618943763;
+        bh=dK943MPZ1IMc++JGvgUyxTvLJTgIj/OVmkNLVW8XDf4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=G688H9fqU6S/3mOhASPJD8Q3HP/mM8PlSrvvp9CytGpbVOD4ksfpFFweHuqasqfwV
+         7Wb3qqc380zMpADcNKpzojWJ9rLZkTd8FS/5jKV/4XKGRoLFqulpEUqlZ4bBdxbta2
+         K6MR5dbnz1TZa7INkm4KkedvO22uOnOLyj+91SyKBDlvie7mZYw2BL5NiHHGfOJl5Y
+         9k8YRyW+LLBR8uFdh+MgJLiAI8Xyq2fev7whQv8J0BHFFdzeyWNsbuCLFeFD10RT3a
+         AErS/YD8hZlvfTYm1F5kke8siLEbZIEfbtV/CT7/5+5JM5pgJq58ajAPSv4J+cR5bz
+         ioD/DHSrLNHIw==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, russell.h.weight@intel.com,
+        linux-kernel@vger.kernel.org, trix@redhat.com, yilun.xu@intel.com,
+        linux-fpga@vger.kernel.org, matthew.gerlach@linux.intel.com,
+        hao.wu@intel.com
+Cc:     Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v3 0/2] spi: altera: Add DFL bus support for Altera SPI
+Date:   Tue, 20 Apr 2021 19:35:30 +0100
+Message-Id: <161894372992.35357.14050459219485520194.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210416165720.554144-1-matthew.gerlach@linux.intel.com>
+References: <20210416165720.554144-1-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On Fri, 16 Apr 2021 09:57:18 -0700, matthew.gerlach@linux.intel.com wrote:
+> This patch set adds Device Feature List (DFL) bus support for
+> the Altera SPI Master controller.
+> 
+> Patch 1 separates spi-altera.c into spi-altera-core.c and
+> spi-altera-platform.c.
+> 
+> Patch 2 adds spi-altera-dfl.c.
+> 
+> [...]
 
-Gracefully ignore misconfigured port entries encountered in
-incorrect FPGA images.
+Applied to
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
----
- drivers/fpga/dfl-pci.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-index b44523e..660d3b6 100644
---- a/drivers/fpga/dfl-pci.c
-+++ b/drivers/fpga/dfl-pci.c
-@@ -212,6 +212,7 @@ static int find_dfls_by_default(struct pci_dev *pcidev,
- 	int port_num, bar, i, ret = 0;
- 	resource_size_t start, len;
- 	void __iomem *base;
-+	int bars = 0;
- 	u32 offset;
- 	u64 v;
- 
-@@ -228,6 +229,7 @@ static int find_dfls_by_default(struct pci_dev *pcidev,
- 	if (dfl_feature_is_fme(base)) {
- 		start = pci_resource_start(pcidev, 0);
- 		len = pci_resource_len(pcidev, 0);
-+		bars |= BIT(0);
- 
- 		dfl_fpga_enum_info_add_dfl(info, start, len);
- 
-@@ -253,9 +255,21 @@ static int find_dfls_by_default(struct pci_dev *pcidev,
- 			 */
- 			bar = FIELD_GET(FME_PORT_OFST_BAR_ID, v);
- 			offset = FIELD_GET(FME_PORT_OFST_DFH_OFST, v);
-+			if (bars & BIT(bar)) {
-+				dev_warn(&pcidev->dev, "skipping bad port BAR %d\n", bar);
-+				continue;
-+			}
-+
- 			start = pci_resource_start(pcidev, bar) + offset;
--			len = pci_resource_len(pcidev, bar) - offset;
-+			len = pci_resource_len(pcidev, bar);
-+			if (offset >= len) {
-+				dev_warn(&pcidev->dev, "bad port offset %u >= %pa\n",
-+					 offset, &len);
-+				continue;
-+			}
- 
-+			len -= offset;
-+			bars |= BIT(bar);
- 			dfl_fpga_enum_info_add_dfl(info, start, len);
- 		}
- 	} else if (dfl_feature_is_port(base)) {
--- 
-1.8.3.1
+Thanks!
 
+[1/2] spi: altera: separate core code from platform code
+      commit: b0c3d9354de1f87eebc00694d5218b6611265933
+[2/2] spi: altera: Add DFL bus driver for Altera API Controller
+      commit: ba2fc167e9447596a812e828842d0130ea9cd0e4
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
