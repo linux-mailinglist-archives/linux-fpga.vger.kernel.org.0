@@ -2,211 +2,502 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C793664CB
-	for <lists+linux-fpga@lfdr.de>; Wed, 21 Apr 2021 07:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A873669DD
+	for <lists+linux-fpga@lfdr.de>; Wed, 21 Apr 2021 13:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbhDUF0b (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 21 Apr 2021 01:26:31 -0400
-Received: from mga09.intel.com ([134.134.136.24]:41963 "EHLO mga09.intel.com"
+        id S234550AbhDULVe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 21 Apr 2021 07:21:34 -0400
+Received: from mga04.intel.com ([192.55.52.120]:33242 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231538AbhDUF0a (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 21 Apr 2021 01:26:30 -0400
-IronPort-SDR: KNXpopj1UAnwPCf/HgH7yn6W92JHgOKRSmj1vCKKEipvLTiJzqIiwBThlZCuY/FOwmLUMU8mdk
- oZMWDmeu8aqw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9960"; a="195755406"
+        id S234152AbhDULVe (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 21 Apr 2021 07:21:34 -0400
+IronPort-SDR: v7FtgED6yAbjAOgFUpaSdWAtdlvwI2zPjzsNSxWXWixRUFCbX2268GqHbKCkJug1Pim6c+hh2z
+ ukU0wDyVnrUA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9960"; a="193559129"
 X-IronPort-AV: E=Sophos;i="5.82,238,1613462400"; 
-   d="scan'208";a="195755406"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 22:25:56 -0700
-IronPort-SDR: uhkcMcOD6kjM/Bzp1ZwEM5si4gVAd49m30fyjpqD9Vli+/qZ6/vN+0WJeWXTAYnULqV+b/s9zv
- MTS48usMquiA==
+   d="scan'208";a="193559129"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2021 04:21:00 -0700
+IronPort-SDR: arZJfk6Hg9dl5zWJhjG2+x4kOIjSguoNs1BOcZk1Y38He886A4wkBcaD4Zq9w1ZJsJ55PhovSK
+ mhhuyJJ5szkg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,238,1613462400"; 
-   d="scan'208";a="534775665"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga004.jf.intel.com with ESMTP; 20 Apr 2021 22:25:56 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 20 Apr 2021 22:25:56 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2
- via Frontend Transport; Tue, 20 Apr 2021 22:25:56 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2106.2; Tue, 20 Apr 2021 22:25:55 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LkEQuLohNC+2PoQwpMCUz2+na6hcz1+MkhXOwacvQWlvEEOhNys50MFVh3Lx++fDTPgR2NQWn79TvFGcI/5ZmMIBf7TQfKeAdUL7mJKITJnHN/olNWdDDNG6Y6d6/W8k9ZZZDnzIIcWqVv1XxgD/jmQi/XGXWUzpsXt9PMpJWg4ju0ZUQPsw3SogCqjtBNcc0UdTcHeCdlAf7iZbjw21P1cRatwMiYqxoPwZT87y+VFFzQRNBkLF8LauLh7E+smQuN49So4OkRTiVBgCyMyP9Pj/mGekUGvM10r7MGoFeMGgXIJCHMTnz86vS+EawsfH4b0bs2DKPY3hWWtSjEJ+0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K9R3Vc6Uo52eW94bm80oW1n99ja710FxrcntkSLQidY=;
- b=PqF9uycVeipOLPY0iEufZQwIoor9lyj6+oTnBo9DLq4+LYqUFykZH2wTi5IuDmJASmLZU6F7r2iKaMCSrXX5eNXx0A6JZlzt4A3PcbdbObbySz8ihgESbt+y8pdMXDiiqL4Pyxyh4Gt/HFGhUxcBh6WjdDNRbh6AVZ8lUltS1DkG2e70lrcgONmFjgY4rmUDuwBe9f1B8QsMWFU6Lgz89t0/IVh5Cv5hmwVApJGOjvk0rAxwM0c7QWZpTx4oRt7rj90Gsh1uFAKJTaG7rwYD8QHFt1WhNbXhnSPxAmrKf5zqJcRKHe6ssVRhJIDJuR1xq5g6rbmpE4eiff0oDHUthg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K9R3Vc6Uo52eW94bm80oW1n99ja710FxrcntkSLQidY=;
- b=aV73rOLpfSeJVbPycg87vHt9ISEZOtSbh30wOyhAQEVympkACsM1sS6dZKHWTeWOQY93opizQErx/mezHW/c4abqc4XysKDltkypOhSnfbKOY0aTb7rc8ONnsba/km/DZS5dSMGQ+tEXhxbnJxrUNkcQOC/JlMLe/b4lFv2tt9k=
-Received: from BYAPR11MB3816.namprd11.prod.outlook.com (2603:10b6:a03:f8::32)
- by BY5PR11MB4273.namprd11.prod.outlook.com (2603:10b6:a03:1c9::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.18; Wed, 21 Apr
- 2021 05:25:52 +0000
-Received: from BYAPR11MB3816.namprd11.prod.outlook.com
- ([fe80::1c35:a545:adc:e8c0]) by BYAPR11MB3816.namprd11.prod.outlook.com
- ([fe80::1c35:a545:adc:e8c0%6]) with mapi id 15.20.4042.024; Wed, 21 Apr 2021
- 05:25:52 +0000
-From:   "Wu, Hao" <hao.wu@intel.com>
-To:     "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "Weight, Russell H" <russell.h.weight@intel.com>,
-        "mdf@kernel.org" <mdf@kernel.org>
-Subject: RE: [PATCH] fpga: dfl: pci: gracefully handle misconfigured port
- entries
-Thread-Topic: [PATCH] fpga: dfl: pci: gracefully handle misconfigured port
- entries
-Thread-Index: AQHXNgpK6sZ5wt8PgU2xWx05XVpyOqq+btGQ
-Date:   Wed, 21 Apr 2021 05:25:52 +0000
-Message-ID: <BYAPR11MB381637F0EFFAFD57902EE47985479@BYAPR11MB3816.namprd11.prod.outlook.com>
-References: <20210420172740.707259-1-matthew.gerlach@linux.intel.com>
-In-Reply-To: <20210420172740.707259-1-matthew.gerlach@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.5.1.3
-authentication-results: linux.intel.com; dkim=none (message not signed)
- header.d=none;linux.intel.com; dmarc=none action=none header.from=intel.com;
-x-originating-ip: [192.102.204.53]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0b404b63-ee05-4123-62d1-08d90485ee7e
-x-ms-traffictypediagnostic: BY5PR11MB4273:
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR11MB427301D61464E84B9308FB2285479@BY5PR11MB4273.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:238;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LxdrOMajR8aUflYqMahGkby8FOhriCQSxiEBPAJ3Tg/a5nAfI2IhXYih6VNmc+HRnFEdykEs2sM50HaPRh2F+yOahLsJTN8mCUzNE0a73XrwUOAXFkkXVjN0mCuMNmTSnT47R6sU/P9GUaGA83vvQDqrP6g6anWgT/AUnplFSh78BRMQKJer76fQopCtykJAiFMorHoWbGcRUwsEi8oE0P8cT+qxfrFl5WAj2xOjIfGci9TWtRVlq62wzFt4+TWPRVLkSC9a3OGzoPYdA8CBqckD1gfuAY890N3QqhbJUvvzhCCEQeVw1RX2q+YRHDix8l5Czp3o7Ehu0rEl0+C4MR32PwTPfRr+CELNMxxcSAzmB1Ri6T9aoskrhvutPD+us66kqtZLnViAgoN6iqZboD2POSthWIFBg3o0mDONUr9yhhVbQH3fLuNTllCIT3c4aceR5MqX0CI7EGSA0x1CIGlXQCVheJd6+hwXCYcvdD4WagXobvlNKpgIg59Dhnq+QisuvNqcNbUA7Vfl/AqLfhljEJRBhckrkO6aFpOh2+XyvPBPFgGWjjjAizdLd1yqKffgTY1T519NpIUtV1elD6stlyhY8OdtPX1/JSfiVcs=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3816.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(346002)(396003)(376002)(39860400002)(186003)(86362001)(64756008)(52536014)(6506007)(2906002)(9686003)(55016002)(83380400001)(478600001)(5660300002)(71200400001)(38100700002)(66476007)(122000001)(66946007)(316002)(110136005)(76116006)(26005)(7696005)(33656002)(8676002)(66556008)(8936002)(66446008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?BZam7oz7GWCVoH3n/jvE9F4tEpcr/bpf0JdOmr019oCAb1OI1IX5I/K8pszb?=
- =?us-ascii?Q?Iu/eWQHY0iVfKqf35kZ0H0uUQCWg7c9/KOts7OYQEXxzaqGX+fKcfaeHss6f?=
- =?us-ascii?Q?pt1QxbWbnIJAZ8yu2jgTg6aOGEuIyu/UKzRc8sig7GaLV+dPSasAx7soRqSO?=
- =?us-ascii?Q?ih0hd5juQYZv7cZCft0hjEaFnmz3Il7+LKGkAntDGC/JTBmoO4s2Osjrvr+O?=
- =?us-ascii?Q?AiHtEfmq1rjDh4vazMxLP7xcWqzCKwgmUCXqcP1EZ5tMoaGdfuD/HHqIuTeG?=
- =?us-ascii?Q?gS0pyTwyHyN6wLMyFoqCqitQgsbqMgeiYExzPsm19e6e57sXYmspiCgY1Q12?=
- =?us-ascii?Q?gzWR3PASPzV8XQ8h9Q8umFp6NHBn1vORnXj4BDyzt6eV4hRWqn3HRfxOL5nk?=
- =?us-ascii?Q?vprU3tUBJbRLSgB7VRt2HN4rDmVL7d3+nF4ZThUJM0pSsG/BUHCroCxhHlwb?=
- =?us-ascii?Q?K0cVyLJi1AZWQFLXE6WHxZMJR3iY/EVW+LA+UDggTH5SZUkSB7WxNmF9Hv26?=
- =?us-ascii?Q?JKd2f96TbUJPAP/woWqhQI0L87+Va+jk0+2cIbHOyyWSsyhfkvpgAXNyF3Pj?=
- =?us-ascii?Q?Qus5YiI1a29wJGDlffAfyZCZo5h7m28vVCFv8EYPgvqbFD9nQOZF3fMkCwe3?=
- =?us-ascii?Q?SKwRxTBmft+sPiq1Htr7Z61t3zHzYTg4NAs22VHOuYiSs3yk38Tt1x/08OqF?=
- =?us-ascii?Q?LuGS1tlNITpbfGTYPFUS5Nsx1Cw5Dt1yT75B+RtwGTI/DhLLy9Q2Tnqvw6YD?=
- =?us-ascii?Q?X1ctGvPb4bvxoXUWtVHhvcqU9yT+zhU0awV2f39r8DiUAYj1mH9PRvA1x5gZ?=
- =?us-ascii?Q?I1V/1tV8gKfVlvFDN+xP4RjKH5Miu+NP1pOIyCcpSsJyGYbADr7s9CqG7S2n?=
- =?us-ascii?Q?2PUuE03JiGOtbkUhVRjHYPHR+suRfkQyGMt0bkTUutXtj7PCBS7AAkZlITY9?=
- =?us-ascii?Q?kK+HgJ1mK9RQVVAiMpIzjtPqNpzmuGevEZYJG/PUaFnCYZ7lDAD5QAxLG81o?=
- =?us-ascii?Q?GFNBvZfH0bXv1vCHml02DWJLAYJlRACL8CBvzwiSCf7haKD9Q1iMZEbyziOB?=
- =?us-ascii?Q?e7lmeT333AlnD0nv6slu5HjA/xJ2f4F7vCPNbNhKWSeQWnHhQaVjbJer2TQz?=
- =?us-ascii?Q?mAfr/OeWMoBHZJDd1Qms7LzyZTleSVN7DOdrrkQCa/ZVxiuENsuAX5LW1u6u?=
- =?us-ascii?Q?UYPIJhnDZ7LK6QU8phkUBYXILk5LKvsD6PvB48ZnoLjq4sSvjoXl+iONydPo?=
- =?us-ascii?Q?3MU9709FlsZgPZ3l7rZuAdLCCygKeMqSL/TLnweaeRAiIWuNGnqet0FB2ejh?=
- =?us-ascii?Q?KQL3Su0a/Ry6W5KMv/r67d0+?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+   d="scan'208";a="420957532"
+Received: from marshy.an.intel.com (HELO [10.122.105.143]) ([10.122.105.143])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Apr 2021 04:20:58 -0700
+Subject: Re: FW: [RFC PATCH v1 1/1] fpga: mgr: enable asynchronous image
+ updates
+To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
+Cc:     Tom Rix <trix@redhat.com>, lgoncalv@redhat.com,
+        Xu Yilun <yilun.xu@intel.com>, hao.wu@intel.com,
+        "Gerlach, Matthew" <matthew.gerlach@intel.com>
+References: <20210410003810.222597-1-russell.h.weight@intel.com>
+ <20210410003810.222597-2-russell.h.weight@intel.com>
+ <d82b7551-8434-b600-c20f-3854638355b2@intel.com>
+ <MWHPR11MB0015BA72FFC35BF0DDB90E63874D9@MWHPR11MB0015.namprd11.prod.outlook.com>
+ <05c2921e-c2dd-347a-c606-f2bf704db7d6@linux.intel.com>
+ <e8c206ba-c6e8-f2bb-35c2-2b574c7a5ec0@intel.com>
+ <8b5b38df-e8bd-5d11-196a-1a719ebc6c95@linux.intel.com>
+ <29b13a51-1a73-f125-c721-02b59894c630@intel.com>
+From:   Richard Gong <richard.gong@linux.intel.com>
+Message-ID: <4c7378e3-e290-4c94-28ca-fbd6e4aeb029@linux.intel.com>
+Date:   Wed, 21 Apr 2021 06:20:49 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3816.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b404b63-ee05-4123-62d1-08d90485ee7e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Apr 2021 05:25:52.6458
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 97YFTA7quXmaQPYVDCUSr8da3dmVSxLSft/oQNAhSepbuiNw388Na7OKABLRecZpyI1zJG5jTfA47rM3PR3BXw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4273
-X-OriginatorOrg: intel.com
+In-Reply-To: <29b13a51-1a73-f125-c721-02b59894c630@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-> Subject: [PATCH] fpga: dfl: pci: gracefully handle misconfigured port ent=
-ries
->=20
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->=20
-> Gracefully ignore misconfigured port entries encountered in
-> incorrect FPGA images.
->=20
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->  drivers/fpga/dfl-pci.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-> index b44523e..660d3b6 100644
-> --- a/drivers/fpga/dfl-pci.c
-> +++ b/drivers/fpga/dfl-pci.c
-> @@ -212,6 +212,7 @@ static int find_dfls_by_default(struct pci_dev *pcide=
-v,
->  	int port_num, bar, i, ret =3D 0;
->  	resource_size_t start, len;
->  	void __iomem *base;
-> +	int bars =3D 0;
->  	u32 offset;
->  	u64 v;
->=20
-> @@ -228,6 +229,7 @@ static int find_dfls_by_default(struct pci_dev *pcide=
-v,
->  	if (dfl_feature_is_fme(base)) {
->  		start =3D pci_resource_start(pcidev, 0);
->  		len =3D pci_resource_len(pcidev, 0);
-> +		bars |=3D BIT(0);
->=20
->  		dfl_fpga_enum_info_add_dfl(info, start, len);
->=20
-> @@ -253,9 +255,21 @@ static int find_dfls_by_default(struct pci_dev *pcid=
-ev,
->  			 */
->  			bar =3D FIELD_GET(FME_PORT_OFST_BAR_ID, v);
->  			offset =3D FIELD_GET(FME_PORT_OFST_DFH_OFST, v);
-> +			if (bars & BIT(bar)) {
-> +				dev_warn(&pcidev->dev, "skipping bad port
-> BAR %d\n", bar);
-> +				continue;
-> +			}
 
-Will it be a real problem that multiple ports are inside one BAR but differ=
-ent offsets?
 
-Hao
+On 4/19/21 11:32 AM, Russ Weight wrote:
+> 
+> 
+> On 4/19/21 4:33 AM, Richard Gong wrote:
+>>
+>>
+>> On 4/15/21 11:03 AM, Russ Weight wrote:
+>>>
+>>>
+>>> On 4/15/21 5:13 AM, Richard Gong wrote:
+>>>>
+>>>>>
+>>>>>
+>>>>> -----Original Message-----
+>>>>> From: Weight, Russell H <russell.h.weight@intel.com>
+>>>>> Sent: Wednesday, April 14, 2021 11:46 AM
+>>>>> To: mdf@kernel.org; linux-fpga@vger.kernel.org
+>>>>> Cc: trix@redhat.com; lgoncalv@redhat.com; Xu, Yilun <yilun.xu@intel.com>; Wu, Hao <hao.wu@intel.com>; Gerlach, Matthew <matthew.gerlach@intel.com>; Gong, Richard <richard.gong@intel.com>
+>>>>> Subject: Re: [RFC PATCH v1 1/1] fpga: mgr: enable asynchronous image updates
+>>>>>
+>>>>> +Richard Gong
+>>>>>
+>>>>> On 4/9/21 5:38 PM, Russ Weight wrote:
+>>>>>> Extend the FPGA Manager class driver to support asynchronous image
+>>>>>> updates in the context of a kernel worker thread. These updates are
+>>>>>> managed through sysfs file entries. This patch specifically creates
+>>>>>> the async_update/filename sysfs node that can be used to initiate an
+>>>>>> asynchronous update. The filename of a update image can be written to
+>>>>>> this sysfs entry to cause the update to occur.
+>>>>>>
+>>>>>> The write of the filename will return immediately, and the update will
+>>>>>> begin in the context of a kernel worker thread.  This tool utilizes
+>>>>>> the request_firmware framework, which requires that the image file
+>>>>>> reside under /lib/firmware.
+>>>>>>
+>>>>>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>>>>>> ---
+>>>>>>     .../ABI/testing/sysfs-class-fpga-manager      |   9 +
+>>>>>>     drivers/fpga/fpga-mgr.c                       | 199 +++++++++++++++++-
+>>>>>>     include/linux/fpga/fpga-mgr.h                 |  52 +++++
+>>>>>>     3 files changed, 259 insertions(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/Documentation/ABI/testing/sysfs-class-fpga-manager
+>>>>>> b/Documentation/ABI/testing/sysfs-class-fpga-manager
+>>>>>> index d78689c357a5..39ff8764f261 100644
+>>>>>> --- a/Documentation/ABI/testing/sysfs-class-fpga-manager
+>>>>>> +++ b/Documentation/ABI/testing/sysfs-class-fpga-manager
+>>>>>> @@ -58,3 +58,12 @@ Description:    Read fpga manager status as a string.
+>>>>>>                               reconfiguration hardware
+>>>>>>             * reconfig fifo overflow error    - FIFO overflow detected by
+>>>>>>                               reconfiguration hardware
+>>>>>> +
+>>>>>> +What:        /sys/class/fpga_manager/<fpga>/async_update/filename
+>>>>>> +Date:        April 2021
+>>>>>> +KernelVersion:    5.13
+>>>>>> +Contact:    Russ Weight <russell.h.weight@intel.com>
+>>>>>> +Description:    Write only. Write the filename of a self-describing  image
+>>>>>> +        file to this sysfs file to initiate an image update. The
+>>>>>> +        write will return immediately, and the image update will
+>>>>>> +        proceed in the background.
+>>>>>> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c index
+>>>>>> b85bc47c91a9..5d4449c82af5 100644
+>>>>>> --- a/drivers/fpga/fpga-mgr.c
+>>>>>> +++ b/drivers/fpga/fpga-mgr.c
+>>>>>> @@ -8,6 +8,7 @@
+>>>>>>      * With code from the mailing list:
+>>>>>>      * Copyright (C) 2013 Xilinx, Inc.
+>>>>>>      */
+>>>>>> +#include <linux/device.h>
+>>>>>>     #include <linux/firmware.h>
+>>>>>>     #include <linux/fpga/fpga-mgr.h>
+>>>>>>     #include <linux/idr.h>
+>>>>>> @@ -446,7 +447,166 @@ static struct attribute *fpga_mgr_attrs[] = {
+>>>>>>         &dev_attr_status.attr,
+>>>>>>         NULL,
+>>>>>>     };
+>>>>>> -ATTRIBUTE_GROUPS(fpga_mgr);
+>>>>>> +
+>>>>>> +static const struct attribute_group fpga_mgr_group = {
+>>>>>> +    .attrs = fpga_mgr_attrs,
+>>>>>> +};
+>>>>>> +
+>>>>>> +#define WRITE_BLOCK_SIZE 0x4000    /* Update remaining_size every 0x4000 bytes */
+>>>>>> +
+>>>>>> +static void fpga_async_dev_error(struct fpga_manager *mgr,
+>>>>>> +                 enum fpga_async_err err_code)
+>>>>>> +{
+>>>>>> +    mgr->async_update.err_code = err_code;
+>>>>>> +    mgr->mops->async_cancel(mgr);
+>>>>>> +}
+>>>>>> +
+>>>>>> +static void progress_complete(struct fpga_manager *mgr) {
+>>>>>> +    struct fpga_async_update *update = &mgr->async_update;
+>>>>>> +
+>>>>>> +    mutex_lock(&update->lock);
+>>>>>> +    update->progress = FPGA_ASYNC_PROG_IDLE;
+>>>>>> +    complete_all(&update->done);
+>>>>>> +    mutex_unlock(&update->lock);
+>>>>>> +}
+>>>>>> +
+>>>>>> +static void fpga_mgr_async_update(struct work_struct *work) {
+>>>>>> +    struct fpga_async_update *update;
+>>>>>> +    u32 size, blk_size, offset = 0;
+>>>>>> +    struct fpga_manager *mgr;
+>>>>>> +    const struct firmware *fw;
+>>>>>> +    enum fpga_async_err ret;
+>>>>>> +
+>>>>>> +    update = container_of(work, struct fpga_async_update, work);
+>>>>>> +    mgr = container_of(update, struct fpga_manager, async_update);
+>>>>>> +
+>>>>>> +    get_device(&mgr->dev);
+>>>>>> +    if (request_firmware(&fw, update->filename, &mgr->dev)) {
+>>>>>> +        update->err_code = FPGA_ASYNC_ERR_FILE_READ;
+>>>>>> +        goto idle_exit;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    update->data = fw->data;
+>>>>>> +    update->remaining_size = fw->size;
+>>>>>> +
+>>>>>> +    if (!try_module_get(mgr->dev.parent->driver->owner)) {
+>>>>>> +        update->err_code = FPGA_ASYNC_ERR_BUSY;
+>>>>>> +        goto release_fw_exit;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    update->progress = FPGA_ASYNC_PROG_PREPARING;
+>>>>>> +    ret = mgr->mops->async_write_init(mgr, fw->size);
+>>>>>> +    if (ret != FPGA_ASYNC_ERR_NONE) {
+>>>>>> +        fpga_async_dev_error(mgr, ret);
+>>>>>> +        goto modput_exit;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    update->progress = FPGA_ASYNC_PROG_WRITING;
+>>>>>> +    size = update->remaining_size;
+>>>>>> +    while (size) {
+>>>>>> +        blk_size = min_t(u32, size, WRITE_BLOCK_SIZE);
+>>>>>> +        size -= blk_size;
+>>>>>> +        ret = mgr->mops->async_write_blk(mgr, mgr->async_update.data,
+>>>>>> +                         offset, blk_size);
+>>>>
+>>>> It is not good idea to set 0x400 bytes here, the size of data chunk should be decided by low-level driver.
+>>>
+>>> 0x4000
+>>>
+>>>>
+>>>> The actual hardware device or firmware may be able to handle data chunk which is larger than 0x400 bytes in one transaction. So it is good for FPGA manager to pass the data to low-level driver and leave the decision to low-level driver.
+>>>
+>>> I understand the concern. The decision to break the write up into multiple
+>>> writes is done for the purpose of providing a progress indication to the
+>>> user. This is only the first of several patches. Another patch will expose
+>>> the remaining_size value via sysfs so that it can be monitored from user
+>>> space. For the devices that I am working with, in the worst case the update
+>>> takes about 40 minutes.
+>>>
+>>> 0x4000 could be changed to a larger number, or it could be left to the lower
+>>> level driver to choose the size. The only thing that is happening between
+>>> writes is update of the remaining_size, and checking to see if the user wants
+>>> to cancel the update, so I don't think this design introduces an appreciable
+>>> delay.
+>>
+>> I still think low-level driver rather than FPGA manager dirver should handle this.
+> 
+> Thanks Richard, I don't think it would be hard to make the change. I could
+> incorporate that into and RFC v2 patch, or into the original patch-set. 
 
-> +
->  			start =3D pci_resource_start(pcidev, bar) + offset;
-> -			len =3D pci_resource_len(pcidev, bar) - offset;
-> +			len =3D pci_resource_len(pcidev, bar);
-> +			if (offset >=3D len) {
-> +				dev_warn(&pcidev->dev, "bad port
-> offset %u >=3D %pa\n",
-> +					 offset, &len);
-> +				continue;
-> +			}
->=20
-> +			len -=3D offset;
-> +			bars |=3D BIT(bar);
->  			dfl_fpga_enum_info_add_dfl(info, start, len);
->  		}
->  	} else if (dfl_feature_is_port(base)) {
-> --
-> 1.8.3.1
+Thanks Russ!
+I think I
+> need to get feedback from Moritz to know which direction he would like to go.
+> 
+> To summarize, I think you and I agree that what were are trying to accomplish is
+> not as similar as we first thought - there really is no overlap - right? 
 
+That's is correct.
+Your driver
+> would not be able to leverage the code that I am working on?
+
+It depends on the direction Moritz likes. If he doesn't like device tree 
+overlay mechanism used for bitstream authentication, I will have to 
+leverage your codes.
+
+Regards,
+Richard
+
+> 
+> The remaining question for me is whether or not it really makes sense to integrate
+> the asynchronous image transfer/update into the FPGA Manager.
+> 
+> - Russ
+> 
+> 
+>>
+>> Regards,
+>> Richard
+>>
+>>>
+>>> - Russ
+>>>
+>>>>
+>>>> Regards,
+>>>> Richard
+>>>>
+>>>>>> +        if (ret != FPGA_ASYNC_ERR_NONE) {
+>>>>>> +            fpga_async_dev_error(mgr, ret);
+>>>>>> +            goto done;
+>>>>>> +        }
+>>>>>> +
+>>>>>> +        update->remaining_size = size;
+>>>>>> +        offset += blk_size;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    update->progress = FPGA_ASYNC_PROG_PROGRAMMING;
+>>>>>> +    ret = mgr->mops->async_write_complete(mgr);
+>>>>>> +    if (ret != FPGA_ASYNC_ERR_NONE)
+>>>>>> +        fpga_async_dev_error(mgr, ret);
+>>>>>> +
+>>>>>> +done:
+>>>>>> +    if (mgr->mops->async_cleanup)
+>>>>>> +        mgr->mops->async_cleanup(mgr);
+>>>>>> +
+>>>>>> +modput_exit:
+>>>>>> +    module_put(mgr->dev.parent->driver->owner);
+>>>>>> +
+>>>>>> +release_fw_exit:
+>>>>>> +    update->data = NULL;
+>>>>>> +    release_firmware(fw);
+>>>>>> +
+>>>>>> +idle_exit:
+>>>>>> +    /*
+>>>>>> +     * Note: update->remaining_size is left unmodified here to
+>>>>>> +     * provide additional information on errors. It will be
+>>>>>> +     * reinitialized when the next async update begins.
+>>>>>> +     */
+>>>>>> +    kfree(update->filename);
+>>>>>> +    update->filename = NULL;
+>>>>>> +    put_device(&mgr->dev);
+>>>>>> +    progress_complete(mgr);
+>>>>>> +}
+>>>>>> +
+>>>>>> +static ssize_t filename_store(struct device *dev, struct device_attribute *attr,
+>>>>>> +                  const char *buf, size_t count) {
+>>>>>> +    struct fpga_manager *mgr = to_fpga_manager(dev);
+>>>>>> +    struct fpga_async_update *update = &mgr->async_update;
+>>>>>> +    int ret = count;
+>>>>>> +
+>>>>>> +    if (count == 0 || count >= PATH_MAX)
+>>>>>> +        return -EINVAL;
+>>>>>> +
+>>>>>> +    mutex_lock(&update->lock);
+>>>>>> +    if (update->driver_unload || update->progress != FPGA_ASYNC_PROG_IDLE) {
+>>>>>> +        ret = -EBUSY;
+>>>>>> +        goto unlock_exit;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    update->filename = kmemdup_nul(buf, count, GFP_KERNEL);
+>>>>>> +    if (!update->filename) {
+>>>>>> +        ret = -ENOMEM;
+>>>>>> +        goto unlock_exit;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    update->err_code = FPGA_ASYNC_ERR_NONE;
+>>>>>> +    update->progress = FPGA_ASYNC_PROG_READING;
+>>>>>> +    reinit_completion(&update->done);
+>>>>>> +    schedule_work(&update->work);
+>>>>>> +
+>>>>>> +unlock_exit:
+>>>>>> +    mutex_unlock(&update->lock);
+>>>>>> +    return ret;
+>>>>>> +}
+>>>>>> +static DEVICE_ATTR_WO(filename);
+>>>>>> +
+>>>>>> +static umode_t
+>>>>>> +fpga_async_update_visible(struct kobject *kobj, struct attribute
+>>>>>> +*attr, int n) {
+>>>>>> +    struct fpga_manager *mgr = to_fpga_manager(kobj_to_dev(kobj));
+>>>>>> +
+>>>>>> +    if (!mgr->mops->async_write_init)
+>>>>>> +        return 0;
+>>>>>> +
+>>>>>> +    return attr->mode;
+>>>>>> +}
+>>>>>> +
+>>>>>> +static struct attribute *fpga_mgr_async_attrs[] = {
+>>>>>> +    &dev_attr_filename.attr,
+>>>>>> +    NULL,
+>>>>>> +};
+>>>>>> +
+>>>>>> +static struct attribute_group fpga_mgr_async_group = {
+>>>>>> +    .name = "async_update",
+>>>>>> +    .attrs = fpga_mgr_async_attrs,
+>>>>>> +    .is_visible = fpga_async_update_visible, };
+>>>>>> +
+>>>>>> +static const struct attribute_group *fpga_mgr_groups[] = {
+>>>>>> +    &fpga_mgr_group,
+>>>>>> +    &fpga_mgr_async_group,
+>>>>>> +    NULL,
+>>>>>> +};
+>>>>>>       static struct fpga_manager *__fpga_mgr_get(struct device *dev)  { @@
+>>>>>> -575,6 +735,15 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
+>>>>>>             return NULL;
+>>>>>>         }
+>>>>>>     +    if (mops->async_write_init || mops->async_write_blk ||
+>>>>>> +        mops->async_write_complete || mops->async_cancel ||
+>>>>>> +        mops->async_cleanup) {
+>>>>>> +        if (!mops->async_write_init || !mops->async_write_blk ||
+>>>>>> +            !mops->async_write_complete || !mops->async_cancel)
+>>>>>> +            dev_err(dev, "Attempt to register incomplete async ops\n");
+>>>>>> +            return NULL;
+>>>>>> +    }
+>>>>>> +
+>>>>>>         if (!name || !strlen(name)) {
+>>>>>>             dev_err(dev, "Attempt to register with no name!\n");
+>>>>>>             return NULL;
+>>>>>> @@ -594,6 +763,12 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
+>>>>>>         mgr->mops = mops;
+>>>>>>         mgr->priv = priv;
+>>>>>>     +    mgr->async_update.driver_unload = false;
+>>>>>> +    mgr->async_update.progress = FPGA_ASYNC_PROG_IDLE;
+>>>>>> +    mutex_init(&mgr->async_update.lock);
+>>>>>> +    init_completion(&mgr->async_update.done);
+>>>>>> +    INIT_WORK(&mgr->async_update.work, fpga_mgr_async_update);
+>>>>>> +
+>>>>>>         device_initialize(&mgr->dev);
+>>>>>>         mgr->dev.class = fpga_mgr_class;
+>>>>>>         mgr->dev.groups = mops->groups;
+>>>>>> @@ -710,11 +885,33 @@ EXPORT_SYMBOL_GPL(fpga_mgr_register);
+>>>>>>      * @mgr: fpga manager struct
+>>>>>>      *
+>>>>>>      * This function is intended for use in a FPGA manager driver's remove function.
+>>>>>> + *
+>>>>>> + * For some devices, once an aysynchronous update has begun the
+>>>>>> + authentication
+>>>>>> + * phase, the hardware cannot be signaled to stop, and the driver
+>>>>>> + will not exit
+>>>>>> + * until the hardware signals completion.  This could be 30+ minutes of waiting.
+>>>>>> + * The driver_unload flag enables a force-unload of the driver (e.g.
+>>>>>> + modprobe -r)
+>>>>>> + * by signaling the parent driver to exit even if the hardware update is incomplete.
+>>>>>> + * The driver_unload flag also prevents new updates from starting
+>>>>>> + once the
+>>>>>> + * unregister process has begun.
+>>>>>>      */
+>>>>>>     void fpga_mgr_unregister(struct fpga_manager *mgr)  {
+>>>>>> +    struct fpga_async_update *update = &mgr->async_update;
+>>>>>> +
+>>>>>>         dev_info(&mgr->dev, "%s %s\n", __func__, mgr->name);
+>>>>>>     +    mutex_lock(&update->lock);
+>>>>>> +    update->driver_unload = true;
+>>>>>> +    if (update->progress == FPGA_ASYNC_PROG_IDLE) {
+>>>>>> +        mutex_unlock(&update->lock);
+>>>>>> +        goto unregister;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    mutex_unlock(&update->lock);
+>>>>>> +    wait_for_completion(&update->done);
+>>>>>> +
+>>>>>> +unregister:
+>>>>>> +
+>>>>>>         /*
+>>>>>>          * If the low level driver provides a method for putting fpga into
+>>>>>>          * a desired state upon unregister, do it.
+>>>>>> diff --git a/include/linux/fpga/fpga-mgr.h
+>>>>>> b/include/linux/fpga/fpga-mgr.h index 2bc3030a69e5..9ff6c55f7a43
+>>>>>> 100644
+>>>>>> --- a/include/linux/fpga/fpga-mgr.h
+>>>>>> +++ b/include/linux/fpga/fpga-mgr.h
+>>>>>> @@ -9,6 +9,7 @@
+>>>>>>     #define _LINUX_FPGA_MGR_H
+>>>>>>       #include <linux/mutex.h>
+>>>>>> +#include <linux/completion.h>
+>>>>>>     #include <linux/platform_device.h>
+>>>>>>       struct fpga_manager;
+>>>>>> @@ -74,6 +75,30 @@ enum fpga_mgr_states {
+>>>>>>     #define FPGA_MGR_BITSTREAM_LSB_FIRST    BIT(3)
+>>>>>>     #define FPGA_MGR_COMPRESSED_BITSTREAM    BIT(4)
+>>>>>>     +/* Asynchronous update error codes */ enum fpga_async_err {
+>>>>>> +    FPGA_ASYNC_ERR_NONE,
+>>>>>> +    FPGA_ASYNC_ERR_HW_ERROR,
+>>>>>> +    FPGA_ASYNC_ERR_TIMEOUT,
+>>>>>> +    FPGA_ASYNC_ERR_CANCELED,
+>>>>>> +    FPGA_ASYNC_ERR_BUSY,
+>>>>>> +    FPGA_ASYNC_ERR_INVALID_SIZE,
+>>>>>> +    FPGA_ASYNC_ERR_RW_ERROR,
+>>>>>> +    FPGA_ASYNC_ERR_WEAROUT,
+>>>>>> +    FPGA_ASYNC_ERR_FILE_READ,
+>>>>>> +    FPGA_ASYNC_ERR_MAX
+>>>>>> +};
+>>>>>> +
+>>>>>> +/* Asynchronous update progress codes */ enum fpga_async_prog {
+>>>>>> +    FPGA_ASYNC_PROG_IDLE,
+>>>>>> +    FPGA_ASYNC_PROG_READING,
+>>>>>> +    FPGA_ASYNC_PROG_PREPARING,
+>>>>>> +    FPGA_ASYNC_PROG_WRITING,
+>>>>>> +    FPGA_ASYNC_PROG_PROGRAMMING,
+>>>>>> +    FPGA_ASYNC_PROG_MAX
+>>>>>> +};
+>>>>>> +
+>>>>>>     /**
+>>>>>>      * struct fpga_image_info - information specific to a FPGA image
+>>>>>>      * @flags: boolean flags as defined above @@ -133,6 +158,16 @@ struct
+>>>>>> fpga_manager_ops {
+>>>>>>         int (*write_complete)(struct fpga_manager *mgr,
+>>>>>>                       struct fpga_image_info *info);
+>>>>>>         void (*fpga_remove)(struct fpga_manager *mgr);
+>>>>>> +
+>>>>>> +    /* async update ops */
+>>>>>> +    enum fpga_async_err (*async_write_init)(struct fpga_manager *mgr,
+>>>>>> +                 size_t count);
+>>>>>> +    enum fpga_async_err (*async_write_blk)(struct fpga_manager *mgr,
+>>>>>> +                 const char *buf, u32 offset, size_t count);
+>>>>>> +    enum fpga_async_err (*async_write_complete)(struct fpga_manager *mgr);
+>>>>>> +    enum fpga_async_err (*async_cancel)(struct fpga_manager *mgr);
+>>>>>> +    void (*async_cleanup)(struct fpga_manager *mgr);
+>>>>>> +
+>>>>>>         const struct attribute_group **groups;  };
+>>>>>>     @@ -154,6 +189,22 @@ struct fpga_compat_id {
+>>>>>>         u64 id_l;
+>>>>>>     };
+>>>>>>     +/**
+>>>>>> + * struct fpga_async_update - asynchronous image update structure
+>>>>>> + * @name: name of low level fpga manager  */ struct fpga_async_update
+>>>>>> +{
+>>>>>> +    char *filename;
+>>>>>> +    const u8 *data;            /* pointer to update data */
+>>>>>> +    u32 remaining_size;        /* size remaining to transfer */
+>>>>>> +    struct work_struct work;
+>>>>>> +    struct completion done;
+>>>>>> +    enum fpga_async_prog progress;
+>>>>>> +    enum fpga_async_err err_code;    /* async update error code */
+>>>>>> +    bool driver_unload;
+>>>>>> +    struct mutex lock;        /* protect data structure contents */
+>>>>>> +};
+>>>>>> +
+>>>>>>     /**
+>>>>>>      * struct fpga_manager - fpga manager structure
+>>>>>>      * @name: name of low level fpga manager @@ -171,6 +222,7 @@ struct
+>>>>>> fpga_manager {
+>>>>>>         enum fpga_mgr_states state;
+>>>>>>         struct fpga_compat_id *compat_id;
+>>>>>>         const struct fpga_manager_ops *mops;
+>>>>>> +    struct fpga_async_update async_update;
+>>>>>>         void *priv;
+>>>>>>     };
+>>>>>>     
+>>>>>
+>>>
+> 
