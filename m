@@ -2,228 +2,147 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CE836E3F4
-	for <lists+linux-fpga@lfdr.de>; Thu, 29 Apr 2021 06:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF6336EBE4
+	for <lists+linux-fpga@lfdr.de>; Thu, 29 Apr 2021 16:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237154AbhD2ELf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 29 Apr 2021 00:11:35 -0400
-Received: from mail-pf1-f169.google.com ([209.85.210.169]:36487 "EHLO
-        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237081AbhD2ELd (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 29 Apr 2021 00:11:33 -0400
-Received: by mail-pf1-f169.google.com with SMTP id c3so26452093pfo.3
-        for <linux-fpga@vger.kernel.org>; Wed, 28 Apr 2021 21:10:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=4FurIoL8xPmMvWIacoA3k6ppfPiWhEhMgrSFdLPlI4o=;
-        b=ZLHo64lQ3rxPPkreynMcsNXOx65UeTZQxTYuj/t0gYTh7HUgjUZZrrr3lxDJd5zG9U
-         vF/sgvAoPIibmfmNRPsWmy1jUZvrn1AkUhLftl9eO9pRqEOSm1MaPlKLApA5a7JQQB9b
-         b4q0ZHwNK++IbXj1MWQw/TA/gCvt2gTrkC1LEKmhuYdJmR8ErRODaQDhKCYSsYOBETOF
-         H6J80PjxmcnGXZTcIHRfNu5AiWZ6sH7m68pOXnxf9vuFmwdG6IG1yL9WZvYhXRvp9mqG
-         gxjKtxl9/xK1xKXP+J9Cj752Prwy2skGQVzZjImTnmUbYJ5h0kEjEqiENaVpjxjbhmdq
-         oDOw==
-X-Gm-Message-State: AOAM533AeoaEE60vPsy98J4tTC5of48AEXRGYqVs2XxnTwgsOm29sILo
-        6BieOrAWEIBkc6limg5yqDA=
-X-Google-Smtp-Source: ABdhPJxuAxsSl63z567AGSpryU9F4Srg9H43tB8lvsu6bJ62GeCvDwPegW9HL8/g82FmQlcK+74tGA==
-X-Received: by 2002:a63:2686:: with SMTP id m128mr1257658pgm.406.1619669430095;
-        Wed, 28 Apr 2021 21:10:30 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1162:1ac0:17a6:4cc6:d1ef])
-        by smtp.gmail.com with ESMTPSA id v8sm1009704pff.220.2021.04.28.21.10.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Apr 2021 21:10:29 -0700 (PDT)
-Date:   Wed, 28 Apr 2021 21:10:29 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, "Xu, Yilun" <yilun.xu@intel.com>,
-        "Wu, Hao" <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
-Subject: Re: RFC: Integrating secure update functions into the FPGA Manager
-Message-ID: <YIoxtaudnbYySm1P@archbook>
-References: <60ff2054-8ee1-7bc8-7981-9249e3ee42c7@intel.com>
+        id S233862AbhD2OFQ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 29 Apr 2021 10:05:16 -0400
+Received: from mail-mw2nam12on2077.outbound.protection.outlook.com ([40.107.244.77]:19698
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233602AbhD2OFQ (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 29 Apr 2021 10:05:16 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lxzST6PxtlP1HXKsn/nBaFc4uOH7Ipqd2QLCEMLJyyYlzQTX1p3uZP5Bdyd4VnQVMkze/WGrfD7VoYUhYe3J71PueoXgVfi0tAWBN49qLl4RyKapM9Mqt91BPYTbAQRG6jDK5HhJJTx5G2S45vjs6tO+GkGZtlo8oVFZ7CHRKDCdHaNC+33IwaOQDBTG4w9AfGC+oMZSIF5ejltrjJPoX6/GONBD16xNEDNCr6dSY9oV1ZkQFv+ZDe7MxTV5cTWSCRWKNE96C/ofcXbEJGk9sL6St8tgWZs01nkjVLqvqI18Y0yunoiVTBcqTAYeg5T62u5FU1JytDj42frRd7tZ0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6Ep+avkAPfieQHq6dnBokQf6VsP89BPJgIgS5V7/LlA=;
+ b=cP+LEtz3R8dHEgBoZtFCikbpjTVqDj8prUV+4zTh74Nld17fwt6Q0e47KLVt+X9QSEGiyyfJGkle2m+Fz54Apx5TLAz7N46zv28NXG16kczWzN4/QQWICz92W3h8HkXUPPLYRp2vKoAtV3DjLkG4xdjMHEBUDmPhDQIDXGudpiStjVQXdrtNwsy8kkQhVtr7dMd0cuDSOKVvzf6BLgVPhSTSCW/iKGLiiH/TPNzYB2bpSs+nHawnRpzAP66vC2ogkwobj6vnRinWTvePImBbZYTuFLipn/or9U6hif1hXH60wE9A7oKVhDkVR+kr6VkxvtPsYW7jsWgud5XhX6Umlw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6Ep+avkAPfieQHq6dnBokQf6VsP89BPJgIgS5V7/LlA=;
+ b=BFo3x5xKQVaNWVpMEVkvoKVAOAzWXDXgRT3BEae6zyraNEpUC96SYyN9FR79TdOr/bW26rW/hHPVMHmNDyKMgBE0Ii5qNmvNLETFgmYr8yLjsziRNe4lNlA2fPy/D6laFi8QeTSyryFDBL+MyAUCrGnIaXTzwVb2UCy1woAGDPs=
+Received: from MN2PR16CA0054.namprd16.prod.outlook.com (2603:10b6:208:234::23)
+ by MN2PR02MB6096.namprd02.prod.outlook.com (2603:10b6:208:186::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.20; Thu, 29 Apr
+ 2021 14:04:25 +0000
+Received: from BL2NAM02FT036.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:234:cafe::f0) by MN2PR16CA0054.outlook.office365.com
+ (2603:10b6:208:234::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.27 via Frontend
+ Transport; Thu, 29 Apr 2021 14:04:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BL2NAM02FT036.mail.protection.outlook.com (10.152.77.154) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4065.21 via Frontend Transport; Thu, 29 Apr 2021 14:04:25 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 29 Apr 2021 07:04:18 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Thu, 29 Apr 2021 07:04:18 -0700
+Envelope-to: git@xilinx.com,
+ robh+dt@kernel.org,
+ mdf@kernel.org,
+ trix@redhat.com,
+ gregkh@linuxfoundation.org,
+ arnd@arndb.de,
+ zou_wei@huawei.com,
+ iwamatsu@nigauri.org,
+ linus.walleij@linaro.org,
+ devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ linux-fpga@vger.kernel.org,
+ chinnikishore369@gmail.com
+Received: from [10.140.6.60] (port=60740 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1lc7H6-0004zS-Da; Thu, 29 Apr 2021 07:04:16 -0700
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <robh+dt@kernel.org>, <michal.simek@xilinx.com>, <mdf@kernel.org>,
+        <trix@redhat.com>, <nava.manne@xilinx.com>,
+        <gregkh@linuxfoundation.org>, <arnd@arndb.de>,
+        <rajan.vaja@xilinx.com>, <amit.sunil.dhamne@xilinx.com>,
+        <manish.narani@xilinx.com>, <zou_wei@huawei.com>,
+        <lakshmi.sai.krishna.potthuri@xilinx.com>, <iwamatsu@nigauri.org>,
+        <wendy.liang@xilinx.com>, <linus.walleij@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <chinnikishore369@gmail.com>, <git@xilinx.com>
+Subject: [PATCH v4 0/4] Add Bitstream configuration support for Versal
+Date:   Thu, 29 Apr 2021 19:34:04 +0530
+Message-ID: <20210429140408.23194-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <60ff2054-8ee1-7bc8-7981-9249e3ee42c7@intel.com>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 12840864-4d8b-49df-2a86-08d90b17b23b
+X-MS-TrafficTypeDiagnostic: MN2PR02MB6096:
+X-Microsoft-Antispam-PRVS: <MN2PR02MB60962B81FACE50F258CB4265C25F9@MN2PR02MB6096.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fKTwAT99ytyE9JmnA6f2P3E0jd3DNHdTOLGgQv+auaqSTOvLCFNUpoCqYegKc50GjJvg49ldIJTVrNJSAeQQznw9xlmEEL46BkOX71vEwMG/YX9VezOS+ezlhS1H+Zu7ejtz0mQoJKvlDhlAyeFskwiLG+4NCj6wWvAV2xetcM9nsx78iuFbb5cAn46AQoKn6q1ICpHsYyYbK9Ko6ycycXH4+TcVWLBuBXsg2LK01b8gJz/qGcQq8R3PrsU5AW6+4NpNDJuvl78Ua9XRHRrWazurbD+6wBhLrSVOaqSl/74csDBuIc6o8BXUnmik6wYUs5eiF11v2DUtm5ABYMwZtHSZXKfzrAfGpXv1XkJBE7RYc5bxzeOzWA25phdYuYxtMtjDqzNW/TZUVrNKikRe/xLpUaegGyNe3LIHez6qzC9I/kBgJwEaAx/5PMO3UswLvkZzxIi+JoxuVxWR1saY5mO5vOgDkUz0lNH2Gr3mgcGysWBHACp3aeYx2+fCo8yVGqxzvEm9rpdeylzKZrueFo0WYmbrErpM1H0tj4iT/ELNVy9FynkpO3bLEa9HVXgTqIC12zdEnhA7Ey5hgFJUhKOOPmsxCngHvEhLWflLn3qQDCAALX1+QuC3x4sWXXv/Y1JxybZUCQjmqOb5Dy/xtZaU6nalbhUf1UCMvm/tHgHElThn0BXQE3VM35CjNih64737t1MQO9rbX1OIPeMFRHqMwLEq5B3isMA4UIq3M4KLS1tE8984Gqb5Q8CiNsSujBwrFJLW1ZnnA9XSekr2GJ9QipzQMLhLRV8GqT1NNoyGOI4dyVxP5QlWZf2B9yJLm8huEf2Aj9LO5ZxPS1IALA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(346002)(376002)(39860400002)(136003)(36840700001)(46966006)(9786002)(316002)(82310400003)(36860700001)(7636003)(110136005)(966005)(5660300002)(356005)(6636002)(336012)(47076005)(478600001)(70586007)(8936002)(186003)(70206006)(36906005)(1076003)(2906002)(7416002)(2616005)(26005)(7696005)(921005)(8676002)(82740400003)(6666004)(36756003)(426003)(102446001)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2021 14:04:25.0621
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12840864-4d8b-49df-2a86-08d90b17b23b
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT036.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6096
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Russ,
+This series Adds FPGA manager driver support for Xilinx Versal SoC.
+it uses the firmware interface to configure the programmable logic.
 
-On Wed, Apr 07, 2021 at 04:56:29PM -0700, Russ Weight wrote:
-> Hi Moritz,
-> 
-> Please see below my analysis of the effort to integrate secure functions
-> into the FPGA Manager. I have recommendations interspersed below. The
-> bottom line is that it seems like there is very little opportunity to
-> share code. I could try to rewrite the fpga_mgr_load() related functions
-> to accommodate worker threads, cancellation, and progress updates, but I'm
-> not sure there is enough value-add to justify the the additional complexity,
-> especially for the scatter-gather versions. The other options is to just
-> port the secure-manager functions into the FPGA Manager.
-> 
-> - Russ
-> 
-> =======================================================================
-> 
-> This is a comparison of the FPGA Security Manager patch-set with the
-> current FPGA Manager. Recommendations are provided on how to the extend
-> the FPGA Manager to support the Security Manager functions.
-> 
-> Purpose of the FPGA Security Manager Class Driver
-> =================================================
-> 
-> The security manager provides a common user API (via sysfs) for transferring
-> an opaque image to the card BMC for validation and disposition with a
-> completion time of up to 40 minutes. A separate trigger function (image_load)
-> can be used to activate a previously transferred image (e.g. FPGA Static
-> Region or BMC image).
-> 
-> Note that secure updates have no notion of Regions, Bridges or FPGA
-> running state.
+Changes for v4:
+		-Rebase the patch series on linux-next.
+		https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
-Not needed.
-> 
-> A successful merge of the Security Manager with the FPGA Manager would include
-> an extension of the FPGA Manager API to provide sysfs nodes to support secure
-> updates.
+Appana Durga Kedareswara rao (1):
+  dt-bindings: fpga: Add binding doc for versal fpga manager
 
-Yes.
-> 
-> The FPGA Security Manager API
-> =============================
-> 
-> Image Update (transfer data to Card BMC for validation & storage)
->   WO: filename, cancel
->   RO: name, status, error, hw_errinfo, remaining_size
-> 
-> Image Load (trigger BMC, FPGA, or FW load from FLASH)
->   RO: available_images  # Images that can be loaded/activated
->   WO: image_load:       # Trigger an image load
-> 
-> 
-> Merging Security Manager and FPGA Manager functions (organized by sysfs-node)
-> =============================================================================
-> 
-> The "name" sysfs node has essentially the same purpose, so no change is
-> required.
-> 
-> The sec-mgr "status" is similar to fpga-mgr "state"
-> The sec-mgr "error" is simliar to fpga-mgr "status"
-> 
-> All others are unique to the security manager.
-> 
-> * RECOMMENDATION: The secure-update sysfs files should be grouped together
-> * in "secure-update" sysfs directory to clearly associate them with the
-> * secure update process and separate them from the other driver functions.
+Nava kishore Manne (3):
+  dt-bindings: firmware: Add bindings for xilinx firmware
+  drivers: firmware: Add PDI load API support
+  fpga: versal-fpga: Add versal fpga manager driver
 
-SGTM.
-> 
-> The sec-mgr sysfs status file has some similarity to the fpga-mgr sysfs
-> state file:
-> 
->     Sec-Mgr status             FPGA-Mgr state
->     --------------             --------------
->                             FPGA_MGR_STATE_UNKNOWN
->                             FPGA_MGR_STATE_POWER_OFF
->                             FPGA_MGR_STATE_POWER_UP
->                             FPGA_MGR_STATE_RESET
-> FPGA_SEC_PROG_IDLE
-> FPGA_SEC_PROG_READING       FPGA_MGR_STATE_FIRMWARE_REQ
->                             FPGA_MGR_STATE_FIRMWARE_REQ_ERR
-> FPGA_SEC_PROG_PREPARING     FPGA_MGR_STATE_WRITE_INIT
->                             FPGA_MGR_STATE_WRITE_INIT_ERR
-> FPGA_SEC_PROG_WRITING       FPGA_MGR_STATE_WRITE
->                             FPGA_MGR_STATE_WRITE_ERR
-> FPGA_SEC_PROG_PROGRAMMING   FPGA_MGR_STATE_WRITE_COMPLETE
->                             FPGA_MGR_STATE_WRITE_COMPLETE_ERR
->                             FPGA_MGR_STATE_OPERATING
-> FPGA_SEC_PROG_IDLE
-> 
-> The sec-mgr sysfs error file seems to be similar in purpose to the
-> fpga-mgr sysfs status file, but there is no overlap in the actual
-> error codes.
-> 
-> * RECOMMENDATION: there is not enough similarity between the status/state and
-> * error/status nodes to try to share them. If all of the other secure-update
-> * related nodes are grouped together in a secure-update directory, it would
-> * probably create confusion to try to share the state and status files that
-> * are in a different location.
+ .../firmware/xilinx/xlnx,zynqmp-firmware.yaml |  63 ++++++++++
+ .../bindings/fpga/xlnx,versal-fpga.yaml       |  33 +++++
+ drivers/firmware/xilinx/zynqmp.c              |  17 +++
+ drivers/fpga/Kconfig                          |   9 ++
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/versal-fpga.c                    | 117 ++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h          |  10 ++
+ 7 files changed, 250 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
+ create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+ create mode 100644 drivers/fpga/versal-fpga.c
 
-Yes.
-> 
-> sysfs: filename
-> ===============
-> 
-> In the current security manager patches, writing the name of an image file
-> to "filename" is roughly equivalent to creating a worker thread and having it
-> call fpga_mgr_load() with info->firmware_name set to the image file name.
-> 
-> The update sequences are similar:
-> 
->     Sec-Mgr ops flow        FPGA-Mgr ops flow
->     ================        =================
->     prepare()               write_init()
->     # Loop on 16KB blocks   write()
->       write_blk()
->     poll_complete()         write_complete()
-> 
-> In the worst case, we have seen n3000 FPGA image updates take up to 40
-> minutes. The remaining_size is updated between each 16KB block to
-> allow users to monitor the progress of the data transfer. The sec-mgr
-> also checks for a cancel flag between each 16KB write and between
-> each stage of the update.
-> 
-> The fpga_mgr has a "buffer" flow and a "scatter-gather" flow. The sec-mgr
-> flow is always started via sysfs and uses request_firmware(), so it only
-> needs one (buffer) flow.
-> 
-> * RECOMMENDATION: keep the update functions separate. Although they are
-> * similar, the fpga-mgr updates are simpler and more readable as they
-> * are. The sec-mgr update is done via kernel worker thread and is a little
-> * more complicated with support for maintaining the remaining size and
-> * with support for cancellation. There currently no need for a scatter-gather
-> * secure update implementation since secure updates use request_firmware.
-> 
-> Note that the sec-mgr supports additional ops:
->     cancel()         : send cancel-request to lower-level driver
->     cleanup()        : optional: called if and only if the prepare op succeeds
->     get_hw_errinfo() : optional: provides device-specific 64-bit error info
-> 
-> sysfs: cancel, status, error, hw_errinfo, remaining_size
-> ========================================================
-> 
-> * RECOMMENDATION: There are no equivalent features in fpga-mgr. Port
-> * these each from the security manager to the FPGA Manager.
+-- 
+2.17.1
 
-SGTM.
-> 
-> sysfs: available_images, load_image
-> ===================================
-> 
->   available_images: RO: list device-specific keywords that can be used
->                     to trigger an image to be loaded/activated. eg.
->                     fpga_factory, fpga_user1, fpga_user2, bmc_factory.
-> 
->   load_image:       WO: trigger the load/activation of an image from FLASH
-> 
-> * RECOMMENDATION: Nothing similar in fpga-mgr. Port functionality to the
-> * FPGA Manager
-> 
-> Conclusion
-> ==========
-> 
-> The purpose of the secure-update support is to provide a common user API
-> for loading an opaque image to a device with completion times of up to 40
-> minutes. The FPGA Manager can be extended to include the sysfs nodes
-> required for a secure update. There is very little opportunity for shared
-> code between the current FPGA Manager and the secure update support.  For
-> the most part, this would be an addition of new functionality.
-
-Sounds good to me overall, sorry for the late response.
-
-- Moritz
