@@ -2,207 +2,94 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A4236ECD3
-	for <lists+linux-fpga@lfdr.de>; Thu, 29 Apr 2021 16:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B488F36F412
+	for <lists+linux-fpga@lfdr.de>; Fri, 30 Apr 2021 04:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbhD2O6C (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 29 Apr 2021 10:58:02 -0400
-Received: from mga03.intel.com ([134.134.136.65]:42588 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232556AbhD2O6B (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 29 Apr 2021 10:58:01 -0400
-IronPort-SDR: /Avq0B02llL/HtSP9g//q/S9mWcSvc1sL0iLkl1OoMNPTOhMoH8qyIqtundFXnhXx2HmoGBU52
- Rtz63MCo4eBQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9969"; a="197069618"
-X-IronPort-AV: E=Sophos;i="5.82,259,1613462400"; 
-   d="scan'208";a="197069618"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2021 07:57:13 -0700
-IronPort-SDR: gJSrSv+nHsc47oysalmZkSpUzWooU42+BJ64KvM4XJJc/bUKl3ShAzDZg8/AzII7N0HaZWKT8n
- oWLT2/bg0pKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,259,1613462400"; 
-   d="scan'208";a="424122601"
-Received: from marshy.an.intel.com (HELO [10.122.105.143]) ([10.122.105.143])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Apr 2021 07:57:12 -0700
-Subject: Re: [PATCHv5 0/7] Extend Intel service layer, FPGA manager and region
-From:   Richard Gong <richard.gong@linux.intel.com>
-To:     Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>
-Cc:     "Gong, Richard" <richard.gong@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        russell.h.weight@intel.com
-References: <1612909233-13867-1-git-send-email-richard.gong@linux.intel.com>
- <MWHPR11MB001577B17723C8A046398249879E9@MWHPR11MB0015.namprd11.prod.outlook.com>
- <YF90y3Di4RbuJvr0@epycbox.lan>
- <496aa871-cfb0-faf4-4b1c-b53e56b58030@redhat.com>
- <YGC619DmLM0AAQ5p@epycbox.lan>
- <8c0fcdde-540b-2ae3-01f2-30cdb87ac037@linux.intel.com>
-Message-ID: <a5e26661-388d-152b-7904-9c39522f7b14@linux.intel.com>
-Date:   Thu, 29 Apr 2021 09:56:54 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229609AbhD3C3r (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 29 Apr 2021 22:29:47 -0400
+Received: from mail-pg1-f175.google.com ([209.85.215.175]:41803 "EHLO
+        mail-pg1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229582AbhD3C3r (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 29 Apr 2021 22:29:47 -0400
+Received: by mail-pg1-f175.google.com with SMTP id m37so5894688pgb.8;
+        Thu, 29 Apr 2021 19:28:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f+ym5C8nmqZrN2w3SYa5W8yqg1cWBbeVoLyKOwLUktI=;
+        b=nVYt6bssRYJC82ldO+QIBAroiHGEDl4Wb0KBE8DII1TEKw48SvhL0AiaKBEWGfdzYO
+         srFGWJ06wmbYyEBGZ1nNpmsZj0J1RyF8+2CQMDlMi4B92YMaUpB/TZ9Mvbdqzlc+02MB
+         MnlLkfW6NMK3IrDpSLFm3QEmKO8bPKIv/sOI6eUTHr2qr/Vqy/uZud08TUKiL8BWo6ER
+         JfbiiYW5kKVvYL528EuP5fHwa4mKQtMrRm4OdMVvsnUJKnGiEvKnhQVWnjCnGb/GfR4K
+         bU2IzduqNJY5u9UqIN7UbbpCfemQmo+ARsoTHF0W8GLPLVFEGjEbNyPMz6Mh8U6c+YuX
+         vcww==
+X-Gm-Message-State: AOAM533qRLCKS4u6duSbkhbYy8TLrixb/lOL0DVaQ7PIPx0mRAvP1Icl
+        LLvDEc9tJEUAp9AI0TUsCLg=
+X-Google-Smtp-Source: ABdhPJxnLTLpdi8/3E6ZaxS32CAhEd9s6DMoRtD4Tu9WfyoAvQHiPKSN3EEDM+h0e9j2wKlI/oqgtw==
+X-Received: by 2002:a63:8c4a:: with SMTP id q10mr2622178pgn.106.1619749738122;
+        Thu, 29 Apr 2021 19:28:58 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id fa17sm3898730pjb.17.2021.04.29.19.28.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Apr 2021 19:28:57 -0700 (PDT)
+Date:   Thu, 29 Apr 2021 19:28:55 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     robh+dt@kernel.org, michal.simek@xilinx.com, mdf@kernel.org,
+        trix@redhat.com, gregkh@linuxfoundation.org, arnd@arndb.de,
+        rajan.vaja@xilinx.com, amit.sunil.dhamne@xilinx.com,
+        manish.narani@xilinx.com, zou_wei@huawei.com,
+        lakshmi.sai.krishna.potthuri@xilinx.com, iwamatsu@nigauri.org,
+        wendy.liang@xilinx.com, linus.walleij@linaro.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        chinnikishore369@gmail.com, git@xilinx.com
+Subject: Re: [PATCH v4 0/4] Add Bitstream configuration support for Versal
+Message-ID: <YItrZ/XTk8Ha0pAZ@epycbox.lan>
+References: <20210429140408.23194-1-nava.manne@xilinx.com>
 MIME-Version: 1.0
-In-Reply-To: <8c0fcdde-540b-2ae3-01f2-30cdb87ac037@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210429140408.23194-1-nava.manne@xilinx.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Hi,
 
-Hi Moritz,
+On Thu, Apr 29, 2021 at 07:34:04PM +0530, Nava kishore Manne wrote:
+> This series Adds FPGA manager driver support for Xilinx Versal SoC.
+> it uses the firmware interface to configure the programmable logic.
+> 
+> Changes for v4:
+> 		-Rebase the patch series on linux-next.
+> 		https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> 
+> Appana Durga Kedareswara rao (1):
+>   dt-bindings: fpga: Add binding doc for versal fpga manager
+> 
+> Nava kishore Manne (3):
+>   dt-bindings: firmware: Add bindings for xilinx firmware
+>   drivers: firmware: Add PDI load API support
+>   fpga: versal-fpga: Add versal fpga manager driver
+> 
+>  .../firmware/xilinx/xlnx,zynqmp-firmware.yaml |  63 ++++++++++
+>  .../bindings/fpga/xlnx,versal-fpga.yaml       |  33 +++++
+>  drivers/firmware/xilinx/zynqmp.c              |  17 +++
+>  drivers/fpga/Kconfig                          |   9 ++
+>  drivers/fpga/Makefile                         |   1 +
+>  drivers/fpga/versal-fpga.c                    | 117 ++++++++++++++++++
+>  include/linux/firmware/xlnx-zynqmp.h          |  10 ++
+>  7 files changed, 250 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
+>  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+>  create mode 100644 drivers/fpga/versal-fpga.c
+> 
+> -- 
+> 2.17.1
+> 
+Series looks good, will wait for Rob's Acks on the DT part.
 
-Not sure if you have chance to view Russ's comments and my comments. 
-Pleas let us know what you think so I can act accordingly.
-
-I had a few discussions with Russ, and we all realized that the goals we 
-were trying to achieve were not as similar as they seemed.
-
-Regards,
-Richard
-
-On 4/12/21 8:41 PM, Richard Gong wrote:
-> 
-> Hi Moritz,
-> 
-> On 3/28/21 12:20 PM, Moritz Fischer wrote:
->> Tom,
->>
->> On Sun, Mar 28, 2021 at 08:40:24AM -0700, Tom Rix wrote:
->>>
->>> On 3/27/21 11:09 AM, Moritz Fischer wrote:
->>>> Hi Richard, Russ,
->>>>
->>>> On Thu, Feb 25, 2021 at 01:07:14PM +0000, Gong, Richard wrote:
->>>>> Hi Moritz,
->>>>>
->>>>> Sorry for asking.
->>>>>
->>>>> When you have chance, can you help review the version 5 patchset 
->>>>> submitted on 02/09/21?
->>>>>
->>>>> Regards,
->>>>> Richard
->>>>>
->>>>> -----Original Message-----
->>>>> From: richard.gong@linux.intel.com <richard.gong@linux.intel.com>
->>>>> Sent: Tuesday, February 9, 2021 4:20 PM
->>>>> To: mdf@kernel.org; trix@redhat.com; gregkh@linuxfoundation.org; 
->>>>> linux-fpga@vger.kernel.org; linux-kernel@vger.kernel.org
->>>>> Cc: Gong, Richard <richard.gong@intel.com>
->>>>> Subject: [PATCHv5 0/7] Extend Intel service layer, FPGA manager and 
->>>>> region
->>>>>
->>>>> From: Richard Gong <richard.gong@intel.com>
->>>>>
->>>>> This is 5th submission of Intel service layer and FPGA patches, 
->>>>> which includes the missing standalone patch in the 4th submission.
->>>>>
->>>>> This submission includes additional changes for Intel service layer 
->>>>> driver to get the firmware version running at FPGA SoC device. Then 
->>>>> FPGA manager driver, one of Intel service layer driver's client, 
->>>>> can decide whether to handle the newly added bitstream 
->>>>> authentication function based on the retrieved firmware version. So 
->>>>> that we can maintain FPGA manager driver the back compatible.
->>>>>
->>>>> Bitstream authentication makes sure a signed bitstream has valid 
->>>>> signatures.
->>>>>
->>>>> The customer sends the bitstream via FPGA framework and overlay, 
->>>>> the firmware will authenticate the bitstream but not program the 
->>>>> bitstream to device. If the authentication passes, the bitstream 
->>>>> will be programmed into QSPI flash and will be expected to boot 
->>>>> without issues.
->>>>>
->>>>> Extend Intel service layer, FPGA manager and region drivers to 
->>>>> support the bitstream authentication feature.
->>>>>
->>>>> Richard Gong (7):
->>>>>    firmware: stratix10-svc: reset COMMAND_RECONFIG_FLAG_PARTIAL to 0
->>>>>    firmware: stratix10-svc: add COMMAND_AUTHENTICATE_BITSTREAM flag
->>>>>    firmware: stratix10-svc: extend SVC driver to get the firmware 
->>>>> version
->>>>>    fpga: fpga-mgr: add FPGA_MGR_BITSTREAM_AUTHENTICATE flag
->>>>>    fpga: of-fpga-region: add authenticate-fpga-config property
->>>>>    dt-bindings: fpga: add authenticate-fpga-config property
->>>>>    fpga: stratix10-soc: extend driver for bitstream authentication
->>>>>
->>>>>   .../devicetree/bindings/fpga/fpga-region.txt       | 10 ++++
->>>>>   drivers/firmware/stratix10-svc.c                   | 12 ++++-
->>>>>   drivers/fpga/of-fpga-region.c                      | 24 ++++++---
->>>>>   drivers/fpga/stratix10-soc.c                       | 62 
->>>>> +++++++++++++++++++---
->>>>>   include/linux/firmware/intel/stratix10-smc.h       | 21 +++++++-
->>>>>   .../linux/firmware/intel/stratix10-svc-client.h    | 11 +++-
->>>>>   include/linux/fpga/fpga-mgr.h                      |  3 ++
->>>>>   7 files changed, 125 insertions(+), 18 deletions(-)
->>>>>
->>>>> -- 
->>>>> 2.7.4
->>>>>
->>>> Apologies for the epic delay in getting back to this, I took another
->>>> look at this patchset and Russ' patchset.
->>>>
->>>> TL;DR I'm not really a fan of using device-tree overlays for this (and
->>>> again, apologies, I should've voiced this earlier ...).
->>>>
->>>> Anyways, let's find a common API for this and Russ' work, they're 
->>>> trying
->>>> to achieve the same / similar thing, they should use the same API.
->>>>
->>>> I'd like to re-invetigate the possiblity to extend FPGA Manager with
->>>> 'secure update' ops that work for both these use-cases (and I susspect
->>>> hte XRT patchset will follow with a similar requirement, right after).
->>>
->>> The xrt patchset makes heavy use of device trees.
->>>
->>> What is the general guidance for device tree usage ?
->>
->> I'm not generally against using device tree, it has its place. To
->> describe hardware (and hardware *changes* with overlays) :)
->>
->> What I don't like about this particular implementation w.r.t device-tree
->> usage is that it uses DT overlays as a mechanism to program the flash --
->> in place of having an API to do so.
->>
->> One could add device-nodes during the DT overlay application, while the
->> FPGA doesn't actually get programmed with a new runtime image -- meaning
->> live DT and actual hardware state diverged -- worst case it'd crash.
->>
->> So when roughly at the same time (from the same company even) we have two
->> patchsets that do similar things with radically different APIs I think
->> we should pause, and reflect on whether we can come up with something
->> that works for both :)
->>
-> 
-> I discussed with Russ and studies his patches, came to realize that the 
-> work we had to accomplish was not same or similar. What I want to 
-> achieve is to verify the identity of the bitstream, which is like doing 
-> a "dry-run" to FPGA configuration.
-> 
-> Performing FPGA configuration (full or partial) through the device tree 
-> overlay is a method widely used by our customers.
-> 
-> Russ's approach utilizes a different user API which is a set of sysfs 
-> files.
-> 
-> If we depart from device tree overlay, then the end-user must utilize 2 
-> different mechanism or APIs (device tree overlay is used for 
-> full/partial configuration, and sysfs is used for bitstream 
-> authentication). Similarly low-level FPGA manager driver also needs to 
-> add additional codes. For the end-user the single and simple mechanism 
-> is always better choice, device tree overlay should be a better way to 
-> achieve that goal.
-> 
-> Regards,
-> Richard
-> 
->> TL;DR the firmware parts to authenticate the bitstream look fine to 
->> me, the
->> way we tie it into the FPGA region I'm not a fan of.
->>
->> - Moritz
->>
+Thanks,
+Moritz
