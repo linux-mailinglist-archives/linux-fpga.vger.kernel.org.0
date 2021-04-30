@@ -2,94 +2,99 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B488F36F412
-	for <lists+linux-fpga@lfdr.de>; Fri, 30 Apr 2021 04:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1AD36FDB2
+	for <lists+linux-fpga@lfdr.de>; Fri, 30 Apr 2021 17:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbhD3C3r (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 29 Apr 2021 22:29:47 -0400
-Received: from mail-pg1-f175.google.com ([209.85.215.175]:41803 "EHLO
-        mail-pg1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbhD3C3r (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 29 Apr 2021 22:29:47 -0400
-Received: by mail-pg1-f175.google.com with SMTP id m37so5894688pgb.8;
-        Thu, 29 Apr 2021 19:28:58 -0700 (PDT)
+        id S229532AbhD3PZp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 30 Apr 2021 11:25:45 -0400
+Received: from mail-oo1-f42.google.com ([209.85.161.42]:33478 "EHLO
+        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229759AbhD3PZo (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 30 Apr 2021 11:25:44 -0400
+Received: by mail-oo1-f42.google.com with SMTP id e9-20020a4ada090000b02901f91091e5acso3502220oou.0;
+        Fri, 30 Apr 2021 08:24:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f+ym5C8nmqZrN2w3SYa5W8yqg1cWBbeVoLyKOwLUktI=;
-        b=nVYt6bssRYJC82ldO+QIBAroiHGEDl4Wb0KBE8DII1TEKw48SvhL0AiaKBEWGfdzYO
-         srFGWJ06wmbYyEBGZ1nNpmsZj0J1RyF8+2CQMDlMi4B92YMaUpB/TZ9Mvbdqzlc+02MB
-         MnlLkfW6NMK3IrDpSLFm3QEmKO8bPKIv/sOI6eUTHr2qr/Vqy/uZud08TUKiL8BWo6ER
-         JfbiiYW5kKVvYL528EuP5fHwa4mKQtMrRm4OdMVvsnUJKnGiEvKnhQVWnjCnGb/GfR4K
-         bU2IzduqNJY5u9UqIN7UbbpCfemQmo+ARsoTHF0W8GLPLVFEGjEbNyPMz6Mh8U6c+YuX
-         vcww==
-X-Gm-Message-State: AOAM533qRLCKS4u6duSbkhbYy8TLrixb/lOL0DVaQ7PIPx0mRAvP1Icl
-        LLvDEc9tJEUAp9AI0TUsCLg=
-X-Google-Smtp-Source: ABdhPJxnLTLpdi8/3E6ZaxS32CAhEd9s6DMoRtD4Tu9WfyoAvQHiPKSN3EEDM+h0e9j2wKlI/oqgtw==
-X-Received: by 2002:a63:8c4a:: with SMTP id q10mr2622178pgn.106.1619749738122;
-        Thu, 29 Apr 2021 19:28:58 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id fa17sm3898730pjb.17.2021.04.29.19.28.56
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=O++0IJzSQB4iNoVIxshkaBPDcmxCVjUNe7XgEw3Js0o=;
+        b=QpHLSaw8J6YnvmWgV6r3sF1n6wy/gtfm5tyusgROh+q/R2TYleTX5vlts9GgifMINU
+         0IMBiQC5n/bc5S7KPWnjuHm4ZUts3OFoJTa7m8Ts605+ny/AfETe31G1OcysJYpwzl+U
+         lnaAMKuXbwPhWlqynOXdlhDUnt9xfwZYW7DymPJpAdTusyvbjNqLbdAIzAOqTgWKCnkA
+         u5TZ3p1Lgy2HPyChicTs+FwfDMx1AVs9y+jR6iiXA9IxnnwbsW2k37+dBpSIhyBSYCT9
+         SSs0vQ4W6+kG5l/ptxOgi+zdES5O1I2YHHFKcwxlXBcny+sxDl9FeZ8qOxBaQ0ROvpWN
+         98Fw==
+X-Gm-Message-State: AOAM532u6Pwu38o5OFYB0HEYL+xFTSOpzRa5CUXLkOvWaiyTforbXq3E
+        0STy2rumbI8wtlpi7b1Ztw==
+X-Google-Smtp-Source: ABdhPJwbb7zE35ajWhOlf/ed6tkFszx1FfE8AvqSHAXlK4IAj7JZBJqZEG3kmn1PD3AcwDFVB7rpEQ==
+X-Received: by 2002:a4a:aa41:: with SMTP id y1mr3783129oom.52.1619796296223;
+        Fri, 30 Apr 2021 08:24:56 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id s131sm838180oib.14.2021.04.30.08.24.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Apr 2021 19:28:57 -0700 (PDT)
-Date:   Thu, 29 Apr 2021 19:28:55 -0700
-From:   Moritz Fischer <mdf@kernel.org>
+        Fri, 30 Apr 2021 08:24:55 -0700 (PDT)
+Received: (nullmailer pid 3353970 invoked by uid 1000);
+        Fri, 30 Apr 2021 15:24:53 -0000
+From:   Rob Herring <robh@kernel.org>
 To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     robh+dt@kernel.org, michal.simek@xilinx.com, mdf@kernel.org,
-        trix@redhat.com, gregkh@linuxfoundation.org, arnd@arndb.de,
-        rajan.vaja@xilinx.com, amit.sunil.dhamne@xilinx.com,
-        manish.narani@xilinx.com, zou_wei@huawei.com,
-        lakshmi.sai.krishna.potthuri@xilinx.com, iwamatsu@nigauri.org,
-        wendy.liang@xilinx.com, linus.walleij@linaro.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        chinnikishore369@gmail.com, git@xilinx.com
-Subject: Re: [PATCH v4 0/4] Add Bitstream configuration support for Versal
-Message-ID: <YItrZ/XTk8Ha0pAZ@epycbox.lan>
-References: <20210429140408.23194-1-nava.manne@xilinx.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210429140408.23194-1-nava.manne@xilinx.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        rajan.vaja@xilinx.com, lakshmi.sai.krishna.potthuri@xilinx.com,
+        git@xilinx.com, gregkh@linuxfoundation.org,
+        amit.sunil.dhamne@xilinx.com, mdf@kernel.org,
+        linus.walleij@linaro.org, manish.narani@xilinx.com,
+        iwamatsu@nigauri.org, trix@redhat.com, arnd@arndb.de,
+        michal.simek@xilinx.com, wendy.liang@xilinx.com,
+        linux-fpga@vger.kernel.org, robh+dt@kernel.org,
+        chinnikishore369@gmail.com, zou_wei@huawei.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20210429140408.23194-2-nava.manne@xilinx.com>
+References: <20210429140408.23194-1-nava.manne@xilinx.com> <20210429140408.23194-2-nava.manne@xilinx.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: firmware: Add bindings for xilinx firmware
+Date:   Fri, 30 Apr 2021 10:24:53 -0500
+Message-Id: <1619796293.713078.3353969.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi,
-
-On Thu, Apr 29, 2021 at 07:34:04PM +0530, Nava kishore Manne wrote:
-> This series Adds FPGA manager driver support for Xilinx Versal SoC.
-> it uses the firmware interface to configure the programmable logic.
+On Thu, 29 Apr 2021 19:34:05 +0530, Nava kishore Manne wrote:
+> Add documentation to describe Xilinx firmware driver bindings.
+> Firmware driver provides an interface to firmware APIs.
+> Interface APIs can be used by any driver to communicate
+> to Platform Management Unit.
 > 
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> ---
 > Changes for v4:
-> 		-Rebase the patch series on linux-next.
-> 		https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>                 -Added new yaml file for xilinx firmware
+>                  as suggested by Rob.
 > 
-> Appana Durga Kedareswara rao (1):
->   dt-bindings: fpga: Add binding doc for versal fpga manager
-> 
-> Nava kishore Manne (3):
->   dt-bindings: firmware: Add bindings for xilinx firmware
->   drivers: firmware: Add PDI load API support
->   fpga: versal-fpga: Add versal fpga manager driver
-> 
->  .../firmware/xilinx/xlnx,zynqmp-firmware.yaml |  63 ++++++++++
->  .../bindings/fpga/xlnx,versal-fpga.yaml       |  33 +++++
->  drivers/firmware/xilinx/zynqmp.c              |  17 +++
->  drivers/fpga/Kconfig                          |   9 ++
->  drivers/fpga/Makefile                         |   1 +
->  drivers/fpga/versal-fpga.c                    | 117 ++++++++++++++++++
->  include/linux/firmware/xlnx-zynqmp.h          |  10 ++
->  7 files changed, 250 insertions(+)
+>  .../firmware/xilinx/xlnx,zynqmp-firmware.yaml | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
 >  create mode 100644 Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
->  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
->  create mode 100644 drivers/fpga/versal-fpga.c
 > 
-> -- 
-> 2.17.1
-> 
-Series looks good, will wait for Rob's Acks on the DT part.
 
-Thanks,
-Moritz
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/xlnx,versal-clk.example.dt.yaml: zynqmp-firmware: 'clock-controller' does not match any of the regexes: 'fpga', 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.example.dt.yaml: zynqmp-firmware: 'zynqmp-aes' does not match any of the regexes: 'fpga', 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
+Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.example.dt.yaml:0:0: /example-0/versal-firmware/fpga: failed to match any schema with compatible: ['xlnx,versal-fpga']
+
+See https://patchwork.ozlabs.org/patch/1471741
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
