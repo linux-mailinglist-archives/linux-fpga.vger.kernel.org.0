@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 980AF3728C2
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 May 2021 12:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB413728CB
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 May 2021 12:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbhEDKX7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 May 2021 06:23:59 -0400
-Received: from mail-mw2nam10on2051.outbound.protection.outlook.com ([40.107.94.51]:38517
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        id S230310AbhEDKYX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 May 2021 06:24:23 -0400
+Received: from mail-dm6nam12on2079.outbound.protection.outlook.com ([40.107.243.79]:39124
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230218AbhEDKXz (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 4 May 2021 06:23:55 -0400
+        id S230338AbhEDKYM (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 4 May 2021 06:24:12 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I+VC2cRYKzQv9oSKNBdGUlrvZ+DM9oNPxNFYoPUwCWExiHtzcmta+eFPbwgm78XJxhqAOQHRGR2Chg62OvVhvLu1Sx4jFmiIUYBY22hi2LMlSQh3dfrZ0OI/MszffV4Er/M5ip8/hzf6JUV1GxZYHHvhSumX4SKElNeN1g1p1X8fRwV1xfjc0maQRfVjFg2KTcievdXZSXgIR9dSFFrbuJ9jLUkfsOTKJrrb0sEscqpIoTFcMP678byA8dblzaE15sHfdkQb+xlV6wBFu9wCTrDehWepDDpOerH1vC/3U616UMqQrWbrlo7b4yslqq52BRBwPMmKlzSfbtHjXE9iLA==
+ b=PkwCri5PqRDrxZMN0hlEb1IbtCoN0yu4Tvn2fw5cUbk+BXA55zFrTT0iki2gynoScpkGpfDouLpjCYBn7W26MGSape+p4SpxkkWXtB2TCoDSJtuLHjvNwceKHA+z++EzbMkFtXeOluCydqTHFydmvFW5iliHiNjwWLlB3szay1jtMECWVctSlvH2xoAHQEO6sw+eYyi7f36SWTcsDSgfwwXG2NVDl0nr36HXvckn3PkLdgla7u79eUPBIfRS9g+aLIR8hQrGDJu5NlPJJ7yqjwes47gnTRpDPhPn0NnFq92KQutgFgsFgxbP5Haqm8u6eNlKMpT/5Y2J87yZAjF+bw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lK7ltAR+odXS+1lyHwU2R7vWKUZKsrUOnSZGTMytPwE=;
- b=Q1WfnOLlOADeTavupquEml+VKJ+QoNUW3wm6WlArcWrX6ZuJGsJ2t9VjkUQOXy+w/26UCsQXF0hTbB1HbEEHBGj30LQl/ppaj0TEn1mbt4y78ElvIEj6BUuHPZN0h3yqxmOzoNRv3JNUHHQpU8wcJFAPqOlR09AeXJB7OB4DK7pFy5ZlajvNAKChrAf0APIwKIUMOdHkMLRJ5qlKmgnv+3BopD/rR/kB/igbjl2VaVvWxQDsJ28JR9nZQGEqRGc4+smvk6kACNTQfvopCs2N/4u+uZStTITmxuLaA81H+6xmFVNB4pY7FOnt8rK3wGLY8MrG+RC5PF/stJLDUd8BCQ==
+ bh=BbSIYtBiWGmu7mZvmS/YkpSyVRIFytYBz9fMtp0Mn1Q=;
+ b=FPOPYk3M/ubhsFQ4ZFJfEGB9Tm8oRz75BqIW3qE6HPChkIzp9bGvoo6PASXUpS5p16Y7D7Q4h5VWyj+e7MVxutnYDohwWMcXVATW8Ky2Vs02lout0mtqt/aI5WJAsyGeHgxCdBFNkbbqphR2iK50Zbq6DaR1a8yimlEojiN22SeOjNE0rZRmamXltqRZ6xXYrI/4eDE1NqiD2fmUwftXQBMp7kUB3NJplrC+Q+stp1vvYvi1D/Yn31X4Nd0WX+AK9G4hn8vfg4yf+hJNu/047HqETb7tVAqZonvyeJooU1vDYQt8uhZRMN1w2LDYW3GL1duoyHfKLeBky4WyXDf7Dg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,35 +26,35 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lK7ltAR+odXS+1lyHwU2R7vWKUZKsrUOnSZGTMytPwE=;
- b=GpF3FF1H7WtYd3dLyaLZVDIhRhMlkiPEESydBlV1BzRM+H4S0Tja/hmD5ioBcYNJdCfWy+r/JluiM3ONSNV5HOqvP4m550rTLLgdw3EtzjirBs4nFhy8vSpzuyQoBH/E2OZNZs0nfGiEBSrdjswMLaZ9zZnogRNASnyXBnJlf8o=
-Received: from SN4PR0201CA0020.namprd02.prod.outlook.com
- (2603:10b6:803:2b::30) by MWHPR02MB2399.namprd02.prod.outlook.com
- (2603:10b6:300:5c::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.38; Tue, 4 May
- 2021 10:22:59 +0000
-Received: from SN1NAM02FT040.eop-nam02.prod.protection.outlook.com
- (2603:10b6:803:2b:cafe::9e) by SN4PR0201CA0020.outlook.office365.com
- (2603:10b6:803:2b::30) with Microsoft SMTP Server (version=TLS1_2,
+ bh=BbSIYtBiWGmu7mZvmS/YkpSyVRIFytYBz9fMtp0Mn1Q=;
+ b=VO9QrQWavTW0HDHZapK8Q4qP3+8TCo4tptcZ17qQ4Mc9A1wadmIxPAjSte2WrvApC9eLuCxEdVgPPe0VeeCcU0vC7Xkv6TiP8jjyAs25D/tpz/2ZhROVS5yA5FyJuI2V0qrV0DKHpKjBn5LbuurFKw/dDRXqXOv50AIQK+Usm14=
+Received: from BN8PR12CA0011.namprd12.prod.outlook.com (2603:10b6:408:60::24)
+ by BN6PR02MB2417.namprd02.prod.outlook.com (2603:10b6:404:52::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.41; Tue, 4 May
+ 2021 10:23:12 +0000
+Received: from BN1NAM02FT015.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:60:cafe::43) by BN8PR12CA0011.outlook.office365.com
+ (2603:10b6:408:60::24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.24 via Frontend
- Transport; Tue, 4 May 2021 10:22:58 +0000
+ Transport; Tue, 4 May 2021 10:23:12 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT040.mail.protection.outlook.com (10.152.72.195) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT015.mail.protection.outlook.com (10.13.2.132) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4065.21 via Frontend Transport; Tue, 4 May 2021 10:22:58 +0000
+ 15.20.4065.21 via Frontend Transport; Tue, 4 May 2021 10:23:12 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 4 May 2021 03:22:52 -0700
+ 15.1.2176.2; Tue, 4 May 2021 03:22:58 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Tue, 4 May 2021 03:22:52 -0700
+ 15.1.2176.2 via Frontend Transport; Tue, 4 May 2021 03:22:58 -0700
 Envelope-to: git@xilinx.com,
  mdf@kernel.org,
  trix@redhat.com,
@@ -71,7 +71,7 @@ Envelope-to: git@xilinx.com,
 Received: from [10.140.6.60] (port=35290 helo=xhdnavam40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <nava.manne@xilinx.com>)
-        id 1ldsCZ-000192-Ej; Tue, 04 May 2021 03:22:51 -0700
+        id 1ldsCe-000192-OU; Tue, 04 May 2021 03:22:57 -0700
 From:   Nava kishore Manne <nava.manne@xilinx.com>
 To:     <mdf@kernel.org>, <trix@redhat.com>, <robh+dt@kernel.org>,
         <michal.simek@xilinx.com>, <arnd@arndb.de>,
@@ -84,9 +84,9 @@ To:     <mdf@kernel.org>, <trix@redhat.com>, <robh+dt@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <git@xilinx.com>,
         <chinnikishore369@gmail.com>
-Subject: [RFC PATCH 3/4] drivers: fpga: Add user-key encrypted FPGA Image loading support
-Date:   Tue, 4 May 2021 15:52:26 +0530
-Message-ID: <20210504102227.15475-4-nava.manne@xilinx.com>
+Subject: [RFC PATCH 4/4] fpga: zynqmp: Add user-key encrypted FPGA Image loading support
+Date:   Tue, 4 May 2021 15:52:27 +0530
+Message-ID: <20210504102227.15475-5-nava.manne@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210504102227.15475-1-nava.manne@xilinx.com>
 References: <20210504102227.15475-1-nava.manne@xilinx.com>
@@ -94,145 +94,118 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9c189947-b1e2-4d56-56a5-08d90ee69706
-X-MS-TrafficTypeDiagnostic: MWHPR02MB2399:
-X-Microsoft-Antispam-PRVS: <MWHPR02MB23992DFA31A2BAD1FB6A6215C25A9@MWHPR02MB2399.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 6502a95d-6585-4c42-f0d4-08d90ee69f6d
+X-MS-TrafficTypeDiagnostic: BN6PR02MB2417:
+X-Microsoft-Antispam-PRVS: <BN6PR02MB2417E900891B558AFAFB7095C25A9@BN6PR02MB2417.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Oob-TLC-OOBClassifiers: OLM:480;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zTDlbVOat4JjzNMWDt4FZzDHCtB83jaK/AS9IREOxQB7AltmEx4J4YTa9boaNrvQO4LqU3cZIidmHb+E8oFyQtmRnPkyjY28OOtMHuS/34v15cjP6PhyyNBP2LQMO9aLe5lJ3FPX+lil8ax7+lQjT1pXFjAtLVAWyF5EDy+GU/D1Jnd3nu2LXUf+pfo4Yc8U7SU/5xhYxUEvx1xNWHIk0fpckKFE0jDOAHwqoxlH03d5zXHL1+rV7rCFH0QhIQAZIf9F0uxDy/Psy2arbtlrwPMoYyrCU80GHlM52VXmeonSnfuSb1oNjhqFpoAU7vOaUjYW7BaHWYzQm6TVKI2H+MnZh1n/yl+OUz3O7/Px0ntQwuAt0dYnLlJqZjuTe+ADSvCEzNx6INaGuQNiLkreGlitZ0njYwmpZxvbAz2WEMkmrnKWIovDmbu7zNnQ3s2hxBiNvko6W/38v3PRlZe/GaQQUonZ1UVGuN0lcPLQcJLGHUD/p5zaabeUxk8F5xTdo38hAdr6dayC1KYDZAO9rAChUZz3osKMXYUqZovzPiKFYhgDtOLjBp4aVD8mDDPU6txDri0GziQUNvouCImU2FG8tu3s668Wd0hxTXu8F+GtXev3FPZopww05ffSGIJBPUSutiR6HzIoJKjQwP0OubB73Xxjh581P1oKdu2ZVmzCF07zlEUXtGZa/ToKQ3AIxV+QfywBRNNCQyPz5Ka0cyyqQZVhbvx3hlCClTvqsxmxXSDbTWBkfuJCVtwyjkdJ
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(39860400002)(396003)(136003)(376002)(346002)(36840700001)(46966006)(7696005)(6666004)(316002)(478600001)(8676002)(82310400003)(8936002)(1076003)(356005)(7416002)(36756003)(110136005)(2616005)(921005)(186003)(2906002)(36906005)(5660300002)(336012)(7636003)(82740400003)(70586007)(83380400001)(47076005)(426003)(26005)(70206006)(36860700001)(9786002)(102446001)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: BY2VTevOB0UE3h8aS0r32qgPMCvPm09pu3KBqCDERd0o8RKd6wVbMfpvqyf5uR1P3IvdysrHIklzCUkp4GkbDB6lbheSxkFydLHPF4pgAfjaPDnR6cVWdQTtEJ74CkRThSFjnuilV+W3IF1NsPd9+UEFivXoFatgwJrFlqN8TK7ZF2trUVGhhW9DDruFLA7svAp8H1rKjsA/ZWCCKNwzELBZdVHpWzEr+YxrpMp48cDMxztEarwnqQMAaS0PvnKR7D34Db9UJg3C8MtY07pVKv0frDbrMSeolTAGwhtIarPR8d/FeKanSCE7u7XhvKA7gmtRGrGNKBWMJgEzEOlNaUHOejoMUUcw1yP+XICrvPQ3ZaEadvVhdu5k8LweEHJBD2/O/OG81NI5s4pXt375jiMEU8cwFY2WFzMZYql4UTXO3qS9IiAFzVu27wGRPkT9xSEryEgzgZGynwx12u16uvEjneIJMMmNvO18kyheNy5XU12q5YrMwxuEiO7DO7fMU7ekrQaBBTLCF3HjxH438os4kTTznozQ/5J9RLcc0C7emznVkUuFIi6kY1UKGGWF3QZMiTOSE5J0AemMeUy8tCLtu5/ZsJBYvBuSjJ6Se2KB5taG68J9yLjNGcrbOVFccm4YKTF3Grsrb8hobNfEhkRqVpjA9QoxVzngQ7TYRiVHiAtcgUTmZNrGp5znl+e6pkHartMlCUeJcnT8oFAgPXaueeDWeWtGhE4z698dTqaz81RaCpPLtlO+iyFWAl94
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(39850400004)(136003)(376002)(346002)(46966006)(36840700001)(47076005)(921005)(7696005)(2616005)(316002)(82310400003)(6666004)(70586007)(8936002)(70206006)(82740400003)(7416002)(356005)(5660300002)(36906005)(26005)(478600001)(110136005)(36756003)(7636003)(83380400001)(1076003)(426003)(36860700001)(186003)(2906002)(9786002)(336012)(8676002)(102446001)(2101003)(83996005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2021 10:22:58.7868
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2021 10:23:12.8275
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c189947-b1e2-4d56-56a5-08d90ee69706
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6502a95d-6585-4c42-f0d4-08d90ee69f6d
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT040.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT015.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2399
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2417
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This patch adds user-key encrypted FPGA Image loading support
-to the framework.
+This patch adds support to load the user-key encrypted FPGA
+Image loading to the Xilinx ZynqMP Soc.
 
 Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
 ---
- drivers/fpga/fpga-mgr.c       | 15 +++++++++++++++
- drivers/fpga/of-fpga-region.c | 13 +++++++++++++
- include/linux/fpga/fpga-mgr.h |  7 +++++++
- 3 files changed, 35 insertions(+)
+ drivers/fpga/zynqmp-fpga.c           | 24 ++++++++++++++++++++++--
+ include/linux/firmware/xlnx-zynqmp.h |  2 ++
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-index b85bc47c91a9..3e79ab8cc86f 100644
---- a/drivers/fpga/fpga-mgr.c
-+++ b/drivers/fpga/fpga-mgr.c
-@@ -325,6 +325,7 @@ static int fpga_mgr_firmware_load(struct fpga_manager *mgr,
- 				  const char *image_name)
+diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
+index 125743c9797f..565ebe9e1610 100644
+--- a/drivers/fpga/zynqmp-fpga.c
++++ b/drivers/fpga/zynqmp-fpga.c
+@@ -22,6 +22,8 @@
+  */
+ struct zynqmp_fpga_priv {
+ 	struct device *dev;
++	const char *key_buf;
++	size_t key_size;
+ 	u32 flags;
+ };
+ 
+@@ -33,6 +35,8 @@ static int zynqmp_fpga_ops_write_init(struct fpga_manager *mgr,
+ 
+ 	priv = mgr->priv;
+ 	priv->flags = info->flags;
++	priv->key_buf = info->enc_key_buf;
++	priv->key_size = info->enc_key_buf_size;
+ 
+ 	return 0;
+ }
+@@ -41,9 +45,9 @@ static int zynqmp_fpga_ops_write(struct fpga_manager *mgr,
+ 				 const char *buf, size_t size)
  {
- 	struct device *dev = &mgr->dev;
-+	const struct firmware *enc_fw;
- 	const struct firmware *fw;
+ 	struct zynqmp_fpga_priv *priv;
+-	dma_addr_t dma_addr;
++	dma_addr_t dma_addr, key_addr;
+ 	u32 eemi_flags = 0;
+-	char *kbuf;
++	char *kbuf, *key_kbuf;
  	int ret;
  
-@@ -339,8 +340,22 @@ static int fpga_mgr_firmware_load(struct fpga_manager *mgr,
- 		return ret;
- 	}
+ 	priv = mgr->priv;
+@@ -54,13 +58,29 @@ static int zynqmp_fpga_ops_write(struct fpga_manager *mgr,
  
-+	if (info->encrypted_key_name) {
-+		ret = request_firmware(&enc_fw, info->encrypted_key_name, dev);
-+		if (ret) {
-+			mgr->state = FPGA_MGR_STATE_FIRMWARE_REQ_ERR;
-+			dev_err(dev, "Error requesting firmware %s\n",
-+				info->encrypted_key_name);
-+			return ret;
-+		}
-+		info->enc_key_buf = enc_fw->data;
-+		info->enc_key_buf_size = enc_fw->size;
+ 	memcpy(kbuf, buf, size);
+ 
++	if (priv->flags & FPGA_MGR_ENCRYPTED_USER_KEY_BITSTREAM) {
++		eemi_flags |= XILINX_ZYNQMP_PM_FPGA_ENC_USER_KEY;
++		key_kbuf = dma_alloc_coherent(priv->dev, size, &key_addr,
++					      GFP_KERNEL);
++		if (!key_kbuf)
++			return -ENOMEM;
++		memcpy(key_kbuf, priv->key_buf, priv->key_size);
 +	}
 +
- 	ret = fpga_mgr_buf_load(mgr, info, fw->data, fw->size);
+ 	wmb(); /* ensure all writes are done before initiate FW call */
  
-+	if (info->encrypted_key_name)
-+		release_firmware(enc_fw);
- 	release_firmware(fw);
+ 	if (priv->flags & FPGA_MGR_PARTIAL_RECONFIG)
+ 		eemi_flags |= XILINX_ZYNQMP_PM_FPGA_PARTIAL;
+ 
++	if (priv->flags & FPGA_MGR_ENCRYPTED_USER_KEY_BITSTREAM)
++		ret = zynqmp_pm_fpga_enc_key_load(key_addr, priv->key_size);
++
+ 	ret = zynqmp_pm_fpga_load(dma_addr, size, eemi_flags);
+ 
++	if (priv->flags & FPGA_MGR_ENCRYPTED_USER_KEY_BITSTREAM)
++		dma_free_coherent(priv->dev, priv->key_size,
++				  key_kbuf, key_addr);
++
+ 	dma_free_coherent(priv->dev, size, kbuf, dma_addr);
  
  	return ret;
-diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
-index e405309baadc..19faa463d96e 100644
---- a/drivers/fpga/of-fpga-region.c
-+++ b/drivers/fpga/of-fpga-region.c
-@@ -195,6 +195,7 @@ static struct fpga_image_info *of_fpga_region_parse_ov(
- {
- 	struct device *dev = &region->dev;
- 	struct fpga_image_info *info;
-+	const char *encrypted_key_name;
- 	const char *firmware_name;
- 	int ret;
- 
-@@ -228,6 +229,18 @@ static struct fpga_image_info *of_fpga_region_parse_ov(
- 	if (of_property_read_bool(overlay, "encrypted-fpga-config"))
- 		info->flags |= FPGA_MGR_ENCRYPTED_BITSTREAM;
- 
-+	if (of_property_read_bool(overlay, "encrypted-user-key-fpga-config")) {
-+		if (!of_property_read_string(overlay, "encrypted-key-name",
-+					     &encrypted_key_name)) {
-+			info->encrypted_key_name =
-+			devm_kstrdup(dev, encrypted_key_name, GFP_KERNEL);
-+			if (!info->encrypted_key_name)
-+				return ERR_PTR(-ENOMEM);
-+		}
-+
-+		info->flags |= FPGA_MGR_ENCRYPTED_USER_KEY_BITSTREAM;
-+	}
-+
- 	if (!of_property_read_string(overlay, "firmware-name",
- 				     &firmware_name)) {
- 		info->firmware_name = devm_kstrdup(dev, firmware_name,
-diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
-index 2bc3030a69e5..ac86f4398c3c 100644
---- a/include/linux/fpga/fpga-mgr.h
-+++ b/include/linux/fpga/fpga-mgr.h
-@@ -67,12 +67,15 @@ enum fpga_mgr_states {
-  * %FPGA_MGR_BITSTREAM_LSB_FIRST: SPI bitstream bit order is LSB first
-  *
-  * %FPGA_MGR_COMPRESSED_BITSTREAM: FPGA bitstream is compressed
-+ * %FPGA_MGR_ENCRYPTED_USER_KEY_BITSTREAM: indicates bitstream is encrypted
-+ *					   with user-key
+diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
+index 7aa9ad40ff53..a767386d930a 100644
+--- a/include/linux/firmware/xlnx-zynqmp.h
++++ b/include/linux/firmware/xlnx-zynqmp.h
+@@ -56,9 +56,11 @@
+  * Firmware FPGA Manager flags
+  * XILINX_ZYNQMP_PM_FPGA_FULL:	FPGA full reconfiguration
+  * XILINX_ZYNQMP_PM_FPGA_PARTIAL: FPGA partial reconfiguration
++ * XILINX_ZYNQMP_PM_FPGA_ENC_USER_KEY: User-key Encrypted FPGA reconfiguration
   */
- #define FPGA_MGR_PARTIAL_RECONFIG	BIT(0)
- #define FPGA_MGR_EXTERNAL_CONFIG	BIT(1)
- #define FPGA_MGR_ENCRYPTED_BITSTREAM	BIT(2)
- #define FPGA_MGR_BITSTREAM_LSB_FIRST	BIT(3)
- #define FPGA_MGR_COMPRESSED_BITSTREAM	BIT(4)
-+#define FPGA_MGR_ENCRYPTED_USER_KEY_BITSTREAM	BIT(5)
+ #define XILINX_ZYNQMP_PM_FPGA_FULL	0x0U
+ #define XILINX_ZYNQMP_PM_FPGA_PARTIAL	BIT(0)
++#define XILINX_ZYNQMP_PM_FPGA_ENC_USER_KEY	BIT(3)
  
- /**
-  * struct fpga_image_info - information specific to a FPGA image
-@@ -82,6 +85,7 @@ enum fpga_mgr_states {
-  * @config_complete_timeout_us: maximum time for FPGA to switch to operating
-  *	   status in the write_complete op.
-  * @firmware_name: name of FPGA image firmware file
-+ * @encrypted_key_name: name of the FPGA image encrypted user-key file
-  * @sgt: scatter/gather table containing FPGA image
-  * @buf: contiguous buffer containing FPGA image
-  * @count: size of buf
-@@ -95,8 +99,11 @@ struct fpga_image_info {
- 	u32 disable_timeout_us;
- 	u32 config_complete_timeout_us;
- 	char *firmware_name;
-+	char *encrypted_key_name;
- 	struct sg_table *sgt;
-+	const char *enc_key_buf;
- 	const char *buf;
-+	size_t enc_key_buf_size;
- 	size_t count;
- 	int region_id;
- 	struct device *dev;
+ enum pm_api_id {
+ 	PM_GET_API_VERSION = 1,
 -- 
 2.17.1
 
