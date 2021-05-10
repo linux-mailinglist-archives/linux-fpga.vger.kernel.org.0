@@ -2,161 +2,601 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D88B379520
-	for <lists+linux-fpga@lfdr.de>; Mon, 10 May 2021 19:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AA23795DA
+	for <lists+linux-fpga@lfdr.de>; Mon, 10 May 2021 19:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbhEJRNk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 10 May 2021 13:13:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56086 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231768AbhEJRNj (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 10 May 2021 13:13:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620666754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/CIW2YCfIyemvqkNlDrF54CSJZHkshL2bUv5uy7OmnQ=;
-        b=gKpZeuWymEV2+L4c6jPrm3/ZtlrKOZBMZDaeRBm2ykzGM/6ciujq/0JHdtcuSBBbOYfcQd
-        zT2GeTdqM3CQb8gqjomfyt0XiuP+c8th5o+Ug9noCWjctj4o5kDwRonlDVG7/nf95gPG/o
-        qpDFql2XVtXIKWRadjJSOFT5ArYed5M=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-215-WoByE6wmN6Sn6jgkEiwgYQ-1; Mon, 10 May 2021 13:12:33 -0400
-X-MC-Unique: WoByE6wmN6Sn6jgkEiwgYQ-1
-Received: by mail-qt1-f199.google.com with SMTP id a15-20020a05622a02cfb02901b5e54ac2e5so10870411qtx.4
-        for <linux-fpga@vger.kernel.org>; Mon, 10 May 2021 10:12:33 -0700 (PDT)
+        id S233024AbhEJRaM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 10 May 2021 13:30:12 -0400
+Received: from mail-pf1-f177.google.com ([209.85.210.177]:45802 "EHLO
+        mail-pf1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233085AbhEJR3j (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 10 May 2021 13:29:39 -0400
+Received: by mail-pf1-f177.google.com with SMTP id i190so14044855pfc.12;
+        Mon, 10 May 2021 10:28:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=/CIW2YCfIyemvqkNlDrF54CSJZHkshL2bUv5uy7OmnQ=;
-        b=If5NLEf12dv/chjxO+zwlyt3eUnBy75ieFGEplZSqi0MdSdVyZAHcVrhAWPV/mKMV9
-         AUa4Iv2m3T3QbdURi/o17Lc8T0y0u6ft8ITlHbonwZr5mmJrcsE6JqicycdcZ+F+QTTC
-         0WfDCbLYCrEDiMrtkv12Vs8CHVQziBzFdTc/uu1a72XxNXNNsNDp1iTvzVvI0yXiYwXU
-         mqclBkDhg1Mx0Xoql+LquvhnmR5dV2lO/6vtkiG08OM4h5yfLLEHFx6V6lLzOhdJfp4r
-         Z4zUeI/PGvxr5gv1Y604cae4+3r5JiSky2zh5JjP8p6XGmfnE/Ncb3kanaDh0KcBShk4
-         yO0w==
-X-Gm-Message-State: AOAM532nW2H+RxXX16F2W9ySR403/Hpbnj9QoCFEPm1yTTR/DSJDMCcQ
-        tmR9oUK6DK1BiybDC5loB50DSDDS3g+zCcIUzC/rZSxjxejsTl7ljwGG3ncQx+rh2RA8txnmV2r
-        MD1lEZUNBGydNPgyhvJdSwQ==
-X-Received: by 2002:a05:622a:30f:: with SMTP id q15mr11898520qtw.257.1620666752676;
-        Mon, 10 May 2021 10:12:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyyc6C7/diGU6s8/6mxi8LzwJ6RGcfL0bThVSbL9h3YFSM+LmOFIdaOMw68anpi6NdkCsXwnA==
-X-Received: by 2002:a05:622a:30f:: with SMTP id q15mr11898502qtw.257.1620666752493;
-        Mon, 10 May 2021 10:12:32 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id p10sm11666764qkg.74.2021.05.10.10.12.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 May 2021 10:12:32 -0700 (PDT)
-Subject: Re: [PATCH v12 5/5] fpga: m10bmc-sec: add max10 get_hw_errinfo
- callback func
-To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@intel.com, richard.gong@intel.com
-References: <20210503214042.316836-1-russell.h.weight@intel.com>
- <20210503214042.316836-6-russell.h.weight@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <bcbf399d-4384-4731-f768-93793a5311b6@redhat.com>
-Date:   Mon, 10 May 2021 10:12:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C+jq+raRiIKpqbPDo+tN+N2gQo4lQJ7AUs78iLKwNTU=;
+        b=GMS+Qgtdnt8b0AJzLZClFpkLaYe/AZ5HQPZLONkGMY1Y1mQmdWE7v09O67Qd6nJHXL
+         xI4NMhphprQ0HvCPDZtX8vVF29mclRruDm1C6Tz9vxMjQH63fuzkwQ8SvWd/Jh3DnAEU
+         ciPWkt7BNF631AbT1YwaglEpRiAjMTLlxRBiHGUdlIkiI8KhAC7REhJbe0lK/wLNA07u
+         /GT78GcjFGcZvcv0GTiCUzuurcPnKlgfOENe1iC0oseToDH6cwLMm5h8mFx7YGH1D0yM
+         fSbhdFeba4lnb1f5mDJPA/xKkAw6Y/s1FgcYGYDErZCr8ksPTnL+arEEI0BEbQtGeUeY
+         65+Q==
+X-Gm-Message-State: AOAM531lMW4QFE3tOeZDRs5DQK30UGPDK4A/N/dHuYuMx9AIaSiOjleI
+        6ei6/0Pp1puaqYAWI4fdgV4=
+X-Google-Smtp-Source: ABdhPJzprM6w30VWNWqSfasnW+MoEb+ZgV15XrAqtM3xEPe82y0VCr0VpgKKnryw6wOwT9mktyT1mw==
+X-Received: by 2002:a63:f252:: with SMTP id d18mr26279722pgk.20.1620667714131;
+        Mon, 10 May 2021 10:28:34 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id q19sm12896695pfl.171.2021.05.10.10.28.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 May 2021 10:28:32 -0700 (PDT)
+Date:   Mon, 10 May 2021 10:28:31 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
+        yilun.xu@intel.com, hao.wu@intel.com, matthew.gerlach@intel.com,
+        richard.gong@intel.com
+Subject: Re: [PATCH v12 1/7] fpga: sec-mgr: fpga security manager class driver
+Message-ID: <YJltP1Vff9jLJnLE@epycbox.lan>
+References: <20210503213546.316439-1-russell.h.weight@intel.com>
+ <20210503213546.316439-2-russell.h.weight@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210503214042.316836-6-russell.h.weight@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210503213546.316439-2-russell.h.weight@intel.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Hi,
 
-On 5/3/21 2:40 PM, Russ Weight wrote:
-> Extend the MAX10 BMC Secure Update driver to include
-> a function that returns 64 bits of additional HW specific
-> data for errors that require additional information.
-> This callback function enables the hw_errinfo sysfs
-> node in the Intel Security Manager class driver.
->
+On Mon, May 03, 2021 at 02:35:40PM -0700, Russ Weight wrote:
+> Create the FPGA Security Manager class driver. The security
+> manager provides interfaces to manage secure updates for the
+> FPGA and BMC images that are stored in FLASH. The driver can
+> also be used to update root entry hashes and to cancel code
+> signing keys. The image type is encoded in the image file
+> and is decoded by the HW/FW secure update engine.
+> 
 > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-
-This looks fine.
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> Reviewed-by: Tom Rix <trix@redhat.com>
 > ---
 > v12:
->    - No change
+>   - Updated Date and KernelVersion fields in ABI documentation
 > v11:
->    - No change
+>   - No change
 > v10:
->    - No change
+>   - Rebased to 5.12-rc2 next
+>   - Updated Date and KernelVersion in ABI documentation
 > v9:
->    - No change
+>   - Updated Date and KernelVersion in ABI documentation
 > v8:
->    - Previously patch 6/6, otherwise no change
+>   - Fixed grammatical error in Documentation/fpga/fpga-sec-mgr.rst
 > v7:
->    - No change
+>   - Changed Date in documentation file to December 2020
 > v6:
->    - Initialized auth_result and doorbell to HW_ERRINFO_POISON
->      in m10bmc_sec_hw_errinfo() and removed unnecessary if statements.
+>   - Removed sysfs support and documentation for the display of the
+>     flash count, root entry hashes, and code-signing-key cancelation
+>     vectors.
 > v5:
->    - No change
+>   - Added the devm_fpga_sec_mgr_unregister() function, following recent
+>     changes to the fpga_manager() implementation.
+>   - Changed some *_show() functions to use sysfs_emit() instead of sprintf(
 > v4:
->    - No change
+>   - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+>     and removed unnecessary references to "Intel".
+>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
 > v3:
->    - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
->    - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
->      driver"
+>   - Modified sysfs handler check in check_sysfs_handler() to make
+>     it more readable.
 > v2:
->    - Implemented HW_ERRINFO_POISON for m10bmc_sec_hw_errinfo() to
->      ensure that corresponding bits are set to 1 if we are unable
->      to read the doorbell or auth_result registers.
->    - Added m10bmc_ prefix to functions in m10bmc_iops structure
+>   - Bumped documentation dates and versions
+>   - Added Documentation/fpga/ifpga-sec-mgr.rst 
+>   - Removed references to bmc_flash_count & smbus_flash_count (not supported)
+>   - Split ifpga_sec_mgr_register() into create() and register() functions
+>   - Added devm_ifpga_sec_mgr_create()
+>   - Removed typedefs for imgr ops
 > ---
->   drivers/fpga/intel-m10-bmc-secure.c | 22 ++++++++++++++++++++++
->   1 file changed, 22 insertions(+)
->
-> diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
-> index 9d45312001a3..bdf87ec125fe 100644
-> --- a/drivers/fpga/intel-m10-bmc-secure.c
-> +++ b/drivers/fpga/intel-m10-bmc-secure.c
-> @@ -483,11 +483,33 @@ static enum fpga_sec_err m10bmc_sec_cancel(struct fpga_sec_mgr *smgr)
->   	return ret ? FPGA_SEC_ERR_RW_ERROR : FPGA_SEC_ERR_NONE;
->   }
->   
-> +#define HW_ERRINFO_POISON	GENMASK(31, 0)
-> +static u64 m10bmc_sec_hw_errinfo(struct fpga_sec_mgr *smgr)
+>  .../ABI/testing/sysfs-class-fpga-sec-mgr      |   5 +
+>  Documentation/fpga/fpga-sec-mgr.rst           |  44 +++
+>  Documentation/fpga/index.rst                  |   1 +
+>  MAINTAINERS                                   |   9 +
+>  drivers/fpga/Kconfig                          |   9 +
+>  drivers/fpga/Makefile                         |   3 +
+>  drivers/fpga/fpga-sec-mgr.c                   | 296 ++++++++++++++++++
+>  include/linux/fpga/fpga-sec-mgr.h             |  44 +++
+>  8 files changed, 411 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
+>  create mode 100644 Documentation/fpga/fpga-sec-mgr.rst
+>  create mode 100644 drivers/fpga/fpga-sec-mgr.c
+>  create mode 100644 include/linux/fpga/fpga-sec-mgr.h
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-fpga-sec-mgr b/Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
+> new file mode 100644
+> index 000000000000..2498aef0ac51
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
+> @@ -0,0 +1,5 @@
+> +What: 		/sys/class/fpga_sec_mgr/fpga_secX/name
+> +Date:		June 2021
+> +KernelVersion:	5.14
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Name of low level fpga security manager driver.
+> diff --git a/Documentation/fpga/fpga-sec-mgr.rst b/Documentation/fpga/fpga-sec-mgr.rst
+> new file mode 100644
+> index 000000000000..9f74c29fe63d
+> --- /dev/null
+> +++ b/Documentation/fpga/fpga-sec-mgr.rst
+> @@ -0,0 +1,44 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +========================================
+> +FPGA Security Manager Class Driver
+> +========================================
+> +
+> +The FPGA Security Manager class driver provides a common
+> +API for user-space tools to manage updates for secure FPGA
+> +devices. Device drivers that instantiate the Security
+> +Manager class driver will interact with a HW secure update
+> +engine in order to transfer new FPGA and BMC images to FLASH so
+> +that they will be automatically loaded when the FPGA card reboots.
+> +
+> +A significant difference between the FPGA Manager and the FPGA
+> +Security Manager is that the FPGA Manager does a live update (Partial
+> +Reconfiguration) to a device, whereas the FPGA Security Manager
+> +updates the FLASH images for the Static Region and the BMC so that
+> +they will be loaded the next time the FPGA card boots. Security is
+> +enforced by hardware and firmware. The security manager interacts
+> +with the firmware to initiate an update, pass in the necessary data,
+> +and collect status on the update.
+> +
+> +In addition to managing secure updates of the FPGA and BMC images,
+> +the FPGA Security Manager update process may also be used to
+> +program root entry hashes and cancellation keys for the FPGA static
+> +region, the FPGA partial reconfiguration region, and the BMC.
+> +
+> +Secure updates make use of the request_firmware framework, which
+> +requires that image files are accessible under /lib/firmware. A request
+> +for a secure update returns immediately, while the update itself
+> +proceeds in the context of a kernel worker thread. Sysfs files provide
+> +a means for monitoring the progress of a secure update and for
+> +retrieving error information in the event of a failure.
+> +
+> +Sysfs Attributes
+> +================
+> +
+> +The API includes a sysfs entry *name* to export the name of the parent
+> +driver. It also includes an *update* sub-directory that can be used to
+> +instantiate and monitor a secure update.
+> +
+> +See `<../ABI/testing/sysfs-class-fpga-sec-mgr>`__ for a full
+> +description of the sysfs attributes for the FPGA Security
+> +Manager.
+> diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
+> index f80f95667ca2..0b2f427042af 100644
+> --- a/Documentation/fpga/index.rst
+> +++ b/Documentation/fpga/index.rst
+> @@ -8,6 +8,7 @@ fpga
+>      :maxdepth: 1
+>  
+>      dfl
+> +    fpga-sec-mgr
+>  
+>  .. only::  subproject and html
+>  
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1783372a608a..3b1dc0376b52 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7146,6 +7146,15 @@ F:	Documentation/fpga/
+>  F:	drivers/fpga/
+>  F:	include/linux/fpga/
+>  
+> +FPGA SECURITY MANAGER DRIVERS
+> +M:	Russ Weight <russell.h.weight@intel.com>
+> +L:	linux-fpga@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
+> +F:	Documentation/fpga/fpga-sec-mgr.rst
+> +F:	drivers/fpga/fpga-sec-mgr.c
+> +F:	include/linux/fpga/fpga-sec-mgr.h
+> +
+>  FPU EMULATOR
+>  M:	Bill Metzenthen <billm@melbpc.org.au>
+>  S:	Maintained
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 33e15058d0dc..09a8d915db26 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -234,4 +234,13 @@ config FPGA_MGR_ZYNQMP_FPGA
+>  	  to configure the programmable logic(PL) through PS
+>  	  on ZynqMP SoC.
+>  
+> +config FPGA_SEC_MGR
+> +	tristate "FPGA Security Manager"
+> +	help
+> +	  The Security Manager class driver presents a common
+> +	  user API for managing secure updates for FPGA
+> +	  devices, including flash images for the FPGA static
+> +	  region and for the BMC. Select this option to enable
+> +	  updates for secure FPGA devices.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 18dc9885883a..22576d1a3996 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -21,6 +21,9 @@ obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
+>  
+> +# FPGA Security Manager Framework
+> +obj-$(CONFIG_FPGA_SEC_MGR)		+= fpga-sec-mgr.o
+> +
+>  # FPGA Bridge Drivers
+>  obj-$(CONFIG_FPGA_BRIDGE)		+= fpga-bridge.o
+>  obj-$(CONFIG_SOCFPGA_FPGA_BRIDGE)	+= altera-hps2fpga.o altera-fpga2sdram.o
+> diff --git a/drivers/fpga/fpga-sec-mgr.c b/drivers/fpga/fpga-sec-mgr.c
+> new file mode 100644
+> index 000000000000..468379e0c825
+> --- /dev/null
+> +++ b/drivers/fpga/fpga-sec-mgr.c
+> @@ -0,0 +1,296 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * FPGA Security Manager
+> + *
+> + * Copyright (C) 2019-2020 Intel Corporation, Inc.
+> + */
+> +
+> +#include <linux/fpga/fpga-sec-mgr.h>
+> +#include <linux/idr.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/vmalloc.h>
+> +
+> +static DEFINE_IDA(fpga_sec_mgr_ida);
+> +static struct class *fpga_sec_mgr_class;
+> +
+> +struct fpga_sec_mgr_devres {
+> +	struct fpga_sec_mgr *smgr;
+> +};
+> +
+> +#define to_sec_mgr(d) container_of(d, struct fpga_sec_mgr, dev)
+> +
+> +static ssize_t name_show(struct device *dev,
+> +			 struct device_attribute *attr, char *buf)
 > +{
-> +	struct m10bmc_sec *sec = smgr->priv;
-> +	u32 auth_result = HW_ERRINFO_POISON;
-> +	u32 doorbell = HW_ERRINFO_POISON;
+> +	struct fpga_sec_mgr *smgr = to_sec_mgr(dev);
 > +
-> +	switch (smgr->err_code) {
-> +	case FPGA_SEC_ERR_HW_ERROR:
-> +	case FPGA_SEC_ERR_TIMEOUT:
-> +	case FPGA_SEC_ERR_BUSY:
-> +	case FPGA_SEC_ERR_WEAROUT:
-> +		m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +		m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result);
+> +	return sysfs_emit(buf, "%s\n", smgr->name);
+> +}
+> +static DEVICE_ATTR_RO(name);
 > +
-> +		return (u64)doorbell << 32 | (u64)auth_result;
-> +	default:
-> +		return 0;
+> +static struct attribute *sec_mgr_attrs[] = {
+> +	&dev_attr_name.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group sec_mgr_attr_group = {
+> +	.attrs = sec_mgr_attrs,
+> +};
+> +
+> +static const struct attribute_group *fpga_sec_mgr_attr_groups[] = {
+> +	&sec_mgr_attr_group,
+> +	NULL,
+> +};
+> +
+> +/**
+> + * fpga_sec_mgr_create - create and initialize an FPGA
+> + *			  security manager struct
+> + *
+> + * @dev:  fpga security manager device from pdev
+> + * @name: fpga security manager name
+> + * @sops: pointer to a structure of fpga callback functions
+> + * @priv: fpga security manager private data
+> + *
+> + * The caller of this function is responsible for freeing the struct
+> + * with ifpg_sec_mgr_free(). Using devm_fpga_sec_mgr_create() instead
+> + * is recommended.
+> + *
+> + * Return: pointer to struct fpga_sec_mgr or NULL
+> + */
+> +struct fpga_sec_mgr *
+> +fpga_sec_mgr_create(struct device *dev, const char *name,
+> +		    const struct fpga_sec_mgr_ops *sops, void *priv)
+> +{
+> +	struct fpga_sec_mgr *smgr;
+> +	int id, ret;
+> +
+> +	if (!name || !strlen(name)) {
+> +		dev_err(dev, "Attempt to register with no name!\n");
+> +		return NULL;
 > +	}
+> +
+> +	smgr = kzalloc(sizeof(*smgr), GFP_KERNEL);
+> +	if (!smgr)
+> +		return NULL;
+> +
+> +	id = ida_simple_get(&fpga_sec_mgr_ida, 0, 0, GFP_KERNEL);
+> +	if (id < 0)
+> +		goto error_kfree;
+> +
+> +	mutex_init(&smgr->lock);
+> +
+> +	smgr->name = name;
+> +	smgr->priv = priv;
+> +	smgr->sops = sops;
+> +
+> +	device_initialize(&smgr->dev);
+> +	smgr->dev.class = fpga_sec_mgr_class;
+> +	smgr->dev.parent = dev;
+> +	smgr->dev.id = id;
+> +
+> +	ret = dev_set_name(&smgr->dev, "fpga_sec%d", id);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to set device name: fpga_sec%d\n", id);
+> +		goto error_device;
+> +	}
+> +
+> +	return smgr;
+> +
+> +error_device:
+> +	ida_simple_remove(&fpga_sec_mgr_ida, id);
+> +
+> +error_kfree:
+> +	kfree(smgr);
+> +
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(fpga_sec_mgr_create);
+> +
+> +/**
+> + * fpga_sec_mgr_free - free an FPGA security manager created
+> + *			with fpga_sec_mgr_create()
+> + *
+> + * @smgr:	FPGA security manager structure
+> + */
+> +void fpga_sec_mgr_free(struct fpga_sec_mgr *smgr)
+> +{
+> +	ida_simple_remove(&fpga_sec_mgr_ida, smgr->dev.id);
+> +	kfree(smgr);
+> +}
+> +EXPORT_SYMBOL_GPL(fpga_sec_mgr_free);
+> +
+> +static void devm_fpga_sec_mgr_release(struct device *dev, void *res)
+> +{
+> +	struct fpga_sec_mgr_devres *dr = res;
+> +
+> +	fpga_sec_mgr_free(dr->smgr);
 > +}
 > +
->   static const struct fpga_sec_mgr_ops m10bmc_sops = {
->   	.prepare = m10bmc_sec_prepare,
->   	.write_blk = m10bmc_sec_write_blk,
->   	.poll_complete = m10bmc_sec_poll_complete,
->   	.cancel = m10bmc_sec_cancel,
-> +	.get_hw_errinfo = m10bmc_sec_hw_errinfo,
->   };
->   
->   static int m10bmc_secure_probe(struct platform_device *pdev)
+> +/**
+> + * devm_fpga_sec_mgr_create - create and initialize an FPGA
+> + *			       security manager struct
+> + *
+> + * @dev:  fpga security manager device from pdev
+> + * @name: fpga security manager name
+> + * @sops: pointer to a structure of fpga callback functions
+> + * @priv: fpga security manager private data
+> + *
+> + * This function is intended for use in a FPGA Security manager
+> + * driver's probe function.  After the security manager driver creates
+> + * the fpga_sec_mgr struct with devm_fpga_sec_mgr_create(), it should
+> + * register it with devm_fpga_sec_mgr_register().
+> + * The fpga_sec_mgr struct allocated with this function will be freed
+> + * automatically on driver detach.
+> + *
+> + * Return: pointer to struct fpga_sec_mgr or NULL
+> + */
+> +struct fpga_sec_mgr *
+> +devm_fpga_sec_mgr_create(struct device *dev, const char *name,
+> +			 const struct fpga_sec_mgr_ops *sops, void *priv)
+> +{
+> +	struct fpga_sec_mgr_devres *dr;
+> +
+> +	dr = devres_alloc(devm_fpga_sec_mgr_release, sizeof(*dr), GFP_KERNEL);
+> +	if (!dr)
+> +		return NULL;
+> +
+> +	dr->smgr = fpga_sec_mgr_create(dev, name, sops, priv);
+> +	if (!dr->smgr) {
+> +		devres_free(dr);
+> +		return NULL;
+> +	}
+> +
+> +	devres_add(dev, dr);
+> +
+> +	return dr->smgr;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_fpga_sec_mgr_create);
+> +
+> +/**
+> + * fpga_sec_mgr_register - register an FPGA security manager
+> + *
+> + * @smgr: fpga security manager struct
+> + *
+> + * Return: 0 on success, negative error code otherwise.
+> + */
+> +int fpga_sec_mgr_register(struct fpga_sec_mgr *smgr)
+> +{
+> +	int ret;
+> +
+> +	ret = device_add(&smgr->dev);
+> +	if (ret)
+> +		goto error_device;
+> +
+> +	dev_info(&smgr->dev, "%s registered\n", smgr->name);
+> +
+> +	return 0;
+> +
+> +error_device:
+> +	ida_simple_remove(&fpga_sec_mgr_ida, smgr->dev.id);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(fpga_sec_mgr_register);
+> +
+> +/**
+> + * fpga_sec_mgr_unregister - unregister an FPGA security manager
+> + *
+> + * @mgr: fpga manager struct
+> + *
+> + * This function is intended for use in an FPGA security manager
+> + * driver's remove() function.
+> + */
+> +void fpga_sec_mgr_unregister(struct fpga_sec_mgr *smgr)
+> +{
+> +	dev_info(&smgr->dev, "%s %s\n", __func__, smgr->name);
+> +
+> +	device_unregister(&smgr->dev);
+> +}
+> +EXPORT_SYMBOL_GPL(fpga_sec_mgr_unregister);
+> +
+> +static int fpga_sec_mgr_devres_match(struct device *dev, void *res,
+> +				     void *match_data)
+> +{
+> +	struct fpga_sec_mgr_devres *dr = res;
+> +
+> +	return match_data == dr->smgr;
+> +}
+> +
+> +static void devm_fpga_sec_mgr_unregister(struct device *dev, void *res)
+> +{
+> +	struct fpga_sec_mgr_devres *dr = res;
+> +
+> +	fpga_sec_mgr_unregister(dr->smgr);
+> +}
+> +
+> +/**
+> + * devm_fpga_sec_mgr_register - resource managed variant of
+> + *				fpga_sec_mgr_register()
+> + *
+> + * @dev: managing device for this FPGA security manager
+> + * @smgr: fpga security manager struct
+> + *
+> + * This is the devres variant of fpga_sec_mgr_register() for which the
+> + * unregister function will be called automatically when the managing
+> + * device is detached.
+> + */
+> +int devm_fpga_sec_mgr_register(struct device *dev, struct fpga_sec_mgr *smgr)
+> +{
+> +	struct fpga_sec_mgr_devres *dr;
+> +	int ret;
+> +
+> +	/*
+> +	 * Make sure that the struct fpga_sec_mgr * that is passed in is
+> +	 * managed itself.
+> +	 */
+> +	if (WARN_ON(!devres_find(dev, devm_fpga_sec_mgr_release,
+> +				 fpga_sec_mgr_devres_match, smgr)))
+> +		return -EINVAL;
+> +
+> +	dr = devres_alloc(devm_fpga_sec_mgr_unregister, sizeof(*dr), GFP_KERNEL);
+> +	if (!dr)
+> +		return -ENOMEM;
+> +
+> +	ret = fpga_sec_mgr_register(smgr);
+> +	if (ret) {
+> +		devres_free(dr);
+> +		return ret;
+> +	}
+> +
+> +	dr->smgr = smgr;
+> +	devres_add(dev, dr);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_fpga_sec_mgr_register);
+> +
+> +static void fpga_sec_mgr_dev_release(struct device *dev)
+> +{
+> +}
+> +
+> +static int __init fpga_sec_mgr_class_init(void)
+> +{
+> +	pr_info("FPGA Security Manager\n");
+> +
+> +	fpga_sec_mgr_class = class_create(THIS_MODULE, "fpga_sec_mgr");
+> +	if (IS_ERR(fpga_sec_mgr_class))
+> +		return PTR_ERR(fpga_sec_mgr_class);
+> +
+> +	fpga_sec_mgr_class->dev_groups = fpga_sec_mgr_attr_groups;
+> +	fpga_sec_mgr_class->dev_release = fpga_sec_mgr_dev_release;
+> +
+> +	return 0;
+> +}
+> +
+> +static void __exit fpga_sec_mgr_class_exit(void)
+> +{
+> +	class_destroy(fpga_sec_mgr_class);
+> +	ida_destroy(&fpga_sec_mgr_ida);
+> +}
+> +
+> +MODULE_DESCRIPTION("FPGA Security Manager Driver");
+> +MODULE_LICENSE("GPL v2");
+> +
+> +subsys_initcall(fpga_sec_mgr_class_init);
+> +module_exit(fpga_sec_mgr_class_exit)
+> diff --git a/include/linux/fpga/fpga-sec-mgr.h b/include/linux/fpga/fpga-sec-mgr.h
+> new file mode 100644
+> index 000000000000..f85665b79b9d
+> --- /dev/null
+> +++ b/include/linux/fpga/fpga-sec-mgr.h
+> @@ -0,0 +1,44 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Header file for FPGA Security Manager
+> + *
+> + * Copyright (C) 2019-2020 Intel Corporation, Inc.
+> + */
+> +#ifndef _LINUX_FPGA_SEC_MGR_H
+> +#define _LINUX_FPGA_SEC_MGR_H
+> +
+> +#include <linux/device.h>
+> +#include <linux/mutex.h>
+> +#include <linux/types.h>
+> +
+> +struct fpga_sec_mgr;
+> +
+> +/**
+> + * struct fpga_sec_mgr_ops - device specific operations
+> + */
+> +struct fpga_sec_mgr_ops {
+> +};
+> +
+> +struct fpga_sec_mgr {
+> +	const char *name;
+> +	struct device dev;
+> +	const struct fpga_sec_mgr_ops *sops;
+> +	struct mutex lock;		/* protect data structure contents */
+> +	void *priv;
+> +};
+> +
+> +struct fpga_sec_mgr *
+> +fpga_sec_mgr_create(struct device *dev, const char *name,
+> +		    const struct fpga_sec_mgr_ops *sops, void *priv);
+> +
+> +struct fpga_sec_mgr *
+> +devm_fpga_sec_mgr_create(struct device *dev, const char *name,
+> +			 const struct fpga_sec_mgr_ops *sops, void *priv);
+> +
+> +int fpga_sec_mgr_register(struct fpga_sec_mgr *smgr);
+> +int devm_fpga_sec_mgr_register(struct device *dev,
+> +			       struct fpga_sec_mgr *smgr);
+> +void fpga_sec_mgr_unregister(struct fpga_sec_mgr *smgr);
+> +void fpga_sec_mgr_free(struct fpga_sec_mgr *smgr);
+> +
+> +#endif
+> -- 
+> 2.25.1
+> 
 
+Looks good to me.
+
+- Moritz
