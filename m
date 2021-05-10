@@ -2,101 +2,92 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B08E37901E
-	for <lists+linux-fpga@lfdr.de>; Mon, 10 May 2021 16:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6227B37906A
+	for <lists+linux-fpga@lfdr.de>; Mon, 10 May 2021 16:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbhEJOIa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 10 May 2021 10:08:30 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37919 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235412AbhEJOBt (ORCPT
+        id S234689AbhEJORL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 10 May 2021 10:17:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27897 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232073AbhEJOOI (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 10 May 2021 10:01:49 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 14AAD5807B2;
-        Mon, 10 May 2021 10:00:38 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 10 May 2021 10:00:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=fwXudyHn8IUNsmfHA12W5pUxFzr
-        IcUsJJs6niPOOwGc=; b=gQh6u0zhPsG//1fbjCgHH3SUq5OZEixVi+ckcNcOvNr
-        8f8S6u6OqczboxIeZQzxpdw3AUy1t45vyyuSQKDA1+yJJEqv0Na0yFB8YXQoxGQa
-        A5mz/uekXLKQlXSBVpDzZgWHaTwxLQ8cfd/84Seg6MJA86M+DwrG/rxkfmjHnsDx
-        Vsn+We4G3Oh5Yvv4HNwlluWEHPMQsGoYqOZqIpzyUGPfcSXaDfcxgaoBasafO20O
-        Nia4uZb9+lsHdBKwEogjjnykkTJJzKThWOeq3e2hyjT/F/nLvkiGpnFJ0uMYCJ5w
-        yhbph4b45d/9JdizeckN5aTq6WAACtGxOiZQK1Svtuw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=fwXudy
-        Hn8IUNsmfHA12W5pUxFzrIcUsJJs6niPOOwGc=; b=FkYLunR8+bNyojGntZzlTv
-        lNhoU5Ih8GFYdgqBiM9GEeBgkR7PC0rd49vKxgNK2oVHYiwvnJ0pFHee6wyNEefG
-        07iyoKlPp2/47lNX2/0a3w6XYC3Muan3VrHn9DIyh2AJDD/sq19lwcD+nClmgOGW
-        3kjTJut/WH9S1nO20R6vTeVSVeiFhLK/oh1ul5trEQZynTCu46HI2dcf9dXPVKk9
-        sOjDpOdiQFUH6B6gq1Emr8rDL+S3scV3gAHdetS1J2hIDO0dgu0hscWNc8fHxaey
-        25F3JvGPZJisNAQmAtq62YqH7TCAIzVvBqJwx8rI9Oyho2YDtxrFPxf1S0VsKOTA
-        ==
-X-ME-Sender: <xms:hDyZYCqZ48w__j-3J2DdcFFyCNO8Px1wZAdweI2vgyXQ5g_1A_avfw>
-    <xme:hDyZYAoPMp-2hhXE5dIuFZVKJLDFR-LeVjsu56BtdhTJGnUi8Md4Pqb1pnf9Vqqdn
-    t02Gw-Ku9S6gnwxX4I>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdegkedgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegvnhcu
-    uehovggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrghtth
-    gvrhhnpeevffdtteetgfdttdekueefgedttddtueeugeekgeetffeuteffjeduieehhfek
-    tdenucfkphepvdegrdduieelrddvtddrvdehheenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehmvgessggvnhgsohgvtghkvghlrdhnvght
-X-ME-Proxy: <xmx:hDyZYHO7a0I2ObO3iNQCJFMynfyvzQSxH3x8A4ShPc13xjvG6wh63A>
-    <xmx:hDyZYB6OL9_iqJiCXEkFvw1uMnu0UHjkSyxn6Irx0qOidEFWAmkwbA>
-    <xmx:hDyZYB472gSq8MYTawlNh6oofIzwaZQvJxltEegElvbnNVF17UiCaA>
-    <xmx:hjyZYNFuZhUi4dOrdPamnliiTh3owe6Tf-ewK9C2k9SXGvHlGfVlTg>
-Received: from localhost (unknown [24.169.20.255])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Mon, 10 May 2021 10:00:35 -0400 (EDT)
-Date:   Mon, 10 May 2021 10:00:34 -0400
-From:   Ben Boeckel <me@benboeckel.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
-Message-ID: <YJk8gkMlk8dtaEsz@erythro.dev.benboeckel.internal>
-References: <cover.1620641727.git.mchehab+huawei@kernel.org>
- <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
- <20210510135518.305cc03d@coco.lan>
+        Mon, 10 May 2021 10:14:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1620655983;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jsE4Hu1jfyAgBnO9Xt9Yk2kkAWYBUYyQ7xRMEnEGmO0=;
+        b=P0AoGecKIg8fIHz6m4B/epOpNuwftzdtnUUi4i+ut+0wDzESntmMe7rja4kpPMbRwJykBh
+        v8BZ+GyBiGWw7vgqsrgkbfBlk+ApPCRM/aPNVwf5M7JtHRhiDg7BKBxCGhay8xHlFyeQQ6
+        5z/zUGFRhisMHJ8SWkMM8efJcWnxFQI=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-88-G31TmJTCPUWWrSZLl5lkEw-1; Mon, 10 May 2021 10:13:00 -0400
+X-MC-Unique: G31TmJTCPUWWrSZLl5lkEw-1
+Received: by mail-qv1-f71.google.com with SMTP id h17-20020a0cb4d10000b02901c51890529dso12665904qvf.18
+        for <linux-fpga@vger.kernel.org>; Mon, 10 May 2021 07:13:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=jsE4Hu1jfyAgBnO9Xt9Yk2kkAWYBUYyQ7xRMEnEGmO0=;
+        b=ZT62kMzuiUM8mmerIHtri5y0hJYZlNfwiJsf66FCVDSkVs7zlcCRjXLtSUAfTAUTqK
+         LJwYG/IChWFRuimWgC1bkuw5N6MlfQUS5FliRK5peVR+LbTUXGEnGj3HfG7GSdZz6k3K
+         kA2HDA93yzmD/cjE/l98dO1Dd1qB/cAxU5zNY8ErpA82rXxFkxnKnQUjBAP1aTmibY12
+         n39IoOqlqk76LKW+53e4dfOP/V1Vqi93LuhPwZ+zwA7mG3ppBdiCDurKhDML/HWNTGBJ
+         dCdS7ZiQ5J8q+Lm2Yqsc6SxKwMTviOT8GzOjL8iIdbJ9bQ+MVZY3DDrgnyEMPb5hrxG1
+         HM0g==
+X-Gm-Message-State: AOAM533TeeP5tNjXJATS4GMG84TWchGRBcr/fWVbj0aY3+TuiD/bd4DH
+        ruTNSYWhoXUtUQgwXOdSQBXuVHroD40iqlWLMC6Z0E/J3uUUBdHhhEQdxZqerRKcqokvMqvF4Mv
+        KsKV8+eMNhjPRaQE5YlFVuw==
+X-Received: by 2002:a05:620a:b:: with SMTP id j11mr23282245qki.159.1620655980279;
+        Mon, 10 May 2021 07:13:00 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxsz1KIzKqaoZqip0lZ+ej6Lo6hmON3jwnFv+dFMaAM1pY0v6DAVkwcOpGnU/1t8FDiz0YU8w==
+X-Received: by 2002:a05:620a:b:: with SMTP id j11mr23282219qki.159.1620655980094;
+        Mon, 10 May 2021 07:13:00 -0700 (PDT)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id r5sm11395577qtp.75.2021.05.10.07.12.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 May 2021 07:12:59 -0700 (PDT)
+Subject: Re: [PATCH v12 0/7] FPGA Security Manager Class Driver
+To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
+        matthew.gerlach@intel.com, richard.gong@intel.com
+References: <20210503213546.316439-1-russell.h.weight@intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <6f3ce0db-883e-2c5b-e671-9ccc363ee532@redhat.com>
+Date:   Mon, 10 May 2021 07:12:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210510135518.305cc03d@coco.lan>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+In-Reply-To: <20210503213546.316439-1-russell.h.weight@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, May 10, 2021 at 13:55:18 +0200, Mauro Carvalho Chehab wrote:
->     $ git grep "CPU 0 has been" Documentation/RCU/
->       Documentation/RCU/Design/Data-Structures/Data-Structures.rst:| #. CPU 0 has been in dyntick-idle mode for quite some time. When it   |
->       Documentation/RCU/Design/Data-Structures/Data-Structures.rst:|    notices that CPU 0 has been in dyntick idle mode, which qualifies  |
 
-The kernel documentation uses hard line wraps, so such a naive grep is
-going to always fail unless such line wraps are taken into account. Not
-saying this isn't an improvement in and of itself, but smarter searching
-strategies are likely needed anyways.
+On 5/3/21 2:35 PM, Russ Weight wrote:
+> The FPGA Security Manager class driver provides a common
+> API for user-space tools to manage updates for secure FPGA
+> devices. Device drivers that instantiate the FPGA Security
+> Manager class driver will interact with a HW secure update
+> engine in order to transfer new FPGA and BMC images to FLASH so
+> that they will be automatically loaded when the FPGA card reboots.
 
---Ben
+Russ,
+
+These have my Reviewed-by, but since it has been a while, I am looking 
+these over again.
+
+If you do not hear anything from me in the next couple of days, please 
+assume everything is fine.
+
+Tom
+
