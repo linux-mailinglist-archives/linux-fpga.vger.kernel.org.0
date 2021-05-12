@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EFA37B3F4
-	for <lists+linux-fpga@lfdr.de>; Wed, 12 May 2021 04:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8A437B3FB
+	for <lists+linux-fpga@lfdr.de>; Wed, 12 May 2021 04:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbhELCCR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 11 May 2021 22:02:17 -0400
-Received: from mail-co1nam11on2074.outbound.protection.outlook.com ([40.107.220.74]:36161
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        id S230240AbhELCCd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 11 May 2021 22:02:33 -0400
+Received: from mail-bn8nam11on2083.outbound.protection.outlook.com ([40.107.236.83]:26080
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230172AbhELCCQ (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 11 May 2021 22:02:16 -0400
+        id S230388AbhELCCc (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 11 May 2021 22:02:32 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q6VRY0dAzxb8CVIWJ6wTrUKrJEGnUgn6uBziArcQhpRGCDRm4JhzfkSyTuuz/GTxsSTPCmk5/T3hO8HWri1qzaMRK/9fUJXgf9RwGU+FxYpgcfD/P3iLoh0U9XL3KzF2cQTOusg27NsVStJZ59V/sHCP/1OITnCL37hdp2LFX9MRD+Dumoics41Uq4XeLaqf9kbscn70xtFKAXu6I3XK67hEPuMNepNEe1WYqM+U4EGR9E4MLvWq8WBeweiPSr9DFqWBjhbI+jb2veA8zrQY4k70mnl4XChmNDLf5SNmwecb8DiewNjlqm9/fLm80DtiGfX62kkC9tfTJNTMwvRS9Q==
+ b=lDJsbWm6wlFUd3Rdkc2qJ4EeZUNiEsDEDclhTnaXTtJ6CvY8mqGjzbuahxIKDHoRBe4rxsdvLA1JVxCETeX++d0cN8MW+SLWtULaHxFshHZbVmJxnu5Jtt9nub7JvKDBH4aDTywPtSJS8BdylroGozgJc6P6LgAHue1N7M8/Jdch8yLRalmqVRtb+5QBnmfnzq8q/A7br+2hVaCXeB6JKt6wVSepDhzFe9c+QQsx9kj24V0GqbRED41PF/AexHFxhfiVumS3i2Ez/bGhZCANj6yQI1uttq1B5gon6+Fwu6WbLtD7rgXrayUAHStnQC5muGlXVaejzfff8t/wmtVrYg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UF2746tPR4L0dSWfP0X6nQnsHIVIbqNag7Dad97Nycw=;
- b=b3mAWDYnpV2bHIFYBOgFZOhFDlLsNXgKmIT+T7zc3hkZdcckzLl2yTSvA1Hn8K5HjzOCiA2f04zyTzYZpfxf0DiibGKFNIRkiYnB8NT64n5npWiBQlSTNAM60rtsZfYcTnGntXLNoKYn21kxwhgsv2rza9N0uwIB8cetNdQnshZgcg71ynH79r+yEWMGVd3f2RpZUZluP4xbEPQeV/Cx6CdjdDZWvhcZRYVNHfYsvQXi2ZWksQB6DBxFU1cOtOURyhbreQy1kQpA6RQtRk44qsdHMmZQ7bQi7BzAUbydXypctYe0O5mXzE0Vo1PsFsjojIlqoer4AOILKOpab+ZWkA==
+ bh=bwGScXAKq1YCjyZe/LJC51PdA34ZIXAEmS7y0o7dfMs=;
+ b=DVnVJmZTm5qCaPJW2CpVOTHy2Ydkw3n0Fsg4RJh7MAoF3FpQcb0OnKMff8x7FypNOBsgUpmvTsBSrFwF6tCF1AtBha8WtjT/U/yITuQLVhoeWaIXUOJBf5+0NnnesSS9pa/JlBuwpuFyrOwrbN8QHZDJ5uAU6a7lkxjyrSzhu5PYDIQ3GxQJ1XAMpZMSl6UBeikgaWtE79TDlZITw1yCon9AQfCmu/qEdROt5HAHnKdJjeSqXepA1Mj3NrzwWWEphqduefRp2QYPOEFSr4Fpiat8R/sjmzpuYALRJUYSX2my5XcLM1vN6qjE79z5QlEb7lD6m6XtlnCDIKhC/wLNtg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,47 +26,46 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UF2746tPR4L0dSWfP0X6nQnsHIVIbqNag7Dad97Nycw=;
- b=fp8ekv+fc6QXD3P8tf9PuY4IhmRk0LFT/N3E1ZAQprrti5rXrX7TR6lLqaf/w6jCnSDrZ0hixNE03o6iG37GuxN0aSqBxlS7Vhx9xHLD3O6gNgR43avpaV417kguye7MzH+2zKou38MMZrX5lE//hndAG2YvO6scklgsYQDBlSg=
-Received: from BN6PR1401CA0023.namprd14.prod.outlook.com
- (2603:10b6:405:4b::33) by CO6PR02MB7748.namprd02.prod.outlook.com
- (2603:10b6:303:a6::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.25; Wed, 12 May
- 2021 02:01:08 +0000
-Received: from BN1NAM02FT005.eop-nam02.prod.protection.outlook.com
- (2603:10b6:405:4b:cafe::78) by BN6PR1401CA0023.outlook.office365.com
- (2603:10b6:405:4b::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.25 via Frontend
- Transport; Wed, 12 May 2021 02:01:08 +0000
+ bh=bwGScXAKq1YCjyZe/LJC51PdA34ZIXAEmS7y0o7dfMs=;
+ b=pg6moR9plHraclRcN6JT0Zl/QzydmD5hC7yMo8lKFuYUqgcy/xzYof1992RG8gIZv6DPQTezDX8mgzVTY3Qfvj/GKp4xWJ++6EuD97rlcXw52oviCHSb5LQBxTx3F4cxPzIbp6Wnb1F+nabcBMuexiMKwSAF5DCD/M8KiDJO50k=
+Received: from DM5PR21CA0014.namprd21.prod.outlook.com (2603:10b6:3:ac::24) by
+ BYAPR02MB4886.namprd02.prod.outlook.com (2603:10b6:a03:46::32) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4108.29; Wed, 12 May 2021 02:01:20 +0000
+Received: from DM3NAM02FT023.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:3:ac:cafe::3) by DM5PR21CA0014.outlook.office365.com
+ (2603:10b6:3:ac::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.0 via Frontend
+ Transport; Wed, 12 May 2021 02:01:20 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT005.mail.protection.outlook.com (10.13.2.124) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT023.mail.protection.outlook.com (10.13.5.127) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4065.21 via Frontend Transport; Wed, 12 May 2021 02:01:08 +0000
+ 15.20.4065.21 via Frontend Transport; Wed, 12 May 2021 02:01:20 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 11 May 2021 19:00:32 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
+ 15.1.2176.2; Tue, 11 May 2021 19:00:56 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Tue, 11 May 2021 19:00:32 -0700
+ 15.1.2176.2 via Frontend Transport; Tue, 11 May 2021 19:00:56 -0700
 Envelope-to: mdf@kernel.org,
  robh@kernel.org,
  trix@redhat.com,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.212] (port=35744 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.212] (port=35748 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <lizhi.hou@xilinx.com>)
-        id 1lgeAq-0006AI-Nk; Tue, 11 May 2021 19:00:32 -0700
+        id 1lgeBE-0002Ju-R6; Tue, 11 May 2021 19:00:56 -0700
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id DC9CB600133; Tue, 11 May 2021 18:53:45 -0700 (PDT)
+        id 09F84600135; Tue, 11 May 2021 18:53:46 -0700 (PDT)
 From:   Lizhi Hou <lizhi.hou@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
@@ -74,9 +73,9 @@ CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
         <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
         <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
         <robh@kernel.org>, Max Zhen <max.zhen@xilinx.com>
-Subject: [PATCH V6 XRT Alveo 16/20] fpga: xrt: clock driver
-Date:   Tue, 11 May 2021 18:53:35 -0700
-Message-ID: <20210512015339.5649-17-lizhi.hou@xilinx.com>
+Subject: [PATCH V6 XRT Alveo 18/20] fpga: xrt: DDR calibration driver
+Date:   Tue, 11 May 2021 18:53:37 -0700
+Message-ID: <20210512015339.5649-19-lizhi.hou@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210512015339.5649-1-lizhi.hou@xilinx.com>
 References: <20210512015339.5649-1-lizhi.hou@xilinx.com>
@@ -84,717 +83,275 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: db50471f-c605-4bb0-fd0e-08d914e9cf07
-X-MS-TrafficTypeDiagnostic: CO6PR02MB7748:
-X-Microsoft-Antispam-PRVS: <CO6PR02MB77486308C683DDD16377862EA1529@CO6PR02MB7748.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1923;
+X-MS-Office365-Filtering-Correlation-Id: 01db50a0-4609-4549-6ae6-08d914e9d648
+X-MS-TrafficTypeDiagnostic: BYAPR02MB4886:
+X-Microsoft-Antispam-PRVS: <BYAPR02MB48861648A52EAE5A809AFDA4A1529@BYAPR02MB4886.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:311;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /aqocu1WAI8Q6x+7nqlM3cpy/osuJWG3ZIKOIp6OWTknNVlUVYQLw1ZP1lqfrrTTfU78MVefWTW5x4+lNGguoeLTFxE6qcQ+akiS9+BCcwVQUPbw7TTUs5p3ikqJaBoF4ZFsxEw/g4xfLo5N4dod4J21DYU0mOlxDrslIBFS60d3+VeUOb1ySvllJzD8aV8ojT3sjYuuK5iE3OwlSiwAuRzx4q6htMdFqiFkhQne6dA331gyGx3JG7D1ZrYeD525OFnHEqluPWlguPtheDfRryUD3XNwP7wRo2xGTnYDiekIMgCTMeMb+b+Q5HHfU8jdcRwwKmuyn7S1GV7NQ7tuInwAlOAvNOQMNaGQxfwmZ4wBsDwXIbQTQ52q7Qzf55bmXZJHJ+6geixBzLXP5j3c5QKv3eH9Xjbt6bLVcpb+vY//8nT3O5Jd5tl84RuPEe9VofxjMEHO2MH0LFiKEybGfIdXvA/Xl7ru3Gd+4q0CWaiV37WU6rytROOH02DPHUBg/kp/r8cXlsQMmYoJ/fMPUr3VWqBKQ2+LoV3PmrOUT3jIe/dPPMSunb2vyxpYT3xylee9g2bpod3jH2OaIRtKhw6nUzMXiFS/4+m+t7KOSvVkFKzQMpNQZc7Rk1nAUnluxXppKuAOkMHe3DG3btV43GlSnu6sBkTTybePigPOhIE=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(39850400004)(376002)(346002)(136003)(46966006)(36840700001)(44832011)(36756003)(36860700001)(82310400003)(1076003)(478600001)(6266002)(42186006)(82740400003)(426003)(26005)(36906005)(30864003)(6916009)(83380400001)(54906003)(2616005)(4326008)(5660300002)(70586007)(8676002)(336012)(7636003)(107886003)(2906002)(186003)(70206006)(6666004)(47076005)(356005)(316002)(8936002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: kepnUP814vH2+Ukt6WeuJN9COuT2fwvmcKercsw+2LM2l+i3rlTLynFXTQL7n8GHsO6TlVGJxBvujYMcBv9ep0ryOsCMfLD7W5vSaGysLj+ZynZrSn3KUKbY6amHntdS2n1le7kCoyMPw6tb0IgKpJPmtXx56TJbmQIShqa0rKPg73IoJj9IpZVcT0pTXbBuFLRfOqjQkOOUBOn//plClgErkywpGPsf0V/SWDgsCU97Y7Kxn3IJlZgxqPfPOI+JxzsV2Wdma7RYM9OwHV+CsK7zxGto0fAEhUElUeKX2Nfvq4aJwJaLsPIc24LQM08gxg+4QxTk153eghQ/t7Ppyu1G8G2jzY9auiSirmZfMLGPHj77IAiKn7r35kuC3+dNCO+qjKJW20GQVOtgdEfs7vAksl0tHfz+CfVA/5Fjwafe/VRwNbEXoM8CnzsVetz1K0ADs2c3S6PQoKLUkbPpwgvWxNQxhA8f3+BvRNhYJGSohPYZenI4Vrq5a8EJMfI0/WlImKikRfwn2OGdbyHK4rUvPM/f2rVbIyqoJUj5zbpnCCS3mXmOcKAxvbTi78y7akoJWJkmsye8augOTAxcd0S273uS194JbeGGpYUuHhSXsc1n57Sm10wozcPM8uzQis/PMne4kthkvSw1Q4KGgTIxSoB83bwHteyegXES8OY=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(39850400004)(396003)(46966006)(36840700001)(2616005)(426003)(6916009)(336012)(54906003)(44832011)(316002)(36756003)(70586007)(1076003)(107886003)(70206006)(356005)(186003)(5660300002)(6266002)(82740400003)(4326008)(42186006)(7636003)(2906002)(36906005)(6666004)(8676002)(26005)(8936002)(478600001)(47076005)(82310400003)(36860700001)(83380400001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2021 02:01:08.1489
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2021 02:01:20.3741
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: db50471f-c605-4bb0-fd0e-08d914e9cf07
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01db50a0-4609-4549-6ae6-08d914e9d648
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT005.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT023.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR02MB7748
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4886
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add clock driver. Clock is a hardware function discovered by walking
-xclbin metadata. A xrt device node will be created for it. Other part of
-driver configures clock through clock driver.
+Add DDR calibration driver. DDR calibration is a hardware function
+discovered by walking firmware metadata. A xrt device node will
+be created for it. Hardware provides DDR calibration status through
+this function.
 
 Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 Reviewed-by: Tom Rix <trix@redhat.com>
 ---
- drivers/fpga/xrt/include/xleaf/clock.h |  29 ++
- drivers/fpga/xrt/lib/xleaf/clock.c     | 652 +++++++++++++++++++++++++
- 2 files changed, 681 insertions(+)
- create mode 100644 drivers/fpga/xrt/include/xleaf/clock.h
- create mode 100644 drivers/fpga/xrt/lib/xleaf/clock.c
+ .../fpga/xrt/include/xleaf/ddr_calibration.h  |  28 +++
+ drivers/fpga/xrt/lib/xleaf/ddr_calibration.c  | 210 ++++++++++++++++++
+ 2 files changed, 238 insertions(+)
+ create mode 100644 drivers/fpga/xrt/include/xleaf/ddr_calibration.h
+ create mode 100644 drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
 
-diff --git a/drivers/fpga/xrt/include/xleaf/clock.h b/drivers/fpga/xrt/include/xleaf/clock.h
+diff --git a/drivers/fpga/xrt/include/xleaf/ddr_calibration.h b/drivers/fpga/xrt/include/xleaf/ddr_calibration.h
 new file mode 100644
-index 000000000000..6858473fd096
+index 000000000000..878740c26ca2
 --- /dev/null
-+++ b/drivers/fpga/xrt/include/xleaf/clock.h
-@@ -0,0 +1,29 @@
++++ b/drivers/fpga/xrt/include/xleaf/ddr_calibration.h
+@@ -0,0 +1,28 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2021 Xilinx, Inc.
 + *
 + * Authors:
-+ *	Lizhi Hou <Lizhi.Hou@xilinx.com>
++ *	Cheng Zhen <maxz@xilinx.com>
 + */
 +
-+#ifndef _XRT_CLOCK_H_
-+#define _XRT_CLOCK_H_
++#ifndef _XRT_DDR_CALIBRATION_H_
++#define _XRT_DDR_CALIBRATION_H_
 +
 +#include "xleaf.h"
 +#include <linux/xrt/xclbin.h>
 +
 +/*
-+ * CLOCK driver leaf calls.
++ * Memory calibration driver leaf calls.
 + */
-+enum xrt_clock_leaf_cmd {
-+	XRT_CLOCK_SET = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-+	XRT_CLOCK_GET,
-+	XRT_CLOCK_VERIFY,
++enum xrt_calib_results {
++	XRT_CALIB_UNKNOWN = 0,
++	XRT_CALIB_SUCCEEDED,
++	XRT_CALIB_FAILED,
 +};
 +
-+struct xrt_clock_get {
-+	u16 freq;
-+	u32 freq_cnter;
++enum xrt_calib_leaf_cmd {
++	XRT_CALIB_RESULT = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
 +};
 +
-+#endif	/* _XRT_CLOCK_H_ */
-diff --git a/drivers/fpga/xrt/lib/xleaf/clock.c b/drivers/fpga/xrt/lib/xleaf/clock.c
++#endif	/* _XRT_DDR_CALIBRATION_H_ */
+diff --git a/drivers/fpga/xrt/lib/xleaf/ddr_calibration.c b/drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
 new file mode 100644
-index 000000000000..ba672fe99a47
+index 000000000000..36a0937c9195
 --- /dev/null
-+++ b/drivers/fpga/xrt/lib/xleaf/clock.c
-@@ -0,0 +1,652 @@
++++ b/drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
+@@ -0,0 +1,210 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Xilinx Alveo FPGA Clock Wizard Driver
++ * Xilinx Alveo FPGA memory calibration driver
 + *
 + * Copyright (C) 2020-2021 Xilinx, Inc.
 + *
++ * memory calibration
++ *
 + * Authors:
 + *      Lizhi Hou<Lizhi.Hou@xilinx.com>
-+ *      Sonal Santan <sonals@xilinx.com>
-+ *      David Zhang <davidzha@xilinx.com>
 + */
-+
-+#include <linux/mod_devicetable.h>
 +#include <linux/delay.h>
-+#include <linux/device.h>
 +#include <linux/regmap.h>
-+#include <linux/io.h>
++#include "xclbin-helper.h"
 +#include "metadata.h"
-+#include "xleaf.h"
-+#include "xleaf/clock.h"
-+#include "xleaf/clkfreq.h"
++#include "xleaf/ddr_calibration.h"
 +
-+/* XRT_CLOCK_MAX_NUM_CLOCKS should be a concept from XCLBIN_ in the future */
-+#define XRT_CLOCK_MAX_NUM_CLOCKS	4
-+#define XRT_CLOCK_STATUS_MASK		0xffff
-+#define XRT_CLOCK_STATUS_MEASURE_START	0x1
-+#define XRT_CLOCK_STATUS_MEASURE_DONE	0x2
++#define XRT_CALIB	"xrt_calib"
 +
-+#define XRT_CLOCK_STATUS_REG		0x4
-+#define XRT_CLOCK_CLKFBOUT_REG		0x200
-+#define XRT_CLOCK_CLKOUT0_REG		0x208
-+#define XRT_CLOCK_LOAD_SADDR_SEN_REG	0x25C
-+#define XRT_CLOCK_DEFAULT_EXPIRE_SECS	1
++#define XRT_CALIB_STATUS_REG		0
++#define XRT_CALIB_READ_RETRIES		20
++#define XRT_CALIB_READ_INTERVAL		500 /* ms */
 +
-+#define CLOCK_ERR(clock, fmt, arg...)	\
-+	xrt_err((clock)->xdev, fmt "\n", ##arg)
-+#define CLOCK_WARN(clock, fmt, arg...)	\
-+	xrt_warn((clock)->xdev, fmt "\n", ##arg)
-+#define CLOCK_INFO(clock, fmt, arg...)	\
-+	xrt_info((clock)->xdev, fmt "\n", ##arg)
-+#define CLOCK_DBG(clock, fmt, arg...)	\
-+	xrt_dbg((clock)->xdev, fmt "\n", ##arg)
++XRT_DEFINE_REGMAP_CONFIG(calib_regmap_config);
 +
-+#define XRT_CLOCK	"xrt_clock"
++struct calib_cache {
++	struct list_head	link;
++	const char		*ep_name;
++	char			*data;
++	u32			data_size;
++};
 +
-+XRT_DEFINE_REGMAP_CONFIG(clock_regmap_config);
-+
-+struct clock {
++struct calib {
 +	struct xrt_device	*xdev;
 +	struct regmap		*regmap;
-+	struct mutex		clock_lock; /* clock dev lock */
-+
-+	const char		*clock_ep_name;
++	struct mutex		lock; /* calibration dev lock */
++	struct list_head	cache_list;
++	u32			cache_num;
++	enum xrt_calib_results	result;
 +};
 +
-+/*
-+ * Precomputed table with config0 and config2 register values together with
-+ * target frequency. The steps are approximately 5 MHz apart. Table is
-+ * generated by platform creation tool.
-+ */
-+static const struct xmgmt_ocl_clockwiz {
-+	/* target frequency */
-+	u16 ocl;
-+	/* config0 register */
-+	u32 config0;
-+	/* config2 register */
-+	u32 config2;
-+} frequency_table[] = {
-+	/*1275.000*/ { 10, 0x02EE0C01, 0x0001F47F },
-+	/*1575.000*/ { 15, 0x02EE0F01, 0x00000069},
-+	/*1600.000*/ { 20, 0x00001001, 0x00000050},
-+	/*1600.000*/ { 25, 0x00001001, 0x00000040},
-+	/*1575.000*/ { 30, 0x02EE0F01, 0x0001F434},
-+	/*1575.000*/ { 35, 0x02EE0F01, 0x0000002D},
-+	/*1600.000*/ { 40, 0x00001001, 0x00000028},
-+	/*1575.000*/ { 45, 0x02EE0F01, 0x00000023},
-+	/*1600.000*/ { 50, 0x00001001, 0x00000020},
-+	/*1512.500*/ { 55, 0x007D0F01, 0x0001F41B},
-+	/*1575.000*/ { 60, 0x02EE0F01, 0x0000FA1A},
-+	/*1462.500*/ { 65, 0x02710E01, 0x0001F416},
-+	/*1575.000*/ { 70, 0x02EE0F01, 0x0001F416},
-+	/*1575.000*/ { 75, 0x02EE0F01, 0x00000015},
-+	/*1600.000*/ { 80, 0x00001001, 0x00000014},
-+	/*1487.500*/ { 85, 0x036B0E01, 0x0001F411},
-+	/*1575.000*/ { 90, 0x02EE0F01, 0x0001F411},
-+	/*1425.000*/ { 95, 0x00FA0E01, 0x0000000F},
-+	/*1600.000*/ { 100, 0x00001001, 0x00000010},
-+	/*1575.000*/ { 105, 0x02EE0F01, 0x0000000F},
-+	/*1512.500*/ { 110, 0x007D0F01, 0x0002EE0D},
-+	/*1437.500*/ { 115, 0x01770E01, 0x0001F40C},
-+	/*1575.000*/ { 120, 0x02EE0F01, 0x00007D0D},
-+	/*1562.500*/ { 125, 0x02710F01, 0x0001F40C},
-+	/*1462.500*/ { 130, 0x02710E01, 0x0000FA0B},
-+	/*1350.000*/ { 135, 0x01F40D01, 0x0000000A},
-+	/*1575.000*/ { 140, 0x02EE0F01, 0x0000FA0B},
-+	/*1450.000*/ { 145, 0x01F40E01, 0x0000000A},
-+	/*1575.000*/ { 150, 0x02EE0F01, 0x0001F40A},
-+	/*1550.000*/ { 155, 0x01F40F01, 0x0000000A},
-+	/*1600.000*/ { 160, 0x00001001, 0x0000000A},
-+	/*1237.500*/ { 165, 0x01770C01, 0x0001F407},
-+	/*1487.500*/ { 170, 0x036B0E01, 0x0002EE08},
-+	/*1575.000*/ { 175, 0x02EE0F01, 0x00000009},
-+	/*1575.000*/ { 180, 0x02EE0F01, 0x0002EE08},
-+	/*1387.500*/ { 185, 0x036B0D01, 0x0001F407},
-+	/*1425.000*/ { 190, 0x00FA0E01, 0x0001F407},
-+	/*1462.500*/ { 195, 0x02710E01, 0x0001F407},
-+	/*1600.000*/ { 200, 0x00001001, 0x00000008},
-+	/*1537.500*/ { 205, 0x01770F01, 0x0001F407},
-+	/*1575.000*/ { 210, 0x02EE0F01, 0x0001F407},
-+	/*1075.000*/ { 215, 0x02EE0A01, 0x00000005},
-+	/*1512.500*/ { 220, 0x007D0F01, 0x00036B06},
-+	/*1575.000*/ { 225, 0x02EE0F01, 0x00000007},
-+	/*1437.500*/ { 230, 0x01770E01, 0x0000FA06},
-+	/*1175.000*/ { 235, 0x02EE0B01, 0x00000005},
-+	/*1500.000*/ { 240, 0x00000F01, 0x0000FA06},
-+	/*1225.000*/ { 245, 0x00FA0C01, 0x00000005},
-+	/*1562.500*/ { 250, 0x02710F01, 0x0000FA06},
-+	/*1275.000*/ { 255, 0x02EE0C01, 0x00000005},
-+	/*1462.500*/ { 260, 0x02710E01, 0x00027105},
-+	/*1325.000*/ { 265, 0x00FA0D01, 0x00000005},
-+	/*1350.000*/ { 270, 0x01F40D01, 0x00000005},
-+	/*1512.500*/ { 275, 0x007D0F01, 0x0001F405},
-+	/*1575.000*/ { 280, 0x02EE0F01, 0x00027105},
-+	/*1425.000*/ { 285, 0x00FA0E01, 0x00000005},
-+	/*1450.000*/ { 290, 0x01F40E01, 0x00000005},
-+	/*1475.000*/ { 295, 0x02EE0E01, 0x00000005},
-+	/*1575.000*/ { 300, 0x02EE0F01, 0x0000FA05},
-+	/*1525.000*/ { 305, 0x00FA0F01, 0x00000005},
-+	/*1550.000*/ { 310, 0x01F40F01, 0x00000005},
-+	/*1575.000*/ { 315, 0x02EE0F01, 0x00000005},
-+	/*1600.000*/ { 320, 0x00001001, 0x00000005},
-+	/*1462.500*/ { 325, 0x02710E01, 0x0001F404},
-+	/*1237.500*/ { 330, 0x01770C01, 0x0002EE03},
-+	/* 837.500*/ { 335, 0x01770801, 0x0001F402},
-+	/*1487.500*/ { 340, 0x036B0E01, 0x00017704},
-+	/* 862.500*/ { 345, 0x02710801, 0x0001F402},
-+	/*1575.000*/ { 350, 0x02EE0F01, 0x0001F404},
-+	/* 887.500*/ { 355, 0x036B0801, 0x0001F402},
-+	/*1575.000*/ { 360, 0x02EE0F01, 0x00017704},
-+	/* 912.500*/ { 365, 0x007D0901, 0x0001F402},
-+	/*1387.500*/ { 370, 0x036B0D01, 0x0002EE03},
-+	/*1500.000*/ { 375, 0x00000F01, 0x00000004},
-+	/*1425.000*/ { 380, 0x00FA0E01, 0x0002EE03},
-+	/* 962.500*/ { 385, 0x02710901, 0x0001F402},
-+	/*1462.500*/ { 390, 0x02710E01, 0x0002EE03},
-+	/* 987.500*/ { 395, 0x036B0901, 0x0001F402},
-+	/*1600.000*/ { 400, 0x00001001, 0x00000004},
-+	/*1012.500*/ { 405, 0x007D0A01, 0x0001F402},
-+	/*1537.500*/ { 410, 0x01770F01, 0x0002EE03},
-+	/*1037.500*/ { 415, 0x01770A01, 0x0001F402},
-+	/*1575.000*/ { 420, 0x02EE0F01, 0x0002EE03},
-+	/*1487.500*/ { 425, 0x036B0E01, 0x0001F403},
-+	/*1075.000*/ { 430, 0x02EE0A01, 0x0001F402},
-+	/*1087.500*/ { 435, 0x036B0A01, 0x0001F402},
-+	/*1375.000*/ { 440, 0x02EE0D01, 0x00007D03},
-+	/*1112.500*/ { 445, 0x007D0B01, 0x0001F402},
-+	/*1575.000*/ { 450, 0x02EE0F01, 0x0001F403},
-+	/*1137.500*/ { 455, 0x01770B01, 0x0001F402},
-+	/*1437.500*/ { 460, 0x01770E01, 0x00007D03},
-+	/*1162.500*/ { 465, 0x02710B01, 0x0001F402},
-+	/*1175.000*/ { 470, 0x02EE0B01, 0x0001F402},
-+	/*1425.000*/ { 475, 0x00FA0E01, 0x00000003},
-+	/*1500.000*/ { 480, 0x00000F01, 0x00007D03},
-+	/*1212.500*/ { 485, 0x007D0C01, 0x0001F402},
-+	/*1225.000*/ { 490, 0x00FA0C01, 0x0001F402},
-+	/*1237.500*/ { 495, 0x01770C01, 0x0001F402},
-+	/*1562.500*/ { 500, 0x02710F01, 0x00007D03},
-+	/*1262.500*/ { 505, 0x02710C01, 0x0001F402},
-+	/*1275.000*/ { 510, 0x02EE0C01, 0x0001F402},
-+	/*1287.500*/ { 515, 0x036B0C01, 0x0001F402},
-+	/*1300.000*/ { 520, 0x00000D01, 0x0001F402},
-+	/*1575.000*/ { 525, 0x02EE0F01, 0x00000003},
-+	/*1325.000*/ { 530, 0x00FA0D01, 0x0001F402},
-+	/*1337.500*/ { 535, 0x01770D01, 0x0001F402},
-+	/*1350.000*/ { 540, 0x01F40D01, 0x0001F402},
-+	/*1362.500*/ { 545, 0x02710D01, 0x0001F402},
-+	/*1512.500*/ { 550, 0x007D0F01, 0x0002EE02},
-+	/*1387.500*/ { 555, 0x036B0D01, 0x0001F402},
-+	/*1400.000*/ { 560, 0x00000E01, 0x0001F402},
-+	/*1412.500*/ { 565, 0x007D0E01, 0x0001F402},
-+	/*1425.000*/ { 570, 0x00FA0E01, 0x0001F402},
-+	/*1437.500*/ { 575, 0x01770E01, 0x0001F402},
-+	/*1450.000*/ { 580, 0x01F40E01, 0x0001F402},
-+	/*1462.500*/ { 585, 0x02710E01, 0x0001F402},
-+	/*1475.000*/ { 590, 0x02EE0E01, 0x0001F402},
-+	/*1487.500*/ { 595, 0x036B0E01, 0x0001F402},
-+	/*1575.000*/ { 600, 0x02EE0F01, 0x00027102},
-+	/*1512.500*/ { 605, 0x007D0F01, 0x0001F402},
-+	/*1525.000*/ { 610, 0x00FA0F01, 0x0001F402},
-+	/*1537.500*/ { 615, 0x01770F01, 0x0001F402},
-+	/*1550.000*/ { 620, 0x01F40F01, 0x0001F402},
-+	/*1562.500*/ { 625, 0x02710F01, 0x0001F402},
-+	/*1575.000*/ { 630, 0x02EE0F01, 0x0001F402},
-+	/*1587.500*/ { 635, 0x036B0F01, 0x0001F402},
-+	/*1600.000*/ { 640, 0x00001001, 0x0001F402},
-+	/*1290.000*/ { 645, 0x01F44005, 0x00000002},
-+	/*1462.500*/ { 650, 0x02710E01, 0x0000FA02}
-+};
-+
-+static u32 find_matching_freq_config(unsigned short freq,
-+				     const struct xmgmt_ocl_clockwiz *table,
-+				     int size)
++static void __calib_cache_clean_nolock(struct calib *calib)
 +{
-+	u32 end = size - 1;
-+	u32 start = 0;
-+	u32 idx;
++	struct calib_cache *cache, *temp;
 +
-+	if (freq < table[0].ocl)
-+		return 0;
-+
-+	if (freq > table[size - 1].ocl)
-+		return size - 1;
-+
-+	while (start < end) {
-+		idx = (start + end) / 2;
-+		if (freq == table[idx].ocl)
-+			break;
-+		if (freq < table[idx].ocl)
-+			end = idx;
-+		else
-+			start = idx + 1;
++	list_for_each_entry_safe(cache, temp, &calib->cache_list, link) {
++		vfree(cache->data);
++		list_del(&cache->link);
++		vfree(cache);
 +	}
-+	if (freq < table[idx].ocl)
-+		idx--;
-+
-+	return idx;
++	calib->cache_num = 0;
 +}
 +
-+static u32 find_matching_freq(u32 freq,
-+			      const struct xmgmt_ocl_clockwiz *freq_table,
-+			      int freq_table_size)
++static void calib_cache_clean(struct calib *calib)
 +{
-+	int idx = find_matching_freq_config(freq, freq_table, freq_table_size);
-+
-+	return freq_table[idx].ocl;
++	mutex_lock(&calib->lock);
++	__calib_cache_clean_nolock(calib);
++	mutex_unlock(&calib->lock);
 +}
 +
-+static inline int clock_wiz_busy(struct clock *clock, int cycle, int interval)
++static int calib_calibration(struct calib *calib)
 +{
-+	u32 val = 0;
-+	int count;
++	u32 times = XRT_CALIB_READ_RETRIES;
++	u32 status;
 +	int ret;
 +
-+	for (count = 0; count < cycle; count++) {
-+		ret = regmap_read(clock->regmap, XRT_CLOCK_STATUS_REG, &val);
++	while (times != 0) {
++		ret = regmap_read(calib->regmap, XRT_CALIB_STATUS_REG, &status);
 +		if (ret) {
-+			CLOCK_ERR(clock, "read status failed %d", ret);
++			xrt_err(calib->xdev, "failed to read status reg %d", ret);
 +			return ret;
 +		}
-+		if (val == 1)
++
++		if (status & BIT(0))
 +			break;
-+
-+		mdelay(interval);
-+	}
-+	if (val != 1) {
-+		CLOCK_ERR(clock, "clockwiz is (%u) busy after %d ms",
-+			  val, cycle * interval);
-+		return -EBUSY;
++		msleep(XRT_CALIB_READ_INTERVAL);
++		times--;
 +	}
 +
++	if (!times) {
++		xrt_err(calib->xdev,
++			"MIG calibration timeout after bitstream download");
++		return -ETIMEDOUT;
++	}
++
++	xrt_info(calib->xdev, "took %dms", (XRT_CALIB_READ_RETRIES - times) *
++		 XRT_CALIB_READ_INTERVAL);
 +	return 0;
 +}
 +
-+static int get_freq(struct clock *clock, u16 *freq)
++static void xrt_calib_event_cb(struct xrt_device *xdev, void *arg)
 +{
-+	u32 mul_frac0 = 0;
-+	u32 div_frac1 = 0;
-+	u32 mul0, div0;
-+	u64 input;
-+	u32 div1;
-+	u32 val;
++	struct calib *calib = xrt_get_drvdata(xdev);
++	struct xrt_event *evt = (struct xrt_event *)arg;
++	enum xrt_events e = evt->xe_evt;
++	enum xrt_subdev_id id;
 +	int ret;
 +
-+	WARN_ON(!mutex_is_locked(&clock->clock_lock));
++	id = evt->xe_subdev.xevt_subdev_id;
 +
-+	ret = regmap_read(clock->regmap, XRT_CLOCK_STATUS_REG, &val);
-+	if (ret) {
-+		CLOCK_ERR(clock, "read status failed %d", ret);
-+		return ret;
-+	}
-+
-+	if ((val & 0x1) == 0) {
-+		CLOCK_ERR(clock, "clockwiz is busy %x", val);
-+		*freq = 0;
-+		return -EBUSY;
-+	}
-+
-+	ret = regmap_read(clock->regmap, XRT_CLOCK_CLKFBOUT_REG, &val);
-+	if (ret) {
-+		CLOCK_ERR(clock, "read clkfbout failed %d", ret);
-+		return ret;
-+	}
-+
-+	div0 = val & 0xff;
-+	mul0 = (val & 0xff00) >> 8;
-+	if (val & BIT(26)) {
-+		mul_frac0 = val >> 16;
-+		mul_frac0 &= 0x3ff;
-+	}
-+
-+	/*
-+	 * Multiply both numerator (mul0) and the denominator (div0) with 1000
-+	 * to account for fractional portion of multiplier
-+	 */
-+	mul0 *= 1000;
-+	mul0 += mul_frac0;
-+	div0 *= 1000;
-+
-+	ret = regmap_read(clock->regmap, XRT_CLOCK_CLKOUT0_REG, &val);
-+	if (ret) {
-+		CLOCK_ERR(clock, "read clkout0 failed %d", ret);
-+		return ret;
-+	}
-+
-+	div1 = val & 0xff;
-+	if (val & BIT(18)) {
-+		div_frac1 = val >> 8;
-+		div_frac1 &= 0x3ff;
-+	}
-+
-+	/*
-+	 * Multiply both numerator (mul0) and the denominator (div1) with
-+	 * 1000 to account for fractional portion of divider
-+	 */
-+
-+	div1 *= 1000;
-+	div1 += div_frac1;
-+	div0 *= div1;
-+	mul0 *= 1000;
-+	if (div0 == 0) {
-+		CLOCK_ERR(clock, "clockwiz 0 divider");
-+		return 0;
-+	}
-+
-+	input = mul0 * 100;
-+	do_div(input, div0);
-+	*freq = (u16)input;
-+
-+	return 0;
-+}
-+
-+static int set_freq(struct clock *clock, u16 freq)
-+{
-+	int err = 0;
-+	u32 idx = 0;
-+	u32 val = 0;
-+	u32 config;
-+
-+	mutex_lock(&clock->clock_lock);
-+	idx = find_matching_freq_config(freq, frequency_table,
-+					ARRAY_SIZE(frequency_table));
-+
-+	CLOCK_INFO(clock, "New: %d Mhz", freq);
-+	err = clock_wiz_busy(clock, 20, 50);
-+	if (err)
-+		goto fail;
-+
-+	config = frequency_table[idx].config0;
-+	err = regmap_write(clock->regmap, XRT_CLOCK_CLKFBOUT_REG, config);
-+	if (err) {
-+		CLOCK_ERR(clock, "write clkfbout failed %d", err);
-+		goto fail;
-+	}
-+
-+	config = frequency_table[idx].config2;
-+	err = regmap_write(clock->regmap, XRT_CLOCK_CLKOUT0_REG, config);
-+	if (err) {
-+		CLOCK_ERR(clock, "write clkout0 failed %d", err);
-+		goto fail;
-+	}
-+
-+	mdelay(10);
-+	err = regmap_write(clock->regmap, XRT_CLOCK_LOAD_SADDR_SEN_REG, 7);
-+	if (err) {
-+		CLOCK_ERR(clock, "write load_saddr_sen failed %d", err);
-+		goto fail;
-+	}
-+
-+	mdelay(1);
-+	err = regmap_write(clock->regmap, XRT_CLOCK_LOAD_SADDR_SEN_REG, 2);
-+	if (err) {
-+		CLOCK_ERR(clock, "write saddr failed %d", err);
-+		goto fail;
-+	}
-+
-+	CLOCK_INFO(clock, "clockwiz waiting for locked signal");
-+
-+	err = clock_wiz_busy(clock, 100, 100);
-+	if (err) {
-+		CLOCK_ERR(clock, "clockwiz MMCM/PLL did not lock");
-+		/* restore */
-+		regmap_write(clock->regmap, XRT_CLOCK_LOAD_SADDR_SEN_REG, 4);
-+		mdelay(10);
-+		regmap_write(clock->regmap, XRT_CLOCK_LOAD_SADDR_SEN_REG, 0);
-+		goto fail;
-+	}
-+	regmap_read(clock->regmap, XRT_CLOCK_CLKFBOUT_REG, &val);
-+	CLOCK_INFO(clock, "clockwiz CONFIG(0) 0x%x", val);
-+	regmap_read(clock->regmap, XRT_CLOCK_CLKOUT0_REG, &val);
-+	CLOCK_INFO(clock, "clockwiz CONFIG(2) 0x%x", val);
-+
-+fail:
-+	mutex_unlock(&clock->clock_lock);
-+	return err;
-+}
-+
-+static int get_freq_counter(struct clock *clock, u32 *freq)
-+{
-+	struct xrt_subdev_platdata *pdata = DEV_PDATA(clock->xdev);
-+	struct xrt_device *xdev = clock->xdev;
-+	struct xrt_device *counter_leaf;
-+	const void *counter;
-+	int err;
-+
-+	WARN_ON(!mutex_is_locked(&clock->clock_lock));
-+
-+	err = xrt_md_get_prop(DEV(xdev), pdata->xsp_dtb, clock->clock_ep_name,
-+			      NULL, XRT_MD_PROP_CLK_CNT, &counter, NULL);
-+	if (err) {
-+		xrt_err(xdev, "no counter specified");
-+		return err;
-+	}
-+
-+	counter_leaf = xleaf_get_leaf_by_epname(xdev, counter);
-+	if (!counter_leaf) {
-+		xrt_err(xdev, "can't find counter");
-+		return -ENOENT;
-+	}
-+
-+	err = xleaf_call(counter_leaf, XRT_CLKFREQ_READ, freq);
-+	if (err)
-+		xrt_err(xdev, "can't read counter");
-+	xleaf_put_leaf(clock->xdev, counter_leaf);
-+
-+	return err;
-+}
-+
-+static int clock_get_freq(struct clock *clock, u16 *freq, u32 *freq_cnter)
-+{
-+	int err = 0;
-+
-+	mutex_lock(&clock->clock_lock);
-+
-+	if (err == 0 && freq)
-+		err = get_freq(clock, freq);
-+
-+	if (err == 0 && freq_cnter)
-+		err = get_freq_counter(clock, freq_cnter);
-+
-+	mutex_unlock(&clock->clock_lock);
-+	return err;
-+}
-+
-+static int clock_verify_freq(struct clock *clock)
-+{
-+	u32 lookup_freq, clock_freq_counter, request_in_khz, tolerance;
-+	int err = 0;
-+	u16 freq;
-+
-+	mutex_lock(&clock->clock_lock);
-+
-+	err = get_freq(clock, &freq);
-+	if (err) {
-+		xrt_err(clock->xdev, "get freq failed, %d", err);
-+		goto end;
-+	}
-+
-+	err = get_freq_counter(clock, &clock_freq_counter);
-+	if (err) {
-+		xrt_err(clock->xdev, "get freq counter failed, %d", err);
-+		goto end;
-+	}
-+
-+	lookup_freq = find_matching_freq(freq, frequency_table,
-+					 ARRAY_SIZE(frequency_table));
-+	request_in_khz = lookup_freq * 1000;
-+	tolerance = lookup_freq * 50;
-+	if (tolerance < abs(clock_freq_counter - request_in_khz)) {
-+		CLOCK_ERR(clock,
-+			  "set clock(%s) failed, request %ukhz, actual %dkhz",
-+			  clock->clock_ep_name, request_in_khz, clock_freq_counter);
-+		err = -EDOM;
-+	} else {
-+		CLOCK_INFO(clock, "verified clock (%s)", clock->clock_ep_name);
-+	}
-+
-+end:
-+	mutex_unlock(&clock->clock_lock);
-+	return err;
-+}
-+
-+static int clock_init(struct clock *clock)
-+{
-+	struct xrt_subdev_platdata *pdata = DEV_PDATA(clock->xdev);
-+	const __be16 *freq;
-+	int err = 0;
-+
-+	err = xrt_md_get_prop(DEV(clock->xdev), pdata->xsp_dtb,
-+			      clock->clock_ep_name, NULL, XRT_MD_PROP_CLK_FREQ,
-+		(const void **)&freq, NULL);
-+	if (err) {
-+		xrt_info(clock->xdev, "no default freq");
-+		return 0;
-+	}
-+
-+	err = set_freq(clock, be16_to_cpu(*freq));
-+
-+	return err;
-+}
-+
-+static ssize_t freq_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct clock *clock = xrt_get_drvdata(to_xrt_dev(dev));
-+	ssize_t count;
-+	u16 freq = 0;
-+
-+	count = clock_get_freq(clock, &freq, NULL);
-+	if (count < 0)
-+		return count;
-+
-+	count = snprintf(buf, 64, "%u\n", freq);
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RO(freq);
-+
-+static struct attribute *clock_attrs[] = {
-+	&dev_attr_freq.attr,
-+	NULL,
-+};
-+
-+static struct attribute_group clock_attr_group = {
-+	.attrs = clock_attrs,
-+};
-+
-+static int
-+xrt_clock_leaf_call(struct xrt_device *xdev, u32 cmd, void *arg)
-+{
-+	struct clock *clock;
-+	int ret = 0;
-+
-+	clock = xrt_get_drvdata(xdev);
-+
-+	switch (cmd) {
-+	case XRT_XLEAF_EVENT:
-+		/* Does not handle any event. */
++	switch (e) {
++	case XRT_EVENT_POST_CREATION:
++		if (id == XRT_SUBDEV_UCS) {
++			ret = calib_calibration(calib);
++			if (ret)
++				calib->result = XRT_CALIB_FAILED;
++			else
++				calib->result = XRT_CALIB_SUCCEEDED;
++		}
 +		break;
-+	case XRT_CLOCK_SET: {
-+		u16	freq = (u16)(uintptr_t)arg;
-+
-+		ret = set_freq(clock, freq);
-+		break;
-+	}
-+	case XRT_CLOCK_VERIFY:
-+		ret = clock_verify_freq(clock);
-+		break;
-+	case XRT_CLOCK_GET: {
-+		struct xrt_clock_get *get =
-+			(struct xrt_clock_get *)arg;
-+
-+		ret = clock_get_freq(clock, &get->freq, &get->freq_cnter);
-+		break;
-+	}
 +	default:
-+		xrt_err(xdev, "unsupported cmd %d", cmd);
-+		return -EINVAL;
++		xrt_dbg(xdev, "ignored event %d", e);
++		break;
 +	}
-+
-+	return ret;
 +}
 +
-+static void clock_remove(struct xrt_device *xdev)
++static void xrt_calib_remove(struct xrt_device *xdev)
 +{
-+	sysfs_remove_group(&xdev->dev.kobj, &clock_attr_group);
++	struct calib *calib = xrt_get_drvdata(xdev);
++
++	calib_cache_clean(calib);
 +}
 +
-+static int clock_probe(struct xrt_device *xdev)
++static int xrt_calib_probe(struct xrt_device *xdev)
 +{
-+	struct clock *clock = NULL;
 +	void __iomem *base = NULL;
 +	struct resource *res;
-+	int ret;
++	struct calib *calib;
++	int err = 0;
 +
-+	clock = devm_kzalloc(&xdev->dev, sizeof(*clock), GFP_KERNEL);
-+	if (!clock)
++	calib = devm_kzalloc(&xdev->dev, sizeof(*calib), GFP_KERNEL);
++	if (!calib)
 +		return -ENOMEM;
 +
-+	xrt_set_drvdata(xdev, clock);
-+	clock->xdev = xdev;
-+	mutex_init(&clock->clock_lock);
++	calib->xdev = xdev;
++	xrt_set_drvdata(xdev, calib);
 +
 +	res = xrt_get_resource(xdev, IORESOURCE_MEM, 0);
 +	if (!res) {
-+		ret = -EINVAL;
++		err = -EINVAL;
 +		goto failed;
 +	}
 +
 +	base = devm_ioremap_resource(&xdev->dev, res);
 +	if (IS_ERR(base)) {
-+		ret = PTR_ERR(base);
++		err = PTR_ERR(base);
 +		goto failed;
 +	}
 +
-+	clock->regmap = devm_regmap_init_mmio(&xdev->dev, base, &clock_regmap_config);
-+	if (IS_ERR(clock->regmap)) {
-+		CLOCK_ERR(clock, "regmap %pR failed", res);
-+		ret = PTR_ERR(clock->regmap);
-+		goto failed;
-+	}
-+	clock->clock_ep_name = res->name;
-+
-+	ret = clock_init(clock);
-+	if (ret)
-+		goto failed;
-+
-+	ret = sysfs_create_group(&xdev->dev.kobj, &clock_attr_group);
-+	if (ret) {
-+		CLOCK_ERR(clock, "create clock attrs failed: %d", ret);
++	calib->regmap = devm_regmap_init_mmio(&xdev->dev, base, &calib_regmap_config);
++	if (IS_ERR(calib->regmap)) {
++		xrt_err(xdev, "Map iomem failed");
++		err = PTR_ERR(calib->regmap);
 +		goto failed;
 +	}
 +
-+	CLOCK_INFO(clock, "successfully initialized Clock subdev");
++	mutex_init(&calib->lock);
++	INIT_LIST_HEAD(&calib->cache_list);
 +
 +	return 0;
 +
 +failed:
++	return err;
++}
++
++static int
++xrt_calib_leaf_call(struct xrt_device *xdev, u32 cmd, void *arg)
++{
++	struct calib *calib = xrt_get_drvdata(xdev);
++	int ret = 0;
++
++	switch (cmd) {
++	case XRT_XLEAF_EVENT:
++		xrt_calib_event_cb(xdev, arg);
++		break;
++	case XRT_CALIB_RESULT: {
++		enum xrt_calib_results *r = (enum xrt_calib_results *)arg;
++		*r = calib->result;
++		break;
++	}
++	default:
++		xrt_err(xdev, "unsupported cmd %d", cmd);
++		ret = -EINVAL;
++	}
 +	return ret;
 +}
 +
-+static struct xrt_dev_endpoints xrt_clock_endpoints[] = {
++static struct xrt_dev_endpoints xrt_calib_endpoints[] = {
 +	{
 +		.xse_names = (struct xrt_dev_ep_names[]) {
-+			{ .compat = "clkwiz" },
++			{ .ep_name = XRT_MD_NODE_DDR_CALIB },
 +			{ NULL },
 +		},
 +		.xse_min_ep = 1,
@@ -802,18 +359,18 @@ index 000000000000..ba672fe99a47
 +	{ 0 },
 +};
 +
-+static struct xrt_driver xrt_clock_driver = {
++static struct xrt_driver xrt_calib_driver = {
 +	.driver = {
-+		.name = XRT_CLOCK,
++		.name = XRT_CALIB,
 +	},
-+	.subdev_id = XRT_SUBDEV_CLOCK,
-+	.endpoints = xrt_clock_endpoints,
-+	.probe = clock_probe,
-+	.remove = clock_remove,
-+	.leaf_call = xrt_clock_leaf_call,
++	.subdev_id = XRT_SUBDEV_CALIB,
++	.endpoints = xrt_calib_endpoints,
++	.probe = xrt_calib_probe,
++	.remove = xrt_calib_remove,
++	.leaf_call = xrt_calib_leaf_call,
 +};
 +
-+XRT_LEAF_INIT_FINI_FUNC(clock);
++XRT_LEAF_INIT_FINI_FUNC(calib);
 -- 
 2.27.0
 
