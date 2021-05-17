@@ -2,43 +2,41 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B53383C34
-	for <lists+linux-fpga@lfdr.de>; Mon, 17 May 2021 20:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED2B383D91
+	for <lists+linux-fpga@lfdr.de>; Mon, 17 May 2021 21:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233749AbhEQS1J (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 17 May 2021 14:27:09 -0400
-Received: from mga06.intel.com ([134.134.136.31]:49139 "EHLO mga06.intel.com"
+        id S233554AbhEQTjI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 17 May 2021 15:39:08 -0400
+Received: from mga04.intel.com ([192.55.52.120]:42548 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233592AbhEQS1J (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 17 May 2021 14:27:09 -0400
-IronPort-SDR: evh7ngWzKox5AtPMDfhroOF4MLdSlIVeGxcV3W9BaHc7OjjAbW8emARfOP458kVPtnW92h2WV2
- VqjRIVABMT2A==
-X-IronPort-AV: E=McAfee;i="6200,9189,9987"; a="261766326"
+        id S229755AbhEQTjI (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 17 May 2021 15:39:08 -0400
+IronPort-SDR: QHn/egflCEZbuw3XKfC1blHtfzTaLXW5EbbzB6r8MXxTl2Qzsuauawkvk6d29L7H8hRVMx5N4p
+ a0AIQjMkFKUQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9987"; a="198601147"
 X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="261766326"
+   d="scan'208";a="198601147"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 11:25:52 -0700
-IronPort-SDR: IzcdCDipCTwPS4N41r5ij2PLkJkochm/BYHVOhxxb5EHSvC+oz9RXnuzDnKuOhASURLnDI46cU
- Pb2MiWJpKOHg==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 12:37:51 -0700
+IronPort-SDR: BVPJNKFsktd7PcDl+s9UprigQ8xws9oGyIBl87P1L6ONweQkK9zfNiieUOKEIGfUe6jAK9b20v
+ uK3kJrQz7KcA==
 X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="543798192"
+   d="scan'208";a="543817544"
 Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.212.243.163])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 11:25:51 -0700
-Subject: Re: [PATCH 01/12] fpga: sec-mgr: fpga security manager class driver
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 12:37:51 -0700
+Subject: Re: [PATCH 02/12] fpga: sec-mgr: enable secure updates
+To:     Greg KH <gregkh@linuxfoundation.org>, Tom Rix <trix@redhat.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
         moritzf@google.com
 References: <20210517023200.52707-1-mdf@kernel.org>
- <20210517023200.52707-2-mdf@kernel.org> <YKH8qH9m1j5ubl9y@kroah.com>
- <0c54779e-4ac6-e816-e290-f613cfe1fff3@intel.com> <YKKuBSLp5Fe0Zh0v@kroah.com>
+ <20210517023200.52707-3-mdf@kernel.org> <YKH/6xQ7bEwJzEsM@kroah.com>
 From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <cb502b12-b941-b230-e67e-391baec0db20@intel.com>
-Date:   Mon, 17 May 2021 11:25:48 -0700
+Message-ID: <5d0552ce-d2bd-cca1-006e-8f11991fd378@intel.com>
+Date:   Mon, 17 May 2021 12:37:48 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <YKKuBSLp5Fe0Zh0v@kroah.com>
+In-Reply-To: <YKH/6xQ7bEwJzEsM@kroah.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -48,124 +46,23 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 
-On 5/17/21 10:55 AM, Greg KH wrote:
-> On Mon, May 17, 2021 at 10:45:40AM -0700, Russ Weight wrote:
->> Hi Greg,
+On 5/16/21 10:32 PM, Greg KH wrote:
+> On Sun, May 16, 2021 at 07:31:50PM -0700, Moritz Fischer wrote:
+>> From: Russ Weight <russell.h.weight@intel.com>
 >>
->> On 5/16/21 10:18 PM, Greg KH wrote:
->>> On Sun, May 16, 2021 at 07:31:49PM -0700, Moritz Fischer wrote:
->>>> From: Russ Weight <russell.h.weight@intel.com>
->>>>
->>>> Create the FPGA Security Manager class driver. The security
->>>> manager provides interfaces to manage secure updates for the
->>>> FPGA and BMC images that are stored in FLASH. The driver can
->>>> also be used to update root entry hashes and to cancel code
->>>> signing keys. The image type is encoded in the image file
->>>> and is decoded by the HW/FW secure update engine.
->>>>
->>>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
->>> Russ, you know the Intel rules here, why did you not get someone who has
->>> knowledge of the kernel's driver model to review your patches before
->>> sending them out?
->>>
->>> Basic driver model review comments below, I'm stopping after reviewing
->>> this one as there's some big failures here...
->>>
->>>> +++ b/drivers/fpga/fpga-sec-mgr.c
->>>> @@ -0,0 +1,296 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/*
->>>> + * FPGA Security Manager
->>>> + *
->>>> + * Copyright (C) 2019-2020 Intel Corporation, Inc.
->>> What year is it?  :(
->> Thanks - I'll fix the copyright dates.
->>>> + */
->>>> +
->>>> +#include <linux/fpga/fpga-sec-mgr.h>
->>>> +#include <linux/idr.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/slab.h>
->>>> +#include <linux/vmalloc.h>
->>>> +
->>>> +static DEFINE_IDA(fpga_sec_mgr_ida);
->>>> +static struct class *fpga_sec_mgr_class;
->>>> +
->>>> +struct fpga_sec_mgr_devres {
->>>> +	struct fpga_sec_mgr *smgr;
->>>> +};
->>>> +
->>>> +#define to_sec_mgr(d) container_of(d, struct fpga_sec_mgr, dev)
->>>> +
->>>> +static ssize_t name_show(struct device *dev,
->>>> +			 struct device_attribute *attr, char *buf)
->>>> +{
->>>> +	struct fpga_sec_mgr *smgr = to_sec_mgr(dev);
->>>> +
->>>> +	return sysfs_emit(buf, "%s\n", smgr->name);
->>>> +}
->>>> +static DEVICE_ATTR_RO(name);
->>> What is wrong with the name of the device?  Please just use that and do
->>> not have a "second name" of the thing.
->> The purpose was to display the name of the parent driver. Should I change
->> "name" to "parent"? Or drop this altogether?
-> How is "name" a "parent"?  To find the parent, just walk up the sysfs
-> tree.
+>> Extend the FPGA Security Manager class driver to
+>> include an update/filename sysfs node that can be used
+>> to initiate a secure update.  The filename of a secure
+>> update file (BMC image, FPGA image, Root Entry Hash image,
+>> or Code Signing Key cancellation image) can be written to
+>> this sysfs entry to cause a secure update to occur.
+> Why is userspace responsible for triggering this?  Passing a "filename"
+> into the kernel and having it do something with it is ripe for major
+> problems, please do not.
 >
->> Please note that in this and other cases, I have been conforming to
->> conventions already used in FPGA Manager class driver:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/fpga/fpga-mgr.c#n397
-> Maybe that needs to be fixed as well :)
->
-> But, why re-implement the same thing and not just use the existing class
-> framework and code?
+I am using the "request_firmware" framework, which accepts a filename
+and finds the firmware file under /lib/firmware.
 
-I did the exercise of trying to merge the new functionality into the
-fpga-mgr.c code, but there was so little commonality that it was beginning
-to look like a dual-personality driver. The only thing that could be shared
-was the registration/unregistration of the driver. It seemed cleaner to
-have it as a separate class driver.
+Is this not an acceptable use for request_firmware?
 
 - Russ
-
->
->
->>>> +EXPORT_SYMBOL_GPL(fpga_sec_mgr_create);
->>> Why did you not register the device here.
->> My original implementation created and registered the device in a single function:
->>
->> https://marc.info/?l=linux-fpga&m=159926365226264&w=2
->>
->> It was split up to conform to the conventions used by other class drivers in the FPGA
->> framework: fpga-mgr.c, fpga-bridge.c, fpga-region.c
-> If you don't need things to be split, don't split it.  Or better yet,
-> use the existing code.
->
->>> There used to be some lovely documentation in the kernel that said I was
->>> allowed to yell at anyone who did something like this.  But that's
->>> removed, so I'll just be quiet and ask you to think about why you would
->>> ever want to provide an empty function, just to make the kernel core "be
->>> quiet".  Did you perhaps think you were smarter than the kobject core
->>> and this was the proper solution to make it "shut up" with it's crazy
->>> warning that some over-eager developer added?  Or perhaps, that warning
->>> was there on purpose, lovingly hand-added to help provide a HUGE HINT
->>> that not providing a REAL release function was wrong.
->> In my original submission, this function was populated.
->>
->> https://marc.info/?l=linux-fpga&m=159926365226264&w=2
->>
->> Again, I was conforming to conventions used in the other class drivers in
->> the FPGA framework, all of which have an empty *_dev_release()
->> function:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/fpga/fpga-mgr.c#n782
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/fpga/fpga-bridge.c#n476
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/fpga/fpga-region.c#n317
-> Oh wow, that's totally wrong and broken, thanks for pointing it out.
-> Please fix that up first.
->
-> thanks,
->
-> greg k-h
-
