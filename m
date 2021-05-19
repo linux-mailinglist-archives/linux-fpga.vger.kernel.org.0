@@ -2,90 +2,148 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 589183865D1
-	for <lists+linux-fpga@lfdr.de>; Mon, 17 May 2021 22:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772C038921D
+	for <lists+linux-fpga@lfdr.de>; Wed, 19 May 2021 16:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235058AbhEQULC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 17 May 2021 16:11:02 -0400
-Received: from mga01.intel.com ([192.55.52.88]:36552 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234946AbhEQULA (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 17 May 2021 16:11:00 -0400
-IronPort-SDR: arf9OR28gsSqNvIX6rOg8KP2giTAb72p4drjRF1uQhqFx+kMZC5oSTqU9lfZlYlnNb0nRAcHMl
- WuJbkD6oJRog==
-X-IronPort-AV: E=McAfee;i="6200,9189,9987"; a="221599383"
-X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="221599383"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 13:09:40 -0700
-IronPort-SDR: VkxUbDJkBtCV9ANF9w4C8IGPqT6BYRcyQH53+mEcZavvGcyffSsIwfkv++WBmvJRTCBTmz10Es
- tH0lfr9qOChQ==
-X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="543826337"
-Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.212.243.163])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 13:09:40 -0700
-Subject: Re: [PATCH 08/12] fpga: m10bmc-sec: create max10 bmc secure update
- driver
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Moritz Fischer <mdf@kernel.org>
-Cc:     linux-fpga@vger.kernel.org, moritzf@google.com,
+        id S232151AbhESPAM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 19 May 2021 11:00:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31003 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237147AbhESPAL (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 19 May 2021 11:00:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1621436331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=d8x5WXETUL/PCG0K619poG/b8n5dSXC7U60P72mCXBs=;
+        b=MdmuRdzOlppffQ421IcIh9JNiMSMpb7/KvLjUKyeSsGFi332f4ognKJUV7S0DixaAH39pD
+        vc2Vs1U3Tlf2LOsZ2y5Z3qfit4NjPJdpKAMo8F0ODLnHvxjz5DTwLd9voHq2WZdrwXh9iY
+        5paWIK73jrDkKYHeZepmNSQBlLSkDas=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-27-_8rLCwXFMV-Ss5PPoabChg-1; Wed, 19 May 2021 10:58:49 -0400
+X-MC-Unique: _8rLCwXFMV-Ss5PPoabChg-1
+Received: by mail-qv1-f71.google.com with SMTP id fi6-20020a0562141a46b02901f064172b74so5655343qvb.3
+        for <linux-fpga@vger.kernel.org>; Wed, 19 May 2021 07:58:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d8x5WXETUL/PCG0K619poG/b8n5dSXC7U60P72mCXBs=;
+        b=PK8JdVK+idkVRpwSMidusC3xW6g4lQSt90kP1yDS+FwyOWN/UKm7uHb8ZBf7VLkx7s
+         eRFZ1qKXECKVkST/hLW7EAKK5UgLbnLKb1CVGiZ8+wZW241IOi5/THLqP0uOHG3JrInh
+         t3aJ/38UR4NHBtfBVsHOlRr9M9FXGdyzNY8bemKCn7W0yIMVa/nhB4gv0WEYIHQiiXu1
+         FRPad8ZfFVYGwzdjiv0XjL9lFwbFoy7UNKPdbl858YqRaROuapdf81pU1uvm0KJQXv1h
+         i5k5v6cZaReh9PA3C40r4uGjWk14AKz9BURveaaJzLbuAViimGRdC/fTJdQsn9Q6rUuF
+         8Y6A==
+X-Gm-Message-State: AOAM533V/EXMtdAXT++E5tGH2BaJJ9ry/Kpqd9r+bT1hYFIo5HrjLhwm
+        bd3b1dxEgPa7PzwxxUwDNNf+5/q81RldUiKEAHwvR9nlQhIePUU6ET1o0HC2WD/NBPNT59Kud7P
+        xJj/p6fZaffV5NcSo/cxkyw==
+X-Received: by 2002:ac8:5d93:: with SMTP id d19mr11832266qtx.289.1621436328116;
+        Wed, 19 May 2021 07:58:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxQZo8HEiW7kD1AY+ztdvMUBBHcl88sQ++J5N3ArYR07BD3gL8VSyoIza33ujucPGZa7Ns2+A==
+X-Received: by 2002:ac8:5d93:: with SMTP id d19mr11832253qtx.289.1621436327962;
+        Wed, 19 May 2021 07:58:47 -0700 (PDT)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id k2sm13679873qtg.68.2021.05.19.07.58.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 May 2021 07:58:47 -0700 (PDT)
+From:   trix@redhat.com
+To:     mdf@kernel.org
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tom Rix <trix@redhat.com>
-References: <20210517023200.52707-1-mdf@kernel.org>
- <20210517023200.52707-9-mdf@kernel.org> <YKH/fwAOVW0gLQvQ@kroah.com>
-From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <477bb3d9-80c7-04ce-11c6-af9c046edcf1@intel.com>
-Date:   Mon, 17 May 2021 13:09:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+Subject: [PATCH] fpga: remove empty release functions
+Date:   Wed, 19 May 2021 07:58:44 -0700
+Message-Id: <20210519145844.1962294-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-In-Reply-To: <YKH/fwAOVW0gLQvQ@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+From: Tom Rix <trix@redhat.com>
 
+Unneeded functions, so remove.
 
-On 5/16/21 10:30 PM, Greg KH wrote:
-> On Sun, May 16, 2021 at 07:31:56PM -0700, Moritz Fischer wrote:
->> From: Russ Weight <russell.h.weight@intel.com>
->>
->> Create a platform driver that can be invoked as a sub
->> driver for the Intel MAX10 BMC in order to support
->> secure updates. This sub-driver will invoke an
->> instance of the FPGA Security Manager class driver
->> in order to expose sysfs interfaces for managing and
->> monitoring secure updates to FPGA and BMC images.
-> No, please NEVER create a platform device for something that is not
-> actually a platform device.  That's a huge abuse of the platform device
-> code.
->
-> Please use the proper api for this if you need it, hint, it's NOT the
-> platform device code.  Your Intel reviewer should have told you what
-> it is when they saw a changelog comment like this....
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/fpga/fpga-bridge.c | 5 -----
+ drivers/fpga/fpga-mgr.c    | 5 -----
+ drivers/fpga/fpga-region.c | 5 -----
+ 3 files changed, 15 deletions(-)
 
-I was following the design of the n3000bmc-hwmon driver, which was recently
-accepted upstream.
-
-The MAX10 BMC driver lists sub-devices here, including my device
-(n3000bmc-secure) and the n3000bmc-hwmon device:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/mfd/intel-m10-bmc.c#n25
-
-The HWMON sub-driver is implemented as a platform driver here:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/intel-m10-bmc-hwmon.c
-
-Is the HWMON driver implemented incorrectly? Or is there something fundamentally
-different in what I am trying to do? Can you point me in the right direction? What
-type of device should this be?
-
-Thanks,
-
-- Russ
-
->
-> greg k-h
+diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+index e9266b2a357f6..6510c7803a784 100644
+--- a/drivers/fpga/fpga-bridge.c
++++ b/drivers/fpga/fpga-bridge.c
+@@ -473,10 +473,6 @@ void fpga_bridge_unregister(struct fpga_bridge *bridge)
+ }
+ EXPORT_SYMBOL_GPL(fpga_bridge_unregister);
+ 
+-static void fpga_bridge_dev_release(struct device *dev)
+-{
+-}
+-
+ static int __init fpga_bridge_dev_init(void)
+ {
+ 	fpga_bridge_class = class_create(THIS_MODULE, "fpga_bridge");
+@@ -484,7 +480,6 @@ static int __init fpga_bridge_dev_init(void)
+ 		return PTR_ERR(fpga_bridge_class);
+ 
+ 	fpga_bridge_class->dev_groups = fpga_bridge_groups;
+-	fpga_bridge_class->dev_release = fpga_bridge_dev_release;
+ 
+ 	return 0;
+ }
+diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+index b85bc47c91a9a..e0e1835beab77 100644
+--- a/drivers/fpga/fpga-mgr.c
++++ b/drivers/fpga/fpga-mgr.c
+@@ -779,10 +779,6 @@ int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr)
+ }
+ EXPORT_SYMBOL_GPL(devm_fpga_mgr_register);
+ 
+-static void fpga_mgr_dev_release(struct device *dev)
+-{
+-}
+-
+ static int __init fpga_mgr_class_init(void)
+ {
+ 	pr_info("FPGA manager framework\n");
+@@ -792,7 +788,6 @@ static int __init fpga_mgr_class_init(void)
+ 		return PTR_ERR(fpga_mgr_class);
+ 
+ 	fpga_mgr_class->dev_groups = fpga_mgr_groups;
+-	fpga_mgr_class->dev_release = fpga_mgr_dev_release;
+ 
+ 	return 0;
+ }
+diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+index c3134b89c3fe5..ddaca70b21de5 100644
+--- a/drivers/fpga/fpga-region.c
++++ b/drivers/fpga/fpga-region.c
+@@ -314,10 +314,6 @@ void fpga_region_unregister(struct fpga_region *region)
+ }
+ EXPORT_SYMBOL_GPL(fpga_region_unregister);
+ 
+-static void fpga_region_dev_release(struct device *dev)
+-{
+-}
+-
+ /**
+  * fpga_region_init - init function for fpga_region class
+  * Creates the fpga_region class and registers a reconfig notifier.
+@@ -329,7 +325,6 @@ static int __init fpga_region_init(void)
+ 		return PTR_ERR(fpga_region_class);
+ 
+ 	fpga_region_class->dev_groups = fpga_region_groups;
+-	fpga_region_class->dev_release = fpga_region_dev_release;
+ 
+ 	return 0;
+ }
+-- 
+2.26.3
 
