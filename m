@@ -2,226 +2,208 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E06963893CA
-	for <lists+linux-fpga@lfdr.de>; Wed, 19 May 2021 18:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F910389826
+	for <lists+linux-fpga@lfdr.de>; Wed, 19 May 2021 22:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242169AbhESQc0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 19 May 2021 12:32:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37722 "EHLO
+        id S229454AbhESUnm (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 19 May 2021 16:43:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53978 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241148AbhESQcX (ORCPT
+        by vger.kernel.org with ESMTP id S229437AbhESUnl (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 19 May 2021 12:32:23 -0400
+        Wed, 19 May 2021 16:43:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1621441863;
+        s=mimecast20190719; t=1621456941;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=DTIBsxfcmpbiGvB6/oqS+BCqPAr0GPYXwX6i6OwUXu8=;
-        b=fs1/BWOz1fEiai/z/E/h1/cqcRl5OObmQOIKaKgnyNuPGmboRrEGSxWZCZu2lJBHOkBHBA
-        kbZAumKZZHr08nlzfwC/ZOJ4Fs2ZGF3o/3+o6lmuhFYn3jXFZ2niNptMzBMWtTEVKlVC5Y
-        XdgrsS9jew1Hg/tXQSSbEWFdYJS/OXE=
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yBJ+jFmNpL9SB6gZaC1cl3/2efDoIcS83OeZ4oxnA9s=;
+        b=g6AznXofa0bsjxlQ9cx09R9k95W11WjL57DtiUpq8KqQ7+rYEE8Mwn3YFmFveGbLSO1bk1
+        fwRi9PckpKXtQnm55WBbI9YJt4RW4nRREInnvnZBPMi5+1hOVG7QKbhQkO+i16KuLrg+gW
+        dIpXGa0cefANSXUceQU2Z6PrEkYzBUg=
 Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
  [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-198--uaX0t92PROw5ogKXFw8BQ-1; Wed, 19 May 2021 12:31:02 -0400
-X-MC-Unique: -uaX0t92PROw5ogKXFw8BQ-1
-Received: by mail-qk1-f200.google.com with SMTP id s10-20020a05620a030ab02902e061a1661fso3734295qkm.12
-        for <linux-fpga@vger.kernel.org>; Wed, 19 May 2021 09:31:02 -0700 (PDT)
+ us-mta-402-xUDL-M30P4iaF0jGnNNttg-1; Wed, 19 May 2021 16:42:15 -0400
+X-MC-Unique: xUDL-M30P4iaF0jGnNNttg-1
+Received: by mail-qk1-f200.google.com with SMTP id o14-20020a05620a0d4eb02903a5eee61155so303817qkl.9
+        for <linux-fpga@vger.kernel.org>; Wed, 19 May 2021 13:42:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DTIBsxfcmpbiGvB6/oqS+BCqPAr0GPYXwX6i6OwUXu8=;
-        b=m8pd+7J0ty9Ld/wGCniQMWn6MdadNTNUZfRRVb4FYoxKRvoZQFAbG711ThMf8mamhV
-         eftjWO+zcEi5L3gz5ThBTGAs6eB03o4AEOWBJzfi8Rgs42zgxMMUNEu+c8feBoIJUOuF
-         VckAnJbcOyJWEsg4M5KF0roVNpDUl2dmrax9pxPYZMju1gxNXLKjTHrzIeuHWFFy5rFQ
-         3lzoCpBCqMH9hjx6c1SeOz8oA3urmq52n84GJ8NhB6YpqakNtyKPxC1cgOmoOYVua9a/
-         M4+4JyCyunyDKeaNsFo17yBmD1BLn5kFStrCgEXX3UA1+M2wvUQEfTKuGypaR8C4sQ93
-         4bWQ==
-X-Gm-Message-State: AOAM530uKKp35QWCz7h2FdhwsTD1bMoOlNlJU/PsTNpKZsoZCukyq1Fs
-        DgggswJ4kkzQcbtI+HtaVBWDolKtcglMs+g996CyOMxc0xLIkYzgyYJpL7tfeU35nEGf3YDg6Fs
-        vIdPukKvbWVu53fI9zgzx7Q==
-X-Received: by 2002:a37:ae86:: with SMTP id x128mr120640qke.427.1621441861587;
-        Wed, 19 May 2021 09:31:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyBDO/tdIzDTtrmY8uL8MiiJzfxzrZi8/LESSihIP4aUK6JgfnB0vNj/ZF4iZSBIj0X30ZwmA==
-X-Received: by 2002:a37:ae86:: with SMTP id x128mr120601qke.427.1621441861183;
-        Wed, 19 May 2021 09:31:01 -0700 (PDT)
-Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id a14sm1442263qtp.74.2021.05.19.09.30.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 May 2021 09:31:00 -0700 (PDT)
-From:   trix@redhat.com
-To:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net,
-        michal.simek@xilinx.com
-Cc:     linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] fpga: fix spelling mistakes
-Date:   Wed, 19 May 2021 09:30:56 -0700
-Message-Id: <20210519163056.1966690-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=yBJ+jFmNpL9SB6gZaC1cl3/2efDoIcS83OeZ4oxnA9s=;
+        b=BQVufvhxYVa+BY/naWXQRj5inyAb1KNbJyjL7U9mV5Dd4TQv5kROClSqfniQr5cmto
+         tRYqSOUs2FVKcgT+8nIjbqda+EXmph0EgXdrZiJdyn84ZhskAdsLi4yMmfQgfewqUqp2
+         5d4ooHgan0kNnPYN+MqTNIyZK5rXY3ymlB3YdHb2wkHMT5yS78pYEN/avpVL5Prbwbyu
+         1sDknvll9QHhhhu+ypmraQsR/VGKnCN/2Uhhwbe6aLrB0X2syd2G4D+KEQmd5bJBmbzn
+         1YfMH2/8T4386ZOJp5nhqyqtJ0yq7jr6x6jej1f6J9fywQw+rh9nrmhpD6soWZcW0dhh
+         nCXA==
+X-Gm-Message-State: AOAM530t49T/W0yI+zJBw3hyDtAV7mfzKDzuEG/wzhDy09Zh4sCb6Nml
+        xCiZnKTXyUwCjbkPasEAjAG73buN3aOQupVFH8bHGxcNuRnXxF3r2bGVxqUFwUDVxWsczRCXrpd
+        03baCo2ahnGKSFjEe0bONtw==
+X-Received: by 2002:a05:622a:202:: with SMTP id b2mr1457470qtx.343.1621456934515;
+        Wed, 19 May 2021 13:42:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzui7oL01xOH+fysoe3I+vdv8OE7XhKYlFalV4QTj6eBIbktRvtVnVVVZ2TnQphkqqa7EKD9Q==
+X-Received: by 2002:a05:622a:202:: with SMTP id b2mr1457450qtx.343.1621456934298;
+        Wed, 19 May 2021 13:42:14 -0700 (PDT)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id t18sm385529qtn.63.2021.05.19.13.42.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 May 2021 13:42:13 -0700 (PDT)
+Subject: Re: [PATCH 01/12] fpga: sec-mgr: fpga security manager class driver
+To:     Russ Weight <russell.h.weight@intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Xu Yilun <yilun.xu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        linux-fpga@vger.kernel.org, moritzf@google.com
+References: <20210517023200.52707-1-mdf@kernel.org>
+ <20210517023200.52707-2-mdf@kernel.org> <YKH8qH9m1j5ubl9y@kroah.com>
+ <0c54779e-4ac6-e816-e290-f613cfe1fff3@intel.com> <YKKuBSLp5Fe0Zh0v@kroah.com>
+ <cb502b12-b941-b230-e67e-391baec0db20@intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <007b6cad-ed86-4036-24ee-fdbc4190664c@redhat.com>
+Date:   Wed, 19 May 2021 13:42:11 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <cb502b12-b941-b230-e67e-391baec0db20@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
 
-Run the fpga subsystem through aspell.
+On 5/17/21 11:25 AM, Russ Weight wrote:
+>
+> On 5/17/21 10:55 AM, Greg KH wrote:
+>> On Mon, May 17, 2021 at 10:45:40AM -0700, Russ Weight wrote:
+>>> Hi Greg,
+>>>
+>>> On 5/16/21 10:18 PM, Greg KH wrote:
+>>>> On Sun, May 16, 2021 at 07:31:49PM -0700, Moritz Fischer wrote:
+>>>>> From: Russ Weight <russell.h.weight@intel.com>
+>>>>>
+>>>>> Create the FPGA Security Manager class driver. The security
+>>>>> manager provides interfaces to manage secure updates for the
+>>>>> FPGA and BMC images that are stored in FLASH. The driver can
+>>>>> also be used to update root entry hashes and to cancel code
+>>>>> signing keys. The image type is encoded in the image file
+>>>>> and is decoded by the HW/FW secure update engine.
+>>>>>
+>>>>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>>>> Russ, you know the Intel rules here, why did you not get someone who has
+>>>> knowledge of the kernel's driver model to review your patches before
+>>>> sending them out?
+>>>>
+>>>> Basic driver model review comments below, I'm stopping after reviewing
+>>>> this one as there's some big failures here...
+>>>>
+>>>>> +++ b/drivers/fpga/fpga-sec-mgr.c
+>>>>> @@ -0,0 +1,296 @@
+>>>>> +// SPDX-License-Identifier: GPL-2.0
+>>>>> +/*
+>>>>> + * FPGA Security Manager
+>>>>> + *
+>>>>> + * Copyright (C) 2019-2020 Intel Corporation, Inc.
+>>>> What year is it?  :(
+>>> Thanks - I'll fix the copyright dates.
+>>>>> + */
+>>>>> +
+>>>>> +#include <linux/fpga/fpga-sec-mgr.h>
+>>>>> +#include <linux/idr.h>
+>>>>> +#include <linux/module.h>
+>>>>> +#include <linux/slab.h>
+>>>>> +#include <linux/vmalloc.h>
+>>>>> +
+>>>>> +static DEFINE_IDA(fpga_sec_mgr_ida);
+>>>>> +static struct class *fpga_sec_mgr_class;
+>>>>> +
+>>>>> +struct fpga_sec_mgr_devres {
+>>>>> +	struct fpga_sec_mgr *smgr;
+>>>>> +};
+>>>>> +
+>>>>> +#define to_sec_mgr(d) container_of(d, struct fpga_sec_mgr, dev)
+>>>>> +
+>>>>> +static ssize_t name_show(struct device *dev,
+>>>>> +			 struct device_attribute *attr, char *buf)
+>>>>> +{
+>>>>> +	struct fpga_sec_mgr *smgr = to_sec_mgr(dev);
+>>>>> +
+>>>>> +	return sysfs_emit(buf, "%s\n", smgr->name);
+>>>>> +}
+>>>>> +static DEVICE_ATTR_RO(name);
+>>>> What is wrong with the name of the device?  Please just use that and do
+>>>> not have a "second name" of the thing.
+>>> The purpose was to display the name of the parent driver. Should I change
+>>> "name" to "parent"? Or drop this altogether?
+>> How is "name" a "parent"?  To find the parent, just walk up the sysfs
+>> tree.
+>>
+>>> Please note that in this and other cases, I have been conforming to
+>>> conventions already used in FPGA Manager class driver:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/fpga/fpga-mgr.c#n397
+>> Maybe that needs to be fixed as well :)
+>>
+>> But, why re-implement the same thing and not just use the existing class
+>> framework and code?
+> I did the exercise of trying to merge the new functionality into the
+> fpga-mgr.c code, but there was so little commonality that it was beginning
+> to look like a dual-personality driver. The only thing that could be shared
+> was the registration/unregistration of the driver. It seemed cleaner to
+> have it as a separate class driver.
+>
+> - Russ
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- Documentation/fpga/dfl.rst    | 4 ++--
- drivers/fpga/altera-cvp.c     | 2 +-
- drivers/fpga/dfl-fme-pr.c     | 2 +-
- drivers/fpga/dfl-n3000-nios.c | 2 +-
- drivers/fpga/dfl.h            | 2 +-
- drivers/fpga/fpga-bridge.c    | 4 ++--
- drivers/fpga/zynq-fpga.c      | 6 +++---
- include/linux/fpga/fpga-mgr.h | 2 +-
- 8 files changed, 12 insertions(+), 12 deletions(-)
+I'll post a patch in a bit that does nothing new but refactor fpga-mgr's 
+ops into 'partial update' and 'full update'
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index f3a1223f2517e..ccc33f199df2a 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -10,7 +10,7 @@ Authors:
- - Xu Yilun <yilun.xu@intel.com>
- 
- The Device Feature List (DFL) FPGA framework (and drivers according to
--this framework) hides the very details of low layer hardwares and provides
-+this framework) hides the very details of low layer hardware and provides
- unified interfaces to userspace. Applications could use these interfaces to
- configure, enumerate, open and access FPGA accelerators on platforms which
- implement the DFL in the device memory. Besides this, the DFL framework
-@@ -205,7 +205,7 @@ given Device Feature Lists and create platform devices for feature devices
- also abstracts operations for the private features and exposes common ops to
- feature device drivers.
- 
--The FPGA DFL Device could be different hardwares, e.g. PCIe device, platform
-+The FPGA DFL Device could be different hardware, e.g. PCIe device, platform
- device and etc. Its driver module is always loaded first once the device is
- created by the system. This driver plays an infrastructural role in the
- driver architecture. It locates the DFLs in the device memory, handles them
-diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-index 4e0edb60bfba6..ccf4546eff297 100644
---- a/drivers/fpga/altera-cvp.c
-+++ b/drivers/fpga/altera-cvp.c
-@@ -346,7 +346,7 @@ static int altera_cvp_write_init(struct fpga_manager *mgr,
- 	}
- 
- 	if (val & VSE_CVP_STATUS_CFG_RDY) {
--		dev_warn(&mgr->dev, "CvP already started, teardown first\n");
-+		dev_warn(&mgr->dev, "CvP already started, tear down first\n");
- 		ret = altera_cvp_teardown(mgr, info);
- 		if (ret)
- 			return ret;
-diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
-index 1194c0e850e07..d61ce9a188792 100644
---- a/drivers/fpga/dfl-fme-pr.c
-+++ b/drivers/fpga/dfl-fme-pr.c
-@@ -148,7 +148,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
- 
- 	/*
- 	 * it allows userspace to reset the PR region's logic by disabling and
--	 * reenabling the bridge to clear things out between accleration runs.
-+	 * reenabling the bridge to clear things out between acceleration runs.
- 	 * so no need to hold the bridges after partial reconfiguration.
- 	 */
- 	if (region->get_bridges)
-diff --git a/drivers/fpga/dfl-n3000-nios.c b/drivers/fpga/dfl-n3000-nios.c
-index 7a95366f6516f..9ddf1d1d392f3 100644
---- a/drivers/fpga/dfl-n3000-nios.c
-+++ b/drivers/fpga/dfl-n3000-nios.c
-@@ -461,7 +461,7 @@ static int n3000_nios_poll_stat_timeout(void __iomem *base, u64 *v)
- 	 * We don't use the time based timeout here for performance.
- 	 *
- 	 * The regbus read/write is on the critical path of Intel PAC N3000
--	 * image programing. The time based timeout checking will add too much
-+	 * image programming. The time based timeout checking will add too much
- 	 * overhead on it. Usually the state changes in 1 or 2 loops on the
- 	 * test server, and we set 10000 times loop here for safety.
- 	 */
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index 2b82c96ba56c7..dac9c3d45e6c3 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -232,7 +232,7 @@ struct dfl_feature_irq_ctx {
-  * @id: sub feature id.
-  * @resource_index: each sub feature has one mmio resource for its registers.
-  *		    this index is used to find its mmio resource from the
-- *		    feature dev (platform device)'s reources.
-+ *		    feature dev (platform device)'s resources.
-  * @ioaddr: mapped mmio resource address.
-  * @irq_ctx: interrupt context list.
-  * @nr_irqs: number of interrupt contexts.
-diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-index 6510c7803a784..d31eec32eb426 100644
---- a/drivers/fpga/fpga-bridge.c
-+++ b/drivers/fpga/fpga-bridge.c
-@@ -230,7 +230,7 @@ EXPORT_SYMBOL_GPL(fpga_bridges_put);
-  *
-  * Get an exclusive reference to the bridge and and it to the list.
-  *
-- * Return 0 for success, error code from of_fpga_bridge_get() othewise.
-+ * Return 0 for success, error code from of_fpga_bridge_get() otherwise.
-  */
- int of_fpga_bridge_get_to_list(struct device_node *np,
- 			       struct fpga_image_info *info,
-@@ -260,7 +260,7 @@ EXPORT_SYMBOL_GPL(of_fpga_bridge_get_to_list);
-  *
-  * Get an exclusive reference to the bridge and and it to the list.
-  *
-- * Return 0 for success, error code from fpga_bridge_get() othewise.
-+ * Return 0 for success, error code from fpga_bridge_get() otherwise.
-  */
- int fpga_bridge_get_to_list(struct device *dev,
- 			    struct fpga_image_info *info,
-diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-index 07fa8d9ec6750..9b75bd4f93d8e 100644
---- a/drivers/fpga/zynq-fpga.c
-+++ b/drivers/fpga/zynq-fpga.c
-@@ -192,7 +192,7 @@ static void zynq_step_dma(struct zynq_fpga_priv *priv)
- 
- 	/* Once the first transfer is queued we can turn on the ISR, future
- 	 * calls to zynq_step_dma will happen from the ISR context. The
--	 * dma_lock spinlock guarentees this handover is done coherently, the
-+	 * dma_lock spinlock guarantees this handover is done coherently, the
- 	 * ISR enable is put at the end to avoid another CPU spinning in the
- 	 * ISR on this lock.
- 	 */
-@@ -267,7 +267,7 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
- 		ctrl = zynq_fpga_read(priv, CTRL_OFFSET);
- 		if (!(ctrl & CTRL_SEC_EN_MASK)) {
- 			dev_err(&mgr->dev,
--				"System not secure, can't use crypted bitstreams\n");
-+				"System not secure, can't use encrypted bitstreams\n");
- 			err = -EINVAL;
- 			goto out_err;
- 		}
-@@ -344,7 +344,7 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
- 
- 	/* set configuration register with following options:
- 	 * - enable PCAP interface
--	 * - set throughput for maximum speed (if bistream not crypted)
-+	 * - set throughput for maximum speed (if bistream not encrypted)
- 	 * - set CPU in user mode
- 	 */
- 	ctrl = zynq_fpga_read(priv, CTRL_OFFSET);
-diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
-index 2bc3030a69e54..3a32b8e201857 100644
---- a/include/linux/fpga/fpga-mgr.h
-+++ b/include/linux/fpga/fpga-mgr.h
-@@ -110,7 +110,7 @@ struct fpga_image_info {
-  * @initial_header_size: Maximum number of bytes that should be passed into write_init
-  * @state: returns an enum value of the FPGA's state
-  * @status: returns status of the FPGA, including reconfiguration error code
-- * @write_init: prepare the FPGA to receive confuration data
-+ * @write_init: prepare the FPGA to receive configuration data
-  * @write: write count bytes of configuration data to the FPGA
-  * @write_sg: write the scatter list of configuration data to the FPGA
-  * @write_complete: set FPGA to operating state after writing is done
--- 
-2.26.3
+existing stuff in partial
+
+security update stuff in full
+
+Tom
+
+>
+>>
+>>>>> +EXPORT_SYMBOL_GPL(fpga_sec_mgr_create);
+>>>> Why did you not register the device here.
+>>> My original implementation created and registered the device in a single function:
+>>>
+>>> https://marc.info/?l=linux-fpga&m=159926365226264&w=2
+>>>
+>>> It was split up to conform to the conventions used by other class drivers in the FPGA
+>>> framework: fpga-mgr.c, fpga-bridge.c, fpga-region.c
+>> If you don't need things to be split, don't split it.  Or better yet,
+>> use the existing code.
+>>
+>>>> There used to be some lovely documentation in the kernel that said I was
+>>>> allowed to yell at anyone who did something like this.  But that's
+>>>> removed, so I'll just be quiet and ask you to think about why you would
+>>>> ever want to provide an empty function, just to make the kernel core "be
+>>>> quiet".  Did you perhaps think you were smarter than the kobject core
+>>>> and this was the proper solution to make it "shut up" with it's crazy
+>>>> warning that some over-eager developer added?  Or perhaps, that warning
+>>>> was there on purpose, lovingly hand-added to help provide a HUGE HINT
+>>>> that not providing a REAL release function was wrong.
+>>> In my original submission, this function was populated.
+>>>
+>>> https://marc.info/?l=linux-fpga&m=159926365226264&w=2
+>>>
+>>> Again, I was conforming to conventions used in the other class drivers in
+>>> the FPGA framework, all of which have an empty *_dev_release()
+>>> function:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/fpga/fpga-mgr.c#n782
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/fpga/fpga-bridge.c#n476
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/fpga/fpga-region.c#n317
+>> Oh wow, that's totally wrong and broken, thanks for pointing it out.
+>> Please fix that up first.
+>>
+>> thanks,
+>>
+>> greg k-h
 
