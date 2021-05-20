@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39467389F8C
-	for <lists+linux-fpga@lfdr.de>; Thu, 20 May 2021 10:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37586389F85
+	for <lists+linux-fpga@lfdr.de>; Thu, 20 May 2021 10:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbhETIMk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 20 May 2021 04:12:40 -0400
-Received: from mail-bn8nam11on2054.outbound.protection.outlook.com ([40.107.236.54]:3798
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S231187AbhETIL5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 20 May 2021 04:11:57 -0400
+Received: from mail-mw2nam12on2045.outbound.protection.outlook.com ([40.107.244.45]:54049
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229953AbhETIMk (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 20 May 2021 04:12:40 -0400
+        id S231211AbhETILz (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 20 May 2021 04:11:55 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dQOPTog2kIm2YhxBjMqYf+Mm1UjO9KY04f7+aG5Om6u0CNMCDNwF11KfwxlWNtYUB/CrvJk7u3aU+lRw+511QkLUyySR217T9ZBbOf2Qg6isb4179363Ah4NNhCMVyy3OxrJ7yIfhGZi6SlxS5/tdiH9BznfBEOvDP2jtdBD/lDxsg7xwGC3ZMpCJhbF/mSmyqReDk2lvg+7sb5TAOM5Bj4bHPyWhfETGmvzeJ3HUi6gVxs1TdEP335EbBi/KVbPM/7wiZHL6CI9gUqmxGyPrdKZwCoqMoQ6HoT/WeJCBjGP5GyWdS5r+ft0pDtQWDogZrg/FMP/s6oqjKY9OsLjHw==
+ b=hY6orsAWzG0Y9ZwWaO1cCvee0WRdDpM8XZN9O5zVSKoBgmuExNXyb0Him19Rd/PelSD98BCwXkNp1n1BESIM64O2qFxRuqLHyibBpVl+uZmZ8ulIZhJaMrXHWePlwGYRROtlO253TWE1fUFTo04rmRQqOrsXzY1P2ATKNwxeoC+n7zxINS7FH8bw6i87S3NND8DA4ZjMwe1JdHRhtqH0ExFNoWOuagusG77hf/mq3ibOef2HKmgPn23CHWtWWV0aONV98qjIJpjEWyZA+qZy0lXhxdtu+4Vn+LAZcHmlv6xYG7t0BwjDTs88UjUVJBqKjIXnpZw0zAxPg8iET9I6LQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7d9OPnim+dQ8PjkhePuL2xqi4lRmnMRAVgszwGm5eUM=;
- b=WKyItFfoG33A+zZrlFha3j1od4P7obeBiTjCspWl+1UiLT5MIQiZk9NnShhCx2GHehWJ8jbRWHrqf8vvDM8Zmf6mGKCTpCB7QqKmf1Pq1BgTfPp1GrsBwFAgSZlLaMJOAxjdZwCIH5IYEcLhzq3jFn1bYISNLHGWbivUT4CykT1evnR/lKPaN97gaNijnQ9POxa/MF6WN+S9FUfbbien8VU0O7tXcMWGNKoHfYqbCYQdtKOqp18mnpVmrvYGPthSx8NyyREycGQLZHCbv2Q1xheYkHTOR5/iepbfHe49zFKu6MIYE+83x9Aoq/BILdSGdIuzf0Wtj4dtncRmx6E99w==
+ bh=YrIy+6hP3NQzquFEHYUWYM9ay1KssBxMmQ5PbZ/rZqU=;
+ b=ANk3xRsPQO1atrPgGfp/vm6u7h1aqAgHViadkaNPHQjwR1hcRWAqFZa2BqpRJj5Nxp0sqdNmbDOFfehctSSasr2KqxAIwZ91ARyqsznevmN3qjz8D0Dqxi3ZAXTdVS6fT+mhNYYA2p2ndpcvwtDlK0NzdF2mgAU1y+E5Wr7/mRURc5+JI64qWibSBrY3I6xbBWnlQcrmefsxn9MqZft7bpk/F5vkH0XaVZszgKoMdwDfftv6hsYxHtNxhdS9j3XZEnVuLGwl4oyoQ23A6+BI0YNSFF0HhTY8v4FAla1HyX2Tc0bWXAQOvN4Hf0BEeJ+FTT0WRexxbliJ3pKsR7b/gQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,35 +26,35 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7d9OPnim+dQ8PjkhePuL2xqi4lRmnMRAVgszwGm5eUM=;
- b=seJkMg7l+YswFfy+tnhcKhBCAdkiO2FrWY6/nvUIoWVqgEs1ZeF2T7vCGSEyNl3Kuns21XGWAdUq23h+vCHEM/wILkQbMbbsrVmqrT+nN8SeeQmW5SSP/6oB1lz96ZTRQ2DIJMLrsywKrsR0dFnHOm5bdcUjFfciVQp5vSo+vQI=
-Received: from SN6PR05CA0028.namprd05.prod.outlook.com (2603:10b6:805:de::41)
- by CH2PR02MB6294.namprd02.prod.outlook.com (2603:10b6:610:e::18) with
+ bh=YrIy+6hP3NQzquFEHYUWYM9ay1KssBxMmQ5PbZ/rZqU=;
+ b=qL6SdCzx+g201WCsBdDeYPajfUD7vX9C8o7EPExqGTx2kkaYOU/AED6W4zvTiQplYeEAJcK0SxpdC6X2hn4jxvXgy6nkzTp2BvX/LzKj5mAV/yGic0DfFfieJh9QR+cOgn6mGohrYfrpu9FX0TpICpAmmmIpXpMsegjHjeWRZd8=
+Received: from SA0PR11CA0117.namprd11.prod.outlook.com (2603:10b6:806:d1::32)
+ by MN2PR02MB6079.namprd02.prod.outlook.com (2603:10b6:208:185::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.31; Thu, 20 May
- 2021 08:11:17 +0000
-Received: from SN1NAM02FT0042.eop-nam02.prod.protection.outlook.com
- (2603:10b6:805:de:cafe::72) by SN6PR05CA0028.outlook.office365.com
- (2603:10b6:805:de::41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.12 via Frontend
- Transport; Thu, 20 May 2021 08:11:16 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.28; Thu, 20 May
+ 2021 08:10:31 +0000
+Received: from SN1NAM02FT0047.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:d1:cafe::b0) by SA0PR11CA0117.outlook.office365.com
+ (2603:10b6:806:d1::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.23 via Frontend
+ Transport; Thu, 20 May 2021 08:10:31 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0042.mail.protection.outlook.com (10.97.4.129) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0047.mail.protection.outlook.com (10.97.5.120) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4129.27 via Frontend Transport; Thu, 20 May 2021 08:11:16 +0000
+ 15.20.4129.27 via Frontend Transport; Thu, 20 May 2021 08:10:31 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 20 May 2021 01:10:14 -0700
+ 15.1.2176.2; Thu, 20 May 2021 01:10:25 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Thu, 20 May 2021 01:10:14 -0700
+ 15.1.2176.2 via Frontend Transport; Thu, 20 May 2021 01:10:25 -0700
 Envelope-to: git@xilinx.com,
  robh+dt@kernel.org,
  mdf@kernel.org,
@@ -71,7 +71,7 @@ Envelope-to: git@xilinx.com,
 Received: from [10.140.6.60] (port=42624 helo=xhdnavam40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <nava.manne@xilinx.com>)
-        id 1ljdkz-0007IV-8Z; Thu, 20 May 2021 01:10:13 -0700
+        id 1ljdl4-0007IV-K3; Thu, 20 May 2021 01:10:19 -0700
 From:   Nava kishore Manne <nava.manne@xilinx.com>
 To:     <robh+dt@kernel.org>, <michal.simek@xilinx.com>, <mdf@kernel.org>,
         <trix@redhat.com>, <nava.manne@xilinx.com>, <arnd@arndb.de>,
@@ -83,10 +83,9 @@ To:     <robh+dt@kernel.org>, <michal.simek@xilinx.com>, <mdf@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
         <git@xilinx.com>, <chinnikishore369@gmail.com>
-CC:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-Subject: [PATCH v6 2/4] dt-bindings: fpga: Add binding doc for versal fpga manager
-Date:   Thu, 20 May 2021 13:39:52 +0530
-Message-ID: <20210520080954.1393-3-nava.manne@xilinx.com>
+Subject: [PATCH v6 3/4] dt-bindings: firmware: Add bindings for xilinx firmware
+Date:   Thu, 20 May 2021 13:39:53 +0530
+Message-ID: <20210520080954.1393-4-nava.manne@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210520080954.1393-1-nava.manne@xilinx.com>
 References: <20210520080954.1393-1-nava.manne@xilinx.com>
@@ -94,92 +93,157 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1474629-b071-4e9d-1e55-08d91b66d7a3
-X-MS-TrafficTypeDiagnostic: CH2PR02MB6294:
-X-Microsoft-Antispam-PRVS: <CH2PR02MB62942A2E56C32A47BB9EDDA4C22A9@CH2PR02MB6294.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: e58186c0-f4e2-4c4e-8729-08d91b66bc76
+X-MS-TrafficTypeDiagnostic: MN2PR02MB6079:
+X-Microsoft-Antispam-PRVS: <MN2PR02MB60796AF83BA192FF33FB656FC22A9@MN2PR02MB6079.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W+2zQNtXl+XJzNFPcJ8mX7bCTnKT98a6AondExH1HecyokcfeX0ZN3sDERuVygr3Uiuofx7VJbbzADOzZ0m+qENFXJjnOzLA5/C5QVdJYr601ta/MqDSWj9MnWz1sVJ6fCurKqaTCFu+4Z4whWuFtGWOarZALeyVQ1O0lF12h8H694GtMWCpZMatXmlh9rXUyxDiKyCYvavJhI/oHL0Tf4TpB1+OW+PTMp36fh+Xc/PDUTpOGjM4xUVZ0dBVqXxlBBimOFBUGlTNui9NYl/IyHZ6bg9t1xaZKxb4nOoXxRuckGOYzWUv8JrxMJLtZLNNp1pAb3rNejv37e26nsBG6HvrhEkXhxQp9ZoKeAFavsPSq0XsPw7PUZAz7stfS/TqnTdeZb2ll3nal+9PwrG3thiFU5z8ETHLOPD9aCwhQMtJkK8+BgebePzEJRsuGUTg2vaMr0iAEq1Hrn9WCD845rkuTsMmqCxwxA8YJal0YFtvuej5V4zklSIybXOtNQO+uoh2gkdAu7ri3OHGLCwGpRWCxTFH1JDIVfD1XE/7K5/2Gko3dtLowTqKYQkwC3azKGVe+oA54ZJ9GcwoOicDD3dXCWxuSBafHG7v0mYXrrv/48bHu36jzU+TFHw3q4xuGsHo3QnM7/5AZZTTTDbfB9l3GF4HavinuYZUb1djoHFZUWFQpohjgF/MllABvZF2CbuwfK/QmmbLwuRalyoJBVdTWyRpENtxpeBm3EjFHwpQky9vS0sRGe/acv5VPi6IoJXFPYPR7qxVHLKW1/03eG5kR92ZT1PoiilD+2BB4Ipw38lw4CUHxqfDgFQzChZB
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(346002)(396003)(39850400004)(376002)(46966006)(36840700001)(47076005)(8936002)(2616005)(70586007)(478600001)(70206006)(336012)(316002)(36906005)(26005)(82310400003)(1076003)(110136005)(2906002)(966005)(107886003)(82740400003)(7696005)(4326008)(426003)(356005)(36756003)(7636003)(9786002)(5660300002)(36860700001)(83380400001)(8676002)(6666004)(7416002)(921005)(186003)(102446001)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: mKteWy7vUy596WVHnpHfofERVTx0KzJl1kIDtyPID5+7Q/OnGAnvZN6lxQ7NO94ii2GxeS9iBiaY84H4wpxLcVxmiCXTxupRWKnW5qbWe/QS1d/5Q0sR2j5zb1gVatH846fd5khgJQIZjzPNZoyKromm1aQZ/2V7NwO22PdBIGc9JBXz6P+OSFY8uFXwp6k0nGxN41pUtCXOXikkpZrw+42HrERukemBk4toy0tMkKF0yHsbZCOO3n0J5m2D3/9qD0yAKO4t46udwTPdfVvnmpiXz5sEEDRGEHrHo27whysAiS7wdD4WbXFipGYgnuNA4yrXvIOP0WTlE7Eur21uqsr16Zkjv7+KRsIQ0rIxkogWXBi2RHO8CEZRaOSn6i9XkM/OJkZgBxIp7egaPVtOXLzGI+6iDOuIyp/iz9AA8xv5Bma1RySKaelbl9V01I01IRyPN3T+EBCASSaWeGsEFlm6OwNwPELpOQuOcwN16DmNMozeZDviQlLHN85lH+FNUrom8ff1uGtKm3a3ePigTv/+X9UsjRxf1nFkLlYbj6pkZEuLGx959Cvciy38jN9nmyGleIuEZGZ9cFcu+fgTZWvq4t4NqXtllUAiRYeRWXFqde/OYDUtISrcb/iv+5gAiiyz7EJbhEMb/H9Te9Ab5SN1rZT6QQZpEDnIUevBy+Icr+QRQa3xjEjJA5Oo478Nw9QShphk4cqgpZ3YO93sQe2tZ0pE1/GhAK47q9erOCd2jQziPJKL32Jw/HW0cc9m58m10ZbyylpoZpvfC+5dhj9Cd6X+LcAxysPd7rDfECZMKm04T+JQAqT61ctjvToKJnA6C8aPIQeXSTbcK21byw==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(396003)(39850400004)(136003)(376002)(36840700001)(46966006)(2906002)(36756003)(110136005)(478600001)(36906005)(316002)(966005)(1076003)(8936002)(70586007)(8676002)(921005)(5660300002)(70206006)(7696005)(47076005)(9786002)(7636003)(26005)(356005)(6666004)(82740400003)(7416002)(83380400001)(82310400003)(186003)(2616005)(426003)(336012)(36860700001)(102446001)(2101003)(83996005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2021 08:11:16.7241
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2021 08:10:31.1334
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1474629-b071-4e9d-1e55-08d91b66d7a3
+X-MS-Exchange-CrossTenant-Network-Message-Id: e58186c0-f4e2-4c4e-8729-08d91b66bc76
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0042.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0047.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6294
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6079
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-
-This patch adds binding doc for versal fpga manager driver.
+Add documentation to describe Xilinx firmware driver bindings.
+Firmware driver provides an interface to firmware APIs.
+Interface APIs can be used by any driver to communicate
+to Platform Management Unit.
 
 Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-Signed-off-by: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
 ---
-Changes for v2:
-                -Fixed file format and syntax issues.
-Changes for v3:
-                -Removed unwated extra spaces.
 Changes for v4:
-                -Rebased the changes on linux-next.
-                 No functional changes
+                -Added new yaml file for xilinx firmware
+                 as suggested by Rob.
 Changes for v5:
-                -Updated fpga node name to versal_fpga.
+                -Fixed some minor issues and updated the fpga node name to versal_fpga.
 
 Changes for v6:
-               -None.
+               -Added AES and Clk nodes as a sub nodes to the firmware node.
 
- .../bindings/fpga/xlnx,versal-fpga.yaml       | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+ .../firmware/xilinx/xlnx,zynqmp-firmware.yaml | 102 ++++++++++++++++++
+ 1 file changed, 102 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
 
-diff --git a/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml b/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+diff --git a/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml b/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
 new file mode 100644
-index 000000000000..ac6a207278d5
+index 000000000000..58016191e150
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
-@@ -0,0 +1,33 @@
++++ b/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
+@@ -0,0 +1,102 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/fpga/xlnx,versal-fpga.yaml#
++$id: http://devicetree.org/schemas/firmware/xilinx/xlnx,zynqmp-firmware.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Xilinx Versal FPGA driver.
++title: Xilinx firmware driver
 +
 +maintainers:
 +  - Nava kishore Manne <nava.manne@xilinx.com>
 +
-+description: |
-+  Device Tree Versal FPGA bindings for the Versal SoC, controlled
-+  using firmware interface.
++description:
++  The zynqmp-firmware node describes the interface to platform firmware.
++  ZynqMP has an interface to communicate with secure firmware. Firmware
++  driver provides an interface to firmware APIs. Interface APIs can be
++  used by any driver to communicate to PMUFW(Platform Management Unit).
++  These requests include clock management, pin control, device control,
++  power management service, FPGA service and other platform management
++  services.
 +
 +properties:
 +  compatible:
-+    items:
-+      - enum:
-+          - xlnx,versal-fpga
++    oneOf:
++      - description:
++          For implementations complying for Zynq Ultrascale+ MPSoC.
++        const: xlnx,zynqmp-firmware
++
++      - description:
++          For implementations complying for Versal.
++        const: xlnx,versal-firmware
++
++  method:
++    description: |
++                 The method of calling the PM-API firmware layer.
++                 Permitted values are.
++                 - "smc" : SMC #0, following the SMCCC
++                 - "hvc" : HVC #0, following the SMCCC
++
++    $ref: /schemas/types.yaml#/definitions/string-array
++    enum:
++      - smc
++      - hvc
++
++patternProperties:
++  "versal_fpga":
++    $ref: "../../fpga/xlnx,versal-fpga.yaml#"
++    description: Compatible of the FPGA device.
++    type: object
++    required:
++      - compatible
++
++  "zynqmp-aes":
++    $ref: "../../crypto/xlnx,zynqmp-aes.yaml#"
++    description: |
++                 The ZynqMP AES-GCM hardened cryptographic accelerator is
++                 used to encrypt or decrypt the data with provided key and
++                 initialization vector.
++    type: object
++    required:
++      - compatible
++
++  "clock-controller":
++    $ref: "../../clock/xlnx,versal-clk.yaml#"
++    description: |
++                 The clock controller is a hardware block of Xilinx versal
++                 clock tree. It reads required input clock frequencies from
++                 the devicetree and acts as clock provider for all clock
++                 consumers of PS clocks.list of clock specifiers which are
++                 external input clocks to the given clock controller.
++    type: object
++    required:
++      - compatible
++      - "#clock-cells"
++      - clocks
++      - clock-names
 +
 +required:
 +  - compatible
 +
-+additionalProperties: false
-+
 +examples:
 +  - |
-+    versal_fpga: versal_fpga {
-+         compatible = "xlnx,versal-fpga";
++    versal-firmware {
++      compatible = "xlnx,versal-firmware";
++      method = "smc";
++
++      versal_fpga: versal_fpga {
++        compatible = "xlnx,versal-fpga";
++      };
++
++      xlnx_aes: zynqmp-aes {
++        compatible = "xlnx,zynqmp-aes";
++      };
++
++      versal_clk: clock-controller {
++        #clock-cells = <1>;
++        compatible = "xlnx,versal-clk";
++        clocks = <&ref>, <&alt_ref>, <&pl_alt_ref>;
++        clock-names = "ref", "alt_ref", "pl_alt_ref";
++      };
 +    };
 +
-+...
++additionalProperties: false
 -- 
 2.17.1
 
