@@ -2,93 +2,102 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 619A938B60D
-	for <lists+linux-fpga@lfdr.de>; Thu, 20 May 2021 20:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B1C38BB32
+	for <lists+linux-fpga@lfdr.de>; Fri, 21 May 2021 03:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234617AbhETScf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 20 May 2021 14:32:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51553 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232273AbhETScf (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 20 May 2021 14:32:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1621535473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rzVWT+hgucJulWTbb27JAU0YdQhBiQeXz3Y6dtzUOvc=;
-        b=XZ3qQjrWc8Msy6XS98kSc2oF+ldsgQTI5YRDcWokREWNhIKxX85Lx+lYJ9pLsZTszrKDpu
-        rEODKXULl/o21vgJxB6Ym4TbHK8me0Xb/zdlPOuNdD8DDh60H2Hr/tF2loI9WcWqV+6yrQ
-        sAMM39cT3cY/fEq3oC5Kx6MRm19KJ7I=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-258--OZnmJzgOnyNaHnVshFyrQ-1; Thu, 20 May 2021 14:31:11 -0400
-X-MC-Unique: -OZnmJzgOnyNaHnVshFyrQ-1
-Received: by mail-qv1-f69.google.com with SMTP id d9-20020a0ce4490000b02901f0bee07112so7667572qvm.7
-        for <linux-fpga@vger.kernel.org>; Thu, 20 May 2021 11:31:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rzVWT+hgucJulWTbb27JAU0YdQhBiQeXz3Y6dtzUOvc=;
-        b=F2OrgVS7Ep2FffHZXLVFQBfFm8NgNxm1uoDQNAWi3kfmNy1uqBPToanj34cB1UVbJb
-         XY82dNxzvDIfKO2yPtUn30LqHQYXMepfcRywNvdjcBu6li/Xd0j8p0zFgy9adYjZHyT4
-         fRsYDCmsAdn6rGbqTMO+Ym5M4w71C4n7/GzOSmrE+33E4u5vCpyjzvWfYTDqxRkWa9FC
-         tzDF0flzeGXFtvLBzIDI7HcuCRrRQzFN+ixphrMc8a7TrYAiOYnm4u0rGCdD9Vjhm/QE
-         qOTrvrHK31cieiXqFB5mkoPG7CzL/th9Tmsx9qEndR5C06AGRDcgsDj05eIr65Q4pe9R
-         FvaQ==
-X-Gm-Message-State: AOAM532sSu6AJWRDKLSf0wA0z55inyLOdo4j4bnKYqtcfkStklL8i77H
-        cjlLQnU/wrK1XaJg3r4ll4EfLcIENEpwDGCyOeS2J17vJgnooUpAKHPpsbfCHKptVWWIToX8rs0
-        2qOTQ2mHVrBoqZUXgXLo85w==
-X-Received: by 2002:a05:620a:4101:: with SMTP id j1mr6928632qko.473.1621535471202;
-        Thu, 20 May 2021 11:31:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwr9bSXVI+qKOI/88WMXKcwo9b+VphJpj50l+bbQ3An4TsZbQnI8rlBxiGYrWYuBqzTclLdbg==
-X-Received: by 2002:a05:620a:4101:: with SMTP id j1mr6928619qko.473.1621535471070;
-        Thu, 20 May 2021 11:31:11 -0700 (PDT)
-Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id y8sm2544801qtn.61.2021.05.20.11.31.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 11:31:10 -0700 (PDT)
-From:   trix@redhat.com
-To:     mdf@kernel.org
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH v2 5/5] fpga: use reimage ops in fpga_mgr_load()
-Date:   Thu, 20 May 2021 11:31:06 -0700
-Message-Id: <20210520183106.2022873-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        id S235467AbhEUBFa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 20 May 2021 21:05:30 -0400
+Received: from mga07.intel.com ([134.134.136.100]:8071 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234754AbhEUBFa (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 20 May 2021 21:05:30 -0400
+IronPort-SDR: 5Gvjak9R317aY0z+vOK9gjSLqgIAmzKTqwtZvoyOEV7K3R1DIF6HCDyi5bnsYmo9y8IwoqHbxf
+ IMTvqRlqPQxg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9990"; a="265286808"
+X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
+   d="scan'208";a="265286808"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 18:04:07 -0700
+IronPort-SDR: LT6WZ0G985tf2QKgG7ftzmk9cw4TZzXXFREpujtH01leyDn7uz/RPtu1rR7U7PoSVgH4YyWCUQ
+ tjUsiK5YfcXQ==
+X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
+   d="scan'208";a="395120270"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.209.50.218])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 18:04:07 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        richard.gong@intel.com, Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v1 0/3] fpga: Use standard class dev_release function
+Date:   Thu, 20 May 2021 18:03:56 -0700
+Message-Id: <20210521010359.635717-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+The FPGA framework has a convention of using managed resource
+functions to allow parent drivers to manage the data structures
+allocated by the class drivers. They use an empty *_dev_release()
+function to satisfy the class driver.
 
-If the fpga_image_info flags FPGA_MGR_REIMAGE bit is set
-swap out the reconfig ops for the reimage ops and do
-the load.
+This is inconsistent with linux driver model.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/fpga/fpga-mgr.c | 3 +++
- 1 file changed, 3 insertions(+)
+These changes remove the managed resource functions and populate
+the class dev_release callback functions. They also merge the
+create and register functions into a single register function for
+each of the fpga-mgr, fpga-region, and fpga-bridge class drivers.
 
-diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-index 5247703a3743d..34d251e87ca6c 100644
---- a/drivers/fpga/fpga-mgr.c
-+++ b/drivers/fpga/fpga-mgr.c
-@@ -369,6 +369,9 @@ int fpga_mgr_load(struct fpga_manager *mgr, struct fpga_image_info *info)
- {
- 	const struct fpga_manager_update_ops *uops = &mgr->mops->reconfig;
- 
-+	if (info->flags & FPGA_MGR_REIMAGE)
-+		uops = &mgr->mops->reimage;
-+
- 	if (!uops->write_complete ||
- 	    !uops->write_init ||
- 	    (!uops->write && !uops->write_sg) ||
+For more context, refer to this email thread:
+
+https://marc.info/?l=linux-fpga&m=162127412218557&w=2
+
+I turned on the configs assocated with each of the modified files,
+but I must have been missing some dependencies, because not all
+of them compiled. I did a run-time test specifically with the
+dfl-fme infrastructure. This would have exercised the region,
+bridge, and fpga-mgr frameworks.
+
+- Russ
+
+Russ Weight (3):
+  fpga: mgr: Use standard dev_release for class driver
+  fpga: bridge: Use standard dev_release for class driver
+  fpga: region: Use standard dev_release for class driver
+
+ drivers/fpga/altera-cvp.c           |  12 +-
+ drivers/fpga/altera-fpga2sdram.c    |  12 +-
+ drivers/fpga/altera-freeze-bridge.c |  10 +-
+ drivers/fpga/altera-hps2fpga.c      |  12 +-
+ drivers/fpga/altera-pr-ip-core.c    |   6 +-
+ drivers/fpga/altera-ps-spi.c        |   8 +-
+ drivers/fpga/dfl-fme-br.c           |  10 +-
+ drivers/fpga/dfl-fme-mgr.c          |  10 +-
+ drivers/fpga/dfl-fme-region.c       |  10 +-
+ drivers/fpga/dfl.c                  |  10 +-
+ drivers/fpga/fpga-bridge.c          | 113 ++++--------------
+ drivers/fpga/fpga-mgr.c             | 177 ++++------------------------
+ drivers/fpga/fpga-region.c          |  97 +++------------
+ drivers/fpga/ice40-spi.c            |   8 +-
+ drivers/fpga/machxo2-spi.c          |   8 +-
+ drivers/fpga/of-fpga-region.c       |  10 +-
+ drivers/fpga/socfpga-a10.c          |  16 +--
+ drivers/fpga/socfpga.c              |   8 +-
+ drivers/fpga/stratix10-soc.c        |  15 +--
+ drivers/fpga/ts73xx-fpga.c          |   8 +-
+ drivers/fpga/xilinx-pr-decoupler.c  |  17 +--
+ drivers/fpga/xilinx-spi.c           |  10 +-
+ drivers/fpga/zynq-fpga.c            |  16 +--
+ drivers/fpga/zynqmp-fpga.c          |   8 +-
+ include/linux/fpga/fpga-bridge.h    |  12 +-
+ include/linux/fpga/fpga-mgr.h       |  14 +--
+ include/linux/fpga/fpga-region.h    |  12 +-
+ 27 files changed, 150 insertions(+), 499 deletions(-)
+
 -- 
-2.26.3
+2.25.1
 
