@@ -2,33 +2,33 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7333938D765
-	for <lists+linux-fpga@lfdr.de>; Sat, 22 May 2021 22:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C405938D7C8
+	for <lists+linux-fpga@lfdr.de>; Sun, 23 May 2021 01:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbhEVUhq (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 22 May 2021 16:37:46 -0400
-Received: from mga17.intel.com ([192.55.52.151]:22555 "EHLO mga17.intel.com"
+        id S231451AbhEVXcv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 22 May 2021 19:32:51 -0400
+Received: from mga03.intel.com ([134.134.136.65]:45615 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231351AbhEVUhq (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sat, 22 May 2021 16:37:46 -0400
-IronPort-SDR: wfPzvtXQeKZcppR6uOo8G5Ph6x+iKyk6NkFbInYtqevRxXGUt3SUSOU4WIHpD3PLTLOGHf+Svc
- gOejVnXM0Elg==
-X-IronPort-AV: E=McAfee;i="6200,9189,9992"; a="181998485"
+        id S231440AbhEVXcu (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 22 May 2021 19:32:50 -0400
+IronPort-SDR: G/EpN7Jzb1eRnV5elMdGShwCyxL0KO/2sLUqUVABotm0R9N2qL6paJILW+ymzEmM7dHnA2F4qL
+ Gywbe8jN90Xg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9992"; a="201759442"
 X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="gz'50?scan'50,208,50";a="181998485"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2021 13:36:20 -0700
-IronPort-SDR: ZM5YnE9BBHGCmdYcyT/wYVMSwi+EVbfDx/VIKDMcO3B0S6st/F/fd6421KknMhtbdrRvQ2Wthw
- cY10ZRjqrarw==
+   d="gz'50?scan'50,208,50";a="201759442"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2021 16:31:24 -0700
+IronPort-SDR: NSTqJA6VXbHjIcKj0SkDR5lneO4fb+a3XFBeHiyGSCzRSOr9IvuZApqzP4Qodrm4gwSncM/iOu
+ cIUVE8UMAoMw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="gz'50?scan'50,208,50";a="469492691"
+   d="gz'50?scan'50,208,50";a="413068056"
 Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 May 2021 13:36:17 -0700
+  by orsmga002.jf.intel.com with ESMTP; 22 May 2021 16:31:20 -0700
 Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lkYM4-0000QS-Jw; Sat, 22 May 2021 20:36:16 +0000
-Date:   Sun, 23 May 2021 04:35:46 +0800
+        id 1lkb5U-0000XC-4Y; Sat, 22 May 2021 23:31:20 +0000
+Date:   Sun, 23 May 2021 07:30:51 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -36,21 +36,21 @@ Cc:     kbuild-all@lists.01.org, clang-built-linux@googlegroups.com,
         trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
         hao.wu@intel.com, matthew.gerlach@intel.com,
         richard.gong@intel.com, Russ Weight <russell.h.weight@intel.com>
-Subject: Re: [PATCH v1 1/3] fpga: mgr: Use standard dev_release for class
+Subject: Re: [PATCH v1 3/3] fpga: region: Use standard dev_release for class
  driver
-Message-ID: <202105230422.J3kpuvPD-lkp@intel.com>
-References: <20210521010359.635717-2-russell.h.weight@intel.com>
+Message-ID: <202105230753.wrkBxedp-lkp@intel.com>
+References: <20210521010359.635717-4-russell.h.weight@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="+QahgC5+KEYLbs62"
+Content-Type: multipart/mixed; boundary="VS++wcV0S1rZb1Fb"
 Content-Disposition: inline
-In-Reply-To: <20210521010359.635717-2-russell.h.weight@intel.com>
+In-Reply-To: <20210521010359.635717-4-russell.h.weight@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
---+QahgC5+KEYLbs62
+--VS++wcV0S1rZb1Fb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -74,10 +74,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install x86_64 cross compiling tool for clang build
         # apt-get install binutils-x86-64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/fe4ee184f8a9b9acbf00d536ec38d8d793f8dcee
+        # https://github.com/0day-ci/linux/commit/2bd6e6762866ff1b80bea0d0d8377bcf9d2253ce
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Russ-Weight/fpga-Use-standard-class-dev_release-function/20210522-205631
-        git checkout fe4ee184f8a9b9acbf00d536ec38d8d793f8dcee
+        git checkout 2bd6e6762866ff1b80bea0d0d8377bcf9d2253ce
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64 
 
@@ -86,112 +86,77 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/fpga/fpga-mgr.c:581:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (id < 0)
-               ^~~~~~
-   drivers/fpga/fpga-mgr.c:620:17: note: uninitialized use occurs here
-           return ERR_PTR(ret);
-                          ^~~
-   drivers/fpga/fpga-mgr.c:581:2: note: remove the 'if' if its condition is always false
-           if (id < 0)
-           ^~~~~~~~~~~
-   drivers/fpga/fpga-mgr.c:562:13: note: initialize the variable 'ret' to silence this warning
-           int id, ret;
-                      ^
-                       = 0
-   1 warning generated.
+>> drivers/fpga/fpga-region.c:193: warning: expecting prototype for fpga_region_create(). Prototype was for fpga_region_register() instead
 
 
-vim +581 drivers/fpga/fpga-mgr.c
+vim +193 drivers/fpga/fpga-region.c
 
-ebf877a51ad7b6 Alan Tull       2017-11-15  547  
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  548  /**
-fe4ee184f8a9b9 Russ Weight     2021-05-20  549   * fpga_mgr_register - create and register a FPGA manager struct
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  550   * @dev:	fpga manager device from pdev
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  551   * @name:	fpga manager name
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  552   * @mops:	pointer to structure of fpga manager ops
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  553   * @priv:	fpga manager private data
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  554   *
-fe4ee184f8a9b9 Russ Weight     2021-05-20  555   * Returns a struct fpga_manager pointer on success, or ERR_PTR() on error.
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  556   */
-fe4ee184f8a9b9 Russ Weight     2021-05-20  557  struct fpga_manager *
-fe4ee184f8a9b9 Russ Weight     2021-05-20  558  fpga_mgr_register(struct device *dev, const char *name,
-fe4ee184f8a9b9 Russ Weight     2021-05-20  559  		  const struct fpga_manager_ops *mops, void *priv)
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  560  {
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  561  	struct fpga_manager *mgr;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  562  	int id, ret;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  563  
-baa6d396635129 Jason Gunthorpe 2017-02-01  564  	if (!mops || !mops->write_complete || !mops->state ||
-baa6d396635129 Jason Gunthorpe 2017-02-01  565  	    !mops->write_init || (!mops->write && !mops->write_sg) ||
-baa6d396635129 Jason Gunthorpe 2017-02-01  566  	    (mops->write && mops->write_sg)) {
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  567  		dev_err(dev, "Attempt to register without fpga_manager_ops\n");
-fe4ee184f8a9b9 Russ Weight     2021-05-20  568  		return ERR_PTR(-EINVAL);
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  569  	}
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  570  
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  571  	if (!name || !strlen(name)) {
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  572  		dev_err(dev, "Attempt to register with no name!\n");
-fe4ee184f8a9b9 Russ Weight     2021-05-20  573  		return ERR_PTR(-EINVAL);
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  574  	}
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  575  
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  576  	mgr = kzalloc(sizeof(*mgr), GFP_KERNEL);
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  577  	if (!mgr)
-fe4ee184f8a9b9 Russ Weight     2021-05-20  578  		return ERR_PTR(-ENOMEM);
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  579  
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  580  	id = ida_simple_get(&fpga_mgr_ida, 0, 0, GFP_KERNEL);
-88aaab9218f87c Tom Rix         2020-06-08 @581  	if (id < 0)
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  582  		goto error_kfree;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  583  
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  584  	mutex_init(&mgr->ref_mutex);
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  585  
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  586  	mgr->name = name;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  587  	mgr->mops = mops;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  588  	mgr->priv = priv;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  589  
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  590  	mgr->dev.class = fpga_mgr_class;
-845089bbf589be Alan Tull       2017-11-15  591  	mgr->dev.groups = mops->groups;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  592  	mgr->dev.parent = dev;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  593  	mgr->dev.of_node = dev->of_node;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  594  	mgr->dev.id = id;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  595  
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  596  	ret = dev_set_name(&mgr->dev, "fpga%d", id);
-07687c031d14a1 Alan Tull       2015-10-29  597  	if (ret)
-07687c031d14a1 Alan Tull       2015-10-29  598  		goto error_device;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  599  
-7085e2a94f7df5 Alan Tull       2018-05-16  600  	/*
-7085e2a94f7df5 Alan Tull       2018-05-16  601  	 * Initialize framework state by requesting low level driver read state
-7085e2a94f7df5 Alan Tull       2018-05-16  602  	 * from device.  FPGA may be in reset mode or may have been programmed
-7085e2a94f7df5 Alan Tull       2018-05-16  603  	 * by bootloader or EEPROM.
-7085e2a94f7df5 Alan Tull       2018-05-16  604  	 */
-7085e2a94f7df5 Alan Tull       2018-05-16  605  	mgr->state = mgr->mops->state(mgr);
-7085e2a94f7df5 Alan Tull       2018-05-16  606  
-fe4ee184f8a9b9 Russ Weight     2021-05-20  607  	ret = device_register(&mgr->dev);
-fe4ee184f8a9b9 Russ Weight     2021-05-20  608  	if (ret) {
-fe4ee184f8a9b9 Russ Weight     2021-05-20  609  		put_device(&mgr->dev);
-fe4ee184f8a9b9 Russ Weight     2021-05-20  610  		return ERR_PTR(ret);
-fe4ee184f8a9b9 Russ Weight     2021-05-20  611  	}
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  612  
-fe4ee184f8a9b9 Russ Weight     2021-05-20  613  	return mgr;
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  614  
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  615  error_device:
-fe4ee184f8a9b9 Russ Weight     2021-05-20  616  	ida_simple_remove(&fpga_mgr_ida, id);
-fe4ee184f8a9b9 Russ Weight     2021-05-20  617  error_kfree:
-fe4ee184f8a9b9 Russ Weight     2021-05-20  618  	kfree(mgr);
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  619  
-fe4ee184f8a9b9 Russ Weight     2021-05-20  620  	return ERR_PTR(ret);
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  621  }
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  622  EXPORT_SYMBOL_GPL(fpga_mgr_register);
-6a8c3be7ec8eb3 Alan Tull       2015-10-07  623  
+41a8b2c56470b7 Wu Hao      2018-06-30  181  
+9f368977b4589e Alan Tull   2018-05-16  182  /**
+9f368977b4589e Alan Tull   2018-05-16  183   * fpga_region_create - alloc and init a struct fpga_region
+9f368977b4589e Alan Tull   2018-05-16  184   * @dev: device parent
+9f368977b4589e Alan Tull   2018-05-16  185   * @mgr: manager that programs this region
+9f368977b4589e Alan Tull   2018-05-16  186   * @get_bridges: optional function to get bridges to a list
+9f368977b4589e Alan Tull   2018-05-16  187   *
+2bd6e6762866ff Russ Weight 2021-05-20  188   * Returns a struct fpga_region pointer on success, or ERR_PTR() on error.
+9f368977b4589e Alan Tull   2018-05-16  189   */
+2bd6e6762866ff Russ Weight 2021-05-20  190  struct fpga_region *
+2bd6e6762866ff Russ Weight 2021-05-20  191  fpga_region_register(struct device *dev, struct fpga_manager *mgr,
+9f368977b4589e Alan Tull   2018-05-16  192  		     int (*get_bridges)(struct fpga_region *))
+0fa20cdfcc1f68 Alan Tull   2016-11-01 @193  {
+9f368977b4589e Alan Tull   2018-05-16  194  	struct fpga_region *region;
+0fa20cdfcc1f68 Alan Tull   2016-11-01  195  	int id, ret = 0;
+0fa20cdfcc1f68 Alan Tull   2016-11-01  196  
+9f368977b4589e Alan Tull   2018-05-16  197  	region = kzalloc(sizeof(*region), GFP_KERNEL);
+9f368977b4589e Alan Tull   2018-05-16  198  	if (!region)
+2bd6e6762866ff Russ Weight 2021-05-20  199  		return ERR_PTR(-ENOMEM);
+9f368977b4589e Alan Tull   2018-05-16  200  
+0fa20cdfcc1f68 Alan Tull   2016-11-01  201  	id = ida_simple_get(&fpga_region_ida, 0, 0, GFP_KERNEL);
+52a3a7ccce07e7 Alan Tull   2017-11-15  202  	if (id < 0)
+9f368977b4589e Alan Tull   2018-05-16  203  		goto err_free;
+0fa20cdfcc1f68 Alan Tull   2016-11-01  204  
+9f368977b4589e Alan Tull   2018-05-16  205  	region->mgr = mgr;
+9f368977b4589e Alan Tull   2018-05-16  206  	region->get_bridges = get_bridges;
+0fa20cdfcc1f68 Alan Tull   2016-11-01  207  	mutex_init(&region->mutex);
+0fa20cdfcc1f68 Alan Tull   2016-11-01  208  	INIT_LIST_HEAD(&region->bridge_list);
+9f368977b4589e Alan Tull   2018-05-16  209  
+0fa20cdfcc1f68 Alan Tull   2016-11-01  210  	region->dev.class = fpga_region_class;
+0fa20cdfcc1f68 Alan Tull   2016-11-01  211  	region->dev.parent = dev;
+52a3a7ccce07e7 Alan Tull   2017-11-15  212  	region->dev.of_node = dev->of_node;
+0fa20cdfcc1f68 Alan Tull   2016-11-01  213  	region->dev.id = id;
+0fa20cdfcc1f68 Alan Tull   2016-11-01  214  
+0fa20cdfcc1f68 Alan Tull   2016-11-01  215  	ret = dev_set_name(&region->dev, "region%d", id);
+0fa20cdfcc1f68 Alan Tull   2016-11-01  216  	if (ret)
+0fa20cdfcc1f68 Alan Tull   2016-11-01  217  		goto err_remove;
+0fa20cdfcc1f68 Alan Tull   2016-11-01  218  
+2bd6e6762866ff Russ Weight 2021-05-20  219  	ret = device_register(&region->dev);
+2bd6e6762866ff Russ Weight 2021-05-20  220  	if (ret) {
+2bd6e6762866ff Russ Weight 2021-05-20  221  		put_device(&region->dev);
+2bd6e6762866ff Russ Weight 2021-05-20  222  		return ERR_PTR(ret);
+2bd6e6762866ff Russ Weight 2021-05-20  223  	}
+2bd6e6762866ff Russ Weight 2021-05-20  224  
+9f368977b4589e Alan Tull   2018-05-16  225  	return region;
+52a3a7ccce07e7 Alan Tull   2017-11-15  226  
+52a3a7ccce07e7 Alan Tull   2017-11-15  227  err_remove:
+52a3a7ccce07e7 Alan Tull   2017-11-15  228  	ida_simple_remove(&fpga_region_ida, id);
+9f368977b4589e Alan Tull   2018-05-16  229  err_free:
+9f368977b4589e Alan Tull   2018-05-16  230  	kfree(region);
+9f368977b4589e Alan Tull   2018-05-16  231  
+2bd6e6762866ff Russ Weight 2021-05-20  232  	return ERR_PTR(ret);
+52a3a7ccce07e7 Alan Tull   2017-11-15  233  }
+52a3a7ccce07e7 Alan Tull   2017-11-15  234  EXPORT_SYMBOL_GPL(fpga_region_register);
+52a3a7ccce07e7 Alan Tull   2017-11-15  235  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---+QahgC5+KEYLbs62
+--VS++wcV0S1rZb1Fb
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICHxNqWAAAy5jb25maWcAjFxLd9s4st7Pr9BJb3oW3fErnuTe4wVEghJaJMEGQFnyhkex
+H4sICCl2qWAAAy5jb25maWcAjFxLd9s4st7Pr9BJb3oW3fErnuTe4wVEghJaJMEGQFnyhkex
 lYzv+JGR7Z7k398qgI8CCCqTRRKiCu9C1VeFgn752y8z9vb6/Lh7vb/dPTz8mH3dP+0Pu9f9
 3ezL/cP+f2epnJXSzHgqzO/AnN8/vX1///3jZXN5Mfvw++nZ7yez1f7wtH+YJc9PX+6/vkHl
 ++env/3yt0SWmVg0SdKsudJClo3hG3P17vZh9/R19tf+8AJ8s9Pz30+gjV+/3r/+z/v38Pfj
@@ -948,4 +913,4 @@ ixZYKdTQbA88SBMwzBrfonhteSEqeSGlZC+1LlSayWACA8O9u5gm/W64oKpmYeodC8ACI+FV
 yuTaW2gA6CtcMdGULGJHnBoQ2N1wCEW3Cpzj9w6TBzdXWbFr6poBfjoJ+hAOck4on4//AaWI
 FmBucwIA
 
---+QahgC5+KEYLbs62--
+--VS++wcV0S1rZb1Fb--
