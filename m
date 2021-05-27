@@ -2,221 +2,234 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D3D392C27
-	for <lists+linux-fpga@lfdr.de>; Thu, 27 May 2021 12:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3003936CD
+	for <lists+linux-fpga@lfdr.de>; Thu, 27 May 2021 22:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236191AbhE0KwN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 27 May 2021 06:52:13 -0400
-Received: from mail-bn8nam12on2069.outbound.protection.outlook.com ([40.107.237.69]:28769
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236190AbhE0KwM (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 27 May 2021 06:52:12 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XkWQQlUZ3tZi1RRUL4xhAF8arCcLGFhBD/tJ/8GJ5EEuyz9eP6cXB6v33sxCXKEDk3bfMPO4F6+CCSIq4rREbE7JpRmv0JuI8X2CTgwF2GnpiKxCTOZcyMAZf9DU/YNdbUHnDi1DJC/LLwP/0fanC/gbhHyj7LvJsvO/qyJhAPNIbtcWTwE2oj8Vk9Aq/I37pQ4L6aCaxbKitibP/IeDUNeZJVRei0zuEvnio7MBhIE2nRl7B1eD2uc4C9WB2T+TaCi1caiSIy0O9bdy2JxE5ou4O2IyerJvHdW/Yrb8XgFZ8CNOFS9nx8v1788Bvw2nHZhtARqFvw1nERpiUdqS9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6ClbstyQpFJ1n/EsDriymi0DDhjVL5Ptk4Qi4bnPPtM=;
- b=gOU06kgL9TeZbmwFKV0T2wKQLGF4ijCNjILXCxCAtcuNQCfxfP+hIo46LNczN+ZEsYX9EAR/ZgiJFk3NTyq7+2PhhrZJIS8OSinoWpZcsrSaeWZ2ErC8c/mImMpNt/LF4YcjVMRXVr7kZQwJMTSy9N3ZCREq9Sqoud0gl+awlamGurNab8bNxMXJ702PVJ65e6EAgHpYU0Y+Jfh/uk9c+WKYlSsekZYn9gUbgWTeBR88RAg9G4DXkM7aOb/ShBcKN9ZjMHdemHtDhNa5JQKO1/8ZkpKSPfmMpYM8lGmSdNku9W1Wdhtj4F3xCDdTQqTUGVTnz+d3bI/CgLYgBYt2RA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
- dkim=pass header.d=xilinx.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6ClbstyQpFJ1n/EsDriymi0DDhjVL5Ptk4Qi4bnPPtM=;
- b=kYpuhQA70Sv9+Kg542aREgCsxGAFTKlZF7mqeqXyeQT8Nc0THo1relBh875omFBnF1uEHKVFF3aowa7tsO7/0OINgTMg3+9Nvp1Zl9yTw2ZIrGiDGechQ2Sk/fgp2TnpL7NHKtbZYn4yYpVkXI5W9hHk3w77cypK/3WOj+q3IJQ=
-Received: from MW4PR02MB7332.namprd02.prod.outlook.com (2603:10b6:303:79::18)
- by MW4PR02MB7332.namprd02.prod.outlook.com (2603:10b6:303:79::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.21; Thu, 27 May
- 2021 10:50:36 +0000
-Received: from MW4PR02MB7332.namprd02.prod.outlook.com
- ([fe80::a5e1:28aa:7a36:e6c2]) by MW4PR02MB7332.namprd02.prod.outlook.com
- ([fe80::a5e1:28aa:7a36:e6c2%6]) with mapi id 15.20.4173.021; Thu, 27 May 2021
- 10:50:36 +0000
-From:   Nava kishore Manne <navam@xilinx.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "mdf@kernel.org" <mdf@kernel.org>,
-        "trix@redhat.com" <trix@redhat.com>,
-        Michal Simek <michals@xilinx.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, Rajan Vaja <RAJANV@xilinx.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        Amit Sunil Dhamne <amitsuni@xlnx.xilinx.com>,
-        Tejas Patel <tejasp@xlnx.xilinx.com>,
-        "zou_wei@huawei.com" <zou_wei@huawei.com>,
-        Manish Narani <MNARANI@xilinx.com>,
-        Sai Krishna Potthuri <lakshmis@xilinx.com>,
-        Jiaying Liang <jliang@xilinx.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, git <git@xilinx.com>,
-        "chinnikishore369@gmail.com" <chinnikishore369@gmail.com>
-Subject: RE: [RFC PATCH 2/4] fpga: Add new properties to support user-key
- encrypted bitstream loading
-Thread-Topic: [RFC PATCH 2/4] fpga: Add new properties to support user-key
- encrypted bitstream loading
-Thread-Index: AQHXQM90hYIAhSQLOEqomCrE4N/mi6rgvmsAgACDurCAAEZ2gIAVwFYQ
-Date:   Thu, 27 May 2021 10:50:36 +0000
-Message-ID: <MW4PR02MB7332EAA757E0C032A8E9D379C2239@MW4PR02MB7332.namprd02.prod.outlook.com>
-References: <20210504102227.15475-1-nava.manne@xilinx.com>
- <20210504102227.15475-3-nava.manne@xilinx.com>
- <20210513023104.GA909876@robh.at.kernel.org>
- <MWHPR02MB262309A8DC5BD857CBB01446C2519@MWHPR02MB2623.namprd02.prod.outlook.com>
- <CAL_Jsq+mHsrgQOrT48gaoqBOUuMf5mxeVauM74RDxELiA8fXKg@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+mHsrgQOrT48gaoqBOUuMf5mxeVauM74RDxELiA8fXKg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=xilinx.com;
-x-originating-ip: [149.199.50.128]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 51718d22-471a-40f1-22fe-08d920fd4291
-x-ms-traffictypediagnostic: MW4PR02MB7332:
-x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MW4PR02MB7332404DAD4F5C562125674BC2239@MW4PR02MB7332.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kb//yS3nXb/jPSts4nJMi0wnk41REdfQp2Zf1ceRgM2MmjRLnbDePkIoNweMbE35XbtZehHBdHrEBaFpMYkob9nn+OJGghv8HsmLkX9ehvk4JA7+0RTyrOdXwoInVy9ieui8KLuaN4M1HrH1xQxwTvPx2pT4Z0ewmRVDMcBoabDeQY1iGUlDDvIXCenmWN+lGdWuhYkPXTQP0ldB+0lzUUqOtMNBpMTSsdG7/D6wo1axGtxw9DcPIrYSCzLEStDXPGOZ08szRIm5nCCBuCGzjLJcneeKahTf+3uRN+3tU2bE10E2O44tkiJVga1WQ5M2oTWcGJ6Fk7GhwUMHfZPk/jscOMWMcoY2zbSAABdzpUTlXveQu5dKD4t/qvhaXeBeXtyxSDCQe+xMwM2iS3US8n5NfE/jLZZQnWhw8AflvoIT28G620w3uGv1mxt/R/+S1J8ydBhB4HGQjNtPA68jlt42QVSj7cOMwNN87TUAJdtEPrpKSAqaiyMKq5Y9MmaMTqJWdh79zM7zJQCybLfFEefT6ynimioJJ+LO4SMmY6hGg0aVSvS5FedOmB+bTQilUOlRIDwl2EXhrnchmdJrwc+f77RAPMWnOGUir0mzoPQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR02MB7332.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(346002)(366004)(376002)(39860400002)(5660300002)(52536014)(66556008)(33656002)(76116006)(66446008)(71200400001)(64756008)(66946007)(86362001)(2906002)(66476007)(83380400001)(9686003)(55016002)(186003)(6916009)(26005)(7696005)(478600001)(4326008)(53546011)(6506007)(7416002)(8936002)(54906003)(38100700002)(8676002)(316002)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dzZqdGE1cE5VTzQ4ZkhMS1NpL3JNUENrbGtlU2hDckVSU2J2T1NFUU1FczFI?=
- =?utf-8?B?cnFVYllMQ3VTQ3Z0ZmFsZFdpU0wrUE1WdkFXRTNEM3Q0cnZ1OGRoS2FxZ0dD?=
- =?utf-8?B?NDZSb1A2QzFoSkk2L2kwZVZRSDNmRC9MUEhGcndaNXVacDFIeDlzdzNBdkFG?=
- =?utf-8?B?WFhSNlFJeXlON1ZYa2R4bGo1WW9GV3puOWZIY20ramlZckg3NkhsZUorRlBk?=
- =?utf-8?B?MFI0d2UwemhOL0g2WWVNUU5ja2FFL09URi9kZWgreW51V2lnUDdFcjVMRVlk?=
- =?utf-8?B?U25OSmxJaFF3SFI2MHBVMTY2OHdYUEFOL2U5Y1lha3RwZjZxdDFwZ0liWVhW?=
- =?utf-8?B?UUNpbG9rV2ptdVcvbHZwMHcwcDlRZWU2QWUwUmNWZTV0MGl1YWZRSUx5NWRh?=
- =?utf-8?B?SzdnNTdkTWh4MDV2bTUwbWRlMmpTbHBhemJPb3ptdHN5QWVFMjZsMUNlbS9Q?=
- =?utf-8?B?YTRoaTRIdHdvdktXYWEwbjdRZEpQc2ZrM2JBdnhjYmIvYnBuODhBTE0ybU9J?=
- =?utf-8?B?TERIZWQ5U01wZXJrYVg5d20zREtoVDNXMFloeEtwaXVQZzROaEtENysyS0Vx?=
- =?utf-8?B?YVV4VUNKcUo1NkljY1FhYTJCWGdNbDRGR25yRk1KUTkwbjZGeUpNTXNyM3lG?=
- =?utf-8?B?V3VVVmFNLy9kZHJmTytmSXhreCtZMXRCVGtsZWduYmF1elZZMU5lWnVhcG01?=
- =?utf-8?B?b3dkZmdNMHNsbDZVM2c2S2FqZTREa2ZBczU2Z2VCUko3QUFrbERZb3NDWSth?=
- =?utf-8?B?VVJ0MTdBSnNDQTZpdy9wZ2xVUG50Ujh4cis1RU5LL3NQalIyWFZWbFF0YXEw?=
- =?utf-8?B?UTU2Qnd5U3pvNVRtYXRGeE5pcThUSTRLajh4QmdZOG82ZHhlSzFxemE0NHVr?=
- =?utf-8?B?TFlENUJXakZjbEt4a0hEaUhWWkRGQVJyOUx2ZG41c1NCWDlKRHYydGVxZnpZ?=
- =?utf-8?B?RW5MYjFzSmd5c2JDNTFiaHBGOEg5bkZQVEtudkNkckI4c2sxenFSWTFBeFJo?=
- =?utf-8?B?d0huREE1UFUrTmVlUkJSSXI2MFFKUmV0SVhaR2FJRXhodm9kN0FNUk5uNFd3?=
- =?utf-8?B?UWZnZzRTZDRLdnZRRStKYVNhSFpJK0ZPa0xIZkZyZmthNEZBbVNjL1dMTEFo?=
- =?utf-8?B?RGt2eGxWdWFad3d4bnpWekFOMTZyT3lydml4QkgrMlllM1FrUWpOWnFxL0gw?=
- =?utf-8?B?MFo5TWE1M05XQzRWK2p6ZlJYU2ovdmxjeUx4c1pHeVNMT2EreHZsT01QeWZn?=
- =?utf-8?B?YjZqQ1d2SDFzbHZkQ3hvTTVDalNheVZvUkphVGZTcU9ReTlXRkhyKzYrdUgw?=
- =?utf-8?Q?ggzOMaBlWd?=
-x-ms-exchange-antispam-messagedata-1: ThDFh80vjt2GjDniRI1MiJ1Grxlt21UBMeU5TNyfjVeq5Jtn7Qq/wvJO4qHakcIh2xY/5GfWly99/hHxxhzbrmTMvaDD3LzEFwxBQFB5YqIr+gn4+osXvNCRQW6wVPbUXhNgy2o4Mad/Dv97zPNvQfsPwtTcKVomR3qTlL8GYyWEVeDA++Pzougxmr5q2Vo/bbjP/jrdGXw+AX/htnPkRqCk4V5CDnOqfQPdyazMheRGtIQhPVGJNXRKwOiX8WAaourxNDHGmkgMv3onx1GjGohCiap1cd7G1VZCGGduUzRGJqATGr1X5Wujl/U8Y4Tun6y0Wpg0B69QpR3Tz9IvZ9nU
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S235566AbhE0UKl (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 27 May 2021 16:10:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48503 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235519AbhE0UKj (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 27 May 2021 16:10:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1622146145;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DhMCEoC71DeYcLFzap4I0+HN6X7eTgKuNl1UamyyAJQ=;
+        b=HTjGfuV3kF9csqOe0km2/YDte2askZRrbs8yQ2jH96jHt3gw3F2liZDHFWrs3BpmRZzexZ
+        ZAtu7oLxdqroEmm+4Ixl0S//slpHcjDDbtZvuFGSq5QdsCdhSPF2BtekQ/klUQxS3kjiOj
+        QDqWKAlP7i3Q1sxA/x97QJy6jPc5oS4=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-224-1WXMD8y6PWONQWLcKa72iA-1; Thu, 27 May 2021 16:09:04 -0400
+X-MC-Unique: 1WXMD8y6PWONQWLcKa72iA-1
+Received: by mail-ot1-f70.google.com with SMTP id h28-20020a056830035cb02902a5ea00385cso660417ote.4
+        for <linux-fpga@vger.kernel.org>; Thu, 27 May 2021 13:09:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DhMCEoC71DeYcLFzap4I0+HN6X7eTgKuNl1UamyyAJQ=;
+        b=uX8R69j03xucwv4EKiKOUPBR6WFlnERKhgQyeea5QfqVQgD+7z8Ue9O6mU5rleCYcR
+         oaK/nEYUBb1rMQQUijYJ3JwAfRqYSo39xgKmgZ3OwEmvfsd5fJf/FB72ngZ6lSMEmq6T
+         q8JVw/6QMpYaVDQ2RNA6clySdlpV1RVDJJMvodqK4iWTDN2rOqDjoqx8nugPwxlytiQi
+         CKDSohMc85e1Ml0STuD7jXRz0F2DKn1bU6Ahl6q7MOZYWqhLCAQI3Ai7GxHeKg6989Ze
+         kpasF91m4RRgZrCtGOsZliN70j17ZJJ83BFnGpEZ+aRfrc6Pews/1Itr74O9P9w8t4rF
+         Sxpw==
+X-Gm-Message-State: AOAM531xEn5uIrr3kniUhEu5Qmu0Ld/Oj4ADrQQzQebZ7ktE7S4ByF/p
+        8kIoJvEeFsz2OSOJRbUL83n2i2SvvkdAeqe6pofkXOVJcfmF3w9Jpnafr7FSdES0jqDSe4lMcPm
+        GxlsL/9gULStkS3eEEZSFXA==
+X-Received: by 2002:a05:6830:1155:: with SMTP id x21mr4090552otq.303.1622146143239;
+        Thu, 27 May 2021 13:09:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyCkp4fHhNtfLrCKbdxUvriNHcn1UCGVTm1I6709kKfxlzFS68SW5CuZArK4ihyde9rOSg4vg==
+X-Received: by 2002:a05:6830:1155:: with SMTP id x21mr4090517otq.303.1622146142935;
+        Thu, 27 May 2021 13:09:02 -0700 (PDT)
+Received: from localhost (cpe-70-95-20-182.san.res.rr.com. [70.95.20.182])
+        by smtp.gmail.com with ESMTPSA id s85sm635380oos.4.2021.05.27.13.09.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 May 2021 13:09:02 -0700 (PDT)
+Date:   Thu, 27 May 2021 13:09:00 -0700
+From:   Fernando Pacheco <fpacheco@redhat.com>
+To:     trix@redhat.com
+Cc:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] fpga: fix spelling mistakes
+Message-ID: <20210527200900.GA875457@mail.gmail.com>
+References: <20210519163056.1966690-1-trix@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR02MB7332.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51718d22-471a-40f1-22fe-08d920fd4291
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 May 2021 10:50:36.4601
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: egEwsoY6EaNtUt51xe1Nmp93/c3e65TdSvEvWJ3y/Q0N4+fY4X8uFwnXmPbjlUpsUjBFnrS+5QThWLbmqTKw9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR02MB7332
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210519163056.1966690-1-trix@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-SGkgUm9iLA0KDQoJUGxlYXNlIGZpbmQgbXkgcmVzcG9uc2UgaW5saW5lLg0KDQo+IC0tLS0tT3Jp
-Z2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+
-DQo+IFNlbnQ6IFRodXJzZGF5LCBNYXkgMTMsIDIwMjEgODowNSBQTQ0KPiBUbzogTmF2YSBraXNo
-b3JlIE1hbm5lIDxuYXZhbUB4aWxpbnguY29tPg0KPiBDYzogbWRmQGtlcm5lbC5vcmc7IHRyaXhA
-cmVkaGF0LmNvbTsgTWljaGFsIFNpbWVrIDxtaWNoYWxzQHhpbGlueC5jb20+Ow0KPiBhcm5kQGFy
-bmRiLmRlOyBSYWphbiBWYWphIDxSQUpBTlZAeGlsaW54LmNvbT47DQo+IGdyZWdraEBsaW51eGZv
-dW5kYXRpb24ub3JnOyBsaW51cy53YWxsZWlqQGxpbmFyby5vcmc7IEFtaXQgU3VuaWwgRGhhbW5l
-DQo+IDxhbWl0c3VuaUB4bG54LnhpbGlueC5jb20+OyBUZWphcyBQYXRlbCA8dGVqYXNwQHhsbngu
-eGlsaW54LmNvbT47DQo+IHpvdV93ZWlAaHVhd2VpLmNvbTsgTWFuaXNoIE5hcmFuaSA8TU5BUkFO
-SUB4aWxpbnguY29tPjsgU2FpIEtyaXNobmENCj4gUG90dGh1cmkgPGxha3NobWlzQHhpbGlueC5j
-b20+OyBKaWF5aW5nIExpYW5nIDxqbGlhbmdAeGlsaW54LmNvbT47IGxpbnV4LQ0KPiBmcGdhQHZn
-ZXIua2VybmVsLm9yZzsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBrZXJu
-ZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc7
-IGdpdA0KPiA8Z2l0QHhpbGlueC5jb20+OyBjaGlubmlraXNob3JlMzY5QGdtYWlsLmNvbQ0KPiBT
-dWJqZWN0OiBSZTogW1JGQyBQQVRDSCAyLzRdIGZwZ2E6IEFkZCBuZXcgcHJvcGVydGllcyB0byBz
-dXBwb3J0IHVzZXIta2V5DQo+IGVuY3J5cHRlZCBiaXRzdHJlYW0gbG9hZGluZw0KPiANCj4gT24g
-VGh1LCBNYXkgMTMsIDIwMjEgYXQgNTo1NSBBTSBOYXZhIGtpc2hvcmUgTWFubmUgPG5hdmFtQHhp
-bGlueC5jb20+DQo+IHdyb3RlOg0KPiA+DQo+ID4gSGkgUm9iLA0KPiA+DQo+ID4gICAgICAgICBQ
-bGVhc2UgZmluZCBteSByZXNwb25zZSBpbmxpbmUuDQo+ID4NCj4gPiA+IC0tLS0tT3JpZ2luYWwg
-TWVzc2FnZS0tLS0tDQo+ID4gPiBGcm9tOiBSb2IgSGVycmluZyA8cm9iaEBrZXJuZWwub3JnPg0K
-PiA+ID4gU2VudDogVGh1cnNkYXksIE1heSAxMywgMjAyMSA4OjAxIEFNDQo+ID4gPiBUbzogTmF2
-YSBraXNob3JlIE1hbm5lIDxuYXZhbUB4aWxpbnguY29tPg0KPiA+ID4gQ2M6IG1kZkBrZXJuZWwu
-b3JnOyB0cml4QHJlZGhhdC5jb207IE1pY2hhbCBTaW1law0KPiA+ID4gPG1pY2hhbHNAeGlsaW54
-LmNvbT47IGFybmRAYXJuZGIuZGU7IFJhamFuIFZhamENCj4gPFJBSkFOVkB4aWxpbnguY29tPjsN
-Cj4gPiA+IGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnOyBsaW51cy53YWxsZWlqQGxpbmFyby5v
-cmc7IEFtaXQgU3VuaWwNCj4gPiA+IERoYW1uZSA8YW1pdHN1bmlAeGxueC54aWxpbnguY29tPjsg
-VGVqYXMgUGF0ZWwNCj4gPiA+IDx0ZWphc3BAeGxueC54aWxpbnguY29tPjsgem91X3dlaUBodWF3
-ZWkuY29tOyBNYW5pc2ggTmFyYW5pDQo+ID4gPiA8TU5BUkFOSUB4aWxpbnguY29tPjsgU2FpIEty
-aXNobmEgUG90dGh1cmkgPGxha3NobWlzQHhpbGlueC5jb20+Ow0KPiA+ID4gSmlheWluZyBMaWFu
-ZyA8amxpYW5nQHhpbGlueC5jb20+OyBsaW51eC0gZnBnYUB2Z2VyLmtlcm5lbC5vcmc7DQo+ID4g
-PiBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGludXgtIGtlcm5lbEB2Z2VyLmtlcm5lbC5v
-cmc7DQo+ID4gPiBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc7IGdpdCA8Z2l0
-QHhpbGlueC5jb20+Ow0KPiA+ID4gY2hpbm5pa2lzaG9yZTM2OUBnbWFpbC5jb20NCj4gPiA+IFN1
-YmplY3Q6IFJlOiBbUkZDIFBBVENIIDIvNF0gZnBnYTogQWRkIG5ldyBwcm9wZXJ0aWVzIHRvIHN1
-cHBvcnQNCj4gPiA+IHVzZXIta2V5IGVuY3J5cHRlZCBiaXRzdHJlYW0gbG9hZGluZw0KPiA+ID4N
-Cj4gPiA+IE9uIFR1ZSwgTWF5IDA0LCAyMDIxIGF0IDAzOjUyOjI1UE0gKzA1MzAsIE5hdmEga2lz
-aG9yZSBNYW5uZSB3cm90ZToNCj4gPiA+ID4gVGhpcyBwYXRjaCBBZGRzIOKAmGVuY3J5cHRlZC1r
-ZXktbmFtZeKAmSBhbmQNCj4gPiA+ID4g4oCYZW5jcnlwdGVkLXVzZXIta2V5LWZwZ2EtY29uZmln
-4oCZIHByb3BlcnRpZXMgdG8gc3VwcG9ydCB1c2VyLWtleQ0KPiA+ID4gPiBlbmNyeXB0ZWQgYml0
-c3RyZWFtIGxvYWRpbmcgdXNlIGNhc2UuDQo+ID4gPiA+DQo+ID4gPiA+IFNpZ25lZC1vZmYtYnk6
-IE5hdmEga2lzaG9yZSBNYW5uZSA8bmF2YS5tYW5uZUB4aWxpbnguY29tPg0KPiA+ID4gPiAtLS0N
-Cj4gPiA+ID4gIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9mcGdhL2ZwZ2EtcmVn
-aW9uLnR4dCB8IDUgKysrKysNCj4gPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMo
-KykNCj4gPiA+ID4NCj4gPiA+ID4gZGlmZiAtLWdpdA0KPiA+ID4gPiBhL0RvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy9mcGdhL2ZwZ2EtcmVnaW9uLnR4dA0KPiA+ID4gPiBiL0RvY3Vt
-ZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9mcGdhL2ZwZ2EtcmVnaW9uLnR4dA0KPiA+ID4g
-PiBpbmRleCBkNzg3ZDU3NDkxYTEuLjk1N2RjNmNiY2Q5ZSAxMDA2NDQNCj4gPiA+ID4gLS0tIGEv
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2ZwZ2EvZnBnYS1yZWdpb24udHh0DQo+
-ID4gPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9mcGdhL2ZwZ2Et
-cmVnaW9uLnR4dA0KPiA+ID4gPiBAQCAtMTc3LDYgKzE3Nyw5IEBAIE9wdGlvbmFsIHByb3BlcnRp
-ZXM6DQo+ID4gPiA+ICAgICBpdCBpbmRpY2F0ZXMgdGhhdCB0aGUgRlBHQSBoYXMgYWxyZWFkeSBi
-ZWVuIHByb2dyYW1tZWQgd2l0aA0KPiA+ID4gPiB0aGlzDQo+ID4gPiBpbWFnZS4NCj4gPiA+ID4g
-ICAgIElmIHRoaXMgcHJvcGVydHkgaXMgaW4gYW4gb3ZlcmxheSB0YXJnZXRpbmcgYSBGUEdBIHJl
-Z2lvbiwgaXQgaXMgYQ0KPiA+ID4gPiAgICAgcmVxdWVzdCB0byBwcm9ncmFtIHRoZSBGUEdBIHdp
-dGggdGhhdCBpbWFnZS4NCj4gPiA+ID4gKy0gZW5jcnlwdGVkLWtleS1uYW1lIDogc2hvdWxkIGNv
-bnRhaW4gdGhlIG5hbWUgb2YgYW4gZW5jcnlwdGVkDQo+ID4gPiA+ICtrZXkgZmlsZQ0KPiA+ID4g
-bG9jYXRlZA0KPiA+ID4gPiArICAgb24gdGhlIGZpcm13YXJlIHNlYXJjaCBwYXRoLiBJdCB3aWxs
-IGJlIHVzZWQgdG8gZGVjcnlwdCB0aGUNCj4gPiA+ID4gKyBGUEdBDQo+ID4gPiBpbWFnZQ0KPiA+
-ID4gPiArICAgZmlsZS4NCj4gPiA+ID4gIC0gZnBnYS1icmlkZ2VzIDogc2hvdWxkIGNvbnRhaW4g
-YSBsaXN0IG9mIHBoYW5kbGVzIHRvIEZQR0ENCj4gPiA+ID4gQnJpZGdlcyB0aGF0IG11c3QNCj4g
-PiA+IGJlDQo+ID4gPiA+ICAgICBjb250cm9sbGVkIGR1cmluZyBGUEdBIHByb2dyYW1taW5nIGFs
-b25nIHdpdGggdGhlIHBhcmVudCBGUEdBDQo+ID4gPiBicmlkZ2UuDQo+ID4gPiA+ICAgICBUaGlz
-IHByb3BlcnR5IGlzIG9wdGlvbmFsIGlmIHRoZSBGUEdBIE1hbmFnZXIgaGFuZGxlcyB0aGUgYnJp
-ZGdlcy4NCj4gPiA+ID4gQEAgLTE4Nyw2ICsxOTAsOCBAQCBPcHRpb25hbCBwcm9wZXJ0aWVzOg0K
-PiA+ID4gPiAgLSBleHRlcm5hbC1mcGdhLWNvbmZpZyA6IGJvb2xlYW4sIHNldCBpZiB0aGUgRlBH
-QSBoYXMgYWxyZWFkeQ0KPiA+ID4gPiBiZWVuDQo+ID4gPiBjb25maWd1cmVkDQo+ID4gPiA+ICAg
-ICBwcmlvciB0byBPUyBib290IHVwLg0KPiA+ID4gPiAgLSBlbmNyeXB0ZWQtZnBnYS1jb25maWcg
-OiBib29sZWFuLCBzZXQgaWYgdGhlIGJpdHN0cmVhbSBpcw0KPiA+ID4gPiBlbmNyeXB0ZWQNCj4g
-PiA+ID4gKy0gZW5jcnlwdGVkLXVzZXIta2V5LWZwZ2EtY29uZmlnIDogYm9vbGVhbiwgc2V0IGlm
-IHRoZSBiaXRzdHJlYW0NCj4gPiA+ID4gK2lzDQo+ID4gPiBlbmNyeXB0ZWQNCj4gPiA+ID4gKyAg
-IHdpdGggdXNlciBrZXkuDQo+ID4gPg0KPiA+ID4gV2hhdCdzIHRoZSByZWxhdGlvbnNoaXAgd2l0
-aCBlbmNyeXB0ZWQtZnBnYS1jb25maWc/IEJvdGggcHJlc2VudCBvcg0KPiA+ID4gbXV0dWFsbHkg
-ZXhjbHVzaXZlPyBDb3VsZG4ndCB0aGlzIGJlIGltcGxpZWQgYnkgZW5jcnlwdGVkLWtleS1uYW1l
-DQo+ID4gPiBiZWluZyBwcmVzZW50Pw0KPiA+ID4NCj4gPg0KPiA+IEluIEVuY3J5cHRpb24gd2Ug
-aGF2ZSB0d28ga2luZHMgb2YgdXNlIGNhc2Ugb25lIGlzIEVuY3J5cHRlZCBCaXRzdHJlYW0NCj4g
-PiBsb2FkaW5nIHdpdGggRGV2aWNlLWtleSBhbmQgT3RoZXIgb25lIGlzIEVuY3J5cHRlZCBCaXRz
-dHJlYW0gbG9hZGluZw0KPiA+IHdpdGggVXNlci1rZXkuIGVuY3J5cHRlZC1mcGdhLWNvbmZpZyBh
-bmQNCj4gPiBlbmNyeXB0ZWQtdXNlci1rZXktZnBnYS1jb25maWcgYXJlIG11dHVhbGx5IGV4Y2x1
-c2l2ZS4gVG8gZGlmZmVyZW50aWF0ZQ0KPiBib3RoIHRoZSB1c2UgY2FzZXMgSSBoYXZlIGFkZGVk
-IHRoaXMgbmV3IGZsYWcgYW5kIEFlcyBLZXkgZmlsZShlbmNyeXB0ZWQta2V5LQ0KPiBuYW1lKSBp
-cyBuZWVkZWQgb25seSBmb3IgZW5jcnlwdGVkLXVzZXIta2V5LWZwZ2EtY29uZmlnIHVzZSBjYXNl
-cy4NCj4gDQo+IElmIGVuY3J5cHRlZC1rZXktbmFtZSBpcyByZXF1aXJlZCBmb3IgYSB1c2VyIGtl
-eSwgdGhlbiB3aHkgZG8geW91IG5lZWQNCj4gZW5jcnlwdGVkLXVzZXIta2V5LWZwZ2EtY29uZmln
-IGFsc28/DQo+IA0KPiBJT1csIHdoeSBoYXZlIDMgcHJvcGVydGllcyAodGhhdCdzIDkgcG9zc2li
-bGUgY29tYmluYXRpb25zKSBmb3IgMiBtb2Rlcz8NCj4gDQoNCkFncmVlLCB3ZSBjYW4gdXNlIGVu
-Y3J5cHRlZC1rZXktbmFtZSBmb3IgdXNlci1rZXkgdXNlIGNhc2VzIGluc3RlYWQgb2YgaGF2aW5n
-IGJvdGggZW5jcnlwdGVkLWtleS1uYW1lIGFuZCBlbmNyeXB0ZWQtdXNlci1rZXktZnBnYS1jb25m
-aWcgZmxhZ3MuDQpXaWxsIGZpeCB0aGlzIGlzc3VlIGluIHYyLg0KDQpSZWdhcmRzLA0KTmF2YWtp
-c2hvcmUuDQoNCg==
+On Wed, May 19, 2021 at 09:30:56AM -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Run the fpga subsystem through aspell.
+
+Reviewed-by: Fernando Pacheco <fpacheco@redhat.com>
+
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  Documentation/fpga/dfl.rst    | 4 ++--
+>  drivers/fpga/altera-cvp.c     | 2 +-
+>  drivers/fpga/dfl-fme-pr.c     | 2 +-
+>  drivers/fpga/dfl-n3000-nios.c | 2 +-
+>  drivers/fpga/dfl.h            | 2 +-
+>  drivers/fpga/fpga-bridge.c    | 4 ++--
+>  drivers/fpga/zynq-fpga.c      | 6 +++---
+>  include/linux/fpga/fpga-mgr.h | 2 +-
+>  8 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> index f3a1223f2517e..ccc33f199df2a 100644
+> --- a/Documentation/fpga/dfl.rst
+> +++ b/Documentation/fpga/dfl.rst
+> @@ -10,7 +10,7 @@ Authors:
+>  - Xu Yilun <yilun.xu@intel.com>
+>  
+>  The Device Feature List (DFL) FPGA framework (and drivers according to
+> -this framework) hides the very details of low layer hardwares and provides
+> +this framework) hides the very details of low layer hardware and provides
+>  unified interfaces to userspace. Applications could use these interfaces to
+>  configure, enumerate, open and access FPGA accelerators on platforms which
+>  implement the DFL in the device memory. Besides this, the DFL framework
+> @@ -205,7 +205,7 @@ given Device Feature Lists and create platform devices for feature devices
+>  also abstracts operations for the private features and exposes common ops to
+>  feature device drivers.
+>  
+> -The FPGA DFL Device could be different hardwares, e.g. PCIe device, platform
+> +The FPGA DFL Device could be different hardware, e.g. PCIe device, platform
+>  device and etc. Its driver module is always loaded first once the device is
+>  created by the system. This driver plays an infrastructural role in the
+>  driver architecture. It locates the DFLs in the device memory, handles them
+> diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
+> index 4e0edb60bfba6..ccf4546eff297 100644
+> --- a/drivers/fpga/altera-cvp.c
+> +++ b/drivers/fpga/altera-cvp.c
+> @@ -346,7 +346,7 @@ static int altera_cvp_write_init(struct fpga_manager *mgr,
+>  	}
+>  
+>  	if (val & VSE_CVP_STATUS_CFG_RDY) {
+> -		dev_warn(&mgr->dev, "CvP already started, teardown first\n");
+> +		dev_warn(&mgr->dev, "CvP already started, tear down first\n");
+>  		ret = altera_cvp_teardown(mgr, info);
+>  		if (ret)
+>  			return ret;
+> diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
+> index 1194c0e850e07..d61ce9a188792 100644
+> --- a/drivers/fpga/dfl-fme-pr.c
+> +++ b/drivers/fpga/dfl-fme-pr.c
+> @@ -148,7 +148,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
+>  
+>  	/*
+>  	 * it allows userspace to reset the PR region's logic by disabling and
+> -	 * reenabling the bridge to clear things out between accleration runs.
+> +	 * reenabling the bridge to clear things out between acceleration runs.
+>  	 * so no need to hold the bridges after partial reconfiguration.
+>  	 */
+>  	if (region->get_bridges)
+> diff --git a/drivers/fpga/dfl-n3000-nios.c b/drivers/fpga/dfl-n3000-nios.c
+> index 7a95366f6516f..9ddf1d1d392f3 100644
+> --- a/drivers/fpga/dfl-n3000-nios.c
+> +++ b/drivers/fpga/dfl-n3000-nios.c
+> @@ -461,7 +461,7 @@ static int n3000_nios_poll_stat_timeout(void __iomem *base, u64 *v)
+>  	 * We don't use the time based timeout here for performance.
+>  	 *
+>  	 * The regbus read/write is on the critical path of Intel PAC N3000
+> -	 * image programing. The time based timeout checking will add too much
+> +	 * image programming. The time based timeout checking will add too much
+>  	 * overhead on it. Usually the state changes in 1 or 2 loops on the
+>  	 * test server, and we set 10000 times loop here for safety.
+>  	 */
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 2b82c96ba56c7..dac9c3d45e6c3 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -232,7 +232,7 @@ struct dfl_feature_irq_ctx {
+>   * @id: sub feature id.
+>   * @resource_index: each sub feature has one mmio resource for its registers.
+>   *		    this index is used to find its mmio resource from the
+> - *		    feature dev (platform device)'s reources.
+> + *		    feature dev (platform device)'s resources.
+>   * @ioaddr: mapped mmio resource address.
+>   * @irq_ctx: interrupt context list.
+>   * @nr_irqs: number of interrupt contexts.
+> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+> index 6510c7803a784..d31eec32eb426 100644
+> --- a/drivers/fpga/fpga-bridge.c
+> +++ b/drivers/fpga/fpga-bridge.c
+> @@ -230,7 +230,7 @@ EXPORT_SYMBOL_GPL(fpga_bridges_put);
+>   *
+>   * Get an exclusive reference to the bridge and and it to the list.
+>   *
+> - * Return 0 for success, error code from of_fpga_bridge_get() othewise.
+> + * Return 0 for success, error code from of_fpga_bridge_get() otherwise.
+>   */
+>  int of_fpga_bridge_get_to_list(struct device_node *np,
+>  			       struct fpga_image_info *info,
+> @@ -260,7 +260,7 @@ EXPORT_SYMBOL_GPL(of_fpga_bridge_get_to_list);
+>   *
+>   * Get an exclusive reference to the bridge and and it to the list.
+>   *
+> - * Return 0 for success, error code from fpga_bridge_get() othewise.
+> + * Return 0 for success, error code from fpga_bridge_get() otherwise.
+>   */
+>  int fpga_bridge_get_to_list(struct device *dev,
+>  			    struct fpga_image_info *info,
+> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+> index 07fa8d9ec6750..9b75bd4f93d8e 100644
+> --- a/drivers/fpga/zynq-fpga.c
+> +++ b/drivers/fpga/zynq-fpga.c
+> @@ -192,7 +192,7 @@ static void zynq_step_dma(struct zynq_fpga_priv *priv)
+>  
+>  	/* Once the first transfer is queued we can turn on the ISR, future
+>  	 * calls to zynq_step_dma will happen from the ISR context. The
+> -	 * dma_lock spinlock guarentees this handover is done coherently, the
+> +	 * dma_lock spinlock guarantees this handover is done coherently, the
+>  	 * ISR enable is put at the end to avoid another CPU spinning in the
+>  	 * ISR on this lock.
+>  	 */
+> @@ -267,7 +267,7 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
+>  		ctrl = zynq_fpga_read(priv, CTRL_OFFSET);
+>  		if (!(ctrl & CTRL_SEC_EN_MASK)) {
+>  			dev_err(&mgr->dev,
+> -				"System not secure, can't use crypted bitstreams\n");
+> +				"System not secure, can't use encrypted bitstreams\n");
+>  			err = -EINVAL;
+>  			goto out_err;
+>  		}
+> @@ -344,7 +344,7 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
+>  
+>  	/* set configuration register with following options:
+>  	 * - enable PCAP interface
+> -	 * - set throughput for maximum speed (if bistream not crypted)
+> +	 * - set throughput for maximum speed (if bistream not encrypted)
+>  	 * - set CPU in user mode
+>  	 */
+>  	ctrl = zynq_fpga_read(priv, CTRL_OFFSET);
+> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+> index 2bc3030a69e54..3a32b8e201857 100644
+> --- a/include/linux/fpga/fpga-mgr.h
+> +++ b/include/linux/fpga/fpga-mgr.h
+> @@ -110,7 +110,7 @@ struct fpga_image_info {
+>   * @initial_header_size: Maximum number of bytes that should be passed into write_init
+>   * @state: returns an enum value of the FPGA's state
+>   * @status: returns status of the FPGA, including reconfiguration error code
+> - * @write_init: prepare the FPGA to receive confuration data
+> + * @write_init: prepare the FPGA to receive configuration data
+>   * @write: write count bytes of configuration data to the FPGA
+>   * @write_sg: write the scatter list of configuration data to the FPGA
+>   * @write_complete: set FPGA to operating state after writing is done
+> -- 
+> 2.26.3
+> 
+
