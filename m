@@ -2,767 +2,224 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95905390959
-	for <lists+linux-fpga@lfdr.de>; Tue, 25 May 2021 21:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE2D392C11
+	for <lists+linux-fpga@lfdr.de>; Thu, 27 May 2021 12:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbhEYTCa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 25 May 2021 15:02:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54701 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231365AbhEYTCa (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 25 May 2021 15:02:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1621969258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZRBQDWkoDiDu19mmgLBqnHptWstctTXeaI/pF65Vvm0=;
-        b=Tp6uWbw9FCqKXS/+DxCBFSHduiZyvUE5+/pVMHfQPLdlApqkxHXdOP6/CiSaQFMlfKYDmJ
-        o1FJuHBO6rMTc/wm1soNn1MFol+bWM7D6UVaKC6g6q78kOHZ5D/dcaL0VAj8ox0Xgp+2yq
-        N9XkPMghl58QFclxaQwmy9afhIAGqBg=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-458-b3almGn1M4e-fPiPxWLF-g-1; Tue, 25 May 2021 15:00:55 -0400
-X-MC-Unique: b3almGn1M4e-fPiPxWLF-g-1
-Received: by mail-ot1-f71.google.com with SMTP id h8-20020a9d6a480000b02902edb9406104so22358567otn.5
-        for <linux-fpga@vger.kernel.org>; Tue, 25 May 2021 12:00:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=ZRBQDWkoDiDu19mmgLBqnHptWstctTXeaI/pF65Vvm0=;
-        b=OO73mcCvf5ouIK9w46fadQBW6x1/OyRsm6EgfXjrF+khQ/yU2P2M++yD1vnGxUEg74
-         qPod0cbEwTw9I4nywYX05OpVYpFX44ugyJIjLo6JppUv80mZxfcLqdP6pLvBiUycTn8a
-         mlCm4zKhXdlqTtJBUmuf9RvBcq8NIbc4l+8VlAQUyOZmzMr9ITRoH5agIY983VixxMfz
-         vao5Z4ogZx5VPAqTE9So1l21/qus2PLcK1iZnfjU2ghxmNvsaZ4z3563lYxWUJQ+yyK3
-         nPtf65EUWSFcgSZiucxLrBatGmd4DGVcCANH8MB7G5mXLZuv6+Zgc5yNPWdtvspvjg/3
-         Rx2g==
-X-Gm-Message-State: AOAM533jU2RriCnf4CsE7QcnDQBNqYSc+rSRRk/T2WiBPSeVGHVPEBqk
-        AfiRV9u9UzRn93FBSJoNKv9ClNsyXv4onHCMBvsx1P0YA/2cAMyxtw7/h1tqEYdM39hrnle9jOC
-        1TkNZz65nfblRd4jRdxmU+g==
-X-Received: by 2002:aca:44d4:: with SMTP id r203mr3701787oia.76.1621969253261;
-        Tue, 25 May 2021 12:00:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzJnMox+v2m4MMr7dZU2/GFn39JBsQEZhy26jtnWfM2dsz3Dz2IYHbHa6Laq7Jqw8bA953NuQ==
-X-Received: by 2002:aca:44d4:: with SMTP id r203mr3701770oia.76.1621969252834;
-        Tue, 25 May 2021 12:00:52 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id l9sm3616353oou.43.2021.05.25.12.00.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 May 2021 12:00:52 -0700 (PDT)
-Subject: Re: [PATCH v3 1/3] fpga: mgr: Use standard dev_release for class
- driver
-To:     Russ Weight <russell.h.weight@intel.com>,
-        Moritz Fischer <mdf@kernel.org>
-Cc:     linux-fpga@vger.kernel.org, lgoncalv@redhat.com,
-        yilun.xu@intel.com, hao.wu@intel.com, matthew.gerlach@intel.com,
-        richard.gong@intel.com
-References: <20210524185049.681683-1-russell.h.weight@intel.com>
- <20210524185049.681683-2-russell.h.weight@intel.com>
- <YKwrP1wQXagN5xkJ@epycbox.lan>
- <78e95f12-88fd-f4f9-12c5-07c923c2ba10@intel.com>
- <43fcc76e-9dfc-bae0-a569-fda1435a5be3@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <ce95e20a-1d7d-65c4-1635-4d5d81e90b6f@redhat.com>
-Date:   Tue, 25 May 2021 12:00:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <43fcc76e-9dfc-bae0-a569-fda1435a5be3@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S236236AbhE0KpI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 27 May 2021 06:45:08 -0400
+Received: from mail-bn8nam11on2062.outbound.protection.outlook.com ([40.107.236.62]:39920
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236157AbhE0KpH (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 27 May 2021 06:45:07 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=evw8jmOxdfoLdHkU7OhISpr9AotBQ6jwde9sGqpQuKQ6fLEIlWJprYPE8SFwm8PvpPlVFilnZWHgoHGM8KsnzCLoAFFwPCs0JT8O6kw83sSVzJbjzn0azGNt5inoIFCN6S1KC6epDEL9wWwZQSBh+XVHVS+SEfJ1Q6Gvkmx7z6FooYuckaHx9DajkOIWepnYlsUwMJ6ZPBB6SSe47w0KT5PZLoi7oISPwqhMCMLOGHCCrXnEpDdsrmpLE7FFi/zZoOi2zTbIkcauJj2nQK6tF8Qciinbnu0nz9FjE6K4tLxDH3jEvly56hpp6HIRemwaU4QfIvqfO+0Nc3h/XZGjWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0vPLvgddIWKvOcMSqzCaFibILYPissoMyobekvahsAA=;
+ b=FGzi0vntHCTa/sMRUsrjCXXF1xSZAPZd9vCS17368Xr/7YK+cXn9nDlfV5rVo9fYA8MEoBrj3xMAzQrBU1cW1LV2WiK9kVPGt/EL2mNiUajnXodfoZHStID/Ks0sGeuaDjRiuWPFTL6JnVROF9mErfM3nNhjp79E/TbvIYi46EfCozEiAAPAauhNN1tuDoF2QhYLPUeARMK5Ky5uhxzYlT66LAP54J3uSD+YdJ1j9Z8uGgKoxtPY/Hv/qbXKynJOZ/RojKJbodgoKGMJuBiQAJk11/Xlfy40COr1DKfqdWEQU5F5vVMJOX3b8VoqvaWyUhmN0wQahr6YqKKOHwTG9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0vPLvgddIWKvOcMSqzCaFibILYPissoMyobekvahsAA=;
+ b=BjCprBh0xNs0fhhFSPUxNEE7FERkA6pg7doaUKc7lTKz2dY6W78i8bZXCcSEEKRnrxL2PzbWeFVG5i742JmOtDBGDCM9t9ZIBdbFKXpqsWBVxtq3GOic67O2fTZ854dF8dVgbdwiMIC9BcRDNgJ72CDxgKY7mP3tu/wGE+XlWd0=
+Received: from MW4PR02MB7332.namprd02.prod.outlook.com (2603:10b6:303:79::18)
+ by MWHPR0201MB3482.namprd02.prod.outlook.com (2603:10b6:301:76::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.20; Thu, 27 May
+ 2021 10:43:30 +0000
+Received: from MW4PR02MB7332.namprd02.prod.outlook.com
+ ([fe80::a5e1:28aa:7a36:e6c2]) by MW4PR02MB7332.namprd02.prod.outlook.com
+ ([fe80::a5e1:28aa:7a36:e6c2%6]) with mapi id 15.20.4173.021; Thu, 27 May 2021
+ 10:43:30 +0000
+From:   Nava kishore Manne <navam@xilinx.com>
+To:     Moritz Fischer <mdf@kernel.org>
+CC:     "trix@redhat.com" <trix@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Michal Simek <michals@xilinx.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>,
+        "chinnikishore369@gmail.com" <chinnikishore369@gmail.com>
+Subject: RE: [PATCH 1/2] fpga: mgr: Adds secure BitStream loading support
+Thread-Topic: [PATCH 1/2] fpga: mgr: Adds secure BitStream loading support
+Thread-Index: AQHW7UWZwDiwSbkqzUWMwmmZwUyntqozISAAgAgZmKCANxU1wIBrXauAgAFH0bCAGPoWwA==
+Date:   Thu, 27 May 2021 10:43:30 +0000
+Message-ID: <MW4PR02MB733201057C43C9EEC54EF255C2239@MW4PR02MB7332.namprd02.prod.outlook.com>
+References: <20210118025058.10051-1-nava.manne@xilinx.com>
+ <YApf1jlEghbnDFo/@archbook>
+ <MWHPR02MB2623B63A5359BB35B89BF086C2BB9@MWHPR02MB2623.namprd02.prod.outlook.com>
+ <BN6PR02MB2612733F9D85ED6A36BBF801C2989@BN6PR02MB2612.namprd02.prod.outlook.com>
+ <YJlw5fk0ORhioDb4@epycbox.lan>
+ <MWHPR02MB2623E6E6759FA574129901E7C2539@MWHPR02MB2623.namprd02.prod.outlook.com>
+In-Reply-To: <MWHPR02MB2623E6E6759FA574129901E7C2539@MWHPR02MB2623.namprd02.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=xilinx.com;
+x-originating-ip: [149.199.50.128]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0f029725-8a6c-49b2-62a3-08d920fc44e8
+x-ms-traffictypediagnostic: MWHPR0201MB3482:
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR0201MB34824F1A9FD710436CD17179C2239@MWHPR0201MB3482.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:843;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kNktENTnfr9SRN1v2vuhEdfXRVziZeGXSmvBHmCT6Wg0NsNbZHQmzEooOQgh4owX0sMWkYl2g4n3+oMpjT5bEePfZ8MgaL3Pij0VqhDdGhJ65YgmejIzz02t/DiDcR+gbHbcx1uEbNv9ZprcW9lBBlI+ak6O5pBDKoPzv5VibUodgBxFvtZTFHxINSYPZ1mcj29SvoCeXS6BwIfc1+hT0+bsnMdC875BiKK4OV33S5sjcXibmoKnKwoj3/N1dC1Z/Xa2pHFZlU7cAIN+5IFWSSIgWGOwqH4kBOtl2ytAPXobOkMddObNy3Bc7e6xrEDYy9vtQI+rS2pv0iWJ/cc7dm9OfI8gbp2z8+SVH4eEWY2ZR3B+HVUvsH8fn7csy+ZC9UZ/9vTyenyeVC8XqhWARiGAEDZ489l9a1/3EgLduQlTfbpqt1ZoOnUex5vmTjdHZOVxb1djn/wbtZ2kgU/tcA8l6rKLGs5DFMHa3FIj7+Pd93Xqb6Nro72aY1+e/caWwqxmdOoHdY7bZfqsI6bjFS1q/CO69Xhi0SGhAuwkoygqbwEIzYluXFoKWWafBevAn3K7G7OnjxyE6xkRmUxClWxOHUeiHmjROgC7nAk7Avo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR02MB7332.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(39860400002)(366004)(346002)(376002)(316002)(33656002)(66556008)(122000001)(66476007)(8676002)(38100700002)(8936002)(66946007)(66446008)(83380400001)(6916009)(64756008)(86362001)(71200400001)(2906002)(55016002)(6506007)(53546011)(26005)(478600001)(76116006)(4326008)(7696005)(9686003)(54906003)(52536014)(186003)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3l8dwNNOewDhAxdnNtz5vJaDJIiwL5hZbIQfm08ICalXIsCC5Jz2zqakvjOh?=
+ =?us-ascii?Q?grMQmnlVlmM0NtPJC/R4fefE2j6QVbAe6AMGSdi2K1rNFeTU8SDFqODBVwQm?=
+ =?us-ascii?Q?yqrWN5XwT+H30Womh4JhdAcPe9WerzeXGu/7W3F2OivH+w2CdXcLfmHqA0za?=
+ =?us-ascii?Q?FzWe1+UR8yymRJGc+9uFayXxwu+3hrfQ0Ux3ipQwbdGFZWC68YXlPFQ97v5B?=
+ =?us-ascii?Q?PL7tDboiS2difoft2nes3kob9EKYFvRHVpEzkENYdQNe4yt/tIt1y91TfUcd?=
+ =?us-ascii?Q?6h7YI2VwGvP6UTjv4Bx+8kmqR/R71YAekJ1dOshRPCbwkI3kMxwr8mB4HgbP?=
+ =?us-ascii?Q?5hN7n0S9x1Ymz5J0iFtHCeWoH+EuFqZ9XdxJ3bnHKn/qk6jB/ZomGZqphIoJ?=
+ =?us-ascii?Q?uXNxHaYxxT0D07EPzAfnIjkbSqYILt6B0m4dT4qVlTg9XhRKSO9qGSrwB71b?=
+ =?us-ascii?Q?58WMOvKp33t6wCYETPv3iMNze3BrlyF4YX2/JREQxplUEzTycxYEEBiiHhgC?=
+ =?us-ascii?Q?q9Lw4PXv63h94GVb5IE4/qkDsJivaKtKGe02rEenPIYtSf38khsQM5oSEAs5?=
+ =?us-ascii?Q?NnOZv4PQuuqFAuuMYGOAuZNRUhnkI7U4rEZZnI22FVpHZuhmVjLcoPvqXBRC?=
+ =?us-ascii?Q?UvfWq3j955bUNiipCvLsl3Boemipix1mCwJa94Gx693Y6aU8KBHODHUQ6l9s?=
+ =?us-ascii?Q?6ah8VB7i8GaWuPUI2C7UTl2P6NRiIPJIkEN3EPL8wFdo2PoWM8HsHj4qYcbD?=
+ =?us-ascii?Q?v+xjFyFUGnWYPvG2TNDzPNBKV2sMrVfBYZttv1Zm4GStAbMIfZG79eV2mCDF?=
+ =?us-ascii?Q?iBX0iMKtgPLg30xABNlU4v0qWCoQLiopRxd3S7yfsoO76hfnXO/TRhNV9FAQ?=
+ =?us-ascii?Q?WS/vmnCHOCrLAZxfZiU0J4jATHDhWFrX/0BvpTjrzMX5LmgXrQLmYARgfh1t?=
+ =?us-ascii?Q?BBZJouQn1AiR0fZQrFxgmc/xEajs2lxJRC5ddLK7?=
+x-ms-exchange-antispam-messagedata-1: q3RHf5lpcsxrlVOzlJCMnLH9YOqVlshsXnxhx2bobU+G41cj3oUvAeWj9IlQLPhXrle4OJjFtrpoapcUnVxNeHW1HgTFIe8YoHDEvsLl1Cm7IffaY4jHvMPaPS4fbl/JdK3R8uurotmBmDAmYdt3UmIClaPj0gTXtE3gbKmv7mNAz1R70rA/iTeLtxYFicyAi5hwuctXm6GlVPOW1Bw7PSHY9E2Q5Jc6lo0tPgRrjMqegHsIFoIPVOPrG1uBoYpn8Af9MSirfd4RvOJ7PhvsAqQjVnKarZS3vPgzqy3/NTQzx3diOhVImNDln2yB1yKxv430/w1HzwYB+XokG0JWf2UP
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR02MB7332.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f029725-8a6c-49b2-62a3-08d920fc44e8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 May 2021 10:43:30.8926
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 511DWmTWM2FYStbi5W2xcgv65yNjGAH74B9iti9NBiO9IvefFWJJipJulIy3xwmaBMAHqEB9O3R0zfO+BzHrPQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0201MB3482
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Ping!
 
-On 5/25/21 10:39 AM, Russ Weight wrote:
-> Moritz,
->
-> On 5/24/21 4:07 PM, Russ Weight wrote:
->> On 5/24/21 3:39 PM, Moritz Fischer wrote:
->>> On Mon, May 24, 2021 at 11:50:47AM -0700, Russ Weight wrote:
->>>> The FPGA manager class driver data structure is being treated as a
->>>> managed resource instead of using standard dev_release call-back
->>>> to release the class data structure. This change removes the
->>>> managed resource code for the freeing of the class data structure
->>>> and combines the create() and register() functions into a single
->>>> register() function.
->>>>
->>>> The devm_fpga_mgr_register() function is retained.
->>> Should this be maybe called devm_fpga_mgr_create_and_register() ?
->> Yes - I think that is more descriptive. I'll make that change.
-> Before I make the change, consider this:
->
-> The core device_register() function is defined as:
->
->> int device_register(struct device *dev)
->> {
->>          device_initialize(dev); # called by previous fpga-mgr-create()
->>          return device_add(dev); # called by previous fpga_mgr_register()
->> }
->> EXPORT_SYMBOL_GPL(device_register);
-> In a sense, our prior naming convention was inconsistent with the driver
-> core, where the register() function encompasses both the both initialization
-> of the device and addition into the driver core.
->
-> It is true that we are allocating the data structure as well in the merged
-> registration function, but that could may be considered part of the
-> initialization step.
->
-> What do you think? Would it be OK to stick with the shorter name of
-> devm_fpga_mgr_register()?
-
-my 2 cents is to stick with the shorter name.
-
-It's already pretty long ;)
-
-Tom
-
->
-> - Russ
->
->> - Russ
->>
->>>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
->>>> ---
->>>> v3:
->>>>    - Cleaned up comment header for fpga_mgr_register()
->>>>    - Fix error return on ida_simple_get() failure
->>>> v2:
->>>>    - Restored devm_fpga_mgr_register() functionality, adapted for the combined
->>>>      create/register functionality.
->>>>    - All previous callers of devm_fpga_mgr_register() will continue to call
->>>>      devm_fpga_mgr_register().
->>>>    - replaced unnecessary ternary operators in return statements with standard
->>>>      if conditions.
->>>> ---
->>>>   drivers/fpga/altera-cvp.c        |  12 +--
->>>>   drivers/fpga/altera-pr-ip-core.c |   8 +-
->>>>   drivers/fpga/altera-ps-spi.c     |  10 +-
->>>>   drivers/fpga/dfl-fme-mgr.c       |  10 +-
->>>>   drivers/fpga/fpga-mgr.c          | 163 ++++++++-----------------------
->>>>   drivers/fpga/ice40-spi.c         |  10 +-
->>>>   drivers/fpga/machxo2-spi.c       |  10 +-
->>>>   drivers/fpga/socfpga-a10.c       |  16 ++-
->>>>   drivers/fpga/socfpga.c           |  10 +-
->>>>   drivers/fpga/stratix10-soc.c     |  15 +--
->>>>   drivers/fpga/ts73xx-fpga.c       |  10 +-
->>>>   drivers/fpga/xilinx-spi.c        |  12 +--
->>>>   drivers/fpga/zynq-fpga.c         |  16 ++-
->>>>   drivers/fpga/zynqmp-fpga.c       |  10 +-
->>>>   include/linux/fpga/fpga-mgr.h    |  17 ++--
->>>>   15 files changed, 112 insertions(+), 217 deletions(-)
->>>>
->>>> diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
->>>> index 4e0edb60bfba..b61020ceb0a1 100644
->>>> --- a/drivers/fpga/altera-cvp.c
->>>> +++ b/drivers/fpga/altera-cvp.c
->>>> @@ -652,19 +652,15 @@ static int altera_cvp_probe(struct pci_dev *pdev,
->>>>   	snprintf(conf->mgr_name, sizeof(conf->mgr_name), "%s @%s",
->>>>   		 ALTERA_CVP_MGR_NAME, pci_name(pdev));
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(&pdev->dev, conf->mgr_name,
->>>> -				   &altera_cvp_ops, conf);
->>>> -	if (!mgr) {
->>>> -		ret = -ENOMEM;
->>>> +	mgr = fpga_mgr_register(&pdev->dev, conf->mgr_name,
->>>> +				&altera_cvp_ops, conf);
->>>> +	if (IS_ERR(mgr)) {
->>>> +		ret = PTR_ERR(mgr);
->>>>   		goto err_unmap;
->>>>   	}
->>>>   
->>>>   	pci_set_drvdata(pdev, mgr);
->>>>   
->>>> -	ret = fpga_mgr_register(mgr);
->>>> -	if (ret)
->>>> -		goto err_unmap;
->>>> -
->>>>   	return 0;
->>>>   
->>>>   err_unmap:
->>>> diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
->>>> index 5b130c4d9882..0980e134cc43 100644
->>>> --- a/drivers/fpga/altera-pr-ip-core.c
->>>> +++ b/drivers/fpga/altera-pr-ip-core.c
->>>> @@ -191,11 +191,11 @@ int alt_pr_register(struct device *dev, void __iomem *reg_base)
->>>>   		(val & ALT_PR_CSR_STATUS_MSK) >> ALT_PR_CSR_STATUS_SFT,
->>>>   		(int)(val & ALT_PR_CSR_PR_START));
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(dev, dev_name(dev), &alt_pr_ops, priv);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> +	mgr = devm_fpga_mgr_register(dev, dev_name(dev), &alt_pr_ops, priv);
->>>> +	if (IS_ERR(mgr))
->>>> +		return PTR_ERR(mgr);
->>>>   
->>>> -	return devm_fpga_mgr_register(dev, mgr);
->>>> +	return 0;
->>>>   }
->>>>   EXPORT_SYMBOL_GPL(alt_pr_register);
->>>>   
->>>> diff --git a/drivers/fpga/altera-ps-spi.c b/drivers/fpga/altera-ps-spi.c
->>>> index 23bfd4d1ad0f..d3f77b0312b2 100644
->>>> --- a/drivers/fpga/altera-ps-spi.c
->>>> +++ b/drivers/fpga/altera-ps-spi.c
->>>> @@ -302,12 +302,12 @@ static int altera_ps_probe(struct spi_device *spi)
->>>>   	snprintf(conf->mgr_name, sizeof(conf->mgr_name), "%s %s",
->>>>   		 dev_driver_string(&spi->dev), dev_name(&spi->dev));
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(&spi->dev, conf->mgr_name,
->>>> -				   &altera_ps_ops, conf);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> +	mgr = devm_fpga_mgr_register(&spi->dev, conf->mgr_name,
->>>> +				     &altera_ps_ops, conf);
->>>> +	if (IS_ERR(mgr))
->>>> +		return PTR_ERR(mgr);
->>>>   
->>>> -	return devm_fpga_mgr_register(&spi->dev, mgr);
->>>> +	return 0;
->>>>   }
->>>>   
->>>>   static const struct spi_device_id altera_ps_spi_ids[] = {
->>>> diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
->>>> index d5861d13b306..d71eba817b3b 100644
->>>> --- a/drivers/fpga/dfl-fme-mgr.c
->>>> +++ b/drivers/fpga/dfl-fme-mgr.c
->>>> @@ -308,14 +308,14 @@ static int fme_mgr_probe(struct platform_device *pdev)
->>>>   
->>>>   	fme_mgr_get_compat_id(priv->ioaddr, compat_id);
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(dev, "DFL FME FPGA Manager",
->>>> -				   &fme_mgr_ops, priv);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> +	mgr = devm_fpga_mgr_register(dev, "DFL FME FPGA Manager",
->>>> +				     &fme_mgr_ops, priv);
->>>> +	if (IS_ERR(mgr))
->>>> +		return PTR_ERR(mgr);
->>>>   
->>>>   	mgr->compat_id = compat_id;
->>>>   
->>>> -	return devm_fpga_mgr_register(dev, mgr);
->>>> +	return 0;
->>>>   }
->>>>   
->>>>   static struct platform_driver fme_mgr_driver = {
->>>> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
->>>> index b85bc47c91a9..22f0dd5c2834 100644
->>>> --- a/drivers/fpga/fpga-mgr.c
->>>> +++ b/drivers/fpga/fpga-mgr.c
->>>> @@ -550,20 +550,20 @@ void fpga_mgr_unlock(struct fpga_manager *mgr)
->>>>   EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
->>>>   
->>>>   /**
->>>> - * fpga_mgr_create - create and initialize a FPGA manager struct
->>>> + * fpga_mgr_register - create and register a FPGA Manager device
->>>>    * @dev:	fpga manager device from pdev
->>>>    * @name:	fpga manager name
->>>>    * @mops:	pointer to structure of fpga manager ops
->>>>    * @priv:	fpga manager private data
->>>>    *
->>>> - * The caller of this function is responsible for freeing the struct with
->>>> - * fpga_mgr_free().  Using devm_fpga_mgr_create() instead is recommended.
->>>> + * The caller of this function is responsible for calling fpga_mgr_unregister().
->>>> + * Using devm_fpga_mgr_register instead is recommended.
->>>>    *
->>>> - * Return: pointer to struct fpga_manager or NULL
->>>> + * Returns a struct fpga_manager pointer on success, or ERR_PTR() on error.
->>>>    */
->>>> -struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
->>>> -				     const struct fpga_manager_ops *mops,
->>>> -				     void *priv)
->>>> +struct fpga_manager *
->>>> +fpga_mgr_register(struct device *dev, const char *name,
->>>> +		  const struct fpga_manager_ops *mops, void *priv)
->>>>   {
->>>>   	struct fpga_manager *mgr;
->>>>   	int id, ret;
->>>> @@ -572,21 +572,23 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
->>>>   	    !mops->write_init || (!mops->write && !mops->write_sg) ||
->>>>   	    (mops->write && mops->write_sg)) {
->>>>   		dev_err(dev, "Attempt to register without fpga_manager_ops\n");
->>>> -		return NULL;
->>>> +		return ERR_PTR(-EINVAL);
->>>>   	}
->>>>   
->>>>   	if (!name || !strlen(name)) {
->>>>   		dev_err(dev, "Attempt to register with no name!\n");
->>>> -		return NULL;
->>>> +		return ERR_PTR(-EINVAL);
->>>>   	}
->>>>   
->>>>   	mgr = kzalloc(sizeof(*mgr), GFP_KERNEL);
->>>>   	if (!mgr)
->>>> -		return NULL;
->>>> +		return ERR_PTR(-ENOMEM);
->>>>   
->>>>   	id = ida_simple_get(&fpga_mgr_ida, 0, 0, GFP_KERNEL);
->>>> -	if (id < 0)
->>>> +	if (id < 0) {
->>>> +		ret = id;
->>>>   		goto error_kfree;
->>>> +	}
->>>>   
->>>>   	mutex_init(&mgr->ref_mutex);
->>>>   
->>>> @@ -594,7 +596,6 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
->>>>   	mgr->mops = mops;
->>>>   	mgr->priv = priv;
->>>>   
->>>> -	device_initialize(&mgr->dev);
->>>>   	mgr->dev.class = fpga_mgr_class;
->>>>   	mgr->dev.groups = mops->groups;
->>>>   	mgr->dev.parent = dev;
->>>> @@ -605,84 +606,6 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
->>>>   	if (ret)
->>>>   		goto error_device;
->>>>   
->>>> -	return mgr;
->>>> -
->>>> -error_device:
->>>> -	ida_simple_remove(&fpga_mgr_ida, id);
->>>> -error_kfree:
->>>> -	kfree(mgr);
->>>> -
->>>> -	return NULL;
->>>> -}
->>>> -EXPORT_SYMBOL_GPL(fpga_mgr_create);
->>>> -
->>>> -/**
->>>> - * fpga_mgr_free - free a FPGA manager created with fpga_mgr_create()
->>>> - * @mgr:	fpga manager struct
->>>> - */
->>>> -void fpga_mgr_free(struct fpga_manager *mgr)
->>>> -{
->>>> -	ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
->>>> -	kfree(mgr);
->>>> -}
->>>> -EXPORT_SYMBOL_GPL(fpga_mgr_free);
->>>> -
->>>> -static void devm_fpga_mgr_release(struct device *dev, void *res)
->>>> -{
->>>> -	struct fpga_mgr_devres *dr = res;
->>>> -
->>>> -	fpga_mgr_free(dr->mgr);
->>>> -}
->>>> -
->>>> -/**
->>>> - * devm_fpga_mgr_create - create and initialize a managed FPGA manager struct
->>>> - * @dev:	fpga manager device from pdev
->>>> - * @name:	fpga manager name
->>>> - * @mops:	pointer to structure of fpga manager ops
->>>> - * @priv:	fpga manager private data
->>>> - *
->>>> - * This function is intended for use in a FPGA manager driver's probe function.
->>>> - * After the manager driver creates the manager struct with
->>>> - * devm_fpga_mgr_create(), it should register it with fpga_mgr_register().  The
->>>> - * manager driver's remove function should call fpga_mgr_unregister().  The
->>>> - * manager struct allocated with this function will be freed automatically on
->>>> - * driver detach.  This includes the case of a probe function returning error
->>>> - * before calling fpga_mgr_register(), the struct will still get cleaned up.
->>>> - *
->>>> - * Return: pointer to struct fpga_manager or NULL
->>>> - */
->>>> -struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
->>>> -					  const struct fpga_manager_ops *mops,
->>>> -					  void *priv)
->>>> -{
->>>> -	struct fpga_mgr_devres *dr;
->>>> -
->>>> -	dr = devres_alloc(devm_fpga_mgr_release, sizeof(*dr), GFP_KERNEL);
->>>> -	if (!dr)
->>>> -		return NULL;
->>>> -
->>>> -	dr->mgr = fpga_mgr_create(dev, name, mops, priv);
->>>> -	if (!dr->mgr) {
->>>> -		devres_free(dr);
->>>> -		return NULL;
->>>> -	}
->>>> -
->>>> -	devres_add(dev, dr);
->>>> -
->>>> -	return dr->mgr;
->>>> -}
->>>> -EXPORT_SYMBOL_GPL(devm_fpga_mgr_create);
->>>> -
->>>> -/**
->>>> - * fpga_mgr_register - register a FPGA manager
->>>> - * @mgr: fpga manager struct
->>>> - *
->>>> - * Return: 0 on success, negative error code otherwise.
->>>> - */
->>>> -int fpga_mgr_register(struct fpga_manager *mgr)
->>>> -{
->>>> -	int ret;
->>>> -
->>>>   	/*
->>>>   	 * Initialize framework state by requesting low level driver read state
->>>>   	 * from device.  FPGA may be in reset mode or may have been programmed
->>>> @@ -690,18 +613,20 @@ int fpga_mgr_register(struct fpga_manager *mgr)
->>>>   	 */
->>>>   	mgr->state = mgr->mops->state(mgr);
->>>>   
->>>> -	ret = device_add(&mgr->dev);
->>>> -	if (ret)
->>>> -		goto error_device;
->>>> -
->>>> -	dev_info(&mgr->dev, "%s registered\n", mgr->name);
->>>> +	ret = device_register(&mgr->dev);
->>>> +	if (ret) {
->>>> +		put_device(&mgr->dev);
->>>> +		return ERR_PTR(ret);
->>>> +	}
->>>>   
->>>> -	return 0;
->>>> +	return mgr;
->>>>   
->>>>   error_device:
->>>> -	ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
->>>> +	ida_simple_remove(&fpga_mgr_ida, id);
->>>> +error_kfree:
->>>> +	kfree(mgr);
->>>>   
->>>> -	return ret;
->>>> +	return ERR_PTR(ret);
->>>>   }
->>>>   EXPORT_SYMBOL_GPL(fpga_mgr_register);
->>>>   
->>>> @@ -726,14 +651,6 @@ void fpga_mgr_unregister(struct fpga_manager *mgr)
->>>>   }
->>>>   EXPORT_SYMBOL_GPL(fpga_mgr_unregister);
->>>>   
->>>> -static int fpga_mgr_devres_match(struct device *dev, void *res,
->>>> -				 void *match_data)
->>>> -{
->>>> -	struct fpga_mgr_devres *dr = res;
->>>> -
->>>> -	return match_data == dr->mgr;
->>>> -}
->>>> -
->>>>   static void devm_fpga_mgr_unregister(struct device *dev, void *res)
->>>>   {
->>>>   	struct fpga_mgr_devres *dr = res;
->>>> @@ -743,44 +660,44 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
->>>>   
->>>>   /**
->>>>    * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
->>>> - * @dev: managing device for this FPGA manager
->>>> - * @mgr: fpga manager struct
->>>> + * @dev:	fpga manager device from pdev
->>>> + * @name:	fpga manager name
->>>> + * @mops:	pointer to structure of fpga manager ops
->>>> + * @priv:	fpga manager private data
->>>>    *
->>>>    * This is the devres variant of fpga_mgr_register() for which the unregister
->>>>    * function will be called automatically when the managing device is detached.
->>>>    */
->>>> -int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr)
->>>> +struct fpga_manager *
->>>> +devm_fpga_mgr_register(struct device *dev, const char *name,
->>>> +		       const struct fpga_manager_ops *mops, void *priv)
->>>>   {
->>>>   	struct fpga_mgr_devres *dr;
->>>> -	int ret;
->>>> -
->>>> -	/*
->>>> -	 * Make sure that the struct fpga_manager * that is passed in is
->>>> -	 * managed itself.
->>>> -	 */
->>>> -	if (WARN_ON(!devres_find(dev, devm_fpga_mgr_release,
->>>> -				 fpga_mgr_devres_match, mgr)))
->>>> -		return -EINVAL;
->>>> +	struct fpga_manager *mgr;
->>>>   
->>>>   	dr = devres_alloc(devm_fpga_mgr_unregister, sizeof(*dr), GFP_KERNEL);
->>>>   	if (!dr)
->>>> -		return -ENOMEM;
->>>> +		return ERR_PTR(-ENOMEM);
->>>>   
->>>> -	ret = fpga_mgr_register(mgr);
->>>> -	if (ret) {
->>>> +	mgr = fpga_mgr_register(dev, name, mops, priv);
->>>> +	if (IS_ERR(mgr)) {
->>>>   		devres_free(dr);
->>>> -		return ret;
->>>> +		return mgr;
->>>>   	}
->>>>   
->>>>   	dr->mgr = mgr;
->>>>   	devres_add(dev, dr);
->>>>   
->>>> -	return 0;
->>>> +	return mgr;
->>>>   }
->>>>   EXPORT_SYMBOL_GPL(devm_fpga_mgr_register);
->>>>   
->>>>   static void fpga_mgr_dev_release(struct device *dev)
->>>>   {
->>>> +	struct fpga_manager *mgr = to_fpga_manager(dev);
->>>> +
->>>> +	ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
->>>> +	kfree(mgr);
->>>>   }
->>>>   
->>>>   static int __init fpga_mgr_class_init(void)
->>>> diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
->>>> index 69dec5af23c3..91ac25f339f3 100644
->>>> --- a/drivers/fpga/ice40-spi.c
->>>> +++ b/drivers/fpga/ice40-spi.c
->>>> @@ -178,12 +178,12 @@ static int ice40_fpga_probe(struct spi_device *spi)
->>>>   		return ret;
->>>>   	}
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(dev, "Lattice iCE40 FPGA Manager",
->>>> -				   &ice40_fpga_ops, priv);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> +	mgr = devm_fpga_mgr_register(dev, "Lattice iCE40 FPGA Manager",
->>>> +				     &ice40_fpga_ops, priv);
->>>> +	if (IS_ERR(mgr))
->>>> +		return PTR_ERR(mgr);
->>>>   
->>>> -	return devm_fpga_mgr_register(dev, mgr);
->>>> +	return 0;
->>>>   }
->>>>   
->>>>   static const struct of_device_id ice40_fpga_of_match[] = {
->>>> diff --git a/drivers/fpga/machxo2-spi.c b/drivers/fpga/machxo2-spi.c
->>>> index 114a64d2b7a4..0137c1e2e706 100644
->>>> --- a/drivers/fpga/machxo2-spi.c
->>>> +++ b/drivers/fpga/machxo2-spi.c
->>>> @@ -366,12 +366,12 @@ static int machxo2_spi_probe(struct spi_device *spi)
->>>>   		return -EINVAL;
->>>>   	}
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(dev, "Lattice MachXO2 SPI FPGA Manager",
->>>> -				   &machxo2_ops, spi);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> +	mgr = devm_fpga_mgr_register(dev, "Lattice MachXO2 SPI FPGA Manager",
->>>> +				     &machxo2_ops, spi);
->>>> +	if (IS_ERR(mgr))
->>>> +		return PTR_ERR(mgr);
->>>>   
->>>> -	return devm_fpga_mgr_register(dev, mgr);
->>>> +	return 0;
->>>>   }
->>>>   
->>>>   static const struct of_device_id of_match[] = {
->>>> diff --git a/drivers/fpga/socfpga-a10.c b/drivers/fpga/socfpga-a10.c
->>>> index 573d88bdf730..ac8e89b8a5cc 100644
->>>> --- a/drivers/fpga/socfpga-a10.c
->>>> +++ b/drivers/fpga/socfpga-a10.c
->>>> @@ -508,19 +508,15 @@ static int socfpga_a10_fpga_probe(struct platform_device *pdev)
->>>>   		return -EBUSY;
->>>>   	}
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(dev, "SoCFPGA Arria10 FPGA Manager",
->>>> -				   &socfpga_a10_fpga_mgr_ops, priv);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> -
->>>> -	platform_set_drvdata(pdev, mgr);
->>>> -
->>>> -	ret = fpga_mgr_register(mgr);
->>>> -	if (ret) {
->>>> +	mgr = fpga_mgr_register(dev, "SoCFPGA Arria10 FPGA Manager",
->>>> +				&socfpga_a10_fpga_mgr_ops, priv);
->>>> +	if (IS_ERR(mgr)) {
->>>>   		clk_disable_unprepare(priv->clk);
->>>> -		return ret;
->>>> +		return PTR_ERR(mgr);
->>>>   	}
->>>>   
->>>> +	platform_set_drvdata(pdev, mgr);
->>>> +
->>>>   	return 0;
->>>>   }
->>>>   
->>>> diff --git a/drivers/fpga/socfpga.c b/drivers/fpga/socfpga.c
->>>> index 1f467173fc1f..ebfa9f4d24ef 100644
->>>> --- a/drivers/fpga/socfpga.c
->>>> +++ b/drivers/fpga/socfpga.c
->>>> @@ -571,12 +571,12 @@ static int socfpga_fpga_probe(struct platform_device *pdev)
->>>>   	if (ret)
->>>>   		return ret;
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(dev, "Altera SOCFPGA FPGA Manager",
->>>> -				   &socfpga_fpga_ops, priv);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> +	mgr = devm_fpga_mgr_register(dev, "Altera SOCFPGA FPGA Manager",
->>>> +				     &socfpga_fpga_ops, priv);
->>>> +	if (IS_ERR(mgr))
->>>> +		return PTR_ERR(mgr);
->>>>   
->>>> -	return devm_fpga_mgr_register(dev, mgr);
->>>> +	return 0;
->>>>   }
->>>>   
->>>>   #ifdef CONFIG_OF
->>>> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
->>>> index 657a70c5fc99..e0bd91b3f7f8 100644
->>>> --- a/drivers/fpga/stratix10-soc.c
->>>> +++ b/drivers/fpga/stratix10-soc.c
->>>> @@ -425,18 +425,11 @@ static int s10_probe(struct platform_device *pdev)
->>>>   
->>>>   	init_completion(&priv->status_return_completion);
->>>>   
->>>> -	mgr = fpga_mgr_create(dev, "Stratix10 SOC FPGA Manager",
->>>> -			      &s10_ops, priv);
->>>> -	if (!mgr) {
->>>> -		dev_err(dev, "unable to create FPGA manager\n");
->>>> -		ret = -ENOMEM;
->>>> -		goto probe_err;
->>>> -	}
->>>> -
->>>> -	ret = fpga_mgr_register(mgr);
->>>> -	if (ret) {
->>>> +	mgr = fpga_mgr_register(dev, "Stratix10 SOC FPGA Manager",
->>>> +				&s10_ops, priv);
->>>> +	if (IS_ERR(mgr)) {
->>>>   		dev_err(dev, "unable to register FPGA manager\n");
->>>> -		fpga_mgr_free(mgr);
->>>> +		ret = PTR_ERR(mgr);
->>>>   		goto probe_err;
->>>>   	}
->>>>   
->>>> diff --git a/drivers/fpga/ts73xx-fpga.c b/drivers/fpga/ts73xx-fpga.c
->>>> index 101f016c6ed8..5efbec2b9f9f 100644
->>>> --- a/drivers/fpga/ts73xx-fpga.c
->>>> +++ b/drivers/fpga/ts73xx-fpga.c
->>>> @@ -122,12 +122,12 @@ static int ts73xx_fpga_probe(struct platform_device *pdev)
->>>>   	if (IS_ERR(priv->io_base))
->>>>   		return PTR_ERR(priv->io_base);
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(kdev, "TS-73xx FPGA Manager",
->>>> -				   &ts73xx_fpga_ops, priv);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> +	mgr = devm_fpga_mgr_register(kdev, "TS-73xx FPGA Manager",
->>>> +				     &ts73xx_fpga_ops, priv);
->>>> +	if (IS_ERR(mgr))
->>>> +		return PTR_ERR(mgr);
->>>>   
->>>> -	return devm_fpga_mgr_register(kdev, mgr);
->>>> +	return 0;
->>>>   }
->>>>   
->>>>   static struct platform_driver ts73xx_fpga_driver = {
->>>> diff --git a/drivers/fpga/xilinx-spi.c b/drivers/fpga/xilinx-spi.c
->>>> index fee4d0abf6bf..efda475f7a98 100644
->>>> --- a/drivers/fpga/xilinx-spi.c
->>>> +++ b/drivers/fpga/xilinx-spi.c
->>>> @@ -247,13 +247,13 @@ static int xilinx_spi_probe(struct spi_device *spi)
->>>>   		return dev_err_probe(&spi->dev, PTR_ERR(conf->done),
->>>>   				     "Failed to get DONE gpio\n");
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(&spi->dev,
->>>> -				   "Xilinx Slave Serial FPGA Manager",
->>>> -				   &xilinx_spi_ops, conf);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> +	mgr = devm_fpga_mgr_register(&spi->dev,
->>>> +				     "Xilinx Slave Serial FPGA Manager",
->>>> +				     &xilinx_spi_ops, conf);
->>>> +	if (IS_ERR(mgr))
->>>> +		return PTR_ERR(mgr);
->>>>   
->>>> -	return devm_fpga_mgr_register(&spi->dev, mgr);
->>>> +	return 0;
->>>>   }
->>>>   
->>>>   static const struct of_device_id xlnx_spi_of_match[] = {
->>>> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
->>>> index 07fa8d9ec675..74bbb9710f4e 100644
->>>> --- a/drivers/fpga/zynq-fpga.c
->>>> +++ b/drivers/fpga/zynq-fpga.c
->>>> @@ -609,20 +609,16 @@ static int zynq_fpga_probe(struct platform_device *pdev)
->>>>   
->>>>   	clk_disable(priv->clk);
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(dev, "Xilinx Zynq FPGA Manager",
->>>> -				   &zynq_fpga_ops, priv);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> -
->>>> -	platform_set_drvdata(pdev, mgr);
->>>> -
->>>> -	err = fpga_mgr_register(mgr);
->>>> -	if (err) {
->>>> +	mgr = fpga_mgr_register(dev, "Xilinx Zynq FPGA Manager",
->>>> +				&zynq_fpga_ops, priv);
->>>> +	if (IS_ERR(mgr)) {
->>>>   		dev_err(dev, "unable to register FPGA manager\n");
->>>>   		clk_unprepare(priv->clk);
->>>> -		return err;
->>>> +		return PTR_ERR(mgr);
->>>>   	}
->>>>   
->>>> +	platform_set_drvdata(pdev, mgr);
->>>> +
->>>>   	return 0;
->>>>   }
->>>>   
->>>> diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
->>>> index 125743c9797f..1a6d520985be 100644
->>>> --- a/drivers/fpga/zynqmp-fpga.c
->>>> +++ b/drivers/fpga/zynqmp-fpga.c
->>>> @@ -102,12 +102,12 @@ static int zynqmp_fpga_probe(struct platform_device *pdev)
->>>>   
->>>>   	priv->dev = dev;
->>>>   
->>>> -	mgr = devm_fpga_mgr_create(dev, "Xilinx ZynqMP FPGA Manager",
->>>> -				   &zynqmp_fpga_ops, priv);
->>>> -	if (!mgr)
->>>> -		return -ENOMEM;
->>>> +	mgr = devm_fpga_mgr_register(dev, "Xilinx ZynqMP FPGA Manager",
->>>> +				     &zynqmp_fpga_ops, priv);
->>>> +	if (IS_ERR(mgr))
->>>> +		return PTR_ERR(mgr);
->>>>   
->>>> -	return devm_fpga_mgr_register(dev, mgr);
->>>> +	return 0;
->>>>   }
->>>>   
->>>>   static const struct of_device_id zynqmp_fpga_of_match[] = {
->>>> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
->>>> index 2bc3030a69e5..d1ccf8f8c38a 100644
->>>> --- a/include/linux/fpga/fpga-mgr.h
->>>> +++ b/include/linux/fpga/fpga-mgr.h
->>>> @@ -191,17 +191,14 @@ struct fpga_manager *fpga_mgr_get(struct device *dev);
->>>>   
->>>>   void fpga_mgr_put(struct fpga_manager *mgr);
->>>>   
->>>> -struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
->>>> -				     const struct fpga_manager_ops *mops,
->>>> -				     void *priv);
->>>> -void fpga_mgr_free(struct fpga_manager *mgr);
->>>> -int fpga_mgr_register(struct fpga_manager *mgr);
->>>> +struct fpga_manager *fpga_mgr_register(struct device *dev, const char *name,
->>>> +				       const struct fpga_manager_ops *mops,
->>>> +				       void *priv);
->>>>   void fpga_mgr_unregister(struct fpga_manager *mgr);
->>>>   
->>>> -int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr);
->>>> -
->>>> -struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
->>>> -					  const struct fpga_manager_ops *mops,
->>>> -					  void *priv);
->>>> +struct fpga_manager *
->>>> +devm_fpga_mgr_register(struct device *dev, const char *name,
->>>> +		       const struct fpga_manager_ops *mops,
->>>> +		       void *priv);
->>>>   
->>>>   #endif /*_LINUX_FPGA_MGR_H */
->>>> -- 
->>>> 2.25.1
->>>>
->>> Moritz
+> -----Original Message-----
+> From: Nava kishore Manne <navam@xilinx.com>
+> Sent: Tuesday, May 11, 2021 7:02 PM
+> To: Moritz Fischer <mdf@kernel.org>
+> Cc: trix@redhat.com; robh+dt@kernel.org; Michal Simek
+> <michals@xilinx.com>; linux-fpga@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> kernel@vger.kernel.org; git <git@xilinx.com>; chinnikishore369@gmail.com
+> Subject: RE: [PATCH 1/2] fpga: mgr: Adds secure BitStream loading support
+>=20
+> Hi Moritz,
+>=20
+> Please find my response inline.
+>=20
+> > -----Original Message-----
+> > From: Moritz Fischer <mdf@kernel.org>
+> > Sent: Monday, May 10, 2021 11:14 PM
+> > To: Nava kishore Manne <navam@xilinx.com>
+> > Cc: Moritz Fischer <mdf@kernel.org>; trix@redhat.com;
+> > robh+dt@kernel.org; Michal Simek <michals@xilinx.com>; linux-
+> > fpga@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git
+> > <git@xilinx.com>; chinnikishore369@gmail.com
+> > Subject: Re: [PATCH 1/2] fpga: mgr: Adds secure BitStream loading
+> > support
+> >
+> > On Wed, Mar 03, 2021 at 10:11:51AM +0000, Nava kishore Manne wrote:
+> > > Ping!
+> > >
+> > > > -----Original Message-----
+> > > > From: Nava kishore Manne
+> > > > Sent: Wednesday, January 27, 2021 2:43 PM
+> > > > To: Moritz Fischer <mdf@kernel.org>
+> > > > Cc: trix@redhat.com; robh+dt@kernel.org; Michal Simek
+> > > > <michals@xilinx.com>; linux-fpga@vger.kernel.org;
+> > > > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> > > > linux- kernel@vger.kernel.org; git <git@xilinx.com>;
+> > > > chinnikishore369@gmail.com
+> > > > Subject: RE: [PATCH 1/2] fpga: mgr: Adds secure BitStream loading
+> > > > support
+> > > >
+> > > > Hi Moritz,
+> > > >
+> > > > 	Thanks for the review.
+> > > > Please find my response inline.
+> > > >
+> > > > > -----Original Message-----
+> > > > > From: Moritz Fischer <mdf@kernel.org>
+> > > > > Sent: Friday, January 22, 2021 10:47 AM
+> > > > > To: Nava kishore Manne <navam@xilinx.com>
+> > > > > Cc: mdf@kernel.org; trix@redhat.com; robh+dt@kernel.org; Michal
+> > > > > Simek <michals@xilinx.com>; linux-fpga@vger.kernel.org;
+> > > > > devicetree@vger.kernel.org;
+> > > > > linux-arm-kernel@lists.infradead.org;
+> > > > > linux- kernel@vger.kernel.org; git <git@xilinx.com>;
+> > > > > chinnikishore369@gmail.com
+> > > > > Subject: Re: [PATCH 1/2] fpga: mgr: Adds secure BitStream
+> > > > > loading support
+> > > > >
+> > > > > On Mon, Jan 18, 2021 at 08:20:57AM +0530, Nava kishore Manne
+> > wrote:
+> > > > > > This commit adds secure flags to the framework to support
+> > > > > > secure BitStream Loading.
+> > > > > >
+> > > > > > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> > > > > > ---
+> > > > > >  drivers/fpga/of-fpga-region.c | 10 ++++++++++
+> > > > > > include/linux/fpga/fpga-mgr.h | 12 ++++++++++++
+> > > > > >  2 files changed, 22 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/fpga/of-fpga-region.c
+> > > > > > b/drivers/fpga/of-fpga-region.c index
+> > > > > > e405309baadc..3a5eb4808888
+> > > > > > 100644
+> > > > > > --- a/drivers/fpga/of-fpga-region.c
+> > > > > > +++ b/drivers/fpga/of-fpga-region.c
+> > > > > > @@ -228,6 +228,16 @@ static struct fpga_image_info
+> > > > > *of_fpga_region_parse_ov(
+> > > > > >  	if (of_property_read_bool(overlay, "encrypted-fpga-config"))
+> > > > > >  		info->flags |=3D FPGA_MGR_ENCRYPTED_BITSTREAM;
+> > > > > >
+> > > > > > +	if (of_property_read_bool(overlay, "userkey-encrypted-fpga-
+> > > > > config"))
+> > > > > > +		info->flags |=3D
+> > > > > FPGA_MGR_USERKEY_ENCRYPTED_BITSTREAM;
+> > > > >
+> > > > > Can this just be encrypted-fpga-config/FPGA_MGR_ENCRYPTED?
+> > > >
+> > > > In Encryption we have two kinds of use case one is Encrypted
+> > > > Bitstream loading with Device-key and Other one is Encrypted
+> > > > Bitstream loading with User-key. To differentiate both the use
+> > > > cases this
+> > Changes are needed.
+> > > >
+> > > > Regards,
+> > > > Navakishore.
+> >
+> > Is this region specific, or could this be a sysfs attribute?
+> >
+>=20
+> These changes are region specific.
+>=20
+> Regards,
+> Navakishore.
 
