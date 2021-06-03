@@ -2,443 +2,728 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2B739A305
-	for <lists+linux-fpga@lfdr.de>; Thu,  3 Jun 2021 16:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B6939ACAB
+	for <lists+linux-fpga@lfdr.de>; Thu,  3 Jun 2021 23:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbhFCOZE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 3 Jun 2021 10:25:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36701 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231621AbhFCOZB (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 3 Jun 2021 10:25:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1622730196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w5bPGjiUA0ORxtoWUHBqSULchX5OLwYgOoNcxSrOB+A=;
-        b=e9WoCZiVxHRR1Sr1VOkK9UDAIVboY78P4AuWXWrPCx8J+5yQ5sdtRLXgEUL0L97D81st1n
-        v5sBbHzrNd7sFrEwu8EqzEKu/3vYBypiVTPPgZuLwRHTyazZfv/t4JhB4QdZafcls6XSvb
-        XiRiN9STMhnjTbIsDRBxA2bihW/LqQY=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-297-MrIQlnxGNeayxGht34OIjA-1; Thu, 03 Jun 2021 10:23:14 -0400
-X-MC-Unique: MrIQlnxGNeayxGht34OIjA-1
-Received: by mail-ot1-f72.google.com with SMTP id a22-20020a0568301016b02902a60679231fso3307473otp.6
-        for <linux-fpga@vger.kernel.org>; Thu, 03 Jun 2021 07:23:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=w5bPGjiUA0ORxtoWUHBqSULchX5OLwYgOoNcxSrOB+A=;
-        b=dDSyzc/O4f33SsjTmKiYlp3x2RkbAml6h0EtrVFl+yHQS1vQHQtCcZ+xDN+ytoLreq
-         Gu64QlBU098zhyHEuB31E193BfsqafOM12SyzBbvnYFNwZQ2D12pCFt+kRNDVVh621U6
-         E6RhljP7Apu9lY5HRQp176ttnvexs+DOYQQQDb6FrQIVrxL0PQFbDWmWozRab6dq25Rt
-         GzjtM9ZaULlKLV52dF0F45m876i47kAgGNVJx392cfyIW3kHbkI5EG5BuqxYDsffVCIG
-         QpZB7xirrc9V/nwerl6qt8aPV3wB1O/ST57glMhDkfWU69EVoZDbuP4K4HpYwmBFsI4w
-         5DtQ==
-X-Gm-Message-State: AOAM532iK0oJsY+7Rv8ocJnU2ejQI04mMwwRVyrWCltFTDIm2hi5uUqj
-        IcpN3xM5Pf2GQuB8gz3E0dJiMp0cBnTbYuMEAX5V4AiHg1OHLpzQEVc/F5yKJaY9LuFOqYHWgOY
-        60MIFsBiBkVtIA2hXQ4OV9A==
-X-Received: by 2002:a05:6830:1e8b:: with SMTP id n11mr30645223otr.327.1622730193857;
-        Thu, 03 Jun 2021 07:23:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyGCzGHfTBLmBkX50SLBobQ0vyfStKGul0ELz3CqRDkIGacvZ+4I2Ge2HerGE2GJd/XtbwxGQ==
-X-Received: by 2002:a05:6830:1e8b:: with SMTP id n11mr30645206otr.327.1622730193572;
-        Thu, 03 Jun 2021 07:23:13 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id w11sm654773oov.19.2021.06.03.07.23.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Jun 2021 07:23:13 -0700 (PDT)
-Subject: RFC : [PATCH V7 XRT Alveo 00/20] XRT Alveo driver overview
-To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org,
-        "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>
-Cc:     linux-fpga@vger.kernel.org, maxz@xilinx.com,
-        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
-        robh@kernel.org
-References: <20210528004959.61354-1-lizhi.hou@xilinx.com>
- <bdd31ecc-f6c5-392b-1609-f05efcba7f88@xilinx.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <68e85a4f-4a10-1ff9-0443-aa565878c855@redhat.com>
-Date:   Thu, 3 Jun 2021 07:23:10 -0700
+        id S229620AbhFCVW5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 3 Jun 2021 17:22:57 -0400
+Received: from mga11.intel.com ([192.55.52.93]:59611 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230111AbhFCVW5 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 3 Jun 2021 17:22:57 -0400
+IronPort-SDR: pvh1MM1vEIFBkmCr5XY4FT5ISWEqtM/+J2a52blCAFZ8oTMlnCRfQrx70X96/lgRY8WgPArVfb
+ X1bEECWcr4dA==
+X-IronPort-AV: E=McAfee;i="6200,9189,10004"; a="201137932"
+X-IronPort-AV: E=Sophos;i="5.83,246,1616482800"; 
+   d="scan'208";a="201137932"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2021 14:21:11 -0700
+IronPort-SDR: i1aDkyoLWuE5EOEnTE4zVLH5VtSRNMpNpOBQLTY7ZyM5u0uEaSe7GktP+05N+qNUIFQENeUMNm
+ VWXYXsDk8dkA==
+X-IronPort-AV: E=Sophos;i="5.83,246,1616482800"; 
+   d="scan'208";a="400729894"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.209.7.200])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2021 14:21:11 -0700
+Subject: Re: [PATCH v4 1/3] fpga: mgr: Use standard dev_release for class
+ driver
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org, trix@redhat.com,
+        lgoncalv@redhat.com, hao.wu@intel.com, matthew.gerlach@intel.com,
+        richard.gong@intel.com
+References: <20210528215755.839712-1-russell.h.weight@intel.com>
+ <20210528215755.839712-2-russell.h.weight@intel.com>
+ <20210531085426.GA1928186@yilunxu-OptiPlex-7050>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <c74ac537-d6fe-9935-97d1-0f12a2923a73@intel.com>
+Date:   Thu, 3 Jun 2021 14:21:08 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <bdd31ecc-f6c5-392b-1609-f05efcba7f88@xilinx.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210531085426.GA1928186@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
-On 6/2/21 3:34 PM, Lizhi Hou wrote:
-> Hi Moritz and Tom,
+
+On 5/31/21 1:54 AM, Xu Yilun wrote:
+> A quick comment, may come back later. See inline:
 >
-> Thanks a lot for reviewing the XRT patches. This v7 patches contains 
-> our latest fixes for all review comments. And it seems auto build 
-> robot is happy with it as well. Do you have more comment against v7? 
-> What will be the next step for XRT patches if it looks ok to you?
+> On Fri, May 28, 2021 at 02:57:53PM -0700, Russ Weight wrote:
+>> The FPGA manager class driver data structure is being treated as a
+>> managed resource instead of using standard dev_release call-back
+>> to release the class data structure. This change removes the
+>> managed resource code for the freeing of the class data structure
+>> and combines the create() and register() functions into a single
+>> register() function.
+>>
+>> The devm_fpga_mgr_register() function is retained.
+>>
+>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>> ---
+>> v4:
+>>   - Added the compat_id parameter to fpga_mgr_register() and
+>>     devm_fpga_mgr_register() to ensure that the compat_id is set before
+>>     the device_register() call.
+>> v3:
+>>   - Cleaned up comment header for fpga_mgr_register()
+>>   - Fix error return on ida_simple_get() failure
+>> v2:
+>>   - Restored devm_fpga_mgr_register() functionality, adapted for the combined
+>>     create/register functionality.
+>>   - All previous callers of devm_fpga_mgr_register() will continue to call
+>>     devm_fpga_mgr_register().
+>>   - replaced unnecessary ternary operators in return statements with standard
+>>     if conditions.
+>> ---
+>>  drivers/fpga/altera-cvp.c        |  12 +--
+>>  drivers/fpga/altera-pr-ip-core.c |   9 +-
+>>  drivers/fpga/altera-ps-spi.c     |  10 +-
+>>  drivers/fpga/dfl-fme-mgr.c       |  12 +--
+>>  drivers/fpga/fpga-mgr.c          | 168 +++++++++----------------------
+>>  drivers/fpga/ice40-spi.c         |  10 +-
+>>  drivers/fpga/machxo2-spi.c       |  10 +-
+>>  drivers/fpga/socfpga-a10.c       |  16 ++-
+>>  drivers/fpga/socfpga.c           |  10 +-
+>>  drivers/fpga/stratix10-soc.c     |  15 +--
+>>  drivers/fpga/ts73xx-fpga.c       |  10 +-
+>>  drivers/fpga/xilinx-spi.c        |  12 +--
+>>  drivers/fpga/zynq-fpga.c         |  16 ++-
+>>  drivers/fpga/zynqmp-fpga.c       |  10 +-
+>>  include/linux/fpga/fpga-mgr.h    |  19 ++--
+>>  15 files changed, 120 insertions(+), 219 deletions(-)
+>>
+>> diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
+>> index 4e0edb60bfba..25eaa97ae7aa 100644
+>> --- a/drivers/fpga/altera-cvp.c
+>> +++ b/drivers/fpga/altera-cvp.c
+>> @@ -652,19 +652,15 @@ static int altera_cvp_probe(struct pci_dev *pdev,
+>>  	snprintf(conf->mgr_name, sizeof(conf->mgr_name), "%s @%s",
+>>  		 ALTERA_CVP_MGR_NAME, pci_name(pdev));
+>>  
+>> -	mgr = devm_fpga_mgr_create(&pdev->dev, conf->mgr_name,
+>> -				   &altera_cvp_ops, conf);
+>> -	if (!mgr) {
+>> -		ret = -ENOMEM;
+>> +	mgr = fpga_mgr_register(&pdev->dev, conf->mgr_name, NULL,
+>> +				&altera_cvp_ops, conf);
+>> +	if (IS_ERR(mgr)) {
+>> +		ret = PTR_ERR(mgr);
+>>  		goto err_unmap;
+>>  	}
+>>  
+>>  	pci_set_drvdata(pdev, mgr);
+>>  
+>> -	ret = fpga_mgr_register(mgr);
+>> -	if (ret)
+>> -		goto err_unmap;
+>> -
+>>  	return 0;
+>>  
+>>  err_unmap:
+>> diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
+>> index 5b130c4d9882..bfd4de1e7ac5 100644
+>> --- a/drivers/fpga/altera-pr-ip-core.c
+>> +++ b/drivers/fpga/altera-pr-ip-core.c
+>> @@ -191,11 +191,12 @@ int alt_pr_register(struct device *dev, void __iomem *reg_base)
+>>  		(val & ALT_PR_CSR_STATUS_MSK) >> ALT_PR_CSR_STATUS_SFT,
+>>  		(int)(val & ALT_PR_CSR_PR_START));
+>>  
+>> -	mgr = devm_fpga_mgr_create(dev, dev_name(dev), &alt_pr_ops, priv);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> +	mgr = devm_fpga_mgr_register(dev, dev_name(dev), NULL,
+>> +				     &alt_pr_ops, priv);
+>> +	if (IS_ERR(mgr))
+>> +		return PTR_ERR(mgr);
+>>  
+>> -	return devm_fpga_mgr_register(dev, mgr);
+>> +	return 0;
+>>  }
+>>  EXPORT_SYMBOL_GPL(alt_pr_register);
+>>  
+>> diff --git a/drivers/fpga/altera-ps-spi.c b/drivers/fpga/altera-ps-spi.c
+>> index 23bfd4d1ad0f..e6fc7208213c 100644
+>> --- a/drivers/fpga/altera-ps-spi.c
+>> +++ b/drivers/fpga/altera-ps-spi.c
+>> @@ -302,12 +302,12 @@ static int altera_ps_probe(struct spi_device *spi)
+>>  	snprintf(conf->mgr_name, sizeof(conf->mgr_name), "%s %s",
+>>  		 dev_driver_string(&spi->dev), dev_name(&spi->dev));
+>>  
+>> -	mgr = devm_fpga_mgr_create(&spi->dev, conf->mgr_name,
+>> -				   &altera_ps_ops, conf);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> +	mgr = devm_fpga_mgr_register(&spi->dev, conf->mgr_name, NULL,
+>> +				     &altera_ps_ops, conf);
+>> +	if (IS_ERR(mgr))
+>> +		return PTR_ERR(mgr);
+>>  
+>> -	return devm_fpga_mgr_register(&spi->dev, mgr);
+>> +	return 0;
+>>  }
+>>  
+>>  static const struct spi_device_id altera_ps_spi_ids[] = {
+>> diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
+>> index d5861d13b306..c9b98afa7d50 100644
+>> --- a/drivers/fpga/dfl-fme-mgr.c
+>> +++ b/drivers/fpga/dfl-fme-mgr.c
+>> @@ -308,14 +308,12 @@ static int fme_mgr_probe(struct platform_device *pdev)
+>>  
+>>  	fme_mgr_get_compat_id(priv->ioaddr, compat_id);
+>>  
+>> -	mgr = devm_fpga_mgr_create(dev, "DFL FME FPGA Manager",
+>> -				   &fme_mgr_ops, priv);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> -
+>> -	mgr->compat_id = compat_id;
+>> +	mgr = devm_fpga_mgr_register(dev, "DFL FME FPGA Manager", compat_id,
+>> +				     &fme_mgr_ops, priv);
+>> +	if (IS_ERR(mgr))
+>> +		return PTR_ERR(mgr);
+>>  
+>> -	return devm_fpga_mgr_register(dev, mgr);
+>> +	return 0;
+>>  }
+>>  
+>>  static struct platform_driver fme_mgr_driver = {
+>> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+>> index b85bc47c91a9..d6d64ce34417 100644
+>> --- a/drivers/fpga/fpga-mgr.c
+>> +++ b/drivers/fpga/fpga-mgr.c
+>> @@ -550,20 +550,22 @@ void fpga_mgr_unlock(struct fpga_manager *mgr)
+>>  EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
+>>  
+>>  /**
+>> - * fpga_mgr_create - create and initialize a FPGA manager struct
+>> + * fpga_mgr_register - create and register a FPGA Manager device
+>>   * @dev:	fpga manager device from pdev
+>>   * @name:	fpga manager name
+>> + * @compat_id:	FPGA manager id for compatibility check.
+>>   * @mops:	pointer to structure of fpga manager ops
+>>   * @priv:	fpga manager private data
+>>   *
+>> - * The caller of this function is responsible for freeing the struct with
+>> - * fpga_mgr_free().  Using devm_fpga_mgr_create() instead is recommended.
+>> + * The caller of this function is responsible for calling fpga_mgr_unregister().
+>> + * Using devm_fpga_mgr_register instead is recommended.
+>>   *
+>> - * Return: pointer to struct fpga_manager or NULL
+>> + * Return: struct fpga_manager pointer on success, ERR_PTR() on error.
+>>   */
+>> -struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
+>> -				     const struct fpga_manager_ops *mops,
+>> -				     void *priv)
+>> +struct fpga_manager *
+>> +fpga_mgr_register(struct device *dev, const char *name,
+>> +		  struct fpga_compat_id *compat_id,
+>> +		  const struct fpga_manager_ops *mops, void *priv)
+>>  {
+>>  	struct fpga_manager *mgr;
+>>  	int id, ret;
+>> @@ -572,29 +574,31 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
+>>  	    !mops->write_init || (!mops->write && !mops->write_sg) ||
+>>  	    (mops->write && mops->write_sg)) {
+>>  		dev_err(dev, "Attempt to register without fpga_manager_ops\n");
+>> -		return NULL;
+>> +		return ERR_PTR(-EINVAL);
+>>  	}
+>>  
+>>  	if (!name || !strlen(name)) {
+>>  		dev_err(dev, "Attempt to register with no name!\n");
+>> -		return NULL;
+>> +		return ERR_PTR(-EINVAL);
+>>  	}
+>>  
+>>  	mgr = kzalloc(sizeof(*mgr), GFP_KERNEL);
+>>  	if (!mgr)
+>> -		return NULL;
+>> +		return ERR_PTR(-ENOMEM);
+>>  
+>>  	id = ida_simple_get(&fpga_mgr_ida, 0, 0, GFP_KERNEL);
+>> -	if (id < 0)
+>> +	if (id < 0) {
+>> +		ret = id;
+>>  		goto error_kfree;
+>> +	}
+>>  
+>>  	mutex_init(&mgr->ref_mutex);
+>>  
+>>  	mgr->name = name;
+>> +	mgr->compat_id = compat_id;
+>>  	mgr->mops = mops;
+>>  	mgr->priv = priv;
+>>  
+>> -	device_initialize(&mgr->dev);
+>>  	mgr->dev.class = fpga_mgr_class;
+>>  	mgr->dev.groups = mops->groups;
+>>  	mgr->dev.parent = dev;
+>> @@ -605,84 +609,6 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
+>>  	if (ret)
+>>  		goto error_device;
+>>  
+>> -	return mgr;
+>> -
+>> -error_device:
+>> -	ida_simple_remove(&fpga_mgr_ida, id);
+>> -error_kfree:
+>> -	kfree(mgr);
+>> -
+>> -	return NULL;
+>> -}
+>> -EXPORT_SYMBOL_GPL(fpga_mgr_create);
+>> -
+>> -/**
+>> - * fpga_mgr_free - free a FPGA manager created with fpga_mgr_create()
+>> - * @mgr:	fpga manager struct
+>> - */
+>> -void fpga_mgr_free(struct fpga_manager *mgr)
+>> -{
+>> -	ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
+>> -	kfree(mgr);
+>> -}
+>> -EXPORT_SYMBOL_GPL(fpga_mgr_free);
+>> -
+>> -static void devm_fpga_mgr_release(struct device *dev, void *res)
+>> -{
+>> -	struct fpga_mgr_devres *dr = res;
+>> -
+>> -	fpga_mgr_free(dr->mgr);
+>> -}
+>> -
+>> -/**
+>> - * devm_fpga_mgr_create - create and initialize a managed FPGA manager struct
+>> - * @dev:	fpga manager device from pdev
+>> - * @name:	fpga manager name
+>> - * @mops:	pointer to structure of fpga manager ops
+>> - * @priv:	fpga manager private data
+>> - *
+>> - * This function is intended for use in a FPGA manager driver's probe function.
+>> - * After the manager driver creates the manager struct with
+>> - * devm_fpga_mgr_create(), it should register it with fpga_mgr_register().  The
+>> - * manager driver's remove function should call fpga_mgr_unregister().  The
+>> - * manager struct allocated with this function will be freed automatically on
+>> - * driver detach.  This includes the case of a probe function returning error
+>> - * before calling fpga_mgr_register(), the struct will still get cleaned up.
+>> - *
+>> - * Return: pointer to struct fpga_manager or NULL
+>> - */
+>> -struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
+>> -					  const struct fpga_manager_ops *mops,
+>> -					  void *priv)
+>> -{
+>> -	struct fpga_mgr_devres *dr;
+>> -
+>> -	dr = devres_alloc(devm_fpga_mgr_release, sizeof(*dr), GFP_KERNEL);
+>> -	if (!dr)
+>> -		return NULL;
+>> -
+>> -	dr->mgr = fpga_mgr_create(dev, name, mops, priv);
+>> -	if (!dr->mgr) {
+>> -		devres_free(dr);
+>> -		return NULL;
+>> -	}
+>> -
+>> -	devres_add(dev, dr);
+>> -
+>> -	return dr->mgr;
+>> -}
+>> -EXPORT_SYMBOL_GPL(devm_fpga_mgr_create);
+>> -
+>> -/**
+>> - * fpga_mgr_register - register a FPGA manager
+>> - * @mgr: fpga manager struct
+>> - *
+>> - * Return: 0 on success, negative error code otherwise.
+>> - */
+>> -int fpga_mgr_register(struct fpga_manager *mgr)
+>> -{
+>> -	int ret;
+>> -
+>>  	/*
+>>  	 * Initialize framework state by requesting low level driver read state
+>>  	 * from device.  FPGA may be in reset mode or may have been programmed
+>> @@ -690,18 +616,20 @@ int fpga_mgr_register(struct fpga_manager *mgr)
+>>  	 */
+>>  	mgr->state = mgr->mops->state(mgr);
+>>  
+>> -	ret = device_add(&mgr->dev);
+>> -	if (ret)
+>> -		goto error_device;
+>> -
+>> -	dev_info(&mgr->dev, "%s registered\n", mgr->name);
+>> +	ret = device_register(&mgr->dev);
+>> +	if (ret) {
+>> +		put_device(&mgr->dev);
+>> +		return ERR_PTR(ret);
+>> +	}
+>>  
+>> -	return 0;
+>> +	return mgr;
+>>  
+>>  error_device:
+>> -	ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
+>> +	ida_simple_remove(&fpga_mgr_ida, id);
+>> +error_kfree:
+>> +	kfree(mgr);
+>>  
+>> -	return ret;
+>> +	return ERR_PTR(ret);
+>>  }
+>>  EXPORT_SYMBOL_GPL(fpga_mgr_register);
+>>  
+>> @@ -726,14 +654,6 @@ void fpga_mgr_unregister(struct fpga_manager *mgr)
+>>  }
+>>  EXPORT_SYMBOL_GPL(fpga_mgr_unregister);
+>>  
+>> -static int fpga_mgr_devres_match(struct device *dev, void *res,
+>> -				 void *match_data)
+>> -{
+>> -	struct fpga_mgr_devres *dr = res;
+>> -
+>> -	return match_data == dr->mgr;
+>> -}
+>> -
+>>  static void devm_fpga_mgr_unregister(struct device *dev, void *res)
+>>  {
+>>  	struct fpga_mgr_devres *dr = res;
+>> @@ -743,44 +663,46 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
+>>  
+>>  /**
+>>   * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
+>> - * @dev: managing device for this FPGA manager
+>> - * @mgr: fpga manager struct
+>> + * @dev:	fpga manager device from pdev
+>> + * @name:	fpga manager name
+>> + * @compat_id:	FPGA manager id for compatibility check.
+>> + * @mops:	pointer to structure of fpga manager ops
+>> + * @priv:	fpga manager private data
+>>   *
+>>   * This is the devres variant of fpga_mgr_register() for which the unregister
+>>   * function will be called automatically when the managing device is detached.
+>>   */
+>> -int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr)
+>> +struct fpga_manager *
+>> +devm_fpga_mgr_register(struct device *dev, const char *name,
+>> +		       struct fpga_compat_id *compat_id,
+>> +		       const struct fpga_manager_ops *mops, void *priv)
+>>  {
+>>  	struct fpga_mgr_devres *dr;
+>> -	int ret;
+>> -
+>> -	/*
+>> -	 * Make sure that the struct fpga_manager * that is passed in is
+>> -	 * managed itself.
+>> -	 */
+>> -	if (WARN_ON(!devres_find(dev, devm_fpga_mgr_release,
+>> -				 fpga_mgr_devres_match, mgr)))
+>> -		return -EINVAL;
+>> +	struct fpga_manager *mgr;
+>>  
+>>  	dr = devres_alloc(devm_fpga_mgr_unregister, sizeof(*dr), GFP_KERNEL);
+>>  	if (!dr)
+>> -		return -ENOMEM;
+>> +		return ERR_PTR(-ENOMEM);
+>>  
+>> -	ret = fpga_mgr_register(mgr);
+>> -	if (ret) {
+>> +	mgr = fpga_mgr_register(dev, name, compat_id, mops, priv);
+>> +	if (IS_ERR(mgr)) {
+>>  		devres_free(dr);
+>> -		return ret;
+>> +		return mgr;
+>>  	}
+>>  
+>>  	dr->mgr = mgr;
+>>  	devres_add(dev, dr);
+>>  
+>> -	return 0;
+>> +	return mgr;
+>>  }
+>>  EXPORT_SYMBOL_GPL(devm_fpga_mgr_register);
+>>  
+>>  static void fpga_mgr_dev_release(struct device *dev)
+>>  {
+>> +	struct fpga_manager *mgr = to_fpga_manager(dev);
+>> +
+>> +	ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
+>> +	kfree(mgr);
+>>  }
+>>  
+>>  static int __init fpga_mgr_class_init(void)
+>> diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
+>> index 69dec5af23c3..b1c7c0713e11 100644
+>> --- a/drivers/fpga/ice40-spi.c
+>> +++ b/drivers/fpga/ice40-spi.c
+>> @@ -178,12 +178,12 @@ static int ice40_fpga_probe(struct spi_device *spi)
+>>  		return ret;
+>>  	}
+>>  
+>> -	mgr = devm_fpga_mgr_create(dev, "Lattice iCE40 FPGA Manager",
+>> -				   &ice40_fpga_ops, priv);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> +	mgr = devm_fpga_mgr_register(dev, "Lattice iCE40 FPGA Manager",
+>> +				     NULL, &ice40_fpga_ops, priv);
+>> +	if (IS_ERR(mgr))
+>> +		return PTR_ERR(mgr);
+>>  
+>> -	return devm_fpga_mgr_register(dev, mgr);
+>> +	return 0;
+>>  }
+>>  
+>>  static const struct of_device_id ice40_fpga_of_match[] = {
+>> diff --git a/drivers/fpga/machxo2-spi.c b/drivers/fpga/machxo2-spi.c
+>> index 114a64d2b7a4..75cc6efaa1b6 100644
+>> --- a/drivers/fpga/machxo2-spi.c
+>> +++ b/drivers/fpga/machxo2-spi.c
+>> @@ -366,12 +366,12 @@ static int machxo2_spi_probe(struct spi_device *spi)
+>>  		return -EINVAL;
+>>  	}
+>>  
+>> -	mgr = devm_fpga_mgr_create(dev, "Lattice MachXO2 SPI FPGA Manager",
+>> -				   &machxo2_ops, spi);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> +	mgr = devm_fpga_mgr_register(dev, "Lattice MachXO2 SPI FPGA Manager",
+>> +				     NULL, &machxo2_ops, spi);
+>> +	if (IS_ERR(mgr))
+>> +		return PTR_ERR(mgr);
+>>  
+>> -	return devm_fpga_mgr_register(dev, mgr);
+>> +	return 0;
+>>  }
+>>  
+>>  static const struct of_device_id of_match[] = {
+>> diff --git a/drivers/fpga/socfpga-a10.c b/drivers/fpga/socfpga-a10.c
+>> index 573d88bdf730..80b8891fb302 100644
+>> --- a/drivers/fpga/socfpga-a10.c
+>> +++ b/drivers/fpga/socfpga-a10.c
+>> @@ -508,19 +508,15 @@ static int socfpga_a10_fpga_probe(struct platform_device *pdev)
+>>  		return -EBUSY;
+>>  	}
+>>  
+>> -	mgr = devm_fpga_mgr_create(dev, "SoCFPGA Arria10 FPGA Manager",
+>> -				   &socfpga_a10_fpga_mgr_ops, priv);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> -
+>> -	platform_set_drvdata(pdev, mgr);
+>> -
+>> -	ret = fpga_mgr_register(mgr);
+>> -	if (ret) {
+>> +	mgr = fpga_mgr_register(dev, "SoCFPGA Arria10 FPGA Manager",
+>> +				NULL, &socfpga_a10_fpga_mgr_ops, priv);
+>> +	if (IS_ERR(mgr)) {
+>>  		clk_disable_unprepare(priv->clk);
+>> -		return ret;
+>> +		return PTR_ERR(mgr);
+>>  	}
+>>  
+>> +	platform_set_drvdata(pdev, mgr);
+>> +
+>>  	return 0;
+>>  }
+>>  
+>> diff --git a/drivers/fpga/socfpga.c b/drivers/fpga/socfpga.c
+>> index 1f467173fc1f..06edfab8a496 100644
+>> --- a/drivers/fpga/socfpga.c
+>> +++ b/drivers/fpga/socfpga.c
+>> @@ -571,12 +571,12 @@ static int socfpga_fpga_probe(struct platform_device *pdev)
+>>  	if (ret)
+>>  		return ret;
+>>  
+>> -	mgr = devm_fpga_mgr_create(dev, "Altera SOCFPGA FPGA Manager",
+>> -				   &socfpga_fpga_ops, priv);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> +	mgr = devm_fpga_mgr_register(dev, "Altera SOCFPGA FPGA Manager",
+>> +				     NULL, &socfpga_fpga_ops, priv);
+>> +	if (IS_ERR(mgr))
+>> +		return PTR_ERR(mgr);
+>>  
+>> -	return devm_fpga_mgr_register(dev, mgr);
+>> +	return 0;
+>>  }
+>>  
+>>  #ifdef CONFIG_OF
+>> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+>> index 657a70c5fc99..434094c3ac69 100644
+>> --- a/drivers/fpga/stratix10-soc.c
+>> +++ b/drivers/fpga/stratix10-soc.c
+>> @@ -425,18 +425,11 @@ static int s10_probe(struct platform_device *pdev)
+>>  
+>>  	init_completion(&priv->status_return_completion);
+>>  
+>> -	mgr = fpga_mgr_create(dev, "Stratix10 SOC FPGA Manager",
+>> -			      &s10_ops, priv);
+>> -	if (!mgr) {
+>> -		dev_err(dev, "unable to create FPGA manager\n");
+>> -		ret = -ENOMEM;
+>> -		goto probe_err;
+>> -	}
+>> -
+>> -	ret = fpga_mgr_register(mgr);
+>> -	if (ret) {
+>> +	mgr = fpga_mgr_register(dev, "Stratix10 SOC FPGA Manager",
+>> +				NULL, &s10_ops, priv);
+>> +	if (IS_ERR(mgr)) {
+>>  		dev_err(dev, "unable to register FPGA manager\n");
+>> -		fpga_mgr_free(mgr);
+>> +		ret = PTR_ERR(mgr);
+>>  		goto probe_err;
+>>  	}
+>>  
+>> diff --git a/drivers/fpga/ts73xx-fpga.c b/drivers/fpga/ts73xx-fpga.c
+>> index 101f016c6ed8..5efbec2b9f9f 100644
+>> --- a/drivers/fpga/ts73xx-fpga.c
+>> +++ b/drivers/fpga/ts73xx-fpga.c
+>> @@ -122,12 +122,12 @@ static int ts73xx_fpga_probe(struct platform_device *pdev)
+>>  	if (IS_ERR(priv->io_base))
+>>  		return PTR_ERR(priv->io_base);
+>>  
+>> -	mgr = devm_fpga_mgr_create(kdev, "TS-73xx FPGA Manager",
+>> -				   &ts73xx_fpga_ops, priv);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> +	mgr = devm_fpga_mgr_register(kdev, "TS-73xx FPGA Manager",
+>> +				     &ts73xx_fpga_ops, priv);
+>> +	if (IS_ERR(mgr))
+>> +		return PTR_ERR(mgr);
+>>  
+>> -	return devm_fpga_mgr_register(kdev, mgr);
+>> +	return 0;
+>>  }
+>>  
+>>  static struct platform_driver ts73xx_fpga_driver = {
+>> diff --git a/drivers/fpga/xilinx-spi.c b/drivers/fpga/xilinx-spi.c
+>> index fee4d0abf6bf..6f1894929687 100644
+>> --- a/drivers/fpga/xilinx-spi.c
+>> +++ b/drivers/fpga/xilinx-spi.c
+>> @@ -247,13 +247,13 @@ static int xilinx_spi_probe(struct spi_device *spi)
+>>  		return dev_err_probe(&spi->dev, PTR_ERR(conf->done),
+>>  				     "Failed to get DONE gpio\n");
+>>  
+>> -	mgr = devm_fpga_mgr_create(&spi->dev,
+>> -				   "Xilinx Slave Serial FPGA Manager",
+>> -				   &xilinx_spi_ops, conf);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> +	mgr = devm_fpga_mgr_register(&spi->dev,
+>> +				     "Xilinx Slave Serial FPGA Manager",
+>> +				     NULL, &xilinx_spi_ops, conf);
+>> +	if (IS_ERR(mgr))
+>> +		return PTR_ERR(mgr);
+>>  
+>> -	return devm_fpga_mgr_register(&spi->dev, mgr);
+>> +	return 0;
+>>  }
+>>  
+>>  static const struct of_device_id xlnx_spi_of_match[] = {
+>> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+>> index 07fa8d9ec675..74bbb9710f4e 100644
+>> --- a/drivers/fpga/zynq-fpga.c
+>> +++ b/drivers/fpga/zynq-fpga.c
+>> @@ -609,20 +609,16 @@ static int zynq_fpga_probe(struct platform_device *pdev)
+>>  
+>>  	clk_disable(priv->clk);
+>>  
+>> -	mgr = devm_fpga_mgr_create(dev, "Xilinx Zynq FPGA Manager",
+>> -				   &zynq_fpga_ops, priv);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> -
+>> -	platform_set_drvdata(pdev, mgr);
+>> -
+>> -	err = fpga_mgr_register(mgr);
+>> -	if (err) {
+>> +	mgr = fpga_mgr_register(dev, "Xilinx Zynq FPGA Manager",
+>> +				&zynq_fpga_ops, priv);
+>> +	if (IS_ERR(mgr)) {
+>>  		dev_err(dev, "unable to register FPGA manager\n");
+>>  		clk_unprepare(priv->clk);
+>> -		return err;
+>> +		return PTR_ERR(mgr);
+>>  	}
+>>  
+>> +	platform_set_drvdata(pdev, mgr);
+>> +
+>>  	return 0;
+>>  }
+>>  
+>> diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
+>> index 125743c9797f..1a6d520985be 100644
+>> --- a/drivers/fpga/zynqmp-fpga.c
+>> +++ b/drivers/fpga/zynqmp-fpga.c
+>> @@ -102,12 +102,12 @@ static int zynqmp_fpga_probe(struct platform_device *pdev)
+>>  
+>>  	priv->dev = dev;
+>>  
+>> -	mgr = devm_fpga_mgr_create(dev, "Xilinx ZynqMP FPGA Manager",
+>> -				   &zynqmp_fpga_ops, priv);
+>> -	if (!mgr)
+>> -		return -ENOMEM;
+>> +	mgr = devm_fpga_mgr_register(dev, "Xilinx ZynqMP FPGA Manager",
+>> +				     &zynqmp_fpga_ops, priv);
+>> +	if (IS_ERR(mgr))
+>> +		return PTR_ERR(mgr);
+>>  
+>> -	return devm_fpga_mgr_register(dev, mgr);
+>> +	return 0;
+>>  }
+>>  
+>>  static const struct of_device_id zynqmp_fpga_of_match[] = {
+>> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+>> index 2bc3030a69e5..3e1859cc0640 100644
+>> --- a/include/linux/fpga/fpga-mgr.h
+>> +++ b/include/linux/fpga/fpga-mgr.h
+>> @@ -191,17 +191,16 @@ struct fpga_manager *fpga_mgr_get(struct device *dev);
+>>  
+>>  void fpga_mgr_put(struct fpga_manager *mgr);
+>>  
+>> -struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
+>> -				     const struct fpga_manager_ops *mops,
+>> -				     void *priv);
+>> -void fpga_mgr_free(struct fpga_manager *mgr);
+>> -int fpga_mgr_register(struct fpga_manager *mgr);
+>> +struct fpga_manager *fpga_mgr_register(struct device *dev, const char *name,
+>> +				       struct fpga_compat_id *compat_id,
+>> +				       const struct fpga_manager_ops *mops,
+>> +				       void *priv);
+>>  void fpga_mgr_unregister(struct fpga_manager *mgr);
+>>  
+>> -int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr);
+>> -
+>> -struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
+>> -					  const struct fpga_manager_ops *mops,
+>> -					  void *priv);
+>> +struct fpga_manager *
+>> +devm_fpga_mgr_register(struct device *dev, const char *name,
+>> +		       struct fpga_compat_id *compat_id,
+> Could we integrate the compat_id in fpga_manager_ops? Actually not much
+> driver cares about the compat_id.
+> In this way we don't force everyone fill a NULL on registration.
 
-Please do not add any features to the patchset.
+I'll keep it this way for now. I am also looking for input from others. I think
+this suggestion would make it easier for drivers that don't care about compat_id,
+and harder for drivers that do - because they would have to dynamically create
+the fpga_manager_ops data structure in stead of defining it statically.
 
-When you add a feature, that tends to reset the review process.
-
-
-For little stuff.
-
-I need to look at the documentation again, iirc that was the only issue 
-in v6.
-
-
-For big stuff.
-
-At the beginning some possible refactor questions were raised, I don't 
-know if they have been resolved.
-
-ex/
-
-some of the leaf drivers like clock should be moved the clock subsystem
-
-the xrt/ dir vs existing flat, we don't want both.
-
-is your xrt bus consistent with dfl bus, can it support adding devices 
-outside of fpga/xrt
-
-how clean are the public headers
-
-
-Since flipflopping on refactoring is a painful, let's try to get a 
-consensus before moving forward.
-
-This may mean the patchset is committed by parts as it and the existing 
-code changes.
-
-
-Lets start with the directory structure.
-
-Since there are a lot of files in xrt, the xrt/ makes sense.
-
-For other fpga's with a lot of files, say > 3, we need to change ex/
-
-dfl-foo.c to dfl/foo.c
-
-to be consistent.
-
-
-The Kconfig and Makefiles for xrt/ and dfl/ would only be in that top 
-subdir.
-
-Which i think is a change for xrt/
-
-
-I'll whip up something for dfl/ to move things along.
-
-Tom
-
-
+- Russ
+>
+> Expecting more opinions.
 >
 > Thanks,
+> Yilun
 >
-> Lizhi
->
->
-> On 05/27/2021 05:49 PM, Lizhi Hou wrote:
->> Hello,
->>
->> This is V7 of patch series which adds management physical function 
->> driver
->> for Xilinx Alveo PCIe accelerator cards.
->>      https://www.xilinx.com/products/boards-and-kits/alveo.html
->>
->> This driver is part of Xilinx Runtime (XRT) open source stack.
->>
->> XILINX ALVEO PLATFORM ARCHITECTURE
->>
->> Alveo PCIe FPGA based platforms have a static *shell* partition and a
->> partial re-configurable *user* partition. The shell partition is
->> automatically loaded from flash when host is booted and PCIe is 
->> enumerated
->> by BIOS. Shell cannot be changed till the next cold reboot. The shell
->> exposes two PCIe physical functions:
->>
->> 1. management physical function
->> 2. user physical function
->>
->> The patch series includes Documentation/xrt.rst which describes Alveo
->> platform, XRT driver architecture and deployment model in more detail.
->>
->> Users compile their high level design in C/C++/OpenCL or RTL into FPGA
->> image using Vitis tools.
->> https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html
->>
->> The compiled image is packaged as xclbin which contains partial 
->> bitstream
->> for the user partition and necessary metadata. Users can dynamically 
->> swap
->> the image running on the user partition in order to switch between
->> different workloads by loading different xclbins.
->>
->> XRT DRIVERS FOR XILINX ALVEO
->>
->> XRT Linux kernel driver *xrt-mgmt* binds to management physical 
->> function of
->> Alveo platform. The modular driver framework is organized into several
->> platform drivers which primarily handle the following functionality:
->>
->> 1.  Loading firmware container also called xsabin at driver attach time
->> 2.  Loading of user compiled xclbin with FPGA Manager integration
->> 3.  Clock scaling of image running on user partition
->> 4.  In-band sensors: temp, voltage, power, etc.
->> 5.  Device reset and rescan
->>
->> The platform drivers are packaged into *xrt-lib* helper module with well
->> defined interfaces. The module provides a pseudo-bus implementation 
->> for the
->> platform drivers. More details on the driver model can be found in
->> Documentation/xrt.rst.
->>
->> User physical function driver is not included in this patch series.
->>
->> LIBFDT REQUIREMENT
->>
->> XRT driver infrastructure uses Device Tree as a metadata format to 
->> discover
->> HW subsystems in the Alveo PCIe device. The Device Tree schema used 
->> by XRT
->> is documented in Documentation/xrt.rst.
->>
->> TESTING AND VALIDATION
->>
->> xrt-mgmt driver can be tested with full XRT open source stack which
->> includes user space libraries, board utilities and (out of tree) first
->> generation user physical function driver xocl. XRT open source runtime
->> stack is available at https://github.com/Xilinx/XRT
->>
->> Complete documentation for XRT open source stack including sections on
->> Alveo/XRT security and platform architecture can be found here:
->>
->> https://xilinx.github.io/XRT/master/html/index.html
->> https://xilinx.github.io/XRT/master/html/security.html
->> https://xilinx.github.io/XRT/master/html/platforms_partitions.html
->>
->> Changes since v6:
->> - Resolved grammatical errors and cleaned up taxonomy in xrt.rst
->>    documentation.
->> - Fixed clang warnings.
->> - Updated code base to include v6 code review comments.
->>
->> Changes since v5:
->> - Revert all changes 'mgnt/MGNT' back to 'mgmt/MGMT'
->> - Updated code base to include v5 code review comments.
->>     xrt.rst: address grammar and taxonomy
->>     subdev_id.h: defines XRT_SUBDEV_INVALID = 0
->>     xclbin.c: change shift operation to be_to_cpu
->> - Resolved kernel test robot errors.
->>
->> Changes since v4:
->> - Added xrt_bus_type and xrt_device. All sub devices were changed from
->>    platform_bus_type/platform_device to xrt_bus_type/xrt_device.
->> - Renamed xrt-mgmt driver to xrt-mgnt driver.
->> - Replaced 'MGMT' with 'MGNT' and 'mgmt' with 'mgnt' in code and file 
->> names
->> - Moved pci function calls from infrastructure to xrt-mgnt driver.
->> - Renamed files: mgmt/main.c -> mgnt/xmgnt-main.c
->>                   mgmt/main-region.c -> mgnt/xmgnt-main-region.c
->>                   include/xmgmt-main.h -> include/xmgnt-main.h
->>                   mgmt/fmgr-drv.c -> mgnt/xrt-mgr.c
->>                   mgmt/fmgr.h -> mgnt/xrt-mgr.h
->> - Updated code base to include v4 code review comments.
->>
->> Changes since v3:
->> - Leaf drivers use regmap-mmio to access hardware registers.
->> - Renamed driver module: xmgmt.ko -> xrt-mgmt.ko
->> - Renamed files: calib.[c|h] -> ddr_calibration.[c|h],
->>                   lib/main.[c|h] -> lib/lib-drv.[c|h],
->>                   mgmt/main-impl.h - > mgmt/xmgnt.h
->> - Updated code base to include v3 code review comments.
->>
->> Changes since v2:
->> - Streamlined the driver framework into *xleaf*, *group* and *xroot*
->> - Updated documentation to show the driver model with examples
->> - Addressed kernel test robot errors
->> - Added a selftest for basic driver framework
->> - Documented device tree schema
->> - Removed need to export libfdt symbols
->>
->> Changes since v1:
->> - Updated the driver to use fpga_region and fpga_bridge for FPGA
->>    programming
->> - Dropped platform drivers not related to PR programming to focus on XRT
->>    core framework
->> - Updated Documentation/fpga/xrt.rst with information on XRT core 
->> framework
->> - Addressed checkpatch issues
->> - Dropped xrt- prefix from some header files
->>
->> For reference V6 version of patch series can be found here:
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-1-lizhi.hou@xilinx.com/
->> https://lore.kernel.org/lkml/20210512015339.5649-2-lizhi.hou@xilinx.com/
->> https://lore.kernel.org/lkml/20210512015339.5649-3-lizhi.hou@xilinx.com/
->> https://lore.kernel.org/lkml/20210512015339.5649-4-lizhi.hou@xilinx.com/
->> https://lore.kernel.org/lkml/20210512015339.5649-5-lizhi.hou@xilinx.com/
->> https://lore.kernel.org/lkml/20210512015339.5649-6-lizhi.hou@xilinx.com/
->> https://lore.kernel.org/lkml/20210512015339.5649-7-lizhi.hou@xilinx.com/
->> https://lore.kernel.org/lkml/20210512015339.5649-8-lizhi.hou@xilinx.com/
->> https://lore.kernel.org/lkml/20210512015339.5649-9-lizhi.hou@xilinx.com/
->> https://lore.kernel.org/lkml/20210512015339.5649-10-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-11-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-12-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-13-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-14-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-15-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-16-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-17-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-18-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-19-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-20-lizhi.hou@xilinx.com/ 
->>
->> https://lore.kernel.org/lkml/20210512015339.5649-21-lizhi.hou@xilinx.com/ 
->>
->>
->> Lizhi Hou (20):
->>    Documentation: fpga: Add a document describing XRT Alveo drivers
->>    fpga: xrt: driver metadata helper functions
->>    fpga: xrt: xclbin file helper functions
->>    fpga: xrt: xrt-lib driver manager
->>    fpga: xrt: group driver
->>    fpga: xrt: char dev node helper functions
->>    fpga: xrt: root driver infrastructure
->>    fpga: xrt: driver infrastructure
->>    fpga: xrt: management physical function driver (root)
->>    fpga: xrt: main driver for management function device
->>    fpga: xrt: fpga-mgr and region implementation for xclbin download
->>    fpga: xrt: VSEC driver
->>    fpga: xrt: User Clock Subsystem driver
->>    fpga: xrt: ICAP driver
->>    fpga: xrt: devctl xrt driver
->>    fpga: xrt: clock driver
->>    fpga: xrt: clock frequency counter driver
->>    fpga: xrt: DDR calibration driver
->>    fpga: xrt: partition isolation driver
->>    fpga: xrt: Kconfig and Makefile updates for XRT drivers
->>
->>   Documentation/fpga/index.rst                  |   1 +
->>   Documentation/fpga/xrt.rst                    | 870 ++++++++++++++++++
->>   MAINTAINERS                                   |  11 +
->>   drivers/Makefile                              |   1 +
->>   drivers/fpga/Kconfig                          |   2 +
->>   drivers/fpga/Makefile                         |   5 +
->>   drivers/fpga/xrt/Kconfig                      |   8 +
->>   drivers/fpga/xrt/include/events.h             |  45 +
->>   drivers/fpga/xrt/include/group.h              |  25 +
->>   drivers/fpga/xrt/include/metadata.h           | 236 +++++
->>   drivers/fpga/xrt/include/subdev_id.h          |  39 +
->>   drivers/fpga/xrt/include/xclbin-helper.h      |  48 +
->>   drivers/fpga/xrt/include/xdevice.h            | 131 +++
->>   drivers/fpga/xrt/include/xleaf.h              | 205 +++++
->>   drivers/fpga/xrt/include/xleaf/axigate.h      |  23 +
->>   drivers/fpga/xrt/include/xleaf/clkfreq.h      |  21 +
->>   drivers/fpga/xrt/include/xleaf/clock.h        |  29 +
->>   .../fpga/xrt/include/xleaf/ddr_calibration.h  |  28 +
->>   drivers/fpga/xrt/include/xleaf/devctl.h       |  40 +
->>   drivers/fpga/xrt/include/xleaf/icap.h         |  27 +
->>   drivers/fpga/xrt/include/xmgmt-main.h         |  34 +
->>   drivers/fpga/xrt/include/xroot.h              | 117 +++
->>   drivers/fpga/xrt/lib/Kconfig                  |  17 +
->>   drivers/fpga/xrt/lib/Makefile                 |  30 +
->>   drivers/fpga/xrt/lib/cdev.c                   | 209 +++++
->>   drivers/fpga/xrt/lib/group.c                  | 278 ++++++
->>   drivers/fpga/xrt/lib/lib-drv.c                | 328 +++++++
->>   drivers/fpga/xrt/lib/lib-drv.h                |  21 +
->>   drivers/fpga/xrt/lib/subdev.c                 | 859 +++++++++++++++++
->>   drivers/fpga/xrt/lib/subdev_pool.h            |  53 ++
->>   drivers/fpga/xrt/lib/xclbin.c                 | 381 ++++++++
->>   drivers/fpga/xrt/lib/xleaf/axigate.c          | 325 +++++++
->>   drivers/fpga/xrt/lib/xleaf/clkfreq.c          | 223 +++++
->>   drivers/fpga/xrt/lib/xleaf/clock.c            | 652 +++++++++++++
->>   drivers/fpga/xrt/lib/xleaf/ddr_calibration.c  | 210 +++++
->>   drivers/fpga/xrt/lib/xleaf/devctl.c           | 169 ++++
->>   drivers/fpga/xrt/lib/xleaf/icap.c             | 328 +++++++
->>   drivers/fpga/xrt/lib/xleaf/ucs.c              | 152 +++
->>   drivers/fpga/xrt/lib/xleaf/vsec.c             | 372 ++++++++
->>   drivers/fpga/xrt/lib/xroot.c                  | 536 +++++++++++
->>   drivers/fpga/xrt/metadata/Kconfig             |  12 +
->>   drivers/fpga/xrt/metadata/Makefile            |  16 +
->>   drivers/fpga/xrt/metadata/metadata.c          | 578 ++++++++++++
->>   drivers/fpga/xrt/mgmt/Kconfig                 |  15 +
->>   drivers/fpga/xrt/mgmt/Makefile                |  19 +
->>   drivers/fpga/xrt/mgmt/root.c                  | 420 +++++++++
->>   drivers/fpga/xrt/mgmt/xmgmt-main-region.c     | 483 ++++++++++
->>   drivers/fpga/xrt/mgmt/xmgmt-main.c            | 662 +++++++++++++
->>   drivers/fpga/xrt/mgmt/xmgmt.h                 |  33 +
->>   drivers/fpga/xrt/mgmt/xrt-mgr.c               | 190 ++++
->>   drivers/fpga/xrt/mgmt/xrt-mgr.h               |  16 +
->>   include/uapi/linux/xrt/xclbin.h               | 409 ++++++++
->>   include/uapi/linux/xrt/xmgmt-ioctl.h          |  46 +
->>   53 files changed, 9988 insertions(+)
->>   create mode 100644 Documentation/fpga/xrt.rst
->>   create mode 100644 drivers/fpga/xrt/Kconfig
->>   create mode 100644 drivers/fpga/xrt/include/events.h
->>   create mode 100644 drivers/fpga/xrt/include/group.h
->>   create mode 100644 drivers/fpga/xrt/include/metadata.h
->>   create mode 100644 drivers/fpga/xrt/include/subdev_id.h
->>   create mode 100644 drivers/fpga/xrt/include/xclbin-helper.h
->>   create mode 100644 drivers/fpga/xrt/include/xdevice.h
->>   create mode 100644 drivers/fpga/xrt/include/xleaf.h
->>   create mode 100644 drivers/fpga/xrt/include/xleaf/axigate.h
->>   create mode 100644 drivers/fpga/xrt/include/xleaf/clkfreq.h
->>   create mode 100644 drivers/fpga/xrt/include/xleaf/clock.h
->>   create mode 100644 drivers/fpga/xrt/include/xleaf/ddr_calibration.h
->>   create mode 100644 drivers/fpga/xrt/include/xleaf/devctl.h
->>   create mode 100644 drivers/fpga/xrt/include/xleaf/icap.h
->>   create mode 100644 drivers/fpga/xrt/include/xmgmt-main.h
->>   create mode 100644 drivers/fpga/xrt/include/xroot.h
->>   create mode 100644 drivers/fpga/xrt/lib/Kconfig
->>   create mode 100644 drivers/fpga/xrt/lib/Makefile
->>   create mode 100644 drivers/fpga/xrt/lib/cdev.c
->>   create mode 100644 drivers/fpga/xrt/lib/group.c
->>   create mode 100644 drivers/fpga/xrt/lib/lib-drv.c
->>   create mode 100644 drivers/fpga/xrt/lib/lib-drv.h
->>   create mode 100644 drivers/fpga/xrt/lib/subdev.c
->>   create mode 100644 drivers/fpga/xrt/lib/subdev_pool.h
->>   create mode 100644 drivers/fpga/xrt/lib/xclbin.c
->>   create mode 100644 drivers/fpga/xrt/lib/xleaf/axigate.c
->>   create mode 100644 drivers/fpga/xrt/lib/xleaf/clkfreq.c
->>   create mode 100644 drivers/fpga/xrt/lib/xleaf/clock.c
->>   create mode 100644 drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
->>   create mode 100644 drivers/fpga/xrt/lib/xleaf/devctl.c
->>   create mode 100644 drivers/fpga/xrt/lib/xleaf/icap.c
->>   create mode 100644 drivers/fpga/xrt/lib/xleaf/ucs.c
->>   create mode 100644 drivers/fpga/xrt/lib/xleaf/vsec.c
->>   create mode 100644 drivers/fpga/xrt/lib/xroot.c
->>   create mode 100644 drivers/fpga/xrt/metadata/Kconfig
->>   create mode 100644 drivers/fpga/xrt/metadata/Makefile
->>   create mode 100644 drivers/fpga/xrt/metadata/metadata.c
->>   create mode 100644 drivers/fpga/xrt/mgmt/Kconfig
->>   create mode 100644 drivers/fpga/xrt/mgmt/Makefile
->>   create mode 100644 drivers/fpga/xrt/mgmt/root.c
->>   create mode 100644 drivers/fpga/xrt/mgmt/xmgmt-main-region.c
->>   create mode 100644 drivers/fpga/xrt/mgmt/xmgmt-main.c
->>   create mode 100644 drivers/fpga/xrt/mgmt/xmgmt.h
->>   create mode 100644 drivers/fpga/xrt/mgmt/xrt-mgr.c
->>   create mode 100644 drivers/fpga/xrt/mgmt/xrt-mgr.h
->>   create mode 100644 include/uapi/linux/xrt/xclbin.h
->>   create mode 100644 include/uapi/linux/xrt/xmgmt-ioctl.h
->>
->
+>> +		       const struct fpga_manager_ops *mops,
+>> +		       void *priv);
+>>  
+>>  #endif /*_LINUX_FPGA_MGR_H */
+>> -- 
+>> 2.25.1
 
