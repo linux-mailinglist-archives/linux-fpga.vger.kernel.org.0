@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F2B39B801
-	for <lists+linux-fpga@lfdr.de>; Fri,  4 Jun 2021 13:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E70939B805
+	for <lists+linux-fpga@lfdr.de>; Fri,  4 Jun 2021 13:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbhFDLft (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 4 Jun 2021 07:35:49 -0400
-Received: from mail-sn1anam02on2052.outbound.protection.outlook.com ([40.107.96.52]:23882
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        id S230080AbhFDLgA (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 4 Jun 2021 07:36:00 -0400
+Received: from mail-mw2nam12on2069.outbound.protection.outlook.com ([40.107.244.69]:60576
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229962AbhFDLfs (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 4 Jun 2021 07:35:48 -0400
+        id S229962AbhFDLf7 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 4 Jun 2021 07:35:59 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BBoYKsNmBqgTZJ27Y7sKppMGDGRrAK8AWBQNQRcVsasy+6/xyKCBtWJBkxcszTDW6/NjM2PmVMj2LbVSVHUta+7fMmvmBitKNZFfSbItiufncFF8iSpg60CQRighUfUVtcd0v+apv3gNzut5Zf6QjiguCOnDfMYTU/fE7TTiCmISoXavf2FwWUh3CO5ScSNegUejiBpFTlzrBe637vk8Z8jzqj311hJeQvbZ5G+BfViV0bITl1V3mGbeg/whyX8tEuxldfvGPPsy+VYhQ9k+PmIiZytP2gxKjlLPSH+PE/BEkuI6HpmPwE9sgqIP/Zym7p4fPwrxZeoEE/xKeKLP7Q==
+ b=FSTniVCsviUBspXntv14H47vD3D60gBymZ0YpPDXogsQqtcX4hOYCN7+BBcntO7xClAdIUGIP4gGNuu+hrittXklXc6sRQT3gpKocuTZImO/CxV6hUA9tgrKC0JixxcINlU04cavRAup9p8iawFOTyu29n10X7BGg5+93fY+upypzryGVUY3NGHAP61zyzMyLiOKENDEl41Owsa1bcOxa187DefWGRlHu5d/zkdeuf+qkSfktGJmCetKIHrV4Li9cOBHFv1vS5muPslJIQZghWTdH1kKK4SFlt8WpsRcTLof2pAzR8ZEsvmVsOPxcMQCHTxqrTPgxnPZgeHKJTwAFg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/6M3AH8+0OkJrJ1tEatpCI7eEWjz/xiRoBiDefRxNEM=;
- b=RraabJP94lE4IdY656YO+HowsEY+BSz1AEGmTz7f4qosa5xseYfZB7zb668z+8UBhCrj0q9roVHfWVkdbFBfPImNjmV/QyKfvGywTShvKnUrc5BDFoNVy9rx2Yw48SFaVaGdfO2J19wShxTKmZqHx3kJpLpHZ8ByIzxhGebQV033cYoVFpbwa+WG+Ip2jfWTxaxoe8yZfdcErXBdleE8YBDTo1PMY73kfSRS6Ji9XN+jFv2fp75R7uYSool1Nnw5YwnpMCzdJwxpUKaOCZUUFv611a4r/FrDVu/SxaLku/q4PGk5BA1B+xUwdWGaUOfc+olKJZ3jQVPsemPD1wCjwA==
+ bh=kj6itWoH2DKTfNlx95DzU55pPWeaxCNEO6NzzlNdRVQ=;
+ b=P7FFJJJuq2H0MgwTkO0EGB7m6tda+n64d89mr8X4Xxwy7uPFSknSjHmVW04YXs41JwN2s82mNr3w3PKr1DWlpDXHbig982axjlc6UCstUWkKqip1DUTzxJmG4omKQIorXZm5xxiLOrA9Up0C0iEDb9+wquQm+zaUs/ESdpfTD0SH6i3ji5B36zywIV71ykdtlLxnZs/nBNCnAUb/GI0HWHyi9Ub6mRO21rsxZSMpRGnZw5le0jksLTg/Gmixz9IF4hgwCj8yQ/IHMR5XvgwiBpZ51grbjiTT95CwEFAiDp2s+Oysw/B2gB6EZSTikCd0zuz3DEKAphfVX6DR4Vcdfg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/6M3AH8+0OkJrJ1tEatpCI7eEWjz/xiRoBiDefRxNEM=;
- b=bxuEbUSarqYOSqVhOFjFOHhbIDI6mfpp9EtczNNv/wWEAluVgV2fkyTomxnDO63CXG8jDr5O/sRDeHLTljaNQbg5n6VN9w4jupGXVrt32a3vtlzdQaHWqg9aGBIbppjGvFqU43kEUIqsvCIxjRvBIZJOWVFfJWHemYqSuP4Ega8=
-Received: from SN6PR2101CA0016.namprd21.prod.outlook.com
- (2603:10b6:805:106::26) by SN6PR02MB4958.namprd02.prod.outlook.com
- (2603:10b6:805:99::24) with Microsoft SMTP Server (version=TLS1_2,
+ bh=kj6itWoH2DKTfNlx95DzU55pPWeaxCNEO6NzzlNdRVQ=;
+ b=OSDscCi42Jg/M76CPgcYZF4JT4wroZMRi17pV2dAj/4Lp20DCLGafCGZqZeNvzFpUNu1hocxSrLoltd3C8DPN0F1pOGdWD7dGh1EQ33s76lGr6sRvq9x9UkA6W/NUvLn15hRtXWV/IT4cPzHXJRAuEktW5HKX4XA0nwvKd3nT4U=
+Received: from SA0PR11CA0139.namprd11.prod.outlook.com (2603:10b6:806:131::24)
+ by MN2PR02MB6654.namprd02.prod.outlook.com (2603:10b6:208:1de::19) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.23; Fri, 4 Jun
- 2021 11:34:00 +0000
-Received: from SN1NAM02FT0010.eop-nam02.prod.protection.outlook.com
- (2603:10b6:805:106:cafe::52) by SN6PR2101CA0016.outlook.office365.com
- (2603:10b6:805:106::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.3 via Frontend
- Transport; Fri, 4 Jun 2021 11:34:00 +0000
+ 2021 11:34:11 +0000
+Received: from SN1NAM02FT0006.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:131:cafe::78) by SA0PR11CA0139.outlook.office365.com
+ (2603:10b6:806:131::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.21 via Frontend
+ Transport; Fri, 4 Jun 2021 11:34:10 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
@@ -45,16 +45,16 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
  client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
 Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0010.mail.protection.outlook.com (10.97.4.76) with Microsoft SMTP
+ SN1NAM02FT0006.mail.protection.outlook.com (10.97.5.193) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4195.18 via Frontend Transport; Fri, 4 Jun 2021 11:34:00 +0000
+ 15.20.4195.18 via Frontend Transport; Fri, 4 Jun 2021 11:34:10 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 4 Jun 2021 04:33:47 -0700
+ 15.1.2176.2; Fri, 4 Jun 2021 04:33:54 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Fri, 4 Jun 2021 04:33:47 -0700
+ 15.1.2176.2 via Frontend Transport; Fri, 4 Jun 2021 04:33:54 -0700
 Envelope-to: git@xilinx.com,
  robh+dt@kernel.org,
  mdf@kernel.org,
@@ -71,7 +71,7 @@ Envelope-to: git@xilinx.com,
 Received: from [10.140.6.60] (port=49944 helo=xhdnavam40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <nava.manne@xilinx.com>)
-        id 1lp85C-0005PI-G2; Fri, 04 Jun 2021 04:33:46 -0700
+        id 1lp85I-0005PI-NU; Fri, 04 Jun 2021 04:33:53 -0700
 From:   Nava kishore Manne <nava.manne@xilinx.com>
 To:     <robh+dt@kernel.org>, <michal.simek@xilinx.com>, <mdf@kernel.org>,
         <trix@redhat.com>, <nava.manne@xilinx.com>, <arnd@arndb.de>,
@@ -83,9 +83,10 @@ To:     <robh+dt@kernel.org>, <michal.simek@xilinx.com>, <mdf@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
         <git@xilinx.com>, <chinnikishore369@gmail.com>
-Subject: [PATCH v7 1/4] drivers: firmware: Add PDI load API support
-Date:   Fri, 4 Jun 2021 17:03:29 +0530
-Message-ID: <20210604113332.1394-2-nava.manne@xilinx.com>
+CC:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+Subject: [PATCH v7 2/4] dt-bindings: fpga: Add binding doc for versal fpga manager
+Date:   Fri, 4 Jun 2021 17:03:30 +0530
+Message-ID: <20210604113332.1394-3-nava.manne@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210604113332.1394-1-nava.manne@xilinx.com>
 References: <20210604113332.1394-1-nava.manne@xilinx.com>
@@ -93,49 +94,49 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4fa61ff2-758e-4d35-0296-08d9274ca624
-X-MS-TrafficTypeDiagnostic: SN6PR02MB4958:
-X-Microsoft-Antispam-PRVS: <SN6PR02MB4958F6F819689D153DCAFD7DC23B9@SN6PR02MB4958.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: ae66fedf-97f5-4cad-2f33-08d9274cabf5
+X-MS-TrafficTypeDiagnostic: MN2PR02MB6654:
+X-Microsoft-Antispam-PRVS: <MN2PR02MB665400AD587A66D022951D60C23B9@MN2PR02MB6654.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:644;
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VYrj0qsi3dFU3CbZk0EuQafwV96/XTE+KrtJ1xrioHVWj9fp+RUcHNHCEdkm8il/MYYt+/Vfc6oxfn96aMY48wxOdl9XYZPRJ3yoPistD1FjSyG2jVboyQbnCZCWoeW/qc4GTIZsp1sAg1w11T4bi0vQ9nO3NQFTIEEnquo6tOuDrUuyDFao7jHnHCDvwD0bAvDwxuYwIlEtsRvaTimIAEy+ihSdH+LNttlfpKIbLz42T4Av/hGlCpVnyrAIy7myxk5alWvl9jjib9izg1CjItdYK3DEnMEUlpK3XO+zI21P9oNnd0HF6peGm2meIOhlQtkmlKXSaCR612ugPM84xoc5f5Z0QrUFJ5+FPQb99pjUyS01Ot1nrvH+R1jPMA75aH5dYrjvGbvBWsB53mGEssQO5kS1PpIlAoAH2Bt691auZV4E9/i2aFrbTqcPvRfrBb6fiKFmnOUU05xxNtSvaboWNRdtgfOpFsGDZCfhQSxmNv6xTk/CltMjbN+lHZAkM0Dqd+7Hfrh0w6f+x/0TYqxFZf5ZpLSTokOdjxfHRGhfo/XOEnbLl8wVtTH3T5ixBQL7pO+iS8FYIGqT5Ue9ESNzAnjzqm3Qe78TxSuSyqgPrAKjcdOC/xxeWUi9+8zT97W2Tfuf6BNvJWPmN5FZ6aVWZbqZDPWqBVcopVrwhKrU4TghDB1hq08i+iBULo/xE/WKeLhY7XyNIZ3/U2FdQ0xjMS60YY0NR8PzCjhFJ4WCsOzJ4bRF8fKkJpZXfWbi
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(39860400002)(136003)(346002)(396003)(376002)(46966006)(36840700001)(36860700001)(316002)(36906005)(336012)(478600001)(7416002)(110136005)(8936002)(8676002)(1076003)(82740400003)(426003)(7696005)(2616005)(47076005)(83380400001)(2906002)(9786002)(7636003)(26005)(186003)(5660300002)(356005)(36756003)(6666004)(921005)(82310400003)(70586007)(70206006)(102446001)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: dVU2K1ScsSVLwr5JqgY4te/5z1J98IXK+G6KVjvwkcGngOSg1w1yyco0yuFkq3WWO6Rth7MNbioGygYN7HXMLgCqYKpyPUIE9AzJx0V4MYT/Dih/dWmOTi3JCPv1MPzOfDu24gEKUwTNar009Qp2nAXtc46wcRDhGWu2aH1Y3fwgdXATrMnltd4ChLPLCaMiiJ5NJmTDTNJAFW/xziR4dlbyqFRPUlOtriIpIoei4lS8xbQq6fzWlvOneXhpD22vVhhwtJ9KbrTowGFnuI5rmDPYPQ59ma/D+kSuTqXp2NaWl25aFdVEt0WwxJZ5Y6+3tCZGIvz85qUGbBgi1xd4wsrKqgEidbUo48mw0j05gcpn6f7JU4KNd0N2TDaQA7jxjNW4VZBGC0x3jZHXPOm3+xIULvNzf8S+jImjryQRADHPPcitJdA/p6Fk/5+plmn1YkKWoH6csCUv+knCP0TO042l3doRWIX1AmtBnLXJq+nqKOZxsQ1LN6z/V8mPFtWX+joEouF00MUhtPu79sE+rSCivES/9yS0kPqzW40ydUbWQIdPknCSbGyCHhfAB5FElnQqoMSt9sdNzRBTMTEt5juLOfjZvr6BOnmUxUSu8FSNOz4GfHYRlPS1H1VOY0ht595gggrMpcC113qN5BVLdXI4ucEPYB+OJLcrS/ZK1TkPh7PtpzUN6rKGOWXgEfRPwI1L5Rv/oD3rNF6jgNnlmluwBhWC+nHdVkwZd21zwoOwR1f2rKkCuQTT1AHaa3t67ddMTPxVfuuBhD1jDwUbO5JM+C52ZrbhVlcQbc2QMZOK24XUnqqJB7fFzMJscqTeMqTQJlsVNxDh8AHJgZNE/2poPKPZVWB8eoYIuckootZE6m3/dJ8V8SK6Zipia57+MyeON74qp+BnnaG94deBOw==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(396003)(136003)(376002)(39860400002)(36840700001)(46966006)(36906005)(316002)(47076005)(70586007)(110136005)(1076003)(9786002)(7416002)(921005)(8936002)(2906002)(8676002)(7636003)(36756003)(356005)(82740400003)(6666004)(5660300002)(26005)(82310400003)(336012)(426003)(2616005)(107886003)(83380400001)(36860700001)(70206006)(478600001)(7696005)(966005)(4326008)(186003)(102446001)(83996005)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2021 11:34:00.7171
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2021 11:34:10.4806
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4fa61ff2-758e-4d35-0296-08d9274ca624
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae66fedf-97f5-4cad-2f33-08d9274cabf5
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0010.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0006.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB4958
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6654
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This patch adds load PDI API support to enable full/partial PDI loading
-from linux. Programmable Device Image (PDI) is combination of headers,
-images and bitstream files to be loaded.
+From: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+
+This patch adds binding doc for versal fpga manager driver.
 
 Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-Reviewed-by: Moritz Fischer <mdf@kernel.org>
+Signed-off-by: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 Changes for v2:
-              -Updated API Doc and commit msg.
-               No functional changes.
+              -Fixed file format and syntax issues.
 
 Changes for v3:
-              -None.
+              -Removed unwated extra spaces.
 
 Changes for v4:
               -Rebased the changes on linux-next.
                No functional changes
 
 Changes for v5:
-              -None.
+              -Updated fpga node name to versal_fpga.
 
 Changes for v6:
               -None.
@@ -143,73 +144,49 @@ Changes for v6:
 Changes for v7:
               -None.
 
- drivers/firmware/xilinx/zynqmp.c     | 17 +++++++++++++++++
- include/linux/firmware/xlnx-zynqmp.h | 10 ++++++++++
- 2 files changed, 27 insertions(+)
+ .../bindings/fpga/xlnx,versal-fpga.yaml       | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
 
-diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-index 15b138326ecc..2db571da9ad8 100644
---- a/drivers/firmware/xilinx/zynqmp.c
-+++ b/drivers/firmware/xilinx/zynqmp.c
-@@ -1011,6 +1011,23 @@ int zynqmp_pm_set_requirement(const u32 node, const u32 capabilities,
- }
- EXPORT_SYMBOL_GPL(zynqmp_pm_set_requirement);
- 
-+/**
-+ * zynqmp_pm_load_pdi - Load and process PDI
-+ * @src:       Source device where PDI is located
-+ * @address:   PDI src address
-+ *
-+ * This function provides support to load PDI from linux
-+ *
-+ * Return: Returns status, either success or error+reason
-+ */
-+int zynqmp_pm_load_pdi(const u32 src, const u64 address)
-+{
-+	return zynqmp_pm_invoke_fn(PM_LOAD_PDI, src,
-+				   lower_32_bits(address),
-+				   upper_32_bits(address), 0, NULL);
-+}
-+EXPORT_SYMBOL_GPL(zynqmp_pm_load_pdi);
+diff --git a/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml b/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+new file mode 100644
+index 000000000000..ac6a207278d5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+@@ -0,0 +1,33 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/fpga/xlnx,versal-fpga.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- /**
-  * zynqmp_pm_aes - Access AES hardware to encrypt/decrypt the data using
-  * AES-GCM core.
-diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-index 9d1a5c175065..56b426fe020c 100644
---- a/include/linux/firmware/xlnx-zynqmp.h
-+++ b/include/linux/firmware/xlnx-zynqmp.h
-@@ -52,6 +52,10 @@
- #define	ZYNQMP_PM_CAPABILITY_WAKEUP	0x4U
- #define	ZYNQMP_PM_CAPABILITY_UNUSABLE	0x8U
- 
-+/* Loader commands */
-+#define PM_LOAD_PDI	0x701
-+#define PDI_SRC_DDR	0xF
++title: Xilinx Versal FPGA driver.
 +
- /*
-  * Firmware FPGA Manager flags
-  * XILINX_ZYNQMP_PM_FPGA_FULL:	FPGA full reconfiguration
-@@ -411,6 +415,7 @@ int zynqmp_pm_pinctrl_get_config(const u32 pin, const u32 param,
- 				 u32 *value);
- int zynqmp_pm_pinctrl_set_config(const u32 pin, const u32 param,
- 				 u32 value);
-+int zynqmp_pm_load_pdi(const u32 src, const u64 address);
- #else
- static inline int zynqmp_pm_get_api_version(u32 *version)
- {
-@@ -622,6 +627,11 @@ static inline int zynqmp_pm_pinctrl_set_config(const u32 pin, const u32 param,
- {
- 	return -ENODEV;
- }
++maintainers:
++  - Nava kishore Manne <nava.manne@xilinx.com>
 +
-+static inline int zynqmp_pm_load_pdi(const u32 src, const u64 address)
-+{
-+	return -ENODEV;
-+}
- #endif
- 
- #endif /* __FIRMWARE_ZYNQMP_H__ */
++description: |
++  Device Tree Versal FPGA bindings for the Versal SoC, controlled
++  using firmware interface.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - xlnx,versal-fpga
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    versal_fpga: versal_fpga {
++         compatible = "xlnx,versal-fpga";
++    };
++
++...
 -- 
 2.17.1
 
