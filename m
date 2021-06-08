@@ -2,54 +2,54 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA2A3A05DC
-	for <lists+linux-fpga@lfdr.de>; Tue,  8 Jun 2021 23:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECA73A05E5
+	for <lists+linux-fpga@lfdr.de>; Tue,  8 Jun 2021 23:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234453AbhFHV02 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 8 Jun 2021 17:26:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31180 "EHLO
+        id S234819AbhFHV0j (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 8 Jun 2021 17:26:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22733 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234483AbhFHV0R (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Jun 2021 17:26:17 -0400
+        by vger.kernel.org with ESMTP id S234366AbhFHV0T (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Jun 2021 17:26:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623187463;
+        s=mimecast20190719; t=1623187465;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sl2hI9DkGhrHAF/gZGC77L8hn5lQAm7T18qsJ8qLvm8=;
-        b=LrP5T1HfkeTiKXbPBAY63Labmx2dvQ78fKYVcJxLQZBs+TdxPLsbxNdZL5aOH7MVqXxL4c
-        V0RNuNelU22hgSvwq20UWV4/pMZR8I1dqbiiAIsmvAVBvKzPLPDL7HflFEM0ngghHg15dZ
-        8YczHybDtjUev8/oh/jq6kF1ry4qPng=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-106-kOl6TwApO2SyHmNoisu1YQ-1; Tue, 08 Jun 2021 17:24:21 -0400
-X-MC-Unique: kOl6TwApO2SyHmNoisu1YQ-1
-Received: by mail-oi1-f200.google.com with SMTP id q41-20020a0568082029b02901f4500c63c4so1854570oiw.22
-        for <linux-fpga@vger.kernel.org>; Tue, 08 Jun 2021 14:24:21 -0700 (PDT)
+        bh=Vgj8oqZLl0A1vt9dwKiJZ0f0m4QB6PQYsey/uhZG+bc=;
+        b=E4ynXmV/9fUyt1cnd/b0Xudku/LNhq/b5dyNRaPKPPyYdSNZ7QXrNNPhGJ4XIuhHrw2B+E
+        JTGjbBZ2g3FLF2nyVTneOsko2RtR+WPDBmzPkggGltzpE141mfQTpoWMoxLZ/79PLYYlxq
+        eWFbFwFSL5EzmxkM2NmPbN8E9aDadxw=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-272-8nadUpJZO9Gi4On_25jUuw-1; Tue, 08 Jun 2021 17:24:24 -0400
+X-MC-Unique: 8nadUpJZO9Gi4On_25jUuw-1
+Received: by mail-oo1-f71.google.com with SMTP id v8-20020a0568200048b0290249f46c70eeso3659216oob.22
+        for <linux-fpga@vger.kernel.org>; Tue, 08 Jun 2021 14:24:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sl2hI9DkGhrHAF/gZGC77L8hn5lQAm7T18qsJ8qLvm8=;
-        b=XG5joyvaGY0zkssU4qKr4qfykcyAGzgFuaahZy7jWoRk2Rg11YiuuSFOGU2IMTjYGp
-         PPVlcy8xIsv/S89owqkpIzXlViApISOn8vxPn193wVv5ywrk/8zfqWsznYNUHqHuHSUr
-         xGBLX1aqjc5uYlioDv9RUKzSR+j+3ku7kr5Q3mJhkppcpNch48qr8eGG7FAxoVXJpkWW
-         aLhfdXa/7tBOHeQ7jdy+J76IsZ6TAoszyfkhejg0GeaK1Cx+YvVvFX3SoHjau6uoGMX8
-         USu5ZocJ9z1Wnwd4ee2zVg5M3xkkBoB317y21tVinFvHX00Qr+LH/dEDSomiwZ7lTp6i
-         454w==
-X-Gm-Message-State: AOAM5312PounDuraARDpWAcpCz238oGzmPdSH+TRBWqZ4JRSGXSPA0yz
-        aC40dWig76SvHVGjPP/iKEr7FA5BExmUq89ACW//fld2Ht/35LNgziA7Xya16M8+8RYvwfmSpye
-        DpzxXK7Qjq9VIG8LzhrgJgg==
-X-Received: by 2002:a9d:6042:: with SMTP id v2mr17663743otj.170.1623187461258;
-        Tue, 08 Jun 2021 14:24:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxmxpPWzOyTlGEiV6Av+AuPF28wy57ENACphojjEyHPZwmAPwtDFH5wKuVEl6aUMJEsLLhlTw==
-X-Received: by 2002:a9d:6042:: with SMTP id v2mr17663714otj.170.1623187461077;
-        Tue, 08 Jun 2021 14:24:21 -0700 (PDT)
+        bh=Vgj8oqZLl0A1vt9dwKiJZ0f0m4QB6PQYsey/uhZG+bc=;
+        b=Y/2dx/ZFCpcczY1SPAsoAvpDGJcScO9DmKXPKdPGPfE7X/wHh7csz95Bko4kRoWv5x
+         4h4vVY9cEDyr99NIAvegjCLA43HA23KvjDp0h/TIJOYvzp76uRCQWe4X1+D3J/inwNu0
+         SrpkfQDpoi7JJRgY0Pc4fEmIu/pB2H24ciwUej12g0A6z5ztCeqUgqnu4IzLXCAdZlEb
+         RYgrPcmquXFPUY9lguHEun/tuLqiHXVX1k2ROxhvY5JVb8s6ebGjp4DVDKzjdcAMkduE
+         FkF6yZ1f0YB4fC5UYwnRJaThKQEgcZXWEwZ2ksnMf/x2tKxMIe31twHucTtrfL/GYk+Y
+         t4Lg==
+X-Gm-Message-State: AOAM533Y8tIEq0zkYllYFosUUxqaXfONCRWT5SkH0KloNo3XYbJjbOxr
+        OuOLbFHYeJ3fSjXi57/Z3B4oEV3hQiqLY2AtlrFwlNmBv6qCjvjDba4iLCMPFh/2sgO+ntldcls
+        1EpwcusPhpcggVrcGzEoOaA==
+X-Received: by 2002:a4a:315a:: with SMTP id v26mr18955553oog.75.1623187463592;
+        Tue, 08 Jun 2021 14:24:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz82nKYiIALAJjZeYKXYeO4V0CO6L9b2b0ozuO1NkuMBf4budBP8Ik6fiODXlFbdCe14KQ8gg==
+X-Received: by 2002:a4a:315a:: with SMTP id v26mr18955531oog.75.1623187463421;
+        Tue, 08 Jun 2021 14:24:23 -0700 (PDT)
 Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id x199sm1954310oif.5.2021.06.08.14.24.18
+        by smtp.gmail.com with ESMTPSA id x199sm1954310oif.5.2021.06.08.14.24.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 14:24:20 -0700 (PDT)
+        Tue, 08 Jun 2021 14:24:23 -0700 (PDT)
 From:   trix@redhat.com
 To:     mdf@kernel.org, robh+dt@kernel.org, hao.wu@intel.com,
         corbet@lwn.net, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
@@ -61,9 +61,9 @@ Cc:     linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-crypto@vger.kernel.org,
         linux-staging@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH 08/11] fpga: region: change FPGA indirect article to an
-Date:   Tue,  8 Jun 2021 14:23:47 -0700
-Message-Id: <20210608212350.3029742-10-trix@redhat.com>
+Subject: [PATCH 09/11] fpga: of-fpga-region: change FPGA indirect article to an
+Date:   Tue,  8 Jun 2021 14:23:48 -0700
+Message-Id: <20210608212350.3029742-11-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20210608212350.3029742-1-trix@redhat.com>
 References: <20210608212350.3029742-1-trix@redhat.com>
@@ -79,70 +79,42 @@ Change use of 'a fpga' to 'an fpga'
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/fpga/fpga-region.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/fpga/of-fpga-region.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
-index c3134b89c3fe5..c5c55d2f20b92 100644
---- a/drivers/fpga/fpga-region.c
-+++ b/drivers/fpga/fpga-region.c
-@@ -33,14 +33,14 @@ struct fpga_region *fpga_region_class_find(
- EXPORT_SYMBOL_GPL(fpga_region_class_find);
- 
- /**
-- * fpga_region_get - get an exclusive reference to a fpga region
-+ * fpga_region_get - get an exclusive reference to an fpga region
-  * @region: FPGA Region struct
-  *
-  * Caller should call fpga_region_put() when done with region.
-  *
-  * Return fpga_region struct if successful.
-  * Return -EBUSY if someone already has a reference to the region.
-- * Return -ENODEV if @np is not a FPGA Region.
-+ * Return -ENODEV if @np is not an FPGA Region.
-  */
- static struct fpga_region *fpga_region_get(struct fpga_region *region)
- {
-@@ -234,7 +234,7 @@ struct fpga_region
- EXPORT_SYMBOL_GPL(fpga_region_create);
- 
- /**
-- * fpga_region_free - free a FPGA region created by fpga_region_create()
-+ * fpga_region_free - free an FPGA region created by fpga_region_create()
+diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
+index e405309baadc1..e3c25576b6b9d 100644
+--- a/drivers/fpga/of-fpga-region.c
++++ b/drivers/fpga/of-fpga-region.c
+@@ -181,7 +181,7 @@ static int child_regions_with_firmware(struct device_node *overlay)
   * @region: FPGA region
+  * @overlay: overlay applied to the FPGA region
+  *
+- * Given an overlay applied to a FPGA region, parse the FPGA image specific
++ * Given an overlay applied to an FPGA region, parse the FPGA image specific
+  * info in the overlay and do some checking.
+  *
+  * Returns:
+@@ -273,7 +273,7 @@ static struct fpga_image_info *of_fpga_region_parse_ov(
+  * @region: FPGA region that the overlay was applied to
+  * @nd: overlay notification data
+  *
+- * Called when an overlay targeted to a FPGA Region is about to be applied.
++ * Called when an overlay targeted to an FPGA Region is about to be applied.
+  * Parses the overlay for properties that influence how the FPGA will be
+  * programmed and does some checking. If the checks pass, programs the FPGA.
+  * If the checks fail, overlay is rejected and does not get added to the
+@@ -336,8 +336,8 @@ static void of_fpga_region_notify_post_remove(struct fpga_region *region,
+  * @action:	notifier action
+  * @arg:	reconfig data
+  *
+- * This notifier handles programming a FPGA when a "firmware-name" property is
+- * added to a fpga-region.
++ * This notifier handles programming an FPGA when a "firmware-name" property is
++ * added to an fpga-region.
+  *
+  * Returns NOTIFY_OK or error if FPGA programming fails.
   */
- void fpga_region_free(struct fpga_region *region)
-@@ -257,7 +257,7 @@ static void devm_fpga_region_release(struct device *dev, void *res)
-  * @mgr: manager that programs this region
-  * @get_bridges: optional function to get bridges to a list
-  *
-- * This function is intended for use in a FPGA region driver's probe function.
-+ * This function is intended for use in an FPGA region driver's probe function.
-  * After the region driver creates the region struct with
-  * devm_fpga_region_create(), it should register it with fpga_region_register().
-  * The region driver's remove function should call fpga_region_unregister().
-@@ -291,7 +291,7 @@ struct fpga_region
- EXPORT_SYMBOL_GPL(devm_fpga_region_create);
- 
- /**
-- * fpga_region_register - register a FPGA region
-+ * fpga_region_register - register an FPGA region
-  * @region: FPGA region
-  *
-  * Return: 0 or -errno
-@@ -303,10 +303,10 @@ int fpga_region_register(struct fpga_region *region)
- EXPORT_SYMBOL_GPL(fpga_region_register);
- 
- /**
-- * fpga_region_unregister - unregister a FPGA region
-+ * fpga_region_unregister - unregister an FPGA region
-  * @region: FPGA region
-  *
-- * This function is intended for use in a FPGA region driver's remove function.
-+ * This function is intended for use in an FPGA region driver's remove function.
-  */
- void fpga_region_unregister(struct fpga_region *region)
- {
 -- 
 2.26.3
 
