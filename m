@@ -2,61 +2,64 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A573A04B0
-	for <lists+linux-fpga@lfdr.de>; Tue,  8 Jun 2021 21:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B603A04B2
+	for <lists+linux-fpga@lfdr.de>; Tue,  8 Jun 2021 21:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234430AbhFHT5H (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 8 Jun 2021 15:57:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30731 "EHLO
+        id S234575AbhFHT5K (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 8 Jun 2021 15:57:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52211 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233989AbhFHT5G (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Jun 2021 15:57:06 -0400
+        by vger.kernel.org with ESMTP id S233989AbhFHT5J (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Jun 2021 15:57:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623182112;
+        s=mimecast20190719; t=1623182114;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
         bh=g/+OD7OvS+76UUwXsW39r3R0qwsEt76jbnvntpEkAgY=;
-        b=SDRWthhL61IjPb9M8bYDVk+PSOrMVCZU7hF3r5pwUytroEJHPRwMOblYaz0e+LjH6zVdRy
-        MibAQBpXSDkueatIfIH48PYLYfs7/YfUdjzfkMstIWVO0OHI/sxf/ejuD55ON7Mce5/a6T
-        +wVdC5rdccI5NMxZyNSWb5N6VP24vNA=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-404-sPSQp9gCNiaqRSTJlZpZlA-1; Tue, 08 Jun 2021 15:55:11 -0400
-X-MC-Unique: sPSQp9gCNiaqRSTJlZpZlA-1
-Received: by mail-oi1-f200.google.com with SMTP id l1-20020a5441010000b02901ecd2ee1861so8844465oic.13
-        for <linux-fpga@vger.kernel.org>; Tue, 08 Jun 2021 12:55:11 -0700 (PDT)
+        b=fvWULo9U34E9ALDSFekk1wc4rqdRJ+Q8l6h5zQb+YdT9OCdLGMM+eX9dv0sZg/OsLGj8/v
+        qA+Q47TSE42T++LvfsNjlek5YIOoL6KKOeSI2VN35Q0hqpY4BAKMRw8lB1mEVDXQXJtk/z
+        9MKbwCTDlaLqkPU8dmeFxXBMUebTjBQ=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-581-J04B-VfgNS6XJD4BmVQfJg-1; Tue, 08 Jun 2021 15:55:13 -0400
+X-MC-Unique: J04B-VfgNS6XJD4BmVQfJg-1
+Received: by mail-ot1-f70.google.com with SMTP id q20-20020a9d7c940000b02903f5a4101f8eso1848076otn.17
+        for <linux-fpga@vger.kernel.org>; Tue, 08 Jun 2021 12:55:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
         bh=g/+OD7OvS+76UUwXsW39r3R0qwsEt76jbnvntpEkAgY=;
-        b=N0eGBgmmZ7ZsgPqi5n82RxoYZwlL8rh2Mxz4REYUEpPmn8Dq+P6AiaCDhZ+EQvVGd/
-         QXvpuuGkHWST8QIIwU3Wsoux7YYmJ+2EULkGqPW+UsU06q0vq+LLRLlDggR/BCSkUJnn
-         9eF4OcQRV1XW5SrquMwKS+neyCzTFkbIHq18SL2coSWHTtbdNNxU7QAl5q88beflDAzv
-         ZMsDsM2sP2tSlElKSxBFhAs9aVPnnbZYNn7HQPiEUqsc7ubWYPs9JKGEBgnwv3SHYRET
-         OgSFU53batYyZrO7uuYri/x2MbSIDDaCv1TsG/OPDv3my85JyLE9byDzNMMvmIbQJVwB
-         o7ig==
-X-Gm-Message-State: AOAM533P6uEmQq3+ez3aaj4zi/9oBoXazxZDl1Tyfrz5WxSR+dEad1uM
-        seJenSt1BTCZhrrNYI0MKIFUeTcgU5oNCW0v995Ek124ef3vGwf2Z+R/nE1qxUuLUJmcFVaINhJ
-        lwlwJDBcozxcZ3rj9FTTcTA==
-X-Received: by 2002:a4a:a843:: with SMTP id p3mr18458764oom.29.1623182111169;
-        Tue, 08 Jun 2021 12:55:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz7iFsOk+xHbLD3KsS/d+cS++jYnbcHd1SPwdO/kpmBt2w1RQcd/Tt8SvWaTnz4Ft10DJ6acg==
-X-Received: by 2002:a4a:a843:: with SMTP id p3mr18458754oom.29.1623182110927;
-        Tue, 08 Jun 2021 12:55:10 -0700 (PDT)
+        b=kdrZPAoGTNomx0POIF8joN6/8rbG1D/pysPlnjLcm+oLdgL2Gcj4YSgwHGsEBDo6cD
+         AnfxgkzAkeM7SebhCxykbs2QYfFnjpITgERPluFpB9XgDH8+TFi/4Dbh7nj18ahDzxov
+         Z96eaOMEjahCEKcIyXLWaC0yh/EsS2ugbwce8tBI1/8Cc4VTTNBD+Gxy7LoKjFKq4p9D
+         D7AUoiquQ3mSY5RxLgw8Ef6e2pSTNneTuZMkRafaYYSowZVat0jNd2UVXJ3qTdpNMpH2
+         QTCgPB2ZQIOrF2p4iTFfpmvTTlgmEuFWzxmSO0rTmTiPybjw980XymM3bblRrNPvPLP8
+         dfOA==
+X-Gm-Message-State: AOAM532D2LOf13bd09WxAh09fCHGTulhgq8JbMz2dwO1s5CK/NM/frxM
+        NVHX8P5GpX4KNZm3qeE2w7+C5gPEGpBN8/XuSOGsYptJ7DINH3iuUnttNOs0iztKyqzolPMEyo4
+        n4W944avgh96zQZVurfghGw==
+X-Received: by 2002:aca:5b8b:: with SMTP id p133mr3992484oib.75.1623182112432;
+        Tue, 08 Jun 2021 12:55:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwbDl4SpSap74DUV7pafZUncOFUOrU/Cz2F9tkGN+Hxjt6lNnqX1mltU/vlxo0GVifoqg5pNA==
+X-Received: by 2002:aca:5b8b:: with SMTP id p133mr3992474oib.75.1623182112286;
+        Tue, 08 Jun 2021 12:55:12 -0700 (PDT)
 Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id s17sm3024046oog.31.2021.06.08.12.55.09
+        by smtp.gmail.com with ESMTPSA id s17sm3024046oog.31.2021.06.08.12.55.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 12:55:10 -0700 (PDT)
+        Tue, 08 Jun 2021 12:55:12 -0700 (PDT)
 From:   trix@redhat.com
 To:     hao.wu@intel.com, mdf@kernel.org, michal.simek@xilinx.com
 Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, Tom Rix <trix@redhat.com>
 Subject: [PATCH v2 0/7]  wrappers for fpga_manager_ops
-Date:   Tue,  8 Jun 2021 12:54:58 -0700
-Message-Id: <20210608195506.3022550-1-trix@redhat.com>
+Date:   Tue,  8 Jun 2021 12:54:59 -0700
+Message-Id: <20210608195506.3022550-2-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
+In-Reply-To: <20210608195506.3022550-1-trix@redhat.com>
+References: <20210608195506.3022550-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
