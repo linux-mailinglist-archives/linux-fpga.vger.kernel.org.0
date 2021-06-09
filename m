@@ -2,68 +2,87 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C17A43A1D8C
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 21:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9613A1FDA
+	for <lists+linux-fpga@lfdr.de>; Thu, 10 Jun 2021 00:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbhFITSQ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 9 Jun 2021 15:18:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58638 "EHLO mail.kernel.org"
+        id S229626AbhFIWQc (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 9 Jun 2021 18:16:32 -0400
+Received: from mga18.intel.com ([134.134.136.126]:22619 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229548AbhFITSP (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 9 Jun 2021 15:18:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E32F613D4;
-        Wed,  9 Jun 2021 19:16:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623266165;
-        bh=4cqLWh1ppp/hZrwvpFtKbyel9fKraZQyl4S5GrUmaVI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FA0IuT82Kmgb26c4HTEsXhhtvzA+EzUysDU8lXY0+Kh9VkRo5vsJ8K8o+83kTaSBK
-         83h9SUNVw+pEmcWmhu42J42Rq9Loxp1JkA/ihTPv3Wb/CrbSPv27GI+R3J2uRAX1U1
-         yRpYkVqhuHlOYypXxehed+CqsD/H0UoDc/OuZ3WY=
-Date:   Wed, 9 Jun 2021 21:16:02 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
-        nava.manne@xilinx.com, dinguyen@kernel.org,
-        krzysztof.kozlowski@canonical.com, yilun.xu@intel.com,
-        arnd@arndb.de, fpacheco@redhat.com, richard.gong@intel.com,
-        luca@lucaceresoli.net, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 0/4] fpga: reorganize to subdirs
-Message-ID: <YMETcualK2uPMLMc@kroah.com>
-References: <20210609142208.3085451-1-trix@redhat.com>
- <YMDV7R52QUTFhpHH@kroah.com>
- <2738ee7a-448f-c327-c430-13fb44da45ec@redhat.com>
- <YMDueTEHGWuAcknP@kroah.com>
- <a35f5fda-a202-dc66-4445-b3ce333a55e6@redhat.com>
- <YMD2yxtsQN16MoPA@kroah.com>
- <aba774cb-1135-26aa-6e20-3c00b4e269ac@redhat.com>
+        id S229535AbhFIWQc (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 9 Jun 2021 18:16:32 -0400
+IronPort-SDR: 777KI1wEZMDr7oxaxYj1JIztjpkkJYKPI8Hgh+caA34GHdZnTsvjzm2hbVH4sTVjx9Y/zX1eZx
+ hvBoxr4yepFA==
+X-IronPort-AV: E=McAfee;i="6200,9189,10010"; a="192496199"
+X-IronPort-AV: E=Sophos;i="5.83,261,1616482800"; 
+   d="scan'208";a="192496199"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 15:14:36 -0700
+IronPort-SDR: ttnncI97L8gVHkR2zaFnqmQj+eDhTue+DO9OhtwhPfMRUHVqsbdZ4UPdIf8M6ndDzroI7kUT6r
+ tofEm0SuibZQ==
+X-IronPort-AV: E=Sophos;i="5.83,261,1616482800"; 
+   d="scan'208";a="477095291"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.251.20.114])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 15:14:35 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        richard.gong@intel.com, Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v2 0/8] fpga: Populate dev_release functions
+Date:   Wed,  9 Jun 2021 15:11:27 -0700
+Message-Id: <20210609221135.261837-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aba774cb-1135-26aa-6e20-3c00b4e269ac@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 11:52:44AM -0700, Tom Rix wrote:
-> > My main complaints here are:
-> > 	- these patches were not tested
-> > 	- you renamed kernel modules "accidentally"
-> > 	- you forgot SPDX lines
-> > 	- lack of description of why these files being moved was
-> > 	  necessary in the changelog where you moved the files
-> > 
-> > Remember, patch 0/X never shows up in changelogs...
-> 
-> I will respin and collapse the patches to a single patch with a better
-> commit log.
+The FPGA framework has a convention of using managed resource functions
+to allow parent drivers to manage the data structures allocated by the
+class drivers. They use an empty *_dev_release() function to satisfy the
+class driver.
 
-They should not be a single patch, I never said that at all :(
+This is inconsistent with linux driver model.
 
-Please read what I wrote above, did I ever mention there was too many
-patches in the series here?
+This is a complete re-do of the previous patch set entitled
+"fpga: Use standard class dev_release function". These changes populate the
+class dev_release callback functions while maintaining the current API.
+Additional changes are made to maintain consistency with the driver model.
 
-{sigh}
+For more context on these changes, refer to this email thread:
 
-greg k-h
+https://marc.info/?l=linux-fpga&m=162127412218557&w=2
+
+Changelog v1 -> v2:
+  - Moved the renaming of "dev" to "parent" into a separate patch each for
+    fpga-mgr, fpga-bridge, fpga-region.
+  - Restored the call to fpga_mgr_free() in devm_*_mgr_release() instead of 
+    changing it to put_device().
+  - Replaced patch "fpga: altera-pr-ip: Remove function alt_pr_unregister"
+    with "fpga: altera-pr-ip: Remove function alt_pr_unregister". This patch
+    removes the alt_pr_unregister() function altogether, instead of just
+    removing portions of it.
+
+Russ Weight (8):
+  fpga: altera-pr-ip: Remove function alt_pr_unregister
+  fpga: stratix10-soc: Add missing fpga_mgr_free() call
+  fpga: mgr: Rename dev to parent for parent device
+  fpga: bridge: Rename dev to parent for parent device
+  fpga: region: Rename dev to parent for parent device
+  fpga: mgr: Use standard dev_release for class driver
+  fpga: bridge: Use standard dev_release for class driver
+  fpga: region: Use standard dev_release for class driver
+
+ drivers/fpga/altera-pr-ip-core.c       | 10 -----
+ drivers/fpga/fpga-bridge.c             | 46 ++++++++++-----------
+ drivers/fpga/fpga-mgr.c                | 55 ++++++++++++--------------
+ drivers/fpga/fpga-region.c             | 44 ++++++++++-----------
+ drivers/fpga/stratix10-soc.c           |  1 +
+ include/linux/fpga/altera-pr-ip-core.h |  1 -
+ 6 files changed, 71 insertions(+), 86 deletions(-)
+
+-- 
+2.25.1
+
