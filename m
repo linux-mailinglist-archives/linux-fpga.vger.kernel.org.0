@@ -2,80 +2,59 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9573A10B4
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 12:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A22173A10BE
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 12:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234881AbhFIJ6L (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 9 Jun 2021 05:58:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43352 "EHLO mail.kernel.org"
+        id S235907AbhFIKAH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 9 Jun 2021 06:00:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44104 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232603AbhFIJ6K (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 9 Jun 2021 05:58:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D08561375;
-        Wed,  9 Jun 2021 09:56:15 +0000 (UTC)
+        id S235816AbhFIKAG (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 9 Jun 2021 06:00:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 53BAC61108;
+        Wed,  9 Jun 2021 09:58:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623232575;
-        bh=ZsqaPYIxcSGMqTlGO1r0h5iys19QXtf4kaWe+9Nbfvs=;
+        s=korg; t=1623232691;
+        bh=LVMyo9Spr1AN6Nc0PzUAUPSDefGf1/zfkI5i4p5A0wA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RLlyBX2LsAFkg6J4J6/N1Y+FhwPDdu1On1QPgKFCTsUwluclQc0mI4eYTmudOD/9h
-         HwOfV6g992PuO16nE5c6yiuOxJcBWGNmJGwgLInxKEK3yMKYOYptFeJ2hZQYjzLyB9
-         o2C0L1aKd/MGYxGQKvcT0354ZA/ue+KNe/9XWqQU=
-Date:   Wed, 9 Jun 2021 11:56:13 +0200
+        b=nPqr1if+FmVXU775yqSylEGz1BATyFjDIJlwoR356hJWeymL/EKsXJb2ETjze/tJP
+         OMtXuWlPpB1oeeqC8OBJRKW6+KPNlgzgko7lWhHWncZMuPUh4bhCMzTO3y9BIEiRqp
+         0JGSjIxZ/nbWwsTx+lR3LBCzIc1Ervy2TORdmItQ=
+Date:   Wed, 9 Jun 2021 11:58:09 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     robh+dt@kernel.org, michal.simek@xilinx.com, mdf@kernel.org,
-        trix@redhat.com, arnd@arndb.de, rajan.vaja@xilinx.com,
-        amit.sunil.dhamne@xilinx.com, tejas.patel@xilinx.com,
-        zou_wei@huawei.com, lakshmi.sai.krishna.potthuri@xilinx.com,
-        ravi.patel@xilinx.com, iwamatsu@nigauri.org,
-        wendy.liang@xilinx.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, git@xilinx.com,
-        chinnikishore369@gmail.com
-Subject: Re: [RFC v2 2/4] fpga: Add new property to support user-key
- encrypted bitstream loading
-Message-ID: <YMCQPeGE2gR6QD85@kroah.com>
-References: <20210609055232.4501-1-nava.manne@xilinx.com>
- <20210609055232.4501-3-nava.manne@xilinx.com>
+To:     trix@redhat.com
+Cc:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net,
+        michal.simek@xilinx.com, dinguyen@kernel.org,
+        krzysztof.kozlowski@canonical.com, nava.manne@xilinx.com,
+        yilun.xu@intel.com, davidgow@google.com, fpacheco@redhat.com,
+        richard.gong@intel.com, luca@lucaceresoli.net,
+        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 0/7] fpga: reorganize to subdirs
+Message-ID: <YMCQsboQRTQd/AF7@kroah.com>
+References: <20210608162340.3010204-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210609055232.4501-3-nava.manne@xilinx.com>
+In-Reply-To: <20210608162340.3010204-1-trix@redhat.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 11:22:30AM +0530, Nava kishore Manne wrote:
-> This patch Adds ‘encrypted-key-name’ property to
-> support user-key encrypted bitstream loading
-> use case.
+On Tue, Jun 08, 2021 at 09:23:32AM -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 > 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> ---
-> Changes for v2:
->                 -Both DT properties ie; encrypted-key-name and encrypted-user-key-fpga-config
->                  are targeted to use for the same use cases but ideally encrypted-key-name
->                  is enough to serve the purpose so updated the file to remove the unwanted
->                  encrypted-user-key-fpga-config property as suggested by Rob.
-> 
->  Documentation/devicetree/bindings/fpga/fpga-region.txt | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt b/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> index d787d57491a1..0de4a1c54650 100644
-> --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> @@ -177,6 +177,9 @@ Optional properties:
->  	it indicates that the FPGA has already been programmed with this image.
->  	If this property is in an overlay targeting a FPGA region, it is a
->  	request to program the FPGA with that image.
-> +- encrypted-key-name : should contain the name of an encrypted key file located
-> +	on the firmware search path. It will be used to decrypt the FPGA image
-> +	file with user-key.
+> The incoming xrt patchset has a toplevel subdir xrt/
+> The current fpga/ uses a single dir with filename prefixes to subdivide owners
+> For consistency, there should be only one way to organize the fpga/ dir.
+> Because the subdir model scales better, refactor to use it.
+> The discussion wrt xrt is here:
+> https://lore.kernel.org/linux-fpga/68e85a4f-4a10-1ff9-0443-aa565878c855@redhat.com/
 
-What is the format this "user-key" is in?  Where is the documentation
-for how to use this type of thing?
+Your series was odd, patches 6 and 7 were not threaded properly.
+
+Please fix up your emailer and resend so that tools can correctly pick
+them up automatically.
 
 thanks,
 
