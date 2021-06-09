@@ -2,53 +2,54 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F18723A1705
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 16:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487BD3A1706
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 16:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236269AbhFIOYd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        id S234846AbhFIOYd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
         Wed, 9 Jun 2021 10:24:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36749 "EHLO
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21751 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235827AbhFIOYO (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 9 Jun 2021 10:24:14 -0400
+        by vger.kernel.org with ESMTP id S237819AbhFIOYT (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 9 Jun 2021 10:24:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623248539;
+        s=mimecast20190719; t=1623248544;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
         bh=pJmqxzT8uSof7JvXwU0e58Z2K6C1TfI+K5YVC+evFiE=;
-        b=D/mzUEavIITh10R2gCJcBw/XMOIzhFkXFcWsRBNMU7n/BX7c907Ut1jC3fPNuEVFqdmItT
-        k3M3993zdFIussuDudiC9UWbQ0W5njRNYXoEe/dbVr2GNNXsc7lB+DWOOBotZQA2PiyTMC
-        Yqy5pjJ/lxAUm8wpsbifC6LfqBIIk0U=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-143-soub762JNMqwNGdY4dw7AQ-1; Wed, 09 Jun 2021 10:22:18 -0400
-X-MC-Unique: soub762JNMqwNGdY4dw7AQ-1
-Received: by mail-oo1-f72.google.com with SMTP id n62-20020a4a53410000b0290246a4799849so15009344oob.8
-        for <linux-fpga@vger.kernel.org>; Wed, 09 Jun 2021 07:22:18 -0700 (PDT)
+        b=WJjyO/H5WvGzZEHaQzTdG6zqS5PcJqKPeYfnmwaFMsulR53ZnK3V4ZJn5+DGSte2KXfU7x
+        ehXB8GykGfVTQ3bLmqX1jTExKHOkGs9aF1BF0qoA7sMsyG8lFsPDwKnNp6el4veVANMC/n
+        Bgpyb5a/CpJ6n4BHQElIgbe8e59AGZY=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-46-3gzJL0RzNSaNqptD6NdBfA-1; Wed, 09 Jun 2021 10:22:22 -0400
+X-MC-Unique: 3gzJL0RzNSaNqptD6NdBfA-1
+Received: by mail-ot1-f71.google.com with SMTP id x2-20020a9d62820000b02902e4ff743c4cso16388338otk.8
+        for <linux-fpga@vger.kernel.org>; Wed, 09 Jun 2021 07:22:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
         bh=pJmqxzT8uSof7JvXwU0e58Z2K6C1TfI+K5YVC+evFiE=;
-        b=rDKANwsd3dwcxE67WeXg9tCM6CcQsCuB+Z3l36cdDti0iZzxoTLPKIOtVXBf54dlbj
-         WHWH949dU6Ty4tXcPy+U6IXzCTP20YEMRKd8MVNxMotBi/98jyN5ODEFT7YDPyq11Xpa
-         TsMgw/YcCmTZTJYEHB7Drm9R5sRSQNbgQumDcSUBvlDnJ/te6EnOxAGJVSKlK5mPAyRB
-         n5sU2f5GcCbpdRt1lrUNrpnCYO0ZQcFmaMT6ule+nPP3DGQ9WiUJoEnDpsFVbydfxMmP
-         Q7jr0atd9j50YBSBPSAnt+tOlOm0ojUd9WqiA46y6JmoCau3+BGyOgmpu77gG/GwGpu9
-         TPfw==
-X-Gm-Message-State: AOAM533otvDrmP3qtv7s5QodeGDDbCeiTWDoxBQ1xmdIChbG6rFvddxG
-        xFKw9dGkRxC2NSCuenH0nGNa4mBnTLiC5h/ynmHvjaYn9Pxn8zy+3y3xSKZooyARhZ4TamTHCVb
-        ozCOfiHQ2Vakkx5S3k+h5WA==
-X-Received: by 2002:a54:4692:: with SMTP id k18mr6628944oic.118.1623248537329;
-        Wed, 09 Jun 2021 07:22:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxtTQNkYbadoKGH9x829Ut7eBbGhSJab/deluCz5u6zv1Bar6KI8Zg7PNZ+5UFKoVUqd1XH+g==
-X-Received: by 2002:a54:4692:: with SMTP id k18mr6628919oic.118.1623248537059;
-        Wed, 09 Jun 2021 07:22:17 -0700 (PDT)
+        b=ahhCjg8Zv0mkklvLLLFWuanhIi0gKaOypI4HZCRFHFZDfkq6KOwKHyeKhZNI6RvNaR
+         3NGILhy09PTMmP2sfsOl1etKHHj+TwWk+oK6aAykqlP9lnLN8BX9UgLyz2u0v1IEBTPt
+         Vf6rSV4vYZhX8G3nPRMk7L7nPjD2K2cHvaBYwgM37zcp1D9m6vHTNtXTKquR7R5sZyrU
+         3gteipthQLlM6SfW9Wh0mL/N8QoOaX1jjyGSB0n/bCjzPf1lJv4FM4Hf/p1/ZlCLAOP+
+         P8ox523V53fVh7+zLMhJmn5YsVldfUsrOCz5915AIPsGWLHlFPhi7BSLvjfZAWbsH5tK
+         +eZg==
+X-Gm-Message-State: AOAM533/oWJT8psVvazF07W6EeKgNhteugFvvXTNJU6gaKsCzfBFepqT
+        fcHqnCCnFuq/Avl90GTFt9DwbfdCt3OJeOhu7Gdr3JQ0YLXKzdXnZXUTBBsYvkEwGnbyaACQQg4
+        rC7sXeXRTh0ebS6MyIRbziw==
+X-Received: by 2002:a4a:c190:: with SMTP id w16mr131545oop.92.1623248541582;
+        Wed, 09 Jun 2021 07:22:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxu1WpD4Vw2H8PHe3Y+K4jIkppLYRuWDkmuN8flEkgAaKSMsHNxNDUIeMWZ0aGs6vcS4v0ofw==
+X-Received: by 2002:a4a:c190:: with SMTP id w16mr131529oop.92.1623248541400;
+        Wed, 09 Jun 2021 07:22:21 -0700 (PDT)
 Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id o4sm3414432oon.15.2021.06.09.07.22.15
+        by smtp.gmail.com with ESMTPSA id o4sm3414432oon.15.2021.06.09.07.22.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jun 2021 07:22:16 -0700 (PDT)
+        Wed, 09 Jun 2021 07:22:21 -0700 (PDT)
 From:   trix@redhat.com
 To:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
         gregkh@linuxfoundation.org, nava.manne@xilinx.com,
@@ -58,9 +59,11 @@ To:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
 Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, Tom Rix <trix@redhat.com>
 Subject: [PATCH v2 0/4]  fpga: reorganize to subdirs
-Date:   Wed,  9 Jun 2021 07:22:03 -0700
-Message-Id: <20210609142208.3085451-1-trix@redhat.com>
+Date:   Wed,  9 Jun 2021 07:22:04 -0700
+Message-Id: <20210609142208.3085451-2-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
+In-Reply-To: <20210609142208.3085451-1-trix@redhat.com>
+References: <20210609142208.3085451-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
