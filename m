@@ -1,53 +1,79 @@
 Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3AED3A183A
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 16:57:08 +0200 (CEST)
+Received: from vger.kernel.org (unknown [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id A996D3A1841
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 16:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238644AbhFIO6i (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 9 Jun 2021 10:58:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34520 "EHLO mail.kernel.org"
+        id S238871AbhFIO73 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 9 Jun 2021 10:59:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34874 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238616AbhFIO6f (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 9 Jun 2021 10:58:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 79A86611CC;
-        Wed,  9 Jun 2021 14:56:40 +0000 (UTC)
+        id S238713AbhFIO7N (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 9 Jun 2021 10:59:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DB43F611CC;
+        Wed,  9 Jun 2021 14:57:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623250601;
-        bh=QcXcoCHqRToiVYjGJQBeuWzSgQGC9WmgZbjg7vHhcf0=;
+        s=korg; t=1623250628;
+        bh=PoYwI9DjnEQh9Wl4w4xBqnWBXjC1LGAiHsJEEJ6mXGA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1w8BXspqXRnYPh6n2ZfBZboVrc3s7W0W3QJrs/oQQID1Z4WpwuAll2UHLCmQYU7J6
-         HN16/qu2APsuaqs28SpK15C2TmL1g8zjhlJjG+jvxJp34qwo0HLPsQoizs/VRtPcHt
-         FwR7NUM+1LZWb4yqcVOyVboX0deQV5U9yc96o2b8=
-Date:   Wed, 9 Jun 2021 16:56:38 +0200
+        b=cuXuDESBH4coEGxFrqh46LUUazB5vkj5TUfBOfEmOQ+WXJSt7Dx5gajXLLigJQnh8
+         eZj4jicxM7b5l6eQc4ZydlAStTCbKTkBwfe58PKnMKNcquIB5Uc/qv6URGWz0n6QFF
+         sD3iB5RGzTvAU92hIOkS9u+LQeVt25AbJo5FxFZ4=
+Date:   Wed, 9 Jun 2021 16:57:06 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     trix@redhat.com
-Cc:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
-        nava.manne@xilinx.com, dinguyen@kernel.org,
-        krzysztof.kozlowski@canonical.com, yilun.xu@intel.com,
-        arnd@arndb.de, fpacheco@redhat.com, richard.gong@intel.com,
-        luca@lucaceresoli.net, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 4/4] fpga: lattice: reorganize to subdir layout
-Message-ID: <YMDWpgO0ejNfUEKJ@kroah.com>
-References: <20210609142208.3085451-1-trix@redhat.com>
- <20210609142208.3085451-6-trix@redhat.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     mdf@kernel.org, michal.simek@xilinx.com, nava.manne@xilinx.com,
+        luca@lucaceresoli.net, linux-fpga@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/7] fpga: xilinx: remove xilinx- prefix on files
+Message-ID: <YMDWwjnCAMNMH94W@kroah.com>
+References: <20210608162551.3010533-1-trix@redhat.com>
+ <YMCQ9rNKAtXaCiuw@kroah.com>
+ <ec407ae2-ea5a-5c97-aea6-1ba2451116b7@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210609142208.3085451-6-trix@redhat.com>
+In-Reply-To: <ec407ae2-ea5a-5c97-aea6-1ba2451116b7@redhat.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 07:22:08AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On Wed, Jun 09, 2021 at 06:27:05AM -0700, Tom Rix wrote:
 > 
-> Create a lattice/ subdir
-> Move ice40* and machxo2* files to it.
-> Add a Kconfig and Makefile
+> On 6/9/21 2:59 AM, Greg KH wrote:
+> > On Tue, Jun 08, 2021 at 09:25:51AM -0700, trix@redhat.com wrote:
+> > > From: Tom Rix <trix@redhat.com>
+> > > 
+> > > It is not necessary to have a xilinx- prefix on a file
+> > > when the file is in a xilinx/ subdir.
+> > > 
+> > > Signed-off-by: Tom Rix <trix@redhat.com>
+> > > ---
+> > >   drivers/fpga/xilinx/Makefile                                  | 4 ++--
+> > >   drivers/fpga/xilinx/{xilinx-pr-decoupler.c => pr-decoupler.c} | 0
+> > >   drivers/fpga/xilinx/{xilinx-spi.c => spi.c}                   | 0
+> > >   3 files changed, 2 insertions(+), 2 deletions(-)
+> > >   rename drivers/fpga/xilinx/{xilinx-pr-decoupler.c => pr-decoupler.c} (100%)
+> > >   rename drivers/fpga/xilinx/{xilinx-spi.c => spi.c} (100%)
+> > > 
+> > > diff --git a/drivers/fpga/xilinx/Makefile b/drivers/fpga/xilinx/Makefile
+> > > index 7bb7543412790..4ac727d03e140 100644
+> > > --- a/drivers/fpga/xilinx/Makefile
+> > > +++ b/drivers/fpga/xilinx/Makefile
+> > > @@ -1,7 +1,7 @@
+> > >   # SPDX-License-Identifier: GPL-2.0
+> > > -obj-$(CONFIG_XILINX_PR_DECOUPLER) += xilinx-pr-decoupler.o
+> > > -obj-$(CONFIG_FPGA_MGR_XILINX_SPI) += xilinx-spi.o
+> > > +obj-$(CONFIG_XILINX_PR_DECOUPLER) += pr-decoupler.o
+> > > +obj-$(CONFIG_FPGA_MGR_XILINX_SPI) += spi.o
+> > You just renamed the module to be called "spi.ko"????
+> > 
+> > Did you test this thing?  You can not rename modules without good
+> > reasons, and calling a device specific kernel module "spi.ko" is not ok.
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> yes, this is a problem, I will drop the renaming patches.
 
-And again, no SPDX line :(
+So you didn't test these?
+
+Again, why is this file movement necessary?
