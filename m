@@ -2,63 +2,69 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EED453A10C9
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 12:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B755B3A152E
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 15:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238548AbhFIKCg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 9 Jun 2021 06:02:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45236 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236044AbhFIKCg (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 9 Jun 2021 06:02:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 61E986128A;
-        Wed,  9 Jun 2021 10:00:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623232841;
-        bh=IrNl7vfYlp+saZHXReXLrhcdAC1w3K2DQvXRBiZoqE4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1BOCOjMr/rJivnL5uoCS+hChPU6Hs9/5OpwrwnY6ZIDDKPOy+BFK2Ch460O+JcniA
-         C9jPf3kC6NRCFFhISSDMPa3sAciPL4t1dy35eVu4rrd53EVRwa3vUAT+dn/6za47LV
-         pFEKGY1X8QjnGTRPQdZPWHsjiFH8MGNpgr5HTuNo=
-Date:   Wed, 9 Jun 2021 12:00:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     trix@redhat.com
-Cc:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net,
-        michal.simek@xilinx.com, dinguyen@kernel.org,
-        krzysztof.kozlowski@canonical.com, nava.manne@xilinx.com,
-        yilun.xu@intel.com, davidgow@google.com, fpacheco@redhat.com,
-        richard.gong@intel.com, luca@lucaceresoli.net,
-        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/7] fpga: reorganize to subdirs
-Message-ID: <YMCRRm/lB2+gfpS9@kroah.com>
-References: <20210608162340.3010204-1-trix@redhat.com>
- <20210608162340.3010204-2-trix@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210608162340.3010204-2-trix@redhat.com>
+        id S232656AbhFINNk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 9 Jun 2021 09:13:40 -0400
+Received: from flippie-beckerswealthsa.xyz ([62.173.138.170]:57986 "EHLO
+        host.flippie-beckerswealthsa.xyz" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231379AbhFINNk (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 9 Jun 2021 09:13:40 -0400
+X-Greylist: delayed 3171 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Jun 2021 09:13:39 EDT
+Received: from flippie-beckerswealthsa.xyz (ec2-18-118-29-154.us-east-2.compute.amazonaws.com [18.118.29.154])
+        by host.flippie-beckerswealthsa.xyz (Postfix) with ESMTPA id A7B7D30C3AB7
+        for <linux-fpga@vger.kernel.org>; Wed,  9 Jun 2021 15:09:32 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealthsa.xyz A7B7D30C3AB7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippie-beckerswealthsa.xyz; s=default; t=1623240573;
+        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=i0l8i1KLdnFSvtk5wfslpJGywdloCfF3Hx7cr+HBXbH48Tuoukd9zTwv9pskku/qd
+         fXeqL1yoRXuNsI6zu9GKNS6RM4g9oNjJGFeyu9OZrhp4tUjbKbw+j4M3WSWz7qmw8v
+         Txz876rnYUlqqmHta6Jd6WNjuAkrpDih6aGfGJcU=
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealthsa.xyz A7B7D30C3AB7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippie-beckerswealthsa.xyz; s=default; t=1623240573;
+        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=i0l8i1KLdnFSvtk5wfslpJGywdloCfF3Hx7cr+HBXbH48Tuoukd9zTwv9pskku/qd
+         fXeqL1yoRXuNsI6zu9GKNS6RM4g9oNjJGFeyu9OZrhp4tUjbKbw+j4M3WSWz7qmw8v
+         Txz876rnYUlqqmHta6Jd6WNjuAkrpDih6aGfGJcU=
+Reply-To: jmasuku40@flippiebeckerwealthservices.com
+From:   Jotham Masuku <jmasuku40@flippie-beckerswealthsa.xyz>
+To:     linux-fpga@vger.kernel.org
+Subject: Projects
+Date:   09 Jun 2021 12:09:32 +0000
+Message-ID: <20210609120932.12797B114BA8556D@flippie-beckerswealthsa.xyz>
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 09:23:33AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> The incoming xrt patchset has a toplevel subdir xrt/
-> The current fpga/ uses a single dir with filename prefixes to subdivide owners
-> For consistency, there should be only one way to organize the fpga/ dir.
-> Because the subdir model scales better, refactor to use it.
-> The discussion wrt xrt is here:
-> https://lore.kernel.org/linux-fpga/68e85a4f-4a10-1ff9-0443-aa565878c855@redhat.com/
-> 
-> Follow drivers/net/ethernet/ which has control configs
-> NET_VENDOR_BLA that map to drivers/net/ethernet/bla
-> Since fpgas do not have many vendors, drop the 'VENDOR' and use
-> FPGA_BLA.
+Hello there,
 
-Why did we get two 0/7 emails?
+I hope this message finds you in good spirits especially during=20
+this challenging time of coronavirus pandemic. I hope you and=20
+your family are well and keeping safe. Anyway, I am Jotham=20
+Masuku, a broker working with Flippiebecker Wealth. I got your=20
+contact (along with few other contacts) through an online=20
+business directory and I thought I should contact you to see if=20
+you are interested in this opportunity. I am contacting you=20
+because one of my high profile clients is interested in investing=20
+abroad and has asked me to look for individuals and companies=20
+with interesting business ideas and projects that he can invest=20
+in. He wants to invest a substantial amount of asset abroad.
 
-confused,
+Please kindly respond back to this email if you are interested in=20
+this opportunity. Once I receive your response, I will give you=20
+more details and we can plan a strategy that will be beneficial=20
+to all parties.
 
-greg k-h
+Best regards
+
+J Masuku
+Flippiebecker Wealth
