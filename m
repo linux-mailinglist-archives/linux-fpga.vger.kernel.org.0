@@ -2,111 +2,136 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 189C13A0A83
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 05:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509D63A0C03
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jun 2021 07:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbhFIDNP (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 8 Jun 2021 23:13:15 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27816 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233316AbhFIDNP (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Jun 2021 23:13:15 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1592Yljn166699;
-        Tue, 8 Jun 2021 23:10:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=XA2LuTKM6oytXDfyhlj9P6N1EyqEbVoRRxJ1vjn8jgc=;
- b=bLiCk1FtCU1F6m72Dk44bIJFumRDvGvlg2fqfyuWKdtHqeyisSOg0Ssi5jUy0EYvs60p
- p7bV5IHrSao073RmGCDxVCXX818TC6/xLLwqhefYKegxfikoO7UcSNfUcG18Cn1+aPRj
- UghMgSQQ/f9aXTIYUc2UNSl9ChjkW3VI+7+hVBBmUj+Pxa8dmJ8WoEJfnvjSwJMsGLw7
- ptC/ZuIHAImVOxRultXmhS1nBL3+KGVTfrU2+WmIYMJXxcF5iAmXWa/WsqJ4KzKMQTW/
- Ps34kkPPXz+8bJsSCYIkoZhz0+9SlQyjFSPxoaWmEtHdKedXYHrRi2yPsUNWJQAszQbh 6A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 392d7pkpsb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Jun 2021 23:10:57 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1592ZWrv168759;
-        Tue, 8 Jun 2021 23:10:57 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 392d7pkprx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Jun 2021 23:10:57 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1593AtHT020402;
-        Wed, 9 Jun 2021 03:10:55 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 3900w891e2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Jun 2021 03:10:55 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1593ArdC25625026
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Jun 2021 03:10:53 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 01D3942042;
-        Wed,  9 Jun 2021 03:10:53 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F1864203F;
-        Wed,  9 Jun 2021 03:10:52 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Jun 2021 03:10:52 +0000 (GMT)
-Received: from [9.206.155.145] (unknown [9.206.155.145])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 27FAB60134;
-        Wed,  9 Jun 2021 13:10:44 +1000 (AEST)
-Subject: Re: [PATCH 03/11] Documentation: ocxl.rst: change FPGA indirect
- article to an
-To:     trix@redhat.com, mdf@kernel.org, robh+dt@kernel.org,
-        hao.wu@intel.com, corbet@lwn.net, fbarrat@linux.ibm.com,
-        bbrezillon@kernel.org, arno@natisbad.org, schalla@marvell.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        gregkh@linuxfoundation.org, Sven.Auhagen@voleatech.de,
-        grandmaster@al2klimov.de
-Cc:     linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-crypto@vger.kernel.org,
-        linux-staging@lists.linux.dev
-References: <20210608212350.3029742-1-trix@redhat.com>
- <20210608212350.3029742-5-trix@redhat.com>
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-Message-ID: <01f22915-0a72-1d16-7a42-a6e870ccaec2@linux.ibm.com>
-Date:   Wed, 9 Jun 2021 13:10:39 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S233681AbhFIFyl (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 9 Jun 2021 01:54:41 -0400
+Received: from mail-dm6nam12on2059.outbound.protection.outlook.com ([40.107.243.59]:17888
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233313AbhFIFyk (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 9 Jun 2021 01:54:40 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SDFu8v0qBE3YjSvZwRdR0vg41Nckq5WvxHTKYzj0zacghCAGBjL/77b+6s3RipX3uF77ZTpcoPeHGKxXBH1ryb/h++6UUB7yULtTkUJVJhO+gxmHQ4fqSY8YwJnTXtWb+CkErV5djtx0WiFLhJvNOl40Puta08Ax5h/oQbNW82cfL7Ke+UTMIk6OKQmKpn5EgfbmdrzickU7YSuFUgFRU0yFFJKZZLbU3yY3KW5RAKFG06DJs8mHdTkei5/ey5DJsbSYR+VlxipemV5Z8/RcbmQdNCQkdoeePOv6g74N7leY8bKOdpY/h0Bx6JGQ7m/o8OSpnFDZIxxtHPVedWp5Kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f+sWMca+HmpV1WeEqoGoIbpNpxRRL1tyfW+QA5t717U=;
+ b=en75qR8ZOgnU8o1Rh5gWzKvuCVeb7amGyaKeqBCYk0x4Gy40q96Xs8QF7Gx94pf/d+JonQ07JMyqvNb4fFIW666NEdMsHNn5rpR2i0WIfJVXnjOCw4rFDeRjV8T9NqTVR4C3O7yungxuTtqQehItIGalW4lawauMEbIHIGzEEpVWdK4u50S6luT0IWpyngksp1wNQTz6Jc1cFbQBkShpMLPmsI+7MuiePSZxKxn5oRb3+vCXnDTHbZc5A1KsAAeEJocHyCjt/35ymMsLTAxd46S4SlBft8nfPyGG5FMt93E78aWitRbFvC31kEErPSaJPjrXN8UuQJpXU9Ai12cjGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f+sWMca+HmpV1WeEqoGoIbpNpxRRL1tyfW+QA5t717U=;
+ b=rAIn1xzdDcl/xnqW387VUNoxZxQTnusjz5foaYKb+vrfwTw+lmdThIMvYNTn3cqFCDeE9H+qryWjPkjnUUUoHPHQmyTX1fiOhAw9ANAxtW3lM4lOAg+HcY3ScbH+ZGZVwb8VLUouq0Gv8/Y2uMbaWIhXB4uc7yboJHR0FR1owLI=
+Received: from BN1PR13CA0021.namprd13.prod.outlook.com (2603:10b6:408:e2::26)
+ by SJ0PR02MB7150.namprd02.prod.outlook.com (2603:10b6:a03:29a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.20; Wed, 9 Jun
+ 2021 05:52:44 +0000
+Received: from BN1NAM02FT029.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:e2:cafe::61) by BN1PR13CA0021.outlook.office365.com
+ (2603:10b6:408:e2::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.12 via Frontend
+ Transport; Wed, 9 Jun 2021 05:52:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT029.mail.protection.outlook.com (10.13.2.143) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4195.18 via Frontend Transport; Wed, 9 Jun 2021 05:52:44 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 8 Jun 2021 22:52:42 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Tue, 8 Jun 2021 22:52:42 -0700
+Envelope-to: git@xilinx.com,
+ robh+dt@kernel.org,
+ mdf@kernel.org,
+ trix@redhat.com,
+ arnd@arndb.de,
+ gregkh@linuxfoundation.org,
+ zou_wei@huawei.com,
+ iwamatsu@nigauri.org,
+ devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ linux-fpga@vger.kernel.org,
+ chinnikishore369@gmail.com
+Received: from [10.140.6.60] (port=51918 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1lqr8r-0007H3-0d; Tue, 08 Jun 2021 22:52:41 -0700
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <robh+dt@kernel.org>, <michal.simek@xilinx.com>, <mdf@kernel.org>,
+        <trix@redhat.com>, <nava.manne@xilinx.com>, <arnd@arndb.de>,
+        <rajan.vaja@xilinx.com>, <gregkh@linuxfoundation.org>,
+        <amit.sunil.dhamne@xilinx.com>, <tejas.patel@xilinx.com>,
+        <zou_wei@huawei.com>, <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        <ravi.patel@xilinx.com>, <iwamatsu@nigauri.org>,
+        <wendy.liang@xilinx.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <git@xilinx.com>, <chinnikishore369@gmail.com>
+Subject: [RFC v2 0/4]Fpga: adds support to load the user-key encrypted FPGA Image loading
+Date:   Wed, 9 Jun 2021 11:22:28 +0530
+Message-ID: <20210609055232.4501-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20210608212350.3029742-5-trix@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rhKqRFJG-wMyLq05xrV-qvprdaqJmQuI
-X-Proofpoint-GUID: nFu8dFCLDDKqockFlSmj80mifT7sH7nq
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-09_01:2021-06-04,2021-06-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 clxscore=1011
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106090001
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 156d7224-e98e-46c8-54d0-08d92b0acd3f
+X-MS-TrafficTypeDiagnostic: SJ0PR02MB7150:
+X-Microsoft-Antispam-PRVS: <SJ0PR02MB7150FE50C40FDC91B90B6D9EC2369@SJ0PR02MB7150.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:2449;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c6Ozvt1vTPHFAV5Oq/TKcVKgayUFqm3frl1e3a3atXJ9NRiV3o5Lx7fWcc85R9SSauQOMgTkUKZq5Bv/bQXLQFG3GJPboSmqrLeaomhtkyGWTwUKgeHyMk2vAVgvBt9VNGPN+Qbe0RG9vrAjVa5xo2m5YaG9QcrS/eYqWuhr/YvdlXHLXtdHya2Ve2GFmVGY8SvusjTQ3uIPZRx4wRERsIqS5zkKG+bveW2B2v0HAd41P7S5hBISx/ZpxvauSwrB//g2WmGONO7yd+CNLGCdDtJEkMHuqV8qQnakg0Id+hWENWqGw1QV1a2drA+rHSIFcZrSCP2oxLYq6+Tooum5TgjLGHh7fgKej3WFvPpxMRjRHRIdOGxDiE0iWZ0W6S/cQFPGzURiQnwct0bEO5ZOQg7xajS3AqvTCPCasMBbaObArULfO0jll29q4ccEt9/LgQ/FhZa3TORZB9Gdg4/xF8Pw8RzVlotVE8Cu2rvXDcgzvcAdSryIpayDWycM59fudc8HtTYblUgeGVLDMXkw9c/m+zgYN3gOF/frB7uumW0g3FMW7cYLpvRQXVJUjVYLN9ImiEV9G1vfrVjKFHmC3r+DPZwjN0uLo080VzIgKCncl/RLNp80N/PdTsp+YOpZh+CgnourHp9nonpozlZFSmZDm82HL2qp+pB/zDgWXhMPBKmKRJrT/82+XEM2e6mBn/DZpZhfmHUI3w5KY3z5YluyFJGs9IyDQZ2xfz9/r1GzE/FC7Vn9vtVGGbm4Xkb8
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(39860400002)(396003)(376002)(136003)(36840700001)(46966006)(2906002)(4744005)(478600001)(82740400003)(7636003)(36860700001)(186003)(921005)(110136005)(8936002)(356005)(70206006)(8676002)(6666004)(36756003)(70586007)(336012)(7696005)(426003)(1076003)(83380400001)(7416002)(82310400003)(5660300002)(316002)(36906005)(26005)(47076005)(2616005)(9786002)(102446001)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2021 05:52:44.1313
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 156d7224-e98e-46c8-54d0-08d92b0acd3f
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT029.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7150
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 9/6/21 7:23 am, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Change use of 'a fpga' to 'an fpga'
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+This patch series adds supports user-key encrypted FPGA Image loading using
+FPGA Manager framework.
 
-Acked-by: Andrew Donnellan <ajd@linux.ibm.com>
+Nava kishore Manne (4):
+  drivers: firmware: Add user encrypted key load API support
+  fpga: Add new property to support user-key encrypted bitstream loading
+  drivers: fpga: Add user-key encrypted FPGA Image loading support
+  fpga: zynqmp: Add user-key encrypted FPGA Image loading support
 
+ .../devicetree/bindings/fpga/fpga-region.txt  |  3 +++
+ drivers/firmware/xilinx/zynqmp.c              | 17 +++++++++++++
+ drivers/fpga/fpga-mgr.c                       | 15 ++++++++++++
+ drivers/fpga/of-fpga-region.c                 | 11 +++++++++
+ drivers/fpga/zynqmp-fpga.c                    | 24 +++++++++++++++++--
+ include/linux/firmware/xlnx-zynqmp.h          |  9 +++++++
+ include/linux/fpga/fpga-mgr.h                 |  7 ++++++
+ 7 files changed, 84 insertions(+), 2 deletions(-)
 
 -- 
-Andrew Donnellan              OzLabs, ADL Canberra
-ajd@linux.ibm.com             IBM Australia Limited
+2.17.1
+
