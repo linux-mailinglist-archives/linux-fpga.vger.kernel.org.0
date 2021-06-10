@@ -2,43 +2,44 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE7C3A263D
-	for <lists+linux-fpga@lfdr.de>; Thu, 10 Jun 2021 10:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCDE3A2647
+	for <lists+linux-fpga@lfdr.de>; Thu, 10 Jun 2021 10:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbhFJIKW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 10 Jun 2021 04:10:22 -0400
-Received: from mga01.intel.com ([192.55.52.88]:13604 "EHLO mga01.intel.com"
+        id S229895AbhFJIMC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 10 Jun 2021 04:12:02 -0400
+Received: from mga07.intel.com ([134.134.136.100]:1405 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229770AbhFJIKV (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 10 Jun 2021 04:10:21 -0400
-IronPort-SDR: xr3nOwn9YpsN7k8M7bbbF729w5Vpit54oKMB8+h1CcRD8eTL9Mc6lMRAMnynPEo/dT0tCIUUAL
- frP6a5+T0B5w==
-X-IronPort-AV: E=McAfee;i="6200,9189,10010"; a="226638738"
+        id S229778AbhFJIMB (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 10 Jun 2021 04:12:01 -0400
+IronPort-SDR: 9ZfTyPzJKkouJ/NA3KJ5zFXCFrqqZUy0X7KqKv+brdJMfx6Fvnse9YUwwh5K5V72pbP+FLyBuO
+ OeJtcsya1HHw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10010"; a="269104025"
 X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
-   d="scan'208";a="226638738"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 01:08:17 -0700
-IronPort-SDR: grg7mwbvEthZEbvswQT6dq+gSlB8iGV0BIxWrX5DcUGkoLQfFzRhmALZ2DNC86LqFycYT7GOUF
- fMQoMH4Wp/Jw==
+   d="scan'208";a="269104025"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 01:10:00 -0700
+IronPort-SDR: opJKC0RTN3oijEaIgd3OlnzMm9F+uUIbE2ZoLCk13funCQ/6ep5J9FZIdN9A0JzkANuf/y+bfq
+ LNGN/s4Jtfvw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
-   d="scan'208";a="482739986"
+   d="scan'208";a="638281147"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by orsmga001.jf.intel.com with ESMTP; 10 Jun 2021 01:08:10 -0700
-Date:   Thu, 10 Jun 2021 16:02:30 +0800
+  by fmsmga005.fm.intel.com with ESMTP; 10 Jun 2021 01:09:57 -0700
+Date:   Thu, 10 Jun 2021 16:04:18 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     Russ Weight <russell.h.weight@intel.com>
 Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org, trix@redhat.com,
         lgoncalv@redhat.com, hao.wu@intel.com, matthew.gerlach@intel.com,
         richard.gong@intel.com
-Subject: Re: [PATCH v2 3/8] fpga: mgr: Rename dev to parent for parent device
-Message-ID: <20210610080230.GB2007225@yilunxu-OptiPlex-7050>
+Subject: Re: [PATCH v2 4/8] fpga: bridge: Rename dev to parent for parent
+ device
+Message-ID: <20210610080418.GC2007225@yilunxu-OptiPlex-7050>
 References: <20210609221135.261837-1-russell.h.weight@intel.com>
- <20210609221135.261837-4-russell.h.weight@intel.com>
+ <20210609221135.261837-5-russell.h.weight@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210609221135.261837-4-russell.h.weight@intel.com>
+In-Reply-To: <20210609221135.261837-5-russell.h.weight@intel.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
@@ -47,7 +48,7 @@ Looks good to me.
 
 Reviewed-by: Xu Yilun <yilun.xu@intel.com>
 
-On Wed, Jun 09, 2021 at 03:11:30PM -0700, Russ Weight wrote:
+On Wed, Jun 09, 2021 at 03:11:31PM -0700, Russ Weight wrote:
 > Rename variable "dev" to "parent" in cases where it represents the parent
 > device.
 > 
@@ -55,41 +56,35 @@ On Wed, Jun 09, 2021 at 03:11:30PM -0700, Russ Weight wrote:
 > ---
 > v2:
 >   - This patch contains the renaming of "dev" to "parent" that was previously
->     part of the patch: "fpga: mgr: Use standard dev_release for class driver"
+>     part of the patch: "fpga: bridge: Use standard dev_release for class driver"
 > ---
->  drivers/fpga/fpga-mgr.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+>  drivers/fpga/fpga-bridge.c | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> index b85bc47c91a9..42ddc0844781 100644
-> --- a/drivers/fpga/fpga-mgr.c
-> +++ b/drivers/fpga/fpga-mgr.c
-> @@ -551,7 +551,7 @@ EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
+> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+> index 05c6d4f2d043..6c56afc66a6d 100644
+> --- a/drivers/fpga/fpga-bridge.c
+> +++ b/drivers/fpga/fpga-bridge.c
+> @@ -313,7 +313,7 @@ ATTRIBUTE_GROUPS(fpga_bridge);
 >  
 >  /**
->   * fpga_mgr_create - create and initialize a FPGA manager struct
-> - * @dev:	fpga manager device from pdev
-> + * @parent:	fpga manager device from pdev
->   * @name:	fpga manager name
->   * @mops:	pointer to structure of fpga manager ops
->   * @priv:	fpga manager private data
-> @@ -561,7 +561,7 @@ EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
+>   * fpga_bridge_create - create and initialize a struct fpga_bridge
+> - * @dev:	FPGA bridge device from pdev
+> + * @parent:	FPGA bridge device from pdev
+>   * @name:	FPGA bridge name
+>   * @br_ops:	pointer to structure of fpga bridge ops
+>   * @priv:	FPGA bridge private data
+> @@ -323,7 +323,7 @@ ATTRIBUTE_GROUPS(fpga_bridge);
 >   *
->   * Return: pointer to struct fpga_manager or NULL
+>   * Return: struct fpga_bridge or NULL
 >   */
-> -struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
-> +struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
->  				     const struct fpga_manager_ops *mops,
->  				     void *priv)
+> -struct fpga_bridge *fpga_bridge_create(struct device *dev, const char *name,
+> +struct fpga_bridge *fpga_bridge_create(struct device *parent, const char *name,
+>  				       const struct fpga_bridge_ops *br_ops,
+>  				       void *priv)
 >  {
-> @@ -571,12 +571,12 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
->  	if (!mops || !mops->write_complete || !mops->state ||
->  	    !mops->write_init || (!mops->write && !mops->write_sg) ||
->  	    (mops->write && mops->write_sg)) {
-> -		dev_err(dev, "Attempt to register without fpga_manager_ops\n");
-> +		dev_err(parent, "Attempt to register without fpga_manager_ops\n");
->  		return NULL;
->  	}
+> @@ -331,7 +331,7 @@ struct fpga_bridge *fpga_bridge_create(struct device *dev, const char *name,
+>  	int id, ret;
 >  
 >  	if (!name || !strlen(name)) {
 > -		dev_err(dev, "Attempt to register with no name!\n");
@@ -97,50 +92,49 @@ On Wed, Jun 09, 2021 at 03:11:30PM -0700, Russ Weight wrote:
 >  		return NULL;
 >  	}
 >  
-> @@ -597,8 +597,8 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
->  	device_initialize(&mgr->dev);
->  	mgr->dev.class = fpga_mgr_class;
->  	mgr->dev.groups = mops->groups;
-> -	mgr->dev.parent = dev;
-> -	mgr->dev.of_node = dev->of_node;
-> +	mgr->dev.parent = parent;
-> +	mgr->dev.of_node = parent->of_node;
->  	mgr->dev.id = id;
+> @@ -353,8 +353,8 @@ struct fpga_bridge *fpga_bridge_create(struct device *dev, const char *name,
+>  	device_initialize(&bridge->dev);
+>  	bridge->dev.groups = br_ops->groups;
+>  	bridge->dev.class = fpga_bridge_class;
+> -	bridge->dev.parent = dev;
+> -	bridge->dev.of_node = dev->of_node;
+> +	bridge->dev.parent = parent;
+> +	bridge->dev.of_node = parent->of_node;
+>  	bridge->dev.id = id;
 >  
->  	ret = dev_set_name(&mgr->dev, "fpga%d", id);
-> @@ -636,7 +636,7 @@ static void devm_fpga_mgr_release(struct device *dev, void *res)
+>  	ret = dev_set_name(&bridge->dev, "br%d", id);
+> @@ -392,7 +392,7 @@ static void devm_fpga_bridge_release(struct device *dev, void *res)
 >  
 >  /**
->   * devm_fpga_mgr_create - create and initialize a managed FPGA manager struct
-> - * @dev:	fpga manager device from pdev
-> + * @parent:	fpga manager device from pdev
->   * @name:	fpga manager name
->   * @mops:	pointer to structure of fpga manager ops
->   * @priv:	fpga manager private data
-> @@ -651,7 +651,7 @@ static void devm_fpga_mgr_release(struct device *dev, void *res)
->   *
->   * Return: pointer to struct fpga_manager or NULL
+>   * devm_fpga_bridge_create - create and init a managed struct fpga_bridge
+> - * @dev:	FPGA bridge device from pdev
+> + * @parent:	FPGA bridge device from pdev
+>   * @name:	FPGA bridge name
+>   * @br_ops:	pointer to structure of fpga bridge ops
+>   * @priv:	FPGA bridge private data
+> @@ -408,7 +408,7 @@ static void devm_fpga_bridge_release(struct device *dev, void *res)
+>   *  Return: struct fpga_bridge or NULL
 >   */
-> -struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
-> +struct fpga_manager *devm_fpga_mgr_create(struct device *parent, const char *name,
->  					  const struct fpga_manager_ops *mops,
->  					  void *priv)
+>  struct fpga_bridge
+> -*devm_fpga_bridge_create(struct device *dev, const char *name,
+> +*devm_fpga_bridge_create(struct device *parent, const char *name,
+>  			 const struct fpga_bridge_ops *br_ops, void *priv)
 >  {
-> @@ -661,13 +661,13 @@ struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
->  	if (!dr)
+>  	struct fpga_bridge **ptr, *bridge;
+> @@ -417,12 +417,12 @@ struct fpga_bridge
+>  	if (!ptr)
 >  		return NULL;
 >  
-> -	dr->mgr = fpga_mgr_create(dev, name, mops, priv);
-> +	dr->mgr = fpga_mgr_create(parent, name, mops, priv);
->  	if (!dr->mgr) {
->  		devres_free(dr);
->  		return NULL;
+> -	bridge = fpga_bridge_create(dev, name, br_ops, priv);
+> +	bridge = fpga_bridge_create(parent, name, br_ops, priv);
+>  	if (!bridge) {
+>  		devres_free(ptr);
+>  	} else {
+>  		*ptr = bridge;
+> -		devres_add(dev, ptr);
+> +		devres_add(parent, ptr);
 >  	}
 >  
-> -	devres_add(dev, dr);
-> +	devres_add(parent, dr);
->  
->  	return dr->mgr;
->  }
+>  	return bridge;
 > -- 
 > 2.25.1
