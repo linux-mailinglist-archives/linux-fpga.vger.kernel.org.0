@@ -2,177 +2,220 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C853A6F3D
-	for <lists+linux-fpga@lfdr.de>; Mon, 14 Jun 2021 21:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E345A3A7008
+	for <lists+linux-fpga@lfdr.de>; Mon, 14 Jun 2021 22:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234219AbhFNTkB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 14 Jun 2021 15:40:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55605 "EHLO
+        id S233295AbhFNUTT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 14 Jun 2021 16:19:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52628 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233865AbhFNTkB (ORCPT
+        by vger.kernel.org with ESMTP id S235093AbhFNUTL (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 14 Jun 2021 15:40:01 -0400
+        Mon, 14 Jun 2021 16:19:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623699477;
+        s=mimecast20190719; t=1623701827;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3BJ5O27clnR5cGJrYKlEuYA0fPGRx/F8qnn1d/757kc=;
-        b=DBTQPjsVjMb4VJi+3wF9fcDnJFz7QoDZbWRkmqSt3lZBcfNxyr2Jse/kZOClfIzt5xRfGW
-        uoYlgct8ttn2D9wYRfz1svZpztJA7YJdDWyn7JB6KIB3SEvXwbNEMPnHZsUxZc7Zkuz600
-        gwM68AZHzkrXa2Ibo/pReQ1Y2Kczotg=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-273-gYRJ6I-PMeaWXUFL11iDfw-1; Mon, 14 Jun 2021 15:37:56 -0400
-X-MC-Unique: gYRJ6I-PMeaWXUFL11iDfw-1
-Received: by mail-oi1-f197.google.com with SMTP id y25-20020a0568080619b02901f8e8a51961so3745580oih.13
-        for <linux-fpga@vger.kernel.org>; Mon, 14 Jun 2021 12:37:56 -0700 (PDT)
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6BGYUcTx5tsZwPa17u6H+0H1QgwUbqfF91m+1x+AxEk=;
+        b=YJHWV82vS1RnOkr8kEctR5xoLTs1gYFhORbJ6aNj78xb5/7gOJdYxxcY7PJ6dlIJ/JU5du
+        eF6711JUqtasJ4jNOQ8VWU/tdK9m+TiNAzpybLEEixAFQbI4qEvknTZbyIsl/v9c82jRD/
+        pZ8I42tjndDmv2svjIyE3Ki5MigFO4w=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-265-HMM-NhgaM46tV1vkr9d1oQ-1; Mon, 14 Jun 2021 16:17:06 -0400
+X-MC-Unique: HMM-NhgaM46tV1vkr9d1oQ-1
+Received: by mail-ot1-f69.google.com with SMTP id x35-20020a0568302463b02903cb28b38d0aso2301968otr.19
+        for <linux-fpga@vger.kernel.org>; Mon, 14 Jun 2021 13:17:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=3BJ5O27clnR5cGJrYKlEuYA0fPGRx/F8qnn1d/757kc=;
-        b=EkJSaszxsWgv4itlq5Ch1WONoXiSgY3XNdU5UTZsiG90T40b5giH+Tleauu844bdCg
-         05WLKPnwXAAjP792a+JliZ1gPij6N1LBTvTP1EfGHgZRx7Ylx9EZHvkKVFFHMvmGv3bq
-         r69PdV2c8uXc1BbEK+43udsEIwHeIF/dVojfsziv3Nz2esL2u0EMUW6xiZpzTw5bKmH2
-         7d9p4VbeoVoxqyhejSqpsn2dnC0sTfzs0dyBre//m0fnZxY7ROAyxJd/RGgD8Jwl5WqX
-         ITA8gGJGvMJg+gtZxVfyrAtl9kAXYd91qtxX3izI81eL7/rY3uybcMNFmBTiI2E4Q8pZ
-         0zdQ==
-X-Gm-Message-State: AOAM533FfuCA0doQa/xqmIJGKBLGzcoMRd9YV+HIGZhiJvx9hKAfWS7l
-        mU04I+FU8aBPYow4OAlWTLmEQBuoA/kHNfzM1lzPxmymsw9jNbCCN5RpEl/SWvej4/YQkkabQht
-        P4WAg1hk0ZviLZ1+ZdkB9zA==
-X-Received: by 2002:a05:6830:190:: with SMTP id q16mr14408712ota.34.1623699475974;
-        Mon, 14 Jun 2021 12:37:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz8p0QFbVXQfC0QNKHYnnRI8FMKAlh+fKs1XFy7aI7TkhFRX5Q9extu0k7MX/H+VtuG6zGBHg==
-X-Received: by 2002:a05:6830:190:: with SMTP id q16mr14408698ota.34.1623699475748;
-        Mon, 14 Jun 2021 12:37:55 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id p65sm3265218oop.0.2021.06.14.12.37.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Jun 2021 12:37:55 -0700 (PDT)
-Subject: Re: [PATCH 3/8] fpga: mgr: Rename dev to parent for parent device
-To:     Moritz Fischer <mdf@kernel.org>, gregkh@linuxfoundation.org
-Cc:     linux-fpga@vger.kernel.org,
-        Russ Weight <russell.h.weight@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>
-References: <20210614170909.232415-1-mdf@kernel.org>
- <20210614170909.232415-4-mdf@kernel.org>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <e948f1ef-34c1-edef-68d4-ab6f2b03f8a9@redhat.com>
-Date:   Mon, 14 Jun 2021 12:37:53 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6BGYUcTx5tsZwPa17u6H+0H1QgwUbqfF91m+1x+AxEk=;
+        b=X2XAr94lAdFiG+Qx6ndmDhzYweKKpZSBz3s/EwCvPm8OYA0LaPZs5QwQqlSgMYVEPE
+         8uFQCjwVN8HJ2TJrA6/8YNb6Kh0BUY85I3j/q1rcOiOws4PeNafRs4J7Zz0g0iw34ouc
+         JSeoQIaaWjGjcSvOJMLtx8yIkp8X27ZjUbAYiYmVJYeMght4PkmMxEHMfZL7amSXjuPL
+         OyBz8rnKostdTLUNXUIEd6YbPLNyuvvnfvZRVItco/SyVfwKU9yPxA6pK/t1FYhxIXVF
+         SC/ki8vCvHSAcDoqI4HpqJgQ4iir/a+Ge+bZ49QrKJp+K8miAREg/dFvOaSNb0exEDCQ
+         /XsQ==
+X-Gm-Message-State: AOAM53346XJWs5PuEkAtdiJt7vWdVy59f3yAAVUf0JmRudZMOwxcKlHV
+        V/aB8XXxpPzz9ciL7hp5ouf1AyM5jgu7PUxHnPdWXUUzPDObOMME6Zj/oXgJ1SKsvlR4sTQ/sJQ
+        KCX8dqgCQyHUo32i6NZn4qQ==
+X-Received: by 2002:a9d:ea2:: with SMTP id 31mr15359821otj.200.1623701825792;
+        Mon, 14 Jun 2021 13:17:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxStQ7LCZTicbomt7siOy4OuZfVD05aIA2Dix5G42Cxc5pR7KAybcNVdBiEuXhJuxkEq35kJg==
+X-Received: by 2002:a9d:ea2:: with SMTP id 31mr15359806otj.200.1623701825558;
+        Mon, 14 Jun 2021 13:17:05 -0700 (PDT)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id b198sm408535oii.19.2021.06.14.13.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jun 2021 13:17:05 -0700 (PDT)
+From:   trix@redhat.com
+To:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net,
+        michal.simek@xilinx.com, gregkh@linuxfoundation.org,
+        krzysztof.kozlowski@canonical.com, nava.manne@xilinx.com,
+        yilun.xu@intel.com, davidgow@google.com, fpacheco@redhat.com,
+        richard.gong@intel.com, luca@lucaceresoli.net
+Cc:     linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH v4 0/4] fpga: reorganize to subdirs
+Date:   Mon, 14 Jun 2021 13:16:43 -0700
+Message-Id: <20210614201648.3358206-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-In-Reply-To: <20210614170909.232415-4-mdf@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+From: Tom Rix <trix@redhat.com>
 
-On 6/14/21 10:09 AM, Moritz Fischer wrote:
-> From: Russ Weight <russell.h.weight@intel.com>
->
-> Rename variable "dev" to "parent" in cases where it represents the parent
-> device.
->
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-> Signed-off-by: Moritz Fischer <mdf@kernel.org>
-> ---
->   drivers/fpga/fpga-mgr.c | 20 ++++++++++----------
->   1 file changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> index b85bc47c91a9..42ddc0844781 100644
-> --- a/drivers/fpga/fpga-mgr.c
-> +++ b/drivers/fpga/fpga-mgr.c
-> @@ -551,7 +551,7 @@ EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
->   
->   /**
->    * fpga_mgr_create - create and initialize a FPGA manager struct
-> - * @dev:	fpga manager device from pdev
-> + * @parent:	fpga manager device from pdev
+The incoming xrt patchset has a toplevel subdir xrt/
+The current fpga/ uses a single dir with filename prefixes to subdivide owners
+For consistency, there should be only one way to organize the fpga/ dir.
+Because the subdir model scales better, refactor to use it.
+The discussion wrt xrt is here:
+https://lore.kernel.org/linux-fpga/68e85a4f-4a10-1ff9-0443-aa565878c855@redhat.com/
 
-This line has a conflict with -next because of my recent 'a FPGA -> an 
-FPGA' change in the preceding line
+Follow drivers/net/ethernet/ which has control configs
+NET_VENDOR_BLA that map to drivers/net/ethernet/bla
+Since fpgas do not have many vendors, drop the 'VENDOR' and use
+FPGA_BLA.
 
-Tom
+There are several new subdirs
+altera/
+dfl/
+lattice/
+xilinx/
 
->    * @name:	fpga manager name
->    * @mops:	pointer to structure of fpga manager ops
->    * @priv:	fpga manager private data
-> @@ -561,7 +561,7 @@ EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
->    *
->    * Return: pointer to struct fpga_manager or NULL
->    */
-> -struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
-> +struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
->   				     const struct fpga_manager_ops *mops,
->   				     void *priv)
->   {
-> @@ -571,12 +571,12 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
->   	if (!mops || !mops->write_complete || !mops->state ||
->   	    !mops->write_init || (!mops->write && !mops->write_sg) ||
->   	    (mops->write && mops->write_sg)) {
-> -		dev_err(dev, "Attempt to register without fpga_manager_ops\n");
-> +		dev_err(parent, "Attempt to register without fpga_manager_ops\n");
->   		return NULL;
->   	}
->   
->   	if (!name || !strlen(name)) {
-> -		dev_err(dev, "Attempt to register with no name!\n");
-> +		dev_err(parent, "Attempt to register with no name!\n");
->   		return NULL;
->   	}
->   
-> @@ -597,8 +597,8 @@ struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
->   	device_initialize(&mgr->dev);
->   	mgr->dev.class = fpga_mgr_class;
->   	mgr->dev.groups = mops->groups;
-> -	mgr->dev.parent = dev;
-> -	mgr->dev.of_node = dev->of_node;
-> +	mgr->dev.parent = parent;
-> +	mgr->dev.of_node = parent->of_node;
->   	mgr->dev.id = id;
->   
->   	ret = dev_set_name(&mgr->dev, "fpga%d", id);
-> @@ -636,7 +636,7 @@ static void devm_fpga_mgr_release(struct device *dev, void *res)
->   
->   /**
->    * devm_fpga_mgr_create - create and initialize a managed FPGA manager struct
-> - * @dev:	fpga manager device from pdev
-> + * @parent:	fpga manager device from pdev
->    * @name:	fpga manager name
->    * @mops:	pointer to structure of fpga manager ops
->    * @priv:	fpga manager private data
-> @@ -651,7 +651,7 @@ static void devm_fpga_mgr_release(struct device *dev, void *res)
->    *
->    * Return: pointer to struct fpga_manager or NULL
->    */
-> -struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
-> +struct fpga_manager *devm_fpga_mgr_create(struct device *parent, const char *name,
->   					  const struct fpga_manager_ops *mops,
->   					  void *priv)
->   {
-> @@ -661,13 +661,13 @@ struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
->   	if (!dr)
->   		return NULL;
->   
-> -	dr->mgr = fpga_mgr_create(dev, name, mops, priv);
-> +	dr->mgr = fpga_mgr_create(parent, name, mops, priv);
->   	if (!dr->mgr) {
->   		devres_free(dr);
->   		return NULL;
->   	}
->   
-> -	devres_add(dev, dr);
-> +	devres_add(parent, dr);
->   
->   	return dr->mgr;
->   }
+Each subdir has a Kconfig that has a new/reused
+
+if FPGA_BLA
+  ... existing configs ...
+endif FPGA_BLA
+
+Which is sourced into the main fpga/Kconfig
+
+Each subdir has a Makefile whose transversal is controlled in the
+fpga/Makefile by
+
+obj-$(CONFIG_FPGA_BLA) += bla/
+
+Some cleanup to arrange thing alphabetically and make fpga/Makefile's
+whitespace look more like net/'s
+
+Changes from
+v1
+  Drop renaming files
+  Cleanup makefiles
+
+v2
+  Expand commit messages
+  Add SPDX to Kconfig
+  Expand new Kconfig variable help messages
+
+v3
+  Update Documentation/fpga/dfl.rst for fpga/dfl/
+
+Tom Rix (4):
+  fpga: dfl: reorganize to subdir layout
+  fpga: xilinx: reorganize to subdir layout
+  fpga: altera: reorganize to subdir layout
+  fpga: lattice: reorganize to subdir layout
+
+ Documentation/fpga/dfl.rst                    |   4 +-
+ MAINTAINERS                                   |   2 +-
+ drivers/fpga/Kconfig                          | 204 +-----------------
+ drivers/fpga/Makefile                         |  47 +---
+ drivers/fpga/altera/Kconfig                   |  85 ++++++++
+ drivers/fpga/altera/Makefile                  |  12 ++
+ drivers/fpga/{ => altera}/altera-cvp.c        |   0
+ drivers/fpga/{ => altera}/altera-fpga2sdram.c |   0
+ .../fpga/{ => altera}/altera-freeze-bridge.c  |   0
+ drivers/fpga/{ => altera}/altera-hps2fpga.c   |   0
+ .../{ => altera}/altera-pr-ip-core-plat.c     |   0
+ drivers/fpga/{ => altera}/altera-pr-ip-core.c |   0
+ drivers/fpga/{ => altera}/altera-ps-spi.c     |   0
+ drivers/fpga/{ => altera}/socfpga-a10.c       |   0
+ drivers/fpga/{ => altera}/socfpga.c           |   0
+ drivers/fpga/{ => altera}/stratix10-soc.c     |   0
+ drivers/fpga/{ => altera}/ts73xx-fpga.c       |   0
+ drivers/fpga/dfl/Kconfig                      |  83 +++++++
+ drivers/fpga/dfl/Makefile                     |  16 ++
+ drivers/fpga/{ => dfl}/dfl-afu-dma-region.c   |   0
+ drivers/fpga/{ => dfl}/dfl-afu-error.c        |   0
+ drivers/fpga/{ => dfl}/dfl-afu-main.c         |   0
+ drivers/fpga/{ => dfl}/dfl-afu-region.c       |   0
+ drivers/fpga/{ => dfl}/dfl-afu.h              |   0
+ drivers/fpga/{ => dfl}/dfl-fme-br.c           |   0
+ drivers/fpga/{ => dfl}/dfl-fme-error.c        |   0
+ drivers/fpga/{ => dfl}/dfl-fme-main.c         |   0
+ drivers/fpga/{ => dfl}/dfl-fme-mgr.c          |   0
+ drivers/fpga/{ => dfl}/dfl-fme-perf.c         |   0
+ drivers/fpga/{ => dfl}/dfl-fme-pr.c           |   0
+ drivers/fpga/{ => dfl}/dfl-fme-pr.h           |   0
+ drivers/fpga/{ => dfl}/dfl-fme-region.c       |   0
+ drivers/fpga/{ => dfl}/dfl-fme.h              |   0
+ drivers/fpga/{ => dfl}/dfl-n3000-nios.c       |   0
+ drivers/fpga/{ => dfl}/dfl-pci.c              |   0
+ drivers/fpga/{ => dfl}/dfl.c                  |   0
+ drivers/fpga/{ => dfl}/dfl.h                  |   0
+ drivers/fpga/lattice/Kconfig                  |  29 +++
+ drivers/fpga/lattice/Makefile                 |   4 +
+ drivers/fpga/{ => lattice}/ice40-spi.c        |   0
+ drivers/fpga/{ => lattice}/machxo2-spi.c      |   0
+ drivers/fpga/xilinx/Kconfig                   |  55 +++++
+ drivers/fpga/xilinx/Makefile                  |   6 +
+ .../fpga/{ => xilinx}/xilinx-pr-decoupler.c   |   0
+ drivers/fpga/{ => xilinx}/xilinx-spi.c        |   0
+ drivers/fpga/{ => xilinx}/zynq-fpga.c         |   0
+ drivers/fpga/{ => xilinx}/zynqmp-fpga.c       |   0
+ 47 files changed, 305 insertions(+), 242 deletions(-)
+ create mode 100644 drivers/fpga/altera/Kconfig
+ create mode 100644 drivers/fpga/altera/Makefile
+ rename drivers/fpga/{ => altera}/altera-cvp.c (100%)
+ rename drivers/fpga/{ => altera}/altera-fpga2sdram.c (100%)
+ rename drivers/fpga/{ => altera}/altera-freeze-bridge.c (100%)
+ rename drivers/fpga/{ => altera}/altera-hps2fpga.c (100%)
+ rename drivers/fpga/{ => altera}/altera-pr-ip-core-plat.c (100%)
+ rename drivers/fpga/{ => altera}/altera-pr-ip-core.c (100%)
+ rename drivers/fpga/{ => altera}/altera-ps-spi.c (100%)
+ rename drivers/fpga/{ => altera}/socfpga-a10.c (100%)
+ rename drivers/fpga/{ => altera}/socfpga.c (100%)
+ rename drivers/fpga/{ => altera}/stratix10-soc.c (100%)
+ rename drivers/fpga/{ => altera}/ts73xx-fpga.c (100%)
+ create mode 100644 drivers/fpga/dfl/Kconfig
+ create mode 100644 drivers/fpga/dfl/Makefile
+ rename drivers/fpga/{ => dfl}/dfl-afu-dma-region.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-afu-error.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-afu-main.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-afu-region.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-afu.h (100%)
+ rename drivers/fpga/{ => dfl}/dfl-fme-br.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-fme-error.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-fme-main.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-fme-mgr.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-fme-perf.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-fme-pr.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-fme-pr.h (100%)
+ rename drivers/fpga/{ => dfl}/dfl-fme-region.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-fme.h (100%)
+ rename drivers/fpga/{ => dfl}/dfl-n3000-nios.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl-pci.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl.c (100%)
+ rename drivers/fpga/{ => dfl}/dfl.h (100%)
+ create mode 100644 drivers/fpga/lattice/Kconfig
+ create mode 100644 drivers/fpga/lattice/Makefile
+ rename drivers/fpga/{ => lattice}/ice40-spi.c (100%)
+ rename drivers/fpga/{ => lattice}/machxo2-spi.c (100%)
+ create mode 100644 drivers/fpga/xilinx/Kconfig
+ create mode 100644 drivers/fpga/xilinx/Makefile
+ rename drivers/fpga/{ => xilinx}/xilinx-pr-decoupler.c (100%)
+ rename drivers/fpga/{ => xilinx}/xilinx-spi.c (100%)
+ rename drivers/fpga/{ => xilinx}/zynq-fpga.c (100%)
+ rename drivers/fpga/{ => xilinx}/zynqmp-fpga.c (100%)
+
+-- 
+2.26.3
 
