@@ -2,57 +2,61 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7263A682F
-	for <lists+linux-fpga@lfdr.de>; Mon, 14 Jun 2021 15:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788F13A6987
+	for <lists+linux-fpga@lfdr.de>; Mon, 14 Jun 2021 17:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234190AbhFNNmL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 14 Jun 2021 09:42:11 -0400
-Received: from mail-io1-f45.google.com ([209.85.166.45]:34557 "EHLO
-        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233803AbhFNNmJ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Jun 2021 09:42:09 -0400
-Received: by mail-io1-f45.google.com with SMTP id 5so39612028ioe.1;
-        Mon, 14 Jun 2021 06:39:56 -0700 (PDT)
+        id S233288AbhFNPFr (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 14 Jun 2021 11:05:47 -0400
+Received: from mail-il1-f180.google.com ([209.85.166.180]:44916 "EHLO
+        mail-il1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232869AbhFNPFr (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Jun 2021 11:05:47 -0400
+Received: by mail-il1-f180.google.com with SMTP id i17so12450373ilj.11;
+        Mon, 14 Jun 2021 08:03:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=tK4mvObzT5yhHWFs5yQAbbm4CHtG0x0FL1g6TUnbVOw=;
-        b=WPRBlR0xy0SxOp49vsHvlK2nixIaLnEGqjn/MhDJGdD/+IEKDoUYm9enm2tFEQ0xKv
-         D75rrPDGQpK0JsXFXY4r5VmCPhgispYSOcymCCMpHF2rxw/CAUXT02JjO47+Ib0tx+ck
-         LRYz898ghQvxKP4lV5VYtFxzqJ8dUqRNHP93HOvlLGcsmJ2QLR+gkf7UaqL5cesU5eQX
-         We3B7E85bisqgUuaYk26YG6DU/tdlUqhoWk4FZdEYt24xngAg4G5Dc8FNFoyjw0DFF/+
-         +FcVFRvY6+wrRm6R2OHNo6Ba6z3/KglFD70Qv+IyaPwY8Biggg4w1ZICjCyKHJg+ek9z
-         GDjw==
-X-Gm-Message-State: AOAM5313/s3jQUG/Nv7c41UnYlYAioB0JYao30sjejr83XpESsPx8rqm
-        I1O3SBLHUTOsiqmiTtkRyl8lpczoXA==
-X-Google-Smtp-Source: ABdhPJz651Pxax/XP5gAmnBT/RYQV/ZXl9Az215uyTRwLEIj/k0EwlCzE6a4IMUZ3d6+lSbb322r8A==
-X-Received: by 2002:a5d:904c:: with SMTP id v12mr14106122ioq.95.1623677996262;
-        Mon, 14 Jun 2021 06:39:56 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ORcJk31TiVnuEogk3RJcUiauMJCVCh/REeNy+uWJyuI=;
+        b=Q30pWdmsyox1BEsn8LU2WQR4fhKxEL5SZFm96nZM/hXxLPhBPLKzs31+ZD4e17Druv
+         3AfPTyY9LflPD0Ux3ID8wyzan9wRioikfdlMO263W/KgMzANMkDj4hCILT86v46BLd7Q
+         PFmSixOx8Yu5iID9nM1LqS20cbC0d+aIbKpkvl5wX5Nz3ab0CKXhgF603EYJBhNAMBIW
+         S68PYwT9qA59oaW/xgdvvse6DCzliRIaDfD+mxmtXReXBgPyD9DaLXf9lCguiQPFPsGs
+         7lKWxzwLNC8MDlMnaBwJo+FD4bXzkEUrolV12VFGEjwKbgjz630hAB6FUZZBEalB5emT
+         Pyaw==
+X-Gm-Message-State: AOAM5319XGqf/GWu7QFPZoQN32WlX1i/W56aXzNoTvO9ghR2EFgahK96
+        Km9qvob7m8xCoHf1H0L7F51wBjTMjg==
+X-Google-Smtp-Source: ABdhPJxevxIhIoghxuFi1Czoup2tc4Tf11I/KvnTMIECwiSsVK/e/doraZRmwywMjpT9+SnmMWGoQw==
+X-Received: by 2002:a92:190f:: with SMTP id 15mr13571076ilz.45.1623683023926;
+        Mon, 14 Jun 2021 08:03:43 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id v1sm7726151ilo.81.2021.06.14.06.39.54
+        by smtp.gmail.com with ESMTPSA id i13sm7633657ilr.16.2021.06.14.08.03.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jun 2021 06:39:55 -0700 (PDT)
-Received: (nullmailer pid 630751 invoked by uid 1000);
-        Mon, 14 Jun 2021 13:39:48 -0000
+        Mon, 14 Jun 2021 08:03:42 -0700 (PDT)
+Received: (nullmailer pid 758861 invoked by uid 1000);
+        Mon, 14 Jun 2021 15:03:41 -0000
+Date:   Mon, 14 Jun 2021 09:03:41 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Cc:     linux-fpga@vger.kernel.org, shubhrajyoti.datta@xilinx.com,
-        gregkh@linuxfoundation.org, peter.crosthwaite@xilinx.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        navam@xilinx.com, michal.simek@xilinx.com,
-        soren.brinkmann@xilinx.com, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org
-In-Reply-To: <20210613213359.296400-1-iwamatsu@nigauri.org>
+Cc:     gregkh@linuxfoundation.org, michal.simek@xilinx.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, shubhrajyoti.datta@xilinx.com,
+        navam@xilinx.com, peter.crosthwaite@xilinx.com,
+        soren.brinkmann@xilinx.com
+Subject: Re: [PATCH] dt-bindings: serial: convert Cadence UART bindings to
+ YAML
+Message-ID: <20210614150341.GA747048@robh.at.kernel.org>
 References: <20210613213359.296400-1-iwamatsu@nigauri.org>
-Subject: Re: [PATCH] dt-bindings: serial: convert Cadence UART bindings to YAML
-Date:   Mon, 14 Jun 2021 07:39:48 -0600
-Message-Id: <1623677988.138699.630750.nullmailer@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210613213359.296400-1-iwamatsu@nigauri.org>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, 14 Jun 2021 06:33:59 +0900, Nobuhiro Iwamatsu wrote:
+On Mon, Jun 14, 2021 at 06:33:59AM +0900, Nobuhiro Iwamatsu wrote:
 > Convert serial for Cadence UART bindings documentation to YAML.
 > 
 > Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
@@ -63,27 +67,127 @@ On Mon, 14 Jun 2021 06:33:59 +0900, Nobuhiro Iwamatsu wrote:
 >  delete mode 100644 Documentation/devicetree/bindings/serial/cdns,uart.txt
 >  create mode 100644 Documentation/devicetree/bindings/serial/cdns,uart.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/serial/cdns,uart.txt b/Documentation/devicetree/bindings/serial/cdns,uart.txt
+> deleted file mode 100644
+> index 4efc560f90abbd..00000000000000
+> --- a/Documentation/devicetree/bindings/serial/cdns,uart.txt
+> +++ /dev/null
+> @@ -1,27 +0,0 @@
+> -Binding for Cadence UART Controller
+> -
+> -Required properties:
+> -- compatible :
+> -  Use "xlnx,xuartps","cdns,uart-r1p8" for Zynq-7xxx SoC.
+> -  Use "xlnx,zynqmp-uart","cdns,uart-r1p12" for Zynq Ultrascale+ MPSoC.
+> -- reg: Should contain UART controller registers location and length.
+> -- interrupts: Should contain UART controller interrupts.
+> -- clocks: Must contain phandles to the UART clocks
+> -  See ../clocks/clock-bindings.txt for details.
+> -- clock-names: Tuple to identify input clocks, must contain "uart_clk" and "pclk"
+> -  See ../clocks/clock-bindings.txt for details.
+> -
+> -
+> -Optional properties:
+> -- cts-override : Override the CTS modem status signal. This signal will
+> -  always be reported as active instead of being obtained from the modem status
+> -  register. Define this if your serial port does not use this pin
+> -
+> -Example:
+> -	uart@e0000000 {
+> -		compatible = "cdns,uart-r1p8";
+> -		clocks = <&clkc 23>, <&clkc 40>;
+> -		clock-names = "uart_clk", "pclk";
+> -		reg = <0xE0000000 0x1000>;
+> -		interrupts = <0 27 4>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/serial/cdns,uart.yaml b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
+> new file mode 100644
+> index 00000000000000..ce467fa464bfd0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/serial/cdns,uart.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cadence UART Controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - Michal Simek <michal.simek@xilinx.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/serial.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - description: UART controller for Zynq-7xxx SoC
+> +        items:
+> +          - enum:
+> +            - xlnx,xuartps
+> +            - cdns,uart-r1p8
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+What you want is:
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/serial/cdns,uart.yaml:21:13: [warning] wrong indentation: expected 14 but found 12 (indentation)
-./Documentation/devicetree/bindings/serial/cdns,uart.yaml:26:13: [warning] wrong indentation: expected 14 but found 12 (indentation)
+items:
+  - const: xlnx,xuartps
+  - const: cdns,uart-r1p8
 
-dtschema/dtc warnings/errors:
-\ndoc reference errors (make refcheckdocs):
+> +      - description: UART controller for Zynq Ultrascale+ MPSoC
+> +        items:
+> +          - enum:
+> +            - xlnx,zynqmp-uart
+> +            - cdns,uart-r1p12
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    items:
+> +      - const: uart_clk
+> +      - const: pclk
+> +
+> +  cts-override:
+> +    description: |
+> +      Override the CTS modem status signal. This signal will
+> +      always be reported as active instead of being obtained
+> +      from the modem status register. Define this if your serial
+> +      port does not use this pin.
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
 
-See https://patchwork.ozlabs.org/patch/1491509
+unevaluatedProperties: false
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+because you could have child nodes with attached devices.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+> +
+> +examples:
+> +  - |
+> +    serial@e0000000 {
+> +      compatible = "cdns,uart-r1p8";
 
-pip3 install dtschema --upgrade
+This is wrong based on what the binding said.
 
-Please check and re-submit.
-
+> +      clocks = <&clkc 23>, <&clkc 40>;
+> +      clock-names = "uart_clk", "pclk";
+> +      reg = <0xE0000000 0x1000>;
+> +      interrupts = <0 27 4>;
+> +    };
+> -- 
+> 2.32.0
