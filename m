@@ -2,54 +2,55 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E345A3A7008
-	for <lists+linux-fpga@lfdr.de>; Mon, 14 Jun 2021 22:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 999843A700A
+	for <lists+linux-fpga@lfdr.de>; Mon, 14 Jun 2021 22:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbhFNUTT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 14 Jun 2021 16:19:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52628 "EHLO
+        id S234638AbhFNUTU (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 14 Jun 2021 16:19:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:27105 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235093AbhFNUTL (ORCPT
+        by vger.kernel.org with ESMTP id S235541AbhFNUTT (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 14 Jun 2021 16:19:11 -0400
+        Mon, 14 Jun 2021 16:19:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623701827;
+        s=mimecast20190719; t=1623701836;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6BGYUcTx5tsZwPa17u6H+0H1QgwUbqfF91m+1x+AxEk=;
-        b=YJHWV82vS1RnOkr8kEctR5xoLTs1gYFhORbJ6aNj78xb5/7gOJdYxxcY7PJ6dlIJ/JU5du
-        eF6711JUqtasJ4jNOQ8VWU/tdK9m+TiNAzpybLEEixAFQbI4qEvknTZbyIsl/v9c82jRD/
-        pZ8I42tjndDmv2svjIyE3Ki5MigFO4w=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-265-HMM-NhgaM46tV1vkr9d1oQ-1; Mon, 14 Jun 2021 16:17:06 -0400
-X-MC-Unique: HMM-NhgaM46tV1vkr9d1oQ-1
-Received: by mail-ot1-f69.google.com with SMTP id x35-20020a0568302463b02903cb28b38d0aso2301968otr.19
-        for <linux-fpga@vger.kernel.org>; Mon, 14 Jun 2021 13:17:06 -0700 (PDT)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m59DiS1ZjnjfAyunE8ikV8cdEfZ7rZEI1Opqzju1Nk0=;
+        b=Vm0bHyE50IIRNVVaKZZYugF7pbnyjEYnlfGL+B/NtI7SFN3q3hB/aLH3xlCUSUJ7VLXNf8
+        3GIbdvSL80N3Ww7y8Qz0PvAAqHG1WnOypxWCLzptEcIgUuIsZlRi+CtJWyjMC6/FICRWRJ
+        ZLWnVKK4j0cuS0R1QhV8UIpGxVlDdCw=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-361-q88SUaV3OVWB0hGns0U6nA-1; Mon, 14 Jun 2021 16:17:14 -0400
+X-MC-Unique: q88SUaV3OVWB0hGns0U6nA-1
+Received: by mail-oo1-f71.google.com with SMTP id l13-20020a4aa78d0000b0290245c8f11ac2so7635374oom.11
+        for <linux-fpga@vger.kernel.org>; Mon, 14 Jun 2021 13:17:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6BGYUcTx5tsZwPa17u6H+0H1QgwUbqfF91m+1x+AxEk=;
-        b=X2XAr94lAdFiG+Qx6ndmDhzYweKKpZSBz3s/EwCvPm8OYA0LaPZs5QwQqlSgMYVEPE
-         8uFQCjwVN8HJ2TJrA6/8YNb6Kh0BUY85I3j/q1rcOiOws4PeNafRs4J7Zz0g0iw34ouc
-         JSeoQIaaWjGjcSvOJMLtx8yIkp8X27ZjUbAYiYmVJYeMght4PkmMxEHMfZL7amSXjuPL
-         OyBz8rnKostdTLUNXUIEd6YbPLNyuvvnfvZRVItco/SyVfwKU9yPxA6pK/t1FYhxIXVF
-         SC/ki8vCvHSAcDoqI4HpqJgQ4iir/a+Ge+bZ49QrKJp+K8miAREg/dFvOaSNb0exEDCQ
-         /XsQ==
-X-Gm-Message-State: AOAM53346XJWs5PuEkAtdiJt7vWdVy59f3yAAVUf0JmRudZMOwxcKlHV
-        V/aB8XXxpPzz9ciL7hp5ouf1AyM5jgu7PUxHnPdWXUUzPDObOMME6Zj/oXgJ1SKsvlR4sTQ/sJQ
-        KCX8dqgCQyHUo32i6NZn4qQ==
-X-Received: by 2002:a9d:ea2:: with SMTP id 31mr15359821otj.200.1623701825792;
-        Mon, 14 Jun 2021 13:17:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxStQ7LCZTicbomt7siOy4OuZfVD05aIA2Dix5G42Cxc5pR7KAybcNVdBiEuXhJuxkEq35kJg==
-X-Received: by 2002:a9d:ea2:: with SMTP id 31mr15359806otj.200.1623701825558;
-        Mon, 14 Jun 2021 13:17:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=m59DiS1ZjnjfAyunE8ikV8cdEfZ7rZEI1Opqzju1Nk0=;
+        b=X+PPqswFnufju5wv/3Ppg8CpHEgJ8VYmM7ytSnCL2BpRGL0Fb4KlugtEBkTX4t9X+t
+         4VFlZZP2WQ2rOyGo4C8QbeLoLO1BxjwmDEw+CganK8do63nsuPUvuWs15Fg88axN0Qq0
+         J67zjQEpWtR/6kdyJN0QIZXt5Kd8xSBuVwNBPQtj/2rsYsjJ4+VW4FE1o2qsJdRw07Wm
+         5qXSEzCxvkHWBXamm65UYU3tpCOrnuubSOYdks2YTw6JBIO+TMjGXr5olAoyVhiBIjib
+         HOj5V673vDS3Ij5+Fn02yRdl9GU1f8sFbodIuG8R4lO7teIqxIJJj4yOWm8G0yWBw8lI
+         V4kg==
+X-Gm-Message-State: AOAM532zaNOt6J0MQkeUGfn5wj3RwODj90KPhizDHBJKw19C61/z/djN
+        aXYPpIi1HBGzoqiAi+qE4R9Jd0uH1xbVwzHL3TlKPvYg/zdBg4GHciSZY4eMi3w5iyGuLwvy84w
+        syGdcGQvlZhM0yGr+CeNAPw==
+X-Received: by 2002:a54:4091:: with SMTP id i17mr594907oii.96.1623701833975;
+        Mon, 14 Jun 2021 13:17:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy3K8cIrnlZQomBgKz/dwkYBYT7XHgBiItRGW5wPdfp1N6A9j3HJjFVPjlwovBmIAe6kVRtCA==
+X-Received: by 2002:a54:4091:: with SMTP id i17mr594888oii.96.1623701833671;
+        Mon, 14 Jun 2021 13:17:13 -0700 (PDT)
 Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id b198sm408535oii.19.2021.06.14.13.17.03
+        by smtp.gmail.com with ESMTPSA id b198sm408535oii.19.2021.06.14.13.17.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jun 2021 13:17:05 -0700 (PDT)
+        Mon, 14 Jun 2021 13:17:13 -0700 (PDT)
 From:   trix@redhat.com
 To:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net,
         michal.simek@xilinx.com, gregkh@linuxfoundation.org,
@@ -59,10 +60,12 @@ To:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net,
 Cc:     linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Tom Rix <trix@redhat.com>
-Subject: [PATCH v4 0/4] fpga: reorganize to subdirs
-Date:   Mon, 14 Jun 2021 13:16:43 -0700
-Message-Id: <20210614201648.3358206-1-trix@redhat.com>
+Subject: [PATCH v4 1/4] fpga: dfl: reorganize to subdir layout
+Date:   Mon, 14 Jun 2021 13:16:45 -0700
+Message-Id: <20210614201648.3358206-3-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
+In-Reply-To: <20210614201648.3358206-1-trix@redhat.com>
+References: <20210614201648.3358206-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -70,13 +73,6 @@ List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Tom Rix <trix@redhat.com>
-
-The incoming xrt patchset has a toplevel subdir xrt/
-The current fpga/ uses a single dir with filename prefixes to subdivide owners
-For consistency, there should be only one way to organize the fpga/ dir.
-Because the subdir model scales better, refactor to use it.
-The discussion wrt xrt is here:
-https://lore.kernel.org/linux-fpga/68e85a4f-4a10-1ff9-0443-aa565878c855@redhat.com/
 
 Follow drivers/net/ethernet/ which has control configs
 NET_VENDOR_BLA that map to drivers/net/ethernet/bla
@@ -102,89 +98,45 @@ fpga/Makefile by
 
 obj-$(CONFIG_FPGA_BLA) += bla/
 
-Some cleanup to arrange thing alphabetically and make fpga/Makefile's
-whitespace look more like net/'s
+This is the dfl/ subdir part.
 
-Changes from
-v1
-  Drop renaming files
-  Cleanup makefiles
+Create a dfl/ subdir
+Move dfl-* files to it.
+Add a Kconfig and Makefile
 
-v2
-  Expand commit messages
-  Add SPDX to Kconfig
-  Expand new Kconfig variable help messages
+Because FPGA_DFL is now used in dfl/Kconfig in a if/endif
+block, all the other configs in dfl/Kconfig implicitly depend
+on FPGA_DFL.  So the explicit dependence can be removed.  Also
+since FPGA_DFL depends on HAS_IOMEM, it can be removed from the
+other configs.
 
-v3
-  Update Documentation/fpga/dfl.rst for fpga/dfl/
-
-Tom Rix (4):
-  fpga: dfl: reorganize to subdir layout
-  fpga: xilinx: reorganize to subdir layout
-  fpga: altera: reorganize to subdir layout
-  fpga: lattice: reorganize to subdir layout
-
- Documentation/fpga/dfl.rst                    |   4 +-
- MAINTAINERS                                   |   2 +-
- drivers/fpga/Kconfig                          | 204 +-----------------
- drivers/fpga/Makefile                         |  47 +---
- drivers/fpga/altera/Kconfig                   |  85 ++++++++
- drivers/fpga/altera/Makefile                  |  12 ++
- drivers/fpga/{ => altera}/altera-cvp.c        |   0
- drivers/fpga/{ => altera}/altera-fpga2sdram.c |   0
- .../fpga/{ => altera}/altera-freeze-bridge.c  |   0
- drivers/fpga/{ => altera}/altera-hps2fpga.c   |   0
- .../{ => altera}/altera-pr-ip-core-plat.c     |   0
- drivers/fpga/{ => altera}/altera-pr-ip-core.c |   0
- drivers/fpga/{ => altera}/altera-ps-spi.c     |   0
- drivers/fpga/{ => altera}/socfpga-a10.c       |   0
- drivers/fpga/{ => altera}/socfpga.c           |   0
- drivers/fpga/{ => altera}/stratix10-soc.c     |   0
- drivers/fpga/{ => altera}/ts73xx-fpga.c       |   0
- drivers/fpga/dfl/Kconfig                      |  83 +++++++
- drivers/fpga/dfl/Makefile                     |  16 ++
- drivers/fpga/{ => dfl}/dfl-afu-dma-region.c   |   0
- drivers/fpga/{ => dfl}/dfl-afu-error.c        |   0
- drivers/fpga/{ => dfl}/dfl-afu-main.c         |   0
- drivers/fpga/{ => dfl}/dfl-afu-region.c       |   0
- drivers/fpga/{ => dfl}/dfl-afu.h              |   0
- drivers/fpga/{ => dfl}/dfl-fme-br.c           |   0
- drivers/fpga/{ => dfl}/dfl-fme-error.c        |   0
- drivers/fpga/{ => dfl}/dfl-fme-main.c         |   0
- drivers/fpga/{ => dfl}/dfl-fme-mgr.c          |   0
- drivers/fpga/{ => dfl}/dfl-fme-perf.c         |   0
- drivers/fpga/{ => dfl}/dfl-fme-pr.c           |   0
- drivers/fpga/{ => dfl}/dfl-fme-pr.h           |   0
- drivers/fpga/{ => dfl}/dfl-fme-region.c       |   0
- drivers/fpga/{ => dfl}/dfl-fme.h              |   0
- drivers/fpga/{ => dfl}/dfl-n3000-nios.c       |   0
- drivers/fpga/{ => dfl}/dfl-pci.c              |   0
- drivers/fpga/{ => dfl}/dfl.c                  |   0
- drivers/fpga/{ => dfl}/dfl.h                  |   0
- drivers/fpga/lattice/Kconfig                  |  29 +++
- drivers/fpga/lattice/Makefile                 |   4 +
- drivers/fpga/{ => lattice}/ice40-spi.c        |   0
- drivers/fpga/{ => lattice}/machxo2-spi.c      |   0
- drivers/fpga/xilinx/Kconfig                   |  55 +++++
- drivers/fpga/xilinx/Makefile                  |   6 +
- .../fpga/{ => xilinx}/xilinx-pr-decoupler.c   |   0
- drivers/fpga/{ => xilinx}/xilinx-spi.c        |   0
- drivers/fpga/{ => xilinx}/zynq-fpga.c         |   0
- drivers/fpga/{ => xilinx}/zynqmp-fpga.c       |   0
- 47 files changed, 305 insertions(+), 242 deletions(-)
- create mode 100644 drivers/fpga/altera/Kconfig
- create mode 100644 drivers/fpga/altera/Makefile
- rename drivers/fpga/{ => altera}/altera-cvp.c (100%)
- rename drivers/fpga/{ => altera}/altera-fpga2sdram.c (100%)
- rename drivers/fpga/{ => altera}/altera-freeze-bridge.c (100%)
- rename drivers/fpga/{ => altera}/altera-hps2fpga.c (100%)
- rename drivers/fpga/{ => altera}/altera-pr-ip-core-plat.c (100%)
- rename drivers/fpga/{ => altera}/altera-pr-ip-core.c (100%)
- rename drivers/fpga/{ => altera}/altera-ps-spi.c (100%)
- rename drivers/fpga/{ => altera}/socfpga-a10.c (100%)
- rename drivers/fpga/{ => altera}/socfpga.c (100%)
- rename drivers/fpga/{ => altera}/stratix10-soc.c (100%)
- rename drivers/fpga/{ => altera}/ts73xx-fpga.c (100%)
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ Documentation/fpga/dfl.rst                  |  4 +-
+ MAINTAINERS                                 |  2 +-
+ drivers/fpga/Kconfig                        | 80 +-------------------
+ drivers/fpga/Makefile                       | 18 +----
+ drivers/fpga/dfl/Kconfig                    | 83 +++++++++++++++++++++
+ drivers/fpga/dfl/Makefile                   | 16 ++++
+ drivers/fpga/{ => dfl}/dfl-afu-dma-region.c |  0
+ drivers/fpga/{ => dfl}/dfl-afu-error.c      |  0
+ drivers/fpga/{ => dfl}/dfl-afu-main.c       |  0
+ drivers/fpga/{ => dfl}/dfl-afu-region.c     |  0
+ drivers/fpga/{ => dfl}/dfl-afu.h            |  0
+ drivers/fpga/{ => dfl}/dfl-fme-br.c         |  0
+ drivers/fpga/{ => dfl}/dfl-fme-error.c      |  0
+ drivers/fpga/{ => dfl}/dfl-fme-main.c       |  0
+ drivers/fpga/{ => dfl}/dfl-fme-mgr.c        |  0
+ drivers/fpga/{ => dfl}/dfl-fme-perf.c       |  0
+ drivers/fpga/{ => dfl}/dfl-fme-pr.c         |  0
+ drivers/fpga/{ => dfl}/dfl-fme-pr.h         |  0
+ drivers/fpga/{ => dfl}/dfl-fme-region.c     |  0
+ drivers/fpga/{ => dfl}/dfl-fme.h            |  0
+ drivers/fpga/{ => dfl}/dfl-n3000-nios.c     |  0
+ drivers/fpga/{ => dfl}/dfl-pci.c            |  0
+ drivers/fpga/{ => dfl}/dfl.c                |  0
+ drivers/fpga/{ => dfl}/dfl.h                |  0
+ 24 files changed, 104 insertions(+), 99 deletions(-)
  create mode 100644 drivers/fpga/dfl/Kconfig
  create mode 100644 drivers/fpga/dfl/Makefile
  rename drivers/fpga/{ => dfl}/dfl-afu-dma-region.c (100%)
@@ -205,17 +157,342 @@ Tom Rix (4):
  rename drivers/fpga/{ => dfl}/dfl-pci.c (100%)
  rename drivers/fpga/{ => dfl}/dfl.c (100%)
  rename drivers/fpga/{ => dfl}/dfl.h (100%)
- create mode 100644 drivers/fpga/lattice/Kconfig
- create mode 100644 drivers/fpga/lattice/Makefile
- rename drivers/fpga/{ => lattice}/ice40-spi.c (100%)
- rename drivers/fpga/{ => lattice}/machxo2-spi.c (100%)
- create mode 100644 drivers/fpga/xilinx/Kconfig
- create mode 100644 drivers/fpga/xilinx/Makefile
- rename drivers/fpga/{ => xilinx}/xilinx-pr-decoupler.c (100%)
- rename drivers/fpga/{ => xilinx}/xilinx-spi.c (100%)
- rename drivers/fpga/{ => xilinx}/zynq-fpga.c (100%)
- rename drivers/fpga/{ => xilinx}/zynqmp-fpga.c (100%)
 
+diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+index ef9eec71f6f3a..532fdc2e7d623 100644
+--- a/Documentation/fpga/dfl.rst
++++ b/Documentation/fpga/dfl.rst
+@@ -210,7 +210,7 @@ device and etc. Its driver module is always loaded first once the device is
+ created by the system. This driver plays an infrastructural role in the
+ driver architecture. It locates the DFLs in the device memory, handles them
+ and related resources to common interfaces from DFL framework for enumeration.
+-(Please refer to drivers/fpga/dfl.c for detailed enumeration APIs).
++(Please refer to drivers/fpga/dfl/dfl.c for detailed enumeration APIs).
+ 
+ The FPGA Management Engine (FME) driver is a platform driver which is loaded
+ automatically after FME platform device creation from the DFL device module. It
+@@ -499,7 +499,7 @@ In some cases, we may need to add some new private features to existing FIUs
+ framework, as each private feature will be parsed automatically and related
+ mmio resources can be found under FIU platform device created by DFL framework.
+ Developer only needs to provide a sub feature driver with matched feature id.
+-FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
++FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl/dfl-fme-pr.c)
+ could be a reference.
+ 
+ Location of DFLs on a PCI Device
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c6cdd550cd3ad..50b0e470f5f09 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7229,7 +7229,7 @@ L:	linux-fpga@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-bus-dfl*
+ F:	Documentation/fpga/dfl.rst
+-F:	drivers/fpga/dfl*
++F:	drivers/fpga/dfl/
+ F:	drivers/uio/uio_dfl.c
+ F:	include/linux/dfl.h
+ F:	include/uapi/linux/fpga-dfl.h
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 8cd454ee20c0c..7a290b2234576 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -145,85 +145,7 @@ config OF_FPGA_REGION
+ 	  Support for loading FPGA images by applying a Device Tree
+ 	  overlay.
+ 
+-config FPGA_DFL
+-	tristate "FPGA Device Feature List (DFL) support"
+-	select FPGA_BRIDGE
+-	select FPGA_REGION
+-	depends on HAS_IOMEM
+-	help
+-	  Device Feature List (DFL) defines a feature list structure that
+-	  creates a linked list of feature headers within the MMIO space
+-	  to provide an extensible way of adding features for FPGA.
+-	  Driver can walk through the feature headers to enumerate feature
+-	  devices (e.g. FPGA Management Engine, Port and Accelerator
+-	  Function Unit) and their private features for target FPGA devices.
+-
+-	  Select this option to enable common support for Field-Programmable
+-	  Gate Array (FPGA) solutions which implement Device Feature List.
+-	  It provides enumeration APIs and feature device infrastructure.
+-
+-config FPGA_DFL_FME
+-	tristate "FPGA DFL FME Driver"
+-	depends on FPGA_DFL && HWMON && PERF_EVENTS
+-	help
+-	  The FPGA Management Engine (FME) is a feature device implemented
+-	  under Device Feature List (DFL) framework. Select this option to
+-	  enable the platform device driver for FME which implements all
+-	  FPGA platform level management features. There shall be one FME
+-	  per DFL based FPGA device.
+-
+-config FPGA_DFL_FME_MGR
+-	tristate "FPGA DFL FME Manager Driver"
+-	depends on FPGA_DFL_FME && HAS_IOMEM
+-	help
+-	  Say Y to enable FPGA Manager driver for FPGA Management Engine.
+-
+-config FPGA_DFL_FME_BRIDGE
+-	tristate "FPGA DFL FME Bridge Driver"
+-	depends on FPGA_DFL_FME && HAS_IOMEM
+-	help
+-	  Say Y to enable FPGA Bridge driver for FPGA Management Engine.
+-
+-config FPGA_DFL_FME_REGION
+-	tristate "FPGA DFL FME Region Driver"
+-	depends on FPGA_DFL_FME && HAS_IOMEM
+-	help
+-	  Say Y to enable FPGA Region driver for FPGA Management Engine.
+-
+-config FPGA_DFL_AFU
+-	tristate "FPGA DFL AFU Driver"
+-	depends on FPGA_DFL
+-	help
+-	  This is the driver for FPGA Accelerated Function Unit (AFU) which
+-	  implements AFU and Port management features. A User AFU connects
+-	  to the FPGA infrastructure via a Port. There may be more than one
+-	  Port/AFU per DFL based FPGA device.
+-
+-config FPGA_DFL_NIOS_INTEL_PAC_N3000
+-	tristate "FPGA DFL NIOS Driver for Intel PAC N3000"
+-	depends on FPGA_DFL
+-	select REGMAP
+-	help
+-	  This is the driver for the N3000 Nios private feature on Intel
+-	  PAC (Programmable Acceleration Card) N3000. It communicates
+-	  with the embedded Nios processor to configure the retimers on
+-	  the card. It also instantiates the SPI master (spi-altera) for
+-	  the card's BMC (Board Management Controller).
+-
+-config FPGA_DFL_PCI
+-	tristate "FPGA DFL PCIe Device Driver"
+-	depends on PCI && FPGA_DFL
+-	help
+-	  Select this option to enable PCIe driver for PCIe-based
+-	  Field-Programmable Gate Array (FPGA) solutions which implement
+-	  the Device Feature List (DFL). This driver provides interfaces
+-	  for userspace applications to configure, enumerate, open and access
+-	  FPGA accelerators on the FPGA DFL devices, enables system level
+-	  management functions such as FPGA partial reconfiguration, power
+-	  management and virtualization with DFL framework and DFL feature
+-	  device drivers.
+-
+-	  To compile this as a module, choose M here.
++source "drivers/fpga/dfl/Kconfig"
+ 
+ config FPGA_MGR_ZYNQMP_FPGA
+ 	tristate "Xilinx ZynqMP FPGA"
+diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+index 18dc9885883a2..bda74e54ce390 100644
+--- a/drivers/fpga/Makefile
++++ b/drivers/fpga/Makefile
+@@ -31,20 +31,4 @@ obj-$(CONFIG_XILINX_PR_DECOUPLER)	+= xilinx-pr-decoupler.o
+ obj-$(CONFIG_FPGA_REGION)		+= fpga-region.o
+ obj-$(CONFIG_OF_FPGA_REGION)		+= of-fpga-region.o
+ 
+-# FPGA Device Feature List Support
+-obj-$(CONFIG_FPGA_DFL)			+= dfl.o
+-obj-$(CONFIG_FPGA_DFL_FME)		+= dfl-fme.o
+-obj-$(CONFIG_FPGA_DFL_FME_MGR)		+= dfl-fme-mgr.o
+-obj-$(CONFIG_FPGA_DFL_FME_BRIDGE)	+= dfl-fme-br.o
+-obj-$(CONFIG_FPGA_DFL_FME_REGION)	+= dfl-fme-region.o
+-obj-$(CONFIG_FPGA_DFL_AFU)		+= dfl-afu.o
+-
+-dfl-fme-objs := dfl-fme-main.o dfl-fme-pr.o dfl-fme-error.o
+-dfl-fme-objs += dfl-fme-perf.o
+-dfl-afu-objs := dfl-afu-main.o dfl-afu-region.o dfl-afu-dma-region.o
+-dfl-afu-objs += dfl-afu-error.o
+-
+-obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+-
+-# Drivers for FPGAs which implement DFL
+-obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
++obj-$(CONFIG_FPGA_DFL) += dfl/
+diff --git a/drivers/fpga/dfl/Kconfig b/drivers/fpga/dfl/Kconfig
+new file mode 100644
+index 0000000000000..f765b0ec63d5c
+--- /dev/null
++++ b/drivers/fpga/dfl/Kconfig
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++config FPGA_DFL
++	tristate "FPGA Device Feature List (DFL) support"
++	select FPGA_BRIDGE
++	select FPGA_REGION
++	depends on HAS_IOMEM
++	help
++	  Device Feature List (DFL) defines a feature list structure that
++	  creates a linked list of feature headers within the MMIO space
++	  to provide an extensible way of adding features for FPGA.
++	  Driver can walk through the feature headers to enumerate feature
++	  devices (e.g. FPGA Management Engine, Port and Accelerator
++	  Function Unit) and their private features for target FPGA devices.
++
++	  Select this option to enable common support for Field-Programmable
++	  Gate Array (FPGA) solutions which implement Device Feature List.
++	  It provides enumeration APIs and feature device infrastructure.
++
++if FPGA_DFL
++
++config FPGA_DFL_FME
++	tristate "FPGA DFL FME Driver"
++	depends on HWMON && PERF_EVENTS
++	help
++	  The FPGA Management Engine (FME) is a feature device implemented
++	  under Device Feature List (DFL) framework. Select this option to
++	  enable the platform device driver for FME which implements all
++	  FPGA platform level management features. There shall be one FME
++	  per DFL based FPGA device.
++
++config FPGA_DFL_FME_MGR
++	tristate "FPGA DFL FME Manager Driver"
++	depends on FPGA_DFL_FME
++	help
++	  Say Y to enable FPGA Manager driver for FPGA Management Engine.
++
++config FPGA_DFL_FME_BRIDGE
++	tristate "FPGA DFL FME Bridge Driver"
++	depends on FPGA_DFL_FME
++	help
++	  Say Y to enable FPGA Bridge driver for FPGA Management Engine.
++
++config FPGA_DFL_FME_REGION
++	tristate "FPGA DFL FME Region Driver"
++	depends on FPGA_DFL_FME
++	help
++	  Say Y to enable FPGA Region driver for FPGA Management Engine.
++
++config FPGA_DFL_AFU
++	tristate "FPGA DFL AFU Driver"
++	help
++	  This is the driver for FPGA Accelerated Function Unit (AFU) which
++	  implements AFU and Port management features. A User AFU connects
++	  to the FPGA infrastructure via a Port. There may be more than one
++	  Port/AFU per DFL based FPGA device.
++
++config FPGA_DFL_NIOS_INTEL_PAC_N3000
++	tristate "FPGA DFL NIOS Driver for Intel PAC N3000"
++	select REGMAP
++	help
++	  This is the driver for the N3000 Nios private feature on Intel
++	  PAC (Programmable Acceleration Card) N3000. It communicates
++	  with the embedded Nios processor to configure the retimers on
++	  the card. It also instantiates the SPI master (spi-altera) for
++	  the card's BMC (Board Management Controller).
++
++config FPGA_DFL_PCI
++	tristate "FPGA DFL PCIe Device Driver"
++	depends on PCI
++	help
++	  Select this option to enable PCIe driver for PCIe-based
++	  Field-Programmable Gate Array (FPGA) solutions which implement
++	  the Device Feature List (DFL). This driver provides interfaces
++	  for userspace applications to configure, enumerate, open and access
++	  FPGA accelerators on the FPGA DFL devices, enables system level
++	  management functions such as FPGA partial reconfiguration, power
++	  management and virtualization with DFL framework and DFL feature
++	  device drivers.
++
++	  To compile this as a module, choose M here.
++
++endif #FPGA_DFL
+diff --git a/drivers/fpga/dfl/Makefile b/drivers/fpga/dfl/Makefile
+new file mode 100644
+index 0000000000000..1c22507c60aa0
+--- /dev/null
++++ b/drivers/fpga/dfl/Makefile
+@@ -0,0 +1,16 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# FPGA Device Feature List (DFL) Support
++obj-$(CONFIG_FPGA_DFL) += dfl.o
++obj-$(CONFIG_FPGA_DFL_AFU) += dfl-afu.o
++obj-$(CONFIG_FPGA_DFL_FME) += dfl-fme.o
++obj-$(CONFIG_FPGA_DFL_FME_BRIDGE) += dfl-fme-br.o
++obj-$(CONFIG_FPGA_DFL_FME_MGR) += dfl-fme-mgr.o
++obj-$(CONFIG_FPGA_DFL_FME_REGION) += dfl-fme-region.o
++obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000) += dfl-n3000-nios.o
++obj-$(CONFIG_FPGA_DFL_PCI) += dfl-pci.o
++
++dfl-fme-objs := dfl-fme-main.o dfl-fme-pr.o dfl-fme-error.o		\
++                dfl-fme-perf.o
++dfl-afu-objs := dfl-afu-main.o dfl-afu-region.o dfl-afu-dma-region.o	\
++                dfl-afu-error.o
+diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl/dfl-afu-dma-region.c
+similarity index 100%
+rename from drivers/fpga/dfl-afu-dma-region.c
+rename to drivers/fpga/dfl/dfl-afu-dma-region.c
+diff --git a/drivers/fpga/dfl-afu-error.c b/drivers/fpga/dfl/dfl-afu-error.c
+similarity index 100%
+rename from drivers/fpga/dfl-afu-error.c
+rename to drivers/fpga/dfl/dfl-afu-error.c
+diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl/dfl-afu-main.c
+similarity index 100%
+rename from drivers/fpga/dfl-afu-main.c
+rename to drivers/fpga/dfl/dfl-afu-main.c
+diff --git a/drivers/fpga/dfl-afu-region.c b/drivers/fpga/dfl/dfl-afu-region.c
+similarity index 100%
+rename from drivers/fpga/dfl-afu-region.c
+rename to drivers/fpga/dfl/dfl-afu-region.c
+diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl/dfl-afu.h
+similarity index 100%
+rename from drivers/fpga/dfl-afu.h
+rename to drivers/fpga/dfl/dfl-afu.h
+diff --git a/drivers/fpga/dfl-fme-br.c b/drivers/fpga/dfl/dfl-fme-br.c
+similarity index 100%
+rename from drivers/fpga/dfl-fme-br.c
+rename to drivers/fpga/dfl/dfl-fme-br.c
+diff --git a/drivers/fpga/dfl-fme-error.c b/drivers/fpga/dfl/dfl-fme-error.c
+similarity index 100%
+rename from drivers/fpga/dfl-fme-error.c
+rename to drivers/fpga/dfl/dfl-fme-error.c
+diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl/dfl-fme-main.c
+similarity index 100%
+rename from drivers/fpga/dfl-fme-main.c
+rename to drivers/fpga/dfl/dfl-fme-main.c
+diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl/dfl-fme-mgr.c
+similarity index 100%
+rename from drivers/fpga/dfl-fme-mgr.c
+rename to drivers/fpga/dfl/dfl-fme-mgr.c
+diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl/dfl-fme-perf.c
+similarity index 100%
+rename from drivers/fpga/dfl-fme-perf.c
+rename to drivers/fpga/dfl/dfl-fme-perf.c
+diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl/dfl-fme-pr.c
+similarity index 100%
+rename from drivers/fpga/dfl-fme-pr.c
+rename to drivers/fpga/dfl/dfl-fme-pr.c
+diff --git a/drivers/fpga/dfl-fme-pr.h b/drivers/fpga/dfl/dfl-fme-pr.h
+similarity index 100%
+rename from drivers/fpga/dfl-fme-pr.h
+rename to drivers/fpga/dfl/dfl-fme-pr.h
+diff --git a/drivers/fpga/dfl-fme-region.c b/drivers/fpga/dfl/dfl-fme-region.c
+similarity index 100%
+rename from drivers/fpga/dfl-fme-region.c
+rename to drivers/fpga/dfl/dfl-fme-region.c
+diff --git a/drivers/fpga/dfl-fme.h b/drivers/fpga/dfl/dfl-fme.h
+similarity index 100%
+rename from drivers/fpga/dfl-fme.h
+rename to drivers/fpga/dfl/dfl-fme.h
+diff --git a/drivers/fpga/dfl-n3000-nios.c b/drivers/fpga/dfl/dfl-n3000-nios.c
+similarity index 100%
+rename from drivers/fpga/dfl-n3000-nios.c
+rename to drivers/fpga/dfl/dfl-n3000-nios.c
+diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl/dfl-pci.c
+similarity index 100%
+rename from drivers/fpga/dfl-pci.c
+rename to drivers/fpga/dfl/dfl-pci.c
+diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl/dfl.c
+similarity index 100%
+rename from drivers/fpga/dfl.c
+rename to drivers/fpga/dfl/dfl.c
+diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl/dfl.h
+similarity index 100%
+rename from drivers/fpga/dfl.h
+rename to drivers/fpga/dfl/dfl.h
 -- 
 2.26.3
 
