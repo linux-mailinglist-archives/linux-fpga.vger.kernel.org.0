@@ -2,45 +2,45 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1F23A6CCC
-	for <lists+linux-fpga@lfdr.de>; Mon, 14 Jun 2021 19:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6F73A6CD1
+	for <lists+linux-fpga@lfdr.de>; Mon, 14 Jun 2021 19:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235078AbhFNRLh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 14 Jun 2021 13:11:37 -0400
-Received: from mail-pf1-f178.google.com ([209.85.210.178]:39583 "EHLO
-        mail-pf1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbhFNRLh (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Jun 2021 13:11:37 -0400
-Received: by mail-pf1-f178.google.com with SMTP id k15so11019652pfp.6
-        for <linux-fpga@vger.kernel.org>; Mon, 14 Jun 2021 10:09:34 -0700 (PDT)
+        id S235485AbhFNRL4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 14 Jun 2021 13:11:56 -0400
+Received: from mail-pf1-f176.google.com ([209.85.210.176]:36774 "EHLO
+        mail-pf1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235403AbhFNRLz (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Jun 2021 13:11:55 -0400
+Received: by mail-pf1-f176.google.com with SMTP id c12so11023528pfl.3
+        for <linux-fpga@vger.kernel.org>; Mon, 14 Jun 2021 10:09:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yYPGmANBSfZBi4amo1Bgx2OEk3jiKcjGucI1PxoeL9E=;
-        b=gltgBI6bgjY3ehx9+x/qb9nIN8qCc56V/hbPVDl7hGDuwp0/X2nrxD8JQywI6iyI+H
-         A+txhSRTgmm3BfsETv8MGYSBbNXOGx6j/Ghr9te7dRgYqn9vZnZVDSypV/BiiHwMIXGI
-         jOHuzTmcmJwF8jWMcTBg8p6k9HtN9/+lQs0eejrNhU2XWC4EWt9ong8Nh96WNtQ3DnZL
-         DuZUtmA4ERNuDpfTXSAyux4bHlmfxlVbt7ZCn5XtYFee7b/s0r7kTrM7P2pGgO6ZkZim
-         H/BNgjb2w6W9DLD5KBsO2pW/4PC2IdaHMxKxPYVTeMtp+kKIH+vNVVeqx0pZ+nqbxdYq
-         x0Aw==
-X-Gm-Message-State: AOAM530OQpirFlbFD87g1/d++pxlaUKjqoDN6qmGJRENygMuZF+Z5HWk
-        elX/l8gzOf6Mr9cGAJwT6uk=
-X-Google-Smtp-Source: ABdhPJwWePqYNeZZfFQwOKbSjRcvlQU1WUl1ddDIqGHXfH4dOxR37q94NRH5ngfqgdOtsSw4P6GRIw==
-X-Received: by 2002:aa7:8509:0:b029:2e5:8cfe:bc17 with SMTP id v9-20020aa785090000b02902e58cfebc17mr22852330pfn.2.1623690574232;
-        Mon, 14 Jun 2021 10:09:34 -0700 (PDT)
+        bh=64IvQlrXeou9jXkno2E2GgEDTZxDLn+r8yPnV7jM6oo=;
+        b=PTFh+wR3BfMUsUFYBkD28ry8bASJiIgV2+eSB5rM44x5OHB7/sjeg3aE4/QZv7kmlg
+         vc5Y3a7HBVwKyn0INNDnED1WanoZ61Lhv9hpviejR0dS+f7uWAkHCILOj6dWpCsYJCzP
+         JFxXFKAh88ksDkPyc4hHdy2Pv6Yvi3Wnw7zT0RciD2hAhdLVCv5i43GeT/W3x9X35DyE
+         xuDEzi7h/w1vCJwQQKENhlFyh1/5MPWZsUontJSSHpms8Jnmm8nNSxSMI+qFr18u3zBU
+         xtseqdSiCmdrdojGKPiJL+hIHF8b1t433elvKMI+ySCAKVVuqmgCUk1EbHdjMzXh36Fv
+         vE+w==
+X-Gm-Message-State: AOAM533dqhSRwT5c/1K1SLQ9uxgNb/v1NXhiQvrs24hQb7ipWx5QuaBd
+        PTFzWSfjV/YOTPwFdmx42BE=
+X-Google-Smtp-Source: ABdhPJx5kOEjSsaSYR/Db6aGJrE6a9pEL2diVwV4qJ/d7Cqzg+CY5I86v7QtB/7EDnPBHpnKlDlddw==
+X-Received: by 2002:a65:624e:: with SMTP id q14mr17720484pgv.103.1623690575797;
+        Mon, 14 Jun 2021 10:09:35 -0700 (PDT)
 Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id y3sm9753126pgr.46.2021.06.14.10.09.33
+        by smtp.gmail.com with ESMTPSA id 20sm12842816pfi.170.2021.06.14.10.09.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jun 2021 10:09:33 -0700 (PDT)
+        Mon, 14 Jun 2021 10:09:35 -0700 (PDT)
 From:   Moritz Fischer <mdf@kernel.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-fpga@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
         Russ Weight <russell.h.weight@intel.com>,
         Xu Yilun <yilun.xu@intel.com>
-Subject: [PATCH 7/8] fpga: bridge: Use standard dev_release for class driver
-Date:   Mon, 14 Jun 2021 10:09:08 -0700
-Message-Id: <20210614170909.232415-8-mdf@kernel.org>
+Subject: [PATCH 8/8] fpga: region: Use standard dev_release for class driver
+Date:   Mon, 14 Jun 2021 10:09:09 -0700
+Message-Id: <20210614170909.232415-9-mdf@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210614170909.232415-1-mdf@kernel.org>
 References: <20210614170909.232415-1-mdf@kernel.org>
@@ -52,87 +52,87 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Russ Weight <russell.h.weight@intel.com>
 
-The FPGA bridge class driver data structure is being treated as a managed
+The FPGA region class driver data structure is being treated as a managed
 resource instead of using standard dev_release call-back to release the
 class data structure. This change populates the class.dev_release function
-and changes the fpga_bridge_free() function to call put_device(). It also
-changes fpga_bridge_unregister() to call device_del() instead of
-device_unregister().
+and changes the fpga_region_free() function to call put_device().
+It also changes fpga_region_unregister() to call device_del() instead
+of device_unregister().
 
 Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 Reviewed-by: Xu Yilun <yilun.xu@intel.com>
 Signed-off-by: Moritz Fischer <mdf@kernel.org>
 ---
- drivers/fpga/fpga-bridge.c | 28 ++++++++++++++--------------
+ drivers/fpga/fpga-region.c | 28 ++++++++++++++--------------
  1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-index d4aca0f724f5..cf06c887593a 100644
---- a/drivers/fpga/fpga-bridge.c
-+++ b/drivers/fpga/fpga-bridge.c
-@@ -340,8 +340,10 @@ struct fpga_bridge *fpga_bridge_create(struct device *parent, const char *name,
+diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+index 4d60d643cada..bdc15fab60c0 100644
+--- a/drivers/fpga/fpga-region.c
++++ b/drivers/fpga/fpga-region.c
+@@ -204,8 +204,10 @@ struct fpga_region
  		return NULL;
  
- 	id = ida_simple_get(&fpga_bridge_ida, 0, 0, GFP_KERNEL);
+ 	id = ida_simple_get(&fpga_region_ida, 0, 0, GFP_KERNEL);
 -	if (id < 0)
--		goto error_kfree;
+-		goto err_free;
 +	if (id < 0) {
-+		kfree(bridge);
++		kfree(region);
 +		return NULL;
 +	}
  
- 	mutex_init(&bridge->mutex);
- 	INIT_LIST_HEAD(&bridge->node);
-@@ -358,17 +360,12 @@ struct fpga_bridge *fpga_bridge_create(struct device *parent, const char *name,
- 	bridge->dev.id = id;
+ 	region->mgr = mgr;
+ 	region->get_bridges = get_bridges;
+@@ -219,17 +221,12 @@ struct fpga_region
+ 	region->dev.id = id;
  
- 	ret = dev_set_name(&bridge->dev, "br%d", id);
+ 	ret = dev_set_name(&region->dev, "region%d", id);
 -	if (ret)
--		goto error_device;
+-		goto err_remove;
 +	if (ret) {
-+		put_device(&bridge->dev);
++		put_device(&region->dev);
 +		return NULL;
 +	}
  
- 	return bridge;
+ 	return region;
 -
--error_device:
--	ida_simple_remove(&fpga_bridge_ida, id);
--error_kfree:
--	kfree(bridge);
+-err_remove:
+-	ida_simple_remove(&fpga_region_ida, id);
+-err_free:
+-	kfree(region);
 -
 -	return NULL;
  }
- EXPORT_SYMBOL_GPL(fpga_bridge_create);
+ EXPORT_SYMBOL_GPL(fpga_region_create);
  
-@@ -378,8 +375,7 @@ EXPORT_SYMBOL_GPL(fpga_bridge_create);
+@@ -239,8 +236,7 @@ EXPORT_SYMBOL_GPL(fpga_region_create);
   */
- void fpga_bridge_free(struct fpga_bridge *bridge)
+ void fpga_region_free(struct fpga_region *region)
  {
--	ida_simple_remove(&fpga_bridge_ida, bridge->dev.id);
--	kfree(bridge);
-+	put_device(&bridge->dev);
+-	ida_simple_remove(&fpga_region_ida, region->dev.id);
+-	kfree(region);
++	put_device(&region->dev);
  }
- EXPORT_SYMBOL_GPL(fpga_bridge_free);
+ EXPORT_SYMBOL_GPL(fpga_region_free);
  
-@@ -469,12 +465,16 @@ void fpga_bridge_unregister(struct fpga_bridge *bridge)
- 	if (bridge->br_ops && bridge->br_ops->fpga_bridge_remove)
- 		bridge->br_ops->fpga_bridge_remove(bridge);
- 
--	device_unregister(&bridge->dev);
-+	device_del(&bridge->dev);
- }
- EXPORT_SYMBOL_GPL(fpga_bridge_unregister);
- 
- static void fpga_bridge_dev_release(struct device *dev)
+@@ -310,12 +306,16 @@ EXPORT_SYMBOL_GPL(fpga_region_register);
+  */
+ void fpga_region_unregister(struct fpga_region *region)
  {
-+	struct fpga_bridge *bridge = to_fpga_bridge(dev);
+-	device_unregister(&region->dev);
++	device_del(&region->dev);
+ }
+ EXPORT_SYMBOL_GPL(fpga_region_unregister);
+ 
+ static void fpga_region_dev_release(struct device *dev)
+ {
++	struct fpga_region *region = to_fpga_region(dev);
 +
-+	ida_simple_remove(&fpga_bridge_ida, bridge->dev.id);
-+	kfree(bridge);
++	ida_simple_remove(&fpga_region_ida, region->dev.id);
++	kfree(region);
  }
  
- static int __init fpga_bridge_dev_init(void)
+ /**
 -- 
 2.31.1
 
