@@ -2,227 +2,135 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C43103A92F7
-	for <lists+linux-fpga@lfdr.de>; Wed, 16 Jun 2021 08:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393483AA71F
+	for <lists+linux-fpga@lfdr.de>; Thu, 17 Jun 2021 00:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbhFPGqV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 16 Jun 2021 02:46:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35710 "EHLO mail.kernel.org"
+        id S230351AbhFPXAB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 16 Jun 2021 19:00:01 -0400
+Received: from mga01.intel.com ([192.55.52.88]:34926 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229543AbhFPGqU (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 16 Jun 2021 02:46:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3688461246;
-        Wed, 16 Jun 2021 06:44:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623825855;
-        bh=sRHL++P1LvtKqbrnBqUPwL8n12zn0Ypnp0DTwnZUriY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NRAWuRAZtqyO7vfC1QkEpH+IsDYhm/GX5lb7VGhggfKOKWhP9JftTetpySEvbUMLq
-         gA2b5tqh+2smQvnAM3PFbk4QOyYxIvDbfgR8IqRCyjsqW3/u0uwjW0YbuyqtHf1/vU
-         MEcbywTDDPAjW/AMAeYmvxOUXwD/SbnfjKWli2T4=
-Date:   Wed, 16 Jun 2021 08:44:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     hao.wu@intel.com, mdf@kernel.org, corbet@lwn.net,
-        michal.simek@xilinx.com, krzysztof.kozlowski@canonical.com,
-        nava.manne@xilinx.com, yilun.xu@intel.com, davidgow@google.com,
-        fpacheco@redhat.com, richard.gong@intel.com, luca@lucaceresoli.net,
-        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 2/4] fpga: xilinx: reorganize to subdir layout
-Message-ID: <YMmdu2tBZn7BE88J@kroah.com>
-References: <20210614201648.3358206-1-trix@redhat.com>
- <20210614201648.3358206-4-trix@redhat.com>
- <YMhYfCgOAthEqPXs@kroah.com>
- <4fa2a233-e429-1b41-fc9b-1f4c6d9a05ae@redhat.com>
+        id S230188AbhFPXAA (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 16 Jun 2021 19:00:00 -0400
+IronPort-SDR: 74iwvKvtfN6k4Jtj7MXPuFFf//q2dilYZn25+8KPSiqhkgZCvUmge8qunCsVoov4gHRNx3HxIc
+ tJ/ZC/qj6eoQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10017"; a="227776751"
+X-IronPort-AV: E=Sophos;i="5.83,278,1616482800"; 
+   d="scan'208";a="227776751"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2021 15:57:54 -0700
+IronPort-SDR: D5d1oVn9ZfNy8i67/8dYYM/me8jQYDm05JzBJ92Gzcd7VAgAacScZ5EQJrJSnohPSdJu4kmbNH
+ 5/pqXN8DgSzA==
+X-IronPort-AV: E=Sophos;i="5.83,278,1616482800"; 
+   d="scan'208";a="452552746"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.209.39.246])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2021 15:57:53 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        richard.gong@intel.com, Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v5 0/3] fpga: Use standard class dev_release function
+Date:   Wed, 16 Jun 2021 15:57:37 -0700
+Message-Id: <20210616225740.399486-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4fa2a233-e429-1b41-fc9b-1f4c6d9a05ae@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 01:19:11PM -0700, Tom Rix wrote:
-> 
-> On 6/15/21 12:36 AM, Greg KH wrote:
-> > On Mon, Jun 14, 2021 at 01:16:46PM -0700, trix@redhat.com wrote:
-> > > From: Tom Rix <trix@redhat.com>
-> > > 
-> > > Follow drivers/net/ethernet/ which has control configs
-> > > NET_VENDOR_BLA that map to drivers/net/ethernet/bla
-> > > Since fpgas do not have many vendors, drop the 'VENDOR' and use
-> > > FPGA_BLA.
-> > > 
-> > > There are several new subdirs
-> > > altera/
-> > > dfl/
-> > > lattice/
-> > > xilinx/
-> > > 
-> > > Each subdir has a Kconfig that has a new/reused
-> > > 
-> > > if FPGA_BLA
-> > >    ... existing configs ...
-> > > endif FPGA_BLA
-> > > 
-> > > Which is sourced into the main fpga/Kconfig
-> > > 
-> > > Each subdir has a Makefile whose transversal is controlled in the
-> > > fpga/Makefile by
-> > > 
-> > > obj-$(CONFIG_FPGA_BLA) += bla/
-> > > 
-> > > This is the xilinx/ subdir part
-> > > 
-> > > Create a xilinx/ subdir
-> > > Move xilinx-* and zynq* files to it.
-> > > Add a Kconfig and Makefile
-> > > 
-> > > Signed-off-by: Tom Rix <trix@redhat.com>
-> > > ---
-> > >   drivers/fpga/Kconfig                          | 40 +-------------
-> > >   drivers/fpga/Makefile                         |  5 +-
-> > >   drivers/fpga/xilinx/Kconfig                   | 55 +++++++++++++++++++
-> > >   drivers/fpga/xilinx/Makefile                  |  6 ++
-> > >   .../fpga/{ => xilinx}/xilinx-pr-decoupler.c   |  0
-> > >   drivers/fpga/{ => xilinx}/xilinx-spi.c        |  0
-> > >   drivers/fpga/{ => xilinx}/zynq-fpga.c         |  0
-> > >   drivers/fpga/{ => xilinx}/zynqmp-fpga.c       |  0
-> > >   8 files changed, 63 insertions(+), 43 deletions(-)
-> > >   create mode 100644 drivers/fpga/xilinx/Kconfig
-> > >   create mode 100644 drivers/fpga/xilinx/Makefile
-> > >   rename drivers/fpga/{ => xilinx}/xilinx-pr-decoupler.c (100%)
-> > >   rename drivers/fpga/{ => xilinx}/xilinx-spi.c (100%)
-> > >   rename drivers/fpga/{ => xilinx}/zynq-fpga.c (100%)
-> > >   rename drivers/fpga/{ => xilinx}/zynqmp-fpga.c (100%)
-> > > 
-> > > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> > > index 7a290b2234576..28c261807b428 100644
-> > > --- a/drivers/fpga/Kconfig
-> > > +++ b/drivers/fpga/Kconfig
-> > > @@ -52,25 +52,12 @@ config FPGA_MGR_ALTERA_CVP
-> > >   	  FPGA manager driver support for Arria-V, Cyclone-V, Stratix-V,
-> > >   	  Arria 10 and Stratix10 Altera FPGAs using the CvP interface over PCIe.
-> > > -config FPGA_MGR_ZYNQ_FPGA
-> > > -	tristate "Xilinx Zynq FPGA"
-> > > -	depends on ARCH_ZYNQ || COMPILE_TEST
-> > > -	help
-> > > -	  FPGA manager driver support for Xilinx Zynq FPGAs.
-> > > -
-> > >   config FPGA_MGR_STRATIX10_SOC
-> > >   	tristate "Intel Stratix10 SoC FPGA Manager"
-> > >   	depends on (ARCH_INTEL_SOCFPGA && INTEL_STRATIX10_SERVICE)
-> > >   	help
-> > >   	  FPGA manager driver support for the Intel Stratix10 SoC.
-> > > -config FPGA_MGR_XILINX_SPI
-> > > -	tristate "Xilinx Configuration over Slave Serial (SPI)"
-> > > -	depends on SPI
-> > > -	help
-> > > -	  FPGA manager driver support for Xilinx FPGA configuration
-> > > -	  over slave serial interface.
-> > > -
-> > >   config FPGA_MGR_ICE40_SPI
-> > >   	tristate "Lattice iCE40 SPI"
-> > >   	depends on OF && SPI
-> > > @@ -113,23 +100,6 @@ config ALTERA_FREEZE_BRIDGE
-> > >   	  isolate one region of the FPGA from the busses while that
-> > >   	  region is being reprogrammed.
-> > > -config XILINX_PR_DECOUPLER
-> > > -	tristate "Xilinx LogiCORE PR Decoupler"
-> > > -	depends on FPGA_BRIDGE
-> > > -	depends on HAS_IOMEM
-> > > -	help
-> > > -	  Say Y to enable drivers for Xilinx LogiCORE PR Decoupler
-> > > -	  or Xilinx Dynamic Function eXchnage AIX Shutdown Manager.
-> > > -	  The PR Decoupler exists in the FPGA fabric to isolate one
-> > > -	  region of the FPGA from the busses while that region is
-> > > -	  being reprogrammed during partial reconfig.
-> > > -	  The Dynamic Function eXchange AXI shutdown manager prevents
-> > > -	  AXI traffic from passing through the bridge. The controller
-> > > -	  safely handles AXI4MM and AXI4-Lite interfaces on a
-> > > -	  Reconfigurable Partition when it is undergoing dynamic
-> > > -	  reconfiguration, preventing the system deadlock that can
-> > > -	  occur if AXI transactions are interrupted by DFX.
-> > > -
-> > >   config FPGA_REGION
-> > >   	tristate "FPGA Region"
-> > >   	depends on FPGA_BRIDGE
-> > > @@ -146,14 +116,6 @@ config OF_FPGA_REGION
-> > >   	  overlay.
-> > >   source "drivers/fpga/dfl/Kconfig"
-> > > -
-> > > -config FPGA_MGR_ZYNQMP_FPGA
-> > > -	tristate "Xilinx ZynqMP FPGA"
-> > > -	depends on ZYNQMP_FIRMWARE || (!ZYNQMP_FIRMWARE && COMPILE_TEST)
-> > > -	help
-> > > -	  FPGA manager driver support for Xilinx ZynqMP FPGAs.
-> > > -	  This driver uses the processor configuration port(PCAP)
-> > > -	  to configure the programmable logic(PL) through PS
-> > > -	  on ZynqMP SoC.
-> > > +source "drivers/fpga/xilinx/Kconfig"
-> > >   endif # FPGA
-> > > diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> > > index bda74e54ce390..0868c7c4264d8 100644
-> > > --- a/drivers/fpga/Makefile
-> > > +++ b/drivers/fpga/Makefile
-> > > @@ -15,9 +15,6 @@ obj-$(CONFIG_FPGA_MGR_SOCFPGA)		+= socfpga.o
-> > >   obj-$(CONFIG_FPGA_MGR_SOCFPGA_A10)	+= socfpga-a10.o
-> > >   obj-$(CONFIG_FPGA_MGR_STRATIX10_SOC)	+= stratix10-soc.o
-> > >   obj-$(CONFIG_FPGA_MGR_TS73XX)		+= ts73xx-fpga.o
-> > > -obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
-> > > -obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
-> > > -obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
-> > >   obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
-> > >   obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
-> > > @@ -25,10 +22,10 @@ obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
-> > >   obj-$(CONFIG_FPGA_BRIDGE)		+= fpga-bridge.o
-> > >   obj-$(CONFIG_SOCFPGA_FPGA_BRIDGE)	+= altera-hps2fpga.o altera-fpga2sdram.o
-> > >   obj-$(CONFIG_ALTERA_FREEZE_BRIDGE)	+= altera-freeze-bridge.o
-> > > -obj-$(CONFIG_XILINX_PR_DECOUPLER)	+= xilinx-pr-decoupler.o
-> > >   # High Level Interfaces
-> > >   obj-$(CONFIG_FPGA_REGION)		+= fpga-region.o
-> > >   obj-$(CONFIG_OF_FPGA_REGION)		+= of-fpga-region.o
-> > >   obj-$(CONFIG_FPGA_DFL) += dfl/
-> > > +obj-$(CONFIG_FPGA_XILINX) += xilinx/
-> > > diff --git a/drivers/fpga/xilinx/Kconfig b/drivers/fpga/xilinx/Kconfig
-> > > new file mode 100644
-> > > index 0000000000000..e016d450539a0
-> > > --- /dev/null
-> > > +++ b/drivers/fpga/xilinx/Kconfig
-> > > @@ -0,0 +1,55 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only
-> > > +
-> > > +config FPGA_XILINX
-> > > +	bool "Xilinx FPGAs"
-> > "Xilinx FPGA drivers"
-> > 
-> > > +	default y
-> > > +	help
-> > > +	  If you have a xilinx fpga, say Y.
-> > "Xilix FPGA"
-> Ok.
-> > But how about being a bit more descriptive here:
-> > 
-> > "Select this option if you want to enable support for Xilinx FPGA
-> > drivers"
-> ok
-> > 
-> > > +	  Note that the answer to this question doesn't directly affect the
-> > > +	  kernel: saying N will just cause the configurator to skip all
-> > > +	  the questions about xilinx fpgas. If you say Y, you will be asked
-> > > +	  for your specific device in the following questions.
-> > Why this "note"?  Do networking drivers have this type of description?
-> 
-> Yes, the NET_VENDOR_* configs all have this boilerplate.
+The FPGA framework has a convention of using managed resource
+functions to allow parent drivers to manage the data structures
+allocated by the class drivers. They use an empty *_dev_release()
+function to satisfy the class driver.
 
-The first example I found drivers/net/ethernet/cavium/Kconfig, did not.
-But you are right, others do.
+This is inconsistent with linux driver model.
 
-But fix the case issues in this text please.  Vendors get mad enough
-when we use their names, we should at least get the case correct when
-using them.
+These changes remove the managed resource functions and populate
+the class dev_release callback functions. They also merge the
+create and register functions into a single register function for
+each of the fpga-mgr, fpga-region, and fpga-bridge class drivers.
 
-thanks,
+For more context, refer to this email thread:
 
-greg k-h
+https://marc.info/?l=linux-fpga&m=162127412218557&w=2
+
+I turned on the configs assocated with each of the modified files,
+but I must have been missing some dependencies, because not all
+of them compiled. I did a run-time test specifically with the
+dfl-fme infrastructure. This would have exercised the region,
+bridge, and fpga-mgr frameworks.
+
+Changelog v4 -> v5:
+  - Rebased on top of recently accepted patches.
+  - Removed compat_id from the fpga_mgr_register() parameter list
+    and added it to the fpga_manager_ops structure. This also required
+    dynamically allocating the dfl-fme-ops structure in order to add
+    the appropriate compat_id.
+  - Created the fpga_region_ops data structure which is optionally passed
+    to fpga_region_register(). compat_id, the get_bridges() pointer, and
+    the priv pointer are included in the fpga_region_ops structure.
+
+Changelog v3 -> v4:
+  - Added the compat_id parameter to fpga_mgr_register() and
+    devm_fpga_mgr_register() to ensure that the compat_id is set before
+    the device_register() call.
+  - Added the compat_id parameter to fpga_region_register() to ensure
+    that the compat_id is set before the device_register() call.
+  - Modified the dfl_fpga_feature_devs_enumerate() function to restore
+    the fpga_region_register() call to the correct location.
+
+Changelog v2 -> v3:
+  - Cleaned up comment headers for fpga_mgr_register(), fpga_bridge_register(),
+    and fpga_region_register().
+  - Fixed error return on ida_simple_get() failure for fpga_mgr_register(),
+    fpga_bridge_register(), and fpga_region_register().
+  - Fixed error return value for fpga_bridge_register(): ERR_PTR(ret) instead
+    of NULL.
+
+Changelog v1 -> v2:
+  - Restored devm_fpga_mgr_register() functionality to the fpga-mgr
+    class driver, adapted for the combined create/register functionality.
+  - All previous callers of devm_fpga_mgr_register() will continue to call
+    devm_fpga_mgr_register().
+  - replaced unnecessary ternary operators in return statements with
+    standard if conditions.
+
+Russ Weight (3):
+  fpga: mgr: Use standard dev_release for class driver
+  fpga: bridge: Use standard dev_release for class driver
+  fpga: region: Use standard dev_release for class driver
+
+ drivers/fpga/altera-cvp.c           |  12 +-
+ drivers/fpga/altera-fpga2sdram.c    |  12 +-
+ drivers/fpga/altera-freeze-bridge.c |  10 +-
+ drivers/fpga/altera-hps2fpga.c      |  12 +-
+ drivers/fpga/altera-pr-ip-core.c    |   8 +-
+ drivers/fpga/altera-ps-spi.c        |  10 +-
+ drivers/fpga/dfl-fme-br.c           |  10 +-
+ drivers/fpga/dfl-fme-mgr.c          |  52 +++++----
+ drivers/fpga/dfl-fme-pr.c           |   2 +-
+ drivers/fpga/dfl-fme-region.c       |  32 ++++--
+ drivers/fpga/dfl.c                  |  12 +-
+ drivers/fpga/fpga-bridge.c          | 116 ++++----------------
+ drivers/fpga/fpga-mgr.c             | 163 +++++++---------------------
+ drivers/fpga/fpga-region.c          | 119 +++++---------------
+ drivers/fpga/ice40-spi.c            |  10 +-
+ drivers/fpga/machxo2-spi.c          |  10 +-
+ drivers/fpga/of-fpga-region.c       |  14 +--
+ drivers/fpga/socfpga-a10.c          |  16 +--
+ drivers/fpga/socfpga.c              |  10 +-
+ drivers/fpga/stratix10-soc.c        |  16 +--
+ drivers/fpga/ts73xx-fpga.c          |  10 +-
+ drivers/fpga/xilinx-pr-decoupler.c  |  17 +--
+ drivers/fpga/xilinx-spi.c           |  12 +-
+ drivers/fpga/zynq-fpga.c            |  16 +--
+ drivers/fpga/zynqmp-fpga.c          |  10 +-
+ include/linux/fpga/fpga-bridge.h    |  12 +-
+ include/linux/fpga/fpga-mgr.h       |  43 ++++----
+ include/linux/fpga/fpga-region.h    |  38 ++++---
+ 28 files changed, 286 insertions(+), 518 deletions(-)
+
+-- 
+2.25.1
+
