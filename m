@@ -2,27 +2,27 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E1A3AE3C5
-	for <lists+linux-fpga@lfdr.de>; Mon, 21 Jun 2021 09:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2153AE3BF
+	for <lists+linux-fpga@lfdr.de>; Mon, 21 Jun 2021 09:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbhFUHIz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 21 Jun 2021 03:08:55 -0400
-Received: from first.geanix.com ([116.203.34.67]:54084 "EHLO first.geanix.com"
+        id S230161AbhFUHIw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 21 Jun 2021 03:08:52 -0400
+Received: from first.geanix.com ([116.203.34.67]:54102 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229583AbhFUHIq (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 21 Jun 2021 03:08:46 -0400
+        id S229804AbhFUHIs (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 21 Jun 2021 03:08:48 -0400
 Received: from 185.17.218.86 (unknown [185.17.218.86])
-        by first.geanix.com (Postfix) with ESMTPSA id 178754C3BB8;
-        Mon, 21 Jun 2021 07:06:30 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id DD7B34C3BB7;
+        Mon, 21 Jun 2021 07:06:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=silicom.dk; s=first;
-        t=1624259190; bh=e3h4F5C3FTTVvZujv41AeP7Sff71JQ2Cctc9Xe9XIFs=;
+        t=1624259192; bh=EvJBXmKpD9XzIULYTA8pUFWOTf4A6/iiDUj0U5hdSvc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=K+fM+uVUJKzZqm93n6/x114b/dsA0eaUMioKpKEdZvL0JHN4fMDBi3REyC5Zq7GqZ
-         v4GylqkFXGTsKjVPImUInd66OLG2qbTp80wOIdTtp/FwMi+IMktUkLfcoy2ZIgumN4
-         0pwlvxxhYnDUTeOARSOwDpeKzB1AwDtVHA2M5Oh94MR6yUPNFY8YXoGbctKqLWviHz
-         JWNZtEiyBKhIYW8EPXQc/Tdn7inaHWkjeXY4usy9k4LwOd2IkBPjrmnn6taf86kp3a
-         A/w/AQsb3fVLb+uDJ4Mech467WmpGANOU+JeCoGbudw6oUyF3tsLkc9/WAlZDGfS/J
-         tcwOpTRQg85mQ==
+        b=a4r9ikf51N/FMGhXyLfg7J0FfBqo+3CMlW6iDiIN/fAshKci3ArsTgT9y/Qd3PXm7
+         V/dfn6TTtmDz2B3k/hgvHtPuzD+Df6JyDuYZ521ki/QlGLzKaovoSK47Bd+NNIjqtr
+         G3/bKFlmtA4izfChXzQjAxKIlOs8tmP7GK1EWifItkLrXs4y7VaAcH+wwSpKQo4nT/
+         DPWx7yI6UdMX0dkILu/M0tfMXJNrvQJxIaLcoKoDYUbs1rdfkiDRTghHzNObOiKJZr
+         ua7416nnJYNCQ6aUI21EbUmdJr1T7SaqWlwfVNMIfW9QhXvrYr8YfDeS7FEoAlc+zk
+         1mBerE5LRxKwg==
 From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@silicom.dk>
 To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
         Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
@@ -33,10 +33,12 @@ To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
 Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@geanix.com>,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
+        Debarati Biswas <debaratix.biswas@intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
         =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@silicom.dk>
-Subject: [PATCH 1/4] fpga: dfl: pci: add device IDs for Silicom N501x PAC cards
-Date:   Mon, 21 Jun 2021 09:06:18 +0200
-Message-Id: <20210621070621.431482-2-mhu@silicom.dk>
+Subject: [PATCH 2/4] fpga: dfl: Move DFH header register macros to linux/dfl.h
+Date:   Mon, 21 Jun 2021 09:06:19 +0200
+Message-Id: <20210621070621.431482-3-mhu@silicom.dk>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20210621070621.431482-1-mhu@silicom.dk>
 References: <20210621070621.431482-1-mhu@silicom.dk>
@@ -51,37 +53,164 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This adds the approved PCI Express Device IDs for the
-Silicom PAC N5010 and N5011 cards.
+From: Debarati Biswas <debaratix.biswas@intel.com>
 
+Device Feature List (DFL) drivers may be defined in subdirectories other
+than drivers/fpga, and each DFL driver should have access to the Device
+Feature Header (DFH) register, which contains revision and type
+information. This change moves the macros specific to the DFH register
+from drivers/fpga/dfl.h to include/linux/dfl.h.
+
+Signed-off-by: Debarati Biswas <debaratix.biswas@intel.com>
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
 ---
- drivers/fpga/dfl-pci.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/fpga/dfl.h  | 48 +----------------------------------------
+ include/linux/dfl.h | 52 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 53 insertions(+), 47 deletions(-)
 
-diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-index b44523ea8c91..4d68719e608f 100644
---- a/drivers/fpga/dfl-pci.c
-+++ b/drivers/fpga/dfl-pci.c
-@@ -74,6 +74,9 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
- #define PCIE_DEVICE_ID_PF_DSC_1_X		0x09C4
- #define PCIE_DEVICE_ID_INTEL_PAC_N3000		0x0B30
- #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
-+#define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
-+#define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
+diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+index 2b82c96ba56c..6ed0353e9a99 100644
+--- a/drivers/fpga/dfl.h
++++ b/drivers/fpga/dfl.h
+@@ -17,6 +17,7 @@
+ #include <linux/bitfield.h>
+ #include <linux/cdev.h>
+ #include <linux/delay.h>
++#include <linux/dfl.h>
+ #include <linux/eventfd.h>
+ #include <linux/fs.h>
+ #include <linux/interrupt.h>
+@@ -53,32 +54,6 @@
+ #define PORT_FEATURE_ID_UINT		0x12
+ #define PORT_FEATURE_ID_STP		0x13
+ 
+-/*
+- * Device Feature Header Register Set
+- *
+- * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
+- * For AFUs, they have DFH + GUID as common header registers.
+- * For private features, they only have DFH register as common header.
+- */
+-#define DFH			0x0
+-#define GUID_L			0x8
+-#define GUID_H			0x10
+-#define NEXT_AFU		0x18
+-
+-#define DFH_SIZE		0x8
+-
+-/* Device Feature Header Register Bitfield */
+-#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID */
+-#define DFH_ID_FIU_FME		0
+-#define DFH_ID_FIU_PORT		1
+-#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
+-#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
+-#define DFH_EOL			BIT_ULL(40)		/* End of list */
+-#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
+-#define DFH_TYPE_AFU		1
+-#define DFH_TYPE_PRIVATE	3
+-#define DFH_TYPE_FIU		4
+-
+ /* Next AFU Register Bitfield */
+ #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
+ 
+@@ -403,27 +378,6 @@ struct device *dfl_fpga_pdata_to_parent(struct dfl_feature_platform_data *pdata)
+ 	return pdata->dev->dev.parent->parent;
+ }
+ 
+-static inline bool dfl_feature_is_fme(void __iomem *base)
+-{
+-	u64 v = readq(base + DFH);
+-
+-	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
+-		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_FME);
+-}
+-
+-static inline bool dfl_feature_is_port(void __iomem *base)
+-{
+-	u64 v = readq(base + DFH);
+-
+-	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
+-		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_PORT);
+-}
+-
+-static inline u8 dfl_feature_revision(void __iomem *base)
+-{
+-	return (u8)FIELD_GET(DFH_REVISION, readq(base + DFH));
+-}
+-
+ /**
+  * struct dfl_fpga_enum_info - DFL FPGA enumeration information
+  *
+diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+index 6cc10982351a..1cd86b2e7cb1 100644
+--- a/include/linux/dfl.h
++++ b/include/linux/dfl.h
+@@ -8,7 +8,9 @@
+ #ifndef __LINUX_DFL_H
+ #define __LINUX_DFL_H
+ 
++#include <linux/bitfield.h>
+ #include <linux/device.h>
++#include <linux/io.h>
+ #include <linux/mod_devicetable.h>
+ 
+ /**
+@@ -83,4 +85,54 @@ void dfl_driver_unregister(struct dfl_driver *dfl_drv);
+ 	module_driver(__dfl_driver, dfl_driver_register, \
+ 		      dfl_driver_unregister)
+ 
++/*
++ * Device Feature Header Register Set
++ *
++ * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
++ * For AFUs, they have DFH + GUID as common header registers.
++ * For private features, they only have DFH register as common header.
++ */
++#define DFH                     0x0
++#define GUID_L                  0x8
++#define GUID_H                  0x10
++#define NEXT_AFU                0x18
 +
- /* VF Device */
- #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
- #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
-@@ -90,6 +93,8 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
- 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_N3000),},
- 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_D5005),},
- 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
-+	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
-+	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
- 	{0,}
- };
- MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
++#define DFH_SIZE                0x8
++
++/* Device Feature Header Register Bitfield */
++#define DFH_ID                  GENMASK_ULL(11, 0)      /* Feature ID */
++#define DFH_ID_FIU_FME          0
++#define DFH_ID_FIU_PORT         1
++#define DFH_REVISION            GENMASK_ULL(15, 12)
++#define DFH_NEXT_HDR_OFST       GENMASK_ULL(39, 16)     /* Offset to next DFH */
++#define DFH_EOL                 BIT_ULL(40)             /* End of list */
++#define DFH_TYPE                GENMASK_ULL(63, 60)     /* Feature type */
++#define DFH_TYPE_AFU            1
++#define DFH_TYPE_PRIVATE        3
++#define DFH_TYPE_FIU            4
++
++/* Function to read from DFH and check if the Feature type is FME */
++static inline bool dfl_feature_is_fme(void __iomem *base)
++{
++	u64 v = readq(base + DFH);
++
++	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
++		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_FME);
++}
++
++/* Function to read from DFH and check if the Feature type is port*/
++static inline bool dfl_feature_is_port(void __iomem *base)
++{
++	u64 v = readq(base + DFH);
++
++	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
++		 (FIELD_GET(DFH_ID, v) == DFH_ID_FIU_PORT);
++}
++
++/* Function to read feature revision from DFH */
++static inline u8 dfl_feature_revision(void __iomem *base)
++{
++	return (u8)FIELD_GET(DFH_REVISION, readq(base + DFH));
++}
++
+ #endif /* __LINUX_DFL_H */
 -- 
 2.31.0
 
