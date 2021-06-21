@@ -2,897 +2,321 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E67E3AE374
-	for <lists+linux-fpga@lfdr.de>; Mon, 21 Jun 2021 08:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4263AE380
+	for <lists+linux-fpga@lfdr.de>; Mon, 21 Jun 2021 08:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbhFUGr1 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 21 Jun 2021 02:47:27 -0400
-Received: from mga18.intel.com ([134.134.136.126]:55469 "EHLO mga18.intel.com"
+        id S229887AbhFUGtm (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 21 Jun 2021 02:49:42 -0400
+Received: from mga12.intel.com ([192.55.52.136]:16680 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230202AbhFUGrM (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 21 Jun 2021 02:47:12 -0400
-IronPort-SDR: 0N1ywyV0HJ1xscAQQlgHMhZvESFw3p5iIjhvDcLPpoWJbb8k4cwl247Cdq7xNRh+QGEJ1+C0M6
- BSZ69FL6dsWg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10021"; a="194098526"
+        id S229583AbhFUGtl (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 21 Jun 2021 02:49:41 -0400
+IronPort-SDR: gCz0s4078hTdu69S9TvRPgnaw/URHsl1SDxyF/qKXwIA0tmLkmJ4C4Y5tDK/wql4RTEpaZJBqR
+ nUy+msfq/elA==
+X-IronPort-AV: E=McAfee;i="6200,9189,10021"; a="186480780"
 X-IronPort-AV: E=Sophos;i="5.83,289,1616482800"; 
-   d="scan'208";a="194098526"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2021 23:44:58 -0700
-IronPort-SDR: PApTi2KbIDMFGSi3OntTC00NUIK8QCkqMUJ+yjscU4eu43VpXDCrc68anqZVsymMaYD4PpRchf
- h5yRAn0c0+tw==
+   d="scan'208";a="186480780"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2021 23:47:27 -0700
+IronPort-SDR: xJ+qgaNlhJYF/V1C733Qinw7VL0pJRrRzPaiAKlPlu6HlbVydvo6FHBHjq15SPW5SNdRPfqIXR
+ 3HPNB+IonDbw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,289,1616482800"; 
-   d="scan'208";a="486379707"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by orsmga001.jf.intel.com with ESMTP; 20 Jun 2021 23:44:55 -0700
-Date:   Mon, 21 Jun 2021 14:39:44 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     Tom Rix <trix@redhat.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, lgoncalv@redhat.com, hao.wu@intel.com,
-        matthew.gerlach@intel.com, richard.gong@intel.com
-Subject: Re: [PATCH v5 1/3] fpga: mgr: Use standard dev_release for class
-  driver
-Message-ID: <20210621063944.GC21682@yilunxu-OptiPlex-7050>
+   d="scan'208";a="405525123"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP; 20 Jun 2021 23:47:27 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Sun, 20 Jun 2021 23:47:26 -0700
+Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Sun, 20 Jun 2021 23:47:26 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4
+ via Frontend Transport; Sun, 20 Jun 2021 23:47:26 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.175)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.4; Sun, 20 Jun 2021 23:47:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RRismALh4ucghLTJgIRD/o2e4S/JsPpQXlgOjZbZHM+IiqBQ5J1Ttw+8JFpynEJ4jbhNbPJNjkF5wezH2C3m1rXgtCpSfAEgq8RlNJpKMNctYUtLGTQ2ZaHdbhuYwgJrA+8sC0Ca+sT3tbMfAVcV/iJbJ0V0byXK26EbL5NV956TkztcNZd2cImlw3STfrbupUQacsdLaV2spTqAyvqBMHdBitpVGv85Ky+WsKMmqr4JZBgg81fZ9RAWhRCQQylG2vvrb5GBu0KLbbZZloCt74UCbHoyYWWyIqhglm8/a5fzMD7eEgEjjc49tN0evaD02+9Xew9CgbB72VGmVANLow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WBla+hZHKCQ1UsmkAUF3eEy1tk/HBElIUIOZPQsiWYs=;
+ b=N3h9QJzT9XmtJkU2g6fdYwIaB+uk0xtM4zjIYLfy4JSqplOI9VmY1kgpYusjjKutfJEyUkfVWfgFNuzbfTufIHtCPZfMbGlXU8KtuONFARYQ6JSob/Lke6KL0qYOTfI3QXDVAr2NynhoBZvrzwJdUCUlSIXEaJM3OGwevoCIIg54uWoL+YsZRcRW3UownEZ71c9RNp8K/kGEsrocodZFy4r43p4KHdmno/LwRLIoy9aYJY+kB+49glVRAeEPW83xsFNbILj6QH47yhezUuq21c98mFntshdbNNKN4nMup6pW7FQ5hjAPZ8gmwX8EpRG+Odf2YTbI6dHSmQa/wGELUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WBla+hZHKCQ1UsmkAUF3eEy1tk/HBElIUIOZPQsiWYs=;
+ b=XT8HgTF2mrewfHYY1Vz3sJZH4aib4V2ZswNd6c1n6rZpEHlzC8e1faeZW0k71exS8i5AumXGQibnyeZmJMYY6qG77Cw6ESWrcGuF0fL14OCXZROO7t3tcjwb3speKdI98ToSAeOqdxl/FZpoOOQQHIy2ZYt39Nm8FvGdocMFvFw=
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
+ by DM6PR11MB4457.namprd11.prod.outlook.com (2603:10b6:5:203::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19; Mon, 21 Jun
+ 2021 06:47:24 +0000
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::3dc3:868b:cec3:513b]) by DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::3dc3:868b:cec3:513b%6]) with mapi id 15.20.4242.023; Mon, 21 Jun 2021
+ 06:47:24 +0000
+From:   "Wu, Hao" <hao.wu@intel.com>
+To:     "Weight, Russell H" <russell.h.weight@intel.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>
+CC:     "mdf@kernel.org" <mdf@kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
+        "Gerlach, Matthew" <matthew.gerlach@intel.com>,
+        "Gong, Richard" <richard.gong@intel.com>
+Subject: RE: [PATCH v5 1/3] fpga: mgr: Use standard dev_release for class
+ driver
+Thread-Topic: [PATCH v5 1/3] fpga: mgr: Use standard dev_release for class
+ driver
+Thread-Index: AQHXYwMPs4aRDCQatEGStgPCWyw0TKsZ7AUAgAAE9YCAACAeAIAD9vhA
+Date:   Mon, 21 Jun 2021 06:47:24 +0000
+Message-ID: <DM6PR11MB3819F6705045FEF70C050214850A9@DM6PR11MB3819.namprd11.prod.outlook.com>
 References: <20210616225740.399486-1-russell.h.weight@intel.com>
  <20210616225740.399486-2-russell.h.weight@intel.com>
  <20210618154554.GA5626@yilunxu-OptiPlex-7050>
  <beca500b-a66c-d6fa-1452-3e7513394d0e@intel.com>
  <69a0135d-ad0b-49ea-f741-54c982a0e5f3@intel.com>
- <2253ceae-8c9b-9176-4ec2-88e84c2b627a@redhat.com>
- <af3423d4-a833-8cbf-5863-d387946e8bad@intel.com>
+In-Reply-To: <69a0135d-ad0b-49ea-f741-54c982a0e5f3@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+authentication-results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [192.55.46.52]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e5d394a3-aa5e-487b-0bce-08d934806d6e
+x-ms-traffictypediagnostic: DM6PR11MB4457:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR11MB44574BAE4DB18FC6D52E0711850A9@DM6PR11MB4457.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YZ0skWbInCNNeGqKqhTHWtyoFVMT0MQh3IqgyOF+i2veocSfJulqruMajnS6Q8k9a/NtW6tiCbs+ouJeHVZXy/RNWd6fQlpYrMY0d8hEqTzdLZU+bOOw5HmgL5Ky5pCXkrUBDCpOv77qdy3lstaySOqDe55HhXWU7+sV9TTIbCLm5/wk9GdEzJlH8a2mRRgvWV6wJlVWxmiSGJP5fCfP2SOVVfdtNzsrZjr5b+btvcHUjRxo7LL6swbw7gbi8noRKitCQ1/Iwd16pnKTm1Hty+QFcc5qI7B7yC9IRK2kxggCrmZPoXw1Skvp06QTGpOso1KdiYzDwRfJKIejZp/dUc6bqQKo68AYwJoFXtCqFUsVkHoONzRZQEiV3IMgiDi4v4eEV+XzYgMbeeq2X+bHyYUT9lo+Uojjf26nZArmG+HnpcrNnMjHuVcHsHPuTW8hrnimHjzFdjY5vNhb+BNAS6894ycEwsKZD4SgVWHXieGKAgJf5Pql0dhfjl9eU+IeWveqkImpuxSHahXd3Y1Gax3mu6CabDVJ0Ik7Dz5Xv6fxeXjof0C5IUlrZ7IR7jHrp4fgQa2W/UOjbeWZ4LzarJv7Uy0KYX/oOdPDlbGfSfw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(39860400002)(136003)(366004)(396003)(346002)(83380400001)(478600001)(316002)(38100700002)(76116006)(53546011)(54906003)(64756008)(66556008)(2906002)(66946007)(66476007)(4326008)(7696005)(66446008)(9686003)(33656002)(6636002)(86362001)(107886003)(122000001)(71200400001)(6506007)(110136005)(8676002)(8936002)(26005)(52536014)(55016002)(186003)(5660300002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VDYxRkRYaDBUSGFUOGoxdFlPK250bWR4bnRhMFJpWnBwbEliTmpQeFhlRktn?=
+ =?utf-8?B?ZUF3YVpGNC93aXBVVGV3bVZCOWxXZThOVlkxMm11bkxMTk1UQjZjK1gyRjhz?=
+ =?utf-8?B?cWpjUm9aM1Bjd2tJRTJrenRvVFluQ3JMTWlzUVM5M0lNaWYyWnh6aGRpaUxK?=
+ =?utf-8?B?OEYwMmRDdzVTaEc2cEY1T1lvRnl1dkdZNExNR2xlaXJVZjcybG1ibTNmaENw?=
+ =?utf-8?B?dEZ1a3BSTEt6d09uUUFPM0gycTdzWGdOd0dSNjVMWld0THpZQXFqZFZReTFH?=
+ =?utf-8?B?YndWRzJqd1YrL3JnYmZQZk1OaVRYMmdiMzdJSHBDQmEwUHYxQXc1VDB2aFFm?=
+ =?utf-8?B?NjZkNEdGSVB6bVRRd09jd056dmt2YkhpSmc4cXhUUTU1TWpCZ2djU2Fud1d3?=
+ =?utf-8?B?cytTUW9VZXF0STVEeXVnTmpya3E0aU1kUGR5TDZxTGcwaWlwTHpHbFBacHRy?=
+ =?utf-8?B?ZVJzSVhhVEFoNE5IZDh3R3FjbzF2c1dNbUpmejZ0Z2NlVi82OFc5NmZnbGRs?=
+ =?utf-8?B?VEtyNEwrY0U5djUzay9tUTN6OGo2akl2b1ZZRmdMZWtZM0lxYklacGF0NjZh?=
+ =?utf-8?B?bkNybU8xNkl1dERUUlhHeXEzS0hRNUJIYlJYeW5GZnowOTlUL2hWV1VmZUtN?=
+ =?utf-8?B?clBZVk1hVXc1VHBudkF6SzZvWWxsRW1jcWZtWHd1Nll4Z2d4UzhTVTVpNEZC?=
+ =?utf-8?B?Q3dFeU0wZUMwSEFBayt6YWI4UmkvUFc2M1orb2twOGI4ZjhWdFhYbGVWbm80?=
+ =?utf-8?B?aW12RERkRkVDSkUxNExTWEtkdzlIOCtsM3F6VnF0M04vRWNEY2xHSGlXSzVD?=
+ =?utf-8?B?b1ZpOUVtajdtckFTdEJvc012eVFFa3kvclJiYlhRQU9zZS9peDZIZXZoaklu?=
+ =?utf-8?B?ekhycUNkYVZhQlIxY3daTjBCSVFuK2N6RW80RDZpY1Zwbjg4R2U2KytBUXl1?=
+ =?utf-8?B?VkR2cVcrOHlwcmZjcDFpWHpPMzFkdE5Xc1o4Z1c2T2JuR2hCZXlTaFhyUU0x?=
+ =?utf-8?B?THNob3dFZlMxZjNBR1IxSy96b0pNcERxSWk5ZDNhTzBCWllyN1ZsRTZpQVRs?=
+ =?utf-8?B?Vi9LbUZpZnJIT1h1N1ltSWlUUE1YYmNsbWFLZmVlbWE1SVhObHdHM0UrSFMv?=
+ =?utf-8?B?R2FQN2s4U0lNQllMNUNmd015cWtSNjdXcU10RXdNOHNQZXc0dnBSME5sZGpN?=
+ =?utf-8?B?MFNFL2ZhNmZKUkZlUkpIS0hTZFg5bGZwVVlrZUVjTDl3QVRzNU1Va3Vmb0xk?=
+ =?utf-8?B?S1Q2SFZ2TFBCWUszdStwRXZpdUpyelRzNTZwWnZ2R242Rys5N05KQTlUeGJD?=
+ =?utf-8?B?VHFOTGxkVjAwMHc0MEF3NEI4bkdDb212NzEwMHN4eVkrR0F6VG14dlBDM3R1?=
+ =?utf-8?B?bjRZc2VRazFyOVZzZzZlaURrTXRHMXNSUDV2aWtvQ01FTkdGTFJ1dXc1R0dF?=
+ =?utf-8?B?RzIveDFrbWY0Q2tvc3BMalZLOEtOTklpUW5IVVVKa1ZDSGhZZkwyMk9ISTBa?=
+ =?utf-8?B?dlFFb3dsNlZJdlRNY240aUhLdzlSV3pESnM3K05OMFhGNmJ2MzhIWVdEVjNC?=
+ =?utf-8?B?RzFqOUVlaWQvZDVrTERwT05TQmdLK1V5cEZhRGp6RDNpU1d5TU1mSmVQZ1g4?=
+ =?utf-8?B?TFljdjVzM3htamlEMlNDK01ERnM0MmhBOWVSbVc3ZUNuUG00aE00WFdaRHlJ?=
+ =?utf-8?B?N0ZYUUEyaW9YRWRNcjlUS2dIbC9jRXk0ZzF5RXNOSkNlUW5wSTc2amQxbzAr?=
+ =?utf-8?Q?NrMlX5tyt/pBOf9cZ8=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <af3423d4-a833-8cbf-5863-d387946e8bad@intel.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5d394a3-aa5e-487b-0bce-08d934806d6e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2021 06:47:24.4943
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eUtRWv+sCtuZSVVMh8o0UwVUEvYlhyPoW3zu288TAE8M+iC3tGbgB/ZWy5Ql2uKEQYe3df5eZqbLkQolAxtJhw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4457
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Jun 18, 2021 at 03:31:50PM -0700, Russ Weight wrote:
-> 
-> 
-> On 6/18/21 1:39 PM, Tom Rix wrote:
-> >
-> > On 6/18/21 10:58 AM, Russ Weight wrote:
-> >>
-> >> On 6/18/21 9:03 AM, Russ Weight wrote:
-> >>> On 6/18/21 8:45 AM, Xu Yilun wrote:
-> >>>> On Wed, Jun 16, 2021 at 03:57:38PM -0700, Russ Weight wrote:
-> >>>>> The FPGA manager class driver data structure is being treated as a
-> >>>>> managed resource instead of using standard dev_release call-back
-> >>>>> to release the class data structure. This change removes the
-> >>>>> managed resource code for the freeing of the class data structure
-> >>>>> and combines the create() and register() functions into a single
-> >>>>> register() function.
-> >>>>>
-> >>>>> The devm_fpga_mgr_register() function is retained.
-> >>>>>
-> >>>>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> >>>>> ---
-> >>>>> v5:
-> >>>>>    - Rebased on top of recently accepted patches.
-> >>>>>    - Removed compat_id from the fpga_mgr_register() parameter list
-> >>>>>      and added it to the fpga_manager_ops structure. This also required
-> >>>> My reason for this change is, we could avoid further change of the
-> >>>> fpga_mgr_register() API if we add new input parameters later on.
-> >>> With this patchset, changes are only required for the callers
-> >>> that use the new parameters.
-> >>>
-> >>>>>      dynamically allocating the dfl-fme-ops structure in order to add
-> >>>>>      the appropriate compat_id.
-> >>>> But enforcing the dynamical allocation of the parameters is not prefered
-> >>>> to me. How about a dedicated structure that wraps all the needed
-> >>>> parameters:
-> >>>>
-> >>>> struct fpga_mgr_info {
-> >>>>     const char *name;
-> >>>>     const struct fpga_manager_ops *mops;
-> >>>>     const struct fpga_compat_id *compat_id;
-> >>>>     const void *priv;
-> >>>> };
-> >>>>
-> >>>> Then We can simply define a local variable of this struct for
-> >>>> fpga_mgr_register().
-> >>>>
-> >>>> more details inline.
-> >>> I agree the at the dynamic allocation is not preferred, but it is only
-> >>> required if compat_id is used. In all other cases, the static structure
-> >>> can continue to be used. In otherwords, only one caller is affected.
-> >>>>> v4:
-> >>>>>    - Added the compat_id parameter to fpga_mgr_register() and
-> >>>>>      devm_fpga_mgr_register() to ensure that the compat_id is set before
-> >>>>>      the device_register() call.
-> >>>>> v3:
-> >>>>>    - Cleaned up comment header for fpga_mgr_register()
-> >>>>>    - Fix error return on ida_simple_get() failure
-> >>>>> v2:
-> >>>>>    - Restored devm_fpga_mgr_register() functionality, adapted for the combined
-> >>>>>      create/register functionality.
-> >>>>>    - All previous callers of devm_fpga_mgr_register() will continue to call
-> >>>>>      devm_fpga_mgr_register().
-> >>>>>    - replaced unnecessary ternary operators in return statements with standard
-> >>>>>      if conditions.
-> >>>>> ---
-> >>>>>   drivers/fpga/altera-cvp.c        |  12 +--
-> >>>>>   drivers/fpga/altera-pr-ip-core.c |   8 +-
-> >>>>>   drivers/fpga/altera-ps-spi.c     |  10 +-
-> >>>>>   drivers/fpga/dfl-fme-mgr.c       |  52 ++++++----
-> >>>>>   drivers/fpga/dfl-fme-region.c    |   2 +-
-> >>>>>   drivers/fpga/fpga-mgr.c          | 163 ++++++++-----------------------
-> >>>>>   drivers/fpga/ice40-spi.c         |  10 +-
-> >>>>>   drivers/fpga/machxo2-spi.c       |  10 +-
-> >>>>>   drivers/fpga/socfpga-a10.c       |  16 ++-
-> >>>>>   drivers/fpga/socfpga.c           |  10 +-
-> >>>>>   drivers/fpga/stratix10-soc.c     |  16 +--
-> >>>>>   drivers/fpga/ts73xx-fpga.c       |  10 +-
-> >>>>>   drivers/fpga/xilinx-spi.c        |  12 +--
-> >>>>>   drivers/fpga/zynq-fpga.c         |  16 ++-
-> >>>>>   drivers/fpga/zynqmp-fpga.c       |  10 +-
-> >>>>>   include/linux/fpga/fpga-mgr.h    |  43 ++++----
-> >>>>>   16 files changed, 153 insertions(+), 247 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-> >>>>> index ccf4546eff29..4ffb9da537d8 100644
-> >>>>> --- a/drivers/fpga/altera-cvp.c
-> >>>>> +++ b/drivers/fpga/altera-cvp.c
-> >>>>> @@ -652,19 +652,15 @@ static int altera_cvp_probe(struct pci_dev *pdev,
-> >>>>>       snprintf(conf->mgr_name, sizeof(conf->mgr_name), "%s @%s",
-> >>>>>            ALTERA_CVP_MGR_NAME, pci_name(pdev));
-> >>>>>   -    mgr = devm_fpga_mgr_create(&pdev->dev, conf->mgr_name,
-> >>>>> -                   &altera_cvp_ops, conf);
-> >>>>> -    if (!mgr) {
-> >>>>> -        ret = -ENOMEM;
-> >>>>> +    mgr = fpga_mgr_register(&pdev->dev, conf->mgr_name,
-> >>>>> +                &altera_cvp_ops, conf);
-> >>>>> +    if (IS_ERR(mgr)) {
-> >>>>> +        ret = PTR_ERR(mgr);
-> >>>>>           goto err_unmap;
-> >>>>>       }
-> >>>>>         pci_set_drvdata(pdev, mgr);
-> >>>>>   -    ret = fpga_mgr_register(mgr);
-> >>>>> -    if (ret)
-> >>>>> -        goto err_unmap;
-> >>>>> -
-> >>>>>       return 0;
-> >>>>>     err_unmap:
-> >>>>> diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
-> >>>>> index dfdf21ed34c4..17babf974852 100644
-> >>>>> --- a/drivers/fpga/altera-pr-ip-core.c
-> >>>>> +++ b/drivers/fpga/altera-pr-ip-core.c
-> >>>>> @@ -191,11 +191,11 @@ int alt_pr_register(struct device *dev, void __iomem *reg_base)
-> >>>>>           (val & ALT_PR_CSR_STATUS_MSK) >> ALT_PR_CSR_STATUS_SFT,
-> >>>>>           (int)(val & ALT_PR_CSR_PR_START));
-> >>>>>   -    mgr = devm_fpga_mgr_create(dev, dev_name(dev), &alt_pr_ops, priv);
-> >>>>> -    if (!mgr)
-> >>>>> -        return -ENOMEM;
-> >>>>> +    mgr = devm_fpga_mgr_register(dev, dev_name(dev), &alt_pr_ops, priv);
-> >>>>> +    if (IS_ERR(mgr))
-> >>>>> +        return PTR_ERR(mgr);
-> >>>>>   -    return devm_fpga_mgr_register(dev, mgr);
-> >>>>> +    return 0;
-> >>>>>   }
-> >>>>>   EXPORT_SYMBOL_GPL(alt_pr_register);
-> >>>>>   diff --git a/drivers/fpga/altera-ps-spi.c b/drivers/fpga/altera-ps-spi.c
-> >>>>> index 23bfd4d1ad0f..d3f77b0312b2 100644
-> >>>>> --- a/drivers/fpga/altera-ps-spi.c
-> >>>>> +++ b/drivers/fpga/altera-ps-spi.c
-> >>>>> @@ -302,12 +302,12 @@ static int altera_ps_probe(struct spi_device *spi)
-> >>>>>       snprintf(conf->mgr_name, sizeof(conf->mgr_name), "%s %s",
-> >>>>>            dev_driver_string(&spi->dev), dev_name(&spi->dev));
-> >>>>>   -    mgr = devm_fpga_mgr_create(&spi->dev, conf->mgr_name,
-> >>>>> -                   &altera_ps_ops, conf);
-> >>>>> -    if (!mgr)
-> >>>>> -        return -ENOMEM;
-> >>>>> +    mgr = devm_fpga_mgr_register(&spi->dev, conf->mgr_name,
-> >>>>> +                     &altera_ps_ops, conf);
-> >>>>> +    if (IS_ERR(mgr))
-> >>>>> +        return PTR_ERR(mgr);
-> >>>>>   -    return devm_fpga_mgr_register(&spi->dev, mgr);
-> >>>>> +    return 0;
-> >>>>>   }
-> >>>>>     static const struct spi_device_id altera_ps_spi_ids[] = {
-> >>>>> diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
-> >>>>> index d5861d13b306..1b93bc292dbe 100644
-> >>>>> --- a/drivers/fpga/dfl-fme-mgr.c
-> >>>>> +++ b/drivers/fpga/dfl-fme-mgr.c
-> >>>>> @@ -264,14 +264,6 @@ static u64 fme_mgr_status(struct fpga_manager *mgr)
-> >>>>>       return pr_error_to_mgr_status(priv->pr_error);
-> >>>>>   }
-> >>>>>   -static const struct fpga_manager_ops fme_mgr_ops = {
-> >>>>> -    .write_init = fme_mgr_write_init,
-> >>>>> -    .write = fme_mgr_write,
-> >>>>> -    .write_complete = fme_mgr_write_complete,
-> >>>>> -    .state = fme_mgr_state,
-> >>>>> -    .status = fme_mgr_status,
-> >>>>> -};
-> >>>>> -
-> >>>>>   static void fme_mgr_get_compat_id(void __iomem *fme_pr,
-> >>>>>                     struct fpga_compat_id *id)
-> >>>>>   {
-> >>>>> @@ -279,10 +271,34 @@ static void fme_mgr_get_compat_id(void __iomem *fme_pr,
-> >>>>>       id->id_h = readq(fme_pr + FME_PR_INTFC_ID_H);
-> >>>>>   }
-> >>>>>   +static struct fpga_manager_ops *fme_mgr_get_ops(struct device *dev,
-> >>>>> +                        struct fme_mgr_priv *priv)
-> >>>>> +{
-> >>>>> +    struct fpga_manager_ops *ops;
-> >>>>> +
-> >>>>> +    ops = devm_kzalloc(dev, sizeof(*ops), GFP_KERNEL);
-> >>>>> +    if (!ops)
-> >>>>> +        return NULL;
-> >>>>> +
-> >>>>> +    ops->compat_id = devm_kzalloc(dev, sizeof(struct fpga_compat_id),
-> >>>>> +                      GFP_KERNEL);
-> >>>>> +    if (!ops->compat_id)
-> >>>>> +        return NULL;
-> >>>>> +
-> >>>>> +    fme_mgr_get_compat_id(priv->ioaddr, ops->compat_id);
-> >>>>> +    ops->write_init = fme_mgr_write_init;
-> >>>>> +    ops->write = fme_mgr_write;
-> >>>>> +    ops->write_complete = fme_mgr_write_complete;
-> >>>>> +    ops->state = fme_mgr_state;
-> >>>>> +    ops->status = fme_mgr_status;
-> >>>>> +
-> >>>>> +    return ops;
-> >>>>> +}
-> >> What do other's think? Is it better to dynamically allocate the ops structure
-> >> for users of compat_id (just one user at this time)? Or better to create an
-> >> info structure on the stack for all callers? See above for an example of a
-> >> dynamically allocated the ops structure.
-> >>
-> >> To me, using the ops structure seems more standard, and the dynamic allocation,
-> >> while not optimal, does not require much more space or complexity than the static
-> >> allocation. At this time it only affects one caller.
-> >>
-> >> Adding the info structure as a parameter to the register() functions adds a
-> >> little more complexity to all callers, whether or not they use the dynamic
-> >> elements of the structure.
-> >
-> > Looks like dfl is the only user of compat_id.
-> >
-> > A board specific value does not belong in a common structure, it belongs in a board structure
-> >
-> > Move compat_id out of fpga-mgr.h and into dfl.h
-> >
-> > In dfl- you can do whatever you want.
-> 
-> Yilun - is this a correct explanation of the use of compat_id?
-> 
-> I believe the compat_id is used to verify whether or not an AFU is compatible with the Static Region. When the FPGA Manager is created (for PR purposes) the compat_id is read from the Static Region and stored in the FPGA Manager. When the region is created (containing the PR region), the same compat_id is then associated with the FPGA Region. The compat_id is exported by the region via syfs to allow userspace to verify compatibility between an AFU and the static region.
-> 
-> And I suppose the FPGA Manager _could_ be associated with multiple regions?
-> 
-> So I think compat_id _is_ (optionally) an attribute of the FPGA manager and the Region.
-
-Yes, I believe it could be associated with FPGA mgr & region dev. It is
-for compatibility check of the FPGA reconfiguration hardware and image.
-Maybe we don't move it away just because DFL is the only one who
-implements this interface.
-
-Thanks,
-Yilun
-
-> 
-> - Russ
-> 
-> >
-> > And leave the others' ops as-is.
-> >
-> >
-> > Tom
-> >
-> >>
-> >> - Russ
-> >>
-> >>>>> +
-> >>>>>   static int fme_mgr_probe(struct platform_device *pdev)
-> >>>>>   {
-> >>>>>       struct dfl_fme_mgr_pdata *pdata = dev_get_platdata(&pdev->dev);
-> >>>>> -    struct fpga_compat_id *compat_id;
-> >>>>> +    struct fpga_manager_ops *fme_mgr_ops;
-> >>>>>       struct device *dev = &pdev->dev;
-> >>>>>       struct fme_mgr_priv *priv;
-> >>>>>       struct fpga_manager *mgr;
-> >>>>> @@ -302,20 +318,16 @@ static int fme_mgr_probe(struct platform_device *pdev)
-> >>>>>               return PTR_ERR(priv->ioaddr);
-> >>>>>       }
-> >>>>>   -    compat_id = devm_kzalloc(dev, sizeof(*compat_id), GFP_KERNEL);
-> >>>>> -    if (!compat_id)
-> >>>>> -        return -ENOMEM;
-> >>>>> -
-> >>>>> -    fme_mgr_get_compat_id(priv->ioaddr, compat_id);
-> >>>>> -
-> >>>>> -    mgr = devm_fpga_mgr_create(dev, "DFL FME FPGA Manager",
-> >>>>> -                   &fme_mgr_ops, priv);
-> >>>>> -    if (!mgr)
-> >>>>> +    fme_mgr_ops = fme_mgr_get_ops(dev, priv);
-> >>>>> +    if (!fme_mgr_ops)
-> >>>>>           return -ENOMEM;
-> >>>>>   -    mgr->compat_id = compat_id;
-> >>>>> +    mgr = devm_fpga_mgr_register(dev, "DFL FME FPGA Manager",
-> >>>>> +                     fme_mgr_ops, priv);
-> >>>>> +    if (IS_ERR(mgr))
-> >>>>> +        return PTR_ERR(mgr);
-> >>>> With structure fpga_mgr_info, we don't need the dynamical allocation
-> >>>> anymore:
-> >>>>
-> >>>>     struct fpga_mgr_info minfo = { 0 };
-> >>>>
-> >>>>     minfo.name = "DFL FME FPGA Manager";
-> >>>>     minfo.mops = &fme_mgr_ops;
-> >>>>     minfo.compat_id = compat_id;
-> >>>>     minfo.priv = priv;
-> >>>>
-> >>>>     mgr = devm_fpga_mgr_register(dev, &minfo);
-> >>>>
-> >>>> Drivers could also leaves minfo.compat_id zero if they don't care.
-> >>>>
-> >>>> I also expect more opinions.
-> >>>>
-> >>>>>   -    return devm_fpga_mgr_register(dev, mgr);
-> >>>>> +    return 0;
-> >>>>>   }
-> >>>>>     static struct platform_driver fme_mgr_driver = {
-> >>>>> diff --git a/drivers/fpga/dfl-fme-region.c b/drivers/fpga/dfl-fme-region.c
-> >>>>> index 1eeb42af1012..a64c13e198a0 100644
-> >>>>> --- a/drivers/fpga/dfl-fme-region.c
-> >>>>> +++ b/drivers/fpga/dfl-fme-region.c
-> >>>>> @@ -46,7 +46,7 @@ static int fme_region_probe(struct platform_device *pdev)
-> >>>>>       }
-> >>>>>         region->priv = pdata;
-> >>>>> -    region->compat_id = mgr->compat_id;
-> >>>>> +    region->compat_id = mgr->mops->compat_id;
-> >>>> The changes should be in Patch #3, is it?
-> >>> This is the patch that moves compat_id out of mgr and into mgr->mops.
-> >>> In order to be able to compile, this patch needs the change.
-> >>>
-> >>>>>       platform_set_drvdata(pdev, region);
-> >>>>>         ret = fpga_region_register(region);
-> >>>>> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> >>>>> index ecb4c3c795fa..9aecfea432c8 100644
-> >>>>> --- a/drivers/fpga/fpga-mgr.c
-> >>>>> +++ b/drivers/fpga/fpga-mgr.c
-> >>>>> @@ -550,20 +550,20 @@ void fpga_mgr_unlock(struct fpga_manager *mgr)
-> >>>>>   EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
-> >>>>>     /**
-> >>>>> - * fpga_mgr_create - create and initialize an FPGA manager struct
-> >>>>> + * fpga_mgr_register - create and register an FPGA Manager device
-> >>>>>    * @parent:    fpga manager device from pdev
-> >>>>>    * @name:    fpga manager name
-> >>>>>    * @mops:    pointer to structure of fpga manager ops
-> >>>>>    * @priv:    fpga manager private data
-> >>>>>    *
-> >>>>> - * The caller of this function is responsible for freeing the struct with
-> >>>>> - * fpga_mgr_free().  Using devm_fpga_mgr_create() instead is recommended.
-> >>>>> + * The caller of this function is responsible for calling fpga_mgr_unregister().
-> >>>>> + * Using devm_fpga_mgr_register instead is recommended.
-> >>>>>    *
-> >>>>> - * Return: pointer to struct fpga_manager or NULL
-> >>>>> + * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-> >>>>>    */
-> >>>>> -struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
-> >>>>> -                     const struct fpga_manager_ops *mops,
-> >>>>> -                     void *priv)
-> >>>>> +struct fpga_manager *
-> >>>>> +fpga_mgr_register(struct device *parent, const char *name,
-> >>>>> +          const struct fpga_manager_ops *mops, void *priv)
-> >>>> fpga_mgr_register(struct device *parent, struct fpga_mgr_info *minfo)
-> >>>>
-> >>>>>   {
-> >>>>>       struct fpga_manager *mgr;
-> >>>>>       int id, ret;
-> >>>>> @@ -572,21 +572,23 @@ struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
-> >>>>>           !mops->write_init || (!mops->write && !mops->write_sg) ||
-> >>>>>           (mops->write && mops->write_sg)) {
-> >>>>>           dev_err(parent, "Attempt to register without fpga_manager_ops\n");
-> >>>>> -        return NULL;
-> >>>>> +        return ERR_PTR(-EINVAL);
-> >>>>>       }
-> >>>>>         if (!name || !strlen(name)) {
-> >>>>>           dev_err(parent, "Attempt to register with no name!\n");
-> >>>>> -        return NULL;
-> >>>>> +        return ERR_PTR(-EINVAL);
-> >>>>>       }
-> >>>>>         mgr = kzalloc(sizeof(*mgr), GFP_KERNEL);
-> >>>>>       if (!mgr)
-> >>>>> -        return NULL;
-> >>>>> +        return ERR_PTR(-ENOMEM);
-> >>>>>         id = ida_simple_get(&fpga_mgr_ida, 0, 0, GFP_KERNEL);
-> >>>>> -    if (id < 0)
-> >>>>> +    if (id < 0) {
-> >>>>> +        ret = id;
-> >>>>>           goto error_kfree;
-> >>>>> +    }
-> >>>>>         mutex_init(&mgr->ref_mutex);
-> >>>>>   @@ -594,7 +596,6 @@ struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
-> >>>>>       mgr->mops = mops;
-> >>>>>       mgr->priv = priv;
-> >>>>     mgr->name = minfo->name;
-> >>>>     mgr->mops = minfo->mops;
-> >>>>     mgr->priv = minfo->priv;
-> >>>>     mgr->compat_id = minfo->compat_id;
-> >>>>
-> >>>>>   -    device_initialize(&mgr->dev);
-> >>>>>       mgr->dev.class = fpga_mgr_class;
-> >>>>>       mgr->dev.groups = mops->groups;
-> >>>>>       mgr->dev.parent = parent;
-> >>>>> @@ -605,84 +606,6 @@ struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
-> >>>>>       if (ret)
-> >>>>>           goto error_device;
-> >>>>>   -    return mgr;
-> >>>>> -
-> >>>>> -error_device:
-> >>>>> -    ida_simple_remove(&fpga_mgr_ida, id);
-> >>>>> -error_kfree:
-> >>>>> -    kfree(mgr);
-> >>>>> -
-> >>>>> -    return NULL;
-> >>>>> -}
-> >>>>> -EXPORT_SYMBOL_GPL(fpga_mgr_create);
-> >>>>> -
-> >>>>> -/**
-> >>>>> - * fpga_mgr_free - free an FPGA manager created with fpga_mgr_create()
-> >>>>> - * @mgr:    fpga manager struct
-> >>>>> - */
-> >>>>> -void fpga_mgr_free(struct fpga_manager *mgr)
-> >>>>> -{
-> >>>>> -    ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
-> >>>>> -    kfree(mgr);
-> >>>>> -}
-> >>>>> -EXPORT_SYMBOL_GPL(fpga_mgr_free);
-> >>>>> -
-> >>>>> -static void devm_fpga_mgr_release(struct device *dev, void *res)
-> >>>>> -{
-> >>>>> -    struct fpga_mgr_devres *dr = res;
-> >>>>> -
-> >>>>> -    fpga_mgr_free(dr->mgr);
-> >>>>> -}
-> >>>>> -
-> >>>>> -/**
-> >>>>> - * devm_fpga_mgr_create - create and initialize a managed FPGA manager struct
-> >>>>> - * @parent:    fpga manager device from pdev
-> >>>>> - * @name:    fpga manager name
-> >>>>> - * @mops:    pointer to structure of fpga manager ops
-> >>>>> - * @priv:    fpga manager private data
-> >>>>> - *
-> >>>>> - * This function is intended for use in an FPGA manager driver's probe function.
-> >>>>> - * After the manager driver creates the manager struct with
-> >>>>> - * devm_fpga_mgr_create(), it should register it with fpga_mgr_register().  The
-> >>>>> - * manager driver's remove function should call fpga_mgr_unregister().  The
-> >>>>> - * manager struct allocated with this function will be freed automatically on
-> >>>>> - * driver detach.  This includes the case of a probe function returning error
-> >>>>> - * before calling fpga_mgr_register(), the struct will still get cleaned up.
-> >>>>> - *
-> >>>>> - * Return: pointer to struct fpga_manager or NULL
-> >>>>> - */
-> >>>>> -struct fpga_manager *devm_fpga_mgr_create(struct device *parent, const char *name,
-> >>>>> -                      const struct fpga_manager_ops *mops,
-> >>>>> -                      void *priv)
-> >>>>> -{
-> >>>>> -    struct fpga_mgr_devres *dr;
-> >>>>> -
-> >>>>> -    dr = devres_alloc(devm_fpga_mgr_release, sizeof(*dr), GFP_KERNEL);
-> >>>>> -    if (!dr)
-> >>>>> -        return NULL;
-> >>>>> -
-> >>>>> -    dr->mgr = fpga_mgr_create(parent, name, mops, priv);
-> >>>>> -    if (!dr->mgr) {
-> >>>>> -        devres_free(dr);
-> >>>>> -        return NULL;
-> >>>>> -    }
-> >>>>> -
-> >>>>> -    devres_add(parent, dr);
-> >>>>> -
-> >>>>> -    return dr->mgr;
-> >>>>> -}
-> >>>>> -EXPORT_SYMBOL_GPL(devm_fpga_mgr_create);
-> >>>>> -
-> >>>>> -/**
-> >>>>> - * fpga_mgr_register - register an FPGA manager
-> >>>>> - * @mgr: fpga manager struct
-> >>>>> - *
-> >>>>> - * Return: 0 on success, negative error code otherwise.
-> >>>>> - */
-> >>>>> -int fpga_mgr_register(struct fpga_manager *mgr)
-> >>>>> -{
-> >>>>> -    int ret;
-> >>>>> -
-> >>>>>       /*
-> >>>>>        * Initialize framework state by requesting low level driver read state
-> >>>>>        * from device.  FPGA may be in reset mode or may have been programmed
-> >>>>> @@ -690,18 +613,20 @@ int fpga_mgr_register(struct fpga_manager *mgr)
-> >>>>>        */
-> >>>>>       mgr->state = mgr->mops->state(mgr);
-> >>>>>   -    ret = device_add(&mgr->dev);
-> >>>>> -    if (ret)
-> >>>>> -        goto error_device;
-> >>>>> -
-> >>>>> -    dev_info(&mgr->dev, "%s registered\n", mgr->name);
-> >>>>> +    ret = device_register(&mgr->dev);
-> >>>>> +    if (ret) {
-> >>>>> +        put_device(&mgr->dev);
-> >>>>> +        return ERR_PTR(ret);
-> >>>>> +    }
-> >>>>>   -    return 0;
-> >>>>> +    return mgr;
-> >>>>>     error_device:
-> >>>>> -    ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
-> >>>>> +    ida_simple_remove(&fpga_mgr_ida, id);
-> >>>>> +error_kfree:
-> >>>>> +    kfree(mgr);
-> >>>>>   -    return ret;
-> >>>>> +    return ERR_PTR(ret);
-> >>>>>   }
-> >>>>>   EXPORT_SYMBOL_GPL(fpga_mgr_register);
-> >>>>>   @@ -726,14 +651,6 @@ void fpga_mgr_unregister(struct fpga_manager *mgr)
-> >>>>>   }
-> >>>>>   EXPORT_SYMBOL_GPL(fpga_mgr_unregister);
-> >>>>>   -static int fpga_mgr_devres_match(struct device *dev, void *res,
-> >>>>> -                 void *match_data)
-> >>>>> -{
-> >>>>> -    struct fpga_mgr_devres *dr = res;
-> >>>>> -
-> >>>>> -    return match_data == dr->mgr;
-> >>>>> -}
-> >>>>> -
-> >>>>>   static void devm_fpga_mgr_unregister(struct device *dev, void *res)
-> >>>>>   {
-> >>>>>       struct fpga_mgr_devres *dr = res;
-> >>>>> @@ -743,44 +660,44 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
-> >>>>>     /**
-> >>>>>    * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
-> >>>>> - * @dev: managing device for this FPGA manager
-> >>>>> - * @mgr: fpga manager struct
-> >>>>> + * @dev:    fpga manager device from pdev
-> >>>>> + * @name:    fpga manager name
-> >>>>> + * @mops:    pointer to structure of fpga manager ops
-> >>>>> + * @priv:    fpga manager private data
-> >>>>>    *
-> >>>>>    * This is the devres variant of fpga_mgr_register() for which the unregister
-> >>>>>    * function will be called automatically when the managing device is detached.
-> >>>>>    */
-> >>>>> -int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr)
-> >>>>> +struct fpga_manager *
-> >>>>> +devm_fpga_mgr_register(struct device *dev, const char *name,
-> >>>>     devm_fpga_mgr_register(struct device *parent,
-> >>> Yes - thanks for catching that.
-> >>>
-> >>> - Russ
-> >>>
-> >>>>> +               const struct fpga_manager_ops *mops, void *priv)
-> >>>>>   {
-> >>>>>       struct fpga_mgr_devres *dr;
-> >>>>> -    int ret;
-> >>>>> -
-> >>>>> -    /*
-> >>>>> -     * Make sure that the struct fpga_manager * that is passed in is
-> >>>>> -     * managed itself.
-> >>>>> -     */
-> >>>>> -    if (WARN_ON(!devres_find(dev, devm_fpga_mgr_release,
-> >>>>> -                 fpga_mgr_devres_match, mgr)))
-> >>>>> -        return -EINVAL;
-> >>>>> +    struct fpga_manager *mgr;
-> >>>>>         dr = devres_alloc(devm_fpga_mgr_unregister, sizeof(*dr), GFP_KERNEL);
-> >>>>>       if (!dr)
-> >>>>> -        return -ENOMEM;
-> >>>>> +        return ERR_PTR(-ENOMEM);
-> >>>>>   -    ret = fpga_mgr_register(mgr);
-> >>>>> -    if (ret) {
-> >>>>> +    mgr = fpga_mgr_register(dev, name, mops, priv);
-> >>>>> +    if (IS_ERR(mgr)) {
-> >>>>>           devres_free(dr);
-> >>>>> -        return ret;
-> >>>>> +        return mgr;
-> >>>>>       }
-> >>>>>         dr->mgr = mgr;
-> >>>>>       devres_add(dev, dr);
-> >>>>>   -    return 0;
-> >>>>> +    return mgr;
-> >>>>>   }
-> >>>>>   EXPORT_SYMBOL_GPL(devm_fpga_mgr_register);
-> >>>>>     static void fpga_mgr_dev_release(struct device *dev)
-> >>>>>   {
-> >>>>> +    struct fpga_manager *mgr = to_fpga_manager(dev);
-> >>>>> +
-> >>>>> +    ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
-> >>>>> +    kfree(mgr);
-> >>>>>   }
-> >>>>>     static int __init fpga_mgr_class_init(void)
-> >>>>> diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
-> >>>>> index 69dec5af23c3..91ac25f339f3 100644
-> >>>>> --- a/drivers/fpga/ice40-spi.c
-> >>>>> +++ b/drivers/fpga/ice40-spi.c
-> >>>>> @@ -178,12 +178,12 @@ static int ice40_fpga_probe(struct spi_device *spi)
-> >>>>>           return ret;
-> >>>>>       }
-> >>>>>   -    mgr = devm_fpga_mgr_create(dev, "Lattice iCE40 FPGA Manager",
-> >>>>> -                   &ice40_fpga_ops, priv);
-> >>>>> -    if (!mgr)
-> >>>>> -        return -ENOMEM;
-> >>>>> +    mgr = devm_fpga_mgr_register(dev, "Lattice iCE40 FPGA Manager",
-> >>>>> +                     &ice40_fpga_ops, priv);
-> >>>>> +    if (IS_ERR(mgr))
-> >>>>> +        return PTR_ERR(mgr);
-> >>>>>   -    return devm_fpga_mgr_register(dev, mgr);
-> >>>>> +    return 0;
-> >>>>>   }
-> >>>>>     static const struct of_device_id ice40_fpga_of_match[] = {
-> >>>>> diff --git a/drivers/fpga/machxo2-spi.c b/drivers/fpga/machxo2-spi.c
-> >>>>> index 114a64d2b7a4..0137c1e2e706 100644
-> >>>>> --- a/drivers/fpga/machxo2-spi.c
-> >>>>> +++ b/drivers/fpga/machxo2-spi.c
-> >>>>> @@ -366,12 +366,12 @@ static int machxo2_spi_probe(struct spi_device *spi)
-> >>>>>           return -EINVAL;
-> >>>>>       }
-> >>>>>   -    mgr = devm_fpga_mgr_create(dev, "Lattice MachXO2 SPI FPGA Manager",
-> >>>>> -                   &machxo2_ops, spi);
-> >>>>> -    if (!mgr)
-> >>>>> -        return -ENOMEM;
-> >>>>> +    mgr = devm_fpga_mgr_register(dev, "Lattice MachXO2 SPI FPGA Manager",
-> >>>>> +                     &machxo2_ops, spi);
-> >>>>> +    if (IS_ERR(mgr))
-> >>>>> +        return PTR_ERR(mgr);
-> >>>>>   -    return devm_fpga_mgr_register(dev, mgr);
-> >>>>> +    return 0;
-> >>>>>   }
-> >>>>>     static const struct of_device_id of_match[] = {
-> >>>>> diff --git a/drivers/fpga/socfpga-a10.c b/drivers/fpga/socfpga-a10.c
-> >>>>> index 573d88bdf730..ac8e89b8a5cc 100644
-> >>>>> --- a/drivers/fpga/socfpga-a10.c
-> >>>>> +++ b/drivers/fpga/socfpga-a10.c
-> >>>>> @@ -508,19 +508,15 @@ static int socfpga_a10_fpga_probe(struct platform_device *pdev)
-> >>>>>           return -EBUSY;
-> >>>>>       }
-> >>>>>   -    mgr = devm_fpga_mgr_create(dev, "SoCFPGA Arria10 FPGA Manager",
-> >>>>> -                   &socfpga_a10_fpga_mgr_ops, priv);
-> >>>>> -    if (!mgr)
-> >>>>> -        return -ENOMEM;
-> >>>>> -
-> >>>>> -    platform_set_drvdata(pdev, mgr);
-> >>>>> -
-> >>>>> -    ret = fpga_mgr_register(mgr);
-> >>>>> -    if (ret) {
-> >>>>> +    mgr = fpga_mgr_register(dev, "SoCFPGA Arria10 FPGA Manager",
-> >>>>> +                &socfpga_a10_fpga_mgr_ops, priv);
-> >>>>> +    if (IS_ERR(mgr)) {
-> >>>>>           clk_disable_unprepare(priv->clk);
-> >>>>> -        return ret;
-> >>>>> +        return PTR_ERR(mgr);
-> >>>>>       }
-> >>>>>   +    platform_set_drvdata(pdev, mgr);
-> >>>>> +
-> >>>>>       return 0;
-> >>>>>   }
-> >>>>>   diff --git a/drivers/fpga/socfpga.c b/drivers/fpga/socfpga.c
-> >>>>> index 1f467173fc1f..ebfa9f4d24ef 100644
-> >>>>> --- a/drivers/fpga/socfpga.c
-> >>>>> +++ b/drivers/fpga/socfpga.c
-> >>>>> @@ -571,12 +571,12 @@ static int socfpga_fpga_probe(struct platform_device *pdev)
-> >>>>>       if (ret)
-> >>>>>           return ret;
-> >>>>>   -    mgr = devm_fpga_mgr_create(dev, "Altera SOCFPGA FPGA Manager",
-> >>>>> -                   &socfpga_fpga_ops, priv);
-> >>>>> -    if (!mgr)
-> >>>>> -        return -ENOMEM;
-> >>>>> +    mgr = devm_fpga_mgr_register(dev, "Altera SOCFPGA FPGA Manager",
-> >>>>> +                     &socfpga_fpga_ops, priv);
-> >>>>> +    if (IS_ERR(mgr))
-> >>>>> +        return PTR_ERR(mgr);
-> >>>>>   -    return devm_fpga_mgr_register(dev, mgr);
-> >>>>> +    return 0;
-> >>>>>   }
-> >>>>>     #ifdef CONFIG_OF
-> >>>>> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-> >>>>> index a2cea500f7cc..9155e888a133 100644
-> >>>>> --- a/drivers/fpga/stratix10-soc.c
-> >>>>> +++ b/drivers/fpga/stratix10-soc.c
-> >>>>> @@ -425,18 +425,11 @@ static int s10_probe(struct platform_device *pdev)
-> >>>>>         init_completion(&priv->status_return_completion);
-> >>>>>   -    mgr = fpga_mgr_create(dev, "Stratix10 SOC FPGA Manager",
-> >>>>> -                  &s10_ops, priv);
-> >>>>> -    if (!mgr) {
-> >>>>> -        dev_err(dev, "unable to create FPGA manager\n");
-> >>>>> -        ret = -ENOMEM;
-> >>>>> -        goto probe_err;
-> >>>>> -    }
-> >>>>> -
-> >>>>> -    ret = fpga_mgr_register(mgr);
-> >>>>> -    if (ret) {
-> >>>>> +    mgr = fpga_mgr_register(dev, "Stratix10 SOC FPGA Manager",
-> >>>>> +                &s10_ops, priv);
-> >>>>> +    if (IS_ERR(mgr)) {
-> >>>>>           dev_err(dev, "unable to register FPGA manager\n");
-> >>>>> -        fpga_mgr_free(mgr);
-> >>>>> +        ret = PTR_ERR(mgr);
-> >>>>>           goto probe_err;
-> >>>>>       }
-> >>>>>   @@ -454,7 +447,6 @@ static int s10_remove(struct platform_device *pdev)
-> >>>>>       struct s10_priv *priv = mgr->priv;
-> >>>>>         fpga_mgr_unregister(mgr);
-> >>>>> -    fpga_mgr_free(mgr);
-> >>>>>       stratix10_svc_free_channel(priv->chan);
-> >>>>>         return 0;
-> >>>>> diff --git a/drivers/fpga/ts73xx-fpga.c b/drivers/fpga/ts73xx-fpga.c
-> >>>>> index 101f016c6ed8..5efbec2b9f9f 100644
-> >>>>> --- a/drivers/fpga/ts73xx-fpga.c
-> >>>>> +++ b/drivers/fpga/ts73xx-fpga.c
-> >>>>> @@ -122,12 +122,12 @@ static int ts73xx_fpga_probe(struct platform_device *pdev)
-> >>>>>       if (IS_ERR(priv->io_base))
-> >>>>>           return PTR_ERR(priv->io_base);
-> >>>>>   -    mgr = devm_fpga_mgr_create(kdev, "TS-73xx FPGA Manager",
-> >>>>> -                   &ts73xx_fpga_ops, priv);
-> >>>>> -    if (!mgr)
-> >>>>> -        return -ENOMEM;
-> >>>>> +    mgr = devm_fpga_mgr_register(kdev, "TS-73xx FPGA Manager",
-> >>>>> +                     &ts73xx_fpga_ops, priv);
-> >>>>> +    if (IS_ERR(mgr))
-> >>>>> +        return PTR_ERR(mgr);
-> >>>>>   -    return devm_fpga_mgr_register(kdev, mgr);
-> >>>>> +    return 0;
-> >>>>>   }
-> >>>>>     static struct platform_driver ts73xx_fpga_driver = {
-> >>>>> diff --git a/drivers/fpga/xilinx-spi.c b/drivers/fpga/xilinx-spi.c
-> >>>>> index fee4d0abf6bf..efda475f7a98 100644
-> >>>>> --- a/drivers/fpga/xilinx-spi.c
-> >>>>> +++ b/drivers/fpga/xilinx-spi.c
-> >>>>> @@ -247,13 +247,13 @@ static int xilinx_spi_probe(struct spi_device *spi)
-> >>>>>           return dev_err_probe(&spi->dev, PTR_ERR(conf->done),
-> >>>>>                        "Failed to get DONE gpio\n");
-> >>>>>   -    mgr = devm_fpga_mgr_create(&spi->dev,
-> >>>>> -                   "Xilinx Slave Serial FPGA Manager",
-> >>>>> -                   &xilinx_spi_ops, conf);
-> >>>>> -    if (!mgr)
-> >>>>> -        return -ENOMEM;
-> >>>>> +    mgr = devm_fpga_mgr_register(&spi->dev,
-> >>>>> +                     "Xilinx Slave Serial FPGA Manager",
-> >>>>> +                     &xilinx_spi_ops, conf);
-> >>>>> +    if (IS_ERR(mgr))
-> >>>>> +        return PTR_ERR(mgr);
-> >>>>>   -    return devm_fpga_mgr_register(&spi->dev, mgr);
-> >>>>> +    return 0;
-> >>>>>   }
-> >>>>>     static const struct of_device_id xlnx_spi_of_match[] = {
-> >>>>> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-> >>>>> index 9b75bd4f93d8..426aa34c6a0d 100644
-> >>>>> --- a/drivers/fpga/zynq-fpga.c
-> >>>>> +++ b/drivers/fpga/zynq-fpga.c
-> >>>>> @@ -609,20 +609,16 @@ static int zynq_fpga_probe(struct platform_device *pdev)
-> >>>>>         clk_disable(priv->clk);
-> >>>>>   -    mgr = devm_fpga_mgr_create(dev, "Xilinx Zynq FPGA Manager",
-> >>>>> -                   &zynq_fpga_ops, priv);
-> >>>>> -    if (!mgr)
-> >>>>> -        return -ENOMEM;
-> >>>>> -
-> >>>>> -    platform_set_drvdata(pdev, mgr);
-> >>>>> -
-> >>>>> -    err = fpga_mgr_register(mgr);
-> >>>>> -    if (err) {
-> >>>>> +    mgr = fpga_mgr_register(dev, "Xilinx Zynq FPGA Manager",
-> >>>>> +                &zynq_fpga_ops, priv);
-> >>>>> +    if (IS_ERR(mgr)) {
-> >>>>>           dev_err(dev, "unable to register FPGA manager\n");
-> >>>>>           clk_unprepare(priv->clk);
-> >>>>> -        return err;
-> >>>>> +        return PTR_ERR(mgr);
-> >>>>>       }
-> >>>>>   +    platform_set_drvdata(pdev, mgr);
-> >>>>> +
-> >>>>>       return 0;
-> >>>>>   }
-> >>>>>   diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
-> >>>>> index 125743c9797f..1a6d520985be 100644
-> >>>>> --- a/drivers/fpga/zynqmp-fpga.c
-> >>>>> +++ b/drivers/fpga/zynqmp-fpga.c
-> >>>>> @@ -102,12 +102,12 @@ static int zynqmp_fpga_probe(struct platform_device *pdev)
-> >>>>>         priv->dev = dev;
-> >>>>>   -    mgr = devm_fpga_mgr_create(dev, "Xilinx ZynqMP FPGA Manager",
-> >>>>> -                   &zynqmp_fpga_ops, priv);
-> >>>>> -    if (!mgr)
-> >>>>> -        return -ENOMEM;
-> >>>>> +    mgr = devm_fpga_mgr_register(dev, "Xilinx ZynqMP FPGA Manager",
-> >>>>> +                     &zynqmp_fpga_ops, priv);
-> >>>>> +    if (IS_ERR(mgr))
-> >>>>> +        return PTR_ERR(mgr);
-> >>>>>   -    return devm_fpga_mgr_register(dev, mgr);
-> >>>>> +    return 0;
-> >>>>>   }
-> >>>>>     static const struct of_device_id zynqmp_fpga_of_match[] = {
-> >>>>> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
-> >>>>> index 474c1f506307..d3c6f0153457 100644
-> >>>>> --- a/include/linux/fpga/fpga-mgr.h
-> >>>>> +++ b/include/linux/fpga/fpga-mgr.h
-> >>>>> @@ -105,6 +105,17 @@ struct fpga_image_info {
-> >>>>>   #endif
-> >>>>>   };
-> >>>>>   +/**
-> >>>>> + * struct fpga_compat_id - id for compatibility check
-> >>>>> + *
-> >>>>> + * @id_h: high 64bit of the compat_id
-> >>>>> + * @id_l: low 64bit of the compat_id
-> >>>>> + */
-> >>>>> +struct fpga_compat_id {
-> >>>>> +    u64 id_h;
-> >>>>> +    u64 id_l;
-> >>>>> +};
-> >>>>> +
-> >>>>>   /**
-> >>>>>    * struct fpga_manager_ops - ops for low level fpga manager drivers
-> >>>>>    * @initial_header_size: Maximum number of bytes that should be passed into write_init
-> >>>>> @@ -116,6 +127,7 @@ struct fpga_image_info {
-> >>>>>    * @write_complete: set FPGA to operating state after writing is done
-> >>>>>    * @fpga_remove: optional: Set FPGA into a specific state during driver remove
-> >>>>>    * @groups: optional attribute groups.
-> >>>>> + * @compat_id: optional: FPGA manager id for compatibility check.
-> >>>>>    *
-> >>>>>    * fpga_manager_ops are the low level functions implemented by a specific
-> >>>>>    * fpga manager driver.  The optional ones are tested for NULL before being
-> >>>>> @@ -134,6 +146,7 @@ struct fpga_manager_ops {
-> >>>>>                     struct fpga_image_info *info);
-> >>>>>       void (*fpga_remove)(struct fpga_manager *mgr);
-> >>>>>       const struct attribute_group **groups;
-> >>>>> +    struct fpga_compat_id *compat_id;
-> >>>> We don't have to move compat_id here, keep it in struct fpga_mgr
-> >>>>
-> >>>> Thanks,
-> >>>> Yilun
-> >>>>
-> >>>>>   };
-> >>>>>     /* FPGA manager status: Partial/Full Reconfiguration errors */
-> >>>>> @@ -143,24 +156,12 @@ struct fpga_manager_ops {
-> >>>>>   #define FPGA_MGR_STATUS_IP_PROTOCOL_ERR        BIT(3)
-> >>>>>   #define FPGA_MGR_STATUS_FIFO_OVERFLOW_ERR    BIT(4)
-> >>>>>   -/**
-> >>>>> - * struct fpga_compat_id - id for compatibility check
-> >>>>> - *
-> >>>>> - * @id_h: high 64bit of the compat_id
-> >>>>> - * @id_l: low 64bit of the compat_id
-> >>>>> - */
-> >>>>> -struct fpga_compat_id {
-> >>>>> -    u64 id_h;
-> >>>>> -    u64 id_l;
-> >>>>> -};
-> >>>>> -
-> >>>>>   /**
-> >>>>>    * struct fpga_manager - fpga manager structure
-> >>>>>    * @name: name of low level fpga manager
-> >>>>>    * @dev: fpga manager device
-> >>>>>    * @ref_mutex: only allows one reference to fpga manager
-> >>>>>    * @state: state of fpga manager
-> >>>>> - * @compat_id: FPGA manager id for compatibility check.
-> >>>>>    * @mops: pointer to struct of fpga manager ops
-> >>>>>    * @priv: low level driver private date
-> >>>>>    */
-> >>>>> @@ -169,7 +170,6 @@ struct fpga_manager {
-> >>>>>       struct device dev;
-> >>>>>       struct mutex ref_mutex;
-> >>>>>       enum fpga_mgr_states state;
-> >>>>> -    struct fpga_compat_id *compat_id;
-> >>>>>       const struct fpga_manager_ops *mops;
-> >>>>>       void *priv;
-> >>>>>   };
-> >>>>> @@ -191,17 +191,14 @@ struct fpga_manager *fpga_mgr_get(struct device *dev);
-> >>>>>     void fpga_mgr_put(struct fpga_manager *mgr);
-> >>>>>   -struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
-> >>>>> -                     const struct fpga_manager_ops *mops,
-> >>>>> -                     void *priv);
-> >>>>> -void fpga_mgr_free(struct fpga_manager *mgr);
-> >>>>> -int fpga_mgr_register(struct fpga_manager *mgr);
-> >>>>> +struct fpga_manager *fpga_mgr_register(struct device *dev, const char *name,
-> >>>>> +                       const struct fpga_manager_ops *mops,
-> >>>>> +                       void *priv);
-> >>>>>   void fpga_mgr_unregister(struct fpga_manager *mgr);
-> >>>>>   -int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr);
-> >>>>> -
-> >>>>> -struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
-> >>>>> -                      const struct fpga_manager_ops *mops,
-> >>>>> -                      void *priv);
-> >>>>> +struct fpga_manager *
-> >>>>> +devm_fpga_mgr_register(struct device *dev, const char *name,
-> >>>>> +               const struct fpga_manager_ops *mops,
-> >>>>> +               void *priv);
-> >>>>>     #endif /*_LINUX_FPGA_MGR_H */
-> >>>>> -- 
-> >>>>> 2.25.1
-> >
+PiBPbiA2LzE4LzIxIDk6MDMgQU0sIFJ1c3MgV2VpZ2h0IHdyb3RlOg0KPiA+DQo+ID4gT24gNi8x
+OC8yMSA4OjQ1IEFNLCBYdSBZaWx1biB3cm90ZToNCj4gPj4gT24gV2VkLCBKdW4gMTYsIDIwMjEg
+YXQgMDM6NTc6MzhQTSAtMDcwMCwgUnVzcyBXZWlnaHQgd3JvdGU6DQo+ID4+PiBUaGUgRlBHQSBt
+YW5hZ2VyIGNsYXNzIGRyaXZlciBkYXRhIHN0cnVjdHVyZSBpcyBiZWluZyB0cmVhdGVkIGFzIGEN
+Cj4gPj4+IG1hbmFnZWQgcmVzb3VyY2UgaW5zdGVhZCBvZiB1c2luZyBzdGFuZGFyZCBkZXZfcmVs
+ZWFzZSBjYWxsLWJhY2sNCj4gPj4+IHRvIHJlbGVhc2UgdGhlIGNsYXNzIGRhdGEgc3RydWN0dXJl
+LiBUaGlzIGNoYW5nZSByZW1vdmVzIHRoZQ0KPiA+Pj4gbWFuYWdlZCByZXNvdXJjZSBjb2RlIGZv
+ciB0aGUgZnJlZWluZyBvZiB0aGUgY2xhc3MgZGF0YSBzdHJ1Y3R1cmUNCj4gPj4+IGFuZCBjb21i
+aW5lcyB0aGUgY3JlYXRlKCkgYW5kIHJlZ2lzdGVyKCkgZnVuY3Rpb25zIGludG8gYSBzaW5nbGUN
+Cj4gPj4+IHJlZ2lzdGVyKCkgZnVuY3Rpb24uDQo+ID4+Pg0KPiA+Pj4gVGhlIGRldm1fZnBnYV9t
+Z3JfcmVnaXN0ZXIoKSBmdW5jdGlvbiBpcyByZXRhaW5lZC4NCj4gPj4+DQo+ID4+PiBTaWduZWQt
+b2ZmLWJ5OiBSdXNzIFdlaWdodCA8cnVzc2VsbC5oLndlaWdodEBpbnRlbC5jb20+DQo+ID4+PiAt
+LS0NCj4gPj4+IHY1Og0KPiA+Pj4gICAtIFJlYmFzZWQgb24gdG9wIG9mIHJlY2VudGx5IGFjY2Vw
+dGVkIHBhdGNoZXMuDQo+ID4+PiAgIC0gUmVtb3ZlZCBjb21wYXRfaWQgZnJvbSB0aGUgZnBnYV9t
+Z3JfcmVnaXN0ZXIoKSBwYXJhbWV0ZXIgbGlzdA0KPiA+Pj4gICAgIGFuZCBhZGRlZCBpdCB0byB0
+aGUgZnBnYV9tYW5hZ2VyX29wcyBzdHJ1Y3R1cmUuIFRoaXMgYWxzbyByZXF1aXJlZA0KPiA+PiBN
+eSByZWFzb24gZm9yIHRoaXMgY2hhbmdlIGlzLCB3ZSBjb3VsZCBhdm9pZCBmdXJ0aGVyIGNoYW5n
+ZSBvZiB0aGUNCj4gPj4gZnBnYV9tZ3JfcmVnaXN0ZXIoKSBBUEkgaWYgd2UgYWRkIG5ldyBpbnB1
+dCBwYXJhbWV0ZXJzIGxhdGVyIG9uLg0KPiA+IFdpdGggdGhpcyBwYXRjaHNldCwgY2hhbmdlcyBh
+cmUgb25seSByZXF1aXJlZCBmb3IgdGhlIGNhbGxlcnMNCj4gPiB0aGF0IHVzZSB0aGUgbmV3IHBh
+cmFtZXRlcnMuDQo+ID4NCj4gPj4+ICAgICBkeW5hbWljYWxseSBhbGxvY2F0aW5nIHRoZSBkZmwt
+Zm1lLW9wcyBzdHJ1Y3R1cmUgaW4gb3JkZXIgdG8gYWRkDQo+ID4+PiAgICAgdGhlIGFwcHJvcHJp
+YXRlIGNvbXBhdF9pZC4NCj4gPj4gQnV0IGVuZm9yY2luZyB0aGUgZHluYW1pY2FsIGFsbG9jYXRp
+b24gb2YgdGhlIHBhcmFtZXRlcnMgaXMgbm90IHByZWZlcmVkDQo+ID4+IHRvIG1lLiBIb3cgYWJv
+dXQgYSBkZWRpY2F0ZWQgc3RydWN0dXJlIHRoYXQgd3JhcHMgYWxsIHRoZSBuZWVkZWQNCj4gPj4g
+cGFyYW1ldGVyczoNCj4gPj4NCj4gPj4gc3RydWN0IGZwZ2FfbWdyX2luZm8gew0KPiA+PiAJY29u
+c3QgY2hhciAqbmFtZTsNCj4gPj4gCWNvbnN0IHN0cnVjdCBmcGdhX21hbmFnZXJfb3BzICptb3Bz
+Ow0KPiA+PiAJY29uc3Qgc3RydWN0IGZwZ2FfY29tcGF0X2lkICpjb21wYXRfaWQ7DQo+ID4+IAlj
+b25zdCB2b2lkICpwcml2Ow0KPiA+PiB9Ow0KPiA+Pg0KPiA+PiBUaGVuIFdlIGNhbiBzaW1wbHkg
+ZGVmaW5lIGEgbG9jYWwgdmFyaWFibGUgb2YgdGhpcyBzdHJ1Y3QgZm9yDQo+ID4+IGZwZ2FfbWdy
+X3JlZ2lzdGVyKCkuDQo+ID4+DQo+ID4+IG1vcmUgZGV0YWlscyBpbmxpbmUuDQo+ID4gSSBhZ3Jl
+ZSB0aGUgYXQgdGhlIGR5bmFtaWMgYWxsb2NhdGlvbiBpcyBub3QgcHJlZmVycmVkLCBidXQgaXQg
+aXMgb25seQ0KPiA+IHJlcXVpcmVkIGlmIGNvbXBhdF9pZCBpcyB1c2VkLiBJbiBhbGwgb3RoZXIg
+Y2FzZXMsIHRoZSBzdGF0aWMgc3RydWN0dXJlDQo+ID4gY2FuIGNvbnRpbnVlIHRvIGJlIHVzZWQu
+IEluIG90aGVyd29yZHMsIG9ubHkgb25lIGNhbGxlciBpcyBhZmZlY3RlZC4NCj4gPj4NCj4gPj4+
+IHY0Og0KPiA+Pj4gICAtIEFkZGVkIHRoZSBjb21wYXRfaWQgcGFyYW1ldGVyIHRvIGZwZ2FfbWdy
+X3JlZ2lzdGVyKCkgYW5kDQo+ID4+PiAgICAgZGV2bV9mcGdhX21ncl9yZWdpc3RlcigpIHRvIGVu
+c3VyZSB0aGF0IHRoZSBjb21wYXRfaWQgaXMgc2V0IGJlZm9yZQ0KPiA+Pj4gICAgIHRoZSBkZXZp
+Y2VfcmVnaXN0ZXIoKSBjYWxsLg0KPiA+Pj4gdjM6DQo+ID4+PiAgIC0gQ2xlYW5lZCB1cCBjb21t
+ZW50IGhlYWRlciBmb3IgZnBnYV9tZ3JfcmVnaXN0ZXIoKQ0KPiA+Pj4gICAtIEZpeCBlcnJvciBy
+ZXR1cm4gb24gaWRhX3NpbXBsZV9nZXQoKSBmYWlsdXJlDQo+ID4+PiB2MjoNCj4gPj4+ICAgLSBS
+ZXN0b3JlZCBkZXZtX2ZwZ2FfbWdyX3JlZ2lzdGVyKCkgZnVuY3Rpb25hbGl0eSwgYWRhcHRlZCBm
+b3IgdGhlDQo+IGNvbWJpbmVkDQo+ID4+PiAgICAgY3JlYXRlL3JlZ2lzdGVyIGZ1bmN0aW9uYWxp
+dHkuDQo+ID4+PiAgIC0gQWxsIHByZXZpb3VzIGNhbGxlcnMgb2YgZGV2bV9mcGdhX21ncl9yZWdp
+c3RlcigpIHdpbGwgY29udGludWUgdG8gY2FsbA0KPiA+Pj4gICAgIGRldm1fZnBnYV9tZ3JfcmVn
+aXN0ZXIoKS4NCj4gPj4+ICAgLSByZXBsYWNlZCB1bm5lY2Vzc2FyeSB0ZXJuYXJ5IG9wZXJhdG9y
+cyBpbiByZXR1cm4gc3RhdGVtZW50cyB3aXRoDQo+IHN0YW5kYXJkDQo+ID4+PiAgICAgaWYgY29u
+ZGl0aW9ucy4NCj4gPj4+IC0tLQ0KPiA+Pj4gIGRyaXZlcnMvZnBnYS9hbHRlcmEtY3ZwLmMgICAg
+ICAgIHwgIDEyICstLQ0KPiA+Pj4gIGRyaXZlcnMvZnBnYS9hbHRlcmEtcHItaXAtY29yZS5jIHwg
+ICA4ICstDQo+ID4+PiAgZHJpdmVycy9mcGdhL2FsdGVyYS1wcy1zcGkuYyAgICAgfCAgMTAgKy0N
+Cj4gPj4+ICBkcml2ZXJzL2ZwZ2EvZGZsLWZtZS1tZ3IuYyAgICAgICB8ICA1MiArKysrKystLS0t
+DQo+ID4+PiAgZHJpdmVycy9mcGdhL2RmbC1mbWUtcmVnaW9uLmMgICAgfCAgIDIgKy0NCj4gPj4+
+ICBkcml2ZXJzL2ZwZ2EvZnBnYS1tZ3IuYyAgICAgICAgICB8IDE2MyArKysrKysrKy0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tDQo+ID4+PiAgZHJpdmVycy9mcGdhL2ljZTQwLXNwaS5jICAgICAgICAg
+fCAgMTAgKy0NCj4gPj4+ICBkcml2ZXJzL2ZwZ2EvbWFjaHhvMi1zcGkuYyAgICAgICB8ICAxMCAr
+LQ0KPiA+Pj4gIGRyaXZlcnMvZnBnYS9zb2NmcGdhLWExMC5jICAgICAgIHwgIDE2ICsrLQ0KPiA+
+Pj4gIGRyaXZlcnMvZnBnYS9zb2NmcGdhLmMgICAgICAgICAgIHwgIDEwICstDQo+ID4+PiAgZHJp
+dmVycy9mcGdhL3N0cmF0aXgxMC1zb2MuYyAgICAgfCAgMTYgKy0tDQo+ID4+PiAgZHJpdmVycy9m
+cGdhL3RzNzN4eC1mcGdhLmMgICAgICAgfCAgMTAgKy0NCj4gPj4+ICBkcml2ZXJzL2ZwZ2EveGls
+aW54LXNwaS5jICAgICAgICB8ICAxMiArLS0NCj4gPj4+ICBkcml2ZXJzL2ZwZ2EvenlucS1mcGdh
+LmMgICAgICAgICB8ICAxNiArKy0NCj4gPj4+ICBkcml2ZXJzL2ZwZ2EvenlucW1wLWZwZ2EuYyAg
+ICAgICB8ICAxMCArLQ0KPiA+Pj4gIGluY2x1ZGUvbGludXgvZnBnYS9mcGdhLW1nci5oICAgIHwg
+IDQzICsrKystLS0tDQo+ID4+PiAgMTYgZmlsZXMgY2hhbmdlZCwgMTUzIGluc2VydGlvbnMoKyks
+IDI0NyBkZWxldGlvbnMoLSkNCj4gPj4+DQo+ID4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9mcGdh
+L2FsdGVyYS1jdnAuYyBiL2RyaXZlcnMvZnBnYS9hbHRlcmEtY3ZwLmMNCj4gPj4+IGluZGV4IGNj
+ZjQ1NDZlZmYyOS4uNGZmYjlkYTUzN2Q4IDEwMDY0NA0KPiA+Pj4gLS0tIGEvZHJpdmVycy9mcGdh
+L2FsdGVyYS1jdnAuYw0KPiA+Pj4gKysrIGIvZHJpdmVycy9mcGdhL2FsdGVyYS1jdnAuYw0KPiA+
+Pj4gQEAgLTY1MiwxOSArNjUyLDE1IEBAIHN0YXRpYyBpbnQgYWx0ZXJhX2N2cF9wcm9iZShzdHJ1
+Y3QgcGNpX2RldiAqcGRldiwNCj4gPj4+ICAJc25wcmludGYoY29uZi0+bWdyX25hbWUsIHNpemVv
+Zihjb25mLT5tZ3JfbmFtZSksICIlcyBAJXMiLA0KPiA+Pj4gIAkJIEFMVEVSQV9DVlBfTUdSX05B
+TUUsIHBjaV9uYW1lKHBkZXYpKTsNCj4gPj4+DQo+ID4+PiAtCW1nciA9IGRldm1fZnBnYV9tZ3Jf
+Y3JlYXRlKCZwZGV2LT5kZXYsIGNvbmYtPm1ncl9uYW1lLA0KPiA+Pj4gLQkJCQkgICAmYWx0ZXJh
+X2N2cF9vcHMsIGNvbmYpOw0KPiA+Pj4gLQlpZiAoIW1ncikgew0KPiA+Pj4gLQkJcmV0ID0gLUVO
+T01FTTsNCj4gPj4+ICsJbWdyID0gZnBnYV9tZ3JfcmVnaXN0ZXIoJnBkZXYtPmRldiwgY29uZi0+
+bWdyX25hbWUsDQo+ID4+PiArCQkJCSZhbHRlcmFfY3ZwX29wcywgY29uZik7DQo+ID4+PiArCWlm
+IChJU19FUlIobWdyKSkgew0KPiA+Pj4gKwkJcmV0ID0gUFRSX0VSUihtZ3IpOw0KPiA+Pj4gIAkJ
+Z290byBlcnJfdW5tYXA7DQo+ID4+PiAgCX0NCj4gPj4+DQo+ID4+PiAgCXBjaV9zZXRfZHJ2ZGF0
+YShwZGV2LCBtZ3IpOw0KPiA+Pj4NCj4gPj4+IC0JcmV0ID0gZnBnYV9tZ3JfcmVnaXN0ZXIobWdy
+KTsNCj4gPj4+IC0JaWYgKHJldCkNCj4gPj4+IC0JCWdvdG8gZXJyX3VubWFwOw0KPiA+Pj4gLQ0K
+PiA+Pj4gIAlyZXR1cm4gMDsNCj4gPj4+DQo+ID4+PiAgZXJyX3VubWFwOg0KPiA+Pj4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvZnBnYS9hbHRlcmEtcHItaXAtY29yZS5jIGIvZHJpdmVycy9mcGdhL2Fs
+dGVyYS1wci1pcC0NCj4gY29yZS5jDQo+ID4+PiBpbmRleCBkZmRmMjFlZDM0YzQuLjE3YmFiZjk3
+NDg1MiAxMDA2NDQNCj4gPj4+IC0tLSBhL2RyaXZlcnMvZnBnYS9hbHRlcmEtcHItaXAtY29yZS5j
+DQo+ID4+PiArKysgYi9kcml2ZXJzL2ZwZ2EvYWx0ZXJhLXByLWlwLWNvcmUuYw0KPiA+Pj4gQEAg
+LTE5MSwxMSArMTkxLDExIEBAIGludCBhbHRfcHJfcmVnaXN0ZXIoc3RydWN0IGRldmljZSAqZGV2
+LCB2b2lkDQo+IF9faW9tZW0gKnJlZ19iYXNlKQ0KPiA+Pj4gIAkJKHZhbCAmIEFMVF9QUl9DU1Jf
+U1RBVFVTX01TSykgPj4gQUxUX1BSX0NTUl9TVEFUVVNfU0ZULA0KPiA+Pj4gIAkJKGludCkodmFs
+ICYgQUxUX1BSX0NTUl9QUl9TVEFSVCkpOw0KPiA+Pj4NCj4gPj4+IC0JbWdyID0gZGV2bV9mcGdh
+X21ncl9jcmVhdGUoZGV2LCBkZXZfbmFtZShkZXYpLCAmYWx0X3ByX29wcywgcHJpdik7DQo+ID4+
+PiAtCWlmICghbWdyKQ0KPiA+Pj4gLQkJcmV0dXJuIC1FTk9NRU07DQo+ID4+PiArCW1nciA9IGRl
+dm1fZnBnYV9tZ3JfcmVnaXN0ZXIoZGV2LCBkZXZfbmFtZShkZXYpLCAmYWx0X3ByX29wcywgcHJp
+dik7DQo+ID4+PiArCWlmIChJU19FUlIobWdyKSkNCj4gPj4+ICsJCXJldHVybiBQVFJfRVJSKG1n
+cik7DQo+ID4+Pg0KPiA+Pj4gLQlyZXR1cm4gZGV2bV9mcGdhX21ncl9yZWdpc3RlcihkZXYsIG1n
+cik7DQo+ID4+PiArCXJldHVybiAwOw0KPiA+Pj4gIH0NCj4gPj4+ICBFWFBPUlRfU1lNQk9MX0dQ
+TChhbHRfcHJfcmVnaXN0ZXIpOw0KPiA+Pj4NCj4gPj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2Zw
+Z2EvYWx0ZXJhLXBzLXNwaS5jIGIvZHJpdmVycy9mcGdhL2FsdGVyYS1wcy1zcGkuYw0KPiA+Pj4g
+aW5kZXggMjNiZmQ0ZDFhZDBmLi5kM2Y3N2IwMzEyYjIgMTAwNjQ0DQo+ID4+PiAtLS0gYS9kcml2
+ZXJzL2ZwZ2EvYWx0ZXJhLXBzLXNwaS5jDQo+ID4+PiArKysgYi9kcml2ZXJzL2ZwZ2EvYWx0ZXJh
+LXBzLXNwaS5jDQo+ID4+PiBAQCAtMzAyLDEyICszMDIsMTIgQEAgc3RhdGljIGludCBhbHRlcmFf
+cHNfcHJvYmUoc3RydWN0IHNwaV9kZXZpY2UgKnNwaSkNCj4gPj4+ICAJc25wcmludGYoY29uZi0+
+bWdyX25hbWUsIHNpemVvZihjb25mLT5tZ3JfbmFtZSksICIlcyAlcyIsDQo+ID4+PiAgCQkgZGV2
+X2RyaXZlcl9zdHJpbmcoJnNwaS0+ZGV2KSwgZGV2X25hbWUoJnNwaS0+ZGV2KSk7DQo+ID4+Pg0K
+PiA+Pj4gLQltZ3IgPSBkZXZtX2ZwZ2FfbWdyX2NyZWF0ZSgmc3BpLT5kZXYsIGNvbmYtPm1ncl9u
+YW1lLA0KPiA+Pj4gLQkJCQkgICAmYWx0ZXJhX3BzX29wcywgY29uZik7DQo+ID4+PiAtCWlmICgh
+bWdyKQ0KPiA+Pj4gLQkJcmV0dXJuIC1FTk9NRU07DQo+ID4+PiArCW1nciA9IGRldm1fZnBnYV9t
+Z3JfcmVnaXN0ZXIoJnNwaS0+ZGV2LCBjb25mLT5tZ3JfbmFtZSwNCj4gPj4+ICsJCQkJICAgICAm
+YWx0ZXJhX3BzX29wcywgY29uZik7DQo+ID4+PiArCWlmIChJU19FUlIobWdyKSkNCj4gPj4+ICsJ
+CXJldHVybiBQVFJfRVJSKG1ncik7DQo+ID4+Pg0KPiA+Pj4gLQlyZXR1cm4gZGV2bV9mcGdhX21n
+cl9yZWdpc3Rlcigmc3BpLT5kZXYsIG1ncik7DQo+ID4+PiArCXJldHVybiAwOw0KPiA+Pj4gIH0N
+Cj4gPj4+DQo+ID4+PiAgc3RhdGljIGNvbnN0IHN0cnVjdCBzcGlfZGV2aWNlX2lkIGFsdGVyYV9w
+c19zcGlfaWRzW10gPSB7DQo+ID4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9mcGdhL2RmbC1mbWUt
+bWdyLmMgYi9kcml2ZXJzL2ZwZ2EvZGZsLWZtZS1tZ3IuYw0KPiA+Pj4gaW5kZXggZDU4NjFkMTNi
+MzA2Li4xYjkzYmMyOTJkYmUgMTAwNjQ0DQo+ID4+PiAtLS0gYS9kcml2ZXJzL2ZwZ2EvZGZsLWZt
+ZS1tZ3IuYw0KPiA+Pj4gKysrIGIvZHJpdmVycy9mcGdhL2RmbC1mbWUtbWdyLmMNCj4gPj4+IEBA
+IC0yNjQsMTQgKzI2NCw2IEBAIHN0YXRpYyB1NjQgZm1lX21ncl9zdGF0dXMoc3RydWN0IGZwZ2Ff
+bWFuYWdlcg0KPiAqbWdyKQ0KPiA+Pj4gIAlyZXR1cm4gcHJfZXJyb3JfdG9fbWdyX3N0YXR1cyhw
+cml2LT5wcl9lcnJvcik7DQo+ID4+PiAgfQ0KPiA+Pj4NCj4gPj4+IC1zdGF0aWMgY29uc3Qgc3Ry
+dWN0IGZwZ2FfbWFuYWdlcl9vcHMgZm1lX21ncl9vcHMgPSB7DQo+ID4+PiAtCS53cml0ZV9pbml0
+ID0gZm1lX21ncl93cml0ZV9pbml0LA0KPiA+Pj4gLQkud3JpdGUgPSBmbWVfbWdyX3dyaXRlLA0K
+PiA+Pj4gLQkud3JpdGVfY29tcGxldGUgPSBmbWVfbWdyX3dyaXRlX2NvbXBsZXRlLA0KPiA+Pj4g
+LQkuc3RhdGUgPSBmbWVfbWdyX3N0YXRlLA0KPiA+Pj4gLQkuc3RhdHVzID0gZm1lX21ncl9zdGF0
+dXMsDQo+ID4+PiAtfTsNCj4gPj4+IC0NCj4gPj4+ICBzdGF0aWMgdm9pZCBmbWVfbWdyX2dldF9j
+b21wYXRfaWQodm9pZCBfX2lvbWVtICpmbWVfcHIsDQo+ID4+PiAgCQkJCSAgc3RydWN0IGZwZ2Ff
+Y29tcGF0X2lkICppZCkNCj4gPj4+ICB7DQo+ID4+PiBAQCAtMjc5LDEwICsyNzEsMzQgQEAgc3Rh
+dGljIHZvaWQgZm1lX21ncl9nZXRfY29tcGF0X2lkKHZvaWQNCj4gX19pb21lbSAqZm1lX3ByLA0K
+PiA+Pj4gIAlpZC0+aWRfaCA9IHJlYWRxKGZtZV9wciArIEZNRV9QUl9JTlRGQ19JRF9IKTsNCj4g
+Pj4+ICB9DQo+ID4+Pg0KPiA+Pj4gK3N0YXRpYyBzdHJ1Y3QgZnBnYV9tYW5hZ2VyX29wcyAqZm1l
+X21ncl9nZXRfb3BzKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4gPj4+ICsJCQkJCQlzdHJ1Y3QgZm1l
+X21ncl9wcml2ICpwcml2KQ0KPiA+Pj4gK3sNCj4gPj4+ICsJc3RydWN0IGZwZ2FfbWFuYWdlcl9v
+cHMgKm9wczsNCj4gPj4+ICsNCj4gPj4+ICsJb3BzID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9m
+KCpvcHMpLCBHRlBfS0VSTkVMKTsNCj4gPj4+ICsJaWYgKCFvcHMpDQo+ID4+PiArCQlyZXR1cm4g
+TlVMTDsNCj4gPj4+ICsNCj4gPj4+ICsJb3BzLT5jb21wYXRfaWQgPSBkZXZtX2t6YWxsb2MoZGV2
+LCBzaXplb2Yoc3RydWN0IGZwZ2FfY29tcGF0X2lkKSwNCj4gPj4+ICsJCQkJICAgICAgR0ZQX0tF
+Uk5FTCk7DQo+ID4+PiArCWlmICghb3BzLT5jb21wYXRfaWQpDQo+ID4+PiArCQlyZXR1cm4gTlVM
+TDsNCj4gPj4+ICsNCj4gPj4+ICsJZm1lX21ncl9nZXRfY29tcGF0X2lkKHByaXYtPmlvYWRkciwg
+b3BzLT5jb21wYXRfaWQpOw0KPiA+Pj4gKwlvcHMtPndyaXRlX2luaXQgPSBmbWVfbWdyX3dyaXRl
+X2luaXQ7DQo+ID4+PiArCW9wcy0+d3JpdGUgPSBmbWVfbWdyX3dyaXRlOw0KPiA+Pj4gKwlvcHMt
+PndyaXRlX2NvbXBsZXRlID0gZm1lX21ncl93cml0ZV9jb21wbGV0ZTsNCj4gPj4+ICsJb3BzLT5z
+dGF0ZSA9IGZtZV9tZ3Jfc3RhdGU7DQo+ID4+PiArCW9wcy0+c3RhdHVzID0gZm1lX21ncl9zdGF0
+dXM7DQo+ID4+PiArDQo+ID4+PiArCXJldHVybiBvcHM7DQo+ID4+PiArfQ0KPiANCj4gV2hhdCBk
+byBvdGhlcidzIHRoaW5rPyBJcyBpdCBiZXR0ZXIgdG8gZHluYW1pY2FsbHkgYWxsb2NhdGUgdGhl
+IG9wcyBzdHJ1Y3R1cmUNCj4gZm9yIHVzZXJzIG9mIGNvbXBhdF9pZCAoanVzdCBvbmUgdXNlciBh
+dCB0aGlzIHRpbWUpPyBPciBiZXR0ZXIgdG8gY3JlYXRlIGFuDQo+IGluZm8gc3RydWN0dXJlIG9u
+IHRoZSBzdGFjayBmb3IgYWxsIGNhbGxlcnM/IFNlZSBhYm92ZSBmb3IgYW4gZXhhbXBsZSBvZiBh
+DQo+IGR5bmFtaWNhbGx5IGFsbG9jYXRlZCB0aGUgb3BzIHN0cnVjdHVyZS4NCg0KVG8gbWUsIGl0
+IHNlZW1zIG5vdCBnb29kIHRvIHB1dCBjb21wYXRfaWQgaW50byBvcHMsIG9wcyBzaG91bGQgYmUg
+cHJvdmlkZWQgYnkNCmRyaXZlciwgYnV0IGNvbXBhdF9pZCBpcyBzb21ldGhpbmcgZnJvbSBoYXJk
+d2FyZSBmb3IgY29tcGF0aWJsZSBjaGVja2luZywgc28NCnRoaXMgaXMgd2h5IGNvbXBhdF9pZCBp
+cyBpbiBmcGdhLW1nciBhbmQgZnBnYS1yZWdpb24uIGNvbXBhdF9pZCBjYW4gYmUgZnBnYSBtZ3IN
+CmxldmVsIG9yIHBlciBlYWNoIGZwZ2EgcmVnaW9uLCB0aGlzIGlzIHdoeSB3ZSBoYXZlIGJvdGgg
+dGhlcmUuDQoNCkN1cnJlbnRseSB3ZSBoYXZlIGFsbG9jYXRpb24gY29kZSBpbiBzcGVjaWZpYyBm
+cGdhIG1nciBkcml2ZXIgKGUuZy4gZGZsKSwgYXMgbW9zdA0KZHJpdmVycyBhcmUgbm90IHVzaW5n
+IHRoZW0gYXQgYWxsLiBUbyBtZSwga2VlcCB0aGUgYWxsb2NhdGlvbiBjb2RlIGhlcmUgb3IgbW92
+ZQ0KaXQgaW50byBzb21lIGNvbW1vbiBjb2RlLCBib3RoIGFyZSBmaW5lIHRvIG1lLCBidXQgYWRk
+IHRoaXMgdG8gb3BzIHNlZW1zIGNvbmZ1c2luZy4NCg0KVGhhbmtzDQpIYW8NCg0KPiANCj4gVG8g
+bWUsIHVzaW5nIHRoZSBvcHMgc3RydWN0dXJlIHNlZW1zIG1vcmUgc3RhbmRhcmQsIGFuZCB0aGUg
+ZHluYW1pYyBhbGxvY2F0aW9uLA0KPiB3aGlsZSBub3Qgb3B0aW1hbCwgZG9lcyBub3QgcmVxdWly
+ZSBtdWNoIG1vcmUgc3BhY2Ugb3IgY29tcGxleGl0eSB0aGFuIHRoZQ0KPiBzdGF0aWMNCj4gYWxs
+b2NhdGlvbi4gQXQgdGhpcyB0aW1lIGl0IG9ubHkgYWZmZWN0cyBvbmUgY2FsbGVyLg0KPiANCj4g
+QWRkaW5nIHRoZSBpbmZvIHN0cnVjdHVyZSBhcyBhIHBhcmFtZXRlciB0byB0aGUgcmVnaXN0ZXIo
+KSBmdW5jdGlvbnMgYWRkcyBhDQo+IGxpdHRsZSBtb3JlIGNvbXBsZXhpdHkgdG8gYWxsIGNhbGxl
+cnMsIHdoZXRoZXIgb3Igbm90IHRoZXkgdXNlIHRoZSBkeW5hbWljDQo+IGVsZW1lbnRzIG9mIHRo
+ZSBzdHJ1Y3R1cmUuDQo+IA0KPiAtIFJ1c3MNCj4gDQoNCg==
