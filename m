@@ -2,62 +2,62 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD3E3B3877
-	for <lists+linux-fpga@lfdr.de>; Thu, 24 Jun 2021 23:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E4F3B3879
+	for <lists+linux-fpga@lfdr.de>; Thu, 24 Jun 2021 23:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbhFXVUW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 24 Jun 2021 17:20:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28789 "EHLO
+        id S232760AbhFXVU1 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 24 Jun 2021 17:20:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36197 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232705AbhFXVUU (ORCPT
+        by vger.kernel.org with ESMTP id S232732AbhFXVU0 (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 24 Jun 2021 17:20:20 -0400
+        Thu, 24 Jun 2021 17:20:26 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624569480;
+        s=mimecast20190719; t=1624569485;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mFedRc0xrO8oseMlvLubEPJS4VuKtnhUf95dNVhDdKc=;
-        b=RCb9gVyh1IFz5l+P9UsIv88Jbt+0dSBZV9nUMxObyupZ2CKWYCdGv6sgOcZtHt1lW3vTMV
-        R1RhrHBFxB5FAN/F9Z+v6+ykfY6PkYu76XcYHSEfSTe5jojwk7NeSO1GLvHkwSDk+DjmrH
-        zzY/+XK2QBlJFz3crujbXWFc0QAk11o=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-93-292cKPmQOquz-YKJIl7qAw-1; Thu, 24 Jun 2021 17:17:58 -0400
-X-MC-Unique: 292cKPmQOquz-YKJIl7qAw-1
-Received: by mail-ot1-f69.google.com with SMTP id y21-20020a0568301d95b029044f7b7f3047so4281391oti.5
-        for <linux-fpga@vger.kernel.org>; Thu, 24 Jun 2021 14:17:58 -0700 (PDT)
+        bh=QEL5AZ4mSr0YqB6XpyjJsxT+Qv98DMEzNJZysot2Lnw=;
+        b=ZwiE+HjbygU4UT7UJqDB+kuXKYSD0docsyNbPgzNRfuNoEbFAfrMJs1t8qLaMhxfAdpcEk
+        7ZdVQR6JUrixw/0CuD0qJG7RdAFClzkKc+VrU75Z5Bv9RluteZf7mTR9FN4AU3Lo854Q4E
+        ncN1GTGXg1Sv1dcM9TGcFBZtCvtDRZE=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-60-8QNwk_Y_Mjyi-l_2TlV2DQ-1; Thu, 24 Jun 2021 17:18:02 -0400
+X-MC-Unique: 8QNwk_Y_Mjyi-l_2TlV2DQ-1
+Received: by mail-oi1-f197.google.com with SMTP id v142-20020acaac940000b02901f80189ca30so4543546oie.22
+        for <linux-fpga@vger.kernel.org>; Thu, 24 Jun 2021 14:18:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mFedRc0xrO8oseMlvLubEPJS4VuKtnhUf95dNVhDdKc=;
-        b=psmu6gfhVZdOv2KqBCexa93H9f2i4ixSxMdLc6JbcYQZl0pV164IJSmIDrNbVQvQDs
-         2dSMm1Gi9LHnXXDCNapISzS9+CwJxu/mJiZ5LeC4qgfsoE7MDHxNgj1Deg3A1T01W1TM
-         63FML4YlJg8mFMOMtPbL5dmeE17gPKRtos+tErZxWXhhSQByho7vGQhxtYDkcljGeX6H
-         skEADeWd4dKqdOvwiEGxVDziNsY4kvJnbniob8Pa92MnG2w+z8HPygN/ewBBgCVwz3va
-         +Emfr8ohpdHNWH8G1JVwBMIxSMS4EkYJnHflEOm+WZv3Ume8eMBOZkY99S1NVFEB9Bqm
-         m8Ig==
-X-Gm-Message-State: AOAM532FOd+HDkHVzoQATOa0gdgq6P+pSgOlXn0qTwxk9G0NNunMEekI
-        yht77IkOtjxzgjK39pTUg5qMZe3/olox0VZdOXp2ltXEGsIfWOAju8gbwxR93bNxpvLRkiOPB5a
-        Mun+ErTGrSlvRExSzRu3z8A==
-X-Received: by 2002:a05:6830:1ac4:: with SMTP id r4mr6259372otc.36.1624569478212;
-        Thu, 24 Jun 2021 14:17:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJymkYtjbDACtIBCrlWJa04+yJJF5DcY75EP2JsqstF7I/shhvTHBjE5r+wDrfOsOzapIRL9Aw==
-X-Received: by 2002:a05:6830:1ac4:: with SMTP id r4mr6259359otc.36.1624569478058;
-        Thu, 24 Jun 2021 14:17:58 -0700 (PDT)
+        bh=QEL5AZ4mSr0YqB6XpyjJsxT+Qv98DMEzNJZysot2Lnw=;
+        b=WMbL0BWJ94Vzk+yarMntFHTMQfvij80+S4mrmSIzXGPGIc3iks4fcVywv1xY4LdwWM
+         XqM6xvhceKrS5v9nwpL781J7PRYAsTwFSImyLZ5Ef6Oqqd6JrbvCA/hGkCb35Jvz3UxP
+         HVddh7NHUqvvLjLRTDbDpD9yTgwRwaVattg5Jbd/J8CfujcThu6ry/Povh/kmNfyu9il
+         fRAcyOfitfyJVxC6fou7zGpCQlmJPqDygKYf7eS5VCqPOOSwwuZgYgodd5G/F2zil1yK
+         nbCiJ9zHzn6v6Uk4bsVtwXceniIhLvb6Lk7SVBM0KaHhlDyffJYltwKKfgijDFbFAF2g
+         KOoA==
+X-Gm-Message-State: AOAM531EH/nCeZM28DQRow2rPgpsFX7HAFmUBx7Gdfuy9afJRVIQMtw6
+        cwbYTYwdRmPYHpP3CvRdP/Zx63qg0mJbBuf8bevy3SrAfLOpTdnrhMmom2WJszu4hBa8rutkymd
+        icV0xDdoAkoJccm7LBWWjGA==
+X-Received: by 2002:a05:6830:270b:: with SMTP id j11mr6370723otu.161.1624569481796;
+        Thu, 24 Jun 2021 14:18:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzOtcE8iHvqrMnsAhoUJeiWnBz2O5EA2IJu/b1p2L7kvKl5sId+fviItFlU87dzuMw8Y+u/bg==
+X-Received: by 2002:a05:6830:270b:: with SMTP id j11mr6370708otu.161.1624569481664;
+        Thu, 24 Jun 2021 14:18:01 -0700 (PDT)
 Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 94sm915513otj.33.2021.06.24.14.17.56
+        by smtp.gmail.com with ESMTPSA id 94sm915513otj.33.2021.06.24.14.17.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 14:17:57 -0700 (PDT)
+        Thu, 24 Jun 2021 14:18:00 -0700 (PDT)
 From:   trix@redhat.com
 To:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com
 Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH v4 4/5] fpga: use reimage ops in fpga_mgr_load()
-Date:   Thu, 24 Jun 2021 14:17:26 -0700
-Message-Id: <20210624211727.501019-6-trix@redhat.com>
+Subject: [PATCH v4 5/5] fpga: fpga-mgr: simplify mops check in wrappers
+Date:   Thu, 24 Jun 2021 14:17:27 -0700
+Message-Id: <20210624211727.501019-7-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20210624211727.501019-1-trix@redhat.com>
 References: <20210624211727.501019-1-trix@redhat.com>
@@ -69,29 +69,44 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Tom Rix <trix@redhat.com>
 
-If the fpga_image_info flags FPGA_MGR_REIMAGE bit is set
-swap out the reconfig ops for the reimage ops and do
-the load.
+The mops value is checked in fpga_mgr_create,
+do not check it twice.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/fpga/fpga-mgr.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/fpga/fpga-mgr.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-index a785b7dc5dba0..2abb7043858dc 100644
+index 2abb7043858dc..21b4fd34b1dbf 100644
 --- a/drivers/fpga/fpga-mgr.c
 +++ b/drivers/fpga/fpga-mgr.c
-@@ -420,6 +420,9 @@ int fpga_mgr_load(struct fpga_manager *mgr, struct fpga_image_info *info)
+@@ -28,14 +28,14 @@ struct fpga_mgr_devres {
+ /* mops wrappers */
+ static inline enum fpga_mgr_states fpga_mgr_state(struct fpga_manager *mgr)
  {
- 	const struct fpga_manager_update_ops *uops = &mgr->mops->reconfig;
+-	if (mgr->mops && mgr->mops->state)
++	if (mgr->mops->state)
+ 		return  mgr->mops->state(mgr);
+ 	return FPGA_MGR_STATE_UNKNOWN;
+ }
  
-+	if (info->flags & FPGA_MGR_REIMAGE)
-+		uops = &mgr->mops->reimage;
-+
- 	if (info->sgt)
- 		return fpga_mgr_buf_load_sg(mgr, info, info->sgt, uops);
- 	if (info->buf && info->count)
+ static inline u64 fpga_mgr_status(struct fpga_manager *mgr)
+ {
+-	if (mgr->mops && mgr->mops->status)
++	if (mgr->mops->status)
+ 		return mgr->mops->status(mgr);
+ 	return 0;
+ }
+@@ -93,7 +93,7 @@ static inline int fpga_mgr_write_complete(struct fpga_manager *mgr,
+ 
+ static inline void fpga_mgr_fpga_remove(struct fpga_manager *mgr)
+ {
+-	if (mgr->mops && mgr->mops->fpga_remove)
++	if (mgr->mops->fpga_remove)
+ 		mgr->mops->fpga_remove(mgr);
+ }
+ 
 -- 
 2.26.3
 
