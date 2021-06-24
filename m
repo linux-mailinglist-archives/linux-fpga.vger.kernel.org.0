@@ -2,180 +2,176 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF773B3186
-	for <lists+linux-fpga@lfdr.de>; Thu, 24 Jun 2021 16:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026DC3B33B0
+	for <lists+linux-fpga@lfdr.de>; Thu, 24 Jun 2021 18:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbhFXOji (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 24 Jun 2021 10:39:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41404 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230170AbhFXOjh (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 24 Jun 2021 10:39:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624545438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9h8u0xPq+lyz4kG2IM71OZjooGkjqLutHSguaAe0NLE=;
-        b=L/EnulhFts90OqL3t75ZoF/oByYLU7TJVLJIA6Amny2EhIQt105gheCFMCNDB+L43H9v7A
-        lwNR4b9yygOrUbwaMuajG19U5OScBYQAJug3eTb4qeDOVEA9UW7DvbRWdubXjVf7iJVyvN
-        wsOge5XlCjEmhcZOD9j/D1eZq9ayk44=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-534-thb3oLIDM0yYcQ9dZFCXPA-1; Thu, 24 Jun 2021 10:37:16 -0400
-X-MC-Unique: thb3oLIDM0yYcQ9dZFCXPA-1
-Received: by mail-oi1-f197.google.com with SMTP id q31-20020a056808201fb02902242061b668so3910710oiw.8
-        for <linux-fpga@vger.kernel.org>; Thu, 24 Jun 2021 07:37:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=9h8u0xPq+lyz4kG2IM71OZjooGkjqLutHSguaAe0NLE=;
-        b=lE2SeJq8q5WMvf9bxpB9IBIlqejBvbzTexC99gmBDxnDH1D+acNrFwt5GlxmRpdKpo
-         +BQ5kJuLPaL6k5kMZiqXkscj65uiHUAX+PgSX4lE2L9Sz3ltNotxqfI78X434La7fDj9
-         k9ul3+aSnQBdulVj++EeCXaL8s4Xf8ZH6xBwZ+G195XjDeipENQVr5eY0OxxJ9Nf0WhX
-         fadON2ePBGTpsTskxCTE8G8Y6dVeSw8/FHcsQ0dsnlV8tP6mFkPBkaWv5dv5o8c7ilLC
-         rcv2mHX9fJzsWpC2VNTXUeqfeLVZoxw8ICJIZ0GQK5YhVDSe9ZgWDNHWw15nTy5dR5VC
-         ZoIA==
-X-Gm-Message-State: AOAM5316mX4fgXcTnAokh7UnNz8vkv68Qc6JKaPkmjNQe/rgq2yWYEQn
-        nZYGA2283vkwQm2XV+v0q7eQvxVPEVS5qzydctFZ6ONOUACYNChOiOeJbL2TDl04sYLoEN0+87G
-        JxiQeUNm3r2w9gBlOSGzZtg==
-X-Received: by 2002:a05:6808:60e:: with SMTP id y14mr7361121oih.105.1624545436102;
-        Thu, 24 Jun 2021 07:37:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzw2Crh/+XLQyWazz2/WmdZ58gp6OxY8shHXD3gklt/l5Xl579uOibcqZlSSEOhwX2KHZdxAg==
-X-Received: by 2002:a05:6808:60e:: with SMTP id y14mr7361113oih.105.1624545435916;
-        Thu, 24 Jun 2021 07:37:15 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 2sm692895ota.58.2021.06.24.07.37.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Jun 2021 07:37:15 -0700 (PDT)
-Subject: Re: [PATCH v3 1/7] fpga-mgr: wrap the write_init() op
-To:     Xu Yilun <yilun.xu@intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     hao.wu@intel.com, mdf@kernel.org, michal.simek@xilinx.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20210623182410.3787784-1-trix@redhat.com>
- <20210623182410.3787784-3-trix@redhat.com>
- <20210624075414.GA44700@yilunxu-OptiPlex-7050>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <02bd1acf-6b8d-7ca1-6a9c-c3f6d3a2071c@redhat.com>
-Date:   Thu, 24 Jun 2021 07:37:13 -0700
+        id S231941AbhFXQRA (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 24 Jun 2021 12:17:00 -0400
+Received: from mga06.intel.com ([134.134.136.31]:8714 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232012AbhFXQQz (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 24 Jun 2021 12:16:55 -0400
+IronPort-SDR: KfPlgT6pGZOH8dAHer+aFaqafBCmNAv/rUbcxP/fu0Kyow61lfN9FTMmP2CG9/is5pliXiQxzj
+ BoOpLGcRFQWw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10025"; a="268638047"
+X-IronPort-AV: E=Sophos;i="5.83,296,1616482800"; 
+   d="scan'208";a="268638047"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2021 09:14:30 -0700
+IronPort-SDR: Lvj7D2catDIlgkTrAzXuJ0tWCjsbuZ+l0BghRyisX58BDOCVjK730gxbzQrEYZBNAc2M42WOpa
+ DZzylLBynOhQ==
+X-IronPort-AV: E=Sophos;i="5.83,296,1616482800"; 
+   d="scan'208";a="406694441"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.209.11.192])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2021 09:14:29 -0700
+Subject: Re: [PATCH v7 0/3] fpga: Use standard class dev_release function
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org, trix@redhat.com,
+        lgoncalv@redhat.com, hao.wu@intel.com, matthew.gerlach@intel.com,
+        richard.gong@intel.com
+References: <20210623011151.481244-1-russell.h.weight@intel.com>
+ <20210624012312.GD4910@yilunxu-OptiPlex-7050>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <39daf6c7-de33-1c3a-adfb-3fa645bee112@intel.com>
+Date:   Thu, 24 Jun 2021 09:13:53 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210624075414.GA44700@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20210624012312.GD4910@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Good catch. I'll update the documentation, add the reviewed-by tags, and resubmit.
 
-On 6/24/21 12:54 AM, Xu Yilun wrote:
-> On Wed, Jun 23, 2021 at 11:24:04AM -0700, trix@redhat.com wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> An FPGA manager should not be required to provide a
->> write_init() op if there is nothing for it do.
->> So add a wrapper and move the op checking.
->> Default to success.
->>
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>   drivers/fpga/fpga-mgr.c | 14 +++++++++++---
->>   1 file changed, 11 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
->> index ecb4c3c795fa5..87bbb940c9504 100644
->> --- a/drivers/fpga/fpga-mgr.c
->> +++ b/drivers/fpga/fpga-mgr.c
->> @@ -69,6 +69,14 @@ void fpga_image_info_free(struct fpga_image_info *info)
->>   }
->>   EXPORT_SYMBOL_GPL(fpga_image_info_free);
->>   
->> +static int fpga_mgr_write_init(struct fpga_manager *mgr,
->> +			       struct fpga_image_info *info,
->> +			       const char *buf, size_t count)
->> +{
->> +	if (mgr->mops && mgr->mops->write_init)
-> Maybe we don't have to check mgr->mops, it is already checked on
-> creation.
+- Russ
 
-The check was on purpose because my earlier patchset responding to 
-problems with sec-mgr.
-
-Focusing on Greg's comment that why can't sec-mgr be done with existing 
-code,
-
-I think the sec-mgr can be folded into the exiting fpga-mgr via a new 
-set of ops.
-
-the 'generalize fpga_mgr_load' patchset set has two sets of ops,
-
-one for existing partial reconfiguration
-
-and one for reimaging the whole board, what the sec-mgr is doing.
-
-Since dfl has the only instance of need, it would have the only reimage ops.
-
-The check at creation has been deferred to at use.
-
-other targets could have null ops.
-
-Having maybe null ops means the wrappers need to check.
-
-Here is a ref to the earlier patchset
-
-https://lore.kernel.org/linux-fpga/20210524162721.2220782-1-trix@redhat.com/
-
-I'll respin 'generalize fpga_mgr_load' within the context this patchset 
-to give you some more context.
-
-It will test is the check is needed and give folks a chance to comment 
-if this a way sec-mgr should go.
-
-Tom
-
-
->
-> The same concern to all the following patches.
+On 6/23/21 6:23 PM, Xu Yilun wrote:
+> Sorry, I missed another one. The Documentations in
+> Documentation/driver-api/fpga should be updated.
 >
 > Thanks,
 > Yilun
 >
->> +		return  mgr->mops->write_init(mgr, info, buf, count);
->> +	return 0;
->> +}
->>   /*
->>    * Call the low level driver's write_init function.  This will do the
->>    * device-specific things to get the FPGA into the state where it is ready to
->> @@ -83,9 +91,9 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
->>   
->>   	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
->>   	if (!mgr->mops->initial_header_size)
->> -		ret = mgr->mops->write_init(mgr, info, NULL, 0);
->> +		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
->>   	else
->> -		ret = mgr->mops->write_init(
->> +		ret = fpga_mgr_write_init(
->>   		    mgr, info, buf, min(mgr->mops->initial_header_size, count));
->>   
->>   	if (ret) {
->> @@ -569,7 +577,7 @@ struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
->>   	int id, ret;
->>   
->>   	if (!mops || !mops->write_complete || !mops->state ||
->> -	    !mops->write_init || (!mops->write && !mops->write_sg) ||
->> +	    (!mops->write && !mops->write_sg) ||
->>   	    (mops->write && mops->write_sg)) {
->>   		dev_err(parent, "Attempt to register without fpga_manager_ops\n");
->>   		return NULL;
+> On Tue, Jun 22, 2021 at 06:11:48PM -0700, Russ Weight wrote:
+>> The FPGA framework has a convention of using managed resource functions
+>> to allow parent drivers to manage the data structures allocated by the
+>> class drivers. They use an empty *_dev_release() function to satisfy the
+>> class driver.
+>>
+>> This is inconsistent with linux driver model.
+>>
+>> These changes remove the managed resource functions and populate the class
+>> dev_release callback functions. They also merge the create() and register()
+>> functions into a single register() or register_simple() function for each of
+>> the fpga-mgr, fpga-region, and fpga-bridge class drivers.
+>>
+>> The new *register() functions accept an info data structure to provide
+>> flexibility in passing optional parameters. The *register_simple()
+>> functions support the legacy parameter list for users that don't require
+>> the use of optional parameters.
+>>
+>> For more context, refer to this email thread:
+>>
+>> https://marc.info/?l=linux-fpga&m=162127412218557&w=2
+>>
+>> I turned on the configs assocated with each of the modified files, but I
+>> must have been missing some dependencies, because not all of them compiled.
+>> I did a run-time test specifically with the dfl-fme infrastructure. This
+>> would have exercised the region, bridge, and fpga-mgr frameworks.
+>>
+>> Changelog v6 -> v7:
+>>   - Update the commit messages to describe the new parameters for the
+>>     *register() functions and to mention the *register_simple() functions.
+>>   - Fix function prototypes in header file to rename dev to parent.
+>>   - Make use of the PTR_ERR_OR_ZERO() macro when possible.
+>>   - Some cleanup of comments.
+>>   - Update function defintions/prototypes to apply const to the new info
+>>     parameter.
+>>   - Verify that info->br_ops is non-null in the fpga_bridge_register()
+>>     function.
+>>   - Verify a non-null info pointer in the fpga_region_register() function.
+>>
+>> Changelog v5 -> v6:
+>>   - Moved FPGA manager/bridge/region optional parameters out of the ops
+>>     structure and back into the FPGA class driver structure.
+>>   - Changed fpga_*_register() function parameters to accept an info data
+>>     structure to provide flexibility in passing optional parameters.
+>>   - Added fpga_*_register_simple() functions to support current parameters
+>>     for users that don't require use of optional parameters.
+>>
+>> Changelog v4 -> v5:
+>>   - Rebased on top of recently accepted patches.
+>>   - Removed compat_id from the fpga_mgr_register() parameter list
+>>     and added it to the fpga_manager_ops structure. This also required
+>>     dynamically allocating the dfl-fme-ops structure in order to add
+>>     the appropriate compat_id.
+>>   - Created the fpga_region_ops data structure which is optionally passed
+>>     to fpga_region_register(). compat_id, the get_bridges() pointer, and
+>>     the priv pointer are included in the fpga_region_ops structure.
+>>
+>> Changelog v3 -> v4:
+>>   - Added the compat_id parameter to fpga_mgr_register() and
+>>     devm_fpga_mgr_register() to ensure that the compat_id is set before
+>>     the device_register() call.
+>>   - Added the compat_id parameter to fpga_region_register() to ensure
+>>     that the compat_id is set before the device_register() call.
+>>   - Modified the dfl_fpga_feature_devs_enumerate() function to restore
+>>     the fpga_region_register() call to the correct location.
+>>
+>> Changelog v2 -> v3:
+>>   - Cleaned up comment headers for fpga_mgr_register(), fpga_bridge_register(),
+>>     and fpga_region_register().
+>>   - Fixed error return on ida_simple_get() failure for fpga_mgr_register(),
+>>     fpga_bridge_register(), and fpga_region_register().
+>>   - Fixed error return value for fpga_bridge_register(): ERR_PTR(ret) instead
+>>     of NULL.
+>>
+>> Changelog v1 -> v2:
+>>   - Restored devm_fpga_mgr_register() functionality to the fpga-mgr
+>>     class driver, adapted for the combined create/register functionality.
+>>   - All previous callers of devm_fpga_mgr_register() will continue to call
+>>     devm_fpga_mgr_register().
+>>   - replaced unnecessary ternary operators in return statements with
+>>     standard if conditions.
+>>
+>> Russ Weight (3):
+>>   fpga: mgr: Use standard dev_release for class driver
+>>   fpga: bridge: Use standard dev_release for class driver
+>>   fpga: region: Use standard dev_release for class driver
+>>
+>>  drivers/fpga/altera-cvp.c           |  12 +-
+>>  drivers/fpga/altera-fpga2sdram.c    |  12 +-
+>>  drivers/fpga/altera-freeze-bridge.c |  10 +-
+>>  drivers/fpga/altera-hps2fpga.c      |  12 +-
+>>  drivers/fpga/altera-pr-ip-core.c    |   8 +-
+>>  drivers/fpga/altera-ps-spi.c        |   9 +-
+>>  drivers/fpga/dfl-fme-br.c           |  10 +-
+>>  drivers/fpga/dfl-fme-mgr.c          |  22 ++-
+>>  drivers/fpga/dfl-fme-region.c       |  17 ++-
+>>  drivers/fpga/dfl.c                  |  12 +-
+>>  drivers/fpga/fpga-bridge.c          | 138 +++++++-----------
+>>  drivers/fpga/fpga-mgr.c             | 214 ++++++++++++----------------
+>>  drivers/fpga/fpga-region.c          | 121 ++++++----------
+>>  drivers/fpga/ice40-spi.c            |   9 +-
+>>  drivers/fpga/machxo2-spi.c          |  10 +-
+>>  drivers/fpga/of-fpga-region.c       |  11 +-
+>>  drivers/fpga/socfpga-a10.c          |  16 +--
+>>  drivers/fpga/socfpga.c              |   9 +-
+>>  drivers/fpga/stratix10-soc.c        |  16 +--
+>>  drivers/fpga/ts73xx-fpga.c          |   9 +-
+>>  drivers/fpga/xilinx-pr-decoupler.c  |  17 +--
+>>  drivers/fpga/xilinx-spi.c           |  11 +-
+>>  drivers/fpga/zynq-fpga.c            |  16 +--
+>>  drivers/fpga/zynqmp-fpga.c          |   9 +-
+>>  include/linux/fpga/fpga-bridge.h    |  33 +++--
+>>  include/linux/fpga/fpga-mgr.h       |  62 +++++---
+>>  include/linux/fpga/fpga-region.h    |  36 +++--
+>>  27 files changed, 371 insertions(+), 490 deletions(-)
+>>
 >> -- 
->> 2.26.3
+>> 2.25.1
 
