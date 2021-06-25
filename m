@@ -2,27 +2,27 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 787243B3DBE
-	for <lists+linux-fpga@lfdr.de>; Fri, 25 Jun 2021 09:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA223B3DC2
+	for <lists+linux-fpga@lfdr.de>; Fri, 25 Jun 2021 09:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbhFYHpH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 25 Jun 2021 03:45:07 -0400
-Received: from first.geanix.com ([116.203.34.67]:34880 "EHLO first.geanix.com"
+        id S230001AbhFYHpI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 25 Jun 2021 03:45:08 -0400
+Received: from first.geanix.com ([116.203.34.67]:34902 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229474AbhFYHpH (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 25 Jun 2021 03:45:07 -0400
+        id S229616AbhFYHpI (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 25 Jun 2021 03:45:08 -0400
 Received: from zen.. (unknown [185.17.218.86])
-        by first.geanix.com (Postfix) with ESMTPSA id 0B3A54C41AF;
-        Fri, 25 Jun 2021 07:42:44 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 3EE7A4C41BE;
+        Fri, 25 Jun 2021 07:42:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1624606964; bh=gSgxnotvFWjxmyiWvry2LQo2dRMw5YZN5NOHhaPPBNU=;
-        h=From:To:Cc:Subject:Date;
-        b=I+IjEbkVotK4Ajs5M1I1HGy9ivLYPeI6QWBwGXnmyp+tyfZRI0kmPgfk176Td9s18
-         91Ns3gL0+bPFck2NTadAFdGN7QvK86qZq7HjPvfzDAjOq3s8iVDo7dhH2+47XzVHPx
-         fEkGYZFSZ/2omytzd5OJ8L30zsrMV/S9yQWUgPIpyzaldyNnNZqVO/Afl+TL8lyJaq
-         FXpj6toam+VpEl22QWZIDjXdAkczNzGQW78pI8i3ImdKi3ibwg2QJk7+p6uUobl47a
-         7nly2FKLJ3epopbiMmyGuEkpYQJoVxPhWrNwVxfxoQ/X9Axh2c1Q8w585Tc00RnqJa
-         87WiLWoOMdkzw==
+        t=1624606965; bh=I4CaXQmrIoZGKkHneB3jqMMq5ESOCyFcDhfuGZWM4N0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Y/AEmpr4z+Vr+2ydH0NnwaAM3m5bu8dZ0dPyx6XR2TlM+aSEfyI1m/jTyRb/TLV9E
+         JXNkcyjASYvQa0oxdLBy6Kp67/tOiPSkojTZk8iAbD6/sNecLLmVtK/JyknfmCo9LN
+         Tmss7MYjzRQc4Axj9P3pasi8CxZFJG1MpF1/+90d+4TWUSEMVT1xAmNdarohK2jNS0
+         9aUgDbh7yBMriGRZq1UPPryLP4T0encp1yNm7tdB2V4xm0xue7qGc19iOh/3zZg4Uo
+         pnp/1d57VmzNnqOTx06C9CzQJGZOfSabdzbrrqzU21YghVoUskGQZlUIwVO8bta9TJ
+         S80XzdohQUbcQ==
 From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
 To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
         Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
@@ -33,10 +33,12 @@ To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
 Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@silicom.dk>,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v2 0/5] fpga/mfd/hwmon: Initial support for Silicom N5010 PAC
-Date:   Fri, 25 Jun 2021 09:42:08 +0200
-Message-Id: <20210625074213.654274-1-martin@geanix.com>
+Subject: [PATCH v2 1/5] fpga: dfl: pci: add device IDs for Silicom N501x PAC cards
+Date:   Fri, 25 Jun 2021 09:42:09 +0200
+Message-Id: <20210625074213.654274-2-martin@geanix.com>
 X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20210625074213.654274-1-martin@geanix.com>
+References: <20210625074213.654274-1-martin@geanix.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -50,35 +52,52 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Martin Hundebøll <mhu@silicom.dk>
 
-This is an initial set of patches for the Silciom N5010 programmable
-accelerated card adding support for reading out sensors.
+This adds the approved PCI Express Device IDs for the Silicom PAC N5010
+and N5011 cards (aka. Silicom Lightning Creek cards).
 
-Based on v5.13-rc7
+The N5010 features an FPGA that manages/interfaces four QSFP ports, and
+allows on-board custom packet processing/filtering/routing, based on
+logic loaded with user-provided FPGA bitstreams.
+
+The N5011 cards adds a PCIe switch that exposes, in addition to the FPGA
+itself, two Intel E810 (aka Columbiaville) ethernet controllers. With
+this, packets can be forwarded from the FPGA to the host for further
+processing.
+
+Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+Acked-by: Wu Hao <hao.wu@intel.com>
+---
 
 Changes since v1:
- * Commit message in patch 1 is updated with card description
- * Added Hao's Acked-by to patch 1
- * Patch 2 is replaced with a new patch to carry feature revision info
-   in struct dfl_device
- * Patch 3 is updated to use feature revision from struct dfl_device
- * Patch 4 from v0 is split into separate patches for hwmon and mfd
+ * Commit message is updated with card description
+ * Added Hao's Acked-by
 
-Martin Hundebøll (5):
-  fpga: dfl: pci: add device IDs for Silicom N501x PAC cards
-  fpga: dfl: expose feature revision from struct dfl_device
-  spi: spi-altera-dfl: support n5010 feature revision
-  mfd: intel-m10-bmc: add n5010 variant
-  hwmon: intel-m10-bmc-hwmon: add n5010 sensors
+ drivers/fpga/dfl-pci.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- drivers/fpga/dfl-pci.c              |   5 ++
- drivers/fpga/dfl.c                  |  27 ++++---
- drivers/fpga/dfl.h                  |   1 +
- drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
- drivers/mfd/intel-m10-bmc.c         |  12 ++-
- drivers/spi/spi-altera-dfl.c        |  15 +++-
- include/linux/dfl.h                 |   1 +
- 7 files changed, 164 insertions(+), 13 deletions(-)
-
+diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+index b44523ea8c91..4d68719e608f 100644
+--- a/drivers/fpga/dfl-pci.c
++++ b/drivers/fpga/dfl-pci.c
+@@ -74,6 +74,9 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
+ #define PCIE_DEVICE_ID_PF_DSC_1_X		0x09C4
+ #define PCIE_DEVICE_ID_INTEL_PAC_N3000		0x0B30
+ #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
++#define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
++#define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
++
+ /* VF Device */
+ #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
+ #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
+@@ -90,6 +93,8 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
+ 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_N3000),},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_D5005),},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
++	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
++	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
+ 	{0,}
+ };
+ MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
 -- 
 2.31.0
 
