@@ -2,27 +2,27 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CCF3B3DCC
+	by mail.lfdr.de (Postfix) with ESMTP id E62493B3DCE
 	for <lists+linux-fpga@lfdr.de>; Fri, 25 Jun 2021 09:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbhFYHpN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 25 Jun 2021 03:45:13 -0400
-Received: from first.geanix.com ([116.203.34.67]:34952 "EHLO first.geanix.com"
+        id S230152AbhFYHpO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 25 Jun 2021 03:45:14 -0400
+Received: from first.geanix.com ([116.203.34.67]:34920 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230025AbhFYHpK (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 25 Jun 2021 03:45:10 -0400
+        id S230072AbhFYHpL (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 25 Jun 2021 03:45:11 -0400
 Received: from zen.. (unknown [185.17.218.86])
-        by first.geanix.com (Postfix) with ESMTPSA id CD7334C41C2;
-        Fri, 25 Jun 2021 07:42:47 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 2575E4C41C3;
+        Fri, 25 Jun 2021 07:42:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1624606968; bh=KqpbJ6G/4HtHo9jdTQoQrgQLylu4HU0NQpLl5hC5Uok=;
+        t=1624606969; bh=OKf6/wgB4ByxaDS2MUvVAWCddXMhFEU98vb6qMw2YFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=K+6Ao/sSZOLuKeZcKFLeNjy+uUAtdSmWpBp4oa9XG7PJfaysbtQY01oedcKV9PRsr
-         5tEUj1eeuQHf8R8mUTGPUok1zaIp3J0Z9bh/qZfB6uUnQ45k19+7RV5ZCnuIbOXjKF
-         rXEv/MxJFR3Qmv4f9h6gFXNcymbJXJM09MKu7FwsAn9HDVTqT/1CNSbSVhc+OKh/vp
-         rxb2i9YuOS140XWVtSnM7pdE8XwW7DFINq5GuiwI2TawNhr9vvAduIedE4BFbDECoZ
-         3nvayORsaN5MVG33mZtNnOT3NsvuOjTdjaguN4AwTXyO5zn4UEoKYhWKLP0XICfRz7
-         vyUc+0Y5hWy2w==
+        b=mmAUhgMbswgWarxJrCs4wz7LlzzraEhgzo1XE3e04M1OBcDUEZiYmP10wRX8/5tKl
+         mgC1m4YctSvqdVART116Z2pwkYGN2QZ8zeLxrKnwtljaDYjbM70BeOygDaXR/BNQnp
+         DQeYpROeZLPRQngUsScBuVjrF4C5IrYt5PSrF8DCscca62EMwSn05GanFI2pMTqjmN
+         ssNYCEFDLXcHUTzX7W9vOnMBouZXp6uZTDtNCgpHUJwfk4PCjvtb3+3bWmgCNe5fYG
+         4o+KZgtbtcZpTbmWENCY25NKVjD20IV+BqX1JH8mrR4WmVbEcEzvGM0wrVeK7lb53v
+         7Ab0tWtMApANw==
 From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
 To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
         Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
@@ -33,9 +33,9 @@ To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
 Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@silicom.dk>,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v2 3/5] spi: spi-altera-dfl: support n5010 feature revision
-Date:   Fri, 25 Jun 2021 09:42:11 +0200
-Message-Id: <20210625074213.654274-4-martin@geanix.com>
+Subject: [PATCH v2 4/5] mfd: intel-m10-bmc: add n5010 variant
+Date:   Fri, 25 Jun 2021 09:42:12 +0200
+Message-Id: <20210625074213.654274-5-martin@geanix.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20210625074213.654274-1-martin@geanix.com>
 References: <20210625074213.654274-1-martin@geanix.com>
@@ -52,60 +52,62 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Martin Hundebøll <mhu@silicom.dk>
 
-The Max10 BMC on the Silicom n5010 PAC is slightly different than the
-existing BMC's, so use a dedicated feature revision detect it.
+ The m10-bmc is used on the Silicom N5010 PAC too, so add it to list of
+ m10bmc types.
 
 Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
 ---
 
 Changes since v1:
- * use feature revision from struct dfl_device instead of reading it
-   from io-mem
+ * Patch split out to separate mfd changes
 
- drivers/spi/spi-altera-dfl.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/mfd/intel-m10-bmc.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-altera-dfl.c b/drivers/spi/spi-altera-dfl.c
-index 3e32e4fe5895..f6cf7c8d9dac 100644
---- a/drivers/spi/spi-altera-dfl.c
-+++ b/drivers/spi/spi-altera-dfl.c
-@@ -111,6 +111,13 @@ static struct spi_board_info m10_bmc_info = {
- 	.chip_select = 0,
+diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+index 1a9bfb7f48cd..8db3bcf5fccc 100644
+--- a/drivers/mfd/intel-m10-bmc.c
++++ b/drivers/mfd/intel-m10-bmc.c
+@@ -15,7 +15,8 @@
+ 
+ enum m10bmc_type {
+ 	M10_N3000,
+-	M10_D5005
++	M10_D5005,
++	M10_N5010,
  };
  
-+static struct spi_board_info m10_n5010_bmc_info = {
-+	.modalias = "m10-n5010",
-+	.max_speed_hz = 12500000,
-+	.bus_num = 0,
-+	.chip_select = 0,
+ static struct mfd_cell m10bmc_d5005_subdevs[] = {
+@@ -28,6 +29,10 @@ static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
+ 	{ .name = "n3000bmc-secure" },
+ };
+ 
++static struct mfd_cell m10bmc_n5010_subdevs[] = {
++	{ .name = "n5010bmc-hwmon" },
 +};
 +
- static void config_spi_master(void __iomem *base, struct spi_master *master)
- {
- 	u64 v;
-@@ -130,6 +137,7 @@ static void config_spi_master(void __iomem *base, struct spi_master *master)
- 
- static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
- {
-+	struct spi_board_info *board_info = &m10_bmc_info;
- 	struct device *dev = &dfl_dev->dev;
- 	struct spi_master *master;
- 	struct altera_spi *hw;
-@@ -172,9 +180,12 @@ static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
- 		goto exit;
+ static const struct regmap_range m10bmc_regmap_range[] = {
+ 	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
+ 	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
+@@ -192,6 +197,10 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ 		cells = m10bmc_d5005_subdevs;
+ 		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+ 		break;
++	case M10_N5010:
++		cells = m10bmc_n5010_subdevs;
++		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
++		break;
+ 	default:
+ 		return -ENODEV;
  	}
- 
--	if (!spi_new_device(master,  &m10_bmc_info)) {
-+	if (dfl_dev->revision == FME_FEATURE_REV_MAX10_SPI_N5010)
-+		board_info = &m10_n5010_bmc_info;
-+
-+	if (!spi_new_device(master, board_info)) {
- 		dev_err(dev, "%s failed to create SPI device: %s\n",
--			__func__, m10_bmc_info.modalias);
-+			__func__, board_info->modalias);
- 	}
- 
- 	return 0;
+@@ -207,6 +216,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ static const struct spi_device_id m10bmc_spi_id[] = {
+ 	{ "m10-n3000", M10_N3000 },
+ 	{ "m10-d5005", M10_D5005 },
++	{ "m10-n5010", M10_N5010 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
 -- 
 2.31.0
 
