@@ -2,62 +2,62 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 315E53B4967
+	by mail.lfdr.de (Postfix) with ESMTP id D1ECD3B4969
 	for <lists+linux-fpga@lfdr.de>; Fri, 25 Jun 2021 21:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbhFYTyn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 25 Jun 2021 15:54:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22473 "EHLO
+        id S229940AbhFYTyo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 25 Jun 2021 15:54:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57910 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229999AbhFYTyk (ORCPT
+        by vger.kernel.org with ESMTP id S230025AbhFYTyn (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 25 Jun 2021 15:54:40 -0400
+        Fri, 25 Jun 2021 15:54:43 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624650739;
+        s=mimecast20190719; t=1624650741;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LjAdCEfiqEm9c0Ynsebg4BWNbSDpcr72TwU3P0oRZpc=;
-        b=VSF5jgK+HMRUdpnVfJO8GcCW2SspgeM/uGFcNANNoFl/zGsjkHZanx4ZfGxxgcu2If9p3E
-        olgb3eUcOUl2eI9SHZTr05sfDxR7hQVFY9Z0YmoYIeBlx4nRmIrs/SUq1Rjc8A9bR373nO
-        Pg5XeMdqFj7n4B0Z/ajacxBbSJuN/5M=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-477-PnmrCepzOiyCvQBgdCDGHQ-1; Fri, 25 Jun 2021 15:52:18 -0400
-X-MC-Unique: PnmrCepzOiyCvQBgdCDGHQ-1
-Received: by mail-ot1-f71.google.com with SMTP id y6-20020a9d51860000b029046100bd0f34so3876700otg.22
-        for <linux-fpga@vger.kernel.org>; Fri, 25 Jun 2021 12:52:17 -0700 (PDT)
+        bh=4aYp4hJz/EjjMi3xPniOC0g0VH/UB+PZgaBhiQVtvD8=;
+        b=BqH653PKyq0iNNLLhK9q4nM0xF9m4J+pZScFsx+sTQ6UsbVdiKfqi1NVHjCJNVlls9N27R
+        a9nHW13/tQE94R6jYedKRlz3mcSI2MjvKejU/AvDhFaE7g2rU1jvmNeY8B8kivzCiKa3r9
+        xKB3fz2kQVaOQGcW/q6sja1Cw1HPfao=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-179-d-UaBtudMK2QO0Np-0cdWQ-1; Fri, 25 Jun 2021 15:52:20 -0400
+X-MC-Unique: d-UaBtudMK2QO0Np-0cdWQ-1
+Received: by mail-oi1-f197.google.com with SMTP id t22-20020a0568081596b029023a41b03dc9so5279270oiw.1
+        for <linux-fpga@vger.kernel.org>; Fri, 25 Jun 2021 12:52:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LjAdCEfiqEm9c0Ynsebg4BWNbSDpcr72TwU3P0oRZpc=;
-        b=g+WhGDC56t2uqI17u9Y72x9ki08wTlaGe7tU6OKjKqi0Z86ZRk8T6gozN2vnN75a6Y
-         4yCdehQLv2sTgDiFX7whjLUc2eMczyTqPk7yIIqvpGQIeTF0avcnJc1gJSygv/7PSdA3
-         Zsn3ik4XqI6BtPLgNniM2CA8RRul7+vtSIk/cKZj8MRS5J/aIYyIfvVhU1AraQe1/8Li
-         gFkhzGxfN9B2kJaCGOehLshMRIgNpbgMJ8dVZnFuR55X6B4QfrX6WAexhi3qFGLp03lk
-         Tj0Hy7Tg18/ToFrh0H/SjcFszImR4xb5GFLQVH79d5d8+gXwIc1oj45WAKErW2TBCOqH
-         9vGg==
-X-Gm-Message-State: AOAM533KeMnCpPrfo7zkWqJ5FLTWVg4yGjKSXYzIc53bGox1k2It9W5f
-        Qz5A11pmB52FJ5gB7WHtV906t2mimtD037hSbID78sgljjRQZAk0jol4n/0m3TLYQynJXLPeBID
-        P7svSYHjdzvktj4jgL7aRag==
-X-Received: by 2002:aca:e107:: with SMTP id y7mr12990072oig.11.1624650737409;
-        Fri, 25 Jun 2021 12:52:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwF1c4CKnAxDSoTM1uv3ouUh/l8z5JnAQLTGazp+4FQ/B0la7C6C13aQqkvGpjE5+63AdBssw==
-X-Received: by 2002:aca:e107:: with SMTP id y7mr12990063oig.11.1624650737263;
-        Fri, 25 Jun 2021 12:52:17 -0700 (PDT)
+        bh=4aYp4hJz/EjjMi3xPniOC0g0VH/UB+PZgaBhiQVtvD8=;
+        b=QRywNO0K8o5zIpKXYCR7H65rL4IRUUaS9mI43DWb64wKRzByCMq/u5JSH1AtZtYdlU
+         9jDuI2V045nNlkoaU2SDWsOflNgxOlRx42ybiwQ9QC4rWnj62bVClie4BkHe5oKHodMx
+         06/6LK/voekEgNBx1QIWrB3tB05RX5z8CwYvbn093imcVThULZpoUufXpU9cYURQeonC
+         /Nc+lG3voTEER2zUmVUkHTy+CpYjZGGri9YGOrwh8BXm34DersQzU652Sd2dvGi0Ywv7
+         iHuKRq+TiHSbiRGUNJwDWwQHqEvqA0fCjEpuq2dlAYU8qjDdhqV6YvOSuWFE/W2RFEyK
+         TyKg==
+X-Gm-Message-State: AOAM530Rllv4uJ7D1tP0iYQTuCjc25OmN9DPAzaHFXNUNbXyBXsOmz3V
+        lSejXxBmQIjjrkj3GH4sciklxBUa87HpabYQ0Mg9se05iIL0edKfbUi2FlL2FmwqeqvsXvLLWy4
+        O6NDBPBjrO76896hJ1oaC8w==
+X-Received: by 2002:a05:6808:bc1:: with SMTP id o1mr12878395oik.176.1624650739896;
+        Fri, 25 Jun 2021 12:52:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJypIr38r6Xwat7SHOutFdWdtMBZB5yIHYyEpbFVr7YNiZOiaRsU1APN36mLAM8st0Os4NeZUA==
+X-Received: by 2002:a05:6808:bc1:: with SMTP id o1mr12878390oik.176.1624650739792;
+        Fri, 25 Jun 2021 12:52:19 -0700 (PDT)
 Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id o25sm1535446ood.20.2021.06.25.12.52.16
+        by smtp.gmail.com with ESMTPSA id o25sm1535446ood.20.2021.06.25.12.52.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Jun 2021 12:52:17 -0700 (PDT)
+        Fri, 25 Jun 2021 12:52:19 -0700 (PDT)
 From:   trix@redhat.com
 To:     hao.wu@intel.com, mdf@kernel.org, michal.simek@xilinx.com
 Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH v4 6/7] fpga-mgr: wrap the fpga_remove() op
-Date:   Fri, 25 Jun 2021 12:51:47 -0700
-Message-Id: <20210625195148.837230-8-trix@redhat.com>
+Subject: [PATCH v4 7/7] fpga-mgr: wrap the write_sg() op
+Date:   Fri, 25 Jun 2021 12:51:48 -0700
+Message-Id: <20210625195148.837230-9-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20210625195148.837230-1-trix@redhat.com>
 References: <20210625195148.837230-1-trix@redhat.com>
@@ -69,42 +69,44 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Tom Rix <trix@redhat.com>
 
-An FPGA manager is not required to provide a fpga_remove() op.
-Add a wrapper consistent with the other op wrappers.
-Move op check to wrapper.
+An FPGA manager should not be required to provide a
+write_sg function. Move the op check to the wrapper.
+Default to -EOPNOTSUP so its users will fail
+gracefully.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/fpga/fpga-mgr.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/fpga/fpga-mgr.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-index b3380ad341d22..077c0f9edbe4c 100644
+index 077c0f9edbe4c..aa30889e23208 100644
 --- a/drivers/fpga/fpga-mgr.c
 +++ b/drivers/fpga/fpga-mgr.c
-@@ -25,6 +25,12 @@ struct fpga_mgr_devres {
- 	struct fpga_manager *mgr;
- };
+@@ -83,6 +83,14 @@ static inline int fpga_mgr_write_init(struct fpga_manager *mgr,
+ 	return 0;
+ }
  
-+static inline void fpga_mgr_fpga_remove(struct fpga_manager *mgr)
++static inline int fpga_mgr_write_sg(struct fpga_manager *mgr,
++				    struct sg_table *sgt)
 +{
-+	if (mgr->mops->fpga_remove)
-+		mgr->mops->fpga_remove(mgr);
++	if (mgr->mops->write_sg)
++		return  mgr->mops->write_sg(mgr, sgt);
++	return -EOPNOTSUPP;
 +}
 +
- static inline enum fpga_mgr_states fpga_mgr_state(struct fpga_manager *mgr)
- {
- 	if (mgr->mops->state)
-@@ -745,8 +751,7 @@ void fpga_mgr_unregister(struct fpga_manager *mgr)
- 	 * If the low level driver provides a method for putting fpga into
- 	 * a desired state upon unregister, do it.
- 	 */
--	if (mgr->mops->fpga_remove)
--		mgr->mops->fpga_remove(mgr);
-+	fpga_mgr_fpga_remove(mgr);
+ /**
+  * fpga_image_info_alloc - Allocate an FPGA image info struct
+  * @dev: owning device
+@@ -225,7 +233,7 @@ static int fpga_mgr_buf_load_sg(struct fpga_manager *mgr,
+ 	/* Write the FPGA image to the FPGA. */
+ 	mgr->state = FPGA_MGR_STATE_WRITE;
+ 	if (mgr->mops->write_sg) {
+-		ret = mgr->mops->write_sg(mgr, sgt);
++		ret = fpga_mgr_write_sg(mgr, sgt);
+ 	} else {
+ 		struct sg_mapping_iter miter;
  
- 	device_unregister(&mgr->dev);
- }
 -- 
 2.26.3
 
