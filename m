@@ -2,200 +2,107 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 440323B4939
-	for <lists+linux-fpga@lfdr.de>; Fri, 25 Jun 2021 21:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4E33B495E
+	for <lists+linux-fpga@lfdr.de>; Fri, 25 Jun 2021 21:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbhFYT3L (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 25 Jun 2021 15:29:11 -0400
-Received: from mail-pg1-f181.google.com ([209.85.215.181]:42635 "EHLO
-        mail-pg1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbhFYT3L (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 25 Jun 2021 15:29:11 -0400
-Received: by mail-pg1-f181.google.com with SMTP id d12so8770845pgd.9;
-        Fri, 25 Jun 2021 12:26:50 -0700 (PDT)
+        id S229712AbhFYTyX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 25 Jun 2021 15:54:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21450 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229531AbhFYTyW (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 25 Jun 2021 15:54:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1624650721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ef9qFAYdxrVH6/HlVHojSk640HF0K6FvgDiFwPqxu5U=;
+        b=JEs8bf3kbVdVmwDbSxceBzIVzs+KWIXNgdvIR4XOmkWlA0XnRBx8FCfI7MIVi4j7RadGOr
+        kMvIIlYZOkFtq4OXQF1vOSvc/nOzmlXExY0Z54pfRVdCcdfXBKY3eOJ08NrAitODGWwLx5
+        z9HMmIg8ccWDo0jsZmnQJcHLUV9PEx4=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-470-wTiB0a1yPCa5eonosbohoQ-1; Fri, 25 Jun 2021 15:52:00 -0400
+X-MC-Unique: wTiB0a1yPCa5eonosbohoQ-1
+Received: by mail-ot1-f70.google.com with SMTP id y21-20020a0568301d95b029044f7b7f3047so6562914oti.5
+        for <linux-fpga@vger.kernel.org>; Fri, 25 Jun 2021 12:51:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=h1GdoT+CpTe+GaIuEBpH8gMshMEuLSCbkgQ3nh1A9HQ=;
-        b=jjzJSgpcpLZRT2zsaBKgw8AOLGnmAKDA1G/SyEEPDcwxbAM8NUjjtSnmGMoO/9cqFs
-         7lnGBeXKN8xPAQVgj/zrcZ7XldqU3hmRbEp8gUQ9T+EPmwsjraNEHjRAzeu69b3KfxNl
-         hpQcjyIEKDO0NFI4+DSc9iCk0hkqpoqyWz+GFSJaVytZAbslrFzDPAJED7fCfKDOlAjJ
-         HDaHGmZbwk626LMccW0xiIxb7nTp/CS9678K8rlmaQWMwlBrah7qEq+6lIlg0x7vu7pM
-         YsgavzRcCIcyqga+Qzge8qh1hsyMPKd+Ep1qibUz231lqSR5uYtyaRCrpyiAalGSI0qw
-         trhQ==
-X-Gm-Message-State: AOAM533gZvITPeDkOkmmjczH9k/+pYmwaziwog2O0wD+GR14gtku4nFW
-        FD9vAKaPMSUf+FXYWeAbJSo=
-X-Google-Smtp-Source: ABdhPJwTEEzENLi2KqgrCM7qoAwDS8vgHBE3F82EOEjnj7s+DoBBdlOy15DkQ0bU5Jj9FxbxmBMcAw==
-X-Received: by 2002:a63:e958:: with SMTP id q24mr10982182pgj.438.1624649210126;
-        Fri, 25 Jun 2021 12:26:50 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id a15sm6507385pff.128.2021.06.25.12.26.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ef9qFAYdxrVH6/HlVHojSk640HF0K6FvgDiFwPqxu5U=;
+        b=XOfIzVFKbx0BTxsnYB1I03b6A44YMTyt+oN8crCn/epwO19p28aaiUV7oCTMWL3TmS
+         nTIP22t13/1/KoaCuTdI6Tw1BKw+yfEuHwdto9SwuZcJHKXoZcBXPCCF9TlmAZZv0N6p
+         RKZ3l5DdgTfofZ/6LYv/0aVD46191sZIxpbOOAOn5w3Gu3HKO+9xHOFW1PUNZgccph+Q
+         G2RzQ+VqVfoEcYxXOd9ZGpdIAWtnH3C1BKiltvPIWaAbvUGPjxy7h0EzAFgFc+FQxEv2
+         2eGt2XZlEqBklX4rlJg9OOnmcUkSwAxwEaMRxRiH6RTqsRlBn9ojihFtTUZh4D2cVUS5
+         FESw==
+X-Gm-Message-State: AOAM5333rJdW1UxTxIZ6NcJsoyoa9r3LznqdbBv4V+7YiGT0g3LGg7rE
+        NikxRMSQOH8DuEkeeE3g2HAW6lEmEJZwPOCQ6w8WpcZEg5YFoo5C+IMYLt1+DjwkwztJGTMkAnK
+        6Oa7dYlhgaUd33fcjQoGPjA==
+X-Received: by 2002:a9d:634d:: with SMTP id y13mr11285125otk.294.1624650719409;
+        Fri, 25 Jun 2021 12:51:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz9SONxhvUh55/AyVb2xueMPq6ATJRY/MzaDu3zdxqWTtJLSpUkP8d50R9gFMFN0vLoTE02qw==
+X-Received: by 2002:a9d:634d:: with SMTP id y13mr11285114otk.294.1624650719191;
+        Fri, 25 Jun 2021 12:51:59 -0700 (PDT)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id o25sm1535446ood.20.2021.06.25.12.51.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Jun 2021 12:26:49 -0700 (PDT)
-Date:   Fri, 25 Jun 2021 12:26:48 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
-Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] fpga: dfl: expose feature revision from struct
- dfl_device
-Message-ID: <YNYt+Dl43zhkjIhI@epycbox.lan>
-References: <20210625074213.654274-1-martin@geanix.com>
- <20210625074213.654274-3-martin@geanix.com>
+        Fri, 25 Jun 2021 12:51:58 -0700 (PDT)
+From:   trix@redhat.com
+To:     hao.wu@intel.com, mdf@kernel.org, michal.simek@xilinx.com
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH v4 0/7]  wrappers for fpga_manager_ops
+Date:   Fri, 25 Jun 2021 12:51:40 -0700
+Message-Id: <20210625195148.837230-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210625074213.654274-3-martin@geanix.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Jun 25, 2021 at 09:42:10AM +0200, Martin Hundebøll wrote:
-> From: Martin Hundebøll <mhu@silicom.dk>
-> 
-> Drivers can make use of the feature field from the DFL header, but
-> shouldn't know about the header structure. To avoid exposing such info,
-> and to reduce the number of reads from the io-mem, the revision is added
-> to struct dfl_device.
-> 
-> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-> ---
-> 
-> Changes since v1:
->  * This patch replaces the previous patch 2 and exposes the feature
->    revision through struct dfl_device instead of a helper reading from
->    io-mem
-> 
->  drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
->  drivers/fpga/dfl.h  |  1 +
->  include/linux/dfl.h |  1 +
->  3 files changed, 19 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 511b20ff35a3..9381c579d1cd 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
->  
->  	ddev->type = feature_dev_id_type(pdev);
->  	ddev->feature_id = feature->id;
-> +	ddev->revision = feature->revision;
->  	ddev->cdev = pdata->dfl_cdev;
->  
->  	/* add mmio resource */
-> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
->   */
->  struct dfl_feature_info {
->  	u16 fid;
-> +	u8 rev;
->  	struct resource mmio_res;
->  	void __iomem *ioaddr;
->  	struct list_head node;
-> @@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
->  		/* save resource information for each feature */
->  		feature->dev = fdev;
->  		feature->id = finfo->fid;
-> +		feature->revision = finfo->rev;
->  
->  		/*
->  		 * the FIU header feature has some fundamental functions (sriov
-> @@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
->  	devm_kfree(binfo->dev, binfo);
->  }
->  
-> -static inline u32 feature_size(void __iomem *start)
-> +static inline u32 feature_size(u64 value)
->  {
-> -	u64 v = readq(start + DFH);
-> -	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
-> +	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
->  	/* workaround for private features with invalid size, use 4K instead */
->  	return ofst ? ofst : 4096;
->  }
->  
-> -static u16 feature_id(void __iomem *start)
-> +static u16 feature_id(u64 value)
->  {
-> -	u64 v = readq(start + DFH);
-> -	u16 id = FIELD_GET(DFH_ID, v);
-> -	u8 type = FIELD_GET(DFH_TYPE, v);
-> +	u16 id = FIELD_GET(DFH_ID, value);
-> +	u8 type = FIELD_GET(DFH_TYPE, value);
->  
->  	if (type == DFH_TYPE_FIU)
->  		return FEATURE_ID_FIU_HEADER;
-> @@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->  	unsigned int irq_base, nr_irqs;
->  	struct dfl_feature_info *finfo;
->  	int ret;
-> +	u8 rev;
-> +	u64 v;
-> +
-> +	v = readq(binfo->ioaddr + ofst);
-> +	rev = FIELD_GET(DFH_REVISION, v);
->  
->  	/* read feature size and id if inputs are invalid */
-> -	size = size ? size : feature_size(binfo->ioaddr + ofst);
-> -	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
-> +	size = size ? size : feature_size(v);
-> +	fid = fid ? fid : feature_id(v);
->  
->  	if (binfo->len - ofst < size)
->  		return -EINVAL;
-> @@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->  		return -ENOMEM;
->  
->  	finfo->fid = fid;
-> +	finfo->rev = rev;
->  	finfo->mmio_res.start = binfo->start + ofst;
->  	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
->  	finfo->mmio_res.flags = IORESOURCE_MEM;
-> @@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
->  {
->  	if (!is_feature_dev_detected(binfo)) {
->  		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
-> -			feature_id(binfo->ioaddr + ofst));
-> +			feature_id(readq(binfo->ioaddr + ofst)));
->  		return -EINVAL;
->  	}
->  
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 2b82c96ba56c..422157cfd742 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
->  struct dfl_feature {
->  	struct platform_device *dev;
->  	u16 id;
-> +	u8 revision;
->  	int resource_index;
->  	void __iomem *ioaddr;
->  	struct dfl_feature_irq_ctx *irq_ctx;
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 6cc10982351a..431636a0dc78 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -38,6 +38,7 @@ struct dfl_device {
->  	int id;
->  	u16 type;
->  	u16 feature_id;
-> +	u8 revision;
->  	struct resource mmio_res;
->  	int *irqs;
->  	unsigned int num_irqs;
-> -- 
-> 2.31.0
-> 
-Looks good to me, any concerns from Intel folks?
+From: Tom Rix <trix@redhat.com>
 
-- Moritz
+As followup from
+https://lore.kernel.org/linux-fpga/06301910-10a1-0e62-45a0-d28ab5a787ed@redhat.com/
+
+Boards should not be required to have noop functions.
+So improve or create fpga-mgr wrappers for the fpga_manager_ops.  
+Remove the noop functions.
+Refactor fpga-mgr to use the wrappers.
+
+Changes from
+
+v1:
+  commit subject,log
+
+v2:
+  rebase to next-20210623
+
+v3:
+  remove mops check
+  add write_sg wrapper
+  drop 'fpga-mgr: collect wappers and change to inline'
+
+Tom Rix (7):
+  fpga-mgr: wrap the write_init() op
+  fpga-mgr: make write_complete() op optional
+  fpga-mgr: wrap the write() op
+  fpga-mgr: wrap the status() op
+  fpga-mgr: wrap the state() op
+  fpga-mgr: wrap the fpga_remove() op
+  fpga-mgr: wrap the write_sg() op
+
+ drivers/fpga/dfl-fme-mgr.c   |   6 --
+ drivers/fpga/fpga-mgr.c      | 111 +++++++++++++++++++++++------------
+ drivers/fpga/stratix10-soc.c |   6 --
+ drivers/fpga/ts73xx-fpga.c   |   6 --
+ drivers/fpga/zynqmp-fpga.c   |   7 ---
+ 5 files changed, 75 insertions(+), 61 deletions(-)
+
+-- 
+2.26.3
+
