@@ -2,151 +2,240 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 096593B5C84
-	for <lists+linux-fpga@lfdr.de>; Mon, 28 Jun 2021 12:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A90D3B5FB2
+	for <lists+linux-fpga@lfdr.de>; Mon, 28 Jun 2021 16:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbhF1KgO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 28 Jun 2021 06:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        id S232251AbhF1ONp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 28 Jun 2021 10:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232689AbhF1KgK (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 28 Jun 2021 06:36:10 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD64C061768
-        for <linux-fpga@vger.kernel.org>; Mon, 28 Jun 2021 03:33:44 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id j1so20593854wrn.9
-        for <linux-fpga@vger.kernel.org>; Mon, 28 Jun 2021 03:33:44 -0700 (PDT)
+        with ESMTP id S230033AbhF1ONl (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 28 Jun 2021 10:13:41 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDEFC061574;
+        Mon, 28 Jun 2021 07:11:14 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id g19-20020a9d12930000b0290457fde18ad0so18880082otg.1;
+        Mon, 28 Jun 2021 07:11:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=GIGzDkjYpMYYcMV5RqlKoJGmaST1cvK174JxTj86cYw=;
-        b=qkId5XP/gDFWBYbhE5fxBwPKbrAaoDqv0KdktsZhUzkzKw5HFCl7vNukEkPXrIGVT1
-         UPtZQgemL3W61gWTdy7SufoTyNkS5D1oY5wW4WKDDauH/5qdOF7kd3sgdpox6kEXbcbS
-         a53UoGRp1J4EnDXkHSBjLZr3GuBQMU6aQ3e7pgl1yvyvxa16Zf8BeaYXd5HFjJJEbeYP
-         eS+vXjDO3WfciCvP+zQnlm0RbqEBrUsItbf3hAEKUUwVyUcbQd5wCLrDCG+7hdp4+HKG
-         DC3TrBd10TpNk+YTaC2zfmNIUMC7DNCPXtPQLfxMk12kbsIkOFwtWzhUS7dzoZTVpUaE
-         Gciw==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=NCy8SzHtVsTms8W2cCZWxIt9IklFt3RTVjERxFKBJRU=;
+        b=QTI2Djox7MRIV5xmVdooXf1riXKjlPe55adOU+BbFPijCaVTewXZ5ie4xVJsUrdcBD
+         cJlaDQ0G3jnRQLLI4ucg9LiqJXoFUL6UF2TdwnGnGtzNPK8lFvgToLswQ41VZ24yv2nQ
+         APiWED5RrVS3FU+JaP99TaMMnWbx8swi1+T9I0Lzqyuw36K+MEEdXeqT+yN1Kbe+8u+q
+         Nvw+TC7qW+mR340aPPwnhXKV/asgsrjefMugWibYblLQo+twZx0UsIDpXi6EuogG+xfL
+         dTLM/fXncBQegCh1l/jxYY4BheYzmt3HHt6EhczL8on3MfoCQ1m6Yu56FxKx5ukPt4Fc
+         1DyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GIGzDkjYpMYYcMV5RqlKoJGmaST1cvK174JxTj86cYw=;
-        b=Ra91Vty7SG6RVjvsyZUyH6+xU8cKlLyaw3A/Lj7xzRbL8is0NvCLfaiNR49CL2CW01
-         AxvwyT7i4RYqudg3f8IA8cv3SFc1t15mSR97oWJhxHydKVDL6cXCF6yhr3FJjygHNpsy
-         B6dpNoz9osD8duHpa01Y4QwSIxjHKAsi2EnR4mJH2l4rq9XDh7wWAb5VX1WWMc9C4F9M
-         2mpr6wypJyfr2G7UXhUZ/1bVVoe2ZBM6yuv+FeTauhxOXt2qwBS+tpIxHjUOA6uDLoN1
-         fvFwSz1l+jd8VVihXOgGPRPrAU/SfaaEazco/ShudkPobwGofTmAtGhsJyYI+EOyw6o5
-         BSqg==
-X-Gm-Message-State: AOAM530p6KXr+XRykMxyz69OY6BSXdlay8BVEr98SpCHS+8W2Yr6LIrT
-        RWALFLrtkruvt62qJ68frZawKA==
-X-Google-Smtp-Source: ABdhPJxiFmlLKEIXNMbZ1Kh48F8904JRqw1IOBpgNb6LA2rdOVM+ZUd7tqNfSLul3mtJIC73CTIa5Q==
-X-Received: by 2002:adf:f20c:: with SMTP id p12mr26363513wro.257.1624876422753;
-        Mon, 28 Jun 2021 03:33:42 -0700 (PDT)
-Received: from dell ([95.144.13.187])
-        by smtp.gmail.com with ESMTPSA id s18sm14593601wrw.33.2021.06.28.03.33.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jun 2021 03:33:42 -0700 (PDT)
-Date:   Mon, 28 Jun 2021 11:33:39 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NCy8SzHtVsTms8W2cCZWxIt9IklFt3RTVjERxFKBJRU=;
+        b=WPjwoopFWCThGGc2zUtG1I+/X9nzblPj89TLdmFbB1c/j+4s1/Esb6SnTxRCbbaYgH
+         dfgfQBHVNh/FRY66RogItNnKDrNPoAEM+gU+k3jiAhT3ZYOeLST27S1ok+Pekfs907ho
+         IUp7mTNDmzjTeIHmkKquf1LezmUjtrDNK0h7TqVoDEZ46wQ5j+Ux21mt3pQguVBDST74
+         DXQqDGtZfD5iMUM5Zeta2bYt6qDtsy19aeV2ob0YfG8DB2tlNJ1L4k7+r86coyYnItES
+         J0cKlwFvtx5fgSptByg8hzWhxYcar2onSAi351RLoJjoBEW6ZrZKOwiFvVvTC2njaInR
+         VOeA==
+X-Gm-Message-State: AOAM532mZSzD+F47bE8Y71L7dmjX9GI9Yb6NCgUC+VLYVyn3TUlVK6u3
+        jCDFCkKssggICvSK8d1LV2qDGRP14X0=
+X-Google-Smtp-Source: ABdhPJz/RXKT8x97KI9wifUr08T/FRV419WzdifSJDubUxN/tao0sXxCDyEYw9FcL+YvC+iV0ip2Tw==
+X-Received: by 2002:a9d:5c14:: with SMTP id o20mr20880765otk.328.1624889472363;
+        Mon, 28 Jun 2021 07:11:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r204sm3120937oih.11.2021.06.28.07.11.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Jun 2021 07:11:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v2 5/5] hwmon: intel-m10-bmc-hwmon: add n5010 sensors
+To:     Xu Yilun <yilun.xu@intel.com>,
+        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
         Moritz Fischer <mdf@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
         Mark Brown <broonie@kernel.org>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
+        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] mfd: intel-m10-bmc: add n5010 variant
-Message-ID: <YNmlgz7wdJSGzMh9@dell>
 References: <20210625074213.654274-1-martin@geanix.com>
- <20210625074213.654274-5-martin@geanix.com>
- <20210628055942.GD72330@yilunxu-OptiPlex-7050>
+ <20210625074213.654274-6-martin@geanix.com>
+ <20210628060019.GE72330@yilunxu-OptiPlex-7050>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <6cb3b8cb-35dc-7279-cda2-0a2300aa959a@roeck-us.net>
+Date:   Mon, 28 Jun 2021 07:11:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20210628060019.GE72330@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210628055942.GD72330@yilunxu-OptiPlex-7050>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, 28 Jun 2021, Xu Yilun wrote:
-
+On 6/27/21 11:00 PM, Xu Yilun wrote:
 > It is good to me.
+> 
 
-Please provide a proper *-by tag:
+As already pointed out, please don't top-post, and provide a
+formal Reviewed-by: or Acked-by: tag.
 
-  See the: 'Sign your work - the Developer's Certificate of Origin'
-  section in Documentation/process/submitting-patches.rst
+Thanks,
+Guenter
 
-And please don't top post.
+> On Fri, Jun 25, 2021 at 09:42:13AM +0200, Martin Hundebøll wrote:
+>> From: Martin Hundebøll <mhu@silicom.dk>
+>>
+>> Add the list of sensors supported by the Silicom n5010 PAC, and enable
+>> the drivers as a subtype of the intel-m10-bmc multi-function driver.
+>>
+>> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+>> ---
+>>
+>> Changes since v1:
+>>   * Patch split out to separate hwmon changes
+>>
+>>   drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
+>>   1 file changed, 116 insertions(+)
+>>
+>> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
+>> index bd7ed2ed3a1e..7a08e4c44a4b 100644
+>> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
+>> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
+>> @@ -228,6 +228,118 @@ static const struct m10bmc_hwmon_board_data d5005bmc_hwmon_bdata = {
+>>   	.hinfo = d5005bmc_hinfo,
+>>   };
+>>   
+>> +static const struct m10bmc_sdata n5010bmc_temp_tbl[] = {
+>> +	{ 0x100, 0x0, 0x104, 0x0, 0x0, 1000, "Board Local Temperature" },
+>> +	{ 0x108, 0x0, 0x10c, 0x0, 0x0, 1000, "FPGA 1 Temperature" },
+>> +	{ 0x110, 0x0, 0x114, 0x0, 0x0, 1000, "FPGA 2 Temperature" },
+>> +	{ 0x118, 0x0, 0x0, 0x0, 0x0, 1000, "Card Top Temperature" },
+>> +	{ 0x11c, 0x0, 0x0, 0x0, 0x0, 1000, "Card Bottom Temperature" },
+>> +	{ 0x128, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 1.2V Temperature" },
+>> +	{ 0x134, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 5V Temperature" },
+>> +	{ 0x140, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 0.9V Temperature" },
+>> +	{ 0x14c, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 0.85V Temperature" },
+>> +	{ 0x158, 0x0, 0x0, 0x0, 0x0, 1000, "AUX 12V Temperature" },
+>> +	{ 0x164, 0x0, 0x0, 0x0, 0x0, 1000, "Backplane 12V Temperature" },
+>> +	{ 0x1a8, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-1 Temperature" },
+>> +	{ 0x1ac, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-2 Temperature" },
+>> +	{ 0x1b0, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-3 Temperature" },
+>> +	{ 0x1b4, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-4 Temperature" },
+>> +	{ 0x1b8, 0x0, 0x0, 0x0, 0x0, 1000, "CVL1 Internal Temperature" },
+>> +	{ 0x1bc, 0x0, 0x0, 0x0, 0x0, 1000, "CVL2 Internal Temperature" },
+>> +};
+>> +
+>> +static const struct m10bmc_sdata n5010bmc_in_tbl[] = {
+>> +	{ 0x120, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.2V Voltage" },
+>> +	{ 0x12c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 5V Voltage" },
+>> +	{ 0x138, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.9V Voltage" },
+>> +	{ 0x144, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.85V Voltage" },
+>> +	{ 0x150, 0x0, 0x0, 0x0, 0x0, 1, "AUX 12V Voltage" },
+>> +	{ 0x15c, 0x0, 0x0, 0x0, 0x0, 1, "Backplane 12V Voltage" },
+>> +	{ 0x16c, 0x0, 0x0, 0x0, 0x0, 1, "DDR4 1.2V Voltage" },
+>> +	{ 0x17c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.8V Voltage" },
+>> +	{ 0x184, 0x0, 0x0, 0x0, 0x0, 1, "QDR 1.3V Voltage" },
+>> +	{ 0x18c, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 0.8V Voltage" },
+>> +	{ 0x194, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 1.05V Voltage" },
+>> +	{ 0x19c, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 1.05V Voltage" },
+>> +	{ 0x1a4, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 0.8V Voltage" },
+>> +};
+>> +
+>> +static const struct m10bmc_sdata n5010bmc_curr_tbl[] = {
+>> +	{ 0x124, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.2V Current" },
+>> +	{ 0x130, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 5V Current" },
+>> +	{ 0x13c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.9V Current" },
+>> +	{ 0x148, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.85V Current" },
+>> +	{ 0x154, 0x0, 0x0, 0x0, 0x0, 1, "AUX 12V Current" },
+>> +	{ 0x160, 0x0, 0x0, 0x0, 0x0, 1, "Backplane 12V Current" },
+>> +	{ 0x168, 0x0, 0x0, 0x0, 0x0, 1, "DDR4 1.2V Current" },
+>> +	{ 0x178, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.8V Current" },
+>> +	{ 0x180, 0x0, 0x0, 0x0, 0x0, 1, "QDR 1.3V Current" },
+>> +	{ 0x188, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 0.8V Current" },
+>> +	{ 0x190, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 1.05V Current" },
+>> +	{ 0x198, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 1.05V Current" },
+>> +	{ 0x1a0, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 0.8V Current" },
+>> +};
+>> +
+>> +static const struct hwmon_channel_info *n5010bmc_hinfo[] = {
+>> +	HWMON_CHANNEL_INFO(temp,
+>> +			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+>> +	HWMON_CHANNEL_INFO(in,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL),
+>> +	HWMON_CHANNEL_INFO(curr,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL),
+>> +	NULL
+>> +};
+>> +
+>> +static const struct m10bmc_hwmon_board_data n5010bmc_hwmon_bdata = {
+>> +	.tables = {
+>> +		[hwmon_temp] = n5010bmc_temp_tbl,
+>> +		[hwmon_in] = n5010bmc_in_tbl,
+>> +		[hwmon_curr] = n5010bmc_curr_tbl,
+>> +	},
+>> +
+>> +	.hinfo = n5010bmc_hinfo,
+>> +};
+>> +
+>>   static umode_t
+>>   m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
+>>   			u32 attr, int channel)
+>> @@ -438,6 +550,10 @@ static const struct platform_device_id intel_m10bmc_hwmon_ids[] = {
+>>   		.name = "d5005bmc-hwmon",
+>>   		.driver_data = (unsigned long)&d5005bmc_hwmon_bdata,
+>>   	},
+>> +	{
+>> +		.name = "n5010bmc-hwmon",
+>> +		.driver_data = (unsigned long)&n5010bmc_hwmon_bdata,
+>> +	},
+>>   	{ }
+>>   };
+>>   
+>> -- 
+>> 2.31.0
 
-> On Fri, Jun 25, 2021 at 09:42:12AM +0200, Martin Hundebøll wrote:
-> > From: Martin Hundebøll <mhu@silicom.dk>
-> > 
-> >  The m10-bmc is used on the Silicom N5010 PAC too, so add it to list of
-> >  m10bmc types.
-> > 
-> > Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-> > ---
-> > 
-> > Changes since v1:
-> >  * Patch split out to separate mfd changes
-> > 
-> >  drivers/mfd/intel-m10-bmc.c | 12 +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-> > index 1a9bfb7f48cd..8db3bcf5fccc 100644
-> > --- a/drivers/mfd/intel-m10-bmc.c
-> > +++ b/drivers/mfd/intel-m10-bmc.c
-> > @@ -15,7 +15,8 @@
-> >  
-> >  enum m10bmc_type {
-> >  	M10_N3000,
-> > -	M10_D5005
-> > +	M10_D5005,
-> > +	M10_N5010,
-> >  };
-> >  
-> >  static struct mfd_cell m10bmc_d5005_subdevs[] = {
-> > @@ -28,6 +29,10 @@ static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
-> >  	{ .name = "n3000bmc-secure" },
-> >  };
-> >  
-> > +static struct mfd_cell m10bmc_n5010_subdevs[] = {
-> > +	{ .name = "n5010bmc-hwmon" },
-> > +};
-> > +
-> >  static const struct regmap_range m10bmc_regmap_range[] = {
-> >  	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
-> >  	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
-> > @@ -192,6 +197,10 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> >  		cells = m10bmc_d5005_subdevs;
-> >  		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
-> >  		break;
-> > +	case M10_N5010:
-> > +		cells = m10bmc_n5010_subdevs;
-> > +		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
-> > +		break;
-> >  	default:
-> >  		return -ENODEV;
-> >  	}
-> > @@ -207,6 +216,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> >  static const struct spi_device_id m10bmc_spi_id[] = {
-> >  	{ "m10-n3000", M10_N3000 },
-> >  	{ "m10-d5005", M10_D5005 },
-> > +	{ "m10-n5010", M10_N5010 },
-> >  	{ }
-> >  };
-> >  MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
