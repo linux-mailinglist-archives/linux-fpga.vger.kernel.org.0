@@ -2,117 +2,118 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 593E13B59D7
-	for <lists+linux-fpga@lfdr.de>; Mon, 28 Jun 2021 09:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96CC3B59EC
+	for <lists+linux-fpga@lfdr.de>; Mon, 28 Jun 2021 09:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbhF1HiJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 28 Jun 2021 03:38:09 -0400
-Received: from mail-eopbgr80113.outbound.protection.outlook.com ([40.107.8.113]:23874
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        id S232369AbhF1HpC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 28 Jun 2021 03:45:02 -0400
+Received: from mail-eopbgr00095.outbound.protection.outlook.com ([40.107.0.95]:13393
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232394AbhF1HiH (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 28 Jun 2021 03:38:07 -0400
+        id S232417AbhF1HpA (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 28 Jun 2021 03:45:00 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UscbwJKDZ+gEdcEiF1VYG+agO78k1lSxGbBsfDw+429pLJNoXrag8AuNTIkQX1z1y9SA/ztlPRcab4d77o0Rt244op2AiP8LE4abOSvspQt1Wk+Y6ZzftemSVhElX8ubfA13K/0fbPPe760BKtmumCZS1XeNXB53c9PEYKx57vMwM6A9TYvSeKxbwG6VM4DbSLK26Baby8R7jBXWpqC9UblcwQZtbR8eIo4sOmyZlktk1eurWXqv4DTIpNuHKeLXkjGyI10/+oh81/EPX20TeDa1gB9ljpnsrdY0e4eQ2oXM+pPbx2ZYPbD7AgSsXNcOTijveI924DbUxgUSLLnRMw==
+ b=ZooULy4aS4PAU79b/lZ/xKQIcbCSsWSFZ/RirohxZYhcV5AOLVHwLpxMxJsrs7mDAhMxm9v/EkWwG4eSuxJWvbWNBMB9H/EXNU0vnhS2uFog9jGdsvSGlB5tvat2Cu79q7O9tjgnozh4xljP/sG7K15FdggRoNIscCQON3v/wLeO4KeVt2aSqf3fswgSzs0yL+Mzd9q+RDPPoOxWe31ktczHSqG5Io2atREMBvPdvP/7ZgqVMKJbrF31COtrb12V6LMti3hHqcMksL2bpS7OAW2QW3iVIAQ1p3ATMki6si0MdwYzrhbVUdKs+H74Q3NzVBZ/PliDduYT94mT7ZUTbg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5qozXyHGbIkZly3m4typG31QMKWhPyyFo2i1EfbYxFc=;
- b=SV0uBXwOluROo0CrOB5Y53EIn9sJ3kYmwDBWNtu25g0AZGDURUy8umPGTdAWWuELLIqvHAfoeA3HJyMIuILD5/lFKu0yQ1sFw8ONA4yybORmvD7IDvrKGfRsduKKIqOlC9sUVUW5eEcpMIVM+yckkrsVwEDB+IFidmYezu1ChzQWnxX91ziF51NPYdGXzlYUtzebdNSjsoouwapWyFFsyDYbWCCbhYDZjomZG///w9RZ7tkRyelNFDWIXlvmir0DOv27KwlUiPKh9VVu2kaqeano2kZh5s5IrGsJ0XqbxazIcNi4cwuPytizoPqckJqsTuaWFnjhAzymQUo04HpoRQ==
+ bh=4FdfCgXac0wQoswGtQexDtcgHZ+2DQKedOByekJQQVE=;
+ b=h+yAkDiDZWBjnj1Hoz2mIpFyG5NwURA8b5Iq9GFa51bhep5TklkPdWcSW2bIISQdeZNC++i4SZTNqTUJDArVXUUw16y8r/VmDyv4i6R3uePirrP6AxFPKDacOsgAkkPgBJKg8OWxeBdSrgJxTCAgwbIbfvyn22xyEbU6FDiEiLMzgc0l3aY7V8/BLvXCBKAudwiCUKtzeGaWFH5hY2gxDVgenpr4sw2k80ywuImaRYlZa57D1+uGW9FPyPfo4/eQZrxqbcSmzk34cO1/FzYQlqgoSa3pD5GBmhaA6dEVVHMvVhbPc4YHtlWZiE1brS5Hot0SGMreZizZzfhvhHxnvQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=silicom.dk; dmarc=pass action=none header.from=silicom.dk;
  dkim=pass header.d=silicom.dk; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5qozXyHGbIkZly3m4typG31QMKWhPyyFo2i1EfbYxFc=;
- b=nY4xVkcJU4QqBGf6N+8Qaue8JLuL2zv8J2GoOSNcwiAXa/SdGPNbHwypeCJ12jUnSiwDoOX/uJd7EChYbPuBmCMwWHsrkQRGV3wIzJlSgyEXYOMdB4oQefypQ/nBL2x3OpEuCFJMWlEBA8U4XRcEp9Ohvgnc8OX9kr98X/t2yAs=
+ bh=4FdfCgXac0wQoswGtQexDtcgHZ+2DQKedOByekJQQVE=;
+ b=pHiBuurq2GvSXkyiEHYa60Wnhlr077er2kkaXGcqs7EL6wsZd4dVq3LHQCUypwgtFCJjPGGhCvWZpmIjjaoSBroLk2rPAMNH6AzHzv82HSgBD0GN+wWZfaKCmxa9BY7yZX5PpSKKSbJFRmruTPqZE+KEkryGHqBqTfY8/jeoYVU=
 Authentication-Results: lists.infradead.org; dkim=none (message not signed)
  header.d=none;lists.infradead.org; dmarc=none action=none
  header.from=silicom.dk;
 Received: from AM0PR0402MB3426.eurprd04.prod.outlook.com
- (2603:10a6:208:22::15) by AM0PR04MB6788.eurprd04.prod.outlook.com
- (2603:10a6:208:18e::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.18; Mon, 28 Jun
- 2021 07:35:39 +0000
+ (2603:10a6:208:22::15) by AM0PR04MB6881.eurprd04.prod.outlook.com
+ (2603:10a6:208:18b::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.19; Mon, 28 Jun
+ 2021 07:42:31 +0000
 Received: from AM0PR0402MB3426.eurprd04.prod.outlook.com
  ([fe80::50fd:f133:3592:292e]) by AM0PR0402MB3426.eurprd04.prod.outlook.com
  ([fe80::50fd:f133:3592:292e%7]) with mapi id 15.20.4264.026; Mon, 28 Jun 2021
- 07:35:39 +0000
-Subject: Re: [PATCH v5 2/4] fpga: add FPGA_MGR_REIMAGE flag
+ 07:42:31 +0000
+Subject: Re: [PATCH v5 3/4] fpga: pass fpga_manager_update_ops to the
+ fpga_manager_write functions
 To:     trix@redhat.com, mdf@kernel.org, hao.wu@intel.com,
         michal.simek@xilinx.com
 Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20210625195849.837976-1-trix@redhat.com>
- <20210625195849.837976-4-trix@redhat.com>
+ <20210625195849.837976-5-trix@redhat.com>
 From:   =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>
-Message-ID: <17e69761-9922-b3f2-5bd7-e29190f0b72c@silicom.dk>
-Date:   Mon, 28 Jun 2021 09:35:38 +0200
+Message-ID: <f80e3d42-31dc-d9eb-90ec-8e740e2e4237@silicom.dk>
+Date:   Mon, 28 Jun 2021 09:42:30 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
-In-Reply-To: <20210625195849.837976-4-trix@redhat.com>
+In-Reply-To: <20210625195849.837976-5-trix@redhat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US-large
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [85.184.138.169]
-X-ClientProxiedBy: AM5PR0701CA0071.eurprd07.prod.outlook.com
- (2603:10a6:203:2::33) To AM0PR0402MB3426.eurprd04.prod.outlook.com
+X-ClientProxiedBy: AM6PR08CA0039.eurprd08.prod.outlook.com
+ (2603:10a6:20b:c0::27) To AM0PR0402MB3426.eurprd04.prod.outlook.com
  (2603:10a6:208:22::15)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.8.20] (85.184.138.169) by AM5PR0701CA0071.eurprd07.prod.outlook.com (2603:10a6:203:2::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.12 via Frontend Transport; Mon, 28 Jun 2021 07:35:39 +0000
+Received: from [192.168.8.20] (85.184.138.169) by AM6PR08CA0039.eurprd08.prod.outlook.com (2603:10a6:20b:c0::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.18 via Frontend Transport; Mon, 28 Jun 2021 07:42:30 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3aee807e-cc72-4cdc-94cb-08d93a0753a2
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6788:
-X-Microsoft-Antispam-PRVS: <AM0PR04MB67882156D40547A425C4CA05D5039@AM0PR04MB6788.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:586;
+X-MS-Office365-Filtering-Correlation-Id: 2d9b7ed5-9816-4a43-9849-08d93a084933
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6881:
+X-Microsoft-Antispam-PRVS: <AM0PR04MB68815FB8F9D7A87D111A0EC9D5039@AM0PR04MB6881.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TyYV75RRv0ApfdaOS4V6yK8Dwfw1/gL4l1scD2unMCu752AFMgh3AISFuMijP6C0PK4SwfJ8q6gkhlUmS23cuL/QaCY2YwlXdIcUO7SXtgeWEkUK88235RQsLYP82QF6mkOsecegrvyxVER2deGhZQ5A9Vrn2FvDX7r6ceIUE0jHh/VWV0eFN83bkyVaKi6jfE7dOIp5g7guKW1DT3f+wbuEdApsxHMafjJcBQDH6T/UK2RfNcrQ6Oz64ZO3OL/6TXHLFXw7+IKG6tnY5H3yhj8yctggjmLGZYfyD3BwESMSG4Lhll+7WDd71aYd5oBZBBPWQ9GxaAK0yJSSqGxheFtd4oH41wd2VMsc12aHArf7QwlV5BGcvaFNCJt7BRegcIm1XETrsIfCo/D8IZmyx2ZISmCFXyeFoghQIHQozP+LxywKR/YEomQRZy6VIMGKjUojtj5jsyDsTU7YsQ/ZAQWflCPm290RsSlyAOEM3suj5383ouij5/DazX2o1Q+rY2qrl85ivsVOxdPPK7AUgY9WNKAQPLFqANs6Po4ze0GXvFTM/jr5BjErMWfzYl3lCEhwS9Cx3+hGSYlottBUJyWRxG4hQJ4IGQ0KLmwMqo+slbDBx1rT4WSQTF8psl+V5PaHuZ4YhTsy4qS19TTzqd2aDFDSS9V/ehqae/WkXngAFiareY0HnDKpJn0v8L2W
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3426.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(39830400003)(366004)(376002)(346002)(31686004)(8976002)(2906002)(8676002)(2616005)(83380400001)(956004)(5660300002)(66476007)(31696002)(66556008)(4326008)(478600001)(6486002)(38100700002)(16526019)(186003)(8936002)(86362001)(26005)(16576012)(36756003)(66946007)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: pMP6cqrwq0EUb0PZ1JWMOZUczFesV0V6H4T89RmHOWG5jy9+PMZvlBLmWpTa0besPM0T9Sl+f8+p2iih9AKL2qT9Agrb/9D0HqnJCXsGMXkzdWH6feYP2IVHP8Wli/vFzawqBFbhDl9iEvQwCe1K9Fg9l98D48p42xdP30T1cQGQ7GUMYe3KeQrmND53VB53EaK3jQFGUwnS2KKDkWMZFZPR2Tz5V95ttGVB9aajUsKMyDko7D5U8LlxGLMl8rH8uAq3sgkVDjEi5K/G0IhB8N0NB8KGEBrP2o7JG3Yzn3KqFjX+k5CQv/9eK6xG0EPSTUWcinPNwSe7utUYpNJx4DNs2Dilm/foPZhbM9JLgQDcM2yHgmnDMRl3LEGkWpFWh1agehpJn4ftQbYCj9CRjywwEapl7XPDxtmJaDz6AXlZfKJcAoUj5UcDtc1k3QHpBUT41gKdhdanhWknCA6ffx0B/h0wnxmK24oV96Q3ZjA+n/i7uyqEL+XGgIHAZU1noOfcqOa6vGMZ89+N5zGP9KezxWs6Wg8uoAcLo5U9JAqlAzamSKkfGmemMU414ofRmix9buB9obiDLL5sqp498LRFt8XYJVXSZnkKERpnvAZ5DQF9yKmrBjHMx2bqq71rHSFS6KF+5Eu41Wu3Nm4MZX9yMPnpjSTE4dOuCGH84gsEKLNt1ojMcA9TV9RZLVcpVIdEzpmdRQmz/cwDNDZLzAlOGlgfgqLphpm4UNhtqw1jFHWuS6N9JGeMcMFNokiw
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3426.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39840400004)(376002)(366004)(136003)(396003)(2616005)(316002)(8936002)(4326008)(66556008)(36756003)(66476007)(16576012)(8976002)(83380400001)(38100700002)(66946007)(956004)(186003)(6486002)(8676002)(31686004)(26005)(31696002)(5660300002)(2906002)(16526019)(478600001)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGxrVmxMZW9nR3VpMGloa2cxUnlVZzkvU3FEWkdBbUM0Y05yK0Q4ZzQrVkc1?=
- =?utf-8?B?S3h3azNpYm9vOWV3RmFXY3NoRnhhUUNEZGJvNWRrQWZDb211OWdwSTA5dXhH?=
- =?utf-8?B?TDFhWEozMW9Rd1RaaS9JOXQ2Sk43aFIxSFFCVURHYlIrRk1DWHFseXRIWmZ2?=
- =?utf-8?B?V3pud2NaU25UMHpWNklWYkovVy9OZGw5M3JqdVVjWFgrTFZCZXh6NkxoUlV3?=
- =?utf-8?B?QURTZFMxVGczeXhBT240MHA3MlBJanBuYU8ycEJzckR6M1F1WG9XZTVsakNp?=
- =?utf-8?B?T1FsSGo3NmNEQXZRV0l1TVFmV1M3amExNHkycEVkTWlQam1BeWRwQnBITzBO?=
- =?utf-8?B?UGFUbjFzb2tPelNHQ3hCUWNPdHh6R3hybHE3c21NcWN0eUxjU2lHSFB6dGp6?=
- =?utf-8?B?ZFozYWZxdXlDaHZLNHFZZ2s1ekpTd1NONjRTOTgvSFVsNUhRZDczTjhjbHhm?=
- =?utf-8?B?WHNqbkdkZG9IaGRJaFVrMjY4U29zZWFOdTBzVllQVDViUDdQZ0M5dUhjZmxq?=
- =?utf-8?B?MFRWRDRYYXlnaG9NU0NBdTVnTC85UnNpK0RoY25CVko3SEtndFp6UkFhWVVQ?=
- =?utf-8?B?WU93Y3ZsUjNLVDkyRTJSVUlTcExNOUdya3ZRUERmdmFOYTJpenp3U1R6SVJ0?=
- =?utf-8?B?LzI1VDdrNE12RE1RaThObEgxbVNpUlhJN1l3RW0xRTYrVFlxTHlXTlROdmFu?=
- =?utf-8?B?dEF4bEhCYmVCOWdKWEkrMmRHNm9rT0tGVEZSTm5xaDFxaURkbDBXMFNheTZ2?=
- =?utf-8?B?UEpJYXZsYy9YcDNnbHJFcUUzTURsN3FrQzFwYys5UVVGdDVEYW9mNHJHaDNw?=
- =?utf-8?B?c0hQeUV6bXhNTjBhV1dlWksxQXlzREZlRkN1b3ZrRkRKTkgwZStINFZZZEdw?=
- =?utf-8?B?UG9oZVI4Tno0TnFUTFNjNmY3YjRrRzJBSzJVbEkyZkRGWngwWkZwZmJMTlJh?=
- =?utf-8?B?b0JmMHFuTDFEYjF3UnlZU0I3MFJMYmIxUG1zNGFoT2VTNkVmTFVaQmZTQUlS?=
- =?utf-8?B?UkZXRHFpUVBtUVY3UHJnM3dKSlVpWmpVa2FlZ1BDSVBBSzB2TFNnakI2L0I3?=
- =?utf-8?B?ek5oN3VIMWsrL2hYMUpTUWQrNEtIQTBvQTY5M05HWGFUYkFCRldnS21Peldq?=
- =?utf-8?B?SThjQUlqbE5UN1BXTVFDQTB6RFBMcmt0ZjhmUEFFNjhjSnpBTE1lUDZGNDFR?=
- =?utf-8?B?NHhidHJVT3hWSC9oUFlodnJkVGtnWG9vM1YrSXRHNWJkd1pVVnkrNzhyenFh?=
- =?utf-8?B?Qld5czlXd1NiRTMxZitQbFMydVhTcitvbTIrM1VRUFRnQlh6Zi8ydkppeHp5?=
- =?utf-8?B?bHNSNXhYMTI4S1lDbnpqaXlLalFWMnFIZXdHUGtubWtLNVVGK0ZqQW1xWDdo?=
- =?utf-8?B?aDI1Y3ozWHQ0aUFURkx3blpldzU2Y2M3b3hrdVFPekRYL2dGTzVSWjZsUlQ4?=
- =?utf-8?B?OW93RzZyWlJNbVFoSFBINnVNbnc4cVcralRBaHlGdVdqakRTcmZFcnAybVgz?=
- =?utf-8?B?bG9iNXN5c1ZvOGVFdjYxalUrNWdrUDF2L0lPeHZFaG1NSko4MkZJUmNGalBN?=
- =?utf-8?B?NzAxbW5QRUFKdmtvWVpMTVBDNlorYXpXMGtPVmhqZzA3OG9OSkF0bG5EaEZy?=
- =?utf-8?B?Zk9qNThFZ3YxTU9WbDRDa3k3QkVLVm1QbzZ2RTRMRVJQc3FtR0dNakdYZ2d5?=
- =?utf-8?B?Z2xhOUk4N0ZWc1JSdDRtbGo5aGVUWityQitkckdqNVkrWlpZWkp2cWpMYlFV?=
- =?utf-8?Q?012lUBmVrma4CpCuGlNZ86Hx53h5GGQ5hMJuaTx?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cUs2RVlxdVZnMUVjUEw4L2o1S2MyQzc0TmZRVFBYTXRTLzNFVnV3dEVEa29Z?=
+ =?utf-8?B?Rm1mN0IvRTY5SmMvbUkvdXAvaDRPSTNLa08zUlEyMFRIcHQrUkl1KyttRVFr?=
+ =?utf-8?B?azdLOG9rZFJNVnFIMG5iUmIyL0lSZ0p0aUV5RjM1TnFuTUFMMDAwYUJhamZO?=
+ =?utf-8?B?bS93VUFsUkFWVk82TnoycG81aklualcvTXczbnVrQVFBN0VaWEc1S2JiWFJJ?=
+ =?utf-8?B?bEZpNDNHaFZrb0FjbnoxNmsrQ0ptbmsrUkY0Vnpmc2hZN3lORnZXcnA3NU12?=
+ =?utf-8?B?OEpaVHZoUnFLVzJjSjc5enRKY2xNL2twc1JESFdHeUtSQUJTemFLM1pPdXFi?=
+ =?utf-8?B?aHdBR2lKM1JiaVhub1lSd0UrUVhCSjdXeXZmQk1XZE9RU0hFQ0N4T3gxMWdD?=
+ =?utf-8?B?V29XQ2lFSnRTRFIyYlNQWUZqTmJxUi9uL08wN0s4aFFZS1E5Ymp4M2xUYmVa?=
+ =?utf-8?B?V2RTbk41aVZ1ZXdaZTlNSzBXeE04UmxPYTV5enY1TGxGUHZjaFVZVGNmL0dx?=
+ =?utf-8?B?TUZlT21QQ2w4YWNMRHZJSWZaTnM0SVFKRytvY3p4WUNWaGN1REx5YU01azhu?=
+ =?utf-8?B?RTJIdnRBalhlUUZTRlJCNHhyUlVWOWh2V0xxak1GYllJN1VuQkpOTlYrTEp4?=
+ =?utf-8?B?eGhGbFdZbEc5eURVSEE3emhVT2Rpb3E3aHNhZDdIcE1zUXBMbkpoS3EzOUxU?=
+ =?utf-8?B?ZzlkOGR1NWp2a3RuaHNJMTlQRjdnR281TmxmSXZhUy80NUI1azFqaHJnMWZz?=
+ =?utf-8?B?d0tFYWMxeG4yVnlZaCtCMXVpeE14cVA3UHRCRXg5cU95NG9GcFZMenViY3hl?=
+ =?utf-8?B?ZW5SU0xiMFUvYTZvZTVFSmNBRG5hbDNGN1lnZXFLZEJsb3dIaE4xb25LTFVQ?=
+ =?utf-8?B?c0FEUW54VmRJWmRJZDdFSWdJWHYzOFdpNWVXaXlrek1zQzBVK01lSytXRnpp?=
+ =?utf-8?B?ZWR4eVVTZm9SWkpVdy9GdVFEeHFXZUZTRTVTcnVDUS93cnNsRHZxOSs5bDdn?=
+ =?utf-8?B?Z21IVW12ZlA4bkFERDlZMTUwNHB1Ti85U3RjemNpZkVyM2xIaisxY29KTllS?=
+ =?utf-8?B?a0RZeG9EMTBxYklPMmpKbURlSEJ5TENOM3BrRktTeG96eFRMNjFOOVBwcmlz?=
+ =?utf-8?B?a0E0em9LUCtScjlOeHJuOVFQcVQyVkJKTThodU51M09MR3NUUVpraW92VG81?=
+ =?utf-8?B?dURWVG80SnU3Y2ZuOS9qcnVJbHg2bVBZanMxaGV0Q1MzYlFrdjhKdTY1Wjdn?=
+ =?utf-8?B?WjQ2aDl6bUo5N3ZhQ2ZrL2lseHdxYkkwQ3IyQ0NKa2gyU0V3azlMVU9sNUpL?=
+ =?utf-8?B?WVNiMkZ6UWtLUFZCUGp6S3R0MHdjNVFFb256QTBOZ1NhRXZBWCtETXpKcG91?=
+ =?utf-8?B?eXhrakVrRW1HTlB6eTJkYkQ2aURXUFRNVXRFd3NZclFlVzU2SnFvcHVFNnBj?=
+ =?utf-8?B?dTZvTnpDcm9YM2ZXN1E2VHNqVEVvWnVwTmpOdXZEMkNMSXJIQ2tTM1RFUUtt?=
+ =?utf-8?B?T1BVd05FZUZHTEI0VTVHaXpkeGtiV0RDOW83TS9GUzFQdmZ0WWozeU8rZFVt?=
+ =?utf-8?B?UFNRTVh0QmJsMFAwOFdsVVFTOHNsWVNjZ1dqQ09oZ0Nta2RSRnBlZEo3WG9z?=
+ =?utf-8?B?U1lMblp5alpGUGV3ekN2QVVLaTFUSlJLeTA1UzdZdlZuRUxvT25IcUVzbG5X?=
+ =?utf-8?B?U0NocmlFQ2RId0dnenRQRDlNT0MrSzhxTkEwc2VDa3hrWnh6NUVQc2d4N0o5?=
+ =?utf-8?Q?XFEsu74ErUeiYSsRNBMnBraFmqzlyBhvAN20iTD?=
 X-OriginatorOrg: silicom.dk
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3aee807e-cc72-4cdc-94cb-08d93a0753a2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d9b7ed5-9816-4a43-9849-08d93a084933
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3426.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2021 07:35:39.4280
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2021 07:42:31.3502
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9xjijVED1Ky0A92sLelwKTZYs+qpUaAOGb6OxBMjBurXrDFUvzowCvIaVGaFovHe
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6788
+X-MS-Exchange-CrossTenant-UserPrincipalName: NjxiMjr/6F6qoBnp9dhU1t4L91nHTihJE4wEmftMEsH5vgp8qQxZCWIckTsM5cSU
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6881
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
@@ -120,32 +121,84 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 On 25/06/2021 21.58, trix@redhat.com wrote:
 > From: Tom Rix <trix@redhat.com>
 > 
-> If this flag is set the reimage ops will be used otherwise the
-> reconfig ops will be used to write the image
+> Refactor fpga_manager_write* functions for reimaging, pass
+> the update_ops as a parameter.  Continue the passing of the update_ops
+> to the write wrapper functions.  Only do the reconfig ops.
 > 
 > Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->   include/linux/fpga/fpga-mgr.h | 3 +++
->   1 file changed, 3 insertions(+)
+>   drivers/fpga/fpga-mgr.c | 90 ++++++++++++++++++++++++-----------------
+>   1 file changed, 53 insertions(+), 37 deletions(-)
 > 
-> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
-> index 53f9402d6aa17..0791e22b07f88 100644
-> --- a/include/linux/fpga/fpga-mgr.h
-> +++ b/include/linux/fpga/fpga-mgr.h
-> @@ -67,12 +67,15 @@ enum fpga_mgr_states {
->    * %FPGA_MGR_BITSTREAM_LSB_FIRST: SPI bitstream bit order is LSB first
->    *
->    * %FPGA_MGR_COMPRESSED_BITSTREAM: FPGA bitstream is compressed
-> + *
-> + * %FPGA_MGR_REIMAGE: Reimage the whole card, fpga bs and other device fw
->    */
->   #define FPGA_MGR_PARTIAL_RECONFIG	BIT(0)
->   #define FPGA_MGR_EXTERNAL_CONFIG	BIT(1)
->   #define FPGA_MGR_ENCRYPTED_BITSTREAM	BIT(2)
->   #define FPGA_MGR_BITSTREAM_LSB_FIRST	BIT(3)
->   #define FPGA_MGR_COMPRESSED_BITSTREAM	BIT(4)
-> +#define FPGA_MGR_REIMAGE                BIT(5)
+> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> index 31c51d7e07cc8..c8a6bfa037933 100644
+> --- a/drivers/fpga/fpga-mgr.c
+> +++ b/drivers/fpga/fpga-mgr.c
+> @@ -45,10 +45,12 @@ static inline u64 fpga_mgr_status(struct fpga_manager *mgr)
+>   	return 0;
+>   }
+>   
+> -static inline int fpga_mgr_write(struct fpga_manager *mgr, const char *buf, size_t count)
+> +static inline int fpga_mgr_write(struct fpga_manager *mgr,
+> +				 const char *buf, size_t count,
+> +				 const struct fpga_manager_update_ops *uops)
+>   {
+>   	if (mgr->mops->reconfig.write)
 
-Are you mixing spaces with tabs here?
+Shouldn't this check be
+
+if (uops->write)
+	return ...
+
+?
+
+> -		return  mgr->mops->reconfig.write(mgr, buf, count);
+> +		return  uops->write(mgr, buf, count);
+>   	return -EOPNOTSUPP;
+>   }
+>   
+
+<snip>
+
+> @@ -208,6 +215,7 @@ static int fpga_mgr_write_init_sg(struct fpga_manager *mgr,
+>    * @mgr:	fpga manager
+>    * @info:	fpga image specific information
+>    * @sgt:	scatterlist table
+> + * @uops:       which update ops to use
+
+Tabs vs. spaces.
+
+>    *
+>    * Step the low level fpga manager through the device-specific steps of getting
+>    * an FPGA ready to be configured, writing the image to it, then doing whatever
+
+<snip>
+
+> @@ -285,6 +295,7 @@ static int fpga_mgr_buf_load_mapped(struct fpga_manager *mgr,
+>    * @info:	fpga image info
+>    * @buf:	buffer contain fpga image
+>    * @count:	byte count of buf
+> + * @uops:       which update ops to use
+
+Tabs vs. spaces.
+
+>    *
+>    * Step the low level fpga manager through the device-specific steps of getting
+>    * an FPGA ready to be configured, writing the image to it, then doing whatever
+
+<snip>
+
+> @@ -356,6 +368,7 @@ static int fpga_mgr_buf_load(struct fpga_manager *mgr,
+>    * @mgr:	fpga manager
+>    * @info:	fpga image specific information
+>    * @image_name:	name of image file on the firmware search path
+> + * @uops:       which update ops to use
+
+Tabs vs. spaces.
+
+>    *
+>    * Request an FPGA image using the firmware class, then write out to the FPGA.
+>    * Update the state before each step to provide info on what step failed if
+
 
 // Martin
