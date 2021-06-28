@@ -2,81 +2,127 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFB33B597E
-	for <lists+linux-fpga@lfdr.de>; Mon, 28 Jun 2021 09:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9103B59A1
+	for <lists+linux-fpga@lfdr.de>; Mon, 28 Jun 2021 09:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbhF1HLD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 28 Jun 2021 03:11:03 -0400
-Received: from mga14.intel.com ([192.55.52.115]:48616 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230134AbhF1HLC (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 28 Jun 2021 03:11:02 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10028"; a="207717468"
-X-IronPort-AV: E=Sophos;i="5.83,305,1616482800"; 
-   d="scan'208";a="207717468"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2021 00:08:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,305,1616482800"; 
-   d="scan'208";a="557466718"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by orsmga004.jf.intel.com with ESMTP; 28 Jun 2021 00:08:33 -0700
-Date:   Mon, 28 Jun 2021 15:03:15 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     trix@redhat.com
-Cc:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 4/4] fpga: use reimage ops in fpga_mgr_load()
-Message-ID: <20210628070315.GF72330@yilunxu-OptiPlex-7050>
-References: <20210625195849.837976-1-trix@redhat.com>
- <20210625195849.837976-6-trix@redhat.com>
+        id S232145AbhF1HUr (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 28 Jun 2021 03:20:47 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:30340 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229998AbhF1HUq (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 28 Jun 2021 03:20:46 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15S74Dog043820;
+        Mon, 28 Jun 2021 03:18:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=nn0ACPMnVX/PLgpAmD7MyV871J4EE4YnQb1PU4QRyXw=;
+ b=fh6ENSFmj3dhqzUguGnllZDyDlFo7EzCsp1tTO5ngeWOv7XIR45ebNT2zqJpl5rJncRJ
+ UgFcRq/anE2CK03hPdMJ8Ce++PApNtb2OoLLGmK0/mCcsZP8mFHm4dQ5xbwPIARtSEwH
+ XK2QqP/VMNjeE8yop6MhtTzyHYh1UWEDlASG9WctUkeAn81Hw0XCCJfmxJmx2bM7BmUk
+ 5o17UEfJ5bRsaRW/Iz8r/xOveaXQrJC1JO7EdmTm1eP+mG8KgJUzwD8MZQO9EeypfpCZ
+ 0pR9F4piZjLu8UOQFiKxyPZ83dt5mE4q/hYpAs6Vb0ZiHjNnM6zGRYOYHkh8m724+1To ng== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39f8j0t2xg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Jun 2021 03:18:12 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15S74L3K044337;
+        Mon, 28 Jun 2021 03:18:12 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39f8j0t2wr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Jun 2021 03:18:12 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15S7HkT4007920;
+        Mon, 28 Jun 2021 07:18:10 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 39duv8gb34-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Jun 2021 07:18:09 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15S7I6Xi33358298
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Jun 2021 07:18:06 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 03B15520A3;
+        Mon, 28 Jun 2021 07:16:03 +0000 (GMT)
+Received: from localhost.localdomain.com (unknown [9.85.85.15])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7DE20522B8;
+        Mon, 28 Jun 2021 07:15:56 +0000 (GMT)
+From:   Kajol Jain <kjain@linux.ibm.com>
+To:     will@kernel.org, hao.wu@intel.com, mark.rutland@arm.com
+Cc:     trix@redhat.com, yilun.xu@intel.com, luwei.kang@intel.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        maddy@linux.vnet.ibm.com, atrajeev@linux.vnet.ibm.com,
+        kjain@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, rnsastry@linux.ibm.com
+Subject: [RFC] fpga: dfl: fme: Fix cpu hotplug code
+Date:   Mon, 28 Jun 2021 12:45:46 +0530
+Message-Id: <20210628071546.167088-1-kjain@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210625195849.837976-6-trix@redhat.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GjoDKIxFLf-hkCgBFSKbtvp0JQGhIj82
+X-Proofpoint-ORIG-GUID: EzjgMD5N2Ah2TPVSxKt9XScKkDCRHmp3
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-28_03:2021-06-25,2021-06-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ impostorscore=0 priorityscore=1501 spamscore=0 mlxscore=0
+ lowpriorityscore=0 clxscore=1011 malwarescore=0 adultscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106280049
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Jun 25, 2021 at 12:58:49PM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> If the fpga_image_info flags FPGA_MGR_REIMAGE bit is set
-> swap out the reconfig ops for the reimage ops and do
-> the load.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/fpga/fpga-mgr.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> index c8a6bfa037933..5e53a0508087a 100644
-> --- a/drivers/fpga/fpga-mgr.c
-> +++ b/drivers/fpga/fpga-mgr.c
-> @@ -419,6 +419,9 @@ int fpga_mgr_load(struct fpga_manager *mgr, struct fpga_image_info *info)
->  {
->  	const struct fpga_manager_update_ops *uops = &mgr->mops->reconfig;
->  
-> +	if (info->flags & FPGA_MGR_REIMAGE)
-> +		uops = &mgr->mops->reimage;
-> +
+Commit 724142f8c42a ("fpga: dfl: fme: add performance
+reporting support") added performance reporting support
+for FPGA management engine via perf.
 
-So seems there is no big difference on processing 'reconfig' & 'reimage'
-in FPGA mgr framework. We may not have to introduce 2 sets of ops in
-fpga_mgr.
+It also added cpu hotplug feature but it didn't add
+pmu migration call in cpu offline function.
+This can create an issue incase the current designated
+cpu being used to collect fme pmu data got offline,
+as based on current code we are not migrating fme pmu to
+new target cpu. Because of that perf will still try to
+fetch data from that offline cpu and hence we will not
+get counter data.
 
-Could we just reuse the fpga_mgr_ops for reimage? The
-fpga_mgr_ops.write_init() will pass the fpga_image_info to device driver,
-and driver could be aware of the REIMAGE flag. Just like the handling of
-other flags in fpga_image_info.
+Patch fixed this issue by adding pmu_migrate_context call
+in fme_perf_offline_cpu function.
 
-Thanks,
-Yilun
+Fixes: 724142f8c42a ("fpga: dfl: fme: add performance reporting support")
+Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+---
+ drivers/fpga/dfl-fme-perf.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
->  	if (info->sgt)
->  		return fpga_mgr_buf_load_sg(mgr, info, info->sgt, uops);
->  	if (info->buf && info->count)
-> -- 
-> 2.26.3
+---
+- This fix patch is not tested (as I don't have required environment).
+  But issue mentioned in the commit msg can be re-created, by starting any
+  fme_perf event and while its still running, offline current designated
+  cpu pointed by cpumask file. Since current code didn't migrating pmu,
+  perf gonna try getting counts from that offlined cpu and hence we will
+  not get event data.
+---
+diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
+index 4299145ef347..b9a54583e505 100644
+--- a/drivers/fpga/dfl-fme-perf.c
++++ b/drivers/fpga/dfl-fme-perf.c
+@@ -953,6 +953,10 @@ static int fme_perf_offline_cpu(unsigned int cpu, struct hlist_node *node)
+ 		return 0;
+ 
+ 	priv->cpu = target;
++
++	/* Migrate fme_perf pmu events to the new target cpu */
++	perf_pmu_migrate_context(&priv->pmu, cpu, target);
++
+ 	return 0;
+ }
+ 
+-- 
+2.31.1
+
