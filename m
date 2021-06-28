@@ -2,128 +2,151 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 411FB3B5C61
-	for <lists+linux-fpga@lfdr.de>; Mon, 28 Jun 2021 12:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096593B5C84
+	for <lists+linux-fpga@lfdr.de>; Mon, 28 Jun 2021 12:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbhF1KUU (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 28 Jun 2021 06:20:20 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61792 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232628AbhF1KUT (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 28 Jun 2021 06:20:19 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15SA6FdZ021485;
-        Mon, 28 Jun 2021 06:17:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=sXZdoLvBk+fNTtJpTtUX4MKouU0H3cFHvZFshe/wFbE=;
- b=PNFDmJnhJNIN2yJRpC2Qu8qSGShRLpJ+b8GSq2n4VYloUdnD1DS92FIX4p5G6cUaIffl
- TTCrvWzND8SfjqlEUwfIGDJEOAGK3ep+bBWi5FPhgabiglfRj8XnF9GDHgzMc0Eg8b4i
- QQOEMldUqFb+eGdS0B15M/1wz4RlQJa1vTPR+kLbRVSOw9BvykCwx5XY/L+fRw2n2TcB
- 8PeLMW/Zy1rYM5z0f+rDTnluJj2KxZDzlJ0vvUDQLZsC/H+rIHTkz42JMXvfs6Rpj2be
- fxsfIg0VlvgLJ6oEEcQOgO/ZQC2LJOzwk5z7Wl4krYzFbH6l5Mi3Rq1Gen3Dz4tpK20e yQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39fb6d2acr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Jun 2021 06:17:46 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15SA6ckU023350;
-        Mon, 28 Jun 2021 06:17:46 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39fb6d2ac6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Jun 2021 06:17:46 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15SAHBBd019245;
-        Mon, 28 Jun 2021 10:17:44 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04fra.de.ibm.com with ESMTP id 39duv8gchb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Jun 2021 10:17:44 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15SAGAsA23200056
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Jun 2021 10:16:10 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 00BBAAE3BC;
-        Mon, 28 Jun 2021 10:17:40 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47AC1AE454;
-        Mon, 28 Jun 2021 10:17:36 +0000 (GMT)
-Received: from localhost.localdomain.com (unknown [9.199.42.117])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Jun 2021 10:17:36 +0000 (GMT)
-From:   Kajol Jain <kjain@linux.ibm.com>
-To:     will@kernel.org, hao.wu@intel.com, mark.rutland@arm.com
-Cc:     trix@redhat.com, yilun.xu@intel.com, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, maddy@linux.vnet.ibm.com,
-        atrajeev@linux.vnet.ibm.com, kjain@linux.ibm.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        rnsastry@linux.ibm.com, linux-perf-users@vger.kernel.org
-Subject: [PATCH] fpga: dfl: fme: Fix cpu hotplug issue in performance reporting
-Date:   Mon, 28 Jun 2021 15:47:21 +0530
-Message-Id: <20210628101721.188991-1-kjain@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ALhaI1aBKmPv9rGZWQe4h5o1VwraTyfn
-X-Proofpoint-ORIG-GUID: Ll6Af3jtnxqNQDGQEYB0jvWtFaxc-WaF
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S232691AbhF1KgO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 28 Jun 2021 06:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232689AbhF1KgK (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 28 Jun 2021 06:36:10 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD64C061768
+        for <linux-fpga@vger.kernel.org>; Mon, 28 Jun 2021 03:33:44 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id j1so20593854wrn.9
+        for <linux-fpga@vger.kernel.org>; Mon, 28 Jun 2021 03:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=GIGzDkjYpMYYcMV5RqlKoJGmaST1cvK174JxTj86cYw=;
+        b=qkId5XP/gDFWBYbhE5fxBwPKbrAaoDqv0KdktsZhUzkzKw5HFCl7vNukEkPXrIGVT1
+         UPtZQgemL3W61gWTdy7SufoTyNkS5D1oY5wW4WKDDauH/5qdOF7kd3sgdpox6kEXbcbS
+         a53UoGRp1J4EnDXkHSBjLZr3GuBQMU6aQ3e7pgl1yvyvxa16Zf8BeaYXd5HFjJJEbeYP
+         eS+vXjDO3WfciCvP+zQnlm0RbqEBrUsItbf3hAEKUUwVyUcbQd5wCLrDCG+7hdp4+HKG
+         DC3TrBd10TpNk+YTaC2zfmNIUMC7DNCPXtPQLfxMk12kbsIkOFwtWzhUS7dzoZTVpUaE
+         Gciw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GIGzDkjYpMYYcMV5RqlKoJGmaST1cvK174JxTj86cYw=;
+        b=Ra91Vty7SG6RVjvsyZUyH6+xU8cKlLyaw3A/Lj7xzRbL8is0NvCLfaiNR49CL2CW01
+         AxvwyT7i4RYqudg3f8IA8cv3SFc1t15mSR97oWJhxHydKVDL6cXCF6yhr3FJjygHNpsy
+         B6dpNoz9osD8duHpa01Y4QwSIxjHKAsi2EnR4mJH2l4rq9XDh7wWAb5VX1WWMc9C4F9M
+         2mpr6wypJyfr2G7UXhUZ/1bVVoe2ZBM6yuv+FeTauhxOXt2qwBS+tpIxHjUOA6uDLoN1
+         fvFwSz1l+jd8VVihXOgGPRPrAU/SfaaEazco/ShudkPobwGofTmAtGhsJyYI+EOyw6o5
+         BSqg==
+X-Gm-Message-State: AOAM530p6KXr+XRykMxyz69OY6BSXdlay8BVEr98SpCHS+8W2Yr6LIrT
+        RWALFLrtkruvt62qJ68frZawKA==
+X-Google-Smtp-Source: ABdhPJxiFmlLKEIXNMbZ1Kh48F8904JRqw1IOBpgNb6LA2rdOVM+ZUd7tqNfSLul3mtJIC73CTIa5Q==
+X-Received: by 2002:adf:f20c:: with SMTP id p12mr26363513wro.257.1624876422753;
+        Mon, 28 Jun 2021 03:33:42 -0700 (PDT)
+Received: from dell ([95.144.13.187])
+        by smtp.gmail.com with ESMTPSA id s18sm14593601wrw.33.2021.06.28.03.33.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Jun 2021 03:33:42 -0700 (PDT)
+Date:   Mon, 28 Jun 2021 11:33:39 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Brown <broonie@kernel.org>,
+        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] mfd: intel-m10-bmc: add n5010 variant
+Message-ID: <YNmlgz7wdJSGzMh9@dell>
+References: <20210625074213.654274-1-martin@geanix.com>
+ <20210625074213.654274-5-martin@geanix.com>
+ <20210628055942.GD72330@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-28_07:2021-06-25,2021-06-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- suspectscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 malwarescore=0
- adultscore=0 priorityscore=1501 bulkscore=0 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2106280070
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210628055942.GD72330@yilunxu-OptiPlex-7050>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The performance reporting driver added cpu hotplug
-feature but it didn't add pmu migration call in cpu
-offline function.
-This can create an issue incase the current designated
-cpu being used to collect fme pmu data got offline,
-as based on current code we are not migrating fme pmu to
-new target cpu. Because of that perf will still try to
-fetch data from that offline cpu and hence we will not
-get counter data.
+On Mon, 28 Jun 2021, Xu Yilun wrote:
 
-Patch fixed this issue by adding pmu_migrate_context call
-in fme_perf_offline_cpu function.
+> It is good to me.
 
-Fixes: 724142f8c42a ("fpga: dfl: fme: add performance reporting support")
-Tested-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
----
- drivers/fpga/dfl-fme-perf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Please provide a proper *-by tag:
 
----
-Changelog:
-- Remove RFC tag
-- Did nits changes on subject and commit message as suggested by Xu Yilun
-- Added Tested-by tag
-- Link to rfc patch: https://lkml.org/lkml/2021/6/28/112
----
-diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
-index 4299145ef347..b9a54583e505 100644
---- a/drivers/fpga/dfl-fme-perf.c
-+++ b/drivers/fpga/dfl-fme-perf.c
-@@ -953,6 +953,10 @@ static int fme_perf_offline_cpu(unsigned int cpu, struct hlist_node *node)
- 		return 0;
- 
- 	priv->cpu = target;
-+
-+	/* Migrate fme_perf pmu events to the new target cpu */
-+	perf_pmu_migrate_context(&priv->pmu, cpu, target);
-+
- 	return 0;
- }
- 
+  See the: 'Sign your work - the Developer's Certificate of Origin'
+  section in Documentation/process/submitting-patches.rst
+
+And please don't top post.
+
+> On Fri, Jun 25, 2021 at 09:42:12AM +0200, Martin Hundebøll wrote:
+> > From: Martin Hundebøll <mhu@silicom.dk>
+> > 
+> >  The m10-bmc is used on the Silicom N5010 PAC too, so add it to list of
+> >  m10bmc types.
+> > 
+> > Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> > ---
+> > 
+> > Changes since v1:
+> >  * Patch split out to separate mfd changes
+> > 
+> >  drivers/mfd/intel-m10-bmc.c | 12 +++++++++++-
+> >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> > index 1a9bfb7f48cd..8db3bcf5fccc 100644
+> > --- a/drivers/mfd/intel-m10-bmc.c
+> > +++ b/drivers/mfd/intel-m10-bmc.c
+> > @@ -15,7 +15,8 @@
+> >  
+> >  enum m10bmc_type {
+> >  	M10_N3000,
+> > -	M10_D5005
+> > +	M10_D5005,
+> > +	M10_N5010,
+> >  };
+> >  
+> >  static struct mfd_cell m10bmc_d5005_subdevs[] = {
+> > @@ -28,6 +29,10 @@ static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
+> >  	{ .name = "n3000bmc-secure" },
+> >  };
+> >  
+> > +static struct mfd_cell m10bmc_n5010_subdevs[] = {
+> > +	{ .name = "n5010bmc-hwmon" },
+> > +};
+> > +
+> >  static const struct regmap_range m10bmc_regmap_range[] = {
+> >  	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
+> >  	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
+> > @@ -192,6 +197,10 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> >  		cells = m10bmc_d5005_subdevs;
+> >  		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> >  		break;
+> > +	case M10_N5010:
+> > +		cells = m10bmc_n5010_subdevs;
+> > +		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> > +		break;
+> >  	default:
+> >  		return -ENODEV;
+> >  	}
+> > @@ -207,6 +216,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> >  static const struct spi_device_id m10bmc_spi_id[] = {
+> >  	{ "m10-n3000", M10_N3000 },
+> >  	{ "m10-d5005", M10_D5005 },
+> > +	{ "m10-n5010", M10_N5010 },
+> >  	{ }
+> >  };
+> >  MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+
 -- 
-2.31.1
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
