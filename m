@@ -2,98 +2,126 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D90843B8102
-	for <lists+linux-fpga@lfdr.de>; Wed, 30 Jun 2021 12:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834BE3B87D3
+	for <lists+linux-fpga@lfdr.de>; Wed, 30 Jun 2021 19:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbhF3K7w (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 30 Jun 2021 06:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234161AbhF3K7r (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 30 Jun 2021 06:59:47 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE0FC06175F
-        for <linux-fpga@vger.kernel.org>; Wed, 30 Jun 2021 03:57:16 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id u6so3075981wrs.5
-        for <linux-fpga@vger.kernel.org>; Wed, 30 Jun 2021 03:57:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=DmYIvYkRX4IsUDGy0OBH/JkPnt12KYyi21aGW72CZ7A=;
-        b=a04xkbmpsgErnHdAiuLzV3LmUxzEnj6J7OFvUta9tOj3pItR0QD019BYty0qw9Drq2
-         KAVo64B7vvenhDkTuN2rh8Uq4Eq5CYAq0/BEY16zf2Ne3ocNS7Ci5Zg5triMs4Bx5d1l
-         bWVr4SUr1KH6q78WJnKY9ZE0dmLhwBcxnYck12xsH93G4uupfbxZ6E3tNkHH+kB2Fmnc
-         WVtDZc2WIn/rYzg+Lr22qtdarrR2E3oQeWDnaSNFhOMj48zDb7OZc11guCyK3+pKWF+H
-         Dr4kLs8Y0MyPZem/hodGmxABYKw8lhGCKBDwTQJRzcX8D0K+jqAADmBfFtlzCeTAvEvP
-         d6nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=DmYIvYkRX4IsUDGy0OBH/JkPnt12KYyi21aGW72CZ7A=;
-        b=VXoh+UWuUTdWCtjKgpSlZiqr0w+dcjah5OfsU3x17eCaW6xGaR5tJNHSl7hx3oJOi/
-         aFw/3t67PRKEje0V+0OOj9c6nO7162CZLssjJpDYc8DzXh1qo61lJbmRGW0cgO1BW72l
-         wEtSaWUnm/0Botwe+9ZG+3eAOjcdy3yzVaUhG65NJtDFctnvm5vX+2ZvJHNB8ptXidnn
-         xT5eZS5K3GKD1yF5debdKjDGEW7RE1kA3aJXLWo/vjamWuAW9Pda0wI2/ZTxaq4vZGPi
-         9geCIYN2fzwRVPYKPNy7Gegp8EJG42i6DKZ6YJ3RqA4Fiu7Q5BkTLJkP+A8iqVreYuFY
-         VM9Q==
-X-Gm-Message-State: AOAM530W2a+4JNrzqhKkaZLsmcQd5JSM/5yV5pJg+25BOu1RtcDWwKk8
-        XxGNOrYzVRXYB/QQWuf8W+gHjw==
-X-Google-Smtp-Source: ABdhPJz3JeDagWbYMUoFJT/9R94VInUH6Gicf0QhP+KXAgXOEqIJFHfg3tish5VeJwfEtFNxv+L7NA==
-X-Received: by 2002:adf:ff8e:: with SMTP id j14mr38565132wrr.374.1625050634869;
-        Wed, 30 Jun 2021 03:57:14 -0700 (PDT)
-Received: from dell ([95.144.13.171])
-        by smtp.gmail.com with ESMTPSA id k16sm4653787wru.79.2021.06.30.03.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Jun 2021 03:57:14 -0700 (PDT)
-Date:   Wed, 30 Jun 2021 11:57:12 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
-Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        id S231986AbhF3RnT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 30 Jun 2021 13:43:19 -0400
+Received: from mga04.intel.com ([192.55.52.120]:54695 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229852AbhF3RnS (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 30 Jun 2021 13:43:18 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10031"; a="206575955"
+X-IronPort-AV: E=Sophos;i="5.83,312,1616482800"; 
+   d="scan'208";a="206575955"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2021 10:40:48 -0700
+X-IronPort-AV: E=Sophos;i="5.83,312,1616482800"; 
+   d="scan'208";a="457343141"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2021 10:40:47 -0700
+Date:   Wed, 30 Jun 2021 10:42:18 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     =?ISO-8859-15?Q?Martin_Hundeb=F8ll?= <martin@geanix.com>
+cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
         Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
         Mark Brown <broonie@kernel.org>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
+        =?ISO-8859-15?Q?Martin_Hundeb=F8ll?= <mhu@silicom.dk>,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] mfd: intel-m10-bmc: add n5010 variant
-Message-ID: <YNxOCJNgG5x6zUU+@dell>
-References: <20210625074213.654274-1-martin@geanix.com>
- <20210625074213.654274-5-martin@geanix.com>
+Subject: Re: [PATCH v3 3/4] mfd: intel-m10-bmc: add n5010 variant
+In-Reply-To: <20210629121214.988036-4-martin@geanix.com>
+Message-ID: <alpine.DEB.2.22.394.2106301042030.1372882@rhweight-WRK1>
+References: <20210629121214.988036-1-martin@geanix.com> <20210629121214.988036-4-martin@geanix.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210625074213.654274-5-martin@geanix.com>
+Content-Type: multipart/mixed; boundary="8323328-2141539894-1625074945=:1372882"
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, 25 Jun 2021, Martin Hundebøll wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-2141539894-1625074945=:1372882
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+
+
+
+On Tue, 29 Jun 2021, Martin Hundebøll wrote:
 
 > From: Martin Hundebøll <mhu@silicom.dk>
-> 
->  The m10-bmc is used on the Silicom N5010 PAC too, so add it to list of
->  m10bmc types.
-> 
+>
+> The m10-bmc is used on the Silicom N5010 PAC too, so add it to list of
+> m10bmc types.
+>
 > Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> Acked-by: Moritz Fischer <mdf@kernel.org>
+> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > ---
-> 
+>
+> Changes since v2:
+> * Added Yilun's Reviewed-by
+> * Added Moritz' Acked-by
+>
 > Changes since v1:
->  * Patch split out to separate mfd changes
-> 
->  drivers/mfd/intel-m10-bmc.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-
-For my own reference (apply this as-is to your sign-off block):
-
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> * Patch split out to separate mfd changes
+>
+> drivers/mfd/intel-m10-bmc.c | 12 +++++++++++-
+> 1 file changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> index 1a9bfb7f48cd..8db3bcf5fccc 100644
+> --- a/drivers/mfd/intel-m10-bmc.c
+> +++ b/drivers/mfd/intel-m10-bmc.c
+> @@ -15,7 +15,8 @@
+>
+> enum m10bmc_type {
+> 	M10_N3000,
+> -	M10_D5005
+> +	M10_D5005,
+> +	M10_N5010,
+> };
+>
+> static struct mfd_cell m10bmc_d5005_subdevs[] = {
+> @@ -28,6 +29,10 @@ static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
+> 	{ .name = "n3000bmc-secure" },
+> };
+>
+> +static struct mfd_cell m10bmc_n5010_subdevs[] = {
+> +	{ .name = "n5010bmc-hwmon" },
+> +};
+> +
+> static const struct regmap_range m10bmc_regmap_range[] = {
+> 	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
+> 	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
+> @@ -192,6 +197,10 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> 		cells = m10bmc_d5005_subdevs;
+> 		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> 		break;
+> +	case M10_N5010:
+> +		cells = m10bmc_n5010_subdevs;
+> +		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> +		break;
+> 	default:
+> 		return -ENODEV;
+> 	}
+> @@ -207,6 +216,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> static const struct spi_device_id m10bmc_spi_id[] = {
+> 	{ "m10-n3000", M10_N3000 },
+> 	{ "m10-d5005", M10_D5005 },
+> +	{ "m10-n5010", M10_N5010 },
+> 	{ }
+> };
+> MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+> -- 
+> 2.31.0
+>
+>
+--8323328-2141539894-1625074945=:1372882--
