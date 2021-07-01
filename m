@@ -2,527 +2,485 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 039383B8DC1
-	for <lists+linux-fpga@lfdr.de>; Thu,  1 Jul 2021 08:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D043B97A6
+	for <lists+linux-fpga@lfdr.de>; Thu,  1 Jul 2021 22:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234268AbhGAGev (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 1 Jul 2021 02:34:51 -0400
-Received: from mga14.intel.com ([192.55.52.115]:57694 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233878AbhGAGev (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 1 Jul 2021 02:34:51 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10031"; a="208301649"
-X-IronPort-AV: E=Sophos;i="5.83,313,1616482800"; 
-   d="scan'208";a="208301649"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2021 23:32:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,313,1616482800"; 
-   d="scan'208";a="476548672"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Jun 2021 23:32:16 -0700
-Date:   Thu, 1 Jul 2021 14:26:55 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org, trix@redhat.com,
-        lgoncalv@redhat.com, hao.wu@intel.com, matthew.gerlach@intel.com,
-        richard.gong@intel.com
-Subject: Re: [PATCH v9 2/3] fpga: bridge: Use standard dev_release for class
- driver
-Message-ID: <20210701062655.GD96355@yilunxu-OptiPlex-7050>
-References: <20210701013733.75483-1-russell.h.weight@intel.com>
- <20210701013733.75483-3-russell.h.weight@intel.com>
+        id S236915AbhGAUfH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 1 Jul 2021 16:35:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56836 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236154AbhGAUfF (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 1 Jul 2021 16:35:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1625171553;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2KQAToDhWxTM1Kudh1KdUqTTZgkpVYGitU3j/5zdxvo=;
+        b=BHNOAgTgAZ/aoxytsnWJoylAPQmt7/ZdG5W4Uer+bRUHtljVlEvKpXgAu44lJ22/6DkTtF
+        deiY0Bq8hb8w0Z2Nub5uFhc/TfQvOpCLtHrWtcSZI+NibYcWI45H6Y6AWfVmWC6y9hLysw
+        3G4bNtXyfEVK6AZcHBcXnlp3i5Mpj1M=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-557-TKJAZxJAOP63CL3Dny8UmA-1; Thu, 01 Jul 2021 16:32:32 -0400
+X-MC-Unique: TKJAZxJAOP63CL3Dny8UmA-1
+Received: by mail-ot1-f72.google.com with SMTP id k11-20020a056830242bb0290400324955afso4775343ots.14
+        for <linux-fpga@vger.kernel.org>; Thu, 01 Jul 2021 13:32:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=2KQAToDhWxTM1Kudh1KdUqTTZgkpVYGitU3j/5zdxvo=;
+        b=oAuVCyIDkZMhByvN90jhCxEbQQXZfBf940tqyUtPdAMl6kxvVUGbPdR5qDKJljMZDx
+         3uSYdZo1OyJUyHX9PWKHPI9gPWWERFE4vFo4qV/82adV2U6Kb6qw0wTsVKAtqT0QUYEv
+         bJr5nUjLQO2dvYhC0ECH/A8UnFMrjq3VnGbXaImARQtQeAxdndgJbLRY7EJkO5OJn8E+
+         93HvMbnDVvBMroYOgw4jJRIY8RM4V9frtDq8pgj5nQKu19bMk1ymjt0wqL5WDh0JCdOw
+         b22DkhJyBhTV8gSfIUstwxCy1C/azgAUBwJ+QTr7no4zPGRbKD0V6Hk2UfsYTFOSw3ho
+         iBew==
+X-Gm-Message-State: AOAM530462MSIxRp5gRZrUJhgnM9N13d4cT3URclaLq+nLkv7tREHNik
+        l4lIm2PtfncNjf2tjGCpWnLsYNJ1CIWvkXicDMq990rZ8i3smXPh5cyNsyL67HskbkmQgSDePLQ
+        Ai/Tk+uXOSNUyQjOEKPgD6Q==
+X-Received: by 2002:aca:da86:: with SMTP id r128mr9406412oig.150.1625171551963;
+        Thu, 01 Jul 2021 13:32:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxLg15XNaohPbkurJhE+al+F72joPCbLR+czL3G9Xg0CMyAEUg7B/x0nlHkyrmYTN54RebIYg==
+X-Received: by 2002:aca:da86:: with SMTP id r128mr9406381oig.150.1625171551657;
+        Thu, 01 Jul 2021 13:32:31 -0700 (PDT)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id z22sm170767otk.16.2021.07.01.13.32.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jul 2021 13:32:31 -0700 (PDT)
+Subject: Re: [PATCH V7 XRT Alveo 00/20] XRT Alveo driver overview
+To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org,
+        "mdf@kernel.org" <mdf@kernel.org>
+Cc:     linux-fpga@vger.kernel.org, maxz@xilinx.com,
+        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, devicetree@vger.kernel.org, robh@kernel.org
+References: <20210528004959.61354-1-lizhi.hou@xilinx.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <0677c3b8-87a8-7092-0c63-36de55a4de4d@redhat.com>
+Date:   Thu, 1 Jul 2021 13:32:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210701013733.75483-3-russell.h.weight@intel.com>
+In-Reply-To: <20210528004959.61354-1-lizhi.hou@xilinx.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 06:37:32PM -0700, Russ Weight wrote:
-> The FPGA bridge class driver data structure is being treated as a
-> managed resource instead of using the standard dev_release call-back
-> function to release the class data structure. This change removes
-> the managed resource code and combines the create() and register()
-> functions into a single register() or register_simple() function.
-> 
-> The register() function accepts an info data structure to provide
-> flexibility in passing optional parameters. The register_simple()
-> function supports the current parameter list for users that don't
-> require the use of optional parameters.
-> 
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-> ---
-> v9:
->   - Cleaned up documentation for the FPGA Bridge register functions
->   - Renamed fpga_bridge_register() to fpga_bridge_register_full()
->   - Renamed fpga_bridge_register_simple() to fpga_bridge_register()
+Lizhi,
 
-Now we come back to the fpga_XXX_register for normal cases and
-fpga_XXX_register_full for extra parameters.
+Sorry for the delay in reviewing v7.
 
-But the fpga_bridge_register_full has no use case yet, should we
-implement it when it is really needed?
+Is it too early to blame it on the July 4 holiday here ?!? :)
 
-Thanks,
-Yilun
 
-> v8:
->   - Added reviewed-by tag.
->   - Updated Documentation/driver-api/fpga/fpga-bridge.rst documentation.
-> v7:
->   - Update the commit message to describe the new parameters for the
->     fpga_bridge_register() function and to mention the
->     fpga_bridge_register_simple() function.
->   - Fix function prototypes in header file to rename dev to parent.
->   - Some cleanup of comments.
->   - Update function defintions/prototypes to apply const to the new info
->     parameter.
->   - Verify that info->br_ops is non-null in register functions.
-> v6:
->   - Changed fpga_bridge_register() parameters to accept an info data
->     structure to provide flexibility in passing optional parameters.
->   - Added fpga_bridge_register_simple() function to support current
->     parameters for users that don't require the use of optional
->     parameters.
-> v5:
->   - Rebased on top of recently accepted patches.
-> v4:
->   - Restore the previous format for the Return value in the comment header
->     for fpga_bridge_register()
-> v3:
->   - Cleaned up comment header for fpga_bridge_register()
->   - Fix error return values for fpga_bridge_register()
-> v2:
->   - No changes
-> ---
->  Documentation/driver-api/fpga/fpga-bridge.rst |   8 +-
->  drivers/fpga/altera-fpga2sdram.c              |  12 +-
->  drivers/fpga/altera-freeze-bridge.c           |  10 +-
->  drivers/fpga/altera-hps2fpga.c                |  12 +-
->  drivers/fpga/dfl-fme-br.c                     |  10 +-
->  drivers/fpga/fpga-bridge.c                    | 137 ++++++------------
->  drivers/fpga/xilinx-pr-decoupler.c            |  17 +--
->  include/linux/fpga/fpga-bridge.h              |  33 +++--
->  8 files changed, 101 insertions(+), 138 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/fpga/fpga-bridge.rst b/Documentation/driver-api/fpga/fpga-bridge.rst
-> index 8d650b4e2ce6..38e3bac8e877 100644
-> --- a/Documentation/driver-api/fpga/fpga-bridge.rst
-> +++ b/Documentation/driver-api/fpga/fpga-bridge.rst
-> @@ -6,8 +6,10 @@ API to implement a new FPGA bridge
->  
->  * struct fpga_bridge - The FPGA Bridge structure
->  * struct fpga_bridge_ops - Low level Bridge driver ops
-> -* devm_fpga_bridge_create() - Allocate and init a bridge struct
-> -* fpga_bridge_register() - Register a bridge
-> +* fpga_bridge_register_full() - Create and register a bridge using the
-> +  fpga_bridge_info structure to provide the full flexibility of options
-> +* fpga_bridge_register() - Create and register a bridge using standard
-> +  arguments
->  * fpga_bridge_unregister() - Unregister a bridge
->  
->  .. kernel-doc:: include/linux/fpga/fpga-bridge.h
-> @@ -17,7 +19,7 @@ API to implement a new FPGA bridge
->     :functions: fpga_bridge_ops
->  
->  .. kernel-doc:: drivers/fpga/fpga-bridge.c
-> -   :functions: devm_fpga_bridge_create
-> +   :functions: fpga_bridge_register_full
->  
->  .. kernel-doc:: drivers/fpga/fpga-bridge.c
->     :functions: fpga_bridge_register
-> diff --git a/drivers/fpga/altera-fpga2sdram.c b/drivers/fpga/altera-fpga2sdram.c
-> index a78e49c63c64..66063507116b 100644
-> --- a/drivers/fpga/altera-fpga2sdram.c
-> +++ b/drivers/fpga/altera-fpga2sdram.c
-> @@ -121,17 +121,13 @@ static int alt_fpga_bridge_probe(struct platform_device *pdev)
->  	/* Get f2s bridge configuration saved in handoff register */
->  	regmap_read(sysmgr, SYSMGR_ISWGRP_HANDOFF3, &priv->mask);
->  
-> -	br = devm_fpga_bridge_create(dev, F2S_BRIDGE_NAME,
-> -				     &altera_fpga2sdram_br_ops, priv);
-> -	if (!br)
-> -		return -ENOMEM;
-> +	br = fpga_bridge_register(dev, F2S_BRIDGE_NAME,
-> +				  &altera_fpga2sdram_br_ops, priv);
-> +	if (IS_ERR(br))
-> +		return PTR_ERR(mgr);
->  
->  	platform_set_drvdata(pdev, br);
->  
-> -	ret = fpga_bridge_register(br);
-> -	if (ret)
-> -		return ret;
-> -
->  	dev_info(dev, "driver initialized with handoff %08x\n", priv->mask);
->  
->  	if (!of_property_read_u32(dev->of_node, "bridge-enable", &enable)) {
-> diff --git a/drivers/fpga/altera-freeze-bridge.c b/drivers/fpga/altera-freeze-bridge.c
-> index dd58c4aea92e..bfbfa43cd05b 100644
-> --- a/drivers/fpga/altera-freeze-bridge.c
-> +++ b/drivers/fpga/altera-freeze-bridge.c
-> @@ -244,14 +244,14 @@ static int altera_freeze_br_probe(struct platform_device *pdev)
->  
->  	priv->base_addr = base_addr;
->  
-> -	br = devm_fpga_bridge_create(dev, FREEZE_BRIDGE_NAME,
-> -				     &altera_freeze_br_br_ops, priv);
-> -	if (!br)
-> -		return -ENOMEM;
-> +	br = fpga_bridge_register(dev, FREEZE_BRIDGE_NAME,
-> +				  &altera_freeze_br_br_ops, priv);
-> +	if (IS_ERR(br))
-> +		return PTR_ERR(br);
->  
->  	platform_set_drvdata(pdev, br);
->  
-> -	return fpga_bridge_register(br);
-> +	return 0;
->  }
->  
->  static int altera_freeze_br_remove(struct platform_device *pdev)
-> diff --git a/drivers/fpga/altera-hps2fpga.c b/drivers/fpga/altera-hps2fpga.c
-> index 77b95f251821..aa758426c22b 100644
-> --- a/drivers/fpga/altera-hps2fpga.c
-> +++ b/drivers/fpga/altera-hps2fpga.c
-> @@ -180,19 +180,15 @@ static int alt_fpga_bridge_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> -	br = devm_fpga_bridge_create(dev, priv->name,
-> -				     &altera_hps2fpga_br_ops, priv);
-> -	if (!br) {
-> -		ret = -ENOMEM;
-> +	br = fpga_bridge_register(dev, priv->name,
-> +				  &altera_hps2fpga_br_ops, priv);
-> +	if (IS_ERR(br)) {
-> +		ret = PTR_ERR(br);
->  		goto err;
->  	}
->  
->  	platform_set_drvdata(pdev, br);
->  
-> -	ret = fpga_bridge_register(br);
-> -	if (ret)
-> -		goto err;
-> -
->  	return 0;
->  
->  err:
-> diff --git a/drivers/fpga/dfl-fme-br.c b/drivers/fpga/dfl-fme-br.c
-> index 3ff9f3a687ce..808d1f4d76df 100644
-> --- a/drivers/fpga/dfl-fme-br.c
-> +++ b/drivers/fpga/dfl-fme-br.c
-> @@ -68,14 +68,14 @@ static int fme_br_probe(struct platform_device *pdev)
->  
->  	priv->pdata = dev_get_platdata(dev);
->  
-> -	br = devm_fpga_bridge_create(dev, "DFL FPGA FME Bridge",
-> -				     &fme_bridge_ops, priv);
-> -	if (!br)
-> -		return -ENOMEM;
-> +	br = fpga_bridge_register(dev, "DFL FPGA FME Bridge",
-> +				  &fme_bridge_ops, priv);
-> +	if (IS_ERR(br))
-> +		return PTR_ERR(br);
->  
->  	platform_set_drvdata(pdev, br);
->  
-> -	return fpga_bridge_register(br);
-> +	return 0;
->  }
->  
->  static int fme_br_remove(struct platform_device *pdev)
-> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-> index 798f55670646..e6d98be8531b 100644
-> --- a/drivers/fpga/fpga-bridge.c
-> +++ b/drivers/fpga/fpga-bridge.c
-> @@ -312,55 +312,63 @@ static struct attribute *fpga_bridge_attrs[] = {
->  ATTRIBUTE_GROUPS(fpga_bridge);
->  
->  /**
-> - * fpga_bridge_create - create and initialize a struct fpga_bridge
-> + * fpga_bridge_register_full - create and register an FPGA Bridge device
->   * @parent:	FPGA bridge device from pdev
-> - * @name:	FPGA bridge name
-> - * @br_ops:	pointer to structure of fpga bridge ops
-> - * @priv:	FPGA bridge private data
-> + * @info:	parameters for FPGA Bridge
->   *
-> - * The caller of this function is responsible for freeing the bridge with
-> - * fpga_bridge_free().  Using devm_fpga_bridge_create() instead is recommended.
-> - *
-> - * Return: struct fpga_bridge or NULL
-> + * Return: struct fpga_bridge pointer or ERR_PTR()
->   */
-> -struct fpga_bridge *fpga_bridge_create(struct device *parent, const char *name,
-> -				       const struct fpga_bridge_ops *br_ops,
-> -				       void *priv)
-> +struct fpga_bridge *
-> +fpga_bridge_register_full(struct device *parent,
-> +			  const struct fpga_bridge_info *info)
->  {
->  	struct fpga_bridge *bridge;
->  	int id, ret;
->  
-> -	if (!name || !strlen(name)) {
-> +	if (!info->br_ops) {
-> +		dev_err(parent, "Attempt to register without fpga_bridge_ops\n");
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	if (!info->name || !strlen(info->name)) {
->  		dev_err(parent, "Attempt to register with no name!\n");
-> -		return NULL;
-> +		return ERR_PTR(-EINVAL);
->  	}
->  
->  	bridge = kzalloc(sizeof(*bridge), GFP_KERNEL);
->  	if (!bridge)
-> -		return NULL;
-> +		return ERR_PTR(-ENOMEM);
->  
->  	id = ida_simple_get(&fpga_bridge_ida, 0, 0, GFP_KERNEL);
-> -	if (id < 0)
-> +	if (id < 0) {
-> +		ret = id;
->  		goto error_kfree;
-> +	}
->  
->  	mutex_init(&bridge->mutex);
->  	INIT_LIST_HEAD(&bridge->node);
->  
-> -	bridge->name = name;
-> -	bridge->br_ops = br_ops;
-> -	bridge->priv = priv;
-> +	bridge->name = info->name;
-> +	bridge->br_ops = info->br_ops;
-> +	bridge->priv = info->priv;
->  
-> -	device_initialize(&bridge->dev);
-> -	bridge->dev.groups = br_ops->groups;
-> +	bridge->dev.groups = info->br_ops->groups;
->  	bridge->dev.class = fpga_bridge_class;
->  	bridge->dev.parent = parent;
->  	bridge->dev.of_node = parent->of_node;
->  	bridge->dev.id = id;
-> +	of_platform_populate(bridge->dev.of_node, NULL, NULL, &bridge->dev);
->  
->  	ret = dev_set_name(&bridge->dev, "br%d", id);
->  	if (ret)
->  		goto error_device;
->  
-> +	ret = device_register(&bridge->dev);
-> +	if (ret) {
-> +		put_device(&bridge->dev);
-> +		return ERR_PTR(ret);
-> +	}
-> +
->  	return bridge;
->  
->  error_device:
-> @@ -368,88 +376,35 @@ struct fpga_bridge *fpga_bridge_create(struct device *parent, const char *name,
->  error_kfree:
->  	kfree(bridge);
->  
-> -	return NULL;
-> -}
-> -EXPORT_SYMBOL_GPL(fpga_bridge_create);
-> -
-> -/**
-> - * fpga_bridge_free - free an fpga bridge created by fpga_bridge_create()
-> - * @bridge:	FPGA bridge struct
-> - */
-> -void fpga_bridge_free(struct fpga_bridge *bridge)
-> -{
-> -	ida_simple_remove(&fpga_bridge_ida, bridge->dev.id);
-> -	kfree(bridge);
-> -}
-> -EXPORT_SYMBOL_GPL(fpga_bridge_free);
-> -
-> -static void devm_fpga_bridge_release(struct device *dev, void *res)
-> -{
-> -	struct fpga_bridge *bridge = *(struct fpga_bridge **)res;
-> -
-> -	fpga_bridge_free(bridge);
-> +	return ERR_PTR(ret);
->  }
-> +EXPORT_SYMBOL_GPL(fpga_bridge_register_full);
->  
->  /**
-> - * devm_fpga_bridge_create - create and init a managed struct fpga_bridge
-> + * fpga_bridge_register - create and register an FPGA Bridge device
->   * @parent:	FPGA bridge device from pdev
->   * @name:	FPGA bridge name
->   * @br_ops:	pointer to structure of fpga bridge ops
->   * @priv:	FPGA bridge private data
->   *
-> - * This function is intended for use in an FPGA bridge driver's probe function.
-> - * After the bridge driver creates the struct with devm_fpga_bridge_create(), it
-> - * should register the bridge with fpga_bridge_register().  The bridge driver's
-> - * remove function should call fpga_bridge_unregister().  The bridge struct
-> - * allocated with this function will be freed automatically on driver detach.
-> - * This includes the case of a probe function returning error before calling
-> - * fpga_bridge_register(), the struct will still get cleaned up.
-> + * This simple version of the register should be sufficient for most users.
-> + * The fpga_bridge_register_full() function is available for users that need to pass
-> + * additional, optional parameters.
->   *
-> - *  Return: struct fpga_bridge or NULL
-> + * Return: struct fpga_bridge pointer or ERR_PTR()
->   */
-> -struct fpga_bridge
-> -*devm_fpga_bridge_create(struct device *parent, const char *name,
-> -			 const struct fpga_bridge_ops *br_ops, void *priv)
-> +struct fpga_bridge *
-> +fpga_bridge_register(struct device *parent, const char *name,
-> +		     const struct fpga_bridge_ops *br_ops,
-> +		     void *priv)
->  {
-> -	struct fpga_bridge **ptr, *bridge;
-> -
-> -	ptr = devres_alloc(devm_fpga_bridge_release, sizeof(*ptr), GFP_KERNEL);
-> -	if (!ptr)
-> -		return NULL;
-> -
-> -	bridge = fpga_bridge_create(parent, name, br_ops, priv);
-> -	if (!bridge) {
-> -		devres_free(ptr);
-> -	} else {
-> -		*ptr = bridge;
-> -		devres_add(parent, ptr);
-> -	}
-> +	struct fpga_bridge_info info = { 0 };
->  
-> -	return bridge;
-> -}
-> -EXPORT_SYMBOL_GPL(devm_fpga_bridge_create);
-> +	info.name = name;
-> +	info.br_ops = br_ops;
-> +	info.priv = priv;
->  
-> -/**
-> - * fpga_bridge_register - register an FPGA bridge
-> - *
-> - * @bridge: FPGA bridge struct
-> - *
-> - * Return: 0 for success, error code otherwise.
-> - */
-> -int fpga_bridge_register(struct fpga_bridge *bridge)
-> -{
-> -	struct device *dev = &bridge->dev;
-> -	int ret;
-> -
-> -	ret = device_add(dev);
-> -	if (ret)
-> -		return ret;
-> -
-> -	of_platform_populate(dev->of_node, NULL, NULL, dev);
-> -
-> -	dev_info(dev->parent, "fpga bridge [%s] registered\n", bridge->name);
-> -
-> -	return 0;
-> +	return fpga_bridge_register_full(parent, &info);
->  }
->  EXPORT_SYMBOL_GPL(fpga_bridge_register);
->  
-> @@ -475,6 +430,10 @@ EXPORT_SYMBOL_GPL(fpga_bridge_unregister);
->  
->  static void fpga_bridge_dev_release(struct device *dev)
->  {
-> +	struct fpga_bridge *bridge = to_fpga_bridge(dev);
-> +
-> +	ida_simple_remove(&fpga_bridge_ida, bridge->dev.id);
-> +	kfree(bridge);
->  }
->  
->  static int __init fpga_bridge_dev_init(void)
-> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-> index ea2bde6e5bc4..c004e52b9464 100644
-> --- a/drivers/fpga/xilinx-pr-decoupler.c
-> +++ b/drivers/fpga/xilinx-pr-decoupler.c
-> @@ -138,22 +138,17 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
->  
->  	clk_disable(priv->clk);
->  
-> -	br = devm_fpga_bridge_create(&pdev->dev, priv->ipconfig->name,
-> -				     &xlnx_pr_decoupler_br_ops, priv);
-> -	if (!br) {
-> -		err = -ENOMEM;
-> -		goto err_clk;
-> -	}
-> -
-> -	platform_set_drvdata(pdev, br);
-> -
-> -	err = fpga_bridge_register(br);
-> -	if (err) {
-> +	br = fpga_bridge_register(&pdev->dev, priv->ipconfig->name,
-> +				  &xlnx_pr_decoupler_br_ops, priv);
-> +	if (IS_ERR(br)) {
-> +		err = PTR_ERR(br);
->  		dev_err(&pdev->dev, "unable to register %s",
->  			priv->ipconfig->name);
->  		goto err_clk;
->  	}
->  
-> +	platform_set_drvdata(pdev, br);
-> +
->  	return 0;
->  
->  err_clk:
-> diff --git a/include/linux/fpga/fpga-bridge.h b/include/linux/fpga/fpga-bridge.h
-> index 6c3c28806ff1..f0a4d99d9c8e 100644
-> --- a/include/linux/fpga/fpga-bridge.h
-> +++ b/include/linux/fpga/fpga-bridge.h
-> @@ -22,6 +22,23 @@ struct fpga_bridge_ops {
->  	const struct attribute_group **groups;
->  };
->  
-> +/**
-> + * struct fpga_bridge_info - collection of parameters an FPGA Bridge
-> + * @name: fpga bridge name
-> + * @br_ops: pointer to structure of fpga bridge ops
-> + * @priv: fpga bridge private data
-> + *
-> + * fpga_bridge_info contains parameters for the register function. These
-> + * are separated into an info structure because they some are optional
-> + * others could be added to in the future. The info structure facilitates
-> + * maintaining a stable API.
-> + */
-> +struct fpga_bridge_info {
-> +	const char *name;
-> +	const struct fpga_bridge_ops *br_ops;
-> +	void *priv;
-> +};
-> +
->  /**
->   * struct fpga_bridge - FPGA bridge structure
->   * @name: name of low level FPGA bridge
-> @@ -62,15 +79,13 @@ int of_fpga_bridge_get_to_list(struct device_node *np,
->  			       struct fpga_image_info *info,
->  			       struct list_head *bridge_list);
->  
-> -struct fpga_bridge *fpga_bridge_create(struct device *dev, const char *name,
-> -				       const struct fpga_bridge_ops *br_ops,
-> -				       void *priv);
-> -void fpga_bridge_free(struct fpga_bridge *br);
-> -int fpga_bridge_register(struct fpga_bridge *br);
-> -void fpga_bridge_unregister(struct fpga_bridge *br);
-> +struct fpga_bridge *
-> +fpga_bridge_register_full(struct device *parent, const struct fpga_bridge_info *info);
->  
-> -struct fpga_bridge
-> -*devm_fpga_bridge_create(struct device *dev, const char *name,
-> -			 const struct fpga_bridge_ops *br_ops, void *priv);
-> +struct fpga_bridge *
-> +fpga_bridge_register(struct device *parent, const char *name,
-> +		     const struct fpga_bridge_ops *br_ops,
-> +		     void *priv);
-> +void fpga_bridge_unregister(struct fpga_bridge *br);
->  
->  #endif /* _LINUX_FPGA_BRIDGE_H */
-> -- 
-> 2.25.1
+All the small stuff looks fine to me.  In this pass I looked at issues 
+that would need a refactoring.  Since it would be a lot of work and I am 
+not the final word on this, it would be good if some others to chime in. 
+Also a couple of new spelling fixes at the end.
+
+Tom
+
+
+Having xrt/ dir
+ok with it or it will follow the subdir reorg of fpga/, afaik not a blocker
+
+Location of xrt_bus_type
+ok, similar to dfl_bus_type
+
+Non fpga subdevices should go to other subsystems.
+looking in drivers/fpga/xrt/lib/xleaf
+
+clock clkfrq ucs these are clocks
+should move to drivers/clk/xilinx/
+
+axigate, for fpga partitioning
+ok to stay
+
+ddr_calibaration, a memory status checker
+should move drivers/memory dfl-emif is similar
+
+devctl, a general purpose misc driver
+should move to drivers/mfd
+
+icap, for fpga bitstream writing
+ok to stay
+
+vsec, misc small drivers discovered via pci config vsec
+should move to drivers/mfd
+
+For include/uapi/linux
+collapse include/uapi/linux/xrt/*.h into include/uapi/linux/fpga-xrt.h
+There are only 2 files, one really small. fpga-xrt.h follows fpga-dfl.h
+The comments are pretty messy, user should be able to scan them.
+Try cleaning them up.
+
+Spelling mistakes
+
+diff --git a/Documentation/fpga/xrt.rst b/Documentation/fpga/xrt.rst
+index 5a5b4d5a3bc6..84eb41be9ac1 100644
+--- a/Documentation/fpga/xrt.rst
++++ b/Documentation/fpga/xrt.rst
+@@ -275,7 +275,7 @@ fpga_bridge and fpga_region for the next region in 
+the chain.
+  fpga_bridge
+  -----------
+
+-Like the fpga_region, a fpga_bridge is created by walking the device tree
++Like the fpga_region, an fpga_bridge is created by walking the device tree
+  of the parent group. The bridge is used for isolation between a parent and
+  its child.
+
+@@ -416,7 +416,7 @@ xclbin is compiled by end user using
+  `Vitis 
+<https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html>`_
+  tool set from Xilinx. The xclbin contains sections describing user 
+compiled
+  acceleration engines/kernels, memory subsystems, clocking information 
+etc. It also
+-contains a FPGA bitstream for the user partition, UUIDs, platform name, 
+etc.
++contains an FPGA bitstream for the user partition, UUIDs, platform 
+name, etc.
+
+
+  .. _xsabin_xclbin_container_format:
+diff --git a/drivers/fpga/xrt/include/metadata.h 
+b/drivers/fpga/xrt/include/metadata.h
+index c4df88262f8a..f48d6d42f5ef 100644
+--- a/drivers/fpga/xrt/include/metadata.h
++++ b/drivers/fpga/xrt/include/metadata.h
+@@ -194,7 +194,7 @@ int xrt_md_get_interface_uuids(struct device *dev, 
+const char *blob,
+  /*
+   * The firmware provides a 128 bit hash string as a unique id to the
+   * partition/interface.
+- * Existing hw does not yet use the cononical form, so it is necessary to
++ * Existing hw does not yet use the canonical form, so it is necessary to
+   * use a translation function.
+   */
+  static inline void xrt_md_trans_uuid2str(const uuid_t *uuid, char 
+*uuidstr)
+diff --git a/drivers/fpga/xrt/lib/xroot.c b/drivers/fpga/xrt/lib/xroot.c
+index 7b3e540dd6c0..f324a25e1d4d 100644
+--- a/drivers/fpga/xrt/lib/xroot.c
++++ b/drivers/fpga/xrt/lib/xroot.c
+@@ -427,7 +427,7 @@ static void xroot_bringup_group_work(struct 
+work_struct *work)
+                 r = xleaf_call(xdev, XRT_GROUP_INIT_CHILDREN, NULL);
+                 xroot_put_group(xr, xdev);
+                 if (r == -EEXIST)
+-                       continue; /* Already brough up, nothing to do. */
++                       continue; /* Already brought up, nothing to do. */
+                 if (r)
+atomic_inc(&xr->groups.bringup_failed_cnt);
+
+diff --git a/drivers/fpga/xrt/mgmt/xmgmt-main.c 
+b/drivers/fpga/xrt/mgmt/xmgmt-main.c
+index 820c888e7918..9077254e0f8a 100644
+--- a/drivers/fpga/xrt/mgmt/xmgmt-main.c
++++ b/drivers/fpga/xrt/mgmt/xmgmt-main.c
+@@ -142,7 +142,7 @@ static ssize_t VBNV_show(struct device *dev, struct 
+device_attribute *da, char *
+  }
+  static DEVICE_ATTR_RO(VBNV);
+
+-/* logic uuid is the uuid uniquely identfy the partition */
++/* logic uuid is the uuid uniquely identify the partition */
+  static ssize_t logic_uuids_show(struct device *dev, struct 
+device_attribute *da, char *buf)
+  {
+         struct xrt_device *xdev = to_xrt_dev(dev);
+diff --git a/drivers/fpga/xrt/mgmt/xrt-mgr.c 
+b/drivers/fpga/xrt/mgmt/xrt-mgr.c
+index 41263a033d9d..ab253b516e8d 100644
+--- a/drivers/fpga/xrt/mgmt/xrt-mgr.c
++++ b/drivers/fpga/xrt/mgmt/xrt-mgr.c
+@@ -115,7 +115,7 @@ static int xmgmt_pr_write_init(struct fpga_manager *mgr,
+  }
+
+  /*
+- * The implementation requries full xclbin image before we can start
++ * The implementation requires full xclbin image before we can start
+   * programming the hardware via ICAP subsystem. The full image is required
+   * for checking the validity of xclbin and walking the sections to
+   * discover the bitstream.
+
+On 5/27/21 5:49 PM, Lizhi Hou wrote:
+> Hello,
+>
+> This is V7 of patch series which adds management physical function driver
+> for Xilinx Alveo PCIe accelerator cards.
+>      https://www.xilinx.com/products/boards-and-kits/alveo.html
+>
+> This driver is part of Xilinx Runtime (XRT) open source stack.
+>
+> XILINX ALVEO PLATFORM ARCHITECTURE
+>
+> Alveo PCIe FPGA based platforms have a static *shell* partition and a
+> partial re-configurable *user* partition. The shell partition is
+> automatically loaded from flash when host is booted and PCIe is enumerated
+> by BIOS. Shell cannot be changed till the next cold reboot. The shell
+> exposes two PCIe physical functions:
+>
+> 1. management physical function
+> 2. user physical function
+>
+> The patch series includes Documentation/xrt.rst which describes Alveo
+> platform, XRT driver architecture and deployment model in more detail.
+>
+> Users compile their high level design in C/C++/OpenCL or RTL into FPGA
+> image using Vitis tools.
+>      https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html
+>
+> The compiled image is packaged as xclbin which contains partial bitstream
+> for the user partition and necessary metadata. Users can dynamically swap
+> the image running on the user partition in order to switch between
+> different workloads by loading different xclbins.
+>
+> XRT DRIVERS FOR XILINX ALVEO
+>
+> XRT Linux kernel driver *xrt-mgmt* binds to management physical function of
+> Alveo platform. The modular driver framework is organized into several
+> platform drivers which primarily handle the following functionality:
+>
+> 1.  Loading firmware container also called xsabin at driver attach time
+> 2.  Loading of user compiled xclbin with FPGA Manager integration
+> 3.  Clock scaling of image running on user partition
+> 4.  In-band sensors: temp, voltage, power, etc.
+> 5.  Device reset and rescan
+>
+> The platform drivers are packaged into *xrt-lib* helper module with well
+> defined interfaces. The module provides a pseudo-bus implementation for the
+> platform drivers. More details on the driver model can be found in
+> Documentation/xrt.rst.
+>
+> User physical function driver is not included in this patch series.
+>
+> LIBFDT REQUIREMENT
+>
+> XRT driver infrastructure uses Device Tree as a metadata format to discover
+> HW subsystems in the Alveo PCIe device. The Device Tree schema used by XRT
+> is documented in Documentation/xrt.rst.
+>
+> TESTING AND VALIDATION
+>
+> xrt-mgmt driver can be tested with full XRT open source stack which
+> includes user space libraries, board utilities and (out of tree) first
+> generation user physical function driver xocl. XRT open source runtime
+> stack is available at https://github.com/Xilinx/XRT
+>
+> Complete documentation for XRT open source stack including sections on
+> Alveo/XRT security and platform architecture can be found here:
+>
+> https://xilinx.github.io/XRT/master/html/index.html
+> https://xilinx.github.io/XRT/master/html/security.html
+> https://xilinx.github.io/XRT/master/html/platforms_partitions.html
+>
+> Changes since v6:
+> - Resolved grammatical errors and cleaned up taxonomy in xrt.rst
+>    documentation.
+> - Fixed clang warnings.
+> - Updated code base to include v6 code review comments.
+>
+> Changes since v5:
+> - Revert all changes 'mgnt/MGNT' back to 'mgmt/MGMT'
+> - Updated code base to include v5 code review comments.
+>     xrt.rst: address grammar and taxonomy
+>     subdev_id.h: defines XRT_SUBDEV_INVALID = 0
+>     xclbin.c: change shift operation to be_to_cpu
+> - Resolved kernel test robot errors.
+>
+> Changes since v4:
+> - Added xrt_bus_type and xrt_device. All sub devices were changed from
+>    platform_bus_type/platform_device to xrt_bus_type/xrt_device.
+> - Renamed xrt-mgmt driver to xrt-mgnt driver.
+> - Replaced 'MGMT' with 'MGNT' and 'mgmt' with 'mgnt' in code and file names
+> - Moved pci function calls from infrastructure to xrt-mgnt driver.
+> - Renamed files: mgmt/main.c -> mgnt/xmgnt-main.c
+>                   mgmt/main-region.c -> mgnt/xmgnt-main-region.c
+>                   include/xmgmt-main.h -> include/xmgnt-main.h
+>                   mgmt/fmgr-drv.c -> mgnt/xrt-mgr.c
+>                   mgmt/fmgr.h -> mgnt/xrt-mgr.h
+> - Updated code base to include v4 code review comments.
+>
+> Changes since v3:
+> - Leaf drivers use regmap-mmio to access hardware registers.
+> - Renamed driver module: xmgmt.ko -> xrt-mgmt.ko
+> - Renamed files: calib.[c|h] -> ddr_calibration.[c|h],
+>                   lib/main.[c|h] -> lib/lib-drv.[c|h],
+>                   mgmt/main-impl.h - > mgmt/xmgnt.h
+> - Updated code base to include v3 code review comments.
+>
+> Changes since v2:
+> - Streamlined the driver framework into *xleaf*, *group* and *xroot*
+> - Updated documentation to show the driver model with examples
+> - Addressed kernel test robot errors
+> - Added a selftest for basic driver framework
+> - Documented device tree schema
+> - Removed need to export libfdt symbols
+>
+> Changes since v1:
+> - Updated the driver to use fpga_region and fpga_bridge for FPGA
+>    programming
+> - Dropped platform drivers not related to PR programming to focus on XRT
+>    core framework
+> - Updated Documentation/fpga/xrt.rst with information on XRT core framework
+> - Addressed checkpatch issues
+> - Dropped xrt- prefix from some header files
+>
+> For reference V6 version of patch series can be found here:
+>
+> https://lore.kernel.org/lkml/20210512015339.5649-1-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-2-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-3-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-4-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-5-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-6-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-7-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-8-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-9-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-10-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-11-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-12-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-13-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-14-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-15-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-16-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-17-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-18-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-19-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-20-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20210512015339.5649-21-lizhi.hou@xilinx.com/
+>
+> Lizhi Hou (20):
+>    Documentation: fpga: Add a document describing XRT Alveo drivers
+>    fpga: xrt: driver metadata helper functions
+>    fpga: xrt: xclbin file helper functions
+>    fpga: xrt: xrt-lib driver manager
+>    fpga: xrt: group driver
+>    fpga: xrt: char dev node helper functions
+>    fpga: xrt: root driver infrastructure
+>    fpga: xrt: driver infrastructure
+>    fpga: xrt: management physical function driver (root)
+>    fpga: xrt: main driver for management function device
+>    fpga: xrt: fpga-mgr and region implementation for xclbin download
+>    fpga: xrt: VSEC driver
+>    fpga: xrt: User Clock Subsystem driver
+>    fpga: xrt: ICAP driver
+>    fpga: xrt: devctl xrt driver
+>    fpga: xrt: clock driver
+>    fpga: xrt: clock frequency counter driver
+>    fpga: xrt: DDR calibration driver
+>    fpga: xrt: partition isolation driver
+>    fpga: xrt: Kconfig and Makefile updates for XRT drivers
+>
+>   Documentation/fpga/index.rst                  |   1 +
+>   Documentation/fpga/xrt.rst                    | 870 ++++++++++++++++++
+>   MAINTAINERS                                   |  11 +
+>   drivers/Makefile                              |   1 +
+>   drivers/fpga/Kconfig                          |   2 +
+>   drivers/fpga/Makefile                         |   5 +
+>   drivers/fpga/xrt/Kconfig                      |   8 +
+>   drivers/fpga/xrt/include/events.h             |  45 +
+>   drivers/fpga/xrt/include/group.h              |  25 +
+>   drivers/fpga/xrt/include/metadata.h           | 236 +++++
+>   drivers/fpga/xrt/include/subdev_id.h          |  39 +
+>   drivers/fpga/xrt/include/xclbin-helper.h      |  48 +
+>   drivers/fpga/xrt/include/xdevice.h            | 131 +++
+>   drivers/fpga/xrt/include/xleaf.h              | 205 +++++
+>   drivers/fpga/xrt/include/xleaf/axigate.h      |  23 +
+>   drivers/fpga/xrt/include/xleaf/clkfreq.h      |  21 +
+>   drivers/fpga/xrt/include/xleaf/clock.h        |  29 +
+>   .../fpga/xrt/include/xleaf/ddr_calibration.h  |  28 +
+>   drivers/fpga/xrt/include/xleaf/devctl.h       |  40 +
+>   drivers/fpga/xrt/include/xleaf/icap.h         |  27 +
+>   drivers/fpga/xrt/include/xmgmt-main.h         |  34 +
+>   drivers/fpga/xrt/include/xroot.h              | 117 +++
+>   drivers/fpga/xrt/lib/Kconfig                  |  17 +
+>   drivers/fpga/xrt/lib/Makefile                 |  30 +
+>   drivers/fpga/xrt/lib/cdev.c                   | 209 +++++
+>   drivers/fpga/xrt/lib/group.c                  | 278 ++++++
+>   drivers/fpga/xrt/lib/lib-drv.c                | 328 +++++++
+>   drivers/fpga/xrt/lib/lib-drv.h                |  21 +
+>   drivers/fpga/xrt/lib/subdev.c                 | 859 +++++++++++++++++
+>   drivers/fpga/xrt/lib/subdev_pool.h            |  53 ++
+>   drivers/fpga/xrt/lib/xclbin.c                 | 381 ++++++++
+>   drivers/fpga/xrt/lib/xleaf/axigate.c          | 325 +++++++
+>   drivers/fpga/xrt/lib/xleaf/clkfreq.c          | 223 +++++
+>   drivers/fpga/xrt/lib/xleaf/clock.c            | 652 +++++++++++++
+>   drivers/fpga/xrt/lib/xleaf/ddr_calibration.c  | 210 +++++
+>   drivers/fpga/xrt/lib/xleaf/devctl.c           | 169 ++++
+>   drivers/fpga/xrt/lib/xleaf/icap.c             | 328 +++++++
+>   drivers/fpga/xrt/lib/xleaf/ucs.c              | 152 +++
+>   drivers/fpga/xrt/lib/xleaf/vsec.c             | 372 ++++++++
+>   drivers/fpga/xrt/lib/xroot.c                  | 536 +++++++++++
+>   drivers/fpga/xrt/metadata/Kconfig             |  12 +
+>   drivers/fpga/xrt/metadata/Makefile            |  16 +
+>   drivers/fpga/xrt/metadata/metadata.c          | 578 ++++++++++++
+>   drivers/fpga/xrt/mgmt/Kconfig                 |  15 +
+>   drivers/fpga/xrt/mgmt/Makefile                |  19 +
+>   drivers/fpga/xrt/mgmt/root.c                  | 420 +++++++++
+>   drivers/fpga/xrt/mgmt/xmgmt-main-region.c     | 483 ++++++++++
+>   drivers/fpga/xrt/mgmt/xmgmt-main.c            | 662 +++++++++++++
+>   drivers/fpga/xrt/mgmt/xmgmt.h                 |  33 +
+>   drivers/fpga/xrt/mgmt/xrt-mgr.c               | 190 ++++
+>   drivers/fpga/xrt/mgmt/xrt-mgr.h               |  16 +
+>   include/uapi/linux/xrt/xclbin.h               | 409 ++++++++
+>   include/uapi/linux/xrt/xmgmt-ioctl.h          |  46 +
+>   53 files changed, 9988 insertions(+)
+>   create mode 100644 Documentation/fpga/xrt.rst
+>   create mode 100644 drivers/fpga/xrt/Kconfig
+>   create mode 100644 drivers/fpga/xrt/include/events.h
+>   create mode 100644 drivers/fpga/xrt/include/group.h
+>   create mode 100644 drivers/fpga/xrt/include/metadata.h
+>   create mode 100644 drivers/fpga/xrt/include/subdev_id.h
+>   create mode 100644 drivers/fpga/xrt/include/xclbin-helper.h
+>   create mode 100644 drivers/fpga/xrt/include/xdevice.h
+>   create mode 100644 drivers/fpga/xrt/include/xleaf.h
+>   create mode 100644 drivers/fpga/xrt/include/xleaf/axigate.h
+>   create mode 100644 drivers/fpga/xrt/include/xleaf/clkfreq.h
+>   create mode 100644 drivers/fpga/xrt/include/xleaf/clock.h
+>   create mode 100644 drivers/fpga/xrt/include/xleaf/ddr_calibration.h
+>   create mode 100644 drivers/fpga/xrt/include/xleaf/devctl.h
+>   create mode 100644 drivers/fpga/xrt/include/xleaf/icap.h
+>   create mode 100644 drivers/fpga/xrt/include/xmgmt-main.h
+>   create mode 100644 drivers/fpga/xrt/include/xroot.h
+>   create mode 100644 drivers/fpga/xrt/lib/Kconfig
+>   create mode 100644 drivers/fpga/xrt/lib/Makefile
+>   create mode 100644 drivers/fpga/xrt/lib/cdev.c
+>   create mode 100644 drivers/fpga/xrt/lib/group.c
+>   create mode 100644 drivers/fpga/xrt/lib/lib-drv.c
+>   create mode 100644 drivers/fpga/xrt/lib/lib-drv.h
+>   create mode 100644 drivers/fpga/xrt/lib/subdev.c
+>   create mode 100644 drivers/fpga/xrt/lib/subdev_pool.h
+>   create mode 100644 drivers/fpga/xrt/lib/xclbin.c
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/axigate.c
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/clkfreq.c
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/clock.c
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/ddr_calibration.c
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/devctl.c
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/icap.c
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/ucs.c
+>   create mode 100644 drivers/fpga/xrt/lib/xleaf/vsec.c
+>   create mode 100644 drivers/fpga/xrt/lib/xroot.c
+>   create mode 100644 drivers/fpga/xrt/metadata/Kconfig
+>   create mode 100644 drivers/fpga/xrt/metadata/Makefile
+>   create mode 100644 drivers/fpga/xrt/metadata/metadata.c
+>   create mode 100644 drivers/fpga/xrt/mgmt/Kconfig
+>   create mode 100644 drivers/fpga/xrt/mgmt/Makefile
+>   create mode 100644 drivers/fpga/xrt/mgmt/root.c
+>   create mode 100644 drivers/fpga/xrt/mgmt/xmgmt-main-region.c
+>   create mode 100644 drivers/fpga/xrt/mgmt/xmgmt-main.c
+>   create mode 100644 drivers/fpga/xrt/mgmt/xmgmt.h
+>   create mode 100644 drivers/fpga/xrt/mgmt/xrt-mgr.c
+>   create mode 100644 drivers/fpga/xrt/mgmt/xrt-mgr.h
+>   create mode 100644 include/uapi/linux/xrt/xclbin.h
+>   create mode 100644 include/uapi/linux/xrt/xmgmt-ioctl.h
+>
+
