@@ -2,40 +2,42 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2593BDF86
-	for <lists+linux-fpga@lfdr.de>; Wed,  7 Jul 2021 00:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF97A3BDF8D
+	for <lists+linux-fpga@lfdr.de>; Wed,  7 Jul 2021 01:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbhGFW4s (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Jul 2021 18:56:48 -0400
-Received: from mga03.intel.com ([134.134.136.65]:36701 "EHLO mga03.intel.com"
+        id S229787AbhGFXG4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Jul 2021 19:06:56 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32256 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229753AbhGFW4r (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 6 Jul 2021 18:56:47 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10037"; a="209250383"
-X-IronPort-AV: E=Sophos;i="5.83,329,1616482800"; 
-   d="scan'208";a="209250383"
+        id S229753AbhGFXG4 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 6 Jul 2021 19:06:56 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10037"; a="196490043"
+X-IronPort-AV: E=Sophos;i="5.83,330,1616482800"; 
+   d="scan'208";a="196490043"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 15:54:06 -0700
-X-IronPort-AV: E=Sophos;i="5.83,329,1616482800"; 
-   d="scan'208";a="457236562"
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 16:04:14 -0700
+X-IronPort-AV: E=Sophos;i="5.83,330,1616482800"; 
+   d="scan'208";a="457239357"
 Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.209.123.96])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 15:54:05 -0700
-Subject: Re: [PATCH v9 2/3] fpga: bridge: Use standard dev_release for class
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 16:04:14 -0700
+Subject: Re: [PATCH v9 1/3] fpga: mgr: Use standard dev_release for class
  driver
 To:     Tom Rix <trix@redhat.com>, mdf@kernel.org,
         linux-fpga@vger.kernel.org
 Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
         matthew.gerlach@intel.com, richard.gong@intel.com
 References: <20210701013733.75483-1-russell.h.weight@intel.com>
- <20210701013733.75483-3-russell.h.weight@intel.com>
- <b8dd365e-fab9-d735-5cf2-a0c9e234a294@redhat.com>
+ <20210701013733.75483-2-russell.h.weight@intel.com>
+ <c2b4788f-1021-8068-185c-015858503882@redhat.com>
+ <cc973878-63d5-9ff3-af4d-503af2c4a070@intel.com>
+ <aad7440c-5e7d-149d-e764-b49a1b583519@redhat.com>
 From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <3ef10acb-044b-4114-85ab-3a80982f97b4@intel.com>
-Date:   Tue, 6 Jul 2021 15:53:51 -0700
+Message-ID: <c8dd6468-e0ad-111a-b752-9389141981a6@intel.com>
+Date:   Tue, 6 Jul 2021 16:03:59 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <b8dd365e-fab9-d735-5cf2-a0c9e234a294@redhat.com>
+In-Reply-To: <aad7440c-5e7d-149d-e764-b49a1b583519@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -45,473 +47,892 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 
-On 7/6/21 1:08 PM, Tom Rix wrote:
-> Russ,
+On 7/6/21 2:44 PM, Tom Rix wrote:
 >
-> Similar concern with 2 register functions as in fpga-mgr.
->
-> But here it does not seen that any instance uses fpga_bridge_register_full directly.
->
-> So it really isn't needed.
-
-Sure - the fpga_bridge_register_full() is really not needed. I can delete that.
-
->
-> However if fpga-mgr changes to having a single register(... *info), fpga-bridge should likewise.
->
-> Peeking ahead, fpga-region looks similar.
->
-> my preference for api stability is for have mgr,bridge and region to have the *register_full(... *info) as the only *register()
->
->
-> On 6/30/21 6:37 PM, Russ Weight wrote:
->> The FPGA bridge class driver data structure is being treated as a
->> managed resource instead of using the standard dev_release call-back
->> function to release the class data structure. This change removes
->> the managed resource code and combines the create() and register()
->> functions into a single register() or register_simple() function.
+> On 7/6/21 2:02 PM, Russ Weight wrote:
 >>
->> The register() function accepts an info data structure to provide
->> flexibility in passing optional parameters. The register_simple()
->> function supports the current parameter list for users that don't
->> require the use of optional parameters.
->>
->> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
->> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
->> ---
->> v9:
->>    - Cleaned up documentation for the FPGA Bridge register functions
->>    - Renamed fpga_bridge_register() to fpga_bridge_register_full()
->>    - Renamed fpga_bridge_register_simple() to fpga_bridge_register()
->> v8:
->>    - Added reviewed-by tag.
->>    - Updated Documentation/driver-api/fpga/fpga-bridge.rst documentation.
->> v7:
->>    - Update the commit message to describe the new parameters for the
->>      fpga_bridge_register() function and to mention the
->>      fpga_bridge_register_simple() function.
->>    - Fix function prototypes in header file to rename dev to parent.
->>    - Some cleanup of comments.
->>    - Update function defintions/prototypes to apply const to the new info
->>      parameter.
->>    - Verify that info->br_ops is non-null in register functions.
->> v6:
->>    - Changed fpga_bridge_register() parameters to accept an info data
->>      structure to provide flexibility in passing optional parameters.
->>    - Added fpga_bridge_register_simple() function to support current
->>      parameters for users that don't require the use of optional
->>      parameters.
->> v5:
->>    - Rebased on top of recently accepted patches.
->> v4:
->>    - Restore the previous format for the Return value in the comment header
->>      for fpga_bridge_register()
->> v3:
->>    - Cleaned up comment header for fpga_bridge_register()
->>    - Fix error return values for fpga_bridge_register()
->> v2:
->>    - No changes
->> ---
->>   Documentation/driver-api/fpga/fpga-bridge.rst |   8 +-
->>   drivers/fpga/altera-fpga2sdram.c              |  12 +-
->>   drivers/fpga/altera-freeze-bridge.c           |  10 +-
->>   drivers/fpga/altera-hps2fpga.c                |  12 +-
->>   drivers/fpga/dfl-fme-br.c                     |  10 +-
->>   drivers/fpga/fpga-bridge.c                    | 137 ++++++------------
->>   drivers/fpga/xilinx-pr-decoupler.c            |  17 +--
->>   include/linux/fpga/fpga-bridge.h              |  33 +++--
->>   8 files changed, 101 insertions(+), 138 deletions(-)
->>
->> diff --git a/Documentation/driver-api/fpga/fpga-bridge.rst b/Documentation/driver-api/fpga/fpga-bridge.rst
->> index 8d650b4e2ce6..38e3bac8e877 100644
->> --- a/Documentation/driver-api/fpga/fpga-bridge.rst
->> +++ b/Documentation/driver-api/fpga/fpga-bridge.rst
->> @@ -6,8 +6,10 @@ API to implement a new FPGA bridge
->>     * struct fpga_bridge - The FPGA Bridge structure
->>   * struct fpga_bridge_ops - Low level Bridge driver ops
->> -* devm_fpga_bridge_create() - Allocate and init a bridge struct
->> -* fpga_bridge_register() - Register a bridge
->> +* fpga_bridge_register_full() - Create and register a bridge using the
->> +  fpga_bridge_info structure to provide the full flexibility of options
-> fpga_bridge_info (and fpga_mgr_info earlier) could be added to the kernel-doc:: list lower down
-
-I wasn't sure if fpga_bridge_info needed to be document here since it is a
-temporary data structure that is used only for passing argments. The data
-that is passed ends up in the fpga_bridge data structure. I can add this
-documentation if you think it is needed.
-
-If we delete the fpga_bridge_register_full() function, then this temporary
-structure goes away for the fpga_bridge.
-
->> +* fpga_bridge_register() - Create and register a bridge using standard
->> +  arguments
->>   * fpga_bridge_unregister() - Unregister a bridge
->>     .. kernel-doc:: include/linux/fpga/fpga-bridge.h
->> @@ -17,7 +19,7 @@ API to implement a new FPGA bridge
->>      :functions: fpga_bridge_ops
->>     .. kernel-doc:: drivers/fpga/fpga-bridge.c
->> -   :functions: devm_fpga_bridge_create
->> +   :functions: fpga_bridge_register_full
->>     .. kernel-doc:: drivers/fpga/fpga-bridge.c
->>      :functions: fpga_bridge_register
->> diff --git a/drivers/fpga/altera-fpga2sdram.c b/drivers/fpga/altera-fpga2sdram.c
->> index a78e49c63c64..66063507116b 100644
->> --- a/drivers/fpga/altera-fpga2sdram.c
->> +++ b/drivers/fpga/altera-fpga2sdram.c
->> @@ -121,17 +121,13 @@ static int alt_fpga_bridge_probe(struct platform_device *pdev)
->>       /* Get f2s bridge configuration saved in handoff register */
->>       regmap_read(sysmgr, SYSMGR_ISWGRP_HANDOFF3, &priv->mask);
->>   -    br = devm_fpga_bridge_create(dev, F2S_BRIDGE_NAME,
->> -                     &altera_fpga2sdram_br_ops, priv);
->> -    if (!br)
->> -        return -ENOMEM;
->> +    br = fpga_bridge_register(dev, F2S_BRIDGE_NAME,
->> +                  &altera_fpga2sdram_br_ops, priv);
->> +    if (IS_ERR(br))
->> +        return PTR_ERR(mgr);
->>         platform_set_drvdata(pdev, br);
->>   -    ret = fpga_bridge_register(br);
->> -    if (ret)
->> -        return ret;
->> -
->>       dev_info(dev, "driver initialized with handoff %08x\n", priv->mask);
->>         if (!of_property_read_u32(dev->of_node, "bridge-enable", &enable)) {
->> diff --git a/drivers/fpga/altera-freeze-bridge.c b/drivers/fpga/altera-freeze-bridge.c
->> index dd58c4aea92e..bfbfa43cd05b 100644
->> --- a/drivers/fpga/altera-freeze-bridge.c
->> +++ b/drivers/fpga/altera-freeze-bridge.c
->> @@ -244,14 +244,14 @@ static int altera_freeze_br_probe(struct platform_device *pdev)
->>         priv->base_addr = base_addr;
->>   -    br = devm_fpga_bridge_create(dev, FREEZE_BRIDGE_NAME,
->> -                     &altera_freeze_br_br_ops, priv);
->> -    if (!br)
->> -        return -ENOMEM;
->> +    br = fpga_bridge_register(dev, FREEZE_BRIDGE_NAME,
->> +                  &altera_freeze_br_br_ops, priv);
->> +    if (IS_ERR(br))
->> +        return PTR_ERR(br);
->>         platform_set_drvdata(pdev, br);
->>   -    return fpga_bridge_register(br);
->> +    return 0;
->>   }
->>     static int altera_freeze_br_remove(struct platform_device *pdev)
->> diff --git a/drivers/fpga/altera-hps2fpga.c b/drivers/fpga/altera-hps2fpga.c
->> index 77b95f251821..aa758426c22b 100644
->> --- a/drivers/fpga/altera-hps2fpga.c
->> +++ b/drivers/fpga/altera-hps2fpga.c
->> @@ -180,19 +180,15 @@ static int alt_fpga_bridge_probe(struct platform_device *pdev)
->>           }
->>       }
->>   -    br = devm_fpga_bridge_create(dev, priv->name,
->> -                     &altera_hps2fpga_br_ops, priv);
->> -    if (!br) {
->> -        ret = -ENOMEM;
->> +    br = fpga_bridge_register(dev, priv->name,
->> +                  &altera_hps2fpga_br_ops, priv);
->> +    if (IS_ERR(br)) {
->> +        ret = PTR_ERR(br);
->>           goto err;
->>       }
->>         platform_set_drvdata(pdev, br);
->>   -    ret = fpga_bridge_register(br);
->> -    if (ret)
->> -        goto err;
->> -
->>       return 0;
->>     err:
->> diff --git a/drivers/fpga/dfl-fme-br.c b/drivers/fpga/dfl-fme-br.c
->> index 3ff9f3a687ce..808d1f4d76df 100644
->> --- a/drivers/fpga/dfl-fme-br.c
->> +++ b/drivers/fpga/dfl-fme-br.c
->> @@ -68,14 +68,14 @@ static int fme_br_probe(struct platform_device *pdev)
->>         priv->pdata = dev_get_platdata(dev);
->>   -    br = devm_fpga_bridge_create(dev, "DFL FPGA FME Bridge",
->> -                     &fme_bridge_ops, priv);
->> -    if (!br)
->> -        return -ENOMEM;
->> +    br = fpga_bridge_register(dev, "DFL FPGA FME Bridge",
->> +                  &fme_bridge_ops, priv);
->> +    if (IS_ERR(br))
->> +        return PTR_ERR(br);
->>         platform_set_drvdata(pdev, br);
->>   -    return fpga_bridge_register(br);
->> +    return 0;
->>   }
->>     static int fme_br_remove(struct platform_device *pdev)
->> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
->> index 798f55670646..e6d98be8531b 100644
->> --- a/drivers/fpga/fpga-bridge.c
->> +++ b/drivers/fpga/fpga-bridge.c
->> @@ -312,55 +312,63 @@ static struct attribute *fpga_bridge_attrs[] = {
->>   ATTRIBUTE_GROUPS(fpga_bridge);
->>     /**
->> - * fpga_bridge_create - create and initialize a struct fpga_bridge
->> + * fpga_bridge_register_full - create and register an FPGA Bridge device
->>    * @parent:    FPGA bridge device from pdev
->> - * @name:    FPGA bridge name
->> - * @br_ops:    pointer to structure of fpga bridge ops
->> - * @priv:    FPGA bridge private data
->> + * @info:    parameters for FPGA Bridge
->>    *
->> - * The caller of this function is responsible for freeing the bridge with
->> - * fpga_bridge_free().  Using devm_fpga_bridge_create() instead is recommended.
->> - *
->> - * Return: struct fpga_bridge or NULL
->> + * Return: struct fpga_bridge pointer or ERR_PTR()
->>    */
->> -struct fpga_bridge *fpga_bridge_create(struct device *parent, const char *name,
->> -                       const struct fpga_bridge_ops *br_ops,
->> -                       void *priv)
->> +struct fpga_bridge *
->> +fpga_bridge_register_full(struct device *parent,
->> +              const struct fpga_bridge_info *info)
->>   {
->>       struct fpga_bridge *bridge;
->>       int id, ret;
->>   -    if (!name || !strlen(name)) {
->> +    if (!info->br_ops) {
->> +        dev_err(parent, "Attempt to register without fpga_bridge_ops\n");
->> +        return ERR_PTR(-EINVAL);
->> +    }
->> +
->> +    if (!info->name || !strlen(info->name)) {
->>           dev_err(parent, "Attempt to register with no name!\n");
->> -        return NULL;
->> +        return ERR_PTR(-EINVAL);
->>       }
->>         bridge = kzalloc(sizeof(*bridge), GFP_KERNEL);
->>       if (!bridge)
->> -        return NULL;
->> +        return ERR_PTR(-ENOMEM);
->>         id = ida_simple_get(&fpga_bridge_ida, 0, 0, GFP_KERNEL);
->> -    if (id < 0)
->> +    if (id < 0) {
->> +        ret = id;
->>           goto error_kfree;
->> +    }
->>         mutex_init(&bridge->mutex);
->>       INIT_LIST_HEAD(&bridge->node);
->>   -    bridge->name = name;
->> -    bridge->br_ops = br_ops;
->> -    bridge->priv = priv;
->> +    bridge->name = info->name;
->> +    bridge->br_ops = info->br_ops;
->> +    bridge->priv = info->priv;
->>   -    device_initialize(&bridge->dev);
->> -    bridge->dev.groups = br_ops->groups;
->> +    bridge->dev.groups = info->br_ops->groups;
->>       bridge->dev.class = fpga_bridge_class;
->>       bridge->dev.parent = parent;
->>       bridge->dev.of_node = parent->of_node;
->>       bridge->dev.id = id;
->> +    of_platform_populate(bridge->dev.of_node, NULL, NULL, &bridge->dev);
->>         ret = dev_set_name(&bridge->dev, "br%d", id);
->>       if (ret)
->>           goto error_device;
->>   +    ret = device_register(&bridge->dev);
->> +    if (ret) {
->> +        put_device(&bridge->dev);
->> +        return ERR_PTR(ret);
->> +    }
->> +
->>       return bridge;
->>     error_device:
->> @@ -368,88 +376,35 @@ struct fpga_bridge *fpga_bridge_create(struct device *parent, const char *name,
->>   error_kfree:
->>       kfree(bridge);
->>   -    return NULL;
->> -}
->> -EXPORT_SYMBOL_GPL(fpga_bridge_create);
->> -
->> -/**
->> - * fpga_bridge_free - free an fpga bridge created by fpga_bridge_create()
->> - * @bridge:    FPGA bridge struct
->> - */
->> -void fpga_bridge_free(struct fpga_bridge *bridge)
->> -{
->> -    ida_simple_remove(&fpga_bridge_ida, bridge->dev.id);
->> -    kfree(bridge);
->> -}
->> -EXPORT_SYMBOL_GPL(fpga_bridge_free);
->> -
->> -static void devm_fpga_bridge_release(struct device *dev, void *res)
->> -{
->> -    struct fpga_bridge *bridge = *(struct fpga_bridge **)res;
->> -
->> -    fpga_bridge_free(bridge);
->> +    return ERR_PTR(ret);
->>   }
->> +EXPORT_SYMBOL_GPL(fpga_bridge_register_full);
->>     /**
->> - * devm_fpga_bridge_create - create and init a managed struct fpga_bridge
->> + * fpga_bridge_register - create and register an FPGA Bridge device
->>    * @parent:    FPGA bridge device from pdev
->>    * @name:    FPGA bridge name
->>    * @br_ops:    pointer to structure of fpga bridge ops
->>    * @priv:    FPGA bridge private data
->>    *
->> - * This function is intended for use in an FPGA bridge driver's probe function.
->> - * After the bridge driver creates the struct with devm_fpga_bridge_create(), it
->> - * should register the bridge with fpga_bridge_register().  The bridge driver's
->> - * remove function should call fpga_bridge_unregister().  The bridge struct
->> - * allocated with this function will be freed automatically on driver detach.
->> - * This includes the case of a probe function returning error before calling
->> - * fpga_bridge_register(), the struct will still get cleaned up.
->> + * This simple version of the register should be sufficient for most users.
->> + * The fpga_bridge_register_full() function is available for users that need to pass
->> + * additional, optional parameters.
->>    *
->> - *  Return: struct fpga_bridge or NULL
->> + * Return: struct fpga_bridge pointer or ERR_PTR()
->>    */
->> -struct fpga_bridge
->> -*devm_fpga_bridge_create(struct device *parent, const char *name,
->> -             const struct fpga_bridge_ops *br_ops, void *priv)
->> +struct fpga_bridge *
->> +fpga_bridge_register(struct device *parent, const char *name,
->> +             const struct fpga_bridge_ops *br_ops,
->> +             void *priv)
->>   {
->> -    struct fpga_bridge **ptr, *bridge;
->> -
->> -    ptr = devres_alloc(devm_fpga_bridge_release, sizeof(*ptr), GFP_KERNEL);
->> -    if (!ptr)
->> -        return NULL;
->> -
->> -    bridge = fpga_bridge_create(parent, name, br_ops, priv);
->> -    if (!bridge) {
->> -        devres_free(ptr);
->> -    } else {
->> -        *ptr = bridge;
->> -        devres_add(parent, ptr);
->> -    }
->> +    struct fpga_bridge_info info = { 0 };
->>   -    return bridge;
->> -}
->> -EXPORT_SYMBOL_GPL(devm_fpga_bridge_create);
->> +    info.name = name;
->> +    info.br_ops = br_ops;
->> +    info.priv = priv;
->>   -/**
->> - * fpga_bridge_register - register an FPGA bridge
->> - *
->> - * @bridge: FPGA bridge struct
->> - *
->> - * Return: 0 for success, error code otherwise.
->> - */
->> -int fpga_bridge_register(struct fpga_bridge *bridge)
->> -{
->> -    struct device *dev = &bridge->dev;
->> -    int ret;
->> -
->> -    ret = device_add(dev);
->> -    if (ret)
->> -        return ret;
->> -
->> -    of_platform_populate(dev->of_node, NULL, NULL, dev);
->> -
->> -    dev_info(dev->parent, "fpga bridge [%s] registered\n", bridge->name);
->> -
->> -    return 0;
->> +    return fpga_bridge_register_full(parent, &info);
->>   }
->>   EXPORT_SYMBOL_GPL(fpga_bridge_register);
->>   @@ -475,6 +430,10 @@ EXPORT_SYMBOL_GPL(fpga_bridge_unregister);
->>     static void fpga_bridge_dev_release(struct device *dev)
->>   {
->> +    struct fpga_bridge *bridge = to_fpga_bridge(dev);
->> +
->> +    ida_simple_remove(&fpga_bridge_ida, bridge->dev.id);
->> +    kfree(bridge);
->>   }
->>     static int __init fpga_bridge_dev_init(void)
->> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
->> index ea2bde6e5bc4..c004e52b9464 100644
->> --- a/drivers/fpga/xilinx-pr-decoupler.c
->> +++ b/drivers/fpga/xilinx-pr-decoupler.c
->> @@ -138,22 +138,17 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
->>         clk_disable(priv->clk);
->>   -    br = devm_fpga_bridge_create(&pdev->dev, priv->ipconfig->name,
->> -                     &xlnx_pr_decoupler_br_ops, priv);
->> -    if (!br) {
->> -        err = -ENOMEM;
->> -        goto err_clk;
->> -    }
->> -
->> -    platform_set_drvdata(pdev, br);
->> -
->> -    err = fpga_bridge_register(br);
->> -    if (err) {
->> +    br = fpga_bridge_register(&pdev->dev, priv->ipconfig->name,
->> +                  &xlnx_pr_decoupler_br_ops, priv);
->> +    if (IS_ERR(br)) {
->> +        err = PTR_ERR(br);
->>           dev_err(&pdev->dev, "unable to register %s",
->>               priv->ipconfig->name);
->>           goto err_clk;
->>       }
->>   +    platform_set_drvdata(pdev, br);
->> +
->>       return 0;
->>     err_clk:
->> diff --git a/include/linux/fpga/fpga-bridge.h b/include/linux/fpga/fpga-bridge.h
->> index 6c3c28806ff1..f0a4d99d9c8e 100644
->> --- a/include/linux/fpga/fpga-bridge.h
->> +++ b/include/linux/fpga/fpga-bridge.h
->> @@ -22,6 +22,23 @@ struct fpga_bridge_ops {
->>       const struct attribute_group **groups;
+>> On 7/6/21 12:04 PM, Tom Rix wrote:
+>>> Russ,
+>>>
+>>> My two big concerns are.
+>>>
+>>> compat_id does not belong in fpga_mgr_info, it belongs in fme_mgr_priv.
+>> fpga_mgr_info is a temporary structure on the stack that contains the
+>> parameters only long enough to pass them in and have them added to the
+>> fpga_manager structure. Do you have a concern about it being on the
+>> fpga_manager structure.
 >
-> This groups seems to be unused.
+> My concern is compat_id should never have been part of fpga-mgr in the first place.
 >
-> If it is, maybe it should go into info.
+> It is dfl specific, so instead of going in a common structure, it should go into a dfl structure
+>
+> The likely place it should go is fme_mgr_priv.
+>
+> The need for 2 register functions here and in fpga-region is caused by carrying this dfl data around in the wrong place.
 
-Maybe - but that could be done as a separate patch, right? It is outside
-the scope of what I'm trying to do.
+This issue was raised for the previous patch version, and Hao pointed out that
+its placement in the fpga_manager structure was a result of community discussion.
+
+These changes aren't affecting the location of compat_id. Where it is
+stored is not really within the scope of what I am trying to accomplish.
+If it needs to be changed, could it be handled in a separate patch set?
 
 - Russ
->
+
 > Tom
 >
->>   };
->>   +/**
->> + * struct fpga_bridge_info - collection of parameters an FPGA Bridge
->> + * @name: fpga bridge name
->> + * @br_ops: pointer to structure of fpga bridge ops
->> + * @priv: fpga bridge private data
->> + *
->> + * fpga_bridge_info contains parameters for the register function. These
->> + * are separated into an info structure because they some are optional
->> + * others could be added to in the future. The info structure facilitates
->> + * maintaining a stable API.
->> + */
->> +struct fpga_bridge_info {
->> +    const char *name;
->> +    const struct fpga_bridge_ops *br_ops;
->> +    void *priv;
->> +};
->> +
->>   /**
->>    * struct fpga_bridge - FPGA bridge structure
->>    * @name: name of low level FPGA bridge
->> @@ -62,15 +79,13 @@ int of_fpga_bridge_get_to_list(struct device_node *np,
->>                      struct fpga_image_info *info,
->>                      struct list_head *bridge_list);
->>   -struct fpga_bridge *fpga_bridge_create(struct device *dev, const char *name,
->> -                       const struct fpga_bridge_ops *br_ops,
->> -                       void *priv);
->> -void fpga_bridge_free(struct fpga_bridge *br);
->> -int fpga_bridge_register(struct fpga_bridge *br);
->> -void fpga_bridge_unregister(struct fpga_bridge *br);
->> +struct fpga_bridge *
->> +fpga_bridge_register_full(struct device *parent, const struct fpga_bridge_info *info);
->>   -struct fpga_bridge
->> -*devm_fpga_bridge_create(struct device *dev, const char *name,
->> -             const struct fpga_bridge_ops *br_ops, void *priv);
->> +struct fpga_bridge *
->> +fpga_bridge_register(struct device *parent, const char *name,
->> +             const struct fpga_bridge_ops *br_ops,
->> +             void *priv);
->> +void fpga_bridge_unregister(struct fpga_bridge *br);
->>     #endif /* _LINUX_FPGA_BRIDGE_H */
+>>> there are two register functions, there should be one.
+>> I get what you are saying. I don't really like the idea of forcing the
+>> complexity of the temporary structure on all callers, since only a
+>> couple require it, but we can do that if that is the concensus.
+>>
+>> What do others think?
+>>
+>>> On 6/30/21 6:37 PM, Russ Weight wrote:
+>>>> The FPGA manager class driver data structure is being treated as a
+>>>> managed resource instead of using the standard dev_release call-back
+>>>> function to release the class data structure. This change removes
+>>>> the managed resource code for the freeing of the class data structure
+>>>> and combines the create() and register() functions into a single
+>>>> register() or register_simple() function.
+>>>>
+>>>> The register() function accepts an info data structure to provide
+>>>> flexibility in passing optional parameters. The register_simple()
+>>>> function supports the current parameter list for users that don't
+>>>> require the use of optional parameters.
+>>>>
+>>>> The devm_fpga_mgr_register() function is retained, and the
+>>>> devm_fpga_mgr_register_simple() function is added.
+>>>>
+>>>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>>>> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+>>>> ---
+>>>> v9:
+>>>>     - Cleaned up documentation for the FPGA Manager register functions
+>>>>     - Renamed fpga_mgr_register() to fpga_mgr_register_full()
+>>>>     - Renamed fpga_mgr_register_simple() to fpga_mgr_register()
+>>>>     - Renamed devm_fpga_mgr_register() to devm_fpga_mgr_register_full()
+>>>>     - Renamed devm_fpga_mgr_register_simple() to devm_fpga_mgr_register()
+>>>> v8:
+>>>>     - Added reviewed-by tag.
+>>>>     - Updated Documentation/driver-api/fpga/fpga-mgr.rst documentation.
+>>>> v7:
+>>>>     - Update the commit message to describe the new parameters for the
+>>>>       *fpga_mgr_register() functions and to mention the
+>>>>       *fpga_mgr_register_simple() functions.
+>>>>     - Fix function prototypes in header file to rename dev to parent.
+>>>>     - Make use of the PTR_ERR_OR_ZERO() macro when possible.
+>>>>     - Some cleanup of comments.
+>>>>     - Update function defintions/prototypes to apply const to the new info
+>>>>       parameter.
+>>>> v6:
+>>>>     - Moved FPGA manager optional parameters out of the ops structure and
+>>>>       back into the FPGA manager structure.
+>>>>     - Changed fpga_mgr_register()/devm_fpga_mgr_register() parameters to
+>>>>       accept an info data structure to provide flexibility in passing optional
+>>>>       parameters.
+>>>>     - Added fpga_mgr_register_simple()/devm_fpga_mgr_register_simple()
+>>>>       functions to support current parameters for users that don't require
+>>>>       the use of optional parameters.
+>>>> v5:
+>>>>     - Rebased on top of recently accepted patches.
+>>>>     - Removed compat_id from the fpga_mgr_register() parameter list
+>>>>       and added it to the fpga_manager_ops structure. This also required
+>>>>       dynamically allocating the dfl-fme-ops structure in order to add
+>>>>       the appropriate compat_id.
+>>>> v4:
+>>>>     - Added the compat_id parameter to fpga_mgr_register() and
+>>>>       devm_fpga_mgr_register() to ensure that the compat_id is set before
+>>>>       the device_register() call.
+>>>> v3:
+>>>>     - Cleaned up comment header for fpga_mgr_register()
+>>>>     - Fix error return on ida_simple_get() failure
+>>>> v2:
+>>>>     - Restored devm_fpga_mgr_register() functionality, adapted for the combined
+>>>>       create/register functionality.
+>>>>     - All previous callers of devm_fpga_mgr_register() will continue to call
+>>>>       devm_fpga_mgr_register().
+>>>>     - replaced unnecessary ternary operators in return statements with standard
+>>>>       if conditions.
+>>>> ---
+>>>>    Documentation/driver-api/fpga/fpga-mgr.rst |  34 +++-
+>>>>    drivers/fpga/altera-cvp.c                  |  12 +-
+>>>>    drivers/fpga/altera-pr-ip-core.c           |   7 +-
+>>>>    drivers/fpga/altera-ps-spi.c               |   9 +-
+>>>>    drivers/fpga/dfl-fme-mgr.c                 |  22 +--
+>>>>    drivers/fpga/fpga-mgr.c                    | 215 +++++++++------------
+>>>>    drivers/fpga/ice40-spi.c                   |   9 +-
+>>>>    drivers/fpga/machxo2-spi.c                 |   9 +-
+>>>>    drivers/fpga/socfpga-a10.c                 |  16 +-
+>>>>    drivers/fpga/socfpga.c                     |   9 +-
+>>>>    drivers/fpga/stratix10-soc.c               |  16 +-
+>>>>    drivers/fpga/ts73xx-fpga.c                 |   9 +-
+>>>>    drivers/fpga/xilinx-spi.c                  |  11 +-
+>>>>    drivers/fpga/zynq-fpga.c                   |  16 +-
+>>>>    drivers/fpga/zynqmp-fpga.c                 |   9 +-
+>>>>    include/linux/fpga/fpga-mgr.h              |  62 ++++--
+>>>>    16 files changed, 210 insertions(+), 255 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/driver-api/fpga/fpga-mgr.rst b/Documentation/driver-api/fpga/fpga-mgr.rst
+>>>> index 4d926b452cb3..826ed8dc9210 100644
+>>>> --- a/Documentation/driver-api/fpga/fpga-mgr.rst
+>>>> +++ b/Documentation/driver-api/fpga/fpga-mgr.rst
+>>>> @@ -24,7 +24,7 @@ How to support a new FPGA device
+>>>>    --------------------------------
+>>>>      To add another FPGA manager, write a driver that implements a set of ops.  The
+>>>> -probe function calls fpga_mgr_register(), such as::
+>>>> +probe function calls fpga_mgr_register() or fpga_mgr_register_full(), such as::
+>>>>          static const struct fpga_manager_ops socfpga_fpga_ops = {
+>>>>            .write_init = socfpga_fpga_ops_configure_init,
+>>>> @@ -49,14 +49,14 @@ probe function calls fpga_mgr_register(), such as::
+>>>>             * them in priv
+>>>>             */
+>>>>    -        mgr = devm_fpga_mgr_create(dev, "Altera SOCFPGA FPGA Manager",
+>>>> -                       &socfpga_fpga_ops, priv);
+>>>> -        if (!mgr)
+>>>> -            return -ENOMEM;
+>>>> +        mgr = fpga_mgr_register(dev, "Altera SOCFPGA FPGA Manager",
+>>>> +                    &socfpga_fpga_ops, priv);
+>>>> +        if (IS_ERR(mgr))
+>>>> +            return PTR_ERR(mgr);
+>>>>              platform_set_drvdata(pdev, mgr);
+>>>>    -        return fpga_mgr_register(mgr);
+>>>> +        return 0;
+>>>>        }
+>>>>          static int socfpga_fpga_remove(struct platform_device *pdev)
+>>>> @@ -68,6 +68,11 @@ probe function calls fpga_mgr_register(), such as::
+>>>>            return 0;
+>>>>        }
+>>>>    +Alternatively, the probe function could call one of the resource managed
+>>>> +register functions, devm_fpga_mgr_register() or devm_fpga_mgr_register_full().
+>>>> +When these functions are used, the parameter syntax is the same, but the call
+>>>> +to fpga_mgr_unregister() should be removed. In the above example, the
+>>>> +socfpga_fpga_remove() function would not be required.
+>>>>      The ops will implement whatever device specific register writes are needed to
+>>>>    do the programming sequence for this particular FPGA.  These ops return 0 for
+>>>> @@ -104,8 +109,13 @@ API for implementing a new FPGA Manager driver
+>>>>    * ``fpga_mgr_states`` -  Values for :c:expr:`fpga_manager->state`.
+>>>>    * struct fpga_manager -  the FPGA manager struct
+>>>>    * struct fpga_manager_ops -  Low level FPGA manager driver ops
+>>>> -* devm_fpga_mgr_create() -  Allocate and init a manager struct
+>>>> -* fpga_mgr_register() -  Register an FPGA manager
+>>>> +* fpga_mgr_register_full() -  Create and register an FPGA manager using the
+>>>> +  fpga_mgr_info structure to provide the full flexibility of options
+>>>> +* fpga_mgr_register() -  Create and register an FPGA manager using standard
+>>>> +  arguments
+>>>> +* devm_fpga_mgr_register_full() -  Resource managed version of
+>>>> +  fpga_mgr_register_full()
+>>>> +* devm_fpga_mgr_register() -  Resource managed version of fpga_mgr_register()
+>>>>    * fpga_mgr_unregister() -  Unregister an FPGA manager
+>>>>      .. kernel-doc:: include/linux/fpga/fpga-mgr.h
+>>>> @@ -118,10 +128,16 @@ API for implementing a new FPGA Manager driver
+>>>>       :functions: fpga_manager_ops
+>>>>      .. kernel-doc:: drivers/fpga/fpga-mgr.c
+>>>> -   :functions: devm_fpga_mgr_create
+>>>> +   :functions: fpga_mgr_register_full
+>>>>      .. kernel-doc:: drivers/fpga/fpga-mgr.c
+>>>>       :functions: fpga_mgr_register
+>>>>    +.. kernel-doc:: drivers/fpga/fpga-mgr.c
+>>>> +   :functions: devm_fpga_mgr_register_full
+>>>> +
+>>>> +.. kernel-doc:: drivers/fpga/fpga-mgr.c
+>>>> +   :functions: devm_fpga_mgr_register
+>>>> +
+>>>>    .. kernel-doc:: drivers/fpga/fpga-mgr.c
+>>>>       :functions: fpga_mgr_unregister
+>>>> diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
+>>>> index ccf4546eff29..4ffb9da537d8 100644
+>>>> --- a/drivers/fpga/altera-cvp.c
+>>>> +++ b/drivers/fpga/altera-cvp.c
+>>>> @@ -652,19 +652,15 @@ static int altera_cvp_probe(struct pci_dev *pdev,
+>>>>        snprintf(conf->mgr_name, sizeof(conf->mgr_name), "%s @%s",
+>>>>             ALTERA_CVP_MGR_NAME, pci_name(pdev));
+>>>>    -    mgr = devm_fpga_mgr_create(&pdev->dev, conf->mgr_name,
+>>>> -                   &altera_cvp_ops, conf);
+>>>> -    if (!mgr) {
+>>>> -        ret = -ENOMEM;
+>>>> +    mgr = fpga_mgr_register(&pdev->dev, conf->mgr_name,
+>>>> +                &altera_cvp_ops, conf);
+>>>> +    if (IS_ERR(mgr)) {
+>>>> +        ret = PTR_ERR(mgr);
+>>>>            goto err_unmap;
+>>>>        }
+>>>>          pci_set_drvdata(pdev, mgr);
+>>>>    -    ret = fpga_mgr_register(mgr);
+>>>> -    if (ret)
+>>>> -        goto err_unmap;
+>>>> -
+>>>>        return 0;
+>>>>      err_unmap:
+>>>> diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
+>>>> index dfdf21ed34c4..be0667968d33 100644
+>>>> --- a/drivers/fpga/altera-pr-ip-core.c
+>>>> +++ b/drivers/fpga/altera-pr-ip-core.c
+>>>> @@ -191,11 +191,8 @@ int alt_pr_register(struct device *dev, void __iomem *reg_base)
+>>>>            (val & ALT_PR_CSR_STATUS_MSK) >> ALT_PR_CSR_STATUS_SFT,
+>>>>            (int)(val & ALT_PR_CSR_PR_START));
+>>>>    -    mgr = devm_fpga_mgr_create(dev, dev_name(dev), &alt_pr_ops, priv);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    return devm_fpga_mgr_register(dev, mgr);
+>>>> +    mgr = devm_fpga_mgr_register(dev, dev_name(dev), &alt_pr_ops, priv);
+>>>> +    return PTR_ERR_OR_ZERO(mgr);
+>>>>    }
+>>>>    EXPORT_SYMBOL_GPL(alt_pr_register);
+>>>>    diff --git a/drivers/fpga/altera-ps-spi.c b/drivers/fpga/altera-ps-spi.c
+>>>> index 23bfd4d1ad0f..5e1e009dba89 100644
+>>>> --- a/drivers/fpga/altera-ps-spi.c
+>>>> +++ b/drivers/fpga/altera-ps-spi.c
+>>>> @@ -302,12 +302,9 @@ static int altera_ps_probe(struct spi_device *spi)
+>>>>        snprintf(conf->mgr_name, sizeof(conf->mgr_name), "%s %s",
+>>>>             dev_driver_string(&spi->dev), dev_name(&spi->dev));
+>>>>    -    mgr = devm_fpga_mgr_create(&spi->dev, conf->mgr_name,
+>>>> -                   &altera_ps_ops, conf);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    return devm_fpga_mgr_register(&spi->dev, mgr);
+>>>> +    mgr = devm_fpga_mgr_register(&spi->dev, conf->mgr_name,
+>>>> +                     &altera_ps_ops, conf);
+>>>> +    return PTR_ERR_OR_ZERO(mgr);
+>>>>    }
+>>>>      static const struct spi_device_id altera_ps_spi_ids[] = {
+>>>> diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
+>>>> index d5861d13b306..620e7874ab53 100644
+>>>> --- a/drivers/fpga/dfl-fme-mgr.c
+>>>> +++ b/drivers/fpga/dfl-fme-mgr.c
+>>>> @@ -282,7 +282,7 @@ static void fme_mgr_get_compat_id(void __iomem *fme_pr,
+>>>>    static int fme_mgr_probe(struct platform_device *pdev)
+>>>>    {
+>>>>        struct dfl_fme_mgr_pdata *pdata = dev_get_platdata(&pdev->dev);
+>>>> -    struct fpga_compat_id *compat_id;
+>>>> +    struct fpga_manager_info info = { 0 };
+>>>>        struct device *dev = &pdev->dev;
+>>>>        struct fme_mgr_priv *priv;
+>>>>        struct fpga_manager *mgr;
+>>>> @@ -302,20 +302,16 @@ static int fme_mgr_probe(struct platform_device *pdev)
+>>>>                return PTR_ERR(priv->ioaddr);
+>>>>        }
+>>>>    -    compat_id = devm_kzalloc(dev, sizeof(*compat_id), GFP_KERNEL);
+>>>> -    if (!compat_id)
+>>>> +    info.name = "DFL FME FPGA Manager";
+>>>> +    info.mops = &fme_mgr_ops;
+>>>> +    info.priv = priv;
+>>>> +    info.compat_id = devm_kzalloc(dev, sizeof(*info.compat_id), GFP_KERNEL);
+>>>> +    if (!info.compat_id)
+>>>>            return -ENOMEM;
+>>> could we limp along instead of failing ?
+>> The compat_id is used to verify compatibility between the static region and
+>> the partial reconfiguration. If there is insufficient memory for the small
+>> data structure, I think it is best to fail here. This is also consistent
+>> current implementation.
+>>  
+>>>>    -    fme_mgr_get_compat_id(priv->ioaddr, compat_id);
+>>>> -
+>>>> -    mgr = devm_fpga_mgr_create(dev, "DFL FME FPGA Manager",
+>>>> -                   &fme_mgr_ops, priv);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    mgr->compat_id = compat_id;
+>>>> -
+>>>> -    return devm_fpga_mgr_register(dev, mgr);
+>>>> +    fme_mgr_get_compat_id(priv->ioaddr, info.compat_id);
+>>>> +    mgr = devm_fpga_mgr_register_full(dev, &info);
+>>>> +    return PTR_ERR_OR_ZERO(mgr);
+>>>>    }
+>>>>      static struct platform_driver fme_mgr_driver = {
+>>>> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+>>>> index ecb4c3c795fa..5a913aa649fd 100644
+>>>> --- a/drivers/fpga/fpga-mgr.c
+>>>> +++ b/drivers/fpga/fpga-mgr.c
+>>>> @@ -550,21 +550,19 @@ void fpga_mgr_unlock(struct fpga_manager *mgr)
+>>>>    EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
+>>>>      /**
+>>>> - * fpga_mgr_create - create and initialize an FPGA manager struct
+>>>> + * fpga_mgr_register_full - create and register an FPGA Manager device
+>>>>     * @parent:    fpga manager device from pdev
+>>>> - * @name:    fpga manager name
+>>>> - * @mops:    pointer to structure of fpga manager ops
+>>>> - * @priv:    fpga manager private data
+>>>> + * @info:    parameters for fpga manager
+>>>>     *
+>>>> - * The caller of this function is responsible for freeing the struct with
+>>>> - * fpga_mgr_free().  Using devm_fpga_mgr_create() instead is recommended.
+>>>> + * The caller of this function is responsible for calling fpga_mgr_unregister().
+>>>> + * Using devm_fpga_mgr_register_full() instead is recommended.
+>>>>     *
+>>>> - * Return: pointer to struct fpga_manager or NULL
+>>>> + * Return: pointer to struct fpga_manager pointer or ERR_PTR()
+>>>>     */
+>>>> -struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
+>>>> -                     const struct fpga_manager_ops *mops,
+>>>> -                     void *priv)
+>>>> +struct fpga_manager *
+>>>> +fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info)
+>>>>    {
+>>>> +    const struct fpga_manager_ops *mops = info->mops;
+>>>>        struct fpga_manager *mgr;
+>>>>        int id, ret;
+>>>>    @@ -572,29 +570,31 @@ struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
+>>>>            !mops->write_init || (!mops->write && !mops->write_sg) ||
+>>>>            (mops->write && mops->write_sg)) {
+>>>>            dev_err(parent, "Attempt to register without fpga_manager_ops\n");
+>>>> -        return NULL;
+>>>> +        return ERR_PTR(-EINVAL);
+>>>>        }
+>>>>    -    if (!name || !strlen(name)) {
+>>>> +    if (!info->name || !strlen(info->name)) {
+>>>>            dev_err(parent, "Attempt to register with no name!\n");
+>>>> -        return NULL;
+>>>> +        return ERR_PTR(-EINVAL);
+>>>>        }
+>>>>          mgr = kzalloc(sizeof(*mgr), GFP_KERNEL);
+>>>>        if (!mgr)
+>>>> -        return NULL;
+>>>> +        return ERR_PTR(-ENOMEM);
+>>>>          id = ida_simple_get(&fpga_mgr_ida, 0, 0, GFP_KERNEL);
+>>>> -    if (id < 0)
+>>>> +    if (id < 0) {
+>>>> +        ret = id;
+>>>>            goto error_kfree;
+>>>> +    }
+>>>>          mutex_init(&mgr->ref_mutex);
+>>>>    -    mgr->name = name;
+>>>> -    mgr->mops = mops;
+>>>> -    mgr->priv = priv;
+>>>> +    mgr->name = info->name;
+>>>> +    mgr->mops = info->mops;
+>>>> +    mgr->priv = info->priv;
+>>>> +    mgr->compat_id = info->compat_id;
+>>>>    -    device_initialize(&mgr->dev);
+>>>>        mgr->dev.class = fpga_mgr_class;
+>>>>        mgr->dev.groups = mops->groups;
+>>>>        mgr->dev.parent = parent;
+>>>> @@ -605,6 +605,19 @@ struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
+>>>>        if (ret)
+>>>>            goto error_device;
+>>>>    +    /*
+>>>> +     * Initialize framework state by requesting low level driver read state
+>>>> +     * from device.  FPGA may be in reset mode or may have been programmed
+>>>> +     * by bootloader or EEPROM.
+>>>> +     */
+>>>> +    mgr->state = mgr->mops->state(mgr);
+>>> This is existing code, but it seems wrong.
+>>>
+>>> A side effect of state() should not be to initialize.
+>>>
+>>> An init() should be added to mops
+>> I think this is just capturing the state of the underlying device an
+>> reflecting it in the fpga-manager state? Maybe someone else can comment
+>> on this. It seems outside the scope of these patches.
+>>
+>>>> +
+>>>> +    ret = device_register(&mgr->dev);
+>>>> +    if (ret) {
+>>>> +        put_device(&mgr->dev);
+>>>> +        return ERR_PTR(ret);
+>>>> +    }
+>>>> +
+>>>>        return mgr;
+>>>>      error_device:
+>>>> @@ -612,96 +625,36 @@ struct fpga_manager *fpga_mgr_create(struct device *parent, const char *name,
+>>>>    error_kfree:
+>>>>        kfree(mgr);
+>>>>    -    return NULL;
+>>>> +    return ERR_PTR(ret);
+>>>>    }
+>>>> -EXPORT_SYMBOL_GPL(fpga_mgr_create);
+>>>> +EXPORT_SYMBOL_GPL(fpga_mgr_register_full);
+>>>>      /**
+>>>> - * fpga_mgr_free - free an FPGA manager created with fpga_mgr_create()
+>>>> - * @mgr:    fpga manager struct
+>>>> - */
+>>>> -void fpga_mgr_free(struct fpga_manager *mgr)
+>>>> -{
+>>>> -    ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
+>>>> -    kfree(mgr);
+>>>> -}
+>>>> -EXPORT_SYMBOL_GPL(fpga_mgr_free);
+>>>> -
+>>>> -static void devm_fpga_mgr_release(struct device *dev, void *res)
+>>>> -{
+>>>> -    struct fpga_mgr_devres *dr = res;
+>>>> -
+>>>> -    fpga_mgr_free(dr->mgr);
+>>>> -}
+>>>> -
+>>>> -/**
+>>>> - * devm_fpga_mgr_create - create and initialize a managed FPGA manager struct
+>>>> + * fpga_mgr_register - create and register an FPGA Manager device
+>>>>     * @parent:    fpga manager device from pdev
+>>>>     * @name:    fpga manager name
+>>>>     * @mops:    pointer to structure of fpga manager ops
+>>>>     * @priv:    fpga manager private data
+>>>>     *
+>>>> - * This function is intended for use in an FPGA manager driver's probe function.
+>>>> - * After the manager driver creates the manager struct with
+>>>> - * devm_fpga_mgr_create(), it should register it with fpga_mgr_register().  The
+>>>> - * manager driver's remove function should call fpga_mgr_unregister().  The
+>>>> - * manager struct allocated with this function will be freed automatically on
+>>>> - * driver detach.  This includes the case of a probe function returning error
+>>>> - * before calling fpga_mgr_register(), the struct will still get cleaned up.
+>>>> + * The caller of this function is responsible for calling fpga_mgr_unregister().
+>>>> + * Using devm_fpga_mgr_register() instead is recommended. This simple
+>>>> + * version of the register function should be sufficient for most users. The
+>>>> + * fpga_mgr_register_full() function is available for users that need to pass
+>>>> + * additional, optional parameters.
+>>>>     *
+>>>> - * Return: pointer to struct fpga_manager or NULL
+>>>> + * Return: pointer to struct fpga_manager pointer or ERR_PTR()
+>>>>     */
+>>>> -struct fpga_manager *devm_fpga_mgr_create(struct device *parent, const char *name,
+>>>> -                      const struct fpga_manager_ops *mops,
+>>>> -                      void *priv)
+>>>> +struct fpga_manager *
+>>>> +fpga_mgr_register(struct device *parent, const char *name,
+>>>> +          const struct fpga_manager_ops *mops, void *priv)
+>>>>    {
+>>>> -    struct fpga_mgr_devres *dr;
+>>>> +    struct fpga_manager_info info = { 0 };
+>>>>    -    dr = devres_alloc(devm_fpga_mgr_release, sizeof(*dr), GFP_KERNEL);
+>>>> -    if (!dr)
+>>>> -        return NULL;
+>>>> +    info.name = name;
+>>>> +    info.mops = mops;
+>>>> +    info.priv = priv;
+>>>>    -    dr->mgr = fpga_mgr_create(parent, name, mops, priv);
+>>>> -    if (!dr->mgr) {
+>>>> -        devres_free(dr);
+>>>> -        return NULL;
+>>>> -    }
+>>>> -
+>>>> -    devres_add(parent, dr);
+>>>> -
+>>>> -    return dr->mgr;
+>>>> -}
+>>>> -EXPORT_SYMBOL_GPL(devm_fpga_mgr_create);
+>>>> -
+>>>> -/**
+>>>> - * fpga_mgr_register - register an FPGA manager
+>>>> - * @mgr: fpga manager struct
+>>>> - *
+>>>> - * Return: 0 on success, negative error code otherwise.
+>>>> - */
+>>>> -int fpga_mgr_register(struct fpga_manager *mgr)
+>>>> -{
+>>>> -    int ret;
+>>>> -
+>>>> -    /*
+>>>> -     * Initialize framework state by requesting low level driver read state
+>>>> -     * from device.  FPGA may be in reset mode or may have been programmed
+>>>> -     * by bootloader or EEPROM.
+>>>> -     */
+>>>> -    mgr->state = mgr->mops->state(mgr);
+>>>> -
+>>>> -    ret = device_add(&mgr->dev);
+>>>> -    if (ret)
+>>>> -        goto error_device;
+>>>> -
+>>>> -    dev_info(&mgr->dev, "%s registered\n", mgr->name);
+>>>> -
+>>>> -    return 0;
+>>>> -
+>>>> -error_device:
+>>>> -    ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
+>>>> -
+>>>> -    return ret;
+>>>> +    return fpga_mgr_register_full(parent, &info);
+>>>>    }
+>>>>    EXPORT_SYMBOL_GPL(fpga_mgr_register);
+>>>>    @@ -726,14 +679,6 @@ void fpga_mgr_unregister(struct fpga_manager *mgr)
+>>>>    }
+>>>>    EXPORT_SYMBOL_GPL(fpga_mgr_unregister);
+>>>>    -static int fpga_mgr_devres_match(struct device *dev, void *res,
+>>>> -                 void *match_data)
+>>>> -{
+>>>> -    struct fpga_mgr_devres *dr = res;
+>>>> -
+>>>> -    return match_data == dr->mgr;
+>>>> -}
+>>>> -
+>>>>    static void devm_fpga_mgr_unregister(struct device *dev, void *res)
+>>>>    {
+>>>>        struct fpga_mgr_devres *dr = res;
+>>>> @@ -742,45 +687,67 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
+>>>>    }
+>>>>      /**
+>>>> - * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
+>>>> - * @dev: managing device for this FPGA manager
+>>>> - * @mgr: fpga manager struct
+>>>> + * devm_fpga_mgr_register_full - resource managed variant of fpga_mgr_register()
+>>>> + * @parent:    fpga manager device from pdev
+>>>> + * @info:    parameters for fpga manager
+>>>>     *
+>>>> - * This is the devres variant of fpga_mgr_register() for which the unregister
+>>>> + * This is the devres variant of fpga_mgr_register_full() for which the unregister
+>>>>     * function will be called automatically when the managing device is detached.
+>>>>     */
+>>>> -int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr)
+>>>> +struct fpga_manager *
+>>>> +devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info)
+>>>>    {
+>>>>        struct fpga_mgr_devres *dr;
+>>>> -    int ret;
+>>>> -
+>>>> -    /*
+>>>> -     * Make sure that the struct fpga_manager * that is passed in is
+>>>> -     * managed itself.
+>>>> -     */
+>>>> -    if (WARN_ON(!devres_find(dev, devm_fpga_mgr_release,
+>>>> -                 fpga_mgr_devres_match, mgr)))
+>>>> -        return -EINVAL;
+>>>> +    struct fpga_manager *mgr;
+>>>>          dr = devres_alloc(devm_fpga_mgr_unregister, sizeof(*dr), GFP_KERNEL);
+>>>>        if (!dr)
+>>>> -        return -ENOMEM;
+>>>> +        return ERR_PTR(-ENOMEM);
+>>>>    -    ret = fpga_mgr_register(mgr);
+>>>> -    if (ret) {
+>>>> +    mgr = fpga_mgr_register_full(parent, info);
+>>>> +    if (IS_ERR(mgr)) {
+>>>>            devres_free(dr);
+>>>> -        return ret;
+>>>> +        return mgr;
+>>>>        }
+>>>>          dr->mgr = mgr;
+>>>> -    devres_add(dev, dr);
+>>>> +    devres_add(parent, dr);
+>>>>    -    return 0;
+>>>> +    return mgr;
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(devm_fpga_mgr_register_full);
+>>>> +
+>>>> +/**
+>>>> + * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
+>>>> + * @parent:    fpga manager device from pdev
+>>>> + * @name:    fpga manager name
+>>>> + * @mops:    pointer to structure of fpga manager ops
+>>>> + * @priv:    fpga manager private data
+>>>> + *
+>>>> + * This is the devres variant of fpga_mgr_register() for which the
+>>>> + * unregister function will be called automatically when the managing
+>>>> + * device is detached.
+>>>> + */
+>>>> +struct fpga_manager *
+>>>> +devm_fpga_mgr_register(struct device *parent, const char *name,
+>>>> +               const struct fpga_manager_ops *mops, void *priv)
+>>>> +{
+>>>> +    struct fpga_manager_info info = { 0 };
+>>>> +
+>>>> +    info.name = name;
+>>>> +    info.mops = mops;
+>>>> +    info.priv = priv;
+>>>> +
+>>>> +    return devm_fpga_mgr_register_full(parent, &info);
+>>>>    }
+>>>>    EXPORT_SYMBOL_GPL(devm_fpga_mgr_register);
+>>>>      static void fpga_mgr_dev_release(struct device *dev)
+>>>>    {
+>>>> +    struct fpga_manager *mgr = to_fpga_manager(dev);
+>>>> +
+>>>> +    ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
+>>>> +    kfree(mgr);
+>>>>    }
+>>>>      static int __init fpga_mgr_class_init(void)
+>>>> diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
+>>>> index 69dec5af23c3..b7591912248f 100644
+>>>> --- a/drivers/fpga/ice40-spi.c
+>>>> +++ b/drivers/fpga/ice40-spi.c
+>>>> @@ -178,12 +178,9 @@ static int ice40_fpga_probe(struct spi_device *spi)
+>>>>            return ret;
+>>>>        }
+>>>>    -    mgr = devm_fpga_mgr_create(dev, "Lattice iCE40 FPGA Manager",
+>>>> -                   &ice40_fpga_ops, priv);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    return devm_fpga_mgr_register(dev, mgr);
+>>>> +    mgr = devm_fpga_mgr_register(dev, "Lattice iCE40 FPGA Manager",
+>>>> +                     &ice40_fpga_ops, priv);
+>>>> +    return PTR_ERR_OR_ZERO(mgr);
+>>>>    }
+>>>>      static const struct of_device_id ice40_fpga_of_match[] = {
+>>>> diff --git a/drivers/fpga/machxo2-spi.c b/drivers/fpga/machxo2-spi.c
+>>>> index 1afb41aa20d7..8469dfb5dd21 100644
+>>>> --- a/drivers/fpga/machxo2-spi.c
+>>>> +++ b/drivers/fpga/machxo2-spi.c
+>>>> @@ -366,12 +366,9 @@ static int machxo2_spi_probe(struct spi_device *spi)
+>>>>            return -EINVAL;
+>>>>        }
+>>>>    -    mgr = devm_fpga_mgr_create(dev, "Lattice MachXO2 SPI FPGA Manager",
+>>>> -                   &machxo2_ops, spi);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    return devm_fpga_mgr_register(dev, mgr);
+>>>> +    mgr = devm_fpga_mgr_register(dev, "Lattice MachXO2 SPI FPGA Manager",
+>>>> +                     &machxo2_ops, spi);
+>>>> +    return PTR_ERR_OR_ZERO(mgr);
+>>>>    }
+>>>>      #ifdef CONFIG_OF
+>>>> diff --git a/drivers/fpga/socfpga-a10.c b/drivers/fpga/socfpga-a10.c
+>>>> index 573d88bdf730..ac8e89b8a5cc 100644
+>>>> --- a/drivers/fpga/socfpga-a10.c
+>>>> +++ b/drivers/fpga/socfpga-a10.c
+>>>> @@ -508,19 +508,15 @@ static int socfpga_a10_fpga_probe(struct platform_device *pdev)
+>>>>            return -EBUSY;
+>>>>        }
+>>>>    -    mgr = devm_fpga_mgr_create(dev, "SoCFPGA Arria10 FPGA Manager",
+>>>> -                   &socfpga_a10_fpga_mgr_ops, priv);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    platform_set_drvdata(pdev, mgr);
+>>>> -
+>>>> -    ret = fpga_mgr_register(mgr);
+>>>> -    if (ret) {
+>>>> +    mgr = fpga_mgr_register(dev, "SoCFPGA Arria10 FPGA Manager",
+>>>> +                &socfpga_a10_fpga_mgr_ops, priv);
+>>>> +    if (IS_ERR(mgr)) {
+>>>>            clk_disable_unprepare(priv->clk);
+>>>> -        return ret;
+>>>> +        return PTR_ERR(mgr);
+>>>>        }
+>>>>    +    platform_set_drvdata(pdev, mgr);
+>>>> +
+>>>>        return 0;
+>>>>    }
+>>>>    diff --git a/drivers/fpga/socfpga.c b/drivers/fpga/socfpga.c
+>>>> index 1f467173fc1f..7e0741f99696 100644
+>>>> --- a/drivers/fpga/socfpga.c
+>>>> +++ b/drivers/fpga/socfpga.c
+>>>> @@ -571,12 +571,9 @@ static int socfpga_fpga_probe(struct platform_device *pdev)
+>>>>        if (ret)
+>>>>            return ret;
+>>>>    -    mgr = devm_fpga_mgr_create(dev, "Altera SOCFPGA FPGA Manager",
+>>>> -                   &socfpga_fpga_ops, priv);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    return devm_fpga_mgr_register(dev, mgr);
+>>>> +    mgr = devm_fpga_mgr_register(dev, "Altera SOCFPGA FPGA Manager",
+>>>> +                     &socfpga_fpga_ops, priv);
+>>>> +    return PTR_ERR_OR_ZERO(mgr);
+>>>>    }
+>>>>      #ifdef CONFIG_OF
+>>>> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+>>>> index a2cea500f7cc..9155e888a133 100644
+>>>> --- a/drivers/fpga/stratix10-soc.c
+>>>> +++ b/drivers/fpga/stratix10-soc.c
+>>>> @@ -425,18 +425,11 @@ static int s10_probe(struct platform_device *pdev)
+>>>>          init_completion(&priv->status_return_completion);
+>>>>    -    mgr = fpga_mgr_create(dev, "Stratix10 SOC FPGA Manager",
+>>>> -                  &s10_ops, priv);
+>>>> -    if (!mgr) {
+>>>> -        dev_err(dev, "unable to create FPGA manager\n");
+>>>> -        ret = -ENOMEM;
+>>>> -        goto probe_err;
+>>>> -    }
+>>>> -
+>>>> -    ret = fpga_mgr_register(mgr);
+>>>> -    if (ret) {
+>>>> +    mgr = fpga_mgr_register(dev, "Stratix10 SOC FPGA Manager",
+>>>> +                &s10_ops, priv);
+>>>> +    if (IS_ERR(mgr)) {
+>>>>            dev_err(dev, "unable to register FPGA manager\n");
+>>>> -        fpga_mgr_free(mgr);
+>>>> +        ret = PTR_ERR(mgr);
+>>>>            goto probe_err;
+>>>>        }
+>>>>    @@ -454,7 +447,6 @@ static int s10_remove(struct platform_device *pdev)
+>>>>        struct s10_priv *priv = mgr->priv;
+>>>>          fpga_mgr_unregister(mgr);
+>>>> -    fpga_mgr_free(mgr);
+>>>>        stratix10_svc_free_channel(priv->chan);
+>>>>          return 0;
+>>>> diff --git a/drivers/fpga/ts73xx-fpga.c b/drivers/fpga/ts73xx-fpga.c
+>>>> index 101f016c6ed8..fd52de20ddb2 100644
+>>>> --- a/drivers/fpga/ts73xx-fpga.c
+>>>> +++ b/drivers/fpga/ts73xx-fpga.c
+>>>> @@ -122,12 +122,9 @@ static int ts73xx_fpga_probe(struct platform_device *pdev)
+>>>>        if (IS_ERR(priv->io_base))
+>>>>            return PTR_ERR(priv->io_base);
+>>>>    -    mgr = devm_fpga_mgr_create(kdev, "TS-73xx FPGA Manager",
+>>>> -                   &ts73xx_fpga_ops, priv);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    return devm_fpga_mgr_register(kdev, mgr);
+>>>> +    mgr = devm_fpga_mgr_register(kdev, "TS-73xx FPGA Manager",
+>>>> +                     &ts73xx_fpga_ops, priv);
+>>>> +    return PTR_ERR_OR_ZERO(mgr);
+>>>>    }
+>>>>      static struct platform_driver ts73xx_fpga_driver = {
+>>>> diff --git a/drivers/fpga/xilinx-spi.c b/drivers/fpga/xilinx-spi.c
+>>>> index fee4d0abf6bf..db23626f9ab2 100644
+>>>> --- a/drivers/fpga/xilinx-spi.c
+>>>> +++ b/drivers/fpga/xilinx-spi.c
+>>>> @@ -247,13 +247,10 @@ static int xilinx_spi_probe(struct spi_device *spi)
+>>>>            return dev_err_probe(&spi->dev, PTR_ERR(conf->done),
+>>>>                         "Failed to get DONE gpio\n");
+>>>>    -    mgr = devm_fpga_mgr_create(&spi->dev,
+>>>> -                   "Xilinx Slave Serial FPGA Manager",
+>>>> -                   &xilinx_spi_ops, conf);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    return devm_fpga_mgr_register(&spi->dev, mgr);
+>>>> +    mgr = devm_fpga_mgr_register(&spi->dev,
+>>>> +                     "Xilinx Slave Serial FPGA Manager",
+>>>> +                     &xilinx_spi_ops, conf);
+>>>> +    return PTR_ERR_OR_ZERO(mgr);
+>>>>    }
+>>>>      static const struct of_device_id xlnx_spi_of_match[] = {
+>>>> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+>>>> index 9b75bd4f93d8..426aa34c6a0d 100644
+>>>> --- a/drivers/fpga/zynq-fpga.c
+>>>> +++ b/drivers/fpga/zynq-fpga.c
+>>>> @@ -609,20 +609,16 @@ static int zynq_fpga_probe(struct platform_device *pdev)
+>>>>          clk_disable(priv->clk);
+>>>>    -    mgr = devm_fpga_mgr_create(dev, "Xilinx Zynq FPGA Manager",
+>>>> -                   &zynq_fpga_ops, priv);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    platform_set_drvdata(pdev, mgr);
+>>>> -
+>>>> -    err = fpga_mgr_register(mgr);
+>>>> -    if (err) {
+>>>> +    mgr = fpga_mgr_register(dev, "Xilinx Zynq FPGA Manager",
+>>>> +                &zynq_fpga_ops, priv);
+>>>> +    if (IS_ERR(mgr)) {
+>>>>            dev_err(dev, "unable to register FPGA manager\n");
+>>>>            clk_unprepare(priv->clk);
+>>>> -        return err;
+>>>> +        return PTR_ERR(mgr);
+>>>>        }
+>>>>    +    platform_set_drvdata(pdev, mgr);
+>>>> +
+>>>>        return 0;
+>>>>    }
+>>>>    diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
+>>>> index 125743c9797f..975bdc4d0a65 100644
+>>>> --- a/drivers/fpga/zynqmp-fpga.c
+>>>> +++ b/drivers/fpga/zynqmp-fpga.c
+>>>> @@ -102,12 +102,9 @@ static int zynqmp_fpga_probe(struct platform_device *pdev)
+>>>>          priv->dev = dev;
+>>>>    -    mgr = devm_fpga_mgr_create(dev, "Xilinx ZynqMP FPGA Manager",
+>>>> -                   &zynqmp_fpga_ops, priv);
+>>>> -    if (!mgr)
+>>>> -        return -ENOMEM;
+>>>> -
+>>>> -    return devm_fpga_mgr_register(dev, mgr);
+>>>> +    mgr = devm_fpga_mgr_register(dev, "Xilinx ZynqMP FPGA Manager",
+>>>> +                     &zynqmp_fpga_ops, priv);
+>>>> +    return PTR_ERR_OR_ZERO(mgr);
+>>>>    }
+>>>>      static const struct of_device_id zynqmp_fpga_of_match[] = {
+>>>> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+>>>> index 474c1f506307..ac3ddaf2903c 100644
+>>>> --- a/include/linux/fpga/fpga-mgr.h
+>>>> +++ b/include/linux/fpga/fpga-mgr.h
+>>>> @@ -105,6 +105,36 @@ struct fpga_image_info {
+>>>>    #endif
+>>>>    };
+>>>>    +/**
+>>>> + * struct fpga_compat_id - id for compatibility check
+>>>> + *
+>>>> + * @id_h: high 64bit of the compat_id
+>>>> + * @id_l: low 64bit of the compat_id
+>>>> + */
+>>>> +struct fpga_compat_id {
+>>>> +    u64 id_h;
+>>>> +    u64 id_l;
+>>>> +};
+>>>> +
+>>> There are two register functions are to handle this dfl only structure.
+>>>
+>>> This really needs to be moved fme_mgr_priv.
+>>>
+>>>> +/**
+>>>> + * struct fpga_manager_info - collection of parameters for an FPGA Manager
+>>>> + * @name: fpga manager name
+>>>> + * @compat_id: FPGA manager id for compatibility check.
+>>>> + * @mops: pointer to structure of fpga manager ops
+>>>> + * @priv: fpga manager private data
+>>>> + *
+>>>> + * fpga_manager_info contains parameters for the register function. These
+>>>> + * are separated into an info structure because they some are optional
+>>>> + * others could be added to in the future. The info structure facilitates
+>>>> + * maintaining a stable API.
+>>>> + */
+>>>> +struct fpga_manager_info {
+>>>> +    const char *name;
+>>>> +    struct fpga_compat_id *compat_id;
+>>>> +    const struct fpga_manager_ops *mops;
+>>>> +    void *priv;
+>>>> +};
+>>>> +
+>>>>    /**
+>>>>     * struct fpga_manager_ops - ops for low level fpga manager drivers
+>>>>     * @initial_header_size: Maximum number of bytes that should be passed into write_init
+>>>> @@ -143,17 +173,6 @@ struct fpga_manager_ops {
+>>>>    #define FPGA_MGR_STATUS_IP_PROTOCOL_ERR        BIT(3)
+>>>>    #define FPGA_MGR_STATUS_FIFO_OVERFLOW_ERR    BIT(4)
+>>>>    -/**
+>>>> - * struct fpga_compat_id - id for compatibility check
+>>>> - *
+>>>> - * @id_h: high 64bit of the compat_id
+>>>> - * @id_l: low 64bit of the compat_id
+>>>> - */
+>>>> -struct fpga_compat_id {
+>>>> -    u64 id_h;
+>>>> -    u64 id_l;
+>>>> -};
+>>>> -
+>>>>    /**
+>>>>     * struct fpga_manager - fpga manager structure
+>>>>     * @name: name of low level fpga manager
+>>>> @@ -191,17 +210,18 @@ struct fpga_manager *fpga_mgr_get(struct device *dev);
+>>>>      void fpga_mgr_put(struct fpga_manager *mgr);
+>>>>    -struct fpga_manager *fpga_mgr_create(struct device *dev, const char *name,
+>>>> -                     const struct fpga_manager_ops *mops,
+>>>> -                     void *priv);
+>>>> -void fpga_mgr_free(struct fpga_manager *mgr);
+>>> removing these should cause any oot driver to fail to load.
+>>>
+>>> so an oops is unlikely.
+>>>
+>>> I'm ok with with api change.
+>>>
+>>>> -int fpga_mgr_register(struct fpga_manager *mgr);
+>>>> -void fpga_mgr_unregister(struct fpga_manager *mgr);
+>>>> +struct fpga_manager *
+>>>> +fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
+>>>>    -int devm_fpga_mgr_register(struct device *dev, struct fpga_manager *mgr);
+>>>> +struct fpga_manager *
+>>>> +fpga_mgr_register(struct device *parent, const char *name,
+>>>> +          const struct fpga_manager_ops *mops, void *priv);
+>>> having 2 ways to do the same thing is not great.
+>>>
+>>> this should be reduced down to 1.
+>>>
+>>> My preference is for the *info one as it's api will be durable.
+>> I would like to see if other's agree.
+>>
+>>> Tom
+>>>
+>>>> +void fpga_mgr_unregister(struct fpga_manager *mgr);
+>>>>    -struct fpga_manager *devm_fpga_mgr_create(struct device *dev, const char *name,
+>>>> -                      const struct fpga_manager_ops *mops,
+>>>> -                      void *priv);
+>>>> +struct fpga_manager *
+>>>> +devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
+>>>> +struct fpga_manager *
+>>>> +devm_fpga_mgr_register(struct device *parent, const char *name,
+>>>> +               const struct fpga_manager_ops *mops, void *priv);
+>>>>      #endif /*_LINUX_FPGA_MGR_H */
 >
 
