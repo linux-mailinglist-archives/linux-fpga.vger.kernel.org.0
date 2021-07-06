@@ -2,68 +2,77 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB1B3BD8A9
-	for <lists+linux-fpga@lfdr.de>; Tue,  6 Jul 2021 16:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F673BD88D
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 Jul 2021 16:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232514AbhGFOpu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Jul 2021 10:45:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38664 "EHLO
+        id S232073AbhGFOnS (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Jul 2021 10:43:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26753 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232918AbhGFOpj (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Jul 2021 10:45:39 -0400
+        by vger.kernel.org with ESMTP id S232637AbhGFOnN (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Jul 2021 10:43:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625582580;
+        s=mimecast20190719; t=1625582434;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hIGlWplN3h4+H7k0zEf33Wa5rvWTcEsOsBYR4qfAjpI=;
-        b=Pe+of7FlJbsK2KCgzqKjj5XxtJjjJz3rMPQG4d0cZTtAoCn/ngqZJ5KOvZ1HHvnS19B2Zo
-        rXKeCHWQ/hSbGWNlnnQfjyG15d4GGrx4Nd2HzhM3UpC8kdC48+1/kwMxmCSVpXCk0BbFsm
-        KlgmybBAVK7maZNhnbykrx1Ga5/XQ6I=
+        bh=NHx89jgg+s1tGwoFUM1nmd6dYpOTFpPK4p0VQ+8MqkM=;
+        b=RwXqnYt15F/GAhocoXVF+k8KvBQQ/cgJyn3Kyr1at91Fg2QK/o71OAdJTv7FBbigxYoQgB
+        T+FduNmQoGvdUO1lwtm8KLPdwB3xj/gugL3hSNqI0Tbf2aV17x3w/UASf9LwF1nGrNhi0K
+        MOwya1ZWODBriw8jddwDfP7BjJkY5ZM=
 Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
  [209.85.167.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-580-48QIyownOXCQHwU3mx1KNA-1; Tue, 06 Jul 2021 09:52:12 -0400
-X-MC-Unique: 48QIyownOXCQHwU3mx1KNA-1
-Received: by mail-oi1-f199.google.com with SMTP id l4-20020aca57040000b0290240a9d123c6so4624446oib.0
-        for <linux-fpga@vger.kernel.org>; Tue, 06 Jul 2021 06:52:12 -0700 (PDT)
+ us-mta-390-mNRc2FE7PiyYppatzvpmTQ-1; Tue, 06 Jul 2021 10:10:25 -0400
+X-MC-Unique: mNRc2FE7PiyYppatzvpmTQ-1
+Received: by mail-oi1-f199.google.com with SMTP id i3-20020a5440830000b0290240d559971cso1194016oii.12
+        for <linux-fpga@vger.kernel.org>; Tue, 06 Jul 2021 07:10:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=hIGlWplN3h4+H7k0zEf33Wa5rvWTcEsOsBYR4qfAjpI=;
-        b=PRuHxtgGbzYMsyTg6m5tVS4DZlqn+u2vXKVnqYY7U3f3jJn2Ae628EhVL9NLfCuH5J
-         /Sm+wQ5HkSo2AOOKarmPuqIqvW4thYNty5G6AeBtENaAecT65gs+35XovB+y6z8fX/n7
-         YlyE+9WIx+hBcM98KE6n++zwEm6Q11vIRp4rUs6Shn1OBJ9wWrPLFnJ5hk8AypLH5fTt
-         eNye25x/m8zn9T/Bm5RvomoXTIzKRuenLtgL1iiqzddIcTJPFDsB35Ac/UHWtfL5NLdu
-         ETU8LNE0O9jU9OVDkNFepS4pcbzWydiCu1R4zHNl/mHAj+r5M4IfVak3BJRcvNl3xcJA
-         HdWg==
-X-Gm-Message-State: AOAM532cU0dtHni4OjN6I4x3y+D2PDHVpvFvGdJQRoyUbS0w7i+EyxuO
-        8bvRuhRRvNQynwS5ful6/jokC/O288qhnglTU+1CX5XljT3N/Jcmp64+1wopE4tO275dKd+tKPC
-        Gh+dBo0bwP63vgFQFnW4lA/pdqMV3Ci1rprWqfFeP/j8OyNjUG9mJXbSHhN4t82DQFz74
-X-Received: by 2002:a9d:8d3:: with SMTP id 77mr903124otf.6.1625579531296;
-        Tue, 06 Jul 2021 06:52:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzsEe7Coa/1uFo0NgCw7WGdJ4W6Zi4fbDPurzCeh25mF9UZO/rfDPRn55ROq89hhBabddzPfQ==
-X-Received: by 2002:a9d:8d3:: with SMTP id 77mr903109otf.6.1625579531076;
-        Tue, 06 Jul 2021 06:52:11 -0700 (PDT)
+        bh=NHx89jgg+s1tGwoFUM1nmd6dYpOTFpPK4p0VQ+8MqkM=;
+        b=JHN4OVL+vmecrkWwbVQx7qatMZiUJdRd1jtsG+8AXlnkYjE3GNyAcgtDWLrz5FQPX8
+         FoHGrHlVyU90d7iksI7V2ufCt4hmw89Fw/zxChF/7TQdOHmtqAEjg3CmD54V9qmaKCz1
+         yGzBzcDP0Sv2dgozbPj76b5seaKbUX7WA1FnI1oKsFOqS0t1ucrjA/RKgonGswTZmbbF
+         hjzfV4o9tu+jW6JM9b7yhf+6KaWKR1+ZzfX5hftkRlEkHBFzXHwQcKFXo154PNX7IPq1
+         SLJrbqLYR1rG+5PDcENOi4viAroKhwxYXYethkKAzHWv85VRb/sE3PmxNbDI7Dq9H09A
+         E4rA==
+X-Gm-Message-State: AOAM533SQRpTDl0R4PeFM8rsBwo8HmdGXcj7PBeXKSGZCJ8V4nzR1n+K
+        RvnrRiEUxjHmzbL1EBHeG6eZLTZKu3Jj+ZlsAs/CO10ZWLt1vZ4K6jRNSEpMaZGPGxbvv+vtSi+
+        ba88OieU35bssEjEXS36Z5w==
+X-Received: by 2002:aca:d9d7:: with SMTP id q206mr8464520oig.93.1625580624131;
+        Tue, 06 Jul 2021 07:10:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJydwYnoxxkt+tI3dKHZhxx+PKB9tAQtQwvI7A11IgHI60BOdfFuzpvLSzk2QkjyMCcJT8KvOQ==
+X-Received: by 2002:aca:d9d7:: with SMTP id q206mr8464502oig.93.1625580623944;
+        Tue, 06 Jul 2021 07:10:23 -0700 (PDT)
 Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id w16sm1202113oik.15.2021.07.06.06.52.10
+        by smtp.gmail.com with ESMTPSA id x29sm2811045ooj.10.2021.07.06.07.10.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jul 2021 06:52:10 -0700 (PDT)
-Subject: Re: [PATCH] bus: Make remove callback return void
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org
-References: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
+        Tue, 06 Jul 2021 07:10:23 -0700 (PDT)
+Subject: Re: [PATCH v4 1/4] fpga: dfl: expose feature revision from struct
+ dfl_device
+To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+References: <20210705101645.2040106-1-martin@geanix.com>
+ <20210705101645.2040106-2-martin@geanix.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <4c7210e4-76e4-07fe-a40c-a58e331d0a6e@redhat.com>
-Date:   Tue, 6 Jul 2021 06:52:09 -0700
+Message-ID: <93a8e949-ec25-d00d-4740-72d9e18ebb68@redhat.com>
+Date:   Tue, 6 Jul 2021 07:10:21 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20210705101645.2040106-2-martin@geanix.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -72,39 +81,164 @@ List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
-On 7/6/21 2:50 AM, Uwe Kleine-König wrote:
-> The driver core ignores the return value of this callback because there
-> is only little it can do when a device disappears.
+On 7/5/21 3:16 AM, Martin Hundebøll wrote:
+> From: Martin Hundebøll <mhu@silicom.dk>
 >
-> This is the final bit of a long lasting cleanup quest where several
-> buses were converted to also return void from their remove callback.
-> Additionally some resource leaks were fixed that were caused by drivers
-> returning an error code in the expectation that the driver won't go
-> away.
+> DFL device drivers have a common need for checking feature revision
+> information from the DFL header, as well as other common DFL information
+> like the already exposed feature id and type.
 >
-> With struct bus_type::remove returning void it's prevented that newly
-> implemented buses return an ignored error code and so don't anticipate
-> wrong expectations for driver authors.
+> This patch exposes the feature revision information directly via the DFL
+> device data structure.
 >
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Since the DFL core code has already read the DFL header, this this patch
+> saves additional mmio reads from DFL device drivers too.
+>
+> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> Acked-by: Wu Hao <hao.wu@intel.com>
+> Acked-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > ---
-> Hello,
 >
-> this patch depends on "PCI: endpoint: Make struct pci_epf_driver::remove
-> return void" that is not yet applied, see
-> https://lore.kernel.org/r/20210223090757.57604-1-u.kleine-koenig@pengutronix.de.
+> Changes since v3:
+>   * Added Hao's Acked-by
+>   * Added Matthew's Acked-by
 >
-> I tested it using allmodconfig on amd64 and arm, but I wouldn't be
-> surprised if I still missed to convert a driver. So it would be great to
-> get this into next early after the merge window closes.
+> Changes since v2:
+>   * Reworded commit message as per Hao's suggestion
 >
-> I send this mail to all people that get_maintainer.pl emits for this
-> patch. I wonder how many recipents will refuse this mail because of the
-> long Cc: list :-)
+> Changes since v1:
+>   * This patch replaces the previous patch 2 and exposes the feature
+>     revision through struct dfl_device instead of a helper reading from
+>     io-mem
 >
-> Best regards
-> Uwe
+>   drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
+>   drivers/fpga/dfl.h  |  1 +
+>   include/linux/dfl.h |  1 +
+>   3 files changed, 19 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index 511b20ff35a3..9381c579d1cd 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
+>   
+>   	ddev->type = feature_dev_id_type(pdev);
+>   	ddev->feature_id = feature->id;
+> +	ddev->revision = feature->revision;
+>   	ddev->cdev = pdata->dfl_cdev;
+>   
+>   	/* add mmio resource */
+> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
+>    */
+>   struct dfl_feature_info {
+>   	u16 fid;
+> +	u8 rev;
 
->   drivers/fpga/dfl.c                        | 4 +---
-Reviewed-by: Tom Rix <trix@redhat.com>
+In other places 'revision' is the element name.
+
+For consistency, change rev to revision
+
+>   	struct resource mmio_res;
+>   	void __iomem *ioaddr;
+>   	struct list_head node;
+> @@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
+>   		/* save resource information for each feature */
+>   		feature->dev = fdev;
+>   		feature->id = finfo->fid;
+> +		feature->revision = finfo->rev;
+>   
+>   		/*
+>   		 * the FIU header feature has some fundamental functions (sriov
+> @@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
+>   	devm_kfree(binfo->dev, binfo);
+>   }
+>   
+> -static inline u32 feature_size(void __iomem *start)
+> +static inline u32 feature_size(u64 value)
+
+The return type should match its use in create_feature_instance 
+'resource_size_t'
+
+change u32 to resource_size_t
+
+Tom
+
+>   {
+> -	u64 v = readq(start + DFH);
+> -	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
+> +	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
+>   	/* workaround for private features with invalid size, use 4K instead */
+>   	return ofst ? ofst : 4096;
+>   }
+>   
+> -static u16 feature_id(void __iomem *start)
+> +static u16 feature_id(u64 value)
+>   {
+> -	u64 v = readq(start + DFH);
+> -	u16 id = FIELD_GET(DFH_ID, v);
+> -	u8 type = FIELD_GET(DFH_TYPE, v);
+> +	u16 id = FIELD_GET(DFH_ID, value);
+> +	u8 type = FIELD_GET(DFH_TYPE, value);
+>   
+>   	if (type == DFH_TYPE_FIU)
+>   		return FEATURE_ID_FIU_HEADER;
+> @@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>   	unsigned int irq_base, nr_irqs;
+>   	struct dfl_feature_info *finfo;
+>   	int ret;
+> +	u8 rev;
+> +	u64 v;
+> +
+> +	v = readq(binfo->ioaddr + ofst);
+> +	rev = FIELD_GET(DFH_REVISION, v);
+>   
+>   	/* read feature size and id if inputs are invalid */
+> -	size = size ? size : feature_size(binfo->ioaddr + ofst);
+> -	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
+> +	size = size ? size : feature_size(v);
+> +	fid = fid ? fid : feature_id(v);
+>   
+>   	if (binfo->len - ofst < size)
+>   		return -EINVAL;
+> @@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>   		return -ENOMEM;
+>   
+>   	finfo->fid = fid;
+> +	finfo->rev = rev;
+>   	finfo->mmio_res.start = binfo->start + ofst;
+>   	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+>   	finfo->mmio_res.flags = IORESOURCE_MEM;
+> @@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
+>   {
+>   	if (!is_feature_dev_detected(binfo)) {
+>   		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
+> -			feature_id(binfo->ioaddr + ofst));
+> +			feature_id(readq(binfo->ioaddr + ofst)));
+>   		return -EINVAL;
+>   	}
+>   
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 2b82c96ba56c..422157cfd742 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
+>   struct dfl_feature {
+>   	struct platform_device *dev;
+>   	u16 id;
+> +	u8 revision;
+>   	int resource_index;
+>   	void __iomem *ioaddr;
+>   	struct dfl_feature_irq_ctx *irq_ctx;
+> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+> index 6cc10982351a..431636a0dc78 100644
+> --- a/include/linux/dfl.h
+> +++ b/include/linux/dfl.h
+> @@ -38,6 +38,7 @@ struct dfl_device {
+>   	int id;
+>   	u16 type;
+>   	u16 feature_id;
+> +	u8 revision;
+>   	struct resource mmio_res;
+>   	int *irqs;
+>   	unsigned int num_irqs;
 
