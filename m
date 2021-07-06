@@ -2,243 +2,196 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F673BD88D
-	for <lists+linux-fpga@lfdr.de>; Tue,  6 Jul 2021 16:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800B53BD8FE
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 Jul 2021 16:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbhGFOnS (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Jul 2021 10:43:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26753 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232637AbhGFOnN (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Jul 2021 10:43:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625582434;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NHx89jgg+s1tGwoFUM1nmd6dYpOTFpPK4p0VQ+8MqkM=;
-        b=RwXqnYt15F/GAhocoXVF+k8KvBQQ/cgJyn3Kyr1at91Fg2QK/o71OAdJTv7FBbigxYoQgB
-        T+FduNmQoGvdUO1lwtm8KLPdwB3xj/gugL3hSNqI0Tbf2aV17x3w/UASf9LwF1nGrNhi0K
-        MOwya1ZWODBriw8jddwDfP7BjJkY5ZM=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-390-mNRc2FE7PiyYppatzvpmTQ-1; Tue, 06 Jul 2021 10:10:25 -0400
-X-MC-Unique: mNRc2FE7PiyYppatzvpmTQ-1
-Received: by mail-oi1-f199.google.com with SMTP id i3-20020a5440830000b0290240d559971cso1194016oii.12
-        for <linux-fpga@vger.kernel.org>; Tue, 06 Jul 2021 07:10:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=NHx89jgg+s1tGwoFUM1nmd6dYpOTFpPK4p0VQ+8MqkM=;
-        b=JHN4OVL+vmecrkWwbVQx7qatMZiUJdRd1jtsG+8AXlnkYjE3GNyAcgtDWLrz5FQPX8
-         FoHGrHlVyU90d7iksI7V2ufCt4hmw89Fw/zxChF/7TQdOHmtqAEjg3CmD54V9qmaKCz1
-         yGzBzcDP0Sv2dgozbPj76b5seaKbUX7WA1FnI1oKsFOqS0t1ucrjA/RKgonGswTZmbbF
-         hjzfV4o9tu+jW6JM9b7yhf+6KaWKR1+ZzfX5hftkRlEkHBFzXHwQcKFXo154PNX7IPq1
-         SLJrbqLYR1rG+5PDcENOi4viAroKhwxYXYethkKAzHWv85VRb/sE3PmxNbDI7Dq9H09A
-         E4rA==
-X-Gm-Message-State: AOAM533SQRpTDl0R4PeFM8rsBwo8HmdGXcj7PBeXKSGZCJ8V4nzR1n+K
-        RvnrRiEUxjHmzbL1EBHeG6eZLTZKu3Jj+ZlsAs/CO10ZWLt1vZ4K6jRNSEpMaZGPGxbvv+vtSi+
-        ba88OieU35bssEjEXS36Z5w==
-X-Received: by 2002:aca:d9d7:: with SMTP id q206mr8464520oig.93.1625580624131;
-        Tue, 06 Jul 2021 07:10:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJydwYnoxxkt+tI3dKHZhxx+PKB9tAQtQwvI7A11IgHI60BOdfFuzpvLSzk2QkjyMCcJT8KvOQ==
-X-Received: by 2002:aca:d9d7:: with SMTP id q206mr8464502oig.93.1625580623944;
-        Tue, 06 Jul 2021 07:10:23 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id x29sm2811045ooj.10.2021.07.06.07.10.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jul 2021 07:10:23 -0700 (PDT)
-Subject: Re: [PATCH v4 1/4] fpga: dfl: expose feature revision from struct
- dfl_device
-To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
-        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        id S232160AbhGFOzJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Jul 2021 10:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231248AbhGFOzH (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Jul 2021 10:55:07 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDE3C0617AB;
+        Tue,  6 Jul 2021 07:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=1ayrkKf5NvJjQdfUl2A/VO9K+bU0q5/9ZgivWetFS3o=; b=JbK3meFocLJ6fB6QYONBPtOQk9
+        DJh8XYIRvVsq19DtaRbOde3Pqt+U3mVhAJRiVq9/pLYYfHRPetQ2VwkvtOK63TFIov9LQtN9N9PJt
+        W7/r5BUcb6i86u+BjFat8OYQU9y2P1DA/EDcTwU14mU2aPtj4aDiy4zBQ/DSm0rkTEqy36baSOqyA
+        V4yYgj7JmTV6DLtcs5VRxDGb3q6cP0CLL/po4JfkE8jt0lxs+Hs+g3d6AcmGzyEozq//QEL4RnMt8
+        byUYd3U5VUmkthiwr4pU7QnYiaWZQxohw6U15DrlSostKCZf7pcDzFMvg9GIfhVhYyVE4cG/tyrih
+        3mmB/xNA==;
+Received: from [2602:306:c5a2:a380:b447:81b0:ffaa:defc]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m0mQg-00F4IY-8x; Tue, 06 Jul 2021 14:52:06 +0000
+Subject: Re: [PATCH] bus: Make remove callback return void
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxim Levitsky <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-References: <20210705101645.2040106-1-martin@geanix.com>
- <20210705101645.2040106-2-martin@geanix.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <93a8e949-ec25-d00d-4740-72d9e18ebb68@redhat.com>
-Date:   Tue, 6 Jul 2021 07:10:21 -0700
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Thorsten Scherer <t.scherer@eckelmann.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Michael Buesch <m@bues.ch>,
+        Sven Van Asbroeck <TheSven73@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Marc Zyngier <maz@kernel.org>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Qinglang Miao <miaoqinglang@huawei.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Joey Pabalan <jpabalanb@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Frank Li <lznuaa@gmail.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Bodo Stroesser <bostroesser@gmail.com>,
+        Hannes Reinecke <hare@suse.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        SeongJae Park <sjpark@amazon.de>,
+        Julien Grall <jgrall@amazon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+References: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
+From:   Geoff Levand <geoff@infradead.org>
+Message-ID: <7a68b536-302c-0374-848f-4b9535ff1306@infradead.org>
+Date:   Tue, 6 Jul 2021 07:51:36 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210705101645.2040106-2-martin@geanix.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On 7/6/21 2:50 AM, Uwe Kleine-König wrote:
 
-On 7/5/21 3:16 AM, Martin Hundebøll wrote:
-> From: Martin Hundebøll <mhu@silicom.dk>
->
-> DFL device drivers have a common need for checking feature revision
-> information from the DFL header, as well as other common DFL information
-> like the already exposed feature id and type.
->
-> This patch exposes the feature revision information directly via the DFL
-> device data structure.
->
-> Since the DFL core code has already read the DFL header, this this patch
-> saves additional mmio reads from DFL device drivers too.
->
-> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-> Acked-by: Wu Hao <hao.wu@intel.com>
-> Acked-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->
-> Changes since v3:
->   * Added Hao's Acked-by
->   * Added Matthew's Acked-by
->
-> Changes since v2:
->   * Reworded commit message as per Hao's suggestion
->
-> Changes since v1:
->   * This patch replaces the previous patch 2 and exposes the feature
->     revision through struct dfl_device instead of a helper reading from
->     io-mem
->
->   drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
->   drivers/fpga/dfl.h  |  1 +
->   include/linux/dfl.h |  1 +
->   3 files changed, 19 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 511b20ff35a3..9381c579d1cd 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
->   
->   	ddev->type = feature_dev_id_type(pdev);
->   	ddev->feature_id = feature->id;
-> +	ddev->revision = feature->revision;
->   	ddev->cdev = pdata->dfl_cdev;
->   
->   	/* add mmio resource */
-> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
->    */
->   struct dfl_feature_info {
->   	u16 fid;
-> +	u8 rev;
+> --- a/arch/powerpc/platforms/ps3/system-bus.c
+> +++ b/arch/powerpc/platforms/ps3/system-bus.c
+> @@ -381,7 +381,7 @@ static int ps3_system_bus_probe(struct device *_dev)
+>  	return result;
+>  }
+>  
+> -static int ps3_system_bus_remove(struct device *_dev)
+> +static void ps3_system_bus_remove(struct device *_dev)
+>  {
+>  	struct ps3_system_bus_device *dev = ps3_dev_to_system_bus_dev(_dev);
+>  	struct ps3_system_bus_driver *drv;
+> @@ -399,7 +399,6 @@ static int ps3_system_bus_remove(struct device *_dev)
+>  			__func__, __LINE__, drv->core.name);
+>  
+>  	pr_debug(" <- %s:%d: %s\n", __func__, __LINE__, dev_name(&dev->core));
+> -	return 0;
+>  }
 
-In other places 'revision' is the element name.
+PS3 part looks fine.
 
-For consistency, change rev to revision
-
->   	struct resource mmio_res;
->   	void __iomem *ioaddr;
->   	struct list_head node;
-> @@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
->   		/* save resource information for each feature */
->   		feature->dev = fdev;
->   		feature->id = finfo->fid;
-> +		feature->revision = finfo->rev;
->   
->   		/*
->   		 * the FIU header feature has some fundamental functions (sriov
-> @@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
->   	devm_kfree(binfo->dev, binfo);
->   }
->   
-> -static inline u32 feature_size(void __iomem *start)
-> +static inline u32 feature_size(u64 value)
-
-The return type should match its use in create_feature_instance 
-'resource_size_t'
-
-change u32 to resource_size_t
-
-Tom
-
->   {
-> -	u64 v = readq(start + DFH);
-> -	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
-> +	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
->   	/* workaround for private features with invalid size, use 4K instead */
->   	return ofst ? ofst : 4096;
->   }
->   
-> -static u16 feature_id(void __iomem *start)
-> +static u16 feature_id(u64 value)
->   {
-> -	u64 v = readq(start + DFH);
-> -	u16 id = FIELD_GET(DFH_ID, v);
-> -	u8 type = FIELD_GET(DFH_TYPE, v);
-> +	u16 id = FIELD_GET(DFH_ID, value);
-> +	u8 type = FIELD_GET(DFH_TYPE, value);
->   
->   	if (type == DFH_TYPE_FIU)
->   		return FEATURE_ID_FIU_HEADER;
-> @@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->   	unsigned int irq_base, nr_irqs;
->   	struct dfl_feature_info *finfo;
->   	int ret;
-> +	u8 rev;
-> +	u64 v;
-> +
-> +	v = readq(binfo->ioaddr + ofst);
-> +	rev = FIELD_GET(DFH_REVISION, v);
->   
->   	/* read feature size and id if inputs are invalid */
-> -	size = size ? size : feature_size(binfo->ioaddr + ofst);
-> -	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
-> +	size = size ? size : feature_size(v);
-> +	fid = fid ? fid : feature_id(v);
->   
->   	if (binfo->len - ofst < size)
->   		return -EINVAL;
-> @@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->   		return -ENOMEM;
->   
->   	finfo->fid = fid;
-> +	finfo->rev = rev;
->   	finfo->mmio_res.start = binfo->start + ofst;
->   	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
->   	finfo->mmio_res.flags = IORESOURCE_MEM;
-> @@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
->   {
->   	if (!is_feature_dev_detected(binfo)) {
->   		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
-> -			feature_id(binfo->ioaddr + ofst));
-> +			feature_id(readq(binfo->ioaddr + ofst)));
->   		return -EINVAL;
->   	}
->   
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 2b82c96ba56c..422157cfd742 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
->   struct dfl_feature {
->   	struct platform_device *dev;
->   	u16 id;
-> +	u8 revision;
->   	int resource_index;
->   	void __iomem *ioaddr;
->   	struct dfl_feature_irq_ctx *irq_ctx;
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 6cc10982351a..431636a0dc78 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -38,6 +38,7 @@ struct dfl_device {
->   	int id;
->   	u16 type;
->   	u16 feature_id;
-> +	u8 revision;
->   	struct resource mmio_res;
->   	int *irqs;
->   	unsigned int num_irqs;
-
+Acked-by: Geoff Levand <geoff@infradead.org>
