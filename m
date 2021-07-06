@@ -2,24 +2,24 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D36A73BDF96
-	for <lists+linux-fpga@lfdr.de>; Wed,  7 Jul 2021 01:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600833BDF9B
+	for <lists+linux-fpga@lfdr.de>; Wed,  7 Jul 2021 01:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbhGFXJn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Jul 2021 19:09:43 -0400
-Received: from mga02.intel.com ([134.134.136.20]:59880 "EHLO mga02.intel.com"
+        id S229910AbhGFXLT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Jul 2021 19:11:19 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32478 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229811AbhGFXJn (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 6 Jul 2021 19:09:43 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10037"; a="196376386"
+        id S229891AbhGFXLT (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 6 Jul 2021 19:11:19 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10037"; a="196490406"
 X-IronPort-AV: E=Sophos;i="5.83,330,1616482800"; 
-   d="scan'208";a="196376386"
+   d="scan'208";a="196490406"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 16:07:04 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 16:08:40 -0700
 X-IronPort-AV: E=Sophos;i="5.83,330,1616482800"; 
-   d="scan'208";a="457239929"
+   d="scan'208";a="457240167"
 Received: from rhweight-mobl2.amr.corp.intel.com (HELO [10.0.2.4]) ([10.209.123.96])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 16:07:03 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 16:08:39 -0700
 Subject: Re: [PATCH v9 2/3] fpga: bridge: Use standard dev_release for class
  driver
 To:     Xu Yilun <yilun.xu@intel.com>
@@ -28,14 +28,14 @@ Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org, trix@redhat.com,
         richard.gong@intel.com
 References: <20210701013733.75483-1-russell.h.weight@intel.com>
  <20210701013733.75483-3-russell.h.weight@intel.com>
- <20210701053943.GB96355@yilunxu-OptiPlex-7050>
+ <20210701062655.GD96355@yilunxu-OptiPlex-7050>
 From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <a7f14a61-e784-fb6f-4a72-97fbd51eb836@intel.com>
-Date:   Tue, 6 Jul 2021 16:06:51 -0700
+Message-ID: <bf15e384-013f-45bf-3ed7-90d228fb9af9@intel.com>
+Date:   Tue, 6 Jul 2021 16:08:27 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210701053943.GB96355@yilunxu-OptiPlex-7050>
+In-Reply-To: <20210701062655.GD96355@yilunxu-OptiPlex-7050>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -45,7 +45,7 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 
-On 6/30/21 10:39 PM, Xu Yilun wrote:
+On 6/30/21 11:26 PM, Xu Yilun wrote:
 > On Wed, Jun 30, 2021 at 06:37:32PM -0700, Russ Weight wrote:
 >> The FPGA bridge class driver data structure is being treated as a
 >> managed resource instead of using the standard dev_release call-back
@@ -57,14 +57,7 @@ On 6/30/21 10:39 PM, Xu Yilun wrote:
 >> flexibility in passing optional parameters. The register_simple()
 >> function supports the current parameter list for users that don't
 >> require the use of optional parameters.
-> Please update the commit message, others are good to me.
-
-Will do.
-- Russ
->
-> Thanks,
-> Yilun
->
+>>
 >> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 >> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
 >> ---
@@ -72,6 +65,20 @@ Will do.
 >>   - Cleaned up documentation for the FPGA Bridge register functions
 >>   - Renamed fpga_bridge_register() to fpga_bridge_register_full()
 >>   - Renamed fpga_bridge_register_simple() to fpga_bridge_register()
+> Now we come back to the fpga_XXX_register for normal cases and
+> fpga_XXX_register_full for extra parameters.
+>
+> But the fpga_bridge_register_full has no use case yet, should we
+> implement it when it is really needed?
+I was just trying to maintain consistency throughout the
+framework. I can remove the unused fpga_bridge_register_full()
+function.
+
+- Russ
+>
+> Thanks,
+> Yilun
+>
 >> v8:
 >>   - Added reviewed-by tag.
 >>   - Updated Documentation/driver-api/fpga/fpga-bridge.rst documentation.
