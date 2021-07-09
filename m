@@ -2,236 +2,179 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F2A3BFA60
-	for <lists+linux-fpga@lfdr.de>; Thu,  8 Jul 2021 14:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3BB3C1CDC
+	for <lists+linux-fpga@lfdr.de>; Fri,  9 Jul 2021 02:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbhGHMoX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 8 Jul 2021 08:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbhGHMoW (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 8 Jul 2021 08:44:22 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CA9C061762
-        for <linux-fpga@vger.kernel.org>; Thu,  8 Jul 2021 05:41:40 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id j2so997988vsi.6
-        for <linux-fpga@vger.kernel.org>; Thu, 08 Jul 2021 05:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hP9H7HVTE7TFrRNTl1vyqWVVeZcuqXBCZg0bGqclL/A=;
-        b=VetX2Cfr8bdRNaZiWLEm04u6bqZW3l6DI4CAN74JIY7k4z1gUX2WPAhVDnzm350lf2
-         zN9Z12JQmbzlk/BWNUXvjVAbpB66ZXuvK3SPb444QQ5diXQOytBY51L2/oTaoUD9VeXU
-         uFurAnxdtCpnicZBLB0yD9ojUwv6W/qtm1PvBS9AFUFJNPr3tKxeC4wQWDvFkNeWRoRf
-         7SjXn45LyDiaoeLgbbyRwVPp/zZWqO3qYud0+Xn/514eUefuiFS0gjROioJ7tCP2C/ZN
-         ZUSLS7lmtDXFsaxdqMahs7f08oqXmzo9A5DfBGmAWg3PByPV9/9CFdzFbNZ8GtPMsFJE
-         z42g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hP9H7HVTE7TFrRNTl1vyqWVVeZcuqXBCZg0bGqclL/A=;
-        b=gWhY72rPm0dXej09X5w4ytNozp5bX+pJ6pjEQ/bcX2EgLsg7PewHmqFd2p8xmTD7B7
-         aR8qM3ZXNLMxCZxM1x5PZ5e2/toNqPJ7oKHuajUnylvppAkxXMLDh5R3MiEVYIldJWKx
-         BXHgt41ZhA4TWbhR2x0aJZX/J7TpR1fBBiI4+NsfR6IIEyjulLXTOX4guuBChLEB8Lyv
-         DSkCXWKOTd4+YYmGyTyVcL/fH9O5xsoN5UZ1EnNEeqSHXGInEDilMMFr3WAxLNIZIivX
-         ZhVfhNZm3nEg2gQEiev7aH1sRlOidATjSYE5VymtRwAbhxfAn+zK09tqooWjq7JQwvkL
-         CZcg==
-X-Gm-Message-State: AOAM5314IvXXV+/RLkF5dZqL8Jc0Lnv7Oh6mAqoPImsUHNlHpYZPU/8Z
-        BpraAWmGmWUiC4M1aLtPPIM94Vv4/Zg5lszJcFxqAg==
-X-Google-Smtp-Source: ABdhPJywz4fR2V+V+6/E9OWxEVi9/b58VFa4IZ2LlJTPpT0B9SRAdSG9PM7u1rPMHG2ZlSabjmUDzfVjnsqdUEe3bFI=
-X-Received: by 2002:a67:8783:: with SMTP id j125mr27888650vsd.42.1625748098931;
- Thu, 08 Jul 2021 05:41:38 -0700 (PDT)
+        id S229986AbhGIApK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 8 Jul 2021 20:45:10 -0400
+Received: from mga14.intel.com ([192.55.52.115]:39652 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229843AbhGIApK (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 8 Jul 2021 20:45:10 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10039"; a="209440816"
+X-IronPort-AV: E=Sophos;i="5.84,225,1620716400"; 
+   d="scan'208";a="209440816"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 17:42:26 -0700
+X-IronPort-AV: E=Sophos;i="5.84,225,1620716400"; 
+   d="scan'208";a="411619651"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.251.14.230])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 17:42:25 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        richard.gong@intel.com, Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v10 0/3] fpga: Use standard class dev_release function
+Date:   Thu,  8 Jul 2021 17:42:03 -0700
+Message-Id: <20210709004206.244607-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de> <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 8 Jul 2021 14:41:02 +0200
-Message-ID: <CAPDyKFo0zuooWAkuR=BcsvcJ2pmSrcEoBhuC8+ne18GQphyPHA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] bus: Make remove callback return void
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Geoff Levand <geoff@infradead.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
-        Jens Taprogge <jens.taprogge@taprogge.org>,
-        Johannes Thumshirn <morbidrsa@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxim Levitsky <maximlevitsky@gmail.com>,
-        Alex Dubov <oakad@yahoo.com>, Lee Jones <lee.jones@linaro.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Thorsten Scherer <t.scherer@eckelmann.de>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Michael Buesch <m@bues.ch>,
-        Sven Van Asbroeck <TheSven73@gmail.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Marc Zyngier <maz@kernel.org>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Qinglang Miao <miaoqinglang@huawei.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joey Pabalan <jpabalanb@gmail.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Frank Li <lznuaa@gmail.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Bodo Stroesser <bostroesser@gmail.com>,
-        Hannes Reinecke <hare@suse.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        SeongJae Park <sjpark@amazon.de>,
-        Julien Grall <jgrall@amazon.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
-        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
-        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Johannes Thumshirn <jth@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, 6 Jul 2021 at 17:53, Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> The driver core ignores the return value of this callback because there
-> is only little it can do when a device disappears.
->
-> This is the final bit of a long lasting cleanup quest where several
-> buses were converted to also return void from their remove callback.
-> Additionally some resource leaks were fixed that were caused by drivers
-> returning an error code in the expectation that the driver won't go
-> away.
->
-> With struct bus_type::remove returning void it's prevented that newly
-> implemented buses return an ignored error code and so don't anticipate
-> wrong expectations for driver authors.
->
-> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk> (For ARM, Am=
-ba and related parts)
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Acked-by: Chen-Yu Tsai <wens@csie.org> (for drivers/bus/sunxi-rsb.c)
-> Acked-by: Pali Roh=C3=A1r <pali@kernel.org>
-> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org> (for drivers/media)
-> Acked-by: Hans de Goede <hdegoede@redhat.com> (For drivers/platform)
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Acked-By: Vinod Koul <vkoul@kernel.org>
-> Acked-by: Juergen Gross <jgross@suse.com> (For Xen)
-> Acked-by: Lee Jones <lee.jones@linaro.org> (For drivers/mfd)
-> Acked-by: Johannes Thumshirn <jth@kernel.org> (For drivers/mcb)
-> Acked-by: Johan Hovold <johan@kernel.org>
-> Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org> (For drive=
-rs/slimbus)
-> Acked-by: Kirti Wankhede <kwankhede@nvidia.com> (For drivers/vfio)
-> Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com> (For ulpi and=
- typec)
-> Acked-by: Samuel Iglesias Gons=C3=A1lvez <siglesias@igalia.com> (For ipac=
-k)
-> Reviewed-by: Tom Rix <trix@redhat.com> (For fpga)
-> Acked-by: Geoff Levand <geoff@infradead.org> (For ps3)
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+The FPGA framework has a convention of using managed resource functions
+to allow parent drivers to manage the data structures allocated by the
+class drivers. They use an empty *_dev_release() function to satisfy the
+class driver.
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
+This is inconsistent with linux driver model.
 
-[...]
+These changes remove the managed resource functions and populate the class
+dev_release callback functions. They also merge the create() and register()
+functions into a single register() or register_full() function for each of
+the fpga-mgr, fpga-region, and fpga-bridge class drivers.
 
-Kind regards
-Uffe
+The new *register_full() functions accept an info data structure to provide
+flexibility in passing optional parameters. The *register() functions
+support the legacy parameter list for users that don't require the use of
+optional parameters.
+
+For more context, refer to this email thread:
+
+https://marc.info/?l=linux-fpga&m=162127412218557&w=2
+
+I turned on the configs assocated with each of the modified files, but I
+must have been missing some dependencies, because not all of them compiled.
+I did a run-time test specifically with the dfl-fme infrastructure. This
+would have exercised the region, bridge, and fpga-mgr frameworks.
+
+Changelog v9 -> v10:
+  - Fixed commit messages to reference register_full() instead of
+    register_simple().
+  - Removed the fpga_bridge_register_full() function, because there is
+    not need for it yet. Updated the documentation and commit message
+    accordingly.
+  - Updated documentation to reference the fpga_manager_info and
+    fpga_region_info structures.
+
+Changelog v8 -> v9:
+  - Cleaned up documentation for the FPGA Manager, Bridge, and Region
+    register functions
+  - Renamed fpga_*_register() to fpga_*_register_full()
+  - Renamed fpga_*_register_simple() to fpga_*_register()
+  - Renamed devm_fpga_mgr_register() to devm_fpga_mgr_register_full()
+  - Renamed devm_fpga_mgr_register_simple() to devm_fpga_mgr_register()
+
+Changelog v7 -> v8:
+  - Added reviewed-by tags.
+  - Updated Documentation/driver-api/fpga/ files: fpga-mgr.rst,
+    fpga-bridge.rst, and fpga-region.rst.
+
+Changelog v6 -> v7:
+  - Update the commit messages to describe the new parameters for the
+    *register() functions and to mention the *register_simple() functions.
+  - Fix function prototypes in header file to rename dev to parent.
+  - Make use of the PTR_ERR_OR_ZERO() macro when possible.
+  - Some cleanup of comments.
+  - Update function definitions/prototypes to apply const to the new info
+    parameter.
+  - Verify that info->br_ops is non-null in the fpga_bridge_register()
+    function.
+  - Verify a non-null info pointer in the fpga_region_register() function.
+
+Changelog v5 -> v6:
+  - Moved FPGA manager/bridge/region optional parameters out of the ops
+    structure and back into the FPGA class driver structure.
+  - Changed fpga_*_register() function parameters to accept an info data
+    structure to provide flexibility in passing optional parameters.
+  - Added fpga_*_register_simple() functions to support current parameters
+    for users that don't require use of optional parameters.
+
+Changelog v4 -> v5:
+  - Rebased on top of recently accepted patches.
+  - Removed compat_id from the fpga_mgr_register() parameter list
+    and added it to the fpga_manager_ops structure. This also required
+    dynamically allocating the dfl-fme-ops structure in order to add
+    the appropriate compat_id.
+  - Created the fpga_region_ops data structure which is optionally passed
+    to fpga_region_register(). compat_id, the get_bridges() pointer, and
+    the priv pointer are included in the fpga_region_ops structure.
+
+Changelog v3 -> v4:
+  - Added the compat_id parameter to fpga_mgr_register() and
+    devm_fpga_mgr_register() to ensure that the compat_id is set before
+    the device_register() call.
+  - Added the compat_id parameter to fpga_region_register() to ensure
+    that the compat_id is set before the device_register() call.
+  - Modified the dfl_fpga_feature_devs_enumerate() function to restore
+    the fpga_region_register() call to the correct location.
+
+Changelog v2 -> v3:
+  - Cleaned up comment headers for fpga_mgr_register(), fpga_bridge_register(),
+    and fpga_region_register().
+  - Fixed error return on ida_simple_get() failure for fpga_mgr_register(),
+    fpga_bridge_register(), and fpga_region_register().
+  - Fixed error return value for fpga_bridge_register(): ERR_PTR(ret) instead
+    of NULL.
+
+Changelog v1 -> v2:
+  - Restored devm_fpga_mgr_register() functionality to the fpga-mgr
+    class driver, adapted for the combined create/register functionality.
+  - All previous callers of devm_fpga_mgr_register() will continue to call
+    devm_fpga_mgr_register().
+  - replaced unnecessary ternary operators in return statements with
+    standard if conditions.
+
+Russ Weight (3):
+  fpga: mgr: Use standard dev_release for class driver
+  fpga: bridge: Use standard dev_release for class driver
+  fpga: region: Use standard dev_release for class driver
+
+ Documentation/driver-api/fpga/fpga-bridge.rst |   6 +-
+ Documentation/driver-api/fpga/fpga-mgr.rst    |  38 +++-
+ Documentation/driver-api/fpga/fpga-region.rst |  12 +-
+ drivers/fpga/altera-cvp.c                     |  12 +-
+ drivers/fpga/altera-fpga2sdram.c              |  12 +-
+ drivers/fpga/altera-freeze-bridge.c           |  10 +-
+ drivers/fpga/altera-hps2fpga.c                |  12 +-
+ drivers/fpga/altera-pr-ip-core.c              |   7 +-
+ drivers/fpga/altera-ps-spi.c                  |   9 +-
+ drivers/fpga/dfl-fme-br.c                     |  10 +-
+ drivers/fpga/dfl-fme-mgr.c                    |  22 +-
+ drivers/fpga/dfl-fme-region.c                 |  17 +-
+ drivers/fpga/dfl.c                            |  12 +-
+ drivers/fpga/fpga-bridge.c                    | 122 +++-------
+ drivers/fpga/fpga-mgr.c                       | 215 ++++++++----------
+ drivers/fpga/fpga-region.c                    | 119 ++++------
+ drivers/fpga/ice40-spi.c                      |   9 +-
+ drivers/fpga/machxo2-spi.c                    |   9 +-
+ drivers/fpga/of-fpga-region.c                 |  10 +-
+ drivers/fpga/socfpga-a10.c                    |  16 +-
+ drivers/fpga/socfpga.c                        |   9 +-
+ drivers/fpga/stratix10-soc.c                  |  16 +-
+ drivers/fpga/ts73xx-fpga.c                    |   9 +-
+ drivers/fpga/xilinx-pr-decoupler.c            |  17 +-
+ drivers/fpga/xilinx-spi.c                     |  11 +-
+ drivers/fpga/zynq-fpga.c                      |  16 +-
+ drivers/fpga/zynqmp-fpga.c                    |   9 +-
+ include/linux/fpga/fpga-bridge.h              |  30 ++-
+ include/linux/fpga/fpga-mgr.h                 |  62 +++--
+ include/linux/fpga/fpga-region.h              |  36 ++-
+ 30 files changed, 383 insertions(+), 511 deletions(-)
+
+-- 
+2.25.1
+
