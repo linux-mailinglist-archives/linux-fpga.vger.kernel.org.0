@@ -2,462 +2,165 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EDF3C1CDE
-	for <lists+linux-fpga@lfdr.de>; Fri,  9 Jul 2021 02:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010473C20DD
+	for <lists+linux-fpga@lfdr.de>; Fri,  9 Jul 2021 10:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbhGIApK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 8 Jul 2021 20:45:10 -0400
-Received: from mga14.intel.com ([192.55.52.115]:39652 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229843AbhGIApK (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 8 Jul 2021 20:45:10 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10039"; a="209440820"
-X-IronPort-AV: E=Sophos;i="5.84,225,1620716400"; 
-   d="scan'208";a="209440820"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 17:42:27 -0700
-X-IronPort-AV: E=Sophos;i="5.84,225,1620716400"; 
-   d="scan'208";a="411619661"
-Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.251.14.230])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 17:42:27 -0700
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     mdf@kernel.org, linux-fpga@vger.kernel.org
-Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-        hao.wu@intel.com, matthew.gerlach@intel.com,
-        richard.gong@intel.com, Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v10 3/3] fpga: region: Use standard dev_release for class driver
-Date:   Thu,  8 Jul 2021 17:42:06 -0700
-Message-Id: <20210709004206.244607-4-russell.h.weight@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210709004206.244607-1-russell.h.weight@intel.com>
-References: <20210709004206.244607-1-russell.h.weight@intel.com>
+        id S231539AbhGIIgi (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 9 Jul 2021 04:36:38 -0400
+Received: from mail-mw2nam10on2058.outbound.protection.outlook.com ([40.107.94.58]:4566
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231494AbhGIIgh (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 9 Jul 2021 04:36:37 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Utl8VH0CkzzUvycC1rqdrGQMqhyBaa102NykAnC1JFVZ+RpoHrFERMpXD8Wm1hUQ8V1eAMm8wOm73+DULAtWMK+Mom15kVWOuNCsbfsqlxiC/taOlf8R+knJ0Fv6f/n3IfRQgHgNE+i+d8q1IxSIDjOsFXlFvFSPruiRh0OnfZ9WSHXjRpi05TfGNLdEYSmKSpIaGr6N1WHpf8Pb4wsBiSexsV5ugq9jvi6bIUFlKcrmDaxVYhXOy3O9jLjg25Wd8njsIztayVt9M8XGr/bk7sOw9VWuxJ+NhVXQIqerYcRK8EW/NLjIs7mzZBY+WjOaiRde92kciIWzPQV6fYYdvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZEVmd8g4dCsCNcs9qcxkgDbw5kQwfeB+kfNQi9D/9hs=;
+ b=Lzi8tdBg09aNTB24MYqBja5t5UvqYJVgmc81yR4GALtUGzQ3bJHV9zx+ywH1lMGKNoZyBnByyTl0IFd0NaO9FAnoga/NZ8fkH0vZ06V4KpqDKmz7O5Gp284R6Yku+ZqJBUHN0QHvQT+et9Om+7o4z33myVinGSiS44HtKYqvCRfYXY+iIvePrQe7LatcNVaEz2lb8NexTisLeoDGIjjF0/QrS2DDbXYSEGe10qI2DPE6tNEJ7wC3WP1yURZWg2fY0IoD2HthD5Pc1Rt6gHAM8Au5lgvq8QiRmUnoTh0jEx7/WpY4FbTUT99L6JDMInVKegRmraIbwo1DqwXxBNznRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZEVmd8g4dCsCNcs9qcxkgDbw5kQwfeB+kfNQi9D/9hs=;
+ b=lkRV3Nrpp8+oNjU4F4Z7eu9LqFe4yxfjk2D2y9nMWOJWdOp3FPRVrgh3TtKCWBzSS7xLFy1Zuhbevx6tNAi3dDONt49BcnSCLY657Lhq9HAO1JsQGHTWEBQ4SlanBUa3dGS0ZlrA3N4fDNG+ucg2+MV7l7HsturKUl0/w8GDrhk=
+Received: from PH0PR02MB7336.namprd02.prod.outlook.com (2603:10b6:510:d::6) by
+ PH0PR02MB8616.namprd02.prod.outlook.com (2603:10b6:510:104::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.19; Fri, 9 Jul
+ 2021 08:33:49 +0000
+Received: from PH0PR02MB7336.namprd02.prod.outlook.com
+ ([fe80::a8bd:e49f:7daf:fb1e]) by PH0PR02MB7336.namprd02.prod.outlook.com
+ ([fe80::a8bd:e49f:7daf:fb1e%9]) with mapi id 15.20.4308.023; Fri, 9 Jul 2021
+ 08:33:49 +0000
+From:   Nava kishore Manne <navam@xilinx.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Michal Simek <michals@xilinx.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, Rajan Vaja <RAJANV@xilinx.com>,
+        Amit Sunil Dhamne <amitsuni@xlnx.xilinx.com>,
+        Tejas Patel <tejasp@xlnx.xilinx.com>,
+        "zou_wei@huawei.com" <zou_wei@huawei.com>,
+        Sai Krishna Potthuri <lakshmis@xilinx.com>,
+        Ravi Patel <ravipate@xlnx.xilinx.com>,
+        "iwamatsu@nigauri.org" <iwamatsu@nigauri.org>,
+        Jiaying Liang <jliang@xilinx.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        git <git@xilinx.com>,
+        "chinnikishore369@gmail.com" <chinnikishore369@gmail.com>
+Subject: RE: [RFC v2 0/4]Fpga: adds support to load the user-key encrypted
+ FPGA Image loading
+Thread-Topic: [RFC v2 0/4]Fpga: adds support to load the user-key encrypted
+ FPGA Image loading
+Thread-Index: AQHXXPOugeyV41oUbUyELuYcyX+oKqsLcUCAgC8N3bA=
+Date:   Fri, 9 Jul 2021 08:33:49 +0000
+Message-ID: <PH0PR02MB73367186A920B6DB0028442AC2189@PH0PR02MB7336.namprd02.prod.outlook.com>
+References: <20210609055232.4501-1-nava.manne@xilinx.com>
+ <YMCQESaESBSKCTrv@kroah.com>
+In-Reply-To: <YMCQESaESBSKCTrv@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: afed79fc-9b8c-4d72-de82-08d942b446a1
+x-ms-traffictypediagnostic: PH0PR02MB8616:
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <PH0PR02MB8616BD47167BCFA29E64F2C6C2189@PH0PR02MB8616.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wqJHYHotSxMBSnV1t+gpihLs6XfoiUf3WoH9yh0bsHeLVAjZFPQfK147VXYuuqQNDuA8MiRABOQhNI6045PCI5zSHBRrE52390Z8IXC0JRHPT8JU8QoMgELdmqc2sUbJqm1dmDZK6iPMxkSHbGe3Vgvnmd8758xXz2fx3fsZQTXE/P0vTuft0EJzFwvHxQTkEchULktL8TgbbWRbRUsYkK7yMa7bHeZdzCC8kRgO2bx8HRcKVtZus7t2ivgTU2PExCRDuevKpZa3sZOmfSq+oVZkM9uGIG70sEq8eaa3AGVqxt0gpaGZxn65My6GatXRIUliwotAVSUnGHoOzxw1+Nq26+HNUN+nJdi7YLqTziWSKQcSMooMHGifhhdHwSsU76du5hLqLOCuQ4pHYAVaH370KXtS2yZxwfzT4ZIG+r5kVV/yQKWqJqnFMS7swFrZTrg0VWZN9Qqb5ZmdbF8uEU2t8oryy8mk3DJoKG8uu8U8UBF+3RSD0rfIgDWlfYmeLbcdj9diHLuKI4JY2sooEMazkrTMK7IQZLIcTy5xmQfZ1fLyORToxlSmtCVHXK3YEql3u04WBva3Y67vm9gfwSlRyGtx0ptXPuKreOfTK/9xWshcUZrWur9FE/4OreLG/gZ0JYcNNVeatKuQCChRUw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR02MB7336.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(346002)(366004)(396003)(376002)(66476007)(55236004)(76116006)(8936002)(55016002)(7696005)(8676002)(186003)(9686003)(52536014)(71200400001)(66946007)(38100700002)(7416002)(64756008)(66556008)(66446008)(33656002)(478600001)(2906002)(54906003)(6916009)(26005)(53546011)(4326008)(6506007)(5660300002)(316002)(83380400001)(122000001)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BinEKWUJ9asOCVN9PRBgmS3PP6s6kMENcuaOHweRWaDxllN2Yt1kvOVQSk6j?=
+ =?us-ascii?Q?VI7i+h+Xt5p76YVZrLLVQIYoz3YB+EW98l4d/ZbETePUww7gumdW3LeqV0d+?=
+ =?us-ascii?Q?PgFkxPsRYdfNhUX5XLiH407N7diADBmEl2uzfT4s51YWD7qImhRfEVsexjVL?=
+ =?us-ascii?Q?uK0ztN4tRhuR0qJ/M8JI+A3hX6M28CEp0XDrOB4ddM+IKzEVrrMBtNvhVWg9?=
+ =?us-ascii?Q?BJ9rmL37sI9Xb6Vxo8ZByrwbeTCnKquZLWN5AeTGqzzNygJLPV6Ecm1UrjM3?=
+ =?us-ascii?Q?FQeQix4+UKZVYubNMxnNY2JfRQNRz7JMZp/ZmRc6JlWz+w0OnApWmprHH3qH?=
+ =?us-ascii?Q?B0FMmrLnOsj+U1syUAaaV+Us3l+rsLo55Ue1E6/jke2tiEp6qbs+DV/ye0iw?=
+ =?us-ascii?Q?Ys3pbct9RkmtMVr62U7WHL7gIzCgKUo1cY9XXXFJdcMZmJN/F0lRwA2TxD0R?=
+ =?us-ascii?Q?UoTe8R/VNupUgFuRTx5604AFh38OYbEWupTRWjm+wf3PKCHn3pIt/V8v43Wi?=
+ =?us-ascii?Q?zR8AiqbP5p2Z3OisYj6hGWExg8ft+4PrlJo9aUHBw941zRa3zJPwjo6Fj+Va?=
+ =?us-ascii?Q?Ig4N2XSji+HlpivUIU06tV/YmfPuC1cxTA2dGXg2hrozSaNG0CDww8K6To0b?=
+ =?us-ascii?Q?BEcQKpgb6ovej6kPLyaexBXYlWK8bIC1T7htpU5PzUDE1+xroULmVgATYA/r?=
+ =?us-ascii?Q?UzbxDwQwBpCr5wj7uWpj1i2cNkDgEWSxvcy8r2MuiyfyiLiikyJ91ocwITrG?=
+ =?us-ascii?Q?Ue+sW60qghxrW1Q9apb72o1M51avmDbVdIeAO9n/Ewx3UsLhQx1D100i+XNp?=
+ =?us-ascii?Q?FCUpRi1PEMveSbQztFzobmOoUE9PLwb/fs7f665Gy7OzSp+vrcbbZxF/0kGY?=
+ =?us-ascii?Q?ZHvw5S1KKlYVpAKTiYG+DpuECPVE9I1DearV1hY+8Y3lqZ0ESU4dXCcERrCD?=
+ =?us-ascii?Q?XxKyLa6QIc8DOH+j6Hty1DafPeL0LeNwJ3WZRMcLzALGDHekGBZFU9qtKUbJ?=
+ =?us-ascii?Q?NMCpB5w79+MmxmzNPD3iYydgO1SUKFWKlRn9mlTR5T04oroqyQTrImGhsY41?=
+ =?us-ascii?Q?EoQ+B3m1Dxy0/fSKNFl6C7hELfbAMvx3QTK20gR+6ZnheA4FbsmA3EO05NMZ?=
+ =?us-ascii?Q?aIVcfIUq4ZzN+HWIi739p8NzXAjRAmXxBUwJJ8HdYjdDoHPBUHoHjUSVKUoB?=
+ =?us-ascii?Q?HJmoJK+qC9urJ/JZjjynBzY85OpM9H4I036gvptzkY5HACWCliKcqlA1Qish?=
+ =?us-ascii?Q?rkeZRgtAwSc4ZLNB1m4EyHiSwdKvAxr2IbJX9jxy8iADQxoGiokWkNRDEDRW?=
+ =?us-ascii?Q?GkM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR02MB7336.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: afed79fc-9b8c-4d72-de82-08d942b446a1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2021 08:33:49.5000
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: r6SNDvid2S18bCXlgziEsven5sglAm2sx8Pxk94Xt7fJSDp8NlszkT+cXKjgiSqb/+ddsXXOru41drQKB54wWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB8616
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The FPGA region class driver data structure is being treated as a
-managed resource instead of using the standard dev_release call-back
-function to release the class data structure. This change removes the
-managed resource code and combines the create() and register()
-functions into a single register() or register_full() function.
+Hi Greg,
 
-The register_full() function accepts an info data structure to provide
-flexibility in passing optional parameters. The register() function
-supports the current parameter list for users that don't require the
-use of optional parameters.
+	Thanks for providing the review comments.
+Please find my response inline.
 
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
----
-v10:
-  - Fixed commit message to reference register_full() instead of
-    register_simple().
-  - Updated documentation to reference the fpga_region_info structure
-v9:
-  - Cleaned up documentation for the FPGA Region register functions
-  - Renamed fpga_region_register() to fpga_region_register_full()
-  - Renamed fpga_region_register_simple() to fpga_region_register()
-v8:
-  - Added reviewed-by tag.
-  - Updated Documentation/driver-api/fpga/fpga-region.rst documentation.
-v7:
-  - Update the commit message to describe the new parameters for the
-    fpga_region_register() function and to mention the
-    fpga_region_register_simple() function.
-  - Fix function prototypes in header file to rename dev to parent.
-  - Some cleanup of comments.
-  - Update function definitions/prototypes to apply const to the new info
-    parameter.
-  - Verify a non-null info pointer in the register() functions.
-v6:
-  - Moved FPGA manager optional parameters out of the ops structure and
-    back into the FPGA Region structure.
-  - Changed fpga_region_register() parameters to accept an info data
-    structure to provide flexibility in passing optional parameters.
-  - Added fpga_region_register_simple() functions to support current
-    parameters for users that don't require the use of optional parameters.
-v5:
-  - Rebased on top of recently accepted patches.
-  - Created the fpga_region_ops data structure which is optionally passed
-    to fpga_region_register(). compat_id, the get_bridges() pointer, and
-    the priv pointer are included in the fpga_region_ops structure.
-v4:
-  - Added the compat_id parameter to fpga_region_register() to ensure
-    that the compat_id is set before the device_register() call.
-  - Modified the dfl_fpga_feature_devs_enumerate() function to restore
-    the fpga_region_register() call to the correct location.
-v3:
-  - Cleaned up comment header for fpga_region_register()
-  - Fix fpga_region_register() error return on ida_simple_get() failure
-v2:
-  - No changes
----
- Documentation/driver-api/fpga/fpga-region.rst |  12 +-
- drivers/fpga/dfl-fme-region.c                 |  17 ++-
- drivers/fpga/dfl.c                            |  12 +-
- drivers/fpga/fpga-region.c                    | 119 +++++++-----------
- drivers/fpga/of-fpga-region.c                 |  10 +-
- include/linux/fpga/fpga-region.h              |  36 ++++--
- 6 files changed, 95 insertions(+), 111 deletions(-)
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Wednesday, June 9, 2021 3:25 PM
+> To: Nava kishore Manne <navam@xilinx.com>
+> Cc: robh+dt@kernel.org; Michal Simek <michals@xilinx.com>;
+> mdf@kernel.org; trix@redhat.com; arnd@arndb.de; Rajan Vaja
+> <RAJANV@xilinx.com>; Amit Sunil Dhamne <amitsuni@xlnx.xilinx.com>;
+> Tejas Patel <tejasp@xlnx.xilinx.com>; zou_wei@huawei.com; Sai Krishna
+> Potthuri <lakshmis@xilinx.com>; Ravi Patel <RAVIPATE@xilinx.com>;
+> iwamatsu@nigauri.org; Jiaying Liang <jliang@xilinx.com>;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> kernel@vger.kernel.org; linux-fpga@vger.kernel.org; git <git@xilinx.com>;
+> chinnikishore369@gmail.com
+> Subject: Re: [RFC v2 0/4]Fpga: adds support to load the user-key encrypte=
+d
+> FPGA Image loading
+>=20
+> On Wed, Jun 09, 2021 at 11:22:28AM +0530, Nava kishore Manne wrote:
+> > This patch series adds supports user-key encrypted FPGA Image loading
+> > using FPGA Manager framework.
+>=20
+> Why is this series "RFC"?  Do you not think it is good enough to be merge=
+d?
+>=20
 
-diff --git a/Documentation/driver-api/fpga/fpga-region.rst b/Documentation/driver-api/fpga/fpga-region.rst
-index 2636a27c11b2..dc55d60a0b4a 100644
---- a/Documentation/driver-api/fpga/fpga-region.rst
-+++ b/Documentation/driver-api/fpga/fpga-region.rst
-@@ -46,8 +46,11 @@ API to add a new FPGA region
- ----------------------------
- 
- * struct fpga_region - The FPGA region struct
--* devm_fpga_region_create() - Allocate and init a region struct
--* fpga_region_register() -  Register an FPGA region
-+* struct fpga_region_info - Parameter structure for fpga_region_register_full()
-+* fpga_region_register_full() -  Create and register an FPGA region using the
-+  fpga_region_info structure to provide the full flexibility of options
-+* fpga_region_register() -  Create and register an FPGA region using standard
-+  arguments
- * fpga_region_unregister() -  Unregister an FPGA region
- 
- The FPGA region's probe function will need to get a reference to the FPGA
-@@ -75,8 +78,11 @@ following APIs to handle building or tearing down that list.
- .. kernel-doc:: include/linux/fpga/fpga-region.h
-    :functions: fpga_region
- 
-+.. kernel-doc:: include/linux/fpga/fpga-region.h
-+   :functions: fpga_region_info
-+
- .. kernel-doc:: drivers/fpga/fpga-region.c
--   :functions: devm_fpga_region_create
-+   :functions: fpga_region_register_full
- 
- .. kernel-doc:: drivers/fpga/fpga-region.c
-    :functions: fpga_region_register
-diff --git a/drivers/fpga/dfl-fme-region.c b/drivers/fpga/dfl-fme-region.c
-index 1eeb42af1012..4aebde0a7f1c 100644
---- a/drivers/fpga/dfl-fme-region.c
-+++ b/drivers/fpga/dfl-fme-region.c
-@@ -30,6 +30,7 @@ static int fme_region_get_bridges(struct fpga_region *region)
- static int fme_region_probe(struct platform_device *pdev)
- {
- 	struct dfl_fme_region_pdata *pdata = dev_get_platdata(&pdev->dev);
-+	struct fpga_region_info info = { 0 };
- 	struct device *dev = &pdev->dev;
- 	struct fpga_region *region;
- 	struct fpga_manager *mgr;
-@@ -39,20 +40,18 @@ static int fme_region_probe(struct platform_device *pdev)
- 	if (IS_ERR(mgr))
- 		return -EPROBE_DEFER;
- 
--	region = devm_fpga_region_create(dev, mgr, fme_region_get_bridges);
--	if (!region) {
--		ret = -ENOMEM;
-+	info.mgr = mgr;
-+	info.compat_id = mgr->compat_id;
-+	info.get_bridges = fme_region_get_bridges;
-+	info.priv = pdata;
-+	region = fpga_region_register_full(dev, &info);
-+	if (IS_ERR(region)) {
-+		ret = PTR_ERR(region);
- 		goto eprobe_mgr_put;
- 	}
- 
--	region->priv = pdata;
--	region->compat_id = mgr->compat_id;
- 	platform_set_drvdata(pdev, region);
- 
--	ret = fpga_region_register(region);
--	if (ret)
--		goto eprobe_mgr_put;
--
- 	dev_dbg(dev, "DFL FME FPGA Region probed\n");
- 
- 	return 0;
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index 511b20ff35a3..3905995ef6d5 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -1400,19 +1400,15 @@ dfl_fpga_feature_devs_enumerate(struct dfl_fpga_enum_info *info)
- 	if (!cdev)
- 		return ERR_PTR(-ENOMEM);
- 
--	cdev->region = devm_fpga_region_create(info->dev, NULL, NULL);
--	if (!cdev->region) {
--		ret = -ENOMEM;
--		goto free_cdev_exit;
--	}
--
- 	cdev->parent = info->dev;
- 	mutex_init(&cdev->lock);
- 	INIT_LIST_HEAD(&cdev->port_dev_list);
- 
--	ret = fpga_region_register(cdev->region);
--	if (ret)
-+	cdev->region = fpga_region_register(info->dev, NULL, NULL);
-+	if (IS_ERR(cdev->region)) {
-+		ret = PTR_ERR(cdev->region);
- 		goto free_cdev_exit;
-+	}
- 
- 	/* create and init build info for enumeration */
- 	binfo = devm_kzalloc(info->dev, sizeof(*binfo), GFP_KERNEL);
-diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
-index a4838715221f..b0ac18de4885 100644
---- a/drivers/fpga/fpga-region.c
-+++ b/drivers/fpga/fpga-region.c
-@@ -180,39 +180,42 @@ static struct attribute *fpga_region_attrs[] = {
- ATTRIBUTE_GROUPS(fpga_region);
- 
- /**
-- * fpga_region_create - alloc and init a struct fpga_region
-+ * fpga_region_register_full - create and register an FPGA Region device
-  * @parent: device parent
-- * @mgr: manager that programs this region
-- * @get_bridges: optional function to get bridges to a list
-- *
-- * The caller of this function is responsible for freeing the resulting region
-- * struct with fpga_region_free().  Using devm_fpga_region_create() instead is
-- * recommended.
-+ * @info: parameters for FPGA Region
-  *
-- * Return: struct fpga_region or NULL
-+ * Return: struct fpga_region or ERR_PTR()
-  */
--struct fpga_region
--*fpga_region_create(struct device *parent,
--		    struct fpga_manager *mgr,
--		    int (*get_bridges)(struct fpga_region *))
-+struct fpga_region *
-+fpga_region_register_full(struct device *parent, const struct fpga_region_info *info)
- {
- 	struct fpga_region *region;
- 	int id, ret = 0;
- 
-+	if (!info) {
-+		dev_err(parent,
-+			"Attempt to register without required info structure\n");
-+		return ERR_PTR(-EINVAL);
-+	}
-+
- 	region = kzalloc(sizeof(*region), GFP_KERNEL);
- 	if (!region)
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
- 
- 	id = ida_simple_get(&fpga_region_ida, 0, 0, GFP_KERNEL);
--	if (id < 0)
-+	if (id < 0) {
-+		ret = id;
- 		goto err_free;
-+	}
-+
-+	region->mgr = info->mgr;
-+	region->compat_id = info->compat_id;
-+	region->priv = info->priv;
-+	region->get_bridges = info->get_bridges;
- 
--	region->mgr = mgr;
--	region->get_bridges = get_bridges;
- 	mutex_init(&region->mutex);
- 	INIT_LIST_HEAD(&region->bridge_list);
- 
--	device_initialize(&region->dev);
- 	region->dev.class = fpga_region_class;
- 	region->dev.parent = parent;
- 	region->dev.of_node = parent->of_node;
-@@ -222,6 +225,12 @@ struct fpga_region
- 	if (ret)
- 		goto err_remove;
- 
-+	ret = device_register(&region->dev);
-+	if (ret) {
-+		put_device(&region->dev);
-+		return ERR_PTR(ret);
-+	}
-+
- 	return region;
- 
- err_remove:
-@@ -229,76 +238,32 @@ struct fpga_region
- err_free:
- 	kfree(region);
- 
--	return NULL;
--}
--EXPORT_SYMBOL_GPL(fpga_region_create);
--
--/**
-- * fpga_region_free - free an FPGA region created by fpga_region_create()
-- * @region: FPGA region
-- */
--void fpga_region_free(struct fpga_region *region)
--{
--	ida_simple_remove(&fpga_region_ida, region->dev.id);
--	kfree(region);
--}
--EXPORT_SYMBOL_GPL(fpga_region_free);
--
--static void devm_fpga_region_release(struct device *dev, void *res)
--{
--	struct fpga_region *region = *(struct fpga_region **)res;
--
--	fpga_region_free(region);
-+	return ERR_PTR(ret);
- }
-+EXPORT_SYMBOL_GPL(fpga_region_register_full);
- 
- /**
-- * devm_fpga_region_create - create and initialize a managed FPGA region struct
-+ * fpga_region_register - create and register an FPGA Region device
-  * @parent: device parent
-  * @mgr: manager that programs this region
-  * @get_bridges: optional function to get bridges to a list
-  *
-- * This function is intended for use in an FPGA region driver's probe function.
-- * After the region driver creates the region struct with
-- * devm_fpga_region_create(), it should register it with fpga_region_register().
-- * The region driver's remove function should call fpga_region_unregister().
-- * The region struct allocated with this function will be freed automatically on
-- * driver detach.  This includes the case of a probe function returning error
-- * before calling fpga_region_register(), the struct will still get cleaned up.
-+ * This simple version of the register function should be sufficient for most users.
-+ * The fpga_region_register_full() function is available for users that need to
-+ * pass additional, optional parameters.
-  *
-- * Return: struct fpga_region or NULL
-+ * Return: struct fpga_region or ERR_PTR()
-  */
--struct fpga_region
--*devm_fpga_region_create(struct device *parent,
--			 struct fpga_manager *mgr,
--			 int (*get_bridges)(struct fpga_region *))
-+struct fpga_region *
-+fpga_region_register(struct device *parent, struct fpga_manager *mgr,
-+		     int (*get_bridges)(struct fpga_region *))
- {
--	struct fpga_region **ptr, *region;
--
--	ptr = devres_alloc(devm_fpga_region_release, sizeof(*ptr), GFP_KERNEL);
--	if (!ptr)
--		return NULL;
-+	struct fpga_region_info info = { 0 };
- 
--	region = fpga_region_create(parent, mgr, get_bridges);
--	if (!region) {
--		devres_free(ptr);
--	} else {
--		*ptr = region;
--		devres_add(parent, ptr);
--	}
-+	info.mgr = mgr;
-+	info.get_bridges = get_bridges;
- 
--	return region;
--}
--EXPORT_SYMBOL_GPL(devm_fpga_region_create);
--
--/**
-- * fpga_region_register - register an FPGA region
-- * @region: FPGA region
-- *
-- * Return: 0 or -errno
-- */
--int fpga_region_register(struct fpga_region *region)
--{
--	return device_add(&region->dev);
-+	return fpga_region_register_full(parent, &info);
- }
- EXPORT_SYMBOL_GPL(fpga_region_register);
- 
-@@ -316,6 +281,10 @@ EXPORT_SYMBOL_GPL(fpga_region_unregister);
- 
- static void fpga_region_dev_release(struct device *dev)
- {
-+	struct fpga_region *region = to_fpga_region(dev);
-+
-+	ida_simple_remove(&fpga_region_ida, region->dev.id);
-+	kfree(region);
- }
- 
- /**
-diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
-index e3c25576b6b9..9c662db1c508 100644
---- a/drivers/fpga/of-fpga-region.c
-+++ b/drivers/fpga/of-fpga-region.c
-@@ -405,16 +405,12 @@ static int of_fpga_region_probe(struct platform_device *pdev)
- 	if (IS_ERR(mgr))
- 		return -EPROBE_DEFER;
- 
--	region = devm_fpga_region_create(dev, mgr, of_fpga_region_get_bridges);
--	if (!region) {
--		ret = -ENOMEM;
-+	region = fpga_region_register(dev, mgr, of_fpga_region_get_bridges);
-+	if (IS_ERR(region)) {
-+		ret = PTR_ERR(region);
- 		goto eprobe_mgr_put;
- 	}
- 
--	ret = fpga_region_register(region);
--	if (ret)
--		goto eprobe_mgr_put;
--
- 	of_platform_populate(np, fpga_region_of_match, NULL, &region->dev);
- 	platform_set_drvdata(pdev, region);
- 
-diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
-index 27cb706275db..ae111beeffba 100644
---- a/include/linux/fpga/fpga-region.h
-+++ b/include/linux/fpga/fpga-region.h
-@@ -7,6 +7,27 @@
- #include <linux/fpga/fpga-mgr.h>
- #include <linux/fpga/fpga-bridge.h>
- 
-+struct fpga_region;
-+
-+/**
-+ * struct fpga_region_info - collection of parameters an FPGA Region
-+ * @mgr: fpga region manager
-+ * @compat_id: FPGA region id for compatibility check.
-+ * @priv: fpga region private data
-+ * @get_bridges: optional function to get bridges to a list
-+ *
-+ * fpga_region_info contains parameters for the register_full function.
-+ * These are separated into an info structure because they some are optional
-+ * others could be added to in the future. The info structure facilitates
-+ * maintaining a stable API.
-+ */
-+struct fpga_region_info {
-+	struct fpga_manager *mgr;
-+	struct fpga_compat_id *compat_id;
-+	void *priv;
-+	int (*get_bridges)(struct fpga_region *region);
-+};
-+
- /**
-  * struct fpga_region - FPGA Region structure
-  * @dev: FPGA Region device
-@@ -37,15 +58,12 @@ struct fpga_region *fpga_region_class_find(
- 
- int fpga_region_program_fpga(struct fpga_region *region);
- 
--struct fpga_region
--*fpga_region_create(struct device *dev, struct fpga_manager *mgr,
--		    int (*get_bridges)(struct fpga_region *));
--void fpga_region_free(struct fpga_region *region);
--int fpga_region_register(struct fpga_region *region);
--void fpga_region_unregister(struct fpga_region *region);
-+struct fpga_region *
-+fpga_region_register_full(struct device *parent, const struct fpga_region_info *info);
- 
--struct fpga_region
--*devm_fpga_region_create(struct device *dev, struct fpga_manager *mgr,
--			int (*get_bridges)(struct fpga_region *));
-+struct fpga_region *
-+fpga_region_register(struct device *parent, struct fpga_manager *mgr,
-+		     int (*get_bridges)(struct fpga_region *));
-+void fpga_region_unregister(struct fpga_region *region);
- 
- #endif /* _FPGA_REGION_H */
--- 
-2.25.1
+As it's a new feature to the fpga manager subsystem. So i have posted it as=
+ RFC to get the inputs.
+
+Regards,
+Navakishore.
 
