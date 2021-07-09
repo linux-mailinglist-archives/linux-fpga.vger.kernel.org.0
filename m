@@ -2,63 +2,62 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3C03C2931
-	for <lists+linux-fpga@lfdr.de>; Fri,  9 Jul 2021 20:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE013C2936
+	for <lists+linux-fpga@lfdr.de>; Fri,  9 Jul 2021 20:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbhGIStU (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 9 Jul 2021 14:49:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32417 "EHLO
+        id S230336AbhGISti (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 9 Jul 2021 14:49:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25792 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229506AbhGIStT (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 9 Jul 2021 14:49:19 -0400
+        by vger.kernel.org with ESMTP id S229821AbhGISti (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 9 Jul 2021 14:49:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625856395;
+        s=mimecast20190719; t=1625856414;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding;
-        bh=zs305fSgOIpwBUwyxoV06D5N+pPR0pzJgrOMpwSsZcQ=;
-        b=JkoLZLE6vv/TFAzDrlxdoTOwoLwrPL8Gu+JPPXQJQJ9Ym9GNzuaHjEEr0Dhp48HPYQKKFh
-        aNkoCBp5xQ584XJxF0CMGgIYe056faN4sLQPby8bitj9iHVB/fASAAJK42G4P6L0GDSmOV
-        4sWqiu72MQSnRXfvYmPWbvk42OMZjVM=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-126-_-Mf8BOqOiWXy5014VYiFw-1; Fri, 09 Jul 2021 14:46:34 -0400
-X-MC-Unique: _-Mf8BOqOiWXy5014VYiFw-1
-Received: by mail-oo1-f70.google.com with SMTP id d12-20020a4aeb8c0000b029023bbaaddcbbso6047414ooj.13
-        for <linux-fpga@vger.kernel.org>; Fri, 09 Jul 2021 11:46:34 -0700 (PDT)
+        bh=wMNuEC7p1hYYeQcAVeoisWoHkfZWMVz8tQXwl6mqvRw=;
+        b=AmoX78kBhJpC2SdHqtGWt8ucCkbdBQAkQZkXmFBJbBkak96VfXxyQ9se2saonrC8R1r092
+        XRDHoWQKLhtE0k+pQoxczDXTiN1ZYTFQ28Hxq4Qx4U0HsgiRjzch6Q/WAEsW+AMfpUErgv
+        5AR2vrMs2cTLa7L/VxDTNIo6MM+QuEo=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-397-ewp7DsV4NJKgg02QuZsPig-1; Fri, 09 Jul 2021 14:46:53 -0400
+X-MC-Unique: ewp7DsV4NJKgg02QuZsPig-1
+Received: by mail-ot1-f72.google.com with SMTP id 16-20020a9d05900000b02903f5a4101f8eso1422897otd.17
+        for <linux-fpga@vger.kernel.org>; Fri, 09 Jul 2021 11:46:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=zs305fSgOIpwBUwyxoV06D5N+pPR0pzJgrOMpwSsZcQ=;
-        b=SnUMZ93eiWlZhTATGIRusKs91XklqvwZ1wMlnMwki7CyWyYeUgls0KBKx6Ex1swGkd
-         izwd3f4P4fMhUjx2IpWIf7hW7M6H9z3ND4UhRZikMVHCUjtgbhSVFAdE39CmEkcXpgsX
-         f1OGcYQ9XN1BsNPZOOAsBh6GHh1fM/2aF+g9EQRRe8ClI8Mo497dxtmDcF/sgleDtzip
-         ytodhh8jIp5hkNk5iq+yJMMzNdaH9f1huQgK+1IZyoHzEPbW2P9huFh2hz+6HZsHMXyB
-         U5aKwqrIGrA+XYqWH+Ib/f5gOEpiwEWLjzh7v+yK13Na3/OUjObkPIsPBZqnhjXbhMed
-         TNJA==
-X-Gm-Message-State: AOAM530L4+BtCuhxWVeZUD5knwivxvkqk8/x6f2XpnIR3rzZUlFbu8Py
-        GCVcpGRBp0yALVYh9D5HEy7iJxbaXuaHPmVTL1McV2MYixvMPVkULgnhnk9Na5AfaUSqrXNCDTV
-        F7e4NaZj9f2OUnu86jyWj/A==
-X-Received: by 2002:aca:ac56:: with SMTP id v83mr24688247oie.178.1625856393899;
-        Fri, 09 Jul 2021 11:46:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyQoY3lLhGCPXuBrfIZlHf4LBNGDrj5opH2RMTGDYa5nR+h1WiTlX/2LBWkFQaE+45NVvAnkQ==
-X-Received: by 2002:aca:ac56:: with SMTP id v83mr24688220oie.178.1625856393658;
-        Fri, 09 Jul 2021 11:46:33 -0700 (PDT)
+        bh=wMNuEC7p1hYYeQcAVeoisWoHkfZWMVz8tQXwl6mqvRw=;
+        b=FxRpAHllKtw5RjjB71ykE7gpgbAVsmWZ9qALl4zZE7DxSlQMFs2kILnFW0HSVwkoNF
+         uxi+xmcR7wSe6movl0eg9RavcE84JibaLycTgcl3laXhV1tOWFvV+65Vel1HpFMcFrsL
+         UTGxGBBX3BqoQ919ZzjGpCAJ9YGIFgYCuryZGv31Gu7AQQ4WYHg4AisVTwAWNj5nanJC
+         bBA7mkzXwWHMLCHY0avyUOUOk/RjVr4r+OMnctC/b6K2UU0rWptL377bJFGpm72npRtf
+         YpeClH/P25z9jsWSci/4MTfqMJm026AWlUkon+q6gUaslUKfTBxdSc96fYdnbKXnWHLB
+         t5ZA==
+X-Gm-Message-State: AOAM533GE7VVay4bmJsDiZxPtkV4MNmzutJQUsTu0+1v2t6CzfiVExeX
+        S6hPngGWq1/F1KRhRnN3+eygIcyPRVUakkHRsWLBDQLI4qj9ScyAypuDZmdf1TCur41nVEtfJKq
+        dsjyebcV+UjBYPQl4+Ai38g==
+X-Received: by 2002:aca:1809:: with SMTP id h9mr313937oih.4.1625856412474;
+        Fri, 09 Jul 2021 11:46:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwT6Qkx17xOl0yMmkNwVOlw5rcnNBZ7ZjKZSODzgT5CEJC/DZwMvYGwmRnePz7tODl1Xst8Aw==
+X-Received: by 2002:aca:1809:: with SMTP id h9mr313920oih.4.1625856412298;
+        Fri, 09 Jul 2021 11:46:52 -0700 (PDT)
 Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id l8sm1365245otk.81.2021.07.09.11.46.32
+        by smtp.gmail.com with ESMTPSA id s8sm756129otp.37.2021.07.09.11.46.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 11:46:33 -0700 (PDT)
+        Fri, 09 Jul 2021 11:46:51 -0700 (PDT)
 From:   trix@redhat.com
-To:     mdf@kernel.org, corbet@lwn.net, hao.wu@intel.com,
-        michal.simek@xilinx.com
+To:     mdf@kernel.org, corbet@lwn.net, hao.wu@intel.com
 Cc:     linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
         Russ Weight <russell.h.weight@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Subject: [RFC PATCH v10 2/3] fpga: bridge: Use standard dev_release for class driver
-Date:   Fri,  9 Jul 2021 11:46:24 -0700
-Message-Id: <20210709184624.2521751-1-trix@redhat.com>
+        Tom Rix <trix@redhat.com>, Xu Yilun <yilun.xu@intel.com>
+Subject: [RFC PATCH v10 3/3] fpga: region: Use standard dev_release for class driver
+Date:   Fri,  9 Jul 2021 11:46:48 -0700
+Message-Id: <20210709184648.2521926-1-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -69,422 +68,310 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Russ Weight <russell.h.weight@intel.com>
 
-The FPGA bridge class driver data structure is being treated as a
+The FPGA region class driver data structure is being treated as a
 managed resource instead of using the standard dev_release call-back
-function to release the class data structure. This change removes
-the managed resource code and combines the create() and register()
+function to release the class data structure. This change removes the
+managed resource code and combines the create() and register()
 functions into a single register() function.
 
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-Reviewed-by: Tom Rix <trix@redhat.com>
----
- Documentation/driver-api/fpga/fpga-bridge.rst |  12 +-
- drivers/fpga/altera-fpga2sdram.c              |  12 +-
- drivers/fpga/altera-freeze-bridge.c           |  10 +-
- drivers/fpga/altera-hps2fpga.c                |  12 +-
- drivers/fpga/dfl-fme-br.c                     |  10 +-
- drivers/fpga/fpga-bridge.c                    | 122 ++++--------------
- drivers/fpga/xilinx-pr-decoupler.c            |  17 +--
- include/linux/fpga/fpga-bridge.h              |  30 +++--
- 8 files changed, 77 insertions(+), 148 deletions(-)
+The parameter 'void *priv' was added to register().
 
-diff --git a/Documentation/driver-api/fpga/fpga-bridge.rst b/Documentation/driver-api/fpga/fpga-bridge.rst
-index 198aadafd3e7d..6042085340953 100644
---- a/Documentation/driver-api/fpga/fpga-bridge.rst
-+++ b/Documentation/driver-api/fpga/fpga-bridge.rst
-@@ -4,11 +4,10 @@ FPGA Bridge
- API to implement a new FPGA bridge
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
+Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+---
+ Documentation/driver-api/fpga/fpga-region.rst |   4 -
+ drivers/fpga/dfl-fme-region.c                 |   7 +-
+ drivers/fpga/dfl.c                            |  12 +-
+ drivers/fpga/fpga-region.c                    | 108 +++++-------------
+ drivers/fpga/of-fpga-region.c                 |  10 +-
+ include/linux/fpga/fpga-region.h              |  12 +-
+ 6 files changed, 38 insertions(+), 115 deletions(-)
+
+diff --git a/Documentation/driver-api/fpga/fpga-region.rst b/Documentation/driver-api/fpga/fpga-region.rst
+index 2f621de51130d..572729e49ec02 100644
+--- a/Documentation/driver-api/fpga/fpga-region.rst
++++ b/Documentation/driver-api/fpga/fpga-region.rst
+@@ -47,7 +47,6 @@ API to add a new FPGA region
  
--* struct fpga_bridge — The FPGA Bridge structure
--* struct fpga_bridge_ops — Low level Bridge driver ops
--* devm_fpga_bridge_create() — Allocate and init a bridge struct
--* fpga_bridge_register() — Register a bridge
--* fpga_bridge_unregister() — Unregister a bridge
-+* struct fpga_bridge - The FPGA Bridge structure
-+* struct fpga_bridge_ops - Low level Bridge driver ops
-+* fpga_bridge_register() - Create and register a bridge
-+* fpga_bridge_unregister() - Unregister a bridge
+ * struct fpga_region — The FPGA region struct
+ * struct fpga_region_ops —  Low level FPGA region driver ops
+-* devm_fpga_region_create() — Allocate and init a region struct
+ * fpga_region_register() —  Register an FPGA region
+ * fpga_region_unregister() —  Unregister an FPGA region
  
- .. kernel-doc:: include/linux/fpga/fpga-bridge.h
-    :functions: fpga_bridge
-@@ -16,9 +15,6 @@ API to implement a new FPGA bridge
- .. kernel-doc:: include/linux/fpga/fpga-bridge.h
-    :functions: fpga_bridge_ops
+@@ -79,9 +78,6 @@ following APIs to handle building or tearing down that list.
+ .. kernel-doc:: include/linux/fpga/fpga-region.h
+    :functions: fpga_region_ops
  
--.. kernel-doc:: drivers/fpga/fpga-bridge.c
--   :functions: devm_fpga_bridge_create
+-.. kernel-doc:: drivers/fpga/fpga-region.c
+-   :functions: devm_fpga_region_create
 -
- .. kernel-doc:: drivers/fpga/fpga-bridge.c
-    :functions: fpga_bridge_register
+ .. kernel-doc:: drivers/fpga/fpga-region.c
+    :functions: fpga_region_register
  
-diff --git a/drivers/fpga/altera-fpga2sdram.c b/drivers/fpga/altera-fpga2sdram.c
-index a78e49c63c640..66063507116b7 100644
---- a/drivers/fpga/altera-fpga2sdram.c
-+++ b/drivers/fpga/altera-fpga2sdram.c
-@@ -121,17 +121,13 @@ static int alt_fpga_bridge_probe(struct platform_device *pdev)
- 	/* Get f2s bridge configuration saved in handoff register */
- 	regmap_read(sysmgr, SYSMGR_ISWGRP_HANDOFF3, &priv->mask);
+diff --git a/drivers/fpga/dfl-fme-region.c b/drivers/fpga/dfl-fme-region.c
+index be1d57ee37666..13befbb4e1a6c 100644
+--- a/drivers/fpga/dfl-fme-region.c
++++ b/drivers/fpga/dfl-fme-region.c
+@@ -57,19 +57,14 @@ static int fme_region_probe(struct platform_device *pdev)
+ 	if (IS_ERR(mgr))
+ 		return -EPROBE_DEFER;
  
--	br = devm_fpga_bridge_create(dev, F2S_BRIDGE_NAME,
--				     &altera_fpga2sdram_br_ops, priv);
--	if (!br)
--		return -ENOMEM;
-+	br = fpga_bridge_register(dev, F2S_BRIDGE_NAME,
-+				  &altera_fpga2sdram_br_ops, priv);
-+	if (IS_ERR(br))
-+		return PTR_ERR(mgr);
- 
- 	platform_set_drvdata(pdev, br);
- 
--	ret = fpga_bridge_register(br);
--	if (ret)
--		return ret;
--
- 	dev_info(dev, "driver initialized with handoff %08x\n", priv->mask);
- 
- 	if (!of_property_read_u32(dev->of_node, "bridge-enable", &enable)) {
-diff --git a/drivers/fpga/altera-freeze-bridge.c b/drivers/fpga/altera-freeze-bridge.c
-index dd58c4aea92ea..bfbfa43cd05bc 100644
---- a/drivers/fpga/altera-freeze-bridge.c
-+++ b/drivers/fpga/altera-freeze-bridge.c
-@@ -244,14 +244,14 @@ static int altera_freeze_br_probe(struct platform_device *pdev)
- 
- 	priv->base_addr = base_addr;
- 
--	br = devm_fpga_bridge_create(dev, FREEZE_BRIDGE_NAME,
--				     &altera_freeze_br_br_ops, priv);
--	if (!br)
--		return -ENOMEM;
-+	br = fpga_bridge_register(dev, FREEZE_BRIDGE_NAME,
-+				  &altera_freeze_br_br_ops, priv);
-+	if (IS_ERR(br))
-+		return PTR_ERR(br);
- 
- 	platform_set_drvdata(pdev, br);
- 
--	return fpga_bridge_register(br);
-+	return 0;
- }
- 
- static int altera_freeze_br_remove(struct platform_device *pdev)
-diff --git a/drivers/fpga/altera-hps2fpga.c b/drivers/fpga/altera-hps2fpga.c
-index 77b95f2518216..aa758426c22bc 100644
---- a/drivers/fpga/altera-hps2fpga.c
-+++ b/drivers/fpga/altera-hps2fpga.c
-@@ -180,19 +180,15 @@ static int alt_fpga_bridge_probe(struct platform_device *pdev)
- 		}
+-	region = devm_fpga_region_create(dev, mgr, &fme_fpga_region_ops);
++	region = fpga_region_register(dev, mgr, &fme_fpga_region_ops, pdata);
+ 	if (!region) {
+ 		ret = -ENOMEM;
+ 		goto eprobe_mgr_put;
  	}
  
--	br = devm_fpga_bridge_create(dev, priv->name,
--				     &altera_hps2fpga_br_ops, priv);
--	if (!br) {
--		ret = -ENOMEM;
-+	br = fpga_bridge_register(dev, priv->name,
-+				  &altera_hps2fpga_br_ops, priv);
-+	if (IS_ERR(br)) {
-+		ret = PTR_ERR(br);
- 		goto err;
- 	}
+-	region->priv = pdata;
+ 	platform_set_drvdata(pdev, region);
  
- 	platform_set_drvdata(pdev, br);
- 
--	ret = fpga_bridge_register(br);
+-	ret = fpga_region_register(region);
 -	if (ret)
--		goto err;
+-		goto eprobe_mgr_put;
 -
+ 	dev_dbg(dev, "DFL FME FPGA Region probed\n");
+ 
  	return 0;
+diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+index 511b20ff35a33..6e628c07c1dc1 100644
+--- a/drivers/fpga/dfl.c
++++ b/drivers/fpga/dfl.c
+@@ -1400,19 +1400,15 @@ dfl_fpga_feature_devs_enumerate(struct dfl_fpga_enum_info *info)
+ 	if (!cdev)
+ 		return ERR_PTR(-ENOMEM);
  
- err:
-diff --git a/drivers/fpga/dfl-fme-br.c b/drivers/fpga/dfl-fme-br.c
-index 3ff9f3a687ce5..808d1f4d76df8 100644
---- a/drivers/fpga/dfl-fme-br.c
-+++ b/drivers/fpga/dfl-fme-br.c
-@@ -68,14 +68,14 @@ static int fme_br_probe(struct platform_device *pdev)
+-	cdev->region = devm_fpga_region_create(info->dev, NULL, NULL);
+-	if (!cdev->region) {
+-		ret = -ENOMEM;
+-		goto free_cdev_exit;
+-	}
+-
+ 	cdev->parent = info->dev;
+ 	mutex_init(&cdev->lock);
+ 	INIT_LIST_HEAD(&cdev->port_dev_list);
  
- 	priv->pdata = dev_get_platdata(dev);
+-	ret = fpga_region_register(cdev->region);
+-	if (ret)
++	cdev->region = fpga_region_register(info->dev, NULL, NULL, NULL);
++	if (IS_ERR(cdev->region)) {
++		ret = PTR_ERR(cdev->region);
+ 		goto free_cdev_exit;
++	}
  
--	br = devm_fpga_bridge_create(dev, "DFL FPGA FME Bridge",
--				     &fme_bridge_ops, priv);
--	if (!br)
--		return -ENOMEM;
-+	br = fpga_bridge_register(dev, "DFL FPGA FME Bridge",
-+				  &fme_bridge_ops, priv);
-+	if (IS_ERR(br))
-+		return PTR_ERR(br);
- 
- 	platform_set_drvdata(pdev, br);
- 
--	return fpga_bridge_register(br);
-+	return 0;
- }
- 
- static int fme_br_remove(struct platform_device *pdev)
-diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-index 2bfb2ff869305..16ae053afc30f 100644
---- a/drivers/fpga/fpga-bridge.c
-+++ b/drivers/fpga/fpga-bridge.c
-@@ -312,36 +312,41 @@ static struct attribute *fpga_bridge_attrs[] = {
- ATTRIBUTE_GROUPS(fpga_bridge);
+ 	/* create and init build info for enumeration */
+ 	binfo = devm_kzalloc(info->dev, sizeof(*binfo), GFP_KERNEL);
+diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+index b08d3914716f0..6442e80480b43 100644
+--- a/drivers/fpga/fpga-region.c
++++ b/drivers/fpga/fpga-region.c
+@@ -184,39 +184,44 @@ static struct attribute *fpga_region_attrs[] = {
+ ATTRIBUTE_GROUPS(fpga_region);
  
  /**
-- * fpga_bridge_create - create and initialize a struct fpga_bridge
-+ * fpga_bridge_register - create and register an FPGA Bridge device
-  * @parent:	FPGA bridge device from pdev
-  * @name:	FPGA bridge name
-  * @br_ops:	pointer to structure of fpga bridge ops
-  * @priv:	FPGA bridge private data
+- * fpga_region_create - alloc and init a struct fpga_region
++ * fpga_region_register - create and register an FPGA Region device
+  * @parent: device parent
+  * @mgr: manager that programs this region
+- * @rops:  optional pointer to struct for fpga region ops
++ * @rops: optional pointer to struct for fpga region ops
++ * @priv: fpga region private data
   *
-- * The caller of this function is responsible for freeing the bridge with
-- * fpga_bridge_free().  Using devm_fpga_bridge_create() instead is recommended.
-- *
-- * Return: struct fpga_bridge or NULL
-+ * Return: struct fpga_bridge pointer or ERR_PTR()
+  * The caller of this function is responsible for freeing the resulting region
+- * struct with fpga_region_free().  Using devm_fpga_region_create() instead is
++ * struct with fpga_region_unregiser().  Using devm_fpga_region_create() instead is
+  * recommended.
+  *
+- * Return: struct fpga_region or NULL
++ * Return: struct fpga_region or ERR_PTR()
   */
--struct fpga_bridge *fpga_bridge_create(struct device *parent, const char *name,
--				       const struct fpga_bridge_ops *br_ops,
--				       void *priv)
-+struct fpga_bridge *
-+fpga_bridge_register(struct device *parent, const char *name,
-+		     const struct fpga_bridge_ops *br_ops,
+-struct fpga_region
+-*fpga_region_create(struct device *parent,
+-		    struct fpga_manager *mgr,
+-		    const struct fpga_region_ops *rops)
++struct fpga_region *
++fpga_region_register(struct device *parent,
++		     struct fpga_manager *mgr,
++		     const struct fpga_region_ops *rops,
 +		     void *priv)
  {
- 	struct fpga_bridge *bridge;
- 	int id, ret;
+ 	struct fpga_region *region;
+ 	int id, ret = 0;
  
-+	if (!br_ops) {
-+		dev_err(parent, "Attempt to register without fpga_bridge_ops\n");
-+		return ERR_PTR(-EINVAL);
-+	}
-+
- 	if (!name || !strlen(name)) {
- 		dev_err(parent, "Attempt to register with no name!\n");
--		return NULL;
-+		return ERR_PTR(-EINVAL);
- 	}
- 
- 	bridge = kzalloc(sizeof(*bridge), GFP_KERNEL);
- 	if (!bridge)
+ 	region = kzalloc(sizeof(*region), GFP_KERNEL);
+ 	if (!region)
 -		return NULL;
 +		return ERR_PTR(-ENOMEM);
  
- 	id = ida_simple_get(&fpga_bridge_ida, 0, 0, GFP_KERNEL);
+ 	id = ida_simple_get(&fpga_region_ida, 0, 0, GFP_KERNEL);
 -	if (id < 0)
 +	if (id < 0) {
 +		ret = id;
- 		goto error_kfree;
+ 		goto err_free;
 +	}
  
- 	mutex_init(&bridge->mutex);
- 	INIT_LIST_HEAD(&bridge->node);
-@@ -350,17 +355,23 @@ struct fpga_bridge *fpga_bridge_create(struct device *parent, const char *name,
- 	bridge->br_ops = br_ops;
- 	bridge->priv = priv;
+ 	region->mgr = mgr;
+ 	region->rops = rops;
++	region->priv = priv;
++
+ 	mutex_init(&region->mutex);
+ 	INIT_LIST_HEAD(&region->bridge_list);
  
--	device_initialize(&bridge->dev);
- 	bridge->dev.groups = br_ops->groups;
- 	bridge->dev.class = fpga_bridge_class;
- 	bridge->dev.parent = parent;
- 	bridge->dev.of_node = parent->of_node;
- 	bridge->dev.id = id;
-+	of_platform_populate(bridge->dev.of_node, NULL, NULL, &bridge->dev);
- 
- 	ret = dev_set_name(&bridge->dev, "br%d", id);
+-	device_initialize(&region->dev);
+ 	region->dev.class = fpga_region_class;
+ 	region->dev.parent = parent;
+ 	region->dev.of_node = parent->of_node;
+@@ -226,6 +231,12 @@ struct fpga_region
  	if (ret)
- 		goto error_device;
+ 		goto err_remove;
  
-+	ret = device_register(&bridge->dev);
++	ret = device_register(&region->dev);
 +	if (ret) {
-+		put_device(&bridge->dev);
++		put_device(&region->dev);
 +		return ERR_PTR(ret);
 +	}
 +
- 	return bridge;
+ 	return region;
  
- error_device:
-@@ -368,88 +379,7 @@ struct fpga_bridge *fpga_bridge_create(struct device *parent, const char *name,
- error_kfree:
- 	kfree(bridge);
+ err_remove:
+@@ -233,76 +244,7 @@ struct fpga_region
+ err_free:
+ 	kfree(region);
  
 -	return NULL;
 -}
--EXPORT_SYMBOL_GPL(fpga_bridge_create);
+-EXPORT_SYMBOL_GPL(fpga_region_create);
 -
 -/**
-- * fpga_bridge_free - free an fpga bridge created by fpga_bridge_create()
-- * @bridge:	FPGA bridge struct
+- * fpga_region_free - free an FPGA region created by fpga_region_create()
+- * @region: FPGA region
 - */
--void fpga_bridge_free(struct fpga_bridge *bridge)
+-void fpga_region_free(struct fpga_region *region)
 -{
--	ida_simple_remove(&fpga_bridge_ida, bridge->dev.id);
--	kfree(bridge);
+-	ida_simple_remove(&fpga_region_ida, region->dev.id);
+-	kfree(region);
 -}
--EXPORT_SYMBOL_GPL(fpga_bridge_free);
+-EXPORT_SYMBOL_GPL(fpga_region_free);
 -
--static void devm_fpga_bridge_release(struct device *dev, void *res)
+-static void devm_fpga_region_release(struct device *dev, void *res)
 -{
--	struct fpga_bridge *bridge = *(struct fpga_bridge **)res;
+-	struct fpga_region *region = *(struct fpga_region **)res;
 -
--	fpga_bridge_free(bridge);
+-	fpga_region_free(region);
 -}
 -
 -/**
-- * devm_fpga_bridge_create - create and init a managed struct fpga_bridge
-- * @parent:	FPGA bridge device from pdev
-- * @name:	FPGA bridge name
-- * @br_ops:	pointer to structure of fpga bridge ops
-- * @priv:	FPGA bridge private data
+- * devm_fpga_region_create - create and initialize a managed FPGA region struct
+- * @parent: device parent
+- * @mgr: manager that programs this region
+- * @rops:  optional pointer to struct for fpga region ops
 - *
-- * This function is intended for use in an FPGA bridge driver's probe function.
-- * After the bridge driver creates the struct with devm_fpga_bridge_create(), it
-- * should register the bridge with fpga_bridge_register().  The bridge driver's
-- * remove function should call fpga_bridge_unregister().  The bridge struct
-- * allocated with this function will be freed automatically on driver detach.
-- * This includes the case of a probe function returning error before calling
-- * fpga_bridge_register(), the struct will still get cleaned up.
+- * This function is intended for use in an FPGA region driver's probe function.
+- * After the region driver creates the region struct with
+- * devm_fpga_region_create(), it should register it with fpga_region_register().
+- * The region driver's remove function should call fpga_region_unregister().
+- * The region struct allocated with this function will be freed automatically on
+- * driver detach.  This includes the case of a probe function returning error
+- * before calling fpga_region_register(), the struct will still get cleaned up.
 - *
-- *  Return: struct fpga_bridge or NULL
+- * Return: struct fpga_region or NULL
 - */
--struct fpga_bridge
--*devm_fpga_bridge_create(struct device *parent, const char *name,
--			 const struct fpga_bridge_ops *br_ops, void *priv)
+-struct fpga_region
+-*devm_fpga_region_create(struct device *parent,
+-			 struct fpga_manager *mgr,
+-			 const struct fpga_region_ops *rops)
 -{
--	struct fpga_bridge **ptr, *bridge;
+-	struct fpga_region **ptr, *region;
 -
--	ptr = devres_alloc(devm_fpga_bridge_release, sizeof(*ptr), GFP_KERNEL);
+-	ptr = devres_alloc(devm_fpga_region_release, sizeof(*ptr), GFP_KERNEL);
 -	if (!ptr)
 -		return NULL;
 -
--	bridge = fpga_bridge_create(parent, name, br_ops, priv);
--	if (!bridge) {
+-	region = fpga_region_create(parent, mgr, rops);
+-	if (!region) {
 -		devres_free(ptr);
 -	} else {
--		*ptr = bridge;
+-		*ptr = region;
 -		devres_add(parent, ptr);
 -	}
 -
--	return bridge;
+-	return region;
 -}
--EXPORT_SYMBOL_GPL(devm_fpga_bridge_create);
+-EXPORT_SYMBOL_GPL(devm_fpga_region_create);
 -
 -/**
-- * fpga_bridge_register - register an FPGA bridge
+- * fpga_region_register - register an FPGA region
+- * @region: FPGA region
 - *
-- * @bridge: FPGA bridge struct
-- *
-- * Return: 0 for success, error code otherwise.
+- * Return: 0 or -errno
 - */
--int fpga_bridge_register(struct fpga_bridge *bridge)
+-int fpga_region_register(struct fpga_region *region)
 -{
--	struct device *dev = &bridge->dev;
--	int ret;
--
--	ret = device_add(dev);
--	if (ret)
--		return ret;
--
--	of_platform_populate(dev->of_node, NULL, NULL, dev);
--
--	dev_info(dev->parent, "fpga bridge [%s] registered\n", bridge->name);
--
--	return 0;
+-	return device_add(&region->dev);
 +	return ERR_PTR(ret);
  }
- EXPORT_SYMBOL_GPL(fpga_bridge_register);
+ EXPORT_SYMBOL_GPL(fpga_region_register);
  
-@@ -475,6 +405,10 @@ EXPORT_SYMBOL_GPL(fpga_bridge_unregister);
+@@ -320,6 +262,10 @@ EXPORT_SYMBOL_GPL(fpga_region_unregister);
  
- static void fpga_bridge_dev_release(struct device *dev)
+ static void fpga_region_dev_release(struct device *dev)
  {
-+	struct fpga_bridge *bridge = to_fpga_bridge(dev);
++	struct fpga_region *region = to_fpga_region(dev);
 +
-+	ida_simple_remove(&fpga_bridge_ida, bridge->dev.id);
-+	kfree(bridge);
++	ida_simple_remove(&fpga_region_ida, region->dev.id);
++	kfree(region);
  }
  
- static int __init fpga_bridge_dev_init(void)
-diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-index ea2bde6e5bc4e..c004e52b94646 100644
---- a/drivers/fpga/xilinx-pr-decoupler.c
-+++ b/drivers/fpga/xilinx-pr-decoupler.c
-@@ -138,22 +138,17 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
+ /**
+diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
+index 2c99605e008a6..bceb51b2476c6 100644
+--- a/drivers/fpga/of-fpga-region.c
++++ b/drivers/fpga/of-fpga-region.c
+@@ -409,16 +409,12 @@ static int of_fpga_region_probe(struct platform_device *pdev)
+ 	if (IS_ERR(mgr))
+ 		return -EPROBE_DEFER;
  
- 	clk_disable(priv->clk);
- 
--	br = devm_fpga_bridge_create(&pdev->dev, priv->ipconfig->name,
--				     &xlnx_pr_decoupler_br_ops, priv);
--	if (!br) {
--		err = -ENOMEM;
--		goto err_clk;
--	}
--
--	platform_set_drvdata(pdev, br);
--
--	err = fpga_bridge_register(br);
--	if (err) {
-+	br = fpga_bridge_register(&pdev->dev, priv->ipconfig->name,
-+				  &xlnx_pr_decoupler_br_ops, priv);
-+	if (IS_ERR(br)) {
-+		err = PTR_ERR(br);
- 		dev_err(&pdev->dev, "unable to register %s",
- 			priv->ipconfig->name);
- 		goto err_clk;
+-	region = devm_fpga_region_create(dev, mgr, &of_fpga_region_ops);
+-	if (!region) {
+-		ret = -ENOMEM;
++	region = fpga_region_register(dev, mgr, &of_fpga_region_ops, NULL);
++	if (IS_ERR(region)) {
++		ret = PTR_ERR(region);
+ 		goto eprobe_mgr_put;
  	}
  
-+	platform_set_drvdata(pdev, br);
-+
- 	return 0;
- 
- err_clk:
-diff --git a/include/linux/fpga/fpga-bridge.h b/include/linux/fpga/fpga-bridge.h
-index 6c3c28806ff13..223da48a6d18b 100644
---- a/include/linux/fpga/fpga-bridge.h
-+++ b/include/linux/fpga/fpga-bridge.h
-@@ -22,6 +22,23 @@ struct fpga_bridge_ops {
- 	const struct attribute_group **groups;
- };
- 
-+/**
-+ * struct fpga_bridge_info - collection of parameters an FPGA Bridge
-+ * @name: fpga bridge name
-+ * @br_ops: pointer to structure of fpga bridge ops
-+ * @priv: fpga bridge private data
-+ *
-+ * fpga_bridge_info contains parameters for the register function. These
-+ * are separated into an info structure because they some are optional
-+ * others could be added to in the future. The info structure facilitates
-+ * maintaining a stable API.
-+ */
-+struct fpga_bridge_info {
-+	const char *name;
-+	const struct fpga_bridge_ops *br_ops;
-+	void *priv;
-+};
-+
- /**
-  * struct fpga_bridge - FPGA bridge structure
-  * @name: name of low level FPGA bridge
-@@ -62,15 +79,10 @@ int of_fpga_bridge_get_to_list(struct device_node *np,
- 			       struct fpga_image_info *info,
- 			       struct list_head *bridge_list);
- 
--struct fpga_bridge *fpga_bridge_create(struct device *dev, const char *name,
--				       const struct fpga_bridge_ops *br_ops,
--				       void *priv);
--void fpga_bridge_free(struct fpga_bridge *br);
--int fpga_bridge_register(struct fpga_bridge *br);
-+struct fpga_bridge *
-+fpga_bridge_register(struct device *parent, const char *name,
-+		     const struct fpga_bridge_ops *br_ops,
-+		     void *priv);
- void fpga_bridge_unregister(struct fpga_bridge *br);
- 
--struct fpga_bridge
--*devm_fpga_bridge_create(struct device *dev, const char *name,
--			 const struct fpga_bridge_ops *br_ops, void *priv);
+-	ret = fpga_region_register(region);
+-	if (ret)
+-		goto eprobe_mgr_put;
 -
- #endif /* _LINUX_FPGA_BRIDGE_H */
+ 	of_platform_populate(np, fpga_region_of_match, NULL, &region->dev);
+ 	platform_set_drvdata(pdev, region);
+ 
+diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
+index afc79784b2823..98f001625933f 100644
+--- a/include/linux/fpga/fpga-region.h
++++ b/include/linux/fpga/fpga-region.h
+@@ -51,15 +51,9 @@ struct fpga_region *fpga_region_class_find(
+ 
+ int fpga_region_program_fpga(struct fpga_region *region);
+ 
+-struct fpga_region
+-*fpga_region_create(struct device *dev, struct fpga_manager *mgr,
+-		    const struct fpga_region_ops *rops);
+-void fpga_region_free(struct fpga_region *region);
+-int fpga_region_register(struct fpga_region *region);
++struct fpga_region *
++fpga_region_register(struct device *parent, struct fpga_manager *mgr,
++		     const struct fpga_region_ops *rops, void *priv);
+ void fpga_region_unregister(struct fpga_region *region);
+ 
+-struct fpga_region
+-*devm_fpga_region_create(struct device *dev, struct fpga_manager *mgr,
+-			 const struct fpga_region_ops *rops);
+-
+ #endif /* _FPGA_REGION_H */
 -- 
 2.26.3
 
