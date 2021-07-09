@@ -2,61 +2,61 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCE03C2523
+	by mail.lfdr.de (Postfix) with ESMTP id C23193C2525
 	for <lists+linux-fpga@lfdr.de>; Fri,  9 Jul 2021 15:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbhGINpo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        id S232023AbhGINpo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
         Fri, 9 Jul 2021 09:45:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29469 "EHLO
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:58085 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232009AbhGINpk (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 9 Jul 2021 09:45:40 -0400
+        by vger.kernel.org with ESMTP id S232051AbhGINpo (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 9 Jul 2021 09:45:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625838177;
+        s=mimecast20190719; t=1625838180;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8wz+VSo4V9K18GbntS6U5gCGz01NIx30Fco4WkjLLzY=;
-        b=AQuOhYOMxoKjq3Jv+ETM0VluDGglm1ZczPsQeDSSoT4Pd2n+qfRFNJwDsjBGSbbE0/FaXI
-        VZOwxCBJPJq7THzbvheWU1Mu0QcbcGCh06QKuUHnJ790PZAB8BWEL/mqiQLjg+vcT10f6q
-        0bd/WVoJ+JA76sj+UoFe4lhO5i4hLsg=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-188--yZszxaXMH6t0r8wu-2VOg-1; Fri, 09 Jul 2021 09:42:55 -0400
-X-MC-Unique: -yZszxaXMH6t0r8wu-2VOg-1
-Received: by mail-oo1-f71.google.com with SMTP id o186-20020a4a2cc30000b029025bea4a7246so2748649ooo.8
-        for <linux-fpga@vger.kernel.org>; Fri, 09 Jul 2021 06:42:55 -0700 (PDT)
+        bh=KlPPUF0Gcbw6/yHTlRqjYQVdox+0fqPhBKj6QGPVVk8=;
+        b=OcSMGlgjUbPa4vWWHNuymXlVMi1LmD6xbrzlNI+0aa9mQE9Jl4fc2O4v/sc4YCjqPOdTzA
+        hYlpCjuuCiu4VPp8KRtvL17r8IMmiWb+0s8tHIWQf+zwXYZohxMnBI1CZmdNQbtOJwxTKf
+        9u7RFcSQ8hXI5rak3ZOMZfkwDpKY2FM=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-277-et6x_6HhMF2NEtvcrZK8Nw-1; Fri, 09 Jul 2021 09:42:58 -0400
+X-MC-Unique: et6x_6HhMF2NEtvcrZK8Nw-1
+Received: by mail-oi1-f200.google.com with SMTP id l189-20020acabbc60000b02901f566a77bb8so6693955oif.7
+        for <linux-fpga@vger.kernel.org>; Fri, 09 Jul 2021 06:42:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8wz+VSo4V9K18GbntS6U5gCGz01NIx30Fco4WkjLLzY=;
-        b=louyv3DgBsnuk7kwkhnILkVYRJ7iWIAF8vgnninQd5iwRenKEgKYTaCbAXBOHAD1Kj
-         c3wGOUuTn4srda+mdLQQl8mv30D34ex2qlm4q5IeWpnvkxVMdaBxlYdcpjU7hcazZZci
-         9Es6tzXleAZMtaL8XHLMwYUeYvN/6lNY7nHaNu3EDrxztMstLF0gN8lrurL8cBzVBwt6
-         AU1MmUVwgT6Auqzvr8z/+l1uWRloDKLe1hnyRUWaGjs10UXcsSK1HukRc144W7JiIfcN
-         fwGgysHf1ZQqco9XnJyIYKd2LNHqlbPL6lFaQLliyHHqaX0eEGa4g22Nr9NEGmeZ3aMT
-         t4cA==
-X-Gm-Message-State: AOAM532pArQrqEV37soB2XItD+h6oahvVg7yxh++c01RCfLVjbX+cGyX
-        Y6QaqDIUY9Know9/4yJVBb83F9QrEnhzHAx1346nf/ReXL1+PkBtoJqGlpw7DWl/qOThk04GT5d
-        vbcofXvWzG5dYBT3gGpIbrw==
-X-Received: by 2002:a05:6830:1bd8:: with SMTP id v24mr28542668ota.343.1625838175131;
-        Fri, 09 Jul 2021 06:42:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyct9gWfuz8J4WdA0JiUc5G3he1tUaqh++CoaPW1Hq4K8Vh7x7DTNLAC9435HjMvp1BII3xog==
-X-Received: by 2002:a05:6830:1bd8:: with SMTP id v24mr28542648ota.343.1625838174975;
-        Fri, 09 Jul 2021 06:42:54 -0700 (PDT)
+        bh=KlPPUF0Gcbw6/yHTlRqjYQVdox+0fqPhBKj6QGPVVk8=;
+        b=sWBGujhu17J0tQdMTjTnnc4uoigdsPmwZa6tHj1V/0V8NwOMLzRNM0uCLsWR/30nq+
+         HEQVAZb8llgJxxhMbfJaWbiaTkI/D+5oUeUVYw2ymN9OqhYWsRlQ6hgjgrKEYjLpYWn2
+         s1b9cDu7jU44qmK+KCYImDLgRKkEApbyxEwTBs14FL/ky/xWtm5vetEwUDGRNE/NCbOf
+         7f6/n6Cy+COYSoXAHLwttj/M7zQAmzJqXIsZKspjb4wTNxtT3N4lb9AGCeohkWiGIh3S
+         pCI20KqDjliS8U81U66ojtQdj2S25J7whKhCjwnXiYco8cX/jaMjCWxdLiR9U4IAF4CL
+         JK3g==
+X-Gm-Message-State: AOAM530Is+5dP1x2wr3uRVrwQRITxQCNdCgllFrAtzsrUx2AD/blRONT
+        PO1GZQ8fVhGEJiBfjRWkjQVe7FtSsx+//NwAoj9fTH8CBXcpis7jgVo20mkbuJmSOGGzNyz12es
+        wjSfzqfstw8DKe77wtAumiQ==
+X-Received: by 2002:a05:6830:916:: with SMTP id v22mr25514349ott.201.1625838178195;
+        Fri, 09 Jul 2021 06:42:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyZB10we+gSjX2AbpriYStSZIsyFAqiV/1xYA1P7bwk1YCEK7j4xSxMnm+CRKGwJ5ih2KGX9Q==
+X-Received: by 2002:a05:6830:916:: with SMTP id v22mr25514334ott.201.1625838178022;
+        Fri, 09 Jul 2021 06:42:58 -0700 (PDT)
 Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id j23sm1215948oie.9.2021.07.09.06.42.53
+        by smtp.gmail.com with ESMTPSA id j23sm1215948oie.9.2021.07.09.06.42.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 06:42:54 -0700 (PDT)
+        Fri, 09 Jul 2021 06:42:57 -0700 (PDT)
 From:   trix@redhat.com
 To:     mdf@kernel.org, corbet@lwn.net, hao.wu@intel.com
 Cc:     linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH v2 3/4] fpga: dfl: implement the compat_id_show region op
-Date:   Fri,  9 Jul 2021 06:42:28 -0700
-Message-Id: <20210709134229.2510349-5-trix@redhat.com>
+Subject: [PATCH v2 4/4] fpga: remove compat_id from fpga_manager and fpga_region
+Date:   Fri,  9 Jul 2021 06:42:29 -0700
+Message-Id: <20210709134229.2510349-6-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20210709134229.2510349-1-trix@redhat.com>
 References: <20210709134229.2510349-1-trix@redhat.com>
@@ -68,129 +68,141 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Tom Rix <trix@redhat.com>
 
-Make sure dfl will work as previously when compat_id is removed
-from struct fpga_manager.  Store and pass the compat_id values
-internal to dfl.
+compat_id is implementation specific.  So the data should be
+stored at the implemeation layer, not the infrastructure layer.
+Remove the compat_id elements and supporting code.
+
+Printing out the compat_id is done with the fpga_region
+compat_id_show() op.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/fpga/dfl-fme-mgr.c    | 16 +++++++++++++---
- drivers/fpga/dfl-fme-region.c | 14 ++++++++++++++
- drivers/fpga/dfl.h            | 14 ++++++++++++++
- 3 files changed, 41 insertions(+), 3 deletions(-)
+ drivers/fpga/dfl-fme-mgr.c       |  7 -------
+ drivers/fpga/dfl-fme-region.c    |  1 -
+ drivers/fpga/fpga-region.c       |  7 +------
+ include/linux/fpga/fpga-mgr.h    | 13 -------------
+ include/linux/fpga/fpga-region.h |  2 --
+ 5 files changed, 1 insertion(+), 29 deletions(-)
 
 diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
-index d5861d13b3069..cd0b9157ea6e5 100644
+index cd0b9157ea6e5..8c5423eeffe75 100644
 --- a/drivers/fpga/dfl-fme-mgr.c
 +++ b/drivers/fpga/dfl-fme-mgr.c
-@@ -22,6 +22,7 @@
- #include <linux/io-64-nonatomic-lo-hi.h>
- #include <linux/fpga/fpga-mgr.h>
- 
-+#include "dfl.h"
- #include "dfl-fme-pr.h"
- 
- /* FME Partial Reconfiguration Sub Feature Register Set */
-@@ -70,6 +71,7 @@
- struct fme_mgr_priv {
- 	void __iomem *ioaddr;
- 	u64 pr_error;
-+	struct dfl_compat_id compat_id;
- };
- 
- static u64 pr_error_to_mgr_status(u64 err)
-@@ -272,13 +274,21 @@ static const struct fpga_manager_ops fme_mgr_ops = {
- 	.status = fme_mgr_status,
- };
- 
--static void fme_mgr_get_compat_id(void __iomem *fme_pr,
--				  struct fpga_compat_id *id)
-+static void _fme_mgr_get_compat_id(void __iomem *fme_pr,
-+				   struct dfl_compat_id *id)
- {
- 	id->id_l = readq(fme_pr + FME_PR_INTFC_ID_L);
- 	id->id_h = readq(fme_pr + FME_PR_INTFC_ID_H);
- }
- 
-+void fme_mgr_get_compat_id(struct fpga_manager *mgr,
-+			   struct dfl_compat_id *id)
-+{
-+	struct fme_mgr_priv *priv = mgr->priv;
-+	*id = priv->compat_id;
-+}
-+EXPORT_SYMBOL_GPL(fme_mgr_get_compat_id);
-+
+@@ -292,7 +292,6 @@ EXPORT_SYMBOL_GPL(fme_mgr_get_compat_id);
  static int fme_mgr_probe(struct platform_device *pdev)
  {
  	struct dfl_fme_mgr_pdata *pdata = dev_get_platdata(&pdev->dev);
-@@ -306,7 +316,7 @@ static int fme_mgr_probe(struct platform_device *pdev)
- 	if (!compat_id)
- 		return -ENOMEM;
+-	struct fpga_compat_id *compat_id;
+ 	struct device *dev = &pdev->dev;
+ 	struct fme_mgr_priv *priv;
+ 	struct fpga_manager *mgr;
+@@ -312,10 +311,6 @@ static int fme_mgr_probe(struct platform_device *pdev)
+ 			return PTR_ERR(priv->ioaddr);
+ 	}
  
--	fme_mgr_get_compat_id(priv->ioaddr, compat_id);
-+	_fme_mgr_get_compat_id(priv->ioaddr, &priv->compat_id);
+-	compat_id = devm_kzalloc(dev, sizeof(*compat_id), GFP_KERNEL);
+-	if (!compat_id)
+-		return -ENOMEM;
+-
+ 	_fme_mgr_get_compat_id(priv->ioaddr, &priv->compat_id);
  
  	mgr = devm_fpga_mgr_create(dev, "DFL FME FPGA Manager",
- 				   &fme_mgr_ops, priv);
-diff --git a/drivers/fpga/dfl-fme-region.c b/drivers/fpga/dfl-fme-region.c
-index ca7277d3d30a9..d21eacbf2469f 100644
---- a/drivers/fpga/dfl-fme-region.c
-+++ b/drivers/fpga/dfl-fme-region.c
-@@ -17,6 +17,7 @@
- #include <linux/fpga/fpga-mgr.h>
- #include <linux/fpga/fpga-region.h>
+@@ -323,8 +318,6 @@ static int fme_mgr_probe(struct platform_device *pdev)
+ 	if (!mgr)
+ 		return -ENOMEM;
  
-+#include "dfl.h"
- #include "dfl-fme-pr.h"
- 
- static int fme_region_get_bridges(struct fpga_region *region)
-@@ -27,8 +28,21 @@ static int fme_region_get_bridges(struct fpga_region *region)
- 	return fpga_bridge_get_to_list(dev, region->info, &region->bridge_list);
+-	mgr->compat_id = compat_id;
+-
+ 	return devm_fpga_mgr_register(dev, mgr);
  }
  
-+static ssize_t fme_region_compat_id_show(struct fpga_region *region, char *buf)
-+{
-+	struct fpga_manager *mgr = region->mgr;
-+	struct dfl_compat_id compat_id;
-+
-+	fme_mgr_get_compat_id(mgr, &compat_id);
-+
-+	return sysfs_emit(buf, "%016llx%016llx\n",
-+			  (unsigned long long)compat_id.id_h,
-+			  (unsigned long long)compat_id.id_l);
-+}
-+
- static const struct fpga_region_ops fme_fpga_region_ops = {
- 	.get_bridges = fme_region_get_bridges,
-+	.compat_id_show = fme_region_compat_id_show,
- };
+diff --git a/drivers/fpga/dfl-fme-region.c b/drivers/fpga/dfl-fme-region.c
+index d21eacbf2469f..be1d57ee37666 100644
+--- a/drivers/fpga/dfl-fme-region.c
++++ b/drivers/fpga/dfl-fme-region.c
+@@ -64,7 +64,6 @@ static int fme_region_probe(struct platform_device *pdev)
+ 	}
  
- static int fme_region_probe(struct platform_device *pdev)
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index 2b82c96ba56c7..a83fd11b390fc 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -169,6 +169,20 @@
- #define PORT_UINT_CAP_INT_NUM	GENMASK_ULL(11, 0)	/* Interrupts num */
- #define PORT_UINT_CAP_FST_VECT	GENMASK_ULL(23, 12)	/* First Vector */
+ 	region->priv = pdata;
+-	region->compat_id = mgr->compat_id;
+ 	platform_set_drvdata(pdev, region);
  
-+/**
-+ * struct dfl_compat_id - id for compatibility check
-+ *
-+ * @id_h: high 64bit of the compat_id
-+ * @id_l: low 64bit of the compat_id
-+ */
-+struct dfl_compat_id {
-+	u64 id_h;
-+	u64 id_l;
-+};
-+
-+void fme_mgr_get_compat_id(struct fpga_manager *mgr,
-+			   struct dfl_compat_id *id);
-+
+ 	ret = fpga_region_register(region);
+diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+index 864dd4f290e3b..b08d3914716f0 100644
+--- a/drivers/fpga/fpga-region.c
++++ b/drivers/fpga/fpga-region.c
+@@ -172,12 +172,7 @@ static ssize_t compat_id_show(struct device *dev,
+ 	if (region->rops && region->rops->compat_id_show)
+ 		return region->rops->compat_id_show(region, buf);
+ 
+-	if (!region->compat_id)
+-		return -ENOENT;
+-
+-	return sprintf(buf, "%016llx%016llx\n",
+-		       (unsigned long long)region->compat_id->id_h,
+-		       (unsigned long long)region->compat_id->id_l);
++	return -ENOENT;
+ }
+ 
+ static DEVICE_ATTR_RO(compat_id);
+diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+index ec2cd8bfceb00..ebdea215a8643 100644
+--- a/include/linux/fpga/fpga-mgr.h
++++ b/include/linux/fpga/fpga-mgr.h
+@@ -143,24 +143,12 @@ struct fpga_manager_ops {
+ #define FPGA_MGR_STATUS_IP_PROTOCOL_ERR		BIT(3)
+ #define FPGA_MGR_STATUS_FIFO_OVERFLOW_ERR	BIT(4)
+ 
+-/**
+- * struct fpga_compat_id - id for compatibility check
+- *
+- * @id_h: high 64bit of the compat_id
+- * @id_l: low 64bit of the compat_id
+- */
+-struct fpga_compat_id {
+-	u64 id_h;
+-	u64 id_l;
+-};
+-
  /**
-  * struct dfl_fpga_port_ops - port ops
-  *
+  * struct fpga_manager - fpga manager structure
+  * @name: name of low level fpga manager
+  * @dev: fpga manager device
+  * @ref_mutex: only allows one reference to fpga manager
+  * @state: state of fpga manager
+- * @compat_id: FPGA manager id for compatibility check.
+  * @mops: pointer to struct of fpga manager ops
+  * @priv: low level driver private date
+  */
+@@ -169,7 +157,6 @@ struct fpga_manager {
+ 	struct device dev;
+ 	struct mutex ref_mutex;
+ 	enum fpga_mgr_states state;
+-	struct fpga_compat_id *compat_id;
+ 	const struct fpga_manager_ops *mops;
+ 	void *priv;
+ };
+diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
+index 236d3819f1c13..afc79784b2823 100644
+--- a/include/linux/fpga/fpga-region.h
++++ b/include/linux/fpga/fpga-region.h
+@@ -30,7 +30,6 @@ struct fpga_region_ops {
+  * @bridge_list: list of FPGA bridges specified in region
+  * @mgr: FPGA manager
+  * @info: FPGA image info
+- * @compat_id: FPGA region id for compatibility check.
+  * @priv: private data
+  * @rops: optional pointer to struct for fpga region ops
+  */
+@@ -40,7 +39,6 @@ struct fpga_region {
+ 	struct list_head bridge_list;
+ 	struct fpga_manager *mgr;
+ 	struct fpga_image_info *info;
+-	struct fpga_compat_id *compat_id;
+ 	void *priv;
+ 	const struct fpga_region_ops *rops;
+ };
 -- 
 2.26.3
 
