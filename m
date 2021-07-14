@@ -2,221 +2,152 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F453C82B6
-	for <lists+linux-fpga@lfdr.de>; Wed, 14 Jul 2021 12:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1203C8379
+	for <lists+linux-fpga@lfdr.de>; Wed, 14 Jul 2021 13:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238002AbhGNK3y (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 14 Jul 2021 06:29:54 -0400
-Received: from foss.arm.com ([217.140.110.172]:32948 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237703AbhGNK3w (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 14 Jul 2021 06:29:52 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3209A1042;
-        Wed, 14 Jul 2021 03:27:00 -0700 (PDT)
-Received: from bogus (unknown [10.57.79.213])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FF633F774;
-        Wed, 14 Jul 2021 03:26:27 -0700 (PDT)
-Date:   Wed, 14 Jul 2021 11:25:29 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@pengutronix.de, Sudeep Holla <sudeep.holla@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Alex Dubov <oakad@yahoo.com>, Alex Elder <elder@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bodo Stroesser <bostroesser@gmail.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Dexuan Cui <decui@microsoft.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Finn Thain <fthain@linux-m68k.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frank Li <lznuaa@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Geoff Levand <geoff@infradead.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>, Ira Weiny <ira.weiny@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jason Wang <jasowang@redhat.com>,
-        Jens Taprogge <jens.taprogge@taprogge.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Joey Pabalan <jpabalanb@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Johannes Thumshirn <morbidrsa@gmail.com>,
-        Jon Mason <jdmason@kudzu.us>, Juergen Gross <jgross@suse.com>,
-        Julien Grall <jgrall@amazon.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lee Jones <lee.jones@linaro.org>, Len Brown <lenb@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Maxim Levitsky <maximlevitsky@gmail.com>,
-        Michael Buesch <m@bues.ch>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Jamet <michael.jamet@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Rich Felker <dalias@libc.org>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Samuel Holland <samuel@sholland.org>,
-        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
-        SeongJae Park <sjpark@amazon.de>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Van Asbroeck <TheSven73@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thorsten Scherer <t.scherer@eckelmann.de>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Tom Rix <trix@redhat.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Yufen Yu <yuyufen@huawei.com>, alsa-devel@alsa-project.org,
-        dmaengine@vger.kernel.org, greybus-dev@lists.linaro.org,
-        industrypack-devel@lists.sourceforge.net, kvm@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-ntb@googlegroups.com, linux-parisc@vger.kernel.org,
-        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-sunxi@lists.linux.dev,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, nvdimm@lists.linux.dev,
-        platform-driver-x86@vger.kernel.org, sparclinux@vger.kernel.org,
-        target-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org,
-        Johannes Thumshirn <jth@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v4 5/5] bus: Make remove callback return void
-Message-ID: <20210714102529.ehwquc2s2qlbccyg@bogus>
-References: <20210713193522.1770306-1-u.kleine-koenig@pengutronix.de>
- <20210713193522.1770306-6-u.kleine-koenig@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        id S231256AbhGNLRA (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 14 Jul 2021 07:17:00 -0400
+Received: from mail-vi1eur05on2134.outbound.protection.outlook.com ([40.107.21.134]:1376
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229899AbhGNLQ7 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 14 Jul 2021 07:16:59 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cCUDiM3CqnODCR6DtYkIuusARXVnoBuChO7PXvnr/siFWjMPQgZV7B/jDw+amqFbIyEZhnpiofu3g6vD5jYBjT/1O7UerpYBsTWdxrl9QlUYhaBQYWkuZpqQbvDeB4ejwCPQGT0bq06GPNh393C2odrjtqXwdY9WjmfjkF3mn08Qr40SPVTdk3GTgGJeNOAZQpmBpxYBQY0T7P4mQLxqsO4gfCHPjqGsQGiL5AQztYzOVesZbqoej4qFLGX5qd22x8W73l6w+h6Z1myEGdA8eZiGH/0e1gypjphoVbo69+LPruK+j5wo/AHfRva8puQqESWp1I/X46MSkNzJVx8oMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7sZECMJbFYcsSBOa1w71nGjVVxUVKpl8QFOUGWoA/uU=;
+ b=Px5LS7aYQPARxkupjB8N1pyBFdv608fYIBzMp7aI8aM3ZApzsVA8lL+ydLSoyLKTZtl63BBKexcsLhPyu22sy8e5ZRziiW4GNcFQwGu65nqyZRBUCJxZguaM/RaHM46suoA3/KLbFKtgDC2ZnIUsPI4qDaI5U16kYacHLYTe0KBmjnmxaKSaBQyqi6ZyH8FvpBQ2/q/x2oCcKnzJ5kxwauGCHtAxwCfzq4dB5UczCbTiiff2ln7/ortH8ic9Q3nRMtJWjPv4WETrIKYQJESpUuz0aMSvq7i2+VDWv6lUqdnvyKiCySrssAdtj+iXhovCoR7hvsxxLOEKCWF7gRkwQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silicom.dk; dmarc=pass action=none header.from=silicom.dk;
+ dkim=pass header.d=silicom.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7sZECMJbFYcsSBOa1w71nGjVVxUVKpl8QFOUGWoA/uU=;
+ b=Ax2fb+znDHoWalxI8PXfTYy1tyGFOWnQeRFmGGT4i44LoGK1biYi5WaIsDy+og1JPvd8cnD5AjbRYToMCQG9cTXO8SXr5ZJUljwzsIbBvtwq8uk0GT5VtkMHL895d0Pw/j3cik+InzyNyaPULwpNnFvAu5cSXNqB4DWSYa+VY+4=
+Authentication-Results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none header.from=silicom.dk;
+Received: from AM0PR0402MB3426.eurprd04.prod.outlook.com
+ (2603:10a6:208:22::15) by AM0PR0402MB3747.eurprd04.prod.outlook.com
+ (2603:10a6:208:6::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21; Wed, 14 Jul
+ 2021 11:14:06 +0000
+Received: from AM0PR0402MB3426.eurprd04.prod.outlook.com
+ ([fe80::50fd:f133:3592:292e]) by AM0PR0402MB3426.eurprd04.prod.outlook.com
+ ([fe80::50fd:f133:3592:292e%7]) with mapi id 15.20.4308.027; Wed, 14 Jul 2021
+ 11:14:06 +0000
+Subject: Re: [PATCH v4 1/4] fpga: dfl: expose feature revision from struct
+ dfl_device
+To:     Tom Rix <trix@redhat.com>,
+        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+References: <20210705101645.2040106-1-martin@geanix.com>
+ <20210705101645.2040106-2-martin@geanix.com>
+ <93a8e949-ec25-d00d-4740-72d9e18ebb68@redhat.com>
+From:   =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>
+Message-ID: <4ffd5153-e182-c615-0a81-2f5dad4979f5@silicom.dk>
+Date:   Wed, 14 Jul 2021 13:14:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+In-Reply-To: <93a8e949-ec25-d00d-4740-72d9e18ebb68@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210713193522.1770306-6-u.kleine-koenig@pengutronix.de>
+X-ClientProxiedBy: AM6P193CA0086.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:209:88::27) To AM0PR0402MB3426.eurprd04.prod.outlook.com
+ (2603:10a6:208:22::15)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.100.1.108] (5.179.91.58) by AM6P193CA0086.EURP193.PROD.OUTLOOK.COM (2603:10a6:209:88::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Wed, 14 Jul 2021 11:14:05 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 93c1b2e2-f5c1-4b06-5b0d-08d946b87e67
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3747:
+X-Microsoft-Antispam-PRVS: <AM0PR0402MB37472633BD4691C6E159998CD5139@AM0PR0402MB3747.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pL7NF711x3CfrW2lD6qTBsiQ6VJhOJQQbeVaj37Z+S6Ni5jjeyLnqljhxYkSf+xMhcYTsRsaKIiSUVjdrpbBi7stsqpEhR/VxjjGKXS+c1/vBu/aNmDTJ57jEAPl1OZJ1XDVvkH4C7ocQm0aey8xlGnG381MskVbyHjm7NVShJCAC7Wx/3/O5mJrDTRcF+l78Ncna+BMtLKbyCj8kINZCpxli6t6I465Mr+t6t2EtZYCJfez1Vf549e85Q2p9JdKIuMiLlZrt0vNklDBf2CBhguBB57K0pj9eDGHk+vABZ+z9VoYOCyWnE5I0yhrEjgRVWpuvsf6BB9JTctpsgWJj10pvosxHunU1fj6f2HV+pTpFdqZLrujnAMU+U2hChbOSPXHfa3dI4jeFfffxo1RBmQcBhI1RnOUbU3qC+G+bO3SzL3i2m8NvIQy7Hx6VydCO0XJpqp75BNTXQfiWElcvQqKJvC2lb5Q/Uw9a1/0dfAbcZtmZGh0nC3p66t7yk0eyPdl3iGW239byLd+61DrgL1bi0Oy5LOnNgwWCUBzhzI0D27NMeNJpAZZTlMN1Tt3/AE4YGOJjsc2QkyjT0GO3oGcNO1ESQb0ZTAQ0iduIOjBqIkDu7Tk2wCryizeKxpOSidvpLnkLds4G9rZBx64xq4kn9ASUbuwsKgTblmGJ0Qsc31mYQHry1CK/zycvtfp0dwOy2BKuOuvQeryqedS+uFS+tPehhKDFHMuiZcN5qk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3426.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(346002)(366004)(376002)(39840400004)(16576012)(316002)(66946007)(2906002)(66556008)(66476007)(478600001)(31686004)(5660300002)(4744005)(6486002)(110136005)(4326008)(2616005)(956004)(36756003)(7416002)(8936002)(8976002)(8676002)(86362001)(31696002)(38100700002)(26005)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aHZ3QXM0b2NJL0tDQ3lTVHRUZjhVbFJSRVM4V2sydHRuRkdLeTdOTGV6NVpI?=
+ =?utf-8?B?a1ROUzR2L2RRVVQ2VjFIL0YwVkhBL0I5UWZuYkU1cWlBRmM3SEx4S3YzUk5L?=
+ =?utf-8?B?QXBnZWFMbGJXaWhVTWFBenNZSzJ2ekVRMzA0SnAwYjR6T29yaXl3M09FM3FE?=
+ =?utf-8?B?M255d1V6bzZVaUg2Z2Q5anpuQkswS2xxZFIya3BXaStFajJhQmE3VzFJQWpB?=
+ =?utf-8?B?bmgrMUhzSmgrNGhBK2NaU045VHRja2FBVjN2TFIwKzk5SGRhSW5sRE5La2Vi?=
+ =?utf-8?B?Z2grNFVadk5MbEliZG9TRkpYZ0dhd1ZHZTM5MUpURkxNNVV3Z203M3kzU3k5?=
+ =?utf-8?B?bjcxRkRQNUY2SFlMT1JmQjhDTHJvcDJnejJRTVFvMDkzUWI3MmFDM0FqTDJK?=
+ =?utf-8?B?R2xCOXJBTXRaTEMrLytVKzBtNWMvNmRHSWszTXVsaWNxQzdyY3ZxQlFHYXBQ?=
+ =?utf-8?B?R1crQzM0OTNKcUl4ejN3MC9DVDkxaFRrdE8wNUpHR1VINTdGdEhrT3pwYUd2?=
+ =?utf-8?B?VDJKazd5aG14Nm9QOHo0MHo1RXI1UlJRNkN0K3F4NnB1SnpCMXhwT296SThQ?=
+ =?utf-8?B?eXA4RE9YVlgxNWU1dlpHa0NucWw5SEs1ZDNnbzNKRmdqN3VUaUZLMENPSG5k?=
+ =?utf-8?B?ZWdtZjdMT09paHZZUGIzS1lDQ0Y0em1WZE55aTBqSlJacHo4Qlh2cElPeVQ4?=
+ =?utf-8?B?VzdvMlZaK25yckNzUVd5WEh6YlZFcHgwcE4yMlVUQ3p1c21FZEdWOXU3VjRp?=
+ =?utf-8?B?Z1U0MkhyWitueU9LVnRBMExjME5ueXVGTGtLa3BVTGEyUVljenVXMkFDQ25l?=
+ =?utf-8?B?N1V1a0VhZk02a2liWGRxc1lBOXhIUG1CV21IdVRmU0owaTNGbjVWeFhhalo3?=
+ =?utf-8?B?eVA1MDRJeng3ODU4UHBCMDBBVHcvdHA3WHg2S3dwQWZsejNxRFo5T215R1ZK?=
+ =?utf-8?B?aDVCejhRVlN4cjZnRnRMSkhHWkFOMmFITTNGd2hNV0h5YkFqWWVNL3JTK2Zx?=
+ =?utf-8?B?ZzFyVllKajlkRjR2cVVtQW9VZkkzaEpSRkRIZ1dLSVl3bUVtQTVjTldBSVRn?=
+ =?utf-8?B?RVBLTndTd21mMlYzc3VqNGRtUXhzV2JQeDlUbkVtQzM5NGllYi9SUDN5SUpR?=
+ =?utf-8?B?WnI4YWhwcWVuU2hKZnMwNWJqVzVjYkwzNTlhdWdjZG1qNDExQ1U4R1I0Smpu?=
+ =?utf-8?B?KzJUdG8wZGlnN2V3NWlNajRTWTlWUmc0VTcwMTh1UkwxZTdSTllOeXFVOUR6?=
+ =?utf-8?B?dllBL1BBSXN3WUk3Y3dMQkFDQUhzREpjRTgzRURNc2I0NkRta204SkV4L0pL?=
+ =?utf-8?B?ZDlKbDFGOG5HNDg2RlA4T3J1bjMxTGJqNGpUdEJOZ3phNHE4WHNuYWpkeUxr?=
+ =?utf-8?B?eklkNUd0Yi9Hek5HdmN1RXZzVXZ1ZVJjRDM3TUVWbi9xakN1WVo2cG11MjNJ?=
+ =?utf-8?B?dWY1QloyV09vWE9aeVhEZ1dGWmppSURERWwxZUsvSWpjQ3hvK3RIdnRyK0lp?=
+ =?utf-8?B?d0xqdGJkWE5PZVErd1JWcVdueERNYXd6ZFhHN1FyRGpCMGZ3NmtPczdBYnZq?=
+ =?utf-8?B?dkhvM2hacDBvWG1WdG0zazdCYTU1WncvTnMwRW1IMk1YUjJCdlloUFRiVFZJ?=
+ =?utf-8?B?OFQ2MXpmTktrT0tILy9Cd2l5Qk5LYmJBQ3BqSEozRE96ZjhYSnp5ZHB5Q0ZY?=
+ =?utf-8?B?NXdRNm03aHRwVFZ3RlRCUGxkUnA4ejBSbDRwREorZlQrTjhXNHlocGhTLzhs?=
+ =?utf-8?Q?s0lPotSER0+6woqSdHlXWbPSS7CD5EUkoEgS2XS?=
+X-OriginatorOrg: silicom.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93c1b2e2-f5c1-4b06-5b0d-08d946b87e67
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3426.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2021 11:14:05.9364
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZpfWGyD6AW0VQNktXqsG3LmvO3DgWe4dffWOw9CIrjbs/c0D6ddDMt8X5O0b+F4t
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3747
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Jul 13, 2021 at 09:35:22PM +0200, Uwe Kleine-K�nig wrote:
-> The driver core ignores the return value of this callback because there
-> is only little it can do when a device disappears.
+
+
+On 06/07/2021 16.10, Tom Rix wrote:
+>> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+>> index 511b20ff35a3..9381c579d1cd 100644
+>> --- a/drivers/fpga/dfl.c
+>> +++ b/drivers/fpga/dfl.c
+>> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
+>>       ddev->type = feature_dev_id_type(pdev);
+>>       ddev->feature_id = feature->id;
+>> +    ddev->revision = feature->revision;
+>>       ddev->cdev = pdata->dfl_cdev;
+>>       /* add mmio resource */
+>> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
+>>    */
+>>   struct dfl_feature_info {
+>>       u16 fid;
+>> +    u8 rev;
 > 
-> This is the final bit of a long lasting cleanup quest where several
-> buses were converted to also return void from their remove callback.
-> Additionally some resource leaks were fixed that were caused by drivers
-> returning an error code in the expectation that the driver won't go
-> away.
+> In other places 'revision' is the element name.
 > 
-> With struct bus_type::remove returning void it's prevented that newly
-> implemented buses return an ignored error code and so don't anticipate
-> wrong expectations for driver authors.
-> 
+> For consistency, change rev to revision
 
-[...]
+So is fid vs. feature. I deliberately chose 'rev' to be consistent
+with other elements in struct dfl_feature_info.
 
-> diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
-> index 784cf0027da3..2682c3df651c 100644
-> --- a/drivers/firmware/arm_scmi/bus.c
-> +++ b/drivers/firmware/arm_scmi/bus.c
-> @@ -116,15 +116,13 @@ static int scmi_dev_probe(struct device *dev)
->  	return scmi_drv->probe(scmi_dev);
->  }
->  
-> -static int scmi_dev_remove(struct device *dev)
-> +static void scmi_dev_remove(struct device *dev)
->  {
->  	struct scmi_driver *scmi_drv = to_scmi_driver(dev->driver);
->  	struct scmi_device *scmi_dev = to_scmi_dev(dev);
->  
->  	if (scmi_drv->remove)
->  		scmi_drv->remove(scmi_dev);
-> -
-> -	return 0;
->  }
->  
->  static struct bus_type scmi_bus_type = {
-
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
---
-Regards,
-Sudeep
+// Martin
