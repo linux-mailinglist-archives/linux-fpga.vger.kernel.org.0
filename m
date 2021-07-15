@@ -2,167 +2,207 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D838A3C9F5D
-	for <lists+linux-fpga@lfdr.de>; Thu, 15 Jul 2021 15:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201263CA0A2
+	for <lists+linux-fpga@lfdr.de>; Thu, 15 Jul 2021 16:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237413AbhGONV3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 15 Jul 2021 09:21:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59349 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229624AbhGONV2 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 15 Jul 2021 09:21:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626355114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0xpUm/bZf/gJUFnUOsgmJ47taBTH+Qv6PQ/m3LfGTGw=;
-        b=dOz8I00P/oXzgbHVZOyRTzizevR9MHm7uwD5cTggkXJCBmj2cMeqIel16gOVJv+6OBkGX7
-        4FNT5HlbrolGCZ7iROju4MctQbpO/YekgooqE79NgBrFh7yViuzEKEE4WSbHS/r1FXTszc
-        BxJ40fxUaBGe2LcxWmBNlBVFW5+Fn2k=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-217-WxSNEc49OGC26rVntN3EdA-1; Thu, 15 Jul 2021 09:18:34 -0400
-X-MC-Unique: WxSNEc49OGC26rVntN3EdA-1
-Received: by mail-qv1-f70.google.com with SMTP id e19-20020ad442b30000b02902dc988b8675so4116101qvr.3
-        for <linux-fpga@vger.kernel.org>; Thu, 15 Jul 2021 06:18:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=0xpUm/bZf/gJUFnUOsgmJ47taBTH+Qv6PQ/m3LfGTGw=;
-        b=j6WdfUYbCAwtk4qU8p/vCwUatQw8IjTRPB3Mt+khrv4E7F5G34WQLb71DBg3gj9R4V
-         VfD1ZzxJpVu6ia/KFg+MKjOVpdLcCM7E8yn5rs3wqoO337YunG6b1s4tOZvlmFfxo6kz
-         hAwdxr0dPPBAQ4FvBCgwnjQx9hb4dU+0Dg9QFZ9tFF81Hn0aZHvBl59kT3wkX/DH82f2
-         vBsZDGdDVwm+hPaAnGXNu+9del6rvLU2MzJNt+ueWkbfn5sEA0Sd2cb86gOjWSCpJg/U
-         crf1ISLOIiQw9kbM4+WwGDyNKNpMMbTaTBVj0yhNsDAZLVZkat/VBSCzm7iUNa40GKAP
-         vySw==
-X-Gm-Message-State: AOAM531ZHIkI69Vc1/D1zWpXpU2wAMThDqgrh2iQQqoi9TcHiLfRxK0Q
-        O1tKZR3qQrQKoYEZFhDj17gWUwE54QO2a0p34BQgjpBv/IA15b2mVNRQoVjzb6fJW1kkf0urtpH
-        QHP8gYt0tvaaFfSnbAXO7QWAVpPBOMn3TnTY7V4vmzvMlLgva3tFOfior7pFPIhTRCRTr
-X-Received: by 2002:a05:6214:7cf:: with SMTP id bb15mr4351667qvb.29.1626355113273;
-        Thu, 15 Jul 2021 06:18:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwvOYGQHwP4m9K0OvynsEmDNkxDs2xY5R/rJGf0uAm0tyiz1L5gf7DU/xLnn7JerWoBsO1R8w==
-X-Received: by 2002:a05:6214:7cf:: with SMTP id bb15mr4351636qvb.29.1626355112992;
-        Thu, 15 Jul 2021 06:18:32 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id d25sm2005088qtw.59.2021.07.15.06.18.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jul 2021 06:18:31 -0700 (PDT)
-Subject: Re: [PATCH] dt-bindings: fpga: convert Xilinx Zynq MPSoC bindings to
- YAML
-To:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>, robh+dt@kernel.org,
-        michal.simek@xilinx.com, mdf@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-References: <20210715100236.228531-1-iwamatsu@nigauri.org>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <f78e471c-8f08-4ef6-667b-1c8484baf60a@redhat.com>
-Date:   Thu, 15 Jul 2021 06:18:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S232003AbhGOObp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 15 Jul 2021 10:31:45 -0400
+Received: from elvis.franken.de ([193.175.24.41]:59759 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229624AbhGOObo (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 15 Jul 2021 10:31:44 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1m42Ly-0004w9-02; Thu, 15 Jul 2021 16:28:42 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id AC72DC099E; Thu, 15 Jul 2021 15:02:21 +0200 (CEST)
+Date:   Thu, 15 Jul 2021 15:02:21 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Geoff Levand <geoff@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxim Levitsky <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Thorsten Scherer <t.scherer@eckelmann.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Michael Buesch <m@bues.ch>,
+        Sven Van Asbroeck <TheSven73@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Marc Zyngier <maz@kernel.org>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Qinglang Miao <miaoqinglang@huawei.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Joey Pabalan <jpabalanb@gmail.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Frank Li <lznuaa@gmail.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Bodo Stroesser <bostroesser@gmail.com>,
+        Hannes Reinecke <hare@suse.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        SeongJae Park <sjpark@amazon.de>,
+        Julien Grall <jgrall@amazon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Johannes Thumshirn <jth@kernel.org>
+Subject: Re: [PATCH v2 4/4] bus: Make remove callback return void
+Message-ID: <20210715130221.GA10298@alpha.franken.de>
+References: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de>
+ <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20210715100236.228531-1-iwamatsu@nigauri.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-
-On 7/15/21 3:02 AM, Nobuhiro Iwamatsu wrote:
-> Convert FPGA Manager for Xilinx Zynq MPSoC bindings documentation to
-> YAML.
->
-> Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+On Tue, Jul 06, 2021 at 05:48:03PM +0200, Uwe Kleine-König wrote:
+> The driver core ignores the return value of this callback because there
+> is only little it can do when a device disappears.
+> 
+> This is the final bit of a long lasting cleanup quest where several
+> buses were converted to also return void from their remove callback.
+> Additionally some resource leaks were fixed that were caused by drivers
+> returning an error code in the expectation that the driver won't go
+> away.
+> 
+> With struct bus_type::remove returning void it's prevented that newly
+> implemented buses return an ignored error code and so don't anticipate
+> wrong expectations for driver authors.
+> 
+> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk> (For ARM, Amba and related parts)
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Chen-Yu Tsai <wens@csie.org> (for drivers/bus/sunxi-rsb.c)
+> Acked-by: Pali Rohár <pali@kernel.org>
+> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org> (for drivers/media)
+> Acked-by: Hans de Goede <hdegoede@redhat.com> (For drivers/platform)
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-By: Vinod Koul <vkoul@kernel.org>
+> Acked-by: Juergen Gross <jgross@suse.com> (For Xen)
+> Acked-by: Lee Jones <lee.jones@linaro.org> (For drivers/mfd)
+> Acked-by: Johannes Thumshirn <jth@kernel.org> (For drivers/mcb)
+> Acked-by: Johan Hovold <johan@kernel.org>
+> Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org> (For drivers/slimbus)
+> Acked-by: Kirti Wankhede <kwankhede@nvidia.com> (For drivers/vfio)
+> Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com> (For ulpi and typec)
+> Acked-by: Samuel Iglesias Gonsálvez <siglesias@igalia.com> (For ipack)
+> Reviewed-by: Tom Rix <trix@redhat.com> (For fpga)
+> Acked-by: Geoff Levand <geoff@infradead.org> (For ps3)
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > ---
->   .../bindings/fpga/xlnx,zynqmp-pcap-fpga.txt   | 25 -------------
->   .../bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml  | 36 +++++++++++++++++++
->   2 files changed, 36 insertions(+), 25 deletions(-)
->   delete mode 100644 Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.txt
->   create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml
->
-> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.txt b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.txt
-> deleted file mode 100644
-> index 3052bf619dd547..00000000000000
-> --- a/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.txt
-> +++ /dev/null
-> @@ -1,25 +0,0 @@
-> -Devicetree bindings for Zynq Ultrascale MPSoC FPGA Manager.
-> -The ZynqMP SoC uses the PCAP (Processor configuration Port) to configure the
-> -Programmable Logic (PL). The configuration uses  the firmware interface.
-> -
-> -Required properties:
-> -- compatible: should contain "xlnx,zynqmp-pcap-fpga"
-> -
-> -Example for full FPGA configuration:
-> -
-> -	fpga-region0 {
-> -		compatible = "fpga-region";
-> -		fpga-mgr = <&zynqmp_pcap>;
-> -		#address-cells = <0x1>;
-> -		#size-cells = <0x1>;
-> -	};
-> -
-> -	firmware {
-> -		zynqmp_firmware: zynqmp-firmware {
-> -			compatible = "xlnx,zynqmp-firmware";
-> -			method = "smc";
-> -			zynqmp_pcap: pcap {
-> -				compatible = "xlnx,zynqmp-pcap-fpga";
-> -			};
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml
-> new file mode 100644
-> index 00000000000000..565b835b7fbac0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml
-> @@ -0,0 +1,36 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/fpga/xlnx,zynqmp-pcap-fpga.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx Zynq Ultrascale MPSoC FPGA Manager Device Tree Bindings
-> +
-> +maintainers:
-> +  - Michal Simek <michal.simek@xilinx.com>
-Needs a change to MAINTAINERS ?
-> +
-> +description: |
-> +  Device Tree Bindings for Zynq Ultrascale MPSoC FPGA Manager.
-> +  The ZynqMP SoC uses the PCAP (Processor configuration Port) to
+> [...] 
+>  arch/mips/sgi-ip22/ip22-gio.c             | 3 +--
 
-Configuration
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-Tom
-
-> +  configure the Programmable Logic (PL). The configuration uses the
-> +  firmware interface.
-> +
-> +properties:
-> +  compatible:
-> +    const: xlnx,zynqmp-pcap-fpga
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    firmware {
-> +      zynqmp_firmware: zynqmp-firmware {
-> +        zynqmp_pcap: pcap {
-> +          compatible = "xlnx,zynqmp-pcap-fpga";
-> +        };
-> +      };
-> +    };
-> +...
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
