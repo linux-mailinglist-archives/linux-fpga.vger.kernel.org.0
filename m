@@ -2,27 +2,27 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8751C3CB820
-	for <lists+linux-fpga@lfdr.de>; Fri, 16 Jul 2021 15:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0883CB823
+	for <lists+linux-fpga@lfdr.de>; Fri, 16 Jul 2021 15:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239738AbhGPN5w (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 16 Jul 2021 09:57:52 -0400
-Received: from first.geanix.com ([116.203.34.67]:35038 "EHLO first.geanix.com"
+        id S240071AbhGPN5y (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 16 Jul 2021 09:57:54 -0400
+Received: from first.geanix.com ([116.203.34.67]:35062 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232088AbhGPN5w (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 16 Jul 2021 09:57:52 -0400
+        id S232808AbhGPN5x (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 16 Jul 2021 09:57:53 -0400
 Received: from zen.. (unknown [185.17.218.86])
-        by first.geanix.com (Postfix) with ESMTPSA id 982994C7135;
-        Fri, 16 Jul 2021 13:54:54 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 26ACA4C7C48;
+        Fri, 16 Jul 2021 13:54:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1626443694; bh=Em7PjSoXenIt5zoQnSrFagVO2cjkXgWtRzWVFLohT04=;
-        h=From:To:Cc:Subject:Date;
-        b=cxjcHJVTVzaI3TWfDG2Xdvr4hYzCnl82pIjxLw+PYsRY0ZZaNWNXnSTBDXBaNC2YL
-         /F1lhd0fCp6Az5Z2BvvpbUsQo4grxWy4BCqMibs5aKP0D2RWYJGAI+d5Aa5v0B6TdA
-         +Jj9NyBACG1sv2q2LAW25io1jg4MZz8kEiKaExXuIwi9g/LO3h8JyILqMhWX0hOsxO
-         DevSsNp/0cWBmEvzfhPSmx8UBSHz5OrikgkShqsJYIRMZg/GYiPQ1dG5g0Zvkjjy7X
-         cE7lhyheq9TH/Zzr3H10cmS3hrFPtOZOSCR/GgFEGcx7Xzz9V/z3EhLJyN3N6/bhQ8
-         lFLQppRTK6NqQ==
+        t=1626443696; bh=F/AxVbqAVC3EqTlJsEexumFqSk49MJGE8lWAvwVeiQA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=BAWLfA8BpVWJy6D+j7tT5MmfQWIDGBovMyrlmwvjFjbDqSvLjl7OqKNBAPg4L+3Wc
+         qgt3eRkz9aMSVkTFQ7Bhz8cQ7HytnQy60gplFGAhw96u7CqLNZoqE/pSwz7V3KuuTu
+         8R4zsNOAqPC2So121rT8oR24LVAS15vtrebkDStmDDXF35GkLq/rpRto/oaN1MYkYY
+         JuvM3elJR5Fuj5YJi1pxiWVN+ozDNQs0xFAiP4qfdfIPt7UCV8LH9soMxO/jvNRvDd
+         lmKJcX1Vo1FJb+TRKEI0IDxdLywOjODHiATR8S3DRB2mZ4cg9+QgGChZQijVx7FiXw
+         nM2qYt56D6lkQ==
 From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
 To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
         Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
@@ -31,11 +31,14 @@ To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
         Mark Brown <broonie@kernel.org>
 Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@silicom.dk>,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v5 0/3] fpga/spi/hwmon: Initial support for Silicom N5010 PAC
-Date:   Fri, 16 Jul 2021 15:54:38 +0200
-Message-Id: <20210716135441.3235863-1-martin@geanix.com>
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v5 1/3] fpga: dfl: expose feature revision from struct dfl_device
+Date:   Fri, 16 Jul 2021 15:54:39 +0200
+Message-Id: <20210716135441.3235863-2-martin@geanix.com>
 X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20210716135441.3235863-1-martin@geanix.com>
+References: <20210716135441.3235863-1-martin@geanix.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -49,53 +52,153 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Martin Hundebøll <mhu@silicom.dk>
 
-This is an initial set of patches for the Silciom N5010 programmable
-accelerated card adding support for reading out sensors.
+DFL device drivers have a common need for checking feature revision
+information from the DFL header, as well as other common DFL information
+like the already exposed feature id and type.
 
-Based on v5.14-rc1
+This patch exposes the feature revision information directly via the DFL
+device data structure.
+
+Since the DFL core code has already read the DFL header, this this patch
+saves additional mmio reads from DFL device drivers too.
+
+Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+Acked-by: Wu Hao <hao.wu@intel.com>
+Acked-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+---
 
 Changes since v4:
- * Removed the mfd patch that has been applied by Lee
- * Renamed 'rev' to 'revision' in patch 1/3 as per Tom's suggestion
- * Moved spi board_info structure in patch 2/3 from global/static scope
-   to function/stack scope
+ * Renamed 'rev' to 'revision' as per Tom's suggestion
 
 Changes since v3:
- * Added Hao's Acked-by to patch 1/4
- * Added Matthew's Acked-by to patch 1/4
- * Changed "BMC's" to "BMCs" in patch 2/4
- * Added Moritz' Reviewed-by to patch 2/4
- * Added Matthew's Reviewed-by to patch 3/4
- * Added Lee's Acked-for-MFD-by to patch 3/4
+ * Added Hao's Acked-by
+ * Added Matthew's Acked-by
 
 Changes since v2:
- * Removed patch 1/5 from v2 already in fpga/for-next
- * Reworded commit message in patch 1/4 as per Hao's suggestion
- * Added Yilun's Reviewed-by to patch 3/4 and 4/4
- * Added Moritz' Acked-by to patch 3/4
- * Added Moritz' Reviewed-by to patch 4/4
- * Added Guenter's Reviewed-by to patch 4/4
+ * Reworded commit message as per Hao's suggestion
 
 Changes since v1:
- * Commit message in patch 1 is updated with card description
- * Added Hao's Acked-by to patch 1
- * Patch 2 is replaced with a new patch to carry feature revision info
-   in struct dfl_device
- * Patch 3 is updated to use feature revision from struct dfl_device
- * Patch 4 from v0 is split into separate patches for hwmon and mfd
+ * This patch replaces the previous patch 2 and exposes the feature
+   revision through struct dfl_device instead of a helper reading from
+   io-mem
 
-Martin Hundebøll (3):
-  fpga: dfl: expose feature revision from struct dfl_device
-  spi: spi-altera-dfl: support n5010 feature revision
-  hwmon: intel-m10-bmc-hwmon: add n5010 sensors
+ drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
+ drivers/fpga/dfl.h  |  1 +
+ include/linux/dfl.h |  1 +
+ 3 files changed, 19 insertions(+), 10 deletions(-)
 
- drivers/fpga/dfl.c                  |  27 ++++---
- drivers/fpga/dfl.h                  |   1 +
- drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
- drivers/spi/spi-altera-dfl.c        |  21 ++---
- include/linux/dfl.h                 |   1 +
- 5 files changed, 147 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+index 511b20ff35a3..e73a70053906 100644
+--- a/drivers/fpga/dfl.c
++++ b/drivers/fpga/dfl.c
+@@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
+ 
+ 	ddev->type = feature_dev_id_type(pdev);
+ 	ddev->feature_id = feature->id;
++	ddev->revision = feature->revision;
+ 	ddev->cdev = pdata->dfl_cdev;
+ 
+ 	/* add mmio resource */
+@@ -717,6 +718,7 @@ struct build_feature_devs_info {
+  */
+ struct dfl_feature_info {
+ 	u16 fid;
++	u8 revision;
+ 	struct resource mmio_res;
+ 	void __iomem *ioaddr;
+ 	struct list_head node;
+@@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
+ 		/* save resource information for each feature */
+ 		feature->dev = fdev;
+ 		feature->id = finfo->fid;
++		feature->revision = finfo->revision;
+ 
+ 		/*
+ 		 * the FIU header feature has some fundamental functions (sriov
+@@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
+ 	devm_kfree(binfo->dev, binfo);
+ }
+ 
+-static inline u32 feature_size(void __iomem *start)
++static inline u32 feature_size(u64 value)
+ {
+-	u64 v = readq(start + DFH);
+-	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
++	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
+ 	/* workaround for private features with invalid size, use 4K instead */
+ 	return ofst ? ofst : 4096;
+ }
+ 
+-static u16 feature_id(void __iomem *start)
++static u16 feature_id(u64 value)
+ {
+-	u64 v = readq(start + DFH);
+-	u16 id = FIELD_GET(DFH_ID, v);
+-	u8 type = FIELD_GET(DFH_TYPE, v);
++	u16 id = FIELD_GET(DFH_ID, value);
++	u8 type = FIELD_GET(DFH_TYPE, value);
+ 
+ 	if (type == DFH_TYPE_FIU)
+ 		return FEATURE_ID_FIU_HEADER;
+@@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+ 	unsigned int irq_base, nr_irqs;
+ 	struct dfl_feature_info *finfo;
+ 	int ret;
++	u8 revision;
++	u64 v;
++
++	v = readq(binfo->ioaddr + ofst);
++	revision = FIELD_GET(DFH_REVISION, v);
+ 
+ 	/* read feature size and id if inputs are invalid */
+-	size = size ? size : feature_size(binfo->ioaddr + ofst);
+-	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
++	size = size ? size : feature_size(v);
++	fid = fid ? fid : feature_id(v);
+ 
+ 	if (binfo->len - ofst < size)
+ 		return -EINVAL;
+@@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+ 		return -ENOMEM;
+ 
+ 	finfo->fid = fid;
++	finfo->revision = revision;
+ 	finfo->mmio_res.start = binfo->start + ofst;
+ 	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+ 	finfo->mmio_res.flags = IORESOURCE_MEM;
+@@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
+ {
+ 	if (!is_feature_dev_detected(binfo)) {
+ 		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
+-			feature_id(binfo->ioaddr + ofst));
++			feature_id(readq(binfo->ioaddr + ofst)));
+ 		return -EINVAL;
+ 	}
+ 
+diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+index 2b82c96ba56c..422157cfd742 100644
+--- a/drivers/fpga/dfl.h
++++ b/drivers/fpga/dfl.h
+@@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
+ struct dfl_feature {
+ 	struct platform_device *dev;
+ 	u16 id;
++	u8 revision;
+ 	int resource_index;
+ 	void __iomem *ioaddr;
+ 	struct dfl_feature_irq_ctx *irq_ctx;
+diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+index 6cc10982351a..431636a0dc78 100644
+--- a/include/linux/dfl.h
++++ b/include/linux/dfl.h
+@@ -38,6 +38,7 @@ struct dfl_device {
+ 	int id;
+ 	u16 type;
+ 	u16 feature_id;
++	u8 revision;
+ 	struct resource mmio_res;
+ 	int *irqs;
+ 	unsigned int num_irqs;
 -- 
 2.31.0
 
