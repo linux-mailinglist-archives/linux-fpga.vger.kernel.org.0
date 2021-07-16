@@ -2,76 +2,104 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 225413CA3F3
-	for <lists+linux-fpga@lfdr.de>; Thu, 15 Jul 2021 19:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A138C3CB3AA
+	for <lists+linux-fpga@lfdr.de>; Fri, 16 Jul 2021 09:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234348AbhGOR1p (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 15 Jul 2021 13:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
+        id S237149AbhGPH7W (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 16 Jul 2021 03:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234374AbhGOR1o (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 15 Jul 2021 13:27:44 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF086C0613DC
-        for <linux-fpga@vger.kernel.org>; Thu, 15 Jul 2021 10:24:50 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id o30-20020a05600c511eb029022e0571d1a0so4137797wms.5
-        for <linux-fpga@vger.kernel.org>; Thu, 15 Jul 2021 10:24:50 -0700 (PDT)
+        with ESMTP id S237040AbhGPH7R (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 16 Jul 2021 03:59:17 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37880C061760
+        for <linux-fpga@vger.kernel.org>; Fri, 16 Jul 2021 00:56:21 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id t5so10978429wrw.12
+        for <linux-fpga@vger.kernel.org>; Fri, 16 Jul 2021 00:56:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
-        b=o95sP91j4SYQ4F4yMZkQdklAh0tECHyOVF4RDJjtqUpxjOk9jlE6ak/li2a6dEdoLY
-         Cu/4ATPM6l+UKUPlRyWzSRojszX9yymc830gEsDRmUXSoUg/Rt0JgeXoLMPluA8yAQzV
-         tgYcEDkVdB6I1RTRWNmVbZdNwU+JgEnhbRNrDkpgFSyF6uYMYuDUAp7PtM2OWYu6SrQv
-         AbCNlo2HlF3yBytq1BuPSqTZ1Ek1L09vpfuSz7qHTp/F56F/hGXEvrRbmsWaboXcgfGZ
-         gSnfdLo206nrfXwsKAgJ943zzqbKUAZEaUZVVZFqFq77Qxw37mHpsJz1ncHU4WIQMQOg
-         ewxw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uVR/Jck5v49z+8mpV1Vad40sYJAyKAQCRBapDHKnLq0=;
+        b=b173FmM3z/kDXtJkwwpSOdu/0g6cpW7zpOvbLBco/CZeWD6AqepnPtzBG5gG4+c9Qq
+         7Qu0jnHuDXsn7aK/PyTqTx+kh/VdIahhyG/JjJtmllOMoH8P3CmptiIdCpyh1r5vELO6
+         W+D8QXvBv+5RigjXbKPMIbGHopL7HSUMSVFNb/dE4bevZ9kvndHTUzo05SIkwQyKBOlB
+         n8JEzsW5eVebvHJLz9ducXQnO0SMZHZUplG/Q0/+eLlmTl4ZWnWAP+j23t7SEKiS/8o0
+         JIFCYcljOpw++5nx/W6NaWMzqTHB+YPkCNttLeOoO+pl9NJ25Vkl0jwzkY0RL/ci12xo
+         w4ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
-        b=MxjtYue56oJwpuSFTCoKWojuZHbGRRf0sZ0X/KDywxD1DeMbN+Xliti589/pf0vE4F
-         Cmsyo604EvFYGCKUqihTIjirLwKrUwxgf4jvonDWGnCh05v3q7eppMr9OkSSHZEDrYH5
-         aQqIc+o/Wfi9iHST6P+X979eFAvT/L+1qI7fqF5iZOhAcUllrGBx8MpTV/mfVZ0xtEj+
-         DG2qUuYSO9/Yx2PrxWkBlh5/Y+5wp94gmX661kgL8wCHonjeK5LbtZV7lupIsSd0V8TY
-         1xjnq+yB4V5nntAYlRrs85y7RgLGB2btuOyYCiVJjvgLay9ooBXTiXZOI4gkhkaPp7SO
-         n16w==
-X-Gm-Message-State: AOAM5328lxve9v/f/Zn0rz73f5Jbnvhnys1V3SkJSi9Bu8vxQk2y6oXF
-        HG8uqIgvSQbL5PpNE3GZV+TgrvWuX6t7yPepmgA=
-X-Google-Smtp-Source: ABdhPJz1M/hHf7BdBz3GK7XR8mhZC4pBBhAF+fLnwTSbvlF4nAAEeZ3GSVXKADw3h1fGJ9uaWaIZdjj3kCo2gQ1U7qM=
-X-Received: by 2002:a1c:416:: with SMTP id 22mr11923787wme.59.1626369888523;
- Thu, 15 Jul 2021 10:24:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uVR/Jck5v49z+8mpV1Vad40sYJAyKAQCRBapDHKnLq0=;
+        b=R9HBUQ982UA3X1FZLHVBB0me6WBbal/Y2PjYSpbxgV8LNJO6oAmAUavGEOobluBhVA
+         E4XPyOlpPc1QXkFYyLsXzcw6VOxMPc/7Xfi9TeGvGJWNK7aq/+FawjjoTr/0SC2CR+oQ
+         UUG3OF62PiVa1MFid5paZ/DpwvzMSw12CqtYjN8KM9Lq30mKSmNuoqFoTWdd+5HFz6i0
+         vgXVhKG9HF5auLcujKc1JRaQRIKtZ68fMbxTsQjk8pWSQ1B3B8HcuOtM0/Gb6nVwaoPt
+         gMmmWYwmuems8ntodmixYlzxxE9W+pccCODYB494onyLg6CUr2lTxj+hKawdQ9qJkeo0
+         mavQ==
+X-Gm-Message-State: AOAM530yrM+5FtgxTTnqCr4bCEPghES9WlJg60h51YzXfEflFa30qkSp
+        2VOMgIVQGy+UaxBvN6itirwuKQ==
+X-Google-Smtp-Source: ABdhPJzASykD3R2CXs24CTU0MqQNY5E8qoccE8Z0FhyLoh+efaGHiDUdNcuDK6UwFWGbWEMK/4M3bg==
+X-Received: by 2002:a5d:46cc:: with SMTP id g12mr10357001wrs.136.1626422179823;
+        Fri, 16 Jul 2021 00:56:19 -0700 (PDT)
+Received: from google.com ([31.124.24.141])
+        by smtp.gmail.com with ESMTPSA id l14sm8810302wrs.22.2021.07.16.00.56.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jul 2021 00:56:19 -0700 (PDT)
+Date:   Fri, 16 Jul 2021 08:56:17 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Brown <broonie@kernel.org>,
+        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] mfd: intel-m10-bmc: add n5010 variant
+Message-ID: <YPE7oUflWYJt1IoD@google.com>
+References: <20210629121214.988036-1-martin@geanix.com>
+ <20210629121214.988036-4-martin@geanix.com>
 MIME-Version: 1.0
-Received: by 2002:adf:f30c:0:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:24:47
- -0700 (PDT)
-Reply-To: faty.muhamad@gmail.com
-From:   Fatima Muhammad <rallispeterrallie@gmail.com>
-Date:   Thu, 15 Jul 2021 17:24:47 +0000
-Message-ID: <CAG5NioepHT-5D-VOA-wEcKyXRgSxA1SHew6MMS7cLtWEG6fXmw@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210629121214.988036-4-martin@geanix.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hello Dear,
+On Tue, 29 Jun 2021, Martin Hundebøll wrote:
 
-My name is Ms.Fatima Muhammad., Please forgive me for stressing you
-with my predicaments and I sorry to approach you through this media
-because is serves the fastest means of  my communication right now,
+> From: Martin Hundebøll <mhu@silicom.dk>
+> 
+>  The m10-bmc is used on the Silicom N5010 PAC too, so add it to list of
+>  m10bmc types.
 
-I came across your Email from my personal search and I decided to
-contact you believing you will be honest to fulfill my business
-proposal which I believe that will be a very good opportunity for both
-of us. Please it is my pleasure to contact you today for a business
-partnership investments projects worth $4.6 million USD which I intend
-to establish in your country..
+Please refrain from padding out the commit message in future.
 
-Pls If this business proposal offends your moral and ethic values do
-accept my apology. therefore kindly contact me immediately if you are
-interested for more details.
+> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> Acked-by: Moritz Fischer <mdf@kernel.org>
+> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> ---
+> 
+> Changes since v2:
+>  * Added Yilun's Reviewed-by
+>  * Added Moritz' Acked-by
+> 
+> Changes since v1:
+>  * Patch split out to separate mfd changes
+> 
+>  drivers/mfd/intel-m10-bmc.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 
-Thank you for your wiliness to help me
-Yours Sincerely Fatima Muhammad
+Applied, thanks.
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
