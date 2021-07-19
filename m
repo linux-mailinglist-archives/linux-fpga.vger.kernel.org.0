@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E43AC3CF047
-	for <lists+linux-fpga@lfdr.de>; Tue, 20 Jul 2021 01:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E55C3CF048
+	for <lists+linux-fpga@lfdr.de>; Tue, 20 Jul 2021 01:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbhGSXMJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 19 Jul 2021 19:12:09 -0400
-Received: from mail-dm6nam12on2058.outbound.protection.outlook.com ([40.107.243.58]:4576
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        id S236201AbhGSXMP (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 19 Jul 2021 19:12:15 -0400
+Received: from mail-sn1anam02on2051.outbound.protection.outlook.com ([40.107.96.51]:60260
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1388217AbhGSUqW (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 19 Jul 2021 16:46:22 -0400
+        id S1388227AbhGSUqj (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 19 Jul 2021 16:46:39 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OOGBTJdHP+xUIcImI0O18SYB2hJAv66d+jJ9Fof0zRpg3PS6jow8j3kWd/m4nEwRLWoJrKKEH2lt3OIeZvCFRo0yJr0IJQWS9L71W77DHg3H9KaTotMwse2Awov4uimMf/KmGZ2n9yXb8sBQavJd7hGlIVeIlrZwY2FXupsVDYBTPsgH9vauA7BuTaE+zHGVJvQFlu3apiucJ9Wpdb2qXLMXVUWOR0+UU1K5iXCrjkTs/MS7YMJK5XtYj1MY6xf/uL+Sgu09c5N7+arVjnrHjVrmQjulZQV65qgG7d3QfVXM3B2Z2xP+SQ0oTmPHFC863+1sWgzLyo0x22Cu2uxawQ==
+ b=eWZjTkHJmDbl/27RxhTyHfGFHhzLLV0/5lSPn/6zK2B9fiI6af49ccd2mGZRYv4S9mn/J5cvWPRPTil+CIEOPwkykuPhcpR5c0czfWRbJgMrZsxghlqx2wbe1D93SsP5fibPlRLoPM0wczxkGp0w0O/iWlOcm3toeEn0Ncl1l9oZgF0j3UfZE+zHNE4bdo2n+G2NVeQ+e0geQH6RR9LlIeyn9j9Szxf/RvJyZjMTKmAdkUcfeTct+/Jd3ivpBF3C4Vp+UWzV9jtO3v8IHQDNlGm1tSO4tpXjc5H6rV7rGhFALzEO/HYrfV3axNUOEGGHjMrzriWBPbg0SLbEUvsJMA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CZqm0BfLE+mH3kNFkS4JrfVUz8fDCCs9sgj/PeLSrTw=;
- b=f2ms1ImFF2zF2ZV/VU7z7BqjavY0IvwarzMC94o6XyOCObAKPVqFB8czXDNZcSe5U7523ELqjKhgGerxyekQwfE2mgJhXwTbLe2Umh6Aaj0BKFI/T6T26+0ir83+RuRwySqXOAqoGnKhRNRf2i1dCrRD1zFsQEbw8884tUetN86hJ4UsnfXUP+6okREJoDTwNfcYSp8hC0eD5wlPeC5ZQvorans9pShCIYR7k4WKRdR322jAgOFAxxZglFgMtPM8Nh93Z623JjBt7X1PakmD1zWm+23l3DNUCUAPJCNVwYO8TJRyhuC+QDeyskWCflv78I+ovUGdqwKcFGWyZaGeoA==
+ bh=8aculnYNcbYtJ/YX+CXlSMntVEwyU0cas/MeOV7Fz+U=;
+ b=V835xbVIsfq9Has0QMqp2utMZha1F5Ns7MOeM7+yfCfEODNlOJxd2jmTaUMHHQHVaVPnQaI+Yc+BtMwrCwzp808NZnkOAUZWVntF/S6avIEW6Y8iXTmcowGirlK25cnsHncOGYaQDHt37z5J9BdERpz5TYjzn3W4fJMFlxoEgLO1d+YJ+4ZCGb5dY45jLstFMrsZuv0FdqLSUP8egYz2rB66GuRjM2gKrRMBjp3it0eALGaDQF6SiVP6uiOJ4RNFMNoq5EcS9VrYVpvmb2d3gmZAX3isByLpjTEMXn6cJ+qVLQf8Ro2TY60GCE2rP8GVXsXD+sEywJU6yNZXSsQL7w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,46 +26,47 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CZqm0BfLE+mH3kNFkS4JrfVUz8fDCCs9sgj/PeLSrTw=;
- b=Axvn4xl3PyArbfTuAaXR4O5yldWvMbl0qecOJz4sz9RH/W7XKSTrK1k9KYJ4Pa2TA1sbFltwwXUpTXivDgmEOq6M8qXKY9dATT2Rf//Th5pZx5l69Zlh6/RCIAba/Eyx2mE8ArkAppkAggOc4uEPaW/XW5WPomaeIPGRuFiRE0s=
-Received: from DM5PR07CA0030.namprd07.prod.outlook.com (2603:10b6:3:16::16) by
- BL0PR02MB4450.namprd02.prod.outlook.com (2603:10b6:208:44::32) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4331.29; Mon, 19 Jul 2021 21:26:57 +0000
-Received: from DM3NAM02FT018.eop-nam02.prod.protection.outlook.com
- (2603:10b6:3:16:cafe::f7) by DM5PR07CA0030.outlook.office365.com
- (2603:10b6:3:16::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend
- Transport; Mon, 19 Jul 2021 21:26:57 +0000
+ bh=8aculnYNcbYtJ/YX+CXlSMntVEwyU0cas/MeOV7Fz+U=;
+ b=ion7eoJJayEPqqUjcnWOuTKL5GyI/Cs3dDaZeUREowbDmNAO+Ldj1sJtejcx2++YGSlhkS4AyTDhbPUVS4CHmy3NvccNzt/6B7xll/aFhCQ1/I4WQEhXNw6kyPqvAf0afjuGwlRpGJyc2gUxQBxDLefZyd3uky/aKNH7kZ8Apkg=
+Received: from DM6PR12CA0034.namprd12.prod.outlook.com (2603:10b6:5:1c0::47)
+ by CH0PR02MB8108.namprd02.prod.outlook.com (2603:10b6:610:10d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21; Mon, 19 Jul
+ 2021 21:27:16 +0000
+Received: from DM3NAM02FT012.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:1c0:cafe::ac) by DM6PR12CA0034.outlook.office365.com
+ (2603:10b6:5:1c0::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.22 via Frontend
+ Transport; Mon, 19 Jul 2021 21:27:16 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT018.mail.protection.outlook.com (10.13.4.68) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT012.mail.protection.outlook.com (10.13.5.125) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4331.21 via Frontend Transport; Mon, 19 Jul 2021 21:26:56 +0000
+ 15.20.4331.21 via Frontend Transport; Mon, 19 Jul 2021 21:27:16 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 19 Jul 2021 14:26:56 -0700
+ 15.1.2176.2; Mon, 19 Jul 2021 14:27:08 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Mon, 19 Jul 2021 14:26:56 -0700
+ 15.1.2176.2 via Frontend Transport; Mon, 19 Jul 2021 14:27:08 -0700
 Envelope-to: mdf@kernel.org,
  robh@kernel.org,
  trix@redhat.com,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.73.109] (port=38268 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.73.109] (port=38270 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <lizhi.hou@xilinx.com>)
-        id 1m5amu-000F6S-0C; Mon, 19 Jul 2021 14:26:56 -0700
+        id 1m5an6-000F7s-1U; Mon, 19 Jul 2021 14:27:08 -0700
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id 5D14860011C; Mon, 19 Jul 2021 14:26:31 -0700 (PDT)
+        id 740136020BA; Mon, 19 Jul 2021 14:26:31 -0700 (PDT)
 From:   Lizhi Hou <lizhi.hou@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
@@ -73,9 +74,9 @@ CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
         <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
         <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
         <robh@kernel.org>, Max Zhen <max.zhen@xilinx.com>
-Subject: [PATCH V8 XRT Alveo 02/14] fpga: xrt: driver metadata helper functions
-Date:   Mon, 19 Jul 2021 14:26:16 -0700
-Message-ID: <20210719212628.134129-3-lizhi.hou@xilinx.com>
+Subject: [PATCH V8 XRT Alveo 03/14] fpga: xrt: xclbin file helper functions
+Date:   Mon, 19 Jul 2021 14:26:17 -0700
+Message-ID: <20210719212628.134129-4-lizhi.hou@xilinx.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210719212628.134129-1-lizhi.hou@xilinx.com>
 References: <20210719212628.134129-1-lizhi.hou@xilinx.com>
@@ -84,870 +85,921 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e419aedd-4ecc-42fd-148c-08d94afbefc7
-X-MS-TrafficTypeDiagnostic: BL0PR02MB4450:
-X-Microsoft-Antispam-PRVS: <BL0PR02MB445076957BAB2DAA2A10528FA1E19@BL0PR02MB4450.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
+X-MS-Office365-Filtering-Correlation-Id: 8f9ab168-7a2f-44d0-8c80-08d94afbfba5
+X-MS-TrafficTypeDiagnostic: CH0PR02MB8108:
+X-Microsoft-Antispam-PRVS: <CH0PR02MB8108C6C0D9ED2C8091A16266A1E19@CH0PR02MB8108.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1824;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DwNYocaKo9Y1fytfb7p0zq9tJxk0swQrf7AR87Dk+EKHwArMMt8nchAnDpze1lB+RqPWlY7kdg7GvEM4FnFSWthBgyU6XUWp56kO3pDhxiKNdz1SpAdr5OrgLJIS453g+TOppWW1y8bgIzP34Qo7ISCFv7crJp4LCzLqtcfmXyWT8CCCDrQImVozgXYlNnzqIPhTukzLBeLmOIwGhG4/XoWIfYeVm5fnRnMQRjXrnS5VKTgHO90jTyz6NeDiF6Qz3Z0z0qqjoIoeaoo5+O2rgfI3vxC5ZI7DNUqvDANS1yxrpc7dkwSDQ/2Z0QDAlkieKEC3c7PsCC7tQGUBYErYSYiCfHuRAFT/H0amgBPP9wTkpQ/pT/GAxh+vFUZ03ODCH//9JB7FCu3bWX4//Jq6V7WUIHZiJQqrKx8hJTNWzgguTP+6Yvqck/z1xp/z8CIUQ4C5GhjyD01Uzd4NfkZtJs4RTsvy4ND72mQam7JaBrvCAkdzNUOSAzMkewXJNeRU+nmfklKtIYDUEYs+uPV9BEupHVD3cmbuA4zxb1oRxTh5Pv8qx95L/IhKHv7wuysgAOR7jNYaJUkjcj+GWvuxT3GPpat2NNLx4qEfCkX/TVmq8Kz1w6XubsVOA92xyuwfy3mX0Y8lt64ryZivhffv9ykDj+oG7QJzvNyNoJ/L0nigdUtzwLvaw1Mu3Whi1eT7GMNsUoO3fKUE0QsjDmaX2Q==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(346002)(39860400002)(136003)(376002)(36840700001)(46966006)(83380400001)(4326008)(44832011)(6916009)(42186006)(316002)(36906005)(2906002)(36860700001)(6266002)(47076005)(26005)(8936002)(336012)(70206006)(5660300002)(36756003)(70586007)(1076003)(30864003)(186003)(426003)(82310400003)(8676002)(107886003)(82740400003)(54906003)(7636003)(356005)(2616005)(478600001)(6666004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: P7R1P+hH2z3UhSWNiLIVXoSLp3kvEamxcm8L7sjHUZY8s+NYwc/QBS19WNb3YOM4R9A2F/U1r+aOPn8EAYXooEKlAYkkMCOrf3AW+jhuOTUH0EN4yxEnBZnkMVNss1NqYDgBz0RbAoe4fsRL3Hr1WTcCLnTU3KH/IVyXqkaBxIRVP5hAmJegUGsiM6kDKSv54tT65ydb9UZuXIhF8kQuUV8R3jLSI+RJD/ktrhjVVtCidrkx4rtt4weUDxHjVvC03sMNTS/eeEqyVS4T7nglvUPQ3v0XBd3MVQLOMW7GRsdef5rq+GJAg8z4gXdTDh00MWpf4ifplO5ezc7Lj2Tct7tpit4B+WElrmNLrhcfkG1ApMQ4KNME4gX2V8he3iiDTaXXhkqwtnXqGPfRweFZbUU/QO34Ul8Qyqt8nbtSIHKD8gGF5UZ7wYZD7aPcX3ay+VJm0nVZHW0O+3DG158sIcaZTq4WcIYAGlzKzfv/SaVAKn8GGNYTjhmdgKNzUp4mX5PjVSkmKbJFz0nsBBq/anNc9RnZyWMk3PVvabK9RN3O1zdzAepKy1zU//mm5VJEmVw7ZyjcrAw9U147m4/6PXw9oByKBqrijnMcKUUHXtdrWlx/91uxoseOYf/NroqhtIeyKrW21GHNAIkqn/TGH00Y/lVUhPXCJqQt7L6dKRLPXujePQ1I/i78iX+GBmYR2q4WlIrolwSkzY1yFO/A3g==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(39860400002)(346002)(136003)(376002)(396003)(36840700001)(46966006)(26005)(107886003)(316002)(6916009)(70206006)(70586007)(6666004)(8936002)(5660300002)(1076003)(6266002)(4326008)(83380400001)(36906005)(36860700001)(186003)(2906002)(82310400003)(42186006)(82740400003)(30864003)(54906003)(426003)(336012)(478600001)(8676002)(2616005)(44832011)(7636003)(356005)(47076005)(36756003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2021 21:26:56.8774
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2021 21:27:16.7893
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e419aedd-4ecc-42fd-148c-08d94afbefc7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f9ab168-7a2f-44d0-8c80-08d94afbfba5
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT018.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT012.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4450
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR02MB8108
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-XRT drivers use device tree as metadata format to discover HW subsystems
-behind PCIe BAR. Thus libfdt functions are called for the driver to parse
-the device tree blob.
+Alveo FPGA firmware and partial reconfigure file are in xclbin format. This
+code enumerates and extracts sections from xclbin files. xclbin.h is cross
+platform and used across all platforms and OS.
 
 Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 Reviewed-by: Tom Rix <trix@redhat.com>
 ---
- drivers/fpga/xrt/include/metadata.h  | 236 +++++++++++
- drivers/fpga/xrt/metadata/metadata.c | 578 +++++++++++++++++++++++++++
- 2 files changed, 814 insertions(+)
- create mode 100644 drivers/fpga/xrt/include/metadata.h
- create mode 100644 drivers/fpga/xrt/metadata/metadata.c
+ drivers/fpga/xrt/include/xclbin-helper.h |  48 +++
+ drivers/fpga/xrt/lib/xclbin.c            | 381 ++++++++++++++++++++
+ include/uapi/linux/fpga-xrt.h            | 428 +++++++++++++++++++++++
+ 3 files changed, 857 insertions(+)
+ create mode 100644 drivers/fpga/xrt/include/xclbin-helper.h
+ create mode 100644 drivers/fpga/xrt/lib/xclbin.c
+ create mode 100644 include/uapi/linux/fpga-xrt.h
 
-diff --git a/drivers/fpga/xrt/include/metadata.h b/drivers/fpga/xrt/include/metadata.h
+diff --git a/drivers/fpga/xrt/include/xclbin-helper.h b/drivers/fpga/xrt/include/xclbin-helper.h
 new file mode 100644
-index 000000000000..f48d6d42f5ef
+index 000000000000..518d55f74c25
 --- /dev/null
-+++ b/drivers/fpga/xrt/include/metadata.h
-@@ -0,0 +1,236 @@
++++ b/drivers/fpga/xrt/include/xclbin-helper.h
+@@ -0,0 +1,48 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2021 Xilinx, Inc.
 + *
 + * Authors:
-+ *      Lizhi Hou <Lizhi.Hou@xilinx.com>
++ *    David Zhang <davidzha@xilinx.com>
++ *    Sonal Santan <sonal.santan@xilinx.com>
 + */
 +
-+#ifndef _XRT_METADATA_H
-+#define _XRT_METADATA_H
++#ifndef _XCLBIN_HELPER_H_
++#define _XCLBIN_HELPER_H_
 +
++#include <linux/types.h>
 +#include <linux/device.h>
-+#include <linux/vmalloc.h>
-+#include <linux/uuid.h>
++#include <linux/fpga-xrt.h>
 +
-+#define XRT_MD_INVALID_LENGTH (~0U)
++#define XCLBIN_VERSION2	"xclbin2"
++#define XCLBIN_HWICAP_BITFILE_BUF_SZ 1024
++#define XCLBIN_MAX_SZ_1G (1024 * 1024 * 1024) /* Assuming xclbin <= 1G, always */
 +
-+/* metadata properties */
-+#define XRT_MD_PROP_BAR_IDX "pcie_bar_mapping"
-+#define XRT_MD_PROP_COMPATIBLE "compatible"
-+#define XRT_MD_PROP_HWICAP "axi_hwicap"
-+#define XRT_MD_PROP_INTERFACE_UUID "interface_uuid"
-+#define XRT_MD_PROP_INTERRUPTS "interrupts"
-+#define XRT_MD_PROP_IO_OFFSET "reg"
-+#define XRT_MD_PROP_LOGIC_UUID "logic_uuid"
-+#define XRT_MD_PROP_PDI_CONFIG "pdi_config_mem"
-+#define XRT_MD_PROP_PF_NUM "pcie_physical_function"
-+#define XRT_MD_PROP_VERSION_MAJOR "firmware_version_major"
++enum axlf_section_kind;
++struct axlf;
 +
-+/* non IP nodes */
-+#define XRT_MD_NODE_ENDPOINTS "addressable_endpoints"
-+#define XRT_MD_NODE_FIRMWARE "firmware"
-+#define XRT_MD_NODE_INTERFACES "interfaces"
-+#define XRT_MD_NODE_PARTITION_INFO "partition_info"
-+
-+/*
-+ * IP nodes
-+ * AF:  AXI Firewall
-+ * CMC: Card Management Controller
-+ * ERT: Embedded Runtime
-+ * EP:  End Point
-+ * PLP: Provider Reconfigurable Partition
-+ * ULP: User Reconfigurable Partition
++/**
++ * Bitstream header information as defined by Xilinx tools.
++ * Please note that this struct definition is not owned by the driver.
 + */
-+#define XRT_MD_NODE_ADDR_TRANSLATOR "ep_remap_data_c2h_00"
-+#define XRT_MD_NODE_AF_BLP_CTRL_MGMT "ep_firewall_blp_ctrl_mgmt_00"
-+#define XRT_MD_NODE_AF_BLP_CTRL_USER "ep_firewall_blp_ctrl_user_00"
-+#define XRT_MD_NODE_AF_CTRL_DEBUG "ep_firewall_ctrl_debug_00"
-+#define XRT_MD_NODE_AF_CTRL_MGMT "ep_firewall_ctrl_mgmt_00"
-+#define XRT_MD_NODE_AF_CTRL_USER "ep_firewall_ctrl_user_00"
-+#define XRT_MD_NODE_AF_DATA_C2H "ep_firewall_data_c2h_00" /* c2h: card to host */
-+#define XRT_MD_NODE_AF_DATA_H2C "ep_firewall_data_h2c_00" /* h2c: host to card */
-+#define XRT_MD_NODE_AF_DATA_M2M "ep_firewall_data_m2m_00"
-+#define XRT_MD_NODE_AF_DATA_P2P "ep_firewall_data_p2p_00"
-+#define XRT_MD_NODE_CLKFREQ_HBM "ep_freq_cnt_aclk_hbm_00" /* hbm: High Bandwidth Memory */
-+#define XRT_MD_NODE_CLKFREQ_K1 "ep_freq_cnt_aclk_kernel_00"
-+#define XRT_MD_NODE_CLKFREQ_K2 "ep_freq_cnt_aclk_kernel_01"
-+#define XRT_MD_NODE_CLK_KERNEL1 "ep_aclk_kernel_00"
-+#define XRT_MD_NODE_CLK_KERNEL2 "ep_aclk_kernel_01"
-+#define XRT_MD_NODE_CLK_KERNEL3 "ep_aclk_hbm_00"
-+#define XRT_MD_NODE_CLK_SHUTDOWN "ep_aclk_shutdown_00"
-+#define XRT_MD_NODE_CMC_FW_MEM "ep_cmc_firmware_mem_00"
-+#define XRT_MD_NODE_CMC_MUTEX "ep_cmc_mutex_00"
-+#define XRT_MD_NODE_CMC_REG "ep_cmc_regmap_00"
-+#define XRT_MD_NODE_CMC_RESET "ep_cmc_reset_00"
-+#define XRT_MD_NODE_DDR_CALIB "ep_ddr_mem_calib_00"
-+#define XRT_MD_NODE_DDR4_RESET_GATE "ep_ddr_mem_srsr_gate_00"
-+#define XRT_MD_NODE_ERT_BASE "ep_ert_base_address_00"
-+#define XRT_MD_NODE_ERT_CQ_MGMT "ep_ert_command_queue_mgmt_00"
-+#define XRT_MD_NODE_ERT_CQ_USER "ep_ert_command_queue_user_00"
-+#define XRT_MD_NODE_ERT_FW_MEM "ep_ert_firmware_mem_00"
-+#define XRT_MD_NODE_ERT_RESET "ep_ert_reset_00"
-+#define XRT_MD_NODE_ERT_SCHED "ep_ert_sched_00"
-+#define XRT_MD_NODE_FLASH "ep_card_flash_program_00"
-+#define XRT_MD_NODE_FPGA_CONFIG "ep_fpga_configuration_00"
-+#define XRT_MD_NODE_GAPPING "ep_gapping_demand_00"
-+#define XRT_MD_NODE_GATE_PLP "ep_pr_isolate_plp_00"
-+#define XRT_MD_NODE_GATE_ULP "ep_pr_isolate_ulp_00"
-+#define XRT_MD_NODE_KDMA_CTRL "ep_kdma_ctrl_00"
-+#define XRT_MD_NODE_MAILBOX_MGMT "ep_mailbox_mgmt_00"
-+#define XRT_MD_NODE_MAILBOX_USER "ep_mailbox_user_00"
-+#define XRT_MD_NODE_MAILBOX_XRT "ep_mailbox_user_to_ert_00"
-+#define XRT_MD_NODE_MSIX "ep_msix_00"
-+#define XRT_MD_NODE_P2P "ep_p2p_00"
-+#define XRT_MD_NODE_PCIE_MON "ep_pcie_link_mon_00"
-+#define XRT_MD_NODE_PMC_INTR   "ep_pmc_intr_00"
-+#define XRT_MD_NODE_PMC_MUX    "ep_pmc_mux_00"
-+#define XRT_MD_NODE_QDMA "ep_qdma_00"
-+#define XRT_MD_NODE_QDMA4 "ep_qdma4_00"
-+#define XRT_MD_NODE_REMAP_P2P "ep_remap_p2p_00"
-+#define XRT_MD_NODE_STM "ep_stream_traffic_manager_00"
-+#define XRT_MD_NODE_STM4 "ep_stream_traffic_manager4_00"
-+#define XRT_MD_NODE_SYSMON "ep_cmp_sysmon_00"
-+#define XRT_MD_NODE_XDMA "ep_xdma_00"
-+#define XRT_MD_NODE_XVC_PUB "ep_debug_bscan_user_00"
-+#define XRT_MD_NODE_XVC_PRI "ep_debug_bscan_mgmt_00"
-+#define XRT_MD_NODE_UCS_CONTROL_STATUS "ep_ucs_control_status_00"
-+
-+/* endpoint compatible string */
-+#define XRT_MD_COMPAT_DDR_SRSR "drv_ddr_srsr"
-+#define XRT_MD_COMPAT_CLKFREQ "freq_cnt"
-+
-+/* driver defined endpoints */
-+#define XRT_MD_NODE_BLP_ROM "drv_ep_blp_rom_00"
-+#define XRT_MD_NODE_DDR_SRSR "drv_ep_ddr_srsr"
-+#define XRT_MD_NODE_FLASH_VSEC "drv_ep_card_flash_program_00"
-+#define XRT_MD_NODE_GOLDEN_VER "drv_ep_golden_ver_00"
-+#define XRT_MD_NODE_MAILBOX_VSEC "drv_ep_mailbox_vsec_00"
-+#define XRT_MD_NODE_MGMT_MAIN "drv_ep_mgmt_main_00"
-+#define XRT_MD_NODE_PLAT_INFO "drv_ep_platform_info_mgmt_00"
-+#define XRT_MD_NODE_PARTITION_INFO_BLP "partition_info_0"
-+#define XRT_MD_NODE_PARTITION_INFO_PLP "partition_info_1"
-+#define XRT_MD_NODE_TEST "drv_ep_test_00"
-+#define XRT_MD_NODE_VSEC "drv_ep_vsec_00"
-+#define XRT_MD_NODE_VSEC_GOLDEN "drv_ep_vsec_golden_00"
-+
-+/* driver defined properties */
-+#define XRT_MD_PROP_OFFSET "drv_offset"
-+#define XRT_MD_PROP_CLK_FREQ "drv_clock_frequency"
-+#define XRT_MD_PROP_CLK_CNT "drv_clock_frequency_counter"
-+#define XRT_MD_PROP_VBNV "vbnv"
-+#define XRT_MD_PROP_VROM "vrom"
-+#define XRT_MD_PROP_PARTITION_LEVEL "partition_level"
-+
-+struct xrt_md_endpoint {
-+	const char	*ep_name;
-+	u32		bar_index;
-+	u64		bar_off;
-+	u64		size;
-+	char		*compat;
-+	char		*compat_ver;
++struct xclbin_bit_head_info {
++	u32 header_length;		/* Length of header in 32 bit words */
++	u32 bitstream_length;		/* Length of bitstream to read in bytes */
++	const unchar *design_name;	/* Design name get from bitstream */
++	const unchar *part_name;	/* Part name read from bitstream */
++	const unchar *date;		/* Date read from bitstream header */
++	const unchar *time;		/* Bitstream creation time */
++	u32 magic_length;		/* Length of the magic numbers */
++	const unchar *version;		/* Version string */
 +};
 +
-+/* Note: res_id is defined by leaf driver and must start with 0. */
-+struct xrt_iores_map {
-+	char		*res_name;
-+	int		res_id;
-+};
++/* caller must free the allocated memory for **data. len could be NULL. */
++int xrt_xclbin_get_section(struct device *dev,  const struct axlf *xclbin,
++			   enum axlf_section_kind kind, void **data,
++			   uint64_t *len);
++int xrt_xclbin_get_metadata(struct device *dev, const struct axlf *xclbin, char **dtb);
++int xrt_xclbin_parse_bitstream_header(struct device *dev, const unchar *data,
++				      u32 size, struct xclbin_bit_head_info *head_info);
++const char *xrt_clock_type2epname(enum XCLBIN_CLOCK_TYPE type);
 +
-+static inline int xrt_md_res_name2id(const struct xrt_iores_map *res_map,
-+				     int entry_num, const char *res_name)
++#endif /* _XCLBIN_HELPER_H_ */
+diff --git a/drivers/fpga/xrt/lib/xclbin.c b/drivers/fpga/xrt/lib/xclbin.c
+new file mode 100644
+index 000000000000..6edac3d418be
+--- /dev/null
++++ b/drivers/fpga/xrt/lib/xclbin.c
+@@ -0,0 +1,381 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Xilinx Alveo FPGA Driver XCLBIN parser
++ *
++ * Copyright (C) 2020-2021 Xilinx, Inc.
++ *
++ * Authors: David Zhang <davidzha@xilinx.com>
++ */
++
++#include <asm/errno.h>
++#include <linux/vmalloc.h>
++#include <linux/device.h>
++#include "xclbin-helper.h"
++#include "metadata.h"
++
++/* Used for parsing bitstream header */
++#define BITSTREAM_EVEN_MAGIC_BYTE	0x0f
++#define BITSTREAM_ODD_MAGIC_BYTE	0xf0
++
++static inline u16 bitstream_read16(const char *data, u32 *offset)
 +{
-+	int i;
++	u16 val;
 +
-+	for (i = 0; i < entry_num; i++) {
-+		if (!strncmp(res_name, res_map->res_name, strlen(res_map->res_name) + 1))
-+			return res_map->res_id;
-+		res_map++;
-+	}
-+	return -1;
++	val = be16_to_cpu(*(__be16 *)(data + *offset));
++	*offset += sizeof(__be16);
++
++	return val;
 +}
 +
-+static inline const char *
-+xrt_md_res_id2name(const struct xrt_iores_map *res_map, int entry_num, int id)
++static inline u32 bitstream_read32(const char *data, u32 *offset)
++{
++	u32 val;
++
++	val = be32_to_cpu(*(__be32 *)(data + *offset));
++	*offset += sizeof(__be32);
++
++	return val;
++}
++
++static int xrt_xclbin_get_section_hdr(const struct axlf *xclbin,
++				      enum axlf_section_kind kind,
++				      const struct axlf_section_header **header)
++{
++	const struct axlf_section_header *phead = NULL;
++	u64 xclbin_len;
++	int i;
++
++	*header = NULL;
++	for (i = 0; i < xclbin->header.num_sections; i++) {
++		if (xclbin->sections[i].section_kind == kind) {
++			phead = &xclbin->sections[i];
++			break;
++		}
++	}
++
++	if (!phead)
++		return -ENOENT;
++
++	xclbin_len = xclbin->header.length;
++	if (xclbin_len > XCLBIN_MAX_SZ_1G || !phead->section_size ||
++	    phead->section_offset + phead->section_size > xclbin_len)
++		return -EINVAL;
++
++	*header = phead;
++	return 0;
++}
++
++static int xrt_xclbin_section_info(const struct axlf *xclbin,
++				   enum axlf_section_kind kind,
++				   u64 *offset, u64 *size)
++{
++	const struct axlf_section_header *mem_header = NULL;
++	int rc;
++
++	rc = xrt_xclbin_get_section_hdr(xclbin, kind, &mem_header);
++	if (rc)
++		return rc;
++
++	*offset = mem_header->section_offset;
++	*size = mem_header->section_size;
++
++	return 0;
++}
++
++/* caller must free the allocated memory for **data */
++int xrt_xclbin_get_section(struct device *dev,
++			   const struct axlf *buf,
++			   enum axlf_section_kind kind,
++			   void **data, u64 *len)
++{
++	const struct axlf *xclbin = (const struct axlf *)buf;
++	void *section = NULL;
++	u64 offset;
++	u64 size;
++	int err;
++
++	if (!data) {
++		dev_err(dev, "invalid data pointer");
++		return -EINVAL;
++	}
++
++	err = xrt_xclbin_section_info(xclbin, kind, &offset, &size);
++	if (err) {
++		dev_dbg(dev, "parsing section failed. kind %d, err = %d", kind, err);
++		return err;
++	}
++
++	section = vzalloc(size);
++	if (!section)
++		return -ENOMEM;
++
++	memcpy(section, ((const char *)xclbin) + offset, size);
++
++	*data = section;
++	if (len)
++		*len = size;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xrt_xclbin_get_section);
++
++static inline int xclbin_bit_get_string(const unchar *data, u32 size,
++					u32 offset, unchar prefix,
++					const unchar **str)
++{
++	int len;
++	u32 tmp;
++
++	/* prefix and length will be 3 bytes */
++	if (offset + 3  > size)
++		return -EINVAL;
++
++	/* Read prefix */
++	tmp = data[offset++];
++	if (tmp != prefix)
++		return -EINVAL;
++
++	/* Get string length */
++	len = bitstream_read16(data, &offset);
++	if (offset + len > size)
++		return -EINVAL;
++
++	if (data[offset + len - 1] != '\0')
++		return -EINVAL;
++
++	*str = data + offset;
++
++	return len + 3;
++}
++
++/* parse bitstream header */
++int xrt_xclbin_parse_bitstream_header(struct device *dev, const unchar *data,
++				      u32 size, struct xclbin_bit_head_info *head_info)
++{
++	u32 offset = 0;
++	int len, i;
++	u16 magic;
++
++	memset(head_info, 0, sizeof(*head_info));
++
++	/* Get "Magic" length */
++	if (size < sizeof(u16)) {
++		dev_err(dev, "invalid size");
++		return -EINVAL;
++	}
++
++	len = bitstream_read16(data, &offset);
++	if (offset + len > size) {
++		dev_err(dev, "invalid magic len");
++		return -EINVAL;
++	}
++	head_info->magic_length = len;
++
++	for (i = 0; i < head_info->magic_length - 1; i++) {
++		magic = data[offset++];
++		if (!(i % 2) && magic != BITSTREAM_EVEN_MAGIC_BYTE) {
++			dev_err(dev, "invalid magic even byte at %d", offset);
++			return -EINVAL;
++		}
++
++		if ((i % 2) && magic != BITSTREAM_ODD_MAGIC_BYTE) {
++			dev_err(dev, "invalid magic odd byte at %d", offset);
++			return -EINVAL;
++		}
++	}
++
++	if (offset + 3 > size) {
++		dev_err(dev, "invalid length of magic end");
++		return -EINVAL;
++	}
++	/* Read null end of magic data. */
++	if (data[offset++]) {
++		dev_err(dev, "invalid magic end");
++		return -EINVAL;
++	}
++
++	/* Read 0x01 (short) */
++	magic = bitstream_read16(data, &offset);
++
++	/* Check the "0x01" half word */
++	if (magic != 0x01) {
++		dev_err(dev, "invalid magic end");
++		return -EINVAL;
++	}
++
++	len = xclbin_bit_get_string(data, size, offset, 'a', &head_info->design_name);
++	if (len < 0) {
++		dev_err(dev, "get design name failed");
++		return -EINVAL;
++	}
++
++	head_info->version = strstr(head_info->design_name, "Version=") + strlen("Version=");
++	offset += len;
++
++	len = xclbin_bit_get_string(data, size, offset, 'b', &head_info->part_name);
++	if (len < 0) {
++		dev_err(dev, "get part name failed");
++		return -EINVAL;
++	}
++	offset += len;
++
++	len = xclbin_bit_get_string(data, size, offset, 'c', &head_info->date);
++	if (len < 0) {
++		dev_err(dev, "get data failed");
++		return -EINVAL;
++	}
++	offset += len;
++
++	len = xclbin_bit_get_string(data, size, offset, 'd', &head_info->time);
++	if (len < 0) {
++		dev_err(dev, "get time failed");
++		return -EINVAL;
++	}
++	offset += len;
++
++	if (offset + 5 >= size) {
++		dev_err(dev, "can not get bitstream length");
++		return -EINVAL;
++	}
++
++	/* Read 'e' */
++	if (data[offset++] != 'e') {
++		dev_err(dev, "invalid prefix of bitstream length");
++		return -EINVAL;
++	}
++
++	/* Get byte length of bitstream */
++	head_info->bitstream_length = bitstream_read32(data, &offset);
++
++	head_info->header_length = offset;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xrt_xclbin_parse_bitstream_header);
++
++static struct xrt_clock_desc {
++	char	*clock_ep_name;
++	u32	clock_xclbin_type;
++	char	*clkfreq_ep_name;
++} clock_desc[] = {
++	{
++		.clock_ep_name = XRT_MD_NODE_CLK_KERNEL1,
++		.clock_xclbin_type = CT_DATA,
++		.clkfreq_ep_name = XRT_MD_NODE_CLKFREQ_K1,
++	},
++	{
++		.clock_ep_name = XRT_MD_NODE_CLK_KERNEL2,
++		.clock_xclbin_type = CT_KERNEL,
++		.clkfreq_ep_name = XRT_MD_NODE_CLKFREQ_K2,
++	},
++	{
++		.clock_ep_name = XRT_MD_NODE_CLK_KERNEL3,
++		.clock_xclbin_type = CT_SYSTEM,
++		.clkfreq_ep_name = XRT_MD_NODE_CLKFREQ_HBM,
++	},
++};
++
++const char *xrt_clock_type2epname(enum XCLBIN_CLOCK_TYPE type)
 +{
 +	int i;
 +
-+	for (i = 0; i < entry_num; i++) {
-+		if (res_map->res_id == id)
-+			return res_map->res_name;
-+		res_map++;
++	for (i = 0; i < ARRAY_SIZE(clock_desc); i++) {
++		if (clock_desc[i].clock_xclbin_type == type)
++			return clock_desc[i].clock_ep_name;
++	}
++	return NULL;
++}
++EXPORT_SYMBOL_GPL(xrt_clock_type2epname);
++
++static const char *clock_type2clkfreq_name(enum XCLBIN_CLOCK_TYPE type)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(clock_desc); i++) {
++		if (clock_desc[i].clock_xclbin_type == type)
++			return clock_desc[i].clkfreq_ep_name;
 +	}
 +	return NULL;
 +}
 +
-+u32 xrt_md_size(struct device *dev, const char *blob);
-+int xrt_md_create(struct device *dev, char **blob);
-+char *xrt_md_dup(struct device *dev, const char *blob);
-+int xrt_md_add_endpoint(struct device *dev, char *blob,
-+			struct xrt_md_endpoint *ep);
-+int xrt_md_del_endpoint(struct device *dev, char *blob, const char *ep_name,
-+			const char *compat);
-+int xrt_md_get_prop(struct device *dev, const char *blob, const char *ep_name,
-+		    const char *compat, const char *prop,
-+		    const void **val, int *size);
-+int xrt_md_set_prop(struct device *dev, char *blob, const char *ep_name,
-+		    const char *compat, const char *prop,
-+		    const void *val, int size);
-+int xrt_md_copy_endpoint(struct device *dev, char *blob, const char *src_blob,
-+			 const char *ep_name, const char *compat,
-+			 const char *new_ep_name);
-+int xrt_md_get_next_endpoint(struct device *dev, const char *blob,
-+			     const char *ep_name,  const char *compat,
-+			     char **next_ep, char **next_compat);
-+int xrt_md_get_compatible_endpoint(struct device *dev, const char *blob,
-+				   const char *compat, const char **ep_name);
-+int xrt_md_find_endpoint(struct device *dev, const char *blob,
-+			 const char *ep_name, const char *compat,
-+			 const char **epname);
-+int xrt_md_pack(struct device *dev, char *blob);
-+int xrt_md_get_interface_uuids(struct device *dev, const char *blob,
-+			       u32 num_uuids, uuid_t *intf_uuids);
-+
-+/*
-+ * The firmware provides a 128 bit hash string as a unique id to the
-+ * partition/interface.
-+ * Existing hw does not yet use the canonical form, so it is necessary to
-+ * use a translation function.
-+ */
-+static inline void xrt_md_trans_uuid2str(const uuid_t *uuid, char *uuidstr)
++static int xrt_xclbin_add_clock_metadata(struct device *dev,
++					 const struct axlf *xclbin,
++					 char *dtb)
 +{
-+	int i, p;
-+	u8 tmp[UUID_SIZE];
-+
-+	BUILD_BUG_ON(UUID_SIZE != 16);
-+	export_uuid(tmp, uuid);
-+	for (p = 0, i = UUID_SIZE - 1; i >= 0; p++, i--)
-+		snprintf(&uuidstr[p * 2], 3, "%02x", tmp[i]);
-+}
-+
-+static inline int xrt_md_trans_str2uuid(struct device *dev, const char *uuidstr, uuid_t *p_uuid)
-+{
-+	u8 p[UUID_SIZE];
-+	const char *str;
-+	char tmp[3] = { 0 };
-+	int i, ret;
-+
-+	if (strlen(uuidstr) != UUID_SIZE * 2)
-+		return -EINVAL;
-+
-+	str = uuidstr + strlen(uuidstr) - 2;
-+
-+	for (i = 0; i < sizeof(*p_uuid) && str >= uuidstr; i++) {
-+		tmp[0] = *str;
-+		tmp[1] = *(str + 1);
-+		ret = kstrtou8(tmp, 16, &p[i]);
-+		if (ret)
-+			return -EINVAL;
-+		str -= 2;
-+	}
-+	import_uuid(p_uuid, p);
-+
-+	return 0;
-+}
-+
-+#endif
-diff --git a/drivers/fpga/xrt/metadata/metadata.c b/drivers/fpga/xrt/metadata/metadata.c
-new file mode 100644
-index 000000000000..6f67490a3ab1
---- /dev/null
-+++ b/drivers/fpga/xrt/metadata/metadata.c
-@@ -0,0 +1,578 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Xilinx Alveo FPGA Metadata parse APIs
-+ *
-+ * Copyright (C) 2020-2021 Xilinx, Inc.
-+ *
-+ * Authors:
-+ *      Lizhi Hou <Lizhi.Hou@xilinx.com>
-+ */
-+
-+#include <linux/libfdt_env.h>
-+#include "libfdt.h"
-+#include "metadata.h"
-+
-+#define XRT_MAX_BLOB_SIZE	(4096 * 25)
-+#define XRT_MAX_DEPTH 5
-+
-+static int xrt_md_setprop(struct device *dev, char *blob, int offset,
-+			  const char *prop, const void *val, int size)
-+{
-+	int ret;
-+
-+	ret = fdt_setprop(blob, offset, prop, val, size);
-+	if (ret) {
-+		ret = -EINVAL;
-+		dev_err(dev, "failed to set prop %d", ret);
-+	}
-+
-+	return ret;
-+}
-+
-+static int xrt_md_add_node(struct device *dev, char *blob, int parent_offset,
-+			   const char *ep_name)
-+{
-+	int ret;
-+
-+	ret = fdt_add_subnode(blob, parent_offset, ep_name);
-+	if (ret < 0 && ret != -FDT_ERR_EXISTS) {
-+		ret = -EINVAL;
-+		dev_err(dev, "failed to add node %s. %d", ep_name, ret);
-+	}
-+
-+	return ret;
-+}
-+
-+static int xrt_md_get_endpoint(struct device *dev, const char *blob,
-+			       const char *ep_name, const char *compat,
-+			       int *ep_offset)
-+{
-+	const char *name;
-+	int offset;
-+
-+	if (compat) {
-+		for (offset = fdt_next_node((blob), -1, NULL);
-+		     offset >= 0;
-+		     offset = fdt_next_node((blob), offset, NULL)) {
-+			name = fdt_get_name(blob, offset, NULL);
-+			if (!name || strncmp(name, ep_name, strlen(ep_name) + 1))
-+				continue;
-+			if (!fdt_node_check_compatible(blob, offset, compat))
-+				break;
-+		}
-+	} else {
-+		for (offset = fdt_next_node((blob), -1, NULL);
-+		     offset >= 0;
-+		     offset = fdt_next_node((blob), offset, NULL)) {
-+			name = fdt_get_name(blob, offset, NULL);
-+			if (name && !strncmp(name, ep_name, strlen(ep_name) + 1))
-+				break;
-+		}
-+	}
-+
-+	if (offset < 0)
-+		return -ENODEV;
-+
-+	*ep_offset = offset;
-+
-+	return 0;
-+}
-+
-+static inline int xrt_md_get_node(struct device *dev, const char *blob,
-+				  const char *name, const char *compat,
-+				  int *offset)
-+{
-+	int ret = 0;
-+
-+	if (name) {
-+		ret = xrt_md_get_endpoint(dev, blob, name, compat,
-+					  offset);
-+		if (ret) {
-+			if (compat) {
-+				dev_err(dev, "cannot get node %s compat %s, ret %d",
-+					name, compat, ret);
-+			} else {
-+				dev_err(dev, "cannot get node %s, ret %d", name, ret);
-+			}
-+			return -EINVAL;
-+		}
-+	} else {
-+		ret = fdt_next_node(blob, -1, NULL);
-+		if (ret < 0) {
-+			dev_err(dev, "internal error, ret = %d", ret);
-+			return -EINVAL;
-+		}
-+		*offset = ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int xrt_md_overlay(struct device *dev, char *blob, int target,
-+			  const char *overlay_blob, int overlay_offset,
-+			  int depth)
-+{
-+	int property, subnode;
-+	int ret;
-+
-+	if (!blob || !overlay_blob) {
-+		dev_err(dev, "blob is NULL");
-+		return -EINVAL;
-+	}
-+
-+	if (depth > XRT_MAX_DEPTH) {
-+		dev_err(dev, "meta data depth beyond %d", XRT_MAX_DEPTH);
-+		return -EINVAL;
-+	}
-+
-+	if (target < 0) {
-+		target = fdt_next_node(blob, -1, NULL);
-+		if (target < 0) {
-+			dev_err(dev, "invalid target");
-+			return -EINVAL;
-+		}
-+	}
-+	if (overlay_offset < 0) {
-+		overlay_offset = fdt_next_node(overlay_blob, -1, NULL);
-+		if (overlay_offset < 0) {
-+			dev_err(dev, "invalid overlay");
-+			return -EINVAL;
-+		}
-+	}
-+
-+	fdt_for_each_property_offset(property, overlay_blob, overlay_offset) {
-+		const char *name;
-+		const void *prop;
-+		int prop_len;
-+
-+		prop = fdt_getprop_by_offset(overlay_blob, property, &name,
-+					     &prop_len);
-+		if (!prop || prop_len >= XRT_MAX_BLOB_SIZE || prop_len < 0) {
-+			dev_err(dev, "internal error");
-+			return -EINVAL;
-+		}
-+
-+		ret = xrt_md_setprop(dev, blob, target, name, prop,
-+				     prop_len);
-+		if (ret) {
-+			dev_err(dev, "setprop failed, ret = %d", ret);
-+			return ret;
-+		}
-+	}
-+
-+	fdt_for_each_subnode(subnode, overlay_blob, overlay_offset) {
-+		const char *name = fdt_get_name(overlay_blob, subnode, NULL);
-+		int nnode;
-+
-+		nnode = xrt_md_add_node(dev, blob, target, name);
-+		if (nnode == -FDT_ERR_EXISTS)
-+			nnode = fdt_subnode_offset(blob, target, name);
-+		if (nnode < 0) {
-+			dev_err(dev, "add node failed, ret = %d", nnode);
-+			return -EINVAL;
-+		}
-+
-+		ret = xrt_md_overlay(dev, blob, nnode, overlay_blob, subnode, depth + 1);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+u32 xrt_md_size(struct device *dev, const char *blob)
-+{
-+	u32 len = fdt_totalsize(blob);
-+
-+	if (len > XRT_MAX_BLOB_SIZE)
-+		return XRT_MD_INVALID_LENGTH;
-+
-+	return len;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_size);
-+
-+int xrt_md_create(struct device *dev, char **blob)
-+{
-+	int ret = 0;
-+
-+	if (!blob) {
-+		dev_err(dev, "blob is NULL");
-+		return -EINVAL;
-+	}
-+
-+	*blob = vzalloc(XRT_MAX_BLOB_SIZE);
-+	if (!*blob)
-+		return -ENOMEM;
-+
-+	ret = fdt_create_empty_tree(*blob, XRT_MAX_BLOB_SIZE);
-+	if (ret) {
-+		ret = -EINVAL;
-+		dev_err(dev, "format blob failed, ret = %d", ret);
-+		goto failed;
-+	}
-+
-+	ret = fdt_next_node(*blob, -1, NULL);
-+	if (ret < 0) {
-+		ret = -EINVAL;
-+		dev_err(dev, "No Node, ret = %d", ret);
-+		goto failed;
-+	}
-+
-+	ret = fdt_add_subnode(*blob, 0, XRT_MD_NODE_ENDPOINTS);
-+	if (ret < 0) {
-+		ret = -EINVAL;
-+		dev_err(dev, "add node failed, ret = %d", ret);
-+		goto failed;
-+	}
-+
-+	return 0;
-+
-+failed:
-+	vfree(*blob);
-+	*blob = NULL;
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_create);
-+
-+char *xrt_md_dup(struct device *dev, const char *blob)
-+{
-+	char *dup_blob;
-+	int ret;
-+
-+	ret = xrt_md_create(dev, &dup_blob);
-+	if (ret)
-+		return NULL;
-+	ret = xrt_md_overlay(dev, dup_blob, -1, blob, -1, 0);
-+	if (ret) {
-+		vfree(dup_blob);
-+		return NULL;
-+	}
-+
-+	return dup_blob;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_dup);
-+
-+int xrt_md_del_endpoint(struct device *dev, char *blob, const char *ep_name,
-+			const char *compat)
-+{
-+	int ep_offset;
-+	int ret;
-+
-+	ret = xrt_md_get_endpoint(dev, blob, ep_name, compat, &ep_offset);
-+	if (ret) {
-+		dev_err(dev, "can not find ep %s", ep_name);
-+		return -EINVAL;
-+	}
-+
-+	ret = fdt_del_node(blob, ep_offset);
-+	if (ret) {
-+		ret = -EINVAL;
-+		dev_err(dev, "delete node %s failed, ret %d", ep_name, ret);
-+	}
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_del_endpoint);
-+
-+static int __xrt_md_add_endpoint(struct device *dev, char *blob,
-+				 struct xrt_md_endpoint *ep, int *offset,
-+				 const char *parent)
-+{
-+	int parent_offset = 0;
-+	u32 val, count = 0;
-+	int ep_offset = 0;
-+	u64 io_range[2];
-+	char comp[128];
-+	int ret = 0;
-+
-+	if (!ep->ep_name) {
-+		dev_err(dev, "empty name");
-+		return -EINVAL;
-+	}
-+
-+	if (parent) {
-+		ret = xrt_md_get_endpoint(dev, blob, parent, NULL, &parent_offset);
-+		if (ret) {
-+			dev_err(dev, "invalid blob, ret = %d", ret);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	ep_offset = xrt_md_add_node(dev, blob, parent_offset, ep->ep_name);
-+	if (ep_offset < 0) {
-+		dev_err(dev, "add endpoint failed, ret = %d", ret);
-+		return -EINVAL;
-+	}
-+	if (offset)
-+		*offset = ep_offset;
-+
-+	if (ep->size != 0) {
-+		val = cpu_to_be32(ep->bar_index);
-+		ret = xrt_md_setprop(dev, blob, ep_offset, XRT_MD_PROP_BAR_IDX,
-+				     &val, sizeof(u32));
-+		if (ret) {
-+			dev_err(dev, "set %s failed, ret %d",
-+				XRT_MD_PROP_BAR_IDX, ret);
-+			goto failed;
-+		}
-+		io_range[0] = cpu_to_be64((u64)ep->bar_off);
-+		io_range[1] = cpu_to_be64((u64)ep->size);
-+		ret = xrt_md_setprop(dev, blob, ep_offset, XRT_MD_PROP_IO_OFFSET,
-+				     io_range, sizeof(io_range));
-+		if (ret) {
-+			dev_err(dev, "set %s failed, ret %d",
-+				XRT_MD_PROP_IO_OFFSET, ret);
-+			goto failed;
-+		}
-+	}
-+
-+	if (ep->compat) {
-+		if (ep->compat_ver) {
-+			count = snprintf(comp, sizeof(comp) - 1,
-+					 "%s-%s", ep->compat, ep->compat_ver);
-+			count++;
-+		}
-+		if (count >= sizeof(comp)) {
-+			ret = -EINVAL;
-+			goto failed;
-+		}
-+
-+		count += snprintf(comp + count, sizeof(comp) - count - 1,
-+				  "%s", ep->compat);
-+		count++;
-+		if (count >= sizeof(comp)) {
-+			ret = -EINVAL;
-+			goto failed;
-+		}
-+
-+		ret = xrt_md_setprop(dev, blob, ep_offset, XRT_MD_PROP_COMPATIBLE,
-+				     comp, count);
-+		if (ret) {
-+			dev_err(dev, "set %s failed, ret %d",
-+				XRT_MD_PROP_COMPATIBLE, ret);
-+			goto failed;
-+		}
-+	}
-+
-+failed:
-+	if (ret)
-+		xrt_md_del_endpoint(dev, blob, ep->ep_name, NULL);
-+
-+	return ret;
-+}
-+
-+int xrt_md_add_endpoint(struct device *dev, char *blob,
-+			struct xrt_md_endpoint *ep)
-+{
-+	return __xrt_md_add_endpoint(dev, blob, ep, NULL, XRT_MD_NODE_ENDPOINTS);
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_add_endpoint);
-+
-+int xrt_md_find_endpoint(struct device *dev, const char *blob,
-+			 const char *ep_name, const char *compat,
-+			 const char **epname)
-+{
-+	int offset;
-+	int ret;
-+
-+	ret = xrt_md_get_endpoint(dev, blob, ep_name, compat,
-+				  &offset);
-+	if (ret)
-+		return ret;
-+
-+	if (epname) {
-+		*epname = fdt_get_name(blob, offset, NULL);
-+		if (!*epname)
-+			return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_find_endpoint);
-+
-+int xrt_md_get_prop(struct device *dev, const char *blob, const char *ep_name,
-+		    const char *compat, const char *prop,
-+		    const void **val, int *size)
-+{
-+	int offset;
-+	int ret;
-+
-+	if (!val) {
-+		dev_err(dev, "val is null");
-+		return -EINVAL;
-+	}
-+
-+	*val = NULL;
-+	ret = xrt_md_get_node(dev, blob, ep_name, compat, &offset);
-+	if (ret)
-+		return ret;
-+
-+	*val = fdt_getprop(blob, offset, prop, size);
-+	if (!*val) {
-+		dev_dbg(dev, "get ep %s, prop %s failed", ep_name, prop);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_get_prop);
-+
-+int xrt_md_set_prop(struct device *dev, char *blob,
-+		    const char *ep_name, const char *compat,
-+		    const char *prop, const void *val, int size)
-+{
-+	int offset;
-+	int ret;
-+
-+	ret = xrt_md_get_node(dev, blob, ep_name, compat, &offset);
-+	if (ret)
-+		return ret;
-+
-+	ret = xrt_md_setprop(dev, blob, offset, prop, val, size);
-+	if (ret)
-+		dev_err(dev, "set prop %s failed, ret = %d", prop, ret);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_set_prop);
-+
-+int xrt_md_copy_endpoint(struct device *dev, char *blob, const char *src_blob,
-+			 const char *ep_name, const char *compat,
-+			 const char *new_ep_name)
-+{
-+	const char *newepnm = new_ep_name ? new_ep_name : ep_name;
-+	struct xrt_md_endpoint ep = {0};
-+	int offset, target;
-+	const char *parent;
-+	int ret;
-+
-+	ret = xrt_md_get_endpoint(dev, src_blob, ep_name, compat,
-+				  &offset);
-+	if (ret)
-+		return -EINVAL;
-+
-+	ret = xrt_md_get_endpoint(dev, blob, newepnm, compat, &target);
-+	if (ret) {
-+		ep.ep_name = newepnm;
-+		parent = fdt_parent_offset(src_blob, offset) == 0 ? NULL : XRT_MD_NODE_ENDPOINTS;
-+		ret = __xrt_md_add_endpoint(dev, blob, &ep, &target, parent);
-+		if (ret)
-+			return -EINVAL;
-+	}
-+
-+	ret = xrt_md_overlay(dev, blob, target, src_blob, offset, 0);
-+	if (ret)
-+		dev_err(dev, "overlay failed, ret = %d", ret);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_copy_endpoint);
-+
-+int xrt_md_get_next_endpoint(struct device *dev, const char *blob,
-+			     const char *ep_name, const char *compat,
-+			     char **next_ep, char **next_compat)
-+{
-+	int offset, ret;
-+
-+	*next_ep = NULL;
-+	*next_compat = NULL;
-+	if (!ep_name) {
-+		ret = xrt_md_get_endpoint(dev, blob, XRT_MD_NODE_ENDPOINTS, NULL,
-+					  &offset);
-+	} else {
-+		ret = xrt_md_get_endpoint(dev, blob, ep_name, compat,
-+					  &offset);
-+	}
-+
-+	if (ret)
-+		return -EINVAL;
-+
-+	if (ep_name)
-+		offset = fdt_next_subnode(blob, offset);
-+	else
-+		offset = fdt_first_subnode(blob, offset);
-+	if (offset < 0)
-+		return -EINVAL;
-+
-+	*next_ep = (char *)fdt_get_name(blob, offset, NULL);
-+	*next_compat = (char *)fdt_stringlist_get(blob, offset, XRT_MD_PROP_COMPATIBLE,
-+						  0, NULL);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_get_next_endpoint);
-+
-+int xrt_md_get_compatible_endpoint(struct device *dev, const char *blob,
-+				   const char *compat, const char **ep_name)
-+{
-+	int ep_offset;
-+
-+	ep_offset = fdt_node_offset_by_compatible(blob, -1, compat);
-+	if (ep_offset < 0) {
-+		*ep_name = NULL;
-+		return -ENOENT;
-+	}
-+
-+	*ep_name = fdt_get_name(blob, ep_offset, NULL);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_get_compatible_endpoint);
-+
-+int xrt_md_pack(struct device *dev, char *blob)
-+{
-+	int ret;
-+
-+	ret = fdt_pack(blob);
-+	if (ret) {
-+		ret = -EINVAL;
-+		dev_err(dev, "pack failed %d", ret);
-+	}
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(xrt_md_pack);
-+
-+int xrt_md_get_interface_uuids(struct device *dev, const char *blob,
-+			       u32 num_uuids, uuid_t *interface_uuids)
-+{
-+	int offset, count = 0;
-+	const char *uuid_str;
-+	int ret;
-+
-+	ret = xrt_md_get_endpoint(dev, blob, XRT_MD_NODE_INTERFACES, NULL, &offset);
-+	if (ret)
-+		return -ENOENT;
-+
-+	for (offset = fdt_first_subnode(blob, offset);
-+	    offset >= 0;
-+	    offset = fdt_next_subnode(blob, offset), count++) {
-+		uuid_str = fdt_getprop(blob, offset, XRT_MD_PROP_INTERFACE_UUID,
-+				       NULL);
-+		if (!uuid_str) {
-+			dev_err(dev, "empty interface uuid node");
-+			return -EINVAL;
-+		}
-+
-+		if (!num_uuids)
++	struct clock_freq_topology *clock_topo;
++	u16 freq;
++	int rc;
++	int i;
++
++	/* if clock section does not exist, add nothing and return success */
++	rc = xrt_xclbin_get_section(dev, xclbin, CLOCK_FREQ_TOPOLOGY,
++				    (void **)&clock_topo, NULL);
++	if (rc == -ENOENT)
++		return 0;
++	else if (rc)
++		return rc;
++
++	for (i = 0; i < clock_topo->count; i++) {
++		u8 type = clock_topo->clock_freq[i].type;
++		const char *ep_name = xrt_clock_type2epname(type);
++		const char *counter_name = clock_type2clkfreq_name(type);
++
++		if (!ep_name || !counter_name)
 +			continue;
 +
-+		if (count == num_uuids) {
-+			dev_err(dev, "too many interface uuid in blob");
-+			return -EINVAL;
-+		}
++		freq = be16_to_cpu((__force __be16)clock_topo->clock_freq[i].freq_MHZ);
++		rc = xrt_md_set_prop(dev, dtb, ep_name, NULL, XRT_MD_PROP_CLK_FREQ,
++				     &freq, sizeof(freq));
++		if (rc)
++			break;
 +
-+		if (interface_uuids && count < num_uuids) {
-+			ret = xrt_md_trans_str2uuid(dev, uuid_str,
-+						    &interface_uuids[count]);
-+			if (ret)
-+				return -EINVAL;
-+		}
++		rc = xrt_md_set_prop(dev, dtb, ep_name, NULL, XRT_MD_PROP_CLK_CNT,
++				     counter_name, strlen(counter_name) + 1);
++		if (rc)
++			break;
 +	}
-+	if (!count)
-+		count = -ENOENT;
 +
-+	return count;
++	vfree(clock_topo);
++
++	return rc;
 +}
-+EXPORT_SYMBOL_GPL(xrt_md_get_interface_uuids);
++
++int xrt_xclbin_get_metadata(struct device *dev, const struct axlf *xclbin, char **dtb)
++{
++	char *md = NULL, *newmd = NULL;
++	u64 len, md_len;
++	int rc;
++
++	*dtb = NULL;
++
++	rc = xrt_xclbin_get_section(dev, xclbin, PARTITION_METADATA, (void **)&md, &len);
++	if (rc)
++		goto done;
++
++	md_len = xrt_md_size(dev, md);
++
++	/* Sanity check the dtb section. */
++	if (md_len > len) {
++		rc = -EINVAL;
++		goto done;
++	}
++
++	/* use dup function here to convert incoming metadata to writable */
++	newmd = xrt_md_dup(dev, md);
++	if (!newmd) {
++		rc = -EFAULT;
++		goto done;
++	}
++
++	/* Convert various needed xclbin sections into dtb. */
++	rc = xrt_xclbin_add_clock_metadata(dev, xclbin, newmd);
++
++	if (!rc)
++		*dtb = newmd;
++	else
++		vfree(newmd);
++done:
++	vfree(md);
++	return rc;
++}
++EXPORT_SYMBOL_GPL(xrt_xclbin_get_metadata);
+diff --git a/include/uapi/linux/fpga-xrt.h b/include/uapi/linux/fpga-xrt.h
+new file mode 100644
+index 000000000000..ace7d3d09897
+--- /dev/null
++++ b/include/uapi/linux/fpga-xrt.h
+@@ -0,0 +1,428 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ *  Xilinx FPGA compiled binary container format
++ *
++ *  Copyright (C) 2015-2021, Xilinx Inc
++ */
++
++#ifndef _UAPI_LINUX_FPGA_XRT_H
++#define _UAPI_LINUX_FPGA_XRT_H
++
++#if defined(__KERNEL__)
++
++#include <linux/types.h>
++
++#elif defined(__cplusplus)
++
++#include <cstdlib>
++#include <cstdint>
++#include <algorithm>
++#include <uuid/uuid.h>
++
++#else
++
++#include <stdlib.h>
++#include <stdint.h>
++#include <uuid/uuid.h>
++
++#endif
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#include <linux/ioctl.h>
++
++/**
++ * DOC: Container format for Xilinx FPGA images
++ * The container stores bitstreams, metadata and firmware images.
++ * xclbin/xsabin is an ELF-like binary container format. It is a structured
++ * series of sections. There is a file header followed by several section
++ * headers which is followed by sections. A section header points to an
++ * actual section. There is an optional signature at the end. The
++ * following figure illustrates a typical xclbin:
++ *
++ *     +---------------------+
++ *     |                     |
++ *     |       HEADER        |
++ *     +---------------------+
++ *     |   SECTION  HEADER   |
++ *     |                     |
++ *     +---------------------+
++ *     |        ...          |
++ *     |                     |
++ *     +---------------------+
++ *     |   SECTION  HEADER   |
++ *     |                     |
++ *     +---------------------+
++ *     |       SECTION       |
++ *     |                     |
++ *     +---------------------+
++ *     |         ...         |
++ *     |                     |
++ *     +---------------------+
++ *     |       SECTION       |
++ *     |                     |
++ *     +---------------------+
++ *     |      SIGNATURE      |
++ *     |      (OPTIONAL)     |
++ *     +---------------------+
++ */
++
++enum XCLBIN_MODE {
++	XCLBIN_FLAT = 0,
++	XCLBIN_PR,
++	XCLBIN_TANDEM_STAGE2,
++	XCLBIN_TANDEM_STAGE2_WITH_PR,
++	XCLBIN_HW_EMU,
++	XCLBIN_SW_EMU,
++	XCLBIN_MODE_MAX
++};
++
++enum axlf_section_kind {
++	BITSTREAM = 0,
++	CLEARING_BITSTREAM,
++	EMBEDDED_METADATA,
++	FIRMWARE,
++	DEBUG_DATA,
++	SCHED_FIRMWARE,
++	MEM_TOPOLOGY,
++	CONNECTIVITY,
++	IP_LAYOUT,
++	DEBUG_IP_LAYOUT,
++	DESIGN_CHECK_POINT,
++	CLOCK_FREQ_TOPOLOGY,
++	MCS,
++	BMC,
++	BUILD_METADATA,
++	KEYVALUE_METADATA,
++	USER_METADATA,
++	DNA_CERTIFICATE,
++	PDI,
++	BITSTREAM_PARTIAL_PDI,
++	PARTITION_METADATA,
++	EMULATION_DATA,
++	SYSTEM_METADATA,
++	SOFT_KERNEL,
++	ASK_FLASH,
++	AIE_METADATA,
++	ASK_GROUP_TOPOLOGY,
++	ASK_GROUP_CONNECTIVITY
++};
++
++enum MEM_TYPE {
++	MEM_DDR3 = 0,
++	MEM_DDR4,
++	MEM_DRAM,
++	MEM_STREAMING,
++	MEM_PREALLOCATED_GLOB,
++	MEM_ARE,
++	MEM_HBM,
++	MEM_BRAM,
++	MEM_URAM,
++	MEM_STREAMING_CONNECTION
++};
++
++enum IP_TYPE {
++	IP_MB = 0,
++	IP_KERNEL,
++	IP_DNASC,
++	IP_DDR4_CONTROLLER,
++	IP_MEM_DDR4,
++	IP_MEM_HBM
++};
++
++struct axlf_section_header {
++	uint32_t section_kind;			/* Section type */
++	char section_name[16];			/* Section name */
++	char rsvd[4];
++	uint64_t section_offset;		/* File offset of section data */
++	uint64_t section_size;			/* Size of section data */
++} __packed;
++
++struct axlf_header {
++	uint64_t length;			/* Total size of the xclbin file */
++	uint64_t time_stamp;			/* Timestamp when xclbin was created */
++	uint64_t feature_rom_timestamp;		/* TimeSinceEpoch of the featureRom */
++	uint16_t version_patch;			/* Patch Version */
++	uint8_t version_major;			/* Major Version */
++	uint8_t version_minor;			/* Minor Version */
++	uint32_t mode;				/* Xclbin mode. See enum XCLBIN_MODE */
++	union {
++		struct {
++			uint64_t platform_id;	/* 64 bit platform ID */
++			uint64_t feature_id;	/* 64 bit feature ID */
++		} rom;
++		unsigned char rom_uuid[16];	/* feature ROM UUID */
++	};
++	unsigned char platform_vbnv[64];	/* String of Vendor:Board:Name:Version */
++	union {
++		char next_axlf[16];		/* Name of next xclbin file */
++		unsigned char uuid[16];		/* uuid of this xclbin */
++	};
++	char debug_bin[16];			/* Name of binary with debug information */
++	uint32_t num_sections;			/* Number of section headers */
++	char rsvd[4];
++} __packed;
++
++struct axlf {
++	char magic[8];				/* Magic word: xclbin2\0 */
++	int32_t signature_length;		/* Length. -1 indicates no signature */
++	uint8_t reserved[28];
++	uint8_t key_block[256];			/* Signature for validation of binary */
++	uint64_t unique_id;			/* Unique ID */
++	struct axlf_header header;		/* Inline header */
++	struct axlf_section_header sections[1];	/* One or more section headers follow */
++} __packed;
++
++/* bitstream information */
++struct xlnx_bitstream {
++	uint8_t freq[8];
++	char bits[1];
++} __packed;
++
++/****	MEMORY TOPOLOGY SECTION ****/
++struct mem_data {
++	uint8_t type;				/* Memory type. See enum MEM_TYPE */
++	uint8_t used;				/* Memory presence. 0 means not present */
++	uint8_t rsvd[6];
++	union {
++		uint64_t size;			/* Memory size. Counted in KB */
++		uint64_t route_id;		/* Stream route ID */
++	};
++	union {
++		uint64_t base_address;		/* Memory base address */
++		uint64_t flow_id;		/* Stream flow ID */
++	};
++	unsigned char tag[16];			/* Memory tag string */
++} __packed;
++
++struct mem_topology {
++	int32_t count;				/* Number of mem_data */
++	struct mem_data mem_data[1];		/* mem_data array, sorted on mem_type */
++} __packed;
++
++/****	CONNECTIVITY SECTION ****/
++/* Connectivity of each argument of CU(Compute Unit). It will be in terms
++ * of argument index associated. For associating CU instances with arguments
++ * and banks, start at the connectivity section. Using the ip_layout_index
++ * access the ip_data.name. Now we can associate this CU instance with its
++ * original CU name and get the connectivity as well. This enables us to form
++ * related groups of CU instances.
++ */
++
++struct connection {
++	int32_t arg_index;			/* Index of CU argument */
++	int32_t ip_layout_index;		/* Index into the ip_layout section */
++	int32_t mem_data_index;			/* Index into the mem_data section */
++} __packed;
++
++struct connectivity {
++	int32_t count;
++	struct connection connection[1];
++} __packed;
++
++/****	IP_LAYOUT SECTION ****/
++
++/* IP Kernel */
++#define IP_INT_ENABLE_MASK	  0x0001
++#define IP_INTERRUPT_ID_MASK  0x00FE
++#define IP_INTERRUPT_ID_SHIFT 0x1
++
++enum IP_CONTROL {
++	AP_CTRL_HS = 0,
++	AP_CTRL_CHAIN,
++	AP_CTRL_NONE,
++	AP_CTRL_ME,
++	ACCEL_ADAPTER
++};
++
++#define IP_CONTROL_MASK	 0xFF00
++#define IP_CONTROL_SHIFT 0x8
++
++/*
++ * IPs on AXI lite - their types, names, and base addresses.
++ *
++ * The defination of 32-bit follows IP_TYPE is based on IP_TYPE
++ *   For IP_KERNEL
++ *	    int_enable   : Bit  - 0x0000_0001;
++ *	    interrupt_id : Bits - 0x0000_00FE;
++ *	    ip_control   : Bits - 0x0000_FF00;
++ *   For IP_MEM_*
++ *	    index        : Bits - 0x0000_FFFF;
++ *	    pc_index     : Bits - 0x00FF_0000;
++ */
++struct ip_data {
++	uint32_t type;				/* Type. See enum IP_TYPE */
++	union {
++		uint32_t properties;
++		struct {
++			uint16_t index;
++			uint8_t pc_index;
++			uint8_t unused;
++		} indices;
++	};
++	uint64_t base_address;
++	uint8_t name[64];			/* Name of IP */
++} __packed;
++
++struct ip_layout {
++	int32_t count;
++	struct ip_data ip_data[1];		/* ip_data array, sorted by base_address */
++} __packed;
++
++/*** Debug IP section layout ****/
++enum DEBUG_IP_TYPE {
++	UNDEFINED = 0,
++	LAPC,
++	ILA,
++	AXI_MM_MONITOR,
++	AXI_TRACE_FUNNEL,
++	AXI_MONITOR_FIFO_LITE,
++	AXI_MONITOR_FIFO_FULL,
++	ACCEL_MONITOR,
++	AXI_STREAM_MONITOR,
++	AXI_STREAM_PROTOCOL_CHECKER,
++	TRACE_S2MM,
++	AXI_DMA,
++	TRACE_S2MM_FULL
++};
++
++struct debug_ip_data {
++	uint8_t type;				/* Type. See enum DEBUG_IP_TYPE */
++	uint8_t index_lowbyte;
++	uint8_t properties;
++	uint8_t major;
++	uint8_t minor;
++	uint8_t index_highbyte;
++	uint8_t reserved[2];
++	uint64_t base_address;
++	char	name[128];
++} __packed;
++
++struct debug_ip_layout {
++	uint16_t count;
++	struct debug_ip_data debug_ip_data[1];
++} __packed;
++
++/* Supported clock frequency types */
++enum XCLBIN_CLOCK_TYPE {
++	CT_UNUSED = 0,				/* Initialized value */
++	CT_DATA	  = 1,				/* Data clock */
++	CT_KERNEL = 2,				/* Kernel clock */
++	CT_SYSTEM = 3				/* System Clock */
++};
++
++/* Clock Frequency Entry */
++struct clock_freq {
++	uint16_t freq_MHZ;			/* Frequency in MHz */
++	uint8_t type;				/* Clock type (enum CLOCK_TYPE) */
++	uint8_t unused[5];
++	char name[128];				/* Clock Name */
++} __packed;
++
++/* Clock frequency section */
++struct clock_freq_topology {
++	int16_t count;				/* Number of entries */
++	struct clock_freq clock_freq[1];	/* Clock array */
++} __packed;
++
++/* Supported MCS file types */
++enum MCS_TYPE {
++	MCS_UNKNOWN = 0,			/* Initialized value */
++	MCS_PRIMARY = 1,			/* The primary mcs file data */
++	MCS_SECONDARY = 2,			/* The secondary mcs file data */
++};
++
++/* One chunk of MCS data */
++struct mcs_chunk {
++	uint8_t type;				/* MCS data type */
++	uint8_t unused[7];
++	uint64_t offset;			/* Data offset */
++	uint64_t size;				/* Data size */
++} __packed;
++
++/* MCS data section */
++struct mcs {
++	int8_t count;				/* Number of chunks */
++	int8_t unused[7];
++	struct mcs_chunk chunk[1];		/* MCS chunks followed by data */
++} __packed;
++
++/* bmc data section */
++struct bmc {
++	uint64_t offset;			/* Data offset */
++	uint64_t size;				/* Data size (bytes) */
++	char image_name[64];			/* Name of the image */
++	char device_name[64];			/* Name of the device */
++	char version[64];
++	char md5value[33];			/* MD5 checksum */
++	char padding[7];
++} __packed;
++
++/*
++ * soft kernel data section, used by classic driver
++ * Prefix Syntax:
++ *  mpo - member, pointer, offset
++ *  This variable represents a zero terminated string
++ *  that is offseted from the beginning of the section.
++ *  The pointer to access the string is initialized as follows:
++ *  char * pCharString = (address_of_section) + (mpo value)
++ */
++struct soft_kernel {
++	uint32_t mpo_name;			/* Name of the soft kernel */
++	uint32_t image_offset;			/* Image offset */
++	uint32_t image_size;			/* Image size */
++	uint32_t mpo_version;			/* Version */
++	uint32_t mpo_md5_value;			/* MD5 checksum */
++	uint32_t mpo_symbol_name;		/* Symbol name */
++	uint32_t num_instances;			/* Number of instances */
++	uint8_t padding[36];			/* Reserved for future use */
++	uint8_t reserved_ext[16];		/* Reserved for future extended data */
++} __packed;
++
++enum CHECKSUM_TYPE {
++	CST_UNKNOWN = 0,
++	CST_SDBM = 1,
++	CST_LAST
++};
++
++/**
++ * DOC: PCIe Kernel Driver for Management Physical Function
++ * Interfaces exposed by *xrt-mgmt* driver are defined in file, *xmgmt-ioctl.h*.
++ * Core functionality provided by *xrt-mgmt* driver is described in the following table:
++ *
++ * =========== ============================== ==================================
++ * Functionality           ioctl request code           data format
++ * =========== ============================== ==================================
++ * 1 FPGA image download   XMGMT_IOCICAPDOWNLOAD_AXLF xmgmt_ioc_bitstream_axlf
++ * =========== ============================== ==================================
++ */
++
++#define XMGMT_IOC_MAGIC 'X'
++#define XMGMT_IOC_ICAP_DOWNLOAD_AXLF 0x6
++
++/**
++ * struct xmgmt_ioc_bitstream_axlf - load xclbin (AXLF) device image
++ * used with XMGMT_IOCICAPDOWNLOAD_AXLF ioctl
++ *
++ * @xclbin:     Pointer to user's xclbin structure in memory
++ */
++struct xmgmt_ioc_bitstream_axlf {
++	struct axlf *xclbin;
++};
++
++#define XMGMT_IOCICAPDOWNLOAD_AXLF                              \
++	_IOW(XMGMT_IOC_MAGIC, XMGMT_IOC_ICAP_DOWNLOAD_AXLF, struct xmgmt_ioc_bitstream_axlf)
++
++/*
++ * The following definitions are for binary compatibility with classic XRT management driver
++ */
++#define XCLMGMT_IOCICAPDOWNLOAD_AXLF XMGMT_IOCICAPDOWNLOAD_AXLF
++#define xclmgmt_ioc_bitstream_axlf xmgmt_ioc_bitstream_axlf
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif
 -- 
 2.27.0
 
