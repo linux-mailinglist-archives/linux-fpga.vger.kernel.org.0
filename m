@@ -2,330 +2,323 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADB03D11B5
-	for <lists+linux-fpga@lfdr.de>; Wed, 21 Jul 2021 16:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECCD3D1AA6
+	for <lists+linux-fpga@lfdr.de>; Thu, 22 Jul 2021 02:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239134AbhGUOPe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 21 Jul 2021 10:15:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42005 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239301AbhGUOPe (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 21 Jul 2021 10:15:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626879367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0trSOTFOMBamPMqBdzHm6zCVbyndFGYFMN0tzHECiUY=;
-        b=aUrqwnGjTvp8cwPrXs6ZcuEPln9jhL/j95NRRYKZn4D+s8hSY5LVudm2bFIS96LQ/vSlfQ
-        g2lD+/LippGpwHf/D+WatVtqGT+eipZj0hx0FZEfjmxsOhiw9pJM5O3WXBaF8j7Kc58QMn
-        bh+De7syrdyJVd8EqF3x8ap6dVRpAy0=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-548-7U08ygDXNHaZtqutPhCA9Q-1; Wed, 21 Jul 2021 10:56:06 -0400
-X-MC-Unique: 7U08ygDXNHaZtqutPhCA9Q-1
-Received: by mail-oi1-f199.google.com with SMTP id q199-20020aca75d00000b029025a3cb2429bso1833731oic.20
-        for <linux-fpga@vger.kernel.org>; Wed, 21 Jul 2021 07:56:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=0trSOTFOMBamPMqBdzHm6zCVbyndFGYFMN0tzHECiUY=;
-        b=pcnHvfE1SumZpEG5Ut2PrFJGH6I8AaxPakLjTzUdw6sXYuPkFUqcEMQnKYv+83Yj/z
-         35MBkdaOUUmK1oQWE8JV/35enY04pOogrqigEejQDJwleEZUYDjIz2vYS2s0e2AhvSU+
-         3RZwGclk3SaRMwK4z4aD4wt6TiHE1j0zryc87ICwwuX6gAa05XhtBz9VsZcDTMkJAMgA
-         5mOt7DIZChldmri993qOBVWOTOSdOEb9A8CoEYI4oJZOSiMNLBaGUe/Tok8FxkIbkh65
-         22ZdnGRh/1itKdj6ybkJ0vlEW/YIzhuuAJJxlyWEBNVWPVQnvlo2/8ONOncIpCMPa6JU
-         n/Dw==
-X-Gm-Message-State: AOAM531cIHju/D0ECtl11L0PMfBFI8bI1Krp7PihPCzm8loIIf9ncNFn
-        /dCvHeRUe/X98Jj/0uKqHS8qQHd2wMjuBTJCNZBnThUXwMPLlF8r8dKarYli0NearkKSf4I5UWi
-        iIEIx/roRabmpEwei5HZYLg==
-X-Received: by 2002:a9d:ba3:: with SMTP id 32mr26086643oth.126.1626879365333;
-        Wed, 21 Jul 2021 07:56:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxNktGmeoz+EkXM7Nb7sjsRakQKZHdY6E1wA5IgwF4wCujuDvnllGI6naXhPF3F3mSM4klpwg==
-X-Received: by 2002:a9d:ba3:: with SMTP id 32mr26086634oth.126.1626879365164;
-        Wed, 21 Jul 2021 07:56:05 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id w19sm4640024ooj.39.2021.07.21.07.56.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jul 2021 07:56:04 -0700 (PDT)
-Subject: Re: [PATCH v2 4/4] fpga: remove compat_id from fpga_manager and
- fpga_region
-To:     "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
+        id S229887AbhGUXiM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 21 Jul 2021 19:38:12 -0400
+Received: from mga06.intel.com ([134.134.136.31]:52386 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229600AbhGUXiL (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 21 Jul 2021 19:38:11 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10052"; a="272653804"
+X-IronPort-AV: E=Sophos;i="5.84,259,1620716400"; 
+   d="scan'208";a="272653804"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 17:18:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,259,1620716400"; 
+   d="scan'208";a="511985589"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Jul 2021 17:18:45 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Wed, 21 Jul 2021 17:18:45 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10 via Frontend Transport; Wed, 21 Jul 2021 17:18:45 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.10; Wed, 21 Jul 2021 17:18:44 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YRjUQ1oVML3iA86s749kD9zZkdmzoL/lywvyZCB0W/S3tyWpVtEVveQl0IlQmo0v+Y1GVS2T0rDxZlH0Zmpmj/mN6EJzRPk7aWLf/SN8YKkz6m3z2+MlA2wNvyaaVqVGkRAvkN5L+2RnYMqY5amwwqO18iIXFqUxHHiroYZIIFnqRQrcm4LWt2ZVOWx70KV1myTF+KrFR/RP3gRrABV1wf0HG5t9Iwy7Xp2SIXStMjFOLsLRNq3XruWyKe9z0lhiD0h7iVwwPtgbBH0IWxBKIIT4Jj+DJLp7wDXtsOjy8B9yHfeXmcTgVwGfAiA3xzCiLrHme+VH61sBl1OkifaM+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2CgI7OWbuKdTYUtB5bjyby6iiW49/OtDq2kH/Sm7MnI=;
+ b=NoQWoWLwa1Kc4oe+l7YPmdHGJM4TpZKQXtv9cvczjAFzhdHEMyLAl4tLsgyEf62fUe4aDNMQOoKzePQhc6Tt/DutD/XnqN5Uv30h2dwbs47foSztrbLyzkoFJkCrTzWwl36t856OFBA8DjrE3uVcxxHdHqlyw6fBGMRrnZAhuU7+J+6VgPBwc0Uib6kA1shpFEpt7EjCNREKrwTZhWAilXQQrXbHALbdUAo1FGpFwYZ5HcfYVfHDMaG3qIH19JcqEv7mhpEQYc4jiLvY6/iYmcPh8vE1qrbc4tDEcjTxreufQhsql3CmdUVxeGgXTOyJKWMW3Dx0co0zBhSJqkJF9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2CgI7OWbuKdTYUtB5bjyby6iiW49/OtDq2kH/Sm7MnI=;
+ b=CDW1xXUgcGsmuDFKembDLpu4NWpDYMEkF7Kzhg5zawAcuHc6TvZI6pt0d67xR2zMsym+jsAlxGnHYArCRqSrKMNosZmWfeo5/PMB2OOd+uOE6OZhiEse9frJyK4ZKNG0+41/8wZLqRTSjIUP1S3/cwd2Bjao/k+hlVgR/5m5MO8=
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
+ by DM6PR11MB4594.namprd11.prod.outlook.com (2603:10b6:5:2a0::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.23; Thu, 22 Jul
+ 2021 00:18:38 +0000
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::3dc3:868b:cec3:513b]) by DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::3dc3:868b:cec3:513b%6]) with mapi id 15.20.4308.027; Thu, 22 Jul 2021
+ 00:18:38 +0000
+From:   "Wu, Hao" <hao.wu@intel.com>
+To:     Tom Rix <trix@redhat.com>, "mdf@kernel.org" <mdf@kernel.org>,
         "corbet@lwn.net" <corbet@lwn.net>,
         "Weight, Russell H" <russell.h.weight@intel.com>
-Cc:     "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+CC:     "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 4/4] fpga: remove compat_id from fpga_manager and
+ fpga_region
+Thread-Topic: [PATCH v2 4/4] fpga: remove compat_id from fpga_manager and
+ fpga_region
+Thread-Index: AQHXdMhnnZ/opknHKEOx9KM5yJtYvas+kL3QgADx7QCADVWi4IAAvy2AgACaklA=
+Date:   Thu, 22 Jul 2021 00:18:38 +0000
+Message-ID: <DM6PR11MB38194D113950FA4B75C7F2C485E49@DM6PR11MB3819.namprd11.prod.outlook.com>
 References: <20210709134229.2510349-1-trix@redhat.com>
  <20210709134229.2510349-6-trix@redhat.com>
  <DM6PR11MB3819098B673C54530B227D4385159@DM6PR11MB3819.namprd11.prod.outlook.com>
  <2a3b3131-96a3-9761-f2e7-63a32fd277f6@redhat.com>
  <DM6PR11MB38193C3FE87830E9627E112C85E39@DM6PR11MB3819.namprd11.prod.outlook.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <2056f88d-7215-8f6a-d3c3-2692741c2c2d@redhat.com>
-Date:   Wed, 21 Jul 2021 07:56:01 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <DM6PR11MB38193C3FE87830E9627E112C85E39@DM6PR11MB3819.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ <2056f88d-7215-8f6a-d3c3-2692741c2c2d@redhat.com>
+In-Reply-To: <2056f88d-7215-8f6a-d3c3-2692741c2c2d@redhat.com>
+Accept-Language: en-US
 Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+authentication-results: redhat.com; dkim=none (message not signed)
+ header.d=none;redhat.com; dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fc604af7-7745-47c2-3e21-08d94ca64102
+x-ms-traffictypediagnostic: DM6PR11MB4594:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR11MB4594FB3282DE3374C6BF628A85E49@DM6PR11MB4594.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3YeQqsBQYqqk2oMAiZU3Fw7byt0FhHKtYXRCeMidIKCPuPdmrpLywgVLJUKrav33yHXWmfZi8MXNYOIT0BDp/SP4PHOeH7c5KvKGm0Wb/bvw5a+yWn7FgcLMVFcXcDgB/Vy5DfKP8+pK00dRVxbc/SOqs7pzeIhg1kg8lIvklET82z+VRfKaBi7S/AIjbb7lcikoD5yEM7rehYpngWTUYviCS1F33w+uGmKAQyhM/IDrgo9EuH8K7RPqSss0wtmejx6AFEK9ftMNuksXPveza/PXZ5eQWZbuIK592nZfLp/FBwi3hzBFVvdrlsvmcWeVTFMGK8Def1b+J83PYsvH5Qyg9ZsZDi8fCF8r6j1DztaKzPBj/73M+8Q/JZP7xGDfJhpeliwTzBn3urZc0RG+mLf8VB1bwx3VhDh8FAOseOn/ZgNpi8rIwZW0yXxYQz0YH2RiQXLoGSQDIko7q5vm1JHbL2uSkmH+dm8fLrDMjjGuVfxTehqUlurqbXxgdYqSeU84BAcijbK75QIa5I7yn/A/oqVeitM4EWazClUZXApODotoqrkUkA91FH+6+gKvwiP7+x8JsM5+pKICR93KHY7mle40pqSc33VAUcpfhT5cPwY3aqFFc/qKxnWj4krTISh9c9Ut6nvPJKmeHfck9x7szBJv+0AtyGN5WVqN9/YKnJ9P4kUP5iBNlS+ZuW0UiPsfD8xO5+OtJBEU7Wvm8hv9biA2U/+g2ZVHlNM5VDxa/ku6+MbDx2Z7XMcSdWh+ENCX7oyYrLa95zf8ZSDEdktNrLPHF8F41lA3RQ/9/wM7QQDdtJvELcW7JboFE1BJ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66556008)(76116006)(66946007)(83380400001)(38100700002)(508600001)(4326008)(53546011)(9686003)(66476007)(966005)(64756008)(66446008)(55016002)(6506007)(7696005)(86362001)(122000001)(2906002)(8676002)(71200400001)(8936002)(5660300002)(33656002)(316002)(26005)(54906003)(186003)(110136005)(52536014)(6636002)(9126006)(38070700004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OFgyNXQ1NkxKTDlVNWFPdVlxeUFORUh0cDBFemZqN1BkSmhLdng2bjR3Y2ti?=
+ =?utf-8?B?SGptMEdVT012SURVckg0aDNyQXZya0ZRZjZjaytyUmNsTGdFV2l4ajhIMjN3?=
+ =?utf-8?B?MmkzakdSYTI0NUEzaFlKTDhmbGJFb3A2c3RrSUVaTHlTUVhodWJtQjZSc1pY?=
+ =?utf-8?B?Q2hJTUJEeWI5V1JPV21xY2tXWnJ4YU51Qld1cVRabHFrc2M5ZnNFcEZLM3pU?=
+ =?utf-8?B?MUxkSWYyalA1QXhTbmNCMTJUajVrenJUSVBZRitQYmliOVA0Y242ZXRiYy9q?=
+ =?utf-8?B?QUtWU204akFxbnRFVVBpaXZZUWZMSy9uVDIrMXZxK0hwZlJVY0k5WGpVRytu?=
+ =?utf-8?B?K0FwcDVIV0pnYnN2T0dGM2pmM0JxeHYvd25sWFU2UVZ6RzNnN290YmVadVNu?=
+ =?utf-8?B?QmtSS1hkcHFESG1mNUVmRzNpR1ZHdkgxYW5LQjdGcVBEbFZaTDJoTVFpQkt0?=
+ =?utf-8?B?bGRBTVBtaUZkTmxrajh0YksrdDFadVNZam9VN1AzRHpkdlYvRDRGYnpUSXBm?=
+ =?utf-8?B?S1d5eHV5SXVBWm0xK0lTd00vS1FDa3hhcU8vK1RNdS94MEtSZkM3VmdRTTdh?=
+ =?utf-8?B?Ukw4M01wZnRyRGxydWJsTlJlcVNvcmZWd3R0dzhNSWlVbXIzUTU3NlVNMHpr?=
+ =?utf-8?B?cFVhd0w4TjdrOFZVcWlZU3ZoeC9tYUZFYXlzMytuL3NFVU94TjRlZUZmQ0Ix?=
+ =?utf-8?B?d2NCSlErVmFFQmlYazdLbTVxVDZRZVNadktxUGt0KzN0VmJFVHR6SFlFVHFB?=
+ =?utf-8?B?WlA5cmR2cWorTFIwZklVRXVUbklsWFY0bUNXQ3Q4ZG11VU1MMkVpZlRIRFZP?=
+ =?utf-8?B?L2QxbGlNc3hqMFM2VGhNZXBRcDFNZlBYVlpwZzNlTXFpMVV1K1Z3M2RmMWlL?=
+ =?utf-8?B?eE1jd2RrOTRMcEFKeVBGOXFtTUFlNDNrSVVkYkhtZWRpM0QzRDRIdXNhSWoz?=
+ =?utf-8?B?b2RkQkdtZmtOcWQwd1BhVk52UHd1cDFtR3JJMVZTNnZnNkpYSEh4d2dZZXdi?=
+ =?utf-8?B?cG5EaVNzS0xacXBsOTdabk9LT1Z0eVV1dm95eVlWRU5DMGlXVnBwS3pnYkQw?=
+ =?utf-8?B?WE5HQjVGSC9xUytvSnBQaE5yUCtWVm1xQzY2ajI0dmRpbDFERFJwaGFYTy9k?=
+ =?utf-8?B?Y2ZhL05mNjlmVHltMi9XT3dvSTF4QUwrRlY3Uy9tZ3QrQ1ZGYjNYM2RpWXMy?=
+ =?utf-8?B?dkhwczRpOXZlRnNWU08rZVhkUStIeUkrS1I1c0JsbXNPeFkxaGlwZEpsbDU4?=
+ =?utf-8?B?WXdHWkROWVk1UHRFWkIrV3A2K1ltdERjSmFGV09oZDVIRXFxOWhva2l4Nkh2?=
+ =?utf-8?B?N21KcU45S0VEMVg1TCtLSjJZdE1lTFFVUC85UUVPWlFRQ09YTkZhazg2enBR?=
+ =?utf-8?B?cXE1dTdKSEtjbER6VE9OaVNYaGU3SllvU3plYmVvcVBZMTVqTWlDWFRmcGFF?=
+ =?utf-8?B?bkNqMW5ISWZ6SnNPczdHSi85c0RUengwaFlsTmxwRXN0Wmd2UmYyRGExVmQw?=
+ =?utf-8?B?OHlJRTJFZURBOE1ZM3JaUFFteGZHMEdrOFBrYTVSL0VPdWdWTnZvOXlZdW1I?=
+ =?utf-8?B?QXF0NTVxZ2t6dzZ1S2NUbFNld004T3JVYTRIdWt3MzU5aUhwbE55d0RLUmtW?=
+ =?utf-8?B?c2xHMzlHaEw0TzVGZ3RxRjVmd0hyQXZzbWdDL2k3RnRFM3hQOTZ6OWhvM1ll?=
+ =?utf-8?B?TVN6c2YzaUxPWW1yZkZiMHllUXUydm1kV2JaSWNYTFY3cWFySktOaTlZZ3Nn?=
+ =?utf-8?Q?qcxPcHNtQtyt7RIzK8DVUK8ylxN6FIFhQMN6J6o?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc604af7-7745-47c2-3e21-08d94ca64102
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2021 00:18:38.7224
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tUdpU9mLcNqaXcBUVICQ+inkWQAVFFE6LBXpjvETtmKXbt/tqjxPdYSfuyOGcptltWU37zRZ4C0CdfvSgZuwyw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4594
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-
-On 7/20/21 9:48 PM, Wu, Hao wrote:
->> On 7/11/21 6:40 PM, Wu, Hao wrote:
->>>> -----Original Message-----
->>>> From: trix@redhat.com <trix@redhat.com>
->>>> Sent: Friday, July 9, 2021 9:42 PM
->>>> To: mdf@kernel.org; corbet@lwn.net; Wu, Hao <hao.wu@intel.com>
->>>> Cc: linux-fpga@vger.kernel.org; linux-doc@vger.kernel.org; linux-
->>>> kernel@vger.kernel.org; Tom Rix <trix@redhat.com>
->>>> Subject: [PATCH v2 4/4] fpga: remove compat_id from fpga_manager and
->>>> fpga_region
->>>>
->>>> From: Tom Rix <trix@redhat.com>
->>>>
->>>> compat_id is implementation specific.  So the data should be
->>>> stored at the implemeation layer, not the infrastructure layer.
->>>> Remove the compat_id elements and supporting code.
->>> I think current compat_id format can meet the checking requirement.
->>> Actually I hope other hardware which needs compatible checking
->>> to expose the same format compat_id. Then we can have more
->>> unified/common code, e.g. userspace application/lib handling.
->> v2 does not change the current ABI. The dfl output is the same as
->> before, the other nonusers get -ENOENT.
-> I think the common ABI is changed somehow, as output format can
-> be anything with your change, this confuses userspace too.
-
-Only dfl uses this interface, any dfl userspace like opae reading the 
-sysfs compat_id would remain unchanged.
-
-Others will continue to receive the -ENOENT.
-
-If the others wanted to use this entry in the future, the
-
-existing ABI documentation is consistent with with allowing them to
-
-define it as they wish.  The format of the output is not specified
-
-only the error condition. with language the leaves it up to the region
-
-creator to define.
-
-from sysfs-class-fpga-region
-
-"FPGA region id for compatibility check, e.g. compatibility
-  of the FPGA reconfiguration hardware and image. This value
-  is defined or calculated by the layer that is creating the
-  FPGA region. This interface returns the compat_id value or
-  just error code -ENOENT in case compat_id is not used."
-
->
->> For dfl compat_id is 2 64 bit registers.
->>
->> For compat_id to be useful to the others, they need the flexibility to
->> print to the sysfs in the manner that aligns with whatever their user
->> library interface is, 2 64 values isn't going to work for everyone.  ex/
->> xrt likely would be a uuid_t printed out a special way. someone else
->> maybe just string in the board fw, maybe some has a 8 or 256 bits of
->> compat_id  etc.
->>
->> as a driver region specific op, others are free to do whatever is required.
->>
->>> Currently I didn't see any other usage or requirement on this part
->>> now, only DFL uses it.  So should we leave it here at this moment?
->>> I feel we don't have to change it for now to move it to a
->>> Per-fpga-mgr format. : )
->> The motivation for doing this now is the 'use standard class dev release
->> .. ' patchset
->>
->> I really do not like 2 register functions.
->>
->> By moving compat_id, the 2 register functions reduces down to 1.
->>
-> You don't have to moving compact_id, you can have 1 parameter
-> with a data structure including everything.
-
-I like the fpga_mgr_register( ... , const struct fpga_magager_info 
-*info) better as well because it will stabilize the public api.
-
-Since we agree on that, do you agree Russ's patch can be resolved by
-
-from include/linux/fpga-mgr.h
-
-keep
-
-struct fpga_manager *
-fpga_mgr_register(struct device *parent, const struct fpga_manager_info 
-*info);
-
-remove *simple() from the public api, move it to driver/fpga/
-
-and something similar for fpga-region.h ?
-
-However the compat_id refactor goes, having just *register(... *info) is 
-fine and could be done first.
-
-Tom
-
-
->
-> Thanks
-> Hao
->
->> I did a poc here
->>
->> https://lore.kernel.org/linux-fpga/20210709184511.2521508-1-
->> trix@redhat.com/
->>
->> Tom
->>
->>> Thanks
->>> Hao
->>>
->>>> Printing out the compat_id is done with the fpga_region
->>>> compat_id_show() op.
->>>>
->>>> Signed-off-by: Tom Rix <trix@redhat.com>
->>>> ---
->>>>    drivers/fpga/dfl-fme-mgr.c       |  7 -------
->>>>    drivers/fpga/dfl-fme-region.c    |  1 -
->>>>    drivers/fpga/fpga-region.c       |  7 +------
->>>>    include/linux/fpga/fpga-mgr.h    | 13 -------------
->>>>    include/linux/fpga/fpga-region.h |  2 --
->>>>    5 files changed, 1 insertion(+), 29 deletions(-)
->>>>
->>>> diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
->>>> index cd0b9157ea6e5..8c5423eeffe75 100644
->>>> --- a/drivers/fpga/dfl-fme-mgr.c
->>>> +++ b/drivers/fpga/dfl-fme-mgr.c
->>>> @@ -292,7 +292,6 @@ EXPORT_SYMBOL_GPL(fme_mgr_get_compat_id);
->>>>    static int fme_mgr_probe(struct platform_device *pdev)
->>>>    {
->>>>    	struct dfl_fme_mgr_pdata *pdata = dev_get_platdata(&pdev->dev);
->>>> -	struct fpga_compat_id *compat_id;
->>>>    	struct device *dev = &pdev->dev;
->>>>    	struct fme_mgr_priv *priv;
->>>>    	struct fpga_manager *mgr;
->>>> @@ -312,10 +311,6 @@ static int fme_mgr_probe(struct platform_device
->>>> *pdev)
->>>>    			return PTR_ERR(priv->ioaddr);
->>>>    	}
->>>>
->>>> -	compat_id = devm_kzalloc(dev, sizeof(*compat_id), GFP_KERNEL);
->>>> -	if (!compat_id)
->>>> -		return -ENOMEM;
->>>> -
->>>>    	_fme_mgr_get_compat_id(priv->ioaddr, &priv->compat_id);
->>>>
->>>>    	mgr = devm_fpga_mgr_create(dev, "DFL FME FPGA Manager",
->>>> @@ -323,8 +318,6 @@ static int fme_mgr_probe(struct platform_device
->> *pdev)
->>>>    	if (!mgr)
->>>>    		return -ENOMEM;
->>>>
->>>> -	mgr->compat_id = compat_id;
->>>> -
->>>>    	return devm_fpga_mgr_register(dev, mgr);
->>>>    }
->>>>
->>>> diff --git a/drivers/fpga/dfl-fme-region.c b/drivers/fpga/dfl-fme-region.c
->>>> index d21eacbf2469f..be1d57ee37666 100644
->>>> --- a/drivers/fpga/dfl-fme-region.c
->>>> +++ b/drivers/fpga/dfl-fme-region.c
->>>> @@ -64,7 +64,6 @@ static int fme_region_probe(struct platform_device
->> *pdev)
->>>>    	}
->>>>
->>>>    	region->priv = pdata;
->>>> -	region->compat_id = mgr->compat_id;
->>>>    	platform_set_drvdata(pdev, region);
->>>>
->>>>    	ret = fpga_region_register(region);
->>>> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
->>>> index 864dd4f290e3b..b08d3914716f0 100644
->>>> --- a/drivers/fpga/fpga-region.c
->>>> +++ b/drivers/fpga/fpga-region.c
->>>> @@ -172,12 +172,7 @@ static ssize_t compat_id_show(struct device *dev,
->>>>    	if (region->rops && region->rops->compat_id_show)
->>>>    		return region->rops->compat_id_show(region, buf);
->>>>
->>>> -	if (!region->compat_id)
->>>> -		return -ENOENT;
->>>> -
->>>> -	return sprintf(buf, "%016llx%016llx\n",
->>>> -		       (unsigned long long)region->compat_id->id_h,
->>>> -		       (unsigned long long)region->compat_id->id_l);
->>>> +	return -ENOENT;
->>>>    }
->>>>
->>>>    static DEVICE_ATTR_RO(compat_id);
->>>> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
->>>> index ec2cd8bfceb00..ebdea215a8643 100644
->>>> --- a/include/linux/fpga/fpga-mgr.h
->>>> +++ b/include/linux/fpga/fpga-mgr.h
->>>> @@ -143,24 +143,12 @@ struct fpga_manager_ops {
->>>>    #define FPGA_MGR_STATUS_IP_PROTOCOL_ERR		BIT(3)
->>>>    #define FPGA_MGR_STATUS_FIFO_OVERFLOW_ERR	BIT(4)
->>>>
->>>> -/**
->>>> - * struct fpga_compat_id - id for compatibility check
->>>> - *
->>>> - * @id_h: high 64bit of the compat_id
->>>> - * @id_l: low 64bit of the compat_id
->>>> - */
->>>> -struct fpga_compat_id {
->>>> -	u64 id_h;
->>>> -	u64 id_l;
->>>> -};
->>>> -
->>>>    /**
->>>>     * struct fpga_manager - fpga manager structure
->>>>     * @name: name of low level fpga manager
->>>>     * @dev: fpga manager device
->>>>     * @ref_mutex: only allows one reference to fpga manager
->>>>     * @state: state of fpga manager
->>>> - * @compat_id: FPGA manager id for compatibility check.
->>>>     * @mops: pointer to struct of fpga manager ops
->>>>     * @priv: low level driver private date
->>>>     */
->>>> @@ -169,7 +157,6 @@ struct fpga_manager {
->>>>    	struct device dev;
->>>>    	struct mutex ref_mutex;
->>>>    	enum fpga_mgr_states state;
->>>> -	struct fpga_compat_id *compat_id;
->>>>    	const struct fpga_manager_ops *mops;
->>>>    	void *priv;
->>>>    };
->>>> diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-
->> region.h
->>>> index 236d3819f1c13..afc79784b2823 100644
->>>> --- a/include/linux/fpga/fpga-region.h
->>>> +++ b/include/linux/fpga/fpga-region.h
->>>> @@ -30,7 +30,6 @@ struct fpga_region_ops {
->>>>     * @bridge_list: list of FPGA bridges specified in region
->>>>     * @mgr: FPGA manager
->>>>     * @info: FPGA image info
->>>> - * @compat_id: FPGA region id for compatibility check.
->>>>     * @priv: private data
->>>>     * @rops: optional pointer to struct for fpga region ops
->>>>     */
->>>> @@ -40,7 +39,6 @@ struct fpga_region {
->>>>    	struct list_head bridge_list;
->>>>    	struct fpga_manager *mgr;
->>>>    	struct fpga_image_info *info;
->>>> -	struct fpga_compat_id *compat_id;
->>>>    	void *priv;
->>>>    	const struct fpga_region_ops *rops;
->>>>    };
->>>> --
->>>> 2.26.3
-
+IA0KPiBPbiA3LzIwLzIxIDk6NDggUE0sIFd1LCBIYW8gd3JvdGU6DQo+ID4+IE9uIDcvMTEvMjEg
+Njo0MCBQTSwgV3UsIEhhbyB3cm90ZToNCj4gPj4+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0t
+LQ0KPiA+Pj4+IEZyb206IHRyaXhAcmVkaGF0LmNvbSA8dHJpeEByZWRoYXQuY29tPg0KPiA+Pj4+
+IFNlbnQ6IEZyaWRheSwgSnVseSA5LCAyMDIxIDk6NDIgUE0NCj4gPj4+PiBUbzogbWRmQGtlcm5l
+bC5vcmc7IGNvcmJldEBsd24ubmV0OyBXdSwgSGFvIDxoYW8ud3VAaW50ZWwuY29tPg0KPiA+Pj4+
+IENjOiBsaW51eC1mcGdhQHZnZXIua2VybmVsLm9yZzsgbGludXgtZG9jQHZnZXIua2VybmVsLm9y
+ZzsgbGludXgtDQo+ID4+Pj4ga2VybmVsQHZnZXIua2VybmVsLm9yZzsgVG9tIFJpeCA8dHJpeEBy
+ZWRoYXQuY29tPg0KPiA+Pj4+IFN1YmplY3Q6IFtQQVRDSCB2MiA0LzRdIGZwZ2E6IHJlbW92ZSBj
+b21wYXRfaWQgZnJvbSBmcGdhX21hbmFnZXIgYW5kDQo+ID4+Pj4gZnBnYV9yZWdpb24NCj4gPj4+
+Pg0KPiA+Pj4+IEZyb206IFRvbSBSaXggPHRyaXhAcmVkaGF0LmNvbT4NCj4gPj4+Pg0KPiA+Pj4+
+IGNvbXBhdF9pZCBpcyBpbXBsZW1lbnRhdGlvbiBzcGVjaWZpYy4gIFNvIHRoZSBkYXRhIHNob3Vs
+ZCBiZQ0KPiA+Pj4+IHN0b3JlZCBhdCB0aGUgaW1wbGVtZWF0aW9uIGxheWVyLCBub3QgdGhlIGlu
+ZnJhc3RydWN0dXJlIGxheWVyLg0KPiA+Pj4+IFJlbW92ZSB0aGUgY29tcGF0X2lkIGVsZW1lbnRz
+IGFuZCBzdXBwb3J0aW5nIGNvZGUuDQo+ID4+PiBJIHRoaW5rIGN1cnJlbnQgY29tcGF0X2lkIGZv
+cm1hdCBjYW4gbWVldCB0aGUgY2hlY2tpbmcgcmVxdWlyZW1lbnQuDQo+ID4+PiBBY3R1YWxseSBJ
+IGhvcGUgb3RoZXIgaGFyZHdhcmUgd2hpY2ggbmVlZHMgY29tcGF0aWJsZSBjaGVja2luZw0KPiA+
+Pj4gdG8gZXhwb3NlIHRoZSBzYW1lIGZvcm1hdCBjb21wYXRfaWQuIFRoZW4gd2UgY2FuIGhhdmUg
+bW9yZQ0KPiA+Pj4gdW5pZmllZC9jb21tb24gY29kZSwgZS5nLiB1c2Vyc3BhY2UgYXBwbGljYXRp
+b24vbGliIGhhbmRsaW5nLg0KPiA+PiB2MiBkb2VzIG5vdCBjaGFuZ2UgdGhlIGN1cnJlbnQgQUJJ
+LiBUaGUgZGZsIG91dHB1dCBpcyB0aGUgc2FtZSBhcw0KPiA+PiBiZWZvcmUsIHRoZSBvdGhlciBu
+b251c2VycyBnZXQgLUVOT0VOVC4NCj4gPiBJIHRoaW5rIHRoZSBjb21tb24gQUJJIGlzIGNoYW5n
+ZWQgc29tZWhvdywgYXMgb3V0cHV0IGZvcm1hdCBjYW4NCj4gPiBiZSBhbnl0aGluZyB3aXRoIHlv
+dXIgY2hhbmdlLCB0aGlzIGNvbmZ1c2VzIHVzZXJzcGFjZSB0b28uDQo+IA0KPiBPbmx5IGRmbCB1
+c2VzIHRoaXMgaW50ZXJmYWNlLCBhbnkgZGZsIHVzZXJzcGFjZSBsaWtlIG9wYWUgcmVhZGluZyB0
+aGUNCj4gc3lzZnMgY29tcGF0X2lkIHdvdWxkIHJlbWFpbiB1bmNoYW5nZWQuDQo+IA0KPiBPdGhl
+cnMgd2lsbCBjb250aW51ZSB0byByZWNlaXZlIHRoZSAtRU5PRU5ULg0KPiANCj4gSWYgdGhlIG90
+aGVycyB3YW50ZWQgdG8gdXNlIHRoaXMgZW50cnkgaW4gdGhlIGZ1dHVyZSwgdGhlDQo+IA0KPiBl
+eGlzdGluZyBBQkkgZG9jdW1lbnRhdGlvbiBpcyBjb25zaXN0ZW50IHdpdGggd2l0aCBhbGxvd2lu
+ZyB0aGVtIHRvDQo+IA0KPiBkZWZpbmUgaXQgYXMgdGhleSB3aXNoLsKgIFRoZSBmb3JtYXQgb2Yg
+dGhlIG91dHB1dCBpcyBub3Qgc3BlY2lmaWVkDQo+IA0KPiBvbmx5IHRoZSBlcnJvciBjb25kaXRp
+b24uIHdpdGggbGFuZ3VhZ2UgdGhlIGxlYXZlcyBpdCB1cCB0byB0aGUgcmVnaW9uDQo+IA0KPiBj
+cmVhdG9yIHRvIGRlZmluZS4NCj4gDQo+IGZyb20gc3lzZnMtY2xhc3MtZnBnYS1yZWdpb24NCj4g
+DQo+ICJGUEdBIHJlZ2lvbiBpZCBmb3IgY29tcGF0aWJpbGl0eSBjaGVjaywgZS5nLiBjb21wYXRp
+YmlsaXR5DQo+ICDCoG9mIHRoZSBGUEdBIHJlY29uZmlndXJhdGlvbiBoYXJkd2FyZSBhbmQgaW1h
+Z2UuIFRoaXMgdmFsdWUNCj4gIMKgaXMgZGVmaW5lZCBvciBjYWxjdWxhdGVkIGJ5IHRoZSBsYXll
+ciB0aGF0IGlzIGNyZWF0aW5nIHRoZQ0KPiAgwqBGUEdBIHJlZ2lvbi4gVGhpcyBpbnRlcmZhY2Ug
+cmV0dXJucyB0aGUgY29tcGF0X2lkIHZhbHVlIG9yDQo+ICDCoGp1c3QgZXJyb3IgY29kZSAtRU5P
+RU5UIGluIGNhc2UgY29tcGF0X2lkIGlzIG5vdCB1c2VkLiINCj4gDQoNCkFzIHdlIGhhdmUgZml4
+ZWQgY29tcGF0X2lkIGZvcm1hdCwgc28gdGhlIG91dHB1dCBmb3JtYXQgaXMgZml4ZWQuDQpJZiBv
+dXRwdXQgZm9ybWF0IGlzIG5vdCBmaXhlZCB0aGVuIHdlIHdpbGwgbmV2ZXIgaGF2ZSByZXVzYWJs
+ZSBjb2RlIGJhc2VkDQpvbiB0aGlzIGNvbW1vbiBBQkkgb24gZnBnYSByZWdpb24sIG9ubHkgdmVu
+ZG9yIHNwZWNpZmljIGNvZGUgY2FuLg0KDQo+ID4NCj4gPj4gRm9yIGRmbCBjb21wYXRfaWQgaXMg
+MiA2NCBiaXQgcmVnaXN0ZXJzLg0KPiA+Pg0KPiA+PiBGb3IgY29tcGF0X2lkIHRvIGJlIHVzZWZ1
+bCB0byB0aGUgb3RoZXJzLCB0aGV5IG5lZWQgdGhlIGZsZXhpYmlsaXR5IHRvDQo+ID4+IHByaW50
+IHRvIHRoZSBzeXNmcyBpbiB0aGUgbWFubmVyIHRoYXQgYWxpZ25zIHdpdGggd2hhdGV2ZXIgdGhl
+aXIgdXNlcg0KPiA+PiBsaWJyYXJ5IGludGVyZmFjZSBpcywgMiA2NCB2YWx1ZXMgaXNuJ3QgZ29p
+bmcgdG8gd29yayBmb3IgZXZlcnlvbmUuwqAgZXgvDQo+ID4+IHhydCBsaWtlbHkgd291bGQgYmUg
+YSB1dWlkX3QgcHJpbnRlZCBvdXQgYSBzcGVjaWFsIHdheS4gc29tZW9uZSBlbHNlDQo+ID4+IG1h
+eWJlIGp1c3Qgc3RyaW5nIGluIHRoZSBib2FyZCBmdywgbWF5YmUgc29tZSBoYXMgYSA4IG9yIDI1
+NiBiaXRzIG9mDQo+ID4+IGNvbXBhdF9pZMKgIGV0Yy4NCj4gPj4NCj4gPj4gYXMgYSBkcml2ZXIg
+cmVnaW9uIHNwZWNpZmljIG9wLCBvdGhlcnMgYXJlIGZyZWUgdG8gZG8gd2hhdGV2ZXIgaXMgcmVx
+dWlyZWQuDQo+ID4+DQo+ID4+PiBDdXJyZW50bHkgSSBkaWRuJ3Qgc2VlIGFueSBvdGhlciB1c2Fn
+ZSBvciByZXF1aXJlbWVudCBvbiB0aGlzIHBhcnQNCj4gPj4+IG5vdywgb25seSBERkwgdXNlcyBp
+dC4gIFNvIHNob3VsZCB3ZSBsZWF2ZSBpdCBoZXJlIGF0IHRoaXMgbW9tZW50Pw0KPiA+Pj4gSSBm
+ZWVsIHdlIGRvbid0IGhhdmUgdG8gY2hhbmdlIGl0IGZvciBub3cgdG8gbW92ZSBpdCB0byBhDQo+
+ID4+PiBQZXItZnBnYS1tZ3IgZm9ybWF0LiA6ICkNCj4gPj4gVGhlIG1vdGl2YXRpb24gZm9yIGRv
+aW5nIHRoaXMgbm93IGlzIHRoZSAndXNlIHN0YW5kYXJkIGNsYXNzIGRldiByZWxlYXNlDQo+ID4+
+IC4uICcgcGF0Y2hzZXQNCj4gPj4NCj4gPj4gSSByZWFsbHkgZG8gbm90IGxpa2UgMiByZWdpc3Rl
+ciBmdW5jdGlvbnMuDQo+ID4+DQo+ID4+IEJ5IG1vdmluZyBjb21wYXRfaWQsIHRoZSAyIHJlZ2lz
+dGVyIGZ1bmN0aW9ucyByZWR1Y2VzIGRvd24gdG8gMS4NCj4gPj4NCj4gPiBZb3UgZG9uJ3QgaGF2
+ZSB0byBtb3ZpbmcgY29tcGFjdF9pZCwgeW91IGNhbiBoYXZlIDEgcGFyYW1ldGVyDQo+ID4gd2l0
+aCBhIGRhdGEgc3RydWN0dXJlIGluY2x1ZGluZyBldmVyeXRoaW5nLg0KPiANCj4gSSBsaWtlIHRo
+ZSBmcGdhX21ncl9yZWdpc3RlciggLi4uICwgY29uc3Qgc3RydWN0IGZwZ2FfbWFnYWdlcl9pbmZv
+DQo+ICppbmZvKSBiZXR0ZXIgYXMgd2VsbCBiZWNhdXNlIGl0IHdpbGwgc3RhYmlsaXplIHRoZSBw
+dWJsaWMgYXBpLg0KPiANCj4gU2luY2Ugd2UgYWdyZWUgb24gdGhhdCwgZG8geW91IGFncmVlIFJ1
+c3MncyBwYXRjaCBjYW4gYmUgcmVzb2x2ZWQgYnkNCj4gDQo+IGZyb20gaW5jbHVkZS9saW51eC9m
+cGdhLW1nci5oDQo+IA0KPiBrZWVwDQo+IA0KPiBzdHJ1Y3QgZnBnYV9tYW5hZ2VyICoNCj4gZnBn
+YV9tZ3JfcmVnaXN0ZXIoc3RydWN0IGRldmljZSAqcGFyZW50LCBjb25zdCBzdHJ1Y3QgZnBnYV9t
+YW5hZ2VyX2luZm8NCj4gKmluZm8pOw0KPiANCj4gcmVtb3ZlICpzaW1wbGUoKSBmcm9tIHRoZSBw
+dWJsaWMgYXBpLCBtb3ZlIGl0IHRvIGRyaXZlci9mcGdhLw0KDQpZZXMsIHRoYXQgc291bmRzIGdv
+b2QgdG8gbWUuDQoNCj4gDQo+IGFuZCBzb21ldGhpbmcgc2ltaWxhciBmb3IgZnBnYS1yZWdpb24u
+aCA/DQo+IA0KPiBIb3dldmVyIHRoZSBjb21wYXRfaWQgcmVmYWN0b3IgZ29lcywgaGF2aW5nIGp1
+c3QgKnJlZ2lzdGVyKC4uLiAqaW5mbykgaXMNCj4gZmluZSBhbmQgY291bGQgYmUgZG9uZSBmaXJz
+dC4NCg0KWWVzLiBBZGRpbmcgb3IgcmVtb3ZpbmcgdGhpbmcgbGF0ZXIgd29uJ3QgaW1wYWN0IHRo
+aXMgcmVnaXN0ZXIgaW50ZXJmYWNlLg0KDQpIYW8NCg0KPiANCj4gVG9tDQo+IA0KPiANCj4gPg0K
+PiA+IFRoYW5rcw0KPiA+IEhhbw0KPiA+DQo+ID4+IEkgZGlkIGEgcG9jIGhlcmUNCj4gPj4NCj4g
+Pj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtZnBnYS8yMDIxMDcwOTE4NDUxMS4yNTIx
+NTA4LTEtDQo+ID4+IHRyaXhAcmVkaGF0LmNvbS8NCj4gPj4NCj4gPj4gVG9tDQo+ID4+DQo+ID4+
+PiBUaGFua3MNCj4gPj4+IEhhbw0KPiA+Pj4NCj4gPj4+PiBQcmludGluZyBvdXQgdGhlIGNvbXBh
+dF9pZCBpcyBkb25lIHdpdGggdGhlIGZwZ2FfcmVnaW9uDQo+ID4+Pj4gY29tcGF0X2lkX3Nob3co
+KSBvcC4NCj4gPj4+Pg0KPiA+Pj4+IFNpZ25lZC1vZmYtYnk6IFRvbSBSaXggPHRyaXhAcmVkaGF0
+LmNvbT4NCj4gPj4+PiAtLS0NCj4gPj4+PiAgICBkcml2ZXJzL2ZwZ2EvZGZsLWZtZS1tZ3IuYyAg
+ICAgICB8ICA3IC0tLS0tLS0NCj4gPj4+PiAgICBkcml2ZXJzL2ZwZ2EvZGZsLWZtZS1yZWdpb24u
+YyAgICB8ICAxIC0NCj4gPj4+PiAgICBkcml2ZXJzL2ZwZ2EvZnBnYS1yZWdpb24uYyAgICAgICB8
+ICA3ICstLS0tLS0NCj4gPj4+PiAgICBpbmNsdWRlL2xpbnV4L2ZwZ2EvZnBnYS1tZ3IuaCAgICB8
+IDEzIC0tLS0tLS0tLS0tLS0NCj4gPj4+PiAgICBpbmNsdWRlL2xpbnV4L2ZwZ2EvZnBnYS1yZWdp
+b24uaCB8ICAyIC0tDQo+ID4+Pj4gICAgNSBmaWxlcyBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
+MjkgZGVsZXRpb25zKC0pDQo+ID4+Pj4NCj4gPj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9mcGdh
+L2RmbC1mbWUtbWdyLmMgYi9kcml2ZXJzL2ZwZ2EvZGZsLWZtZS1tZ3IuYw0KPiA+Pj4+IGluZGV4
+IGNkMGI5MTU3ZWE2ZTUuLjhjNTQyM2VlZmZlNzUgMTAwNjQ0DQo+ID4+Pj4gLS0tIGEvZHJpdmVy
+cy9mcGdhL2RmbC1mbWUtbWdyLmMNCj4gPj4+PiArKysgYi9kcml2ZXJzL2ZwZ2EvZGZsLWZtZS1t
+Z3IuYw0KPiA+Pj4+IEBAIC0yOTIsNyArMjkyLDYgQEAgRVhQT1JUX1NZTUJPTF9HUEwoZm1lX21n
+cl9nZXRfY29tcGF0X2lkKTsNCj4gPj4+PiAgICBzdGF0aWMgaW50IGZtZV9tZ3JfcHJvYmUoc3Ry
+dWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gPj4+PiAgICB7DQo+ID4+Pj4gICAgCXN0cnVj
+dCBkZmxfZm1lX21ncl9wZGF0YSAqcGRhdGEgPSBkZXZfZ2V0X3BsYXRkYXRhKCZwZGV2LT5kZXYp
+Ow0KPiA+Pj4+IC0Jc3RydWN0IGZwZ2FfY29tcGF0X2lkICpjb21wYXRfaWQ7DQo+ID4+Pj4gICAg
+CXN0cnVjdCBkZXZpY2UgKmRldiA9ICZwZGV2LT5kZXY7DQo+ID4+Pj4gICAgCXN0cnVjdCBmbWVf
+bWdyX3ByaXYgKnByaXY7DQo+ID4+Pj4gICAgCXN0cnVjdCBmcGdhX21hbmFnZXIgKm1ncjsNCj4g
+Pj4+PiBAQCAtMzEyLDEwICszMTEsNiBAQCBzdGF0aWMgaW50IGZtZV9tZ3JfcHJvYmUoc3RydWN0
+IHBsYXRmb3JtX2RldmljZQ0KPiA+Pj4+ICpwZGV2KQ0KPiA+Pj4+ICAgIAkJCXJldHVybiBQVFJf
+RVJSKHByaXYtPmlvYWRkcik7DQo+ID4+Pj4gICAgCX0NCj4gPj4+Pg0KPiA+Pj4+IC0JY29tcGF0
+X2lkID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9mKCpjb21wYXRfaWQpLCBHRlBfS0VSTkVMKTsN
+Cj4gPj4+PiAtCWlmICghY29tcGF0X2lkKQ0KPiA+Pj4+IC0JCXJldHVybiAtRU5PTUVNOw0KPiA+
+Pj4+IC0NCj4gPj4+PiAgICAJX2ZtZV9tZ3JfZ2V0X2NvbXBhdF9pZChwcml2LT5pb2FkZHIsICZw
+cml2LT5jb21wYXRfaWQpOw0KPiA+Pj4+DQo+ID4+Pj4gICAgCW1nciA9IGRldm1fZnBnYV9tZ3Jf
+Y3JlYXRlKGRldiwgIkRGTCBGTUUgRlBHQSBNYW5hZ2VyIiwNCj4gPj4+PiBAQCAtMzIzLDggKzMx
+OCw2IEBAIHN0YXRpYyBpbnQgZm1lX21ncl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlDQo+
+ID4+ICpwZGV2KQ0KPiA+Pj4+ICAgIAlpZiAoIW1ncikNCj4gPj4+PiAgICAJCXJldHVybiAtRU5P
+TUVNOw0KPiA+Pj4+DQo+ID4+Pj4gLQltZ3ItPmNvbXBhdF9pZCA9IGNvbXBhdF9pZDsNCj4gPj4+
+PiAtDQo+ID4+Pj4gICAgCXJldHVybiBkZXZtX2ZwZ2FfbWdyX3JlZ2lzdGVyKGRldiwgbWdyKTsN
+Cj4gPj4+PiAgICB9DQo+ID4+Pj4NCj4gPj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9mcGdhL2Rm
+bC1mbWUtcmVnaW9uLmMgYi9kcml2ZXJzL2ZwZ2EvZGZsLWZtZS1yZWdpb24uYw0KPiA+Pj4+IGlu
+ZGV4IGQyMWVhY2JmMjQ2OWYuLmJlMWQ1N2VlMzc2NjYgMTAwNjQ0DQo+ID4+Pj4gLS0tIGEvZHJp
+dmVycy9mcGdhL2RmbC1mbWUtcmVnaW9uLmMNCj4gPj4+PiArKysgYi9kcml2ZXJzL2ZwZ2EvZGZs
+LWZtZS1yZWdpb24uYw0KPiA+Pj4+IEBAIC02NCw3ICs2NCw2IEBAIHN0YXRpYyBpbnQgZm1lX3Jl
+Z2lvbl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlDQo+ID4+ICpwZGV2KQ0KPiA+Pj4+ICAg
+IAl9DQo+ID4+Pj4NCj4gPj4+PiAgICAJcmVnaW9uLT5wcml2ID0gcGRhdGE7DQo+ID4+Pj4gLQly
+ZWdpb24tPmNvbXBhdF9pZCA9IG1nci0+Y29tcGF0X2lkOw0KPiA+Pj4+ICAgIAlwbGF0Zm9ybV9z
+ZXRfZHJ2ZGF0YShwZGV2LCByZWdpb24pOw0KPiA+Pj4+DQo+ID4+Pj4gICAgCXJldCA9IGZwZ2Ff
+cmVnaW9uX3JlZ2lzdGVyKHJlZ2lvbik7DQo+ID4+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZnBn
+YS9mcGdhLXJlZ2lvbi5jIGIvZHJpdmVycy9mcGdhL2ZwZ2EtcmVnaW9uLmMNCj4gPj4+PiBpbmRl
+eCA4NjRkZDRmMjkwZTNiLi5iMDhkMzkxNDcxNmYwIDEwMDY0NA0KPiA+Pj4+IC0tLSBhL2RyaXZl
+cnMvZnBnYS9mcGdhLXJlZ2lvbi5jDQo+ID4+Pj4gKysrIGIvZHJpdmVycy9mcGdhL2ZwZ2EtcmVn
+aW9uLmMNCj4gPj4+PiBAQCAtMTcyLDEyICsxNzIsNyBAQCBzdGF0aWMgc3NpemVfdCBjb21wYXRf
+aWRfc2hvdyhzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ID4+Pj4gICAgCWlmIChyZWdpb24tPnJvcHMg
+JiYgcmVnaW9uLT5yb3BzLT5jb21wYXRfaWRfc2hvdykNCj4gPj4+PiAgICAJCXJldHVybiByZWdp
+b24tPnJvcHMtPmNvbXBhdF9pZF9zaG93KHJlZ2lvbiwgYnVmKTsNCj4gPj4+Pg0KPiA+Pj4+IC0J
+aWYgKCFyZWdpb24tPmNvbXBhdF9pZCkNCj4gPj4+PiAtCQlyZXR1cm4gLUVOT0VOVDsNCj4gPj4+
+PiAtDQo+ID4+Pj4gLQlyZXR1cm4gc3ByaW50ZihidWYsICIlMDE2bGx4JTAxNmxseFxuIiwNCj4g
+Pj4+PiAtCQkgICAgICAgKHVuc2lnbmVkIGxvbmcgbG9uZylyZWdpb24tPmNvbXBhdF9pZC0+aWRf
+aCwNCj4gPj4+PiAtCQkgICAgICAgKHVuc2lnbmVkIGxvbmcgbG9uZylyZWdpb24tPmNvbXBhdF9p
+ZC0+aWRfbCk7DQo+ID4+Pj4gKwlyZXR1cm4gLUVOT0VOVDsNCj4gPj4+PiAgICB9DQo+ID4+Pj4N
+Cj4gPj4+PiAgICBzdGF0aWMgREVWSUNFX0FUVFJfUk8oY29tcGF0X2lkKTsNCj4gPj4+PiBkaWZm
+IC0tZ2l0IGEvaW5jbHVkZS9saW51eC9mcGdhL2ZwZ2EtbWdyLmggYi9pbmNsdWRlL2xpbnV4L2Zw
+Z2EvZnBnYS1tZ3IuaA0KPiA+Pj4+IGluZGV4IGVjMmNkOGJmY2ViMDAuLmViZGVhMjE1YTg2NDMg
+MTAwNjQ0DQo+ID4+Pj4gLS0tIGEvaW5jbHVkZS9saW51eC9mcGdhL2ZwZ2EtbWdyLmgNCj4gPj4+
+PiArKysgYi9pbmNsdWRlL2xpbnV4L2ZwZ2EvZnBnYS1tZ3IuaA0KPiA+Pj4+IEBAIC0xNDMsMjQg
+KzE0MywxMiBAQCBzdHJ1Y3QgZnBnYV9tYW5hZ2VyX29wcyB7DQo+ID4+Pj4gICAgI2RlZmluZSBG
+UEdBX01HUl9TVEFUVVNfSVBfUFJPVE9DT0xfRVJSCQlCSVQoMykNCj4gPj4+PiAgICAjZGVmaW5l
+IEZQR0FfTUdSX1NUQVRVU19GSUZPX09WRVJGTE9XX0VSUglCSVQoNCkNCj4gPj4+Pg0KPiA+Pj4+
+IC0vKioNCj4gPj4+PiAtICogc3RydWN0IGZwZ2FfY29tcGF0X2lkIC0gaWQgZm9yIGNvbXBhdGli
+aWxpdHkgY2hlY2sNCj4gPj4+PiAtICoNCj4gPj4+PiAtICogQGlkX2g6IGhpZ2ggNjRiaXQgb2Yg
+dGhlIGNvbXBhdF9pZA0KPiA+Pj4+IC0gKiBAaWRfbDogbG93IDY0Yml0IG9mIHRoZSBjb21wYXRf
+aWQNCj4gPj4+PiAtICovDQo+ID4+Pj4gLXN0cnVjdCBmcGdhX2NvbXBhdF9pZCB7DQo+ID4+Pj4g
+LQl1NjQgaWRfaDsNCj4gPj4+PiAtCXU2NCBpZF9sOw0KPiA+Pj4+IC19Ow0KPiA+Pj4+IC0NCj4g
+Pj4+PiAgICAvKioNCj4gPj4+PiAgICAgKiBzdHJ1Y3QgZnBnYV9tYW5hZ2VyIC0gZnBnYSBtYW5h
+Z2VyIHN0cnVjdHVyZQ0KPiA+Pj4+ICAgICAqIEBuYW1lOiBuYW1lIG9mIGxvdyBsZXZlbCBmcGdh
+IG1hbmFnZXINCj4gPj4+PiAgICAgKiBAZGV2OiBmcGdhIG1hbmFnZXIgZGV2aWNlDQo+ID4+Pj4g
+ICAgICogQHJlZl9tdXRleDogb25seSBhbGxvd3Mgb25lIHJlZmVyZW5jZSB0byBmcGdhIG1hbmFn
+ZXINCj4gPj4+PiAgICAgKiBAc3RhdGU6IHN0YXRlIG9mIGZwZ2EgbWFuYWdlcg0KPiA+Pj4+IC0g
+KiBAY29tcGF0X2lkOiBGUEdBIG1hbmFnZXIgaWQgZm9yIGNvbXBhdGliaWxpdHkgY2hlY2suDQo+
+ID4+Pj4gICAgICogQG1vcHM6IHBvaW50ZXIgdG8gc3RydWN0IG9mIGZwZ2EgbWFuYWdlciBvcHMN
+Cj4gPj4+PiAgICAgKiBAcHJpdjogbG93IGxldmVsIGRyaXZlciBwcml2YXRlIGRhdGUNCj4gPj4+
+PiAgICAgKi8NCj4gPj4+PiBAQCAtMTY5LDcgKzE1Nyw2IEBAIHN0cnVjdCBmcGdhX21hbmFnZXIg
+ew0KPiA+Pj4+ICAgIAlzdHJ1Y3QgZGV2aWNlIGRldjsNCj4gPj4+PiAgICAJc3RydWN0IG11dGV4
+IHJlZl9tdXRleDsNCj4gPj4+PiAgICAJZW51bSBmcGdhX21ncl9zdGF0ZXMgc3RhdGU7DQo+ID4+
+Pj4gLQlzdHJ1Y3QgZnBnYV9jb21wYXRfaWQgKmNvbXBhdF9pZDsNCj4gPj4+PiAgICAJY29uc3Qg
+c3RydWN0IGZwZ2FfbWFuYWdlcl9vcHMgKm1vcHM7DQo+ID4+Pj4gICAgCXZvaWQgKnByaXY7DQo+
+ID4+Pj4gICAgfTsNCj4gPj4+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9mcGdhL2ZwZ2Et
+cmVnaW9uLmggYi9pbmNsdWRlL2xpbnV4L2ZwZ2EvZnBnYS0NCj4gPj4gcmVnaW9uLmgNCj4gPj4+
+PiBpbmRleCAyMzZkMzgxOWYxYzEzLi5hZmM3OTc4NGIyODIzIDEwMDY0NA0KPiA+Pj4+IC0tLSBh
+L2luY2x1ZGUvbGludXgvZnBnYS9mcGdhLXJlZ2lvbi5oDQo+ID4+Pj4gKysrIGIvaW5jbHVkZS9s
+aW51eC9mcGdhL2ZwZ2EtcmVnaW9uLmgNCj4gPj4+PiBAQCAtMzAsNyArMzAsNiBAQCBzdHJ1Y3Qg
+ZnBnYV9yZWdpb25fb3BzIHsNCj4gPj4+PiAgICAgKiBAYnJpZGdlX2xpc3Q6IGxpc3Qgb2YgRlBH
+QSBicmlkZ2VzIHNwZWNpZmllZCBpbiByZWdpb24NCj4gPj4+PiAgICAgKiBAbWdyOiBGUEdBIG1h
+bmFnZXINCj4gPj4+PiAgICAgKiBAaW5mbzogRlBHQSBpbWFnZSBpbmZvDQo+ID4+Pj4gLSAqIEBj
+b21wYXRfaWQ6IEZQR0EgcmVnaW9uIGlkIGZvciBjb21wYXRpYmlsaXR5IGNoZWNrLg0KPiA+Pj4+
+ICAgICAqIEBwcml2OiBwcml2YXRlIGRhdGENCj4gPj4+PiAgICAgKiBAcm9wczogb3B0aW9uYWwg
+cG9pbnRlciB0byBzdHJ1Y3QgZm9yIGZwZ2EgcmVnaW9uIG9wcw0KPiA+Pj4+ICAgICAqLw0KPiA+
+Pj4+IEBAIC00MCw3ICszOSw2IEBAIHN0cnVjdCBmcGdhX3JlZ2lvbiB7DQo+ID4+Pj4gICAgCXN0
+cnVjdCBsaXN0X2hlYWQgYnJpZGdlX2xpc3Q7DQo+ID4+Pj4gICAgCXN0cnVjdCBmcGdhX21hbmFn
+ZXIgKm1ncjsNCj4gPj4+PiAgICAJc3RydWN0IGZwZ2FfaW1hZ2VfaW5mbyAqaW5mbzsNCj4gPj4+
+PiAtCXN0cnVjdCBmcGdhX2NvbXBhdF9pZCAqY29tcGF0X2lkOw0KPiA+Pj4+ICAgIAl2b2lkICpw
+cml2Ow0KPiA+Pj4+ICAgIAljb25zdCBzdHJ1Y3QgZnBnYV9yZWdpb25fb3BzICpyb3BzOw0KPiA+
+Pj4+ICAgIH07DQo+ID4+Pj4gLS0NCj4gPj4+PiAyLjI2LjMNCg0K
