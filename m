@@ -2,354 +2,382 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EC13D2008
-	for <lists+linux-fpga@lfdr.de>; Thu, 22 Jul 2021 10:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015C33D24F5
+	for <lists+linux-fpga@lfdr.de>; Thu, 22 Jul 2021 15:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbhGVIF0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 22 Jul 2021 04:05:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55882 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231189AbhGVIFZ (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 22 Jul 2021 04:05:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A43AE6128C;
-        Thu, 22 Jul 2021 08:45:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626943559;
-        bh=iHEKpKP05yPtSDo0WVw13tR4OsPIw3x7iurEQu7Pc7Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d2l4V14jYNVya/romP2w2ezg4x2LnX47K9dLSJmCxQOKyIqkdonEoIsuSyzycFfD4
-         aHamBXJweC7B8K4Qi3lPBaud6oc7vHctb7fViEzj6oXWZWpeL9VSuOZpThr23TyNei
-         Kh7xAATxCTMeB2NBX21iFqK668swZChaCi9FSwpo=
-Date:   Thu, 22 Jul 2021 10:45:55 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     kernel@pengutronix.de,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Alex Dubov <oakad@yahoo.com>, Alex Elder <elder@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bodo Stroesser <bostroesser@gmail.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Dexuan Cui <decui@microsoft.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Farman <farman@linux.ibm.com>,
-        Finn Thain <fthain@linux-m68k.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frank Li <lznuaa@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Geoff Levand <geoff@infradead.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>, Ira Weiny <ira.weiny@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jason Wang <jasowang@redhat.com>,
-        Jens Taprogge <jens.taprogge@taprogge.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Joey Pabalan <jpabalanb@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Johannes Thumshirn <morbidrsa@gmail.com>,
-        Jon Mason <jdmason@kudzu.us>, Juergen Gross <jgross@suse.com>,
-        Julien Grall <jgrall@amazon.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lee Jones <lee.jones@linaro.org>, Len Brown <lenb@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Maxim Levitsky <maximlevitsky@gmail.com>,
-        Michael Buesch <m@bues.ch>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Jamet <michael.jamet@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Rich Felker <dalias@libc.org>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Samuel Holland <samuel@sholland.org>,
-        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
-        SeongJae Park <sjpark@amazon.de>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sven Van Asbroeck <TheSven73@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thorsten Scherer <t.scherer@eckelmann.de>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Tom Rix <trix@redhat.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Yufen Yu <yuyufen@huawei.com>, alsa-devel@alsa-project.org,
-        dmaengine@vger.kernel.org, greybus-dev@lists.linaro.org,
-        industrypack-devel@lists.sourceforge.net, kvm@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-ntb@googlegroups.com, linux-parisc@vger.kernel.org,
-        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-sunxi@lists.linux.dev,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, nvdimm@lists.linux.dev,
-        platform-driver-x86@vger.kernel.org, sparclinux@vger.kernel.org,
-        target-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v4 0/5] bus: Make remove callback return void
-Message-ID: <YPkwQwf0dUKnGA7L@kroah.com>
-References: <20210713193522.1770306-1-u.kleine-koenig@pengutronix.de>
- <YPfyZen4Y0uDKqDT@kroah.com>
+        id S232213AbhGVNRt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 22 Jul 2021 09:17:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27633 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232200AbhGVNRt (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>);
+        Thu, 22 Jul 2021 09:17:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1626962303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B+ZEIrxXdHN+KKS25Y08dQGB9Q6yHwa17s57v5VuMUA=;
+        b=RwyScTfHRbwxbR4ajKc3y7t7HlouuK3+AXsjoX+0H0tLPNl22ootOKEndW4XN8ZE1uGeib
+        cmQegvQvoqSZbM3IM1TK9VYZ0kPMuwwXw0Yttm3No0SiMt+slpJxidRzLpA66DO4l9bb65
+        vL03Y8qqRNh0l6LXvpOYR443yfo5IE0=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-348-fD4eiRY7NG-IOsanS10kOw-1; Thu, 22 Jul 2021 09:58:22 -0400
+X-MC-Unique: fD4eiRY7NG-IOsanS10kOw-1
+Received: by mail-ot1-f71.google.com with SMTP id w5-20020a0568304105b02904ceed859e6eso3717543ott.21
+        for <linux-fpga@vger.kernel.org>; Thu, 22 Jul 2021 06:58:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=B+ZEIrxXdHN+KKS25Y08dQGB9Q6yHwa17s57v5VuMUA=;
+        b=WtvX1+8D7p5GAZ0nr8R19BWMjlLF7sfiCmCJraW0eDUMRP4fN6m2sAItMZ3ead/q8o
+         IUv1LHAcFj0yFaP1fOjQ+xVGSv86bXmCwnotz6ew6z7ULPclOQDpN2tl3YIH9OysL8nZ
+         XGbfP6I0uyaDZNFly2hcM7WlML+a8FIzJfN4JlyZDx30hLad9PwG6Vwd1/OF8+XJ5yOA
+         KfhnvKZsQpzYoEsn+z2ZIcQHOVHyF4RTPa8ESsM0x+Bs3NV/0NKC59CQmSvxy8sXq9Qy
+         u4PmE1/ZxO74jqy3edHY2BzXc0UoOAsCSz8kUf3X8/JyqcGF0UgmHJU/Ydyn47Ip4vmM
+         4gdA==
+X-Gm-Message-State: AOAM533gcte+Xr3iWCFoDrQyqMOr8v6ni2oIfGClXYjoz0lRUEpSPpaB
+        eNmW0CnbEdBeYthZnA1iwfBnRhqi6s+ULWVPnYOM1KLWIYPmGiegXQsdCS8ERpyBM10b2VpbYRn
+        FCtWuzdhZ9aWhMrJqfReE9w==
+X-Received: by 2002:a05:6830:10c5:: with SMTP id z5mr29756755oto.154.1626962301598;
+        Thu, 22 Jul 2021 06:58:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwB0KEESlrLVySjLINZ6QqelXe7Baf1YjJgPPuMDBDHrm8FX4xuz9eBuAl+zLS9peLF37SqNQ==
+X-Received: by 2002:a05:6830:10c5:: with SMTP id z5mr29756743oto.154.1626962301387;
+        Thu, 22 Jul 2021 06:58:21 -0700 (PDT)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id u7sm804602oop.11.2021.07.22.06.58.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jul 2021 06:58:21 -0700 (PDT)
+Subject: Re: [PATCH v2 4/4] fpga: remove compat_id from fpga_manager and
+ fpga_region
+To:     "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "Weight, Russell H" <russell.h.weight@intel.com>
+Cc:     "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210709134229.2510349-1-trix@redhat.com>
+ <20210709134229.2510349-6-trix@redhat.com>
+ <DM6PR11MB3819098B673C54530B227D4385159@DM6PR11MB3819.namprd11.prod.outlook.com>
+ <2a3b3131-96a3-9761-f2e7-63a32fd277f6@redhat.com>
+ <DM6PR11MB38193C3FE87830E9627E112C85E39@DM6PR11MB3819.namprd11.prod.outlook.com>
+ <2056f88d-7215-8f6a-d3c3-2692741c2c2d@redhat.com>
+ <DM6PR11MB38194D113950FA4B75C7F2C485E49@DM6PR11MB3819.namprd11.prod.outlook.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <4ab7dd2d-c215-6333-6860-6f7d0ac64c3d@redhat.com>
+Date:   Thu, 22 Jul 2021 06:58:19 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <DM6PR11MB38194D113950FA4B75C7F2C485E49@DM6PR11MB3819.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YPfyZen4Y0uDKqDT@kroah.com>
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Jul 21, 2021 at 12:09:41PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Jul 13, 2021 at 09:35:17PM +0200, Uwe Kleine-K�nig wrote:
-> > Hello,
-> > 
-> > this is v4 of the final patch set for my effort to make struct
-> > bus_type::remove return void.
-> > 
-> > The first four patches contain cleanups that make some of these
-> > callbacks (more obviously) always return 0. They are acked by the
-> > respective maintainers. Bjorn Helgaas explicitly asked to include the
-> > pci patch (#1) into this series, so Greg taking this is fine. I assume
-> > the s390 people are fine with Greg taking patches #2 to #4, too, they
-> > didn't explicitly said so though.
-> > 
-> > The last patch actually changes the prototype and so touches quite some
-> > drivers and has the potential to conflict with future developments, so I
-> > consider it beneficial to put these patches into next soon. I expect
-> > that it will be Greg who takes the complete series, he already confirmed
-> > via irc (for v2) to look into this series.
-> > 
-> > The only change compared to v3 is in the fourth patch where I modified a
-> > few more drivers to fix build failures. Some of them were found by build
-> > bots (thanks!), some of them I found myself using a regular expression
-> > search. The newly modified files are:
-> > 
-> >  arch/sparc/kernel/vio.c
-> >  drivers/nubus/bus.c
-> >  drivers/sh/superhyway/superhyway.c
-> >  drivers/vlynq/vlynq.c
-> >  drivers/zorro/zorro-driver.c
-> >  sound/ac97/bus.c
-> > 
-> > Best regards
-> > Uwe
-> 
-> Now queued up.  I can go make a git tag that people can pull from after
-> 0-day is finished testing this to verify all is good, if others need it.
 
-Ok, here's a tag that any other subsystem can pull from if they want
-these changes in their tree before 5.15-rc1 is out.  I might pull it
-into my char-misc-next tree as well just to keep that tree sane as it
-seems to pick up new busses on a regular basis...
+On 7/21/21 5:18 PM, Wu, Hao wrote:
+>   
+>> On 7/20/21 9:48 PM, Wu, Hao wrote:
+>>>> On 7/11/21 6:40 PM, Wu, Hao wrote:
+>>>>>> -----Original Message-----
+>>>>>> From: trix@redhat.com <trix@redhat.com>
+>>>>>> Sent: Friday, July 9, 2021 9:42 PM
+>>>>>> To: mdf@kernel.org; corbet@lwn.net; Wu, Hao <hao.wu@intel.com>
+>>>>>> Cc: linux-fpga@vger.kernel.org; linux-doc@vger.kernel.org; linux-
+>>>>>> kernel@vger.kernel.org; Tom Rix <trix@redhat.com>
+>>>>>> Subject: [PATCH v2 4/4] fpga: remove compat_id from fpga_manager and
+>>>>>> fpga_region
+>>>>>>
+>>>>>> From: Tom Rix <trix@redhat.com>
+>>>>>>
+>>>>>> compat_id is implementation specific.  So the data should be
+>>>>>> stored at the implemeation layer, not the infrastructure layer.
+>>>>>> Remove the compat_id elements and supporting code.
+>>>>> I think current compat_id format can meet the checking requirement.
+>>>>> Actually I hope other hardware which needs compatible checking
+>>>>> to expose the same format compat_id. Then we can have more
+>>>>> unified/common code, e.g. userspace application/lib handling.
+>>>> v2 does not change the current ABI. The dfl output is the same as
+>>>> before, the other nonusers get -ENOENT.
+>>> I think the common ABI is changed somehow, as output format can
+>>> be anything with your change, this confuses userspace too.
+>> Only dfl uses this interface, any dfl userspace like opae reading the
+>> sysfs compat_id would remain unchanged.
+>>
+>> Others will continue to receive the -ENOENT.
+>>
+>> If the others wanted to use this entry in the future, the
+>>
+>> existing ABI documentation is consistent with with allowing them to
+>>
+>> define it as they wish.  The format of the output is not specified
+>>
+>> only the error condition. with language the leaves it up to the region
+>>
+>> creator to define.
+>>
+>> from sysfs-class-fpga-region
+>>
+>> "FPGA region id for compatibility check, e.g. compatibility
+>>    of the FPGA reconfiguration hardware and image. This value
+>>    is defined or calculated by the layer that is creating the
+>>    FPGA region. This interface returns the compat_id value or
+>>    just error code -ENOENT in case compat_id is not used."
+>>
+> As we have fixed compat_id format, so the output format is fixed.
+> If output format is not fixed then we will never have reusable code based
+> on this common ABI on fpga region, only vendor specific code can.
 
-thanks,
+Looking for a compromise that leaves the data in fpga_manager,
 
-greg k-h
+The data type of currently is vendor specific, 2 64 bit values.
 
------------------------------------
+can we change that to a neutral type like uuid_t ?
+
+It is treated as a uuid_t in opae, with.
+
+being read byte string with this logic
+
+     for (i = 0; i < 32; i += 2) {
+         tmp = buf[i + 2];
+         buf[i + 2] = 0;
+
+         octet = 0;
+         sscanf(&buf[i], "%x", &octet);
+         guid[i / 2] = (uint8_t)octet;
+
+         buf[i + 2] = tmp;
+     }
+
+Into this final type
+
+/**
+  * Globally unique identifier (GUID)
+  *
+  * GUIDs are used widely within OPAE for helping identify FPGA 
+resources. For
+  * example, every FPGA resource has a `guid` property, which can be 
+(and in the
+  * case of FPGA_ACCELERATOR resource primarily is) used for enumerating 
+a resource of a
+  * specific type.
+   *
+  * `fpga_guid` is compatible with libuuid's uuid_t, so users can use 
+libuuid
+  * functions like uuid_parse() to create and work with GUIDs.
+  */
+typedef uint8_t fpga_guid[16];
+
+Tom
 
 
-The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
+>
+>>>> For dfl compat_id is 2 64 bit registers.
+>>>>
+>>>> For compat_id to be useful to the others, they need the flexibility to
+>>>> print to the sysfs in the manner that aligns with whatever their user
+>>>> library interface is, 2 64 values isn't going to work for everyone.  ex/
+>>>> xrt likely would be a uuid_t printed out a special way. someone else
+>>>> maybe just string in the board fw, maybe some has a 8 or 256 bits of
+>>>> compat_id  etc.
+>>>>
+>>>> as a driver region specific op, others are free to do whatever is required.
+>>>>
+>>>>> Currently I didn't see any other usage or requirement on this part
+>>>>> now, only DFL uses it.  So should we leave it here at this moment?
+>>>>> I feel we don't have to change it for now to move it to a
+>>>>> Per-fpga-mgr format. : )
+>>>> The motivation for doing this now is the 'use standard class dev release
+>>>> .. ' patchset
+>>>>
+>>>> I really do not like 2 register functions.
+>>>>
+>>>> By moving compat_id, the 2 register functions reduces down to 1.
+>>>>
+>>> You don't have to moving compact_id, you can have 1 parameter
+>>> with a data structure including everything.
+>> I like the fpga_mgr_register( ... , const struct fpga_magager_info
+>> *info) better as well because it will stabilize the public api.
+>>
+>> Since we agree on that, do you agree Russ's patch can be resolved by
+>>
+>> from include/linux/fpga-mgr.h
+>>
+>> keep
+>>
+>> struct fpga_manager *
+>> fpga_mgr_register(struct device *parent, const struct fpga_manager_info
+>> *info);
+>>
+>> remove *simple() from the public api, move it to driver/fpga/
+> Yes, that sounds good to me.
+>
+>> and something similar for fpga-region.h ?
+>>
+>> However the compat_id refactor goes, having just *register(... *info) is
+>> fine and could be done first.
+> Yes. Adding or removing thing later won't impact this register interface.
+>
+> Hao
+>
+>> Tom
+>>
+>>
+>>> Thanks
+>>> Hao
+>>>
+>>>> I did a poc here
+>>>>
+>>>> https://lore.kernel.org/linux-fpga/20210709184511.2521508-1-
+>>>> trix@redhat.com/
+>>>>
+>>>> Tom
+>>>>
+>>>>> Thanks
+>>>>> Hao
+>>>>>
+>>>>>> Printing out the compat_id is done with the fpga_region
+>>>>>> compat_id_show() op.
+>>>>>>
+>>>>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>>>>> ---
+>>>>>>     drivers/fpga/dfl-fme-mgr.c       |  7 -------
+>>>>>>     drivers/fpga/dfl-fme-region.c    |  1 -
+>>>>>>     drivers/fpga/fpga-region.c       |  7 +------
+>>>>>>     include/linux/fpga/fpga-mgr.h    | 13 -------------
+>>>>>>     include/linux/fpga/fpga-region.h |  2 --
+>>>>>>     5 files changed, 1 insertion(+), 29 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
+>>>>>> index cd0b9157ea6e5..8c5423eeffe75 100644
+>>>>>> --- a/drivers/fpga/dfl-fme-mgr.c
+>>>>>> +++ b/drivers/fpga/dfl-fme-mgr.c
+>>>>>> @@ -292,7 +292,6 @@ EXPORT_SYMBOL_GPL(fme_mgr_get_compat_id);
+>>>>>>     static int fme_mgr_probe(struct platform_device *pdev)
+>>>>>>     {
+>>>>>>     	struct dfl_fme_mgr_pdata *pdata = dev_get_platdata(&pdev->dev);
+>>>>>> -	struct fpga_compat_id *compat_id;
+>>>>>>     	struct device *dev = &pdev->dev;
+>>>>>>     	struct fme_mgr_priv *priv;
+>>>>>>     	struct fpga_manager *mgr;
+>>>>>> @@ -312,10 +311,6 @@ static int fme_mgr_probe(struct platform_device
+>>>>>> *pdev)
+>>>>>>     			return PTR_ERR(priv->ioaddr);
+>>>>>>     	}
+>>>>>>
+>>>>>> -	compat_id = devm_kzalloc(dev, sizeof(*compat_id), GFP_KERNEL);
+>>>>>> -	if (!compat_id)
+>>>>>> -		return -ENOMEM;
+>>>>>> -
+>>>>>>     	_fme_mgr_get_compat_id(priv->ioaddr, &priv->compat_id);
+>>>>>>
+>>>>>>     	mgr = devm_fpga_mgr_create(dev, "DFL FME FPGA Manager",
+>>>>>> @@ -323,8 +318,6 @@ static int fme_mgr_probe(struct platform_device
+>>>> *pdev)
+>>>>>>     	if (!mgr)
+>>>>>>     		return -ENOMEM;
+>>>>>>
+>>>>>> -	mgr->compat_id = compat_id;
+>>>>>> -
+>>>>>>     	return devm_fpga_mgr_register(dev, mgr);
+>>>>>>     }
+>>>>>>
+>>>>>> diff --git a/drivers/fpga/dfl-fme-region.c b/drivers/fpga/dfl-fme-region.c
+>>>>>> index d21eacbf2469f..be1d57ee37666 100644
+>>>>>> --- a/drivers/fpga/dfl-fme-region.c
+>>>>>> +++ b/drivers/fpga/dfl-fme-region.c
+>>>>>> @@ -64,7 +64,6 @@ static int fme_region_probe(struct platform_device
+>>>> *pdev)
+>>>>>>     	}
+>>>>>>
+>>>>>>     	region->priv = pdata;
+>>>>>> -	region->compat_id = mgr->compat_id;
+>>>>>>     	platform_set_drvdata(pdev, region);
+>>>>>>
+>>>>>>     	ret = fpga_region_register(region);
+>>>>>> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+>>>>>> index 864dd4f290e3b..b08d3914716f0 100644
+>>>>>> --- a/drivers/fpga/fpga-region.c
+>>>>>> +++ b/drivers/fpga/fpga-region.c
+>>>>>> @@ -172,12 +172,7 @@ static ssize_t compat_id_show(struct device *dev,
+>>>>>>     	if (region->rops && region->rops->compat_id_show)
+>>>>>>     		return region->rops->compat_id_show(region, buf);
+>>>>>>
+>>>>>> -	if (!region->compat_id)
+>>>>>> -		return -ENOENT;
+>>>>>> -
+>>>>>> -	return sprintf(buf, "%016llx%016llx\n",
+>>>>>> -		       (unsigned long long)region->compat_id->id_h,
+>>>>>> -		       (unsigned long long)region->compat_id->id_l);
+>>>>>> +	return -ENOENT;
+>>>>>>     }
+>>>>>>
+>>>>>>     static DEVICE_ATTR_RO(compat_id);
+>>>>>> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+>>>>>> index ec2cd8bfceb00..ebdea215a8643 100644
+>>>>>> --- a/include/linux/fpga/fpga-mgr.h
+>>>>>> +++ b/include/linux/fpga/fpga-mgr.h
+>>>>>> @@ -143,24 +143,12 @@ struct fpga_manager_ops {
+>>>>>>     #define FPGA_MGR_STATUS_IP_PROTOCOL_ERR		BIT(3)
+>>>>>>     #define FPGA_MGR_STATUS_FIFO_OVERFLOW_ERR	BIT(4)
+>>>>>>
+>>>>>> -/**
+>>>>>> - * struct fpga_compat_id - id for compatibility check
+>>>>>> - *
+>>>>>> - * @id_h: high 64bit of the compat_id
+>>>>>> - * @id_l: low 64bit of the compat_id
+>>>>>> - */
+>>>>>> -struct fpga_compat_id {
+>>>>>> -	u64 id_h;
+>>>>>> -	u64 id_l;
+>>>>>> -};
+>>>>>> -
+>>>>>>     /**
+>>>>>>      * struct fpga_manager - fpga manager structure
+>>>>>>      * @name: name of low level fpga manager
+>>>>>>      * @dev: fpga manager device
+>>>>>>      * @ref_mutex: only allows one reference to fpga manager
+>>>>>>      * @state: state of fpga manager
+>>>>>> - * @compat_id: FPGA manager id for compatibility check.
+>>>>>>      * @mops: pointer to struct of fpga manager ops
+>>>>>>      * @priv: low level driver private date
+>>>>>>      */
+>>>>>> @@ -169,7 +157,6 @@ struct fpga_manager {
+>>>>>>     	struct device dev;
+>>>>>>     	struct mutex ref_mutex;
+>>>>>>     	enum fpga_mgr_states state;
+>>>>>> -	struct fpga_compat_id *compat_id;
+>>>>>>     	const struct fpga_manager_ops *mops;
+>>>>>>     	void *priv;
+>>>>>>     };
+>>>>>> diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-
+>>>> region.h
+>>>>>> index 236d3819f1c13..afc79784b2823 100644
+>>>>>> --- a/include/linux/fpga/fpga-region.h
+>>>>>> +++ b/include/linux/fpga/fpga-region.h
+>>>>>> @@ -30,7 +30,6 @@ struct fpga_region_ops {
+>>>>>>      * @bridge_list: list of FPGA bridges specified in region
+>>>>>>      * @mgr: FPGA manager
+>>>>>>      * @info: FPGA image info
+>>>>>> - * @compat_id: FPGA region id for compatibility check.
+>>>>>>      * @priv: private data
+>>>>>>      * @rops: optional pointer to struct for fpga region ops
+>>>>>>      */
+>>>>>> @@ -40,7 +39,6 @@ struct fpga_region {
+>>>>>>     	struct list_head bridge_list;
+>>>>>>     	struct fpga_manager *mgr;
+>>>>>>     	struct fpga_image_info *info;
+>>>>>> -	struct fpga_compat_id *compat_id;
+>>>>>>     	void *priv;
+>>>>>>     	const struct fpga_region_ops *rops;
+>>>>>>     };
+>>>>>> --
+>>>>>> 2.26.3
 
-  Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/bus_remove_return_void-5.15
-
-for you to fetch changes up to fc7a6209d5710618eb4f72a77cd81b8d694ecf89:
-
-  bus: Make remove callback return void (2021-07-21 11:53:42 +0200)
-
-----------------------------------------------------------------
-Bus: Make remove callback return void tag
-
-Tag for other trees/branches to pull from in order to have a stable
-place to build off of if they want to add new busses for 5.15.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Uwe Kleine-K�nig (5):
-      PCI: endpoint: Make struct pci_epf_driver::remove return void
-      s390/cio: Make struct css_driver::remove return void
-      s390/ccwgroup: Drop if with an always false condition
-      s390/scm: Make struct scm_driver::remove return void
-      bus: Make remove callback return void
-
- arch/arm/common/locomo.c                  | 3 +--
- arch/arm/common/sa1111.c                  | 4 +---
- arch/arm/mach-rpc/ecard.c                 | 4 +---
- arch/mips/sgi-ip22/ip22-gio.c             | 3 +--
- arch/parisc/kernel/drivers.c              | 5 ++---
- arch/powerpc/platforms/ps3/system-bus.c   | 3 +--
- arch/powerpc/platforms/pseries/ibmebus.c  | 3 +--
- arch/powerpc/platforms/pseries/vio.c      | 3 +--
- arch/s390/include/asm/eadm.h              | 2 +-
- arch/sparc/kernel/vio.c                   | 4 +---
- drivers/acpi/bus.c                        | 3 +--
- drivers/amba/bus.c                        | 4 +---
- drivers/base/auxiliary.c                  | 4 +---
- drivers/base/isa.c                        | 4 +---
- drivers/base/platform.c                   | 4 +---
- drivers/bcma/main.c                       | 6 ++----
- drivers/bus/sunxi-rsb.c                   | 4 +---
- drivers/cxl/core.c                        | 3 +--
- drivers/dax/bus.c                         | 4 +---
- drivers/dma/idxd/sysfs.c                  | 4 +---
- drivers/firewire/core-device.c            | 4 +---
- drivers/firmware/arm_scmi/bus.c           | 4 +---
- drivers/firmware/google/coreboot_table.c  | 4 +---
- drivers/fpga/dfl.c                        | 4 +---
- drivers/hid/hid-core.c                    | 4 +---
- drivers/hid/intel-ish-hid/ishtp/bus.c     | 4 +---
- drivers/hv/vmbus_drv.c                    | 5 +----
- drivers/hwtracing/intel_th/core.c         | 4 +---
- drivers/i2c/i2c-core-base.c               | 5 +----
- drivers/i3c/master.c                      | 4 +---
- drivers/input/gameport/gameport.c         | 3 +--
- drivers/input/serio/serio.c               | 3 +--
- drivers/ipack/ipack.c                     | 4 +---
- drivers/macintosh/macio_asic.c            | 4 +---
- drivers/mcb/mcb-core.c                    | 4 +---
- drivers/media/pci/bt8xx/bttv-gpio.c       | 3 +--
- drivers/memstick/core/memstick.c          | 3 +--
- drivers/mfd/mcp-core.c                    | 3 +--
- drivers/misc/mei/bus.c                    | 4 +---
- drivers/misc/tifm_core.c                  | 3 +--
- drivers/mmc/core/bus.c                    | 4 +---
- drivers/mmc/core/sdio_bus.c               | 4 +---
- drivers/net/netdevsim/bus.c               | 3 +--
- drivers/ntb/core.c                        | 4 +---
- drivers/ntb/ntb_transport.c               | 4 +---
- drivers/nubus/bus.c                       | 6 ++----
- drivers/nvdimm/bus.c                      | 3 +--
- drivers/pci/endpoint/pci-epf-core.c       | 7 ++-----
- drivers/pci/pci-driver.c                  | 3 +--
- drivers/pcmcia/ds.c                       | 4 +---
- drivers/platform/surface/aggregator/bus.c | 4 +---
- drivers/platform/x86/wmi.c                | 4 +---
- drivers/pnp/driver.c                      | 3 +--
- drivers/rapidio/rio-driver.c              | 4 +---
- drivers/rpmsg/rpmsg_core.c                | 7 ++-----
- drivers/s390/block/scm_drv.c              | 4 +---
- drivers/s390/cio/ccwgroup.c               | 6 +-----
- drivers/s390/cio/chsc_sch.c               | 3 +--
- drivers/s390/cio/css.c                    | 7 +++----
- drivers/s390/cio/css.h                    | 2 +-
- drivers/s390/cio/device.c                 | 9 +++------
- drivers/s390/cio/eadm_sch.c               | 4 +---
- drivers/s390/cio/scm.c                    | 5 +++--
- drivers/s390/cio/vfio_ccw_drv.c           | 3 +--
- drivers/s390/crypto/ap_bus.c              | 4 +---
- drivers/scsi/scsi_debug.c                 | 3 +--
- drivers/sh/superhyway/superhyway.c        | 8 ++------
- drivers/siox/siox-core.c                  | 4 +---
- drivers/slimbus/core.c                    | 4 +---
- drivers/soc/qcom/apr.c                    | 4 +---
- drivers/spi/spi.c                         | 4 +---
- drivers/spmi/spmi.c                       | 3 +--
- drivers/ssb/main.c                        | 4 +---
- drivers/staging/fieldbus/anybuss/host.c   | 4 +---
- drivers/staging/greybus/gbphy.c           | 4 +---
- drivers/target/loopback/tcm_loop.c        | 5 ++---
- drivers/thunderbolt/domain.c              | 4 +---
- drivers/tty/serdev/core.c                 | 4 +---
- drivers/usb/common/ulpi.c                 | 4 +---
- drivers/usb/serial/bus.c                  | 4 +---
- drivers/usb/typec/bus.c                   | 4 +---
- drivers/vdpa/vdpa.c                       | 4 +---
- drivers/vfio/mdev/mdev_driver.c           | 4 +---
- drivers/virtio/virtio.c                   | 3 +--
- drivers/vlynq/vlynq.c                     | 4 +---
- drivers/vme/vme.c                         | 4 +---
- drivers/xen/xenbus/xenbus.h               | 2 +-
- drivers/xen/xenbus/xenbus_probe.c         | 4 +---
- drivers/zorro/zorro-driver.c              | 3 +--
- include/linux/device/bus.h                | 2 +-
- include/linux/pci-epf.h                   | 2 +-
- sound/ac97/bus.c                          | 6 ++----
- sound/aoa/soundbus/core.c                 | 4 +---
- 93 files changed, 107 insertions(+), 263 deletions(-)
