@@ -2,297 +2,299 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A519C3D68B5
-	for <lists+linux-fpga@lfdr.de>; Mon, 26 Jul 2021 23:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF673D6946
+	for <lists+linux-fpga@lfdr.de>; Tue, 27 Jul 2021 00:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbhGZUxK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 26 Jul 2021 16:53:10 -0400
-Received: from mga18.intel.com ([134.134.136.126]:37186 "EHLO mga18.intel.com"
+        id S232923AbhGZVck (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 26 Jul 2021 17:32:40 -0400
+Received: from mga18.intel.com ([134.134.136.126]:21553 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229489AbhGZUxK (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 26 Jul 2021 16:53:10 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10057"; a="199549585"
+        id S232875AbhGZVck (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 26 Jul 2021 17:32:40 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10057"; a="199553956"
 X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
-   d="scan'208";a="199549585"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2021 14:33:38 -0700
+   d="scan'208";a="199553956"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2021 15:13:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
-   d="scan'208";a="566312384"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga004.jf.intel.com with ESMTP; 26 Jul 2021 14:33:37 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10; Mon, 26 Jul 2021 14:33:37 -0700
+   d="scan'208";a="579901393"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Jul 2021 15:13:07 -0700
 Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10; Mon, 26 Jul 2021 14:33:36 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
  fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10 via Frontend Transport; Mon, 26 Jul 2021 14:33:36 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.171)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2242.10; Mon, 26 Jul 2021 15:13:07 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10 via Frontend Transport; Mon, 26 Jul 2021 15:13:07 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.48) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.10; Mon, 26 Jul 2021 14:33:35 -0700
+ 15.1.2242.10; Mon, 26 Jul 2021 15:12:50 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dwq05vnEXtA4bNQDkA46/BnJ3V1PLQZ/Pu+h7Ctc7uKREQ5ye2q5E/LQfwd9glDoW1ZNbzsykZMZZDGoLiEzdZCdytEaOqaSnhMECkR6LxKReQs6uZ2Q/ZyPMc+jOfSsiwjYcxqgjXtWY7Jzl16RT53fg+MTdaHGGNAjmfnWjA/LNvHDmXDxKiUeC2dAEzJuR0JxensKxhJ5kfYeaOawVBZdbDxsCweVwOwtmzj+BQJxJ4mOB4E8JkySG8scS04dzXwdE/Enuzo0I43q3jVNrJoChe/kCMgdcJSS6SMhXMOnuMZHBYoeIfbYeMwcQy6FIZchqP+OmmHtJI4MmSOa0w==
+ b=EPxVXc5jI/FLYCiiByA6PFSyoNnjg3EEPxkOTVFslvRA7qglFjIpQibqqDKAmi+l4MUqdjBpYEfyIdZpAmi9Fn+Vp0BcSjPii3gyH5phaPEMVkYaX2OqIG1FEIRizV2GKehghW0QTUf36z4KN0GuIQFbde6cZ87+O9Li0qhm4aTINL1b1/LSpEzk6eq+Vcd0sSBuH7oRtyul+bLatQhof6gVINFGIn/GgubZ+3qDUmR+HS+TrK+HGvsJXKNiQvxirvYnEw8doWrZH0hjhJ4F3y5eA5ZA88WdESXW1UhY2/si8STUuwjH7DDrFv+rZ2cJf+SwyKVhIkOyQslPL3uHjg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tdl3o40kWsQWaYmCAf5/F0sOi/c8LSXOx/mUqq55mnQ=;
- b=PW7XKuf/SOLq3dIqsM3xCsKc27Js0r0NV/gyjTc5CdERo68q/qWYpBgAGuE5ExJed/H7rwxwaQcjyn3xQnvhT03OY9Sdq1NYkSYo61AYxwlw1uN/E0jy4DOz51RMHIhNA8+2U0pUrv0+DefiInLFdejXCWHFssoX4ZqVmq86YsgAbUuF/9ZgZiHfpfGPoybLRf+REMA+reZKlMgKengLg6jILmz1hYOCLrgd/TvSiqvje9Gi/JHpdj/pelhEGtipc6qSk650Q7AHpqyjK3dw2eDXzq5u3tUvRtMWNxq9fEhd7newYSbviisXdgRSxUSEA99M3PP6YaPIk4coIWmUuA==
+ bh=ddmg74I+XlEo0rWDssk8104gW4HLLINvpqKbhsCke7M=;
+ b=bHz1a7EnP4qH5KL7+wTCVccHbsjR6cF6E37jHWIaGvISaqPd3me5Q4DdK1P86yXNPw8Nwy9YKJYUQXM6Z7wkbYbrkWrNMVUAExZhop9KXP9eqihUbt2z93zc6ro/maXjdXuT25ZS5OIWO3ze1zouQl9nOX8/L6n5gxjW82gPSrgN7KOGlnNI2tPs3vYptgtf8BOF3zq7pHMCd7L8hchNfUuDOt19rPlH2dznd/GOHsbbXR8YdpkRxi9TKfOdBQJAymD2thqPhLgxH5thTZxQk4H7X0ZkRrBDGKIxzghDY5jBK7VUG3oI4ChNvVtAznN8Dhko1YXl+JC3JYI6NH6pZQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
  s=selector2-intel-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tdl3o40kWsQWaYmCAf5/F0sOi/c8LSXOx/mUqq55mnQ=;
- b=qrPoGpbWPBTF85ZlEv/0ebULb8JtndMyCkJJd7+7KpIk//LTPes5kiSeN6/tc58TtO1sHIGRoiI9c71g6OWrjMzKfUUTSNlSIIfAVC9syrLCOP+2FvGbRgpznON8p5T+iJDzciHwuteGn2NoECv6l0r9j2Al/1wNrvG7hsNMXAs=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
+ bh=ddmg74I+XlEo0rWDssk8104gW4HLLINvpqKbhsCke7M=;
+ b=XfukPAgMOjYRi6fQxVPT+h8NjDGJ8M+p0525m/2PbTHNjz/KYnBZrvZlXXaCK9DLDKmxRmMSe7SqMt4k1RqyBmSS66o9BHfg4FvlsgWHzNlzXLnuPG+Zgb7kH4QanqC1ifJ1TDwVRLKexCP2QS83cW6UCz+Lalw7n3yGN36Wn+8=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=intel.com;
 Received: from SA2PR11MB5163.namprd11.prod.outlook.com (2603:10b6:806:113::20)
- by SA2PR11MB4825.namprd11.prod.outlook.com (2603:10b6:806:111::17) with
+ by SA2PR11MB4889.namprd11.prod.outlook.com (2603:10b6:806:110::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.25; Mon, 26 Jul
- 2021 21:33:32 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.26; Mon, 26 Jul
+ 2021 22:12:43 +0000
 Received: from SA2PR11MB5163.namprd11.prod.outlook.com
  ([fe80::51db:698d:e2e3:7fc8]) by SA2PR11MB5163.namprd11.prod.outlook.com
  ([fe80::51db:698d:e2e3:7fc8%4]) with mapi id 15.20.4352.031; Mon, 26 Jul 2021
- 21:33:32 +0000
-Subject: Re: [RESEND PATCH v10 0/3] fpga: Use standard class dev_release
- function
-To:     <mdf@kernel.org>, <linux-fpga@vger.kernel.org>
-CC:     <trix@redhat.com>, <lgoncalv@redhat.com>, <yilun.xu@intel.com>,
-        <hao.wu@intel.com>, <matthew.gerlach@intel.com>,
-        <richard.gong@intel.com>
-References: <20210726212750.121293-1-russell.h.weight@intel.com>
+ 22:12:42 +0000
+Subject: Re: [PATCH] fpga: region: handle compat_id as an uuid
+To:     <trix@redhat.com>, <hao.wu@intel.com>, <mdf@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>
+References: <20210726202650.4074614-1-trix@redhat.com>
 From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <39607b02-bad3-0f65-c1c8-efd6036ab4f3@intel.com>
-Date:   Mon, 26 Jul 2021 14:33:29 -0700
+Message-ID: <6f30a4c6-61a0-bb57-9f13-bcad3f3589b8@intel.com>
+Date:   Mon, 26 Jul 2021 15:12:40 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.11.0
-In-Reply-To: <20210726212750.121293-1-russell.h.weight@intel.com>
+In-Reply-To: <20210726202650.4074614-1-trix@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-ClientProxiedBy: SJ0PR03CA0175.namprd03.prod.outlook.com
- (2603:10b6:a03:338::30) To SA2PR11MB5163.namprd11.prod.outlook.com
+X-ClientProxiedBy: MW4PR03CA0327.namprd03.prod.outlook.com
+ (2603:10b6:303:dd::32) To SA2PR11MB5163.namprd11.prod.outlook.com
  (2603:10b6:806:113::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.0.2.4] (50.43.42.212) by SJ0PR03CA0175.namprd03.prod.outlook.com (2603:10b6:a03:338::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.26 via Frontend Transport; Mon, 26 Jul 2021 21:33:31 +0000
+Received: from [10.0.2.4] (50.43.42.212) by MW4PR03CA0327.namprd03.prod.outlook.com (2603:10b6:303:dd::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.24 via Frontend Transport; Mon, 26 Jul 2021 22:12:42 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ed8bfc53-3db8-4832-7294-08d9507d03f7
-X-MS-TrafficTypeDiagnostic: SA2PR11MB4825:
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Office365-Filtering-Correlation-Id: 72155bb8-d792-455a-db10-08d950827d4c
+X-MS-TrafficTypeDiagnostic: SA2PR11MB4889:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SA2PR11MB48255A908933F744FA465799C5E89@SA2PR11MB4825.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Microsoft-Antispam-PRVS: <SA2PR11MB488936FC66A9604EFC8F2EEBC5E89@SA2PR11MB4889.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XsH+PXpaz6dB9/DBKRzjjwSvUMAv+gfGX5KDdsAYS5AYOkY8UUVFPuyPofJ2GY2m7bYZvEr+PQn6NSNhkJecyeGWZcKcEIilH+HDNuVTw2ofGAIpxs6Ma5nENLsu/ERcJgOfs7IAZYoyQzaK9ti4hqeWR+j5ZsM99g3SXKfpjGa7/9nvc1FFw9yOafLc6OjnRsY6WmOHQS3oWfN6Y/mbN/1xg8Cpd37WZFvxVVrhW0VhJAXpp1kN4fcRL2UiKHgMUySrgNbl+DGxi6lQ2DvxdcerLLIq0ar2D0jp0K0YsWb/hgVDbsBtNNNh/UAxTxHLgT/i3dZ2PuaM4M3MCEBI0gpABgnGGqlESIa2+qQ0OtrlFea1ArC/rl/vE7Y3Pr50eC+zkQQzaUFvVHvYkBcM4D1EN3dpxdcEQFXdP6VuYbVs8Cw7l/6/APln9G7sStMCgIC21MYegVWuFAl280cNd1Goj7e2Zp4g0hB++U+hbtWbHHt1PpLgA10UMjB7GYQrRlzJKNXjVnxVF6ODhwwa0XMYlV9uV5ggMT3MXi17iuHq/U30sq1SpRe62RVlMwaErnnWB0bdglVxTupi6VlwFnkQzIDXsEZzOFARtTbtIk7d5gf6vY2WZR+M32/wHin74YCE2C6XrwRzuxKjNg58MbYh0I+B2LtgeRObyC4kq0WmEqwjvs+NskEhhDmXF/lKOHbhhSdRRXYuiBxYEQZDS9s5mkKC5+vt9WSZAQMRRB/fzpnoYtdVv3HqLJ+3+3LJ2CFPmWG5vTYHZLiWkEvFIK+k38V7aCwFocuYVSzLeW1rHXQBgsYuY+ut0fSUyr+h
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB5163.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(66946007)(2906002)(8936002)(8676002)(16576012)(38100700002)(31686004)(186003)(4326008)(66556008)(66476007)(6486002)(107886003)(53546011)(36756003)(508600001)(316002)(2616005)(31696002)(966005)(26005)(956004)(86362001)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: YhoU5KQfzrTJrqNQkdIXExE25PNnd7iML98zRqAIiRhLNasXzsjvcpAcSbQb42LXtVd4Qu/26+0VV3PwrqmzDOWl+1ZvARnec+Vh3UFSm2hY07zLn6zvA2IW4M/A71K/WKmVU+ckOuR/BGFyvSeYhyfpwzHhmy4WucvD/sEPs8tKlFudGyaR8gDd/jeLf6fz1/ImqHXFdWzb62tdX5n53cqni6rRcWUGfMIvItEKv2yZbvbZyIOIrRWWJKt+Tq/bvgWvPj6gZNgqKh7ulYFsXl1cfKWSuOH+UdkXetzUCNhl8B3fe7AHjCyZTJQ9PEufCZtAJckhs887IF8B64O7wlTi7j0FteLG3YaVjr53AMC6ehW7/ZPGZtqo85bA1PW/bAg3wgqa75MtBLDyYa4N0XFq1SbAl2Gwe+9/bH1fOJD/Y0BkpVN9MkTkDRW0ltLoGVEVraepVQ9noNcm1JEr5ClBmJuL96hF+9xpxIh6S2vzr2aPhcqxxT0ug0WX4KPc1oLs5Q1s7FCEC0MNJq8FCe/qTGv0tL4A6n+SOF/g5tCgYm3fVnDZSNCropuBW5z0fF0OzPBFpWU146CDLE2jIntI7kUkEFXb5i+XO9Tqp7qhpDIKxwzlMdoFzZsaTdkIEOzBnOxX20aU6L2vPkLq+AlNIkgzEaRIDNWvN4Fctzdq/wmLqKN499Rl/hYdi827nhvs/JfX0UBgDkVHH/oD5OoYcoTpwiW7Zm3PnXRetD/iGN79sC6NHA2l8O311Y/p
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB5163.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(39860400002)(136003)(366004)(376002)(36756003)(66946007)(31686004)(2906002)(8676002)(4326008)(31696002)(8936002)(2616005)(316002)(956004)(5660300002)(186003)(6486002)(66556008)(66476007)(16576012)(478600001)(83380400001)(38100700002)(86362001)(53546011)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NEFkQzRCR2RuVktYZXZhdTZoYzdTUVVxTHdsZFRkdWVIajFlbGJ0MnFrdVJs?=
- =?utf-8?B?c09nTmJmVUU4SVFJeEh4YjMvRjVrdTZyTStHSGM2VU1Xb0Ixc2M0Y1RVLzZP?=
- =?utf-8?B?bzIzemp1Z2NzeUlwRndLK1V6TExWQXlrcXpWY0grLzlVM2JFWFd6VndScUVo?=
- =?utf-8?B?c256QzhpUUVTcGFpUmdmVmZ1eXIvcVd2WCtDUEx1VXJFU28xMDRWY2k2WmxH?=
- =?utf-8?B?TDFiZThlVU15TkVxS0xodlMxVUJHWlhyK2xBS1o3cFE5QjhHNVMrYWc4c2Zv?=
- =?utf-8?B?SHdiejdFL1d6UkFwdjUzdzVnZlcybkZMRER1dUgvcTRpV3cxNkdhQ0U3cDJP?=
- =?utf-8?B?aVoyREFEMHl3SUZGbjJ1cExCbkYwRHh3cE5LdzRVN1RCM21GS0twR21mWFJP?=
- =?utf-8?B?cTVkZ093a1RTSzNWNi9nNmI3Zy94M0dOUlduVWtwazVPeURHY0xUZUdwQm1q?=
- =?utf-8?B?aVVpSlpUT1FpQTJRYTRMN1lpbG1Qb1RYcVp4c3hyZVlYWFluQWwzZDBZSzVD?=
- =?utf-8?B?UC9HQm0rNEQyS0M5ZjAwL05TejUyZGJQcXNTVGovOEdKN1MvcXRTZjJ4cGFw?=
- =?utf-8?B?M0h3RzhRVmhSekhZTnZBVnpDaUtsWCtFT2orQVU4bHFJSHRZenlQaVlNd3Rs?=
- =?utf-8?B?M0REV0x3Z2VrZDlueG1iWnF1ektnNmhKaTlHOERVWWhrV0Z6ai9tSUtIQll6?=
- =?utf-8?B?cThhenBVdTc1alVtOU5iV0EvM3JYK3RRa1ZaK0JFNXljbWt6Mksra0ZhSEZ6?=
- =?utf-8?B?enFBWTJxd3JWd3ZrS2ZJbHFjTTUwK1ZXWERBRU9FNDNycngwZGRrRVFUN2NT?=
- =?utf-8?B?eUI3cWxYRkIwNTg5RExETHBuaFVaTDIzYjVKdkdvN1ZabWMxWVMvdy9Fajgw?=
- =?utf-8?B?MCtEUFNnd3VOejVvVUdoaytWOHN2UzNSelMxQStFcXJEdVFjeVhOWmM2S3RF?=
- =?utf-8?B?UWxyanJZcUV0d2w0V1VpQlJRZWYxNkUvWExkVjRqQWZsZmwrazhJcTkvZkgz?=
- =?utf-8?B?bmtqcVBYdE13eERFV0FUOENhNTY3cUc1TXd6VmwrTEtJcnhwdkZiT1JSMmRX?=
- =?utf-8?B?Rlh1YWlIZkR5N0pzYW1TNmlFeXBVczRhL3J3ekh5R20yTnB1Yng1VDkzSkRp?=
- =?utf-8?B?a3dPSG1OZVpBdy91dnU0NEFzZE5rbHdtQ0xZbDJPT3lSYkk1TFNwZzZIMFEv?=
- =?utf-8?B?YWNCdTNzZTRuNFlybXVNZ3BjaEhhZCtJR1F0Y3NDMWl1RDhQR1p4NitDUkdq?=
- =?utf-8?B?SFdYc25EN2RsbnFMM0pBcXdwZ3RGNUhhRmY4Mlo0RTNnR2RBUHRaNjgrM3E3?=
- =?utf-8?B?RlArY0Z4Wkl2MndramRkbkJOREU1SU9JNVRRT0lhMDczcFdnUkVrdTNlY2U3?=
- =?utf-8?B?VFdKNWM1WEFJOTFMdDJ3RVdGbTVwWWlmdkx4Qy9na3poeU1RVFVMQXAyYTNh?=
- =?utf-8?B?Z2lrU2VNVXd3SEsvY1pTdy9md2NYTnF3R3VoUW5mWUJjTU9NcEFIT3p0Vysz?=
- =?utf-8?B?OFdhV05SdzNlVFg0NC9CVDk4V2pJWnBPNmc5UzhSK3cybXVucDYrV1h0aGpP?=
- =?utf-8?B?VE5QbTNqV2pEZ2RiMVpYR0dLRzBGMUJMWnZVVEJVMW9hV3RHYWtyeFRQQzVS?=
- =?utf-8?B?dEdkMHRqdXVYSVFmS3ZleGdjcTVORzFRV25mOFZKMnl0ZVVpODJFVmxpUVE5?=
- =?utf-8?B?aWJkOE1sZ0ZTZTM2eFMvTXZ6ejFVaEhXZk41Qm5pQ1VEY3FXTGw5YUUvSEVS?=
- =?utf-8?Q?BE0/MNbp3q1LNSjSnY7c1X+QqVAoNiiLf51Hw7H?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed8bfc53-3db8-4832-7294-08d9507d03f7
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WkdHenFlOGRybVRhN1ZaZm1qRThYVmdha2t1K05lSlZsWUFzbjZySGR1aFN2?=
+ =?utf-8?B?SGNEYkw5R2FwTEhxNVlvRFVwWks0NEJpUEgybUZMenNHcmFJWEpXNTNyNkZM?=
+ =?utf-8?B?QVhhLzFreUMxVWtCay9YdVBEb01NaUVVNDR1bk9xcDdTbk1GRWY3RUhwSTQ4?=
+ =?utf-8?B?azRQeFkralRTV0taYTlsVlRhTG9tUFF6QjVNRlpqZ1VvTDNHN2ZVamREb3Ru?=
+ =?utf-8?B?cDM3a05CeHkwRHZUOSsyaGhSdkxZcVZudlZYQmtRV0VGZlRKNUVTclN2ZGNm?=
+ =?utf-8?B?cE1RcEllc01walZDcWs1T2hwdmRTeGhmbGlmMHdEOE9FazFENW5zWjhxN2lQ?=
+ =?utf-8?B?UnNwMVVoTHcxVjhObnVZWEorVndXOFBIdEd1ZUxkdklxb2FqWFJaUm5VT3dC?=
+ =?utf-8?B?N3pvRC9kVWw2WXlyUkZwNXJ2VEVIeE5aa1lMWXJXTXhEeGZoWDgzRlFEeGF4?=
+ =?utf-8?B?VGZwWGxhc2dSdHREY1JLSncrQllSM1I4VmRaV0VEOW14L09LV1JVRFlXaVNo?=
+ =?utf-8?B?bk01Ui9jMkRWTVhwRlpNVGhzWnVMNjJ6ZHp2eXd1RWRlUDZiSmlKdnRnV2FZ?=
+ =?utf-8?B?VjZHS2FaK3A0RUdWOXpjU1k3dHNXR2RzT3lZUk5za3o4VUFBUXdrUlJ0UmFG?=
+ =?utf-8?B?Zmg0VHhzYmx1ejR0Q2hpWk9ZSVBqd3lMeXdBdkJtVkgxTit0RCtnZDF1YTlu?=
+ =?utf-8?B?NTZQa3BMdUt6eWI5cnZ0MDA2TFBqbVNjR3c0Q1A4aE9jR0MvVHJoRWQ5ZlFO?=
+ =?utf-8?B?WmdxaGlvdGRhZ0JCOE9NRWFKRmtxUDAyeUlidTVPaWVkUGV4dDlmM0tIR3gv?=
+ =?utf-8?B?MjZqKzNRdmRQaWZQbkVWMG0rS0RrVHdBcW9hNU5xR1duYWEvZFQvRkJLYjln?=
+ =?utf-8?B?cGxVUFd5NFlKY25aRGsrbVZ5eDBMUGNENS80UENabHFtdmhOR0FRSVZyaUtx?=
+ =?utf-8?B?MjNtcnFOdDQ3a2JFNnM2SlFOenZvVTZ3RTJUeWVtQUtpMHk3SE9XYmx0eFNM?=
+ =?utf-8?B?VGNrdmR1T1VEczc2SXVFaHZ4eko3U1RZRjJvdDFRdVIydjhRTHpxa0hOV0RP?=
+ =?utf-8?B?MGxvdk53WkRnam9NZ1U3TkJ2eGc0SGMrakI5L3dQR1UzaXFxUXNRYnZOclFM?=
+ =?utf-8?B?cXp2SUNqU1ZEaVRUdjJTZGExODlraU4xTHNpRFczOCtiNjhFZ0lxSlVUY1pV?=
+ =?utf-8?B?ZkFrcXVVTXNTbEdWL052OWxzZ3lFamxKeGtMa2FtT0xObGZUNzJUd0tsV0I4?=
+ =?utf-8?B?OHlJS3RWVmxUQXpLc1JrMHpZOXRmbHhjd3NHUDdPbDN6Z1N3SDdVS2gxTXla?=
+ =?utf-8?B?clNBQUcrWTIrNnZsTm5uQk8xTlIzRFVZakx0ZCs5LzF1NXVWZUpReERzeU5C?=
+ =?utf-8?B?bnB6bTZDcUZ3WnFwcjJseFhkd0l2RDUvU0RWZ1hXT3M3SVVnOVloTDRReTBD?=
+ =?utf-8?B?d0w3L3p2aktmeFpuUlFmZGRKT1c3ZkFZaldjV05hOVM2MXFGTmx5VW9YOXRN?=
+ =?utf-8?B?bU1pWU9oZzRiZ01mbTBzOXViV09zb0xER056Q1pkOW9XdER6ZU55NEVwL0VF?=
+ =?utf-8?B?VjQrZ0JPMk9wU0hNaFdjOVlGN2I3aXhZR0pZTTNXdVZ5MTJiOTQzQzd2blBR?=
+ =?utf-8?B?TGRTMmRNTUM1WHBLeXhzSGdKdUhPWXZDM1NxanZONVJ3SndiSWtHZ3RjRnhl?=
+ =?utf-8?B?QzkwRjY4S0M5YmZtazgxQ20vTk54QUQ4WGJldk1LMzBoRXdRNENrTzY3RVR6?=
+ =?utf-8?Q?cxsP0SYgRUXhBcT58qF7TCF+iICAbKjelaQ4nYF?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72155bb8-d792-455a-db10-08d950827d4c
 X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB5163.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2021 21:33:31.9080
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2021 22:12:42.9378
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PdQJTvHO98itxj3N5RB6ghoDRggx3EVgJ0D9wVePKuk5GDt6NiL8xNN88puvyFgjBMbnmwPxAUNl79r6JBydUrDBAjzrUh8OXUXAN3O0ShI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4825
+X-MS-Exchange-CrossTenant-UserPrincipalName: 28M2cQqsLeNyOLAai1NRn8gJ6iOf6KGoApltPnK6uxDqYrsEMFFH27bJKMx1TgHSdA7a0P7Gs+2zj7E9bnOywtvI/JTGzatpr+59MbWJRh4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4889
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Moritz,
+On 7/26/21 1:26 PM, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+>
+> An fpga region's compat_id is exported by the sysfs
+> as a 128 bit hex string formed by concatenating two
+> 64 bit values together.
+>
+> The only user of compat_id is dfl.  Its user library
+> opae converts this value into a uuid.
+>
+> ex/
+> $ cat /sys/class/fpga_region/region1/compat_id
+> f3c9941350814aadbced07eb84a6d0bb
+>
+> Is reported as
+> $ fpgainfo bmc
+> ...
+> Pr Interface Id                  : f3c99413-5081-4aad-bced-07eb84a6d0bb
+>
+> Storing a uuid as 2 64 bit values is vendor specific.
+> And concatenating them together is vendor specific.
+>
+> It is better to store and print out as a vendor neutral uuid.
+>
+> Change fpga_compat_id from a struct to a union.
+> Keep the old 64 bit values for dfl.
+> Sysfs output is now
+> f3c99413-5081-4aad-bced-07eb84a6d0bb
 
-I sent this version of the patchset out on July 8th. The only discussion has
-been around the compat-id structure. I think there is agreement that this can
-be treated separately. What are your thoughts? Do you think this patchset is
-ready?
+I'm fowarding feedback from Tim Whisonant, one of the OPAE userspace
+developers:
 
-Thanks,
+I think that this change to the sysfs for the compat_id node will
+end up breaking the SDK, which does not expect the '-' characters to
+be included when parsing the sysfs value. Currently, it is parsed as
+a raw hex string without regard to any '-' characters. This goes for
+any "guid" currently exported by sysfs and for what we read in the
+device MMIO space.
+
 - Russ
 
-
-On 7/26/21 2:27 PM, Russ Weight wrote:
-> The FPGA framework has a convention of using managed resource functions
-> to allow parent drivers to manage the data structures allocated by the
-> class drivers. They use an empty *_dev_release() function to satisfy the
-> class driver.
 >
-> This is inconsistent with linux driver model.
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  .../ABI/testing/sysfs-class-fpga-region        |  4 ++--
+>  drivers/fpga/dfl-fme-mgr.c                     |  8 ++++----
+>  drivers/fpga/fpga-region.c                     |  4 +---
+>  include/linux/fpga/fpga-mgr.h                  | 18 ++++++++++++------
+>  include/linux/fpga/fpga-region.h               |  2 +-
+>  5 files changed, 20 insertions(+), 16 deletions(-)
 >
-> These changes remove the managed resource functions and populate the class
-> dev_release callback functions. They also merge the create() and register()
-> functions into a single register() or register_full() function for each of
-> the fpga-mgr, fpga-region, and fpga-bridge class drivers.
->
-> The new *register_full() functions accept an info data structure to provide
-> flexibility in passing optional parameters. The *register() functions
-> support the legacy parameter list for users that don't require the use of
-> optional parameters.
->
-> For more context, refer to this email thread:
->
-> https://marc.info/?l=linux-fpga&m=162127412218557&w=2
->
-> I turned on the configs assocated with each of the modified files, but I
-> must have been missing some dependencies, because not all of them compiled.
-> I did a run-time test specifically with the dfl-fme infrastructure. This
-> would have exercised the region, bridge, and fpga-mgr frameworks.
->
-> Changelog v9 -> v10:
->   - Fixed commit messages to reference register_full() instead of
->     register_simple().
->   - Removed the fpga_bridge_register_full() function, because there is
->     not need for it yet. Updated the documentation and commit message
->     accordingly.
->   - Updated documentation to reference the fpga_manager_info and
->     fpga_region_info structures.
->
-> Changelog v8 -> v9:
->   - Cleaned up documentation for the FPGA Manager, Bridge, and Region
->     register functions
->   - Renamed fpga_*_register() to fpga_*_register_full()
->   - Renamed fpga_*_register_simple() to fpga_*_register()
->   - Renamed devm_fpga_mgr_register() to devm_fpga_mgr_register_full()
->   - Renamed devm_fpga_mgr_register_simple() to devm_fpga_mgr_register()
->
-> Changelog v7 -> v8:
->   - Added reviewed-by tags.
->   - Updated Documentation/driver-api/fpga/ files: fpga-mgr.rst,
->     fpga-bridge.rst, and fpga-region.rst.
->
-> Changelog v6 -> v7:
->   - Update the commit messages to describe the new parameters for the
->     *register() functions and to mention the *register_simple() functions.
->   - Fix function prototypes in header file to rename dev to parent.
->   - Make use of the PTR_ERR_OR_ZERO() macro when possible.
->   - Some cleanup of comments.
->   - Update function definitions/prototypes to apply const to the new info
->     parameter.
->   - Verify that info->br_ops is non-null in the fpga_bridge_register()
->     function.
->   - Verify a non-null info pointer in the fpga_region_register() function.
->
-> Changelog v5 -> v6:
->   - Moved FPGA manager/bridge/region optional parameters out of the ops
->     structure and back into the FPGA class driver structure.
->   - Changed fpga_*_register() function parameters to accept an info data
->     structure to provide flexibility in passing optional parameters.
->   - Added fpga_*_register_simple() functions to support current parameters
->     for users that don't require use of optional parameters.
->
-> Changelog v4 -> v5:
->   - Rebased on top of recently accepted patches.
->   - Removed compat_id from the fpga_mgr_register() parameter list
->     and added it to the fpga_manager_ops structure. This also required
->     dynamically allocating the dfl-fme-ops structure in order to add
->     the appropriate compat_id.
->   - Created the fpga_region_ops data structure which is optionally passed
->     to fpga_region_register(). compat_id, the get_bridges() pointer, and
->     the priv pointer are included in the fpga_region_ops structure.
->
-> Changelog v3 -> v4:
->   - Added the compat_id parameter to fpga_mgr_register() and
->     devm_fpga_mgr_register() to ensure that the compat_id is set before
->     the device_register() call.
->   - Added the compat_id parameter to fpga_region_register() to ensure
->     that the compat_id is set before the device_register() call.
->   - Modified the dfl_fpga_feature_devs_enumerate() function to restore
->     the fpga_region_register() call to the correct location.
->
-> Changelog v2 -> v3:
->   - Cleaned up comment headers for fpga_mgr_register(), fpga_bridge_register(),
->     and fpga_region_register().
->   - Fixed error return on ida_simple_get() failure for fpga_mgr_register(),
->     fpga_bridge_register(), and fpga_region_register().
->   - Fixed error return value for fpga_bridge_register(): ERR_PTR(ret) instead
->     of NULL.
->
-> Changelog v1 -> v2:
->   - Restored devm_fpga_mgr_register() functionality to the fpga-mgr
->     class driver, adapted for the combined create/register functionality.
->   - All previous callers of devm_fpga_mgr_register() will continue to call
->     devm_fpga_mgr_register().
->   - replaced unnecessary ternary operators in return statements with
->     standard if conditions.
->
-> Russ Weight (3):
->   fpga: mgr: Use standard dev_release for class driver
->   fpga: bridge: Use standard dev_release for class driver
->   fpga: region: Use standard dev_release for class driver
->
->  Documentation/driver-api/fpga/fpga-bridge.rst |   6 +-
->  Documentation/driver-api/fpga/fpga-mgr.rst    |  38 +++-
->  Documentation/driver-api/fpga/fpga-region.rst |  12 +-
->  drivers/fpga/altera-cvp.c                     |  12 +-
->  drivers/fpga/altera-fpga2sdram.c              |  12 +-
->  drivers/fpga/altera-freeze-bridge.c           |  10 +-
->  drivers/fpga/altera-hps2fpga.c                |  12 +-
->  drivers/fpga/altera-pr-ip-core.c              |   7 +-
->  drivers/fpga/altera-ps-spi.c                  |   9 +-
->  drivers/fpga/dfl-fme-br.c                     |  10 +-
->  drivers/fpga/dfl-fme-mgr.c                    |  22 +-
->  drivers/fpga/dfl-fme-region.c                 |  17 +-
->  drivers/fpga/dfl.c                            |  12 +-
->  drivers/fpga/fpga-bridge.c                    | 122 +++-------
->  drivers/fpga/fpga-mgr.c                       | 215 ++++++++----------
->  drivers/fpga/fpga-region.c                    | 119 ++++------
->  drivers/fpga/ice40-spi.c                      |   9 +-
->  drivers/fpga/machxo2-spi.c                    |   9 +-
->  drivers/fpga/of-fpga-region.c                 |  10 +-
->  drivers/fpga/socfpga-a10.c                    |  16 +-
->  drivers/fpga/socfpga.c                        |   9 +-
->  drivers/fpga/stratix10-soc.c                  |  16 +-
->  drivers/fpga/ts73xx-fpga.c                    |   9 +-
->  drivers/fpga/xilinx-pr-decoupler.c            |  17 +-
->  drivers/fpga/xilinx-spi.c                     |  11 +-
->  drivers/fpga/zynq-fpga.c                      |  16 +-
->  drivers/fpga/zynqmp-fpga.c                    |   9 +-
->  include/linux/fpga/fpga-bridge.h              |  30 ++-
->  include/linux/fpga/fpga-mgr.h                 |  62 +++--
->  include/linux/fpga/fpga-region.h              |  36 ++-
->  30 files changed, 383 insertions(+), 511 deletions(-)
->
+> diff --git a/Documentation/ABI/testing/sysfs-class-fpga-region b/Documentation/ABI/testing/sysfs-class-fpga-region
+> index bc7ec644acc9a..241359fb74a55 100644
+> --- a/Documentation/ABI/testing/sysfs-class-fpga-region
+> +++ b/Documentation/ABI/testing/sysfs-class-fpga-region
+> @@ -5,5 +5,5 @@ Contact:	Wu Hao <hao.wu@intel.com>
+>  Description:	FPGA region id for compatibility check, e.g. compatibility
+>  		of the FPGA reconfiguration hardware and image. This value
+>  		is defined or calculated by the layer that is creating the
+> -		FPGA region. This interface returns the compat_id value or
+> -		just error code -ENOENT in case compat_id is not used.
+> +		FPGA region. This interface returns a uuid value or just
+> +		error code -ENOENT in case compat_id is not used.
+> diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
+> index d5861d13b3069..012b72712684c 100644
+> --- a/drivers/fpga/dfl-fme-mgr.c
+> +++ b/drivers/fpga/dfl-fme-mgr.c
+> @@ -273,16 +273,16 @@ static const struct fpga_manager_ops fme_mgr_ops = {
+>  };
+>  
+>  static void fme_mgr_get_compat_id(void __iomem *fme_pr,
+> -				  struct fpga_compat_id *id)
+> +				  union fpga_compat_id *id)
+>  {
+> -	id->id_l = readq(fme_pr + FME_PR_INTFC_ID_L);
+> -	id->id_h = readq(fme_pr + FME_PR_INTFC_ID_H);
+> +	id->id_l = cpu_to_be64(readq(fme_pr + FME_PR_INTFC_ID_L));
+> +	id->id_h = cpu_to_be64(readq(fme_pr + FME_PR_INTFC_ID_H));
+>  }
+>  
+>  static int fme_mgr_probe(struct platform_device *pdev)
+>  {
+>  	struct dfl_fme_mgr_pdata *pdata = dev_get_platdata(&pdev->dev);
+> -	struct fpga_compat_id *compat_id;
+> +	union fpga_compat_id *compat_id;
+>  	struct device *dev = &pdev->dev;
+>  	struct fme_mgr_priv *priv;
+>  	struct fpga_manager *mgr;
+> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+> index a4838715221ff..f1083b5894635 100644
+> --- a/drivers/fpga/fpga-region.c
+> +++ b/drivers/fpga/fpga-region.c
+> @@ -166,9 +166,7 @@ static ssize_t compat_id_show(struct device *dev,
+>  	if (!region->compat_id)
+>  		return -ENOENT;
+>  
+> -	return sprintf(buf, "%016llx%016llx\n",
+> -		       (unsigned long long)region->compat_id->id_h,
+> -		       (unsigned long long)region->compat_id->id_l);
+> +	return sprintf(buf, "%pU\n", &region->compat_id->uuid);
+>  }
+>  
+>  static DEVICE_ATTR_RO(compat_id);
+> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+> index ec2cd8bfceb00..b12f9994932e1 100644
+> --- a/include/linux/fpga/fpga-mgr.h
+> +++ b/include/linux/fpga/fpga-mgr.h
+> @@ -10,6 +10,7 @@
+>  
+>  #include <linux/mutex.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/uuid.h>
+>  
+>  struct fpga_manager;
+>  struct sg_table;
+> @@ -144,14 +145,19 @@ struct fpga_manager_ops {
+>  #define FPGA_MGR_STATUS_FIFO_OVERFLOW_ERR	BIT(4)
+>  
+>  /**
+> - * struct fpga_compat_id - id for compatibility check
+> - *
+> + * union fpga_compat_id - id for compatibility check
+> + * Can be accessed as either:
+> + * @uuid: the base uuid_t type
+> + * or
+>   * @id_h: high 64bit of the compat_id
+>   * @id_l: low 64bit of the compat_id
+>   */
+> -struct fpga_compat_id {
+> -	u64 id_h;
+> -	u64 id_l;
+> +union fpga_compat_id {
+> +	uuid_t uuid;
+> +	struct {
+> +		u64 id_h;
+> +		u64 id_l;
+> +	};
+>  };
+>  
+>  /**
+> @@ -169,7 +175,7 @@ struct fpga_manager {
+>  	struct device dev;
+>  	struct mutex ref_mutex;
+>  	enum fpga_mgr_states state;
+> -	struct fpga_compat_id *compat_id;
+> +	union fpga_compat_id *compat_id;
+>  	const struct fpga_manager_ops *mops;
+>  	void *priv;
+>  };
+> diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
+> index 27cb706275dba..7cc2ee543efb4 100644
+> --- a/include/linux/fpga/fpga-region.h
+> +++ b/include/linux/fpga/fpga-region.h
+> @@ -24,7 +24,7 @@ struct fpga_region {
+>  	struct list_head bridge_list;
+>  	struct fpga_manager *mgr;
+>  	struct fpga_image_info *info;
+> -	struct fpga_compat_id *compat_id;
+> +	union fpga_compat_id *compat_id;
+>  	void *priv;
+>  	int (*get_bridges)(struct fpga_region *region);
+>  };
 
