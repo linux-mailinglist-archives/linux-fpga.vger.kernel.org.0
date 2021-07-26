@@ -2,695 +2,1084 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E36C63D6A4A
-	for <lists+linux-fpga@lfdr.de>; Tue, 27 Jul 2021 01:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDBC3D6A4E
+	for <lists+linux-fpga@lfdr.de>; Tue, 27 Jul 2021 01:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234020AbhGZWzE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 26 Jul 2021 18:55:04 -0400
-Received: from mga09.intel.com ([134.134.136.24]:52331 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233580AbhGZWzE (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 26 Jul 2021 18:55:04 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10057"; a="212323234"
-X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
-   d="gz'50?scan'50,208,50";a="212323234"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2021 16:35:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
-   d="gz'50?scan'50,208,50";a="437042689"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 26 Jul 2021 16:35:28 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1m8A88-0006CK-0s; Mon, 26 Jul 2021 23:35:28 +0000
-Date:   Tue, 27 Jul 2021 07:35:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     trix@redhat.com, hao.wu@intel.com, mdf@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH] fpga: region: handle compat_id as an uuid
-Message-ID: <202107270712.a50O2Grb-lkp@intel.com>
-References: <20210726202650.4074614-1-trix@redhat.com>
+        id S233580AbhGZW4X (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 26 Jul 2021 18:56:23 -0400
+Received: from mail-dm6nam11on2078.outbound.protection.outlook.com ([40.107.223.78]:46272
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233491AbhGZW4X (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 26 Jul 2021 18:56:23 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P6iTIaaLY277nWOe9tPNSVkqtCEccC4IZX6whqwxRTq8T7PBe6tZ5NAKnrF6W2NCYM3Yyme+DQkgRL1KaDdj+M2LTpdYyaK+VgAcXuDdiCO+8pJV1WCbg+ujUmhhQ0l0HhLPftXBiqZQ+cuknWZdtZcHrG2el2repuAj3StOB1gGwsqI1dk/hRz2xRGXF4qN6MSfRwG60RnGsnDAaAd1VQMwJw4j6IxmP0jqq6rHojETHEP9tPuqzCSfdzlJRmaQE3EbyYle7NMyFjPboTc/v8PoW8lzHO9C6OUVCGGC2aVrGkctQ//tQ9LpatYU7DrDf43zSzj051fdfArz97batg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cvBlonwfWAd+aMhLwJJ6TPixE2XN0EVi5xYFQNqFKIs=;
+ b=KeYJ9Vq/m34lAJFE7Ad+u8fHvM/q1xa2w2zAl9+jnoyzCVy1Z3MZCT0zJxws0X8qF7R20ElCFcd67fDx0EyvnZTfkd1HXZDQ0wA5Cuk5mHB+r2uE9ErGzOwS47J05nWuBd/L4oVwhdyArLC+5ljHvN9iRwupAxV8IfAAVeyLvsehszjPHD+Tf3UlfPUA+NNZJsG2C8N6v2WiquqrKj7Ldah1n4sr2cKfhnknH32aTcUcvkexSnEYukyKvdNJ32b+tK4mXmnE1HM+OKyq5cG+cDgdFbzYJkzPoniV0t7qE+eguK9MbCwi4b/xaUqZ++NAIHpp6xm+gq/PaQn4WTCn+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cvBlonwfWAd+aMhLwJJ6TPixE2XN0EVi5xYFQNqFKIs=;
+ b=ec09thFeAVx2IUpw9HxRM0aslTrBgglz5SEL/HdLg3kcdp2XS5wXao76Va1GYjpOLsaSHO81QLMuQuGDnCq8hV0UMEE8Y2iBSHKuNZC6HLLKqRFQHPiRJec2YcHxi8rw5isFMc3jx8r84zJcmIL+Y5ME2i4y0kcGEEVpr7zly60=
+Received: from DM3PR03CA0005.namprd03.prod.outlook.com (2603:10b6:0:50::15) by
+ BN6PR02MB2324.namprd02.prod.outlook.com (2603:10b6:404:2a::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4352.29; Mon, 26 Jul 2021 23:36:48 +0000
+Received: from DM3NAM02FT022.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:0:50:cafe::b6) by DM3PR03CA0005.outlook.office365.com
+ (2603:10b6:0:50::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.24 via Frontend
+ Transport; Mon, 26 Jul 2021 23:36:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT022.mail.protection.outlook.com (10.13.5.89) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4352.24 via Frontend Transport; Mon, 26 Jul 2021 23:36:48 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 26 Jul 2021 16:36:47 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Mon, 26 Jul 2021 16:36:47 -0700
+Envelope-to: robh@kernel.org,
+ trix@redhat.com,
+ devicetree@vger.kernel.org,
+ linux-fpga@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ mdf@kernel.org
+Received: from [10.17.2.60] (port=46786)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <lizhi.hou@xilinx.com>)
+        id 1m8A9P-00043I-FK; Mon, 26 Jul 2021 16:36:47 -0700
+Subject: Re: [PATCH V8 XRT Alveo 04/14] fpga: xrt: xrt-lib driver manager
+To:     Moritz Fischer <mdf@kernel.org>, Lizhi Hou <lizhi.hou@xilinx.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <maxz@xilinx.com>, <sonal.santan@xilinx.com>, <yliu@xilinx.com>,
+        <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
+        <devicetree@vger.kernel.org>, <trix@redhat.com>, <robh@kernel.org>,
+        Max Zhen <max.zhen@xilinx.com>
+References: <20210719212628.134129-1-lizhi.hou@xilinx.com>
+ <20210719212628.134129-5-lizhi.hou@xilinx.com> <YP42zE2ljx4hHj40@epycbox.lan>
+From:   Lizhi Hou <lizhi.hou@xilinx.com>
+Message-ID: <da5fa0ba-5321-9a9c-e20f-a9c993417f05@xilinx.com>
+Date:   Mon, 26 Jul 2021 16:36:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="vkogqOf2sHV7VnPd"
-Content-Disposition: inline
-In-Reply-To: <20210726202650.4074614-1-trix@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YP42zE2ljx4hHj40@epycbox.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ef80aeb0-ccb0-43e9-97e2-08d9508e3cdd
+X-MS-TrafficTypeDiagnostic: BN6PR02MB2324:
+X-Microsoft-Antispam-PRVS: <BN6PR02MB23249B16605207FA48F4E764A1E89@BN6PR02MB2324.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:210;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4g7unTCenCLPjjjxYLt/lEAchdi08UNuVnXxlSzt6WuboY9QJLydxF/YvzFHuINUaLNX1DF6gARpVgQLy38rNgbja0FbtfROgjCPHApbeHIyjnS6YGhdQOTLnN7tAcgjIkXja1wDWWWcC1Gou6+jSN8HcZRhC9LihBYHoSlimyWV7vvDiafysaW+hjRrFsFm8OPhFFBMvBukk3MnArRV8ygLKp0kSh3zKoYDw8dCzFmFv8tN9WktTEnq0B4mULbmeQEkBLy6zbgFyVj+IwXJFw4/4jPK/ild3CDMsRybWeO6Cf2tjaHqQDsptmGFwKzJn4tjJmPOqqmWg4lzmrHZDc0y2jjmjYFYq0kNQZ/XTT3Fhy+HN3VQ5kqLAnSFB3JrBT9QsUoICpyitU78jFvts1gtK3yNDKknvWluAJX/CWlTZ/1H/ePX/2zcVlCf603FfOO7jcGGqPcomFXBHawBF0FpdFf1cG0GmnIt7AyPgFZdp3AUatUVNE3dIkuLbv4IHjWXmCfd57/MrZNvLQoZIXbi0amuW9I62fli3So1rwA1GfCklejWDoahK3j4o0Ol3e1ad/Tmzv9FQ92vrvDzCxIsW9DjMibAML/Bkxz0PQyCyfbbuIicHbhnPRLzoTJwME7N/L/gUUrXiUlCDQf4mmAzez3BHF0pXjoj91iFhiVCkc3LUsI1YlpW4A8R2WZyhsoQD9bfuT7u49XBUM6Uwh+HcnKbXVJO3hI4m8jaDVJk1UHVD+GBgJeQx7Mo+kYS0dCDsL09vzp64DA+5XUIcw==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(346002)(39860400002)(136003)(396003)(46966006)(36840700001)(7636003)(31686004)(2906002)(47076005)(44832011)(82740400003)(36906005)(36756003)(9786002)(30864003)(8936002)(107886003)(336012)(316002)(26005)(426003)(356005)(31696002)(5660300002)(478600001)(83380400001)(8676002)(186003)(4326008)(54906003)(2616005)(110136005)(70586007)(82310400003)(53546011)(36860700001)(70206006)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2021 23:36:48.5429
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef80aeb0-ccb0-43e9-97e2-08d9508e3cdd
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT022.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2324
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-
---vkogqOf2sHV7VnPd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.14-rc3 next-20210726]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/trix-redhat-com/fpga-region-handle-compat_id-as-an-uuid/20210727-042850
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git ff1176468d368232b684f75e82563369208bc371
-config: x86_64-randconfig-s032-20210726 (attached as .config)
-compiler: gcc-10 (Ubuntu 10.3.0-1ubuntu1~20.04) 10.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.3-341-g8af24329-dirty
-        # https://github.com/0day-ci/linux/commit/fc6e727a3f214d2b60561c3accc1f054982e2281
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review trix-redhat-com/fpga-region-handle-compat_id-as-an-uuid/20210727-042850
-        git checkout fc6e727a3f214d2b60561c3accc1f054982e2281
-        # save the attached .config to linux build tree
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=x86_64 
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Moritz,
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/fpga/dfl-fme-mgr.c:278:18: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] id_l @@     got restricted __be64 [usertype] @@
-   drivers/fpga/dfl-fme-mgr.c:278:18: sparse:     expected unsigned long long [usertype] id_l
-   drivers/fpga/dfl-fme-mgr.c:278:18: sparse:     got restricted __be64 [usertype]
->> drivers/fpga/dfl-fme-mgr.c:279:18: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] id_h @@     got restricted __be64 [usertype] @@
-   drivers/fpga/dfl-fme-mgr.c:279:18: sparse:     expected unsigned long long [usertype] id_h
-   drivers/fpga/dfl-fme-mgr.c:279:18: sparse:     got restricted __be64 [usertype]
+On 07/25/2021 09:15 PM, Moritz Fischer wrote:
+> On Mon, Jul 19, 2021 at 02:26:18PM -0700, Lizhi Hou wrote:
+>> xrt-lib kernel module infrastructure code to register and manage all
+>> leaf driver modules.
+>>
+>> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+>> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+>> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
+>> Reviewed-by: Tom Rix <trix@redhat.com>
+>> ---
+>>   drivers/fpga/xrt/include/subdev_id.h          |  39 +++
+>>   drivers/fpga/xrt/include/xdevice.h            | 131 +++++++
+>>   drivers/fpga/xrt/include/xleaf.h              | 205 +++++++++++
+>>   drivers/fpga/xrt/include/xleaf/clkfreq.h      |  21 ++
+>>   drivers/fpga/xrt/include/xleaf/clock.h        |  29 ++
+>>   .../fpga/xrt/include/xleaf/ddr_calibration.h  |  28 ++
+>>   drivers/fpga/xrt/include/xleaf/devctl.h       |  40 +++
+>>   drivers/fpga/xrt/lib/lib-drv.c                | 322 ++++++++++++++++++
+>>   drivers/fpga/xrt/lib/lib-drv.h                |  21 ++
+>>   9 files changed, 836 insertions(+)
+>>   create mode 100644 drivers/fpga/xrt/include/subdev_id.h
+>>   create mode 100644 drivers/fpga/xrt/include/xdevice.h
+>>   create mode 100644 drivers/fpga/xrt/include/xleaf.h
+>>   create mode 100644 drivers/fpga/xrt/include/xleaf/clkfreq.h
+>>   create mode 100644 drivers/fpga/xrt/include/xleaf/clock.h
+>>   create mode 100644 drivers/fpga/xrt/include/xleaf/ddr_calibration.h
+>>   create mode 100644 drivers/fpga/xrt/include/xleaf/devctl.h
+>>   create mode 100644 drivers/fpga/xrt/lib/lib-drv.c
+>>   create mode 100644 drivers/fpga/xrt/lib/lib-drv.h
+>>
+>> diff --git a/drivers/fpga/xrt/include/subdev_id.h b/drivers/fpga/xrt/include/subdev_id.h
+>> new file mode 100644
+>> index 000000000000..02df4b939a1b
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/include/subdev_id.h
+>> @@ -0,0 +1,39 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *   Cheng Zhen <maxz@xilinx.com>
+>> + */
+>> +
+>> +#ifndef _XRT_SUBDEV_ID_H_
+>> +#define _XRT_SUBDEV_ID_H_
+>> +
+>> +/*
+>> + * Every subdev driver has an ID for others to refer to it. There can be multiple number of
+>> + * instances of a subdev driver. A <subdev_id, subdev_instance> tuple is a unique identification
+>> + * of a specific instance of a subdev driver.
+>> + */
+>> +enum xrt_subdev_id {
+>> +     XRT_SUBDEV_INVALID = 0,
+>> +     XRT_SUBDEV_GRP,
+>> +     XRT_SUBDEV_VSEC,
+>> +     XRT_SUBDEV_VSEC_GOLDEN,
+>> +     XRT_SUBDEV_DEVCTL,
+>> +     XRT_SUBDEV_AXIGATE,
+>> +     XRT_SUBDEV_ICAP,
+>> +     XRT_SUBDEV_TEST,
+>> +     XRT_SUBDEV_MGMT_MAIN,
+>> +     XRT_SUBDEV_QSPI,
+>> +     XRT_SUBDEV_MAILBOX,
+>> +     XRT_SUBDEV_CMC,
+>> +     XRT_SUBDEV_CALIB,
+>> +     XRT_SUBDEV_CLKFREQ,
+>> +     XRT_SUBDEV_CLOCK,
+>> +     XRT_SUBDEV_SRSR,
+>> +     XRT_SUBDEV_UCS,
+>> +     XRT_SUBDEV_NUM, /* Total number of subdevs. */
+>> +     XRT_ROOT = -1, /* Special ID for root driver. */
+>> +};
+>> +
+>> +#endif       /* _XRT_SUBDEV_ID_H_ */
+>> diff --git a/drivers/fpga/xrt/include/xdevice.h b/drivers/fpga/xrt/include/xdevice.h
+>> new file mode 100644
+>> index 000000000000..3afd96989fc5
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/include/xdevice.h
+>> @@ -0,0 +1,131 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *    Lizhi Hou <lizhi.hou@xilinx.com>
+>> + */
+>> +
+>> +#ifndef _XRT_DEVICE_H_
+>> +#define _XRT_DEVICE_H_
+>> +
+>> +#include <linux/fs.h>
+>> +#include <linux/cdev.h>
+>> +
+>> +#define XRT_MAX_DEVICE_NODES         128
+>> +#define XRT_INVALID_DEVICE_INST              (XRT_MAX_DEVICE_NODES + 1)
+>> +
+>> +enum {
+>> +     XRT_DEVICE_STATE_NONE = 0,
+>> +     XRT_DEVICE_STATE_ADDED
+>> +};
+>> +
+>> +/*
+>> + * struct xrt_device - represent an xrt device on xrt bus
+>> + *
+>> + * dev: generic device interface.
+>> + * id: id of the xrt device.
+> Shouldn't this document the rest of the members?
+Sure. I will add comments as below.
 
-vim +278 drivers/fpga/dfl-fme-mgr.c
+  * dev: generic device interface.
+  * subdev_id: id of the xrt device. See enum xrt_subdev_id.
+  * name: name of the xrt device.
+  * instance: instance of the xrt device. The xrt device with same id 
+can have
+  *           more than 1 instances.
+  * state: current state of the xrt device.
+  * num_resources: The total number of resource for the xrt device.
+  * resource: point to the xrt device resource array.
+  * sdev_data: private data pointer.
 
-   274	
-   275	static void fme_mgr_get_compat_id(void __iomem *fme_pr,
-   276					  union fpga_compat_id *id)
-   277	{
- > 278		id->id_l = cpu_to_be64(readq(fme_pr + FME_PR_INTFC_ID_L));
- > 279		id->id_h = cpu_to_be64(readq(fme_pr + FME_PR_INTFC_ID_H));
-   280	}
-   281	
+>
+>> + */
+>> +struct xrt_device {
+>> +     struct device dev;
+>> +     u32 subdev_id;
+>> +     const char *name;
+>> +     u32 instance;
+>> +     u32 state;
+>> +     u32 num_resources;
+>> +     struct resource *resource;
+>> +     void *sdev_data;
+>> +};
+>> +
+>> +/*
+>> + * If populated by xrt device driver, infra will handle the mechanics of
+>> + * char device (un)registration.
+>> + */
+>> +enum xrt_dev_file_mode {
+>> +     /* Infra create cdev, default file name */
+>> +     XRT_DEV_FILE_DEFAULT = 0,
+>> +     /* Infra create cdev, need to encode inst num in file name */
+>> +     XRT_DEV_FILE_MULTI_INST,
+>> +     /* No auto creation of cdev by infra, leaf handles it by itself */
+>> +     XRT_DEV_FILE_NO_AUTO,
+>> +};
+>> +
+>> +struct xrt_dev_file_ops {
+>> +     const struct file_operations xsf_ops;
+>> +     dev_t xsf_dev_t;
+>> +     const char *xsf_dev_name;
+>> +     enum xrt_dev_file_mode xsf_mode;
+>> +};
+>> +
+>> +/*
+>> + * this struct define the endpoints belong to the same xrt device
+>> + */
+> ep_name: ... etc?
+I will add comment as below.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+  * ep_name: endpoint name
+  * compat: compatible string
 
---vkogqOf2sHV7VnPd
-Content-Type: application/gzip
-Content-Disposition: attachment; filename=".config.gz"
-Content-Transfer-Encoding: base64
+>> +struct xrt_dev_ep_names {
+>> +     const char *ep_name;
+>> +     const char *compat;
+>> +};
+>> +
+>> +struct xrt_dev_endpoints {
+>> +     struct xrt_dev_ep_names *xse_names;
+>> +     /* minimum number of endpoints to support the subdevice */
+>> +     u32 xse_min_ep;
+>> +};
+>> +
+>> +/*
+>> + * struct xrt_driver - represent a xrt device driver
+>> + *
+>> + * drv: driver model structure.
+> drv vs driver?
+will fix this.
+>> + * id_table: pointer to table of device IDs the driver is interested in.
+>> + *           { } member terminated.
+> ?
+> file_ops?
+I will remove 'id_table' and  add comment as below:
 
-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
+  * driver: driver model structure.
+  * subdev_id: id of the xrt device. See enum xrt_subdev_id.
+  * file_ops: character device name and callbacks.
+  * probe: mandatory callback for device binding.
+  * remove: callback for device unbinding.
+  * leaf_call: callback for servicing other leaf drivers.
 
---vkogqOf2sHV7VnPd--
+>> + * probe: mandatory callback for device binding.
+>> + * remove: callback for device unbinding.
+>> + */
+>> +struct xrt_driver {
+>> +     struct device_driver driver;
+>> +     u32 subdev_id;
+>> +     struct xrt_dev_file_ops file_ops;
+>> +     struct xrt_dev_endpoints *endpoints;
+>> +
+>> +     /*
+>> +      * Subdev driver callbacks populated by subdev driver.
+>> +      */
+>> +     int (*probe)(struct xrt_device *xrt_dev);
+>> +     void (*remove)(struct xrt_device *xrt_dev);
+>> +     /*
+>> +      * If leaf_call is defined, these are called by other leaf drivers.
+>> +      * Note that root driver may call into leaf_call of a group driver.
+>> +      */
+>> +     int (*leaf_call)(struct xrt_device *xrt_dev, u32 cmd, void *arg);
+>> +};
+>> +
+>> +#define to_xrt_dev(d) container_of(d, struct xrt_device, dev)
+>> +#define to_xrt_drv(d) container_of(d, struct xrt_driver, driver)
+>> +
+>> +static inline void *xrt_get_drvdata(const struct xrt_device *xdev)
+>> +{
+>> +     return dev_get_drvdata(&xdev->dev);
+>> +}
+>> +
+>> +static inline void xrt_set_drvdata(struct xrt_device *xdev, void *data)
+>> +{
+>> +     dev_set_drvdata(&xdev->dev, data);
+>> +}
+>> +
+>> +static inline void *xrt_get_xdev_data(struct device *dev)
+>> +{
+>> +     struct xrt_device *xdev = to_xrt_dev(dev);
+>> +
+>> +     return xdev->sdev_data;
+>> +}
+>> +
+>> +struct xrt_device *
+>> +xrt_device_register(struct device *parent, u32 id,
+>> +                 struct resource *res, u32 res_num,
+>> +                 void *pdata, size_t data_sz);
+>> +void xrt_device_unregister(struct xrt_device *xdev);
+>> +int xrt_register_driver(struct xrt_driver *drv);
+>> +void xrt_unregister_driver(struct xrt_driver *drv);
+>> +void *xrt_get_xdev_data(struct device *dev);
+>> +struct resource *xrt_get_resource(struct xrt_device *xdev, u32 type, u32 num);
+>> +
+>> +#endif /* _XRT_DEVICE_H_ */
+>> diff --git a/drivers/fpga/xrt/include/xleaf.h b/drivers/fpga/xrt/include/xleaf.h
+>> new file mode 100644
+>> index 000000000000..f065fc766e0f
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/include/xleaf.h
+>> @@ -0,0 +1,205 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *    Cheng Zhen <maxz@xilinx.com>
+>> + *    Sonal Santan <sonal.santan@xilinx.com>
+>> + */
+>> +
+>> +#ifndef _XRT_XLEAF_H_
+>> +#define _XRT_XLEAF_H_
+>> +
+>> +#include <linux/mod_devicetable.h>
+>> +#include "xdevice.h"
+>> +#include "subdev_id.h"
+>> +#include "xroot.h"
+>> +#include "events.h"
+>> +
+>> +/* All subdev drivers should use below common routines to print out msg. */
+>> +#define DEV(xdev)    (&(xdev)->dev)
+>> +#define DEV_PDATA(xdev)                                      \
+>> +     ((struct xrt_subdev_platdata *)xrt_get_xdev_data(DEV(xdev)))
+>> +#define DEV_FILE_OPS(xdev)                           \
+>> +     (&(to_xrt_drv((xdev)->dev.driver))->file_ops)
+>> +#define FMT_PRT(prt_fn, xdev, fmt, args...)          \
+>> +     ({typeof(xdev) (_xdev) = (xdev);                \
+>> +     prt_fn(DEV(_xdev), "%s %s: " fmt,               \
+>> +     DEV_PDATA(_xdev)->xsp_root_name, __func__, ##args); })
+>> +#define xrt_err(xdev, fmt, args...) FMT_PRT(dev_err, xdev, fmt, ##args)
+>> +#define xrt_warn(xdev, fmt, args...) FMT_PRT(dev_warn, xdev, fmt, ##args)
+>> +#define xrt_info(xdev, fmt, args...) FMT_PRT(dev_info, xdev, fmt, ##args)
+>> +#define xrt_dbg(xdev, fmt, args...) FMT_PRT(dev_dbg, xdev, fmt, ##args)
+>> +
+>> +#define XRT_DEFINE_REGMAP_CONFIG(config_name)                                \
+>> +     static const struct regmap_config config_name = {               \
+>> +             .reg_bits = 32,                                         \
+>> +             .val_bits = 32,                                         \
+>> +             .reg_stride = 4,                                        \
+>> +             .max_register = 0x1000,                                 \
+>> +     }
+>> +
+>> +enum {
+>> +     /* Starting cmd for common leaf cmd implemented by all leaves. */
+>> +     XRT_XLEAF_COMMON_BASE = 0,
+>> +     /* Starting cmd for leaves' specific leaf cmds. */
+>> +     XRT_XLEAF_CUSTOM_BASE = 64,
+>> +};
+>> +
+>> +enum xrt_xleaf_common_leaf_cmd {
+>> +     XRT_XLEAF_EVENT = XRT_XLEAF_COMMON_BASE,
+>> +};
+>> +
+>> +/*
+>> + * Partially initialized by the parent driver, then, passed in as subdev driver's
+>> + * platform data when creating subdev driver instance by calling platform
+>> + * device register API (xrt_device_register_data() or the likes).
+>> + *
+>> + * Once device register API returns, platform driver framework makes a copy of
+>> + * this buffer and maintains its life cycle. The content of the buffer is
+>> + * completely owned by subdev driver.
+>> + *
+>> + * Thus, parent driver should be very careful when it touches this buffer
+>> + * again once it's handed over to subdev driver. And the data structure
+>> + * should not contain pointers pointing to buffers that is managed by
+>> + * other or parent drivers since it could have been freed before platform
+>> + * data buffer is freed by platform driver framework.
+>> + */
+>> +struct xrt_subdev_platdata {
+>> +     /*
+>> +      * Per driver instance callback. The xdev points to the instance.
+>> +      * Should always be defined for subdev driver to get service from root.
+>> +      */
+>> +     xrt_subdev_root_cb_t xsp_root_cb;
+>> +     void *xsp_root_cb_arg;
+>> +
+>> +     /* Something to associate w/ root for msg printing. */
+>> +     const char *xsp_root_name;
+>> +
+>> +     /*
+>> +      * Char dev support for this subdev instance.
+>> +      * Initialized by subdev driver.
+>> +      */
+>> +     struct cdev xsp_cdev;
+>> +     struct device *xsp_sysdev;
+>> +     struct mutex xsp_devnode_lock; /* devnode lock */
+>> +     struct completion xsp_devnode_comp;
+>> +     int xsp_devnode_ref;
+>> +     bool xsp_devnode_online;
+>> +     bool xsp_devnode_excl;
+>> +
+>> +     /*
+>> +      * Subdev driver specific init data. The buffer should be embedded
+>> +      * in this data structure buffer after dtb, so that it can be freed
+>> +      * together with platform data.
+>> +      */
+>> +     loff_t xsp_priv_off; /* Offset into this platform data buffer. */
+>> +     size_t xsp_priv_len;
+>> +
+>> +     /*
+>> +      * Populated by parent driver to describe the device tree for
+>> +      * the subdev driver to handle. Should always be last one since it's
+>> +      * of variable length.
+>> +      */
+>> +     bool xsp_dtb_valid;
+>> +     char xsp_dtb[0];
+>> +};
+>> +
+>> +struct subdev_match_arg {
+>> +     enum xrt_subdev_id id;
+>> +     int instance;
+>> +};
+>> +
+>> +bool xleaf_has_endpoint(struct xrt_device *xdev, const char *endpoint_name);
+>> +struct xrt_device *xleaf_get_leaf(struct xrt_device *xdev,
+>> +                               xrt_subdev_match_t cb, void *arg);
+>> +
+>> +static inline bool subdev_match(enum xrt_subdev_id id, struct xrt_device *xdev, void *arg)
+>> +{
+>> +     const struct subdev_match_arg *a = (struct subdev_match_arg *)arg;
+>> +     int instance = a->instance;
+>> +
+>> +     if (id != a->id)
+>> +             return false;
+>> +     if (instance != xdev->instance && instance != XRT_INVALID_DEVICE_INST)
+>> +             return false;
+>> +     return true;
+>> +}
+>> +
+>> +static inline bool xrt_subdev_match_epname(enum xrt_subdev_id id,
+>> +                                        struct xrt_device *xdev, void *arg)
+>> +{
+>> +     return xleaf_has_endpoint(xdev, arg);
+>> +}
+>> +
+>> +static inline struct xrt_device *
+>> +xleaf_get_leaf_by_id(struct xrt_device *xdev,
+>> +                  enum xrt_subdev_id id, int instance)
+>> +{
+>> +     struct subdev_match_arg arg = { id, instance };
+>> +
+>> +     return xleaf_get_leaf(xdev, subdev_match, &arg);
+>> +}
+>> +
+>> +static inline struct xrt_device *
+>> +xleaf_get_leaf_by_epname(struct xrt_device *xdev, const char *name)
+>> +{
+>> +     return xleaf_get_leaf(xdev, xrt_subdev_match_epname, (void *)name);
+>> +}
+>> +
+>> +static inline int xleaf_call(struct xrt_device *tgt, u32 cmd, void *arg)
+>> +{
+>> +     return (to_xrt_drv(tgt->dev.driver)->leaf_call)(tgt, cmd, arg);
+>> +}
+>> +
+>> +int xleaf_broadcast_event(struct xrt_device *xdev, enum xrt_events evt, bool async);
+>> +int xleaf_create_group(struct xrt_device *xdev, char *dtb);
+>> +int xleaf_destroy_group(struct xrt_device *xdev, int instance);
+>> +void xleaf_get_root_res(struct xrt_device *xdev, u32 region_id, struct resource **res);
+>> +void xleaf_get_root_id(struct xrt_device *xdev, unsigned short *vendor, unsigned short *device,
+>> +                    unsigned short *subvendor, unsigned short *subdevice);
+>> +void xleaf_hot_reset(struct xrt_device *xdev);
+>> +int xleaf_put_leaf(struct xrt_device *xdev, struct xrt_device *leaf);
+>> +struct device *xleaf_register_hwmon(struct xrt_device *xdev, const char *name, void *drvdata,
+>> +                                 const struct attribute_group **grps);
+>> +void xleaf_unregister_hwmon(struct xrt_device *xdev, struct device *hwmon);
+>> +int xleaf_wait_for_group_bringup(struct xrt_device *xdev);
+>> +
+>> +/*
+>> + * Character device helper APIs for use by leaf drivers
+>> + */
+>> +static inline bool xleaf_devnode_enabled(struct xrt_device *xdev)
+>> +{
+>> +     return DEV_FILE_OPS(xdev)->xsf_ops.open;
+>> +}
+>> +
+>> +int xleaf_devnode_create(struct xrt_device *xdev,
+>> +                      const char *file_name, const char *inst_name);
+>> +void xleaf_devnode_destroy(struct xrt_device *xdev);
+>> +
+>> +struct xrt_device *xleaf_devnode_open_excl(struct inode *inode);
+>> +struct xrt_device *xleaf_devnode_open(struct inode *inode);
+>> +void xleaf_devnode_close(struct inode *inode);
+>> +
+>> +/* Module's init/fini routines for leaf driver in xrt-lib module */
+>> +#define XRT_LEAF_INIT_FINI_FUNC(name)                                        \
+>> +void name##_leaf_init_fini(bool init)                                        \
+>> +{                                                                    \
+>> +     if (init)                                                       \
+>> +             xrt_register_driver(&xrt_##name##_driver);              \
+>> +     else                                                            \
+>> +             xrt_unregister_driver(&xrt_##name##_driver);            \
+>> +}
+>> +
+>> +/* Module's init/fini routines for leaf driver in xrt-lib module */
+>> +void group_leaf_init_fini(bool init);
+>> +void vsec_leaf_init_fini(bool init);
+>> +void devctl_leaf_init_fini(bool init);
+>> +void axigate_leaf_init_fini(bool init);
+>> +void icap_leaf_init_fini(bool init);
+>> +void calib_leaf_init_fini(bool init);
+>> +void clkfreq_leaf_init_fini(bool init);
+>> +void clock_leaf_init_fini(bool init);
+>> +void ucs_leaf_init_fini(bool init);
+>> +
+>> +#endif       /* _XRT_LEAF_H_ */
+>> diff --git a/drivers/fpga/xrt/include/xleaf/clkfreq.h b/drivers/fpga/xrt/include/xleaf/clkfreq.h
+>> new file mode 100644
+>> index 000000000000..005441d5df78
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/include/xleaf/clkfreq.h
+>> @@ -0,0 +1,21 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *   Lizhi Hou <Lizhi.Hou@xilinx.com>
+>> + */
+>> +
+>> +#ifndef _XRT_CLKFREQ_H_
+>> +#define _XRT_CLKFREQ_H_
+>> +
+>> +#include "xleaf.h"
+>> +
+>> +/*
+>> + * CLKFREQ driver leaf calls.
+>> + */
+>> +enum xrt_clkfreq_leaf_cmd {
+>> +     XRT_CLKFREQ_READ = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+>> +};
+>> +
+>> +#endif       /* _XRT_CLKFREQ_H_ */
+>> diff --git a/drivers/fpga/xrt/include/xleaf/clock.h b/drivers/fpga/xrt/include/xleaf/clock.h
+>> new file mode 100644
+>> index 000000000000..1379e24fa5d0
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/include/xleaf/clock.h
+>> @@ -0,0 +1,29 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *   Lizhi Hou <Lizhi.Hou@xilinx.com>
+>> + */
+>> +
+>> +#ifndef _XRT_CLOCK_H_
+>> +#define _XRT_CLOCK_H_
+>> +
+>> +#include "xleaf.h"
+>> +#include <linux/fpga_xrt.h>
+>> +
+>> +/*
+>> + * CLOCK driver leaf calls.
+>> + */
+>> +enum xrt_clock_leaf_cmd {
+>> +     XRT_CLOCK_SET = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+>> +     XRT_CLOCK_GET,
+>> +     XRT_CLOCK_VERIFY,
+>> +};
+>> +
+>> +struct xrt_clock_get {
+>> +     u16 freq;
+>> +     u32 freq_cnter;
+>> +};
+>> +
+>> +#endif       /* _XRT_CLOCK_H_ */
+>> diff --git a/drivers/fpga/xrt/include/xleaf/ddr_calibration.h b/drivers/fpga/xrt/include/xleaf/ddr_calibration.h
+>> new file mode 100644
+>> index 000000000000..c44ae30f939a
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/include/xleaf/ddr_calibration.h
+>> @@ -0,0 +1,28 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *   Cheng Zhen <maxz@xilinx.com>
+>> + */
+>> +
+>> +#ifndef _XRT_DDR_CALIBRATION_H_
+>> +#define _XRT_DDR_CALIBRATION_H_
+>> +
+>> +#include "xleaf.h"
+>> +#include <linux/fpga-xrt.h>
+>> +
+>> +/*
+>> + * Memory calibration driver leaf calls.
+>> + */
+>> +enum xrt_calib_results {
+>> +     XRT_CALIB_UNKNOWN = 0,
+>> +     XRT_CALIB_SUCCEEDED,
+>> +     XRT_CALIB_FAILED,
+>> +};
+>> +
+>> +enum xrt_calib_leaf_cmd {
+>> +     XRT_CALIB_RESULT = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+>> +};
+>> +
+>> +#endif       /* _XRT_DDR_CALIBRATION_H_ */
+>> diff --git a/drivers/fpga/xrt/include/xleaf/devctl.h b/drivers/fpga/xrt/include/xleaf/devctl.h
+>> new file mode 100644
+>> index 000000000000..b97f3b6d9326
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/include/xleaf/devctl.h
+>> @@ -0,0 +1,40 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *   Lizhi Hou <Lizhi.Hou@xilinx.com>
+>> + */
+>> +
+>> +#ifndef _XRT_DEVCTL_H_
+>> +#define _XRT_DEVCTL_H_
+>> +
+>> +#include "xleaf.h"
+>> +
+>> +/*
+>> + * DEVCTL driver leaf calls.
+>> + */
+>> +enum xrt_devctl_leaf_cmd {
+>> +     XRT_DEVCTL_READ = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
+>> +};
+>> +
+>> +enum xrt_devctl_id {
+>> +     XRT_DEVCTL_ROM_UUID = 0,
+>> +     XRT_DEVCTL_DDR_CALIB,
+>> +     XRT_DEVCTL_GOLDEN_VER,
+>> +     XRT_DEVCTL_MAX
+>> +};
+>> +
+>> +struct xrt_devctl_rw {
+>> +     u32     xdr_id;
+>> +     void    *xdr_buf;
+>> +     u32     xdr_len;
+>> +     u32     xdr_offset;
+>> +};
+>> +
+>> +struct xrt_devctl_intf_uuid {
+>> +     u32     uuid_num;
+>> +     uuid_t  *uuids;
+>> +};
+>> +
+>> +#endif       /* _XRT_DEVCTL_H_ */
+>> diff --git a/drivers/fpga/xrt/lib/lib-drv.c b/drivers/fpga/xrt/lib/lib-drv.c
+>> new file mode 100644
+>> index 000000000000..2c2f9fe3e07e
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/lib/lib-drv.c
+>> @@ -0,0 +1,322 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *   Cheng Zhen <maxz@xilinx.com>
+>> + *   Lizhi Hou <lizhi.hou@xilinx.com>
+>> + */
+>> +
+>> +#include <linux/module.h>
+>> +#include <linux/vmalloc.h>
+>> +#include <linux/slab.h>
+>> +#include "xleaf.h"
+>> +#include "xroot.h"
+>> +#include "lib-drv.h"
+>> +
+>> +#define XRT_IPLIB_MODULE_NAME                "xrt-lib"
+>> +#define XRT_IPLIB_MODULE_VERSION     "4.0.0"
+> No driver versions ...
+I will remove the version.
+>> +#define XRT_DRVNAME(drv)             ((drv)->driver.name)
+>> +
+>> +#define XRT_SUBDEV_ID_SHIFT          16
+>> +#define XRT_SUBDEV_ID_MASK           ((1 << XRT_SUBDEV_ID_SHIFT) - 1)
+>> +
+>> +struct xrt_find_drv_data {
+>> +     enum xrt_subdev_id id;
+>> +     struct xrt_driver *xdrv;
+>> +};
+>> +
+>> +struct class *xrt_class;
+>> +static DEFINE_IDA(xrt_device_ida);
+>> +
+>> +static inline u32 xrt_instance_to_id(enum xrt_subdev_id id, u32 instance)
+>> +{
+>> +     return (id << XRT_SUBDEV_ID_SHIFT) | instance;
+>> +}
+>> +
+>> +static inline u32 xrt_id_to_instance(u32 id)
+>> +{
+>> +     return (id & XRT_SUBDEV_ID_MASK);
+> Don't need braces?
+I will remove the braces.
+>> +}
+>> +
+>> +static int xrt_bus_match(struct device *dev, struct device_driver *drv)
+>> +{
+>> +     struct xrt_device *xdev = to_xrt_dev(dev);
+>> +     struct xrt_driver *xdrv = to_xrt_drv(drv);
+>> +
+>> +     if (xdev->subdev_id == xdrv->subdev_id)
+>> +             return 1;
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static int xrt_bus_probe(struct device *dev)
+>> +{
+>> +     struct xrt_driver *xdrv = to_xrt_drv(dev->driver);
+>> +     struct xrt_device *xdev = to_xrt_dev(dev);
+>> +
+>> +     return xdrv->probe(xdev);
+>> +}
+>> +
+>> +static int xrt_bus_remove(struct device *dev)
+>> +{
+>> +     struct xrt_driver *xdrv = to_xrt_drv(dev->driver);
+>> +     struct xrt_device *xdev = to_xrt_dev(dev);
+>> +
+>> +     if (xdrv->remove)
+>> +             xdrv->remove(xdev);
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +struct bus_type xrt_bus_type = {
+>> +     .name           = "xrt",
+>> +     .match          = xrt_bus_match,
+>> +     .probe          = xrt_bus_probe,
+>> +     .remove         = xrt_bus_remove,
+>> +};
+>> +
+>> +int xrt_register_driver(struct xrt_driver *drv)
+>> +{
+>> +     const char *drvname = XRT_DRVNAME(drv);
+>> +     int rc = 0;
+>> +
+>> +     /* Initialize dev_t for char dev node. */
+>> +     if (drv->file_ops.xsf_ops.open) {
+>> +             rc = alloc_chrdev_region(&drv->file_ops.xsf_dev_t, 0,
+>> +                                      XRT_MAX_DEVICE_NODES, drvname);
+>> +             if (rc) {
+>> +                     pr_err("failed to alloc dev minor for %s: %d\n", drvname, rc);
+>> +                     return rc;
+>> +             }
+>> +     } else {
+>> +             drv->file_ops.xsf_dev_t = (dev_t)-1;
+>> +     }
+>> +
+>> +     drv->driver.owner = THIS_MODULE;
+>> +     drv->driver.bus = &xrt_bus_type;
+>> +
+>> +     rc = driver_register(&drv->driver);
+>> +     if (rc) {
+>> +             pr_err("register %s xrt driver failed\n", drvname);
+>> +             if (drv->file_ops.xsf_dev_t != (dev_t)-1) {
+>> +                     unregister_chrdev_region(drv->file_ops.xsf_dev_t,
+>> +                                              XRT_MAX_DEVICE_NODES);
+>> +             }
+>> +             return rc;
+>> +     }
+>> +
+>> +     pr_info("%s registered successfully\n", drvname);
+>> +
+>> +     return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(xrt_register_driver);
+>> +
+>> +void xrt_unregister_driver(struct xrt_driver *drv)
+>> +{
+>> +     driver_unregister(&drv->driver);
+>> +
+>> +     if (drv->file_ops.xsf_dev_t != (dev_t)-1)
+>> +             unregister_chrdev_region(drv->file_ops.xsf_dev_t, XRT_MAX_DEVICE_NODES);
+>> +
+>> +     pr_info("%s unregistered successfully\n", XRT_DRVNAME(drv));
+> Drop this.
+Sure.
+>> +}
+>> +EXPORT_SYMBOL_GPL(xrt_unregister_driver);
+>> +
+>> +static int __find_driver(struct device_driver *drv, void *_data)
+>> +{
+>> +     struct xrt_driver *xdrv = to_xrt_drv(drv);
+>> +     struct xrt_find_drv_data *data = _data;
+>> +
+>> +     if (xdrv->subdev_id == data->id) {
+>> +             data->xdrv = xdrv;
+>> +             return 1;
+>> +     }
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +const char *xrt_drv_name(enum xrt_subdev_id id)
+>> +{
+>> +     struct xrt_find_drv_data data = { 0 };
+>> +
+>> +     data.id = id;
+>> +     bus_for_each_drv(&xrt_bus_type, NULL, &data, __find_driver);
+>> +
+>> +     if (data.xdrv)
+>> +             return XRT_DRVNAME(data.xdrv);
+>> +
+>> +     return NULL;
+>> +}
+>> +
+>> +static int xrt_drv_get_instance(enum xrt_subdev_id id)
+>> +{
+>> +     int ret;
+>> +
+>> +     ret = ida_alloc_range(&xrt_device_ida, xrt_instance_to_id(id, 0),
+>> +                           xrt_instance_to_id(id, XRT_MAX_DEVICE_NODES),
+>> +                           GFP_KERNEL);
+>> +     if (ret < 0)
+>> +             return ret;
+>> +
+>> +     return xrt_id_to_instance((u32)ret);
+>> +}
+>> +
+>> +static void xrt_drv_put_instance(enum xrt_subdev_id id, int instance)
+>> +{
+>> +     ida_free(&xrt_device_ida, xrt_instance_to_id(id, instance));
+>> +}
+>> +
+>> +struct xrt_dev_endpoints *xrt_drv_get_endpoints(enum xrt_subdev_id id)
+>> +{
+>> +     struct xrt_find_drv_data data = { 0 };
+>> +
+>> +     data.id = id;
+>> +     bus_for_each_drv(&xrt_bus_type, NULL, &data, __find_driver);
+>> +
+>> +     if (data.xdrv)
+>> +             return data.xdrv->endpoints;
+>> +
+>> +     return NULL;
+>> +}
+>> +
+>> +static void xrt_device_release(struct device *dev)
+>> +{
+>> +     struct xrt_device *xdev = container_of(dev, struct xrt_device, dev);
+>> +
+>> +     kfree(xdev);
+>> +}
+>> +
+>> +void xrt_device_unregister(struct xrt_device *xdev)
+>> +{
+>> +     if (xdev->state == XRT_DEVICE_STATE_ADDED)
+>> +             device_del(&xdev->dev);
+>> +
+>> +     vfree(xdev->sdev_data);
+>> +     kfree(xdev->resource);
+>> +
+>> +     if (xdev->instance != XRT_INVALID_DEVICE_INST)
+>> +             xrt_drv_put_instance(xdev->subdev_id, xdev->instance);
+>> +
+>> +     if (xdev->dev.release == xrt_device_release)
+>> +             put_device(&xdev->dev);
+>> +}
+>> +
+>> +struct xrt_device *
+>> +xrt_device_register(struct device *parent, u32 id,
+>> +                 struct resource *res, u32 res_num,
+>> +                 void *pdata, size_t data_sz)
+>> +{
+>> +     struct xrt_device *xdev = NULL;
+>> +     int ret;
+>> +
+>> +     xdev = kzalloc(sizeof(*xdev), GFP_KERNEL);
+>> +     if (!xdev)
+>> +             return NULL;
+> Nit: return xdev
+Sure.
+>> +     xdev->instance = XRT_INVALID_DEVICE_INST;
+>> +
+>> +     /* Obtain dev instance number. */
+>> +     ret = xrt_drv_get_instance(id);
+>> +     if (ret < 0) {
+>> +             dev_err(parent, "failed get instance, ret %d", ret);
+>> +             goto fail;
+>> +     }
+>> +
+>> +     xdev->instance = ret;
+>> +     xdev->name = xrt_drv_name(id);
+>> +     xdev->subdev_id = id;
+>> +     device_initialize(&xdev->dev);
+>> +     xdev->dev.release = xrt_device_release;
+>> +     xdev->dev.parent = parent;
+>> +
+>> +     xdev->dev.bus = &xrt_bus_type;
+>> +     dev_set_name(&xdev->dev, "%s.%d", xdev->name, xdev->instance);
+>> +
+>> +     xdev->num_resources = res_num;
+>> +     xdev->resource = kmemdup(res, sizeof(*res) * res_num, GFP_KERNEL);
+>> +     if (!xdev->resource)
+>> +             goto fail;
+>> +
+>> +     xdev->sdev_data = vzalloc(data_sz);
+>> +     if (!xdev->sdev_data)
+>> +             goto fail;
+> Do you need another label here? I don't see this getting cleaned up if
+> device_add() fails below ...?
+sdev_data will be cleaned up in xrt_device_unregister().
+
+Thanks,
+Lizhi
+>> +
+>> +     memcpy(xdev->sdev_data, pdata, data_sz);
+>> +
+>> +     ret = device_add(&xdev->dev);
+>> +     if (ret) {
+>> +             dev_err(parent, "failed add device, ret %d", ret);
+>> +             goto fail;
+>> +     }
+>> +     xdev->state = XRT_DEVICE_STATE_ADDED;
+>> +
+>> +     return xdev;
+>> +
+>> +fail:
+>> +     xrt_device_unregister(xdev);
+>> +     kfree(xdev);
+>> +
+>> +     return NULL;
+>> +}
+>> +
+>> +struct resource *xrt_get_resource(struct xrt_device *xdev, u32 type, u32 num)
+>> +{
+>> +     u32 i;
+>> +
+>> +     for (i = 0; i < xdev->num_resources; i++) {
+>> +             struct resource *r = &xdev->resource[i];
+>> +
+>> +             if (type == resource_type(r) && num-- == 0)
+>> +                     return r;
+>> +     }
+>> +     return NULL;
+>> +}
+>> +
+>> +/*
+>> + * Leaf driver's module init/fini callbacks. This is not a open infrastructure for dynamic
+>> + * plugging in drivers. All drivers should be statically added.
+>> + */
+>> +static void (*leaf_init_fini_cbs[])(bool) = {
+>> +     group_leaf_init_fini,
+>> +     axigate_leaf_init_fini,
+>> +     icap_leaf_init_fini,
+>> +};
+>> +
+>> +static __init int xrt_lib_init(void)
+>> +{
+>> +     int ret;
+>> +     int i;
+>> +
+>> +     ret = bus_register(&xrt_bus_type);
+>> +     if (ret)
+>> +             return ret;
+>> +
+>> +     xrt_class = class_create(THIS_MODULE, XRT_IPLIB_MODULE_NAME);
+>> +     if (IS_ERR(xrt_class)) {
+>> +             bus_unregister(&xrt_bus_type);
+>> +             return PTR_ERR(xrt_class);
+>> +     }
+>> +
+>> +     for (i = 0; i < ARRAY_SIZE(leaf_init_fini_cbs); i++)
+>> +             leaf_init_fini_cbs[i](true);
+>> +     return 0;
+>> +}
+>> +
+>> +static __exit void xrt_lib_fini(void)
+>> +{
+>> +     int i;
+>> +
+>> +     for (i = 0; i < ARRAY_SIZE(leaf_init_fini_cbs); i++)
+>> +             leaf_init_fini_cbs[i](false);
+>> +
+>> +     class_destroy(xrt_class);
+>> +     bus_unregister(&xrt_bus_type);
+>> +}
+>> +
+>> +module_init(xrt_lib_init);
+>> +module_exit(xrt_lib_fini);
+>> +
+>> +MODULE_VERSION(XRT_IPLIB_MODULE_VERSION);
+>> +MODULE_AUTHOR("XRT Team <runtime@xilinx.com>");
+>> +MODULE_DESCRIPTION("Xilinx Alveo IP Lib driver");
+>> +MODULE_LICENSE("GPL v2");
+>> diff --git a/drivers/fpga/xrt/lib/lib-drv.h b/drivers/fpga/xrt/lib/lib-drv.h
+>> new file mode 100644
+>> index 000000000000..0276c28e009f
+>> --- /dev/null
+>> +++ b/drivers/fpga/xrt/lib/lib-drv.h
+>> @@ -0,0 +1,21 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2020-2021 Xilinx, Inc.
+>> + *
+>> + * Authors:
+>> + *   Cheng Zhen <maxz@xilinx.com>
+>> + */
+>> +
+>> +#ifndef _LIB_DRV_H_
+>> +#define _LIB_DRV_H_
+>> +
+>> +#include <linux/device/class.h>
+>> +#include <linux/device/bus.h>
+>> +
+>> +extern struct class *xrt_class;
+>> +extern struct bus_type xrt_bus_type;
+>> +
+>> +const char *xrt_drv_name(enum xrt_subdev_id id);
+>> +struct xrt_dev_endpoints *xrt_drv_get_endpoints(enum xrt_subdev_id id);
+>> +
+>> +#endif       /* _LIB_DRV_H_ */
+>> --
+>> 2.27.0
+>>
+
