@@ -2,99 +2,69 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE883D9167
-	for <lists+linux-fpga@lfdr.de>; Wed, 28 Jul 2021 16:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F003D97C7
+	for <lists+linux-fpga@lfdr.de>; Wed, 28 Jul 2021 23:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236837AbhG1O4i (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 28 Jul 2021 10:56:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21596 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237350AbhG1O4X (ORCPT
+        id S231741AbhG1Vv7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 28 Jul 2021 17:51:59 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:56100
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230156AbhG1Vv7 (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 28 Jul 2021 10:56:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1627484181;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=it5Te9P2fE9hEACV7bmI0ZQUC4eOMZ6L7HHf6MGR5Mo=;
-        b=gqvKyC+oxaz04/LupRrVhApxsAbNgvSUJrWeGJC4ogPu16glJkj9wAr9H2Gnh7brvC5MIV
-        aeX6zn23o+v4t9/5ecRKiaNInBbUQKwdXBOvnVrDzlX7IR+8u+wHLIajIC8AHXkKuyQKSx
-        YntlWJhdU5QrhqNWLKFoIxgk6YF9hf0=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-98-oRDZiJBLOnStF4CgFebdKQ-1; Wed, 28 Jul 2021 10:56:20 -0400
-X-MC-Unique: oRDZiJBLOnStF4CgFebdKQ-1
-Received: by mail-qk1-f200.google.com with SMTP id x2-20020a05620a0ec2b02903b8bd8b612eso1742617qkm.19
-        for <linux-fpga@vger.kernel.org>; Wed, 28 Jul 2021 07:56:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=it5Te9P2fE9hEACV7bmI0ZQUC4eOMZ6L7HHf6MGR5Mo=;
-        b=knaZU80K2+w9uDqAR0l7cHQf2fApYhOmwNTseUNVahkCMd6cDWw9TLf29xHokKXat1
-         H2Frmzy7WYIf65i08vI+sKgckbx/UrRXhaFEkqlTSesyto2OzFKNNSmolOFLa61/qlQ3
-         NMbJKxAWNHXYuvrpo1G61W7ep6YTomG8GFvpihZ6mPrnIzllJAbk5y5xNempUc+/pfPH
-         XWdB9UitCg92ob2iZtpkA44tLiSlX4vuNSA1IYWHINOjbYezKJFaOxIxqos7DA47xazL
-         7tek19SjADtL853PT8skS9pwBOPTOlcEZct2n9W8WNmF1ooTtNXPBKe+8dK0xIgP7VgX
-         DyyA==
-X-Gm-Message-State: AOAM532Gk6kimkkWxMwI7SDT2xfRfmkobmZUP74IfqEp+/jrBiWcwmob
-        9VDvqCG+zC3WMGnNlZETUK0BBzkPyQj8nXVft4pTR3PIjbAgpxFWVrSSoCQUJXLwOMq2gQ+FbX1
-        423Ktkc/XR4wUMBG09NvAqA==
-X-Received: by 2002:a05:622a:104b:: with SMTP id f11mr23864112qte.134.1627484179605;
-        Wed, 28 Jul 2021 07:56:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx7m6DREgWBE6Hlfac89TKVr/iCoUvG1oqWqS55n/ROdB1Bdnlx4nra3hys5EdZ7ULEdaF4Dw==
-X-Received: by 2002:a05:622a:104b:: with SMTP id f11mr23864096qte.134.1627484179449;
-        Wed, 28 Jul 2021 07:56:19 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id s81sm104241qka.82.2021.07.28.07.56.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jul 2021 07:56:19 -0700 (PDT)
-Subject: Re: [PATCH v13 0/4] Intel MAX10 BMC Secure Update Driver
-To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Wu, Hao" <hao.wu@intel.com>
-Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, matthew.gerlach@intel.com,
-        richard.gong@intel.com
-References: <20210727225859.153572-1-russell.h.weight@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <65ed311d-a492-413e-33a8-f64e9c41e7c2@redhat.com>
-Date:   Wed, 28 Jul 2021 07:56:16 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 28 Jul 2021 17:51:59 -0400
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net [80.193.200.194])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id EE8283F228;
+        Wed, 28 Jul 2021 21:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1627509116;
+        bh=7A9PJEk1zQ7CyaYPHPeDtT58e8/56nw5lQvVXu6g2gA=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=wZtz7qeijstDNi9RFF4FSHttSaYpcry7t4QXm7VKXyLfdNOWUvFg+70aU9VMFJeFv
+         30k5g1e1xg8wyXX4JpX4ahHwW7Abl88PuL9z80mcyAdVbDAvjwc63/LZm9qtrdeub7
+         5VvJcv/kTGgdhjqGA+OQFn1hTNsBccdEnV4V9DqnV7+9fNk4DnXfh65T70Z9U5FsLu
+         3S5O4JEQ9fOiITcR/mZFVuQUHF1Nfad6tEm5weIjWoby1G/uNpvMyju2LTOwrAaog1
+         MsFQFsOocp7i0XYsrhQD7hn7/dY8q81RiVweaFwm2SfNu8i7A0ELP4qMU7Sh3EZE6S
+         o+TQ2LvrNRCCg==
+From:   Colin King <colin.king@canonical.com>
+To:     Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
+        linux-fpga@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fpga: Fix spelling mistake "eXchnage" -> "exchange" in Kconfig
+Date:   Wed, 28 Jul 2021 22:51:50 +0100
+Message-Id: <20210728215150.191914-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210727225859.153572-1-russell.h.weight@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Russ
-> Russ Weight (4):
->    fpga: m10bmc-sec: create max10 bmc secure update driver
->    fpga: m10bmc-sec: expose max10 flash update count
->    fpga: m10bmc-sec: expose max10 canceled keys in sysfs
+From: Colin Ian King <colin.king@canonical.com>
 
-Since sec-mgr is taking a long time, I am looking at splitting out parts 
-we can agree on.
+There is a spelling mistake in the Kconfig text. Fix it.
 
-These 3 patches are a new dfl specific driver and do not depend on sec-mgr.
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/fpga/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Here is a poc on char-misc-next, splitting them and moving them before 
-sec-mgr
-
-https://github.com/trixirt/linux-next/commits/sec-mgr-reorder
-
-Moritz, Hao
-
-Could these 3 patches go into fpga-next now ?
-
-Tom
-
-
->    fpga: m10bmc-sec: add max10 secure update functions
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 16793bfc2bb4..991b3f361ec9 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -119,7 +119,7 @@ config XILINX_PR_DECOUPLER
+ 	depends on HAS_IOMEM
+ 	help
+ 	  Say Y to enable drivers for Xilinx LogiCORE PR Decoupler
+-	  or Xilinx Dynamic Function eXchnage AIX Shutdown Manager.
++	  or Xilinx Dynamic Function eXchange AIX Shutdown Manager.
+ 	  The PR Decoupler exists in the FPGA fabric to isolate one
+ 	  region of the FPGA from the busses while that region is
+ 	  being reprogrammed during partial reconfig.
+-- 
+2.31.1
 
