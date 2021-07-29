@@ -2,102 +2,74 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C70773D995A
-	for <lists+linux-fpga@lfdr.de>; Thu, 29 Jul 2021 01:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B513DAB14
+	for <lists+linux-fpga@lfdr.de>; Thu, 29 Jul 2021 20:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbhG1XRv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 28 Jul 2021 19:17:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39410 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232230AbhG1XRv (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 28 Jul 2021 19:17:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1627514268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yPDkVTZ8b83r4TbJSlWFDW+2FFM5TXW1fN7erbN+dQI=;
-        b=OD+3fKIlEDj5K2HHg/7fNAF8hQum9odFT+ufLcdQgUfQqqaU77gKRNar2WUTJwgNSnn20n
-        eKCcmhByFdDzPfEtC7CzmSrJaP2291IlLtHgk8G4QaXY6yGs2Gqv3iwuWOK12EcqramYd3
-        18dKkU8suierzIlJlKqOJyigkbj0Mjw=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-479-LdblmV_bPnyrxkAfRHG1tA-1; Wed, 28 Jul 2021 19:17:46 -0400
-X-MC-Unique: LdblmV_bPnyrxkAfRHG1tA-1
-Received: by mail-qt1-f200.google.com with SMTP id m2-20020ac807c20000b0290269bd8044e1so1841548qth.10
-        for <linux-fpga@vger.kernel.org>; Wed, 28 Jul 2021 16:17:46 -0700 (PDT)
+        id S229672AbhG2Sj6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 29 Jul 2021 14:39:58 -0400
+Received: from mail-il1-f170.google.com ([209.85.166.170]:36728 "EHLO
+        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229614AbhG2Sj6 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 29 Jul 2021 14:39:58 -0400
+Received: by mail-il1-f170.google.com with SMTP id c3so6910027ilh.3;
+        Thu, 29 Jul 2021 11:39:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=yPDkVTZ8b83r4TbJSlWFDW+2FFM5TXW1fN7erbN+dQI=;
-        b=AjYgH2GuuWvGGq8SJbfK/udVBWkbcY1DD9aexX6+usVMGA0CiORaZC0rKM3xzve3IS
-         1l/E+l4b44Mckw7pLJERw7Mfhtk09zhRXxOW0avaXmEWR6/6yrsthgwNlPtP23pPNcA8
-         m4RiDvLVfHWTnwAfqVjHBO6k9bG5H2qPPG3+MIZ6gAlc3glxIeKdTSISODpr26OY5eP9
-         m7LdHLgE6pb3nXlMTyG4/OB1RJkAm8YUkXCciaBA4FDqmWhhsGGqHQO1jkU+680KPfBy
-         R1EXk8U0v+KOGCUH0Oreugpa6sYGFy8iLL57Zrz4YRF62DQSQxuExj3rJ8plx9P/0GNX
-         mvEw==
-X-Gm-Message-State: AOAM533PJtOog8XEkG03wRld4uVODOcQfrxqmgeZa5i+iY9lMqHghNVp
-        YT0VVjXuBYkyYDkPR0R8kgYpESfXM3rBL1lVBGCJucE2APqgpuvhMqpKlQ8ghjD8qddHDTeI4OH
-        LbPiWjMY71rCD3AnSKfK7VA==
-X-Received: by 2002:a37:b0a:: with SMTP id 10mr2186634qkl.291.1627514266121;
-        Wed, 28 Jul 2021 16:17:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyXAgP9lkJWoLrU3pYzWQ9f0mbAUQ4I6TKaLd4nsL8jBdRO7aVFQFKVPcznO0D3SmBXEvMXYQ==
-X-Received: by 2002:a37:b0a:: with SMTP id 10mr2186621qkl.291.1627514265949;
-        Wed, 28 Jul 2021 16:17:45 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id q184sm794947qkd.35.2021.07.28.16.17.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jul 2021 16:17:45 -0700 (PDT)
-Subject: Re: [PATCH] fpga: Fix spelling mistake "eXchnage" -> "exchange" in
- Kconfig
-To:     Colin King <colin.king@canonical.com>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210728215150.191914-1-colin.king@canonical.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <5e7b2e4a-aaf6-81f2-2b08-5a9adcbbee57@redhat.com>
-Date:   Wed, 28 Jul 2021 16:17:43 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G8n24DYudmmBlwPEsIXvodH0cqEc+9JvYB6zqj+BSWA=;
+        b=bbTg9xQcqeKr3I0czAlvIhs3OS0DnFY9++YElSx5zFNWZf72WtIPll0wmHpkMWcnI5
+         rEgkZgL6PbRrkVxW0lQ8ntRKq+bKr7p4QPE+qsgso8V+HpC0rLWjGeDOD+okKQo3NP2p
+         gPJDRi8sdhD7OIQuU5GKuR8ay3IC6STEmrrj1wY0kpMUTWWKtnNcu1hGfjP6iWDl4vXo
+         IqGvopBqGcYZrSqiibm3gRvTDrE7V3dnxj4iNcY50i0ra8wIz7StZrW30apKKzPM91fv
+         oSyVpJe5KKCZYK0wqHCq9NXZPEqECOCJDNvKlrXWrqo3CLYzus0IxwcmAgUd7ReezbTp
+         rvdQ==
+X-Gm-Message-State: AOAM5315q7ul+J9o3P+tLly42VFXw0IKCoG5MS6NqlPX/IK4dppTyQuL
+        wCOcZ/t7ZwMaSoZs2s6IrA==
+X-Google-Smtp-Source: ABdhPJzHZZglPsN0icIN4InIO/S2YvyIIh/Lyvd63Ouq0Q3WHZDfaRAcbLEDefewEG0ysVBx3EdK0Q==
+X-Received: by 2002:a05:6e02:e82:: with SMTP id t2mr4721387ilj.218.1627583994765;
+        Thu, 29 Jul 2021 11:39:54 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id g1sm2356621ilq.13.2021.07.29.11.39.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jul 2021 11:39:54 -0700 (PDT)
+Received: (nullmailer pid 659539 invoked by uid 1000);
+        Thu, 29 Jul 2021 18:39:52 -0000
+Date:   Thu, 29 Jul 2021 12:39:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-fpga@vger.kernel.org, michal.simek@xilinx.com,
+        linux-kernel@vger.kernel.org, trix@redhat.com, navam@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, mdf@kernel.org
+Subject: Re: [PATCH v2] dt-bindings: fpga: convert Xilinx Zynq MPSoC bindings
+ to YAML
+Message-ID: <YQL1+JfwKukG6E7j@robh.at.kernel.org>
+References: <20210716212621.286806-1-iwamatsu@nigauri.org>
 MIME-Version: 1.0
-In-Reply-To: <20210728215150.191914-1-colin.king@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210716212621.286806-1-iwamatsu@nigauri.org>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-
-On 7/28/21 2:51 PM, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
->
-> There is a spelling mistake in the Kconfig text. Fix it.
->
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+On Sat, 17 Jul 2021 06:26:21 +0900, Nobuhiro Iwamatsu wrote:
+> Convert FPGA Manager for Xilinx Zynq MPSoC bindings documentation to
+> YAML.
+> 
+> Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+> 
 > ---
->   drivers/fpga/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 16793bfc2bb4..991b3f361ec9 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -119,7 +119,7 @@ config XILINX_PR_DECOUPLER
->   	depends on HAS_IOMEM
->   	help
->   	  Say Y to enable drivers for Xilinx LogiCORE PR Decoupler
-> -	  or Xilinx Dynamic Function eXchnage AIX Shutdown Manager.
-> +	  or Xilinx Dynamic Function eXchange AIX Shutdown Manager.
->   	  The PR Decoupler exists in the FPGA fabric to isolate one
->   	  region of the FPGA from the busses while that region is
->   	  being reprogrammed during partial reconfig.
+> v2:
+>   - Fix to the correct maintainer 'Nava kishore Manne <navam@xilinx.com>'.
+>   - Update the word from configuration to Configuration.
+> 
+>  .../bindings/fpga/xlnx,zynqmp-pcap-fpga.txt   | 25 -------------
+>  .../bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml  | 36 +++++++++++++++++++
+>  2 files changed, 36 insertions(+), 25 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.txt
+>  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml
+> 
 
-Looks good, thanks
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
+Applied, thanks!
