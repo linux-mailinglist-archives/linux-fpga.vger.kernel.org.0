@@ -2,184 +2,218 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 673553DABB8
-	for <lists+linux-fpga@lfdr.de>; Thu, 29 Jul 2021 21:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6277C3DAC5F
+	for <lists+linux-fpga@lfdr.de>; Thu, 29 Jul 2021 22:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbhG2TQ7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 29 Jul 2021 15:16:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36879 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230034AbhG2TQ7 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 29 Jul 2021 15:16:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1627586215;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5A2N7dGYeQ+Xbk5UXj9qLfRubLSGQbg8nll0cwkgIt4=;
-        b=f/lP5fuKFN8BxfqEU+DAv3BE0ZjPSw0GUIR8hVCdvUYtDbo0ctY/HOanViEmnX8zRp+49p
-        3011iGWSQ2M4eS2mV7h1aqtpqRgi3HMrGK+lTFrV31mLmTF46fnL4bPsAxdOhbGORjPeBf
-        Dt0+BmfILhgZf/EasJ20upTDawLjr4w=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-5-v0e46dFaN_SyAmyUcwAIXQ-1; Thu, 29 Jul 2021 15:16:51 -0400
-X-MC-Unique: v0e46dFaN_SyAmyUcwAIXQ-1
-Received: by mail-qt1-f198.google.com with SMTP id l24-20020ac872580000b029024e988e8277so3169333qtp.23
-        for <linux-fpga@vger.kernel.org>; Thu, 29 Jul 2021 12:16:51 -0700 (PDT)
+        id S229642AbhG2UEy (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 29 Jul 2021 16:04:54 -0400
+Received: from mail-pl1-f182.google.com ([209.85.214.182]:47084 "EHLO
+        mail-pl1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229625AbhG2UEx (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 29 Jul 2021 16:04:53 -0400
+Received: by mail-pl1-f182.google.com with SMTP id t21so8227792plr.13;
+        Thu, 29 Jul 2021 13:04:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=5A2N7dGYeQ+Xbk5UXj9qLfRubLSGQbg8nll0cwkgIt4=;
-        b=dsvJhvfiTrpeCHRtC8RCJMNqqzcSGltOZgslkQJsM+VIr27l6phV+2cWB5CGfkyKKZ
-         fTHfePo8TC0CpfuZccCcl/Ev4UVdsp7hyDB5imikKjLoleLShG1J3SFS3uzLsyKxfbMC
-         hC/+DMCob/2OcTUK9lUbKxL1miFki4e00aKLOA9L6UkgSNjejEGQII9bwgK4KlyT5Ivt
-         +jlzQWvhOfhQbsEaxq9kyC1vW3MA//q4nUbEkMziGx4jFMdCM7DNIR6Yqh0gWa4b9JPQ
-         CofOfra/kmkQNVp4bc59msvzdEQfIbTnFPkMdkoiSrmuNxxaO/AQKLfAnMa1TNXjoLAT
-         MPug==
-X-Gm-Message-State: AOAM531OdpjOphnGFVwJbQoKs6Lx5X/vW1j2IaWQzugo0+xdgBzxpCRC
-        IsEvV8X8BLIiwZbX1iwCsytYViroEoMbGUUEX55GchFTd5iIQjXnek/8eL384204eIGmmOAAzW9
-        WRApUAZVTK5azkNEN36Vekmuo7PlHXwlnSDq40cLi9glEYIcKiUrTGp9hPUs23MYYPdli
-X-Received: by 2002:a37:668e:: with SMTP id a136mr6733818qkc.54.1627586210427;
-        Thu, 29 Jul 2021 12:16:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxXWZdunXtPWYgMO5r2/mrUnugJE+AZjsM1cvmYe3z4ID1Ag4YUCClpSiGUppBJ4TltSIlYHQ==
-X-Received: by 2002:a37:668e:: with SMTP id a136mr6733790qkc.54.1627586210155;
-        Thu, 29 Jul 2021 12:16:50 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id t6sm2219044qkg.75.2021.07.29.12.16.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jul 2021 12:16:49 -0700 (PDT)
-Subject: Re: [PATCH] fpga: region: handle compat_id as an uuid
-To:     Moritz Fischer <mdf@kernel.org>, "Wu, Hao" <hao.wu@intel.com>
-Cc:     "Weight, Russell H" <russell.h.weight@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
-References: <20210726202650.4074614-1-trix@redhat.com>
- <6f30a4c6-61a0-bb57-9f13-bcad3f3589b8@intel.com>
- <ba28bac6-9c6d-de73-523f-b8ba4bef84de@redhat.com>
- <DM6PR11MB38199F872DC94971D9C8A53885EA9@DM6PR11MB3819.namprd11.prod.outlook.com>
- <YQL4qyAmqj322HTz@epycbox.lan>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <a5b4b303-7d9b-27d7-4c1e-cd29fea8cdb9@redhat.com>
-Date:   Thu, 29 Jul 2021 12:16:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=IHRkpF0RO7xgumloMSUZy6/MlTJAsHxlyDJXP+2mTd8=;
+        b=i6/kWaaxwh43qFB8sYwDyFJDsZOE7ZfAWxc85m6TXbKwAdSUx6jIe4VuQH3deeufNQ
+         yjj81odVw9HHSnFk9Ge434sa8ouG5jTYja6i5Pt4PeOoCii9sK45+72PIivDFHZemxu3
+         K7R3GR6pazMqmlAe+3eciuE6ARhwWV1I/ZlivCmJrBb6rI4Bx5jocp7fBwZPCBZyQz1B
+         XtIm0lheE3v0X50B8A8IQCONuL8XaZ9GNMlvuHWcbJC/tJTuGceILIqvndsLHyK2eXNi
+         MIyYawv2uGn5gKT7yBD8PSZgM+Yt7U5X4LOahgF17KLGfn6pIMk+lmtxGTCxJFtm6iVm
+         J7AA==
+X-Gm-Message-State: AOAM532eKrp4DAICEdKPYGC1tF7OJ/2iljOEblY2r7XUYm3ndgjc7epI
+        B61HC3dDvve+9wWc5ZFgrTQ=
+X-Google-Smtp-Source: ABdhPJxwBLkt8B/tY+5WYrqCRbM2Hr03x84qARqvRTVM5uIeBGiOklXkkP/i8FmNwFJl9YBZruitkw==
+X-Received: by 2002:a17:90a:990f:: with SMTP id b15mr16514780pjp.188.1627589088651;
+        Thu, 29 Jul 2021 13:04:48 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:6f70:be34:681b:b1e9:776f])
+        by smtp.gmail.com with ESMTPSA id q17sm5440135pgd.39.2021.07.29.13.04.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jul 2021 13:04:47 -0700 (PDT)
+Date:   Thu, 29 Jul 2021 13:04:46 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Brown <broonie@kernel.org>,
+        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH v5 1/3] fpga: dfl: expose feature revision from struct
+ dfl_device
+Message-ID: <YQMJ3tG9jlYNK+dx@epycbox.lan>
+References: <20210716135441.3235863-1-martin@geanix.com>
+ <20210716135441.3235863-2-martin@geanix.com>
 MIME-Version: 1.0
-In-Reply-To: <YQL4qyAmqj322HTz@epycbox.lan>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210716135441.3235863-2-martin@geanix.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Fri, Jul 16, 2021 at 03:54:39PM +0200, Martin Hundebøll wrote:
+> From: Martin Hundebøll <mhu@silicom.dk>
+> 
+> DFL device drivers have a common need for checking feature revision
+> information from the DFL header, as well as other common DFL information
+> like the already exposed feature id and type.
+> 
+> This patch exposes the feature revision information directly via the DFL
+> device data structure.
+> 
+> Since the DFL core code has already read the DFL header, this this patch
+> saves additional mmio reads from DFL device drivers too.
+> 
+> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> Acked-by: Wu Hao <hao.wu@intel.com>
+> Acked-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+> 
+> Changes since v4:
+>  * Renamed 'rev' to 'revision' as per Tom's suggestion
+> 
+> Changes since v3:
+>  * Added Hao's Acked-by
+>  * Added Matthew's Acked-by
+> 
+> Changes since v2:
+>  * Reworded commit message as per Hao's suggestion
+> 
+> Changes since v1:
+>  * This patch replaces the previous patch 2 and exposes the feature
+>    revision through struct dfl_device instead of a helper reading from
+>    io-mem
+> 
+>  drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
+>  drivers/fpga/dfl.h  |  1 +
+>  include/linux/dfl.h |  1 +
+>  3 files changed, 19 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index 511b20ff35a3..e73a70053906 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
+>  
+>  	ddev->type = feature_dev_id_type(pdev);
+>  	ddev->feature_id = feature->id;
+> +	ddev->revision = feature->revision;
+>  	ddev->cdev = pdata->dfl_cdev;
+>  
+>  	/* add mmio resource */
+> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
+>   */
+>  struct dfl_feature_info {
+>  	u16 fid;
+> +	u8 revision;
+>  	struct resource mmio_res;
+>  	void __iomem *ioaddr;
+>  	struct list_head node;
+> @@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
+>  		/* save resource information for each feature */
+>  		feature->dev = fdev;
+>  		feature->id = finfo->fid;
+> +		feature->revision = finfo->revision;
+>  
+>  		/*
+>  		 * the FIU header feature has some fundamental functions (sriov
+> @@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
+>  	devm_kfree(binfo->dev, binfo);
+>  }
+>  
+> -static inline u32 feature_size(void __iomem *start)
+> +static inline u32 feature_size(u64 value)
+>  {
+> -	u64 v = readq(start + DFH);
+> -	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
+> +	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
+>  	/* workaround for private features with invalid size, use 4K instead */
+>  	return ofst ? ofst : 4096;
+>  }
+>  
+> -static u16 feature_id(void __iomem *start)
+> +static u16 feature_id(u64 value)
+>  {
+> -	u64 v = readq(start + DFH);
+> -	u16 id = FIELD_GET(DFH_ID, v);
+> -	u8 type = FIELD_GET(DFH_TYPE, v);
+> +	u16 id = FIELD_GET(DFH_ID, value);
+> +	u8 type = FIELD_GET(DFH_TYPE, value);
+>  
+>  	if (type == DFH_TYPE_FIU)
+>  		return FEATURE_ID_FIU_HEADER;
+> @@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>  	unsigned int irq_base, nr_irqs;
+>  	struct dfl_feature_info *finfo;
+>  	int ret;
+> +	u8 revision;
+> +	u64 v;
+> +
+> +	v = readq(binfo->ioaddr + ofst);
+> +	revision = FIELD_GET(DFH_REVISION, v);
+>  
+>  	/* read feature size and id if inputs are invalid */
+> -	size = size ? size : feature_size(binfo->ioaddr + ofst);
+> -	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
+> +	size = size ? size : feature_size(v);
+> +	fid = fid ? fid : feature_id(v);
+>  
+>  	if (binfo->len - ofst < size)
+>  		return -EINVAL;
+> @@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>  		return -ENOMEM;
+>  
+>  	finfo->fid = fid;
+> +	finfo->revision = revision;
+>  	finfo->mmio_res.start = binfo->start + ofst;
+>  	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+>  	finfo->mmio_res.flags = IORESOURCE_MEM;
+> @@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
+>  {
+>  	if (!is_feature_dev_detected(binfo)) {
+>  		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
+> -			feature_id(binfo->ioaddr + ofst));
+> +			feature_id(readq(binfo->ioaddr + ofst)));
+>  		return -EINVAL;
+>  	}
+>  
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 2b82c96ba56c..422157cfd742 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
+>  struct dfl_feature {
+>  	struct platform_device *dev;
+>  	u16 id;
+> +	u8 revision;
+>  	int resource_index;
+>  	void __iomem *ioaddr;
+>  	struct dfl_feature_irq_ctx *irq_ctx;
+> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+> index 6cc10982351a..431636a0dc78 100644
+> --- a/include/linux/dfl.h
+> +++ b/include/linux/dfl.h
+> @@ -38,6 +38,7 @@ struct dfl_device {
+>  	int id;
+>  	u16 type;
+>  	u16 feature_id;
+> +	u8 revision;
+>  	struct resource mmio_res;
+>  	int *irqs;
+>  	unsigned int num_irqs;
+> -- 
+> 2.31.0
+> 
 
-On 7/29/21 11:51 AM, Moritz Fischer wrote:
-> On Wed, Jul 28, 2021 at 01:36:56AM +0000, Wu, Hao wrote:
->>> On 7/26/21 3:12 PM, Russ Weight wrote:
->>>> On 7/26/21 1:26 PM, trix@redhat.com wrote:
->>>>> From: Tom Rix <trix@redhat.com>
->>>>>
->>>>> An fpga region's compat_id is exported by the sysfs
->>>>> as a 128 bit hex string formed by concatenating two
->>>>> 64 bit values together.
->>>>>
->>>>> The only user of compat_id is dfl.  Its user library
->>>>> opae converts this value into a uuid.
->>>>>
->>>>> ex/
->>>>> $ cat /sys/class/fpga_region/region1/compat_id
->>>>> f3c9941350814aadbced07eb84a6d0bb
->>>>>
->>>>> Is reported as
->>>>> $ fpgainfo bmc
->>>>> ...
->>>>> Pr Interface Id                  : f3c99413-5081-4aad-bced-07eb84a6d0bb
->>>>>
->>>>> Storing a uuid as 2 64 bit values is vendor specific.
->>>>> And concatenating them together is vendor specific.
->>>>>
->>>>> It is better to store and print out as a vendor neutral uuid.
->>>>>
->>>>> Change fpga_compat_id from a struct to a union.
->>>>> Keep the old 64 bit values for dfl.
->>>>> Sysfs output is now
->>>>> f3c99413-5081-4aad-bced-07eb84a6d0bb
->>>> I'm fowarding feedback from Tim Whisonant, one of the OPAE userspace
->>>> developers:
->>>>
->>>> I think that this change to the sysfs for the compat_id node will
->>>> end up breaking the SDK, which does not expect the '-' characters to
->>>> be included when parsing the sysfs value. Currently, it is parsed as
->>>> a raw hex string without regard to any '-' characters. This goes for
->>>> any "guid" currently exported by sysfs and for what we read in the
->>>> device MMIO space.
->>> Yes, it will.
->>>
->>> And there are other places, like dfl-afu-main.c:afu_id_show()
->>>
->>> outputs raw hex that sdk turns into a uuid.
->>>
->>>
->>> Some options.
->>>
->>> If no one but dfl will ever use it, then v1 of patchset.
->>>
->>> If others can use it but don't want to change dfl, then v2 of patchset,
->>> my favorite.
->>>
->>> Or this one for uuid for everyone, what have been v3 but changed too much.
->>>
->>>
->>> could dfl change generally to output uuid's to the sysfs ?
->>>
->>> this would be generally helpful and a one time disruption to the sdk.
->> This change limited the output format to uuid_t, but if any hardware doesn't
->> use uuid_t on hardware may have to convert it back from the sysfs output in
->> userspace. Leave it to print hardware values (e.g. from register), and convert
->> it in userspace should be fine too I think.
-> I'm not entirely sure. I seem to recall there being examples of sysfs
-> files returning different things for different drivers.
->
-> That being said it seems largely cosmetic to add the '-' in between.
->
-> If it breaks userspace, I'm against it. If you *need* it make a
-> compat_uuid entry or something in that case?
+Applied to for-next,
 
-My gripe is
-
-For a nominally common interface, compat_id has a vendor specific output.
-
-If for example another vendor wanted to use this field but their natural 
-format was an OF string.
-
-16 bytes of raw hex would not work for them, so they would roll their own.
-
-which defeats the purpose of a common interface.
-
-
-The language in the docs as-is is vague on the output format.
-
-DFL is the only user of the interface.
-
-So ver 2
-
-https://lore.kernel.org/linux-fpga/4ab7dd2d-c215-6333-6860-6f7d0ac64c3d@redhat.com/
-
-Keeps the output as-is for dfl, so nothing breaks in userspace
-
-And adds flexibility for vendors to output their appropriate natural form.
-
-So compat_id becomes generally useful.
-
-
-Tom
-
-
->
-> - Moritz
->
-
+Thanks
