@@ -2,165 +2,100 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBAE3DB0D5
-	for <lists+linux-fpga@lfdr.de>; Fri, 30 Jul 2021 03:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068513DB7AA
+	for <lists+linux-fpga@lfdr.de>; Fri, 30 Jul 2021 13:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbhG3Byv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 29 Jul 2021 21:54:51 -0400
-Received: from mga12.intel.com ([192.55.52.136]:61238 "EHLO mga12.intel.com"
+        id S238403AbhG3LSy (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 30 Jul 2021 07:18:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35344 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229667AbhG3Byv (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 29 Jul 2021 21:54:51 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10060"; a="192606373"
-X-IronPort-AV: E=Sophos;i="5.84,280,1620716400"; 
-   d="scan'208";a="192606373"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2021 18:54:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,280,1620716400"; 
-   d="scan'208";a="518667688"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Jul 2021 18:54:45 -0700
-Date:   Fri, 30 Jul 2021 09:48:59 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, "Wu, Hao" <hao.wu@intel.com>,
-        "Weight, Russell H" <russell.h.weight@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
-Subject: Re: [PATCH] fpga: region: handle compat_id as an uuid
-Message-ID: <20210730014859.GA436611@yilunxu-OptiPlex-7050>
-References: <20210726202650.4074614-1-trix@redhat.com>
- <6f30a4c6-61a0-bb57-9f13-bcad3f3589b8@intel.com>
- <ba28bac6-9c6d-de73-523f-b8ba4bef84de@redhat.com>
- <DM6PR11MB38199F872DC94971D9C8A53885EA9@DM6PR11MB3819.namprd11.prod.outlook.com>
- <YQL4qyAmqj322HTz@epycbox.lan>
- <a5b4b303-7d9b-27d7-4c1e-cd29fea8cdb9@redhat.com>
+        id S230157AbhG3LSy (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 30 Jul 2021 07:18:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5923260F48;
+        Fri, 30 Jul 2021 11:18:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1627643928;
+        bh=AZxwPyppExrB/z7d2++YjFvcn5ph6Qq45oTx0RCRNow=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wpEefXegDCZ8MLvMN2ilv/zzwWzm60qSj8uvPz32rHbmlW16IGN4CSnNhX3XyHmSf
+         IrrNhNxwT5XsGs99/HcbLLO2XPJUD3ehqZVodijM79VLAKjfp+X5FyK87IdNXGnbKY
+         RyQ60BAACdMJu+slLGJxo1Zbntz+3IMBCGmXXOoQ=
+Date:   Fri, 30 Jul 2021 13:18:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        linux-fpga@vger.kernel.org, moritzf@google.com
+Subject: Re: [PATCH 02/12] fpga: sec-mgr: enable secure updates
+Message-ID: <YQPgFn/z024U06HJ@kroah.com>
+References: <20210517023200.52707-1-mdf@kernel.org>
+ <20210517023200.52707-3-mdf@kernel.org>
+ <YKH/6xQ7bEwJzEsM@kroah.com>
+ <5d0552ce-d2bd-cca1-006e-8f11991fd378@intel.com>
+ <f3d474d2-f85d-4759-75b5-84af64fe5b3c@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a5b4b303-7d9b-27d7-4c1e-cd29fea8cdb9@redhat.com>
+In-Reply-To: <f3d474d2-f85d-4759-75b5-84af64fe5b3c@intel.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 12:16:47PM -0700, Tom Rix wrote:
-> 
-> On 7/29/21 11:51 AM, Moritz Fischer wrote:
-> > On Wed, Jul 28, 2021 at 01:36:56AM +0000, Wu, Hao wrote:
-> > > > On 7/26/21 3:12 PM, Russ Weight wrote:
-> > > > > On 7/26/21 1:26 PM, trix@redhat.com wrote:
-> > > > > > From: Tom Rix <trix@redhat.com>
-> > > > > > 
-> > > > > > An fpga region's compat_id is exported by the sysfs
-> > > > > > as a 128 bit hex string formed by concatenating two
-> > > > > > 64 bit values together.
-> > > > > > 
-> > > > > > The only user of compat_id is dfl.  Its user library
-> > > > > > opae converts this value into a uuid.
-> > > > > > 
-> > > > > > ex/
-> > > > > > $ cat /sys/class/fpga_region/region1/compat_id
-> > > > > > f3c9941350814aadbced07eb84a6d0bb
-> > > > > > 
-> > > > > > Is reported as
-> > > > > > $ fpgainfo bmc
-> > > > > > ...
-> > > > > > Pr Interface Id                  : f3c99413-5081-4aad-bced-07eb84a6d0bb
-> > > > > > 
-> > > > > > Storing a uuid as 2 64 bit values is vendor specific.
-> > > > > > And concatenating them together is vendor specific.
-> > > > > > 
-> > > > > > It is better to store and print out as a vendor neutral uuid.
-> > > > > > 
-> > > > > > Change fpga_compat_id from a struct to a union.
-> > > > > > Keep the old 64 bit values for dfl.
-> > > > > > Sysfs output is now
-> > > > > > f3c99413-5081-4aad-bced-07eb84a6d0bb
-> > > > > I'm fowarding feedback from Tim Whisonant, one of the OPAE userspace
-> > > > > developers:
-> > > > > 
-> > > > > I think that this change to the sysfs for the compat_id node will
-> > > > > end up breaking the SDK, which does not expect the '-' characters to
-> > > > > be included when parsing the sysfs value. Currently, it is parsed as
-> > > > > a raw hex string without regard to any '-' characters. This goes for
-> > > > > any "guid" currently exported by sysfs and for what we read in the
-> > > > > device MMIO space.
-> > > > Yes, it will.
-> > > > 
-> > > > And there are other places, like dfl-afu-main.c:afu_id_show()
-> > > > 
-> > > > outputs raw hex that sdk turns into a uuid.
-> > > > 
-> > > > 
-> > > > Some options.
-> > > > 
-> > > > If no one but dfl will ever use it, then v1 of patchset.
-> > > > 
-> > > > If others can use it but don't want to change dfl, then v2 of patchset,
-> > > > my favorite.
-> > > > 
-> > > > Or this one for uuid for everyone, what have been v3 but changed too much.
-> > > > 
-> > > > 
-> > > > could dfl change generally to output uuid's to the sysfs ?
-> > > > 
-> > > > this would be generally helpful and a one time disruption to the sdk.
-> > > This change limited the output format to uuid_t, but if any hardware doesn't
-> > > use uuid_t on hardware may have to convert it back from the sysfs output in
-> > > userspace. Leave it to print hardware values (e.g. from register), and convert
-> > > it in userspace should be fine too I think.
-> > I'm not entirely sure. I seem to recall there being examples of sysfs
-> > files returning different things for different drivers.
-> > 
-> > That being said it seems largely cosmetic to add the '-' in between.
-> > 
-> > If it breaks userspace, I'm against it. If you *need* it make a
-> > compat_uuid entry or something in that case?
-> 
-> My gripe is
-> 
-> For a nominally common interface, compat_id has a vendor specific output.
-> 
-> If for example another vendor wanted to use this field but their natural
-> format was an OF string.
-> 
-> 16 bytes of raw hex would not work for them, so they would roll their own.
-> 
-> which defeats the purpose of a common interface.
+On Thu, Jul 29, 2021 at 06:23:12PM -0700, Russ Weight wrote:
 > 
 > 
-> The language in the docs as-is is vague on the output format.
+> On 5/17/21 12:37 PM, Russ Weight wrote:
+> > On 5/16/21 10:32 PM, Greg KH wrote:
+> >> On Sun, May 16, 2021 at 07:31:50PM -0700, Moritz Fischer wrote:
+> >>> From: Russ Weight <russell.h.weight@intel.com>
+> >>>
+> >>> Extend the FPGA Security Manager class driver to
+> >>> include an update/filename sysfs node that can be used
+> >>> to initiate a secure update.  The filename of a secure
+> >>> update file (BMC image, FPGA image, Root Entry Hash image,
+> >>> or Code Signing Key cancellation image) can be written to
+> >>> this sysfs entry to cause a secure update to occur.
+> >> Why is userspace responsible for triggering this?  Passing a "filename"
+> >> into the kernel and having it do something with it is ripe for major
+> >> problems, please do not.
+> >>
+> > I am using the "request_firmware" framework, which accepts a filename
+> > and finds the firmware file under /lib/firmware.
+> >
+> > Is this not an acceptable use for request_firmware?
+> >
+> > - Russ
 > 
-> DFL is the only user of the interface.
+> Hi Greg,
 > 
-> So ver 2
-> 
-> https://lore.kernel.org/linux-fpga/4ab7dd2d-c215-6333-6860-6f7d0ac64c3d@redhat.com/
-> 
-> Keeps the output as-is for dfl, so nothing breaks in userspace
-> 
-> And adds flexibility for vendors to output their appropriate natural form.
-> 
-> So compat_id becomes generally useful.
+> The dev_release fixes that you asked for in the FPGA Manager, Bridge, and
+> Region code are almost complete. I'm trying to get back to the FPGA
+> security manager patch set. Your previous comments challenged some basic
+> assumptions. If it is OK, I would like to get some clarity before I rework
+> the patches.
 
-Mixing types seems be strongly against in Documentation/filesystems/sysfs.rst.
-So in my opinion there should be a determined format for the output. The
-concern for this patch is which one is a better format, uuid style or
-128 bit raw hex?
+Note, I do not have the time, nor the inclination, to help your company
+out with design reviews at this point in time.  If you have questions
+about this, please discuss it with the open source managers at Intel,
+they know the current situation quite well.
 
-And I vote for 128 bit raw hex, as other vendors may not use uuid_t as
-the identifier, may be an OF string. So we don't have to force them
-decorate it as the uuid style.
+I am glad to review patches that have gone through the proper internal
+Intel patch review process and then sent out to the community.
 
-Thanks
-Yilun
+That being said, I will make one comment on your questions below:
 
-> 
-> 
-> Tom
-> 
-> 
-> > 
-> > - Moritz
-> > 
+> (1) request_firmware(). We had assumed that making use of the existing
+> request_firmware() would be preferred. This requires providing a filename
+> under /lib/firmware to the framework. You commented (above): "Passing a
+> 'filename' into the kernel and having it do something with it is ripe for
+> problems, please do not." Unless you have additional comments on this, I
+> will plan to NOT use the request_firmware framework.
+
+request_firmware() should always be used for requesting firmware for a
+device.  Having an api where you write a random filename to a sysfs file
+and have that loaded by the kernel seems ripe for disaster though, I can
+not think of any other in-kernel user of the firmware api that does
+this.  Or are there examples that I have just missed?
+
+thanks,
+
+greg k-h
