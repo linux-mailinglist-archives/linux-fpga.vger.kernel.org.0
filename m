@@ -2,341 +2,192 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372193DF430
-	for <lists+linux-fpga@lfdr.de>; Tue,  3 Aug 2021 19:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCA93DF517
+	for <lists+linux-fpga@lfdr.de>; Tue,  3 Aug 2021 21:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238476AbhHCRyI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 3 Aug 2021 13:54:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35474 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238458AbhHCRyE (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 3 Aug 2021 13:54:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628013232;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/0n5SoN8Nphb5rzz25bARIpmrkKEpvuDmecyvrfz4es=;
-        b=gNRS5TS54ifJpreDyP8zdS/IEa9zQW9DhHJoJhNn5U2mrlq2ZViBNWxDxxZo6cc/3r0HSM
-        XHA2msaEUTGYjdQa90gW2UEhetQ+cKo8XEhNa98MNHb6ibfm62r683OIiLebiSNz+en2Tl
-        0TmDelOwxo3yzIUnwRPIW5gGp9khdtc=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-116-tEC-5ZwtNZmA8zg03PEQOg-1; Tue, 03 Aug 2021 13:53:50 -0400
-X-MC-Unique: tEC-5ZwtNZmA8zg03PEQOg-1
-Received: by mail-qt1-f200.google.com with SMTP id g10-20020ac8768a0000b029023c90fba3dcso13877823qtr.7
-        for <linux-fpga@vger.kernel.org>; Tue, 03 Aug 2021 10:53:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/0n5SoN8Nphb5rzz25bARIpmrkKEpvuDmecyvrfz4es=;
-        b=i8HWx1yp4WPuuIrrO54AemAAxI1HkbwlyZArEjk/XBXIqzl517SrOzKg5KhPCQur9v
-         KbVk2uyRR5IotfypAHHU2qEnfI2VPvVdf5MKR8IME+FtsGGv+rQY9q8iCsTyiuQCzZQS
-         EpxGJ78MeHSzP/p4LUwJZT6eiaCWLT41JzoVpbYy8l1vQNleOZDgpJktMXXK6BkbmF4u
-         2zMiEDsep79rDbAVxf37kGdmzaYmYnmIvEixO6U/zKBxaUokwK/qg2fCA2RE98B9+CW/
-         ANx+T33eB+oUR5dfcwWd0MPsU58V6vqn8MwJwLwunOmrDF/cBifFfdsohGWhilqeHSuN
-         xkFw==
-X-Gm-Message-State: AOAM5327CbEOt3DpO+fbGTk1pNklpwm95TofaKvJO9KquTqi5TlptMk7
-        x1M6+evaOdKhdudFsbcTsHq+1+8IHENaXqYcmfc8UsKt0rYfTTfmcVFgXqJrZyFK1BwX+67sAMC
-        9I0DLtxjja9Usit7iDMzqhA==
-X-Received: by 2002:a0c:a321:: with SMTP id u30mr22583318qvu.57.1628013229739;
-        Tue, 03 Aug 2021 10:53:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw9FGRasKGf+YgUsw6Wgz0pUGMFYXqvQ6gMelUB9a5jlrqdy6GjCGvjirQ4tcLScZk+68wk9g==
-X-Received: by 2002:a0c:a321:: with SMTP id u30mr22583296qvu.57.1628013229398;
-        Tue, 03 Aug 2021 10:53:49 -0700 (PDT)
-Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id l4sm8364697qkd.77.2021.08.03.10.53.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Aug 2021 10:53:49 -0700 (PDT)
-From:   trix@redhat.com
-To:     mdf@kernel.org, corbet@lwn.net, hao.wu@intel.com
-Cc:     linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] fpga: region: introduce fpga_region_ops
-Date:   Tue,  3 Aug 2021 10:53:18 -0700
-Message-Id: <20210803175318.446646-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        id S238837AbhHCTCm (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 3 Aug 2021 15:02:42 -0400
+Received: from mga03.intel.com ([134.134.136.65]:9039 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238764AbhHCTCm (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 3 Aug 2021 15:02:42 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="213792094"
+X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
+   d="scan'208";a="213792094"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 12:02:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
+   d="scan'208";a="670616386"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga005.fm.intel.com with ESMTP; 03 Aug 2021 12:02:29 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Tue, 3 Aug 2021 12:02:29 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Tue, 3 Aug 2021 12:02:28 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10 via Frontend Transport; Tue, 3 Aug 2021 12:02:28 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.10; Tue, 3 Aug 2021 12:02:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iHS0vGiLOlrAuNx0gwu+RdcHLIZMMMd5Dda+a9kIkXSPMXoG4uOGAvm9ZSDVfzVhp7qo2aw4tZsc/RekU0BK8KuvH+hGPd9+oWVE9ilHTWchXgXB7N/htNO8/Z3CjKG7r6RynKqpeTXUCqmdWS18DdJsClyF8vIzpwsftxjdmKZ2IIsInk8hijidCMpR1+GqVUN19RAJsPkKad7AeAg1X50AQvEp5U5glJ28HFlg42FHuiKMGZOLqV6JsciB2hFniqLd39hAd5Lu4bZ/6WzkhvrKBTEWk4Dd6LdT4QIz2UKefi04iINJFyf4aD0lJ06jZTn9h4YD8jbUKJrBAAM5mQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OgrlDoKRqQ38KLCHFlT0n6M/kJwyZzmas9ZTwznBYTw=;
+ b=UQm/n+/aP6OEArjSMDye2LyT+Htl2RuZ166D1XhKz24SBA5QFOUwuMs1ZReaxgpAbx8XNhyz+MgL63mn8rP503gt0+3PHLXZyMN8tsdQe55Tm+jbfAUbHvxqUBzZekmiI/xrjqpglhqm1zo3qD0dmzcORObP1CjY7y9Cxiz9/Qw6rsSaKwVxvurN77poNCzpE39qqmHx3cYeOcWzfvqMzqhqXU2Y5tLLA4eIpX3Yi9cEpex2b31oAdAW96RT9VeCinDzeZiRCrLtrxEso/RntSTxMMLoE12coBKBtcHmyfpCha3hQLqvjeFIH1dl3IFl45mvaUdoLglJpRB4hjM3QA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OgrlDoKRqQ38KLCHFlT0n6M/kJwyZzmas9ZTwznBYTw=;
+ b=o2jjVQzsVjzIFCh0s0V1XFSvFUkJdJhqG+467VLeLHg/RiIjzxJPt2sYgT/wlT0Zg9O80XDarPFLnri0qW7FzLaAOX+rpIDc626Fds7ZCJkc9UwNtdNTsB5FEVPZoV4Xfo/vKHTGRgD4MJy/Il6s8RrilMiiOottUZSZ2diphyE=
+Authentication-Results: google.com; dkim=none (message not signed)
+ header.d=none;google.com; dmarc=none action=none header.from=intel.com;
+Received: from SA2PR11MB5163.namprd11.prod.outlook.com (2603:10b6:806:113::20)
+ by SA0PR11MB4670.namprd11.prod.outlook.com (2603:10b6:806:9a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15; Tue, 3 Aug
+ 2021 19:02:27 +0000
+Received: from SA2PR11MB5163.namprd11.prod.outlook.com
+ ([fe80::51db:698d:e2e3:7fc8]) by SA2PR11MB5163.namprd11.prod.outlook.com
+ ([fe80::51db:698d:e2e3:7fc8%4]) with mapi id 15.20.4373.026; Tue, 3 Aug 2021
+ 19:02:27 +0000
+From:   Russ Weight <russell.h.weight@intel.com>
+Subject: Re: [PATCH 02/12] fpga: sec-mgr: enable secure updates
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        <linux-fpga@vger.kernel.org>, <moritzf@google.com>
+References: <20210517023200.52707-1-mdf@kernel.org>
+ <20210517023200.52707-3-mdf@kernel.org> <YKH/6xQ7bEwJzEsM@kroah.com>
+ <5d0552ce-d2bd-cca1-006e-8f11991fd378@intel.com>
+ <f3d474d2-f85d-4759-75b5-84af64fe5b3c@intel.com> <YQPgFn/z024U06HJ@kroah.com>
+ <85cd4801-ca1f-4482-6999-3d2e648b24e5@intel.com> <YQjY+KL59m51kucV@kroah.com>
+Message-ID: <3ba35b3c-3c85-394b-f404-130968587a6f@intel.com>
+Date:   Tue, 3 Aug 2021 12:02:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.11.0
+In-Reply-To: <YQjY+KL59m51kucV@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-ClientProxiedBy: MWHPR2201CA0055.namprd22.prod.outlook.com
+ (2603:10b6:301:16::29) To SA2PR11MB5163.namprd11.prod.outlook.com
+ (2603:10b6:806:113::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.0.2.4] (50.43.42.212) by MWHPR2201CA0055.namprd22.prod.outlook.com (2603:10b6:301:16::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15 via Frontend Transport; Tue, 3 Aug 2021 19:02:26 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: eb74ef54-dcf6-4075-6de9-08d956b13c6e
+X-MS-TrafficTypeDiagnostic: SA0PR11MB4670:
+X-Microsoft-Antispam-PRVS: <SA0PR11MB4670A6C4E5604DA827CCA92EC5F09@SA0PR11MB4670.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2TNZII4TzFXKxubCt48TYf4V7fi+qz+z2hmOuOOm1SGMR7uEtZ6Ho4V22GvH6Z2wwF7AR7w5R5ukjPp2p9qCll/wdNcIbiQ35rtCTaC11vjUO1cs7P2M2wX9qdbYm5r4FwpNGgWIDcxGKpswQfpU9yVH9TGAugbkYWJhtnIPfsHRUGB0431gwd0J7Ajz8G/P/SKKYnpNp9gnf5OhAeZ6M0o0FZtR6baEvmIQBBy2Inc95jxswpYCdsqujkWdPC8WZDIpLkgAx8hJuq/1NCNPfKstZsq+k6Nv/5V6+YwTAXiVkevdo1EpaN1gFgBp1jg9gNMN6u+ZpgG6zEO9DjxWtZjNUr/b6RLKUk/iwK74BKdX3j+Nwkt4hX+D1qRmCz4NeDxxg3hjOucoqHhPa6Njh2wHx+7gXKvcRrbQvKWnSaTVJqQpLGlLiRLqhoZOjfFdcXXVods3k0HY2zBghZMTpYqQWaaZW4X/grgQszYwwp44qLgif6eJRroqfeaUJw73iZU7PkQRZwyMRq/z9LqlDpSLAR5NBP1e5OxSKa1OVD9+4plLEcqD6hvKt8Zhl10qfPB9uomjAn11xEwBT1xa/TEkDPTvGJcjNx6qynrMb1hEb9D98Biq/wsmenAk99xReDrx3kV5RiuN8c2lJMbE6KLT6u28x0DbNzGIM4yA0ID9syDW72RSUtWPvHtS6o207SZyQH3D6yP3dGV2QKzmSj8s6Y51dxBNVDDH0JF58WakwVNFBBsEuZlBgP8L/HZS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB5163.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(136003)(346002)(39860400002)(376002)(15650500001)(54906003)(316002)(16576012)(956004)(478600001)(8676002)(26005)(186003)(86362001)(5660300002)(66946007)(2616005)(8936002)(31696002)(66556008)(66476007)(38100700002)(83380400001)(53546011)(6916009)(2906002)(6486002)(31686004)(4326008)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V0lGYUgrRGtSZTMxR2hGSkQzS2tMUXdvZW9qZFAzNnhJcVdjS0p6bEpoTHRh?=
+ =?utf-8?B?Q2Vjdy9NKzRXUW5KN1N4aTFNd1BycVVtdVI0dWlBR3VvL2Vhc3FVN3JnYnJr?=
+ =?utf-8?B?WUpUaDRrZEFIU0RRUHkxNWdxN0VGWmI0M3RNQXhMM21IdmFsN056RVc5WjhP?=
+ =?utf-8?B?ZkVSaHh6SXNDdVJIZjZNZ2d4dVBqR3hpMWpzbVNnMkRmTjZCeWxDNWU1N20z?=
+ =?utf-8?B?b0dVMXZoY3RYeVowNFFpc01xWWF4MGprRWttVnFqck1MV2xpYkRFRnpLRzBQ?=
+ =?utf-8?B?SzBwTGkwQWlQd282QjJ5ZnhFSVM4TGUzeEVPQlRFcEQreXRXditvT0wwb3li?=
+ =?utf-8?B?SFp5VkoyN2lCOVpFNzUwTHZ4VnkwS0t5MHZOYmk1MmpXMFJ6VTNWSEJXSDZP?=
+ =?utf-8?B?WDlBUkQrQVZVZHgvRnRpTEk3RVljRy96d1dJNXNpdTRjUjhDcktiS09YWS9Y?=
+ =?utf-8?B?d2hhVDM5dGRHSUd3QTFLUkg4S0tEVzh3V1RwWTVKZ1ZWbjViL3R2YUpCRDNa?=
+ =?utf-8?B?WUZmTVI2YW05TVdVYzVpeUp1bTJ4N3I2NjVrQmRQNExEZUdRc1o4bUltTGJY?=
+ =?utf-8?B?M1pLSThiRFJhcXpJY1VsNkIrR0NGcGRRRlpiWlErQUY5QWpXOE5oNTdpcnFw?=
+ =?utf-8?B?TmRXcWVacXVxVTNiM29FTFp0aFAwVnRUT2JFVmR2eEExaFNFSU5kczZOeisx?=
+ =?utf-8?B?cU5TbWNnNHdJZTJtRTE2TVR2Z1RaVTN3VGxmcEp2R3d3RXRsdDZBb1dVRkdR?=
+ =?utf-8?B?UTNsRnk4SGtkUWpzWW9aVXhCb0lhaW03aWNGWVlHSXlvMm9aMmVJM1VEajRm?=
+ =?utf-8?B?dE80VzNxTG5nZWhucUhkTU91UnhLVzVBRkc3V2ROdTgvMm5BVHRGN0lTWXNI?=
+ =?utf-8?B?Skh3N0d0WENwazNiVnljWHRIV0p5dDBIVzJ2Q1VOM1BCUTdPL2VQVTM3Y2cr?=
+ =?utf-8?B?RXB0WFZoSWhFb0R0anR5WkhDc0dlUFhZd2poZGFCdEhDcXVkVS9xZVZzMkFi?=
+ =?utf-8?B?dDhZQUZTQmxtMTNOY2dYMmtNQnEzVXVMaGpLY1UwSWpQS2RvOWM1c2lUS25D?=
+ =?utf-8?B?SHY2NE93SnNFaEJnTXJTWWhBelZWbjFIVlpZeEVTMmd2YlZHSHhXampVdGQr?=
+ =?utf-8?B?YjFva1JtWGNwaEVNOUptc3ZIVHlUNUJWemU4NVZxNTNGWEtUeS9mN3plS2VD?=
+ =?utf-8?B?ODI0WS9yZlBySGVTa0FobW1uVWVxQk04dnBvM1FMK1J3TGpNYUhCM3U4MGp5?=
+ =?utf-8?B?WWl4U1FCYktRUTJnQ2IzclBwNS9RTFlLZjI0dDVjaE0vMC8rVWFXNkMyN2tI?=
+ =?utf-8?B?WDlXN1c1Q282WUU2V2RqVEJhb0lzMnRzOWJuQkREWEhhTUpHUmxQWi9Iaysz?=
+ =?utf-8?B?WkcvK1FPVitseVh4dWtXa0VDMmpZZEcvdXZISFMzTmVDUitmaVNzZXlBYUxt?=
+ =?utf-8?B?ZVd1M3ZIUlk3Mm8zTmVFbHFWWjdBQ1NLb1kvS2E5Q1NraXFGMTF1NDNWZ1VJ?=
+ =?utf-8?B?SlZOc2xjaDkyMEFielFsSXRWZ2FHMHVwZll1RVRzQ1JnQmZiVEVzSG9nTURV?=
+ =?utf-8?B?MkdOYklTSXpESDJhZFhCSjA0aGlxQ0Y3cUVvcXR0dThQTGNSNGdMdjRpbzla?=
+ =?utf-8?B?a3B3WDJCeURVRitwV21KVE96S2ZvZENPNnBldXlBTVVjK053THJxYWtRQXVs?=
+ =?utf-8?B?SlhvTk4rVDA2OXM3c09ISWo5aWYyK0ZoSG9aZ0dsM05Rb094NUQrTXFPMHY2?=
+ =?utf-8?Q?dUsJDmyggzIoj4H7ZiQc3yJRJ4skpQRF/efsELP?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb74ef54-dcf6-4075-6de9-08d956b13c6e
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB5163.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2021 19:02:27.3960
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yXBBDNAmuYxa8MDJTua+sDyARSS11xXxJ0K2CaUUJcYFjVGNPTDjG7t8gIxgcKW/1MzMyDU7T3coNGKsIzWjlhP0zHYBnJLKXzVtSKg5Wx8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4670
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
 
-Convert passing of a get_bridges() function pointer in the
-the *fpga_region_create() to passing an ops table with
-get_bridges() as an element.
 
-For backward compatibility, because *create() could take a NULL
-function pointer, *create() and take a NULL ops table.
+On 8/2/21 10:49 PM, Greg KH wrote:
+>> If the request_firmware() implementation is not acceptable, then would
+>> you agree that an IOCTL implementation is our best option?
+> There is no difference in the end between using an ioctl, or a sysfs
+> file, to provide the filename of your firmware, don't get hung up on
+> that.
 
-Non NULL uses were converted to ops tables.
+I meant to suggest that passing file data (not a filename) through an
+IOCTL might be better for this use case than trying to use request_firmware.
+We have to, somehow, allow the user to point us to the desired image
+data (which could be a root-entry-hash, or an FPGA image). We can't
+really use a fixed filename modified by device version as many of
+the devices do.
 
-Add a fpga_region_get_bridges() wrapper handle to the NULL cases.
+> By providing a "filename", you are going around all of the namespace and
+> other "container" protection that the kernel provides, and allowing
+> processes to potentially load files that are normally outside of their
+> scope to the hardware.  If you are willing to allow that security
+> "escape", wonderful, but you better document the heck out of it and
+> explain why this is allowed for your special hardware and use case.
+>
+> As you are expecting this to work "in the cloud", I do not think that
+> the operators of such hardware are really going to be all that happy to
+> see this type of interface given these reasons.
+>
+> What is wrong with the current fpga firmware api that somehow is lacking
+> for your special hardware, that other devices do not have to worry
+> about?
+The existing framework wants to update the live image in the FPGA,
+whereas for this device, we are passing signed data to BMC firmware
+which will store it in FLASH to be loaded on a subsequent boot of
+the card.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- Documentation/driver-api/fpga/fpga-region.rst |  6 +++-
- drivers/fpga/dfl-fme-pr.c                     |  2 +-
- drivers/fpga/dfl-fme-region.c                 |  6 +++-
- drivers/fpga/fpga-region.c                    | 32 +++++++++++--------
- drivers/fpga/of-fpga-region.c                 |  6 +++-
- include/linux/fpga/fpga-region.h              | 22 ++++++++++---
- 6 files changed, 53 insertions(+), 21 deletions(-)
+The existing framework needs to manage FPGA state, whereas for this
+device, it is just a transfer of signed data. We also have to handle
+a total transfer/authentication time of up to 45 minutes, so we are
+using a kernel worker thread for the update.
 
-diff --git a/Documentation/driver-api/fpga/fpga-region.rst b/Documentation/driver-api/fpga/fpga-region.rst
-index 2636a27c11b24..b18fec6c4be56 100644
---- a/Documentation/driver-api/fpga/fpga-region.rst
-+++ b/Documentation/driver-api/fpga/fpga-region.rst
-@@ -46,6 +46,7 @@ API to add a new FPGA region
- ----------------------------
- 
- * struct fpga_region - The FPGA region struct
-+* struct fpga_region_ops —  Low level FPGA region driver ops
- * devm_fpga_region_create() - Allocate and init a region struct
- * fpga_region_register() -  Register an FPGA region
- * fpga_region_unregister() -  Unregister an FPGA region
-@@ -63,7 +64,7 @@ The FPGA region will need to specify which bridges to control while programming
- the FPGA.  The region driver can build a list of bridges during probe time
- (:c:expr:`fpga_region->bridge_list`) or it can have a function that creates
- the list of bridges to program just before programming
--(:c:expr:`fpga_region->get_bridges`).  The FPGA bridge framework supplies the
-+(:c:expr:`fpga_region_ops->get_bridges`).  The FPGA bridge framework supplies the
- following APIs to handle building or tearing down that list.
- 
- * fpga_bridge_get_to_list() - Get a ref of an FPGA bridge, add it to a
-@@ -75,6 +76,9 @@ following APIs to handle building or tearing down that list.
- .. kernel-doc:: include/linux/fpga/fpga-region.h
-    :functions: fpga_region
- 
-+.. kernel-doc:: include/linux/fpga/fpga-region.h
-+   :functions: fpga_region_ops
-+
- .. kernel-doc:: drivers/fpga/fpga-region.c
-    :functions: devm_fpga_region_create
- 
-diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
-index d61ce9a188792..4805d8c533d4a 100644
---- a/drivers/fpga/dfl-fme-pr.c
-+++ b/drivers/fpga/dfl-fme-pr.c
-@@ -151,7 +151,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
- 	 * reenabling the bridge to clear things out between acceleration runs.
- 	 * so no need to hold the bridges after partial reconfiguration.
- 	 */
--	if (region->get_bridges)
-+	if (region->rops && region->rops->get_bridges)
- 		fpga_bridges_put(&region->bridge_list);
- 
- 	put_device(&region->dev);
-diff --git a/drivers/fpga/dfl-fme-region.c b/drivers/fpga/dfl-fme-region.c
-index 1eeb42af10122..ca7277d3d30a9 100644
---- a/drivers/fpga/dfl-fme-region.c
-+++ b/drivers/fpga/dfl-fme-region.c
-@@ -27,6 +27,10 @@ static int fme_region_get_bridges(struct fpga_region *region)
- 	return fpga_bridge_get_to_list(dev, region->info, &region->bridge_list);
- }
- 
-+static const struct fpga_region_ops fme_fpga_region_ops = {
-+	.get_bridges = fme_region_get_bridges,
-+};
-+
- static int fme_region_probe(struct platform_device *pdev)
- {
- 	struct dfl_fme_region_pdata *pdata = dev_get_platdata(&pdev->dev);
-@@ -39,7 +43,7 @@ static int fme_region_probe(struct platform_device *pdev)
- 	if (IS_ERR(mgr))
- 		return -EPROBE_DEFER;
- 
--	region = devm_fpga_region_create(dev, mgr, fme_region_get_bridges);
-+	region = devm_fpga_region_create(dev, mgr, &fme_fpga_region_ops);
- 	if (!region) {
- 		ret = -ENOMEM;
- 		goto eprobe_mgr_put;
-diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
-index a4838715221ff..dfa35c2dc2720 100644
---- a/drivers/fpga/fpga-region.c
-+++ b/drivers/fpga/fpga-region.c
-@@ -18,6 +18,14 @@
- static DEFINE_IDA(fpga_region_ida);
- static struct class *fpga_region_class;
- 
-+static int fpga_region_get_bridges(struct fpga_region *region)
-+{
-+	if (region->rops && region->rops->get_bridges)
-+		return region->rops->get_bridges(region);
-+
-+	return 0;
-+}
-+
- struct fpga_region *fpga_region_class_find(
- 	struct device *start, const void *data,
- 	int (*match)(struct device *, const void *))
-@@ -115,12 +123,10 @@ int fpga_region_program_fpga(struct fpga_region *region)
- 	 * In some cases, we already have a list of bridges in the
- 	 * fpga region struct.  Or we don't have any bridges.
- 	 */
--	if (region->get_bridges) {
--		ret = region->get_bridges(region);
--		if (ret) {
--			dev_err(dev, "failed to get fpga region bridges\n");
--			goto err_unlock_mgr;
--		}
-+	ret = fpga_region_get_bridges(region);
-+	if (ret) {
-+		dev_err(dev, "failed to get fpga region bridges\n");
-+		goto err_unlock_mgr;
- 	}
- 
- 	ret = fpga_bridges_disable(&region->bridge_list);
-@@ -147,7 +153,7 @@ int fpga_region_program_fpga(struct fpga_region *region)
- 	return 0;
- 
- err_put_br:
--	if (region->get_bridges)
-+	if (region->rops && region->rops->get_bridges)
- 		fpga_bridges_put(&region->bridge_list);
- err_unlock_mgr:
- 	fpga_mgr_unlock(region->mgr);
-@@ -183,7 +189,7 @@ ATTRIBUTE_GROUPS(fpga_region);
-  * fpga_region_create - alloc and init a struct fpga_region
-  * @parent: device parent
-  * @mgr: manager that programs this region
-- * @get_bridges: optional function to get bridges to a list
-+ * @rops:  optional pointer to struct for fpga region ops
-  *
-  * The caller of this function is responsible for freeing the resulting region
-  * struct with fpga_region_free().  Using devm_fpga_region_create() instead is
-@@ -194,7 +200,7 @@ ATTRIBUTE_GROUPS(fpga_region);
- struct fpga_region
- *fpga_region_create(struct device *parent,
- 		    struct fpga_manager *mgr,
--		    int (*get_bridges)(struct fpga_region *))
-+		    const struct fpga_region_ops *rops)
- {
- 	struct fpga_region *region;
- 	int id, ret = 0;
-@@ -208,7 +214,7 @@ struct fpga_region
- 		goto err_free;
- 
- 	region->mgr = mgr;
--	region->get_bridges = get_bridges;
-+	region->rops = rops;
- 	mutex_init(&region->mutex);
- 	INIT_LIST_HEAD(&region->bridge_list);
- 
-@@ -255,7 +261,7 @@ static void devm_fpga_region_release(struct device *dev, void *res)
-  * devm_fpga_region_create - create and initialize a managed FPGA region struct
-  * @parent: device parent
-  * @mgr: manager that programs this region
-- * @get_bridges: optional function to get bridges to a list
-+ * @rops:  optional pointer to struct for fpga region ops
-  *
-  * This function is intended for use in an FPGA region driver's probe function.
-  * After the region driver creates the region struct with
-@@ -270,7 +276,7 @@ static void devm_fpga_region_release(struct device *dev, void *res)
- struct fpga_region
- *devm_fpga_region_create(struct device *parent,
- 			 struct fpga_manager *mgr,
--			 int (*get_bridges)(struct fpga_region *))
-+			 const struct fpga_region_ops *rops)
- {
- 	struct fpga_region **ptr, *region;
- 
-@@ -278,7 +284,7 @@ struct fpga_region
- 	if (!ptr)
- 		return NULL;
- 
--	region = fpga_region_create(parent, mgr, get_bridges);
-+	region = fpga_region_create(parent, mgr, rops);
- 	if (!region) {
- 		devres_free(ptr);
- 	} else {
-diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
-index e3c25576b6b9d..2c99605e008a6 100644
---- a/drivers/fpga/of-fpga-region.c
-+++ b/drivers/fpga/of-fpga-region.c
-@@ -138,6 +138,10 @@ static int of_fpga_region_get_bridges(struct fpga_region *region)
- 	return 0;
- }
- 
-+static const struct fpga_region_ops of_fpga_region_ops = {
-+	.get_bridges = of_fpga_region_get_bridges,
-+};
-+
- /**
-  * child_regions_with_firmware
-  * @overlay: device node of the overlay
-@@ -405,7 +409,7 @@ static int of_fpga_region_probe(struct platform_device *pdev)
- 	if (IS_ERR(mgr))
- 		return -EPROBE_DEFER;
- 
--	region = devm_fpga_region_create(dev, mgr, of_fpga_region_get_bridges);
-+	region = devm_fpga_region_create(dev, mgr, &of_fpga_region_ops);
- 	if (!region) {
- 		ret = -ENOMEM;
- 		goto eprobe_mgr_put;
-diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
-index 27cb706275dba..d712344fd00a7 100644
---- a/include/linux/fpga/fpga-region.h
-+++ b/include/linux/fpga/fpga-region.h
-@@ -7,6 +7,20 @@
- #include <linux/fpga/fpga-mgr.h>
- #include <linux/fpga/fpga-bridge.h>
- 
-+struct fpga_region;
-+
-+/**
-+ * struct fpga_region_ops - ops for low level fpga region drivers
-+ * @get_bridges: optional function to get bridges to a list
-+ *
-+ * fpga_region_ops are the low level functions implemented by a specific
-+ * fpga region driver.  The optional ones are tested for NULL before being
-+ * called, so leaving them out is fine.
-+ */
-+struct fpga_region_ops {
-+	int (*get_bridges)(struct fpga_region *region);
-+};
-+
- /**
-  * struct fpga_region - FPGA Region structure
-  * @dev: FPGA Region device
-@@ -16,7 +30,7 @@
-  * @info: FPGA image info
-  * @compat_id: FPGA region id for compatibility check.
-  * @priv: private data
-- * @get_bridges: optional function to get bridges to a list
-+ * @rops: optional pointer to struct for fpga region ops
-  */
- struct fpga_region {
- 	struct device dev;
-@@ -26,7 +40,7 @@ struct fpga_region {
- 	struct fpga_image_info *info;
- 	struct fpga_compat_id *compat_id;
- 	void *priv;
--	int (*get_bridges)(struct fpga_region *region);
-+	const struct fpga_region_ops *rops;
- };
- 
- #define to_fpga_region(d) container_of(d, struct fpga_region, dev)
-@@ -39,13 +53,13 @@ int fpga_region_program_fpga(struct fpga_region *region);
- 
- struct fpga_region
- *fpga_region_create(struct device *dev, struct fpga_manager *mgr,
--		    int (*get_bridges)(struct fpga_region *));
-+		    const struct fpga_region_ops *rops);
- void fpga_region_free(struct fpga_region *region);
- int fpga_region_register(struct fpga_region *region);
- void fpga_region_unregister(struct fpga_region *region);
- 
- struct fpga_region
- *devm_fpga_region_create(struct device *dev, struct fpga_manager *mgr,
--			int (*get_bridges)(struct fpga_region *));
-+			 const struct fpga_region_ops *rops);
- 
- #endif /* _FPGA_REGION_H */
--- 
-2.26.3
+Perhaps the name, fpga security manager, is wrong? Maybe something
+like fpga_sec_image_xfer is better?
+
+- Russ
+> thanks,
+>
+> greg k-h
 
