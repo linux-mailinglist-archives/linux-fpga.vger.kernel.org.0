@@ -2,139 +2,142 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FCB4072A4
-	for <lists+linux-fpga@lfdr.de>; Fri, 10 Sep 2021 22:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E7A4072B0
+	for <lists+linux-fpga@lfdr.de>; Fri, 10 Sep 2021 22:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbhIJUmF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 10 Sep 2021 16:42:05 -0400
-Received: from mga11.intel.com ([192.55.52.93]:63524 "EHLO mga11.intel.com"
+        id S233736AbhIJUtH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 10 Sep 2021 16:49:07 -0400
+Received: from mga11.intel.com ([192.55.52.93]:64017 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233384AbhIJUmE (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 10 Sep 2021 16:42:04 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10103"; a="218000337"
+        id S233384AbhIJUtH (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 10 Sep 2021 16:49:07 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10103"; a="218001644"
 X-IronPort-AV: E=Sophos;i="5.85,283,1624345200"; 
-   d="scan'208";a="218000337"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 13:40:52 -0700
+   d="scan'208";a="218001644"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 13:47:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,283,1624345200"; 
-   d="scan'208";a="470683307"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by orsmga007.jf.intel.com with ESMTP; 10 Sep 2021 13:40:52 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+   d="scan'208";a="697289976"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Sep 2021 13:47:55 -0700
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Fri, 10 Sep 2021 13:40:51 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ 15.1.2242.12; Fri, 10 Sep 2021 13:47:55 -0700
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Fri, 10 Sep 2021 13:40:51 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ 15.1.2242.12; Fri, 10 Sep 2021 13:47:54 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12 via Frontend Transport; Fri, 10 Sep 2021 13:47:54 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Fri, 10 Sep 2021 13:40:50 -0700
+ 15.1.2242.12; Fri, 10 Sep 2021 13:47:53 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zt3TqcHkTBgaaCxwqXAsBswu0C+qYmJx4QYc6ycwacMuqS0MVXRbQ9g0MNJtxXaJ9E2dxPdXtqtr/DtD/xLO4nNIl3fDuS/X4/8Rk6vH/h/sBCz2bfeP7VnLFqNmSFM9xofe8p2P7hZBE1P15cdln1kMs9NvZMl3/DVARTOJHFAZ4Jx3b+PQMG+LHDuWMdnqrk0awvIB5ZJW9CiHrw6pQAGbsk4z2kqYnj+j7Y0bgrXIIRwDr+xCAT0YPdjZs6GCftVWUObMZXy8YuhKyk1NjxjmU8IdpBGrGfkr+qP9MEf/OEhaFDyuuRjhuaQcS0EHY5wCtKASZ/e1ei9Hve2FrA==
+ b=Y2HQ3FWa3CdPgTgIMrAuMTEwA74QTZQ8JzA5WrUd8sMxVDR78vnjBmIrnIEjiU4oSpvNeq1citIr8SoceUoPHn1dypxWhT6k2nXQ/tEkpJgBfZhfJG7+fJyCdpySOtuaV52hqy5uB7lLNCnO/dOkkYSdKMITdq1DO/LBDzhqEJllsMbbS7ZnXCOtMEEts+MDZVKS/Xn6sfXqoL0UNANqYAcITsTRe6b6Osvf3ouJgScY920/TCEjygOxxmlK4JLtnCbqMOwYCu1jpWVYID9b1ohELIZnqwY7Egwv/uSnu9ox9uOc+XZcm0amm/EALiCEtQ8saRdVkgbCZaYsT87CtQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=qhpbBJApErVZxQjlbe51p9jxOySGEIy94n2dkPyK90A=;
- b=dRt5orYw9cAGHqkL35XdWllbN3nfVroEUMYNncihKC0R82gP7q7j3Yw4yFrjJO3xVA/g0DhKH5Ep/iIU+u4D0Ngk4EIPTvL08u2eK4QpfRADm0gDOedyzQo01VUZz3NaK4mmljSVSA+Mdl2fKcEaul1qUB6Xvmp0j9xDKL3uOpC9+FH9RxvNcIaQ2nLODB+XBmn/zJzCVUgOKJbE717rQRhXHhBaHnaL4D3AVxSSyNMh/gjPQ4+9GFJylFP6XatqcoecfoN9j54VdOGfskIT5oRBPWXm5Y/cqvlGGWrQa4HB6NfG4LutWfjNrNuZKXSmj44ojlrY6pILDHAPN4pjsw==
+ bh=aa/jCALVeUnl+bZNAqV7tuwta4sKVvTpfQ2kDw1Z/hQ=;
+ b=Sf7VPLaGF7nLRu0z6aelZGsAolro20SYiFI6z5Q5fz+/ndpK5ATTi5YMSfe9w0SnT2RFwiyVz1YOzdnSbT5deYrrnqErPgv+8nAOu6IICV3QRve6dALOWDdO4R33YvFVkX+dQ4+3o5dEOcPAK8iuqKUwa1wOabSCGoTJ0PFj1wfCMV5khqfzpZEZyHOSpeEdvRgh4+PklLqpn5JWC7B94g8nkMFgLKDV/YzaBNTTfDJKw3t6jfEdaSk8ZRcvrywdIZoRU1+VrB2oyMPAwq9Fm8Mv4sufzNjstrSYIl9ULipan2EsbKq1WeuTpunbaDBr+o6+npGp8L4PA6NiRdWPhA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
  s=selector2-intel-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qhpbBJApErVZxQjlbe51p9jxOySGEIy94n2dkPyK90A=;
- b=PXwjqpL22uMXtum+bNdX36cN8Dyz/FfE5Aq777fHTDCtbqjhgJntJ/LH5fpavbyxklIDtPWoe88yyGIqOuSQcX4qmLT1Z3zqzIGm21Y/ZXzla4I6EPB+4k4CWato3vF/E8UQ76j69OBrWeIIT0TsLfCkkmO/8o7GSXG36FNQ14U=
+ bh=aa/jCALVeUnl+bZNAqV7tuwta4sKVvTpfQ2kDw1Z/hQ=;
+ b=jjvpo7P7x03d3U1TCdHQ6Wj5JaXCubhFt6Ds1PL1uU4mYpqboIUs0h+eITre246y1NeObBDs6bwm3HTGjcpVM+Q0N1rigWiEFFSpax/gDDZNcZgA4Rw567RT7zhn0Puq3VDCDkUR+/tz2VP0y9sXAX3r14PWh3Sw3pPXEwhP2GU=
 Authentication-Results: intel.com; dkim=none (message not signed)
  header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
 Received: from SA2PR11MB5163.namprd11.prod.outlook.com (2603:10b6:806:113::20)
- by SN6PR11MB3262.namprd11.prod.outlook.com (2603:10b6:805:bf::17) with
+ by SA0PR11MB4719.namprd11.prod.outlook.com (2603:10b6:806:95::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14; Fri, 10 Sep
- 2021 20:40:47 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.16; Fri, 10 Sep
+ 2021 20:47:46 +0000
 Received: from SA2PR11MB5163.namprd11.prod.outlook.com
  ([fe80::90de:46c1:4d23:5c8c]) by SA2PR11MB5163.namprd11.prod.outlook.com
  ([fe80::90de:46c1:4d23:5c8c%6]) with mapi id 15.20.4500.017; Fri, 10 Sep 2021
- 20:40:47 +0000
-Subject: Re: [PATCH v14 4/4] fpga: m10bmc-sec: add max10 secure update
- functions
+ 20:47:46 +0000
+Subject: Re: [PATCH v15 1/6] fpga: image-load: fpga image load class driver
 To:     Xu Yilun <yilun.xu@intel.com>
 CC:     <mdf@kernel.org>, <linux-fpga@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <trix@redhat.com>,
         <lgoncalv@redhat.com>, <hao.wu@intel.com>,
         <matthew.gerlach@intel.com>
-References: <20210909233304.5650-1-russell.h.weight@intel.com>
- <20210909233304.5650-5-russell.h.weight@intel.com>
- <20210910153347.GC757507@yilunxu-OptiPlex-7050>
+References: <20210909021846.681121-1-russell.h.weight@intel.com>
+ <20210909021846.681121-2-russell.h.weight@intel.com>
+ <20210910064658.GA754505@yilunxu-OptiPlex-7050>
 From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <c5bc9aae-63f7-7fc2-1e41-6945e11c3f53@intel.com>
-Date:   Fri, 10 Sep 2021 13:40:43 -0700
+Message-ID: <bc55df5c-d571-aaa5-f36d-2985419bcd29@intel.com>
+Date:   Fri, 10 Sep 2021 13:47:43 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.13.0
-In-Reply-To: <20210910153347.GC757507@yilunxu-OptiPlex-7050>
+In-Reply-To: <20210910064658.GA754505@yilunxu-OptiPlex-7050>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-ClientProxiedBy: MWHPR2201CA0051.namprd22.prod.outlook.com
- (2603:10b6:301:16::25) To SA2PR11MB5163.namprd11.prod.outlook.com
+X-ClientProxiedBy: MWHPR18CA0065.namprd18.prod.outlook.com
+ (2603:10b6:300:39::27) To SA2PR11MB5163.namprd11.prod.outlook.com
  (2603:10b6:806:113::20)
 MIME-Version: 1.0
-Received: from [10.0.2.4] (50.43.42.212) by MWHPR2201CA0051.namprd22.prod.outlook.com (2603:10b6:301:16::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Fri, 10 Sep 2021 20:40:46 +0000
+Received: from [10.0.2.4] (50.43.42.212) by MWHPR18CA0065.namprd18.prod.outlook.com (2603:10b6:300:39::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Fri, 10 Sep 2021 20:47:45 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5ece20a6-3ce9-49a2-7efd-08d9749b44bf
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3262:
+X-MS-Office365-Filtering-Correlation-Id: 192b6850-e66c-44db-0124-08d9749c3e9e
+X-MS-TrafficTypeDiagnostic: SA0PR11MB4719:
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SN6PR11MB326268BF8CAEC4FCC0A35186C5D69@SN6PR11MB3262.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Microsoft-Antispam-PRVS: <SA0PR11MB47192FB37CC728145EAAAFEFC5D69@SA0PR11MB4719.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hrq0EyrXaftXGW9zl0EBGilTRsVo1e4NOh9HXL9D+zDKP/HxdAHIzCH2wuHyYBo9Eeyle7i6sO2M1HD9HUz+qaSwSWL/CMAdKJu2DKW5zdDVLkwjc55gex/uoWJsTxVKOvsvzk0kTD9c4LRddzPezauQ0X3gkf9StAS6rl9GKBYI7YlFLFiLJEP/CiOm1kvqP5bQhlqzI8cFEmfYEiaCKjTKoFO7ECUzBb8lRuGqGEJq+rOi/lYY1ab8zidK3UEFM9GQhz/j2N7//KcvXBFrCkrbJ7zWNfNTF597uAYN5gq/vYObvaiAlUnqLGByS76JlznTLT+ecs/nIBz8MKfyWA3sAvGQCgei9RaSgE9yDSMdcghqdw9SFaWiIMTO9ePYELK+eeQEcNhMgv3p9Ei5EgfmPhlj7pjALHqT+MU6l0wLmZPMakNp5b3YO/yDU5o1aJoapNlUmnYscFwNuJXyUO0eLRTzEYK4qbbJMv7zFgcf1EH5WMgLfznk+nLZBKYJfQ3KYdFi/ULcffVygpSN5oiyEIMHIYs9RnC5c9i96Hw0UUrAd+1Sjdc/KKphgxTrFlyxgRs7rEzcx8Ll4/u2kKVQjcuii6xMvLhLE2GhIcb8k8aIy7HUl/NYFepjefUMMrjIjL97lflwhAcsXsIQLqZ0PyAs2G0XkPNdhjJuH5seCuaUdEvVmupSLdUO0A/+IoeTmB3RzYFk8sNbl1MQSqRjvgVQRrCXA2Ob+3ND3d/ujGkbDjApmqm8BcgmFqL4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB5163.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39860400002)(136003)(376002)(346002)(396003)(4326008)(26005)(2616005)(6636002)(66476007)(66556008)(478600001)(66946007)(53546011)(186003)(37006003)(83380400001)(15650500001)(86362001)(5660300002)(2906002)(6486002)(36756003)(31686004)(16576012)(31696002)(107886003)(6862004)(8676002)(6666004)(30864003)(956004)(38100700002)(8936002)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: I84sDlCJz59EOQoW4LJxoTq3qnM1XcpTSO6oa0trjTS2/AoIQOoz4eTeOK1HNGVSeelJ1kY63SyC9I0sOJ6qvZgYzfPFIP/I+j4Z5WVPJJllL4lzNngFbp4YbD/oI9joWvLj6xL9pp1OJgHKuhRDv2ydDrACZJMnzeexlJ8GbVNNpdkAg8khybgdtwSYSq8m6LL6T+Eg7c6YTDIKCWCJ78pdrdJzpJlckbRydfv1EtXivPacIigtFWTIYn0jJzW36U9SKrXwPc4OUJDlpnYAOGr9kZEfxwYeWxy06XIU+La082u/ClTye540/ilCeXS0BFjPwJumcEGNaZcza1XeyvTOp0TAwKzDLWt8nJm/AWXoWX42E1pg3ZNPOeH9+y5XfyhMq2IWp/BKFj5vo5qyoIjWk61beaYFLMBWLYu2yOPBfGjgSQ7oU8uDGc4/giSp1y49fZUjbIK4qA1Pu+tLDgXwELU7LdGesPVWvZbqprr6N9e44m6SFzXj6U6Mgt/Ha6hBFXMnWW7mOJJ/KyRQrhnWpr0NMG136TzJDe17AqW8kpxnasFmGeQSTWSnldOmL6mpWTi0HXw+UMtkKYuLsd9GOQtlebSMRidIQoB0u3JzhROsa0aBB4g9Ymsuq9PZoLJiOxNZeFqliBQJSYWZ89ulUwkKulBKG4Fdop8J+MY1K9wqxkV4FwPwE3kB+t+ulrl8E3fnXEIt6R3CKQhRURdMdsxVEgARji3S7vz+EkM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB5163.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(366004)(136003)(376002)(346002)(37006003)(83380400001)(316002)(36756003)(478600001)(107886003)(6486002)(2906002)(956004)(86362001)(6862004)(8936002)(4326008)(16576012)(30864003)(38100700002)(53546011)(6636002)(66556008)(8676002)(186003)(5660300002)(66946007)(26005)(31696002)(2616005)(31686004)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NjFmRjh4SlZKdGFoZmRGVmwyTCttd3g3QUsyd2tHdTViSUk0dk9YcklveVNr?=
- =?utf-8?B?Y2JNeXZXZmNJZ0s3Y2YzeEJyUzg2ME9NMTdlMHZXU254ZHVMWlh6N2YvTjN1?=
- =?utf-8?B?azF0QXJvd0k0cTIvUFpEd1J4cXhsUUdHQ3JENjlzQjVadVQybWFadlNPckgw?=
- =?utf-8?B?SGNoQnhOTStBZmM3NXREK1U0ZFVOYTRZSDVOcURmblRCc3dLb3g4T1kyOEtj?=
- =?utf-8?B?SVkxWTdDVCtxYi9XcGlBcU9rYzZnMnRCcW5yUEJaVXVmU3h0eC9FUGgvSi9w?=
- =?utf-8?B?QzlzNWl0TEdUWmV3L1NDTndrdElORnlwVE8yUlFaeHN6dmFjMWVZNSs1RTZ0?=
- =?utf-8?B?dlhQVzFtclBLcXM2QlAxZjhNRWM1aW8yYkp0Y0ZIS1pROStaZ3E3aXQ5Tmx0?=
- =?utf-8?B?N3kzeUx6VzBPc0pqeVF2eUlabTU1eE1OTXcwRDNGcUp5VHZ3eXJaUFJxbWFs?=
- =?utf-8?B?SVRTODBIcHNDZGVSZGRrSkhxRzl6bUhaQTNQOGxEWFZFMzczL25wVUl1eTNY?=
- =?utf-8?B?ZFV3UUdWTHF4TUhtQmVEMEltOHFNNnlXcy9uNnFoUU0zaHgvV01hMGJuc21n?=
- =?utf-8?B?SjVnMnI1TUk4bFQzK0hacTh1eVFFdWdXRkVTWnpGdThOVElFMkdTMGUxdWFI?=
- =?utf-8?B?RHEvaTBhQVhIb0htc0ZQdWh1dVo1VVFiVWo1akV5Q080RlkyWDl5c1BYblBM?=
- =?utf-8?B?T04zYytmSE5yZEExbEM2bjdWMzQweXNGbk5sV2ZlTjl0Q1NzOEpUQkZnUEFt?=
- =?utf-8?B?MkE1TmhybTRFaUJMTTZlTnVNQTFxd0s4dXdlZzFFbDhMVEo1ZTVlaEhqc2Nv?=
- =?utf-8?B?d21GMkU1WUJ0RE1qaGtKdmYwNGVpaVQrSEFubUJnZC8rMm5Xb1NpcFZFdUQ2?=
- =?utf-8?B?dWkyMm1KN0hhOEhlWlBqN2RYVlNZVC96ekNGOGZHYmhTc1d3V1BENW0rSmdq?=
- =?utf-8?B?b25PY01UbjA1aDlLQXVnaUhLeVQ4SExZRE1MWHRGNEgyT2dxc3ZtblZKZGpE?=
- =?utf-8?B?TDNqeWV4eWdNZ2FBUGNFZ0oweGVIekxKZkMzRXRBalVhRmNOUHRlVmFJYzBY?=
- =?utf-8?B?cWdtOFVEa0k5K21nTC8xVEExWHN3V1VTdURCZ3YrdHd5NGlrQUR4WUZpeXNp?=
- =?utf-8?B?V295OGlvVzdHSGl3Y2FJR1hlanRoS0JnekJDMy9kS0lqNHV6L0h3OXhxbzVz?=
- =?utf-8?B?UVZGTDU1K20vSUgyNmFpejJzMnlCMkpEY21mMk9henpNTGRmNmNwNHFEL1lT?=
- =?utf-8?B?cTg5eDRISnBtcHBYc2FDaHdHK2JFb2c3dTVWK0dIQUViMVA4M1Z6RTRJTThU?=
- =?utf-8?B?bXBLVlhMSDlKemdERlQ2bmJSNTN4V29CQm1LRWhuQ3BTMHZ6VytUZFg2YUgr?=
- =?utf-8?B?dXM0OU52cGkvNjA5bVgxejBBaUZ1aUpzSlRLRzN0WUtOdVNJZTFDSUJmb3Fz?=
- =?utf-8?B?b2dQbG9GVjUrUkNlditJVEM4T3BaQjhKcCtralJVdVVsZThxdkdvOVBoTEx1?=
- =?utf-8?B?S01UbWsrRGFDendPSXBpRXNFMEhYbHVrcFVpVzRxck5KZlo0dnpoWTR5OVY3?=
- =?utf-8?B?T21FdFJNWVBRNHkwSWlRcVdxbVE2cmVzVnVBQTMrTk5aRUliUWJKOEVML1R4?=
- =?utf-8?B?NFRlakNhUjNaZVR5TmtaNzN6MTZtTTc2ZlQvNmc5aWc2RTRoTXVFd1VDbUFi?=
- =?utf-8?B?SUZQMnZ5c1c2Skw2V2pPZ1R4VE1TR0NLeDFsNnMxYkR4RU1tYytRZFQvekFs?=
- =?utf-8?Q?P2MIvhx95/Iwnx8I8E5i16dDwYTqw+oJVZhzvjO?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ece20a6-3ce9-49a2-7efd-08d9749b44bf
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N1lTNFJhczFzWC9qNGhEaVpQZGhYSHVXajhncjRCUWRGSGhJR0RUYWltSG9u?=
+ =?utf-8?B?U2xONk5oWk1UZHVBV1lNc2hpU2p4TlQ3dU91UzNQZFdjQ0pZNE40R3ZxaHg3?=
+ =?utf-8?B?NXVHajBUbzc5aGlsMERwb3VaUzZUS3B2TGUwY3B3VDd6UldDbmxBdk11cHRD?=
+ =?utf-8?B?cTM2d3VqaEVBbGNPdk9vVkMrWnRqOGd6UllZMkRQWDJWdFBMcXdML2xJWklK?=
+ =?utf-8?B?U2VVa1lFRWl0eDREUWluSXFTZlFnbGNqaXhyaFJ3dk5DT1Q3WHNaY2VyeTRJ?=
+ =?utf-8?B?UzlLTTVQb0hRa1pxSHV0bzNCK05LTzNVaEh5VkJnZmZ2L3lONGxuUWdwQlFC?=
+ =?utf-8?B?aEVYbDFubTd5VCt4WXBxK2padXNRc3Fta1ZJMFE3UFZNaWwwNnYwY2E5Y3k1?=
+ =?utf-8?B?NHAweklROTF1aWFHWnY3MFhDNmRTUUVyNk5ZTFFpYWRJZlVHSExxd05PRENN?=
+ =?utf-8?B?MFFCdFF6T3psY3h3bFpqVGorYVVrQm1GWTQzM2wvUVVFa0ZzK0hIVEN2OHhj?=
+ =?utf-8?B?UlJqakNYQ3ovdHRLTlU3cXdkUWJPV0ExQXA2M2gwNm1wUUEydzV2SDlTR1Nl?=
+ =?utf-8?B?Q3k3SEVYYXpBS2Q1YXY5QmU4R08vdm1HSFUwUVZVbnpGUWk0anBLcmkxVzlS?=
+ =?utf-8?B?VUVvaVZRQjN5NndVNjc4UkFRRzdyL25scm5UQ0JWNm9aeCtZNENDcHM4RkFj?=
+ =?utf-8?B?eXdUdjZGbnFHSnM1dCtQbE4yOEpIM2o1bFhOSTZWM0VWYXdtNWxDVnoxRmkx?=
+ =?utf-8?B?OFFOMGtTd1c0Tml3S29vbmg4SUVsWi9YMHZsQThSNW5wUklyMGFuSXpQelJ2?=
+ =?utf-8?B?S1lneGhJa3RJTkdyeUFHamZkV3JVSG9HTGdtZjdIaHFrYXpMS0x4WWs0ZnBC?=
+ =?utf-8?B?bFVyOTRMV2xOVXVzNmNNSmNXV2FHM0hWeVdqQ0cyWE03ZW14SjdUalhObFBm?=
+ =?utf-8?B?Qm1nZ2E3VDhFR09zLy9CR2diclVPS3pWY09PbE9CaU8wT1FERmVBQkJlbzNk?=
+ =?utf-8?B?dHErOTlmViszUVV0bW0wbnlSTC9IbjdqRlNHa25DWWVieFFrQ3d1VDdlWWkw?=
+ =?utf-8?B?Uzg2cHJzcU52TDlYbFYwSm5Zc2xKNVlDcnJDOHRUb1RZNW1acTB1REUwcXBa?=
+ =?utf-8?B?bU41RkNwNTJtZGl1TXVudEF2SDVzdkdBWEF3NGcxRmZoYjlpUzFIWUNmcUMx?=
+ =?utf-8?B?M3hmMjVzMWllaGQvaHlkUXlQTFYyeWVVRVBCRjdReXRIWFl5bHV4S1NiWU12?=
+ =?utf-8?B?Ym5UdmRQVlpSTWZrMDhOL2FjcmhTcGUyekc3bWhKQjlwbVE4eThTU0Uwa1hy?=
+ =?utf-8?B?dXJ1ZW5JN3BWSmZQYWtCWG1zUkhVcFIxT1ppSDR2dVVEeXUyRmhSM1pENlFq?=
+ =?utf-8?B?azRIblA3bmFFRVFhbVp4VndvcG00UlMxbUpod1pURy9BL0FrKytuYTk5N3Aw?=
+ =?utf-8?B?UkoveG5MZWNUVkRReEFCT2twNERRSFRJZy9DQWxzOFRsdXY1bkdSaTJHajkv?=
+ =?utf-8?B?V0EzaTQ4Z0g1dzVQUHZOVWdhS3JGQUg4TkNTR1g5dmtnc2xGZVJqWDV0dVBJ?=
+ =?utf-8?B?VkdIRkVFSmVnZ1NFa3pTSnBpYkVpVzZIVzVtU0lBNGRIcm5LdXZBZklXUnNX?=
+ =?utf-8?B?eW00eU9qNnVwcEMrWkpwK2VVV1VvejRDNVN4RU1GTkFmQlR4bnNXNEF5ZG1M?=
+ =?utf-8?B?WXpUZWRSM2ZpTE9yVE1qQjhwalpnZ2dqRFFRRmJqVSszM1NOTy91bjlPVWpG?=
+ =?utf-8?Q?NmP4sURKPWJ2Wu3hFpb5KXXc+6zdZdb3ARs5ZH8?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 192b6850-e66c-44db-0124-08d9749c3e9e
 X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB5163.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2021 20:40:47.3193
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2021 20:47:46.5172
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gWd860gId1Upi03H8e1AR2+64CzSGAdhx4rw2x4CfD/wHBZwoUW5Kfi7wYhW0/CZ5PrSf14cB9GLd2XYOCwTH/U8k1QnulIoyzKXyPhFnKo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3262
+X-MS-Exchange-CrossTenant-UserPrincipalName: xQK4qhy5+/an0CiWyVuTagQEXki7/QBGxpA+Z8ZT0JvOrxVp7uHVrfHuxU+vZ/VDy8+ppn8yFQ573b3edxuC0YHNCTtfOgWjhPWToz/QIIs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4719
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
@@ -142,411 +145,355 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 
-On 9/10/21 8:33 AM, Xu Yilun wrote:
-> On Thu, Sep 09, 2021 at 04:33:04PM -0700, Russ Weight wrote:
->> Invoke an instance of the FPGA Image Load driver and extend the MAX10
->> BMC Secure Update driver to include the functions that enable secure
->> updates of BMC images, FPGA images, etc.
+On 9/9/21 11:46 PM, Xu Yilun wrote:
+> On Wed, Sep 08, 2021 at 07:18:41PM -0700, Russ Weight wrote:
+>> The FPGA Image Load class driver provides an API to transfer update
+>> files to an FPGA device. Image files are self-describing. They could
+>> contain FPGA images, BMC images, Root Entry Hashes, or other device
+>> specific files. It is up to the device driver and the target device
+>> to authenticate and disposition the file data.
 >>
 >> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 >> ---
+>> v15:
+>>  - Compare to previous patch:
+>>      [PATCH v14 1/6] fpga: sec-mgr: fpga security manager class driver 
+>>  - Changed file, symbol, and config names to reflect the new driver name
+>>  - Rewrote documentation. The documentation will be added to in later patches.
+>>  - Removed signed-off/reviewed-by tags
 >> v14:
->>   - Changed symbol names to reflect the renaming of the Security Manager
->>     Class driver to FPGA Image Load.
+>>  - Updated copyright to 2021
+>>  - Removed the name sysfs entry
+>>  - Removed MAINTAINERS reference to
+>>    Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
+>>  - Use xa_alloc() instead of ida_simple_get()
+>>  - Rename dev to parent for parent devices
+>>  - Remove fpga_sec_mgr_create(), devm_fpga_sec_mgr_create(), and
+>>    fpga_sec_mgr_free() functions and update the fpga_sec_mgr_register()
+>>    function to both create and register a new security manager.
+>>  - Populate the fpga_sec_mgr_dev_release() function.
 >> v13:
 >>   - No change
 >> v12:
 >>   - Updated Date and KernelVersion fields in ABI documentation
->>   - Removed size parameter from the write_blk() op. m10bmc_sec_write_blk()
->>     no longer has a size parameter, and the block size is determined
->>     in this (the lower-level) driver.
 >> v11:
 >>   - No change
 >> v10:
->>   - No change
+>>   - Rebased to 5.12-rc2 next
+>>   - Updated Date and KernelVersion in ABI documentation
 >> v9:
->>   - No change
+>>   - Updated Date and KernelVersion in ABI documentation
 >> v8:
->>   - Previously patch 5/6, otherwise no change
+>>   - Fixed grammatical error in Documentation/fpga/fpga-sec-mgr.rst
 >> v7:
->>   - No change
+>>   - Changed Date in documentation file to December 2020
 >> v6:
->>   - Changed (size / stride) calculation to ((size + stride - 1) / stride)
->>     to ensure that the proper count is passed to regmap_bulk_write().
->>   - Removed unnecessary call to rsu_check_complete() in
->>     m10bmc_sec_poll_complete() and changed while loop to
->>     do/while loop.
+>>   - Removed sysfs support and documentation for the display of the
+>>     flash count, root entry hashes, and code-signing-key cancelation
+>>     vectors.
 >> v5:
->>   - No change
+>>   - Added the devm_fpga_sec_mgr_unregister() function, following recent
+>>     changes to the fpga_manager() implementation.
+>>   - Changed some *_show() functions to use sysfs_emit() instead of sprintf(
 >> v4:
->>   - No change
->> v3:
+>>   - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+>>     and removed unnecessary references to "Intel".
 >>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
->>   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
->>     driver"
->>   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
->>     underlying functions are now called directly.
->>   - Changed calling functions of functions that return "enum fpga_sec_err"
->>     to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
+>> v3:
+>>   - Modified sysfs handler check in check_sysfs_handler() to make
+>>     it more readable.
 >> v2:
->>   - Reworked the rsu_start_done() function to make it more readable
->>   - Reworked while-loop condition/content in rsu_prog_ready()
->>   - Minor code cleanup per review comments
->>   - Added a comment to the m10bmc_sec_poll_complete() function to
->>     explain the context (could take 30+ minutes to complete).
->>   - Added m10bmc_ prefix to functions in m10bmc_iops structure
->>   - Moved MAX10 BMC address and function definitions to a separate
->>     patch.
+>>   - Bumped documentation dates and versions
+>>   - Added Documentation/fpga/ifpga-sec-mgr.rst
+>>   - Removed references to bmc_flash_count & smbus_flash_count (not supported)
+>>   - Split ifpga_sec_mgr_register() into create() and register() functions
+>>   - Added devm_ifpga_sec_mgr_create()
+>>   - Removed typedefs for imgr ops
 >> ---
->>  drivers/fpga/intel-m10-bmc-secure.c | 310 +++++++++++++++++++++++++++-
->>  1 file changed, 309 insertions(+), 1 deletion(-)
+>> ---
+>>  Documentation/fpga/fpga-image-load.rst |  10 ++
+>>  Documentation/fpga/index.rst           |   1 +
+>>  MAINTAINERS                            |   8 ++
+>>  drivers/fpga/Kconfig                   |  10 ++
+>>  drivers/fpga/Makefile                  |   3 +
+>>  drivers/fpga/fpga-image-load.c         | 124 +++++++++++++++++++++++++
+>>  include/linux/fpga/fpga-image-load.h   |  35 +++++++
+>>  7 files changed, 191 insertions(+)
+>>  create mode 100644 Documentation/fpga/fpga-image-load.rst
+>>  create mode 100644 drivers/fpga/fpga-image-load.c
+>>  create mode 100644 include/linux/fpga/fpga-image-load.h
 >>
->> diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
->> index ae1383d13bfc..025655684d00 100644
->> --- a/drivers/fpga/intel-m10-bmc-secure.c
->> +++ b/drivers/fpga/intel-m10-bmc-secure.c
->> @@ -181,7 +181,315 @@ static const struct attribute_group *m10bmc_sec_attr_groups[] = {
->>  	NULL,
->>  };
+>> diff --git a/Documentation/fpga/fpga-image-load.rst b/Documentation/fpga/fpga-image-load.rst
+>> new file mode 100644
+>> index 000000000000..a6e53ac66026
+>> --- /dev/null
+>> +++ b/Documentation/fpga/fpga-image-load.rst
+>> @@ -0,0 +1,10 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +============================
+>> +FPGA Image Load Class Driver
+>> +============================
+>> +
+>> +The FPGA Image Load class driver provides a common API for user-space
+>> +tools to manage image uploads to FPGA devices. Device drivers that
+>> +instantiate the FPGA Image Load class driver will interact with the
+>> +target device to transfer and authenticate the image data.
+>> diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
+>> index f80f95667ca2..85d25fb22c08 100644
+>> --- a/Documentation/fpga/index.rst
+>> +++ b/Documentation/fpga/index.rst
+>> @@ -8,6 +8,7 @@ fpga
+>>      :maxdepth: 1
 >>  
->> -static const struct fpga_image_load_ops m10bmc_lops = { };
->> +static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
->> +{
->> +	u32 auth_result;
+>>      dfl
+>> +    fpga-image-load
+>>  
+>>  .. only::  subproject and html
+>>  
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 6c63415d2ac2..4e7f48fa7e5c 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -7358,6 +7358,14 @@ F:	Documentation/fpga/
+>>  F:	drivers/fpga/
+>>  F:	include/linux/fpga/
+>>  
+>> +FPGA SECURITY MANAGER DRIVERS
+>> +M:	Russ Weight <russell.h.weight@intel.com>
+>> +L:	linux-fpga@vger.kernel.org
+>> +S:	Maintained
+>> +F:	Documentation/fpga/fpga-image-load.rst
+>> +F:	drivers/fpga/fpga-image-load.c
+>> +F:	include/linux/fpga/fpga-image-load.h
 >> +
->> +	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
+>>  FPU EMULATOR
+>>  M:	Bill Metzenthen <billm@melbpc.org.au>
+>>  S:	Maintained
+>> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+>> index 991b3f361ec9..c12a14e62fff 100644
+>> --- a/drivers/fpga/Kconfig
+>> +++ b/drivers/fpga/Kconfig
+>> @@ -243,4 +243,14 @@ config FPGA_MGR_VERSAL_FPGA
+>>  	  configure the programmable logic(PL).
+>>  
+>>  	  To compile this as a module, choose M here.
 >> +
->> +	if (!m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result))
->> +		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
->> +}
+>> +config FPGA_IMAGE_LOAD
+>> +	tristate "FPGA Image Load Driver"
+> Maybe we don't call it "Driver". A framework or "FPGA Image load support",
+> is it better?
+>
+> There are more descriptions about "driver" below, maybe you need to change
+> them all.
+
+Yeah - I think that language sounds better.
+>
+>> +	help
+>> +	  The FPGA Image Load class driver presents a common user API for
+>> +	  uploading an image file to an FPGA device. The image file is
+>> +	  expected to be self-describing. It is up to the device driver
+>> +	  and/or the device itself to authenticate and disposition the
+>> +	  image data.
 >> +
->> +static enum fpga_image_err rsu_check_idle(struct m10bmc_sec *sec)
->> +{
->> +	u32 doorbell;
->> +	int ret;
+>>  endif # FPGA
+>> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+>> index 0bff783d1b61..adf228ee4f5e 100644
+>> --- a/drivers/fpga/Makefile
+>> +++ b/drivers/fpga/Makefile
+>> @@ -22,6 +22,9 @@ obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
+>>  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
+>>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
+>>  
+>> +# FPGA Image Load Framework
+>> +obj-$(CONFIG_FPGA_IMAGE_LOAD)		+= fpga-image-load.o
 >> +
->> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
->> +	if (ret)
->> +		return FPGA_IMAGE_ERR_RW_ERROR;
->> +
->> +	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
->> +	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE) {
->> +		log_error_regs(sec, doorbell);
->> +		return FPGA_IMAGE_ERR_BUSY;
->> +	}
->> +
->> +	return FPGA_IMAGE_ERR_NONE;
->> +}
->> +
->> +static inline bool rsu_start_done(u32 doorbell)
->> +{
->> +	u32 status, progress;
->> +
->> +	if (doorbell & DRBL_RSU_REQUEST)
->> +		return false;
->> +
->> +	status = rsu_stat(doorbell);
->> +	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
->> +		return true;
->> +
->> +	progress = rsu_prog(doorbell);
->> +	if (progress != RSU_PROG_IDLE && progress != RSU_PROG_RSU_DONE)
->> +		return true;
->> +
->> +	return false;
->> +}
->> +
->> +static enum fpga_image_err rsu_update_init(struct m10bmc_sec *sec)
->> +{
->> +	u32 doorbell, status;
->> +	int ret;
->> +
->> +	ret = regmap_update_bits(sec->m10bmc->regmap,
->> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
->> +				 DRBL_RSU_REQUEST | DRBL_HOST_STATUS,
->> +				 DRBL_RSU_REQUEST |
->> +				 FIELD_PREP(DRBL_HOST_STATUS,
->> +					    HOST_STATUS_IDLE));
->> +	if (ret)
->> +		return FPGA_IMAGE_ERR_RW_ERROR;
->> +
->> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
->> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
->> +				       doorbell,
->> +				       rsu_start_done(doorbell),
->> +				       NIOS_HANDSHAKE_INTERVAL_US,
->> +				       NIOS_HANDSHAKE_TIMEOUT_US);
->> +
->> +	if (ret == -ETIMEDOUT) {
->> +		log_error_regs(sec, doorbell);
->> +		return FPGA_IMAGE_ERR_TIMEOUT;
->> +	} else if (ret) {
->> +		return FPGA_IMAGE_ERR_RW_ERROR;
->> +	}
->> +
->> +	status = rsu_stat(doorbell);
->> +	if (status == RSU_STAT_WEAROUT) {
->> +		dev_warn(sec->dev, "Excessive flash update count detected\n");
->> +		return FPGA_IMAGE_ERR_WEAROUT;
->> +	} else if (status == RSU_STAT_ERASE_FAIL) {
->> +		log_error_regs(sec, doorbell);
->> +		return FPGA_IMAGE_ERR_HW_ERROR;
->> +	}
->> +
->> +	return FPGA_IMAGE_ERR_NONE;
->> +}
->> +
->> +static enum fpga_image_err rsu_prog_ready(struct m10bmc_sec *sec)
->> +{
->> +	unsigned long poll_timeout;
->> +	u32 doorbell, progress;
->> +	int ret;
->> +
->> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
->> +	if (ret)
->> +		return FPGA_IMAGE_ERR_RW_ERROR;
->> +
->> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_PREP_TIMEOUT_MS);
->> +	while (rsu_prog(doorbell) == RSU_PROG_PREPARE) {
->> +		msleep(RSU_PREP_INTERVAL_MS);
->> +		if (time_after(jiffies, poll_timeout))
->> +			break;
->> +
->> +		ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
->> +		if (ret)
->> +			return FPGA_IMAGE_ERR_RW_ERROR;
->> +	}
->> +
->> +	progress = rsu_prog(doorbell);
->> +	if (progress == RSU_PROG_PREPARE) {
->> +		log_error_regs(sec, doorbell);
->> +		return FPGA_IMAGE_ERR_TIMEOUT;
->> +	} else if (progress != RSU_PROG_READY) {
->> +		log_error_regs(sec, doorbell);
->> +		return FPGA_IMAGE_ERR_HW_ERROR;
->> +	}
->> +
->> +	return FPGA_IMAGE_ERR_NONE;
->> +}
->> +
->> +static enum fpga_image_err rsu_send_data(struct m10bmc_sec *sec)
->> +{
->> +	u32 doorbell;
->> +	int ret;
->> +
->> +	ret = regmap_update_bits(sec->m10bmc->regmap,
->> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
->> +				 DRBL_HOST_STATUS,
->> +				 FIELD_PREP(DRBL_HOST_STATUS,
->> +					    HOST_STATUS_WRITE_DONE));
->> +	if (ret)
->> +		return FPGA_IMAGE_ERR_RW_ERROR;
->> +
->> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
->> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
->> +				       doorbell,
->> +				       rsu_prog(doorbell) != RSU_PROG_READY,
->> +				       NIOS_HANDSHAKE_INTERVAL_US,
->> +				       NIOS_HANDSHAKE_TIMEOUT_US);
->> +
->> +	if (ret == -ETIMEDOUT) {
->> +		log_error_regs(sec, doorbell);
->> +		return FPGA_IMAGE_ERR_TIMEOUT;
->> +	} else if (ret) {
->> +		return FPGA_IMAGE_ERR_RW_ERROR;
->> +	}
->> +
->> +	switch (rsu_stat(doorbell)) {
->> +	case RSU_STAT_NORMAL:
->> +	case RSU_STAT_NIOS_OK:
->> +	case RSU_STAT_USER_OK:
->> +	case RSU_STAT_FACTORY_OK:
->> +		break;
->> +	default:
->> +		log_error_regs(sec, doorbell);
->> +		return FPGA_IMAGE_ERR_HW_ERROR;
->> +	}
->> +
->> +	return FPGA_IMAGE_ERR_NONE;
->> +}
->> +
->> +static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
->> +{
->> +	if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, doorbell))
->> +		return -EIO;
->> +
->> +	switch (rsu_stat(*doorbell)) {
->> +	case RSU_STAT_NORMAL:
->> +	case RSU_STAT_NIOS_OK:
->> +	case RSU_STAT_USER_OK:
->> +	case RSU_STAT_FACTORY_OK:
->> +		break;
->> +	default:
->> +		return -EINVAL;
->> +	}
->> +
->> +	switch (rsu_prog(*doorbell)) {
->> +	case RSU_PROG_IDLE:
->> +	case RSU_PROG_RSU_DONE:
->> +		return 0;
->> +	case RSU_PROG_AUTHENTICATING:
->> +	case RSU_PROG_COPYING:
->> +	case RSU_PROG_UPDATE_CANCEL:
->> +	case RSU_PROG_PROGRAM_KEY_HASH:
->> +		return -EAGAIN;
->> +	default:
->> +		return -EINVAL;
->> +	}
->> +}
->> +
->> +static enum fpga_image_err m10bmc_sec_prepare(struct fpga_image_load *imgld)
->> +{
->> +	struct m10bmc_sec *sec = imgld->priv;
->> +	enum fpga_image_err ret;
->> +
->> +	if (imgld->remaining_size > M10BMC_STAGING_SIZE)
->> +		return FPGA_IMAGE_ERR_INVALID_SIZE;
->> +
->> +	ret = rsu_check_idle(sec);
->> +	if (ret != FPGA_IMAGE_ERR_NONE)
->> +		return ret;
->> +
->> +	ret = rsu_update_init(sec);
->> +	if (ret != FPGA_IMAGE_ERR_NONE)
->> +		return ret;
->> +
->> +	return rsu_prog_ready(sec);
->> +}
->> +
->> +#define WRITE_BLOCK_SIZE 0x4000 /* Update remaining_size every 0x4000 bytes */
->> +
->> +static enum fpga_image_err
->> +m10bmc_sec_write_blk(struct fpga_image_load *imgld, u32 offset)
->> +{
->> +	struct m10bmc_sec *sec = imgld->priv;
->> +	unsigned int stride = regmap_get_reg_stride(sec->m10bmc->regmap);
->> +	u32 doorbell, blk_size;
->> +	int ret;
->> +
->> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
->> +	if (ret) {
->> +		return FPGA_IMAGE_ERR_RW_ERROR;
->> +	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
->> +		log_error_regs(sec, doorbell);
->> +		return FPGA_IMAGE_ERR_HW_ERROR;
->> +	}
->> +
->> +	blk_size = min_t(u32, imgld->remaining_size, WRITE_BLOCK_SIZE);
->> +	ret = regmap_bulk_write(sec->m10bmc->regmap,
->> +				M10BMC_STAGING_BASE + offset,
->> +				(void *)imgld->data + offset,
->> +				(blk_size + stride - 1) / stride);
->> +
->> +	if (ret)
->> +		return FPGA_IMAGE_ERR_RW_ERROR;
->> +
->> +	imgld->remaining_size -= blk_size;
->> +	return FPGA_IMAGE_ERR_NONE;
->> +}
->> +
+>>  # FPGA Bridge Drivers
+>>  obj-$(CONFIG_FPGA_BRIDGE)		+= fpga-bridge.o
+>>  obj-$(CONFIG_SOCFPGA_FPGA_BRIDGE)	+= altera-hps2fpga.o altera-fpga2sdram.o
+>> diff --git a/drivers/fpga/fpga-image-load.c b/drivers/fpga/fpga-image-load.c
+>> new file mode 100644
+>> index 000000000000..7d75bbcff541
+>> --- /dev/null
+>> +++ b/drivers/fpga/fpga-image-load.c
+>> @@ -0,0 +1,124 @@
+>> +// SPDX-License-Identifier: GPL-2.0
 >> +/*
->> + * m10bmc_sec_poll_complete() is called after handing things off to
->> + * the BMC firmware. Depending on the type of update, it could be
->> + * 30+ minutes before the BMC firmware completes the update. The
->> + * imgld->driver_unload check allows the driver to be unloaded,
->> + * but the BMC firmware will continue the update and no further
->> + * secure updates can be started for this device until the update
->> + * is complete.
+>> + * FPGA Image Load Class Driver
+>> + *
+>> + * Copyright (C) 2019-2021 Intel Corporation, Inc.
 >> + */
->> +static enum fpga_image_err m10bmc_sec_poll_complete(struct fpga_image_load *imgld)
+>> +
+>> +#include <linux/fpga/fpga-image-load.h>
+>> +#include <linux/module.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/vmalloc.h>
+>> +
+>> +#define IMAGE_LOAD_XA_LIMIT	XA_LIMIT(0, INT_MAX)
+>> +static DEFINE_XARRAY_ALLOC(fpga_image_load_xa);
+>> +
+>> +static struct class *fpga_image_load_class;
+>> +
+>> +#define to_image_load(d) container_of(d, struct fpga_image_load, dev)
+>> +
+>> +/**
+>> + * fpga_image_load_register - create and register an FPGA Image Load Device
+>> + *
+>> + * @parent: fpga image load device from pdev
+>> + * @lops:   pointer to a structure of image load callback functions
+> Maybe "ops" is just good, some more below.
+
+OK
+>
+>> + * @priv:   fpga image load private data
+>> + *
+>> + * Returns a struct fpga_image_load pointer on success, or ERR_PTR() on
+>> + * error. The caller of this function is responsible for calling
+>> + * fpga_image_load_unregister().
+>> + */
+>> +struct fpga_image_load *
+>> +fpga_image_load_register(struct device *parent,
+>> +			 const struct fpga_image_load_ops *lops, void *priv)
 >> +{
->> +	struct m10bmc_sec *sec = imgld->priv;
->> +	unsigned long poll_timeout;
->> +	enum fpga_image_err result;
->> +	u32 doorbell;
->> +	int ret;
+>> +	struct fpga_image_load *imgld;
+>> +	int id, ret;
 >> +
->> +	result = rsu_send_data(sec);
->> +	if (result != FPGA_IMAGE_ERR_NONE)
->> +		return result;
+>> +	imgld = kzalloc(sizeof(*imgld), GFP_KERNEL);
+>> +	if (!imgld)
+>> +		return NULL;
 >> +
->> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_COMPLETE_TIMEOUT_MS);
->> +	do {
->> +		msleep(RSU_COMPLETE_INTERVAL_MS);
->> +		ret = rsu_check_complete(sec, &doorbell);
->> +		if (imgld->driver_unload)
->> +			return FPGA_IMAGE_ERR_CANCELED;
-> Why we return CANCELED error code to user when driver unload is
-> requested?
->
-> Users may think the update is failed and the old image is kept,
-> but in fact, the update continues and finally the old image is
-> replaced by the new one.
+>> +	ret = xa_alloc(&fpga_image_load_xa, &imgld->dev.id, imgld, IMAGE_LOAD_XA_LIMIT,
+>> +		       GFP_KERNEL);
+>> +	if (ret)
+>> +		goto error_kfree;
+>> +
+>> +	mutex_init(&imgld->lock);
+>> +
+>> +	imgld->priv = priv;
+>> +	imgld->lops = lops;
+>> +
+>> +	imgld->dev.class = fpga_image_load_class;
+>> +	imgld->dev.parent = parent;
+>> +
+>> +	ret = dev_set_name(&imgld->dev, "fpga_image%d", id);
+> Is it better "fpga_image_load%d"?
+OK
 
-I could return FPGA_IMAGE_ERR_NONE, and then userspace code would
-think that the update completed without error, even though the
-update is still in progress.
-
-Or I could create a new FPGA_IMAGE_ERR_EXIT code to indicate that
-the driver has exited while the update is still progressing.
-
-I like the FPGA_IMAGE_ERR_EXIT option best of those two options.
-Any other suggestions?
-
-Thanks,
+Thanks for the comments,
 - Russ
-
-
 >
-> Thanks,
-> Yilun
->
->> +	} while (ret == -EAGAIN && !time_after(jiffies, poll_timeout));
->> +
->> +	if (ret == -EAGAIN) {
->> +		log_error_regs(sec, doorbell);
->> +		return FPGA_IMAGE_ERR_TIMEOUT;
->> +	} else if (ret == -EIO) {
->> +		return FPGA_IMAGE_ERR_RW_ERROR;
->> +	} else if (ret) {
->> +		log_error_regs(sec, doorbell);
->> +		return FPGA_IMAGE_ERR_HW_ERROR;
+>> +	if (ret) {
+>> +		dev_err(parent, "Failed to set device name: fpga_image%d\n", id);
+>> +		goto error_device;
 >> +	}
 >> +
->> +	return FPGA_IMAGE_ERR_NONE;
->> +}
+>> +	ret = device_register(&imgld->dev);
+>> +	if (ret) {
+>> +		put_device(&imgld->dev);
+>> +		return ERR_PTR(ret);
+>> +	}
 >> +
->> +static enum fpga_image_err m10bmc_sec_cancel(struct fpga_image_load *imgld)
+>> +	return imgld;
+>> +
+>> +error_device:
+>> +	xa_erase(&fpga_image_load_xa, imgld->dev.id);
+>> +
+>> +error_kfree:
+>> +	kfree(imgld);
+>> +
+>> +	return ERR_PTR(ret);
+>> +}
+>> +EXPORT_SYMBOL_GPL(fpga_image_load_register);
+>> +
+>> +/**
+>> + * fpga_image_load_unregister - unregister an FPGA image load device
+>> + *
+>> + * @imgld: pointer to struct fpga_image_load
+>> + *
+>> + * This function is intended for use in an FPGA Image Load driver's
+>> + * remove() function.
+>> + */
+>> +void fpga_image_load_unregister(struct fpga_image_load *imgld)
 >> +{
->> +	struct m10bmc_sec *sec = imgld->priv;
->> +	u32 doorbell;
->> +	int ret;
+>> +	device_unregister(&imgld->dev);
+>> +}
+>> +EXPORT_SYMBOL_GPL(fpga_image_load_unregister);
 >> +
->> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
->> +	if (ret)
->> +		return FPGA_IMAGE_ERR_RW_ERROR;
+>> +static void fpga_image_load_dev_release(struct device *dev)
+>> +{
+>> +	struct fpga_image_load *imgld = to_image_load(dev);
 >> +
->> +	if (rsu_prog(doorbell) != RSU_PROG_READY)
->> +		return FPGA_IMAGE_ERR_BUSY;
->> +
->> +	ret = regmap_update_bits(sec->m10bmc->regmap,
->> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
->> +				 DRBL_HOST_STATUS,
->> +				 FIELD_PREP(DRBL_HOST_STATUS,
->> +					    HOST_STATUS_ABORT_RSU));
->> +
->> +	return ret ? FPGA_IMAGE_ERR_RW_ERROR : FPGA_IMAGE_ERR_NONE;
+>> +	xa_erase(&fpga_image_load_xa, imgld->dev.id);
+>> +	kfree(imgld);
 >> +}
 >> +
->> +static const struct fpga_image_load_ops m10bmc_lops = {
->> +	.prepare = m10bmc_sec_prepare,
->> +	.write_blk = m10bmc_sec_write_blk,
->> +	.poll_complete = m10bmc_sec_poll_complete,
->> +	.cancel = m10bmc_sec_cancel,
+>> +static int __init fpga_image_load_class_init(void)
+>> +{
+>> +	pr_info("FPGA Image Load Driver\n");
+>> +
+>> +	fpga_image_load_class = class_create(THIS_MODULE, "fpga_image_load");
+>> +	if (IS_ERR(fpga_image_load_class))
+>> +		return PTR_ERR(fpga_image_load_class);
+>> +
+>> +	fpga_image_load_class->dev_release = fpga_image_load_dev_release;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void __exit fpga_image_load_class_exit(void)
+>> +{
+>> +	class_destroy(fpga_image_load_class);
+>> +	WARN_ON(!xa_empty(&fpga_image_load_xa));
+>> +}
+>> +
+>> +MODULE_DESCRIPTION("FPGA Image Load Driver");
+>> +MODULE_LICENSE("GPL v2");
+>> +
+>> +subsys_initcall(fpga_image_load_class_init);
+>> +module_exit(fpga_image_load_class_exit)
+>> diff --git a/include/linux/fpga/fpga-image-load.h b/include/linux/fpga/fpga-image-load.h
+>> new file mode 100644
+>> index 000000000000..a9cef9e1056b
+>> --- /dev/null
+>> +++ b/include/linux/fpga/fpga-image-load.h
+>> @@ -0,0 +1,35 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Header file for FPGA Image Load Driver
+>> + *
+>> + * Copyright (C) 2019-2021 Intel Corporation, Inc.
+>> + */
+>> +#ifndef _LINUX_FPGA_IMAGE_LOAD_H
+>> +#define _LINUX_FPGA_IMAGE_LOAD_H
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/mutex.h>
+>> +#include <linux/types.h>
+>> +
+>> +struct fpga_image_load;
+>> +
+>> +/**
+>> + * struct fpga_image_load_ops - device specific operations
+>> + */
+>> +struct fpga_image_load_ops {
 >> +};
->>  
->>  static int m10bmc_secure_probe(struct platform_device *pdev)
->>  {
+>> +
+>> +struct fpga_image_load {
+>> +	struct device dev;
+>> +	const struct fpga_image_load_ops *lops;
+>> +	struct mutex lock;		/* protect data structure contents */
+>> +	void *priv;
+>> +};
+>> +
+>> +struct fpga_image_load *
+>> +fpga_image_load_register(struct device *dev,
+>> +			 const struct fpga_image_load_ops *lops, void *priv);
+>> +
+>> +void fpga_image_load_unregister(struct fpga_image_load *imgld);
+>> +
+>> +#endif
 >> -- 
 >> 2.25.1
+> Thanks,
+> Yilun
 
