@@ -2,386 +2,621 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B552B406769
-	for <lists+linux-fpga@lfdr.de>; Fri, 10 Sep 2021 08:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA0440687C
+	for <lists+linux-fpga@lfdr.de>; Fri, 10 Sep 2021 10:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbhIJGyt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 10 Sep 2021 02:54:49 -0400
-Received: from mga01.intel.com ([192.55.52.88]:21996 "EHLO mga01.intel.com"
+        id S231666AbhIJIaY (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 10 Sep 2021 04:30:24 -0400
+Received: from mga01.intel.com ([192.55.52.88]:28757 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231312AbhIJGyt (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 10 Sep 2021 02:54:49 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10102"; a="243331833"
+        id S231665AbhIJIaY (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 10 Sep 2021 04:30:24 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10102"; a="243348390"
 X-IronPort-AV: E=Sophos;i="5.85,282,1624345200"; 
-   d="scan'208";a="243331833"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2021 23:53:31 -0700
+   d="scan'208";a="243348390"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 01:29:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,282,1624345200"; 
-   d="scan'208";a="504949298"
+   d="scan'208";a="549180320"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Sep 2021 23:53:29 -0700
-Date:   Fri, 10 Sep 2021 14:46:58 +0800
+  by fmsmga002.fm.intel.com with ESMTP; 10 Sep 2021 01:29:03 -0700
+Date:   Fri, 10 Sep 2021 16:22:32 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     Russ Weight <russell.h.weight@intel.com>
 Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
         hao.wu@intel.com, matthew.gerlach@intel.com
-Subject: Re: [PATCH v15 1/6] fpga: image-load: fpga image load class driver
-Message-ID: <20210910064658.GA754505@yilunxu-OptiPlex-7050>
+Subject: Re: [PATCH v15 2/6] fpga: image-load: enable image loads
+Message-ID: <20210910082232.GB754505@yilunxu-OptiPlex-7050>
 References: <20210909021846.681121-1-russell.h.weight@intel.com>
- <20210909021846.681121-2-russell.h.weight@intel.com>
+ <20210909021846.681121-3-russell.h.weight@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210909021846.681121-2-russell.h.weight@intel.com>
+In-Reply-To: <20210909021846.681121-3-russell.h.weight@intel.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Sep 08, 2021 at 07:18:41PM -0700, Russ Weight wrote:
-> The FPGA Image Load class driver provides an API to transfer update
-> files to an FPGA device. Image files are self-describing. They could
-> contain FPGA images, BMC images, Root Entry Hashes, or other device
-> specific files. It is up to the device driver and the target device
-> to authenticate and disposition the file data.
+On Wed, Sep 08, 2021 at 07:18:42PM -0700, Russ Weight wrote:
+> Extend the FPGA Image Load class driver to include IOCTL support
+> (FPGA_IMAGE_LOAD_WRITE) for initiating an upload of an image to a device.
+> The IOCTL will return immediately, and the update will begin in the
+> context of a kernel worker thread.
 > 
 > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 > ---
 > v15:
 >  - Compare to previous patch:
->      [PATCH v14 1/6] fpga: sec-mgr: fpga security manager class driver 
+>      [PATCH v14 2/6] fpga: sec-mgr: enable secure updates
 >  - Changed file, symbol, and config names to reflect the new driver name
->  - Rewrote documentation. The documentation will be added to in later patches.
+>  - Removed update/filename sysfs file and added the FPGA_IMAGE_LOAD_WRITE
+>    IOCTL for writing the image data to the FPGA card. The driver no longer
+>    uses the request_firmware framework.
+>  - Fixed some error return values in fpga_image_load_register()
 >  - Removed signed-off/reviewed-by tags
 > v14:
->  - Updated copyright to 2021
->  - Removed the name sysfs entry
->  - Removed MAINTAINERS reference to
+>  - Added MAINTAINERS reference for
 >    Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
->  - Use xa_alloc() instead of ida_simple_get()
->  - Rename dev to parent for parent devices
->  - Remove fpga_sec_mgr_create(), devm_fpga_sec_mgr_create(), and
->    fpga_sec_mgr_free() functions and update the fpga_sec_mgr_register()
->    function to both create and register a new security manager.
->  - Populate the fpga_sec_mgr_dev_release() function.
+>  - Updated ABI documentation date and kernel version
+>  - Updated copyright to 2021
 > v13:
->   - No change
+>   - Change "if (count == 0 || " to "if (!count || "
+>   - Improve error message: "Attempt to register without all required ops\n"
 > v12:
 >   - Updated Date and KernelVersion fields in ABI documentation
+>   - Removed size parameter from write_blk() op - it is now up to
+>     the lower-level driver to determine the appropriate size and
+>     to update smgr->remaining_size accordingly.
 > v11:
->   - No change
+>   - Fixed a spelling error in a comment
+>   - Initialize smgr->err_code and smgr->progress explicitly in
+>     fpga_sec_mgr_create() instead of accepting the default 0 value.
 > v10:
 >   - Rebased to 5.12-rc2 next
 >   - Updated Date and KernelVersion in ABI documentation
 > v9:
 >   - Updated Date and KernelVersion in ABI documentation
 > v8:
->   - Fixed grammatical error in Documentation/fpga/fpga-sec-mgr.rst
+>   - No change
 > v7:
 >   - Changed Date in documentation file to December 2020
+>   - Changed filename_store() to use kmemdup_nul() instead of
+>     kstrndup() and changed the count to not assume a line-return.
 > v6:
->   - Removed sysfs support and documentation for the display of the
->     flash count, root entry hashes, and code-signing-key cancelation
->     vectors.
+>   - Changed "security update" to "secure update" in commit message
 > v5:
->   - Added the devm_fpga_sec_mgr_unregister() function, following recent
->     changes to the fpga_manager() implementation.
->   - Changed some *_show() functions to use sysfs_emit() instead of sprintf(
+>   - When checking the return values for functions of type enum
+>     fpga_sec_err err_code, test for FPGA_SEC_ERR_NONE instead of 0
 > v4:
 >   - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
 >     and removed unnecessary references to "Intel".
 >   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
 > v3:
->   - Modified sysfs handler check in check_sysfs_handler() to make
->     it more readable.
+>   - Removed unnecessary "goto done"
+>   - Added a comment to explain imgr->driver_unload in
+>     ifpga_sec_mgr_unregister()
 > v2:
->   - Bumped documentation dates and versions
->   - Added Documentation/fpga/ifpga-sec-mgr.rst
->   - Removed references to bmc_flash_count & smbus_flash_count (not supported)
->   - Split ifpga_sec_mgr_register() into create() and register() functions
->   - Added devm_ifpga_sec_mgr_create()
->   - Removed typedefs for imgr ops
+>   - Bumped documentation date and version
+>   - Removed explicit value assignments in enums
+>   - Other minor code cleanup per review comments
 > ---
-> ---
->  Documentation/fpga/fpga-image-load.rst |  10 ++
->  Documentation/fpga/index.rst           |   1 +
->  MAINTAINERS                            |   8 ++
->  drivers/fpga/Kconfig                   |  10 ++
->  drivers/fpga/Makefile                  |   3 +
->  drivers/fpga/fpga-image-load.c         | 124 +++++++++++++++++++++++++
->  include/linux/fpga/fpga-image-load.h   |  35 +++++++
->  7 files changed, 191 insertions(+)
->  create mode 100644 Documentation/fpga/fpga-image-load.rst
->  create mode 100644 drivers/fpga/fpga-image-load.c
->  create mode 100644 include/linux/fpga/fpga-image-load.h
+>  Documentation/fpga/fpga-image-load.rst |  21 +++
+>  MAINTAINERS                            |   1 +
+>  drivers/fpga/fpga-image-load.c         | 224 ++++++++++++++++++++++++-
+>  include/linux/fpga/fpga-image-load.h   |  29 ++++
+>  include/uapi/linux/fpga-image-load.h   |  58 +++++++
+>  5 files changed, 329 insertions(+), 4 deletions(-)
+>  create mode 100644 include/uapi/linux/fpga-image-load.h
 > 
 > diff --git a/Documentation/fpga/fpga-image-load.rst b/Documentation/fpga/fpga-image-load.rst
-> new file mode 100644
-> index 000000000000..a6e53ac66026
-> --- /dev/null
+> index a6e53ac66026..2ca8d2f0212d 100644
+> --- a/Documentation/fpga/fpga-image-load.rst
 > +++ b/Documentation/fpga/fpga-image-load.rst
-> @@ -0,0 +1,10 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+> @@ -8,3 +8,24 @@ The FPGA Image Load class driver provides a common API for user-space
+>  tools to manage image uploads to FPGA devices. Device drivers that
+>  instantiate the FPGA Image Load class driver will interact with the
+>  target device to transfer and authenticate the image data.
 > +
-> +============================
-> +FPGA Image Load Class Driver
-> +============================
+> +User API
+> +========
 > +
-> +The FPGA Image Load class driver provides a common API for user-space
-> +tools to manage image uploads to FPGA devices. Device drivers that
-> +instantiate the FPGA Image Load class driver will interact with the
-> +target device to transfer and authenticate the image data.
-> diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
-> index f80f95667ca2..85d25fb22c08 100644
-> --- a/Documentation/fpga/index.rst
-> +++ b/Documentation/fpga/index.rst
-> @@ -8,6 +8,7 @@ fpga
->      :maxdepth: 1
->  
->      dfl
-> +    fpga-image-load
->  
->  .. only::  subproject and html
->  
+> +open
+> +----
+> +
+> +An FPGA Image Load device is opened exclusively to control an image load.
+> +Image loads are processed by a kernel worker thread. A user may choose
+> +close the device while the upload continues.
+
+Why we allow the user to close the dev while the uploading is ongoing?
+Seems it introduces more checking effort when another user open the dev
+again and try another uploading.
+
+> +
+> +ioctl
+> +-----
+> +
+> +FPGA_IMAGE_LOAD_WRITE:
+> +
+> +Start an image load with the provided image buffer. This IOCTL returns
+> +immediately after starting a kernel worker thread to process the image load
+> +which could take as long a 40 minutes depending on the actual device being
+> +updated. This is an exclusive operation; an attempt to start concurrent image
+> +load for the same device will fail with EBUSY.
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 6c63415d2ac2..4e7f48fa7e5c 100644
+> index 4e7f48fa7e5c..637bc003ca81 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -7358,6 +7358,14 @@ F:	Documentation/fpga/
->  F:	drivers/fpga/
->  F:	include/linux/fpga/
+> @@ -7365,6 +7365,7 @@ S:	Maintained
+>  F:	Documentation/fpga/fpga-image-load.rst
+>  F:	drivers/fpga/fpga-image-load.c
+>  F:	include/linux/fpga/fpga-image-load.h
+> +F:	include/uapi/linux/fpga-image-load.h
 >  
-> +FPGA SECURITY MANAGER DRIVERS
-> +M:	Russ Weight <russell.h.weight@intel.com>
-> +L:	linux-fpga@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/fpga/fpga-image-load.rst
-> +F:	drivers/fpga/fpga-image-load.c
-> +F:	include/linux/fpga/fpga-image-load.h
-> +
 >  FPU EMULATOR
 >  M:	Bill Metzenthen <billm@melbpc.org.au>
->  S:	Maintained
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 991b3f361ec9..c12a14e62fff 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -243,4 +243,14 @@ config FPGA_MGR_VERSAL_FPGA
->  	  configure the programmable logic(PL).
->  
->  	  To compile this as a module, choose M here.
-> +
-> +config FPGA_IMAGE_LOAD
-> +	tristate "FPGA Image Load Driver"
-
-Maybe we don't call it "Driver". A framework or "FPGA Image load support",
-is it better?
-
-There are more descriptions about "driver" below, maybe you need to change
-them all.
-
-> +	help
-> +	  The FPGA Image Load class driver presents a common user API for
-> +	  uploading an image file to an FPGA device. The image file is
-> +	  expected to be self-describing. It is up to the device driver
-> +	  and/or the device itself to authenticate and disposition the
-> +	  image data.
-> +
->  endif # FPGA
-> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> index 0bff783d1b61..adf228ee4f5e 100644
-> --- a/drivers/fpga/Makefile
-> +++ b/drivers/fpga/Makefile
-> @@ -22,6 +22,9 @@ obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
->  
-> +# FPGA Image Load Framework
-> +obj-$(CONFIG_FPGA_IMAGE_LOAD)		+= fpga-image-load.o
-> +
->  # FPGA Bridge Drivers
->  obj-$(CONFIG_FPGA_BRIDGE)		+= fpga-bridge.o
->  obj-$(CONFIG_SOCFPGA_FPGA_BRIDGE)	+= altera-hps2fpga.o altera-fpga2sdram.o
 > diff --git a/drivers/fpga/fpga-image-load.c b/drivers/fpga/fpga-image-load.c
-> new file mode 100644
-> index 000000000000..7d75bbcff541
-> --- /dev/null
+> index 7d75bbcff541..f5ccfa9dd977 100644
+> --- a/drivers/fpga/fpga-image-load.c
 > +++ b/drivers/fpga/fpga-image-load.c
-> @@ -0,0 +1,124 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * FPGA Image Load Class Driver
-> + *
-> + * Copyright (C) 2019-2021 Intel Corporation, Inc.
-> + */
+> @@ -5,18 +5,181 @@
+>   * Copyright (C) 2019-2021 Intel Corporation, Inc.
+>   */
+>  
+> +#include <linux/delay.h>
+>  #include <linux/fpga/fpga-image-load.h>
+> +#include <linux/fs.h>
+> +#include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+> +#include <linux/uaccess.h>
+>  #include <linux/vmalloc.h>
+>  
+>  #define IMAGE_LOAD_XA_LIMIT	XA_LIMIT(0, INT_MAX)
+>  static DEFINE_XARRAY_ALLOC(fpga_image_load_xa);
+>  
+>  static struct class *fpga_image_load_class;
+> +static dev_t fpga_image_devt;
+>  
+>  #define to_image_load(d) container_of(d, struct fpga_image_load, dev)
+>  
+> +static void fpga_image_dev_error(struct fpga_image_load *imgld,
+> +				 enum fpga_image_err err_code)
+> +{
+> +	imgld->err_code = err_code;
+> +	imgld->lops->cancel(imgld);
+> +}
 > +
-> +#include <linux/fpga/fpga-image-load.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/vmalloc.h>
+> +static void fpga_image_prog_complete(struct fpga_image_load *imgld)
+> +{
+> +	mutex_lock(&imgld->lock);
+> +	imgld->progress = FPGA_IMAGE_PROG_IDLE;
+> +	complete_all(&imgld->update_done);
+> +	mutex_unlock(&imgld->lock);
+> +}
 > +
-> +#define IMAGE_LOAD_XA_LIMIT	XA_LIMIT(0, INT_MAX)
-> +static DEFINE_XARRAY_ALLOC(fpga_image_load_xa);
-> +
-> +static struct class *fpga_image_load_class;
-> +
-> +#define to_image_load(d) container_of(d, struct fpga_image_load, dev)
-> +
-> +/**
-> + * fpga_image_load_register - create and register an FPGA Image Load Device
-> + *
-> + * @parent: fpga image load device from pdev
-> + * @lops:   pointer to a structure of image load callback functions
-
-Maybe "ops" is just good, some more below.
-
-> + * @priv:   fpga image load private data
-> + *
-> + * Returns a struct fpga_image_load pointer on success, or ERR_PTR() on
-> + * error. The caller of this function is responsible for calling
-> + * fpga_image_load_unregister().
-> + */
-> +struct fpga_image_load *
-> +fpga_image_load_register(struct device *parent,
-> +			 const struct fpga_image_load_ops *lops, void *priv)
+> +static void fpga_image_do_load(struct work_struct *work)
 > +{
 > +	struct fpga_image_load *imgld;
-> +	int id, ret;
+> +	enum fpga_image_err ret;
+> +	u32 size, offset = 0;
 > +
-> +	imgld = kzalloc(sizeof(*imgld), GFP_KERNEL);
-> +	if (!imgld)
-> +		return NULL;
+> +	imgld = container_of(work, struct fpga_image_load, work);
+> +	size = imgld->remaining_size;
 > +
-> +	ret = xa_alloc(&fpga_image_load_xa, &imgld->dev.id, imgld, IMAGE_LOAD_XA_LIMIT,
-> +		       GFP_KERNEL);
-> +	if (ret)
-> +		goto error_kfree;
-> +
-> +	mutex_init(&imgld->lock);
-> +
-> +	imgld->priv = priv;
-> +	imgld->lops = lops;
-> +
-> +	imgld->dev.class = fpga_image_load_class;
-> +	imgld->dev.parent = parent;
-> +
-> +	ret = dev_set_name(&imgld->dev, "fpga_image%d", id);
-
-Is it better "fpga_image_load%d"?
-
-> +	if (ret) {
-> +		dev_err(parent, "Failed to set device name: fpga_image%d\n", id);
-> +		goto error_device;
+> +	get_device(&imgld->dev);
+> +	if (!try_module_get(imgld->dev.parent->driver->owner)) {
+> +		imgld->err_code = FPGA_IMAGE_ERR_BUSY;
+> +		goto idle_exit;
 > +	}
 > +
-> +	ret = device_register(&imgld->dev);
+> +	imgld->progress = FPGA_IMAGE_PROG_PREPARING;
+> +	ret = imgld->lops->prepare(imgld);
+> +	if (ret != FPGA_IMAGE_ERR_NONE) {
+> +		fpga_image_dev_error(imgld, ret);
+> +		goto modput_exit;
+> +	}
+> +
+> +	imgld->progress = FPGA_IMAGE_PROG_WRITING;
+> +	while (imgld->remaining_size) {
+> +		ret = imgld->lops->write_blk(imgld, offset);
+> +		if (ret != FPGA_IMAGE_ERR_NONE) {
+> +			fpga_image_dev_error(imgld, ret);
+> +			goto done;
+> +		}
+> +
+> +		offset = size - imgld->remaining_size;
+
+The low level driver is required to update the "remaining_size" in
+write_blk ops?
+
+The API seems ambiguous. The framework asks for writing a block of data,
+but no block size is specified.
+
+> +	}
+> +
+> +	imgld->progress = FPGA_IMAGE_PROG_PROGRAMMING;
+> +	ret = imgld->lops->poll_complete(imgld);
+> +	if (ret != FPGA_IMAGE_ERR_NONE)
+> +		fpga_image_dev_error(imgld, ret);
+> +
+> +done:
+> +	if (imgld->lops->cleanup)
+> +		imgld->lops->cleanup(imgld);
+> +
+> +modput_exit:
+> +	module_put(imgld->dev.parent->driver->owner);
+> +
+> +idle_exit:
+> +	/*
+> +	 * Note: imgld->remaining_size is left unmodified here to provide
+> +	 * additional information on errors. It will be reinitialized when
+> +	 * the next image load begins.
+> +	 */
+> +	vfree(imgld->data);
+> +	imgld->data = NULL;
+> +	put_device(&imgld->dev);
+> +	fpga_image_prog_complete(imgld);
+> +}
+> +
+> +static int fpga_image_load_ioctl_write(struct fpga_image_load *imgld,
+> +				       unsigned long arg)
+> +{
+> +	struct fpga_image_write wb;
+> +	unsigned long minsz;
+> +	u8 *buf;
+> +
+> +	if (imgld->driver_unload || imgld->progress != FPGA_IMAGE_PROG_IDLE)
+> +		return -EBUSY;
+> +
+> +	minsz = offsetofend(struct fpga_image_write, buf);
+> +	if (copy_from_user(&wb, (void __user *)arg, minsz))
+> +		return -EFAULT;
+> +
+> +	if (wb.flags)
+> +		return -EINVAL;
+> +
+> +	/* Enforce 32-bit alignment on the write data */
+> +	if (wb.size & 0x3)
+> +		return -EINVAL;
+> +
+> +	buf = vzalloc(wb.size);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	if (copy_from_user(buf, u64_to_user_ptr(wb.buf), wb.size)) {
+> +		vfree(buf);
+> +		return -EFAULT;
+> +	}
+> +
+> +	imgld->data = buf;
+> +	imgld->remaining_size = wb.size;
+> +	imgld->err_code = FPGA_IMAGE_ERR_NONE;
+> +	imgld->progress = FPGA_IMAGE_PROG_STARTING;
+> +	reinit_completion(&imgld->update_done);
+> +	schedule_work(&imgld->work);
+> +
+> +	return 0;
+> +}
+> +
+> +static long fpga_image_load_ioctl(struct file *filp, unsigned int cmd,
+> +				  unsigned long arg)
+> +{
+> +	struct fpga_image_load *imgld = filp->private_data;
+> +	int ret = -ENOTTY;
+> +
+> +	switch (cmd) {
+> +	case FPGA_IMAGE_LOAD_WRITE:
+> +		mutex_lock(&imgld->lock);
+> +		ret = fpga_image_load_ioctl_write(imgld, arg);
+> +		mutex_unlock(&imgld->lock);
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int fpga_image_load_open(struct inode *inode, struct file *filp)
+> +{
+> +	struct fpga_image_load *imgld = container_of(inode->i_cdev,
+> +						     struct fpga_image_load, cdev);
+> +
+> +	if (test_and_set_bit(0, &imgld->opened))
+
+Some more flags to add for "opened" field? But the field name indicates
+it is a single flag.
+
+> +		return -EBUSY;
+> +
+> +	filp->private_data = imgld;
+> +
+> +	return 0;
+> +}
+> +
+> +static int fpga_image_load_release(struct inode *inode, struct file *filp)
+> +{
+> +	struct fpga_image_load *imgld = filp->private_data;
+> +
+> +	clear_bit(0, &imgld->opened);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct file_operations fpga_image_load_fops = {
+> +	.owner = THIS_MODULE,
+> +	.open = fpga_image_load_open,
+> +	.release = fpga_image_load_release,
+> +	.unlocked_ioctl = fpga_image_load_ioctl,
+> +};
+> +
+>  /**
+>   * fpga_image_load_register - create and register an FPGA Image Load Device
+>   *
+> @@ -33,11 +196,17 @@ fpga_image_load_register(struct device *parent,
+>  			 const struct fpga_image_load_ops *lops, void *priv)
+>  {
+>  	struct fpga_image_load *imgld;
+> -	int id, ret;
+> +	int ret;
+> +
+> +	if (!lops || !lops->cancel || !lops->prepare ||
+> +	    !lops->write_blk || !lops->poll_complete) {
+> +		dev_err(parent, "Attempt to register without all required ops\n");
+> +		return ERR_PTR(-ENOMEM);
+> +	}
+>  
+>  	imgld = kzalloc(sizeof(*imgld), GFP_KERNEL);
+>  	if (!imgld)
+> -		return NULL;
+> +		return ERR_PTR(-ENOMEM);
+
+This is the fix for Patch #1? If yes please merge it to Patch #1.
+
+>  
+>  	ret = xa_alloc(&fpga_image_load_xa, &imgld->dev.id, imgld, IMAGE_LOAD_XA_LIMIT,
+>  		       GFP_KERNEL);
+> @@ -48,13 +217,19 @@ fpga_image_load_register(struct device *parent,
+>  
+>  	imgld->priv = priv;
+>  	imgld->lops = lops;
+> +	imgld->err_code = FPGA_IMAGE_ERR_NONE;
+> +	imgld->progress = FPGA_IMAGE_PROG_IDLE;
+> +	init_completion(&imgld->update_done);
+> +	INIT_WORK(&imgld->work, fpga_image_do_load);
+>  
+>  	imgld->dev.class = fpga_image_load_class;
+>  	imgld->dev.parent = parent;
+> +	imgld->dev.devt = MKDEV(MAJOR(fpga_image_devt), imgld->dev.id);
+>  
+> -	ret = dev_set_name(&imgld->dev, "fpga_image%d", id);
+> +	ret = dev_set_name(&imgld->dev, "fpga_image%d", imgld->dev.id);
+
+Another fix? Please merge it to Patch #1.
+
+>  	if (ret) {
+> -		dev_err(parent, "Failed to set device name: fpga_image%d\n", id);
+> +		dev_err(parent, "Failed to set device name: fpga_image%d\n",
+> +			imgld->dev.id);
+
+Ditto
+
+>  		goto error_device;
+>  	}
+>  
+> @@ -64,6 +239,16 @@ fpga_image_load_register(struct device *parent,
+>  		return ERR_PTR(ret);
+>  	}
+>  
+> +	cdev_init(&imgld->cdev, &fpga_image_load_fops);
+> +	imgld->cdev.owner = parent->driver->owner;
+> +	imgld->cdev.kobj.parent = &imgld->dev.kobj;
+> +
+> +	ret = cdev_add(&imgld->cdev, imgld->dev.devt, 1);
 > +	if (ret) {
 > +		put_device(&imgld->dev);
 > +		return ERR_PTR(ret);
 > +	}
 > +
-> +	return imgld;
-> +
-> +error_device:
-> +	xa_erase(&fpga_image_load_xa, imgld->dev.id);
-> +
-> +error_kfree:
-> +	kfree(imgld);
-> +
-> +	return ERR_PTR(ret);
-> +}
-> +EXPORT_SYMBOL_GPL(fpga_image_load_register);
-> +
-> +/**
-> + * fpga_image_load_unregister - unregister an FPGA image load device
+>  	return imgld;
+>  
+>  error_device:
+> @@ -83,9 +268,29 @@ EXPORT_SYMBOL_GPL(fpga_image_load_register);
+>   *
+>   * This function is intended for use in an FPGA Image Load driver's
+>   * remove() function.
 > + *
-> + * @imgld: pointer to struct fpga_image_load
-> + *
-> + * This function is intended for use in an FPGA Image Load driver's
-> + * remove() function.
-> + */
-> +void fpga_image_load_unregister(struct fpga_image_load *imgld)
-> +{
-> +	device_unregister(&imgld->dev);
-> +}
-> +EXPORT_SYMBOL_GPL(fpga_image_load_unregister);
+> + * For some devices, once authentication of the uploaded image has begun,
+> + * the hardware cannot be signaled to stop, and the driver will not exit
+> + * until the hardware signals completion.  This could be 30+ minutes of
+> + * waiting. The driver_unload flag enables a force-unload of the driver
+> + * (e.g. modprobe -r) by signaling the parent driver to exit even if the
+
+How does the driver_unload enables the force unload of the parent
+driver? I didn't find the code.
+
+> + * hardware update is incomplete. The driver_unload flag also prevents
+> + * new updates from starting once the unregister process has begun.
+>   */
+>  void fpga_image_load_unregister(struct fpga_image_load *imgld)
+>  {
+> +	mutex_lock(&imgld->lock);
+> +	imgld->driver_unload = true;
+> +	if (imgld->progress == FPGA_IMAGE_PROG_IDLE) {
+> +		mutex_unlock(&imgld->lock);
+> +		goto unregister;
+> +	}
 > +
-> +static void fpga_image_load_dev_release(struct device *dev)
-> +{
-> +	struct fpga_image_load *imgld = to_image_load(dev);
+> +	mutex_unlock(&imgld->lock);
+> +	wait_for_completion(&imgld->update_done);
 > +
-> +	xa_erase(&fpga_image_load_xa, imgld->dev.id);
-> +	kfree(imgld);
-> +}
+> +unregister:
+> +	cdev_del(&imgld->cdev);
+>  	device_unregister(&imgld->dev);
+>  }
+>  EXPORT_SYMBOL_GPL(fpga_image_load_unregister);
+> @@ -100,19 +305,30 @@ static void fpga_image_load_dev_release(struct device *dev)
+>  
+>  static int __init fpga_image_load_class_init(void)
+>  {
+> +	int ret;
+>  	pr_info("FPGA Image Load Driver\n");
+>  
+>  	fpga_image_load_class = class_create(THIS_MODULE, "fpga_image_load");
+>  	if (IS_ERR(fpga_image_load_class))
+>  		return PTR_ERR(fpga_image_load_class);
+>  
+> +	ret = alloc_chrdev_region(&fpga_image_devt, 0, MINORMASK,
+> +				  "fpga_image_load");
+> +	if (ret)
+> +		goto exit_destroy_class;
 > +
-> +static int __init fpga_image_load_class_init(void)
-> +{
-> +	pr_info("FPGA Image Load Driver\n");
+>  	fpga_image_load_class->dev_release = fpga_image_load_dev_release;
+>  
+>  	return 0;
 > +
-> +	fpga_image_load_class = class_create(THIS_MODULE, "fpga_image_load");
-> +	if (IS_ERR(fpga_image_load_class))
-> +		return PTR_ERR(fpga_image_load_class);
-> +
-> +	fpga_image_load_class->dev_release = fpga_image_load_dev_release;
-> +
-> +	return 0;
-> +}
-> +
-> +static void __exit fpga_image_load_class_exit(void)
-> +{
+> +exit_destroy_class:
 > +	class_destroy(fpga_image_load_class);
-> +	WARN_ON(!xa_empty(&fpga_image_load_xa));
-> +}
-> +
-> +MODULE_DESCRIPTION("FPGA Image Load Driver");
-> +MODULE_LICENSE("GPL v2");
-> +
-> +subsys_initcall(fpga_image_load_class_init);
-> +module_exit(fpga_image_load_class_exit)
+> +	return ret;
+>  }
+>  
+>  static void __exit fpga_image_load_class_exit(void)
+>  {
+> +	unregister_chrdev_region(fpga_image_devt, MINORMASK);
+>  	class_destroy(fpga_image_load_class);
+>  	WARN_ON(!xa_empty(&fpga_image_load_xa));
+>  }
 > diff --git a/include/linux/fpga/fpga-image-load.h b/include/linux/fpga/fpga-image-load.h
-> new file mode 100644
-> index 000000000000..a9cef9e1056b
-> --- /dev/null
+> index a9cef9e1056b..b3d790e5d943 100644
+> --- a/include/linux/fpga/fpga-image-load.h
 > +++ b/include/linux/fpga/fpga-image-load.h
-> @@ -0,0 +1,35 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+> @@ -7,22 +7,51 @@
+>  #ifndef _LINUX_FPGA_IMAGE_LOAD_H
+>  #define _LINUX_FPGA_IMAGE_LOAD_H
+>  
+> +#include <linux/cdev.h>
+> +#include <linux/completion.h>
+>  #include <linux/device.h>
+>  #include <linux/mutex.h>
+>  #include <linux/types.h>
+> +#include <uapi/linux/fpga-image-load.h>
+>  
+>  struct fpga_image_load;
+>  
+>  /**
+>   * struct fpga_image_load_ops - device specific operations
+> + * @prepare:		    Required: Prepare secure update
+> + * @write_blk:		    Required: Write a block of data
+> + * @poll_complete:	    Required: Check for the completion of the
+> + *			    HW authentication/programming process. This
+> + *			    function should check for imgld->driver_unload
+> + *			    and abort with FPGA_IMAGE_ERR_CANCELED when true.
+> + * @cancel:		    Required: Signal HW to cancel update
+> + * @cleanup:		    Optional: Complements the prepare()
+> + *			    function and is called at the completion
+> + *			    of the update, whether success or failure,
+> + *			    if the prepare function succeeded.
+>   */
+>  struct fpga_image_load_ops {
+> +	enum fpga_image_err (*prepare)(struct fpga_image_load *imgld);
+> +	enum fpga_image_err (*write_blk)(struct fpga_image_load *imgld, u32 offset);
+> +	enum fpga_image_err (*poll_complete)(struct fpga_image_load *imgld);
+> +	enum fpga_image_err (*cancel)(struct fpga_image_load *imgld);
+> +	void (*cleanup)(struct fpga_image_load *imgld);
+>  };
+>  
+>  struct fpga_image_load {
+>  	struct device dev;
+> +	struct cdev cdev;
+>  	const struct fpga_image_load_ops *lops;
+>  	struct mutex lock;		/* protect data structure contents */
+> +	unsigned long opened;
+> +	struct work_struct work;
+> +	struct completion update_done;
+> +	const u8 *data;				/* pointer to update data */
+> +	u32 remaining_size;			/* size remaining to transfer */
+> +	enum fpga_image_prog progress;
+> +	enum fpga_image_prog err_progress;	/* progress at time of failure */
+
+This field is not used in this patch? So could you introduce it later?
+
+> +	enum fpga_image_err err_code;		/* image load error code */
+> +	bool driver_unload;
+>  	void *priv;
+>  };
+>  
+> diff --git a/include/uapi/linux/fpga-image-load.h b/include/uapi/linux/fpga-image-load.h
+> new file mode 100644
+> index 000000000000..4146a0a9e408
+> --- /dev/null
+> +++ b/include/uapi/linux/fpga-image-load.h
+> @@ -0,0 +1,58 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 > +/*
-> + * Header file for FPGA Image Load Driver
+> + * Header File for FPGA Image Load User API
 > + *
 > + * Copyright (C) 2019-2021 Intel Corporation, Inc.
+> + *
 > + */
-> +#ifndef _LINUX_FPGA_IMAGE_LOAD_H
-> +#define _LINUX_FPGA_IMAGE_LOAD_H
 > +
-> +#include <linux/device.h>
-> +#include <linux/mutex.h>
+> +#ifndef _UAPI_LINUX_FPGA_IMAGE_LOAD_H
+> +#define _UAPI_LINUX_FPGA_IMAGE_LOAD_H
+> +
 > +#include <linux/types.h>
+> +#include <linux/ioctl.h>
 > +
-> +struct fpga_image_load;
+> +#define FPGA_IMAGE_LOAD_MAGIC 0xB9
+> +
+> +/* Image load progress codes */
+> +enum fpga_image_prog {
+> +	FPGA_IMAGE_PROG_IDLE,
+> +	FPGA_IMAGE_PROG_STARTING,
+> +	FPGA_IMAGE_PROG_PREPARING,
+> +	FPGA_IMAGE_PROG_WRITING,
+> +	FPGA_IMAGE_PROG_PROGRAMMING,
+> +	FPGA_IMAGE_PROG_MAX
+> +};
+> +
+> +/* Image error progress codes */
+> +enum fpga_image_err {
+> +	FPGA_IMAGE_ERR_NONE,
+> +	FPGA_IMAGE_ERR_HW_ERROR,
+> +	FPGA_IMAGE_ERR_TIMEOUT,
+> +	FPGA_IMAGE_ERR_CANCELED,
+> +	FPGA_IMAGE_ERR_BUSY,
+> +	FPGA_IMAGE_ERR_INVALID_SIZE,
+> +	FPGA_IMAGE_ERR_RW_ERROR,
+> +	FPGA_IMAGE_ERR_WEAROUT,
+> +	FPGA_IMAGE_ERR_MAX
+> +};
+> +
+> +#define FPGA_IMAGE_LOAD_WRITE	_IOW(FPGA_IMAGE_LOAD_MAGIC, 0, struct fpga_image_write)
+
+Put the cmd word definition under the comments and parameter definition.
+
 > +
 > +/**
-> + * struct fpga_image_load_ops - device specific operations
-> + */
-> +struct fpga_image_load_ops {
-> +};
-> +
-> +struct fpga_image_load {
-> +	struct device dev;
-> +	const struct fpga_image_load_ops *lops;
-> +	struct mutex lock;		/* protect data structure contents */
-> +	void *priv;
-> +};
-> +
-> +struct fpga_image_load *
-> +fpga_image_load_register(struct device *dev,
-> +			 const struct fpga_image_load_ops *lops, void *priv);
-> +
-> +void fpga_image_load_unregister(struct fpga_image_load *imgld);
-> +
-> +#endif
-> -- 
-> 2.25.1
+> + * FPGA_IMAGE_LOAD_WRITE - _IOW(FPGA_IMAGE_LOAD_MAGIC, 0,
+> + *				struct fpga_image_write)
+> + *
+> + * Upload a data buffer to the target device. The user must provide the
+> + * data buffer, size, and an eventfd file descriptor.
+
+I didn't find the eventfd.
 
 Thanks,
 Yilun
+
+> + *
+> + * Return: 0 on success, -errno on failure.
+> + */
+> +struct fpga_image_write {
+> +	/* Input */
+> +	__u32 flags;		/* Zero for now */
+> +	__u32 size;		/* Data size (in bytes) to be written */
+> +	__u64 buf;		/* User space address of source data */
+> +};
+> +
+> +#endif /* _UAPI_LINUX_FPGA_IMAGE_LOAD_H */
+> -- 
+> 2.25.1
