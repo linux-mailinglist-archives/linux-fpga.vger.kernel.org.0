@@ -2,420 +2,386 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F188406018
-	for <lists+linux-fpga@lfdr.de>; Fri, 10 Sep 2021 01:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B552B406769
+	for <lists+linux-fpga@lfdr.de>; Fri, 10 Sep 2021 08:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345823AbhIIXeU (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 9 Sep 2021 19:34:20 -0400
-Received: from mga02.intel.com ([134.134.136.20]:8845 "EHLO mga02.intel.com"
+        id S231253AbhIJGyt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 10 Sep 2021 02:54:49 -0400
+Received: from mga01.intel.com ([192.55.52.88]:21996 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244256AbhIIXeT (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Thu, 9 Sep 2021 19:34:19 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10102"; a="208167532"
-X-IronPort-AV: E=Sophos;i="5.85,281,1624345200"; 
-   d="scan'208";a="208167532"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2021 16:33:08 -0700
-X-IronPort-AV: E=Sophos;i="5.85,281,1624345200"; 
-   d="scan'208";a="581098925"
-Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.212.210.210])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2021 16:33:08 -0700
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-        hao.wu@intel.com, matthew.gerlach@intel.com,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v14 4/4] fpga: m10bmc-sec: add max10 secure update functions
-Date:   Thu,  9 Sep 2021 16:33:04 -0700
-Message-Id: <20210909233304.5650-5-russell.h.weight@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210909233304.5650-1-russell.h.weight@intel.com>
-References: <20210909233304.5650-1-russell.h.weight@intel.com>
+        id S231312AbhIJGyt (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 10 Sep 2021 02:54:49 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10102"; a="243331833"
+X-IronPort-AV: E=Sophos;i="5.85,282,1624345200"; 
+   d="scan'208";a="243331833"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2021 23:53:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,282,1624345200"; 
+   d="scan'208";a="504949298"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Sep 2021 23:53:29 -0700
+Date:   Fri, 10 Sep 2021 14:46:58 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com
+Subject: Re: [PATCH v15 1/6] fpga: image-load: fpga image load class driver
+Message-ID: <20210910064658.GA754505@yilunxu-OptiPlex-7050>
+References: <20210909021846.681121-1-russell.h.weight@intel.com>
+ <20210909021846.681121-2-russell.h.weight@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210909021846.681121-2-russell.h.weight@intel.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Invoke an instance of the FPGA Image Load driver and extend the MAX10
-BMC Secure Update driver to include the functions that enable secure
-updates of BMC images, FPGA images, etc.
+On Wed, Sep 08, 2021 at 07:18:41PM -0700, Russ Weight wrote:
+> The FPGA Image Load class driver provides an API to transfer update
+> files to an FPGA device. Image files are self-describing. They could
+> contain FPGA images, BMC images, Root Entry Hashes, or other device
+> specific files. It is up to the device driver and the target device
+> to authenticate and disposition the file data.
+> 
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> ---
+> v15:
+>  - Compare to previous patch:
+>      [PATCH v14 1/6] fpga: sec-mgr: fpga security manager class driver 
+>  - Changed file, symbol, and config names to reflect the new driver name
+>  - Rewrote documentation. The documentation will be added to in later patches.
+>  - Removed signed-off/reviewed-by tags
+> v14:
+>  - Updated copyright to 2021
+>  - Removed the name sysfs entry
+>  - Removed MAINTAINERS reference to
+>    Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
+>  - Use xa_alloc() instead of ida_simple_get()
+>  - Rename dev to parent for parent devices
+>  - Remove fpga_sec_mgr_create(), devm_fpga_sec_mgr_create(), and
+>    fpga_sec_mgr_free() functions and update the fpga_sec_mgr_register()
+>    function to both create and register a new security manager.
+>  - Populate the fpga_sec_mgr_dev_release() function.
+> v13:
+>   - No change
+> v12:
+>   - Updated Date and KernelVersion fields in ABI documentation
+> v11:
+>   - No change
+> v10:
+>   - Rebased to 5.12-rc2 next
+>   - Updated Date and KernelVersion in ABI documentation
+> v9:
+>   - Updated Date and KernelVersion in ABI documentation
+> v8:
+>   - Fixed grammatical error in Documentation/fpga/fpga-sec-mgr.rst
+> v7:
+>   - Changed Date in documentation file to December 2020
+> v6:
+>   - Removed sysfs support and documentation for the display of the
+>     flash count, root entry hashes, and code-signing-key cancelation
+>     vectors.
+> v5:
+>   - Added the devm_fpga_sec_mgr_unregister() function, following recent
+>     changes to the fpga_manager() implementation.
+>   - Changed some *_show() functions to use sysfs_emit() instead of sprintf(
+> v4:
+>   - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+>     and removed unnecessary references to "Intel".
+>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+> v3:
+>   - Modified sysfs handler check in check_sysfs_handler() to make
+>     it more readable.
+> v2:
+>   - Bumped documentation dates and versions
+>   - Added Documentation/fpga/ifpga-sec-mgr.rst
+>   - Removed references to bmc_flash_count & smbus_flash_count (not supported)
+>   - Split ifpga_sec_mgr_register() into create() and register() functions
+>   - Added devm_ifpga_sec_mgr_create()
+>   - Removed typedefs for imgr ops
+> ---
+> ---
+>  Documentation/fpga/fpga-image-load.rst |  10 ++
+>  Documentation/fpga/index.rst           |   1 +
+>  MAINTAINERS                            |   8 ++
+>  drivers/fpga/Kconfig                   |  10 ++
+>  drivers/fpga/Makefile                  |   3 +
+>  drivers/fpga/fpga-image-load.c         | 124 +++++++++++++++++++++++++
+>  include/linux/fpga/fpga-image-load.h   |  35 +++++++
+>  7 files changed, 191 insertions(+)
+>  create mode 100644 Documentation/fpga/fpga-image-load.rst
+>  create mode 100644 drivers/fpga/fpga-image-load.c
+>  create mode 100644 include/linux/fpga/fpga-image-load.h
+> 
+> diff --git a/Documentation/fpga/fpga-image-load.rst b/Documentation/fpga/fpga-image-load.rst
+> new file mode 100644
+> index 000000000000..a6e53ac66026
+> --- /dev/null
+> +++ b/Documentation/fpga/fpga-image-load.rst
+> @@ -0,0 +1,10 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +============================
+> +FPGA Image Load Class Driver
+> +============================
+> +
+> +The FPGA Image Load class driver provides a common API for user-space
+> +tools to manage image uploads to FPGA devices. Device drivers that
+> +instantiate the FPGA Image Load class driver will interact with the
+> +target device to transfer and authenticate the image data.
+> diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
+> index f80f95667ca2..85d25fb22c08 100644
+> --- a/Documentation/fpga/index.rst
+> +++ b/Documentation/fpga/index.rst
+> @@ -8,6 +8,7 @@ fpga
+>      :maxdepth: 1
+>  
+>      dfl
+> +    fpga-image-load
+>  
+>  .. only::  subproject and html
+>  
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 6c63415d2ac2..4e7f48fa7e5c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7358,6 +7358,14 @@ F:	Documentation/fpga/
+>  F:	drivers/fpga/
+>  F:	include/linux/fpga/
+>  
+> +FPGA SECURITY MANAGER DRIVERS
+> +M:	Russ Weight <russell.h.weight@intel.com>
+> +L:	linux-fpga@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/fpga/fpga-image-load.rst
+> +F:	drivers/fpga/fpga-image-load.c
+> +F:	include/linux/fpga/fpga-image-load.h
+> +
+>  FPU EMULATOR
+>  M:	Bill Metzenthen <billm@melbpc.org.au>
+>  S:	Maintained
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 991b3f361ec9..c12a14e62fff 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -243,4 +243,14 @@ config FPGA_MGR_VERSAL_FPGA
+>  	  configure the programmable logic(PL).
+>  
+>  	  To compile this as a module, choose M here.
+> +
+> +config FPGA_IMAGE_LOAD
+> +	tristate "FPGA Image Load Driver"
 
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
----
-v14:
-  - Changed symbol names to reflect the renaming of the Security Manager
-    Class driver to FPGA Image Load.
-v13:
-  - No change
-v12:
-  - Updated Date and KernelVersion fields in ABI documentation
-  - Removed size parameter from the write_blk() op. m10bmc_sec_write_blk()
-    no longer has a size parameter, and the block size is determined
-    in this (the lower-level) driver.
-v11:
-  - No change
-v10:
-  - No change
-v9:
-  - No change
-v8:
-  - Previously patch 5/6, otherwise no change
-v7:
-  - No change
-v6:
-  - Changed (size / stride) calculation to ((size + stride - 1) / stride)
-    to ensure that the proper count is passed to regmap_bulk_write().
-  - Removed unnecessary call to rsu_check_complete() in
-    m10bmc_sec_poll_complete() and changed while loop to
-    do/while loop.
-v5:
-  - No change
-v4:
-  - No change
-v3:
-  - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
-  - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
-    driver"
-  - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
-    underlying functions are now called directly.
-  - Changed calling functions of functions that return "enum fpga_sec_err"
-    to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
-v2:
-  - Reworked the rsu_start_done() function to make it more readable
-  - Reworked while-loop condition/content in rsu_prog_ready()
-  - Minor code cleanup per review comments
-  - Added a comment to the m10bmc_sec_poll_complete() function to
-    explain the context (could take 30+ minutes to complete).
-  - Added m10bmc_ prefix to functions in m10bmc_iops structure
-  - Moved MAX10 BMC address and function definitions to a separate
-    patch.
----
- drivers/fpga/intel-m10-bmc-secure.c | 310 +++++++++++++++++++++++++++-
- 1 file changed, 309 insertions(+), 1 deletion(-)
+Maybe we don't call it "Driver". A framework or "FPGA Image load support",
+is it better?
 
-diff --git a/drivers/fpga/intel-m10-bmc-secure.c b/drivers/fpga/intel-m10-bmc-secure.c
-index ae1383d13bfc..025655684d00 100644
---- a/drivers/fpga/intel-m10-bmc-secure.c
-+++ b/drivers/fpga/intel-m10-bmc-secure.c
-@@ -181,7 +181,315 @@ static const struct attribute_group *m10bmc_sec_attr_groups[] = {
- 	NULL,
- };
- 
--static const struct fpga_image_load_ops m10bmc_lops = { };
-+static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
-+{
-+	u32 auth_result;
-+
-+	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
-+
-+	if (!m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result))
-+		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
-+}
-+
-+static enum fpga_image_err rsu_check_idle(struct m10bmc_sec *sec)
-+{
-+	u32 doorbell;
-+	int ret;
-+
-+	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+	if (ret)
-+		return FPGA_IMAGE_ERR_RW_ERROR;
-+
-+	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
-+	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE) {
-+		log_error_regs(sec, doorbell);
-+		return FPGA_IMAGE_ERR_BUSY;
-+	}
-+
-+	return FPGA_IMAGE_ERR_NONE;
-+}
-+
-+static inline bool rsu_start_done(u32 doorbell)
-+{
-+	u32 status, progress;
-+
-+	if (doorbell & DRBL_RSU_REQUEST)
-+		return false;
-+
-+	status = rsu_stat(doorbell);
-+	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
-+		return true;
-+
-+	progress = rsu_prog(doorbell);
-+	if (progress != RSU_PROG_IDLE && progress != RSU_PROG_RSU_DONE)
-+		return true;
-+
-+	return false;
-+}
-+
-+static enum fpga_image_err rsu_update_init(struct m10bmc_sec *sec)
-+{
-+	u32 doorbell, status;
-+	int ret;
-+
-+	ret = regmap_update_bits(sec->m10bmc->regmap,
-+				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				 DRBL_RSU_REQUEST | DRBL_HOST_STATUS,
-+				 DRBL_RSU_REQUEST |
-+				 FIELD_PREP(DRBL_HOST_STATUS,
-+					    HOST_STATUS_IDLE));
-+	if (ret)
-+		return FPGA_IMAGE_ERR_RW_ERROR;
-+
-+	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-+				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				       doorbell,
-+				       rsu_start_done(doorbell),
-+				       NIOS_HANDSHAKE_INTERVAL_US,
-+				       NIOS_HANDSHAKE_TIMEOUT_US);
-+
-+	if (ret == -ETIMEDOUT) {
-+		log_error_regs(sec, doorbell);
-+		return FPGA_IMAGE_ERR_TIMEOUT;
-+	} else if (ret) {
-+		return FPGA_IMAGE_ERR_RW_ERROR;
-+	}
-+
-+	status = rsu_stat(doorbell);
-+	if (status == RSU_STAT_WEAROUT) {
-+		dev_warn(sec->dev, "Excessive flash update count detected\n");
-+		return FPGA_IMAGE_ERR_WEAROUT;
-+	} else if (status == RSU_STAT_ERASE_FAIL) {
-+		log_error_regs(sec, doorbell);
-+		return FPGA_IMAGE_ERR_HW_ERROR;
-+	}
-+
-+	return FPGA_IMAGE_ERR_NONE;
-+}
-+
-+static enum fpga_image_err rsu_prog_ready(struct m10bmc_sec *sec)
-+{
-+	unsigned long poll_timeout;
-+	u32 doorbell, progress;
-+	int ret;
-+
-+	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+	if (ret)
-+		return FPGA_IMAGE_ERR_RW_ERROR;
-+
-+	poll_timeout = jiffies + msecs_to_jiffies(RSU_PREP_TIMEOUT_MS);
-+	while (rsu_prog(doorbell) == RSU_PROG_PREPARE) {
-+		msleep(RSU_PREP_INTERVAL_MS);
-+		if (time_after(jiffies, poll_timeout))
-+			break;
-+
-+		ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+		if (ret)
-+			return FPGA_IMAGE_ERR_RW_ERROR;
-+	}
-+
-+	progress = rsu_prog(doorbell);
-+	if (progress == RSU_PROG_PREPARE) {
-+		log_error_regs(sec, doorbell);
-+		return FPGA_IMAGE_ERR_TIMEOUT;
-+	} else if (progress != RSU_PROG_READY) {
-+		log_error_regs(sec, doorbell);
-+		return FPGA_IMAGE_ERR_HW_ERROR;
-+	}
-+
-+	return FPGA_IMAGE_ERR_NONE;
-+}
-+
-+static enum fpga_image_err rsu_send_data(struct m10bmc_sec *sec)
-+{
-+	u32 doorbell;
-+	int ret;
-+
-+	ret = regmap_update_bits(sec->m10bmc->regmap,
-+				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				 DRBL_HOST_STATUS,
-+				 FIELD_PREP(DRBL_HOST_STATUS,
-+					    HOST_STATUS_WRITE_DONE));
-+	if (ret)
-+		return FPGA_IMAGE_ERR_RW_ERROR;
-+
-+	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-+				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				       doorbell,
-+				       rsu_prog(doorbell) != RSU_PROG_READY,
-+				       NIOS_HANDSHAKE_INTERVAL_US,
-+				       NIOS_HANDSHAKE_TIMEOUT_US);
-+
-+	if (ret == -ETIMEDOUT) {
-+		log_error_regs(sec, doorbell);
-+		return FPGA_IMAGE_ERR_TIMEOUT;
-+	} else if (ret) {
-+		return FPGA_IMAGE_ERR_RW_ERROR;
-+	}
-+
-+	switch (rsu_stat(doorbell)) {
-+	case RSU_STAT_NORMAL:
-+	case RSU_STAT_NIOS_OK:
-+	case RSU_STAT_USER_OK:
-+	case RSU_STAT_FACTORY_OK:
-+		break;
-+	default:
-+		log_error_regs(sec, doorbell);
-+		return FPGA_IMAGE_ERR_HW_ERROR;
-+	}
-+
-+	return FPGA_IMAGE_ERR_NONE;
-+}
-+
-+static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
-+{
-+	if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, doorbell))
-+		return -EIO;
-+
-+	switch (rsu_stat(*doorbell)) {
-+	case RSU_STAT_NORMAL:
-+	case RSU_STAT_NIOS_OK:
-+	case RSU_STAT_USER_OK:
-+	case RSU_STAT_FACTORY_OK:
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	switch (rsu_prog(*doorbell)) {
-+	case RSU_PROG_IDLE:
-+	case RSU_PROG_RSU_DONE:
-+		return 0;
-+	case RSU_PROG_AUTHENTICATING:
-+	case RSU_PROG_COPYING:
-+	case RSU_PROG_UPDATE_CANCEL:
-+	case RSU_PROG_PROGRAM_KEY_HASH:
-+		return -EAGAIN;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static enum fpga_image_err m10bmc_sec_prepare(struct fpga_image_load *imgld)
-+{
-+	struct m10bmc_sec *sec = imgld->priv;
-+	enum fpga_image_err ret;
-+
-+	if (imgld->remaining_size > M10BMC_STAGING_SIZE)
-+		return FPGA_IMAGE_ERR_INVALID_SIZE;
-+
-+	ret = rsu_check_idle(sec);
-+	if (ret != FPGA_IMAGE_ERR_NONE)
-+		return ret;
-+
-+	ret = rsu_update_init(sec);
-+	if (ret != FPGA_IMAGE_ERR_NONE)
-+		return ret;
-+
-+	return rsu_prog_ready(sec);
-+}
-+
-+#define WRITE_BLOCK_SIZE 0x4000 /* Update remaining_size every 0x4000 bytes */
-+
-+static enum fpga_image_err
-+m10bmc_sec_write_blk(struct fpga_image_load *imgld, u32 offset)
-+{
-+	struct m10bmc_sec *sec = imgld->priv;
-+	unsigned int stride = regmap_get_reg_stride(sec->m10bmc->regmap);
-+	u32 doorbell, blk_size;
-+	int ret;
-+
-+	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+	if (ret) {
-+		return FPGA_IMAGE_ERR_RW_ERROR;
-+	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
-+		log_error_regs(sec, doorbell);
-+		return FPGA_IMAGE_ERR_HW_ERROR;
-+	}
-+
-+	blk_size = min_t(u32, imgld->remaining_size, WRITE_BLOCK_SIZE);
-+	ret = regmap_bulk_write(sec->m10bmc->regmap,
-+				M10BMC_STAGING_BASE + offset,
-+				(void *)imgld->data + offset,
-+				(blk_size + stride - 1) / stride);
-+
-+	if (ret)
-+		return FPGA_IMAGE_ERR_RW_ERROR;
-+
-+	imgld->remaining_size -= blk_size;
-+	return FPGA_IMAGE_ERR_NONE;
-+}
-+
-+/*
-+ * m10bmc_sec_poll_complete() is called after handing things off to
-+ * the BMC firmware. Depending on the type of update, it could be
-+ * 30+ minutes before the BMC firmware completes the update. The
-+ * imgld->driver_unload check allows the driver to be unloaded,
-+ * but the BMC firmware will continue the update and no further
-+ * secure updates can be started for this device until the update
-+ * is complete.
-+ */
-+static enum fpga_image_err m10bmc_sec_poll_complete(struct fpga_image_load *imgld)
-+{
-+	struct m10bmc_sec *sec = imgld->priv;
-+	unsigned long poll_timeout;
-+	enum fpga_image_err result;
-+	u32 doorbell;
-+	int ret;
-+
-+	result = rsu_send_data(sec);
-+	if (result != FPGA_IMAGE_ERR_NONE)
-+		return result;
-+
-+	poll_timeout = jiffies + msecs_to_jiffies(RSU_COMPLETE_TIMEOUT_MS);
-+	do {
-+		msleep(RSU_COMPLETE_INTERVAL_MS);
-+		ret = rsu_check_complete(sec, &doorbell);
-+		if (imgld->driver_unload)
-+			return FPGA_IMAGE_ERR_CANCELED;
-+	} while (ret == -EAGAIN && !time_after(jiffies, poll_timeout));
-+
-+	if (ret == -EAGAIN) {
-+		log_error_regs(sec, doorbell);
-+		return FPGA_IMAGE_ERR_TIMEOUT;
-+	} else if (ret == -EIO) {
-+		return FPGA_IMAGE_ERR_RW_ERROR;
-+	} else if (ret) {
-+		log_error_regs(sec, doorbell);
-+		return FPGA_IMAGE_ERR_HW_ERROR;
-+	}
-+
-+	return FPGA_IMAGE_ERR_NONE;
-+}
-+
-+static enum fpga_image_err m10bmc_sec_cancel(struct fpga_image_load *imgld)
-+{
-+	struct m10bmc_sec *sec = imgld->priv;
-+	u32 doorbell;
-+	int ret;
-+
-+	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+	if (ret)
-+		return FPGA_IMAGE_ERR_RW_ERROR;
-+
-+	if (rsu_prog(doorbell) != RSU_PROG_READY)
-+		return FPGA_IMAGE_ERR_BUSY;
-+
-+	ret = regmap_update_bits(sec->m10bmc->regmap,
-+				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				 DRBL_HOST_STATUS,
-+				 FIELD_PREP(DRBL_HOST_STATUS,
-+					    HOST_STATUS_ABORT_RSU));
-+
-+	return ret ? FPGA_IMAGE_ERR_RW_ERROR : FPGA_IMAGE_ERR_NONE;
-+}
-+
-+static const struct fpga_image_load_ops m10bmc_lops = {
-+	.prepare = m10bmc_sec_prepare,
-+	.write_blk = m10bmc_sec_write_blk,
-+	.poll_complete = m10bmc_sec_poll_complete,
-+	.cancel = m10bmc_sec_cancel,
-+};
- 
- static int m10bmc_secure_probe(struct platform_device *pdev)
- {
--- 
-2.25.1
+There are more descriptions about "driver" below, maybe you need to change
+them all.
 
+> +	help
+> +	  The FPGA Image Load class driver presents a common user API for
+> +	  uploading an image file to an FPGA device. The image file is
+> +	  expected to be self-describing. It is up to the device driver
+> +	  and/or the device itself to authenticate and disposition the
+> +	  image data.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 0bff783d1b61..adf228ee4f5e 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -22,6 +22,9 @@ obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
+>  
+> +# FPGA Image Load Framework
+> +obj-$(CONFIG_FPGA_IMAGE_LOAD)		+= fpga-image-load.o
+> +
+>  # FPGA Bridge Drivers
+>  obj-$(CONFIG_FPGA_BRIDGE)		+= fpga-bridge.o
+>  obj-$(CONFIG_SOCFPGA_FPGA_BRIDGE)	+= altera-hps2fpga.o altera-fpga2sdram.o
+> diff --git a/drivers/fpga/fpga-image-load.c b/drivers/fpga/fpga-image-load.c
+> new file mode 100644
+> index 000000000000..7d75bbcff541
+> --- /dev/null
+> +++ b/drivers/fpga/fpga-image-load.c
+> @@ -0,0 +1,124 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * FPGA Image Load Class Driver
+> + *
+> + * Copyright (C) 2019-2021 Intel Corporation, Inc.
+> + */
+> +
+> +#include <linux/fpga/fpga-image-load.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/vmalloc.h>
+> +
+> +#define IMAGE_LOAD_XA_LIMIT	XA_LIMIT(0, INT_MAX)
+> +static DEFINE_XARRAY_ALLOC(fpga_image_load_xa);
+> +
+> +static struct class *fpga_image_load_class;
+> +
+> +#define to_image_load(d) container_of(d, struct fpga_image_load, dev)
+> +
+> +/**
+> + * fpga_image_load_register - create and register an FPGA Image Load Device
+> + *
+> + * @parent: fpga image load device from pdev
+> + * @lops:   pointer to a structure of image load callback functions
+
+Maybe "ops" is just good, some more below.
+
+> + * @priv:   fpga image load private data
+> + *
+> + * Returns a struct fpga_image_load pointer on success, or ERR_PTR() on
+> + * error. The caller of this function is responsible for calling
+> + * fpga_image_load_unregister().
+> + */
+> +struct fpga_image_load *
+> +fpga_image_load_register(struct device *parent,
+> +			 const struct fpga_image_load_ops *lops, void *priv)
+> +{
+> +	struct fpga_image_load *imgld;
+> +	int id, ret;
+> +
+> +	imgld = kzalloc(sizeof(*imgld), GFP_KERNEL);
+> +	if (!imgld)
+> +		return NULL;
+> +
+> +	ret = xa_alloc(&fpga_image_load_xa, &imgld->dev.id, imgld, IMAGE_LOAD_XA_LIMIT,
+> +		       GFP_KERNEL);
+> +	if (ret)
+> +		goto error_kfree;
+> +
+> +	mutex_init(&imgld->lock);
+> +
+> +	imgld->priv = priv;
+> +	imgld->lops = lops;
+> +
+> +	imgld->dev.class = fpga_image_load_class;
+> +	imgld->dev.parent = parent;
+> +
+> +	ret = dev_set_name(&imgld->dev, "fpga_image%d", id);
+
+Is it better "fpga_image_load%d"?
+
+> +	if (ret) {
+> +		dev_err(parent, "Failed to set device name: fpga_image%d\n", id);
+> +		goto error_device;
+> +	}
+> +
+> +	ret = device_register(&imgld->dev);
+> +	if (ret) {
+> +		put_device(&imgld->dev);
+> +		return ERR_PTR(ret);
+> +	}
+> +
+> +	return imgld;
+> +
+> +error_device:
+> +	xa_erase(&fpga_image_load_xa, imgld->dev.id);
+> +
+> +error_kfree:
+> +	kfree(imgld);
+> +
+> +	return ERR_PTR(ret);
+> +}
+> +EXPORT_SYMBOL_GPL(fpga_image_load_register);
+> +
+> +/**
+> + * fpga_image_load_unregister - unregister an FPGA image load device
+> + *
+> + * @imgld: pointer to struct fpga_image_load
+> + *
+> + * This function is intended for use in an FPGA Image Load driver's
+> + * remove() function.
+> + */
+> +void fpga_image_load_unregister(struct fpga_image_load *imgld)
+> +{
+> +	device_unregister(&imgld->dev);
+> +}
+> +EXPORT_SYMBOL_GPL(fpga_image_load_unregister);
+> +
+> +static void fpga_image_load_dev_release(struct device *dev)
+> +{
+> +	struct fpga_image_load *imgld = to_image_load(dev);
+> +
+> +	xa_erase(&fpga_image_load_xa, imgld->dev.id);
+> +	kfree(imgld);
+> +}
+> +
+> +static int __init fpga_image_load_class_init(void)
+> +{
+> +	pr_info("FPGA Image Load Driver\n");
+> +
+> +	fpga_image_load_class = class_create(THIS_MODULE, "fpga_image_load");
+> +	if (IS_ERR(fpga_image_load_class))
+> +		return PTR_ERR(fpga_image_load_class);
+> +
+> +	fpga_image_load_class->dev_release = fpga_image_load_dev_release;
+> +
+> +	return 0;
+> +}
+> +
+> +static void __exit fpga_image_load_class_exit(void)
+> +{
+> +	class_destroy(fpga_image_load_class);
+> +	WARN_ON(!xa_empty(&fpga_image_load_xa));
+> +}
+> +
+> +MODULE_DESCRIPTION("FPGA Image Load Driver");
+> +MODULE_LICENSE("GPL v2");
+> +
+> +subsys_initcall(fpga_image_load_class_init);
+> +module_exit(fpga_image_load_class_exit)
+> diff --git a/include/linux/fpga/fpga-image-load.h b/include/linux/fpga/fpga-image-load.h
+> new file mode 100644
+> index 000000000000..a9cef9e1056b
+> --- /dev/null
+> +++ b/include/linux/fpga/fpga-image-load.h
+> @@ -0,0 +1,35 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Header file for FPGA Image Load Driver
+> + *
+> + * Copyright (C) 2019-2021 Intel Corporation, Inc.
+> + */
+> +#ifndef _LINUX_FPGA_IMAGE_LOAD_H
+> +#define _LINUX_FPGA_IMAGE_LOAD_H
+> +
+> +#include <linux/device.h>
+> +#include <linux/mutex.h>
+> +#include <linux/types.h>
+> +
+> +struct fpga_image_load;
+> +
+> +/**
+> + * struct fpga_image_load_ops - device specific operations
+> + */
+> +struct fpga_image_load_ops {
+> +};
+> +
+> +struct fpga_image_load {
+> +	struct device dev;
+> +	const struct fpga_image_load_ops *lops;
+> +	struct mutex lock;		/* protect data structure contents */
+> +	void *priv;
+> +};
+> +
+> +struct fpga_image_load *
+> +fpga_image_load_register(struct device *dev,
+> +			 const struct fpga_image_load_ops *lops, void *priv);
+> +
+> +void fpga_image_load_unregister(struct fpga_image_load *imgld);
+> +
+> +#endif
+> -- 
+> 2.25.1
+
+Thanks,
+Yilun
