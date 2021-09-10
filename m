@@ -2,235 +2,180 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 917144068C5
-	for <lists+linux-fpga@lfdr.de>; Fri, 10 Sep 2021 10:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C604068CE
+	for <lists+linux-fpga@lfdr.de>; Fri, 10 Sep 2021 10:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbhIJI57 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 10 Sep 2021 04:57:59 -0400
-Received: from mga17.intel.com ([192.55.52.151]:41199 "EHLO mga17.intel.com"
+        id S231795AbhIJJAX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 10 Sep 2021 05:00:23 -0400
+Received: from mga04.intel.com ([192.55.52.120]:62019 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231731AbhIJI56 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 10 Sep 2021 04:57:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10102"; a="201224849"
+        id S231771AbhIJJAX (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 10 Sep 2021 05:00:23 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10102"; a="219170877"
 X-IronPort-AV: E=Sophos;i="5.85,282,1624345200"; 
-   d="scan'208";a="201224849"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 01:56:45 -0700
+   d="scan'208";a="219170877"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 01:59:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,282,1624345200"; 
-   d="scan'208";a="540452276"
+   d="scan'208";a="470465066"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Sep 2021 01:56:36 -0700
-Date:   Fri, 10 Sep 2021 16:50:05 +0800
+  by orsmga007.jf.intel.com with ESMTP; 10 Sep 2021 01:59:09 -0700
+Date:   Fri, 10 Sep 2021 16:52:38 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     Russ Weight <russell.h.weight@intel.com>
 Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
         hao.wu@intel.com, matthew.gerlach@intel.com
-Subject: Re: [PATCH v15 4/6] fpga: image-load: add status ioctl
-Message-ID: <20210910085005.GC754505@yilunxu-OptiPlex-7050>
+Subject: Re: [PATCH v15 5/6] fpga: image-load: create status sysfs node
+Message-ID: <20210910085238.GD754505@yilunxu-OptiPlex-7050>
 References: <20210909021846.681121-1-russell.h.weight@intel.com>
- <20210909021846.681121-5-russell.h.weight@intel.com>
+ <20210909021846.681121-6-russell.h.weight@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210909021846.681121-5-russell.h.weight@intel.com>
+In-Reply-To: <20210909021846.681121-6-russell.h.weight@intel.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Sep 08, 2021 at 07:18:44PM -0700, Russ Weight wrote:
-> Extend the FPGA Image Load class driver to include an
-> FPGA_IMAGE_LOAD_STATUS IOCTL that can be used to monitor the progress
-> of an ongoing image load.  The status returned includes how much data
-> remains to be transferred, the progress of the image load, and error
-> information in the case of a failure.
-> 
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> ---
-> V15:
->  - This patch is new to the patchset and provides an FPGA_IMAGE_LOAD_STATUS
->    IOCTL to return the current values for: remaining_size, progress,
->    err_progress, and err_code.
->  - This patch has elements of the following three patches from the previous
->    patch-set:
->      [PATCH v14 3/6] fpga: sec-mgr: expose sec-mgr update status
->      [PATCH v14 4/6] fpga: sec-mgr: expose sec-mgr update errors
->      [PATCH v14 5/6] fpga: sec-mgr: expose sec-mgr update size
->  - Changed file, symbol, and config names to reflect the new driver name
->  - There are some minor changes to locking to enable this ioctl to return
->    coherent data.
-> ---
->  Documentation/fpga/fpga-image-load.rst |  6 +++
->  drivers/fpga/fpga-image-load.c         | 53 ++++++++++++++++++++++----
->  include/uapi/linux/fpga-image-load.h   | 18 +++++++++
->  3 files changed, 70 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/fpga/fpga-image-load.rst b/Documentation/fpga/fpga-image-load.rst
-> index 739d735592a5..3d5eb51223e3 100644
-> --- a/Documentation/fpga/fpga-image-load.rst
-> +++ b/Documentation/fpga/fpga-image-load.rst
-> @@ -31,3 +31,9 @@ updated. This is an exclusive operation; an attempt to start concurrent image
->  load for the same device will fail with EBUSY. An eventfd file descriptor
->  parameter is provided to this IOCTL, and it will be signalled at the
->  completion of the image load.
-> +
-> +FPGA_IMAGE_LOAD_STATUS:
-> +
-> +Collect status for an on-going image upload. The status returned includes
-> +how much data remains to be transferred, the progress of the image load,
-> +and error information in the case of a failure.
-> diff --git a/drivers/fpga/fpga-image-load.c b/drivers/fpga/fpga-image-load.c
-> index b784456765b0..99a47b21c995 100644
-> --- a/drivers/fpga/fpga-image-load.c
-> +++ b/drivers/fpga/fpga-image-load.c
-> @@ -22,10 +22,27 @@ static dev_t fpga_image_devt;
->  
->  #define to_image_load(d) container_of(d, struct fpga_image_load, dev)
->  
-> -static void fpga_image_dev_error(struct fpga_image_load *imgld,
-> +static void fpga_image_update_progress(struct fpga_image_load *imgld,
-> +				       enum fpga_image_prog new_progress)
-> +{
-> +	mutex_lock(&imgld->lock);
-> +	imgld->progress = new_progress;
-> +	mutex_unlock(&imgld->lock);
-> +}
-> +
-> +static void fpga_image_set_error(struct fpga_image_load *imgld,
->  				 enum fpga_image_err err_code)
->  {
-> +	mutex_lock(&imgld->lock);
-> +	imgld->err_progress = imgld->progress;
->  	imgld->err_code = err_code;
-> +	mutex_unlock(&imgld->lock);
-> +}
-> +
-> +static void fpga_image_dev_error(struct fpga_image_load *imgld,
-> +				 enum fpga_image_err err_code)
-> +{
-> +	fpga_image_set_error(imgld, err_code);
->  	imgld->lops->cancel(imgld);
->  }
->  
-> @@ -49,18 +66,18 @@ static void fpga_image_do_load(struct work_struct *work)
->  
->  	get_device(&imgld->dev);
->  	if (!try_module_get(imgld->dev.parent->driver->owner)) {
-> -		imgld->err_code = FPGA_IMAGE_ERR_BUSY;
-> +		fpga_image_set_error(imgld, FPGA_IMAGE_ERR_BUSY);
->  		goto idle_exit;
->  	}
->  
-> -	imgld->progress = FPGA_IMAGE_PROG_PREPARING;
-> +	fpga_image_update_progress(imgld, FPGA_IMAGE_PROG_PREPARING);
->  	ret = imgld->lops->prepare(imgld);
->  	if (ret != FPGA_IMAGE_ERR_NONE) {
->  		fpga_image_dev_error(imgld, ret);
->  		goto modput_exit;
->  	}
->  
-> -	imgld->progress = FPGA_IMAGE_PROG_WRITING;
-> +	fpga_image_update_progress(imgld, FPGA_IMAGE_PROG_WRITING);
->  	while (imgld->remaining_size) {
->  		ret = imgld->lops->write_blk(imgld, offset);
->  		if (ret != FPGA_IMAGE_ERR_NONE) {
-> @@ -71,7 +88,7 @@ static void fpga_image_do_load(struct work_struct *work)
->  		offset = size - imgld->remaining_size;
->  	}
->  
-> -	imgld->progress = FPGA_IMAGE_PROG_PROGRAMMING;
-> +	fpga_image_update_progress(imgld, FPGA_IMAGE_PROG_PROGRAMMING);
->  	ret = imgld->lops->poll_complete(imgld);
->  	if (ret != FPGA_IMAGE_ERR_NONE)
->  		fpga_image_dev_error(imgld, ret);
-> @@ -151,20 +168,42 @@ static int fpga_image_load_ioctl_write(struct fpga_image_load *imgld,
->  	return ret;
->  }
->  
-> +static int fpga_image_load_ioctl_status(struct fpga_image_load *imgld,
-> +					unsigned long arg)
-> +{
-> +	struct fpga_image_status status;
-> +
-> +	memset(&status, 0, sizeof(status));
-> +	status.progress = imgld->progress;
-> +	status.remaining_size = imgld->remaining_size;
-> +	status.err_progress = imgld->err_progress;
-> +	status.err_code = imgld->err_code;
-> +
-> +	if (copy_to_user((void __user *)arg, &status, sizeof(status)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
->  static long fpga_image_load_ioctl(struct file *filp, unsigned int cmd,
->  				  unsigned long arg)
->  {
->  	struct fpga_image_load *imgld = filp->private_data;
->  	int ret = -ENOTTY;
->  
-> +	mutex_lock(&imgld->lock);
-> +
->  	switch (cmd) {
->  	case FPGA_IMAGE_LOAD_WRITE:
-> -		mutex_lock(&imgld->lock);
->  		ret = fpga_image_load_ioctl_write(imgld, arg);
-> -		mutex_unlock(&imgld->lock);
-> +		break;
-> +	case FPGA_IMAGE_LOAD_STATUS:
-> +		ret = fpga_image_load_ioctl_status(imgld, arg);
->  		break;
->  	}
->  
-> +	mutex_unlock(&imgld->lock);
-> +
->  	return ret;
->  }
->  
-> diff --git a/include/uapi/linux/fpga-image-load.h b/include/uapi/linux/fpga-image-load.h
-> index a60da115adf5..6a995bcc0fb7 100644
-> --- a/include/uapi/linux/fpga-image-load.h
-> +++ b/include/uapi/linux/fpga-image-load.h
-> @@ -38,6 +38,7 @@ enum fpga_image_err {
->  };
->  
->  #define FPGA_IMAGE_LOAD_WRITE	_IOW(FPGA_IMAGE_LOAD_MAGIC, 0, struct fpga_image_write)
-> +#define FPGA_IMAGE_LOAD_STATUS	_IOR(FPGA_IMAGE_LOAD_MAGIC, 1, struct fpga_image_status)
->  
->  /**
->   * FPGA_IMAGE_LOAD_WRITE - _IOW(FPGA_IMAGE_LOAD_MAGIC, 0,
-> @@ -56,4 +57,21 @@ struct fpga_image_write {
->  	__u64 buf;		/* User space address of source data */
->  };
->  
-> +/**
-> + * FPGA_IMAGE_LOAD_STATUS - _IOR(FPGA_IMAGE_LOAD_MAGIC, 1,
-> + *				 struct fpga_image_status)
-> + *
-> + * Request status information for an ongoing update.
-> + * data buffer, size, and an eventfd file descriptor.
+On Wed, Sep 08, 2021 at 07:18:45PM -0700, Russ Weight wrote:
+> Extend the FPGA Image Load class driver to include a status sysfs node that
+> can be viewed to determine from the command line if an image load is in
+> progress. Status will be one of: idle, starting, preparing, writing, or
+> programming.
 
-This line is a typo.
-
-> + *
-> + * Return: 0 on success, -errno on failure.
-> + */
-> +struct fpga_image_status {
-> +	/* Output */
-> +	__u32 remaining_size;			/* size remaining to transfer */
-> +	enum fpga_image_prog progress;		/* current progress of image load */
-> +	enum fpga_image_prog err_progress;	/* progress at time of error */
-> +	enum fpga_image_err err_code;		/* error code */
-
-Should we use __u32 for these enumeration types?
+The FPGA_IMAGE_LOAD_STATUS ioctl already provides the progress info.
+Why we need 2 user interfaces for the same information?
 
 Thanks,
 Yilun
 
+> 
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> ---
+> v15:
+>  - Compare to previous patch:
+>      [PATCH v14 3/6] fpga: sec-mgr: expose sec-mgr update status
+>  - Changed file, symbol, and config names to reflect the new driver name
+>  - Removed signed-off/reviewed-by tags
+> v14:
+>  - Updated ABI documentation date and kernel version
+> v13:
+>   - No change
+> v12:
+>   - Updated Date and KernelVersion fields in ABI documentation
+>   - Changed syntax of sec_mgr_prog_str[] array definition from:
+> 	"idle",			/* FPGA_SEC_PROG_IDLE */
+>     to:
+> 	[FPGA_SEC_PROG_IDLE]	    = "idle",
+> v11:
+>   - No change
+> v10:
+>   - Rebased to 5.12-rc2 next
+>   - Updated Date and KernelVersion in ABI documentation
+> v9:
+>   - Updated Date and KernelVersion in ABI documentation
+> v8:
+>   - No change
+> v7:
+>   - Changed Date in documentation file to December 2020
+> v6:
+>   - No change
+> v5:
+>   - Use new function sysfs_emit() in the status_show() function
+> v4:
+>   - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+>     and removed unnecessary references to "Intel".
+>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+> v3:
+>   - Use a local variable to read progress once in status_show()
+>   - Use dev_err to report invalid progress status
+> v2:
+>   - Bumped documentation date and version
+>   - Changed progress state "read_file" to "reading"
+> ---
+>  .../ABI/testing/sysfs-class-fpga-image-load   |  7 ++++
+>  MAINTAINERS                                   |  1 +
+>  drivers/fpga/fpga-image-load.c                | 33 +++++++++++++++++++
+>  3 files changed, 41 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-class-fpga-image-load
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-fpga-image-load b/Documentation/ABI/testing/sysfs-class-fpga-image-load
+> new file mode 100644
+> index 000000000000..6c04a49f01cc
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-class-fpga-image-load
+> @@ -0,0 +1,7 @@
+> +What: 		/sys/class/fpga_image_load/fpga_imageX/status
+> +Date:		Aug 2021
+> +KernelVersion:	5.15
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Read-only. Returns a string describing the current status
+> +		of an FPGA image upload. The string will be one of the
+> +		following: idle, starting, preparing, writing, programming.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 637bc003ca81..e3fbc1bde9bc 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7362,6 +7362,7 @@ FPGA SECURITY MANAGER DRIVERS
+>  M:	Russ Weight <russell.h.weight@intel.com>
+>  L:	linux-fpga@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/ABI/testing/sysfs-class-fpga-image-load
+>  F:	Documentation/fpga/fpga-image-load.rst
+>  F:	drivers/fpga/fpga-image-load.c
+>  F:	include/linux/fpga/fpga-image-load.h
+> diff --git a/drivers/fpga/fpga-image-load.c b/drivers/fpga/fpga-image-load.c
+> index 99a47b21c995..6ec0a39f07b3 100644
+> --- a/drivers/fpga/fpga-image-load.c
+> +++ b/drivers/fpga/fpga-image-load.c
+> @@ -236,6 +236,38 @@ static const struct file_operations fpga_image_load_fops = {
+>  	.unlocked_ioctl = fpga_image_load_ioctl,
+>  };
+>  
+> +static const char * const image_load_prog_str[] = {
+> +	[FPGA_IMAGE_PROG_IDLE]	      = "idle",
+> +	[FPGA_IMAGE_PROG_STARTING]    = "starting",
+> +	[FPGA_IMAGE_PROG_PREPARING]   = "preparing",
+> +	[FPGA_IMAGE_PROG_WRITING]     = "writing",
+> +	[FPGA_IMAGE_PROG_PROGRAMMING] = "programming"
 > +};
 > +
->  #endif /* _UAPI_LINUX_FPGA_IMAGE_LOAD_H */
+> +static ssize_t
+> +status_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	struct fpga_image_load *imgld = to_image_load(dev);
+> +	const char *status = "unknown-status";
+> +	enum fpga_image_prog progress;
+> +
+> +	progress = imgld->progress;
+> +	if (progress < FPGA_IMAGE_PROG_MAX)
+> +		status = image_load_prog_str[progress];
+> +	else
+> +		dev_err(dev, "Invalid status during secure update: %d\n",
+> +			progress);
+> +
+> +	return sysfs_emit(buf, "%s\n", status);
+> +}
+> +static DEVICE_ATTR_RO(status);
+> +
+> +static struct attribute *fpga_image_load_attrs[] = {
+> +	&dev_attr_status.attr,
+> +	NULL,
+> +};
+> +ATTRIBUTE_GROUPS(fpga_image_load);
+> +
+>  /**
+>   * fpga_image_load_register - create and register an FPGA Image Load Device
+>   *
+> @@ -373,6 +405,7 @@ static int __init fpga_image_load_class_init(void)
+>  	if (ret)
+>  		goto exit_destroy_class;
+>  
+> +	fpga_image_load_class->dev_groups = fpga_image_load_groups;
+>  	fpga_image_load_class->dev_release = fpga_image_load_dev_release;
+>  
+>  	return 0;
 > -- 
 > 2.25.1
