@@ -2,253 +2,185 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FE9408AC8
-	for <lists+linux-fpga@lfdr.de>; Mon, 13 Sep 2021 14:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C359E40A17D
+	for <lists+linux-fpga@lfdr.de>; Tue, 14 Sep 2021 01:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239851AbhIMMNy (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 13 Sep 2021 08:13:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50418 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237106AbhIMMNx (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 13 Sep 2021 08:13:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1631535157;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vSMeQm4fsiThkonXMhr3sKRDMnUc6h1VcL9Yy6VW9yg=;
-        b=hqp44VcTqLM2vlKWcw2j2RykqAvmPmzRTLqdcdFwy+8eBD2CGJg+fSYXY6sRlM4RUmeZ30
-        3osdSMsztMtJC6Wiv164iE+RJAGzj1lJRbNvQF/yZKfpbq7rYpPBr8EZKHvMn65qaNk6zG
-        1iDwN2qyETd8966VErmU4X61UPqctBM=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-589-1c0PqNDsNUSOuWed_44HsA-1; Mon, 13 Sep 2021 08:12:36 -0400
-X-MC-Unique: 1c0PqNDsNUSOuWed_44HsA-1
-Received: by mail-qk1-f200.google.com with SMTP id k12-20020a05620a0b8c00b003d5c8646ec2so40937296qkh.20
-        for <linux-fpga@vger.kernel.org>; Mon, 13 Sep 2021 05:12:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=vSMeQm4fsiThkonXMhr3sKRDMnUc6h1VcL9Yy6VW9yg=;
-        b=Q5yfaPlkBT6f+48VKYqmianJ3/veYL0F3+W87M1H2Sq6YmQ3A0naORRPmpKiXuzdNe
-         7DBXcRNz8XslDtqDFl8cDquiZNB4p0ocQVNDVRN/VDiR55LU8dZEez3Fsf3GvQTP+4fu
-         L5AJJNx4wn2u+DCxnrG4/nFxzy83MO+QQI+MLMlMaWaskpiRQwFH+uheXjvVW38hZ33k
-         WYtw/l8KtEnS8mcCb30+683UuFsPrJHXdbdJfu044k93wWSdrWEinZSdc3o/NmxSOWVn
-         SgI6uKMxMRXvcUeYBojec8kBqfVD7pCL7gBiWiBW3n2ldKNlk7I684pZXMzbmdCsexkW
-         YW2Q==
-X-Gm-Message-State: AOAM5332LEXLoHFx0AUZb0Vqo6DbVAQtizsfF1CBpfGqwbcxgo1hTZPC
-        6koYrX3CkaVi8ZG/8Y8egar7ZSXmUiMKUX0tSdb+i0cmehKf8iFIVVtFWZNyG1isjdluIWrpMcn
-        EqFpIYakGPFag3TGi2Ncj9g==
-X-Received: by 2002:a0c:aa01:: with SMTP id d1mr10242262qvb.47.1631535156047;
-        Mon, 13 Sep 2021 05:12:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwsB3wBj1DUtV27jjdM7xr8evfxgFGSlShP5h/DPjPcqyz2uJyl2ADEiP+lnH+apzuQnS58mA==
-X-Received: by 2002:a0c:aa01:: with SMTP id d1mr10242237qvb.47.1631535155782;
-        Mon, 13 Sep 2021 05:12:35 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id i14sm5062462qka.66.2021.09.13.05.12.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Sep 2021 05:12:35 -0700 (PDT)
-Subject: Re: [PATCH v14 1/4] fpga: m10bmc-sec: create max10 bmc secure update
- driver
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lgoncalv@redhat.com, hao.wu@intel.com, matthew.gerlach@intel.com
-References: <20210909233304.5650-1-russell.h.weight@intel.com>
- <20210909233304.5650-2-russell.h.weight@intel.com>
- <20210910151335.GB757507@yilunxu-OptiPlex-7050>
- <1e4a9cc9-4390-1c9d-5ec0-7e9295158dfa@intel.com>
- <ce3039c5-d18a-87d5-229d-5ff571c2aaa9@redhat.com>
- <20210913053747.GE754505@yilunxu-OptiPlex-7050>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <41b42ae2-6cbc-fec2-44b3-6353507e1b02@redhat.com>
-Date:   Mon, 13 Sep 2021 05:12:32 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S234285AbhIMXUo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 13 Sep 2021 19:20:44 -0400
+Received: from mga18.intel.com ([134.134.136.126]:44604 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349789AbhIMXTm (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 13 Sep 2021 19:19:42 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="208916727"
+X-IronPort-AV: E=Sophos;i="5.85,291,1624345200"; 
+   d="scan'208";a="208916727"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 16:13:13 -0700
+X-IronPort-AV: E=Sophos;i="5.85,291,1624345200"; 
+   d="scan'208";a="551942778"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.209.14.63])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 16:13:12 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        richard.gong@intel.com, Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v11 0/3] fpga: Use standard class dev_release function
+Date:   Mon, 13 Sep 2021 16:12:29 -0700
+Message-Id: <20210913231232.65944-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210913053747.GE754505@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+The FPGA framework has a convention of using managed resource functions
+to allow parent drivers to manage the data structures allocated by the
+class drivers. They use an empty *_dev_release() function to satisfy the
+class driver.
 
-On 9/12/21 10:37 PM, Xu Yilun wrote:
-> On Sat, Sep 11, 2021 at 12:04:07PM -0700, Tom Rix wrote:
->> On 9/10/21 1:27 PM, Russ Weight wrote:
->>> On 9/10/21 8:13 AM, Xu Yilun wrote:
->>>> On Thu, Sep 09, 2021 at 04:33:01PM -0700, Russ Weight wrote:
->>>>> Create a sub driver for the FPGA Card BMC in order to support secure
->>>>> updates.  This sub-driver will invoke an instance of the FPGA Image Load
->>>>> class driver for the image load portion of the update.
->>>>>
->>>>> This patch creates the MAX10 BMC Secure Update driver and provides sysfs
->>>>> files for displaying the current root entry hashes for the FPGA static
->>>>> region, the FPGA PR region, and the MAX10 BMC.
->>>>>
->>>>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
->>>>> Reviewed-by: Tom Rix <trix@redhat.com>
->>>>> ---
->>>>> v14:
->>>>>     - Changed symbol and text references to reflect the renaming of the
->>>>>       Security Manager Class driver to FPGA Image Load.
->>>>> v13:
->>>>>     - Updated copyright to 2021
->>>>>     - Updated ABI documentation date and kernel version
->>>>>     - Call updated fpga_sec_mgr_register() and fpga_sec_mgr_unregister()
->>>>>       functions instead of devm_fpga_sec_mgr_create() and
->>>>>       devm_fpga_sec_mgr_register().
->>>>> v12:
->>>>>     - Updated Date and KernelVersion fields in ABI documentation
->>>>> v11:
->>>>>     - Added Reviewed-by tag
->>>>> v10:
->>>>>     - Changed the path expressions in the sysfs documentation to
->>>>>       replace the n3000 reference with something more generic to
->>>>>       accomodate other devices that use the same driver.
->>>>> v9:
->>>>>     - Rebased to 5.12-rc2 next
->>>>>     - Updated Date and KernelVersion in ABI documentation
->>>>> v8:
->>>>>     - Previously patch 2/6, otherwise no change
->>>>> v7:
->>>>>     - Updated Date and KernelVersion in ABI documentation
->>>>> v6:
->>>>>     - Added WARN_ON() call for (sha_num_bytes / stride) to assert
->>>>>       that the proper count is passed to regmap_bulk_read().
->>>>> v5:
->>>>>     - No change
->>>>> v4:
->>>>>     - Moved sysfs files for displaying the root entry hashes (REH)
->>>>>       from the FPGA Security Manager class driver to here. The
->>>>>       m10bmc_reh() and m10bmc_reh_size() functions are removed and
->>>>>       the functionality from these functions is moved into a
->>>>>       show_root_entry_hash() function for displaying the REHs.
->>>>>     - Added ABI documentation for the new sysfs entries:
->>>>>       sysfs-driver-intel-m10-bmc-secure
->>>>>     - Updated the MAINTAINERS file to add the new ABI documentation
->>>>>       file: sysfs-driver-intel-m10-bmc-secure
->>>>>     - Removed unnecessary ret variable from m10bmc_secure_probe()
->>>>>     - Incorporated new devm_fpga_sec_mgr_register() function into
->>>>>       m10bmc_secure_probe() and removed the m10bmc_secure_remove()
->>>>>       function.
->>>>> v3:
->>>>>     - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
->>>>>     - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
->>>>>     - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure
->>>>>       Update driver"
->>>>>     - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
->>>>>       underlying functions are now called directly.
->>>>>     - Changed "_root_entry_hash" to "_reh", with a comment explaining
->>>>>       what reh is.
->>>>> v2:
->>>>>     - Added drivers/fpga/intel-m10-bmc-secure.c file to MAINTAINERS.
->>>>>     - Switched to GENMASK(31, 16) for a couple of mask definitions.
->>>>>     - Moved MAX10 BMC address and function definitions to a separate
->>>>>       patch.
->>>>>     - Replaced small function-creation macros with explicit function
->>>>>       declarations.
->>>>>     - Removed ifpga_sec_mgr_init() and ifpga_sec_mgr_uinit() functions.
->>>>>     - Adapted to changes in the Intel FPGA Security Manager by splitting
->>>>>       the single call to ifpga_sec_mgr_register() into two function
->>>>>       calls: devm_ifpga_sec_mgr_create() and ifpga_sec_mgr_register().
->>>>> ---
->>>>>    .../testing/sysfs-driver-intel-m10-bmc-secure |  29 ++++
->>>>>    MAINTAINERS                                   |   2 +
->>>>>    drivers/fpga/Kconfig                          |  11 ++
->>>>>    drivers/fpga/Makefile                         |   3 +
->>>>>    drivers/fpga/intel-m10-bmc-secure.c           | 145 ++++++++++++++++++
->>>>>    5 files changed, 190 insertions(+)
->>>>>    create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
->>>>>    create mode 100644 drivers/fpga/intel-m10-bmc-secure.c
->>>>>
->>>>> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
->>>>> new file mode 100644
->>>>> index 000000000000..363403ce992d
->>>>> --- /dev/null
->>>>> +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
->>>>> @@ -0,0 +1,29 @@
->>>>> +What:		/sys/bus/platform/drivers/intel-m10bmc-secure/.../security/sr_root_entry_hash
->>>>> +Date:		Aug 2021
->>>>> +KernelVersion:	5.15
->>>>> +Contact:	Russ Weight <russell.h.weight@intel.com>
->>>>> +Description:	Read only. Returns the root entry hash for the static
->>>>> +		region if one is programmed, else it returns the
->>>>> +		string: "hash not programmed".  This file is only
->>>>> +		visible if the underlying device supports it.
->>>>> +		Format: "0x%x".
->>>>> +
->>>>> +What:		/sys/bus/platform/drivers/intel-m10bmc-secure/.../security/pr_root_entry_hash
->>>>> +Date:		Aug 2021
->>>>> +KernelVersion:	5.15
->>>>> +Contact:	Russ Weight <russell.h.weight@intel.com>
->>>>> +Description:	Read only. Returns the root entry hash for the partial
->>>>> +		reconfiguration region if one is programmed, else it
->>>>> +		returns the string: "hash not programmed".  This file
->>>>> +		is only visible if the underlying device supports it.
->>>>> +		Format: "0x%x".
->>>>> +
->>>>> +What:		/sys/bus/platform/drivers/intel-m10bmc-secure/.../security/bmc_root_entry_hash
->>>>> +Date:		Aug 2021
->>>>> +KernelVersion:	5.15
->>>>> +Contact:	Russ Weight <russell.h.weight@intel.com>
->>>>> +Description:	Read only. Returns the root entry hash for the BMC image
->>>>> +		if one is programmed, else it returns the string:
->>>>> +		"hash not programmed".  This file is only visible if the
->>>>> +		underlying device supports it.
->>>>> +		Format: "0x%x".
->>>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>>> index e3fbc1bde9bc..cf93835b4775 100644
->>>>> --- a/MAINTAINERS
->>>>> +++ b/MAINTAINERS
->>>>> @@ -7363,8 +7363,10 @@ M:	Russ Weight <russell.h.weight@intel.com>
->>>>>    L:	linux-fpga@vger.kernel.org
->>>>>    S:	Maintained
->>>>>    F:	Documentation/ABI/testing/sysfs-class-fpga-image-load
->>>>> +F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-secure
->>>> Should we change the name of the driver? Some keywords like "image load"
->>>> or "firmware update" should be in the name.
->>> I considered that. The image-upload functionality is a subset of  this
->>> driver. It also exposes security collateral via sysfs, and the image-load
->>> triggers and power-on-image sysfs files will probably end up in this
->>> driver too.
->>>
->>> The current driver name is intel-m10-bmc-secure. Do we need to keep
->>> "intel-m10-bmc" in the name?
->>>
->>> intel-m10-bmc-sec-fw-update?
->>> intel-m10-bmc-sec-update?
->>>
->>> What do you think? Any other suggestions?
-> The single word "secure" is quite indistinct to me. I think
-> intel-m10-bmc-sec-update is much better.
+This is inconsistent with linux driver model.
 
-This fine.
+These changes remove the managed resource functions and populate the class
+dev_release callback functions. They also merge the create() and register()
+functions into a single register() or register_full() function for each of
+the fpga-mgr, fpga-region, and fpga-bridge class drivers.
 
-Should it move to mfd/ ?
+The new *register_full() functions accept an info data structure to provide
+flexibility in passing optional parameters. The *register() functions
+support the legacy parameter list for users that don't require the use of
+optional parameters.
 
-Tom
+For more context, refer to this email thread:
 
->
->> The prefix intel-m10-bmc-sec is clunky and confuses me because I think of
->> mfd/intel-m10-bmc.c
-> The secure update engine is now implemented in MAX10 bmc. The driver
-> code also assumes it is always a sub device of MAX10 bmc. So my
-> preference is we keep the prefix.
->
->> How about
->>
->> dfl-image-load ?
-> There may be several secure update engines for DFL based FPGAs. So we
-> may be more specific.
->
-> Thanks,
-> Yilun
->
+https://marc.info/?l=linux-fpga&m=162127412218557&w=2
+
+I turned on the configs assocated with each of the modified files, but I
+must have been missing some dependencies, because not all of them compiled.
+I did a run-time test specifically with the dfl-fme infrastructure. This
+would have exercised the region, bridge, and fpga-mgr frameworks.
+
+Changelog v10 -> v11:
+  - Rebased to latest linux-next
+  - Resolved a single conflict in fpga-mgr.c with associated with  wrapper
+    function: fpga_mgr_state(mgr)
+
+Changelog v9 -> v10:
+  - Fixed commit messages to reference register_full() instead of
+    register_simple().
+  - Removed the fpga_bridge_register_full() function, because there is
+    not need for it yet. Updated the documentation and commit message
+    accordingly.
+  - Updated documentation to reference the fpga_manager_info and
+    fpga_region_info structures.
+
+Changelog v8 -> v9:
+  - Cleaned up documentation for the FPGA Manager, Bridge, and Region
+    register functions
+  - Renamed fpga_*_register() to fpga_*_register_full()
+  - Renamed fpga_*_register_simple() to fpga_*_register()
+  - Renamed devm_fpga_mgr_register() to devm_fpga_mgr_register_full()
+  - Renamed devm_fpga_mgr_register_simple() to devm_fpga_mgr_register()
+
+Changelog v7 -> v8:
+  - Added reviewed-by tags.
+  - Updated Documentation/driver-api/fpga/ files: fpga-mgr.rst,
+    fpga-bridge.rst, and fpga-region.rst.
+
+Changelog v6 -> v7:
+  - Update the commit messages to describe the new parameters for the
+    *register() functions and to mention the *register_simple() functions.
+  - Fix function prototypes in header file to rename dev to parent.
+  - Make use of the PTR_ERR_OR_ZERO() macro when possible.
+  - Some cleanup of comments.
+  - Update function definitions/prototypes to apply const to the new info
+    parameter.
+  - Verify that info->br_ops is non-null in the fpga_bridge_register()
+    function.
+  - Verify a non-null info pointer in the fpga_region_register() function.
+
+Changelog v5 -> v6:
+  - Moved FPGA manager/bridge/region optional parameters out of the ops
+    structure and back into the FPGA class driver structure.
+  - Changed fpga_*_register() function parameters to accept an info data
+    structure to provide flexibility in passing optional parameters.
+  - Added fpga_*_register_simple() functions to support current parameters
+    for users that don't require use of optional parameters.
+
+Changelog v4 -> v5:
+  - Rebased on top of recently accepted patches.
+  - Removed compat_id from the fpga_mgr_register() parameter list
+    and added it to the fpga_manager_ops structure. This also required
+    dynamically allocating the dfl-fme-ops structure in order to add
+    the appropriate compat_id.
+  - Created the fpga_region_ops data structure which is optionally passed
+    to fpga_region_register(). compat_id, the get_bridges() pointer, and
+    the priv pointer are included in the fpga_region_ops structure.
+
+Changelog v3 -> v4:
+  - Added the compat_id parameter to fpga_mgr_register() and
+    devm_fpga_mgr_register() to ensure that the compat_id is set before
+    the device_register() call.
+  - Added the compat_id parameter to fpga_region_register() to ensure
+    that the compat_id is set before the device_register() call.
+  - Modified the dfl_fpga_feature_devs_enumerate() function to restore
+    the fpga_region_register() call to the correct location.
+
+Changelog v2 -> v3:
+  - Cleaned up comment headers for fpga_mgr_register(), fpga_bridge_register(),
+    and fpga_region_register().
+  - Fixed error return on ida_simple_get() failure for fpga_mgr_register(),
+    fpga_bridge_register(), and fpga_region_register().
+  - Fixed error return value for fpga_bridge_register(): ERR_PTR(ret) instead
+    of NULL.
+
+Changelog v1 -> v2:
+  - Restored devm_fpga_mgr_register() functionality to the fpga-mgr
+    class driver, adapted for the combined create/register functionality.
+  - All previous callers of devm_fpga_mgr_register() will continue to call
+    devm_fpga_mgr_register().
+  - replaced unnecessary ternary operators in return statements with
+    standard if conditions.
+
+Russ Weight (3):
+  fpga: mgr: Use standard dev_release for class driver
+  fpga: bridge: Use standard dev_release for class driver
+  fpga: region: Use standard dev_release for class driver
+
+ Documentation/driver-api/fpga/fpga-bridge.rst |   6 +-
+ Documentation/driver-api/fpga/fpga-mgr.rst    |  38 +++-
+ Documentation/driver-api/fpga/fpga-region.rst |  12 +-
+ drivers/fpga/altera-cvp.c                     |  12 +-
+ drivers/fpga/altera-fpga2sdram.c              |  12 +-
+ drivers/fpga/altera-freeze-bridge.c           |  10 +-
+ drivers/fpga/altera-hps2fpga.c                |  12 +-
+ drivers/fpga/altera-pr-ip-core.c              |   7 +-
+ drivers/fpga/altera-ps-spi.c                  |   9 +-
+ drivers/fpga/dfl-fme-br.c                     |  10 +-
+ drivers/fpga/dfl-fme-mgr.c                    |  22 +-
+ drivers/fpga/dfl-fme-region.c                 |  17 +-
+ drivers/fpga/dfl.c                            |  12 +-
+ drivers/fpga/fpga-bridge.c                    | 122 +++-------
+ drivers/fpga/fpga-mgr.c                       | 215 ++++++++----------
+ drivers/fpga/fpga-region.c                    | 119 ++++------
+ drivers/fpga/ice40-spi.c                      |   9 +-
+ drivers/fpga/machxo2-spi.c                    |   9 +-
+ drivers/fpga/of-fpga-region.c                 |  10 +-
+ drivers/fpga/socfpga-a10.c                    |  16 +-
+ drivers/fpga/socfpga.c                        |   9 +-
+ drivers/fpga/stratix10-soc.c                  |  16 +-
+ drivers/fpga/ts73xx-fpga.c                    |   9 +-
+ drivers/fpga/xilinx-pr-decoupler.c            |  17 +-
+ drivers/fpga/xilinx-spi.c                     |  11 +-
+ drivers/fpga/zynq-fpga.c                      |  16 +-
+ drivers/fpga/zynqmp-fpga.c                    |   9 +-
+ include/linux/fpga/fpga-bridge.h              |  30 ++-
+ include/linux/fpga/fpga-mgr.h                 |  62 +++--
+ include/linux/fpga/fpga-region.h              |  36 ++-
+ 30 files changed, 383 insertions(+), 511 deletions(-)
+
+-- 
+2.25.1
 
