@@ -2,32 +2,30 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 581C641869F
-	for <lists+linux-fpga@lfdr.de>; Sun, 26 Sep 2021 07:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF364187EA
+	for <lists+linux-fpga@lfdr.de>; Sun, 26 Sep 2021 11:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbhIZFxN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 26 Sep 2021 01:53:13 -0400
-Received: from mga12.intel.com ([192.55.52.136]:20119 "EHLO mga12.intel.com"
+        id S229716AbhIZJdl (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 26 Sep 2021 05:33:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59964 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229592AbhIZFxN (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Sun, 26 Sep 2021 01:53:13 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10118"; a="203810302"
-X-IronPort-AV: E=Sophos;i="5.85,323,1624345200"; 
-   d="scan'208";a="203810302"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2021 22:51:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,323,1624345200"; 
-   d="scan'208";a="552367749"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Sep 2021 22:51:36 -0700
-Date:   Sun, 26 Sep 2021 13:44:49 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
+        id S229584AbhIZJdk (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sun, 26 Sep 2021 05:33:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 81F3360EC0;
+        Sun, 26 Sep 2021 09:32:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1632648725;
+        bh=xTM899nuas+7465j3Cnl+Dzu4wy3OCnVBSboxjaHXw4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YScpJJSGgkOy9zaVZnSkrgozjIcx5EK014FrXFZA7ndqi14A71rC+PoWACbaaTGgq
+         xMdohhx2kXscCZMCoGIB1WJckqyLcz1o9EgZZvzOqUL5fholHHtqEyfmv/ciIBWVnO
+         vNgduHyrC/e2c6LfquHP1e4PTWSv1BGHqT+s6FOY=
+Date:   Sun, 26 Sep 2021 11:32:02 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Moritz Fischer <mdf@kernel.org>
-Cc:     linux-fpga@vger.kernel.org, gregkh@linuxfoundation.org,
-        hao.wu@intel.com
+Cc:     linux-fpga@vger.kernel.org, hao.wu@intel.com, yilun.xu@intel.com
 Subject: Re: Maintenance of Linux FPGA
-Message-ID: <20210926054449.GD806603@yilunxu-OptiPlex-7050>
+Message-ID: <YVA+EvWpX4vNKqTf@kroah.com>
 References: <YU9s27qwyzmeONiq@epycbox.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -57,18 +55,22 @@ On Sat, Sep 25, 2021 at 11:39:23AM -0700, Moritz Fischer wrote:
 > 
 > Yilun has been very helpful with reviews and I think he'd be a good
 > pick, too.
-
-It's my pleasure for the nomination and yes I'd like to be one of the
-maintainer team, to be more helpful.
-
-Thanks,
-Yilun
-
 > 
 > In terms of how to structure this: I'm not sure just yet, open to input.
 > 
 > How do other multi-maintainer subsystems operate? Ideas? Suggestions?
-> 
-> Let me know what you think,
-> 
-> Moritz
+
+There's lots of different ways they work, depends on what works best for
+you all.
+
+Some take turns on a weekly basis to commit patches to the tree.  Some
+require multiple acks/reviews by the others before they are allowed to
+merge to their tree.  Some just do what they can and merge what they
+want :)
+
+So it's all up to you all as to what you all find works best.  I'll
+gladly take patches from whatever you all determine to do.
+
+thanks,
+
+greg k-h
