@@ -2,161 +2,231 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 481B841BC09
-	for <lists+linux-fpga@lfdr.de>; Wed, 29 Sep 2021 03:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F5041CF98
+	for <lists+linux-fpga@lfdr.de>; Thu, 30 Sep 2021 01:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243495AbhI2BGj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 28 Sep 2021 21:06:39 -0400
-Received: from mga09.intel.com ([134.134.136.24]:65361 "EHLO mga09.intel.com"
+        id S1347358AbhI2XCM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 29 Sep 2021 19:02:12 -0400
+Received: from mga09.intel.com ([134.134.136.24]:47376 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243507AbhI2BGi (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 28 Sep 2021 21:06:38 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10121"; a="224874816"
-X-IronPort-AV: E=Sophos;i="5.85,330,1624345200"; 
-   d="scan'208";a="224874816"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2021 18:04:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,330,1624345200"; 
-   d="scan'208";a="519518523"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Sep 2021 18:04:57 -0700
-Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Tue, 28 Sep 2021 18:04:57 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Tue, 28 Sep 2021 18:04:57 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Tue, 28 Sep 2021 18:04:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g+0ms7lFVqta+d4WE13v71bHCXgEyZHlC/878fpFEYNFYSaLxXwoyI1b/xI0Bd+uGEfMf06Sg0nftFe6UThMJ79J0G57CI7uT1VFgU87ZeqedRDXY9GO3SZXWBoXd8lqzb7Uq48kTeFuyduTsWsmI7s0Ps0f9IKzQbP8o5LFlkFfa2exrKlNTXSaFjMbwZqlfP6mjnqWfwHKr49CWda6LngSg+ZPTdaJ3xjwrWycnq0d/sAmrroJa2cy/vszwVTkSTtjXdGPJ9CAJKupDE55RE5CBguSxlRn+g8dvGHkKK4WXfxtGPk70GJOemgznLV7qD99d5J6LuIbpsuySykMVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=NEffVyp5WWWClibKETbCebszWbqTvhtKla+EKTXnBX4=;
- b=Ltgy7S6o3g/XhHGqNIWOaOkJVsPmZoD6jXt0whh53uQUaYBcgKdMulzCba07chsO+NE32d54WigBCpgs6pfaIMBV7bySf60uyT9afHMJcmiiTCATXpo/+xdfFpicygY7KU69gq6Vp5KYIjB6VDL6Tl2pvwIvHg5N55H64xzWZlJPvGCIu+pEwILPHX9HVa/eIvlIITiUfVTRrfDlFiURDk1OBQorK9NTrEhXl8AgSipaO372QMsa0LcO1U8bb4AORF8U2F9tNhQkOD2LZr+gcwdc9XDkkNkxqJRtycVbhc5Kbd0dPKaoLAGOVWYjXdmB7SHms9dpHbz7fEFGbTB0Pw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NEffVyp5WWWClibKETbCebszWbqTvhtKla+EKTXnBX4=;
- b=j3PybQ/o0HaSIfnpyLXFbsDmPxm9Ov2oKiuJCNAQ4joocA3dXPYgOYiwvqeQSwCIQz9GkaTQ980OvDH5Z+Wx/l5vr9iQ7whd1k4YReduuZ5Bjmz2i+a7yna964z6xoMr+jBPVcYMtxnbHbLAzLlJne6CL86GJqwsNRzEQmiG9Co=
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by DM6PR11MB2571.namprd11.prod.outlook.com (2603:10b6:5:c7::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.14; Wed, 29 Sep
- 2021 01:04:54 +0000
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::ed01:8536:290d:caf5]) by DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::ed01:8536:290d:caf5%3]) with mapi id 15.20.4544.022; Wed, 29 Sep 2021
- 01:04:54 +0000
-From:   "Wu, Hao" <hao.wu@intel.com>
-To:     "Xu, Yilun" <yilun.xu@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Moritz Fischer <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "moritzf@google.com" <moritzf@google.com>
-Subject: RE: [PATCH 1/2] MAINTAINERS: Add Hao and Yilun as maintainers
-Thread-Topic: [PATCH 1/2] MAINTAINERS: Add Hao and Yilun as maintainers
-Thread-Index: AQHXtMvH96oPEu2k7kuQ6W6ChNQEMau6MePg
-Date:   Wed, 29 Sep 2021 01:04:54 +0000
-Message-ID: <DM6PR11MB38198AC7508C50D208281A0685A99@DM6PR11MB3819.namprd11.prod.outlook.com>
-References: <20210928150227.22275-1-mdf@kernel.org>
- <YVM0p3xrck0zriHd@kroah.com> <20210929004235.GC6179@yilunxu-OptiPlex-7050>
-In-Reply-To: <20210929004235.GC6179@yilunxu-OptiPlex-7050>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-authentication-results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 69beb592-031d-4c46-87ed-08d982e525e3
-x-ms-traffictypediagnostic: DM6PR11MB2571:
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR11MB257101B60864A2EA6632DEED85A99@DM6PR11MB2571.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vIrmftfdSwLzOFr9bNTt/wHEbcLZgXvIKVh0dLE6daiXkfQHsS5Xe2D6oZqbkReAZKaN6DcEKCDEvEfjLW/GobtdbK/q6ixaaP6ncUsvOY3uTyAUqk2wAapghyBHbbA4fO0VrMVxA3369UG3XLpjGTefPu66qj47KZUYQ4LFxO1PCin5VT6LeeNr3+ee9A3rQgsG5fm1H1V9I4vHtvwBPJuvwOp2wcdpuAVVlaU83zMpeaOIOwheZzBaZ4zYEfqaHEW2gVDFwOjlysJTH2lBZxPbwMCa68J0riPxuuw9COHV2oFdES1frwyFwHz9rfQctG1ijtmN0/Cl3xHRwiksOaoiIovmycijYzoG3+BUwDCVqUdCrYhyFoOvioBIarAq8ijpHA1hDJxjMoiAvumy8pLaUTqTmEFQbhXoVrTd/zxtx0WuznrCI1Xcqgd4qCyb4rWP9/sbLiVbXqoRVvBl6FV88WHyhw1nUboc4uaGBdibC0rbnqz4Fl8EobGsCqbvAh0JUNjgmrjTd73phuBkYkw+wJPT3Mx1eSMDi1OzNxUgEL4Q9WE16ETiR0yeba9Q2SC1ZthKdKEG0w2f+MyKxMWRAqKH7y6rCW8RotIza0RAPsdyghJLIhlqWlNoO2JmSb7UcFky5R51feQmoGqJthUS+cjEfdORqztoqujZv7d2AbChuG5gCkyGf6CVtfCfQqJBlw689M1sReVNUJVVdA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(71200400001)(26005)(9686003)(508600001)(110136005)(8936002)(186003)(33656002)(54906003)(7696005)(316002)(2906002)(83380400001)(66446008)(86362001)(66556008)(66476007)(64756008)(4326008)(76116006)(38070700005)(66946007)(122000001)(52536014)(38100700002)(6506007)(5660300002)(4744005)(8676002)(55016002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7fcm9oDGZVcpHIqLR0R3AQeEOG4GwQglH9nry+WgCxdS7Xoylt9T4OhdTX2J?=
- =?us-ascii?Q?0b8unVOfe484B2EoKHeWDz2E66AOg0U0UzDkrPRexDbZq8qPmlfRpOsRBbVc?=
- =?us-ascii?Q?G371ENhrGEkrGGhca/4Cwz5kaBun3zGxhQ+mwDbUTNzq9TFcZdXjzqxKUzqV?=
- =?us-ascii?Q?4myA4ROyQrMNuwfgG+EXV+sg9LHHhL31LqAi1Qo30j6islUy7HIdjQPpTJGd?=
- =?us-ascii?Q?N5/fdfm+nWnaLd2d+cay+Pmilf0YjjlzO6LHSpV/2EL7O/wWbrErdj5Z1Knx?=
- =?us-ascii?Q?mtP5DKtUkXCQg4bkkwSI5UWfYv4GzW+JyrWXfxt9QaP6TAHSz8QdFGREVR2u?=
- =?us-ascii?Q?oYdAQxNE/P8Y4pIkZXFktBE40Ic+0dX1c8Pu+V4uqaEC9bN5DXA8WmiA+T3a?=
- =?us-ascii?Q?A7jLCPBpfBR+BHIfcX07zjoi8613EuRdAUEygXdM0EsEP6niVYCi5E/mnqun?=
- =?us-ascii?Q?PHOSgu/FLzKerTFwFyFPbvF8kwmEymEOwgBiRc9nIks+JQAp1Y7xiKGpKb5d?=
- =?us-ascii?Q?QZ3ftvogkLLcXGMGN2bNeSDPWJHhIPShdRmAG5Bt+1k30jsUhYVuWj1OYifA?=
- =?us-ascii?Q?uPKogDSwvQardrDE8AndLcg6vGMb8hffNdXtAjPaq9cQg/dWogNS5RgqERJH?=
- =?us-ascii?Q?cZksiYMj8+QqYpP/pQqFcwEbirJsmbnKCB/COlv78iun4Hx6SI5SyULMKDZJ?=
- =?us-ascii?Q?3yZMfl3LV6VpKPZRJ1GL+29Yd55AquPeSHa/9JV+Emc5yyLTZ78k/e0hY/Pa?=
- =?us-ascii?Q?w0aPek+0W6Wx13H5B54nKNSCCB9zSIFqYXXPtX7NxfHzyhP3DRle5K4FS8dy?=
- =?us-ascii?Q?iVdACBZ0LWdYUc5RhQ5U9n6oJMpGyi0OdrC1S6Drlc94mz5N01eDhL5879QL?=
- =?us-ascii?Q?QqnEgXm531Xk3go5BFtFrlhhphEXQPmvqbeBbPckhHsqcLoPBc/Ff6Phx0Kg?=
- =?us-ascii?Q?sTy3k4GK3M2Junwjis9q5m+5NjhqZMStQdf7JdvfKKad76KiIC9ZEeFnugeP?=
- =?us-ascii?Q?lgx70VxsaEYH1AZycXbQwqZXoqSi24nmoVZyB+xYDruQk4/pmo/3ZdO4KKbZ?=
- =?us-ascii?Q?Mt9acUE3YmkMP1p4XdPSe0yJtP3c/n19kmnldIYyX4CQBwPSPsKs0KTDo9xY?=
- =?us-ascii?Q?j0m//Hb1dsGK4eE2dSWe5rf49FLBCqFJIcfemaHn/odDN1oYuA3pbnnmYz5H?=
- =?us-ascii?Q?fV57gIQmdFQT6CTZGdnLs+9W2D5asa2ZWuNgB9NJwYtWiYzL4ppSEUOzNVFT?=
- =?us-ascii?Q?xtZBOdoeOkvH79pXD4u8mjxXDOOBJb1sAE+N68oy4O9CFPfaWiO32DIDbMTB?=
- =?us-ascii?Q?Zulx9HCYoC84WM//1JcbdBtt?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1347352AbhI2XCM (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 29 Sep 2021 19:02:12 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10122"; a="225097210"
+X-IronPort-AV: E=Sophos;i="5.85,334,1624345200"; 
+   d="scan'208";a="225097210"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2021 16:00:30 -0700
+X-IronPort-AV: E=Sophos;i="5.85,334,1624345200"; 
+   d="scan'208";a="617768021"
+Received: from rhweight-mobl2.amr.corp.intel.com (HELO rhweight-mobl2.ra.intel.com) ([10.255.230.76])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2021 16:00:29 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v17 0/5] FPGA Image Load (previously Security Manager)
+Date:   Wed, 29 Sep 2021 16:00:20 -0700
+Message-Id: <20210929230025.68961-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69beb592-031d-4c46-87ed-08d982e525e3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Sep 2021 01:04:54.3176
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: If1c8V/zfchgIxpLuM7bfjrzVsSwNPtOBnH6vF0Ond7Aa3Ln01C0vgFw9a6kzo1Yfh3mFQH6FmxOPU/JRLrDjw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2571
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-> On Tue, Sep 28, 2021 at 05:28:39PM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Sep 28, 2021 at 08:02:25AM -0700, Moritz Fischer wrote:
-> > > Hao and Yilun have agreed to help out with maintenance.
-> > > Both have been active in the Linux FPGA community for a long time
-> > > and we need backups for vacation and load-balancing.
-> > >
-> > > Cc: Xu Yilun <yilun.xu@intel.com>
-> > > Cc: Wu Hao <hao.wu@intel.com>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >
-> > I need an ack from the two new people here in order to take this :)
->=20
-> Acked-by: Xu Yilun <yilun.xu@intel.com>
+The FPGA Image Load framework provides an API to upload image
+files to an FPGA device. Image files are self-describing. They could
+contain FPGA images, BMC images, Root Entry Hashes, or other device
+specific files. It is up to the lower-level device driver and the
+target device to authenticate and disposition the file data.
 
-Acked-by: Wu Hao <hao.wu@intel.com>
+The n3000bmc-sec-update driver is the first driver to use the FPGA Image
+Load Framework. This driver was previously submitted in the same patch
+set, but was split into a separate patch set starting with v2.
 
-Thanks
-Hao
+Changelog v16 -> v17:
+ - Documentation cleanup with clarification for changes to how cancellation
+   is handled.
+ - Removed the FPGA_IMAGE_ERR_NONE macro in favor of returning zero. The
+   constant name made sense when we were using enum data types, but is no
+   longer necessary.
+ - Changed the syntax of the write_blk() function and renamed it to
+   write().
+   It now returns a positive size or a negative error number.
+ - Removed the default block size for write_block(). The lower-level driver
+   must choose a block size.
+ - Changed the prepare() and write() ops to pass in elements of the
+   fpga_image_load data structure instead of having the op functions access
+   them directly via imgld.
+ - Changed work queue from system_unbound_wq to system_long_wq.
+ - Removed calls to cond_resched(). The lower-level driver must manage
+   any scheduler issues.
+ - Removed the request_cancel flag and handling from the class driver
+   including the fpga_image_prog_transition() function.
+ - The cancel system call now directly calls the cancel() op of the
+   lower-level driver. 
+ - Changed the cancel() op to return void.
 
->=20
-> Thanks,
-> Yilun
->=20
-> >
-> > thanks,
-> >
-> > greg k-h
+Changelog v15 -> v16:
+ - Remove previous patch #5: fpga: image-load: create status sysfs node
+ - Change device name from "fpga_image%d" to "fpga_image_load%d"
+ - Shift from "Driver" terminology to "Framework" in comments and
+   documentation
+ - Some cleanup of documentation for the FPGA_IMAGE_LOAD_WRITE IOCTL.
+ - Rename lops to ops for structure member and local variables
+ - Change the write_blk() definition to pass in *blk_size (a pointer to
+   a default block size of WRITE_BLOCK_SIZE=0x4000) and max_size (the
+   the maximum block size to stay within the limit of the data buffer).
+   The write_blk() op may use the default *blk_size or modify it to a
+   more optimal number for the given device, subject to the max_size limit.
+ - All enum values for progress and errors are changed to macros, because
+   they are included in the uapi header. This is done to maintain consistency
+   amongst the DFL related IOCTL header files. All references to the enum
+   types are changed to u32.
+ - Bail out early in fpga_image_do_load() if imgld->driver_unload is true.
+ - Add a call to cond_resched() in the write_blk() loop to ensure that
+   we yield to higher priority tasks during long data transfers.
+ - Switch to the system_unbound_wq to enable calls to cond_resched().
+ - Switch from test_and_set_bit() to atomic_cmpxchg() to manage
+   imgld->opened.
+ - Change fpga_image_load_release() cancel an ongoing image upload when
+   possible and to block when cancellation is not possible.
+ - Remove the completion object, imgld->update_done, in favor of calling
+   flush_work(&imgld->work);
+
+Changelog v14 -> v15:
+ - Changed the driver name from FPGA Security Manager to FPGA Image Load
+ - Changed file, symbol, and config names to reflect the new driver name
+ - Rewrote documentation.
+ - Removed all sysfs files except for "status", which has moved to the
+   parent directory.
+ - Implemented FPGA_IMAGE_LOAD_WRITE, FPGA_IMAGE_LOAD_STATUS, and
+   FPGA_IMAGE_LOAD_CANCEL IOCTLs to initiate, monitor, and cancel image
+   uploads.
+ - Fixed some error return values in fpga_image_load_register()
+ - Added an eventfd which is signalled upon completion of an image load.
+ - Minor changes to locking to accommodate the FPGA_IMAGE_LOAD_STATUS IOCTL
+ - Removed signed-off/reviewed-by tags. Please resend as appropriate.
+
+Changelog v13 -> v14:
+ - Dropped the patch: fpga: sec-mgr: expose hardware error info
+ - Updated copyrights to 2021
+ - Updated ABI documentation date and kernel version
+ - Removed the name sysfs entry from the class driver
+ - Use xa_alloc() instead of ida_simple_get()
+ - Rename dev to parent for parent devices
+ - Remove fpga_sec_mgr_create(), devm_fpga_sec_mgr_create(), and
+   fpga_sec_mgr_free() functions and update the fpga_sec_mgr_register()
+   function to both create and register a new security manager.
+ - Populate the fpga_sec_mgr_dev_release() function.
+ - Added MAINTAINERS reference for
+   Documentation/ABI/testing/sysfs-class-fpga-sec-mgr
+
+Changelog v12 -> v13:
+  - Change "if (count == 0 || " to "if (!count || "
+  - Improve error message: "Attempt to register without all required ops\n"
+  - Change set_error() to fpga_sec_set_error()
+  - Change set_hw_errinfo() to fpga_sec_set_hw_errinfo()
+
+Changelog v11 -> v12:
+  - Updated Date and KernelVersion fields in ABI documentation
+  - Removed size parameter from write_blk() op - it is now up to
+    the lower-level driver to determine the appropriate size and
+    to update smgr->remaining_size accordingly.
+  - Changed syntax of sec_mgr_prog_str[] and sec_mgr_err_str array definitions
+    from:
+	"idle",			/* FPGA_SEC_PROG_IDLE */
+    to:
+	[FPGA_SEC_PROG_IDLE]	    = "idle",
+
+Changelog v10 -> v11:
+  - Fixed a spelling error in a comment
+  - Initialize smgr->err_code and smgr->progress explicitly in
+    fpga_sec_mgr_create() instead of accepting the default 0 value.
+
+Changelog v9 -> v10:
+  - Rebased to 5.12-rc2 next
+  - Updated Date and KernelVersion in ABI documentation
+
+Changelog v8 -> v9:
+  - Rebased patches for 5.11-rc2
+  - Updated Date and KernelVersion in ABI documentation
+
+Changelog v7 -> v8:
+  - Fixed grammatical error in Documentation/fpga/fpga-sec-mgr.rst
+
+Changelog v6 -> v7:
+  - Changed dates in documentation file to December 2020
+  - Changed filename_store() to use kmemdup_nul() instead of
+    kstrndup() and changed the count to not assume a line-return.
+
+Changelog v5 -> v6:
+  - Removed sysfs support and documentation for the display of the
+    flash count, root entry hashes, and code-signing-key cancellation
+    vectors from the class driver. This information can vary by device
+    and will instead be displayed by the device-specific parent driver.
+
+Changelog v4 -> v5:
+  - Added the devm_fpga_sec_mgr_unregister() function, following recent
+    changes to the fpga_manager() implementation.
+  - Changed most of the *_show() functions to use sysfs_emit()
+    instead of sprintf(
+  - When checking the return values for functions of type enum
+    fpga_sec_err err_code, test for FPGA_SEC_ERR_NONE instead of 0
+
+Changelog v3 -> v4:
+  - This driver is generic enough that it could be used for non Intel
+    FPGA devices. Changed from "Intel FPGA Security Manager" to FPGA
+    Security Manager" and removed unnecessary references to "Intel".
+  - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+    Note that this also affects some filenames.
+
+Changelog v2 -> v3:
+  - Use dev_err() to report invalid progress in sec_progress()
+  - Use dev_err() to report invalid error code in sec_error()
+  - Modified sysfs handler check in check_sysfs_handler() to make
+    it more readable.
+  - Removed unnecessary "goto done"
+  - Added a comment to explain imgr->driver_unload in
+    ifpga_sec_mgr_unregister()
+
+Changelog v1 -> v2:
+  - Separated out the MAX10 BMC Security Engine to be submitted in
+    a separate patch-set.
+  - Bumped documentation dates and versions
+  - Split ifpga_sec_mgr_register() into create() and register() functions
+  - Added devm_ifpga_sec_mgr_create()
+  - Added Documentation/fpga/ifpga-sec-mgr.rst 
+  - Changed progress state "read_file" to "reading"
+  - Added sec_error() function (similar to sec_progress())
+  - Removed references to bmc_flash_count & smbus_flash_count (not supported)
+  - Removed typedefs for imgr ops
+  - Removed explicit value assignments in enums
+  - Other minor code cleanup per review comments 
+
+Russ Weight (5):
+  fpga: image-load: fpga image load framework
+  fpga: image-load: enable image uploads
+  fpga: image-load: signal eventfd when complete
+  fpga: image-load: add status ioctl
+  fpga: image-load: enable cancel of image upload
+
+ Documentation/fpga/fpga-image-load.rst |  50 +++
+ Documentation/fpga/index.rst           |   1 +
+ MAINTAINERS                            |   9 +
+ drivers/fpga/Kconfig                   |  10 +
+ drivers/fpga/Makefile                  |   3 +
+ drivers/fpga/fpga-image-load.c         | 416 +++++++++++++++++++++++++
+ include/linux/fpga/fpga-image-load.h   |  69 ++++
+ include/uapi/linux/fpga-image-load.h   |  74 +++++
+ 8 files changed, 632 insertions(+)
+ create mode 100644 Documentation/fpga/fpga-image-load.rst
+ create mode 100644 drivers/fpga/fpga-image-load.c
+ create mode 100644 include/linux/fpga/fpga-image-load.h
+ create mode 100644 include/uapi/linux/fpga-image-load.h
+
+-- 
+2.25.1
+
