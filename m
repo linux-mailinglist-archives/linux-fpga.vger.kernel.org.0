@@ -2,83 +2,78 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C093341FBA2
-	for <lists+linux-fpga@lfdr.de>; Sat,  2 Oct 2021 14:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C3741FC9F
+	for <lists+linux-fpga@lfdr.de>; Sat,  2 Oct 2021 16:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbhJBMKm (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 2 Oct 2021 08:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbhJBMKl (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 2 Oct 2021 08:10:41 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22672C0613EE
-        for <linux-fpga@vger.kernel.org>; Sat,  2 Oct 2021 05:08:56 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id y17so5071415ilb.9
-        for <linux-fpga@vger.kernel.org>; Sat, 02 Oct 2021 05:08:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
-        b=a2iaqEzmPasVkUoh1sVe0p8ugF0Dm8fbBJwNh5eLghcBavfmCkWY+7WvUYikU0R4pf
-         SAkf5bHz3hKIqXDqO0kKeQJzNehcvUOGiUnPBCEz4rLzYaVEbRb6W+XFExI3a0/Tmggb
-         PSeMKrrDli/goFYYNtQu+dq0hNCA2wE0EvsDObcAv2mFbd/lilR8vCccY7PYAgGUgQy0
-         I1GK0+FNWuKnM0c90f1JYHuTi6jcA2t9TuLOzNXHP61pHC3w79vHcZe3ck1v30catGJ0
-         zOXXoEDTA4vUsbzXHJQv/PeHgx9lQbhhiMUMTLbtfpnrkPo0/dh4uHtwIhM7AilPKjFG
-         a+YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
-        b=cce3mABpdKMabXjmF3yyW8pZiPx4IzC8YmnVROrqTjKEFHHkvl2sBGCxeXgyn2NXPA
-         qP5AgNdmIH4S08El4RB/3FfQkDpA9+/CCfs/uVLmrhea2M3cerNoGZw6TEkw+5AFvq7Q
-         VRWXYLt/sYCZIQUyO64ichOmWr6lLTR4ReAKxd89+S/9QSkUK20hvIQuqFClioeB660y
-         ifrxvASBOKyk1wSzEidaUFyeuXOwUwB19nJFP8gCBtoVqzowSC7z1g/f7bMS7LeVSmAl
-         EFPX6RYDI+Ncq9QUf5fK9jE55ypXyEYS+trZbpLEst0HE6ZQLEncaY+ln1t2v61fRcRC
-         RwyQ==
-X-Gm-Message-State: AOAM533paLOLjoEhxjhfzNp8vV5xf7LGalyW+Og4/s8lMPWtFtGtMaKF
-        sO+AdgVwSN/2X27lg9ptKZZo4KT+8t3KDprxt0I=
-X-Google-Smtp-Source: ABdhPJy2ZYXXOkGJFkiNw6/3KHpvOdePAyQ068nAqGyfHRcsx9ei26RQHXLxdYSCArOYsVhT2BMJFIj3M1q+oU71JJk=
-X-Received: by 2002:a05:6e02:2144:: with SMTP id d4mr2502619ilv.316.1633176535609;
- Sat, 02 Oct 2021 05:08:55 -0700 (PDT)
+        id S233429AbhJBO56 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 2 Oct 2021 10:57:58 -0400
+Received: from mga17.intel.com ([192.55.52.151]:30472 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229560AbhJBO56 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 2 Oct 2021 10:57:58 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10125"; a="205849320"
+X-IronPort-AV: E=Sophos;i="5.85,342,1624345200"; 
+   d="scan'208";a="205849320"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2021 07:56:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,341,1624345200"; 
+   d="scan'208";a="620015059"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Oct 2021 07:56:11 -0700
+Date:   Sat, 2 Oct 2021 22:49:57 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     linux-fpga@vger.kernel.org, moritzf@google.com,
+        Wu Hao <hao.wu@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 2/2] MAINTAINERS: Drop outdated FPGA Manager website
+Message-ID: <20211002144957.GA53209@yilunxu-OptiPlex-7050>
+References: <20210928150227.22275-1-mdf@kernel.org>
+ <20210928150227.22275-2-mdf@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a4f:f90d:0:0:0:0:0 with HTTP; Sat, 2 Oct 2021 05:08:55 -0700 (PDT)
-Reply-To: unitednnation0@gmail.com
-From:   "U.n" <wadebaye33@gmail.com>
-Date:   Sat, 2 Oct 2021 00:08:55 -1200
-Message-ID: <CACE0T5WWY3=MUa1cKRyivuNbOKyGW=7Cq4Ssh_10HxGvdfYhCA@mail.gmail.com>
-Subject: Attention
-To:     unitednnation0@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210928150227.22275-2-mdf@kernel.org>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
---=20
+On Tue, Sep 28, 2021 at 08:02:26AM -0700, Moritz Fischer wrote:
+> The rocketboards website no longer really reflects a good landing
+> place for people interested in FPGA Manager.
+> 
+> Cc: Xu Yilun <yilun.xu@intel.com>
+> Cc: Wu Hao <hao.wu@intel.com>
+> Signed-off-by: Moritz Fischer <mdf@kernel.org>
+> ---
+>  MAINTAINERS | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 2ec4c2a2458a..c4eaac287edb 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7342,7 +7342,6 @@ M:	Xu Yilun <yilun.xu@intel.com>
+>  R:	Tom Rix <trix@redhat.com>
+>  L:	linux-fpga@vger.kernel.org
+>  S:	Maintained
+> -W:	http://www.rocketboards.org
 
+The website is mostly about SOCFPGA architecture, while the FPGA Manager
+is mainly about the generic image loading and enumeration framework. So
+I'm good to this change.
 
-Attention Sir/Madam
-This is the United Nation (UN). We the United Nations (UN) Globally
-has approved (US$2.500,000)( two Million Five hundred thousand
-dollars) compensation as part of our responsibilities for humanitarian
-Aid for fighting against CoronaVirus and you are among the lucky ones.
+People could still find the website at ARM/SOCFPGA ARCHITECTURE, which is a
+better place for it.
 
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-This compensation is for the most affected countries, communities and
-families across the global. Your funds were deposited with Bank in USA
-to transfer your funds to you via Internet Banking. You have to send
-your full details as state below:with this email Address
-  ( unitednnation0@gmail.com )
-Your full names:
-Address:
-Telephone:
-Occupation:
+Thanks,
+Yilun
 
-
-
-Yours Sincerely
-Mr. Ant=C3=B3nio Guterres
-United Nations (UN).
+>  Q:	http://patchwork.kernel.org/project/linux-fpga/list/
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git
+>  F:	Documentation/devicetree/bindings/fpga/
+> -- 
+> 2.33.0
