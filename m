@@ -2,427 +2,530 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4B4432BFE
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Oct 2021 05:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48649432CCD
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Oct 2021 06:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbhJSDCm (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 18 Oct 2021 23:02:42 -0400
-Received: from mga03.intel.com ([134.134.136.65]:59151 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229663AbhJSDCl (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 18 Oct 2021 23:02:41 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="228360298"
-X-IronPort-AV: E=Sophos;i="5.85,383,1624345200"; 
-   d="scan'208";a="228360298"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 20:00:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,383,1624345200"; 
-   d="scan'208";a="493893932"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by orsmga008.jf.intel.com with ESMTP; 18 Oct 2021 20:00:27 -0700
-Date:   Tue, 19 Oct 2021 10:53:56 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     Tom Rix <trix@redhat.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lgoncalv@redhat.com, hao.wu@intel.com, matthew.gerlach@intel.com
-Subject: Re: [PATCH v17 0/5] FPGA Image Load (previously Security Manager)
-Message-ID: <20211019025356.GC40070@yilunxu-OptiPlex-7050>
-References: <20211012074752.GB95330@yilunxu-OptiPlex-7050>
- <e629eca0-a86c-4028-7bbf-65185699137b@intel.com>
- <20211013010617.GE95330@yilunxu-OptiPlex-7050>
- <58036b2d-ca8f-2deb-f1b4-0301d633714b@intel.com>
- <20211014014947.GF95330@yilunxu-OptiPlex-7050>
- <7d1971d0-b50b-077f-2a82-83d822cd2ad7@intel.com>
- <20211015025140.GH95330@yilunxu-OptiPlex-7050>
- <2b26bea5-60d3-6763-00e8-9a94fa0bf45b@intel.com>
- <20211018081356.GB40070@yilunxu-OptiPlex-7050>
- <301850cf-9f34-530b-bd9c-fbe9bf9feee5@intel.com>
+        id S229742AbhJSEes (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 19 Oct 2021 00:34:48 -0400
+Received: from mail-co1nam11on2052.outbound.protection.outlook.com ([40.107.220.52]:64257
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229692AbhJSEer (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 19 Oct 2021 00:34:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UiSgg/AJqHV6fzHj3s+WyJpC/iPpjB/MI5PtEPUVFH04Z3H0ixYw0g85J4pTzUV2GtgdbktzLVQVB1HLizRJDzSqzaalUPGOHBRqHz+amB4o7zDba3iY040yDEe5nij3vpyj+BSJGGbU/jLHpzxqEPGIZAuD95lMhQd+VIvjdDDXdWcg/nH91xD4i6dC/e3cBlE1PAC3md15lkTG7NbzjfTabf2/EKFXHCYYMxl1bHECa5gjybFlUrl7eui3ZT79n6q2ojuWYG7lCstScMx0UMHNXhQ8sFx2Vcn/uy/Y0l0pO0XOFLUnBAmg/Fuxa/3sE+9v51O8SO1fq69Ffp49qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9LlLzd0/SFc7R2vdNeEu300OgKI2y8sq/laW/z9Ee/w=;
+ b=POAxV+PBfaCm6IwJNHfJCxuR+qBsVxU8U9MXazoTnJhDmfq9g8tZO41DqMKy3sD8KNgcIzbWHYOq+iyglcScnOZC+5IQuoJ4FMHNwjbKXCp1jlRljUGXnR+UGG/gx7eTFJttSBNQgQEGk758dyxpVfXB/F8UVoLLf0z6YHFwx8r2AaNSyAyZFzDIJtyu4LSS9YX+MnkdVVM/iOMy05OiOG6fpQjd3AwI2bcOEm704y8XFMWlYjRepOvcuK2FEdwrSlECFH147xxbEYKSYM4pZpYZg3jL9ZbsgSWhpD0GZAMfMy8+840q45OnB865JhU7C3TYoBGYNxdNxWu15PtE9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9LlLzd0/SFc7R2vdNeEu300OgKI2y8sq/laW/z9Ee/w=;
+ b=MKxCbQGVmjABGMgcACauPg7bSNwHrIiCYRaQXSPQfCGrm0cEHpknoen7SU73b1nV4kyFhlFlPlu3H78+/bGMXSnjnR60RKqtm53VTNmH6pLr74cLgNGp7Q+v8XSg+/aNO8rE857jnXr3mD1jVM2UPuKAbZFO+xIEH8HONP/38eM=
+Received: from SJ0PR02MB8845.namprd02.prod.outlook.com (2603:10b6:a03:3d9::15)
+ by SJ0PR02MB8516.namprd02.prod.outlook.com (2603:10b6:a03:3fc::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.16; Tue, 19 Oct
+ 2021 04:32:28 +0000
+Received: from SJ0PR02MB8845.namprd02.prod.outlook.com
+ ([fe80::99df:f9a6:46b7:8eee]) by SJ0PR02MB8845.namprd02.prod.outlook.com
+ ([fe80::99df:f9a6:46b7:8eee%9]) with mapi id 15.20.4608.018; Tue, 19 Oct 2021
+ 04:32:28 +0000
+From:   Sonal Santan <sonals@xilinx.com>
+To:     Lizhi Hou <lizhih@xilinx.com>, "robh@kernel.org" <robh@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        Max Zhen <maxz@xilinx.com>, Yu Liu <yliu@xilinx.com>,
+        Michal Simek <michals@xilinx.com>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "mdf@kernel.org" <mdf@kernel.org>, Max Zhen <maxz@xilinx.com>,
+        Lizhi Hou <lizhih@xilinx.com>, Xu Yilun <yilun.xu@intel.com>
+Subject: RE: [PATCH V9 XRT Alveo 01/14] Documentation: fpga: Add a document
+ describing XRT Alveo drivers
+Thread-Topic: [PATCH V9 XRT Alveo 01/14] Documentation: fpga: Add a document
+ describing XRT Alveo drivers
+Thread-Index: AQHXwRZT42sxzSlZ7UucM2Fcbi/fLKvZtviw
+Date:   Tue, 19 Oct 2021 04:32:28 +0000
+Message-ID: <SJ0PR02MB8845237B771E890121E43116BBBD9@SJ0PR02MB8845.namprd02.prod.outlook.com>
+References: <20210802160521.331031-1-lizhi.hou@xilinx.com>
+ <20210802160521.331031-2-lizhi.hou@xilinx.com>
+ <20211012050931.GA95330@yilunxu-OptiPlex-7050>
+ <8d8f6c08-6e68-a4b8-4cfd-1dd547f3fe28@xilinx.com>
+ <20211014022122.GG95330@yilunxu-OptiPlex-7050>
+ <cc261622-5104-39ae-7221-b33dd70303e5@xilinx.com>
+In-Reply-To: <cc261622-5104-39ae-7221-b33dd70303e5@xilinx.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: xilinx.com; dkim=none (message not signed)
+ header.d=none;xilinx.com; dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ae889f6b-19f0-4027-7c3e-08d992b97558
+x-ms-traffictypediagnostic: SJ0PR02MB8516:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <SJ0PR02MB8516A65317E4EEC64747DE0FBBBD9@SJ0PR02MB8516.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FDARrOSDKaUYWupki6nHKCw0rCmK2+vvbYKTErXUSz+RyJHA0qiDPconv+oD+qlSrDScvAM3CsczuOy7xGAPYX9OuRknYtBqHrHayFcUXvYU9JGbMo/n81pPM9UHWNklUz0SGxoyRC5AhXInDplwv5070y3NW52y7JmT+2dm6xEQusukCe/KNLJZkMzFTjDIf8MJFrnOe+8mgBIxpNg0VG97BOicpKWp8g//Hf06lGGJ9wKuzyJv+kgvprLpaBQKuslEfqEZ8Oq15DGr4B753X8RmKDf+qQRNea1drfxUG7T8mlYnK6L/dOJxDQ3dSICJ+p9gQ7JgyeyzQx6kIgrF/bzbVRDpxPMTtAMyK+3M5flFGcZPL7TRAcNl3pcEvhkI0wXbOy+8qqTq2OvBsADJenI1mUN8I1XESRzOF40doMQyt7Uw9PImFQEARSL6Xmrbe2XzmWa2LNiGEK6ydW/lDY8+11HxYWC9MJSPlYH/S6tYY5JJB6nk4P0j/6g3XPaJdAo2ymToWzVyE8+xHt6I+uvVBKXMVOTUOnHwp9hJeF5p6nF0xR3loOot72wEv7L2XxFERWzhPyRzT6J8IupHEtva1XVOzjpw8OdtK6r/NOkIpmvdnk82qgCJay/HR6vQedVV16vYX6hns7ROYVggcqxQOY62pSaFWNyATYShYGHk5qRHmo3vFkY5amm2fG16bBO+20uXr7RAWY/E05B/4WTBMrhoCjlHXfORcpE0N0clFukYSx3UMNsfx8gkRpFZf3ccS9fUsXr19FC5BOrkiSGFzKz+8nn1FzKlbrsv4e5qkEbZbkhnkOabGfF0qH+0eo0MR933THB5BpxJwneqQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR02MB8845.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(38100700002)(6506007)(66556008)(53546011)(122000001)(64756008)(316002)(66476007)(2906002)(8936002)(54906003)(52536014)(5660300002)(38070700005)(186003)(8676002)(66446008)(110136005)(86362001)(4326008)(26005)(71200400001)(9686003)(55016002)(83380400001)(33656002)(66946007)(7696005)(76116006)(966005)(508600001)(45080400002)(30864003)(579004);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NDR2eW9teU1NcU9mQVZEZmNyaTUvdWFtSVNjNEJYaTFrVy84UFppL2pISUsz?=
+ =?utf-8?B?ZHY4YkhTQ3YyeDVFSVhEMVJ3djhpdEVKUG12aEdZVkJMdXIreEowWEhSNERS?=
+ =?utf-8?B?OTQrUm1vT0tIRiszWU9HNVpsVVJXS3lLWXNYYzVNNFdiODRMVk9tT1pIZ1hG?=
+ =?utf-8?B?TzJucXRuTHo5VFA2dm9WejhBc3A5bzRGeWViR1gvQlh0d3VOb3dvd1paWlRs?=
+ =?utf-8?B?TkorN3FPc2Z5NFArMk04NEdHOVo0OHVkOEcvWmdtbmxRYTQvckU5TEs3ekF2?=
+ =?utf-8?B?eUMrMlVpTkg5MGRjeW9VQ0N4R2NMTWJLWDRNYXMzTmdKUWVIRzY2Wkp0OUo3?=
+ =?utf-8?B?eGt4MURWanFqdjdaRkZkdTBHMDRjOGFoQ0NubWhKT043SndWc1ZCTXpVdHVn?=
+ =?utf-8?B?TkxUM2tLSnhsZnZ3VGtkNGdSL1dKZU5xdDlHTHVVUlFBQ1lhYStQQ3dDRXNL?=
+ =?utf-8?B?djVtUytMcUtRbUNFNVBwRWlQMFVreUJxY1hIaHh2L0VBZTFyQ3lDY2VxaSs2?=
+ =?utf-8?B?Mk9lZlJIZkphZ2RFdTFjYmJiOUp1Zk5QQ2tWU3ZCWXNucEtLbUFXUXY2RjM0?=
+ =?utf-8?B?a3BzYXc0UGRMU29BQVh1YnV4OVRxRFN3RnQrSG9UbVBPcXdCcFVvWU1vTUk5?=
+ =?utf-8?B?ek04RzNHNEZGck5yUTBiZU83ajZNMVBCcEFaeVpBS0tuMW1PeTZVbTd0Rmw1?=
+ =?utf-8?B?aG5CUGEyQ1RIQnJ3OTd5QWFZcTJYVDA2T1JnUDB6SzkxZmhuRXhXK1NxK3My?=
+ =?utf-8?B?U3k1d3VFK3h2NGNWYWlCK3ovQ05NdDNBV1VoaXI0ZHJXSmVEalplN3JJb1k3?=
+ =?utf-8?B?R1VZMU0rUXJxdlhmL2hNY1RueDR0T2h0YWY4L2s3VEJaK1VjT2gydmsvaFFz?=
+ =?utf-8?B?dWcrL2lsOVkzV3hpSTdiZ1FVaWt2aG5Xeld4Q1NwWHBGTWM2bHIxZXMvbm04?=
+ =?utf-8?B?STNYZzNKOHBndWdlNnpPU2x2T0ZSckhXSkw3dE0ySzFFcy8rUmpDYjEzR1Bi?=
+ =?utf-8?B?bDdCWGdER3JqUzFPTmZ5NExTZlBrT3MwZHdrMnFSaXhXNHBrR28rVHdYTGdt?=
+ =?utf-8?B?WmJDK2lweFZDOUNzekNMK2Q3ZUtpWWhmZmdlOGxPR0t1bHVwZko1aWc3TW5B?=
+ =?utf-8?B?RUhmVGlwYi9ZUjY5ODdKQnlqOUxJR2JJVk9LVmtxMjAzQnFFTFZ3K3AyTlF6?=
+ =?utf-8?B?Sm5WR0FEUUc5ek9vZS9HYWY0S05FNUVtS0dWWFpCdllldzdrMnNGdEY4VEoy?=
+ =?utf-8?B?ZlZlSHQzL2ZqU0RLMDdwblJkNU55YWFEb3JZOUMzNEpqb2Vpd0FsaXhpSzBT?=
+ =?utf-8?B?WGxYeVdQUDQwS21zeEg3SnBsa0VUTFl1SzRHRGU2STMwY0d1UmJWK3NZcFZZ?=
+ =?utf-8?B?cktlMDJIMHErd2tRNk8yYnZHbmQwTGw3ay9wTDFiSWJ6ZVVLTzJPNDBxWUc2?=
+ =?utf-8?B?RDlyRHlZSDY4VVlsc0txOEdNTm5yakNMVnF4QlRMaC9XcGlDazduQ25oR25Z?=
+ =?utf-8?B?U2hKRUg5VFpDVkNzMTBmTDNyZll1dGxDT1hGemRMWVF3MS9kNk9tNitFZHRK?=
+ =?utf-8?B?eThTUFF3S1ZKTnhMQThwbWpvZ045STNtZk1zU3hieUdNZ2RVY3pyZlhFN3RS?=
+ =?utf-8?B?cHZ3U3ExMVBubzUxRW5LdmhVWC91VWwxR2ttZFJlbVZ6YUNQanRYSXJweTFD?=
+ =?utf-8?B?bzZhS2VhYlI4SExGRVVWK2dFV1BwRDlTMkNYL1VDZVVMK3p2QXVBMEViNVh0?=
+ =?utf-8?Q?2fcwnWqGrPjDX9PjzFi4DSXcPO6mWwMiduUG/1d?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <301850cf-9f34-530b-bd9c-fbe9bf9feee5@intel.com>
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB8845.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae889f6b-19f0-4027-7c3e-08d992b97558
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Oct 2021 04:32:28.2266
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5w+N7/TOToBkFnvI5DetpT5BJcKaQElKm+fuD65M8cyeKBoeDRJAY79eg3rvYZDrTgbG+7OWiyxg8INbmxirRQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB8516
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 09:24:08AM -0700, Russ Weight wrote:
-> 
-> 
-> On 10/18/21 1:13 AM, Xu Yilun wrote:
-> > On Fri, Oct 15, 2021 at 10:34:23AM -0700, Russ Weight wrote:
-> >>
-> >> On 10/14/21 7:51 PM, Xu Yilun wrote:
-> >>> On Thu, Oct 14, 2021 at 09:32:53AM -0700, Russ Weight wrote:
-> >>>> On 10/13/21 6:49 PM, Xu Yilun wrote:
-> >>>>> On Wed, Oct 13, 2021 at 11:09:08AM -0700, Russ Weight wrote:
-> >>>>>> On 10/12/21 6:06 PM, Xu Yilun wrote:
-> >>>>>>> On Tue, Oct 12, 2021 at 10:20:15AM -0700, Russ Weight wrote:
-> >>>>>>>> On 10/12/21 12:47 AM, Xu Yilun wrote:
-> >>>>>>>>> On Mon, Oct 11, 2021 at 06:00:16PM -0700, Russ Weight wrote:
-> >>>>>>>>>> On 10/11/21 5:35 AM, Tom Rix wrote:
-> >>>>>>>>>>> On 10/10/21 6:41 PM, Xu Yilun wrote:
-> >>>>>>>>>>>> On Sat, Oct 09, 2021 at 05:11:20AM -0700, Tom Rix wrote:
-> >>>>>>>>>>>>> On 10/9/21 1:08 AM, Xu Yilun wrote:
-> >>>>>>>>>>>>>> On Wed, Sep 29, 2021 at 04:00:20PM -0700, Russ Weight wrote:
-> >>>>>>>>>>>>>>> The FPGA Image Load framework provides an API to upload image
-> >>>>>>>>>>>>>>> files to an FPGA device. Image files are self-describing. They could
-> >>>>>>>>>>>>>>> contain FPGA images, BMC images, Root Entry Hashes, or other device
-> >>>>>>>>>>>>>>> specific files. It is up to the lower-level device driver and the
-> >>>>>>>>>>>>>>> target device to authenticate and disposition the file data.
-> >>>>>>>>>>>>>> I've reconsider the FPGA persistent image update again, and think we
-> >>>>>>>>>>>>>> may include it in FPGA manager framework.
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>> Sorry I raised this topic again when it is already at patch v17, but now
-> >>>>>>>>>>>>>> I need to consider more seriously than before.
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>> We have consensus the FPGA persistent image update is just like a normal
-> >>>>>>>>>>>>>> firmware update which finally writes the nvmem like flash or eeprom,
-> >>>>>>>>>>>>>> while the current FPGA manager deals with the active FPGA region update
-> >>>>>>>>>>>>>> and re-activation. Could we just expand the FPGA manager and let it handle
-> >>>>>>>>>>>>>> the nvmem update as well? Many FPGA cards have nvmem and downloaders
-> >>>>>>>>>>>>>> supports updating both FPGA region and nvmem.
-> >>>>>>>>>> The fpga-image-load driver is actually just a data transfer. The class
-> >>>>>>>>> IMHO, The fpga-mgr dev is also a data transfer. The fpga-region dev is
-> >>>>>>>>> acting as the FPGA region admin responsible for gating, transfering and
-> >>>>>>>>> re-enumerating.
-> >>>>>>>>>
-> >>>>>>>>> So my opinion is to add a new data transfer type and keep a unified process.
-> >>>>>>>>>
-> >>>>>>>>>> driver has no knowledge about what the data is or where/if the data will
-> >>>>>>>>>> be stored.
-> >>>>>>>>> The fpga-image-load driver knows the data will be stored in nvmem,
-> >>>>>>>> FYI: This is not strictly correct. In a coming product there is a
-> >>>>>>>> case where the data will be stored in RAM. Richard Gong was also
-> >>>>>>>> looking to use this driver to validate an image without programming
-> >>>>>>>> or storing it. The fpga-image-load driver has no expectation that
-> >>>>>>>> the data will be stored in nvmem, or even that it will be stored
-> >>>>>>>> at all.
-> >>>>>>> OK, we can discuss that use case then. But fundamentally a driver should
-> >>>>>>> be clear what it is doing.
-> >>>>>> The lower-level driver is, of course, clear what it is doing. And the
-> >>>>>> FPGA Image Load Framework simply provides a consistent API and manages
-> >>>>>> a potentially long-running data transfer in the context of a kernel
-> >>>>>> worker thread.
-> >>>>>>
-> >>>>>> It sounds like you are saying that that is not "clear enough" in the
-> >>>>>> context of the FPGA Manager?
-> >>>>>>
-> >>>>>> The files that are used with Intel PAC devices are self-describing. The
-> >>>>>> user-space tools, the class driver and the lower-level driver just pass
-> >>>>>> the data through to the card BMC without any knowledge of the content,
-> >>>>>> purpose or final destination of the data.
-> >>>>>>
-> >>>>>> The card BMC will receive signed data, validate it, and process it as a
-> >>>>>> BMC image, an FPGA image, a Root Entry Hash, or a key cancellation. In
-> >>>>> I category all these actions as firmware update fully or partially on
-> >>>>> persistent storage. The FPGA Manager don't have to know the meaning of
-> >>>>> every byte on flash, but it should be aware the firmware is updated and
-> >>>>> the card may acts differently with a new firmware. This is the common
-> >>>>> working model for most of the FPGA cards so that we implement it in FPGA
-> >>>>> manager class. 
-> >>>>>
-> >>>>>> the n6000, it could also be part of a multi-step process for programming
-> >>>>>> SDM keys and the data may not be stored permanently.
-> >>>>> This is new to me, but seems to be different from firmware update, so lets
-> >>>>> think about it again.
-> >>>>>
-> >>>>>>> You may try to extend the FPGA framework to
-> >>>>>>> support nvmem storage, or image validation, but cannot say we feed the
-> >>>>>>> data to any engine undefined by the framework.
-> >>>>>> I'm not sure what you mean by "feed the data to any engine undefined by the
-> >>>>>> framework". I think the "engine" is the lower level driver/device that invokes
-> >>>>>> the fpga_mgr. The lower level driver, of course, is clear what it is doing.
-> >>>>>> The fpga_mgr cannot control what driver invokes it.
-> >>>>>>
-> >>>>>> Are saying that when invoking the fpga-mgr, that it _must_ also pass descriptive
-> >>>>>> data. Meaning that a self-describing file alone is not acceptable?
-> >>>>> The class driver should define a reasonable working model and APIs.
-> >>>>> Updating the FPGA backup storage is good to me. But receiving a mystery
-> >>>>> box and do whatever it requires is not.
-> >>>>>
-> >>>>> Self-describing file is OK, encryption is OK, but either the class
-> >>>>> driver itself, or with the help of the low level driver, should make
-> >>>>> sure it works within its scope.
-> >>>> In our secure update process, the card BMC firmware authenticates
-> >>>> the data using the root entry hashes and will either reject the
-> >>>> data or perform some function based on the contents. Neither the
-> >>>> user-space, the class driver, nor the lower level driver know
-> >>>> what the contents are. It _is_ a "mystery box" to them. How do we
-> >>>> verify scope in this model?
-> >>> I think we need to find out how. One case is, the HW is designed to have
-> >>> one single function, such as firmware update, then any image input
-> >>> through firmware update API is within expectation, and the driver
-> >>> should only serve the firmware update API. I think this is how the
-> >>> N3000 is working now. If the HW is for another function, register itself
-> >>> to serve another API, or another class driver.
-> >>>
-> >>> Another case is, the HW could do multiple types of tasks depending on
-> >>> the content of the image, such as firmware update, image verification,
-> >>> or assumably power off the card ... There should be some mechanism for
-> >>> the driver to only accept the right image according to what API is called.
-> >>> Or the user may input an image named update_the_card.img through
-> >>> firmware update API and finally get the card off. Having some headers
-> >>> readable by host for the operation type? Or, some HW interface for host
-> >>> to apply the operation type as well as the image, let the HW verify?
-> >>> Let's think about it.
-> >> I'm not sure if I am following your thinking here. The HW, of course,
-> >> verifies authentication of the image and acts according to the image
-> >> type. I don't think it is reasonable to require the class driver to
-> >> interpret the data to determine what it is. That implies that the
-> >> class driver would have to know the header format and possible values.
-> >> It also means that changes to the header format would require patches
-> >> to the class driver.
-> >>
-> >> The FPGA card is trusted by virtue of the fact that the customer
-> >> purchased it and physically placed it in the machine. If the FPGA card
-> >> (or the lower level driver) validates the image, then why does the
-> >> Class driver need to be concerned about the file type? I think the
-> >> purpose of the class driver is primarily to provide a common API and
-> >> perform common functions so that they don't have to be replicated
-> >> among similar low-level drivers. It is up to the low-level driver
-> >> or the device itself to ensure that the data received is acceptable.
-> >>
-> >> If the card receives data through the fpga-mgr upload facility that
-> >> isn't strictly a firmware update, and if the lower-level driver or
-> >> the card handles it and returns appropriate status - is that really
-> >> a problem?
-> >>>> As you have noted, most current cases result in a change to the
-> >>>> card, and I suspect that it will remain that way. But that can't be
-> >>>> guaranteed, and I'm not convinced that a host driver needs to be
-> >>>> concerned about it.
-> >>> A host driver should know what is done, in some abstraction level.
-> >>> I think updating the persistent storage is an acceptable abstraction
-> >>> in FPGA domain, so I'd like to extend it in FPGA manager. But doing
-> >>> anything according to the image is not.
-> >> By host driver, do you mean the class driver? Or the lower-level device
-> >> driver?
-> > The class driver.
-> >
-> >> It seems to me that you are saying that self-describing images are not
-> >> acceptable? Or at least they are not acceptable payload for an FPGA
-> >> Manager firmware-update API?
-> > For N3000, we are working on the persistent storage update APIs, which is
-> > a much simpler working model, no runtime device change, and needs no
-> > device removal & re-enumeration.
-> >
-> > But if you need to extend something more that would potentially changes
-> > the behavior of the running devices on FPGA, device removal &
-> > re-enumeration are needed so that the system knows what devices are
-> > changed.
-> >
-> >> The FPGA Image Load Framework was designed with the concept of
-> >> transferring data to a device without imposing a purpose on the data.
-> >> The expectation is that the lower-level driver or the device will
-> >> validate the data. Is there something fundamentally wrong with that
-> > I think there is something wrong here. As I said before, persistent
-> > storage updating has different software process from some runtime
-> > updating, so the class driver should be aware of what the HW engine
-> > is doing.
-> So far, there are no self-describing images that cause a
-> change in run-time behavior, and I don't think that will
-> happen for the very reason that the class-driver would
-> need to know about it.
-
-Again, the class driver needs to know what is happening, at some
-abstraction level, to ensure the system is aligned with the HW state.
-
-If the class driver cannot tell the detail, it has to assume the
-whole FPGA region will be changed, and removal & re-enumeration is
-needed.
-
-> 
-> When I asserted that not all self-describing images are
-> changing firmware, I did not mean to imply that they change
-> run-time behavior; they do not. They are part of a multi-
-> step update of firmware. However, looking at each part of
-> the sequence independently, there is at least one instance
-> where a certificate is stored in RAM for temporary use.
-> When the driver exits from this call, there is no firmware
-> change. There is also no change in run-time behavior.
-> 
-> I'm thinking we could have different IOCTLs:
-> 
-> (1) firmware  update (address, size, purpose provided
->     with the image)
-
-Will the firmware update use the self-describing files?
-
-> (2) image upload (self-describing files)
-
-If both 1 & 2 use self-describing files, how the class driver verifies
-the type of the file without looking into the file?
-
-For example, if a user calls a firmware update API but inputs an image
-upload file, will the class driver block the call? How?
-
-> (3) image validation
-> 
-> These would all use most of the same code, but the FPGA
-> Manager flags and structure fields would be set differently.
-
-This is good to me.
-
-Thanks,
-Yilun
-
-> 
-> - Russ
-> >
-> > Thanks,
-> > Yilun
-> >
-> >> approach? And if not, why couldn't we incorporate a similar image_load
-> >> API into the FPGA Manager?
-> >>
-> >> - Russ
-> >>
-> >>> Thanks,
-> >>> Yilun
-> >>>
-> >>>> - Russ
-> >>>>
-> >>>>> Thanks,
-> >>>>> Yilun
-> >>>>>
-> >>>>>> Thanks,
-> >>>>>> - Russ
-> >>>>>>
-> >>>>>>> Thanks,
-> >>>>>>> Yilun
-> >>>>>>>
-> >>>>>>>>> while
-> >>>>>>>>> the fpga-mgr knows the data will be stored in FPGA cells. They may need
-> >>>>>>>>> to know the exact physical position to store, may not, depends on what the
-> >>>>>>>>> HW engines are.
-> >>>>>>>>>
-> >>>>>>>>>> This functionality could, of course, be merged into the fpga-mgr. I did
-> >>>>>>>>>> a proof of concept of this a while back and we discussed the pros and cons.
-> >>>>>>>>>> See this email for a recap:
-> >>>>>>>>>>
-> >>>>>>>>>> https://marc.info/?l=linux-fpga&m=161998085507374&w=2
-> >>>>>>>>>>
-> >>>>>>>>>> Things have changed some with the evolution of the driver. The IOCTL
-> >>>>>>>>>> approach probably fits better than the sysfs implementation. At the time
-> >>>>>>>>>> it seemed that a merge would add unnecessary complexity without adding value.
-> >>>>>>>>> I think at least developers don't have to go through 2 sets of software
-> >>>>>>>>> stacks which are of the same concept. And adding some new features like
-> >>>>>>>>> optionally threading or canceling data transfer are also good to FPGA
-> >>>>>>>>> region update. And the nvmem update could also be benifit from exsiting
-> >>>>>>>>> implementations like scatter-gather buffers, in-kernel firmware loading.
-> >>>>>>>>>
-> >>>>>>>>> I try to explain myself according to each of your concern from that mail
-> >>>>>>>>> thread:
-> >>>>>>>>>
-> >>>>>>>>> Purpose of the 2 updates
-> >>>>>>>>> ========================
-> >>>>>>>>>
-> >>>>>>>>>   As I said before, I think they are both data transfer devices. FPGA
-> >>>>>>>>> region update gets extra support from fpga-region & fpga-bridge, and
-> >>>>>>>>> FPGA nvmem update could be a standalone fpga-mgr.
-> >>>>>>>>>
-> >>>>>>>>> Extra APIs that are unique to nvmem update
-> >>>>>>>>> ==========================================
-> >>>>>>>>>
-> >>>>>>>>>   cdev APIs for nvmem update:
-> >>>>>>>>>     Yes we need to expand the functionality so we need them.
-> >>>>>>>>>
-> >>>>>>>>>   available_images, image_load APIs for loading nvmem content to FPGA
-> >>>>>>>>>   region:
-> >>>>>>>>>     These are features in later patchsets which are not submitted, but we
-> >>>>>>>>>     could talk about it in advance. I think this is actually a FPGA region
-> >>>>>>>>>     update from nvmem, it also requires gating, data loading (no SW transfer)
-> >>>>>>>>>     and re-enumeration, or a single command to image_load HW may result system
-> >>>>>>>>>     disordered. The FPGA framework now only supports update from in-kernel
-> >>>>>>>>>     user data, maybe we add support for update from nvmem later.
-> >>>>>>>>>
-> >>>>>>>>>   fpga-mgr state extend:
-> >>>>>>>>>     I think it could be extended, The current states are not perfect,
-> >>>>>>>>>     adding something like IDLE or READY is just fine.
-> >>>>>>>>>
-> >>>>>>>>>   fpga-mgr status extend:
-> >>>>>>>>>     Add general error definitions as needed. If there is some status
-> >>>>>>>>>     that is quite vendor specific, expose it in low-level driver.
-> >>>>>>>>>
-> >>>>>>>>>   remaining-size:
-> >>>>>>>>>     Nice to have for all.
-> >>>>>>>>>
-> >>>>>>>>> Threading the update
-> >>>>>>>>> ====================
-> >>>>>>>>>
-> >>>>>>>>>   Also a good option for FPGA region update, maybe we also have a slow FPGA
-> >>>>>>>>>   reprogrammer?
-> >>>>>>>>>
-> >>>>>>>>> Cancelling the update
-> >>>>>>>>> ====================
-> >>>>>>>>>
-> >>>>>>>>>   Also a good option for FPGA region update if HW engine supports.
-> >>>>>>>> These are all good points.
-> >>>>>>>>
-> >>>>>>>> Thanks,
-> >>>>>>>> - Russ
-> >>>>>>>>> Thanks,
-> >>>>>>>>> Yilun
-> >>>>>>>>>
-> >>>>>>>>>>>>>> According to the patchset, the basic workflow of the 2 update types are
-> >>>>>>>>>>>>>> quite similar, get the data, prepare for the HW, write and complete.
-> >>>>>>>>>>>>>> They are already implemented in FPGA manager. We've discussed some
-> >>>>>>>>>>>>>> differences like threading or canceling the update, which are
-> >>>>>>>>>>>>>> not provided by FPGA manager but they may also nice to have for FPGA
-> >>>>>>>>>>>>>> region update. An FPGA region update may also last for a long time??
-> >>>>>>>>>>>>>> So I think having 2 sets of similar frameworks in FPGA is unnecessary.
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>> My quick mind is that we add some flags in struct fpga_mgr & struct
-> >>>>>>>>>>>>>> fpga_image_info to indicate the HW capability (support FPGA region
-> >>>>>>>>>>>>>> update or nvmem update or both) of the download engine and the provided
-> >>>>>>>>>>>>>> image type. Then the low-level driver knows how to download if it
-> >>>>>>>>>>>>>> supports both image types.An char device could be added for each fpga manager dev, providing the
-> >>>>>>>>>>>>>> user APIs for nvmem update. We may not use the char dev for FPGA region
-> >>>>>>>>>>>>>> update cause it changes the system HW devices and needs device hotplug
-> >>>>>>>>>>>>>> in FPGA region. We'd better leave it to FPGA region class, this is
-> >>>>>>>>>>>>>> another topic.
-> >>>>>>>>>> I'll give this some more thought and see if I can come up with some RFC
-> >>>>>>>>>> patches.
-> >>>>>>>>>>
-> >>>>>>>>>> - Russ
-> >>>>>>>>>>>>>> More discussion is appreciated.
-> >>>>>>>>>>>>> I also think fpga_mgr could be extended.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> In this patchset,
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> https://lore.kernel.org/linux-fpga/20210625195849.837976-1-trix@redhat.com/
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> A second, similar set of write ops was added to fpga_manger_ops,
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> new bit/flag was added to fpga_image_info
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> The intent was for dfl to add their specific ops to cover what is done in
-> >>>>>>>>>>>>> this patchset.
-> >>>>>>>>>>>> I think we don't have to add 2 ops for reconfig & reimage in framework,
-> >>>>>>>>>>>> the 2 processes are almost the same.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> Just add the _REIMAGE (or something else, NVMEM?) flag for
-> >>>>>>>>>>>> fpga_image_info, and low level drivers handle it as they do for other
-> >>>>>>>>>>>> flags.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> How do you think?
-> >>>>>>>>>>> A single set is fine.
-> >>>>>>>>>>>
-> >>>>>>>>>>> A difficult part of is the length of  time to do the write. The existing write should be improved to use a worker thread.
-> >>>>>>>>>>>
-> >>>>>>>>>>> Tom
-> >>>>>>>>>>>
-> >>>>>>>>>>>> Thanks,
-> >>>>>>>>>>>> Yilun
-> >>>>>>>>>>>>
-> >>>>>>>>>>>>> Any other driver would do similar.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> Is this close to what you are thinking ?
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> Tom
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>> Thanks,
-> >>>>>>>>>>>>>> Yilun
-> >>>>>>>>>>>>>>
+SGVsbG8gUm9iLA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IExpemhp
+IEhvdSA8bGl6aGkuaG91QHhpbGlueC5jb20+DQo+IFNlbnQ6IFRodXJzZGF5LCBPY3RvYmVyIDE0
+LCAyMDIxIDk6MTMgQU0NCj4gVG86IHJvYmhAa2VybmVsLm9yZw0KPiBDYzogbGludXgta2VybmVs
+QHZnZXIua2VybmVsLm9yZzsgbGludXgtZnBnYUB2Z2VyLmtlcm5lbC5vcmc7IE1heCBaaGVuDQo+
+IDxtYXh6QHhpbGlueC5jb20+OyBTb25hbCBTYW50YW4gPHNvbmFsc0B4aWxpbnguY29tPjsgWXUg
+TGl1DQo+IDx5bGl1QHhpbGlueC5jb20+OyBNaWNoYWwgU2ltZWsgPG1pY2hhbHNAeGlsaW54LmNv
+bT47IFN0ZWZhbm8gU3RhYmVsbGluaQ0KPiA8c3RlZmFub3NAeGlsaW54LmNvbT47IGRldmljZXRy
+ZWVAdmdlci5rZXJuZWwub3JnOyB0cml4QHJlZGhhdC5jb207DQo+IG1kZkBrZXJuZWwub3JnOyBN
+YXggWmhlbiA8bWF4ekB4aWxpbnguY29tPjsgTGl6aGkgSG91IDxsaXpoaWhAeGlsaW54LmNvbT47
+DQo+IFh1IFlpbHVuIDx5aWx1bi54dUBpbnRlbC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0gg
+VjkgWFJUIEFsdmVvIDAxLzE0XSBEb2N1bWVudGF0aW9uOiBmcGdhOiBBZGQgYQ0KPiBkb2N1bWVu
+dCBkZXNjcmliaW5nIFhSVCBBbHZlbyBkcml2ZXJzDQo+IA0KPiBIZWxsbyBSb2IsDQo+IA0KPiBQ
+bGVhc2UgaGVscCB3aXRoIHRoZSByZXZpZXcgb2YgdGhlIHByb3Bvc2VkIEZEVCB1c2FnZSBieSBB
+bHZlby9YUlQgZHJpdmVycy4NCj4gDQo+IFRoYW5rcywNCj4gTGl6aGkNCj4gDQo+IE9uIDEwLzEz
+LzIxIDc6MjEgUE0sIFh1IFlpbHVuIHdyb3RlOg0KPiA+IENBVVRJT046IFRoaXMgbWVzc2FnZSBo
+YXMgb3JpZ2luYXRlZCBmcm9tIGFuIEV4dGVybmFsIFNvdXJjZS4gUGxlYXNlIHVzZQ0KPiBwcm9w
+ZXIganVkZ21lbnQgYW5kIGNhdXRpb24gd2hlbiBvcGVuaW5nIGF0dGFjaG1lbnRzLCBjbGlja2lu
+ZyBsaW5rcywgb3INCj4gcmVzcG9uZGluZyB0byB0aGlzIGVtYWlsLg0KPiA+DQo+ID4NCj4gPj4+
+PiArLi4gX2RldmljZV90cmVlX3VzYWdlOg0KPiA+Pj4+ICsNCj4gPj4+PiArRGV2aWNlIFRyZWUg
+VXNhZ2UNCj4gPj4+PiArLS0tLS0tLS0tLS0tLS0tLS0NCj4gPj4+PiArDQo+ID4+Pj4gK1RoZSB4
+c2FiaW4gZmlsZSBzdG9yZXMgbWV0YWRhdGEgd2hpY2ggYWR2ZXJ0aXNlIEhXIHN1YnN5c3RlbXMN
+Cj4gPj4+PiArcHJlc2VudCBpbiBhIHBhcnRpdGlvbi4gVGhlIG1ldGFkYXRhIGlzIHN0b3JlZCBp
+biBkZXZpY2UgdHJlZQ0KPiA+Pj4+ICtmb3JtYXQgd2l0aCBhIHdlbGwgZGVmaW5lZCBzY2hlbWEu
+IFhSVCBtYW5hZ2VtZW50IGRyaXZlciB1c2VzIHRoaXMNCj4gPj4+PiAraW5mb3JtYXRpb24gdG8g
+YmluZCAqeHJ0X2RyaXZlcnMqIHRvIHRoZSBzdWJzeXN0ZW0gaW5zdGFudGlhdGlvbnMuDQo+ID4+
+Pj4gK1RoZSB4cnRfZHJpdmVycyBhcmUgZm91bmQgaW4gKip4cnQtbGliLmtvKioga2VybmVsIG1v
+ZHVsZS4NCj4gPj4+IEknbSBzdGlsbCBjYXRjaGluZyB1cCB0aGUgcGF0Y2hzZXQgZnJvbSB0aGUg
+dmVyeSBiZWdpbm5pbmcsIGFuZCBqdXN0DQo+ID4+PiBmaW5pc2hlZCB0aGUgRG9jdW1lbnRhdGlv
+biBwYXJ0LiBTbyBmYXIsIEkgc2VlIHRoZSBEVCB1c2FnZSBjb25jZXJuDQo+ID4+PiB3aGljaCBt
+YXkgaW1wYWN0IHRoZSBhcmNoaXRlY3VyZSBhIGxvdCwgc28gSSBzaG91bGQgcmFpc2UgaXQgQVNB
+UC4NCj4gPj4+DQo+ID4+PiBUaGUgY29uY2VybiByYWlzZWQgYnkgdGhlIERUIG1haW50YWluZXI6
+DQo+ID4+PiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1mcGdhL0NBTF9Kc3FMb2Q2RkJH
+Rmh1N1dYdE1yQl96N3dqOC11cA0KPiA+Pj4gMEVldE0xUVM5TTNnam04ZDdRQG1haWwuZ21haWwu
+Y29tLw0KPiA+Pj4NCj4gPj4+IEZpcnN0IG9mIGFsbCwgZGlyZWN0bHkgcGFyc2luZyBGRFQgaW4g
+ZGV2aWNlIGRyaXZlcnMgaXMgbm90IGEgbm9ybWFsDQo+ID4+PiB1c2FnZSBvZiBEVCBpbiBsaW51
+eC4gSXQgaXMgb3V0IG9mIHRoZSBjdXJyZW50IERUIHVzYWdlIG1vZGVsLiBTbyBpdA0KPiA+Pj4g
+c2hvdWxkIGJlIGFncmVlZCBieSBEVCBtYWludGFpbmVycy4NCg0KRnJpZW5kbHkgcmVtaW5kZXIg
+dGhhdCB3ZSBhcmUgd2FpdGluZyBmb3IgeW91ciBmZWVkYmFjayBvbiB0aGUgcHJvcG9zZWQgRkRU
+IHVzZSBtb2RlbCBieSB0aGUgQWx2ZW8vWFJUIGRyaXZlcnMuIFBsZWFzZSBhZHZpc2Ugb24gaG93
+IHRvIHByb2NlZWQgZm9yd2FyZC4NCg0KVGhhbmtzLA0KLVNvbmFsDQo+ID4+IFRoYW5rcyBmb3Ig
+cmV2aWV3aW5nIFhSVCBkb2N1bWVudCBhbmQgcHJvdmlkaW5nIGZlZWRiYWNrLg0KPiA+PiBIZXJl
+IGlzIHRoZSByZXBseSBmcm9tIFNvbmFsIGZvciBSb2LigJlzIHF1ZXN0aW9uOg0KPiA+PiBodHRw
+czovL2xvcmUua2VybmVsLm9yZy9saW51eC0NCj4gZnBnYS9CWTVQUjAyTUI2MjYwNEI4N0M2NkEx
+QUQxMzlBNkYxNTNCDQo+ID4+IEJGNDBAQlk1UFIwMk1CNjI2MC5uYW1wcmQwMi5wcm9kLm91dGxv
+b2suY29tLw0KPiA+PiBPdmVyYWxsLCBsaWJmZHQgaXMgdXNlZCBieSBYUlQgZHJpdmVyIHRvIHBh
+cnNlIHRoZSBtZXRhZGF0YSB3aGljaA0KPiA+PiBjb21lcyB3aXRoIGFuIEFsdmVvIGJvYXJkLg0K
+PiA+PiBXaGVuIFhSVCBkcml2ZXIgZGlzY292ZXJzIGFuIEFsdmVvIGJvYXJkLCBpdCB3aWxsIHJl
+YWQgYSBmZHQgYmxvYg0KPiA+PiBmcm9tIGJvYXJkIGZpcm13YXJlIGZpbGUgcmVzaWRlbnQgb24g
+dGhlIGhvc3QuDQo+ID4+IEJ5IHBhcnNpbmcgdGhlIGZkdCBibG9iLCBYUlQgZHJpdmVyIGdldHMg
+aW5mb3JtYXRpb24gYWJvdXQgdGhpcyBBbHZlbw0KPiA+PiBib2FyZCwgc3VjaCBhcyB2ZXJzaW9u
+LCB1dWlkLCBJUHMgZXhwb3NlZCB0byBQQ0kgQkFSLCBpbnRlcnJ1cHQgYmluZGluZyBldGMuDQo+
+ID4+IFNvIGxpYmZkdCBpcyB1c2VkIHNpbXBseSBhcyBBbHZlbyBtZXRhZGF0YSBwYXJzZXIgaGVy
+ZS4gWFJUIGRyaXZlcnMNCj4gPj4gZG8gbm90IGludGVyYWN0IHdpdGggc3lzdGVtIHdpZGUgRFQg
+b3IgcHJlc2VudCB0aGUgQWx2ZW8gZGV2aWNlIHRyZWUNCj4gPj4gdG8gaG9zdC4gRm9yIG1hbnkg
+c3lzdGVtcyBsaWtlIHg4Nl82NCwgc3lzdGVtIHdpZGUgRFQgaXMgbm90IHByZXNlbnQNCj4gPj4g
+YnV0IGxpYmZkdCBwYXJzaW5nIHNlcnZpY2VzIHdpbGwgc3RpbGwgYmUgbmVlZGVkLg0KPiA+IFll
+cywgSSB1bmRlcnN0YW5kIHRoZSB1c2UgY2FzZS4NCj4gPg0KPiA+IE15IGNvbmNlcm4gaXMsIGRp
+cmVjdGx5IHBhcnNpbmcgYW4gaXNvbGF0ZWQgRkRUIGluIGRldmljZSBkcml2ZXIgYW5kDQo+ID4g
+cG9wdWxhdGUgc3ViIGRldmljZXMsIHNraXBwaW5nIHRoZSB1bmZsYXR0ZW5pbmcsIHRoaXMgaXMg
+YSBuZXcgd29ya2luZw0KPiA+IG1vZGVsIG9mIGRldmljZSB0cmVlIHVzYWdlLCBidXQgZm9yIHRo
+ZSBzYW1lIHB1cnBvc2UgYXMgdGhlIGV4aXN0aW5nDQo+ID4gb25lLg0KPiA+DQo+ID4gU28gSSBy
+ZWFsbHkgbmVlZCB0aGUgY29uZmlybWF0aW9uIG9mIERUIG1haW50YWluZXJzLg0KPiA+DQo+ID4+
+PiBDdXJyZW50IEZQR0EgZnJhbWV3b3JrIG1vZGlmaWVzIGtlcm5lbCdzIGxpdmUgdHJlZSBieSBE
+VCBvdmVybGF5LA0KPiA+Pj4gd2hlbiBGUEdBIGlzIGR5bmFtaWNhbGx5IHJlcHJvZ3JhbW1lZCBh
+bmQgbmV3IEhXIGRldmljZXMgYXBwZWFyLiBTZWUNCj4gPj4+IERvY3VtZW50YXRpb24vZGV2aWNl
+dHJlZS9iaW5kaW5ncy9mcGdhL2ZwZ2EtcmVnaW9uLnR4dC4NCj4gPj4+DQo+ID4+PiBUaGVuIHNv
+bWV0aGluZyBsZXNzIGltcG9ydGFudDoNCj4gPj4+DQo+ID4+PiAgICAgMS4gVGhlIGJpbmRpbmdz
+IHNob3VsZCBiZSBkb2N1bWVudGVkIGluDQo+IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5k
+aW5ncy8uDQo+ID4+PiAgICAgMi4gQXJlIGFsbCB0aGUgZXhhbXBsZSBEVCB1c2FnZSBjb25mb3Jt
+IHRvIHRoZSBleHNpdGluZyBiaW5kaW5ncz8gSQ0KPiA+Pj4gICAgICAgIGRpZG4ndCBnbyB0aHJv
+dWdoIGFsbCBkZXZpY2UgY2xhc3NlcywgYnV0IHJlbWVtYmVyIGxpa2UgdGhlDQo+ID4+PiAgICAg
+ICAgaW50ZXJydXB0LWNvbnRyb2xsZXIgc2hvdWxkIGhhdmUgYSAiaW50ZXJydXB0LWNvbnRyb2xs
+ZXIiIHByb3BlcnR5LCBhbmQNCj4gPj4+ICAgICAgICB0aGUgUENJIHByb3BlcnRpZXMgYXJlIGFs
+c28gZGlmZmVyZW50IGZyb20gUENJIGJpbmRpbmdzLg0KPiA+PiBUaGUgZmR0IHByb3BlcnRpZXMg
+YXJlIGRlZmluZWQgZm9yIEFsdmVvIGZpcm13YXJlIGZpbGVzLiBYUlQgZHJpdmVyDQo+ID4+IGlz
+IHRoZSBvbmx5IGNvbnN1bWVyIG9mIHRoaXMgZGF0YS4gSSBhbSB3b25kZXJpbmcgaWYNCj4gPiBQ
+ZXJzb25hbGx5IEkgZG9uJ3QgbGlrZSB0aGUgaWRlYSBvZiBhIGRpZmZlcmVudCBiaW5kaW5nIGRl
+ZmluaXRpb24NCj4gPiBzZXQsIGV2ZW4gaWYgdGhlIG5ldyBkZXZpY2UgdHJlZSB1c2FnZSBpcyBh
+Y2NlcHRlZC4gV2UgYWxsIHVzZSBkZXZpY2UNCj4gPiB0cmVlIGZvciBkZXZpY2UgZW51bWVyYXRp
+b24sIHNvIHdoeSB0aGUgZGlmZmVyZW50IGRlZmluaXRpb25zLg0KPiA+DQo+ID4gVGhhbmtzLA0K
+PiA+IFlpbHVuDQo+ID4NCj4gPj4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzIGlz
+IHRoZSByaWdodCBwbGFjZSBmb3IgQWx2ZW8vWFJUDQo+ID4+IHByaXZhdGUgZm9ybWF0IG9yIHNo
+b3VsZCBpdCBiZSBkb2N1bWVudGVkIGFzIHBhcnQgb2YgWFJUIGRyaXZlcg0KPiBkb2N1bWVudGF0
+aW9uPw0KPiA+PiBMb29raW5nIGZvciBndWlkYW5jZSBoZXJlLg0KPiA+Pg0KPiA+Pg0KPiA+PiBU
+aGFua3MsDQo+ID4+DQo+ID4+IExpemhpDQo+ID4+DQo+ID4+PiBUaGFua3MsDQo+ID4+PiBZaWx1
+bg0KPiA+Pj4NCj4gPj4+PiArDQo+ID4+Pj4gK0xvZ2ljIFVVSUQNCj4gPj4+PiArXl5eXl5eXl5e
+Xg0KPiA+Pj4+ICtBIHBhcnRpdGlvbiBpcyBpZGVudGlmaWVkIHVuaXF1ZWx5IHRocm91Z2ggYGBs
+b2dpY191dWlkYGAgcHJvcGVydHk6Og0KPiA+Pj4+ICsNCj4gPj4+PiArICAvZHRzLXYxLzsNCj4g
+Pj4+PiArICAvIHsNCj4gPj4+PiArICAgICAgbG9naWNfdXVpZCA9ICIwMTIzNDU2Nzg5YWJjZGVm
+MDEyMzQ1Njc4OWFiY2RlZiI7DQo+ID4+Pj4gKyAgICAgIC4uLg0KPiA+Pj4+ICsgICAgfQ0KPiA+
+Pj4+ICsNCj4gPj4+PiArU2NoZW1hIFZlcnNpb24NCj4gPj4+PiArXl5eXl5eXl5eXl5eXl4NCj4g
+Pj4+PiArU2NoZW1hIHZlcnNpb24gaXMgZGVmaW5lZCB0aHJvdWdoIHRoZSBgYHNjaGVtYV92ZXJz
+aW9uYGAgbm9kZS4gSXQNCj4gPj4+PiArY29udGFpbnMgYGBtYWpvcmBgIGFuZCBgYG1pbm9yYGAg
+cHJvcGVydGllcyBhcyBiZWxvdzo6DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgIC9kdHMtdjEvOw0KPiA+
+Pj4+ICsgIC8gew0KPiA+Pj4+ICsgICAgICAgc2NoZW1hX3ZlcnNpb24gew0KPiA+Pj4+ICsgICAg
+ICAgICAgIG1ham9yID0gPDB4MDE+Ow0KPiA+Pj4+ICsgICAgICAgICAgIG1pbm9yID0gPDB4MDA+
+Ow0KPiA+Pj4+ICsgICAgICAgfTsNCj4gPj4+PiArICAgICAgIC4uLg0KPiA+Pj4+ICsgICAgfQ0K
+PiA+Pj4+ICsNCj4gPj4+PiArLi4gX3BhcnRpdGlvbl91dWlkczoNCj4gPj4+PiArDQo+ID4+Pj4g
+K1BhcnRpdGlvbiBVVUlEcw0KPiA+Pj4+ICteXl5eXl5eXl5eXl5eXl4NCj4gPj4+PiArRWFjaCBw
+YXJ0aXRpb24gbWF5IGhhdmUgcGFyZW50IGFuZCBjaGlsZCBVVUlEcy4gVGhlc2UgVVVJRHMgYXJl
+DQo+ID4+Pj4gK2RlZmluZWQgYnkgYGBpbnRlcmZhY2VzYGAgbm9kZSBhbmQgYGBpbnRlcmZhY2Vf
+dXVpZGBgIHByb3BlcnR5OjoNCj4gPj4+PiArDQo+ID4+Pj4gKyAgL2R0cy12MS87DQo+ID4+Pj4g
+KyAgLyB7DQo+ID4+Pj4gKyAgICAgICBpbnRlcmZhY2VzIHsNCj4gPj4+PiArICAgICAgICAgICBA
+MCB7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgIGludGVyZmFjZV91dWlkID0gIjAxMjM0NTY3
+ODlhYmNkZWYwMTIzNDU2Nzg5YWJjZGVmIjsNCj4gPj4+PiArICAgICAgICAgICB9Ow0KPiA+Pj4+
+ICsgICAgICAgICAgIEAxIHsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgaW50ZXJmYWNlX3V1
+aWQgPSAiZmVkY2JhOTg3NjU0MzIxMGZlZGNiYTk4NzY1NDMyMTAiOw0KPiA+Pj4+ICsgICAgICAg
+ICAgIH07DQo+ID4+Pj4gKyAgICAgICAgICAgLi4uDQo+ID4+Pj4gKyAgICAgICAgfTsNCj4gPj4+
+PiArICAgICAgIC4uLg0KPiA+Pj4+ICsgICAgfQ0KPiA+Pj4+ICsNCj4gPj4+PiArDQo+ID4+Pj4g
+K1N1YnN5c3RlbSBJbnN0YW50aWF0aW9ucw0KPiA+Pj4+ICteXl5eXl5eXl5eXl5eXl5eXl5eXl5e
+Xl4NCj4gPj4+PiArU3Vic3lzdGVtIGluc3RhbnRpYXRpb25zIGFyZSBjYXB0dXJlZCBhcyBjaGls
+ZHJlbiBvZg0KPiA+Pj4+ICtgYGFkZHJlc3NhYmxlX2VuZHBvaW50c2BgDQo+ID4+Pj4gK25vZGU6
+Og0KPiA+Pj4+ICsNCj4gPj4+PiArICAvZHRzLXYxLzsNCj4gPj4+PiArICAvIHsNCj4gPj4+PiAr
+ICAgICAgIGFkZHJlc3NhYmxlX2VuZHBvaW50cyB7DQo+ID4+Pj4gKyAgICAgICAgICAgYWJjIHsN
+Cj4gPj4+PiArICAgICAgICAgICAgICAgLi4uDQo+ID4+Pj4gKyAgICAgICAgICAgfTsNCj4gPj4+
+PiArICAgICAgICAgICBkZWYgew0KPiA+Pj4+ICsgICAgICAgICAgICAgICAuLi4NCj4gPj4+PiAr
+ICAgICAgICAgICB9Ow0KPiA+Pj4+ICsgICAgICAgICAgIC4uLg0KPiA+Pj4+ICsgICAgICAgfQ0K
+PiA+Pj4+ICsgIH0NCj4gPj4+PiArDQo+ID4+Pj4gK1N1Ym5vZGUgJ2FiYycgYW5kICdkZWYnIGFy
+ZSB0aGUgbmFtZSBvZiBzdWJzeXN0ZW0gbm9kZXMNCj4gPj4+PiArDQo+ID4+Pj4gK1N1YnN5c3Rl
+bSBOb2RlDQo+ID4+Pj4gK15eXl5eXl5eXl5eXl5eDQo+ID4+Pj4gK0VhY2ggc3Vic3lzdGVtIG5v
+ZGUgYW5kIGl0cyBwcm9wZXJ0aWVzIGRlZmluZSBhIGhhcmR3YXJlIGluc3RhbmNlOjoNCj4gPj4+
+PiArDQo+ID4+Pj4gKw0KPiA+Pj4+ICsgIGFkZHJlc3NhYmxlX2VuZHBvaW50cyB7DQo+ID4+Pj4g
+KyAgICAgIGFiYyB7DQo+ID4+Pj4gKyAgICAgICAgICByZWcgPSA8MHgwMCAweDFmMDUwMDAgMHgw
+MCAweDEwMDA+Pg0KPiA+Pj4+ICsgICAgICAgICAgcGNpZV9waHlzaWNhbF9mdW5jdGlvbiA9IDww
+eDA+Ow0KPiA+Pj4+ICsgICAgICAgICAgcGNpZV9iYXJfbWFwcGluZyA9IDwweDI+Ow0KPiA+Pj4+
+ICsgICAgICAgICAgY29tcGF0aWJsZSA9ICJhYmMgZGVmIjsNCj4gPj4+PiArICAgICAgICAgIGlu
+dGVycnVwdHMgPSA8MHgwOSAweDBjPjsNCj4gPj4+PiArICAgICAgICAgIGZpcm13YXJlIHsNCj4g
+Pj4+PiArICAgICAgICAgICAgICBmaXJtd2FyZV9wcm9kdWN0X25hbWUgPSAiYWJjIg0KPiA+Pj4+
+ICsgICAgICAgICAgICAgIGZpcm13YXJlX2JyYW5jaF9uYW1lID0gImRlZiINCj4gPj4+PiArICAg
+ICAgICAgICAgICBmaXJtd2FyZV92ZXJzaW9uX21ham9yID0gPDE+DQo+ID4+Pj4gKyAgICAgICAg
+ICAgICAgZmlybXdhcmVfdmVyc2lvbl9taW5vciA9IDwyPg0KPiA+Pj4+ICsgICAgICAgICAgfTsN
+Cj4gPj4+PiArICAgICAgfQ0KPiA+Pj4+ICsgICAgICAuLi4NCj4gPj4+PiArICB9DQo+ID4+Pj4g
+Kw0KPiA+Pj4+ICs6cmVnOg0KPiA+Pj4+ICsgUHJvcGVydHkgZGVmaW5lcyBhbiBhZGRyZXNzIHJh
+bmdlLiBgPDB4MDAgMHgxZjA1MDAwIDB4MDAgMHgxMDAwPmANCj4gPj4+PiAraW5kaWNhdGVzDQo+
+ID4+Pj4gKyAqMHgwMCAweDFmMDUwMDAqIGFzIEJBUiBvZmZzZXQgYW5kICoweDAwIDB4MTAwMCog
+YXMgYWRkcmVzcyBsZW5ndGguDQo+ID4+Pj4gKzpwY2llX3BoeXNpY2FsX2Z1bmN0aW9uOg0KPiA+
+Pj4+ICsgUHJvcGVydHkgc3BlY2lmaWVzIHdoaWNoIFBDSWUgcGh5c2ljYWwgZnVuY3Rpb24gdGhl
+IHN1YnN5c3RlbSBub2RlDQo+IHJlc2lkZXMuDQo+ID4+Pj4gKyBgPDB4MD5gIGltcGxpZXMgcGh5
+c2ljYWwgZnVuY3Rpb24gMC4NCj4gPj4+PiArOnBjaWVfYmFyX21hcHBpbmc6DQo+ID4+Pj4gKyBQ
+cm9wZXJ0eSBzcGVjaWZpZXMgd2hpY2ggUENJZSBCQVIgdGhlIHN1YnN5c3RlbSBub2RlIHJlc2lk
+ZXMuDQo+ID4+Pj4gK2A8MHgyPmAgaW1wbGllcyAgQkFSIDIuIEEgdmFsdWUgb2YgMCBtZWFucyB0
+aGUgcHJvcGVydHkgaXMgbm90IGRlZmluZWQuDQo+ID4+Pj4gKzpjb21wYXRpYmxlOg0KPiA+Pj4+
+ICsgUHJvcGVydHkgaXMgYSBsaXN0IG9mIHN0cmluZ3MuIFRoZSBmaXJzdCBzdHJpbmcgaW4gdGhl
+IGxpc3QNCj4gPj4+PiArc3BlY2lmaWVzIHRoZSBleGFjdCAgc3Vic3lzdGVtIG5vZGUuIFRoZSBm
+b2xsb3dpbmcgc3RyaW5ncw0KPiA+Pj4+ICtyZXByZXNlbnQgb3RoZXIgZGV2aWNlcyB0aGF0IHRo
+ZSBkZXZpY2UgIGlzIGNvbXBhdGlibGUgd2l0aC4NCj4gPj4+PiArOmludGVycnVwdHM6DQo+ID4+
+Pj4gKyBQcm9wZXJ0eSBzcGVjaWZpZXMgc3RhcnQgYW5kIGVuZCBpbnRlcnJ1cHRzIGZvciB0aGlz
+IHN1YnN5c3RlbSBub2RlLg0KPiA+Pj4+ICsgYDwweDA5IDB4MGM+YCBpbXBsaWVzIGludGVycnVw
+dHMgOSB0byAxMyBhcmUgdXNlZCBieSB0aGlzIHN1YnN5c3RlbS4NCj4gPj4+PiArOmZpcm13YXJl
+Og0KPiA+Pj4+ICsgU3Vibm9kZSBkZWZpbmVzIHRoZSBmaXJtd2FyZSByZXF1aXJlZCBieSB0aGlz
+IHN1YnN5c3RlbSBub2RlLg0KPiA+Pj4+ICsNCj4gPj4+PiArQWx2ZW8gVTUwIFBsYXRmb3JtIEV4
+YW1wbGUNCj4gPj4+PiArXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl4NCj4gPj4+PiArOjoNCj4g
+Pj4+PiArDQo+ID4+Pj4gKyAgL2R0cy12MS87DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgIC97DQo+ID4+
+Pj4gKyAgICAgICAgbG9naWNfdXVpZCA9ICJmNDY1YjBhM2FlOGM2NGY2MTliYzE1MDM4NGFjZTY5
+YiI7DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgICAgICAgIHNjaGVtYV92ZXJzaW9uIHsNCj4gPj4+PiAr
+ICAgICAgICAgICAgICAgIG1ham9yID0gPDB4MDE+Ow0KPiA+Pj4+ICsgICAgICAgICAgICAgICAg
+bWlub3IgPSA8MHgwMD47DQo+ID4+Pj4gKyAgICAgICAgfTsNCj4gPj4+PiArDQo+ID4+Pj4gKyAg
+ICAgICAgaW50ZXJmYWNlcyB7DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgQDAg
+ew0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICBpbnRlcmZhY2VfdXVpZCA9DQo+ICI4
+NjJjNzAyMGEyNTAyOTNlMzIwMzZmMTk5NTY2NjllNSI7DQo+ID4+Pj4gKyAgICAgICAgICAgICAg
+ICB9Ow0KPiA+Pj4+ICsgICAgICAgIH07DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgICAgICAgIGFkZHJl
+c3NhYmxlX2VuZHBvaW50cyB7DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgZXBf
+YmxwX3JvbV8wMCB7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwweDAw
+IDB4MWYwNDAwMCAweDAwIDB4MTAwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAg
+IHBjaWVfcGh5c2ljYWxfZnVuY3Rpb24gPSA8MHgwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAg
+ICAgICAgICAgIGNvbXBhdGlibGUgPSAieGlsaW54LmNvbSxyZWdfYWJzLWF4aV9icmFtX2N0cmwt
+DQo+IDEuMFwwYXhpX2JyYW1fY3RybCI7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICB9Ow0KPiA+
+Pj4+ICsNCj4gPj4+PiArICAgICAgICAgICAgICAgIGVwX2NhcmRfZmxhc2hfcHJvZ3JhbV8wMCB7
+DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwweDAwIDB4MWYwNjAwMCAw
+eDAwIDB4MTAwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHBjaWVfcGh5c2lj
+YWxfZnVuY3Rpb24gPSA8MHgwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGNv
+bXBhdGlibGUgPSAieGlsaW54LmNvbSxyZWdfYWJzLWF4aV9xdWFkX3NwaS0NCj4gMS4wXDBheGlf
+cXVhZF9zcGkiOw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICBpbnRlcnJ1cHRzID0g
+PDB4MDMgMHgwMz47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICB9Ow0KPiA+Pj4+ICsNCj4gPj4+
+PiArICAgICAgICAgICAgICAgIGVwX2NtY19maXJtd2FyZV9tZW1fMDAgew0KPiA+Pj4+ICsgICAg
+ICAgICAgICAgICAgICAgICAgICByZWcgPSA8MHgwMCAweDFlMjAwMDAgMHgwMCAweDIwMDAwPjsN
+Cj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgcGNpZV9waHlzaWNhbF9mdW5jdGlvbiA9
+IDwweDAwPjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9DQo+
+ID4+Pj4gKyAieGlsaW54LmNvbSxyZWdfYWJzLWF4aV9icmFtX2N0cmwtMS4wXDBheGlfYnJhbV9j
+dHJsIjsNCj4gPj4+PiArDQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGZpcm13YXJl
+IHsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBmaXJtd2FyZV9wcm9k
+dWN0X25hbWUgPSAiY21jIjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBmaXJtd2FyZV9icmFuY2hfbmFtZSA9ICJ1NTAiOw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIGZpcm13YXJlX3ZlcnNpb25fbWFqb3IgPSA8MHgwMT47DQo+ID4+Pj4g
+KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmlybXdhcmVfdmVyc2lvbl9taW5vciA9
+IDwweDAwPjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgfTsNCj4gPj4+PiArICAg
+ICAgICAgICAgICAgIH07DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgZXBfY21j
+X2ludGNfMDAgew0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICByZWcgPSA8MHgwMCAw
+eDFlMDMwMDAgMHgwMCAweDEwMDA+Ow0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICBw
+Y2llX3BoeXNpY2FsX2Z1bmN0aW9uID0gPDB4MDA+Ow0KPiA+Pj4+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICBjb21wYXRpYmxlID0gInhpbGlueC5jb20scmVnX2Ficy1heGlfaW50Yy0xLjBcMGF4
+aV9pbnRjIjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgaW50ZXJydXB0cyA9IDww
+eDA0IDB4MDQ+Ow0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgfTsNCj4gPj4+PiArDQo+ID4+Pj4g
+KyAgICAgICAgICAgICAgICBlcF9jbWNfbXV0ZXhfMDAgew0KPiA+Pj4+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICByZWcgPSA8MHgwMCAweDFlMDIwMDAgMHgwMCAweDEwMDA+Ow0KPiA+Pj4+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICBwY2llX3BoeXNpY2FsX2Z1bmN0aW9uID0gPDB4MDA+Ow0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gInhpbGlueC5jb20s
+cmVnX2Ficy1heGlfZ3Bpby0xLjBcMGF4aV9ncGlvIjsNCj4gPj4+PiArICAgICAgICAgICAgICAg
+IH07DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgZXBfY21jX3JlZ21hcF8wMCB7
+DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwweDAwIDB4MWUwODAwMCAw
+eDAwIDB4MjAwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHBjaWVfcGh5c2lj
+YWxfZnVuY3Rpb24gPSA8MHgwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGNv
+bXBhdGlibGUgPQ0KPiA+Pj4+ICsgInhpbGlueC5jb20scmVnX2Ficy1heGlfYnJhbV9jdHJsLTEu
+MFwwYXhpX2JyYW1fY3RybCI7DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICBmaXJtd2FyZSB7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ZmlybXdhcmVfcHJvZHVjdF9uYW1lID0gInNjLWZ3IjsNCj4gPj4+PiArICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBmaXJtd2FyZV9icmFuY2hfbmFtZSA9ICJ1NTAiOw0KPiA+Pj4+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZpcm13YXJlX3ZlcnNpb25fbWFqb3IgPSA8
+MHgwNT47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIH07DQo+ID4+Pj4gKyAgICAg
+ICAgICAgICAgICB9Ow0KPiA+Pj4+ICsNCj4gPj4+PiArICAgICAgICAgICAgICAgIGVwX2NtY19y
+ZXNldF8wMCB7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwweDAwIDB4
+MWUwMTAwMCAweDAwIDB4MTAwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHBj
+aWVfcGh5c2ljYWxfZnVuY3Rpb24gPSA8MHgwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgIGNvbXBhdGlibGUgPSAieGlsaW54LmNvbSxyZWdfYWJzLWF4aV9ncGlvLTEuMFwwYXhp
+X2dwaW8iOw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgfTsNCj4gPj4+PiArDQo+ID4+Pj4gKyAg
+ICAgICAgICAgICAgICBlcF9kZHJfbWVtX2NhbGliXzAwIHsNCj4gPj4+PiArICAgICAgICAgICAg
+ICAgICAgICAgICAgcmVnID0gPDB4MDAgMHg2MzAwMCAweDAwIDB4MTAwMD47DQo+ID4+Pj4gKyAg
+ICAgICAgICAgICAgICAgICAgICAgIHBjaWVfcGh5c2ljYWxfZnVuY3Rpb24gPSA8MHgwMD47DQo+
+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAieGlsaW54LmNvbSxy
+ZWdfYWJzLWF4aV9ncGlvLTEuMFwwYXhpX2dwaW8iOw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAg
+fTsNCj4gPj4+PiArDQo+ID4+Pj4gKyAgICAgICAgICAgICAgICBlcF9kZWJ1Z19ic2Nhbl9tZ210
+XzAwIHsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgcmVnID0gPDB4MDAgMHgxZTkw
+MDAwIDB4MDAgMHgxMDAwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHBjaWVf
+cGh5c2ljYWxfZnVuY3Rpb24gPSA8MHgwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgIGNvbXBhdGlibGUgPSAieGlsaW54LmNvbSxyZWdfYWJzLWRlYnVnX2JyaWRnZS0NCj4gMS4w
+XDBkZWJ1Z19icmlkZ2UiOw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgfTsNCj4gPj4+PiArDQo+
+ID4+Pj4gKyAgICAgICAgICAgICAgICBlcF9lcnRfYmFzZV9hZGRyZXNzXzAwIHsNCj4gPj4+PiAr
+ICAgICAgICAgICAgICAgICAgICAgICAgcmVnID0gPDB4MDAgMHgyMTAwMCAweDAwIDB4MTAwMD47
+DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHBjaWVfcGh5c2ljYWxfZnVuY3Rpb24g
+PSA8MHgwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAi
+eGlsaW54LmNvbSxyZWdfYWJzLWF4aV9ncGlvLTEuMFwwYXhpX2dwaW8iOw0KPiA+Pj4+ICsgICAg
+ICAgICAgICAgICAgfTsNCj4gPj4+PiArDQo+ID4+Pj4gKyAgICAgICAgICAgICAgICBlcF9lcnRf
+Y29tbWFuZF9xdWV1ZV9tZ210XzAwIHsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAg
+cmVnID0gPDB4MDAgMHg0MDAwMCAweDAwIDB4MTAwMDA+Ow0KPiA+Pj4+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICBwY2llX3BoeXNpY2FsX2Z1bmN0aW9uID0gPDB4MDA+Ow0KPiA+Pj4+ICsgICAg
+ICAgICAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gInhpbGlueC5jb20scmVnX2Ficy1lcnRf
+Y29tbWFuZF9xdWV1ZS0NCj4gMS4wXDBlcnRfY29tbWFuZF9xdWV1ZSI7DQo+ID4+Pj4gKyAgICAg
+ICAgICAgICAgICB9Ow0KPiA+Pj4+ICsNCj4gPj4+PiArICAgICAgICAgICAgICAgIGVwX2VydF9j
+b21tYW5kX3F1ZXVlX3VzZXJfMDAgew0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICBy
+ZWcgPSA8MHgwMCAweDQwMDAwIDB4MDAgMHgxMDAwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAg
+ICAgICAgICAgIHBjaWVfcGh5c2ljYWxfZnVuY3Rpb24gPSA8MHgwMT47DQo+ID4+Pj4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAieGlsaW54LmNvbSxyZWdfYWJzLWVydF9j
+b21tYW5kX3F1ZXVlLQ0KPiAxLjBcMGVydF9jb21tYW5kX3F1ZXVlIjsNCj4gPj4+PiArICAgICAg
+ICAgICAgICAgIH07DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgZXBfZXJ0X2Zp
+cm13YXJlX21lbV8wMCB7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDww
+eDAwIDB4MzAwMDAgMHgwMCAweDgwMDA+Ow0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAg
+ICBwY2llX3BoeXNpY2FsX2Z1bmN0aW9uID0gPDB4MDA+Ow0KPiA+Pj4+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICBjb21wYXRpYmxlID0NCj4gPj4+PiArICJ4aWxpbnguY29tLHJlZ19hYnMtYXhp
+X2JyYW1fY3RybC0xLjBcMGF4aV9icmFtX2N0cmwiOw0KPiA+Pj4+ICsNCj4gPj4+PiArICAgICAg
+ICAgICAgICAgICAgICAgICAgZmlybXdhcmUgew0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIGZpcm13YXJlX3Byb2R1Y3RfbmFtZSA9ICJlcnQiOw0KPiA+Pj4+ICsgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZpcm13YXJlX2JyYW5jaF9uYW1lID0gInYyMCI7
+DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmlybXdhcmVfdmVyc2lv
+bl9tYWpvciA9IDwweDAxPjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgfTsNCj4g
+Pj4+PiArICAgICAgICAgICAgICAgIH07DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgICAgICAgICAgICAg
+ICAgZXBfZXJ0X2ludGNfMDAgew0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICByZWcg
+PSA8MHgwMCAweDIzMDAwIDB4MDAgMHgxMDAwPjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAg
+ICAgICAgcGNpZV9waHlzaWNhbF9mdW5jdGlvbiA9IDwweDAwPjsNCj4gPj4+PiArICAgICAgICAg
+ICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJ4aWxpbnguY29tLHJlZ19hYnMtYXhpX2ludGMt
+MS4wXDBheGlfaW50YyI7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGludGVycnVw
+dHMgPSA8MHgwNSAweDA1PjsNCj4gPj4+PiArICAgICAgICAgICAgICAgIH07DQo+ID4+Pj4gKw0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgZXBfZXJ0X3Jlc2V0XzAwIHsNCj4gPj4+PiArICAgICAg
+ICAgICAgICAgICAgICAgICAgcmVnID0gPDB4MDAgMHgyMjAwMCAweDAwIDB4MTAwMD47DQo+ID4+
+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHBjaWVfcGh5c2ljYWxfZnVuY3Rpb24gPSA8MHgw
+MD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAieGlsaW54
+LmNvbSxyZWdfYWJzLWF4aV9ncGlvLTEuMFwwYXhpX2dwaW8iOw0KPiA+Pj4+ICsgICAgICAgICAg
+ICAgICAgfTsNCj4gPj4+PiArDQo+ID4+Pj4gKyAgICAgICAgICAgICAgICBlcF9lcnRfc2NoZWRf
+MDAgew0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICByZWcgPSA8MHgwMCAweDUwMDAw
+IDB4MDAgMHgxMDAwPjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgcGNpZV9waHlz
+aWNhbF9mdW5jdGlvbiA9IDwweDAxPjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAg
+Y29tcGF0aWJsZSA9ICJ4aWxpbnguY29tLHJlZ19hYnMtZXJ0X3NjaGVkLQ0KPiAxLjBcMGVydF9z
+Y2hlZCI7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGludGVycnVwdHMgPSA8MHgw
+OSAweDBjPjsNCj4gPj4+PiArICAgICAgICAgICAgICAgIH07DQo+ID4+Pj4gKw0KPiA+Pj4+ICsg
+ICAgICAgICAgICAgICAgZXBfZnBnYV9jb25maWd1cmF0aW9uXzAwIHsNCj4gPj4+PiArICAgICAg
+ICAgICAgICAgICAgICAgICAgcmVnID0gPDB4MDAgMHgxZTg4MDAwIDB4MDAgMHg4MDAwPjsNCj4g
+Pj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgcGNpZV9waHlzaWNhbF9mdW5jdGlvbiA9IDww
+eDAwPjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJ4aWxp
+bnguY29tLHJlZ19hYnMtYXhpX2h3aWNhcC0NCj4gMS4wXDBheGlfaHdpY2FwIjsNCj4gPj4+PiAr
+ICAgICAgICAgICAgICAgICAgICAgICAgaW50ZXJydXB0cyA9IDwweDAyIDB4MDI+Ow0KPiA+Pj4+
+ICsgICAgICAgICAgICAgICAgfTsNCj4gPj4+PiArDQo+ID4+Pj4gKyAgICAgICAgICAgICAgICBl
+cF9pY2FwX3Jlc2V0XzAwIHsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgcmVnID0g
+PDB4MDAgMHgxZjA3MDAwIDB4MDAgMHgxMDAwPjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAg
+ICAgICAgcGNpZV9waHlzaWNhbF9mdW5jdGlvbiA9IDwweDAwPjsNCj4gPj4+PiArICAgICAgICAg
+ICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJ4aWxpbnguY29tLHJlZ19hYnMtYXhpX2dwaW8t
+MS4wXDBheGlfZ3BpbyI7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICB9Ow0KPiA+Pj4+ICsNCj4g
+Pj4+PiArICAgICAgICAgICAgICAgIGVwX21zaXhfMDAgew0KPiA+Pj4+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICByZWcgPSA8MHgwMCAweDAwIDB4MDAgMHgyMDAwMD47DQo+ID4+Pj4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgIHBjaWVfcGh5c2ljYWxfZnVuY3Rpb24gPSA8MHgwMD47DQo+ID4+
+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAieGlsaW54LmNvbSxyZWdf
+YWJzLW1zaXgtMS4wXDBtc2l4IjsNCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgcGNp
+ZV9iYXJfbWFwcGluZyA9IDwweDAyPjsNCj4gPj4+PiArICAgICAgICAgICAgICAgIH07DQo+ID4+
+Pj4gKw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgZXBfcGNpZV9saW5rX21vbl8wMCB7DQo+ID4+
+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwweDAwIDB4MWYwNTAwMCAweDAwIDB4
+MTAwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHBjaWVfcGh5c2ljYWxfZnVu
+Y3Rpb24gPSA8MHgwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGNvbXBhdGli
+bGUgPSAieGlsaW54LmNvbSxyZWdfYWJzLWF4aV9ncGlvLTEuMFwwYXhpX2dwaW8iOw0KPiA+Pj4+
+ICsgICAgICAgICAgICAgICAgfTsNCj4gPj4+PiArDQo+ID4+Pj4gKyAgICAgICAgICAgICAgICBl
+cF9wcl9pc29sYXRlX3BscF8wMCB7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHJl
+ZyA9IDwweDAwIDB4MWYwMTAwMCAweDAwIDB4MTAwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAg
+ICAgICAgICAgIHBjaWVfcGh5c2ljYWxfZnVuY3Rpb24gPSA8MHgwMD47DQo+ID4+Pj4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAieGlsaW54LmNvbSxyZWdfYWJzLWF4aV9n
+cGlvLTEuMFwwYXhpX2dwaW8iOw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgfTsNCj4gPj4+PiAr
+DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICBlcF9wcl9pc29sYXRlX3VscF8wMCB7DQo+ID4+Pj4g
+KyAgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwweDAwIDB4MTAwMCAweDAwIDB4MTAwMD47
+DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHBjaWVfcGh5c2ljYWxfZnVuY3Rpb24g
+PSA8MHgwMD47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAi
+eGlsaW54LmNvbSxyZWdfYWJzLWF4aV9ncGlvLTEuMFwwYXhpX2dwaW8iOw0KPiA+Pj4+ICsgICAg
+ICAgICAgICAgICAgfTsNCj4gPj4+PiArDQo+ID4+Pj4gKyAgICAgICAgICAgICAgICBlcF91dWlk
+X3JvbV8wMCB7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwweDAwIDB4
+NjQwMDAgMHgwMCAweDEwMDA+Ow0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICBwY2ll
+X3BoeXNpY2FsX2Z1bmN0aW9uID0gPDB4MDA+Ow0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICBjb21wYXRpYmxlID0gInhpbGlueC5jb20scmVnX2Ficy1heGlfYnJhbV9jdHJsLQ0KPiAx
+LjBcMGF4aV9icmFtX2N0cmwiOw0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgfTsNCj4gPj4+PiAr
+DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICBlcF94ZG1hXzAwIHsNCj4gPj4+PiArICAgICAgICAg
+ICAgICAgICAgICAgICAgcmVnID0gPDB4MDAgMHgwMCAweDAwIDB4MTAwMDA+Ow0KPiA+Pj4+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICBwY2llX3BoeXNpY2FsX2Z1bmN0aW9uID0gPDB4MDE+Ow0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gInhpbGlueC5jb20s
+cmVnX2Ficy14ZG1hLTEuMFwweGRtYSI7DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAg
+IHBjaWVfYmFyX21hcHBpbmcgPSA8MHgwMj47DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICB9Ow0K
+PiA+Pj4+ICsgICAgICAgIH07DQo+ID4+Pj4gKw0KPiA+Pj4+ICsgIH0NCj4gPj4+PiArDQo+ID4+
+Pj4gKw0KPiA+Pj4+ICsNCj4gPj4+PiArRGVwbG95bWVudCBNb2RlbHMNCj4gPj4+PiArPT09PT09
+PT09PT09PT09PT0NCj4gPj4+PiArDQo+ID4+Pj4gK0JhcmVtZXRhbA0KPiA+Pj4+ICstLS0tLS0t
+LS0NCj4gPj4+PiArDQo+ID4+Pj4gK0luIGJhcmUtbWV0YWwgZGVwbG95bWVudHMsIGJvdGggTVBG
+IGFuZCBVUEYgYXJlIHZpc2libGUgYW5kDQo+ID4+Pj4gK2FjY2Vzc2libGUuIFRoZSB4cnQtbWdt
+dCBkcml2ZXIgYmluZHMgdG8gTVBGLiBUaGUgeHJ0LW1nbXQgZHJpdmVyDQo+ID4+Pj4gK29wZXJh
+dGlvbnMgYXJlIHByaXZpbGVnZWQgYW5kIGF2YWlsYWJsZSB0byBzeXN0ZW0gYWRtaW5pc3RyYXRv
+ci4gVGhlIGZ1bGwNCj4gc3RhY2sgaXMgaWxsdXN0cmF0ZWQgYmVsb3c6Og0KPiA+Pj4+ICsNCj4g
+Pj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgIEhPU1QNCj4gPj4+PiArDQo+ID4+Pj4g
+KyAgICAgICAgICAgICAgIFtYUlQtTUdNVF0gICAgICAgICBbWFJULVVTRVJdDQo+ID4+Pj4gKyAg
+ICAgICAgICAgICAgICAgICAgfCAgICAgICAgICAgICAgICAgIHwNCj4gPj4+PiArICAgICAgICAg
+ICAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgfA0KPiA+Pj4+ICsgICAgICAgICAgICAgICAg
+ICstLS0tLSsgICAgICAgICAgICArLS0tLS0rDQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgfCBN
+UEYgfCAgICAgICAgICAgIHwgVVBGIHwNCj4gPj4+PiArICAgICAgICAgICAgICAgICB8ICAgICB8
+ICAgICAgICAgICAgfCAgICAgfA0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgIHwgUEYwIHwgICAg
+ICAgICAgICB8IFBGMSB8DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgKy0tKy0tKyAgICAgICAg
+ICAgICstLSstLSsNCj4gPj4+PiArICAgICAgICAgIC4uLi4uLi4uLiBeLi4uLi4uLi4uLi4uLi4u
+Li4gXi4uLi4uLi4uLi4NCj4gPj4+PiArICAgICAgICAgICAgICAgICAgICB8ICAgICAgICAgICAg
+ICAgICAgfA0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgIHwgICBQQ0llIERFVklDRSAgICB8
+DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgICAgfCAgICAgICAgICAgICAgICAgIHwNCj4gPj4+
+PiArICAgICAgICAgICAgICAgICArLS0rLS0tLS0tLS0tLS0tLS0tLS0tKy0tKw0KPiA+Pj4+ICsg
+ICAgICAgICAgICAgICAgIHwgICAgICAgICBTSEVMTCAgICAgICAgICB8DQo+ID4+Pj4gKyAgICAg
+ICAgICAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4gPj4+PiArICAgICAgICAg
+ICAgICAgICArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKw0KPiA+Pj4+ICsgICAgICAgICAgICAg
+ICAgIHwgICAgICAgICBVU0VSICAgICAgICAgICB8DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAg
+fCAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4gPj4+PiArICAgICAgICAgICAgICAgICB8ICAg
+ICAgICAgICAgICAgICAgICAgICAgfA0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgIHwgICAgICAg
+ICAgICAgICAgICAgICAgICB8DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgfCAgICAgICAgICAg
+ICAgICAgICAgICAgIHwNCj4gPj4+PiArICAgICAgICAgICAgICAgICArLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tKw0KPiA+Pj4+ICsNCj4gPj4+PiArDQo+ID4+Pj4gKw0KPiA+Pj4+ICtWaXJ0dWFs
+aXplZA0KPiA+Pj4+ICstLS0tLS0tLS0tLQ0KPiA+Pj4+ICsNCj4gPj4+PiArSW4gdmlydHVhbGl6
+ZWQgZGVwbG95bWVudHMsIHRoZSBwcml2aWxlZ2VkIE1QRiBpcyBhc3NpZ25lZCB0byB0aGUNCj4g
+Pj4+PiAraG9zdCBidXQgdGhlIHVucHJpdmlsZWdlZCBVUEYgaXMgYXNzaWduZWQgdG8gYSBndWVz
+dCBWTSB2aWEgUENJZQ0KPiA+Pj4+ICtwYXNzLXRocm91Z2guIFRoZSB4cnQtbWdtdCBkcml2ZXIg
+aW4gaG9zdCBiaW5kcyB0byBNUEYuIFRoZQ0KPiA+Pj4+ICt4cnQtbWdtdCBkcml2ZXIgb3BlcmF0
+aW9ucyBhcmUgcHJpdmlsZWdlZCBhbmQgb25seSBhY2Nlc3NpYmxlIHRvIHRoZQ0KPiBNUEYuIFRo
+ZSBmdWxsIHN0YWNrIGlzIGlsbHVzdHJhdGVkIGJlbG93OjoNCj4gPj4+PiArDQo+ID4+Pj4gKw0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAuLi4uLi4uLi4uLi4uLg0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgICBIT1NUICAgICAgICAgICAuICAgIFZNICAgICAgLg0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAuICAgICAgICAgICAgLg0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICBbWFJULU1HTVRdICAgICAgICAuIFtYUlQtVVNFUl0gLg0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgIHwgICAgICAgICAgICAuICAgICB8ICAgICAgLg0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgIHwgICAgICAgICAgICAuICAgICB8ICAgICAgLg0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgICstLS0tLSsgICAgICAgICAuICArLS0tLS0rICAgLg0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgIHwgTVBGIHwgICAgICAgICAuICB8IFVQRiB8ICAgLg0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgIHwgICAgIHwgICAgICAgICAuICB8ICAgICB8ICAgLg0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgIHwgUEYwIHwgICAgICAgICAuICB8IFBGMSB8ICAgLg0K
+PiA+Pj4+ICsgICAgICAgICAgICAgICAgICstLSstLSsgICAgICAgICAuICArLS0rLS0rICAgLg0K
+PiA+Pj4+ICsgICAgICAgICAgLi4uLi4uLi4uIF4uLi4uLi4uLi4uLi4uLi4uLiBeLi4uLi4uLi4u
+Lg0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICAgIHwgICAgICAgICAgICAgICAgICB8DQo+ID4+
+Pj4gKyAgICAgICAgICAgICAgICAgICAgfCAgIFBDSWUgREVWSUNFICAgIHwNCj4gPj4+PiArICAg
+ICAgICAgICAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgfA0KPiA+Pj4+ICsgICAgICAgICAg
+ICAgICAgICstLSstLS0tLS0tLS0tLS0tLS0tLS0rLS0rDQo+ID4+Pj4gKyAgICAgICAgICAgICAg
+ICAgfCAgICAgICAgIFNIRUxMICAgICAgICAgIHwNCj4gPj4+PiArICAgICAgICAgICAgICAgICB8
+ICAgICAgICAgICAgICAgICAgICAgICAgfA0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICstLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0rDQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgfCAgICAgICAg
+IFVTRVIgICAgICAgICAgIHwNCj4gPj4+PiArICAgICAgICAgICAgICAgICB8ICAgICAgICAgICAg
+ICAgICAgICAgICAgfA0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgIHwgICAgICAgICAgICAgICAg
+ICAgICAgICB8DQo+ID4+Pj4gKyAgICAgICAgICAgICAgICAgfCAgICAgICAgICAgICAgICAgICAg
+ICAgIHwNCj4gPj4+PiArICAgICAgICAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAg
+fA0KPiA+Pj4+ICsgICAgICAgICAgICAgICAgICstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rDQo+
+ID4+Pj4gKw0KPiA+Pj4+ICsNCj4gPj4+PiArDQo+ID4+Pj4gKw0KPiA+Pj4+ICsNCj4gPj4+PiAr
+UGxhdGZvcm0gU2VjdXJpdHkgQ29uc2lkZXJhdGlvbnMNCj4gPj4+PiArPT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT0NCj4gPj4+PiArDQo+ID4+Pj4gK2BTZWN1cml0eSBvZiBBbHZlbyBQ
+bGF0Zm9ybQ0KPiA+Pj4+ICs8aHR0cHM6Ly94aWxpbnguZ2l0aHViLmlvL1hSVC9tYXN0ZXIvaHRt
+bC9zZWN1cml0eS5odG1sPmBfDQo+ID4+Pj4gK2Rpc2N1c3NlcyB0aGUgZGVwbG95bWVudCBvcHRp
+b25zIGFuZCBzZWN1cml0eSBpbXBsaWNhdGlvbnMgaW4gZ3JlYXQNCj4gZGV0YWlsLg0KPiA+Pj4+
+IGRpZmYgLS1naXQgYS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJTIGluZGV4DQo+ID4+Pj4gMDU2
+OTY2YzlhYWM5Li5iZWVhZjAyNTczNjQgMTAwNjQ0DQo+ID4+Pj4gLS0tIGEvTUFJTlRBSU5FUlMN
+Cj4gPj4+PiArKysgYi9NQUlOVEFJTkVSUw0KPiA+Pj4+IEBAIC03Mjc0LDYgKzcyNzQsMTcgQEAg
+RjogICAgIERvY3VtZW50YXRpb24vZnBnYS8NCj4gPj4+PiAgICBGOiAgIGRyaXZlcnMvZnBnYS8N
+Cj4gPj4+PiAgICBGOiAgIGluY2x1ZGUvbGludXgvZnBnYS8NCj4gPj4+Pg0KPiA+Pj4+ICtGUEdB
+IFhSVCBEUklWRVJTDQo+ID4+Pj4gK006ICAgTGl6aGkgSG91IDxsaXpoaS5ob3VAeGlsaW54LmNv
+bT4NCj4gPj4+PiArUjogICBNYXggWmhlbiA8bWF4LnpoZW5AeGlsaW54LmNvbT4NCj4gPj4+PiAr
+UjogICBTb25hbCBTYW50YW4gPHNvbmFsLnNhbnRhbkB4aWxpbnguY29tPg0KPiA+Pj4+ICtMOiAg
+IGxpbnV4LWZwZ2FAdmdlci5rZXJuZWwub3JnDQo+ID4+Pj4gK1M6ICAgU3VwcG9ydGVkDQo+ID4+
+Pj4gK1c6ICAgaHR0cHM6Ly9naXRodWIuY29tL1hpbGlueC9YUlQNCj4gPj4+PiArRjogICBEb2N1
+bWVudGF0aW9uL2ZwZ2EveHJ0LnJzdA0KPiA+Pj4+ICtGOiAgIGRyaXZlcnMvZnBnYS94cnQvDQo+
+ID4+Pj4gK0Y6ICAgaW5jbHVkZS91YXBpL2xpbnV4L3hydC8NCj4gPj4+PiArDQo+ID4+Pj4gICAg
+RlBVIEVNVUxBVE9SDQo+ID4+Pj4gICAgTTogICBCaWxsIE1ldHplbnRoZW4gPGJpbGxtQG1lbGJw
+Yy5vcmcuYXU+DQo+ID4+Pj4gICAgUzogICBNYWludGFpbmVkDQo+ID4+Pj4gLS0NCj4gPj4+PiAy
+LjI3LjANCg==
