@@ -2,146 +2,138 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 856FB435020
-	for <lists+linux-fpga@lfdr.de>; Wed, 20 Oct 2021 18:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE5043556E
+	for <lists+linux-fpga@lfdr.de>; Wed, 20 Oct 2021 23:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbhJTQ3k (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 20 Oct 2021 12:29:40 -0400
-Received: from mga09.intel.com ([134.134.136.24]:38205 "EHLO mga09.intel.com"
+        id S230484AbhJTVpW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 20 Oct 2021 17:45:22 -0400
+Received: from mga11.intel.com ([192.55.52.93]:8388 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229943AbhJTQ3h (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 20 Oct 2021 12:29:37 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10143"; a="228697415"
+        id S230288AbhJTVpW (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 20 Oct 2021 17:45:22 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10143"; a="226347829"
 X-IronPort-AV: E=Sophos;i="5.87,167,1631602800"; 
-   d="scan'208";a="228697415"
+   d="scan'208";a="226347829"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2021 09:27:23 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2021 14:43:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,167,1631602800"; 
-   d="scan'208";a="594726300"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga004.jf.intel.com with ESMTP; 20 Oct 2021 09:27:22 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+   d="scan'208";a="594824406"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga004.jf.intel.com with ESMTP; 20 Oct 2021 14:43:06 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Wed, 20 Oct 2021 09:27:22 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ 15.1.2242.12; Wed, 20 Oct 2021 14:43:05 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Wed, 20 Oct 2021 09:27:22 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2242.12 via Frontend Transport; Wed, 20 Oct 2021 14:43:05 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.48) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Wed, 20 Oct 2021 09:27:22 -0700
+ 15.1.2242.12; Wed, 20 Oct 2021 14:43:05 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eoPkl7rAdWWXPItfdZnnialXvie8TNZy3JF7n/tZg9LfykpSGeyDXFMLvq53va8WAwm8X0u5DKJSB4EQtZXVqxS0GPebbfaI1bUTIDDkToeA7LfrKy+Ryoe8Ym0EDvE5AtNVfIxfSHeFeMaKinOT9ZIvgBhFwtrfM2EUzhfAHa43lii+uccva6F20HfI4TE/nA09LBNntS4SiubXeMozbODBhAE8DEOtKnVjbUZbg8iiKkBYPRrkdkgeWXsh4Cx37keL1brjl1Dcnn07tZ230rbb1FYEipEOHef7IEpgFvfxg8pfG9UTyO83gBmm55EuE1qVtrNXWlOFpmjcQE0pLQ==
+ b=deRwl19AnM5GLfUkdySj1woXj1fn/HpomPyrGZFaYjYrjUi4QmhT/gtWAY6RgvDLQbtxZ4BKfkBnVRBcx2f1NELMArNPb4G2h40mqjt6zVqq/zr88X/RXyTt7TGl905SlAF0b6oUsWXqBCOVnq0YlgzPI7sHQUuOuT2ezJ4qFKa4ZR95M6plS4GiDdcc4ZLDYBj3hkxj8SaceEqvHE0npkod0v5V9VOsbL2pyvNif591RDWvP7EXZMqYtaD1gdTgjK8Nd6Yjp4/zsiz1LZzok+xMSlPTQPA3dcsZimlbShXMcjFYCI4WUBqMAO31lsruZuptF2DIwp5bichUj5B3MQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IVMMAzHqtpw2lXJHuto403CNKr7uB3rQBooVUc2oFYk=;
- b=hi0sKKJvRUqLBmferNVHoazIwj/nFHL6+ehW7sz3fw8tsDrXr0Bg37n8Qh6wqkEeGcxfHGL/xsHHqi+YK8VNCwZ6/VTZKsJh3t9kbgsFQn4xtpAAlEjtCBZOMquLVS1y1IE2skXqzRITtPZ7RwowqueMhhM3sYQZFJdU1uNn+dePEf1djNJCdFu4faQHSFg9LfKA9ZfGeYs3/k5jRPLPem8QMMB75Qh62CzmTf3LuzLcGNt0TuM55oFx2TSNkhVKZHE8URF2wU8uC4zp8HkHQP0hvrk5ovmxxNWeBDHwy5aQvrdGGDT5pDgoamBXx2UnruV+lWe9gbgQcLXCxwlt7w==
+ bh=c/0eTOwM/znGj2PaeAxuHnfJE0cK2oL76dHNqW81jBU=;
+ b=EMzT3Varr0vaPXesHqgwtV36EAzNG0EAIbt6WVj/0MmqeMhd7Rm9oEMC5x5QAvSoTBeTSWufyahSuz9WRaeIfhiyTbNbSWvFAvG673NCIWt3QO5uOcdrMTQ7yE1vNUHpKSe3T3juTnI1M1nSQhkPsp9KD7Mm3IzT3d2+ATu/MGp8l+2bvr9kzDRAuXivGPxxT0ligqmkPz8LLtattrfP05fhpr9tKr91sEaImvrsevMfyVIL2sNNUVcbl+vnooHjtGlyp+LnWSE3xKCkoREbtO/wUAZZYodcz98QLexkVtNszTf2u19yBC4Kp15befGOveVEiQGZLlWe2hStdusm4Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
  s=selector2-intel-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IVMMAzHqtpw2lXJHuto403CNKr7uB3rQBooVUc2oFYk=;
- b=EokZsg7S37jrDU153Kb7LiRhf39yFlrqyewdOcWH6l0cWg9icO4WuznbzRNLEvr8LiR1BDZM/TOrEHP01fUa2yL1Sf/eaqXrrwCb7JDZwh3UFJ/RvJONg2NcsE8hVMs/xSPyBBwpdGofX1vGHATe9fA7HRgJzYJa/0cxryhAaKM=
+ bh=c/0eTOwM/znGj2PaeAxuHnfJE0cK2oL76dHNqW81jBU=;
+ b=PV3oHLsiWBd3lVzuwcFqvccf3ma+U/QGP2QWbUF8wTUABh6Qrat+54J0Y0jQZs70WecY9qbEXowFHgT7FRMmj/er9FIIQ56p6zKjYgG5z1D4xG9HbxOuyqAit7Mhva3Y2nt4RZa6dkPJOf89i7nZOMgfbL+fFJrXpkCZMKexfj4=
 Authentication-Results: intel.com; dkim=none (message not signed)
  header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
 Received: from SA2PR11MB5163.namprd11.prod.outlook.com (2603:10b6:806:113::20)
- by SN6PR11MB2893.namprd11.prod.outlook.com (2603:10b6:805:dc::23) with
+ by SA2PR11MB5036.namprd11.prod.outlook.com (2603:10b6:806:114::24) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.17; Wed, 20 Oct
- 2021 16:27:11 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.16; Wed, 20 Oct
+ 2021 21:43:01 +0000
 Received: from SA2PR11MB5163.namprd11.prod.outlook.com
  ([fe80::a039:c121:4dce:5def]) by SA2PR11MB5163.namprd11.prod.outlook.com
  ([fe80::a039:c121:4dce:5def%7]) with mapi id 15.20.4608.018; Wed, 20 Oct 2021
- 16:27:11 +0000
-Subject: Re: [PATCH v17 0/5] FPGA Image Load (previously Security Manager)
-To:     Xu Yilun <yilun.xu@intel.com>
-CC:     Tom Rix <trix@redhat.com>, <mdf@kernel.org>,
-        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lgoncalv@redhat.com>, <hao.wu@intel.com>,
-        <matthew.gerlach@intel.com>
-References: <20211013010617.GE95330@yilunxu-OptiPlex-7050>
- <58036b2d-ca8f-2deb-f1b4-0301d633714b@intel.com>
- <20211014014947.GF95330@yilunxu-OptiPlex-7050>
- <7d1971d0-b50b-077f-2a82-83d822cd2ad7@intel.com>
- <20211015025140.GH95330@yilunxu-OptiPlex-7050>
- <2b26bea5-60d3-6763-00e8-9a94fa0bf45b@intel.com>
- <20211018081356.GB40070@yilunxu-OptiPlex-7050>
- <301850cf-9f34-530b-bd9c-fbe9bf9feee5@intel.com>
- <20211019025356.GC40070@yilunxu-OptiPlex-7050>
- <85d56e4b-5bed-693d-4f76-027173a6e7a0@intel.com>
- <20211020011608.GA145760@yilunxu-OptiPlex-7050>
+ 21:43:01 +0000
+Subject: Re: [PATCH v17 4/5] fpga: image-load: add status ioctl
+To:     Lizhi Hou <lizhi.hou@xilinx.com>, <mdf@kernel.org>,
+        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <trix@redhat.com>, <lgoncalv@redhat.com>, <yilun.xu@intel.com>,
+        <hao.wu@intel.com>, <matthew.gerlach@intel.com>
+References: <20210929230025.68961-1-russell.h.weight@intel.com>
+ <20210929230025.68961-5-russell.h.weight@intel.com>
+ <97bb3fb5-3807-386d-d2c8-fec9c077a255@xilinx.com>
 From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <38cfb530-8826-7890-da59-c1dd33b9cc7d@intel.com>
-Date:   Wed, 20 Oct 2021 09:27:17 -0700
+Message-ID: <1e94cff5-ed53-bab7-1bb1-321ba833ea1e@intel.com>
+Date:   Wed, 20 Oct 2021 14:42:57 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.13.0
-In-Reply-To: <20211020011608.GA145760@yilunxu-OptiPlex-7050>
+In-Reply-To: <97bb3fb5-3807-386d-d2c8-fec9c077a255@xilinx.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-X-ClientProxiedBy: TYAPR01CA0053.jpnprd01.prod.outlook.com
- (2603:1096:404:2b::17) To SA2PR11MB5163.namprd11.prod.outlook.com
+X-ClientProxiedBy: TYBP286CA0019.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:404:ce::31) To SA2PR11MB5163.namprd11.prod.outlook.com
  (2603:10b6:806:113::20)
 MIME-Version: 1.0
-Received: from [10.0.2.4] (50.43.42.212) by TYAPR01CA0053.jpnprd01.prod.outlook.com (2603:1096:404:2b::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.15 via Frontend Transport; Wed, 20 Oct 2021 16:27:09 +0000
+Received: from [10.0.2.4] (50.43.42.212) by TYBP286CA0019.JPNP286.PROD.OUTLOOK.COM (2603:1096:404:ce::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.15 via Frontend Transport; Wed, 20 Oct 2021 21:42:58 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 87ce3000-5683-454d-71b2-08d993e6780b
-X-MS-TrafficTypeDiagnostic: SN6PR11MB2893:
+X-MS-Office365-Filtering-Correlation-Id: 11a35379-3c6c-498e-cec1-08d9941296d8
+X-MS-TrafficTypeDiagnostic: SA2PR11MB5036:
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <SN6PR11MB2893D30470E8D3807F6F2F1EC5BE9@SN6PR11MB2893.namprd11.prod.outlook.com>
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <SA2PR11MB5036998F6DF0FDC781683AD3C5BE9@SA2PR11MB5036.namprd11.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zj8chnvGTAWWuaQGRo1W7XQilQulOmMP2Kwqs9SwPzHqL0U10NmMrtw4DSk1qnyBuFHtPVg/q6fJEQVqGZpbRYrk1LYDmuTDpvk1k2RQ4FhL/Wd04FjCA7eLW1jPTovRJt2n/XtdLiVD2JLfnDfr1R41qqzaaJ3U8R4rS7Hcr9J9gIIh2WLCcyhf1Jdfl/zhB3JW5t7GE9RoDcBMqi15JEiHOu83gZN7LEsRUiBvhlhWBndz8tO3J6a0J4ZZjWwU+x0xhDDDp1YPyNB3Ygqw4Fr045vd/fG6tmiMJbcN8nBRHiwxQa0cz9vEgsEkPixEkJ0uuymU8+nD+dynUl6pUVzWO/UrpQ6uMW9Mnfbtl9o0Y644U91/JAqfQkgqigtsuRgRjJ588x87BmM4Y33NfnIEbYmPuxA3WrDS616FW10YUrq4Ts4nXAnhmxcs6hz0R455Kf28VbMfkVESttWt40fEFtIMYAsJo+RVGHkgB4TUM2PQl+W58pjeRBwwjclKSPwA3kIQ2slV6tMu3VhOCE5KXdCqPmm7qnjafxfRWXdWV2o78lvZHiZsLONvMp+Aq0hvaVz5kJjSO3rUaLqdzSwROgLUi5ItkdOA5bMl1pAsUUAMM3OxQH/gGrB6PYgFfmX3sFp6fGYpos2Sk/JTfYtyNJNtaAvqtyzNVJSVsE5ReK7T2fadItbdg7VOvES7zZZ6Jlm9YUVHZw6LNJSpHUPIOWmzVy/76dDrSAC0ursoCGinSfhJGKlC/JFK6/y3oW9qRsUSs+GP2JzAUeDOBp7teIuKdBfmfoS75virQUzwcuFaZWaozbdiLtkAAOpWgCs3irap+wyDTR5RMJbHwJ4BQCl1Zn5kKvj/KERF3xU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB5163.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(53546011)(30864003)(38100700002)(8676002)(15650500001)(2616005)(2906002)(66556008)(4326008)(6862004)(966005)(8936002)(6666004)(956004)(5660300002)(6636002)(66476007)(66946007)(6486002)(508600001)(107886003)(37006003)(16576012)(31686004)(31696002)(26005)(316002)(86362001)(186003)(83380400001)(36756003)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: bWCLSC7SqnjvuI7TXsdKvCtKueqOscZhxqmLVQEe9Hn5/iWw4ldNXNqrkjfYcW6ZWnRdavIpzMf5UGyi7pDUQv/jX7WlkX0MnoXRPdQbxdGspDw3d9cs/ZnTAIRf+p5fM2akWuaKmp+LuN3e5tGGj3fAsZsHhC2WdsjYiWYaWeoAUHGmitzVRfeQpwaBuBuv9LJgP5vJpKVILBraxhfiWeKUdAvQ8WbUv/WsTsJsrCB0fI9U5EpgWATxQfVkDo6xKWrxN+c+b3ituztxgjagpKDisCADgPBlVKzLk5xA22SNudMliYJBTbkshHV39He4Fuo1gsjqnMG36rK0MdBwuvkKyQtg1xd3IzVvz6fqny23hD++jOcBJDJTbecRA5jNzA0xhGqDhpfbK5f6WBRoEn06VeuF3E1ZY+TWubxE88fFigy7jr363TQnklaa4QBZef3PVaU2JrFxBOa+t7uNbG/dlry7Sk83bvnvd58sMTLrq6pckTR/1b5phAVxQWyLG1FXNyEtUaFSBB1dd6tZp4K8xS++D0TvtUDyqNPUmzdFPJhN9/GrkB7Qj7revC4hbKjqLbL7eKSa5F7lKSKd6rYW/5C7ZdBgXb56hrUBbC7X2TjNRZZfkbn/SvK1HAqM2Bvvvdpisr66W6/DRnxNdCnjDVYSC7W60rBlQ3ZhbzGkI1oAlD9MP/PW9kdquQc8gKseXD0MQI2XXJ5dkZbt2Ab7K55t4807mqg2Wa//dxUxtdQJshizhZ8i9OBBGcqr/UkNQW/Qpy+6PBa7j9V7tQXMXskbDBbPtZbrox0tQePfSdWlBDCxNJ7ByAxQpTiA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB5163.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66556008)(16576012)(82960400001)(2906002)(956004)(36756003)(508600001)(6486002)(83380400001)(31696002)(8676002)(4326008)(107886003)(66476007)(38100700002)(31686004)(8936002)(2616005)(966005)(316002)(86362001)(26005)(66946007)(186003)(5660300002)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SXN4SUFYc0dKMHkwdS9NZThmQXZVN3I1UDdLRytjNitrY0h5UTNmU1c5c1Fi?=
- =?utf-8?B?OFExRXZFdnQ4UlRGSWNYOGlJNXYxZGh1amlJbXRLQW04VzQwVDJkZUI5b21M?=
- =?utf-8?B?UGt0eHdGQ2RJQy95aG9SckdDM1h6Sy9nSXNoUW0vYW9lTE5GNzF2dndXTHA0?=
- =?utf-8?B?eFFTYjEvME1pMDFmYWNnT0t2WWlKNWorbmJkTzVkSFNqZHVqTUZGMyt5VGps?=
- =?utf-8?B?UlNIMDMzSkpGb2pUdVh4THFjSVJvcmJjcjZ4SUJyemNjSGU2UW1PMUt6ZUtV?=
- =?utf-8?B?NGpEMXVqbUIvNUV2VXhIYlBreWJJKzVLRUNYZ2JydjJhb0I1WU9tTkVEaE4w?=
- =?utf-8?B?RnZhV0lXQ2d0MW82VmYwZFVLTCtkam1LMWZWOTlHUjczSEhoa1dsNkVQTW1N?=
- =?utf-8?B?MWUwRi9mVWp4cTVlaW95dmJwVEYwWGJOMGFMUXE1VlV2OHFPUk5GdmNpUXhv?=
- =?utf-8?B?ZTFnNDg5MUdPYzNqSjdQM0RvdnEwOWg1S2NHd2lNWC9SRVdUU3NUM25HTVF5?=
- =?utf-8?B?MEoyL3pWN1VsNUpvam04MkVJZXpqbzN0MDRyZHVNUENYeitxaWVMVUUyOFU4?=
- =?utf-8?B?QmtZTThTenhCMDRWbVlOOHU0SWxkUEliemlLWTBOdGs0UEg2MEJxWlhZTUkv?=
- =?utf-8?B?WmlHSFZES29tYkdrY0s3M3BrNklFcjY1Q0lFQ3hlZlBXbkpxVHgwd0p6c3VB?=
- =?utf-8?B?cm5UL3A1V2hmYlVYZUJDWkx4ZDJnUXRsVldwLzlBc2tzbUYxT3lHajRGcDdG?=
- =?utf-8?B?Mmx0RHIwZkdvekQyZ3VVWXpHWEg4b0xRblVhR3U4QzNxd0g2Q0xhbURXUzRT?=
- =?utf-8?B?N1VneVJZMWZMTGFBWGlZUGxoekkwVlBOam8yeWZvb25jSHZhRDhiSHZBVGtO?=
- =?utf-8?B?a0VtWm0wZmQxcHdxVmxWMDNhVzJoanREcXJMV21IWXBCQnVFTFA2MnYxcldv?=
- =?utf-8?B?NE5qaGttUGl1YkV4K3dlS0pIQU1Ga05BTjc3dDg5TE8yNVZJeGlCQzNSU2Ft?=
- =?utf-8?B?ZmtsSDNIMkVLbkdSeXpIL1JjSHVnVnlZUTB5UmYyOUZTa3RJcDFoQ2JNRjBZ?=
- =?utf-8?B?UWd4WmVMUWlGSUoxbGVHcUQwdU1OS0xzVVIwRUE2SUNGT1Z0UnhKTGw0d0RG?=
- =?utf-8?B?dnlnalBZZUZmOVlUTDRMdWIrOVN4cmxVcUlIMjVVYTFxOC9ESXJiM0hpNWdW?=
- =?utf-8?B?L085TTdod3ZBczZneCt2cU5nWmU1alNzRCt5NVJ2RzJVd2J0KzNGek5vc2da?=
- =?utf-8?B?WHNLcGFwSE5oSEk1T08yS2RPbk9aa2YxOWg5N1RGcXVhdGhNU3JiUmJ5bXhP?=
- =?utf-8?B?ajB0eHI0NDlUQjBkMGFuWVovV1c3WmdVVjNZTUtXSTdEbFo5V2h3WVhBY1lQ?=
- =?utf-8?B?R2d0K3Z2a1FzaTNnNWpDeGhQcEdvaWwraUd1SjZGN2hkNDRxMjlQdWgxN0Vp?=
- =?utf-8?B?NzB1eXczOHBiSSttYzdUeDA0b3VwR3g5dEJ1N2FhMXJET3pXenRJSTNPOGkx?=
- =?utf-8?B?Rm5QWTdiWCtpR2JsSXo5bmRBMFFWNkVya0ZydWhVdHBOTFVkQjRqTkk3OHla?=
- =?utf-8?B?b3QzZFNidVFOd3JFdmVocGRneXNBb2R4YVRzdm1ETkh3S2JKOEdSYmZrN05O?=
- =?utf-8?B?ZkQ3RzRZMHF4dUdZZHl0cENwcXRaN0tCL1E4RFM5TmtTQzhVbXR6NnNJMjVt?=
- =?utf-8?B?djhlSUMzTXZEMVcvZk9sK3F0dVZrUmFweWRDTCtDWElVRnR6YVR5bzBCUUZW?=
- =?utf-8?Q?2dqjy/8Tbn/NQ9h5PhUgGojblQ1Ap2VlVXEVNxn?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87ce3000-5683-454d-71b2-08d993e6780b
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aFY5dHNHT1QzS2pXWEVKNWNuQU5BVnUzVi9DV2pId2w3YjlVeVBxNmRNbEts?=
+ =?utf-8?B?Mkw5ajFYMUZRU3RDNXJKTFA5bHdmQWI4Q0dnbWRXVjY3Vll5VXd2RTdtbnZ4?=
+ =?utf-8?B?aTZXTExnV2Z0cllNMFdpdzAwYmM0dlc3RDFFWTBZTnNKcytrR2txdnd0V0I2?=
+ =?utf-8?B?cEJVeStla0lqejJwRkNlQjR3djN4UThoSTF0TG0ycHRqQTMyYnVob0Nic0Ru?=
+ =?utf-8?B?Y2txWFhwMDNGMWh0VkR2YUg1U1dVUEJWN1RxZEt3bU5TZVprSU0vU3hmaEdt?=
+ =?utf-8?B?aEdIV1dDTms1YXJRSnMzQW1Lbk1pTnVaVmZGZDRkZVBraE9NSmJPNHNEQzVE?=
+ =?utf-8?B?TWhUeENjMzRTSTh2YS92dXAxNWtRUEJZaU53elVXeFdYaHhiKzVFclQrZUg4?=
+ =?utf-8?B?Vmg0cUtURUJTSkdzKytlbWtMQzQzL01NMXM1WHFYLzkyMWpkWG5kNHQvL2ox?=
+ =?utf-8?B?cE9QL05ta0ZpYlF4dDcxNTkvMzI4UGxaRWt3RHlDMWx2SXRmeHRZb3RHbEIx?=
+ =?utf-8?B?TGZDN3lqamRhc2lTUmpESFdIYkp5NU83NXpJVlFiQkZHeEgzZENoTTBlT3ZV?=
+ =?utf-8?B?MG1aaEhrWkVRSTNyTFl4dUZiRkZJczJ1RHRmMWZ3RUtsTVRESmNsT3p4T2FU?=
+ =?utf-8?B?QnJrQThJQkFETml2QUJjVXZNd0phdUthby9zcUt1MHB5eFR2ZDBWbVptM3ZN?=
+ =?utf-8?B?bDU1KzFFVi9zdHJDU1dXazVadzVRbzhUUURqZEpHbE16Y2dFdWhieUZkazVw?=
+ =?utf-8?B?NGU4N0hGUmllcXA0aUZXcktHa0p6UE1iNndlTG1YVUFsbjZqVFJPaEs4NWdZ?=
+ =?utf-8?B?elhaTlFpNld6S21kTGVTNXN5M3ltamZ5UmV5R3JTVlY1ZmxWa2p1UHpXVU1a?=
+ =?utf-8?B?V2tYOWxncldVQmZmdlhZVlRRVUZ6QnpvbDY4NXBIUlQwRlJ2ZnlmQ25WRE5X?=
+ =?utf-8?B?Y2UrSThFbGNFQm1oMzZqZnRyL1M5MndmZTJoZFM4M2U5MUJYclJPWmt0Q1B0?=
+ =?utf-8?B?ckk2azZ2OU9iUEJUMG5SWW9hZDBWWHNLVldDVnZlRVhJZFMvc0xDMElGbnpM?=
+ =?utf-8?B?RDlyeHM0VWwwNXE0QUlCaUZTTHNZSEFZMFM4Z0xOODlCc1RQRGp3RlhqYzlJ?=
+ =?utf-8?B?d0cwYmkvYVlLSWFxZkUwZStESThkRW1TbTY2a0RHdUVGb0Z3bnZmMXQ0YWF2?=
+ =?utf-8?B?YXVWVTNiWThhNzJwVThLemJ5L3NTZlphcVRtWDcvNGJ0QkROYXJhbytSWXRI?=
+ =?utf-8?B?dmF5Vll0cUZmMmVWdUVuU0RubmlHUDNqT01oYkRJUXVXTWdrRWgyU2txNkdG?=
+ =?utf-8?B?Z2w5RUZlYVp5bGtOSHM2cHNGa0hYMXpzeUpXQVpWUFNTT1NVV3VQZS9ZYWcz?=
+ =?utf-8?B?aEFQMTRnQUpCRzdIWXN2UHlFVTFpYlRuc0tBRGJjQ2xva2VoMVZVNWJCTzJp?=
+ =?utf-8?B?cjF5ZUlEWkFQbGVYamtYQUZuRjliNDJ3amtndVJ2c2tUbEtXOFZISW5hUGpu?=
+ =?utf-8?B?bjhISnFzZFRJbXlSNzA1aTJRUGZ3NElUSVJnd3J4N2szY0J5M3F1dVBobVBD?=
+ =?utf-8?B?VlkvZlplWDJBSlk2RGxmTzZ1RENUWmV0c3VqRG1xcGFib1hpZERxU0JWTVRC?=
+ =?utf-8?B?bVU3NmwvcThmeEdjdytxc0liakIwUmlIVkVTdGFiRUJuRnpZdjhzeGlwb1Fy?=
+ =?utf-8?B?ZU45ZnFBUHRhQzkvaW54QmxDTjQreUY3aGd0V2JTYnlGamtHa2Q5YkloYjYr?=
+ =?utf-8?Q?PNRP/941X7M9ZEYV+k58gC7TvJ28hF7wJUcE6d8?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11a35379-3c6c-498e-cec1-08d9941296d8
 X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB5163.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2021 16:27:11.8031
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2021 21:43:01.2103
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
 X-MS-Exchange-CrossTenant-UserPrincipalName: russell.h.weight@intel.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2893
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5036
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
@@ -149,398 +141,251 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 
-On 10/19/21 6:16 PM, Xu Yilun wrote:
-> On Tue, Oct 19, 2021 at 08:09:46AM -0700, Russ Weight wrote:
->>
->> On 10/18/21 7:53 PM, Xu Yilun wrote:
->>> On Mon, Oct 18, 2021 at 09:24:08AM -0700, Russ Weight wrote:
->>>> On 10/18/21 1:13 AM, Xu Yilun wrote:
->>>>> On Fri, Oct 15, 2021 at 10:34:23AM -0700, Russ Weight wrote:
->>>>>> On 10/14/21 7:51 PM, Xu Yilun wrote:
->>>>>>> On Thu, Oct 14, 2021 at 09:32:53AM -0700, Russ Weight wrote:
->>>>>>>> On 10/13/21 6:49 PM, Xu Yilun wrote:
->>>>>>>>> On Wed, Oct 13, 2021 at 11:09:08AM -0700, Russ Weight wrote:
->>>>>>>>>> On 10/12/21 6:06 PM, Xu Yilun wrote:
->>>>>>>>>>> On Tue, Oct 12, 2021 at 10:20:15AM -0700, Russ Weight wrote:
->>>>>>>>>>>> On 10/12/21 12:47 AM, Xu Yilun wrote:
->>>>>>>>>>>>> On Mon, Oct 11, 2021 at 06:00:16PM -0700, Russ Weight wrote:
->>>>>>>>>>>>>> On 10/11/21 5:35 AM, Tom Rix wrote:
->>>>>>>>>>>>>>> On 10/10/21 6:41 PM, Xu Yilun wrote:
->>>>>>>>>>>>>>>> On Sat, Oct 09, 2021 at 05:11:20AM -0700, Tom Rix wrote:
->>>>>>>>>>>>>>>>> On 10/9/21 1:08 AM, Xu Yilun wrote:
->>>>>>>>>>>>>>>>>> On Wed, Sep 29, 2021 at 04:00:20PM -0700, Russ Weight wrote:
->>>>>>>>>>>>>>>>>>> The FPGA Image Load framework provides an API to upload image
->>>>>>>>>>>>>>>>>>> files to an FPGA device. Image files are self-describing. They could
->>>>>>>>>>>>>>>>>>> contain FPGA images, BMC images, Root Entry Hashes, or other device
->>>>>>>>>>>>>>>>>>> specific files. It is up to the lower-level device driver and the
->>>>>>>>>>>>>>>>>>> target device to authenticate and disposition the file data.
->>>>>>>>>>>>>>>>>> I've reconsider the FPGA persistent image update again, and think we
->>>>>>>>>>>>>>>>>> may include it in FPGA manager framework.
->>>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>> Sorry I raised this topic again when it is already at patch v17, but now
->>>>>>>>>>>>>>>>>> I need to consider more seriously than before.
->>>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>> We have consensus the FPGA persistent image update is just like a normal
->>>>>>>>>>>>>>>>>> firmware update which finally writes the nvmem like flash or eeprom,
->>>>>>>>>>>>>>>>>> while the current FPGA manager deals with the active FPGA region update
->>>>>>>>>>>>>>>>>> and re-activation. Could we just expand the FPGA manager and let it handle
->>>>>>>>>>>>>>>>>> the nvmem update as well? Many FPGA cards have nvmem and downloaders
->>>>>>>>>>>>>>>>>> supports updating both FPGA region and nvmem.
->>>>>>>>>>>>>> The fpga-image-load driver is actually just a data transfer. The class
->>>>>>>>>>>>> IMHO, The fpga-mgr dev is also a data transfer. The fpga-region dev is
->>>>>>>>>>>>> acting as the FPGA region admin responsible for gating, transfering and
->>>>>>>>>>>>> re-enumerating.
->>>>>>>>>>>>>
->>>>>>>>>>>>> So my opinion is to add a new data transfer type and keep a unified process.
->>>>>>>>>>>>>
->>>>>>>>>>>>>> driver has no knowledge about what the data is or where/if the data will
->>>>>>>>>>>>>> be stored.
->>>>>>>>>>>>> The fpga-image-load driver knows the data will be stored in nvmem,
->>>>>>>>>>>> FYI: This is not strictly correct. In a coming product there is a
->>>>>>>>>>>> case where the data will be stored in RAM. Richard Gong was also
->>>>>>>>>>>> looking to use this driver to validate an image without programming
->>>>>>>>>>>> or storing it. The fpga-image-load driver has no expectation that
->>>>>>>>>>>> the data will be stored in nvmem, or even that it will be stored
->>>>>>>>>>>> at all.
->>>>>>>>>>> OK, we can discuss that use case then. But fundamentally a driver should
->>>>>>>>>>> be clear what it is doing.
->>>>>>>>>> The lower-level driver is, of course, clear what it is doing. And the
->>>>>>>>>> FPGA Image Load Framework simply provides a consistent API and manages
->>>>>>>>>> a potentially long-running data transfer in the context of a kernel
->>>>>>>>>> worker thread.
->>>>>>>>>>
->>>>>>>>>> It sounds like you are saying that that is not "clear enough" in the
->>>>>>>>>> context of the FPGA Manager?
->>>>>>>>>>
->>>>>>>>>> The files that are used with Intel PAC devices are self-describing. The
->>>>>>>>>> user-space tools, the class driver and the lower-level driver just pass
->>>>>>>>>> the data through to the card BMC without any knowledge of the content,
->>>>>>>>>> purpose or final destination of the data.
->>>>>>>>>>
->>>>>>>>>> The card BMC will receive signed data, validate it, and process it as a
->>>>>>>>>> BMC image, an FPGA image, a Root Entry Hash, or a key cancellation. In
->>>>>>>>> I category all these actions as firmware update fully or partially on
->>>>>>>>> persistent storage. The FPGA Manager don't have to know the meaning of
->>>>>>>>> every byte on flash, but it should be aware the firmware is updated and
->>>>>>>>> the card may acts differently with a new firmware. This is the common
->>>>>>>>> working model for most of the FPGA cards so that we implement it in FPGA
->>>>>>>>> manager class. 
->>>>>>>>>
->>>>>>>>>> the n6000, it could also be part of a multi-step process for programming
->>>>>>>>>> SDM keys and the data may not be stored permanently.
->>>>>>>>> This is new to me, but seems to be different from firmware update, so lets
->>>>>>>>> think about it again.
->>>>>>>>>
->>>>>>>>>>> You may try to extend the FPGA framework to
->>>>>>>>>>> support nvmem storage, or image validation, but cannot say we feed the
->>>>>>>>>>> data to any engine undefined by the framework.
->>>>>>>>>> I'm not sure what you mean by "feed the data to any engine undefined by the
->>>>>>>>>> framework". I think the "engine" is the lower level driver/device that invokes
->>>>>>>>>> the fpga_mgr. The lower level driver, of course, is clear what it is doing.
->>>>>>>>>> The fpga_mgr cannot control what driver invokes it.
->>>>>>>>>>
->>>>>>>>>> Are saying that when invoking the fpga-mgr, that it _must_ also pass descriptive
->>>>>>>>>> data. Meaning that a self-describing file alone is not acceptable?
->>>>>>>>> The class driver should define a reasonable working model and APIs.
->>>>>>>>> Updating the FPGA backup storage is good to me. But receiving a mystery
->>>>>>>>> box and do whatever it requires is not.
->>>>>>>>>
->>>>>>>>> Self-describing file is OK, encryption is OK, but either the class
->>>>>>>>> driver itself, or with the help of the low level driver, should make
->>>>>>>>> sure it works within its scope.
->>>>>>>> In our secure update process, the card BMC firmware authenticates
->>>>>>>> the data using the root entry hashes and will either reject the
->>>>>>>> data or perform some function based on the contents. Neither the
->>>>>>>> user-space, the class driver, nor the lower level driver know
->>>>>>>> what the contents are. It _is_ a "mystery box" to them. How do we
->>>>>>>> verify scope in this model?
->>>>>>> I think we need to find out how. One case is, the HW is designed to have
->>>>>>> one single function, such as firmware update, then any image input
->>>>>>> through firmware update API is within expectation, and the driver
->>>>>>> should only serve the firmware update API. I think this is how the
->>>>>>> N3000 is working now. If the HW is for another function, register itself
->>>>>>> to serve another API, or another class driver.
->>>>>>>
->>>>>>> Another case is, the HW could do multiple types of tasks depending on
->>>>>>> the content of the image, such as firmware update, image verification,
->>>>>>> or assumably power off the card ... There should be some mechanism for
->>>>>>> the driver to only accept the right image according to what API is called.
->>>>>>> Or the user may input an image named update_the_card.img through
->>>>>>> firmware update API and finally get the card off. Having some headers
->>>>>>> readable by host for the operation type? Or, some HW interface for host
->>>>>>> to apply the operation type as well as the image, let the HW verify?
->>>>>>> Let's think about it.
->>>>>> I'm not sure if I am following your thinking here. The HW, of course,
->>>>>> verifies authentication of the image and acts according to the image
->>>>>> type. I don't think it is reasonable to require the class driver to
->>>>>> interpret the data to determine what it is. That implies that the
->>>>>> class driver would have to know the header format and possible values.
->>>>>> It also means that changes to the header format would require patches
->>>>>> to the class driver.
->>>>>>
->>>>>> The FPGA card is trusted by virtue of the fact that the customer
->>>>>> purchased it and physically placed it in the machine. If the FPGA card
->>>>>> (or the lower level driver) validates the image, then why does the
->>>>>> Class driver need to be concerned about the file type? I think the
->>>>>> purpose of the class driver is primarily to provide a common API and
->>>>>> perform common functions so that they don't have to be replicated
->>>>>> among similar low-level drivers. It is up to the low-level driver
->>>>>> or the device itself to ensure that the data received is acceptable.
->>>>>>
->>>>>> If the card receives data through the fpga-mgr upload facility that
->>>>>> isn't strictly a firmware update, and if the lower-level driver or
->>>>>> the card handles it and returns appropriate status - is that really
->>>>>> a problem?
->>>>>>>> As you have noted, most current cases result in a change to the
->>>>>>>> card, and I suspect that it will remain that way. But that can't be
->>>>>>>> guaranteed, and I'm not convinced that a host driver needs to be
->>>>>>>> concerned about it.
->>>>>>> A host driver should know what is done, in some abstraction level.
->>>>>>> I think updating the persistent storage is an acceptable abstraction
->>>>>>> in FPGA domain, so I'd like to extend it in FPGA manager. But doing
->>>>>>> anything according to the image is not.
->>>>>> By host driver, do you mean the class driver? Or the lower-level device
->>>>>> driver?
->>>>> The class driver.
->>>>>
->>>>>> It seems to me that you are saying that self-describing images are not
->>>>>> acceptable? Or at least they are not acceptable payload for an FPGA
->>>>>> Manager firmware-update API?
->>>>> For N3000, we are working on the persistent storage update APIs, which is
->>>>> a much simpler working model, no runtime device change, and needs no
->>>>> device removal & re-enumeration.
->>>>>
->>>>> But if you need to extend something more that would potentially changes
->>>>> the behavior of the running devices on FPGA, device removal &
->>>>> re-enumeration are needed so that the system knows what devices are
->>>>> changed.
->>>>>
->>>>>> The FPGA Image Load Framework was designed with the concept of
->>>>>> transferring data to a device without imposing a purpose on the data.
->>>>>> The expectation is that the lower-level driver or the device will
->>>>>> validate the data. Is there something fundamentally wrong with that
->>>>> I think there is something wrong here. As I said before, persistent
->>>>> storage updating has different software process from some runtime
->>>>> updating, so the class driver should be aware of what the HW engine
->>>>> is doing.
->>>> So far, there are no self-describing images that cause a
->>>> change in run-time behavior, and I don't think that will
->>>> happen for the very reason that the class-driver would
->>>> need to know about it.
->>> Again, the class driver needs to know what is happening, at some
->>> abstraction level, to ensure the system is aligned with the HW state.
->>>
->>> If the class driver cannot tell the detail, it has to assume the
->>> whole FPGA region will be changed, and removal & re-enumeration is
->>> needed.
->> So we make it a requirement that the self-describing files
->> cannot make changes that require the class driver to manage
->> state.
-> The API should not only define what it won't do, but also define what
-> it will do. But the "image load" just specifies the top half of the
-> process. So I don't think this API would be accepted.
-So what is the path forward. It seems like you are saying
-that the self-describing files do not fit in the fpga-mgr.
-Can we reconsider the FPGA Image Load Framework, which does
-not make any assumptions about the contents of the image
-files?
-
+On 10/15/21 1:22 PM, Lizhi Hou wrote:
 >
->>>> When I asserted that not all self-describing images are
->>>> changing firmware, I did not mean to imply that they change
->>>> run-time behavior; they do not. They are part of a multi-
->>>> step update of firmware. However, looking at each part of
->>>> the sequence independently, there is at least one instance
->>>> where a certificate is stored in RAM for temporary use.
->>>> When the driver exits from this call, there is no firmware
->>>> change. There is also no change in run-time behavior.
->>>>
->>>> I'm thinking we could have different IOCTLs:
->>>>
->>>> (1) firmware  update (address, size, purpose provided
->>>>     with the image)
->>> Will the firmware update use the self-describing files?
->> The firmware update option would be for files that
->> are not self-describing.
->>>> (2) image upload (self-describing files)
->>> If both 1 & 2 use self-describing files, how the class driver verifies
->>> the type of the file without looking into the file?
->> Only 2 would use self-describing files.
-> Which IOCTL the N3000 flash secure update will use?
-It would use 2. All of our image update files are self-describing.
+> On 9/29/21 4:00 PM, Russ Weight wrote:
+>> Extend the FPGA Image Load framework to include an FPGA_IMAGE_LOAD_STATUS
+>> IOCTL that can be used to monitor the progress of an ongoing image upload.
+>> The status returned includes how much data remains to be transferred, the
+>> progress of the image upload, and error information in the case of a
+>> failure.
+>>
+>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>> ---
+>> v17:
+>>   - Rebased for changes to earlier patches.
+>> v16:
+>>   - Minor changes to adapt in changes in prevoius patches.
+>> v15:
+>>   - This patch is new to the patchset and provides an FPGA_IMAGE_LOAD_STATUS
+>>     IOCTL to return the current values for: remaining_size, progress,
+>>     err_progress, and err_code.
+>>   - This patch has elements of the following three patches from the previous
+>>     patch-set:
+>>       [PATCH v14 3/6] fpga: sec-mgr: expose sec-mgr update status
+>>       [PATCH v14 4/6] fpga: sec-mgr: expose sec-mgr update errors
+>>       [PATCH v14 5/6] fpga: sec-mgr: expose sec-mgr update size
+>>   - Changed file, symbol, and config names to reflect the new driver name
+>>   - There are some minor changes to locking to enable this ioctl to return
+>>     coherent data.
+>> ---
+>>   Documentation/fpga/fpga-image-load.rst |  6 +++
+>>   drivers/fpga/fpga-image-load.c         | 58 +++++++++++++++++++++-----
+>>   include/linux/fpga/fpga-image-load.h   |  1 +
+>>   include/uapi/linux/fpga-image-load.h   | 18 ++++++++
+>>   4 files changed, 73 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/Documentation/fpga/fpga-image-load.rst b/Documentation/fpga/fpga-image-load.rst
+>> index 487b5466f67c..f64f5ee473b8 100644
+>> --- a/Documentation/fpga/fpga-image-load.rst
+>> +++ b/Documentation/fpga/fpga-image-load.rst
+>> @@ -33,3 +33,9 @@ being updated. This is an exclusive operation; an attempt to start
+>>   concurrent image uploads for the same device will fail with EBUSY. An
+>>   eventfd file descriptor parameter is provided to this IOCTL. It will be
+>>   signalled at the completion of the image upload.
+>> +
+>> +FPGA_IMAGE_LOAD_STATUS:
+>> +
+>> +Collect status for an on-going image upload. The status returned includes
+>> +how much data remains to be transferred, the progress of the image upload,
+>> +and error information in the case of a failure.
+>> diff --git a/drivers/fpga/fpga-image-load.c b/drivers/fpga/fpga-image-load.c
+>> index f04dfc71c190..58373b9e8c02 100644
+>> --- a/drivers/fpga/fpga-image-load.c
+>> +++ b/drivers/fpga/fpga-image-load.c
+>> @@ -22,6 +22,22 @@ static dev_t fpga_image_devt;
+>>
+>>   #define to_image_load(d) container_of(d, struct fpga_image_load, dev)
+>>
+>> +static void fpga_image_update_progress(struct fpga_image_load *imgld,
+>> +                                      u32 new_progress)
+>> +{
+>> +       mutex_lock(&imgld->lock);
+>> +       imgld->progress = new_progress;
+>> +       mutex_unlock(&imgld->lock);
+>> +}
+>> +
+>> +static void fpga_image_set_error(struct fpga_image_load *imgld, u32 err_code)
+>> +{
+>> +       mutex_lock(&imgld->lock);
+>> +       imgld->err_progress = imgld->progress;
+>> +       imgld->err_code = err_code;
+>> +       mutex_unlock(&imgld->lock);
+>> +}
+>> +
+>>   static void fpga_image_prog_complete(struct fpga_image_load *imgld)
+>>   {
+>>          mutex_lock(&imgld->lock);
+>> @@ -38,24 +54,24 @@ static void fpga_image_do_load(struct work_struct *work)
+>>          imgld = container_of(work, struct fpga_image_load, work);
+>>
+>>          if (imgld->driver_unload) {
+>> -               imgld->err_code = FPGA_IMAGE_ERR_CANCELED;
+>> +               fpga_image_set_error(imgld, FPGA_IMAGE_ERR_CANCELED);
+>>                  goto idle_exit;
+>>          }
+>>
+>>          get_device(&imgld->dev);
+>>          if (!try_module_get(imgld->dev.parent->driver->owner)) {
+>> -               imgld->err_code = FPGA_IMAGE_ERR_BUSY;
+>> +               fpga_image_set_error(imgld, FPGA_IMAGE_ERR_BUSY);
+>>                  goto putdev_exit;
+>>          }
+>>
+>> -       imgld->progress = FPGA_IMAGE_PROG_PREPARING;
+>> +       fpga_image_update_progress(imgld, FPGA_IMAGE_PROG_PREPARING);
+>>          ret = imgld->ops->prepare(imgld, imgld->data, imgld->remaining_size);
+>>          if (ret) {
+>> -               imgld->err_code = ret;
+>> +               fpga_image_set_error(imgld, ret);
+>>                  goto modput_exit;
+>>          }
+>>
+>> -       imgld->progress = FPGA_IMAGE_PROG_WRITING;
+>> +       fpga_image_update_progress(imgld, FPGA_IMAGE_PROG_WRITING);
+>>          while (imgld->remaining_size) {
+>>                  ret = imgld->ops->write(imgld, imgld->data, offset,
+>>                                          imgld->remaining_size);
+>> @@ -65,7 +81,7 @@ static void fpga_image_do_load(struct work_struct *work)
+>>                                           "write-op wrote zero data\n");
+>>                                  ret = -FPGA_IMAGE_ERR_RW_ERROR;
+>>                          }
+>> -                       imgld->err_code = -ret;
+>> +                       fpga_image_set_error(imgld, -ret);
+>>                          goto done;
+>>                  }
+>>
+>> @@ -73,10 +89,10 @@ static void fpga_image_do_load(struct work_struct *work)
+>>                  offset += ret;
+>>          }
+>>
+>> -       imgld->progress = FPGA_IMAGE_PROG_PROGRAMMING;
+>> +       fpga_image_update_progress(imgld, FPGA_IMAGE_PROG_PROGRAMMING);
+>>          ret = imgld->ops->poll_complete(imgld);
+>>          if (ret)
+>> -               imgld->err_code = ret;
+>> +               fpga_image_set_error(imgld, ret);
+>>
+>>   done:
+>>          if (imgld->ops->cleanup)
+>> @@ -151,20 +167,42 @@ static int fpga_image_load_ioctl_write(struct fpga_image_load *imgld,
+>>          return ret;
+>>   }
+>>
+>> +static int fpga_image_load_ioctl_status(struct fpga_image_load *imgld,
+>> +                                       unsigned long arg)
+>> +{
+>> +       struct fpga_image_status status;
+>> +
+>> +       memset(&status, 0, sizeof(status));
+>> +       status.progress = imgld->progress;
+>> +       status.remaining_size = imgld->remaining_size;
+>> +       status.err_progress = imgld->err_progress;
+>> +       status.err_code = imgld->err_code;
+>> +
+>> +       if (copy_to_user((void __user *)arg, &status, sizeof(status)))
+>> +               return -EFAULT;
+>> +
+>> +       return 0;
+>> +}
+>> +
+>>   static long fpga_image_load_ioctl(struct file *filp, unsigned int cmd,
+>>                                    unsigned long arg)
+>>   {
+>>          struct fpga_image_load *imgld = filp->private_data;
+>>          int ret = -ENOTTY;
+>>
+>> +       mutex_lock(&imgld->lock);
+>> +
+>>          switch (cmd) {
+>>          case FPGA_IMAGE_LOAD_WRITE:
+>> -               mutex_lock(&imgld->lock);
+>>                  ret = fpga_image_load_ioctl_write(imgld, arg);
+>> -               mutex_unlock(&imgld->lock);
+>> +               break;
+>> +       case FPGA_IMAGE_LOAD_STATUS:
+>> +               ret = fpga_image_load_ioctl_status(imgld, arg);
+>>                  break;
+>>          }
+>>
+>> +       mutex_unlock(&imgld->lock);
+>> +
+>>          return ret;
+>>   }
+>>
+>> diff --git a/include/linux/fpga/fpga-image-load.h b/include/linux/fpga/fpga-image-load.h
+>> index 77b3c91ce073..366111d090fb 100644
+>> --- a/include/linux/fpga/fpga-image-load.h
+>> +++ b/include/linux/fpga/fpga-image-load.h
+>> @@ -49,6 +49,7 @@ struct fpga_image_load {
+>>          const u8 *data;                 /* pointer to update data */
+>>          u32 remaining_size;             /* size remaining to transfer */
+>>          u32 progress;
+>> +       u32 err_progress;               /* progress at time of error */
+>>          u32 err_code;                   /* image load error code */
+>>          bool driver_unload;
+>>          struct eventfd_ctx *finished;
+>> diff --git a/include/uapi/linux/fpga-image-load.h b/include/uapi/linux/fpga-image-load.h
+>> index 8d2d3db92e87..1b91343961df 100644
+>> --- a/include/uapi/linux/fpga-image-load.h
+>> +++ b/include/uapi/linux/fpga-image-load.h
+>> @@ -51,4 +51,22 @@ struct fpga_image_write {
+>>
+>>   #define FPGA_IMAGE_LOAD_WRITE  _IOW(FPGA_IMAGE_LOAD_MAGIC, 0, struct fpga_image_write)
+>>
+>> +/**
+>> + * FPGA_IMAGE_LOAD_STATUS - _IOR(FPGA_IMAGE_LOAD_MAGIC, 1,
+>> + *                              struct fpga_image_status)
+>> + *
+>> + * Request status information for an ongoing update.
+>> + *
+>> + * Return: 0 on success, -errno on failure.
+>> + */
+>> +struct fpga_image_status {
+>> +       /* Output */
+>> +       __u32 remaining_size;   /* size remaining to transfer */
+>> +       __u32 progress;         /* current progress of image load */
+>> +       __u32 err_progress;     /* progress at time of error */
+>> +       __u32 err_code;         /* error code */
+>> +};
+>
+> Could this be extended to also collect the image detail?
+>
+>         Image version, name, etc been successfully written to device (flash).
+>
+>         Image version, name, etc is currently running on the device.
+>
+> Or maybe add another query command to do these?
+>
+> So the userland utility will be able to show what image is running and what image is going to run with next cold reboot.
+
+This status call is intended specifically to show the progress and
+status of the image load. Yilun's comments on patch 5 suggest that
+some of these types of operations could be handled as part of the
+fpga-region class driver
+
+I have patches that have not been submitted yet that contain some
+of these types of features, although not in the class driver (yet).
+Here is a link to documentation for what I have now. Take a look
+at the sysfs node descriptions that are in the control subdirectory.
+These are listed at the bottom of the file.
+
+https://github.com/OPAE/linux-dfl/blob/fpga-ofs-dev/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
 
 - Russ
+
+
+>
 >
 > Thanks,
-> Yilun
 >
->> - Russ
->>> For example, if a user calls a firmware update API but inputs an image
->>> upload file, will the class driver block the call? How?
->>>
->>>> (3) image validation
->>>>
->>>> These would all use most of the same code, but the FPGA
->>>> Manager flags and structure fields would be set differently.
->>> This is good to me.
->>>
->>> Thanks,
->>> Yilun
->>>
->>>> - Russ
->>>>> Thanks,
->>>>> Yilun
->>>>>
->>>>>> approach? And if not, why couldn't we incorporate a similar image_load
->>>>>> API into the FPGA Manager?
->>>>>>
->>>>>> - Russ
->>>>>>
->>>>>>> Thanks,
->>>>>>> Yilun
->>>>>>>
->>>>>>>> - Russ
->>>>>>>>
->>>>>>>>> Thanks,
->>>>>>>>> Yilun
->>>>>>>>>
->>>>>>>>>> Thanks,
->>>>>>>>>> - Russ
->>>>>>>>>>
->>>>>>>>>>> Thanks,
->>>>>>>>>>> Yilun
->>>>>>>>>>>
->>>>>>>>>>>>> while
->>>>>>>>>>>>> the fpga-mgr knows the data will be stored in FPGA cells. They may need
->>>>>>>>>>>>> to know the exact physical position to store, may not, depends on what the
->>>>>>>>>>>>> HW engines are.
->>>>>>>>>>>>>
->>>>>>>>>>>>>> This functionality could, of course, be merged into the fpga-mgr. I did
->>>>>>>>>>>>>> a proof of concept of this a while back and we discussed the pros and cons.
->>>>>>>>>>>>>> See this email for a recap:
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> https://marc.info/?l=linux-fpga&m=161998085507374&w=2
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> Things have changed some with the evolution of the driver. The IOCTL
->>>>>>>>>>>>>> approach probably fits better than the sysfs implementation. At the time
->>>>>>>>>>>>>> it seemed that a merge would add unnecessary complexity without adding value.
->>>>>>>>>>>>> I think at least developers don't have to go through 2 sets of software
->>>>>>>>>>>>> stacks which are of the same concept. And adding some new features like
->>>>>>>>>>>>> optionally threading or canceling data transfer are also good to FPGA
->>>>>>>>>>>>> region update. And the nvmem update could also be benifit from exsiting
->>>>>>>>>>>>> implementations like scatter-gather buffers, in-kernel firmware loading.
->>>>>>>>>>>>>
->>>>>>>>>>>>> I try to explain myself according to each of your concern from that mail
->>>>>>>>>>>>> thread:
->>>>>>>>>>>>>
->>>>>>>>>>>>> Purpose of the 2 updates
->>>>>>>>>>>>> ========================
->>>>>>>>>>>>>
->>>>>>>>>>>>>   As I said before, I think they are both data transfer devices. FPGA
->>>>>>>>>>>>> region update gets extra support from fpga-region & fpga-bridge, and
->>>>>>>>>>>>> FPGA nvmem update could be a standalone fpga-mgr.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Extra APIs that are unique to nvmem update
->>>>>>>>>>>>> ==========================================
->>>>>>>>>>>>>
->>>>>>>>>>>>>   cdev APIs for nvmem update:
->>>>>>>>>>>>>     Yes we need to expand the functionality so we need them.
->>>>>>>>>>>>>
->>>>>>>>>>>>>   available_images, image_load APIs for loading nvmem content to FPGA
->>>>>>>>>>>>>   region:
->>>>>>>>>>>>>     These are features in later patchsets which are not submitted, but we
->>>>>>>>>>>>>     could talk about it in advance. I think this is actually a FPGA region
->>>>>>>>>>>>>     update from nvmem, it also requires gating, data loading (no SW transfer)
->>>>>>>>>>>>>     and re-enumeration, or a single command to image_load HW may result system
->>>>>>>>>>>>>     disordered. The FPGA framework now only supports update from in-kernel
->>>>>>>>>>>>>     user data, maybe we add support for update from nvmem later.
->>>>>>>>>>>>>
->>>>>>>>>>>>>   fpga-mgr state extend:
->>>>>>>>>>>>>     I think it could be extended, The current states are not perfect,
->>>>>>>>>>>>>     adding something like IDLE or READY is just fine.
->>>>>>>>>>>>>
->>>>>>>>>>>>>   fpga-mgr status extend:
->>>>>>>>>>>>>     Add general error definitions as needed. If there is some status
->>>>>>>>>>>>>     that is quite vendor specific, expose it in low-level driver.
->>>>>>>>>>>>>
->>>>>>>>>>>>>   remaining-size:
->>>>>>>>>>>>>     Nice to have for all.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Threading the update
->>>>>>>>>>>>> ====================
->>>>>>>>>>>>>
->>>>>>>>>>>>>   Also a good option for FPGA region update, maybe we also have a slow FPGA
->>>>>>>>>>>>>   reprogrammer?
->>>>>>>>>>>>>
->>>>>>>>>>>>> Cancelling the update
->>>>>>>>>>>>> ====================
->>>>>>>>>>>>>
->>>>>>>>>>>>>   Also a good option for FPGA region update if HW engine supports.
->>>>>>>>>>>> These are all good points.
->>>>>>>>>>>>
->>>>>>>>>>>> Thanks,
->>>>>>>>>>>> - Russ
->>>>>>>>>>>>> Thanks,
->>>>>>>>>>>>> Yilun
->>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>> According to the patchset, the basic workflow of the 2 update types are
->>>>>>>>>>>>>>>>>> quite similar, get the data, prepare for the HW, write and complete.
->>>>>>>>>>>>>>>>>> They are already implemented in FPGA manager. We've discussed some
->>>>>>>>>>>>>>>>>> differences like threading or canceling the update, which are
->>>>>>>>>>>>>>>>>> not provided by FPGA manager but they may also nice to have for FPGA
->>>>>>>>>>>>>>>>>> region update. An FPGA region update may also last for a long time??
->>>>>>>>>>>>>>>>>> So I think having 2 sets of similar frameworks in FPGA is unnecessary.
->>>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>> My quick mind is that we add some flags in struct fpga_mgr & struct
->>>>>>>>>>>>>>>>>> fpga_image_info to indicate the HW capability (support FPGA region
->>>>>>>>>>>>>>>>>> update or nvmem update or both) of the download engine and the provided
->>>>>>>>>>>>>>>>>> image type. Then the low-level driver knows how to download if it
->>>>>>>>>>>>>>>>>> supports both image types.An char device could be added for each fpga manager dev, providing the
->>>>>>>>>>>>>>>>>> user APIs for nvmem update. We may not use the char dev for FPGA region
->>>>>>>>>>>>>>>>>> update cause it changes the system HW devices and needs device hotplug
->>>>>>>>>>>>>>>>>> in FPGA region. We'd better leave it to FPGA region class, this is
->>>>>>>>>>>>>>>>>> another topic.
->>>>>>>>>>>>>> I'll give this some more thought and see if I can come up with some RFC
->>>>>>>>>>>>>> patches.
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> - Russ
->>>>>>>>>>>>>>>>>> More discussion is appreciated.
->>>>>>>>>>>>>>>>> I also think fpga_mgr could be extended.
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> In this patchset,
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> https://lore.kernel.org/linux-fpga/20210625195849.837976-1-trix@redhat.com/
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> A second, similar set of write ops was added to fpga_manger_ops,
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> new bit/flag was added to fpga_image_info
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> The intent was for dfl to add their specific ops to cover what is done in
->>>>>>>>>>>>>>>>> this patchset.
->>>>>>>>>>>>>>>> I think we don't have to add 2 ops for reconfig & reimage in framework,
->>>>>>>>>>>>>>>> the 2 processes are almost the same.
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> Just add the _REIMAGE (or something else, NVMEM?) flag for
->>>>>>>>>>>>>>>> fpga_image_info, and low level drivers handle it as they do for other
->>>>>>>>>>>>>>>> flags.
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> How do you think?
->>>>>>>>>>>>>>> A single set is fine.
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> A difficult part of is the length of  time to do the write. The existing write should be improved to use a worker thread.
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> Tom
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> Thanks,
->>>>>>>>>>>>>>>> Yilun
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> Any other driver would do similar.
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> Is this close to what you are thinking ?
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> Tom
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>> Thanks,
->>>>>>>>>>>>>>>>>> Yilun
->>>>>>>>>>>>>>>>>>
+> Lizhi
+>
+>> +
+>> +#define FPGA_IMAGE_LOAD_STATUS _IOR(FPGA_IMAGE_LOAD_MAGIC, 1, struct fpga_image_status)
+>> +
+>>   #endif /* _UAPI_LINUX_FPGA_IMAGE_LOAD_H */
+>> -- 
+>> 2.25.1
+>>
 
