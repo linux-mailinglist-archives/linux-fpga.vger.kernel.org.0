@@ -2,295 +2,237 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4398E434BBD
-	for <lists+linux-fpga@lfdr.de>; Wed, 20 Oct 2021 14:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B779D434F9F
+	for <lists+linux-fpga@lfdr.de>; Wed, 20 Oct 2021 18:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbhJTNCL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 20 Oct 2021 09:02:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37847 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230201AbhJTNCL (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 20 Oct 2021 09:02:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634734796;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ct6AzxsLZvZzaTtpXmpX/t4/3JdzVca+UxLIgdtMXLM=;
-        b=YDGsucE7hDkTMzO9tLKYdKAlUUIEKW8BafSLSG7L0BIGqyVXTfl2DH/FEFDf2jKqSZdO7D
-        jDdKn1xMcXv91NSt+AO7nTBlRBwaF3TA7wZVWMQ0woJxzNqf8+SHUtatowpzZYFxgJ3Za0
-        4cYBfl0zEBKnrVh1DXo2+i8trrOoR+k=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-35-E73cr986PlCP7b4AvjmrlQ-1; Wed, 20 Oct 2021 08:59:55 -0400
-X-MC-Unique: E73cr986PlCP7b4AvjmrlQ-1
-Received: by mail-pf1-f197.google.com with SMTP id d187-20020a6236c4000000b0044cf291bfebso1885178pfa.10
-        for <linux-fpga@vger.kernel.org>; Wed, 20 Oct 2021 05:59:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=ct6AzxsLZvZzaTtpXmpX/t4/3JdzVca+UxLIgdtMXLM=;
-        b=ZQCB79x5fsJB8cCkN5HjLI0T2jO3EC5SUUY09hH/fdyk+IiDLoXiAGVZTXVRk1xHZe
-         ks/0n9ahouOL/r4MQx55iw8bT3Myz+bcngpCAPwkz3ga0+bP96KaTUCiODj5aQltKmet
-         dMAWcfcds/93jOpMjqlrfO5K+VbPGXK/06SKwsOP14s3yac28I5h/uRJ0/cVCH3vidgY
-         mGHrEMJXK+x+efYcoFzc5LtKGFI+AX/9MNozix8eMVeQ6ZxYXK0OF+r8Ys/b+/wvNAI6
-         9BIWYwcpX4MuLQnE7KmfE9qN8auwDaVYZSmZCQQM+1t00KIoO5ixtXUSU1i6bkTft33Y
-         2a6w==
-X-Gm-Message-State: AOAM531oOPPTT0iQOEQqQrSscVv9q/qfZ+RlBbKVoIsb+frETaPkOZsm
-        RMeD39k/nmx8wkcYawJ+NYddoXwTXYv9fwZAf1CEoLZ0040JJALbjrAJnnGJxOkganO7cmOPozK
-        wCWDGp7l85i/y2mgJLvOOcw==
-X-Received: by 2002:a17:90b:3e85:: with SMTP id rj5mr7227111pjb.104.1634734794468;
-        Wed, 20 Oct 2021 05:59:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxqOZtXOyH6mb3QAlfIxTB2ohMzAcq6IrqWoqI+2PTacRqzqUfEWH0x962GShvqgmR6u6JaaA==
-X-Received: by 2002:a17:90b:3e85:: with SMTP id rj5mr7227072pjb.104.1634734794020;
-        Wed, 20 Oct 2021 05:59:54 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id i13sm2257483pgf.77.2021.10.20.05.59.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Oct 2021 05:59:53 -0700 (PDT)
-Subject: Re: [PATCH v1 2/2] fpga: dfl: fme: Clear fme global errors at driver
- init
-To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@intel.com
+        id S230495AbhJTQGG (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 20 Oct 2021 12:06:06 -0400
+Received: from mga02.intel.com ([134.134.136.20]:1633 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229817AbhJTQF6 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 20 Oct 2021 12:05:58 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10143"; a="215982065"
+X-IronPort-AV: E=Sophos;i="5.87,167,1631602800"; 
+   d="scan'208";a="215982065"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2021 09:02:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,167,1631602800"; 
+   d="scan'208";a="527126027"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga001.jf.intel.com with ESMTP; 20 Oct 2021 09:02:23 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Wed, 20 Oct 2021 09:02:22 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12 via Frontend Transport; Wed, 20 Oct 2021 09:02:22 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.12; Wed, 20 Oct 2021 09:02:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YFv3p+3LHNEHtOh6y5rL9rG2JDKQpnXJEtN4LFTJ1orF36jFwZiUo5yUtgRUarJENzCBKKfgZO9JpwoSR311NtZiEXVtnxWuExdfn8TJ0AYDp4OniOB+466tVrCJRcn9NwBLYFNQLHXI8QiCDK6Sd3yxAb03fS9nCFBmbDaO5PeIZ0v9mqucyquDqSIWuEwcN0CYxspcBSPISWblm52+1ZENomFwmpoZgdDR+lD1yp+g6AbiyasjwLnJKZHPEAeHls/a8r2HOMDeTMnRruh32vkZUWpTYzlz/Pb6TShpkpuvhdlhOuwdH3BQ7F/aAiL82OXzkGZH3KOkLnfQ9V3tUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KuFDFR7RMceDD6URuK/a4/ynL7yCYR90hgWd45jrY9c=;
+ b=NzoHBxwR2vr3kH5AISI+kjasgfq+GjK0js/TuLHdbz5aOOgqpoJiwZZ/QJEiO3eXUSkjvJUZ7E1jcIFN6RH8yUlDcgeo201CLWmGu3nxt1XzR5HP6sy6E1FvOUMzceL/Y8HYZ8X/RqyDAVYWqoFg/SFjqmugZW3Wo67NJhuTu9dzYobh2phmOo/Qq+D9TtnjFTJTH1U4LdwriMKm4Z1yx4mMj4fTiOrmnxOzkGgmLOHsvSbxjgVH7VNFbYHPLKtjlr0uNM3yxUQowjPeCHrETFwMsguu30lG3Kpt5n7X5bOfsVB1v0Hk6zaX24GY1kS0SRWsgaQvir8E5adsvL/2PQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KuFDFR7RMceDD6URuK/a4/ynL7yCYR90hgWd45jrY9c=;
+ b=IzkYgdX/5B34gw48ZytrsozqTGj3S3gW604PwczQkut8inkLVXr5tPqKrpoWx9w2HvhNGO/PlJJEOTdVlqu4DqVzYj8lEnP+IRtNuFPm04p2Wctqlw73kC8ELIimAvFOVl5WRy8K6wI5wDgIoMmyJ/Qb/jG9HLfYgWUVPx5w6SI=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
+Received: from SA2PR11MB5163.namprd11.prod.outlook.com (2603:10b6:806:113::20)
+ by SN6PR11MB3501.namprd11.prod.outlook.com (2603:10b6:805:d4::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.18; Wed, 20 Oct
+ 2021 16:02:19 +0000
+Received: from SA2PR11MB5163.namprd11.prod.outlook.com
+ ([fe80::a039:c121:4dce:5def]) by SA2PR11MB5163.namprd11.prod.outlook.com
+ ([fe80::a039:c121:4dce:5def%7]) with mapi id 15.20.4608.018; Wed, 20 Oct 2021
+ 16:02:19 +0000
+Subject: Re: [PATCH v1 1/2] fpga: dfl: afu: Clear port errors in afu init
+To:     Tom Rix <trix@redhat.com>, <mdf@kernel.org>,
+        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <lgoncalv@redhat.com>, <yilun.xu@intel.com>, <hao.wu@intel.com>,
+        <matthew.gerlach@intel.com>
 References: <20211019231545.47118-1-russell.h.weight@intel.com>
- <20211019231545.47118-3-russell.h.weight@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <0b911b70-1cea-2d9e-1dfa-d1c743eae396@redhat.com>
-Date:   Wed, 20 Oct 2021 05:59:47 -0700
+ <20211019231545.47118-2-russell.h.weight@intel.com>
+ <e03a0a0a-74c3-9791-2603-523c2796a71d@redhat.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+Message-ID: <cfcd0e62-aa51-3fdf-a6ce-75d8dad76b3f@intel.com>
+Date:   Wed, 20 Oct 2021 09:02:29 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20211019231545.47118-3-russell.h.weight@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ Firefox/78.0 Thunderbird/78.13.0
+In-Reply-To: <e03a0a0a-74c3-9791-2603-523c2796a71d@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+X-ClientProxiedBy: MWHPR20CA0015.namprd20.prod.outlook.com
+ (2603:10b6:300:13d::25) To SA2PR11MB5163.namprd11.prod.outlook.com
+ (2603:10b6:806:113::20)
+MIME-Version: 1.0
+Received: from [10.0.2.4] (50.43.42.212) by MWHPR20CA0015.namprd20.prod.outlook.com (2603:10b6:300:13d::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16 via Frontend Transport; Wed, 20 Oct 2021 16:02:18 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b4376b66-53c8-4f52-c00d-08d993e2fe6e
+X-MS-TrafficTypeDiagnostic: SN6PR11MB3501:
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <SN6PR11MB3501A5789914C658DCC1AAC5C5BE9@SN6PR11MB3501.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W9A5lFClf5c72T6DKCTYvZ92W1JZYx7LSrh91i43OANp74MyrhFErA2ytpG6dhh9JiG3SI5/Kr8+tLIo+4WUmfT8Q8MLHkY13BO0v5UPf70ETOytW5hiwn/X59mkY5wHblhbh7IrJAoketgZkETboZSnqdDXCWH9l6zfOmpLho0TCm2LzC0Zq3WbtoMYWSnddkb5mpyC9jkNxP4h7TKLYJ3jY4MS8C6q8eo269PA8VsuIHlYIXwzs3tCjqiUlPme1+KnSBkEmiAcjMdCIQxtNVlLnlBcv0MEIMFkQgGe8g7vEMzZrrpkZ/6TuotBDEeP6+QIGSn5iTHuMyGmdtlj3nFQz+H8vzMt8aFaKDYDKGlMcWMbKf6KCYjKh/EdsrRhKcb0qAtAq7CCoPFkwZIKGoNS4CXCTPjEof3OOlcVF8g+khGKvmXo8kcxAh4Ue6b/ke2EYiUIKY50WkB7qA4KVbk52Y96uK1UY+pjlNuDCtfXQar68kRNbqP2BD7ZS5P+aJGE3aUp9SCMiJ8RUPHjCcb81JYZxa2N9GxapJxnDDHmHoj2H4HIZfb1Ak6fB2/qKkxYLiFQyV35b0pKa675ppj2JGG2G8vBBQ0u567G6wZKTzy+KN3FKikHvj0lL5lZjAioRaXGgn7qcFNgiZ2feNiFvVG9UJEhWNABTMGBRWgoZTTPBlzOthBJ+znoexGCi77DivHHl+EGlybTmFUvM5BUeYC+24EDp/4ZZ7bLD8U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB5163.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(186003)(26005)(83380400001)(2906002)(5660300002)(316002)(16576012)(6666004)(8676002)(4326008)(53546011)(8936002)(31686004)(508600001)(86362001)(107886003)(36756003)(956004)(6486002)(66946007)(31696002)(2616005)(38100700002)(66556008)(66476007)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QmZTVWUyMmtmU1ZCYXkvQjJRazBGU3JqZGRqTUxWamhucDd4ZDBwSmxTKzBs?=
+ =?utf-8?B?NjRhN2pndWdnYTlHYzcrb1RINGFzRVhmZXB1d0hWMnY3NlI5MXdmbXdiM2JI?=
+ =?utf-8?B?WWN4dG5RZUthZ3BlRkdFVE1qd3hlbFRqRXVjYStIZWVRMlUwZFZkenJIZWd0?=
+ =?utf-8?B?TDRZOGtTek8zQnd3VDZsRi9zVXNrbVJpa20zSTdQalBhZHZwMVVHMmM5OUZ2?=
+ =?utf-8?B?alpocUtOMDhVZGxoekFkaUR3aUlqUnNhQlIvd0c2dnk5ZzNzV045dVE0RG5Y?=
+ =?utf-8?B?cDEzbmFwMDM1UWJONE5TT3czSm5Jdjh5citkdlhtU2VCeHdvZDRtSFdpRml5?=
+ =?utf-8?B?R2thdzlqQkdPTjZlQnBqV1UvTnJJZzN5M0pZaXhsQldxT2hjb2Nnbi9lQllR?=
+ =?utf-8?B?MGJxdVhJQWFmN1RnYmhPYmwzb2dVWGxZMmcvQUxBNEE5ODB0b0hOdTdzY0Qv?=
+ =?utf-8?B?SktQTmdIZHZVbG4rUzl4NFNjckx0ZkwvV3hVUHB5Qndwak0ydm1yOU1SVWRk?=
+ =?utf-8?B?Qkc3cHZiY2FOTE8xVnB6YW8vd1UvWVZ3S2grZXI1cDU3eTVKVUNoQzlXTDEx?=
+ =?utf-8?B?VjdWUWdha2lJblVEMmJSekF1aVNCWkQ3dFNvUHBZRFU0V29sS3hEeUFnTmoz?=
+ =?utf-8?B?TXBYUWhZNExLOW1BeU1NcDgwOUJzMDZWeUpYNHo0UFpubEtVZjNkV09adTlE?=
+ =?utf-8?B?b0ZtMkdlTmMySGpncTloK1RGais1c3JjVkN1UnJMOHYyeHloczBKL0duM0sw?=
+ =?utf-8?B?VDQwSit6bDlGV3plczh2VlNtTCtEQTFTdXBuVnArNmdvYnBxZ3czSEtCVkNh?=
+ =?utf-8?B?bWU3SG0vU3Urd3lWSTZCaEhGbzUrS3BYZVZRUjkzYW9VTFhJN2U1cW9FNDFG?=
+ =?utf-8?B?QlJCODhUWGJoNzN5cExGR25WdTd0dkcvTVZCZXc0clRkSDFjTjlBazIxakkz?=
+ =?utf-8?B?QzlXR25USHhHMXFuMkxmM1BKVGRvMGtLMkxIdnBIK0ZqT2k0Rk84bER4SGoy?=
+ =?utf-8?B?WnhJQTA4VFF6a2hxdFEyN1Y4d1A3SE1KaVlIRWZ0bnVlVjJzY2VLUm93T1hD?=
+ =?utf-8?B?VENFenVqejRnTDdMem9MOTlOU3ZBN1M0WVI4L2hONHMrY2duSkxVQW1GQkJa?=
+ =?utf-8?B?Y3lFZERMbitpa1h5VWIzY3RDbTRLY0lROFg3ZWVxN1l6MUh0UTJHeTUxdG1k?=
+ =?utf-8?B?SFpuRHZyemg3b1VWakxiaGs3Q1ZleUhpQ28zb3BhWEFnSWp0c2lJdmU5aFlF?=
+ =?utf-8?B?QWFUSFRKbUZjSVdHU2NiNFEvZllxeXFZL3FYNlFBMDZobUFQQzFOMzlmMnlZ?=
+ =?utf-8?B?b2h1VjNiUXczOFQyZWR3dG9sRGtoQjhmUUxRcE5EUkFhd1RxejZjeHNoSEtU?=
+ =?utf-8?B?dFNrUXFPTHJrbDNJWVVuZVhXcmpZc08rTW1CQmx6V3hMTk1KdFJobVJKWk5h?=
+ =?utf-8?B?aGtJV3VsTkg4Qlp2K3pLQThFTHNydy9RRHkxN1VPU3IrazFvUHFVclFQajZZ?=
+ =?utf-8?B?dEJZOWQ1U3IvS3Y5b3VDQnZzREZHQkwzb3VqcGluR29PRUhxd2pLZ1REZ1JP?=
+ =?utf-8?B?MjRON0Fma00wOTlSK0xwTjBTN2lITGpld1ZVMnJYcW00RFNwM2txZnZmWGNI?=
+ =?utf-8?B?cnVPakIxZE5jQ014dnAwYkxLdUFibzVBQ1dQRHp0NGphdkt4dksvT1hOd2Uv?=
+ =?utf-8?B?UnR4eEY5Y3FGM0s0WUJUTVplTFZSSDZDWkJwbGRUV0lwKzUwWi8rYWVqTjEv?=
+ =?utf-8?Q?yV0SUDnmn2pJH0LXaVYIBwt13AdBFdcoKdexDeR?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4376b66-53c8-4f52-c00d-08d993e2fe6e
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB5163.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2021 16:02:19.2249
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: russell.h.weight@intel.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3501
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
-On 10/19/21 4:15 PM, Russ Weight wrote:
-> When the fme-error driver initializes, log any pre-existing errors and
-> clear them. To avoid code replication, common code is gathered into
-> a common fme_err_clear() function and a structure (err_reg) is created
-> to describe each of the error registers, the corresponding mask
-> registers, and the default mask for each register.
+
+On 10/20/21 5:18 AM, Tom Rix wrote:
 >
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> ---
->   drivers/fpga/dfl-fme-error.c | 128 +++++++++++++++++++++++------------
->   1 file changed, 84 insertions(+), 44 deletions(-)
+> On 10/19/21 4:15 PM, Russ Weight wrote:
+>> When the AFU driver initializes, log any pre-existing errors and clear them.
+>>
+>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>> ---
+>>   drivers/fpga/dfl-afu-error.c | 26 ++++++++++++++++----------
+>>   1 file changed, 16 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/fpga/dfl-afu-error.c b/drivers/fpga/dfl-afu-error.c
+>> index ab7be6217368..0dc60bf49902 100644
+>> --- a/drivers/fpga/dfl-afu-error.c
+>> +++ b/drivers/fpga/dfl-afu-error.c
+>> @@ -47,13 +47,13 @@ static void afu_port_err_mask(struct device *dev, bool mask)
+>>   }
+>>     /* clear port errors. */
+>> -static int afu_port_err_clear(struct device *dev, u64 err)
+>> +static int afu_port_err_clear(struct device *dev, u64 err, bool clear_all)
+>>   {
+>>       struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
+>>       struct platform_device *pdev = to_platform_device(dev);
+>> +    u64 v, port_error, port_first_error;
+> v is only used now by the read of PORT_HDR_STS, could v be changed to a more descriptive variable like hdr_sts ?
+>>       void __iomem *base_err, *base_hdr;
+>>       int enable_ret = 0, ret = -EBUSY;
+>> -    u64 v;
+>>         base_err = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_ERROR);
+>>       base_hdr = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
+>> @@ -88,16 +88,21 @@ static int afu_port_err_clear(struct device *dev, u64 err)
+>>       __afu_port_err_mask(dev, true);
+>>         /* Clear errors if err input matches with current port errors.*/
+>> -    v = readq(base_err + PORT_ERROR);
+>> +    port_error = readq(base_err + PORT_ERROR);
+>>   -    if (v == err) {
+>> -        writeq(v, base_err + PORT_ERROR);
+>> +    if (clear_all || port_error == err) {
+>> +        port_first_error = readq(base_err + PORT_FIRST_ERROR);
+>>   -        v = readq(base_err + PORT_FIRST_ERROR);
+>> -        writeq(v, base_err + PORT_FIRST_ERROR);
+>> +        if (clear_all && (port_error || port_first_error))
 >
-> diff --git a/drivers/fpga/dfl-fme-error.c b/drivers/fpga/dfl-fme-error.c
-> index 51c2892ec06d..44da7b30c469 100644
-> --- a/drivers/fpga/dfl-fme-error.c
-> +++ b/drivers/fpga/dfl-fme-error.c
-> @@ -39,6 +39,27 @@
->   
->   #define ERROR_MASK		GENMASK_ULL(63, 0)
->   
-> +struct err_reg {
-> +	char *name;
-> +	u32 err_offset;
-> +	u32 mask_offset;
-> +	u32 mask_value;
-> +};
-> +
-> +static struct err_reg pcie0_reg = {
-> +	.name = "PCIE0",
-> +	.err_offset = PCIE0_ERROR,
-> +	.mask_offset = PCIE0_ERROR_MASK,
-> +	.mask_value = 0ULL
-> +};
-> +
-> +static struct err_reg pcie1_reg = {
-> +	.name = "PCIE1",
-> +	.err_offset = PCIE1_ERROR,
-> +	.mask_offset = PCIE1_ERROR_MASK,
-> +	.mask_value = 0ULL
-> +};
-> +
-Can these be stored in an array ?
->   static ssize_t pcie0_errors_show(struct device *dev,
->   				 struct device_attribute *attr, char *buf)
->   {
-> @@ -55,31 +76,48 @@ static ssize_t pcie0_errors_show(struct device *dev,
->   	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
->   }
->   
-> -static ssize_t pcie0_errors_store(struct device *dev,
-> -				  struct device_attribute *attr,
-> -				  const char *buf, size_t count)
-> +static int fme_err_clear(struct device *dev, struct err_reg *reg,
-> +			 u64 err, bool clear_all)
->   {
->   	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
->   	void __iomem *base;
->   	int ret = 0;
-> -	u64 v, val;
-> -
-> -	if (kstrtou64(buf, 0, &val))
-> -		return -EINVAL;
-> +	u64 v;
->   
->   	base = dfl_get_feature_ioaddr_by_id(dev, FME_FEATURE_ID_GLOBAL_ERR);
->   
->   	mutex_lock(&pdata->lock);
-> -	writeq(GENMASK_ULL(63, 0), base + PCIE0_ERROR_MASK);
-> +	writeq(GENMASK_ULL(63, 0), base + reg->mask_offset);
->   
-> -	v = readq(base + PCIE0_ERROR);
-> -	if (val == v)
-> -		writeq(v, base + PCIE0_ERROR);
-> -	else
-> +	v = readq(base + reg->err_offset);
-> +	if (clear_all || err == v) {
-> +		if (clear_all && v)
-clear_all will over report.
-> +			dev_warn(dev, "%s: %s Errors: 0x%llx\n",
-> +				 __func__, reg->name, v);
-> +
-> +		writeq(v, base + reg->err_offset);
-> +	} else {
->   		ret = -EINVAL;
-> +	}
->   
-> -	writeq(0ULL, base + PCIE0_ERROR_MASK);
-> +	writeq(reg->mask_value, base + reg->mask_offset);
->   	mutex_unlock(&pdata->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static ssize_t pcie0_errors_store(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  const char *buf, size_t count)
-> +{
-> +	u64 val;
-> +	int ret;
-> +
-> +	if (kstrtou64(buf, 0, &val))
-> +		return -EINVAL;
-> +
-> +	ret = fme_err_clear(dev, &pcie0_reg, val, false);
-> +
->   	return ret ? ret : count;
->   }
->   static DEVICE_ATTR_RW(pcie0_errors);
-> @@ -104,27 +142,14 @@ static ssize_t pcie1_errors_store(struct device *dev,
->   				  struct device_attribute *attr,
->   				  const char *buf, size_t count)
->   {
-This looks like a copy of pcie0_errors_store can these functions be 
-consolidated ?
-> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-> -	void __iomem *base;
-> -	int ret = 0;
-> -	u64 v, val;
-> +	u64 val;
-> +	int ret;
->   
->   	if (kstrtou64(buf, 0, &val))
->   		return -EINVAL;
->   
-> -	base = dfl_get_feature_ioaddr_by_id(dev, FME_FEATURE_ID_GLOBAL_ERR);
-> +	ret = fme_err_clear(dev, &pcie1_reg, val, false);
->   
-> -	mutex_lock(&pdata->lock);
-> -	writeq(GENMASK_ULL(63, 0), base + PCIE1_ERROR_MASK);
-> -
-> -	v = readq(base + PCIE1_ERROR);
-> -	if (val == v)
-> -		writeq(v, base + PCIE1_ERROR);
-> -	else
-> -		ret = -EINVAL;
-> -
-> -	writeq(0ULL, base + PCIE1_ERROR_MASK);
-> -	mutex_unlock(&pdata->lock);
->   	return ret ? ret : count;
->   }
->   static DEVICE_ATTR_RW(pcie1_errors);
-> @@ -218,29 +243,26 @@ static ssize_t fme_errors_store(struct device *dev,
->   				struct device_attribute *attr,
->   				const char *buf, size_t count)
->   {
-> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-> +	static struct err_reg fme_reg = {
-> +		.name = "FME",
-> +		.err_offset = FME_ERROR,
-> +		.mask_offset = FME_ERROR_MASK,
-> +		.mask_value = 0ULL
-> +	};
->   	void __iomem *base;
-> -	u64 v, val;
-> -	int ret = 0;
-> +	u64 val;
-> +	int ret;
->   
->   	if (kstrtou64(buf, 0, &val))
->   		return -EINVAL;
->   
-> +	/* Workaround: disable MBP_ERROR if feature revision is 0 */
->   	base = dfl_get_feature_ioaddr_by_id(dev, FME_FEATURE_ID_GLOBAL_ERR);
-> +	if (!dfl_feature_revision(base))
-> +		fme_reg.mask_value = MBP_ERROR;
->   
-> -	mutex_lock(&pdata->lock);
-> -	writeq(GENMASK_ULL(63, 0), base + FME_ERROR_MASK);
-> +	ret = fme_err_clear(dev, &fme_reg, val, false);
->   
-> -	v = readq(base + FME_ERROR);
-> -	if (val == v)
-> -		writeq(v, base + FME_ERROR);
-> -	else
-> -		ret = -EINVAL;
-> -
-> -	/* Workaround: disable MBP_ERROR if feature revision is 0 */
-> -	writeq(dfl_feature_revision(base) ? 0ULL : MBP_ERROR,
-> -	       base + FME_ERROR_MASK);
-> -	mutex_unlock(&pdata->lock);
->   	return ret ? ret : count;
->   }
->   static DEVICE_ATTR_RW(fme_errors);
-> @@ -338,6 +360,24 @@ static void fme_err_mask(struct device *dev, bool mask)
->   static int fme_global_err_init(struct platform_device *pdev,
->   			       struct dfl_feature *feature)
->   {
-> +	static struct err_reg fme_reg = {
-> +		.name = "FME",
-> +		.err_offset = FME_ERROR,
-> +		.mask_offset = FME_ERROR_MASK,
-> +		.mask_value = 0ULL
-> +	};
-> +	void __iomem *base;
-> +
-> +	/* Workaround: disable MBP_ERROR if feature revision is 0 */
-> +	base = dfl_get_feature_ioaddr_by_id(&pdev->dev,
-> +					    FME_FEATURE_ID_GLOBAL_ERR);
-> +	if (!dfl_feature_revision(base))
-> +		fme_reg.mask_value = MBP_ERROR;
+> likely with clear_all that this dev_warn will over report.
+>
+> how about removing clear_all && from if-check ?
+I think that would make it report more often? clear_all is only set
+at the time that the driver initializes. With the current condition,
+errors will only be logged when the driver loads, if and only if
+there are actually errors to report.
 
-A similar block above to set fme_reg.mask_value.
 
-These should be consolidated.
+>
+>> +            dev_warn(dev,
+>> +                 "Port Error: 0x%llx, First Error 0x%llx\n",
+>> +                 port_error, port_first_error);
+>> +
+>> +        writeq(port_error, base_err + PORT_ERROR);
+>> +        writeq(port_first_error, base_err + PORT_FIRST_ERROR);
+>>       } else {
+>>           dev_warn(dev, "%s: received 0x%llx, expected 0x%llx\n",
+>> -             __func__, v, err);
+>> +             __func__, port_error, err);
+>>           ret = -EINVAL;
+>>       }
+>>   @@ -137,7 +142,7 @@ static ssize_t errors_store(struct device *dev, struct device_attribute *attr,
+>>       if (kstrtou64(buff, 0, &value))
+>>           return -EINVAL;
+>>   -    ret = afu_port_err_clear(dev, value);
+>> +    ret = afu_port_err_clear(dev, value, false);
+>>         return ret ? ret : count;
+>>   }
+>> @@ -211,7 +216,8 @@ const struct attribute_group port_err_group = {
+>>   static int port_err_init(struct platform_device *pdev,
+>>                struct dfl_feature *feature)
+>>   {
+>> -    afu_port_err_mask(&pdev->dev, false);
+>> +    if (afu_port_err_clear(&pdev->dev, 0, true))
+>> +        afu_port_err_mask(&pdev->dev, false);
+>
+> There is a __afu_port_err_mask at the end of afu_port_err_clear so this call isn't needed.
 
-> +
-> +	(void)fme_err_clear(&pdev->dev, &pcie0_reg, 0ULL, true);
+The condition statements says to only clear the mask explicitly if afu_port_err_clear()
+fails. If it succeeds, then the explicit call will not happen, because as you have
+pointed out, afu_port_err_clear() clear the mask.
 
-remove casting return to (void)
+Thanks,
+- Russ
 
-Tom
-
-> +	(void)fme_err_clear(&pdev->dev, &pcie1_reg, 0ULL, true);
-> +	(void)fme_err_clear(&pdev->dev, &fme_reg, 0ULL, true);
-> +
->   	fme_err_mask(&pdev->dev, false);
->   
->   	return 0;
+>
+> Tom
+>
+>>         return 0;
+>>   }
+>
 
