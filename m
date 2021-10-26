@@ -2,1042 +2,364 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0494390DB
-	for <lists+linux-fpga@lfdr.de>; Mon, 25 Oct 2021 10:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C2D43A919
+	for <lists+linux-fpga@lfdr.de>; Tue, 26 Oct 2021 02:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbhJYIKk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 25 Oct 2021 04:10:40 -0400
-Received: from mga17.intel.com ([192.55.52.151]:45226 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230106AbhJYIKj (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 25 Oct 2021 04:10:39 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10147"; a="210375034"
-X-IronPort-AV: E=Sophos;i="5.87,179,1631602800"; 
-   d="scan'208";a="210375034"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 01:08:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,179,1631602800"; 
-   d="scan'208";a="485574472"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
-  by orsmga007.jf.intel.com with ESMTP; 25 Oct 2021 01:08:06 -0700
-Date:   Mon, 25 Oct 2021 16:01:30 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Lizhi Hou <lizhi.hou@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        maxz@xilinx.com, sonal.santan@xilinx.com, yliu@xilinx.com,
-        michal.simek@xilinx.com, stefanos@xilinx.com,
-        devicetree@vger.kernel.org, trix@redhat.com, mdf@kernel.org,
-        robh@kernel.org, Max Zhen <max.zhen@xilinx.com>
-Subject: Re: [PATCH V9 XRT Alveo 04/14] fpga: xrt: xrt-lib driver manager
-Message-ID: <20211025080130.GE40070@yilunxu-OptiPlex-7050>
-References: <20210802160521.331031-1-lizhi.hou@xilinx.com>
- <20210802160521.331031-5-lizhi.hou@xilinx.com>
+        id S233433AbhJZAJb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 25 Oct 2021 20:09:31 -0400
+Received: from mail-co1nam11on2072.outbound.protection.outlook.com ([40.107.220.72]:13163
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230343AbhJZAJa (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Mon, 25 Oct 2021 20:09:30 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YOq7edVxRHilVhO4FoC0itqcOL/wGAy+ke5uOLFMl0FdtR6qSsEO7CRgoUvC5Y4QYBytyp1LUcFIsX58MLOTZztHABvCfLbO8aUDE2+QqfJsAatDT4dcHnMdCG8pQuReHC7wibtUlcT4SI2H02Hyygz0IDbnYqLwLVRHdoAomnxlZSg9Gj1V0HToprPTM4/FNqBkpKfQ3R7oFWsZNy7lAZWOEpPxP7jix/66KAfQM9Q/ffcFsAg9d9eKCRePIQ6+qA5Z6ivzP8CeoY7/i75jC81rfAJDptudAh/RBey8Q4dFETBRdmnuciP9lPaJXvPt9qRpVx52mXCnrXq2UQg63w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6G58yBAe7NVmaRBKYBLGeZ/fNW4Us+rsSFoLt0eb0kE=;
+ b=ZgcTBsw716PJn7LK9yT9iAGo7dBEGwmyUp6cwT/aJfmJlrxVBALD1NmrXOsjYOPOSqbORirvu8Vf4qt/JpXeK8xdTyLZOmM3sMtu2JuXsdcOZO65a9RSmXVH76jP8ufMUGCM3bUV2Dw2OvuD2lqv9BzM2iAOby+dekY7qg6tzRcfUp0Fdj2HxIi5s2/kCkem+v2VHKj2qkpQ+ZcQGmlo88x9dHb0kfotDfwrQbiJiHUTImlovYfs90o9ZnRwc9vgFKrHYUQNh8GBXXw9TDmJCC3wJfeGHBy4IYr40mjpLFc326Y3168UV3ha5NT3OUsc//e3g/Q/Y6LVQf22KQIGhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=intel.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6G58yBAe7NVmaRBKYBLGeZ/fNW4Us+rsSFoLt0eb0kE=;
+ b=CjDNhFASeem6RU/sEwL0x9gaRLGSFPRfY3Dd2O61WFm4fNokVc1vlLMnXp4/IF5uJyy3CCdkLzA9zy8B/6+Wuo6GrO6hGr7RHfyRwveA2TgNxG9FIZjc4xRQrvAh+lErG4X3qj86A1hxb040KfspUKwQ8vDodOuM8l6EKf4TLbM=
+Received: from BN6PR19CA0117.namprd19.prod.outlook.com (2603:10b6:404:a0::31)
+ by BL0PR02MB3889.namprd02.prod.outlook.com (2603:10b6:207:4b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.18; Tue, 26 Oct
+ 2021 00:07:04 +0000
+Received: from BN1NAM02FT026.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:404:a0:cafe::33) by BN6PR19CA0117.outlook.office365.com
+ (2603:10b6:404:a0::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.18 via Frontend
+ Transport; Tue, 26 Oct 2021 00:07:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT026.mail.protection.outlook.com (10.13.2.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4628.18 via Frontend Transport; Tue, 26 Oct 2021 00:07:04 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 25 Oct 2021 17:07:02 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Mon, 25 Oct 2021 17:07:02 -0700
+Envelope-to: matthew.gerlach@intel.com,
+ hao.wu@intel.com,
+ yilun.xu@intel.com,
+ lgoncalv@redhat.com,
+ trix@redhat.com,
+ linux-kernel@vger.kernel.org,
+ linux-fpga@vger.kernel.org,
+ mdf@kernel.org,
+ russell.h.weight@intel.com
+Received: from [10.17.2.60] (port=52458)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <lizhi.hou@xilinx.com>)
+        id 1mf9za-0001Qo-D9; Mon, 25 Oct 2021 17:07:02 -0700
+Subject: Re: [PATCH v17 4/5] fpga: image-load: add status ioctl
+To:     Russ Weight <russell.h.weight@intel.com>,
+        Lizhi Hou <lizhi.hou@xilinx.com>, <mdf@kernel.org>,
+        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <trix@redhat.com>, <lgoncalv@redhat.com>, <yilun.xu@intel.com>,
+        <hao.wu@intel.com>, <matthew.gerlach@intel.com>
+References: <20210929230025.68961-1-russell.h.weight@intel.com>
+ <20210929230025.68961-5-russell.h.weight@intel.com>
+ <97bb3fb5-3807-386d-d2c8-fec9c077a255@xilinx.com>
+ <1e94cff5-ed53-bab7-1bb1-321ba833ea1e@intel.com>
+From:   Lizhi Hou <lizhi.hou@xilinx.com>
+Message-ID: <bbcb902c-49e4-75e1-6e8e-4e791d8c6537@xilinx.com>
+Date:   Mon, 25 Oct 2021 17:07:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210802160521.331031-5-lizhi.hou@xilinx.com>
+In-Reply-To: <1e94cff5-ed53-bab7-1bb1-321ba833ea1e@intel.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e0625bae-3b98-421f-9fe8-08d998148ada
+X-MS-TrafficTypeDiagnostic: BL0PR02MB3889:
+X-Microsoft-Antispam-PRVS: <BL0PR02MB38894D8C363DCD6EAB8B06EAA1849@BL0PR02MB3889.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nVKtTDt4mnFdWdBoGSZi9Emva1ePkK5J8ytWd5lOlc859RNjvj6Ks5/icVUe2QRJrUab8b0+BwE1aN2slLJC3026hShkMn7GZ7UJYhUM+iw5tuNpNW7tSczqB/mQOitbRfSswoJkbgwWQjRpMN1EM+SSY7d/24Tll8S8OjV8K/HRIaSjRpL12xmS9kX68+q4r6jxVw7YdLII8GwECuf+RnGlSfclrC/tsVAX/5mDDRiSg9RrP4/Ayrf+TQA6/ABLOJ3pXkoPRpFJbwLZlXEHwP0GNp6xVNJARwSTDZCBepcrVRwmHOYspwQNFOwLZv2mwFlRLimL0J9DMqMISTkmxN2KtxXxrx2cEo5Db/c/M0zXrN6n8RNyztAvJ6tnTWqHx7/OxSwv2jNob8VMcn8XUGcdDfgEeeEDFMrKABuJLI4uQxcZs/qVqu2sjVuLa7tAqYMYjmGp7zKPTx+uh6U/FvhILj93HrOendDnpqf6mjb+9/wR+IueKI4aTFFOulJgena7BkJvcAGAi5T/Bs18qoHQ+kBsPdgK1VUW+Vsuhys5Lgo59saXR0p9uePyJ8VdZ4vLhU9tkDQPmyd1Fd6e2YWWQGpJp9OrTSOXFH7sQ8Z+fdbU5Fui1rhQ7sxWj5MFO1mRQkRvIWU+aF6lOfs1I1pvgR/LN5WzIJA4NXnp9RBFFQxJ5z1m+axOR4Ijbt8o2rd+O2yjZqlLGeqXWLCzfmUEZep2UX/awzp7peRt/zIvo2hoeYfwybEWX1yvxpoizjhsXhQdzi9yHsVFd97N7dLEaXGXMsoKjdyxaIksBkSeYRhk5mlQdLm8A213VT4AIDWkHaKKyPMnK0wUaKNFBnc+J6ncVucS8UEPEtBsH2U=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(36840700001)(46966006)(9786002)(31696002)(70206006)(4326008)(356005)(36860700001)(110136005)(186003)(2616005)(508600001)(82310400003)(47076005)(44832011)(36756003)(70586007)(966005)(54906003)(53546011)(316002)(336012)(26005)(2906002)(31686004)(426003)(83380400001)(8936002)(8676002)(36906005)(5660300002)(7636003)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2021 00:07:04.4587
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0625bae-3b98-421f-9fe8-08d998148ada
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT026.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB3889
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Aug 02, 2021 at 09:05:11AM -0700, Lizhi Hou wrote:
-> xrt-lib kernel module infrastructure code to register and manage all
-> leaf driver modules.
-> 
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
-> Reviewed-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/fpga/xrt/include/subdev_id.h          |  39 +++
->  drivers/fpga/xrt/include/xdevice.h            | 141 ++++++++
->  drivers/fpga/xrt/include/xleaf.h              | 205 +++++++++++
->  drivers/fpga/xrt/include/xleaf/clkfreq.h      |  21 ++
->  drivers/fpga/xrt/include/xleaf/clock.h        |  29 ++
->  .../fpga/xrt/include/xleaf/ddr_calibration.h  |  28 ++
->  drivers/fpga/xrt/include/xleaf/devctl.h       |  40 +++
->  drivers/fpga/xrt/lib/lib-drv.c                | 318 ++++++++++++++++++
->  drivers/fpga/xrt/lib/lib-drv.h                |  21 ++
->  9 files changed, 842 insertions(+)
->  create mode 100644 drivers/fpga/xrt/include/subdev_id.h
->  create mode 100644 drivers/fpga/xrt/include/xdevice.h
->  create mode 100644 drivers/fpga/xrt/include/xleaf.h
->  create mode 100644 drivers/fpga/xrt/include/xleaf/clkfreq.h
->  create mode 100644 drivers/fpga/xrt/include/xleaf/clock.h
->  create mode 100644 drivers/fpga/xrt/include/xleaf/ddr_calibration.h
->  create mode 100644 drivers/fpga/xrt/include/xleaf/devctl.h
->  create mode 100644 drivers/fpga/xrt/lib/lib-drv.c
->  create mode 100644 drivers/fpga/xrt/lib/lib-drv.h
-> 
-> diff --git a/drivers/fpga/xrt/include/subdev_id.h b/drivers/fpga/xrt/include/subdev_id.h
-> new file mode 100644
-> index 000000000000..02df4b939a1b
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/subdev_id.h
-> @@ -0,0 +1,39 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Cheng Zhen <maxz@xilinx.com>
-> + */
-> +
-> +#ifndef _XRT_SUBDEV_ID_H_
-> +#define _XRT_SUBDEV_ID_H_
-> +
-> +/*
-> + * Every subdev driver has an ID for others to refer to it. There can be multiple number of
-> + * instances of a subdev driver. A <subdev_id, subdev_instance> tuple is a unique identification
-> + * of a specific instance of a subdev driver.
-> + */
-> +enum xrt_subdev_id {
-> +	XRT_SUBDEV_INVALID = 0,
-> +	XRT_SUBDEV_GRP,
-> +	XRT_SUBDEV_VSEC,
-> +	XRT_SUBDEV_VSEC_GOLDEN,
-> +	XRT_SUBDEV_DEVCTL,
-> +	XRT_SUBDEV_AXIGATE,
-> +	XRT_SUBDEV_ICAP,
-> +	XRT_SUBDEV_TEST,
-> +	XRT_SUBDEV_MGMT_MAIN,
-> +	XRT_SUBDEV_QSPI,
-> +	XRT_SUBDEV_MAILBOX,
-> +	XRT_SUBDEV_CMC,
-> +	XRT_SUBDEV_CALIB,
-> +	XRT_SUBDEV_CLKFREQ,
-> +	XRT_SUBDEV_CLOCK,
-> +	XRT_SUBDEV_SRSR,
-> +	XRT_SUBDEV_UCS,
-> +	XRT_SUBDEV_NUM, /* Total number of subdevs. */
-> +	XRT_ROOT = -1, /* Special ID for root driver. */
-> +};
-> +
-> +#endif	/* _XRT_SUBDEV_ID_H_ */
-> diff --git a/drivers/fpga/xrt/include/xdevice.h b/drivers/fpga/xrt/include/xdevice.h
-> new file mode 100644
-> index 000000000000..b40ebe98b54d
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xdevice.h
-> @@ -0,0 +1,141 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *    Lizhi Hou <lizhi.hou@xilinx.com>
-> + */
-> +
-> +#ifndef _XRT_DEVICE_H_
-> +#define _XRT_DEVICE_H_
-> +
-> +#include <linux/fs.h>
-> +#include <linux/cdev.h>
-> +
-> +#define XRT_MAX_DEVICE_NODES		128
-> +#define XRT_INVALID_DEVICE_INST		(XRT_MAX_DEVICE_NODES + 1)
-> +
-> +enum {
-> +	XRT_DEVICE_STATE_NONE = 0,
-> +	XRT_DEVICE_STATE_ADDED
-> +};
-> +
-> +/*
-> + * struct xrt_device - represent an xrt device on xrt bus
-> + *
-> + * dev: generic device interface.
-> + * subdev_id: id of the xrt device. See enum xrt_subdev_id.
-> + * name: name of the xrt device.
-> + * instance: instance of the xrt device. The xrt device with same id can have
-> + *           more than 1 instances.
-> + * state: current state of the xrt device.
-> + * num_resources: The total number of resource for the xrt device.
-> + * resource: point to the xrt device resource array.
-> + * sdev_data: private data pointer.
-> + */
-> +struct xrt_device {
-> +	struct device dev;
-> +	u32 subdev_id;
-> +	const char *name;
-> +	u32 instance;
-> +	u32 state;
-> +	u32 num_resources;
-> +	struct resource *resource;
-> +	void *sdev_data;
-> +};
-> +
-> +/*
-> + * If populated by xrt device driver, infra will handle the mechanics of
-> + * char device (un)registration.
-> + */
-> +enum xrt_dev_file_mode {
-> +	/* Infra create cdev, default file name */
-> +	XRT_DEV_FILE_DEFAULT = 0,
-> +	/* Infra create cdev, need to encode inst num in file name */
-> +	XRT_DEV_FILE_MULTI_INST,
-> +	/* No auto creation of cdev by infra, leaf handles it by itself */
-> +	XRT_DEV_FILE_NO_AUTO,
-> +};
-> +
-> +struct xrt_dev_file_ops {
-> +	const struct file_operations xsf_ops;
-> +	dev_t xsf_dev_t;
-> +	const char *xsf_dev_name;
-> +	enum xrt_dev_file_mode xsf_mode;
-> +};
-> +
-> +/*
-> + * this struct define the endpoints belong to the same xrt device
-> + * ep_name: endpoint name
-> + * compat: compatible string
-> + */
-> +struct xrt_dev_ep_names {
-> +	const char *ep_name;
-> +	const char *compat;
-> +};
-> +
-> +struct xrt_dev_endpoints {
-> +	struct xrt_dev_ep_names *xse_names;
-> +	/* minimum number of endpoints to support the subdevice */
-> +	u32 xse_min_ep;
 
-Why some device must have several DT nodes?
+On 10/20/21 2:42 PM, Russ Weight wrote:
+> On 10/15/21 1:22 PM, Lizhi Hou wrote:
+>> On 9/29/21 4:00 PM, Russ Weight wrote:
+>>> Extend the FPGA Image Load framework to include an FPGA_IMAGE_LOAD_STATUS
+>>> IOCTL that can be used to monitor the progress of an ongoing image upload.
+>>> The status returned includes how much data remains to be transferred, the
+>>> progress of the image upload, and error information in the case of a
+>>> failure.
+>>>
+>>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>>> ---
+>>> v17:
+>>>    - Rebased for changes to earlier patches.
+>>> v16:
+>>>    - Minor changes to adapt in changes in prevoius patches.
+>>> v15:
+>>>    - This patch is new to the patchset and provides an FPGA_IMAGE_LOAD_STATUS
+>>>      IOCTL to return the current values for: remaining_size, progress,
+>>>      err_progress, and err_code.
+>>>    - This patch has elements of the following three patches from the previous
+>>>      patch-set:
+>>>        [PATCH v14 3/6] fpga: sec-mgr: expose sec-mgr update status
+>>>        [PATCH v14 4/6] fpga: sec-mgr: expose sec-mgr update errors
+>>>        [PATCH v14 5/6] fpga: sec-mgr: expose sec-mgr update size
+>>>    - Changed file, symbol, and config names to reflect the new driver name
+>>>    - There are some minor changes to locking to enable this ioctl to return
+>>>      coherent data.
+>>> ---
+>>>    Documentation/fpga/fpga-image-load.rst |  6 +++
+>>>    drivers/fpga/fpga-image-load.c         | 58 +++++++++++++++++++++-----
+>>>    include/linux/fpga/fpga-image-load.h   |  1 +
+>>>    include/uapi/linux/fpga-image-load.h   | 18 ++++++++
+>>>    4 files changed, 73 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/Documentation/fpga/fpga-image-load.rst b/Documentation/fpga/fpga-image-load.rst
+>>> index 487b5466f67c..f64f5ee473b8 100644
+>>> --- a/Documentation/fpga/fpga-image-load.rst
+>>> +++ b/Documentation/fpga/fpga-image-load.rst
+>>> @@ -33,3 +33,9 @@ being updated. This is an exclusive operation; an attempt to start
+>>>    concurrent image uploads for the same device will fail with EBUSY. An
+>>>    eventfd file descriptor parameter is provided to this IOCTL. It will be
+>>>    signalled at the completion of the image upload.
+>>> +
+>>> +FPGA_IMAGE_LOAD_STATUS:
+>>> +
+>>> +Collect status for an on-going image upload. The status returned includes
+>>> +how much data remains to be transferred, the progress of the image upload,
+>>> +and error information in the case of a failure.
+>>> diff --git a/drivers/fpga/fpga-image-load.c b/drivers/fpga/fpga-image-load.c
+>>> index f04dfc71c190..58373b9e8c02 100644
+>>> --- a/drivers/fpga/fpga-image-load.c
+>>> +++ b/drivers/fpga/fpga-image-load.c
+>>> @@ -22,6 +22,22 @@ static dev_t fpga_image_devt;
+>>>
+>>>    #define to_image_load(d) container_of(d, struct fpga_image_load, dev)
+>>>
+>>> +static void fpga_image_update_progress(struct fpga_image_load *imgld,
+>>> +                                      u32 new_progress)
+>>> +{
+>>> +       mutex_lock(&imgld->lock);
+>>> +       imgld->progress = new_progress;
+>>> +       mutex_unlock(&imgld->lock);
+>>> +}
+>>> +
+>>> +static void fpga_image_set_error(struct fpga_image_load *imgld, u32 err_code)
+>>> +{
+>>> +       mutex_lock(&imgld->lock);
+>>> +       imgld->err_progress = imgld->progress;
+>>> +       imgld->err_code = err_code;
+>>> +       mutex_unlock(&imgld->lock);
+>>> +}
+>>> +
+>>>    static void fpga_image_prog_complete(struct fpga_image_load *imgld)
+>>>    {
+>>>           mutex_lock(&imgld->lock);
+>>> @@ -38,24 +54,24 @@ static void fpga_image_do_load(struct work_struct *work)
+>>>           imgld = container_of(work, struct fpga_image_load, work);
+>>>
+>>>           if (imgld->driver_unload) {
+>>> -               imgld->err_code = FPGA_IMAGE_ERR_CANCELED;
+>>> +               fpga_image_set_error(imgld, FPGA_IMAGE_ERR_CANCELED);
+>>>                   goto idle_exit;
+>>>           }
+>>>
+>>>           get_device(&imgld->dev);
+>>>           if (!try_module_get(imgld->dev.parent->driver->owner)) {
+>>> -               imgld->err_code = FPGA_IMAGE_ERR_BUSY;
+>>> +               fpga_image_set_error(imgld, FPGA_IMAGE_ERR_BUSY);
+>>>                   goto putdev_exit;
+>>>           }
+>>>
+>>> -       imgld->progress = FPGA_IMAGE_PROG_PREPARING;
+>>> +       fpga_image_update_progress(imgld, FPGA_IMAGE_PROG_PREPARING);
+>>>           ret = imgld->ops->prepare(imgld, imgld->data, imgld->remaining_size);
+>>>           if (ret) {
+>>> -               imgld->err_code = ret;
+>>> +               fpga_image_set_error(imgld, ret);
+>>>                   goto modput_exit;
+>>>           }
+>>>
+>>> -       imgld->progress = FPGA_IMAGE_PROG_WRITING;
+>>> +       fpga_image_update_progress(imgld, FPGA_IMAGE_PROG_WRITING);
+>>>           while (imgld->remaining_size) {
+>>>                   ret = imgld->ops->write(imgld, imgld->data, offset,
+>>>                                           imgld->remaining_size);
+>>> @@ -65,7 +81,7 @@ static void fpga_image_do_load(struct work_struct *work)
+>>>                                            "write-op wrote zero data\n");
+>>>                                   ret = -FPGA_IMAGE_ERR_RW_ERROR;
+>>>                           }
+>>> -                       imgld->err_code = -ret;
+>>> +                       fpga_image_set_error(imgld, -ret);
+>>>                           goto done;
+>>>                   }
+>>>
+>>> @@ -73,10 +89,10 @@ static void fpga_image_do_load(struct work_struct *work)
+>>>                   offset += ret;
+>>>           }
+>>>
+>>> -       imgld->progress = FPGA_IMAGE_PROG_PROGRAMMING;
+>>> +       fpga_image_update_progress(imgld, FPGA_IMAGE_PROG_PROGRAMMING);
+>>>           ret = imgld->ops->poll_complete(imgld);
+>>>           if (ret)
+>>> -               imgld->err_code = ret;
+>>> +               fpga_image_set_error(imgld, ret);
+>>>
+>>>    done:
+>>>           if (imgld->ops->cleanup)
+>>> @@ -151,20 +167,42 @@ static int fpga_image_load_ioctl_write(struct fpga_image_load *imgld,
+>>>           return ret;
+>>>    }
+>>>
+>>> +static int fpga_image_load_ioctl_status(struct fpga_image_load *imgld,
+>>> +                                       unsigned long arg)
+>>> +{
+>>> +       struct fpga_image_status status;
+>>> +
+>>> +       memset(&status, 0, sizeof(status));
+>>> +       status.progress = imgld->progress;
+>>> +       status.remaining_size = imgld->remaining_size;
+>>> +       status.err_progress = imgld->err_progress;
+>>> +       status.err_code = imgld->err_code;
+>>> +
+>>> +       if (copy_to_user((void __user *)arg, &status, sizeof(status)))
+>>> +               return -EFAULT;
+>>> +
+>>> +       return 0;
+>>> +}
+>>> +
+>>>    static long fpga_image_load_ioctl(struct file *filp, unsigned int cmd,
+>>>                                     unsigned long arg)
+>>>    {
+>>>           struct fpga_image_load *imgld = filp->private_data;
+>>>           int ret = -ENOTTY;
+>>>
+>>> +       mutex_lock(&imgld->lock);
+>>> +
+>>>           switch (cmd) {
+>>>           case FPGA_IMAGE_LOAD_WRITE:
+>>> -               mutex_lock(&imgld->lock);
+>>>                   ret = fpga_image_load_ioctl_write(imgld, arg);
+>>> -               mutex_unlock(&imgld->lock);
+>>> +               break;
+>>> +       case FPGA_IMAGE_LOAD_STATUS:
+>>> +               ret = fpga_image_load_ioctl_status(imgld, arg);
+>>>                   break;
+>>>           }
+>>>
+>>> +       mutex_unlock(&imgld->lock);
+>>> +
+>>>           return ret;
+>>>    }
+>>>
+>>> diff --git a/include/linux/fpga/fpga-image-load.h b/include/linux/fpga/fpga-image-load.h
+>>> index 77b3c91ce073..366111d090fb 100644
+>>> --- a/include/linux/fpga/fpga-image-load.h
+>>> +++ b/include/linux/fpga/fpga-image-load.h
+>>> @@ -49,6 +49,7 @@ struct fpga_image_load {
+>>>           const u8 *data;                 /* pointer to update data */
+>>>           u32 remaining_size;             /* size remaining to transfer */
+>>>           u32 progress;
+>>> +       u32 err_progress;               /* progress at time of error */
+>>>           u32 err_code;                   /* image load error code */
+>>>           bool driver_unload;
+>>>           struct eventfd_ctx *finished;
+>>> diff --git a/include/uapi/linux/fpga-image-load.h b/include/uapi/linux/fpga-image-load.h
+>>> index 8d2d3db92e87..1b91343961df 100644
+>>> --- a/include/uapi/linux/fpga-image-load.h
+>>> +++ b/include/uapi/linux/fpga-image-load.h
+>>> @@ -51,4 +51,22 @@ struct fpga_image_write {
+>>>
+>>>    #define FPGA_IMAGE_LOAD_WRITE  _IOW(FPGA_IMAGE_LOAD_MAGIC, 0, struct fpga_image_write)
+>>>
+>>> +/**
+>>> + * FPGA_IMAGE_LOAD_STATUS - _IOR(FPGA_IMAGE_LOAD_MAGIC, 1,
+>>> + *                              struct fpga_image_status)
+>>> + *
+>>> + * Request status information for an ongoing update.
+>>> + *
+>>> + * Return: 0 on success, -errno on failure.
+>>> + */
+>>> +struct fpga_image_status {
+>>> +       /* Output */
+>>> +       __u32 remaining_size;   /* size remaining to transfer */
+>>> +       __u32 progress;         /* current progress of image load */
+>>> +       __u32 err_progress;     /* progress at time of error */
+>>> +       __u32 err_code;         /* error code */
+>>> +};
+>> Could this be extended to also collect the image detail?
+>>
+>>          Image version, name, etc been successfully written to device (flash).
+>>
+>>          Image version, name, etc is currently running on the device.
+>>
+>> Or maybe add another query command to do these?
+>>
+>> So the userland utility will be able to show what image is running and what image is going to run with next cold reboot.
+> This status call is intended specifically to show the progress and
+> status of the image load. Yilun's comments on patch 5 suggest that
+> some of these types of operations could be handled as part of the
+> fpga-region class driver
+>
+> I have patches that have not been submitted yet that contain some
+> of these types of features, although not in the class driver (yet).
+> Here is a link to documentation for what I have now. Take a look
+> at the sysfs node descriptions that are in the control subdirectory.
+> These are listed at the bottom of the file.
+>
+> https://github.com/OPAE/linux-dfl/blob/fpga-ofs-dev/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
 
-> +};
-> +
-> +/*
-> + * struct xrt_driver - represent a xrt device driver
-> + *
-> + * driver: driver model structure.
-> + * subdev_id: id of the xrt device. See enum xrt_subdev_id.
-> + * file_ops: character device name and callbacks.
-> + * probe: mandatory callback for device binding.
-> + * remove: callback for device unbinding.
-> + * leaf_call: callback for servicing other leaf drivers.
-> + */
-> +struct xrt_driver {
-> +	struct device_driver driver;
-> +	u32 subdev_id;
-> +	struct xrt_dev_file_ops file_ops;
-> +	struct xrt_dev_endpoints *endpoints;
+Thanks a lot. This is very helpful.
 
-No DOC for this field.
+Lizhi
 
-Seems this is to list the device types the driver supports, but usually
-this is done by an id_table in driver.
-
-> +
-> +	/*
-> +	 * Subdev driver callbacks populated by subdev driver.
-> +	 */
-> +	int (*probe)(struct xrt_device *xrt_dev);
-> +	void (*remove)(struct xrt_device *xrt_dev);
-> +	/*
-> +	 * If leaf_call is defined, these are called by other leaf drivers.
-> +	 * Note that root driver may call into leaf_call of a group driver.
-> +	 */
-> +	int (*leaf_call)(struct xrt_device *xrt_dev, u32 cmd, void *arg);
-
-Why this is needed? If a function of a driver module needs to be called
-by other modules, just export the function.
-
-> +};
-> +
-> +#define to_xrt_dev(d) container_of(d, struct xrt_device, dev)
-> +#define to_xrt_drv(d) container_of(d, struct xrt_driver, driver)
-> +
-> +static inline void *xrt_get_drvdata(const struct xrt_device *xdev)
-> +{
-> +	return dev_get_drvdata(&xdev->dev);
-> +}
-> +
-> +static inline void xrt_set_drvdata(struct xrt_device *xdev, void *data)
-> +{
-> +	dev_set_drvdata(&xdev->dev, data);
-> +}
-> +
-> +static inline void *xrt_get_xdev_data(struct device *dev)
-> +{
-> +	struct xrt_device *xdev = to_xrt_dev(dev);
-> +
-> +	return xdev->sdev_data;
-> +}
-> +
-> +struct xrt_device *
-> +xrt_device_register(struct device *parent, u32 id,
-> +		    struct resource *res, u32 res_num,
-> +		    void *pdata, size_t data_sz);
-> +void xrt_device_unregister(struct xrt_device *xdev);
-> +int xrt_register_driver(struct xrt_driver *drv);
-> +void xrt_unregister_driver(struct xrt_driver *drv);
-> +void *xrt_get_xdev_data(struct device *dev);
-> +struct resource *xrt_get_resource(struct xrt_device *xdev, u32 type, u32 num);
-> +
-> +#endif /* _XRT_DEVICE_H_ */
-> diff --git a/drivers/fpga/xrt/include/xleaf.h b/drivers/fpga/xrt/include/xleaf.h
-> new file mode 100644
-> index 000000000000..f065fc766e0f
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf.h
-> @@ -0,0 +1,205 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *    Cheng Zhen <maxz@xilinx.com>
-> + *    Sonal Santan <sonal.santan@xilinx.com>
-> + */
-> +
-> +#ifndef _XRT_XLEAF_H_
-> +#define _XRT_XLEAF_H_
-> +
-> +#include <linux/mod_devicetable.h>
-> +#include "xdevice.h"
-> +#include "subdev_id.h"
-> +#include "xroot.h"
-> +#include "events.h"
-> +
-> +/* All subdev drivers should use below common routines to print out msg. */
-> +#define DEV(xdev)	(&(xdev)->dev)
-> +#define DEV_PDATA(xdev)					\
-> +	((struct xrt_subdev_platdata *)xrt_get_xdev_data(DEV(xdev)))
-> +#define DEV_FILE_OPS(xdev)				\
-> +	(&(to_xrt_drv((xdev)->dev.driver))->file_ops)
-> +#define FMT_PRT(prt_fn, xdev, fmt, args...)		\
-> +	({typeof(xdev) (_xdev) = (xdev);		\
-> +	prt_fn(DEV(_xdev), "%s %s: " fmt,		\
-> +	DEV_PDATA(_xdev)->xsp_root_name, __func__, ##args); })
-> +#define xrt_err(xdev, fmt, args...) FMT_PRT(dev_err, xdev, fmt, ##args)
-> +#define xrt_warn(xdev, fmt, args...) FMT_PRT(dev_warn, xdev, fmt, ##args)
-> +#define xrt_info(xdev, fmt, args...) FMT_PRT(dev_info, xdev, fmt, ##args)
-> +#define xrt_dbg(xdev, fmt, args...) FMT_PRT(dev_dbg, xdev, fmt, ##args)
-> +
-> +#define XRT_DEFINE_REGMAP_CONFIG(config_name)				\
-> +	static const struct regmap_config config_name = {		\
-> +		.reg_bits = 32,						\
-> +		.val_bits = 32,						\
-> +		.reg_stride = 4,					\
-> +		.max_register = 0x1000,					\
-> +	}
-> +
-> +enum {
-> +	/* Starting cmd for common leaf cmd implemented by all leaves. */
-> +	XRT_XLEAF_COMMON_BASE = 0,
-> +	/* Starting cmd for leaves' specific leaf cmds. */
-> +	XRT_XLEAF_CUSTOM_BASE = 64,
-> +};
-> +
-> +enum xrt_xleaf_common_leaf_cmd {
-> +	XRT_XLEAF_EVENT = XRT_XLEAF_COMMON_BASE,
-> +};
-> +
-> +/*
-> + * Partially initialized by the parent driver, then, passed in as subdev driver's
-> + * platform data when creating subdev driver instance by calling platform
-> + * device register API (xrt_device_register_data() or the likes).
-
-Didn't find the xrt_device_register_data, should be xrt_device_register?
-
-> + *
-> + * Once device register API returns, platform driver framework makes a copy of
-> + * this buffer and maintains its life cycle. The content of the buffer is
-> + * completely owned by subdev driver.
-
-Generally the platform data contains some specific description of the device, so
-it should also be managered by the parent same as the device. The driver
-owned data should be in dev.driver_data
-
-> + *
-> + * Thus, parent driver should be very careful when it touches this buffer
-> + * again once it's handed over to subdev driver. And the data structure
-> + * should not contain pointers pointing to buffers that is managed by
-> + * other or parent drivers since it could have been freed before platform
-> + * data buffer is freed by platform driver framework.
-> + */
-> +struct xrt_subdev_platdata {
-> +	/*
-> +	 * Per driver instance callback. The xdev points to the instance.
-> +	 * Should always be defined for subdev driver to get service from root.
-> +	 */
-> +	xrt_subdev_root_cb_t xsp_root_cb;
-> +	void *xsp_root_cb_arg;
-> +
-> +	/* Something to associate w/ root for msg printing. */
-> +	const char *xsp_root_name;
-> +
-> +	/*
-> +	 * Char dev support for this subdev instance.
-> +	 * Initialized by subdev driver.
-> +	 */
-> +	struct cdev xsp_cdev;
-> +	struct device *xsp_sysdev;
-> +	struct mutex xsp_devnode_lock; /* devnode lock */
-> +	struct completion xsp_devnode_comp;
-> +	int xsp_devnode_ref;
-> +	bool xsp_devnode_online;
-> +	bool xsp_devnode_excl;
-> +
-> +	/*
-> +	 * Subdev driver specific init data. The buffer should be embedded
-> +	 * in this data structure buffer after dtb, so that it can be freed
-> +	 * together with platform data.
-> +	 */
-> +	loff_t xsp_priv_off; /* Offset into this platform data buffer. */
-> +	size_t xsp_priv_len;
-
-Didn't see the usage.
-
-> +
-> +	/*
-> +	 * Populated by parent driver to describe the device tree for
-> +	 * the subdev driver to handle. Should always be last one since it's
-> +	 * of variable length.
-> +	 */
-> +	bool xsp_dtb_valid;
-> +	char xsp_dtb[0];
-> +};
-> +
-> +struct subdev_match_arg {
-> +	enum xrt_subdev_id id;
-> +	int instance;
-> +};
-> +
-> +bool xleaf_has_endpoint(struct xrt_device *xdev, const char *endpoint_name);
-> +struct xrt_device *xleaf_get_leaf(struct xrt_device *xdev,
-> +				  xrt_subdev_match_t cb, void *arg);
-> +
-> +static inline bool subdev_match(enum xrt_subdev_id id, struct xrt_device *xdev, void *arg)
-> +{
-> +	const struct subdev_match_arg *a = (struct subdev_match_arg *)arg;
-> +	int instance = a->instance;
-> +
-> +	if (id != a->id)
-> +		return false;
-> +	if (instance != xdev->instance && instance != XRT_INVALID_DEVICE_INST)
-> +		return false;
-> +	return true;
-> +}
-> +
-> +static inline bool xrt_subdev_match_epname(enum xrt_subdev_id id,
-> +					   struct xrt_device *xdev, void *arg)
-> +{
-> +	return xleaf_has_endpoint(xdev, arg);
-> +}
-> +
-> +static inline struct xrt_device *
-> +xleaf_get_leaf_by_id(struct xrt_device *xdev,
-> +		     enum xrt_subdev_id id, int instance)
-> +{
-> +	struct subdev_match_arg arg = { id, instance };
-> +
-> +	return xleaf_get_leaf(xdev, subdev_match, &arg);
-> +}
-> +
-> +static inline struct xrt_device *
-> +xleaf_get_leaf_by_epname(struct xrt_device *xdev, const char *name)
-> +{
-> +	return xleaf_get_leaf(xdev, xrt_subdev_match_epname, (void *)name);
-> +}
-> +
-> +static inline int xleaf_call(struct xrt_device *tgt, u32 cmd, void *arg)
-> +{
-> +	return (to_xrt_drv(tgt->dev.driver)->leaf_call)(tgt, cmd, arg);
-> +}
-> +
-> +int xleaf_broadcast_event(struct xrt_device *xdev, enum xrt_events evt, bool async);
-> +int xleaf_create_group(struct xrt_device *xdev, char *dtb);
-> +int xleaf_destroy_group(struct xrt_device *xdev, int instance);
-> +void xleaf_get_root_res(struct xrt_device *xdev, u32 region_id, struct resource **res);
-> +void xleaf_get_root_id(struct xrt_device *xdev, unsigned short *vendor, unsigned short *device,
-> +		       unsigned short *subvendor, unsigned short *subdevice);
-> +void xleaf_hot_reset(struct xrt_device *xdev);
-> +int xleaf_put_leaf(struct xrt_device *xdev, struct xrt_device *leaf);
-> +struct device *xleaf_register_hwmon(struct xrt_device *xdev, const char *name, void *drvdata,
-> +				    const struct attribute_group **grps);
-> +void xleaf_unregister_hwmon(struct xrt_device *xdev, struct device *hwmon);
-> +int xleaf_wait_for_group_bringup(struct xrt_device *xdev);
-> +
-> +/*
-> + * Character device helper APIs for use by leaf drivers
-> + */
-> +static inline bool xleaf_devnode_enabled(struct xrt_device *xdev)
-> +{
-> +	return DEV_FILE_OPS(xdev)->xsf_ops.open;
-> +}
-> +
-> +int xleaf_devnode_create(struct xrt_device *xdev,
-> +			 const char *file_name, const char *inst_name);
-> +void xleaf_devnode_destroy(struct xrt_device *xdev);
-> +
-> +struct xrt_device *xleaf_devnode_open_excl(struct inode *inode);
-> +struct xrt_device *xleaf_devnode_open(struct inode *inode);
-> +void xleaf_devnode_close(struct inode *inode);
-> +
-> +/* Module's init/fini routines for leaf driver in xrt-lib module */
-> +#define XRT_LEAF_INIT_FINI_FUNC(name)					\
-> +void name##_leaf_init_fini(bool init)					\
-> +{									\
-> +	if (init)							\
-> +		xrt_register_driver(&xrt_##name##_driver);		\
-> +	else								\
-> +		xrt_unregister_driver(&xrt_##name##_driver);		\
-> +}
-> +
-> +/* Module's init/fini routines for leaf driver in xrt-lib module */
-> +void group_leaf_init_fini(bool init);
-> +void vsec_leaf_init_fini(bool init);
-> +void devctl_leaf_init_fini(bool init);
-> +void axigate_leaf_init_fini(bool init);
-> +void icap_leaf_init_fini(bool init);
-> +void calib_leaf_init_fini(bool init);
-> +void clkfreq_leaf_init_fini(bool init);
-> +void clock_leaf_init_fini(bool init);
-> +void ucs_leaf_init_fini(bool init);
-> +
-> +#endif	/* _XRT_LEAF_H_ */
-> diff --git a/drivers/fpga/xrt/include/xleaf/clkfreq.h b/drivers/fpga/xrt/include/xleaf/clkfreq.h
-> new file mode 100644
-> index 000000000000..005441d5df78
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/clkfreq.h
-> @@ -0,0 +1,21 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
-> + */
-> +
-> +#ifndef _XRT_CLKFREQ_H_
-> +#define _XRT_CLKFREQ_H_
-> +
-> +#include "xleaf.h"
-> +
-> +/*
-> + * CLKFREQ driver leaf calls.
-> + */
-> +enum xrt_clkfreq_leaf_cmd {
-> +	XRT_CLKFREQ_READ = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-> +};
-> +
-> +#endif	/* _XRT_CLKFREQ_H_ */
-> diff --git a/drivers/fpga/xrt/include/xleaf/clock.h b/drivers/fpga/xrt/include/xleaf/clock.h
-> new file mode 100644
-> index 000000000000..1379e24fa5d0
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/clock.h
-> @@ -0,0 +1,29 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
-> + */
-> +
-> +#ifndef _XRT_CLOCK_H_
-> +#define _XRT_CLOCK_H_
-> +
-> +#include "xleaf.h"
-> +#include <linux/fpga_xrt.h>
-> +
-> +/*
-> + * CLOCK driver leaf calls.
-> + */
-> +enum xrt_clock_leaf_cmd {
-> +	XRT_CLOCK_SET = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-> +	XRT_CLOCK_GET,
-> +	XRT_CLOCK_VERIFY,
-> +};
-> +
-> +struct xrt_clock_get {
-> +	u16 freq;
-> +	u32 freq_cnter;
-> +};
-> +
-> +#endif	/* _XRT_CLOCK_H_ */
-> diff --git a/drivers/fpga/xrt/include/xleaf/ddr_calibration.h b/drivers/fpga/xrt/include/xleaf/ddr_calibration.h
-> new file mode 100644
-> index 000000000000..c44ae30f939a
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/ddr_calibration.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Cheng Zhen <maxz@xilinx.com>
-> + */
-> +
-> +#ifndef _XRT_DDR_CALIBRATION_H_
-> +#define _XRT_DDR_CALIBRATION_H_
-> +
-> +#include "xleaf.h"
-> +#include <linux/fpga-xrt.h>
-> +
-> +/*
-> + * Memory calibration driver leaf calls.
-> + */
-> +enum xrt_calib_results {
-> +	XRT_CALIB_UNKNOWN = 0,
-> +	XRT_CALIB_SUCCEEDED,
-> +	XRT_CALIB_FAILED,
-> +};
-> +
-> +enum xrt_calib_leaf_cmd {
-> +	XRT_CALIB_RESULT = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-> +};
-> +
-> +#endif	/* _XRT_DDR_CALIBRATION_H_ */
-> diff --git a/drivers/fpga/xrt/include/xleaf/devctl.h b/drivers/fpga/xrt/include/xleaf/devctl.h
-> new file mode 100644
-> index 000000000000..b97f3b6d9326
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/include/xleaf/devctl.h
-> @@ -0,0 +1,40 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Lizhi Hou <Lizhi.Hou@xilinx.com>
-> + */
-> +
-> +#ifndef _XRT_DEVCTL_H_
-> +#define _XRT_DEVCTL_H_
-> +
-> +#include "xleaf.h"
-> +
-> +/*
-> + * DEVCTL driver leaf calls.
-> + */
-> +enum xrt_devctl_leaf_cmd {
-> +	XRT_DEVCTL_READ = XRT_XLEAF_CUSTOM_BASE, /* See comments in xleaf.h */
-> +};
-> +
-> +enum xrt_devctl_id {
-> +	XRT_DEVCTL_ROM_UUID = 0,
-> +	XRT_DEVCTL_DDR_CALIB,
-> +	XRT_DEVCTL_GOLDEN_VER,
-> +	XRT_DEVCTL_MAX
-> +};
-> +
-> +struct xrt_devctl_rw {
-> +	u32	xdr_id;
-> +	void	*xdr_buf;
-> +	u32	xdr_len;
-> +	u32	xdr_offset;
-> +};
-> +
-> +struct xrt_devctl_intf_uuid {
-> +	u32	uuid_num;
-> +	uuid_t	*uuids;
-> +};
-> +
-> +#endif	/* _XRT_DEVCTL_H_ */
-> diff --git a/drivers/fpga/xrt/lib/lib-drv.c b/drivers/fpga/xrt/lib/lib-drv.c
-> new file mode 100644
-> index 000000000000..7d21ef565651
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/lib/lib-drv.c
-> @@ -0,0 +1,318 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Cheng Zhen <maxz@xilinx.com>
-> + *	Lizhi Hou <lizhi.hou@xilinx.com>
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/slab.h>
-> +#include "xleaf.h"
-> +#include "xroot.h"
-> +#include "lib-drv.h"
-> +
-> +#define XRT_IPLIB_MODULE_NAME		"xrt-lib"
-> +#define XRT_DRVNAME(drv)		((drv)->driver.name)
-> +
-> +#define XRT_SUBDEV_ID_SHIFT		16
-> +#define XRT_SUBDEV_ID_MASK		((1 << XRT_SUBDEV_ID_SHIFT) - 1)
-> +
-> +struct xrt_find_drv_data {
-> +	enum xrt_subdev_id id;
-> +	struct xrt_driver *xdrv;
-> +};
-> +
-> +struct class *xrt_class;
-> +static DEFINE_IDA(xrt_device_ida);
-> +
-> +static inline u32 xrt_instance_to_id(enum xrt_subdev_id id, u32 instance)
-> +{
-> +	return (id << XRT_SUBDEV_ID_SHIFT) | instance;
-> +}
-> +
-> +static inline u32 xrt_id_to_instance(u32 id)
-> +{
-> +	return id & XRT_SUBDEV_ID_MASK;
-> +}
-> +
-> +static int xrt_bus_match(struct device *dev, struct device_driver *drv)
-> +{
-> +	struct xrt_device *xdev = to_xrt_dev(dev);
-> +	struct xrt_driver *xdrv = to_xrt_drv(drv);
-> +
-> +	if (xdev->subdev_id == xdrv->subdev_id)
-> +		return 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static int xrt_bus_probe(struct device *dev)
-> +{
-> +	struct xrt_driver *xdrv = to_xrt_drv(dev->driver);
-> +	struct xrt_device *xdev = to_xrt_dev(dev);
-> +
-> +	return xdrv->probe(xdev);
-> +}
-> +
-> +static int xrt_bus_remove(struct device *dev)
-> +{
-> +	struct xrt_driver *xdrv = to_xrt_drv(dev->driver);
-> +	struct xrt_device *xdev = to_xrt_dev(dev);
-> +
-> +	if (xdrv->remove)
-> +		xdrv->remove(xdev);
-> +
-> +	return 0;
-> +}
-> +
-> +struct bus_type xrt_bus_type = {
-> +	.name		= "xrt",
-> +	.match		= xrt_bus_match,
-> +	.probe		= xrt_bus_probe,
-> +	.remove		= xrt_bus_remove,
-> +};
-
-Actually I'm not sure a new bus type is needed. The bus itself is a
-virtual bus and the device identifier (xdev.subdev_id) for the bus
-is SW defined, then why don't we just use the name string matching and
-create platform devices for each leaf?
-
-> +
-> +int xrt_register_driver(struct xrt_driver *drv)
-> +{
-> +	const char *drvname = XRT_DRVNAME(drv);
-> +	int rc = 0;
-> +
-> +	/* Initialize dev_t for char dev node. */
-> +	if (drv->file_ops.xsf_ops.open) {
-> +		rc = alloc_chrdev_region(&drv->file_ops.xsf_dev_t, 0,
-> +					 XRT_MAX_DEVICE_NODES, drvname);
-
-I think no need to help alloc char majors for each driver here. The
-function is for driver registration, the char dev is for the actual driver
-functionality and had better be managered in its own module.
-
-I only see the xmgmt_main module needs the char dev, so maybe we only do
-it in xmgmt_main init function.
-
-> +		if (rc) {
-> +			pr_err("failed to alloc dev minor for %s: %d\n", drvname, rc);
-> +			return rc;
-> +		}
-> +	} else {
-> +		drv->file_ops.xsf_dev_t = (dev_t)-1;
-> +	}
-> +
-> +	drv->driver.owner = THIS_MODULE;
-> +	drv->driver.bus = &xrt_bus_type;
-> +
-> +	rc = driver_register(&drv->driver);
-> +	if (rc) {
-> +		pr_err("register %s xrt driver failed\n", drvname);
-> +		if (drv->file_ops.xsf_dev_t != (dev_t)-1) {
-> +			unregister_chrdev_region(drv->file_ops.xsf_dev_t,
-> +						 XRT_MAX_DEVICE_NODES);
-> +		}
-> +		return rc;
-> +	}
-> +
-> +	pr_info("%s registered successfully\n", drvname);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_register_driver);
-> +
-> +void xrt_unregister_driver(struct xrt_driver *drv)
-> +{
-> +	driver_unregister(&drv->driver);
-> +
-> +	if (drv->file_ops.xsf_dev_t != (dev_t)-1)
-> +		unregister_chrdev_region(drv->file_ops.xsf_dev_t, XRT_MAX_DEVICE_NODES);
-> +}
-> +EXPORT_SYMBOL_GPL(xrt_unregister_driver);
-> +
-> +static int __find_driver(struct device_driver *drv, void *_data)
-> +{
-> +	struct xrt_driver *xdrv = to_xrt_drv(drv);
-> +	struct xrt_find_drv_data *data = _data;
-> +
-> +	if (xdrv->subdev_id == data->id) {
-> +		data->xdrv = xdrv;
-> +		return 1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +const char *xrt_drv_name(enum xrt_subdev_id id)
-> +{
-> +	struct xrt_find_drv_data data = { 0 };
-> +
-> +	data.id = id;
-> +	bus_for_each_drv(&xrt_bus_type, NULL, &data, __find_driver);
-> +
-> +	if (data.xdrv)
-> +		return XRT_DRVNAME(data.xdrv);
-> +
-> +	return NULL;
-> +}
-> +
-> +static int xrt_drv_get_instance(enum xrt_subdev_id id)
-> +{
-> +	int ret;
-> +
-> +	ret = ida_alloc_range(&xrt_device_ida, xrt_instance_to_id(id, 0),
-> +			      xrt_instance_to_id(id, XRT_MAX_DEVICE_NODES),
-> +			      GFP_KERNEL);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return xrt_id_to_instance((u32)ret);
-> +}
-> +
-> +static void xrt_drv_put_instance(enum xrt_subdev_id id, int instance)
-> +{
-> +	ida_free(&xrt_device_ida, xrt_instance_to_id(id, instance));
-> +}
-> +
-> +struct xrt_dev_endpoints *xrt_drv_get_endpoints(enum xrt_subdev_id id)
-> +{
-> +	struct xrt_find_drv_data data = { 0 };
-> +
-> +	data.id = id;
-> +	bus_for_each_drv(&xrt_bus_type, NULL, &data, __find_driver);
-> +
-> +	if (data.xdrv)
-> +		return data.xdrv->endpoints;
-> +
-> +	return NULL;
-> +}
-> +
-> +static void xrt_device_release(struct device *dev)
-> +{
-> +	struct xrt_device *xdev = container_of(dev, struct xrt_device, dev);
-> +
-> +	kfree(xdev);
-> +}
-> +
-> +void xrt_device_unregister(struct xrt_device *xdev)
-> +{
-> +	if (xdev->state == XRT_DEVICE_STATE_ADDED)
-> +		device_del(&xdev->dev);
-> +
-> +	vfree(xdev->sdev_data);
-> +	kfree(xdev->resource);
-> +
-> +	if (xdev->instance != XRT_INVALID_DEVICE_INST)
-> +		xrt_drv_put_instance(xdev->subdev_id, xdev->instance);
-
-I suggest all the free work be done in dev.release. The xrt_device may
-still be accessible after this function, these resources may still be
-accessed too.
-
-> +
-> +	if (xdev->dev.release == xrt_device_release)
-> +		put_device(&xdev->dev);
-
-It is OK but unnormal, I suggest you don't integrate the error handling
-of xrt_device_register here. That would make the code easier to read.
-
-> +}
-> +
-> +struct xrt_device *
-> +xrt_device_register(struct device *parent, u32 id,
-> +		    struct resource *res, u32 res_num,
-> +		    void *pdata, size_t data_sz)
-> +{
-> +	struct xrt_device *xdev = NULL;
-> +	int ret;
-> +
-> +	xdev = kzalloc(sizeof(*xdev), GFP_KERNEL);
-> +	if (!xdev)
-> +		return xdev;
-> +	xdev->instance = XRT_INVALID_DEVICE_INST;
-> +
-> +	/* Obtain dev instance number. */
-> +	ret = xrt_drv_get_instance(id);
-> +	if (ret < 0) {
-> +		dev_err(parent, "failed get instance, ret %d", ret);
-> +		goto fail;
-> +	}
-> +
-> +	xdev->instance = ret;
-> +	xdev->name = xrt_drv_name(id);
-
-What if the xrt_driver is not loaded yet?
-
-Normally the device represents the HW devices in system, it could be
-enumerated and created no matter whether its device driver exists. So I
-think some code in this patchset is not reasonable, that creates
-xrt_device when the corresponding xrt_driver exists.
-
-> +	xdev->subdev_id = id;
-> +	device_initialize(&xdev->dev);
-> +	xdev->dev.release = xrt_device_release;
-> +	xdev->dev.parent = parent;
-> +
-> +	xdev->dev.bus = &xrt_bus_type;
-> +	dev_set_name(&xdev->dev, "%s.%d", xdev->name, xdev->instance);
-> +
-> +	xdev->num_resources = res_num;
-> +	xdev->resource = kmemdup(res, sizeof(*res) * res_num, GFP_KERNEL);
-> +	if (!xdev->resource)
-> +		goto fail;
-> +
-> +	xdev->sdev_data = vzalloc(data_sz);
-
-vmalloc the platform_data is quite unnormal, the concern is the
-performance. Maybe you should split the structures and only vmalloc
-for big data chunk.
-
-> +	if (!xdev->sdev_data)
-> +		goto fail;
-> +
-> +	memcpy(xdev->sdev_data, pdata, data_sz);
-
-As I can see, you need to cut and copy the selected dtb data in
-platform_data for each dev. But why? Why not put the whole dtb somewhere
-and let the driver access it as needed?
-
-> +
-> +	ret = device_add(&xdev->dev);
-> +	if (ret) {
-> +		dev_err(parent, "failed add device, ret %d", ret);
-> +		goto fail;
-> +	}
-> +	xdev->state = XRT_DEVICE_STATE_ADDED;
-> +
-> +	return xdev;
-> +
-> +fail:
-> +	xrt_device_unregister(xdev);
-> +	kfree(xdev);
-> +
-> +	return NULL;
-> +}
-> +
-> +struct resource *xrt_get_resource(struct xrt_device *xdev, u32 type, u32 num)
-> +{
-> +	u32 i;
-> +
-> +	for (i = 0; i < xdev->num_resources; i++) {
-> +		struct resource *r = &xdev->resource[i];
-> +
-> +		if (type == resource_type(r) && num-- == 0)
-> +			return r;
-> +	}
-> +	return NULL;
-> +}
-> +
-> +/*
-> + * Leaf driver's module init/fini callbacks. This is not a open infrastructure for dynamic
-> + * plugging in drivers. All drivers should be statically added.
-
-That's not the normal way, moreover, as a FPGA, users may integrate all
-kinds of IP blocks whose drivers are not belong to FPGA domain. Put them
-all in FPGA folder is not a good idea.
-
-Thanks,
-Yilun
-
-> + */
-> +static void (*leaf_init_fini_cbs[])(bool) = {
-> +	group_leaf_init_fini,
-> +	axigate_leaf_init_fini,
-> +	icap_leaf_init_fini,
-> +};
-> +
-> +static __init int xrt_lib_init(void)
-> +{
-> +	int ret;
-> +	int i;
-> +
-> +	ret = bus_register(&xrt_bus_type);
-> +	if (ret)
-> +		return ret;
-> +
-> +	xrt_class = class_create(THIS_MODULE, XRT_IPLIB_MODULE_NAME);
-> +	if (IS_ERR(xrt_class)) {
-> +		bus_unregister(&xrt_bus_type);
-> +		return PTR_ERR(xrt_class);
-> +	}
-> +
-> +	for (i = 0; i < ARRAY_SIZE(leaf_init_fini_cbs); i++)
-> +		leaf_init_fini_cbs[i](true);
-> +	return 0;
-> +}
-> +
-> +static __exit void xrt_lib_fini(void)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(leaf_init_fini_cbs); i++)
-> +		leaf_init_fini_cbs[i](false);
-> +
-> +	class_destroy(xrt_class);
-> +	bus_unregister(&xrt_bus_type);
-> +}
-> +
-> +module_init(xrt_lib_init);
-> +module_exit(xrt_lib_fini);
-> +
-> +MODULE_AUTHOR("XRT Team <runtime@xilinx.com>");
-> +MODULE_DESCRIPTION("Xilinx Alveo IP Lib driver");
-> +MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/fpga/xrt/lib/lib-drv.h b/drivers/fpga/xrt/lib/lib-drv.h
-> new file mode 100644
-> index 000000000000..0276c28e009f
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/lib/lib-drv.h
-> @@ -0,0 +1,21 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Cheng Zhen <maxz@xilinx.com>
-> + */
-> +
-> +#ifndef _LIB_DRV_H_
-> +#define _LIB_DRV_H_
-> +
-> +#include <linux/device/class.h>
-> +#include <linux/device/bus.h>
-> +
-> +extern struct class *xrt_class;
-> +extern struct bus_type xrt_bus_type;
-> +
-> +const char *xrt_drv_name(enum xrt_subdev_id id);
-> +struct xrt_dev_endpoints *xrt_drv_get_endpoints(enum xrt_subdev_id id);
-> +
-> +#endif	/* _LIB_DRV_H_ */
-> -- 
-> 2.27.0
+>
+> - Russ
+>
+>
+>>
+>> Thanks,
+>>
+>> Lizhi
+>>
+>>> +
+>>> +#define FPGA_IMAGE_LOAD_STATUS _IOR(FPGA_IMAGE_LOAD_MAGIC, 1, struct fpga_image_status)
+>>> +
+>>>    #endif /* _UAPI_LINUX_FPGA_IMAGE_LOAD_H */
+>>> --
+>>> 2.25.1
+>>>
