@@ -2,135 +2,192 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD694526F4
-	for <lists+linux-fpga@lfdr.de>; Tue, 16 Nov 2021 03:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7E3453DA1
+	for <lists+linux-fpga@lfdr.de>; Wed, 17 Nov 2021 02:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237814AbhKPCOE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 15 Nov 2021 21:14:04 -0500
-Received: from mga17.intel.com ([192.55.52.151]:29965 "EHLO mga17.intel.com"
+        id S232696AbhKQBYf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 16 Nov 2021 20:24:35 -0500
+Received: from mga17.intel.com ([192.55.52.151]:25272 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238827AbhKPCLN (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Mon, 15 Nov 2021 21:11:13 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="214325772"
-X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="214325772"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 18:08:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="506206418"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
-  by orsmga008.jf.intel.com with ESMTP; 15 Nov 2021 18:08:14 -0800
-Date:   Tue, 16 Nov 2021 10:01:15 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     hao.wu@intel.com, mdf@kernel.org, linux-fpga@vger.kernel.org,
+        id S232708AbhKQBY1 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Tue, 16 Nov 2021 20:24:27 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10170"; a="214580726"
+X-IronPort-AV: E=Sophos;i="5.87,239,1631602800"; 
+   d="scan'208";a="214580726"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 17:21:28 -0800
+X-IronPort-AV: E=Sophos;i="5.87,239,1631602800"; 
+   d="scan'208";a="494710458"
+Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.209.15.48])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 17:21:28 -0800
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: dfl: pci: generalize find_dfls_by_vsec()
-Message-ID: <20211116020115.GA269984@yilunxu-OptiPlex-7050>
-References: <20211113221252.4062704-1-trix@redhat.com>
- <20211115012516.GA288162@yilunxu-OptiPlex-7050>
- <f645abbe-230c-b3b8-de6c-6b8a605535f4@redhat.com>
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v13 0/3] fpga: Use standard class dev_release function
+Date:   Tue, 16 Nov 2021 17:21:19 -0800
+Message-Id: <20211117012122.60141-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f645abbe-230c-b3b8-de6c-6b8a605535f4@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 10:28:32AM -0800, Tom Rix wrote:
-> 
-> On 11/14/21 5:25 PM, Xu Yilun wrote:
-> > On Sat, Nov 13, 2021 at 02:12:52PM -0800, trix@redhat.com wrote:
-> > > From: Tom Rix <trix@redhat.com>
-> > > 
-> > > find_dfls_by_vsec() is a general dfl function.
-> > > Although dfl has multiple vendors, only Intel is supported.
-> > > Move vsec and vendor id to an array variable.
-> > > Other vendors can append the array to enable their support.
-> > As Hao mentioned, DVSEC could be a better solution if DFL should be
-> > present in components by a variety of vendors. This is not finally
-> > determined, but I think we should not add new features for VSEC now.
-> 
-> Can you expand what you mean by this ?
+The FPGA framework has a convention of using managed resource functions
+to allow parent drivers to manage the data structures allocated by the
+class drivers. They use an empty *_dev_release() function to satisfy the
+class driver.
 
-Using vendor_id-vsec pair is not a good way. It requires a specific VSEC
-ID for each vendor to describe DFL. DVSEC is actually the existing
-solution for these cases. I expect we switch to DVSEC for DFL and drop
-this VSEC solution.
+This is inconsistent with linux driver model.
 
-> 
-> I am considering the n5010 usecase, the vendor is not intel and will go
-> through this dfl function and always fail.
+These changes remove the managed resource functions and populate the class
+dev_release callback functions. They also merge the create() and register()
+functions into a single register() or register_full() function for each of
+the fpga-mgr, fpga-region, and fpga-bridge class drivers.
 
-Is n5010 using the DFL VSEC, or it just finds DFL by default? Its devId
-is supported several month ago and no issue reported so I assume it is
-using the default DFL finding. It would be better to stick to it.
+The new *register_full() functions accept an info data structure to provide
+flexibility in passing optional parameters. The *register() functions
+support the legacy parameter list for users that don't require the use of
+optional parameters.
 
-Thanks,
-Yilun
+For more context, refer to this email thread:
 
-> 
-> This is broken.
-> 
-> Either the function should be generalized or moved to an intel specific
-> call.
-> 
-> Tom
-> 
-> > 
-> > Thanks,
-> > Yilun
-> > 
-> > > Signed-off-by: Tom Rix <trix@redhat.com>
-> > > ---
-> > >   drivers/fpga/dfl-pci.c | 31 ++++++++++++++++++++++++-------
-> > >   1 file changed, 24 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-> > > index 4d68719e608f..9dc0815c8274 100644
-> > > --- a/drivers/fpga/dfl-pci.c
-> > > +++ b/drivers/fpga/dfl-pci.c
-> > > @@ -136,19 +136,36 @@ static int *cci_pci_create_irq_table(struct pci_dev *pcidev, unsigned int nvec)
-> > >   	return table;
-> > >   }
-> > > -static int find_dfls_by_vsec(struct pci_dev *pcidev, struct dfl_fpga_enum_info *info)
-> > > +struct dfl_vsec {
-> > > +	u16 vendor;
-> > > +	u16 id;
-> > > +};
-> > > +
-> > > +static struct dfl_vsec vsecs[] = {
-> > > +	{ PCI_VENDOR_ID_INTEL, PCI_VSEC_ID_INTEL_DFLS },
-> > > +};
-> > > +
-> > > +static int find_dfls_by_vsec(struct pci_dev *pcidev,
-> > > +			     struct dfl_fpga_enum_info *info)
-> > >   {
-> > >   	u32 bir, offset, vndr_hdr, dfl_cnt, dfl_res;
-> > >   	int dfl_res_off, i, bars, voff = 0;
-> > >   	resource_size_t start, len;
-> > > -	while ((voff = pci_find_next_ext_capability(pcidev, voff, PCI_EXT_CAP_ID_VNDR))) {
-> > > -		vndr_hdr = 0;
-> > > -		pci_read_config_dword(pcidev, voff + PCI_VNDR_HEADER, &vndr_hdr);
-> > > +	for (i = 0; i < ARRAY_SIZE(vsecs); i++) {
-> > > +		if (pcidev->vendor != vsecs[i].vendor)
-> > > +			continue;
-> > > +
-> > > +		while ((voff =
-> > > +			pci_find_next_ext_capability(pcidev, voff,
-> > > +						     PCI_EXT_CAP_ID_VNDR))) {
-> > > +			vndr_hdr = 0;
-> > > +			pci_read_config_dword(pcidev, voff + PCI_VNDR_HEADER,
-> > > +					      &vndr_hdr);
-> > > -		if (PCI_VNDR_HEADER_ID(vndr_hdr) == PCI_VSEC_ID_INTEL_DFLS &&
-> > > -		    pcidev->vendor == PCI_VENDOR_ID_INTEL)
-> > > -			break;
-> > > +			if (PCI_VNDR_HEADER_ID(vndr_hdr) == vsecs[i].id)
-> > > +				break;
-> > > +		}
-> > >   	}
-> > >   	if (!voff) {
-> > > -- 
-> > > 2.26.3
+https://marc.info/?l=linux-fpga&m=162127412218557&w=2
+
+I turned on the configs assocated with each of the modified files, but I
+must have been missing some dependencies, because not all of them compiled.
+I did a run-time test specifically with the dfl-fme infrastructure. This
+would have exercised the region, bridge, and fpga-mgr frameworks.
+
+Changelog v12 -> v13:
+  - Add Acked-by tag
+
+Changelog v11 -> v12:
+  - Made the requisite changes to the new versal-fpga driver
+
+Changelog v10 -> v11:
+  - Rebased to latest linux-next
+  - Resolved a single conflict in fpga-mgr.c with associated with  wrapper
+    function: fpga_mgr_state(mgr)
+
+Changelog v9 -> v10:
+  - Fixed commit messages to reference register_full() instead of
+    register_simple().
+  - Removed the fpga_bridge_register_full() function, because there is
+    not need for it yet. Updated the documentation and commit message
+    accordingly.
+  - Updated documentation to reference the fpga_manager_info and
+    fpga_region_info structures.
+
+Changelog v8 -> v9:
+  - Cleaned up documentation for the FPGA Manager, Bridge, and Region
+    register functions
+  - Renamed fpga_*_register() to fpga_*_register_full()
+  - Renamed fpga_*_register_simple() to fpga_*_register()
+  - Renamed devm_fpga_mgr_register() to devm_fpga_mgr_register_full()
+  - Renamed devm_fpga_mgr_register_simple() to devm_fpga_mgr_register()
+
+Changelog v7 -> v8:
+  - Added reviewed-by tags.
+  - Updated Documentation/driver-api/fpga/ files: fpga-mgr.rst,
+    fpga-bridge.rst, and fpga-region.rst.
+
+Changelog v6 -> v7:
+  - Update the commit messages to describe the new parameters for the
+    *register() functions and to mention the *register_simple() functions.
+  - Fix function prototypes in header file to rename dev to parent.
+  - Make use of the PTR_ERR_OR_ZERO() macro when possible.
+  - Some cleanup of comments.
+  - Update function definitions/prototypes to apply const to the new info
+    parameter.
+  - Verify that info->br_ops is non-null in the fpga_bridge_register()
+    function.
+  - Verify a non-null info pointer in the fpga_region_register() function.
+
+Changelog v5 -> v6:
+  - Moved FPGA manager/bridge/region optional parameters out of the ops
+    structure and back into the FPGA class driver structure.
+  - Changed fpga_*_register() function parameters to accept an info data
+    structure to provide flexibility in passing optional parameters.
+  - Added fpga_*_register_simple() functions to support current parameters
+    for users that don't require use of optional parameters.
+
+Changelog v4 -> v5:
+  - Rebased on top of recently accepted patches.
+  - Removed compat_id from the fpga_mgr_register() parameter list
+    and added it to the fpga_manager_ops structure. This also required
+    dynamically allocating the dfl-fme-ops structure in order to add
+    the appropriate compat_id.
+  - Created the fpga_region_ops data structure which is optionally passed
+    to fpga_region_register(). compat_id, the get_bridges() pointer, and
+    the priv pointer are included in the fpga_region_ops structure.
+
+Changelog v3 -> v4:
+  - Added the compat_id parameter to fpga_mgr_register() and
+    devm_fpga_mgr_register() to ensure that the compat_id is set before
+    the device_register() call.
+  - Added the compat_id parameter to fpga_region_register() to ensure
+    that the compat_id is set before the device_register() call.
+  - Modified the dfl_fpga_feature_devs_enumerate() function to restore
+    the fpga_region_register() call to the correct location.
+
+Changelog v2 -> v3:
+  - Cleaned up comment headers for fpga_mgr_register(), fpga_bridge_register(),
+    and fpga_region_register().
+  - Fixed error return on ida_simple_get() failure for fpga_mgr_register(),
+    fpga_bridge_register(), and fpga_region_register().
+  - Fixed error return value for fpga_bridge_register(): ERR_PTR(ret) instead
+    of NULL.
+
+Changelog v1 -> v2:
+  - Restored devm_fpga_mgr_register() functionality to the fpga-mgr
+    class driver, adapted for the combined create/register functionality.
+  - All previous callers of devm_fpga_mgr_register() will continue to call
+    devm_fpga_mgr_register().
+  - replaced unnecessary ternary operators in return statements with
+    standard if conditions.
+
+Russ Weight (3):
+  fpga: mgr: Use standard dev_release for class driver
+  fpga: bridge: Use standard dev_release for class driver
+  fpga: region: Use standard dev_release for class driver
+
+ Documentation/driver-api/fpga/fpga-bridge.rst |   6 +-
+ Documentation/driver-api/fpga/fpga-mgr.rst    |  38 +++-
+ Documentation/driver-api/fpga/fpga-region.rst |  12 +-
+ drivers/fpga/altera-cvp.c                     |  12 +-
+ drivers/fpga/altera-fpga2sdram.c              |  12 +-
+ drivers/fpga/altera-freeze-bridge.c           |  10 +-
+ drivers/fpga/altera-hps2fpga.c                |  12 +-
+ drivers/fpga/altera-pr-ip-core.c              |   7 +-
+ drivers/fpga/altera-ps-spi.c                  |   9 +-
+ drivers/fpga/dfl-fme-br.c                     |  10 +-
+ drivers/fpga/dfl-fme-mgr.c                    |  22 +-
+ drivers/fpga/dfl-fme-region.c                 |  17 +-
+ drivers/fpga/dfl.c                            |  12 +-
+ drivers/fpga/fpga-bridge.c                    | 122 +++-------
+ drivers/fpga/fpga-mgr.c                       | 215 ++++++++----------
+ drivers/fpga/fpga-region.c                    | 119 ++++------
+ drivers/fpga/ice40-spi.c                      |   9 +-
+ drivers/fpga/machxo2-spi.c                    |   9 +-
+ drivers/fpga/of-fpga-region.c                 |  10 +-
+ drivers/fpga/socfpga-a10.c                    |  16 +-
+ drivers/fpga/socfpga.c                        |   9 +-
+ drivers/fpga/stratix10-soc.c                  |  16 +-
+ drivers/fpga/ts73xx-fpga.c                    |   9 +-
+ drivers/fpga/versal-fpga.c                    |   9 +-
+ drivers/fpga/xilinx-pr-decoupler.c            |  17 +-
+ drivers/fpga/xilinx-spi.c                     |  11 +-
+ drivers/fpga/zynq-fpga.c                      |  16 +-
+ drivers/fpga/zynqmp-fpga.c                    |   9 +-
+ include/linux/fpga/fpga-bridge.h              |  30 ++-
+ include/linux/fpga/fpga-mgr.h                 |  62 +++--
+ include/linux/fpga/fpga-region.h              |  36 ++-
+ 31 files changed, 386 insertions(+), 517 deletions(-)
+
+-- 
+2.25.1
+
