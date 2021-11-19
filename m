@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 774024578AB
-	for <lists+linux-fpga@lfdr.de>; Fri, 19 Nov 2021 23:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F244578A8
+	for <lists+linux-fpga@lfdr.de>; Fri, 19 Nov 2021 23:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbhKSW2U (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 19 Nov 2021 17:28:20 -0500
-Received: from mail-dm6nam10on2060.outbound.protection.outlook.com ([40.107.93.60]:37152
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        id S235003AbhKSW17 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 19 Nov 2021 17:27:59 -0500
+Received: from mail-bn8nam12on2057.outbound.protection.outlook.com ([40.107.237.57]:15520
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234745AbhKSW2U (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 19 Nov 2021 17:28:20 -0500
+        id S234745AbhKSW17 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 19 Nov 2021 17:27:59 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FR2holyrp3W0c+YNYtdH9UyBwVSEw1HAbh/w8/eao2la9GvVng57zUtz6jeZvUsJzXytX/9j+ebBLVTs4M90kpJ28qsAhlS8livC1g+ShgeQYtr0/0dJ0VQmDdPdVw/2TLoiJHyExE2nURRh6Uc9CCMFHvaVRLalheZBykmrJ/heh0WbpwpxSjEE/2fpAa4eKmGPb3APEtXoQnbH1KnYp2rMo/aJh4pm95zbcpcuF4t1OYGDB8kyZ1OBYebud6Y38aErc0yNm1iz/n9a9BxAtJUo8lEJ086GO2b+252GuuBL8PPCHfA/0MY+CEtJTt8P7KJNomecdWaNMyeSdNv5Tg==
+ b=WvRs8+fK6mpAwjmdCa6QOVg41kWLV2QW0N7QVuFxOW3Pcfrl5bJD0N8OU5CVuQ7nZVjScBvhZjA7QBofS6Q5deAhHyjnRXoAOS2VAh/e1yFnX9C8rXw4F0nihVu1y5zO3FDow48f7QLAIklqUILdiFLzrplUAJQcMPhCR09lhvmJrfHWjDXH0x6q3mbBK6S6jPjGmBSpVAUn9bsAQfc8KgLEc245TWCH0Dy77oO0dCxE0OPC0LqtfK6fm49a86mN5Jc81YBLF9s2upHMnXyVRJpd4SgRe1vLb2FHBxzw52BMsGYe2tiYJ40MGpxf30ILFxo8CzPAynHbILA9RSImuw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1igVE7zaLdniu8vfszrZASVNDL49MDeN+YyJ7SpgO6k=;
- b=KC1J/+4bKzuvf6w/9FD3bigzaLMmN+0pLCawjG1jeKYjKFK1HDA01eJRXb2wVnNuMIZG9nkmxzPy/5vop7MsXrpDdkhbhrDyk9HD7nk1zDT+XVIp/XHwGLqXcMSxEZ0T3lKCH82p76XOXNqZB1PXU8HWtIthikGGijYamBTMkJGL6P/eALfeIdkB8rB/9Np/Oaw60QvTtbqbd/F1HxkGMZz1ZKc8JADCjpOEJv2RTQL9a8OMXGhJImc5TogY/4fHek06mIsAYRyythcCt16CXkOCHm4XqotceIj8TYrosfmGUE/ALfZdqcSce/pc75UC1GYtkXDRErsrP5LRCBH8+Q==
+ bh=dor8ozB7mx0oWaaCwou5aFQnENTnttIBANnGY2uccQ8=;
+ b=KXJ+h3r8fd0YQ+A5/QeBrYEmyDS9viVqCJo2dpJ9mOPvk4mDNu1+aCvLOGL6K6tIU1csGhZHFDkoJowyapDuY5GEjKuwyjfDP+hEuqzO5hMclp1pmOBws0RzsLfVh4oCkrVDKQCunQYaaac3IPG1q1Jvxa6DdUSrBiq9hwZx7hC5lGvUIhMQszH0iQCLRI8vHmGkoOBJ1iZ5hgUvfem+pQrt8A/aFaQWhqY+m5c/s6lGhFVZDYKPld+7+Gmg5E4IWVrJP8PfWwe8WAOIqXGt1VLU0h8F60U3bWpM4+hVHn1l8m2luaj9Ozk00Lw6rXX8Uo0IINfWlMM2f24B4mebtQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=infradead.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,17 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1igVE7zaLdniu8vfszrZASVNDL49MDeN+YyJ7SpgO6k=;
- b=Y0T3nzB/Gy3R6w7pV9jSv/+GyXfuUAcsegZ5h6iEP+HOL3geUEkf/mJPQT+vKrsuI/pjqcett2qXOTAiwVYXUTQSiGUitt9mKhU4gKsTCSMmcIryJhcgj9YMLsMTRV6uD1HBHFlt7eXOz17m363RcgfqiG2pl/nY8b0c38RCDq4=
-Received: from DS7PR03CA0242.namprd03.prod.outlook.com (2603:10b6:5:3b3::7) by
- CO6PR02MB7537.namprd02.prod.outlook.com (2603:10b6:303:b3::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4713.19; Fri, 19 Nov 2021 22:25:14 +0000
-Received: from DM3NAM02FT007.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:3b3:cafe::e2) by DS7PR03CA0242.outlook.office365.com
- (2603:10b6:5:3b3::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.24 via Frontend
- Transport; Fri, 19 Nov 2021 22:25:14 +0000
+ bh=dor8ozB7mx0oWaaCwou5aFQnENTnttIBANnGY2uccQ8=;
+ b=iBmZ+WzvMUaBP/9t7V6KSHvcNj0HUxScsO4uhC1OvreLHs+k5t0RvcuG4q/afX6mA8gCPI+KWe0mSxmK5H5Z/j329y2EkNIy9vHggtmM29TQM5vjLFWW3/JyNb+7TqvLAQ/rFqDQs/ZLsjRohly2TBbVfC6Fz27OFU2zNssOM6c=
+Received: from DS7PR05CA0030.namprd05.prod.outlook.com (2603:10b6:5:3b9::35)
+ by BYAPR02MB5062.namprd02.prod.outlook.com (2603:10b6:a03:6f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22; Fri, 19 Nov
+ 2021 22:24:52 +0000
+Received: from DM3NAM02FT031.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:3b9:cafe::cc) by DS7PR05CA0030.outlook.office365.com
+ (2603:10b6:5:3b9::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.11 via Frontend
+ Transport; Fri, 19 Nov 2021 22:24:52 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=xilinx.com;
@@ -44,16 +45,16 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
  client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
 Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT007.mail.protection.outlook.com (10.13.4.88) with Microsoft SMTP
+ DM3NAM02FT031.mail.protection.outlook.com (10.13.4.184) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4713.19 via Frontend Transport; Fri, 19 Nov 2021 22:25:14 +0000
+ 15.20.4713.19 via Frontend Transport; Fri, 19 Nov 2021 22:24:51 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 19 Nov 2021 14:25:03 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
+ 15.1.2176.14; Fri, 19 Nov 2021 14:24:50 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Fri, 19 Nov 2021 14:25:02 -0800
+ 15.1.2176.14 via Frontend Transport; Fri, 19 Nov 2021 14:24:50 -0800
 Envelope-to: dwmw2@infradead.org,
  mdf@kernel.org,
  robh@kernel.org,
@@ -61,12 +62,12 @@ Envelope-to: dwmw2@infradead.org,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.93] (port=38938 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.93] (port=38936 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <lizhi.hou@xilinx.com>)
-        id 1moCJa-0001M7-SP; Fri, 19 Nov 2021 14:25:02 -0800
+        id 1moCJO-000ANC-Nh; Fri, 19 Nov 2021 14:24:50 -0800
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id 162B760014B; Fri, 19 Nov 2021 14:24:14 -0800 (PST)
+        id ECEAE600147; Fri, 19 Nov 2021 14:24:14 -0800 (PST)
 From:   Lizhi Hou <lizhi.hou@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
@@ -75,9 +76,9 @@ CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
         <robh@kernel.org>, <dwmw2@infradead.org>,
         Max Zhen <max.zhen@xilinx.com>
-Subject: [PATCH V2 XRT Alveo Infrastructure 3/9] of: handle fdt buffer alignment inside unflatten function
-Date:   Fri, 19 Nov 2021 14:24:06 -0800
-Message-ID: <20211119222412.1092763-4-lizhi.hou@xilinx.com>
+Subject: [PATCH V2 XRT Alveo Infrastructure 4/9] of: create empty of root
+Date:   Fri, 19 Nov 2021 14:24:07 -0800
+Message-ID: <20211119222412.1092763-5-lizhi.hou@xilinx.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211119222412.1092763-1-lizhi.hou@xilinx.com>
 References: <20211119222412.1092763-1-lizhi.hou@xilinx.com>
@@ -86,75 +87,114 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d1f88afb-4b63-467d-0782-08d9abab755e
-X-MS-TrafficTypeDiagnostic: CO6PR02MB7537:
-X-Microsoft-Antispam-PRVS: <CO6PR02MB7537EC8FA0961A51C4123798A19C9@CO6PR02MB7537.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
+X-MS-Office365-Filtering-Correlation-Id: 121281a7-92cd-4736-ca61-08d9abab678a
+X-MS-TrafficTypeDiagnostic: BYAPR02MB5062:
+X-Microsoft-Antispam-PRVS: <BYAPR02MB506286185DA3F40BE54A0365A19C9@BYAPR02MB5062.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1824;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XRd29BQ9ItvF+qT68WS9VmX2RDUDzGrHLooVzR3+2e2iSnOwPgMV4F9YqVG6eGY9HUz4n34zgwpC5JzJC8bw33UG4LmtRY0xx4i/oCa4jj9SyrnA7jkKSfT8neVghTe2KFTBfx8Y2RzAA2F6bzXCmNRL+CGXBiNabKhid2K21lLyIA/mWLafMnP41/j0cJZK4h4WhKszJYrhAtFF125mh9fgDqZZ4G7ymGfEEHWZyOeUksnz6cvOd0pktGAvT3vlk5sKVAW2H6QVEny0z69Xm4UFOMSyOJ+PygpJ6mp/KFTgWMLG8LpofYUcmBkEPuF8SqJpUlI/BcxZBY77pHNI/hRml2Wew6Lxit6gWNC9Z+vXTfxu+AhvH+VfRzY6CEXz7B+7U9BA/iEuaM1NgXyKVof5u6icrQqPwlto49oCi8R7sLRYFn/r2i78r0bjRNgWf3gMWSKDiza+s5A01O/uSlYytMGTXMS5bj6D81BaYsm8ph0Bq8Uy9L60p0dVOw01HSoRtMDef+uUa6+niOb/DrPRytK804H9/8Qw4b/nUYlP28fyLNWuO8dnfEDg/kuwIU+/jleJc1xZEXOyZ1A9bh7luFSoPH5bF//2AyjDJd20L7G3wjErJI8B3O8XMMWbD68MYFx/LvfHoXD8gP3XUkTBfXWluynJmySihSHLkVs6kSKETsOhk48Qn0zGx4Paf8oM9bB+Dtdz/Y1Iv/1ZfQ==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(36840700001)(46966006)(6916009)(44832011)(54906003)(42186006)(8676002)(36756003)(426003)(336012)(2616005)(47076005)(1076003)(36906005)(4326008)(6266002)(107886003)(316002)(8936002)(82310400003)(26005)(6666004)(2906002)(186003)(508600001)(7636003)(356005)(36860700001)(83380400001)(5660300002)(70586007)(70206006);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: jAfEHgx+B9160Mb/DN8mWfV/cXomRauH306W+sy/4NMGdF5V+QoqK50eeSMnIMDe0L6nQ+d0hqO+mluAlytJWqf+v+ElDDBwsu0dAuZb2X90lYTr2WEgNl+dZGZLcMwX+cgXoqLzvNLUK+IFn8UgBlVMRF7iRWgVz3lH4n24VcCcvVpiZt1Ju4j2ylPM3zGYN2wikSgx1C/TFyD+NELOd2uxfuI6ZYxICXnuzNX2OdLyXGm4cHr9l/imLd9mMIK17G/ZGsKmSFMy4Be0y4D+JraYtiDT8cPHY3iMJ1o3LFIwO0pqkRV7ldcZSZ2IlVC7QoMASFqFKPPgOPMJJzGXfA40B7RKhKK1UwQAlD5QTz+KqpSvzhd9glf2YPyJhSjTZJYFxxl6DZE/bkCRCit9DAwCUKOMSoIbC+NNOiV8dnISPFuv7jzGJNmCDo2xLACr/qaA+0H/L0xDLXEQMI5doLVHN8NcQZ7jwUjXTidfSWAjZ16cEATZQqp5jKP1Xucy06zIVutAnQ/2y6tT4m6csHKXjgHfh2mn5yTNbqW7c5eCcAF+3PFGR5CX0++nNDBN7lLTgSuYRTmyYCSeovwHMbluJwUzIcC0GOfS33nr7z0j1JjUHzrx4EshS88fcHNcEqCy/slWd86oh5i/5UEy4/YSPgO8AGicy1yv2KiJAaUaXYJb/bSqZZlN/RlyDQ7kcE4nES8HM+Y9kAc2tCn78g==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(46966006)(36840700001)(36906005)(8936002)(82310400003)(42186006)(26005)(8676002)(508600001)(44832011)(2616005)(54906003)(316002)(6916009)(36756003)(4326008)(5660300002)(426003)(356005)(70586007)(70206006)(83380400001)(107886003)(2906002)(6666004)(36860700001)(1076003)(7636003)(6266002)(186003)(336012)(47076005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2021 22:25:14.5580
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2021 22:24:51.3632
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1f88afb-4b63-467d-0782-08d9abab755e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 121281a7-92cd-4736-ca61-08d9abab678a
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT007.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT031.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR02MB7537
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5062
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add alignment check to of_fdt_unflatten_tree(). If it is not aligned,
-allocate a aligned buffer and copy the fdt blob. So the caller does not
-have to deal with the buffer alignment before calling this function.
-XRT uses this function to unflatten fdt which is from Alveo firmware.
+When OF_FLATTREE is selected and there is not a device tree, create an
+empty device tree root node. of/unittest.c code is referenced.
 
 Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 ---
- drivers/of/fdt.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ drivers/of/Makefile        |  2 +-
+ drivers/of/fdt.c           | 20 ++++++++++++++++++++
+ drivers/of/fdt_default.dts |  5 +++++
+ drivers/of/of_private.h    |  5 +++++
+ 4 files changed, 31 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/of/fdt_default.dts
 
+diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+index c13b982084a3..815f5220465b 100644
+--- a/drivers/of/Makefile
++++ b/drivers/of/Makefile
+@@ -2,7 +2,7 @@
+ obj-y = base.o device.o platform.o property.o
+ obj-$(CONFIG_OF_KOBJ) += kobj.o
+ obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
+-obj-$(CONFIG_OF_FLATTREE) += fdt.o
++obj-$(CONFIG_OF_FLATTREE) += fdt.o fdt_default.dtb.o
+ obj-$(CONFIG_OF_EARLY_FLATTREE) += fdt_address.o
+ obj-$(CONFIG_OF_PROMTREE) += pdt.o
+ obj-$(CONFIG_OF_ADDRESS)  += address.o
 diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 4546572af24b..d64445e43ceb 100644
+index d64445e43ceb..3d6e4543419e 100644
 --- a/drivers/of/fdt.c
 +++ b/drivers/of/fdt.c
-@@ -455,13 +455,28 @@ void *of_fdt_unflatten_tree(const unsigned long *blob,
- 			    struct device_node *dad,
- 			    struct device_node **mynodes)
- {
-+	void *new_fdt = NULL, *fdt_align;
- 	void *mem;
- 
-+	if (fdt_check_header(blob)) {
-+		pr_err("Invalid fdt blob\n");
-+		return NULL;
-+	}
-+	fdt_align = (void *)PTR_ALIGN(blob, FDT_ALIGN_SIZE);
-+	if (fdt_align != blob) {
-+		new_fdt = kmalloc(fdt_totalsize(blob) + FDT_ALIGN_SIZE, GFP_KERNEL);
-+		if (!new_fdt)
-+			return NULL;
-+		fdt_align = PTR_ALIGN(new_fdt, FDT_ALIGN_SIZE);
-+	}
-+
- 	mutex_lock(&of_fdt_unflatten_mutex);
--	mem = __unflatten_device_tree(blob, dad, mynodes, &kernel_tree_alloc,
-+	mem = __unflatten_device_tree(fdt_align, dad, mynodes, &kernel_tree_alloc,
- 				      true);
- 	mutex_unlock(&of_fdt_unflatten_mutex);
- 
-+	kfree(new_fdt);
-+
- 	return mem;
+@@ -481,6 +481,26 @@ void *of_fdt_unflatten_tree(const unsigned long *blob,
  }
  EXPORT_SYMBOL_GPL(of_fdt_unflatten_tree);
+ 
++static int __init of_fdt_root_init(void)
++{
++	struct device_node *np;
++
++	if (of_root)
++		return 0;
++
++	if (!of_fdt_unflatten_tree((const unsigned long *)__dtb_fdt_default_begin,
++				   NULL, &of_root)) {
++		pr_warn("%s: unflatten default tree failed\n", __func__);
++		return -ENODATA;
++	}
++
++	for_each_of_allnodes(np)
++		__of_attach_node_sysfs(np);
++
++	return 0;
++}
++late_initcall(of_fdt_root_init);
++
+ /* Everything below here references initial_boot_params directly. */
+ int __initdata dt_root_addr_cells;
+ int __initdata dt_root_size_cells;
+diff --git a/drivers/of/fdt_default.dts b/drivers/of/fdt_default.dts
+new file mode 100644
+index 000000000000..d1f12a76dfc6
+--- /dev/null
++++ b/drivers/of/fdt_default.dts
+@@ -0,0 +1,5 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++
++/ {
++};
+diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
+index 631489f7f8c0..47c6bb47ef25 100644
+--- a/drivers/of/of_private.h
++++ b/drivers/of/of_private.h
+@@ -41,6 +41,11 @@ extern struct mutex of_mutex;
+ extern struct list_head aliases_lookup;
+ extern struct kset *of_kset;
+ 
++#if defined(CONFIG_OF_FLATTREE)
++extern u8 __dtb_fdt_default_begin[];
++extern u8 __dtb_fdt_default_end[];
++#endif
++
+ #if defined(CONFIG_OF_DYNAMIC)
+ extern int of_property_notify(int action, struct device_node *np,
+ 			      struct property *prop, struct property *old_prop);
 -- 
 2.27.0
 
