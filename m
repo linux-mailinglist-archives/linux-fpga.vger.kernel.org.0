@@ -2,217 +2,196 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA9745786C
-	for <lists+linux-fpga@lfdr.de>; Fri, 19 Nov 2021 23:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD73A45789D
+	for <lists+linux-fpga@lfdr.de>; Fri, 19 Nov 2021 23:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbhKSWD2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 19 Nov 2021 17:03:28 -0500
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:41689 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233337AbhKSWD2 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 19 Nov 2021 17:03:28 -0500
-Received: by mail-pf1-f180.google.com with SMTP id g19so10450371pfb.8;
-        Fri, 19 Nov 2021 14:00:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ggijRPDDjZPAsK7FXooPHxZqLE8dAs4DKChssROyTcQ=;
-        b=2VKu3V7u+pIdihfDVc7T1kUxTnX+DfaOO/HOt1HqP9rkG3jbzI8UZE1Yll0e/iNzeq
-         zEPi6dgpeQFEtCirU2K2daomxvAjTvPi1rNNp2hP3PPprppZ2AzWKcZlhzSO3vRVV05V
-         NBODSY4hqVWtPV4GnNUlwRArjUBGvfaxFPJS5pOn/MUdxvf824fVokKHkv7FC9t1Db/9
-         WmZCvm8L5PXj/gSPjMav2ghiPphuiY6j5lkUX9JVg5I03m24Me0yeXYSi1i/vlwZMNGw
-         lw0PIx+gix6TaK9efczrhbdpRmKhYDFEcNVehgCREW5MNjNSr3bM5/WzcoI1yUUw3SHe
-         +d5A==
-X-Gm-Message-State: AOAM531+vfdD1s7zfKhrNf0oeEymXUDy1spgVBbEC7tsODo+sXgtfVnA
-        PHM6yvXEuGgxyLZ5X9fGa9s=
-X-Google-Smtp-Source: ABdhPJwT052WvkT1NvuImmCFPNUEPm5pR2ZNpF1ovKwHNtK9rTaGnW9QrKdDIOqPqlLMQ0rFkdnoMw==
-X-Received: by 2002:a63:a12:: with SMTP id 18mr19349308pgk.171.1637359225752;
-        Fri, 19 Nov 2021 14:00:25 -0800 (PST)
-Received: from localhost (h67-204-187-10.bendor.broadband.dynamic.tds.net. [67.204.187.10])
-        by smtp.gmail.com with ESMTPSA id t31sm481171pgl.47.2021.11.19.14.00.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Nov 2021 14:00:25 -0800 (PST)
-Date:   Fri, 19 Nov 2021 14:00:23 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
-        yilun.xu@intel.com, hao.wu@intel.com, matthew.gerlach@intel.com
-Subject: Re: [PATCH v14 0/3] fpga: Use standard class dev_release function
-Message-ID: <YZgedxD8aejQmb6c@archbook>
-References: <20211119015553.62704-1-russell.h.weight@intel.com>
+        id S235669AbhKSW1V (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 19 Nov 2021 17:27:21 -0500
+Received: from mail-bn8nam12on2045.outbound.protection.outlook.com ([40.107.237.45]:58176
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235458AbhKSW1U (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 19 Nov 2021 17:27:20 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SkSUPwhZXTgF9Z9nHkmxiIJgga/lmZAZdoHZxT5sBp+EskymDH4M6IBuEwwL+/wq5HYZjEUNSm4QlvohujMe/olPusurPtBsjPqTmh5E0iEGE8Q6L1NaKBCqVknRSQ4D2yn4nUYUJoFX80fKrNlzS+NXEwYAds7MXXwkebkAlA9HDCzgsYVMiNy1Bz8rGsueGZBvOcugGomaMHMiqjucPGHWdyC38Rfln35mAMUTMXAKMH6VrMRLTHyS7lwgf4hZq9YLtUGpJzLWZnJy7uSNqqIEpSmQDi3mjg9kdKwH4TiA6ImtDKsE4X8iFLavIJRtMuZVe4ffxA8vBESV6D8GEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vRtToOi2FmhPx9zf5bMTkEW7m5/3NiEb+B2GOiZlzsE=;
+ b=O6/YlqvYtmS1suXkufSB2P/J0l8uIGmGoz8skwZB+49pFG3UtyM2dXUYMSoog5ryvNQlXqV4F8tGhsWo2LT3/NDpz5sif6ZOGR5kWWcWafvWZfWJlSFTQ4jzHVdMQnZ+0LtlRlO++AMob7eurg4L2PZxdE+LwfmVZcY1L/4yANnKfAMJRc8l1s4z2vCfYvKf670uMZ/TCuJeNKpBt0HcD9OHmbr3B9KxN0ON2+p5TOb6okLZHIMhraqwB26ASHwFp4IEvGAWzirVncqufDOa2lMKNsCQ/3JDSa7AZeEMJhnzXHxPOkM0uD5pC7IcDNvP6guQ6dKyctqQ75SiBgvPWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=infradead.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vRtToOi2FmhPx9zf5bMTkEW7m5/3NiEb+B2GOiZlzsE=;
+ b=dNdzhQVcDCKVJv+8R3IAX+4gUYYeEmYkkOY0lL8psvWBezKu9tZ1EqKvDWD5QQW0VB2Y616JjJIQ0kK5Zp/FaQ5a3shK3O5ZpCXW/nhC7af32Qs2LCBT/YX3F4NL8VD/1Anq7jiz0Hax8piPXrPLcehhLNifdrEu05Cofol+kAk=
+Received: from DM6PR03CA0028.namprd03.prod.outlook.com (2603:10b6:5:40::41) by
+ CH0PR02MB8136.namprd02.prod.outlook.com (2603:10b6:610:10d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22; Fri, 19 Nov
+ 2021 22:24:15 +0000
+Received: from DM3NAM02FT042.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:40:cafe::55) by DM6PR03CA0028.outlook.office365.com
+ (2603:10b6:5:40::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.19 via Frontend
+ Transport; Fri, 19 Nov 2021 22:24:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT042.mail.protection.outlook.com (10.13.4.213) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4713.19 via Frontend Transport; Fri, 19 Nov 2021 22:24:15 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 19 Nov 2021 14:24:14 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Fri, 19 Nov 2021 14:24:14 -0800
+Envelope-to: dwmw2@infradead.org,
+ mdf@kernel.org,
+ robh@kernel.org,
+ trix@redhat.com,
+ devicetree@vger.kernel.org,
+ linux-fpga@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Received: from [172.19.72.93] (port=38930 helo=xsj-xw9400.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <lizhi.hou@xilinx.com>)
+        id 1moCIo-000ALP-QQ; Fri, 19 Nov 2021 14:24:14 -0800
+Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
+        id AB1E8600139; Fri, 19 Nov 2021 14:24:14 -0800 (PST)
+From:   Lizhi Hou <lizhi.hou@xilinx.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
+        <maxz@xilinx.com>, <sonal.santan@xilinx.com>, <yliu@xilinx.com>,
+        <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
+        <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
+        <robh@kernel.org>, <dwmw2@infradead.org>
+Subject: [PATCH V2 XRT Alveo Infrastructure 0/9] XRT Alveo driver infrastructure overview
+Date:   Fri, 19 Nov 2021 14:24:03 -0800
+Message-ID: <20211119222412.1092763-1-lizhi.hou@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211119015553.62704-1-russell.h.weight@intel.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3d4a989f-8433-433e-7c96-08d9abab522f
+X-MS-TrafficTypeDiagnostic: CH0PR02MB8136:
+X-Microsoft-Antispam-PRVS: <CH0PR02MB8136BD27292A4B145D082CE9A19C9@CH0PR02MB8136.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +NnwvkCu7XkXq+w7K4JbS9A/UdllA34YONafDeunoom2Qg+Fl4Dk99yfvkj1h2mPx6924kc6SsjgkMaxjvoGMUzr2PW1hcqnsPUm+kfVQVwFYw5HIv8JLT6K5p7zKsm6cl3ilkhy/2O1Fy+qsY2f+9CBlTRXALnAyZT8jAbGgi6nirkzreqPVeX40fQltlX5k/37bPHuj1ZqZwffObVkbT4ho+UeAxR7Pz3IWCtUMk7EEaCqyD45e8UoQlc/DIO3A6fChULAeh9RJegSQObXZDJuwPqKwMwlA70DolZ4BeAk19n6MdoZ4UMdtOz+HC9kGlsDDrGJHmC7ydyNL8ZxHk+vwop36YraLzxLraSoDUOuV8xoukEwTDiMxNxGDszApq45cw9ySOXZXzOwTHtILvEbCfZhdZCtiUVDOBxhFBKqcOR7KfFL6g1Up9qi0y+QjCh1NeirCjX2Yq+sczbDXdfZ9JIHOGHBsyBSRH/za6i8kdf5Ba8mQ0yJuJfQtDC7TcKKzlSsRFxKA5CmWlLiSECXMnzo+rSrDGwZu0EjCvLhfuBENxxbK1T7ZXDnk+CCA9MEhvvlhDgnZmamQQxZeLn3AJO2u5cPYfAQwPbweZuQ4pHTPCt9mURin/kQNqKWOBfybllkdysL0RsRiq8UD3swJhzxSwBtMq06JHR9VIX+JP1SPfWS6WppxwlKw3oQaDZGcN67MPi7QQnOEWW41/YOeipYz6M+MCyh3+DnFCHRX8O6RbUM1DAySwqOmO/LbykjN7pOOaXbzHK6iI8Df8IqT6lUu52n23cQNFbpqcs=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(46966006)(36840700001)(36756003)(36906005)(2906002)(316002)(336012)(70206006)(42186006)(966005)(508600001)(7636003)(44832011)(4326008)(426003)(2616005)(6266002)(5660300002)(8676002)(1076003)(6666004)(36860700001)(47076005)(186003)(8936002)(26005)(83380400001)(54906003)(70586007)(6916009)(356005)(82310400003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2021 22:24:15.5327
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d4a989f-8433-433e-7c96-08d9abab522f
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT042.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR02MB8136
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Russ,
+Hello,
 
-On Thu, Nov 18, 2021 at 05:55:50PM -0800, Russ Weight wrote:
-> The FPGA framework has a convention of using managed resource functions
-> to allow parent drivers to manage the data structures allocated by the
-> class drivers. They use an empty *_dev_release() function to satisfy the
-> class driver.
-> 
-> This is inconsistent with linux driver model.
-> 
-> These changes remove the managed resource functions and populate the class
-> dev_release callback functions. They also merge the create() and register()
-> functions into a single register() or register_full() function for each of
-> the fpga-mgr, fpga-region, and fpga-bridge class drivers.
-> 
-> The new *register_full() functions accept an info data structure to provide
-> flexibility in passing optional parameters. The *register() functions
-> support the legacy parameter list for users that don't require the use of
-> optional parameters.
-> 
-> For more context, refer to this email thread:
-> 
-> https://marc.info/?l=linux-fpga&m=162127412218557&w=2
-> 
-> I turned on the configs assocated with each of the modified files, but I
-> must have been missing some dependencies, because not all of them compiled.
-> I did a run-time test specifically with the dfl-fme infrastructure. This
-> would have exercised the region, bridge, and fpga-mgr frameworks.
-> 
-> Changelog v13 -> v14:
->   - Fixed typo/bug detected by kernel test robot <lkp@intel.com>: s/mgr/br/
-> 
-> Changelog v12 -> v13:
->   - Add Acked-by tag
-> 
-> Changelog v11 -> v12:
->   - Made the requisite changes to the new versal-fpga driver
-> 
-> Changelog v10 -> v11:
->   - Rebased to latest linux-next
->   - Resolved a single conflict in fpga-mgr.c with associated with  wrapper
->     function: fpga_mgr_state(mgr)
-> 
-> Changelog v9 -> v10:
->   - Fixed commit messages to reference register_full() instead of
->     register_simple().
->   - Removed the fpga_bridge_register_full() function, because there is
->     not need for it yet. Updated the documentation and commit message
->     accordingly.
->   - Updated documentation to reference the fpga_manager_info and
->     fpga_region_info structures.
-> 
-> Changelog v8 -> v9:
->   - Cleaned up documentation for the FPGA Manager, Bridge, and Region
->     register functions
->   - Renamed fpga_*_register() to fpga_*_register_full()
->   - Renamed fpga_*_register_simple() to fpga_*_register()
->   - Renamed devm_fpga_mgr_register() to devm_fpga_mgr_register_full()
->   - Renamed devm_fpga_mgr_register_simple() to devm_fpga_mgr_register()
-> 
-> Changelog v7 -> v8:
->   - Added reviewed-by tags.
->   - Updated Documentation/driver-api/fpga/ files: fpga-mgr.rst,
->     fpga-bridge.rst, and fpga-region.rst.
-> 
-> Changelog v6 -> v7:
->   - Update the commit messages to describe the new parameters for the
->     *register() functions and to mention the *register_simple() functions.
->   - Fix function prototypes in header file to rename dev to parent.
->   - Make use of the PTR_ERR_OR_ZERO() macro when possible.
->   - Some cleanup of comments.
->   - Update function definitions/prototypes to apply const to the new info
->     parameter.
->   - Verify that info->br_ops is non-null in the fpga_bridge_register()
->     function.
->   - Verify a non-null info pointer in the fpga_region_register() function.
-> 
-> Changelog v5 -> v6:
->   - Moved FPGA manager/bridge/region optional parameters out of the ops
->     structure and back into the FPGA class driver structure.
->   - Changed fpga_*_register() function parameters to accept an info data
->     structure to provide flexibility in passing optional parameters.
->   - Added fpga_*_register_simple() functions to support current parameters
->     for users that don't require use of optional parameters.
-> 
-> Changelog v4 -> v5:
->   - Rebased on top of recently accepted patches.
->   - Removed compat_id from the fpga_mgr_register() parameter list
->     and added it to the fpga_manager_ops structure. This also required
->     dynamically allocating the dfl-fme-ops structure in order to add
->     the appropriate compat_id.
->   - Created the fpga_region_ops data structure which is optionally passed
->     to fpga_region_register(). compat_id, the get_bridges() pointer, and
->     the priv pointer are included in the fpga_region_ops structure.
-> 
-> Changelog v3 -> v4:
->   - Added the compat_id parameter to fpga_mgr_register() and
->     devm_fpga_mgr_register() to ensure that the compat_id is set before
->     the device_register() call.
->   - Added the compat_id parameter to fpga_region_register() to ensure
->     that the compat_id is set before the device_register() call.
->   - Modified the dfl_fpga_feature_devs_enumerate() function to restore
->     the fpga_region_register() call to the correct location.
-> 
-> Changelog v2 -> v3:
->   - Cleaned up comment headers for fpga_mgr_register(), fpga_bridge_register(),
->     and fpga_region_register().
->   - Fixed error return on ida_simple_get() failure for fpga_mgr_register(),
->     fpga_bridge_register(), and fpga_region_register().
->   - Fixed error return value for fpga_bridge_register(): ERR_PTR(ret) instead
->     of NULL.
-> 
-> Changelog v1 -> v2:
->   - Restored devm_fpga_mgr_register() functionality to the fpga-mgr
->     class driver, adapted for the combined create/register functionality.
->   - All previous callers of devm_fpga_mgr_register() will continue to call
->     devm_fpga_mgr_register().
->   - replaced unnecessary ternary operators in return statements with
->     standard if conditions.
-> 
-> Russ Weight (3):
->   fpga: mgr: Use standard dev_release for class driver
->   fpga: bridge: Use standard dev_release for class driver
->   fpga: region: Use standard dev_release for class driver
-> 
->  Documentation/driver-api/fpga/fpga-bridge.rst |   6 +-
->  Documentation/driver-api/fpga/fpga-mgr.rst    |  38 +++-
->  Documentation/driver-api/fpga/fpga-region.rst |  12 +-
->  drivers/fpga/altera-cvp.c                     |  12 +-
->  drivers/fpga/altera-fpga2sdram.c              |  12 +-
->  drivers/fpga/altera-freeze-bridge.c           |  10 +-
->  drivers/fpga/altera-hps2fpga.c                |  12 +-
->  drivers/fpga/altera-pr-ip-core.c              |   7 +-
->  drivers/fpga/altera-ps-spi.c                  |   9 +-
->  drivers/fpga/dfl-fme-br.c                     |  10 +-
->  drivers/fpga/dfl-fme-mgr.c                    |  22 +-
->  drivers/fpga/dfl-fme-region.c                 |  17 +-
->  drivers/fpga/dfl.c                            |  12 +-
->  drivers/fpga/fpga-bridge.c                    | 122 +++-------
->  drivers/fpga/fpga-mgr.c                       | 215 ++++++++----------
->  drivers/fpga/fpga-region.c                    | 119 ++++------
->  drivers/fpga/ice40-spi.c                      |   9 +-
->  drivers/fpga/machxo2-spi.c                    |   9 +-
->  drivers/fpga/of-fpga-region.c                 |  10 +-
->  drivers/fpga/socfpga-a10.c                    |  16 +-
->  drivers/fpga/socfpga.c                        |   9 +-
->  drivers/fpga/stratix10-soc.c                  |  16 +-
->  drivers/fpga/ts73xx-fpga.c                    |   9 +-
->  drivers/fpga/versal-fpga.c                    |   9 +-
->  drivers/fpga/xilinx-pr-decoupler.c            |  17 +-
->  drivers/fpga/xilinx-spi.c                     |  11 +-
->  drivers/fpga/zynq-fpga.c                      |  16 +-
->  drivers/fpga/zynqmp-fpga.c                    |   9 +-
->  include/linux/fpga/fpga-bridge.h              |  30 ++-
->  include/linux/fpga/fpga-mgr.h                 |  62 +++--
->  include/linux/fpga/fpga-region.h              |  36 ++-
->  31 files changed, 386 insertions(+), 517 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
+This V1 of patch series is the infrastruture of previous submitted XRT
+driver patch set for Xilinx Alveo PCIe accelerator cards.
+    https://lore.kernel.org/lkml/20210802160521.331031-1-lizhi.hou@xilinx.com/
 
-Patchset looks good to me, I'm currently travelling, will get around to
-it next week.
+The patch series includes Documentation/xrt.rst which describes Alveo
+platform, XRT driver architecture and deployment model in more detail.
 
-- Moritz
+The Alveo PCIe device uses Device Tree blob to describe its HW subsystems.
+Each device tree node respresents a hardware endpoint and each endpoint
+is an hardware unit which requires a driver for it. XRT driver
+infrastructure unflattens device tree blob and overlay the device nodes
+to system device tree. of/unittest.c, pci/hotplug/pnv_php.c and other
+linux kernel code are referenced for usage of OF functions.
+
+XRT driver infrastructure implements xrt_device and xrt_driver for Alveo
+endpoints. An xrt_bus_type is also implemented to bind xrt driver to
+xrt device.
+
+This patch series uses a builtin test device tree blob which contains only
+one endpoint as a input. The XRT driver creates a pseudo group xrt_device
+for the input device tree blob. And a group xrt_driver is implemented to
+discover and create xrt_device for the endpoint contained in the blob.
+--
+Changes since v1:
+- fixed 'make dt_binding_check' errors.
+
+Lizhi Hou (9):
+  Documentation: fpga: Add a document describing XRT Alveo driver
+    infrastructure
+  Documentation: devicetree: bindings: add xrt group binding
+  of: handle fdt buffer alignment inside unflatten function
+  of: create empty of root
+  fpga: xrt: xrt-lib initialization
+  fpga: xrt: xrt bus and device
+  fpga: xrt: lib-xrt xroot APIs
+  fpga: xrt: xrt group device driver
+  fpga: xrt: management physical function driver
+
+ .../bindings/xrt/xlnx,xrt-group.yaml          |  57 ++
+ Documentation/fpga/index.rst                  |   1 +
+ Documentation/fpga/xrt.rst                    | 510 ++++++++++++++++++
+ MAINTAINERS                                   |  10 +
+ drivers/fpga/Kconfig                          |   3 +
+ drivers/fpga/Makefile                         |   4 +
+ drivers/fpga/xrt/Kconfig                      |   7 +
+ drivers/fpga/xrt/include/xroot.h              |  30 ++
+ drivers/fpga/xrt/lib/Kconfig                  |  16 +
+ drivers/fpga/xrt/lib/Makefile                 |  18 +
+ drivers/fpga/xrt/lib/group.c                  |  94 ++++
+ drivers/fpga/xrt/lib/lib-drv.c                | 249 +++++++++
+ drivers/fpga/xrt/lib/lib-drv.h                |  28 +
+ drivers/fpga/xrt/lib/xroot.c                  | 210 ++++++++
+ drivers/fpga/xrt/lib/xrt-bus.dts              |  13 +
+ drivers/fpga/xrt/mgmt/Kconfig                 |  14 +
+ drivers/fpga/xrt/mgmt/Makefile                |  16 +
+ drivers/fpga/xrt/mgmt/dt-test.dts             |  13 +
+ drivers/fpga/xrt/mgmt/dt-test.h               |  15 +
+ drivers/fpga/xrt/mgmt/xmgmt-drv.c             | 166 ++++++
+ drivers/of/Makefile                           |   2 +-
+ drivers/of/fdt.c                              |  37 +-
+ drivers/of/fdt_default.dts                    |   5 +
+ drivers/of/of_private.h                       |   5 +
+ include/linux/xrt/xdevice.h                   | 128 +++++
+ 25 files changed, 1649 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/xrt/xlnx,xrt-group.yaml
+ create mode 100644 Documentation/fpga/xrt.rst
+ create mode 100644 drivers/fpga/xrt/Kconfig
+ create mode 100644 drivers/fpga/xrt/include/xroot.h
+ create mode 100644 drivers/fpga/xrt/lib/Kconfig
+ create mode 100644 drivers/fpga/xrt/lib/Makefile
+ create mode 100644 drivers/fpga/xrt/lib/group.c
+ create mode 100644 drivers/fpga/xrt/lib/lib-drv.c
+ create mode 100644 drivers/fpga/xrt/lib/lib-drv.h
+ create mode 100644 drivers/fpga/xrt/lib/xroot.c
+ create mode 100644 drivers/fpga/xrt/lib/xrt-bus.dts
+ create mode 100644 drivers/fpga/xrt/mgmt/Kconfig
+ create mode 100644 drivers/fpga/xrt/mgmt/Makefile
+ create mode 100644 drivers/fpga/xrt/mgmt/dt-test.dts
+ create mode 100644 drivers/fpga/xrt/mgmt/dt-test.h
+ create mode 100644 drivers/fpga/xrt/mgmt/xmgmt-drv.c
+ create mode 100644 drivers/of/fdt_default.dts
+ create mode 100644 include/linux/xrt/xdevice.h
+
+-- 
+2.27.0
+
