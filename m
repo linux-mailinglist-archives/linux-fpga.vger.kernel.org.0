@@ -2,91 +2,77 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E50BB46444E
-	for <lists+linux-fpga@lfdr.de>; Wed,  1 Dec 2021 01:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70F9464CCB
+	for <lists+linux-fpga@lfdr.de>; Wed,  1 Dec 2021 12:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbhLAA7B (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 30 Nov 2021 19:59:01 -0500
-Received: from mga05.intel.com ([192.55.52.43]:58641 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229450AbhLAA7B (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Tue, 30 Nov 2021 19:59:01 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="322596855"
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="322596855"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 16:55:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="601749336"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Nov 2021 16:55:38 -0800
-Date:   Wed, 1 Dec 2021 08:48:24 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Russ Weight <russell.h.weight@intel.com>,
-        Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH v2] fpga: stratix10-soc: Do not use ret uninitialized in
- s10_probe()
-Message-ID: <20211201004824.GA336280@yilunxu-OptiPlex-7050>
-References: <20211130221123.3800420-1-nathan@kernel.org>
+        id S1348954AbhLALhg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 1 Dec 2021 06:37:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348930AbhLALhc (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 1 Dec 2021 06:37:32 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E8EC06175E
+        for <linux-fpga@vger.kernel.org>; Wed,  1 Dec 2021 03:34:10 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so1173207pjb.1
+        for <linux-fpga@vger.kernel.org>; Wed, 01 Dec 2021 03:34:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
+         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
+         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
+         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
+         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
+         Af5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=I1ImD4chN7hHBjJ3AZOEPOJidaq38zP+NefEAI+GquDj6Dv9an8EBA4kyDUL/NspT8
+         J20Oh37kewFd0u/y+DO/SgARiCKOLkKV9s4+1maq3NDytsErn/VZUEQvG1E1NDwbEh4R
+         XdoZ09HCHAFAmV2NSCIrvTVUVyQm/AAs796fcLux/bEbds+pl3GrKrmOg8axJ16iHqJY
+         qMhrX4n4ouLjDD52pz0Wq6CMM4KJsvslfGj3g1dOQUps9iauZtaVmPcCBy0g4JTpoto9
+         VDJ6X2wtCC3wRlSseJAZ9KKS6YjyWj7AoJPs0Hzxl0MGDoqUIuteYY3+q3M5avnsSAV+
+         jtzA==
+X-Gm-Message-State: AOAM532fmGJ90loj+kpoxjpmTXUMZWukYUIre4VlBKeiThPhyftH+xmW
+        3ADXxMp88pYzEBT6ULAXF3WlQHHjyzhhcjlfqXWYonn1TO8=
+X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
+X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
+ Wed, 01 Dec 2021 03:33:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130221123.3800420-1-nathan@kernel.org>
+Sender: unitednationawardwinner@gmail.com
+Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
+From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
+Date:   Wed, 1 Dec 2021 03:33:58 -0800
+X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
+Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
+Subject: Your long awaited part payment of $2.5.000.00Usd
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 03:11:24PM -0700, Nathan Chancellor wrote:
-> Clang warns:
-> 
-> drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
->         return ret;
->                ^~~
-> 
-> ret is only assigned in an error path now so just return 0 directly.
-> 
-> Fixes: 4ba0b2c294fe ("fpga: mgr: Use standard dev_release for class driver")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1517
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> Reviewed-by: Tom Rix <trix@redhat.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Attention: Beneficiary, Your long awaited part payment of
+$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
+Dollars) is ready for immediate release to you, and it was
+electronically credited into an ATM Visa Card for easy delivery.
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Your new Payment Reference No.- 6363836,
+Pin Code No: 1787
+Your Certificate of Merit Payment No: 05872,
 
-Thanks,
-Yilun
+Your Names: |
+Address: |
 
-> ---
-> 
-> v1 -> v2: https://lore.kernel.org/r/20211129161009.3625548-1-nathan@kernel.org/
-> 
-> * Drop clang's suggestion text (Tom).
-> 
-> * Pick up Russ and Tom's review tags.
-> 
->  drivers/fpga/stratix10-soc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-> index 737d14c6e0de..357cea58ec98 100644
-> --- a/drivers/fpga/stratix10-soc.c
-> +++ b/drivers/fpga/stratix10-soc.c
-> @@ -428,7 +428,7 @@ static int s10_probe(struct platform_device *pdev)
->  	}
->  
->  	platform_set_drvdata(pdev, mgr);
-> -	return ret;
-> +	return 0;
->  
->  probe_err:
->  	stratix10_svc_free_channel(priv->chan);
-> 
-> base-commit: 8886a579744fbfa53e69aa453ed10ae3b1f9abac
-> -- 
-> 2.34.1
+Person to Contact:MR KELLY HALL the Director of the International
+Audit unit ATM Payment Center,
+
+Email: uba-bf@e-ubabf.com
+TELEPHONE: +226 64865611 You can whatsApp the bank
+
+Regards.
+Mrs ORGIL BAATAR
