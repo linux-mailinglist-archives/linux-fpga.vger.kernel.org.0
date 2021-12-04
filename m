@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE07468172
-	for <lists+linux-fpga@lfdr.de>; Sat,  4 Dec 2021 01:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A48468177
+	for <lists+linux-fpga@lfdr.de>; Sat,  4 Dec 2021 01:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383873AbhLDAoj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 3 Dec 2021 19:44:39 -0500
-Received: from mail-mw2nam08on2045.outbound.protection.outlook.com ([40.107.101.45]:39392
-        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
+        id S1383889AbhLDAov (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 3 Dec 2021 19:44:51 -0500
+Received: from mail-mw2nam10on2074.outbound.protection.outlook.com ([40.107.94.74]:19799
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1354301AbhLDAoj (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:44:39 -0500
+        id S1354301AbhLDAou (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Fri, 3 Dec 2021 19:44:50 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h7m6j8iJNFz9Y7kIyORoPNae07wi6pOGRkp1bD4a4qsh6IMMEom6KQZYvw6VtgrgDIYWi1o3zQ/w9aqZ/3Rx+xLQ8aB02fbGocv75fHPMEYYjTS0OSbXHn2NsG1/aK40IrS6zClqgLvqOJL94pCK7EIe1m4PEt9JGq5sX607XHVo/qifY3+Z1bzY7Tqi6dPW3UaYfOPGjtAtGY8HAYng3l3s7mumGw7GhOv8UYspDiWcIRtP08UaLFk/rvmFIDC8R+jBfYRA+Qr4386U84WxYsBcITE6cniq++0HZpXQ/kczWHAj8/jTNxHw49trwUghCcWzQWU2mOnkHUp+NB/eMA==
+ b=MqNnEFPo6NN8P+fLgHhTL/I+EDhQLbqmfLLAJazNSB3PvgXcbprtUkRIuLweAR5iaXFSWgN80J9kg9ts2rzGznIvITacDxoa3uo8z9JbFgxMeVJAxrBYPw/Hn0FRbiW0LeP0jG2HWgwFMFTHS328liHO+FU1lnVAYbnxQI20ik4rk3F5zdi/NGwCmxdQ1wOP/A6d9U5ncID1XpvpOISqcdCNFtbx+TOXMMb8EWR0gcARoPthCow2k5NFA74IwepTbJes8VY/OTUTtMkoMbRetA/HvG1wYM3b77j7MpDzyqaSWlC0dNZs4kNRGT2A7F56BYWKFcDwpRoS1h6bCmVqpQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jWLCgOntJLI8ZMJ0WIcvcS8gElPjBGa5fgiu/SoYYx4=;
- b=BeMC0/K7VPyvm1A30nHI5qJz+AAE0fD7JyM0urNRD7C64IEOCztQhVsjHoDYaiJKTYV4hA01Slk+u9W/LUla3tlzJaqaEbybReUYjWrppTG1/cy9Rr5TQzCgspPr6N2mX2WRhMwSkxqxVl6uIitF7iY5mWu5ZLfG5r//gqoM53bUe8x4cCqBUPotxvhldJs1Qa1tVLiTU75kXIDOVAIuk8MLuUHBLFAy3QhV/8PNfZaD8+PzxFV2b/IvSk15WJCjxM88uGkIb6Jewtec4qn8osf2LGP/gNJRKvMYATRWSfV/yWsL+J0GQsiCN6hoa2MsZAzlLPVbkpwWa+Xa0rKIRQ==
+ bh=ZaBKcT7UEF2+ztUlkTt5Ky/G32yoV8gCsFoHGuUqp/Q=;
+ b=EMrDk/W6RUC1XB8v8FpCf9MdpFZrxFQM+JDxPcuNoZNuJ3ZRXUQJZhLsTe1uCyNt9HbNcJ9C2Z4kMSD9ePOb8wY4ykjTh+m8SlYSb2az0MHZUiT3opE3DiDzJPCyQtxhfWKL3XcTSfJit4obXJPJZ9e9Fkjd9y7P6XZUekpZVrQl/t3rEiwJ2WS181MdN4TQEt0okhCd2GFd0CW4N7MpRz4Bcgqf12SbW8cwGRokvuKvt2KmMggfMEBaAWVFucmn0qkyOIR7emd94ee67HWU4J2e4EA9CPPOYqXXFIhaAAHmmVqhnsezjQ8TH8wO/wSXyhGt9tbmi3iBuGSobuwjgQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=infradead.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jWLCgOntJLI8ZMJ0WIcvcS8gElPjBGa5fgiu/SoYYx4=;
- b=ZdgIm0a+hrY5k1j1f6K+pCqrV2jEG3te1IB8UgqAqRe7Uob1xoAu7ZcWOOKuDqgfCe4LMEPZQRb8NBctJfhYXYvhfUWTQb/IS7eMyHikzH2r1n+40rAtH9uCLO/JoQCBbzHcqTIoGZTM1Sm0eHPqNMhdQrwEyuMNdGROinJ/C/k=
-Received: from BN9PR03CA0628.namprd03.prod.outlook.com (2603:10b6:408:106::33)
- by CH2PR02MB6183.namprd02.prod.outlook.com (2603:10b6:610:3::17) with
+ bh=ZaBKcT7UEF2+ztUlkTt5Ky/G32yoV8gCsFoHGuUqp/Q=;
+ b=DlPsGEqPKe+knm3RMcZRawrQ1lfl7SRsAjD0wkKAYcImkoeRhyh5sLYIbgRJvEi7+IPizCd2gEZDLUMXCnxHU56rWgyy+3VjTMuTf64HwPzSetMLfDkxNytzXN/pB0qa860iq7v6RZS8woHHDDYXRvOjXWl8it10Y+TkTtNolzM=
+Received: from BN9PR03CA0624.namprd03.prod.outlook.com (2603:10b6:408:106::29)
+ by BL0PR02MB4419.namprd02.prod.outlook.com (2603:10b6:208:44::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.28; Sat, 4 Dec
- 2021 00:41:11 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Sat, 4 Dec
+ 2021 00:41:23 +0000
 Received: from BN1NAM02FT012.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:106:cafe::5e) by BN9PR03CA0628.outlook.office365.com
- (2603:10b6:408:106::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend
- Transport; Sat, 4 Dec 2021 00:41:11 +0000
+ (2603:10b6:408:106:cafe::5d) by BN9PR03CA0624.outlook.office365.com
+ (2603:10b6:408:106::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend
+ Transport; Sat, 4 Dec 2021 00:41:22 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=xilinx.com;
@@ -47,14 +47,14 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
 Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
  BN1NAM02FT012.mail.protection.outlook.com (10.13.2.130) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4755.13 via Frontend Transport; Sat, 4 Dec 2021 00:41:11 +0000
+ 15.20.4755.13 via Frontend Transport; Sat, 4 Dec 2021 00:41:22 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 3 Dec 2021 16:41:03 -0800
+ 15.1.2176.14; Fri, 3 Dec 2021 16:41:15 -0800
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Fri, 3 Dec 2021 16:41:03 -0800
+ 15.1.2176.14 via Frontend Transport; Fri, 3 Dec 2021 16:41:15 -0800
 Envelope-to: dwmw2@infradead.org,
  mdf@kernel.org,
  robh@kernel.org,
@@ -62,12 +62,12 @@ Envelope-to: dwmw2@infradead.org,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.93] (port=55518 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.93] (port=55520 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <lizhi.hou@xilinx.com>)
-        id 1mtJ6t-000Ayu-2M; Fri, 03 Dec 2021 16:41:03 -0800
+        id 1mtJ75-000B0A-3l; Fri, 03 Dec 2021 16:41:15 -0800
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id 7AD0C60084F; Fri,  3 Dec 2021 16:40:02 -0800 (PST)
+        id 8FC1F600851; Fri,  3 Dec 2021 16:40:02 -0800 (PST)
 From:   Lizhi Hou <lizhi.hou@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
@@ -76,9 +76,9 @@ CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
         <robh@kernel.org>, <dwmw2@infradead.org>,
         Max Zhen <max.zhen@xilinx.com>
-Subject: [PATCH V3 XRT Alveo Infrastructure 5/8] fpga: xrt: xrt bus and device
-Date:   Fri, 3 Dec 2021 16:39:54 -0800
-Message-ID: <20211204003957.1448567-6-lizhi.hou@xilinx.com>
+Subject: [PATCH V3 XRT Alveo Infrastructure 6/8] fpga: xrt: lib-xrt xroot APIs
+Date:   Fri, 3 Dec 2021 16:39:55 -0800
+Message-ID: <20211204003957.1448567-7-lizhi.hou@xilinx.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211204003957.1448567-1-lizhi.hou@xilinx.com>
 References: <20211204003957.1448567-1-lizhi.hou@xilinx.com>
@@ -87,394 +87,319 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1c36d96-b4d2-4206-ec5c-08d9b6bec535
-X-MS-TrafficTypeDiagnostic: CH2PR02MB6183:
-X-Microsoft-Antispam-PRVS: <CH2PR02MB618325DF9963F68A8BF03014A16B9@CH2PR02MB6183.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1051;
+X-MS-Office365-Filtering-Correlation-Id: 6b8cb5bc-e8cc-4c21-19f7-08d9b6becbd5
+X-MS-TrafficTypeDiagnostic: BL0PR02MB4419:
+X-Microsoft-Antispam-PRVS: <BL0PR02MB4419BAC05FD0E3CA7EC20FA9A16B9@BL0PR02MB4419.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:81;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CMaTqkfljna41aAQciXA1a0NZFTpA8KdStSuTPdqhMJP8moWVp9dNoMMpCY6AVHwty6yZVbabAOI0TEEHOY8BMjgDYhm0uGe197/oxmojkZedVejGce2f8mi5uzxtt1eLmvLzN6qkI+dPLtiMBXvYfJG2TBm7+6jUsWmlfVOuBDay1HTR/3gxVqmhLcxw9+FgtQXacrLNK3LXFbhhHCj40JtrbP5VYULt9leUL6YgG8GxLOitYAryaU/F9JoiAP8lp7E5CKnaqC0dNXcs1tZzVb/0l4531kSW0vAZtFTuS2qBJZnNKc8qez1h4XqabuSt1F4TTXcJ0kL9A4cxfwJJHeFhMt7engEDeOmJW0vO87x8Oo1GxYMEpYG+Mie/PYiuBmFArAY9wPlhzA2z+R/EUTT5H9N83NyDjTsYQ9YwW/SWmhSAwdnOm6Gyy/W+p5FSe4dvT0K18vPQRQeVlIGp6GGKhSOhBgnMLGJ8JvoVYR+gzdQc7NHXOY4zqh/0NkNuSth8n8NV6sY2mTAresBEGKBPnYkk65OlgzOU9WRg4N6cPMGEIfAN+S2PpgFYiRcMXz0a9W5RWY2jBxT1U8ecweWp3b4HVMQ88KHpVclGSjhxvY4/8MbRzrHke+kki9y/2lAz1VmGjsUIRfwRfHbnJUDquTipohYpz0C+MRIk6VVART3vOSywkCkSwcTwJ7RMFzV7d5l77WsgD6ynxRpzA==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(36840700001)(46966006)(6916009)(47076005)(26005)(6666004)(356005)(316002)(6266002)(42186006)(5660300002)(70206006)(70586007)(54906003)(7636003)(36860700001)(2616005)(8936002)(36756003)(107886003)(336012)(82310400004)(508600001)(8676002)(1076003)(4326008)(186003)(2906002)(426003)(44832011);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: dpMQi8g+oIbtmRjweKbjxK+6eTnOlqk7loGNgMQfe5WDmZeSrisrxabyPFB2p6bU2bTONLQV/ETGhsG6dTwlLo16wz29nzftuwsmq4b8qudsi6agiROtPDcv000CFyEtdPjMDSE0L/2xbR1MGK7V0hnbVB+Z7ITdlNKonCAzOmbCnlpojT1+QSF2EoG7pN2IYjltlGUIvFPDiz8gqs1GmrLDgQXwJ0rtxY+jgQ0Y5lTai9P9GOcwzRIUdsSBB/pt5CFB/XMoqmL/U9mbwQmlpXlIK1zIOIkmdzfosBSrxOHVd+YL+M6+tvFVycLXEwxaiA9g3+/wYm9OF60GsGZsf673cb2CcnpczHboJ8CNzeV+c9/3Tl+yZxXW8vvs/kfpqQxYKimAQ3YFl3DGUPD6+DNdHzjs9ID00p1JgmvW9CwAGR15tdb9xuXR1kyB4yVU4jNdzwpFA3LCkzs7OFSwLAAriw2hLs+zaGjxTjpK7+4q3+TeAtvL8HPgFXi80CNJTIrt55p0mwF20yck7kjGEtjzz27QDLCoy0hgD3SA9UjKbJdxtkTpBKIV+f1hDvtWWfEbnts1EUBMsHCDhZksrzi2lOJNuWEDYjmKaxu0AWZ9NxnwLUPJ4Qv2qR4qDdHyn25ugY/DDQEVgY0XYmSRkhSKW9upGUALy7XU08RlRAXkTMb41YZIipcK0b/WZVW+D2YmaJByZKmFIa7jYuy9Rg==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(46966006)(36840700001)(47076005)(54906003)(70586007)(8936002)(70206006)(316002)(2906002)(4326008)(7636003)(36860700001)(6666004)(8676002)(6916009)(5660300002)(336012)(26005)(42186006)(186003)(2616005)(6266002)(107886003)(1076003)(508600001)(426003)(36756003)(356005)(44832011)(82310400004);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2021 00:41:11.6916
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2021 00:41:22.8011
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1c36d96-b4d2-4206-ec5c-08d9b6bec535
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b8cb5bc-e8cc-4c21-19f7-08d9b6becbd5
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT012.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6183
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4419
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-xrt-lib kernel module infrastructure code to add xrt_bus_type, xrt_driver
-and xrt_device
+lib-xrt infrastructure code to create xrt group device.
 
 Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 ---
- drivers/fpga/xrt/lib/lib-drv.c | 192 +++++++++++++++++++++++++++++++++
- include/linux/xrt/xdevice.h    | 128 ++++++++++++++++++++++
- 2 files changed, 320 insertions(+)
- create mode 100644 include/linux/xrt/xdevice.h
+ drivers/fpga/xrt/include/xroot.h |  30 +++++
+ drivers/fpga/xrt/lib/Makefile    |   1 +
+ drivers/fpga/xrt/lib/xroot.c     | 223 +++++++++++++++++++++++++++++++
+ 3 files changed, 254 insertions(+)
+ create mode 100644 drivers/fpga/xrt/include/xroot.h
+ create mode 100644 drivers/fpga/xrt/lib/xroot.c
 
-diff --git a/drivers/fpga/xrt/lib/lib-drv.c b/drivers/fpga/xrt/lib/lib-drv.c
-index d4597cd4767f..3ad02a7c2aac 100644
---- a/drivers/fpga/xrt/lib/lib-drv.c
-+++ b/drivers/fpga/xrt/lib/lib-drv.c
-@@ -11,10 +11,195 @@
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
- #include <linux/of_device.h>
-+#include <linux/xrt/xdevice.h>
- #include "lib-drv.h"
- 
- static int xrt_bus_ovcs_id;
- 
-+#define XRT_DRVNAME(drv)		((drv)->driver.name)
-+
-+static DEFINE_IDA(xrt_device_ida);
-+
-+static int xrt_bus_match(struct device *dev, struct device_driver *drv)
-+{
-+	if (of_driver_match_device(dev, drv))
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static int xrt_bus_probe(struct device *dev)
-+{
-+	struct xrt_driver *xdrv = to_xrt_drv(dev->driver);
-+	struct xrt_device *xdev = to_xrt_dev(dev);
-+
-+	return xdrv->probe(xdev);
-+}
-+
-+static void xrt_bus_remove(struct device *dev)
-+{
-+	struct xrt_driver *xdrv = to_xrt_drv(dev->driver);
-+	struct xrt_device *xdev = to_xrt_dev(dev);
-+
-+	if (xdrv->remove)
-+		xdrv->remove(xdev);
-+}
-+
-+struct bus_type xrt_bus_type = {
-+	.name		= "xrt",
-+	.match		= xrt_bus_match,
-+	.probe		= xrt_bus_probe,
-+	.remove		= xrt_bus_remove,
-+};
-+
-+int xrt_register_driver(struct xrt_driver *drv)
-+{
-+	const char *drvname = XRT_DRVNAME(drv);
-+	int rc = 0;
-+
-+	/* Initialize dev_t for char dev node. */
-+	if (drv->file_ops.xsf_ops.open) {
-+		rc = alloc_chrdev_region(&drv->file_ops.xsf_dev_t, 0,
-+					 XRT_MAX_DEVICE_NODES, drvname);
-+		if (rc) {
-+			pr_err("failed to alloc dev minor for %s: %d\n", drvname, rc);
-+			return rc;
-+		}
-+	} else {
-+		drv->file_ops.xsf_dev_t = (dev_t)-1;
-+	}
-+
-+	drv->driver.bus = &xrt_bus_type;
-+
-+	rc = driver_register(&drv->driver);
-+	if (rc) {
-+		pr_err("register %s xrt driver failed\n", drvname);
-+		if (drv->file_ops.xsf_dev_t != (dev_t)-1) {
-+			unregister_chrdev_region(drv->file_ops.xsf_dev_t,
-+						 XRT_MAX_DEVICE_NODES);
-+		}
-+		return rc;
-+	}
-+
-+	pr_info("%s registered successfully\n", drvname);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(xrt_register_driver);
-+
-+void xrt_unregister_driver(struct xrt_driver *drv)
-+{
-+	driver_unregister(&drv->driver);
-+
-+	if (drv->file_ops.xsf_dev_t != (dev_t)-1)
-+		unregister_chrdev_region(drv->file_ops.xsf_dev_t, XRT_MAX_DEVICE_NODES);
-+
-+	pr_info("%s unregistered successfully\n", XRT_DRVNAME(drv));
-+}
-+EXPORT_SYMBOL_GPL(xrt_unregister_driver);
-+
-+static int xrt_dev_get_instance(void)
-+{
-+	int ret;
-+
-+	ret = ida_alloc_range(&xrt_device_ida, 0, 0x7fffffff, GFP_KERNEL);
-+	if (ret < 0)
-+		return ret;
-+
-+	return ret;
-+}
-+
-+static void xrt_dev_put_instance(int instance)
-+{
-+	ida_free(&xrt_device_ida, instance);
-+}
-+
-+static void xrt_device_release(struct device *dev)
-+{
-+	struct xrt_device *xdev = container_of(dev, struct xrt_device, dev);
-+
-+	kfree(xdev);
-+}
-+
-+void xrt_device_unregister(struct xrt_device *xdev)
-+{
-+	if (xdev->state == XRT_DEVICE_STATE_ADDED)
-+		device_del(&xdev->dev);
-+
-+	vfree(xdev->sdev_data);
-+	kfree(xdev->resource);
-+
-+	if (xdev->instance != XRT_INVALID_DEVICE_INST)
-+		xrt_dev_put_instance(xdev->instance);
-+
-+	if (xdev->dev.of_node)
-+		of_node_put(xdev->dev.of_node);
-+
-+	if (xdev->dev.release == xrt_device_release)
-+		put_device(&xdev->dev);
-+}
-+
-+struct xrt_device *
-+xrt_device_register(struct device *parent, struct device_node *dn,
-+		    struct resource *res, u32 res_num,
-+		    void *pdata, size_t data_sz)
-+{
-+	struct xrt_device *xdev = NULL;
-+	int ret;
-+
-+	xdev = kzalloc(sizeof(*xdev), GFP_KERNEL);
-+	if (!xdev)
-+		return NULL;
-+	xdev->instance = XRT_INVALID_DEVICE_INST;
-+
-+	/* Obtain dev instance number. */
-+	ret = xrt_dev_get_instance();
-+	if (ret < 0) {
-+		dev_err(parent, "failed get instance, ret %d", ret);
-+		goto fail;
-+	}
-+
-+	xdev->instance = ret;
-+	xdev->name = dn->full_name;
-+	device_initialize(&xdev->dev);
-+	xdev->dev.release = xrt_device_release;
-+	xdev->dev.parent = parent;
-+
-+	xdev->dev.bus = &xrt_bus_type;
-+	dev_set_name(&xdev->dev, "%s.%d", xdev->name, xdev->instance);
-+
-+	if (res_num > 0) {
-+		xdev->num_resources = res_num;
-+		xdev->resource = kmemdup(res, sizeof(*res) * res_num, GFP_KERNEL);
-+		if (!xdev->resource)
-+			goto fail;
-+	}
-+
-+	if (data_sz > 0) {
-+		xdev->sdev_data = vzalloc(data_sz);
-+		if (!xdev->sdev_data)
-+			goto fail;
-+
-+		memcpy(xdev->sdev_data, pdata, data_sz);
-+	}
-+
-+	ret = device_add(&xdev->dev);
-+	if (ret) {
-+		dev_err(parent, "failed add device, ret %d", ret);
-+		goto fail;
-+	}
-+	xdev->state = XRT_DEVICE_STATE_ADDED;
-+	xdev->dev.of_node = of_node_get(dn);
-+
-+	return xdev;
-+
-+fail:
-+	xrt_device_unregister(xdev);
-+	kfree(xdev);
-+
-+	return NULL;
-+}
-+
- static __init int xrt_lib_init(void)
- {
- 	int ret;
-@@ -25,11 +210,18 @@ static __init int xrt_lib_init(void)
- 	if (ret)
- 		return ret;
- 
-+	ret = bus_register(&xrt_bus_type);
-+	if (ret) {
-+		of_overlay_remove(&xrt_bus_ovcs_id);
-+		return ret;
-+	}
-+
- 	return 0;
- }
- 
- static __exit void xrt_lib_fini(void)
- {
-+	bus_unregister(&xrt_bus_type);
- 	of_overlay_remove(&xrt_bus_ovcs_id);
- }
- 
-diff --git a/include/linux/xrt/xdevice.h b/include/linux/xrt/xdevice.h
+diff --git a/drivers/fpga/xrt/include/xroot.h b/drivers/fpga/xrt/include/xroot.h
 new file mode 100644
-index 000000000000..0b3fec9ae598
+index 000000000000..b87acbf702c8
 --- /dev/null
-+++ b/include/linux/xrt/xdevice.h
-@@ -0,0 +1,128 @@
++++ b/drivers/fpga/xrt/include/xroot.h
+@@ -0,0 +1,30 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2021 Xilinx, Inc.
 + *
 + * Authors:
-+ *    Lizhi Hou <lizhi.hou@xilinx.com>
++ *	Cheng Zhen <maxz@xilinx.com>
 + */
 +
-+#ifndef _XRT_DEVICE_H_
-+#define _XRT_DEVICE_H_
++#ifndef _XRT_ROOT_H_
++#define _XRT_ROOT_H_
 +
-+#include <linux/fs.h>
-+#include <linux/cdev.h>
++struct xroot_range {
++	__be32 child_addr[3];
++	__be32 parent_addr[2];
++	__be32 child_size[2];
++};
++
++struct xroot_info {
++	u32 addr;
++	int num_range;
++	struct xroot_range *ranges;
++};
++
++int xroot_probe(struct device *dev, struct xroot_info *info, void **root);
++void xroot_remove(void *root);
++
++int xroot_create_group(void *xr, void *dtb, u32 len);
++void xroot_destroy_group(void *xr, u32 grp_id);
++
++#endif	/* _XRT_ROOT_H_ */
+diff --git a/drivers/fpga/xrt/lib/Makefile b/drivers/fpga/xrt/lib/Makefile
+index f67bb19ef20a..fd2af2cbd1da 100644
+--- a/drivers/fpga/xrt/lib/Makefile
++++ b/drivers/fpga/xrt/lib/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_FPGA_XRT_LIB) += xrt-lib.o
+ 
+ xrt-lib-objs :=			\
+ 	lib-drv.o		\
++	xroot.o			\
+ 	xrt-bus.dtb.o
+ 
+ ccflags-y := -I$(FULL_XRT_PATH)/include
+diff --git a/drivers/fpga/xrt/lib/xroot.c b/drivers/fpga/xrt/lib/xroot.c
+new file mode 100644
+index 000000000000..d82934a5c35b
+--- /dev/null
++++ b/drivers/fpga/xrt/lib/xroot.c
+@@ -0,0 +1,223 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Xilinx Alveo FPGA Root Functions
++ *
++ * Copyright (C) 2020-2021 Xilinx, Inc.
++ *
++ * Authors:
++ *	Cheng Zhen <maxz@xilinx.com>
++ *	Lizhi Hou <lizhih@xilinx.com>
++ */
++
++#include <linux/module.h>
++#include <linux/slab.h>
 +#include <linux/of.h>
++#include <linux/of_fdt.h>
++#include <linux/xrt/xdevice.h>
++#include "xroot.h"
 +
-+#define XRT_MAX_DEVICE_NODES		128
-+#define XRT_INVALID_DEVICE_INST		(XRT_MAX_DEVICE_NODES + 1)
++#define XROOT_FDT_ALIGN		8
 +
-+enum {
-+	XRT_DEVICE_STATE_NONE = 0,
-+	XRT_DEVICE_STATE_ADDED
++#define xroot_err(xr, fmt, args...) dev_err((xr)->dev, "%s: " fmt, __func__, ##args)
++#define xroot_warn(xr, fmt, args...) dev_warn((xr)->dev, "%s: " fmt, __func__, ##args)
++#define xroot_info(xr, fmt, args...) dev_info((xr)->dev, "%s: " fmt, __func__, ##args)
++#define xroot_dbg(xr, fmt, args...) dev_dbg((xr)->dev, "%s: " fmt, __func__, ##args)
++
++struct xroot {
++	struct device *dev;
++	struct list_head groups;
++	u32 addr;
++	struct xroot_range *ranges;
++	int num_range;
++	struct ida grp_ida;
 +};
 +
++struct xroot_group {
++	struct list_head node;
++	struct xroot *xr;
++	struct xrt_device *grp_dev;
++	struct property ranges;
++	struct of_changeset chgset;
++	bool chgset_applied;
++	void *dn_mem;
++	char *name;
++	void *fdt;
++	int id;
++};
++
++#define XRT_GROUP	"xrt-group"
++#define MAX_GRP_NAME_LEN	64
++
++static void xroot_cleanup_group(struct xroot_group *grp)
++{
++	if (grp->grp_dev)
++		xrt_device_unregister(grp->grp_dev);
++	if (grp->chgset_applied)
++		of_changeset_revert(&grp->chgset);
++	of_changeset_destroy(&grp->chgset);
++
++	if (grp->id >= 0)
++		ida_free(&grp->xr->grp_ida, grp->id);
++	kfree(grp->dn_mem);
++	kfree(grp->name);
++	kfree(grp->fdt);
++}
++
++void xroot_destroy_group(void *root, u32 grp_id)
++{
++	struct xroot *xr = root;
++	struct xroot_group *grp;
++
++	list_for_each_entry(grp, &xr->groups, node) {
++		if (grp->id == grp_id)
++			break;
++	}
++	if (list_entry_is_head(grp, &xr->groups, node))
++		return;
++
++	list_del(&grp->node);
++
++	xroot_cleanup_group(grp);
++	kfree(grp);
++}
++EXPORT_SYMBOL_GPL(xroot_destroy_group);
++
 +/*
-+ * struct xrt_device - represent an xrt device on xrt bus
++ * Create XRT group device.
 + *
-+ * dev: generic device interface.
-+ * id: id of the xrt device.
++ * Unflatten the device tree blob attached to the group and
++ * overlay the device nodes under /xrt-bus. Then create group device
++ * and link it to device node.
 + */
-+struct xrt_device {
-+	struct device dev;
-+	const char *name;
-+	u32 instance;
-+	u32 state;
-+	u32 num_resources;
-+	struct resource *resource;
-+	void *sdev_data;
-+};
-+
-+/*
-+ * If populated by xrt device driver, infra will handle the mechanics of
-+ * char device (un)registration.
-+ */
-+enum xrt_dev_file_mode {
-+	/* Infra create cdev, default file name */
-+	XRT_DEV_FILE_DEFAULT = 0,
-+	/* Infra create cdev, need to encode inst num in file name */
-+	XRT_DEV_FILE_MULTI_INST,
-+	/* No auto creation of cdev by infra, leaf handles it by itself */
-+	XRT_DEV_FILE_NO_AUTO,
-+};
-+
-+struct xrt_dev_file_ops {
-+	const struct file_operations xsf_ops;
-+	dev_t xsf_dev_t;
-+	const char *xsf_dev_name;
-+	enum xrt_dev_file_mode xsf_mode;
-+};
-+
-+/*
-+ * this struct define the endpoints belong to the same xrt device
-+ */
-+struct xrt_dev_ep_names {
-+	const char *ep_name;
-+	const char *compat;
-+};
-+
-+/*
-+ * struct xrt_driver - represent a xrt device driver
-+ *
-+ * driver: driver model structure.
-+ * id_table: pointer to table of device IDs the driver is interested in.
-+ *           { } member terminated.
-+ * probe: mandatory callback for device binding.
-+ * remove: callback for device unbinding.
-+ */
-+struct xrt_driver {
-+	struct device_driver driver;
-+	struct xrt_dev_file_ops file_ops;
-+
-+	/*
-+	 * Subdev driver callbacks populated by subdev driver.
-+	 */
-+	int (*probe)(struct xrt_device *xrt_dev);
-+	void (*remove)(struct xrt_device *xrt_dev);
-+	/*
-+	 * If leaf_call is defined, these are called by other leaf drivers.
-+	 * Note that root driver may call into leaf_call of a group driver.
-+	 */
-+	int (*leaf_call)(struct xrt_device *xrt_dev, u32 cmd, void *arg);
-+};
-+
-+#define to_xrt_dev(d) container_of(d, struct xrt_device, dev)
-+#define to_xrt_drv(d) container_of(d, struct xrt_driver, driver)
-+/*
-+ * module_xrt_driver() - Helper macro for drivers that don't do
-+ * anything special in module init/exit.
-+ */
-+#define module_xrt_driver(__xrt_driver)				\
-+	module_driver(__xrt_driver, xrt_register_driver,	\
-+		      xrt_unregister_driver)
-+
-+static inline void *xrt_get_drvdata(const struct xrt_device *xdev)
++int xroot_create_group(void *root, void *dtb, u32 len)
 +{
-+	return dev_get_drvdata(&xdev->dev);
-+}
++	struct device_node *dn, *bus, *grp_dn;
++	struct xroot *xr = root;
++	struct xroot_group *grp;
++	void *dtb_aligned;
++	int ret;
 +
-+static inline void xrt_set_drvdata(struct xrt_device *xdev, void *data)
++	grp = kzalloc(sizeof(*grp), GFP_KERNEL);
++	if (!grp)
++		return -ENOMEM;
++
++	bus = of_find_node_by_path("/xrt-bus");
++	if (!bus) {
++		kfree(grp);
++		return -EINVAL;
++	}
++	grp->xr = xr;
++	of_changeset_init(&grp->chgset);
++
++	ret = ida_alloc(&xr->grp_ida, GFP_KERNEL);
++	if (ret < 0)
++		goto failed;
++
++	grp->id = ret;
++
++	grp->name = kzalloc(MAX_GRP_NAME_LEN, GFP_KERNEL);
++	if (!grp->name) {
++		ret = -ENOMEM;
++		goto failed;
++	}
++	snprintf(grp->name, MAX_GRP_NAME_LEN, "%s@%x,%x", XRT_GROUP, xr->addr, grp->id);
++
++	grp->fdt = kmalloc(len + XROOT_FDT_ALIGN, GFP_KERNEL);
++	if (!grp->fdt) {
++		ret = -ENOMEM;
++		goto failed;
++	}
++	dtb_aligned = PTR_ALIGN(grp->fdt, XROOT_FDT_ALIGN);
++	memcpy(dtb_aligned, dtb, len);
++
++	grp->dn_mem = of_fdt_unflatten_tree(dtb_aligned, NULL, &grp_dn);
++	if (!grp->dn_mem) {
++		ret = -EINVAL;
++		goto failed;
++	}
++
++	of_node_get(grp_dn);
++	grp_dn->full_name = grp->name;
++	grp_dn->parent = bus;
++	for (dn = grp_dn; dn; dn = of_find_all_nodes(dn))
++		of_changeset_attach_node(&grp->chgset, dn);
++
++	grp->ranges.name = "ranges";
++	grp->ranges.length = xr->num_range * sizeof(*xr->ranges);
++	grp->ranges.value = xr->ranges;
++	ret = of_changeset_add_property(&grp->chgset, grp_dn, &grp->ranges);
++	if (ret)
++		goto failed;
++
++	ret = of_changeset_apply(&grp->chgset);
++	if (ret)
++		goto failed;
++	grp->chgset_applied = true;
++
++	of_node_put(bus);
++	bus = NULL;
++
++	grp->grp_dev = xrt_device_register(xr->dev, grp_dn, NULL, 0, NULL, 0);
++	if (!grp->grp_dev) {
++		ret = -EFAULT;
++		goto failed;
++	}
++
++	if (device_attach(&grp->grp_dev->dev) != 1) {
++		ret = -EFAULT;
++		xroot_err(xr, "failed to attach");
++		goto failed;
++	}
++
++	list_add(&grp->node, &xr->groups);
++
++	return grp->id;
++
++failed:
++	if (bus)
++		of_node_put(bus);
++	xroot_cleanup_group(grp);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(xroot_create_group);
++
++int xroot_probe(struct device *dev, struct xroot_info *info, void **root)
 +{
-+	dev_set_drvdata(&xdev->dev, data);
-+}
++	struct xroot *xr = NULL;
 +
-+static inline void *xrt_get_xdev_data(struct device *dev)
++	dev_info(dev, "%s: probing...", __func__);
++
++	xr = devm_kzalloc(dev, sizeof(*xr), GFP_KERNEL);
++	if (!xr)
++		return -ENOMEM;
++
++	xr->dev = dev;
++	INIT_LIST_HEAD(&xr->groups);
++
++	xr->addr = info->addr;
++	xr->num_range = info->num_range;
++	xr->ranges = devm_kzalloc(dev, sizeof(*info->ranges) * info->num_range, GFP_KERNEL);
++	if (!xr->ranges)
++		return -ENOMEM;
++
++	memcpy(&xr->ranges, info->ranges, sizeof(*info->ranges) * info->num_range);
++	ida_init(&xr->grp_ida);
++
++	*root = xr;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xroot_probe);
++
++void xroot_remove(void *root)
 +{
-+	struct xrt_device *xdev = to_xrt_dev(dev);
++	struct xroot *xr = (struct xroot *)root;
++	struct xroot_group *grp, *tmp;
 +
-+	return xdev->sdev_data;
++	xroot_info(xr, "leaving...");
++	list_for_each_entry_safe(grp, tmp, &xr->groups, node) {
++		list_del(&grp->node);
++		xroot_cleanup_group(grp);
++		kfree(grp);
++	}
 +}
-+
-+struct xrt_device *
-+xrt_device_register(struct device *parent, struct device_node *dn,
-+		    struct resource *res, u32 res_num,
-+		    void *pdata, size_t data_sz);
-+void xrt_device_unregister(struct xrt_device *xdev);
-+int xrt_register_driver(struct xrt_driver *drv);
-+void xrt_unregister_driver(struct xrt_driver *drv);
-+
-+#endif /* _XRT_DEVICE_H_ */
++EXPORT_SYMBOL_GPL(xroot_remove);
 -- 
 2.27.0
 
