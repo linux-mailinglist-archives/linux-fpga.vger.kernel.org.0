@@ -2,37 +2,38 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D029468243
-	for <lists+linux-fpga@lfdr.de>; Sat,  4 Dec 2021 05:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3291F46854C
+	for <lists+linux-fpga@lfdr.de>; Sat,  4 Dec 2021 15:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbhLDEp7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 3 Dec 2021 23:45:59 -0500
-Received: from mga14.intel.com ([192.55.52.115]:31155 "EHLO mga14.intel.com"
+        id S1385187AbhLDOVV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 4 Dec 2021 09:21:21 -0500
+Received: from mga14.intel.com ([192.55.52.115]:63379 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233688AbhLDEp7 (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Fri, 3 Dec 2021 23:45:59 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="237319527"
-X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
-   d="scan'208";a="237319527"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 20:42:34 -0800
+        id S1385174AbhLDOVV (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Sat, 4 Dec 2021 09:21:21 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="237346832"
+X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
+   d="scan'208";a="237346832"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 06:17:55 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
-   d="scan'208";a="656479297"
+X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
+   d="scan'208";a="514100772"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Dec 2021 20:42:31 -0800
+  by orsmga008.jf.intel.com with ESMTP; 04 Dec 2021 06:17:52 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mtMsY-000ITh-Tg; Sat, 04 Dec 2021 04:42:30 +0000
-Date:   Sat, 4 Dec 2021 12:41:31 +0800
+        id 1mtVrL-000J5T-Lo; Sat, 04 Dec 2021 14:17:51 +0000
+Date:   Sat, 4 Dec 2021 22:16:56 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Lizhi Hou <lizhi.hou@xilinx.com>,
-        linux-fpga@vger.kernel.org, maxz@xilinx.com,
-        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, trix@redhat.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Lizhi Hou <lizhi.hou@xilinx.com>, linux-fpga@vger.kernel.org,
+        maxz@xilinx.com, sonal.santan@xilinx.com, yliu@xilinx.com,
+        michal.simek@xilinx.com, stefanos@xilinx.com,
+        devicetree@vger.kernel.org, trix@redhat.com
 Subject: Re: [PATCH V3 XRT Alveo Infrastructure 3/8] of: create empty of root
-Message-ID: <202112041242.HCDtTlb5-lkp@intel.com>
+Message-ID: <202112042255.DZihRncD-lkp@intel.com>
 References: <20211204003957.1448567-4-lizhi.hou@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -55,33 +56,33 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Lizhi-Hou/XRT-Alveo-driver-infrastructure-overview/20211204-084333
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: nds32-allnoconfig (https://download.01.org/0day-ci/archive/20211204/202112041242.HCDtTlb5-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
+config: mips-randconfig-c004-20211203 (https://download.01.org/0day-ci/archive/20211204/202112042255.DZihRncD-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
         # https://github.com/0day-ci/linux/commit/1b36c19ebc303a293dff82ed399ea70bf4ddde50
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Lizhi-Hou/XRT-Alveo-driver-infrastructure-overview/20211204-084333
         git checkout 1b36c19ebc303a293dff82ed399ea70bf4ddde50
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash drivers/of/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   drivers/of/fdt.c: In function 'of_fdt_root_init':
->> drivers/of/fdt.c:505:14: error: implicit declaration of function 'of_resolve_phandles'; did you mean 'of_parse_phandle'? [-Werror=implicit-function-declaration]
-     505 |         rc = of_resolve_phandles(dt);
-         |              ^~~~~~~~~~~~~~~~~~~
-         |              of_parse_phandle
-   cc1: some warnings being treated as errors
+>> drivers/of/fdt.c:505:7: error: implicit declaration of function 'of_resolve_phandles' [-Werror,-Wimplicit-function-declaration]
+           rc = of_resolve_phandles(dt);
+                ^
+   1 error generated.
 
 
-vim +505 drivers/of/fdt.c
+vim +/of_resolve_phandles +505 drivers/of/fdt.c
 
    468	
    469	static int __init of_fdt_root_init(void)
