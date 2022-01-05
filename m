@@ -2,23 +2,23 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0428485BDE
-	for <lists+linux-fpga@lfdr.de>; Wed,  5 Jan 2022 23:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0504B485BDC
+	for <lists+linux-fpga@lfdr.de>; Wed,  5 Jan 2022 23:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245229AbiAEWw1 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 5 Jan 2022 17:52:27 -0500
-Received: from mail-bn8nam11on2042.outbound.protection.outlook.com ([40.107.236.42]:28193
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S245218AbiAEWwC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 5 Jan 2022 17:52:02 -0500
+Received: from mail-co1nam11on2050.outbound.protection.outlook.com ([40.107.220.50]:43851
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S245199AbiAEWvW (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
-        Wed, 5 Jan 2022 17:51:22 -0500
+        id S245178AbiAEWvD (ORCPT <rfc822;linux-fpga@vger.kernel.org>);
+        Wed, 5 Jan 2022 17:51:03 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TECCwkwACSVSflLwU0DH3zXL0Clwt+6hBcQE5qvhFEIAHQaL8PcSFcBE824YwT5r5g2QZ3VTLk9PldBXD8sNjsAkcdyWkBdjwmmeRgt8CqhqDNnH+0O1gerW/kDe7Bp4jU7BhO6+A4bg6iDIdtTuzZTy+kY2E6YyFxrwXJxtirliqioNDeqDmmba1vCskIxayWWowzYFjW8dKnkFpUL4C7xYqny6MjzUP0XQcIU7ciiZaxkU8Ns6MoycTku4U7w8FtAGOkOJaEJippV+uW4QpniiVICz8tBcc5qGEehxzRNCThyHXWJ2/3h6LBN7MiyrDsZJ/sGPGwsYliTGPoLxoA==
+ b=Wd3sdm1gAAnefeCvVSe50qvc5+3BXXkVBtEgHerhcwzZ4mEdpzCOBreBiINEcODdrpGW53nuFAK6ZsHO6aSJLdFpV9WmhiA9Upz+SmTlmhxc4lOECusOISdbL9RdA2paRKEMtQ0jvB4G6a2Q/xK3JrUKICx21Blm8lg6wz/77a8w2LBpysk67yYAUX3GHOSayxlnGe+o3A2cFKr+rbDbQd5gR8QOP5AcR8PDLT7ET9DMcSjWPGiIkGPUj3LMX0/7zRpE98YPenqs1J12U4lhuRrM+mwU2Lrr3IQSt3TKoN58jFN+bmApDHjc0d+idnkiPOq73afJVQWByQAzPjKH8g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ejP6Jvo/Wo15iIUgV5OqBwRFJigbTzBzOLGPObONoXw=;
- b=cIWRID7pAEMnmwVJ0tWPFbq59Ex/mzDl3F0nAblD65Kn15AM+2zEicSiNHQnrAsK0vNAFRuywMtt1t/hLXzPbAUWR/wT6rUU1kJgOqDpwIXZ1Rr8veSOTicmeQtREL2T7OD5gL2k/ZRPHOpFmQczI85v9y+V58ZTQbaUxr37UGNdwMeJhtd4aSWBO+oX20vJZuBS2aXAO4+yHJZtXF+jgReZKfCEYkrFfl3vK+gAJ+m2WKQyFIGPoazw/D1V4prR/juxUxjzNATHhy3UiIjEKmgsVVksejWYNGt+eT6hGR4x6e/L4P0ox0+f3tgoYzeOgji8gZY4WuEMeh/lihxpWw==
+ bh=3sa4V/JxSV9doE4+XJwC4vcYV0b02IcNryo/K9fVitA=;
+ b=DXrN9Kjm/W5jqv1/UrxoHBbZ58AxmQH3LSTjifWSCUmH/tf1S2uXhwZG5wlNLiYHrxkaYF/nrDyBVt5ls+y/n0iVJgOHKUtHEPCrX77UwJnCEF7mMqS1wBhANoFuqK5Nfq4ls+ttciUZT4eoL76me1BPanb+DXiVaP87AhTdoArFbg0KuD7Q/Wlh29yiUazJRl7A8GEQIW43GpgfQimfru1iFIeeGi8sMv/VcNXFM3k1SxM2vaHFhTQ23JExIKufAulUc8W4jXjNUz921CQgq/GmJ+Dq98ymhnNl5swljgKu2Vz8T2Z2YOK/NnW1OmnvHBkf2Ay5SPUfoj2EmMqRVA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=infradead.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,18 +26,17 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ejP6Jvo/Wo15iIUgV5OqBwRFJigbTzBzOLGPObONoXw=;
- b=GkthItMIMcs8c6BqE/HADU2JsA+KkIhiRwUXTrO/dhjUdXG4Dzup90a4KVsxxElXtnUwEUbv+a2IX4nG0bfyry8ppHGC9THVxbwcp89j51F0HR0PvZ7D+QRvK0LFIugM9AO3kwONZiH3HK+dZLXTNjUTq3djU4t0SME+aNeKlmw=
-Received: from BN6PR2001CA0007.namprd20.prod.outlook.com
- (2603:10b6:404:b4::17) by SA2PR02MB7612.namprd02.prod.outlook.com
- (2603:10b6:806:134::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Wed, 5 Jan
- 2022 22:51:19 +0000
-Received: from BN1NAM02FT039.eop-nam02.prod.protection.outlook.com
- (2603:10b6:404:b4:cafe::de) by BN6PR2001CA0007.outlook.office365.com
- (2603:10b6:404:b4::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7 via Frontend
- Transport; Wed, 5 Jan 2022 22:51:19 +0000
+ bh=3sa4V/JxSV9doE4+XJwC4vcYV0b02IcNryo/K9fVitA=;
+ b=eNBvC+o9dK3IXXWkJs9qoZQ+T/YGHCMbidQUDZ20MrPArLWzyLEBA7EKkOZl1ERWGyY2ypeHyq4Sv7NbldmJzVW0gPaY4Hh97g/g2WwyO6bgI8UL1vcDKmuX2vl0T+0yPxJ6NF9cAKq/U1qdvnQgkqJj2w0CsyA1s+qH2mFz2wo=
+Received: from DM5PR07CA0110.namprd07.prod.outlook.com (2603:10b6:4:ae::39) by
+ DM6PR02MB6810.namprd02.prod.outlook.com (2603:10b6:5:214::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4867.7; Wed, 5 Jan 2022 22:51:01 +0000
+Received: from DM3NAM02FT012.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:4:ae:cafe::d8) by DM5PR07CA0110.outlook.office365.com
+ (2603:10b6:4:ae::39) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14 via Frontend
+ Transport; Wed, 5 Jan 2022 22:51:01 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=xilinx.com;
@@ -45,16 +44,16 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
  client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
 Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT039.mail.protection.outlook.com (10.13.2.150) with Microsoft SMTP
+ DM3NAM02FT012.mail.protection.outlook.com (10.13.5.125) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4867.7 via Frontend Transport; Wed, 5 Jan 2022 22:51:18 +0000
+ 15.20.4867.7 via Frontend Transport; Wed, 5 Jan 2022 22:51:00 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 5 Jan 2022 14:51:12 -0800
+ 15.1.2176.14; Wed, 5 Jan 2022 14:51:00 -0800
 Received: from smtp.xilinx.com (172.19.127.95) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 5 Jan 2022 14:51:12 -0800
+ 15.1.2176.14 via Frontend Transport; Wed, 5 Jan 2022 14:51:00 -0800
 Envelope-to: dwmw2@infradead.org,
  mdf@kernel.org,
  robh@kernel.org,
@@ -62,12 +61,12 @@ Envelope-to: dwmw2@infradead.org,
  devicetree@vger.kernel.org,
  linux-fpga@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Received: from [172.19.72.93] (port=56784 helo=xsj-xw9400.xilinx.com)
+Received: from [172.19.72.93] (port=56782 helo=xsj-xw9400.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <lizhi.hou@xilinx.com>)
-        id 1n5F7g-000B78-A7; Wed, 05 Jan 2022 14:51:12 -0800
+        id 1n5F7U-000B1h-8b; Wed, 05 Jan 2022 14:51:00 -0800
 Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id 02C88600AD4; Wed,  5 Jan 2022 14:50:22 -0800 (PST)
+        id E412360018F; Wed,  5 Jan 2022 14:50:22 -0800 (PST)
 From:   Lizhi Hou <lizhi.hou@xilinx.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
@@ -76,9 +75,9 @@ CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
         <robh@kernel.org>, <dwmw2@infradead.org>,
         Max Zhen <max.zhen@xilinx.com>
-Subject: [PATCH V4 XRT Alveo Infrastructure 3/5] of: create empty of root
-Date:   Wed, 5 Jan 2022 14:50:11 -0800
-Message-ID: <20220105225013.1567871-4-lizhi.hou@xilinx.com>
+Subject: [PATCH V4 XRT Alveo Infrastructure 4/5] fpga: xrt: xrt-lib common interfaces
+Date:   Wed, 5 Jan 2022 14:50:12 -0800
+Message-ID: <20220105225013.1567871-5-lizhi.hou@xilinx.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220105225013.1567871-1-lizhi.hou@xilinx.com>
 References: <20220105225013.1567871-1-lizhi.hou@xilinx.com>
@@ -87,321 +86,370 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bf1b028d-665a-4520-f081-08d9d09de30b
-X-MS-TrafficTypeDiagnostic: SA2PR02MB7612:EE_
-X-Microsoft-Antispam-PRVS: <SA2PR02MB761254E5DF375D036C556BAFA14B9@SA2PR02MB7612.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2089;
+X-MS-Office365-Filtering-Correlation-Id: 726a3ae5-dbd0-4eaf-c128-08d9d09dd886
+X-MS-TrafficTypeDiagnostic: DM6PR02MB6810:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR02MB6810B8998A3E4D04C10E1893A14B9@DM6PR02MB6810.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:499;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zHaGhIIIeP1+z8FkJm5fUtSMhzZNbBsakFCa8lvosUPyJJM6t1PNAi6c6wajxEMAN+b7VgLyni9X2xXc/M+dKEsMMTUknm39nlEGRJ3c9c4jjxwTaUGWOKJ8qoyL+XO2ggWwGYSwnnScu1RSDptwAWMSqr4h+5Z0QrDXc26TIcWKm5ThSnpNeVAARCyayNLUXWYrglyrLjQfATvybfSfsf5rduvlbhFVD/w55sCVzx2iDGhciqE5XBDCT9aeh5rmlZ4Xo9HkrsAOUu7OKgFcHGyq/lPPXq9VD7kKM65xVERsAAmKFNAheuyJKU3g/WcGchY32dwCl7xzcwCCTsaHVuWadBSYgaFTMfxo4P3z7g0yEcVttr7w7pBG3wEJj0aYzPCuaZfGwqOXkHhd57jls8l55FnUrTB01vbIdJSjpQYjTwWxcij7YKu71uYRdUBMsAIvcTaOy4BQVgMsOaTM2ix7o9M9eM6KToEnsMRbo4dhHZq4y2fygaU/ddaOwSMqQ9PP2/SSxOpfX+lQC87JhhZ3z/MviB8cXF7WxyhJ3r7iPQIY58zF7U+4uQSSAy7KHHZ7WvsJFcSGNC4rIIlGO7kkwP8nlrhIw5/Rw0BgC4hZw7eGpM/cNwK0KDHjeqUJW9G7VbTXBGMq3l8AixuIICQQlBJtA6mdNIgE9nz5SFGe46L1HO9tQ8ruujTLT/Pann27sadX4AoKuF17qLAdFA==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(8936002)(36756003)(26005)(186003)(2906002)(54906003)(36860700001)(8676002)(82310400004)(508600001)(47076005)(7636003)(2616005)(44832011)(6666004)(70206006)(356005)(70586007)(1076003)(107886003)(6266002)(336012)(316002)(42186006)(426003)(4326008)(5660300002)(83380400001)(6916009);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: UPJATpf2450SGR8/Hufoq8ALard/IqbOGtXmWU1DikrCE0DBCSQWcSnRxVH5A1RSodNuFKwUjMg+mFBJL2RLkYPjn60qOwTFrSxfZWaba6m7fnrurlDTjf1iGnlcqauOTukvODxzaWGzgD17nYiSCKGBUkx0PMyP+OOsT9Ft25BnBtWrC9L2I6AjxI6iN5eoMurgpp7Fl+NINO+XvMgB9GSn0xwGKXCY7kC5pt//5ti3VIYQIi+TzMbl5dqAnBuCAcaDeFrujkYVWM+WzzGaaAGTzO5xGMFWnu1Z6GRpNx/R/cCXIrZxDybDzoe1Btoa8I011WgMTrIk8Sy2IbscBgeKLPlHZWcIdKUeTAnC2lx++iRMbCizma5YB8v2rhb3uNzGOgxKZQwX7t6v+MKk8IAu3xrzHRFd+4n4m4lKV/wFA1rL5A+m+Vn9P7Q5yhU9EfjBVzgch2sH/jttVggUR+uk5FZLt9BoU4rwaLaU+U/hGKr8Q1AEXWSNHZTD5skhm8FGCarxdRaWD7lXzecncl6qaleNWnhuRxr5qbaRZIhMV7vABTpl3IKypfmeQWUdfi8y8pS32XEwRAouL5F/NteACOdL4NfSNjuovNa5XPHjvNfzvRcnDX24/W/+C42PnoczwRsyXGXrGxPcSzmiy/m2oYYapvrMiwa3e8jrx3/vOyxZNfzKLtsZi5iLbKyDZ1zOftne8XdVwq4QabyzKg==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(316002)(42186006)(4326008)(44832011)(70206006)(70586007)(5660300002)(6666004)(1076003)(8676002)(26005)(186003)(2906002)(54906003)(107886003)(6916009)(36756003)(2616005)(8936002)(7636003)(36860700001)(47076005)(356005)(426003)(336012)(82310400004)(6266002)(508600001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 22:51:18.5883
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 22:51:00.9694
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf1b028d-665a-4520-f081-08d9d09de30b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 726a3ae5-dbd0-4eaf-c128-08d9d09dd886
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT039.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT012.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR02MB7612
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6810
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-When OF_FLATTREE is selected and there is not a device tree, create an
-empty device tree root node. of/unittest.c code is referenced.
+The Alveo platform has to PCI fucntions. Each function has its own driver
+attached. The common interfaces are created to support both drivers.
 
 Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
 Signed-off-by: Max Zhen <max.zhen@xilinx.com>
 Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 ---
- drivers/of/Makefile        |  5 +++
- drivers/of/fdt.c           | 90 ++++++++++++++++++++++++++++++++++++++
- drivers/of/fdt_default.dts |  5 +++
- drivers/of/of_private.h    | 17 +++++++
- drivers/of/unittest.c      | 72 ++----------------------------
- 5 files changed, 120 insertions(+), 69 deletions(-)
- create mode 100644 drivers/of/fdt_default.dts
+ drivers/fpga/Kconfig                  |   3 +
+ drivers/fpga/Makefile                 |   3 +
+ drivers/fpga/xrt/Kconfig              |   6 +
+ drivers/fpga/xrt/include/xpartition.h |  28 ++++
+ drivers/fpga/xrt/lib/Kconfig          |  17 +++
+ drivers/fpga/xrt/lib/Makefile         |  15 +++
+ drivers/fpga/xrt/lib/lib-drv.c        | 178 ++++++++++++++++++++++++++
+ drivers/fpga/xrt/lib/lib-drv.h        |  15 +++
+ 8 files changed, 265 insertions(+)
+ create mode 100644 drivers/fpga/xrt/Kconfig
+ create mode 100644 drivers/fpga/xrt/include/xpartition.h
+ create mode 100644 drivers/fpga/xrt/lib/Kconfig
+ create mode 100644 drivers/fpga/xrt/lib/Makefile
+ create mode 100644 drivers/fpga/xrt/lib/lib-drv.c
+ create mode 100644 drivers/fpga/xrt/lib/lib-drv.h
 
-diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-index c13b982084a3..a2989055c578 100644
---- a/drivers/of/Makefile
-+++ b/drivers/of/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-y = base.o device.o platform.o property.o
-+
- obj-$(CONFIG_OF_KOBJ) += kobj.o
- obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
- obj-$(CONFIG_OF_FLATTREE) += fdt.o
-@@ -20,4 +21,8 @@ obj-y	+= kexec.o
- endif
- endif
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 991b3f361ec9..93ae387c97c5 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -243,4 +243,7 @@ config FPGA_MGR_VERSAL_FPGA
+ 	  configure the programmable logic(PL).
  
-+ifndef CONFIG_OF_UNITTEST
-+obj-$(CONFIG_OF_FLATTREE) += fdt_default.dtb.o
-+endif
+ 	  To compile this as a module, choose M here.
 +
- obj-$(CONFIG_OF_UNITTEST) += unittest-data/
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 4546572af24b..66ef9ac97829 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -466,6 +466,96 @@ void *of_fdt_unflatten_tree(const unsigned long *blob,
- }
- EXPORT_SYMBOL_GPL(of_fdt_unflatten_tree);
++source "drivers/fpga/xrt/Kconfig"
++
+ endif # FPGA
+diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+index 0bff783d1b61..5bd41cf4c7ec 100644
+--- a/drivers/fpga/Makefile
++++ b/drivers/fpga/Makefile
+@@ -49,3 +49,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
  
-+static int __init of_fdt_root_init(void)
-+{
-+	struct device_node *dt = NULL, *np;
-+	void *fdt = NULL, *fdt_aligned;
-+	struct property *prop = NULL;
-+	__be32 *val = NULL;
-+	int size, rc = 0;
+ # Drivers for FPGAs which implement DFL
+ obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
 +
-+#if !defined(CONFIG_OF_UNITTEST)
-+	if (of_root)
-+		return 0;
++# XRT drivers for Alveo
++obj-$(CONFIG_FPGA_XRT_LIB)		+= xrt/lib/
+diff --git a/drivers/fpga/xrt/Kconfig b/drivers/fpga/xrt/Kconfig
+new file mode 100644
+index 000000000000..04c3bb5aaf4f
+--- /dev/null
++++ b/drivers/fpga/xrt/Kconfig
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Xilinx Alveo FPGA device configuration
++#
++
++source "drivers/fpga/xrt/lib/Kconfig"
+diff --git a/drivers/fpga/xrt/include/xpartition.h b/drivers/fpga/xrt/include/xpartition.h
+new file mode 100644
+index 000000000000..d72090ddfbee
+--- /dev/null
++++ b/drivers/fpga/xrt/include/xpartition.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Xilinx, Inc.
++ *
++ * Authors:
++ *	Lizhi Hou <lizhih@xilinx.com>
++ */
++
++#ifndef _XRT_PARTITION_H_
++#define _XRT_PARTITION_H_
++
++struct xrt_partition_range {
++	u32 bar_idx;
++	u64 base;
++	u64 size;
++};
++
++struct xrt_partition_info {
++	int num_range;
++	struct xrt_partition_range *ranges;
++	void *fdt;
++	u32 fdt_len;
++};
++
++int xrt_partition_create(struct device *dev, struct xrt_partition_info *info, void **handle);
++void xrt_partition_destroy(void *handle);
++
 +#endif
-+	size = __dtb_fdt_default_end - __dtb_fdt_default_begin;
+diff --git a/drivers/fpga/xrt/lib/Kconfig b/drivers/fpga/xrt/lib/Kconfig
+new file mode 100644
+index 000000000000..73de1f50d5c6
+--- /dev/null
++++ b/drivers/fpga/xrt/lib/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# XRT Alveo FPGA device configuration
++#
 +
-+	fdt = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
-+	if (!fdt)
++config FPGA_XRT_LIB
++	tristate "XRT Alveo Driver Library"
++	depends on HWMON && PCI && HAS_IOMEM && OF
++	select REGMAP_MMIO
++	select OF_OVERLAY
++	help
++	  Select this option to enable Xilinx XRT Alveo driver library. This
++	  library is core infrastructure of XRT Alveo FPGA drivers which
++	  provides functions for working with device nodes, iteration and
++	  lookup of platform devices, common interfaces for platform devices,
++	  plumbing of function call and ioctls between platform devices and
++	  parent partitions.
+diff --git a/drivers/fpga/xrt/lib/Makefile b/drivers/fpga/xrt/lib/Makefile
+new file mode 100644
+index 000000000000..698877c39657
+--- /dev/null
++++ b/drivers/fpga/xrt/lib/Makefile
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (C) 2020-2022 Xilinx, Inc. All rights reserved.
++#
++# Authors: Sonal.Santan@xilinx.com
++#
++
++FULL_XRT_PATH=$(srctree)/$(src)/..
++
++obj-$(CONFIG_FPGA_XRT_LIB) += xrt-lib.o
++
++xrt-lib-objs :=			\
++	lib-drv.o
++
++ccflags-y := -I$(FULL_XRT_PATH)/include
+diff --git a/drivers/fpga/xrt/lib/lib-drv.c b/drivers/fpga/xrt/lib/lib-drv.c
+new file mode 100644
+index 000000000000..56334b2b9bec
+--- /dev/null
++++ b/drivers/fpga/xrt/lib/lib-drv.c
+@@ -0,0 +1,178 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2020-2022 Xilinx, Inc.
++ *
++ * Authors:
++ *	Cheng Zhen <maxz@xilinx.com>
++ *	Lizhi Hou <lizhi.hou@xilinx.com>
++ */
++
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/vmalloc.h>
++#include <linux/of.h>
++#include <linux/of_fdt.h>
++#include <linux/of_device.h>
++#include <linux/of_platform.h>
++#include "xpartition.h"
++#include "lib-drv.h"
++
++#define XRT_PARTITION_FDT_ALIGN		8
++#define XRT_PARTITION_NAME_LEN		64
++
++struct xrt_partition {
++	struct device *dev;
++	u32 id;
++	char name[XRT_PARTITION_NAME_LEN];
++	void *fdt;
++	struct property ranges;
++	struct of_changeset chgset;
++	bool chgset_applied;
++	void *dn_mem;
++};
++
++DEFINE_IDA(xrt_partition_id);
++
++static int xrt_partition_set_ranges(struct xrt_partition *xp, struct xrt_partition_range *ranges,
++				    int num_range)
++{
++	__be64 *prop;
++	u32 prop_len;
++	int i;
++
++	prop_len = num_range * (sizeof(u64) * 3);
++	prop = kzalloc(prop_len, GFP_KERNEL);
++	if (!prop)
 +		return -ENOMEM;
 +
-+	fdt_aligned = PTR_ALIGN(fdt, FDT_ALIGN_SIZE);
-+	memcpy(fdt_aligned, __dtb_fdt_default_begin, size);
++	xp->ranges.name = "ranges";
++	xp->ranges.length = prop_len;
++	xp->ranges.value = prop;
 +
-+	if (!of_fdt_unflatten_tree((const unsigned long *)fdt_aligned,
-+				   NULL, &dt)) {
-+		pr_warn("%s: unflatten default tree failed\n", __func__);
-+		kfree(fdt);
-+		return -ENODATA;
-+	}
-+	if (!dt) {
-+		pr_warn("%s: empty default tree\n", __func__);
-+		kfree(fdt);
-+		return -ENODATA;
++	for (i = 0; i < num_range; i++) {
++		*prop = cpu_to_be64((u64)ranges[i].bar_idx << 60);
++		prop++;
++		*prop = cpu_to_be64(ranges[i].base);
++		prop++;
++		*prop = cpu_to_be64(ranges[i].size);
++		prop++;
 +	}
 +
-+	/*
-+	 * This lock normally encloses of_resolve_phandles()
-+	 */
-+	of_overlay_mutex_lock();
++	return 0;
++}
 +
-+	rc = of_resolve_phandles(dt);
-+	if (rc) {
-+		pr_err("%s: Failed to resolve phandles (rc=%i)\n", __func__, rc);
++void xrt_partition_destroy(void *handle)
++{
++	struct xrt_partition *xp = handle;
++
++	if (xp->chgset_applied)
++		of_changeset_revert(&xp->chgset);
++	of_changeset_destroy(&xp->chgset);
++
++	ida_free(&xrt_partition_id, xp->id);
++	kfree(xp->dn_mem);
++	kfree(xp->fdt);
++	kfree(xp->ranges.value);
++	kfree(xp);
++}
++EXPORT_SYMBOL_GPL(xrt_partition_destroy);
++
++int xrt_partition_create(struct device *dev, struct xrt_partition_info *info, void **handle)
++{
++	struct device_node *parent_dn = NULL, *dn, *part_dn;
++	struct xrt_partition *xp = NULL;
++	void *fdt_aligned;
++	int ret;
++
++	xp = kzalloc(sizeof(*xp), GFP_KERNEL);
++	if (!xp)
++		return -ENOMEM;
++
++	ret = ida_alloc(&xrt_partition_id, GFP_KERNEL);
++	if (ret < 0) {
++		dev_err(dev, "alloc id failed, ret %d", ret);
++		kfree(xp);
++		return ret;
++	}
++	xp->id = ret;
++	of_changeset_init(&xp->chgset);
++
++	parent_dn = of_find_node_by_path("/");
++	if (!parent_dn) {
++		dev_err(dev, "did not find xrt node");
++		ret = -EINVAL;
 +		goto failed;
 +	}
 +
-+	if (!of_root) {
-+		prop = kcalloc(2, sizeof(*prop), GFP_KERNEL);
-+		if (!prop) {
-+			rc = -ENOMEM;
-+			goto failed;
-+		}
-+		val = kzalloc(sizeof(*val), GFP_KERNEL);
-+		if (!val) {
-+			rc = -ENOMEM;
-+			goto failed;
-+		}
-+		*val = cpu_to_be32(sizeof(void *) / sizeof(u32));
++	xp->dev = dev;
++	snprintf(xp->name, XRT_PARTITION_NAME_LEN, "xrt-part@%x", xp->id);
++	ret = xrt_partition_set_ranges(xp, info->ranges, info->num_range);
++	if (ret)
++		goto failed;
 +
-+		prop->name = "#address-cells";
-+		prop->value = val;
-+		prop->length = sizeof(u32);
-+		of_add_property(dt, prop);
-+		prop++;
-+		prop->name = "#size-cells";
-+		prop->value = val;
-+		prop->length = sizeof(u32);
-+		of_add_property(dt, prop);
-+		of_root = dt;
-+		for_each_of_allnodes(np)
-+			__of_attach_node_sysfs(np);
-+		of_aliases = of_find_node_by_path("/aliases");
-+		of_chosen = of_find_node_by_path("/chosen");
-+		of_overlay_mutex_unlock();
-+pr_info("OF ROOT FLAG %lx\n", of_root->_flags);
-+		return 0;
++	xp->fdt = kmalloc(info->fdt_len + XRT_PARTITION_FDT_ALIGN, GFP_KERNEL);
++	if (!xp->fdt) {
++		ret = -ENOMEM;
++		goto failed;
++	}
++	fdt_aligned = PTR_ALIGN(xp->fdt, XRT_PARTITION_FDT_ALIGN);
++	memcpy(fdt_aligned, info->fdt, info->fdt_len);
++
++	xp->dn_mem = of_fdt_unflatten_tree(fdt_aligned, NULL, &part_dn);
++	if (!xp->dn_mem) {
++		ret = -EINVAL;
++		goto failed;
 +	}
 +
-+	unittest_data_add(dt);
++	of_node_get(part_dn);
++	part_dn->full_name = xp->name;
++	part_dn->parent = parent_dn;
++	for (dn = part_dn; dn; dn = of_find_all_nodes(dn))
++		of_changeset_attach_node(&xp->chgset, dn);
 +
-+	of_overlay_mutex_unlock();
++	ret = of_changeset_add_property(&xp->chgset, part_dn, &xp->ranges);
++	if (ret) {
++		dev_err(dev, "failed to add property, ret %d", ret);
++		goto failed;
++	}
 +
++	ret = of_changeset_apply(&xp->chgset);
++	if (ret) {
++		dev_err(dev, "failed to apply changeset, ret %d", ret);
++		goto failed;
++	}
++	xp->chgset_applied = true;
++	of_node_put(parent_dn);
++
++	ret = of_platform_populate(part_dn, NULL, NULL, dev);
++	if (ret) {
++		dev_err(dev, "failed to populate devices, ret %d", ret);
++		goto failed;
++	}
++
++	*handle = xp;
 +	return 0;
 +
 +failed:
-+	of_overlay_mutex_unlock();
-+	kfree(val);
-+	kfree(prop);
-+	return rc;
++	if (parent_dn)
++		of_node_put(parent_dn);
++	xrt_partition_destroy(xp);
++	return ret;
 +}
-+pure_initcall(of_fdt_root_init);
++EXPORT_SYMBOL_GPL(xrt_partition_create);
 +
- /* Everything below here references initial_boot_params directly. */
- int __initdata dt_root_addr_cells;
- int __initdata dt_root_size_cells;
-diff --git a/drivers/of/fdt_default.dts b/drivers/of/fdt_default.dts
-new file mode 100644
-index 000000000000..d1f12a76dfc6
---- /dev/null
-+++ b/drivers/of/fdt_default.dts
-@@ -0,0 +1,5 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+
-+/ {
-+};
-diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
-index 631489f7f8c0..1ef93bccfdba 100644
---- a/drivers/of/of_private.h
-+++ b/drivers/of/of_private.h
-@@ -41,6 +41,18 @@ extern struct mutex of_mutex;
- extern struct list_head aliases_lookup;
- extern struct kset *of_kset;
- 
-+#if defined(CONFIG_OF_UNITTEST)
-+extern u8 __dtb_testcases_begin[];
-+extern u8 __dtb_testcases_end[];
-+#define __dtb_fdt_default_begin		__dtb_testcases_begin
-+#define __dtb_fdt_default_end		__dtb_testcases_end
-+void __init unittest_data_add(struct device_node *dt);
-+#else
-+extern u8 __dtb_fdt_default_begin[];
-+extern u8 __dtb_fdt_default_end[];
-+static inline void unittest_data_add(struct device_node *dt) {}
-+#endif
-+
- #if defined(CONFIG_OF_DYNAMIC)
- extern int of_property_notify(int action, struct device_node *np,
- 			      struct property *prop, struct property *old_prop);
-@@ -84,6 +96,11 @@ static inline void __of_detach_node_sysfs(struct device_node *np) {}
- 
- #if defined(CONFIG_OF_RESOLVE)
- int of_resolve_phandles(struct device_node *tree);
-+#else
-+static inline int of_resolve_phandles(struct device_node *tree)
++static __init int xrt_lib_init(void)
 +{
 +	return 0;
 +}
- #endif
- 
- void __of_phandle_cache_inv_entry(phandle handle);
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index 8c056972a6dd..745f455235cc 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -1402,73 +1402,15 @@ static void attach_node_and_children(struct device_node *np)
-  *	unittest_data_add - Reads, copies data from
-  *	linked tree and attaches it to the live tree
-  */
--static int __init unittest_data_add(void)
-+void __init unittest_data_add(struct device_node *dt)
- {
--	void *unittest_data;
--	void *unittest_data_align;
--	struct device_node *unittest_data_node = NULL, *np;
--	/*
--	 * __dtb_testcases_begin[] and __dtb_testcases_end[] are magically
--	 * created by cmd_dt_S_dtb in scripts/Makefile.lib
--	 */
--	extern uint8_t __dtb_testcases_begin[];
--	extern uint8_t __dtb_testcases_end[];
--	const int size = __dtb_testcases_end - __dtb_testcases_begin;
--	int rc;
--	void *ret;
--
--	if (!size) {
--		pr_warn("%s: testcases is empty\n", __func__);
--		return -ENODATA;
--	}
--
--	/* creating copy */
--	unittest_data = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
--	if (!unittest_data)
--		return -ENOMEM;
--
--	unittest_data_align = PTR_ALIGN(unittest_data, FDT_ALIGN_SIZE);
--	memcpy(unittest_data_align, __dtb_testcases_begin, size);
--
--	ret = of_fdt_unflatten_tree(unittest_data_align, NULL, &unittest_data_node);
--	if (!ret) {
--		pr_warn("%s: unflatten testcases tree failed\n", __func__);
--		kfree(unittest_data);
--		return -ENODATA;
--	}
--	if (!unittest_data_node) {
--		pr_warn("%s: testcases tree is empty\n", __func__);
--		kfree(unittest_data);
--		return -ENODATA;
--	}
--
--	/*
--	 * This lock normally encloses of_resolve_phandles()
--	 */
--	of_overlay_mutex_lock();
--
--	rc = of_resolve_phandles(unittest_data_node);
--	if (rc) {
--		pr_err("%s: Failed to resolve phandles (rc=%i)\n", __func__, rc);
--		of_overlay_mutex_unlock();
--		return -EINVAL;
--	}
--
--	if (!of_root) {
--		of_root = unittest_data_node;
--		for_each_of_allnodes(np)
--			__of_attach_node_sysfs(np);
--		of_aliases = of_find_node_by_path("/aliases");
--		of_chosen = of_find_node_by_path("/chosen");
--		of_overlay_mutex_unlock();
--		return 0;
--	}
-+	struct device_node *np;
- 
- 	EXPECT_BEGIN(KERN_INFO,
- 		     "Duplicate name in testcase-data, renamed to \"duplicate-name#1\"");
- 
- 	/* attach the sub-tree to live tree */
--	np = unittest_data_node->child;
-+	np = dt->child;
- 	while (np) {
- 		struct device_node *next = np->sibling;
- 
-@@ -1479,10 +1421,6 @@ static int __init unittest_data_add(void)
- 
- 	EXPECT_END(KERN_INFO,
- 		   "Duplicate name in testcase-data, renamed to \"duplicate-name#1\"");
--
--	of_overlay_mutex_unlock();
--
--	return 0;
- }
- 
- #ifdef CONFIG_OF_OVERLAY
-@@ -3258,7 +3196,6 @@ static inline __init void of_unittest_overlay_high_level(void) {}
- static int __init of_unittest(void)
- {
- 	struct device_node *np;
--	int res;
- 
- 	pr_info("start of unittest - you will see error messages\n");
- 
-@@ -3267,9 +3204,6 @@ static int __init of_unittest(void)
- 	if (IS_ENABLED(CONFIG_UML))
- 		unittest_unflatten_overlay_base();
- 
--	res = unittest_data_add();
--	if (res)
--		return res;
- 	if (!of_aliases)
- 		of_aliases = of_find_node_by_path("/aliases");
- 
++
++static __exit void xrt_lib_fini(void)
++{
++}
++
++module_init(xrt_lib_init);
++module_exit(xrt_lib_fini);
++
++MODULE_AUTHOR("XRT Team <runtime@xilinx.com>");
++MODULE_DESCRIPTION("Xilinx Alveo IP Lib driver");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/fpga/xrt/lib/lib-drv.h b/drivers/fpga/xrt/lib/lib-drv.h
+new file mode 100644
+index 000000000000..77ed5c399dcf
+--- /dev/null
++++ b/drivers/fpga/xrt/lib/lib-drv.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Xilinx, Inc.
++ *
++ * Authors:
++ *	Cheng Zhen <maxz@xilinx.com>
++ */
++
++#ifndef _LIB_DRV_H_
++#define _LIB_DRV_H_
++
++extern u8 __dtb_xrt_begin[];
++extern u8 __dtb_xrt_end[];
++
++#endif	/* _LIB_DRV_H_ */
 -- 
 2.27.0
 
