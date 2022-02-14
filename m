@@ -2,290 +2,186 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35A74B5BE0
-	for <lists+linux-fpga@lfdr.de>; Mon, 14 Feb 2022 22:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 277D54B5E43
+	for <lists+linux-fpga@lfdr.de>; Tue, 15 Feb 2022 00:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbiBNU6T (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 14 Feb 2022 15:58:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50198 "EHLO
+        id S231488AbiBNX23 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 14 Feb 2022 18:28:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiBNU6K (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Feb 2022 15:58:10 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6B5110EEF;
-        Mon, 14 Feb 2022 12:57:39 -0800 (PST)
+        with ESMTP id S229449AbiBNX22 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Feb 2022 18:28:28 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9269FABC4;
+        Mon, 14 Feb 2022 15:28:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644872260; x=1676408260;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+ZOSDcI2qdIWgBn8a33RycD675mh/DMLTMtB1BKSO68=;
-  b=Cu7J1A8t5paQM1GqwgCcVmlmdK0objzjfsNA+cBKoJszkbaPz8r31ggE
-   kGemuABrYYLJHfIaRZ6Bs3E3GaibUrER3gHScEdMNDuR/Mx+EN9sdDJA/
-   hMvP3stXA81IRXW0vF1dyj+b2mkH4AORXyKZChO0c97DGNidTAQy+KXvL
-   PVl/IYiwTNSUGRh0gqPdHGfs+OF4VXwbJDnB9T1SbCj692QnvS/3FHfwk
-   5QHRCUBbVKNVHjeqey2e4aeg+0PRuiJc+OHDB5rPcUr+/Vbw8TryzBo+w
-   3smuAEJtEsyaV1+nHlls8C1wztq+6Q2EJg1kHAlpO7Bh4CM7aTyoJxadJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="310916638"
+  t=1644881299; x=1676417299;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=93NC8urXNxmx+jBkfS1e/YKVj41fJ3mJekQJ4cYiYDQ=;
+  b=SMs93lw+dKE21rjpWzezH3vGqxoxIK30DfNoJc4erC9Wi5/nxVvbyn/f
+   4n1fErI8Ly5tyxYhqb3nZo5wEARgyZsIKwoLMZcgr16q2lzfagiIqmmpN
+   Z8RuRDKBAmTUpJO2shrb7xWn/1fxaKYBo2+09VIQKoiSU3Fq7cgdcCxdA
+   gv18rNCpmbPEiiR64hpPpBWrc8+tgOTq7Y+zZDM+J+4d7ican/7+wwP3J
+   lBSrBOC1O6UOS3jG7Poohrk03NPMAepmRiWKKKVChzOqQ3TpMmR/X/N1b
+   QTs6hmzW4FWZ+oZ6T4pUXvbHTMwUaebTcrcJVr1T0cIGijPBFN2Ktd59g
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="249955510"
 X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="310916638"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 12:35:21 -0800
+   d="scan'208";a="249955510"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 15:27:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="635415061"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 14 Feb 2022 12:35:19 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJi46-0008vY-HT; Mon, 14 Feb 2022 20:35:18 +0000
-Date:   Tue, 15 Feb 2022 04:34:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     kbuild-all@lists.01.org, mdf@kernel.org, hao.wu@intel.com,
-        yilun.xu@intel.com, trix@redhat.com, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, system@metrotek.ru,
-        Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Subject: Re: [PATCH] fpga: microsemi-spi: add Microsemi FPGA manager
-Message-ID: <202202150434.i0eTuy1u-lkp@intel.com>
-References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
+   d="scan'208";a="528499988"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga007.jf.intel.com with ESMTP; 14 Feb 2022 15:27:57 -0800
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 14 Feb 2022 15:27:56 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 14 Feb 2022 15:27:56 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 14 Feb 2022 15:27:56 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n1Ezc7dtvnO4lt6yPMjzZrokAA4uZZ9bHqANDVIpn2EyAowj6YSkCG5XiqOldEsh0f0rte4AGnh39UKdE9dDQ3xnfvBrAY1L99W51Q8Lg6bJP9YQju4g2/D+Jt0rOt2TuEIPBBZ4MqyXaupgXJM5jFwilVFyzTxCcK7FXFRHh0Nd/0A0DPe1e8g73l6H5PraXckDE30+vdqLiDz7RQiJigO7RUmjoADmn0CNadvukfJkXIk3t/tRcqRwZUANOr4NDWgcmiqRFfHGqyhwqa78nAVFIefuJ+ThOitSehNwf5INgtRFN4JruLK0Z8dFzb4Aw06FqIAxXOE9NhmzID2cOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=93NC8urXNxmx+jBkfS1e/YKVj41fJ3mJekQJ4cYiYDQ=;
+ b=IJEhw3IHmoA6wgb1c3PS8JEB6M8UBlJhlM2898Qidyz24fta6pdOMdekZAIWhuRk41zFwXHKexwj/8Hhs8NwdkrE0e/DQR9gDEcZI0G6AILsWmkJOsr9SZVc1gHcbIUnliK+U/Mr+uKIa0jScQHZL4l/pEap1sTSN2LGA5Pmwv6/gFhVLMQd65CrdWfsOyLBe21LUyW3dED9bTq1vjPkippEIW83alKcf4RQR1CN0yNmBAcu4MfvVrJ4/evjiMi8nyMF1J7gzBVI44tmYpBdcO/io+tcohN9Jy0M3yxxqZBOAzjb3ILIPgbjzyzLLOAlJHICs1rSGNo4PtFHQSEByA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
+ by SN6PR11MB2704.namprd11.prod.outlook.com (2603:10b6:805:53::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18; Mon, 14 Feb
+ 2022 23:27:52 +0000
+Received: from BN9PR11MB5483.namprd11.prod.outlook.com
+ ([fe80::c8ff:c95c:e601:eee3]) by BN9PR11MB5483.namprd11.prod.outlook.com
+ ([fe80::c8ff:c95c:e601:eee3%6]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
+ 23:27:52 +0000
+From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Akira Yokosawa <akiyks@gmail.com>
+CC:     "corbet@lwn.net" <corbet@lwn.net>, "Wu, Hao" <hao.wu@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>
+Subject: RE: [PATCH v1 1/7] Documentation: fpga: dfl: add description of IOFS
+Thread-Topic: [PATCH v1 1/7] Documentation: fpga: dfl: add description of IOFS
+Thread-Index: AQHYIZYrI9khWBzXDEChcSjUIMBh1qyS9toAgABeawCAAFxVYA==
+Date:   Mon, 14 Feb 2022 23:27:52 +0000
+Message-ID: <BN9PR11MB548353C757E2B7247C0733E3E3339@BN9PR11MB5483.namprd11.prod.outlook.com>
+References: <20220214112619.219761-2-tianfei.zhang@intel.com>
+ <eb5506aa-815d-b373-2eff-a3b9df533141@gmail.com>
+ <be378318-2b68-15d3-df89-db5b10ccc8cb@infradead.org>
+In-Reply-To: <be378318-2b68-15d3-df89-db5b10ccc8cb@infradead.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.6.200.16
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4ac1ee99-4f87-47c2-19e5-08d9f0119f51
+x-ms-traffictypediagnostic: SN6PR11MB2704:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <SN6PR11MB27049F784CDE5819EED5AF5CE3339@SN6PR11MB2704.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2657;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rFh9UVxHx/1yMSC09DHdoOJwK9ttQP4tVMlgGftkiLXRlcswAvJP7PPpp4UyDEYpknxaR97CS8+5JqSoU03UUdNy5aOGvTCnOV/t2aIRKH04QGvc4XCGjCt7AglPnRWozvtqYoMU2ZWq1CXMqfyvKgEBJFe8/aJ3wdv2KXmguJ+AZk6EiJ3Daotrt9JZLlM1MVo7eJbA1xIUmiRUPGlmZIJd/ywaNRQOhsLmk5Nitz0kPlHT+2BDhvl1F4JSBjrnWS2EPl16WswARpVV1XK2fr+jkgswNcoJleLX48pspFtK3n+rnUYYEMNjzB6hL07LVWuuDDM6VsBxLSfU29JRu6N76GcB7ckAGuKJAVzEMWsdeer5J6jsnlfdahiaC1R7Kp5OMGXHxqkUm9JjtCtg/1saFFhnCJGxtVlVw3pBv0sn8RzBGvHufleZitc/t7BLvjuJFt+JJmgfcjqM8YqJvF7/xH1vQVmB7JnNWFakCv5c5Mt/SoZM1UkLBaeJjKDr+PJaSyCh3jJnOODxg2PJHPDqbxHWvfKgYOXoeTDQMe3fcYMGmxuxqDd4KFnwKJxMQLuVjsasKJZUTTViXbZITI3dgiCkg3jrEg85nnWV+ZsRdGVkmRz5Vca1oLYBdkyMKet9254xlpesWrni/rXwY6krjmL3AAYQzqPDcq95yslLVmnn4Y1whVDhGKxt+Yu+nho3tNQE9S8HfsVrMFirBw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(54906003)(7696005)(83380400001)(110136005)(316002)(71200400001)(508600001)(6506007)(9686003)(86362001)(5660300002)(38100700002)(186003)(2906002)(33656002)(55016003)(107886003)(8676002)(4326008)(53546011)(66446008)(66476007)(64756008)(66556008)(122000001)(66946007)(82960400001)(52536014)(76116006)(8936002)(4744005)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eWhhWWMzZTZuczIyWXBVNGFOMURwN2RXcHY0dVhvc1lCVWxyMEF5a2lLcFlT?=
+ =?utf-8?B?eHo2dmszRitGamhjZG9jZDA5bFRaSENhY3ozYlBWUlVtbDFmM1pJZkxHWWZ0?=
+ =?utf-8?B?cFF3Sk5McjJMR0t0Y3FWdWY4NjZUejA3VnIxK2d3NXZhbUh5V0Q1Ympxbm96?=
+ =?utf-8?B?Z3NPSXB3SVhISmZpd25Ja25TWHV5d1YvOTk2ZVhHNWlwc3lXRi95Nll0Vjd1?=
+ =?utf-8?B?UVJRZXRUY1BIYndOc3NDdWg0alhocUJsbXVxT3ZwZmpaQ0UxdjhlTEVKMEs1?=
+ =?utf-8?B?TTNpQ0JZVEsvVm5hVHpVMmN4dUwyZGNQQm5YY3BKUUlyUUw4dk5nOTl0c0Ja?=
+ =?utf-8?B?TzNKS0RrYlB1djZmMzRvMGR6eEhWcnB3NEx3YUI4ZU1NdDRtK3J4WTZONnpv?=
+ =?utf-8?B?QkU3bTFLNVA1ZGpMMnJGeU4zTmNFSVIydGloVG1rc0I5UnVsbGxHYTdTeUlh?=
+ =?utf-8?B?d3hDelRtMGVzeU5ONWlZd1BONmwzVjBNS0lqeCtsMkcrTE5FNGIzMGR5QnJt?=
+ =?utf-8?B?bFlwc24xTlZaWG4xSjFKR0Z6QjVxQ1NqK1lWd2U1TnRBWUFUdUU3NnJ3NWIy?=
+ =?utf-8?B?ZWdYSFpoWHhiaThHTDlLTWtRSlFoa2ZLNGtQZ1dIQ0MxcWVaUjhHcmxJdkpF?=
+ =?utf-8?B?VFhNM2lnSmJnOEsrelRBNGZ5OXNtc0pDa254a3ZUeER3T3F4QlhHVGpnblNZ?=
+ =?utf-8?B?ZTlwQmYxdFRmY0QvdnRTTUZ5OFp3TEZpN3JSZ2F3a0tteWlGQTNLZmo4ZnI1?=
+ =?utf-8?B?RlRQdjZJN2gzaE5FSlVpMFh2MmE1ZlUrWXpCSVFKWmRQcnZUc2g5Sy9Hby9v?=
+ =?utf-8?B?VktKTklUVjBEMEdZcGFIMHhkK1k4QVVkU01QTWp4R3FPWFdBQmZMeTExbGpC?=
+ =?utf-8?B?ZXJHbHJhUFBqSVN2V0lOTmg1NFNGK2JacEYwZE1FMmc2b01MU0JYckdlOTh6?=
+ =?utf-8?B?QUVFeGdqQmZ5OHBFL0QxaWlSKzQreWVJaG5XU2xGb1N1WnFheU91UndzcVli?=
+ =?utf-8?B?RDVqMVJuTlFzMjdMS3VXbDNIcWFSREMvNHpIcEpYUEhzV2Z6eWhDSmdhMkV2?=
+ =?utf-8?B?dzZ1K3lrSExZK0hEWkZlSU9lb2JHOFVzWG5wQTNtanc5OE8wZk90a3ZtTGhi?=
+ =?utf-8?B?TTRsK3JuY253MDJnbktKczE4YitiZ0QzejJtbnBXb1lNV0J6aS9NeUNnWjZq?=
+ =?utf-8?B?bkNDRUJNL0Q1d2owcFFOcC83SjJIdkRWcWw5SWhrejh5RDhaZGw1NDl5OVRR?=
+ =?utf-8?B?VlhVNTF5NjdmeGpBeDVLOHYrQlpuams3M2JyOEpSWGx3K1VDUENMQTlGZnZK?=
+ =?utf-8?B?RE5YaDlWR0hMSGFMdkpPRXNqS2xLc0RtMFlhTVFpdHlMQ2dFMml5dHRROWJT?=
+ =?utf-8?B?cmRjVEFoMEVYRWQrNkhqbU1xdjJjY0dKbVdNY2JmTUJmWjBvcmpvc2xEK20v?=
+ =?utf-8?B?RDRDb0w0N0NYZ0w2Ri9WZTNKSkZ1ZFF3NGhRMUlWNThvUVNaR1RuNXQ2d1Fw?=
+ =?utf-8?B?dzVvek5kYWlUWDlhbXEvcXdYV1VmOG4vR2x6K0k1eDJOUGREZ05VODN2RStw?=
+ =?utf-8?B?Nm1ZTmdaOEExTXFiS05hZ3ZPdlFxQUswV2xPckJSYVcyYVJ1MWxieFcvYnli?=
+ =?utf-8?B?Wm9OOEJRRjc0NFpwNFdaNFlQS1plV3JGOUtCNDhoem0zcUh3QWR4Lytpa1ZL?=
+ =?utf-8?B?Qm9hc0tNZ1lmaE1ZVWlDeXVkdmJmUHJ0and5VGY3aHB0aEFNdmx6MVhxQnpN?=
+ =?utf-8?B?NVViWTlWT1lMaUVQZUlLUS9YWGNJZGV4YktkSTRCWnRJM2VLT0VmWG0yL1Q0?=
+ =?utf-8?B?cXRaekY0b3BtZWs4YTQwdmZ2U1JKcWhlVVpYcVltNlZWaUNpUWZZYWE1eVFD?=
+ =?utf-8?B?WTJqV3pqdlovQUgvL0xUUmR1ajJ3MXFYY3ZzT3k3U25KSVVIQjhvQThHeXQv?=
+ =?utf-8?B?SWpWYnJYbWlCbFRZdDIvVzcwZys5S1NUcXBvbFFrbncvaEk1ZU1BMk56VXZP?=
+ =?utf-8?B?aGJRSXlJNHFCRUczNVBwMXA2N2RsUGI3RGpuQkNodzVicGRmZVo1UzNEVUJ5?=
+ =?utf-8?B?eGhnMjI1TDRPVFRaMTB2Q2NuTlRHT3lvV2RINWo1TDRPWlRJbStRT0trZlVk?=
+ =?utf-8?B?dHIySHJPcUVBeUFyNy9ZSTFUL2dVRWVLQ0lMZnJsMzE5Y0hOMEVUcnY3cG16?=
+ =?utf-8?B?WGlQejZ3SWN2OXpjc01ZVDc1UGtYT1lBa0w3Mk1ZTFlyRXIxdExRUWRNWERm?=
+ =?utf-8?Q?itm+UqZJTvo0OXn9HG6tuDDKIpG7GDtFlfMhS/gVmE=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ac1ee99-4f87-47c2-19e5-08d9f0119f51
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2022 23:27:52.6389
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QFfAUsy7PZPUxcTGtpJG8pw5CuxJeQvYO9po3MVcidLdEEwHvDT6zuIdsK+bKTy2o/LqlAce6TL8Zto0cS+sOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2704
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Ivan,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.17-rc4 next-20220214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Ivan-Bornyakov/fpga-microsemi-spi-add-Microsemi-FPGA-manager/20220214-222923
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 754e0b0e35608ed5206d6a67a791563c631cec07
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202150434.i0eTuy1u-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/19d9c174f03a9b8387ba654d558351cac9d63d24
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Ivan-Bornyakov/fpga-microsemi-spi-add-Microsemi-FPGA-manager/20220214-222923
-        git checkout 19d9c174f03a9b8387ba654d558351cac9d63d24
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash drivers/fpga/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c: In function 'microsemi_fpga_ops_write':
->> drivers/fpga/microsemi-spi.c:244:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-     244 |                 dev_err(dev, "Failed to find bitstream start %d\n",
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:244:17: note: in expansion of macro 'dev_err'
-     244 |                 dev_err(dev, "Failed to find bitstream start %d\n",
-         |                 ^~~~~~~
-   drivers/fpga/microsemi-spi.c:244:63: note: format string is defined here
-     244 |                 dev_err(dev, "Failed to find bitstream start %d\n",
-         |                                                              ~^
-         |                                                               |
-         |                                                               int
-         |                                                              %ld
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c:252:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-     252 |                 dev_err(dev, "Failed to parse bitstream size %d\n",
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:252:17: note: in expansion of macro 'dev_err'
-     252 |                 dev_err(dev, "Failed to parse bitstream size %d\n",
-         |                 ^~~~~~~
-   drivers/fpga/microsemi-spi.c:252:63: note: format string is defined here
-     252 |                 dev_err(dev, "Failed to parse bitstream size %d\n",
-         |                                                              ~^
-         |                                                               |
-         |                                                               int
-         |                                                              %ld
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:259:17: note: in expansion of macro 'dev_err'
-     259 |                 dev_err(dev,
-         |                 ^~~~~~~
-   drivers/fpga/microsemi-spi.c:260:70: note: format string is defined here
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                                                                     ~^
-         |                                                                      |
-         |                                                                      int
-         |                                                                     %ld
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:259:17: note: in expansion of macro 'dev_err'
-     259 |                 dev_err(dev,
-         |                 ^~~~~~~
-   drivers/fpga/microsemi-spi.c:260:89: note: format string is defined here
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                                                                                        ~^
-         |                                                                                         |
-         |                                                                                         int
-         |                                                                                        %ld
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
->> drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 5 has type 'size_t' {aka 'long unsigned int'} [-Wformat=]
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:259:17: note: in expansion of macro 'dev_err'
-     259 |                 dev_err(dev,
-         |                 ^~~~~~~
-   drivers/fpga/microsemi-spi.c:260:107: note: format string is defined here
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                                                                                                          ~^
-         |                                                                                                           |
-         |                                                                                                           int
-         |                                                                                                          %ld
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c:274:33: warning: format '%d' expects argument of type 'int', but argument 4 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-     274 |                                 "Failed to write bitstream frame number %d of %d\n",
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:273:25: note: in expansion of macro 'dev_err'
-     273 |                         dev_err(dev,
-         |                         ^~~~~~~
-   drivers/fpga/microsemi-spi.c:274:80: note: format string is defined here
-     274 |                                 "Failed to write bitstream frame number %d of %d\n",
-         |                                                                               ~^
-         |                                                                                |
-         |                                                                                int
-         |                                                                               %ld
-
-
-vim +244 drivers/fpga/microsemi-spi.c
-
-   225	
-   226	static int microsemi_fpga_ops_write(struct fpga_manager *mgr, const char *buf,
-   227					    size_t count)
-   228	{
-   229		ssize_t bitstream_start = 0, bitstream_size;
-   230		struct microsemi_fpga_priv *priv = mgr->priv;
-   231		struct spi_device *spi = priv->spi;
-   232		struct device *dev = &mgr->dev;
-   233		u8 tmp_buf[SPI_FRAME_SIZE + 1];
-   234		int ret, i;
-   235	
-   236		if (crc_ccitt(0, buf, count)) {
-   237			dev_err(dev, "CRC error\n");
-   238	
-   239			return -EINVAL;
-   240		}
-   241	
-   242		bitstream_start = lookup_block_start(BITSTREAM_ID, buf, count);
-   243		if (bitstream_start < 0) {
- > 244			dev_err(dev, "Failed to find bitstream start %d\n",
-   245				bitstream_start);
-   246	
-   247			return bitstream_start;
-   248		}
-   249	
-   250		bitstream_size = parse_bitstream_size(buf, count);
-   251		if (bitstream_size < 0) {
-   252			dev_err(dev, "Failed to parse bitstream size %d\n",
-   253				bitstream_size);
-   254	
-   255			return bitstream_size;
-   256		}
-   257	
-   258		if (bitstream_start + bitstream_size * SPI_FRAME_SIZE > count) {
-   259			dev_err(dev,
- > 260				"Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-   261				bitstream_start, bitstream_size * SPI_FRAME_SIZE, count);
-   262	
-   263			return -EFAULT;
-   264		}
-   265	
-   266		for (i = 0; i < bitstream_size; i++) {
-   267			tmp_buf[0] = SPI_FRAME;
-   268			memcpy(tmp_buf + 1, buf + bitstream_start + i * SPI_FRAME_SIZE,
-   269			       SPI_FRAME_SIZE);
-   270	
-   271			ret = microsemi_spi_write(spi, tmp_buf, sizeof(tmp_buf));
-   272			if (ret) {
-   273				dev_err(dev,
-   274					"Failed to write bitstream frame number %d of %d\n",
-   275					i, bitstream_size);
-   276	
-   277				return ret;
-   278			}
-   279		}
-   280	
-   281		return 0;
-   282	}
-   283	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFJhbmR5IER1bmxhcCA8cmR1
+bmxhcEBpbmZyYWRlYWQub3JnPg0KPiBTZW50OiBUdWVzZGF5LCBGZWJydWFyeSAxNSwgMjAyMiAx
+OjU3IEFNDQo+IFRvOiBBa2lyYSBZb2tvc2F3YSA8YWtpeWtzQGdtYWlsLmNvbT47IFpoYW5nLCBU
+aWFuZmVpDQo+IDx0aWFuZmVpLnpoYW5nQGludGVsLmNvbT4NCj4gQ2M6IGNvcmJldEBsd24ubmV0
+OyBXdSwgSGFvIDxoYW8ud3VAaW50ZWwuY29tPjsgbGludXgtDQo+IGRvY0B2Z2VyLmtlcm5lbC5v
+cmc7IGxpbnV4LWZwZ2FAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIua2Vy
+bmVsLm9yZzsgbWRmQGtlcm5lbC5vcmc7IHRyaXhAcmVkaGF0LmNvbTsgWHUsIFlpbHVuDQo+IDx5
+aWx1bi54dUBpbnRlbC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjEgMS83XSBEb2N1bWVu
+dGF0aW9uOiBmcGdhOiBkZmw6IGFkZCBkZXNjcmlwdGlvbiBvZiBJT0ZTDQo+IA0KPiANCj4gDQo+
+IE9uIDIvMTQvMjIgMDQ6MTgsIEFraXJhIFlva29zYXdhIHdyb3RlOg0KPiA+IEhpLA0KPiA+DQo+
+ID4gSnVzdCBhIGNvdXBsZSBvZiBuaXRzIG9uIFJlU1QgZm9ybWF0dGluZy4NCj4gPg0KPiANCj4g
+VGhhbmtzIDopDQo+IA0KPiANCj4gPg0KPiA+IEknZCByZWNvbW1lbmQgcnVubmluZyAibWFrZSBo
+dG1kb2NzIiBhbmQgc2VlIGlmIHRoZSBwYWdlcyBhcmUgcmVuZGVyZWQNCj4gPiBhcyB5b3UgZXhw
+ZWN0Lg0KPiANCj4gSSB0aGluayB0aGF0J3MgIm1ha2UgaHRtbGRvY3MiLiBCdXQgcGxlYXNlIGRv
+IHVzZSBpdC4NCg0KVGhhbmtz77yMSSB3aWxsIGZpeCBpdCBvbiBuZXh0IHZlcnNpb24uDQoNCj4g
+DQo+IC0tDQo+IH5SYW5keQ0K
