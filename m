@@ -2,45 +2,45 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24D04B5CF6
-	for <lists+linux-fpga@lfdr.de>; Mon, 14 Feb 2022 22:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35A74B5BE0
+	for <lists+linux-fpga@lfdr.de>; Mon, 14 Feb 2022 22:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbiBNVeg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 14 Feb 2022 16:34:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34088 "EHLO
+        id S229460AbiBNU6T (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 14 Feb 2022 15:58:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbiBNVdp (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Feb 2022 16:33:45 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0B6BC10;
-        Mon, 14 Feb 2022 13:31:32 -0800 (PST)
+        with ESMTP id S229522AbiBNU6K (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Feb 2022 15:58:10 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6B5110EEF;
+        Mon, 14 Feb 2022 12:57:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644874292; x=1676410292;
+  t=1644872260; x=1676408260;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=nVcSprTXkhP3aqq6ijMMGA5otSVh37h8gNcsRTrYVdQ=;
-  b=ZPDPQ1kS5QY8Fdfa9ihjxupQuW3pb0cOGRKw79sA2VUkCPC2icVLL9VZ
-   nWyUj/Lw9ecuD2ZhP0wRu0FA8VZkePbfwmfY/zM0BFY73DNiHjxSFXQhg
-   ZhPyHaJbrRzfiaSNLFWMLJmCWYhcSMFwAbN3s7kF+3/8eTFqgwv4bGtMP
-   3gsaWIgxDQ4dtI/dePdXcTZMc3V7WJw7j1DP6tFTdADYeSxAJYNAEw5Yr
-   76HTwwz1k/QIyku0gb3ZCGWkuxcQacbq7IWBRLWMdA3ZHJfd/PpVWaeLX
-   amU7DkBaIbGfYzrAobjmLGGtXWmFYgJIYCHa8T49GU0QRqq7VPqXqI4hC
+  bh=+ZOSDcI2qdIWgBn8a33RycD675mh/DMLTMtB1BKSO68=;
+  b=Cu7J1A8t5paQM1GqwgCcVmlmdK0objzjfsNA+cBKoJszkbaPz8r31ggE
+   kGemuABrYYLJHfIaRZ6Bs3E3GaibUrER3gHScEdMNDuR/Mx+EN9sdDJA/
+   hMvP3stXA81IRXW0vF1dyj+b2mkH4AORXyKZChO0c97DGNidTAQy+KXvL
+   PVl/IYiwTNSUGRh0gqPdHGfs+OF4VXwbJDnB9T1SbCj692QnvS/3FHfwk
+   5QHRCUBbVKNVHjeqey2e4aeg+0PRuiJc+OHDB5rPcUr+/Vbw8TryzBo+w
+   3smuAEJtEsyaV1+nHlls8C1wztq+6Q2EJg1kHAlpO7Bh4CM7aTyoJxadJ
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="274738979"
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="310916638"
 X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="274738979"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 11:23:19 -0800
+   d="scan'208";a="310916638"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 12:35:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="495955011"
+   d="scan'208";a="635415061"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Feb 2022 11:23:16 -0800
+  by orsmga004.jf.intel.com with ESMTP; 14 Feb 2022 12:35:19 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nJgwN-0008rH-TT; Mon, 14 Feb 2022 19:23:15 +0000
-Date:   Tue, 15 Feb 2022 03:22:43 +0800
+        id 1nJi46-0008vY-HT; Mon, 14 Feb 2022 20:35:18 +0000
+Date:   Tue, 15 Feb 2022 04:34:24 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
 Cc:     kbuild-all@lists.01.org, mdf@kernel.org, hao.wu@intel.com,
@@ -48,17 +48,17 @@ Cc:     kbuild-all@lists.01.org, mdf@kernel.org, hao.wu@intel.com,
         linux-fpga@vger.kernel.org, system@metrotek.ru,
         Ivan Bornyakov <i.bornyakov@metrotek.ru>
 Subject: Re: [PATCH] fpga: microsemi-spi: add Microsemi FPGA manager
-Message-ID: <202202150337.lVXXx685-lkp@intel.com>
+Message-ID: <202202150434.i0eTuy1u-lkp@intel.com>
 References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,8 +77,8 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Ivan-Bornyakov/fpga-microsemi-spi-add-Microsemi-FPGA-manager/20220214-222923
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 754e0b0e35608ed5206d6a67a791563c631cec07
-config: h8300-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202150337.lVXXx685-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202150434.i0eTuy1u-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -88,36 +88,18 @@ reproduce (this is a W=1 build):
         git checkout 19d9c174f03a9b8387ba654d558351cac9d63d24
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/fpga/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash drivers/fpga/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/module.h:12,
-                    from drivers/fpga/microsemi-spi.c:6:
-   include/linux/scatterlist.h: In function 'sg_set_buf':
-   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
-      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
-         |                                                   ^~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/scatterlist.h:160:9: note: in expansion of macro 'BUG_ON'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |         ^~~~~~
-   include/linux/scatterlist.h:160:17: note: in expansion of macro 'virt_addr_valid'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |                 ^~~~~~~~~~~~~~~
    In file included from include/linux/device.h:15,
                     from include/linux/spi/spi.h:10,
                     from drivers/fpga/microsemi-spi.c:7:
    drivers/fpga/microsemi-spi.c: In function 'microsemi_fpga_ops_write':
-   drivers/fpga/microsemi-spi.c:244:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
+>> drivers/fpga/microsemi-spi.c:244:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
      244 |                 dev_err(dev, "Failed to find bitstream start %d\n",
          |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
@@ -180,7 +162,7 @@ All warnings (new ones prefixed by >>):
    In file included from include/linux/device.h:15,
                     from include/linux/spi/spi.h:10,
                     from drivers/fpga/microsemi-spi.c:7:
->> drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long int' [-Wformat=]
+   drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'ssize_t' {aka 'long int'} [-Wformat=]
      260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
@@ -201,7 +183,7 @@ All warnings (new ones prefixed by >>):
    In file included from include/linux/device.h:15,
                     from include/linux/spi/spi.h:10,
                     from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 5 has type 'size_t' {aka 'long unsigned int'} [-Wformat=]
+>> drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 5 has type 'size_t' {aka 'long unsigned int'} [-Wformat=]
      260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
@@ -242,7 +224,7 @@ All warnings (new ones prefixed by >>):
          |                                                                               %ld
 
 
-vim +260 drivers/fpga/microsemi-spi.c
+vim +244 drivers/fpga/microsemi-spi.c
 
    225	
    226	static int microsemi_fpga_ops_write(struct fpga_manager *mgr, const char *buf,
@@ -263,7 +245,7 @@ vim +260 drivers/fpga/microsemi-spi.c
    241	
    242		bitstream_start = lookup_block_start(BITSTREAM_ID, buf, count);
    243		if (bitstream_start < 0) {
-   244			dev_err(dev, "Failed to find bitstream start %d\n",
+ > 244			dev_err(dev, "Failed to find bitstream start %d\n",
    245				bitstream_start);
    246	
    247			return bitstream_start;
