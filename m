@@ -2,186 +2,476 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277D54B5E43
-	for <lists+linux-fpga@lfdr.de>; Tue, 15 Feb 2022 00:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D444B6BE2
+	for <lists+linux-fpga@lfdr.de>; Tue, 15 Feb 2022 13:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiBNX23 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 14 Feb 2022 18:28:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50518 "EHLO
+        id S237562AbiBOMRb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 15 Feb 2022 07:17:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiBNX22 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Feb 2022 18:28:28 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9269FABC4;
-        Mon, 14 Feb 2022 15:28:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644881299; x=1676417299;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=93NC8urXNxmx+jBkfS1e/YKVj41fJ3mJekQJ4cYiYDQ=;
-  b=SMs93lw+dKE21rjpWzezH3vGqxoxIK30DfNoJc4erC9Wi5/nxVvbyn/f
-   4n1fErI8Ly5tyxYhqb3nZo5wEARgyZsIKwoLMZcgr16q2lzfagiIqmmpN
-   Z8RuRDKBAmTUpJO2shrb7xWn/1fxaKYBo2+09VIQKoiSU3Fq7cgdcCxdA
-   gv18rNCpmbPEiiR64hpPpBWrc8+tgOTq7Y+zZDM+J+4d7ican/7+wwP3J
-   lBSrBOC1O6UOS3jG7Poohrk03NPMAepmRiWKKKVChzOqQ3TpMmR/X/N1b
-   QTs6hmzW4FWZ+oZ6T4pUXvbHTMwUaebTcrcJVr1T0cIGijPBFN2Ktd59g
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="249955510"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="249955510"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 15:27:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="528499988"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by orsmga007.jf.intel.com with ESMTP; 14 Feb 2022 15:27:57 -0800
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 14 Feb 2022 15:27:56 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Mon, 14 Feb 2022 15:27:56 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 14 Feb 2022 15:27:56 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n1Ezc7dtvnO4lt6yPMjzZrokAA4uZZ9bHqANDVIpn2EyAowj6YSkCG5XiqOldEsh0f0rte4AGnh39UKdE9dDQ3xnfvBrAY1L99W51Q8Lg6bJP9YQju4g2/D+Jt0rOt2TuEIPBBZ4MqyXaupgXJM5jFwilVFyzTxCcK7FXFRHh0Nd/0A0DPe1e8g73l6H5PraXckDE30+vdqLiDz7RQiJigO7RUmjoADmn0CNadvukfJkXIk3t/tRcqRwZUANOr4NDWgcmiqRFfHGqyhwqa78nAVFIefuJ+ThOitSehNwf5INgtRFN4JruLK0Z8dFzb4Aw06FqIAxXOE9NhmzID2cOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=93NC8urXNxmx+jBkfS1e/YKVj41fJ3mJekQJ4cYiYDQ=;
- b=IJEhw3IHmoA6wgb1c3PS8JEB6M8UBlJhlM2898Qidyz24fta6pdOMdekZAIWhuRk41zFwXHKexwj/8Hhs8NwdkrE0e/DQR9gDEcZI0G6AILsWmkJOsr9SZVc1gHcbIUnliK+U/Mr+uKIa0jScQHZL4l/pEap1sTSN2LGA5Pmwv6/gFhVLMQd65CrdWfsOyLBe21LUyW3dED9bTq1vjPkippEIW83alKcf4RQR1CN0yNmBAcu4MfvVrJ4/evjiMi8nyMF1J7gzBVI44tmYpBdcO/io+tcohN9Jy0M3yxxqZBOAzjb3ILIPgbjzyzLLOAlJHICs1rSGNo4PtFHQSEByA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
- by SN6PR11MB2704.namprd11.prod.outlook.com (2603:10b6:805:53::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18; Mon, 14 Feb
- 2022 23:27:52 +0000
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::c8ff:c95c:e601:eee3]) by BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::c8ff:c95c:e601:eee3%6]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
- 23:27:52 +0000
-From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Akira Yokosawa <akiyks@gmail.com>
-CC:     "corbet@lwn.net" <corbet@lwn.net>, "Wu, Hao" <hao.wu@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "Xu, Yilun" <yilun.xu@intel.com>
-Subject: RE: [PATCH v1 1/7] Documentation: fpga: dfl: add description of IOFS
-Thread-Topic: [PATCH v1 1/7] Documentation: fpga: dfl: add description of IOFS
-Thread-Index: AQHYIZYrI9khWBzXDEChcSjUIMBh1qyS9toAgABeawCAAFxVYA==
-Date:   Mon, 14 Feb 2022 23:27:52 +0000
-Message-ID: <BN9PR11MB548353C757E2B7247C0733E3E3339@BN9PR11MB5483.namprd11.prod.outlook.com>
-References: <20220214112619.219761-2-tianfei.zhang@intel.com>
- <eb5506aa-815d-b373-2eff-a3b9df533141@gmail.com>
- <be378318-2b68-15d3-df89-db5b10ccc8cb@infradead.org>
-In-Reply-To: <be378318-2b68-15d3-df89-db5b10ccc8cb@infradead.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.200.16
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4ac1ee99-4f87-47c2-19e5-08d9f0119f51
-x-ms-traffictypediagnostic: SN6PR11MB2704:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <SN6PR11MB27049F784CDE5819EED5AF5CE3339@SN6PR11MB2704.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2657;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rFh9UVxHx/1yMSC09DHdoOJwK9ttQP4tVMlgGftkiLXRlcswAvJP7PPpp4UyDEYpknxaR97CS8+5JqSoU03UUdNy5aOGvTCnOV/t2aIRKH04QGvc4XCGjCt7AglPnRWozvtqYoMU2ZWq1CXMqfyvKgEBJFe8/aJ3wdv2KXmguJ+AZk6EiJ3Daotrt9JZLlM1MVo7eJbA1xIUmiRUPGlmZIJd/ywaNRQOhsLmk5Nitz0kPlHT+2BDhvl1F4JSBjrnWS2EPl16WswARpVV1XK2fr+jkgswNcoJleLX48pspFtK3n+rnUYYEMNjzB6hL07LVWuuDDM6VsBxLSfU29JRu6N76GcB7ckAGuKJAVzEMWsdeer5J6jsnlfdahiaC1R7Kp5OMGXHxqkUm9JjtCtg/1saFFhnCJGxtVlVw3pBv0sn8RzBGvHufleZitc/t7BLvjuJFt+JJmgfcjqM8YqJvF7/xH1vQVmB7JnNWFakCv5c5Mt/SoZM1UkLBaeJjKDr+PJaSyCh3jJnOODxg2PJHPDqbxHWvfKgYOXoeTDQMe3fcYMGmxuxqDd4KFnwKJxMQLuVjsasKJZUTTViXbZITI3dgiCkg3jrEg85nnWV+ZsRdGVkmRz5Vca1oLYBdkyMKet9254xlpesWrni/rXwY6krjmL3AAYQzqPDcq95yslLVmnn4Y1whVDhGKxt+Yu+nho3tNQE9S8HfsVrMFirBw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(54906003)(7696005)(83380400001)(110136005)(316002)(71200400001)(508600001)(6506007)(9686003)(86362001)(5660300002)(38100700002)(186003)(2906002)(33656002)(55016003)(107886003)(8676002)(4326008)(53546011)(66446008)(66476007)(64756008)(66556008)(122000001)(66946007)(82960400001)(52536014)(76116006)(8936002)(4744005)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eWhhWWMzZTZuczIyWXBVNGFOMURwN2RXcHY0dVhvc1lCVWxyMEF5a2lLcFlT?=
- =?utf-8?B?eHo2dmszRitGamhjZG9jZDA5bFRaSENhY3ozYlBWUlVtbDFmM1pJZkxHWWZ0?=
- =?utf-8?B?cFF3Sk5McjJMR0t0Y3FWdWY4NjZUejA3VnIxK2d3NXZhbUh5V0Q1Ympxbm96?=
- =?utf-8?B?Z3NPSXB3SVhISmZpd25Ja25TWHV5d1YvOTk2ZVhHNWlwc3lXRi95Nll0Vjd1?=
- =?utf-8?B?UVJRZXRUY1BIYndOc3NDdWg0alhocUJsbXVxT3ZwZmpaQ0UxdjhlTEVKMEs1?=
- =?utf-8?B?TTNpQ0JZVEsvVm5hVHpVMmN4dUwyZGNQQm5YY3BKUUlyUUw4dk5nOTl0c0Ja?=
- =?utf-8?B?TzNKS0RrYlB1djZmMzRvMGR6eEhWcnB3NEx3YUI4ZU1NdDRtK3J4WTZONnpv?=
- =?utf-8?B?QkU3bTFLNVA1ZGpMMnJGeU4zTmNFSVIydGloVG1rc0I5UnVsbGxHYTdTeUlh?=
- =?utf-8?B?d3hDelRtMGVzeU5ONWlZd1BONmwzVjBNS0lqeCtsMkcrTE5FNGIzMGR5QnJt?=
- =?utf-8?B?bFlwc24xTlZaWG4xSjFKR0Z6QjVxQ1NqK1lWd2U1TnRBWUFUdUU3NnJ3NWIy?=
- =?utf-8?B?ZWdYSFpoWHhiaThHTDlLTWtRSlFoa2ZLNGtQZ1dIQ0MxcWVaUjhHcmxJdkpF?=
- =?utf-8?B?VFhNM2lnSmJnOEsrelRBNGZ5OXNtc0pDa254a3ZUeER3T3F4QlhHVGpnblNZ?=
- =?utf-8?B?ZTlwQmYxdFRmY0QvdnRTTUZ5OFp3TEZpN3JSZ2F3a0tteWlGQTNLZmo4ZnI1?=
- =?utf-8?B?RlRQdjZJN2gzaE5FSlVpMFh2MmE1ZlUrWXpCSVFKWmRQcnZUc2g5Sy9Hby9v?=
- =?utf-8?B?VktKTklUVjBEMEdZcGFIMHhkK1k4QVVkU01QTWp4R3FPWFdBQmZMeTExbGpC?=
- =?utf-8?B?ZXJHbHJhUFBqSVN2V0lOTmg1NFNGK2JacEYwZE1FMmc2b01MU0JYckdlOTh6?=
- =?utf-8?B?QUVFeGdqQmZ5OHBFL0QxaWlSKzQreWVJaG5XU2xGb1N1WnFheU91UndzcVli?=
- =?utf-8?B?RDVqMVJuTlFzMjdMS3VXbDNIcWFSREMvNHpIcEpYUEhzV2Z6eWhDSmdhMkV2?=
- =?utf-8?B?dzZ1K3lrSExZK0hEWkZlSU9lb2JHOFVzWG5wQTNtanc5OE8wZk90a3ZtTGhi?=
- =?utf-8?B?TTRsK3JuY253MDJnbktKczE4YitiZ0QzejJtbnBXb1lNV0J6aS9NeUNnWjZq?=
- =?utf-8?B?bkNDRUJNL0Q1d2owcFFOcC83SjJIdkRWcWw5SWhrejh5RDhaZGw1NDl5OVRR?=
- =?utf-8?B?VlhVNTF5NjdmeGpBeDVLOHYrQlpuams3M2JyOEpSWGx3K1VDUENMQTlGZnZK?=
- =?utf-8?B?RE5YaDlWR0hMSGFMdkpPRXNqS2xLc0RtMFlhTVFpdHlMQ2dFMml5dHRROWJT?=
- =?utf-8?B?cmRjVEFoMEVYRWQrNkhqbU1xdjJjY0dKbVdNY2JmTUJmWjBvcmpvc2xEK20v?=
- =?utf-8?B?RDRDb0w0N0NYZ0w2Ri9WZTNKSkZ1ZFF3NGhRMUlWNThvUVNaR1RuNXQ2d1Fw?=
- =?utf-8?B?dzVvek5kYWlUWDlhbXEvcXdYV1VmOG4vR2x6K0k1eDJOUGREZ05VODN2RStw?=
- =?utf-8?B?Nm1ZTmdaOEExTXFiS05hZ3ZPdlFxQUswV2xPckJSYVcyYVJ1MWxieFcvYnli?=
- =?utf-8?B?Wm9OOEJRRjc0NFpwNFdaNFlQS1plV3JGOUtCNDhoem0zcUh3QWR4Lytpa1ZL?=
- =?utf-8?B?Qm9hc0tNZ1lmaE1ZVWlDeXVkdmJmUHJ0and5VGY3aHB0aEFNdmx6MVhxQnpN?=
- =?utf-8?B?NVViWTlWT1lMaUVQZUlLUS9YWGNJZGV4YktkSTRCWnRJM2VLT0VmWG0yL1Q0?=
- =?utf-8?B?cXRaekY0b3BtZWs4YTQwdmZ2U1JKcWhlVVpYcVltNlZWaUNpUWZZYWE1eVFD?=
- =?utf-8?B?WTJqV3pqdlovQUgvL0xUUmR1ajJ3MXFYY3ZzT3k3U25KSVVIQjhvQThHeXQv?=
- =?utf-8?B?SWpWYnJYbWlCbFRZdDIvVzcwZys5S1NUcXBvbFFrbncvaEk1ZU1BMk56VXZP?=
- =?utf-8?B?aGJRSXlJNHFCRUczNVBwMXA2N2RsUGI3RGpuQkNodzVicGRmZVo1UzNEVUJ5?=
- =?utf-8?B?eGhnMjI1TDRPVFRaMTB2Q2NuTlRHT3lvV2RINWo1TDRPWlRJbStRT0trZlVk?=
- =?utf-8?B?dHIySHJPcUVBeUFyNy9ZSTFUL2dVRWVLQ0lMZnJsMzE5Y0hOMEVUcnY3cG16?=
- =?utf-8?B?WGlQejZ3SWN2OXpjc01ZVDc1UGtYT1lBa0w3Mk1ZTFlyRXIxdExRUWRNWERm?=
- =?utf-8?Q?itm+UqZJTvo0OXn9HG6tuDDKIpG7GDtFlfMhS/gVmE=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ac1ee99-4f87-47c2-19e5-08d9f0119f51
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2022 23:27:52.6389
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QFfAUsy7PZPUxcTGtpJG8pw5CuxJeQvYO9po3MVcidLdEEwHvDT6zuIdsK+bKTy2o/LqlAce6TL8Zto0cS+sOg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2704
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        with ESMTP id S233984AbiBOMRa (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 15 Feb 2022 07:17:30 -0500
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306AA1074DF;
+        Tue, 15 Feb 2022 04:17:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
+         in-reply-to:references;
+        bh=8CtI45VWznLgRJQ3ssy47pHs7UB4qilR2OnOc0r/6MI=;
+        b=i8gUbndEAhosom8LoMm+HQ8nSDkOsazEttFTSArF1OlyyR2MeMKXUxtwneKdyX4FPrkXK95G5SHBf
+         frQgg034wFADchOdXUGsAlebaYiKe1I+4GOJkEEkqsPt9ey5stSs1FTqr7jLvzo1kpWCbW7fwFEfd2
+         CTfn2XyR3PSjQPeutriDy/Sxaw/Reara299iOOa9iDsGhoHrx0he21banKG2OJnZkookwHSeC019zN
+         rAxDqSdkEaCHZbKf6amXbNySOpwKzK4iv3cSLH7hdnZp40uEGS/FQu3T2f47pAawiRthZ/tDf7qnX2
+         t0HddEj5ogEb6go6vnag47EugRm79GA==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1403, Stamp: 3], Multi: [Enabled, t: (0.000012,0.031498)], BW: [Enabled, t: (0.000024,0.000002)], RTDA: [Enabled, t: (0.102431), Hit: No, Details: v2.25.0; Id: 15.52kbdd.1frul147b.9fu8], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([178.70.66.234])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Tue, 15 Feb 2022 15:17:00 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, system@metrotek.ru,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Subject: [PATCH v2] fpga: microsemi-spi: add Microsemi FPGA manager
+Date:   Tue, 15 Feb 2022 14:58:53 +0300
+Message-Id: <20220215115853.26491-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
+References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFJhbmR5IER1bmxhcCA8cmR1
-bmxhcEBpbmZyYWRlYWQub3JnPg0KPiBTZW50OiBUdWVzZGF5LCBGZWJydWFyeSAxNSwgMjAyMiAx
-OjU3IEFNDQo+IFRvOiBBa2lyYSBZb2tvc2F3YSA8YWtpeWtzQGdtYWlsLmNvbT47IFpoYW5nLCBU
-aWFuZmVpDQo+IDx0aWFuZmVpLnpoYW5nQGludGVsLmNvbT4NCj4gQ2M6IGNvcmJldEBsd24ubmV0
-OyBXdSwgSGFvIDxoYW8ud3VAaW50ZWwuY29tPjsgbGludXgtDQo+IGRvY0B2Z2VyLmtlcm5lbC5v
-cmc7IGxpbnV4LWZwZ2FAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIua2Vy
-bmVsLm9yZzsgbWRmQGtlcm5lbC5vcmc7IHRyaXhAcmVkaGF0LmNvbTsgWHUsIFlpbHVuDQo+IDx5
-aWx1bi54dUBpbnRlbC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjEgMS83XSBEb2N1bWVu
-dGF0aW9uOiBmcGdhOiBkZmw6IGFkZCBkZXNjcmlwdGlvbiBvZiBJT0ZTDQo+IA0KPiANCj4gDQo+
-IE9uIDIvMTQvMjIgMDQ6MTgsIEFraXJhIFlva29zYXdhIHdyb3RlOg0KPiA+IEhpLA0KPiA+DQo+
-ID4gSnVzdCBhIGNvdXBsZSBvZiBuaXRzIG9uIFJlU1QgZm9ybWF0dGluZy4NCj4gPg0KPiANCj4g
-VGhhbmtzIDopDQo+IA0KPiANCj4gPg0KPiA+IEknZCByZWNvbW1lbmQgcnVubmluZyAibWFrZSBo
-dG1kb2NzIiBhbmQgc2VlIGlmIHRoZSBwYWdlcyBhcmUgcmVuZGVyZWQNCj4gPiBhcyB5b3UgZXhw
-ZWN0Lg0KPiANCj4gSSB0aGluayB0aGF0J3MgIm1ha2UgaHRtbGRvY3MiLiBCdXQgcGxlYXNlIGRv
-IHVzZSBpdC4NCg0KVGhhbmtz77yMSSB3aWxsIGZpeCBpdCBvbiBuZXh0IHZlcnNpb24uDQoNCj4g
-DQo+IC0tDQo+IH5SYW5keQ0K
+Add support to the FPGA manager for programming Microsemi Polarfire
+FPGAs over slave SPI interface.
+
+Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+---
+Changelog:
+  v1 -> v2: fix printk formating
+
+ drivers/fpga/Kconfig         |   9 +
+ drivers/fpga/Makefile        |   1 +
+ drivers/fpga/microsemi-spi.c | 366 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 376 insertions(+)
+ create mode 100644 drivers/fpga/microsemi-spi.c
+
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 991b3f361ec9..25c2631a387c 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -243,4 +243,13 @@ config FPGA_MGR_VERSAL_FPGA
+ 	  configure the programmable logic(PL).
+ 
+ 	  To compile this as a module, choose M here.
++
++config FPGA_MGR_MICROSEMI_SPI
++	tristate "Microsemi FPGA manager"
++	depends on SPI
++	select CRC_CCITT
++	help
++	  FPGA manager driver support for Microsemi Polarfire FPGAs
++	  programming over slave SPI interface.
++
+ endif # FPGA
+diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+index 0bff783d1b61..8b3d818546a6 100644
+--- a/drivers/fpga/Makefile
++++ b/drivers/fpga/Makefile
+@@ -19,6 +19,7 @@ obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
+ obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+ obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+ obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
++obj-$(CONFIG_FPGA_MGR_MICROSEMI_SPI)	+= microsemi-spi.o
+ obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
+ obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
+ 
+diff --git a/drivers/fpga/microsemi-spi.c b/drivers/fpga/microsemi-spi.c
+new file mode 100644
+index 000000000000..facbc8f600be
+--- /dev/null
++++ b/drivers/fpga/microsemi-spi.c
+@@ -0,0 +1,366 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Microsemi Polarfire FPGA programming over slave SPI interface.
++ */
++
++#include <linux/module.h>
++#include <linux/spi/spi.h>
++#include <linux/of_device.h>
++#include <linux/fpga/fpga-mgr.h>
++#include <linux/delay.h>
++#include <linux/crc-ccitt.h>
++
++#define	SPI_ISC_ENABLE		0x0B
++#define	SPI_ISC_DISABLE		0x0C
++#define	SPI_READ_STATUS		0x00
++#define	SPI_READ_DATA		0x01
++#define	SPI_FRAME_INIT		0xAE
++#define	SPI_FRAME		0xEE
++#define	SPI_PRG_MODE		0x01
++#define	SPI_RELEASE		0x23
++
++#define	SPI_FRAME_SIZE	16
++
++#define	HEADER_SIZE_OFFSET		24
++#define	DATA_SIZE_OFFSET		55
++
++#define	LOOKUP_TABLE_RECORD_SIZE	9
++#define	LOOKUP_TABLE_BLOCK_ID_OFFSET	0
++#define	LOOKUP_TABLE_BLOCK_START_OFFSET	1
++
++#define	COMPONENTS_SIZE_ID	5
++#define	BITSTREAM_ID		8
++
++#define	BITS_PER_COMPONENT_SIZE	22
++
++#define	STATUS_POLL_TIMEOUT_MS	1000
++#define	STATUS_BUSY		BIT(0)
++#define	STATUS_READY		BIT(1)
++#define	STATUS_SPI_VIOLATION	BIT(2)
++#define	STATUS_SPI_ERROR	BIT(3)
++
++struct microsemi_fpga_priv {
++	struct spi_device *spi;
++	bool program_mode;
++};
++
++static enum fpga_mgr_states microsemi_fpga_ops_state(struct fpga_manager *mgr)
++{
++	struct microsemi_fpga_priv *priv = mgr->priv;
++	struct spi_device *spi = priv->spi;
++	bool program_mode = priv->program_mode;
++	ssize_t status;
++
++	status = spi_w8r8(spi, SPI_READ_STATUS);
++
++	if (!program_mode && !status)
++		return FPGA_MGR_STATE_OPERATING;
++
++	return FPGA_MGR_STATE_UNKNOWN;
++}
++
++static int poll_status_not_busy(struct spi_device *spi, u8 mask)
++{
++	ssize_t status, timeout = STATUS_POLL_TIMEOUT_MS;
++
++	while (timeout--) {
++		status = spi_w8r8(spi, SPI_READ_STATUS);
++		if (status < 0)
++			return status;
++
++		if (mask) {
++			if (!(status & STATUS_BUSY) && (status & mask))
++				return status;
++		} else {
++			if (!(status & STATUS_BUSY))
++				return status;
++		}
++
++		mdelay(1);
++	}
++
++	return -EBUSY;
++}
++
++static int microsemi_spi_write(struct spi_device *spi, const void *buf,
++			       size_t buf_size)
++{
++	int status = poll_status_not_busy(spi, 0);
++
++	if (status < 0)
++		return status;
++
++	return spi_write(spi, buf, buf_size);
++}
++
++static int microsemi_spi_write_then_read(struct spi_device *spi,
++					 const void *txbuf, size_t txbuf_size,
++					 void *rxbuf, size_t rxbuf_size)
++{
++	const u8 read_command[] = { SPI_READ_DATA };
++	int ret;
++
++	ret = microsemi_spi_write(spi, txbuf, txbuf_size);
++	if (ret)
++		return ret;
++
++	ret = poll_status_not_busy(spi, STATUS_READY);
++	if (ret < 0)
++		return ret;
++
++	return spi_write_then_read(spi, read_command, sizeof(read_command),
++				   rxbuf, rxbuf_size);
++}
++
++static int microsemi_fpga_ops_write_init(struct fpga_manager *mgr,
++					 struct fpga_image_info *info,
++					 const char *buf, size_t count)
++{
++	const u8 isc_en_command[] = { SPI_ISC_ENABLE };
++	const u8 program_mode[] = { SPI_FRAME_INIT, SPI_PRG_MODE };
++	struct microsemi_fpga_priv *priv = mgr->priv;
++	struct spi_device *spi = priv->spi;
++	struct device *dev = &mgr->dev;
++	u32 isc_ret;
++	int ret;
++
++	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
++		dev_err(dev, "Partial reconfiguration is not supported\n");
++
++		return -EOPNOTSUPP;
++	}
++
++	ret = microsemi_spi_write_then_read(spi, isc_en_command,
++					    sizeof(isc_en_command),
++					    &isc_ret, sizeof(isc_ret));
++	if (ret || isc_ret) {
++		dev_err(dev, "Failed to enable ISC: %d\n", ret ? ret : isc_ret);
++
++		return -EFAULT;
++	}
++
++	ret = microsemi_spi_write(spi, program_mode, sizeof(program_mode));
++	if (ret) {
++		dev_err(dev, "Failed to enter program mode: %d\n", ret);
++
++		return ret;
++	}
++
++	priv->program_mode = true;
++
++	return 0;
++}
++
++static ssize_t lookup_block_start(int id, const char *buf, size_t buf_size)
++{
++	u8 header_size, blocks_num, block_id;
++	u32 block_start, i;
++
++	header_size = *(buf + HEADER_SIZE_OFFSET);
++
++	if (header_size > buf_size)
++		return -EFAULT;
++
++	blocks_num = *(buf + header_size - 1);
++
++	if (header_size + blocks_num * LOOKUP_TABLE_RECORD_SIZE > buf_size)
++		return -EFAULT;
++
++	for (i = 0; i < blocks_num; i++) {
++		block_id = *(buf + header_size + LOOKUP_TABLE_RECORD_SIZE * i +
++			     LOOKUP_TABLE_BLOCK_ID_OFFSET);
++
++		if (block_id == id) {
++			memcpy(&block_start,
++			       buf + header_size +
++			       LOOKUP_TABLE_RECORD_SIZE * i +
++			       LOOKUP_TABLE_BLOCK_START_OFFSET,
++			       sizeof(block_start));
++
++			return le32_to_cpu(block_start);
++		}
++	}
++
++	return -EFAULT;
++}
++
++static ssize_t parse_bitstream_size(const char *buf, size_t buf_size)
++{
++	ssize_t	bitstream_size = 0, components_size_start = 0,
++		component_size_byte_num, component_size_byte_off, i;
++	u16 components_num;
++	u32 component_size;
++
++	memcpy(&components_num, buf + DATA_SIZE_OFFSET, sizeof(components_num));
++	components_num = le16_to_cpu(components_num);
++
++	components_size_start = lookup_block_start(COMPONENTS_SIZE_ID, buf,
++						   buf_size);
++	if (components_size_start < 0)
++		return components_size_start;
++
++	if (components_size_start +
++	    DIV_ROUND_UP(components_num * BITS_PER_COMPONENT_SIZE,
++			 BITS_PER_BYTE) > buf_size)
++		return -EFAULT;
++
++	for (i = 0; i < components_num; i++) {
++		component_size_byte_num =
++			(i * BITS_PER_COMPONENT_SIZE) / BITS_PER_BYTE;
++		component_size_byte_off =
++			(i * BITS_PER_COMPONENT_SIZE) % BITS_PER_BYTE;
++
++		memcpy(&component_size,
++		       buf + components_size_start + component_size_byte_num,
++		       sizeof(component_size));
++		component_size = le32_to_cpu(component_size);
++		component_size >>= component_size_byte_off;
++		component_size &= GENMASK(BITS_PER_COMPONENT_SIZE - 1, 0);
++
++		bitstream_size += component_size;
++	}
++
++	return bitstream_size;
++}
++
++static int microsemi_fpga_ops_write(struct fpga_manager *mgr, const char *buf,
++				    size_t count)
++{
++	ssize_t bitstream_start = 0, bitstream_size;
++	struct microsemi_fpga_priv *priv = mgr->priv;
++	struct spi_device *spi = priv->spi;
++	struct device *dev = &mgr->dev;
++	u8 tmp_buf[SPI_FRAME_SIZE + 1];
++	int ret, i;
++
++	if (crc_ccitt(0, buf, count)) {
++		dev_err(dev, "CRC error\n");
++
++		return -EINVAL;
++	}
++
++	bitstream_start = lookup_block_start(BITSTREAM_ID, buf, count);
++	if (bitstream_start < 0) {
++		dev_err(dev, "Failed to find bitstream start %zd\n",
++			bitstream_start);
++
++		return bitstream_start;
++	}
++
++	bitstream_size = parse_bitstream_size(buf, count);
++	if (bitstream_size < 0) {
++		dev_err(dev, "Failed to parse bitstream size %zd\n",
++			bitstream_size);
++
++		return bitstream_size;
++	}
++
++	if (bitstream_start + bitstream_size * SPI_FRAME_SIZE > count) {
++		dev_err(dev,
++			"Bitstram outruns firmware. Bitstream start %zd, bitstream size %zd, firmware size %zu\n",
++			bitstream_start, bitstream_size * SPI_FRAME_SIZE, count);
++
++		return -EFAULT;
++	}
++
++	for (i = 0; i < bitstream_size; i++) {
++		tmp_buf[0] = SPI_FRAME;
++		memcpy(tmp_buf + 1, buf + bitstream_start + i * SPI_FRAME_SIZE,
++		       SPI_FRAME_SIZE);
++
++		ret = microsemi_spi_write(spi, tmp_buf, sizeof(tmp_buf));
++		if (ret) {
++			dev_err(dev,
++				"Failed to write bitstream frame number %d of %zd\n",
++				i, bitstream_size);
++
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int microsemi_fpga_ops_write_complete(struct fpga_manager *mgr,
++					     struct fpga_image_info *info)
++{
++	const u8 isc_dis_command[] = { SPI_ISC_DISABLE };
++	const u8 release_command[] = { SPI_RELEASE };
++	struct microsemi_fpga_priv *priv = mgr->priv;
++	struct spi_device *spi = priv->spi;
++	struct device *dev = &mgr->dev;
++	int ret;
++
++	ret = microsemi_spi_write(spi, isc_dis_command,
++				  sizeof(isc_dis_command));
++	if (ret) {
++		dev_err(dev, "Failed to disable ISC: %d\n", ret);
++
++		return ret;
++	}
++
++	mdelay(1);
++
++	ret = microsemi_spi_write(spi, release_command,
++				  sizeof(release_command));
++	if (ret) {
++		dev_err(dev, "Failed to exit program mode: %d\n", ret);
++
++		return ret;
++	}
++
++	priv->program_mode = false;
++
++	return 0;
++}
++
++static const struct fpga_manager_ops microsemi_fpga_ops = {
++	.state = microsemi_fpga_ops_state,
++	.write_init = microsemi_fpga_ops_write_init,
++	.write = microsemi_fpga_ops_write,
++	.write_complete = microsemi_fpga_ops_write_complete,
++};
++
++static int microsemi_fpga_probe(struct spi_device *spi)
++{
++	struct microsemi_fpga_priv *priv;
++	struct device *dev = &spi->dev;
++	struct fpga_manager *mgr;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->spi = spi;
++
++	mgr = devm_fpga_mgr_register(dev, "Microsemi FPGA Manager",
++				     &microsemi_fpga_ops, priv);
++
++	return PTR_ERR_OR_ZERO(mgr);
++}
++
++static const struct spi_device_id microsemi_fpga_spi_ids[] = {
++	{ .name = "polarfire-fpga-mgr", },
++	{},
++};
++MODULE_DEVICE_TABLE(spi, microsemi_fpga_spi_ids);
++
++static const struct of_device_id microsemi_fpga_of_ids[] = {
++	{ .compatible = "mscc,polarfire-fpga-mgr" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, microsemi_fpga_of_ids);
++
++static struct spi_driver microsemi_fpga_driver = {
++	.probe = microsemi_fpga_probe,
++	.id_table = microsemi_fpga_spi_ids,
++	.driver = {
++		.name = "microsemi_fpga_manager",
++		.of_match_table = of_match_ptr(microsemi_fpga_of_ids),
++	},
++};
++
++module_spi_driver(microsemi_fpga_driver);
++
++MODULE_DESCRIPTION("Microsemi FPGA Manager");
++MODULE_LICENSE("GPL");
+-- 
+2.34.1
+
+
