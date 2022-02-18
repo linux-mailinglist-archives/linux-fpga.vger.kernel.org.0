@@ -2,172 +2,558 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C074BBC2F
-	for <lists+linux-fpga@lfdr.de>; Fri, 18 Feb 2022 16:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E531A4BBD34
+	for <lists+linux-fpga@lfdr.de>; Fri, 18 Feb 2022 17:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236979AbiBRP1a (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 18 Feb 2022 10:27:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57240 "EHLO
+        id S237450AbiBRQOs (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 18 Feb 2022 11:14:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236791AbiBRP13 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 18 Feb 2022 10:27:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EB9C222DC5
-        for <linux-fpga@vger.kernel.org>; Fri, 18 Feb 2022 07:27:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645198032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rYb+BCPyLsby6zJoGkmOBz+36TaLQgOr0GISja/FGo4=;
-        b=Ofvu/gxsrhf2QhGAob2FbLI2R/jf29UyvKhSBAVxJ8S82h82UMlJ1HdaknK3BQLPr+uMIK
-        MqeTp9fM+Xddluh7wlQdkMQ4xzx2LUyr8xCNzhPFaN8uCq7XNl1FEudFHzgPYnK8yyocc2
-        QHtSexCRztYoAFkAdKnZqGSG6PORYyY=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-38-Vzk-1PTDOlmyKua4osDOlg-1; Fri, 18 Feb 2022 10:27:10 -0500
-X-MC-Unique: Vzk-1PTDOlmyKua4osDOlg-1
-Received: by mail-qv1-f71.google.com with SMTP id fq2-20020a056214258200b0042c39c09e5dso9138861qvb.18
-        for <linux-fpga@vger.kernel.org>; Fri, 18 Feb 2022 07:27:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=rYb+BCPyLsby6zJoGkmOBz+36TaLQgOr0GISja/FGo4=;
-        b=mFtXVuDW5OM+vpQQWbl3klTu0ExJ8p3xp0a6Amw62yHm6MsShbL0/DwtC2La4SvE/d
-         PewUXU14EpBxkTuHScO5p6Y6XMG2q+M9qukjr3YR78H97SZQ5LV+f+7QZB3SE3TWAAhN
-         ojJQs4Jl4izmuWyliDderaZFrvcUfc1md0PLSaEGz+TEyk/EK/6/FUMHHYm+tLrrFf8h
-         6GmzHdAakwUArhh2kZMRs10+wRNeXxBSh3Cwq/e6gOlxX9kDVyV29v6br8gbHnvLWyd7
-         KK0gOvCnMvxIvv5+s1kMbirfk3j0Bnyzw8oVZ0X2LF1EnqIGQf9QwfjBzFgd3B5Y33FW
-         Kt/w==
-X-Gm-Message-State: AOAM5317bFpAgMY/dnk9a1vTQiCvUV8q0y/if148PD3CF3iF8H7DOHS7
-        UvjNxQ1SGHXp6f/WizfqAeNnt8R1uLva/21lod68khDpip0yUeGBVaV1riRK6VyrIyfHiiQS97Q
-        Er7LurVqo398QwJfjIZUUcg==
-X-Received: by 2002:a05:6214:23ce:b0:42c:ead:30bf with SMTP id hr14-20020a05621423ce00b0042c0ead30bfmr6091953qvb.122.1645198030347;
-        Fri, 18 Feb 2022 07:27:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwso/6LGXeV4Zu4ZnP/5E/1c8n8lvSxGwqKvfcp8q2OR1q1XJmk90Bq+AluwKPgLZkbfahlAg==
-X-Received: by 2002:a05:6214:23ce:b0:42c:ead:30bf with SMTP id hr14-20020a05621423ce00b0042c0ead30bfmr6091932qvb.122.1645198030110;
-        Fri, 18 Feb 2022 07:27:10 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id t11sm16975190qkp.82.2022.02.18.07.27.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 07:27:09 -0800 (PST)
-Subject: Re: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
-To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
-        "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-References: <20220214112619.219761-1-tianfei.zhang@intel.com>
- <20220214112619.219761-8-tianfei.zhang@intel.com>
- <ed8f4b5f-5c92-f555-ed2d-c5b8f38d5372@redhat.com>
- <BN9PR11MB5483BC7EE52A47CEAEFC58A0E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <3c9fce03-ef29-d80f-6639-0c237c28cf58@redhat.com>
-Date:   Fri, 18 Feb 2022 07:27:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S231910AbiBRQOr (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 18 Feb 2022 11:14:47 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85E919D775;
+        Fri, 18 Feb 2022 08:14:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645200869; x=1676736869;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/5lR+P7Kv8815A4k8RgFtG3prJtHS7oEZ0AFM6VPfxk=;
+  b=U6rP8peJrLbPrrcIraNvI9anzCYqNJ+F9owBDiClKOTJ2CGD9SHD/okk
+   AMR3hrQzG3SzxFj025dWtLBnWBCtyYa2njBjJQKo5yLIZ57QFm7RKj+8p
+   7RLAOuy/3Ty+sRss6FbIo1fsy7lQf5rmCHh/WYUSDtbi+t91ZfGKuoD+a
+   4qzt2+UrVsE2M4+48O82/RBoS1nmwSqCySSZ/Rzz3co1gqQ28PyM4lu7k
+   KbG+un1lCz0rsWsjDd3Ui6rUkrrGGEzhUNwkWZq/yOKx1InoZ+V1IVUaP
+   ugXSUsUiREtgGvwS0NVoI1VaxG0HnPrRIhfotAXxSDQ9nFjfW6AoBBZkN
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="248752360"
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="248752360"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 08:14:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="572354133"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
+  by orsmga001.jf.intel.com with ESMTP; 18 Feb 2022 08:14:26 -0800
+Date:   Sat, 19 Feb 2022 00:05:55 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        conor.dooley@microchip.com, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH v4] fpga: microchip-spi: add Microchip FPGA manager
+Message-ID: <20220218160555.GA1333893@yilunxu-OptiPlex-7050>
+References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
+ <20220217191851.11730-1-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-In-Reply-To: <BN9PR11MB5483BC7EE52A47CEAEFC58A0E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217191851.11730-1-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Thu, Feb 17, 2022 at 10:18:51PM +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Microchip Polarfire
+> FPGAs over slave SPI interface.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+> Changelog:
+>   v1 -> v2: fix printk formating
+>   v2 -> v3:
+>    * replace "microsemi" with "microchip"
+>    * replace prefix "microsemi_fpga_" with "mpf_"
+>    * more sensible .compatible and .name strings
+>    * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+>   v3 -> v4: fix unused variable warning
+>     Put 'mpf_of_ids' definition under conditional compilation, so it
+>     would not hang unused if CONFIG_OF is not enabled.
+> 
+>  drivers/fpga/Kconfig         |   9 +
+>  drivers/fpga/Makefile        |   1 +
+>  drivers/fpga/microchip-spi.c | 361 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 371 insertions(+)
+>  create mode 100644 drivers/fpga/microchip-spi.c
+> 
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 26025dbab353..4240c641b100 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -248,4 +248,13 @@ config FPGA_MGR_VERSAL_FPGA
+>  	  configure the programmable logic(PL).
+>  
+>  	  To compile this as a module, choose M here.
+> +
+> +config FPGA_MGR_MICROCHIP_SPI
+> +	tristate "Microchip Polarfire SPI FPGA manager"
+> +	depends on SPI
+> +	select CRC_CCITT
+> +	help
+> +	  FPGA manager driver support for Microchip Polarfire FPGAs
+> +	  programming over slave SPI interface.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 4da5273948df..fcb389ca4873 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -19,6 +19,7 @@ obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
+>  obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
+> +obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
+> 
+> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+> new file mode 100644
+> index 000000000000..5db25734a27a
+> --- /dev/null
+> +++ b/drivers/fpga/microchip-spi.c
+> @@ -0,0 +1,361 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Microchip Polarfire FPGA programming over slave SPI interface.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/of_device.h>
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/delay.h>
+> +#include <linux/crc-ccitt.h>
 
-On 2/18/22 1:03 AM, Zhang, Tianfei wrote:
->
->> -----Original Message-----
->> From: Tom Rix <trix@redhat.com>
->> Sent: Wednesday, February 16, 2022 12:16 AM
->> To: Zhang, Tianfei <tianfei.zhang@intel.com>; Wu, Hao <hao.wu@intel.com>;
->> mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org;
->> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org
->> Cc: corbet@lwn.net; Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> Subject: Re: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
->>
->>
->> On 2/14/22 3:26 AM, Tianfei zhang wrote:
->>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>
->>> Add the PCI product id for an Open FPGA Stack PCI card.
->> Is there a URL to the card ?
-> This PCIe Device IDs have registered by Intel.
-A URL is useful to introduce the board, Is there one ?
->
->>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
->>> ---
->>>    drivers/fpga/dfl-pci.c | 4 ++++
->>>    1 file changed, 4 insertions(+)
->>>
->>> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c index
->>> 83b604d6dbe6..cb2fbf3eb918 100644
->>> --- a/drivers/fpga/dfl-pci.c
->>> +++ b/drivers/fpga/dfl-pci.c
->>> @@ -76,12 +76,14 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
->>>    #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
->>>    #define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
->>>    #define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
->>> +#define PCIE_DEVICE_ID_INTEL_OFS		0xbcce
->> INTEL_OFS is a generic name, pci id's map to specific cards
->>
->> Is there a more specific name for this card ?
-> I think using INTEL_OFS is better, because INTEL_OFS is the Generic development platform can support multiple cards which using OFS specification,
-> like Intel PAC N6000 card.
+Please list them in alphabetical order.
 
-I would prefer something like PCIE_DEVICE_ID_INTEL_PAC_N6000 because it 
-follows an existing pattern.  Make it easy on a developer, they will 
-look at their board or box, see X and try to find something similar in 
-the driver source.
+> +
+> +#define	SPI_ISC_ENABLE		0x0B
+> +#define	SPI_ISC_DISABLE		0x0C
+> +#define	SPI_READ_STATUS		0x00
+> +#define	SPI_READ_DATA		0x01
+> +#define	SPI_FRAME_INIT		0xAE
+> +#define	SPI_FRAME		0xEE
+> +#define	SPI_PRG_MODE		0x01
+> +#define	SPI_RELEASE		0x23
+> +
+> +#define	SPI_FRAME_SIZE		16
+> +
+> +#define	HEADER_SIZE_OFFSET	24
+> +#define	DATA_SIZE_OFFSET	55
+> +
+> +#define	LOOKUP_TABLE_RECORD_SIZE	9
+> +#define	LOOKUP_TABLE_BLOCK_ID_OFFSET	0
+> +#define	LOOKUP_TABLE_BLOCK_START_OFFSET	1
+> +
+> +#define	COMPONENTS_SIZE_ID	5
+> +#define	BITSTREAM_ID		8
+> +
+> +#define	BITS_PER_COMPONENT_SIZE	22
+> +
+> +#define	STATUS_POLL_TIMEOUT_MS	1000
+> +#define	STATUS_BUSY		BIT(0)
+> +#define	STATUS_READY		BIT(1)
 
-To use OSF_ * the name needs a suffix to differentiate it from future 
-cards that will also use ofs.
+Maybe add some prefix for these vendor specific definitions, like
+MFP_SPI_ISC_ENABLE.
 
-If this really is a generic id please explain in the doc patch how every 
-future board with use this single id and how a driver could work around 
-a hw problem in a specific board with a pci id covering multiple boards.
+> +
+> +struct mpf_priv {
+> +	struct spi_device *spi;
+> +	bool program_mode;
+> +};
+> +
+> +static enum fpga_mgr_states mpf_ops_state(struct fpga_manager *mgr)
+> +{
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct spi_device *spi = priv->spi;
+> +	bool program_mode = priv->program_mode;
+> +	ssize_t status;
+> +
+> +	status = spi_w8r8(spi, SPI_READ_STATUS);
+> +
+> +	if (!program_mode && !status)
+> +		return FPGA_MGR_STATE_OPERATING;
+> +
+> +	return FPGA_MGR_STATE_UNKNOWN;
+> +}
+> +
+> +static int poll_status_not_busy(struct spi_device *spi, u8 mask)
+> +{
+> +	ssize_t status, timeout = STATUS_POLL_TIMEOUT_MS;
+> +
+> +	while (timeout--) {
+> +		status = spi_w8r8(spi, SPI_READ_STATUS);
+> +		if (status < 0)
+> +			return status;
+> +
+> +		if (mask) {
+> +			if (!(status & STATUS_BUSY) && (status & mask))
+> +				return status;
+> +		} else {
+> +			if (!(status & STATUS_BUSY))
+> +				return status;
+> +		}
 
-Tom
+!(status & STATUS_BUSY) is always checked regardless of mask, so may
+move the check out of the if...else statement.
 
->
->> Tom
->>
->>>    /* VF Device */
->>>    #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
->>>    #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
->>>    #define PCIE_DEVICE_ID_VF_DSC_1_X		0x09C5
->>>    #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF	0x0B2C
->>> +#define PCIE_DEVICE_ID_INTEL_OFS_VF		0xbccf
->>>
->>>    static struct pci_device_id cci_pcie_id_tbl[] = {
->>>    	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_PF_INT_5_X),},
->> @@
->>> -95,6 +97,8 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
->>>    	{PCI_DEVICE(PCI_VENDOR_ID_INTEL,
->> PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
->>>    	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK,
->> PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
->>>    	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK,
->>> PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
->>> +	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_OFS),},
->>> +	{PCI_DEVICE(PCI_VENDOR_ID_INTEL,
->> PCIE_DEVICE_ID_INTEL_OFS_VF),},
->>>    	{0,}
->>>    };
->>>    MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
+> +
+> +		mdelay(1);
 
+busy wait for 1ms is discouraged, maybe usleep_range(). See
+Documentation/timers/timers-howto.rst
+
+> +	}
+
+The actual timeout may be much longer than what is defined. To be more
+accurate, you may use:
+
+	time_after(jiffies, timeout_jiffies)
+
+> +
+> +	return -EBUSY;
+> +}
+> +
+> +static int mpf_spi_write(struct spi_device *spi, const void *buf, size_t buf_size)
+> +{
+> +	int status = poll_status_not_busy(spi, 0);
+> +
+> +	if (status < 0)
+> +		return status;
+> +
+> +	return spi_write(spi, buf, buf_size);
+> +}
+> +
+> +static int mpf_spi_write_then_read(struct spi_device *spi,
+> +				   const void *txbuf, size_t txbuf_size,
+> +				   void *rxbuf, size_t rxbuf_size)
+> +{
+> +	const u8 read_command[] = { SPI_READ_DATA };
+> +	int ret;
+> +
+> +	ret = mpf_spi_write(spi, txbuf, txbuf_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = poll_status_not_busy(spi, STATUS_READY);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return spi_write_then_read(spi, read_command, sizeof(read_command),
+> +				   rxbuf, rxbuf_size);
+> +}
+> +
+> +static int mpf_ops_write_init(struct fpga_manager *mgr,
+> +			      struct fpga_image_info *info, const char *buf,
+> +			      size_t count)
+> +{
+> +	const u8 isc_en_command[] = { SPI_ISC_ENABLE };
+> +	const u8 program_mode[] = { SPI_FRAME_INIT, SPI_PRG_MODE };
+
+Better we follow the reverse xmas tree declaration, so reverse the 2
+lines please.
+
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct spi_device *spi = priv->spi;
+> +	struct device *dev = &mgr->dev;
+> +	u32 isc_ret;
+> +	int ret;
+> +
+> +	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
+> +		dev_err(dev, "Partial reconfiguration is not supported\n");
+> +
+
+remove the blank line please
+
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	ret = mpf_spi_write_then_read(spi, isc_en_command, sizeof(isc_en_command),
+> +				      &isc_ret, sizeof(isc_ret));
+> +	if (ret || isc_ret) {
+> +		dev_err(dev, "Failed to enable ISC: %d\n", ret ? ret : isc_ret);
+
+							   ret ? : isc_ret
+
+> +
+
+remove the blank line please
+
+> +		return -EFAULT;
+> +	}
+> +
+> +	ret = mpf_spi_write(spi, program_mode, sizeof(program_mode));
+> +	if (ret) {
+> +		dev_err(dev, "Failed to enter program mode: %d\n", ret);
+> +
+
+the same
+
+> +		return ret;
+> +	}
+> +
+> +	priv->program_mode = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t lookup_block_start(int id, const char *buf, size_t buf_size)
+> +{
+> +	u8 header_size, blocks_num, block_id;
+> +	u32 block_start, i;
+> +
+> +	header_size = *(buf + HEADER_SIZE_OFFSET);
+> +
+> +	if (header_size > buf_size)
+> +		return -EFAULT;
+> +
+> +	blocks_num = *(buf + header_size - 1);
+> +
+> +	if (header_size + blocks_num * LOOKUP_TABLE_RECORD_SIZE > buf_size)
+> +		return -EFAULT;
+> +
+> +	for (i = 0; i < blocks_num; i++) {
+> +		block_id = *(buf + header_size + LOOKUP_TABLE_RECORD_SIZE * i +
+> +			     LOOKUP_TABLE_BLOCK_ID_OFFSET);
+> +
+> +		if (block_id == id) {
+> +			memcpy(&block_start,
+> +			       buf + header_size +
+> +			       LOOKUP_TABLE_RECORD_SIZE * i +
+> +			       LOOKUP_TABLE_BLOCK_START_OFFSET,
+> +			       sizeof(block_start));
+
+why a memcpy here, could we just read from the offset?
+
+> +
+> +			return le32_to_cpu(block_start);
+> +		}
+> +	}
+> +
+> +	return -EFAULT;
+> +}
+> +
+> +static ssize_t parse_bitstream_size(const char *buf, size_t buf_size)
+> +{
+> +	ssize_t	bitstream_size = 0, components_size_start = 0,
+> +		component_size_byte_num, component_size_byte_off, i;
+> +	u16 components_num;
+> +	u32 component_size;
+> +
+> +	memcpy(&components_num, buf + DATA_SIZE_OFFSET, sizeof(components_num));
+
+the same, why a memcpy?
+
+> +	components_num = le16_to_cpu(components_num);
+> +
+> +	components_size_start = lookup_block_start(COMPONENTS_SIZE_ID, buf,
+> +						   buf_size);
+> +	if (components_size_start < 0)
+> +		return components_size_start;
+> +
+> +	if (components_size_start +
+> +	    DIV_ROUND_UP(components_num * BITS_PER_COMPONENT_SIZE,
+> +			 BITS_PER_BYTE) > buf_size)
+> +		return -EFAULT;
+> +
+> +	for (i = 0; i < components_num; i++) {
+> +		component_size_byte_num =
+> +			(i * BITS_PER_COMPONENT_SIZE) / BITS_PER_BYTE;
+> +		component_size_byte_off =
+> +			(i * BITS_PER_COMPONENT_SIZE) % BITS_PER_BYTE;
+> +
+> +		memcpy(&component_size,
+> +		       buf + components_size_start + component_size_byte_num,
+> +		       sizeof(component_size));
+> +		component_size = le32_to_cpu(component_size);
+> +		component_size >>= component_size_byte_off;
+> +		component_size &= GENMASK(BITS_PER_COMPONENT_SIZE - 1, 0);
+> +
+> +		bitstream_size += component_size;
+> +	}
+> +
+> +	return bitstream_size;
+> +}
+> +
+> +static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
+> +{
+> +	ssize_t bitstream_start = 0, bitstream_size;
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct spi_device *spi = priv->spi;
+> +	struct device *dev = &mgr->dev;
+> +	u8 tmp_buf[SPI_FRAME_SIZE + 1];
+> +	int ret, i;
+> +
+> +	if (crc_ccitt(0, buf, count)) {
+> +		dev_err(dev, "CRC error\n");
+> +
+> +		return -EINVAL;
+> +	}
+> +
+> +	bitstream_start = lookup_block_start(BITSTREAM_ID, buf, count);
+> +	if (bitstream_start < 0) {
+> +		dev_err(dev, "Failed to find bitstream start %zd\n",
+> +			bitstream_start);
+> +
+> +		return bitstream_start;
+> +	}
+> +
+> +	bitstream_size = parse_bitstream_size(buf, count);
+> +	if (bitstream_size < 0) {
+> +		dev_err(dev, "Failed to parse bitstream size %zd\n",
+> +			bitstream_size);
+> +
+> +		return bitstream_size;
+> +	}
+> +
+> +	if (bitstream_start + bitstream_size * SPI_FRAME_SIZE > count) {
+> +		dev_err(dev,
+> +			"Bitstram outruns firmware. Bitstream start %zd, bitstream size %zd, firmware size %zu\n",
+
+			 Bitstream
+
+> +			bitstream_start, bitstream_size * SPI_FRAME_SIZE, count);
+> +
+> +		return -EFAULT;
+> +	}
+> +
+
+If I understand right, this function assumes the users provide the
+entire image buffer. But it is possible the image buffer is from a
+scatter list and the callback would be called several times.
+
+Maybe the bitstream info at the head of the image could be parsed in
+write_init(), and this requires the driver fill the
+fpga_manager_ops.initial_header_size
+
+> +	for (i = 0; i < bitstream_size; i++) {
+> +		tmp_buf[0] = SPI_FRAME;
+> +		memcpy(tmp_buf + 1, buf + bitstream_start + i * SPI_FRAME_SIZE,
+> +		       SPI_FRAME_SIZE);
+> +
+> +		ret = mpf_spi_write(spi, tmp_buf, sizeof(tmp_buf));
+
+Is it possible we use spi_sync_transfer to avoid memcpy the whole
+bitstream?
+
+> +		if (ret) {
+> +			dev_err(dev,
+> +				"Failed to write bitstream frame number %d of %zd\n",
+> +				i, bitstream_size);
+> +
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mpf_ops_write_complete(struct fpga_manager *mgr,
+> +					     struct fpga_image_info *info)
+
+"CHECK: Alignment should match open parenthesis" from checkpatch.pl --strict
+
+> +{
+> +	const u8 isc_dis_command[] = { SPI_ISC_DISABLE };
+> +	const u8 release_command[] = { SPI_RELEASE };
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct spi_device *spi = priv->spi;
+> +	struct device *dev = &mgr->dev;
+> +	int ret;
+> +
+> +	ret = mpf_spi_write(spi, isc_dis_command, sizeof(isc_dis_command));
+> +	if (ret) {
+> +		dev_err(dev, "Failed to disable ISC: %d\n", ret);
+> +
+> +		return ret;
+> +	}
+> +
+> +	mdelay(1);
+
+Same concern
+
+> +
+> +	ret = mpf_spi_write(spi, release_command, sizeof(release_command));
+> +	if (ret) {
+> +		dev_err(dev, "Failed to exit program mode: %d\n", ret);
+> +
+> +		return ret;
+> +	}
+> +
+> +	priv->program_mode = false;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct fpga_manager_ops mpf_ops = {
+> +	.state = mpf_ops_state,
+> +	.write_init = mpf_ops_write_init,
+> +	.write = mpf_ops_write,
+> +	.write_complete = mpf_ops_write_complete,
+> +};
+> +
+> +static int mpf_probe(struct spi_device *spi)
+> +{
+> +	struct mpf_priv *priv;
+> +	struct device *dev = &spi->dev;
+> +	struct fpga_manager *mgr;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->spi = spi;
+> +
+> +	mgr = devm_fpga_mgr_register(dev, "Microchip Polarfire SPI FPGA Manager",
+> +				     &mpf_ops, priv);
+> +
+> +	return PTR_ERR_OR_ZERO(mgr);
+> +}
+> +
+> +static const struct spi_device_id mpf_spi_ids[] = {
+> +	{ .name = "mpf-spi-fpga-mgr", },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(spi, mpf_spi_ids);
+> +
+> +#if IS_ENABLED(CONFIG_OF)
+> +static const struct of_device_id mpf_of_ids[] = {
+> +	{ .compatible = "microchip,mpf-spi-fpga-mgr" },
+
+From checkpatch.pl
+
+"WARNING: DT compatible string "microchip,mpf-spi-fpga-mgr" appears un-documented -- check ./Documentation/devicetree/bindings/"
+
+Thanks,
+Yilun
+
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mpf_of_ids);
+> +#endif /* IS_ENABLED(CONFIG_OF) */
+> +
+> +static struct spi_driver mpf_driver = {
+> +	.probe = mpf_probe,
+> +	.id_table = mpf_spi_ids,
+> +	.driver = {
+> +		.name = "microchip_mpf_spi_fpga_mgr",
+> +		.of_match_table = of_match_ptr(mpf_of_ids),
+> +	},
+> +};
+> +
+> +module_spi_driver(mpf_driver);
+> +
+> +MODULE_DESCRIPTION("Microchip Polarfire SPI FPGA Manager");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.34.1
+> 
