@@ -2,479 +2,234 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677524BA9F3
-	for <lists+linux-fpga@lfdr.de>; Thu, 17 Feb 2022 20:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E1B4BB2BA
+	for <lists+linux-fpga@lfdr.de>; Fri, 18 Feb 2022 07:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244782AbiBQThb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 17 Feb 2022 14:37:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41652 "EHLO
+        id S231339AbiBRGx2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 18 Feb 2022 01:53:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243729AbiBQTha (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 17 Feb 2022 14:37:30 -0500
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAD241F96;
-        Thu, 17 Feb 2022 11:37:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=9gf3KEwFUGqr+Iaj7VcNhHguChcJkk3DcHeFxtY00Kw=;
-        b=fWGDPM8Rw4CwFaKkQAgAwre40z4PB1mxu8V9oirn2vE5wQhIgytp8gYp4ttBtiGYNuFgjbI2DCNpA
-         qdv2ssR6qC+Ij0cPonRdZOOgV5bgOs2Q0kYzEbGR67PNSyG5lXkXDZ46F1VIUrRaMAezzozRP69OEQ
-         zFgjpitGWpkUi2UyvP8W4mBcHEHoVaJwV81uFR3FL/MlUHwLgJd5p/oJ0vVmK213fjO0HuuCct6nK0
-         m0GrTdaOK02LaN6Fz3T+mgd7X3no2keiZ/vOfHpQWbtlDLAqEjiR6a/RGmnBcKKOH04yWNxkcpv2ss
-         vlb2SeSNTry9q2zmlwixoRUqzKUjykg==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1403, Stamp: 3], Multi: [Enabled, t: (0.000014,0.031971)], BW: [Enabled, t: (0.000037,0.000002)], RTDA: [Enabled, t: (0.069041), Hit: No, Details: v2.25.0; Id: 15.52k4gb.1fs4j005q.ev6g; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([178.70.66.234])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Thu, 17 Feb 2022 22:36:52 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, conor.dooley@microchip.com,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        system@metrotek.ru, Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Subject: [PATCH v4] fpga: microchip-spi: add Microchip FPGA manager
-Date:   Thu, 17 Feb 2022 22:18:51 +0300
-Message-Id: <20220217191851.11730-1-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
-References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
+        with ESMTP id S231703AbiBRGx0 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 18 Feb 2022 01:53:26 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC2564EC;
+        Thu, 17 Feb 2022 22:53:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645167190; x=1676703190;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=WDBDAQSReevxeW1z9+EKMzeCLaqRpJnU9+7N1UD+C3I=;
+  b=SVVRy25WVT4uTTVxFKrajB+wizSnGqAvVbIcX1rKmzbwdGVvn1VThFnm
+   cxvzRoJTIy+JseehCPfS/tPv8OQhCFGjOhvM7JmqJt2fs2mY7xZjG3k1k
+   FVFkHdNEKTY1Vtec4dsdiPsTe1P2wAiq4673Ff/yhNsZWbXwyGkOZiNFA
+   GPzbv77FuBwTh1Wva3najloWCdB9kdiXmkTMILsmLHD7LwXTJs1sOb9T7
+   sR7L7Hr2UD7iAFSFUqF9pH6GwggoNx1+4YmvWvZSbDa+4UUiH4qioqw4a
+   +uoYn23Ua7TRtvQHaR/5diLZ4D0GEqQxHSWVfBEWOezK5rShiTjKs69Cg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="248661821"
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="248661821"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 22:53:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="637647018"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by orsmga004.jf.intel.com with ESMTP; 17 Feb 2022 22:53:09 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 17 Feb 2022 22:53:09 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Thu, 17 Feb 2022 22:53:09 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.49) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Thu, 17 Feb 2022 22:53:09 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kk4TV0JCBGrmd6RQjZJ99ccFIDehhw373HgsoPr44KEry8a3jvKoLLr42vNDSm1Yn9PrYkSCxrSqmH739SKeXHg3sQIzeWOPRCk/4RT31Njz9RRMK0VsGJ694+d0PMosErumTNiKEp79qDsdrqBgCGOdiyEih4mYoE6+laftSniqIBwHcu4u2OYUrUl9fXbMbqXYoAu+FSbidjt4CpW3oBSJT+UmSaGm3JmMtGFC83/bMSpkqhJgnWHWhOPRwZNq73uq52qSBtz8o3tHBmYYvDp/G6/6GiCyLSWNoOWR+GPw8dwXdzi7a7zUKzmV5oEOUlHmfY7wACdunu2GMDK0Xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WDBDAQSReevxeW1z9+EKMzeCLaqRpJnU9+7N1UD+C3I=;
+ b=D+iCu514PaDGPHn8AJKAulTnD3sUfEyF5y5e7daW1/zawitPBhH+n8azOzkRvVTvIvd6EY4zlGTqjAULCMtv44CligzzpvrpUiLtZTX372AeY1Y0Go2rDr5K5RfK4By2pSLq36/R+Dx094VzMD8e85cyhitTnUCQM5YewcteG3atrmJKyzpH1mWmM2auR0A2zPBJRQferEvbymNeZoLZNBMEMbbEdbvsld0sCYo3pENNASFXSqOkCsX0MGVjMTtN9Mmc7Hfs7eBX25JjccV1EO5z3yJjACqNWmE/mbAGD241MdF9/HYRtjB6pBixM6GAOsirkN+jQYHD71fujV8nDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
+ by BN8PR11MB3604.namprd11.prod.outlook.com (2603:10b6:408:83::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Fri, 18 Feb
+ 2022 06:53:06 +0000
+Received: from BN9PR11MB5483.namprd11.prod.outlook.com
+ ([fe80::8c4b:e24c:c69f:7809]) by BN9PR11MB5483.namprd11.prod.outlook.com
+ ([fe80::8c4b:e24c:c69f:7809%5]) with mapi id 15.20.4995.017; Fri, 18 Feb 2022
+ 06:53:06 +0000
+From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
+To:     Tom Rix <trix@redhat.com>, "Wu, Hao" <hao.wu@intel.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>
+Subject: RE: [PATCH v1 2/7] fpga: dfl: check feature type before parse irq
+ info
+Thread-Topic: [PATCH v1 2/7] fpga: dfl: check feature type before parse irq
+ info
+Thread-Index: AQHYIZYutGpfsM893k+7OxgKTgvvjqyUsy6AgAQun8A=
+Date:   Fri, 18 Feb 2022 06:53:05 +0000
+Message-ID: <BN9PR11MB54839B6D444DCEB7FD789F33E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
+References: <20220214112619.219761-1-tianfei.zhang@intel.com>
+ <20220214112619.219761-3-tianfei.zhang@intel.com>
+ <0de9c8fb-0f04-684f-630c-1d13b0b55ba1@redhat.com>
+In-Reply-To: <0de9c8fb-0f04-684f-630c-1d13b0b55ba1@redhat.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.6.200.16
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b99a5dd0-cffd-414a-8202-08d9f2ab50ee
+x-ms-traffictypediagnostic: BN8PR11MB3604:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <BN8PR11MB36041672DEABB549EB6D5454E3379@BN8PR11MB3604.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2958;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iSJjjoJq5FmVnh8qC3ZDB9i5viHa/gstmcXkqjPslTI7LvJT9FuFswy8rx89v0/wZX3SHK80aFVrmOWk5rCumkWcQpxefJEbc5wgaNLZ2z2w/6huN+tGhm98NTNTYy96wL3MHzIJFBGwvmZb0+1yGHiLKbYI+E8DrNv471ZleV8fVtmNyCZgtXD/FgIbxnXXbk2wdggIWcdul0aYx/o/SUrnFuEdQf9TSeBNrFRE+cwl4xq3+dbl8jO2Cj1/ib6RRukuKqZ6VBjVat4SPbdBtQ6mOSmSqp47YpEgjNGy15f/NjRPHtvAUa7Kb3JULrzS3ctxN9OZFILGXBN5Q22pIF0v5BGU06waEE+ZNHSFfP9lvwjDwSiwqm6Nksalc8Lya32QLHJlsyhuSRlBXYOXdrVrccWv9WmmCrem++Hh0vHsVSq1OzE/fA4DpZlUOY0ozbLbvqmwTl3yzhINwzFb9LkpesgWN+rIG8cZ67xUXIS+pQn1rX79MsGa/qwV9PMHb21dmhE43gUD+Ar4N8BnpOTOH1E3NRj2qFpigzQjoXkuMFSVZ1ImccJlx692p6UTjEtsdLdEy2ikzKzDeCFxsb2Uv0RfIHCz1fBtePxnF5+NVwwCjTADXGg/jnXNEOKA4ukDtDvF0PzAXfksq5l4948kzwdQjs1mSaQc6YkvG/WJPMHB6ay2mwHCrU7+8WSHpP0sG/O0sh9mBDGXSo5h9JPBoGkTojLsAWi0/GuMsj9VvNJo68aX7ZBFga1sqUf36GYj74bRwauz21rmYHlliStl5H38hafhAoGkCAIfw+8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(76116006)(66946007)(8676002)(66556008)(64756008)(66476007)(66446008)(966005)(38070700005)(4326008)(52536014)(186003)(26005)(508600001)(5660300002)(6506007)(7696005)(2906002)(9686003)(33656002)(8936002)(122000001)(110136005)(82960400001)(38100700002)(316002)(53546011)(86362001)(71200400001)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b3pVcE5IMVhJUW5hRkdzenBaaGh0d1c1cDd2UnFUNXgxYzRpNGN3NXBXL2pl?=
+ =?utf-8?B?MU9WaXpnbk5FQ2YrTFFqOVdBL09YZ2NIMUI4dmR2Q1ZOWjliMDBoZE9aUzhG?=
+ =?utf-8?B?MWlreUNwSnE0cTlwS0ZsWHNBa1RsaVFFMVpqRHFnRDF4U3pRbE0yTGsvcUNj?=
+ =?utf-8?B?SGRKMEhJTDduL1ZaZmdQTmt5WjR6Nlc2dG9SQ2JjWDlkWTlWN1RxNkQxWkor?=
+ =?utf-8?B?RnRXL1U2eHN1OGFpY0M4WjJmaFp2MEppRFRFTlJJaUZPaWxKOVpsOTkrYUt2?=
+ =?utf-8?B?UThrZkdpNSs2M0NLVE5aaXJIaFE3cFZNUEFtVVpYR3BNWXpOYTNhcXNIeTlr?=
+ =?utf-8?B?c2JGOWpITkJUbzNjYmJxNHBMU0N4N0VMQ1JyT1E0c0JjWGE1NnE1VlV6cHpT?=
+ =?utf-8?B?eFFKNHVKSFNVYVhkOFNvT1Y1Z05NZERpTFFmRnVOQWNzSGVzQzYrcjZxbGtX?=
+ =?utf-8?B?d1llWXFCWWdNNVI5aVR6d2lSZThyd3NHYkgvaHJwOVcyTmNoMTdQTU4rZkpt?=
+ =?utf-8?B?QjV6bmZoNTlPT2NZc2xpSDBScGxTUjBhWkhzcE5TSDRNUmg3ZFZHYUQ1WS9q?=
+ =?utf-8?B?YmZ1am1VYVRPWFc3bDdMWEQ3QnJTOXY3MlBWeWc0dCtVMUd1YkJuUFd1cTlD?=
+ =?utf-8?B?UGVvNzFySUdTQ0RpcURBRGUyUVhLcFhIb3ZZVlkyNU5GN0o1aXpWa3llM0k2?=
+ =?utf-8?B?d0dUdVhVSGdwajZvQzZtVXlJeXhPdFBIak0zSjFWdG8zVXBSMzdWUHFBQzJO?=
+ =?utf-8?B?TXBXL0JPZGM3dndLWU5IdlNUOWRXUS9iTTVDaUJJMjIzV04zclFQQmE0UWdW?=
+ =?utf-8?B?WWhCNWhpU1BJSWdtd3diekZ4enFuMGtKZHRsT29jT0JjTWpwWm9VbFlBaFFS?=
+ =?utf-8?B?bHNueDhDQ1RMSk4rZHZuRENrTEF2emRvSlA1Tk1DR3ZQYVVNZzltTlRHY3Fx?=
+ =?utf-8?B?UllSNzRoZVcwdmh2WUpzWUJISmhQSnpHcVhrQ21SWnQ4QXRiQ0NnZVBtMFJm?=
+ =?utf-8?B?Q3BmZlpWTVNiRjRwb1VTSnYxOHR3anlXRjg4Z3p1dERBSk1QVllzaUdrUFpT?=
+ =?utf-8?B?aWlzS29ka2ZUajQwa1J2M1VBRytRMWE4eVNiRFlkR2htb01PTWh4Vld3NzQy?=
+ =?utf-8?B?aU1mRnBsdGVyTVhkcGZjVk41WGYydHlIMHIrUzAvL2NJOE1kUSs4c2VPRmFV?=
+ =?utf-8?B?TXFDamJjdTJxUjFidXBIckw0M3haMXFvVC9ET3NuZ0poVWsrQXgxbjNLZm94?=
+ =?utf-8?B?QU5iVC9QaEpYSEFMVk5LaFBqYkpCR2xkejA4MWpkcHcrU0ZBTEJ6a005S3Jh?=
+ =?utf-8?B?YjFMWEp4citnVUUxL2c5OCtBb25tQlovQVg1b2EyTy8yZWN1eFYwTENrN24w?=
+ =?utf-8?B?ZTZMcWZJeXZJU0h5ZVJtOWNCOE1zWW5DN2VDSEZyQlYwUzU3L3ptcWFXMmMy?=
+ =?utf-8?B?Q0FTTE4xcTNFYkI0azlqTmp5ZU40SDExMWNLMFFxbytGbThyZlBwYUR5VFdF?=
+ =?utf-8?B?b1FkWmV5a1dudWI5R3pabzVaUk10cWtSYkQxSnlEdmE2c3Q0d1RkT0FEeDZp?=
+ =?utf-8?B?VXVUbC9Fd29hczlHNGQ4ZHo0eUNkQWZ3UFRzT0txT2hkc2ZVbFVQaTJmWlJt?=
+ =?utf-8?B?MmljRFBPTStrSW5Wb21qZCtQWkd3Q2xEWGU4VnBWRWhXN0tVM25pOEhadzVk?=
+ =?utf-8?B?QjdUQ0ZhK1lPb1MxdzhDNEQxT1RYMDBtOTczbWEzVjRGOWtCSmpIbnFEQkg1?=
+ =?utf-8?B?ekczOXZRQ1VwS2lGUDNLdVNXQTNRTFhaYVN0VDFhZlNINVQyY0lHUmdIbEpM?=
+ =?utf-8?B?RXBlOVZQYndFa2NxMWtCZXlSSFlLZlZRZm55bENnZVhlZGRMOHkrL1RHQndN?=
+ =?utf-8?B?VWJ2NElqaWdDcDR5TDlkcnJCWWtLSDgyNTN0cmlzMWdRTnNaZmd2Z0x2YjJX?=
+ =?utf-8?B?dDNHMjh6VHdLam1uYS9NRGRNL2xYTEF6SXlmdjkvRmhwMEhieTgyUE9TWFVY?=
+ =?utf-8?B?bjZKZU9rTzJpTzdOakRtMjJYN3MreHh4bTI3V2pUV2dDTmdFbzM3RnlBZm9w?=
+ =?utf-8?B?cStONzdWZTdzRVpaOE96cUtNUng1WThIZjF0MmowVno4TWVnRW8ySDAvUXpn?=
+ =?utf-8?B?T2hJNUIwMWNZWC9mNVVTUStJREVsTnRPT3ZPS1M0UFZ3Y05OSHloY0t1Nnhy?=
+ =?utf-8?Q?nNFYvYUDc+C9TnRjCrKX3/Y=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b99a5dd0-cffd-414a-8202-08d9f2ab50ee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2022 06:53:05.9367
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XGChDMzvjOrDVw+uZM8UH/lqB/PxbBoc3eBp2LdeYlxigeDWZcRDBr23+obzAMR7UfhniJoLFuSK+8zsS+8iRw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR11MB3604
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add support to the FPGA manager for programming Microchip Polarfire
-FPGAs over slave SPI interface.
-
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
----
-Changelog:
-  v1 -> v2: fix printk formating
-  v2 -> v3:
-   * replace "microsemi" with "microchip"
-   * replace prefix "microsemi_fpga_" with "mpf_"
-   * more sensible .compatible and .name strings
-   * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
-  v3 -> v4: fix unused variable warning
-    Put 'mpf_of_ids' definition under conditional compilation, so it
-    would not hang unused if CONFIG_OF is not enabled.
-
- drivers/fpga/Kconfig         |   9 +
- drivers/fpga/Makefile        |   1 +
- drivers/fpga/microchip-spi.c | 361 +++++++++++++++++++++++++++++++++++
- 3 files changed, 371 insertions(+)
- create mode 100644 drivers/fpga/microchip-spi.c
-
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index 26025dbab353..4240c641b100 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -248,4 +248,13 @@ config FPGA_MGR_VERSAL_FPGA
- 	  configure the programmable logic(PL).
- 
- 	  To compile this as a module, choose M here.
-+
-+config FPGA_MGR_MICROCHIP_SPI
-+	tristate "Microchip Polarfire SPI FPGA manager"
-+	depends on SPI
-+	select CRC_CCITT
-+	help
-+	  FPGA manager driver support for Microchip Polarfire FPGAs
-+	  programming over slave SPI interface.
-+
- endif # FPGA
-diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-index 4da5273948df..fcb389ca4873 100644
---- a/drivers/fpga/Makefile
-+++ b/drivers/fpga/Makefile
-@@ -19,6 +19,7 @@ obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
- obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
- obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
- obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
-+obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
- obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
- obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
-
-diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
-new file mode 100644
-index 000000000000..5db25734a27a
---- /dev/null
-+++ b/drivers/fpga/microchip-spi.c
-@@ -0,0 +1,361 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Microchip Polarfire FPGA programming over slave SPI interface.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/spi/spi.h>
-+#include <linux/of_device.h>
-+#include <linux/fpga/fpga-mgr.h>
-+#include <linux/delay.h>
-+#include <linux/crc-ccitt.h>
-+
-+#define	SPI_ISC_ENABLE		0x0B
-+#define	SPI_ISC_DISABLE		0x0C
-+#define	SPI_READ_STATUS		0x00
-+#define	SPI_READ_DATA		0x01
-+#define	SPI_FRAME_INIT		0xAE
-+#define	SPI_FRAME		0xEE
-+#define	SPI_PRG_MODE		0x01
-+#define	SPI_RELEASE		0x23
-+
-+#define	SPI_FRAME_SIZE		16
-+
-+#define	HEADER_SIZE_OFFSET	24
-+#define	DATA_SIZE_OFFSET	55
-+
-+#define	LOOKUP_TABLE_RECORD_SIZE	9
-+#define	LOOKUP_TABLE_BLOCK_ID_OFFSET	0
-+#define	LOOKUP_TABLE_BLOCK_START_OFFSET	1
-+
-+#define	COMPONENTS_SIZE_ID	5
-+#define	BITSTREAM_ID		8
-+
-+#define	BITS_PER_COMPONENT_SIZE	22
-+
-+#define	STATUS_POLL_TIMEOUT_MS	1000
-+#define	STATUS_BUSY		BIT(0)
-+#define	STATUS_READY		BIT(1)
-+
-+struct mpf_priv {
-+	struct spi_device *spi;
-+	bool program_mode;
-+};
-+
-+static enum fpga_mgr_states mpf_ops_state(struct fpga_manager *mgr)
-+{
-+	struct mpf_priv *priv = mgr->priv;
-+	struct spi_device *spi = priv->spi;
-+	bool program_mode = priv->program_mode;
-+	ssize_t status;
-+
-+	status = spi_w8r8(spi, SPI_READ_STATUS);
-+
-+	if (!program_mode && !status)
-+		return FPGA_MGR_STATE_OPERATING;
-+
-+	return FPGA_MGR_STATE_UNKNOWN;
-+}
-+
-+static int poll_status_not_busy(struct spi_device *spi, u8 mask)
-+{
-+	ssize_t status, timeout = STATUS_POLL_TIMEOUT_MS;
-+
-+	while (timeout--) {
-+		status = spi_w8r8(spi, SPI_READ_STATUS);
-+		if (status < 0)
-+			return status;
-+
-+		if (mask) {
-+			if (!(status & STATUS_BUSY) && (status & mask))
-+				return status;
-+		} else {
-+			if (!(status & STATUS_BUSY))
-+				return status;
-+		}
-+
-+		mdelay(1);
-+	}
-+
-+	return -EBUSY;
-+}
-+
-+static int mpf_spi_write(struct spi_device *spi, const void *buf, size_t buf_size)
-+{
-+	int status = poll_status_not_busy(spi, 0);
-+
-+	if (status < 0)
-+		return status;
-+
-+	return spi_write(spi, buf, buf_size);
-+}
-+
-+static int mpf_spi_write_then_read(struct spi_device *spi,
-+				   const void *txbuf, size_t txbuf_size,
-+				   void *rxbuf, size_t rxbuf_size)
-+{
-+	const u8 read_command[] = { SPI_READ_DATA };
-+	int ret;
-+
-+	ret = mpf_spi_write(spi, txbuf, txbuf_size);
-+	if (ret)
-+		return ret;
-+
-+	ret = poll_status_not_busy(spi, STATUS_READY);
-+	if (ret < 0)
-+		return ret;
-+
-+	return spi_write_then_read(spi, read_command, sizeof(read_command),
-+				   rxbuf, rxbuf_size);
-+}
-+
-+static int mpf_ops_write_init(struct fpga_manager *mgr,
-+			      struct fpga_image_info *info, const char *buf,
-+			      size_t count)
-+{
-+	const u8 isc_en_command[] = { SPI_ISC_ENABLE };
-+	const u8 program_mode[] = { SPI_FRAME_INIT, SPI_PRG_MODE };
-+	struct mpf_priv *priv = mgr->priv;
-+	struct spi_device *spi = priv->spi;
-+	struct device *dev = &mgr->dev;
-+	u32 isc_ret;
-+	int ret;
-+
-+	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
-+		dev_err(dev, "Partial reconfiguration is not supported\n");
-+
-+		return -EOPNOTSUPP;
-+	}
-+
-+	ret = mpf_spi_write_then_read(spi, isc_en_command, sizeof(isc_en_command),
-+				      &isc_ret, sizeof(isc_ret));
-+	if (ret || isc_ret) {
-+		dev_err(dev, "Failed to enable ISC: %d\n", ret ? ret : isc_ret);
-+
-+		return -EFAULT;
-+	}
-+
-+	ret = mpf_spi_write(spi, program_mode, sizeof(program_mode));
-+	if (ret) {
-+		dev_err(dev, "Failed to enter program mode: %d\n", ret);
-+
-+		return ret;
-+	}
-+
-+	priv->program_mode = true;
-+
-+	return 0;
-+}
-+
-+static ssize_t lookup_block_start(int id, const char *buf, size_t buf_size)
-+{
-+	u8 header_size, blocks_num, block_id;
-+	u32 block_start, i;
-+
-+	header_size = *(buf + HEADER_SIZE_OFFSET);
-+
-+	if (header_size > buf_size)
-+		return -EFAULT;
-+
-+	blocks_num = *(buf + header_size - 1);
-+
-+	if (header_size + blocks_num * LOOKUP_TABLE_RECORD_SIZE > buf_size)
-+		return -EFAULT;
-+
-+	for (i = 0; i < blocks_num; i++) {
-+		block_id = *(buf + header_size + LOOKUP_TABLE_RECORD_SIZE * i +
-+			     LOOKUP_TABLE_BLOCK_ID_OFFSET);
-+
-+		if (block_id == id) {
-+			memcpy(&block_start,
-+			       buf + header_size +
-+			       LOOKUP_TABLE_RECORD_SIZE * i +
-+			       LOOKUP_TABLE_BLOCK_START_OFFSET,
-+			       sizeof(block_start));
-+
-+			return le32_to_cpu(block_start);
-+		}
-+	}
-+
-+	return -EFAULT;
-+}
-+
-+static ssize_t parse_bitstream_size(const char *buf, size_t buf_size)
-+{
-+	ssize_t	bitstream_size = 0, components_size_start = 0,
-+		component_size_byte_num, component_size_byte_off, i;
-+	u16 components_num;
-+	u32 component_size;
-+
-+	memcpy(&components_num, buf + DATA_SIZE_OFFSET, sizeof(components_num));
-+	components_num = le16_to_cpu(components_num);
-+
-+	components_size_start = lookup_block_start(COMPONENTS_SIZE_ID, buf,
-+						   buf_size);
-+	if (components_size_start < 0)
-+		return components_size_start;
-+
-+	if (components_size_start +
-+	    DIV_ROUND_UP(components_num * BITS_PER_COMPONENT_SIZE,
-+			 BITS_PER_BYTE) > buf_size)
-+		return -EFAULT;
-+
-+	for (i = 0; i < components_num; i++) {
-+		component_size_byte_num =
-+			(i * BITS_PER_COMPONENT_SIZE) / BITS_PER_BYTE;
-+		component_size_byte_off =
-+			(i * BITS_PER_COMPONENT_SIZE) % BITS_PER_BYTE;
-+
-+		memcpy(&component_size,
-+		       buf + components_size_start + component_size_byte_num,
-+		       sizeof(component_size));
-+		component_size = le32_to_cpu(component_size);
-+		component_size >>= component_size_byte_off;
-+		component_size &= GENMASK(BITS_PER_COMPONENT_SIZE - 1, 0);
-+
-+		bitstream_size += component_size;
-+	}
-+
-+	return bitstream_size;
-+}
-+
-+static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
-+{
-+	ssize_t bitstream_start = 0, bitstream_size;
-+	struct mpf_priv *priv = mgr->priv;
-+	struct spi_device *spi = priv->spi;
-+	struct device *dev = &mgr->dev;
-+	u8 tmp_buf[SPI_FRAME_SIZE + 1];
-+	int ret, i;
-+
-+	if (crc_ccitt(0, buf, count)) {
-+		dev_err(dev, "CRC error\n");
-+
-+		return -EINVAL;
-+	}
-+
-+	bitstream_start = lookup_block_start(BITSTREAM_ID, buf, count);
-+	if (bitstream_start < 0) {
-+		dev_err(dev, "Failed to find bitstream start %zd\n",
-+			bitstream_start);
-+
-+		return bitstream_start;
-+	}
-+
-+	bitstream_size = parse_bitstream_size(buf, count);
-+	if (bitstream_size < 0) {
-+		dev_err(dev, "Failed to parse bitstream size %zd\n",
-+			bitstream_size);
-+
-+		return bitstream_size;
-+	}
-+
-+	if (bitstream_start + bitstream_size * SPI_FRAME_SIZE > count) {
-+		dev_err(dev,
-+			"Bitstram outruns firmware. Bitstream start %zd, bitstream size %zd, firmware size %zu\n",
-+			bitstream_start, bitstream_size * SPI_FRAME_SIZE, count);
-+
-+		return -EFAULT;
-+	}
-+
-+	for (i = 0; i < bitstream_size; i++) {
-+		tmp_buf[0] = SPI_FRAME;
-+		memcpy(tmp_buf + 1, buf + bitstream_start + i * SPI_FRAME_SIZE,
-+		       SPI_FRAME_SIZE);
-+
-+		ret = mpf_spi_write(spi, tmp_buf, sizeof(tmp_buf));
-+		if (ret) {
-+			dev_err(dev,
-+				"Failed to write bitstream frame number %d of %zd\n",
-+				i, bitstream_size);
-+
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int mpf_ops_write_complete(struct fpga_manager *mgr,
-+					     struct fpga_image_info *info)
-+{
-+	const u8 isc_dis_command[] = { SPI_ISC_DISABLE };
-+	const u8 release_command[] = { SPI_RELEASE };
-+	struct mpf_priv *priv = mgr->priv;
-+	struct spi_device *spi = priv->spi;
-+	struct device *dev = &mgr->dev;
-+	int ret;
-+
-+	ret = mpf_spi_write(spi, isc_dis_command, sizeof(isc_dis_command));
-+	if (ret) {
-+		dev_err(dev, "Failed to disable ISC: %d\n", ret);
-+
-+		return ret;
-+	}
-+
-+	mdelay(1);
-+
-+	ret = mpf_spi_write(spi, release_command, sizeof(release_command));
-+	if (ret) {
-+		dev_err(dev, "Failed to exit program mode: %d\n", ret);
-+
-+		return ret;
-+	}
-+
-+	priv->program_mode = false;
-+
-+	return 0;
-+}
-+
-+static const struct fpga_manager_ops mpf_ops = {
-+	.state = mpf_ops_state,
-+	.write_init = mpf_ops_write_init,
-+	.write = mpf_ops_write,
-+	.write_complete = mpf_ops_write_complete,
-+};
-+
-+static int mpf_probe(struct spi_device *spi)
-+{
-+	struct mpf_priv *priv;
-+	struct device *dev = &spi->dev;
-+	struct fpga_manager *mgr;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->spi = spi;
-+
-+	mgr = devm_fpga_mgr_register(dev, "Microchip Polarfire SPI FPGA Manager",
-+				     &mpf_ops, priv);
-+
-+	return PTR_ERR_OR_ZERO(mgr);
-+}
-+
-+static const struct spi_device_id mpf_spi_ids[] = {
-+	{ .name = "mpf-spi-fpga-mgr", },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(spi, mpf_spi_ids);
-+
-+#if IS_ENABLED(CONFIG_OF)
-+static const struct of_device_id mpf_of_ids[] = {
-+	{ .compatible = "microchip,mpf-spi-fpga-mgr" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, mpf_of_ids);
-+#endif /* IS_ENABLED(CONFIG_OF) */
-+
-+static struct spi_driver mpf_driver = {
-+	.probe = mpf_probe,
-+	.id_table = mpf_spi_ids,
-+	.driver = {
-+		.name = "microchip_mpf_spi_fpga_mgr",
-+		.of_match_table = of_match_ptr(mpf_of_ids),
-+	},
-+};
-+
-+module_spi_driver(mpf_driver);
-+
-+MODULE_DESCRIPTION("Microchip Polarfire SPI FPGA Manager");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
-
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVG9tIFJpeCA8dHJpeEBy
+ZWRoYXQuY29tPg0KPiBTZW50OiBUdWVzZGF5LCBGZWJydWFyeSAxNSwgMjAyMiAxMDo0OSBQTQ0K
+PiBUbzogWmhhbmcsIFRpYW5mZWkgPHRpYW5mZWkuemhhbmdAaW50ZWwuY29tPjsgV3UsIEhhbyA8
+aGFvLnd1QGludGVsLmNvbT47DQo+IG1kZkBrZXJuZWwub3JnOyBYdSwgWWlsdW4gPHlpbHVuLnh1
+QGludGVsLmNvbT47IGxpbnV4LWZwZ2FAdmdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1kb2NAdmdl
+ci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IENjOiBjb3JiZXRA
+bHduLm5ldA0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHYxIDIvN10gZnBnYTogZGZsOiBjaGVjayBm
+ZWF0dXJlIHR5cGUgYmVmb3JlIHBhcnNlIGlycSBpbmZvDQo+IA0KPiANCj4gT24gMi8xNC8yMiAz
+OjI2IEFNLCBUaWFuZmVpIHpoYW5nIHdyb3RlOg0KPiA+IEZyb206IFRpYW5mZWkgWmhhbmcgPHRp
+YW5mZWkuemhhbmdAaW50ZWwuY29tPg0KPiA+DQo+ID4gVGhlIGZlYXR1cmUgSUQgb2YgIlBvcnQg
+VXNlciBJbnRlcnJ1cHQiIGFuZCB0aGUgIlBNQ0kgU3Vic3lzdGVtIiBhcmUNCj4gPiBpZGVudGlj
+YWwsIDB4MTIsIGJ1dCBvbmUgaXMgZm9yIEZNRSwgb3RoZXIgaXMgZm9yIFBvcnQuIEl0IHNob3Vs
+ZA0KPiA+IGNoZWNrIHRoZSBmZWF0dXJlIHR5cGUgV2hpbGUgcGFyc2luZyB0aGUgaXJxIGluZm8g
+aW4NCj4gPiBwYXJzZV9mZWF0dXJlX2lycXMoKS4NCj4gDQo+IFRoaXMgc2VlbXMgbGlrZSBhIGJ1
+ZyBmaXggYW5kIG5vdCBwYXJ0IG9mIGlvZnMgZmVhdHVyZS4NCj4gDQo+IFNwbGl0IHRoaXMgb3V0
+IG9mIHRoZSBwYXRjaHNldC4NCj4gDQo+IFRoaXMgaXMgYSB3b3JrYXJvdW5kIGEgaGFyZHdhcmUg
+cHJvYmxlbSwgdGhlcmUgc2hvdWxkIGJlIHNvbWUgY29tbWVudHMgdG8NCj4gdGhlIGVmZmVjdCB0
+aGF0IHlvdSBjYW4ndCB0cnVzdCBfdGhpc18gb3IgX3RoYXRfIGZlYXR1cmUgaWQgYW5kIHNvbWUg
+c3BlY2lhbA0KPiBoYW5kbGluZyBlYXJsaWVyLg0KPiANCj4gVGhlIGFtYmlndWl0eSBvZiBmZWF0
+dXJlIGlkIGlzIGEgcHJvYmxlbSwgYW5kIHRoaXMgc29ydCBvZiBidWcgd2lsbCBoYXBwZW4gYWdh
+aW4uDQo+IA0KPiBXaGF0IGNhbiBiZSBkb25lIHRvIHByZXZlbnQgdGhpcyBpbiB0aGUgZnV0dXJl
+ID8NCg0KVGhpcyBwYXRjaCBpcyBub3Qgd29ya2Fyb3VuZCwgdGhpcyBpcyBhIGJ1ZyBmaXggZm9y
+IERGTCBkcml2ZXIuIA0KVGhlIHJvb3QgY2F1c2UgaXMgdGhhdCBETEYgZHJpdmVyIG1pc3MgY2hl
+Y2sgdGhlIGZlYXR1cmUgdHlwZSB3aGlsZSBwYXJzaW5nIHRoZSBpbnRlcnJ1cHQgaW5mb3JtYXRp
+b24sIA0KYmVjYXVzZSBzb21lIEZlYXR1cmUgSURzIGFyZSBpZGVudGljYWwgYmV0d2VlbiBGTUUg
+YW5kIFBvcnQsIGxpa2UgUE1DSSBpbiBGTUUgYW5kICJQb3J0IFVzZXIgSW50ZXJydXB0Ig0KaW4g
+UG9ydC4NClRoZSBkZWZpbml0aW9uIG9mIEZlYXR1cmUgSUQgaXMgaGVyZToNCmh0dHBzOi8vZ2l0
+aHViLmNvbS9PUEFFL2xpbnV4LWRmbC1mZWF0dXJlLWlkL2Jsb2IvbWFzdGVyL2RmbC1mZWF0dXJl
+LWlkcy5yc3QNCg0KPiANCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFRpYW5mZWkgWmhhbmcgPHRp
+YW5mZWkuemhhbmdAaW50ZWwuY29tPg0KPiA+IC0tLQ0KPiA+ICAgZHJpdmVycy9mcGdhL2RmbC5j
+IHwgMTEgKysrKysrKysrKysNCj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCsp
+DQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9mcGdhL2RmbC5jIGIvZHJpdmVycy9mcGdh
+L2RmbC5jIGluZGV4DQo+ID4gNTk5YmIyMWQ4NmFmLi4yNmY4Y2Y4OTA3MDAgMTAwNjQ0DQo+ID4g
+LS0tIGEvZHJpdmVycy9mcGdhL2RmbC5jDQo+ID4gKysrIGIvZHJpdmVycy9mcGdhL2RmbC5jDQo+
+ID4gQEAgLTk0MCw5ICs5NDAsMTQgQEAgc3RhdGljIGludCBwYXJzZV9mZWF0dXJlX2lycXMoc3Ry
+dWN0DQo+IGJ1aWxkX2ZlYXR1cmVfZGV2c19pbmZvICpiaW5mbywNCj4gPiAgIHsNCj4gPiAgIAl2
+b2lkIF9faW9tZW0gKmJhc2UgPSBiaW5mby0+aW9hZGRyICsgb2ZzdDsNCj4gPiAgIAl1bnNpZ25l
+ZCBpbnQgaSwgaWJhc2UsIGluciA9IDA7DQo+ID4gKwllbnVtIGRmbF9pZF90eXBlIHR5cGU7DQo+
+ID4gICAJaW50IHZpcnE7DQo+ID4gICAJdTY0IHY7DQo+ID4NCj4gPiArCXR5cGUgPSBmZWF0dXJl
+X2Rldl9pZF90eXBlKGJpbmZvLT5mZWF0dXJlX2Rldik7DQo+ID4gKwlpZiAodHlwZSA+PSBERkxf
+SURfTUFYKQ0KPiA+ICsJCXJldHVybiAtRUlOVkFMOw0KPiA+ICsNCj4gPiAgIAkvKg0KPiA+ICAg
+CSAqIElkZWFsbHkgREZMIGZyYW1ld29yayBzaG91bGQgb25seSByZWFkIGluZm8gZnJvbSBERkwg
+aGVhZGVyLCBidXQNCj4gPiAgIAkgKiBjdXJyZW50IHZlcnNpb24gREZMIG9ubHkgcHJvdmlkZXMg
+bW1pbyByZXNvdXJjZXMgaW5mb3JtYXRpb24gZm9yDQo+ID4gQEAgLTk1OSwxNiArOTY0LDIyIEBA
+IHN0YXRpYyBpbnQgcGFyc2VfZmVhdHVyZV9pcnFzKHN0cnVjdA0KPiBidWlsZF9mZWF0dXJlX2Rl
+dnNfaW5mbyAqYmluZm8sDQo+ID4gICAJICovDQo+ID4gICAJc3dpdGNoIChmaWQpIHsNCj4gPiAg
+IAljYXNlIFBPUlRfRkVBVFVSRV9JRF9VSU5UOg0KPiA+ICsJCWlmICh0eXBlICE9IFBPUlRfSUQp
+DQo+ID4gKwkJCWJyZWFrOw0KPiANCj4gSW5zdGVhZCBvZiBlbWJlZGRpbmcgYSBicmVhayBpbiB0
+aGUgc3dpdGNoLCBicmVhayB0aGUgc3dpdGNoIGludG8gZm1lIHN3aXRjaA0KPiBhbmQgcG9ydCBz
+d2l0Y2gNCj4gDQo+IGlmICh0eXBlID09IFBPUlRfSUQpDQo+IA0KPiAgwqAgcG9ydC1zd2l0Y2gN
+Cj4gDQo+IGVsc2UgaWYgKHR5cGUgPT0gRk1FX0lEDQo+IA0KPiAgwqAgZm1lLXN3aXRjaA0KDQpZ
+b3VyIHN1Z2dlc3Rpb24gaXMgbG9va3MgZ29vZCAgZm9yIG1lLCBJIHdpbGwgY2hhbmdlIG9uIG5l
+eHQgdmVyc2lvbi4NCg0KPiANCj4gVG9tDQo+IA0KPiA+ICAgCQl2ID0gcmVhZHEoYmFzZSArIFBP
+UlRfVUlOVF9DQVApOw0KPiA+ICAgCQlpYmFzZSA9IEZJRUxEX0dFVChQT1JUX1VJTlRfQ0FQX0ZT
+VF9WRUNULCB2KTsNCj4gPiAgIAkJaW5yID0gRklFTERfR0VUKFBPUlRfVUlOVF9DQVBfSU5UX05V
+TSwgdik7DQo+ID4gICAJCWJyZWFrOw0KPiA+ICAgCWNhc2UgUE9SVF9GRUFUVVJFX0lEX0VSUk9S
+Og0KPiA+ICsJCWlmICh0eXBlICE9IFBPUlRfSUQpDQo+ID4gKwkJCWJyZWFrOw0KPiA+ICAgCQl2
+ID0gcmVhZHEoYmFzZSArIFBPUlRfRVJST1JfQ0FQKTsNCj4gPiAgIAkJaWJhc2UgPSBGSUVMRF9H
+RVQoUE9SVF9FUlJPUl9DQVBfSU5UX1ZFQ1QsIHYpOw0KPiA+ICAgCQlpbnIgPSBGSUVMRF9HRVQo
+UE9SVF9FUlJPUl9DQVBfU1VQUF9JTlQsIHYpOw0KPiA+ICAgCQlicmVhazsNCj4gPiAgIAljYXNl
+IEZNRV9GRUFUVVJFX0lEX0dMT0JBTF9FUlI6DQo+ID4gKwkJaWYgKHR5cGUgIT0gRk1FX0lEKQ0K
+PiA+ICsJCQlicmVhazsNCj4gPiAgIAkJdiA9IHJlYWRxKGJhc2UgKyBGTUVfRVJST1JfQ0FQKTsN
+Cj4gPiAgIAkJaWJhc2UgPSBGSUVMRF9HRVQoRk1FX0VSUk9SX0NBUF9JTlRfVkVDVCwgdik7DQo+
+ID4gICAJCWluciA9IEZJRUxEX0dFVChGTUVfRVJST1JfQ0FQX1NVUFBfSU5ULCB2KTsNCg0K
