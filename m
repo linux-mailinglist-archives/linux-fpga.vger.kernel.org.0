@@ -2,81 +2,82 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1269B4BBAA2
-	for <lists+linux-fpga@lfdr.de>; Fri, 18 Feb 2022 15:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8384BBAF0
+	for <lists+linux-fpga@lfdr.de>; Fri, 18 Feb 2022 15:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236045AbiBROaL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 18 Feb 2022 09:30:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45928 "EHLO
+        id S236160AbiBROtl (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 18 Feb 2022 09:49:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233968AbiBROaK (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 18 Feb 2022 09:30:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 258335B880
-        for <linux-fpga@vger.kernel.org>; Fri, 18 Feb 2022 06:29:53 -0800 (PST)
+        with ESMTP id S236157AbiBROtl (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 18 Feb 2022 09:49:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC91FBC3B
+        for <linux-fpga@vger.kernel.org>; Fri, 18 Feb 2022 06:49:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645194592;
+        s=mimecast20190719; t=1645195763;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Cre5M583hm0qhLExvImfc/VgDcRzV3gtvq6Dg7X1ldM=;
-        b=H/GBBCvOGROrJPGmMC9QvXWee+S+GKDSoSknJqAwaOokvhxqgOiRdYSl0ENsFnTD2M0UXZ
-        GFYCMHyP4M1NNozOPG0UEHxA1JydVdkKPiiBXf2k653XwTMwkE3O4pa9Aze3xrHd9Ur7X1
-        Xer/7StNB88KjCBWd/AT0TAcKmaKfig=
+        bh=gJfoFtjczcmtegK/n8NOa4kXtMnG6dmxGgGSDhaREok=;
+        b=i9dnyzkKhixiGP9S7YzsjA8IJRDuyYclcC510YyzSgyzWNRyqybrYjZfcbnCfuEbI5TtLJ
+        se16oCsPgCuIqirmX3fbMa4jamDmzYue4Qa9M+euJzyvs3iMJCZ6o25VXLuC6QHImQ7d4Y
+        hB7BtszWNkBY4ZlBJa6yniHQytCZN6w=
 Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
  [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-14-urPrsybBNZusqnHKtLMM_Q-1; Fri, 18 Feb 2022 09:29:51 -0500
-X-MC-Unique: urPrsybBNZusqnHKtLMM_Q-1
-Received: by mail-qv1-f69.google.com with SMTP id cs16-20020ad44c50000000b0042bfd7b5158so9017316qvb.3
-        for <linux-fpga@vger.kernel.org>; Fri, 18 Feb 2022 06:29:51 -0800 (PST)
+ us-mta-151-6mSu36CuO6OJVHaYkORN5w-1; Fri, 18 Feb 2022 09:49:22 -0500
+X-MC-Unique: 6mSu36CuO6OJVHaYkORN5w-1
+Received: by mail-qv1-f69.google.com with SMTP id hu9-20020a056214234900b0042c4017aeb3so9054817qvb.14
+        for <linux-fpga@vger.kernel.org>; Fri, 18 Feb 2022 06:49:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=Cre5M583hm0qhLExvImfc/VgDcRzV3gtvq6Dg7X1ldM=;
-        b=VTMxTAt2vAW0YKHFY94Daa4mWrCQH9EMKY7n+RmYw68narghwHIs+oobAc+x7BJn0H
-         NS39fLsesJVnY83oKC2TVH4LBr94YJiaB9UHk6XkYeP70cDVKLy6N/lNP5ctXlO1nTam
-         e8RpnbBJ3iHnlhnCJT+Vyc6psIdK4OdFPDej0qTlS/HgFqql8/hXTP+3d8cYXifiTWVf
-         3jBNmX2sKunB8T/x245Xf4Sba3mDcRceHUt5IG0Rd3ooYl2w02er67wdQeZ4ahuA+tp2
-         cm/uyI4dCaLzRRx73QcTCDLYF86nx1WZhrb/975F23w74GjTfYWeyd+oQfEDpE6ikcoS
-         Y5Jg==
-X-Gm-Message-State: AOAM5329Yn4WQqT3AHI5MESfXpOcoAqO5+mNt0tb13vSVjjYBSJ8MnLK
-        mWiUOVZVW4Fm4nCmKllQUuJ8wR6tmMzf+fktzI7GNLo/WBv5nxA3I3aYtpqpZiqUhQcgiWYzzq7
-        +9Iws9CbGoV5v6yDZCnfpSQ==
-X-Received: by 2002:a0c:be8f:0:b0:42c:5083:c6d2 with SMTP id n15-20020a0cbe8f000000b0042c5083c6d2mr5952008qvi.86.1645194590525;
-        Fri, 18 Feb 2022 06:29:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw6spxCalP4ZsB+KSA5YXirNzgk82RqD8K1eLb67sD60cSs8GVpewcKL+2Q5q7aU7TWOZo3LA==
-X-Received: by 2002:a0c:be8f:0:b0:42c:5083:c6d2 with SMTP id n15-20020a0cbe8f000000b0042c5083c6d2mr5951987qvi.86.1645194590259;
-        Fri, 18 Feb 2022 06:29:50 -0800 (PST)
+        bh=gJfoFtjczcmtegK/n8NOa4kXtMnG6dmxGgGSDhaREok=;
+        b=Q/47NT8u84W3cLmT7ABaVrJ30u0dgJBrFBAJrf1A9FPTOD4KjjEuLFkmN4NV61moKE
+         dRpoqmyL43DDcCwHGhScHDaa8U6LkO7gxr0z1tKHTzdgbqIkIVJ+DdRdz2wG5Wz6cTQC
+         gXBc4RJ2aWvMqXbCEfrF/khWtMtlPFVvVe2tqQrckKBAQQki7rKrzPYDSj1DCPIchjSk
+         VW8F/hKJwDg5j8l0G8gC1BQi0PWetXXm3q33khw5ZRKP0vMqcQDO/0mXQTFhklckxshC
+         ea9yla/z4XQiPRLXgKkkNE6gpqwRdkjOY7FMPZStGY3Z5NX3yooN9Zh9atBl88sgE8Qa
+         +4nw==
+X-Gm-Message-State: AOAM531NHSXoXS9K4UTrrfNJ09p4L95el0AfIlkKO5Z576QKLbYrnLPn
+        BaQQo7nqWL6FURnHzhD0pbvnDeRCb1lPSMzTwC9IRltRYFOpjINbJsfsujzE5sRXyNQrPozxQdi
+        N3n+yhFozzGfoc2fXoE1qiA==
+X-Received: by 2002:a37:270c:0:b0:5f0:832f:6d81 with SMTP id n12-20020a37270c000000b005f0832f6d81mr4816601qkn.682.1645195762266;
+        Fri, 18 Feb 2022 06:49:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzQim60t2atOU27c1fu+yon22RzCPjCx8VCJ86EPIuz8BlqduYrSkDFoluOksZ0bKF6i3KRJg==
+X-Received: by 2002:a37:270c:0:b0:5f0:832f:6d81 with SMTP id n12-20020a37270c000000b005f0832f6d81mr4816590qkn.682.1645195762039;
+        Fri, 18 Feb 2022 06:49:22 -0800 (PST)
 Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id x13sm23119558qko.114.2022.02.18.06.29.48
+        by smtp.gmail.com with ESMTPSA id d17sm22661042qkn.84.2022.02.18.06.49.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 06:29:49 -0800 (PST)
-Subject: Re: [PATCH v1 2/7] fpga: dfl: check feature type before parse irq
- info
+        Fri, 18 Feb 2022 06:49:21 -0800 (PST)
+Subject: Re: [PATCH v1 3/7] fpga: dfl: Allow for ports with no local bar
+ space.
 To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
         "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
         "Xu, Yilun" <yilun.xu@intel.com>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
 References: <20220214112619.219761-1-tianfei.zhang@intel.com>
- <20220214112619.219761-3-tianfei.zhang@intel.com>
- <0de9c8fb-0f04-684f-630c-1d13b0b55ba1@redhat.com>
- <BN9PR11MB54839B6D444DCEB7FD789F33E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
+ <20220214112619.219761-4-tianfei.zhang@intel.com>
+ <0fdd3d0d-d280-8104-eccc-8fa8d8a992c2@redhat.com>
+ <BN9PR11MB548314968CBC0CA5E446B366E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <447ce66b-dea7-da2b-6879-e4d37a74ba7d@redhat.com>
-Date:   Fri, 18 Feb 2022 06:29:47 -0800
+Message-ID: <efee5ac0-4c3a-085d-9b9d-0c8ade022f30@redhat.com>
+Date:   Fri, 18 Feb 2022 06:49:18 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <BN9PR11MB54839B6D444DCEB7FD789F33E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
+In-Reply-To: <BN9PR11MB548314968CBC0CA5E446B366E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
@@ -89,108 +90,98 @@ List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
-On 2/17/22 10:53 PM, Zhang, Tianfei wrote:
+On 2/17/22 11:31 PM, Zhang, Tianfei wrote:
 >
 >> -----Original Message-----
 >> From: Tom Rix <trix@redhat.com>
->> Sent: Tuesday, February 15, 2022 10:49 PM
+>> Sent: Tuesday, February 15, 2022 11:06 PM
 >> To: Zhang, Tianfei <tianfei.zhang@intel.com>; Wu, Hao <hao.wu@intel.com>;
 >> mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org;
 >> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org
->> Cc: corbet@lwn.net
->> Subject: Re: [PATCH v1 2/7] fpga: dfl: check feature type before parse irq info
+>> Cc: corbet@lwn.net; Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> Subject: Re: [PATCH v1 3/7] fpga: dfl: Allow for ports with no local bar space.
 >>
 >>
 >> On 2/14/22 3:26 AM, Tianfei zhang wrote:
->>> From: Tianfei Zhang <tianfei.zhang@intel.com>
+>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 >>>
->>> The feature ID of "Port User Interrupt" and the "PMCI Subsystem" are
->>> identical, 0x12, but one is for FME, other is for Port. It should
->>> check the feature type While parsing the irq info in
->>> parse_feature_irqs().
->> This seems like a bug fix and not part of iofs feature.
->>
->> Split this out of the patchset.
+>>>   From a fpga partial reconfiguration standpoint, a port may not be
+>>> connected any local BAR space.  The port could be connected to a
+>>> different PCIe Physical Function (PF) or Virtual Function (VF), in
+>>> which case another driver instance would manage the endpoint.
+>> It is not clear if this is part of iofs or a bug fix.
+> This is the new implementation/feature of IOFS.
+> On IOFS support multiple methods to access the AFU.
+> 1. Legacy Model. This is used for N3000 and N5000 card.
+> In this model the entire AFU region is a unit of PR, and there is a Port device connected to this AFU.
+> On DFL perspective, there is "Next AFU" point to the AFU, and the "BarID" is  the PCIe Bar ID of AFU.
+> In this model, we can use the AFU APIs to access the entire AFU resource, like MMIO.
+> 2. Micro-Personas in AFU.
+> IOFS intruding new model for PR and AFU access.
+> Micro-Personas allow the RTL developer to designate their own AFU-defined PR regions.
+> In this model the unit of PR is not the entire AFU, instead
+> the unit of PR can be any size block or blocks inside the AFU.
+> 3. Multiple VFs per PR slot.
+> In this method, we can instance multiple VFs over SRIOV for one PR slot, and access the AFU resource
+> by different VFs in virtualization usage. In this case, the Port device would not connected to AFU (the BarID of Port device
+> should be set to invalid), so this patch want to support this use model.
 
-?
+What I am looking for is how the older cards using (my term) dfl 1 will 
+still work with dfl 2 and vice versa.
 
->>
->> This is a workaround a hardware problem, there should be some comments to
->> the effect that you can't trust _this_ or _that_ feature id and some special
->> handling earlier.
->>
->> The ambiguity of feature id is a problem, and this sort of bug will happen again.
->>
->> What can be done to prevent this in the future ?
-> This patch is not workaround, this is a bug fix for DFL driver.
-> The root cause is that DLF driver miss check the feature type while parsing the interrupt information,
-> because some Feature IDs are identical between FME and Port, like PMCI in FME and "Port User Interrupt"
-> in Port.
-> The definition of Feature ID is here:
-> https://github.com/OPAE/linux-dfl-feature-id/blob/master/dfl-feature-ids.rst
-Helpful but hidden.  At least a link to this should be added to 
-Documentation/fpga/dfl.rst.
+No where do I see a version check for dfl 2 nor a pci id check so either 
+this just works or backward compatibility has not be considered.
+
+Please add a backward compatibility section to the doc patch
+
+>
+>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 >>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
 >>> ---
->>>    drivers/fpga/dfl.c | 11 +++++++++++
->>>    1 file changed, 11 insertions(+)
+>>>    drivers/fpga/dfl-pci.c | 8 ++++++++
+>>>    1 file changed, 8 insertions(+)
 >>>
->>> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c index
->>> 599bb21d86af..26f8cf890700 100644
->>> --- a/drivers/fpga/dfl.c
->>> +++ b/drivers/fpga/dfl.c
->>> @@ -940,9 +940,14 @@ static int parse_feature_irqs(struct
->> build_feature_devs_info *binfo,
->>>    {
->>>    	void __iomem *base = binfo->ioaddr + ofst;
->>>    	unsigned int i, ibase, inr = 0;
->>> +	enum dfl_id_type type;
->>>    	int virq;
->>>    	u64 v;
+>>> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c index
+>>> 4d68719e608f..8abd9b408403 100644
+>>> --- a/drivers/fpga/dfl-pci.c
+>>> +++ b/drivers/fpga/dfl-pci.c
+>>> @@ -243,6 +243,7 @@ static int find_dfls_by_default(struct pci_dev *pcidev,
+>>>    		v = readq(base + FME_HDR_CAP);
+>>>    		port_num = FIELD_GET(FME_CAP_NUM_PORTS, v);
 >>>
->>> +	type = feature_dev_id_type(binfo->feature_dev);
->>> +	if (type >= DFL_ID_MAX)
->>> +		return -EINVAL;
->>> +
->>>    	/*
->>>    	 * Ideally DFL framework should only read info from DFL header, but
->>>    	 * current version DFL only provides mmio resources information for
->>> @@ -959,16 +964,22 @@ static int parse_feature_irqs(struct
->> build_feature_devs_info *binfo,
->>>    	 */
->>>    	switch (fid) {
->>>    	case PORT_FEATURE_ID_UINT:
->>> +		if (type != PORT_ID)
->>> +			break;
->> Instead of embedding a break in the switch, break the switch into fme switch
->> and port switch
+>>> +		dev_info(&pcidev->dev, "port_num = %d\n", port_num);
+>>>    		WARN_ON(port_num > MAX_DFL_FPGA_PORT_NUM);
+>>>
+>>>    		for (i = 0; i < port_num; i++) {
+>>> @@ -258,6 +259,13 @@ static int find_dfls_by_default(struct pci_dev *pcidev,
+>>>    			 */
+>>>    			bar = FIELD_GET(FME_PORT_OFST_BAR_ID, v);
+>>>    			offset = FIELD_GET(FME_PORT_OFST_DFH_OFST, v);
+>>> +			if (bar >= PCI_STD_NUM_BARS) {
+>> Is bar set to a better magic number that pci_std_num_bars ? maybe 0xff's
 >>
->> if (type == PORT_ID)
->>
->>     port-switch
->>
->> else if (type == FME_ID
->>
->>     fme-switch
-> Your suggestion is looks good  for me, I will change on next version.
+>> How do you tell between this case and broken hw ?
+> Yes, I agree that magic number is better, Currently the RTL using PCI_STD_NUM_BARS for an invalid PCIe bar number.
+
+How do you tell between this case and broken hw ?
+
+Tom
+
+>> Move up a line and skip getting an offset that will not be used.
+> Yes, this line is not necessary, I will remove it on next version patch.
 >
+>>> +				dev_info(&pcidev->dev, "skipping port without
+>> local BAR space %d\n",
+>>> +					 bar);
+>>> +				continue;
+>>> +			} else {
+>>> +				dev_info(&pcidev->dev, "BAR %d offset %u\n",
+>> bar, offset);
+>>> +			}
+>>>    			start = pci_resource_start(pcidev, bar) + offset;
+>>>    			len = pci_resource_len(pcidev, bar) - offset;
+>>>
+>> Is similar logic needed for else-if (port) block below this ?
+> I think, the else-if is not necessary. I will remove it on next version patch.
 >> Tom
->>
->>>    		v = readq(base + PORT_UINT_CAP);
->>>    		ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
->>>    		inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
->>>    		break;
->>>    	case PORT_FEATURE_ID_ERROR:
->>> +		if (type != PORT_ID)
->>> +			break;
->>>    		v = readq(base + PORT_ERROR_CAP);
->>>    		ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
->>>    		inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
->>>    		break;
->>>    	case FME_FEATURE_ID_GLOBAL_ERR:
->>> +		if (type != FME_ID)
->>> +			break;
->>>    		v = readq(base + FME_ERROR_CAP);
->>>    		ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
->>>    		inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
 
