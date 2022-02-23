@@ -2,44 +2,42 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714EB4C159E
-	for <lists+linux-fpga@lfdr.de>; Wed, 23 Feb 2022 15:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FD64C15C8
+	for <lists+linux-fpga@lfdr.de>; Wed, 23 Feb 2022 15:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241690AbiBWOmd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 23 Feb 2022 09:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S241778AbiBWOuD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 23 Feb 2022 09:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiBWOmc (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 23 Feb 2022 09:42:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9DFB3E6C;
-        Wed, 23 Feb 2022 06:42:04 -0800 (PST)
+        with ESMTP id S241829AbiBWOt7 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 23 Feb 2022 09:49:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA039B716E;
+        Wed, 23 Feb 2022 06:49:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1339EB81FCE;
-        Wed, 23 Feb 2022 14:42:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AABBBC340E7;
-        Wed, 23 Feb 2022 14:42:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85EFF6170C;
+        Wed, 23 Feb 2022 14:49:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403B3C340F3;
+        Wed, 23 Feb 2022 14:49:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645627321;
-        bh=54knkAHgw4FVQ6bPw0gxjMifXkkf7pu6KINdWoLri+c=;
+        s=k20201202; t=1645627755;
+        bh=M6i8Ax/c1AB4NHK/oFnPHSNbHeHzsRhTsad/UfRd5wE=;
         h=From:To:Cc:Subject:Date:From;
-        b=rkQtj8PDP2Deulram9ERTWwLjDnlpnC2sBniN8+liD+2uHbKr1Kf63qH9E5vKC2cu
-         TaRTlmooVLtbpbbSPgE/6oMo0qGBspX3dhfcq2DpSFyahkIGqtoZpmSRxzx++qaC9T
-         8rFD1ghTUCPHv8qPHhjfwOMf2hrpqKT+gbxScNeZDajJ/VRHEGvdgoP1nMxMYQdUx+
-         p94GK5cekpWzW9sAgDFTkqO2WtWbHTtE3jgd92lA0eoFOJg5/D4mreEGSIRp+hkU8b
-         GbUBZqiR3WNFkolC/Wcd058whKkQFqsTDzi2DUDRNUrk/XvdJVGlRUYkPla+ZTvQ0E
-         ze78UZuKW7S7Q==
+        b=QLsD3BxRDRD82LHGlm0kF7oI9uupOpfdnttOWlK2+rfGJbUaYESxUlrfJGm9oBlN3
+         y5mfVbWSD3KtDzcIq25MbtgWzVbC0pFcK6qWK9QO+1dD6fAl7DV2KX+0bYjnF4SNKi
+         PJVIhYSLCic+EIg7H1Obpa69yuq2b//cKOSy4D8x073h1MzKY9qqipJA3lQggiNO43
+         6m0R15kC4e/UKRZOk9tjV/nz3KK1tlX/Pv5ZjShtcKdQmxhNq9CZGIpANJ+1D+Ghcm
+         jl9WeLUrLm1Zy6Mf80gJJ9Sm3E/DmDaM1M4LpY7SOxVnsR/4QH7+AWVoQdOIw85Wpo
+         VEyM3CxBx0TbQ==
 From:   Dinh Nguyen <dinguyen@kernel.org>
 To:     gregkh@linuxfoundation.org
-Cc:     dinguyen@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ang Tien Sung <tien.sung.ang@intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] firmware: stratix10-svc: add missing callback parameter on RSU
-Date:   Wed, 23 Feb 2022 08:41:46 -0600
-Message-Id: <20220223144146.399263-1-dinguyen@kernel.org>
+Cc:     dinguyen@kernel.org, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: [PATCH 1/2] MAINTAINERS: add a git repo for the Stratix10 Service driver
+Date:   Wed, 23 Feb 2022 08:49:07 -0600
+Message-Id: <20220223144908.399522-1-dinguyen@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,34 +51,25 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Ang Tien Sung <tien.sung.ang@intel.com>
+Add a git repo entry for the Stratix10 Service driver.
 
-Fix a bug whereby, the return response of parameter a1 from an
-SMC call is not properly set to the callback data during an
-INTEL_SIP_SMC_RSU_ERROR command.
-
-Cc: stable@vger.kernel.org
-Fixes: 6b50d882d38d ("firmware: add remote status update client support")
-Link: https://lore.kernel.org/lkml/20220216081513.28319-1-tien.sung.ang@intel.com
-Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
 Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 ---
- drivers/firmware/stratix10-svc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
-index 29c0a616b317..c4bf934e3553 100644
---- a/drivers/firmware/stratix10-svc.c
-+++ b/drivers/firmware/stratix10-svc.c
-@@ -477,7 +477,7 @@ static int svc_normal_to_secure_thread(void *data)
- 		case INTEL_SIP_SMC_RSU_ERROR:
- 			pr_err("%s: STATUS_ERROR\n", __func__);
- 			cbdata->status = BIT(SVC_STATUS_ERROR);
--			cbdata->kaddr1 = NULL;
-+			cbdata->kaddr1 = &res.a1;
- 			cbdata->kaddr2 = NULL;
- 			cbdata->kaddr3 = NULL;
- 			pdata->chan->scl->receive_cb(pdata->chan->scl, cbdata);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ea3e6c914384..5752236bea80 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9890,6 +9890,7 @@ F:	drivers/firmware/stratix10-rsu.c
+ F:	drivers/firmware/stratix10-svc.c
+ F:	include/linux/firmware/intel/stratix10-smc.h
+ F:	include/linux/firmware/intel/stratix10-svc-client.h
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git
+ 
+ INTEL TELEMETRY DRIVER
+ M:	Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
 -- 
 2.25.1
 
