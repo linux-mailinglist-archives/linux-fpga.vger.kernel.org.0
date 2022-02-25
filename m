@@ -2,50 +2,53 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003B74C3C3D
-	for <lists+linux-fpga@lfdr.de>; Fri, 25 Feb 2022 04:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F724C3C40
+	for <lists+linux-fpga@lfdr.de>; Fri, 25 Feb 2022 04:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236931AbiBYDNp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 24 Feb 2022 22:13:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
+        id S236940AbiBYDNw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 24 Feb 2022 22:13:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiBYDNo (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 24 Feb 2022 22:13:44 -0500
+        with ESMTP id S230117AbiBYDNq (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 24 Feb 2022 22:13:46 -0500
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C93464BE8;
-        Thu, 24 Feb 2022 19:13:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1BD64BE7;
+        Thu, 24 Feb 2022 19:13:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645758793; x=1677294793;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eue+oUcpUjQ1aiaVWgYLbzCGLiuuI90oSMfd5QhnL5Y=;
-  b=gEIC+QRLKzvHdaJ2yanMhqY/Di6HKp+3XKOr/7VuQV7qtJAInnx+yCiS
-   0HlHfe+q0lftmlcomnC9fx/y2um6sOqv+RvHKtEZknVLraHBj1wFPGRCN
-   uSAJ3PE26EFAmRs8c9BtJla1m1TFBGsMkS/qWqF8k5EqjWk4fACszC4oU
-   9YVcGdhia1iMy8bRp+LbCJLV72JW0tgC9fTgLOX9PFfJ3jDY1FhN5W427
-   FjpjAOQjwSuM5jUS7y3PIyV07rBBQSEHLwNrH0Wfnf7XYN0wR2W/L3Qwm
-   WRecrH5bt8oMwju1J5sksLUy0WgPZdXdXY1J9NqFCy9wTbDR8atvrjud8
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252602975"
+  t=1645758796; x=1677294796;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=peqfZ+rFk7ZwJ07YEOVnePiWyPNcAj7SeTjZgu1wjWo=;
+  b=mKTR7uZ+ydvOMo1yALM61PTrA/p2IB7YdtLmPADCk6wkgzcHYlxrndUE
+   YyaMT/+BXHkjEMFZQcQ/6E0DzT3GWdF0CQCHKcvGaKYn1W5A3u02xycvO
+   jSIfLJmUaJrWTkF6H9t5jq6DAFxjQ+9GGyuFnN1F/pqxVE5QYyitB6Kw8
+   813Sfc9aXpJ0XXScON239lcz1r2KlHKyYYJhPt4YggrUiXCZjE9Gdp6G8
+   qItU74Ap2bVLlIYFwaZhwmCuHY/wIziCFBN8r7eh/N1AYVTFLHDnsRFMb
+   Yb8LSCCidmPAFT1Zk+G5uYes+jTqw10ZMPmAoMglh1hw7PX+6uzakRndv
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252602981"
 X-IronPort-AV: E=Sophos;i="5.90,135,1643702400"; 
-   d="scan'208";a="252602975"
+   d="scan'208";a="252602981"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 19:13:13 -0800
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 19:13:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,135,1643702400"; 
-   d="scan'208";a="684512419"
+   d="scan'208";a="684512442"
 Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Feb 2022 19:13:10 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 24 Feb 2022 19:13:13 -0800
 From:   Tianfei zhang <tianfei.zhang@intel.com>
 To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
         yilun.xu@intel.com, linux-fpga@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     corbet@lwn.net, Tianfei zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v2 0/5] Add Intel OFS support for DFL driver
-Date:   Thu, 24 Feb 2022 22:09:57 -0500
-Message-Id: <20220225031002.261264-1-tianfei.zhang@intel.com>
+Cc:     corbet@lwn.net, Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Tianfei Zhang <tianfei.zhang@intel.com>
+Subject: [PATCH v2 1/5] fpga: dfl: Allow for ports without specific bar space.
+Date:   Thu, 24 Feb 2022 22:09:58 -0500
+Message-Id: <20220225031002.261264-2-tianfei.zhang@intel.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20220225031002.261264-1-tianfei.zhang@intel.com>
+References: <20220225031002.261264-1-tianfei.zhang@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,43 +61,56 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-This is v2 patchset adding IOFS (Intel Open FPGA stack) support for
-DFL driver. IOFS is Intel's version of a common core set of
-RTL to allow customers to easily interface to logic and IP
-on the FPGA. IOFS leverages the DFL for the implementation of
-the FPGA RTL design.
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-Patch 1, allows for ports without specific bar space.
-Patch 2, introduces features in dfl_fpga_cdev after DFL enumeration.
-On IOFS, we will add more extensions or features in DFL in
-future, so adding a new member "features"in dfl_fpga_cdev.
-Patch 3, fixs VF creation in "Multiple VFs per PR slot" and legacy model.
-Patch 4, handles dfl's starting with AFU and allows for VFs to be created.
-Patch 5, adds architecture description about IOFS support for DFL
-in documentation.
+In IOFS, there is a Port device for each PR slot, like Port
+control, Port user clock control and Port errors, those feature
+devices are linked with DFL. The DFL of Port device was located
+in PCIe Bar 0 MMIO space by default, but it also can put into any
+PCIe Bar space. If the BarID (3bits field) in PORTn_OFFSET register
+set to invalid means that DFL of Port device is located in the Bar 0
+by default, in this case, it don't need add the Bar 0 into dfl list
+twice.
 
-Changelog v1 -> v2:
-   - Introducing a new member "features" in dfl_fpga_cdev for feature
-     control.
-   - Adding new flag DFL_FEAT_PORT_CONNECTED_AFU for IOFS legacy model.
-   - Updates the documentation for the access models about AFU in IOFS.
-   - Drop the PCI PID patch and will send it later.
+---
+v2: use FME_HDR_NO_PORT_BAR instead of PCI_STD_NUM_BARS.
 
-Matthew Gerlach (2):
-  fpga: dfl: Allow for ports without specific bar space.
-  fpga: dfl: Handle dfl's starting with AFU
+Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+---
+ drivers/fpga/dfl-pci.c | 6 ++++++
+ drivers/fpga/dfl.h     | 1 +
+ 2 files changed, 7 insertions(+)
 
-Tianfei zhang (3):
-  fpga: dfl: add features in dfl_fpga_cdev
-  fpga: dfl: fix VF creation in IOFS
-  Documentation: fpga: dfl: add description of IOFS
-
- Documentation/fpga/dfl.rst | 113 +++++++++++++++++++++++++++++++++++++
- drivers/fpga/dfl-pci.c     |  13 ++++-
- drivers/fpga/dfl.c         |  38 ++++++++-----
- drivers/fpga/dfl.h         |   6 ++
- 4 files changed, 155 insertions(+), 15 deletions(-)
-
+diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+index 4d68719e608f..33545c999c06 100644
+--- a/drivers/fpga/dfl-pci.c
++++ b/drivers/fpga/dfl-pci.c
+@@ -258,6 +258,12 @@ static int find_dfls_by_default(struct pci_dev *pcidev,
+ 			 */
+ 			bar = FIELD_GET(FME_PORT_OFST_BAR_ID, v);
+ 			offset = FIELD_GET(FME_PORT_OFST_DFH_OFST, v);
++			if (bar >= FME_HDR_NO_PORT_BAR) {
++				dev_dbg(&pcidev->dev, "skipping port without specific BAR space %d\n",
++					bar);
++				continue;
++			}
++
+ 			start = pci_resource_start(pcidev, bar) + offset;
+ 			len = pci_resource_len(pcidev, bar) - offset;
+ 
+diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+index 53572c7aced0..1fd493e82dd8 100644
+--- a/drivers/fpga/dfl.h
++++ b/drivers/fpga/dfl.h
+@@ -91,6 +91,7 @@
+ #define FME_HDR_PORT_OFST(n)	(0x38 + ((n) * 0x8))
+ #define FME_HDR_BITSTREAM_ID	0x60
+ #define FME_HDR_BITSTREAM_MD	0x68
++#define FME_HDR_NO_PORT_BAR	7
+ 
+ /* FME Fab Capability Register Bitfield */
+ #define FME_CAP_FABRIC_VERID	GENMASK_ULL(7, 0)	/* Fabric version ID */
 -- 
 2.26.2
 
