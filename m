@@ -2,107 +2,99 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4034C3479
-	for <lists+linux-fpga@lfdr.de>; Thu, 24 Feb 2022 19:18:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 003B74C3C3D
+	for <lists+linux-fpga@lfdr.de>; Fri, 25 Feb 2022 04:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbiBXSQg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 24 Feb 2022 13:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
+        id S236931AbiBYDNp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 24 Feb 2022 22:13:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiBXSQg (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 24 Feb 2022 13:16:36 -0500
-Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53644253163
-        for <linux-fpga@vger.kernel.org>; Thu, 24 Feb 2022 10:16:02 -0800 (PST)
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id NIeQnn7MbrdkGNIeQnJ9oN; Thu, 24 Feb 2022 19:16:00 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 24 Feb 2022 19:16:00 +0100
-X-ME-IP: 90.126.236.122
-Message-ID: <b3e6a19b-caa0-f58a-1039-02b60b17ed21@wanadoo.fr>
-Date:   Thu, 24 Feb 2022 19:15:38 +0100
+        with ESMTP id S230117AbiBYDNo (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 24 Feb 2022 22:13:44 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C93464BE8;
+        Thu, 24 Feb 2022 19:13:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645758793; x=1677294793;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eue+oUcpUjQ1aiaVWgYLbzCGLiuuI90oSMfd5QhnL5Y=;
+  b=gEIC+QRLKzvHdaJ2yanMhqY/Di6HKp+3XKOr/7VuQV7qtJAInnx+yCiS
+   0HlHfe+q0lftmlcomnC9fx/y2um6sOqv+RvHKtEZknVLraHBj1wFPGRCN
+   uSAJ3PE26EFAmRs8c9BtJla1m1TFBGsMkS/qWqF8k5EqjWk4fACszC4oU
+   9YVcGdhia1iMy8bRp+LbCJLV72JW0tgC9fTgLOX9PFfJ3jDY1FhN5W427
+   FjpjAOQjwSuM5jUS7y3PIyV07rBBQSEHLwNrH0Wfnf7XYN0wR2W/L3Qwm
+   WRecrH5bt8oMwju1J5sksLUy0WgPZdXdXY1J9NqFCy9wTbDR8atvrjud8
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252602975"
+X-IronPort-AV: E=Sophos;i="5.90,135,1643702400"; 
+   d="scan'208";a="252602975"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 19:13:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,135,1643702400"; 
+   d="scan'208";a="684512419"
+Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Feb 2022 19:13:10 -0800
+From:   Tianfei zhang <tianfei.zhang@intel.com>
+To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     corbet@lwn.net, Tianfei zhang <tianfei.zhang@intel.com>
+Subject: [PATCH v2 0/5] Add Intel OFS support for DFL driver
+Date:   Thu, 24 Feb 2022 22:09:57 -0500
+Message-Id: <20220225031002.261264-1-tianfei.zhang@intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 00/16] Remove usage of the deprecated "pci-dma-compat.h"
- API
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        David Miller <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>, Vinod Koul <vkoul@kernel.org>,
-        hao.wu@intel.com, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        awalls@md.metrocast.net,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        sreekanth.reddy@broadcom.com,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Alex Bounine <alex.bou9@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        dmaengine@vger.kernel.org, linux-fpga@vger.kernel.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kernel Janitors <kernel-janitors@vger.kernel.org>
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
- <YhXmQwvjMFPQFPUr@infradead.org>
- <ddf6010e-417d-8da7-8e11-1b4a55f92fff@wanadoo.fr>
- <YhckzJp5/x9zW4uQ@infradead.org>
- <CAK8P3a23Pjm1Btc=mXX=vU4hkNiPqz3+o4=j0FuYKHB7KuMtPg@mail.gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <CAK8P3a23Pjm1Btc=mXX=vU4hkNiPqz3+o4=j0FuYKHB7KuMtPg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+This is v2 patchset adding IOFS (Intel Open FPGA stack) support for
+DFL driver. IOFS is Intel's version of a common core set of
+RTL to allow customers to easily interface to logic and IP
+on the FPGA. IOFS leverages the DFL for the implementation of
+the FPGA RTL design.
 
-Le 24/02/2022 à 08:07, Arnd Bergmann a écrit :
-> On Thu, Feb 24, 2022 at 7:25 AM Christoph Hellwig <hch@infradead.org> wrote:
->> On Wed, Feb 23, 2022 at 09:26:56PM +0100, Christophe JAILLET wrote:
->>> Patch 01, 04, 05, 06, 08, 09 have not reached -next yet.
->>> They all still apply cleanly.
->>>
->>> 04 has been picked it up for inclusion in the media subsystem for 5.18.
->>> The other ones all have 1 or more Reviewed-by:/Acked-by: tags.
->>>
->>> Patch 16 must be resubmitted to add "#include <linux/dma-mapping.h>" in
->>> order not to break builds.
->> So how about this:  I'll pick up 1, 5,6,8 and 9 for the dma-mapping
->> tree.  After -rc1 when presumably all other patches have reached
->> mainline your resubmit one with the added include and we finish this
->> off?
-> Sounds good to me as well.
->
->         Arnd
+Patch 1, allows for ports without specific bar space.
+Patch 2, introduces features in dfl_fpga_cdev after DFL enumeration.
+On IOFS, we will add more extensions or features in DFL in
+future, so adding a new member "features"in dfl_fpga_cdev.
+Patch 3, fixs VF creation in "Multiple VFs per PR slot" and legacy model.
+Patch 4, handles dfl's starting with AFU and allows for VFs to be created.
+Patch 5, adds architecture description about IOFS support for DFL
+in documentation.
 
-This is fine for me.
-When all patches have reached -next, I'll re-submit the fixed 16th patch.
+Changelog v1 -> v2:
+   - Introducing a new member "features" in dfl_fpga_cdev for feature
+     control.
+   - Adding new flag DFL_FEAT_PORT_CONNECTED_AFU for IOFS legacy model.
+   - Updates the documentation for the access models about AFU in IOFS.
+   - Drop the PCI PID patch and will send it later.
 
+Matthew Gerlach (2):
+  fpga: dfl: Allow for ports without specific bar space.
+  fpga: dfl: Handle dfl's starting with AFU
 
-Thanks for your assistance for ending this long story :)
+Tianfei zhang (3):
+  fpga: dfl: add features in dfl_fpga_cdev
+  fpga: dfl: fix VF creation in IOFS
+  Documentation: fpga: dfl: add description of IOFS
 
-CJ
+ Documentation/fpga/dfl.rst | 113 +++++++++++++++++++++++++++++++++++++
+ drivers/fpga/dfl-pci.c     |  13 ++++-
+ drivers/fpga/dfl.c         |  38 ++++++++-----
+ drivers/fpga/dfl.h         |   6 ++
+ 4 files changed, 155 insertions(+), 15 deletions(-)
+
+-- 
+2.26.2
 
