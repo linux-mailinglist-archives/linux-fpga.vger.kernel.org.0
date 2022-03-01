@@ -2,283 +2,290 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAAB4C69FC
-	for <lists+linux-fpga@lfdr.de>; Mon, 28 Feb 2022 12:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBD64C7F27
+	for <lists+linux-fpga@lfdr.de>; Tue,  1 Mar 2022 01:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235272AbiB1LPR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 28 Feb 2022 06:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        id S231717AbiCAAXn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 28 Feb 2022 19:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235600AbiB1LOl (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 28 Feb 2022 06:14:41 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9585A7092E;
-        Mon, 28 Feb 2022 03:11:20 -0800 (PST)
+        with ESMTP id S229477AbiCAAXm (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 28 Feb 2022 19:23:42 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DEE2A266;
+        Mon, 28 Feb 2022 16:22:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646046680; x=1677582680;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Cg8xKK7zm1Ts8KpDM6zDiOcGeAYQRj1YbTg/ImUKtNM=;
-  b=BJQsuvRPU34EefSpiC2kTGuvAEXL3SqIFR06zaq7WvWngXTuYpTYEYWe
-   ++XACKjjbHjHdilua43DcowC4mvTaxqUeNbtjYbs0hRbWdKGRvvK9Mz1r
-   GOvN8mMHHB18vwrc/gfBGf12/JBffYznvQPYL/j4b4i6b8LebJgQPtnZm
-   RSnOACAm+2EcXHXELnjJPzawABst5e5SqoZMYLYYjGp0VWr+ZMUB8k0CQ
-   FACoyIi09aoYJyGxBStUZtcosV2i+rYMGwEDuDmIazkAPMdnlfYN9IGcg
-   7pN/ZqDHZ6f0+h5tEkIFEuLv5GxAtvjIGYAnmmHpHMc9iPTHds4zfEqML
+  t=1646094179; x=1677630179;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=XUmmuHjG8G/Dw4YcsSBZoSmwvfmIIN75R1y/yRMIssk=;
+  b=OdwjHFtAtp466VNc7gwPerSsgNihQ4xP9p+j4QKdTsfOjFsP4GVHinDg
+   vXWFJIE6q/ZCn6jwYR9rolDW7PpsGfh4jEtKXnh3KPJmXeraT1iYKaGrU
+   9uUDGCEuexyk3FlJFjCtgZJcgueqz4VP+waFMoXajSWC2xL1yQGAg6wV0
+   uyYZYqhqf3LcZxut/QW7jM1aZDhU770ygNvFnih8+n0jM0T81cAJjrsMN
+   oNgMpJ+IcOWMlXDvvbW3igVXutOauvKnBq+z/6TIV/KaGIU+zTlHSSIjP
+   ZblNG8wAlOj/+7QuPrzssR2w8mqKNIS0wJqDtTckT52aEFbcI69rwUBuG
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="251692406"
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="251692406"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 03:10:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="507389034"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga002.jf.intel.com with ESMTP; 28 Feb 2022 03:10:01 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 28 Feb 2022 03:10:00 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Mon, 28 Feb 2022 03:10:00 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 28 Feb 2022 03:10:00 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B37YG1yW2pM9JTSLvytxOLAkAv5jPxMxyPp6SYwYaKL4WZGQy4m0MspL3ffNOzsK7opbFaYlhYW6ooX44U9bhyu1t4CvsUjenjb74FqR+kFmN5I8sA3PbiuPtgKMAknF8M+LRN5I6ePO+y4Y9feW32McLZOucZXB4liYhWLz8VIqWNzaNc+TqkE9nFf8LZkcJJDm6PoWVr3QCIHEbQ3HDcW/sdsERT/8iiR2ya4fijKpbLIANpdwbJbbERM5sPIs/HOPHBCY/e/cCc4vFa3r8I35ErUge7bxQpNEenMfIYrw3Yip/klw3R3d6UEVbnXyNxr1fIVvGtl3UmyqDvCsTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oqch6jRUxYiV0U9yfxLVpvzSnujRTV0NGvx7tTBM5Xg=;
- b=mzMWuPeXud50V0R9+Yg9NT4pRACT1Fq2oKkj95BOhicpO7dkuvkqTJa9qi6xGF7arFXsJckuaWps204hnGxGtomAkOr1zULIlri+YioTB3D7MRTQg7SehnV46KAWZ4czgsEd3GU60qClZVRbcfp4KL5zIB/Xq3j3gNo+5/zbQp9Kw5VQ/aDnByi0ONqC3XRoQoYjuBnTU2MVyC1GjIyG5pr83MjvC4Bq1MIMUWh9SaCJDf+EnMvzpOnSAdTc4Lzdr+de+15FfN5c8bO12Glv3Q/PQMS0uYxawCmPBNProo+kwfn5vA5rk79X0URWey4ZDOncCaPKEgBcDhaOp3e7FA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by CO1PR11MB4884.namprd11.prod.outlook.com (2603:10b6:303:6c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Mon, 28 Feb
- 2022 11:09:58 +0000
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::e1a9:e3c3:d61d:dd1d]) by DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::e1a9:e3c3:d61d:dd1d%3]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
- 11:09:58 +0000
-From:   "Wu, Hao" <hao.wu@intel.com>
-To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277682743"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="277682743"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 16:22:59 -0800
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="510296877"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.40])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 16:22:59 -0800
+Date:   Mon, 28 Feb 2022 16:25:03 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     "Wu, Hao" <hao.wu@intel.com>
+cc:     Tom Rix <trix@redhat.com>,
+        "Zhang, Tianfei" <tianfei.zhang@intel.com>,
         "mdf@kernel.org" <mdf@kernel.org>,
         "Xu, Yilun" <yilun.xu@intel.com>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "corbet@lwn.net" <corbet@lwn.net>
-Subject: RE: [PATCH v1] fpga: dfl: check feature type before parse irq info
-Thread-Topic: [PATCH v1] fpga: dfl: check feature type before parse irq info
-Thread-Index: AQHYKWCM9LLv46vm40url05b1bO9gKyo0a6A
-Date:   Mon, 28 Feb 2022 11:09:58 +0000
-Message-ID: <DM6PR11MB381942D6F18C6518FE3556B585019@DM6PR11MB3819.namprd11.prod.outlook.com>
-References: <20220224092242.127081-1-tianfei.zhang@intel.com>
-In-Reply-To: <20220224092242.127081-1-tianfei.zhang@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 753442f3-74c4-488d-9b4e-08d9faaadbc1
-x-ms-traffictypediagnostic: CO1PR11MB4884:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <CO1PR11MB4884F924F69210520F76F12E85019@CO1PR11MB4884.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FbElCaCQ+OPPRNb6IHyHfdyyYuNqP7H+UNIqyC4aKKcWsWyawZpUKPtejRaYHsg06S1HfVFRpwleWdS84+/nAQaLINEa2rD6JJ13ZSTKHuP/ngyPa7sRrecs/b6JEbTyeG0zw6BcRvmc4ZURbi8b9TR/HLR9uFXfJbqyX2bjvAKuI5cOVoNa7Bj6ykQIV6xd7Cge2t/oDKUp9Uw1xpA/sOGc9rjVkRT3/jk+KYTs/PFGqc9T/76sMLUXNNguBdpjhqoo/QFmVLQiaEYFnU+aIYqE44+tmm/rpOwPW33tS3YfCkkf4YcoiRyvLI2fIHFcze77rQE0+HZ6/6ExBhXiRJgAvmUl5ebCGTRCocO98iTRshIi1NtubaNa194v4BPX0/wjuMdvjwdinzc5yIIowvM0YkUe6S/x+5Chedy23NTYbPx3SD3LT+fJ5WR62bse7jltFx1ScjYa3DZepQv3lDt9rHnc8sMDzo1bkV3eOyXQ5YLlFT7Zb3OxJsncFuKe2zyAbkcNx+ZONm18euneXTL4e02/bw5prS0en3VGXVjSvzNiQvb2cozNlTGBNQSetAwZKH3vfRbBavM4nJvZhLP2k6lA8z8Tp6otNO+0wcMNowqejyV8X/rggpXhO6n7OCijMN3hX7IfDfEJif18PpnD9V21llc2bC464HnZp7UgE2sn0tyYoGYTXMg7yFju2IYrXFxJMMIz/Ka5+fZu75ELJGeC2M+UGCT6hxVhGUCZd72acdvp/VcjuwPVQxs2ymNviYupF4MvUrsYY54ZqkKlMLh3ATZYM3jKmHfC76DuK4ZtAu4e5ChwIREnWn3Zj0BSfGj9LCPSSVp/xopGRQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(71200400001)(508600001)(966005)(110136005)(8676002)(76116006)(45080400002)(9686003)(66476007)(66946007)(6506007)(66446008)(66556008)(7696005)(64756008)(8936002)(52536014)(5660300002)(83380400001)(2906002)(82960400001)(38070700005)(122000001)(38100700002)(186003)(26005)(86362001)(4326008)(316002)(55016003)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?oSBU40jJXt0xM9AFY8a+RxmPzJzeIB5sr++I7b6aRP8gVLgP4YkJLe9LXsem?=
- =?us-ascii?Q?WZpsoBeuub9WC//gEs+L04rB7ESYUOTa8ZODrArZsQXSGLSKqtYGaZFL8p/x?=
- =?us-ascii?Q?RIKLy9cRLAOZWEdi8jQB32vRCPCxVp0LDAfxISDZkxa8TG6v7UF/QCEZph3a?=
- =?us-ascii?Q?70tmlQ0DmPNPuzHl2dk9srZ0pODHiq97Y8xll0gfKWKeMu1QSDZ58xYk+xKm?=
- =?us-ascii?Q?ANiFrnegnEQWeqkgRVNlFz3pq6TgPYdSSxECFrm8D3WUisLwcVHNNKD20SYy?=
- =?us-ascii?Q?ixfFWbaZQRRq7xoPIOIaZMSDa1pbf3FzWg2FCDneBZPASJuyLbl529xH5WMi?=
- =?us-ascii?Q?SKNqdP2pdWQwdiLQNj9Obks0BHMY7qED2diD7Kt/oy6CpUmDuUxirGvPWZtv?=
- =?us-ascii?Q?EaXHfNq4sb+lGfywMzIcDLYTiRnE/qgYvH3Ce/xUGKO6Q8lm2bFDuGaRAKTC?=
- =?us-ascii?Q?7CRYoO4Ypdnx65Ng0qQ/OtTmby84r6Tc8+agVtNmw1PkVwh3EVIWBwm8NTS3?=
- =?us-ascii?Q?Izu/9JDuqB0O/RPxlcmSy4PuKiyES+HtnrWhIlKUbLk94F6o0XV07eKStaDJ?=
- =?us-ascii?Q?7e6zaarxPHj6Ydq4JHhYiOYedmLXkdpxh4u2952Wuhh5mHHBj3Hok6PFsrYy?=
- =?us-ascii?Q?S48NabZM1y0jnI1N3Kv4pIO7kmMHKQSHnr08GJ6C2VIyjIJiWsti5BnPSctb?=
- =?us-ascii?Q?9iDgCx1m59Sdo2HtW/I6jXMIzDIiTUoX5IiCQquZpg1yC9TpS8UOax+1Z8/p?=
- =?us-ascii?Q?P2vU5x35s8Lq+2e4mgBmTX42Tm6krRpXUPkRQZPHdwIvCd5vUElHX2GY8Cdw?=
- =?us-ascii?Q?XUl9kTwnTIhwa/EE+HcD9rfZ2WpOal+BDTTvrs5aDmfBBKovn2efE310O/nn?=
- =?us-ascii?Q?OtOdUzQjUKWUXFwwNDQaRIvVg+DJpAYNtd0wBAgmcabiU4Zn7T1WlVBvnObw?=
- =?us-ascii?Q?TrL6i5p87PI9lrZaiRZwBg8kO2zyLQ4JRGU7r/l8qh1Dosy2rbhk1fHKfeGG?=
- =?us-ascii?Q?O0khptyyn2OGnZjii+AAv/gHJjhUnvdEcPNyvoKz3f9gnK732VOdesfdUf7S?=
- =?us-ascii?Q?Tg1m21KdcLUOusR8/IarPhmmaOv53F6vDRGzOUUlhOe3yiXewKmvUbtcBRh9?=
- =?us-ascii?Q?MZZ+KJfZvxywwAjZaw0dIoL1h9ZZR9NAsOH8glBmEYApHjJDxrHM7/kO4ZtM?=
- =?us-ascii?Q?3INVbGN8EO/yADbIirSg0IOtfvAlNPfBT/An448aX87IjMqsIDIH7+TLYwoA?=
- =?us-ascii?Q?f7vECVOpyEDbcRi8aeGrm7xELaKQT3DaIK7rmFvkj8IRHqCWt9hnvp2sLSwO?=
- =?us-ascii?Q?grluKZ/4NVVSmlF7QuzUrZNjTwhI3JVhdEbRwbX9wT3lFKWYkpb29azJvtUX?=
- =?us-ascii?Q?D3LH3gk1erdLz2yDHLpmuuBOFRhn5fa+ywlF85jtxb4RChkudlM1e1a+4tkc?=
- =?us-ascii?Q?nmBrCO8C1/FC7j6JUoBFSwEAYbnNoQueZvSj/o4DrYbjx9eukOeFThKPBGKm?=
- =?us-ascii?Q?WEOjqdMijsdzihzK8stCrEpwxi+tA7NdNCGd+D1CwoIpoatVg6RsjKwU7DwX?=
- =?us-ascii?Q?AR+RrQMymr7LgARSwCvbqJJpfbLTQ9j30f275geaOyiNHpL0ABdzmTNkG2Hv?=
- =?us-ascii?Q?Jw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "Grier, Aaron J" <aaron.j.grier@intel.com>
+Subject: RE: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
+In-Reply-To: <DM6PR11MB38194BD59EBFE97F125A37B685019@DM6PR11MB3819.namprd11.prod.outlook.com>
+Message-ID: <alpine.DEB.2.22.394.2202281618480.103377@rhweight-WRK1>
+References: <20220214112619.219761-1-tianfei.zhang@intel.com> <20220214112619.219761-8-tianfei.zhang@intel.com> <ed8f4b5f-5c92-f555-ed2d-c5b8f38d5372@redhat.com> <BN9PR11MB5483BC7EE52A47CEAEFC58A0E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
+ <3c9fce03-ef29-d80f-6639-0c237c28cf58@redhat.com> <alpine.DEB.2.22.394.2202210934570.117064@rhweight-WRK1> <e5580849-c137-fb61-0599-198c341bf688@redhat.com> <BN9PR11MB54835A454A34ECE13349B555E33B9@BN9PR11MB5483.namprd11.prod.outlook.com>
+ <d6cf0f48-e90a-6441-6096-5b87122a0bb6@redhat.com> <alpine.DEB.2.22.394.2202240932380.634457@rhweight-WRK1> <DM6PR11MB38194BD59EBFE97F125A37B685019@DM6PR11MB3819.namprd11.prod.outlook.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 753442f3-74c4-488d-9b4e-08d9faaadbc1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2022 11:09:58.6668
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JZlpxdn03vvJViZyYk33zw4dvhSb8OahTLI5Kx6PW7fPHWDYBPRA5e6/wiI+LhZaUV2r78TH5OiTWLoM4dUF2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4884
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323328-604420537-1646094309=:103377"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-> Subject: [PATCH v1] fpga: dfl: check feature type before parse irq info
->=20
-> From: Tianfei Zhang <tianfei.zhang@intel.com>
->=20
-> The feature ID of "Port User Interrupt" and the
-> "PMCI Subsystem" are identical, 0x12, but one is for FME,
-> other is for Port. It should check the feature type While
-> parsing the irq info in parse_feature_irqs().
->=20
-> Fixes: 8d021039cbb5 ("fpga: dfl: parse interrupt info for feature devices=
- on
-> enumeration")
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Actually this is not a real bug, as in original design, there is no overlap=
- for FME and
-Port features. This is why you see features for Port doesn't start from 0. =
-But anyway
-I am good with such extension.
+--8323328-604420537-1646094309=:103377
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-> Link: https://lore.kernel.org/linux-
-> fpga/BN9PR11MB54833D7636348D62F931526CE33A9@BN9PR11MB5483.nam
-> prd11.prod.outlook.com/
->=20
-> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> ---
->  Documentation/fpga/dfl.rst |  5 +++++
->  drivers/fpga/dfl.c         | 38 ++++++++++++++++++++++----------------
->  2 files changed, 27 insertions(+), 16 deletions(-)
->=20
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index ef9eec71f6f3..9ce418da1876 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -502,6 +502,11 @@ Developer only needs to provide a sub feature driver
-> with matched feature id.
->  FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme=
--pr.c)
->  could be a reference.
->=20
-> +Individual DFL drivers are bound DFL devices based on Feature Type and
-> Feature ID.
-> +The definition of Feature Type and Feature ID can be found:
-> +
-> +https://github.com/OPAE/linux-dfl-feature-id/blob/master/dfl-feature-ids=
-.rst
 
-Thanks for tracking ID allocations. could we also add some description that=
- if
-user want to implement a new private feature, then they need to submit new
-ID application to https://github.com/OPAE/linux-dfl-feature-id, and add som=
-e
-README file to guide people for the application process?
 
-Thanks
-Hao
+On Mon, 28 Feb 2022, Wu, Hao wrote:
 
-> +
->  Location of DFLs on a PCI Device
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
->  The original method for finding a DFL on a PCI device assumed the start =
-of the
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 599bb21d86af..6bff39ff21a0 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -940,9 +940,12 @@ static int parse_feature_irqs(struct
-> build_feature_devs_info *binfo,
->  {
->  	void __iomem *base =3D binfo->ioaddr + ofst;
->  	unsigned int i, ibase, inr =3D 0;
-> +	enum dfl_id_type type;
->  	int virq;
->  	u64 v;
->=20
-> +	type =3D feature_dev_id_type(binfo->feature_dev);
-> +
->  	/*
->  	 * Ideally DFL framework should only read info from DFL header, but
->  	 * current version DFL only provides mmio resources information for
-> @@ -957,22 +960,25 @@ static int parse_feature_irqs(struct
-> build_feature_devs_info *binfo,
->  	 * code will be added. But in order to be compatible to old version
->  	 * DFL, the driver may still fall back to these quirks.
->  	 */
-> -	switch (fid) {
-> -	case PORT_FEATURE_ID_UINT:
-> -		v =3D readq(base + PORT_UINT_CAP);
-> -		ibase =3D FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> -		inr =3D FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> -		break;
-> -	case PORT_FEATURE_ID_ERROR:
-> -		v =3D readq(base + PORT_ERROR_CAP);
-> -		ibase =3D FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> -		inr =3D FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> -		break;
-> -	case FME_FEATURE_ID_GLOBAL_ERR:
-> -		v =3D readq(base + FME_ERROR_CAP);
-> -		ibase =3D FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> -		inr =3D FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> -		break;
-> +	if (type =3D=3D PORT_ID) {
-> +		switch (fid) {
-> +		case PORT_FEATURE_ID_UINT:
-> +			v =3D readq(base + PORT_UINT_CAP);
-> +			ibase =3D FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> +			inr =3D FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> +			break;
-> +		case PORT_FEATURE_ID_ERROR:
-> +			v =3D readq(base + PORT_ERROR_CAP);
-> +			ibase =3D FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> +			inr =3D FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> +			break;
-> +		}
-> +	} else if (type =3D=3D FME_ID) {
-> +		if (fid =3D=3D FME_FEATURE_ID_GLOBAL_ERR) {
-> +			v =3D readq(base + FME_ERROR_CAP);
-> +			ibase =3D FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> +			inr =3D FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> +		}
->  	}
->=20
->  	if (!inr) {
-> --
-> 2.26.2
+>>>
+>>> On 2/21/22 7:11 PM, Zhang, Tianfei wrote:
+>>>>
+>>>>> -----Original Message-----
+>>>>> From: Tom Rix <trix@redhat.com>
+>>>>> Sent: Tuesday, February 22, 2022 2:10 AM
+>>>>> To: matthew.gerlach@linux.intel.com
+>>>>> Cc: Zhang, Tianfei <tianfei.zhang@intel.com>; Wu, Hao
+>> <hao.wu@intel.com>;
+>>>>> mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>;
+>>>>> linux-fpga@vger.kernel.org;
+>>>>> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org; corbet@lwn.net
+>>>>> Subject: Re: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
+>>>>>
+>>>>>
+>>>>> On 2/21/22 9:50 AM, matthew.gerlach@linux.intel.com wrote:
+>>>>>>
+>>>>>> On Fri, 18 Feb 2022, Tom Rix wrote:
+>>>>>>
+>>>>>>> On 2/18/22 1:03 AM, Zhang, Tianfei wrote:
+>>>>>>>>> -----Original Message-----
+>>>>>>>>> From: Tom Rix <trix@redhat.com>
+>>>>>>>>> Sent: Wednesday, February 16, 2022 12:16 AM
+>>>>>>>>> To: Zhang, Tianfei <tianfei.zhang@intel.com>; Wu, Hao
+>>>>>>>>> <hao.wu@intel.com>; mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>;
+>>>>>>>>> linux-fpga@vger.kernel.org; linux-doc@vger.kernel.org;
+>>>>>>>>> linux-kernel@vger.kernel.org
+>>>>>>>>> Cc: corbet@lwn.net; Matthew Gerlach
+>>>>>>>>> <matthew.gerlach@linux.intel.com>
+>>>>>>>>> Subject: Re: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> On 2/14/22 3:26 AM, Tianfei zhang wrote:
+>>>>>>>>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>>>>>>>>>
+>>>>>>>>>> Add the PCI product id for an Open FPGA Stack PCI card.
+>>>>>>>>> Is there a URL to the card ?
+>>>>>>>> This PCIe Device IDs have registered by Intel.
+>>>>>>> A URL is useful to introduce the board, Is there one ?
+>>>>>>>>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>>>>>>>>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+>>>>>>>>>> ---
+>>>>>>>>>>     drivers/fpga/dfl-pci.c | 4 ++++
+>>>>>>>>>>     1 file changed, 4 insertions(+)
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c index
+>>>>>>>>>> 83b604d6dbe6..cb2fbf3eb918 100644
+>>>>>>>>>> --- a/drivers/fpga/dfl-pci.c
+>>>>>>>>>> +++ b/drivers/fpga/dfl-pci.c
+>>>>>>>>>> @@ -76,12 +76,14 @@ static void cci_pci_free_irq(struct pci_dev
+>>>>>>>>>> *pcidev)
+>>>>>>>>>>     #define PCIE_DEVICE_ID_INTEL_PAC_D5005        0x0B2B
+>>>>>>>>>>     #define PCIE_DEVICE_ID_SILICOM_PAC_N5010    0x1000
+>>>>>>>>>>     #define PCIE_DEVICE_ID_SILICOM_PAC_N5011    0x1001
+>>>>>>>>>> +#define PCIE_DEVICE_ID_INTEL_OFS        0xbcce
+>>>>>>>>> INTEL_OFS is a generic name, pci id's map to specific cards
+>>>>>>>>>
+>>>>>>>>> Is there a more specific name for this card ?
+>>>>>>>> I think using INTEL_OFS is better, because INTEL_OFS is the Generic
+>>>>>>>> development platform can support multiple cards which using OFS
+>>>>>>>> specification, like Intel PAC N6000 card.
+>>>>>>> I would prefer something like PCIE_DEVICE_ID_INTEL_PAC_N6000
+>> because
+>>>>>>> it follows an existing pattern.  Make it easy on a developer, they
+>>>>>>> will look at their board or box, see X and try to find something
+>>>>>>> similar in the driver source.
+>>>>>>>
+>>>>>>> To use OSF_ * the name needs a suffix to differentiate it from future
+>>>>>>> cards that will also use ofs.
+>>>>>>>
+>>>>>>> If this really is a generic id please explain in the doc patch how
+>>>>>>> every future board with use this single id and how a driver could
+>>>>>>> work around a hw problem in a specific board with a pci id covering
+>>>>>>> multiple boards.
+>>>>>>>
+>>>>>>> Tom
+>>>>>> Hi Tom,
+>>>>>>
+>>>>>> The intent is to have a generic device id that can be used with many
+>>>>>> different boards.  Currently, we have FPGA implementations for 3
+>>>>>> different boards using this generic id.  We may need a better name for
+>>>>>> device id than OFS.  More precisely this generic device id means a PCI
+>>>>>> function that is described by a Device Feature List (DFL).  How about
+>>>>>> PCIE_DEVICE_ID_INTEL_DFL?
+>>>>>>
+>>>>>> With a DFL device id, the functionality of the PF/VF is determined by
+>>>>>> the contents of the DFL.  Each Device Feature Header (DFH) in the DFL
+>>>>>> has a revision field that can be used identify "broken" hw, or new
+>>>>>> functionality added to a feature.  Additionally, since the DFL is
+>>>>>> typically used in a FPGA, the broken hardware, can and should be fixed
+>>>>>> in most cases.
+>>>>> How is lspci supposed to work ?
+>>>> There is an example for one card using IOFS and DFL.
+>>>>
+>>>> # lspci | grep acc
+>>>> b1:00.0 Processing accelerators: Intel Corporation Device bcce (rev 01)
+>>>> b1:00.1 Processing accelerators: Intel Corporation Device bcce
+>>>> b1:00.2 Processing accelerators: Intel Corporation Device bcce
+>>>> b1:00.3 Processing accelerators: Red Hat, Inc. Virtio network device
+>>>> b1:00.4 Processing accelerators: Intel Corporation Device bcce
+>>>>
+>>>> Note: There 5 PFs in this card, it exports the management functions via
+>>>> PF0(b1:00.0),
+>>>> Other PFs like b1:00.1, b1:00.2, b1:00.4, are using for testing, which
+>>>> depends on RTL designer
+>>>> or project requirement. The PF3 instance a VirtIO net device for example,
+>>>> will bind with virtio-net driver
+>>>> presenting itself as a network interface to the OS.
+>>
+>> Hi Tom,
+>>
+>> These are very good questions, and the answers will be addressed in the
+>> documentation associated with a v2 submission of this patch.
+>>
+>>>
+>>> What I mean there is heterogeneous set of cards in one machine, how do you
+>>> tell which card is which ?
+>>
+>> If the PCI PID/VID is generic, indicating only that there is one or more
+>> DFL, then some other mechanism must be used to differentiate the cards.
+>> One could use unique PCI sub-PID/sub-VIDs to differentiate specific
+>> implementations.  One could also use some register in BAR space to help
+>> identify the card, or one could use PCI Vital Product Data (VPD) to
+>> provide detailed information about the running FPGA design on the card.
+>
+> Ideally DFL has different scope than PCI. DFL is a higher layer concept than
+> PCI, as DFL can be applied to PCI device, platform device or even other devices.
+> If some PCI level quirks need to be applied before accessing BAR for one card,
+> then DFL may not be able to help at all. Use PCI level solution should be better,
+> and different VID/DID may be the easiest solution.
+>
+> Hao
 
+Very good point Hao.  DFL is a higher layer than PCI.  So PCI level quirks 
+would need to be handled at the PCI level.  The VID/DID, optionally 
+in conjuction with the Subsytem Vendor ID and Substem ID, would be used to 
+determine how the quirks were applied.
+
+Matthew
+
+
+>>
+>>>
+>>> Or in a datacenter where the machines are all remote and admin has to flash
+>>> just the n6000's ?
+>>
+>> This problem exists with the N3000 cards.  Depending on the FPGA
+>> configuration, the line side of the card could be very different (e.g.
+>> 4x10Gb or 2x2x25Gb).  The network operator must make sure to update a
+>> particular N3000 card with the correct FPGA image type.  In the case of
+>> the N3000 there is a register exposed through sysfs containing the
+>> "Bitstream ID" which contains the line side configuration of the FPGA.
+>>
+>>>
+>>> How could she find just the n6000's with lspci ?
+>>
+>> If you only wanted to use lspci to determine the card, then
+>> differentiating PCI sub-VID/sub-PID could be used or VPD could be used.
+>>
+>>>
+>>> How would the driver know ?
+>>
+>> The dfl-pci driver is fairly generic in that it doesn't really care about
+>> the PCI PID/VID because all it really does enumerate the DFLs.  It is the
+>> individual dfl drivers that may need to know hw differences/bugs for that
+>> component IP.
+>>
+>>>
+>>> Tom
+>>>
+>>>>
+>>>>> A dfl set can change with fw updates and in theory different boards could
+>>>>> have
+>>>>> the same set.
+>>>>>
+>>>>> Tom
+>>>>>
+>>>>>> Matthew
+>>>>>>>>> Tom
+>>>>>>>>>
+>>>>>>>>>>     /* VF Device */
+>>>>>>>>>>     #define PCIE_DEVICE_ID_VF_INT_5_X        0xBCBF
+>>>>>>>>>>     #define PCIE_DEVICE_ID_VF_INT_6_X        0xBCC1
+>>>>>>>>>>     #define PCIE_DEVICE_ID_VF_DSC_1_X        0x09C5
+>>>>>>>>>>     #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF    0x0B2C
+>>>>>>>>>> +#define PCIE_DEVICE_ID_INTEL_OFS_VF        0xbccf
+>>>>>>>>>>
+>>>>>>>>>>     static struct pci_device_id cci_pcie_id_tbl[] = {
+>>>>>>>>>>         {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
+>>>>>>>>>> PCIE_DEVICE_ID_PF_INT_5_X),},
+>>>>>>>>> @@
+>>>>>>>>>> -95,6 +97,8 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
+>>>>>>>>>>         {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
+>>>>>>>>> PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
+>>>>>>>>>> {PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK,
+>>>>>>>>> PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
+>>>>>>>>>> {PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK,
+>>>>>>>>>> PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
+>>>>>>>>>> +    {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
+>> PCIE_DEVICE_ID_INTEL_OFS),},
+>>>>>>>>>> +    {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
+>>>>>>>>> PCIE_DEVICE_ID_INTEL_OFS_VF),},
+>>>>>>>>>>         {0,}
+>>>>>>>>>>     };
+>>>>>>>>>>     MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
+>>>>>>>
+>>>
+>>>
+>
+--8323328-604420537-1646094309=:103377--
