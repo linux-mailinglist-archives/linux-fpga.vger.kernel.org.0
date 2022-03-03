@@ -2,40 +2,40 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661EA4CB3DA
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6534CB3D9
 	for <lists+linux-fpga@lfdr.de>; Thu,  3 Mar 2022 01:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbiCCAe0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 2 Mar 2022 19:34:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S230410AbiCCAe1 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 2 Mar 2022 19:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiCCAeZ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 2 Mar 2022 19:34:25 -0500
+        with ESMTP id S230402AbiCCAe0 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 2 Mar 2022 19:34:26 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF4D3206C;
-        Wed,  2 Mar 2022 16:33:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D33732EE7;
+        Wed,  2 Mar 2022 16:33:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646267616; x=1677803616;
+  t=1646267617; x=1677803617;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=puhGGhdgKTMBV39T07x+pJAUC5Dwf4xYKce7ErjFuPA=;
-  b=QD7UO8twvQ5Av5Y6oqRu53yYELIFlsNYUyKLc2genR+5ULPqNOAWfO6U
-   99z8OK9cRvUkmHvJIdh+Cs74T1Ef3OhOAddq9XOFFcC8Jc1+6lIfF4pYh
-   6rzARFw7H8auwcenaVjZCZOhTFcxYFIRiXgbNlIcWjFWRPfpCaxWx9WkZ
-   BM05fs12Z++8zSBjSSedHlpDoOt0ddaH/S4rHHMuDJZ6y5Vu3Dt3gqKKf
-   TPsRwV6r3f6PhiWDrrR8gIwjItkhgDWCaPEABQaM/Bs5AVdxYEUhzfhO6
-   YBdYYQkLYO9XI+jXbD3FA8gu5+cuRuvCA2iR0ujaBKVmVcHDxLfY+ObiC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253468950"
+  bh=h3pvaJzVup7pXnuQkVHvNdcjk0nARUMaKJwO0XAacDg=;
+  b=i/7tH8IpcgBpwTaE4vrq1elO8pDbnE34N7IANHvlgTJfjJ2JlFtchmn0
+   R2x1dA5utGCqUuZ6v1xE/q4eSHdDLQd6Mk0VT5jUkaWRiLbbUvsxyQcwY
+   xGhw8cPQKnxhZ6+zYAgeNWOiYcsgj1YypQeAcjHYP6OEXE5Xo5rEJ1cJt
+   dlqbOwFM9ua/S+46ycwwkAmNihibBIUkzSRqmdpuNWyPabXEhGd9NDW+C
+   0753VuCHABk0BDinUmHzNHK/zZmxDjBYj+gs28CWeIjSBd3i/0scyiVjE
+   PR8/9Hu1fxSa+NG79UlRISxSyOLkujSlAb3RrVLm5yHoAU8GHnQuM/hG8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253468952"
 X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="253468950"
+   d="scan'208";a="253468952"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 16:33:32 -0800
 X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="686309310"
+   d="scan'208";a="686309315"
 Received: from rhweight-wrk1.ra.intel.com ([137.102.106.40])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 16:33:31 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 16:33:32 -0800
 From:   matthew.gerlach@linux.intel.com
 To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
@@ -44,9 +44,9 @@ To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         dan.j.williams@intel.com, ashok.raj@intel.com,
         tianfei.zhang@intel.com
 Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v2 1/2] Documentation: fpga: dfl: add PCI Identification documentation
-Date:   Wed,  2 Mar 2022 16:35:33 -0800
-Message-Id: <20220303003534.3307971-2-matthew.gerlach@linux.intel.com>
+Subject: [PATCH v2 2/2] drivers: fpga: dfl-pci: Add PCIE device IDs for Intel DFL cards
+Date:   Wed,  2 Mar 2022 16:35:34 -0800
+Message-Id: <20220303003534.3307971-3-matthew.gerlach@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220303003534.3307971-1-matthew.gerlach@linux.intel.com>
 References: <20220303003534.3307971-1-matthew.gerlach@linux.intel.com>
@@ -64,47 +64,45 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-Add documentation on identifying FPGA based PCI cards prompted
-by discussion on the linux-fpga@vger.kernel.org mailing list.
+Add the PCIE device IDs for Intel cards with Device Feature Lists
+(DFL) to the pci_dev_table for the dfl-pci driver.
 
 Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
 ---
-v2: Introduced in v2.
+v2: changed names from INTEL_OFS to INTEL_DFL
 ---
- Documentation/fpga/dfl.rst | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/fpga/dfl-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index ef9eec71f6f3..5fb2ca8e76d7 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -502,6 +502,26 @@ Developer only needs to provide a sub feature driver with matched feature id.
- FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
- could be a reference.
+diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+index 717ac9715970..8faf284509e7 100644
+--- a/drivers/fpga/dfl-pci.c
++++ b/drivers/fpga/dfl-pci.c
+@@ -77,12 +77,14 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
+ #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
+ #define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
+ #define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
++#define PCIE_DEVICE_ID_INTEL_DFL		0xbcce
  
-+PCI Device Identification
-+================================
-+Since FPGA based PCI cards can be reconfigured to a perform a completely
-+new function at runtime, properly identifying such cards and binding the
-+correct driver can be challenging. In many use cases, deployed FPGA based
-+PCI cards are essentially static and the PCI Product ID and Vendor ID pair
-+is sufficient to identify the card.  The DFL framework helps with the
-+dynamic case of deployed FPGA cards changing at run time by providing
-+more detailed information about card discoverable at runtime.
-+
-+At one level, the DFL on a PCI card describes the function of the card.
-+However, the same DFL could be instantiated on different physical cards.
-+Conversely, different DFLs could be instantiated on the same physical card.
-+Practical management of a cloud containing a heterogeneous set of such cards
-+requires a PCI level of card identification. While the PCI Product ID and
-+Vendor ID may be sufficient to bind the dfl-pci driver, it is expected
-+that FPGA PCI cards would advertise suitable Subsystem ID and Subsystem
-+Vendor ID values. PCI Vital Product Data (VPD) can also be used for
-+more granular information about the board.
-+
- Location of DFLs on a PCI Device
- ================================
- The original method for finding a DFL on a PCI device assumed the start of the
+ /* VF Device */
+ #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
+ #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
+ #define PCIE_DEVICE_ID_VF_DSC_1_X		0x09C5
+ #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF	0x0B2C
++#define PCIE_DEVICE_ID_INTEL_DFL_VF		0xbccf
+ 
+ static struct pci_device_id cci_pcie_id_tbl[] = {
+ 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_PF_INT_5_X),},
+@@ -96,6 +98,8 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
+ 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
++	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL),},
++	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF),},
+ 	{0,}
+ };
+ MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
 -- 
 2.25.1
 
