@@ -2,362 +2,219 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB93B4CCAB1
-	for <lists+linux-fpga@lfdr.de>; Fri,  4 Mar 2022 01:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6B04CD069
+	for <lists+linux-fpga@lfdr.de>; Fri,  4 Mar 2022 09:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237361AbiCDAVg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 3 Mar 2022 19:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S231540AbiCDIpj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 4 Mar 2022 03:45:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiCDAVe (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 3 Mar 2022 19:21:34 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71165AD122;
-        Thu,  3 Mar 2022 16:20:47 -0800 (PST)
+        with ESMTP id S231493AbiCDIpi (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 4 Mar 2022 03:45:38 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA92D527F3
+        for <linux-fpga@vger.kernel.org>; Fri,  4 Mar 2022 00:44:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646353247; x=1677889247;
+  t=1646383490; x=1677919490;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=T9WPo0qnXZotHfyvgI4EW6E9ew9GFI0NPxyeDdbRJN4=;
-  b=OmeRsPnks9+s1YcGKonerWRS6x9VfA2qIzdeLdgwZIZF+heacXDyoIMm
-   IEoONboNXQIGJdNb3TAEUoI+XOtpABgQQxiwicf7uV8z+p9f54c7RAn7E
-   a8RFfdrlQsMprhi/NHOII1E2CfpuW6NSS9wb5lPU7Jo40MxwdN7wdzsfc
-   mO0vD9ZcnduRMAiYII3dCxFthquNTq5o2w6yVKGqi2b4RWuifFzBN8Wvx
-   Xi+llXYn0dPqjvu3C6fyGnq0WHzYMccpff0XeFX4IF71kfzaQngbcIAim
-   RK0U71nv6k6+pEvzUIwzkF/SC7a4Pbzjz33LsWONwEkhWIa8d56e3deyk
+  bh=fGRTzGlLoPLi+Y770irppSsVbaArActvVNY5OTxFz+0=;
+  b=Ze8jp3hTl2hyCCUidUmlQIpHXX1bpSpZTJzHwMSgg7xIy/6Av2Z22Sed
+   0aaiZr9C8zm6tv9VIuSF+13mzZLnoUaqAkjcvUUoDJ19LMB0rV+WDeRIG
+   08bZUIUw9JDvKkJD7jCZbARTqMRRWNVnSuu6StktZHLmFIbdiuHg7HDxx
+   Bedd/diwHSVYvEV1cL9ybpWC7EBQCxr5nKcvXU/gDZ9IJkBq+8up3ovBZ
+   tzglfEqrov3uQ4fG+xghQ2j4BpypdXzq4oJAeGYrx1HjAnDqRwwSmeIOz
+   33CW8AWOVzMH8zYyinmtRMKIrZEwR+MLhntR9s+epBjS1RymLs6eCCxhf
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="252678596"
-X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
-   d="scan'208";a="252678596"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 16:20:47 -0800
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="253660782"
+X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
+   d="scan'208";a="253660782"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 00:44:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
-   d="scan'208";a="594599248"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Mar 2022 16:20:46 -0800
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
+   d="scan'208";a="642445020"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by orsmga004.jf.intel.com with ESMTP; 04 Mar 2022 00:44:47 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 3 Mar 2022 16:20:46 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ 15.1.2308.21; Fri, 4 Mar 2022 00:44:47 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 3 Mar 2022 16:20:46 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Thu, 3 Mar 2022 16:20:46 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.102)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ 15.1.2308.21 via Frontend Transport; Fri, 4 Mar 2022 00:44:47 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Thu, 3 Mar 2022 16:20:45 -0800
+ 15.1.2308.21; Fri, 4 Mar 2022 00:44:46 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lgHRVD23J4N9fSwa/zF6sC7miFlp+mOs/RHvu0J0NsmJ0JFuE4VU8BySTB5gHYefVP6Nh0YyPC80HWYlsDIl+sqc4jsyqmlfWKNSW4hsR3gkVpwxahewDzmei7mz6SDniT2wDYHN2BoN3lNqHxGZLVV59qYXU3WX+R2CtbUDQY3wqAHsc3OrNn504KT8wOa9aL7T0Izdj3FvNZL23B2lc2BiNc0vv9a8Wx5ZiIJKZZxuqTsiuzNcU328hZwxF9D7KpSOrFLgxurJOOdPnPpFvErOfiQ/m09XavzH6GCHfOTL2olaGNsHNznThd6Ku2lHFEXXDL8q1s5+e89iOlLBow==
+ b=VE/AuAbiX3CuAOir5lefl4v9hpeDzVFq9+LHjzIgnrZrHFNRMiQPC3ng7D1Mxh7JpfIH70pJOMUpCRjfIlQpiN4AJXFJIqRqFpKUiA9yiHN++epOaAgo9lPzRXYUZZhFkrKjL7Sb3RZp/W/HTC3BJje4NxBlRJ42oEipF160DrgIW0qayWuAYFajqHpfJPSKBljQPKvBGSsNGUKiwOWuNdMBXo+jFJ5svL59dyKtvz96Le2mjSfMqzwqmOg3w2j73Efe6NN81hBkn9lOQRZksqx4N1+8q8pPBH/tGClCx78W61NjIVKRfJqjG3/LDrX0iC3wCVLoFl1+qbDmySk8EA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tY/6VxiIXfirwj/KGvh317zwIiLLhv+cOcDNX7+rXbc=;
- b=EnXPB8L/Ba/5vbkdbsfKNksH2DUON1Yi0rmDQ/5mgps9sm3rjzaJP7pVQAVeb4Ihkh9ssEH9sPRPAFK2M84+2Hm4MZDb08HWEHB5kzMk8g9FzHznVw2V6QkrKpBby9xXyiCESIfbQAlPC5h7fiJdRSb97+Mp5t5i2AlhXAKX5UoI7v8r9XwYmVncpEdI/pUvq5jbfts7uL1NcmXSXH70G9PFzVuVDwrXCOlfeKbKCDrkupBW+1nS3GSTDqRW7qBBA4dHp7xaC1xJ/Mpj4KLrXdCLzQgzwN9Sb4TA0DPemYzrZrnvUQknBbV//r/0UI2/d3+Su2/Rq+ckbGOtGrM13w==
+ bh=wWRU7OIKYEKKuFWN1nnRhuOOAeZpM0yJri61p6l2Juo=;
+ b=IKw/HJknodjt4k6FCqiZrUhuaNkdrNGpHRkKqgNdyPSOVOLsmjXwuwtnCqFq8hHJcuymvkgyGykSaY9S1G3CkFaH0CAl8hrvYA6cwl7HQZVo+MyAwFw9ZvU5vVoM2Sy+IKXneR1y4YxMKoESAdRaugC8+8c41w+QhfovUc6aDDqeoXzf/Cvp1rQuoIpUg0kzkVw66t5F8rBEYd3j2GgjbYbDucuPoFXf4wLKLb+C9uOthAYeQYHysZWzQAnOuZhcsCfw2rx838vuy19Yu9wxT//KQoNtX64FGJNEXAfE0h7ruk3zg6bGp/xkkO7fHwUtm0/sRdG1njw3kcTYLVB1WA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
- by CY4PR11MB1256.namprd11.prod.outlook.com (2603:10b6:903:25::10) with
+Received: from DM8PR11MB5735.namprd11.prod.outlook.com (2603:10b6:8:10::7) by
+ BN6PR11MB1891.namprd11.prod.outlook.com (2603:10b6:404:107::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Fri, 4 Mar
- 2022 00:20:40 +0000
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::8c4b:e24c:c69f:7809]) by BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::8c4b:e24c:c69f:7809%6]) with mapi id 15.20.5038.014; Fri, 4 Mar 2022
- 00:20:40 +0000
-From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
-To:     "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "corbet@lwn.net" <corbet@lwn.net>
-Subject: RE: [PATCH v1] fpga: dfl: check feature type before parse irq info
-Thread-Topic: [PATCH v1] fpga: dfl: check feature type before parse irq info
-Thread-Index: AQHYKWCMboctMLwByUuDsP0F5N+Bl6yo1LAAgADoPMCAABbUAIAElC3Q
-Date:   Fri, 4 Mar 2022 00:20:40 +0000
-Message-ID: <BN9PR11MB54830CC9AB0EB6737B1B1958E3059@BN9PR11MB5483.namprd11.prod.outlook.com>
-References: <20220224092242.127081-1-tianfei.zhang@intel.com>
- <DM6PR11MB381942D6F18C6518FE3556B585019@DM6PR11MB3819.namprd11.prod.outlook.com>
- <BN9PR11MB548388C1E086059E277F4C8BE3029@BN9PR11MB5483.namprd11.prod.outlook.com>
- <DM6PR11MB3819683BD840979FF8F6084885029@DM6PR11MB3819.namprd11.prod.outlook.com>
-In-Reply-To: <DM6PR11MB3819683BD840979FF8F6084885029@DM6PR11MB3819.namprd11.prod.outlook.com>
-Accept-Language: zh-CN, en-US
+ 2022 08:44:44 +0000
+Received: from DM8PR11MB5735.namprd11.prod.outlook.com
+ ([fe80::948:c1e4:4f45:e53f]) by DM8PR11MB5735.namprd11.prod.outlook.com
+ ([fe80::948:c1e4:4f45:e53f%5]) with mapi id 15.20.5038.016; Fri, 4 Mar 2022
+ 08:44:44 +0000
+From:   "Ang, Tien Sung" <tien.sung.ang@intel.com>
+To:     "Wu, Hao" <hao.wu@intel.com>, "Xu, Yilun" <yilun.xu@intel.com>
+CC:     Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
+Subject: RE: [PATCH] fpga: altera-cvp: Increase the credit timeout
+Thread-Topic: [PATCH] fpga: altera-cvp: Increase the credit timeout
+Thread-Index: AQHYJunzc0vqy726LUioVAKtQqjR3KykdDqAgARQMwCABjQlgA==
+Date:   Fri, 4 Mar 2022 08:44:44 +0000
+Message-ID: <DM8PR11MB5735394B66899E6244C99AA6BE059@DM8PR11MB5735.namprd11.prod.outlook.com>
+References: <20220221141127.3765-1-tien.sung.ang@intel.com>
+ <20220225160203.GA1377773@yilunxu-OptiPlex-7050>
+ <DM6PR11MB381994DFABA2C0F1FC4E236A85019@DM6PR11MB3819.namprd11.prod.outlook.com>
+In-Reply-To: <DM6PR11MB381994DFABA2C0F1FC4E236A85019@DM6PR11MB3819.namprd11.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.401.20
-dlp-reaction: no-action
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2b70bceb-8607-46f8-7046-08d9fd74d06b
-x-ms-traffictypediagnostic: CY4PR11MB1256:EE_
+x-ms-office365-filtering-correlation-id: 0971b3c7-3e6a-49bc-7b18-08d9fdbb3b42
+x-ms-traffictypediagnostic: BN6PR11MB1891:EE_
 x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <CY4PR11MB1256256A32BBF6B9C28C90ACE3059@CY4PR11MB1256.namprd11.prod.outlook.com>
+x-microsoft-antispam-prvs: <BN6PR11MB18918F92F9726FCA4282188BBE059@BN6PR11MB1891.namprd11.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: v1cPzgGjxh1d6ERAe+dQz8HvM9jQ+1N8k3k6mLaZ1RqLEu0rU4WnLRZkcOPU9OvVrGZDvUk0kde7Gca65GPcZCPjPCuYlHuVld+5CcY4+WczvKA2JVZBrM4RF0/2FWw566V0mCEeE/3wiHaaiWSkNI+3U+ZMHGmVnKcecGoR9UOACXlEL+vqF9YmMXjlaApUAlATolykBy65ePp6uRYKAi3ZEAj89k/81o5xr68dsBwIBCvdwuqwoAPDA1S2bRADem/qbGo8zq55XmL9922GVs5r/pEFhuENURmDkmX1RGbIDUOsn0xjvxKgDad6Cqc+UKz7H+1Cf3pHIkJiHU2fbQ2yldibOxcpDC0lyRgoQIS9sHQ3UFmk1sX6jWXssMywYpxs5xhSqu8u/mgtS3wAenuuHURkwt9HVsa9nosnGhbtOgeCdKuIe8lr0yK/DaxJioej6zry0HN8xSmnJrLauSNN5Q4QC5uHG+BpZ3yWHEioVIMGVTag+PyQngd0LuJikzenQzM4lGySNrvDAUsKPjiPqOoq3z4Q/eKCg46HMIq4mwtNbgprztfHuLkXK9rvSPBECKAsqE70J+ziBa2u1xVobYJxGpZ9vPKIO6gSYivV3lnfm8Sh5qSLGoyYSQUkMLJH10fyFLqLy+4Kmv+WXPksv4xgyQk2Lp02pKf2t9W2MeejxgLsuD8Rz2dhYza1c9bv1QUq2qZKyhd0pWOoIUoWJXROqRu3hUq4W4npbHs9K+JZJVXIbDzxM9BdeaU/FLWmJrCeEt2ckK5LjZ4YERoEP4PhZ6+hmZRkTMQgExPlgTj1dZYQTU6/j02aCEeUtVhRzJ7MPsvGvB3HsIY6jQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(64756008)(9686003)(316002)(8676002)(66946007)(38100700002)(33656002)(82960400001)(4326008)(76116006)(26005)(66446008)(122000001)(5660300002)(186003)(45080400002)(52536014)(66556008)(66476007)(38070700005)(508600001)(966005)(55016003)(8936002)(6506007)(7696005)(110136005)(53546011)(83380400001)(86362001)(71200400001)(2906002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: wD0HPnJvj8Ww2dxTn1ZBzHrPnnyGKuMlTYO/QB1m5CXVnRd8uSEMqgSw6Ukau0O5GzCmdeXaYhGZvFsZBWvtZg7zBfiKIkdFf/LOEaVL0jOrLk/wxJDoxf90d3m1+8y2ypmObTE/balQwkOrHG6TOfgubUYwNb4AzE0LFQDwYznDhwzOZjHYH7PwTOpiAaLRrEpEP66SdOJsDogi9x3bMBFIs6uJun9CgTCiRnwXZ8dSQjkkSxW5UetvtwdYynM2YMtd2lez9fazdE/sKsFFvtWOGNpRe0LrckTjMO1YuR+y13t+GRfxmfHcBh6j2wLysdbY7OrnpBny6Ps5rQ1HWoNDlqVmqrlIXcw1G7dyeEhjunBbqImX9oM48KKBUdkiH93R7rJNHyTjMceiZgAGeX/lqQeodVYyxzZL5ckF/Kje2ixDQxEMxw9d792eZi9ox4PsX3ImwZbRK90EbTJZkL/UHdCi/p45IASTs9RhYaS++NH22s2v3kW7i3hDy5ljno1WVo23yJqwOK0D8lldEnDRnaisUJshPk1rK07uWT6STSxVAje+AwbH4SuJyJqjagaSkzoZRuj36iGKgz10Nl6RQ1Pw0BJMtjLvkEwwT/SBadh4/FfpTXpXtsYdOfbkN3HDKeZC1RZpSpwCRp9CKQoHd8A//6av0BXkKbiOq62TmT8mGJ0XoTRxbl6bsYwchDnGHUN8OimPCOeARxPdMA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5735.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(83380400001)(5660300002)(54906003)(6636002)(53546011)(26005)(6506007)(186003)(52536014)(8936002)(7696005)(55016003)(9686003)(66556008)(66476007)(66446008)(71200400001)(316002)(122000001)(82960400001)(64756008)(86362001)(33656002)(508600001)(38100700002)(38070700005)(66946007)(76116006)(8676002)(4326008)(110136005);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nZcWu8f4u95e4Huv/JCejeJH6LLhhMxX/9pl/YOy6sx6yAAoeKcDf+5aJhb2?=
- =?us-ascii?Q?w5L5e62BVygRBDLQK1KMNcKlyE79hrNXO8ab7ZX4dZcmokL0RYjSh2vc6TKt?=
- =?us-ascii?Q?9Q8AXc3nPhgQf2/TvSCRKunhUP6fY0i+WXgyr3rIN61gTpN332N/GP7GLOj8?=
- =?us-ascii?Q?eeJ6sffwNvTj1wzm3b/X/Qrv2nHtPczX+oDdV8dOpX7/IhtrEXOEDroI2nCd?=
- =?us-ascii?Q?p9grW+8WZ6n3GO4CT7vgzPQsXw0UVnJqMQ1nG/Ra1YHZge7qq+tThH6xGt8d?=
- =?us-ascii?Q?K7Edq9W9W4gnvzJ0IACimB395lvTg6vxBGitDEQ5YrrLvl+Lq1285rLFfA6q?=
- =?us-ascii?Q?jxAygE4jV0fs3kZmvc+immx0Qoxe0/GBK1Z/DZ5+b9iLEE4OY4CPHwEV9FlQ?=
- =?us-ascii?Q?VmoGjaoFtcZtCwLSj/m5r+BxKEP7PB30F0Yyv4sCJjkBLujYEhVq76OfFmLq?=
- =?us-ascii?Q?bZUI+TE8nOK6NTCRZB8ZX19oTVtiHJ3t7UZNgIvGmL/OE9AapkV4AxoBj7cF?=
- =?us-ascii?Q?tkf0vyF8fCXp+cL60NpUhhtwoKVKPKGFJQ09AYLqEdHpzCTgboSVpCrkj8r8?=
- =?us-ascii?Q?ZWYOM1758fseSnvK5r1E+Zr0x6hOsDMlvOV0tq2VvNu+lzjlMnl9KILYsCfA?=
- =?us-ascii?Q?zcHudOxrvRxwu6EVIjM7w8txUnKJoOpFMX5hH6jCNHi5MsaBofeRlPQ2t8LF?=
- =?us-ascii?Q?J4qfNtCmvYSX5csPMlaz1c0dvu7f8lGaabN9NnZ56j51i6eAKK8vu88IYzKz?=
- =?us-ascii?Q?5VlIxytv9340eFysZMtN1EDlB53CDSj8FaW3sqe0poy9hK7EhuBbXGXK/+68?=
- =?us-ascii?Q?RS+rlw8KYo0pOV7Nu6rvCT0MpiLsSn4y12Y/VBd2TXZZuaaee/pUNZEvwdpn?=
- =?us-ascii?Q?HH7QJw+7EDZxBD6QhBP4sNZJfuGhsDk2k03gWjpkgVzcSfLzpZsFaRb8aOEx?=
- =?us-ascii?Q?h2qfaEIa3KnaSIAeascUx+M3S9r/TjDKs30Jt7+TDHnlMdomSDaW54RfU1aM?=
- =?us-ascii?Q?NRvwGojkY9e0/zJV+5NJ/xDbB5kSJXX70VwRv24boqSFQx1ltumm8JMT0eBA?=
- =?us-ascii?Q?LurD54HnT9Z2rbnZdzfKGCjSgArah0D+/beuWDupwzImR+JDbY8NFD5uRGlL?=
- =?us-ascii?Q?3fH9DsOz1BY+d+TL/o3o3xH6fACefBvuJxCB7oMEyX4ce1l/C8IcODkSEzD2?=
- =?us-ascii?Q?EixGwdaaeVogxX9swHHsnSRfZuB9pa7pNTwsGhs5WPksAqyBj/etSzfdlhNu?=
- =?us-ascii?Q?ErW5JyWWU4Wsr0imLPYpnZSdxBQLkHhjCdkMpWHKKJf/5cQrzLQXQBSPf4M5?=
- =?us-ascii?Q?9jisKztJPpe8Ia3bdaAKV5sX4jqQgCsji6WAKCpoDzquIA1vJuCvPlTfiuRv?=
- =?us-ascii?Q?9IQWcVSbzQlNrPP8muir8v19UL9+VIFim8puryllf5tfVzsDa7IZWyixt5SH?=
- =?us-ascii?Q?U7ArgjoOfr9IrFU/Nw1bAx7e3ZPSCDWuumCxBRaXK0Y8EIu6QvhzAk33qSTw?=
- =?us-ascii?Q?bX8oX6OE4chahOk92uov4McPveuhVV3isvWQzEkDnpA6WlGL3r6rJaiQhxLY?=
- =?us-ascii?Q?H0585r0Hl0do5oCBOTD27wqCv0HyzLL9IaPU4HSyzw2XPPWpUUk6TcxS1u+d?=
- =?us-ascii?Q?qZwwFRX1SOzpLTebzAhg8NA=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?o4+xThVK2mb9Jit8vv1XnzmvZp19Prw8KZ9IqCU98Y2/uMNqZqnCmymSQmsO?=
+ =?us-ascii?Q?w5IaWmdZyoy7kSpwERU5gyb1mmyFQDl0BRvIRgZ0ezgD8PLanvM5Kzd2Jz5f?=
+ =?us-ascii?Q?el+2iV/TCFt0DAyhv56UArG5HpXXc12WF6eb5hbsuCrJzUR0pE5OUkPXJgTf?=
+ =?us-ascii?Q?uXKZyCfNwyETK+D7CkcAkJOuKqZLSZl3sj8tFccbpL9dtaXsoFemTuH1gyGw?=
+ =?us-ascii?Q?gNaN5Mt6LY2b0pTEWccXJ62ZIWTQSn5e2BKr1/8oe/u7msVu7Z1fWCVafrbA?=
+ =?us-ascii?Q?MB5Y8Y85kryL3ewl0CSSCeeB24Lkda4rCuDTkhHZc4fTw2YTM1KJDMViHhr3?=
+ =?us-ascii?Q?xh/SAP+gbUt3CsKPDw/MthitWzQVC3IAkRzmT8Q+jHHULSRiIylFf4WmVPre?=
+ =?us-ascii?Q?xUPhWVXgK9gbtzdW90iaGrylUm/d1Eyumk4PYvSfTCiT4lGlUHl9AVebvwA+?=
+ =?us-ascii?Q?kggeaEM5rEkVx9DInyK2UVWWB3SsFSTRYHjCJ0KFgy2TButz97jl40fKeDBB?=
+ =?us-ascii?Q?Mrbap7oaExAUVGauP+gCOXMVb2jfHh0Zu2PMQ7NdB8ujIztHn+LZQWx0Hl5y?=
+ =?us-ascii?Q?99H5N20ynpsoF20YNpaITkoaGIwOFdhxjtWzN7Ulu1MEXQawBaRatns6uY6D?=
+ =?us-ascii?Q?sw11hFG1uTcH8wVxPy5GBdkSvFAhoPVjN2oCQesoyL8a8ajjhX91ycUBnreT?=
+ =?us-ascii?Q?Cyda7b6bP60aWq4WndroVdavsiXinUheaP2eMLv5p14pKWiO8be7qJy+iLhb?=
+ =?us-ascii?Q?Ipv76Ms/v2itmmgGUnuCGQqAUcsAHwTa7frSi1ax4WxPmVcjXqNaskb0V2BN?=
+ =?us-ascii?Q?Lloy1sYt/s7lt9en6OyWwjcZmIz8w5uHnN8aEEMuVn048jNh1ULJFeUf5Y07?=
+ =?us-ascii?Q?PouVBJ0vumeSCMRE9BjE+YKOpr+ehcUY+wNlx1JT54eXkst2Ei/RV9GSKNhk?=
+ =?us-ascii?Q?q0zMUmUU5MaV6RpSqqubcbBl9AhAbFu/L4I9ADjRWo5mXC7kgjL+QKmomVDx?=
+ =?us-ascii?Q?IQUidUHLmHUtr8Mu54gE96VByuyvA3sTNPQVMRKQNwveaHLOwXv4wCyXkVeJ?=
+ =?us-ascii?Q?IVLuCMzFhaL/qqhhNASqpDFfg3trQQq312bYUWoEmWiIKWB4t2BUNSJUZGan?=
+ =?us-ascii?Q?SNVRlBDbccdERXqwt+LaQbl2oG5V814/XTg6whyUwmTlW5Gl24GF7gDx+Y2r?=
+ =?us-ascii?Q?jGqKrMQ0mcmqZVE3Mq2Aar9w0w54dEdd2rdh3+ns8umOt2V+Y/AYJ/bodDlg?=
+ =?us-ascii?Q?qAdFGN4JDwaontExiu83qncAyyZditDJlTSvvg3CC1xQS9EZ7fluKBnOitSu?=
+ =?us-ascii?Q?VpVoE0ca8iWLSW844owlSJxYrGiRodKpROb4bHITGn0helmVmGpI2ucvkxf3?=
+ =?us-ascii?Q?hCblhZurjkCTvf6uRqHd0bgpsA+ESHezsUSSmCi1poGWBwh7P9sPeB1efQXv?=
+ =?us-ascii?Q?J/cNgSXbSH3N9UAOl8VqymRCoIL+LiGssyvwuUfHPyJ18LJcT3Fpk8pybRfr?=
+ =?us-ascii?Q?l6avz2pQGnRQU79cKTLsI84XC8AFoRh9Cb6rCjeCZMRO2lxRx3AeZxTtATO+?=
+ =?us-ascii?Q?l1gEw9qyZ/VvZLVxk342L+9oKi+hMRpslkcq94mAVn90YcwMSA953lWXUXUt?=
+ =?us-ascii?Q?GWosIknNSscWwfWsxDQ6Qmk=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b70bceb-8607-46f8-7046-08d9fd74d06b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2022 00:20:40.3746
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5735.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0971b3c7-3e6a-49bc-7b18-08d9fdbb3b42
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2022 08:44:44.3466
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0iNRuhAqax3zYf0EWB50UtMZ9CPOLd3w1mfH+NHAsC5LCWy8HdzybxQOOt9MtRelXFzmNGP7wM0P0NgqzWpdoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1256
+X-MS-Exchange-CrossTenant-userprincipalname: 1beBHpSvmU0rIjmg4sMJtXQWYuamiieSOpNZa0KQCF8ncuTbBQbjWILmlrZQXrlobt3eFXr1Nwibn8jwsaVc0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1891
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Hi Hao,
 
+We have tested the 40ms change with 500 loops and deem this satisfying
+based on the recommendations by the Intel FPGA SDM HW team.
+SDM was expected to respond within  a maximum time of 20ms +-error margin.=
+=20
+However, there were cases this weren't the case during tests.=20
+After many rounds of tests, they conclude that 40ms is doable.=20
+And, this is  double the previous time-out of 20ms.=20
+There is a bigger margin added this time.=20
+Overall, we don't intend to increase the time-out any further.=20
+Thanks
+Tien Sung
 
-> -----Original Message-----
-> From: Wu, Hao <hao.wu@intel.com>
-> Sent: Tuesday, March 1, 2022 10:23 AM
-> To: Zhang, Tianfei <tianfei.zhang@intel.com>; trix@redhat.com;
-> mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.or=
-g;
-> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org
-> Cc: corbet@lwn.net
-> Subject: RE: [PATCH v1] fpga: dfl: check feature type before parse irq in=
-fo
+-----Original Message-----
+From: Wu, Hao <hao.wu@intel.com>=20
+Sent: Monday, 28 February, 2022 5:54 PM
+To: Xu, Yilun <yilun.xu@intel.com>; Ang, Tien Sung <tien.sung.ang@intel.com=
+>
+Cc: Moritz Fischer <mdf@kernel.org>; Tom Rix <trix@redhat.com>; linux-fpga@=
+vger.kernel.org
+Subject: RE: [PATCH] fpga: altera-cvp: Increase the credit timeout
+
+> Subject: Re: [PATCH] fpga: altera-cvp: Increase the credit timeout
 >=20
-> > > -----Original Message-----
-> > > From: Wu, Hao <hao.wu@intel.com>
-> > > Sent: Monday, February 28, 2022 7:10 PM
-> > > To: Zhang, Tianfei <tianfei.zhang@intel.com>; trix@redhat.com;
-> > > mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>;
-> > > linux-fpga@vger.kernel.org; linux-doc@vger.kernel.org;
-> > > linux-kernel@vger.kernel.org
-> > > Cc: corbet@lwn.net
-> > > Subject: RE: [PATCH v1] fpga: dfl: check feature type before parse
-> > > irq info
-> > >
-> > > > Subject: [PATCH v1] fpga: dfl: check feature type before parse irq
-> > > > info
-> > > >
-> > > > From: Tianfei Zhang <tianfei.zhang@intel.com>
-> > > >
-> > > > The feature ID of "Port User Interrupt" and the "PMCI Subsystem"
-> > > > are identical, 0x12, but one is for FME, other is for Port. It
-> > > > should check the feature type While parsing the irq info in
-> > > > parse_feature_irqs().
-> > > >
-> > > > Fixes: 8d021039cbb5 ("fpga: dfl: parse interrupt info for feature
-> > > > devices on
-> > > > enumeration")
-> > >
-> > > Actually this is not a real bug, as in original design, there is no
-> > > overlap for FME and Port features. This is why you see features for P=
-ort
-> doesn't start from 0.
-> > But
-> > > anyway I am good with such extension.
+> On Mon, Feb 21, 2022 at 10:11:27PM +0800, tien.sung.ang@intel.com wrote:
+> > From: Ang Tien Sung <tien.sung.ang@intel.com>
 > >
-> > I think this is a bug, I add some printk debug log in DFL driver, we
-> > observed that
+> > Increase the timeout for SDM (Secure device manager) data credits=20
+> > from 20ms to 40ms. Internal stress tests running at 500 loops failed=20
+> > with the current timeout of 20ms. At the start of a FPGA=20
+> > configuration, the CVP host driver reads the transmit credits from=20
+> > SDM. It then sends bitstream FPGA data to SDM based on the total=20
+> > credits. Each credit allows the CVP host driver to send 4kBytes of=20
+> > data. There are situations whereby, the SDM did not respond in time dur=
+ing testing.
+
+Why this timeout is changed to 40ms not 50ms or 60ms?
+What's the time we expected from SDM?
+I hope we don't need to change this again.
+
+Thanks
+Hao
+
+> >
+> > Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
+> > ---
+> >  drivers/fpga/altera-cvp.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c=20
+> > index 4ffb9da537d8..5295ff90482b 100644
+> > --- a/drivers/fpga/altera-cvp.c
+> > +++ b/drivers/fpga/altera-cvp.c
+> > @@ -52,7 +52,7 @@
+> >  /* V2 Defines */
+> >  #define VSE_CVP_TX_CREDITS		0x49	/* 8bit */
+> >
+> > -#define V2_CREDIT_TIMEOUT_US		20000
+> > +#define V2_CREDIT_TIMEOUT_US		40000
+> >  #define V2_CHECK_CREDIT_US		10
+> >  #define V2_POLL_TIMEOUT_US		1000000
+> >  #define V2_USER_TIMEOUT_US		500000
 >=20
-> Per original design, you should not use overlap feature IDs for FME and P=
-ort as
-> existing products. It extends the scope/rules of using feature IDs, for y=
-our new
-> cards, so to me, this is not a sw bug but extension.
-
-Tom in the previous patch commented that this is a bug fix.
-
-Hi Tom, do you agree this is extension or a DFL software bug?
-
+> Acked-by: Xu Yilun <yilun.xu@intel.com>
 >=20
-> > it was mistaken for
-> > the "Port User Interrput" feature device while we are parsing the FME
-> > feature devices, so actually it read out the PMCI MMIO space for "Port
-> > User Interrput".
-> >
-> > Here is the log:
-> >
-> > [90273.482859] parse_feature: DFH_TYPE_FIU [90273.482861]
-> > parse_feature_fiu: id:0 fme [90273.482864] create_feature_instance:
-> > feature id: 0xfe [90273.482868] parse_feature: DFH_TYPE_PRIVATE
-> > [90273.482870] create_feature_instance: feature id: 0x1 [90273.482872]
-> > parse_feature: DFH_TYPE_PRIVATE [90273.482874]
-> > create_feature_instance: feature id: 0x7 ...
-> > [90273.482895] create_feature_instance: feature id: 0x12
-> > [90273.482898] parse_feature_irqs, PORT_UINT_DFH: 0x3000000200001012
-> > [90273.482898] parse_feature_irqs, PORT_UINT_CAP: 0xbaadbeefdeadbeef
-> > [90273.482899] dfl-pci 0000:b1:00.0: feature: 0x12, irq_base: 2779, nr_=
-irqs:
-> > 3823
-> > [90273.482901] dfl-pci 0000:b1:00.0: Ignoring nvalid interrupt number
-> > in feature
-> > 0x12 6602 > 7
-> >
-> > >
-> > > > Link: https://lore.kernel.org/linux-
-> > > >
-> > >
-> >
-> fpga/BN9PR11MB54833D7636348D62F931526CE33A9@BN9PR11MB5483.nam
-> > > > prd11.prod.outlook.com/
-> > > >
-> > > > Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> > > > ---
-> > > >  Documentation/fpga/dfl.rst |  5 +++++
-> > > >  drivers/fpga/dfl.c         | 38 ++++++++++++++++++++++------------=
-----
-> > > >  2 files changed, 27 insertions(+), 16 deletions(-)
-> > > >
-> > > > diff --git a/Documentation/fpga/dfl.rst
-> > > > b/Documentation/fpga/dfl.rst index ef9eec71f6f3..9ce418da1876
-> > > > 100644
-> > > > --- a/Documentation/fpga/dfl.rst
-> > > > +++ b/Documentation/fpga/dfl.rst
-> > > > @@ -502,6 +502,11 @@ Developer only needs to provide a sub feature
-> > > > driver with matched feature id.
-> > > >  FME Partial Reconfiguration Sub Feature driver (see
-> > > > drivers/fpga/dfl-fme-pr.c)  could be a reference.
-> > > >
-> > > > +Individual DFL drivers are bound DFL devices based on Feature
-> > > > +Type and
-> > > > Feature ID.
-> > > > +The definition of Feature Type and Feature ID can be found:
-> > > > +
-> > > > +https://github.com/OPAE/linux-dfl-feature-id/blob/master/dfl-feat
-> > > > +ure-
-> > > > +ids.rst
-> > >
-> > > Thanks for tracking ID allocations. could we also add some
-> > > description that if user want to implement a new private feature,
-> > > then they need to submit new
-> > ID
-> > > application to https://github.com/OPAE/linux-dfl-feature-id, and add
-> > > some README file to guide people for the application process?
-> >
-> > That is a good point, I will add this for next version patch.
-> >
-> > >
-> > > Thanks
-> > > Hao
-> > >
-> > > > +
-> > > >  Location of DFLs on a PCI Device
-> > > >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > >  The original method for finding a DFL on a PCI device assumed the
-> > > > start of the diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> > > > index 599bb21d86af..6bff39ff21a0 100644
-> > > > --- a/drivers/fpga/dfl.c
-> > > > +++ b/drivers/fpga/dfl.c
-> > > > @@ -940,9 +940,12 @@ static int parse_feature_irqs(struct
-> > > > build_feature_devs_info *binfo,  {
-> > > >  	void __iomem *base =3D binfo->ioaddr + ofst;
-> > > >  	unsigned int i, ibase, inr =3D 0;
-> > > > +	enum dfl_id_type type;
-> > > >  	int virq;
-> > > >  	u64 v;
-> > > >
-> > > > +	type =3D feature_dev_id_type(binfo->feature_dev);
-> > > > +
-> > > >  	/*
-> > > >  	 * Ideally DFL framework should only read info from DFL header, b=
-ut
-> > > >  	 * current version DFL only provides mmio resources information
-> > > > for @@ -957,22 +960,25 @@ static int parse_feature_irqs(struct
-> > > > build_feature_devs_info *binfo,
-> > > >  	 * code will be added. But in order to be compatible to old versi=
-on
-> > > >  	 * DFL, the driver may still fall back to these quirks.
-> > > >  	 */
-> > > > -	switch (fid) {
-> > > > -	case PORT_FEATURE_ID_UINT:
-> > > > -		v =3D readq(base + PORT_UINT_CAP);
-> > > > -		ibase =3D FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> > > > -		inr =3D FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> > > > -		break;
-> > > > -	case PORT_FEATURE_ID_ERROR:
-> > > > -		v =3D readq(base + PORT_ERROR_CAP);
-> > > > -		ibase =3D FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> > > > -		inr =3D FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> > > > -		break;
-> > > > -	case FME_FEATURE_ID_GLOBAL_ERR:
-> > > > -		v =3D readq(base + FME_ERROR_CAP);
-> > > > -		ibase =3D FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> > > > -		inr =3D FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> > > > -		break;
-> > > > +	if (type =3D=3D PORT_ID) {
-> > > > +		switch (fid) {
-> > > > +		case PORT_FEATURE_ID_UINT:
-> > > > +			v =3D readq(base + PORT_UINT_CAP);
-> > > > +			ibase =3D FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> > > > +			inr =3D FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> > > > +			break;
-> > > > +		case PORT_FEATURE_ID_ERROR:
-> > > > +			v =3D readq(base + PORT_ERROR_CAP);
-> > > > +			ibase =3D FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> > > > +			inr =3D FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> > > > +			break;
-> > > > +		}
-> > > > +	} else if (type =3D=3D FME_ID) {
-> > > > +		if (fid =3D=3D FME_FEATURE_ID_GLOBAL_ERR) {
-> > > > +			v =3D readq(base + FME_ERROR_CAP);
-> > > > +			ibase =3D FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> > > > +			inr =3D FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> > > > +		}
-> > > >  	}
-> > > >
-> > > >  	if (!inr) {
-> > > > --
-> > > > 2.26.2
-
+> > --
+> > 2.25.1
