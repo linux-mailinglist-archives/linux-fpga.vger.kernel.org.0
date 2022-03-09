@@ -2,158 +2,236 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E651C4D237C
-	for <lists+linux-fpga@lfdr.de>; Tue,  8 Mar 2022 22:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A914D3C6D
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Mar 2022 22:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbiCHVlO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 8 Mar 2022 16:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
+        id S230398AbiCIVxf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 9 Mar 2022 16:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241520AbiCHVlN (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Mar 2022 16:41:13 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF3A4EF65;
-        Tue,  8 Mar 2022 13:40:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=I8yzHC1Xlo807W/LcczI8zaHBKgBK4Z74fr7+DrjB6Y=; b=MMoZWDf3F66bBjPZVjjfcy9ed8
-        +n5IRnJJoId3VMNStIS2o8v5OfttlDumunSYftyBazUO0R/vije/CuTgxuRmyxdwlsKVGGTFWsM9q
-        fK9orsfvTrmtaHQRcpAIy1Ccy7kR69sFhLrg5hnoRTLWk5Q4xz1uaR0YnR6XmZrspbqjPjqMznb1w
-        wWqhSDrClS7H7dBWeXUsVSXIOUlSKwoXLiIem1b589OFmpx64AdWemDNR2aiRfqdfckEDKbIqC89K
-        ycp2lmnNqICtsMvO3/6RGPbZW/CbFTAMoNXGVNcVB3cTsbTuDLrUcDGCGiVGtY+6Bh3+8dSnQHRsZ
-        DrIHgv+A==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRhYw-00GYmR-2r; Tue, 08 Mar 2022 21:40:10 +0000
-Message-ID: <6d3bca5e-00d7-3a69-4f90-809f4aac95d5@infradead.org>
-Date:   Tue, 8 Mar 2022 13:40:06 -0800
+        with ESMTP id S234704AbiCIVxf (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 9 Mar 2022 16:53:35 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63AF10DA6E;
+        Wed,  9 Mar 2022 13:52:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646862755; x=1678398755;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=fmSUzFDTn+caVfrjB+opeHTjer1QHPR05JzKn6iL2V0=;
+  b=hzExKy/Tduud7Pc3Hy3FLqembe4HL/hNq4cvGq1EAaGdUdQT4L2+04Yw
+   cg4SRbp229vhk8vhGw3KJ/L4oUapFKYRkdtVvJhxow1FLvz8VcwQPj8zu
+   Gvbo0uOC6+e4jwQCyT1nECDtTliNXUCH88heawjJSWrH6UUNIXI8kdmUr
+   LpSIjZolMsSDHs/8qzu2+hkjCvgbS6zIR1QXatpWaI+Xgrf3hiopgGL5m
+   NFiqjpyMTUNj4zOLk8sqDBsJymufI7gWD77PG7tEt+8jLyaJH4MxQ0nU6
+   ZaL6f7AgUBPbCKFxAEp9kYtFeKQPxKDcMIvm8xkulLqSBnWYet5+/6Quk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="318324554"
+X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
+   d="scan'208";a="318324554"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 13:52:34 -0800
+X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
+   d="scan'208";a="712109894"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.40])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 13:52:34 -0800
+Date:   Wed, 9 Mar 2022 13:54:36 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Tianfei zhang <tianfei.zhang@intel.com>
+cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, corbet@lwn.net
+Subject: Re: [PATCH v4 6/6] Documentation: fpga: dfl: add description of
+ OFS
+In-Reply-To: <20220307133243.1426300-7-tianfei.zhang@intel.com>
+Message-ID: <alpine.DEB.2.22.394.2203091331130.3679111@rhweight-WRK1>
+References: <20220307133243.1426300-1-tianfei.zhang@intel.com> <20220307133243.1426300-7-tianfei.zhang@intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 6/6] fpga: fpga-region: Add missing kernel-doc description
-Content-Language: en-US
-To:     Nava kishore Manne <nava.manne@xilinx.com>, mdf@kernel.org,
-        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220308094519.1816649-1-nava.manne@xilinx.com>
- <20220308094519.1816649-7-nava.manne@xilinx.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220308094519.1816649-7-nava.manne@xilinx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi,
 
-For all function return results,
 
-s/@return:/Return:/
+On Mon, 7 Mar 2022, Tianfei zhang wrote:
 
-thanks.
-
-On 3/8/22 01:45, Nava kishore Manne wrote:
-> Fixed the warnings: Function parameter or member 'xxx' not
-> described.
-> 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> This patch adds description about OFS support for DFL.
+>
 > ---
->  drivers/fpga/of-fpga-region.c | 18 ++++++++++--------
->  1 file changed, 10 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
-> index 50b83057c048..61ce257c47f3 100644
-> --- a/drivers/fpga/of-fpga-region.c
-> +++ b/drivers/fpga/of-fpga-region.c
-> @@ -28,7 +28,7 @@ MODULE_DEVICE_TABLE(of, fpga_region_of_match);
->   *
->   * Caller will need to put_device(&region->dev) when done.
->   *
-> - * Returns FPGA Region struct or NULL
-> + * @return: FPGA Region struct or NULL
->   */
->  static struct fpga_region *of_fpga_region_find(struct device_node *np)
->  {
-> @@ -43,7 +43,7 @@ static struct fpga_region *of_fpga_region_find(struct device_node *np)
->   *
->   * Caller should call fpga_mgr_put() when done with manager.
->   *
-> - * Return: fpga manager struct or IS_ERR() condition containing error code.
-> + * @return: fpga manager struct or IS_ERR() condition containing error code.
->   */
->  static struct fpga_manager *of_fpga_region_get_mgr(struct device_node *np)
->  {
-> @@ -80,7 +80,7 @@ static struct fpga_manager *of_fpga_region_get_mgr(struct device_node *np)
->   * Caller should call fpga_bridges_put(&region->bridge_list) when
->   * done with the bridges.
->   *
-> - * Return 0 for success (even if there are no bridges specified)
-> + * @return: 0 for success (even if there are no bridges specified)
->   * or -EBUSY if any of the bridges are in use.
->   */
->  static int of_fpga_region_get_bridges(struct fpga_region *region)
-> @@ -139,13 +139,13 @@ static int of_fpga_region_get_bridges(struct fpga_region *region)
->  }
->  
->  /**
-> - * child_regions_with_firmware
-> + * child_regions_with_firmware - Used to check the child region info.
->   * @overlay: device node of the overlay
->   *
->   * If the overlay adds child FPGA regions, they are not allowed to have
->   * firmware-name property.
->   *
-> - * Return 0 for OK or -EINVAL if child FPGA region adds firmware-name.
-> + * @return: 0 for OK or -EINVAL if child FPGA region adds firmware-name.
->   */
->  static int child_regions_with_firmware(struct device_node *overlay)
->  {
-> @@ -184,7 +184,7 @@ static int child_regions_with_firmware(struct device_node *overlay)
->   * Given an overlay applied to an FPGA region, parse the FPGA image specific
->   * info in the overlay and do some checking.
->   *
-> - * Returns:
-> + * @return:
->   *   NULL if overlay doesn't direct us to program the FPGA.
->   *   fpga_image_info struct if there is an image to program.
->   *   error code for invalid overlay.
-> @@ -279,7 +279,7 @@ static struct fpga_image_info *of_fpga_region_parse_ov(
->   * If the checks fail, overlay is rejected and does not get added to the
->   * live tree.
->   *
-> - * Returns 0 for success or negative error code for failure.
-> + * @return: 0 for success or negative error code for failure.
->   */
->  static int of_fpga_region_notify_pre_apply(struct fpga_region *region,
->  					   struct of_overlay_notify_data *nd)
-> @@ -339,7 +339,7 @@ static void of_fpga_region_notify_post_remove(struct fpga_region *region,
->   * This notifier handles programming an FPGA when a "firmware-name" property is
->   * added to an fpga-region.
->   *
-> - * Returns NOTIFY_OK or error if FPGA programming fails.
-> + * @return: NOTIFY_OK or error if FPGA programming fails.
->   */
->  static int of_fpga_region_notify(struct notifier_block *nb,
->  				 unsigned long action, void *arg)
-> @@ -446,6 +446,8 @@ static struct platform_driver of_fpga_region_driver = {
->  /**
->   * of_fpga_region_init - init function for fpga_region class
->   * Creates the fpga_region class and registers a reconfig notifier.
-> + *
-> + * @return: 0 on success, negative error code otherwise.
->   */
->  static int __init of_fpga_region_init(void)
->  {
+> v4:
+> add description about access the AFU on "multiple VFs per PR slot" model.
+> v3:
+> change IOFS to OFS in documentation.
+> v2:
+> * Fixs some typos.
+> * Adds more detail description about the models of AFU access which supported in OFS.
+>
+> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> ---
+> Documentation/fpga/dfl.rst | 114 +++++++++++++++++++++++++++++++++++++
+> 1 file changed, 114 insertions(+)
+>
+> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> index ef9eec71f6f3..4dcd5cc101c4 100644
+> --- a/Documentation/fpga/dfl.rst
+> +++ b/Documentation/fpga/dfl.rst
+> @@ -556,6 +556,120 @@ new DFL feature via UIO direct access, its feature id should be added to the
+> driver's id_table.
+>
+>
+> +Open FPGA stack
+> +=====================
+> +
+How about the following minor changes for the first sentence?
 
--- 
-~Randy
+Open FPGA Stack (OFS) is a collection of RTL and open source software 
+providing interfaces to access the instantiated RTL easily in a FPGA.
+
+> +Open FPGA stack aka OFS, a collection of RTL and open software providing interface
+> +to access the instantiated RTL easily in FPGA. OFS leverages the DFL for the
+> +implementation of the FPGA RTL design.
+> +
+> +OFS designs allow for the arrangement of software interfaces across multiple
+> +PCIe endpoints. Some of these interfaces may be PFs defined in the static region
+> +that connect to interfaces in an IP that is loaded via Partial Reconfiguration (PR).
+> +And some of these interfaces may be VFs defined in the PR region that can be
+> +reconfigured by the end-user. Furthermore, these PFs/VFs may also be arranged
+> +using a DFL such that features may be discovered and accessed in user space
+
+How about the following for the sentence above?
+Furthermore, these PFs/VFs may use DFLS such that feature may be discoved
+
+> +(with the aid of a generic kernel driver like vfio-pci). The diagram below depicts
+> +an example design with two PFs and two VFs. In this example, it will export the
+> +management functions via PF0, PF1 will bind with virtio-net driver presenting itself
+> +as a network interface to the OS. The other functions, VF0 and VF1, leverage VFIO
+> +to export the MMIO space to an application or assign to a VM.
+> +::
+> +
+> +     +-----------------+  +--------------+  +-------------+  +------------+
+> +     | FPGA Management |  |   VirtIO     |  |  User App   |  | Virtual    |
+> +     |      App        |  |     App      |  |             |  | Machine    |
+> +     +--------+--------+  +------+-------+  +------+------+  +-----+------+
+> +              |                  |                 |               |
+> +     +--------+--------+  +------+-------+  +------+------+        |
+> +     |     DFL Driver  |  |VirtIO driver |  |    VFIO     |        |
+> +     +--------+--------+  +------+-------+  +------+------+        |
+> +              |                  |                 |               |
+> +              |                  |                 |               |
+> +     +--------+--------+  +------+-------+  +------+------+   +----+------+
+> +     |     PF0         |  |     PF1      |  |   PF0_VF0   |   |  PF0_VF1  |
+> +     +-----------------+  +--------------+  +-------------+   +-----------+
+> +
+> +As accelerators are specialized hardware, they are typically limited in the
+> +number installed in a given system. Many use cases require them to be shared
+> +across multiple software contexts or threads of software execution, either
+> +through partitioning of individual dedicated resources, or virtualization of
+> +shared resources. On OFS, it provides several models to share the AFU
+
+s/On OFS, it/OFS/
+
+> +resources via PR mechanism and hardware-based virtualization schemes.
+> +
+> +1. Legacy model.
+> +   In legacy FPGA card platforms (like Intel PAC N3000 or N5000 Card),there is
+
+How about the following for the line above?
+With legacy model cards like the Intel PAC N3000 or N5000, there is
+
+> +   a notion that the boundary between the AFU and the shell is also the unit of
+> +   PR for those FPGA platforms. In this model, it can only able to handle a
+
+s/In this model, it can only able to/This model can only/
+
+> +   single context, because it only has one PR engine, and one PR region which
+> +   has an associated Port device.
+> +2. Multiple VFs per PR slot.
+> +   In this model, available AFU resources may allow instantiation of many of VFs
+> +   which has a dedicated PCIe function with their own dedicated MMIO space, or
+> +   partition a region of MMIO space on a single PCIe function. Intel PAC N6000
+> +   card has implemented this model.
+> +   In this model, the AFU/PR slot was not connected to port device. For DFL's view,
+> +   the Next_AFU pointer in FIU feature header of port device points to NULL in this
+> +   model, so in AFU driver perspective, there are no AFU MMIO region managed by
+> +   AFU driver. On the other hand, each VF can start with an AFU feature header without
+> +   connected to a FIU Port feature header.
+> +
+> +In multiple VFs per PR slot model, it still can access the port device using
+
+s/it still can access the port device/the port device can still be 
+accessed using/
+
+> +ioctls API which expose by /dev/dfl-port.n device node, like port reset, get
+> +port info, whose APIs were mentioned in AFU section in this documentation. But
+> +it cannot access the AFU MMIO space via AFU ioctl APIs like DFL_FPGA_PORT_DMA_MAP
+> +because no AFU MMIO space managed in AFU driver. Users can access the AFU resource
+> +by create VF devices via PCIe SRIOV interface, and then access the VF via VFIO
+
+s/by create/by creating/
+> +driver or assign the VF to VM.
+> +
+> +In multiple VFs per PR slot model, the steps enable VFs are compatible with
+> +legacy mode which mentioned in "FPGA virtualization - PCIe SRIOV" section
+> +in this documentation.
+> +
+> +OFS provides the diversity for access the AFU resource to RTL developer.
+> +An IP designer may choose to add more than one PF for interfacing with IP
+> +on the FPGA and choose different model to access the AFU resource.
+> +
+> +There is one reference architecture design using the "Multiple VFs per PR slot"
+> +model for OFS as illustrated below. In this reference design, it exports the
+> +FPGA management functions via PF0. PF1 will bind with virtio-net driver
+> +presenting itself as a network interface to the OS. PF2 will bound to the
+> +vfio-pci driver allowing the user space software to discover and interface
+> +with the specific workload like diagnostic test. To access the AFU resource,
+> +it uses SR-IOV to partition workload interfaces across various VFs.
+> +::
+> +
+> +                              +----------------------+
+> +                              |   PF/VF mux/demux    |
+> +                              +--+--+-----+------+-+-+
+> +                                 |  |     |      | |
+> +        +------------------------+  |     |      | |
+> +  PF0   |                 +---------+   +-+      | |
+> +    +---+---+             |         +---+----+   | |
+> +    |  DFH  |             |         |   DFH  |   | |
+> +    +-------+       +-----+----+    +--------+   | |
+> +    |  FME  |       |  VirtIO  |    |  Test  |   | |
+> +    +---+---+       +----------+    +--------+   | |
+> +        |                PF1            PF2      | |
+> +        |                                        | |
+> +        |                             +----------+ |
+> +        |                             |           ++
+> +        |                             |           |
+> +        |                             | PF0_VF0   | PF0_VF1
+> +        |           +-----------------+-----------+------------+
+> +        |           |           +-----+-----------+--------+   |
+> +        |           |           |     |           |        |   |
+> +        |           | +------+  |  +--+ -+     +--+---+    |   |
+> +        |           | | Port |  |  | DFH |     |  DFH |    |   |
+> +        +-----------+ +------+  |  +-----+     +------+    |   |
+> +                    |           |  | DEV |     |  DEV |    |   |
+> +                    |           |  +-----+     +------+    |   |
+> +                    |           |            PR Slot       |   |
+> +                    |           +--------------------------+   |
+> +                    | Port Gasket                              |
+> +                    +------------------------------------------+
+> +
+> +
+> Open discussion
+> ===============
+> FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
+> -- 
+> 2.26.2
+>
+>
