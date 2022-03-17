@@ -2,88 +2,95 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C314DBD3E
-	for <lists+linux-fpga@lfdr.de>; Thu, 17 Mar 2022 03:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FD24DC03C
+	for <lists+linux-fpga@lfdr.de>; Thu, 17 Mar 2022 08:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240263AbiCQCvw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 16 Mar 2022 22:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S230310AbiCQHf0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 17 Mar 2022 03:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237023AbiCQCvv (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 16 Mar 2022 22:51:51 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2431205F6;
-        Wed, 16 Mar 2022 19:50:35 -0700 (PDT)
+        with ESMTP id S230335AbiCQHfY (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 17 Mar 2022 03:35:24 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD16F8455;
+        Thu, 17 Mar 2022 00:34:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647485435; x=1679021435;
+  t=1647502448; x=1679038448;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=yrCKNch9pvQtA495w+XMZ/xp2BYXZKt8m19piGIekkg=;
-  b=QqtU1o9FN0vi+hlfy2a115NgaoFG2Y7NB4pNUegiQV2aIkkg9aldYtas
-   BsIEUNLuenGRU5QPDZXXTFKyOj4y9XmFgraFLyL3FnD5zF/AY6V3Csy+i
-   FR/fei/jRHEibSH0GXNmM4Av+W60qAyvcHwyfS3ol5Z9yYeiuBr2qEtbZ
-   D6yKyF6RKGb0QXfN0hmCO6476uoWaUfCa0mRXfald5gJ+ysaTBB9CEHd2
-   IPhcHzlaH9/wY1t+oDkrPI9RI/VQOvyjYhFl1CPwsJhVFpOBcV3BGGPmA
-   4CCBNW3r13Dl2D9M7ryTqdXy2WMwLlWiOCQSJrtTG5zeWzgpwyOPyGsUy
+  bh=kslqP82opOYUjwSmN0dayOFq80Y0G+Wty4ijFXFxKLw=;
+  b=Qh8eIQSpbQ57IHT2fgESeZRn+MkhsqQhpE685P7B8QLqShc6IAj3eOhQ
+   XWpvV+trSQJd9+WtjYIgk/F9uHVjlS88yfpZBYdQtv4ch/y6joa/r718i
+   VXyY/4WnWiSYLCQWOPzYA5BjzdWpQJArrkStnTw08KakS28FgnaefFrRO
+   FS0ujs/qdOQvmd5O4bDPKQDr1iV4zoEpFed173dXDCOUDbM0QJPOPg1PQ
+   nrbehSWlwpm6mPAKxOJbmz51vy+qrDxygPsRhZlUAU7AJT/Sut9q1Ml1H
+   Wf4HQDTODVOXxVB1cS9emkN+/89hnUCUQLzeRHc0wlr9ebRgO36JvClok
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="236712177"
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="255635708"
 X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="236712177"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 19:50:35 -0700
+   d="scan'208";a="255635708"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 00:34:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="646891781"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga004.jf.intel.com with ESMTP; 16 Mar 2022 19:50:34 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+   d="scan'208";a="498739426"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga003.jf.intel.com with ESMTP; 17 Mar 2022 00:34:08 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Mar 2022 19:50:34 -0700
+ 15.1.2308.21; Thu, 17 Mar 2022 00:34:07 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 00:34:07 -0700
 Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Wed, 16 Mar 2022 19:50:34 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2308.21 via Frontend Transport; Thu, 17 Mar 2022 00:34:07 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.47) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Wed, 16 Mar 2022 19:50:34 -0700
+ 15.1.2308.21; Thu, 17 Mar 2022 00:34:06 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OoPu074mAgUE4y8s+a3nX43vCno5flUBS7UgadcBt55cg7Izl91PnMWd5eGLLz+Nx/7I85L8UQx/1xbsh67N+IcpPj3xszY1pUWbAd1NzJ7BMWdg4QJ+RR6QjWHOk01MYHJCef1ECxte8/11RyxYFWnJX9YBll+/ChPafH/bGf+y9Xom9GlWS5c3viCaFvSK7ox/3SG4N9vUAF5EaE3N4Sb+x/w9aiwp1CBghg/q45/um6+WayYEmNiZVSqlQfI3GN+D6pb/gb+QmlxRZiKHlCilY0NvtcsHqSgfI/7ba17N0vqe/wmeGwZYwoKbVsMozrkx7Zc5HsUx5s3ji4c9RQ==
+ b=aHHcO/5lV88z5qeGFnCQaIjVfZmhJynjMkzc1NADXqneq08hRegSXVBpKLUc4a/6JjMK+HX6xAHbaHQqIlpVzYjp5yBWl7yOcF6rERC1XrJm+veQxnQVYtXInV54HeEqm1kJx5VYyllUVkBOeTcnHpj+R2dQDY9xNQM0FXndG/Ur98hTDuVeefOPgBfFdNpWS8eDexQiR7iwzrOa8kzaQN5skc3kyI7UXFtSF13ZNUibCMwLYpo3lz9eExclxUj6jtGJ7cH8j/Mr+JjQB82MV2U0v32kLEW3ehE3IzPGzYNMK+8QuqNrOQo0BjDSHqttJDQ56kUbyCACFLKQeb/j4w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oVKqQQc2SioY2o/x+ngkN0T8iMZNPdEJZYtms1KdgVg=;
- b=mK8l8+berNDVyKWRM7arnbNg6zbtCnSP3j02hOBky/6KUdUUkaKRs9JJLuiGPGfiy4cYFNFXnD+ZjhPN6z72Jei2UHi5p4bIMUET6bUeaFSIa29P0klbyvlU3czOqmoXNjysBL+XkJ+1m9fGKj7O0EotERE5vK3ZP3Js4kTxVlls+jYWUIudViVzwNIV+aUOyCITxeXpGkwtNs1U66M0cG64h1cFGRw1adgnMRZMa/ruL7JZe3QGi7n2+6Is+30BMArKxxkILTLgcafZy+4Np49DaF8obGMgWz3qQ+U/upP35SzjeigdqaCs2Q1/X9fDMvre/bxDBuH2pSkmlTFC/g==
+ bh=C4Pm8cceRICP79DNO6CqDERFJld5ijm+nB2QnVmVb0U=;
+ b=Z/WJFWDbPX1LX0+2NAjr+B5ElbdYjVzbqEEtmEXx9BVCn+8Rjyp5/5+HTRoybPifAFdH9xijgLzSHghTZBKG+9CE9SZQDc27BynXLfIgIeH8Ud03TyqTEXZr7Uj7whv61Vl6dctezW6DEjdtknQnnCdVteZqT6nQ1gO1E/JQyyhb5+IsW5iyMiIPXZuqyqpX1wee9HVhNxiRLfWLfAbZIuP6niWj4O/HBXbtjberqTqbADHj9Ud5GVcWrEORZ0FWMT606nBwNf+V/WJbSpAEvmpg3d4OHE2Vok+f/TrAbvclrfkDBJCAoMvtJCzAkcbxMcVEKbaTNNBjI89PIUpTww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
- by BYAPR11MB2583.namprd11.prod.outlook.com (2603:10b6:a02:c6::16) with
+ by MN2PR11MB4414.namprd11.prod.outlook.com (2603:10b6:208:17b::27) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.26; Thu, 17 Mar
- 2022 02:50:29 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Thu, 17 Mar
+ 2022 07:34:04 +0000
 Received: from BN9PR11MB5483.namprd11.prod.outlook.com
  ([fe80::8c4b:e24c:c69f:7809]) by BN9PR11MB5483.namprd11.prod.outlook.com
  ([fe80::8c4b:e24c:c69f:7809%5]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
- 02:50:29 +0000
+ 07:34:04 +0000
 From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
 To:     "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
         "mdf@kernel.org" <mdf@kernel.org>,
         "Xu, Yilun" <yilun.xu@intel.com>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "corbet@lwn.net" <corbet@lwn.net>
-Subject: RE: [PATCH v3] fpga: dfl: check feature type before parse irq info
-Thread-Topic: [PATCH v3] fpga: dfl: check feature type before parse irq info
-Thread-Index: AQHYNO3Mz7yyGRAOxUOWMPv4ER/dsqzC2COAgAAQnVA=
-Date:   Thu, 17 Mar 2022 02:50:28 +0000
-Message-ID: <BN9PR11MB5483AD216BC179029E279E0BE3129@BN9PR11MB5483.namprd11.prod.outlook.com>
-References: <20220311021121.1504442-1-tianfei.zhang@intel.com>
- <BYAPR11MB3816A2AD9C59AC3A1B6494C485129@BYAPR11MB3816.namprd11.prod.outlook.com>
-In-Reply-To: <BYAPR11MB3816A2AD9C59AC3A1B6494C485129@BYAPR11MB3816.namprd11.prod.outlook.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: RE: [PATCH v6 1/6] fpga: dfl: Allow ports without local bar space.
+Thread-Topic: [PATCH v6 1/6] fpga: dfl: Allow ports without local bar space.
+Thread-Index: AQHYOQUcVwr1NO7I9EaBR7STlp8buqzC1K+AgABHRmA=
+Date:   Thu, 17 Mar 2022 07:34:04 +0000
+Message-ID: <BN9PR11MB54839B3ABC5844DF45602995E3129@BN9PR11MB5483.namprd11.prod.outlook.com>
+References: <20220316070814.1916017-1-tianfei.zhang@intel.com>
+ <20220316070814.1916017-2-tianfei.zhang@intel.com>
+ <BYAPR11MB3816EAB6CC0047B2DBB5086685129@BYAPR11MB3816.namprd11.prod.outlook.com>
+In-Reply-To: <BYAPR11MB3816EAB6CC0047B2DBB5086685129@BYAPR11MB3816.namprd11.prod.outlook.com>
 Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -94,58 +101,58 @@ dlp-reaction: no-action
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9e70ca9e-1dbb-4c06-473b-08da07c0e564
-x-ms-traffictypediagnostic: BYAPR11MB2583:EE_
+x-ms-office365-filtering-correlation-id: 1852c1fd-5458-413b-4307-08da07e8833a
+x-ms-traffictypediagnostic: MN2PR11MB4414:EE_
 x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BYAPR11MB25835C7C67C2EFCE02489614E3129@BYAPR11MB2583.namprd11.prod.outlook.com>
+x-microsoft-antispam-prvs: <MN2PR11MB44149C4F07EE650410A2C84AE3129@MN2PR11MB4414.namprd11.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7s0YywHLf8fJyBGk9+NHZQmFqHOmakqhftNR5U+hYnq6xTTugGlySjhvI4OSzXa9/1lmTovElyMdu604gwdflLYLhWiOHA3IsTHf/46EbylcYQ9IUKT0KlAOYgMRygvnrZWEWS9CS+UAWo+n5Hds+ZYfYdiRvrU4lUyYA15ZAOlvDn9FO0KC8Ks3BfkwJFh+mE8QTQeyrlkmwD94DidWhvGVWXXwqWeVbWHz+kL52lPMbrt0chpME2VlCBPoxQro63P/dMOlwupumiO8sWT8OVt9NJRD8YHmtSOsKVqdCIb1w4iPbBIFNLJwJ5z2r2GjYAh6uuCkTQDFe8sCtkjKw3NjV4vV0R7OxlhevXJpVHJ/z5EFgbH2iHa0HqWCU/QUBwAaLRrIsQxTGBIjTop48LJoAlMJbhKcdA8gYexnf8h5M49Z0GXyfPi11S+DsivF6VI1iSmVzdfoPelo/6k+Dp60kh21m8uWsfNUwXJWspmk45W4JSzPYW509vrEIVcORGcxzRRnBhrNeKqPqsfroruxsRWJddSsImNgyHEWlikOHRhKTwWG1N8ys+36iQGagsjz362uVQyJGe6vO45itq02csIAyg1PN53eFaPgdSLMwDvBdSqNpReFsCExOQyYcgotOv5yNfUytSUbrPobzcbZJpBotSSMwbPIECTxVJ+9AZx5hw2RIXuqvEtDFvYbpX9DHXIVU2YDDMQdlHvW8Yf0Lw4KJMjhBnqTlCDXbU86tOJiKOSLJllmyHOlFYXgZQM61LGBKTIuPIcSw0+3K1OZqpGLWbNVQVvwmYsZR6zCexPmEGSKu8G3abXw6jpB45IB129rGAR63L/4R/S66A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(52536014)(8936002)(5660300002)(38070700005)(82960400001)(83380400001)(186003)(2906002)(26005)(53546011)(6506007)(4326008)(9686003)(110136005)(7696005)(316002)(86362001)(71200400001)(508600001)(122000001)(966005)(64756008)(8676002)(66476007)(66446008)(76116006)(66946007)(38100700002)(55016003)(33656002)(66556008);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: fIlroCAQe52x+3ccIFvYRAFNwtHEeCh+3T84hcgcdpelWccTweECJ9BnPhv1YOFR1q8akjg1GVjRVRcLA6nsonYPNBDDk8AF16B/jKdK00WxoeAb6JEW2Om+HLXRI9E+zArtX+McCL6xslJ1CnGISacw0BC0UoZgYIfaiMg86TiMnqMusiApIRl6zuPJc62phTXJQRgZtmCWr/V8w1OUG8U6obkuvhKOXrvb6FGAJXrNf2dGD2emdHhQw35TuTqRpxTXT1c+laEA4TsmFBw3j9M1CuRlW6+AC+UqfuAONm/P1GoRkjfcqRMOceJ69AqBJDK3/yLTw2KlyZrcLie4lJJbKuX3kFtJdl1pAxV499gIH3ySUlFyD0HWNQO3XZXiDu+6JJA3mGfyw9d5beATkmJBuqS5Qin+5zZoi8u+hItsSIEDs8bKy4qnkCxuYwI8eRb2WwtRimPHyXXeRp8pQm9O+qsdDVXqvlK/UR2oEserZiv1qbqoKsaJJGq2XGHGgR64wYgVSriZJjJpQ/364W2o9/rx46ZbYx+XOQMYpkmGNgGd4PftehdMQfnR7v7nTN5sr2ZSZaxT3dbbJIq5ayDGncwdrAixuRUDEQcPDsAdtdTDNlZ2fOsPvlXhO4dJDeeuc2bOKlX6PqrPGFcVa8qIBJL3oNHh9cVkeW+8eAzt3Id7xcHJmI8hWCEFwDm/+knYzl3kHBQMNGbN38x7BQXiyHtveSAL1nz3DbWbW9Y=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(26005)(83380400001)(186003)(9686003)(7696005)(6506007)(316002)(5660300002)(53546011)(71200400001)(54906003)(76116006)(66946007)(66556008)(38070700005)(122000001)(82960400001)(33656002)(66476007)(110136005)(8676002)(921005)(66446008)(64756008)(52536014)(55016003)(508600001)(2906002)(38100700002)(4326008)(86362001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?v6t0fegptKE2L2iv9YZKklFK+EeU2ngyM5v7sdNMm/mYgDFeMIWzLq7NsLTz?=
- =?us-ascii?Q?hWC/HNvW06WHc2ODoRJUmFy7LIYLNV3IvARHP9mgAh63/+J2RO7v4PU2kReA?=
- =?us-ascii?Q?uRfx6NWn1Acus02QTpBPzneu8eGz5XDivNlXCHo/ZlhP8yJzoK2WVXjx9xrC?=
- =?us-ascii?Q?gV/LzoKAILy/G1Pr9ZjaKU1RTg3yzd5i0u47hb0Ue5f5v7IQJzkzg1jDaOto?=
- =?us-ascii?Q?G6B5aTwF5F1Pcdl8nPo0Y34soS5vJDtj1G+YyY1NfdKRybdtfL+sm01CUFBS?=
- =?us-ascii?Q?liNK2mg+ppUa6X5eTM8i2y5kwEJhZ02HwzETq1/dklT2Ls7RUs+cjqS+Xrug?=
- =?us-ascii?Q?Aze4e+qrIvO4AZmaasPpvxxqq+akISPkLVyhP2vMGES94rGHZalNer3kChRO?=
- =?us-ascii?Q?5w94idu2dThwlAoOgKrhXljEroWyvKEE97LAp+U31vvsup9peMAftuJRrh60?=
- =?us-ascii?Q?7nZsK0GN71g2zD5quk6/65DUimUqsTfG+iKXbX6PBevFKiu8/4/FIYbgq7z8?=
- =?us-ascii?Q?XcWk7KZSpu/UOhYhUniYTUQUeu/3H+EI+Af/+0/tE9f29tqde8DRCKvaeT6S?=
- =?us-ascii?Q?Oy8pZt5aYchnc5RVWg/FnKXyWSKzQ1zZtL/1XHGTCc8gtKyjPIgaOFkpIpmc?=
- =?us-ascii?Q?bBhaagN31XqhCdwxc2QeqNZ6s/HRqFooPgPl4GH4FJ4WYPgqnd9Bxw/f6D1I?=
- =?us-ascii?Q?xVVa5LImkPbVqQlljReORWiQo80sDfTWZlisf+HOhv5GYeT6Gz6R8/DCJzOh?=
- =?us-ascii?Q?j88KWCyqqQRbrxUQyL3imIR+Q0Elb2BPf3FUsi2Tr5HR3Vc4AbNRg5Ag+9fj?=
- =?us-ascii?Q?3smWFMJbFFndsSK0WHzxpEPYQRKlz3npu/z2o+XpaZkVlZz/M1HzIe3YlTXM?=
- =?us-ascii?Q?xhfBTWnjMRXZVADEjzrDNzFiB4PmHpw5gRB5/ejCyTjN1XrGmwbgNvE6NKN8?=
- =?us-ascii?Q?xAcEeWWECSu2p6iUObaC/F4jqHlWfZcXTudIzcwL7VK1eIniyrm8YP6EvhsA?=
- =?us-ascii?Q?aFCkLKS0pZOYFzJuwvkuktSEHr2DzsDZqnElmA1XZx6EMWSIe0urvmLDY0vh?=
- =?us-ascii?Q?CvsbY3EwZjyIbcIISVE90fxtVYoB1LwutDc0D81ABVvg1FTwJ8prKymtmvvc?=
- =?us-ascii?Q?NoPbP8benI7ElP6ECNvb9ZpCg4T2536UPs2sRERoLndNEz/7cCCTqO7DUmGE?=
- =?us-ascii?Q?ah36fZQ4qtzKJ0vK3S0DOEKc4kfi4dJMY+K9mmX+hkC3o18heSOM0/HLc3BK?=
- =?us-ascii?Q?OiNVQKFPjBoon/k9PdL33dW7i+bdzkPfVgPYFtqumLI0/fbPjEqwfODyukuP?=
- =?us-ascii?Q?aYr0qTvMv/VVRnyxDMcG7GSKXwWJVWN7Wc5y+oGoFQFiML6/EGaLkj6mWVy1?=
- =?us-ascii?Q?/3TgA7RX9TWfHNg/PP0o4GrwWezB3Nf6F866Sm714cBi9Ef9wXBw+Q4k2qpb?=
- =?us-ascii?Q?D4g9G98dfT/wxrtoKeJEuvwXZ4hJySgH?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2SB0Vb49tvoKN6nP6jquW2kAisiDjR5QmVe8yWKd0rrKK3QgJ+9cl/Uuqwkl?=
+ =?us-ascii?Q?Dyd1FXdGGPpnCpFZQCtCUw1LKSRLTMFPHsIwmbwNJaRFzzsDod7IluKxTCIl?=
+ =?us-ascii?Q?Wrzm0oqL4szcPrkBBXtVD/VtwyesIZg0txtEBfrS56TdQ0SZ2L+RdHU77T3d?=
+ =?us-ascii?Q?PGCDjr32LGboz8j6ys/pCoYLqS3Ds3tchU3DipMxgHxHFgNCDCUS2UNTnvrL?=
+ =?us-ascii?Q?a5yB4o8sS48Tf4ut64nUbPF5KdTurYsr8rTjgh50KaWsHl/2nX3shchJ1Ply?=
+ =?us-ascii?Q?JfUQfngyE7NIxnIEgV6Xo8VN7YtM3lmRaKLz4pa8RxyrWs5zN/eUZpy11Wo9?=
+ =?us-ascii?Q?m6he53mlgVOaN9yxtYSlfRETzMsYYlvbadgEYmEA4WNXmYPeqhefUEd+bg27?=
+ =?us-ascii?Q?FmiRlUZZzGor6TEQwgmoR77WNhEbe7NqpOcv3gwpbUVuqYIoXmg8yimFzeS6?=
+ =?us-ascii?Q?1cf6q4CI4A7FpjBWOqpHGRvBbdIy6Fq7LNEGr8PThwPhR/gCESphIZtEshan?=
+ =?us-ascii?Q?a8cw98S1Sj+Pc4wBi1BiYzgjG465XV213I/8S8DEXVinevy/FVeZvrqiTZml?=
+ =?us-ascii?Q?4FS6TNV5c6UXJ1Nr4s0zNEuzg9bm4rjHufeVhH+e2h7/l33Jbg0VJe7hBUHz?=
+ =?us-ascii?Q?nPW6MTN3w2aijgKPW51L6ahr6TaG16nrSMYgQ4+/P3OBYnClZQsS9lTLlFFh?=
+ =?us-ascii?Q?cYyXggPOsvhUlnCiWdaCs2R4/B3O1dfS0hCLr/SVv46yDn3MR+I7DBKWjBGd?=
+ =?us-ascii?Q?kRAh+Xxm9YgiAgyjQTf2dYgVwfpGbgyrfWMmTZobFsVxkecOpSqF+RP9F8u6?=
+ =?us-ascii?Q?hsSPse9vNnPkpmeQDSnoEPazAJ7NPNKQLJtHxco6Z9/AJM9VVdCe+J0uftAK?=
+ =?us-ascii?Q?IogCjfQjgDfZAIWD+v3p7uDivQnHiUIAwTpnMJg7fNcFLJegKT/NFjcLvklp?=
+ =?us-ascii?Q?I5RuahrXCzuU56uzJh8BojlWmH2w5FEBP1bggzaXgBSN8zJ55SyzTWTZ40gG?=
+ =?us-ascii?Q?GimHZT0sqMDQRrMeYKKyHiFZpkQ0XUujqUmxujFyl0rrcKryyII0MA4p8UOE?=
+ =?us-ascii?Q?mktv75fR32ouVQv14ZYZRImB19xYafbLz6Gq51+4Pm7N3oNtgUF2bSFTzr+g?=
+ =?us-ascii?Q?l4WBmhkN0x2lFQIWc6k9l2Jh0GVUzx9W8jQsXDtFwgmTX8Y4FddGxiPGVIbJ?=
+ =?us-ascii?Q?XHBjaJP0leramCmmEXT2fVDaj+mPeWsqFEqw35Wpamb2pENZ/aoVO3MvqCt5?=
+ =?us-ascii?Q?3bdCLvgbnNyZ6UVMCENVAO8NAep+beY+liwKYJ9jNJoKtFcYZs0m+ERyvSnY?=
+ =?us-ascii?Q?Czp37ph9ZqlpKFPUH3/YXUa8FZw8f0JbgHS/9Zn2ocwJLaTR0hAqMYRTUZhV?=
+ =?us-ascii?Q?L0X9seoWyIfWqyWUnkIPdAOs3IjV5QToUMqTyQGtvN/fkXhwDeP0VYWuWjqE?=
+ =?us-ascii?Q?E+DGHWaXmc6QGONAJkjMv8CxhzzOLzqP?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e70ca9e-1dbb-4c06-473b-08da07c0e564
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2022 02:50:28.9078
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1852c1fd-5458-413b-4307-08da07e8833a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2022 07:34:04.0225
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: J3pUDyf8BG2WHJfqop3cjwOvJDeV5CLhYmBK15FhYV4GkCP9h72t+SwZqlvWVomLfB/+a/QEiHOPocwEAi1V1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2583
+X-MS-Exchange-CrossTenant-userprincipalname: 7E7moZdU+4o3fCDw+6xsiLAtACA58QuhjPyU9654FkKYPzNQFWVkzlEOK8K1Ay2jmTaWNBxzLuGEbVykF6rI4A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4414
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,169 +161,137 @@ List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
-
 > -----Original Message-----
 > From: Wu, Hao <hao.wu@intel.com>
-> Sent: Thursday, March 17, 2022 9:48 AM
+> Sent: Thursday, March 17, 2022 10:05 AM
 > To: Zhang, Tianfei <tianfei.zhang@intel.com>; trix@redhat.com;
 > mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.or=
 g;
-> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org
-> Cc: corbet@lwn.net
-> Subject: RE: [PATCH v3] fpga: dfl: check feature type before parse irq in=
-fo
+> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org;
+> rdunlap@infradead.org
+> Cc: corbet@lwn.net; Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Subject: RE: [PATCH v6 1/6] fpga: dfl: Allow ports without local bar spac=
+e.
 >=20
 > > -----Original Message-----
 > > From: Zhang, Tianfei <tianfei.zhang@intel.com>
-> > Sent: Friday, March 11, 2022 10:11 AM
+> > Sent: Wednesday, March 16, 2022 3:08 PM
 > > To: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org; Xu,
 > > Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org;
-> > linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Cc: corbet@lwn.net; Zhang, Tianfei <tianfei.zhang@intel.com>
-> > Subject: [PATCH v3] fpga: dfl: check feature type before parse irq
-> > info
+> > linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > rdunlap@infradead.org
+> > Cc: corbet@lwn.net; Matthew Gerlach <matthew.gerlach@linux.intel.com>;
+> > Zhang, Tianfei <tianfei.zhang@intel.com>
+> > Subject: [PATCH v6 1/6] fpga: dfl: Allow ports without local bar space.
 > >
-> > The feature ID of "Port User Interrupt" and the "PMCI Subsystem" are
-> > identical, 0x12, but one is for FME, other is for Port. It should
-> > check the feature type While parsing the irq info in
-> > parse_feature_irqs().
+> > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > >
+> > In OFS, each PR slot (AFU) has one port device which include Port
+> > control, Port user clock control and Port errors. In legacy model, the
+> > AFU MMIO space was connected with Port device, so from port device
+> > point of view, there is a bar space associated with this port device.
+> > But in "Multiple VFs per PR slot" model, the AFU MMIO space was not
+> > connected with Port device. The BarID (3bits field) in PORTn_OFFSET
+> > register indicates which PCI bar space associated with this port
+> > device, the value 0b111 (FME_HDR_NO_PORT_BAR) means that no PCI bar
+> > for this port device.
 >=20
-> What about this
-> "Previously the feature IDs defined are unique, no matter which feature t=
-ype.
-> But currently we want to extend its usage to have a per-type feature ID s=
-pace,
-> so this patch adds feature type checking as well just before look into fe=
-ature ID
-> for different features which have irq info."
+> The commit message is not matching the change, it's not related to AFU...
+>=20
+> Current usage (FME DFL and PORT DFL are not linked together)
 
-This commit looks good for me.
+This usage is only on Intel PAC N3000 and N5000 card.=20
+In my understand, the space of Port can put into any PCI bar space.=20
+In the previous use case, the space of port was located on Bar 2.
+For OFS, it allows the port without specific bar space.
 
 >=20
+> FME DFL
+> PORT DFL (located by FME's PORTn_OFFSET register, BAR + offset)
+>=20
+> Your proposed new usage is (FME DFL and PORT DFL are linked together)
+>=20
+> FME DFL -> PORT DFL
+> So FME's PORTn_OFFSET can be marked, then driver could skip it.
+>=20
+> Is my understanding correct? If yes, please update your title and commit
+> message, and add some comments in code as well.
+
+From DLF perspective, I think it is yes.
+
+How about the title:  "fpga: dfl: Allow Port and FME's DFL link together" ?
+
+I will also add some comments in code.
+Here is the new git commit for this patch, any comments?=20
+
+In previous FPGA platform like Intel PAC N3000 and N5000, The BarID (3bits =
+field) in PORTn_OFFSET
+register indicated which PCI bar space was associated with this port device=
+. In this case, the DFL of Port device
+was located in the specific PCI bar space, and then the FME and Port's DFL =
+were not linked. But in OFS, we extend
+the usage, it allows the FME and Port's DFL  linked together when there was=
+ no local PCI bar space specified by=20
+the Port device. The value 0b111 (FME_HDR_NO_PORT_BAR) of BarID means that =
+no specific PCI bar space=20
+was associated with the port device.
+
+>=20
+> Again, the change you did in dfl core code, is not only impacting your OF=
+S
+> device, but also future DFL devices, it's an extension to DFL.
+
+Yes, I agree that is an extended usage.
+
+>=20
+> Thanks
+> Hao
+>=20
+> >
 > > ---
-> > v3: Remove "Fixes" in commit log with Hao's comment, this is a
-> >     extension not a bug fix.
+> > v3: add PCI bar number checking with PCI_STD_NUM_BARS.
+> > v2: use FME_HDR_NO_PORT_BAR instead of PCI_STD_NUM_BARS.
 > >
-> > v2: add DFL Feature ID Registry in documentation.
-> >
+> > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > > Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
->=20
-> Move up your signed off line before these changelogs.
->=20
 > > ---
-> >  Documentation/fpga/dfl.rst | 11 +++++++++++
-> >  drivers/fpga/dfl.c         | 38 ++++++++++++++++++++++----------------
-> >  2 files changed, 33 insertions(+), 16 deletions(-)
+> >  drivers/fpga/dfl-pci.c | 7 +++++++
+> >  drivers/fpga/dfl.h     | 1 +
+> >  2 files changed, 8 insertions(+)
 > >
-> > diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> > index ef9eec71f6f3..14f342bb85e4 100644
-> > --- a/Documentation/fpga/dfl.rst
-> > +++ b/Documentation/fpga/dfl.rst
-> > @@ -502,6 +502,17 @@ Developer only needs to provide a sub feature
-> > driver with matched feature id.
-> >  FME Partial Reconfiguration Sub Feature driver (see
-> > drivers/fpga/dfl-fme-pr.c)  could be a reference.
+> > diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c index
+> > 4d68719e608f..2e9abeca3625 100644
+> > --- a/drivers/fpga/dfl-pci.c
+> > +++ b/drivers/fpga/dfl-pci.c
+> > @@ -258,6 +258,13 @@ static int find_dfls_by_default(struct pci_dev *pc=
+idev,
+> >  			 */
+> >  			bar =3D FIELD_GET(FME_PORT_OFST_BAR_ID, v);
+> >  			offset =3D FIELD_GET(FME_PORT_OFST_DFH_OFST, v);
+> > +			if (bar >=3D PCI_STD_NUM_BARS ||
+> > +			    bar =3D=3D FME_HDR_NO_PORT_BAR) {
+> > +				dev_dbg(&pcidev->dev, "skipping port without
+> > local BAR space %d\n",
+> > +					bar);
+> > +				continue;
+> > +			}
+> > +
+> >  			start =3D pci_resource_start(pcidev, bar) + offset;
+> >  			len =3D pci_resource_len(pcidev, bar) - offset;
 > >
-> > +Individual DFL drivers are bound DFL devices based on Feature Type
-> > +and
-> > Feature ID.
-> > +The definition of Feature Type and Feature ID can be found:
-> > +
-> > +https://github.com/OPAE/linux-dfl-feature-id/blob/master/dfl-feature-
-> > +ids.rst
-> > +
-> > +If you want to add a new feature ID for FPGA DFL feature device, we
-> > recommend that
->=20
-> "recommend" or "must"
-
-I think it is "must" if you want to use linux dfl driver.
-
->=20
-> > +use a pull request to reserve a feature ID for DFL. Here is the DFL
-> > +Feature ID
-> > +Registry:
-> > +
-> > +https://github.com/OPAE/linux-dfl-feature-id
-> > +
->=20
-> Actually we don't have to put all details in kernel doc, and feature ID i=
-s used
-> inside the device, it could be used in linux or windows or other OS.
-> What about putting a README file in your repo to describe the detailed pr=
-ocess,
-> not in kernel doc. And we can just put a link to that README here.
-> Then split this one into another patch? How do you think?
-
-I think the process is that submit a patch/pull request to " https://github=
-.com/OPAE/linux-dfl-feature-id" for review if you have a new FeatureID.
-
->=20
-> >  Location of DFLs on a PCI Device
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >  The original method for finding a DFL on a PCI device assumed the
-> > start of the diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> > index 599bb21d86af..6bff39ff21a0 100644
-> > --- a/drivers/fpga/dfl.c
-> > +++ b/drivers/fpga/dfl.c
-> > @@ -940,9 +940,12 @@ static int parse_feature_irqs(struct
-> > build_feature_devs_info *binfo,  {
-> >  	void __iomem *base =3D binfo->ioaddr + ofst;
-> >  	unsigned int i, ibase, inr =3D 0;
-> > +	enum dfl_id_type type;
-> >  	int virq;
-> >  	u64 v;
+> > diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h index
+> > 53572c7aced0..1fd493e82dd8 100644
+> > --- a/drivers/fpga/dfl.h
+> > +++ b/drivers/fpga/dfl.h
+> > @@ -91,6 +91,7 @@
+> >  #define FME_HDR_PORT_OFST(n)	(0x38 + ((n) * 0x8))
+> >  #define FME_HDR_BITSTREAM_ID	0x60
+> >  #define FME_HDR_BITSTREAM_MD	0x68
+> > +#define FME_HDR_NO_PORT_BAR	7
 > >
-> > +	type =3D feature_dev_id_type(binfo->feature_dev);
-> > +
-> >  	/*
-> >  	 * Ideally DFL framework should only read info from DFL header, but
-> >  	 * current version DFL only provides mmio resources information for
-> > @@ -957,22 +960,25 @@ static int parse_feature_irqs(struct
-> > build_feature_devs_info *binfo,
-> >  	 * code will be added. But in order to be compatible to old version
-> >  	 * DFL, the driver may still fall back to these quirks.
-> >  	 */
-> > -	switch (fid) {
-> > -	case PORT_FEATURE_ID_UINT:
-> > -		v =3D readq(base + PORT_UINT_CAP);
-> > -		ibase =3D FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> > -		inr =3D FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> > -		break;
-> > -	case PORT_FEATURE_ID_ERROR:
-> > -		v =3D readq(base + PORT_ERROR_CAP);
-> > -		ibase =3D FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> > -		inr =3D FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> > -		break;
-> > -	case FME_FEATURE_ID_GLOBAL_ERR:
-> > -		v =3D readq(base + FME_ERROR_CAP);
-> > -		ibase =3D FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> > -		inr =3D FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> > -		break;
-> > +	if (type =3D=3D PORT_ID) {
-> > +		switch (fid) {
-> > +		case PORT_FEATURE_ID_UINT:
-> > +			v =3D readq(base + PORT_UINT_CAP);
-> > +			ibase =3D FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> > +			inr =3D FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> > +			break;
-> > +		case PORT_FEATURE_ID_ERROR:
-> > +			v =3D readq(base + PORT_ERROR_CAP);
-> > +			ibase =3D FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> > +			inr =3D FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> > +			break;
-> > +		}
-> > +	} else if (type =3D=3D FME_ID) {
-> > +		if (fid =3D=3D FME_FEATURE_ID_GLOBAL_ERR) {
-> > +			v =3D readq(base + FME_ERROR_CAP);
-> > +			ibase =3D FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> > +			inr =3D FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> > +		}
-> >  	}
-> >
-> >  	if (!inr) {
+> >  /* FME Fab Capability Register Bitfield */
+> >  #define FME_CAP_FABRIC_VERID	GENMASK_ULL(7, 0)	/* Fabric
+> > version ID */
 > > --
 > > 2.26.2
 
