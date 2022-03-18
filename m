@@ -2,102 +2,87 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523AB4DD232
-	for <lists+linux-fpga@lfdr.de>; Fri, 18 Mar 2022 02:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B815D4DD386
+	for <lists+linux-fpga@lfdr.de>; Fri, 18 Mar 2022 04:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbiCRBBD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 17 Mar 2022 21:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S231894AbiCRDVh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 17 Mar 2022 23:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiCRBBB (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 17 Mar 2022 21:01:01 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C1325718B;
-        Thu, 17 Mar 2022 17:59:44 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id e3so6277108pjm.5;
-        Thu, 17 Mar 2022 17:59:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sPi7qafOCETIMPSsawZV1A+wzBisJGD5S6jwVe4yEdc=;
-        b=jYQfblf4upRN392OGvwkDOx0xqz0G8EI+KlIdMm9mA39eW2iabhwYbwmufQfeHCNVB
-         cik9WiAD49Dwp4z4WcNcjiVCu2lDP/ofIVRJMnk7XVtpkfy1cPnrPOq8pQsfAFzhYdD+
-         0vou01/zzOaxO/9PIa7vPf6lfwKHNVzm/q4j3Ith28S7Oh/3Pi62IpWK048OToZ3DRJC
-         itHxJscDtB8Zyd7TkrlO2uzZuJ86YTpeCyoQtmgbIjerlKx3VabNbfEtBvUGW9IQxw+p
-         GsZXvziFoHwB8gsUx3r3+wECjufpbzBQqgd0ZihoIwygQv8+L4uTHw2VD0KZxNNFPTB3
-         euEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sPi7qafOCETIMPSsawZV1A+wzBisJGD5S6jwVe4yEdc=;
-        b=CbTh2gDfBdf0nB4B/bxq9CVqwHxXkTZeRZK2GGroTVyMFqQIQZcnc9/bZKXp0o+I20
-         cNSd4AxMfqKX9ZXBdkqlAkX5ApdqrnoJx/8r4YYwRfVr4MZ4nvwgB9AEc0gLLXd+pdxL
-         HJN45IxEnyteEJOhce+2xAkgqJI7Jhso+q7tRp6fH5G7DVJf7Y4nNZe7faKuDGGrLwIy
-         0/gcCKdhShRtaFdbKj1OMIgsFriU6Bp61g7d3lahQC95pQw/XmPOM1dzi9U9J7ZYu+ur
-         TYuA+R32wMr8/ZmzYw1SWSEy4zR6e+eWNghbcuQPk2BPfloqfAomv4T3gzHcyQI+XtyC
-         5t9Q==
-X-Gm-Message-State: AOAM531LUm1xjVFG4qxgJJfVNrZw6AzCoOlu0eQQnfP8buX2QrbE7XsD
-        jOrCxpYVzqwIyi3RG+rOJJM=
-X-Google-Smtp-Source: ABdhPJxsXFpylByBwSZcWAou4WQqsUHrgo6k2ysdJfmwETpyA/5kamnWAhiEB9M+MPwoqD51z//7Hw==
-X-Received: by 2002:a17:902:8e82:b0:151:777b:6d7 with SMTP id bg2-20020a1709028e8200b00151777b06d7mr7843302plb.172.1647565183544;
-        Thu, 17 Mar 2022 17:59:43 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 63-20020a630942000000b00372a99c1821sm6160191pgj.21.2022.03.17.17.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 17:59:43 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     hao.wu@intel.com
-Cc:     trix@redhat.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] fpga: dfl: pci: Remove useless DMA-32 fallback configuration
-Date:   Fri, 18 Mar 2022 00:59:38 +0000
-Message-Id: <20220318005938.2142028-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231215AbiCRDVg (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 17 Mar 2022 23:21:36 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5BD19530D;
+        Thu, 17 Mar 2022 20:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647573617; x=1679109617;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oQO5wErIlCM9YnkPEAv4OFlanCveA22VgbUuXCD6i5o=;
+  b=j6rz93JfgHmaFCakYhWeL2KUN75XeaCnyAwNC+FfE6N2lqJQDanq5Oe4
+   +ysDspZtgXyYox4J3iTxM/e7QUeLiRW+F+mAlOky/BIhdOzjpwNdsVvE3
+   7z2liGSsI8e3KA1DXdc0ed1hJK0QUFY26pfGchCxohVbEz+/Jt31NJ/eR
+   mRJ6PbxShkRr98G0HYwsZ+rL53wIzGbmuBqKDpD22P9z5vH2O/ZJwLnpZ
+   kj4OvkGNgC6F0BoOmweFDPvhhRVc42Q9w/RGqsaYacbzaJCz4aXwSCnJF
+   f+jaNE8VuatmTc0YRpuPSTmQUgm7TE2oJTTiqzqtTr9HIpNgxJLiTOMRz
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="254592177"
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="254592177"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 20:20:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="647292884"
+Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
+  by orsmga004.jf.intel.com with ESMTP; 17 Mar 2022 20:20:14 -0700
+From:   Tianfei Zhang <tianfei.zhang@intel.com>
+To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, rdunlap@infradead.org
+Cc:     corbet@lwn.net, Tianfei Zhang <tianfei.zhang@intel.com>
+Subject: [PATCH v4 0/2] check feature type for DFL irq parsing
+Date:   Thu, 17 Mar 2022 23:16:52 -0400
+Message-Id: <20220318031654.2130587-1-tianfei.zhang@intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+This patch set adds an extended usage of Feature ID for DFL.
+Previously the feature IDs defined are unique, no matter
+which feature type. But currently we want to extend its
+usage to have a per-type feature ID space.
 
-As stated in [1], dma_set_mask() with a 64-bit mask will never fail if
-dev->dma_mask is non-NULL.
-So, if it fails, the 32 bits case will also fail for the same reason.
+Patch 1 adds feature type checking before parse the irq info.
+Patch 2 adds description about the Feature ID.
 
-Simplify code and remove some dead code accordingly.
+v4:
+  - Fix the git commit from Hao's comments.
+  - Split documentation into another patch.
+v3:
+  - Remove "Fixes" in commit log with Hao's comment, this is a
+    extension not a bug fix.
+v2:
+  - add DFL Feature ID Registry in documentation.
 
-[1]: https://lkml.org/lkml/2021/6/7/398
+Tianfei zhang (2):
+  fpga: dfl: check feature type before parse irq info
+  Documentation: fpga: dfl: add description of Feature ID
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/fpga/dfl-pci.c | 2 --
- 1 file changed, 2 deletions(-)
+ Documentation/fpga/dfl.rst | 10 ++++++++++
+ drivers/fpga/dfl.c         | 38 ++++++++++++++++++++++----------------
+ 2 files changed, 32 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-index 717ac9715970..42fdfa7a28d6 100644
---- a/drivers/fpga/dfl-pci.c
-+++ b/drivers/fpga/dfl-pci.c
-@@ -356,8 +356,6 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
- 	pci_set_master(pcidev);
- 
- 	ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(64));
--	if (ret)
--		ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(32));
- 	if (ret) {
- 		dev_err(&pcidev->dev, "No suitable DMA support available.\n");
- 		goto disable_error_report_exit;
 -- 
-2.25.1
+2.26.2
 
