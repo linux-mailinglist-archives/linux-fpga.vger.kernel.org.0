@@ -2,108 +2,107 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E5D4E2334
-	for <lists+linux-fpga@lfdr.de>; Mon, 21 Mar 2022 10:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526A04E27C5
+	for <lists+linux-fpga@lfdr.de>; Mon, 21 Mar 2022 14:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345808AbiCUJVI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 21 Mar 2022 05:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+        id S1345886AbiCUNhC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 21 Mar 2022 09:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240382AbiCUJVG (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 21 Mar 2022 05:21:06 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02270F211A;
-        Mon, 21 Mar 2022 02:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=cW97tF9dygiHq7o/+gILOv2WKq3Hft3IjKo4B2OX804=;
-        b=eP+TbhMwTDC2j/k3vk+arf1HxLZHBCa9ukqIl4zZcm2pKdDaQQT9Z7/5UP7gZXUagWq3IrAZtvYpN
-         BzEro9LzLjg4qfTuMtL1O/0RIbJa58cLmvRBkQ2T8j37jYvTnwTbkAhRFVYmQGhGtsdak/c2fp3Dq6
-         bltPPCBPCBNeUVuWkt+a4sIOtJlcqmpQr86V5ZOo5E62ojQ7p0w5KJy04+NTKTtFW4fkUMleu4lIoZ
-         UlA9/DLMgukrJwOxfSkqEYJVhpQ9ickKwLXipoXRTwkqjlL2gK0oCndaRINI5nN//bcjYU4mzcbX+O
-         sg4YwOE6kkZU4yOUxb7wzMsLJnZibtg==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1410, Stamp: 3], Multi: [Enabled, t: (0.000009,0.007073)], BW: [Enabled, t: (0.000021,0.000001)], RTDA: [Enabled, t: (0.159073), Hit: No, Details: v2.28.0; Id: 15.52k2hp.1fulscguq.40nc; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Mon, 21 Mar 2022 12:19:30 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, mdf@kernel.org,
-        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
-        conor.dooley@microchip.com, robh+dt@kernel.org, system@metrotek.ru,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v6 2/2] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
-Date:   Mon, 21 Mar 2022 12:00:20 +0300
-Message-Id: <20220321090020.22530-3-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220321090020.22530-1-i.bornyakov@metrotek.ru>
-References: <20220321090020.22530-1-i.bornyakov@metrotek.ru>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S1347978AbiCUNgm (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 21 Mar 2022 09:36:42 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF1B45525;
+        Mon, 21 Mar 2022 06:35:16 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id o20-20020a9d7194000000b005cb20cf4f1bso10504213otj.7;
+        Mon, 21 Mar 2022 06:35:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=NU1pLk5IqSWcyWusRAP1p7PrXvtwzl9hkbWcVT80EPU=;
+        b=GJPuiVkwP0BfPjMy+MitMyl+/ZsheE84vn1vVH9p04AUjo4R4HgHi26dQ9H3IupkqM
+         O49VsMADvDDohab0OYA0+IT4K8EZrk0euVDCk/Hi8tg10H5k/iBn9CvLr9uQLFYmPGdm
+         A8rEuf04mZ5nWGj+y782rFNz+AxyYF4XMkL3UMz2JT+I8ABwSnd23rLaiEKdrkbwSWAX
+         GQPcWETbsLCTpulVsi53pvxbNGCfNSi46b9gaRxSbSHSJulq5Ub+nDlnG9NNND8Fba8L
+         s+krInbA6ZzmChrJUCKzQKQ3eYDsFdWoW3dq774oP4PX8QQ+UyhX5Qf9dQxVKJWkbStJ
+         HgBQ==
+X-Gm-Message-State: AOAM533hjdTBVTqeGZWR5dDCDGqTrdWfaGYS5+yfL0RBBkMblaFgmR2Y
+        PYhwWziUo0yff/xvgdjsN0fFExwwvA==
+X-Google-Smtp-Source: ABdhPJxXvj7+Au/0bjcORzoGJez8P+Nc7Rh9Cw/fVD8qcE/yQPAqJPfplnxo6L4ijO8qvhE/tW7lUQ==
+X-Received: by 2002:a05:6830:3113:b0:5c9:416c:83c0 with SMTP id b19-20020a056830311300b005c9416c83c0mr8072791ots.239.1647869715649;
+        Mon, 21 Mar 2022 06:35:15 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b15-20020a05687061cf00b000d17a5f0ee6sm6241462oah.11.2022.03.21.06.35.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 06:35:14 -0700 (PDT)
+Received: (nullmailer pid 4125324 invoked by uid 1000);
+        Mon, 21 Mar 2022 13:35:11 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     robh+dt@kernel.org, mdf@kernel.org, linux-fpga@vger.kernel.org,
+        hao.wu@intel.com, linux-kernel@vger.kernel.org,
+        conor.dooley@microchip.com, devicetree@vger.kernel.org,
+        system@metrotek.ru, yilun.xu@intel.com, trix@redhat.com
+In-Reply-To: <20220321090020.22530-3-i.bornyakov@metrotek.ru>
+References: <20220321090020.22530-1-i.bornyakov@metrotek.ru> <20220321090020.22530-3-i.bornyakov@metrotek.ru>
+Subject: Re: [PATCH v6 2/2] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+Date:   Mon, 21 Mar 2022 08:35:11 -0500
+Message-Id: <1647869711.882038.4125323.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
-slave SPI to load .dat formatted bitstream image.
+On Mon, 21 Mar 2022 12:00:20 +0300, Ivan Bornyakov wrote:
+> Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
+> slave SPI to load .dat formatted bitstream image.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+>  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> 
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
----
- .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-new file mode 100644
-index 000000000000..6955fc527ed2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-@@ -0,0 +1,32 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/microchip,mpf-spi-fpga-mgr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip Polarfire FPGA manager.
-+
-+description: |
-+  Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
-+  load the bitstream in .dat format.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+        - microchip,mpf-spi-fpga-mgr
-+
-+  reg:
-+    items:
-+      - description: spi chip select
-+
-+examples:
-+  - |
-+    spi@2008000 {
-+            ...
-+            fpga_mgr: fpga_mgr@0 {
-+                    compatible = "microchip,mpf-spi-fpga-mgr";
-+                    spi-max-frequency = <20000000>;
-+                    reg = <0>;
-+            };
-+    };
--- 
-2.34.1
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml:17:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
 
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml: 'maintainers' is a required property
+	hint: Metaschema for devicetree binding documentation
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml: 'additionalProperties' is a required property
+	hint: A schema without a "$ref" to another schema must define all properties and use "additionalProperties"
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml: ignoring, error in schema: 
+Error: Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.example.dts:22.17-26 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1398: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1607659
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
