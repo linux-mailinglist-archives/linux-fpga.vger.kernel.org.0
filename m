@@ -2,200 +2,233 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A964E393E
-	for <lists+linux-fpga@lfdr.de>; Tue, 22 Mar 2022 07:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2C34E39E3
+	for <lists+linux-fpga@lfdr.de>; Tue, 22 Mar 2022 08:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237206AbiCVG5Q (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 22 Mar 2022 02:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42890 "EHLO
+        id S229518AbiCVHrn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 22 Mar 2022 03:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237219AbiCVG5P (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 22 Mar 2022 02:57:15 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A3DE54;
-        Mon, 21 Mar 2022 23:55:48 -0700 (PDT)
+        with ESMTP id S229586AbiCVHrh (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 22 Mar 2022 03:47:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D38A1C929;
+        Tue, 22 Mar 2022 00:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647935141; x=1679471141;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=43LCu4BdhBVJqNm0wJyoLM/WJb4LWJfcNtr/87WkSPQ=;
+  b=KI1+oxmL6Ks3YOqk8bL02wBuJ7MecW+xoKPVJR0RLg+TkAusvLlIy2IN
+   E6Huv6OTPEj823SfIeBgFln/OCEuaqxb8/te5niV+UMSsi9ZjgqG8noA5
+   RwmeEAhR3Q3ggrIBSs8W8qLpK8q0HqmOII53uoEoz0COQ0UyHoeVLttM4
+   ieIJVaL3TIiJPKFcr2C+gVvqIFq1DeMdCQIEoObKateZUozQx1gfBzUQl
+   mdiL2zRhHtDbapnvPf2UsRdr/pznht+DqU/c1ZnVrdJCihzXPcEjEhQsM
+   ybuh2Om0TMCefJy8JJSpxeDa3npPVl3lWhIytIZG7P+lio8ADlkFDlC6l
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="344182061"
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="344182061"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 00:45:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="543580665"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by orsmga007.jf.intel.com with ESMTP; 22 Mar 2022 00:45:25 -0700
+Received: from orsmsx606.amr.corp.intel.com (10.22.229.19) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Tue, 22 Mar 2022 00:45:24 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Tue, 22 Mar 2022 00:45:24 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Mar 2022 00:45:23 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Tue, 22 Mar 2022 00:45:23 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.42) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Tue, 22 Mar 2022 00:45:23 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kadU5SF9OnoH/A7WRZ1BKMIhesL1kEruo1/tlXhvjSOJvfr09WmSETb45RaERafObk2Q/WZyRtms/296GcN8qJG/OCemi8/7pcv8XKxoee8xIqLUnnbeLoZWAOKeg2V4X4bge4iGzxBzZKUX4wVrYwbOACC26P90R23XTSUY4VaujXYw1V8eZB0+NM5NXlydpNQLW6ZuHpOXZs7ZdjEfPSpSwpfwY2/agQCUlXVXZZ2kOQEwVDsAZ1hv2IzkzzQuFHo7oGWId/EdFMi8hsJqnQv2wdr5TRC//m/D2ybIJrsil6UcFNiV7nn9HkgGanigSB0v18v+MZZTm8Dq6cWQ3g==
+ b=KA7PHCeN+qHbSjGX3txr3dS2X1m4rXlQhNgTAAT3Jbe42ihzbtOfW2EwfS0oAiY3ShyOE0gHECEP4L8dpBTxemo7aTl7a85ZYVuozs6HjJqGjSpjqNW850yoEfADHcBkGt1Q26D87pgaV+BnvfRgrYPWTXadqqRIa/kwNDDt9FSqdOiPP600CkBZy4fjwapDL+WlHCOpTmT0urb26iEfl/PmJWHiKEC+M61QjUs0XFI+Smmys94+l35P8IzcuZN19C2MNnslp7beGXr2nyTDqj1ZZOBD1qbvKijyxe9t8SHlJEKtj4Y82pu/l6U5O9IyX4tkXjSWxi30oqJ8hrWtVQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JuI6yIdxLXTw/7bHl6I5izzXym1faE0XLsP1k+NVMRs=;
- b=KW6z12R3yLPMLKCIzk3KE+AqbpXSKTCkeL1ZrPYlMVTjPEBK7vxjwZSKKlVYVk8C1bHc3rJoZJOG3qacaV/jM+KmKZPEl+2H8PjFfwLcDZDOQtXS4eNYl1BKHglfqpwYxqsr54KONzu32401CWfQznG4icG8qnc90IYWs6n0p6BxyBPypPdM9gT4yMrpnqPUxDcBU67t2nd1cSxJ8diHVPTjt7aF/B42z8qT3A3jXaUvCtPUAzDzRr926nyAZdSNc7P57HAinEzkdvifyhISDjSxNq85XaZnKU7pmpFK8O0qnanEIG3CEljQam0EMgngrpJwPpyhrqAImQt16kkTbA==
+ bh=Ya+kitdwDweVb1m52wf/eHGDnL3ySr1PNMCs+XVIK8Y=;
+ b=mSzZJ9Leki4xaLsH6nklC9AtxIklnJrS85wBlcl+laOTAqNQgVSZvwHhSIDwRGQpVZxx76QdSeODmdz//ORFtsm7DFtbMJ+evbSzfTXEl0ceGprW6MbXJNynCkD41xqjoypqByY40vgvs1ETbp4dEkiNnEZf6A/PnfH4gjhhFjHRGVvLoqxmy9pEA7UtS50KVc7EJd7xrZ6N7+lP26b4uIPJFOorCErQwR/CAjhS4/m7fUef48u7X4oYyi4HeunFGpOqhqMWHOqdx9Hb3bsZBjTTV+jXhO8u0tyLdLzAlbXrASLdBbOKAHyACFg7hXoqoy22msfC5YGB5i2QtEeTxg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
- dkim=pass header.d=xilinx.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JuI6yIdxLXTw/7bHl6I5izzXym1faE0XLsP1k+NVMRs=;
- b=eIRN3dCEYD1IeuVJRx7Or4xTuCJi5GRnoaj4We+T4w0NunAg3hncXBZ3LIFOkaddX/7fh6EXzqQvEQJmEAK0XVvwNedJnIp5aOhlDZCWWa3TN3Ww9sWkubR7RPfx0uGzljeKfTgiXxd49FP740Q+PzjkiW8LLuDe1TpQc2S3sNw=
-Received: from SN6PR02MB4576.namprd02.prod.outlook.com (2603:10b6:805:af::17)
- by BL0PR02MB3650.namprd02.prod.outlook.com (2603:10b6:207:47::15) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
+ by MWHPR11MB1519.namprd11.prod.outlook.com (2603:10b6:301:d::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Tue, 22 Mar
- 2022 06:55:46 +0000
-Received: from SN6PR02MB4576.namprd02.prod.outlook.com
- ([fe80::6162:c36f:2c80:b4dd]) by SN6PR02MB4576.namprd02.prod.outlook.com
- ([fe80::6162:c36f:2c80:b4dd%6]) with mapi id 15.20.5102.016; Tue, 22 Mar 2022
- 06:55:44 +0000
-From:   Nava kishore Manne <navam@xilinx.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-CC:     "mdf@kernel.org" <mdf@kernel.org>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        Michal Simek <michals@xilinx.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Tue, 22 Mar
+ 2022 07:45:20 +0000
+Received: from BN9PR11MB5483.namprd11.prod.outlook.com
+ ([fe80::8c4b:e24c:c69f:7809]) by BN9PR11MB5483.namprd11.prod.outlook.com
+ ([fe80::8c4b:e24c:c69f:7809%5]) with mapi id 15.20.5102.016; Tue, 22 Mar 2022
+ 07:45:20 +0000
+From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
+To:     "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
+CC:     "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH 2/6] fpga: zynqmp: Initialized variables before using it
-Thread-Topic: [PATCH 2/6] fpga: zynqmp: Initialized variables before using it
-Thread-Index: AQHYMtFNadCZe0VWu0OEcc9wpwDlOKy6QtkAgAYbAYCAAEp0gIAKZPXw
-Date:   Tue, 22 Mar 2022 06:55:44 +0000
-Message-ID: <SN6PR02MB45765A42BF873BDC02DF210EC2179@SN6PR02MB4576.namprd02.prod.outlook.com>
-References: <20220308094519.1816649-1-nava.manne@xilinx.com>
- <20220308094519.1816649-3-nava.manne@xilinx.com>
- <20220311142814.GA97487@yilunxu-OptiPlex-7050>
- <SN6PR02MB4576FB4490F96E593E09D4B9C2109@SN6PR02MB4576.namprd02.prod.outlook.com>
- <20220315160855.GA121107@yilunxu-OptiPlex-7050>
-In-Reply-To: <20220315160855.GA121107@yilunxu-OptiPlex-7050>
-Accept-Language: en-US
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>
+Subject: RE: [PATCH v4 2/2] Documentation: fpga: dfl: add description of
+ Feature ID
+Thread-Topic: [PATCH v4 2/2] Documentation: fpga: dfl: add description of
+ Feature ID
+Thread-Index: AQHYOncg7GsMrXxd9kSP/V7qFr9prazKe1aAgACQ1lA=
+Date:   Tue, 22 Mar 2022 07:45:20 +0000
+Message-ID: <BN9PR11MB5483564D3A228D690C6AE60CE3179@BN9PR11MB5483.namprd11.prod.outlook.com>
+References: <20220318031654.2130587-1-tianfei.zhang@intel.com>
+ <20220318031654.2130587-3-tianfei.zhang@intel.com>
+ <alpine.DEB.2.22.394.2203211604590.4191417@rhweight-WRK1>
+In-Reply-To: <alpine.DEB.2.22.394.2203211604590.4191417@rhweight-WRK1>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.6.401.20
+dlp-reaction: no-action
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xilinx.com;
+ header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e041eb50-ae4b-497d-2e64-08da0bd0fc94
-x-ms-traffictypediagnostic: BL0PR02MB3650:EE_
-x-microsoft-antispam-prvs: <BL0PR02MB36502EE52637255D1B16304EC2179@BL0PR02MB3650.namprd02.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: bfa0895e-8ddc-4f81-6ce8-08da0bd7ea91
+x-ms-traffictypediagnostic: MWHPR11MB1519:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <MWHPR11MB1519C157D2102C5FEFEAE0D1E3179@MWHPR11MB1519.namprd11.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tv6sXLJCDnSPfeDFLpUWBcNws4DYeXyjB7sEH0z2uUib1zHPCDQGD6N1dFNADy5qaqAB2Z3wcLCodnD8icB1RaLTCDzTkvwiFejs5w335n0pw7zbdvlUd6qYZ8eYAicINWMUNdMhZV/mWf87DBGH+Bim6xmd+4tdVnlrpH8zPtOi5ESOtz6E3bM0DOB4VFHN/ldvgHbihRzTCOyM71sy+qeQaKp7VIIp225AoTN/v6eHyEsNkFv/Z1q9QKebcw1e6CQCPrqJt0rAxpkZvaf1HBts2/vBDdKk8n2fx7KPbjus6WuScHwFZWZfk0edbDbgmCMEtv7qVfTGarD1VWg46QnwVTpceZed/XMh3WoZGanvSwYmf98UcMegDLMx3eeeGQv4ZGfl6/kK23bIfRJKzBPOma6ntRWmkm+cTqnERVSf6X6WzzI8doKk6kUwu75+LWUYMFMiqodvhnvXP5AuQ9K92wLKlNPZtrOutcOHyxmMEUIHNKSBHfMXA1zLxY66ZoLl1VzeSDwtDrDHysXVf6tkJupm0wRdYBx+AB/jKp2c1gaLVQVOFyA8byIvbgwmgjTh9ddX2eWReAARU+UNzmP4KTRTeON0hWqrQYAS3c9mEmISCjO/0FKhHxiw1hH8XCSC1eE45IrwSOV95Ad5Tw03hvgBXvhk7hjs+mjPFNsd1VMYBaMPNcQrML42GozL1/ACIs1ceyrpQuIDdnBxZQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR02MB4576.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(8936002)(6506007)(52536014)(9686003)(33656002)(7696005)(53546011)(83380400001)(26005)(186003)(71200400001)(55016003)(508600001)(38100700002)(122000001)(38070700005)(86362001)(66446008)(54906003)(64756008)(2906002)(316002)(6916009)(66476007)(8676002)(66556008)(66946007)(76116006)(4326008);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: YZAfw3nk8UNiKFqr0NP0bNLBAHVJ4YnTSc2bo3jXWhYK58doOOMON9gsx4lnZIWt6tpy1qEXScfbmeg2ozcWEB445U9aBomAe7voO8rgEnenX18whQS60Ugchf1wk2Ch5kIDG1vTItR9D0q7JRqnDvpOFkYdbFTkDgag+t03rVyzTXCd0/hFwIFyADX0A2z4pWFGR7vU32x1m9EInECglFwaw67jc+LY/QqYZDHndfxzwZFR5eliQ9EuRmx1HWbUgaSSmgTjPEOybgNs9q2ZygMEzzkwRiV23GLAOWzyGNjsLd5Nta76KXCkDmNABEviIzzR4Sk0Q0go/1g/tLPGyFhi+A/oKhTmRM0ItomFSmCUYWV/7IDYoAZRQXH5JxYHjVsLNIgX8HqxTDjlfbR5CYb8JfUXFaFtlFv3TxPbfDTqoMM6HBXtUmnlib5LodAtqtyrvvP5crVxOQsYtEtx5I17q1Zdedd6H6DXV/67Qvx6qKEqQL9TyXYigu4pTQeclOozxBMSnx/j04dmGqh/WIy3K0M1WNVS1pwczfpZaue8qkCBjyhe1Ojao8JwiHYQtD0XVcYwQhHcduzsmOYPg0MyLfCtbi+5MUHSw7b+OpuxWb5xahMNzTxRiPidDgd9cp+RTS/6R1Rw0DmdAnLRAbCgl7MhRBRycVMiqM5Js8g8NgblSBF6dYjAmTyZcHwOSiDnVE/PJr0lXYDEn9shYsj9oJ+DAh/ibG9H4uYb8D+G7RFZre8NLq0L26UFsIWBjqPeXMp5q97fFDxlTxbNiUD44SAAMcJkl+CZjx3BvNIZBqiJxh/xQCi1kjYgllkUTzdVHBL8n4bUq+zq4j4tmw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(26005)(53546011)(83380400001)(9686003)(6506007)(7696005)(33656002)(82960400001)(508600001)(55016003)(186003)(71200400001)(54906003)(5660300002)(38070700005)(8936002)(52536014)(38100700002)(316002)(4326008)(6916009)(86362001)(66556008)(8676002)(2906002)(122000001)(66476007)(66446008)(64756008)(66946007)(76116006);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2V12AUjXCbjUrEuiDgkdIWvA9PRX1vS6jcg/7/c+cIVoOj8rL4gl8Fra84H9?=
- =?us-ascii?Q?+MwpPUo1TP5JR3WgxB8Af1eHUgmKg3R4YT3CeMNnJQN/oSA+FhIg2R9EdbZS?=
- =?us-ascii?Q?r8eEuvc/4Vo1utfWld+vxfQUcOYIz/BcAPQIylJcX+XG036174TDw2+ycSVh?=
- =?us-ascii?Q?DosSFN7a+SFFUNrxOJCS4+c2Yj27MZt29+n+wLs2bICL4O/nY7YSAli8QNhr?=
- =?us-ascii?Q?VxnTZAq7vbK2BxlOyZfy+Dt532LT9RaQqBHqOJL6D+zlZvfFJf9gD1jzh/sl?=
- =?us-ascii?Q?hUllsPII0VM0uBtDH6ExjxFxkoWRgFnufvl8YkMatiyK0rdoxxxDiv89P3/D?=
- =?us-ascii?Q?5qxvVQK03OmD08r51fFpzx/77cLWfvlD+wKWPeNUhm0NI24ksEX7KL98YJpl?=
- =?us-ascii?Q?yOzIFmxtq5sy2e1n7dzC3lL6Am/KZY+0YTw3oWeIA7Fxd+52Az0ZSTFovVDE?=
- =?us-ascii?Q?UyW+VUQmeQPkwy7Wxhl2trOxtWdkublfNXX8CYki70JnDGwapBAjhZh6or0+?=
- =?us-ascii?Q?Zygs11Ul0wjcBC63J1SvkmEbvfD6KSyP9X2DPFKs3JpwJqjelPi3OKv/XJKD?=
- =?us-ascii?Q?U/MbFu/E7Qya96DO17k7vdjL2/4qEM8pWGKxX8W1fgJBbJKDUCIe3o/U4hAs?=
- =?us-ascii?Q?tR1QGeZ2o1FcX8SrwkdN+2NteR5yNumS5pL76BkieHpu4svMTebtQKW8nuE/?=
- =?us-ascii?Q?a3zv4Guexapev5JuIzGujjBq6vziwW2SrEy9F8wo7LFJv8MGAnaNajXNJmbx?=
- =?us-ascii?Q?HyqPZ1GEUauUgPQXZFB2ZrGfFZ0neM1Zp7RCNPss0cW0Jizw7snjqDQQnRx4?=
- =?us-ascii?Q?VGL7+TwoXbrN2fW0ScoyuLqW+WZMqUXcHVs8Ja+xOVgdji4l5bmaz6CqKyYo?=
- =?us-ascii?Q?HcMQMGV9VjIVyRiqrbZ7d/hUCKny3q1KUWqcZYskgUEwQFkqu9ZNpB+fNzOu?=
- =?us-ascii?Q?8EgdqRCazdNrNfzNWkihNgrIcXAvaf6w/lLZn2nV8GGZ031kPgSQ35gyL8qi?=
- =?us-ascii?Q?/x8iWp2GoGXmjMMhYQRNNNbiXn7uicc8N3rpiwlbJBRMx4kT0BiJulJl+vtC?=
- =?us-ascii?Q?KMXmFteNtW1xyX3iB8aYeX8coA43K5WhUetJD6DoDSLE91xjFUbQeed7mFBl?=
- =?us-ascii?Q?pFOFD18o1Vg9BF/fPRpvkARbFyvS8c8t0UITFUgM1zKgyhjWdMT3LJGpR8Fv?=
- =?us-ascii?Q?Z3jbQb5izfkrPpTnNTAqUCxmOCPR5t4dwkvGMSyWsSGt7BhF+SzlXto9CGtL?=
- =?us-ascii?Q?5iATZKxMX1GwTvzjPM1jwDfL6jgnNMvL9sj9bu4iDzZie9Vga8CiibadXf2d?=
- =?us-ascii?Q?q+5RkkTwq/y/I6lmOl/td8pxUnObSIdYfqZbMdMSyJoYLkKbC2WU/dSFVYIi?=
- =?us-ascii?Q?xsoDt4Ojo796xR3EjWgD5RU2Li+ND8A6HwYtdSYZELhSWXvy5hSHHKNJrwq5?=
- =?us-ascii?Q?DfEQqhlMdXYKN+omn4ci1FLoUxY7HKZa?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?B8+45dXvmT2f8IDtKxgYXTR7gCg804fCIehgvtwqWqGk9FsHQ4ZF6r+o3Ut3?=
+ =?us-ascii?Q?efPyWqCHSIXqzYseL6y2dmyGVfbBINGzw1jsXqEkfzwbLe8sjO+oQDPoyhqS?=
+ =?us-ascii?Q?HGR+U/2dpV3vOT6nzRezI5CyIfXYXuixx3NNZ/y0xQGCrj3i7rR45fmrxsa0?=
+ =?us-ascii?Q?VGdYqlQEYKER8OoSLfpVLEu/5kfrHXnl6wlTaFvpHC2la/aTJJYuYKLVHF6/?=
+ =?us-ascii?Q?iSr6vK0VSAFlBqK7v+DerTSpdvCsA+caXIVP1wcE0B5230tBVTbJrnJxUDlw?=
+ =?us-ascii?Q?RGvNBKt0sieUxhOZohF+zC6hG89wagYBNawpN8H9F8BjtwTRAv9xSn6ZLW/8?=
+ =?us-ascii?Q?OWkp2OZPI9vUgb4KgNR2zR+2+Ov4cBr1Boab4YQ0sfYWoculIGOoLz0DRqaB?=
+ =?us-ascii?Q?6HwrOZJWMxs4FniNChnQ/pT9HU3dLNH6/qObkpaAVAL+X1qhIYEVTDTexYpl?=
+ =?us-ascii?Q?Lq4c8pzwr9xKhfsA3n2bsqFRo64WM8lpsbfsMD+GXvYH3VqCWwODWPdFL1HM?=
+ =?us-ascii?Q?1SUOkJTYV01ZGGGIhflw231VgwcKpF8MPGOYna2kK59PEVxnhr/0UhQWyWtL?=
+ =?us-ascii?Q?l/mVf0DK0X+jEkUwkLReBJe8NegRVcTwuEI3VKA3giWFZnG9j//kdZWdszrl?=
+ =?us-ascii?Q?YnYa5E0gDJkIlG6X0w1+QYdYDB4qNcyItnMqqBhM5beiMhmqSTtSJH0dZtu/?=
+ =?us-ascii?Q?iO8GPAkd7aR2ZEwA1OScCRG5eJpEoM+6GP22s8bZuxS4FHQtaYI+NIjQu20p?=
+ =?us-ascii?Q?G9ZpP/dUk7YyYOQc33jo+oEGT3LNHG8IuTSGjsiMjWepxlsAaeuXdpBRSD2c?=
+ =?us-ascii?Q?GBY4RP+8j5IMfnj0DAOMuPlvOiGuBQofZ+mKvyVpR+m1x44oDiFkrw3Z/JNa?=
+ =?us-ascii?Q?RZsVKy2AV0GaVJ72Y+Ya0qBSwjWFwdLW1Gxs3y2Bql0w63O/8r8o6xS9oosg?=
+ =?us-ascii?Q?V05qhF1lu3wOdHZSF5+tKT7wSyPLLkhpEEBHGbtv4IioUb0nkKURBJz849Xm?=
+ =?us-ascii?Q?297YUxCbHeKPi0GKejuyFBI0q7AMJ+8YdOO8XiC6sCX5gitLN8oZedHB5rU9?=
+ =?us-ascii?Q?OaUtDzFBbjZ8YejV6oY7odjqYOvr75O+7fBgJDHbVLoJ2Dp1YEnHiE/0mqZ9?=
+ =?us-ascii?Q?MOpzo8Wzqp8Jm8IuBYu2i9pIj6WwEsRao+pHVc2bduarnK/uaCOScE9xCgvK?=
+ =?us-ascii?Q?XUPWoa1Sh0z+JpHKO3HDaWJdM/sRQg9guEzttWkiFATC2K7SSXs3N8c9zxTy?=
+ =?us-ascii?Q?8GdvZL9fCQ5G0WreiqP3b50RMJZiRTgdZXX62uTr7UtOWAXhAGZlrKfn54UQ?=
+ =?us-ascii?Q?Xs3hBLA6BzZOTNRjGzN10LfYOQEg+aupcjlBe0FN2J53bIWTKptlG4emq4hN?=
+ =?us-ascii?Q?UPjr7O22DrlN5Rkw0NhLhCNHUhOT0ZCXE4uMnh/F077mqiojxiFUC87zS/J4?=
+ =?us-ascii?Q?6l/67taEeIDg1Czfet3owmbZ86APtCrU?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4576.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e041eb50-ae4b-497d-2e64-08da0bd0fc94
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2022 06:55:44.4238
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bfa0895e-8ddc-4f81-6ce8-08da0bd7ea91
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2022 07:45:20.6057
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6M8z4ALG0Fzz9qGT/m6R7qI3pu84imsYjJEGxbKQtwXXcPTwO3OcUtv8FmByBDUgr1fQgha88GJW+cJiizw8+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB3650
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: pv1R1rBR46p4ObBZSSHFNvyj97yMyHKvcrq35TJec21YTaPQOFYK75chngSjXrPh1ZmgmOgyxdogwjNB6lrEqQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1519
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Yilun,
 
-	Please find my response inline.
 
 > -----Original Message-----
-> From: Xu Yilun <yilun.xu@intel.com>
-> Sent: Tuesday, March 15, 2022 9:39 PM
-> To: Nava kishore Manne <navam@xilinx.com>
-> Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com; Michal Simek
-> <michals@xilinx.com>; linux-fpga@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
-> Subject: Re: [PATCH 2/6] fpga: zynqmp: Initialized variables before using=
- it
+> From: matthew.gerlach@linux.intel.com <matthew.gerlach@linux.intel.com>
+> Sent: Tuesday, March 22, 2022 7:05 AM
+> To: Zhang, Tianfei <tianfei.zhang@intel.com>
+> Cc: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org; Xu, Yilu=
+n
+> <yilun.xu@intel.com>; linux-fpga@vger.kernel.org; linux-doc@vger.kernel.o=
+rg;
+> rdunlap@infradead.org; corbet@lwn.net
+> Subject: Re: [PATCH v4 2/2] Documentation: fpga: dfl: add description of
+> Feature ID
 >=20
-> On Tue, Mar 15, 2022 at 11:48:11AM +0000, Nava kishore Manne wrote:
-> > Hi Yilun,
-> >
-> > 	Thanks for providing the review comments.
-> > Please find my response inline.
-> >
-> > > -----Original Message-----
-> > > From: Xu Yilun <yilun.xu@intel.com>
-> > > Sent: Friday, March 11, 2022 7:58 PM
-> > > To: Nava kishore Manne <navam@xilinx.com>
-> > > Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com; Michal Simek
-> > > <michals@xilinx.com>; linux-fpga@vger.kernel.org; linux-
-> > > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
-> > > Subject: Re: [PATCH 2/6] fpga: zynqmp: Initialized variables before
-> > > using it
-> > >
-> > > On Tue, Mar 08, 2022 at 03:15:15PM +0530, Nava kishore Manne wrote:
-> > > > This patch initialized variables with the proper value.
-> > > > Addresses-Coverity: "uninit_use: Using uninitialized value"
-> > > >
-> > > > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> > > > ---
-> > > >  drivers/fpga/zynqmp-fpga.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/fpga/zynqmp-fpga.c
-> > > > b/drivers/fpga/zynqmp-fpga.c index c60f20949c47..e931d69819a7
-> > > > 100644
-> > > > --- a/drivers/fpga/zynqmp-fpga.c
-> > > > +++ b/drivers/fpga/zynqmp-fpga.c
-> > > > @@ -41,7 +41,7 @@ static int zynqmp_fpga_ops_write(struct
-> > > fpga_manager *mgr,
-> > > >  				 const char *buf, size_t size)  {
-> > > >  	struct zynqmp_fpga_priv *priv;
-> > > > -	dma_addr_t dma_addr;
-> > > > +	dma_addr_t dma_addr =3D 0;
-> > >
-> > > The first use of this variable is as an output parameter:
-> > >
-> > > 	kbuf =3D dma_alloc_coherent(priv->dev, size, &dma_addr,
-> GFP_KERNEL);
-> > >
-> > > So I don't think it needs to be initialized as 0.
-> > >
-> >
-> > This issue is found by Coverity Scan, Whether this param is input/outpu=
-t
-> this fix will not impact the actual functionality.
-> > In order to fix the issues reported by the Coverity tool, this fix is n=
-eeded.
 >=20
-> I didn't see issues about this piece of code, so I don't think we need th=
-e fix
-> just to make the tool happy. Maybe the tool could be improved to help us
-> better.
 >=20
+> On Thu, 17 Mar 2022, Tianfei Zhang wrote:
+>=20
+> > From: Tianfei zhang <tianfei.zhang@intel.com>
+> >
+> > This patch adds the description and registration of Feature ID in
+> > documentation.
+> >
+> > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > ---
+> > Documentation/fpga/dfl.rst | 10 ++++++++++
+> > 1 file changed, 10 insertions(+)
+> >
+> > diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> > index ef9eec71f6f3..260cac3b7215 100644
+> > --- a/Documentation/fpga/dfl.rst
+> > +++ b/Documentation/fpga/dfl.rst
+> > @@ -502,6 +502,16 @@ Developer only needs to provide a sub feature driv=
+er
+> with matched feature id.
+> > FME Partial Reconfiguration Sub Feature driver (see
+> > drivers/fpga/dfl-fme-pr.c) could be a reference.
+> >
+> > +Individual DFL drivers are bound DFL devices based on Feature Type and
+> Feature ID.
+> > +The definition of Feature Type and Feature ID can be found:
+> > +
+> > +https://github.com/OPAE/linux-dfl-feature-id/blob/master/dfl-feature-
+> > +ids.rst
+> > +
+> > +If you want to add a new feature ID for FPGA DFL feature device, you
+> > +must use a pull
+>=20
+> s/you muse use/submit/
 
-Agreed, I will drop this patch in v2.
+Thanks, I will change to:  you must submit a pull request ...
 
-Regards,
-Navakishore.
+>=20
+> > +request to register a feature ID for DFL. Here is the DFL Feature ID R=
+egistry:
+> > +
+> > +https://github.com/OPAE/linux-dfl-feature-id
+> > +
+> > Location of DFLs on a PCI Device
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > The original method for finding a DFL on a PCI device assumed the
+> > start of the
+> > --
+> > 2.26.2
+> >
+> >
