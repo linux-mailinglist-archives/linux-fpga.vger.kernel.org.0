@@ -2,104 +2,101 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28294E3418
-	for <lists+linux-fpga@lfdr.de>; Tue, 22 Mar 2022 00:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413924E381A
+	for <lists+linux-fpga@lfdr.de>; Tue, 22 Mar 2022 05:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbiCUXPX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 21 Mar 2022 19:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S236569AbiCVExd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 22 Mar 2022 00:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbiCUXPH (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 21 Mar 2022 19:15:07 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43567420B40;
-        Mon, 21 Mar 2022 16:03:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647903807; x=1679439807;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=l5HXWVGfL0h5jEBZyDeoiw3bRlPLm52xB+vqF1vPhRY=;
-  b=GGbzUNvIadOFc033m/g5iZsZQrx4aqB/zjDjr0QOIdim/0E4RMpKykgV
-   PRmKTGqtaf5PnT5wXAU/+HWnguGx1wEkUbdEyqdJQ1IGogpQ/8SXYusOH
-   cOWvH7lr56uXD0mBEtL18Wsqk4Thv0h9Ex2tWYiIJs7cF2gk+O3iSH0/6
-   C+K3QMblG9cQHds02spSkUw/f5an94qByWFcwpE50RRINZ4Po7YbYpXzi
-   ADNU36chuppbxAhmhSfOESBJuJfV0fKCxiLK5O0ivllfPwx82jQdxOTrK
-   QO7FNc/Z7G9JPRkSEbKs6K4B/mlwGIUin96ZmHwV2q5LcLeMXcHGBfUJF
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="255231044"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="255231044"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 16:03:11 -0700
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="560085847"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 16:03:11 -0700
-Date:   Mon, 21 Mar 2022 16:05:19 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Tianfei Zhang <tianfei.zhang@intel.com>
-cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, rdunlap@infradead.org, corbet@lwn.net
-Subject: Re: [PATCH v4 2/2] Documentation: fpga: dfl: add description of
- Feature ID
-In-Reply-To: <20220318031654.2130587-3-tianfei.zhang@intel.com>
-Message-ID: <alpine.DEB.2.22.394.2203211604590.4191417@rhweight-WRK1>
-References: <20220318031654.2130587-1-tianfei.zhang@intel.com> <20220318031654.2130587-3-tianfei.zhang@intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S236567AbiCVExc (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 22 Mar 2022 00:53:32 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6893E9BAC8;
+        Mon, 21 Mar 2022 21:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=F2PNjHl4rmC8UgOnj2jVs0WLgwPYSsdn2UDLTRFAhwU=;
+        b=QiiDY/7jbOZ5bQfhUp+Fk7+xnxg2F5T3iVWVkEfUz+i+ktx5yePCG3M1WwlSP7kjwhjDRhy3qjjvX
+         816uKgtfweysZwkU5SJ+NW6bkcs1qMYNMSuNho4zNTBES9aD0rfiRQnBQKsQkquLXKgKrVZVE+wAMi
+         yF0gxTwtUsJ7Ic8mV3lu0kvDTfS/tHwd9ho4lw+O93vNbjxdrJgME+acOs2FgnQ1X846+7Pbya5rU6
+         aFxt2QdPS8AQjPKRx2w3kALGSUGa+5nolhKvwTYFvOlvQGt5LdOOsnH1s5jsAaH3d+50nOqi3DDa7z
+         OzgkbR2DtQw5wW/4rEkNEDEgbOXiiFA==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1410, Stamp: 3], Multi: [Enabled, t: (0.000009,0.008186)], BW: [Enabled, t: (0.000022,0.000001)], RTDA: [Enabled, t: (0.063727), Hit: No, Details: v2.28.0; Id: 15.52kaoo.1funvetfu.1se3; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([178.70.66.234])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Tue, 22 Mar 2022 07:51:42 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, mdf@kernel.org,
+        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+        conor.dooley@microchip.com, robh+dt@kernel.org, system@metrotek.ru,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v7 0/2] Microchip Polarfire FPGA manager
+Date:   Tue, 22 Mar 2022 07:32:17 +0300
+Message-Id: <20220322043219.23770-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Add support to the FPGA manager for programming Microchip Polarfire
+FPGAs over slave SPI interface with .dat formatted bitsream image.
+
+Changelog:
+  v1 -> v2: fix printk formating
+  v2 -> v3:
+   * replace "microsemi" with "microchip"
+   * replace prefix "microsemi_fpga_" with "mpf_"
+   * more sensible .compatible and .name strings
+   * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+  v3 -> v4: fix unused variable warning
+    Put 'mpf_of_ids' definition under conditional compilation, so it
+    would not hang unused if CONFIG_OF is not enabled.
+  v4 -> v5:
+   * prefix defines with MPF_
+   * mdelay() -> usleep_range()
+   * formatting fixes
+   * add DT bindings doc
+   * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
+     We can't parse image header in write_init() because image header
+     size is not known beforehand. Thus parsing need to be done in
+     fpga_manager_ops.write() callback, but fpga_manager_ops.write()
+     also need to be reenterable. On the other hand,
+     fpga_manager_ops.write_sg() is called once. Thus, rework usage of
+     write() callback to write_sg().
+  v5 -> v6: fix patch applying
+     I forgot to clean up unrelated local changes which lead to error on
+     patch 0001-fpga-microchip-spi-add-Microchip-MPF-FPGA-manager.patch
+     applying on vanilla kernel.
+  v6 ->v7: fix binding doc to pass dt_binding_check
+
+Ivan Bornyakov (2):
+  fpga: microchip-spi: add Microchip MPF FPGA manager
+  dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+
+ .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  44 ++
+ drivers/fpga/Kconfig                          |  10 +
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/microchip-spi.c                  | 448 ++++++++++++++++++
+ 4 files changed, 503 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+ create mode 100644 drivers/fpga/microchip-spi.c
+
+-- 
+2.34.1
 
 
-On Thu, 17 Mar 2022, Tianfei Zhang wrote:
-
-> From: Tianfei zhang <tianfei.zhang@intel.com>
->
-> This patch adds the description and registration of Feature ID
-> in documentation.
->
-> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> ---
-> Documentation/fpga/dfl.rst | 10 ++++++++++
-> 1 file changed, 10 insertions(+)
->
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index ef9eec71f6f3..260cac3b7215 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -502,6 +502,16 @@ Developer only needs to provide a sub feature driver with matched feature id.
-> FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
-> could be a reference.
->
-> +Individual DFL drivers are bound DFL devices based on Feature Type and Feature ID.
-> +The definition of Feature Type and Feature ID can be found:
-> +
-> +https://github.com/OPAE/linux-dfl-feature-id/blob/master/dfl-feature-ids.rst
-> +
-> +If you want to add a new feature ID for FPGA DFL feature device, you must use a pull
-
-s/you muse use/submit/
-
-> +request to register a feature ID for DFL. Here is the DFL Feature ID Registry:
-> +
-> +https://github.com/OPAE/linux-dfl-feature-id
-> +
-> Location of DFLs on a PCI Device
-> ================================
-> The original method for finding a DFL on a PCI device assumed the start of the
-> -- 
-> 2.26.2
->
->
