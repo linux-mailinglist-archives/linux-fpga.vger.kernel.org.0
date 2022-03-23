@@ -2,98 +2,99 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85D24E4EC5
-	for <lists+linux-fpga@lfdr.de>; Wed, 23 Mar 2022 09:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A254E51F8
+	for <lists+linux-fpga@lfdr.de>; Wed, 23 Mar 2022 13:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242947AbiCWI4X (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 23 Mar 2022 04:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
+        id S233134AbiCWMNu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 23 Mar 2022 08:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242938AbiCWI4V (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 23 Mar 2022 04:56:21 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C7B5EDFD;
-        Wed, 23 Mar 2022 01:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648025692; x=1679561692;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=N5YYyV66tPIKoOXEpoly446tfaseGcfjL/6Hy4p5OI8=;
-  b=YENG48Sj4r4U92+UWpV48ACPqTM6WEvU0myJby5Uqgg0q7Lpjj0H59PK
-   8KR7BYMQOB+gjlA4HjK0ojiy7JN6XAnwZ2tVO/qI8SBVMvSjysDO4p6Yz
-   svsiJXZ5CQ1bn12WUlUfqGcHlOzsk+Dr4eR+pXQAolv38iDYlnMKCG7xE
-   rMuA5ASuCdHXbJ9RmndQiaPlbqqeSF1QMa9f5Uh07DGttw74dDYXmSvKx
-   QMtvqMTQSiNoG0BBaWoVTwWmleLYI0p+pQfEPl7l1SL6sgZD2oQa6VGrQ
-   6mgPvv5/5VM0qUwJ7/h+KabMFrqj8EC/VwhorKiQNmO9xZ9ph8FZ+l77y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="258010502"
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="258010502"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 01:54:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="717315449"
-Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by orsmga005.jf.intel.com with ESMTP; 23 Mar 2022 01:54:30 -0700
-From:   Tianfei Zhang <tianfei.zhang@intel.com>
-To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     corbet@lwn.net, rdunlap@infradead.org,
-        Tianfei zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v5 2/2] Documentation: fpga: dfl: add description of Feature ID
-Date:   Wed, 23 Mar 2022 04:51:02 -0400
-Message-Id: <20220323085102.2297964-3-tianfei.zhang@intel.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220323085102.2297964-1-tianfei.zhang@intel.com>
-References: <20220323085102.2297964-1-tianfei.zhang@intel.com>
+        with ESMTP id S229664AbiCWMNu (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 23 Mar 2022 08:13:50 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2D33EB91;
+        Wed, 23 Mar 2022 05:12:20 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id g19so1343674pfc.9;
+        Wed, 23 Mar 2022 05:12:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Uy574NlMQLT2C/W7Xe2w7E8L3baidSP256V6jNL1nBM=;
+        b=PL5u5tcRBQaWtZC2QdG5yeePgxQ9Re8f14XoWgsiy/CfuxMt+RaVgpmK8sbJLJptte
+         H240NdWnIn2paiOQDFe2IXEH0X0KyJdtHKpmusBaZEKtIj03n1jI6MS9sRgCHnhs95LH
+         bIgG3obY18ev+XMt1wpHaBSjUTwI++D+7SU8akTAqzUK+oeok2ZztdoHEFLpzV+62fwi
+         0Z+V2o2657HLE2jJLIimnT+51FizFekGTdSJ/zZ8MozulekHRktBtAQ/xUIsHHCEWL/E
+         Cf1B6uCQFofXHh6MJN5gb68zRgOMNlDX+zQkQUoZX8/sZizRnRPGhGyU6FS6LWtJTtKT
+         Q+2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Uy574NlMQLT2C/W7Xe2w7E8L3baidSP256V6jNL1nBM=;
+        b=iFJI+k22hE130zU1i/P7HKRVfl/8ofv5/BX+o5fwMZKrAs9ub8Al4AcH2ycjaN+cvb
+         Hr+RLsnuYUZjytmD1AqoBk9w+cw6dR4vTO7AOkWWIdrxKFAoaJ6/uwStKrjTnGjq15Iy
+         uojoryOmp12cEriApcCXEE4qMvlXBk+HzswIizfd0pdvLXGAv9Q0BtXeOLLKTIPe5lV8
+         tvQLeaamjHfLJdDU4awJmBgazGSPx40y2nDtOvSLuheDmWJsKCLpS71PJdvNaMzOjXfl
+         Clj0+whzEvSTjAuExeji5Prvy/58d1y/vE8t/RpB/doYTpzPQxOnmo4fhgPgcd8At3EY
+         MDog==
+X-Gm-Message-State: AOAM530zhjuaValXPP/fN+j9WDFnvftyLkK86cShiRsD/HPb6V7Err0/
+        VdwyoQg0R1rIzz2fGvTwN0wCAu89wr2Gx/ah
+X-Google-Smtp-Source: ABdhPJxPF27V+mmlGxEdQ6Ee7gnJ1QewV6sWASf3Ggc3QVb90dIf4qGE3m1gak1G+rvDw6oIHFnIjQ==
+X-Received: by 2002:a63:4707:0:b0:382:207b:889c with SMTP id u7-20020a634707000000b00382207b889cmr22153777pga.541.1648037539917;
+        Wed, 23 Mar 2022 05:12:19 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-71.three.co.id. [180.214.233.71])
+        by smtp.gmail.com with ESMTPSA id gt15-20020a17090af2cf00b001c755f3078dsm5710264pjb.50.2022.03.23.05.12.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 05:12:19 -0700 (PDT)
+Message-ID: <08baab49-e6da-31ac-612f-df3f462df7a3@gmail.com>
+Date:   Wed, 23 Mar 2022 19:12:13 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 2/2] Documentation: fpga: dfl: add description of
+ Feature ID
+Content-Language: en-US
+To:     Tianfei Zhang <tianfei.zhang@intel.com>, hao.wu@intel.com,
+        trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com,
+        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     corbet@lwn.net, rdunlap@infradead.org
+References: <20220323085102.2297964-1-tianfei.zhang@intel.com>
+ <20220323085102.2297964-3-tianfei.zhang@intel.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220323085102.2297964-3-tianfei.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Tianfei zhang <tianfei.zhang@intel.com>
+On 23/03/22 15.51, Tianfei Zhang wrote:
+> +Individual DFL drivers are bound DFL devices based on Feature Type and Feature ID.
+> +The definition of Feature Type and Feature ID can be found:
+> +
+> +https://github.com/OPAE/linux-dfl-feature-id/blob/master/dfl-feature-ids.rst
+> +
 
-This patch adds the description and registration of Feature ID
-in documentation.
+This doesn't answer "What is Feature Type and Feature ID?" question.
+I would like to see the answer and the feature list above in the kernel
+documentation.
 
-Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
----
-v5: fix documentation from Matthew's comment.
----
- Documentation/fpga/dfl.rst | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+> +If you want to add a new feature ID for FPGA DFL feature device, you must submit a pull
+> +request to register a feature ID for DFL. Here is the DFL Feature ID Registry:
+> +
+> +https://github.com/OPAE/linux-dfl-feature-id
+> +
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index ef9eec71f6f3..231fe7a4d099 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -502,6 +502,16 @@ Developer only needs to provide a sub feature driver with matched feature id.
- FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
- could be a reference.
- 
-+Individual DFL drivers are bound DFL devices based on Feature Type and Feature ID.
-+The definition of Feature Type and Feature ID can be found:
-+
-+https://github.com/OPAE/linux-dfl-feature-id/blob/master/dfl-feature-ids.rst
-+
-+If you want to add a new feature ID for FPGA DFL feature device, you must submit a pull
-+request to register a feature ID for DFL. Here is the DFL Feature ID Registry:
-+
-+https://github.com/OPAE/linux-dfl-feature-id
-+
- Location of DFLs on a PCI Device
- ================================
- The original method for finding a DFL on a PCI device assumed the start of the
+Please explain, in this document, the PR procedure regarding feature ID
+registration.
+
 -- 
-2.26.2
-
+An old man doll... just what I always wanted! - Clara
