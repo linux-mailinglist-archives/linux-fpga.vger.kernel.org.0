@@ -2,84 +2,78 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419F14EB608
-	for <lists+linux-fpga@lfdr.de>; Wed, 30 Mar 2022 00:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0AF4EB681
+	for <lists+linux-fpga@lfdr.de>; Wed, 30 Mar 2022 01:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237209AbiC2WbQ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 29 Mar 2022 18:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S238927AbiC2XLV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 29 Mar 2022 19:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237187AbiC2WbQ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 29 Mar 2022 18:31:16 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9466565D1C;
-        Tue, 29 Mar 2022 15:29:32 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id w21so22224476wra.2;
-        Tue, 29 Mar 2022 15:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:mime-version:content-transfer-encoding
-         :content-description:subject:to:from:date:reply-to;
-        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
-        b=CofhH8nchDKrCLKpjJS6KYHEaLu5DrxrBUY1FuqNxffnpSGpilWdv6xrcAI8hh+i58
-         CNvcYzKJilYjMvYMFRnvOzagq4dhnIWthXiP6Cm7zt7I8Y4OBlNhflihGI0OV8gXa64w
-         EccC9HCkgXc7GjgL1G4XC+kfFKY0qF0JUYQ48Oc/0GoeXXBaEHZ4RMBEWb9DokdD5ZAS
-         yMdNMO3Tgmq1iQMXboCw4wrF8kKfLjkAlJE8DyvFGWPgEE9H02UuS+KRocjbPkTrp3En
-         xhlM+cH8KqBUeV0Afz//HPJ/Ib2yrJin0lS52PU6WCxHNFYcv0izr4KgMuDBRXqBle/M
-         5uVg==
+        with ESMTP id S236271AbiC2XLV (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 29 Mar 2022 19:11:21 -0400
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C108AF1F7;
+        Tue, 29 Mar 2022 16:09:37 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id o20-20020a9d7194000000b005cb20cf4f1bso13775588otj.7;
+        Tue, 29 Mar 2022 16:09:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:content-description:subject:to:from:date
-         :reply-to;
-        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
-        b=HtIXSJLgGlURdnWtnErMCjOCLf4wOsDRiSkGYifXPLEzuwPMF0iOYOk4iQ4h2ehzML
-         lOGwqwjtoAT/kyBM8Cyy+Sy9IxkprXY38aqA2JO4mm9KBgk6t6vble841OiCGWHzveyV
-         84nYCVAnPHye92+fL2rjTmYLpkSQjNlMTY5+0wIpUDo7oxujhhPv0xpkGF/VIxXaRf19
-         JPgWgxul5/CC9Fw4QT8E7zveuLiSBAWtLXM5ttL2tNDUnY96hBDlgqH+V0KoH62irlUt
-         fKn2UMJB41n7OEHedNGGe2SXDrST5Qv5oAx6naTaccg4q9VIZhvad6+u5TJh9ndpX+Go
-         Rexw==
-X-Gm-Message-State: AOAM530qO6yO3ERe/RyAh8lQq/tIkTO4s7MyQawdlDxrBw7shfHT0JTR
-        mV7KdE2ao9c97R0GzHwcC6M=
-X-Google-Smtp-Source: ABdhPJyi1qE6effmjETV9+HIlPV8oeAtVSi3GgGVH/c7Ne8O1wB8Cb3Bd4sY91uX/AZo6cC2f/99hg==
-X-Received: by 2002:a05:6000:239:b0:204:101:8fdd with SMTP id l25-20020a056000023900b0020401018fddmr34133764wrz.267.1648592971177;
-        Tue, 29 Mar 2022 15:29:31 -0700 (PDT)
-Received: from [172.20.10.4] ([102.91.4.187])
-        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0037bb8df81a2sm4047096wmp.13.2022.03.29.15.29.20
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Tue, 29 Mar 2022 15:29:27 -0700 (PDT)
-Message-ID: <62438847.1c69fb81.ca756.0916@mx.google.com>
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xtO41FFtsVppvhi60ir4ebFxoHFSsQTScElxpQB9J/w=;
+        b=6oKJS/jwwqN8QpbSqvtvIw9EoTLaDCh+5HcuMywBF3OQxT11gN/C7DH/fUb83l9Mwq
+         S/U6ak7eIl8CC1I0qveq6yZ+4w1YPyACFZPXbN4z054EQm/dHd4cvBaNgan/biWsYnxF
+         1rYfNzEHk2c6QniUtZ9i78LV5mRmCqBQxoIZQrlTXLvYLEJxoxnZny+Z5GQAalm0GH3A
+         Q+gjnlaGKueZskJROm8W60WAabxl/OvxUGLWKe/ci741yCy6t2S++xxE/omL1S7Uz3n9
+         s3ArICeYXNpUMpx7z1MKKvyCdDa2+x1rtM754tbe8lWXsT3ivtOP4sZIFD1+MLXFBU0l
+         XALg==
+X-Gm-Message-State: AOAM533kmrWL4+sIT4j4rB8lafiubLsjesq0J+JArGeV2PwmvLcEukod
+        BTGACSSq8rScCDGvLihBQw==
+X-Google-Smtp-Source: ABdhPJzEDpJMH1mPuGj7NKEY+O1n/LC+LymNnfwy0CuECx5bStXAvnD0S+0wrP/5p43RMQpuxEf/sw==
+X-Received: by 2002:a9d:6a84:0:b0:5cd:ad64:a50 with SMTP id l4-20020a9d6a84000000b005cdad640a50mr2128500otq.114.1648595376776;
+        Tue, 29 Mar 2022 16:09:36 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 14-20020a056870134e00b000ddaf3927b1sm9124300oac.32.2022.03.29.16.09.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 16:09:35 -0700 (PDT)
+Received: (nullmailer pid 1524452 invoked by uid 1000);
+        Tue, 29 Mar 2022 23:09:34 -0000
+Date:   Tue, 29 Mar 2022 18:09:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     yilun.xu@intel.com, conor.dooley@microchip.com, trix@redhat.com,
+        devicetree@vger.kernel.org, hao.wu@intel.com,
+        linux-fpga@vger.kernel.org, robh+dt@kernel.org, system@metrotek.ru,
+        mdf@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 2/2] dt-bindings: fpga: add binding doc for
+ microchip-spi fpga mgr
+Message-ID: <YkORrgC1FdzaKCMW@robh.at.kernel.org>
+References: <20220322191552.13156-1-i.bornyakov@metrotek.ru>
+ <20220322191552.13156-3-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Gefeliciteerd, er is geld aan je gedoneerd
-To:     Recipients <adeboyejofolashade55@gmail.com>
-From:   adeboyejofolashade55@gmail.com
-Date:   Tue, 29 Mar 2022 23:29:09 +0100
-Reply-To: mike.weirsky.foundation003@gmail.com
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_US_DOLLARS_3 autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322191552.13156-3-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Beste begunstigde,
+On Tue, 22 Mar 2022 22:15:52 +0300, Ivan Bornyakov wrote:
+> Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
+> slave SPI to load .dat formatted bitstream image.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+>  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> 
 
- Je hebt een liefdadigheidsdonatie van ($ 10.000.000,00) van Mr. Mike Weirs=
-ky, een winnaar van een powerball-jackpotloterij van $ 273 miljoen.  Ik don=
-eer aan 5 willekeurige personen als je deze e-mail ontvangt, dan is je e-ma=
-il geselecteerd na een spin-ball. Ik heb vrijwillig besloten om het bedrag =
-van $ 10 miljoen USD aan jou te doneren als een van de geselecteerde 5, om =
-mijn winst te verifi=EBren
- =
-
-  Vriendelijk antwoord op: mike.weirsky.foundation003@gmail.com
- Voor uw claim.
+Reviewed-by: Rob Herring <robh@kernel.org>
