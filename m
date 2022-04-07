@@ -2,112 +2,111 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B536C4F76A0
-	for <lists+linux-fpga@lfdr.de>; Thu,  7 Apr 2022 08:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E343C4F80D5
+	for <lists+linux-fpga@lfdr.de>; Thu,  7 Apr 2022 15:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiDGG5d (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 7 Apr 2022 02:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S1343716AbiDGNkQ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 7 Apr 2022 09:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiDGG5b (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 7 Apr 2022 02:57:31 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098626553;
-        Wed,  6 Apr 2022 23:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649314532; x=1680850532;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8cY/HD592AL6q7NPOD/NPQfxvapMBjLaxqhPPMiIjWY=;
-  b=FJ+rFRaoxc+6chNKcjTcFCthS4PQnwcUv+WymW9Wg60QM594b/bczNMp
-   3SZBEOtWKZG9+sVKbToXTLsmkouitjH0VmMGcWawyVzbuOwKAtBUQ++xM
-   COYZO7FDPmcxNsOeU3hH/Vr+du1gp8oggkGkOPjFZb2ojd2yv+Em/HlbF
-   U5V0gg7LE79XuXhMpXujSsYaN29FN73+HsR9bjYHuHWcaoNRv3YAu+1OA
-   zNSxI7iAVogwD2lXbuRVCD6UpEv7bWApa7anoPg1hU/LHLp3lRjPPjyam
-   FRrRnq3Ziv+Blzh6PlkSNSPI7U2gGAXCW+KmkvFvMbW5QdW9xtwVkUDlh
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="260081841"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="260081841"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 23:55:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="570921063"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 06 Apr 2022 23:55:28 -0700
-Date:   Thu, 7 Apr 2022 14:48:07 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <navam@xilinx.com>
-Cc:     "mdf@kernel.org" <mdf@kernel.org>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        Michal Simek <michals@xilinx.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, git <git@xilinx.com>
-Subject: Re: [PATCH v3 5/5] fpga: fpga-region: Add missing kernel-doc
-  description
-Message-ID: <20220407064807.GA256966@yilunxu-OptiPlex-7050>
-References: <20220403051641.3867610-1-nava.manne@xilinx.com>
- <20220403051641.3867610-6-nava.manne@xilinx.com>
- <20220405053547.GA249845@yilunxu-OptiPlex-7050>
- <SN6PR02MB45766BEFCA6532873271099FC2E69@SN6PR02MB4576.namprd02.prod.outlook.com>
+        with ESMTP id S233639AbiDGNkO (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 7 Apr 2022 09:40:14 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB44D7522F;
+        Thu,  7 Apr 2022 06:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=8xUY+6z0XGg4FC1jk7TlBzJSYvpUJMRLP9Xa5YtemiU=;
+        b=U1pyT7hZfk7dG7ZtOMSE//6Ao5/Nqog+vbGZawaRtg6t6k7SMmr5zWUL36MQKpoNcsL4tvQ5BV+eI
+         WCGbEg2+6IR1W6NPv13IIJwE4g3u85kEThSlWzbOJU5JsMzuuCo/TGxywjW/wzjpP4GXN0giPuOfN+
+         VJqT7BuKmj5SBMMY7ts12swj6itCj+KUvxEPEB/6CMIQ61yDYB8WWUuTqjmwfTdjSv5br9QlaaibpY
+         M7dzOMYZJgkN0tA6UmnRLcNC2Ic9+nukNRLqbXPv5G+00fXSvekdXRCF2+wxblcHQ1PVXZaEg21sCi
+         dBphaB3uheTGxKOjAiGn+9nNLvcpwgA==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1410, Stamp: 3], Multi: [Enabled, t: (0.000007,0.009301)], BW: [Enabled, t: (0.000019,0.000001)], RTDA: [Enabled, t: (0.075250), Hit: No, Details: v2.34.0; Id: 15.52kd6l.1g023tfl4.d7qj; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Thu, 7 Apr 2022 16:37:39 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, mdf@kernel.org,
+        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+        conor.dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, system@metrotek.ru,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v9 0/3] Microchip Polarfire FPGA manager
+Date:   Thu,  7 Apr 2022 16:36:55 +0300
+Message-Id: <20220407133658.15699-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SN6PR02MB45766BEFCA6532873271099FC2E69@SN6PR02MB4576.namprd02.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 05:31:39AM +0000, Nava kishore Manne wrote:
-> Hi Yilun,
-> 
-> 	Thanks for providing the review comments.
-> Please find my response inline.
-> 
-> > -----Original Message-----
-> > From: Xu Yilun <yilun.xu@intel.com>
-> > Sent: Tuesday, April 5, 2022 11:06 AM
-> > To: Nava kishore Manne <navam@xilinx.com>
-> > Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com; Michal Simek
-> > <michals@xilinx.com>; linux-fpga@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; git
-> > <git@xilinx.com>
-> > Subject: Re: [PATCH v3 5/5] fpga: fpga-region: Add missing kernel-doc
-> > description
-> > 
-> > On Sun, Apr 03, 2022 at 10:46:41AM +0530, Nava kishore Manne wrote:
-> > > Fixed the warnings: No description found for return value of 'xxx'
-> > 
-> > The commit message is not clear. There are descriptions for some functions,
-> > but not in right format.
-> > 
-> I agree for some functions has description but not in the right format.
-> The "Description Not exits" and  "Description not in the right format" in both cases the tool will report the same warning ie; " warnings: No description found for return value of 'xxx'"
+Add support to the FPGA manager for programming Microchip Polarfire
+FPGAs over slave SPI interface with .dat formatted bitsream image.
 
-Thanks for the info. It would be better we describe the root cause in commit
-message along with the robot reports.
+Changelog:
+  v1 -> v2: fix printk formating
+  v2 -> v3:
+   * replace "microsemi" with "microchip"
+   * replace prefix "microsemi_fpga_" with "mpf_"
+   * more sensible .compatible and .name strings
+   * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+  v3 -> v4: fix unused variable warning
+    Put 'mpf_of_ids' definition under conditional compilation, so it
+    would not hang unused if CONFIG_OF is not enabled.
+  v4 -> v5:
+   * prefix defines with MPF_
+   * mdelay() -> usleep_range()
+   * formatting fixes
+   * add DT bindings doc
+   * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
+     We can't parse image header in write_init() because image header
+     size is not known beforehand. Thus parsing need to be done in
+     fpga_manager_ops.write() callback, but fpga_manager_ops.write()
+     also need to be reenterable. On the other hand,
+     fpga_manager_ops.write_sg() is called once. Thus, rework usage of
+     write() callback to write_sg().
+  v5 -> v6: fix patch applying
+     I forgot to clean up unrelated local changes which lead to error on
+     patch 0001-fpga-microchip-spi-add-Microchip-MPF-FPGA-manager.patch
+     applying on vanilla kernel.
+  v6 -> v7: fix binding doc to pass dt_binding_check
+  v7 -> v8: another fix for dt_binding_check warning
+  v8 -> v9:
+   * add another patch to support bitstream offset in FPGA image buffer
+   * rework fpga_manager_ops.write_sg() back to fpga_manager_ops.write()
+   * move image header parsing from write() to write_init()
 
-And also change the subject please.
+Ivan Bornyakov (3):
+  fpga: fpga-mgr: support bitstream offset in image buffer
+  fpga: microchip-spi: add Microchip MPF FPGA manager
+  dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
 
-> This patch address the above warning. So to make it relevant I have added the same in the commit msg.
+ .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  44 ++
+ drivers/fpga/Kconfig                          |  10 +
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/fpga-mgr.c                       |  48 ++-
+ drivers/fpga/microchip-spi.c                  | 379 ++++++++++++++++++
+ include/linux/fpga/fpga-mgr.h                 |   5 +
+ 6 files changed, 479 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+ create mode 100644 drivers/fpga/microchip-spi.c
 
-Adding the same commit message may not be a good way, for this case you could
-just combine them into one commit.
+-- 
+2.25.1
 
-Thanks,
-Yilun
 
-> 
-> Regards,
-> Navakishore.
