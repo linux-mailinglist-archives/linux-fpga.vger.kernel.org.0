@@ -2,123 +2,98 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374674F80D6
-	for <lists+linux-fpga@lfdr.de>; Thu,  7 Apr 2022 15:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524504F8C9E
+	for <lists+linux-fpga@lfdr.de>; Fri,  8 Apr 2022 05:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343745AbiDGNkX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 7 Apr 2022 09:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S231416AbiDHCWR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 7 Apr 2022 22:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343733AbiDGNkT (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 7 Apr 2022 09:40:19 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000ED888F3;
-        Thu,  7 Apr 2022 06:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=VEwVqHIiRKkga52rsTMf8TB66Lb+csRivGMwrTXjWv8=;
-        b=g6EkfFXdAjb+mA7xuIazwx4fyipNTqcUlhNje6j0fv+E6Pl3amp3DV7LuNAF6TH0gL2B9TdYkyLHI
-         g4ADzG4LEae0wvo7Xy15WSxU+JhA/VxQgulnx5m3zmbyUXm6k6JCwokDYUjyx6wgSvSqaWbB0fSHKG
-         8EIGVF3/pUTUNGTgzB2slENR+SuNpFogz1E/ctYPfurwlNLCUZiZgBa4IuNFOclFcOYEKO/QQKabWE
-         lKYbEbxmYG1LGT0l2r5edO8kmk2Tuh8iewRqZlL6M7mrJ1qsmNbIm/ymehV6lyVWvi0YhPu4aKBO0h
-         Syi4X5xKrnn5iQtZ45Qn7riGD6IF3iA==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1410, Stamp: 3], Multi: [Enabled, t: (0.000008,0.007309)], BW: [Enabled, t: (0.000017,0.000001)], RTDA: [Enabled, t: (0.081273), Hit: No, Details: v2.34.0; Id: 15.52k6u6.1g023trdo.k2qr; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Thu, 7 Apr 2022 16:37:52 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, mdf@kernel.org,
-        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
-        conor.dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, system@metrotek.ru,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH v9 3/3] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
-Date:   Thu,  7 Apr 2022 16:36:58 +0300
-Message-Id: <20220407133658.15699-4-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220407133658.15699-1-i.bornyakov@metrotek.ru>
-References: <20220407133658.15699-1-i.bornyakov@metrotek.ru>
+        with ESMTP id S229799AbiDHCWQ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 7 Apr 2022 22:22:16 -0400
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B324F29B125;
+        Thu,  7 Apr 2022 19:20:14 -0700 (PDT)
+Received: by mail-pg1-f174.google.com with SMTP id r66so6580217pgr.3;
+        Thu, 07 Apr 2022 19:20:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=77mGg9AZzzqczjvRh5VdTdYWN+BZWlxGZo/4aro3IbA=;
+        b=C0W5jFpqbsCHD6fzciuzNE0xLQNGoxDZjEL52AbsPqV6Fvs75G8FtP45yTg2yXB3Bm
+         sZN5ol6GlrKlA0Yeju0k6WR9x65sOyvn80/D9CKh5M/RDtmyhUGdh/d93yx3VoX2fbRO
+         zUhJYSdPJI6wVkorKr1lnrdzrMuKWANQqAsE6DAXO6EQ+3sDvguTlFykbjUnZAn8E/Y6
+         rJGEhKmvBkb9mh3G80ssXYn/9lYTk7mEdCRVd2lTNqxGvgDkUPZ1CIyWNhZ13vygYc1R
+         K2vEehS5OlmwwWNkl2bTj1+xilkFq6eOc9zSBjo+QXAGflPken0LhOWXm5KQRLFBKCQs
+         i0yA==
+X-Gm-Message-State: AOAM53097dlsNjlqcf95Uo97BsiyBJhgzeF4if20X4RnXCwZBPdsh7By
+        C0Zaj8jZ22WrfwwS8TA+/+BfRr+2g62fOQ==
+X-Google-Smtp-Source: ABdhPJxfE5RYEw2y7dLVBmffQG46S+AhGteS4uO5VMNPpZ49YvdYkUK+Sc5RCvEIJVAn5Iy7qfIAPQ==
+X-Received: by 2002:a63:6c0a:0:b0:398:6bd2:a16a with SMTP id h10-20020a636c0a000000b003986bd2a16amr13792858pgc.191.1649384413667;
+        Thu, 07 Apr 2022 19:20:13 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:ece0:aab:34ff:52ca:a7a5])
+        by smtp.gmail.com with ESMTPSA id br8-20020a056a00440800b004fe10df2d3fsm13744876pfb.157.2022.04.07.19.20.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 19:20:12 -0700 (PDT)
+From:   Moritz Fischer <mdf@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fpga@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] MAINTAINERS: Update linux-fpga repository location
+Date:   Thu,  7 Apr 2022 19:20:02 -0700
+Message-Id: <20220408022002.22957-1-mdf@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
-slave SPI to load .dat formatted bitstream image.
+As maintainer team we have decided to move the linux-fpga development
+to a shared repository with shared access.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Cc: Xu Yilun <yilun.xu@intel.com>
+Cc: Wu Hao <hao.wu@intel.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Moritz Fischer <mdf@kernel.org>
 ---
- .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
 
-diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-new file mode 100644
-index 000000000000..aee45cb15592
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/microchip,mpf-spi-fpga-mgr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip Polarfire FPGA manager.
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description:
-+  Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
-+  load the bitstream in .dat format.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - microchip,mpf-spi-fpga-mgr
-+
-+  reg:
-+    description: SPI chip select
-+    maxItems: 1
-+
-+  spi-max-frequency: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            fpga_mgr@0 {
-+                    compatible = "microchip,mpf-spi-fpga-mgr";
-+                    spi-max-frequency = <20000000>;
-+                    reg = <0>;
-+            };
-+    };
+Hi Stephen,
+
+can you help us update the linux-next part accordingly?
+
+Thanks,
+
+Moritz
+---
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fd768d43e048..9b08d5ea001e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7717,7 +7717,7 @@ R:	Tom Rix <trix@redhat.com>
+ L:	linux-fpga@vger.kernel.org
+ S:	Maintained
+ Q:	http://patchwork.kernel.org/project/linux-fpga/list/
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mdf/linux-fpga.git
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga.git
+ F:	Documentation/devicetree/bindings/fpga/
+ F:	Documentation/driver-api/fpga/
+ F:	Documentation/fpga/
 -- 
-2.25.1
-
+2.35.1
 
