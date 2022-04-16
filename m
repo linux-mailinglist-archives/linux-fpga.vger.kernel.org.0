@@ -2,132 +2,129 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2795037AB
-	for <lists+linux-fpga@lfdr.de>; Sat, 16 Apr 2022 19:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39ACA5037AF
+	for <lists+linux-fpga@lfdr.de>; Sat, 16 Apr 2022 19:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbiDPRBT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 16 Apr 2022 13:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S232158AbiDPRNF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 16 Apr 2022 13:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbiDPRBR (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 16 Apr 2022 13:01:17 -0400
-Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08C84C411;
-        Sat, 16 Apr 2022 09:58:44 -0700 (PDT)
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 112E5223DA;
-        Sat, 16 Apr 2022 16:58:43 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 42FA32000E;
-        Sat, 16 Apr 2022 16:58:41 +0000 (UTC)
-Message-ID: <ac22068dad06fd61f2e82c0bf7c0f58a4e5df050.camel@perches.com>
-Subject: Re: [PATCH v4 2/5] fpga: fix for coding style issues
-From:   Joe Perches <joe@perches.com>
-To:     Nava kishore Manne <nava.manne@xilinx.com>, mdf@kernel.org,
-        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+        with ESMTP id S231343AbiDPRND (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 16 Apr 2022 13:13:03 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB4C8C7F1;
+        Sat, 16 Apr 2022 10:10:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650129031; x=1681665031;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=unCoICu+tR6XjB3V0LBDQueMtp5vDCI6pFAj0TG4Zsc=;
+  b=C/4o06qkJVWDl3tNXcqtHV3GaFGGcfzp574xaB6z3GGMycP+8xxT/wPL
+   eJmZzf1CDaZdMxTOadkpLje+dkBwmp8KxLtMKAhmrC9Q7leBZFK37veSb
+   KamZsHyLvj+XExdelPBpUKxDnNmYoYqarDfzRj3UpxHIjPQtIF2OYIkg8
+   TcigR7AS4f1M7QccXG/lHSgO5OHVgedFExTwCpD4SX1aZSS/LCAk78WIq
+   89XxHzosgDUCYjtEfJhLDr+Cs8/vygcwcVAazPg0EvjA6BiApf83xOV5v
+   14/okRFUJ2S8Gm+xxfAJWOzrDJh3ZNNHEXd9dJft9Bq82oBbW1Oca3gHn
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="323751016"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="323751016"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 10:10:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="553608605"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga007.jf.intel.com with ESMTP; 16 Apr 2022 10:10:28 -0700
+Date:   Sun, 17 Apr 2022 01:02:57 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
         michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         git@xilinx.com
-Date:   Sat, 16 Apr 2022 09:58:40 -0700
-In-Reply-To: <20220416133719.3382895-3-nava.manne@xilinx.com>
+Subject: Re: [PATCH v4 2/5] fpga: fix for coding style issues
+Message-ID: <20220416170257.GA302575@yilunxu-OptiPlex-7050>
 References: <20220416133719.3382895-1-nava.manne@xilinx.com>
-         <20220416133719.3382895-3-nava.manne@xilinx.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+ <20220416133719.3382895-3-nava.manne@xilinx.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220416133719.3382895-3-nava.manne@xilinx.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: 5iasq51u9gsrfia9ayz48s37ztk95x9o
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 42FA32000E
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18NXzAwtfsG6VD8cMuiMu8V8tvZafI+GT8=
-X-HE-Tag: 1650128321-724278
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Sat, 2022-04-16 at 19:07 +0530, Nava kishore Manne wrote:
+On Sat, Apr 16, 2022 at 07:07:16PM +0530, Nava kishore Manne wrote:
 > fixes the below checks reported by checkpatch.pl
 > Lines should not end with a '('
 > Alignment should match open parenthesis
 
-in fpga-mgr:
-	Another possibillty would be to change the function arguments
+Please help format the commit log, like:
 
-and 
+fixes the below checks reported by checkpatch.pl:
 
-in fpga-region:
-	Ideally keep the include declaration and definition styles synced
+- Lines should not end with a '('
+- Alignment should match open parenthesis
 
-Perhaps:
----
- drivers/fpga/fpga-mgr.c          | 13 ++++++++-----
- drivers/fpga/fpga-region.c       |  6 +++---
- include/linux/fpga/fpga-region.h |  6 +++---
- 3 files changed, 14 insertions(+), 11 deletions(-)
+> 
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
 
-diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-index d49a9ce34568..c65b97450a67 100644
---- a/drivers/fpga/fpga-mgr.c
-+++ b/drivers/fpga/fpga-mgr.c
-@@ -148,12 +148,15 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
- 	int ret;
- 
- 	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
--	if (!mgr->mops->initial_header_size)
--		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
--	else
--		ret = fpga_mgr_write_init(
--		    mgr, info, buf, min(mgr->mops->initial_header_size, count));
- 
-+	if (mgr->mops->initial_header_size) {
-+		count = min(mgr->mops->initial_header_size, count);
-+	} else {
-+		buf = NULL;
-+		count = 0;
-+	}
-+
-+	ret = fpga_mgr_write_init(mgr, info, buf, count);
- 	if (ret) {
- 		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
- 		mgr->state = FPGA_MGR_STATE_WRITE_INIT_ERR;
-diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
-index b0ac18de4885..485948e3c0db 100644
---- a/drivers/fpga/fpga-region.c
-+++ b/drivers/fpga/fpga-region.c
-@@ -18,9 +18,9 @@
- static DEFINE_IDA(fpga_region_ida);
- static struct class *fpga_region_class;
- 
--struct fpga_region *fpga_region_class_find(
--	struct device *start, const void *data,
--	int (*match)(struct device *, const void *))
-+struct fpga_region *
-+fpga_region_class_find(struct device *start, const void *data,
-+		       int (*match)(struct device *, const void *))
- {
- 	struct device *dev;
- 
-diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
-index 3b87f232425c..9d4d32909340 100644
---- a/include/linux/fpga/fpga-region.h
-+++ b/include/linux/fpga/fpga-region.h
-@@ -52,9 +52,9 @@ struct fpga_region {
- 
- #define to_fpga_region(d) container_of(d, struct fpga_region, dev)
- 
--struct fpga_region *fpga_region_class_find(
--	struct device *start, const void *data,
--	int (*match)(struct device *, const void *));
-+struct fpga_region *
-+fpga_region_class_find(struct device *start, const void *data,
-+		       int (*match)(struct device *, const void *));
- 
- int fpga_region_program_fpga(struct fpga_region *region);
- 
+With the minor fixes, please add my Acked-by.
 
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+
+> ---
+> Changes for v2:
+>                 -None.
+> Changes for v3:
+>                -Fixed similar issue exists in "drivers/fpga/*".
+> Changes for v4:
+>                -None.
+> 
+>  drivers/fpga/fpga-mgr.c    | 4 ++--
+>  drivers/fpga/fpga-region.c | 7 ++++---
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> index d49a9ce34568..a699cc8e2fa6 100644
+> --- a/drivers/fpga/fpga-mgr.c
+> +++ b/drivers/fpga/fpga-mgr.c
+> @@ -151,8 +151,8 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
+>  	if (!mgr->mops->initial_header_size)
+>  		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
+>  	else
+> -		ret = fpga_mgr_write_init(
+> -		    mgr, info, buf, min(mgr->mops->initial_header_size, count));
+> +		ret = fpga_mgr_write_init(mgr, info, buf,
+> +					  min(mgr->mops->initial_header_size, count));
+>  
+>  	if (ret) {
+>  		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
+> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+> index b0ac18de4885..3864bf4f8920 100644
+> --- a/drivers/fpga/fpga-region.c
+> +++ b/drivers/fpga/fpga-region.c
+> @@ -18,9 +18,10 @@
+>  static DEFINE_IDA(fpga_region_ida);
+>  static struct class *fpga_region_class;
+>  
+> -struct fpga_region *fpga_region_class_find(
+> -	struct device *start, const void *data,
+> -	int (*match)(struct device *, const void *))
+> +struct fpga_region *fpga_region_class_find(struct device *start,
+> +					   const void *data,
+> +					   int (*match)(struct device *,
+> +							const void *))
+>  {
+>  	struct device *dev;
+>  
+> -- 
+> 2.25.1
