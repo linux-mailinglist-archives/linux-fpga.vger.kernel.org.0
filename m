@@ -2,195 +2,117 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50AE6503773
-	for <lists+linux-fpga@lfdr.de>; Sat, 16 Apr 2022 18:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92E8503782
+	for <lists+linux-fpga@lfdr.de>; Sat, 16 Apr 2022 18:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbiDPQDF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 16 Apr 2022 12:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        id S232526AbiDPQ2W (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 16 Apr 2022 12:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiDPQDF (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 16 Apr 2022 12:03:05 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3609F6E7
-        for <linux-fpga@vger.kernel.org>; Sat, 16 Apr 2022 09:00:31 -0700 (PDT)
+        with ESMTP id S232525AbiDPQ2U (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 16 Apr 2022 12:28:20 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111D92ED67
+        for <linux-fpga@vger.kernel.org>; Sat, 16 Apr 2022 09:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650124832; x=1681660832;
+  t=1650126348; x=1681662348;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=vky81R1mG182RqB83yqiX7ur2bU30K+rUOTWOeYEAH4=;
-  b=QLABmgkjoX5Q+HYzQew+V3BZ2JoV+C0l+XLHpUabtpabGE2D3XuM5Z50
-   AuMFXiAv0wNSx/+arYnMozhg/fqYJNDUuzJfG/uU0kaqfF/JqqMZz5hLb
-   6ERZtN0ONs5hG24nwMT0vZ+dHa3NHRZq70t9VFj60holSxOkyd4Xil4Yp
-   OSZdF7M0kc/ZB3qlO15Niq0lS7lJZ8YJpbsCTlJ2jJ+WoVp0IWJe4hpmX
-   7m6kJIQTmVMdFfOF7D9OzKr05CNmcmf2FN2JG2wuHzHqcdNHaZe0WRKWf
-   7N6gX0ly/CkI59xqRUyBgwSWntEpplkyhLOHAH9xD2V6nVi6/P7ZU8OYf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="288376366"
+  bh=Y/mdB7VGAJUBnhGVl9Ng5vHD4Fg6XvCfzw3p2GJnuho=;
+  b=B1WmbQ6ZRTaJV4vnyNN1KUFtr3pOnqILC6lzWHu7eAiU4rOiMf0/THOF
+   8xEC5jF0qzNBC7UsvYpP6KsQGmM3F3mKGTmhWYJsFXlu0Cj5PgK9MZRlp
+   6pqm/ZLtK96/0Wg3LILNYRG4N6P9iz/HkqcIiy0bPQXjx2PThcfMtQn8V
+   hqFtXO7Ac8Nbyd0p/z7nyS0QDoczc/o3VfeCZ4u308UNw8L28/isiltad
+   YGRO2GNtmD4gbynVRpS7RM2e8vxfDNJz5kdTF18cKDUybSTLhMZFV2MqT
+   zLPRx7Fqa+ctmT3ChT2+AiowJNHK1GlS8Km/I11vPL5bDPz1ZrwZST1VK
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="263479281"
 X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="288376366"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 09:00:31 -0700
+   d="scan'208";a="263479281"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 09:25:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="726124703"
+   d="scan'208";a="553595101"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga005.jf.intel.com with ESMTP; 16 Apr 2022 09:00:30 -0700
-Date:   Sat, 16 Apr 2022 23:52:58 +0800
+  by orsmga007.jf.intel.com with ESMTP; 16 Apr 2022 09:25:45 -0700
+Date:   Sun, 17 Apr 2022 00:18:14 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     Tianfei Zhang <tianfei.zhang@intel.com>
 Cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v1] fpga: dfl: fme: adding reserved bits for revision of
- FME/Port error
-Message-ID: <20220416155258.GB301222@yilunxu-OptiPlex-7050>
-References: <20220412063523.54587-1-tianfei.zhang@intel.com>
+        linux-fpga@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH v1] fpga: dfl: Allow Port to be linked to FME's DFL
+Message-ID: <20220416161814.GC301222@yilunxu-OptiPlex-7050>
+References: <20220413091519.317735-1-tianfei.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412063523.54587-1-tianfei.zhang@intel.com>
+In-Reply-To: <20220413091519.317735-1-tianfei.zhang@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 02:35:23AM -0400, Tianfei Zhang wrote:
-> From: Tianfei zhang <tianfei.zhang@intel.com>
+On Wed, Apr 13, 2022 at 05:15:19AM -0400, Tianfei Zhang wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> There are 2 different register layouts for FME/Port error
-> registers. This patch introduces 4 reserved bits (Bit[59:56])
-> to indicate the revision of register layout for userland
-> application.
-
-Please specify that the 4 bits are reserved by HW so that SW appends
-revision info on these bits for the attr readout value.
-
+> Currently we use PORTn_OFFSET to locate PORT DFLs, and PORT DFLs are not
+> connected FME DFL. But for some cases (e.g. Intel Open FPGA Stack device),
+> PORT DFLs are connected to FME DFL directly, so we don't need to search
+> PORT DFLs via PORTn_OFFSET again. If BAR value of PORTn_OFFSET is 0x7
+> (FME_PORT_OFST_BAR_SKIP) then driver will skip searching the DFL for that
+> port.
 > 
-> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Link: https://lore.kernel.org/linux-fpga/20220316070814.1916017-2-tianfei.zhang@intel.com/
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
 > ---
->  drivers/fpga/dfl-fme-error.c | 36 ++++++++++++++++++++++++++++++------
->  1 file changed, 30 insertions(+), 6 deletions(-)
+>  drivers/fpga/dfl-pci.c | 7 +++++++
+>  drivers/fpga/dfl.h     | 1 +
+>  2 files changed, 8 insertions(+)
 > 
-> diff --git a/drivers/fpga/dfl-fme-error.c b/drivers/fpga/dfl-fme-error.c
-> index 51c2892ec06d..3b54470f56ca 100644
-> --- a/drivers/fpga/dfl-fme-error.c
-> +++ b/drivers/fpga/dfl-fme-error.c
-> @@ -39,6 +39,22 @@
->  
->  #define ERROR_MASK		GENMASK_ULL(63, 0)
->  
-> +/* Bit[59:56] was reserved by software for error revision */
-> +#define ERROR_SW_REVISION_MASK GENMASK_ULL(59, 56)
+> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> index 717ac9715970..6347f31058f0 100644
+> --- a/drivers/fpga/dfl-pci.c
+> +++ b/drivers/fpga/dfl-pci.c
+> @@ -259,6 +259,13 @@ static int find_dfls_by_default(struct pci_dev *pcidev,
+>  			 */
+>  			bar = FIELD_GET(FME_PORT_OFST_BAR_ID, v);
+>  			offset = FIELD_GET(FME_PORT_OFST_DFH_OFST, v);
+> +			if (bar >= PCI_STD_NUM_BARS ||
+> +			    bar == FME_PORT_OFST_BAR_SKIP) {
 
-This will change the user behavior for the error interfaces. Now they
-need to recognize the revision bits and discard them before clearing
-the errors, is it?
+Seems the second judgement will never be triggered?
 
-How users know the revision fields in output values? Maybe it still
-involves change in Documentation/ABI/testing/sysfs-platform-dfl-fme,
-which should be reconsidered carefully.
-
-> +
-> +static u64 set_error_revision(struct device *dev, u64 value)
-> +{
-> +	void __iomem *base;
-> +	u64 dfh;
-> +	u64 revision;
-
-Better we follow the reverse xmas tree declaration, so reverse the 2
-lines please.
-
-Thanks,
+Thanks
 Yilun
 
+> +				dev_dbg(&pcidev->dev, "skipping search DFL for port %d on BAR %d\n",
+> +					i, bar);
+> +				continue;
+> +			}
 > +
-> +	base = dfl_get_feature_ioaddr_by_id(dev, FME_FEATURE_ID_GLOBAL_ERR);
-> +	dfh = readq(base);
-> +	revision = FIELD_GET(DFH_REVISION, dfh);
-> +
-> +	return value | FIELD_PREP(ERROR_SW_REVISION_MASK, revision);
-> +}
-> +
->  static ssize_t pcie0_errors_show(struct device *dev,
->  				 struct device_attribute *attr, char *buf)
->  {
-> @@ -52,7 +68,8 @@ static ssize_t pcie0_errors_show(struct device *dev,
->  	value = readq(base + PCIE0_ERROR);
->  	mutex_unlock(&pdata->lock);
+>  			start = pci_resource_start(pcidev, bar) + offset;
+>  			len = pci_resource_len(pcidev, bar) - offset;
 >  
-> -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> +	return sprintf(buf, "0x%llx\n",
-> +		       (unsigned long long)set_error_revision(dev, value));
->  }
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 53572c7aced0..e0f0abfbeb8c 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -91,6 +91,7 @@
+>  #define FME_HDR_PORT_OFST(n)	(0x38 + ((n) * 0x8))
+>  #define FME_HDR_BITSTREAM_ID	0x60
+>  #define FME_HDR_BITSTREAM_MD	0x68
+> +#define FME_PORT_OFST_BAR_SKIP	7
 >  
->  static ssize_t pcie0_errors_store(struct device *dev,
-> @@ -97,7 +114,8 @@ static ssize_t pcie1_errors_show(struct device *dev,
->  	value = readq(base + PCIE1_ERROR);
->  	mutex_unlock(&pdata->lock);
->  
-> -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> +	return sprintf(buf, "0x%llx\n",
-> +		       (unsigned long long)set_error_revision(dev, value));
->  }
->  
->  static ssize_t pcie1_errors_store(struct device *dev,
-> @@ -133,11 +151,13 @@ static ssize_t nonfatal_errors_show(struct device *dev,
->  				    struct device_attribute *attr, char *buf)
->  {
->  	void __iomem *base;
-> +	u64 value;
->  
->  	base = dfl_get_feature_ioaddr_by_id(dev, FME_FEATURE_ID_GLOBAL_ERR);
-> +	value = readq(base + RAS_NONFAT_ERROR);
->  
->  	return sprintf(buf, "0x%llx\n",
-> -		       (unsigned long long)readq(base + RAS_NONFAT_ERROR));
-> +		       (unsigned long long)set_error_revision(dev, value));
->  }
->  static DEVICE_ATTR_RO(nonfatal_errors);
->  
-> @@ -145,11 +165,13 @@ static ssize_t catfatal_errors_show(struct device *dev,
->  				    struct device_attribute *attr, char *buf)
->  {
->  	void __iomem *base;
-> +	u64 value;
->  
->  	base = dfl_get_feature_ioaddr_by_id(dev, FME_FEATURE_ID_GLOBAL_ERR);
-> +	value = readq(base + RAS_CATFAT_ERROR);
->  
->  	return sprintf(buf, "0x%llx\n",
-> -		       (unsigned long long)readq(base + RAS_CATFAT_ERROR));
-> +		       (unsigned long long)set_error_revision(dev, value));
->  }
->  static DEVICE_ATTR_RO(catfatal_errors);
->  
-> @@ -165,9 +187,10 @@ static ssize_t inject_errors_show(struct device *dev,
->  	mutex_lock(&pdata->lock);
->  	v = readq(base + RAS_ERROR_INJECT);
->  	mutex_unlock(&pdata->lock);
-> +	v = FIELD_GET(INJECT_ERROR_MASK, v);
->  
->  	return sprintf(buf, "0x%llx\n",
-> -		       (unsigned long long)FIELD_GET(INJECT_ERROR_MASK, v));
-> +		       (unsigned long long)set_error_revision(dev, v));
->  }
->  
->  static ssize_t inject_errors_store(struct device *dev,
-> @@ -211,7 +234,8 @@ static ssize_t fme_errors_show(struct device *dev,
->  	value = readq(base + FME_ERROR);
->  	mutex_unlock(&pdata->lock);
->  
-> -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> +	return sprintf(buf, "0x%llx\n",
-> +		       (unsigned long long)set_error_revision(dev, value));
->  }
->  
->  static ssize_t fme_errors_store(struct device *dev,
+>  /* FME Fab Capability Register Bitfield */
+>  #define FME_CAP_FABRIC_VERID	GENMASK_ULL(7, 0)	/* Fabric version ID */
 > -- 
 > 2.26.2
