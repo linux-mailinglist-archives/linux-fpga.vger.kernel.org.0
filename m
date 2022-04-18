@@ -2,371 +2,162 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697F2504B16
-	for <lists+linux-fpga@lfdr.de>; Mon, 18 Apr 2022 04:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB50504E9B
+	for <lists+linux-fpga@lfdr.de>; Mon, 18 Apr 2022 11:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbiDRCx3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 17 Apr 2022 22:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S232333AbiDRJ5T (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 18 Apr 2022 05:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232831AbiDRCx2 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 17 Apr 2022 22:53:28 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA4963B0
-        for <linux-fpga@vger.kernel.org>; Sun, 17 Apr 2022 19:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650250251; x=1681786251;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=e7N6K+7o36KMAdEp4fEtPr9xUrioXmKUpZeaV/35oPA=;
-  b=S4l+GFUi6BihmIwAUpSMSAkNy9/qec1sdAbpGTyiNPCrtUvX4XT5ifQn
-   K9f/W1kqUQd+/zrzCgaM58mCuuMY/S1iydGgGXuP8jPcjfw9n0n3LO7pq
-   ujrwsHMjL5LMHtIaVpggMr0UmtmiMjoye2Isw7yN2YidHlb4njz+9szGS
-   S+ckWzHKIRTSlLUuxZxryKGi5H3A7iCIrp0Wv9rmhnd+vM7G5zIo0Apc1
-   c22m8MbzYV8oa7OPdIE4LKDWu08NAuQ5LFc64WwX4CheS625qJG5gC9No
-   zVtJFWy8scETG3mE9AI3UpHM/Y8W+fOi/WjdfKCdBULlpkB7D/uGWJ3v3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="245326504"
-X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="245326504"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 19:50:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="625144724"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Apr 2022 19:50:50 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 17 Apr 2022 19:50:50 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 17 Apr 2022 19:50:49 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Sun, 17 Apr 2022 19:50:49 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.103)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Sun, 17 Apr 2022 19:50:49 -0700
+        with ESMTP id S231559AbiDRJ5R (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 18 Apr 2022 05:57:17 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2076.outbound.protection.outlook.com [40.107.93.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51661167C8;
+        Mon, 18 Apr 2022 02:54:38 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Er03PsyHPXY6FBMroncHAuobJ03Uo5NhsRNr8a2z9bA+FusKGxXAuy4vFR8xxEvHGyLuu02PMuiKQQfPCRL2kVXCEVUEx7Xo3mwF9kxAMCgjFon8ijvJ3OVsXokgBwGxKwrYxf5Kg5NrFVD1ZUhmodMfrV3bYGCw6YUIOcljkdnxjinZBghWSIY/aRbrpNw6XAn4BjnQaHYsLJHfMh49t+TbLPEyxq3TcqirirjRW6hXpSOvYXIkbNo1nHoNen7Kb4zIC6eOcC71l/MTEA9bMXRk5g9ZspaZvhUekxymUrTq2gGgy4rgShhMcIsyQ/2j40ly5UXgTpzno2YY98RffQ==
+ b=ccGdw7RA0SrhPILqlpcUQYeKuO8qvAothB/w0Y9+XDkyWo1RZcn7Vkq3A+vR65wBoM657fj4yLDoFz145OeOdhe8FfuJ62OQXL3xKwT8QNzNAb5ev124YhZGLHyVQRg0fr3jy8pVSlaI/+AHUgsFKglvOo/TGBYkrTEXTmKF6hudXixLG9/5LwsmQMeMQUOeQ9LN43R8T3jCeGGVo3PemJG24w78oVXnJUUF0XIXvHRoBPZcp4ECFUvGB5wbPpdx7ZiJG5AU6BTkvjsRZ5XGLDGTHIe6WuVti2INqwdDO8qNnIefS54JO4K7vCwMN3qpMmMknWv8SYDmGO5Sj/08nw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ry6hVEZy6fj2G0nKqFWcy8lWHbv+/gT1+AvXKKpgcIE=;
- b=lN7LITNAGHgG5Qm7GjFujBjemmDkQYKeO3d831q10vZUq432xT4AoWh7Lt1ZVBeh6+S2XiqgcW16JOJ2Eu4/xi/ZcLzDi4Tq1wsZqqZiyktBOaSpG7o4kyrN1I0hKzY4FB5WQMJbuch2rzFmkvG6oHtxuaqqYLoHcI6fcUTUAfvnf/51KZCK3CdeTKDHSwnuIdtb0GS82XubFs/hynU5m8vRm3tJuAnpM6s37NRP1WF50ZLdZiWmXUmLCHExPrBi4KRuK/MvpRf3hICBgvLx6s6UsKm+BljMn/rjc+60o3gjhcckEaSNSj3/ckS+sgT8g3qZCwG+CNY+xbeZBWRNHg==
+ bh=gJIRuNbMdTHOAX8229IYLv3xXOXhNvnnb0yTbZ5yTaA=;
+ b=eyAv0x4KnKs0nmnw9zCe1g0w/7xb+gQKJbHJA5VM1hW8lVmnSlTBGcRLYEMzphah8Q6TCMRpl6U5jch+10TrSCuAydesJdzV6yEFq4meyv6WMxbSZ73Nr6zUqLbVi6yI99b9ncghzf1Yx88w7endW4Pk38623HPCINh9lmRezESlfSqakZ9QWtcH6lzOYInDkJ0OoV00Jc3aCzz0bfsQ9slpZ376vt20yvQVkOvSZFR5/aSeui71cwJY7guY6vXsd8jAUaSZLLFViEjZOgaRzRy+FX1eKDNnS0FyB7+KlOs22/24mWl+XeOMu111JJ64dFI0/M0RMs2YNYSev/dDJQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
- by SN6PR11MB3053.namprd11.prod.outlook.com (2603:10b6:805:d9::16) with
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gJIRuNbMdTHOAX8229IYLv3xXOXhNvnnb0yTbZ5yTaA=;
+ b=d4tqlYNriz6lqSFnw6lnO8xpkCyYzkPhIugYmAsm035KJxOeNUc2MhOA+rYGRy3Oo3/wLQjgi/vH+Y1Vi+4NVsxG46p8xu/DQljGMYfpCWWr0/yXkgqhZhLs3ca3gWKVg9bqtfErQyvcijXj2+AWWE2rqgnrBIh0kVw2H0Ym9Xg=
+Received: from SN6PR02MB4576.namprd02.prod.outlook.com (2603:10b6:805:af::17)
+ by BYAPR02MB5559.namprd02.prod.outlook.com (2603:10b6:a03:a1::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Mon, 18 Apr
- 2022 02:50:47 +0000
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::c076:6436:db8e:ee22]) by BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::c076:6436:db8e:ee22%9]) with mapi id 15.20.5164.025; Mon, 18 Apr 2022
- 02:50:47 +0000
-From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
-To:     "Wu, Hao" <hao.wu@intel.com>, "Xu, Yilun" <yilun.xu@intel.com>
-CC:     "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
-Subject: RE: [PATCH v1] fpga: dfl: fme: adding reserved bits for revision of
- FME/Port error
-Thread-Topic: [PATCH v1] fpga: dfl: fme: adding reserved bits for revision of
- FME/Port error
-Thread-Index: AQHYTjf3U79tFgn6Ik+Ohp7VUNfX56zyt6YAgAItQBCAAAdKAIAAEdPw
-Date:   Mon, 18 Apr 2022 02:50:47 +0000
-Message-ID: <BN9PR11MB548392CD6116C529A3338374E3F39@BN9PR11MB5483.namprd11.prod.outlook.com>
-References: <20220412063523.54587-1-tianfei.zhang@intel.com>
- <20220416155258.GB301222@yilunxu-OptiPlex-7050>
- <BN9PR11MB54833E8D5E0853DEC4AEDB34E3F39@BN9PR11MB5483.namprd11.prod.outlook.com>
- <DM6PR11MB381931AC7159F2D1262F05C385F39@DM6PR11MB3819.namprd11.prod.outlook.com>
-In-Reply-To: <DM6PR11MB381931AC7159F2D1262F05C385F39@DM6PR11MB3819.namprd11.prod.outlook.com>
-Accept-Language: zh-CN, en-US
+ 2022 09:54:36 +0000
+Received: from SN6PR02MB4576.namprd02.prod.outlook.com
+ ([fe80::f1c0:bdc3:9a56:d6d0]) by SN6PR02MB4576.namprd02.prod.outlook.com
+ ([fe80::f1c0:bdc3:9a56:d6d0%7]) with mapi id 15.20.5164.025; Mon, 18 Apr 2022
+ 09:54:35 +0000
+From:   Nava kishore Manne <navam@xilinx.com>
+To:     Joe Perches <joe@perches.com>, "mdf@kernel.org" <mdf@kernel.org>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
+        "yilun.xu@intel.com" <yilun.xu@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        Michal Simek <michals@xilinx.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, git <git@xilinx.com>
+Subject: RE: [PATCH v4 2/5] fpga: fix for coding style issues
+Thread-Topic: [PATCH v4 2/5] fpga: fix for coding style issues
+Thread-Index: AQHYUZcjkgksvVyG0kSyIxbadyFg96zyw0MAgAKsDPA=
+Date:   Mon, 18 Apr 2022 09:54:35 +0000
+Message-ID: <SN6PR02MB45763D1B949353F99AAFE7D8C2F39@SN6PR02MB4576.namprd02.prod.outlook.com>
+References: <20220416133719.3382895-1-nava.manne@xilinx.com>
+         <20220416133719.3382895-3-nava.manne@xilinx.com>
+ <ac22068dad06fd61f2e82c0bf7c0f58a4e5df050.camel@perches.com>
+In-Reply-To: <ac22068dad06fd61f2e82c0bf7c0f58a4e5df050.camel@perches.com>
+Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.401.20
-dlp-reaction: no-action
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e6fd3ec0-fb70-413a-200c-08da20e63d70
-x-ms-traffictypediagnostic: SN6PR11MB3053:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <SN6PR11MB30531BAB8BC56244840B34F0E3F39@SN6PR11MB3053.namprd11.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: f0e76d32-3b75-4b19-dc33-08da212171f8
+x-ms-traffictypediagnostic: BYAPR02MB5559:EE_
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <BYAPR02MB5559A29ECB9FED0AB21C2AA8C2F39@BYAPR02MB5559.namprd02.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3RTOvlvYGRKuoEMjblMV1MOgul4To24kk9jhd8kQkPuN5kCKIYHy2n1u3BuPJSiQPdFQNd7A4kvgYK0oOhrX2yUZ/WE7Xd7dlnRMhuirfZma864I6JEpha/dZDQGbpcpbGn0GXiM9OXmuC6FEPgY45v86KG+PtONpinKSnKxQUYlehAElFapaW3mOtNc3bgSbn6OImKjCXmBzUQ6j3ULudoeicF/Y4G6LUFvarroQANLeXSvbd/nHxdGClbtRxPsY7Ppow4In/KA2lPWMZJjFip40Lib88PhaEwPkojdV5z6FM4PoM2uK+9ycemdR8HUMv6Sk/RtzFIZzgkZDk5FrdtSUMw6ZI+3Tn066rqqzy50qC0CqZ0+aJdxq5ziUhw+MBcvYH4+Bc1/Z7eRro8M4OZXYRyM0/04sWWYQtaVeZVQzfS6m1uZ45US3Q6X42K2juosF0dVlUT5giyfOMwiIThV7sbsfr/a6OHHjwNngMSI1V6AXtkKHzCP+SbPf77qcp3vygnu5rxM5TYVWZBwmTifL/gDTLMhpyDZVIvy+G1C61zv8SmvhxnVuXfLtoZdb6T5pAOlHi0qGjxpz7m3LmNxvUQZg+IRHo5crJlbWANTRfR/LsSOwLwRW3N2AW15E+NUPco3TuUcIIVsqEc9sQiOw3TWATLfLbq8AZnVv8TblVq8xH8Y9B+re4sqiPi6+JAKMYf+n7bbwCIXrbWaMA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(55016003)(6636002)(71200400001)(53546011)(33656002)(7696005)(6506007)(54906003)(8936002)(316002)(5660300002)(110136005)(508600001)(86362001)(83380400001)(122000001)(52536014)(82960400001)(2906002)(38070700005)(38100700002)(8676002)(4326008)(66556008)(26005)(66446008)(9686003)(64756008)(66476007)(76116006)(66946007)(186003);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: pzSdKmKKu0OEjbGpnE2UbgSMnc9f935R3Xjfl0SVy5i9nkB2bV8K0sABx2N2RauUmEmF3eagR2FzxSEzcUa7PN2pq7TWtNJiK5X/BRJokTwbOBlBwxggb5l9sPGGCh7sFPSK9rs5Cw3VgwnKWIhcbCulN4fgyfl6WhsIJZo7Sh38oV9JByGeUoM+mkz9jH8jM7UIA8eJUUDv14z2EoBPsI2dzweLbKCz7n/360m+e2rCburLhnwTfb5xafs6pf+I3Xwn76pVybUClAQMUVn0+Wts4A4H0Fk1nEPe71pMIaZ0s4YuAiXdGcDFuT4Mj2zaPZyHXr3X7eILr9Br1Gbl1peUKTyS3qY00eB7/XMp6raUtL+XeFDpgSjFuYK27Ml/JdReUU1nMhjY/GPHpR0df6MFO2C3jflAl00eG1I2ah75c6K+GoIWZ7LDYxOOmFnOUHIPq3qWAZASRZwFCNl0xJ5Y+YqHPdZdBlCITvbusmvtjsAnMi1mkt1qPOhv876lDuCKqROakQ+GRquMXaSeyhIMUCb91+dpWtec+i3gbi4yrpgSVdNoG2qZrPohznby6Shc1Lbm+Cxm0ffsT1SUFOl38ZTKFHUeM2FU6m/fSFk9fyc4tUpnxZW2ANbvjJYSG9i3PFpXy7dae+mNyuCu3jnmnpi/ITdOKyvwd7RcAbJOaWvlArjx6HMxeut59sj2QckX0xV7feIAG0pKM7p+smZ8n0ct6+K3bvMoqw36EdY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR02MB4576.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(64756008)(66476007)(66446008)(33656002)(66556008)(66946007)(4744005)(52536014)(8936002)(76116006)(83380400001)(5660300002)(55016003)(8676002)(26005)(110136005)(186003)(921005)(508600001)(316002)(6636002)(2906002)(38100700002)(86362001)(38070700005)(71200400001)(9686003)(53546011)(6506007)(7696005);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RUp0w9pT3pieqVu2ovR9JuB2C8iyIRcdeciIZvomz5q/xSgrUCCWREs8N3A/?=
- =?us-ascii?Q?6jyi9ztYxy0Eyz3/oHH+0I2fhVibgz+8QMW3u3Ds0HM06YGh7B6/IZ7bGFfM?=
- =?us-ascii?Q?eMxMH1aF3k0WcMhQXFOHagu7xSX6cfkOWg1MBvxg23zUJqw+OqYnCdRmURlE?=
- =?us-ascii?Q?Hc6VK0LmnkIsSMxWRmk2Gd/1mBVEXuqJf730gXaQiK/sAYMCRun3jT+x0fJN?=
- =?us-ascii?Q?w3lxSQ20E/VuQiBTmgrIzP8jMjxRZTfAAjjjQC9fuUFSZr0Oj/m/h9+A9Y6w?=
- =?us-ascii?Q?AHyXsGEpM5T99zq6LvJ1v7FF8reCEjpWMJtMIoWufdkoVrabClXp80tUTNRS?=
- =?us-ascii?Q?UpPCbLiYGt9ZaTABYWtjpW7zd6ThVfKMjOJcoL1/akhxws6eSB5f/BshZRsp?=
- =?us-ascii?Q?qg5ts8blENR62z/0inDcU0nnWbp6zvjSvaJuNOUBAVdgkdtBH2ffAELIFfuk?=
- =?us-ascii?Q?N0CVGVk0DWdR6cSSSIsfdTNngRUcNcbmGqQLHXfyKwLUErkmbfCaUFyT7wdv?=
- =?us-ascii?Q?io5yE2meV1X6Lh8G0Edz5Ys8MwCjfCX0af1YxndjK+5nTaKzXjbZfM1UGUJ9?=
- =?us-ascii?Q?h7qm5mhfga3QG63tdJIS+MgRlRhzHqJ+9ZeRu3kATshAuZNOVJu7V2i483hL?=
- =?us-ascii?Q?UhOjrNeMHtGk27CDgxq2+HljpxqnmO8reEQWKKEPqMRyU8+H5y3VzkuIyOJZ?=
- =?us-ascii?Q?eD6Ws5Mjh6sQx1K/4AhiZr0tMcKgXol5XiRZbo0ER6csjlVZ2gKz8y7r1UdA?=
- =?us-ascii?Q?1CofUXtNHg7irV7Cz2e5jNKE5VSJ8X2trvT7xlZXruLpF7h5STOREkhPVlid?=
- =?us-ascii?Q?wjp9aN4uyVnolrQPbiipThjPQGsLbm4Q3MWNL5enkeTQ1W12J/vJ1Y7Crj8K?=
- =?us-ascii?Q?EgNii7N9gzrZ4HtCrJA6KqqhWMnmx5Gw9y1Qd466CLO2kA9jBUYGaL8ooSmR?=
- =?us-ascii?Q?XsKPsQnYWW8ZHU5Qq3nZw6zGvZNLvDw63wHrWETMqIdJuuOppxD5K9JRxPoy?=
- =?us-ascii?Q?YvLUUf97uA/jIyMosq61CFGuVm7iyFloA0T27D+AXsCAKMjRQa41nnQvRDyU?=
- =?us-ascii?Q?44at9xoRecceXydhPFsS/mJDSM3Y1f7TQjlVbA7m+H0u1po/Cmh6taFiGg5n?=
- =?us-ascii?Q?UMuUnQviWZVsl+d0IZ4HACYxCUxdUuWYegtcXG7fRRjXchEkjitImtEOvbsG?=
- =?us-ascii?Q?vv6DGXXvNqOkjrFWULLSl5WSvRGV6hWQU/7a5yUODhNcXrz0QVUpnr6nWKI6?=
- =?us-ascii?Q?22bqVS5GN4tA7HijHZYMX0Jn3EegCrFF/u5aHB+z7htoBPiau+jJNqIqUBPK?=
- =?us-ascii?Q?xnK/2s0wEgtAgyu6p5dHdm222+Z025rPncBhw4R7BbV+mqY87avQPzvikcM7?=
- =?us-ascii?Q?6MsJZo4gxz5wQpKwdB9h3Q/aJN11MwCvxX66ZneK8occ2Jwn+UhOUdP/fieP?=
- =?us-ascii?Q?QoNasnxvaRnaSVOTh/zPkJYZOgD1mOOilXBIDZM1/xc/+VOtHdA0M9c4xftQ?=
- =?us-ascii?Q?CuyKf6ZjsG0PBDPNvpdT0jnRQyh+el5efjQ0qsTrFTF35djSPBd3vWy5kxHe?=
- =?us-ascii?Q?vdax8oSV9UORHNrMYj6ufbXeK1F9UVuxwBHk872MAxU7ozZUjuqtOa/j8CFI?=
- =?us-ascii?Q?/8AjjnnPunVInee9nytFUvGvQnJqfzdJveVA+2ChOFr5z0ID/o/CYXhabtMr?=
- =?us-ascii?Q?5RAtLFMru/SR4hMvyFv+sxxrPd/R0kTgvW+g0XXCtR/WVp6MCVLGoSkI9h/4?=
- =?us-ascii?Q?qewRKn74rg=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?raLm+WgCEuFlQWnRDFMludNdhTsWTQZkZtp1IMWzEFOQ7m76+kOmVRQ1j2lD?=
+ =?us-ascii?Q?FJBsZqdAPS4yQY7HVudUNqojcEZWDl7u5j5R6T7fg9kbe/OLRb2gsDFQXFyP?=
+ =?us-ascii?Q?q2uIf/ZCaRMzdOhV+Ic/G+PeTC/zCs5ANfMx1AdoJNqM6+ZWsrfmosMNQisw?=
+ =?us-ascii?Q?DO7eVkUGWpKTQbCaIFrYrZ65/VWgWO6EYEro048o9eK1DQm+a30CYqYDIYPd?=
+ =?us-ascii?Q?6kjTgxqCKbPNh/xPp18k+6OV7/xYpdM25xb6A61CNoXm2+hHWx7hI9taAriA?=
+ =?us-ascii?Q?fn+JNldv0GSv03pAa1IwT/+5gEP38sE8htQypAfeBO8TNtIaF/gP/Xqe8Lrp?=
+ =?us-ascii?Q?CIiaGbL0pStR+RUHZjDHL+5rVU+E01bYo1ypxqp0Aha74MidGYTiBlrM6RO3?=
+ =?us-ascii?Q?y6LMFOP6fhGWTKLbx0jlymEy4+FUFIX8SrOuJuK7zqwGQs2LMKHYM1WdH/o1?=
+ =?us-ascii?Q?8NuxSXfTCI2TT5yvp2TTi9YzjfhGXnCUZPCzsMTTiZqpdZTNaNqQhnmvt/6M?=
+ =?us-ascii?Q?fZ5e3E+Qd9GTvC98dIiBMsQ7W8DN5HODYXhmePz0K8GQezqWrvLMMf/bzR/H?=
+ =?us-ascii?Q?s1yvmD7BZBDq6WWPTyQnIQoqRpfZxKuWx6rAII5DNwRuQF+rknCxdJa+a5EP?=
+ =?us-ascii?Q?qNVfZZYHigszew+7izyUH959q2fGx6axQ3LUTeEMOw/h6bpijud21edc3TnT?=
+ =?us-ascii?Q?kXB0W7joWK0vBOHyuTFSlcz4A86vGcqIHZSQzj6CqBEVmtKqlapxTYVHjBGX?=
+ =?us-ascii?Q?UoybqPN8oT7TK3FiubkBqTx77pEp/Kj7xWdiZG1BPY1pPjHp8oLjsYT9ujgO?=
+ =?us-ascii?Q?+6uFrZIJdo2g+AEEXrf0O8IIVOeVihqEXj5mWNFmRkfroNiim+YhtAIc8jO7?=
+ =?us-ascii?Q?87Fcx1EQRsIphg0wIbfnVWU/uRSSCye/hpMFjEOLQc5QuoR5QgrpeUtDvKek?=
+ =?us-ascii?Q?tNUi0tobFO5aMpVc3FSfpf2/e47m0c111mB013QKtn7T6peH3zSKULINRPcw?=
+ =?us-ascii?Q?/sBJ9g1Rl/NVoQ8YHjX15HoPVVLoNTKBuCbSbkkYAMTAoKppMHHbBsEOlnIb?=
+ =?us-ascii?Q?GRcK7IeJzimEtQ9WQk+ffAZwiHnVMlDy6ZpA/ux72vZ29sLydosAeThaVU3N?=
+ =?us-ascii?Q?Htk7t68oqB78zTG+I7OtQp0/eKQHaTcwHZJfwE3ds15KGTkC42uMAYR2yNIQ?=
+ =?us-ascii?Q?ovHUGSy1DwM3wjsf4hMapFDrVZmdkFdJf1fmQmcCc/Nv3KF8RZGVzk3O7F3P?=
+ =?us-ascii?Q?9XszbKwxMk6olJG6PzXNZkwB0r0f4KA1aHtq+QZ3c5fb9kH0z8pFqthTNpzW?=
+ =?us-ascii?Q?PGknpLl87QHcwQyA0jOgiSPQ6vE5wSqukmR/YBT77PG4CDpiTMrQikvd/dyo?=
+ =?us-ascii?Q?KVaUGnS+MSo9WdtBFgXd/Lka52cbfBpz/++RhESGEr9eY4ocbJvO3tTEMrOb?=
+ =?us-ascii?Q?TpnOyEhRTtsr6Tw48dP3u64QXMSPCzgFdkn8bl0m+FS1dDMaswO4dMG8OIdQ?=
+ =?us-ascii?Q?eD27h56/pz+LMWIzA1wXl+0zPjSLg8Pz32DUP2iVOx9Rr6BM/rpAgZFKpfGx?=
+ =?us-ascii?Q?o343abu7ZyoWWyb186Cl4eabBDkKvu3JnCTvhuIYbEel7PFGdZXde2Kx8Q6U?=
+ =?us-ascii?Q?7fecvBL8ymTc429+k9uieKwNjbaKEbYnPEGR745HfdzNaVSjmcmuK3IPhkUG?=
+ =?us-ascii?Q?h6oKqkuvscRQ96DlLUYnwLXx7qnVmSgUZCj4ilnXHu5b8YsCWbZcPYH+Qvkw?=
+ =?us-ascii?Q?vTgi32QeyQ=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6fd3ec0-fb70-413a-200c-08da20e63d70
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2022 02:50:47.0734
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4576.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0e76d32-3b75-4b19-dc33-08da212171f8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2022 09:54:35.5649
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1OSS/HTx937kK7KycxQ8L7/dW8DCfC+LMCmbm5Pi7ZOMb0PFS9Nq/KeSzFjPfZJ9MixFHxHDBYkVQ0zqzZTUNg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3053
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: t1hT5HHn/EqkuI0UKhRT9zqC2fsKwN1lBElR42ycthCIdfwnsXkm5G6nbV1K48+8IsARXFV0duFiOJv8M/N5ZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5559
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Hi Joe,
 
+	Please find my response inline.
 
 > -----Original Message-----
-> From: Wu, Hao <hao.wu@intel.com>
-> Sent: Monday, April 18, 2022 9:52 AM
-> To: Zhang, Tianfei <tianfei.zhang@intel.com>; Xu, Yilun <yilun.xu@intel.c=
-om>
-> Cc: trix@redhat.com; mdf@kernel.org; linux-fpga@vger.kernel.org
-> Subject: RE: [PATCH v1] fpga: dfl: fme: adding reserved bits for revision=
- of
-> FME/Port error
+> From: Joe Perches <joe@perches.com>
+> Sent: Saturday, April 16, 2022 10:29 PM
+> To: Nava kishore Manne <navam@xilinx.com>; mdf@kernel.org;
+> hao.wu@intel.com; yilun.xu@intel.com; trix@redhat.com; Michal Simek
+> <michals@xilinx.com>; linux-fpga@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; git
+> <git@xilinx.com>
+> Subject: Re: [PATCH v4 2/5] fpga: fix for coding style issues
 >=20
+> On Sat, 2022-04-16 at 19:07 +0530, Nava kishore Manne wrote:
+> > fixes the below checks reported by checkpatch.pl Lines should not end
+> > with a '('
+> > Alignment should match open parenthesis
 >=20
-> > > -----Original Message-----
-> > > From: Xu, Yilun <yilun.xu@intel.com>
-> > > Sent: Saturday, April 16, 2022 11:53 PM
-> > > To: Zhang, Tianfei <tianfei.zhang@intel.com>
-> > > Cc: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org;
-> > > linux- fpga@vger.kernel.org
-> > > Subject: Re: [PATCH v1] fpga: dfl: fme: adding reserved bits for
-> > > revision of FME/Port error
-> > >
-> > > On Tue, Apr 12, 2022 at 02:35:23AM -0400, Tianfei Zhang wrote:
-> > > > From: Tianfei zhang <tianfei.zhang@intel.com>
-> > > >
-> > > > There are 2 different register layouts for FME/Port error registers=
-.
-> > > > This patch introduces 4 reserved bits (Bit[59:56]) to indicate the
-> > > > revision of register layout for userland application.
+> in fpga-mgr:
+> 	Another possibillty would be to change the function arguments
 >=20
-> Please provide more detailed background information to explain why we nee=
-d
-> this.
+> and
+>=20
+> in fpga-region:
+> 	Ideally keep the include declaration and definition styles synced
+>=20
 
-The background is that it is not a good method that it use one sysfs node' =
-value to determine the usage of other sysfs node.
-The sysfs node should be has a persistent value or usage.
-In our previous patch, we provide a "revision" sysfs node for user applicat=
-ion to get the register layout information while paring the FME/Port error =
-registers.
+These changes are targeted to fix the checks reported by checkpatch.pl with=
+out touching the actual functionality.
 
->=20
-> > >
-> > > Please specify that the 4 bits are reserved by HW so that SW appends
-> > > revision info on these bits for the attr readout value.
-> >
-> > Yes, correct, I will make the git log message clear. How about this
-> > git commit
-> > message:
-> >
-> > There are 2 different register layouts for FME/Port error registers.
-> > This patch introduces 4 reserved bits (Bit[59:56]) which are reserved
-> > by HW, dfl driver appends the FME/Port error revision info on those
-> > bits for attribute on the readout value.
->=20
-> We need more clear information, why we have 2 different register layouts,=
- and
-> why 2 different register layouts requires 4 bits in HW, or even 4 bits wi=
-ll that be
-> enough?
-
-The old production like PAC N3000 was used the old format, and the new prod=
-uction like PAC N6000 was used the new register format.
-The new register format will be more reasonable.
-The revision in DFH register was 4 bits width, so we reserved 4 bits is eno=
-ugh.
-
->=20
-> >
-> > >
-> > > >
-> > > > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > > > ---
-> > > >  drivers/fpga/dfl-fme-error.c | 36
-> > > > ++++++++++++++++++++++++++++++------
-> > > >  1 file changed, 30 insertions(+), 6 deletions(-)
-> > > >
-> > > > diff --git a/drivers/fpga/dfl-fme-error.c
-> > > > b/drivers/fpga/dfl-fme-error.c index 51c2892ec06d..3b54470f56ca
-> > > > 100644
-> > > > --- a/drivers/fpga/dfl-fme-error.c
-> > > > +++ b/drivers/fpga/dfl-fme-error.c
-> > > > @@ -39,6 +39,22 @@
-> > > >
-> > > >  #define ERROR_MASK		GENMASK_ULL(63, 0)
-> > > >
-> > > > +/* Bit[59:56] was reserved by software for error revision */
-> > > > +#define ERROR_SW_REVISION_MASK GENMASK_ULL(59, 56)
-> > >
-> > > This will change the user behavior for the error interfaces. Now
-> > > they need to recognize the revision bits and discard them before clea=
-ring the
-> errors, is it?
-> >
-> > Yes, the end-user write to those error register without this revision i=
-nfo.
-> >
-> > >
-> > > How users know the revision fields in output values? Maybe it still
-> > > involves change in Documentation/ABI/testing/sysfs-platform-dfl-fme,
-> > > which should be reconsidered carefully.
-> >
-> > I will add those info in sysfs node documentation.
-> >
-> > >
-> > > > +
-> > > > +static u64 set_error_revision(struct device *dev, u64 value) {
-> > > > +	void __iomem *base;
-> > > > +	u64 dfh;
-> > > > +	u64 revision;
-> > >
-> > > Better we follow the reverse xmas tree declaration, so reverse the 2
-> > > lines please.
-> > Yes, I will fix it on next version.
-> > >
-> > > Thanks,
-> > > Yilun
-> > >
-> > > > +
-> > > > +	base =3D dfl_get_feature_ioaddr_by_id(dev,
-> > > FME_FEATURE_ID_GLOBAL_ERR);
-> > > > +	dfh =3D readq(base);
-> > > > +	revision =3D FIELD_GET(DFH_REVISION, dfh);
-> > > > +
-> > > > +	return value | FIELD_PREP(ERROR_SW_REVISION_MASK, revision); }
-> > > > +
-> > > >  static ssize_t pcie0_errors_show(struct device *dev,
-> > > >  				 struct device_attribute *attr, char *buf)  { @@
-> > > -52,7 +68,8 @@
-> > > > static ssize_t pcie0_errors_show(struct device *dev,
-> > > >  	value =3D readq(base + PCIE0_ERROR);
-> > > >  	mutex_unlock(&pdata->lock);
-> > > >
-> > > > -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> > > > +	return sprintf(buf, "0x%llx\n",
-> > > > +		       (unsigned long long)set_error_revision(dev, value));
-> > > >  }
-> > > >
-> > > >  static ssize_t pcie0_errors_store(struct device *dev, @@ -97,7
-> > > > +114,8 @@ static ssize_t pcie1_errors_show(struct device *dev,
-> > > >  	value =3D readq(base + PCIE1_ERROR);
-> > > >  	mutex_unlock(&pdata->lock);
-> > > >
-> > > > -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> > > > +	return sprintf(buf, "0x%llx\n",
-> > > > +		       (unsigned long long)set_error_revision(dev, value));
-> > > >  }
-> > > >
-> > > >  static ssize_t pcie1_errors_store(struct device *dev, @@ -133,11
-> > > > +151,13 @@ static ssize_t nonfatal_errors_show(struct device *dev,
-> > > >  				    struct device_attribute *attr, char *buf)  {
-> > > >  	void __iomem *base;
-> > > > +	u64 value;
-> > > >
-> > > >  	base =3D dfl_get_feature_ioaddr_by_id(dev,
-> > > FME_FEATURE_ID_GLOBAL_ERR);
-> > > > +	value =3D readq(base + RAS_NONFAT_ERROR);
-> > > >
-> > > >  	return sprintf(buf, "0x%llx\n",
-> > > > -		       (unsigned long long)readq(base + RAS_NONFAT_ERROR));
-> > > > +		       (unsigned long long)set_error_revision(dev, value));
-> > > >  }
-> > > >  static DEVICE_ATTR_RO(nonfatal_errors);
-> > > >
-> > > > @@ -145,11 +165,13 @@ static ssize_t catfatal_errors_show(struct
-> > > > device
-> > > *dev,
-> > > >  				    struct device_attribute *attr, char *buf)  {
-> > > >  	void __iomem *base;
-> > > > +	u64 value;
-> > > >
-> > > >  	base =3D dfl_get_feature_ioaddr_by_id(dev,
-> > > FME_FEATURE_ID_GLOBAL_ERR);
-> > > > +	value =3D readq(base + RAS_CATFAT_ERROR);
-> > > >
-> > > >  	return sprintf(buf, "0x%llx\n",
-> > > > -		       (unsigned long long)readq(base + RAS_CATFAT_ERROR));
-> > > > +		       (unsigned long long)set_error_revision(dev, value));
-> > > >  }
-> > > >  static DEVICE_ATTR_RO(catfatal_errors);
-> > > >
-> > > > @@ -165,9 +187,10 @@ static ssize_t inject_errors_show(struct devic=
-e
-> *dev,
-> > > >  	mutex_lock(&pdata->lock);
-> > > >  	v =3D readq(base + RAS_ERROR_INJECT);
-> > > >  	mutex_unlock(&pdata->lock);
-> > > > +	v =3D FIELD_GET(INJECT_ERROR_MASK, v);
-> > > >
-> > > >  	return sprintf(buf, "0x%llx\n",
-> > > > -		       (unsigned long long)FIELD_GET(INJECT_ERROR_MASK, v));
-> > > > +		       (unsigned long long)set_error_revision(dev, v));
-> > > >  }
-> > > >
-> > > >  static ssize_t inject_errors_store(struct device *dev, @@ -211,7
-> > > > +234,8 @@ static ssize_t fme_errors_show(struct device *dev,
-> > > >  	value =3D readq(base + FME_ERROR);
-> > > >  	mutex_unlock(&pdata->lock);
-> > > >
-> > > > -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> > > > +	return sprintf(buf, "0x%llx\n",
-> > > > +		       (unsigned long long)set_error_revision(dev, value));
-> > > >  }
-> > > >
-> > > >  static ssize_t fme_errors_store(struct device *dev,
-> > > > --
-> > > > 2.26.2
+Regards,
+Navakishore.
