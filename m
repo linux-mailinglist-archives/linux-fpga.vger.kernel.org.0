@@ -2,89 +2,87 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F575504AB8
-	for <lists+linux-fpga@lfdr.de>; Mon, 18 Apr 2022 03:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4505C504ABC
+	for <lists+linux-fpga@lfdr.de>; Mon, 18 Apr 2022 03:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235613AbiDRBzK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 17 Apr 2022 21:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S235736AbiDRB66 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 17 Apr 2022 21:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234337AbiDRBzJ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 17 Apr 2022 21:55:09 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B935183A3
-        for <linux-fpga@vger.kernel.org>; Sun, 17 Apr 2022 18:52:32 -0700 (PDT)
+        with ESMTP id S231700AbiDRB64 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 17 Apr 2022 21:58:56 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9506A18397
+        for <linux-fpga@vger.kernel.org>; Sun, 17 Apr 2022 18:56:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650246752; x=1681782752;
+  t=1650246979; x=1681782979;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=AlZoLlCvOjsxKM1NoWllaDV3ggzxBrIaCwLS9vtqTig=;
-  b=BP8ScFhX2ma5Rw3GnFsqxr4Gh0N5vw6sKSWuaMbSVvCuHB8XRWc2zYpt
-   n73zyTHt3YsU7AUtqioZVh32PN6+GTmyTHZuoVjnILlxmKdfDV0Sn5beQ
-   xDOgURGdiONASsHY2p9iLcjj7gceYA6gNKFq6zqqirBwCKDQA4OXz3UCf
-   KtfS20v6UFhVBjWwOl2aYVP7z9NLpTBllU1SAeE0ADkvTFDIDW3NgEPWM
-   ph82LonS6cO1quklZSU1rIaqMyUaESFey1k8wwxVsT8RmlGyuZcmkebjL
-   zyLLigonu+/KpVK6Zblj/ZwgG5tqgBbv40rhmmIs0JTnTXSM59elAjKPH
+  bh=R8WTc7pxbRQzF1m5bZiaJ4Q437gYegDJmHPRJqKAsjc=;
+  b=S74uPcix24kmLQZ+YTnGnWATwp63pWv3KbtapiKh64oNtATGc9rUR1Rc
+   iwQfpkit+/DV+wes3/8jMCd0pi7GKwl5eZIa/e4elMtlM+qmFBODDmxhA
+   W6ZtGdUVy8BHmhGYW4SKpFd1GVRJV3QdkwKH+k2/orpAvauqow4NR0AtM
+   onmu4tX9oN64W165wyFflvRcgTe78daSPVKpb8LeW4yGXEk4TYh35A5r0
+   r1kcwp8BPIoexQezLXyNsa6P5gWa2mMdYez7X9DLzTx0nKdnlKDqE/dLt
+   M9q0mgz3RYjoUxUBv0kDPGtE97ZkeuJF6B9DtqUVwm4O8/SIAmtKz94qG
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="243364986"
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="349882571"
 X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="243364986"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 18:52:31 -0700
+   d="scan'208";a="349882571"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 18:56:19 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="529277105"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga002.jf.intel.com with ESMTP; 17 Apr 2022 18:52:31 -0700
-Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+   d="scan'208";a="804135659"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by fmsmga006.fm.intel.com with ESMTP; 17 Apr 2022 18:56:19 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 17 Apr 2022 18:52:31 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ 15.1.2308.27; Sun, 17 Apr 2022 18:56:18 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Sun, 17 Apr 2022 18:52:31 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.177)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.1.2308.27 via Frontend Transport; Sun, 17 Apr 2022 18:56:18 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Sun, 17 Apr 2022 18:52:30 -0700
+ 15.1.2308.27; Sun, 17 Apr 2022 18:56:18 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CSKvWo5MYiNuLx+dCDIrM57gMcdrucB/SVQZuifVhZ1pp0GA+CJZE5Ij75sVaOfTRh4A2k01XSVKhbaGl3th1/w/fjbS85uctcgbb74N3pznqZYKWKUz/5jGHXASMXwgQEcbiw23D92Tc+mvAV3nN67ay+p8v1AS4Q9y3VaQmYuh75Zk7X/EH3P+nEKJapm4Bp2KbUyAAWbXkWW3ACXP+OlnV0RCfJ8kAQN4HSROKYo5Imyrg7+nZhfAVfPblBwFwcjVGWqqp9ppih/zAqoXHBy/kPEHUVTvXVfmmH8ftNHTR2WakaLP0/A9+BS9b+rzfI3EJhQrxZAXcK0+Spo+Tw==
+ b=PRTV1Q6hv1YrqVJ18soq+HPrND0gQ4hOw2twHXVq+4g2DkaZDE1bW07mGGc4RqSQk9Hj4aDHQ3sQeQ6ypY566HDLYAXqmiK21LF+2LF1RJZh+D4kgy05Jki4kD7mi7jKfEQMucUxxupsq9US0godKCz5UMDBT6cS0p0+8shkxL3y1shn2/7b5BzHhq2r/DCzKJYrqY3liscBY6Z1jsXOx6b90lSXNFx4aEjJ+a6QAIa6LzAA5ASAp+fCubgUR6oaZtMf6A57nSbKlvwWoDTvLHV+fW8iyL7mGWwcRdCW6bYWuvIdQfjSfU+nNDEepFSqByehcrdYGD4EnQ9DmgMNcg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=treFYVlagbb6knSQvvAs5WKEBl0fG1B5PeTFMTIcDCs=;
- b=d0J+Hbe9xi0UNN/+6nsemGBB2yUUHU4RTkqE0q+/6momJvJ1ctAvyktbWvXLgC35aaRIonnA4LKyQlJSb+gOGQuB2slPoMsxpjsfaKp5uMJQeV19/JfhBowcPLEAoXVpsX6vsCf6oDMmKBbS4Yj5zSpoCTpaMr7gj3W4wnUJSvM54yrnbpJEg/LAuad1vbvqUTYyaGQIeTdRo9IARa0rIyGWbxXBkhvPrK7bvzAnvUdpRzv0lFbFfk7Crk0ZW98zAKNLsIxjJf3tL6FClnPFq9TYv2NEDo+pQ8dw/6CyI/pX7mwTX1hSGcoRyiBCx1n1X3xtK7KY3/a2xlkVwaQk0A==
+ bh=4WW8nVBl4cxZ47eTjWgivb6hmLORTIXPZm0+YVdg8i8=;
+ b=ibpuT44Td9/JGn5xCb7M1KisN8feXidkNuduM4vWQnxonI5kF0JeZ9xQNu4YLLjnPouf6P+S8Wvm/A3eUz4UhbbVfJO7P+I2bG7vTOoIqVBBcwiiDHdSbg5w7U10k4XCYGEB5e25GbbbJGL8Tg9Ojvkk8J7vP0vuZehsB8shCzz3rLNmGK9fsyvIGffq8ZIbdMoRV5+7dSVxy4NK2ZeIGDX7mLZMaDe3ljHxPyydRMvpRA/udtZMYmH8ToZ49tWrg6Br4/sfo01NpdaMxqWyw20GWdc5c1OwFhmsR4cIASZJn4kVNY2UJ5+etS6wHO6fuvr8V6aSQBa2k1AuKb8cUg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by BN9PR11MB5369.namprd11.prod.outlook.com (2603:10b6:408:11a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Mon, 18 Apr
- 2022 01:52:28 +0000
+ by DM5PR11MB1578.namprd11.prod.outlook.com (2603:10b6:4:e::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5164.20; Mon, 18 Apr 2022 01:56:16 +0000
 Received: from DM6PR11MB3819.namprd11.prod.outlook.com
  ([fe80::9973:b30d:11a6:da91]) by DM6PR11MB3819.namprd11.prod.outlook.com
  ([fe80::9973:b30d:11a6:da91%7]) with mapi id 15.20.5164.025; Mon, 18 Apr 2022
- 01:52:28 +0000
+ 01:56:16 +0000
 From:   "Wu, Hao" <hao.wu@intel.com>
 To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
         "Xu, Yilun" <yilun.xu@intel.com>
 CC:     "trix@redhat.com" <trix@redhat.com>,
         "mdf@kernel.org" <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
-Subject: RE: [PATCH v1] fpga: dfl: fme: adding reserved bits for revision of
- FME/Port error
-Thread-Topic: [PATCH v1] fpga: dfl: fme: adding reserved bits for revision of
- FME/Port error
-Thread-Index: AQHYTjf3U79tFgn6Ik+Ohp7VUNfX56zyt6YAgAItQBCAAAdKAA==
-Date:   Mon, 18 Apr 2022 01:52:28 +0000
-Message-ID: <DM6PR11MB381931AC7159F2D1262F05C385F39@DM6PR11MB3819.namprd11.prod.outlook.com>
-References: <20220412063523.54587-1-tianfei.zhang@intel.com>
- <20220416155258.GB301222@yilunxu-OptiPlex-7050>
- <BN9PR11MB54833E8D5E0853DEC4AEDB34E3F39@BN9PR11MB5483.namprd11.prod.outlook.com>
-In-Reply-To: <BN9PR11MB54833E8D5E0853DEC4AEDB34E3F39@BN9PR11MB5483.namprd11.prod.outlook.com>
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: RE: [PATCH v1] fpga: dfl: Allow Port to be linked to FME's DFL
+Thread-Topic: [PATCH v1] fpga: dfl: Allow Port to be linked to FME's DFL
+Thread-Index: AQHYTxeAK+xZBhNuiEywd4yPTwpOoKzyvPYAgAIoY8CAAArksA==
+Date:   Mon, 18 Apr 2022 01:56:16 +0000
+Message-ID: <DM6PR11MB3819CCEB3AD0E0214252044685F39@DM6PR11MB3819.namprd11.prod.outlook.com>
+References: <20220413091519.317735-1-tianfei.zhang@intel.com>
+ <20220416161814.GC301222@yilunxu-OptiPlex-7050>
+ <BN9PR11MB548365366CA105E3D05E1A06E3F39@BN9PR11MB5483.namprd11.prod.outlook.com>
+In-Reply-To: <BN9PR11MB548365366CA105E3D05E1A06E3F39@BN9PR11MB5483.namprd11.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -95,63 +93,63 @@ dlp-version: 11.6.401.20
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a7dc4c18-c71a-4a85-cc8a-08da20de1818
-x-ms-traffictypediagnostic: BN9PR11MB5369:EE_
+x-ms-office365-filtering-correlation-id: 8cd671a8-7ad6-451c-3cc6-08da20de9ffc
+x-ms-traffictypediagnostic: DM5PR11MB1578:EE_
 x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN9PR11MB5369890FB25B4A648DB9269785F39@BN9PR11MB5369.namprd11.prod.outlook.com>
+x-microsoft-antispam-prvs: <DM5PR11MB157807FA35218E5C8C18BF3785F39@DM5PR11MB1578.namprd11.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: B9m0U6HX3ETlGuNPy12h5cr64ICoCVjqn50vT2qA0pbEF/cbt5I/tZat2kbJvSpKDM7BZJjaUHbpJsYdEhoNbQig1/a6dMLNazRj88vtH9pLPc1dyRMD2W2nMvZecCvxyq3TD+5s8EaUHF/Wac9FyjEqrMJ3v5ZiWH91MaDP7FB5Dh3CAwo5WP7bCwPaydaB0MVw4UtVXHYmWTrGHxoC3Si6YRueITM70+CPqa+4LU0Br/8WpjS9klYASe77Vh+pmisp/Slz4yBfs5yd650tRt5uIhRutL1gqkXiEV/SNV2Vw1VmryUPfh/wyu0tiVWJ3LM5bPOPN0AmcSuND0/a2kKNIEmyNmnduvUIznVTkKdOfrtPGQQpNw/8wVZaIh0FcZZ+81HiMpqzhdf8n900xxB8tzFgXl+3I7XL121Rt/FHxv0ChTB+WTPEp3G0ivWwpbG1YUPsE7Jp+9MDKFIIVUk41HavSKRRKL+CfRG0J6vKEqGFv1oWrkitVLOTbq6oWpF9vmYbh4raH/KniwjE+1SsEwOOlw50YUBa85QM3dlxjiPS7IVSNQVtXsIuWHz3oLyUkbKq03VuUddpoJikSTgGG2vUSV7vWpfGGZXze2A1l+5lSmPArsRWl25v3c3EvaPFN8fuAjMbN2Nfu7pepJJYSCNHhfKBy8vqCTrlVPs6wOaQMhL6qyc1SS8FbGFQSI4zrWWeReBTxvOaM8IIgw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(64756008)(66476007)(66556008)(76116006)(38070700005)(5660300002)(2906002)(66946007)(71200400001)(4326008)(53546011)(66446008)(186003)(26005)(110136005)(86362001)(6636002)(8676002)(6506007)(7696005)(83380400001)(9686003)(316002)(55016003)(54906003)(122000001)(82960400001)(52536014)(8936002)(508600001)(33656002)(38100700002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: MvNT18OHjOeTHjlg11LQBsdooLAoM+m7GPAR1nC2P7PJ6xSEyQG1J8wTQfFifArIMvcqUFBYxePKT25oRMMsZTAS8jKved5grY3rx+LICbqagvoXQ5RhTedxwvQZboJAAoyfqbV6CCFBNg1X2GfW+90EHTuR/cSZIG+ka9rBIXshVfvVKAFPQ4LzUS8F59cFMW0p4LM/C5qnUyd2KZK3U8Z0qRr1aktr7lLzqHm+0Oj2J5R6uRCa7HAwGX5vmDhE+qC+SVGE3cWVtpEfohebK+i0VEPFf9R0QgA/9G1/jCWjPwJgiLi8CporvZiHP8D5DWjDt55r0QeiYyEJQoJIzTbcFjN8sjQTLTBX5Aa3ifIG6hHEEJqrvDJ2A5bkKwS9SSzhicHM5qzssAkh8LhwWcPrDLxaN1Ek5aU/zh7eAJ4rhs+zMjaaKj4eiSUCC0HO+uggE1gCdDb3RxRyVZCTydBh07+S7m5Zw+7KDTvJFbitVhQ0evYdAp4SOcB7HlYHTP76V3TVCvoJ80FPM+FEtcY0VAroDHBHYUbUOfQPyKtaBiyKY3OSXR4nPxAuSW4MfMerfmPDscVuz96cme9dS8U7CZGXZAESe4l5ixwaMLdkt5l0UoNR2iXsmltRS3sC53N/j4GlMEncQTnauFowi7Hw4ZdyjYzmCTmBiwqQUujAjCTVy2lUCLG147VmDWHiX8qJdGKtZGTzlrSFwVHuM7Ba2eGlIizOThAMtHBu0oVr+6O6UrbKM3Xe8/pZBULEurRm5aoqbSj1Ml+WOOfEk2FVBI4AuoYsxkN4BHWkJhI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(55016003)(71200400001)(8936002)(82960400001)(38100700002)(966005)(76116006)(64756008)(66946007)(66446008)(66556008)(66476007)(122000001)(8676002)(4326008)(52536014)(6636002)(186003)(26005)(110136005)(54906003)(9686003)(508600001)(53546011)(7696005)(83380400001)(6506007)(2906002)(38070700005)(33656002)(86362001)(316002)(5660300002);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HazCf0IIZ30GoIUIeD2jBDiCC2WA8ZDkVQLEXCrXi5lIfZnWNruTZbtvvcja?=
- =?us-ascii?Q?+CJu8+uqMbljFpGRqdsXE0PrwxlW98abIJ9lsEDP8hNz8o0JBGCTvkoYPqfr?=
- =?us-ascii?Q?fayhaIkpWhN/LC1e3KqdXwmoNGXtAZIiV72kbrd/wV7/eIWNBz3Jvz3kBUxG?=
- =?us-ascii?Q?21EZgvapqY2gBHY3Lk3VS6CLNxHM/gzMv4YOBo61ddOKPxVCDsYKb91GFF76?=
- =?us-ascii?Q?HJYCi15Qq1olR0NJTf87mn5TAPhPxSg86ARYF7Ole1p9Eams/QKHhQdMNYJV?=
- =?us-ascii?Q?SkLsGSvvn/favqk0cqE7f3mHEhIda9mq9hKXFNQxBgPPqaCfKBjlvfNcdBYm?=
- =?us-ascii?Q?Vm7o9IpeNfOZYNrd4tMDMjtr6N3j/QILf+SL+f/yk6X/8EeshhsaJzK5PkHK?=
- =?us-ascii?Q?mxp5koiKDsFsiiwYW+EueqjgrFyen1XzCVPsK1OuI0I9Zv+LuKOoeCc/Dtd9?=
- =?us-ascii?Q?4Un4lRctDeHITpuvRxPcuAbE/rvGxd1m5WkEh+KaboPY0x443lEWp8VKFPI7?=
- =?us-ascii?Q?4wn2QTXhPSL8Qu6200do+e7L313PzMUNbv1JEvJ2Rql+ioRo0g6y1HLGSGNg?=
- =?us-ascii?Q?MCH0T/3V8s0Xj7HX8P+SVO1HyR6QPigPA1/JlQDwanpyFUFd3N27eEJRG3Um?=
- =?us-ascii?Q?6F4U0ghVgNjjd6y5DE6EA63vOVgpDFgBQ9BGR8004WzAWCKO8ACQYDBeiYIU?=
- =?us-ascii?Q?jEj/orvXOttbUTencWGnmrV8MESLjS/g9neUzEVtrGC7eywgM++voK7dNCQL?=
- =?us-ascii?Q?AmZS9R+kd6LQjZ/REQNT56OrV0sQxiljoP7JSnq+KFKVvtjo4gW7/IsQKAmp?=
- =?us-ascii?Q?aNAINZcbqCYwLtD34PW9aHjzcLZQA5nvoPfrM1OgAoKgil/jOiwg+an7t9V5?=
- =?us-ascii?Q?tAlUmmuy4bWQaG5N3TnkediLxnu6EF2/WKxqiaImY3Z83+f2pN3EHdggFOqe?=
- =?us-ascii?Q?Yh4X6jafeIrg8GWJS43RzpDUQlMPYbgqkI3iemjN3oicVlgDhEGuYzifeA3K?=
- =?us-ascii?Q?8WG/dRFAvschyu6y2PRGznWjKvJdSzgZmfjLxuFIt8gXvxYiLt5gg2+vgjtu?=
- =?us-ascii?Q?VoNYLimPu4egq2bxChsFtEzVi/3Y5WudlfFBLaG3xR3GUAms+czNvkPb9DhA?=
- =?us-ascii?Q?0NJb0R7TiqMVILG7KvRXErFTde25ukwT54im7Ukp9OC5r8U9LUUexyWkIUYM?=
- =?us-ascii?Q?NZ2FtZjlBehtwPx1fpwIxWL8R9wfe1SIaPajkVC587cA48EnfbS3kWneQwyt?=
- =?us-ascii?Q?1+VW9K1m4Sl0UYNv0MyTSYHSzV+rw55fJv2jIMtv1cXflSDMxy0jKqsU5cRh?=
- =?us-ascii?Q?feCPpvNneyEDhyZ/kkg/DIC7w4PTciPFCLpofCx7xhWZqjEBzNxU/NtJjow6?=
- =?us-ascii?Q?DnPmwi3TECBkAqFDAivRlKv7NiN6PPKgIg1L0Ovy/r9LRWZBVB4gBGO7UGJn?=
- =?us-ascii?Q?91nXdjxdViRFrfzF3VEvd6AX/jqwkTmFaZHMZht7CCJCLohYfmjLMYSFupp5?=
- =?us-ascii?Q?1XtYDGWn35LggfnuQTzAikIzwnFJzse+cgUpv+86xikorFB/+kCsMv3dLkbP?=
- =?us-ascii?Q?W2GwUaN0lAmbDqgKFYtMl+Wk4FOgOgzmRznUO9nf26gA+SYggOFOn+aRdSgu?=
- =?us-ascii?Q?JAZ/Kg4yGwhNKKssMcZdKzJnuW10lcyE1PngJrb3p/yFx6u3I7/31Rui59gQ?=
- =?us-ascii?Q?KZD4xV/LAJcJRfExpqTuPUyCu4BoY9NgKAZZkmn4KcwNZLCzo1lu9QmgVrWG?=
- =?us-ascii?Q?FlZaGkh7LA=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?AjqUFTVHDjhkQMf0PBl1ab51qJufcOSVb9sn5MnE4pvnhyxhKZa/HjNjYDkU?=
+ =?us-ascii?Q?rGYIz/4NQ0qb6p+GL8ufHa7D8QjqMn0Ev8EL7n9633hAOIPkO627v5V6ml8b?=
+ =?us-ascii?Q?4utPgZcvP0WpNnPQuWGOa2mt0QfLFEo6gEpK23/TTcUEw40iAPKeSFc7bBdc?=
+ =?us-ascii?Q?wnHvVdmERL6yvTUo1qTZs7jgwmImYwwi+9WMDmuP7bwGj+5mRvv3uSj0B7qg?=
+ =?us-ascii?Q?2eNxVBPYqTNoLy6frvyEtkl1hMxsQ4U3UmqTzo1NkWS08bYB8CTuOBJZe1TN?=
+ =?us-ascii?Q?tyIrTfRuu4O/c2xeqIh/we8ppef68wia59qrbPoaE0nWM7Jzf8xzLEEAKGWD?=
+ =?us-ascii?Q?Bh6nV7D+mSA3GUCytEl+H2t/IVE9XeZn1wgXSqSp3mV5mzLOIASxYGVcHCb/?=
+ =?us-ascii?Q?5RN3G3LqNnh+TfdlefDh1aPp7OSxO3uoIOMzU1JVGsF+Y4aPE+k5KZVNLvVD?=
+ =?us-ascii?Q?ZwDba/Oy4gX3TubPzRzG2T8J0XXaYr+v2x/fhVfF5BQH6mLtypjlrqXr4NlW?=
+ =?us-ascii?Q?MPaWi0HX84G7F0SyfjrStsqdMjeY/i/j5h2Tvo9cl2A4v1rVuqyXNlVR6YNN?=
+ =?us-ascii?Q?+P6Qu2DH1HLNVEp0gpFWskVIXEMNYhk1mr1Lceswu04IMdbOh7JCMNkgF9M0?=
+ =?us-ascii?Q?IqfMTUxE5lhMj5ncoStlZSIqLvrsVoWYThXr4q/Nfk6wZUuTmuvsw95S5gvZ?=
+ =?us-ascii?Q?qsLJyyeV4Vaja6Ta6gL4x+jQya9B2+EeL0r3x3B+A2tbqHlJ2SGD/l/U92pR?=
+ =?us-ascii?Q?r1oIWAzpgkMIlgpfsOPdRYb1/Pw647V2caPgpew4MhLrixw10JPfsOKE3qZV?=
+ =?us-ascii?Q?0SrBkQbH9hWwlS4MtPTKDdIPqEQwqxQV8y3GmtxgcabR1YCwqCPfWNrA25Et?=
+ =?us-ascii?Q?j0pnDbRatWOAcKrmGjSYmSPrmUvA0fBccBmQLonW4A/ZDHOOWfFfwK66AAmx?=
+ =?us-ascii?Q?tGitbOsRMuK5VY+GYGbCq6fPiS7xwztVFm1sGMH6/ic2MHV/5gRIfBLxy7pp?=
+ =?us-ascii?Q?zgPespQ0Q2wZ+1mDMGBt1i7NIrSJHUCd+z6ta1FknkHzHagFC0BqwGqvGvro?=
+ =?us-ascii?Q?i1y39RLNivkqyQG3L+W08H/30lHrfZbZT2sfmncSa77U+cU+++7/QumyPS6E?=
+ =?us-ascii?Q?SBH7heY5Igg3KvfD/PJuP2EpAHxLUBeULiyfvmuWfcU4NlbQruYX/W+sT4Rk?=
+ =?us-ascii?Q?IiWNLk5qg5E9co5MSl+OkzdgkmmhKJ9cmPAOZvAPyrM+b+su1WRiOUZkEVH6?=
+ =?us-ascii?Q?2rcigpi7lBJ0JQEEVPBO7FbNHQ7VABG0It8Pc82yjRdTpbGyDHOUf7RCaH7P?=
+ =?us-ascii?Q?sjSP7q05cWFzfyiRVkZw+JcRV5kTdzruXTOn3DEH+QWVG6NAVmm/78gQNRaJ?=
+ =?us-ascii?Q?26t8v1no8SvCM79PchdZE5JTlJdfYHTRMDSMks8QbfZFnn0KoS0B69Tb10vE?=
+ =?us-ascii?Q?9PW/kqsQnmcHcJOAWgFFCjN7HZKO04BGg7GcvBn7+U/dox3wIe3tdwpmfX0M?=
+ =?us-ascii?Q?hGo6wHymkD6yPXugo/cYWaTY0y2oyk2ChppVZ/XHJx7z22+m550XbB+G51cz?=
+ =?us-ascii?Q?3igtHRo1IuAkqYFzPCo4efRpE2/bhrl0CB5RU7R/X6NHNXP3b/bMxUyPhRxp?=
+ =?us-ascii?Q?OBzHz8X3/A7Tjah0Ge60D7I5/HtESNN0dIGu2EGL4WjrLbNHO+KbPURZkTc4?=
+ =?us-ascii?Q?HUVdC0T6idXa156+dKjx7kZF+H2aU4XfGA72QB54LpkY7z8721E0jC93s4p0?=
+ =?us-ascii?Q?CQ+DDC3W1w=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7dc4c18-c71a-4a85-cc8a-08da20de1818
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2022 01:52:28.4203
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8cd671a8-7ad6-451c-3cc6-08da20de9ffc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2022 01:56:16.4501
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ocY1q9SRfh7bVPXt2vFr5HORYSuaMdNS/l5TzFF8ER5oitszP+a1kKKYF4pWkJtbWGYyjMRuR6RxbnMAfRNYxQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5369
+X-MS-Exchange-CrossTenant-userprincipalname: YHwPcnfoLbXxQVMQeAQiFj7q2cEQbQmXSeEPe2x1UnInw6yMBB+/PVHIUfYqglDXfQ1s73PAbW/vRx1pxdnt5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1578
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -159,187 +157,86 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-=20
 > > -----Original Message-----
 > > From: Xu, Yilun <yilun.xu@intel.com>
-> > Sent: Saturday, April 16, 2022 11:53 PM
+> > Sent: Sunday, April 17, 2022 12:18 AM
 > > To: Zhang, Tianfei <tianfei.zhang@intel.com>
 > > Cc: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org; linux-
-> > fpga@vger.kernel.org
-> > Subject: Re: [PATCH v1] fpga: dfl: fme: adding reserved bits for revisi=
-on of
-> > FME/Port error
+> > fpga@vger.kernel.org; Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > Subject: Re: [PATCH v1] fpga: dfl: Allow Port to be linked to FME's DFL
 > >
-> > On Tue, Apr 12, 2022 at 02:35:23AM -0400, Tianfei Zhang wrote:
-> > > From: Tianfei zhang <tianfei.zhang@intel.com>
+> > On Wed, Apr 13, 2022 at 05:15:19AM -0400, Tianfei Zhang wrote:
+> > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > > >
-> > > There are 2 different register layouts for FME/Port error registers.
-> > > This patch introduces 4 reserved bits (Bit[59:56]) to indicate the
-> > > revision of register layout for userland application.
-
-Please provide more detailed background information to explain why we need
-this.
-
-> >
-> > Please specify that the 4 bits are reserved by HW so that SW appends re=
-vision
-> > info on these bits for the attr readout value.
->=20
-> Yes, correct, I will make the git log message clear. How about this git c=
-ommit
-> message:
->=20
-> There are 2 different register layouts for FME/Port error registers.
-> This patch introduces 4 reserved bits (Bit[59:56]) which are reserved by =
-HW, dfl
-> driver appends the
-> FME/Port error revision info on those bits for attribute on the readout v=
-alue.
-
-We need more clear information, why we have 2 different register layouts, a=
-nd
-why 2 different register layouts requires 4 bits in HW, or even 4 bits will=
- that
-be enough?
-
->=20
-> >
+> > > Currently we use PORTn_OFFSET to locate PORT DFLs, and PORT DFLs are
+> > > not connected FME DFL. But for some cases (e.g. Intel Open FPGA Stack
+> > > device), PORT DFLs are connected to FME DFL directly, so we don't nee=
+d
+> > > to search PORT DFLs via PORTn_OFFSET again. If BAR value of
+> > > PORTn_OFFSET is 0x7
+> > > (FME_PORT_OFST_BAR_SKIP) then driver will skip searching the DFL for
+> > > that port.
 > > >
-> > > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > > Link:
+> > > https://lore.kernel.org/linux-fpga/20220316070814.1916017-2-tianfei.z=
+h
+> > > ang@intel.com/
+> > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
 > > > ---
-> > >  drivers/fpga/dfl-fme-error.c | 36
-> > > ++++++++++++++++++++++++++++++------
-> > >  1 file changed, 30 insertions(+), 6 deletions(-)
+> > >  drivers/fpga/dfl-pci.c | 7 +++++++
+> > >  drivers/fpga/dfl.h     | 1 +
+> > >  2 files changed, 8 insertions(+)
 > > >
-> > > diff --git a/drivers/fpga/dfl-fme-error.c
-> > > b/drivers/fpga/dfl-fme-error.c index 51c2892ec06d..3b54470f56ca 10064=
-4
-> > > --- a/drivers/fpga/dfl-fme-error.c
-> > > +++ b/drivers/fpga/dfl-fme-error.c
-> > > @@ -39,6 +39,22 @@
-> > >
-> > >  #define ERROR_MASK		GENMASK_ULL(63, 0)
-> > >
-> > > +/* Bit[59:56] was reserved by software for error revision */ #define
-> > > +ERROR_SW_REVISION_MASK GENMASK_ULL(59, 56)
+> > > diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c index
+> > > 717ac9715970..6347f31058f0 100644
+> > > --- a/drivers/fpga/dfl-pci.c
+> > > +++ b/drivers/fpga/dfl-pci.c
+> > > @@ -259,6 +259,13 @@ static int find_dfls_by_default(struct pci_dev
+> *pcidev,
+> > >  			 */
+> > >  			bar =3D FIELD_GET(FME_PORT_OFST_BAR_ID, v);
+> > >  			offset =3D FIELD_GET(FME_PORT_OFST_DFH_OFST, v);
+> > > +			if (bar >=3D PCI_STD_NUM_BARS ||
+> > > +			    bar =3D=3D FME_PORT_OFST_BAR_SKIP) {
 > >
-> > This will change the user behavior for the error interfaces. Now they n=
-eed to
-> > recognize the revision bits and discard them before clearing the errors=
-, is it?
+> > Seems the second judgement will never be triggered?
 >=20
-> Yes, the end-user write to those error register without this revision inf=
-o.
->=20
-> >
-> > How users know the revision fields in output values? Maybe it still inv=
-olves
-> > change in Documentation/ABI/testing/sysfs-platform-dfl-fme,
-> > which should be reconsidered carefully.
->=20
-> I will add those info in sysfs node documentation.
+> The value is overlap, but there are different meaning, " bar >=3D
+> PCI_STD_NUM_BARS" means that the bar was invalid during the PCIe spec,
+> "bar =3D=3D FME_PORT_OFST_BAR_SKIP" means that the HW tell us that the SW
+> should skip searching the DFL for the port.
+
+So first case is a HW bug we should return error, and second case is a vali=
+d
+case to skip searching DFL, right?
+
 >=20
 > >
-> > > +
-> > > +static u64 set_error_revision(struct device *dev, u64 value) {
-> > > +	void __iomem *base;
-> > > +	u64 dfh;
-> > > +	u64 revision;
-> >
-> > Better we follow the reverse xmas tree declaration, so reverse the 2 li=
-nes
-> > please.
-> Yes, I will fix it on next version.
-> >
-> > Thanks,
+> > Thanks
 > > Yilun
 > >
+> > > +				dev_dbg(&pcidev->dev, "skipping search DFL
+> > for port %d on BAR %d\n",
+> > > +					i, bar);
+> > > +				continue;
+> > > +			}
 > > > +
-> > > +	base =3D dfl_get_feature_ioaddr_by_id(dev,
-> > FME_FEATURE_ID_GLOBAL_ERR);
-> > > +	dfh =3D readq(base);
-> > > +	revision =3D FIELD_GET(DFH_REVISION, dfh);
-> > > +
-> > > +	return value | FIELD_PREP(ERROR_SW_REVISION_MASK, revision); }
-> > > +
-> > >  static ssize_t pcie0_errors_show(struct device *dev,
-> > >  				 struct device_attribute *attr, char *buf)  { @@
-> > -52,7 +68,8 @@
-> > > static ssize_t pcie0_errors_show(struct device *dev,
-> > >  	value =3D readq(base + PCIE0_ERROR);
-> > >  	mutex_unlock(&pdata->lock);
+> > >  			start =3D pci_resource_start(pcidev, bar) + offset;
+> > >  			len =3D pci_resource_len(pcidev, bar) - offset;
 > > >
-> > > -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> > > +	return sprintf(buf, "0x%llx\n",
-> > > +		       (unsigned long long)set_error_revision(dev, value));
-> > >  }
+> > > diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h index
+> > > 53572c7aced0..e0f0abfbeb8c 100644
+> > > --- a/drivers/fpga/dfl.h
+> > > +++ b/drivers/fpga/dfl.h
+> > > @@ -91,6 +91,7 @@
+> > >  #define FME_HDR_PORT_OFST(n)	(0x38 + ((n) * 0x8))
+> > >  #define FME_HDR_BITSTREAM_ID	0x60
+> > >  #define FME_HDR_BITSTREAM_MD	0x68
+> > > +#define FME_PORT_OFST_BAR_SKIP	7
 > > >
-> > >  static ssize_t pcie0_errors_store(struct device *dev, @@ -97,7 +114,=
-8
-> > > @@ static ssize_t pcie1_errors_show(struct device *dev,
-> > >  	value =3D readq(base + PCIE1_ERROR);
-> > >  	mutex_unlock(&pdata->lock);
-> > >
-> > > -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> > > +	return sprintf(buf, "0x%llx\n",
-> > > +		       (unsigned long long)set_error_revision(dev, value));
-> > >  }
-> > >
-> > >  static ssize_t pcie1_errors_store(struct device *dev, @@ -133,11
-> > > +151,13 @@ static ssize_t nonfatal_errors_show(struct device *dev,
-> > >  				    struct device_attribute *attr, char *buf)  {
-> > >  	void __iomem *base;
-> > > +	u64 value;
-> > >
-> > >  	base =3D dfl_get_feature_ioaddr_by_id(dev,
-> > FME_FEATURE_ID_GLOBAL_ERR);
-> > > +	value =3D readq(base + RAS_NONFAT_ERROR);
-> > >
-> > >  	return sprintf(buf, "0x%llx\n",
-> > > -		       (unsigned long long)readq(base + RAS_NONFAT_ERROR));
-> > > +		       (unsigned long long)set_error_revision(dev, value));
-> > >  }
-> > >  static DEVICE_ATTR_RO(nonfatal_errors);
-> > >
-> > > @@ -145,11 +165,13 @@ static ssize_t catfatal_errors_show(struct devi=
-ce
-> > *dev,
-> > >  				    struct device_attribute *attr, char *buf)  {
-> > >  	void __iomem *base;
-> > > +	u64 value;
-> > >
-> > >  	base =3D dfl_get_feature_ioaddr_by_id(dev,
-> > FME_FEATURE_ID_GLOBAL_ERR);
-> > > +	value =3D readq(base + RAS_CATFAT_ERROR);
-> > >
-> > >  	return sprintf(buf, "0x%llx\n",
-> > > -		       (unsigned long long)readq(base + RAS_CATFAT_ERROR));
-> > > +		       (unsigned long long)set_error_revision(dev, value));
-> > >  }
-> > >  static DEVICE_ATTR_RO(catfatal_errors);
-> > >
-> > > @@ -165,9 +187,10 @@ static ssize_t inject_errors_show(struct device =
-*dev,
-> > >  	mutex_lock(&pdata->lock);
-> > >  	v =3D readq(base + RAS_ERROR_INJECT);
-> > >  	mutex_unlock(&pdata->lock);
-> > > +	v =3D FIELD_GET(INJECT_ERROR_MASK, v);
-> > >
-> > >  	return sprintf(buf, "0x%llx\n",
-> > > -		       (unsigned long long)FIELD_GET(INJECT_ERROR_MASK, v));
-> > > +		       (unsigned long long)set_error_revision(dev, v));
-> > >  }
-> > >
-> > >  static ssize_t inject_errors_store(struct device *dev, @@ -211,7
-> > > +234,8 @@ static ssize_t fme_errors_show(struct device *dev,
-> > >  	value =3D readq(base + FME_ERROR);
-> > >  	mutex_unlock(&pdata->lock);
-> > >
-> > > -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> > > +	return sprintf(buf, "0x%llx\n",
-> > > +		       (unsigned long long)set_error_revision(dev, value));
-> > >  }
-> > >
-> > >  static ssize_t fme_errors_store(struct device *dev,
+> > >  /* FME Fab Capability Register Bitfield */
+> > >  #define FME_CAP_FABRIC_VERID	GENMASK_ULL(7, 0)	/* Fabric
+> > version ID */
 > > > --
 > > > 2.26.2
