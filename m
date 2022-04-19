@@ -2,128 +2,152 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6D350681C
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Apr 2022 11:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9065076D5
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Apr 2022 19:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350443AbiDSJzo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 19 Apr 2022 05:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
+        id S1354387AbiDSRzR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 19 Apr 2022 13:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350442AbiDSJzn (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 19 Apr 2022 05:55:43 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5476920BFD;
-        Tue, 19 Apr 2022 02:53:01 -0700 (PDT)
+        with ESMTP id S1354570AbiDSRzK (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 19 Apr 2022 13:55:10 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3FD14000;
+        Tue, 19 Apr 2022 10:52:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650361981; x=1681897981;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jfHt7wB5XGMSPzgSoV7ck75X/YUam3lD2caa7ddZDys=;
-  b=jJzixJYZOk7IjXnWaZ0RrcNxJO4WRWe9lKOMXYok23NrNoYV30sVbZPZ
-   OqYErJyYRPhjn6NqwCCxiIb07MKCprWDazrJg0E4WuaRTYkOARmm02+bs
-   HBMuz7s6l33lRfPXRmlRt5r1CqByQ4vhJmUXBJQMFBxAAuVPDkc3ZQov/
-   ycIw2cdsmw8rUJC2k9h7XVfO5kHKH5nSj99C5VexZdgMBNjV/l7qW6Eom
-   Y5th6TrbDCaX2puUBcoI0pqUYvEDHQgO7WrnFgkFcJWfz/5X6fNMelrj7
-   sP3uPh3VonlnzJKBqw+bw/8NzYunePizqxCbf78CfnnQTWcafTI4wI1Oe
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263485752"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="263485752"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 02:53:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="576022673"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 19 Apr 2022 02:52:57 -0700
-Date:   Tue, 19 Apr 2022 17:45:21 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <navam@xilinx.com>
-Cc:     Joe Perches <joe@perches.com>, "mdf@kernel.org" <mdf@kernel.org>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        Michal Simek <michals@xilinx.com>,
+  t=1650390746; x=1681926746;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=91tvtGEX/zzxIKkabBBW1fLD4fdIYKpdH7IMCAC8IaA=;
+  b=R9PPUbOyojW/x6w/W58lHCeCqr1iGynlfVXLDoQhsvahXDAejYCAzzZF
+   qUYYIAzbQNG1fdANzNR8PZEru74SA8BwltJ/47q7WwbOwxpiOP6b2kURp
+   5VwO4SwFXhoAl+hNaO/QIJcPEw+aFXNlBPgoFdV2REZd1WHelWaYDSkKq
+   jqylicFhsFcg60uKIWu3eZaibS6qcjbwTNl3rX2Jw3eZFonYBZFIz2f11
+   Dco8DInRZdNVHylcqla1tklzUQIpEX8wFuxY+XusGyttiTDo7INJUVYzw
+   VCt4fev25ocvOt6JMOxl1ZBi3332pLtNWOFs0e1SpS+/UQa16JWcCyQ79
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="326731293"
+X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
+   d="scan'208";a="326731293"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:52:25 -0700
+X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
+   d="scan'208";a="554831107"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:52:25 -0700
+Date:   Tue, 19 Apr 2022 10:52:05 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>
+cc:     "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, git <git@xilinx.com>
-Subject: Re: [PATCH v4 2/5] fpga: fix for coding style issues
-Message-ID: <20220419094521.GA322948@yilunxu-OptiPlex-7050>
-References: <20220416133719.3382895-1-nava.manne@xilinx.com>
- <20220416133719.3382895-3-nava.manne@xilinx.com>
- <ac22068dad06fd61f2e82c0bf7c0f58a4e5df050.camel@perches.com>
- <SN6PR02MB45763D1B949353F99AAFE7D8C2F39@SN6PR02MB4576.namprd02.prod.outlook.com>
- <d56ad1bc0ef918cc8395b7c0ec7bdd10baf4c1f6.camel@perches.com>
- <SN6PR02MB45761359B029B065092F8691C2F29@SN6PR02MB4576.namprd02.prod.outlook.com>
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] uio: dfl: add HSSI feature id
+In-Reply-To: <BN9PR11MB548330FAA7EF6B9DAC2F0E76E3F29@BN9PR11MB5483.namprd11.prod.outlook.com>
+Message-ID: <alpine.DEB.2.22.394.2204191048300.5866@rhweight-WRK1>
+References: <20220412062353.53984-1-tianfei.zhang@intel.com> <DM6PR11MB38190E6EEF6DE3EB900290C585F39@DM6PR11MB3819.namprd11.prod.outlook.com> <BN9PR11MB548330FAA7EF6B9DAC2F0E76E3F29@BN9PR11MB5483.namprd11.prod.outlook.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SN6PR02MB45761359B029B065092F8691C2F29@SN6PR02MB4576.namprd02.prod.outlook.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 08:15:57AM +0000, Nava kishore Manne wrote:
-> Hi Joe,
-> 
-> 	Please find my response inline.
-> 
-> > -----Original Message-----
-> > From: Joe Perches <joe@perches.com>
-> > Sent: Monday, April 18, 2022 6:04 PM
-> > To: Nava kishore Manne <navam@xilinx.com>; mdf@kernel.org;
-> > hao.wu@intel.com; yilun.xu@intel.com; trix@redhat.com; Michal Simek
-> > <michals@xilinx.com>; linux-fpga@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; git
-> > <git@xilinx.com>
-> > Subject: Re: [PATCH v4 2/5] fpga: fix for coding style issues
-> > 
-> > On Mon, 2022-04-18 at 09:54 +0000, Nava kishore Manne wrote:
-> > > Hi Joe,
-> > >
-> > > 	Please find my response inline.
-> > >
-> > > > -----Original Message-----
-> > > > From: Joe Perches <joe@perches.com>
-> > > > Sent: Saturday, April 16, 2022 10:29 PM
-> > 
-> > > > On Sat, 2022-04-16 at 19:07 +0530, Nava kishore Manne wrote:
-> > > > > fixes the below checks reported by checkpatch.pl Lines should not
-> > > > > end with a '('
-> > > > > Alignment should match open parenthesis
-> > > >
-> > > > in fpga-mgr:
-> > > > 	Another possibillty would be to change the function arguments
-> > > >
-> 
-> This API is there for a long back. Not sure changing the function arguments is fine or Not.
-> @yilun: Is it ok to change the function arguments?
 
-Joe's example code below doesn't actually change any function definition.
-It just tries to store the value of 'min(mgr->mops->initial_header_size, count)'
-in 'count', thus to reduce the length of the 'fpga_mgr_write_init(...)'
-expression.
 
-So I think it is OK.
+On Tue, 19 Apr 2022, Zhang, Tianfei wrote:
 
-Thanks,
-Yilun
+>
+>
+>>> -----Original Message-----
+>>> From: Zhang, Tianfei <tianfei.zhang@intel.com>
+>>> Sent: Tuesday, April 12, 2022 2:24 PM
+>>> To: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org; Xu,
+>>> Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org;
+>>> gregkh@linuxfoundation.org
+>>> Cc: linux-kernel@vger.kernel.org; Matthew Gerlach
+>>> <matthew.gerlach@linux.intel.com>; Zhang, Tianfei
+>>> <tianfei.zhang@intel.com>
+>>> Subject: [PATCH v2] uio: dfl: add HSSI feature id
+>>>
+>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>>
+>>> Add the feature id of the OFS HSSI (High Speed Serial Interface)
+>>
+>> We still don't see any description on what OFS is here, or will OFS be added to
+>> title as well? we don't expect another submission with the same title but for XXX
+>> HSSI again.
+>
+> This name of HSSI module in dfl feature id table is : OFS HSSI subsystem.
+>
+> How about this tile:
+> uio: dfl: add OFS HSSI device id
+>
+> Add OFS HSSI (Open FPGA Stack High Speed Serial Interface) device ID in uio_dfl driver for Intel PAC N6000 Card.
 
-> 
-> > > > and
-> > > >
-> > > > in fpga-region:
-> > > > 	Ideally keep the include declaration and definition styles synced
-> > >
-> 
-> Will fix it in next version.
-> 
-> Regards,
-> Navakishore.
+Hi Tianfei,
+
+In the Platform Designer tool, this IP block is referred to as the HSSI 
+Subsystem.  I think we should use the same name here.  Additionally, this 
+subsystem is already in use in multiple cards; so I suggest dropping
+any reference to a particular card.
+
+Matthew
+
+>
+>>
+>>> subsystem to table of ids supported by the uio_dfl driver. HSSI
+>>> subsystem consists of harden/soft Ethernet MAC to support various
+>>> ethernet usages and PCS/FEC/PMA direct modes for non-ethernet usages.
+>>>
+>>> We leverage the uio_dfl driver to access the HSSI subsystem on user
+>>> space, because the HSSI subsystem was designed for specific purposes
+>>> and does not fit into the standard MAC and net kernel subsystems.
+>>>
+>>> The Feature ID table of DFL can be found:
+>>> https://github.com/OPAE/dfl-feature-id
+>>
+>> Why you put it here? even this link there is no more descriptions to understand
+>> what it is. Or can be removed here.
+>
+> Yes, I agree, I will remove it.
+>>
+>>>
+>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+>>> ---
+>>> v2: add HSSI introduction and the git repo of Feature ID table.
+>>> ---
+>>>  drivers/uio/uio_dfl.c | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c index
+>>> 89c0fc7b0cbc..660e1d0bf6b9 100644
+>>> --- a/drivers/uio/uio_dfl.c
+>>> +++ b/drivers/uio/uio_dfl.c
+>>> @@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
+>>> }
+>>>
+>>>  #define FME_FEATURE_ID_ETH_GROUP	0x10
+>>> +#define FME_FEATURE_ID_OFS_HSSI		0x15
+>>>
+>>>  static const struct dfl_device_id uio_dfl_ids[] = {
+>>>  	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+>>> +	{ FME_ID, FME_FEATURE_ID_OFS_HSSI },
+>>>  	{ }
+>>>  };
+>>>  MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
+>>> --
+>>> 2.26.2
+>
+>
