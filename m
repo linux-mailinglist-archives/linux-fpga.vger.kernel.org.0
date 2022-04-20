@@ -2,60 +2,59 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9065076D5
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Apr 2022 19:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3457B507FD0
+	for <lists+linux-fpga@lfdr.de>; Wed, 20 Apr 2022 06:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354387AbiDSRzR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 19 Apr 2022 13:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
+        id S245369AbiDTEYg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 20 Apr 2022 00:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354570AbiDSRzK (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 19 Apr 2022 13:55:10 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3FD14000;
-        Tue, 19 Apr 2022 10:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650390746; x=1681926746;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=91tvtGEX/zzxIKkabBBW1fLD4fdIYKpdH7IMCAC8IaA=;
-  b=R9PPUbOyojW/x6w/W58lHCeCqr1iGynlfVXLDoQhsvahXDAejYCAzzZF
-   qUYYIAzbQNG1fdANzNR8PZEru74SA8BwltJ/47q7WwbOwxpiOP6b2kURp
-   5VwO4SwFXhoAl+hNaO/QIJcPEw+aFXNlBPgoFdV2REZd1WHelWaYDSkKq
-   jqylicFhsFcg60uKIWu3eZaibS6qcjbwTNl3rX2Jw3eZFonYBZFIz2f11
-   Dco8DInRZdNVHylcqla1tklzUQIpEX8wFuxY+XusGyttiTDo7INJUVYzw
-   VCt4fev25ocvOt6JMOxl1ZBi3332pLtNWOFs0e1SpS+/UQa16JWcCyQ79
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="326731293"
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="326731293"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:52:25 -0700
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="554831107"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:52:25 -0700
-Date:   Tue, 19 Apr 2022 10:52:05 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>
-cc:     "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] uio: dfl: add HSSI feature id
-In-Reply-To: <BN9PR11MB548330FAA7EF6B9DAC2F0E76E3F29@BN9PR11MB5483.namprd11.prod.outlook.com>
-Message-ID: <alpine.DEB.2.22.394.2204191048300.5866@rhweight-WRK1>
-References: <20220412062353.53984-1-tianfei.zhang@intel.com> <DM6PR11MB38190E6EEF6DE3EB900290C585F39@DM6PR11MB3819.namprd11.prod.outlook.com> <BN9PR11MB548330FAA7EF6B9DAC2F0E76E3F29@BN9PR11MB5483.namprd11.prod.outlook.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S230163AbiDTEYf (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 20 Apr 2022 00:24:35 -0400
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1035512A9B;
+        Tue, 19 Apr 2022 21:21:51 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id e62-20020a17090a6fc400b001d2cd8e9b0aso819470pjk.5;
+        Tue, 19 Apr 2022 21:21:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iTuAOAHUVJpjTZpyLgo06z+SkuCW6MaTC46oAl7CAV8=;
+        b=KND7Kyl89AbTqodWvopHMSw3iqXJVmY+aB7O4m+Oc3lUMn9pNkQKSJaT+PTgPp/slu
+         HKeDAlyhS0hVOf47dmrvS00+OFCe8CiWNcE4QwqjYdaMm0E6RMX1/T93zOv0WSYAORBr
+         MaoeDtk/zor4pxQkXLAR2au82IiEPR8vkApldHZbjQWu6EyTAQlnj92qSHZ3oePLZVvf
+         0nRmgLbzNtZjvu271eIsQYNHgmLkbVu94xi1YsmqPHGg/LOCNyzUH5MwAXqqtEZcEBga
+         fM493yG5MCkNyIss0BCsIWoLcD0PrpFPrx0OtDT5oVTF2WLkZNjXX4Cknkn/2qMCSlR3
+         uhjg==
+X-Gm-Message-State: AOAM530R5k0jbwEGhTSPLC6C6y/czOxXgGuZ3hHwwfnD0gPT2/n3mVc9
+        9RI5YGscOdOyBR7Uo3uGems=
+X-Google-Smtp-Source: ABdhPJw7VNM6Dhl3/Pqg0G9eiYvHhyFDhwCVWdneoxzoozLi+Cjjm+bUmepyQouwZoTwWuQU+dyZfw==
+X-Received: by 2002:a17:90b:4c84:b0:1d2:cadc:4e4d with SMTP id my4-20020a17090b4c8400b001d2cadc4e4dmr2237395pjb.8.1650428510408;
+        Tue, 19 Apr 2022 21:21:50 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:ece1:6248:e226:d2e0:1f33])
+        by smtp.gmail.com with ESMTPSA id w60-20020a17090a6bc200b001cbc1a6963asm18060666pjj.29.2022.04.19.21.21.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 21:21:49 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 21:21:47 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Moritz Fischer <mdf@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] MAINTAINERS: Update linux-fpga repository location
+Message-ID: <Yl+KW2BfkEYXeQz8@archbook>
+References: <20220408022002.22957-1-mdf@kernel.org>
+ <20220409154739.1a85472d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409154739.1a85472d@canb.auug.org.au>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,91 +62,33 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Sat, Apr 09, 2022 at 03:47:39PM +1000, Stephen Rothwell wrote:
+> Hi Moritz,
+> 
+> On Thu,  7 Apr 2022 19:20:02 -0700 Moritz Fischer <mdf@kernel.org> wrote:
+> >
+> > As maintainer team we have decided to move the linux-fpga development
+> > to a shared repository with shared access.
+> > 
+> > Cc: Xu Yilun <yilun.xu@intel.com>
+> > Cc: Wu Hao <hao.wu@intel.com>
+> > Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Moritz Fischer <mdf@kernel.org>
+> > ---
+> > 
+> > Hi Stephen,
+> > 
+> > can you help us update the linux-next part accordingly?
+> 
+> I have done so, but you forgot to create the "fixes" branch in the new
+> tree.  Also, did you want more contacts listed for the tree (apart from
+> yourself)?
 
+Fixed. Thanks!
 
-On Tue, 19 Apr 2022, Zhang, Tianfei wrote:
+If you could add Xu Yilun and Wu Hao as contacts that'd be great!
 
->
->
->>> -----Original Message-----
->>> From: Zhang, Tianfei <tianfei.zhang@intel.com>
->>> Sent: Tuesday, April 12, 2022 2:24 PM
->>> To: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org; Xu,
->>> Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org;
->>> gregkh@linuxfoundation.org
->>> Cc: linux-kernel@vger.kernel.org; Matthew Gerlach
->>> <matthew.gerlach@linux.intel.com>; Zhang, Tianfei
->>> <tianfei.zhang@intel.com>
->>> Subject: [PATCH v2] uio: dfl: add HSSI feature id
->>>
->>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>
->>> Add the feature id of the OFS HSSI (High Speed Serial Interface)
->>
->> We still don't see any description on what OFS is here, or will OFS be added to
->> title as well? we don't expect another submission with the same title but for XXX
->> HSSI again.
->
-> This name of HSSI module in dfl feature id table is : OFS HSSI subsystem.
->
-> How about this tile:
-> uio: dfl: add OFS HSSI device id
->
-> Add OFS HSSI (Open FPGA Stack High Speed Serial Interface) device ID in uio_dfl driver for Intel PAC N6000 Card.
+Sorry for the late reply. I was OOO.
 
-Hi Tianfei,
-
-In the Platform Designer tool, this IP block is referred to as the HSSI 
-Subsystem.  I think we should use the same name here.  Additionally, this 
-subsystem is already in use in multiple cards; so I suggest dropping
-any reference to a particular card.
-
-Matthew
-
->
->>
->>> subsystem to table of ids supported by the uio_dfl driver. HSSI
->>> subsystem consists of harden/soft Ethernet MAC to support various
->>> ethernet usages and PCS/FEC/PMA direct modes for non-ethernet usages.
->>>
->>> We leverage the uio_dfl driver to access the HSSI subsystem on user
->>> space, because the HSSI subsystem was designed for specific purposes
->>> and does not fit into the standard MAC and net kernel subsystems.
->>>
->>> The Feature ID table of DFL can be found:
->>> https://github.com/OPAE/dfl-feature-id
->>
->> Why you put it here? even this link there is no more descriptions to understand
->> what it is. Or can be removed here.
->
-> Yes, I agree, I will remove it.
->>
->>>
->>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
->>> ---
->>> v2: add HSSI introduction and the git repo of Feature ID table.
->>> ---
->>>  drivers/uio/uio_dfl.c | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c index
->>> 89c0fc7b0cbc..660e1d0bf6b9 100644
->>> --- a/drivers/uio/uio_dfl.c
->>> +++ b/drivers/uio/uio_dfl.c
->>> @@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
->>> }
->>>
->>>  #define FME_FEATURE_ID_ETH_GROUP	0x10
->>> +#define FME_FEATURE_ID_OFS_HSSI		0x15
->>>
->>>  static const struct dfl_device_id uio_dfl_ids[] = {
->>>  	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
->>> +	{ FME_ID, FME_FEATURE_ID_OFS_HSSI },
->>>  	{ }
->>>  };
->>>  MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
->>> --
->>> 2.26.2
->
->
+- Moritz
