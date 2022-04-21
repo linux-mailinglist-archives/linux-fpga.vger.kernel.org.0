@@ -2,105 +2,99 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0130B50A4EF
-	for <lists+linux-fpga@lfdr.de>; Thu, 21 Apr 2022 18:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D41050A4F7
+	for <lists+linux-fpga@lfdr.de>; Thu, 21 Apr 2022 18:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390440AbiDUQCz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 21 Apr 2022 12:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
+        id S233360AbiDUQGD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 21 Apr 2022 12:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390432AbiDUQCy (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 21 Apr 2022 12:02:54 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627D310FF9;
-        Thu, 21 Apr 2022 09:00:04 -0700 (PDT)
+        with ESMTP id S1354585AbiDUQGD (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 21 Apr 2022 12:06:03 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51464839B;
+        Thu, 21 Apr 2022 09:03:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650556804; x=1682092804;
+  t=1650556992; x=1682092992;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Km40a1E7MdBXZjMmkalg5GAvHR3jO7GjMsaP0SncP9Q=;
-  b=kiqeBEAEMShJWEJrHTZ5Oe8IPWtB0e+oWKUWYiLVd+yYn9rX8tCfIJ9A
-   8k5Y37f22Ie221ORenGHR0PVzve2leYPJKSI68pQQNGiSNR4o7gKixwhe
-   kd/zu6dPVYXd2qe5tc6l8l321Ie84SsukEqB1C1b330TqNJuGh/rRaQ/H
-   EYEHFsoec0v2yUsIreD1kWxFVwoMRZXBN4OlHervEWWmeMMIyEnGVT7/3
-   O2tnwOMRX/jIpnj5pvUpraneaZT7sD7UWmIZpdNkQgKDmnmUxwteBodvo
-   vuTPu7Y7w8KuGxPFVmeSi9QQnu/ho0YqXU6PXeCLdgfoM5O4pYdqbnJBU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264567203"
+  bh=jRkl3afZKE4xraz15dRqZSIM82vN/xRL4/1OSG77U2I=;
+  b=m9tW2F0/YSHeznULk0jKWECPnG2aqec3uFMrEzHbqejkwy9Km2STeMM6
+   IiTQtU5kSY9sUPYQFBxC4WQvlTKaf+Srwn4CfQd+gUBlZ72PZR4NCsVXZ
+   5qJIONMg/AEouOciDq4Gre0SImM90mo5l1iWgm/pTwEJsAq059Vk/9RTo
+   Ui49zkoxKjSkaGY98U2XpvI0/MqAC31XkyjE+lgLwy6Jmf3ga0xsEwc/Y
+   LBnyq06N/tO4R9aMJONh0q9rTC40z8vdavb75k9BiJIX7OI6InHJUBqIX
+   rzZbpcf+Zg8YO8T1pjdEnQtKxyIZfkm/V6Wh/BcwAV0StpwO12T6j8Uuw
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244326476"
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="264567203"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 09:00:03 -0700
+   d="scan'208";a="244326476"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 09:03:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="577313641"
+   d="scan'208";a="703145798"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 21 Apr 2022 09:00:00 -0700
-Date:   Thu, 21 Apr 2022 23:52:23 +0800
+  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 09:03:10 -0700
+Date:   Thu, 21 Apr 2022 23:55:33 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        git@xilinx.com
-Subject: Re: [PATCH v5 1/5] fpga: zynq: Fix incorrect variable type
-Message-ID: <20220421155223.GB347460@yilunxu-OptiPlex-7050>
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     Nava kishore Manne <nava.manne@xilinx.com>, hao.wu@intel.com,
+        trix@redhat.com, michal.simek@xilinx.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, git@xilinx.com
+Subject: Re: [PATCH v5 0/5]fpga: fix for coding style and kernel-doc issues
+Message-ID: <20220421155533.GC347460@yilunxu-OptiPlex-7050>
 References: <20220421044744.3777983-1-nava.manne@xilinx.com>
- <20220421044744.3777983-2-nava.manne@xilinx.com>
+ <YmFpciblvR9xnjFX@archbook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421044744.3777983-2-nava.manne@xilinx.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YmFpciblvR9xnjFX@archbook>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:17:40AM +0530, Nava kishore Manne wrote:
-> zynq_fpga_has_sync () API is expecting "u8 *" but the
-> formal parameter that was passed is of type "const char *".
-> fixes this issue by changing the buf type to "const char *"
+On Thu, Apr 21, 2022 at 07:25:54AM -0700, Moritz Fischer wrote:
+> On Thu, Apr 21, 2022 at 10:17:39AM +0530, Nava kishore Manne wrote:
+> > This patch series fixes the coding style and kernel-doc issues
+> > exists in the fpga framework, zynq and ZynqMP drivers.
+> > 
+> > Nava kishore Manne (5):
+> >   fpga: zynq: Fix incorrect variable type
+> >   fpga: fix for coding style issues
+> >   fpga: fpga-mgr: fix kernel-doc warnings
+> >   fpga: Use tab instead of space indentation
+> >   fpga: fpga-region: fix kernel-doc formatting issues
+> > 
+> >  drivers/fpga/Makefile            |  6 +++---
+> >  drivers/fpga/fpga-mgr.c          |  8 ++++++--
+> >  drivers/fpga/fpga-region.c       |  7 ++++---
+> >  drivers/fpga/of-fpga-region.c    | 22 ++++++++++++----------
+> >  drivers/fpga/zynq-fpga.c         |  2 +-
+> >  include/linux/fpga/fpga-region.h |  7 ++++---
+> >  6 files changed, 30 insertions(+), 22 deletions(-)
+> > 
+> > -- 
+> > 2.25.1
+> > 
+> I've applied patches 1-4 to for-next.
+> 
+> Patch 5 seems to not apply.
 
-  Fix this issue by ...
+Hi Moritz:
+
+Seems some patches still need rework, is it possible we drop them
+and wait for next version?
+
+Thanks,
+Yilun
 
 > 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-
-With the minor fix, Acked-by: Xu Yilun <yilun.xu@intel.com>
-
-> ---
-> Changes for v2:
->                 -None.
-> Changes for v3:
->                - Changed arg buf type to "const char *" as suggested by Tom.
->                - update zynq_fpga_has_sync () API description to align with API
->                  functionality.
-> Changes for v4:
->                - None.
-> 
-> Changes for v5:
->                - Dropped the irrelevant doc update changes.
-> 
->  drivers/fpga/zynq-fpga.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-> index 426aa34c6a0d..6beaba9dfe97 100644
-> --- a/drivers/fpga/zynq-fpga.c
-> +++ b/drivers/fpga/zynq-fpga.c
-> @@ -239,7 +239,7 @@ static irqreturn_t zynq_fpga_isr(int irq, void *data)
->   * the correct byte order, and be dword aligned. The input is a Xilinx .bin
->   * file with every 32 bit quantity swapped.
->   */
-> -static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
-> +static bool zynq_fpga_has_sync(const char *buf, size_t count)
->  {
->  	for (; count >= 4; buf += 4, count -= 4)
->  		if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
-> -- 
-> 2.25.1
+> - Moritz
