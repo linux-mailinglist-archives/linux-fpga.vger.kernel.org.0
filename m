@@ -2,100 +2,77 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9F650A33E
-	for <lists+linux-fpga@lfdr.de>; Thu, 21 Apr 2022 16:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A2150A38B
+	for <lists+linux-fpga@lfdr.de>; Thu, 21 Apr 2022 17:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389630AbiDUOuL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 21 Apr 2022 10:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S1389769AbiDUPAr (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 21 Apr 2022 11:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389629AbiDUOuK (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 21 Apr 2022 10:50:10 -0400
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A8842A32;
-        Thu, 21 Apr 2022 07:47:20 -0700 (PDT)
-Received: by mail-pl1-f180.google.com with SMTP id t12so5077824pll.7;
-        Thu, 21 Apr 2022 07:47:20 -0700 (PDT)
+        with ESMTP id S1389759AbiDUPAo (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 21 Apr 2022 11:00:44 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD9C443F1
+        for <linux-fpga@vger.kernel.org>; Thu, 21 Apr 2022 07:57:54 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d14so3407127qtw.5
+        for <linux-fpga@vger.kernel.org>; Thu, 21 Apr 2022 07:57:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FfZNCizm0Kgf1lEBR0XR9Meqi5ihWzie8fY0lQAxquc=;
+        b=l53Qzlyz/ITKu/ZFDMfzyBNJJv+J5kWUdOVNjodIZ/lJ0jABu9mD9+3IY/kc3RU+cs
+         CtQvbjrqDW7GqA6xNvWD6eHjfjhGGoG8mqWuZ518j5IJ9q4eZldSVlezfJp6/45tJRnV
+         9v/w4Hbh/xbgFbBlvT9duNCVFpNxWWaCzthk/cRR3fQWVlhKj3oF0hxz6+HVD7vWEp2m
+         cFc614cP530AbYm6vIN+25crdBydtdNN2mRa7u7A3G64sUwpDCu06eAuSazKJV3pta9W
+         D4RsmTrwYd6sb4TC8rEpRDQxNzU3G5GLqzJyUlgbQJCsxfZEj/AupFrdeJtNKk5sryVp
+         Swmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=g202DJgphpepUMd7JLCHKLgUnPLzuZXeZkNUO2SATTw=;
-        b=3bhRDFwtKMS4adOqMnmfloduEPDa8Pmbs7wQgecRj8a4qi92NUzm07yU87FstKQkNm
-         uVy9ScoJvw4crowbmGUl1TPoTnpbUI6uT4ML+zK/iFiURfHaVJe+PGMvnIVjcT3wBnHg
-         i3pFmxWl1w+1n2I1TxOVKC2L0lwVueTRgZHX3TB5zVjR14ImSSTpwEWhTOTXMCm1HGqk
-         dO/XIH1gpLeQqI6lX3XhNVPiU6Glz6k5aQqfIt+5UyHEcsfZxOVAiZyPVaTmMnLvU461
-         Mp7h3l9FZ7Maj+oXRc7Vz9azeQaXgLajxjPJk/apsgh39ag66pqN8RnRhrnwg7YWWO12
-         qBeQ==
-X-Gm-Message-State: AOAM532KhwuB27+iHD2NqnZ5/ONJIzyCH1AdyAnX/5fqVhlTC12cai4T
-        A082NZ57gwnlFhDby3GtGOQ=
-X-Google-Smtp-Source: ABdhPJwBBG1+ZOyO338IDd1IlfZfSzpt6gLj8EEu9VjP4CL3AXLKJFs5PAwxfQV9lBn2EFmUoYRH2w==
-X-Received: by 2002:a17:903:31c8:b0:158:d060:eab7 with SMTP id v8-20020a17090331c800b00158d060eab7mr25810957ple.5.1650552439960;
-        Thu, 21 Apr 2022 07:47:19 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:ece1:6248:e226:d2e0:1f33])
-        by smtp.gmail.com with ESMTPSA id c2-20020a63a442000000b0039cc5a6af1csm22577214pgp.30.2022.04.21.07.47.19
+        bh=FfZNCizm0Kgf1lEBR0XR9Meqi5ihWzie8fY0lQAxquc=;
+        b=ZcCyH7DF0uHgPVzJayM/UEFSO5MxTTBdNl3/dDlCoauMH99eMuavJYgmZPquD4xUYS
+         02ypue4oNyJcccnHnvzA8LC1esFWVDyc09vAG/suWa/sWxYGYn+TiIR/owSMcWQuLqEj
+         gtAPSPBlXrQPdsvuBr1kQYF/71RXLmW4DusP1bkB1ewA9NADnK4BjglQvIc0lXpRT7y/
+         jfYXW83ORzj+ewOwUGmPidB75cLJEq4E3wB9uCgRXhNnIS89skzNJMy64FaIz5apg954
+         eqHqH4WekpD8t490doIKYCZjZDsqV/pIs7Zf1Ydhm2QDnbp4x0EW0VcXmvjrcT4LsaNy
+         6nyw==
+X-Gm-Message-State: AOAM531dI+FxRAlYfuCfwRbkkyJSEINkf79vW71hrEeCWezOZusfCTdQ
+        j/P+O57oGp5bwO4qDIuh6CJ3z8pgQwPSQQ==
+X-Google-Smtp-Source: ABdhPJzOJcz57QkK9Ar8/hS2OYw2gKk4ceEYG2hUEPSmcuqXnBZayTqmhBBVgFqnIpUUkz4eMglw0Q==
+X-Received: by 2002:a05:622a:1186:b0:2f2:68:898 with SMTP id m6-20020a05622a118600b002f200680898mr13169130qtk.389.1650553073296;
+        Thu, 21 Apr 2022 07:57:53 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id a7-20020a05622a064700b002e238d6db02sm3825225qtb.54.2022.04.21.07.57.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 07:47:19 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 07:47:18 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Tianfei Zhang <tianfei.zhang@intel.com>
-Cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, corbet@lwn.net,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: Re: [PATCH v7 2/2] Documentation: fpga: dfl: add link address of
- feature id table
-Message-ID: <YmFudmiIRh5RHGQ+@archbook>
-References: <20220419032942.427429-1-tianfei.zhang@intel.com>
- <20220419032942.427429-3-tianfei.zhang@intel.com>
+        Thu, 21 Apr 2022 07:57:52 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nhYFk-007DbO-7X; Thu, 21 Apr 2022 11:57:52 -0300
+Date:   Thu, 21 Apr 2022 11:57:52 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     linux-fpga@vger.kernel.org, yilun.xu@intel.com, hao.wu@intel.com
+Subject: Re: [PATCH] fpga: fpga-mgr: Fix undefined behavior
+Message-ID: <20220421145752.GU64706@ziepe.ca>
+References: <20220421143924.68443-1-mdf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419032942.427429-3-tianfei.zhang@intel.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220421143924.68443-1-mdf@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 11:29:42PM -0400, Tianfei Zhang wrote:
-> From: Tianfei zhang <tianfei.zhang@intel.com>
-> 
-> This patch adds the link address of feature id table in documentation.
-> 
-> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-Acked-by: Moritz Fischer <mdf@kernel.org>
-> ---
-> v7:
->   - change the title and git commit message.
->   - add Reviewed by from Matthew Gerlach.
-> v6: fix documentation from Hao's comment.
-> v5: fix documentation from Matthew's comment.
-> ---
->  Documentation/fpga/dfl.rst | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index ef9eec71f6f3..15b670926084 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -502,6 +502,11 @@ Developer only needs to provide a sub feature driver with matched feature id.
->  FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
->  could be a reference.
->  
-> +Please refer to below link to existing feature id table and guide for new feature
-> +ids application.
-> +https://github.com/OPAE/dfl-feature-id
-> +
-> +
->  Location of DFLs on a PCI Device
->  ================================
->  The original method for finding a DFL on a PCI device assumed the start of the
-> -- 
-> 2.26.2
-> 
+On Thu, Apr 21, 2022 at 07:39:24AM -0700, Moritz Fischer wrote:
+> Incrementing void pointers is undefined behavior.
+
+AFIACR in the kernel dialect of C this is defined behavior..
+
+Jason
