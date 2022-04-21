@@ -2,54 +2,50 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943C650A262
-	for <lists+linux-fpga@lfdr.de>; Thu, 21 Apr 2022 16:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F94850A2DC
+	for <lists+linux-fpga@lfdr.de>; Thu, 21 Apr 2022 16:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388951AbiDUO2r (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 21 Apr 2022 10:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S1389503AbiDUOm4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 21 Apr 2022 10:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388932AbiDUO2r (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 21 Apr 2022 10:28:47 -0400
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AA619C0D;
-        Thu, 21 Apr 2022 07:25:57 -0700 (PDT)
-Received: by mail-pj1-f43.google.com with SMTP id md4so5086297pjb.4;
-        Thu, 21 Apr 2022 07:25:57 -0700 (PDT)
+        with ESMTP id S1389537AbiDUOmm (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 21 Apr 2022 10:42:42 -0400
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884AB40A09
+        for <linux-fpga@vger.kernel.org>; Thu, 21 Apr 2022 07:39:51 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id u15so1674492ple.4
+        for <linux-fpga@vger.kernel.org>; Thu, 21 Apr 2022 07:39:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z6eYZr81Vczs86aN15rFzTwzc9qxYGexlog897TKVyE=;
-        b=IQaUg6A+aLlgCaxRhtVOL8RghI3FL66eFvPnrsOcyT9YgmFCh3Nb5zFdd5MKh54Fhw
-         fw9ZAY/6ViwUnF5WxHac1kphjdmGGbUsrEK22uzWlq11OeULp1CjKj6KoCqxPTXcSmT2
-         eKNm5KwrRve1kFHvRFdVIeQe0AftpOnCRA75TZ42cNXwFjjppfY8JxlmbY0Rx1uGrQQw
-         LYRNGeZiChDNzTfFF2V6AQi3OJrX7cHrnId0GaAmHDtOo6iDDVpw/6me1VvO2BrB/AH8
-         3MT78WR0J6hBDQ7xTWpyFV4YsWBSTmyNsTs55k5svXR+rZP09J7TbgjtCrln+Yhymyrf
-         zeYg==
-X-Gm-Message-State: AOAM531JlCzaGbLcWCJwoWrXdMTpmrylI1z/la8YEHYQomvZcz6vFKI2
-        0Wq055wniDcS9/JH3ZVloq0=
-X-Google-Smtp-Source: ABdhPJydcFcHSk+B+u3MIwIZJcsvb93QzavgusJ2o7qWb4MG6T8PeixWpLh8YgS99c3ZEYVwSsz9Ng==
-X-Received: by 2002:a17:902:9a4c:b0:156:6735:b438 with SMTP id x12-20020a1709029a4c00b001566735b438mr25911941plv.46.1650551156614;
-        Thu, 21 Apr 2022 07:25:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hKciBBQrVafvysRrJtrY+blLvwiNsFJxjsp9XV7auaE=;
+        b=XPPZJMJU8MdBhFIWGYTL43lqTPycZeLHY52eSZgxKlLVOg0XyPoFDqUmQ6YDk45BNI
+         QE/IcLjvjrPVN3RIpiuW3DvAa365fZpcQUggPN5WsBqrqFnLFde57IQjYksxzCNs2lb+
+         VvduDvwhI0Rz6cL4sLg8FvzDUp+zOh4GaF1+vsbFkutTzd+J3343CyxB8kWhiczmjUx9
+         wYpA1MJdw9Ve0cGLuV99emcMAyXD+A/nq+AsLZZaiihtR8QJ9e59iSe5oUVhPGtnjXkb
+         tST4xaqmK4wG2a1jySlq7Y5Cj2gH3FMjKQvF5dcjzY3qabP2qkkUwTLuwZfup3EwNfSa
+         b5hg==
+X-Gm-Message-State: AOAM533IolwWQF5o15DtliZ5e6cRrvbkpQhqeZDvdDRX7GuZo8Jq91xd
+        NXQAiY/UINLbi8Tz5SScniclzigt5Tk=
+X-Google-Smtp-Source: ABdhPJwgQwed4NTLR1PnA8zk8zB7uTnsPjhUlQwzIh4l/oWNAGWqRYeIzPnoPy3Vo6OMhUzaa+PzAA==
+X-Received: by 2002:a17:90b:390f:b0:1d2:853c:5b99 with SMTP id ob15-20020a17090b390f00b001d2853c5b99mr7993pjb.8.1650551990655;
+        Thu, 21 Apr 2022 07:39:50 -0700 (PDT)
 Received: from localhost ([2601:647:5b00:ece1:6248:e226:d2e0:1f33])
-        by smtp.gmail.com with ESMTPSA id f10-20020a056a0022ca00b0050a858e8cc3sm14194974pfj.200.2022.04.21.07.25.55
+        by smtp.gmail.com with ESMTPSA id y20-20020aa79af4000000b0050832e3caadsm23636111pfp.216.2022.04.21.07.39.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 07:25:56 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 07:25:54 -0700
+        Thu, 21 Apr 2022 07:39:49 -0700 (PDT)
 From:   Moritz Fischer <mdf@kernel.org>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, michal.simek@xilinx.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, git@xilinx.com
-Subject: Re: [PATCH v5 0/5]fpga: fix for coding style and kernel-doc issues
-Message-ID: <YmFpciblvR9xnjFX@archbook>
-References: <20220421044744.3777983-1-nava.manne@xilinx.com>
+To:     linux-fpga@vger.kernel.org
+Cc:     jgg@ziepe.ca, yilun.xu@intel.com, hao.wu@intel.com,
+        Moritz Fischer <mdf@kernel.org>
+Subject: [PATCH] fpga: fpga-mgr: Fix undefined behavior
+Date:   Thu, 21 Apr 2022 07:39:24 -0700
+Message-Id: <20220421143924.68443-1-mdf@kernel.org>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421044744.3777983-1-nava.manne@xilinx.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
@@ -60,30 +56,27 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:17:39AM +0530, Nava kishore Manne wrote:
-> This patch series fixes the coding style and kernel-doc issues
-> exists in the fpga framework, zynq and ZynqMP drivers.
-> 
-> Nava kishore Manne (5):
->   fpga: zynq: Fix incorrect variable type
->   fpga: fix for coding style issues
->   fpga: fpga-mgr: fix kernel-doc warnings
->   fpga: Use tab instead of space indentation
->   fpga: fpga-region: fix kernel-doc formatting issues
-> 
->  drivers/fpga/Makefile            |  6 +++---
->  drivers/fpga/fpga-mgr.c          |  8 ++++++--
->  drivers/fpga/fpga-region.c       |  7 ++++---
->  drivers/fpga/of-fpga-region.c    | 22 ++++++++++++----------
->  drivers/fpga/zynq-fpga.c         |  2 +-
->  include/linux/fpga/fpga-region.h |  7 ++++---
->  6 files changed, 30 insertions(+), 22 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
-I've applied patches 1-4 to for-next.
+Incrementing void pointers is undefined behavior.
 
-Patch 5 seems to not apply.
+Fixes: baa6d3966351 ("fpga: Add scatterlist based programming")
+Signed-off-by: Moritz Fischer <mdf@kernel.org>
+---
+ drivers/fpga/fpga-mgr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- Moritz
+diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+index 6bd018f20793..3d9b8722f5ce 100644
+--- a/drivers/fpga/fpga-mgr.c
++++ b/drivers/fpga/fpga-mgr.c
+@@ -299,7 +299,7 @@ static int fpga_mgr_buf_load(struct fpga_manager *mgr,
+ {
+ 	struct page **pages;
+ 	struct sg_table sgt;
+-	const void *p;
++	const char *p;
+ 	int nr_pages;
+ 	int index;
+ 	int rc;
+-- 
+2.36.0
+
