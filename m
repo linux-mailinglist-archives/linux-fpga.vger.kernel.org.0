@@ -2,60 +2,56 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31D850DA50
-	for <lists+linux-fpga@lfdr.de>; Mon, 25 Apr 2022 09:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99ABB50DB2C
+	for <lists+linux-fpga@lfdr.de>; Mon, 25 Apr 2022 10:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbiDYHmq (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 25 Apr 2022 03:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        id S234528AbiDYIa5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 25 Apr 2022 04:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240010AbiDYHmf (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 25 Apr 2022 03:42:35 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5150F1EC65;
-        Mon, 25 Apr 2022 00:39:26 -0700 (PDT)
+        with ESMTP id S232747AbiDYIaz (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 25 Apr 2022 04:30:55 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA241D0FB
+        for <linux-fpga@vger.kernel.org>; Mon, 25 Apr 2022 01:27:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650872369; x=1682408369;
+  t=1650875270; x=1682411270;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3KF/nt6njR142ErCOrFh+78Qmc0uUlvrXI0T2lqSfgI=;
-  b=anMJAV56slPzoLJLm8CV4apSUhYIkAWjSpqH+37f9mCU/xlNLzFYQ8Cd
-   BagUvcKdtmsERH7hg6VeAtd0CC8azIavdVoVI3Hr73P/5IrUHGFGV4Iun
-   OAjQT9cuKFgATku2IIFq0qqsIKBot9S49bTrEzYlPNJARRbQqanhb05hn
-   pLFPP75ftDWwkriWvAgtts5SpAdnOES41GwslhmNE5btu7PwqoLSX1hoo
-   OAWzrRUrYThjfbzg4Sqy49UNaWF4GGJDB0bGx12zw+YkUDsFkciv0Ft4L
-   LRv0FhVkG7whq2Gna3CApYm1cPyvB7aZNmsCJbAW6VyNwLdAGu0v9gKOs
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="264971399"
+  bh=NE84QOXZy1e5nGVv6CztebdOwty/RqjHdmaJZOueXbw=;
+  b=aZKtBOwM0/8p+XEdMn0bJUEXgf2aoe6YlJKBohfUW4zQKqpSuTH4X5jR
+   HweW6mchlx8122GWZKuXoM/cjJLezDenuFPtJvT3b1qlls19vfAcSSdyi
+   qZecXWHbsKuXr3GW2sgRuYP66S937DmxBPX84Iw8C0Y/qQNtPy4ZayAZE
+   08ouY7vYi2ahhqAKQHwhbdWS8RgRznHVRoWL0Y17vgiqXnE3CAdJzP50P
+   5zOV8xqpEDCZWfxZAXRYWaJNWdHCXyxiZyYXPIbS2bvHhaD8U8BLNNmUp
+   EHjJElGQqyKRy1jqq2j3wEqBsEovS46BYhXCNi2umhhNwL45py8Jye/bA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="265348314"
 X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="264971399"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 00:39:26 -0700
+   d="scan'208";a="265348314"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 01:27:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="531988427"
+   d="scan'208";a="557615456"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga006.jf.intel.com with ESMTP; 25 Apr 2022 00:39:20 -0700
-Date:   Mon, 25 Apr 2022 15:31:39 +0800
+  by orsmga007.jf.intel.com with ESMTP; 25 Apr 2022 01:27:48 -0700
+Date:   Mon, 25 Apr 2022 16:20:06 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     Tianfei Zhang <tianfei.zhang@intel.com>, hao.wu@intel.com,
-        trix@redhat.com, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, corbet@lwn.net,
+To:     Tianfei Zhang <tianfei.zhang@intel.com>
+Cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        linux-fpga@vger.kernel.org,
         Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: Re: [PATCH v7 1/2] fpga: dfl: check feature type before parse irq
-  info
-Message-ID: <20220425073139.GC363795@yilunxu-OptiPlex-7050>
-References: <20220419032942.427429-1-tianfei.zhang@intel.com>
- <20220419032942.427429-2-tianfei.zhang@intel.com>
- <YmFuPdzQCL5LwH2F@archbook>
+Subject: Re: [PATCH v2] fpga: dfl: Allow Port to be linked to FME's DFL
+Message-ID: <20220425082006.GD363795@yilunxu-OptiPlex-7050>
+References: <20220419075224.430824-1-tianfei.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmFuPdzQCL5LwH2F@archbook>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220419075224.430824-1-tianfei.zhang@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,97 +59,68 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 07:46:21AM -0700, Moritz Fischer wrote:
-> On Mon, Apr 18, 2022 at 11:29:41PM -0400, Tianfei Zhang wrote:
-> > From: Tianfei zhang <tianfei.zhang@intel.com>
-> > 
-> > Previously the feature IDs defined are unique, no matter
-> > which feature type. But currently we want to extend its
-> > usage to have a per-type feature ID space, so this patch
-> > adds feature type checking as well just before look into
-> > feature ID for different features which have irq info.
-> > 
-> > Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > Acked-by: Wu Hao <hao.wu@intel.com>
-> Acked-by: Moritz Fischer <mdf@kernel.org>
+On Tue, Apr 19, 2022 at 03:52:24AM -0400, Tianfei Zhang wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> 
+> Currently we use PORTn_OFFSET to locate PORT DFLs, and PORT DFLs are not
+> connected FME DFL. But for some cases (e.g. Intel Open FPGA Stack device),
+> PORT DFLs are connected to FME DFL directly, so we don't need to search
+> PORT DFLs via PORTn_OFFSET again. If BAR value of PORTn_OFFSET is 0x7
+> (FME_PORT_OFST_BAR_SKIP) then driver will skip searching the DFL for that
+> port. If BAR value is invalid, return -EINVAL.
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+> ---
+> v2: return -EINVAL if bar number invalid.
+> ---
+>  drivers/fpga/dfl-pci.c | 11 +++++++++++
+>  drivers/fpga/dfl.h     |  1 +
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> index 86ed9e4223d3..5bd6ef231ccc 100644
+> --- a/drivers/fpga/dfl-pci.c
+> +++ b/drivers/fpga/dfl-pci.c
+> @@ -263,6 +263,17 @@ static int find_dfls_by_default(struct pci_dev *pcidev,
+>  			 */
+>  			bar = FIELD_GET(FME_PORT_OFST_BAR_ID, v);
+>  			offset = FIELD_GET(FME_PORT_OFST_DFH_OFST, v);
+> +			if (bar == FME_PORT_OFST_BAR_SKIP) {
+> +				dev_dbg(&pcidev->dev, "skipping search DFL for port %d on BAR %d\n",
+> +					i, bar);
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+I suggest we remove the dev_dbg, it's a normal case in DFL walking.
 
-> > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > ---
-> > v7:
-> >   - Add Reviewed-by and Acked-by tag.
-> > v4:
-> >   - Fix the git commit from Hao's comments.
-> >   - Split documentation into another patch.
-> > v3:
-> >   - Remove "Fixes" in commit log with Hao's comment, this is a
-> >     extension not a bug fix.
-> > v2:
-> >   - add DFL Feature ID Registry in documentation.
-> > ---
-> >  drivers/fpga/dfl.c | 38 ++++++++++++++++++++++----------------
-> >  1 file changed, 22 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> > index 599bb21d86af..6bff39ff21a0 100644
-> > --- a/drivers/fpga/dfl.c
-> > +++ b/drivers/fpga/dfl.c
-> > @@ -940,9 +940,12 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
-> >  {
-> >  	void __iomem *base = binfo->ioaddr + ofst;
-> >  	unsigned int i, ibase, inr = 0;
-> > +	enum dfl_id_type type;
-> >  	int virq;
-> >  	u64 v;
-> >  
-> > +	type = feature_dev_id_type(binfo->feature_dev);
-> > +
-> >  	/*
-> >  	 * Ideally DFL framework should only read info from DFL header, but
-> >  	 * current version DFL only provides mmio resources information for
-> > @@ -957,22 +960,25 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
-> >  	 * code will be added. But in order to be compatible to old version
-> >  	 * DFL, the driver may still fall back to these quirks.
-> >  	 */
-> > -	switch (fid) {
-> > -	case PORT_FEATURE_ID_UINT:
-> > -		v = readq(base + PORT_UINT_CAP);
-> > -		ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> > -		inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> > -		break;
-> > -	case PORT_FEATURE_ID_ERROR:
-> > -		v = readq(base + PORT_ERROR_CAP);
-> > -		ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> > -		inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> > -		break;
-> > -	case FME_FEATURE_ID_GLOBAL_ERR:
-> > -		v = readq(base + FME_ERROR_CAP);
-> > -		ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> > -		inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> > -		break;
-> > +	if (type == PORT_ID) {
-> > +		switch (fid) {
-> > +		case PORT_FEATURE_ID_UINT:
-> > +			v = readq(base + PORT_UINT_CAP);
-> > +			ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> > +			inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> > +			break;
-> > +		case PORT_FEATURE_ID_ERROR:
-> > +			v = readq(base + PORT_ERROR_CAP);
-> > +			ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> > +			inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> > +			break;
-> > +		}
-> > +	} else if (type == FME_ID) {
-> > +		if (fid == FME_FEATURE_ID_GLOBAL_ERR) {
-> > +			v = readq(base + FME_ERROR_CAP);
-> > +			ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> > +			inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> > +		}
-> >  	}
-> >  
-> >  	if (!inr) {
-> > -- 
-> > 2.26.2
-> > 
+> +				continue;
+> +			} else if (bar >= PCI_STD_NUM_BARS) {
+> +				dev_err(&pcidev->dev, "bad BAR %d for port %d\n",
+> +					bar, i);
+> +				ret = -EINVAL;
+> +				break;
+
+The code is workable, but I suggest we use goto instead of break for
+error out.
+
+Thanks,
+Yilun
+
+> +			}
+> +
+>  			start = pci_resource_start(pcidev, bar) + offset;
+>  			len = pci_resource_len(pcidev, bar) - offset;
+>  
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 53572c7aced0..e0f0abfbeb8c 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -91,6 +91,7 @@
+>  #define FME_HDR_PORT_OFST(n)	(0x38 + ((n) * 0x8))
+>  #define FME_HDR_BITSTREAM_ID	0x60
+>  #define FME_HDR_BITSTREAM_MD	0x68
+> +#define FME_PORT_OFST_BAR_SKIP	7
+>  
+>  /* FME Fab Capability Register Bitfield */
+>  #define FME_CAP_FABRIC_VERID	GENMASK_ULL(7, 0)	/* Fabric version ID */
+> -- 
+> 2.26.2
