@@ -2,110 +2,144 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4413050E1F1
-	for <lists+linux-fpga@lfdr.de>; Mon, 25 Apr 2022 15:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02C850EB1A
+	for <lists+linux-fpga@lfdr.de>; Mon, 25 Apr 2022 23:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236044AbiDYNem (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 25 Apr 2022 09:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S245689AbiDYVLp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 25 Apr 2022 17:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242078AbiDYNee (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 25 Apr 2022 09:34:34 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44EFBA5;
-        Mon, 25 Apr 2022 06:31:30 -0700 (PDT)
+        with ESMTP id S245685AbiDYVLm (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 25 Apr 2022 17:11:42 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEFC6D976;
+        Mon, 25 Apr 2022 14:08:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650893490; x=1682429490;
+  t=1650920916; x=1682456916;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LeeHzvwWWIhoJET4Iby9NAsLpM72fA5MdvAHRDjBpqQ=;
-  b=mRO0MNdsbOJI6HUbDPtpFlxZJSpWLWYEZQetSRdeJeA46CsInfy41C11
-   wo2TVI5MiSoNsV/Wfs+K6O0o4tTK0psb6rfH5xu3gttldeBV5g1+7fx5B
-   hdly0soWuDImL61DQQQFyDMjp7spVhVTwRS3slwm3rpA1ST0fX2QkwEWC
-   JNrv0jSQbMlGfbtAnlzgdBVeSkO3ymngfFXT/s7igoX9ypx8e339uy0FY
-   DgUwzGso//PuZmB13WQMY0xbYXSLkj9Fah/C3iBlOyMWkDVUxhpGkJPis
-   pPH1gtU6VlN2pL5/v9v2wdI/EBxRe1HAEL2kP8YTi1iskx7UDRrvH89bY
+  bh=w9h6Cdx4XjslBo66HrakyPOtDRXWJENi2JZ7dmBusrQ=;
+  b=WxiLxXoLjnOUypy6ZJghPASHB/D/JGsUdE+mW994LJmgleaZ0DV0SP97
+   TNZLIIRMYBdO+owWgjTVBA7ikq2ALPcV/V9jLgY2qE7buxplLmoPVwQ14
+   0CMrJXtOHA84Ka1KSxAccosqGFLS8fz8m1LtcqvaW8FtBhCJvMpLQ//Lc
+   opg5THyeHyddVhjua25DV+wzfaIF6CGha0QsO2FxZF4MU4eSEm8Xk73Mc
+   h8SFVItnO3eQQdjezEbbBGGf46h1cPYRof0/jgqu93azAwLjOpmdYe7UI
+   etozUQ0XzfNgRE5PrjHGb6uEQOLV2+gDejN6KKTd4aIYStIvkxQmkwpgp
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="247174639"
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="247174639"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 06:31:30 -0700
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="262961519"
+X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
+   d="scan'208";a="262961519"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 14:08:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="579286511"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2022 06:31:28 -0700
-Date:   Mon, 25 Apr 2022 21:23:46 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        git@xilinx.com
-Subject: Re: [PATCH v6 1/5] fpga: zynq: Fix incorrect variable type
-Message-ID: <20220425132346.GB367066@yilunxu-OptiPlex-7050>
-References: <20220423170235.2115479-1-nava.manne@xilinx.com>
- <20220423170235.2115479-2-nava.manne@xilinx.com>
+X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
+   d="scan'208";a="564254914"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2022 14:08:32 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nj5wd-0002sj-V6;
+        Mon, 25 Apr 2022 21:08:31 +0000
+Date:   Tue, 26 Apr 2022 05:08:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, trix@redhat.com,
+        marpagan@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@linux.intel.com,
+        tianfei.zhang@intel.com, Russ Weight <russell.h.weight@intel.com>
+Subject: Re: [PATCH v1 1/1] fpga: dfl: fix the kernel warning when
+ release/assign ports for SRIOV
+Message-ID: <202204260456.dOkQIjjg-lkp@intel.com>
+References: <20220425174827.89819-1-russell.h.weight@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220423170235.2115479-2-nava.manne@xilinx.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220425174827.89819-1-russell.h.weight@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 10:32:31PM +0530, Nava kishore Manne wrote:
-> zynq_fpga_has_sync () API is expecting "u8 *" but the
-> formal parameter that was passed is of type "const char *".
-> fix this issue by changing the buf type to "const char *"
-> 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> Acked-by: Xu Yilun <yilun.xu@intel.com>
+Hi Russ,
 
-Hi Nava:
+I love your patch! Perhaps something to improve:
 
-There is a lkp bug report yet to be fixed. Please fix it.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.18-rc4 next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks,
-Yilun
+url:    https://github.com/intel-lab-lkp/linux/commits/Russ-Weight/fpga-dfl-fix-the-kernel-warning-when-release-assign-ports-for-SRIOV/20220426-014949
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git af2d861d4cd2a4da5137f795ee3509e6f944a25b
+config: hexagon-randconfig-r041-20220425 (https://download.01.org/0day-ci/archive/20220426/202204260456.dOkQIjjg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4b4db40cd1b608457d6e1fcf95443bd940d01f3c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Russ-Weight/fpga-dfl-fix-the-kernel-warning-when-release-assign-ports-for-SRIOV/20220426-014949
+        git checkout 4b4db40cd1b608457d6e1fcf95443bd940d01f3c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/fpga/
 
-> ---
-> Changes for v2:
->                 -None.
-> Changes for v3:
->                - Changed arg buf type to "const char *" as suggested by Tom.
->                - update zynq_fpga_has_sync () API description to align with API
->                  functionality.
-> Changes for v4:
->                - None.
-> 
-> Changes for v5:
->                - Dropped the irrelevant doc update changes.
-> Changes for v6:
->                - None.
-> 
->  drivers/fpga/zynq-fpga.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-> index 426aa34c6a0d..6beaba9dfe97 100644
-> --- a/drivers/fpga/zynq-fpga.c
-> +++ b/drivers/fpga/zynq-fpga.c
-> @@ -239,7 +239,7 @@ static irqreturn_t zynq_fpga_isr(int irq, void *data)
->   * the correct byte order, and be dword aligned. The input is a Xilinx .bin
->   * file with every 32 bit quantity swapped.
->   */
-> -static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
-> +static bool zynq_fpga_has_sync(const char *buf, size_t count)
->  {
->  	for (; count >= 4; buf += 4, count -= 4)
->  		if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
-> -- 
-> 2.25.1
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/fpga/dfl.c:54: warning: cannot understand function prototype: 'struct dfl_dev_info '
+   drivers/fpga/dfl.c:74: warning: cannot understand function prototype: 'struct dfl_chardev_info '
+   drivers/fpga/dfl.c:154: warning: Function parameter or member 'fdata' not described in 'dfl_fpga_port_ops_get'
+   drivers/fpga/dfl.c:154: warning: Excess function parameter 'pdev' description in 'dfl_fpga_port_ops_get'
+   drivers/fpga/dfl.c:220: warning: Function parameter or member 'fdata' not described in 'dfl_fpga_check_port_id'
+   drivers/fpga/dfl.c:220: warning: Excess function parameter 'pdev' description in 'dfl_fpga_check_port_id'
+   drivers/fpga/dfl.c:716: warning: Function parameter or member 'revision' not described in 'dfl_feature_info'
+>> drivers/fpga/dfl.c:1509: warning: expecting prototype for __dfl_fpga_cdev_find_port(). Prototype was for __dfl_fpga_cdev_find_port_data() instead
+
+
+vim +1509 drivers/fpga/dfl.c
+
+543be3d8c999b3 Wu Hao   2018-06-30  1490  
+5d56e117001996 Wu Hao   2018-06-30  1491  /**
+5d56e117001996 Wu Hao   2018-06-30  1492   * __dfl_fpga_cdev_find_port - find a port under given container device
+5d56e117001996 Wu Hao   2018-06-30  1493   *
+5d56e117001996 Wu Hao   2018-06-30  1494   * @cdev: container device
+5d56e117001996 Wu Hao   2018-06-30  1495   * @data: data passed to match function
+5d56e117001996 Wu Hao   2018-06-30  1496   * @match: match function used to find specific port from the port device list
+5d56e117001996 Wu Hao   2018-06-30  1497   *
+5d56e117001996 Wu Hao   2018-06-30  1498   * Find a port device under container device. This function needs to be
+5d56e117001996 Wu Hao   2018-06-30  1499   * invoked with lock held.
+5d56e117001996 Wu Hao   2018-06-30  1500   *
+5d56e117001996 Wu Hao   2018-06-30  1501   * Return: pointer to port's platform device if successful, NULL otherwise.
+5d56e117001996 Wu Hao   2018-06-30  1502   *
+5d56e117001996 Wu Hao   2018-06-30  1503   * NOTE: you will need to drop the device reference with put_device() after use.
+5d56e117001996 Wu Hao   2018-06-30  1504   */
+4b4db40cd1b608 Xu Yilun 2022-04-25  1505  struct dfl_feature_dev_data *
+4b4db40cd1b608 Xu Yilun 2022-04-25  1506  __dfl_fpga_cdev_find_port_data(struct dfl_fpga_cdev *cdev, void *data,
+4b4db40cd1b608 Xu Yilun 2022-04-25  1507  			       int (*match)(struct dfl_feature_dev_data *,
+4b4db40cd1b608 Xu Yilun 2022-04-25  1508  					    void *))
+5d56e117001996 Wu Hao   2018-06-30 @1509  {
+4b4db40cd1b608 Xu Yilun 2022-04-25  1510  	struct dfl_feature_dev_data *fdata;
+5d56e117001996 Wu Hao   2018-06-30  1511  
+4b4db40cd1b608 Xu Yilun 2022-04-25  1512  	list_for_each_entry(fdata, &cdev->port_dev_list, node) {
+4b4db40cd1b608 Xu Yilun 2022-04-25  1513  		if (match(fdata, data))
+4b4db40cd1b608 Xu Yilun 2022-04-25  1514  			return fdata;
+5d56e117001996 Wu Hao   2018-06-30  1515  	}
+5d56e117001996 Wu Hao   2018-06-30  1516  
+5d56e117001996 Wu Hao   2018-06-30  1517  	return NULL;
+5d56e117001996 Wu Hao   2018-06-30  1518  }
+4b4db40cd1b608 Xu Yilun 2022-04-25  1519  EXPORT_SYMBOL_GPL(__dfl_fpga_cdev_find_port_data);
+5d56e117001996 Wu Hao   2018-06-30  1520  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
