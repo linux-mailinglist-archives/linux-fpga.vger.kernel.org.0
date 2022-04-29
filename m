@@ -2,55 +2,57 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BBB513FE3
-	for <lists+linux-fpga@lfdr.de>; Fri, 29 Apr 2022 03:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E12D513FE6
+	for <lists+linux-fpga@lfdr.de>; Fri, 29 Apr 2022 03:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353601AbiD2BCR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 28 Apr 2022 21:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
+        id S229802AbiD2BEO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 28 Apr 2022 21:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345344AbiD2BCQ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 28 Apr 2022 21:02:16 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AA8B9F38
-        for <linux-fpga@vger.kernel.org>; Thu, 28 Apr 2022 17:59:00 -0700 (PDT)
+        with ESMTP id S244954AbiD2BEN (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 28 Apr 2022 21:04:13 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA228A7CA;
+        Thu, 28 Apr 2022 18:00:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651193940; x=1682729940;
+  t=1651194057; x=1682730057;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
   bh=KKNCxTu+99qwXWlFXVm9YNtdsjLfxYjBNRBEyc2G6G4=;
-  b=PuNvJKnzrJi7HKSep+48S8ZlgN/J0PC5LruEjfF1eSv8XFviAeGpQmju
-   ZvIGlHrqB3GKzyAiEPjUXsD5MQWua3xK+fvxkS7bv4l3XdvqRE5S5PO+Q
-   9bjCsgHFWmJkyrkYpFUN7tU+QNlbPMInR7gXA8jCVcfgiz+idTQtyldOZ
-   jJFjoT+dlJcbZQFTrKZIXG0PBCBmAu7jW/12uHGMcse+tFEooA4yBe9tb
-   Fo1zcJqgeSmDQp6tjCVmA9LjimDo5nRg2siupY4yHeh8l8QrIZJ4X07Zk
-   cawCq9jSXtx1xpsMWvZuwi5pnqNaTdoJoq1wnrwYTngHzeAO624R9FPA1
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="246398152"
+  b=mAQQbcp2k0zL78W8gC19S7tyUJW6prlN0ZnE4+NGTKPWXVwcB7zIL8Oc
+   HTuYHJKcLNzfsFsZ2J9OglEqEEJhNoWxIVgveCekEcmn4mL0DS4QArGqN
+   sczpap62sfdKkNy12P0q7v2CuWlYD2/mt247OboTzxhi49adm3V8OY8W2
+   CPW0aiwGutNFiX9SiQ75RNkts+dL7FxFRGLnOp65DAfkcXTmsrXIihDjo
+   21/sM0oOLQoFlThvL4QzpbXmHvvNiBtAI+4tl9eLbynkw6DGjapAlWprb
+   QySvn21bb7NgydW3gcqseYJmR3ZwfFMCFH5iEcVtzo4sKny8WQlZ+MtOk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="247038702"
 X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="246398152"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 17:59:00 -0700
+   d="scan'208";a="247038702"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 18:00:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="651515393"
+   d="scan'208";a="629827632"
 Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Apr 2022 17:58:58 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 28 Apr 2022 18:00:54 -0700
 From:   Tianfei Zhang <tianfei.zhang@intel.com>
 To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        yilun.xu@intel.com, linux-fpga@vger.kernel.org
-Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
         Tianfei Zhang <tianfei.zhang@intel.com>
 Subject: [PATCH v3] uio: dfl: add HSSI subsystem feature id
-Date:   Thu, 28 Apr 2022 20:55:21 -0400
-Message-Id: <20220429005521.607678-1-tianfei.zhang@intel.com>
+Date:   Thu, 28 Apr 2022 20:57:26 -0400
+Message-Id: <20220429005726.607804-1-tianfei.zhang@intel.com>
 X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
