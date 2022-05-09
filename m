@@ -2,137 +2,135 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204E1520359
-	for <lists+linux-fpga@lfdr.de>; Mon,  9 May 2022 19:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D616E5203B3
+	for <lists+linux-fpga@lfdr.de>; Mon,  9 May 2022 19:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239533AbiEIRMR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 9 May 2022 13:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S239750AbiEIRmN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 9 May 2022 13:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239600AbiEIRMP (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 9 May 2022 13:12:15 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041EE1C3467;
-        Mon,  9 May 2022 10:08:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652116097; x=1683652097;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jTndZMzOHisiaEyuPzpUVJ/C4tzpGgGs5GoCbyf0aqY=;
-  b=Z3V4tyy08rg4IrSJeYC6TJeQlSf4qOyg67mClIXZKwodOQN7gMY74XQA
-   kvehsqxcBKzeJWM2GAV9bs+9GEUEYESL0pBrSCvPoX9KbLgaOsMq+6P03
-   tZR/Zu4CDXcx7qZ+OALa0khDduEPQ7nZZuiR2lceAbjw1PplTiFswxBYR
-   F4rBRFcGBoWhqJ6r7KFB+H5Fcj3hiDLtRDqAtTdQtFMo/nR6V+eXoOdhR
-   d0TYmcPRTjFZsNkUa0ZukT7nwWtXIHueLDopn8lxA7pOn4W/1DXQlwhaf
-   INSUJq2V8UP22GRoZppfXZn6s2jdAiHZ8uOGeu/KP56vgWhVBeaOpmCM2
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="355539505"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="355539505"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 10:08:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="592908580"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 09 May 2022 10:08:12 -0700
-Date:   Tue, 10 May 2022 01:00:15 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Moritz Fischer <mdf@kernel.org>,
-        Nava kishore Manne <nava.manne@xilinx.com>,
-        Wu Hao <hao.wu@intel.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-fpga@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] fpga: zynq: fix zynq_fpga_has_sync()
-Message-ID: <20220509170015.GC470015@yilunxu-OptiPlex-7050>
-References: <YnkE8AbimDa7sfN8@kili>
+        with ESMTP id S239747AbiEIRmL (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 9 May 2022 13:42:11 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D30218FF4;
+        Mon,  9 May 2022 10:38:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=dyMkGRhEXK18co8K6ojKMRdLSlsCCUiGZiN2gvPJQFQ=;
+        b=KAU9UP5Ok7w0r/jxLmL0P/b5746oBxM41MJIfVHMveebQXD7Xe3kxaNRxXpWOoDyuKVUcpeGp5BRP
+         4ndjNXuX0+5Rl5ZNCNr4E0VpLBsM90O6dTGv/5HVxlbIBatYja6tDnp7ZVEma8hnmF1lms2TpqaW1n
+         YSZ2z+PjJojQVzeUvJVu18d711oesJYuGQHtGgvJI2MdV6YDSqL9jaRES2G/x57FbVOIgKnmp5rlvG
+         n2/r1+xKaXj75EKqmo/SuJhR/y4dGFia/E+J2f9GnMvy+1C8G2lyiNXzBKbGH2tX+Awo6NOXHOTTmF
+         ep61Aw76gFOrdauKLjKBjbNZzR7L59Q==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1422, Stamp: 3], Multi: [Enabled, t: (0.000013,0.008779)], BW: [Enabled, t: (0.000014,0.000001)], RTDA: [Enabled, t: (0.105748), Hit: No, Details: v2.39.0; Id: 15.52k9mu.1g2kuc2jg.10jil; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([178.70.36.174])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Mon, 9 May 2022 20:37:46 +0300
+Date:   Mon, 9 May 2022 20:16:21 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Conor.Dooley@microchip.com
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru
+Subject: Re: [PATCH v11 2/3] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Message-ID: <20220509171621.zk4owxwlngxjodgz@x260>
+References: <20220507074304.11144-1-i.bornyakov@metrotek.ru>
+ <20220507074304.11144-3-i.bornyakov@metrotek.ru>
+ <bd5cb37b-ee56-f6d5-2d98-c08566b60728@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnkE8AbimDa7sfN8@kili>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bd5cb37b-ee56-f6d5-2d98-c08566b60728@microchip.com>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, May 09, 2022 at 03:11:28PM +0300, Dan Carpenter wrote:
-> The type needs to be u8.  The type was accidentally changed to char as
-> a cleanup.  Unfortunately, that meant that the zynq_fpga_has_sync()
-> function never returns true.  This bug was detected by Smatch and Clang:
+On Mon, May 09, 2022 at 11:41:18AM +0000, Conor.Dooley@microchip.com wrote:
+> Hey Ivan, one comment below.
+> Thanks,
+> Conor.
 > 
-> drivers/fpga/zynq-fpga.c:245 zynq_fpga_has_sync() warn: impossible condition '(buf[2] == 153) => ((-128)-127 == 153)'
-> drivers/fpga/zynq-fpga.c:246 zynq_fpga_has_sync() warn: impossible condition '(buf[3] == 170) => ((-128)-127 == 170)'
+> On 07/05/2022 08:43, Ivan Bornyakov wrote:
+> > ... snip ...
+> > +static int mpf_read_status(struct spi_device *spi)
+> > +{
+> > +       u8 status, status_command = MPF_SPI_READ_STATUS;
+> > +       struct spi_transfer xfer = {
+> > +               .tx_buf = &status_command,
+> > +               .rx_buf = &status,
+> > +               .len = 1,
+> > +       };
+> > +       int ret = spi_sync_transfer(spi, &xfer, 1);
+> > +
+> > +       if ((status & MPF_STATUS_SPI_VIOLATION) ||
+> > +           (status & MPF_STATUS_SPI_ERROR))
+> > +               ret = -EIO;
+> > +
+> > +       return ret ? : status;
+> > +}
+> > +
+> > ... snip ...
+> > +
+> > +static int poll_status_not_busy(struct spi_device *spi, u8 mask)
+> > +{
+> > +       int status, timeout = MPF_STATUS_POLL_TIMEOUT;
+> > +
+> > +       while (timeout--) {
+> > +               status = mpf_read_status(spi);
+> > +               if (status < 0 ||
+> > +                   (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask))))
+> > +                       return status;
+> > +
+> > +               usleep_range(1000, 2000);
+> > +       }
+> > +
+> > +       return -EBUSY;
+> > +}
 > 
-> drivers/fpga/zynq-fpga.c:246:14: warning: result of comparison of
-> constant 170 with expression of type 'const char' is always false
-> [-Wtautological-constant-out-of-range-compare]
->                        buf[3] == 0xaa)
->                        ~~~~~~ ^  ~~~~
-> drivers/fpga/zynq-fpga.c:245:50: warning: result of comparison of
-> constant 153 with expression of type 'const char' is always false
-> [-Wtautological-constant-out-of-range-compare]
->                    if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
->                                                            ~~~~~~ ^  ~~~~
+> Is there a reason you changed this from the snippet you sent me
+> in the responses to version 8:
+> static int poll_status_not_busy(struct spi_device *spi, u8 mask)
+> {
+> 	u8 status, status_command = MPF_SPI_READ_STATUS;
+> 	int ret, timeout = MPF_STATUS_POLL_TIMEOUT;
+> 	struct spi_transfer xfer = {
+> 		.tx_buf = &status_command,
+> 		.rx_buf = &status,
+> 		.len = 1,
+> 	};
 > 
-> Fixes: ada14a023a64 ("fpga: zynq: Fix incorrect variable type")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
-> The ada14a023a64 ("fpga: zynq: Fix incorrect variable type") patch went
-> through six of revisions.  The kbuild bug found this bug early on
-> but the author ingored kbuild-bot and kept resending the buggy patch
-> anyway.
+> 	while (timeout--) {
+> 		ret = spi_sync_transfer(spi, &xfer, 1);
+> 		if (ret < 0)
+> 			return ret;
 > 
-> After the patch was merged then I sent a separate bug report and Xu
-> Yilun asked about why only the author was on the CC list for the first
-> bug reports.  A valid question, definitely.  I will poke the kbuild
-> devs about this.
+> 		if (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask)))
+> 			return status;
 > 
-> Hm...  Actually looking through the list there have been a bunch of bug
-> reports about this because both Smatch and Clang complain so kbuild
-> sends duplicate warnings for this type of bug.  And then kbuild
-> sends another to say "This issue is still remaining" warning.  And then
-> Xu Yilun sent an email "Kbuild-bot is still complaining.  Please don't
-> forget to fix this."  So that's at least four public emails about this
-> and one or two private emails directly from kbuild-bot to the author.
+> 		usleep_range(1000, 2000);
+> 	}
 > 
-> The kbuild-bot wanted to send *another* warning today, but I decided to
-> send a fix instead.
+> 	return -EBUSY;
+> }
 > 
-> LOL.
-> 
->  drivers/fpga/zynq-fpga.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-> index 6beaba9dfe97..426aa34c6a0d 100644
-> --- a/drivers/fpga/zynq-fpga.c
-> +++ b/drivers/fpga/zynq-fpga.c
-> @@ -239,7 +239,7 @@ static irqreturn_t zynq_fpga_isr(int irq, void *data)
->   * the correct byte order, and be dword aligned. The input is a Xilinx .bin
->   * file with every 32 bit quantity swapped.
->   */
-> -static bool zynq_fpga_has_sync(const char *buf, size_t count)
-> +static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
+> With the current version, I hit the "Failed to write bitstream
+> frame" check in mpf_ops_write at random points in the transfer.
+> Replacing poll_status_not_busy with the above allows it to run
+> to completion.
 
-Hi Dan & Moritz:
+In my eyes they are equivalent, aren't they?
 
-Thanks for the patch. But it actually reverts Nava's patch. Since Nava's
-patch is not pushed to linux-next yet, could we just drop it from
-linux-fpga?
-
-Thanks,
-Yilun
-
->  {
->  	for (; count >= 4; buf += 4, count -= 4)
->  		if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
-> -- 
-> 2.35.1
