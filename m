@@ -2,122 +2,118 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0953C526785
-	for <lists+linux-fpga@lfdr.de>; Fri, 13 May 2022 18:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3758A527A77
+	for <lists+linux-fpga@lfdr.de>; Sun, 15 May 2022 23:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382504AbiEMQt4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 13 May 2022 12:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S232681AbiEOVsl (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 15 May 2022 17:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382497AbiEMQtx (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 13 May 2022 12:49:53 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2DD527DC;
-        Fri, 13 May 2022 09:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=Y+q3Espln8Rodgx5Nn4tnLIErSJz4K4izMOM418Zr7I=;
-        b=Zcaf7SnnF8CytZ36f7XT3WiBaHo2n41mAy5qjIErCPgYWkyKIdJPNQ00x4aFCY4Sd2wFakFxHijIP
-         UMi3ZVhsDzdlin8MqnXuVAuJ6AUwjMioiIT3DGdUtc9NXvCCsayBHLhmoc3yPgdh4OZobN6WhcpdOt
-         Qv/sjVRi9FIiKhGeM/j47ExlBtzRrSpG3SPbQUDmye0VYVgoyipC+9E+Qam4EaEN/jlvFCHrmKpLPX
-         REqeKxmNHM+i/eyiRJzx6RKgHF9aoEX2WJaD25eowk0b7xXmGLyeuGee/AU8MLxA7p8vXcNPYMnGON
-         FH4XM7X/2JTy826cX5lDdNrg3YZEwvQ==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.007906)], BW: [Enabled, t: (0.000015,0.000001)], RTDA: [Enabled, t: (0.069878), Hit: No, Details: v2.39.0; Id: 15.52k2va.1g2v56i9t.q397; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([178.70.36.174])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Fri, 13 May 2022 19:49:29 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, Conor.Dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru, Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v12 3/3] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
-Date:   Fri, 13 May 2022 19:27:55 +0300
-Message-Id: <20220513162755.16201-4-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220513162755.16201-1-i.bornyakov@metrotek.ru>
-References: <20220513162755.16201-1-i.bornyakov@metrotek.ru>
+        with ESMTP id S231150AbiEOVsl (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 15 May 2022 17:48:41 -0400
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB2EEE09
+        for <linux-fpga@vger.kernel.org>; Sun, 15 May 2022 14:48:37 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id j6so12388928pfe.13
+        for <linux-fpga@vger.kernel.org>; Sun, 15 May 2022 14:48:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=+DZmOdrBjecVLFvcLSDnIUU5cvv4JPHwOh5/ASxX8z0=;
+        b=rMaP6Eubhca1wiU5e37KIzoUWs3Xp0k/5aZY7b3IHLA2I9uei3EYnQ1qNrxXXxyyWA
+         HmWAQSMJNoXG9k2ZOYrlOstxRmlqVRZeoLrsPxGLcNyGIYXmwe3iPqG7nB3ODJLTxaTt
+         79zxZmH/yhHfVVxlpjPiOCi7cxch8Y7CpiLkhj4woniS8lfrDXiB06JVGR635tghAknV
+         Ivz9TID+anMVzn1CnRc/Q5TVcNL/SF2b9+K3UbbbOBb4QqXhqUZCs7TGH0n+f6fi5Czd
+         Q6f/lOH7F83QwMVjXi8WmXlGbfM40b2A066aQBDlkfcW7Oz+bZb+ueN2KQWgSvI1emBh
+         toUg==
+X-Gm-Message-State: AOAM5321oO2Bb0MlahtNUhP7nqi7/Ow3dbUHrRbrxElyKmf2P/yU6Ch6
+        l62qZL5zPJUzGy0PPzfDwoA=
+X-Google-Smtp-Source: ABdhPJxmNbAA9ZIBr6bNXT5UHbfHwPn4lxuZBKFaJTUsQxhiik+qYs/koj7BYWjxNcoPCEsW82YY0Q==
+X-Received: by 2002:a63:81c3:0:b0:3da:fbf1:16ce with SMTP id t186-20020a6381c3000000b003dafbf116cemr13364131pgd.62.1652651316415;
+        Sun, 15 May 2022 14:48:36 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:ece1:6248:e226:d2e0:1f33])
+        by smtp.gmail.com with ESMTPSA id t24-20020a17090ad51800b001dc1e6db7c2sm6992570pju.57.2022.05.15.14.48.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 May 2022 14:48:35 -0700 (PDT)
+Date:   Sun, 15 May 2022 14:48:34 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-fpga@vger.kernel.org, yilun.xu@intel.com, hao.wu@intel.com,
+        moritzf@google.com
+Subject: [GIT PULL] FPGA Manager changes for 5.19-rc1
+Message-ID: <YoF1Mo1ZK69orQ0I@archbook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
-slave SPI to load .dat formatted bitstream image.
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-new file mode 100644
-index 000000000000..aee45cb15592
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/microchip,mpf-spi-fpga-mgr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip Polarfire FPGA manager.
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description:
-+  Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
-+  load the bitstream in .dat format.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - microchip,mpf-spi-fpga-mgr
-+
-+  reg:
-+    description: SPI chip select
-+    maxItems: 1
-+
-+  spi-max-frequency: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            fpga_mgr@0 {
-+                    compatible = "microchip,mpf-spi-fpga-mgr";
-+                    spi-max-frequency = <20000000>;
-+                    reg = <0>;
-+            };
-+    };
--- 
-2.35.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga tags/fpga-for-5.19-rc1
 
+for you to fetch changes up to ae23f746d7442909a19bd43397b567145d6e5db3:
+
+  fpga: dfl: Allow Port to be linked to FME's DFL (2022-05-10 16:05:38 +0800)
+
+----------------------------------------------------------------
+FPGA Manager changes for 5.19-rc1
+
+FPGA Manager
+
+- My change moves the linux-fpga repository to a shared
+  location w/ shared responsibilities between maintainers
+- Nava's changes fix coding style and kernel-docs
+
+DFL
+
+- Matthew's change allows ports to be linked to FMEs.
+- Tianfei's changes clean up some documentation and
+  ensure the feature type is checked before parsing IRQs
+
+All patches have been reviewed on the mailing list, and have been in the
+last linux-next releases (as part of our for-next branch).
+
+Signed-off-by: Moritz Fischer <mdf@kernel.org>
+
+----------------------------------------------------------------
+Matthew Gerlach (1):
+      fpga: dfl: Allow Port to be linked to FME's DFL
+
+Moritz Fischer (1):
+      MAINTAINERS: Update linux-fpga repository location
+
+Nava kishore Manne (4):
+      fpga: fix for coding style issues
+      fpga: fpga-mgr: fix kernel-doc warnings
+      fpga: Use tab instead of space indentation
+      fpga: fpga-region: fix kernel-doc formatting issues
+
+Tianfei zhang (2):
+      fpga: dfl: check feature type before parse irq info
+      Documentation: fpga: dfl: add link address of feature id table
+
+ Documentation/fpga/dfl.rst       |  5 +++++
+ MAINTAINERS                      |  2 +-
+ drivers/fpga/Makefile            |  6 +++---
+ drivers/fpga/dfl-pci.c           |  9 +++++++++
+ drivers/fpga/dfl.c               | 38 ++++++++++++++++++++++----------------
+ drivers/fpga/dfl.h               |  1 +
+ drivers/fpga/fpga-mgr.c          | 13 +++++++++----
+ drivers/fpga/fpga-region.c       |  6 +++---
+ drivers/fpga/of-fpga-region.c    | 22 ++++++++++++----------
+ include/linux/fpga/fpga-region.h |  6 +++---
+ 10 files changed, 68 insertions(+), 40 deletions(-)
