@@ -2,155 +2,57 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EAF527C32
-	for <lists+linux-fpga@lfdr.de>; Mon, 16 May 2022 05:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBD7528A51
+	for <lists+linux-fpga@lfdr.de>; Mon, 16 May 2022 18:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbiEPDB7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 15 May 2022 23:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
+        id S231435AbiEPQ0o (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 16 May 2022 12:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239554AbiEPDBy (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 15 May 2022 23:01:54 -0400
+        with ESMTP id S233696AbiEPQ0n (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 16 May 2022 12:26:43 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC311929E
-        for <linux-fpga@vger.kernel.org>; Sun, 15 May 2022 20:01:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F3D3A5F0;
+        Mon, 16 May 2022 09:26:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652670091; x=1684206091;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=dfYPwxamyW0UwNHUw+SYJm6SNxQ1U/dG4AvAKhgy8qM=;
-  b=GqOze1XuCgzelpvS4RYZXcxx22Bmcj3ubqtoSmfsyRq2e6pVcCqrAWTZ
-   WxaOXLIHNCyRYBSiJFS6V9CxRvfESCj6G8xEOy+JE5EAJjnoER6OgFVfL
-   uRVczZDIT+BgTeiHvLG5SaHS7YcdYSCvqVI3NgS06/FK8KBzR8U8zAbY5
-   9UgTGSD17gkDtR/Dkd8srKEKCa38SR5wOfZAYQAynS4rk4vRs7grD1tbs
-   2/nEVjee8Yt4D8g2mIFPoJ0d+LsqQQxE1JeczetbKk4BsSBdpu7gsykKD
-   itWZnGZX6V+iNbajUF+dYQqpVr632trKU13JtRolMJoqeZ6iD0bFy7VOE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="258285586"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="258285586"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 20:01:29 -0700
+  t=1652718402; x=1684254402;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R84AvKQe2JOkttd3jhF5iQEAST8psfJ6QD6srqjoeD4=;
+  b=MIGPCqEes3qxC7+D+vt6ZRNQp4ltArfX+enNsdh+djYRqyhRsVryUyWf
+   CdNoE7BaEjDMXwXXjbIci+X87YbOGmShkso379Z36iVSNUQDDCH4cnUus
+   t3HlD9xm4mpgaKuq6AY8/UJfwhGLJHt3tCUjopQcFa6jOzpQiJJdAooy3
+   6+8xCgX89boEIai0moIfemM6hTKfnOCpVQAX9973qLjhYyNOsh288uAhp
+   PPLt6rxY3JsTUmGVD15y+BY2gCP8bAs5e6On+eqbwZi1mig1tnCgTZt7t
+   OpvMetLDWeztI6tj2PzOhlCswrh4vnhLXYfenQVD5KN5TEfJnqkqPSkru
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="258451837"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="258451837"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 09:26:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="568109438"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga007.jf.intel.com with ESMTP; 15 May 2022 20:01:29 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 15 May 2022 20:01:29 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 15 May 2022 20:01:28 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Sun, 15 May 2022 20:01:28 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Sun, 15 May 2022 20:01:28 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=abOuS01EED+rMrFQjjPQR9SNfM0thR9WVhTP1s6fkveifUOQLLvwDLmeFTgcBFPY6sRcnzTIJCEnquCfZZjIqEwOPywdodazvLLMhDRYguejGU4FQ+FbKAck3t+lYLFfW5SXLjN7Bs3gjGJ6UE6MiHPcVczS+9kne2IUYIhErIJhK1suLNyxN1ic1xuz3cKPs1iQIaRcqBo+iNZCWGfI6dsZEr9S/xIKbcqbsHUgZgCtsqZLSLUqV72nrmlKF18JMR07ykqdknbRUMSU2+awRrTa9RJMIkD+lEeLy7ESR1gVbT4p45437kCxvCtVNSu82jpRPLzOUIDIrHwSgUG7dA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LdbVxHaEEWDvtHeL94I3DeLQws9QM2h26BQbsufqLeY=;
- b=Jv05BB/VEzO3TIhYDV2sCVBKFJ+oxJPoeTxVngUDtSSLTU7RHuKwXzCbQoBBqVDxKNLX8dYzNIo7m06AaojH/p9IH53ro/2WjLWJBEXTW5/uJA4OWH6/uMRf5mdhoubBMFWJpSU2C+Y+h8cCO5yLCiilAwiQjy4SGbPdQ0EpQhWbBjTJyLrO5CQwqCbuYrYaKJ6npqC7eNuwPmzs5I7tHAw/tBpDF8fTTSctv4HBT0wowhBskeQ8gwwUBaVEmYhszJmBvaTrkx0Zp7cGQR9saS29ImsxPEyVMKuOcXqcJs77fc1Sah1uC48KySHgdFGmn+4UP2IX6CG9OY7Vtv7Vmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
- by SA2PR11MB5210.namprd11.prod.outlook.com (2603:10b6:806:fa::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Mon, 16 May
- 2022 03:01:26 +0000
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::c076:6436:db8e:ee22]) by BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::c076:6436:db8e:ee22%8]) with mapi id 15.20.5250.018; Mon, 16 May 2022
- 03:01:25 +0000
-From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
-To:     "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
-Subject: RE: [PATCH v2] fpga: dfl: fme: adding reserved bits for revision of
- FME/Port error
-Thread-Topic: [PATCH v2] fpga: dfl: fme: adding reserved bits for revision of
- FME/Port error
-Thread-Index: AQHYU5qxV39Tq0+gOESHo9irwPi9fa0P8KEAgBEHtUA=
-Date:   Mon, 16 May 2022 03:01:25 +0000
-Message-ID: <BN9PR11MB5483247B6B612CC9A82B6C43E3CF9@BN9PR11MB5483.namprd11.prod.outlook.com>
-References: <20220419030357.410495-1-tianfei.zhang@intel.com>
- <DM6PR11MB38195D7FDC316CBDEA55D91A85C29@DM6PR11MB3819.namprd11.prod.outlook.com>
-In-Reply-To: <DM6PR11MB38195D7FDC316CBDEA55D91A85C29@DM6PR11MB3819.namprd11.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.401.20
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bf7dac27-7b54-4f30-d5ec-08da36e85d98
-x-ms-traffictypediagnostic: SA2PR11MB5210:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <SA2PR11MB5210CBEB41F83EBC5D0182C9E3CF9@SA2PR11MB5210.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jFMwKEkfgCDQ1Bpu9ptSvwcuwRhchj2cGgSiBywoeMuU2G08HV5uUOgOj0sGM7il+gxe/ui25KRFzfQbyw2tZODMza8sPa8nLR743XLn+582EGs2DxNggSlvrNmt7Zj0cxwlkKc+R3HxPnK51TQBM9yjmqS8BRsKR3Vmb/7nNb1SEFFixUB11a56ifpFMxlrcq1NgRko5i47XSEAV986en47Gr1yYkWWdE6n8HuFQmriRJU4t1+b5f4BRatOv42SSMhdAoNQFginwLfiagAfkPMhbzzS9CPNePBBoBeQ7GrnaS+4/P3seyH8CFenxmSIg9o6984MmWeMQ1TeW7KIyvQPU0i72RdmPd/gCGI9hfEc9o+KdLbmSrEuPzwJ7/pUj97Y8eOHtB3TD600xImEwLX/v8O9UYRx2RdomjpWO83zcMxkB4pOgK7iZyQ4rDmBjngkVmJmzJI17lJMqFcT6NUkhh/ndvZNbTtt4O5omF3ICJcbQs8rHsmLDvQbBH1GADwUZdgxLhl8KpabYkKcgqnZe5C+BgpEyxC7/CtRRDqVNyrzUiqIe0EKoi2EZVhx4ognq4gnobUJTB6HT1FyHmDFCN98H0H/x0uXH0Sjxi5g7hb20dzFHYfKaS39R9gQPIQwrtv7NYaH4TR4jWXJ7yJZ6EY5W11ybAqh4vTinV72yZ1BBl5wu9IcffijWupsKtQGzifnka80N+tPbOrePA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(71200400001)(186003)(316002)(55016003)(2906002)(508600001)(110136005)(26005)(9686003)(53546011)(82960400001)(7696005)(33656002)(122000001)(64756008)(76116006)(66946007)(66476007)(66446008)(8676002)(66556008)(38070700005)(5660300002)(8936002)(38100700002)(83380400001)(86362001)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?H8UK4JGGdPY1Oj1pNYRWwZwTKoecsL7ZE0wqj5AT2CQqvyFtiKs+JhJPfBI+?=
- =?us-ascii?Q?GzX4fzfENNSkXK2juhO7FrBBaUPOq4xubuZltiHL4dYysQdhd+H6cXCbKouO?=
- =?us-ascii?Q?lia+1UY8wUwDIO71owYwJhzYcrqv+z1vMDgSSHdznJOj7qTqUbB94LIQwY1Z?=
- =?us-ascii?Q?tUZn1uc5dXYfrbhcpoDxN4D5JokD6UIy9ZRtCAuLOfA82elqDntKxDqsQKOq?=
- =?us-ascii?Q?SH93pWC+SkZ1f6jrBup5xsqQt7e26mAOQ0BBh/vkDHEnqkm81Y6LogqM88Pc?=
- =?us-ascii?Q?fzwOsdAZd4w3PZFviwES9A+iDn2QZzNZa5L/u2o7v00fAy1bBwgD72XVGkio?=
- =?us-ascii?Q?zYjq8anzy2VFJSSbAdUAXl8r3G0+iiMQEy8kVo7/G/r1Yv+kkozQmXz8VtUK?=
- =?us-ascii?Q?whwhzKjIFmLAVgOVRayIL5IKC2+vi4tOyfcKjkhzygZOursKOsFvc5PhRS+O?=
- =?us-ascii?Q?TMmuCMLFNoRKoKX5e5JSRdNrG2fhFMn7jC4vWpVFx2PUvwBOKzs2xKgnXZNz?=
- =?us-ascii?Q?ASIznd1raXxEKtfhJmeADRzqTG+4e1de65PlrUoifubHqRqjAlLAsafKJpkt?=
- =?us-ascii?Q?t8C+eMBVLEzWFYm7iVrEhuwvTo4KNC6SuSEqJ7DEbh+0CpDAUo3yix37GwUP?=
- =?us-ascii?Q?5waJYZ6ZlhdcDiWHIzKrxW8B46j4ESLt+BEPvmXZRHrKU9ffbxIW4WR1dB8d?=
- =?us-ascii?Q?nko2JMR+uVlNmoFTh8KcBmlW6T5tBD2i+FTGsQn7IzNcIEyr3xMaFSxm0dtN?=
- =?us-ascii?Q?lVnldfdnISChs3MLogoPB1BEhNKPn3HgkFtOHX2kZyVSuJOzaxt1KTGGGM0r?=
- =?us-ascii?Q?3fZxCX1OUr/eJsxglTHozXed5Hpia0JzhnjJfewsV0L3cFeYh0FvuExdGAgC?=
- =?us-ascii?Q?itcQgfVO+Ltb6u7RzG8Fuprch9YydrROpdCaibAXkYXadh7mQjgKjY0wi1wk?=
- =?us-ascii?Q?jmQEW/EqMDC7uML+UTT+yE8a+eEamGRwbZqIK0kfEqea7sIIyJWUuojhxBg1?=
- =?us-ascii?Q?CjyYQmi7cvmpnMLEcNEd2+KIA34MsCFxFp/Gq8fWVB1zlk5m1FOKbZKedN2f?=
- =?us-ascii?Q?XN0l8IqSHuNTXKrcuVSekUGVIcO/SBzkmLB9rX/f12QOjGRtXy/t5SW/RBDM?=
- =?us-ascii?Q?JKdDqOSOWLqtjN2PVk2EBjVQEC5Q8VQoryQvzNA1OGD0aPzUm25zYA2lmUNv?=
- =?us-ascii?Q?rHgZH7Db6120r7rheQpdC0mZg6JO0GkI54etfZZdlkzC6aC3MxZ/e90PG6te?=
- =?us-ascii?Q?64+qH7iKTph8RBlU3zsgYzzyhfFIOFqXJqc6ahVOXJ3+PCnrGh00qId12Ml3?=
- =?us-ascii?Q?EQfXei+jQIk6OuBt89regfCeauBC77gHsLSEhd4E15x+BnppTtTaSQTH5/qB?=
- =?us-ascii?Q?c/lwaZmMenhlUgC7WDaiDGsqaQTkKyiVEdtYy/nvWtkCFmliEeQR5lsfpMEe?=
- =?us-ascii?Q?B35x6MrjgLD6LU4sPw+gaPDTmbN6Nabswyd80O1x7e4iU2oZF+jVZ3obFtBx?=
- =?us-ascii?Q?4dUHX8BVR8peze68KFKxjxLLjCaGE9UcUgFVSgkIU8erMVpiAobsYcAN8G6J?=
- =?us-ascii?Q?1sbf4qG9AOBHpbaS/zzsq5ofkShT06IFIzVTu4E1alHPF+++lrLrF3+fvH7w?=
- =?us-ascii?Q?JzaetRC+1KsLJnm56M9tG0W9CeImCefYC0EFXzuz9ihpwy/7csJsAUSHc1Wj?=
- =?us-ascii?Q?zZiRpiOJt3epZossJoDkyPfcJKu+X0YKmlVQILUuCYWHRD8NQyZ6y7C8s33u?=
- =?us-ascii?Q?FE8ETv8d2w=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="544433471"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga006.jf.intel.com with ESMTP; 16 May 2022 09:26:38 -0700
+Date:   Tue, 17 May 2022 00:19:07 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, lee.jones@linaro.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
+Subject: Re: [PATCH v19 2/5] fpga: m10bmc-sec: create max10 bmc secure update
+Message-ID: <20220516161907.GA37553@yilunxu-OptiPlex-7050>
+References: <20220510195635.140722-1-russell.h.weight@intel.com>
+ <20220510195635.140722-3-russell.h.weight@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf7dac27-7b54-4f30-d5ec-08da36e85d98
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 May 2022 03:01:25.6644
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: u3uqBQXaCePDEhrSkZO8UNKdCvJy2DXfbvL2Uj6eRE3ArOzNHZHahvZgfJ+4Chv1dr7zNDa/xawO0FHUKVDLvQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5210
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510195635.140722-3-russell.h.weight@intel.com>
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -161,279 +63,371 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Tue, May 10, 2022 at 12:56:32PM -0700, Russ Weight wrote:
+> Create a sub driver for the FPGA Card BMC in order to support secure
+> updates.  This patch creates the Max10 BMC Secure Update driver
+> and provides sysfs files for displaying the current root entry hashes
+> for the FPGA static region, the FPGA PR region, and the card BMC.
 
+Could you describe a little more about what is the root entry, and how
+the root entry hashes (maybe also the cancel code signing key) work to
+ensure secure update?
 
-> -----Original Message-----
-> From: Wu, Hao <hao.wu@intel.com>
-> Sent: Thursday, May 5, 2022 2:47 PM
-> To: Zhang, Tianfei <tianfei.zhang@intel.com>; trix@redhat.com;
-> mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.or=
-g
-> Subject: RE: [PATCH v2] fpga: dfl: fme: adding reserved bits for revision=
- of
-> FME/Port error
->=20
-> > -----Original Message-----
-> > From: Zhang, Tianfei <tianfei.zhang@intel.com>
-> > Sent: Tuesday, April 19, 2022 11:04 AM
-> > To: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org; Xu,
-> > Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org
-> > Cc: Zhang, Tianfei <tianfei.zhang@intel.com>
-> > Subject: [PATCH v2] fpga: dfl: fme: adding reserved bits for revision
-> > of FME/Port error
-> >
-> > From: Tianfei zhang <tianfei.zhang@intel.com>
-> >
-> > There are 2 different register layouts for FME/Port error registers.
-> > The new production like Intel PAC N6000 plans to deploy the new
-> > register format which it is more reasonable.
-> >
->=20
-> Can you explain a little more why there would be different register layou=
-ts?
+> 
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> ---
+> v19:
+>   - Change "card bmc" naming back to "m10 bmc" naming to be consistent
+>     with the parent driver.
+> v18:
+>   - Changed the ABI documentation for the Root Entry Hashes to specify
+>     string as the format for the output.
+>   - Updated comments, strings and config options to more consistently
+>     refer to the driver as the Intel FPGA Card BMC Secure Update driver.
+>   - Removed an instance of dev_dbg().
+>   - Deferred the call to firmware_upload_register() to a later patch
+>     where the required ops are provided. The bmc_sec_remove() function is
+>     also removed from this patch and added in a later patch.
+>   - Switched from MODULE_ALIAS() to MODULE_DEVICE_TABLE() in anticipation
+>     of additional cards to be supported by the same driver.
+> v17:
+>   - Update the Date and KernelVersion for the ABI documentation to Jul 2022
+>     and 5.19 respectively.
+>   - Updated the copyright end-date to 2022 for the secure update driver.
+>   - Change m10bmc to cardbmc to reflect the fact that the future devices
+>     will not necessarily use the MAX10. This affects filenames, configs, and
+>     symbol names.
+>   - Removed references to the FPGA Image Load class driver and replaced
+>     them with the new firmware-upload service from the firmware loader.
+>   - Firmware upload requires a unique name for the firmware device. Use
+>     xarray_alloc to generate a unique number to append to the name.
+>   - Changed the license from GPL to GPLv2 per commit bf7fbeeae6db: 'module:
+>     Cure the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity'
+> v16:
+>   - No Change
+> v15:
+>   - Updated the Dates and KernelVersions in the ABI documentation
+>   - Change driver name from "n3000bmc-secure" to "n3000bmc-sec-update".
+>   - Change CONFIG_FPGA_M10_BMC_SECURE to CONFIG_FPGA_M10_BMC_SEC_UPDATE.
+>   - Change instances of *bmc-secure to *bmc-sec-update in file name
+>     and symbol names.
+>   - Change instances of *m10bmc_secure* to *m10bmc-sec_update* in symbol
+>     names.
+>   - Change instances of *lops* to *ops* in symbol names.
+> v14:
+>   - Changed symbol and text references to reflect the renaming of the
+>     Security Manager Class driver to FPGA Image Load.
+> v13:
+>   - Updated copyright to 2021
+>   - Updated ABI documentation date and kernel version
+>   - Call updated fpga_sec_mgr_register() and fpga_sec_mgr_unregister()
+>     functions instead of devm_fpga_sec_mgr_create() and
+>     devm_fpga_sec_mgr_register().
+> v12:
+>   - Updated Date and KernelVersion fields in ABI documentation
+> v11:
+>   - Added Reviewed-by tag
+> v10:
+>   - Changed the path expressions in the sysfs documentation to
+>     replace the n3000 reference with something more generic to
+>     accomodate other devices that use the same driver.
+> v9:
+>   - Rebased to 5.12-rc2 next
+>   - Updated Date and KernelVersion in ABI documentation
+> v8:
+>   - Previously patch 2/6, otherwise no change
+> v7:
+>   - Updated Date and KernelVersion in ABI documentation
+> v6:
+>   - Added WARN_ON() call for (sha_num_bytes / stride) to assert
+>     that the proper count is passed to regmap_bulk_read().
+> v5:
+>   - No change
+> v4:
+>   - Moved sysfs files for displaying the root entry hashes (REH)
+>     from the FPGA Security Manager class driver to here. The
+>     m10bmc_reh() and m10bmc_reh_size() functions are removed and
+>     the functionality from these functions is moved into a
+>     show_root_entry_hash() function for displaying the REHs.
+>   - Added ABI documentation for the new sysfs entries:
+>     sysfs-driver-intel-m10-bmc-secure
+>   - Updated the MAINTAINERS file to add the new ABI documentation
+>     file: sysfs-driver-intel-m10-bmc-secure
+>   - Removed unnecessary ret variable from m10bmc_secure_probe()
+>   - Incorporated new devm_fpga_sec_mgr_register() function into
+>     m10bmc_secure_probe() and removed the m10bmc_secure_remove()
+>     function.
+> v3:
+>   - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+>   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure
+>     Update driver"
+>   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
+>     underlying functions are now called directly.
+>   - Changed "_root_entry_hash" to "_reh", with a comment explaining
+>     what reh is.
+> v2:
+>   - Added drivers/fpga/intel-m10-bmc-secure.c file to MAINTAINERS.
+>   - Switched to GENMASK(31, 16) for a couple of mask definitions.
+>   - Moved MAX10 BMC address and function definitions to a separate
+>     patch.
+>   - Replaced small function-creation macros with explicit function
+>     declarations.
+>   - Removed ifpga_sec_mgr_init() and ifpga_sec_mgr_uinit() functions.
+>   - Adapted to changes in the Intel FPGA Security Manager by splitting
+>     the single call to ifpga_sec_mgr_register() into two function
+>     calls: devm_ifpga_sec_mgr_create() and ifpga_sec_mgr_register().
+> ---
+>  .../sysfs-driver-intel-m10-bmc-sec-update     |  29 ++++
+>  MAINTAINERS                                   |   7 +
+>  drivers/fpga/Kconfig                          |  12 ++
+>  drivers/fpga/Makefile                         |   3 +
+>  drivers/fpga/intel-m10-bmc-sec-update.c       | 133 ++++++++++++++++++
+>  5 files changed, 184 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+>  create mode 100644 drivers/fpga/intel-m10-bmc-sec-update.c
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+> new file mode 100644
+> index 000000000000..2bb271695e14
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+> @@ -0,0 +1,29 @@
+> +What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/sr_root_entry_hash
+> +Date:		Jul 2022
+> +KernelVersion:	5.19
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Read only. Returns the root entry hash for the static
+> +		region if one is programmed, else it returns the
+> +		string: "hash not programmed".  This file is only
+> +		visible if the underlying device supports it.
+> +		Format: string.
+> +
+> +What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/pr_root_entry_hash
+> +Date:		Jul 2022
+> +KernelVersion:	5.19
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Read only. Returns the root entry hash for the partial
+> +		reconfiguration region if one is programmed, else it
+> +		returns the string: "hash not programmed".  This file
+> +		is only visible if the underlying device supports it.
+> +		Format: string.
+> +
+> +What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/bmc_root_entry_hash
+> +Date:		Jul 2022
+> +KernelVersion:	5.19
+> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> +Description:	Read only. Returns the root entry hash for the BMC image
+> +		if one is programmed, else it returns the string:
+> +		"hash not programmed".  This file is only visible if the
+> +		underlying device supports it.
+> +		Format: string.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cf883b1ec852..759a7788dad9 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7784,6 +7784,13 @@ F:	Documentation/fpga/
+>  F:	drivers/fpga/
+>  F:	include/linux/fpga/
+>  
+> +INTEL MAX10 BMC SECURE UPDATES
+> +M:	Russ Weight <russell.h.weight@intel.com>
+> +L:	linux-fpga@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+> +F:	drivers/fpga/intel-m10-bmc-sec-update.c
+> +
+>  FPU EMULATOR
+>  M:	Bill Metzenthen <billm@melbpc.org.au>
+>  S:	Maintained
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 991b3f361ec9..0831eecc9a09 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -243,4 +243,16 @@ config FPGA_MGR_VERSAL_FPGA
+>  	  configure the programmable logic(PL).
+>  
+>  	  To compile this as a module, choose M here.
+> +
+> +config FPGA_M10_BMC_SEC_UPDATE
+> +	tristate "Intel MAX10 BMC Secure Update driver"
+> +	depends on MFD_INTEL_M10_BMC && FW_UPLOAD
+> +	help
+> +	  Secure update support for the Intel MAX10 board management
+> +	  controller.
+> +
+> +	  This is a subdriver of the Intel MAX10 board management controller
+> +	  (BMC) and provides support for secure updates for the BMC image,
+> +	  the FPGA image, the Root Entry Hashes, etc.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 5935b3d0abd5..139ac1b573d3 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -22,6 +22,9 @@ obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
+>  
+> +# FPGA Secure Update Drivers
+> +obj-$(CONFIG_FPGA_M10_BMC_SEC_UPDATE)	+= intel-m10-bmc-sec-update.o
+> +
+>  # FPGA Bridge Drivers
+>  obj-$(CONFIG_FPGA_BRIDGE)		+= fpga-bridge.o
+>  obj-$(CONFIG_SOCFPGA_FPGA_BRIDGE)	+= altera-hps2fpga.o altera-fpga2sdram.o
+> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> new file mode 100644
+> index 000000000000..a36856d897c9
+> --- /dev/null
+> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> @@ -0,0 +1,133 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Intel MAX10 Board Management Controller Secure Update Driver
+> + *
+> + * Copyright (C) 2019-2022 Intel Corporation. All rights reserved.
+> + *
+> + */
+> +#include <linux/bitfield.h>
+> +#include <linux/device.h>
+> +#include <linux/firmware.h>
+> +#include <linux/mfd/intel-m10-bmc.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +
+> +struct m10bmc_sec {
+> +	struct device *dev;
+> +	struct intel_m10bmc *m10bmc;
+> +};
+> +
+> +/* Root Entry Hash (REH) support */
+> +#define REH_SHA256_SIZE		32
+> +#define REH_SHA384_SIZE		48
+> +#define REH_MAGIC		GENMASK(15, 0)
+> +#define REH_SHA_NUM_BYTES	GENMASK(31, 16)
+> +
+> +static ssize_t
+> +show_root_entry_hash(struct device *dev, u32 exp_magic,
+> +		     u32 prog_addr, u32 reh_addr, char *buf)
+> +{
+> +	struct m10bmc_sec *sec = dev_get_drvdata(dev);
+> +	unsigned int stride = regmap_get_reg_stride(sec->m10bmc->regmap);
 
-There is a historical problem for it, the older PAC card using the older re=
-gister layout, but for now, we will use the newer register layout for OFS P=
-AC card.
+reverse xmax tree declarations is recommended. You may initiate the
+variable after declaration.
 
-> There will only be two layouts or more?
+> +	int sha_num_bytes, i, ret, cnt = 0;
+> +	u8 hash[REH_SHA384_SIZE];
+> +	u32 magic;
+> +
+> +	ret = m10bmc_raw_read(sec->m10bmc, prog_addr, &magic);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (FIELD_GET(REH_MAGIC, magic) != exp_magic)
+> +		return sysfs_emit(buf, "hash not programmed\n");
+> +
+> +	sha_num_bytes = FIELD_GET(REH_SHA_NUM_BYTES, magic) / 8;
+> +	if (sha_num_bytes != REH_SHA256_SIZE &&
+> +	    sha_num_bytes != REH_SHA384_SIZE)   {
+> +		dev_err(sec->dev, "%s bad sha num bytes %d\n", __func__,
+> +			sha_num_bytes);
+> +		return -EINVAL;
+> +	}
+> +
+> +	WARN_ON(sha_num_bytes % stride);
 
-Yes, we have two layouts now.
+The user will still get the output value which is broken. So why not
+check the condition earlier, and stop user from accessing the interface
+if it cannot work.
 
-> Intel PAC N6000 "plans" to have new register format? Not finalized yet?
+> +	ret = regmap_bulk_read(sec->m10bmc->regmap, reh_addr,
+> +			       hash, sha_num_bytes / stride);
+> +	if (ret) {
+> +		dev_err(dev, "failed to read root entry hash: %x cnt %x: %d\n",
+> +			reh_addr, sha_num_bytes / stride, ret);
+> +		return ret;
+> +	}
+> +
+> +	for (i = 0; i < sha_num_bytes; i++)
+> +		cnt += sprintf(buf + cnt, "%02x", hash[i]);
+> +	cnt += sprintf(buf + cnt, "\n");
+> +
+> +	return cnt;
+> +}
+> +
+> +#define DEVICE_ATTR_SEC_REH_RO(_name, _magic, _prog_addr, _reh_addr) \
+> +static ssize_t _name##_root_entry_hash_show(struct device *dev, \
+> +					    struct device_attribute *attr, \
+> +					    char *buf) \
+> +{ return show_root_entry_hash(dev, _magic, _prog_addr, _reh_addr, buf); } \
+> +static DEVICE_ATTR_RO(_name##_root_entry_hash)
+> +
+> +DEVICE_ATTR_SEC_REH_RO(bmc, BMC_PROG_MAGIC, BMC_PROG_ADDR, BMC_REH_ADDR);
+> +DEVICE_ATTR_SEC_REH_RO(sr, SR_PROG_MAGIC, SR_PROG_ADDR, SR_REH_ADDR);
+> +DEVICE_ATTR_SEC_REH_RO(pr, PR_PROG_MAGIC, PR_PROG_ADDR, PR_REH_ADDR);
+> +
+> +static struct attribute *m10bmc_security_attrs[] = {
+> +	&dev_attr_bmc_root_entry_hash.attr,
+> +	&dev_attr_sr_root_entry_hash.attr,
+> +	&dev_attr_pr_root_entry_hash.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group m10bmc_security_attr_group = {
+> +	.name = "security",
+> +	.attrs = m10bmc_security_attrs,
+> +};
+> +
+> +static const struct attribute_group *m10bmc_sec_attr_groups[] = {
+> +	&m10bmc_security_attr_group,
+> +	NULL,
+> +};
+> +
+> +#define SEC_UPDATE_LEN_MAX 32
+> +static int m10bmc_sec_probe(struct platform_device *pdev)
+> +{
+> +	struct m10bmc_sec *sec;
+> +
+> +	sec = devm_kzalloc(&pdev->dev, sizeof(*sec), GFP_KERNEL);
+> +	if (!sec)
+> +		return -ENOMEM;
+> +
+> +	sec->dev = &pdev->dev;
+> +	sec->m10bmc = dev_get_drvdata(pdev->dev.parent);
+> +	dev_set_drvdata(&pdev->dev, sec);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct platform_device_id intel_m10bmc_sec_ids[] = {
+> +	{
+> +		.name = "n3000bmc-sec-update",
+> +	},
+> +	{ }
+> +};
+Please move the MODULE_DEVICE_TABLE() here, without blank lines.
 
-N6000 and all of PAC card in the future will use the new register layout fo=
-r FME/Port error register.
+Thanks,
+Yilun
 
-> So anyone could define its own error register layout, is my understanding
-> correct?
-
-Yes, we suggested that they are follow our OFS spec.
-
->=20
-> > To distinguish the register layouts,we provide another sysfs node for
-> > revision info, but it is a bad method that using one sysfs node's
-> > value to determine the usage of other sysfs node.
-> >
-> > This patch introduces 4 reserved bits (Bit[59:56]) which are reserved
-> > by HW, dfl driver appends the FME/Port error revision info on those
-> > bits for attribution on the readout value.
->=20
-> Will UUID be more reasonable than just 4bits value? If we consider this i=
-s a
-> FPGA, anyone could implement its own error register layout, then just res=
-erve
-> 4bits will not be enough? I hope we don't need to modify the code and des=
-ign
-> again...
-
-The revision was came from DFH_REVISION field in DFH register which is 4-bi=
-ts, I think is enough now.
-We suggested that the customers follow our register layout design.
-In the DFH v1 spec, we will consider use the UUID but this spec has not fin=
-alized now.
-
->=20
-> >
-> > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > ---
-> > v2:
-> >  - add documentation for this change.
-> >  - fix the reverse xmas tree declaration.
-> > ---
-> >  .../ABI/testing/sysfs-platform-dfl-fme        | 37 ++++++++++++-------
-> >  drivers/fpga/dfl-fme-error.c                  | 36 +++++++++++++++---
-> >  2 files changed, 54 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-platform-dfl-fme
-> > b/Documentation/ABI/testing/sysfs-platform-dfl-fme
-> > index d6ab34e81b9b..b886568d6071 100644
-> > --- a/Documentation/ABI/testing/sysfs-platform-dfl-fme
-> > +++ b/Documentation/ABI/testing/sysfs-platform-dfl-fme
-> > @@ -50,46 +50,57 @@ Date:		August 2019
-> >  KernelVersion:  5.4
-> >  Contact:	Wu Hao <hao.wu@intel.com>
-> >  Description:	Read-Write. Read this file for errors detected on pcie0 l=
-ink.
-> > -		Write this file to clear errors logged in pcie0_errors. Write
-> > -		fails with -EINVAL if input parsing fails or input error code
-> > -		doesn't match.
-> > +		The readout value has embedded 4 bits revision attribution
-> > +		in Bit[59:56] which reserved by hardware. Write this file to
-> > +		clear errors logged in pcie0_errors. Clean Bit[59:56] before
-> > +		write this file. Write fails with -EINVAL if input parsing
-> > +		fails or input error code doesn't match.
-> >
-> >  What:		/sys/bus/platform/devices/dfl-
-> fme.0/errors/pcie1_errors
-> >  Date:		August 2019
-> >  KernelVersion:  5.4
-> >  Contact:	Wu Hao <hao.wu@intel.com>
-> >  Description:	Read-Write. Read this file for errors detected on pcie1 l=
-ink.
-> > -		Write this file to clear errors logged in pcie1_errors. Write
-> > -		fails with -EINVAL if input parsing fails or input error code
-> > -		doesn't match.
-> > +		The readout value has embedded 4 bits revision attribution
-> > +		in Bit[59:56] which reserved by hardware. Write this file to
-> > +		clear errors logged in pcie1_errors. Clean Bit[59:56] before
-> > +		write this file. Write fails with -EINVAL if input parsing fails
-> > +		or input error code doesn't match.
-> >
-> >  What:		/sys/bus/platform/devices/dfl-
-> fme.0/errors/nonfatal_errors
-> >  Date:		August 2019
-> >  KernelVersion:  5.4
-> >  Contact:	Wu Hao <hao.wu@intel.com>
-> > -Description:	Read-only. It returns non-fatal errors detected.
-> > +Description:	Read-only. It returns non-fatal errors detected. The read=
-out
-> > +		value has embedded 4 bits revision attribution in Bit[59:56]
-> > +		which reserved by hardware.
-> >
-> >  What:		/sys/bus/platform/devices/dfl-
-> fme.0/errors/catfatal_errors
-> >  Date:		August 2019
-> >  KernelVersion:  5.4
-> >  Contact:	Wu Hao <hao.wu@intel.com>
-> >  Description:	Read-only. It returns catastrophic and fatal errors detec=
-ted.
-> > +		The readout value has embedded 4 bits revision attribution in
-> > +		Bit[59:56] which reserved by hardware.
-> >
-> >  What:		/sys/bus/platform/devices/dfl-
-> fme.0/errors/inject_errors
-> >  Date:		August 2019
-> >  KernelVersion:  5.4
-> >  Contact:	Wu Hao <hao.wu@intel.com>
-> > -Description:	Read-Write. Read this file to check errors injected. Writ=
-e this
-> > -		file to inject errors for testing purpose. Write fails with
-> > -		-EINVAL if input parsing fails or input inject error code isn't
-> > -		supported.
-> > +Description:	Read-Write. Read this file to check errors injected. The =
-readout
-> > +		value has embedded 4 bits revision attribution which reserved
-> > by
-> > +		hardware. Write this file to inject errors for testing purpose.
-> > +		Clean Bit[59:56] before write this file. Write fails with -EINVAL
-> > +		if input parsing fails or input inject error code isn't supported.
-> >
-> >  What:		/sys/bus/platform/devices/dfl-fme.0/errors/fme_errors
-> >  Date:		August 2019
-> >  KernelVersion:  5.4
-> >  Contact:	Wu Hao <hao.wu@intel.com>
-> > -Description:	Read-Write. Read this file to get errors detected on FME.
-> > -		Write this file to clear errors logged in fme_errors. Write
-> > +Description:	Read-Write. Read this file to get errors detected on FME.=
- The
-> > +		readout value has embedded 4 bits revision attribution which
-> > +		reserved by hardware. Write this file to clear errors logged
-> > +		in fme_errors. Clean Bit[59:56] before write this file. Write
-> >  		fials with -EINVAL if input parsing fails or input error code
-> >  		doesn't match.
-> >
-> > diff --git a/drivers/fpga/dfl-fme-error.c
-> > b/drivers/fpga/dfl-fme-error.c index 51c2892ec06d..a440bc09938d 100644
-> > --- a/drivers/fpga/dfl-fme-error.c
-> > +++ b/drivers/fpga/dfl-fme-error.c
-> > @@ -39,6 +39,22 @@
-> >
-> >  #define ERROR_MASK		GENMASK_ULL(63, 0)
-> >
-> > +/* Bit[59:56] was reserved by software for error revision */ #define
-> > +ERROR_SW_REVISION_MASK GENMASK_ULL(59, 56)
-> > +
-> > +static u64 set_error_revision(struct device *dev, u64 value) {
-> > +	void __iomem *base;
-> > +	u64 revision;
-> > +	u64 dfh;
-> > +
-> > +	base =3D dfl_get_feature_ioaddr_by_id(dev,
-> > FME_FEATURE_ID_GLOBAL_ERR);
-> > +	dfh =3D readq(base);
-> > +	revision =3D FIELD_GET(DFH_REVISION, dfh);
-> > +
-> > +	return value | FIELD_PREP(ERROR_SW_REVISION_MASK, revision); }
-> > +
-> >  static ssize_t pcie0_errors_show(struct device *dev,
-> >  				 struct device_attribute *attr, char *buf)  { @@
-> -52,7 +68,8 @@
-> > static ssize_t pcie0_errors_show(struct device *dev,
-> >  	value =3D readq(base + PCIE0_ERROR);
-> >  	mutex_unlock(&pdata->lock);
-> >
-> > -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> > +	return sprintf(buf, "0x%llx\n",
-> > +		       (unsigned long long)set_error_revision(dev, value));
-> >  }
-> >
-> >  static ssize_t pcie0_errors_store(struct device *dev, @@ -97,7 +114,8
-> > @@ static ssize_t pcie1_errors_show(struct device *dev,
-> >  	value =3D readq(base + PCIE1_ERROR);
-> >  	mutex_unlock(&pdata->lock);
-> >
-> > -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> > +	return sprintf(buf, "0x%llx\n",
-> > +		       (unsigned long long)set_error_revision(dev, value));
-> >  }
-> >
-> >  static ssize_t pcie1_errors_store(struct device *dev, @@ -133,11
-> > +151,13 @@ static ssize_t nonfatal_errors_show(struct device *dev,
-> >  				    struct device_attribute *attr, char *buf)  {
-> >  	void __iomem *base;
-> > +	u64 value;
-> >
-> >  	base =3D dfl_get_feature_ioaddr_by_id(dev,
-> > FME_FEATURE_ID_GLOBAL_ERR);
-> > +	value =3D readq(base + RAS_NONFAT_ERROR);
-> >
-> >  	return sprintf(buf, "0x%llx\n",
-> > -		       (unsigned long long)readq(base + RAS_NONFAT_ERROR));
-> > +		       (unsigned long long)set_error_revision(dev, value));
-> >  }
-> >  static DEVICE_ATTR_RO(nonfatal_errors);
-> >
-> > @@ -145,11 +165,13 @@ static ssize_t catfatal_errors_show(struct device
-> *dev,
-> >  				    struct device_attribute *attr, char *buf)
-> >  {
-> >  	void __iomem *base;
-> > +	u64 value;
-> >
-> >  	base =3D dfl_get_feature_ioaddr_by_id(dev,
-> > FME_FEATURE_ID_GLOBAL_ERR);
-> > +	value =3D readq(base + RAS_CATFAT_ERROR);
-> >
-> >  	return sprintf(buf, "0x%llx\n",
-> > -		       (unsigned long long)readq(base + RAS_CATFAT_ERROR));
-> > +		       (unsigned long long)set_error_revision(dev, value));
-> >  }
-> >  static DEVICE_ATTR_RO(catfatal_errors);
-> >
-> > @@ -165,9 +187,10 @@ static ssize_t inject_errors_show(struct device *d=
-ev,
-> >  	mutex_lock(&pdata->lock);
-> >  	v =3D readq(base + RAS_ERROR_INJECT);
-> >  	mutex_unlock(&pdata->lock);
-> > +	v =3D FIELD_GET(INJECT_ERROR_MASK, v);
-> >
-> >  	return sprintf(buf, "0x%llx\n",
-> > -		       (unsigned long long)FIELD_GET(INJECT_ERROR_MASK, v));
-> > +		       (unsigned long long)set_error_revision(dev, v));
-> >  }
-> >
-> >  static ssize_t inject_errors_store(struct device *dev,
-> > @@ -211,7 +234,8 @@ static ssize_t fme_errors_show(struct device *dev,
-> >  	value =3D readq(base + FME_ERROR);
-> >  	mutex_unlock(&pdata->lock);
-> >
-> > -	return sprintf(buf, "0x%llx\n", (unsigned long long)value);
-> > +	return sprintf(buf, "0x%llx\n",
-> > +		       (unsigned long long)set_error_revision(dev, value));
-> >  }
-> >
-> >  static ssize_t fme_errors_store(struct device *dev,
-> > --
-> > 2.26.2
-
+> +
+> +static struct platform_driver intel_m10bmc_sec_driver = {
+> +	.probe = m10bmc_sec_probe,
+> +	.driver = {
+> +		.name = "intel-m10bmc-sec-update",
+> +		.dev_groups = m10bmc_sec_attr_groups,
+> +	},
+> +	.id_table = intel_m10bmc_sec_ids,
+> +};
+> +module_platform_driver(intel_m10bmc_sec_driver);
+> +
+> +MODULE_DEVICE_TABLE(platform, intel_m10bmc_sec_ids);
+> +MODULE_AUTHOR("Intel Corporation");
+> +MODULE_DESCRIPTION("Intel MAX10 BMC Secure Update");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.25.1
