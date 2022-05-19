@@ -2,92 +2,63 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7A152C73F
-	for <lists+linux-fpga@lfdr.de>; Thu, 19 May 2022 01:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C0252CAD7
+	for <lists+linux-fpga@lfdr.de>; Thu, 19 May 2022 06:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbiERW5O (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 18 May 2022 18:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S233326AbiESEWo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 19 May 2022 00:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbiERW47 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 18 May 2022 18:56:59 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A039C63A5
-        for <linux-fpga@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id j2so6236640ybu.0
-        for <linux-fpga@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
-        b=ovbcf3BPb/ZrA/FpQ+ZjErGDIEZ9sF3fYOxqsE4Z0xdiTlYY9UY36hS3ty6MLllddq
-         FdZzNc2PcFHW5cwKZ0FlQqx6F8uTY06Ab/cmT+eL89dkm6I4fHT5v6DDGzwY+fqIjM8b
-         RjeYQt93Ckr4p0lPVWY342OwWKznH6xDl4nV36uj7bwrBPcHFh3ePzF5GNEmu/mQBhIV
-         GwWDekgJIDWSV60014hyLdzt2NtjUStY8MI6SiwBWMH8LEBnRGkE0W6Db0zUE9IYWmDQ
-         Ifd6nbhkESdcIbQrjo3sdEfmdPtb1VAIHCw/LAZv1DOtvQwqLYnhML4dVDmuoYeMmVFn
-         q7TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
-        b=dv2WOlLuMBBt8kXrPrkmiygARNzWxNB7OMSQFHBvbV+5+eXP8K+7MOo2L9NV77jEyD
-         VPt8/r6CUVy5sLatT0ll7Q00pC1P3T0Hj1ykJSsBSJddgfks38lrSdh3w/TZ7U3XWMW+
-         n+dkX3i1g/ELOnjr+GIX3Wj1rmHk8tgWR2saNBWQ6NxIPB8fW+5sYzLoRXwaweGxKwAA
-         +i8AC7yZ6A9KuHn9PU6hApyz46ZBJyHGDLhwCvQlqKYK/Ntoi7rrvfT7JQFH43cYai/z
-         I02D2nrO6t+HvlFPUe65CgmfJIk8uU2oNUZWiYrCDGhgPuLV+GGxJ0BYYI+j0DQ9JILR
-         z63Q==
-X-Gm-Message-State: AOAM530TzuiSxwQXm+QjU7aOCAtB7r8cYYlJqrnOFaCedv9dwlwr400M
-        UdbULrAOx3NS1cj0mafSqONdOji2EChOdKXbwsM=
-X-Google-Smtp-Source: ABdhPJyyLDAg+sVdsLTxwEXiZ5avjedwK/uWMP/Y3UWcChEjwDE+iXuY4kOycHY8vIqM/rcV0hLTcVdg0IN0RAQYgBc=
-X-Received: by 2002:a5b:f87:0:b0:64a:9aa6:e181 with SMTP id
- q7-20020a5b0f87000000b0064a9aa6e181mr1852277ybh.157.1652914614913; Wed, 18
- May 2022 15:56:54 -0700 (PDT)
+        with ESMTP id S232796AbiESEWm (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 19 May 2022 00:22:42 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D571054F;
+        Wed, 18 May 2022 21:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652934162; x=1684470162;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=t76k+55CvsHktO8F2+yZT/MW2C/RlykP0eSZCo+OnJk=;
+  b=Lp89bWC6tfb9dx93xJXUl2yoPYqpRgv9tHPUX5Jwu90COzH79tGcv8ot
+   b8fPG7W+t2fegOOi+FGcWaPlSFYq20tfwCumioWza0/aovW8b6dZJDx77
+   01fUjxGquSztp04pvFTgVncG8i2v4E5Lfva6RpbAKAK4F3gQbXDAHk67c
+   OOUpLjTFLQkVXc4xnj3Q/aHPEF7buG829ixabAQmYuBUrGRBeIJE+Zy+D
+   FdTtDWHOgRyP7C3dBAyN8cOkACopis7SRQvyQlSoTdEV0OT6H4oJA1Q6M
+   q17Xu6AHdVf009FH35fRmGS0BrmrRCOT/NWFjiJc4FGdQ92nvzDJ9VPWx
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="332629317"
+X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
+   d="scan'208";a="332629317"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 21:22:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
+   d="scan'208";a="700960357"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
+  by orsmga004.jf.intel.com with ESMTP; 18 May 2022 21:22:39 -0700
+From:   tien.sung.ang@intel.com
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tien.sung.ang@intel.com
+Subject: Re: [PATCH] fpga: altera-cvp: Truncated bitstream error support
+Date:   Thu, 19 May 2022 12:21:35 +0800
+Message-Id: <20220519042135.2805176-1-tien.sung.ang@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <6939d35f-36a0-568e-bfec-4dd2e3a48604@wanadoo.fr>
+References: <6939d35f-36a0-568e-bfec-4dd2e3a48604@wanadoo.fr>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:7143:0:0:0:0 with HTTP; Wed, 18 May 2022 15:56:53
- -0700 (PDT)
-Reply-To: tonywenn@asia.com
-From:   Tony Wen <weboutloock4@gmail.com>
-Date:   Thu, 19 May 2022 06:56:53 +0800
-Message-ID: <CAE2_YrD=5bo8j9+ah-xptEBBV-HEC4=Gb0SRHf996phiopc3WQ@mail.gmail.com>
-Subject: engage
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b33 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4933]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [weboutloock4[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [weboutloock4[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Can I engage your services?
+Thanks for pointing that out. It is always good to get all the alignments right.
+I will add this to the next revision of the patch.
