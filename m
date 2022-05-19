@@ -2,57 +2,72 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3189D52CB25
-	for <lists+linux-fpga@lfdr.de>; Thu, 19 May 2022 06:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3561052CDE5
+	for <lists+linux-fpga@lfdr.de>; Thu, 19 May 2022 10:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbiESEee (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 19 May 2022 00:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S235111AbiESIDk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 19 May 2022 04:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiESEed (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 19 May 2022 00:34:33 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86744C1EEF;
-        Wed, 18 May 2022 21:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652934872; x=1684470872;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6H7Y0vRICaaXnBsjuel9L4ADqlH4Ymet5HLS2FGL6V8=;
-  b=TEBCCbVDMxxdJlJbnkDgg8Cmzb9KG7+CQu2Dp22yY3Ygddu1cCOFp1Wr
-   IJN0wSv6cGdRF2vcCbj+mYgq3oKE/9X5SF7g0lQCxHk7EpNJNATzy/HD5
-   0CnXqpqKenZuL9OKwe0tXTryjimKJLpxELtt9id/v7qmJKDX+sFx6Rpzg
-   501voPu3OP/aDPO4aoEF6dJrlUlnmbg0lo9yI83q2m5Meb1rw5N7zGrRU
-   3w/lezX/+cZverWVC3ghHO52g7Z1A7OlcNPXGfBxRpilVGlmS5x1PGoBn
-   NpP9WNEcxZITLRLtpLDt0c5rMnkVGExoP8AfUkfQDd7W7QGWg/NMzRl2E
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="259584030"
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="259584030"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 21:34:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="742709968"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
-  by orsmga005.jf.intel.com with ESMTP; 18 May 2022 21:34:29 -0700
-From:   tien.sung.ang@intel.com
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tien.sung.ang@intel.com
-Subject: Re: [PATCH] fpga: altera-cvp: Truncated bitstream error support
-Date:   Thu, 19 May 2022 12:34:12 +0800
-Message-Id: <20220519043412.2805706-1-tien.sung.ang@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <3911c8c7-da6d-e6f2-c747-3b601d9cdacc@redhat.com>
-References: <3911c8c7-da6d-e6f2-c747-3b601d9cdacc@redhat.com>
+        with ESMTP id S235145AbiESIDi (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 19 May 2022 04:03:38 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51B15717A;
+        Thu, 19 May 2022 01:03:25 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id bh5so4104448plb.6;
+        Thu, 19 May 2022 01:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KeXnbaKJnGx6CxOBxq1EdGG+BzLXP0puOQzJvH7BluU=;
+        b=AV2+qspzF8P1AKthUwMJ/5NkNWHujoMeP+vXvs6C5vYe8NDhgU2BCw+v5aNx9perC/
+         ivKI7gtVbg+SgQbXC9sHTvWtlQiTOJg36B12tSNDiOgJa2PoD6I32AdOf+B0sdofxlwL
+         AgtOIIHw0JySvbekQ/UKHB3zaJvYvwF0VS3WexOdvz6BtdtGY1VLFy0+BcuHzxY6c0Nn
+         JCRzks5b/OPj90wfdT5w0sMdTMwUuqs9ovoH2PrDkGTvugbukqYEiOH7LVv6xYsi/5wI
+         X+W4nd5kpceZWCqtyUtXSrrhgEUiSiQWtnZpTNgGvLA0hDQXuus9C9jU6USChvE82zYg
+         Leig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KeXnbaKJnGx6CxOBxq1EdGG+BzLXP0puOQzJvH7BluU=;
+        b=I8xZqtj2kBflYcahObqGgX21BsrBr6zIOo2XKXRsYclxw3O9KbxeFHXb2LRlFKdJ75
+         ix2qtZmNNqVX494kDSQ8aCy5UD1kepn0aOtujkuXPbkKhlzfrRVa4rKvpDYTateE8dtm
+         PIb94A7wn9jeWzZ7yn6sC43LvdUuu9LeqsuigXd2yF5GTcriTkXl7YWyCvERTA/F/x05
+         l/aX8MWJDrGm7xySrCmdzyYMiVWHgS+pEqJmcZM3QpODpTol+o4+9ZXTc/LkDKtd7JXD
+         EdaKl9K2budG8ADjc/3bmkZDNCmtueIqHR96IlSzBXVPReYiDq33aRYwUx5naIGJwPZ+
+         zlrQ==
+X-Gm-Message-State: AOAM5323wIKNof3gfeCq3KVHYyZ61GYJ99xSHitqstqf+eLONh0LdVcg
+        6rJupFLMVvDBiXVo86MdzKU=
+X-Google-Smtp-Source: ABdhPJxk3BnUOeOGCFa19Vd8sL3A2PKRDakiJVd3iG+DNRN9ods95VZOlZerRiEWkaF2gsHJ70nFXw==
+X-Received: by 2002:a17:902:e94e:b0:158:91e6:501 with SMTP id b14-20020a170902e94e00b0015891e60501mr3577819pll.29.1652947405403;
+        Thu, 19 May 2022 01:03:25 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-16.three.co.id. [180.214.232.16])
+        by smtp.gmail.com with ESMTPSA id x21-20020a170902b41500b00161996b9a66sm3040382plr.233.2022.05.19.01.03.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 01:03:24 -0700 (PDT)
+Message-ID: <3a5e3080-c1ab-a5c9-f9e7-355975fadc49@gmail.com>
+Date:   Thu, 19 May 2022 15:03:20 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 2/3] fpga: doc: documentation for FPGA debugfs
+Content-Language: en-US
+To:     adrian.ho.yin.ng@intel.com, Moritz Fischer <mdf@kernel.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        Tom Rix <trix@redhat.com>, Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
+        Alan Tull <atull@opensource.altera.com>
+References: <20220517084136.3529-1-adrian.ho.yin.ng@intel.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220517084136.3529-1-adrian.ho.yin.ng@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,16 +75,51 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The send_buf is always used throughout the life-span of the CvP driver.
-Hence, we thought it would be wise to just pre-allocate it one time
-at the start of the probe/init.
-It is also fine if we do it in the altera_cvp_write. The only issue we
-see in this is that, a minor hit on the performance as you need to 
-then, allocate the buffer on every new CvP FPGA configuration write.
+On 5/17/22 15:41, adrian.ho.yin.ng@intel.com wrote:
+> diff --git a/Documentation/fpga/debugfs.txt b/Documentation/fpga/debugfs.txt
+> new file mode 100644
+> index 000000000000..1b34d5460d5d
+> --- /dev/null
+> +++ b/Documentation/fpga/debugfs.txt
+> @@ -0,0 +1,33 @@
+> +FPGA Manager DebugFS interface for FPGA reprogramming.
+> +
+> +Alan Tull 2016
+> +
 
-As for STEP 16, the previous implementation checks the Error latch bit
-which stores the previous transaction's result. If an error occurs
-prior to this, the driver would throw an error which is not right.
-The correct step is to just check for the current CvP error status 
-from the register.
-Hope that is fine with you. Thanks
+Missing (c).
+
+> +Each FPGA gets its own directory such as <debugfs>/fpga_manager/fpga0 and
+> +three files:
+> +
+> + - [RW] flags:          flags as defined in fpga-mgr.h.  For example:
+> +
+> +   $ echo 1 > /sys/kernel/debug/fpga_manager/fpga0/flags
+> +
+> + - [RW] firmware_name:  Name of an FPGA image firmware file.  Writing initiates
+> +                        a complete FPGA programming cycle.  Note that the image
+> +                        file must be in a directory on the firmware search path
+> +                        such as /lib/firmware.
+> +
+> +   $ echo image.rbf > /sys/kernel/debug/fpga_manager/fpga0/firmware_name
+> +
+> + - [WO] image:          Raw FPGA image data.  Writing the FPGA image data will
+> +                        initiate a complete FPGA programming cycle.  Data must
+> +                        be written in one chunk, for example:
+> +
+> +   $ dd bs=10M if=./image.rbf of=/sys/kernel/debug/fpga_manager/fpga0/image
+> +    (where image.rbf < 10M)
+> +
+> +To program the FPGA, write the flags (if needed), then use either the
+> +firmware_name or image file to program.
+> +
+> +This interface does not handle bridges or loading/unloading of soft IP device
+> +drivers.  This makes it really easy to mess things up by doing things like
+> +reprogramming the hardware out from under a driver or reprogramming while a
+> +bridge is enabled, causing gunk to go out on a cpu bus.  It should go without
+> +saying that this interface is for debug only.  Not intended for production use.
+
+Use .rst for writing docs in Documentation/ (and fix any warnings found).
+
+-- 
+An old man doll... just what I always wanted! - Clara
