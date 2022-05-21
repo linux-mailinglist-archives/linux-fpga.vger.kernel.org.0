@@ -2,40 +2,40 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9E452F6E8
-	for <lists+linux-fpga@lfdr.de>; Sat, 21 May 2022 02:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C169152F6EF
+	for <lists+linux-fpga@lfdr.de>; Sat, 21 May 2022 02:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354246AbiEUAgZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 20 May 2022 20:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        id S1354251AbiEUAg0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 20 May 2022 20:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354270AbiEUAgQ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 20 May 2022 20:36:16 -0400
+        with ESMTP id S1354272AbiEUAgS (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 20 May 2022 20:36:18 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E264E8BD34;
-        Fri, 20 May 2022 17:36:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09F48B0AC;
+        Fri, 20 May 2022 17:36:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653093374; x=1684629374;
+  t=1653093376; x=1684629376;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bvCxtMzjBgsMfpOF1m4XIspOUXGrX9yWVeTVVCspghg=;
-  b=IVFSdwZ7/3/pRLhnQItzpOstg3oh1ppk36nVuG9oweJ0k6FGARbWlNhw
-   LWJweOTB2NlR3S8sztn/SVXvuj9aIdOFGr5DDBETczYryeqMsrC0Ac/LA
-   5fp1pNYl25Zkn0Knw0AxPFPFQQxmrqgF5UIxUOTKIxRVZxkbzSzhrf+7s
-   HEiQ41KhH4Fa8CAXebh5ATJJpFrahrGE3+dVeN+ON4PgmZOeZz+oywVEo
-   b/7wAhfnBUMcxhGcxzSDl36w4+YCf+j/dc/Er0JXkYTtSXH3cctireypD
-   rvfF9/1ddgF2DzaGSoFYD1FvdLpZbsWtdyvtuUrZ6zF1NyeX6nCWdeYkM
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="260365767"
+  bh=W9jAjZCpIQNI1oUY2wo5mZyiZS+5a62kQu+A5Cn+WOg=;
+  b=W58ipWxQe1XYcFoJ9X/6TrN4EareJmSodwSuQQxyLlZ3p3RPH+vTSv+4
+   JC9SkeN+aCq7Z7IcPHDxJX/sIN31PRj8M/E9hbU2bfmLVHbAE59YEVQBL
+   GYnDu8/2qyoPbHZOftB5gV6nW9dmu82CXuwxFb5kDbeDwyy6yRcgssBnP
+   r07s/Ivud4V5rQySxTMhgcN3GJGvj6rwXA3AVF4CnSYGnhekdFPYA67MF
+   JDI2DCzuQwya02NdzS2284MkZs2zQBDtH9ZaBzmuLeFMd+rf1Y7zb0uB4
+   UTI3s61Ucu6lcUiwxwZTI76bDqC8WaKAE55W3Bi/m/qpx/I7z0DAc2HqC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="260365771"
 X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="260365767"
+   d="scan'208";a="260365771"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 17:36:14 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 17:36:16 -0700
 X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="628430994"
+   d="scan'208";a="628430998"
 Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.251.21.47])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 17:36:13 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 17:36:14 -0700
 From:   Russ Weight <russell.h.weight@intel.com>
 To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
         lee.jones@linaro.org, linux-fpga@vger.kernel.org,
@@ -44,9 +44,9 @@ Cc:     trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
         matthew.gerlach@linux.intel.com,
         basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
         Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v21 3/5] fpga: m10bmc-sec: expose max10 flash update count
-Date:   Fri, 20 May 2022 17:36:05 -0700
-Message-Id: <20220521003607.737734-4-russell.h.weight@intel.com>
+Subject: [PATCH v21 4/5] fpga: m10bmc-sec: expose max10 canceled keys in sysfs
+Date:   Fri, 20 May 2022 17:36:06 -0700
+Message-Id: <20220521003607.737734-5-russell.h.weight@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220521003607.737734-1-russell.h.weight@intel.com>
 References: <20220521003607.737734-1-russell.h.weight@intel.com>
@@ -62,17 +62,25 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Extend the MAX10 BMC Secure Update driver to provide a sysfs file to
-expose the flash update count.
+Extend the MAX10 BMC Secure Update driver to provide sysfs files to
+expose the 128 bit code signing key (CSK) cancellation vectors. These use
+the standard bitmap list format (e.g. 1,2-6,9).
+
+Each CSK is assigned an ID, a number between 0-127, during the signing
+process. CSK ID cancellation information is stored in 128-bit fields in
+write-once locations in flash.  The cancellation of a CSK can be used
+to prevent the card from being rolled back to older images that were
+signed with a CSK that is now cancelled.
 
 Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 Reviewed-by: Tom Rix <trix@redhat.com>
 ---
 v21:
-  - Replace WARN_ON(FLASH_COUNT_SIZE % stride) with a more elaborate test.
-    Return -EINVAL and write a message to the kernel log. Call WARN_ON_ONCE().
+  - Replace WARN_ON(size % stride) with a more elaborate test. Return
+    -EINVAL and write a message to the kernel log. Call WARN_ON_ONCE().
 v20:
-  - No change
+  - Added text to the commit message to further describe the cancellation of
+    code signing keys.
 v19:
   - Change "card bmc" naming back to "m10 bmc" naming to be consistent
     with the parent driver.
@@ -88,7 +96,7 @@ v16:
 v15:
   - Updated the Dates and KernelVersions in the ABI documentation
 v14:
-  - No change
+  - No changes
 v13:
   - Updated ABI documentation date and kernel version
 v12:
@@ -96,117 +104,154 @@ v12:
 v11:
   - No change
 v10:
-  - Changed the path expression in the sysfs documentation to
+  - Changed the path expressions in the sysfs documentation to
     replace the n3000 reference with something more generic to
     accomodate other devices that use the same driver.
 v9:
   - Rebased to 5.12-rc2 next
   - Updated Date and KernelVersion in ABI documentation
 v8:
-  - Previously patch 3/6, otherwise no change
+  - Previously patch 4/6, otherwise no change
 v7:
   - Updated Date and KernelVersion in ABI documentation
 v6:
-  - Changed flash_count_show() parameter list to achieve
-    reverse-christmas tree format.
-  - Added WARN_ON() call for (FLASH_COUNT_SIZE / stride) to ensure
+  - Added WARN_ON() call for (size / stride) to ensure
     that the proper count is passed to regmap_bulk_read().
 v5:
-  - Renamed sysfs node user_flash_count to flash_count and updated the
-    sysfs documentation accordingly.
+  - No change
 v4:
-  - Moved the sysfs file for displaying the flash count from the
-    FPGA Security Manager class driver to here. The
-    m10bmc_user_flash_count() function is removed and the
-    functionality is moved into a user_flash_count_show()
-    function.
-  - Added ABI documentation for the new sysfs entry
+  - Moved sysfs files for displaying the code-signing-key (CSK)
+    cancellation vectors from the FPGA Security Manger class driver
+    to here. The m10bmc_csk_vector() and m10bmc_csk_cancel_nbits()
+    functions are removed and the functionality from these functions
+    is moved into a show_canceled_csk() function for for displaying
+    the CSK vectors.
+  - Added ABI documentation for new sysfs entries
 v3:
   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
     driver"
   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
     underlying functions are now called directly.
+  - Renamed get_csk_vector() to m10bmc_csk_vector()
 v2:
-  - Renamed get_qspi_flash_count() to m10bmc_user_flash_count()
-  - Minor code cleanup per review comments
+  - Replaced small function-creation macros for explicit function
+    declarations.
+  - Fixed get_csk_vector() function to properly apply the stride
+    variable in calls to m10bmc_raw_bulk_read()
   - Added m10bmc_ prefix to functions in m10bmc_iops structure
 ---
- .../sysfs-driver-intel-m10-bmc-sec-update     |  8 ++++
- drivers/fpga/intel-m10-bmc-sec-update.c       | 43 +++++++++++++++++++
- 2 files changed, 51 insertions(+)
+ .../sysfs-driver-intel-m10-bmc-sec-update     | 24 +++++++++
+ drivers/fpga/intel-m10-bmc-sec-update.c       | 54 +++++++++++++++++++
+ 2 files changed, 78 insertions(+)
 
 diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-index 2bb271695e14..1132e39b2125 100644
+index 1132e39b2125..ca5a34c1c31f 100644
 --- a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
 +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-@@ -27,3 +27,11 @@ Description:	Read only. Returns the root entry hash for the BMC image
- 		"hash not programmed".  This file is only visible if the
+@@ -28,6 +28,30 @@ Description:	Read only. Returns the root entry hash for the BMC image
  		underlying device supports it.
  		Format: string.
-+
-+What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/flash_count
+ 
++What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/sr_canceled_csks
 +Date:		Jul 2022
 +KernelVersion:	5.19
 +Contact:	Russ Weight <russell.h.weight@intel.com>
-+Description:	Read only. Returns number of times the secure update
-+		staging area has been flashed.
-+		Format: "%u".
++Description:	Read only. Returns a list of indices for canceled code
++		signing keys for the static region. The standard bitmap
++		list format is used (e.g. "1,2-6,9").
++
++What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/pr_canceled_csks
++Date:		Jul 2022
++KernelVersion:	5.19
++Contact:	Russ Weight <russell.h.weight@intel.com>
++Description:	Read only. Returns a list of indices for canceled code
++		signing keys for the partial reconfiguration region. The
++		standard bitmap list format is used (e.g. "1,2-6,9").
++
++What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/bmc_canceled_csks
++Date:		Jul 2022
++KernelVersion:	5.19
++Contact:	Russ Weight <russell.h.weight@intel.com>
++Description:	Read only. Returns a list of indices for canceled code
++		signing keys for the BMC.  The standard bitmap list format
++		is used (e.g. "1,2-6,9").
++
+ What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/flash_count
+ Date:		Jul 2022
+ KernelVersion:	5.19
 diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-index f9f39d2cfe5b..25b21f116976 100644
+index 25b21f116976..65fec2a70901 100644
 --- a/drivers/fpga/intel-m10-bmc-sec-update.c
 +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-@@ -78,7 +78,50 @@ DEVICE_ATTR_SEC_REH_RO(bmc, BMC_PROG_MAGIC, BMC_PROG_ADDR, BMC_REH_ADDR);
+@@ -78,6 +78,57 @@ DEVICE_ATTR_SEC_REH_RO(bmc, BMC_PROG_MAGIC, BMC_PROG_ADDR, BMC_REH_ADDR);
  DEVICE_ATTR_SEC_REH_RO(sr, SR_PROG_MAGIC, SR_PROG_ADDR, SR_REH_ADDR);
  DEVICE_ATTR_SEC_REH_RO(pr, PR_PROG_MAGIC, PR_PROG_ADDR, PR_REH_ADDR);
  
-+#define FLASH_COUNT_SIZE 4096	/* count stored as inverted bit vector */
++#define CSK_BIT_LEN		128U
++#define CSK_32ARRAY_SIZE	DIV_ROUND_UP(CSK_BIT_LEN, 32)
 +
-+static ssize_t flash_count_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
++static ssize_t
++show_canceled_csk(struct device *dev, u32 addr, char *buf)
 +{
++	unsigned int i, stride, size = CSK_32ARRAY_SIZE * sizeof(u32);
 +	struct m10bmc_sec *sec = dev_get_drvdata(dev);
-+	unsigned int stride, num_bits;
-+	u8 *flash_buf;
-+	int cnt, ret;
++	DECLARE_BITMAP(csk_map, CSK_BIT_LEN);
++	__le32 csk_le32[CSK_32ARRAY_SIZE];
++	u32 csk32[CSK_32ARRAY_SIZE];
++	int ret;
 +
 +	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
-+	num_bits = FLASH_COUNT_SIZE * 8;
-+
-+	flash_buf = kmalloc(FLASH_COUNT_SIZE, GFP_KERNEL);
-+	if (!flash_buf)
-+		return -ENOMEM;
-+
-+	if (FLASH_COUNT_SIZE % stride) {
++	if (size % stride) {
 +		dev_err(sec->dev,
-+			"FLASH_COUNT_SIZE (0x%x) not aligned to stride (0x%x)\n",
-+			FLASH_COUNT_SIZE, stride);
++			"CSK vector size (0x%x) not aligned to stride (0x%x)\n",
++			size, stride);
 +		WARN_ON_ONCE(1);
 +		return -EINVAL;
 +	}
 +
-+	ret = regmap_bulk_read(sec->m10bmc->regmap, STAGING_FLASH_COUNT,
-+			       flash_buf, FLASH_COUNT_SIZE / stride);
++	ret = regmap_bulk_read(sec->m10bmc->regmap, addr, csk_le32,
++			       size / stride);
 +	if (ret) {
-+		dev_err(sec->dev,
-+			"failed to read flash count: %x cnt %x: %d\n",
-+			STAGING_FLASH_COUNT, FLASH_COUNT_SIZE / stride, ret);
-+		goto exit_free;
++		dev_err(sec->dev, "failed to read CSK vector: %x cnt %x: %d\n",
++			addr, size / stride, ret);
++		return ret;
 +	}
-+	cnt = num_bits - bitmap_weight((unsigned long *)flash_buf, num_bits);
 +
-+exit_free:
-+	kfree(flash_buf);
++	for (i = 0; i < CSK_32ARRAY_SIZE; i++)
++		csk32[i] = le32_to_cpu(((csk_le32[i])));
 +
-+	return ret ? : sysfs_emit(buf, "%u\n", cnt);
++	bitmap_from_arr32(csk_map, csk32, CSK_BIT_LEN);
++	bitmap_complement(csk_map, csk_map, CSK_BIT_LEN);
++	return bitmap_print_to_pagebuf(1, buf, csk_map, CSK_BIT_LEN);
 +}
-+static DEVICE_ATTR_RO(flash_count);
 +
- static struct attribute *m10bmc_security_attrs[] = {
-+	&dev_attr_flash_count.attr,
++#define DEVICE_ATTR_SEC_CSK_RO(_name, _addr) \
++static ssize_t _name##_canceled_csks_show(struct device *dev, \
++					  struct device_attribute *attr, \
++					  char *buf) \
++{ return show_canceled_csk(dev, _addr, buf); } \
++static DEVICE_ATTR_RO(_name##_canceled_csks)
++
++#define CSK_VEC_OFFSET 0x34
++
++DEVICE_ATTR_SEC_CSK_RO(bmc, BMC_PROG_ADDR + CSK_VEC_OFFSET);
++DEVICE_ATTR_SEC_CSK_RO(sr, SR_PROG_ADDR + CSK_VEC_OFFSET);
++DEVICE_ATTR_SEC_CSK_RO(pr, PR_PROG_ADDR + CSK_VEC_OFFSET);
++
+ #define FLASH_COUNT_SIZE 4096	/* count stored as inverted bit vector */
+ 
+ static ssize_t flash_count_show(struct device *dev,
+@@ -125,6 +176,9 @@ static struct attribute *m10bmc_security_attrs[] = {
  	&dev_attr_bmc_root_entry_hash.attr,
  	&dev_attr_sr_root_entry_hash.attr,
  	&dev_attr_pr_root_entry_hash.attr,
++	&dev_attr_sr_canceled_csks.attr,
++	&dev_attr_pr_canceled_csks.attr,
++	&dev_attr_bmc_canceled_csks.attr,
+ 	NULL,
+ };
+ 
 -- 
 2.25.1
 
