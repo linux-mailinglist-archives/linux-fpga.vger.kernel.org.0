@@ -2,162 +2,161 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9430D53063A
-	for <lists+linux-fpga@lfdr.de>; Sun, 22 May 2022 23:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2435307B9
+	for <lists+linux-fpga@lfdr.de>; Mon, 23 May 2022 04:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbiEVVbE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 22 May 2022 17:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
+        id S1350467AbiEWCeP (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 22 May 2022 22:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiEVVbD (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 22 May 2022 17:31:03 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5D82738;
-        Sun, 22 May 2022 14:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1653255057; x=1684791057;
+        with ESMTP id S1344466AbiEWCeO (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 22 May 2022 22:34:14 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177A5D107
+        for <linux-fpga@vger.kernel.org>; Sun, 22 May 2022 19:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653273253; x=1684809253;
   h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=KioIm5cu9dWI/rma4QdqalgKKegWWmnXhBFz4GK8GDs=;
-  b=sJp1wQSCFGpBs+wQuijT/lTuPVRUYSoP4d2svwnJvD2vzTYiWl4fncgo
-   xVvIwtqJX62X9xOvh7XeiojeDQQod4vgKsnyVU6kGhNAp1EsBcts1v/UH
-   YRci32vR5cIuAMo8rrWoPjbTA1HLYFZq7WR4QK8gStZTzWc0z932bChei
-   7X6omQhgLmMLePAxphSpjp+/Z+cGYplDPFkTnSBDsRu+EKj+0cYMMZJgU
-   hQaiAwHzudGc+chqcaLumEvJrhUNcvloVD7RngkFf0gao7soydbDZJKY6
-   igAQlNR5OnshQp9jveAPV7mVPAFjoyf1xyhubYwLCWASx1qvCLLI5gdvV
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=E1Q0YTQsdPdpBDHfURe74wgneoN2DsDjc6At+Dy8X6o=;
+  b=ftuMJwig1D0wY4QrgR2VM1bMxEyCg7/1bzsP7j6BED8esQX0osB4wW+O
+   qgR/cOih9YwWhFXWFrckfPItfhNBRVD1lGr/CuQ+jDu3DffjTXufgzkkp
+   IQnwt06IZ5v0ECh268fodbwEn5YDxL8LJIBJvNBgRp0aoxMIq9IPCY7wY
+   xjGJC1AaoNq5W3f1SmSEtDvnPQaS8Xy9Sb6tLZ5ydvmdXLA9+Fba2YB8k
+   0nQj1T6sqLvOXxnKrfi4oi6FQesuZ15Hnhvz9sUqnIzNIdQnEur2kWM8M
+   RyOyppiIWWsFvIMydxZdAaFhnIp39+5V/X4ZSLKj/1qfwdAiwoBmB13tN
    Q==;
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="96832802"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2022 14:30:56 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="271897498"
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="271897498"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 19:34:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="744472284"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 22 May 2022 19:34:12 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sun, 22 May 2022 14:30:56 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Sun, 22 May 2022 14:30:56 -0700
+ 15.1.2308.27; Sun, 22 May 2022 19:34:12 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Sun, 22 May 2022 19:34:11 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Sun, 22 May 2022 19:34:11 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.172)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Sun, 22 May 2022 19:34:11 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PJoOlyrdikfVdfo8i7wCCyn+kWudQcVXWFxvTuLyDcwSmHrOfIbFRrzxOayGjtNgwEqQVyig2oqrEMFb6clBbzQ1WnNbaMc+C2g5BaX/VAOxzwCDAZtafzjvxGUDvJSpcyclV+IuKSw0raV5aaBeL+q0zahNkYWJf8r8pX+41PEWSN08WnUtNWd1dSJ1BcQ892k72foOoLp22lw2xFj+vqugCyKMajdzlPJJhhxBJw5Dd2poiAW/qIesGyGmcGqEJJfy9DXXbiabb32uFSZyawTR94EXsp9C6BOu86zpf2WdVDy3PYkxUqFuoCbe1vVH6KIZPjL9WeovF2Pf+CAp3Q==
+ b=Tit7yj6FdafXd7pP4rKLWiiUJbZVLaoLKA9Z/lbnul9lyRhui3sEQuwMSXXldsP+dyyYn2BrOZPFumvX2OZdvoDz968j3w8HlwIiTKWlXqg52eBR37YbM0XFZaIyT60n3JZmlsy1jMOQVsHxUAdnTX0jNTCx6z+Prpzsn6uzawtRuWHZIZfWNE7xEMSHUxuaQVGZJpzwHeclBGW6UycTSv824hhMU5zYPRFrcKgMJxSwSLtmZ1dVO2kEgSD0BPg9rGckbuI9561PTbPOUJ4n6vG5lx6mjYewwBQ5TXeh7Jpo7ZMlG2fURt8631i+S+WJKIQiUSfSCCs3MW1MgqsULQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KioIm5cu9dWI/rma4QdqalgKKegWWmnXhBFz4GK8GDs=;
- b=denYz1vYK22wQi4i8wdImbwbD4bIRj8abBFLKokIvxQLbafOveR39Oa5Kv2BjjbW6D0mDxlEh2KSBMBdRUGUWW/lDa01g0GtAm4mzjLodY/SF6s7A9cibOxZUAd4ic8kMGhKJPOrRKw+NBhVAkoZdM6hR3x1bPnmhZpRIH9YegEwTmQYkyttuh9ECshlHd3pApiiU4XsqiJkGOcdrwaEF0oaCbD7tv6/J/6cgeM9Ig5g6OD+KamMdyMBnRcZy8lnVjK3ZYvMapgVCciOyf61ZP3fjvfp5s9v1ywFJ2awhnYZhrItFoztLLjo8NLLM048pPF/8ZKTVApeBomP7vLqbg==
+ bh=qiqLg0TwZTaBR0N+SAavM2WuTFOvqi4oyhkyQlkBv7I=;
+ b=mF+HlayV/T2EYvuq2EBr0EaUuxpZrPZAb8rVilo/ImcfzUTvr6cT9l4AKT+Ndq468fKYVLgLU12xR4CAkmXbSD0QvjDtNWDcvYbQXD3MPvmksaCJuki1+M3KPlWKtbuasSEUuBZac6S+F2vWYxQbHfoeVit/O+4DOSoYEPr5LtigyB0AdxqGiFaaR/6CNyirs6kEOWPW4IzqyktWQt5y2+6a4nHhMXvNnvArhqffmmijP/fS/KIuUHSZUu9KuB5agDgD+IsNR9Ru1G9A158XdQSFl9j4jucGjPs3HGv95n051vdEQUtyZ1vj/Uxq50i/TR94RUJ3mp4Lu6VZNKRbWA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KioIm5cu9dWI/rma4QdqalgKKegWWmnXhBFz4GK8GDs=;
- b=hMlveYehR/vbJ4pv2TuBwyoWXh0Hi7VkJWD30eHKkyHbecAiFx3z0+PV1HnUTDtQl2MCcebcvgl4f/B/I1XeiRKz82vwDC7kF121JxR8B5gq64Sjb2iWSYQVEHKb7DVJGwnOI1ym9HKKZxYMdU4vfjtqTOF1cjhLdkgKlJXsBTw=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by PH0PR11MB4824.namprd11.prod.outlook.com (2603:10b6:510:38::13) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
+ by PH0PR11MB5610.namprd11.prod.outlook.com (2603:10b6:510:e9::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Sun, 22 May
- 2022 21:30:54 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa%5]) with mapi id 15.20.5273.022; Sun, 22 May 2022
- 21:30:54 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <i.bornyakov@metrotek.ru>, <yilun.xu@intel.com>
-CC:     <mdf@kernel.org>, <hao.wu@intel.com>, <trix@redhat.com>,
-        <Conor.Dooley@microchip.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux-fpga@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <system@metrotek.ru>
-Subject: Re: [PATCH v12 2/3] fpga: microchip-spi: add Microchip MPF FPGA
- manager
-Thread-Topic: [PATCH v12 2/3] fpga: microchip-spi: add Microchip MPF FPGA
- manager
-Thread-Index: AQHYZumHhAxSnSBaW0m4mKdPhaAF7a0rKtUAgAA6yICAABL9gA==
-Date:   Sun, 22 May 2022 21:30:54 +0000
-Message-ID: <6d476989-81f9-4cf4-2423-8c5739eb8a7f@microchip.com>
-References: <20220513162755.16201-1-i.bornyakov@metrotek.ru>
- <20220513162755.16201-3-i.bornyakov@metrotek.ru>
- <20220522165232.GB90764@yilunxu-OptiPlex-7050>
- <20220522202255.f6a2x4owvg7nfzks@x260>
-In-Reply-To: <20220522202255.f6a2x4owvg7nfzks@x260>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Mon, 23 May
+ 2022 02:34:04 +0000
+Received: from BN9PR11MB5483.namprd11.prod.outlook.com
+ ([fe80::4d94:5d8b:51d7:d8b4]) by BN9PR11MB5483.namprd11.prod.outlook.com
+ ([fe80::4d94:5d8b:51d7:d8b4%7]) with mapi id 15.20.5273.022; Mon, 23 May 2022
+ 02:34:04 +0000
+From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
+To:     "Weight, Russell H" <russell.h.weight@intel.com>,
+        "mdf@kernel.org" <mdf@kernel.org>, "Wu, Hao" <hao.wu@intel.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
+CC:     "trix@redhat.com" <trix@redhat.com>,
+        "marpagan@redhat.com" <marpagan@redhat.com>,
+        "lgoncalv@redhat.com" <lgoncalv@redhat.com>,
+        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
+        "Muddebihal, Basheer Ahmed" <basheer.ahmed.muddebihal@intel.com>
+Subject: RE: [PATCH v21 0/5] FPGA MAX10 BMC Secure Update Driver
+Thread-Topic: [PATCH v21 0/5] FPGA MAX10 BMC Secure Update Driver
+Thread-Index: AQHYbKrN97piyWzg40O9t1VEcwxYLa0rwOFA
+Date:   Mon, 23 May 2022 02:34:04 +0000
+Message-ID: <BN9PR11MB54831DE841158BD874126462E3D49@BN9PR11MB5483.namprd11.prod.outlook.com>
+References: <20220521003607.737734-1-russell.h.weight@intel.com>
+In-Reply-To: <20220521003607.737734-1-russell.h.weight@intel.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
+dlp-product: dlpe-windows
+dlp-version: 11.6.401.20
+dlp-reaction: no-action
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
+ header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6d69407f-77c1-4385-0661-08da3c3a5a0d
-x-ms-traffictypediagnostic: PH0PR11MB4824:EE_
-x-microsoft-antispam-prvs: <PH0PR11MB48240096CD032081A7606EE998D59@PH0PR11MB4824.namprd11.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: a7dee433-b2af-40a7-47ad-08da3c64b475
+x-ms-traffictypediagnostic: PH0PR11MB5610:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <PH0PR11MB5610926F3D27D82E432DCC9BE3D49@PH0PR11MB5610.namprd11.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Nv58OUMy+JSJ6Xac3tMrmlNbnvcPe5t6T5N5rCQufd7+U1227VAvRcVVKZAOAXO3Zt//Fn55W2fBQy73OR+D6ua8joF2gyo8U7+KRMD7t6F8ymkGly0WAXnxKJEsxe7z+Ew9pS38VUHh55QvmMxmERKhtzUJhYIQO1d1xDZMnCugGDvmqFX8eFiOkZokqy9PmE5ctMn+RWKl3vCboVqW6hH/O1LbIM42CJSsn7Nn+CkaX0143V2kwzdq+5CpCCUEVPtEoXqhqoUKNlgqzHCz9WrMTNAOkGpAJ/6MEG6KDY2pBB3NiWGuAMXLH8X7//90a8ApPAJvMEz6jrexLRUNtZ8QWjDN/dksiB1A6SLJIgcxfT/JrdIDTmkd0uKRwvA/OnI3LcyZ3v0ct15IrzhWP/FJl98q+1z9wYcoXp8ANk5yl3EKDH2JwtObH/r7nbhXjTI3MWClsN6r2GMgIVhfek5Wmzfud+QEOVHw/41wM5Q9HS29ew5tzJKAKsh5/Ydv84HNuAR96CdUkNpK1cyRvnOS8VepHQHRu1mcqDpsujvbN1nQhnYV8jKq61umAxn1Gtp8gi0suTKa15M83ALhD0nCnrCcyi9rlfq7CjnedXS+xmg3d6agOfWk0Y+aOYOxY4d1C4WBGSLWOz0+oUnPRVL1f0/N/M80XToKOB664OE4y/HuVz7UuGpgkiiU78Kl4+BlBOiqz145Fvp05Xx6mbhFDHRd+nat9Vip/37EbGUh0fQ0JMd4xdiD3BTTfLCcfdGt+2wXLx674coQ5yevNSGPgyBGSw6Fc755pGDnDznRTgMCnMgS7tbVIrJLCULCyczunbcCA/zUurGXZXBArBzk7XQtiCruZ04FbxcxvSpM9dCD0tAyy9rb14QsLQktPjtoOvrt00+HPXgoEiA0lg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(31686004)(8676002)(66556008)(66476007)(2906002)(66446008)(64756008)(6486002)(110136005)(54906003)(4326008)(38100700002)(8936002)(91956017)(7416002)(5660300002)(86362001)(76116006)(66946007)(316002)(31696002)(2616005)(83380400001)(186003)(36756003)(53546011)(38070700005)(71200400001)(122000001)(508600001)(6512007)(6506007)(26005)(966005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: WvP06K/VKphu3EYfzhVmLgJNfoT9udlQzIq2xPox+5izS5DW01lFqyc0yhNb86LVQZPRXOqBKHGUTRl77B9iwevs53fkGcnqhW3Lqd/tDlHlGoAMnuo5Jl7ugy+DRSPwupgPQRTW14JlenrNQ8kYBGJeoP6OxOFkmDQAaIOvy0ysasT2YUr567UqsCFD1zfFGptzPG0W46shNNbklSjMUMALlMClp96exU1W5RbrLkyMfC3AxFpEZSYapNCpc26N/LZrhKioZtfFiWUm6/gWGLiki78cOH67hQornbiElWXzO2HToDzxKJWCYxFGPbiyPK14WpF5mwjZdbS3oH/5QSLJfzyileSYFcnDh0twPdudc0yIhwRCPFIPsnDmzIOXw7fj9dD25t8tNUMTTr80CM0ca/eSWIEe4HA9GrTgAtmqEAM2UqwcfUWbgY4Ac3SCPo2kKjMdVM4iD3DjM4tt0bDBSQlfxaRwcPKUFKfZ8FleGo54cjcr2J3cWA6AL70eFXiRa53CioPkNgPeVDy7UNXNDnR9/784VRQAG8WFnND8vzXMzUz00lS/DUwwS7JAJGGMcYJVCwKh68I/5sHWcOKpm7gfk8+vmTsrprjITy4tnj7hGL6UWS5R/mSgsi+i+PUJ6MBqo4wnqPWA6EokQ/LqVZ1m7IHNdvcMzxbVmm2TDPx0LJeXFEPYJQR8Ci6RNBu3zsAGupskTwxXw90DzDvj5UBaQLi0qfGbvYptubSrjMD8gvqDqK6wMCKefUkZ0rfWJ/rd22vA2oyS7+u6xRmsPoQhO8VE82rT6FK88dU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(15650500001)(30864003)(2906002)(186003)(33656002)(76116006)(66556008)(4326008)(86362001)(64756008)(66476007)(5660300002)(8676002)(66946007)(52536014)(8936002)(66446008)(53546011)(9686003)(54906003)(508600001)(71200400001)(55016003)(26005)(122000001)(7696005)(6506007)(38070700005)(316002)(38100700002)(82960400001)(110136005)(966005);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Vjh4SzhNMkZURkw3MVBra2oyZEdkL2VocStiR1NOd3dqZkFpY0piWXU5YUxD?=
- =?utf-8?B?UFZ5ckYxZHJGVk1YQUl5a2tDNk9XT21vKzFHek1aMEVkQU5RaE1mTmlWNW1i?=
- =?utf-8?B?WjA2YkJjOW4wT0NsVEpQVVlMMVVjdmxXald3ZWtOci85dGh3VGJlZFIrL3dM?=
- =?utf-8?B?SW9uTnp5K1QvdnZpT1NXa2tLWUMxR2wvYkxWaFR2dWVQOWFxaFRXUUoycmVn?=
- =?utf-8?B?NVkwTjdGOEp0YzI4S3pkUFl5d3BRRG1QOVNvVVZLV1NuaVBwYWF2eGRiV0JD?=
- =?utf-8?B?eFBQMkJySFFtdGVLTGE4cnpEM1ZLemdaR0JIcmtSanJtK2UzVi9SZ3grZXJi?=
- =?utf-8?B?U2ZhdHNkMUMwTmFZUy9jNFBUenpLa2dFdTgvbnFXMTNSM1FNOUlxRnkzR1lq?=
- =?utf-8?B?RkwySXo1WVpZK3VpcWR0RnRDeVdzMmRyWHZtWFlNbDhmcURFTmZMbjB2OUhv?=
- =?utf-8?B?RmVRaTJXa1BDV0wvYXBUUm1XODhNWC92d3laaEZ0U1ZTUDFFTVFhYWJYODNz?=
- =?utf-8?B?ZGVRc1NacEs3ZnVFRXNwS3NNUHd0L1lhcmdQeFdZV3o3RHdEOCs2cGRiVkN0?=
- =?utf-8?B?YzMxVlhpZzF4VmtXYU40ZWRhNVluL1VxbTAxQmtTT1pqMmFaMDltL3EwaGsz?=
- =?utf-8?B?bXdhMUpHUi82TFcySVdPbDhsSWozUnJyN3RYaWk3TWFGeDBjUlo4QVh3bUlx?=
- =?utf-8?B?enY0cWNDdE8wMEFSQWJhVDZUYlFIVEtPMStOSVZDTG83ZllqbmlIMkVMaTZ6?=
- =?utf-8?B?bjBpNnNqSFAydTMrZ3VnUmpFbmhvNXJUV0xJQmJPZVVVd2kzVjhubXUzTnRD?=
- =?utf-8?B?dGRVNS9oMUZqUUcxNHlaUHpUN0tTUUNSeUYxNkJjYnJjTGxJdHlMWHlhWGkr?=
- =?utf-8?B?emx1d1hCV1QyVkVidWdrMkhlWCt1MjhzcUMvamlQMUZBRkpoN2RuUXgzZFMx?=
- =?utf-8?B?dEdFbnZ5VzJDQyt0VC9IRWtYUVYweXB4WU5tRndpRWYxeWJjRWdNQjVjVi9x?=
- =?utf-8?B?U25vejNWbzI4VCt0dDlMN285bkx4MWVxRU52ZktmMitsNllaeTE4M0lNSTl5?=
- =?utf-8?B?L1AzN0FrZXVTOHppZUdFTWg3OFJFcERhZVBKMTBoWjhFbzF2eTdvYlV4djB2?=
- =?utf-8?B?UU1FUUx0OTQ4WlRXbG9XeXBlZ1c0Y21JTCs1VVFlOEp2Z1FnWmtWbC9JdUIv?=
- =?utf-8?B?OXAxNlpLODZqVEVoaEhZUkM3REFuWVoyMVYycWtuMzIveFdUdWpsWCs0Vkxy?=
- =?utf-8?B?QmJzK0hPOWZRMFZ1UjNqWmYrNTRKM3RPMHlVdGlhQ284YXdqek10MVNkajFR?=
- =?utf-8?B?NFlDNHlXL3E3d0VVbjlsbDNuZkg5ZUNvd1doYy8wTXhtMDJhS3VMRERTTys1?=
- =?utf-8?B?U0hOYU5HQVVjTG5xU01VdG43aUEwdXp4V1RYV0IvSmRyczRwNTl3d0lsWS9H?=
- =?utf-8?B?ZmJPZUtjeTF4MVJKWkFZTDc5elBOSnFqOTZFRVk0T2l1N2hDVzlLRDZ6VVJD?=
- =?utf-8?B?ek9mYStUaGIyZXZjU0hKUVZDNzA1aXlpZDA2TUZ1cmo4bnhTMkFkSkR5MGpD?=
- =?utf-8?B?Y2JOSUJDbFFkdlJpUUFVeGZaakljRHRxNDMvRGVqMlM3Y3krczZTUG1ZcCtW?=
- =?utf-8?B?NlNORG8vZFhZcFl4clFDWUd3b2tBemJwYk12dWIzUUJybGxZT1NRbVBCcHVs?=
- =?utf-8?B?TEdWNGlWejkreTF5NzdDY0h5amhrS3p6SXN5eFFRc2FoNDZuZWxvWDIwZzNV?=
- =?utf-8?B?bE9Ca05WdXpvYzZ1MmJRYkxnV0lnajJveE1wUytNWHdxWUY1NkJGSzdubkFU?=
- =?utf-8?B?N2VNbFMxYVBvUXF0SmpuWDZ2MHlHd1dSaE93VXFJQUN2Z0tOc0RMVmxVZTYx?=
- =?utf-8?B?V0xNbHhFVEVIUW5qZ2VJcjdjVlNUTi9oRFJrSUJiNStyQzBwWk9kOG1Ra092?=
- =?utf-8?B?U093THZYakRTQWZpME1XTSt5NktZVVQvTGNtdTZXWHBVeHpsdzltRGtPdEVT?=
- =?utf-8?B?bXh2OHZ3WERIQlUwU0oxY01MbDBWWUpwMVBjbzZkaFAvTzJZc2dQNGZEZEQ3?=
- =?utf-8?B?TE9vMU5aR3FIeXFNSjg2dFNHWmFOclN1bVNUNlZ2YWM1NnRXT04xdE9UQWxC?=
- =?utf-8?B?YTI1MnlBWTYxWFJ5cFRrbFUzMGdOUXgvd0hrMkIvSTg0a2xzRDN5bGsxSXZ2?=
- =?utf-8?B?YXJPc3F5V0t5NHNtZGJtdmhGMnUwa2M2c0x0Y0lwNU05amNReUc1djdPOFR3?=
- =?utf-8?B?YzhLaHFjdnlPR2k0VHRxMFJZazBwbW52Z0dnMDRhTUlpRlUxa3JwQjB5TzZp?=
- =?utf-8?B?S2pycUtiank1RDMrR2MzWVVqUFAyL0dKSlgvY1hUdlgzMkhvU1hYQT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DF4138D4B18CB44C8DAEDC901DED9A0D@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?el3WsXiey19bxbPWJ5bReNa+bW9HqzDPp037lI2XwAxAEL8sGRqoR+sRLWi+?=
+ =?us-ascii?Q?Pmgm0Ok3omGBBJGXNp7XsGsuDIBsbT/0ejR5qjzHdI4WI1goRh7LLpCMPG0M?=
+ =?us-ascii?Q?Hn3LU4eEVllempvLpJk+UVt1fiTovIg3sPBGT+2P/JNvT92PPmn8mDzHF9Pj?=
+ =?us-ascii?Q?Hz15SwjN3cHSoi/fUS0mmgEIcvWa7+bvtzSP+8m3Esi0mwDeFCivgThWAN7O?=
+ =?us-ascii?Q?sduHgMfjzGcfjIp5op7AVExdNYsp4kMOGaKt4T/VAqvAMtR8zNINWXhK7UVk?=
+ =?us-ascii?Q?Ha7gpqGt0KDDdmKV80Gqm0hsCBUfXe6AlwrkdOazh7fF3l0fF9WEqx/5d056?=
+ =?us-ascii?Q?9FPCd7nCjHoZASzCZJQWjLBPKYbEa32Tt+GuSzdh77Bdxsl3ZNc2EWbsPzGv?=
+ =?us-ascii?Q?Gu6SZVNaJWERUOerpEnHn+EFn8Ik715873WzwlUsxZzvQ1qRr5UtS8UpGkfn?=
+ =?us-ascii?Q?o81b+sPyekeUC/m99QaCyojYUq6OVKh4B+Em1Mxm9BAnbe6FxRvFVNGeMqSH?=
+ =?us-ascii?Q?BQ5Yly+XrBbe2F4hnUgvhMpt9HkO9P8365+YPDKY6bqI8eUmrKXFwtTF0Owc?=
+ =?us-ascii?Q?ft0pRgrRn2OEvCjhT3W3JewBLV2MRsS3wj2XszF8X8P6JVu9dg7sKIBF3KNz?=
+ =?us-ascii?Q?2gmRTVAHJ9TaqMHkBd8cV073PvzGY2hZXFo9+O7lo925u+vRPp0AJF8dY9Ey?=
+ =?us-ascii?Q?Jg8ZnIq5gswGbiTTjjU3hPD//I4UsaanhpJHRpFR8lwV9/Z4LKd4g8kgZzav?=
+ =?us-ascii?Q?TO1rdkO08ASjJLHc0vv/XowKmfRzozcHA/VVSFZz0TeREddlwR1SPj9dJ1S1?=
+ =?us-ascii?Q?qzvWYeQ+eQ5lXGWZb06Uu972Q5C+nbeviNU/roNBvH32piix3z0aaMlzRDIV?=
+ =?us-ascii?Q?hGETI4GyyZZoSy1PlQh8Q4xn4jSTwHvi04M+c/XuMLNKbXVl3fC/acfEAaFt?=
+ =?us-ascii?Q?XMkUDKC/WAD6mvQ46JWyNyXue7A/lHtaNKox9sjlbBT54jOpv0d5oZLu49/I?=
+ =?us-ascii?Q?cwAF3JJkOAJ5c51heOdgWFUfCStRY9QLh6vrrpAXxtGxWa1G7fw786ECuFWy?=
+ =?us-ascii?Q?h4zf9YCm1scW80rgky5z2Gt+4mx85c3Ng5xuSZSImBPd++AjUjOf8jOvQzUl?=
+ =?us-ascii?Q?x3FOndyfrtM0yddNjl4dD0cJYF+70aLRrr4q9V+GOtU2lsxm/2zf2zPmraft?=
+ =?us-ascii?Q?6dUhp1ZQGAPgoMvtVExcSpo1jbpQLt15HeDwjrZYgZozNjmUk6FHTLTGYyV2?=
+ =?us-ascii?Q?BGsJ2AK+MSGZoYC3gbJEDYKjZid7t2LzOwjEVXYBPNwupdMLP5zOgxsO/H1J?=
+ =?us-ascii?Q?GrxjsSsDCsuOSM/bG9WqKT+2Z5TRSHV8anPvEXXkuhY/QNiEZnH1NHpM1eXm?=
+ =?us-ascii?Q?tpkYtOlWjFceZYu7Mk43Sm/Hg/ygnIPmfcSp8uJYApzB6uegNlsiHLYZMyyw?=
+ =?us-ascii?Q?LyP3yBcxn93QXwA8//rOjnVV18dvLzPEndGBaHIBfAW37YgnGMDhT/3m9elM?=
+ =?us-ascii?Q?Xr/yg+Ew8QGqZxjPYuu8oBAH8RuSfqGODxo1mqc94UYF5oXgQfmWyUcWKrfy?=
+ =?us-ascii?Q?hkAlGNs/DSGuN7wx7vqkoSH/vXZZkYOnhfWVyFsab8xHNSQCCrQh6I/90Um8?=
+ =?us-ascii?Q?lLO13GGW356ZUtrg6rWNlK9vMcH5jKOfLqxyvCtzw0SerDxR38aWUaaob3/9?=
+ =?us-ascii?Q?EcIP4kSXzs8qtRK8JXid1bQQ0iV3XWiRnH90ZMKr0sDwLcv0IMms3SVWConf?=
+ =?us-ascii?Q?452eS/1LVA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d69407f-77c1-4385-0661-08da3c3a5a0d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2022 21:30:54.2450
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7dee433-b2af-40a7-47ad-08da3c64b475
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2022 02:34:04.7702
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f4gOHlye9saDYSZiz0AXyU4It9wV5Qiqe/+MGWFADhxzCTs/MmwDI4Lsk1AXHQVyi6pSDEm2pbzw1XH2V5/kudZMfpXPEosvfc9M3t5wA/A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4824
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-userprincipalname: 4qnRmvSK15NTxfk/HBuG128kDyVLF5ZKUVAA0gXPDFichxpHPUcQVTwovxLjiz10jJk4ZV7Tzrn/PR2N03dJpQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5610
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -165,120 +164,250 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-T24gMjIvMDUvMjAyMiAyMToyMiwgSXZhbiBCb3JueWFrb3Ygd3JvdGU6DQo+IE9uIE1vbiwgTWF5
-IDIzLCAyMDIyIGF0IDEyOjUyOjMyQU0gKzA4MDAsIFh1IFlpbHVuIHdyb3RlOg0KPj4gT24gRnJp
-LCBNYXkgMTMsIDIwMjIgYXQgMDc6Mjc6NTRQTSArMDMwMCwgSXZhbiBCb3JueWFrb3Ygd3JvdGU6
-DQo+Pj4gQWRkIHN1cHBvcnQgdG8gdGhlIEZQR0EgbWFuYWdlciBmb3IgcHJvZ3JhbW1pbmcgTWlj
-cm9jaGlwIFBvbGFyZmlyZQ0KPj4+IEZQR0FzIG92ZXIgc2xhdmUgU1BJIGludGVyZmFjZSB3aXRo
-IC5kYXQgZm9ybWF0dGVkIGJpdHNyZWFtIGltYWdlLg0KDQotLS04PC0tLQ0KDQo+Pj4gK3N0YXRp
-YyBpbnQgbXBmX3JlYWRfc3RhdHVzKHN0cnVjdCBzcGlfZGV2aWNlICpzcGkpDQo+Pj4gK3sNCj4+
-PiArCXU4IHN0YXR1cyA9IDAsIHN0YXR1c19jb21tYW5kID0gTVBGX1NQSV9SRUFEX1NUQVRVUzsN
-Cj4+PiArCXN0cnVjdCBzcGlfdHJhbnNmZXIgeGZlcnNbXSA9IHsNCj4+PiArCQlbMCAuLi4gMV0g
-PSB7DQo+Pj4gKwkJCS50eF9idWYgPSAmc3RhdHVzX2NvbW1hbmQsDQo+Pj4gKwkJCS5yeF9idWYg
-PSAmc3RhdHVzLA0KPj4+ICsJCQkubGVuID0gMSwNCj4+PiArCQkJLmNzX2NoYW5nZSA9IDEsDQo+
-Pj4gKwkJfQ0KPj4+ICsJfTsNCj4+PiArCWludCByZXQgPSBzcGlfc3luY190cmFuc2ZlcihzcGks
-IHhmZXJzLCAyKTsNCj4+DQo+PiBJIHJlbWVtYmVyIGl0IGlzIHNwaV93OHI4IGZvciB0aGUgZmly
-c3QgdGltZSwgd2h5IHdlIGNoYW5nZSB0bw0KPj4gc3BpX3N5bmNfdHJhbnNmZXI/IFRoZXkgYmVo
-YXZpb3IgZGlmZmVyZW50bHkgb24gc3BpIGJ1cy4NCj4gDQo+IE9uIHY4IENvbm9yIHJlcG9ydGVk
-IHRoYXQgc3BpX3c4cjggd2FzIG5vdCBjb3JyZWN0IHdheSB0byByZWFkIHRoZSBzdGF0dXMsDQo+
-IGRlc3BpdGUgdGhhdCBteSBIVyB3YXMgZ2l2aW5nIHJlYXNvbmFibGUgcmVzdWx0Lg0KPiANCj4g
-U2VlIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWZwZ2EvN2ZjZGU5YWEtYzA4Ni0zM2Ux
-LTE2MTktMDQ2NjNiZmVmZjg1QG1pY3JvY2hpcC5jb20vI3QNCg0KRm9yIHNvbWUgY29udGV4dCwg
-dGhlIHNwaSBzbGF2ZSBwcm9ncmFtbWluZyB3YXMgaW1wbGVtZW50ZWQgdG8gbWF0Y2ggdGhlDQpq
-dGFnIHByb2dyYW1taW5nIHByb2Nlc3MuIFRoZSBzdGF0dXMgY2FuJ3QgYmUgcmVhZCB3aXRoIHc4
-cjgoKSBiZWNhdXNlIGl0DQpjb21lcyBkaXJlY3RseSBmcm9tIHRoZSBoYXJkd2FyZSBiZXR3ZWVu
-IHRoZSBwaW5zIG9uIHRoZSBGUEdBIGFuZCB0aGUgc3BpDQpzbGF2ZSAmIHdpbGwgc3RhcnQgY2xv
-Y2tpbmcgaXQgb3V0IG9udG8gTUlTTyBhcyBzb29uIGFzIGl0IGhhcyBhIGNsb2NrDQphbmQgaXRz
-IHNlbGVjdCBpcyBhY3RpdmUuDQpJIGFtIG5vdCByZWFsbHkgc3VyZSBob3cgaXQgd29ya2VkIHRo
-YXQgd2F5IGZvciB5b3UuDQoNCj4gDQo+Pg0KPj4gQW5kIHdoeSB3ZSBuZWVkIHRvIHhmZXIgdGhl
-IHNhbWUgbWVzc2FnZSB0d2ljZT8gSWYgaXQgcmVsYXRlcyB0bw0KPj4gc29tZSBIVyBiZWhhdmlv
-ciwgd2UnZCBiZXR0ZXIgYWRkIHNvbWUgY29tbWVudHMgaGVyZS4NCj4+DQo+IA0KPiBPbiB2MTEg
-Q29ub3IgcmVwb3J0ZWQgdGhhdCBoZSBvYnNlcnZlZCBpbmFkZXF1YXRlIHN0YXR1cyByZWFkaW5n
-cywgYW5kDQo+IGRvdWJsZSBzdGF0dXMgcmVhZHMgZml4ZWQgdGhhdC4gVGhlcmUgaXMgYWxzbyBh
-IGhpbnQgaW4gTWljcm9jaGlwJ3MNCj4gIlNQSS1EaXJlY3RDIFVzZXIgR3VpZGUiIHRoYXQgc3Rh
-dHVzIHNob3VsZCBiZSByZWFkIHR3byB0aW1lcywgYnV0IG5vdCBhDQo+IGNsZWFyIHN0YXRlbWVu
-dC4NCj4gDQo+IFNlZSBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1mcGdhLzRiNzUyMTQ3
-LTFhMDktYTRhZi1iYzVkLTNiMTMyYjg0ZWY0OUBjb25jaHVvZC5pZS8jdA0KPiANCj4gQW55d2F5
-LCBJJ2xsIGFkZCBzb21lIHdvcmRzLg0KDQpJJ2xsIGJlIGhvbmVzdCBhbmQgc2F5IHRoYXQgdGhl
-IERpcmVjdEMgdXNlciBndWlkZSBpcyBub3QgZ3JlYXQsIEkgaGFkDQphIGxvb2sgZm9yIHRoYXQg
-ImhpbnQiIGJ1dCBpdCBkaWRuJ3Qgc3RhbmQgb3V0IHRvIG1lLg0KVW5sZXNzIHRoYXQgaXMgeW91
-IG1lYW50IHR3byBzY3JlZW5zaG90cyBvZiAiY2hlY2tpbmcgaGFyZHdhcmUgc3RhdHVzIg0KYXQg
-dGhpcyBVUkwgaW4gc2VjdGlvbiAxMCdzIHN1YnNlY3Rpb25zPw0KaHR0cHM6Ly9vbmxpbmVkb2Nz
-Lm1pY3JvY2hpcC5jb20vcHIvR1VJRC04MzU5MTdBRi1FNTIxLTQwNDYtQUQ1OS1EQ0I0NThFQjg0
-NjYtZW4tVVMtMS9pbmRleC5odG1sDQoNCklmIHRoYXQgaXMgdGhlIGNhc2UsIHRoYXQgc2VlbXMg
-dmVyeSBpbnN1ZmZpY2llbnQgdG8gbWUuIEkgd2lsbCB0cnkgdG8NCmdldCBjbGFyaWZpY2F0aW9u
-ICYgc3VnZ2VzdCB0aGF0IHRoZSBkb2N1bWVudGF0aW9uIGJlIGltcHJvdmVkIGlmIHNvLg0KDQot
-LS04PC0tLQ0KDQo+Pj4gKw0KPj4+ICtzdGF0aWMgaW50IG1wZl9vcHNfd3JpdGUoc3RydWN0IGZw
-Z2FfbWFuYWdlciAqbWdyLCBjb25zdCBjaGFyICpidWYsIHNpemVfdCBjb3VudCkNCj4+PiArew0K
-Pj4+ICsJdTggdG1wX2J1ZltNUEZfU1BJX0ZSQU1FX1NJWkUgKyAxXSA9IHsgTVBGX1NQSV9GUkFN
-RSwgfTsNCj4+PiArCXN0cnVjdCBtcGZfcHJpdiAqcHJpdiA9IG1nci0+cHJpdjsNCj4+PiArCXN0
-cnVjdCBkZXZpY2UgKmRldiA9ICZtZ3ItPmRldjsNCj4+PiArCXN0cnVjdCBzcGlfZGV2aWNlICpz
-cGk7DQo+Pj4gKwlpbnQgcmV0LCBpOw0KPj4+ICsNCj4+PiArCWlmIChjb3VudCAlIE1QRl9TUElf
-RlJBTUVfU0laRSkgew0KPj4+ICsJCWRldl9lcnIoZGV2LCAiQml0c3RyZWFtIHNpemUgaXMgbm90
-IGEgbXVsdGlwbGUgb2YgJWRcbiIsDQo+Pj4gKwkJCU1QRl9TUElfRlJBTUVfU0laRSk7DQo+Pj4g
-KwkJcmV0dXJuIC1FSU5WQUw7DQo+Pj4gKwl9DQo+Pj4gKw0KPj4+ICsJc3BpID0gcHJpdi0+c3Bp
-Ow0KPj4+ICsNCj4+PiArCWZvciAoaSA9IDA7IGkgPCBjb3VudCAvIE1QRl9TUElfRlJBTUVfU0la
-RTsgaSsrKSB7DQo+Pj4gKwkJbWVtY3B5KHRtcF9idWYgKyAxLCBidWYgKyBpICogTVBGX1NQSV9G
-UkFNRV9TSVpFLA0KPj4+ICsJCSAgICAgICBNUEZfU1BJX0ZSQU1FX1NJWkUpOw0KPj4+ICsNCj4+
-PiArCQlyZXQgPSBtcGZfc3BpX3dyaXRlKHNwaSwgdG1wX2J1Ziwgc2l6ZW9mKHRtcF9idWYpKTsN
-Cj4+DQo+PiBBcyBJIG1lbnRpb25lZCBiZWZvcmUsIGlzIGl0IHBvc3NpYmxlIHdlIHVzZSBzcGlf
-c3luY190cmFuc2ZlciB0byBhdm9pZA0KPj4gbWVtY3B5IHRoZSB3aG9sZSBiaXRzdHJlYW0/DQo+
-IA0KPiBVbmZvcnR1bmF0ZWx5LCBJIGRpZG4ndCBzdWNjZWVkIHdpdGggc3BpX3N1bmNfdHJhbnNm
-ZXIgaGVyZS4gTWF5IGJlDQo+IENvbm9yIG9yIG90aGVyIGZvbGtzIHdpdGggbW9yZSBpbnNpZ2h0
-IG9uIE1pY3JvY2hpcCdzIEhXIHdvdWxkIGJlIGFibGUNCj4gdG8gZWxpbWluYXRlIHRoaXMgbWVt
-Y3B5Li4uDQoNClN1cmUsIEknbGwgdGFrZSBhIGxvb2suIElmIEkgY2FuJ3QgYW5zd2VyIEknbGwg
-dHJ5IHRvIGZpbmQgb3V0Lg0KDQpJJ3ZlIGJlZW4gcmVhbGx5IGJ1c3kgdGhlIGxhc3Qgd2VlayAo
-YW5kIHdpbGwgYmUgdGhpcyBjb21pbmcgd2VlayB0b28pIHNvDQp3aGlsZSBJIGRpZCB1c2UgdjEy
-LCBJIGhhdmUgbm90IGJlZW4gYWJsZSB0byBwcm9wZXJseSBzaXQgZG93biBhbmQgbG9vaw0KYXQg
-aXQgcHJvcGVybHkgeWV0LCBzbyBhcG9sb2dpZXMgZm9yIHRoZSByYWRpbyBzaWxlbmNlIGZyb20g
-bWUuIEhvcGVmdWxseQ0KSSB3aWxsIGdldCBhIGNoYW5jZSB0aGlzIHdlZWsgJiBjYW4gZ2l2ZSBl
-aXRoZXIgYSByZXZpZXcgb3IgYWNrIGV0Yy4NCg0KVGhhbmtzLA0KQ29ub3IuDQoNCj4gDQo+Pj4g
-KwkJaWYgKHJldCkgew0KPj4+ICsJCQlkZXZfZXJyKGRldiwgIkZhaWxlZCB0byB3cml0ZSBiaXRz
-dHJlYW0gZnJhbWUgJWQvJXpkXG4iLA0KPj4NCj4+ICV6dSBmb3Igc2l6ZV90DQo+Pg0KPj4+ICsJ
-CQkJaSwgY291bnQgLyBNUEZfU1BJX0ZSQU1FX1NJWkUpOw0KPj4+ICsJCQlyZXR1cm4gcmV0Ow0K
-Pj4+ICsJCX0NCj4+PiArCX0NCj4+PiArDQo+Pj4gKwlyZXR1cm4gMDsNCj4+PiArfQ0KPj4+ICsN
-Cj4+PiArc3RhdGljIGludCBtcGZfb3BzX3dyaXRlX2NvbXBsZXRlKHN0cnVjdCBmcGdhX21hbmFn
-ZXIgKm1nciwNCj4+PiArCQkJCSAgc3RydWN0IGZwZ2FfaW1hZ2VfaW5mbyAqaW5mbykNCj4+PiAr
-ew0KPj4+ICsJY29uc3QgdTggaXNjX2Rpc19jb21tYW5kW10gPSB7IE1QRl9TUElfSVNDX0RJU0FC
-TEUgfTsNCj4+PiArCWNvbnN0IHU4IHJlbGVhc2VfY29tbWFuZFtdID0geyBNUEZfU1BJX1JFTEVB
-U0UgfTsNCj4+PiArCXN0cnVjdCBtcGZfcHJpdiAqcHJpdiA9IG1nci0+cHJpdjsNCj4+PiArCXN0
-cnVjdCBkZXZpY2UgKmRldiA9ICZtZ3ItPmRldjsNCj4+PiArCXN0cnVjdCBzcGlfZGV2aWNlICpz
-cGk7DQo+Pj4gKwlpbnQgcmV0Ow0KPj4+ICsNCj4+PiArCXNwaSA9IHByaXYtPnNwaTsNCj4+PiAr
-DQo+Pj4gKwlyZXQgPSBtcGZfc3BpX3dyaXRlKHNwaSwgaXNjX2Rpc19jb21tYW5kLCBzaXplb2Yo
-aXNjX2Rpc19jb21tYW5kKSk7DQo+Pj4gKwlpZiAocmV0KSB7DQo+Pj4gKwkJZGV2X2VycihkZXYs
-ICJGYWlsZWQgdG8gZGlzYWJsZSBJU0M6ICVkXG4iLCByZXQpOw0KPj4+ICsJCXJldHVybiByZXQ7
-DQo+Pj4gKwl9DQo+Pj4gKw0KPj4+ICsJdXNsZWVwX3JhbmdlKDEwMDAsIDIwMDApOw0KPj4+ICsN
-Cj4+PiArCXJldCA9IG1wZl9zcGlfd3JpdGUoc3BpLCByZWxlYXNlX2NvbW1hbmQsIHNpemVvZihy
-ZWxlYXNlX2NvbW1hbmQpKTsNCj4+PiArCWlmIChyZXQpIHsNCj4+PiArCQlkZXZfZXJyKGRldiwg
-IkZhaWxlZCB0byBleGl0IHByb2dyYW0gbW9kZTogJWRcbiIsIHJldCk7DQo+Pj4gKwkJcmV0dXJu
-IHJldDsNCj4+PiArCX0NCj4+PiArDQo+Pj4gKwlwcml2LT5wcm9ncmFtX21vZGUgPSBmYWxzZTsN
-Cj4+PiArDQo+Pj4gKwlyZXR1cm4gMDsNCj4+PiArfQ0KPj4+ICsNCj4+PiArc3RhdGljIGNvbnN0
-IHN0cnVjdCBmcGdhX21hbmFnZXJfb3BzIG1wZl9vcHMgPSB7DQo+Pj4gKwkuc3RhdGUgPSBtcGZf
-b3BzX3N0YXRlLA0KPj4+ICsJLmluaXRpYWxfaGVhZGVyX3NpemUgPSA3MSwNCj4+PiArCS5wYXJz
-ZV9oZWFkZXIgPSBtcGZfb3BzX3BhcnNlX2hlYWRlciwNCj4+PiArCS53cml0ZV9pbml0ID0gbXBm
-X29wc193cml0ZV9pbml0LA0KPj4+ICsJLndyaXRlID0gbXBmX29wc193cml0ZSwNCj4+PiArCS53
-cml0ZV9jb21wbGV0ZSA9IG1wZl9vcHNfd3JpdGVfY29tcGxldGUsDQo+Pj4gK307DQo+Pj4gKw0K
-Pj4+ICtzdGF0aWMgaW50IG1wZl9wcm9iZShzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpKQ0KPj4+ICt7
-DQo+Pj4gKwlzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmc3BpLT5kZXY7DQo+Pj4gKwlzdHJ1Y3QgZnBn
-YV9tYW5hZ2VyICptZ3I7DQo+Pj4gKwlzdHJ1Y3QgbXBmX3ByaXYgKnByaXY7DQo+Pj4gKw0KPj4+
-ICsJcHJpdiA9IGRldm1fa3phbGxvYyhkZXYsIHNpemVvZigqcHJpdiksIEdGUF9LRVJORUwpOw0K
-Pj4+ICsJaWYgKCFwcml2KQ0KPj4+ICsJCXJldHVybiAtRU5PTUVNOw0KPj4+ICsNCj4+PiArCXBy
-aXYtPnNwaSA9IHNwaTsNCj4+PiArDQo+Pj4gKwltZ3IgPSBkZXZtX2ZwZ2FfbWdyX3JlZ2lzdGVy
-KGRldiwgIk1pY3JvY2hpcCBQb2xhcmZpcmUgU1BJIEZQR0EgTWFuYWdlciIsDQo+Pj4gKwkJCQkg
-ICAgICZtcGZfb3BzLCBwcml2KTsNCj4+PiArDQo+Pj4gKwlyZXR1cm4gUFRSX0VSUl9PUl9aRVJP
-KG1ncik7DQo+Pj4gK30NCj4+PiArDQo+Pj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qgc3BpX2Rldmlj
-ZV9pZCBtcGZfc3BpX2lkc1tdID0gew0KPj4+ICsJeyAubmFtZSA9ICJtcGYtc3BpLWZwZ2EtbWdy
-IiwgfSwNCj4+PiArCXt9LA0KPj4+ICt9Ow0KPj4+ICtNT0RVTEVfREVWSUNFX1RBQkxFKHNwaSwg
-bXBmX3NwaV9pZHMpOw0KPj4+ICsNCj4+PiArI2lmIElTX0VOQUJMRUQoQ09ORklHX09GKQ0KPj4+
-ICtzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBtcGZfb2ZfaWRzW10gPSB7DQo+Pj4g
-Kwl7IC5jb21wYXRpYmxlID0gIm1pY3JvY2hpcCxtcGYtc3BpLWZwZ2EtbWdyIiB9LA0KPj4+ICsJ
-e30sDQo+Pj4gK307DQo+Pj4gK01PRFVMRV9ERVZJQ0VfVEFCTEUob2YsIG1wZl9vZl9pZHMpOw0K
-Pj4+ICsjZW5kaWYgLyogSVNfRU5BQkxFRChDT05GSUdfT0YpICovDQo+Pj4gKw0KPj4+ICtzdGF0
-aWMgc3RydWN0IHNwaV9kcml2ZXIgbXBmX2RyaXZlciA9IHsNCj4+PiArCS5wcm9iZSA9IG1wZl9w
-cm9iZSwNCj4+PiArCS5pZF90YWJsZSA9IG1wZl9zcGlfaWRzLA0KPj4+ICsJLmRyaXZlciA9IHsN
-Cj4+PiArCQkubmFtZSA9ICJtaWNyb2NoaXBfbXBmX3NwaV9mcGdhX21nciIsDQo+Pj4gKwkJLm9m
-X21hdGNoX3RhYmxlID0gb2ZfbWF0Y2hfcHRyKG1wZl9vZl9pZHMpLA0KPj4+ICsJfSwNCj4+PiAr
-fTsNCj4+PiArDQo+Pj4gK21vZHVsZV9zcGlfZHJpdmVyKG1wZl9kcml2ZXIpOw0KPj4+ICsNCj4+
-PiArTU9EVUxFX0RFU0NSSVBUSU9OKCJNaWNyb2NoaXAgUG9sYXJmaXJlIFNQSSBGUEdBIE1hbmFn
-ZXIiKTsNCj4+PiArTU9EVUxFX0xJQ0VOU0UoIkdQTCIpOw0KPj4+IC0tIA0KPj4+IDIuMzUuMQ0K
-Pj4+DQo+IA0K
+
+
+> -----Original Message-----
+> From: Weight, Russell H <russell.h.weight@intel.com>
+> Sent: Saturday, May 21, 2022 8:36 AM
+> To: mdf@kernel.org; Wu, Hao <hao.wu@intel.com>; Xu, Yilun
+> <yilun.xu@intel.com>; lee.jones@linaro.org; linux-fpga@vger.kernel.org; l=
+inux-
+> kernel@vger.kernel.org
+> Cc: trix@redhat.com; marpagan@redhat.com; lgoncalv@redhat.com;
+> matthew.gerlach@linux.intel.com; Muddebihal, Basheer Ahmed
+> <basheer.ahmed.muddebihal@intel.com>; Zhang, Tianfei
+> <tianfei.zhang@intel.com>; Weight, Russell H <russell.h.weight@intel.com>
+> Subject: [PATCH v21 0/5] FPGA MAX10 BMC Secure Update Driver
+>=20
+> The MAX10 BMC Secure Update driver instantiates the new Firmware Upload
+> functionality of the Firmware Loader and provides the callback functions
+> required to support secure updates on Intel n3000 PAC devices.  This driv=
+er is
+> implemented as a sub-driver of the Intel MAX10 BMC mfd driver.
+>=20
+> This driver interacts with the HW secure update engine of the FPGA card B=
+MC in
+> order to transfer new FPGA and BMC images to FLASH on the FPGA card.
+> Security is enforced by hardware and firmware.  The FPGA Card BMC Secure
+> Update driver interacts with the firmware to initiate an update, pass in =
+the
+> necessary data, and collect status on the update.
+>=20
+> This driver provides sysfs files for displaying the flash count, the root=
+ entry
+> hashes (REH), and the code-signing-key (CSK) cancellation vectors.
+>=20
+> Changelog v20 -> v21:
+>   - Replace WARN_ON() calls in flash_count_show() and show_canceled_csk()
+>     with a more elaborate test. Return -EINVAL and write a message to the
+>     kernel log. Call WARN_ON_ONCE().
+>   - Update m10bmc_sec_prepare() to ensure that the base address for an
+>     update image is aligned with stride.
+>   - Update m10bmc_sec_write() to handle a block size that is not aligned
+>     with stride by allocating a zero-filled block that is aligned, and
+>     copying the data before calling regmap_bulk_write().
+>=20
+> Changelog v19 -> v20:
+>   - Added text to commit messages to describe Root Entry Hashes (REH) and
+>     Code Signing Key (CSK) cancellation.
+>   - Use reverse christmas tree format for local variable declarations in
+>     show_root_entry_hash().
+>   - Remove WARN_ON() from show_root_entry_hash() and return -EINVAL if
+>     sha_num_bytes is not a multiple of stride.
+>   - Move MODULE_DEVICE_TABLE() macro to just beneath the definition of
+>     intel_m10bmc_sec_ids[].
+>=20
+> Changelog v18 -> v19:
+>   - Change "card bmc" naming back to "m10 bmc" naming to be consistent
+>     with the parent driver.
+>=20
+> Changelog v17 -> v18:
+>   - Changed the ABI documentation for the Root Entry Hashes to specify
+>     string as the format for the output.
+>   - Updated comments, strings and config options to more consistently
+>     refer to the driver as the Intel FPGA Card BMC Secure Update driver.
+>   - Removed an instance of dev_dbg().
+>   - Deferred the call to firmware_upload_register() to a later patch
+>     where the required ops are provided.
+>   - Switched from MODULE_ALIAS() to MODULE_DEVICE_TABLE() in anticipation
+>     of additional cards to be supported by the same driver.
+>=20
+> Changelog v16 -> v17:
+>   - Change m10bmc to cardbmc to reflect the fact that the future devices
+>     will not necessarily use the MAX10. This affects filenames, configs,
+>     symbol names, and the driver name.
+>   - Update the Date and KernelVersion for the ABI documentation to Jul 20=
+22
+>     and 5.19 respectively.
+>   - Updated the copyright end-date to 2022 for the secure update driver.
+>   - Removed references to the FPGA Image Load class driver and replaced
+>     them with the new firmware-upload service from the firmware loader.
+>   - Use xarray_alloc to generate a unique number/name firmware-upload.
+>   - Chang the license from GPL to GPLv2 per commit bf7fbeeae6db ("module:
+>     Cure the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
+>   - fw_upload_ops functions will return "enum fw_upload_err" data types
+>     instead of integer values.
+>=20
+> Changelog v15 -> v16:
+>   - Use 0 instead of FPGA_IMAGE_ERR_NONE to indicate success.
+>   - The size alignment check was moved from the FPGA Image Load framework
+>     to the prepare() op.
+>   - Added cancel_request boolean flag to struct m10bmc_sec.
+>   - Moved the RSU cancellation logic from m10bmc_sec_cancel() to a new
+>     rsu_cancel() function.
+>   - The m10bmc_sec_cancel() function ONLY sets the cancel_request flag.
+>     The cancel_request flag is checked at the beginning of the
+>     m10bmc_sec_write() and m10bmc_sec_poll_complete() functions.
+>   - Adapt to changed prototypes for the prepare() and write() ops. The
+>     m10bmc_sec_write_blk() function has been renamed to
+>     m10bmc_sec_write().
+>   - Created a cleanup op, m10bmc_sec_cleanup(), to attempt to cancel an
+>     ongoing op during when exiting the update process.
+>=20
+> Changelog v14 -> v15:
+>   - Updated the Dates and KernelVersions in the ABI documentation
+>   - Change driver name from "n3000bmc-secure" to "n3000bmc-sec-update".
+>   - Change CONFIG_FPGA_M10_BMC_SECURE to
+> CONFIG_FPGA_M10_BMC_SEC_UPDATE.
+>   - Change instances of *bmc-secure to *bmc-sec-update in file name
+>     and symbol names.
+>   - Change instances of *m10bmc_secure* to *m10bmc-sec_update* in symbol
+>     names.
+>   - Adapted to changes in the FPGA Image Load framework:
+>     (1) All enum types (progress and errors) are now type u32
+>     (2) m10bmc_sec_write_blk() adds *blk_size and max_size parameters
+>         and uses *blk_size as provided by the caller.
+>     (3) m10bmc_sec_poll_complete() no long checks the driver_unload
+>         flag.
+>=20
+> Changelog v13 -> v14:
+>   - Changed symbol and text references to reflect the renaming of the
+>     Security Manager Class driver to FPGA Image Load.
+>=20
+> Changelog v12 -> v13:
+>   - Updated copyright to 2021
+>   - Updated Date and KernelVersion fields in ABI documentation
+>   - Call updated fpga_sec_mgr_register() and fpga_sec_mgr_unregister()
+>     functions instead of devm_fpga_sec_mgr_create() and
+>     devm_fpga_sec_mgr_register().
+>=20
+> Changelog v11 -> v12:
+>   - Updated Date and KernelVersion fields in ABI documentation
+>   - Removed size parameter from the write_blk() op. m10bmc_sec_write_blk(=
+)
+>     no longer has a size parameter, and the block size is determined
+>     in this (the lower-level) driver.
+>=20
+> Changelog v10 -> v11:
+>   - Added Reviewed-by tag to patch #1
+>=20
+> Changelog v9 -> v10:
+>   - Changed the path expressions in the sysfs documentation to
+>     replace the n3000 reference with something more generic to
+>     accommodate other devices that use the same driver.
+>=20
+> Changelog v8 -> v9:
+>   - Rebased to 5.12-rc2 next
+>   - Updated Date and KernelVersion in ABI documentation
+>=20
+> Changelog v7 -> v8:
+>   - Split out patch "mfd: intel-m10-bmc: support for MAX10 BMC Secure
+>     Updates" and submitted it separately:
+>     https://marc.info/?l=3Dlinux-kernel&m=3D161126987101096&w=3D2
+>=20
+> Changelog v6 -> v7:
+>   - Rebased patches for 5.11-rc2
+>   - Updated Date and KernelVersion in ABI documentation
+>=20
+> Changelog v5 -> v6:
+>   - Added WARN_ON() prior to several calls to regmap_bulk_read()
+>     to assert that the (SIZE / stride) calculations did not result
+>     in remainders.
+>   - Changed the (size / stride) calculation in regmap_bulk_write()
+>     call to ensure that we don't write one less than intended.
+>   - Changed flash_count_show() parameter list to achieve
+>     reverse-christmas tree format.
+>   - Removed unnecessary call to rsu_check_complete() in
+>     m10bmc_sec_poll_complete() and changed while loop to
+>     do/while loop.
+>   - Initialized auth_result and doorbell to HW_ERRINFO_POISON
+>     in m10bmc_sec_hw_errinfo() and removed unnecessary if statements.
+>=20
+> Changelog v4 -> v5:
+>   - Renamed sysfs node user_flash_count to flash_count and updated
+>     the sysfs documentation accordingly to more accurately descirbe
+>     the purpose of the count.
+>=20
+> Changelog v3 -> v4:
+>   - Moved sysfs files for displaying the flash count, the root
+>     entry hashes (REH), and the code-signing-key (CSK) cancellation
+>     vectors from the FPGA Security Manager class driver to this
+>     driver (as they are not generic enough for the class driver).
+>   - Added a new ABI documentation file with informtaion about the
+>     new sysfs entries: sysfs-driver-intel-m10-bmc-secure
+>   - Updated the MAINTAINERS file to add the new ABI documentation
+>     file: sysfs-driver-intel-m10-bmc-secure
+>   - Removed unnecessary ret variable from m10bmc_secure_probe()
+>   - Incorporated new devm_fpga_sec_mgr_register() function into
+>     m10bmc_secure_probe() and removed the m10bmc_secure_remove()
+>     function.
+>=20
+> Changelog v2 -> v3:
+>   - Changed "MAX10 BMC Security Engine driver" to "MAX10 BMC Secure
+>     Update driver"
+>   - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+>   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
+>     underlying functions are now called directly.
+>   - Changed "_root_entry_hash" to "_reh", with a comment explaining
+>     what reh is.
+>   - Renamed get_csk_vector() to m10bmc_csk_vector()
+>   - Changed calling functions of functions that return "enum fpga_sec_err=
+"
+>     to check for (ret !=3D FPGA_SEC_ERR_NONE) instead of (ret)
+>=20
+> Changelog v1 -> v2:
+>   - These patches were previously submitted as part of a larger V1
+>     patch set under the title "Intel FPGA Security Manager Class Driver".
+>   - Grouped all changes to include/linux/mfd/intel-m10-bmc.h into a
+>     single patch: "mfd: intel-m10-bmc: support for MAX10 BMC Security
+>     Engine".
+>   - Removed ifpga_sec_mgr_init() and ifpga_sec_mgr_uinit() functions.
+>   - Adapted to changes in the Intel FPGA Security Manager by splitting
+>     the single call to ifpga_sec_mgr_register() into two function
+>     calls: devm_ifpga_sec_mgr_create() and ifpga_sec_mgr_register().
+>   - Replaced small function-creation macros for explicit function
+>     declarations.
+>   - Bug fix for the get_csk_vector() function to properly apply the
+>     stride variable in calls to m10bmc_raw_bulk_read().
+>   - Added m10bmc_ prefix to functions in m10bmc_iops structure
+>   - Implemented HW_ERRINFO_POISON for m10bmc_sec_hw_errinfo() to
+>     ensure that corresponding bits are set to 1 if we are unable
+>     to read the doorbell or auth_result registers.
+>   - Added comments and additional code cleanup per V1 review.
+>=20
+> Russ Weight (5):
+>   mfd: intel-m10-bmc: Rename n3000bmc-secure driver
+>   fpga: m10bmc-sec: create max10 bmc secure update
+>   fpga: m10bmc-sec: expose max10 flash update count
+>   fpga: m10bmc-sec: expose max10 canceled keys in sysfs
+>   fpga: m10bmc-sec: add max10 secure update functions
+>=20
+>  .../sysfs-driver-intel-m10-bmc-sec-update     |  61 ++
+>  MAINTAINERS                                   |   7 +
+>  drivers/fpga/Kconfig                          |  12 +
+>  drivers/fpga/Makefile                         |   3 +
+>  drivers/fpga/intel-m10-bmc-sec-update.c       | 640 ++++++++++++++++++
+>  drivers/mfd/intel-m10-bmc.c                   |   2 +-
+>  6 files changed, 724 insertions(+), 1 deletion(-)  create mode 100644
+> Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+>  create mode 100644 drivers/fpga/intel-m10-bmc-sec-update.c
+>=20
+>=20
+> base-commit: 18ecd30af1a8402c162cca1bd58771c0e5be7815
+
+Hi Russ,
+I have tested this patch set Intel PAC N3000 card, it woks fine and this pa=
+tch set looks good for me. You can add:
+Tested-by: Tianfei Zhang <tianfei.zhang@intel.com>
+
