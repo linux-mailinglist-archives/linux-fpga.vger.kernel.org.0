@@ -2,25 +2,25 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE75531373
-	for <lists+linux-fpga@lfdr.de>; Mon, 23 May 2022 18:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1435326E9
+	for <lists+linux-fpga@lfdr.de>; Tue, 24 May 2022 11:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236490AbiEWNqW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 23 May 2022 09:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        id S235934AbiEXJv2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 24 May 2022 05:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236614AbiEWNqB (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 23 May 2022 09:46:01 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2081.outbound.protection.outlook.com [40.107.93.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B352632;
-        Mon, 23 May 2022 06:45:58 -0700 (PDT)
+        with ESMTP id S235917AbiEXJv0 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 24 May 2022 05:51:26 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2048.outbound.protection.outlook.com [40.107.100.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95511CB1F;
+        Tue, 24 May 2022 02:51:21 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XLbZwc85Huw4nDUb1VIJw8ZogJF/UOZzvERfrZy+SIaIVv6dQ2G1M/sZ/YJjF2mXTw6fnA3G52FStnCCphr8+Zp95iIa/IXrCATlhmxtwhfTqVwlFFCI3W4hWdSFIu1kP4ka1bZLO4RhNIT9SRdiArOMpOWiFMT78dmQO9NB+e8C6hfM5F0Z/bpsyheN9c1SyVjhENxynrXSyT1/7jYmhjCdsuZGBwFlw5UfWv2tnD5ZPfB0Sw2RxKHdHrayQKDjUEw1wl4EAn4apY0fYfMDBfGnF2eVC9Imr5lJOwyC96T7+Zwi+VXxhn+XYpWy5lMvR2QNXG3CCIJ3U0/ewK9qJA==
+ b=XLQRo+I+QQrQN77vLsaOQYcaPUU74xzpfHNko76ha7CtR1uNQTkYFcrQj2YGy/Qh4t1LdBgAsx0wL3De28PPnuMY+OJ84HaFQGpeTk25dmA0DQi8oWKCCRMTiJrd995e7feX6BirOM6BpOdIV5py9ieDCeNm5cc4B/rNQSpApRD9VSdadMTFStyfr3k5L6i7tY35nDobCrrTUTErqOjgiViJxIXxvePeXddiHDIqT/t7iwJ0+NEPhAgq3yhjOxtwDOSZQ6J/H5K0E/XKn8AESV3/ogHbWGaffgya1Dv0ArQfgnLx408uI66wrVlq+94hM/obVqQfUhBJCmL8Zeryrg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0uwHN2oj69xTfuVrTwOmq6FYI2g192WyEZmoFWEMzZY=;
- b=RalCOem5pARSV742Z0+ucoWRK4B4trWSaGye4q+TGPYBXCCjKCYDheJ1SIx/53O8YcYWbj6/+au3gOfg4IBg1i4uk5QFAimOucGPFwVkm5w3AVHWleXxNzL3nrr75idNBP6RfjK97wqX8jfUOgfotKHbSX3jRHvOcQ5Y6uNbMJ/+dNkusJUoRyXvTJVdLpLEn3jvFWBDaxhWVz6PjbxWa2/PSEyOy3hDBnnnZrrYBlQCL9DziOnI0+wBEIwsEciM10+/TwRSI+S5+oKGWBatNwAfMQaGL2l+PYMSA2IS3bmXSzewTR03ceT17eCDCbmSaPAJ843/88X7m8cYlsqfkA==
+ bh=25CbHyWvTpz2Vorks8wDWpAgL5sf+mITmGtznSu/K8o=;
+ b=KKIOOVhPUJGK0Cf/CanLJG7G3qB4OgkfiwfjFGOi8Bo7FNkDIP1RR37BZfUQtRTcWRXf7Lg9YdGt7Q7srOdUfawWke8/vz7XEGaO+UD2Aiu1or1rDb+uUiPXVQekfy9t2RokadWPbtjhKuanmRiAymsfQO4QtrF1bqeUFXMtBr+SsEdJ56t8lOR0a4ePvjMd0c5Kfc7WxsZ4+Tte3sXEm9oSqYCByrgZSOso0UX3+ZNFOWOv7fBJdtCrRyO7BAXNPA1Hlf/H+VXp+sFEses15vUoSmu/uszJ2BojJ0wjsonuOBYvdv6cisJRg2qEKTBYk997p0NCbflL3AFo9hRCuA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -28,87 +28,86 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0uwHN2oj69xTfuVrTwOmq6FYI2g192WyEZmoFWEMzZY=;
- b=laX9wxLOsGtXi4qZENnIVELthcgJvSpIS1nGVFbXz0j958e0aryr+EH6vyOGX2oIHcQR3i+yrNQdtivYR8YIhMHw9mWbEbNeiS8ybKCEUdEw0XlpPxt+EUmoDxMiS3PQoSsgMQqyhmJoZUTecDzqK8RhHXnGnen5QJ+jNAvIGM4=
-Received: from SN4PR0601CA0021.namprd06.prod.outlook.com
- (2603:10b6:803:2f::31) by PH0PR02MB7750.namprd02.prod.outlook.com
- (2603:10b6:510:5e::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Mon, 23 May
- 2022 13:45:56 +0000
-Received: from SN1NAM02FT0026.eop-nam02.prod.protection.outlook.com
- (2603:10b6:803:2f:cafe::fa) by SN4PR0601CA0021.outlook.office365.com
- (2603:10b6:803:2f::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.22 via Frontend
- Transport; Mon, 23 May 2022 13:45:56 +0000
+ bh=25CbHyWvTpz2Vorks8wDWpAgL5sf+mITmGtznSu/K8o=;
+ b=NkNAYg22Z/CLv1FLHqFfd5jbFUemCOF4BMyWiIM9XIQxkBV9IHqCT+TxoEqjHrjfmZP73pnDi8hI0IPZ/mwRxo4FUt2AK6VQ1Q2f25TNhntoldu3TtO42BBhtChbwzfYRT3XQaibfZ0fXK07wYEbAN83Acm21/+rdQGsC8kUtCg=
+Received: from SN4PR0501CA0130.namprd05.prod.outlook.com
+ (2603:10b6:803:42::47) by MWHPR02MB2542.namprd02.prod.outlook.com
+ (2603:10b6:300:44::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Tue, 24 May
+ 2022 09:51:19 +0000
+Received: from SN1NAM02FT0030.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:803:42:cafe::26) by SN4PR0501CA0130.outlook.office365.com
+ (2603:10b6:803:42::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.7 via Frontend
+ Transport; Tue, 24 May 2022 09:51:19 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0026.mail.protection.outlook.com (10.97.5.74) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0030.mail.protection.outlook.com (10.97.5.194) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5273.14 via Frontend Transport; Mon, 23 May 2022 13:45:56 +0000
+ 15.20.5273.14 via Frontend Transport; Tue, 24 May 2022 09:51:19 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 23 May 2022 06:45:48 -0700
+ 15.1.2176.14; Tue, 24 May 2022 02:51:03 -0700
 Received: from smtp.xilinx.com (172.19.127.95) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 23 May 2022 06:45:48 -0700
+ 15.1.2176.14 via Frontend Transport; Tue, 24 May 2022 02:51:03 -0700
 Envelope-to: git@xilinx.com,
  mdf@kernel.org,
  hao.wu@intel.com,
  yilun.xu@intel.com,
  trix@redhat.com,
- robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org,
- linux-fpga@vger.kernel.org,
- devicetree@vger.kernel.org,
+ gregkh@linuxfoundation.org,
+ linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Received: from [10.140.6.60] (port=57798 helo=xhdnavam40.xilinx.com)
+ linux-fpga@vger.kernel.org
+Received: from [10.140.6.60] (port=58200 helo=xhdnavam40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <nava.manne@xilinx.com>)
-        id 1nt8NX-000GwK-Kl; Mon, 23 May 2022 06:45:48 -0700
+        id 1ntR8u-0005Sf-CC; Tue, 24 May 2022 02:47:56 -0700
 From:   Nava kishore Manne <nava.manne@xilinx.com>
-To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
-        <trix@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <michal.simek@xilinx.com>,
-        <nava.manne@xilinx.com>, <linux-fpga@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <git@xilinx.com>
-Subject: [PATCH v2 3/3] fpga: region: Add runtime PM support
-Date:   Mon, 23 May 2022 19:15:17 +0530
-Message-ID: <20220523134517.4056873-4-nava.manne@xilinx.com>
+To:     <michal.simek@xilinx.com>, <mdf@kernel.org>, <hao.wu@intel.com>,
+        <yilun.xu@intel.com>, <trix@redhat.com>,
+        <gregkh@linuxfoundation.org>, <ronak.jain@xilinx.com>,
+        <abhyuday.godhasara@xilinx.com>, <rajan.vaja@xilinx.com>,
+        <nava.manne@xilinx.com>, <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        <piyush.mehta@xilinx.com>, <harsha.harsha@xilinx.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <git@xilinx.com>
+Subject: [PATCH 0/3]Adds status interface for zynqmp-fpga
+Date:   Tue, 24 May 2022 15:17:42 +0530
+Message-ID: <20220524094745.287002-1-nava.manne@xilinx.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220523134517.4056873-1-nava.manne@xilinx.com>
-References: <20220523134517.4056873-1-nava.manne@xilinx.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e5547734-ee85-4cec-0f5e-08da3cc29011
-X-MS-TrafficTypeDiagnostic: PH0PR02MB7750:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR02MB7750C59358350FCC3342B158C2D49@PH0PR02MB7750.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: a8ea0c78-aad6-4c0a-ca2a-08da3d6af3e7
+X-MS-TrafficTypeDiagnostic: MWHPR02MB2542:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR02MB25422890B1B6189C19DDAF18C2D79@MWHPR02MB2542.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6Q1jV34SDOJ0giSVHPWx4i3OXsga1IXmsUKWwMjWW2trlfUDe7KCkXzdRmMHsLR1sC2vPPxj1gkaASbZDUPJ7j6MiODVOAu2g71DRI2hwYYOzFTf0HyGwybvfrXbLo63T12wJmT+UE4PhuCt0VOsffvfB6TilzerAuQKgaHWeCxdBmEEYAwzqP2hWhl2lm47B2PG+KU2WbxFO8FHKjOo2u500sRNrelU1FsdcYnk3r+rSPKslwjRAImJaQ79yCTKxJuvlu8Ycj77/5GR135XTeUZ/RRWpVANWf3Req5FT9sQuNyxHIVWPjbadQ2M8SJvHqQjq/JzEZhWxEjIQIXdFh3PV4iZsoSQz2EFsxUZMDVVG3TxFALSJQO6Y6IqRTRKYn9WgLnPUAJh6IpJYOE16l2Zr/G0Sk9RpalCUkX7c5OpXv3txe4F5x0V/syyQZaacuBUrU9fFbJSwgOjm+OjY4O4RaqPfqjlb2F1d5vSTU/DLZJGNHSKOF3c6ru7lBg4mozANBDnsk4TkXQHZyPsCgIgLsJ5HTgrsFxXRPDvofKo3iuZJnBOnZlXR+5vZn1kJXDUut8c0eFptJLP93i6q/OXhvlERRSYj7AdxuOOylS3x3WnmObsVjw/gt7P3ESRYp72uEoJUMVMJeg7fsgtqGqjERRWovhLSP/3tBIW8XMlO6sEKGWl/9ru4ZmGFHfhw77Rd5mdMLWF6dTcNhV2LS1qg+HT0wF2FT4T7Jm4IHcsQjnSe8z56SMkI8w++uHcbeSJp2WeJ63h00zaCG/Hdg==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(70586007)(70206006)(8676002)(356005)(6666004)(921005)(7696005)(6636002)(110136005)(508600001)(316002)(36860700001)(47076005)(426003)(336012)(186003)(40460700003)(83380400001)(26005)(2616005)(7636003)(1076003)(5660300002)(82310400005)(9786002)(8936002)(7416002)(2906002)(36756003)(102446001)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 8NI5rgcr07A1qabU/iMH0xsxuRKQWcTY5rNugn4LicME6eZHfX6dcacvp8o1qQjaNkQwo8f/eCMeUDvlgA32uHO4btvQFmiK/5vCdXfVKcRNaFYG7Z0SXOJI/UI1j+Ktc+disA7EQXLV4BuBPeXNkFBplC09AxcFEvy3HNq8vKQDUuXYxBmKBDjGmugpBMH4tL1xkI+ccf6tfnpWfJ6zILR6nGPUDgLfkuO5vN5EdUNaxtB1Ltysu39ChI4nS6t7K+43whq5dDDqaBWfTfWQD/Upa8tYsl4bYZx7hscsEvmRCndelEqellm8DL6Nju5rVSjdCbDYCi6TSMD30UlgOoieJJWhvBqfDr/WLSYBSMiZFRe45Lu3FAPGgr9kENEXQgAP4H+mlgcvmSsd7idy4z1BfMOEpfCosfxlTLQcvOkr5xaYcqpu33rsn1e5DBkttmIBa1FkELe23z9KMmuO06EvedbRyz8nITa/Rlo/wY8YvEVaCJGPe/vMzORJ+dr02NwkIrtaFt3V/KSScpzN1vA+oiPoPUuZlb6JhvPcPocMGaPF565aQt05IRBIzj6YRe5swRn7naj9jMdyCM0LRHCg0ss4S6iH+59aMPx118wPY3pmfFrkfh8XjTDvO9ypovu8UDiiLX+CVNiNDVKRV4NhZ8BKNx6xlNB4ZySh3Ptsg9SCD91Zsmc12lGEkyr0eznslpBrUn/Q6NtMBxxE/zYSm3UcdIhKyBg8/E3DpbL5mewTdv5ldIVNiXxl9oKCrMbZvmTONdLL5oS88A4uSoHuqnKaUlh67nw4a65L9ifDHLsFrYgSIhoii3sMRpdrvbIkfvd86J7jZXlUcm2Uw2TQSZiPtkkinSxu9eLk6o8=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(426003)(7696005)(26005)(5660300002)(40460700003)(336012)(186003)(83380400001)(966005)(8936002)(9786002)(921005)(2906002)(6666004)(47076005)(7636003)(356005)(4744005)(2616005)(110136005)(508600001)(8676002)(70586007)(70206006)(36860700001)(36756003)(82310400005)(1076003)(6636002)(316002)(102446001)(83996005)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 13:45:56.3924
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2022 09:51:19.3447
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5547734-ee85-4cec-0f5e-08da3cc29011
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8ea0c78-aad6-4c0a-ca2a-08da3d6af3e7
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0026.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0030.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB7750
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2542
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -118,83 +117,32 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add support to handle FPGA/PL power domain. With this patch,
-the PL power domain will be turned on before loading the bitstream
-into the targeted region and turned off while removing/unloading the
-bitstream from the targeted region using overlays. This can be achieved
-by adding the runtime PM support to the fpga regions.
+Adds status interface for zynqmp-fpga, It's a read only
+interface which allows the user to get the PL status.
 
-Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
----
-Changes for v2:
-              - Updated commit message.
-              - Updated runtime PM handling logic to fix the PM ref count
-                imbalance issues.
+This patch series also update the below status values for
+fpga-manager.
+ -Device Initialization error.
+ -Device internal signal error.
+ -All I/Os are placed in High-Z state.
+ -Device start-up sequence error.
+ -Firmware error.
 
- drivers/fpga/of-fpga-region.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+For more details refer the ug570.
+https://docs.xilinx.com/v/u/en-US/ug570-ultrascale-configuration
 
-diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
-index ae82532fc127..f14bb5916d97 100644
---- a/drivers/fpga/of-fpga-region.c
-+++ b/drivers/fpga/of-fpga-region.c
-@@ -15,6 +15,7 @@
- #include <linux/of_platform.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
-+#include <linux/pm_runtime.h>
- 
- static const struct of_device_id fpga_region_of_match[] = {
- 	{ .compatible = "fpga-region", },
-@@ -301,10 +302,17 @@ static int of_fpga_region_notify_pre_apply(struct fpga_region *region,
- 		return -EINVAL;
- 	}
- 
-+	ret = pm_runtime_resume_and_get(dev->parent);
-+	if (ret < 0) {
-+		fpga_image_info_free(info);
-+		return ret;
-+	}
-+
- 	region->info = info;
- 	ret = fpga_region_program_fpga(region);
- 	if (ret) {
- 		/* error; reject overlay */
-+		pm_runtime_put_sync(dev->parent);
- 		fpga_image_info_free(info);
- 		region->info = NULL;
- 	}
-@@ -324,10 +332,13 @@ static int of_fpga_region_notify_pre_apply(struct fpga_region *region,
- static void of_fpga_region_notify_post_remove(struct fpga_region *region,
- 					      struct of_overlay_notify_data *nd)
- {
-+	struct device *dev = &region->dev;
-+
- 	fpga_bridges_disable(&region->bridge_list);
- 	fpga_bridges_put(&region->bridge_list);
- 	fpga_image_info_free(region->info);
- 	region->info = NULL;
-+	pm_runtime_put_sync(dev->parent);
- }
- 
- /**
-@@ -411,6 +422,8 @@ static int of_fpga_region_probe(struct platform_device *pdev)
- 		goto eprobe_mgr_put;
- 	}
- 
-+	pm_runtime_enable(&pdev->dev);
-+
- 	of_platform_populate(np, fpga_region_of_match, NULL, &region->dev);
- 	platform_set_drvdata(pdev, region);
- 
-@@ -430,6 +443,7 @@ static int of_fpga_region_remove(struct platform_device *pdev)
- 
- 	fpga_region_unregister(region);
- 	fpga_mgr_put(mgr);
-+	pm_runtime_disable(region->dev.parent);
- 
- 	return 0;
- }
+Nava kishore Manne (3):
+  fpga: mgr: Update the status for fpga-manager
+  firmware: xilinx: Add pm api function for PL readback
+  fpga: zynqmp-fpga: Adds status interface
+
+ drivers/firmware/xilinx/zynqmp.c     | 33 ++++++++++++++++++
+ drivers/fpga/fpga-mgr.c              | 13 +++++++
+ drivers/fpga/zynqmp-fpga.c           | 52 ++++++++++++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h | 14 ++++++++
+ include/linux/fpga/fpga-mgr.h        |  6 ++++
+ 5 files changed, 118 insertions(+)
+
 -- 
 2.25.1
 
