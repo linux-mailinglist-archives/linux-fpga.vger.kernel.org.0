@@ -2,105 +2,107 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D499053403E
-	for <lists+linux-fpga@lfdr.de>; Wed, 25 May 2022 17:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41609534422
+	for <lists+linux-fpga@lfdr.de>; Wed, 25 May 2022 21:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244997AbiEYPP3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 25 May 2022 11:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52444 "EHLO
+        id S1344144AbiEYTQS (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 25 May 2022 15:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245066AbiEYPPZ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 25 May 2022 11:15:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4456CB0A63
-        for <linux-fpga@vger.kernel.org>; Wed, 25 May 2022 08:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653491721;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=gcTixSZTkvL/w/7L1HwLNEqSifq3qq6EouMS7B6x8F4=;
-        b=F/dfPQP5oqOdhKXnv5KmE8m4/REJe3wFZGl3hcvAarXwZjR9dF0YhCVHJoZ3FTioM+wkI0
-        pJNow9+fqNGKOCYC+Ln3nXHHqQtXPRRbGcj5/6djF2xbxnQ0ffaJshm/38AsA8SFWTemBQ
-        wKd9RPmadpedNxXt8jbmGFinypEeFoo=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-SxHsFKXEMTqFRWPl4WO5aw-1; Wed, 25 May 2022 11:15:19 -0400
-X-MC-Unique: SxHsFKXEMTqFRWPl4WO5aw-1
-Received: by mail-ed1-f72.google.com with SMTP id w14-20020a50fa8e000000b0042ab142d677so15134331edr.11
-        for <linux-fpga@vger.kernel.org>; Wed, 25 May 2022 08:15:19 -0700 (PDT)
+        with ESMTP id S1344812AbiEYTPV (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 25 May 2022 15:15:21 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B648E26AD2
+        for <linux-fpga@vger.kernel.org>; Wed, 25 May 2022 12:14:45 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id 67so7203792vsh.2
+        for <linux-fpga@vger.kernel.org>; Wed, 25 May 2022 12:14:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=V3ilouT9genmWgVMdUNI5P/LrIsW5jIirCBfI8vk+4c=;
+        b=YhCwmzZA8IF++F4fvn5TlHJ7w6GabVuEHTUO+oxi72rZeaCOWlB+COG7eVK06i+pIA
+         /rylJL/a+627OftH2zVbaUatklbClygux2am97BWOOy+7iIx3z+m2SrZQ4ej7+pCLIKX
+         qi7slp2sluKpJsvO10fVCXARfCOXWAtNDjIcMZ/Nfzi1R/VF0xZOJFvNtLKn3TW5BWpw
+         BW97vLJn8iE+taCwqCyaAUAx0uQSU5ig/imlBJm5RsOtHWuCLw2bTl1rkBFZCkLMC1Yi
+         e1mrnF4Uf8ydSlRf3b9MwaZXL25MmtJMj9mWYdzi8I7R/R1ZG9wCJbvWEgsdb+TsV/8/
+         grpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
          :content-transfer-encoding;
-        bh=gcTixSZTkvL/w/7L1HwLNEqSifq3qq6EouMS7B6x8F4=;
-        b=flN69UVWhotgh8NrKWl96hb8Kl6tVcndMmXY+tQ+I/OaMw7OMqzyr9FO48H8L26l3N
-         U05a57MQvFq5P8RulKL2CyTioGZti+b8eI7DZaFM1nYdyBGnYQrxx1nFLELiVe7pVyVK
-         eIEba2teIIE+rQ/E1IURmb6+GF/WlV8wKbZCCSRhMB7fCwqrHDMXoXyzJhU6FaE0jJW1
-         ugugQdgz/lT/V5f6gHjfE09Dk9sIxOg4FXbd7RofFEsmRgnXRcNXuVjfHE9KbMlphnPU
-         2xw2bD0/75t3V8itru6khQYbt6DJZqXZqhhcoC+DU4djtjSKKqEsNsHon4jjZQbgc5GE
-         WJ4w==
-X-Gm-Message-State: AOAM532rR+bphalLNa5YkFVA8/6o/HgTbsNysgfVAxL/Am0Hrk3l1b2D
-        jjCLC635jnlbW+lvQmN1cQJ7kcc1EMVAHUGmXmTT4WspDyUVdDFlHISPb6wVE7TBJsH+Z7ETQVz
-        4g0fTUiPUCXe9fqnEaHaq
-X-Received: by 2002:a17:906:2416:b0:6fe:a0be:91d5 with SMTP id z22-20020a170906241600b006fea0be91d5mr26367690eja.132.1653491718361;
-        Wed, 25 May 2022 08:15:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxTgN7zmlntoiNwoEyCgikQcdFrAhVHRko25ErlIb+NvzlhfgJXKvym4ZuzCjZcuR88JwVR7Q==
-X-Received: by 2002:a17:906:2416:b0:6fe:a0be:91d5 with SMTP id z22-20020a170906241600b006fea0be91d5mr26367677eja.132.1653491718216;
-        Wed, 25 May 2022 08:15:18 -0700 (PDT)
-Received: from auir.redhat.com (net-188-216-46-176.cust.vodafonedsl.it. [188.216.46.176])
-        by smtp.gmail.com with ESMTPSA id n17-20020aa7c791000000b0042ab02e3485sm10762135eds.44.2022.05.25.08.15.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 08:15:17 -0700 (PDT)
-From:   Marco Pagani <marpagan@redhat.com>
-To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Cc:     Marco Pagani <marpagan@redhat.com>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] fpga: altera-pr-ip: fix unsigned comparison with less than zero
-Date:   Wed, 25 May 2022 17:14:52 +0200
-Message-Id: <20220525151453.55725-1-marpagan@redhat.com>
-X-Mailer: git-send-email 2.35.3
+        bh=V3ilouT9genmWgVMdUNI5P/LrIsW5jIirCBfI8vk+4c=;
+        b=C5CIQ0GBiFbEuRejn3MiBuj1vNGP2EvbXk1fJ7ly0Cw5scpbBIeYWmJP5q7tVD8ph4
+         QCzGM7wed57Uj8Hp7e/HLUShIytDyRiB41ssB/xJMx3uWO2eT1I152ja47UqWWJ3YKQl
+         EAyvrsIT7s4Qw6EIpX3DplUE9QOKq9wowumJPasY+GLt2Bdxd92eLATir2JphvJXncVR
+         Z2cORwF2SCMWfv0ZDCnU5vBxRAuZ0P12YJGsxaPbRvwLlISPMHQggKQk733GAQhFOYYm
+         PebnW5fuWGagdrpTXCJGy7QErCUgbVqmuUVmi4bwu93ZSRWfBhVgwrF+ojcvHmBTJKAr
+         9vjg==
+X-Gm-Message-State: AOAM5316qmMFpKlocLJd6cUVA+0Q1MXrz0YYISe32aXyIsDuARWYyqF7
+        M4IZK+3fbCRvylrMaNa9JVtG5XDflwnQOaTEyFg=
+X-Google-Smtp-Source: ABdhPJxyWu3QvaL/WDL1lvm+uKiKCgClkS9aBtpFU4ZxDf/BjKXFtN0G1z1kRMSozSHB1HAlIZ8t6JsgjeACleJBVEI=
+X-Received: by 2002:a05:6102:2921:b0:337:b319:bb21 with SMTP id
+ cz33-20020a056102292100b00337b319bb21mr7909452vsb.69.1653506084878; Wed, 25
+ May 2022 12:14:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a59:d484:0:b0:2bc:cae4:6d22 with HTTP; Wed, 25 May 2022
+ 12:14:44 -0700 (PDT)
+From:   Rolf Benra <olfbenra@gmail.com>
+Date:   Wed, 25 May 2022 21:14:44 +0200
+Message-ID: <CA+z==Vvr9X0Z3MWZ7TtH623t5x4t2hKpvkNRXvRnoJrXF_pgRA@mail.gmail.com>
+Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
+To:     contact@firstdiamondbk.com
+Cc:     info@firstdiamondbk.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Fix the "comparison with less than zero" warning reported by
-cppcheck for the unsigned (size_t) parameter count of the
-alt_pr_fpga_write() function.
+Guten Tag,
 
-Reviewed-by: Tom Rix <trix@redhat.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
-Changes v1 -> v2:
-- Coding style fix
----
- drivers/fpga/altera-pr-ip-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
 
-diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
-index be0667968d33..df8671af4a92 100644
---- a/drivers/fpga/altera-pr-ip-core.c
-+++ b/drivers/fpga/altera-pr-ip-core.c
-@@ -108,7 +108,7 @@ static int alt_pr_fpga_write(struct fpga_manager *mgr, const char *buf,
- 	u32 *buffer_32 = (u32 *)buf;
- 	size_t i = 0;
- 
--	if (count <= 0)
-+	if (!count)
- 		return -EINVAL;
- 
- 	/* Write out the complete 32-bit chunks */
--- 
-2.35.3
+haben ?
 
+Ich habe versucht, Sie per E-Mail zu erreichen.
+
+Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
+
+Danke
+
+Rolf Benra
+
+olfbenra@gmail.com
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+Good Afternoon,
+
+I was just wondering if you got my Previous E-mail
+have ?
+
+I tried to reach you by E-mail.
+
+Please come back to me quickly, it is very Important.
+
+Thanks
+
+Rolf Benra
+
+olfbenra@gmail.com
