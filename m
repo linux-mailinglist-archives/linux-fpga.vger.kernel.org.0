@@ -2,60 +2,60 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D6E53C97D
-	for <lists+linux-fpga@lfdr.de>; Fri,  3 Jun 2022 13:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB9B53D790
+	for <lists+linux-fpga@lfdr.de>; Sat,  4 Jun 2022 17:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiFCLgI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 3 Jun 2022 07:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S237729AbiFDPzJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 4 Jun 2022 11:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiFCLgH (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 3 Jun 2022 07:36:07 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE213C719;
-        Fri,  3 Jun 2022 04:36:03 -0700 (PDT)
+        with ESMTP id S236116AbiFDPzI (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 4 Jun 2022 11:55:08 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A329412A87;
+        Sat,  4 Jun 2022 08:55:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654256163; x=1685792163;
+  t=1654358107; x=1685894107;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KYwIuw1yxLEfO4/XQoqiJTXPNDR+57CCdyWkkwbyflE=;
-  b=YHJCAsOM2AndHgYIRpOGWlGbkaD4eEtYJ+HAyGlrxuYy07hCv5CtMrvs
-   fDh7gFY/XKjkPEdnJjKRiEd0f28swwhyPMLSfiDU4s9IzlQ35DMIDuiZo
-   yy2SUas+iWrQvI1BG1WyGWwnTPGgUPQnLREbzo/Z+zap3I2fvnCuczFyA
-   4GHcc/ip6gT2H6AosOIaJ/OrKTvLSuA3mb62uH+1B1tP1Yxen4jF2/qRt
-   6BkME6FsHUcBuNBXkg3u6TLCH3HvlT0gl2afRuR+X7+d2AwIBiD34kBov
-   KWoYBpsS7mdBnfvIGfH4l2v8WpRW0mtVoce9OM4J//QE+/DZ5z6HR27cP
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="362602448"
-X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
-   d="scan'208";a="362602448"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 04:36:03 -0700
+  bh=qLX10b7lJAzC3I8C1GtUDCOkQbNcmBQ5PoQFzo2VNbk=;
+  b=DaD+eYCpVVcNpQ25LmxL1MZf0smkI3quLTj5bSYuLwOLz9Wf0BwxNqyU
+   vOfmSmcdF5RLD2YX5xXTpulnWhWmMgkRsQfYC8lFEGGVekTzUcPSmTNPU
+   4te4QVAz7P+8870HGjfgAObNcTXo1U2rNuyOdufRHlXDFFli84ErpACRB
+   anA5YKpOS6xiRAhu87Z0lkqbuN5+Xq68CYMeAZm3cdz94b6oadX/qBiEw
+   lbKLwHgr5mBNuoNpOE+UL24WNI8oU9I5trHd3C8JJ1ucuWZND9AA6mJGB
+   HM5Vso7Ly6a/UIvMt3nW34Cl1hYqnUtpKfjWmvrbVDtOShMGlepdK94ML
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="276514933"
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="276514933"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 08:55:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
-   d="scan'208";a="607363178"
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="708447931"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 03 Jun 2022 04:35:59 -0700
-Date:   Fri, 3 Jun 2022 19:28:10 +0800
+  by orsmga004.jf.intel.com with ESMTP; 04 Jun 2022 08:55:04 -0700
+Date:   Sat, 4 Jun 2022 23:47:13 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, lee.jones@linaro.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
-        matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
-Subject: Re: [PATCH v22 5/5] fpga: m10bmc-sec: add max10 secure update
- functions
-Message-ID: <20220603112810.GD238410@yilunxu-OptiPlex-7050>
-References: <20220527202330.839555-1-russell.h.weight@intel.com>
- <20220527202330.839555-6-russell.h.weight@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        Conor.Dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru
+Subject: Re: [PATCH v14 1/3] fpga: fpga-mgr: support bitstream offset in
+ image buffer
+Message-ID: <20220604154713.GA243326@yilunxu-OptiPlex-7050>
+References: <20220531192344.23038-1-i.bornyakov@metrotek.ru>
+ <20220531192344.23038-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220527202330.839555-6-russell.h.weight@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220531192344.23038-2-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,552 +64,397 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, May 27, 2022 at 01:23:30PM -0700, Russ Weight wrote:
-> Create firmware upload ops and call the Firmware Upload support of the
-> Firmware Loader subsystem to enable FPGA image uploads for secure
-> updates of BMC images, FPGA images, etc.
+On Tue, May 31, 2022 at 10:23:42PM +0300, Ivan Bornyakov wrote:
+> At the moment FPGA manager core loads to the device entire image
+> provided to fpga_mgr_load(). But it is not always whole FPGA image
+> buffer meant to be written to the device. In particular, .dat formatted
+> image for Microchip MPF contains meta info in the header that is not
+> meant to be written to the device. This is issue for those low level
+> drivers that loads data to the device with write() fpga_manager_ops
+> callback, since write() can be called in iterator over scatter-gather
+> table, not only linear image buffer. On the other hand, write_sg()
+> callback is provided with whole image in scatter-gather form and can
+> decide itself which part should be sent to the device.
 > 
-> Tested-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Add header_size and data_size to the fpga_image_info struct and adjust
+> fpga_mgr_write() callers with respect to them.
+> 
+>   * info->header_size indicates part at the beginning of image buffer
+>     that is *not* meant to be written to the device. It is optional and
+>     can be 0.
+> 
+>   * info->data_size is the size of actual bitstream data that *is* meant
+>     to be written to the device, starting at info->header_size from the
+>     beginning of image buffer. It is also optional and can be 0, which
+>     means bitstream data is up to the end of image buffer.
+> 
+> Also add parse_header() callback to fpga_manager_ops, which purpose is
+> to set info->header_size and info->data_size. At least
+> initial_header_size bytes of image buffer will be passed into
+> parse_header() first time. If it is not enough, parse_header() should
+> set desired size into info->header_size and return -EAGAIN, then it will
+> be called again with greater part of image buffer on the input.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Only one concern left, The XX_PARSE_HEAD state transition is a little messy,
+see my comments inline.
+
 
 > ---
-> v22:
->   - Added Tested-by tag from Tianfei.
->   - Removed unnecessary alignment check for source address from
->     m10bmc_sec_prepare().
->   - Changed the handling of a misaligned blk_size in m10bmc_sec_write().
->     Instead of allocating an aligned buffer and copying the block, copy
->     the misaligned bytes into an unsigned int and write with
->     regmap_write().
-> v21:
->   - Update m10bmc_sec_prepare() to ensure that the base address for an
->     update image is aligned with stride.
->   - Update m10bmc_sec_write() to handle a block size that is not aligned
->     with stride by allocating a zero-filled block that is aligned, and
->     copying the data before calling regmap_bulk_write().
-> v20:
->   - No change.
-> v19:
->   - Change "card bmc" naming back to "m10 bmc" naming to be consistent
->     with the parent driver.
-> v18:
->   - Moved the firmware_upload_register() function here from an earlier
->     patch since this is where the required ops are provided.
->   - Moved the bmc_sec_remove() function here from an earlier patch to
->     unregister the firmware driver and do cleanup.
-> v17:
->   - Change "m10bmc" in symbol names to "cardbmc" to reflect the fact that the
->     future devices will not necessarily use the MAX10.
->   - Change from image_load class driver to the new firmware_upload 
->     functionality of the firmware_loader.
->   - fw_upload_ops functions will return "enum fw_upload_err" data types
->     instead of integer values.
-> v16:
->   - Use 0 instead of FPGA_IMAGE_ERR_NONE to indicate success.
->   - The size alignment check was moved from the FPGA Image Load framework
->     to the prepare() op.
->   - Added cancel_request boolean flag to struct m10bmc_sec.
->   - Moved the RSU cancellation logic from m10bmc_sec_cancel() to a new
->     rsu_cancel() function.
->   - The m10bmc_sec_cancel() function ONLY sets the cancel_request flag.
->     The cancel_request flag is checked at the beginning of the
->     m10bmc_sec_write() and m10bmc_sec_poll_complete() functions.
->   - Adapt to changed prototypes for the prepare() and write() ops. The
->     m10bmc_sec_write_blk() function has been renamed to
->     m10bmc_sec_write().
->   - Created a cleanup() op, m10bmc_sec_cleanup(), to attempt to cancel an
->     ongoing op during when exiting the update process.
-> v15:
->   - Adapted to changes in the FPGA Image Load framework:
->     (1) All enum types (progress and errors) are now type u32
->     (2) m10bmc_sec_write_blk() adds *blk_size and max_size parameters
->         and uses *blk_size as provided by the caller.
->     (3) m10bmc_sec_poll_complete() no long checks the driver_unload
->         flag.
-> v14:
->   - Changed symbol names to reflect the renaming of the Security Manager
->     Class driver to FPGA Image Load.
-> v13:
->   - No change
-> v12:
->   - Updated Date and KernelVersion fields in ABI documentation
->   - Removed size parameter from the write_blk() op. m10bmc_sec_write_blk()
->     no longer has a size parameter, and the block size is determined
->     in this (the lower-level) driver.
-> v11:
->   - No change
-> v10:
->   - No change
-> v9:
->   - No change
-> v8:
->   - Previously patch 5/6, otherwise no change
-> v7:
->   - No change
-> v6:
->   - Changed (size / stride) calculation to ((size + stride - 1) / stride)
->     to ensure that the proper count is passed to regmap_bulk_write().
->   - Removed unnecessary call to rsu_check_complete() in
->     m10bmc_sec_poll_complete() and changed while loop to
->     do/while loop.
-> v5:
->   - No change
-> v4:
->   - No change
-> v3:
->   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
->   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
->     driver"
->   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
->     underlying functions are now called directly.
->   - Changed calling functions of functions that return "enum fpga_sec_err"
->     to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
-> v2:
->   - Reworked the rsu_start_done() function to make it more readable
->   - Reworked while-loop condition/content in rsu_prog_ready()
->   - Minor code cleanup per review comments
->   - Added a comment to the m10bmc_sec_poll_complete() function to
->     explain the context (could take 30+ minutes to complete).
->   - Added m10bmc_ prefix to functions in m10bmc_iops structure
->   - Moved MAX10 BMC address and function definitions to a separate
->     patch.
-> ---
->  drivers/fpga/intel-m10-bmc-sec-update.c | 394 ++++++++++++++++++++++++
->  1 file changed, 394 insertions(+)
+>  drivers/fpga/fpga-mgr.c       | 176 ++++++++++++++++++++++++++++------
+>  include/linux/fpga/fpga-mgr.h |  17 +++-
+>  2 files changed, 165 insertions(+), 28 deletions(-)
 > 
-> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-> index 65fec2a70901..72c677c910de 100644
-> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
-> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-> @@ -17,8 +17,14 @@
->  struct m10bmc_sec {
->  	struct device *dev;
->  	struct intel_m10bmc *m10bmc;
-> +	struct fw_upload *fwl;
-> +	char *fw_name;
-> +	u32 fw_name_id;
-> +	bool cancel_request;
->  };
->  
-> +static DEFINE_XARRAY_ALLOC(fw_upload_xa);
-> +
->  /* Root Entry Hash (REH) support */
->  #define REH_SHA256_SIZE		32
->  #define REH_SHA384_SIZE		48
-> @@ -192,10 +198,365 @@ static const struct attribute_group *m10bmc_sec_attr_groups[] = {
->  	NULL,
->  };
->  
-> +static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
-> +{
-> +	u32 auth_result;
-> +
-> +	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
-> +
-> +	if (!m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result))
-> +		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
-> +}
-> +
-> +static enum fw_upload_err rsu_check_idle(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
-> +	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_BUSY;
-> +	}
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +static inline bool rsu_start_done(u32 doorbell)
-> +{
-> +	u32 status, progress;
-> +
-> +	if (doorbell & DRBL_RSU_REQUEST)
-> +		return false;
-> +
-> +	status = rsu_stat(doorbell);
-> +	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
-> +		return true;
-> +
-> +	progress = rsu_prog(doorbell);
-> +	if (progress != RSU_PROG_IDLE && progress != RSU_PROG_RSU_DONE)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
-> +static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell, status;
-> +	int ret;
-> +
-> +	ret = regmap_update_bits(sec->m10bmc->regmap,
-> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				 DRBL_RSU_REQUEST | DRBL_HOST_STATUS,
-> +				 DRBL_RSU_REQUEST |
-> +				 FIELD_PREP(DRBL_HOST_STATUS,
-> +					    HOST_STATUS_IDLE));
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				       doorbell,
-> +				       rsu_start_done(doorbell),
-> +				       NIOS_HANDSHAKE_INTERVAL_US,
-> +				       NIOS_HANDSHAKE_TIMEOUT_US);
-> +
-> +	if (ret == -ETIMEDOUT) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_TIMEOUT;
-> +	} else if (ret) {
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +	}
-> +
-> +	status = rsu_stat(doorbell);
-> +	if (status == RSU_STAT_WEAROUT) {
-> +		dev_warn(sec->dev, "Excessive flash update count detected\n");
-> +		return FW_UPLOAD_ERR_WEAROUT;
-> +	} else if (status == RSU_STAT_ERASE_FAIL) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_HW_ERROR;
-> +	}
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
-> +{
-> +	unsigned long poll_timeout;
-> +	u32 doorbell, progress;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_PREP_TIMEOUT_MS);
-> +	while (rsu_prog(doorbell) == RSU_PROG_PREPARE) {
-> +		msleep(RSU_PREP_INTERVAL_MS);
-> +		if (time_after(jiffies, poll_timeout))
-> +			break;
-> +
-> +		ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +		if (ret)
-> +			return FW_UPLOAD_ERR_RW_ERROR;
-> +	}
-> +
-> +	progress = rsu_prog(doorbell);
-> +	if (progress == RSU_PROG_PREPARE) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_TIMEOUT;
-> +	} else if (progress != RSU_PROG_READY) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_HW_ERROR;
-> +	}
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	ret = regmap_update_bits(sec->m10bmc->regmap,
-> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				 DRBL_HOST_STATUS,
-> +				 FIELD_PREP(DRBL_HOST_STATUS,
-> +					    HOST_STATUS_WRITE_DONE));
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				       doorbell,
-> +				       rsu_prog(doorbell) != RSU_PROG_READY,
-> +				       NIOS_HANDSHAKE_INTERVAL_US,
-> +				       NIOS_HANDSHAKE_TIMEOUT_US);
-> +
-> +	if (ret == -ETIMEDOUT) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_TIMEOUT;
-> +	} else if (ret) {
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +	}
-> +
-> +	switch (rsu_stat(doorbell)) {
-> +	case RSU_STAT_NORMAL:
-> +	case RSU_STAT_NIOS_OK:
-> +	case RSU_STAT_USER_OK:
-> +	case RSU_STAT_FACTORY_OK:
-> +		break;
-> +	default:
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_HW_ERROR;
-> +	}
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
-> +{
-> +	if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, doorbell))
-> +		return -EIO;
-> +
-> +	switch (rsu_stat(*doorbell)) {
-> +	case RSU_STAT_NORMAL:
-> +	case RSU_STAT_NIOS_OK:
-> +	case RSU_STAT_USER_OK:
-> +	case RSU_STAT_FACTORY_OK:
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	switch (rsu_prog(*doorbell)) {
-> +	case RSU_PROG_IDLE:
-> +	case RSU_PROG_RSU_DONE:
-> +		return 0;
-> +	case RSU_PROG_AUTHENTICATING:
-> +	case RSU_PROG_COPYING:
-> +	case RSU_PROG_UPDATE_CANCEL:
-> +	case RSU_PROG_PROGRAM_KEY_HASH:
-> +		return -EAGAIN;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static enum fw_upload_err rsu_cancel(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	if (rsu_prog(doorbell) != RSU_PROG_READY)
-> +		return FW_UPLOAD_ERR_BUSY;
-> +
-> +	ret = regmap_update_bits(sec->m10bmc->regmap,
-> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				 DRBL_HOST_STATUS,
-> +				 FIELD_PREP(DRBL_HOST_STATUS,
-> +					    HOST_STATUS_ABORT_RSU));
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	return FW_UPLOAD_ERR_CANCELED;
-> +}
-> +
-> +static enum fw_upload_err m10bmc_sec_prepare(struct fw_upload *fwl,
-> +					     const u8 *data, u32 size)
-> +{
-> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> +	u32 ret;
-> +
-> +	sec->cancel_request = false;
-> +
-> +	if (!size || size > M10BMC_STAGING_SIZE)
-> +		return FW_UPLOAD_ERR_INVALID_SIZE;
-> +
-> +	ret = rsu_check_idle(sec);
-> +	if (ret != FW_UPLOAD_ERR_NONE)
-> +		return ret;
-> +
-> +	ret = rsu_update_init(sec);
-> +	if (ret != FW_UPLOAD_ERR_NONE)
-> +		return ret;
-> +
-> +	ret = rsu_prog_ready(sec);
-> +	if (ret != FW_UPLOAD_ERR_NONE)
-> +		return ret;
-> +
-> +	if (sec->cancel_request)
-> +		return rsu_cancel(sec);
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +#define WRITE_BLOCK_SIZE 0x4000	/* Default write-block size is 0x4000 bytes */
-> +
-> +static enum fw_upload_err m10bmc_sec_write(struct fw_upload *fwl, const u8 *data,
-> +					   u32 offset, u32 size, u32 *written)
-> +{
-> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> +	u32 blk_size, doorbell, extra_offset;
-> +	unsigned int stride, extra = 0;
-> +	int ret;
-> +
-> +	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
-> +	if (sec->cancel_request)
-> +		return rsu_cancel(sec);
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret) {
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_HW_ERROR;
-> +	}
-> +
-> +	WARN_ON_ONCE(WRITE_BLOCK_SIZE % stride);
-> +	blk_size = min_t(u32, WRITE_BLOCK_SIZE, size);
-> +	ret = regmap_bulk_write(sec->m10bmc->regmap,
-> +				M10BMC_STAGING_BASE + offset,
-> +				(void *)data + offset,
-> +				blk_size / stride);
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	/*
-> +	 * If blk_size is not aligned to stride, then handle the extra
-> +	 * bytes with regmap_write.
-> +	 */
-> +	if (blk_size % stride) {
-> +		extra_offset = offset + ALIGN_DOWN(blk_size, stride);
-> +		memcpy(&extra, (u8 *)(data + extra_offset), blk_size % stride);
-> +		ret = regmap_write(sec->m10bmc->regmap,
-> +				   M10BMC_STAGING_BASE + extra_offset, extra);
-> +		if (ret)
-> +			return FW_UPLOAD_ERR_RW_ERROR;
-> +	}
-> +
-> +	*written = blk_size;
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +static enum fw_upload_err m10bmc_sec_poll_complete(struct fw_upload *fwl)
-> +{
-> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> +	unsigned long poll_timeout;
-> +	u32 doorbell, result;
-> +	int ret;
-> +
-> +	if (sec->cancel_request)
-> +		return rsu_cancel(sec);
-> +
-> +	result = rsu_send_data(sec);
-> +	if (result != FW_UPLOAD_ERR_NONE)
-> +		return result;
-> +
-> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_COMPLETE_TIMEOUT_MS);
-> +	do {
-> +		msleep(RSU_COMPLETE_INTERVAL_MS);
-> +		ret = rsu_check_complete(sec, &doorbell);
-> +	} while (ret == -EAGAIN && !time_after(jiffies, poll_timeout));
-> +
-> +	if (ret == -EAGAIN) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_TIMEOUT;
-> +	} else if (ret == -EIO) {
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +	} else if (ret) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_HW_ERROR;
-> +	}
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +/*
-> + * m10bmc_sec_cancel() may be called asynchronously with an on-going update.
-> + * All other functions are called sequentially in a single thread. To avoid
-> + * contention on register accesses, m10bmc_sec_cancel() must only update
-> + * the cancel_request flag. Other functions will check this flag and handle
-> + * the cancel request synchronously.
-> + */
-> +static void m10bmc_sec_cancel(struct fw_upload *fwl)
-> +{
-> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> +
-> +	sec->cancel_request = true;
-> +}
-> +
-> +static void m10bmc_sec_cleanup(struct fw_upload *fwl)
-> +{
-> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> +
-> +	(void)rsu_cancel(sec);
-> +}
-> +
-> +static const struct fw_upload_ops m10bmc_ops = {
-> +	.prepare = m10bmc_sec_prepare,
-> +	.write = m10bmc_sec_write,
-> +	.poll_complete = m10bmc_sec_poll_complete,
-> +	.cancel = m10bmc_sec_cancel,
-> +	.cleanup = m10bmc_sec_cleanup,
-> +};
-> +
->  #define SEC_UPDATE_LEN_MAX 32
->  static int m10bmc_sec_probe(struct platform_device *pdev)
->  {
-> +	char buf[SEC_UPDATE_LEN_MAX];
->  	struct m10bmc_sec *sec;
-> +	struct fw_upload *fwl;
-> +	unsigned int len;
-> +	int  ret;
->  
->  	sec = devm_kzalloc(&pdev->dev, sizeof(*sec), GFP_KERNEL);
->  	if (!sec)
-> @@ -205,6 +566,38 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
->  	sec->m10bmc = dev_get_drvdata(pdev->dev.parent);
->  	dev_set_drvdata(&pdev->dev, sec);
->  
-> +	ret = xa_alloc(&fw_upload_xa, &sec->fw_name_id, sec,
-> +		       xa_limit_32b, GFP_KERNEL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
-> +			sec->fw_name_id);
-> +	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
-> +	if (!sec->fw_name)
-> +		return -ENOMEM;
-> +
-> +	fwl = firmware_upload_register(THIS_MODULE, sec->dev, sec->fw_name,
-> +				       &m10bmc_ops, sec);
-> +	if (IS_ERR(fwl)) {
-> +		dev_err(sec->dev, "Firmware Upload driver failed to start\n");
-> +		kfree(sec->fw_name);
-> +		xa_erase(&fw_upload_xa, sec->fw_name_id);
-> +		return PTR_ERR(fwl);
-> +	}
-> +
-> +	sec->fwl = fwl;
-> +	return 0;
-> +}
-> +
-> +static int m10bmc_sec_remove(struct platform_device *pdev)
-> +{
-> +	struct m10bmc_sec *sec = dev_get_drvdata(&pdev->dev);
-> +
-> +	firmware_upload_unregister(sec->fwl);
-> +	kfree(sec->fw_name);
-> +	xa_erase(&fw_upload_xa, sec->fw_name_id);
-> +
+> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> index a3595ecc3f79..34473d482c21 100644
+> --- a/drivers/fpga/fpga-mgr.c
+> +++ b/drivers/fpga/fpga-mgr.c
+> @@ -74,6 +74,15 @@ static inline int fpga_mgr_write_complete(struct fpga_manager *mgr,
 >  	return 0;
 >  }
 >  
-> @@ -218,6 +611,7 @@ MODULE_DEVICE_TABLE(platform, intel_m10bmc_sec_ids);
+> +static inline int fpga_mgr_parse_header(struct fpga_manager *mgr,
+> +					struct fpga_image_info *info,
+> +					const char *buf, size_t count)
+> +{
+> +	if (mgr->mops->parse_header)
+> +		return mgr->mops->parse_header(mgr, info, buf, count);
+> +	return 0;
+> +}
+> +
+>  static inline int fpga_mgr_write_init(struct fpga_manager *mgr,
+>  				      struct fpga_image_info *info,
+>  				      const char *buf, size_t count)
+> @@ -136,24 +145,57 @@ void fpga_image_info_free(struct fpga_image_info *info)
+>  EXPORT_SYMBOL_GPL(fpga_image_info_free);
 >  
->  static struct platform_driver intel_m10bmc_sec_driver = {
->  	.probe = m10bmc_sec_probe,
-> +	.remove = m10bmc_sec_remove,
->  	.driver = {
->  		.name = "intel-m10bmc-sec-update",
->  		.dev_groups = m10bmc_sec_attr_groups,
+>  /*
+> - * Call the low level driver's write_init function.  This will do the
+> + * Call the low level driver's parse_header function. This will set
+> + * info->header_size and info->data_size. The low level driver gets entire
+> + * buffer provided. If it is not enough, driver should set desired size into
+> + * info->header_size and return -EAGAIN, then parse_header() will be called
+> + * again with greater part of image buffer on the input.
+> + */
+> +static int fpga_mgr_parse_header_buf(struct fpga_manager *mgr,
+> +				     struct fpga_image_info *info,
+> +				     const char *buf, size_t count)
+> +{
+> +	int ret;
+> +
+> +	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
+> +	ret = fpga_mgr_parse_header(mgr, info, buf, count);
+> +	if (ret && ret != -EAGAIN) {
+> +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
+> +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+
+Try not to assign the state again and again, or outside the
+xx_parse_header_xxx() function.
+
+If a single function cannot handle all cases, how about having more
+functions, like fpga_mgr_parse_header_mapped(),
+fpga_mgr_parse_header_sg_first(), fpga_mgr_parse_header_sg(),
+and just toggle the state in these functions.
+
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +/*
+> + * Call the low level driver's write_init function. This will do the
+>   * device-specific things to get the FPGA into the state where it is ready to
+> - * receive an FPGA image. The low level driver only gets to see the first
+> - * initial_header_size bytes in the buffer.
+> + * receive an FPGA image. If info->header_size is defined, the low level
+> + * driver gets to see at least first info->header_size bytes in the buffer,
+> + * mgr->mops->initial_header_size otherwise. If neither initial_header_size
+> + * nor header_size are not set, write_init will not get any bytes of image
+> + * buffer.
+>   */
+>  static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
+>  				   struct fpga_image_info *info,
+>  				   const char *buf, size_t count)
+>  {
+> +	size_t header_size;
+>  	int ret;
+>  
+>  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
+> -	if (!mgr->mops->initial_header_size) {
+> +
+> +	if (info->header_size)
+> +		header_size = info->header_size;
+> +	else
+> +		header_size = mgr->mops->initial_header_size;
+> +
+> +	if (header_size > count)
+> +		ret = -EINVAL;
+> +	else if (!header_size)
+>  		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
+> -	} else {
+> -		count = min(mgr->mops->initial_header_size, count);
+> +	else
+>  		ret = fpga_mgr_write_init(mgr, info, buf, count);
+> -	}
+>  
+>  	if (ret) {
+>  		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
+> @@ -164,16 +206,17 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
+>  	return 0;
+>  }
+>  
+> -static int fpga_mgr_write_init_sg(struct fpga_manager *mgr,
+> -				  struct fpga_image_info *info,
+> -				  struct sg_table *sgt)
+> +static int fpga_mgr_prepare_sg(struct fpga_manager *mgr,
+> +			       struct fpga_image_info *info,
+> +			       struct sg_table *sgt)
+>  {
+>  	struct sg_mapping_iter miter;
+> -	size_t len;
+> -	char *buf;
+> +	size_t header_size, len;
+> +	char *buf = NULL;
+>  	int ret;
+>  
+> -	if (!mgr->mops->initial_header_size)
+> +	header_size = mgr->mops->initial_header_size;
+> +	if (!header_size)
+>  		return fpga_mgr_write_init_buf(mgr, info, NULL, 0);
+>  
+>  	/*
+> @@ -182,22 +225,44 @@ static int fpga_mgr_write_init_sg(struct fpga_manager *mgr,
+>  	 */
+>  	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
+>  	if (sg_miter_next(&miter) &&
+> -	    miter.length >= mgr->mops->initial_header_size) {
+> -		ret = fpga_mgr_write_init_buf(mgr, info, miter.addr,
+> -					      miter.length);
+> -		sg_miter_stop(&miter);
+> -		return ret;
+> +	    miter.length >= header_size) {
+> +		ret = fpga_mgr_parse_header_buf(mgr, info, miter.addr,
+> +						miter.length);
+
+Maybe fpga_mgr_parse_header_sg_first()
+
+> +		/*
+> +		 * If -EAGAIN, more sg buffer is needed, otherwise the flow
+> +		 * would always end up in this branch.
+> +		 */
+> +		if (ret != -EAGAIN) {
+> +			if (!ret)
+> +				ret = fpga_mgr_write_init_buf(mgr, info, miter.addr,
+> +							      miter.length);
+> +
+> +			sg_miter_stop(&miter);
+> +			return ret;
+> +		}
+>  	}
+>  	sg_miter_stop(&miter);
+>  
+>  	/* Otherwise copy the fragments into temporary memory. */
+> -	buf = kmalloc(mgr->mops->initial_header_size, GFP_KERNEL);
+> -	if (!buf)
+> -		return -ENOMEM;
+> +	do {
+> +		if (info->header_size)
+> +			header_size = info->header_size;
+> +
+> +		buf = krealloc(buf, header_size, GFP_KERNEL);
+> +		if (!buf)
+> +			return -ENOMEM;
+> +
+> +		len = sg_copy_to_buffer(sgt->sgl, sgt->nents, buf, header_size);
+> +		if (len != header_size) {
+> +			kfree(buf);
+> +			return -EFAULT;
+> +		}
+> +
+> +		ret = fpga_mgr_parse_header_buf(mgr, info, buf, header_size);
+> +	} while (ret == -EAGAIN);
+
+Maybe put the operations in fpga_mgr_parse_header_sg().
+
+>  
+> -	len = sg_copy_to_buffer(sgt->sgl, sgt->nents, buf,
+> -				mgr->mops->initial_header_size);
+> -	ret = fpga_mgr_write_init_buf(mgr, info, buf, len);
+> +	if (!ret)
+> +		ret = fpga_mgr_write_init_buf(mgr, info, buf, header_size);
+>  
+>  	kfree(buf);
+>  
+> @@ -227,7 +292,7 @@ static int fpga_mgr_buf_load_sg(struct fpga_manager *mgr,
+>  {
+>  	int ret;
+>  
+> -	ret = fpga_mgr_write_init_sg(mgr, info, sgt);
+> +	ret = fpga_mgr_prepare_sg(mgr, info, sgt);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -237,11 +302,40 @@ static int fpga_mgr_buf_load_sg(struct fpga_manager *mgr,
+>  		ret = fpga_mgr_write_sg(mgr, sgt);
+>  	} else {
+>  		struct sg_mapping_iter miter;
+> +		size_t length, data_size;
+> +		bool last = false;
+> +		ssize_t count;
+> +		char *addr;
+> +
+> +		data_size = info->data_size;
+> +		count = -info->header_size;
+>  
+>  		sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
+>  		while (sg_miter_next(&miter)) {
+> -			ret = fpga_mgr_write(mgr, miter.addr, miter.length);
+> -			if (ret)
+> +			count += miter.length;
+> +
+> +			/* sg block contains only header, no data */
+> +			if (count <= 0)
+> +				continue;
+> +
+> +			if (count < miter.length) {
+> +				/* sg block contains both header and data */
+> +				addr = miter.addr + miter.length - count;
+> +				length = count;
+> +			} else {
+> +				/* sg block contains pure data */
+> +				addr = miter.addr;
+> +				length = miter.length;
+> +			}
+> +
+> +			/* truncate last block to data_size, if needed */
+> +			if (data_size && count > data_size) {
+> +				length -= count - data_size;
+> +				last = true;
+> +			}
+> +
+> +			ret = fpga_mgr_write(mgr, addr, length);
+> +			if (ret || last)
+>  				break;
+>  		}
+>  		sg_miter_stop(&miter);
+> @@ -262,10 +356,34 @@ static int fpga_mgr_buf_load_mapped(struct fpga_manager *mgr,
+>  {
+>  	int ret;
+>  
+> +	ret = fpga_mgr_parse_header_buf(mgr, info, buf, count);
+> +	if (ret) {
+> +		if (ret == -EAGAIN) {
+> +			dev_err(&mgr->dev, "Header outruns FPGA image\n");
+> +			mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+> +			ret = -EINVAL;
+> +		}
+> +
+> +		return ret;
+> +	}
+> +
+> +	if (info->header_size + info->data_size > count) {
+> +		dev_err(&mgr->dev, "Bitsream data outruns FPGA image\n");
+> +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+> +		return -EINVAL;
+> +	}
+
+Maybe put the checks in fpga_mgr_parse_header_mapped()
+
+Thanks,
+Yilun
+
+> +
+>  	ret = fpga_mgr_write_init_buf(mgr, info, buf, count);
+>  	if (ret)
+>  		return ret;
+>  
+> +	if (info->data_size)
+> +		count = info->data_size;
+> +	else
+> +		count -= info->header_size;
+> +
+> +	buf += info->header_size;
+> +
+>  	/*
+>  	 * Write the FPGA image to the FPGA.
+>  	 */
+> @@ -424,6 +542,10 @@ static const char * const state_str[] = {
+>  	[FPGA_MGR_STATE_FIRMWARE_REQ] =		"firmware request",
+>  	[FPGA_MGR_STATE_FIRMWARE_REQ_ERR] =	"firmware request error",
+>  
+> +	/* Parse FPGA image header */
+> +	[FPGA_MGR_STATE_PARSE_HEADER] =		"parse header",
+> +	[FPGA_MGR_STATE_PARSE_HEADER_ERR] =	"parse header error",
+> +
+>  	/* Preparing FPGA to receive image */
+>  	[FPGA_MGR_STATE_WRITE_INIT] =		"write init",
+>  	[FPGA_MGR_STATE_WRITE_INIT_ERR] =	"write init error",
+> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+> index 0f9468771bb9..cba8bb7827a5 100644
+> --- a/include/linux/fpga/fpga-mgr.h
+> +++ b/include/linux/fpga/fpga-mgr.h
+> @@ -22,6 +22,8 @@ struct sg_table;
+>   * @FPGA_MGR_STATE_RESET: FPGA in reset state
+>   * @FPGA_MGR_STATE_FIRMWARE_REQ: firmware request in progress
+>   * @FPGA_MGR_STATE_FIRMWARE_REQ_ERR: firmware request failed
+> + * @FPGA_MGR_STATE_PARSE_HEADER: parse FPGA image header
+> + * @FPGA_MGR_STATE_PARSE_HEADER_ERR: Error during PARSE_HEADER stage
+>   * @FPGA_MGR_STATE_WRITE_INIT: preparing FPGA for programming
+>   * @FPGA_MGR_STATE_WRITE_INIT_ERR: Error during WRITE_INIT stage
+>   * @FPGA_MGR_STATE_WRITE: writing image to FPGA
+> @@ -42,6 +44,8 @@ enum fpga_mgr_states {
+>  	FPGA_MGR_STATE_FIRMWARE_REQ_ERR,
+>  
+>  	/* write sequence: init, write, complete */
+> +	FPGA_MGR_STATE_PARSE_HEADER,
+> +	FPGA_MGR_STATE_PARSE_HEADER_ERR,
+>  	FPGA_MGR_STATE_WRITE_INIT,
+>  	FPGA_MGR_STATE_WRITE_INIT_ERR,
+>  	FPGA_MGR_STATE_WRITE,
+> @@ -85,6 +89,8 @@ enum fpga_mgr_states {
+>   * @sgt: scatter/gather table containing FPGA image
+>   * @buf: contiguous buffer containing FPGA image
+>   * @count: size of buf
+> + * @header_size: offset in image buffer where bitstream data starts
+> + * @data_size: size of bitstream. If 0, (count - header_size) will be used.
+>   * @region_id: id of target region
+>   * @dev: device that owns this
+>   * @overlay: Device Tree overlay
+> @@ -98,6 +104,8 @@ struct fpga_image_info {
+>  	struct sg_table *sgt;
+>  	const char *buf;
+>  	size_t count;
+> +	size_t header_size;
+> +	size_t data_size;
+>  	int region_id;
+>  	struct device *dev;
+>  #ifdef CONFIG_OF
+> @@ -137,9 +145,13 @@ struct fpga_manager_info {
+>  
+>  /**
+>   * struct fpga_manager_ops - ops for low level fpga manager drivers
+> - * @initial_header_size: Maximum number of bytes that should be passed into write_init
+> + * @initial_header_size: minimum number of bytes that should be passed into
+> + *	parse_header and write_init.
+>   * @state: returns an enum value of the FPGA's state
+>   * @status: returns status of the FPGA, including reconfiguration error code
+> + * @parse_header: parse FPGA image header to set info->header_size and
+> + *	info->data_size. In case the input buffer is not large enough, set
+> + *	required size to info->header_size and return -EAGAIN.
+>   * @write_init: prepare the FPGA to receive configuration data
+>   * @write: write count bytes of configuration data to the FPGA
+>   * @write_sg: write the scatter list of configuration data to the FPGA
+> @@ -155,6 +167,9 @@ struct fpga_manager_ops {
+>  	size_t initial_header_size;
+>  	enum fpga_mgr_states (*state)(struct fpga_manager *mgr);
+>  	u64 (*status)(struct fpga_manager *mgr);
+> +	int (*parse_header)(struct fpga_manager *mgr,
+> +			    struct fpga_image_info *info,
+> +			    const char *buf, size_t count);
+>  	int (*write_init)(struct fpga_manager *mgr,
+>  			  struct fpga_image_info *info,
+>  			  const char *buf, size_t count);
 > -- 
-> 2.25.1
+> 2.35.1
+> 
