@@ -2,54 +2,60 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F98253F5C3
-	for <lists+linux-fpga@lfdr.de>; Tue,  7 Jun 2022 07:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A204A53FA18
+	for <lists+linux-fpga@lfdr.de>; Tue,  7 Jun 2022 11:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235205AbiFGFzu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 7 Jun 2022 01:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
+        id S239415AbiFGJnz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 7 Jun 2022 05:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiFGFzt (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 7 Jun 2022 01:55:49 -0400
+        with ESMTP id S237978AbiFGJny (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 7 Jun 2022 05:43:54 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5086D4122;
-        Mon,  6 Jun 2022 22:55:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9A97CB5B;
+        Tue,  7 Jun 2022 02:43:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654581348; x=1686117348;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=blRvZhyRA1ZaOOrg6D578DFOBpuu1YgJkE3AGHxofgI=;
-  b=GEQimPX2ZKgibeVK6rWacpAdw/G0k0PDrdnfUc3osLI/PSJ8smyxZNXf
-   aWH0YXcjcKXN85W/BUztX5Rv2hAReWEna8YRl9CSl2ym3OL3MZUxuqJU8
-   g1tIudQHpCn0DV+zA5NV5eMTFcfx6DVOQMgbjNbCH6RytpTKsZkik+wuE
-   UtF2PdluXBWLoslNHkG5bEuFKpbxFy7qXSmY29A7s/2f0yoxNilNyxYEY
-   gzZb+yuVxNI6zjcDrA1y2j1V3DgwBzxIEZM+txhRrK7osHiYK8TTx8xvW
-   JLxzSdQvhoWz3WL/ghXVS0eahCnDUY2ebEb8frMVBE+NKmtGDqrRf7CMU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="274244630"
-X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="274244630"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 22:55:48 -0700
+  t=1654595033; x=1686131033;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZRgiGkZugXGc7OZ604Zh98ie9xBINJvjuzajnbFDTJA=;
+  b=ZVNu+7AqZBcl3bb2nh6FWcES882Fq6/eXyLbthnB1U3vL1cMeKtpFQCv
+   rNbJO8iJkPfkOjaX5iyU5NNZrLvbup6aoKR6NemquMy0Lqswmfcq7k7Vo
+   KvmLaWJAo/Yj2rjCUmaE1PQmAb02kU2or8twKW3q9shJMFtu1OxpYl0ij
+   shgdjPAGEUcu11NCXRyMD23XsqE0RWv6TcBw4ucnzq0so575Jx9Tyk+hb
+   tUH7e1efOZyxZALQhdUJ/7Apkj1PX6EOfOeLub9aIC0YyLq9ywLz4EnJm
+   lrQ107XWM2cuEYOb8dieb4qcv6BFvlPZVc/5HLE242NID7ZUqSvcKWGXI
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="274251788"
+X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
+   d="scan'208";a="274251788"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 02:43:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="723182065"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Jun 2022 22:55:46 -0700
-From:   tien.sung.ang@intel.com
-To:     yilun.xu@intel.com
-Cc:     christophe.jaillet@wanadoo.fr, hao.wu@intel.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mdf@kernel.org, tien.sung.ang@intel.com, trix@redhat.com
-Subject: Re: [PATCH v2] fpga: altera-cvp: Truncated bitstream error support
-Date:   Tue,  7 Jun 2022 13:55:30 +0800
-Message-Id: <20220607055530.3755617-1-tien.sung.ang@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220603094911.GA238410@yilunxu-OptiPlex-7050>
-References: <20220603094911.GA238410@yilunxu-OptiPlex-7050>
+X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
+   d="scan'208";a="636052874"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Jun 2022 02:43:50 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nyVkb-000DYr-Dv;
+        Tue, 07 Jun 2022 09:43:49 +0000
+Date:   Tue, 7 Jun 2022 17:42:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tianfei Zhang <tianfei.zhang@intel.com>, yilun.xu@intel.com,
+        lee.jones@linaro.org
+Cc:     kbuild-all@lists.01.org, hao.wu@intel.com, trix@redhat.com,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
+        Tianfei Zhang <tianfei.zhang@intel.com>
+Subject: Re: [PATCH v1 3/4] mfd: intel-m10-bmc: add PMCI driver
+Message-ID: <202206071758.rNTfUEh0-lkp@intel.com>
+References: <20220607032833.3482-4-tianfei.zhang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607032833.3482-4-tianfei.zhang@intel.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,48 +66,47 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-> But you are adding the logic in altera_cvp_write() to keep the
-> correctness. What's the difference adding it somewhere else? And as I
-> can see, preventing the writing at the very beginning is a much cleaner
-> way.
+Hi Tianfei,
 
-Though without doubt, your solution is doable, I have a 
-discussion with the Intel architect and they insisted that
-the device driver must not make such a decision. The decision to 
-drop or accept a transfer is up to the firmware. The firmware
-insisted that the buffer be padded with whatever value. They
-desire the transfer protocol to be obeyed to ensure, that 
-there is no hard dependencies on the device driver if they
-do one day change the 4kbytes to some other smaller value.
+Thank you for the patch! Perhaps something to improve:
 
-> > > If the image size is larger than 1 Page but is not aligned to 1 Page,
-> > > will the reprogramming still fail?
-> > Yes, the reconfiguration will fail. The above tear-down  is to prevent
-> > that CvP Hardware/firmware in the FPGA from entering into a dead-lock.
+[auto build test WARNING on lee-mfd/for-mfd-next]
+[also build test WARNING on v5.19-rc1 next-20220607]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> So if the image size is not aligned to 1 Page, the reprogram should fail
-> anyway, is it? Then I really recommend you fail the reprogramming at the
-> very beginning.
+url:    https://github.com/intel-lab-lkp/linux/commits/Tianfei-Zhang/mfd-add-PMCI-driver-support/20220607-113619
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220607/202206071758.rNTfUEh0-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/88995bb5653b69e780baba37b6ade01348054135
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tianfei-Zhang/mfd-add-PMCI-driver-support/20220607-113619
+        git checkout 88995bb5653b69e780baba37b6ade01348054135
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mfd/
 
-Same reasoning as above. We don't want the driver to make this
-decision.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > >> +		altera_cvp_send_block(conf, (const u32 *)conf->send_buf,
-> > >> +				      conf->priv->block_size);
-> > 
-> > >If the len equals block_size, is the copy still needed?
-> > Actually, not required. But to maintain a simple design, we use
-> > a common flow for all so you can skip the check.
+All warnings (new ones prefixed by >>):
 
-> I don't think so. We should make the code reasonable. Blindly copy the
-> whole buffer impacts all normal cases, and makes people confused. The
-> code seems shorter now, but not simpler, it takes people more time to
-> figure out why.
+>> drivers/mfd/intel-m10-bmc-core.c:18:34: warning: 'n6000_fw_handshake_regs' defined but not used [-Wunused-const-variable=]
+      18 | static const struct regmap_range n6000_fw_handshake_regs[] = {
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~
 
-Yes, it could look confusing to other programmers. And, yes, the 
-padding doesn't matter. Let me relook into this. As the driver is 
-already re-tested by the silicon validatioin. 
-I want to avoid making any change as it
-would meant another couple of weeks of re-testing. 
-Can this be accepted as it is?
 
+vim +/n6000_fw_handshake_regs +18 drivers/mfd/intel-m10-bmc-core.c
+
+    17	
+  > 18	static const struct regmap_range n6000_fw_handshake_regs[] = {
+    19		regmap_reg_range(M10BMC_PMCI_TELEM_START, M10BMC_PMCI_TELEM_END),
+    20	};
+    21	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
