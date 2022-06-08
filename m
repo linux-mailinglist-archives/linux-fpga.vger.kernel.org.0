@@ -2,42 +2,42 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F98D542C26
-	for <lists+linux-fpga@lfdr.de>; Wed,  8 Jun 2022 11:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54ACF542C2C
+	for <lists+linux-fpga@lfdr.de>; Wed,  8 Jun 2022 11:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235448AbiFHJzB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 8 Jun 2022 05:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
+        id S235352AbiFHJ4E (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 8 Jun 2022 05:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbiFHJyo (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 8 Jun 2022 05:54:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5494D27EBC1;
-        Wed,  8 Jun 2022 02:26:49 -0700 (PDT)
+        with ESMTP id S235478AbiFHJzf (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 8 Jun 2022 05:55:35 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C854FB;
+        Wed,  8 Jun 2022 02:28:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654680413; x=1686216413;
+  t=1654680509; x=1686216509;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=88P83JBkvavJqNA7QAXBdgVHLHpgp6ntNSK4IZAoEHY=;
-  b=cvjNbj3HGNIHlFgzgj7Vulx9u+QQIW5KF4s7YPSmC5vuextbL1amL+d0
-   WyDrUytCs0tq6RU2lvBln/jlLALPgI9BkXXTPBMAoNB0VP4WbF0rnZd2d
-   W/7b7FooklIbdl5/csFYAwK7Mj72+9YW9FDH214qFxIYDHevIpcUN+3/Z
-   JmDwaxRnJ5OWPuKDgVoAdJDmDveOa7BptjdtwYKuDIh1vEfpryvi3KTDh
-   D+KtJd392KvCKquKeECjID6+7MwGGtxUxefvxAvfdaDLMDRiQ5Z6IWdP0
-   kAShGraI1UEu3Wfc710FTLoYIBO65cgLFPVGoR70/ClVJ2Ulz8JDnHJ8M
+  bh=p4vKMrHNNmOofyMT/5hRa+TJ1VNChEzud5bx9NkgO6E=;
+  b=Gsc8g5uS+7KmbpEkr02k9mymUpXD9aYIinK2sSeMxvmyee4GMKw6yzp/
+   KBP5rY0btkIUGHHsKT45a3SCIKq8J0O7B48FZR2ZpA4Bzaku/W/jCf7LG
+   WSjX2lynDItBIzpOWdp0tmnMH1hSrkHDDM8sUMvLWoyq2q5IXGNf8y3+0
+   om6dcMwRiijISADOLKG/WbZ1ij8cIHI0U62mZ1tfsGPDtQfMniFKK6eIQ
+   oH1dRjPJ7xynqBaAixhVibwO8lwz16/rnxf6gCwXxlDoWeSPnzTdpAiPD
+   c0fHLr/zVrEQaNwD3pScWzxc/ldYUZCkRQiPl/MAgR+R+1zdrMAVrIdfX
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="278013033"
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="302188690"
 X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="278013033"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 02:26:49 -0700
+   d="scan'208";a="302188690"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 02:28:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="826857115"
+   d="scan'208";a="683229722"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Jun 2022 02:26:46 -0700
-Date:   Wed, 8 Jun 2022 17:18:51 +0800
+  by fmsmga002.fm.intel.com with ESMTP; 08 Jun 2022 02:28:26 -0700
+Date:   Wed, 8 Jun 2022 17:20:32 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
 Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
@@ -45,456 +45,471 @@ Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
         krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         system@metrotek.ru
-Subject: Re: [PATCH v16 1/3] fpga: fpga-mgr: support bitstream offset in
- image buffer
-Message-ID: <20220608091851.GA481269@yilunxu-OptiPlex-7050>
+Subject: Re: [PATCH v16 2/3] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Message-ID: <20220608092032.GB481269@yilunxu-OptiPlex-7050>
 References: <20220607111030.3003-1-i.bornyakov@metrotek.ru>
- <20220607111030.3003-2-i.bornyakov@metrotek.ru>
+ <20220607111030.3003-3-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607111030.3003-2-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220607111030.3003-3-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 02:10:28PM +0300, Ivan Bornyakov wrote:
-> At the moment FPGA manager core loads to the device entire image
-> provided to fpga_mgr_load(). But it is not always whole FPGA image
-> buffer meant to be written to the device. In particular, .dat formatted
-> image for Microchip MPF contains meta info in the header that is not
-> meant to be written to the device. This is issue for those low level
-> drivers that loads data to the device with write() fpga_manager_ops
-> callback, since write() can be called in iterator over scatter-gather
-> table, not only linear image buffer. On the other hand, write_sg()
-> callback is provided with whole image in scatter-gather form and can
-> decide itself which part should be sent to the device.
-> 
-> Add header_size and data_size to the fpga_image_info struct and adjust
-> fpga_mgr_write() callers with respect to them.
-> 
->   * info->header_size indicates part at the beginning of image buffer
->     that is *not* meant to be written to the device. It is optional and
->     can be 0.
-> 
->   * info->data_size is the size of actual bitstream data that *is* meant
->     to be written to the device, starting at info->header_size from the
->     beginning of image buffer. It is also optional and can be 0, which
->     means bitstream data is up to the end of image buffer.
-> 
-> Also add parse_header() callback to fpga_manager_ops, which purpose is
-> to set info->header_size and info->data_size. At least
-> initial_header_size bytes of image buffer will be passed into
-> parse_header() first time. If it is not enough, parse_header() should
-> set desired size into info->header_size and return -EAGAIN, then it will
-> be called again with greater part of image buffer on the input.
+On Tue, Jun 07, 2022 at 02:10:29PM +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Microchip Polarfire
+> FPGAs over slave SPI interface with .dat formatted bitsream image.
 > 
 > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Tested-by: Conor Dooley <conor.dooley@microchip.com>
+
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+
 > ---
->  drivers/fpga/fpga-mgr.c       | 235 ++++++++++++++++++++++++++++++----
->  include/linux/fpga/fpga-mgr.h |  17 ++-
->  2 files changed, 223 insertions(+), 29 deletions(-)
+>  drivers/fpga/Kconfig         |   9 +
+>  drivers/fpga/Makefile        |   1 +
+>  drivers/fpga/microchip-spi.c | 393 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 403 insertions(+)
+>  create mode 100644 drivers/fpga/microchip-spi.c
 > 
-> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> index a3595ecc3f79..cb937c684390 100644
-> --- a/drivers/fpga/fpga-mgr.c
-> +++ b/drivers/fpga/fpga-mgr.c
-> @@ -74,6 +74,15 @@ static inline int fpga_mgr_write_complete(struct fpga_manager *mgr,
->  	return 0;
->  }
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 26025dbab353..75806ef5c9ea 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -248,4 +248,13 @@ config FPGA_MGR_VERSAL_FPGA
+>  	  configure the programmable logic(PL).
 >  
-> +static inline int fpga_mgr_parse_header(struct fpga_manager *mgr,
-> +					struct fpga_image_info *info,
-> +					const char *buf, size_t count)
+>  	  To compile this as a module, choose M here.
+> +
+> +config FPGA_MGR_MICROCHIP_SPI
+> +	tristate "Microchip Polarfire SPI FPGA manager"
+> +	depends on SPI
+> +	help
+> +	  FPGA manager driver support for Microchip Polarfire FPGAs
+> +	  programming over slave SPI interface with .dat formatted
+> +	  bitstream image.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index e32bfa90f968..5425a15892df 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -19,6 +19,7 @@ obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
+>  obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
+> +obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
+>  
+> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+> new file mode 100644
+> index 000000000000..2d1b73fe0b65
+> --- /dev/null
+> +++ b/drivers/fpga/microchip-spi.c
+> @@ -0,0 +1,393 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Microchip Polarfire FPGA programming over slave SPI interface.
+> + */
+> +
+> +#include <asm/unaligned.h>
+> +#include <linux/delay.h>
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/spi/spi.h>
+> +
+> +#define	MPF_SPI_ISC_ENABLE	0x0B
+> +#define	MPF_SPI_ISC_DISABLE	0x0C
+> +#define	MPF_SPI_READ_STATUS	0x00
+> +#define	MPF_SPI_READ_DATA	0x01
+> +#define	MPF_SPI_FRAME_INIT	0xAE
+> +#define	MPF_SPI_FRAME		0xEE
+> +#define	MPF_SPI_PRG_MODE	0x01
+> +#define	MPF_SPI_RELEASE		0x23
+> +
+> +#define	MPF_SPI_FRAME_SIZE	16
+> +
+> +#define	MPF_HEADER_SIZE_OFFSET	24
+> +#define	MPF_DATA_SIZE_OFFSET	55
+> +
+> +#define	MPF_LOOKUP_TABLE_RECORD_SIZE		9
+> +#define	MPF_LOOKUP_TABLE_BLOCK_ID_OFFSET	0
+> +#define	MPF_LOOKUP_TABLE_BLOCK_START_OFFSET	1
+> +
+> +#define	MPF_COMPONENTS_SIZE_ID	5
+> +#define	MPF_BITSTREAM_ID	8
+> +
+> +#define	MPF_BITS_PER_COMPONENT_SIZE	22
+> +
+> +#define	MPF_STATUS_POLL_RETRIES		10000
+> +#define	MPF_STATUS_BUSY			BIT(0)
+> +#define	MPF_STATUS_READY		BIT(1)
+> +#define	MPF_STATUS_SPI_VIOLATION	BIT(2)
+> +#define	MPF_STATUS_SPI_ERROR		BIT(3)
+> +
+> +struct mpf_priv {
+> +	struct spi_device *spi;
+> +	bool program_mode;
+> +};
+> +
+> +static int mpf_read_status(struct spi_device *spi)
 > +{
-> +	if (mgr->mops->parse_header)
-> +		return mgr->mops->parse_header(mgr, info, buf, count);
+> +	u8 status = 0, status_command = MPF_SPI_READ_STATUS;
+> +	struct spi_transfer xfers[2] = { 0 };
+> +	int ret;
+> +
+> +	/*
+> +	 * HW status is returned on MISO in the first byte after CS went
+> +	 * active. However, first reading can be inadequate, so we submit
+> +	 * two identical SPI transfers and use result of the later one.
+> +	 */
+> +	xfers[0].tx_buf = xfers[1].tx_buf = &status_command;
+> +	xfers[0].rx_buf = xfers[1].rx_buf = &status;
+> +	xfers[0].len = xfers[1].len = 1;
+> +	xfers[0].cs_change = 1;
+> +
+> +	ret = spi_sync_transfer(spi, xfers, 2);
+> +
+> +	if ((status & MPF_STATUS_SPI_VIOLATION) ||
+> +	    (status & MPF_STATUS_SPI_ERROR))
+> +		ret = -EIO;
+> +
+> +	return ret ? : status;
+> +}
+> +
+> +static enum fpga_mgr_states mpf_ops_state(struct fpga_manager *mgr)
+> +{
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct spi_device *spi;
+> +	bool program_mode;
+> +	int status;
+> +
+> +	spi = priv->spi;
+> +	program_mode = priv->program_mode;
+> +	status = mpf_read_status(spi);
+> +
+> +	if (!program_mode && !status)
+> +		return FPGA_MGR_STATE_OPERATING;
+> +
+> +	return FPGA_MGR_STATE_UNKNOWN;
+> +}
+> +
+> +static int mpf_ops_parse_header(struct fpga_manager *mgr,
+> +				struct fpga_image_info *info,
+> +				const char *buf, size_t count)
+> +{
+> +	size_t component_size_byte_num, component_size_byte_off,
+> +	       components_size_start, bitstream_start,
+> +	       block_id_offset, block_start_offset;
+> +	u8 header_size, blocks_num, block_id;
+> +	u32 block_start, component_size;
+> +	u16 components_num, i;
+> +
+> +	if (!buf) {
+> +		dev_err(&mgr->dev, "Image buffer is not provided\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	header_size = *(buf + MPF_HEADER_SIZE_OFFSET);
+> +	if (header_size > count) {
+> +		info->header_size = header_size;
+> +		return -EAGAIN;
+> +	}
+> +
+> +	/*
+> +	 * Go through look-up table to find out where actual bitstream starts
+> +	 * and where sizes of components of the bitstream lies.
+> +	 */
+> +	blocks_num = *(buf + header_size - 1);
+> +	block_id_offset = header_size + MPF_LOOKUP_TABLE_BLOCK_ID_OFFSET;
+> +	block_start_offset = header_size + MPF_LOOKUP_TABLE_BLOCK_START_OFFSET;
+> +
+> +	header_size += blocks_num * MPF_LOOKUP_TABLE_RECORD_SIZE;
+> +	if (header_size > count) {
+> +		info->header_size = header_size;
+> +		return -EAGAIN;
+> +	}
+> +
+> +	components_size_start = 0;
+> +	bitstream_start = 0;
+> +
+> +	while (blocks_num--) {
+> +		block_id = *(buf + block_id_offset);
+> +		block_start = get_unaligned_le32(buf + block_start_offset);
+> +
+> +		switch (block_id) {
+> +		case MPF_BITSTREAM_ID:
+> +			info->header_size = bitstream_start = block_start;
+> +			if (block_start > count)
+> +				return -EAGAIN;
+> +
+> +			break;
+> +		case MPF_COMPONENTS_SIZE_ID:
+> +			components_size_start = block_start;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +
+> +		if (bitstream_start && components_size_start)
+> +			break;
+> +
+> +		block_id_offset += MPF_LOOKUP_TABLE_RECORD_SIZE;
+> +		block_start_offset += MPF_LOOKUP_TABLE_RECORD_SIZE;
+> +	}
+> +
+> +	if (!bitstream_start || !components_size_start) {
+> +		dev_err(&mgr->dev, "Failed to parse header look-up table\n");
+> +		return -EFAULT;
+> +	}
+> +
+> +	/*
+> +	 * Parse bitstream size.
+> +	 * Sizes of components of the bitstream are 22-bits long placed next
+> +	 * to each other. Image header should be extended by now up to where
+> +	 * actual bitstream starts, so no need for overflow check anymore.
+> +	 */
+> +	components_num = get_unaligned_le16(buf + MPF_DATA_SIZE_OFFSET);
+> +
+> +	for (i = 0; i < components_num; i++) {
+> +		component_size_byte_num =
+> +			(i * MPF_BITS_PER_COMPONENT_SIZE) / BITS_PER_BYTE;
+> +		component_size_byte_off =
+> +			(i * MPF_BITS_PER_COMPONENT_SIZE) % BITS_PER_BYTE;
+> +
+> +		component_size = get_unaligned_le32(buf +
+> +						    components_size_start +
+> +						    component_size_byte_num);
+> +		component_size >>= component_size_byte_off;
+> +		component_size &= GENMASK(MPF_BITS_PER_COMPONENT_SIZE - 1, 0);
+> +
+> +		info->data_size += component_size * MPF_SPI_FRAME_SIZE;
+> +	}
+> +
 > +	return 0;
 > +}
 > +
->  static inline int fpga_mgr_write_init(struct fpga_manager *mgr,
->  				      struct fpga_image_info *info,
->  				      const char *buf, size_t count)
-> @@ -136,24 +145,142 @@ void fpga_image_info_free(struct fpga_image_info *info)
->  EXPORT_SYMBOL_GPL(fpga_image_info_free);
->  
->  /*
-> - * Call the low level driver's write_init function.  This will do the
-> + * Call the low level driver's parse_header function with entire FPGA image
-> + * buffer on the input. This will set info->header_size and info->data_size.
-> + */
-> +static int fpga_mgr_parse_header_mapped(struct fpga_manager *mgr,
-> +					struct fpga_image_info *info,
-> +					const char *buf, size_t count)
+> +/* Poll HW status until busy bit is cleared and mask bits are set. */
+> +static int mpf_poll_status(struct spi_device *spi, u8 mask)
 > +{
-> +	int ret;
+> +	int status, retries = MPF_STATUS_POLL_RETRIES;
 > +
-> +	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
-> +	ret = fpga_mgr_parse_header(mgr, info, buf, count);
+> +	while (retries--) {
+> +		status = mpf_read_status(spi);
+> +		if (status < 0)
+> +			return status;
 > +
-> +	if (info->header_size + info->data_size > count) {
-> +		dev_err(&mgr->dev, "Bitsream data outruns FPGA image\n");
-> +		ret = -EINVAL;
+> +		if (status & MPF_STATUS_BUSY)
+> +			continue;
+> +
+> +		if (!mask || (status & mask))
+> +			return status;
 > +	}
 > +
-> +	if (ret) {
-> +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
-> +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
-> +	}
-> +
-> +	return ret;
+> +	return -EBUSY;
 > +}
 > +
-> +/*
-> + * Call the low level driver's parse_header function with first fragment of
-> + * scattered FPGA image on the input. If header fits first fragment,
-> + * parse_header will set info->header_size and info->data_size. If it is not,
-> + * parse_header will set desired size to info->header_size and -EAGAIN will be
-> + * returned.
-> + */
-> +static int fpga_mgr_parse_header_sg_first(struct fpga_manager *mgr,
-> +					  struct fpga_image_info *info,
-> +					  struct sg_table *sgt)
+> +static int mpf_spi_write(struct spi_device *spi, const void *buf, size_t buf_size)
 > +{
-> +	size_t header_size = mgr->mops->initial_header_size;
-> +	struct sg_mapping_iter miter;
-> +	int ret;
+> +	int status = mpf_poll_status(spi, 0);
 > +
-> +	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
+> +	if (status < 0)
+> +		return status;
 > +
-> +	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
-> +	if (sg_miter_next(&miter) &&
-> +	    miter.length >= header_size)
-> +		ret = fpga_mgr_parse_header(mgr, info, miter.addr, miter.length);
-> +	else
-> +		ret = -EAGAIN;
-> +	sg_miter_stop(&miter);
-> +
-> +	if (ret && ret != -EAGAIN) {
-> +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
-> +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
-> +	}
-> +
-> +	return ret;
+> +	return spi_write(spi, buf, buf_size);
 > +}
 > +
-> +/*
-> + * Copy scattered FPGA image fragments to temporary buffer of size
-> + * info->header_size and call the low level driver's parse_header function.
-> + * This should be called after fpga_mgr_parse_header_sg_first() returned
-> + * -EAGAIN. In case of success this will set info->header_size and
-> + * info->data_size and return pointer to linear buffer with copy of FPGA
-> + * image header. Returned buffer needs to be freed.
-> + */
-> +static void *fpga_mgr_parse_header_sg(struct fpga_manager *mgr,
-> +				      struct fpga_image_info *info,
-> +				      struct sg_table *sgt)
+> +static int mpf_spi_write_then_read(struct spi_device *spi,
+> +				   const void *txbuf, size_t txbuf_size,
+> +				   void *rxbuf, size_t rxbuf_size)
 > +{
-> +	size_t len, header_size = mgr->mops->initial_header_size;
-> +	char *buf = NULL;
+> +	const u8 read_command[] = { MPF_SPI_READ_DATA };
 > +	int ret;
 > +
-> +	do {
-> +		if (info->header_size)
-> +			header_size = info->header_size;
-> +
-> +		buf = krealloc(buf, header_size, GFP_KERNEL);
-> +		if (!buf) {
-> +			ret = -ENOMEM;
-> +			break;
-> +		}
-> +
-> +		len = sg_copy_to_buffer(sgt->sgl, sgt->nents, buf, header_size);
-> +		if (len != header_size) {
-> +			ret = -EFAULT;
-> +			break;
-> +		}
-> +
-> +		ret = fpga_mgr_parse_header(mgr, info, buf, header_size);
-> +		if (ret == -EAGAIN && info->header_size <= header_size) {
-> +			dev_err(&mgr->dev, "Requested invalid header size\n");
-> +			ret = -EFAULT;
-> +		}
-> +	} while (ret == -EAGAIN);
-> +
-> +	if (ret) {
-> +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
-> +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
-> +		kfree(buf);
-> +		buf = ERR_PTR(ret);
-> +	}
-> +
-> +	return buf;
-> +}
-> +
-> +/*
-> + * Call the low level driver's write_init function. This will do the
->   * device-specific things to get the FPGA into the state where it is ready to
-> - * receive an FPGA image. The low level driver only gets to see the first
-> - * initial_header_size bytes in the buffer.
-> + * receive an FPGA image. If info->header_size is defined, the low level
-> + * driver gets to see at least first info->header_size bytes in the buffer,
-> + * mgr->mops->initial_header_size otherwise. If neither initial_header_size
-> + * nor header_size are not set, write_init will not get any bytes of image
-> + * buffer.
->   */
->  static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
->  				   struct fpga_image_info *info,
->  				   const char *buf, size_t count)
->  {
-> +	size_t header_size;
->  	int ret;
->  
->  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
-> -	if (!mgr->mops->initial_header_size) {
-> +
-> +	if (info->header_size)
-> +		header_size = info->header_size;
-> +	else
-> +		header_size = mgr->mops->initial_header_size;
-> +
-> +	if (header_size > count)
-> +		ret = -EINVAL;
-> +	else if (!header_size)
->  		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
-> -	} else {
-> -		count = min(mgr->mops->initial_header_size, count);
-> +	else
->  		ret = fpga_mgr_write_init(mgr, info, buf, count);
-> -	}
->  
->  	if (ret) {
->  		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
-> @@ -164,12 +291,11 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
->  	return 0;
->  }
->  
-> -static int fpga_mgr_write_init_sg(struct fpga_manager *mgr,
-> -				  struct fpga_image_info *info,
-> -				  struct sg_table *sgt)
-> +static int fpga_mgr_prepare_sg(struct fpga_manager *mgr,
-> +			       struct fpga_image_info *info,
-> +			       struct sg_table *sgt)
->  {
->  	struct sg_mapping_iter miter;
-> -	size_t len;
->  	char *buf;
->  	int ret;
->  
-> @@ -180,24 +306,33 @@ static int fpga_mgr_write_init_sg(struct fpga_manager *mgr,
->  	 * First try to use miter to map the first fragment to access the
->  	 * header, this is the typical path.
->  	 */
-> -	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
-> -	if (sg_miter_next(&miter) &&
-> -	    miter.length >= mgr->mops->initial_header_size) {
-> -		ret = fpga_mgr_write_init_buf(mgr, info, miter.addr,
-> -					      miter.length);
-> +	ret = fpga_mgr_parse_header_sg_first(mgr, info, sgt);
-> +	/* If 0, header fits first fragment, call write_init on it */
-> +	if (!ret) {
-> +		sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
-> +		if (sg_miter_next(&miter)) {
-> +			ret = fpga_mgr_write_init_buf(mgr, info, miter.addr,
-> +						      miter.length);
-> +			sg_miter_stop(&miter);
-> +			return ret;
-> +		}
->  		sg_miter_stop(&miter);
-> +	/*
-> +	 * If -EAGAIN, more sg buffer is needed,
-> +	 * otherwise an error has occurred.
-> +	 */
-> +	} else if (ret != -EAGAIN)
->  		return ret;
-> -	}
-> -	sg_miter_stop(&miter);
->  
-> -	/* Otherwise copy the fragments into temporary memory. */
-> -	buf = kmalloc(mgr->mops->initial_header_size, GFP_KERNEL);
-> -	if (!buf)
-> -		return -ENOMEM;
-> +	/*
-> +	 * Otherwise copy the fragments into temporary memory.
-> +	 * Copying is done inside fpga_mgr_parse_header_sg()
-> +	 */
-> +	buf = fpga_mgr_parse_header_sg(mgr, info, sgt);
-> +	if (IS_ERR(buf))
-> +		return PTR_ERR(buf);
->  
-> -	len = sg_copy_to_buffer(sgt->sgl, sgt->nents, buf,
-> -				mgr->mops->initial_header_size);
-> -	ret = fpga_mgr_write_init_buf(mgr, info, buf, len);
-> +	ret = fpga_mgr_write_init_buf(mgr, info, buf, info->header_size);
-
-If the driver doesn't have mops->parse_header(), the info->header_size
-will be 0, but we still need to pass initial_header_size to the driver,
-is it?
-
-Maybe we could also get the buf_len from fpga_mgr_parse_header_sg().
-
-Thanks,
-Yilun
-
->  
->  	kfree(buf);
->  
-> @@ -227,7 +362,7 @@ static int fpga_mgr_buf_load_sg(struct fpga_manager *mgr,
->  {
->  	int ret;
->  
-> -	ret = fpga_mgr_write_init_sg(mgr, info, sgt);
-> +	ret = fpga_mgr_prepare_sg(mgr, info, sgt);
->  	if (ret)
->  		return ret;
->  
-> @@ -237,11 +372,40 @@ static int fpga_mgr_buf_load_sg(struct fpga_manager *mgr,
->  		ret = fpga_mgr_write_sg(mgr, sgt);
->  	} else {
->  		struct sg_mapping_iter miter;
-> +		size_t length, data_size;
-> +		bool last = false;
-> +		ssize_t count;
-> +		char *addr;
-> +
-> +		data_size = info->data_size;
-> +		count = -info->header_size;
->  
->  		sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
->  		while (sg_miter_next(&miter)) {
-> -			ret = fpga_mgr_write(mgr, miter.addr, miter.length);
-> -			if (ret)
-> +			count += miter.length;
-> +
-> +			/* sg block contains only header, no data */
-> +			if (count <= 0)
-> +				continue;
-> +
-> +			if (count < miter.length) {
-> +				/* sg block contains both header and data */
-> +				addr = miter.addr + miter.length - count;
-> +				length = count;
-> +			} else {
-> +				/* sg block contains pure data */
-> +				addr = miter.addr;
-> +				length = miter.length;
-> +			}
-> +
-> +			/* truncate last block to data_size, if needed */
-> +			if (data_size && count > data_size) {
-> +				length -= count - data_size;
-> +				last = true;
-> +			}
-> +
-> +			ret = fpga_mgr_write(mgr, addr, length);
-> +			if (ret || last)
->  				break;
->  		}
->  		sg_miter_stop(&miter);
-> @@ -262,10 +426,21 @@ static int fpga_mgr_buf_load_mapped(struct fpga_manager *mgr,
->  {
->  	int ret;
->  
-> +	ret = fpga_mgr_parse_header_mapped(mgr, info, buf, count);
+> +	ret = mpf_spi_write(spi, txbuf, txbuf_size);
 > +	if (ret)
 > +		return ret;
 > +
->  	ret = fpga_mgr_write_init_buf(mgr, info, buf, count);
->  	if (ret)
->  		return ret;
->  
-> +	if (info->data_size)
-> +		count = info->data_size;
-> +	else
-> +		count -= info->header_size;
+> +	ret = mpf_poll_status(spi, MPF_STATUS_READY);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +	buf += info->header_size;
+> +	return spi_write_then_read(spi, read_command, sizeof(read_command),
+> +				   rxbuf, rxbuf_size);
+> +}
 > +
->  	/*
->  	 * Write the FPGA image to the FPGA.
->  	 */
-> @@ -424,6 +599,10 @@ static const char * const state_str[] = {
->  	[FPGA_MGR_STATE_FIRMWARE_REQ] =		"firmware request",
->  	[FPGA_MGR_STATE_FIRMWARE_REQ_ERR] =	"firmware request error",
->  
-> +	/* Parse FPGA image header */
-> +	[FPGA_MGR_STATE_PARSE_HEADER] =		"parse header",
-> +	[FPGA_MGR_STATE_PARSE_HEADER_ERR] =	"parse header error",
+> +static int mpf_ops_write_init(struct fpga_manager *mgr,
+> +			      struct fpga_image_info *info, const char *buf,
+> +			      size_t count)
+> +{
+> +	const u8 program_mode[] = { MPF_SPI_FRAME_INIT, MPF_SPI_PRG_MODE };
+> +	const u8 isc_en_command[] = { MPF_SPI_ISC_ENABLE };
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct device *dev = &mgr->dev;
+> +	struct spi_device *spi;
+> +	u32 isc_ret = 0;
+> +	int ret;
 > +
->  	/* Preparing FPGA to receive image */
->  	[FPGA_MGR_STATE_WRITE_INIT] =		"write init",
->  	[FPGA_MGR_STATE_WRITE_INIT_ERR] =	"write init error",
-> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
-> index 0f9468771bb9..cba8bb7827a5 100644
-> --- a/include/linux/fpga/fpga-mgr.h
-> +++ b/include/linux/fpga/fpga-mgr.h
-> @@ -22,6 +22,8 @@ struct sg_table;
->   * @FPGA_MGR_STATE_RESET: FPGA in reset state
->   * @FPGA_MGR_STATE_FIRMWARE_REQ: firmware request in progress
->   * @FPGA_MGR_STATE_FIRMWARE_REQ_ERR: firmware request failed
-> + * @FPGA_MGR_STATE_PARSE_HEADER: parse FPGA image header
-> + * @FPGA_MGR_STATE_PARSE_HEADER_ERR: Error during PARSE_HEADER stage
->   * @FPGA_MGR_STATE_WRITE_INIT: preparing FPGA for programming
->   * @FPGA_MGR_STATE_WRITE_INIT_ERR: Error during WRITE_INIT stage
->   * @FPGA_MGR_STATE_WRITE: writing image to FPGA
-> @@ -42,6 +44,8 @@ enum fpga_mgr_states {
->  	FPGA_MGR_STATE_FIRMWARE_REQ_ERR,
->  
->  	/* write sequence: init, write, complete */
-> +	FPGA_MGR_STATE_PARSE_HEADER,
-> +	FPGA_MGR_STATE_PARSE_HEADER_ERR,
->  	FPGA_MGR_STATE_WRITE_INIT,
->  	FPGA_MGR_STATE_WRITE_INIT_ERR,
->  	FPGA_MGR_STATE_WRITE,
-> @@ -85,6 +89,8 @@ enum fpga_mgr_states {
->   * @sgt: scatter/gather table containing FPGA image
->   * @buf: contiguous buffer containing FPGA image
->   * @count: size of buf
-> + * @header_size: offset in image buffer where bitstream data starts
-> + * @data_size: size of bitstream. If 0, (count - header_size) will be used.
->   * @region_id: id of target region
->   * @dev: device that owns this
->   * @overlay: Device Tree overlay
-> @@ -98,6 +104,8 @@ struct fpga_image_info {
->  	struct sg_table *sgt;
->  	const char *buf;
->  	size_t count;
-> +	size_t header_size;
-> +	size_t data_size;
->  	int region_id;
->  	struct device *dev;
->  #ifdef CONFIG_OF
-> @@ -137,9 +145,13 @@ struct fpga_manager_info {
->  
->  /**
->   * struct fpga_manager_ops - ops for low level fpga manager drivers
-> - * @initial_header_size: Maximum number of bytes that should be passed into write_init
-> + * @initial_header_size: minimum number of bytes that should be passed into
-> + *	parse_header and write_init.
->   * @state: returns an enum value of the FPGA's state
->   * @status: returns status of the FPGA, including reconfiguration error code
-> + * @parse_header: parse FPGA image header to set info->header_size and
-> + *	info->data_size. In case the input buffer is not large enough, set
-> + *	required size to info->header_size and return -EAGAIN.
->   * @write_init: prepare the FPGA to receive configuration data
->   * @write: write count bytes of configuration data to the FPGA
->   * @write_sg: write the scatter list of configuration data to the FPGA
-> @@ -155,6 +167,9 @@ struct fpga_manager_ops {
->  	size_t initial_header_size;
->  	enum fpga_mgr_states (*state)(struct fpga_manager *mgr);
->  	u64 (*status)(struct fpga_manager *mgr);
-> +	int (*parse_header)(struct fpga_manager *mgr,
-> +			    struct fpga_image_info *info,
-> +			    const char *buf, size_t count);
->  	int (*write_init)(struct fpga_manager *mgr,
->  			  struct fpga_image_info *info,
->  			  const char *buf, size_t count);
+> +	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
+> +		dev_err(dev, "Partial reconfiguration is not supported\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	spi = priv->spi;
+> +
+> +	ret = mpf_spi_write_then_read(spi, isc_en_command, sizeof(isc_en_command),
+> +				      &isc_ret, sizeof(isc_ret));
+> +	if (ret || isc_ret) {
+> +		dev_err(dev, "Failed to enable ISC: spi_ret %d, isc_ret %u\n",
+> +			ret, isc_ret);
+> +		return -EFAULT;
+> +	}
+> +
+> +	ret = mpf_spi_write(spi, program_mode, sizeof(program_mode));
+> +	if (ret) {
+> +		dev_err(dev, "Failed to enter program mode: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	priv->program_mode = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
+> +{
+> +	u8 spi_frame_command[] = { MPF_SPI_FRAME };
+> +	struct spi_transfer xfers[2] = { 0 };
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct device *dev = &mgr->dev;
+> +	struct spi_device *spi;
+> +	int ret, i;
+> +
+> +	if (count % MPF_SPI_FRAME_SIZE) {
+> +		dev_err(dev, "Bitstream size is not a multiple of %d\n",
+> +			MPF_SPI_FRAME_SIZE);
+> +		return -EINVAL;
+> +	}
+> +
+> +	spi = priv->spi;
+> +
+> +	xfers[0].tx_buf = spi_frame_command;
+> +	xfers[0].len = sizeof(spi_frame_command);
+> +
+> +	for (i = 0; i < count / MPF_SPI_FRAME_SIZE; i++) {
+> +		xfers[1].tx_buf = buf + i * MPF_SPI_FRAME_SIZE;
+> +		xfers[1].len = MPF_SPI_FRAME_SIZE;
+> +
+> +		ret = mpf_poll_status(spi, 0);
+> +		if (ret >= 0)
+> +			ret = spi_sync_transfer(spi, xfers, ARRAY_SIZE(xfers));
+> +
+> +		if (ret) {
+> +			dev_err(dev, "Failed to write bitstream frame %d/%zu\n",
+> +				i, count / MPF_SPI_FRAME_SIZE);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mpf_ops_write_complete(struct fpga_manager *mgr,
+> +				  struct fpga_image_info *info)
+> +{
+> +	const u8 isc_dis_command[] = { MPF_SPI_ISC_DISABLE };
+> +	const u8 release_command[] = { MPF_SPI_RELEASE };
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct device *dev = &mgr->dev;
+> +	struct spi_device *spi;
+> +	int ret;
+> +
+> +	spi = priv->spi;
+> +
+> +	ret = mpf_spi_write(spi, isc_dis_command, sizeof(isc_dis_command));
+> +	if (ret) {
+> +		dev_err(dev, "Failed to disable ISC: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	usleep_range(1000, 2000);
+> +
+> +	ret = mpf_spi_write(spi, release_command, sizeof(release_command));
+> +	if (ret) {
+> +		dev_err(dev, "Failed to exit program mode: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	priv->program_mode = false;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct fpga_manager_ops mpf_ops = {
+> +	.state = mpf_ops_state,
+> +	.initial_header_size = 71,
+> +	.parse_header = mpf_ops_parse_header,
+> +	.write_init = mpf_ops_write_init,
+> +	.write = mpf_ops_write,
+> +	.write_complete = mpf_ops_write_complete,
+> +};
+> +
+> +static int mpf_probe(struct spi_device *spi)
+> +{
+> +	struct device *dev = &spi->dev;
+> +	struct fpga_manager *mgr;
+> +	struct mpf_priv *priv;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->spi = spi;
+> +
+> +	mgr = devm_fpga_mgr_register(dev, "Microchip Polarfire SPI FPGA Manager",
+> +				     &mpf_ops, priv);
+> +
+> +	return PTR_ERR_OR_ZERO(mgr);
+> +}
+> +
+> +static const struct spi_device_id mpf_spi_ids[] = {
+> +	{ .name = "mpf-spi-fpga-mgr", },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(spi, mpf_spi_ids);
+> +
+> +#if IS_ENABLED(CONFIG_OF)
+> +static const struct of_device_id mpf_of_ids[] = {
+> +	{ .compatible = "microchip,mpf-spi-fpga-mgr" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mpf_of_ids);
+> +#endif /* IS_ENABLED(CONFIG_OF) */
+> +
+> +static struct spi_driver mpf_driver = {
+> +	.probe = mpf_probe,
+> +	.id_table = mpf_spi_ids,
+> +	.driver = {
+> +		.name = "microchip_mpf_spi_fpga_mgr",
+> +		.of_match_table = of_match_ptr(mpf_of_ids),
+> +	},
+> +};
+> +
+> +module_spi_driver(mpf_driver);
+> +
+> +MODULE_DESCRIPTION("Microchip Polarfire SPI FPGA Manager");
+> +MODULE_LICENSE("GPL");
 > -- 
 > 2.35.1
 > 
