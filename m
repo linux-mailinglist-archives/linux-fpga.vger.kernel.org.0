@@ -2,200 +2,111 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728E2542755
-	for <lists+linux-fpga@lfdr.de>; Wed,  8 Jun 2022 09:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED09954294A
+	for <lists+linux-fpga@lfdr.de>; Wed,  8 Jun 2022 10:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiFHGzV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 8 Jun 2022 02:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
+        id S229451AbiFHIUI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 8 Jun 2022 04:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347875AbiFHF6I (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 8 Jun 2022 01:58:08 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FBE1B781D;
-        Tue,  7 Jun 2022 21:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654662310; x=1686198310;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7HhJfLtFr/RjjhFXAUcR5+dY7fCMgUryDbCuqE84jTs=;
-  b=J3JGYRoT0cEzQQkEPrFs1eOGormoqsdy7MQCWEMlw2BzkihV0j64udVu
-   ZNkFni26zeRg8NPgz1Nrd3FjNRN/pNTbxK1yV8yFSx2LScuDiAfNUCaPd
-   aUEjBktHffFZ7FNBl7xMmVQjL9G9/D3aIOvoZ2Ys4PhaxAtm2OHRHbVql
-   J6bvjPEnx93HzQBbQ3UJrhPQw+EPVc2C9JfrDfykA/vDbdRKXvNHNV+tV
-   vI0QMV/fsECq6zyDxP9FCZTkxzW6n7guUG7/6f+KbYXZHAHkAXPA8vt6p
-   GuR/RpN3zNYQjAY38PczL7R8xriSlyOxofvnnx4sgwC+1nxHHStN+ZAfi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="277569589"
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="277569589"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 21:25:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="670339911"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Jun 2022 21:25:08 -0700
-Date:   Wed, 8 Jun 2022 12:17:14 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     keliu <liuke94@huawei.com>
-Cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: Directly use ida_alloc()/free()
-Message-ID: <20220608041714.GA421343@yilunxu-OptiPlex-7050>
-References: <20220527085915.2798928-1-liuke94@huawei.com>
- <20220528154355.GA183426@yilunxu-OptiPlex-7050>
+        with ESMTP id S229986AbiFHISF (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 8 Jun 2022 04:18:05 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64ED391813
+        for <linux-fpga@vger.kernel.org>; Wed,  8 Jun 2022 00:46:33 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id q15so19107752wrc.11
+        for <linux-fpga@vger.kernel.org>; Wed, 08 Jun 2022 00:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=XG67bww8RnposxSh7uvw93F6kyW5ZDtDzq1tSglB9nE=;
+        b=sZh5IUfQYVHlK8+783p/eoxVSuY7vk2paX24Qr5x7vp0UyPJ/3ACqMk9fcsW+lOgKO
+         N3uAukyh3XiTBLUyG2UPira63FkrKMLAxujYmxxUqgY/nSGrYEhLMwq6h34aMTtjnmCv
+         tjJIP2tflXfZIJAo/1fVUCBAN/LwJSNwWCarpyhDktG5qMR2Xhcm3YCTOasoH0ECgv/z
+         hmaWxjWRG9TKOJsbms00a4r/ChaA/aLhC+EdaGQLmOFt/OndRnYZFhJI1hpWKoWLxWod
+         TLxehwkfsiq5oNJ5Os8GI2U4y3pJfZaH9ylVLQNutS0ZoBjb6B8VR2pLoqSNC40WMv2z
+         CEwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=XG67bww8RnposxSh7uvw93F6kyW5ZDtDzq1tSglB9nE=;
+        b=3YijjkL1cInQpJ/TzLJzMLTcrkSx4fyRvGM+jZitKSzlycTstgdlHoKtjF7NwSAwjI
+         d1CzFwYlPVVTEw5ita//qXLP6SGxHLblDAbInPyavkCACvkrWUS3hYDLDpdI6DJsQjR/
+         LFjBVR/r2GMnrVVGv6VuSAq0yu7r3I1APgbC5Tgm09+jsZ5NgHqeDaBi8ABF/FH9AjXX
+         2y6k3vNmueBnFjQ6hZOX/fCqM5CSsoTG0Ck9JafgEh3eGjbggcq2k0b8h0YbCzOGvLAc
+         UopUzudViYFIMIO3wG6mPDi3t/mo2JVW0X0iq7U78Karj2zBjQXyHaVX4Ys6tpgtD7l2
+         C2OA==
+X-Gm-Message-State: AOAM530C9Zr4ip+qYJ+HvV90vqkgtWUMZcT6Ozv5z08dZcASlpZ9Nf97
+        hLZn+a/pGneXdX/zpkzgZaAKEw==
+X-Google-Smtp-Source: ABdhPJwwQKVLr6LrNaVreji1MoQK0L41Yhd/7tWFj4Vwx4iUeklOzgDUzjmUg5xHmS91HlSY0YqPOg==
+X-Received: by 2002:a5d:64e3:0:b0:20f:ed9b:7505 with SMTP id g3-20020a5d64e3000000b0020fed9b7505mr31936939wri.408.1654674391390;
+        Wed, 08 Jun 2022 00:46:31 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id q66-20020a1c4345000000b0039c463e909asm13535796wma.18.2022.06.08.00.46.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 00:46:30 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 08:46:28 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
+Subject: Re: [PATCH v23 1/5] mfd: intel-m10-bmc: Rename n3000bmc-secure driver
+Message-ID: <YqBT1O9dxAqeFphE@google.com>
+References: <20220606160038.846236-1-russell.h.weight@intel.com>
+ <20220606160038.846236-2-russell.h.weight@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220528154355.GA183426@yilunxu-OptiPlex-7050>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220606160038.846236-2-russell.h.weight@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Sat, May 28, 2022 at 11:43:55PM +0800, Xu Yilun wrote:
-> On Fri, May 27, 2022 at 08:59:15AM +0000, keliu wrote:
-> > Use ida_alloc()/ida_free() instead of deprecated
-> > ida_simple_get()/ida_simple_remove() .
-> > 
-> > Signed-off-by: keliu <liuke94@huawei.com>
+On Mon, 06 Jun 2022, Russ Weight wrote:
+
+> The n3000bmc-secure driver has changed to n3000bmc-sec-update. Update
+> the name in the list of the intel-m10-bmc sub-drivers.
 > 
+> Tested-by: Tianfei Zhang <tianfei.zhang@intel.com>
 > Acked-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> ---
+> v23:
+>   - Rebased for 5.19-rc1
+> v22:
+>   - Added Tested-by tag from Tianfei and Acked-by tag from Yilun.
+> v21:
+>   - No change
+> v20:
+>   - No change
+> v19:
+>   - No change
+> v18:
+>   - No change
+> v17:
+>   - This is a new patch to change in the name of the secure update
+>     driver.
+> ---
+>  drivers/mfd/intel-m10-bmc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to for-next.
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-Thanks,
-Yilun
-
-> 
-> > ---
-> >  drivers/fpga/dfl.c         | 4 ++--
-> >  drivers/fpga/fpga-bridge.c | 6 +++---
-> >  drivers/fpga/fpga-mgr.c    | 6 +++---
-> >  drivers/fpga/fpga-region.c | 6 +++---
-> >  4 files changed, 11 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> > index 599bb21d86af..2dff0c626cc6 100644
-> > --- a/drivers/fpga/dfl.c
-> > +++ b/drivers/fpga/dfl.c
-> > @@ -342,7 +342,7 @@ static void release_dfl_dev(struct device *dev)
-> >  	if (ddev->mmio_res.parent)
-> >  		release_resource(&ddev->mmio_res);
-> >  
-> > -	ida_simple_remove(&dfl_device_ida, ddev->id);
-> > +	ida_free(&dfl_device_ida, ddev->id);
-> >  	kfree(ddev->irqs);
-> >  	kfree(ddev);
-> >  }
-> > @@ -360,7 +360,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
-> >  	if (!ddev)
-> >  		return ERR_PTR(-ENOMEM);
-> >  
-> > -	id = ida_simple_get(&dfl_device_ida, 0, 0, GFP_KERNEL);
-> > +	id = ida_alloc(&dfl_device_ida, GFP_KERNEL);
-> >  	if (id < 0) {
-> >  		dev_err(&pdev->dev, "unable to get id\n");
-> >  		kfree(ddev);
-> > diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-> > index 16f2b164a178..727704431f61 100644
-> > --- a/drivers/fpga/fpga-bridge.c
-> > +++ b/drivers/fpga/fpga-bridge.c
-> > @@ -342,7 +342,7 @@ fpga_bridge_register(struct device *parent, const char *name,
-> >  	if (!bridge)
-> >  		return ERR_PTR(-ENOMEM);
-> >  
-> > -	id = ida_simple_get(&fpga_bridge_ida, 0, 0, GFP_KERNEL);
-> > +	id = ida_alloc(&fpga_bridge_ida, GFP_KERNEL);
-> >  	if (id < 0) {
-> >  		ret = id;
-> >  		goto error_kfree;
-> > @@ -375,7 +375,7 @@ fpga_bridge_register(struct device *parent, const char *name,
-> >  	return bridge;
-> >  
-> >  error_device:
-> > -	ida_simple_remove(&fpga_bridge_ida, id);
-> > +	ida_free(&fpga_bridge_ida, id);
-> >  error_kfree:
-> >  	kfree(bridge);
-> >  
-> > @@ -407,7 +407,7 @@ static void fpga_bridge_dev_release(struct device *dev)
-> >  {
-> >  	struct fpga_bridge *bridge = to_fpga_bridge(dev);
-> >  
-> > -	ida_simple_remove(&fpga_bridge_ida, bridge->dev.id);
-> > +	ida_free(&fpga_bridge_ida, bridge->dev.id);
-> >  	kfree(bridge);
-> >  }
-> >  
-> > diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> > index d49a9ce34568..2955a21beebe 100644
-> > --- a/drivers/fpga/fpga-mgr.c
-> > +++ b/drivers/fpga/fpga-mgr.c
-> > @@ -622,7 +622,7 @@ fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *in
-> >  	if (!mgr)
-> >  		return ERR_PTR(-ENOMEM);
-> >  
-> > -	id = ida_simple_get(&fpga_mgr_ida, 0, 0, GFP_KERNEL);
-> > +	id = ida_alloc(&fpga_mgr_ida, GFP_KERNEL);
-> >  	if (id < 0) {
-> >  		ret = id;
-> >  		goto error_kfree;
-> > @@ -661,7 +661,7 @@ fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *in
-> >  	return mgr;
-> >  
-> >  error_device:
-> > -	ida_simple_remove(&fpga_mgr_ida, id);
-> > +	ida_free(&fpga_mgr_ida, id);
-> >  error_kfree:
-> >  	kfree(mgr);
-> >  
-> > @@ -785,7 +785,7 @@ static void fpga_mgr_dev_release(struct device *dev)
-> >  {
-> >  	struct fpga_manager *mgr = to_fpga_manager(dev);
-> >  
-> > -	ida_simple_remove(&fpga_mgr_ida, mgr->dev.id);
-> > +	ida_free(&fpga_mgr_ida, mgr->dev.id);
-> >  	kfree(mgr);
-> >  }
-> >  
-> > diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
-> > index b0ac18de4885..18bcaa1926dd 100644
-> > --- a/drivers/fpga/fpga-region.c
-> > +++ b/drivers/fpga/fpga-region.c
-> > @@ -202,7 +202,7 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
-> >  	if (!region)
-> >  		return ERR_PTR(-ENOMEM);
-> >  
-> > -	id = ida_simple_get(&fpga_region_ida, 0, 0, GFP_KERNEL);
-> > +	id = ida_alloc(&fpga_region_ida, GFP_KERNEL);
-> >  	if (id < 0) {
-> >  		ret = id;
-> >  		goto err_free;
-> > @@ -234,7 +234,7 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
-> >  	return region;
-> >  
-> >  err_remove:
-> > -	ida_simple_remove(&fpga_region_ida, id);
-> > +	ida_free(&fpga_region_ida, id);
-> >  err_free:
-> >  	kfree(region);
-> >  
-> > @@ -283,7 +283,7 @@ static void fpga_region_dev_release(struct device *dev)
-> >  {
-> >  	struct fpga_region *region = to_fpga_region(dev);
-> >  
-> > -	ida_simple_remove(&fpga_region_ida, region->dev.id);
-> > +	ida_free(&fpga_region_ida, region->dev.id);
-> >  	kfree(region);
-> >  }
-> >  
-> > -- 
-> > 2.25.1
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
