@@ -2,63 +2,73 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330E9543DCB
-	for <lists+linux-fpga@lfdr.de>; Wed,  8 Jun 2022 22:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3185544E5C
+	for <lists+linux-fpga@lfdr.de>; Thu,  9 Jun 2022 16:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbiFHUse (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 8 Jun 2022 16:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        id S243896AbiFIOFk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 9 Jun 2022 10:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbiFHUsa (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 8 Jun 2022 16:48:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F04AF136C;
-        Wed,  8 Jun 2022 13:48:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654721308; x=1686257308;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yL3Zv+i95CITTrChFrjzM4m9fnoVpSgmhhjr2XdpLDI=;
-  b=U86VLypUnz5rXnbuUUsz6siH+5t3udYNo0xGxFlPAWC29n0xu0oyXn+H
-   x5GDKofzo2U3e6a7+uQj9NUZ6U0RfDZ4GGReuE6D9nXqWGEDDRAuQTwT2
-   hGI2HeiXeWX7pfXGDwo7lzvwQu5wGRCaWGNf7BrPxtm6i+8Sbn2E7+21M
-   PtrL0RxhVbIZ/s2dM6FnbrAN/lY4J8DIDxlqvRvUNjYkEwR2I61IB11Su
-   Puhe7pI1kDxQrEZII3ZSkYJ6zUZLAfP/pYb5IQxQEyWUWBYhdYH3+YtQT
-   rF9eJw14+DjtVRl5P8R25hkAtjmD8S+MNO0xlrDfWJq8g1znVz1c0ye47
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="275809048"
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="275809048"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 13:48:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="670772436"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Jun 2022 13:48:25 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nz2bJ-000Ezp-1i;
-        Wed, 08 Jun 2022 20:48:25 +0000
-Date:   Thu, 9 Jun 2022 04:47:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tianfei Zhang <tianfei.zhang@intel.com>, yilun.xu@intel.com,
-        lee.jones@linaro.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, hao.wu@intel.com,
-        trix@redhat.com, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, russell.h.weight@intel.com,
-        matthew.gerlach@linux.intel.com,
-        Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: Re: [PATCH v1 3/4] mfd: intel-m10-bmc: add PMCI driver
-Message-ID: <202206090450.TSpq556V-lkp@intel.com>
-References: <20220607032833.3482-4-tianfei.zhang@intel.com>
+        with ESMTP id S243253AbiFIOFj (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 9 Jun 2022 10:05:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 882C812FB2F
+        for <linux-fpga@vger.kernel.org>; Thu,  9 Jun 2022 07:05:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654783536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xhgrKuwsMFGqD7N/R0k/QMWuYyV386FPUEYFwR1ivao=;
+        b=ZGjR7MnVWIkQMamv09045MKUT3WBWJWyAV9V8LQkygDUPTLduejddLK74KLcL8PNyspgqS
+        NcD/vno9KN0qd8sKwQd/hFlLCLWwckWLnTV6QhRJAix+04i2xX4ShdOakseRxDEuMEI0iE
+        tov0/vs5gwN0y/Yx19l9r2oMKGo9l3s=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-64-DyFXXYvvPqCkNC89GP4G0g-1; Thu, 09 Jun 2022 10:05:35 -0400
+X-MC-Unique: DyFXXYvvPqCkNC89GP4G0g-1
+Received: by mail-ed1-f70.google.com with SMTP id eh10-20020a0564020f8a00b0042dd9bf7c57so17204341edb.17
+        for <linux-fpga@vger.kernel.org>; Thu, 09 Jun 2022 07:05:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xhgrKuwsMFGqD7N/R0k/QMWuYyV386FPUEYFwR1ivao=;
+        b=C9ihEgz2wMWaSeFCjyV8BqILeRZwv/r1qqH+gqR5Id2UwE90FP5/03ijDCBaVDfYUN
+         D4eNdri/gmRwHEN5QIz+Oi1sNmcvigom25FrJmtsYfj7909P4rlB/LrGih393osFcjfr
+         0bhw/LDwIBnGDngt/k5nXAlHsPMZWVAdAYf3+08eCgdxCi3CCzWDK3PdGerW1T3mtaOt
+         nM6I7axJQNfPuMJSstDnU/b0OkFTFqkrEHPq/CAqM5fqH6Q+tVriX0AEgtgDw3vH/CcB
+         /UVhTp+Jxndsf262G8RgK3QDtCszcLnCx5zJZVyloifoJJR8yoiO4iLkSd7ceKQumhmf
+         rKOg==
+X-Gm-Message-State: AOAM533JfbrGrqP4CZrEQ0DvnXHnBiibiMlnEkl/9/LE5FtG5UpGBa+3
+        +S0dspCwLqlIfa8zZoKH9U945grJgtNiGhz54rT77sKCnnWfotJ5cG/DjFQVsAkwUTNOTyfFGfm
+        ZjguSbqCVaYRdAKNd5qVU
+X-Received: by 2002:a05:6402:160b:b0:431:35df:63c0 with SMTP id f11-20020a056402160b00b0043135df63c0mr30958628edv.124.1654783533635;
+        Thu, 09 Jun 2022 07:05:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyat2k8+xqz5HSlqoTKaB+b/XqaUBP/0sro/fhR+EAmjl++CgbKpOl7FWRGYDLChRrJ8P//iw==
+X-Received: by 2002:a05:6402:160b:b0:431:35df:63c0 with SMTP id f11-20020a056402160b00b0043135df63c0mr30958587edv.124.1654783533372;
+        Thu, 09 Jun 2022 07:05:33 -0700 (PDT)
+Received: from auir.station (net-188-216-46-176.cust.vodafonedsl.it. [188.216.46.176])
+        by smtp.gmail.com with ESMTPSA id o2-20020aa7dd42000000b0042dc460bda6sm14371070edw.18.2022.06.09.07.05.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 07:05:32 -0700 (PDT)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Alan Tull <atull@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] fpga: altera-pr-ip: fix unsigned comparison with less than zero
+Date:   Thu,  9 Jun 2022 16:05:19 +0200
+Message-Id: <20220609140520.42662-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607032833.3482-4-tianfei.zhang@intel.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,50 +77,36 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Tianfei,
+Fix the "comparison with less than zero" warning reported by
+cppcheck for the unsigned (size_t) parameter count of the
+alt_pr_fpga_write() function.
 
-Thank you for the patch! Perhaps something to improve:
+Fixes: d201cc17a8a3 ("fpga pr ip: Core driver support for Altera Partial Reconfiguration IP")
+Reviewed-by: Tom Rix <trix@redhat.com>
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
+Changes v1 -> v2:
+- Coding style fix
+Changes v2 -> v3:
+- Added Fixes tag
+---
+ drivers/fpga/altera-pr-ip-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[auto build test WARNING on lee-mfd/for-mfd-next]
-[also build test WARNING on v5.19-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tianfei-Zhang/mfd-add-PMCI-driver-support/20220607-113619
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220609/202206090450.TSpq556V-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/88995bb5653b69e780baba37b6ade01348054135
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tianfei-Zhang/mfd-add-PMCI-driver-support/20220607-113619
-        git checkout 88995bb5653b69e780baba37b6ade01348054135
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mfd/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/mfd/intel-m10-bmc-core.c:18:34: warning: unused variable 'n6000_fw_handshake_regs' [-Wunused-const-variable]
-   static const struct regmap_range n6000_fw_handshake_regs[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/n6000_fw_handshake_regs +18 drivers/mfd/intel-m10-bmc-core.c
-
-    17	
-  > 18	static const struct regmap_range n6000_fw_handshake_regs[] = {
-    19		regmap_reg_range(M10BMC_PMCI_TELEM_START, M10BMC_PMCI_TELEM_END),
-    20	};
-    21	
-
+diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
+index be0667968d33..df8671af4a92 100644
+--- a/drivers/fpga/altera-pr-ip-core.c
++++ b/drivers/fpga/altera-pr-ip-core.c
+@@ -108,7 +108,7 @@ static int alt_pr_fpga_write(struct fpga_manager *mgr, const char *buf,
+ 	u32 *buffer_32 = (u32 *)buf;
+ 	size_t i = 0;
+ 
+-	if (count <= 0)
++	if (!count)
+ 		return -EINVAL;
+ 
+ 	/* Write out the complete 32-bit chunks */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.3
+
