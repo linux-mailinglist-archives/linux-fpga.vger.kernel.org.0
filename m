@@ -2,42 +2,42 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AE554DF8C
-	for <lists+linux-fpga@lfdr.de>; Thu, 16 Jun 2022 12:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0516C54E270
+	for <lists+linux-fpga@lfdr.de>; Thu, 16 Jun 2022 15:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiFPKwf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 16 Jun 2022 06:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
+        id S1376688AbiFPNrN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 16 Jun 2022 09:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359357AbiFPKwe (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 16 Jun 2022 06:52:34 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE26DB55;
-        Thu, 16 Jun 2022 03:52:30 -0700 (PDT)
+        with ESMTP id S233271AbiFPNrN (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 16 Jun 2022 09:47:13 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C156D381B2;
+        Thu, 16 Jun 2022 06:47:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655376750; x=1686912750;
+  t=1655387231; x=1686923231;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=FkMwX3n7BLt8msPC+gv9jdQ+dildTIVsFnnTojmG2vE=;
-  b=QdC2T24s3U4VoXv8f//P0ZOkLdMU1+mpSLJCSCrsij3L99JNfchXHfau
-   36WOujWRNO090A9zNE1F/d3HJ56HM+1Lr+eakVDdfgA/jMZ89gzvrdQ7c
-   UnKnYRDqNk0m7V8miiXQ4BKUZpeaS0VxZQWA+U4PvnqkMYVwjw8XhLvGJ
-   NRH+a9du4+9a35HJ302vtyrTKVmWYvNguHwmJ72HpCRinTSqbrNT+Kdhz
-   KJEfBxLhBsOdWxpqfmIlYPk+2JfPI/fFAeaoQyC0EQBthyTKUODpmAJTe
-   B+WNBV9s502tG+2h7iuo19er6ISq6uCreVIH26VBY5eFw3fbTqrOPp0rS
+  bh=EJ+ce527wh6lQA+lHh4gyYTQ3PaCD3cBQi4PKTQkbFQ=;
+  b=aylWJo6sE6jRVNj0bs+j1XpzLOh7PNbecQGIbyQcDusHNrlojXvqq19A
+   rZH+/dNN7GX9sVrDl8zXzqY4flSOpVq03DxN59adxwGwD+UPj2/NaL7cz
+   MG/ChQzCwVLccMJ4HkJmOHuYr+Tg7W0qMqXnm4Et0xcb9n/OH/NEtV3E5
+   /Kb/PkihkAUDRGgS5MqVSpaPMPSlW9lqC4z/xd7VNC5pdVHRprsRq3Im7
+   iQEXhzTdj3WBsXf3jYjUYbD+hBTsr/QqbXa90SDZisEOlzJkilgIr8z3q
+   9A2QpfkvZgZZOHMxF5KqlGCwdQd2plylpgRI6Kv3F2a6jcfU6rvfQhdNL
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="262241300"
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="262241300"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 03:52:30 -0700
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="278046987"
+X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
+   d="scan'208";a="278046987"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 06:47:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="687769984"
+X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
+   d="scan'208";a="675030584"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Jun 2022 03:52:26 -0700
-Date:   Thu, 16 Jun 2022 18:44:24 +0800
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Jun 2022 06:46:57 -0700
+Date:   Thu, 16 Jun 2022 21:38:54 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
 Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, corbet@lwn.net,
@@ -47,17 +47,17 @@ Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, corbet@lwn.net,
         linux-kernel@vger.kernel.org, system@metrotek.ru
 Subject: Re: [PATCH v19 1/4] fpga: fpga-mgr: support bitstream offset in
  image buffer
-Message-ID: <20220616104424.GA1064215@yilunxu-OptiPlex-7050>
+Message-ID: <20220616133854.GB1064215@yilunxu-OptiPlex-7050>
 References: <20220615110137.21902-1-i.bornyakov@metrotek.ru>
  <20220615110137.21902-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220615110137.21902-2-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,6 +82,50 @@ On Wed, Jun 15, 2022 at 02:01:34PM +0300, Ivan Bornyakov wrote:
 >   * info->header_size indicates part at the beginning of image buffer
 >     that is *not* meant to be written to the device. It is optional and
 >     can be 0.
+
+I thought it over again, and still have some concern about the
+definition of info->header_size.
+
+In this patch, the header_size is also used for the write_init() callback,
+So if a driver needs the dynamic image header for write_init(), it should
+update the info->header_size. But the driver may not want to skip the
+header size when write(). Actually we have existing case now, some
+drivers have initial_header_size but don't skip the header on write().
+I guess maybe the firmware behind its data transfer engine deals with the
+header correctly. And our current definition of info->header_size
+restricts the usage.
+
+I think if we could define the info->header_size as the generic image
+header, the framework initialize the info->header_size as the
+mops->initial_header_size. The parse_header() could enlarge the
+info->header_size as needed.
+Then we introduce a bool mops->skip_header for drivers to indicate
+whether to skip info->header_size on write(). Since the exsiting drivers
+don't skip the header, the default initial value of skip_header doesn't
+affect exsiting drivers.
+
+I think this definition is more clear, then we don't have to frequently
+use like:
+
+  if (info->header_size)
+      header_size = info->header_size;
+  else
+      header_size = mops->initial_header_size
+
+We may not need mops->initial_header_size any more after
+info->header_size initialization.
+
+
+And for info->data_size, it could be the actual data size that would be
+transfered by write(). That is to say, if skip_header == true, it
+excludes header_size, if skip_header == false, it includes header_size.
+It could still be 0, which means the whole image buffer.
+
+How do you think?
+
+Thanks,
+Yilun
+
 > 
 >   * info->data_size is the size of actual bitstream data that *is* meant
 >     to be written to the device, starting at info->header_size from the
@@ -211,33 +255,6 @@ On Wed, Jun 15, 2022 at 02:01:34PM +0300, Ivan Bornyakov wrote:
 > +			ret = -ENOMEM;
 > +			break;
 > +		}
-
-Could we firstly check header_size? Then we don't have to always
-consider ZERO_PTR_SIZE case in mind. Maybe this makes the code
-easier to understand.
-
-	do {
-		[...]
-
-		if (!header_size) {
-			ret = -EFAULT;
-			break;
-		}
-
-		new_buf = krealloc(buf, header_size, GFP_KERNEL);
-		if (!new_buf) {
-			ret = -ENOMEM;
-			break;
-		}
-
-		buf = new_buf;
-
-		[...]
-	} while(...)
-
-Thanks,
-Yilun
-
 > +
 > +		len = sg_copy_to_buffer(sgt->sgl, sgt->nents, buf, header_size);
 > +		if (len != header_size) {
