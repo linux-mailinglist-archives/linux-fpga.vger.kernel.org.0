@@ -2,46 +2,46 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732855535E6
-	for <lists+linux-fpga@lfdr.de>; Tue, 21 Jun 2022 17:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D1A5535E0
+	for <lists+linux-fpga@lfdr.de>; Tue, 21 Jun 2022 17:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352762AbiFUPWO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 21 Jun 2022 11:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        id S1352752AbiFUPWK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 21 Jun 2022 11:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352755AbiFUPWM (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 21 Jun 2022 11:22:12 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E0B252BD;
-        Tue, 21 Jun 2022 08:22:11 -0700 (PDT)
+        with ESMTP id S1352740AbiFUPWI (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 21 Jun 2022 11:22:08 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2C828983;
+        Tue, 21 Jun 2022 08:22:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655824931; x=1687360931;
+  t=1655824927; x=1687360927;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Vsw8vB0d2PUw/2PgT1bcqVtYnj4HJ7f6+Ks30Hj4HkA=;
-  b=eUlRgUEwseOtHXmpgl4wIn5aymLTeY5JrrepKMaoLWwtbpDx8gvMZjp9
-   QYYxkmz/zf3q3x2QZ7zrisB489nfph1wYbQUjsAiQPTySd1iBZ7Lkooxe
-   2tDQBFwM+yvBX5+/DRTEisKjvRCw3X0P4ndwD3QSN1mvIv9ktMVmffDom
-   f7snYj2F1ZLBCxBH8HI7c+ZKoShbqmNyGigoci2zVawj4Vr1gCEivcY/i
-   oCTNCCxX4YNitDa8WTz9SI4znZzypLm829c5uQO5fiSPCj0Cg3osyVw6E
-   vCW39vO0xTE/5E+Hc6AjbjB9n0OrJLfQyjNir8ZmVdKfG6iaVCu1kDFLl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="344137151"
+  bh=1flX2RejbeqfiODphgVCmQ1ehxJD9lWgF0DaPcQBkuA=;
+  b=DrDxz3VdRgZTH5birRPOto2LDFc6d2DuTt1ZkTZwrgLzdbdgT6TbYFgG
+   5XOur2LS5J5TkYwwOnXzUJEek/rY7bg3orWR7TbHX5cbVWp3XiPD7vQyC
+   368C3rcLfUUWpT6o0iyu+LmlqZ8lZ3QiETEd/hw8Z0Uoc9+R4svlasbd5
+   i+goJe8zHmdgK0FIveIN9bOuUWmO8GRdIcEn85Th7N2gKqNPY75xg4aO0
+   2kW93IN6TQe3CaqbqZcVYco1tkjtYlwwnRAKUOzW6zRB5TJXbu2C4/WJM
+   KPezGlfwrdhrF3ArZplw4Lhj0UuNS8A7ozRu+v6y+7FmCKOLg0Jr55F9S
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="305588892"
 X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="344137151"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 08:22:06 -0700
+   d="scan'208";a="305588892"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 08:22:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="677045221"
+   d="scan'208";a="585807080"
 Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2022 08:22:02 -0700
+  by orsmga002.jf.intel.com with ESMTP; 21 Jun 2022 08:22:02 -0700
 Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o3fhZ-00004e-M0;
+        id 1o3fhZ-00004Z-LC;
         Tue, 21 Jun 2022 15:22:01 +0000
-Date:   Tue, 21 Jun 2022 23:21:36 +0800
+Date:   Tue, 21 Jun 2022 23:21:37 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Nava kishore Manne <nava.manne@xilinx.com>,
         michal.simek@xilinx.com, hao.wu@intel.com, trix@redhat.com,
@@ -51,19 +51,19 @@ To:     Nava kishore Manne <nava.manne@xilinx.com>,
         harsha.harsha@xilinx.com, lakshmi.sai.krishna.potthuri@xilinx.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-fpga@vger.kernel.org, git@xilinx.com
-Cc:     kbuild-all@lists.01.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
 Subject: Re: [PATCH v2 2/3] firmware: xilinx: Add pm api function for PL
  readback
-Message-ID: <202206212254.d7Dba7Nm-lkp@intel.com>
+Message-ID: <202206212247.2Ky8WLW2-lkp@intel.com>
 References: <20220621092833.1057408-3-nava.manne@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220621092833.1057408-3-nava.manne@xilinx.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,8 +83,8 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Nava-kishore-Manne/fpga-manager-change-status-api-prototype-don-t-use-older/20220621-183524
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 78ca55889a549a9a194c6ec666836329b774ab6d
-config: riscv-randconfig-r042-20220619 (https://download.01.org/0day-ci/archive/20220621/202206212254.d7Dba7Nm-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.3.0
+config: hexagon-randconfig-r003-20220620 (https://download.01.org/0day-ci/archive/20220621/202206212247.2Ky8WLW2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -94,20 +94,18 @@ reproduce (this is a W=1 build):
         git checkout 6b66792a9e4acd718d58c0e5a33ca2426837be87
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/crypto/xilinx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/fpga/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/crypto/xilinx/zynqmp-aes-gcm.c:18:
->> include/linux/firmware/xlnx-zynqmp.h:747:1: error: expected identifier or '(' before '{' token
-     747 | {
-         | ^
-   include/linux/firmware/xlnx-zynqmp.h:744:12: warning: 'zynqmp_pm_fpga_read' declared 'static' but never defined [-Wunused-function]
-     744 | static int zynqmp_pm_fpga_read(const u32 reg_numframes,
-         |            ^~~~~~~~~~~~~~~~~~~
+   In file included from drivers/fpga/zynqmp-fpga.c:13:
+>> include/linux/firmware/xlnx-zynqmp.h:747:1: error: expected identifier or '('
+   {
+   ^
+   1 error generated.
 
 
 vim +747 include/linux/firmware/xlnx-zynqmp.h
