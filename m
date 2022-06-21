@@ -2,25 +2,25 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9606552E53
-	for <lists+linux-fpga@lfdr.de>; Tue, 21 Jun 2022 11:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE968552E57
+	for <lists+linux-fpga@lfdr.de>; Tue, 21 Jun 2022 11:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348895AbiFUJ2s (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 21 Jun 2022 05:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
+        id S1348920AbiFUJ3E (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 21 Jun 2022 05:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348889AbiFUJ2r (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 21 Jun 2022 05:28:47 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2063.outbound.protection.outlook.com [40.107.94.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12482E7;
-        Tue, 21 Jun 2022 02:28:44 -0700 (PDT)
+        with ESMTP id S1348907AbiFUJ24 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 21 Jun 2022 05:28:56 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2066.outbound.protection.outlook.com [40.107.94.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4E4BE3;
+        Tue, 21 Jun 2022 02:28:53 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ai6tC/diUTxn8DoPR+quCTFOAJA5hGS57S/ovH/19IS5lREyvl6Dycv4wOrDLltQA+jU+yA2Idoq5nK3fVJABAP4jIYbR8PLLqeOVSpSwZyqY4vOe+JR9j3HEVs2Nmm2uKg/56dKqgipQUuFmw/B6oDAXcJvVk0MFeoQxgS+cIuqwT5ReQmxlCWSYE/tiE0A1QC3uyrzdxm+QGRU1HwD3TcFvqOH/cnYo4ssRDxklFTouOqRqDrrNg3EypZdDtjy8L/P3KI+10qzye0GrJ+W2fLIlXBAJgXhWyMoq17OCC4mLiVGDDKQ8Hx8P1a57VglATLc5qtqGZU5itpsQddXuQ==
+ b=SvKQzYeqQpXfbFYFxEPpyyCxGztpFJcmej6KfEobmnjMA7BC1dsO265mwiGzF+E5YBqGT0u22bweEBRh0lU9RTRHp1NUlqi67Yof2/NOOt3Dvfb/UrmU7CW+DqJxYDa4ZI/cTJhpHacWXc5C3n2hX61axLwOlpC0TACAbymURVRMh5mdmZ0rJRf9oWDajgPfUisYN1aSfkEfS4dxrzl4M/FTWZ4KfkLoOgGBJcnCAwbi2I24Agy6rz/lyuec047Opy9LN2dtic+FBny1HTz2RM5t4Kabbaegpz+GV6XqAhH+MeCd585K5QPU+OQ+XHdDRPu7mM6um7RqFMy+yCJHcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q/zlDA+4VdyUEHNl6rd7W9ZTfZawQR3r0WsgZMw9DxI=;
- b=bX3wAEJFxw5UN65jsOnWh3ktz1Eq7ILzqczbdhT7hUz1ynAZpFg1E24PvIA1TJDTMhCeLNn60uh2FF8Ipiw/fmWuUc1U1ygo+PT9kycr+DCjErRguFy3TSuWnJrUs7Z1SX3nUJutIvKwQEm3RzC9LRHiO+2rLs7HTfaqBgCjC1yL9BBWcn+Bgs4VgYDdHDeucRN5bHrJzl48F+8hoZzPUmRTpwOMW8zQwPOnOIF2WC7J60bOLc8clEwUB1e0rB05WXROmUVfakMF4wSir9gKGmOWYscrm+I66lvN8VDyJ9ojOtMlKWanJOUr5FUywdiWksuwMAPDED3WzuIoy17HIQ==
+ bh=oG4ViLGS9a9Ayg33rEzZZFSG5BJ46TmXXTBdqwLAb/8=;
+ b=RS/IUeUWlHdLzg76qfE99rTOI/6I/v6woc0CdGvgnZm1gJUmlHK1m9rdqR76imK3X57Jre3MRJAb82S0aK8iWALibZ/kVWQvcn5cvckviSGS+OHxHSbVVbj4OmB/he/QrmrDLM9PpVdCTdjMA06sVlF+iaXru6r7j12hifRLke/dc76MR9RkFDkG92cq9xukRFtnLeLaMbGNNUdhVjvAXeMu8TSH1IN1D9cWDf3pzKICd34oxVqDYEBRz3oOY0nPZjyNF+5eBjVVVQobQb+zoqm7feRqMy6yRdwVm/FrsxdHLivZpoenEvjsd2Xx1HOXSUWBuqpML7OaThr9zVJD6Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=intel.com smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -28,18 +28,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q/zlDA+4VdyUEHNl6rd7W9ZTfZawQR3r0WsgZMw9DxI=;
- b=Bi8KVLFTD3EGufG1rcJlVF7zZThVq8HDVGBDsPaZkfP10kVtK4a7o7NkORsOfh0+rDO5rX6kTA/SzzMenIQWAy3L5Y3JqASjQZDhikYvQbaDQisFI/u13ck7vHFVKF81ACrNjgOt6/RAKitDPYtqZqhL+Xl3yqYYZlDi3XEzSJ4=
-Received: from SN6PR04CA0100.namprd04.prod.outlook.com (2603:10b6:805:f2::41)
- by DM5PR02MB2203.namprd02.prod.outlook.com (2603:10b6:3:5b::17) with
+ bh=oG4ViLGS9a9Ayg33rEzZZFSG5BJ46TmXXTBdqwLAb/8=;
+ b=lZC+6VeO/sPSw+mvpjNP+1qM3N/ULTKs7uWJGwbGO4OmYjEI2otFnYO5RR+zDlLPDpVFEHbo87buy+olGZ5NfE9lE1qbxAz1ctlnJQaTN9wt4EGQoeesIgnhuc/0nit70bb3GhdVWATbNC1IxDfQOwyBhBqH3bYxN5+39dIWe+4=
+Received: from SN6PR05CA0013.namprd05.prod.outlook.com (2603:10b6:805:de::26)
+ by SA0PR02MB7466.namprd02.prod.outlook.com (2603:10b6:806:ed::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Tue, 21 Jun
- 2022 09:28:42 +0000
-Received: from SN1NAM02FT0023.eop-nam02.prod.protection.outlook.com
- (2603:10b6:805:f2:cafe::1f) by SN6PR04CA0100.outlook.office365.com
- (2603:10b6:805:f2::41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16 via Frontend
- Transport; Tue, 21 Jun 2022 09:28:42 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.17; Tue, 21 Jun
+ 2022 09:28:51 +0000
+Received: from SN1NAM02FT0053.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:805:de:cafe::ba) by SN6PR05CA0013.outlook.office365.com
+ (2603:10b6:805:de::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.10 via Frontend
+ Transport; Tue, 21 Jun 2022 09:28:51 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=xilinx.com;
@@ -47,16 +47,16 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
  client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
 Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0023.mail.protection.outlook.com (10.97.4.236) with Microsoft SMTP
+ SN1NAM02FT0053.mail.protection.outlook.com (10.97.4.115) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5353.14 via Frontend Transport; Tue, 21 Jun 2022 09:28:42 +0000
+ 15.20.5353.14 via Frontend Transport; Tue, 21 Jun 2022 09:28:51 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 21 Jun 2022 02:28:40 -0700
+ 15.1.2176.14; Tue, 21 Jun 2022 02:28:47 -0700
 Received: from smtp.xilinx.com (172.19.127.95) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 21 Jun 2022 02:28:40 -0700
+ 15.1.2176.14 via Frontend Transport; Tue, 21 Jun 2022 02:28:47 -0700
 Envelope-to: git@xilinx.com,
  hao.wu@intel.com,
  trix@redhat.com,
@@ -69,7 +69,7 @@ Envelope-to: git@xilinx.com,
 Received: from [10.140.6.60] (port=45120 helo=xhdnavam40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <nava.manne@xilinx.com>)
-        id 1o3aBc-000DOt-1Z; Tue, 21 Jun 2022 02:28:40 -0700
+        id 1o3aBi-000DOt-IK; Tue, 21 Jun 2022 02:28:46 -0700
 From:   Nava kishore Manne <nava.manne@xilinx.com>
 To:     <michal.simek@xilinx.com>, <hao.wu@intel.com>, <trix@redhat.com>,
         <mdf@kernel.org>, <yilun.xu@intel.com>,
@@ -81,34 +81,36 @@ To:     <michal.simek@xilinx.com>, <hao.wu@intel.com>, <trix@redhat.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
         <git@xilinx.com>
-Subject: [PATCH v2 0/3]Adds status interface for zynqmp-fpga
-Date:   Tue, 21 Jun 2022 14:58:30 +0530
-Message-ID: <20220621092833.1057408-1-nava.manne@xilinx.com>
+Subject: [PATCH v2 1/3] fpga: manager: change status api prototype, don't use older
+Date:   Tue, 21 Jun 2022 14:58:31 +0530
+Message-ID: <20220621092833.1057408-2-nava.manne@xilinx.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220621092833.1057408-1-nava.manne@xilinx.com>
+References: <20220621092833.1057408-1-nava.manne@xilinx.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fa949471-0d0d-4c11-1ba1-08da53686e7b
-X-MS-TrafficTypeDiagnostic: DM5PR02MB2203:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR02MB22035ED7F45FEFB41CB18796C2B39@DM5PR02MB2203.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: d0ae5fbd-c8eb-4498-f099-08da5368744b
+X-MS-TrafficTypeDiagnostic: SA0PR02MB7466:EE_
+X-Microsoft-Antispam-PRVS: <SA0PR02MB746620E18446D1C051771FE2C2B39@SA0PR02MB7466.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: c/oNx71aRhfPOE0DE3Xlg1p/fkDasIrmBprNp7WUXnoJJswprXI0XyZH1biHsjWKHMBzzvNH4TdhjVaYl7U2N1k2QVQqHY+kp2s13B9vpzH1vG6eK4gLq50UIaSuj288NKnY0RGPoPlCX9N30BCsHsS6QEdKdFCMRyfB2j4+L1dmcU12SeNvvEvAR54rI1+Nwp5NkV/HhHrraLbsOzSxYGyLAVn2DTE0QLeELeBZTkKC7Fm020zwDQHMpqtl1dC6GbzbkBpIbFokUAxv6rKmbUkO7LkpbnzsITPM9zuY11vLXhTWhzBfLrlTbIbdHg9IPPSaUvkYRaJ0tlmymCJQinv8gg4ilGBDzFxdDZliR5e8by42mKc1d5V/t0+pOahMcULgzIeCoB6zBguFaJITjHDIqHC+eQWl6EoE0FrGqgZgUEsOGTJ2OtS3XHPWnFP5HkQ9xHp72xVTYPWnJ34trUv8EgttGFWhMg/1FzJk7RszoJcRKCPFfAWqDnbTTQoHdB11dc9AxtzpzLHlj50D4ySmQnwBesvgnCozU/2huBmIr6G9Lf/zogF2PiHFJWylYHw2gVME3fBN7rlaf1TCCgD+U+9h5PfbcMFPf6ZPCls6ikv6A4RA+a0KttryIa9ebmRbuojR2EuseNoLBJcJYrK4PvL7Qggs8/PbDf8S1LWmBttilxVYbIC6bt4G/wru6fMdFQ0m3Avr+38MOGL+CG3klGEN+0xDzS0ldJ7UGHtt0Tm/4Fef2VLw22iOVqPbR31BnTG/VFp1Fs8rzDI/8n1gmFslc8Klaz9B1JI9MmVUqed78p+TZ1GzT838OnMHBwEuloYCp5IgCvJu8otrN+Iw1PPmkk6lg03R1Lo14dlB5MUCfbiLjKTAkhRKui4ibVtdDFQVfnaKJwy+bD0r0dtkAQ9XlqhMqTCvkl4ZcuQ=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(39860400002)(136003)(346002)(46966006)(40470700004)(36840700001)(356005)(921005)(82740400003)(7636003)(36756003)(478600001)(966005)(26005)(7696005)(6666004)(336012)(316002)(6636002)(110136005)(186003)(70206006)(70586007)(41300700001)(1076003)(426003)(2616005)(8936002)(2906002)(5660300002)(82310400005)(40480700001)(8676002)(9786002)(4744005)(83380400001)(47076005)(40460700003)(36860700001)(102446001)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Q/yT3HpCKtFDi9RcoiXRsGSs2uKsyHJGYfC8fytLgdF5NG8d5uz5hQwVV/RG0I0htfd/SfOY0mCQTWPaJffZb06+1mvd5fAkSeGNNkdTMovuCIHAQA0YUA2+4kZg55h1Y3LOBXl3MW9GORdTLDxDRLRr76lRZNrbI58w/st5AwkjxO+4sdN91/uVc5KRXIwNc6Z76LZOGu0g+8g/CNuhHGCYEHofMcpckwm74/+wZlonwIcMKeGtgkYWoaxwCUiDYVx5jsRyJ9x3aJH+cZ6TP2jHVjFsKMwYkSLS4QHjsuK8JAkWGVFulhYW6YYnMYbNhHcrXGJzcaMsxFiWdyzOnC58qOsMv7wbQ7MqlM7Xv8587stlfJwsaBkJMte6Iu53zqS1KxpK/mna3qGgjRJsWEVH+VE6Us1/abbSrVL6Ey/9qZjailG0XsCkwr1lDzsM2EwKhpDjDokpWpbfNT0eQx6AHuioP4MLUcEYhadmfc7X+AHQTr9aoKF/9hJVVWigbew/5JCixOgiCcQGg+K3cyuE8pYeadsnz4UXTED17xYoJxSF2PImEsNcTq0yWzcplZzAXTWCCtCbrIlocca93ShG7FvZiGHo8TyhF9YckxqB+j4TqQO81yvHdX5HY1A4vYm3CMZVzKuGBGK7rpWaeuBJLkxXXE87Y4sXpyqZ1KjY5hGxfI/2vipzorrWilRZA/hrI/dkERGFTuN7fpWEQjp+aS36pL+J6MfETJHGmwgHX64gK9pn0h9goltW4DGkQA1+Dxrkz55JDCuLg2qONyWhm6SXx/AqTfvsEWsmk0v6lqY47JY+pagHlVrG0CD6
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(136003)(39860400002)(46966006)(36840700001)(40470700004)(8936002)(36756003)(9786002)(40480700001)(5660300002)(40460700003)(70586007)(82310400005)(2906002)(316002)(6636002)(70206006)(110136005)(186003)(83380400001)(426003)(2616005)(336012)(8676002)(921005)(7696005)(41300700001)(1076003)(478600001)(6666004)(47076005)(36860700001)(82740400003)(26005)(356005)(7636003)(102446001)(2101003)(83996005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 09:28:42.0831
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 09:28:51.8403
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa949471-0d0d-4c11-1ba1-08da53686e7b
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0ae5fbd-c8eb-4498-f099-08da5368744b
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0023.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0053.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB2203
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR02MB7466
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -118,33 +120,132 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Adds status interface for zynqmp-fpga, It's a read only interface
-which allows the user to get the PL status.
- -Device Initialization error.
- -Device internal signal error.
- -All I/Os are placed in High-Z state.
- -Device start-up sequence error.
- -Firmware error.
+Different vendors have different error sets defined by Hardware.
+If we always define the new bits when we cannot find an exact 1:1
+mapping in the core the 64 bits would soon be used out. Also, it's
+hard to understand the mixture of different error sets.
 
-For more details refer the ug570.
-https://docs.xilinx.com/v/u/en-US/ug570-ultrascale-configuration
+To address these issues updated the status interface to handle the
+vendor-specific messages in a generic way. With the updated status
+interface the vendor-specific driver files can independently handle
+the error messages.
 
-This series rebased on 5.19v
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git 
+Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+---
+Changes for v2:
+              - New patch.
 
-Nava kishore Manne (3):
-  fpga: manager: change status api prototype, don't use older
-  firmware: xilinx: Add pm api function for PL readback
-  fpga: zynqmp-fpga: Adds status interface
+ drivers/fpga/dfl-fme-mgr.c    | 20 ++++++++++----------
+ drivers/fpga/fpga-mgr.c       | 24 +++++-------------------
+ include/linux/fpga/fpga-mgr.h |  2 +-
+ 3 files changed, 16 insertions(+), 30 deletions(-)
 
- drivers/firmware/xilinx/zynqmp.c     | 33 +++++++++++++++++
- drivers/fpga/dfl-fme-mgr.c           | 20 +++++------
- drivers/fpga/fpga-mgr.c              | 24 +++----------
- drivers/fpga/zynqmp-fpga.c           | 53 ++++++++++++++++++++++++++++
- include/linux/firmware/xlnx-zynqmp.h | 14 ++++++++
- include/linux/fpga/fpga-mgr.h        |  2 +-
- 6 files changed, 116 insertions(+), 30 deletions(-)
-
+diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
+index af0785783b52..5a8e6a41c85c 100644
+--- a/drivers/fpga/dfl-fme-mgr.c
++++ b/drivers/fpga/dfl-fme-mgr.c
+@@ -72,22 +72,22 @@ struct fme_mgr_priv {
+ 	u64 pr_error;
+ };
+ 
+-static u64 pr_error_to_mgr_status(u64 err)
++static ssize_t pr_error_to_mgr_status(u64 err, char *buf)
+ {
+-	u64 status = 0;
++	ssize_t len = 0;
+ 
+ 	if (err & FME_PR_ERR_OPERATION_ERR)
+-		status |= FPGA_MGR_STATUS_OPERATION_ERR;
++		len += sprintf(buf + len, "reconfig operation error\n");
+ 	if (err & FME_PR_ERR_CRC_ERR)
+-		status |= FPGA_MGR_STATUS_CRC_ERR;
++		len += sprintf(buf + len, "reconfig CRC error\n");
+ 	if (err & FME_PR_ERR_INCOMPATIBLE_BS)
+-		status |= FPGA_MGR_STATUS_INCOMPATIBLE_IMAGE_ERR;
++		len += sprintf(buf + len, "reconfig incompatible image\n");
+ 	if (err & FME_PR_ERR_PROTOCOL_ERR)
+-		status |= FPGA_MGR_STATUS_IP_PROTOCOL_ERR;
++		len += sprintf(buf + len, "reconfig IP protocol error\n");
+ 	if (err & FME_PR_ERR_FIFO_OVERFLOW)
+-		status |= FPGA_MGR_STATUS_FIFO_OVERFLOW_ERR;
++		len += sprintf(buf + len, "reconfig fifo overflow error\n");
+ 
+-	return status;
++	return len;
+ }
+ 
+ static u64 fme_mgr_pr_error_handle(void __iomem *fme_pr)
+@@ -252,11 +252,11 @@ static int fme_mgr_write_complete(struct fpga_manager *mgr,
+ 	return 0;
+ }
+ 
+-static u64 fme_mgr_status(struct fpga_manager *mgr)
++static ssize_t fme_mgr_status(struct fpga_manager *mgr, char *buf)
+ {
+ 	struct fme_mgr_priv *priv = mgr->priv;
+ 
+-	return pr_error_to_mgr_status(priv->pr_error);
++	return pr_error_to_mgr_status(priv->pr_error, buf);
+ }
+ 
+ static const struct fpga_manager_ops fme_mgr_ops = {
+diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+index 08dc85fcd511..ae8de13a482e 100644
+--- a/drivers/fpga/fpga-mgr.c
++++ b/drivers/fpga/fpga-mgr.c
+@@ -38,10 +38,11 @@ static inline enum fpga_mgr_states fpga_mgr_state(struct fpga_manager *mgr)
+ 	return FPGA_MGR_STATE_UNKNOWN;
+ }
+ 
+-static inline u64 fpga_mgr_status(struct fpga_manager *mgr)
++static inline ssize_t fpga_mgr_status(struct fpga_manager *mgr, char *buf)
+ {
+ 	if (mgr->mops->status)
+-		return mgr->mops->status(mgr);
++		return mgr->mops->status(mgr, buf);
++
+ 	return 0;
+ }
+ 
+@@ -460,23 +461,8 @@ static ssize_t status_show(struct device *dev,
+ 			   struct device_attribute *attr, char *buf)
+ {
+ 	struct fpga_manager *mgr = to_fpga_manager(dev);
+-	u64 status;
+-	int len = 0;
+-
+-	status = fpga_mgr_status(mgr);
+-
+-	if (status & FPGA_MGR_STATUS_OPERATION_ERR)
+-		len += sprintf(buf + len, "reconfig operation error\n");
+-	if (status & FPGA_MGR_STATUS_CRC_ERR)
+-		len += sprintf(buf + len, "reconfig CRC error\n");
+-	if (status & FPGA_MGR_STATUS_INCOMPATIBLE_IMAGE_ERR)
+-		len += sprintf(buf + len, "reconfig incompatible image\n");
+-	if (status & FPGA_MGR_STATUS_IP_PROTOCOL_ERR)
+-		len += sprintf(buf + len, "reconfig IP protocol error\n");
+-	if (status & FPGA_MGR_STATUS_FIFO_OVERFLOW_ERR)
+-		len += sprintf(buf + len, "reconfig fifo overflow error\n");
+-
+-	return len;
++
++	return fpga_mgr_status(mgr, buf);
+ }
+ 
+ static DEVICE_ATTR_RO(name);
+diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+index 0f9468771bb9..42c24426fb7f 100644
+--- a/include/linux/fpga/fpga-mgr.h
++++ b/include/linux/fpga/fpga-mgr.h
+@@ -154,7 +154,7 @@ struct fpga_manager_info {
+ struct fpga_manager_ops {
+ 	size_t initial_header_size;
+ 	enum fpga_mgr_states (*state)(struct fpga_manager *mgr);
+-	u64 (*status)(struct fpga_manager *mgr);
++	ssize_t (*status)(struct fpga_manager *mgr, char *buf);
+ 	int (*write_init)(struct fpga_manager *mgr,
+ 			  struct fpga_image_info *info,
+ 			  const char *buf, size_t count);
 -- 
 2.25.1
 
