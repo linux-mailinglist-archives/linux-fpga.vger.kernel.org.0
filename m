@@ -2,112 +2,73 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70955549F6
-	for <lists+linux-fpga@lfdr.de>; Wed, 22 Jun 2022 14:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A07D554E9F
+	for <lists+linux-fpga@lfdr.de>; Wed, 22 Jun 2022 17:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234995AbiFVMRG (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 22 Jun 2022 08:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S1358926AbiFVPEJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 22 Jun 2022 11:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235799AbiFVMQ4 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 22 Jun 2022 08:16:56 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF88340C6;
-        Wed, 22 Jun 2022 05:16:53 -0700 (PDT)
-Received: (Authenticated sender: peter@korsgaard.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5FCDB10000A;
-        Wed, 22 Jun 2022 12:16:47 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
-        (envelope-from <peter@korsgaard.com>)
-        id 1o3zHr-0099t6-5Y; Wed, 22 Jun 2022 14:16:47 +0200
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     <michal.simek@xilinx.com>, <hao.wu@intel.com>, <trix@redhat.com>,
-        <mdf@kernel.org>, <yilun.xu@intel.com>,
-        <gregkh@linuxfoundation.org>, <ronak.jain@xilinx.com>,
-        <rajan.vaja@xilinx.com>, <abhyuday.godhasara@xilinx.com>,
-        <piyush.mehta@xilinx.com>, <harsha.harsha@xilinx.com>,
-        <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
-        <git@xilinx.com>
-Subject: Re: [PATCH v2 3/3] fpga: zynqmp-fpga: Adds status interface
-References: <20220621092833.1057408-1-nava.manne@xilinx.com>
-        <20220621092833.1057408-4-nava.manne@xilinx.com>
-Date:   Wed, 22 Jun 2022 14:16:47 +0200
-In-Reply-To: <20220621092833.1057408-4-nava.manne@xilinx.com> (Nava kishore
-        Manne's message of "Tue, 21 Jun 2022 14:58:33 +0530")
-Message-ID: <87edzg51w0.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S1358374AbiFVPEA (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 22 Jun 2022 11:04:00 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794B03EA8C
+        for <linux-fpga@vger.kernel.org>; Wed, 22 Jun 2022 08:03:52 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-f2a4c51c45so22762705fac.9
+        for <linux-fpga@vger.kernel.org>; Wed, 22 Jun 2022 08:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
+        b=lmXhPRDXrnlbYClAFJkfHZYdowqXsf1nTuDLZnU/Y1W/T6TJ8ApbIv950i47frAtN/
+         OtndHJQoWJG+weygm2GuosJduERMEzUHLtTF4oGKopzqXa+c5O1ob2p5JuwuGNaCZz0D
+         0k2iO6ZG6gpeVsjTt5A+NLMvCH8qDkpG8Ex3xIMBpunG6BNJWrlCGLJYo7boJK6pvBIx
+         W4x550ST0gVpK9sdxwL58OfMVVl7H7xG/39bSvJCxipLUGbdwSBY6WRzvY6hd28wfB/N
+         vDKUfqITg8PxsgA4g6gEDGmS0K0dBg3KSntFmGDvcmLKkvSy/F4e+TYysqkO/txSQBCJ
+         afFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
+        b=sRXtzaEss0cDTbzdVrMBN5kbdheaqtjHNJbwZWvmjT0duducvzvC6iD1Z4H2G63yxT
+         AmIvMAPzTmQX6MoyenLqVd0qstw32bbSrxJvE+E042d4HIWo7Yst1OFs4iWzRrFvejYx
+         il433n11d9k2ocYd/QX4x1w1PcrlZYIO8Rooj+QTgCeE5lpimBKZ7pGsHXFvI0hORJmX
+         YAvxDwIg5nklTCdJvgIPiX9qCaFRjGUAutO89p4PRh/cMcsq5An6regR5FBpNrafAvp3
+         A/l+RO5Tn/8BamhJAE02ir6BMtF8cJRpfJOI63+58J1dIzXMZcW6CPyxL5ARDpWng/o5
+         VBpw==
+X-Gm-Message-State: AJIora9BRCkkSkvycQExZXKReFNfqRtUN5YwdTDP0ZEsIfdxd+LNBctY
+        4c1k+v+HmswtVRG/Iake2ptPllSzQcdiX9FAwT2hwAUWkx2YGSiP
+X-Google-Smtp-Source: AGRyM1ulxotWsDV/SS5wzW6q4zt5LXu3F658bS4StYWI/FgPuIBqBz38zqk7aydOTm9FXxU+wDfnf428k+eRTEG/aD8=
+X-Received: by 2002:a17:90b:1988:b0:1ec:f52d:90d4 with SMTP id
+ mv8-20020a17090b198800b001ecf52d90d4mr1796737pjb.70.1655910220864; Wed, 22
+ Jun 2022 08:03:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a17:903:2308:b0:16a:1b3f:f74b with HTTP; Wed, 22 Jun 2022
+ 08:03:40 -0700 (PDT)
+Reply-To: sales0212@asonmedsystemsinc.com
+From:   Prasad Ronni <lerwickfinance7@gmail.com>
+Date:   Wed, 22 Jun 2022 16:03:40 +0100
+Message-ID: <CAFkto5vTxj70kORZJZdwOGowXjsZ399eo6DJj=8T==7paSuHTw@mail.gmail.com>
+Subject: Service Needed.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
->>>>> "Nava" == Nava kishore Manne <nava.manne@xilinx.com> writes:
-
- > Adds status interface for zynqmp-fpga, It's a read only
- > interface which allows the user to get the PL status.
-
- > Usage:
- > To read the PL configuration status
- >         cat /sys/class/fpga_manager/<fpga>/status
-
- > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
- > ---
- > Changes for v2:
- >               - Updated status messages handling logic as suggested by Xu Yilun.
-
- >  drivers/fpga/zynqmp-fpga.c | 53 ++++++++++++++++++++++++++++++++++++++
- >  1 file changed, 53 insertions(+)
-
- > diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
- > index c60f20949c47..e194bba91d3f 100644
- > --- a/drivers/fpga/zynqmp-fpga.c
- > +++ b/drivers/fpga/zynqmp-fpga.c
- > @@ -14,6 +14,19 @@
- 
- >  /* Constant Definitions */
- >  #define IXR_FPGA_DONE_MASK	BIT(3)
- > +#define READ_DMA_SIZE		256U
- > +
- > +/* Error Register */
- > +#define IXR_FPGA_ERR_CRC_ERR		BIT(0)
- > +#define IXR_FPGA_ERR_SECURITY_ERR	BIT(16)
- > +
- > +/* Signal Status Register. For details refer ug570 */
- > +#define IXR_FPGA_END_OF_STARTUP		BIT(4)
- > +#define IXR_FPGA_GST_CFG_B		BIT(5)
- > +#define IXR_FPGA_INIT_B_INTERNAL	BIT(11)
- > +#define IXR_FPGA_DONE_INTERNAL_SIGNAL	BIT(13)
- > +
- > +#define IXR_FPGA_CONFIG_STAT_OFFSET	7U
- 
- >  /**
- >   * struct zynqmp_fpga_priv - Private data structure
- > @@ -77,8 +90,48 @@ static enum fpga_mgr_states zynqmp_fpga_ops_state(struct fpga_manager *mgr)
- >  	return FPGA_MGR_STATE_UNKNOWN;
- >  }
- 
- > +static ssize_t zynqmp_fpga_ops_status(struct fpga_manager *mgr, char *buf)
- > +{
- > +	unsigned int *kbuf, reg_val;
- > +	dma_addr_t dma_addr;
- > +	ssize_t len = 0;
- > +	int ret;
- > +
- > +	kbuf = dma_alloc_coherent(mgr->dev.parent, READ_DMA_SIZE,
- > +				  &dma_addr, GFP_KERNEL);
- > +	if (!kbuf)
- > +		return -ENOMEM;
-
-What is kbuf used for? You don't seem to ever access it?
-
 -- 
-Bye, Peter Korsgaard
+Hi,
+
+Are you currently open to work as our executive company representative
+on contractual basis working remotely? If yes, we will be happy to
+share more details. Looking forward to your response.
+
+Regards,
