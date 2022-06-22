@@ -2,66 +2,48 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7939554162
-	for <lists+linux-fpga@lfdr.de>; Wed, 22 Jun 2022 06:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3D25549DA
+	for <lists+linux-fpga@lfdr.de>; Wed, 22 Jun 2022 14:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356665AbiFVEOG (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 22 Jun 2022 00:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
+        id S1357654AbiFVMP2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 22 Jun 2022 08:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356942AbiFVENw (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 22 Jun 2022 00:13:52 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C9A34B90;
-        Tue, 21 Jun 2022 21:13:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655871220; x=1687407220;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B/bYItcHLvNJYHpcF6HLJkuCKPwbVggAy5q3voJHv0A=;
-  b=Xy75RLUJsTjQf/t4bpFjms6CUbxXOKdwZtH/rku9CdRs9IGEBpTqRFPw
-   Owro08vFAPEZC6shbpauPeZ4dJSE4/HYaiC7jNvTLHLi9KdVaWL75URTA
-   gDbcNfsTOK63RoCgEc6VruUFZMohCEKJfUoM6xlRMbt5XdB4ACFvadHvw
-   TUYGFb4dQcgPIHT9wjC07KfAwWyQwZtnUoasFuZnH0GLCW9x7JmF7sCC9
-   E/cepmIi4ba4X2C+VrOtL6mFmqihANygrCMsOVhcVUDRKx8bjO0Paj24u
-   Dfz9ibrgvHXGeUt4UsfKBwTMP1KpOJCv3a8uh4EDFPS++EsDRPbDrwEmp
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="277855656"
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="277855656"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 21:13:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="715230316"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jun 2022 21:13:35 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3rkA-0000on-5h;
-        Wed, 22 Jun 2022 04:13:30 +0000
-Date:   Wed, 22 Jun 2022 12:13:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wang Wenhu <wenhu.wang@hotmail.com>, gregkh@linuxfoundation.org,
-        arnd@arndb.de, hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        yilun.xu@intel.com, bhelgaas@google.com, akpm@linux-foundation.org,
-        linux-fpga@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     kbuild-all@lists.01.org, christophe.leroy@csgroup.eu,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        mpe@ellerman.id.au, wenhu.wang@hotmail.com
-Subject: Re: [PATCHv2 1/2] mm: eliminate ifdef of HAVE_IOREMAP_PROT in .c
- files
-Message-ID: <202206221102.w7hylFXN-lkp@intel.com>
-References: <SG2PR01MB295111ED8F547B9F99DB9FA99FAD9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+        with ESMTP id S1358158AbiFVMOP (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 22 Jun 2022 08:14:15 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A4118B20;
+        Wed, 22 Jun 2022 05:14:13 -0700 (PDT)
+Received: (Authenticated sender: peter@korsgaard.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 157A0C0004;
+        Wed, 22 Jun 2022 12:14:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+        (envelope-from <peter@korsgaard.com>)
+        id 1o3zFG-0099lr-Vg; Wed, 22 Jun 2022 14:14:06 +0200
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     <michal.simek@xilinx.com>, <hao.wu@intel.com>, <trix@redhat.com>,
+        <mdf@kernel.org>, <yilun.xu@intel.com>,
+        <gregkh@linuxfoundation.org>, <ronak.jain@xilinx.com>,
+        <rajan.vaja@xilinx.com>, <abhyuday.godhasara@xilinx.com>,
+        <piyush.mehta@xilinx.com>, <harsha.harsha@xilinx.com>,
+        <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <git@xilinx.com>
+Subject: Re: [PATCH v2 2/3] firmware: xilinx: Add pm api function for PL
+ readback
+References: <20220621092833.1057408-1-nava.manne@xilinx.com>
+        <20220621092833.1057408-3-nava.manne@xilinx.com>
+Date:   Wed, 22 Jun 2022 14:14:06 +0200
+In-Reply-To: <20220621092833.1057408-3-nava.manne@xilinx.com> (Nava kishore
+        Manne's message of "Tue, 21 Jun 2022 14:58:32 +0530")
+Message-ID: <87ilos520h.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SG2PR01MB295111ED8F547B9F99DB9FA99FAD9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,34 +51,77 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Wang,
+>>>>> "Nava" == Nava kishore Manne <nava.manne@xilinx.com> writes:
 
-Thank you for the patch! Yet something to improve:
+ > Adds PM API for performing PL configuration readback.
+ > It provides an interface to the pmufw to readback the
+ > FPGA configuration registers as well as configuration
+ > data.
 
-[auto build test ERROR on akpm-mm/mm-everything]
+ > For more detailed info related to the configuration
+ > registers and configuration data refer ug570.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wang-Wenhu/mm-eliminate-ifdef-of-HAVE_IOREMAP_PROT-in-c-files/20220615-140135
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: m68k-buildonly-randconfig-r001-20220622 (https://download.01.org/0day-ci/archive/20220622/202206221102.w7hylFXN-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b20efcc877829b6f416cf111bd5ad2b13a0cd08e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Wang-Wenhu/mm-eliminate-ifdef-of-HAVE_IOREMAP_PROT-in-c-files/20220615-140135
-        git checkout b20efcc877829b6f416cf111bd5ad2b13a0cd08e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+ > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+ > ---
+ > Changes for v2:
+ >               - None.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+ >  drivers/firmware/xilinx/zynqmp.c     | 33 ++++++++++++++++++++++++++++
+ >  include/linux/firmware/xlnx-zynqmp.h | 14 ++++++++++++
+ >  2 files changed, 47 insertions(+)
 
-All errors (new ones prefixed by >>):
+ > diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
+ > index 7977a494a651..40b99299b662 100644
+ > --- a/drivers/firmware/xilinx/zynqmp.c
+ > +++ b/drivers/firmware/xilinx/zynqmp.c
+ > @@ -927,6 +927,39 @@ int zynqmp_pm_fpga_get_status(u32 *value)
+ >  }
+ >  EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_status);
+ 
+ > +/**
+ > + * zynqmp_pm_fpga_read - Perform the fpga configuration readback
+ > + * @reg_numframes: Configuration register offset (or) Number of frames to read
 
->> m68k-linux-ld: drivers/char/mem.o:(.rodata+0x37c): undefined reference to `generic_access_phys'
+An offset OR a length? That sounds odd.
+
+
+ > + * @phys_address: Physical Address of the buffer
+ > + * @readback_type: Type of fpga readback operation
+ > + *                 0 - FPGA configuration register readback
+ > + *                 1 - FPGA configuration data readback
+
+readback_type is a boolean, so how about calling it `bool data` or
+something like that?
+
+
+ > + * @value: Value to read
+
+what is the relation between phys_address and this value output
+argument?
+
+ > + *
+ > + * This function provides access to xilfpga library to perform
+ > + * fpga configuration readback.
+ > + *
+ > + * Return:	Returns status, either success or error+reason
+ > + */
+ > +int zynqmp_pm_fpga_read(const u32 reg_numframes, const phys_addr_t phys_address,
+ > +			bool readback_type, u32 *value)
+ > +{
+ > +	u32 ret_payload[PAYLOAD_ARG_CNT];
+ > +	int ret;
+ > +
+ > +	if (!value)
+ > +		return -EINVAL;
+ > +
+ > +	ret = zynqmp_pm_invoke_fn(PM_FPGA_READ, reg_numframes,
+ > +				  lower_32_bits(phys_address),
+ > +				  upper_32_bits(phys_address), readback_type,
+
+You are adding PM_FPGA_READ_CONFIG_ defines, so how about using them,
+E.G.
+
+data ? PM_FPGA_READ_CONFIG_DATA : PM_FPGA_READ_CONFIG_REG
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Bye, Peter Korsgaard
