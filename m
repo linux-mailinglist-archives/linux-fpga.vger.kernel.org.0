@@ -2,55 +2,59 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53DC559693
-	for <lists+linux-fpga@lfdr.de>; Fri, 24 Jun 2022 11:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CABE559EA0
+	for <lists+linux-fpga@lfdr.de>; Fri, 24 Jun 2022 18:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbiFXJ0Z (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 24 Jun 2022 05:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S231299AbiFXQgc (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 24 Jun 2022 12:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiFXJ0X (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 24 Jun 2022 05:26:23 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3261377044;
-        Fri, 24 Jun 2022 02:26:18 -0700 (PDT)
+        with ESMTP id S229761AbiFXQga (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 24 Jun 2022 12:36:30 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5DF4E384;
+        Fri, 24 Jun 2022 09:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656062779; x=1687598779;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=v5bfWTJCoo5BBPZT3CLaQHxq1vNHu4D3VcxL1e2EOtI=;
-  b=XyABwVWu1TKzL7CjEQsr3vq6eZToWopctbXyD7A3IuIQ/sk78TUN1TyY
-   4IWWGmDXXlag1/BUXNHnC5MlCqiG9BT7Rb8ext54WtDslqw0yrZAxArUX
-   /xBY5uEhJQa1v3vuBTRchFzlKZThieuIHcyq8vjmE62OZJp25DeA53TuW
-   WFjPo8tGNVx9NJHwkcWlzCv00D7hBB0SrPw78m+7x1xsf7FGG5erqtwyM
-   DPkSwNkAbLt72HvOz32tG8k55Uy3w9PRMEhqKkZrV89YRsYVVnj5toKgp
-   PD9kmGt6Pw5IM1BoeP1Hi5ap8ymBW1rneAeBJQkzePGpsXZyRNMtdFmDJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="261389200"
+  t=1656088589; x=1687624589;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ISZpanMTrKMtDF2ptQdE6nRc4RobHD9iXX2SAkgkzm8=;
+  b=J5QyMSv0gVcMNtSsxHtX9zLYLHBe2tFpvYYxAn+R35GIlqjM0rNgchJP
+   xR6QIg0NidV3a93N91zKHsmYa4XpINcmBgR48TMpSfU7Pl4UOEI2qWd0A
+   kJfFm3ax8ClQxkhRlHCU19/2cy5z8fdLjW6WqdsDyh4Wg+YZjB/7jFBIc
+   yYHd/jiLpFnvDGLGtmvUjr1y0DyAEiIo//+0V7D0IL4hgzJ1s0fBGcM5u
+   7WBKT6qs8147m0RIgqpUfQyn5pKKpmsW4xqFL1tUFB+BONQuUzjMmAm9S
+   4kj0hCWxLME6JYJDttTGVorlVmMhDSxT0yxEJw/4dD2kAhYsbHNq9Z08v
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="342726209"
 X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="261389200"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 02:26:18 -0700
+   d="scan'208";a="342726209"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 09:36:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="691454982"
-Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jun 2022 02:26:16 -0700
-From:   Tianfei Zhang <tianfei.zhang@intel.com>
-To:     yilun.xu@intel.com, lee.jones@linaro.org
-Cc:     hao.wu@intel.com, trix@redhat.com, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, russell.h.weight@intel.com,
-        matthew.gerlach@linux.intel.com,
-        Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v3 3/3] mfd: intel-m10-bmc: support different BMC base register address
-Date:   Fri, 24 Jun 2022 05:22:29 -0400
-Message-Id: <20220624092229.45854-4-tianfei.zhang@intel.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220624092229.45854-1-tianfei.zhang@intel.com>
-References: <20220624092229.45854-1-tianfei.zhang@intel.com>
+   d="scan'208";a="835188932"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga006.fm.intel.com with ESMTP; 24 Jun 2022 09:36:25 -0700
+Date:   Sat, 25 Jun 2022 00:28:15 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, git@xilinx.com,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 2/3] fpga: region: Add fpga-region 'power-domains'
+ property
+Message-ID: <20220624162815.GA2142910@yilunxu-OptiPlex-7050>
+References: <20220523134517.4056873-1-nava.manne@xilinx.com>
+ <20220523134517.4056873-3-nava.manne@xilinx.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523134517.4056873-3-nava.manne@xilinx.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,69 +65,61 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-There are different base addresses for the MAX10 CSR registers.
-Introducing a new member "base" in intel_m10bmc data structure
-to support different BMC base register addresses.
+On Mon, May 23, 2022 at 07:15:16PM +0530, Nava kishore Manne wrote:
+> Add fpga-region 'power-domains' property to allow to handle
+> the FPGA/PL power domains.
+> 
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+> Changes for v2:
+>               - Updated power-domains description.
+> 
+>  .../devicetree/bindings/fpga/fpga-region.txt       | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> index 7d3515264838..f299c3749505 100644
+> --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> @@ -196,6 +196,20 @@ Optional properties:
+>  - config-complete-timeout-us : The maximum time in microseconds time for the
+>  	FPGA to go to operating mode after the region has been programmed.
+>  - child nodes : devices in the FPGA after programming.
+> +- power-domains : A phandle and power domain specifier pair to the power domain
+> +	which is responsible for turning on/off the power to the FPGA/PL region.
 
-Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
----
-v3:
- - use a new member "base" instead of m10bmc_csr data structure.
----
- drivers/mfd/intel-m10-bmc-pmci.c  | 1 +
- drivers/mfd/intel-m10-bmc.c       | 1 +
- include/linux/mfd/intel-m10-bmc.h | 4 +++-
- 3 files changed, 5 insertions(+), 1 deletion(-)
+Could you help explain what is PL?
 
-diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
-index 93eca4483ac7..26eeda9720dc 100644
---- a/drivers/mfd/intel-m10-bmc-pmci.c
-+++ b/drivers/mfd/intel-m10-bmc-pmci.c
-@@ -221,6 +221,7 @@ static int pmci_probe(struct dfl_device *ddev)
- 		return -ENOMEM;
- 
- 	pmci->m10bmc.dev = dev;
-+	pmci->m10bmc.base = M10BMC_PMCI_SYS_BASE;
- 	pmci->dev = dev;
- 
- 	pmci->base = devm_ioremap_resource(dev, &ddev->mmio_res);
-diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-index 7e521df29c72..f4cb67629404 100644
---- a/drivers/mfd/intel-m10-bmc.c
-+++ b/drivers/mfd/intel-m10-bmc.c
-@@ -171,6 +171,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
- 		return -ENOMEM;
- 
- 	ddata->dev = dev;
-+	ddata->base = M10BMC_SYS_BASE;
- 
- 	ddata->regmap =
- 		devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
-diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-index 7b58af207b72..0c81dbcdc3dc 100644
---- a/include/linux/mfd/intel-m10-bmc.h
-+++ b/include/linux/mfd/intel-m10-bmc.h
-@@ -130,10 +130,12 @@
-  * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
-  * @dev: this device
-  * @regmap: the regmap used to access registers by m10bmc itself
-+ * @base: the base address of MAX10 BMC registers
-  */
- struct intel_m10bmc {
- 	struct device *dev;
- 	struct regmap *regmap;
-+	unsigned int base;
- };
- 
- /*
-@@ -165,6 +167,6 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
-  * M10BMC_SYS_BASE accordingly.
-  */
- #define m10bmc_sys_read(m10bmc, offset, val) \
--	m10bmc_raw_read(m10bmc, M10BMC_SYS_BASE + (offset), val)
-+	m10bmc_raw_read(m10bmc, (m10bmc)->base + (offset), val)
- 
- #endif /* __MFD_INTEL_M10_BMC_H */
--- 
-2.26.2
+> +Example:
+> +	fpga_full: fpga-full {
+> +                compatible = "fpga-region";
+> +                fpga-mgr = <&zynqmp_pcap>;
+> +                #address-cells = <2>;
+> +                #size-cells = <2>;
+> +                ranges;
+> +                power-domains = <&zynqmp_firmware PL_PD>;
+> +        };
+> +
+> +	The PL_PD power domain will be turned on before loading the bitstream
+> +and turned off while removing/unloading the bitstream using overlays.
 
+I think the single power-domain may not cover some use cases that
+of-fpga-region driver supports. It is possible there are already
+devices in fpga-region for static OF tree, or an overlay with no
+'firmware-name' but 'external-fpga-config'. In these cases power domains
+may still be needed, is it?
+
+Another case is the fpga-region may need multiple power domains?
+
+Since the of-fpga-region driver is a generic fpga-region driver, we may
+investigate more for a compatible power-domain solution.
+
+Thanks,
+Yilun
+
+>  
+>  In the example below, when an overlay is applied targeting fpga-region0,
+>  fpga_mgr is used to program the FPGA.  Two bridges are controlled during
+> -- 
+> 2.25.1
