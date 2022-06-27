@@ -2,58 +2,70 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8D355D1CE
-	for <lists+linux-fpga@lfdr.de>; Tue, 28 Jun 2022 15:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA1E55D59F
+	for <lists+linux-fpga@lfdr.de>; Tue, 28 Jun 2022 15:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233178AbiF0JBO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 27 Jun 2022 05:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
+        id S236273AbiF0Ntz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 27 Jun 2022 09:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232665AbiF0JBN (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 27 Jun 2022 05:01:13 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB09638D;
-        Mon, 27 Jun 2022 02:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656320472; x=1687856472;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q8IKnNQM5WuT51cs8F0X37bF3np5AyCm5DrvLRqHPNg=;
-  b=LdxQKtLM2RVNvp9ogJ6K1DVwD3EZ2BZ8bkFPpAgbRyRN9mo3Bc7L0X4w
-   1HyHSzhjJlCMxjhF+8qMpw5Y6E4jjC/exHKwHSPKqWtKTieeBpHlxyRkO
-   BJWMZd6goQc1b1w75sNGKoCyBqtORfVz6iZYpbzlJVK7BcVfLQsem3fTQ
-   h5dg5gmvrxIK88+m6MtuV4zAUSnU0CWN1I1Qm7fFx0pieI/A18/1P7kSx
-   wZD+w0fCMIPFJ5Ejfjbpm2Y+ni9+H3PkDipzDuFBE1AKcr9/dX0N+PBcZ
-   pPTrT6SUwzdwugpulGVvo50ha6asbKEyfnqLam6vjBi5UHUXlnMTAq2YC
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="281442844"
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="281442844"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 02:01:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="679498814"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Jun 2022 02:01:09 -0700
-Date:   Mon, 27 Jun 2022 16:52:55 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     tien.sung.ang@intel.com
-Cc:     christophe.jaillet@wanadoo.fr, hao.wu@intel.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mdf@kernel.org, trix@redhat.com
-Subject: Re: [PATCH v2] fpga: altera-cvp: Truncated bitstream error support
-Message-ID: <20220627085255.GA2264502@yilunxu-OptiPlex-7050>
-References: <20220608103058.GG481269@yilunxu-OptiPlex-7050>
- <20220627074553.3136597-1-tien.sung.ang@intel.com>
+        with ESMTP id S236276AbiF0Nty (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 27 Jun 2022 09:49:54 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC8BA47E
+        for <linux-fpga@vger.kernel.org>; Mon, 27 Jun 2022 06:49:50 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id o19-20020a05600c4fd300b003a0489f414cso2133873wmq.4
+        for <linux-fpga@vger.kernel.org>; Mon, 27 Jun 2022 06:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=yMnxEKpvmFxR2GNeUIkzTabL3UvC0Sa91WFWMjfUKHs=;
+        b=uzMij9J2nJgMYCxwFHT0Rs5usnbl+5VnHMEgcf8WsH5/Mxg8TuOvdImD2WHu/xbppU
+         YZARXM36QRCvHnxYkJ/TY4f4u/0lqzWCYVatrdhm8IjaWKWwnDFLq7ady/SMJ1H0eMD5
+         IzYS7cwlYYOJY9Hb/dlQuRK4gBho8M2Vs0dFv5ipu4KdRcCiteFNLwxsb0tYixnaPD8n
+         +Bl4D5Q6jtL+oLMrKDCOurA4ja2pY303dPXaw0i44efbrDc5adrwkgWX6DviLpA4lXuv
+         hIlsqPcxoXZDTFoKgNy8f4b8+kd1ybybJIyphnONpwZo04rtUombakv1sT2jlbIZUK2p
+         rVOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=yMnxEKpvmFxR2GNeUIkzTabL3UvC0Sa91WFWMjfUKHs=;
+        b=i6IcnAGpQb3bJjiEsEopUeHiYSJDSWJWJPROqwECpCGuWiovXY5Hw4HhljjPQnBzsi
+         y213QMHmaVQjZzhIwzpCBMpHfyOalsUvReR027zNnfk2380PiHpEQeCOPirXIbsHVIm4
+         GW/Aqrz3GWtKD5+593AJBoTDYAP+0S6SGuXwb7bjLujkO1eBJSjyu5BNJC8xPHIUBVZl
+         UTqdi24TbzUtePzg+Sv+DwiFv7wgOVCcWfEhkVKKiG9A3n4q7SpUq2wTvfgOOASmL9c0
+         iyZDx7DKuK/KzG7fJs9dRjgytCM7aMUdZ3T+LiyPwXY864EEdgxSxLafuAjX+bEcsWwC
+         CTAw==
+X-Gm-Message-State: AJIora/wj/kZbb2luBLx7vyOJbuYVx1YZSaMkU/ZvYLT00hNApdq7U5z
+        S0y0EBP3o5yNOwN6beDkbl1Akg==
+X-Google-Smtp-Source: AGRyM1uh0glNyLsANMQNLVLq8huGqKWmR0mR/1/tQU/4tUCnILOrg3qd6LHKJq2QM+JFqMl8YzKOhg==
+X-Received: by 2002:a05:600c:4e53:b0:39e:e5c4:fe9b with SMTP id e19-20020a05600c4e5300b0039ee5c4fe9bmr19610124wmq.109.1656337789473;
+        Mon, 27 Jun 2022 06:49:49 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id n12-20020a5d6b8c000000b0020c5253d8fcsm12540474wrx.72.2022.06.27.06.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 06:49:48 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 14:49:47 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Tianfei Zhang <tianfei.zhang@intel.com>
+Cc:     yilun.xu@intel.com, hao.wu@intel.com, trix@redhat.com,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com
+Subject: Re: [PATCH v2 1/4] mfd: intel-m10-bmc: rename the local variables
+Message-ID: <Yrm1e+kC/lo8PwDS@google.com>
+References: <20220617020405.128352-1-tianfei.zhang@intel.com>
+ <20220617020405.128352-2-tianfei.zhang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220627074553.3136597-1-tien.sung.ang@intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220617020405.128352-2-tianfei.zhang@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,49 +73,22 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 03:45:53PM +0800, tien.sung.ang@intel.com wrote:
-> > > Though without doubt, your solution is doable, I have a 
-> > > discussion with the Intel architect and they insisted that
-> > > the device driver must not make such a decision. The decision to 
-> > > drop or accept a transfer is up to the firmware. The firmware
-> 
-> > Why dropping or accepting is forbidden, but padding is allowed? If the
-> > decision is no operation to the data, then padding should also be
-> > forbidden.
-> 
-> > > insisted that the buffer be padded with whatever value. They
-> 
-> > If I understand right, the 2 decisions are conflicted. On one hand,
-> > the driver should not care about the data. On another hand, the
-> > driver should still care about the data for some rule.
-> 
-> > So please firstly reach your agreement before making patches.
-> 
-> Had some delays in replying,from the perspective of the driver, 
-> Intel architects want it to be just purely on the transfer of 
-> data without inspecting the data. 
-> If the size of a transfer is 4096bytes, we can padd it. 
-> I can do that which I think it is not an issue.
-> Let me create a reworked patch to pad the payload with Zeros.
+On Thu, 16 Jun 2022, Tianfei Zhang wrote:
 
-No, it's not about padding with Zeros or other values. If we should
-stick on no image touching, then please fix the firmware. If we need
-a workaround in driver, then making a decent fix. Blindly copy the image
-is just a bad idea, and it could actually be avoided.
+> It had better use ddata for local variables which
+> directly interacts with dev_get_drvdata()/dev_set_drvdata().
+> 
+> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+> ---
+>  drivers/mfd/intel-m10-bmc.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Thanks,
-Yilun
+For my own reference (apply this as-is to your sign-off block):
 
-> Would this be OK for patch v3?
-> 
-> > > Yes, it could look confusing to other programmers. And, yes, the 
-> > > padding doesn't matter. Let me relook into this. As the driver is 
-> > > already re-tested by the silicon validatioin. 
-> > > I want to avoid making any change as it
-> > > would meant another couple of weeks of re-testing. 
-> > > Can this be accepted as it is?
-> 
-> > Sorry, I can't. Some clarification is needed.
-> 
-> Reply as above, let us implement the padding in the
-> next patch v3. Appreciate your inputs. Thanks
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
