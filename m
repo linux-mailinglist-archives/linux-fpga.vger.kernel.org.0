@@ -2,60 +2,57 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB2257267C
-	for <lists+linux-fpga@lfdr.de>; Tue, 12 Jul 2022 21:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EDF5736E6
+	for <lists+linux-fpga@lfdr.de>; Wed, 13 Jul 2022 15:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234779AbiGLTrC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 12 Jul 2022 15:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
+        id S235757AbiGMNHk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 13 Jul 2022 09:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235038AbiGLTqV (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 12 Jul 2022 15:46:21 -0400
+        with ESMTP id S229607AbiGMNHj (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 13 Jul 2022 09:07:39 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5129B9D96;
-        Tue, 12 Jul 2022 12:37:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71363C7C;
+        Wed, 13 Jul 2022 06:07:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657654669; x=1689190669;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=WsyqKtSXlQhISKt9B4kKgJBG7bo1PNaIJP2Wls34YBY=;
-  b=YWDY+uiRyi5v9/62iX9qPH/tkeF9OuLbYwLNK4Y8g/0GHtBe/YxyHgL6
-   NlWs5oJUQvZPsoUd7sKCmlIzTMiQX4xqMUhZU9ZOkf7N0CNco/EJ5wP0o
-   CcjKTFXXrMyjFToWBpmKoR72OJ2xuEm+xl8CxygXkkkcwdWQrPvS4OmrG
-   5wsBSl22EKvkgZ4l7Itu3V0sc7w/VGD8SRnaC2BaU6FWOx7Gvb+NpNoCs
-   4/fw4Z6CCfMxOYjeWu9fHSg47uJxKKcglEd0A8cVGRV5/mjNAAlKuyxDU
-   zLr0FsFuNSTZuSp0qz5TSRBs0Ipm4ohV8Igu7rGLOJIHbDSX6Es3kfZQZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="282579342"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="282579342"
+  t=1657717658; x=1689253658;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=haP6Lue6eVNR6wMmuzcn6w4p0UNCT0G+a/I04GM2UjI=;
+  b=EBhLhk9pJ6m7E7UUxn9CtxyoPvIfvsk+bAhcXmiwWTdyl4wNH31ThmFM
+   APiIAcTxKMYJ0WCgp/oP03xwtWqutGUzxlZVVm/ox6It6du4ZR4ZnMUeV
+   f8xnzviG1EjWuyx8GHUggSvbRSg9FDuHHiuEsjXxV7OAFnFlj2zkqdMHq
+   4kuUEK5jvbgN9WxXbYiPaTU3kalmxc2ZxAK3qfnpGWdZ/QtPH78Z24pGZ
+   TgJ1w2TEYyih2FcP5ls/mMUPEPqvlYZjHUcRimjX7QA7q7XhkevytSnh7
+   HPl9vOddPF95rbDgpxzXKNY6ifcu4pQ9zr7DPRv7OHjPrk5mqFKKyuqK4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="282757862"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="282757862"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 12:37:49 -0700
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="922336550"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 12:37:48 -0700
-Date:   Tue, 12 Jul 2022 12:37:38 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Marco Pagani <marpagan@redhat.com>
-cc:     basheer.ahmed.muddebihal@intel.com, corbet@lwn.net,
-        hao.wu@intel.com, linux-doc@vger.kernel.org,
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 06:07:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="922623351"
+Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Jul 2022 06:07:35 -0700
+From:   Tianfei Zhang <tianfei.zhang@intel.com>
+To:     ssantosh@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     trix@redhat.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mdf@kernel.org, russell.h.weight@intel.com,
-        tianfei.zhang@intel.com, trix@redhat.com, yilun.xu@intel.com
-Subject: Re: [PATCH v3 2/2] fpga: dfl-pci: Add IDs for Intel N6000, N6001
- and C6100 cards
-In-Reply-To: <23a5d310-7d5e-a8ee-bd66-b80505e0553e@redhat.com>
-Message-ID: <alpine.DEB.2.22.394.2207121237230.579035@rhweight-WRK1>
-References: <20220707150549.265621-3-matthew.gerlach@linux.intel.com> <23a5d310-7d5e-a8ee-bd66-b80505e0553e@redhat.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        matthew.gerlach@linux.intel.com,
+        Debarati Biswas <debaratix.biswas@intel.com>,
+        Tianfei Zhang <tianfei.zhang@intel.com>
+Subject: [PATCH v2] memory: dfl-emif: Update the dfl emif driver support revision 1
+Date:   Wed, 13 Jul 2022 09:03:55 -0400
+Message-Id: <20220713130355.196115-1-tianfei.zhang@intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,76 +60,139 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+From: Debarati Biswas <debaratix.biswas@intel.com>
 
+The next generation (revision 1) of the DFL EMIF feature device requires
+support for more than 4 memory banks. It does not support the selective
+clearing of memory banks. A capability register replaces the previous
+control register, and contains a bitmask to indicate the presence of each
+memory bank. This bitmask aligns with the previous control register
+bitmask that served the same purpose. The control and capability
+registers are treated like a C Union structure in order to support both
+the new and old revisions of the EMIF device.
 
-On Tue, 12 Jul 2022, Marco Pagani wrote:
+Signed-off-by: Debarati Biswas <debaratix.biswas@intel.com>
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+---
+v2: no code change, just rebased to v5.19-rc6.
+---
+ drivers/memory/dfl-emif.c | 62 +++++++++++++++++++++++++++++++++++----
+ 1 file changed, 57 insertions(+), 5 deletions(-)
 
-> On 2022-07-07 17:05, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Add pci_dev_table entries supporting the Intel N6000, N6001
->> and C6100 cards to the dfl-pci driver.
->>
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
->
-> Tested-by: Marco Pagani <marpagan@redhat.com>
+diff --git a/drivers/memory/dfl-emif.c b/drivers/memory/dfl-emif.c
+index 3f719816771d..da06cd30a016 100644
+--- a/drivers/memory/dfl-emif.c
++++ b/drivers/memory/dfl-emif.c
+@@ -24,11 +24,24 @@
+ #define EMIF_STAT_CLEAR_BUSY_SFT	16
+ #define EMIF_CTRL			0x10
+ #define EMIF_CTRL_CLEAR_EN_SFT		0
+-#define EMIF_CTRL_CLEAR_EN_MSK		GENMASK_ULL(3, 0)
++#define EMIF_CTRL_CLEAR_EN_MSK		GENMASK_ULL(7, 0)
+ 
+ #define EMIF_POLL_INVL			10000 /* us */
+ #define EMIF_POLL_TIMEOUT		5000000 /* us */
+ 
++/*
++ * The Capability Register replaces the Control Register (at the same
++ * offset) for EMIF feature revisions > 0. The bitmask that indicates
++ * the presence of memory channels exists in both the Capability Register
++ * and Control Register definitions. These can be thought of as a C union.
++ * The Capability Register definitions are used to check for the existence
++ * of a memory channel, and the Control Register definitions are used for
++ * managing the memory-clear functionality in revision 0.
++ */
++#define EMIF_CAPABILITY_BASE		0x10
++#define EMIF_CAPABILITY_CHN_MSK_V0	GENMASK_ULL(3, 0)
++#define EMIF_CAPABILITY_CHN_MSK		GENMASK_ULL(7, 0)
++
+ struct dfl_emif {
+ 	struct device *dev;
+ 	void __iomem *base;
+@@ -106,16 +119,30 @@ emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 0);
+ emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 1);
+ emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 2);
+ emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 3);
++emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 4);
++emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 5);
++emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 6);
++emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 7);
+ 
+ emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 0);
+ emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 1);
+ emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 2);
+ emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 3);
++emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 4);
++emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 5);
++emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 6);
++emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 7);
++
+ 
+ emif_clear_attr(0);
+ emif_clear_attr(1);
+ emif_clear_attr(2);
+ emif_clear_attr(3);
++emif_clear_attr(4);
++emif_clear_attr(5);
++emif_clear_attr(6);
++emif_clear_attr(7);
++
+ 
+ static struct attribute *dfl_emif_attrs[] = {
+ 	&emif_attr_inf0_init_done.attr.attr,
+@@ -134,6 +161,22 @@ static struct attribute *dfl_emif_attrs[] = {
+ 	&emif_attr_inf3_cal_fail.attr.attr,
+ 	&emif_attr_inf3_clear.attr.attr,
+ 
++	&emif_attr_inf4_init_done.attr.attr,
++	&emif_attr_inf4_cal_fail.attr.attr,
++	&emif_attr_inf4_clear.attr.attr,
++
++	&emif_attr_inf5_init_done.attr.attr,
++	&emif_attr_inf5_cal_fail.attr.attr,
++	&emif_attr_inf5_clear.attr.attr,
++
++	&emif_attr_inf6_init_done.attr.attr,
++	&emif_attr_inf6_cal_fail.attr.attr,
++	&emif_attr_inf6_clear.attr.attr,
++
++	&emif_attr_inf7_init_done.attr.attr,
++	&emif_attr_inf7_cal_fail.attr.attr,
++	&emif_attr_inf7_clear.attr.attr,
++
+ 	NULL,
+ };
+ 
+@@ -143,15 +186,24 @@ static umode_t dfl_emif_visible(struct kobject *kobj,
+ 	struct dfl_emif *de = dev_get_drvdata(kobj_to_dev(kobj));
+ 	struct emif_attr *eattr = container_of(attr, struct emif_attr,
+ 					       attr.attr);
++	struct dfl_device *ddev = to_dfl_dev(de->dev);
+ 	u64 val;
+ 
+ 	/*
+-	 * This device supports upto 4 memory interfaces, but not all
++	 * This device supports up to 8 memory interfaces, but not all
+ 	 * interfaces are used on different platforms. The read out value of
+-	 * CLEAN_EN field (which is a bitmap) could tell how many interfaces
+-	 * are available.
++	 * CAPABILITY_CHN_MSK field (which is a bitmap) indicates which
++	 * interfaces are available.
+ 	 */
+-	val = FIELD_GET(EMIF_CTRL_CLEAR_EN_MSK, readq(de->base + EMIF_CTRL));
++	if (ddev->revision > 0 && strstr(attr->name, "_clear"))
++		return 0;
++
++	if (ddev->revision == 0)
++		val = FIELD_GET(EMIF_CAPABILITY_CHN_MSK_V0,
++				readq(de->base + EMIF_CAPABILITY_BASE));
++	else
++		val = FIELD_GET(EMIF_CAPABILITY_CHN_MSK,
++				readq(de->base + EMIF_CAPABILITY_BASE));
+ 
+ 	return (val & BIT_ULL(eattr->index)) ? attr->mode : 0;
+ }
+-- 
+2.26.2
 
-Thanks for testing.
-
-Matthew
->
->> ---
->> v3: added necessary subdevice ids
->>     removed 'drivers: ' from title
->>
->> v2: changed names from INTEL_OFS to INTEL_DFL
->> ---
->>  drivers/fpga/dfl-pci.c | 19 +++++++++++++++++++
->>  1 file changed, 19 insertions(+)
->>
->> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
->> index fd1fa55c9113..94eabdf1d2f7 100644
->> --- a/drivers/fpga/dfl-pci.c
->> +++ b/drivers/fpga/dfl-pci.c
->> @@ -77,12 +77,19 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
->>  #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
->>  #define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
->>  #define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
->> +#define PCIE_DEVICE_ID_INTEL_DFL		0xbcce
->>
->>  /* VF Device */
->>  #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
->>  #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
->>  #define PCIE_DEVICE_ID_VF_DSC_1_X		0x09C5
->>  #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF	0x0B2C
->> +#define PCIE_DEVICE_ID_INTEL_DFL_VF		0xbccf
->> +
->> +/* PCI Subdevice ID */
->> +#define PCIE_SUBDEVICE_ID_INTEL_N6000		0x1770
->> +#define PCIE_SUBDEVICE_ID_INTEL_N6001		0x1771
->> +#define PCIE_SUBDEVICE_ID_INTEL_C6100		0x17d4
->>
->>  static struct pci_device_id cci_pcie_id_tbl[] = {
->>  	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_PF_INT_5_X),},
->> @@ -96,6 +103,18 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
->>  	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
->>  	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
->>  	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
->> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
->> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6000),},
->> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
->> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6000),},
->> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
->> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6001),},
->> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
->> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6001),},
->> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
->> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_C6100),},
->> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
->> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_C6100),},
->>  	{0,}
->>  };
->>  MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
->
->
