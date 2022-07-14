@@ -2,142 +2,97 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B928F573F70
-	for <lists+linux-fpga@lfdr.de>; Thu, 14 Jul 2022 00:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425ED57474A
+	for <lists+linux-fpga@lfdr.de>; Thu, 14 Jul 2022 10:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236942AbiGMWHU (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 13 Jul 2022 18:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        id S234878AbiGNIhT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 14 Jul 2022 04:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbiGMWHT (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 13 Jul 2022 18:07:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DABA145062
-        for <linux-fpga@vger.kernel.org>; Wed, 13 Jul 2022 15:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657750038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GNtNspQ7ufX/7l3qNBxVep1F3AGBAOu1ulHpdR7LRfc=;
-        b=eMH3fzrwLZvUtjEn+nUJCk5GQN3A2gsS2iZpt63Xlq3U2PqF70BeniCEWYGH1EAh0935j0
-        hJvVpXQ81ENa58uHv6/MQddOzsACnKO8Q01rIZltsT/yON7Wvb9Y06THLdGWK9FgOgzK+T
-        mF9fUnjqKSBstShar5GVHihUENM7q5U=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-7-LWaKVWfFP4qncV90eDrd4Q-1; Wed, 13 Jul 2022 18:07:16 -0400
-X-MC-Unique: LWaKVWfFP4qncV90eDrd4Q-1
-Received: by mail-ot1-f72.google.com with SMTP id f95-20020a9d03e8000000b0061c75d3deaaso505462otf.12
-        for <linux-fpga@vger.kernel.org>; Wed, 13 Jul 2022 15:07:16 -0700 (PDT)
+        with ESMTP id S237019AbiGNIhE (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 14 Jul 2022 04:37:04 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2A33FA23
+        for <linux-fpga@vger.kernel.org>; Thu, 14 Jul 2022 01:37:01 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id u13so1643678lfn.5
+        for <linux-fpga@vger.kernel.org>; Thu, 14 Jul 2022 01:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=gaDZ6UkvWmoGLPkb5BiwWKXrxZqJRKNx4T2fn6EvGAM0nTMCvTzxyP4EuJ913j6Iv+
+         SvMX4/pvx4tmhR/0cDdL9pbkcCOAwg/dZQZJjKvYYHG5zoS6pTup2xrhZON7aPFodE61
+         jbdbe7f5x1iqsxnbqtRGk5VVyYe+GfguXyW53v/Jtk7m9BRLrugVau1mwPBhoM15I1rO
+         FgfB/JoMGOti2QefdfOSOcdpcygQeBiN0idXo3yCL6hW5Cz+uWpratECqWcSagxAB5xP
+         zT+sUZ3pJE3RjDVpLi/6z/hZ8yL43zLlaxwdm4ILJ3e9Bke6wVp5k2l7GAKtdogOGzmZ
+         5LQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=GNtNspQ7ufX/7l3qNBxVep1F3AGBAOu1ulHpdR7LRfc=;
-        b=tibYLydQjCgOSiEG21ijMSvQK7LMsewaYhbV4kw9Jpdg/fFXMJx0RHDUEeaDBBDFNd
-         nTAkQHc6nYSMFXfJck3PlhwCLbV/fGRpU0QX/eMc6vbohq58IqM836MiuBK0P/FcwQ7g
-         0uXHheCkq6jJb4vqaro12Mr/3meeXUzKQv5Uk7vottn36S3zPhjNjaqGfilA6HEiEQmK
-         T8Ue/SUW1gsW/RKyMw42z05WG8gQLOruMmg4aZXajQRMLM7co+HcyNCmyTQhD7XoDC0M
-         kNd6k8israIayOCXXl66vjPhg7U6slL0v52cKB8qC6k2vLOHmJd/oqOh+rlc+H8/p0vX
-         mnMQ==
-X-Gm-Message-State: AJIora9bbIGEMBlP8UcQ2B9/3sBJZ8Osi+Ps4xmFa9D5LRy+LZSiLwyR
-        IDqct00r6qeW24D9g0iSamjKTxxh6dl9xLI5VfwNszSkotQlL1G2YVhPJt9x2DSt0s8JPajJTct
-        EoSDldqbu8UIbYPPGevyJLA==
-X-Received: by 2002:a05:6808:140d:b0:339:e00e:afb1 with SMTP id w13-20020a056808140d00b00339e00eafb1mr2825673oiv.81.1657750036215;
-        Wed, 13 Jul 2022 15:07:16 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uEvFxl9rP9NFV64gFM86/GXbJZARS8v3Lv8M/gTEDUsgw0YivueIDmJYq2iS+M92gnYHJu7A==
-X-Received: by 2002:a05:6808:140d:b0:339:e00e:afb1 with SMTP id w13-20020a056808140d00b00339e00eafb1mr2825658oiv.81.1657750036026;
-        Wed, 13 Jul 2022 15:07:16 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bu27-20020a0568300d1b00b0061b8653b0c9sm34031otb.22.2022.07.13.15.07.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 15:07:15 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] Documentation: fpga: dfl: add PCI Identification
- documentation
-To:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
-        yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org, corbet@lwn.net,
-        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tianfei.zhang@intel.com
-References: <20220707150549.265621-1-matthew.gerlach@linux.intel.com>
- <20220707150549.265621-2-matthew.gerlach@linux.intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <8180679b-1d71-a527-74f2-d77460ea9902@redhat.com>
-Date:   Wed, 13 Jul 2022 15:07:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=eFbT66HvhIvJ31jkHGUjo2sjnnxpCzF9OdSrswfWHQlR8005RUPNaYAjDcXc6mgL2G
+         vbU1rBexvrfZERYDH/KO85JNvAisMsee0+Z+TypOtWHLXIOj1PKL2mL3I6TeXde1T+TU
+         DSLHK+YGS6T3mCG6/1CMtY6jmRkJoppKMW3Qyf6zCvNKe4NzPjiRSKresnHhgpDR3vmz
+         /zQvgr/maGF8c6wqS2xNZVrRiExM+5lpwEUULWGR54I7SUxEoI5yCu+lHVrQZshgc/KK
+         pFEv8YfXQDnA/QtSvXCgUdc+yCg8U5VcIultHB2cg0EvcP99xpDT4WOOJvg1bwEpRnNE
+         suvQ==
+X-Gm-Message-State: AJIora9sOIoJdlyeeh9J6irb8/NcGfz0OlUJblZZnd34y1na0mA8ArAW
+        FcjJPHW5ZI9miiF8oNZ3d2iPQwFX36bhThD/Meg=
+X-Google-Smtp-Source: AGRyM1vX4Zd9WIWDxqKGtP81mt11peMiDiT310/qUqT5enM4eeA2HoIqQaHp0s5sIeDBZVZu8TIFwya2pg7lDHDFDeo=
+X-Received: by 2002:a05:6512:4004:b0:48a:12dc:7f63 with SMTP id
+ br4-20020a056512400400b0048a12dc7f63mr2033540lfb.131.1657787820892; Thu, 14
+ Jul 2022 01:37:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220707150549.265621-2-matthew.gerlach@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:37:00
+ -0700 (PDT)
+Reply-To: abdwabbomaddahm@gmail.com
+From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
+Date:   Thu, 14 Jul 2022 09:37:00 +0100
+Message-ID: <CAFC-3ieta-vbGq7=-xp9Wgp2Sr8SYhFWTPWR2J6JsyQ_pZJxLQ@mail.gmail.com>
+Subject: Get back to me... URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:132 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4960]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [abdwabbomaddah746[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [abdwabbomaddah746[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-
-On 7/7/22 8:05 AM, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->
-> Add documentation on identifying FPGA based PCI cards prompted
-> by discussion on the linux-fpga@vger.kernel.org mailing list.
->
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
-> v3: Add url to page tracking PCI ID information for DFL based cards.
->
-> v2: Introduced in v2.
-> ---
->   Documentation/fpga/dfl.rst | 21 +++++++++++++++++++++
->   1 file changed, 21 insertions(+)
->
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index 15b670926084..5144775b860a 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -507,6 +507,27 @@ ids application.
->   https://github.com/OPAE/dfl-feature-id
->   
->   
-> +PCI Device Identification
-> +================================
-> +Since FPGA based PCI cards can be reconfigured to a perform a completely
-> +new function at runtime, properly identifying such cards and binding the
-> +correct driver can be challenging. In many use cases, deployed FPGA based
-> +PCI cards are essentially static and the PCI Product ID and Vendor ID pair
-> +is sufficient to identify the card.  The DFL framework helps with the
-> +dynamic case of deployed FPGA cards changing at run time by providing
-> +more detailed information about card discoverable at runtime.
-> +
-> +At one level, the DFL on a PCI card describes the function of the card.
-> +However, the same DFL could be instantiated on different physical cards.
-> +Conversely, different DFLs could be instantiated on the same physical card.
-> +Practical management of a cloud containing a heterogeneous set of such cards
-> +requires a PCI level of card identification. While the PCI Product ID and
-> +Vendor ID may be sufficient to bind the dfl-pci driver, it is expected
-> +that FPGA PCI cards would advertise suitable Subsystem ID and Subsystem
-> +Vendor ID values. Further PCI Product, Vendor, and Subsystem id tracking
-> +can be found at https://github.com/OPAE/dfl-feature-id/blob/main/dfl-pci-ids.rst.
-
-This link looks good.
-
-It may be good to be explicit and say which device(s) needs to be 
-specified by the quadruple.
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
-> +
-> +
->   Location of DFLs on a PCI Device
->   ================================
->   The original method for finding a DFL on a PCI device assumed the start of the
-
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Abd-Wabbo Maddah
