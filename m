@@ -2,97 +2,102 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425ED57474A
-	for <lists+linux-fpga@lfdr.de>; Thu, 14 Jul 2022 10:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A57E574D1B
+	for <lists+linux-fpga@lfdr.de>; Thu, 14 Jul 2022 14:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234878AbiGNIhT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 14 Jul 2022 04:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S239223AbiGNMHo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 14 Jul 2022 08:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237019AbiGNIhE (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 14 Jul 2022 04:37:04 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2A33FA23
-        for <linux-fpga@vger.kernel.org>; Thu, 14 Jul 2022 01:37:01 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id u13so1643678lfn.5
-        for <linux-fpga@vger.kernel.org>; Thu, 14 Jul 2022 01:37:01 -0700 (PDT)
+        with ESMTP id S239158AbiGNMGr (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 14 Jul 2022 08:06:47 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8503C5D0C0
+        for <linux-fpga@vger.kernel.org>; Thu, 14 Jul 2022 05:06:46 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id u13so2449628lfn.5
+        for <linux-fpga@vger.kernel.org>; Thu, 14 Jul 2022 05:06:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=gaDZ6UkvWmoGLPkb5BiwWKXrxZqJRKNx4T2fn6EvGAM0nTMCvTzxyP4EuJ913j6Iv+
-         SvMX4/pvx4tmhR/0cDdL9pbkcCOAwg/dZQZJjKvYYHG5zoS6pTup2xrhZON7aPFodE61
-         jbdbe7f5x1iqsxnbqtRGk5VVyYe+GfguXyW53v/Jtk7m9BRLrugVau1mwPBhoM15I1rO
-         FgfB/JoMGOti2QefdfOSOcdpcygQeBiN0idXo3yCL6hW5Cz+uWpratECqWcSagxAB5xP
-         zT+sUZ3pJE3RjDVpLi/6z/hZ8yL43zLlaxwdm4ILJ3e9Bke6wVp5k2l7GAKtdogOGzmZ
-         5LQg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JP/tjZFPBXiPkDSIwi7EAQJKbNtxPejuw/369uy5bpE=;
+        b=jP4WCMy3/arJ4RhHvkcrhWISPYiHpg0OvEjdj9bjHpSaQ4KdQJMvMOjjWbrZBYlIik
+         LzvjFsoOh5iHvPLBBDJooEVW7PFLCulA+TLiuH3r3CBzlZZvsobyEHhn0qi+XCfhWwLm
+         LXoZcjZq0IUlkZoN37mqJekJ1uMvj4WGbGlJ9CstWqf2M3SIo/PE/uqoT+wEW1PojO40
+         0EhTOEYw2Pg6C7NxpMuzEgYhvF5aCjntoNgqHhGn28DqL5dJkAzEjMOkE7t2tfhHEBcx
+         fiomK6QETXnkHC4mfOYt8zB8WxgTvPX7/SboaIqhLy2cyqErWHYq8s/UCSHiCvS3mYQ0
+         wWUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=eFbT66HvhIvJ31jkHGUjo2sjnnxpCzF9OdSrswfWHQlR8005RUPNaYAjDcXc6mgL2G
-         vbU1rBexvrfZERYDH/KO85JNvAisMsee0+Z+TypOtWHLXIOj1PKL2mL3I6TeXde1T+TU
-         DSLHK+YGS6T3mCG6/1CMtY6jmRkJoppKMW3Qyf6zCvNKe4NzPjiRSKresnHhgpDR3vmz
-         /zQvgr/maGF8c6wqS2xNZVrRiExM+5lpwEUULWGR54I7SUxEoI5yCu+lHVrQZshgc/KK
-         pFEv8YfXQDnA/QtSvXCgUdc+yCg8U5VcIultHB2cg0EvcP99xpDT4WOOJvg1bwEpRnNE
-         suvQ==
-X-Gm-Message-State: AJIora9sOIoJdlyeeh9J6irb8/NcGfz0OlUJblZZnd34y1na0mA8ArAW
-        FcjJPHW5ZI9miiF8oNZ3d2iPQwFX36bhThD/Meg=
-X-Google-Smtp-Source: AGRyM1vX4Zd9WIWDxqKGtP81mt11peMiDiT310/qUqT5enM4eeA2HoIqQaHp0s5sIeDBZVZu8TIFwya2pg7lDHDFDeo=
-X-Received: by 2002:a05:6512:4004:b0:48a:12dc:7f63 with SMTP id
- br4-20020a056512400400b0048a12dc7f63mr2033540lfb.131.1657787820892; Thu, 14
- Jul 2022 01:37:00 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JP/tjZFPBXiPkDSIwi7EAQJKbNtxPejuw/369uy5bpE=;
+        b=LZX6I9idYZ9Dv3GNSMWSvtTZ6SF+acX4oBkwwlDCVbBz1PdjAL25glGgl56RlF3qqI
+         MqJcwBjbiH1TXje79+VO0YgoCGAkQ1RMneFZI5gSDTXc/Jt90KgnIZtSXAr1twC4Y+Es
+         FmGWyXJDS602IBfpOFmuP9P90FhioAfranYLgTaH4CF71PsX4oil8+yzy30yf71MtKLP
+         D/bQ6t2SQhIGaQU0/UW6s7naAvhFIIvXnkeQUVVRAKnlUMb4M/p+Sj3arpxbcfL0fHiz
+         jskcKKPPRXoBTIIGivgWwcVA86n+KjznWU2p850D5ppNxDphx16QhrZAmHAZqSWGNoHR
+         ST2w==
+X-Gm-Message-State: AJIora/pFKkz3ikvurI2tsSOfCOkG0MKwHMTmk0CWDN+saoB7e57xcnN
+        VIuI0kNR4nt1LIccJVmrRfhbAg==
+X-Google-Smtp-Source: AGRyM1s1AwL/+8iWanx4h7Go7zVLShOosA3NySOVsXYXmBYOFy6q4waOvoW9Qs0gIoSLh8jw0T4lTw==
+X-Received: by 2002:a05:6512:118b:b0:46b:a9ae:3a3b with SMTP id g11-20020a056512118b00b0046ba9ae3a3bmr4639039lfr.188.1657800404841;
+        Thu, 14 Jul 2022 05:06:44 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id b16-20020a056512071000b004886508ca5csm327879lfs.68.2022.07.14.05.06.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 05:06:44 -0700 (PDT)
+Message-ID: <54b0e279-5eac-b304-05d0-9bc64a94cbd3@linaro.org>
+Date:   Thu, 14 Jul 2022 14:06:42 +0200
 MIME-Version: 1.0
-Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:37:00
- -0700 (PDT)
-Reply-To: abdwabbomaddahm@gmail.com
-From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
-Date:   Thu, 14 Jul 2022 09:37:00 +0100
-Message-ID: <CAFC-3ieta-vbGq7=-xp9Wgp2Sr8SYhFWTPWR2J6JsyQ_pZJxLQ@mail.gmail.com>
-Subject: Get back to me... URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] memory: dfl-emif: Update the dfl emif driver support
+ revision 1
+Content-Language: en-US
+To:     Tianfei Zhang <tianfei.zhang@intel.com>, ssantosh@kernel.org
+Cc:     trix@redhat.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        matthew.gerlach@linux.intel.com,
+        Debarati Biswas <debaratix.biswas@intel.com>
+References: <20220713130355.196115-1-tianfei.zhang@intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220713130355.196115-1-tianfei.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:132 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4960]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abdwabbomaddah746[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [abdwabbomaddah746[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
--- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
-Abd-Wabbo Maddah
+On 13/07/2022 15:03, Tianfei Zhang wrote:
+> From: Debarati Biswas <debaratix.biswas@intel.com>
+> 
+> The next generation (revision 1) of the DFL EMIF feature device requires
+> support for more than 4 memory banks. It does not support the selective
+> clearing of memory banks. A capability register replaces the previous
+> control register, and contains a bitmask to indicate the presence of each
+> memory bank. This bitmask aligns with the previous control register
+> bitmask that served the same purpose. The control and capability
+> registers are treated like a C Union structure in order to support both
+> the new and old revisions of the EMIF device.
+> 
+> Signed-off-by: Debarati Biswas <debaratix.biswas@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+> ---
+
+Thanks for the patch and for the review.
+
+It is too late in the cycle for me to pick it up. I will take it after
+the merge window.
+
+
+Best regards,
+Krzysztof
