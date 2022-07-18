@@ -2,230 +2,231 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10BE577A2B
-	for <lists+linux-fpga@lfdr.de>; Mon, 18 Jul 2022 06:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2BF577BE4
+	for <lists+linux-fpga@lfdr.de>; Mon, 18 Jul 2022 08:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbiGREng (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 18 Jul 2022 00:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S229770AbiGRGqp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 18 Jul 2022 02:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiGREne (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 18 Jul 2022 00:43:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F9C12A9D;
-        Sun, 17 Jul 2022 21:43:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658119414; x=1689655414;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=N5hR0VJNEv3XBLF/FaJnsU5tNoeCfsUy+x2NnIVfVm0=;
-  b=fC+FAHmN7fk0MM7vzeTUjzakhz5BvjRPfLCAoBmXKWpd5XSi901oCeQL
-   gKg+wyBAOIaIULDAygyV+LHfZjJnmsRK3eMGLvgmjtKJIPHqyytxBYn3s
-   0PzB8cvH1zrN+VNTBT+RNw7lCCVxVb2bZX7Hiv+go3xPQKasME9naVdoV
-   ggf5NjFj7mnU+kvHtuBetXqZ3fXeDee3DahG1UaJSkRXi5QbGms+O4GOo
-   glCvl+UZ/APdVXI3GWiVtHFp+sy9a/H8HcXO88md6/6Xqwtd6ULY8ABcv
-   Qf+dieNA+/Q4H1C5EfUaCVfY6atxZqzo3zOwcYNBYM2ve4Or+l4kbM+8F
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="347819562"
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="347819562"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 21:43:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="699896746"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Jul 2022 21:43:32 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 17 Jul 2022 21:43:32 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Sun, 17 Jul 2022 21:43:32 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Sun, 17 Jul 2022 21:43:32 -0700
+        with ESMTP id S229680AbiGRGqo (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 18 Jul 2022 02:46:44 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2043.outbound.protection.outlook.com [40.107.100.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C5415A3A;
+        Sun, 17 Jul 2022 23:46:43 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XfTA6ywyT7XGNISielSGiE3xvK2RUtlw5HFznkfA/T+PX9NUAQEEZmolhTaBkRxbpNqdynt2XHFCzsT4nF1rdqKliAkeS+3vTMg0ITn20TKqyVy//EmDk/iSnHCW2ZEQ5yV3xRZC6vG04x8kgjrbEgkZehSv9AHH2QIhJhAFfoErea4TWwmo6ulQdxnjoHjR3ZevpyP/gz1jZ1HPXTjcGcDnD8R+DaXhZH/whQeZXptfbcuuBK4f15Jwt321eoidVX99aCg8JdXwhAjkcRjVZm9sslZvPoi2bykYFn64KAKhVKEINkZ0soIOt6R3o4WUG4gdLJAeV1GgIFrwDPYzNw==
+ b=T4QBzGeOH2Wt8lypruqxoILGJEQm0aGwY2mBCoHRsZjGmFff3mz2pZGUkNHpNamSByJAA+OkAk8bO0zDEy2sC4hQrhH/uDeWeABng0E56l7pNaejRGTNJY06xXoVfKupd9KjMFUCLlux0PTE2R/q3paBXaFYgxjAa0CQ0xCj2sfnpqfM7UdOZrhSUi7b4Z0Gi99mSnbJNU1GzvX+i4CnNKodt9NY2r/eIrI5WZAyTDpyzE3GFkYGzW4eQSSZmhhBx1gTCG8xeUahvjDCinO9DcYTAq3LWj37eY6xrTXDj3O0gAEoNelo1U/+HnbrYaIv4gbO01f7xX7m7o21o08l0w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gYJbESf9hCB9xguaXxJUpQ+LN9sTN9OJTLPGH1TRpZk=;
- b=hgAxmynnBoT7xhD+CYHCsIFIUWaDD6AzoZEFpBEmrOU180YlwpI6tq/f9E9vqZv5wGUOSg7s1eWfdH9qFc4W6bqgLwaZp3S0A6gJNWbD02pBzd7j16csVhWFCYFH3hd22TThxwnWf7EGghXeJz9dxKeaSMm8BmYhsk9PxmngmJCAdnJ/1bjLqsY3/7BcH4sF7+Ohk9lHYCm219FKSegyex/vJsp2sztFe4182n3AnUbXaQ4R0dgnN5/YeRynMVFVSXvzM/yGv1oB1cfP2x9DHgwD0G4Y9XxQ57do26nTBw0LgMoHSd59raYKIJFMLFvGGl7ndpdxE4ZN9tV+Kwc6PA==
+ bh=TxWMWtmOVrzTxlUPUZqJFz1DP3W5fsHSnWVFFF1kB8o=;
+ b=hxiZOwj0J2c7VNFaQuxIfxmghbRnPKuxML2U4vXgeJiVvBSj553gMyQsTA+koT9DqGEBLRKNmI24PCfxQglYEnDiH0449XAmz4yjB5k4CTMxkzEiu8HIPTSk1CBC6/gw8cNMoFkPwYnCXb7O8myUSCFt9/rBDOKGHuH7XqqVsmfecsHa5qOAMJE/58y4WA77SBeovp+MyEUdnz7OLm+kgg2V16QtvVcfImQszZL7a8yDpG7M/75OdNpu3IiJq2jy/aTVSR0e4CXpwFAQAuVwSJNKLvPdorBODTP6bL4RjaR3zY474dWXcJgMtWeoHxy7rrXyiUR0zQTOWEOXZmArKg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by SA2PR11MB5179.namprd11.prod.outlook.com (2603:10b6:806:112::7) with
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TxWMWtmOVrzTxlUPUZqJFz1DP3W5fsHSnWVFFF1kB8o=;
+ b=JzlFT/5vgWhlc6wL5ph5rQSmb0FSzlg+L34Eu7uy298azdN8f+7d+20PJH0A7mTlE51rDw59N/wNFweY6J8VakgpPMsw5SHYgaWRkxgBiJ7n5sqjPqbGmE+zLVwTnnNf3eOthMVihCYsv23EMEDIdFBt9kjLrAlkGADf2F9TF/E=
+Received: from DM6PR12MB3993.namprd12.prod.outlook.com (2603:10b6:5:1c5::29)
+ by BN8PR12MB4977.namprd12.prod.outlook.com (2603:10b6:408:a4::30) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.15; Mon, 18 Jul
- 2022 04:43:30 +0000
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::cba:2a0b:8dbe:ca9c]) by DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::cba:2a0b:8dbe:ca9c%7]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
- 04:43:30 +0000
-From:   "Wu, Hao" <hao.wu@intel.com>
-To:     "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "Weight, Russell H" <russell.h.weight@intel.com>,
-        "Muddebihal, Basheer Ahmed" <basheer.ahmed.muddebihal@intel.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.20; Mon, 18 Jul
+ 2022 06:46:32 +0000
+Received: from DM6PR12MB3993.namprd12.prod.outlook.com
+ ([fe80::bd8d:b963:62ed:65c5]) by DM6PR12MB3993.namprd12.prod.outlook.com
+ ([fe80::bd8d:b963:62ed:65c5%7]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
+ 06:46:32 +0000
+From:   "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+To:     Xu Yilun <yilun.xu@intel.com>,
+        Nava kishore Manne <nava.manne@xilinx.com>
+CC:     "mdf@kernel.org" <mdf@kernel.org>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
         "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
         "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Zhang, Tianfei" <tianfei.zhang@intel.com>
-Subject: RE: [PATCH v3 1/2] Documentation: fpga: dfl: add PCI Identification
- documentation
-Thread-Topic: [PATCH v3 1/2] Documentation: fpga: dfl: add PCI Identification
- documentation
-Thread-Index: AQHYkhMU6zFkOPO1zUS4PegFsTjVE62DmZbQ
-Date:   Mon, 18 Jul 2022 04:43:30 +0000
-Message-ID: <DM6PR11MB3819DEC352F9AE313FE340D9858C9@DM6PR11MB3819.namprd11.prod.outlook.com>
-References: <20220707150549.265621-1-matthew.gerlach@linux.intel.com>
- <20220707150549.265621-2-matthew.gerlach@linux.intel.com>
-In-Reply-To: <20220707150549.265621-2-matthew.gerlach@linux.intel.com>
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "git@xilinx.com" <git@xilinx.com>, Rob Herring <robh@kernel.org>
+Subject: RE: [PATCH v2 2/3] fpga: region: Add fpga-region 'power-domains'
+ property
+Thread-Topic: [PATCH v2 2/3] fpga: region: Add fpga-region 'power-domains'
+ property
+Thread-Index: AQHYbqt35NhisV9VlE6ddTAo4lgdma1e8XeAgCUOw+A=
+Date:   Mon, 18 Jul 2022 06:46:32 +0000
+Message-ID: <DM6PR12MB39937A19AE147CD9105C8D52CD8C9@DM6PR12MB3993.namprd12.prod.outlook.com>
+References: <20220523134517.4056873-1-nava.manne@xilinx.com>
+ <20220523134517.4056873-3-nava.manne@xilinx.com>
+ <20220624162815.GA2142910@yilunxu-OptiPlex-7050>
+In-Reply-To: <20220624162815.GA2142910@yilunxu-OptiPlex-7050>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
+ header.d=none;dmarc=none action=none header.from=amd.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a31e401f-f453-4f63-92d8-08da68781040
-x-ms-traffictypediagnostic: SA2PR11MB5179:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-office365-filtering-correlation-id: f6b33398-ae17-4f9a-858b-08da6889403b
+x-ms-traffictypediagnostic: BN8PR12MB4977:EE_
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WBjfB1HR4BOLwxkHq02hmPV09ayD5ssGtpwDIIpvMFxe1tEgZF9/eS48+2Ke40uWM26n+Xb8KSOZ9/7eN8N1K5VLoZkeKjIBN8HvHcuHU4ZleWnNkQhL4GUuidyVCGVsZz1BaLcPzY4+kr+6GfrnBPLiy9fhAJrpNu8q7NxdaRKNSBUcZxoPysxt+0Kv5gVXQA5pMWkbE0WvzZi4NFEq7kz+igZc05DPgKlo1xu6s8FcRzxP3pIzek580glndVAV1pzmZf1H+4wYQAM9kxSLgNuLIDBViDocM9o3ND7NxFgAOsSqXLxljbiQXSmDFpbq/hKjr/j+xxlCHC+W3uG+8EPFBzTtLJr3u1Eo3M2CrHAHtlEX/Dgzc79DFH+0b12F8X8nmvkF6xqknDrZncI9Y+nVnYfMY7gplypggz26iFdL9y/gAkvTiIacrkrTEu2HpJbQh9Ot187GxPS5uTNeZIZKG7Hj28ltVRqzpx0tY2dHEZDANxJyIMN4WWq0PibR5yq/TJ2tI5F3peDYssF2vTMqRcP4xeBMbmNo7tuZAlVi5j8o77iUUWe6UdUghNO2gduUOf6zIvJAXWDXAcKwbdw42ayz9P6VHZqs0JhCFI3NIo4vux6Tk0mIW25xizh53CN99EqvtgvBAbTj11D2od/uuwXJ08e1AtgOse0P/rBxfoa4EssvGghEnEK9kpm3l0Nk34nixGxEzppMYt0yHOruFGiG4nDBw9sO48M6Graoa18YVixlB0ST+ZK7tUiPYR/LEfp4KZWGQYuEMQitwHxEfBIuGg2G3dDfZ0A/qPPBm0Pm0PXXPjQZhN2Y4OUd85E6MmLLAaO0DvLPPKJxFwL68RvnhFlb5y6HbqdNY8Q4jgSuwBz99uk2u+iefIAS+ShN3oeE0bvsr2VOx76OKQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(39860400002)(346002)(366004)(376002)(2906002)(6636002)(52536014)(5660300002)(8936002)(186003)(66946007)(66556008)(316002)(86362001)(8676002)(76116006)(64756008)(66446008)(66476007)(71200400001)(33656002)(55016003)(478600001)(41300700001)(6506007)(7696005)(53546011)(26005)(966005)(110136005)(9686003)(38070700005)(83380400001)(122000001)(38100700002)(921005)(82960400001);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: Ptgvj1cwvp3Fi69yxkmMBPZvKsE0x0vV28eiXy95nTB0uhSUqMFYyD3tPOE5Mi+XAsTqDigAzyUs/9TuC5cobPhDSdWBx7o45VEm78gV7ZFo6lI7M//3ZPW1+AhDKLJve2YQ3ezKt2Nd8BsapnY3Wn7kFpx+zTJWN9WDXPk6lSlMfCDGu+Wyg5K9RYnB24UOuJaTEhoJoYMzCaEjkIL5cQmVLv4mtIPkfxFhyRVL6sZPW0wg7QIQAevBsn+tAaGy9yGD6U6BndVtA4ZAf0Vm7xdMTWbspMtudPRBhkgI/VQ/6yAvFXk5QLM2WH9ZrUGZ6JahkuQnflP//X34XIxB2e3GpTgI7qQxhUGcjqKDpFe3axKpWOnuJeiANL/vo+JOwda87PrSqZn0PQ+Vl9P9b+VdVVKduV+Luh71Zfj1vC/WiV3IZCouofspFrIQ2VJrISU37VRVd+vOSrybAQ2MtgjpAwdJ40xvK3ImP68TKZ87wCz3w6GAWeWd1GkELLF8Fw/VZa1xvsQEzfxccUAWmzcTD1NoM9FzmNGLfQ2MW3uJKoh1DeylE64vPu0/tD7zzliLMz+mZ9u/mca0EiYhnaiNt7pHd7BcRPoTyymG9YX3LbklgGxBdEwgHJq6LMxtMZfJR/AmywZzlID2MJ+ikit2SDLWIEQonMJuOSOJrW1jKQPHT5PmZMftejf5wxWgfA1d2+6jxrtcYe/yOBgJ1oU9Ch2EUfgtF/KfMxdtOSbix0kLdLZOEXHXI3LZfi9/QmotCzheRR1f3tgW/SgXTIP+AseQRaWVhM6oBJQheIe8PsRZWgovOMBRikW9YDrj
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3993.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(316002)(52536014)(8936002)(86362001)(38100700002)(7416002)(55016003)(76116006)(66946007)(66556008)(66446008)(8676002)(4326008)(66476007)(64756008)(7696005)(83380400001)(6506007)(53546011)(5660300002)(38070700005)(41300700001)(54906003)(186003)(9686003)(26005)(110136005)(122000001)(478600001)(2906002)(71200400001)(33656002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZwzE3BMSLEzN8IJ+K/8a0HO6uXOHK8eqiN6JtvMb8nhO3P3/0goILxKYe5Su?=
- =?us-ascii?Q?pjR3yNkWCIF6gpmcpqu2zb7TZ6IjV0X4LDb4uTwRuBfmUoVniHvhp1eLatF9?=
- =?us-ascii?Q?1YJqXktwMdpVfQR0EYbfHLjImqwbQFVCBN3VucfhC+a+dkd0uGkOJHpK59ka?=
- =?us-ascii?Q?FoSzE47WDMFYR7zVJV2Xyx5SHwk1Zyp/jT3f/0o4CotWg8CibjZnSjfbxvEq?=
- =?us-ascii?Q?xMD2hD8Lx5daC+6SixFnkh1bYXcAMyrz4QWq1c+YcasY0jOJOdaSXzlWsKXL?=
- =?us-ascii?Q?Ie8RQNv0FAu1SG3Io1FA8gZRtI/orDmk7ssoRmtlCDLcjwFnmiJfhiewcLgB?=
- =?us-ascii?Q?RN7bdQGAmVuZ0LQz5PoKiCHVCZXi03/OB+GmETSVhLVj8Jb2t0HRNUM72dli?=
- =?us-ascii?Q?xZeDY+4fSr0iI0W4il6JmJmYl2MGRZVXJz7HJ5aQBWC3/T3INwLQ3iMvBFK4?=
- =?us-ascii?Q?qHSuXToN/tnTNVLlnM4Xc/V1m+qnmfOXw6USgBM9QaIrXLiJktX7ih/GhNpj?=
- =?us-ascii?Q?t6xJsdjs4sB/AYT5XAu8ZZIG1eNUNWyEoM3xyvt0IB5oV9/7v+3MF7OHdZxk?=
- =?us-ascii?Q?6I0HXbAFYLW+yRI8Ox6HPGSozzQgaGlZd9/JUkNwhD5DzRyNwGaGRCcLvgBj?=
- =?us-ascii?Q?ac4cj58QnLHtv+F8CUyw+sdmRkjU5TvV9UwblyqCLuAhz8CQpULamGlNci6O?=
- =?us-ascii?Q?ITgz1v84n88X05k9oBL3scLu/NOd3q9kfSo5TSScwp1xxvVAo0bUgA5Uh+UY?=
- =?us-ascii?Q?vwM5m4iW2Kg6egnWC/E7ttq/PNOccUaw7TRVIQF8KGonjtCAYRye5u8J3Ad0?=
- =?us-ascii?Q?6H5l9yTl72vfsToxNLxIZBDvT5LlEK5ZIrB641/7uz06ujJytA03dSL/m7M0?=
- =?us-ascii?Q?ZOWRwfU9S6gy3e3/0wwxRAzTwoededPo1eR44XyyiEaTghyUEy8TncjmgNWX?=
- =?us-ascii?Q?vhAA6M4DvRB32MtTTSE0BEPcHC1DGo9SEKWvNvEb/J5+ZYp55oU6HOMZMbKk?=
- =?us-ascii?Q?XDkBAEVscLej3mFN+XtfFqe6CQYm8Uq2BXn3io6dU/Fuhs67x84OEgzcH8Os?=
- =?us-ascii?Q?0WMkIQrCOONLrrANpp+IVvYwwhGZktmDkkBi1lxpeL9sbuklBd3lxaiTfk/n?=
- =?us-ascii?Q?E6F8RkPnEydutLusHPMHIvILbwgROuDPwVjwefsUJA/9HyYpCmkuMsqc14tM?=
- =?us-ascii?Q?T3gKaZGvBpFGxtBjKwt7m3DtU5HeppLzT7zaMTc/J5JS3f0GAGqJJrF31kmy?=
- =?us-ascii?Q?aysLYjFAdPCo3asOwqFa0dbpLVYESGkA4PMm6yvx8ZlQDBvGkizKWicekSb3?=
- =?us-ascii?Q?qC7V/dLdgN09lwNUy1Bfh5WavRTpBK6Md761lnIwU3kRD5pdZUkOhx+Pmqwh?=
- =?us-ascii?Q?2gkqMFGgHhVzVmXYGUJ/KrScEIA+kzxrZpQ4D762sELrAaIEs/3SPXso8Hys?=
- =?us-ascii?Q?jzRXFu75bd9an13w0NEsxHhbsTvPcSJdWaLIC5M7paCFng4M4fcdt0tPzKI9?=
- =?us-ascii?Q?lhJJROwLLC2dwjkyHvV496SA3czpNghWXbkCkM9E5IsylDBQDT5qZl7HT91D?=
- =?us-ascii?Q?sBC0SyrLN78Wh7DSQVY=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xCi2UZWNgG25I1RrF9WG1iyfZemKIRmqAt6JZzGKcQNcLWeM1fa8DLPkY+VK?=
+ =?us-ascii?Q?J0rZus8uFdaX5MCXe5aPbZeoiv8YIu+0JqnjUMXntfB2I89aAObTMvFcf0Fi?=
+ =?us-ascii?Q?HwVX1ez5mtA9Pwvm9DDmB0QXJRRkc2zow72cymFaZoT2w95iEePUu5yuKFUS?=
+ =?us-ascii?Q?omz0wsZ2w+klbx2v7yLGoBw5ModwtszznxCMFudbS3pkCds4dMxChSttrmAA?=
+ =?us-ascii?Q?u+4zDxX/CYpE3D/mzfayuUctUIrHzYfFAZTsbo1ANxwXE6yXlzz6yyA27UOO?=
+ =?us-ascii?Q?WdeLrmrCDyaRiUJPhA2a+OMDALopFSgHFnDKe3zwANp0Z94/sabCmbAG8Kwo?=
+ =?us-ascii?Q?iRDTiHlIzUkHhErK+5oAa+iS9a1OZ/qcuZQl1m6dXI+WogJS3+QsmHMzScWR?=
+ =?us-ascii?Q?xWsyUM2M8IEF3wOrf+gZs0RlyOgPXv7t786uqmhua7CIZyWAJSwa+retou63?=
+ =?us-ascii?Q?wGN44U+Ww53yCL+mWHpweEIVkWVJdnwxLDwUzHYfvC6TrgpKlSxQ8WDLgJpQ?=
+ =?us-ascii?Q?useKYOBjp7tfsL3HeqYRc+o4Hpkzt8XX1oUT/5tJCsjF4tbNg6C3GafwWfyY?=
+ =?us-ascii?Q?gXvjBWtQ5BwL7ZU4t4RS5jKdqYr1xZwyjfAGAzMu9IYHdMuiYGlxRmw3KjXj?=
+ =?us-ascii?Q?Tw18aDo11IvM8q79rFUgW3yKDGuWMooSU+qBgQKKGW4Uulh6MeqI2dPniy3N?=
+ =?us-ascii?Q?Rqk3I5Yf4LFqJR+xCCt+jUSmwNcdb69Dj6kg8XitzR2A02elsnxA5+iVvpH8?=
+ =?us-ascii?Q?S42Gdh86tVLAx/HzDZlIjGLqe1wS2/zAsGkLcmIUiIk3krD98JRg68IyAp4R?=
+ =?us-ascii?Q?NLXzj3Yz/DxQaGJ6umqlAMsMYqR7zMjW5TA6E/AQyFF6QB62HCrtu7GB+PX4?=
+ =?us-ascii?Q?ukKfEcgtNPn6p29r+Coqe7GpQ/3hf+QnZuehVeo+/1rvSdbKGziq+yq3Tk0E?=
+ =?us-ascii?Q?Hj4WgH6YdbYo4P8m4ynWMyTGpfcdwxb7ph42CY+IEPdW3Fanea6yapYMXhif?=
+ =?us-ascii?Q?XsDLv1o7j4eJH2dFsWY5gOm7fXi9aLG+PoxYAgYyKHxw9802gRC0pUcPa66X?=
+ =?us-ascii?Q?dZo0nRpFk26qIK2+JDdC1ewQ6/Bq4i3vS5+UMlTT79Pi4cd0pWTMnObtkPJ+?=
+ =?us-ascii?Q?Whp2CLs28TCR3Gcq/fybJWZ5GE6jX5iOhSkwu58rtotjOqBX42LD2FxRD8FT?=
+ =?us-ascii?Q?rO91GNfjGx3/sxocjZ+cTvoFBN+U9xzHNAIg2t8GYq3VgO477hZtqpfIdCMO?=
+ =?us-ascii?Q?dY0yjA7TLsL0HnCMf9Si3nYoInORiue4ZujQCekluQWdbUKdW+flfnYDZTn/?=
+ =?us-ascii?Q?ePihZKlecLCstsMj8/mc0HXxVuTgo6zTy7IBm/QsV94arMl4dQMvYb7ol3Lu?=
+ =?us-ascii?Q?f2f3dBdOAsft0INzN2eN0P8SHmfu+Pp01ISjR5cwh1HTzg99r/9oASt+F4gw?=
+ =?us-ascii?Q?V62Vcp6X6MDhk/cvrYhpkmdHXBkvcgNeZZw+U8wRgIw8VIucjeZ+5mIe6xj1?=
+ =?us-ascii?Q?6/gSfuq6CxEM2+boxtxPi55jcj5U/V+8pM3ivCgxnyzsgpXCrFhGVcfHK++7?=
+ =?us-ascii?Q?2wlKEgfGb/q4XbdvJRo=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
+X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a31e401f-f453-4f63-92d8-08da68781040
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2022 04:43:30.4221
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3993.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6b33398-ae17-4f9a-858b-08da6889403b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2022 06:46:32.3328
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UkUDa4MuO1TCcpVT0utn9NAFng5pQjN3nRFi+Fog3/ws/p7xBpJWTJmrpJ/t30NVVchPBCMjtF7GkcHMwyTFWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5179
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: jyOdgwClSRrV2fUF8qpuAz74iV0xXawPQjwPCIKzX0ymSRkiSkqR6HUtbwqN0EBf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB4977
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Hi Yilun,
+
+	Please find my response inline.
+
 > -----Original Message-----
-> From: matthew.gerlach@linux.intel.com <matthew.gerlach@linux.intel.com>
-> Sent: Thursday, July 7, 2022 11:06 PM
-> To: Wu, Hao <hao.wu@intel.com>; Xu, Yilun <yilun.xu@intel.com>; Weight,
-> Russell H <russell.h.weight@intel.com>; Muddebihal, Basheer Ahmed
-> <basheer.ahmed.muddebihal@intel.com>; trix@redhat.com;
-> mdf@kernel.org; corbet@lwn.net; linux-fpga@vger.kernel.org; linux-
-> doc@vger.kernel.org; linux-kernel@vger.kernel.org; Zhang, Tianfei
-> <tianfei.zhang@intel.com>
-> Cc: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Subject: [PATCH v3 1/2] Documentation: fpga: dfl: add PCI Identification
-> documentation
+> From: Xu Yilun <yilun.xu@intel.com>
+> Sent: Friday, June 24, 2022 9:58 PM
+> To: Nava kishore Manne <nava.manne@xilinx.com>
+> Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com;
+> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> michal.simek@xilinx.com; linux-fpga@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; git@xilinx.com; Rob Herring <robh@kernel.org>
+> Subject: Re: [PATCH v2 2/3] fpga: region: Add fpga-region 'power-domains'
+> property
 >=20
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->=20
-> Add documentation on identifying FPGA based PCI cards prompted
-> by discussion on the linux-fpga@vger.kernel.org mailing list.
->=20
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
-> v3: Add url to page tracking PCI ID information for DFL based cards.
->=20
-> v2: Introduced in v2.
-> ---
->  Documentation/fpga/dfl.rst | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->=20
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index 15b670926084..5144775b860a 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -507,6 +507,27 @@ ids application.
->  https://github.com/OPAE/dfl-feature-id
+> CAUTION: This message has originated from an External Source. Please use
+> proper judgment and caution when opening attachments, clicking links, or
+> responding to this email.
 >=20
 >=20
-> +PCI Device Identification
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-> +Since FPGA based PCI cards can be reconfigured to a perform a completely
-> +new function at runtime, properly identifying such cards and binding the
-> +correct driver can be challenging. In many use cases, deployed FPGA base=
-d
-> +PCI cards are essentially static and the PCI Product ID and Vendor ID pa=
-ir
-> +is sufficient to identify the card.  The DFL framework helps with the
-> +dynamic case of deployed FPGA cards changing at run time by providing
-> +more detailed information about card discoverable at runtime.
-> +
-> +At one level, the DFL on a PCI card describes the function of the card.
-> +However, the same DFL could be instantiated on different physical cards.
-> +Conversely, different DFLs could be instantiated on the same physical ca=
-rd.
-> +Practical management of a cloud containing a heterogeneous set of such
-> cards
-> +requires a PCI level of card identification. While the PCI Product ID an=
-d
-> +Vendor ID may be sufficient to bind the dfl-pci driver, it is expected
-> +that FPGA PCI cards would advertise suitable Subsystem ID and Subsystem
-> +Vendor ID values. Further PCI Product, Vendor, and Subsystem id tracking
-> +can be found at https://github.com/OPAE/dfl-feature-id/blob/main/dfl-pci=
+> On Mon, May 23, 2022 at 07:15:16PM +0530, Nava kishore Manne wrote:
+> > Add fpga-region 'power-domains' property to allow to handle the
+> > FPGA/PL power domains.
+> >
+> > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> > Acked-by: Rob Herring <robh@kernel.org>
+> > ---
+> > Changes for v2:
+> >               - Updated power-domains description.
+> >
+> >  .../devicetree/bindings/fpga/fpga-region.txt       | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > index 7d3515264838..f299c3749505 100644
+> > --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > @@ -196,6 +196,20 @@ Optional properties:
+> >  - config-complete-timeout-us : The maximum time in microseconds time
+> for the
+> >       FPGA to go to operating mode after the region has been programmed=
+.
+> >  - child nodes : devices in the FPGA after programming.
+> > +- power-domains : A phandle and power domain specifier pair to the
+> power domain
+> > +     which is responsible for turning on/off the power to the FPGA/PL
+> region.
+>=20
+> Could you help explain what is PL?
+>=20
+> > +Example:
+> > +     fpga_full: fpga-full {
+> > +                compatible =3D "fpga-region";
+> > +                fpga-mgr =3D <&zynqmp_pcap>;
+> > +                #address-cells =3D <2>;
+> > +                #size-cells =3D <2>;
+> > +                ranges;
+> > +                power-domains =3D <&zynqmp_firmware PL_PD>;
+> > +        };
+> > +
+> > +     The PL_PD power domain will be turned on before loading the
+> > +bitstream and turned off while removing/unloading the bitstream using
+> overlays.
+>=20
+> I think the single power-domain may not cover some use cases that of-fpga=
 -
-> ids.rst.
+> region driver supports.
 
-I feel that we may not really need this in fpga-dfl doc, as this is not des=
-cribing
-any new method provided by DFL, but just something from PCI standard, right=
-?
+I am not sure which use case you are talking about. Can you please point me=
+ the exact use case here?
+ =20
+> It is possible there are already devices in fpga-region
+> for static OF tree, or an overlay with no 'firmware-name' but 'external-f=
+pga-
+> config'. In these cases power domains may still be needed, is it?
+>
 
-Thanks
-Hao
+It's an optional property user can decide whether he needs this support or =
+not for 'external-fpga-config
+Use case.=20
+
+> Another case is the fpga-region may need multiple power domains?
+>
+
+In our use case full region and relevant partial regions have different pow=
+er domains and
+this patch is capable of handle different power domain regions (full and pa=
+rtial regions)
+=20
+> Since the of-fpga-region driver is a generic fpga-region driver, we may
+> investigate more for a compatible power-domain solution.
+>=20
+
+Please share your thoughts here we will try to align with it.
+
+Regards,
+Navakishore.
