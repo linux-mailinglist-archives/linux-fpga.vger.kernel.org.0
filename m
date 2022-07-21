@@ -2,97 +2,110 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8A557C576
-	for <lists+linux-fpga@lfdr.de>; Thu, 21 Jul 2022 09:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0A157C594
+	for <lists+linux-fpga@lfdr.de>; Thu, 21 Jul 2022 09:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbiGUHib (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 21 Jul 2022 03:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S231187AbiGUHxO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 21 Jul 2022 03:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbiGUHib (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 21 Jul 2022 03:38:31 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930917C1B9
-        for <linux-fpga@vger.kernel.org>; Thu, 21 Jul 2022 00:38:29 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id a9so1426811lfk.11
-        for <linux-fpga@vger.kernel.org>; Thu, 21 Jul 2022 00:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=d6jGJRgP28s+BMa24FY7e5/52tB4SvyCHdjl8vUxj90=;
-        b=d/WiiK64fg2mfbK2F5bWOrnvfixjgUvgcH7SYwB1KiB6ashLXWbyG97kVwrzVN5QP0
-         Q95g1zUTmYwzqrxN0MtNFBE1wpD+fJEoJ0hiLjWjnwPpZh+A2JDYl66ACbaB0h6L+LEy
-         7gXSu0m3lVSIYXEP6NcSJ12/28YEi2YN2RgnwkVYhM6Ts/CJ+mhOvY74baxv2Z8xNA11
-         KyjyUyzY9/6zWuVgFihQ8di9jELhsQM35kX2p+7BzKHblP/tTaPFvJRabpIHrPKXERF5
-         XWzgm15I28DE21vmJxzTfiAlPOAYx4vh41y1YQdOa6JNp3kfH6Etfi+m7dGPA0NhdzU6
-         x5sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=d6jGJRgP28s+BMa24FY7e5/52tB4SvyCHdjl8vUxj90=;
-        b=nxR1ygTvyNgbKVA/AQ2wOR1UWwoDdXVVYwO9IIp3vg1ogrp3SUxkf+9dmCWhou8xPE
-         YtOSKxE2Gp3PzbGhHK3RJxw0FL8TjpSJlrNf8qlMJkT67KWAO3aIl37X8vxk+V4s07Rr
-         wZ2W2b9Hrb9NqYuJSCO8f40S1PCXJPXQAuczx9QfMDaa6D0jKTrkPRg4FnRsZNUoHwTy
-         Sb6c5iiID4DPQboJfQyh0LX12XEWlMqHCV80h4G01H0WpHt7RK0Uhgkuo6glBX3sZgz8
-         PIfZuZjenft0ZlJgSCds82iz8+5scAcORDyn47cpR2/bEIwMnakyhdWEWITc1gDYHJrt
-         9l7Q==
-X-Gm-Message-State: AJIora9ey+zc7FPKe+1FAIw8ps8XVAnwiBeUucwMQjMT9esHajAdMD+k
-        sqZJyIy6NGZufrcjuSjbdhVEbg==
-X-Google-Smtp-Source: AGRyM1tT45IGEfPxkG0QUWXabfRtQxNvaqKdyD3fesSA/0jHtx4i/CdHDTIVYSqp6uxsMq2efr4Jkw==
-X-Received: by 2002:a05:6512:1090:b0:489:d620:44b7 with SMTP id j16-20020a056512109000b00489d62044b7mr24111802lfg.554.1658389107945;
-        Thu, 21 Jul 2022 00:38:27 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id k10-20020a05651c10aa00b0025d6895ffa9sm307192ljn.98.2022.07.21.00.38.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 00:38:27 -0700 (PDT)
-Message-ID: <e69c6a65-2c8d-6b35-54f9-e16008cbfc50@linaro.org>
-Date:   Thu, 21 Jul 2022 09:38:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/3] fpga: region: Add fpga-region 'power-domains'
- property
-Content-Language: en-US
-To:     Nava kishore Manne <nava.manne@xilinx.com>, mdf@kernel.org,
-        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+        with ESMTP id S229539AbiGUHxN (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 21 Jul 2022 03:53:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3A77CB6B;
+        Thu, 21 Jul 2022 00:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658389992; x=1689925992;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F/IFKPNNCoSx3pRfE5e/uwKggWX4TPWvNE5TXI91sQ0=;
+  b=H4atNDE37CFGv1CLo43aHD9hoL86ky7eqCTN1Z5t9lOfQ8r22dOhML14
+   sLbp23ve3hpXlhNtaXjMFm0jYEth1dL593I6S0woHFb1Chhwh1J5GNMX9
+   hV5xhPqcZ1KUvpX8wGF7mPeQhs+NsL2uWcp9b2IZPUEAE+Zy86XxE/NVQ
+   0iq6InVs5IA8wtAvGYmylOzusLJCI7HlPX6iGHBP6MbuaV2gHZm/jpe0S
+   mrlln9UG9FNgal0MwW1th84S26Y/D1u1k/rSqJuYLvdqSCDuvFBv8MMvB
+   i5jHbdHi5Nr7r3Ts45GMtyjaH9wyyhW9t+KxYLjCQLr3Az2e/4KMOsjut
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="288143430"
+X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
+   d="scan'208";a="288143430"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 00:53:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
+   d="scan'208";a="626009740"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga008.jf.intel.com with ESMTP; 21 Jul 2022 00:53:09 -0700
+Date:   Thu, 21 Jul 2022 15:44:31 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, git@xilinx.com
-Cc:     Rob Herring <robh@kernel.org>
-References: <20220523134517.4056873-1-nava.manne@xilinx.com>
- <20220523134517.4056873-3-nava.manne@xilinx.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220523134517.4056873-3-nava.manne@xilinx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH v5 0/2] Lattice ECP5 FPGA manager
+Message-ID: <20220721074431.GA1712998@yilunxu-OptiPlex-7050>
+References: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 23/05/2022 15:45, Nava kishore Manne wrote:
-> Add fpga-region 'power-domains' property to allow to handle
-> the FPGA/PL power domains.
+On Tue, Jul 19, 2022 at 02:23:33PM +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> slave SPI interface with .bit formatted uncompressed bitstream image.
+
+I didn't have time to looking into the patches yet, but I have some quick
+question.
+
+Where is the bitstream data writing to? To the FPGA active region or the
+backup nvmem like flash?
+
+After reconfiguration, how to re-enumerate the hardware devices in the
+newly programmed FPGA region?
+
+Thanks,
+Yilun
+
 > 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
-> Changes for v2:
->               - Updated power-domains description.
+> ChangeLog:
+>   v1 -> v2:
+>     * remove "spi" from compatible string
+>     * reword description in dt-bindings doc
+>     * add reference to spi-peripheral-props.yaml in dt-binding doc
+>     * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+>       undersores in node names.
+>   v2 -> v3:
+>     * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+>   v3 -> v4:
+>     * dt-bindings: reword description
+>     * dt-bindings: revert props order
+>   v4 -> v5:
+>     * dt-bindings: remove trailing dot from title
+>     * dt-bindings: reword description to avoid driver reference
+>     * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
 > 
->  .../devicetree/bindings/fpga/fpga-region.txt       | 14 ++++++++++++++
-
-Please use subject matching the file, so you have to include dt-bindings
-as one of the prefixes.
-
-
-Best regards,
-Krzysztof
+> Ivan Bornyakov (2):
+>   fpga: ecp5-spi: add Lattice ECP5 FPGA manager
+>   dt-bindings: fpga: add binding doc for ecp5-spi fpga mgr
+> 
+>  .../bindings/fpga/lattice,ecp5-fpga-mgr.yaml  |  74 +++++
+>  drivers/fpga/Kconfig                          |   7 +
+>  drivers/fpga/Makefile                         |   1 +
+>  drivers/fpga/ecp5-spi.c                       | 275 ++++++++++++++++++
+>  4 files changed, 357 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/lattice,ecp5-fpga-mgr.yaml
+>  create mode 100644 drivers/fpga/ecp5-spi.c
+> 
+> -- 
+> 2.37.1
+> 
