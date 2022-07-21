@@ -2,87 +2,188 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B3057B5CC
-	for <lists+linux-fpga@lfdr.de>; Wed, 20 Jul 2022 13:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A02257C4ED
+	for <lists+linux-fpga@lfdr.de>; Thu, 21 Jul 2022 09:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbiGTLpT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 20 Jul 2022 07:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S232316AbiGUHDl (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 21 Jul 2022 03:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbiGTLpR (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 20 Jul 2022 07:45:17 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04256159
-        for <linux-fpga@vger.kernel.org>; Wed, 20 Jul 2022 04:45:15 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z22so16173181lfu.7
-        for <linux-fpga@vger.kernel.org>; Wed, 20 Jul 2022 04:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZDb/On6XpUXGe/BJm5NfUcWD+cnAuZMq9dvjIa0120Q=;
-        b=mEZPxA1vR+xPG2zKAqSjMAl+Xfst+1s20IXxFWtE0YwU8WFkqkEXqZxhMzqIbE50sJ
-         2HB8Guraupn6VExjrv4po+z9HItiF5Bhynj5e6fO/cMlM/mkW1T4MiWv1aM6hfiwIZCh
-         A8SQUlwfZCOsZB0QpYHn60AolriwbJ2muruEyjpwNp7JeitooPKqfCrkLqfDs7Irfu/j
-         230TztwbI4Gz7PGtNCUsH8Xi/SgF67hLw7oqwJnTzS0VNw3n98dgs3+LD1n7a0V+yLCa
-         p5zBdwLcD0BZEckkBF6235jro3HnTCyLl5PrIo46bjUzDDM1tZ6YQIRaduGJMwEIF/ZP
-         xlTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZDb/On6XpUXGe/BJm5NfUcWD+cnAuZMq9dvjIa0120Q=;
-        b=h0ycQFrB/pAa+OBBVwWau+9IyNt/YRfA9VgAFWnBo2fiph6OM696xw0W3NZByIKAzN
-         gAM3CO2GWB3V3nOp/POc0jpQlsfk6GnRuPH2BFjFHYI2HiMha5XIQmx3SKi2QVePfnAz
-         B75PIocVgzSUSLaN+3XvzAtdakC2N0Z/oWZFNgAzAfzNnoqV8E7tzaTfD4LKGRIpNwft
-         uuX8n8zUjCRxRg9ZtdyDPQ7QoudZaFDPrILkYEl0KMG/SHyvK8bdQ1EXkTANvj+tKAep
-         HTInE6DCzxwvoV9OG+UYMy5idIT4RWDg/wj0rUD/zyRTjHdwHO2W5MyaJXVN0Sl3PAHx
-         6AIw==
-X-Gm-Message-State: AJIora/BNIyizxbx72x4/0ScpYrL9sW9XrQSI4+XwYeA7HH3H64WtbJ8
-        5B6odOcmnA6g6CpRb/vzsxC3yg==
-X-Google-Smtp-Source: AGRyM1soy5TCPoLRJYPdeSShcI/P9RSINYXDcAFMHV4+0MdfdZkNBveORV3fCWEyMFwt9APprxQurQ==
-X-Received: by 2002:a05:6512:33c4:b0:489:da1c:76cc with SMTP id d4-20020a05651233c400b00489da1c76ccmr21016882lfg.237.1658317514235;
-        Wed, 20 Jul 2022 04:45:14 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id t13-20020a056512208d00b00482bdd14fdfsm3800568lfr.32.2022.07.20.04.45.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 04:45:13 -0700 (PDT)
-Message-ID: <6ab25b0a-8c34-696e-5d10-1ffb335d850b@linaro.org>
-Date:   Wed, 20 Jul 2022 13:44:51 +0200
+        with ESMTP id S232319AbiGUHDi (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 21 Jul 2022 03:03:38 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7B17B1DB;
+        Thu, 21 Jul 2022 00:03:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658387015; x=1689923015;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tVVixsePGuWthpIXG239h4qnAJPBy+VTisKlJiPtTCs=;
+  b=BjbPGqedKfn12AmVmUxPTBQJ1FO3uIBRtxQlIPUfIgd3iS/6AB5iAgzD
+   +1OzIzzKtG5ag9fAa0Msi+q4XZryv+/V8NHig/DeEqHOmitEZ8iGqCzov
+   VoYrcJqJpmLN6z5XAJp1n1i0w3F22neyF0eAG56e8JZWCE0BxWYLIT3ai
+   9LREwuDRXUvUzJJeiaZOH3+2CTq4n8t78GcmAg68QoJBZ/rYdy28qdEOa
+   9vqLCsB95DB+/dt/iAMdKb813UimdOmlwGjqmoChBLODbQC0XqEU4XeI9
+   0+VtSbrI3Ml6vNMUny+WiWgQ9KCIwhDiv7mY8xnrwMVG6wH2YOF1GSsB5
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="273815972"
+X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
+   d="scan'208";a="273815972"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 00:03:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
+   d="scan'208";a="573621422"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jul 2022 00:03:32 -0700
+Date:   Thu, 21 Jul 2022 14:54:54 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+Cc:     Nava kishore Manne <nava.manne@xilinx.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "git@xilinx.com" <git@xilinx.com>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 2/3] fpga: region: Add fpga-region 'power-domains'
+  property
+Message-ID: <20220721065454.GA1689481@yilunxu-OptiPlex-7050>
+References: <20220523134517.4056873-1-nava.manne@xilinx.com>
+ <20220523134517.4056873-3-nava.manne@xilinx.com>
+ <20220624162815.GA2142910@yilunxu-OptiPlex-7050>
+ <DM6PR12MB39937A19AE147CD9105C8D52CD8C9@DM6PR12MB3993.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: fpga: Fix typo in comment
-Content-Language: en-US
-To:     Slark Xiao <slark_xiao@163.com>, mdf@kernel.org, hao.wu@intel.com,
-        yilun.xu@intel.com, trix@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220720113704.18185-1-slark_xiao@163.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220720113704.18185-1-slark_xiao@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR12MB39937A19AE147CD9105C8D52CD8C9@DM6PR12MB3993.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 20/07/2022 13:37, Slark Xiao wrote:
-> Fix typo in the comment
+On Mon, Jul 18, 2022 at 06:46:32AM +0000, Manne, Nava kishore wrote:
+> Hi Yilun,
 > 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
->  Documentation/devicetree/bindings/fpga/fpga-region.txt | 2 +-
+> 	Please find my response inline.
+> 
+> > -----Original Message-----
+> > From: Xu Yilun <yilun.xu@intel.com>
+> > Sent: Friday, June 24, 2022 9:58 PM
+> > To: Nava kishore Manne <nava.manne@xilinx.com>
+> > Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com;
+> > robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> > michal.simek@xilinx.com; linux-fpga@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
+> > kernel@lists.infradead.org; git@xilinx.com; Rob Herring <robh@kernel.org>
+> > Subject: Re: [PATCH v2 2/3] fpga: region: Add fpga-region 'power-domains'
+> > property
+> > 
+> > CAUTION: This message has originated from an External Source. Please use
+> > proper judgment and caution when opening attachments, clicking links, or
+> > responding to this email.
+> > 
+> > 
+> > On Mon, May 23, 2022 at 07:15:16PM +0530, Nava kishore Manne wrote:
+> > > Add fpga-region 'power-domains' property to allow to handle the
+> > > FPGA/PL power domains.
+> > >
+> > > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> > > Acked-by: Rob Herring <robh@kernel.org>
+> > > ---
+> > > Changes for v2:
+> > >               - Updated power-domains description.
+> > >
+> > >  .../devicetree/bindings/fpga/fpga-region.txt       | 14 ++++++++++++++
+> > >  1 file changed, 14 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > index 7d3515264838..f299c3749505 100644
+> > > --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > @@ -196,6 +196,20 @@ Optional properties:
+> > >  - config-complete-timeout-us : The maximum time in microseconds time
+> > for the
+> > >       FPGA to go to operating mode after the region has been programmed.
+> > >  - child nodes : devices in the FPGA after programming.
+> > > +- power-domains : A phandle and power domain specifier pair to the
+> > power domain
+> > > +     which is responsible for turning on/off the power to the FPGA/PL
+> > region.
+> > 
+> > Could you help explain what is PL?
+> > 
+> > > +Example:
+> > > +     fpga_full: fpga-full {
+> > > +                compatible = "fpga-region";
+> > > +                fpga-mgr = <&zynqmp_pcap>;
+> > > +                #address-cells = <2>;
+> > > +                #size-cells = <2>;
+> > > +                ranges;
+> > > +                power-domains = <&zynqmp_firmware PL_PD>;
+> > > +        };
+> > > +
+> > > +     The PL_PD power domain will be turned on before loading the
+> > > +bitstream and turned off while removing/unloading the bitstream using
+> > overlays.
+> > 
+> > I think the single power-domain may not cover some use cases that of-fpga-
+> > region driver supports.
+> 
+> I am not sure which use case you are talking about. Can you please point me the exact use case here?
+>   
+> > It is possible there are already devices in fpga-region
+> > for static OF tree, or an overlay with no 'firmware-name' but 'external-fpga-
+> > config'. In these cases power domains may still be needed, is it?
+> >
+> 
+> It's an optional property user can decide whether he needs this support or not for 'external-fpga-config
+> Use case. 
 
-Did you receive my feedback or something got lost on the way?
+If an external-fpga-config FPGA region needs to enable a power domain before
+sub devices population, how could it config the DT? I assume in this
+patch "power-domains" property is only used before & after
+reconfiguration but external-fpga-config FPGA region may need no
+reconfiguration.
 
-Best regards,
-Krzysztof
+> 
+> > Another case is the fpga-region may need multiple power domains?
+> >
+> 
+> In our use case full region and relevant partial regions have different power domains and
+> this patch is capable of handle different power domain regions (full and partial regions)
+
+If a FPGA region needs 2 or more power domains for partial reconfiguration,
+how could we find out and enable them all?
+
+From the 2 cases, I see as a generic driver, there may be need to enable
+different power domains at different moments. And I'm afraid a simple
+implementation of pm_runtime_get before reconfiguration may limit the
+usage of "power-domains" property for of-fpga-region.
+
+Thanks,
+Yilun
+
+>  
+> > Since the of-fpga-region driver is a generic fpga-region driver, we may
+> > investigate more for a compatible power-domain solution.
+> > 
+> 
+> Please share your thoughts here we will try to align with it.
+> 
+> Regards,
+> Navakishore.
