@@ -2,116 +2,91 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A10557C6FA
-	for <lists+linux-fpga@lfdr.de>; Thu, 21 Jul 2022 10:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE0457FC78
+	for <lists+linux-fpga@lfdr.de>; Mon, 25 Jul 2022 11:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiGUIzH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 21 Jul 2022 04:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S232148AbiGYJc0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 25 Jul 2022 05:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232684AbiGUIzE (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 21 Jul 2022 04:55:04 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C51680512;
-        Thu, 21 Jul 2022 01:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=5IySwf3XGzdy0S9zkwVt+ygnU6w2l4TY/umizNUb2Ss=;
-        b=I5pgcldwwXwLNS1ZhOR83NcNMSsVS4g4Y+thqh/OHu6WB7m3oW2LWQwlkW+0zXj/Mhuq2UcccUbSg
-         4GpGv4+LRXq8+3g5aa69BavaF753i9d844Fb2FsXoPE6DLRBYNmKcWnATChhHRUJWcMWey02E1MRp6
-         AQhA+XozlCNYM488l8KS2xwtfjTMRtBPTeMgCVIKLoRSTo382jwzjsG19frmHQ6uFVywdfBMp1+CYP
-         Ck9Og3G6rTSywayOq9KVDl6vsqvCLnVZzb0Cg9GNz4+whVMiNhQza0HXX77SCGBd81OwGnBbvlASfx
-         sdr7vKxDFzS0LEr7G8rSlQCQofIYNhw==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.009141)], BW: [Enabled, t: (0.000012,0.000001)], RTDA: [Enabled, t: (0.084208), Hit: No, Details: v2.40.0; Id: 15.52k8uq.1g8fvemiq.ml00; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Thu, 21 Jul 2022 11:54:37 +0300
-Date:   Thu, 21 Jul 2022 11:54:11 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v5 0/2] Lattice ECP5 FPGA manager
-Message-ID: <20220721085411.ennvx74k45sxsimm@h-e2.ddg>
-References: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
- <20220721074431.GA1712998@yilunxu-OptiPlex-7050>
+        with ESMTP id S229822AbiGYJcZ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 25 Jul 2022 05:32:25 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C5913E8A
+        for <linux-fpga@vger.kernel.org>; Mon, 25 Jul 2022 02:32:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658741544; x=1690277544;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AEr/pSHtxZNbSuzOA4DYvC/HtKpcHsvUZHflaesxHuI=;
+  b=dlVQTZ4m9qqyZH9a0QRynIy5qn77OktYZwETeClrlfXtT61wcjbmKtEh
+   7TDPoWx42JjCNAgeXAzffITXOsSBk+T1i02lMNzU8AYtKWW/qV13jbLSX
+   cdy7aUSwzhL/V0FuTftrKICVWKo4m5cnGZanCQ63o1boJAKtxWgLJejuf
+   u8lSP4JiqkqMUniA2lK0rLz2tp1dsWCP47m+Xb2e8qnB58B2JL79rwsph
+   njuVcIL/n+Y/69lTdgZfn5xrDuea/IqXg+Z5yo5B2wQB0dk+zQRZIYrpT
+   AeiXMcAOwlYnuoweiwU7K2lWcF4VxWrr76x/pcljXeG20DE/GS+IHGiui
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="286414809"
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="286414809"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 02:32:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="667421097"
+Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
+  by fmsmga004.fm.intel.com with ESMTP; 25 Jul 2022 02:32:22 -0700
+From:   Tianfei Zhang <tianfei.zhang@intel.com>
+To:     mdf@kernel.org, yilun.xu@intel.com, linux-fpga@vger.kernel.org,
+        lee.jones@linaro.org, russell.h.weight@intel.com
+Cc:     hao.wu@intel.com, trix@redhat.com,
+        Tianfei Zhang <tianfei.zhang@intel.com>
+Subject: [PATCH v2 0/3] add Intel FPGA image reload support
+Date:   Mon, 25 Jul 2022 05:28:33 -0400
+Message-Id: <20220725092836.647028-1-tianfei.zhang@intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721074431.GA1712998@yilunxu-OptiPlex-7050>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 03:44:31PM +0800, Xu Yilun wrote:
-> On Tue, Jul 19, 2022 at 02:23:33PM +0300, Ivan Bornyakov wrote:
-> > Add support to the FPGA manager for programming Lattice ECP5 FPGA over
-> > slave SPI interface with .bit formatted uncompressed bitstream image.
-> 
-> I didn't have time to looking into the patches yet, but I have some quick
-> question.
-> 
-> Where is the bitstream data writing to? To the FPGA active region or the
-> backup nvmem like flash?
+This patchset adds FPGA image reload support on Intel PAC N3000 Card.
+Image reload means that a reload mechanism of an FPGA, BMC, or
+firmware image from FLASH or EEPROM after flash or program the images
+without power cycle the server.
 
-Bitstream is written to FPGA's volatile SRAM configuration memory.
+This patchset introduces 2 new sysfs files for query the available
+images and trigger a image reload.
 
-> 
-> After reconfiguration, how to re-enumerate the hardware devices in the
-> newly programmed FPGA region?
-> 
+patch 1: add register access helper functions for M10BMC.
+patch 2: add the available_images and image_load sysfs files.
+Write a key word into image_load sysfs file to trigger a reload of an
+FPGA, BMC, or firmware image from FLASH or EEPROM.
+patch 3: add a trigger to update a new Retimer firmware.
 
-I personally describe FPGA-based devices statically in DT overlay within
-fpga-region. Of course this approach is error prone to mismatch between
-firmware and devices described in DT overlay...
+v2:
+add more detail about how to use the image_load sysfs files in ABI
+documentation.
 
-> Thanks,
-> Yilun
-> 
-> > 
-> > ChangeLog:
-> >   v1 -> v2:
-> >     * remove "spi" from compatible string
-> >     * reword description in dt-bindings doc
-> >     * add reference to spi-peripheral-props.yaml in dt-binding doc
-> >     * fix DTS example in dt-bindings doc: 4-spaces indentations, no
-> >       undersores in node names.
-> >   v2 -> v3:
-> >     * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
-> >   v3 -> v4:
-> >     * dt-bindings: reword description
-> >     * dt-bindings: revert props order
-> >   v4 -> v5:
-> >     * dt-bindings: remove trailing dot from title
-> >     * dt-bindings: reword description to avoid driver reference
-> >     * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
-> > 
-> > Ivan Bornyakov (2):
-> >   fpga: ecp5-spi: add Lattice ECP5 FPGA manager
-> >   dt-bindings: fpga: add binding doc for ecp5-spi fpga mgr
-> > 
-> >  .../bindings/fpga/lattice,ecp5-fpga-mgr.yaml  |  74 +++++
-> >  drivers/fpga/Kconfig                          |   7 +
-> >  drivers/fpga/Makefile                         |   1 +
-> >  drivers/fpga/ecp5-spi.c                       | 275 ++++++++++++++++++
-> >  4 files changed, 357 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/fpga/lattice,ecp5-fpga-mgr.yaml
-> >  create mode 100644 drivers/fpga/ecp5-spi.c
-> > 
-> > -- 
-> > 2.37.1
-> > 
+Russ Weight (2):
+  fpga: m10bmc-sec: add sysfs to reload FPGA/BMC images
+  fpga: m10bmc-sec: add m10bmc_sec_retimer_load callback
+
+Tianfei Zhang (1):
+  mfd: intel-m10-bmc: add m10bmc_sys_update_bits API
+
+ .../sysfs-driver-intel-m10-bmc-sec-update     |  34 +++
+ drivers/fpga/intel-m10-bmc-sec-update.c       | 250 ++++++++++++++++++
+ include/linux/mfd/intel-m10-bmc.h             |  49 ++++
+ 3 files changed, 333 insertions(+)
+
+-- 
+2.26.2
 
