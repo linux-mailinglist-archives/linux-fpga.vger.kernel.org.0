@@ -2,137 +2,90 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2F4592836
-	for <lists+linux-fpga@lfdr.de>; Mon, 15 Aug 2022 05:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D64C592837
+	for <lists+linux-fpga@lfdr.de>; Mon, 15 Aug 2022 05:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiHODhI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 14 Aug 2022 23:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
+        id S232636AbiHODiD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 14 Aug 2022 23:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiHODhH (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 14 Aug 2022 23:37:07 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32DA13F00;
-        Sun, 14 Aug 2022 20:37:06 -0700 (PDT)
+        with ESMTP id S230309AbiHODiC (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 14 Aug 2022 23:38:02 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1CD13EB4;
+        Sun, 14 Aug 2022 20:38:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660534626; x=1692070626;
+  t=1660534681; x=1692070681;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1lNOF+yYCyzR8glGvzWhXgR1l2ZGMz4pJFP8Rea6CDI=;
-  b=SDxZ9m0/d47r9RU2OOAMbYlsTTfzm+q+r/A55LlITefJtHRcFivsk7wh
-   ckreDJJ3Cwo1VeTdClElysXS4pHsRNEeayINQHMa7/FMV+LufPee7K/nf
-   foBwHC7iCEJTFhY6Nh6Dsc4fPuNbdRy38AgxP9LBc+9qfr6bEkNd6zbK+
-   CBi0jgKcVAuCLkFtdkIxWmr9KRoQGc9x7ytd84mHvGltlk6kVlOL6RStl
-   EZ5G3KiBdg/4GBuMyf1iWZG6Md+lLhD9UJv9Zyy1woCnr6oPyWs2HafHi
-   1WHQIOVM+eSw9v8bku8oU67Mn8OHni4L/9ctddQdjT+pqCBDhV25FxRmv
+  bh=/vQElSEN56HeDPn/ub86EWgbPJWslC5xOYifqsDS/VA=;
+  b=i4v/nLoxh940wbF7iQ0pQK7XTQ9m2/bqohv7dwrix5uJU5/T/k60gFkE
+   OZ/609dOpbqKiIhJnAyHigF/nCuq6Y/QgksgvmBXZ4t3hH3TlX1y4Cbep
+   s6+ZEj0ZaL09Zzgf2fRNiOyXMgNobvvMMUJt23GJUO5vci55MkwWriEmn
+   G6G6ATPk3+ihp+wTvzpPtHGVtLxynaw1GDlpFkMJCFUir8Zd191gtYKDv
+   T5A/fwOknAHYjrt3ViDgu9RLswxHwynsPTNxLKQC6KHjli5N7xkwvYwBC
+   ppvc2nENjLoxPJeLlp0si3daNPQtPDERjeOTPQN7l5D9nI7Wjye6eO0KC
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="278841180"
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="289452613"
 X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="278841180"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 20:37:05 -0700
+   d="scan'208";a="289452613"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 20:38:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="609800470"
+   d="scan'208";a="709632239"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Aug 2022 20:37:02 -0700
-Date:   Mon, 15 Aug 2022 11:27:59 +0800
+  by fmsmga002.fm.intel.com with ESMTP; 14 Aug 2022 20:37:58 -0700
+Date:   Mon, 15 Aug 2022 11:28:55 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, Marco Pagani <marpagan@redhat.com>
-Subject: Re: [PATCH v4] fpga: dfl-pci: Add IDs for Intel N6000, N6001 and
- C6100 cards
-Message-ID: <Yvm9PxYxEI9lGauT@yilunxu-OptiPlex-7050>
-References: <20220719145644.242481-1-matthew.gerlach@linux.intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: microchip-spi: add missing module author entry
+Message-ID: <Yvm9dzhyj6k4+01g@yilunxu-OptiPlex-7050>
+References: <20220728075012.3136914-1-conor.dooley@microchip.com>
+ <53f6e675-1fc5-fb17-ce6f-aa952d61132f@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220719145644.242481-1-matthew.gerlach@linux.intel.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <53f6e675-1fc5-fb17-ce6f-aa952d61132f@redhat.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2022-07-19 at 07:56:44 -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On 2022-07-28 at 05:29:48 -0700, Tom Rix wrote:
 > 
-> Add pci_dev_table entries supporting the Intel N6000, N6001
-> and C6100 cards to the dfl-pci driver.
-> 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> Tested-by: Marco Pagani <marpagan@redhat.com>
+> On 7/28/22 12:50 AM, Conor Dooley wrote:
+> > Add the missing MODULE_AUTHOR entry for the Microchip spi-slave FPGA
+> > programming driver.
+> > 
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > Reviewed-by: Tom Rix <trix@redhat.com>
-> Acked-by: Wu Hao <hao.wu@intel.com>
 
 Acked-by: Xu Yilun <yilun.xu@intel.com>
 
 Applied to for-next
 
-> ---
-> v4: moved subdevice ids next to respective device id
-> 
-> v3: added necessary subdevice ids
->     removed 'drivers: ' from title
-> 
-> v2: changed names from INTEL_OFS to INTEL_DFL
-> ---
->  drivers/fpga/dfl-pci.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-> index fd1fa55c9113..0914e7328b1a 100644
-> --- a/drivers/fpga/dfl-pci.c
-> +++ b/drivers/fpga/dfl-pci.c
-> @@ -77,12 +77,18 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
->  #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
->  #define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
->  #define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
-> +#define PCIE_DEVICE_ID_INTEL_DFL		0xbcce
-> +/* PCI Subdevice ID for PCIE_DEVICE_ID_INTEL_DFL */
-> +#define PCIE_SUBDEVICE_ID_INTEL_N6000		0x1770
-> +#define PCIE_SUBDEVICE_ID_INTEL_N6001		0x1771
-> +#define PCIE_SUBDEVICE_ID_INTEL_C6100		0x17d4
->  
->  /* VF Device */
->  #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
->  #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
->  #define PCIE_DEVICE_ID_VF_DSC_1_X		0x09C5
->  #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF	0x0B2C
-> +#define PCIE_DEVICE_ID_INTEL_DFL_VF		0xbccf
->  
->  static struct pci_device_id cci_pcie_id_tbl[] = {
->  	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_PF_INT_5_X),},
-> @@ -96,6 +102,18 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
->  	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
->  	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
->  	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6000),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6000),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6001),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6001),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_C6100),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_C6100),},
->  	{0,}
->  };
->  MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
-> -- 
-> 2.25.1
+> > ---
+> >   drivers/fpga/microchip-spi.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+> > index bd284c7b8dc9..7436976ea904 100644
+> > --- a/drivers/fpga/microchip-spi.c
+> > +++ b/drivers/fpga/microchip-spi.c
+> > @@ -395,4 +395,5 @@ static struct spi_driver mpf_driver = {
+> >   module_spi_driver(mpf_driver);
+> >   MODULE_DESCRIPTION("Microchip Polarfire SPI FPGA Manager");
+> > +MODULE_AUTHOR("Ivan Bornyakov <i.bornyakov@metrotek.ru>");
+> >   MODULE_LICENSE("GPL");
 > 
