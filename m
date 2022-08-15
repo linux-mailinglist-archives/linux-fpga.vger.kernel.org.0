@@ -2,289 +2,94 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF2559296D
-	for <lists+linux-fpga@lfdr.de>; Mon, 15 Aug 2022 08:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25946592FD2
+	for <lists+linux-fpga@lfdr.de>; Mon, 15 Aug 2022 15:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbiHOGLW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 15 Aug 2022 02:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
+        id S241526AbiHONXM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 15 Aug 2022 09:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233099AbiHOGLN (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 15 Aug 2022 02:11:13 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62DC18B0C
-        for <linux-fpga@vger.kernel.org>; Sun, 14 Aug 2022 23:11:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660543870; x=1692079870;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZTqvSG1BNFaNusd7hzSX/klXn2WVjuljLZ4aH0u2Stw=;
-  b=ely7rnCPwaot4CEeo0cSDlZgGPFI9EJwVBKudQ4wOphKvHf1G2vaakMc
-   2CFVtlz6009cqnRvA5xqGOIX1Ooam5DWvQWwBeWyE12jNhWWiZh3i9rtF
-   7qEYZ3sPdYpyDE8nvK9Du0Ml2kn0nPU/5mCHd57oOTBP6BkxWWGXLeYA3
-   G8/7WAIWgwZ3Mb0p/U3OTZ8jIIB6mr9hnR4uh5tKsK2XkDwJd9xNCk4w3
-   wzTXc/8bJnf1/FKr1yuZd+v2RwATya7uLtpM4LOq8K55KEKgYD5RI3qAU
-   EUypWGpamhiDGuQaQu+K2sNh4GSVkMYov8sbXSTk5OCy0Q8C0YW6PKO7s
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="271670718"
-X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="271670718"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 23:11:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="639544890"
-Received: from unknown (HELO opae-zj-2.sh.intel.com) ([10.238.175.107])
-  by orsmga001.jf.intel.com with ESMTP; 14 Aug 2022 23:11:07 -0700
-From:   Tianfei Zhang <tianfei.zhang@intel.com>
-To:     mdf@kernel.org, yilun.xu@intel.com, linux-fpga@vger.kernel.org,
-        lee.jones@linaro.org, russell.h.weight@intel.com
-Cc:     hao.wu@intel.com, trix@redhat.com,
-        Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v4 2/2] fpga: m10bmc-sec: add m10bmc_sec_retimer_load callback
-Date:   Mon, 15 Aug 2022 02:07:15 -0400
-Message-Id: <20220815060715.37712-3-tianfei.zhang@intel.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220815060715.37712-1-tianfei.zhang@intel.com>
-References: <20220815060715.37712-1-tianfei.zhang@intel.com>
+        with ESMTP id S242921AbiHONXK (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 15 Aug 2022 09:23:10 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DC01CB16;
+        Mon, 15 Aug 2022 06:23:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=XNPtRBIgnIdwwDa0fshxVwxNk2H6vekPXxCch/BBUP0=;
+        b=G0FMv9qLtRUXaNWt/uO0VeoFmodRo318GZWUqLDxdmUHrhFvvA5AsAv5hc4gzfWgQRVYUhLiX0Idh
+         eh0OdHqS2ZdUkqOd0MuuvXh/J+wHOxZs9IXtrnk81OiWU9WoBggxoZ6c1QAitgU7LHP5l6C68VVJqk
+         KUqyUKzalKjUWs2cEeM70Q2MXhD4yVn7fhx4ng22qzJLbTbipciA2BN1CbOQMPLpGSP+IiqEN135Mu
+         FEYy64h3xSifXLazQkY1iFjj5mcykYqXhfl+O2RPpMLTrahsd23Q0nsgxXK00xenNexVY14voyOrk+
+         Q2DJe5wlpMzEMVVeG3jfLbq3Xor7omQ==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.006984)], BW: [Enabled, t: (0.000014,0.000001)], RTDA: [Enabled, t: (0.075403), Hit: No, Details: v2.41.0; Id: 15.52k4h3.1gagqnnpu.5tqt; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Mon, 15 Aug 2022 16:22:50 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, dg@emlix.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: [PATCH v6 0/2] Lattice ECP5 FPGA manager
+Date:   Mon, 15 Aug 2022 16:21:55 +0300
+Message-Id: <20220815132157.8083-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Russ Weight <russell.h.weight@intel.com>
+Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+slave SPI interface with .bit formatted uncompressed bitstream image.
 
-Create m10bmc_sec_retimer_load() callback function
-to provide a trigger to update a new retimer (Intel
-C827 Ethernet transceiver) firmware on Intel PAC
-N3000 Card.
+ChangeLog:
+  v1 -> v2:
+    * remove "spi" from compatible string
+    * reword description in dt-bindings doc
+    * add reference to spi-peripheral-props.yaml in dt-binding doc
+    * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+      undersores in node names.
+  v2 -> v3:
+    * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+  v3 -> v4:
+    * dt-bindings: reword description
+    * dt-bindings: revert props order
+  v4 -> v5:
+    * dt-bindings: remove trailing dot from title
+    * dt-bindings: reword description to avoid driver reference
+    * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
+  v5 -> v6:
+    * ecp5-spi: lock SPI bus for exclusive usage in
+      ecp5_ops_write_init(), release in ecp5_ops_write_complete()
+      or on error
 
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
----
-v3:
-uses regmap_update_bits() API instead of m10bmc_sys_update_bits().
----
- drivers/fpga/intel-m10-bmc-sec-update.c | 148 ++++++++++++++++++++++++
- include/linux/mfd/intel-m10-bmc.h       |  31 +++++
- 2 files changed, 179 insertions(+)
+Ivan Bornyakov (2):
+  fpga: ecp5-spi: add Lattice ECP5 FPGA manager
+  dt-bindings: fpga: add binding doc for ecp5-spi fpga mgr
 
-diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-index 3a082911cf67..bef07e97c107 100644
---- a/drivers/fpga/intel-m10-bmc-sec-update.c
-+++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-@@ -300,6 +300,150 @@ static int m10bmc_sec_bmc_image_load_1(struct m10bmc_sec *sec)
- 	return m10bmc_sec_bmc_image_load(sec, 1);
- }
- 
-+static int trigger_retimer_eeprom_load(struct m10bmc_sec *sec)
-+{
-+	struct intel_m10bmc *m10bmc = sec->m10bmc;
-+	unsigned int val;
-+	int ret;
-+
-+	ret = regmap_update_bits(m10bmc->regmap,
-+				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				 DRBL_PKVL_EEPROM_LOAD_SEC,
-+				 DRBL_PKVL_EEPROM_LOAD_SEC);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * If the current NIOS FW supports this retimer update feature, then
-+	 * it will clear the same PKVL_EEPROM_LOAD bit in 2 seconds. Otherwise
-+	 * the driver needs to clear the PKVL_EEPROM_LOAD bit manually and
-+	 * return an error code.
-+	 */
-+	ret = regmap_read_poll_timeout(m10bmc->regmap,
-+				       M10BMC_SYS_BASE + M10BMC_DOORBELL, val,
-+				       (!(val & DRBL_PKVL_EEPROM_LOAD_SEC)),
-+				       M10BMC_PKVL_LOAD_INTERVAL_US,
-+				       M10BMC_PKVL_LOAD_TIMEOUT_US);
-+	if (ret == -ETIMEDOUT) {
-+		dev_err(sec->dev, "PKVL_EEPROM_LOAD clear timedout\n");
-+		regmap_update_bits(m10bmc->regmap,
-+				   M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				   DRBL_PKVL_EEPROM_LOAD_SEC, 0);
-+		ret = -ENODEV;
-+	} else if (ret) {
-+		dev_err(sec->dev, "poll EEPROM_LOAD error %d\n", ret);
-+	}
-+
-+	return ret;
-+}
-+
-+static int poll_retimer_eeprom_load_done(struct m10bmc_sec *sec)
-+{
-+	struct intel_m10bmc *m10bmc = sec->m10bmc;
-+	unsigned int doorbell;
-+	int ret;
-+
-+	/*
-+	 * RSU_STAT_PKVL_REJECT indicates that the current image is
-+	 * already programmed. RSU_PROG_PKVL_PROM_DONE that the firmware
-+	 * update process has finished, but does not necessarily indicate
-+	 * a successful update.
-+	 */
-+	ret = regmap_read_poll_timeout(m10bmc->regmap,
-+				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				       doorbell,
-+				       ((rsu_prog(doorbell) ==
-+					 RSU_PROG_PKVL_PROM_DONE) ||
-+					(rsu_stat(doorbell) ==
-+					 RSU_STAT_PKVL_REJECT)),
-+				       M10BMC_PKVL_PRELOAD_INTERVAL_US,
-+				       M10BMC_PKVL_PRELOAD_TIMEOUT_US);
-+	if (ret) {
-+		if (ret == -ETIMEDOUT)
-+			dev_err(sec->dev,
-+				"Doorbell check timedout: 0x%08x\n", doorbell);
-+		else
-+			dev_err(sec->dev, "poll Doorbell error\n");
-+		return ret;
-+	}
-+
-+	if (rsu_stat(doorbell) == RSU_STAT_PKVL_REJECT) {
-+		dev_err(sec->dev, "duplicate image rejected\n");
-+		return -ECANCELED;
-+	}
-+
-+	return 0;
-+}
-+
-+static int poll_retimer_preload_done(struct m10bmc_sec *sec)
-+{
-+	struct intel_m10bmc *m10bmc = sec->m10bmc;
-+	unsigned int val;
-+	int ret;
-+
-+	/*
-+	 * Wait for the updated firmware to be loaded by the PKVL device
-+	 * and confirm that the updated firmware is operational
-+	 */
-+	ret = regmap_read_poll_timeout(m10bmc->regmap,
-+				       M10BMC_SYS_BASE + M10BMC_PKVL_POLL_CTRL, val,
-+				       ((val & M10BMC_PKVL_PRELOAD) == M10BMC_PKVL_PRELOAD),
-+				       M10BMC_PKVL_PRELOAD_INTERVAL_US,
-+				       M10BMC_PKVL_PRELOAD_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(sec->dev, "poll M10BMC_PKVL_PRELOAD error %d\n", ret);
-+		return ret;
-+	}
-+
-+	if ((val & M10BMC_PKVL_UPG_STATUS_MASK) != M10BMC_PKVL_UPG_STATUS_GOOD) {
-+		dev_err(sec->dev, "error detected during upgrade\n");
-+		return -EIO;
-+	}
-+
-+	return 0;
-+}
-+
-+static int retimer_check_idle(struct m10bmc_sec *sec)
-+{
-+	u32 doorbell;
-+	int ret;
-+
-+	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+	if (ret)
-+		return -EIO;
-+
-+	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
-+	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE &&
-+	    rsu_prog(doorbell) != RSU_PROG_PKVL_PROM_DONE) {
-+		log_error_regs(sec, doorbell);
-+		return -EBUSY;
-+	}
-+
-+	return 0;
-+}
-+
-+static int m10bmc_sec_retimer_eeprom_load(struct m10bmc_sec *sec)
-+{
-+	int ret;
-+
-+	ret = retimer_check_idle(sec);
-+	if (ret)
-+		goto exit;
-+
-+	ret = trigger_retimer_eeprom_load(sec);
-+	if (ret)
-+		goto exit;
-+
-+	ret = poll_retimer_eeprom_load_done(sec);
-+	if (ret)
-+		goto exit;
-+
-+	ret = poll_retimer_preload_done(sec);
-+
-+exit:
-+	return ret;
-+}
-+
- static struct image_load m10bmc_image_load_hndlrs[] = {
- 	{
- 		.name = "bmc_factory",
-@@ -309,6 +453,10 @@ static struct image_load m10bmc_image_load_hndlrs[] = {
- 		.name = "bmc_user",
- 		.load_image = m10bmc_sec_bmc_image_load_0,
- 	},
-+	{
-+		.name = "retimer_fw",
-+		.load_image = m10bmc_sec_retimer_eeprom_load,
-+	},
- 	{}
- };
- 
-diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-index f0044b14136e..c06b9d3d1c5d 100644
---- a/include/linux/mfd/intel-m10-bmc.h
-+++ b/include/linux/mfd/intel-m10-bmc.h
-@@ -36,6 +36,37 @@
- #define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
- #define M10BMC_VER_LEGACY_INVALID	0xffffffff
- 
-+/* Retimer related registers, in system register region */
-+#define M10BMC_PKVL_POLL_CTRL		0x80
-+#define M10BMC_PKVL_A_PRELOAD		BIT(16)
-+#define M10BMC_PKVL_A_PRELOAD_TO	BIT(17)
-+#define M10BMC_PKVL_A_DATA_TOO_BIG	BIT(18)
-+#define M10BMC_PKVL_A_HDR_CKSUM	BIT(20)
-+#define M10BMC_PKVL_B_PRELOAD		BIT(24)
-+#define M10BMC_PKVL_B_PRELOAD_TO	BIT(25)
-+#define M10BMC_PKVL_B_DATA_TOO_BIG	BIT(26)
-+#define M10BMC_PKVL_B_HDR_CKSUM	BIT(28)
-+
-+#define M10BMC_PKVL_PRELOAD		(M10BMC_PKVL_A_PRELOAD | M10BMC_PKVL_B_PRELOAD)
-+#define M10BMC_PKVL_PRELOAD_TIMEOUT	(M10BMC_PKVL_A_PRELOAD_TO | \
-+					 M10BMC_PKVL_B_PRELOAD_TO)
-+#define M10BMC_PKVL_DATA_TOO_BIG	(M10BMC_PKVL_A_DATA_TOO_BIG | \
-+					 M10BMC_PKVL_B_DATA_TOO_BIG)
-+#define M10BMC_PKVL_HDR_CHECKSUM	(M10BMC_PKVL_A_HDR_CKSUM | \
-+					 M10BMC_PKVL_B_HDR_CKSUM)
-+
-+#define M10BMC_PKVL_UPG_STATUS_MASK	(M10BMC_PKVL_PRELOAD | M10BMC_PKVL_PRELOAD_TIMEOUT |\
-+					 M10BMC_PKVL_DATA_TOO_BIG | M10BMC_PKVL_HDR_CHECKSUM)
-+#define M10BMC_PKVL_UPG_STATUS_GOOD	(M10BMC_PKVL_PRELOAD | M10BMC_PKVL_HDR_CHECKSUM)
-+
-+/* interval 100ms and timeout 2s */
-+#define M10BMC_PKVL_LOAD_INTERVAL_US	(100 * 1000)
-+#define M10BMC_PKVL_LOAD_TIMEOUT_US	(2 * 1000 * 1000)
-+
-+/* interval 100ms and timeout 30s */
-+#define M10BMC_PKVL_PRELOAD_INTERVAL_US	(100 * 1000)
-+#define M10BMC_PKVL_PRELOAD_TIMEOUT_US	(30 * 1000 * 1000)
-+
- /* Secure update doorbell register, in system register region */
- #define M10BMC_DOORBELL			0x400
- 
+ .../bindings/fpga/lattice,ecp5-fpga-mgr.yaml  |  74 +++++
+ drivers/fpga/Kconfig                          |   7 +
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/ecp5-spi.c                       | 311 ++++++++++++++++++
+ 4 files changed, 393 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/lattice,ecp5-fpga-mgr.yaml
+ create mode 100644 drivers/fpga/ecp5-spi.c
+
 -- 
-2.26.2
+2.37.1
+
 
