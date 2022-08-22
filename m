@@ -2,250 +2,418 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B3259914D
-	for <lists+linux-fpga@lfdr.de>; Fri, 19 Aug 2022 01:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E5D59B78B
+	for <lists+linux-fpga@lfdr.de>; Mon, 22 Aug 2022 04:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245671AbiHRXir (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 18 Aug 2022 19:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
+        id S232468AbiHVCRB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 21 Aug 2022 22:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344679AbiHRXiq (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 18 Aug 2022 19:38:46 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A9274BB0;
-        Thu, 18 Aug 2022 16:38:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660865925; x=1692401925;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=9qGkkCQteYOzYMwFkPvYJY4fdbfyzLOYq3LmqRM/NKU=;
-  b=hhxpZyiFOvZAodopc66BPVJGx3jMS52JiZs7TXTiPEMX34/WhPVxh5gP
-   q9cbg2kMfVdZ5wH8FWGHpukLnYtHWgVL3/N5pSLwnFvHZ/ToVOFPnDGDQ
-   77vzDlqkbJxl8jEfehx7Dnh8U1kQM2SZW3zh3AavUItnbis8MBRevhMvZ
-   1nicVU66hQmVhQzeqOfr3P1yTAcHDUw5g/PL/JOa7Ba0cUOLg1+cpqzuR
-   sTO/eEsqXFaiFSJ261ISccC1CdjWJzS4zBbDEOvRdNDQQKpKaB4Zv6Eh8
-   TCtRXMVUWnTKdmzavWPNAWyY1Qv+sMcI+iofjRH5iJk/R6uF/cYZpY94z
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="354633366"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="354633366"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 16:38:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="676257891"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Aug 2022 16:38:43 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 18 Aug 2022 16:38:42 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 18 Aug 2022 16:38:42 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Thu, 18 Aug 2022 16:38:42 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Thu, 18 Aug 2022 16:38:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KJ//ULvAIKdpnKBFxtX/BZmkAr+O6TlK03/uRE9GVVjGes3SUFfBeLdn6QAuU/dg/ap6R8KW2TpTxgiD7jfLrLyFBddQcEoINRBB9DqaFsH/wDsUkOvXRKG1CCZxslcINJoh3GnQKvf8vtjtfvPmYLW/XnViupo89DfvAPE+nJoRWgPNxbM9Y+wO7JrscTy4AbE+v9wTGD+eZbh5QbRsVTu/98qdTCFvc6PAhe7Sxsd6nTGXK7hECA+PKmrMlTXxR9k/aOgERvpqwEHLLzEIkMUalDuZtNkOHIYJj1Eh2Q40UanMgJCWWCBxZsePKaQLAUH7SSUaIAP1AcXYVMi/cg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yks/1ZDXo328p4Y8JyqrWwFNIhkvfYI4Tic96c7eBu8=;
- b=CWb7S+pffUY+rp/T+0C1UhGRihmAnxPtX5XwcSSr/1IkZLgzyi2c2W4dLMstZ1V4BuTU/BKL2OPzbfWiRPmuC0x6Ab4U5+iFm56UKObBQLaClOmAC5IDDN+0R5fyQcANXfXwFf6ale5UXrMyCA/MqiYsnrTZg+EVOj+N6nCnOCRm7sW6RMFySmf5D8RcPogzYyJQl9TfuEmk+Wuog3PHRxtg0ydRfXZdhYlz5iMWumoHpSnmasNHVii3gKi88LSzfFT6MVGDL/63dhCGQBxeUpwTsg9dofQbYikPjgXsG7g9XMgFTWPgiI2D2nbov6p3IgwVNF01BLy66u8oatEGbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM5PR11MB1899.namprd11.prod.outlook.com (2603:10b6:3:10b::14)
- by CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:95::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Thu, 18 Aug
- 2022 23:38:39 +0000
-Received: from DM5PR11MB1899.namprd11.prod.outlook.com
- ([fe80::e5bc:d418:aa62:955c]) by DM5PR11MB1899.namprd11.prod.outlook.com
- ([fe80::e5bc:d418:aa62:955c%10]) with mapi id 15.20.5546.016; Thu, 18 Aug
- 2022 23:38:39 +0000
-Message-ID: <acdf9c04-0816-5995-da90-c53153ffac59@intel.com>
-Date:   Thu, 18 Aug 2022 17:38:35 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v1] uio: dfl: add IOPLL user-clock feature id
-Content-Language: en-US
-To:     Xu Yilun <yilun.xu@intel.com>,
-        Peter Colberg <peter.colberg@intel.com>
-CC:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <matthew.gerlach@linux.intel.com>,
-        <basheer.ahmed.muddebihal@intel.com>, <tianfei.zhang@intel.com>,
-        <marpagan@redhat.com>, <lgoncalv@redhat.com>
-References: <20220817213746.4986-1-peter.colberg@intel.com>
- <Yv29ev8OKyEYcaf/@yilunxu-OptiPlex-7050>
-From:   Russ Weight <russell.h.weight@intel.com>
-In-Reply-To: <Yv29ev8OKyEYcaf/@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR03CA0293.namprd03.prod.outlook.com
- (2603:10b6:303:b5::28) To DM5PR11MB1899.namprd11.prod.outlook.com
- (2603:10b6:3:10b::14)
+        with ESMTP id S232470AbiHVCQn (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 21 Aug 2022 22:16:43 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA6C22BE5;
+        Sun, 21 Aug 2022 19:16:35 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id c2so8679027plo.3;
+        Sun, 21 Aug 2022 19:16:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=xB76u9yqtIZ+mSa30ADibl4N4bymJ9Dh7UlLFPT7o98=;
+        b=HRSBxEVCt3rvrI/7lmMMzAo0rRbfGOgqEC67o825HvHiARvDrjB8+tDVoRpWMePXYp
+         9oQI+id67tHzlJ/A1v+NZiooV2Ufdbed57m4RPzeWT4HTWQ3q2I+/Pe+oeuuLSkGr3sH
+         OFGxMUhrOnPgyl+8PJjFb2VlRGBH65CMs+CTIcK33IedsTj91WJy8qIYPkCyA3YhPpbN
+         xDCCgOZKQ5Y1aN3JjfMjYvKZvr6vDO7+ZcRdt9uyjXkR87MKlV9+WnblT5SVy92eqfSx
+         w3yN/jWsdSyvHft8Zf3G5N2NxPQml5tWr62cry/lKZIDETPbgI06U3OybrR+Eaet25zB
+         MNXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=xB76u9yqtIZ+mSa30ADibl4N4bymJ9Dh7UlLFPT7o98=;
+        b=8HTec5PKe3qNIodA8+yUymOr1kqtqer4mcRv6RSpygHXfAWmuHpvMJzKtn4TcI1uwg
+         zlfaCE/GOg1M3Tff9mf1JFEI8o1qpxFJ84zY8twMkOnTEWR16ZDC3FSowSSBCs8NXmA+
+         Pa9D6z/iMCZUpG4ryP4xajmsjBysnj9bzzq7aaGGgJl5+pkdxy6dJtWmyxkTOR8an//T
+         1yZU0tmzbJyZMpJO4g2mtlcUfaABTeq+n26BJSIbUwwdj0lyaonOGPnlURM+vxOl6CHO
+         nj1blI06Un713sWZAof80W7zmttoEUs4z/+8kXWD3oriB7GnKdH1rGSO8PxxJD1NAhw/
+         24Lg==
+X-Gm-Message-State: ACgBeo1cK40iG/0rQfPTbxfNf6jDO9GVXQ3jxODlOOt+RNbGdX4D3zM4
+        ldaUrG0OFGwuCIV9bT3fJg==
+X-Google-Smtp-Source: AA6agR522vRbRjKGj/9trWnx6g9g6lhC9pFTs134FCjBnfDght6iTV00F7UnaCUQri0jee4v1rjxPQ==
+X-Received: by 2002:a17:90b:33ce:b0:1fb:1aec:ffac with SMTP id lk14-20020a17090b33ce00b001fb1aecffacmr5850314pjb.137.1661134594615;
+        Sun, 21 Aug 2022 19:16:34 -0700 (PDT)
+Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id k3-20020aa79723000000b005321340753fsm7312139pfg.103.2022.08.21.19.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 19:16:34 -0700 (PDT)
+From:   Pingfan Liu <kernelfans@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        linux-fpga@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     Pingfan Liu <kernelfans@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frank Li <Frank.li@nxp.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Li Yang <leoyang.li@nxp.com>, Yury Norov <yury.norov@gmail.com>
+Subject: [RFC 08/10] cpuhp: Replace cpumask_any_but(cpu_online_mask, cpu)
+Date:   Mon, 22 Aug 2022 10:15:18 +0800
+Message-Id: <20220822021520.6996-9-kernelfans@gmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220822021520.6996-1-kernelfans@gmail.com>
+References: <20220822021520.6996-1-kernelfans@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 93cd6d3a-6551-4bfa-d808-08da8172c6ee
-X-MS-TrafficTypeDiagnostic: CO1PR11MB4769:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: txxKmpT++vwA8/FOPW9lJ2JPXnZEV1GTlw4H6gXIbw8v3zK1oMMNDAIsiKSZQ3wf9nxkLGn3Ng1fIEEPr0JHO4+TJjUZvm1T9K7Evf+4mynyat3JjvNLzG7cEuU2uuV3dBPUIOoJaGwl4Bnv8990hu3Fo5gvFszTIjqjuWKvrltbSXFv070Xm6WAPcMwvBh3r+50rdep+C/pgDDG+eTX2OOAAuI9gl9JLdn7jXLmWqUZB5MAr34HLi3W88o+6OLOS06aGdOjV1Jqg7oCezKWa3HPXNxMgjjQ3TNPiOQZbYBRIEjIk/yjnuhacLFwKk68mgKITC4zmdcje7AeHKsZSmVM5sf44IPWTNGlkjPZBaIH5sT0RdL9TINK3zCHVn+TcP7YuCUeObuXLkn/HIU11IyQ4/nsDXi0uErmpAubPsGrvY92eKrTb8t0RqOWONnTkoDmz54Pi/87mceoUHc1pETGnJIFzag8eNqSlRtOUwfaEv2srxFBSOee1TVbUT5j3wrsoGA2p/0WgmOvYcCjIDJmzImhNXHClR6X4vRHPf3DQbMNBI42MTzwoLG4ciHCR3d+sigqwPNO0jMD1P3TErVoUOP2e5l6XrZAL3gdwE240/4bjKLkkY+6T+JLU5turEMWwCm/egEyzRB7aEEGhE9gGSnAsjZhNVQzMAcnT5557gCTg41fv3igZXqsEwZuh5kSDAqqwcSQHH6hAKWmNlEvLZMLmAE9oaXNMqDCGeJvUkOxz7xqjEgR0ki4i6O46ZaGTpDkQ8aBoeH0CxGiOxAbaSIwIfz3TAuEm1rGeSA35lB23ggeb0FT1YlYl422gZWB3UcNe0Gx0RwFWeWsdqYx9PG6a9PoDYOFe2qe7IM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1899.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(346002)(376002)(396003)(39860400002)(41300700001)(966005)(54906003)(478600001)(5660300002)(38100700002)(316002)(6486002)(66946007)(110136005)(66556008)(66476007)(8936002)(8676002)(4326008)(6636002)(2906002)(31686004)(36756003)(31696002)(53546011)(26005)(186003)(86362001)(6506007)(82960400001)(6666004)(2616005)(6512007)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YnIzSkNHRmZobWVJZFdtL0Y3SnB4OEczcWJxUnMvTmVldEMvWFh4NUI2Yk5R?=
- =?utf-8?B?c2V2U25kYVZ0aUFWOEZuT3ZKYUZnaTBIdzVZajR2ZnJxNXpQLzZKWXU2ZDFN?=
- =?utf-8?B?OXV0dnN0RXpNUCtxZ042RXhKU3d1TExKeDFCUkpXckJhY1QzQlkva2FxTk5u?=
- =?utf-8?B?NkJQVEI4NFJqRC9VV0E2NkU2UTVYbGZoTnRJT0MvKzRtQ2psQlNxbU1zQjdh?=
- =?utf-8?B?U3YyM09nUXJaSzZWMUROQTRnUXV6ZjZBK3prVmUxWE1JV0Y0QWZ2cExsb1hK?=
- =?utf-8?B?NWV5bUdQeEM0OFhxczRJSXROc05pNnhETnRHbS9MYlVjUHkzQkJiU3BrM3Vj?=
- =?utf-8?B?TWdLMCtpejBHQjJWMmdjT2VCZjVWZ0RadVZzUlJiNk1TcUNpcUVGUTZvZFhT?=
- =?utf-8?B?dmxQdEZsby94QmFydGRDbmRyM2ppOWlVb0hTaFZZS0xDc0tJRGdXQmxzclFt?=
- =?utf-8?B?eHZ2ZUFJUEFyMVAzZTZoT3F1VWk2SlBma0dyYTBzQXl5K1QybVB4RGNLdHF1?=
- =?utf-8?B?RFRDbm1oUStZT3NIL0lkeEsraE1iQ0xpeGtvRTFJMC9pQmRkL0hnVVZGVEo3?=
- =?utf-8?B?c051SC9JYXJadHpCK0wyQVRhV1JKT0tsNXhjbllXWGNoK05HM0pMRFJhMUNn?=
- =?utf-8?B?Sk5XRGNmbE9SSmsza1JwVlJ3eEJUWnAxTGJKd2Vab1lqSHBGQkxWQkRXVjU4?=
- =?utf-8?B?TnNrZDk1Wnp4NUZlUjJMcXdPaFlxWUtZc0lLNG0wOFJxQjBlZWNmUDBXOWR4?=
- =?utf-8?B?V3dGeUZ0MWE2cGlJdnQ2Sy84UFRPY3E3bko1NGdmWU1KY2EvTVhSTFRZaHp4?=
- =?utf-8?B?SWVCVXZpM1JkV2VDRHBid2s4Qytndzd1RGlZTWFlRWVrZHFMeG9XWERDaUdu?=
- =?utf-8?B?N1pQaEFMOGoxZG5OS2o2eTZDWDJxYkthbllxWlRtQStjVEZNMmNzR0xaT0lH?=
- =?utf-8?B?d0JmaXcxUWpDU2pPVmxZL3JBRHhESEw3aXJPaXRlTERFSjl3TEQyL0VmMnBV?=
- =?utf-8?B?YXpBSHdubnZWc2VFWS9hWUQ5dDhpZGRNTGwyeURVSVliYkloUXFnK2Mxcmd6?=
- =?utf-8?B?VWZRUnlLTTRhTnkwWFBGUkdRR29hcWVjWlUrdGppakNVOWo5NHpFQ1JtVmJW?=
- =?utf-8?B?cWtNQ2psc0VPUlYzY0orYWFab3RGZkxmZ0xEM2xSMnZhNXJRWFFYVFpnMzM4?=
- =?utf-8?B?WFBNN3J1SHp2QitXVjVxQkJhdUQ5ejM1ekg5ZTJ1d0NmcGhGK1RSWFFqS3RP?=
- =?utf-8?B?N2RBdVdoc3ZBcUlibXV5dzFRNUplTTJueFhZanZhV2d5Sk1pdWVrbmQybDZi?=
- =?utf-8?B?K2dUcDZEd3lzTjZta1hreHh1LzMvclkzWE4wc0tBUVdCY09aS2M5U0ZVTk0x?=
- =?utf-8?B?ejJaSm5lZmxqajhSenFMUE1OMzZGU0NnSWFuVkhSUVVGdVEvb3dSWUg5TlI2?=
- =?utf-8?B?ZkNzc1l0aW4rQmVhdFhpUllORVRhY1h0elBWTjJkeHh3ZkxRUWFQbjNacUVD?=
- =?utf-8?B?cEtzUm04NDFHV3hGL3pERWcxNlhiaTVZMVNGbFRPWkxBZ1pyWFBuOXh0cHBR?=
- =?utf-8?B?MzNsK0RydTliK3lRK2JZYW14T2lmeXNJbHhGODhaL1NkaytPN1NXcEFYbEtt?=
- =?utf-8?B?bEp4YzJJNndTN0F5VWFCVG82RmJNYmhuSURFODRSb3QxalpjZzNoTTh5azE4?=
- =?utf-8?B?UWoxMkUzejcrSUs4N2phbHVvdXVQNFJNTVV3dU1PR0EvYlJva3V6YzQ3UGtn?=
- =?utf-8?B?MmpDOU9mQ1VxM29xaWdjTllLcWRlbmV2UzFYbllMblBrTnpTNUlMM0FtVDlH?=
- =?utf-8?B?SFgweCtBais3WWxZN1BqQlRWdW4weE56VFBrSmxHMHhEVmNhSEljZXEzSHg0?=
- =?utf-8?B?Qm5HVG1QMlR5MDltVCtmcDJWZzg2aEh2WGxFNFVSa2lDa2Z3b2UxSmFIWU1O?=
- =?utf-8?B?VnRLcFo0SUQxZHdaODlPbjZ1WWF0MVo1QmJqVHRvLzlIbzJEb2lrN0tGb1lD?=
- =?utf-8?B?cURTMFFWdmZ1dGYyc0VmQ0pWQ2FFL0hpaEJaNzlPSUlMSVo3Sms1ZUFSUWhJ?=
- =?utf-8?B?QlE3MTBLYThYeDQrKzlnQjNQb3hhWjIyYlJWTUYyZkFOQ2lDOXRoTGx4YjRp?=
- =?utf-8?B?U1pnUmFoT0FQT1EzMnNmbFR4d0JSZGNBYWk5VHRWamZPNDkzWFZlcEdGb3hn?=
- =?utf-8?B?dVE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93cd6d3a-6551-4bfa-d808-08da8172c6ee
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1899.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 23:38:39.1861
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3OzRnGwjw5szO52fPhxglAM8Ytt2uy5Y6viBvMXt8SzAwwadBryYNzX17mHqb2N+4ejpQvx37thmlt+y8SJVzacE4F5rMVjYf1h1a15kuVo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4769
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+In a kexec quick reboot path, the dying cpus are still on
+cpu_online_mask. During the teardown of cpu, a subsystem needs to
+migrate its broker to a real online cpu.
 
+This patch replaces cpumask_any_but(cpu_online_mask, cpu) in a teardown
+procedure with cpumask_not_dying_but(cpu_online_mask, cpu).
 
-On 8/17/22 21:18, Xu Yilun wrote:
-> On 2022-08-17 at 17:37:46 -0400, Peter Colberg wrote:
->> Add a Device Feature List (DFL) feature id for the configurable
->> IOPLL user clock source, which can be used to configure the clock
->> speeds that are used for RTL logic that is programmed into the
->> Partial Reconfiguration (PR) region of an FPGA.
-> Why not use linux clock framework for this IOPLL? And let the PR
-> driver set it togeter with the RTL logic reporgramming?
+Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Wu Hao <hao.wu@intel.com>
+Cc: Tom Rix <trix@redhat.com>
+Cc: Moritz Fischer <mdf@kernel.org>
+Cc: Xu Yilun <yilun.xu@intel.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Frank Li <Frank.li@nxp.com>
+Cc: Shaokun Zhang <zhangshaokun@hisilicon.com>
+Cc: Qi Liu <liuqi115@huawei.com>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc: Khuong Dinh <khuong@os.amperecomputing.com>
+Cc: Li Yang <leoyang.li@nxp.com>
+Cc: Yury Norov <yury.norov@gmail.com>
+To: linux-arm-kernel@lists.infradead.org
+To: dmaengine@vger.kernel.org
+To: linux-fpga@vger.kernel.org
+To: intel-gfx@lists.freedesktop.org
+To: dri-devel@lists.freedesktop.org
+To: linux-arm-msm@vger.kernel.org
+To: linuxppc-dev@lists.ozlabs.org
+To: linux-kernel@vger.kernel.org
+---
+ arch/arm/mach-imx/mmdc.c                 | 2 +-
+ arch/arm/mm/cache-l2x0-pmu.c             | 2 +-
+ drivers/dma/idxd/perfmon.c               | 2 +-
+ drivers/fpga/dfl-fme-perf.c              | 2 +-
+ drivers/gpu/drm/i915/i915_pmu.c          | 2 +-
+ drivers/perf/arm-cci.c                   | 2 +-
+ drivers/perf/arm-ccn.c                   | 2 +-
+ drivers/perf/arm-cmn.c                   | 4 ++--
+ drivers/perf/arm_dmc620_pmu.c            | 2 +-
+ drivers/perf/arm_dsu_pmu.c               | 2 +-
+ drivers/perf/arm_smmuv3_pmu.c            | 2 +-
+ drivers/perf/fsl_imx8_ddr_perf.c         | 2 +-
+ drivers/perf/hisilicon/hisi_uncore_pmu.c | 2 +-
+ drivers/perf/marvell_cn10k_tad_pmu.c     | 2 +-
+ drivers/perf/qcom_l2_pmu.c               | 2 +-
+ drivers/perf/qcom_l3_pmu.c               | 2 +-
+ drivers/perf/xgene_pmu.c                 | 2 +-
+ drivers/soc/fsl/qbman/bman_portal.c      | 2 +-
+ drivers/soc/fsl/qbman/qman_portal.c      | 2 +-
+ 19 files changed, 20 insertions(+), 20 deletions(-)
 
-Hi Yilun,
-
-We previously explored the possibility of plugging into the linux
-clock framework. For this device, setting a desired frequency is
-heavily dependent on a table of values that must be programmed in
-order to achieve the desired clock speeds.
-
-Here is an example table, indexed by frequency. The first element
-in each entry is the frequency in kHz:
-
-https://github.com/OPAE/opae-sdk/blob/master/libraries/plugins/xfpga/usrclk/fpga_user_clk_freq.h
-
-We previously experimented with a kernel-space driver. The
-implementation exported a sysfs node into which the table values for
-the desired frequency would be written in order to set the desired
-frequency. The function of the driver was to execute the logic
-required to program the device. We did not think this implementation
-should be up-streamed.
-
-It isn't practical to upstream the frequency tables as they are
-subject to change for future devices. For example, if the reference
-frequency changed in a future device, a whole new table of values would
-have to be added for the new device. In a recent transition to a new
-device, the range of frequencies was increased which required an
-extension to an existing table.
-
-A previous implementation of the user clock was also implemented in
-user-space. The kernel driver exported each of the registers, but
-all of the logic was implemented in user-space. The kernel portion
-can be viewed here:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/fpga/dfl-afu-main.c#n380
-
-This is our reasoning in choosing to implement this driver in
-user-space. Would you consider a uio based user-space driver to
-be acceptable for in this case?
-
-- Russ
-
-
->
-> Thanks,
-> Yilun
->
->> The DFL feature id table can be found at:
->> https://github.com/OPAE/dfl-feature-id
->>
->> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
->> ---
->>  drivers/uio/uio_dfl.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
->> index 8f39cc8bb034..69e93f3e7faf 100644
->> --- a/drivers/uio/uio_dfl.c
->> +++ b/drivers/uio/uio_dfl.c
->> @@ -46,10 +46,12 @@ static int uio_dfl_probe(struct dfl_device *ddev)
->>  
->>  #define FME_FEATURE_ID_ETH_GROUP	0x10
->>  #define FME_FEATURE_ID_HSSI_SUBSYS	0x15
->> +#define PORT_FEATURE_ID_IOPLL_USRCLK	0x14
->>  
->>  static const struct dfl_device_id uio_dfl_ids[] = {
->>  	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
->>  	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
->> +	{ PORT_ID, PORT_FEATURE_ID_IOPLL_USRCLK },
->>  	{ }
->>  };
->>  MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
->> -- 
->> 2.28.0
->>
+diff --git a/arch/arm/mach-imx/mmdc.c b/arch/arm/mach-imx/mmdc.c
+index af12668d0bf5..a109a7ea8613 100644
+--- a/arch/arm/mach-imx/mmdc.c
++++ b/arch/arm/mach-imx/mmdc.c
+@@ -220,7 +220,7 @@ static int mmdc_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+ 	if (!cpumask_test_and_clear_cpu(cpu, &pmu_mmdc->cpu))
+ 		return 0;
+ 
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 
+diff --git a/arch/arm/mm/cache-l2x0-pmu.c b/arch/arm/mm/cache-l2x0-pmu.c
+index 993fefdc167a..1b0037ef7fa5 100644
+--- a/arch/arm/mm/cache-l2x0-pmu.c
++++ b/arch/arm/mm/cache-l2x0-pmu.c
+@@ -428,7 +428,7 @@ static int l2x0_pmu_offline_cpu(unsigned int cpu)
+ 	if (!cpumask_test_and_clear_cpu(cpu, &pmu_cpu))
+ 		return 0;
+ 
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 
+diff --git a/drivers/dma/idxd/perfmon.c b/drivers/dma/idxd/perfmon.c
+index d73004f47cf4..f3f1ccb55f73 100644
+--- a/drivers/dma/idxd/perfmon.c
++++ b/drivers/dma/idxd/perfmon.c
+@@ -528,7 +528,7 @@ static int perf_event_cpu_offline(unsigned int cpu, struct hlist_node *node)
+ 	if (!cpumask_test_and_clear_cpu(cpu, &perfmon_dsa_cpu_mask))
+ 		return 0;
+ 
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 
+ 	/* migrate events if there is a valid target */
+ 	if (target < nr_cpu_ids)
+diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
+index 587c82be12f7..57804f28357e 100644
+--- a/drivers/fpga/dfl-fme-perf.c
++++ b/drivers/fpga/dfl-fme-perf.c
+@@ -948,7 +948,7 @@ static int fme_perf_offline_cpu(unsigned int cpu, struct hlist_node *node)
+ 	if (cpu != priv->cpu)
+ 		return 0;
+ 
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 
+diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
+index 958b37123bf1..f866f9223492 100644
+--- a/drivers/gpu/drm/i915/i915_pmu.c
++++ b/drivers/gpu/drm/i915/i915_pmu.c
+@@ -1068,7 +1068,7 @@ static int i915_pmu_cpu_offline(unsigned int cpu, struct hlist_node *node)
+ 		return 0;
+ 
+ 	if (cpumask_test_and_clear_cpu(cpu, &i915_pmu_cpumask)) {
+-		target = cpumask_any_but(topology_sibling_cpumask(cpu), cpu);
++		target = cpumask_not_dying_but(topology_sibling_cpumask(cpu), cpu);
+ 
+ 		/* Migrate events if there is a valid target */
+ 		if (target < nr_cpu_ids) {
+diff --git a/drivers/perf/arm-cci.c b/drivers/perf/arm-cci.c
+index 03b1309875ae..481da937fb9d 100644
+--- a/drivers/perf/arm-cci.c
++++ b/drivers/perf/arm-cci.c
+@@ -1447,7 +1447,7 @@ static int cci_pmu_offline_cpu(unsigned int cpu)
+ 	if (!g_cci_pmu || cpu != g_cci_pmu->cpu)
+ 		return 0;
+ 
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 
+diff --git a/drivers/perf/arm-ccn.c b/drivers/perf/arm-ccn.c
+index 728d13d8e98a..573d6906ec9b 100644
+--- a/drivers/perf/arm-ccn.c
++++ b/drivers/perf/arm-ccn.c
+@@ -1205,7 +1205,7 @@ static int arm_ccn_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+ 
+ 	if (cpu != dt->cpu)
+ 		return 0;
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 	perf_pmu_migrate_context(&dt->pmu, cpu, target);
+diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+index 80d8309652a4..1847182a1ed3 100644
+--- a/drivers/perf/arm-cmn.c
++++ b/drivers/perf/arm-cmn.c
+@@ -1787,9 +1787,9 @@ static int arm_cmn_pmu_offline_cpu(unsigned int cpu, struct hlist_node *cpuhp_no
+ 	node = dev_to_node(cmn->dev);
+ 	if (cpumask_and(&mask, cpumask_of_node(node), cpu_online_mask) &&
+ 	    cpumask_andnot(&mask, &mask, cpumask_of(cpu)))
+-		target = cpumask_any(&mask);
++		target = cpumask_not_dying_but(&mask, cpu);
+ 	else
+-		target = cpumask_any_but(cpu_online_mask, cpu);
++		target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target < nr_cpu_ids)
+ 		arm_cmn_migrate(cmn, target);
+ 	return 0;
+diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
+index 280a6ae3e27c..3a0a2bb92e12 100644
+--- a/drivers/perf/arm_dmc620_pmu.c
++++ b/drivers/perf/arm_dmc620_pmu.c
+@@ -611,7 +611,7 @@ static int dmc620_pmu_cpu_teardown(unsigned int cpu,
+ 	if (cpu != irq->cpu)
+ 		return 0;
+ 
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 
+diff --git a/drivers/perf/arm_dsu_pmu.c b/drivers/perf/arm_dsu_pmu.c
+index aa9f4393ff0c..e19ce0406b02 100644
+--- a/drivers/perf/arm_dsu_pmu.c
++++ b/drivers/perf/arm_dsu_pmu.c
+@@ -236,7 +236,7 @@ static int dsu_pmu_get_online_cpu_any_but(struct dsu_pmu *dsu_pmu, int cpu)
+ 
+ 	cpumask_and(&online_supported,
+ 			 &dsu_pmu->associated_cpus, cpu_online_mask);
+-	return cpumask_any_but(&online_supported, cpu);
++	return cpumask_not_dying_but(&online_supported, cpu);
+ }
+ 
+ static inline bool dsu_pmu_counter_valid(struct dsu_pmu *dsu_pmu, u32 idx)
+diff --git a/drivers/perf/arm_smmuv3_pmu.c b/drivers/perf/arm_smmuv3_pmu.c
+index 00d4c45a8017..827315d31056 100644
+--- a/drivers/perf/arm_smmuv3_pmu.c
++++ b/drivers/perf/arm_smmuv3_pmu.c
+@@ -640,7 +640,7 @@ static int smmu_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+ 	if (cpu != smmu_pmu->on_cpu)
+ 		return 0;
+ 
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 
+diff --git a/drivers/perf/fsl_imx8_ddr_perf.c b/drivers/perf/fsl_imx8_ddr_perf.c
+index 8e058e08fe81..4e0276fc1548 100644
+--- a/drivers/perf/fsl_imx8_ddr_perf.c
++++ b/drivers/perf/fsl_imx8_ddr_perf.c
+@@ -664,7 +664,7 @@ static int ddr_perf_offline_cpu(unsigned int cpu, struct hlist_node *node)
+ 	if (cpu != pmu->cpu)
+ 		return 0;
+ 
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 
+diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+index fbc8a93d5eac..8c39da8f4b3c 100644
+--- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
++++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+@@ -518,7 +518,7 @@ int hisi_uncore_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+ 	/* Choose a new CPU to migrate ownership of the PMU to */
+ 	cpumask_and(&pmu_online_cpus, &hisi_pmu->associated_cpus,
+ 		    cpu_online_mask);
+-	target = cpumask_any_but(&pmu_online_cpus, cpu);
++	target = cpumask_not_dying_but(&pmu_online_cpus, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 
+diff --git a/drivers/perf/marvell_cn10k_tad_pmu.c b/drivers/perf/marvell_cn10k_tad_pmu.c
+index 69c3050a4348..268e3288893d 100644
+--- a/drivers/perf/marvell_cn10k_tad_pmu.c
++++ b/drivers/perf/marvell_cn10k_tad_pmu.c
+@@ -387,7 +387,7 @@ static int tad_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+ 	if (cpu != pmu->cpu)
+ 		return 0;
+ 
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 
+diff --git a/drivers/perf/qcom_l2_pmu.c b/drivers/perf/qcom_l2_pmu.c
+index 30234c261b05..8823d0bb6476 100644
+--- a/drivers/perf/qcom_l2_pmu.c
++++ b/drivers/perf/qcom_l2_pmu.c
+@@ -822,7 +822,7 @@ static int l2cache_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+ 	/* Any other CPU for this cluster which is still online */
+ 	cpumask_and(&cluster_online_cpus, &cluster->cluster_cpus,
+ 		    cpu_online_mask);
+-	target = cpumask_any_but(&cluster_online_cpus, cpu);
++	target = cpumask_not_dying_but(&cluster_online_cpus, cpu);
+ 	if (target >= nr_cpu_ids) {
+ 		disable_irq(cluster->irq);
+ 		return 0;
+diff --git a/drivers/perf/qcom_l3_pmu.c b/drivers/perf/qcom_l3_pmu.c
+index 1ff2ff6582bf..ba26b2fa0736 100644
+--- a/drivers/perf/qcom_l3_pmu.c
++++ b/drivers/perf/qcom_l3_pmu.c
+@@ -718,7 +718,7 @@ static int qcom_l3_cache_pmu_offline_cpu(unsigned int cpu, struct hlist_node *no
+ 
+ 	if (!cpumask_test_and_clear_cpu(cpu, &l3pmu->cpumask))
+ 		return 0;
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 	perf_pmu_migrate_context(&l3pmu->pmu, cpu, target);
+diff --git a/drivers/perf/xgene_pmu.c b/drivers/perf/xgene_pmu.c
+index 0c32dffc7ede..069eb0a0d3ba 100644
+--- a/drivers/perf/xgene_pmu.c
++++ b/drivers/perf/xgene_pmu.c
+@@ -1804,7 +1804,7 @@ static int xgene_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+ 
+ 	if (!cpumask_test_and_clear_cpu(cpu, &xgene_pmu->cpu))
+ 		return 0;
+-	target = cpumask_any_but(cpu_online_mask, cpu);
++	target = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	if (target >= nr_cpu_ids)
+ 		return 0;
+ 
+diff --git a/drivers/soc/fsl/qbman/bman_portal.c b/drivers/soc/fsl/qbman/bman_portal.c
+index 4d7b9caee1c4..8ebcf87e7d06 100644
+--- a/drivers/soc/fsl/qbman/bman_portal.c
++++ b/drivers/soc/fsl/qbman/bman_portal.c
+@@ -67,7 +67,7 @@ static int bman_offline_cpu(unsigned int cpu)
+ 		return 0;
+ 
+ 	/* use any other online CPU */
+-	cpu = cpumask_any_but(cpu_online_mask, cpu);
++	cpu = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 	irq_set_affinity(pcfg->irq, cpumask_of(cpu));
+ 	return 0;
+ }
+diff --git a/drivers/soc/fsl/qbman/qman_portal.c b/drivers/soc/fsl/qbman/qman_portal.c
+index e23b60618c1a..3807a8285ced 100644
+--- a/drivers/soc/fsl/qbman/qman_portal.c
++++ b/drivers/soc/fsl/qbman/qman_portal.c
+@@ -148,7 +148,7 @@ static int qman_offline_cpu(unsigned int cpu)
+ 		pcfg = qman_get_qm_portal_config(p);
+ 		if (pcfg) {
+ 			/* select any other online CPU */
+-			cpu = cpumask_any_but(cpu_online_mask, cpu);
++			cpu = cpumask_not_dying_but(cpu_online_mask, cpu);
+ 			irq_set_affinity(pcfg->irq, cpumask_of(cpu));
+ 			qman_portal_update_sdest(pcfg, cpu);
+ 		}
+-- 
+2.31.1
 
