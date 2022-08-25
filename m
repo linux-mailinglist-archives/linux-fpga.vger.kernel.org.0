@@ -2,82 +2,114 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA735A10BE
-	for <lists+linux-fpga@lfdr.de>; Thu, 25 Aug 2022 14:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DC05A1326
+	for <lists+linux-fpga@lfdr.de>; Thu, 25 Aug 2022 16:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241901AbiHYMiv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 25 Aug 2022 08:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S237778AbiHYOOo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 25 Aug 2022 10:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239689AbiHYMiu (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 25 Aug 2022 08:38:50 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B193B3B1E;
-        Thu, 25 Aug 2022 05:38:48 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1661431090txmhb4ok
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 Aug 2022 20:38:09 +0800 (CST)
-X-QQ-SSF: 01000000002000C0E000B00A0000000
-X-QQ-FEAT: ILHsT53NKPjHCKbWdw2Ev9EVOZkckTajdXNKIoVDHKFC8mkV2NCBS1YiLQE+J
-        duLxQUm3VXowAki1j6+kLJwB59UuHwi9IrgCGT4GC5I4rtriw4sHTNwIhOECzQp3bxTTa7v
-        9r2Om2WTtaRS63+jx3ZZb7rqaXP/05h7yFIKyBSnNXjwNNRwTfRX7d4kvFH6Zsz0SoCxouE
-        ognTIKSH9/EQpvXmr/4gPJzd1MC15rmnvh7YXg7CsQWGLd2A5qA36B2jXr7j0TytLxQDyrg
-        zEcPOiHNQifR55PfSQyolCaqKR30bn8ZAVzeljAq1bdy7mL93HJz2D/mOk+w3xFRB+imfLM
-        1M9JahCQDu8an/UvQThVPxCy3OqS6QyRZkvB/AnPG2h63ujbkUWw7F8WHlhIUQER9t7ARAa
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] drivers/fpga: fix repeated words in comments
-Date:   Thu, 25 Aug 2022 20:38:03 +0800
-Message-Id: <20220825123803.13979-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S241609AbiHYOO2 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 25 Aug 2022 10:14:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC905AA4EF
+        for <linux-fpga@vger.kernel.org>; Thu, 25 Aug 2022 07:14:17 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jzi@pengutronix.de>)
+        id 1oRDce-0002wH-1V; Thu, 25 Aug 2022 16:14:16 +0200
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <jzi@pengutronix.de>)
+        id 1oRDcd-001umh-0C; Thu, 25 Aug 2022 16:14:15 +0200
+Received: from jzi by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <jzi@pengutronix.de>)
+        id 1oRDcb-005xw1-RL; Thu, 25 Aug 2022 16:14:13 +0200
+From:   Johannes Zink <j.zink@pengutronix.de>
+To:     linux-fpga@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, kernel@pengutronix.de
+Subject: [PATCH 00/16] Add support for Lattice MachXO2 programming via I2C
+Date:   Thu, 25 Aug 2022 16:13:27 +0200
+Message-Id: <20220825141343.1375690-1-j.zink@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *      [43.155.67.158 listed in zen.spamhaus.org]
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: jzi@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
- Delete the redundant word 'if'.
+Lattice MachXO2 FPGAs have internal configuration flash which can be
+reprogrammed over different interfaces. The former driver implementation
+supported programming via SPI, this patch series adds programming via
+I2C.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/fpga/stratix10-soc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The first 4 patches convert the MachXO2 Slave binding from textual
+format to YAML and add additional features like different flash areas to
+be erased upon a programming cycle, a GPIO which can be used to
+explicitely initialize the programming sequence, and finally I2C as
+additional programming interface.
 
-diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-index 357cea58ec98..e4f2e83a615b 100644
---- a/drivers/fpga/stratix10-soc.c
-+++ b/drivers/fpga/stratix10-soc.c
-@@ -285,7 +285,7 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
- 
- 	/*
- 	 * Loop waiting for buffers to be returned.  When a buffer is returned,
--	 * reuse it to send more data or free if if all data has been sent.
-+	 * reuse it to send more data or free if all data has been sent.
- 	 */
- 	while (count > 0 || s10_free_buffer_count(mgr) != NUM_SVC_BUFS) {
- 		reinit_completion(&priv->status_return_completion);
+The following 10 patches clean up and refactor the previous machxo2-spi
+driver code, extract functionalities common to both spi and i2c
+programming interfaces as a preparation, add additional flash areas to
+be erased and signalling for start of the programming sequence via gpio.
+
+Since the original driver did not yield enough time to erase machxo2
+variants with large flash memory, a variation of erase timeout handling
+is added with another patch, introducing a more datasheet conformant way
+of dealing with large flash sizes due to larger LUT counts.
+
+The final patch adds the I2C bus as an additional interface for
+programming.
+
+Johannes Zink (15):
+  dt-bindings: fpga: convert Lattice MachXO2 Slave binding to YAML
+  dt-bindings: fpga: machxo2-slave: add erasure properties
+  dt-bindings: fpga: machxo2-slave: add pin for program sequence init
+  dt-bindings: fpga: machxo2-slave: add lattice,machxo2-slave-i2c
+    compatible
+  fpga: machxo2-spi: remove #ifdef DEBUG
+  fpga: machxo2-spi: factor out status check for readability
+  fpga: machxo2-spi: fix big-endianness incompatibility
+  fpga: machxo2-spi: simplify with spi_sync_transfer()
+  fpga: machxo2-spi: simplify spi write commands
+  fpga: machxo2-spi: prepare extraction of common code
+  fpga: machxo2: move non-spi-related functionality to common code
+  fpga: machxo2: improve status register dump
+  fpga: machxo2: add optional additional flash areas to be erased
+  fpga: machxo2: add program initialization signalling via gpio
+  fpga: machxo2: extend erase timeout for machxo2 FPGA
+
+Peter Jensen (1):
+  fpga: machxo2: add configuration over i2c
+
+ .../bindings/fpga/lattice,machxo2-slave.yaml  |  80 ++++
+ .../bindings/fpga/lattice-machxo2-spi.txt     |  29 --
+ drivers/fpga/Kconfig                          |  14 +
+ drivers/fpga/Makefile                         |   2 +
+ drivers/fpga/machxo2-common.c                 | 392 ++++++++++++++++++
+ drivers/fpga/machxo2-common.h                 |  43 ++
+ drivers/fpga/machxo2-i2c.c                    | 137 ++++++
+ drivers/fpga/machxo2-spi.c                    | 366 ++--------------
+ 8 files changed, 712 insertions(+), 351 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/fpga/lattice,machxo2-slave.yaml
+ delete mode 100644 Documentation/devicetree/bindings/fpga/lattice-machxo2-spi.txt
+ create mode 100644 drivers/fpga/machxo2-common.c
+ create mode 100644 drivers/fpga/machxo2-common.h
+ create mode 100644 drivers/fpga/machxo2-i2c.c
+
 -- 
-2.36.1
+2.30.2
 
