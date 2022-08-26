@@ -2,98 +2,97 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5850D5A192C
-	for <lists+linux-fpga@lfdr.de>; Thu, 25 Aug 2022 20:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735485A20EE
+	for <lists+linux-fpga@lfdr.de>; Fri, 26 Aug 2022 08:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243538AbiHYSvy (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 25 Aug 2022 14:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S236285AbiHZGdK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 26 Aug 2022 02:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243539AbiHYSvg (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 25 Aug 2022 14:51:36 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D41BD17C;
-        Thu, 25 Aug 2022 11:51:28 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-11c4d7d4683so26049965fac.8;
-        Thu, 25 Aug 2022 11:51:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=EBafd0kuWiSBNItH915K6mPKFUjNeQe/adJ0bJpSIs4=;
-        b=7vPCeKOFBqvAmXdOOTYkzRsoXLZxfcbL9PyNsj+mhF5o/YJfdUd2CbvJg/uHi3mG5D
-         zrzbme+pOkcQ6bzf547WdWv2yHyKzKYVD72imXlFyN82tX68bnfJFU3V62qEwpB6JlRy
-         YDNR+m9V9Omn9poo539zxtHmeIkbo+DrvtBePujSmGIMi4oXJEZXfUuRYm1TBSZFrug8
-         Wm2b/nPbS0f+he53hi1RaOuoc0YaL8mJdvCbuOx+0nCfppKhsxYtYJiL3PNIf3t07B4/
-         B2byiasoymwYxgqoEnTlQSul9FMPEdF816RDiZ8qyqZlVmfUh1mg/UNcP7r6u9Wi1vO1
-         JGOA==
-X-Gm-Message-State: ACgBeo2OJdHCQe7B8+8P3tKHCabpbhoRR3VyqFwLzAqOTBLPchsviTVw
-        Isz12vt0+j3fb+caGU0svA==
-X-Google-Smtp-Source: AA6agR5R2gPKUY6/Z6J+Oled6GhByMV7AQAwU8460e49jcL2j2hGAoM5AdWskXfqWCD2RHavojwzuQ==
-X-Received: by 2002:a05:6870:249c:b0:10c:7f4d:71ab with SMTP id s28-20020a056870249c00b0010c7f4d71abmr193954oaq.15.1661453486986;
-        Thu, 25 Aug 2022 11:51:26 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i22-20020a056870891600b0011e37fb5493sm416060oao.30.2022.08.25.11.51.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 11:51:26 -0700 (PDT)
-Received: (nullmailer pid 1486942 invoked by uid 1000);
-        Thu, 25 Aug 2022 18:51:19 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Johannes Zink <j.zink@pengutronix.de>
-Cc:     linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        Moritz Fischer <mdf@kernel.org>, kernel@pengutronix.de,
-        Wu Hao <hao.wu@intel.com>, Rob Herring <robh+dt@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>
-In-Reply-To: <20220825141343.1375690-4-j.zink@pengutronix.de>
-References: <20220825141343.1375690-1-j.zink@pengutronix.de> <20220825141343.1375690-4-j.zink@pengutronix.de>
-Subject: Re: [PATCH 03/16] dt-bindings: fpga: machxo2-slave: add pin for program sequence init
-Date:   Thu, 25 Aug 2022 13:51:19 -0500
-Message-Id: <1661453479.997595.1486941.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S245025AbiHZGdI (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 26 Aug 2022 02:33:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A81C1C91B
+        for <linux-fpga@vger.kernel.org>; Thu, 25 Aug 2022 23:33:08 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=irc.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <j.zink@pengutronix.de>)
+        id 1oRStt-0007pU-87; Fri, 26 Aug 2022 08:33:05 +0200
+Message-ID: <b65b274e797fef70ee5824953d4bcda2c32d3624.camel@pengutronix.de>
+Subject: Re: [PATCH 00/16] Add support for Lattice MachXO2 programming via
+ I2C
+From:   Johannes Zink <j.zink@pengutronix.de>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     devicetree@vger.kernel.org, linux-fpga@vger.kernel.org,
+        robh+dt@kernel.org, mdf@kernel.org, kernel@pengutronix.de,
+        yilun.xu@intel.com, hao.wu@intel.com
+Date:   Fri, 26 Aug 2022 08:32:49 +0200
+In-Reply-To: <20220825152514.9926-1-i.bornyakov@metrotek.ru>
+References: <20220825152514.9926-1-i.bornyakov@metrotek.ru>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: j.zink@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, 25 Aug 2022 16:13:30 +0200, Johannes Zink wrote:
-> This commit adds a pin which initiates the FPGA programming sequence
-> once pulsed low.
+On Thu, 2022-08-25 at 18:25 +0300, Ivan Bornyakov wrote:
+> Hi, Johannes!
+
+Hi Ivan,
 > 
-> Signed-off-by: Johannes Zink <j.zink@pengutronix.de>
-> ---
->  .../devicetree/bindings/fpga/lattice,machxo2-slave.yaml    | 7 +++++++
->  1 file changed, 7 insertions(+)
+> I just came across your patches. Surprisingly, our work interferes.
+> 
+> I recently posted patch-series for configuring ECP5 and was asked to
+> make
+> generalized sysCONFIG driver with support for both ECP5 and MachXO2,
+> which
+> I did. 
+
+That looks very interesting indeed.
+
+> Sadly I don't have hardware with MachXO2, but you clearly do :)
+> 
+> Please, take a look at
+> 
+>  
+> https://lore.kernel.org/linux-fpga/20220825112433.14583-1-i.bornyakov@metrotek.ru/
+> 
+> and please help test MachXO2 variant. When we pull this off, you may
+> add I2C
+> interface on top.
+> 
+> 
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+my hardware has only I2C connected to the MachXO2 (hence the patch
+series...), so I cannot test your patches directly. 
 
-yamllint warnings/errors:
+Since adding I2C requires some quirks with respect to the programming
+commands (some are differ to the SPI ones, ...) it will take me some
+time to add my patches on top of yours in order to test, but after
+having had a short glance at your patch series, I think it should be
+feasible.
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/fpga/lattice,machxo2-slave.example.dts:28.51-52 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:384: Documentation/devicetree/bindings/fpga/lattice,machxo2-slave.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1420: dt_binding_check] Error 2
+Though, I think you should allow the program-gpios, init-gpios and
+done-gpios for machxo2 and have them as optional, at least for machxo2.
 
-doc reference errors (make refcheckdocs):
+Best regards
+Johannes
 
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+-- 
+Pengutronix e.K.                | Johannes Zink                  |
+Steuerwalder Str. 21            | https://www.pengutronix.de/    |
+31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
+Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
 
