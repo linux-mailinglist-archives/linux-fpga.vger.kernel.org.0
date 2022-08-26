@@ -2,110 +2,113 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895835A2273
-	for <lists+linux-fpga@lfdr.de>; Fri, 26 Aug 2022 09:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6995A22C8
+	for <lists+linux-fpga@lfdr.de>; Fri, 26 Aug 2022 10:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245624AbiHZH4U (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 26 Aug 2022 03:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S245279AbiHZIQ5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 26 Aug 2022 04:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245678AbiHZH4U (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 26 Aug 2022 03:56:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837359F1B8
-        for <linux-fpga@vger.kernel.org>; Fri, 26 Aug 2022 00:56:19 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=irc.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <j.zink@pengutronix.de>)
-        id 1oRUCP-0002Dv-QL; Fri, 26 Aug 2022 09:56:17 +0200
-Message-ID: <6f685c47b8564399606d7cf6110713eb4b114784.camel@pengutronix.de>
-Subject: Re: [PATCH 03/16] dt-bindings: fpga: machxo2-slave: add pin for
- program sequence init
-From:   Johannes Zink <j.zink@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        Moritz Fischer <mdf@kernel.org>, kernel@pengutronix.de,
-        Wu Hao <hao.wu@intel.com>, Rob Herring <robh+dt@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>
-Date:   Fri, 26 Aug 2022 09:56:01 +0200
-In-Reply-To: <1661453479.997595.1486941.nullmailer@robh.at.kernel.org>
-References: <20220825141343.1375690-1-j.zink@pengutronix.de>
-         <20220825141343.1375690-4-j.zink@pengutronix.de>
-         <1661453479.997595.1486941.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S1343601AbiHZIQs (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 26 Aug 2022 04:16:48 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AED0D4758;
+        Fri, 26 Aug 2022 01:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=GgM9jd2gfjdVIiQkM15Sjc/NpQmQKqWnNl2+Tz982U0=;
+        b=YTHGiGWauR9+kRWkYLgKVFYGPbBU968unR1+7JEcqiNKxy2Jw4CkFLn6uanf5sq+8wI0nzNOh2ZNS
+         81MpJXS47bHa3EJ7PlPB0ljhGsXLsQWfBo//7ouDtyodpZoXJFN7Zwd12ZHLUW1G1cSXv2WCilm71C
+         toBLJrgoSkmJribf5kmUojgndRoTlMLgjrePvxYBwBYo5vPDhlUrvuBIrTcJymWGpfQi2q8VfmAwAc
+         e/WtmHnqWDkwzhODJZF4j4DQ3HyDzTxFrCQZ/IbWBeN4GAYQDK+tDgwizOcen2ZWJc+EBWVJ4/3lew
+         UKl9dcWy2A1o/T9iyp0egQPshU5nc0Q==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000017,0.009778)], BW: [Enabled, t: (0.000017,0.000001)], RTDA: [Enabled, t: (0.084197), Hit: No, Details: v2.41.0; Id: 15.52katr.1gbcjiluu.1gj; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Fri, 26 Aug 2022 11:16:28 +0300
+Date:   Fri, 26 Aug 2022 11:15:30 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Johannes Zink <j.zink@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-fpga@vger.kernel.org,
+        robh+dt@kernel.org, mdf@kernel.org, kernel@pengutronix.de,
+        yilun.xu@intel.com, hao.wu@intel.com
+Subject: Re: [PATCH 00/16] Add support for Lattice MachXO2 programming via I2C
+Message-ID: <20220826081530.qd4or3fo275m7tyj@h-e2.ddg>
+References: <20220825152514.9926-1-i.bornyakov@metrotek.ru>
+ <b65b274e797fef70ee5824953d4bcda2c32d3624.camel@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: j.zink@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b65b274e797fef70ee5824953d4bcda2c32d3624.camel@pengutronix.de>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, 2022-08-25 at 13:51 -0500, Rob Herring wrote:
-> On Thu, 25 Aug 2022 16:13:30 +0200, Johannes Zink wrote:
-> > This commit adds a pin which initiates the FPGA programming
-> > sequence
-> > once pulsed low.
+On Fri, Aug 26, 2022 at 08:32:49AM +0200, Johannes Zink wrote:
+> On Thu, 2022-08-25 at 18:25 +0300, Ivan Bornyakov wrote:
+> > Hi, Johannes!
+> 
+> Hi Ivan,
 > > 
-> > Signed-off-by: Johannes Zink <j.zink@pengutronix.de>
-> > ---
-> >  .../devicetree/bindings/fpga/lattice,machxo2-slave.yaml    | 7
-> > +++++++
-> >  1 file changed, 7 insertions(+)
+> > I just came across your patches. Surprisingly, our work interferes.
+> > 
+> > I recently posted patch-series for configuring ECP5 and was asked to
+> > make
+> > generalized sysCONFIG driver with support for both ECP5 and MachXO2,
+> > which
+> > I did.�
+> 
+> That looks very interesting indeed.
+> 
+> > Sadly I don't have hardware with MachXO2, but you clearly do :)
+> > 
+> > Please, take a look at
+> > 
+> >  
+> > https://lore.kernel.org/linux-fpga/20220825112433.14583-1-i.bornyakov@metrotek.ru/
+> > 
+> > and please help test MachXO2 variant. When we pull this off, you may
+> > add I2C
+> > interface on top.
+> > 
+> > 
 > > 
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m
-> dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Error: Documentation/devicetree/bindings/fpga/lattice,machxo2-
-> slave.example.dts:28.51-52 syntax error
-> FATAL ERROR: Unable to parse input tree
-> make[1]: *** [scripts/Makefile.lib:384:
-> Documentation/devicetree/bindings/fpga/lattice,machxo2-
-> slave.example.dtb] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1420: dt_binding_check] Error 2
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/patch/
-> 
-> This check can fail if there are any dependencies. The base for a
-> patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up
-> to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
-> 
-Hi, 
+> my hardware has only I2C connected to the MachXO2 (hence the patch
+> series...), so I cannot test your patches directly.
 
-I was able to reproduce the error and will fix it in v2. 
+That's unfortunate, anyway please join the review so your changes would
+be easier to apply on top.
 
-Thanks and best regards
-Johannes
-
--- 
-Pengutronix e.K.                | Johannes Zink                  |
-Steuerwalder Str. 21            | https://www.pengutronix.de/    |
-31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
-Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
+> 
+> Since adding I2C requires some quirks with respect to the programming
+> commands (some are differ to the SPI ones, ...) it will take me some
+> time to add my patches on top of yours in order to test, but after
+> having had a short glance at your patch series, I think it should be
+> feasible.
+> 
+> Though, I think you should allow the program-gpios, init-gpios and
+> done-gpios for machxo2 and have them as optional, at least for machxo2.
+> 
+> Best regards
+> Johannes
+> 
+> -- 
+> Pengutronix e.K.                | Johannes Zink                  |
+> Steuerwalder Str. 21            | https://www.pengutronix.de/    |
+> 31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
+> Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
+> 
 
