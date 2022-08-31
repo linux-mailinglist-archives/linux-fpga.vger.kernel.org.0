@@ -2,254 +2,119 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3EC5A82B3
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Aug 2022 18:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA325A87BA
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Aug 2022 22:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiHaQHg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 31 Aug 2022 12:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
+        id S229691AbiHaUtJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 31 Aug 2022 16:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiHaQHf (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 31 Aug 2022 12:07:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B59143E6A
-        for <linux-fpga@vger.kernel.org>; Wed, 31 Aug 2022 09:07:34 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=irc.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <j.zink@pengutronix.de>)
-        id 1oTQFV-00054L-2N; Wed, 31 Aug 2022 18:07:29 +0200
-Message-ID: <37ca25e23d9f7678c14074546ed3ed5d7bf6104e.camel@pengutronix.de>
-Subject: Re: [PATCH 16/16] fpga: machxo2: add configuration over i2c
-From:   Johannes Zink <j.zink@pengutronix.de>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     devicetree@vger.kernel.org, linux-fpga@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Moritz Fischer <mdf@kernel.org>, kernel@pengutronix.de,
-        Wu Hao <hao.wu@intel.com>
-Date:   Wed, 31 Aug 2022 18:07:11 +0200
-In-Reply-To: <YwzRBmXMV4o8aGO4@yilunxu-OptiPlex-7050>
-References: <20220825141343.1375690-1-j.zink@pengutronix.de>
-         <20220825141343.1375690-17-j.zink@pengutronix.de>
-         <YwyLOSKy6kUFsFOB@yilunxu-OptiPlex-7050>
-         <2800bc77abb68c721feb5569608684414ae3f6be.camel@pengutronix.de>
-         <YwzRBmXMV4o8aGO4@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S230143AbiHaUtI (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 31 Aug 2022 16:49:08 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A75F240B;
+        Wed, 31 Aug 2022 13:49:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661978946; x=1693514946;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HmiW7PexacLNr8e6ySi2jlIwoco6aRi8m2ckyoKLdh0=;
+  b=jj/SBq8rAq4B0t9dDR2m6Z/0t7VuA7LQoQQ4nrJhvTbXXLOn5vyiJhUp
+   63Rc+lSNuUXzro9aJ6RFQoth66YLHoejtRiKz7vGEfOSzCN8j6mQKcuhO
+   pNsTvReiC5XpGF2ONInAxhHQpzY4yNV/iyJUUmykQ4QYspLgc3FAZ3f5X
+   dcrkhR4UNnC/3xJGbm56411KK7fpLBYn0j4ytvQIGWJSscSO1nbD8Ho94
+   /4trC05GUJJf3Eozev09JPA1oPtRFQvwQrkOBiOuO2Gq7E7UsJ7N2R2EJ
+   XwNhI7neg/W4Obiw4r4ntP2t7ejN4vhWzzoofjVLBLQ0MLjNg815qzeYK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="278558549"
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="278558549"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 13:49:04 -0700
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="589176109"
+Received: from scc823097.zsc7.intel.com ([10.148.153.229])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 13:49:04 -0700
+From:   Peter Colberg <peter.colberg@intel.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        marpagan@redhat.com, lgoncalv@redhat.com,
+        Peter Colberg <peter.colberg@intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>
+Subject: [PATCH v3] uio: dfl: add IOPLL user-clock feature id
+Date:   Wed, 31 Aug 2022 16:48:51 -0400
+Message-Id: <20220831204851.4683-1-peter.colberg@intel.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20220826150116.16014-1-peter.colberg@intel.com>
+References: <20220826150116.16014-1-peter.colberg@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: j.zink@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi Yilun,
+Add a Device Feature List (DFL) feature id [1] for the configurable
+IOPLL user clock source, which can be used to configure the clock
+speeds that are used for RTL logic that is programmed into the
+Partial Reconfiguration (PR) region of an FPGA.
 
-On Mon, 2022-08-29 at 22:45 +0800, Xu Yilun wrote:
-> On 2022-08-29 at 15:21:19 +0200, Johannes Zink wrote:
-> > Hi Yilun, 
-> > 
-> > On Mon, 2022-08-29 at 17:47 +0800, Xu Yilun wrote:
-> > > On 2022-08-25 at 16:13:43 +0200, Johannes Zink wrote:
-> > > > From: Peter Jensen <pdj@bang-olufsen.dk>
-> > > > 
-> > > > The configuration flash of the machxo2 fpga can also be erased
-> > > > and
-> > > > written over i2c instead of spi. Add this functionality to the
-> > > > refactored common driver. Since some commands are shorter over
-> > > > I2C
-> > > > than
-> > > > they are over SPI some quirks are added to the common driver in
-> > > > order to
-> > > > account for that.
-> > > > 
-> > > > Signed-off-by: Peter Jensen <pdj@bang-olufsen.dk>
-> > > > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> > > > Signed-off-by: Johannes Zink <j.zink@pengutronix.de>
-> > > > ---
-[snip]
-> > > > 
-> > 
-> > > 
-> > > > +
-> > > > +static int machxo2_i2c_write(struct machxo2_common_priv
-> > > > *common,
-> > > > +                            struct machxo2_cmd *cmds, size_t
-> > > > cmd_count)
-> > > > +{
-> > > > +       struct machxo2_i2c_priv *i2c_priv =
-> > > > to_machxo2_i2c_priv(common);
-> > > > +       struct i2c_client *client = i2c_priv->client;
-> > > > +       size_t i;
-> > > > +       int ret;
-> > > > +
-> > > > +       for (i = 0; i < cmd_count; i++) {
-> > > > +               struct i2c_msg msg[] = {
-> > > > +                       {
-> > > > +                               .addr = client->addr,
-> > > > +                               .buf = cmds[i].cmd,
-> > > > +                               .len = cmds[i].cmd_len,
-> > > > +                       },
-> > > > +               };
-> > > > +
-> > > > +               ret = i2c_transfer(client->adapter, msg,
-> > > > ARRAY_SIZE(msg));
-> > > > +               if (ret < 0)
-> > > > +                       return ret;
-> > > > +               if (ret != ARRAY_SIZE(msg))
-> > > > +                       return -EIO;
-> > > > +               if (cmds[i].delay_us)
-> > > > +                       usleep_range(cmds[i].delay_us,
-> > > > cmds[i].delay_us +
-> > > > +                                    cmds[i].delay_us / 4);
-> > > > +               if (i < cmd_count - 1) /* on any iteration
-> > > > except
-> > > > for the last one... */
-> > > > +                       ret =
-> > > > machxo2_wait_until_not_busy(common);
-> > > 
-> > > Seems no need to implement the loop and wait in transportation
-> > > layer,
-> > > they are common. A callback like write(bus, txbuf, n_tx) is
-> > > better?
-> > > 
-> > > Thanks,
-> > > Yilun
-> > 
-> > I have chosen this implementation mostly due to the fact that I
-> > don't
-> > have a SPI machxo2 device to test against, so I am intentionally
-> > keeping changes to a minimum. 
-> > 
-> > Moving the wait between single commands into the transport layer is
-> > not
-> > functionally equivalent, e.g. the ISC_ENABLE - ISC_ERASE command
-> > sequence in the machxo2_write_init function would require two
-> > separate
-> > messages with a wait time between them, which would deassert the CS
-> > line between sending the messages via SPI if not sent as a sequence
-> > of
-> > SPI transfers. For some of the commands, the fpga requires a delay
-> > between the different commands, which was implemented by setting
-> > the
-> > delay property of the spi transfer objects in the original driver.
-> 
-> Not sure if it is really a problem, but I remember SPI has various
-> APIs
-> to deal with different requirements.
+The IOPLL user-space driver [2] contains frequency tables [3]
+with the specific user clock frequencies for an implementation.
 
-I assume this could probably be implemented by clearing the cs_change
-bit in the SPI transfer, though just sending multiple transfers in
-sequence with the appropriate timing appears a bit more elegant to me,
-since it doesn't reimplement the behaviour for spi, it simply extends
-the i2c part for what is not supported natively in the i2c api. Either
-way, some sort of waiting has to be implemented (please see my comment
-below).
+For each desired frequency, the table values are produced by calling
+the quartus tool, the same tool that generates the IOPLL RTL logic.
+The quartus tool allows the RTL designer to select different options
+which can affect the table values. The table-driven, user-space
+driver allows for supporting future, modified implementations and
+provides users the ability to modify the IOPLL implementation.
 
-Also, please bear in mind that I do not have SPI connected on my board,
-which is why I opted to stay as close as possible to the original
-implementation and only refactor the spi transfers with functionally
-equivalent code in order to keep the risk of breaking things as low as
-possible.
+[1] https://github.com/OPAE/dfl-feature-id
+[2] https://github.com/OPAE/opae-sdk/blob/a494f54a9f0356d0425edbff228f0254a4c70303/libraries/plugins/xfpga/usrclk/fpga_user_clk.c
+[3] https://github.com/OPAE/opae-sdk/blob/a494f54a9f0356d0425edbff228f0254a4c70303/libraries/plugins/xfpga/usrclk/fpga_user_clk_freq.h
 
-> 
-> > 
-> > This implementation tries to mimic the timing behaviour of the SPI
-> > transfer delay property for the I2C implementation. 
-> 
-> Could you firstly try on that until we have real problem? Ideally
-> this
-> is a cleaner implementation, is it?
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+---
+v3:
+	Reorder Signed-off-by: such that submitter is last
+	Add Acked-by: Xu Yilun
 
-The delays themselves are required by the device family datasheet and
-by the sysConfig protocol definition, as part of the command sequence
-timing. 
+v2:
+	Describe IOPLL user-space driver in commit message
+	Add Signed-off-by: Russ Weight
+---
+ drivers/uio/uio_dfl.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Since I have no SPI connected on my hardware, I am only able to test
-the I2C implementation, which works well with the timings taken from
-the original spi driver (except for the erase timeout, which needs to
-be extended as seen in Patch 15 of this series). Extending the delay
-times such that usleep_range can be used has proven to be acceptable,
-at least for the i2c implementation. 
-
-Best regards
-Johannes
-
-> 
-> Thanks,
-> Yilun
-> 
-> > 
-> > Best regards
-> > Johannes
-> > 
-> > > 
-> > > > +       }
-> > > > +
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static int machxo2_i2c_probe(struct i2c_client *client,
-> > > > +                       const struct i2c_device_id *id)
-> > > > +{
-> > > > +       struct device *dev = &client->dev;
-> > > > +       struct machxo2_i2c_priv *priv;
-> > > > +
-> > > > +       priv = devm_kzalloc(dev, sizeof(struct
-> > > > machxo2_i2c_priv),
-> > > > GFP_KERNEL);
-> > > > +       if (!priv)
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       priv->client = client;
-> > > > +       priv->common.get_status = machxo2_i2c_get_status;
-> > > > +       priv->common.write_commands = machxo2_i2c_write;
-> > > > +
-> > > > +       /* Commands are usually 4b, but these aren't for i2c */
-> > > > +       priv->common.enable_3b = true;
-> > > > +       priv->common.refresh_3b = true;
-> > > > +
-> > > > +       return machxo2_common_init(&priv->common, dev);
-> > > > +}
-> > > > +
-> > > > +static const struct of_device_id of_match[] = {
-> > > > +       { .compatible = "lattice,machxo2-slave-i2c", },
-> > > > +       { },
-> > > > +};
-> > > > +MODULE_DEVICE_TABLE(of, of_match);
-> > > > +
-> > > > +static const struct i2c_device_id lattice_ids[] = {
-> > > > +       { "machxo2-slave-i2c", 0 },
-> > > > +       { },
-> > > > +};
-> > > > +MODULE_DEVICE_TABLE(i2c, lattice_ids);
-> > > > +
-> > > > +static struct i2c_driver machxo2_i2c_driver = {
-> > > > +       .driver = {
-> > > > +               .name = "machxo2-slave-i2c",
-> > > > +               .of_match_table = of_match_ptr(of_match),
-> > > > +       },
-> > > > +       .probe = machxo2_i2c_probe,
-> > > > +       .id_table = lattice_ids,
-> > > > +};
-> > > > +
-> > > > +module_i2c_driver(machxo2_i2c_driver);
-> > > > +
-> > > > +MODULE_AUTHOR("Peter Jensen <pdj@bang-olufsen.dk>");
-> > > > +MODULE_DESCRIPTION("Load Lattice FPGA firmware over I2C");
-> > > > +MODULE_LICENSE("GPL");
-> > > > -- 
-> > > > 2.30.2
+diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
+index 8f39cc8bb034..69e93f3e7faf 100644
+--- a/drivers/uio/uio_dfl.c
++++ b/drivers/uio/uio_dfl.c
+@@ -46,10 +46,12 @@ static int uio_dfl_probe(struct dfl_device *ddev)
+ 
+ #define FME_FEATURE_ID_ETH_GROUP	0x10
+ #define FME_FEATURE_ID_HSSI_SUBSYS	0x15
++#define PORT_FEATURE_ID_IOPLL_USRCLK	0x14
+ 
+ static const struct dfl_device_id uio_dfl_ids[] = {
+ 	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+ 	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
++	{ PORT_ID, PORT_FEATURE_ID_IOPLL_USRCLK },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
 -- 
-Pengutronix e.K.                | Johannes Zink                  |
-Steuerwalder Str. 21            | https://www.pengutronix.de/    |
-31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
-Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
+2.28.0
 
