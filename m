@@ -2,35 +2,35 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7861A5A77AE
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Aug 2022 09:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053D55A782E
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Aug 2022 09:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbiHaHiv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 31 Aug 2022 03:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
+        id S230446AbiHaHwW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 31 Aug 2022 03:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbiHaHiv (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 31 Aug 2022 03:38:51 -0400
+        with ESMTP id S230493AbiHaHwG (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 31 Aug 2022 03:52:06 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D11BFC78
-        for <linux-fpga@vger.kernel.org>; Wed, 31 Aug 2022 00:38:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CEAC5783
+        for <linux-fpga@vger.kernel.org>; Wed, 31 Aug 2022 00:51:23 -0700 (PDT)
 Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=irc.pengutronix.de)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <j.zink@pengutronix.de>)
-        id 1oTIJD-0005uX-76; Wed, 31 Aug 2022 09:38:47 +0200
-Message-ID: <c8e119bd0f3739ce771bedf417c2d98285319270.camel@pengutronix.de>
-Subject: Re: [PATCH 02/16] dt-bindings: fpga: machxo2-slave: add erasure
- properties
+        id 1oTIVN-000094-Cf; Wed, 31 Aug 2022 09:51:21 +0200
+Message-ID: <6e253f526b51b854e857432dce185595e2540ace.camel@pengutronix.de>
+Subject: Re: [PATCH 03/16] dt-bindings: fpga: machxo2-slave: add pin for
+ program sequence init
 From:   Johannes Zink <j.zink@pengutronix.de>
 To:     Xu Yilun <yilun.xu@intel.com>
 Cc:     linux-fpga@vger.kernel.org
-Date:   Wed, 31 Aug 2022 09:38:31 +0200
-In-Reply-To: <YwzWt8KjyfdyqehI@yilunxu-OptiPlex-7050>
+Date:   Wed, 31 Aug 2022 09:51:06 +0200
+In-Reply-To: <YwzZYM6GU0GiqBiq@yilunxu-OptiPlex-7050>
 References: <20220825141343.1375690-1-j.zink@pengutronix.de>
-         <20220825141343.1375690-3-j.zink@pengutronix.de>
-         <YwxtFjMILAlEF/uh@yilunxu-OptiPlex-7050>
-         <9d5512768acb4d57f339942007402a9ed9483e84.camel@pengutronix.de>
-         <YwzWt8KjyfdyqehI@yilunxu-OptiPlex-7050>
+         <20220825141343.1375690-4-j.zink@pengutronix.de>
+         <YwxukXtb5pJBKlq7@yilunxu-OptiPlex-7050>
+         <a42d72cd71c96ca675f5bb0cf59128c7f1cb04bb.camel@pengutronix.de>
+         <YwzZYM6GU0GiqBiq@yilunxu-OptiPlex-7050>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
@@ -49,92 +49,60 @@ List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 Hi Yilun, 
-
-On Mon, 2022-08-29 at 23:09 +0800, Xu Yilun wrote:
-> On 2022-08-29 at 10:41:42 +0200, Johannes Zink wrote:
-> > On Mon, 2022-08-29 at 15:39 +0800, Xu Yilun wrote:
-> > > On 2022-08-25 at 16:13:29 +0200, Johannes Zink wrote:
-> > > > This patch introduces additional memory areas of the machxo2-
-> > > > slave
-> > > > fpga
-> > > > to be erased.
-> > > > 
-> > > > Signed-off-by: Johannes Zink <j.zink@pengutronix.de>
-> > > > ---
-> > > >  .../bindings/fpga/lattice,machxo2-slave.yaml      | 15
-> > > > +++++++++++++++
-> > > >  1 file changed, 15 insertions(+)
-> > > > 
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/fpga/lattice,machxo2-
-> > > > slave.yaml
-> > > > b/Documentation/devicetree/bindings/fpga/lattice,machxo2-
-> > > > slave.yaml
-> > > > index d05acd6b0fc6..78f0da8f772f 100644
-> > > > --- a/Documentation/devicetree/bindings/fpga/lattice,machxo2-
-> > > > slave.yaml
-> > > > +++ b/Documentation/devicetree/bindings/fpga/lattice,machxo2-
-> > > > slave.yaml
-> > > > @@ -26,6 +26,19 @@ properties:
-> > > >      enum:
-> > > >        - lattice,machxo2-slave-spi
-> > > >  
-> > > > +  lattice,erase-sram:
-> > > > +    type: boolean
-> > > > +    description: SRAM is to be erased during flash erase
-> > > > operation
-> > > > +
-> > > > +  lattice,erase-feature-row:
-> > > > +    type: boolean
-> > > > +    description: Feature row is to be erased during flash
-> > > > erase
-> > > > operation
-> > > > +
-> > > > +  lattice,erase-userflash:
-> > > > +    type: boolean
-> > > > +    description: |
-> > > > +      UFM (user flash memory) is to be erased during flash
-> > > > erase
-> > > > operation
+On Mon, 2022-08-29 at 23:21 +0800, Xu Yilun wrote:
+> On 2022-08-29 at 11:01:16 +0200, Johannes Zink wrote:
+> > On Mon, 2022-08-29 at 15:45 +0800, Xu Yilun wrote:
+> > > On 2022-08-25 at 16:13:30 +0200, Johannes Zink wrote:
+> > > > This commit adds a pin which initiates the FPGA programming
+> > > > sequence
+> > > > once pulsed low.
 > > > 
-> > > In which conditions should we decide to erase each area?
+> > > Why we don't have to use this pin before?
 > > > 
 > > > Thanks,
 > > > Yilun
+> > > 
 > > 
-> > Hi Yilun, 
+> > According to the MachXO2 Programming and Configuration User Guide
+> > (FPGA-TN-02155-4.4) one of the 3 following methods can be used to
+> > enter
+> > the programming mode: 
 > > 
-> > the flash regions to be erased depend on the system design or
-> > usecase.
-> > For example, if non-volatile configuration is stored in the user
-> > flash
-> > memory, you might want to keep it from being erased in an in-field
-> > upgrade, but you might want to clear it at factory bringup.
+> > - asserting a low pulse on the program gpio
+> > - cycling power to the MachXO2
+> > - sending the refresh command using a configuration port
+> > 
+> > In most cases, the refresh command being sent on initialization of
+> > the
+> > driver (as in the orignal driver) will do the job, but since you
+> > can
+> > deactivate the configuration ports, asserting the program gpio is
+> > the
+> > safe way to enter programming mode. Since the original driver did
+> > not
+> > support setting it, I added it as optional to the binding in order
+> > not
+> > to introduce any breakage. 
 > 
-> So these are all about user requirement, not the hardware
-> capabilities.
-> I think you should not put them here. If the user wants a different
-> erase option supported by HW, why the driver prevents it?
+> So do we need to skip the 3rd method if we already have the 2nd?
 > 
 > Thanks,
-> Yilun
+> Yilun 
 
-I think it is rather a decision made by board-integrator, who will also
-write the DT, than a decision made by the user at runtime, because the
-integrator may decide to use the UFM (user flash memory) as a non-
-volatile storage, e.g. for mac addresses to a softcore ethernet mac
-implementation, or may decide to keep the security and readout-
-protection flags in the user row from being erased.
+the datasheet suggests that the methods are not mutually exclusive, so
+doing both will not hurt. Since I want to keep backwards compatibility
+with the existing driver (which only supports the 3rd option: sending
+the refresh command), i'd rather not drop it in order not to introduce
+any breakage. 
 
-On the other hand I do not have a very strong preference to have these
-properties set via the device tree (I also guess that you may have
-different usecases in mind), it simply appeared to me to fit quite well
-when I thought about how this property is used. 
+However, in my application I cannot power-cycle the FPGA (method 2) and
+the configuration port is disabled after in-factory initial programming
+via a security bit in the Feature Row Flash Area, which only leaves me
+with Method 1 (asserting a low pulse on the program_n pin of the FPGA)
+to enter programming mode for flashing another bitstream to the FPGA. 
 
-If you prefer this property to be set by another interface, please
-suggest how to hand these information into the driver, since I am not
-too familiar with the fpga-mgr framework and its interfaces. I can then
-migrate to it for v2.
+This patch adds support for exactly this pin, while for other system
+setups both of the other methods will work just as they did before.
 
 Best regards
 Johannes
@@ -143,17 +111,44 @@ Johannes
 > > 
 > > Best regards
 > > Johannes
-> > > 
+> > 
+> > > > 
+> > > > Signed-off-by: Johannes Zink <j.zink@pengutronix.de>
+> > > > ---
+> > > >  .../devicetree/bindings/fpga/lattice,machxo2-slave.yaml    | 7
+> > > > +++++++
+> > > >  1 file changed, 7 insertions(+)
+> > > > 
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/fpga/lattice,machxo2-
+> > > > slave.yaml
+> > > > b/Documentation/devicetree/bindings/fpga/lattice,machxo2-
+> > > > slave.yaml
+> > > > index 78f0da8f772f..03dc134ec7b8 100644
+> > > > --- a/Documentation/devicetree/bindings/fpga/lattice,machxo2-
+> > > > slave.yaml
+> > > > +++ b/Documentation/devicetree/bindings/fpga/lattice,machxo2-
+> > > > slave.yaml
+> > > > @@ -26,6 +26,12 @@ properties:
+> > > >      enum:
+> > > >        - lattice,machxo2-slave-spi
+> > > >  
+> > > > +  program-gpios:
+> > > > +    maxItems: 1
+> > > > +    description: |
+> > > > +      GPIO Output tied to the FPGA's n_program pin to initiate
+> > > > a
+> > > > +      programming sequence. This pin is active low.
 > > > > +
-> > > >  required:
-> > > >    - compatible
-> > > >    - reg
-> > > > @@ -42,5 +55,7 @@ examples:
-> > > >              compatible = "lattice,machxo2-slave-spi";
-> > > >              spi-max-frequency = <8000000>;
+> > > >    lattice,erase-sram:
+> > > >      type: boolean
+> > > >      description: SRAM is to be erased during flash erase
+> > > > operation
+> > > > @@ -57,5 +63,6 @@ examples:
 > > > >              reg = <0>;
-> > > > +            lattice,erase-sram;
-> > > > +            lattice,erase-feature-row;
+> > > >              lattice,erase-sram;
+> > > >              lattice,erase-feature-row;
+> > > > +            lattice,program-gpios = <&gpio1 2 GPIO_ACTIVE_LOW>
 > > > >          };
 > > > >      };
 > > > > -- 
@@ -161,13 +156,6 @@ Johannes
 > > > > 
 > > > 
 > > 
-> > -- 
-> > Pengutronix e.K.                | Johannes Zink                  |
-> > Steuerwalder Str. 21            | https://www.pengutronix.de/    |
-> > 31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
-> > Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
-> > 
-> 
 
 -- 
 Pengutronix e.K.                | Johannes Zink                  |
