@@ -2,38 +2,38 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0C75AF423
-	for <lists+linux-fpga@lfdr.de>; Tue,  6 Sep 2022 21:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2593D5AF42A
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 Sep 2022 21:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiIFTEW (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 6 Sep 2022 15:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
+        id S229533AbiIFTEb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 6 Sep 2022 15:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiIFTEV (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Sep 2022 15:04:21 -0400
+        with ESMTP id S229721AbiIFTEZ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 6 Sep 2022 15:04:25 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24D88D3CB;
-        Tue,  6 Sep 2022 12:04:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA5E8E0FE;
+        Tue,  6 Sep 2022 12:04:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662491059; x=1694027059;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=noMjuag55LUNaeVDHiaxN2eVuWfjztTAREa6cfbKFAM=;
-  b=k7d5Jtbs15+bIwYtJ4rnGw0s5CfFrT5nrfNKvpHE2Tres7WVewO/mXyu
-   jrBm7I2HrHgWyQVVoEfX8FuVOjWRRL0PvBFQMz2ayvXu58UDiIQipGFMr
-   tf9d1jpNYS9o6Bg5Pv1aoV09Y247NslK27uXqCYNRR/iEVwgqXVzbVvbS
-   FvryX1Y9tC7mfB7C2Ql2i//whXfifTr1vdpVAX3tuUMrM2VrEzzrDi2Dn
-   Q9UyzMkLCat1WsPPlJ/dh+W1Xec1cxf3DXyI+eolkPMTFXaacsSp8Gp2F
-   P9Dmi0121VHr+NlugoJWD+tKT8bL8s+MoCefzpzLXWgMF75+von7VNpnq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="283677333"
+  t=1662491061; x=1694027061;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=C0bQ5Vs1HjO/iAyiITtp564fOc3TDTgpVvPEYdinvec=;
+  b=isyU3R09JKx6AKl5USrU0Xjhtfhn+H5Z2zWi/0pVySA+tDKJAzSGuE0s
+   hsEgRS/fOdNCVhH8AQBZM8KsZccj1j05sWxZfCeKmOSQftpBxFjhqsZtB
+   3K5HZ2bOB23/0an+HTQ5Mqcut3TjsEs1Ub4doKvsnGM931zhVWiaQbX3o
+   MaLooMtpiL7xOFzk+ceM7qO73+5zwgCOthx09OP8C4ccbZbMsBBGyF9aY
+   tQIkXF4ddtP7IyPh48l3DaseVpb8cmlCDgdasHs4f2SFwoJq8rQhZjeHw
+   uEfX4mxuWWyxFnkm4AiV9Z9ZmoXyJ90zAnhSoIBHOZjy1LQdb+ESlGHvQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="283677335"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="283677333"
+   d="scan'208";a="283677335"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 12:04:18 -0700
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="789782539"
+   d="scan'208";a="789782542"
 Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 12:04:18 -0700
 From:   matthew.gerlach@linux.intel.com
@@ -47,11 +47,13 @@ To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         andriy.shevchenko@linux.intel.com,
         niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
         macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Cc:     Matthew Gerlach <matthew.gerlach@intel.com>
-Subject: [PATCH v1 0/5] Enhance definition of DFH and use enhancements for uart driver
-Date:   Tue,  6 Sep 2022 12:04:21 -0700
-Message-Id: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v1 1/5] Documentation: fpga: dfl: Add documentation for DFHv1
+Date:   Tue,  6 Sep 2022 12:04:22 -0700
+Message-Id: <20220906190426.3139760-2-matthew.gerlach@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -64,44 +66,51 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@intel.com>
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-This patchset enhances the definition of the Device Feature Header (DFH) used by
-the Device Feature List (DFL) bus and then uses the new enhancements in a uart
-driver.
+Add documentation describing the extentions provided by Version
+1 of the Device Feature Header (DFHv1).
 
-Patch 1 updates the DFL documentation to provide the motivation behind the 
-enhancements to the definition of the DFH.
+Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+---
+ Documentation/fpga/dfl.rst | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-Patch 2 moves some of the DFH definitions to include/linux/dfl.h so that
-they can be accessed by drivers outside of drivers/fpga.
-
-Patch 3 adds the definitions for DFHv1.
-
-Patch 4 defines and uses a DFHv1 parameter to provide a generic mechanism for
-describing MSIX interrupts used by a particular feature instance.
-
-Patch 5 adds a DFL uart driver that makes use of the new features of DFHv1.
-
-Basheer Ahmed Muddebihal (2):
-  fpga: dfl: Move the DFH definitions
-  fpga: dfl: Add DFHv1 Register Definitions
-
-Matthew Gerlach (3):
-  Documentation: fpga: dfl: Add documentation for DFHv1
-  fpga: dfl: add generic support for MSIX interrupts
-  tty: serial: 8250: add DFL bus driver for Altera 16550.
-
- Documentation/fpga/dfl.rst         |  24 ++++
- drivers/fpga/dfl.c                 |  59 ++++++---
- drivers/fpga/dfl.h                 |  22 +---
- drivers/tty/serial/8250/8250_dfl.c | 188 +++++++++++++++++++++++++++++
- drivers/tty/serial/8250/Kconfig    |   9 ++
- drivers/tty/serial/8250/Makefile   |   1 +
- include/linux/dfl.h                |  80 +++++++++++-
- 7 files changed, 347 insertions(+), 36 deletions(-)
- create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-
+diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+index 15b670926084..31699b89781e 100644
+--- a/Documentation/fpga/dfl.rst
++++ b/Documentation/fpga/dfl.rst
+@@ -561,6 +561,30 @@ new DFL feature via UIO direct access, its feature id should be added to the
+ driver's id_table.
+ 
+ 
++Extending the Device Feature Header - DFHv1
++===========================================
++The current 8 bytes of the Device Feature Header, hereafter referred to as
++to DFHv0, provide very little opportunity for the hardware to describe itself
++to software. Version 1 of the Device Feature Header (DFHv1) is being introduced
++to provide increased flexibility and extensibility to hardware designs using
++Device Feature Lists.  The list below describes some of the goals behind the
++changes in DFHv1:
++
++* Provide a standardized mechanism for features to describe
++  parameters/capabilities to software.
++* Standardize the use of a GUID for all DFHv1 types.
++* Decouple the location of the DFH from the register space of the feature itself.
++
++Modeled after PCI Capabilities, DFHv1 Parameters provide a mechanism to associate
++a list of parameter values to a particular feature.
++
++With DFHv0, not all features types contained a GUID.  DFHv1 makes the GUILD standard
++across all types.
++
++With DFHv0, the register map of a given feature is located immediately following
++the DFHv0 in the memory space.  With DFHv1, the location of the feature register
++map can be specified as an offset to the DFHv1 or as an absolute address.
++
+ Open discussion
+ ===============
+ FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
 -- 
 2.25.1
 
