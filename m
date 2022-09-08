@@ -2,74 +2,111 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683E75B18CD
-	for <lists+linux-fpga@lfdr.de>; Thu,  8 Sep 2022 11:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089365B1ADD
+	for <lists+linux-fpga@lfdr.de>; Thu,  8 Sep 2022 13:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiIHJdh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 8 Sep 2022 05:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
+        id S230242AbiIHLEZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 8 Sep 2022 07:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiIHJdC (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 8 Sep 2022 05:33:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63747113C6A;
-        Thu,  8 Sep 2022 02:32:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8CD0B8205D;
-        Thu,  8 Sep 2022 09:32:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C84ADC433C1;
-        Thu,  8 Sep 2022 09:32:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662629575;
-        bh=jEqsB1TSbxe5EK4hQqOT2LaFLdTxGRpwjmIj9PFRUDc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hmEj3ACHl9ztohR5Efxco9sCu+H6eXvMxAmVBCN6yJLGkhhdQy+pcZm3WOOabB/ut
-         /cKKArmCz46594IYYVaYoXgA69f1VHGD8W8GX7/70Bc44vaxH7MfJpw6f9av2AXCE7
-         9Oxe5+xfISwiDlcdneXxJUU1Z+2n9BrJUBAPlqVOVO/uX4EzSwEC5YiAF9yY2eK/G3
-         ViTlGlM0fTPgHXuWMisuhrK1vELaVPDu5ozA2XonnmuQH1D+AUWRLIK/0bCL4WfMSq
-         7UJrAcjgpqxlSdFLu+w0pkbNsKsWLBlbW2LpTXrUEeluJka8229tVzvH09Y3StiLEt
-         Iq5TQdke5CC5A==
-Date:   Thu, 8 Sep 2022 10:32:49 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgoncalv@redhat.com,
-        marpagan@redhat.com, matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
-Subject: Re: [PATCH v1 1/2] mfd: intel-m10-bmc: add d5005 bmc secure update
- driver
-Message-ID: <Yxm2wbJkTBLJSqKK@google.com>
-References: <20220902165706.518074-1-russell.h.weight@intel.com>
- <20220902165706.518074-2-russell.h.weight@intel.com>
+        with ESMTP id S230053AbiIHLEW (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 8 Sep 2022 07:04:22 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C6E138;
+        Thu,  8 Sep 2022 04:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662635061; x=1694171061;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fqkHwC0iOprBEufOeKlcg21ZbXtIUhGHzIz0tLHzfq8=;
+  b=P5A11Smug85abEfoYrdeSWYKEViuicI7UnU0Cr0Wq2tBs/4DdY7cyXcu
+   djZjon6WvvkWf8BDIe20s3BNBs9X8tV50IGLyEG9XwNu++pF68TLcEryk
+   pH6Q/+HITs3PjIpnJ5dXB+3I28GBwHE5q3/w+CIDRl2AMwiiHsoo+ndwU
+   pqeIdHtFVYbDuvLMaYDv7AfL6aqnGFEWoTlWCPwWISWW+8MnCwzFkGJcg
+   Thlef21zmZ+5+aLOXYzRydArQD9OOdUb4woPPr9kuQ6mWzz3zhDeMyO6g
+   G3kn/t4U+w7SZTZDUFecmsSXG9E+Fni1RCIV9hZRF2B+Znr3RTE4HqSRB
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="361098738"
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="361098738"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 04:04:21 -0700
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="740634993"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 04:04:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oWFKO-00A5Z7-2n;
+        Thu, 08 Sep 2022 14:04:12 +0300
+Date:   Thu, 8 Sep 2022 14:04:12 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v1 4/5] fpga: dfl: add generic support for MSIX interrupts
+Message-ID: <YxnMLI17XvjN74DW@smile.fi.intel.com>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
+ <20220906190426.3139760-5-matthew.gerlach@linux.intel.com>
+ <YxeqTdny7Nu7LzZo@smile.fi.intel.com>
+ <alpine.DEB.2.22.394.2209071433320.3336870@rhweight-WRK1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220902165706.518074-2-russell.h.weight@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.22.394.2209071433320.3336870@rhweight-WRK1>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, 02 Sep 2022, Russ Weight wrote:
+On Wed, Sep 07, 2022 at 02:37:32PM -0700, matthew.gerlach@linux.intel.com wrote:
+> On Tue, 6 Sep 2022, Andy Shevchenko wrote:
+> > On Tue, Sep 06, 2022 at 12:04:25PM -0700, matthew.gerlach@linux.intel.com wrote:
 
-> Add the D5005 BMC secure update driver to the MAX10 BMC driver
-> for D5005 devices.
+...
+
+> > > +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
+> > > +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
+> > > +		v = readq(base);
+> > > +		v = FIELD_GET(DFH_VERSION, v);
+> > > +
+> > > +		if (v == 1) {
+> > > +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
+> > 
+> > I am already lost what v keeps...
+> > 
+> > Perhaps
+> > 
+> > 		v = readq(base);
+> > 		switch (FIELD_GET(DFH_VERSION, v)) {
+> > 		case 1:
+> > 			...
+> > 			break;
+> > 		}
 > 
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> ---
->  drivers/mfd/intel-m10-bmc.c | 1 +
->  1 file changed, 1 insertion(+)
+> How about?
+> 		if (FIELD_GET(DFH_VERSION, readq(base)) == 1) {
+> 			...
+> 		}
 
-Applied, thanks.
+This one tends to be expanded in the future, so I would keep it switch case.
 
 -- 
-Lee Jones [李琼斯]
+With Best Regards,
+Andy Shevchenko
+
+
