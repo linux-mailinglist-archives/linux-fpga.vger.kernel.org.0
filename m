@@ -2,151 +2,110 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5675B27A6
-	for <lists+linux-fpga@lfdr.de>; Thu,  8 Sep 2022 22:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36B55B2855
+	for <lists+linux-fpga@lfdr.de>; Thu,  8 Sep 2022 23:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiIHUVt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 8 Sep 2022 16:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        id S229921AbiIHVRH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 8 Sep 2022 17:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiIHUVs (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 8 Sep 2022 16:21:48 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F992EC74A;
-        Thu,  8 Sep 2022 13:21:47 -0700 (PDT)
+        with ESMTP id S229685AbiIHVRG (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 8 Sep 2022 17:17:06 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DFDC32F7;
+        Thu,  8 Sep 2022 14:17:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662668507; x=1694204507;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=a7T/JGLT6ZN2mqHLe4wvsZL3e/wJbh1R0c15TYv0olA=;
-  b=Kyn2rGHU+Gr2WOKOPlAZ6r6W40cjNWB2GmN2NCoKaR03AfaXwY0Q4BqU
-   W8lIOCgPUhFTHHjArWwDMH+xsfsnoaBz6c1rQqp1NY/deReN+WkOvgmbq
-   CyESzPZtYm46HcscqthtkA5crwSqi+lLppgOy0Lsgbts6iw9jU9swmLG1
-   QYqpgsBrVO1yBrAA6aHPURYlleL9lWyTkcqbmhM60OsNjVjLPyTw8J/uA
-   H9gdd5eM5QArCM6lLJP8IpJfF/pRnxKNE0YZZFldpGQ1sOgLBFeh/YAVA
-   gsbMwdgnJx3iQhyJRqIy/eiIiKDZwxUBD2FNI5PAKw7V0Y2IvvXj2pito
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="277703539"
+  t=1662671825; x=1694207825;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WCfMZhbDQ5gEis6Z2V2kC1NDXjb3rrNnL4l392+aqgw=;
+  b=NwrDHLkFG4hUa/ZF27CxCDhSKpDG+hzLyCO80b9DmXrMKCNpOO+KHy1c
+   /mXAvzN+M5yWzc13QMzyv7vDSD6StMV4LRd/SmhlixaC5N8BURPkHo6St
+   T2ZZQh4w2txE2oHOuCB5XaQY/CQO/c0g3pjh5ln4AHqePiMHav5Kbk8Cd
+   TgOtea7rBM7PyZ3j5wQtCGTiuK4g8ikMyhoP+L5HYmv+qwvQJsxXgJdzG
+   8DRYYMOTiMt7NZ04SHuyFUJhzGuMihG/3HCdX8S+vMDuKxKPgzZvUJiqp
+   UJ9k+4CXrqzSO4P1dsPHEWPe42JQXZyloHITj8yQXeZ97SMR8rbABDWfp
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="284346824"
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="277703539"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 13:21:46 -0700
+   d="scan'208";a="284346824"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 14:17:04 -0700
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="648182741"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 13:21:45 -0700
-Date:   Thu, 8 Sep 2022 13:21:57 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        russell.h.weight@intel.com, basheer.ahmed.muddebihal@intel.com,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        linux-fpga@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        tianfei.zhang@intel.com, Jonathan Corbet <corbet@lwn.net>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?ISO-8859-15?Q?Niklas_S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>, Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v1 4/5] fpga: dfl: add generic support for MSIX
- interrupts
-In-Reply-To: <CAMuHMdWwRXKP51vX9KYjiwdZ9mUhsnLxkrAex+LwKpCw-H7=8A@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2209081318250.61321@rhweight-WRK1>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com> <20220906190426.3139760-5-matthew.gerlach@linux.intel.com> <YxeqTdny7Nu7LzZo@smile.fi.intel.com> <alpine.DEB.2.22.394.2209071433320.3336870@rhweight-WRK1> <YxnMLI17XvjN74DW@smile.fi.intel.com>
- <alpine.DEB.2.22.394.2209081031450.61321@rhweight-WRK1> <CAMuHMdWwRXKP51vX9KYjiwdZ9mUhsnLxkrAex+LwKpCw-H7=8A@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+   d="scan'208";a="683389519"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 14:16:59 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oWOtL-00AJUn-3A;
+        Fri, 09 Sep 2022 00:16:55 +0300
+Date:   Fri, 9 Sep 2022 00:16:55 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v1 5/5] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+Message-ID: <Yxpbx0Tclqy4O9cR@smile.fi.intel.com>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
+ <20220906190426.3139760-6-matthew.gerlach@linux.intel.com>
+ <YxesjfoBagiC3gGE@smile.fi.intel.com>
+ <alpine.DEB.2.22.394.2209081049290.61321@rhweight-WRK1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2209081049290.61321@rhweight-WRK1>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Thu, Sep 08, 2022 at 11:27:03AM -0700, matthew.gerlach@linux.intel.com wrote:
+> On Tue, 6 Sep 2022, Andy Shevchenko wrote:
+> > On Tue, Sep 06, 2022 at 12:04:26PM -0700, matthew.gerlach@linux.intel.com wrote:
+
+...
+
+> > > +	dev_dbg(dfluart->dev, "UART_CLK_ID %llu Hz\n", dfluart->uart_clk);
+> > 
+> > Isn't this available via normal interfaces to user?
+> 
+> I am not sure what "normal interfaces to user" you are referring to.  The
+> code is just trying to read the frequency of the input clock to the uart
+> from a DFH paramter.
+
+I mean dev_dbg() call. The user can get uart_clk via one of the UART/serial
+ABIs (don't remember which one, though).
 
 
-On Thu, 8 Sep 2022, Geert Uytterhoeven wrote:
+...
 
-> Hi Matthew,
->
-> On Thu, Sep 8, 2022 at 7:34 PM <matthew.gerlach@linux.intel.com> wrote:
->> On Thu, 8 Sep 2022, Andy Shevchenko wrote:
->>> On Wed, Sep 07, 2022 at 02:37:32PM -0700, matthew.gerlach@linux.intel.com wrote:
->>>> On Tue, 6 Sep 2022, Andy Shevchenko wrote:
->>>>> On Tue, Sep 06, 2022 at 12:04:25PM -0700, matthew.gerlach@linux.intel.com wrote:
->>>
->>> ...
->>>
->>>>>> +  if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
->>>>>> +      fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
->>>>>> +          v = readq(base);
->>>>>> +          v = FIELD_GET(DFH_VERSION, v);
->>>>>> +
->>>>>> +          if (v == 1) {
->>>>>> +                  v =  readq(base + DFHv1_CSR_SIZE_GRP);
->>>>>
->>>>> I am already lost what v keeps...
->>>>>
->>>>> Perhaps
->>>>>
->>>>>             v = readq(base);
->>>>>             switch (FIELD_GET(DFH_VERSION, v)) {
->>>>>             case 1:
->>>>>                     ...
->>>>>                     break;
->>>>>             }
->>>>
->>>> How about?
->>>>              if (FIELD_GET(DFH_VERSION, readq(base)) == 1) {
->>>>                      ...
->>>>              }
->>>
->>> This one tends to be expanded in the future, so I would keep it switch case.
->>>
->>
->> I'm okay with using the switch statement, but how about the following?
->>
->>                 switch (FIELD_GET(DFH_VERSION, readq(base))) {
->>                  case 1:
->>                         ...
->>                         break;
->>                 }
->
-> Would it make sense to print an error if a newer version than 1 is detected?
-> BTW, what is the expected value when DFHv1 is not detected? Zero
-> or an arbitrary number?
->
-> Gr{oetje,eeting}s,
->
->                        Geert
->
+> > > +#define FME_FEATURE_ID_UART 0x24
+> > 
+> > Purpose of this definition? For me with or without is still an ID.
+> 
+> I don't think I understand the question. Is the name of the macro unclear,
+> or do you think it is not necessary?
 
-Hi Geert,
+I mean how the definition is useful / useless. I.o.w. I think it's not
+necessary.
 
-Currently, DFHs that are not version 1 should be version 0. I will fill in 
-the switch statement to do nothing for version 0, and the default case 
-will print a warning of an unexpected version.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks for the feedback.
 
-Matthew Gerlach
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                -- Linus Torvalds
->
