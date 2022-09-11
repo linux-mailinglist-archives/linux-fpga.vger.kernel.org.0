@@ -2,41 +2,41 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8F15B4FEB
-	for <lists+linux-fpga@lfdr.de>; Sun, 11 Sep 2022 18:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2029B5B5006
+	for <lists+linux-fpga@lfdr.de>; Sun, 11 Sep 2022 18:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiIKQNI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 11 Sep 2022 12:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S229673AbiIKQVf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 11 Sep 2022 12:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiIKQMz (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 11 Sep 2022 12:12:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAD12B190;
-        Sun, 11 Sep 2022 09:12:53 -0700 (PDT)
+        with ESMTP id S229488AbiIKQVZ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 11 Sep 2022 12:21:25 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C2B13F02;
+        Sun, 11 Sep 2022 09:21:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662912773; x=1694448773;
+  t=1662913284; x=1694449284;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=e1njG/ms4c7Wt/dFm1QalGUQME5inUMeKY7ULkgCdQo=;
-  b=hLKmH9cX0XH1p94zlx2JwUtgiy3EMOcILwmyXw15BBRL+/gmAf6t16bm
-   LEEw3H9H6TnEkNf+6Xh6QY4z/2/1A2kcTbf4+x5w9x6hpqU5zDYHJIqMI
-   otqUzTCHKt4SBfVfLshXdbsz6Ssfck7XYB8vo0SgjsIndYTlwd641gOAv
-   w6rTRNfCtjwFQ3wGOdji3ocNx0QeLszbNUBv+6dnA5iVwy3obCe7/AXl0
-   d+X4oa1/Q3vGaeWcF8VL0auClUT/8G6p8GgJ/zsB0I41rtRzpOu588C2V
-   W0b6XTSU/bZbffltNPntzTkFCUzfHCS+wAIxDiozqvTAOz0v4ZjA2Uv24
+  bh=afnYNxBE1faQLt1ou19ySq2DFzzNl3lg+B6mfO4Ehng=;
+  b=NuPQxWZLnT6i1yh6CwiQ24t4Raa6thhKhudE9mYMm07fT+E3ehNC8h7W
+   736s2D/A1bUpWod93pKzQ3Ay4rffvDhEe/qotpRrX0uYgu4GvUnxUn+gG
+   nE+PTf1K2rR1iKsUfDntFfJSdzhI820Uk63hRE7JAYEh0mnNpCrfX/ZEJ
+   yNcD01Zv4asQDnso/G4mY4CFPHuZQQB0Oj0pT7FgEOZAM+Dbx0x+3QpYf
+   gKO+09/Kfw9jwcnDAKzztYky246A/Kz7BXTzn9Qfhhh7nNp0JnF2RdToj
+   cTCHRzqFcrUBRrp0YmQA4MPX3wG35BL2h847qF0rDom1z3tPmb6zYA9oD
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="297736409"
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="359459860"
 X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="297736409"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 09:12:53 -0700
+   d="scan'208";a="359459860"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 09:21:23 -0700
 X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="566918308"
+   d="scan'208";a="944358817"
 Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 09:12:53 -0700
-Date:   Sun, 11 Sep 2022 09:13:13 -0700 (PDT)
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 09:21:23 -0700
+Date:   Sun, 11 Sep 2022 09:21:42 -0700 (PDT)
 From:   matthew.gerlach@linux.intel.com
 X-X-Sender: mgerlach@rhweight-WRK1
 To:     Xu Yilun <yilun.xu@intel.com>
@@ -52,15 +52,15 @@ cc:     hao.wu@intel.com, russell.h.weight@intel.com,
         macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
         Basheer Ahmed Muddebihal 
         <basheer.ahmed.muddebihal@linux.intel.com>
-Subject: Re: [PATCH v1 2/5] fpga: dfl: Move the DFH definitions
-In-Reply-To: <Yx2Wn7LR6O6ilXae@yilunxu-OptiPlex-7050>
-Message-ID: <alpine.DEB.2.22.394.2209110909450.142336@rhweight-WRK1>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com> <20220906190426.3139760-3-matthew.gerlach@linux.intel.com> <Yx2Wn7LR6O6ilXae@yilunxu-OptiPlex-7050>
+Subject: Re: [PATCH v1 3/5] fpga: dfl: Add DFHv1 Register Definitions
+In-Reply-To: <Yx2cAaQ0HhPkYyC4@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2209110920490.142336@rhweight-WRK1>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com> <20220906190426.3139760-4-matthew.gerlach@linux.intel.com> <Yx2cAaQ0HhPkYyC4@yilunxu-OptiPlex-7050>
 User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,124 +73,83 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 On Sun, 11 Sep 2022, Xu Yilun wrote:
 
-> On 2022-09-06 at 12:04:23 -0700, matthew.gerlach@linux.intel.com wrote:
+> On 2022-09-06 at 12:04:24 -0700, matthew.gerlach@linux.intel.com wrote:
 >> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
 >>
->> Moving the DFH register offset and register definitions from
->> drivers/fpga/dfl.h to include/linux/dfl.h.  These definitions
->> need to be accessed by dfl drivers that are outside of
->> drivers/fpga.
+>> This patch adds the definitions for DFHv1 header and related register
+>> bitfields.
 >>
 >> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
 >> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 >> ---
->>  drivers/fpga/dfl.h  | 22 ++--------------------
->>  include/linux/dfl.h | 23 ++++++++++++++++++++++-
->>  2 files changed, 24 insertions(+), 21 deletions(-)
+>>  include/linux/dfl.h | 37 +++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 37 insertions(+)
 >>
->> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
->> index 06cfcd5e84bb..d4dfc03a0b61 100644
->> --- a/drivers/fpga/dfl.h
->> +++ b/drivers/fpga/dfl.h
->> @@ -2,7 +2,7 @@
->>  /*
->>   * Driver Header File for FPGA Device Feature List (DFL) Support
->>   *
->> - * Copyright (C) 2017-2018 Intel Corporation, Inc.
->> + * Copyright (C) 2017-2022 Intel Corporation, Inc.
->>   *
->>   * Authors:
->>   *   Kang Luwei <luwei.kang@intel.com>
->> @@ -17,6 +17,7 @@
->>  #include <linux/bitfield.h>
->>  #include <linux/cdev.h>
->>  #include <linux/delay.h>
->> +#include <linux/dfl.h>
->>  #include <linux/eventfd.h>
->>  #include <linux/fs.h>
->>  #include <linux/interrupt.h>
->> @@ -53,28 +54,9 @@
->>  #define PORT_FEATURE_ID_UINT		0x12
->>  #define PORT_FEATURE_ID_STP		0x13
->>
->> -/*
->> - * Device Feature Header Register Set
->> - *
->> - * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
->> - * For AFUs, they have DFH + GUID as common header registers.
->> - * For private features, they only have DFH register as common header.
->> - */
->> -#define DFH			0x0
->> -#define GUID_L			0x8
->> -#define GUID_H			0x10
->> -#define NEXT_AFU		0x18
->> -
->> -#define DFH_SIZE		0x8
->> -
->>  /* Device Feature Header Register Bitfield */
->> -#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID */
->>  #define DFH_ID_FIU_FME		0
->>  #define DFH_ID_FIU_PORT		1
->> -#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
->> -#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
->> -#define DFH_EOL			BIT_ULL(40)		/* End of list */
->> -#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
->>  #define DFH_TYPE_AFU		1
->>  #define DFH_TYPE_PRIVATE	3
->>  #define DFH_TYPE_FIU		4
 >> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
->> index 431636a0dc78..b5accdcfa368 100644
+>> index b5accdcfa368..61bcf20c1bc8 100644
 >> --- a/include/linux/dfl.h
 >> +++ b/include/linux/dfl.h
->> @@ -2,7 +2,7 @@
->>  /*
->>   * Header file for DFL driver and device API
->>   *
->> - * Copyright (C) 2020 Intel Corporation, Inc.
->> + * Copyright (C) 2020-2022 Intel Corporation, Inc.
->>   */
->>
->>  #ifndef __LINUX_DFL_H
->> @@ -11,6 +11,27 @@
->>  #include <linux/device.h>
->>  #include <linux/mod_devicetable.h>
+>> @@ -23,6 +23,16 @@
+>>  #define GUID_H			0x10
+>>  #define NEXT_AFU		0x18
 >>
 >> +/*
->> + * Device Feature Header Register Set
->> + *
->> + * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
->> + * For AFUs, they have DFH + GUID as common header registers.
->> + * For private features, they only have DFH register as common header.
+>> + * DFHv1 Register Offset definitons
+>> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
+>> + * as common header registers
 >> + */
->> +#define DFH			0x0
->> +#define GUID_L			0x8
->> +#define GUID_H			0x10
->> +#define NEXT_AFU		0x18
->
-> Now these macros are accessible in global kernel, should we add the
-> DFL_ or DFH_ prefix for them?
->
-> Thanks,
-> Yilun
-
-It does make sense to a DFL_ or DFH_ to these globabl macros, but I'll 
-look again to see if the ones above really need to be global, where as the 
-macros below definitely need to be global.  I also think a marco like 
-DFL_DFH might be a little strange.
-
-Thanks,
-Matthew Gerlach
-
-8>
+>> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
+>> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
+>> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
+>> +#define DFHv1_PARAM_DATA	0x8   /* Offset of Param data from Param header */
 >> +
->> +#define DFH_SIZE		0x8
+>>  #define DFH_SIZE		0x8
+>>
+>>  /* Device Feature Header Register Bitfield */
+>> @@ -30,8 +40,35 @@
+>>  #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
+>>  #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
+>>  #define DFH_EOL			BIT_ULL(40)		/* End of list */
+>> +#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
+>>  #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
+>>
+>> +/*
+>> + *  CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
+>
+> Reduce one whitespace indent.
+>
+>> + * 1'b1 = absolute (ARM or other non-PCIe use)
+>> + */
+>> +#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
 >> +
->> +/* Device Feature Header Register Bitfield */
->> +#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID */
->> +#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
->> +#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
->> +#define DFH_EOL			BIT_ULL(40)		/* End of list */
->> +#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
+>> +/*
+>> + * CSR Header Register Bit Definitions
+>> + */
+>
+> Use oneline style comment should be OK?
+>
+>> +#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
+>> +
+>> +/*
+>> + * CSR SIZE Goup Register Bit Definitions
+>> + */
+>
+> Same concern
+>
+>> +#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
+>> +#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
+>> +#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
+>> +#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
+>> +
+>> +/*
+>> + * PARAM Header Register Bit Definitions
+>> + */
+>
+> Same
+>
+>> +#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
+>> +#define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
+>> +#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
 >> +
 >>  /**
 >>   * enum dfl_id_type - define the DFL FIU types
@@ -199,3 +158,11 @@ Matthew Gerlach
 >> 2.25.1
 >>
 >
+
+Hi Yilun,
+
+I will fix the extra whitespace and change the comments to a single line 
+where appropropriate.
+
+Thanks,
+Matthew Gerlach
