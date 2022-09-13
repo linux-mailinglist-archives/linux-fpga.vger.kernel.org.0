@@ -2,488 +2,413 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E565B6200
-	for <lists+linux-fpga@lfdr.de>; Mon, 12 Sep 2022 22:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220485B65B7
+	for <lists+linux-fpga@lfdr.de>; Tue, 13 Sep 2022 04:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiILUCo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 12 Sep 2022 16:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
+        id S230016AbiIMCjX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 12 Sep 2022 22:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiILUCn (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 12 Sep 2022 16:02:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9DE47B99
-        for <linux-fpga@vger.kernel.org>; Mon, 12 Sep 2022 13:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663012960;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cQ57WPay1FOoOwhk7UbfhxpJpqOtmdGmCfusLiBuMXQ=;
-        b=Tn8qoglMET/WNbLHIcJaANzZWpALlO4uim2F4ppmU9GDEvewp9gvWLCKUPoAjFnIylU9UT
-        etMezCPz8mcDa/u6thLI36KLZzrx8UF/KVqdLBsZorJjYfwab/ShDv0VFo90FVaWck/u2Q
-        4o9gpasg6KSn7HZt0Q8UrpHaRAXgZ6U=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-637-bwqnapWcPA-oRJwE2Sq7vQ-1; Mon, 12 Sep 2022 16:02:39 -0400
-X-MC-Unique: bwqnapWcPA-oRJwE2Sq7vQ-1
-Received: by mail-qv1-f72.google.com with SMTP id dw19-20020a0562140a1300b004a8eee124b4so6612577qvb.21
-        for <linux-fpga@vger.kernel.org>; Mon, 12 Sep 2022 13:02:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=cQ57WPay1FOoOwhk7UbfhxpJpqOtmdGmCfusLiBuMXQ=;
-        b=EMO3ijgHGiuwoSGiL3iiSJo9pbpeAFwFGkWeMPxOww7iGl5by6Ys+Rf1Ezbgy0uciM
-         qKjpMWxjyKdWIlU1kzuZ7XsvDaM7/Xe+WwfSBVZK8IMNO/SxRVtqq8On7ryEt5LU7E6h
-         xfsdJxvLTB6zSwbQMFhqWbKvcDYeewwDLW57SopxELxl5fezHHjoYCwQCngop4TubIHo
-         NAV/k1lGs1v/rF4gYh9MpW3QCFZsyQHkAKUrA2iX3G8JzWSBJ+RvDhBiuphftcd/4GNb
-         GmNHcy3L9MJvO48z5kQIvwNhqnBz4ORMLmNJi//0bF0d3/5rLlMmJ1udj8zZaRJHn4kA
-         PZ8A==
-X-Gm-Message-State: ACgBeo3wwQGLgBeNAf2dijJVjPbLMs9Qq2gaGwf3msOnEhUivlCbORR3
-        8tqUxYxRjCAGM8ixOn5YImZ+/pHWZeZ6BGqOLQ/6aTYPcnCZo3scK2MCXduxmM19xLPxzU9GEwM
-        YDVYEofi33JRpG3VG4W2a
-X-Received: by 2002:ac8:7dd6:0:b0:35b:a061:d5ae with SMTP id c22-20020ac87dd6000000b0035ba061d5aemr14777285qte.661.1663012958701;
-        Mon, 12 Sep 2022 13:02:38 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7Hwdid+qpP1Y75W/qxorPyJ+820KaQs6HJTIOJvydsto2iRE/Y0aRqpZgIYAQrZpG0pMAfyQ==
-X-Received: by 2002:ac8:7dd6:0:b0:35b:a061:d5ae with SMTP id c22-20020ac87dd6000000b0035ba061d5aemr14777226qte.661.1663012958174;
-        Mon, 12 Sep 2022 13:02:38 -0700 (PDT)
-Received: from [192.168.13.171] (93-36-115-26.ip60.fastwebnet.it. [93.36.115.26])
-        by smtp.gmail.com with ESMTPSA id cj5-20020a05622a258500b00344883d3ef8sm7195716qtb.84.2022.09.12.13.02.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 13:02:37 -0700 (PDT)
-Message-ID: <6710ea41-ab2c-f73d-6afa-469a56e00765@redhat.com>
-Date:   Mon, 12 Sep 2022 22:02:23 +0200
+        with ESMTP id S230012AbiIMCjW (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 12 Sep 2022 22:39:22 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5ACC4331D;
+        Mon, 12 Sep 2022 19:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663036761; x=1694572761;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K/EtDYoKROjD8UuR8udCj5gDyp3UBZk8ez/tReGgiP8=;
+  b=loHknw7UqsJQZMqJ2zpS7KqGePVpQeHUyRCw9Htd9RXmCa9XLaBQRdQH
+   5bWFnn4FdDc80mPqd9WBRZmyQzqx+afhrfwK/X+MDHOJ7r9G5TM0yuoDJ
+   /fGZpHE9X7tfJv/OxONbthntUFwGCCUeP6sNHCz6C84B8wqY1h5IUsmcK
+   e7bf+ukACwKz8a9rQtWXJGQORk5negMRWPvn6yMLp6Nv1O+zD0g4PYnRQ
+   9O8D31hS4F/AF1h/5GJCHgNZbeXGDvBkNY9g7VSqaF5tbq06vSGj44WVv
+   q9bwKUzh8NjSsxX+DXa5DTQsqd0xBQdrG3Dx2s9DBPWvWGWttfgWmEsWj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="298022521"
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="298022521"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 19:39:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="684677415"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Sep 2022 19:39:17 -0700
+Date:   Tue, 13 Sep 2022 10:29:44 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
+        j.zink@pengutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, system@metrotek.ru
+Subject: Re: [PATCH v10 1/2] fpga: lattice-sysconfig-spi: add Lattice
+ sysCONFIG FPGA manager
+Message-ID: <Yx/rFy9lwbrvmrjf@yilunxu-OptiPlex-7050>
+References: <20220905133205.17039-1-i.bornyakov@metrotek.ru>
+ <20220905133205.17039-2-i.bornyakov@metrotek.ru>
+ <Yx1isMn5+z/UYapO@yilunxu-OptiPlex-7050>
+ <20220911123257.gpamtv3mhagi42x2@x260>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 4/4] fpga: zynqmp: Add afi config driver
-Content-Language: en-US
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     "Manne, Nava kishore" <nava.kishore.manne@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "ronak.jain@xilinx.com" <ronak.jain@xilinx.com>,
-        "rajan.vaja@xilinx.com" <rajan.vaja@xilinx.com>,
-        "abhyuday.godhasara@xilinx.com" <abhyuday.godhasara@xilinx.com>,
-        "piyush.mehta@xilinx.com" <piyush.mehta@xilinx.com>,
-        "lakshmi.sai.krishna.potthuri@xilinx.com" 
-        <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        "harsha.harsha@xilinx.com" <harsha.harsha@xilinx.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "nava.manne@xilinx.com" <nava.manne@xilinx.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
-References: <20220824035542.706433-1-nava.kishore.manne@amd.com>
- <20220824035542.706433-5-nava.kishore.manne@amd.com>
- <YwoNdUPoSKKHhzxx@yilunxu-OptiPlex-7050>
- <DM6PR12MB39932285FD0EC72F1F04D8E8CD799@DM6PR12MB3993.namprd12.prod.outlook.com>
- <7b4b0dfd-ecf6-0b50-ee8e-82a2014c5e9e@redhat.com>
- <YxOScT3/m0RaEhyG@yilunxu-OptiPlex-7050>
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <YxOScT3/m0RaEhyG@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220911123257.gpamtv3mhagi42x2@x260>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2022-09-03 19:44, Xu Yilun wrote:
-> On 2022-09-01 at 11:53:29 +0200, Marco Pagani wrote:
->> Hi Nava,
->>
->> On 2022-08-30 11:19, Manne, Nava kishore wrote:
->>> Hi Yilun,
->>>
->>> 	Please find my response inline.
->>>
->>>> -----Original Message-----
->>>> From: Xu Yilun <yilun.xu@intel.com>
->>>> Sent: Saturday, August 27, 2022 5:56 PM
->>>> To: Manne, Nava kishore <nava.kishore.manne@amd.com>
->>>> Cc: git (AMD-Xilinx) <git@amd.com>; robh+dt@kernel.org;
->>>> krzysztof.kozlowski+dt@linaro.org; michal.simek@xilinx.com;
->>>> mdf@kernel.org; hao.wu@intel.com; trix@redhat.com;
->>>> p.zabel@pengutronix.de; gregkh@linuxfoundation.org;
->>>> ronak.jain@xilinx.com; rajan.vaja@xilinx.com;
->>>> abhyuday.godhasara@xilinx.com; piyush.mehta@xilinx.com;
->>>> lakshmi.sai.krishna.potthuri@xilinx.com; harsha.harsha@xilinx.com;
->>>> linus.walleij@linaro.org; nava.manne@xilinx.com;
->>>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->>>> kernel@vger.kernel.org; linux-fpga@vger.kernel.org
->>>> Subject: Re: [PATCH 4/4] fpga: zynqmp: Add afi config driver
->>>>
->>>> CAUTION: This message has originated from an External Source. Please use
->>>> proper judgment and caution when opening attachments, clicking links, or
->>>> responding to this email.
->>>>
->>>>
->>>> On 2022-08-24 at 09:25:42 +0530, Nava kishore Manne wrote:
->>>>> Add zynqmp AXI FIFO interface(AFI) config driver. This is useful for
->>>>> the configuration of the PS-PL interface on Zynq US+ MPSoC platform.
->>>>
->>>> Please help illustrate how to use the device for FPGA reprogramming, why it
->>>> should be implemented as an FPGA bridge.
->>>>
->>>> From the code I actually didn't see any operation that gates the fpga-region
->>>> from other part of the machine.
->>>>
->>>
->>> The Zynq UltraScale MPSoC family consists of a system-on-chip (SoC) style integrated processing system (PS)
->>> and a Programmable Logic (PL) unit, providing an extensible and flexible SoC solution on a single die. 
->>> Xilinx Zynq US+ MPSoC connect the PS to the programmable logic (PL) through the AXI port. 
->>> This AXI port helps to establish the data path between the PS and PL (Here AXI Interface act as a Gating between PS and PL)
->>> and this AXI port configuration vary from design to design.  In-order to establish the proper communication path between
->>> PS and PL (Full region),  the AXI port data path should be configured with proper values priories to load the full region.
->>>
->>> Will update the description in v2.
->>
->> Are you implementing your AFI driver as a Bridge because you want to
->> change the configuration of the AXI HP interfaces exported by the PS
->> every time you reconfigure the full fabric?
->>
->> I understand the need to change the configuration of the PS-PL
->> interface at each full reconfiguration to ensure that the parameters
->> of the AXI ports exported by the PS (like the widths of data read
->> and write channels) matches the configuration of the master AXI ports
->> exported by the PL design. However, it seems to me that performing this
->> configuration doesn't fit the role of the FPGA Bridge, whose sole
->> responsibility should be gating the Region's interface during
->> reconfiguration.
->>
->> I think this need could be addressed by adding a new component to the
->> FPGA subsystem called "FPGA Adapter". The Adapter will be an optional
->> component associated with a Region like a Bridge. It will be responsible
->> for changing the configuration of its Region's static interface
->> (or PS/HPS/DRAM interface for the full FPGA) to match the interface
->> exported by the specific reconfigurable module (or full static design).
+On 2022-09-11 at 15:32:57 +0300, Ivan Bornyakov wrote:
+> On Sun, Sep 11, 2022 at 12:23:12PM +0800, Xu Yilun wrote:
+> > On 2022-09-05 at 16:32:04 +0300, Ivan Bornyakov wrote:
+> > > Add support to the FPGA manager for programming Lattice ECP5 and MachXO2
+> > > FPGAs over slave SPI sysCONFIG interface.
+> > 
+> > This version is much better, see my comments inline.
+> > 
+> > > 
+> > > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> > > ---
+> > >  drivers/fpga/Kconfig         |   7 +
+> > >  drivers/fpga/Makefile        |   3 +
+> > >  drivers/fpga/sysconfig-spi.c | 199 ++++++++++++++
+> > >  drivers/fpga/sysconfig.c     | 520 +++++++++++++++++++++++++++++++++++
+> > >  drivers/fpga/sysconfig.h     |  63 +++++
+> > >  5 files changed, 792 insertions(+)
+> > >  create mode 100644 drivers/fpga/sysconfig-spi.c
+> > >  create mode 100644 drivers/fpga/sysconfig.c
+> > >  create mode 100644 drivers/fpga/sysconfig.h
+> > > 
+> > > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> > > index 6c416955da53..991d9d976dca 100644
+> > > --- a/drivers/fpga/Kconfig
+> > > +++ b/drivers/fpga/Kconfig
+> > > @@ -263,4 +263,11 @@ config FPGA_MGR_MICROCHIP_SPI
+> > >  	  programming over slave SPI interface with .dat formatted
+> > >  	  bitstream image.
+> > >  
+> > > +config FPGA_MGR_LATTICE_SPI
+> > > +	tristate "Lattice sysCONFIG SPI FPGA manager"
+> > > +	depends on SPI
+> > > +	help
+> > > +	  FPGA manager driver support for Lattice FPGAs programming over slave
+> > > +	  SPI sysCONFIG interface.
+> > > +
+> > >  endif # FPGA
+> > > diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> > > index 42ae8b58abce..70e5f58d0c10 100644
+> > > --- a/drivers/fpga/Makefile
+> > > +++ b/drivers/fpga/Makefile
+> > > @@ -20,9 +20,12 @@ obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+> > >  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+> > >  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
+> > >  obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
+> > > +obj-$(CONFIG_FPGA_MGR_LATTICE_SPI)	+= lattice-sysconfig-spi.o
+> > >  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
+> > >  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
+> > >  
+> > > +lattice-sysconfig-spi-objs		:= sysconfig-spi.o sysconfig.o
+> > > +
+> > >  # FPGA Secure Update Drivers
+> > >  obj-$(CONFIG_FPGA_M10_BMC_SEC_UPDATE)	+= intel-m10-bmc-sec-update.o
+> > >  
+> > > diff --git a/drivers/fpga/sysconfig-spi.c b/drivers/fpga/sysconfig-spi.c
+> > > new file mode 100644
+> > > index 000000000000..f4dba2b57352
+> > > --- /dev/null
+> > > +++ b/drivers/fpga/sysconfig-spi.c
+> > > @@ -0,0 +1,199 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Lattice FPGA programming over slave SPI sysCONFIG interface.
+> > > + */
+> > > +
+> > > +#include <linux/of_device.h>
+> > > +#include <linux/spi/spi.h>
+> > > +
+> > > +#include "sysconfig.h"
+> > > +
+> > > +static int sysconfig_spi_cmd_write(struct sysconfig_priv *priv,
+> > > +				   const void *tx_buf, size_t tx_len)
+> > > +{
+> > > +	struct spi_device *spi = to_spi_device(priv->dev);
+> > > +
+> > > +	if (!spi)
+> > > +		return -ENODEV;
+> > > +
+> > > +	return spi_write(spi, tx_buf, tx_len);
+> > > +}
+> > > +
+> > > +static int sysconfig_spi_cmd_write_with_data(struct sysconfig_priv *priv,
+> > > +					     const void *cmd, size_t cmd_len,
+> > > +					     const void *data, size_t data_len)
+> > > +{
+> > > +	struct spi_device *spi = to_spi_device(priv->dev);
+> > > +	struct spi_transfer xfers[2] = {
+> > > +		{
+> > > +			.tx_buf = cmd,
+> > > +			.len = cmd_len,
+> > > +		}, {
+> > > +			.tx_buf = data,
+> > > +			.len = data_len,
+> > > +		},
+> > > +	};
+> > > +
+> > > +	if (!spi)
+> > > +		return -ENODEV;
+> > > +
+> > > +	return spi_sync_transfer(spi, xfers, 2);
+> > > +}
+> > > +
+> > > +static int sysconfig_spi_cmd_write_then_read(struct sysconfig_priv *priv,
+> > > +					     const void *tx_buf, size_t tx_len,
+> > > +					     void *rx_buf, size_t rx_len)
+> > > +{
+> > > +	struct spi_device *spi = to_spi_device(priv->dev);
+> > > +
+> > > +	if (!spi)
+> > > +		return -ENODEV;
+> > > +
+> > > +	return spi_write_then_read(spi, tx_buf, tx_len, rx_buf, rx_len);
+> > > +}
+> > > +
+> > > +static int sysconfig_lsc_burst_init(struct sysconfig_priv *priv)
+> > 
+> > add the spi prefix for the func name.
+> > 
+> > > +{
+> > > +	const u8 lsc_bitstream_burst[] = SYSCONFIG_LSC_BITSTREAM_BURST;
+> > > +	struct spi_device *spi = to_spi_device(priv->dev);
+> > > +	struct spi_transfer xfer = {
+> > > +		.tx_buf = lsc_bitstream_burst,
+> > > +		.len = sizeof(lsc_bitstream_burst),
+> > > +		.cs_change = 1,
+> > > +	};
+> > > +	struct spi_message msg;
+> > > +	int ret;
+> > > +
+> > > +	if (!spi)
+> > > +		return -ENODEV;
+> > > +
+> > > +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> > > +
+> > > +	/*
+> > > +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
+> > > +	 * SPI bus will be released in sysconfig_lsc_burst_complete().
+> > > +	 */
+> > > +	spi_bus_lock(spi->controller);
+> > > +
+> > > +	ret = spi_sync_locked(spi, &msg);
+> > > +	if (ret)
+> > > +		spi_bus_unlock(spi->controller);
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +static int sysconfig_bitstream_burst_write(struct sysconfig_priv *priv,
+> > > +					   const char *buf, size_t count)
+> > 
+> > Add spi prefix
+> > 
+> > > +{
+> > > +	struct spi_device *spi = to_spi_device(priv->dev);
+> > > +	struct spi_transfer xfer = {
+> > > +		.tx_buf = buf,
+> > > +		.len = count,
+> > > +		.cs_change = 1,
+> > > +	};
+> > > +	struct spi_message msg;
+> > > +	int ret;
+> > > +
+> > > +	if (!spi)
+> > > +		return -ENODEV;
+> > > +
+> > > +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> > > +	ret = spi_sync_locked(spi, &msg);
+> > > +	if (ret)
+> > > +		spi_bus_unlock(spi->controller);
+> > 
+> > The sysconfig_spi don't have to assume the sysconfig core driver will
+> > register an fpga_manager. It is possible the core driver uses these
+> > callback for MTD ops?
+> > 
+> > So the burst operations don't have to be strictly aligned with
+> > fpga_manager_ops->write_init/write/write_complete.
+> > 
+> > Maybe the logic in core driver could be more generic, like:
+> > 
+> >   if (burst_init())
+> > 	fail;
+> > 
+> >   if (burst_write()) {
+> > 	burst_complete();
+> > 	fail;
+> >   }
+> > 
+> >   burst_complete();
+> > 
+> > So I think you don't have to unlock bus here, let burst_complete do it.
+> > 
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +static int sysconfig_lsc_burst_complete(struct sysconfig_priv *priv)
+> > 
+> > Add spi prefix
+> > 
+> > > +{
+> > > +	struct spi_device *spi = to_spi_device(priv->dev);
+> > > +
+> > > +	if (!spi)
+> > > +		return -ENODEV;
+> > > +
+> > > +	/* Bitstream burst write is done, release SPI bus */
+> > > +	spi_bus_unlock(spi->controller);
+> > > +
+> > > +	/* Toggle CS to finish bitstream write */
+> > > +	return spi_write(spi, NULL, 0);
+> > > +}
+> > > +
+> > > +static int sysconfig_spi_probe(struct spi_device *spi)
+> > > +{
+> > > +	const struct sysconfig_fpga_priv *fpga_priv;
+> > > +	const struct spi_device_id *dev_id;
+> > > +	struct device *dev = &spi->dev;
+> > > +	struct sysconfig_priv *priv;
+> > > +
+> > > +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> > > +	if (!priv)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	fpga_priv = of_device_get_match_data(dev);
+> > > +	if (!fpga_priv) {
+> > > +		dev_id = spi_get_device_id(spi);
+> > > +		if (!dev_id)
+> > > +			return -ENODEV;
+> > > +
+> > > +		fpga_priv = (const struct sysconfig_fpga_priv *)dev_id->driver_data;
+> > > +	}
+> > > +
+> > > +	if (!fpga_priv)
+> > > +		return -EINVAL;
+> > > +
+> > > +	if (spi->max_speed_hz > fpga_priv->spi_max_speed_hz) {
+> > > +		dev_err(dev, "SPI speed %u is too high, maximum speed is %u\n",
+> > > +			spi->max_speed_hz, fpga_priv->spi_max_speed_hz);
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	priv->dev = dev;
+> > > +	priv->fpga_priv = fpga_priv;
+> > > +	priv->command_write = sysconfig_spi_cmd_write;
+> > > +	priv->command_write_with_data = sysconfig_spi_cmd_write_with_data;
+> > > +	priv->command_write_then_read = sysconfig_spi_cmd_write_then_read;
+> > > +	priv->bitstream_burst_write_init = sysconfig_lsc_burst_init;
+> > > +	priv->bitstream_burst_write = sysconfig_bitstream_burst_write;
+> > > +	priv->bitstream_burst_write_complete = sysconfig_lsc_burst_complete;
+> > > +
+> > > +	return sysconfig_probe(priv);
+> > > +}
+> > > +
+> > > +static const struct spi_device_id sysconfig_spi_ids[] = {
+> > > +	{
+> > > +		.name = "ecp5-fpga-mgr",
+> > 
+> > I assume sysconfig could do more than fpga-manager, like detailed flash
+> > management maybe a name not specific to fpga-mgr.
+> > 
+> > > +		.driver_data = (kernel_ulong_t)&ecp5_data,
+> > > +	}, {
+> > > +		.name = "machxo2-fpga-mgr",
+> > > +		.driver_data = (kernel_ulong_t)&machxo2_data,
+> > > +	}, {},
+> > > +};
+> > > +MODULE_DEVICE_TABLE(spi, sysconfig_spi_ids);
+> > > +
+> > > +#if IS_ENABLED(CONFIG_OF)
+> > > +static const struct of_device_id sysconfig_of_ids[] = {
+> > > +	{
+> > > +		.compatible = "lattice,ecp5-fpga-mgr",
+> > > +		.data = &ecp5_data,
+> > > +	}, {
+> > > +		.compatible = "lattice,machxo2-fpga-mgr",
+> > > +		.data = &machxo2_data,
+> > > +	}, {},
+> > > +};
+> > > +MODULE_DEVICE_TABLE(of, sysconfig_of_ids);
+> > > +#endif /* IS_ENABLED(CONFIG_OF) */
+> > > +
+> > > +static struct spi_driver lattice_sysconfig_driver = {
+> > > +	.probe = sysconfig_spi_probe,
+> > > +	.id_table = sysconfig_spi_ids,
+> > > +	.driver = {
+> > > +		.name = "lattice_sysconfig_spi_fpga_mgr",
+> > > +		.of_match_table = of_match_ptr(sysconfig_of_ids),
+> > > +	},
+> > > +};
+> > > +
+> > > +module_spi_driver(lattice_sysconfig_driver);
+> > > +
+> > > +MODULE_DESCRIPTION("Lattice sysCONFIG Slave SPI FPGA Manager");
+> > > +MODULE_LICENSE("GPL");
+> > > diff --git a/drivers/fpga/sysconfig.c b/drivers/fpga/sysconfig.c
+> > > new file mode 100644
+> > > index 000000000000..453dd6f6bf30
+> > > --- /dev/null
+> > > +++ b/drivers/fpga/sysconfig.c
+> > > @@ -0,0 +1,520 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Lattice FPGA sysCONFIG interface functions independent of port type.
+> > > + */
+> > > +
+> > > +#include <linux/delay.h>
+> > > +#include <linux/fpga/fpga-mgr.h>
+> > > +#include <linux/gpio/consumer.h>
+> > > +
+> > > +#include "sysconfig.h"
+> > > +
+> > > +const struct sysconfig_fpga_priv ecp5_data = {
+> > > +	.spi_max_speed_hz = 60000000,
+> > 
+> > Again, don't put spi stuff in core driver, embedded it in
+> > sysconfig_spi.c.
+> > 
+> > > +	.isc_enable_operand = 0x00,
+> > > +	.burst_write = true,
+> > 
+> > Just query, from spec I see we must use burst_write for SRAM
+> > configuration. Is it specific to ecp5 or mandatory to all other boards,
+> > why we cannot configure SRAM by page write?
+> > 
 > 
-> I saw the Documentation/driver_api/interconnect.rst, but didn't look deep
-> into it. For this AFI case, it sets the bus width, is it OK to use it?
+> I'm afraid this is beyond my expertise. I'll do some experiments with
+> paged write on ECP5 some time next week.
 > 
-> Thanks,
-> Yilun
+> > > +	.internal_flash = false,
+> > 
+> > On reviewing the machxo2 patches, I think reprogramming flash should not
+> > be implemented by fpga manager, there are existing solutions for fine
+> > flash control. So maybe we don't have to support flash reprogramming
+> > here.
+> > 
+> > But SRAM configuration from flash could be a feature supported by fpga
+> > manager, we don't have code now, this could be another topic.
+> > 
+> 
+> Am I expected to do something about this in v11? Or it is OK for now as
+> it is and rework can be postponed for the future?
 
-Thanks for pointing me to the interconnect subsystem. I'm currently
-investigating if it's possible to implement a driver for the AFI
-(and possibly other PS interconnects with their QoS regulators)
-using the subsystem.
+No, it's OK without it. We could investigate this feature later.
+
 Thanks,
-Marco
-
-> 
->> Moreover, besides bus-level properties like address/data width and
->> protocol conversion, the Adapter could also be used to configure
->> system-level properties. For instance, the designer may use it to change
->> the memory access policy for the specific reconfigurable module if it
->> uses bus mastering.
->>
->>>
->>>>>
->>>>> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
->>>>> ---
->>>>>  MAINTAINERS               |   6 ++
->>>>>  drivers/fpga/Kconfig      |  13 +++
->>>>>  drivers/fpga/Makefile     |   1 +
->>>>>  drivers/fpga/zynqmp-afi.c | 211
->>>>> ++++++++++++++++++++++++++++++++++++++
->>>>>  4 files changed, 231 insertions(+)
->>>>>  create mode 100644 drivers/fpga/zynqmp-afi.c
->>>>>
->>>>> diff --git a/MAINTAINERS b/MAINTAINERS index
->>>>> 20ffac651214..957e753e6406 100644
->>>>> --- a/MAINTAINERS
->>>>> +++ b/MAINTAINERS
->>>>> @@ -8032,6 +8032,12 @@ F:     Documentation/fpga/
->>>>>  F:   drivers/fpga/
->>>>>  F:   include/linux/fpga/
->>>>>
->>>>> +FPGA ZYNQMP PS-PL BRIDGE DRIVER
->>>>> +M:   Nava kishore Manne <nava.kishore.manne@amd.com>
->>>>> +S:   Supported
->>>>> +F:   Documentation/devicetree/bindings/fpga/xlnx,zynqmp-afi-fpga.yaml
->>>>> +F:   drivers/fpga/zynqmp-afi.c
->>>>> +
->>>>>  INTEL MAX10 BMC SECURE UPDATES
->>>>>  M:   Russ Weight <russell.h.weight@intel.com>
->>>>>  L:   linux-fpga@vger.kernel.org
->>>>> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig index
->>>>> 6c416955da53..c08794d30fb5 100644
->>>>> --- a/drivers/fpga/Kconfig
->>>>> +++ b/drivers/fpga/Kconfig
->>>>> @@ -130,6 +130,19 @@ config XILINX_PR_DECOUPLER
->>>>>         reconfiguration, preventing the system deadlock that can
->>>>>         occur if AXI transactions are interrupted by DFX.
->>>>>
->>>>> +config ZYNQMP_AFI
->>>>> +     tristate "Xilinx ZYNQMP AFI support"
->>>>> +     depends on FPGA_BRIDGE
->>>>> +     help
->>>>> +       Say Y to enable drivers to handle the PS-PL clocks configurations
->>>>> +       and PS-PL Bus-width. Xilinx Zynq US+ MPSoC connect the PS to the
->>>>> +       programmable logic (PL) through the AXI port. This AXI port helps
->>>>> +       to establish the data path between the PS and PL.
->>>>> +       In-order to establish the proper communication path between PS and
->>>> PL,
->>>>> +       the AXI port data path should be configured with the proper Bus-
->>>> width
->>>>> +       values and it will also handles the PS-PL reset signals to reset the
->>>>> +       PL domain.
->>>>
->>>> Same concern, please describe its relationship to FPGA reprogramming.
->>>>
->>>
->>> Same as above.
->>> Will update the description in v2.
->>>
->>>>> +
->>>>>  config FPGA_REGION
->>>>>       tristate "FPGA Region"
->>>>>       depends on FPGA_BRIDGE
->>>>> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile index
->>>>> 42ae8b58abce..94cfe60972db 100644
->>>>> --- a/drivers/fpga/Makefile
->>>>> +++ b/drivers/fpga/Makefile
->>>>> @@ -31,6 +31,7 @@ obj-$(CONFIG_FPGA_BRIDGE)           += fpga-bridge.o
->>>>>  obj-$(CONFIG_SOCFPGA_FPGA_BRIDGE)    += altera-hps2fpga.o altera-
->>>> fpga2sdram.o
->>>>>  obj-$(CONFIG_ALTERA_FREEZE_BRIDGE)   += altera-freeze-bridge.o
->>>>>  obj-$(CONFIG_XILINX_PR_DECOUPLER)    += xilinx-pr-decoupler.o
->>>>> +obj-$(CONFIG_ZYNQMP_AFI)             += zynqmp-afi.o
->>>>>
->>>>>  # High Level Interfaces
->>>>>  obj-$(CONFIG_FPGA_REGION)            += fpga-region.o
->>>>> diff --git a/drivers/fpga/zynqmp-afi.c b/drivers/fpga/zynqmp-afi.c new
->>>>> file mode 100644 index 000000000000..bc975d304039
->>>>> --- /dev/null
->>>>> +++ b/drivers/fpga/zynqmp-afi.c
->>>>> @@ -0,0 +1,211 @@
->>>>> +// SPDX-License-Identifier: GPL-2.0
->>>>> +/*
->>>>> + * Copyright (C) 2022 Xilinx, Inc.
->>>>> + */
->>>>> +
->>>>> +#include <linux/err.h>
->>>>> +#include <linux/firmware/xlnx-zynqmp.h> #include
->>>>> +<linux/fpga/fpga-bridge.h> #include <linux/io.h> #include
->>>>> +<linux/module.h> #include <linux/of.h> #include
->>>>> +<linux/platform_device.h> #include <linux/reset.h> #include
->>>>> +<linux/slab.h>
->>>>> +
->>>>> +/* Registers and special values for doing register-based operations */
->>>>> +#define AFI_RDCHAN_CTRL_OFFSET       0x00
->>>>> +#define AFI_WRCHAN_CTRL_OFFSET       0x14
->>>>> +#define AFI_BUSWIDTH_MASK    BIT(0)
->>>>> +
->>>>> +/**
->>>>> + * struct zynqmp_afi - AFI register description.
->>>>> + * @dev: device that owns this.
->>>>> + * @of_node: Device Tree overlay.
->>>>> + * @resets: Pointer to the reset control for ps-pl resets.
->>>>> + */
->>>>> +struct zynqmp_afi {
->>>>> +     struct device *dev;
->>>>> +     struct device_node *of_node;
->>>>> +     struct reset_control *resets;
->>>>> +};
->>>>> +
->>>>> +/**
->>>>> + * struct zynqmp_afi_configreg - AFI configuration registers info.
->>>>> + * @reg:     Name of the AFI configuration register.
->>>>> + * @id:              Register index value.
->>>>> + */
->>>>> +struct zynqmp_afi_configreg {
->>>>> +     char *reg;
->>>>> +     u32 id;
->>>>> +};
->>>>> +
->>>>> +static struct zynqmp_afi_configreg afi_cfgreg[] = {
->>>>> +     {.reg = "xlnx,afi-fm0-rd-bus-width",    .id = AFIFM0_RDCTRL},
->>>>> +     {.reg = "xlnx,afi-fm1-rd-bus-width",    .id = AFIFM1_RDCTRL},
->>>>> +     {.reg = "xlnx,afi-fm2-rd-bus-width",    .id = AFIFM2_RDCTRL},
->>>>> +     {.reg = "xlnx,afi-fm3-rd-bus-width",    .id = AFIFM3_RDCTRL},
->>>>> +     {.reg = "xlnx,afi-fm4-rd-bus-width",    .id = AFIFM4_RDCTRL},
->>>>> +     {.reg = "xlnx,afi-fm5-rd-bus-width",    .id = AFIFM5_RDCTRL},
->>>>> +     {.reg = "xlnx,afi-fm6-rd-bus-width",    .id = AFIFM6_RDCTRL},
->>>>> +     {.reg = "xlnx,afi-fm0-wr-bus-width",    .id = AFIFM0_WRCTRL},
->>>>> +     {.reg = "xlnx,afi-fm1-wr-bus-width",    .id = AFIFM1_WRCTRL},
->>>>> +     {.reg = "xlnx,afi-fm2-wr-bus-width",    .id = AFIFM2_WRCTRL},
->>>>> +     {.reg = "xlnx,afi-fm3-wr-bus-width",    .id = AFIFM3_WRCTRL},
->>>>> +     {.reg = "xlnx,afi-fm4-wr-bus-width",    .id = AFIFM4_WRCTRL},
->>>>> +     {.reg = "xlnx,afi-fm5-wr-bus-width",    .id = AFIFM5_WRCTRL},
->>>>> +     {.reg = "xlnx,afi-fm6-wr-bus-width",    .id = AFIFM6_WRCTRL},
->>>>> +     {.reg = "xlnx,afi-fs-ss0-bus-width",    .id = AFIFS},
->>>>> +     {.reg = "xlnx,afi-fs-ss2-bus-width",    .id = AFIFS_SS2},
->>>>> +     {}
->>>>> +};
->>>>> +
->>>>> +static int zynqmp_afi_config(struct zynqmp_afi *afi_data) {
->>>>> +     struct zynqmp_afi_configreg *cfgptr = afi_cfgreg;
->>>>> +     struct device_node *np = afi_data->of_node;
->>>>> +     u32 afi_ss0_val, afi_ss1_val, bus_width;
->>>>> +     int ret;
->>>>> +
->>>>> +     while (cfgptr->reg) {
->>>>> +             ret = of_property_read_u32(np, cfgptr->reg, &bus_width);
->>>>> +             if (!ret) {
->>>>> +                     if (cfgptr->id == AFIFS_SS2) {
->>>>> +                             if (bus_width == 32)
->>>>> +                                     ret = zynqmp_pm_afi(AFIFS_SS2,
->>>>> +                                                         AFIFS_SS_BUS_WIDTH_32_CONFIG_VAL);
->>>>> +                             else if (bus_width == 64)
->>>>> +                                     ret = zynqmp_pm_afi(AFIFS_SS2,
->>>>> +
->>>> AFIFS_SS0_SS2_BUS_WIDTH_64_CONFIG_VAL);
->>>>> +                             else if (bus_width == 128)
->>>>> +                                     ret = zynqmp_pm_afi(AFIFS_SS2,
->>>>> +
->>>> AFIFS_SS0_SS2_BUS_WIDTH_128_CONFIG_VAL);
->>>>> +                             else
->>>>> +                                     return -EINVAL;
->>>>> +                     } else if (cfgptr->id == AFIFS) {
->>>>> +                             if (bus_width == 32)
->>>>> +                                     afi_ss0_val = AFIFS_SS_BUS_WIDTH_32_CONFIG_VAL;
->>>>> +                             else if (bus_width == 64)
->>>>> +                                     afi_ss0_val =
->>>> AFIFS_SS0_SS2_BUS_WIDTH_64_CONFIG_VAL;
->>>>> +                             else if (bus_width == 128)
->>>>> +                                     afi_ss0_val =
->>>> AFIFS_SS0_SS2_BUS_WIDTH_128_CONFIG_VAL;
->>>>> +                             else
->>>>> +                                     return -EINVAL;
->>>>> +
->>>>> +                             ret = of_property_read_u32(np, "xlnx,afi-fs-ss1-bus-
->>>> width",
->>>>> +                                                        &bus_width);
->>>>> +                             if (!ret) {
->>>>> +                                     if (bus_width == 32)
->>>>> +                                             afi_ss1_val =
->>>> AFIFS_SS_BUS_WIDTH_32_CONFIG_VAL;
->>>>> +                                     else if (bus_width == 64)
->>>>> +                                             afi_ss1_val =
->>>> AFIFS_SS1_BUS_WIDTH_64_CONFIG_VAL;
->>>>> +                                     else if (bus_width == 128)
->>>>> +                                             afi_ss1_val =
->>>> AFIFS_SS1_BUS_WIDTH_128_CONFIG_VAL;
->>>>> +                                     else
->>>>> +                                             return -EINVAL;
->>>>> +
->>>>> +                                     ret = zynqmp_pm_afi(AFIFS, afi_ss1_val |
->>>> afi_ss0_val);
->>>>> +                             }
->>>>> +                     } else {
->>>>> +                             if (bus_width == 32)
->>>>> +                                     ret = zynqmp_pm_afi(cfgptr->id,
->>>>> +                                                         AFIFM_BUS_WIDTH_32_CONFIG_VAL);
->>>>> +                             else if (bus_width == 64)
->>>>> +                                     ret = zynqmp_pm_afi(cfgptr->id,
->>>>> +                                                         AFIFM_BUS_WIDTH_64_CONFIG_VAL);
->>>>> +                             else if (bus_width == 128)
->>>>> +                                     ret = zynqmp_pm_afi(cfgptr->id,
->>>>> +                                                         AFIFM_BUS_WIDTH_128_CONFIG_VAL);
->>>>> +                             else
->>>>> +                                     return -EINVAL;
->>>>> +                     }
->>>>> +             }
->>>>> +             cfgptr++;
->>>>> +     }
->>>>> +
->>>>> +     return 0;
->>>>> +}
->>>>> +
->>>>> +static int zynqmp_afi_enable_set(struct fpga_bridge *bridge, bool
->>>>> +enable) {
->>>>> +     struct device_node *overlay = bridge->info->overlay;
->>>>> +     struct zynqmp_afi *priv = bridge->priv;
->>>>> +     int ret = 0;
->>>>> +
->>>>> +     if (enable) {
->>>>> +             reset_control_reset(priv->resets);
->>>>> +             return 0;
->>>>> +     }
->>>>> +
->>>>> +     of_node_get(overlay);
->>>>> +     priv->of_node =
->>>>> +     of_find_node_with_property(overlay,
->>>>> +                                "xlnx,afi-fm0-rd-bus-width");
->>>>
->>>> I'm a little confused here. The fpga_image_info.overlay is for fpga-region, but
->>>> from your binding doc this property is for this afi device. You want to add
->>>> another overlay targeting afi dev node during reprograming?
->>>>
->>>
->>> Yes, it uses Overlay's(overlay targeting afi dev node). As I said above for design-to-design AFI configs
->>> relevant to the full region may change and these configs must be set prior to program the full region
->>> once this overlay integrated to the live tree the existing afi config values will be replace with the new one's
->>>
->>>>> +     if (priv->of_node)
->>>>> +             ret = zynqmp_afi_config(priv);
->>>>> +     of_node_put(priv->of_node);
->>>>> +
->>>>> +     return ret;
->>>>> +}
->>>>> +
->>>>> +static const struct fpga_bridge_ops zynqmp_afi_br_ops = {
->>>>> +     .enable_set = zynqmp_afi_enable_set, };
->>>>> +
->>>>> +static const struct of_device_id zynqmp_afi_of_match[] = {
->>>>> +     { .compatible =  "xlnx,zynqmp-afi-fpga" },
->>>>> +     { },
->>>>> +};
->>>>> +MODULE_DEVICE_TABLE(of, zynqmp_afi_of_match);
->>>>> +
->>>>> +static int zynqmp_afi_probe(struct platform_device *pdev) {
->>>>> +     struct device *dev = &pdev->dev;
->>>>> +     struct zynqmp_afi *priv;
->>>>> +     struct fpga_bridge *br;
->>>>> +
->>>>> +     priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
->>>>> +     if (!priv)
->>>>> +             return -ENOMEM;
->>>>> +
->>>>> +     priv->dev = dev;
->>>>> +
->>>>> +     priv->resets =
->>>> devm_reset_control_array_get_optional_exclusive(&pdev->dev);
->>>>> +     if (IS_ERR(priv->resets))
->>>>> +             return PTR_ERR(priv->resets);
->>>>> +
->>>>> +     br = fpga_bridge_register(dev, "Xilinx ZynqMP AFI",
->>>>> +                               &zynqmp_afi_br_ops, priv);
->>>>> +     if (IS_ERR(br)) {
->>>>> +             dev_err(dev, "unable to register Xilinx ZynqMP AFI");
->>>>
->>>> Need a "\n" at the end?
->>>>
->>>
->>> Will fix.
->>>
->>> Regards,
->>> Navakishore.
->>>
->>
->> Thanks,
->> Marco
->>
-> 
-
+Yilun
