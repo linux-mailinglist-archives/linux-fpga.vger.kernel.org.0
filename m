@@ -2,38 +2,38 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C57C5E7A9D
+	by mail.lfdr.de (Postfix) with ESMTP id C85005E7A9E
 	for <lists+linux-fpga@lfdr.de>; Fri, 23 Sep 2022 14:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbiIWMWl (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 23 Sep 2022 08:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
+        id S229770AbiIWMWo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 23 Sep 2022 08:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbiIWMV6 (ORCPT
+        with ESMTP id S231588AbiIWMV6 (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>); Fri, 23 Sep 2022 08:21:58 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53E2135040;
-        Fri, 23 Sep 2022 05:17:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E18135046;
+        Fri, 23 Sep 2022 05:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663935449; x=1695471449;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0Jla0i8CgmTHTT8ljPUhB6fAmRb8N/rW8rradd5CdTw=;
-  b=Ox1484cd9lP+E3iMVoynEqAaTi8ac5RzOBHZVZkUaeSo6pTjnKlmbqJh
-   lYxviqJhEyE6q4InZe+pmUUiyUgE4AXjraCid13MH1iDMYwRCvtNg3Uwv
-   D+NMlgf7e5Ti7CDAChRxuufT7cd3nNVu98u+shq54EApaTiPRObqhICdo
-   Ix3Zm+EMRsySVFqbFgUlMcizRs3yxKFamAQ5c0imR+nX6BlAe48hPrRdK
-   acaU9WWk631vHJQv1HA3PpvI6bCaTJC7Tfer5HhY9FivKNp3Y2f5F/Qo6
-   8/UEu0Vn4h3G6LAeEPnmU/9q2lG+GI/ZcHo+C+h3xXRxoSVrie2O3aIaB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="364595261"
+  t=1663935450; x=1695471450;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HyCYvT4MS9aixSrjDPMIu3T0VuZk0mTl3XzcDjq7QLc=;
+  b=Pfin51E61Eha6ZMYr0qpf63pT4sqikWy2dx9kpPO9oXhe3TgnsiHy1kB
+   UF81lhbIP8XfBCL/OUuoIrm6z0+cYZcDalKqwJcCCSTSmQSsd4wpnudaM
+   7NG0R29Q7qHmoN70g6AU3c9l+3/ACgDp3umtBumXHIbYF7ZtS+T66OxSn
+   0i7hPEJnr7oHJYIsc6DKNv6XH7BoVIXFTo0CXG5SToeMniHbb4HgG/o2b
+   6HDpIJzXfyuR+4guEek+sHumRc725ihEORyAmm2BLDxKBKebdzsGZgOgT
+   DlyMfwySP/TYEE8T+dFWLpCaccGIuPuuK4ok974MrsnA7oDeWpdsG4xgx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="364595264"
 X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="364595261"
+   d="scan'208";a="364595264"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 05:17:29 -0700
 X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="762597725"
+   d="scan'208";a="762597729"
 Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
   by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 05:17:29 -0700
 From:   matthew.gerlach@linux.intel.com
@@ -47,11 +47,13 @@ To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         andriy.shevchenko@linux.intel.com,
         niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
         macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Cc:     Matthew Gerlach <matthew.gerlach@intel.com>
-Subject: [PATCH v2 0/6] Enhance definition of DFH and use enhancements for uart driver
-Date:   Fri, 23 Sep 2022 05:17:39 -0700
-Message-Id: <20220923121745.129167-1-matthew.gerlach@linux.intel.com>
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v2 1/6] Documentation: fpga: dfl: Add documentation for DFHv1
+Date:   Fri, 23 Sep 2022 05:17:40 -0700
+Message-Id: <20220923121745.129167-2-matthew.gerlach@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220923121745.129167-1-matthew.gerlach@linux.intel.com>
+References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,48 +65,79 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@intel.com>
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-This patchset enhances the definition of the Device Feature Header (DFH) used by
-the Device Feature List (DFL) bus and then uses the new enhancements in a uart
-driver.
+Add documentation describing the extensions provided by Version
+1 of the Device Feature Header (DFHv1).
 
-Patch 1 updates the DFL documentation to provide the motivation behind the 
-enhancements to the definition of the DFH.
+Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+---
+v2: s/GUILD/GUID/
+    add picture
+---
+ Documentation/fpga/dfl.rst | 49 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-Patch 2 moves some of the DFH definitions to include/linux/dfl.h so that
-they can be accessed by drivers outside of drivers/fpga.
-
-Patch 3 adds the definitions for DFHv1.
-
-Patch 4 defines and uses a DFHv1 parameter to provide a generic mechanism for
-describing MSIX interrupts used by a particular feature instance.
-
-Patch 5 gets the location and size of the feature's register set from DFHv1.
-
-Patch 6 adds a DFL uart driver that makes use of the new features of DFHv1.
-
-Basheer Ahmed Muddebihal (2):
-  fpga: dfl: Move the DFH definitions
-  fpga: dfl: Add DFHv1 Register Definitions
-
-Matthew Gerlach (4):
-  Documentation: fpga: dfl: Add documentation for DFHv1
-  fpga: dfl: add generic support for MSIX interrupts
-  fpga: dfl: parse the location of the feature's registers from DFHv1
-  tty: serial: 8250: add DFL bus driver for Altera 16550.
-
- Documentation/fpga/dfl.rst         |  49 ++++++++
- drivers/fpga/dfl-afu-main.c        |   4 +-
- drivers/fpga/dfl.c                 |  88 ++++++++++++--
- drivers/fpga/dfl.h                 |  24 +---
- drivers/tty/serial/8250/8250_dfl.c | 177 +++++++++++++++++++++++++++++
- drivers/tty/serial/8250/Kconfig    |   9 ++
- drivers/tty/serial/8250/Makefile   |   1 +
- include/linux/dfl.h                |  79 ++++++++++++-
- 8 files changed, 402 insertions(+), 29 deletions(-)
- create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-
+diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+index 15b670926084..7c786b75b498 100644
+--- a/Documentation/fpga/dfl.rst
++++ b/Documentation/fpga/dfl.rst
+@@ -561,6 +561,55 @@ new DFL feature via UIO direct access, its feature id should be added to the
+ driver's id_table.
+ 
+ 
++Extending the Device Feature Header - DFHv1
++===========================================
++The current 8 bytes of the Device Feature Header, hereafter referred to as
++to DFHv0, provide very little opportunity for the hardware to describe itself
++to software. Version 1 of the Device Feature Header (DFHv1) is being introduced
++to provide increased flexibility and extensibility to hardware designs using
++Device Feature Lists.  The list below describes some of the goals behind the
++changes in DFHv1:
++
++* Provide a standardized mechanism for features to describe
++  parameters/capabilities to software.
++* Standardize the use of a GUID for all DFHv1 types.
++* Decouple the location of the DFH from the register space of the feature itself.
++
++Modeled after PCI Capabilities, DFHv1 Parameters provide a mechanism to associate
++a list of parameter values to a particular feature.
++
++With DFHv0, not all features types contained a GUID.  DFHv1 makes the GUID standard
++across all types.
++
++With DFHv0, the register map of a given feature is located immediately following
++the DFHv0 in the memory space.  With DFHv1, the location of the feature register
++map can be specified as an offset to the DFHv1 or as an absolute address.  The DFHv1
++structure is shown below:
++
++    +-----------------------------------------------------------------------+
++    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0|
++    +-----------------------------------------------------------------------+
++    |63                                 GUID_L                             0|
++    +-----------------------------------------------------------------------+
++    |63                                 GUID_H                             0|
++    +-----------------------------------------------------------------------+
++    |63                 Address/Offset                            1|  Rel  0|
++    +-----------------------------------------------------------------------+
++    |63 Size of register set  32|Params 31|30 Group    16|15 Instance      0|
++    +-----------------------------------------------------------------------+
++    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
++    +-----------------------------------------------------------------------+
++    |63                 Parameter Data                                     0|
++    +-----------------------------------------------------------------------+
++
++                                  ...
++
++    +-----------------------------------------------------------------------+
++    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
++    +-----------------------------------------------------------------------+
++    |63                 Parameter Data                                     0|
++    +-----------------------------------------------------------------------+
++
+ Open discussion
+ ===============
+ FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
 -- 
 2.25.1
 
