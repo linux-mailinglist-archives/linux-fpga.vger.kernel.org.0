@@ -2,65 +2,65 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5352B5F0D25
-	for <lists+linux-fpga@lfdr.de>; Fri, 30 Sep 2022 16:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4F45F1CF8
+	for <lists+linux-fpga@lfdr.de>; Sat,  1 Oct 2022 16:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbiI3OKP (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 30 Sep 2022 10:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
+        id S229504AbiJAOuh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 1 Oct 2022 10:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiI3OKN (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 30 Sep 2022 10:10:13 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8E336405;
-        Fri, 30 Sep 2022 07:10:07 -0700 (PDT)
+        with ESMTP id S229448AbiJAOuf (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 1 Oct 2022 10:50:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1007C18E;
+        Sat,  1 Oct 2022 07:50:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664547008; x=1696083008;
+  t=1664635834; x=1696171834;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=YXEUeoO6/hYWuwTpFS0HnvKZYn5bRmmE1JqrdtO1JmE=;
-  b=TCytLOFK70Iae1ixY0UQenUcNkRG3Qm9LagaBgFwurLZ2tnvjATTvc+Q
-   nUkNht/f2GyfkZCSmG7kCD+3bAwPOY4Y/2Wv+KtMskNKs+eK1O2SBHOy2
-   N54GdJFqd/Ez0SLS8zdRyn8HzKhmgbV1jDAFhmBa2AqkXXgd4jX4x0CGG
-   73MDv+kRNRt0dcjWR67NYlliMVgAOIMrCE62fUZugd4gUmKdYcOP0A7JG
-   NamMCT48aDd4PaT0ngYAeerjggkOxkq/H9ziUrV7OFXT5umOFnsC7Jb5v
-   ZMoI7JXg1TbFQJ5RvabxAEY7O1RBrO697O5N3GBqK1PZPyMF/wl5UcbSJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="300915273"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="300915273"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 07:09:46 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="622779244"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="622779244"
+  bh=Wdofohhhk+WBis7eTbKpBgNiOGZ4pD2blf+gOm7Wz7M=;
+  b=KmEZmN9FLxS9/0pgcwN6jV1iYNun8qrUzcPoU1HopQRwm/5yD5tMYWTA
+   Fy0jAlUBKRIuYLsJ/t7LF90IiMA9+5tIRgD+5QBWjti7zbsFbEvZWu2uP
+   a66IqVLxUZV7EYbGfb7wgw3mv2yMsdgiue8+BYqjusxbYtonMpQT81d41
+   Dqvfx+FAhudwtRNvOh7HQ0N0SxzZgb9EX3mMbXVluwVGaSM6F2CUa3u2a
+   ipf88+cSBOWs55hyur8oG15zqg0spt62oE0FymXnPVE5WlG7Pvk/ZkFaJ
+   bqdEHdVKgX1xYFNt3dM7WYvETXGINaHEzPpsjilFK7rEKbsLIP8jp91J0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10487"; a="302364788"
+X-IronPort-AV: E=Sophos;i="5.93,361,1654585200"; 
+   d="scan'208";a="302364788"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2022 07:50:33 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10487"; a="798265388"
+X-IronPort-AV: E=Sophos;i="5.93,361,1654585200"; 
+   d="scan'208";a="798265388"
 Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 07:09:46 -0700
-Date:   Fri, 30 Sep 2022 07:09:57 -0700 (PDT)
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2022 07:50:33 -0700
+Date:   Sat, 1 Oct 2022 07:50:43 -0700 (PDT)
 From:   matthew.gerlach@linux.intel.com
 X-X-Sender: mgerlach@rhweight-WRK1
-To:     Tom Rix <trix@redhat.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tianfei.zhang@intel.com,
-        corbet@lwn.net, gregkh@linuxfoundation.org,
-        linux-serial@vger.kernel.org, jirislaby@kernel.org,
-        geert+renesas@glider.be, andriy.shevchenko@linux.intel.com,
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
         niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
-        Basheer Ahmed Muddebihal 
-        <basheer.ahmed.muddebihal@linux.intel.com>
-Subject: Re: [PATCH v2 2/6] fpga: dfl: Move the DFH definitions
-In-Reply-To: <36342784-34c3-6a08-7cd4-eb185b61061a@redhat.com>
-Message-ID: <alpine.DEB.2.22.394.2209300708410.1634216@rhweight-WRK1>
-References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-3-matthew.gerlach@linux.intel.com> <36342784-34c3-6a08-7cd4-eb185b61061a@redhat.com>
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v2 4/6] fpga: dfl: add generic support for MSIX
+ interrupts
+In-Reply-To: <YzZiZsc3X0Iy6Z5S@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2210010749440.1720354@rhweight-WRK1>
+References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-5-matthew.gerlach@linux.intel.com> <YzZiZsc3X0Iy6Z5S@yilunxu-OptiPlex-7050>
 User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,179 +70,177 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 
-On Sat, 24 Sep 2022, Tom Rix wrote:
+On Fri, 30 Sep 2022, Xu Yilun wrote:
 
->
-> On 9/23/22 5:17 AM, matthew.gerlach@linux.intel.com wrote:
->> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
->> 
->> Moving the DFH register offset and register definitions from
->> drivers/fpga/dfl.h to include/linux/dfl.h. These definitions
->> need to be accessed by dfl drivers that are outside of
->> drivers/fpga.
->
-> This comment does not match what is done.
->
-> A move, a change in names and the introduction new defines.
->
-> I am not sure if moving these #defines is the best approach, the later use of 
-> the in the uart with FIELD_GET's i think should be wrapped as functions and 
-> these functions exported rather than the #defines.
->
-> So split this patch and justify why #defines are added to the user's 
-> includes.
->
-> Tom
-
-I agree the original intent "diverged in v2".  I will minimize moving and 
-make helper functions to simplify things.
-
-
->
->> 
->> Signed-off-by: Basheer Ahmed Muddebihal 
->> <basheer.ahmed.muddebihal@linux.intel.com>
+> On 2022-09-23 at 05:17:43 -0700, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Define and use a DFHv1 parameter to add generic support for MSIX
+>> interrupts for DFL devices.
+>>
 >> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 >> ---
->> v2: remove extra space in commit
->>      use uniform number of digits in constants
->>      don't change copyright date because of removed content
+>> v2: fix kernel doc
+>>     clarify use of DFH_VERSION field
 >> ---
->>   drivers/fpga/dfl-afu-main.c |  4 ++--
->>   drivers/fpga/dfl.c          |  2 +-
->>   drivers/fpga/dfl.h          | 20 +-------------------
->>   include/linux/dfl.h         | 33 ++++++++++++++++++++++++++++++++-
->>   4 files changed, 36 insertions(+), 23 deletions(-)
->> 
->> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
->> index 7f621e96d3b8..c26961ee33db 100644
->> --- a/drivers/fpga/dfl-afu-main.c
->> +++ b/drivers/fpga/dfl-afu-main.c
->> @@ -468,8 +468,8 @@ afu_id_show(struct device *dev, struct device_attribute 
->> *attr, char *buf)
->>   		return -EBUSY;
->>   	}
->>   -	guidl = readq(base + GUID_L);
->> -	guidh = readq(base + GUID_H);
->> +	guidl = readq(base + DFH_GUID_L);
->> +	guidh = readq(base + DFH_GUID_H);
->>   	mutex_unlock(&pdata->lock);
->>     	return scnprintf(buf, PAGE_SIZE, "%016llx%016llx\n", guidh, guidl);
+>>  drivers/fpga/dfl.c  | 60 +++++++++++++++++++++++++++++++++++++++++----
+>>  include/linux/dfl.h | 14 +++++++++++
+>>  2 files changed, 69 insertions(+), 5 deletions(-)
+>>
 >> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
->> index b9aae85ba930..1132f3c10440 100644
+>> index 1132f3c10440..dfd3f563c92d 100644
 >> --- a/drivers/fpga/dfl.c
 >> +++ b/drivers/fpga/dfl.c
->> @@ -1163,7 +1163,7 @@ static int parse_feature_fiu(struct 
->> build_feature_devs_info *binfo,
->>   	 * find and parse FIU's child AFU via its NEXT_AFU register.
->>   	 * please note that only Port has valid NEXT_AFU pointer per spec.
->>   	 */
->> -	v = readq(binfo->ioaddr + NEXT_AFU);
->> +	v = readq(binfo->ioaddr + DFH_NEXT_AFU);
->>     	offset = FIELD_GET(NEXT_AFU_NEXT_DFH_OFST, v);
->>   	if (offset)
->> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
->> index 06cfcd5e84bb..e620fcb02b5a 100644
->> --- a/drivers/fpga/dfl.h
->> +++ b/drivers/fpga/dfl.h
->> @@ -17,6 +17,7 @@
->>   #include <linux/bitfield.h>
->>   #include <linux/cdev.h>
->>   #include <linux/delay.h>
->> +#include <linux/dfl.h>
->>   #include <linux/eventfd.h>
->>   #include <linux/fs.h>
->>   #include <linux/interrupt.h>
->> @@ -53,28 +54,9 @@
->>   #define PORT_FEATURE_ID_UINT		0x12
->>   #define PORT_FEATURE_ID_STP		0x13
->>   -/*
->> - * Device Feature Header Register Set
->> - *
->> - * For FIUs, they all have DFH + GUID + NEXT_AFU as common header 
->> registers.
->> - * For AFUs, they have DFH + GUID as common header registers.
->> - * For private features, they only have DFH register as common header.
->> - */
->> -#define DFH			0x0
->> -#define GUID_L			0x8
->> -#define GUID_H			0x10
->> -#define NEXT_AFU		0x18
->> -
->> -#define DFH_SIZE		0x8
->> -
->>   /* Device Feature Header Register Bitfield */
->> -#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID 
->> */
->>   #define DFH_ID_FIU_FME		0
->>   #define DFH_ID_FIU_PORT		1
->> -#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision 
->> */
->> -#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH 
->> */
->> -#define DFH_EOL			BIT_ULL(40)		/* End of 
->> list */
->> -#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
->>   #define DFH_TYPE_AFU		1
->>   #define DFH_TYPE_PRIVATE	3
->>   #define DFH_TYPE_FIU		4
+>> @@ -941,23 +941,22 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
+>>  	void __iomem *base = binfo->ioaddr + ofst;
+>>  	unsigned int i, ibase, inr = 0;
+>>  	enum dfl_id_type type;
+>> -	int virq;
+>> +	int virq, off;
+>>  	u64 v;
+>>
+>>  	type = feature_dev_id_type(binfo->feature_dev);
+>>
+>>  	/*
+>>  	 * Ideally DFL framework should only read info from DFL header, but
+>> -	 * current version DFL only provides mmio resources information for
+>> +	 * current version, DFHv0, only provides mmio resources information for
+>
+> With this patchset, it's not 'current version' anymore.
+
+I will update the comment. Thanks.
+
+>
+>>  	 * each feature in DFL Header, no field for interrupt resources.
+>>  	 * Interrupt resource information is provided by specific mmio
+>>  	 * registers of each private feature which supports interrupt. So in
+>>  	 * order to parse and assign irq resources, DFL framework has to look
+>>  	 * into specific capability registers of these private features.
+>>  	 *
+>> -	 * Once future DFL version supports generic interrupt resource
+>> -	 * information in common DFL headers, the generic interrupt parsing
+>> -	 * code will be added. But in order to be compatible to old version
+>> +	 * DFHv1 supports generic interrupt resource information in DFHv1
+>> +	 * parameter blocks. But in order to be compatible to old version
+>>  	 * DFL, the driver may still fall back to these quirks.
+>>  	 */
+>>  	if (type == PORT_ID) {
+>> @@ -981,6 +980,36 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
+>>  		}
+>>  	}
+>>
+>> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
+>> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
+>> +
+>> +		v = FIELD_GET(DFH_VERSION, readq(base));
+>> +		switch (v) {
+>> +		case 0:
+>> +			break;
+>
+> In last version, you mentioned that there will be no quirk for DFLv1, so
+> how about:
+>
+>  v = FIELD_GET(DFH_VERSION, readq(base));
+>
+>  if (v == 0) {
+> 	/* quirks */
+>  } else {
+> 	/* parse PARAM MSIX  */
+>  }
+>
+> No need to check specific feature ids again.
+
+With v3 changes I will use a switch state and not need quirks for v1.
+
+>
+> Thanks,
+> Yilun
+>
+>> +
+>> +		case 1:
+>> +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
+>> +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
+>> +				off = dfl_find_param(base + DFHv1_PARAM_HDR, ofst,
+>> +						     DFHv1_PARAM_ID_MSIX);
+>> +				if (off >= 0) {
+>> +					ibase = readl(base + DFHv1_PARAM_HDR +
+>> +						      off + DFHv1_PARAM_MSIX_STARTV);
+>> +					inr = readl(base + DFHv1_PARAM_HDR +
+>> +						    off + DFHv1_PARAM_MSIX_NUMV);
+>> +					dev_dbg(binfo->dev, "start %d num %d fid 0x%x\n",
+>> +						ibase, inr, fid);
+>> +				}
+>> +			}
+>> +			break;
+>> +
+>> +		default:
+>> +			dev_warn(binfo->dev, "unexpected DFH version %lld\n", v);
+>> +			break;
+>> +		}
+>> +	}
+>> +
+>>  	if (!inr) {
+>>  		*irq_base = 0;
+>>  		*nr_irqs = 0;
+>> @@ -1879,6 +1908,27 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
+>>  }
+>>  EXPORT_SYMBOL_GPL(dfl_feature_ioctl_set_irq);
+>>
+>> +int dfl_find_param(void __iomem *base, resource_size_t max, int param)
+>> +{
+>> +	int off = 0;
+>> +	u64 v, next;
+>> +
+>> +	while (off < max) {
+>> +		v = readq(base + off);
+>> +		if (param == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
+>> +			return off;
+>> +
+>> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+>> +		if (!next)
+>> +			break;
+>> +
+>> +		off += next;
+>> +	}
+>> +
+>> +	return -ENOENT;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfl_find_param);
+>> +
+>>  static void __exit dfl_fpga_exit(void)
+>>  {
+>>  	dfl_chardev_uinit();
 >> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
->> index 431636a0dc78..33d167c53b09 100644
+>> index 1e53468ba8d8..33e21c360671 100644
 >> --- a/include/linux/dfl.h
 >> +++ b/include/linux/dfl.h
->> @@ -2,7 +2,7 @@
->>   /*
->>    * Header file for DFL driver and device API
->>    *
->> - * Copyright (C) 2020 Intel Corporation, Inc.
->> + * Copyright (C) 2020-2022 Intel Corporation, Inc.
->>    */
->>     #ifndef __LINUX_DFL_H
->> @@ -11,6 +11,37 @@
->>   #include <linux/device.h>
->>   #include <linux/mod_devicetable.h>
->>   +/*
->> + * Device Feature Header Register Set
+>> @@ -63,6 +63,10 @@
+>>  #define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
+>>  #define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
+>>
+>> +#define DFHv1_PARAM_ID_MSIX	0x1
+>> +#define DFHv1_PARAM_MSIX_STARTV	0x8
+>> +#define DFHv1_PARAM_MSIX_NUMV	0xc
+>> +
+>>  /**
+>>   * enum dfl_id_type - define the DFL FIU types
+>>   */
+>> @@ -136,4 +140,14 @@ void dfl_driver_unregister(struct dfl_driver *dfl_drv);
+>>  	module_driver(__dfl_driver, dfl_driver_register, \
+>>  		      dfl_driver_unregister)
+>>
+>> +/**
+>> + * dfl_find_param() - find the offset of the given parameter
+>> + * @base: base pointer to start of dfl parameters in DFH
+>> + * @max: maximum offset to search
+>> + * @param: id of dfl parameter
 >> + *
->> + * For FIUs, they all have DFH + GUID + NEXT_AFU as common header 
->> registers.
->> + * For AFUs, they have DFH + GUID as common header registers.
->> + * For private features, they only have DFH register as common header.
+>> + * Return: positive offset on success, negative error code otherwise.
 >> + */
->> +#define DFH			0x00
->> +#define DFH_GUID_L		0x08
->> +#define DFH_GUID_H		0x10
->> +#define DFH_NEXT_AFU		0x18
+>> +int dfl_find_param(void __iomem *base, resource_size_t max, int param);
 >> +
->> +/*
->> + * DFHv1 Register Offset definitons
->> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + 
->> PARAM_DATA
->> + * as common header registers
->> + */
->> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address 
->> */
->> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
->> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header 
->> */
->> +#define DFHv1_PARAM_DATA	0x08  /* Offset of Param data from Param 
->> header */
->> +
->> +#define DFH_SIZE		0x08
->> +
->> +/* Device Feature Header Register Bitfield */
->> +#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID 
->> */
->> +#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision 
->> */
->> +#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH 
->> */
->> +#define DFH_EOL			BIT_ULL(40)		/* End of 
->> list */
->> +#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
->> +
->>   /**
->>    * enum dfl_id_type - define the DFL FIU types
->>    */
->
+>>  #endif /* __LINUX_DFL_H */
+>> --
+>> 2.25.1
+>>
 >
