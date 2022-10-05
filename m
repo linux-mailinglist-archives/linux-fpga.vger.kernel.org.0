@@ -2,42 +2,42 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB9F5F52A6
-	for <lists+linux-fpga@lfdr.de>; Wed,  5 Oct 2022 12:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657885F52E1
+	for <lists+linux-fpga@lfdr.de>; Wed,  5 Oct 2022 12:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiJEKa5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 5 Oct 2022 06:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S229608AbiJEKrY (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 5 Oct 2022 06:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiJEKa4 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 5 Oct 2022 06:30:56 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865C52D1F0;
-        Wed,  5 Oct 2022 03:30:55 -0700 (PDT)
+        with ESMTP id S229505AbiJEKrV (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 5 Oct 2022 06:47:21 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C109926492;
+        Wed,  5 Oct 2022 03:47:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664965855; x=1696501855;
+  t=1664966838; x=1696502838;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=Wezh43SpRoN0/MWvN1oHmzbIRsNAJSzelgJtCEdWV6M=;
-  b=WT2SiHk82pAPVIe/3nKMaBgxsrYgBG7f6ieP27sTDeqnp4ynrObCJokv
-   sW8pjWOoMAyDyx2uMCeJfrdYUxI8fWqIHcgupEJ63NMH9+aTNBeLUaOjd
-   teDde8y+v+/quJrAyX+aodgPe2dupAkQT6QuYKt/gwqhgPtw+BHJEgnOx
-   Ekz7xvdplWrCnJRs2Sm6FHMWqw9c1Oi/YIQSgN3LHKCysOa3Tz2gHBov2
-   Gs18rp7jqZlD1hrb3/i3p/bGwkfynuaLtkNOOzz8HcfSusz46ajwmblmM
-   GiBD9SMkUUckUeupDKzq8gHs0JBLJwN/Z+Odr8zyMRw64kGgO7YtL7ltY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="304696997"
+  bh=Qvdvm6/Yzu7ojmkolJcq8JM8ELA489o7JaJRUu4mY5U=;
+  b=IuoI0hTa7ArWrespAaoLf+8W3nQQa2Mrlwf2E3ditrFWFx4AysDHUJaC
+   8EmFCUAUJ/Fpfyo4kwpzzY9OS7wttI48w/JBpM26a8sePDJhlY8bATrcb
+   jvFw11O/xA7ux3Vz63CPJu+PhEvx4IJHhhU76Gs/mMpWz4uWxeYA1xw0S
+   XUf76pHoF7IDHI9dU1eiDi/0TC5CE3R+tvDsK8sj+WLhoc2+T48mqdMaK
+   KXq5peKU9Pzc6OUos9DeqWnPMK7PQkd5aGfQmWlFCa56v4OpkntpfGOlj
+   08MC3kHmA554FeV0f06r2NERv01uz0Sjev+Ud50dO6mBBcWBylpNNx9p4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="329543795"
 X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="304696997"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 03:30:55 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="619426480"
+   d="scan'208";a="329543795"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 03:47:18 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="869361684"
 X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="619426480"
+   d="scan'208";a="869361684"
 Received: from refaase-mobl1.ger.corp.intel.com ([10.252.39.164])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 03:30:48 -0700
-Date:   Wed, 5 Oct 2022 13:30:45 +0300 (EEST)
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 03:47:11 -0700
+Date:   Wed, 5 Oct 2022 13:47:08 +0300 (EEST)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
 cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
@@ -50,175 +50,192 @@ cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v3 3/4] fpga: dfl: add basic support for DFHv1
-In-Reply-To: <20221004143718.1076710-4-matthew.gerlach@linux.intel.com>
-Message-ID: <2ee52b26-d34d-9599-a465-b3cce51f4b45@linux.intel.com>
-References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-4-matthew.gerlach@linux.intel.com>
+        johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+In-Reply-To: <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
+Message-ID: <d75abf9c-e982-563f-b2-d5a376367b1e@linux.intel.com>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Please try to remember cc all people who have commented your patches when 
-sending the next version.
-
 On Tue, 4 Oct 2022, matthew.gerlach@linux.intel.com wrote:
 
 > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> Add generic support for MSIX interrupts for DFL devices.
-> 
-> The location of a feature's registers is explicitly
-> described in DFHv1 and can be relative to the base of the DFHv1
-> or an absolute address.  Parse the location and pass the information
-> to DFL driver.
+> Add a Device Feature List (DFL) bus driver for the Altera
+> 16550 implementation of UART.
 > 
 > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+> v3: use passed in location of registers
+>     use cleaned up functions for parsing parameters
+> 
+> v2: clean up error messages
+>     alphabetize header files
+>     fix 'missing prototype' error by making function static
+>     tried to sort Makefile and Kconfig better
+> ---
+>  drivers/tty/serial/8250/8250_dfl.c | 177 +++++++++++++++++++++++++++++
+>  drivers/tty/serial/8250/Kconfig    |   9 ++
+>  drivers/tty/serial/8250/Makefile   |   1 +
+>  3 files changed, 187 insertions(+)
+>  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+> 
+> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
+> new file mode 100644
+> index 000000000000..110ad3a73459
+> --- /dev/null
+> +++ b/drivers/tty/serial/8250/8250_dfl.c
+> @@ -0,0 +1,177 @@
 
-> @@ -935,55 +948,74 @@ static u16 feature_id(u64 value)
->  }
->  
->  static int parse_feature_irqs(struct build_feature_devs_info *binfo,
-> -			      resource_size_t ofst, u16 fid,
-> -			      unsigned int *irq_base, unsigned int *nr_irqs)
-> +			      resource_size_t ofst, struct dfl_feature_info *finfo)
->  {
->  	void __iomem *base = binfo->ioaddr + ofst;
->  	unsigned int i, ibase, inr = 0;
->  	enum dfl_id_type type;
-> -	int virq;
-> -	u64 v;
-> -
-> -	type = feature_dev_id_type(binfo->feature_dev);
-> +	u16 fid = finfo->fid;
-> +	u64 v, dfh_ver;
-
-Drop dfh_ver.
-
-> +	int virq, off;
->  
->  	/*
->  	 * Ideally DFL framework should only read info from DFL header, but
-> -	 * current version DFL only provides mmio resources information for
-> +	 * current version, DFHv0, only provides mmio resources information for
->  	 * each feature in DFL Header, no field for interrupt resources.
->  	 * Interrupt resource information is provided by specific mmio
->  	 * registers of each private feature which supports interrupt. So in
->  	 * order to parse and assign irq resources, DFL framework has to look
->  	 * into specific capability registers of these private features.
->  	 *
-> -	 * Once future DFL version supports generic interrupt resource
-> -	 * information in common DFL headers, the generic interrupt parsing
-> -	 * code will be added. But in order to be compatible to old version
-> +	 * DFHv1 supports generic interrupt resource information in DFHv1
-> +	 * parameter blocks. But in order to be compatible to old version
->  	 * DFL, the driver may still fall back to these quirks.
-
-I'm not convinced this comment is useful as is after the introduction of 
-v1. It feels too focused on v0 limitations.
-
-I suggest you move v0 limitations description to v0 block below and 
-perhaps state in the end of it that comment that v1 is recommended for 
-new things because it doesn't have those limitations. Or something along 
-those lines.
-
->  	 */
-> -	if (type == PORT_ID) {
-> -		switch (fid) {
-> -		case PORT_FEATURE_ID_UINT:
-> -			v = readq(base + PORT_UINT_CAP);
-> -			ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> -			inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
+> +static int dfl_uart_get_params(struct device *dev, void __iomem *dfh_base, resource_size_t max,
+> +			       struct uart_8250_port *uart)
+> +{
+> +	u64 v, fifo_len, reg_width;
+> +	int off;
 > +
-> +	switch (finfo->dfh_version) {
-> +	case 0:
-> +		type = feature_dev_id_type(binfo->feature_dev);
-> +		if (type == PORT_ID) {
-> +			switch (fid) {
-> +			case PORT_FEATURE_ID_UINT:
-> +				v = readq(base + PORT_UINT_CAP);
-> +				ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> +				inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> +				break;
-> +			case PORT_FEATURE_ID_ERROR:
-> +				v = readq(base + PORT_ERROR_CAP);
-> +				ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> +				inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> +				break;
-> +			}
-> +		} else if (type == FME_ID) {
-> +			if (fid == FME_FEATURE_ID_GLOBAL_ERR) {
-> +				v = readq(base + FME_ERROR_CAP);
-> +				ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> +				inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> +			}
-> +		}
+> +	if (!dfhv1_has_params(dfh_base)) {
+> +		dev_err(dev, "missing required DFH parameters\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_CLK_FRQ);
+> +	if (off < 0) {
+> +		dev_err(dev, "missing CLK_FRQ param\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	uart->port.uartclk = readq(dfh_base + off);
+> +	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
+> +
+> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_FIFO_LEN);
+> +	if (off < 0) {
+> +		dev_err(dev, "missing FIFO_LEN param\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	fifo_len = readq(dfh_base + off);
+> +	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
+> +
+> +	switch (fifo_len) {
+> +	case 32:
+> +		uart->port.type = PORT_ALTR_16550_F32;
 > +		break;
 > +
-> +	case 1:
-> +		if (!dfhv1_has_params(base))
->  			break;
-> -		case PORT_FEATURE_ID_ERROR:
-> -			v = readq(base + PORT_ERROR_CAP);
-> -			ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> -			inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
+> +	case 64:
+> +		uart->port.type = PORT_ALTR_16550_F64;
+> +		break;
 > +
-> +		off = dfhv1_find_param(base, ofst, DFHv1_PARAM_ID_MSIX);
-> +		if (off < 0)
->  			break;
-> -		}
-> -	} else if (type == FME_ID) {
-> -		if (fid == FME_FEATURE_ID_GLOBAL_ERR) {
-> -			v = readq(base + FME_ERROR_CAP);
-> -			ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> -			inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> -		}
-> +
-> +		ibase = readl(base + off + DFHv1_PARAM_MSIX_STARTV);
-> +		inr = readl(base + off + DFHv1_PARAM_MSIX_NUMV);
+> +	case 128:
+> +		uart->port.type = PORT_ALTR_16550_F128;
 > +		break;
 > +
 > +	default:
-> +		dev_warn(binfo->dev, "unexpected DFH version %lld\n", dfh_ver);
+> +		dev_err(dev, "bad fifo_len %llu\n", fifo_len);
 
-dfh_ver is uninitialized here. The compiler shouldn't have been happy with 
-this.
+I'd tell user "unsupported" rather than "bad".
 
-> @@ -1041,21 +1073,33 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->  	if (binfo->len - ofst < size)
->  		return -EINVAL;
->  
-> -	ret = parse_feature_irqs(binfo, ofst, fid, &irq_base, &nr_irqs);
-> -	if (ret)
-> -		return ret;
-> -
->  	finfo = kzalloc(sizeof(*finfo), GFP_KERNEL);
->  	if (!finfo)
->  		return -ENOMEM;
->  
->  	finfo->fid = fid;
->  	finfo->revision = revision;
-> +	finfo->dfh_version = dfh_version;
->  	finfo->mmio_res.start = binfo->start + ofst;
->  	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
->  	finfo->mmio_res.flags = IORESOURCE_MEM;
-> -	finfo->irq_base = irq_base;
-> -	finfo->nr_irqs = nr_irqs;
+> +		return -EINVAL;
+> +	}
 > +
-> +	ret = parse_feature_irqs(binfo, ofst, finfo);
-> +	if (ret)
-> +		return ret;
+> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
+> +	if (off < 0) {
+> +		dev_err(dev, "missing REG_LAYOUT param\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	v = readq(dfh_base + off);
+> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
+> +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
+> +
+> +	dev_dbg(dev, "UART_LAYOUT_ID width %lld shift %d\n",
+> +		FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v), (int)uart->port.regshift);
 
-finfo has to be freed in case of an error.
+Why not use reg_width directly?
 
-Thanks for rearranging, it looks more logical now.
+> +	switch (reg_width) {
+> +	case 4:
+> +		uart->port.iotype = UPIO_MEM32;
+> +		break;
+> +
+> +	case 2:
+> +		uart->port.iotype = UPIO_MEM16;
+> +		break;
+> +
+> +	default:
+> +		dev_err(dev, "invalid reg_width %lld\n", reg_width);
 
---
+unsupported ?
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
+> +{
+> +	struct device *dev = &dfl_dev->dev;
+> +	struct uart_8250_port uart;
+> +	struct dfl_uart *dfluart;
+> +	resource_size_t res_size;
+> +	void __iomem *dfh_base;
+> +	int ret;
+> +
+> +	memset(&uart, 0, sizeof(uart));
+> +	uart.port.flags = UPF_IOREMAP;
+> +	uart.port.mapbase = dfl_dev->csr_res.start;
+> +	uart.port.mapsize = resource_size(&dfl_dev->csr_res);
+> +
+> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
+> +	if (!dfluart)
+> +		return -ENOMEM;
+> +
+> +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
+> +	if (IS_ERR(dfh_base))
+> +		return PTR_ERR(dfh_base);
+> +
+> +	res_size = resource_size(&dfl_dev->mmio_res);
+> +
+> +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
+> +
+> +	devm_iounmap(dev, dfh_base);
+> +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
+> +
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
+> +
+> +	dev_dbg(dev, "nr_irqs %d %p\n", dfl_dev->num_irqs, dfl_dev->irqs);
+> +
+> +	if (dfl_dev->num_irqs == 1)
+> +		uart.port.irq = dfl_dev->irqs[0];
+> +
+> +	/* register the port */
+
+This comment is pretty useless. Just drop it.
+
+> +	dfluart->line = serial8250_register_8250_port(&uart);
+> +	if (dfluart->line < 0)
+> +		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
+> +
+> +	dev_info(dev, "serial8250_register_8250_port %d\n", dfluart->line);
+
+This you want to drop too. It seems a debug thing rather than info level 
+stuff.
+
+
+-- 
  i.
+
