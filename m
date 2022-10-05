@@ -2,212 +2,223 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C04AE5F46C4
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Oct 2022 17:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB9F5F52A6
+	for <lists+linux-fpga@lfdr.de>; Wed,  5 Oct 2022 12:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiJDPb3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Oct 2022 11:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S229661AbiJEKa5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 5 Oct 2022 06:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJDPb2 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Oct 2022 11:31:28 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A9025E9E;
-        Tue,  4 Oct 2022 08:31:26 -0700 (PDT)
+        with ESMTP id S229532AbiJEKa4 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 5 Oct 2022 06:30:56 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865C52D1F0;
+        Wed,  5 Oct 2022 03:30:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664897487; x=1696433487;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iFOChYJvoxzaLLOQbDuDmgouBoECtc1KKTUSJu34ImU=;
-  b=cSoz2exaR56+6DewyZYFSazw+rPhjPbGws0VKXp00vkyUuIsSDzpnzHj
-   gCMCyZa4+n0fEbBkVb3coFaxUO0fUmcUBMlDrh7++qA5N3iEaHdfdQbjE
-   oV+JFb2/yEzD0HuY4JYKlUJchaTvN6wFMtN2FtibkpCAeAQ/ppKejwq6t
-   gUavRS4c1kbQxLXN+G4RUQduaI7FFGpyKQlrauHH6KeTme9KJHTIhJZey
-   j+nA91d5AwnTQO7Oz/iu1GPhqMNfqGtmdUatggtxaeW0w63uB5XS0QqYR
-   L5oQgqlCUJLNmkmB4u3sskVlQDqEZCHO3lk3YFkb/ybf+rpR2U+cGHQyC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="286130565"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="286130565"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 08:31:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="799152794"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="799152794"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 04 Oct 2022 08:31:20 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ofjt8-0028VQ-28;
-        Tue, 04 Oct 2022 18:31:18 +0300
-Date:   Tue, 4 Oct 2022 18:31:18 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+  t=1664965855; x=1696501855;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Wezh43SpRoN0/MWvN1oHmzbIRsNAJSzelgJtCEdWV6M=;
+  b=WT2SiHk82pAPVIe/3nKMaBgxsrYgBG7f6ieP27sTDeqnp4ynrObCJokv
+   sW8pjWOoMAyDyx2uMCeJfrdYUxI8fWqIHcgupEJ63NMH9+aTNBeLUaOjd
+   teDde8y+v+/quJrAyX+aodgPe2dupAkQT6QuYKt/gwqhgPtw+BHJEgnOx
+   Ekz7xvdplWrCnJRs2Sm6FHMWqw9c1Oi/YIQSgN3LHKCysOa3Tz2gHBov2
+   Gs18rp7jqZlD1hrb3/i3p/bGwkfynuaLtkNOOzz8HcfSusz46ajwmblmM
+   GiBD9SMkUUckUeupDKzq8gHs0JBLJwN/Z+Odr8zyMRw64kGgO7YtL7ltY
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="304696997"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="304696997"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 03:30:55 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="619426480"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="619426480"
+Received: from refaase-mobl1.ger.corp.intel.com ([10.252.39.164])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 03:30:48 -0700
+Date:   Wed, 5 Oct 2022 13:30:45 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
         mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-Message-ID: <YzxRxo8jL7rB1+px@smile.fi.intel.com>
-References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com>
- <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
+        johan@kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v3 3/4] fpga: dfl: add basic support for DFHv1
+In-Reply-To: <20221004143718.1076710-4-matthew.gerlach@linux.intel.com>
+Message-ID: <2ee52b26-d34d-9599-a465-b3cce51f4b45@linux.intel.com>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-4-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 07:37:18AM -0700, matthew.gerlach@linux.intel.com wrote:
+Please try to remember cc all people who have commented your patches when 
+sending the next version.
+
+On Tue, 4 Oct 2022, matthew.gerlach@linux.intel.com wrote:
+
 > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> Add a Device Feature List (DFL) bus driver for the Altera
-> 16550 implementation of UART.
+> Add generic support for MSIX interrupts for DFL devices.
+> 
+> The location of a feature's registers is explicitly
+> described in DFHv1 and can be relative to the base of the DFHv1
+> or an absolute address.  Parse the location and pass the information
+> to DFL driver.
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-...
+> @@ -935,55 +948,74 @@ static u16 feature_id(u64 value)
+>  }
+>  
+>  static int parse_feature_irqs(struct build_feature_devs_info *binfo,
+> -			      resource_size_t ofst, u16 fid,
+> -			      unsigned int *irq_base, unsigned int *nr_irqs)
+> +			      resource_size_t ofst, struct dfl_feature_info *finfo)
+>  {
+>  	void __iomem *base = binfo->ioaddr + ofst;
+>  	unsigned int i, ibase, inr = 0;
+>  	enum dfl_id_type type;
+> -	int virq;
+> -	u64 v;
+> -
+> -	type = feature_dev_id_type(binfo->feature_dev);
+> +	u16 fid = finfo->fid;
+> +	u64 v, dfh_ver;
 
-> Reported-by: kernel test robot <lkp@intel.com>
+Drop dfh_ver.
 
-https://docs.kernel.org/process/submitting-patches.html?highlight=reported#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
+> +	int virq, off;
+>  
+>  	/*
+>  	 * Ideally DFL framework should only read info from DFL header, but
+> -	 * current version DFL only provides mmio resources information for
+> +	 * current version, DFHv0, only provides mmio resources information for
+>  	 * each feature in DFL Header, no field for interrupt resources.
+>  	 * Interrupt resource information is provided by specific mmio
+>  	 * registers of each private feature which supports interrupt. So in
+>  	 * order to parse and assign irq resources, DFL framework has to look
+>  	 * into specific capability registers of these private features.
+>  	 *
+> -	 * Once future DFL version supports generic interrupt resource
+> -	 * information in common DFL headers, the generic interrupt parsing
+> -	 * code will be added. But in order to be compatible to old version
+> +	 * DFHv1 supports generic interrupt resource information in DFHv1
+> +	 * parameter blocks. But in order to be compatible to old version
+>  	 * DFL, the driver may still fall back to these quirks.
 
-"The Reported-by tag gives credit to people who find bugs and report them and it
-hopefully inspires them to help us again in the future. Please note that if the
-bug was reported in private, then ask for permission first before using the
-Reported-by tag. The tag is intended for bugs; please do not use it to credit
-feature requests."
+I'm not convinced this comment is useful as is after the introduction of 
+v1. It feels too focused on v0 limitations.
 
+I suggest you move v0 limitations description to v0 block below and 
+perhaps state in the end of it that comment that v1 is recommended for 
+new things because it doesn't have those limitations. Or something along 
+those lines.
 
-...
-
-> +	if (!dfhv1_has_params(dfh_base)) {
-> +		dev_err(dev, "missing required DFH parameters\n");
-> +		return -EINVAL;
-> +	}
-
-Why not use dev_err_probe() everywhere since this is called only at ->probe()
-stage?
-
-...
-
-> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_CLK_FRQ);
-> +	if (off < 0) {
-> +		dev_err(dev, "missing CLK_FRQ param\n");
-
-> +		return -EINVAL;
-
-Why error code is being shadowed?
-
-> +	}
-
-...
-
-> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_FIFO_LEN);
-> +	if (off < 0) {
-> +		dev_err(dev, "missing FIFO_LEN param\n");
-> +		return -EINVAL;
-
-Ditto.
-
-> +	}
-
-...
-
-> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
-> +	if (off < 0) {
-> +		dev_err(dev, "missing REG_LAYOUT param\n");
-> +		return -EINVAL;
-> +	}
-
-Ditto.
-
-...
-
-> +	dev_dbg(dev, "UART_LAYOUT_ID width %lld shift %d\n",
-> +		FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v), (int)uart->port.regshift);
-
-Casting in printf() in kernel in 99% shows the wrong specifier in use. Try to
-select the best suitable one.
-
-...
-
-> +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
-> +	if (IS_ERR(dfh_base))
-> +		return PTR_ERR(dfh_base);
+>  	 */
+> -	if (type == PORT_ID) {
+> -		switch (fid) {
+> -		case PORT_FEATURE_ID_UINT:
+> -			v = readq(base + PORT_UINT_CAP);
+> -			ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
+> -			inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
 > +
-> +	res_size = resource_size(&dfl_dev->mmio_res);
+> +	switch (finfo->dfh_version) {
+> +	case 0:
+> +		type = feature_dev_id_type(binfo->feature_dev);
+> +		if (type == PORT_ID) {
+> +			switch (fid) {
+> +			case PORT_FEATURE_ID_UINT:
+> +				v = readq(base + PORT_UINT_CAP);
+> +				ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
+> +				inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
+> +				break;
+> +			case PORT_FEATURE_ID_ERROR:
+> +				v = readq(base + PORT_ERROR_CAP);
+> +				ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
+> +				inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
+> +				break;
+> +			}
+> +		} else if (type == FME_ID) {
+> +			if (fid == FME_FEATURE_ID_GLOBAL_ERR) {
+> +				v = readq(base + FME_ERROR_CAP);
+> +				ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
+> +				inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
+> +			}
+> +		}
+> +		break;
 > +
-> +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
+> +	case 1:
+> +		if (!dfhv1_has_params(base))
+>  			break;
+> -		case PORT_FEATURE_ID_ERROR:
+> -			v = readq(base + PORT_ERROR_CAP);
+> -			ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
+> -			inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
+> +
+> +		off = dfhv1_find_param(base, ofst, DFHv1_PARAM_ID_MSIX);
+> +		if (off < 0)
+>  			break;
+> -		}
+> -	} else if (type == FME_ID) {
+> -		if (fid == FME_FEATURE_ID_GLOBAL_ERR) {
+> -			v = readq(base + FME_ERROR_CAP);
+> -			ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
+> -			inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
+> -		}
+> +
+> +		ibase = readl(base + off + DFHv1_PARAM_MSIX_STARTV);
+> +		inr = readl(base + off + DFHv1_PARAM_MSIX_NUMV);
+> +		break;
+> +
+> +	default:
+> +		dev_warn(binfo->dev, "unexpected DFH version %lld\n", dfh_ver);
 
-> +	devm_iounmap(dev, dfh_base);
-> +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
+dfh_ver is uninitialized here. The compiler shouldn't have been happy with 
+this.
 
-If it's temporary, may be you shouldn't even consider devm_ioremap_resource()
-to begin with? The devm_* release type of functions in 99% of the cases
-indicate of the abusing devm_.
+> @@ -1041,21 +1073,33 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>  	if (binfo->len - ofst < size)
+>  		return -EINVAL;
+>  
+> -	ret = parse_feature_irqs(binfo, ofst, fid, &irq_base, &nr_irqs);
+> -	if (ret)
+> -		return ret;
+> -
+>  	finfo = kzalloc(sizeof(*finfo), GFP_KERNEL);
+>  	if (!finfo)
+>  		return -ENOMEM;
+>  
+>  	finfo->fid = fid;
+>  	finfo->revision = revision;
+> +	finfo->dfh_version = dfh_version;
+>  	finfo->mmio_res.start = binfo->start + ofst;
+>  	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+>  	finfo->mmio_res.flags = IORESOURCE_MEM;
+> -	finfo->irq_base = irq_base;
+> -	finfo->nr_irqs = nr_irqs;
+> +
+> +	ret = parse_feature_irqs(binfo, ofst, finfo);
+> +	if (ret)
+> +		return ret;
 
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
+finfo has to be freed in case of an error.
 
-...
+Thanks for rearranging, it looks more logical now.
 
-> +	dev_info(dev, "serial8250_register_8250_port %d\n", dfluart->line);
-
-Why do we need this noise?
-
-...
-
-> +	if (dfluart->line >= 0)
-
-When this can be false?
-
-> +		serial8250_unregister_port(dfluart->line);
-
-...
-
-> +config SERIAL_8250_DFL
-> +	tristate "DFL bus driver for Altera 16550 UART"
-> +	depends on SERIAL_8250 && FPGA_DFL
-> +	help
-> +	  This option enables support for a Device Feature List (DFL) bus
-> +	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
-> +	  can be instantiated in a FPGA and then be discovered during
-> +	  enumeration of the DFL bus.
-
-When m, what be the module name?
-
-...
-
->  obj-$(CONFIG_SERIAL_8250_FOURPORT)	+= 8250_fourport.o
->  obj-$(CONFIG_SERIAL_8250_ACCENT)	+= 8250_accent.o
->  obj-$(CONFIG_SERIAL_8250_BOCA)		+= 8250_boca.o
-> +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
-
-This group of drivers for the 4 UARTs on the board or so, does FPGA belong to
-it? (Same Q, btw, for the Kconfig section. And yes, I know that some of the
-entries are not properly placed there and in Makefile.)
-
->  obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
->  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
->  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--
+ i.
