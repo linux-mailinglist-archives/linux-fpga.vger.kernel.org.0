@@ -2,42 +2,42 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657885F52E1
-	for <lists+linux-fpga@lfdr.de>; Wed,  5 Oct 2022 12:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694075F5321
+	for <lists+linux-fpga@lfdr.de>; Wed,  5 Oct 2022 13:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJEKrY (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 5 Oct 2022 06:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S229754AbiJELFd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 5 Oct 2022 07:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJEKrV (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 5 Oct 2022 06:47:21 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C109926492;
-        Wed,  5 Oct 2022 03:47:18 -0700 (PDT)
+        with ESMTP id S229569AbiJELFb (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 5 Oct 2022 07:05:31 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1200E66139;
+        Wed,  5 Oct 2022 04:05:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664966838; x=1696502838;
+  t=1664967928; x=1696503928;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=Qvdvm6/Yzu7ojmkolJcq8JM8ELA489o7JaJRUu4mY5U=;
-  b=IuoI0hTa7ArWrespAaoLf+8W3nQQa2Mrlwf2E3ditrFWFx4AysDHUJaC
-   8EmFCUAUJ/Fpfyo4kwpzzY9OS7wttI48w/JBpM26a8sePDJhlY8bATrcb
-   jvFw11O/xA7ux3Vz63CPJu+PhEvx4IJHhhU76Gs/mMpWz4uWxeYA1xw0S
-   XUf76pHoF7IDHI9dU1eiDi/0TC5CE3R+tvDsK8sj+WLhoc2+T48mqdMaK
-   KXq5peKU9Pzc6OUos9DeqWnPMK7PQkd5aGfQmWlFCa56v4OpkntpfGOlj
-   08MC3kHmA554FeV0f06r2NERv01uz0Sjev+Ud50dO6mBBcWBylpNNx9p4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="329543795"
+  bh=jKSBPWh8pDyMYM2pEyLTogv+ZtNNMjV8Mb81U4T14t8=;
+  b=C1TF3srpa5jdAKggnekERRZ7ARNPYPOcP+s8SajzrU4wQyz8ze+tlvWC
+   1OijtlJypxTCjz1Fx+6Z67WRJixGIR3p1OxZmuox4/zcbH6LH39BL/htH
+   OmujMRFj4EL9/YEZeeYLH0crTrGsNHmQewryBZQqEC9saNk0WC7W3iP2D
+   3sOLTJhNtq/8EtoWcbOUpdfPtSOFU07LTBix/ZKROyKk4aZ3Rvk2XY7/9
+   696zqR5tVAEWqjLZncrvj+ZsPEcC1BK6/gWBJlAuN9f/OnGjbc1ZIDtUH
+   dFiBk6OmK7Avi5j45gjdOKP/fAycosZFo0JkhWYUyfsvohJ7RnBRoSg5b
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="286345408"
 X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="329543795"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 03:47:18 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="869361684"
+   d="scan'208";a="286345408"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 04:05:26 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="575372394"
 X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="869361684"
+   d="scan'208";a="575372394"
 Received: from refaase-mobl1.ger.corp.intel.com ([10.252.39.164])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 03:47:11 -0700
-Date:   Wed, 5 Oct 2022 13:47:08 +0300 (EEST)
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 04:05:19 -0700
+Date:   Wed, 5 Oct 2022 14:05:16 +0300 (EEST)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
 cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
@@ -50,18 +50,16 @@ cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-In-Reply-To: <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
-Message-ID: <d75abf9c-e982-563f-b2-d5a376367b1e@linux.intel.com>
-References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
+        johan@kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v3 1/4] Documentation: fpga: dfl: Add documentation for
+ DFHv1
+In-Reply-To: <20221004143718.1076710-2-matthew.gerlach@linux.intel.com>
+Message-ID: <7ad7491d-4d7f-986b-5d9d-1cfdeabe23c5@linux.intel.com>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-2-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,169 +71,91 @@ On Tue, 4 Oct 2022, matthew.gerlach@linux.intel.com wrote:
 
 > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> Add a Device Feature List (DFL) bus driver for the Altera
-> 16550 implementation of UART.
+> Add documentation describing the extensions provided by Version
+> 1 of the Device Feature Header (DFHv1).
 > 
 > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
 > ---
-> v3: use passed in location of registers
->     use cleaned up functions for parsing parameters
+> v3: no change
 > 
-> v2: clean up error messages
->     alphabetize header files
->     fix 'missing prototype' error by making function static
->     tried to sort Makefile and Kconfig better
+> v2: s/GUILD/GUID/
+>     add picture
 > ---
->  drivers/tty/serial/8250/8250_dfl.c | 177 +++++++++++++++++++++++++++++
->  drivers/tty/serial/8250/Kconfig    |   9 ++
->  drivers/tty/serial/8250/Makefile   |   1 +
->  3 files changed, 187 insertions(+)
->  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+>  Documentation/fpga/dfl.rst | 49 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
 > 
-> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
-> new file mode 100644
-> index 000000000000..110ad3a73459
-> --- /dev/null
-> +++ b/drivers/tty/serial/8250/8250_dfl.c
-> @@ -0,0 +1,177 @@
+> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> index 15b670926084..7c786b75b498 100644
+> --- a/Documentation/fpga/dfl.rst
+> +++ b/Documentation/fpga/dfl.rst
+> @@ -561,6 +561,55 @@ new DFL feature via UIO direct access, its feature id should be added to the
+>  driver's id_table.
+>  
+>  
+> +Extending the Device Feature Header - DFHv1
+> +===========================================
+> +The current 8 bytes of the Device Feature Header, hereafter referred to as
+> +to DFHv0, provide very little opportunity for the hardware to describe itself
+> +to software. Version 1 of the Device Feature Header (DFHv1) is being introduced
+> +to provide increased flexibility and extensibility to hardware designs using
+> +Device Feature Lists.  The list below describes some of the goals behind the
+> +changes in DFHv1:
+> +
+> +* Provide a standardized mechanism for features to describe
+> +  parameters/capabilities to software.
+> +* Standardize the use of a GUID for all DFHv1 types.
+> +* Decouple the location of the DFH from the register space of the feature itself.
+> +
+> +Modeled after PCI Capabilities, DFHv1 Parameters provide a mechanism to associate
+> +a list of parameter values to a particular feature.
+> +
+> +With DFHv0, not all features types contained a GUID.  DFHv1 makes the GUID standard
+> +across all types.
+> +
+> +With DFHv0, the register map of a given feature is located immediately following
+> +the DFHv0 in the memory space.  With DFHv1, the location of the feature register
+> +map can be specified as an offset to the DFHv1 or as an absolute address.  The DFHv1
+> +structure is shown below:
 
-> +static int dfl_uart_get_params(struct device *dev, void __iomem *dfh_base, resource_size_t max,
-> +			       struct uart_8250_port *uart)
-> +{
-> +	u64 v, fifo_len, reg_width;
-> +	int off;
-> +
-> +	if (!dfhv1_has_params(dfh_base)) {
-> +		dev_err(dev, "missing required DFH parameters\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_CLK_FRQ);
-> +	if (off < 0) {
-> +		dev_err(dev, "missing CLK_FRQ param\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	uart->port.uartclk = readq(dfh_base + off);
-> +	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
-> +
-> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_FIFO_LEN);
-> +	if (off < 0) {
-> +		dev_err(dev, "missing FIFO_LEN param\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	fifo_len = readq(dfh_base + off);
-> +	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
-> +
-> +	switch (fifo_len) {
-> +	case 32:
-> +		uart->port.type = PORT_ALTR_16550_F32;
-> +		break;
-> +
-> +	case 64:
-> +		uart->port.type = PORT_ALTR_16550_F64;
-> +		break;
-> +
-> +	case 128:
-> +		uart->port.type = PORT_ALTR_16550_F128;
-> +		break;
-> +
-> +	default:
-> +		dev_err(dev, "bad fifo_len %llu\n", fifo_len);
+I think this is not a good place for be some kind of v1 marketing speak 
+(that said, I think it's fine to include those goals you have there).
 
-I'd tell user "unsupported" rather than "bad".
+I'd restructure this so that this section only talks about DFHv1 w/o 
+any comparing how v1 is better than v0. Don't base the description on 
+how things changed from v0 but just describe v1, that is, like v1 is 
+already there, not only being introduced to supercede/extend v0.
 
-> +		return -EINVAL;
-> +	}
-> +
-> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
-> +	if (off < 0) {
-> +		dev_err(dev, "missing REG_LAYOUT param\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	v = readq(dfh_base + off);
-> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
-> +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
-> +
-> +	dev_dbg(dev, "UART_LAYOUT_ID width %lld shift %d\n",
-> +		FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v), (int)uart->port.regshift);
-
-Why not use reg_width directly?
-
-> +	switch (reg_width) {
-> +	case 4:
-> +		uart->port.iotype = UPIO_MEM32;
-> +		break;
-> +
-> +	case 2:
-> +		uart->port.iotype = UPIO_MEM16;
-> +		break;
-> +
-> +	default:
-> +		dev_err(dev, "invalid reg_width %lld\n", reg_width);
-
-unsupported ?
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
-> +{
-> +	struct device *dev = &dfl_dev->dev;
-> +	struct uart_8250_port uart;
-> +	struct dfl_uart *dfluart;
-> +	resource_size_t res_size;
-> +	void __iomem *dfh_base;
-> +	int ret;
-> +
-> +	memset(&uart, 0, sizeof(uart));
-> +	uart.port.flags = UPF_IOREMAP;
-> +	uart.port.mapbase = dfl_dev->csr_res.start;
-> +	uart.port.mapsize = resource_size(&dfl_dev->csr_res);
-> +
-> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
-> +	if (!dfluart)
-> +		return -ENOMEM;
-> +
-> +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
-> +	if (IS_ERR(dfh_base))
-> +		return PTR_ERR(dfh_base);
-> +
-> +	res_size = resource_size(&dfl_dev->mmio_res);
-> +
-> +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
-> +
-> +	devm_iounmap(dev, dfh_base);
-> +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
-> +
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
-> +
-> +	dev_dbg(dev, "nr_irqs %d %p\n", dfl_dev->num_irqs, dfl_dev->irqs);
-> +
-> +	if (dfl_dev->num_irqs == 1)
-> +		uart.port.irq = dfl_dev->irqs[0];
-> +
-> +	/* register the port */
-
-This comment is pretty useless. Just drop it.
-
-> +	dfluart->line = serial8250_register_8250_port(&uart);
-> +	if (dfluart->line < 0)
-> +		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
-> +
-> +	dev_info(dev, "serial8250_register_8250_port %d\n", dfluart->line);
-
-This you want to drop too. It seems a debug thing rather than info level 
-stuff.
-
+And then create v0 section after this section which focuses solely on v0.
 
 -- 
  i.
+
+> +    +-----------------------------------------------------------------------+
+> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                                 GUID_L                             0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                                 GUID_H                             0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                 Address/Offset                            1|  Rel  0|
+> +    +-----------------------------------------------------------------------+
+> +    |63 Size of register set  32|Params 31|30 Group    16|15 Instance      0|
+> +    +-----------------------------------------------------------------------+
+> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                 Parameter Data                                     0|
+> +    +-----------------------------------------------------------------------+
+> +
+> +                                  ...
+> +
+> +    +-----------------------------------------------------------------------+
+> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                 Parameter Data                                     0|
+> +    +-----------------------------------------------------------------------+
+> +
+>  Open discussion
+>  ===============
+>  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
+> 
 
