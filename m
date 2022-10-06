@@ -2,160 +2,340 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694075F5321
-	for <lists+linux-fpga@lfdr.de>; Wed,  5 Oct 2022 13:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C54E5F5F5D
+	for <lists+linux-fpga@lfdr.de>; Thu,  6 Oct 2022 05:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiJELFd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 5 Oct 2022 07:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
+        id S229720AbiJFDMw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 5 Oct 2022 23:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiJELFb (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 5 Oct 2022 07:05:31 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1200E66139;
-        Wed,  5 Oct 2022 04:05:27 -0700 (PDT)
+        with ESMTP id S230081AbiJFDMo (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 5 Oct 2022 23:12:44 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42634895F2;
+        Wed,  5 Oct 2022 20:12:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664967928; x=1696503928;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=jKSBPWh8pDyMYM2pEyLTogv+ZtNNMjV8Mb81U4T14t8=;
-  b=C1TF3srpa5jdAKggnekERRZ7ARNPYPOcP+s8SajzrU4wQyz8ze+tlvWC
-   1OijtlJypxTCjz1Fx+6Z67WRJixGIR3p1OxZmuox4/zcbH6LH39BL/htH
-   OmujMRFj4EL9/YEZeeYLH0crTrGsNHmQewryBZQqEC9saNk0WC7W3iP2D
-   3sOLTJhNtq/8EtoWcbOUpdfPtSOFU07LTBix/ZKROyKk4aZ3Rvk2XY7/9
-   696zqR5tVAEWqjLZncrvj+ZsPEcC1BK6/gWBJlAuN9f/OnGjbc1ZIDtUH
-   dFiBk6OmK7Avi5j45gjdOKP/fAycosZFo0JkhWYUyfsvohJ7RnBRoSg5b
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="286345408"
-X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="286345408"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 04:05:26 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="575372394"
-X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="575372394"
-Received: from refaase-mobl1.ger.corp.intel.com ([10.252.39.164])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 04:05:19 -0700
-Date:   Wed, 5 Oct 2022 14:05:16 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v3 1/4] Documentation: fpga: dfl: Add documentation for
- DFHv1
-In-Reply-To: <20221004143718.1076710-2-matthew.gerlach@linux.intel.com>
-Message-ID: <7ad7491d-4d7f-986b-5d9d-1cfdeabe23c5@linux.intel.com>
-References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-2-matthew.gerlach@linux.intel.com>
+  t=1665025959; x=1696561959;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gh5OVqF15e9clx6zOacfWTHXWSaHJb/fk8tuPk8eGYY=;
+  b=aIPXZ3QTv8MGKmdAIyGMcs2GyjPXSbCqaJW/47oV/81FAJI9JNylwtbi
+   wk1/AGyuJk4e6jVAgQHuMxU4xMJwJ85EWkatpTWUtT20AoqDeQ6VbckO4
+   /kE3hEpF1kkKo3yAgQEIifGEwMk/gmgEhAJIhwIQqY4eYjaEEigDF8+wP
+   8kUQvlC3O6oKSer/wZLCwHa/z738sY9qylVRfd9lguRp/e5Dw0kOchO6s
+   mf+18w0JtU/4v1NkTfgdcIeRqDzN4uxUqDSAzgLI3eRzqye4NPMISIHcJ
+   SPDuucUkdFckEJw2qlj8y9ZWMQR/TvHNx03zpOZsJ+xkLnEmQ/ee9+jHZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="303307618"
+X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
+   d="scan'208";a="303307618"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 20:12:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="953444525"
+X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
+   d="scan'208";a="953444525"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga005.fm.intel.com with ESMTP; 05 Oct 2022 20:12:35 -0700
+Date:   Thu, 6 Oct 2022 11:03:39 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
+        j.zink@pengutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, system@metrotek.ru
+Subject: Re: [PATCH v13 1/2] fpga: lattice-sysconfig-spi: add Lattice
+ sysCONFIG FPGA manager
+Message-ID: <Yz5Fi3lBrzV8LMm7@yilunxu-OptiPlex-7050>
+References: <20220926143924.11367-1-i.bornyakov@metrotek.ru>
+ <20220926143924.11367-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926143924.11367-2-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, 4 Oct 2022, matthew.gerlach@linux.intel.com wrote:
-
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On 2022-09-26 at 17:39:23 +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> slave SPI sysCONFIG interface.
 > 
-> Add documentation describing the extensions provided by Version
-> 1 of the Device Feature Header (DFHv1).
+> sysCONFIG interface core functionality is separate from both ECP5 and
+> SPI specifics, so support for other FPGAs with different port types can
+> be added in the future.
 > 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
 > ---
-> v3: no change
+>  drivers/fpga/Kconfig                 |  11 +
+>  drivers/fpga/Makefile                |   2 +
+>  drivers/fpga/lattice-sysconfig-spi.c | 151 ++++++++++
+>  drivers/fpga/lattice-sysconfig.c     | 428 +++++++++++++++++++++++++++
+>  drivers/fpga/lattice-sysconfig.h     |  41 +++
+>  5 files changed, 633 insertions(+)
+>  create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+>  create mode 100644 drivers/fpga/lattice-sysconfig.c
+>  create mode 100644 drivers/fpga/lattice-sysconfig.h
 > 
-> v2: s/GUILD/GUID/
->     add picture
-> ---
->  Documentation/fpga/dfl.rst | 49 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
-> 
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index 15b670926084..7c786b75b498 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -561,6 +561,55 @@ new DFL feature via UIO direct access, its feature id should be added to the
->  driver's id_table.
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 6c416955da53..d1a8107fdcb3 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -263,4 +263,15 @@ config FPGA_MGR_MICROCHIP_SPI
+>  	  programming over slave SPI interface with .dat formatted
+>  	  bitstream image.
 >  
+> +config FPGA_MGR_LATTICE_SYSCONFIG
+> +	tristate
+> +
+> +config FPGA_MGR_LATTICE_SYSCONFIG_SPI
+> +	tristate "Lattice sysCONFIG SPI FPGA manager"
+> +	depends on SPI
+> +	select FPGA_MGR_LATTICE_SYSCONFIG
+> +	help
+> +	  FPGA manager driver support for Lattice FPGAs programming over slave
+> +	  SPI sysCONFIG interface.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 42ae8b58abce..72e554b4d2f7 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -20,6 +20,8 @@ obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
+> +obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG)	+= lattice-sysconfig.o
+> +obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG_SPI)	+= lattice-sysconfig-spi.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
 >  
-> +Extending the Device Feature Header - DFHv1
-> +===========================================
-> +The current 8 bytes of the Device Feature Header, hereafter referred to as
-> +to DFHv0, provide very little opportunity for the hardware to describe itself
-> +to software. Version 1 of the Device Feature Header (DFHv1) is being introduced
-> +to provide increased flexibility and extensibility to hardware designs using
-> +Device Feature Lists.  The list below describes some of the goals behind the
-> +changes in DFHv1:
+> diff --git a/drivers/fpga/lattice-sysconfig-spi.c b/drivers/fpga/lattice-sysconfig-spi.c
+> new file mode 100644
+> index 000000000000..1428705ae7d1
+> --- /dev/null
+> +++ b/drivers/fpga/lattice-sysconfig-spi.c
+> @@ -0,0 +1,151 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Lattice FPGA programming over slave SPI sysCONFIG interface.
+> + */
 > +
-> +* Provide a standardized mechanism for features to describe
-> +  parameters/capabilities to software.
-> +* Standardize the use of a GUID for all DFHv1 types.
-> +* Decouple the location of the DFH from the register space of the feature itself.
+> +#include <linux/spi/spi.h>
 > +
-> +Modeled after PCI Capabilities, DFHv1 Parameters provide a mechanism to associate
-> +a list of parameter values to a particular feature.
+> +#include "lattice-sysconfig.h"
 > +
-> +With DFHv0, not all features types contained a GUID.  DFHv1 makes the GUID standard
-> +across all types.
+> +static const u32 ecp5_spi_max_speed_hz = 60000000;
 > +
-> +With DFHv0, the register map of a given feature is located immediately following
-> +the DFHv0 in the memory space.  With DFHv1, the location of the feature register
-> +map can be specified as an offset to the DFHv1 or as an absolute address.  The DFHv1
-> +structure is shown below:
+> +static int sysconfig_spi_cmd_write(struct sysconfig_priv *priv,
+> +				   const void *tx_buf, size_t tx_len)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +
+> +	return spi_write(spi, tx_buf, tx_len);
+> +}
+> +
+> +static int sysconfig_spi_cmd_read(struct sysconfig_priv *priv,
+> +				  const void *tx_buf, size_t tx_len,
+> +				  void *rx_buf, size_t rx_len)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +
+> +	return spi_write_then_read(spi, tx_buf, tx_len, rx_buf, rx_len);
+> +}
+> +
+> +static int sysconfig_spi_bitstream_burst_init(struct sysconfig_priv *priv)
+> +{
+> +	const u8 lsc_bitstream_burst[] = SYSCONFIG_LSC_BITSTREAM_BURST;
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +	struct spi_transfer xfer = {
+> +		.tx_buf = lsc_bitstream_burst,
+> +		.len = sizeof(lsc_bitstream_burst),
+> +		.cs_change = 1,
+> +	};
+> +	struct spi_message msg;
+> +	int ret;
+> +
+> +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> +
+> +	/*
+> +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
+> +	 * SPI bus will be released in sysconfig_spi_bitstream_burst_complete().
+> +	 */
+> +	spi_bus_lock(spi->controller);
+> +
+> +	ret = spi_sync_locked(spi, &msg);
+> +	if (ret)
+> +		spi_bus_unlock(spi->controller);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sysconfig_spi_bitstream_burst_write(struct sysconfig_priv *priv,
+> +					       const char *buf, size_t len)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +	struct spi_transfer xfer = {
+> +		.tx_buf = buf,
+> +		.len = len,
+> +		.cs_change = 1,
+> +	};
+> +	struct spi_message msg;
+> +
+> +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> +
+> +	return spi_sync_locked(spi, &msg);
+> +}
+> +
+> +static int sysconfig_spi_bitstream_burst_complete(struct sysconfig_priv *priv)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +
+> +	/* Bitstream burst write is done, release SPI bus */
+> +	spi_bus_unlock(spi->controller);
+> +
+> +	/* Toggle CS to finish bitstream write */
+> +	return spi_write(spi, NULL, 0);
+> +}
+> +
+> +static int sysconfig_spi_probe(struct spi_device *spi)
+> +{
+> +	const struct spi_device_id *dev_id;
+> +	struct device *dev = &spi->dev;
+> +	struct sysconfig_priv *priv;
+> +	const u32 *spi_max_speed;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	spi_max_speed = device_get_match_data(dev);
+> +	if (!spi_max_speed) {
+> +		dev_id = spi_get_device_id(spi);
+> +		if (!dev_id)
+> +			return -ENODEV;
+> +
+> +		spi_max_speed = (const u32 *)dev_id->driver_data;
+> +	}
+> +
+> +	if (!spi_max_speed)
+> +		return -EINVAL;
+> +
+> +	if (spi->max_speed_hz > *spi_max_speed) {
+> +		dev_err(dev, "SPI speed %u is too high, maximum speed is %u\n",
+> +			spi->max_speed_hz, *spi_max_speed);
+> +		return -EINVAL;
+> +	}
+> +
+> +	priv->dev = dev;
+> +	priv->command_write = sysconfig_spi_cmd_write;
+> +	priv->command_read = sysconfig_spi_cmd_read;
+> +	priv->bitstream_burst_write_init = sysconfig_spi_bitstream_burst_init;
+> +	priv->bitstream_burst_write = sysconfig_spi_bitstream_burst_write;
+> +	priv->bitstream_burst_write_complete = sysconfig_spi_bitstream_burst_complete;
+> +
+> +	return sysconfig_probe(priv);
+> +}
+> +
+> +static const struct spi_device_id sysconfig_spi_ids[] = {
+> +	{
+> +		.name = "sysconfig-ecp5",
+> +		.driver_data = (kernel_ulong_t)&ecp5_spi_max_speed_hz,
+> +	}, {},
+> +};
+> +MODULE_DEVICE_TABLE(spi, sysconfig_spi_ids);
+> +
+> +#if IS_ENABLED(CONFIG_OF)
+> +static const struct of_device_id sysconfig_of_ids[] = {
+> +	{
+> +		.compatible = "lattice,sysconfig-ecp5",
+> +		.data = &ecp5_spi_max_speed_hz,
+> +	}, {},
+> +};
+> +MODULE_DEVICE_TABLE(of, sysconfig_of_ids);
+> +#endif /* IS_ENABLED(CONFIG_OF) */
+> +
+> +static struct spi_driver lattice_sysconfig_driver = {
+> +	.probe = sysconfig_spi_probe,
+> +	.id_table = sysconfig_spi_ids,
+> +	.driver = {
+> +		.name = "lattice_sysconfig_spi_fpga_mgr",
+> +		.of_match_table = of_match_ptr(sysconfig_of_ids),
+> +	},
+> +};
+> +module_spi_driver(lattice_sysconfig_driver);
+> +
+> +MODULE_DESCRIPTION("Lattice sysCONFIG Slave SPI FPGA Manager");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/fpga/lattice-sysconfig.c b/drivers/fpga/lattice-sysconfig.c
+> new file mode 100644
+> index 000000000000..f9acff1ab122
+> --- /dev/null
+> +++ b/drivers/fpga/lattice-sysconfig.c
+> @@ -0,0 +1,428 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Lattice FPGA sysCONFIG interface functions independent of port type.
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/gpio/consumer.h>
+> +
+> +#include "lattice-sysconfig.h"
+> +
+> +static int sysconfig_cmd_write(struct sysconfig_priv *priv, const void *buf,
+> +			       size_t buf_len)
+> +{
+> +	return priv->command_write(priv, buf, buf_len);
+> +}
+> +
+> +static int sysconfig_cmd_read(struct sysconfig_priv *priv, const void *tx_buf,
+> +			      size_t tx_len, void *rx_buf, size_t rx_len)
+> +{
+> +	return priv->command_read(priv, tx_buf, tx_len, rx_buf, rx_len);
+> +}
+> +
+> +static int sysconfig_read_busy(struct sysconfig_priv *priv)
+> +{
+> +	const u8 lsc_check_busy[] = SYSCONFIG_LSC_CHECK_BUSY;
+> +	u8 busy;
+> +	int ret;
+> +
+> +	ret = sysconfig_cmd_read(priv, lsc_check_busy, sizeof(lsc_check_busy),
+> +				 &busy, sizeof(busy));
+> +
+> +	return ret ? : busy;
+> +}
+> +
+> +static int sysconfig_poll_busy(struct sysconfig_priv *priv)
+> +{
+> +	unsigned long timeout;
+> +	int ret;
+> +
+> +	timeout = jiffies + msecs_to_jiffies(SYSCONFIG_POLL_BUSY_TIMEOUT_MS);
+> +
+> +	while (time_before(jiffies, timeout)) {
+> +		ret = sysconfig_read_busy(priv);
+> +		if (ret <= 0)
+> +			return ret;
+> +
+> +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
+> +			     SYSCONFIG_POLL_INTERVAL_US * 2);
+> +	}
+> +
+> +	return -EBUSY;
 
-I think this is not a good place for be some kind of v1 marketing speak 
-(that said, I think it's fine to include those goals you have there).
+return -ETIMEDOUT? To be aligned with sysconfig_poll_gpio.
 
-I'd restructure this so that this section only talks about DFHv1 w/o 
-any comparing how v1 is better than v0. Don't base the description on 
-how things changed from v0 but just describe v1, that is, like v1 is 
-already there, not only being introduced to supercede/extend v0.
+Others look good to me.
 
-And then create v0 section after this section which focuses solely on v0.
-
--- 
- i.
-
-> +    +-----------------------------------------------------------------------+
-> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0|
-> +    +-----------------------------------------------------------------------+
-> +    |63                                 GUID_L                             0|
-> +    +-----------------------------------------------------------------------+
-> +    |63                                 GUID_H                             0|
-> +    +-----------------------------------------------------------------------+
-> +    |63                 Address/Offset                            1|  Rel  0|
-> +    +-----------------------------------------------------------------------+
-> +    |63 Size of register set  32|Params 31|30 Group    16|15 Instance      0|
-> +    +-----------------------------------------------------------------------+
-> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
-> +    +-----------------------------------------------------------------------+
-> +    |63                 Parameter Data                                     0|
-> +    +-----------------------------------------------------------------------+
-> +
-> +                                  ...
-> +
-> +    +-----------------------------------------------------------------------+
-> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
-> +    +-----------------------------------------------------------------------+
-> +    |63                 Parameter Data                                     0|
-> +    +-----------------------------------------------------------------------+
-> +
->  Open discussion
->  ===============
->  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
-> 
-
+Thanks,
+Yilun
