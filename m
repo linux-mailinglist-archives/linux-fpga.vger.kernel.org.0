@@ -2,160 +2,135 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC755F6262
-	for <lists+linux-fpga@lfdr.de>; Thu,  6 Oct 2022 10:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04A45F6277
+	for <lists+linux-fpga@lfdr.de>; Thu,  6 Oct 2022 10:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiJFINI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 6 Oct 2022 04:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
+        id S230503AbiJFISc (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 6 Oct 2022 04:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiJFINF (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 6 Oct 2022 04:13:05 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C921B6171A;
-        Thu,  6 Oct 2022 01:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=Btkb2gtW6RKewRf9IoFqqlzQlwIj6C4A6/4lF9dHJ4A=;
-        b=FXj4xQ4XcMK2nl2vlpXpWD1Qub0i6qyDiC5EGjRLbgQa0TZagbVMvvNsX7D4Y1JxW0zREEg0eUQVv
-         Ykl2JYbeVqSoEnDaiY8GPnyDYoTnPDeeQh9BYCvX01qpSzDG2O0PulkyLl95AEFxzBfohXy+c0br1v
-         u6nR3cPqj2NhQE2yhAmDKm+30Z2FlyOJ8Th3opfr3CFYMMUYX9sM+VXYr/gr1LcBc4OeU26RchKgue
-         XTqkUyOoDdMVNSXmGMM8TZdXtnvPUGOZCm8MRGfqFvuzsLs2LYRV6Yv4oFhNitmXclHXjbKCUMdEDB
-         ZT5x6x7QNDBfzQtMVOIghi9TKNbWUTQ==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000011,0.012972)], BW: [Enabled, t: (0.000025,0.000002)], RTDA: [Enabled, t: (0.087171), Hit: No, Details: v2.42.0; Id: 15.52k7jn.1gem5lk9e.8ua; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([92.100.86.33])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Thu, 6 Oct 2022 11:12:55 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        with ESMTP id S230516AbiJFISb (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 6 Oct 2022 04:18:31 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8696C7F277
+        for <linux-fpga@vger.kernel.org>; Thu,  6 Oct 2022 01:18:30 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ogM4x-0002S2-VO; Thu, 06 Oct 2022 10:18:04 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7C604F5F5E;
+        Thu,  6 Oct 2022 08:18:02 +0000 (UTC)
+Date:   Thu, 6 Oct 2022 10:18:01 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
         trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        system@metrotek.ru,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v14 2/2] dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
-Date:   Thu,  6 Oct 2022 10:44:49 +0300
-Message-Id: <20221006074449.24082-3-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221006074449.24082-1-i.bornyakov@metrotek.ru>
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, system@metrotek.ru,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v14 1/2] fpga: lattice-sysconfig-spi: add Lattice
+ sysCONFIG FPGA manager
+Message-ID: <20221006081801.xqnnvn6k7rmjokvt@pengutronix.de>
 References: <20221006074449.24082-1-i.bornyakov@metrotek.ru>
+ <20221006074449.24082-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cstclkxk6l4zuxkt"
+Content-Disposition: inline
+In-Reply-To: <20221006074449.24082-2-i.bornyakov@metrotek.ru>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add Device Tree Binding doc for configuring Lattice ECP5 FPGA over
-Slave SPI sysCONFIG interface.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/fpga/lattice,sysconfig.yaml      | 81 +++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+--cstclkxk6l4zuxkt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-new file mode 100644
-index 000000000000..4fb05eb84e2a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/lattice,sysconfig.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Lattice Slave SPI sysCONFIG FPGA manager
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description: |
-+  Lattice sysCONFIG port, which is used for FPGA configuration, among others,
-+  have Slave Serial Peripheral Interface. Only full reconfiguration is
-+  supported.
-+
-+  Programming of ECP5 is done by writing uncompressed bitstream image in .bit
-+  format into FPGA's SRAM configuration memory.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - lattice,sysconfig-ecp5
-+
-+  reg:
-+    maxItems: 1
-+
-+  program-gpios:
-+    description:
-+      A GPIO line connected to PROGRAMN (active low) pin of the device.
-+      Initiates configuration sequence.
-+    maxItems: 1
-+
-+  init-gpios:
-+    description:
-+      A GPIO line connected to INITN (active low) pin of the device.
-+      Indicates that the FPGA is ready to be configured.
-+    maxItems: 1
-+
-+  done-gpios:
-+    description:
-+      A GPIO line connected to DONE (active high) pin of the device.
-+      Indicates that the configuration sequence is complete.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,sysconfig-ecp5
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 60000000
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        fpga-mgr@0 {
-+            compatible = "lattice,sysconfig-ecp5";
-+            reg = <0>;
-+            spi-max-frequency = <20000000>;
-+            program-gpios = <&gpio3 4 GPIO_ACTIVE_LOW>;
-+            init-gpios = <&gpio3 3 GPIO_ACTIVE_LOW>;
-+            done-gpios = <&gpio3 2 GPIO_ACTIVE_HIGH>;
-+        };
-+    };
--- 
-2.35.1
+On 06.10.2022 10:44:48, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> slave SPI sysCONFIG interface.
+>=20
+> sysCONFIG interface core functionality is separate from both ECP5 and
+> SPI specifics, so support for other FPGAs with different port types can
+> be added in the future.
+>=20
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
 
+[...]
 
+> +static int sysconfig_spi_bitstream_burst_init(struct sysconfig_priv *pri=
+v)
+> +{
+> +	const u8 lsc_bitstream_burst[] =3D SYSCONFIG_LSC_BITSTREAM_BURST;
+
+I think you're not allowed to use stack memory for SPI transfers. Better
+clarify this with the SPI people.
+
+> +	struct spi_device *spi =3D to_spi_device(priv->dev);
+> +	struct spi_transfer xfer =3D {
+> +		.tx_buf =3D lsc_bitstream_burst,
+> +		.len =3D sizeof(lsc_bitstream_burst),
+> +		.cs_change =3D 1,
+> +	};
+> +	struct spi_message msg;
+> +	int ret;
+> +
+> +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> +
+> +	/*
+> +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
+> +	 * SPI bus will be released in sysconfig_spi_bitstream_burst_complete().
+> +	 */
+> +	spi_bus_lock(spi->controller);
+> +
+> +	ret =3D spi_sync_locked(spi, &msg);
+> +	if (ret)
+> +		spi_bus_unlock(spi->controller);
+> +
+> +	return ret;
+> +}
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--cstclkxk6l4zuxkt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmM+jzYACgkQrX5LkNig
+013jTQf/W1QkhJsjQBwilMHgV5rq0CQ0bnolb+yuXRoE9sEDr34/oExbkJJ/PKbz
+FTDUXsv05ZZIdSDuLKmLCwRypTW2vJXQT5fTUNUIAs/DBZZZBJYrROXyeGbauhW3
+Ph67IMnJM7D45cCX2Q8r5yA0OkFIqm2s/jkIQvfG9GAtU5if6CHnSqXyhqBfrl90
+33EOOFjdP8P5Vxq13z2B9fH81PcaEUVrsvGIYS+hrnnTSQ3BQPkjDjJzukucSxIw
+480927VcumzgUfSuUVNZWme/qPnlQoaKaUCTQJxyuZgPoX3MomsWybzFRCLrjYxp
+ScEO6jcg2J/euusBd31G8wumdmLYlA==
+=XPet
+-----END PGP SIGNATURE-----
+
+--cstclkxk6l4zuxkt--
