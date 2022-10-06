@@ -2,175 +2,269 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA49A5F6D30
-	for <lists+linux-fpga@lfdr.de>; Thu,  6 Oct 2022 19:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A355F7089
+	for <lists+linux-fpga@lfdr.de>; Thu,  6 Oct 2022 23:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiJFRo0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 6 Oct 2022 13:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
+        id S229939AbiJFVrd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 6 Oct 2022 17:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiJFRoZ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 6 Oct 2022 13:44:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF48B3B3A;
-        Thu,  6 Oct 2022 10:44:24 -0700 (PDT)
+        with ESMTP id S229729AbiJFVrc (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 6 Oct 2022 17:47:32 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F363FBEFA5;
+        Thu,  6 Oct 2022 14:47:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665078264; x=1696614264;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0Algq8hyduIEzy6JYyaOhF1vsvyg3XX+0FRx/6j5o0g=;
-  b=P40ET/E+96MyPWObFb/pj2DToiN71/rWVfNN96w5AcLuw6VBH+/3BMjw
-   w5wJWMId5jSRn3W3bZMxqWa0fLPTN2fF7VWy1LXJ8JTpFTi4WgeHXDSe0
-   +4o1R2C2478UfB7Hz7qSKZKWrVdbxA42OYmXKMpQ7fsiVd1MyzBtf3My8
-   x6rS20cG7vzmpilqERzCht7+0SjIZxFOGAyS8AV2SRGG+Ioq6n9hgasX1
-   UzBcoRr94OLj2m2klPG1Ldiry4DMmxHU4oK6rLpbr9H9PxWXF7OswvIQF
-   FkdjcuBtXGKowFVT3X8Ez+BApVFQH1jrkn8WCi6uKyWuhCzItz/unVmbd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="367644479"
+  t=1665092850; x=1696628850;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=SXGjsA1E5RfmhjNKZMf6XZ6SCP9fS2o5Y11+tqgFSfQ=;
+  b=LNVjmkQOmWjUN6pdpHtEGsH2jAOz5Z9N712/USBOuOhUWzwwKCJOuyTF
+   hBmLxJOoHuEI3l3oyknzLckVyztGCMVHqm4cien7VZ8MrMXockGQbuDuX
+   JR/qu8K2v3Cf7RLWH1DHkgiKiao60BnBst4jSY/rmFe8DdI9NiFZrdi4r
+   6Cw0ZRYQ2Npe/llWYfltvQ5XKlLfGDZN70bCRoam1PtfnlgTIZTifDMx4
+   vNENzoypHyIog3kRgCEB3cvrLzI+exTZ6e4UC1IUnE8Xekw415oKWo4o3
+   Pq50NgMfIAsz2ao3Mm5FQ5oR8jTp3WTFjO9TbeFlS/XUKlOUDfe7lfaXt
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="330014699"
 X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="367644479"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 10:44:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="687529739"
+   d="scan'208";a="330014699"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 14:47:30 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="767318383"
 X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="687529739"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Oct 2022 10:44:18 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ogUuu-003HN6-1V;
-        Thu, 06 Oct 2022 20:44:16 +0300
-Date:   Thu, 6 Oct 2022 20:44:16 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+   d="scan'208";a="767318383"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 14:47:29 -0700
+Date:   Thu, 6 Oct 2022 14:47:40 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
         mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de,
+        johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
         kernel test robot <lkp@intel.com>
 Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
  16550.
-Message-ID: <Yz8T8GdzMLyAKIMb@smile.fi.intel.com>
-References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com>
- <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
- <YzxRxo8jL7rB1+px@smile.fi.intel.com>
- <alpine.DEB.2.22.394.2210060940150.1988353@rhweight-WRK1>
+In-Reply-To: <d75abf9c-e982-563f-b2-d5a376367b1e@linux.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2210061445220.1772307@rhweight-WRK1>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-5-matthew.gerlach@linux.intel.com> <d75abf9c-e982-563f-b2-d5a376367b1e@linux.intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2210060940150.1988353@rhweight-WRK1>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323328-166967846-1665092868=:1772307"
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 10:00:43AM -0700, matthew.gerlach@linux.intel.com wrote:
-> On Tue, 4 Oct 2022, Andy Shevchenko wrote:
-> > On Tue, Oct 04, 2022 at 07:37:18AM -0700, matthew.gerlach@linux.intel.com wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-...
-
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > https://docs.kernel.org/process/submitting-patches.html?highlight=reported#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
-> > 
-> > "The Reported-by tag gives credit to people who find bugs and report them and it
-> > hopefully inspires them to help us again in the future. Please note that if the
-> > bug was reported in private, then ask for permission first before using the
-> > Reported-by tag. The tag is intended for bugs; please do not use it to credit
-> > feature requests."
-> 
-> The kernel test robot did find a bug in my v1 submission.  I was missing the
-> static keyword for a function declaration.  Should I remove the tag?
-
-What's yours take from the above documentation?
-
-...
-
-> > > +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
-> > > +	if (IS_ERR(dfh_base))
-> > > +		return PTR_ERR(dfh_base);
-> > > +
-> > > +	res_size = resource_size(&dfl_dev->mmio_res);
-> > > +
-> > > +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
-> > 
-> > > +	devm_iounmap(dev, dfh_base);
-> > > +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
-> > 
-> > If it's temporary, may be you shouldn't even consider devm_ioremap_resource()
-> > to begin with? The devm_* release type of functions in 99% of the cases
-> > indicate of the abusing devm_.
-> 
-> I will change the code to call ioremap() and request_mem_region() directly
-> instead of the devm_ versions.
-
-But why will you need request_mem_region() in that case?
-
-> > > +	if (ret < 0)
-> > > +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
-
-...
-
-> > > +config SERIAL_8250_DFL
-> > > +	tristate "DFL bus driver for Altera 16550 UART"
-> > > +	depends on SERIAL_8250 && FPGA_DFL
-> > > +	help
-> > > +	  This option enables support for a Device Feature List (DFL) bus
-> > > +	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
-> > > +	  can be instantiated in a FPGA and then be discovered during
-> > > +	  enumeration of the DFL bus.
-> > 
-> > When m, what be the module name?
-> 
-> I see the file, kernel/drivers/tty/serial/8250/8250_dfl.ko, installed into
-> /lib/modules/...  I also see "alias dfl:t0000f0024* 8250_dfl" in
-> modules.alias
-
-My point is that user who will run `make menuconfig` will read this and have
-no clue after the kernel build if the module was built or not. Look into other
-(recent) sections of the Kconfig for drivers in the kernel for how they inform
-user about the module name (this more or less standard pattern you just need
-to copy'n'paste'n'edit carefully).
-
-...
-
-> > >  obj-$(CONFIG_SERIAL_8250_FOURPORT)	+= 8250_fourport.o
-> > >  obj-$(CONFIG_SERIAL_8250_ACCENT)	+= 8250_accent.o
-> > >  obj-$(CONFIG_SERIAL_8250_BOCA)		+= 8250_boca.o
-> > > +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
-> > 
-> > This group of drivers for the 4 UARTs on the board or so, does FPGA belong to
-> > it? (Same Q, btw, for the Kconfig section. And yes, I know that some of the
-> > entries are not properly placed there and in Makefile.)
-> 
-> Since 8250_dfl results in its own module, and my kernel config doesn't have
-> FOURPORT, ACCENT, nor BOCA, I guess I don't understand the problem.
-
-The Makefile is a bit chaotic, but try to find the sorted (more or less)
-group of drivers that are not 4 ports and squeeze your entry there
-(I expect somewhere between the LPSS/MID lines).
-
-It will help to sort out that mess in the future.
-
-> > >  obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
-> > >  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
-> > >  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
-
--- 
-With Best Regards,
-Andy Shevchenko
+--8323328-166967846-1665092868=:1772307
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 8BIT
 
 
+
+On Wed, 5 Oct 2022, Ilpo Järvinen wrote:
+
+> On Tue, 4 Oct 2022, matthew.gerlach@linux.intel.com wrote:
+>
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Add a Device Feature List (DFL) bus driver for the Altera
+>> 16550 implementation of UART.
+>>
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> ---
+>> v3: use passed in location of registers
+>>     use cleaned up functions for parsing parameters
+>>
+>> v2: clean up error messages
+>>     alphabetize header files
+>>     fix 'missing prototype' error by making function static
+>>     tried to sort Makefile and Kconfig better
+>> ---
+>>  drivers/tty/serial/8250/8250_dfl.c | 177 +++++++++++++++++++++++++++++
+>>  drivers/tty/serial/8250/Kconfig    |   9 ++
+>>  drivers/tty/serial/8250/Makefile   |   1 +
+>>  3 files changed, 187 insertions(+)
+>>  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+>>
+>> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
+>> new file mode 100644
+>> index 000000000000..110ad3a73459
+>> --- /dev/null
+>> +++ b/drivers/tty/serial/8250/8250_dfl.c
+>> @@ -0,0 +1,177 @@
+>
+>> +static int dfl_uart_get_params(struct device *dev, void __iomem *dfh_base, resource_size_t max,
+>> +			       struct uart_8250_port *uart)
+>> +{
+>> +	u64 v, fifo_len, reg_width;
+>> +	int off;
+>> +
+>> +	if (!dfhv1_has_params(dfh_base)) {
+>> +		dev_err(dev, "missing required DFH parameters\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_CLK_FRQ);
+>> +	if (off < 0) {
+>> +		dev_err(dev, "missing CLK_FRQ param\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	uart->port.uartclk = readq(dfh_base + off);
+>> +	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
+>> +
+>> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_FIFO_LEN);
+>> +	if (off < 0) {
+>> +		dev_err(dev, "missing FIFO_LEN param\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	fifo_len = readq(dfh_base + off);
+>> +	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
+>> +
+>> +	switch (fifo_len) {
+>> +	case 32:
+>> +		uart->port.type = PORT_ALTR_16550_F32;
+>> +		break;
+>> +
+>> +	case 64:
+>> +		uart->port.type = PORT_ALTR_16550_F64;
+>> +		break;
+>> +
+>> +	case 128:
+>> +		uart->port.type = PORT_ALTR_16550_F128;
+>> +		break;
+>> +
+>> +	default:
+>> +		dev_err(dev, "bad fifo_len %llu\n", fifo_len);
+>
+> I'd tell user "unsupported" rather than "bad".
+
+The word, unsupported, sounds better.  I will change it in both places you 
+suggested.
+
+>
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
+>> +	if (off < 0) {
+>> +		dev_err(dev, "missing REG_LAYOUT param\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	v = readq(dfh_base + off);
+>> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
+>> +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
+>> +
+>> +	dev_dbg(dev, "UART_LAYOUT_ID width %lld shift %d\n",
+>> +		FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v), (int)uart->port.regshift);
+>
+> Why not use reg_width directly?
+
+Good catch.
+
+>
+>> +	switch (reg_width) {
+>> +	case 4:
+>> +		uart->port.iotype = UPIO_MEM32;
+>> +		break;
+>> +
+>> +	case 2:
+>> +		uart->port.iotype = UPIO_MEM16;
+>> +		break;
+>> +
+>> +	default:
+>> +		dev_err(dev, "invalid reg_width %lld\n", reg_width);
+>
+> unsupported ?
+>
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
+>> +{
+>> +	struct device *dev = &dfl_dev->dev;
+>> +	struct uart_8250_port uart;
+>> +	struct dfl_uart *dfluart;
+>> +	resource_size_t res_size;
+>> +	void __iomem *dfh_base;
+>> +	int ret;
+>> +
+>> +	memset(&uart, 0, sizeof(uart));
+>> +	uart.port.flags = UPF_IOREMAP;
+>> +	uart.port.mapbase = dfl_dev->csr_res.start;
+>> +	uart.port.mapsize = resource_size(&dfl_dev->csr_res);
+>> +
+>> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
+>> +	if (!dfluart)
+>> +		return -ENOMEM;
+>> +
+>> +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
+>> +	if (IS_ERR(dfh_base))
+>> +		return PTR_ERR(dfh_base);
+>> +
+>> +	res_size = resource_size(&dfl_dev->mmio_res);
+>> +
+>> +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
+>> +
+>> +	devm_iounmap(dev, dfh_base);
+>> +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
+>> +
+>> +	if (ret < 0)
+>> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
+>> +
+>> +	dev_dbg(dev, "nr_irqs %d %p\n", dfl_dev->num_irqs, dfl_dev->irqs);
+>> +
+>> +	if (dfl_dev->num_irqs == 1)
+>> +		uart.port.irq = dfl_dev->irqs[0];
+>> +
+>> +	/* register the port */
+>
+> This comment is pretty useless. Just drop it.
+
+Will drop this useless comment.
+
+>
+>> +	dfluart->line = serial8250_register_8250_port(&uart);
+>> +	if (dfluart->line < 0)
+>> +		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
+>> +
+>> +	dev_info(dev, "serial8250_register_8250_port %d\n", dfluart->line);
+>
+> This you want to drop too. It seems a debug thing rather than info level
+> stuff.
+
+It is actually redundant output because serial8250_register_8250_port() 
+produces useful output.  I will drop the line.
+
+>
+>
+> -- 
+> i.
+>
+>
+--8323328-166967846-1665092868=:1772307--
