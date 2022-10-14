@@ -2,225 +2,186 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15955FF167
-	for <lists+linux-fpga@lfdr.de>; Fri, 14 Oct 2022 17:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D215FF195
+	for <lists+linux-fpga@lfdr.de>; Fri, 14 Oct 2022 17:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbiJNP2r (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 14 Oct 2022 11:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
+        id S229852AbiJNPmb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 14 Oct 2022 11:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbiJNP2j (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 14 Oct 2022 11:28:39 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F326165528;
-        Fri, 14 Oct 2022 08:28:38 -0700 (PDT)
+        with ESMTP id S229886AbiJNPma (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 14 Oct 2022 11:42:30 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8522AE25;
+        Fri, 14 Oct 2022 08:42:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665761318; x=1697297318;
+  t=1665762148; x=1697298148;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5z/eMgxqqUuDg2RjLvj72J5xElrEO8SgLrrsw5yzTWI=;
-  b=Glh2OkpvxbfD/VinJqInH76DXRgcU/RbCZjd4m4f+v4fQ24Rty31c62M
-   T4m8RNS/4qjcriGsg5Qi9OrXExaLPB/vZqVBtcxtcwANocubV+w7e3PsW
-   JkxNhhId00W6X0eI/7YnuZMYcgCvTLbqjGqH0ya+MAUMK8Nyl92p76Z2M
-   vFw2YSLzgwDypLrUrxqPTBuj4cyftEQZCdsUMURV14VdLkyAoFfmittCS
-   NHTHKJ+kMnV+QbAYx5OhTSJVYoiGMIOweNPV7BAGI5DRTJDuZpXebqmt9
-   iBbD6tBHNn+S0ilFCDNh/PpoiXFqdSZo3rjzbhRAVdtQoqdbLRc/7zuE4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="292758293"
+  bh=O3hlM9RR1X0TYLon8E8uraMngu523Z9hnJiAtff+dNg=;
+  b=Gd0/iQZAHcRdhTOyPrFx/TVyUoONcPjTKcIBQhI643DlV8+WsqJKCwEr
+   FRBG8FO4rZC0mWrJufLvtiGBzEQ0YREEijh29rT+56DD5UuWwf6DMY08+
+   yZ+UN329W/1O4hCuGLJ+5jqXgIRoW2ou65jPKdftCDep5Y6ld/4xdCC2z
+   6+FBiVaMIPBZ+St7456HYSOwSQVhJTS6iAdXltM/wGJdHStsFtk28YAc8
+   QIwhoV8Ax0bh/7zzmSXYD6/UBlub8TCR2GOm85Mjmn0e64M3YhJQmMW0o
+   XkYFbqL1VtkvXBnkLvZG81TEy8fUIqJa1ZqKCDJhZ3IYTKcMd73vEWqpE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="285794014"
 X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
-   d="scan'208";a="292758293"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 08:28:38 -0700
+   d="scan'208";a="285794014"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 08:42:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="956619071"
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="660767496"
 X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
-   d="scan'208";a="956619071"
+   d="scan'208";a="660767496"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Oct 2022 08:28:34 -0700
-Date:   Fri, 14 Oct 2022 23:19:29 +0800
+  by orsmga001.jf.intel.com with ESMTP; 14 Oct 2022 08:42:23 -0700
+Date:   Fri, 14 Oct 2022 23:33:18 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
-        j.zink@pengutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, system@metrotek.ru
-Subject: Re: [PATCH v17 1/2] fpga: lattice-sysconfig-spi: add Lattice
- sysCONFIG FPGA manager
-Message-ID: <Y0l+AbjGSOyTaoqV@yilunxu-OptiPlex-7050>
-References: <20221011193821.21828-1-i.bornyakov@metrotek.ru>
- <20221011193821.21828-2-i.bornyakov@metrotek.ru>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     git@xilinx.com, michal.simek@xilinx.com, mdf@kernel.org,
+        hao.wu@intel.com, trix@redhat.com, gregkh@linuxfoundation.org,
+        ronak.jain@xilinx.com, rajan.vaja@xilinx.com,
+        abhyuday.godhasara@xilinx.com, harsha.harsha@xilinx.com,
+        lakshmi.sai.krishna.potthuri@xilinx.com, tanmay.shah@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] firmware: xilinx: Add pm api function for PL
+ config reg readback
+Message-ID: <Y0mBPmoAeAZ+9SGv@yilunxu-OptiPlex-7050>
+References: <20221013090556.741357-1-nava.kishore.manne@amd.com>
+ <20221013090556.741357-2-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221011193821.21828-2-i.bornyakov@metrotek.ru>
+In-Reply-To: <20221013090556.741357-2-nava.kishore.manne@amd.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2022-10-11 at 22:38:20 +0300, Ivan Bornyakov wrote:
-> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
-> slave SPI sysCONFIG interface.
+On 2022-10-13 at 14:35:55 +0530, Nava kishore Manne wrote:
+> Adds PM API for performing Programmable Logic(PL) configuration
+> register readback. It provides an interface to the firmware(pmufw)
+> to readback the FPGA configuration register.
 > 
-> sysCONFIG interface core functionality is separate from both ECP5 and
-> SPI specifics, so support for other FPGAs with different port types can
-> be added in the future.
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+> hanges for v2:
+>               - None.
 > 
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> Changes for v3:
+>               - Updated API and config reg read-back handling logic
+>               - Updated the commit msg to align with the changes.
+> 
+>  drivers/firmware/xilinx/zynqmp.c     | 35 ++++++++++++++++++++++++++++
+>  include/linux/firmware/xlnx-zynqmp.h | 11 +++++++++
+>  2 files changed, 46 insertions(+)
+> 
+> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
+> index d1f652802181..045a113434c2 100644
+> --- a/drivers/firmware/xilinx/zynqmp.c
+> +++ b/drivers/firmware/xilinx/zynqmp.c
+> @@ -941,6 +941,41 @@ int zynqmp_pm_fpga_get_status(u32 *value)
+>  }
+>  EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_status);
+>  
+> +/**
+> + * zynqmp_pm_fpga_get_config_status - Get the FPGA configuration status.
+> + * @value: Buffer to store FPGA configuration status.
+> + *
+> + * This function provides access to the pmufw to get the FPGA configuration
+> + * status
+> + *
+> + * Return: Returns status, either success or error+reason
 
-[...]
+As mentioned before, please at least specify what value is success
 
-> +
-> +static int sysconfig_read_busy(struct sysconfig_priv *priv)
+> + */
+> +int zynqmp_pm_fpga_get_config_status(u32 *value)
 > +{
-> +	const u8 lsc_check_busy[] = SYSCONFIG_LSC_CHECK_BUSY;
-> +	u8 busy;
+> +	u32 ret_payload[PAYLOAD_ARG_CNT];
+> +	u32 buf, phys_lower_addr, phys_upper_addr, addr;
+
+reverse santa tree, please
+
 > +	int ret;
 > +
-> +	ret = sysconfig_cmd_read(priv, lsc_check_busy, sizeof(lsc_check_busy),
-> +				 &busy, sizeof(busy));
+> +	if (!value)
+> +		return -EINVAL;
 > +
-> +	return ret ? : busy;
+> +	addr = (u64)&buf;
+> +
+> +	phys_lower_addr = lower_32_bits(addr);
+> +	phys_upper_addr = upper_32_bits(addr);
+
+u64 addr???
+
+> +
+> +	ret = zynqmp_pm_invoke_fn(PM_FPGA_READ,
+> +				  XILINX_ZYNQMP_PM_FPGA_CONFIG_STAT_OFFSET,
+> +				  phys_lower_addr, phys_upper_addr,
+> +				  XILINX_ZYNQMP_PM_FPGA_READ_CONFIG_REG,
+> +				  ret_payload);
+> +
+> +	*value = ret_payload[1];
+> +
+> +	return ret;
 > +}
+> +EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_config_status);
 > +
-> +static int sysconfig_poll_busy(struct sysconfig_priv *priv)
+>  /**
+>   * zynqmp_pm_pinctrl_request - Request Pin from firmware
+>   * @pin: Pin number to request
+> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
+> index 9f50dacbf7d6..34b0a9171293 100644
+> --- a/include/linux/firmware/xlnx-zynqmp.h
+> +++ b/include/linux/firmware/xlnx-zynqmp.h
+> @@ -70,6 +70,10 @@
+>  #define XILINX_ZYNQMP_PM_FPGA_FULL	0x0U
+>  #define XILINX_ZYNQMP_PM_FPGA_PARTIAL	BIT(0)
+>  
+> +/* FPGA Status Reg */
+> +#define XILINX_ZYNQMP_PM_FPGA_CONFIG_STAT_OFFSET	7U
+> +#define XILINX_ZYNQMP_PM_FPGA_READ_CONFIG_REG		0U
+> +
+>  /*
+>   * Node IDs for the Error Events.
+>   */
+> @@ -117,6 +121,7 @@ enum pm_api_id {
+>  	PM_CLOCK_GETRATE = 42,
+>  	PM_CLOCK_SETPARENT = 43,
+>  	PM_CLOCK_GETPARENT = 44,
+> +	PM_FPGA_READ = 46,
+>  	PM_SECURE_AES = 47,
+>  	PM_FEATURE_CHECK = 63,
+>  };
+> @@ -475,6 +480,7 @@ int zynqmp_pm_is_function_supported(const u32 api_id, const u32 id);
+>  int zynqmp_pm_set_feature_config(enum pm_feature_config_id id, u32 value);
+>  int zynqmp_pm_get_feature_config(enum pm_feature_config_id id, u32 *payload);
+>  int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset);
+> +int zynqmp_pm_fpga_get_config_status(u32 *value);
+>  #else
+>  static inline int zynqmp_pm_get_api_version(u32 *version)
+>  {
+> @@ -745,6 +751,11 @@ static inline int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset)
+>  {
+>  	return -ENODEV;
+>  }
+> +
+> +int zynqmp_pm_fpga_get_config_status(u32 *value)
 > +{
-> +	unsigned long timeout;
-> +	int ret;
-> +
-> +	timeout = jiffies + msecs_to_jiffies(SYSCONFIG_POLL_BUSY_TIMEOUT_MS);
-> +
-> +	while (time_before(jiffies, timeout)) {
-> +		ret = sysconfig_read_busy(priv);
-> +		if (ret <= 0)
-> +			return ret;
-> +
-> +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
-> +			     SYSCONFIG_POLL_INTERVAL_US * 2);
-> +	}
-> +
-> +	return -ETIMEDOUT;
-
-As mentioned by Ahmad, could read_poll_timeout() be used?
-
+> +	return -ENODEV;
 > +}
-> +
-> +static int sysconfig_read_status(struct sysconfig_priv *priv, u32 *status)
-> +{
-> +	const u8 lsc_read_status[] = SYSCONFIG_LSC_READ_STATUS;
-> +	__be32 device_status;
-> +	int ret;
-> +
-> +	ret = sysconfig_cmd_read(priv, lsc_read_status, sizeof(lsc_read_status),
-> +				 &device_status, sizeof(device_status));
-> +	if (ret)
-> +		return ret;
-> +
-> +	*status = be32_to_cpu(device_status);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sysconfig_poll_status(struct sysconfig_priv *priv, u32 *status)
-> +{
-> +	int ret = sysconfig_poll_busy(priv);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysconfig_read_status(priv, status);
-> +}
-> +
-> +static int sysconfig_poll_gpio(struct gpio_desc *gpio, bool is_active)
-> +{
-> +	unsigned long timeout;
-> +	int value;
-> +
-> +	timeout = jiffies + msecs_to_jiffies(SYSCONFIG_POLL_GPIO_TIMEOUT_MS);
-> +
-> +	while (time_before(jiffies, timeout)) {
-> +		value = gpiod_get_value(gpio);
-> +		if (value < 0)
-> +			return value;
-> +
-> +		if ((is_active && value) || (!is_active && !value))
-> +			return 0;
-> +
-> +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
-> +			     SYSCONFIG_POLL_INTERVAL_US * 2);
-> +	}
-> +
-> +	return -ETIMEDOUT;
-
-Same.
-
-[...]
-
-> +int sysconfig_probe(struct sysconfig_priv *priv)
-> +{
-> +	struct gpio_desc *program, *init, *done;
-> +	struct device *dev = priv->dev;
-> +	struct fpga_manager *mgr;
-> +
-> +	if (!dev)
-> +		return -ENODEV;
-> +
-> +	if (!priv->bitstream_burst_write_init) {
-> +		dev_err(dev,
-> +			"Callback for preparation for bitstream burst write is not defined\n");
-> +		return -EOPNOTSUPP;
-
--EINVAL is better?
-
-> +	}
-> +
-> +	if (!priv->bitstream_burst_write) {
-> +		dev_err(dev,
-> +			"Callback for bitstream burst write is not defined\n");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (!priv->bitstream_burst_write_complete) {
-> +		dev_err(dev,
-> +			"Callback for finishing bitstream burst write is not defined\n");
-> +		return -EOPNOTSUPP;
-> +	}
-
-command_transfer is optional?
-
-And I think different err log for each missing callback is too trivial,
-maybe just say like "ops missing" if any mandatory callback is missing.
-
-> +
-> +	program = devm_gpiod_get_optional(dev, "program", GPIOD_OUT_LOW);
-> +	if (IS_ERR(program))
-> +		return dev_err_probe(dev, PTR_ERR(program),
-> +				     "Failed to get PROGRAM GPIO\n");
-> +
-> +	init = devm_gpiod_get_optional(dev, "init", GPIOD_IN);
-> +	if (IS_ERR(init))
-> +		return dev_err_probe(dev, PTR_ERR(init),
-> +				     "Failed to get INIT GPIO\n");
-> +
-> +	done = devm_gpiod_get_optional(dev, "done", GPIOD_IN);
-> +	if (IS_ERR(done))
-> +		return dev_err_probe(dev, PTR_ERR(done),
-> +				     "Failed to get DONE GPIO\n");
-> +
-> +	priv->program = program;
-> +	priv->init = init;
-> +	priv->done = done;
-> +
-> +	mgr = devm_fpga_mgr_register(dev, "Lattice sysCONFIG FPGA Manager",
-> +				     &sysconfig_fpga_mgr_ops, priv);
-> +
-> +	return PTR_ERR_OR_ZERO(mgr);
-> +}
-> +EXPORT_SYMBOL(sysconfig_probe);
+>  #endif
+>  
+>  #endif /* __FIRMWARE_ZYNQMP_H__ */
+> -- 
+> 2.25.1
+> 
