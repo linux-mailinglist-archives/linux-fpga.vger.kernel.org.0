@@ -2,42 +2,42 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E1F607386
-	for <lists+linux-fpga@lfdr.de>; Fri, 21 Oct 2022 11:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2CC607403
+	for <lists+linux-fpga@lfdr.de>; Fri, 21 Oct 2022 11:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbiJUJID (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 21 Oct 2022 05:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
+        id S229783AbiJUJYy (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 21 Oct 2022 05:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiJUJIB (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 21 Oct 2022 05:08:01 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F361C3E55;
-        Fri, 21 Oct 2022 02:08:00 -0700 (PDT)
+        with ESMTP id S229874AbiJUJYw (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 21 Oct 2022 05:24:52 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DED6275EC;
+        Fri, 21 Oct 2022 02:24:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666343280; x=1697879280;
+  t=1666344286; x=1697880286;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=f186kABHfz6j3m5TTCFTlEj9tjvEmDT5jsf2cCWJk5E=;
-  b=I+skOc/zPUr0103odIwwnD/MqFdEr53nXqTHp6Ee5LINhA0y14Jtl+6G
-   j58Ub3A9sxpCCCHwqxpv8s/5CK2gukzUPCZfH+qSW1NHXnn9Jhdb8OJTb
-   ifJYJDgQaiAq3W7qPn289Cp/2z6zQv8N4qKpxfHzWl6kx1ZbHDj71n85w
-   yQyC7M1YrM/Izqy5jXaUOLbc07RuAHqoU7uxmJabA8xUXUqXkBY/x/NW9
-   dcj96Yaq6R7kRmaPYri4p42XM8ebz3a+plMWbe6UFyaiNZp8vU/Vx+RXk
-   psbUFuOBRELmGxFJut2NPEI23f1XQ/TuJHd8ZSZgxAN47Wej2DHmLivxI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="290263327"
+  bh=jk3GGigshY3ozVIft32XqiGGnJhMw0o6601+Pv/jJHg=;
+  b=mj1BFCVKcskK+BTfao7mXFCM9rgaGB99p6F9MPEms9aSw8UGe/dMMotu
+   d/Q/Q5A9ekMHBlXiEbsDpjT5fgVL51BxL/9Ll8DB0OkAv5AOS2X+DsPuu
+   kMdg65GHe9C96LoKwEo+qL9XLlbUrSLriE5KkBZtjO+LWCa7/VHhOA/wC
+   e6J3Q7JxYQIsHZsVYQ0hI8X9xI6jffmUM6dkPx5adcr+jrPkQ+OnHZ7ld
+   S8v6Nv0/ZOH7QegCL/lv6y1uPKt0JB/IS15z2e0HvIIucVAXN9fbJ63+r
+   ys5O7vOcztCtUydvIcXI2KU7HSQ07CXI+e0Tkr9QF+V8Z3U5vSiNpOfnv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="304572661"
 X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="290263327"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 02:08:00 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="805459735"
+   d="scan'208";a="304572661"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 02:24:43 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="719621315"
 X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="805459735"
+   d="scan'208";a="719621315"
 Received: from lramir2-mobl1.ger.corp.intel.com ([10.252.44.179])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 02:07:54 -0700
-Date:   Fri, 21 Oct 2022 12:07:52 +0300 (EEST)
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 02:24:38 -0700
+Date:   Fri, 21 Oct 2022 12:24:35 +0300 (EEST)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
 cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
@@ -52,15 +52,16 @@ cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
         johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
         marpagan@redhat.com
-Subject: Re: [PATCH v4 3/4] fpga: dfl: add basic support DFHv1
-In-Reply-To: <20221020212610.697729-4-matthew.gerlach@linux.intel.com>
-Message-ID: <4d44fdd5-8c7a-622-25e2-4ce2cc9698dd@linux.intel.com>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-4-matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH v4 4/4] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+In-Reply-To: <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
+Message-ID: <37342f3-cac7-e127-5bea-27b78dbc31c@linux.intel.com>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,57 +72,25 @@ On Thu, 20 Oct 2022, matthew.gerlach@linux.intel.com wrote:
 
 > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> Add generic support for MSI-X interrupts for DFL devices.
-> 
-> The location of a feature's registers is explicitly
-> described in DFHv1 and can be relative to the base of the DFHv1
-> or an absolute address.  Parse the location and pass the information
-> to DFL driver.
+> Add a Device Feature List (DFL) bus driver for the Altera
+> 16550 implementation of UART.
 > 
 > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > ---
 
-> @@ -934,56 +962,108 @@ static u16 feature_id(u64 value)
->  	return 0;
->  }
->  
-> +static void *find_param(void *base, resource_size_t max, int param)
-> +{
-> +	int off = 0;
-> +	u64 v, next;
+> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
+> +	if (!p)
+> +		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT param\n");
 > +
-> +	while (off < max) {
-> +		v = *(u64 *)(base + off);
-> +		if (param == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
-> +			return base + off + DFHv1_PARAM_DATA;
-> +
-> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
-> +		off += next & ~DFHv1_PARAM_HDR_NEXT_MASK;
-> +		if (next & DFHv1_PARAM_HDR_NEXT_EOL)
-> +			break;
-> +
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
-> +/**
-> + * dfh_find_param() - find data for the given parameter id
-> + * @dfl_dev: dfl device
-> + * @param: id of dfl parameter
-> + *
-> + * Return: pointer to parameter data on success, NULL otherwise.
-> + */
-> +void *dfh_find_param(struct dfl_device *dfl_dev, int param)
-> +{
-> +	return find_param(dfl_dev->params, dfl_dev->param_size, param);
-> +}
-> +EXPORT_SYMBOL_GPL(dfh_find_param);
+> +	v = *p;
+> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
+> +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
 
-Do you expect this split between dfh_find_param() and find_param() to
-be useful in the future? If no other callers are expected, I'd just pull 
-find_param() into dfh_find_param() and create local variables for base and 
-max.
+Just use *p directly for the FIELD_GETs. I suppose you can drop v after 
+changing it.
+
+Other than that and what Andy noted, this patch looks good.
+
 
 -- 
  i.
