@@ -2,42 +2,42 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2923260B404
-	for <lists+linux-fpga@lfdr.de>; Mon, 24 Oct 2022 19:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2C060B54A
+	for <lists+linux-fpga@lfdr.de>; Mon, 24 Oct 2022 20:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbiJXRXX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 24 Oct 2022 13:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
+        id S231962AbiJXSS1 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 24 Oct 2022 14:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiJXRXD (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 24 Oct 2022 13:23:03 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2930B10D695;
-        Mon, 24 Oct 2022 08:58:08 -0700 (PDT)
+        with ESMTP id S231476AbiJXSRx (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 24 Oct 2022 14:17:53 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C555227E075;
+        Mon, 24 Oct 2022 09:59:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666627090; x=1698163090;
+  t=1666630758; x=1698166758;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=KF8Fkwnt0swwTeTSQoG35DuMH7urFi84yTD7/k3447s=;
-  b=iWcf2MUMOWojkBMgaMng4oDsQaCoa4ey+XKqlKbxAMVfkMf+T64lJbQd
-   w/x95mYR5gWyqnZxHASCkARdEz5jIeAEwyqc65fkb+qK++twUZIe3Clgk
-   CmPpruVORq6oqDWCHqgt2csSRza/a59A/YFZ9HIs44UZ74fbIWubsj6iQ
-   IB1lqQBS1A39oOSo4OCRiumrTE0aKCtusMMq8kA4g7LVNJEfVFArHR0bS
-   o2AflkoayInpGluuQetlhYhWpjXhoC/YHOB+cw5sCnFotN58nA9TSl8b6
-   QVsQmMdyRwy58+vSon45wK+2Uohol+G0jkQp/9RfTu7TfROZvUXEc+SVg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287840235"
+  bh=7ZhNkL3lvgkekoLnvkErYGzQcvxtw6NFtK0TosGfS1I=;
+  b=hzq4kgpUkV5wF8WzQiVHWt5FVS47UZa5IYGCU1ikoLFe8L46edqcJJrf
+   0QeUZ+2vkFAvyS28uP/zsIB6GTHajjPh6PA30hVl1l6pL+7tbHlPfsoUo
+   5WG2DBxGbnsPzMS03kXt8UBkbR2Ld94SmlfnzAvyLzpfhWliMqIE0LT1S
+   Ypmxu0iLhl5bQLG2cRqNn9Nehbr+ukm2+gRZ/URi6pp1Ws7fGOUBqlVpc
+   i3ik1EmxiS5vuFeInyX00ez1EMRzgo32xnxQff032kqOZ926m5PmqytGf
+   xEjlhqJ3qGIIiFBHI0fupUq0Nrn1pHLRZj5tBOWHkJO3WDvSX81G0JW7C
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="305050380"
 X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="287840235"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:09:18 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="773850887"
+   d="scan'208";a="305050380"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:03:28 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="582443519"
 X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="773850887"
+   d="scan'208";a="582443519"
 Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:09:17 -0700
-Date:   Mon, 24 Oct 2022 08:09:34 -0700 (PDT)
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:03:28 -0700
+Date:   Mon, 24 Oct 2022 08:03:45 -0700 (PDT)
 From:   matthew.gerlach@linux.intel.com
 X-X-Sender: mgerlach@rhweight-WRK1
 To:     =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
@@ -52,16 +52,18 @@ cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
         johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
-        marpagan@redhat.com
-Subject: Re: [PATCH v4 3/4] fpga: dfl: add basic support DFHv1
-In-Reply-To: <97f6047-e364-8ae7-195c-4cf33c4b3ec7@linux.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2210240808400.2070724@rhweight-WRK1>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-4-matthew.gerlach@linux.intel.com> <97f6047-e364-8ae7-195c-4cf33c4b3ec7@linux.intel.com>
+        marpagan@redhat.com,
+        Basheer Ahmed Muddebihal 
+        <basheer.ahmed.muddebihal@linux.intel.com>
+Subject: Re: [PATCH v4 2/4] fpga: dfl: Add DFHv1 Register Definitions
+In-Reply-To: <4d609218-508f-6025-e99-71aac2b01369@linux.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2210240802580.2070724@rhweight-WRK1>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-3-matthew.gerlach@linux.intel.com> <4d609218-508f-6025-e99-71aac2b01369@linux.intel.com>
 User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-2044127639-1666624175=:2070724"
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: multipart/mixed; boundary="8323328-2133041476-1666623825=:2070724"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,7 +74,7 @@ X-Mailing-List: linux-fpga@vger.kernel.org
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323328-2044127639-1666624175=:2070724
+--8323328-2133041476-1666623825=:2070724
 Content-Type: text/plain; charset=ISO-8859-15; format=flowed
 Content-Transfer-Encoding: 8BIT
 
@@ -82,76 +84,118 @@ On Fri, 21 Oct 2022, Ilpo Järvinen wrote:
 
 > On Thu, 20 Oct 2022, matthew.gerlach@linux.intel.com wrote:
 >
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
 >>
->> Add generic support for MSI-X interrupts for DFL devices.
+>> This patch adds the definitions for DFHv1 header and related register
+>> bitfields.
 >>
->> The location of a feature's registers is explicitly
->> described in DFHv1 and can be relative to the base of the DFHv1
->> or an absolute address.  Parse the location and pass the information
->> to DFL driver.
->>
+>> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
 >> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 >> ---
->> v4: s/MSIX/MSI_X
->>     move kernel doc to implementation
->>     use structure assignment
->>     fix decode of absolute address
->>     clean up comment in parse_feature_irqs
->>     remove use of csr_res
+>> v4: s/MSIX/MSI_X/g
+>>     move kerneldoc to implementation
+>>     don't change copyright date
 >>
->> v3: remove unneeded blank line
->>     use clearer variable name
->>     pass finfo into parse_feature_irqs()
->>     refactor code for better indentation
->>     use switch statement for irq parsing
->>     squash in code parsing register location
+>> v3:
+>>     keep DFHv1 definitions "hidden" in drivers/fpga/dfl.h
 >>
->> v2: fix kernel doc
->>     clarify use of DFH_VERSION field
+>> v2: clean up whitespace and one line comments
+>>     remove extra space in commit
+>>     use uniform number of digits in constants
+>>     don't change copyright date because of removed content
+>>
+>> dfl.h s/MSIX/MSI_X/g move kerneldoc
 >> ---
+>>  drivers/fpga/dfl.h  | 33 +++++++++++++++++++++++++++++++++
+>>  include/linux/dfl.h | 11 +++++++++++
+>>  2 files changed, 44 insertions(+)
+>>
+>> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+>> index 06cfcd5e84bb..45e6e1359a67 100644
+>> --- a/drivers/fpga/dfl.h
+>> +++ b/drivers/fpga/dfl.h
+>> @@ -74,11 +74,44 @@
+>>  #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
+>>  #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
+>>  #define DFH_EOL			BIT_ULL(40)		/* End of list */
+>> +#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
+>>  #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
+>>  #define DFH_TYPE_AFU		1
+>>  #define DFH_TYPE_PRIVATE	3
+>>  #define DFH_TYPE_FIU		4
+>>
+>> +/*
+>> + * DFHv1 Register Offset definitons
+>> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
+>> + * as common header registers
+>> + */
+>> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
+>> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
+>> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
+>> +
+>> +/*
+>> + * CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
+>> + * 1'b1 = absolute (ARM or other non-PCIe use)
+>> + */
+>> +#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
+>> +
+>> +/* CSR Header Register Bit Definitions */
+>> +#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
+>> +
+>> +/* CSR SIZE Goup Register Bit Definitions */
+>> +#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
+>> +#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
+>> +#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
+>> +#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
 >
->> +static int dfh_get_psize(void __iomem *dfh_base, resource_size_t max)
->> +{
->> +	int size = 0;
->> +	u64 v, next;
->> +
->> +	if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS,
->> +		       readq(dfh_base + DFHv1_CSR_SIZE_GRP)))
->> +		return 0;
->> +
->> +	while (size + DFHv1_PARAM_HDR < max) {
->> +		v = readq(dfh_base + DFHv1_PARAM_HDR + size);
->> +
->> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
->> +		if (!(next & ~DFHv1_PARAM_HDR_NEXT_MASK))
+> SIZE -> SZ would remove two letters w/o loss of info (remember to
+> rename the offset too if you make this change).
 >
-> In general, try to not use inverse logic for defining masks. However here,
-> just change DFHv1_PARAM_HDR_NEXT_OFFSET to not include any extra bits
-> (no rsvd nor eop) and you no longer need this extra masking.
+>> +/* PARAM Header Register Bit Definitions */
+>> +#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
+>> +#define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
+>> +#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
+>> +#define DFHv1_PARAM_HDR_NEXT_EOL	BIT_ULL(0)
+>> +#define DFHv1_PARAM_HDR_NEXT_MASK	GENMASK_ULL(1, 0)
+>> +#define DFHv1_PARAM_DATA		0x08  /* Offset of Param data from Param header */
+>> +
+>>  /* Next AFU Register Bitfield */
+>>  #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
+>>
+>> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+>> index 431636a0dc78..fea9e16d35b6 100644
+>> --- a/include/linux/dfl.h
+>> +++ b/include/linux/dfl.h
+>> @@ -11,6 +11,17 @@
+>>  #include <linux/device.h>
+>>  #include <linux/mod_devicetable.h>
+>>
+>> +#define DFHv1_PARAM_ID_MSI_X		0x1
+>> +#define DFHv1_PARAM_MSI_X_STARTV	0x0
+>> +#define DFHv1_PARAM_MSI_X_NUMV		0x4
+>> +
+>> +#define DFHv1_PARAM_ID_CLK_FRQ    0x2
+>> +#define DFHv1_PARAM_ID_FIFO_LEN   0x3
+>> +
+>> +#define DFHv1_PARAM_ID_REG_LAYOUT 0x4
+>> +#define DFHv1_PARAM_ID_REG_WIDTH  GENMASK_ULL(63, 32)
+>> +#define DFHv1_PARAM_ID_REG_SHIFT  GENMASK_ULL(31, 0)
+>
+> Any particular reason why MSI_X parameters are given as offsets and
+> these REG_LAYOUT ones as bitfields (both are 32-bit)?
 
-I agree that defining the fields better and using FIELD_GET would make 
-this code cleaner.
+I agree that it would be much better to be consistent.
 
 >
->> +			return -EINVAL;
->> +
->> +		size += next & ~DFHv1_PARAM_HDR_NEXT_MASK;
->
-> ...Then you can drop this anding too.
->
->> +
->> +		if (next & DFHv1_PARAM_HDR_NEXT_EOL)
->
-> Your docs say EOP, but here you use EOL.
+> The naming here would indicate that DFHv1_PARAM_ID_REG_WIDTH is one of the
+> parameters but it's part of param data instead. I suppose you'd want
+> DFHv1_PARAM_REG_LAYOUT_WIDTH instead.
 
-Thanks for catching the inconsistency.
+Thanks for the naming suggestions.
 
->
-> Change DFHv1_PARAM_HDR_NEXT_EOL such that this is extracted directly from
-> v.
 >
 > -- 
 > i.
 >
---8323328-2044127639-1666624175=:2070724--
+>
+--8323328-2133041476-1666623825=:2070724--
