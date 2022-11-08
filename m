@@ -2,97 +2,116 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CDD621686
-	for <lists+linux-fpga@lfdr.de>; Tue,  8 Nov 2022 15:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DB9621717
+	for <lists+linux-fpga@lfdr.de>; Tue,  8 Nov 2022 15:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234001AbiKHO1E (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 8 Nov 2022 09:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
+        id S234254AbiKHOnT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 8 Nov 2022 09:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbiKHO0Y (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Nov 2022 09:26:24 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B08FFD
-        for <linux-fpga@vger.kernel.org>; Tue,  8 Nov 2022 06:25:13 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id l6so13977850pjj.0
-        for <linux-fpga@vger.kernel.org>; Tue, 08 Nov 2022 06:25:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=qJPWO9SMfKs9CV4DzOtfpg0tG5L2kEZQtV/LBBChMrnKplvig/HcfOA36QzOFbaour
-         tgINSm9CFH0IH0weUkbi8oL7C5P0uFU99A+FANpQrOPV/x2at1b6HjUUAphEgu/Nt2rO
-         YdZzEeguInvIt6hR0YTDbuGc0g6QmBH3JOdUVEiMakuZ8pUv0rSqDGDPPz36WP9L+M70
-         Yi8Qvn61/fVJa/s6+O6bNGj9Vrx81J7VmEWQcrrTipgg1zMWjvYHOXsRX3Tp8F7t1isZ
-         URWNY0E6DDGhkUjSdRf6tRRt6Dm01iRomcQNGIBkoA7vu4q8ZFmcmXCe9DgPR3TaW/OT
-         odpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=dtU9XJUpiW8rh1fqtdrah9YaeghRYfchXMw5nJ7FMSwperAmwJ9EfUjlc/KK5qjD/N
-         +H37A1x+qT0JblIQRO+BYdbNBOOjIbTxQ+aKEpNH9TX7nawIGroKpptPh+zfIObh1Xfp
-         ocdRW37udFZjj+LjOWhuzpGJjBEe7JUi83JHq+nrAE6cAotxUtcuiIuFf122SYioZdOq
-         Q1dQE3KVRgIxQAAOeBTxUmD8l+AiY3mDskzP4buUl8WW5XgUDeRUtj5YQ/NvMCCE9Y0k
-         Qyiw6Xrfdmc4wlwEwa7MApSoTULK/pJnWoYlgzAZQ4ggARCAyy1XnpDoPBA5elkHpd2x
-         3Ksg==
-X-Gm-Message-State: ACrzQf1rAYOMgevQF85IA9lmtKsMqJL62iwVJmEl64Pu8YvE0K0XrYMH
-        qAL/HULsl9fY1XiTZ/NX8vKKNzy822zttK4IZyY=
-X-Google-Smtp-Source: AMsMyM7xjnW3BCIcPmRXceI8CMPrgJsNpwknP0oXmxg9pb3hPM8UnVyASTbWsNqLc31U8nSLRepoWwOH4L/DHUye4LA=
-X-Received: by 2002:a17:90b:1d90:b0:213:c798:86f6 with SMTP id
- pf16-20020a17090b1d9000b00213c79886f6mr52558648pjb.84.1667917512394; Tue, 08
- Nov 2022 06:25:12 -0800 (PST)
+        with ESMTP id S232367AbiKHOnS (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Nov 2022 09:43:18 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C17229368;
+        Tue,  8 Nov 2022 06:43:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667918597; x=1699454597;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ltk9PcCFgML5mXI5MbJjN0UtH9fCC+uUjFk5ymEpff4=;
+  b=Cz7Ei/AjT+BRlqA0dwr6OVE8wZMsAk/0md3Bk5SkEFrjr3Uy2lyil3On
+   AZTMOufQzp8Osr1ka1es0bds1Kgv1SkLkUgazs6QSXbw+yPdFXqEesFVz
+   CZnTE4JcsriDnY0tbjzMudM1ThsfJ1haaxdKk7liyF3KA3zRtT0SFIK1D
+   Vo/E6lnfk6He3J8tjZI5JtJaN1F0jU3zhNdSPAJWrKv4fc4k3ruuv0Gmo
+   Nz5u61l2ENwoVfRvOL1/kOvvmmk940DAH3loqGDVdayr+i7QU5bFDVBFm
+   6ywpIcjqRZ5rnm7qenbp7EOnwGw61wKm9uubhkJEiSUyfepMDLJgQFku9
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="374979511"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="374979511"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:43:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="638809638"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="638809638"
+Received: from ppkrause-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.73])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:43:13 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 00/12] intel-m10-bmc: Split BMC to core and SPI parts & add PMCI+N6000 support
+Date:   Tue,  8 Nov 2022 16:42:53 +0200
+Message-Id: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a05:7300:5388:b0:85:81c6:896c with HTTP; Tue, 8 Nov 2022
- 06:25:11 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidkekeli11@gmail.com>
-Date:   Tue, 8 Nov 2022 14:25:11 +0000
-Message-ID: <CAPBO+FJ3Nhd2ncX9Z_fDUqYStiGQU821nC6EEFSDx5iCTdXkaQ@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4992]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidkekeli11[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidkekeli11[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+Hi all,
+
+Here are the patches for MAX 10 BMC core/SPI interface split and
+addition of the PMCI interface. There are a few supporting rearrangement
+patches prior to the actual split. This series also introduced regmap for
+indirect register access generic to Intel FPGA IPs.
+
+The current downside of the split is that there's not that much code
+remaining in the core part when all the type specific definitions are
+moved to the file with the relevant interface.
+
+Ilpo Järvinen (12):
+  mfd: intel-m10-bmc: Move m10bmc_type to header
+  mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
+  mfd: intel-m10-bmc: Rename the local variables
+  mfd: intel-m10-bmc: Split into core and spi specific parts
+  mfd: intel-m10-bmc: Support multiple CSR register layouts
+  fpga: intel-m10-bmc: Add flash ops for sec update
+  mfd: intel-m10-bmc: Downscope SPI related defines
+  regmap: indirect: Add indirect regmap support
+  intel-m10-bmc: Add regmap_indirect_cfg for Intel FPGA IPs
+  mfd: intel-m10-bmc: Add PMCI driver
+  fpga: m10bmc-sec: Add support for N6000
+  mfd: intel-m10-bmc: Change MODULE_LICENSE() to GPL
+
+ .../ABI/testing/sysfs-driver-intel-m10-bmc    |   8 +-
+ MAINTAINERS                                   |   2 +-
+ drivers/base/regmap/Kconfig                   |   3 +
+ drivers/base/regmap/Makefile                  |   1 +
+ drivers/base/regmap/regmap-indirect.c         | 128 +++++++
+ drivers/fpga/Kconfig                          |   2 +-
+ drivers/fpga/intel-m10-bmc-sec-update.c       | 149 ++++----
+ drivers/hwmon/Kconfig                         |   2 +-
+ drivers/mfd/Kconfig                           |  34 +-
+ drivers/mfd/Makefile                          |   6 +-
+ drivers/mfd/intel-m10-bmc-core.c              | 133 +++++++
+ drivers/mfd/intel-m10-bmc-pmci.c              | 339 ++++++++++++++++++
+ drivers/mfd/intel-m10-bmc-spi.c               | 262 ++++++++++++++
+ drivers/mfd/intel-m10-bmc.c                   | 238 ------------
+ include/linux/mfd/intel-m10-bmc.h             | 131 ++++---
+ include/linux/regmap.h                        |  55 +++
+ 16 files changed, 1110 insertions(+), 383 deletions(-)
+ create mode 100644 drivers/base/regmap/regmap-indirect.c
+ create mode 100644 drivers/mfd/intel-m10-bmc-core.c
+ create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
+ create mode 100644 drivers/mfd/intel-m10-bmc-spi.c
+ delete mode 100644 drivers/mfd/intel-m10-bmc.c
+
+-- 
+2.30.2
+
