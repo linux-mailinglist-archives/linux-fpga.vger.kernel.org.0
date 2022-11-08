@@ -2,323 +2,97 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B532C62117A
-	for <lists+linux-fpga@lfdr.de>; Tue,  8 Nov 2022 13:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CDD621686
+	for <lists+linux-fpga@lfdr.de>; Tue,  8 Nov 2022 15:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234060AbiKHMwD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 8 Nov 2022 07:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S234001AbiKHO1E (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 8 Nov 2022 09:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233820AbiKHMwB (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Nov 2022 07:52:01 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375BE63A7;
-        Tue,  8 Nov 2022 04:52:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667911920; x=1699447920;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=+WokfIPxdEhN76d6ctaoFf674f5FNiRB3ygBfunvNMY=;
-  b=FHp7A0CYBuTrGX8H5toTpHgvP47SY5gpyQ6BiLtSgEZO9Jgl4jVye6Te
-   w09fTcbJWVbYicSsMpAMeNGRC9D/9qWZgq6VV8//z4QbeRzr9V5ksR8hk
-   gQ36rQNFf3jhD/o0V2WadufgLjUSZiCUTL6QPAi7XTCaEeWrZD6ekm/aT
-   OovUUtJsk6BjkEso60EHphdtEEYxkUImGDze4iMu46jm3MJGKD8AK9r15
-   aZJbi9KGBO5aK0WNbA73tZVDo6JlgQDlmgWF5Bcwo2JtBiO0zvi5AiTO2
-   7JmQrVAQNNMckqnCpp3a7w7ZEHCT8INGLE1qgc/5ODnkLvLITzK8m6Vi3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="290402907"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="290402907"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:51:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="699911666"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="699911666"
-Received: from ppkrause-mobl.ger.corp.intel.com ([10.249.44.73])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:51:54 -0800
-Date:   Tue, 8 Nov 2022 14:51:54 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        basheer.ahmed.muddebihal@intel.com, corbet@lwn.net,
-        geert+renesas@glider.be, hao.wu@intel.com,
-        Jiri Slaby <jirislaby@kernel.org>, johan@kernel.org,
-        linux-doc@vger.kernel.org, linux-fpga@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>, macro@orcam.me.uk,
-        matthew.gerlach@linux.intel.com, mdf@kernel.org,
-        niklas.soderlund+renesas@ragnatech.se,
-        Russ Weight <russell.h.weight@intel.com>,
-        tianfei.zhang@intel.com, trix@redhat.com, yilun.xu@intel.com
-Subject: Re: [PATCH v4 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-In-Reply-To: <5a786018-559d-b25c-8a64-95968c6c1f44@redhat.com>
-Message-ID: <32473a99-9a0-d630-b8f-cacdaa231ffa@linux.intel.com>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-5-matthew.gerlach@linux.intel.com> <Y11FmiDeVhGir+7z@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2210311719460.2680729@rhweight-WRK1> <Y2B6kAnd+m3ftWRf@yilunxu-OptiPlex-7050>
- <alpine.DEB.2.22.394.2211010843110.2746019@rhweight-WRK1> <1a812bba-6832-36cc-dfed-7d7ddd8f421c@linux.intel.com> <alpine.DEB.2.22.394.2211011037420.2746019@rhweight-WRK1> <95eaaf28-4472-dfd7-624f-73d58bfccaf@linux.intel.com>
- <5a786018-559d-b25c-8a64-95968c6c1f44@redhat.com>
+        with ESMTP id S233998AbiKHO0Y (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Nov 2022 09:26:24 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B08FFD
+        for <linux-fpga@vger.kernel.org>; Tue,  8 Nov 2022 06:25:13 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id l6so13977850pjj.0
+        for <linux-fpga@vger.kernel.org>; Tue, 08 Nov 2022 06:25:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
+        b=qJPWO9SMfKs9CV4DzOtfpg0tG5L2kEZQtV/LBBChMrnKplvig/HcfOA36QzOFbaour
+         tgINSm9CFH0IH0weUkbi8oL7C5P0uFU99A+FANpQrOPV/x2at1b6HjUUAphEgu/Nt2rO
+         YdZzEeguInvIt6hR0YTDbuGc0g6QmBH3JOdUVEiMakuZ8pUv0rSqDGDPPz36WP9L+M70
+         Yi8Qvn61/fVJa/s6+O6bNGj9Vrx81J7VmEWQcrrTipgg1zMWjvYHOXsRX3Tp8F7t1isZ
+         URWNY0E6DDGhkUjSdRf6tRRt6Dm01iRomcQNGIBkoA7vu4q8ZFmcmXCe9DgPR3TaW/OT
+         odpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
+        b=dtU9XJUpiW8rh1fqtdrah9YaeghRYfchXMw5nJ7FMSwperAmwJ9EfUjlc/KK5qjD/N
+         +H37A1x+qT0JblIQRO+BYdbNBOOjIbTxQ+aKEpNH9TX7nawIGroKpptPh+zfIObh1Xfp
+         ocdRW37udFZjj+LjOWhuzpGJjBEe7JUi83JHq+nrAE6cAotxUtcuiIuFf122SYioZdOq
+         Q1dQE3KVRgIxQAAOeBTxUmD8l+AiY3mDskzP4buUl8WW5XgUDeRUtj5YQ/NvMCCE9Y0k
+         Qyiw6Xrfdmc4wlwEwa7MApSoTULK/pJnWoYlgzAZQ4ggARCAyy1XnpDoPBA5elkHpd2x
+         3Ksg==
+X-Gm-Message-State: ACrzQf1rAYOMgevQF85IA9lmtKsMqJL62iwVJmEl64Pu8YvE0K0XrYMH
+        qAL/HULsl9fY1XiTZ/NX8vKKNzy822zttK4IZyY=
+X-Google-Smtp-Source: AMsMyM7xjnW3BCIcPmRXceI8CMPrgJsNpwknP0oXmxg9pb3hPM8UnVyASTbWsNqLc31U8nSLRepoWwOH4L/DHUye4LA=
+X-Received: by 2002:a17:90b:1d90:b0:213:c798:86f6 with SMTP id
+ pf16-20020a17090b1d9000b00213c79886f6mr52558648pjb.84.1667917512394; Tue, 08
+ Nov 2022 06:25:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1761135144-1667911921=:1678"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7300:5388:b0:85:81c6:896c with HTTP; Tue, 8 Nov 2022
+ 06:25:11 -0800 (PST)
+Reply-To: mr.abraham022@gmail.com
+From:   "Mr.Abraham" <davidkekeli11@gmail.com>
+Date:   Tue, 8 Nov 2022 14:25:11 +0000
+Message-ID: <CAPBO+FJ3Nhd2ncX9Z_fDUqYStiGQU821nC6EEFSDx5iCTdXkaQ@mail.gmail.com>
+Subject: Greeting
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:102f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4992]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mr.abraham022[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [davidkekeli11[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [davidkekeli11[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1761135144-1667911921=:1678
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 8 Nov 2022, Marco Pagani wrote:
-
-> 
-> On 2022-11-02 10:57, Ilpo Järvinen wrote:
-> > On Tue, 1 Nov 2022, matthew.gerlach@linux.intel.com wrote:
-> > 
-> >>
-> >>
-> >> On Tue, 1 Nov 2022, Ilpo Järvinen wrote:
-> >>
-> >>> On Tue, 1 Nov 2022, matthew.gerlach@linux.intel.com wrote:
-> >>>
-> >>>>
-> >>>>
-> >>>> On Tue, 1 Nov 2022, Xu Yilun wrote:
-> >>>>
-> >>>>> On 2022-10-31 at 17:34:39 -0700, matthew.gerlach@linux.intel.com wrote:
-> >>>>>>
-> >>>>>>
-> >>>>>> On Sat, 29 Oct 2022, Xu Yilun wrote:
-> >>>>>>
-> >>>>>>> On 2022-10-20 at 14:26:10 -0700, matthew.gerlach@linux.intel.com
-> >>>>>>> wrote:
-> >>>>>>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> >>>>>>>>
-> >>>>>>>> Add a Device Feature List (DFL) bus driver for the Altera
-> >>>>>>>> 16550 implementation of UART.
-> >>>>>>>>
-> >>>>>>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> >>>>>>>> ---
-> >>>>>>>> v4: use dev_err_probe() everywhere that is appropriate
-> >>>>>>>>     clean up noise
-> >>>>>>>>     change error messages to use the word, unsupported
-> >>>>>>>>     tried again to sort Makefile and KConfig better
-> >>>>>>>>     reorder probe function for easier error handling
-> >>>>>>>>     use new dfh_find_param API
-> >>>>>>>>
-> >>>>>>>> v3: use passed in location of registers
-> >>>>>>>>     use cleaned up functions for parsing parameters
-> >>>>>>>>
-> >>>>>>>> v2: clean up error messages
-> >>>>>>>>     alphabetize header files
-> >>>>>>>>     fix 'missing prototype' error by making function static
-> >>>>>>>>     tried to sort Makefile and Kconfig better
-> >>>>>>>> ---
-> >>>>>>>>  drivers/tty/serial/8250/8250_dfl.c | 149
-> >>>>>>>> +++++++++++++++++++++++++++++
-> >>>>>>>>  drivers/tty/serial/8250/Kconfig    |  12 +++
-> >>>>>>>>  drivers/tty/serial/8250/Makefile   |   1 +
-> >>>>>>>>  3 files changed, 162 insertions(+)
-> >>>>>>>>  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-> >>>>>>>>
-> >>>>>>>> diff --git a/drivers/tty/serial/8250/8250_dfl.c
-> >>>>>>>> b/drivers/tty/serial/8250/8250_dfl.c
-> >>>>>>>> new file mode 100644
-> >>>>>>>> index 000000000000..f02f0ba2a565
-> >>>>>>>> --- /dev/null
-> >>>>>>>> +++ b/drivers/tty/serial/8250/8250_dfl.c
-> >>>>>>>> @@ -0,0 +1,149 @@
-> >>>>>>>> +// SPDX-License-Identifier: GPL-2.0
-> >>>>>>>> +/*
-> >>>>>>>> + * Driver for FPGA UART
-> >>>>>>>> + *
-> >>>>>>>> + * Copyright (C) 2022 Intel Corporation, Inc.
-> >>>>>>>> + *
-> >>>>>>>> + * Authors:
-> >>>>>>>> + *   Ananda Ravuri <ananda.ravuri@intel.com>
-> >>>>>>>> + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> >>>>>>>> + */
-> >>>>>>>> +
-> >>>>>>>> +#include <linux/bitfield.h>
-> >>>>>>>> +#include <linux/dfl.h>
-> >>>>>>>> +#include <linux/io-64-nonatomic-lo-hi.h>
-> >>>>>>>> +#include <linux/kernel.h>
-> >>>>>>>> +#include <linux/module.h>
-> >>>>>>>> +#include <linux/serial.h>
-> >>>>>>>> +#include <linux/serial_8250.h>
-> >>>>>>>> +
-> >>>>>>>> +struct dfl_uart {
-> >>>>>>>> +	int line;
-> >>>>>>>> +};
-> >>>>>>>> +
-> >>>>>>>> +static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct
-> >>>>>>>> uart_8250_port *uart)
-> >>>>>>>> +{
-> >>>>>>>> +	struct device *dev = &dfl_dev->dev;
-> >>>>>>>> +	u64 v, fifo_len, reg_width;
-> >>>>>>>> +	u64 *p;
-> >>>>>>>> +
-> >>>>>>>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
-> >>>>>>>> +	if (!p)
-> >>>>>>>> +		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ
-> >>>>>>>> param\n");
-> >>>>>>>> +
-> >>>>>>>> +	uart->port.uartclk = *p;
-> >>>>>>>> +	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
-> >>>>>>>> +
-> >>>>>>>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN);
-> >>>>>>>> +	if (!p)
-> >>>>>>>> +		return dev_err_probe(dev, -EINVAL, "missing FIFO_LEN
-> >>>>>>>> param\n");
-> >>>>>>>> +
-> >>>>>>>> +	fifo_len = *p;
-> >>>>>>>> +	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
-> >>>>>>>> +
-> >>>>>>>> +	switch (fifo_len) {
-> >>>>>>>> +	case 32:
-> >>>>>>>> +		uart->port.type = PORT_ALTR_16550_F32;
-> >>>>>>>> +		break;
-> >>>>>>>> +
-> >>>>>>>> +	case 64:
-> >>>>>>>> +		uart->port.type = PORT_ALTR_16550_F64;
-> >>>>>>>> +		break;
-> >>>>>>>> +
-> >>>>>>>> +	case 128:
-> >>>>>>>> +		uart->port.type = PORT_ALTR_16550_F128;
-> >>>>>>>> +		break;
-> >>>>>>>> +
-> >>>>>>>> +	default:
-> >>>>>>>> +		return dev_err_probe(dev, -EINVAL, "unsupported
-> >>>>>>>> fifo_len %llu\n", fifo_len);
-> >>>>>>>> +	}
-> >>>>>>>> +
-> >>>>>>>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
-> >>>>>>>> +	if (!p)
-> >>>>>>>> +		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT
-> >>>>>>>> param\n");
-> >>>>>>>> +
-> >>>>>>>> +	v = *p;
-> >>>>>>>> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
-> >>>>>>>> +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
-> >>>>>>>
-> >>>>>>> I have concern that the raw layout inside the parameter block is
-> >>>>>>> still exposed to drivers and need to be parsed by each driver.
-> >>>>>>
-> >>>>>> Raw parameter block will always have to be passed to the driver
-> >>>>>> because HW
-> >>>>>> specific properties can be defined that will need to be parsed by the
-> >>>>>> specific driver.
-> >>>>>
-> >>>>> So there is a question about the scope of the definitions of these
-> >>>>> parameter
-> >>>>> blocks. MSIX seems globally used across all dfl devices. REG_LAYOUT
-> >>>>> seems specific to uart?
-> >>>>
-> >>>> There are definitely two classes of parameter blocks.  One class is HW
-> >>>> agnostic parameters where the parameters are relevant to many different
-> >>>> kinds
-> >>>> of HW components.  MSI-X, and input clock-frequency are certainly HW
-> >>>> agnostic,
-> >>>> and it turns out that REG_LAYOUT is not specific to uart.  You can see
-> >>>> reg_bits and reg_stride in struct regmap_config.  There are also device
-> >>>> tree
-> >>>> bindings for reg-shift and reg-io-width.  The second class of parameters
-> >>>> would
-> >>>> be specific to HW component.  In the case of this uart driver, all
-> >>>> parameters
-> >>>> would be considered HW agnostic parameters.
-> >>>>
-> >>>>>
-> >>>>> If a parameter block is widely used in dfl drivers, duplicate the
-> >>>>> parsing
-> >>>>> from HW layout in each driver may not be a good idea. While for device
-> >>>>> specific parameter block, it's OK.
-> >>>>
-> >>>> It sounds like we are in agreement.
-> >>>>
-> >>>>>
-> >>>>> Another concern is the indexing of the parameter IDs. If some parameter
-> >>>>> blocks should be device specific, then no need to have globally indexed
-> >>>>> parameter IDs. Index them locally in device is OK. So put the
-> >>>>> definitions
-> >>>>> of ID values, HW layout and their parsing operation in each driver.
-> >>>>
-> >>>> It may be confusing for two drivers to use the same parameter id that have
-> >>>> different meanings and data layout.  Since all the parameters for this
-> >>>> driver
-> >>>> would be considered HW agnostic, we'd don't need to address this issue
-> >>>> with
-> >>>> this patchset.
-> >>>>
-> >>>>>>> How about we define HW agnostic IDs for parameter specific fields
-> >>>>>>> like:
-> >>>>>>>
-> >>>>>>> PARAM_ID		FIELD_ID
-> >>>>>>> ================================
-> >>>>>>> MSIX			STARTV
-> >>>>>>> 			NUMV
-> >>>>>>> --------------------------------
-> >>>>>>> CLK			FREQ
-> >>>>>>> --------------------------------
-> >>>>>>> FIFO			LEN
-> >>>>>>> --------------------------------
-> >>>>>>> REG_LAYOUT		WIDTH
-> >>>>>>> 			SHIFT
-> >>>>>>>
-> >>>>>>> And define like u64 dfl_find_param(struct dfl_device *, int
-> >>>>>>> param_id,
-> >>>>>>> int field_id)
-> >>>>>>
-> >>>>>> I don't think dfl_find_param as defined above adds much value.
-> >>>>>>
-> >>>>>>>
-> >>>>>>> Think further, if we have to define HW agnostic property - value
-> >>>>>>> pairs,
-> >>>>>>> why don't we just use "Software nodes for the firmware node", see
-> >>>>>>> drivers/base/swnode.c. I think this may be a better choice.
-> >>>>>>
-> >>>>>> I am looking into "Software nodes for the firmware node", and it can
-> >>>>>> be
-> >>>>>> used
-> >>>>>> for HW agnostic properties.  Each dfl driver will still have to make a
-> >>>>>> function call to fetch each HW agnostice property value as well as a
-> >>>>>> function call to find the HW specific parameters and then parse those
-> >>>>>> parameters.
-> >>>
-> >>> Btw, another aspect this discussion has completely overlooked is the
-> >>> presence of parameter version and how it impacts data layout. Is v1
-> >>> always going be a subset of v2 or can a later version remove something
-> >>> v1 had?
-> >>
-> >> In general it would be preferable for v1 to be a subset of v2.  This allows
-> >> for v1 SW to work on v2 HW.
-> > 
-> > In that case, shouldn't the minimum acceptable version be part of 
-> > dfh_find_param() parameters?
-> > 
-> > Currently there's no way for the caller to even look what version the 
-> > parameter is from dfh_find_param()'s return value (except with some 
-> > negative offset hack to access parameter header).
-> > 
-> > 
-> 
-> Why not just checking dfl_dev->dfh_version in dfl_uart_probe() before
-> calling dfh_find_param()? In general, any dfl_driver could potentially
-> do this check in its *_probe() function before reading the header to avoid
-> compatibility issues.
-
-It's about a different version. DFH has it's own version and every
-parameter header has a separate version specific to that parameter.
-
--- 
- i.
-
---8323329-1761135144-1667911921=:1678--
+My Greeting, Did you receive the letter i sent to you. Please answer me.
+Regard, Mr.Abraham
