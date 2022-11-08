@@ -2,41 +2,41 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF14621752
-	for <lists+linux-fpga@lfdr.de>; Tue,  8 Nov 2022 15:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5F3621743
+	for <lists+linux-fpga@lfdr.de>; Tue,  8 Nov 2022 15:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233913AbiKHOrd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 8 Nov 2022 09:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
+        id S234697AbiKHOpg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 8 Nov 2022 09:45:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234582AbiKHOoC (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Nov 2022 09:44:02 -0500
+        with ESMTP id S234287AbiKHOoc (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 8 Nov 2022 09:44:32 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5DD1EEC9;
-        Tue,  8 Nov 2022 06:43:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A39ED7;
+        Tue,  8 Nov 2022 06:44:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667918637; x=1699454637;
+  t=1667918670; x=1699454670;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=x8/1DN3ia10j7d8/dz3FWGCML2gfx829duro15qP8/E=;
-  b=RNAizjIwtOO/6esSBOxr0m+pevg9ZWlR6r07KyE87P52w3yj8VWQcqUQ
-   MBJs4czWSLC8WSwbLMvMt4yE27Jgwc6eJcJBauSCJg0LbJLqSEnWkIjIZ
-   GaaiWuR/SEguLAN1WsFGifmSCc20AvBZ8voW6nTiS7BygAukd9s5jjfKm
-   O99a2QKpCqOs/4ISC8sRwUV94/Qo57mBpD9YTsr8f5gXVvz3Tt66+u+aq
-   +HxZwtipHyaVP/6fbCAbS5GKdOg1dGN0tnnidXQkTzGw491X2J2wewxk9
-   jaexGq2cRG4X8VqKl/cqnSCPUA/FEbn5uxNXX0iPkskUwBoBuU3PN60aq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="312497975"
+  bh=ID4oavSOTy5whIdfy9Y1ZaAXvT9qG1s+ToxFzrU0jZY=;
+  b=iaQECidlfbz36MPwv5clZ9rIuLmN9Q/z9du7GF91srIyDwYc1TT5TQQf
+   xvZ33zUVPzIyC0edqu8Q0fN1gnP8a8Kkcm/+o7hxZGoKU6K3bYFxMsTIO
+   GPydmsf6muE6I1uv0zK7v0hJljDH1WRMD479gHkULveC+XM3RPIjnl0CG
+   DF4bSir5H4vgHFI827u/hV2rbd4jkjR3rnOcHDMkmbaoWaZ6IDu1x1CtV
+   LH1DCnpScSVnSgbC/HRDQ4kHwd6vjE9sLYOIESGvi8INfnaerrKQgMo0o
+   Ale1rEAzQZwDdffC4QZDT+mqGL9j7cHkRSrF0AxgKKMVjKhXrmywirjoW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="312497985"
 X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="312497975"
+   d="scan'208";a="312497985"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:43:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="638809830"
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:43:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="638809842"
 X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="638809830"
+   d="scan'208";a="638809842"
 Received: from ppkrause-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.73])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:43:51 -0800
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:43:55 -0800
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
         Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
@@ -46,11 +46,12 @@ To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
         Tianfei zhang <tianfei.zhang@intel.com>,
         Mark Brown <broonie@kernel.org>,
         Greg KH <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 07/12] mfd: intel-m10-bmc: Downscope SPI related defines
-Date:   Tue,  8 Nov 2022 16:43:00 +0200
-Message-Id: <20221108144305.45424-8-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 08/12] regmap: indirect: Add indirect regmap support
+Date:   Tue,  8 Nov 2022 16:43:01 +0200
+Message-Id: <20221108144305.45424-9-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
 References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
@@ -66,159 +67,264 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Move SPI related defines to per interface from the global header. This
-makes it harder to shoot oneself into foot.
+Add support for indirect register access via a regmap interface.
 
-Some bitfield defs are also moved to intel-m10-bmc-core which seems
-more appropriate for them.
+Indirect register access is a generic way to access registers directly.
+One use case is accessing registers on Intel FPGA IPs with e.g. PMCI or
+HSSI.
 
-Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+Co-developed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/mfd/intel-m10-bmc-core.c  | 11 ++++++++
- drivers/mfd/intel-m10-bmc-spi.c   | 39 +++++++++++++++++++++++++
- include/linux/mfd/intel-m10-bmc.h | 47 -------------------------------
- 3 files changed, 50 insertions(+), 47 deletions(-)
+ drivers/base/regmap/Kconfig           |   3 +
+ drivers/base/regmap/Makefile          |   1 +
+ drivers/base/regmap/regmap-indirect.c | 128 ++++++++++++++++++++++++++
+ include/linux/regmap.h                |  55 +++++++++++
+ 4 files changed, 187 insertions(+)
+ create mode 100644 drivers/base/regmap/regmap-indirect.c
 
-diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
-index 51b78b868235..50a4ec758bdb 100644
---- a/drivers/mfd/intel-m10-bmc-core.c
-+++ b/drivers/mfd/intel-m10-bmc-core.c
-@@ -12,6 +12,17 @@
- #include <linux/mfd/intel-m10-bmc.h>
- #include <linux/module.h>
- 
-+/* Register fields of system registers */
-+#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
-+#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
-+#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
-+#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
-+#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
-+#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
-+#define M10BMC_MAC_COUNT		GENMASK(23, 16)
-+#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
-+#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
+diff --git a/drivers/base/regmap/Kconfig b/drivers/base/regmap/Kconfig
+index 159bac6c5046..94e5ca5434cf 100644
+--- a/drivers/base/regmap/Kconfig
++++ b/drivers/base/regmap/Kconfig
+@@ -65,3 +65,6 @@ config REGMAP_I3C
+ config REGMAP_SPI_AVMM
+ 	tristate
+ 	depends on SPI
 +
- static ssize_t bmc_version_show(struct device *dev,
- 				struct device_attribute *attr, char *buf)
- {
-diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
-index e3b2edb8bc07..4a7a16d9f8d6 100644
---- a/drivers/mfd/intel-m10-bmc-spi.c
-+++ b/drivers/mfd/intel-m10-bmc-spi.c
-@@ -13,6 +13,45 @@
- #include <linux/regmap.h>
- #include <linux/spi/spi.h>
- 
-+#define M10BMC_LEGACY_BUILD_VER		0x300468
-+#define M10BMC_SYS_BASE			0x300800
-+#define M10BMC_SYS_END			0x300fff
-+#define M10BMC_FLASH_BASE		0x10000000
-+#define M10BMC_FLASH_END		0x1fffffff
-+#define M10BMC_MEM_END			M10BMC_FLASH_END
++config REGMAP_INDIRECT
++	tristate
+diff --git a/drivers/base/regmap/Makefile b/drivers/base/regmap/Makefile
+index 11facb32a027..6221a4740806 100644
+--- a/drivers/base/regmap/Makefile
++++ b/drivers/base/regmap/Makefile
+@@ -20,3 +20,4 @@ obj-$(CONFIG_REGMAP_SCCB) += regmap-sccb.o
+ obj-$(CONFIG_REGMAP_I3C) += regmap-i3c.o
+ obj-$(CONFIG_REGMAP_SPI_AVMM) += regmap-spi-avmm.o
+ obj-$(CONFIG_REGMAP_MDIO) += regmap-mdio.o
++obj-$(CONFIG_REGMAP_INDIRECT) += regmap-indirect.o
+diff --git a/drivers/base/regmap/regmap-indirect.c b/drivers/base/regmap/regmap-indirect.c
+new file mode 100644
+index 000000000000..3ceb0c044c7c
+--- /dev/null
++++ b/drivers/base/regmap/regmap-indirect.c
+@@ -0,0 +1,128 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Indirect Register Access.
++ *
++ * Copyright (C) 2020-2022 Intel Corporation, Inc.
++ */
++#include <linux/debugfs.h>
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/regmap.h>
++#include <linux/seq_file.h>
++#include <linux/slab.h>
 +
-+#define M10BMC_STAGING_BASE		0x18000000
++struct indirect_ctx {
++	void __iomem *base;
++	struct device *dev;
++	const struct regmap_indirect_cfg *indirect_cfg;
++};
 +
-+/* Register offset of system registers */
-+#define NIOS2_FW_VERSION		0x0
-+#define M10BMC_MAC_LOW			0x10
-+#define M10BMC_MAC_HIGH			0x14
-+#define M10BMC_TEST_REG			0x3c
-+#define M10BMC_BUILD_VER		0x68
-+#define M10BMC_VER_LEGACY_INVALID	0xffffffff
++static int indirect_bus_idle_cmd(struct indirect_ctx *ctx)
++{
++	unsigned int cmd;
++	int ret;
 +
-+/* Secure update doorbell register, in system register region */
-+#define M10BMC_DOORBELL			0x400
++	writel(ctx->indirect_cfg->idle_cmd, ctx->base + ctx->indirect_cfg->cmd_offset);
 +
-+/* Authorization Result register, in system register region */
-+#define M10BMC_AUTH_RESULT		0x404
++	ret = readl_poll_timeout(ctx->base + ctx->indirect_cfg->cmd_offset, cmd,
++				 cmd == ctx->indirect_cfg->idle_cmd,
++				 ctx->indirect_cfg->sleep_us, ctx->indirect_cfg->timeout_us);
++	if (ret)
++		dev_err(ctx->dev, "timed out waiting idle cmd (residual cmd=0x%x)\n", cmd);
 +
-+/* Addresses for security related data in FLASH */
-+#define BMC_REH_ADDR	0x17ffc004
-+#define BMC_PROG_ADDR	0x17ffc000
-+#define BMC_PROG_MAGIC	0x5746
++	return ret;
++}
 +
-+#define SR_REH_ADDR	0x17ffd004
-+#define SR_PROG_ADDR	0x17ffd000
-+#define SR_PROG_MAGIC	0x5253
++static int indirect_bus_reg_read(void *context, unsigned int reg,
++				     unsigned int *val)
++{
++	struct indirect_ctx *ctx = context;
++	unsigned int cmd, ack, tmpval;
++	int ret;
 +
-+#define PR_REH_ADDR	0x17ffe004
-+#define PR_PROG_ADDR	0x17ffe000
-+#define PR_PROG_MAGIC	0x5250
++	cmd = readl(ctx->base + ctx->indirect_cfg->cmd_offset);
++	if (cmd != ctx->indirect_cfg->idle_cmd)
++		dev_warn(ctx->dev, "residual cmd 0x%x on read entry\n", cmd);
 +
-+/* Address of 4KB inverted bit vector containing staging area FLASH count */
-+#define STAGING_FLASH_COUNT	0x17ffb000
++	writel(reg, ctx->base + ctx->indirect_cfg->addr_offset);
++	writel(ctx->indirect_cfg->read_cmd, ctx->base + ctx->indirect_cfg->cmd_offset);
 +
- static const struct regmap_range m10bmc_regmap_range[] = {
- 	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
- 	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
-diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-index 860408aa8db3..ed920f76d3c8 100644
---- a/include/linux/mfd/intel-m10-bmc.h
-+++ b/include/linux/mfd/intel-m10-bmc.h
-@@ -15,39 +15,8 @@ enum m10bmc_type {
- 	M10_N5010,
++	ret = readl_poll_timeout(ctx->base + ctx->indirect_cfg->ack_offset, ack,
++				 (ack & ctx->indirect_cfg->ack_mask) == ctx->indirect_cfg->ack_mask,
++				 ctx->indirect_cfg->sleep_us, ctx->indirect_cfg->timeout_us);
++	if (ret) {
++		dev_err(ctx->dev, "read timed out on reg 0x%x ack 0x%x\n", reg, ack);
++		goto out;
++	}
++
++	tmpval = readl(ctx->base + ctx->indirect_cfg->read_offset);
++
++	if (indirect_bus_idle_cmd(ctx)) {
++		if (!ret)
++			ret = -ETIMEDOUT;
++		goto out;
++	}
++
++	*val = tmpval;
++out:
++	return ret;
++}
++
++static int indirect_bus_reg_write(void *context, unsigned int reg,
++				      unsigned int val)
++{
++	struct indirect_ctx *ctx = context;
++	unsigned int cmd, ack;
++	int ret;
++
++	cmd = readl(ctx->base + ctx->indirect_cfg->cmd_offset);
++	if (cmd != ctx->indirect_cfg->idle_cmd)
++		dev_warn(ctx->dev, "residual cmd 0x%x on write entry\n", cmd);
++
++	writel(val, ctx->base + ctx->indirect_cfg->write_offset);
++	writel(reg, ctx->base + ctx->indirect_cfg->addr_offset);
++	writel(ctx->indirect_cfg->write_cmd, ctx->base + ctx->indirect_cfg->cmd_offset);
++
++	ret = readl_poll_timeout(ctx->base + ctx->indirect_cfg->ack_offset, ack,
++				 (ack & ctx->indirect_cfg->ack_mask) == ctx->indirect_cfg->ack_mask,
++				 ctx->indirect_cfg->sleep_us, ctx->indirect_cfg->timeout_us);
++	if (ret)
++		dev_err(ctx->dev, "write timed out on reg 0x%x ack 0x%x\n", reg, ack);
++
++	if (indirect_bus_idle_cmd(ctx)) {
++		if (!ret)
++			ret = -ETIMEDOUT;
++	}
++
++	return ret;
++}
++
++static const struct regmap_bus indirect_bus = {
++	.reg_write = indirect_bus_reg_write,
++	.reg_read =  indirect_bus_reg_read,
++};
++
++struct regmap *__devm_regmap_init_indirect(struct device *dev,
++					   void __iomem *base,
++					   struct regmap_config *cfg,
++					   struct lock_class_key *lock_key,
++					   const char *lock_name)
++{
++	struct indirect_ctx *ctx;
++
++	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return NULL;
++
++	ctx->base = base;
++	ctx->dev = dev;
++	ctx->indirect_cfg = cfg->indirect_cfg;
++
++	return __devm_regmap_init(dev, &indirect_bus, ctx, cfg, lock_key, lock_name);
++}
++EXPORT_SYMBOL_GPL(__devm_regmap_init_indirect);
++
++MODULE_DESCRIPTION("Indirect Register Access");
++MODULE_AUTHOR("Intel Corporation");
++MODULE_LICENSE("GPL");
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index ca3434dca3a0..adaa7bca4f60 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -190,6 +190,41 @@ enum regmap_endian {
+ 	REGMAP_ENDIAN_NATIVE,
  };
  
--#define M10BMC_LEGACY_BUILD_VER		0x300468
--#define M10BMC_SYS_BASE			0x300800
--#define M10BMC_SYS_END			0x300fff
--#define M10BMC_FLASH_BASE		0x10000000
--#define M10BMC_FLASH_END		0x1fffffff
--#define M10BMC_MEM_END			M10BMC_FLASH_END
--
--#define M10BMC_STAGING_BASE		0x18000000
- #define M10BMC_STAGING_SIZE		0x3800000
- 
--/* Register offset of system registers */
--#define NIOS2_FW_VERSION		0x0
--#define M10BMC_MAC_LOW			0x10
--#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
--#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
--#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
--#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
--#define M10BMC_MAC_HIGH			0x14
--#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
--#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
--#define M10BMC_MAC_COUNT		GENMASK(23, 16)
--#define M10BMC_TEST_REG			0x3c
--#define M10BMC_BUILD_VER		0x68
--#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
--#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
--#define M10BMC_VER_LEGACY_INVALID	0xffffffff
--
--/* Secure update doorbell register, in system register region */
--#define M10BMC_DOORBELL			0x400
--
--/* Authorization Result register, in system register region */
--#define M10BMC_AUTH_RESULT		0x404
--
- /* Doorbell register fields */
- #define DRBL_RSU_REQUEST		BIT(0)
- #define DRBL_RSU_PROGRESS		GENMASK(7, 4)
-@@ -108,22 +77,6 @@ enum m10bmc_type {
- #define RSU_COMPLETE_INTERVAL_MS	1000
- #define RSU_COMPLETE_TIMEOUT_MS		(40 * 60 * 1000)
- 
--/* Addresses for security related data in FLASH */
--#define BMC_REH_ADDR	0x17ffc004
--#define BMC_PROG_ADDR	0x17ffc000
--#define BMC_PROG_MAGIC	0x5746
--
--#define SR_REH_ADDR	0x17ffd004
--#define SR_PROG_ADDR	0x17ffd000
--#define SR_PROG_MAGIC	0x5253
--
--#define PR_REH_ADDR	0x17ffe004
--#define PR_PROG_ADDR	0x17ffe000
--#define PR_PROG_MAGIC	0x5250
--
--/* Address of 4KB inverted bit vector containing staging area FLASH count */
--#define STAGING_FLASH_COUNT	0x17ffb000
--
++/**
++ * struct regmap_indirect_cfg - A configuration for indirect register access
++ *
++ * @cmd_offset: Command register offset
++ * @idle_cmd: Idle command
++ * @read_cmd: Read command
++ * @write_cmd: Write command
++ *
++ * @ack_offset: Command acknowledgment register offset
++ * @ack_mask: Command acknowledgment bit mask
++ *
++ * @addr_offset: Address register offset
++ * @read_offset: Read register offset
++ * @write_offset: Write register offset
++ *
++ * @sleep_us: Command wait sleep (usecs)
++ * @timeout_us: Command timeout (usecs)
++ */
++struct regmap_indirect_cfg {
++	unsigned int cmd_offset;
++	u32 idle_cmd;
++	u32 read_cmd;
++	u32 write_cmd;
++
++	unsigned int ack_offset;
++	u32 ack_mask;
++
++	unsigned int addr_offset;
++	unsigned int read_offset;
++	unsigned int write_offset;
++
++	unsigned long sleep_us;
++	unsigned long timeout_us;
++};
++
  /**
-  * struct m10bmc_csr_map - Intel MAX 10 BMC CSR register map
-  */
+  * struct regmap_range - A register range, used for access related checks
+  *                       (readable/writeable/volatile/precious checks)
+@@ -431,6 +466,8 @@ struct regmap_config {
+ 	const struct regmap_range_cfg *ranges;
+ 	unsigned int num_ranges;
+ 
++	const struct regmap_indirect_cfg *indirect_cfg;
++
+ 	bool use_hwlock;
+ 	bool use_raw_spinlock;
+ 	unsigned int hwlock_id;
+@@ -693,6 +730,12 @@ struct regmap *__devm_regmap_init_spi_avmm(struct spi_device *spi,
+ 					   const struct regmap_config *config,
+ 					   struct lock_class_key *lock_key,
+ 					   const char *lock_name);
++struct regmap *__devm_regmap_init_indirect(struct device *dev,
++					   void __iomem *base,
++					   struct regmap_config *cfg,
++					   struct lock_class_key *lock_key,
++					   const char *lock_name);
++
+ /*
+  * Wrapper for regmap_init macros to include a unique lockdep key and name
+  * for each call. No-op if CONFIG_LOCKDEP is not set.
+@@ -1148,6 +1191,18 @@ bool regmap_ac97_default_volatile(struct device *dev, unsigned int reg);
+ 	__regmap_lockdep_wrapper(__devm_regmap_init_spi_avmm, #config,	\
+ 				 spi, config)
+ 
++/**
++ * devm_regmap_init_indirect - create a regmap for indirect register access
++ * @dev: device creating the regmap
++ * @base: __iomem point to base of memory with mailbox
++ * @cfg: regmap_config describing interface
++ *
++ * Return: 0 on success, negative error code otherwise.
++ */
++#define devm_regmap_init_indirect(dev, base, config)			\
++	__regmap_lockdep_wrapper(__devm_regmap_init_indirect, #config,	\
++				 dev, base, config)
++
+ int regmap_mmio_attach_clk(struct regmap *map, struct clk *clk);
+ void regmap_mmio_detach_clk(struct regmap *map);
+ void regmap_exit(struct regmap *map);
 -- 
 2.30.2
 
