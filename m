@@ -2,84 +2,176 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0A0626886
-	for <lists+linux-fpga@lfdr.de>; Sat, 12 Nov 2022 10:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8ADE627472
+	for <lists+linux-fpga@lfdr.de>; Mon, 14 Nov 2022 03:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbiKLJ3q (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 12 Nov 2022 04:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S231972AbiKNCIV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 13 Nov 2022 21:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiKLJ3p (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 12 Nov 2022 04:29:45 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B3EDF49
-        for <linux-fpga@vger.kernel.org>; Sat, 12 Nov 2022 01:29:44 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N8Vdf2v5kz15MWp;
-        Sat, 12 Nov 2022 17:29:26 +0800 (CST)
-Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 17:29:42 +0800
-Received: from huawei.com (10.90.53.225) by kwepemm600014.china.huawei.com
- (7.193.23.54) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 12 Nov
- 2022 17:29:42 +0800
-From:   Zhang Qilong <zhangqilong3@huawei.com>
-To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
-        <trix@redhat.com>
-CC:     <linux-fpga@vger.kernel.org>
-Subject: [PATCH] fpga: m10bmc-sec: Fix undefined reference error in m10bmc_sec_remove()
-Date:   Sat, 12 Nov 2022 17:34:46 +0800
-Message-ID: <20221112093446.61726-1-zhangqilong3@huawei.com>
-X-Mailer: git-send-email 2.26.0.106.g9fadedd
+        with ESMTP id S229692AbiKNCIV (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 13 Nov 2022 21:08:21 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDEAE00B;
+        Sun, 13 Nov 2022 18:08:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668391700; x=1699927700;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=NKqfqlFULkV8Q2z4VRHX+tuirm9OvbwAxEukolp0ARU=;
+  b=kqNqfXo19VCPZJRNbzF0s2nVgZAw10WsiJIZ1AP2awyIQ5WqAYsECEBv
+   ov3wBs/XzY1AbWLZ6pfpuDosD+6tJjUybU0xYQArCCpPpXG/f9EZxrnvs
+   QPdMb4q6ZKvtoxxoPnw0vCfSLezRufb9bB2lqVpo7mvrntYcnH/VRYFXh
+   lDt9w6SRNHoINQyCRDmEyC0bFGmDRqY80F3LXI+TpLskPaNAAA+XZhksl
+   OKjNpOccqJxXDrDInfVoTGoa3w7jHZHODAYdjzR9Plp+k9t+z7owDkEEZ
+   6vp/7wb1tJtIWiWhI5v7RX3Fcqr3I5ibpx5hGllERunUbGZtb5OFrRy3h
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="338645836"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="338645836"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 18:08:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="671380952"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="671380952"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga001.jf.intel.com with ESMTP; 13 Nov 2022 18:08:14 -0800
+Date:   Mon, 14 Nov 2022 09:58:51 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 02/12] mfd: intel-m10-bmc: Create m10bmc_platform_info
+ for type specific info
+Message-ID: <Y3Gg29pGm4DwjOgI@yilunxu-OptiPlex-7050>
+References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
+ <20221108144305.45424-3-ilpo.jarvinen@linux.intel.com>
+ <Y24gJ7fIsUPmhzY2@yilunxu-OptiPlex-7050>
+ <752a1dc-fae6-4431-41cf-a6deaf157ad3@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.225]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600014.china.huawei.com (7.193.23.54)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <752a1dc-fae6-4431-41cf-a6deaf157ad3@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Building with CONFIG_FW_LOADER=m && CONFIG_FW_UPLOAD=y causes
-errors:
+On 2022-11-11 at 13:49:38 +0200, Ilpo Järvinen wrote:
+> On Fri, 11 Nov 2022, Xu Yilun wrote:
+> 
+> > On 2022-11-08 at 16:42:55 +0200, Ilpo Järvinen wrote:
+> > > BMC type specific info is currently set by a switch/case block. The
+> > > size of this info is expected to grow as more dev types and features
+> > > are added which would have made the switch block bloaty.
+> > > 
+> > > Store type specific info into struct and place them into .driver_data
+> > > instead because it makes things a bit cleaner.
+> > > 
+> > > Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > ---
+> > >  drivers/mfd/intel-m10-bmc.c       | 50 +++++++++++++++++--------------
+> > >  include/linux/mfd/intel-m10-bmc.h | 14 +++++++++
+> > >  2 files changed, 41 insertions(+), 23 deletions(-)
+> > > 
+> > > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> > > index ee167c5dcd29..762808906380 100644
+> > > --- a/drivers/mfd/intel-m10-bmc.c
+> > > +++ b/drivers/mfd/intel-m10-bmc.c
+> > > @@ -156,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+> > >  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  {
+> > >  	const struct spi_device_id *id = spi_get_device_id(spi);
+> > > +	const struct intel_m10bmc_platform_info *info;
+> > >  	struct device *dev = &spi->dev;
+> > > -	struct mfd_cell *cells;
+> > >  	struct intel_m10bmc *ddata;
+> > > -	int ret, n_cell;
+> > > +	int ret;
+> > >  
+> > >  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
+> > >  	if (!ddata)
+> > >  		return -ENOMEM;
+> > >  
+> > > +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+> > > +	ddata->info = info;
+> > 
+> > Where to use the ddata->info?
+> 
+> In patch 5/12 there are many these constructs:
+> const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> 
+> Now that I look though, this particular line is altered by the split patch 
+> 4/12 so it would be not strictly necessary to do it here. I'd prefer, 
+> however, still to add it here even if it's technically not used until 
+> after the split 5/12 patch because it very much logically belongs to this 
+> change.
 
-ld: drivers/fpga/intel-m10-bmc-sec-update.o: in function `m10bmc_sec_remove':
-intel-m10-bmc-sec-update.c:(.text+0x25b): undefined reference to `firmware_upload_unregister'
-ld: drivers/fpga/intel-m10-bmc-sec-update.o: in function `m10bmc_sec_probe':
-intel-m10-bmc-sec-update.c:(.text+0x3c1): undefined reference to `firmware_upload_register'
+It's good to me.
 
-When CONFIG_FW_LOADER is configed with module, the firmware_upload_unregister()
-could not be seen in m10bmc_sec_remove(), it is controlled by CONFIG_FW_UPLOAD
-that it depends CONFIG_FW_LOADER. We fix it by adding FW_LOADER in
-FPGA_M10_BMC_SEC_UPDATE depends.
+> 
+> > >  	ddata->dev = dev;
+> > >  
+> > >  	ddata->regmap =
+> > > @@ -183,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > -	switch (id->driver_data) {
+> > > -	case M10_N3000:
+> > > -		cells = m10bmc_pacn3000_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
+> > > -		break;
+> > > -	case M10_D5005:
+> > > -		cells = m10bmc_d5005_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> > > -		break;
+> > > -	case M10_N5010:
+> > > -		cells = m10bmc_n5010_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> > > -		break;
+> > > -	default:
+> > > -		return -ENODEV;
+> > > -	}
+> > > -
+> > > -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
+> > > +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+> > > +				   info->cells, info->n_cells,
+> > >  				   NULL, 0, NULL);
+> > >  	if (ret)
+> > >  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+> > > @@ -208,10 +194,28 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  	return ret;
+> > >  }
+> > >  
+> > > +static const struct intel_m10bmc_platform_info m10bmc_m10_n3000 = {
+> > > +	.type = M10_N3000,
+> > 
+> > Is the type enum still useful? Found no usage.
+> 
+> There's no use within context of this patch series. However, I think there 
+> might have been something depending on it in the changes that are not part 
+> of this series so I left it in place for now.
 
-Fixes: 5cd339b370e2 ("fpga: m10bmc-sec: add max10 secure update functions")
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
----
- drivers/fpga/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm not sure how it would be used later. This patch is to eliminate the
+"switch (board type) case" block, but similar code is still to be added
+later?
 
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index 6c416955da53..cfc684e9be9a 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -246,7 +246,7 @@ config FPGA_MGR_VERSAL_FPGA
- 
- config FPGA_M10_BMC_SEC_UPDATE
- 	tristate "Intel MAX10 BMC Secure Update driver"
--	depends on MFD_INTEL_M10_BMC && FW_UPLOAD
-+	depends on MFD_INTEL_M10_BMC && FW_UPLOAD && FW_LOADER
- 	help
- 	  Secure update support for the Intel MAX10 board management
- 	  controller.
--- 
-2.25.1
-
+Thanks,
+Yilun
