@@ -2,84 +2,104 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0480627719
-	for <lists+linux-fpga@lfdr.de>; Mon, 14 Nov 2022 09:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9185D627803
+	for <lists+linux-fpga@lfdr.de>; Mon, 14 Nov 2022 09:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235564AbiKNIGt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 14 Nov 2022 03:06:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
+        id S235683AbiKNIoP (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 14 Nov 2022 03:44:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235807AbiKNIGs (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Nov 2022 03:06:48 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6161928A
-        for <linux-fpga@vger.kernel.org>; Mon, 14 Nov 2022 00:06:47 -0800 (PST)
+        with ESMTP id S235830AbiKNIoO (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Nov 2022 03:44:14 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65A81A80B;
+        Mon, 14 Nov 2022 00:44:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668413207; x=1699949207;
+  t=1668415453; x=1699951453;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=mL/SiDeVvPxckhUEKBGnuj8k7yoI/XIJgh7jhUiptCY=;
-  b=f3bSMxaL9RF5z6tvHNH114/X3ClYNvnHSsjo02W8uEeEXXiVc87iZE7H
-   KDF0pdTcJRk7nINJ4/QKz97i0sY8IT2+XdSVnHI4J7WwGvEZ6DB9wnkRW
-   lPs58Vxk8cKY1M+cUS/Dhg1c8TjJ/xogjesQ6BHu2bD8TB5Zk8fZD0eqe
-   V/JjTxqFkAC+yaBYU7VNXjXZVyKH1QRxZPtDVUhoSwVPEcLyU4P00wPSw
-   Mm5kJbBNts6O6l37AjuE7Qomm8ZFkp6/A3Jw5cTuGAc0CjbvJU7IbCb9c
-   bRfDQIR896iba1wkupTLlYhcJZam63DB1JgID03QnzgUStBOsLN/452jg
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="291626267"
+  bh=20z4hjjoPZCyj4x4M9p7no1rjwPWwV6NdfTwt72mSys=;
+  b=ZTS/HCho9aV+Yg/Zpp0WQMEA52uWza3trG0GcQyW8YD9nyW0yvCenEdP
+   EIn5YgbSRm4ErD4RpiHXcXU8c+574PM6SmgvAB/FH87q+tZyukGxyorZA
+   r2uSF0vmNhyX4W1Xr2CMRDm00Pk9wncGdOdMi9gIbJz0Wq3EsZ+VDKn1t
+   7UxRgOXI79cYbQi/Gy3xcYLhAH6aMMdAy/W6zL5XuvYgVhyj4hdPod7AI
+   j5JvuNCEDV1/Hl/gOcDBE7bYFWYoxOJR4JrEtTIDbBtGaNwhGcvoyr57a
+   iUckja/rn/dnVlzAb7fKtmI4++jPe4/KszzyNEAFgeKlLM4tH1PAPJF5G
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="338700156"
 X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="291626267"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:06:47 -0800
+   d="scan'208";a="338700156"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:44:12 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="638381615"
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="632723420"
 X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="638381615"
+   d="scan'208";a="632723420"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga002.jf.intel.com with ESMTP; 14 Nov 2022 00:06:42 -0800
-Date:   Mon, 14 Nov 2022 15:57:16 +0800
+  by orsmga007.jf.intel.com with ESMTP; 14 Nov 2022 00:44:10 -0800
+Date:   Mon, 14 Nov 2022 16:34:47 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Zhang Qilong <zhangqilong3@huawei.com>
+To:     ye.xingchen@zte.com.cn
 Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH] fpga: m10bmc-sec: Fix undefined reference error in
- m10bmc_sec_remove()
-Message-ID: <Y3H03KV6tKVtk96c@yilunxu-OptiPlex-7050>
-References: <20221112093446.61726-1-zhangqilong3@huawei.com>
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chi.minghao@zte.com.cn
+Subject: Re: [PATCH] fpga-manager: use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <Y3H9p38pzqvpjkID@yilunxu-OptiPlex-7050>
+References: <202211111441162412524@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221112093446.61726-1-zhangqilong3@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202211111441162412524@zte.com.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2022-11-12 at 17:34:46 +0800, Zhang Qilong wrote:
-> Building with CONFIG_FW_LOADER=m && CONFIG_FW_UPLOAD=y causes
-> errors:
+On 2022-11-11 at 14:41:16 +0800, ye.xingchen@zte.com.cn wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> ld: drivers/fpga/intel-m10-bmc-sec-update.o: in function `m10bmc_sec_remove':
-> intel-m10-bmc-sec-update.c:(.text+0x25b): undefined reference to `firmware_upload_unregister'
-> ld: drivers/fpga/intel-m10-bmc-sec-update.o: in function `m10bmc_sec_probe':
-> intel-m10-bmc-sec-update.c:(.text+0x3c1): undefined reference to `firmware_upload_register'
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 > 
-> When CONFIG_FW_LOADER is configed with module, the firmware_upload_unregister()
-> could not be seen in m10bmc_sec_remove(), it is controlled by CONFIG_FW_UPLOAD
-> that it depends CONFIG_FW_LOADER. We fix it by adding FW_LOADER in
-> FPGA_M10_BMC_SEC_UPDATE depends.
-> 
-> Fixes: 5cd339b370e2 ("fpga: m10bmc-sec: add max10 secure update functions")
-> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
-Thanks for your patch, please check this thread:
+Please add your own SoB.
 
-https://lore.kernel.org/all/d81630d5-756c-4067-fc1b-47e5f56cad33@infradead.org/
+> ---
+>  drivers/fpga/socfpga-a10.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/fpga/socfpga-a10.c b/drivers/fpga/socfpga-a10.c
+> index ac8e89b8a5cc..dde2cb49e95d 100644
+> --- a/drivers/fpga/socfpga-a10.c
+> +++ b/drivers/fpga/socfpga-a10.c
+> @@ -479,8 +479,7 @@ static int socfpga_a10_fpga_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+> 
+>  	/* First mmio base is for register access */
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	reg_base = devm_ioremap_resource(dev, res);
+> +	reg_base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+
+Why keep the variable res?
+
+>  	if (IS_ERR(reg_base))
+>  		return PTR_ERR(reg_base);
+
+And please make all related changes, at least in driver/fpga.
 
 Thanks,
 Yilun
+
+> 
+> -- 
+> 2.25.1
