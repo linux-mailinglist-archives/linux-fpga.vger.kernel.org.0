@@ -2,59 +2,51 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63353629B82
-	for <lists+linux-fpga@lfdr.de>; Tue, 15 Nov 2022 15:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CD0629C21
+	for <lists+linux-fpga@lfdr.de>; Tue, 15 Nov 2022 15:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238498AbiKOOEX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 15 Nov 2022 09:04:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
+        id S230090AbiKOO2P (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 15 Nov 2022 09:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiKOOEW (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 15 Nov 2022 09:04:22 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E722A272;
-        Tue, 15 Nov 2022 06:04:21 -0800 (PST)
+        with ESMTP id S231259AbiKOO1p (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 15 Nov 2022 09:27:45 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEBB2CDCA
+        for <linux-fpga@vger.kernel.org>; Tue, 15 Nov 2022 06:27:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668521061; x=1700057061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JYGN4YJCKpoBV1HK1xLD1KHTUJxt32dHk1bzAhudxGo=;
-  b=hRHuYgEqyjvzCjtcxSzsmO4RvIN7pIR6x43963SPoseRe4AvD/8/XSkC
-   9mNblLeUQX2enO9dN0zPpL35NfLGHeE7uMFRBqov+7B2EBrjyk/qJ93gK
-   LJMqyCNXyIGO7fY3aUsMmQ7WBV0vSRSJUlm3BE682bWGjR423Ga90IDAJ
-   wbnU+XVQzXVzPQX2k2FyAv1pvqtbFjx9IMyA0Rf/nyryuwmo2M5Trmp60
-   1NbHt9xw5lo4lTwSwrBPUyMBclBRAIcKEA5lgl6AKRbKfMO/yNqHowSAN
-   1xuj8nontZuU5Jmyj0mDyZE+4HIBTKfKv8VqyyB0612a6NOOgGRyPT6R9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="292653173"
+  t=1668522463; x=1700058463;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uRm9tE1heb4tBO0OekJMEOmavtEVxP3V0zDIUjnC6wE=;
+  b=fQG5hUbdSYvrCG144IzsguMXrDn3+7JVOQQbXwwttir0d2IJ8QhtkNQQ
+   36uW0lI4SIS8ive95fWoH6+yZKkg/7bAbZoadDR+GWkEqFz9JKvDOGtgR
+   UchwrqOhF+J+3EUGKQVXsGTuT4JfPFpDrazm5vOV6UdoqkzKqN8wspAxK
+   cll2mfSrYu9oqIZfVN1vKdT9wOILJoIy5NAqI22jEM2OmG9UGAkYe6Ifd
+   BN3M4KDsMhmL2O/Cy/WpwvJT+XLhcs7chlJMU+aqTYewvrXwjHUyNr92z
+   fceESHXyBCrhaw0aVyHkmL26WaNf+pd4HHjp4RkS+MaLEKFPvY7USXpnx
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="398553099"
 X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="292653173"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 06:04:21 -0800
+   d="scan'208";a="398553099"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 06:27:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="781352842"
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="670101525"
 X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="781352842"
+   d="scan'208";a="670101525"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Nov 2022 06:04:18 -0800
-Date:   Tue, 15 Nov 2022 21:54:54 +0800
+  by orsmga008.jf.intel.com with ESMTP; 15 Nov 2022 06:27:41 -0800
+Date:   Tue, 15 Nov 2022 22:18:17 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        hao.wu@intel.com, trix@redhat.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgoncalv@redhat.com,
-        marpagan@redhat.com, matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] fpga: m10bmc-sec: Fix kconfig dependencies
-Message-ID: <Y3OaLlcTJECIeZoB@yilunxu-OptiPlex-7050>
-References: <20221115001127.289890-1-russell.h.weight@intel.com>
- <48206188-97e3-1477-87f1-8946320be737@infradead.org>
+To:     gregkh@linuxfoundation.org
+Cc:     yilun.xu@intel.com, linux-fpga@vger.kernel.org, hao.wu@intel.com,
+        mdf@kernel.org
+Subject: [GIT PULL] FPGA Manager changes for 6.2-rc1
+Message-ID: <Y3Ofqbmsbn8q4Ksb@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <48206188-97e3-1477-87f1-8946320be737@infradead.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -64,55 +56,51 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2022-11-14 at 17:03:03 -0800, Randy Dunlap wrote:
-> 
-> 
-> On 11/14/22 16:11, Russ Weight wrote:
-> > The secure update driver depends on the firmware-upload functionality of
-> > the firmware-loader. The firmware-loader is carried in the firmware-class
-> > driver which is enabled with the tristate CONFIG_FW_LOADER option. The
-> > firmware-upload functionality is included in the firmware-class driver if
-> > the bool FW_UPLOAD config is set.
-> > 
-> > The current dependency statement, "depends on FW_UPLOAD", is not adequate
-> > because it does not implicitly turn on FW_LOADER. Instead of adding a
-> > dependency, follow the convention used by drivers that require the
-> > FW_LOADER_USER_HELPER functionality of the firmware-loader by using
-> > select for both FW_LOADER and FW_UPLOAD.
-> > 
-> > Fixes: bdf86d0e6ca3 ("fpga: m10bmc-sec: create max10 bmc secure update")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-Applied to for-6.1
+are available in the Git repository at:
 
-> 
-> Thanks.
-> 
-> > ---
-> >  drivers/fpga/Kconfig | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> > index d1a8107fdcb3..6ce143dafd04 100644
-> > --- a/drivers/fpga/Kconfig
-> > +++ b/drivers/fpga/Kconfig
-> > @@ -246,7 +246,9 @@ config FPGA_MGR_VERSAL_FPGA
-> >  
-> >  config FPGA_M10_BMC_SEC_UPDATE
-> >  	tristate "Intel MAX10 BMC Secure Update driver"
-> > -	depends on MFD_INTEL_M10_BMC && FW_UPLOAD
-> > +	depends on MFD_INTEL_M10_BMC
-> > +	select FW_LOADER
-> > +	select FW_UPLOAD
-> >  	help
-> >  	  Secure update support for the Intel MAX10 board management
-> >  	  controller.
-> 
-> -- 
-> ~Randy
+  git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga tags/fpga-for-6.2-rc1
+
+for you to fetch changes up to ee31d5038c06b56ea515f4fe490274628c0f80e1:
+
+  dt-bindings: fpga: document Lattice sysCONFIG FPGA manager (2022-10-25 14:45:53 +0800)
+
+----------------------------------------------------------------
+FPGA Manager changes for 6.2-rc1
+
+Zynq:
+
+- Yang's change Switch to use dev_err_probe() helper
+
+Lattice:
+
+- Ivan's change add support for Lattice Sysconfig FPGA reprogrammer
+
+All patches have been reviewed on the mailing list, and have been in the
+last linux-next releases (as part of our for-next branch).
+
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+
+----------------------------------------------------------------
+Ivan Bornyakov (2):
+      fpga: lattice-sysconfig-spi: add Lattice sysCONFIG FPGA manager
+      dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
+
+Yang Yingliang (1):
+      fpga: zynq: Switch to use dev_err_probe() helper
+
+ .../bindings/fpga/lattice,sysconfig.yaml           |  81 +++++
+ drivers/fpga/Kconfig                               |  11 +
+ drivers/fpga/Makefile                              |   2 +
+ drivers/fpga/lattice-sysconfig-spi.c               | 152 ++++++++
+ drivers/fpga/lattice-sysconfig.c                   | 397 +++++++++++++++++++++
+ drivers/fpga/lattice-sysconfig.h                   |  39 ++
+ drivers/fpga/zynq-fpga.c                           |   8 +-
+ 7 files changed, 685 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+ create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.h
