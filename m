@@ -2,41 +2,41 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89D462DA42
-	for <lists+linux-fpga@lfdr.de>; Thu, 17 Nov 2022 13:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A9062DA45
+	for <lists+linux-fpga@lfdr.de>; Thu, 17 Nov 2022 13:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234891AbiKQMHE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 17 Nov 2022 07:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        id S239998AbiKQMHQ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 17 Nov 2022 07:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239973AbiKQMHB (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 17 Nov 2022 07:07:01 -0500
+        with ESMTP id S239985AbiKQMHJ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 17 Nov 2022 07:07:09 -0500
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC15697E5;
-        Thu, 17 Nov 2022 04:07:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1EC6CA28;
+        Thu, 17 Nov 2022 04:07:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668686820; x=1700222820;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Sk0KWL6T5MnhwvjeD2F65sNgllLmcjcwMqcEmpreQts=;
-  b=hRR2SBCnonVDoWlGJKXjaBM5Ixv+rf1T+Bl//YJ+AlGRfaY88EtTzygR
-   iTBflX8IT2RSkO3TUBozl0Z6XBO2QiT09Cstl2zao6PRBDTrJ6wbXuCcy
-   7no/0EyNEBOqYjtohTtbcNNwQpvcv+kbTKWLpViAWcc8Qc7gXWOOAaO7N
-   lPVfJOqM/UxVyv7TmhRGyLV/txJvtEj3vMjVmh2red1+vSnXl4dP5MvSH
-   vzVWNaN5Ki0hyfaWkzR2sITuQkibxGm/zCXZdIvjRjIZvLcmLOEJLcPEY
-   3lMAIMP8jCPihr8fKxTbLpCCA3ZizOltPhdykCirbBuIvSpNSdTQHT139
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="374964784"
+  t=1668686828; x=1700222828;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=i+se1vuA+3GG0eId+7rBECuN3TLOkAv1bHjo/nViMo4=;
+  b=Pjo6SjxprSfn/JzJHrMLXSjdaokccOhFDoIai8k33f68WDoeO+kCWlOh
+   D4UU1b7D0x4J1mQMFugm5FUECyfn0i7gM3wQr94uYQA6qbhtusSh9ldOf
+   DMSX9GMQVc5UKPvY7RO0brPeecnEXXPp6JTRhLxqVroIjSlb9wLy0KOUk
+   hp+wOntGTzxF6N679VNc8QZOpgkT8FOePYVZbT3ZTmQXRecgay2mUXK6F
+   O2uJDB7rt7lZqh6EbUiOKqwIfN/t6Qm7ROclxNN24UqzMFhc7bY0ocMXK
+   ppfGToYRfj1bj9kFbWAhuDwHzw4McMgOvtqil+bJ7Fgzf9qfuN3n0Wxeo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="374964843"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="374964784"
+   d="scan'208,146";a="374964843"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 04:06:44 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="968855530"
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 04:06:47 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="968855588"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="968855530"
+   d="scan'208,146";a="968855588"
 Received: from kvehmane-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.61.113])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 04:06:35 -0800
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 04:06:42 -0800
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
         Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
@@ -46,13 +46,15 @@ To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
         Tianfei zhang <tianfei.zhang@intel.com>,
         Mark Brown <broonie@kernel.org>,
         Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 00/11] intel-m10-bmc: Split BMC to core and SPI parts & add PMCI+N6000 support
-Date:   Thu, 17 Nov 2022 14:05:04 +0200
-Message-Id: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com>
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 01/11] mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
+Date:   Thu, 17 Nov 2022 14:05:05 +0200
+Message-Id: <20221117120515.37807-2-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com>
+References: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -65,82 +67,152 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Hi all,
+BMC type specific info is currently set by a switch/case block. The
+size of this info is expected to grow as more dev types and features
+are added which would have made the switch block bloaty.
 
-Here are the patches for MAX 10 BMC core/SPI interface split and
-addition of the PMCI interface. There are a few supporting rearrangement
-patches prior to the actual split. This series also introduced regmap for
-indirect register access generic to Intel FPGA IPs.
+Store type specific info into struct and place them into .driver_data
+instead because it makes things a bit cleaner.
 
-The current downside of the split is that there's not that much code
-remaining in the core part when all the type specific definitions are
-moved to the file with the relevant interface.
+The m10bmc_type enum can be dropped as the differentiation is now
+fully handled by the platform info.
 
-I'm not entirely sure if I did properly address Yilun's comment on
-placement of the flash_ops related code. To me the original way which
-keeps them in mfd/intel-m10-bmc-{spi,pmci}.c still seems to the best
-way. If that is still not acceptable, I propose that I'll move just the
-flash ops functions into intel-m10-bmc-sec-update-{spi,pmci}.c and
-create sec related platform info struct to select the correct flash
-ops. This would effectively be the "double split" approach I suggested
-earlier (both mfd and sec have their own per interface splits, to me
-the double split looks overkill but it would meet Yilun's goal of
-keeping sec related code within the sec driver).
+The info member of struct intel_m10bmc that is added here is not used
+yet in this change but its addition logically still belongs to this
+change. The CSR map change that comes after this change needs to have
+the info member.
 
-The patch set is based on top of commit dfd10332596e ("fpga:
-m10bmc-sec: Fix kconfig dependencies") to avoid triggering a Kconfig
-conflict.
+Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/mfd/intel-m10-bmc.c       | 53 ++++++++++++++-----------------
+ include/linux/mfd/intel-m10-bmc.h | 12 +++++++
+ 2 files changed, 36 insertions(+), 29 deletions(-)
 
-v2:
-- Drop type from mfd side, the platform info takes care of differentation
-- Explain introducing ->info to struct m10bmc in commit message (belongs logically there)
-- Intro PMCI better
-- Improve naming
-        - Rename M10BMC_PMCI_FLASH_CTRL to M10BMC_PMCI_FLASH_MUX_CTRL
-        - Use m10bmc_pmci/M10BMC_PMCI prefix consistently
-        - Use M10BMC_SPI prefix for SPI related defines
-        - Newly added stuff gets m10bmc_spi prefix
-- Removed dev from struct m10bmc_pmci_device
-- Rename "n_offset" variable to "offset" in PMCI flash ops
-- Always issue idle command in regmap indirect to clear RD/WR/ACK bits
-- Handle stride misaligned sizes in flash read/write ops
-
-Ilpo Järvinen (11):
-  mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
-  mfd: intel-m10-bmc: Rename the local variables
-  mfd: intel-m10-bmc: Split into core and spi specific parts
-  mfd: intel-m10-bmc: Support multiple CSR register layouts
-  fpga: intel-m10-bmc: Add flash ops for sec update
-  mfd: intel-m10-bmc: Downscope SPI defines & prefix with M10BMC_SPI
-  regmap: indirect: Add indirect regmap support
-  intel-m10-bmc: Add regmap_indirect_cfg for Intel FPGA IPs
-  mfd: intel-m10-bmc: Add PMCI driver
-  fpga: m10bmc-sec: Add support for N6000
-  mfd: intel-m10-bmc: Change MODULE_LICENSE() to GPL
-
- .../ABI/testing/sysfs-driver-intel-m10-bmc    |   8 +-
- MAINTAINERS                                   |   2 +-
- drivers/base/regmap/Kconfig                   |   3 +
- drivers/base/regmap/Makefile                  |   1 +
- drivers/base/regmap/regmap-indirect.c         | 128 +++++++
- drivers/fpga/Kconfig                          |   2 +-
- drivers/fpga/intel-m10-bmc-sec-update.c       | 149 ++++----
- drivers/hwmon/Kconfig                         |   2 +-
- drivers/mfd/Kconfig                           |  34 +-
- drivers/mfd/Makefile                          |   6 +-
- drivers/mfd/intel-m10-bmc-core.c              | 133 +++++++
- drivers/mfd/intel-m10-bmc-pmci.c              | 361 ++++++++++++++++++
- drivers/mfd/intel-m10-bmc-spi.c               | 270 +++++++++++++
- drivers/mfd/intel-m10-bmc.c                   | 238 ------------
- include/linux/mfd/intel-m10-bmc.h             | 122 +++---
- include/linux/regmap.h                        |  55 +++
- 16 files changed, 1131 insertions(+), 383 deletions(-)
- create mode 100644 drivers/base/regmap/regmap-indirect.c
- create mode 100644 drivers/mfd/intel-m10-bmc-core.c
- create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
- create mode 100644 drivers/mfd/intel-m10-bmc-spi.c
- delete mode 100644 drivers/mfd/intel-m10-bmc.c
-
+diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+index 7e3319e5b22f..12c522c16d83 100644
+--- a/drivers/mfd/intel-m10-bmc.c
++++ b/drivers/mfd/intel-m10-bmc.c
+@@ -13,12 +13,6 @@
+ #include <linux/regmap.h>
+ #include <linux/spi/spi.h>
+ 
+-enum m10bmc_type {
+-	M10_N3000,
+-	M10_D5005,
+-	M10_N5010,
+-};
+-
+ static struct mfd_cell m10bmc_d5005_subdevs[] = {
+ 	{ .name = "d5005bmc-hwmon" },
+ 	{ .name = "d5005bmc-sec-update" }
+@@ -162,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ {
+ 	const struct spi_device_id *id = spi_get_device_id(spi);
++	const struct intel_m10bmc_platform_info *info;
+ 	struct device *dev = &spi->dev;
+-	struct mfd_cell *cells;
+ 	struct intel_m10bmc *ddata;
+-	int ret, n_cell;
++	int ret;
+ 
+ 	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
+ 	if (!ddata)
+ 		return -ENOMEM;
+ 
++	info = (struct intel_m10bmc_platform_info *)id->driver_data;
++	ddata->info = info;
+ 	ddata->dev = dev;
+ 
+ 	ddata->regmap =
+@@ -189,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ 		return ret;
+ 	}
+ 
+-	switch (id->driver_data) {
+-	case M10_N3000:
+-		cells = m10bmc_pacn3000_subdevs;
+-		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
+-		break;
+-	case M10_D5005:
+-		cells = m10bmc_d5005_subdevs;
+-		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+-		break;
+-	case M10_N5010:
+-		cells = m10bmc_n5010_subdevs;
+-		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+-		break;
+-	default:
+-		return -ENODEV;
+-	}
+-
+-	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
++	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
++				   info->cells, info->n_cells,
+ 				   NULL, 0, NULL);
+ 	if (ret)
+ 		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+@@ -214,10 +194,25 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ 	return ret;
+ }
+ 
++static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
++	.cells = m10bmc_pacn3000_subdevs,
++	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
++};
++
++static const struct intel_m10bmc_platform_info m10bmc_spi_d5005 = {
++	.cells = m10bmc_d5005_subdevs,
++	.n_cells = ARRAY_SIZE(m10bmc_d5005_subdevs),
++};
++
++static const struct intel_m10bmc_platform_info m10bmc_spi_n5010 = {
++	.cells = m10bmc_n5010_subdevs,
++	.n_cells = ARRAY_SIZE(m10bmc_n5010_subdevs),
++};
++
+ static const struct spi_device_id m10bmc_spi_id[] = {
+-	{ "m10-n3000", M10_N3000 },
+-	{ "m10-d5005", M10_D5005 },
+-	{ "m10-n5010", M10_N5010 },
++	{ "m10-n3000", (kernel_ulong_t)&m10bmc_spi_n3000 },
++	{ "m10-d5005", (kernel_ulong_t)&m10bmc_spi_d5005 },
++	{ "m10-n5010", (kernel_ulong_t)&m10bmc_spi_n5010 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+index f0044b14136e..725b51ea4aee 100644
+--- a/include/linux/mfd/intel-m10-bmc.h
++++ b/include/linux/mfd/intel-m10-bmc.h
+@@ -118,14 +118,26 @@
+ /* Address of 4KB inverted bit vector containing staging area FLASH count */
+ #define STAGING_FLASH_COUNT	0x17ffb000
+ 
++/**
++ * struct intel_m10bmc_platform_info - Intel MAX 10 BMC platform specific information
++ * @cells: MFD cells
++ * @n_cells: MFD cells ARRAY_SIZE()
++ */
++struct intel_m10bmc_platform_info {
++	struct mfd_cell *cells;
++	int n_cells;
++};
++
+ /**
+  * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
+  * @dev: this device
+  * @regmap: the regmap used to access registers by m10bmc itself
++ * @info: the platform information for MAX10 BMC
+  */
+ struct intel_m10bmc {
+ 	struct device *dev;
+ 	struct regmap *regmap;
++	const struct intel_m10bmc_platform_info *info;
+ };
+ 
+ /*
 -- 
 2.30.2
 
