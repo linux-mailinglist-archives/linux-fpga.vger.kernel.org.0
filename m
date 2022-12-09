@@ -2,41 +2,41 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0BE648A47
-	for <lists+linux-fpga@lfdr.de>; Fri,  9 Dec 2022 22:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C171648A48
+	for <lists+linux-fpga@lfdr.de>; Fri,  9 Dec 2022 22:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiLIVpe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 9 Dec 2022 16:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
+        id S230112AbiLIVpg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 9 Dec 2022 16:45:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiLIVpG (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 9 Dec 2022 16:45:06 -0500
+        with ESMTP id S230037AbiLIVpH (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 9 Dec 2022 16:45:07 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4ADB3D389;
-        Fri,  9 Dec 2022 13:45:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE113D38A;
+        Fri,  9 Dec 2022 13:45:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670622305; x=1702158305;
+  t=1670622306; x=1702158306;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=dwtQ/ablDc22bWRHS80WdKvNc6qQOkeHL6kdtmrkUXg=;
-  b=D/1z2ef+9RdDbguFwjU4tOMa0oKPoaRHzHGGLRWoGOsSVdKqw+HtOjO+
-   0PP+5GhOOzD/bbKJcELReWYWKuUZv8dSvsxW75uvsCAmTaNls+AvHya2P
-   DGJRsIqXaT0s2nDmFBDYgI2VZWIQ4WAPD916U3diN8Dvn+7pYbQHKdido
-   PIMRSoLtgH/iAdKR+M1pFe5iH5q+h7FTq68KJ5OP5opkuNVmFiZS/uy+Q
-   8y4DGIIVXSQtjshwDY0+rLKrgZlSANReSUNSKBPe9NDE8fA/Vr6HkwQ9Y
-   rhIgauk8Z+ZJ4U8Pr+c3Ng1HGcdw46ySYFlvX3lpN0cRdB0nRiG+8MqC/
+  bh=06GSFq8WqwL7MGgGawfgMIYV3mLOzPQgcQuG/eWi9Xc=;
+  b=XT61RYNJ/Wd6pY10uXL8Cp20yGjU5yhUBZQ7hmWUD+pLKl1vrjBY3UMQ
+   wWSawUN+EcOTKVdlSOQWDPaLV2JD8kW135nslzowQESDUnj24l2Zs2EDB
+   HYFK4DCe4+Mo5bLQGsqd0DuZupe6V8vtUajODqTeGPakW9/9HsBTV0v2I
+   IobFXvSGAZa7Pba9a6tLOoLsXaNfYBwn0Ut36ayY1Tf8MmPuMWiz4/HRH
+   llSB3spMvS8WU7UdNvVMZvTzVSzX37Rg821trW+96HGphAbq5nPwx1aj0
+   /u8EsB3SCYqomHaDlGUMr26bYXrZ/JQZfIE10lcjH/dzjMJe/ZfhaWIJx
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="300975554"
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="300975564"
 X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="300975554"
+   d="scan'208";a="300975564"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:45:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="711031706"
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:45:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="711031716"
 X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="711031706"
+   d="scan'208";a="711031716"
 Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:45:03 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:45:04 -0800
 From:   matthew.gerlach@linux.intel.com
 To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
@@ -50,9 +50,9 @@ To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
         marpagan@redhat.com
 Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v6 3/4] fpga: dfl: add basic support for DFHv1
-Date:   Fri,  9 Dec 2022 13:45:22 -0800
-Message-Id: <20221209214523.3484193-4-matthew.gerlach@linux.intel.com>
+Subject: [PATCH v6 4/4] tty: serial: 8250: add DFL bus driver for Altera 16550.
+Date:   Fri,  9 Dec 2022 13:45:23 -0800
+Message-Id: <20221209214523.3484193-5-matthew.gerlach@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221209214523.3484193-1-matthew.gerlach@linux.intel.com>
 References: <20221209214523.3484193-1-matthew.gerlach@linux.intel.com>
@@ -70,454 +70,241 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-Version 1 of the Device Feature Header (DFH) definition adds
-functionality to the DFL bus.
-
-A DFHv1 header may have one or more parameter blocks that
-further describes the HW to SW.  Add support to the DFL bus
-to parse the MSI-X parameter.
-
-The location of a feature's register set is explicitly
-described in DFHv1 and can be relative to the base of the DFHv1
-or an absolute address.  Parse the location and pass the information
-to DFL driver.
+Add a Device Feature List (DFL) bus driver for the Altera
+16550 implementation of UART.
 
 Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-v6: move MSI_X parameter definitions to drivers/fpga/dfl.h
+v6: move driver specific parameter definitions to limit scope
 
-v5: update field names
-    fix find_param/dfh_get_psize
-    clean up mmio_res assignments
-    use u64* instead of void*
-    use FIELD_GET instead of masking
+v5: removed unneeded blank line
+    removed unneeded includes
+    included device.h and types.h
+    removed unneeded local variable
+    remove calls to dev_dbg
+    memset -> { }
+    remove space after period
+    explicitly include used headers
+    remove redundant Inc from Copyright
+    fix format specifier
 
-v4: s/MSIX/MSI_X
-    move kernel doc to implementation
-    use structure assignment
-    fix decode of absolute address
-    clean up comment in parse_feature_irqs
-    remove use of csr_res
+v4: use dev_err_probe() everywhere that is appropriate
+    clean up noise
+    change error messages to use the word, unsupported
+    tried again to sort Makefile and KConfig better
+    reorder probe function for easier error handling
+    use new dfh_find_param API
 
-v3: remove unneeded blank line
-    use clearer variable name
-    pass finfo into parse_feature_irqs()
-    refactor code for better indentation
-    use switch statement for irq parsing
-    squash in code parsing register location
+v3: use passed in location of registers
+    use cleaned up functions for parsing parameters
 
-v2: fix kernel doc
-    clarify use of DFH_VERSION field
+v2: clean up error messages
+    alphabetize header files
+    fix 'missing prototype' error by making function static
+    tried to sort Makefile and Kconfig better
 ---
- drivers/fpga/dfl.c  | 234 ++++++++++++++++++++++++++++++++++----------
- drivers/fpga/dfl.h  |   9 ++
- include/linux/dfl.h |   4 +
- 3 files changed, 196 insertions(+), 51 deletions(-)
+ drivers/tty/serial/8250/8250_dfl.c | 154 +++++++++++++++++++++++++++++
+ drivers/tty/serial/8250/Kconfig    |  12 +++
+ drivers/tty/serial/8250/Makefile   |   1 +
+ 3 files changed, 167 insertions(+)
+ create mode 100644 drivers/tty/serial/8250/8250_dfl.c
 
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index b9aae85ba930..df63c96bcbfc 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -342,6 +342,8 @@ static void release_dfl_dev(struct device *dev)
- 	if (ddev->mmio_res.parent)
- 		release_resource(&ddev->mmio_res);
- 
-+	kfree(ddev->params);
-+
- 	ida_free(&dfl_device_ida, ddev->id);
- 	kfree(ddev->irqs);
- 	kfree(ddev);
-@@ -380,7 +382,16 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
- 	ddev->type = feature_dev_id_type(pdev);
- 	ddev->feature_id = feature->id;
- 	ddev->revision = feature->revision;
-+	ddev->dfh_version = feature->dfh_version;
- 	ddev->cdev = pdata->dfl_cdev;
-+	if (feature->param_size) {
-+		ddev->params = kmemdup(feature->params, feature->param_size, GFP_KERNEL);
-+		if (!ddev->params) {
-+			ret = -ENOMEM;
-+			goto put_dev;
-+		}
-+		ddev->param_size = feature->param_size;
-+	}
- 
- 	/* add mmio resource */
- 	parent_res = &pdev->resource[feature->resource_index];
-@@ -708,20 +719,27 @@ struct build_feature_devs_info {
-  * struct dfl_feature_info - sub feature info collected during feature dev build
-  *
-  * @fid: id of this sub feature.
-+ * @revision: revision of this sub feature
-+ * @dfh_version: version of Device Feature Header (DFH)
-  * @mmio_res: mmio resource of this sub feature.
-  * @ioaddr: mapped base address of mmio resource.
-  * @node: node in sub_features linked list.
-  * @irq_base: start of irq index in this sub feature.
-  * @nr_irqs: number of irqs of this sub feature.
-+ * @param_size: size DFH parameters.
-+ * @params: DFH parameter data.
-  */
- struct dfl_feature_info {
- 	u16 fid;
- 	u8 revision;
-+	u8 dfh_version;
- 	struct resource mmio_res;
- 	void __iomem *ioaddr;
- 	struct list_head node;
- 	unsigned int irq_base;
- 	unsigned int nr_irqs;
-+	unsigned int param_size;
-+	u64 params[];
- };
- 
- static void dfl_fpga_cdev_add_port_dev(struct dfl_fpga_cdev *cdev,
-@@ -797,7 +815,17 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
- 		feature->dev = fdev;
- 		feature->id = finfo->fid;
- 		feature->revision = finfo->revision;
-+		feature->dfh_version = finfo->dfh_version;
- 
-+		if (finfo->param_size) {
-+			feature->params = devm_kmemdup(binfo->dev,
-+						       finfo->params, finfo->param_size,
-+						       GFP_KERNEL);
-+			if (!feature->params)
-+				return -ENOMEM;
-+
-+			feature->param_size = finfo->param_size;
-+		}
- 		/*
- 		 * the FIU header feature has some fundamental functions (sriov
- 		 * set, port enable/disable) needed for the dfl bus device and
-@@ -934,56 +962,105 @@ static u16 feature_id(u64 value)
- 	return 0;
- }
- 
-+static u64 *find_param(u64 *params, resource_size_t max, int param_id)
-+{
-+	u64 *end = params + max / sizeof(u64);
-+	u64 v, next;
-+
-+	while (params < end) {
-+		v = *params;
-+		if (param_id == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
-+			return params;
-+
-+		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
-+		params += next;
-+		if (FIELD_GET(DFHv1_PARAM_HDR_NEXT_EOP, v))
-+			break;
-+	}
-+
-+	return NULL;
-+}
-+
-+/**
-+ * dfh_find_param() - find data for the given parameter id
-+ * @dfl_dev: dfl device
-+ * @param: id of dfl parameter
+diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
+new file mode 100644
+index 000000000000..606279d420e0
+--- /dev/null
++++ b/drivers/tty/serial/8250/8250_dfl.c
+@@ -0,0 +1,154 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Driver for FPGA UART
 + *
-+ * Return: pointer to parameter header on success, NULL otherwise.
++ * Copyright (C) 2022 Intel Corporation.
++ *
++ * Authors:
++ *   Ananda Ravuri <ananda.ravuri@intel.com>
++ *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
 + */
-+u64 *dfh_find_param(struct dfl_device *dfl_dev, int param_id)
++
++#include <linux/bitfield.h>
++#include <linux/device.h>
++#include <linux/dfl.h>
++#include <linux/errno.h>
++#include <linux/ioport.h>
++#include <linux/module.h>
++#include <linux/mod_devicetable.h>
++#include <linux/types.h>
++
++#include <linux/serial.h>
++#include <linux/serial_8250.h>
++
++#define DFHv1_PARAM_ID_CLK_FRQ    0x2
++#define DFHv1_PARAM_ID_FIFO_LEN   0x3
++
++#define DFHv1_PARAM_ID_REG_LAYOUT	0x4
++#define DFHv1_PARAM_REG_LAYOUT_WIDTH	GENMASK_ULL(63, 32)
++#define DFHv1_PARAM_REG_LAYOUT_SHIFT	GENMASK_ULL(31, 0)
++
++struct dfl_uart {
++	int line;
++};
++
++static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
 +{
-+	return find_param(dfl_dev->params, dfl_dev->param_size, param_id);
-+}
-+EXPORT_SYMBOL_GPL(dfh_find_param);
-+
- static int parse_feature_irqs(struct build_feature_devs_info *binfo,
--			      resource_size_t ofst, u16 fid,
--			      unsigned int *irq_base, unsigned int *nr_irqs)
-+			      resource_size_t ofst, struct dfl_feature_info *finfo)
- {
- 	void __iomem *base = binfo->ioaddr + ofst;
- 	unsigned int i, ibase, inr = 0;
-+	void *params = finfo->params;
- 	enum dfl_id_type type;
-+	u16 fid = finfo->fid;
- 	int virq;
++	struct device *dev = &dfl_dev->dev;
++	u32 reg_width;
++	u64 fifo_len;
 +	u64 *p;
- 	u64 v;
- 
--	type = feature_dev_id_type(binfo->feature_dev);
-+	switch (finfo->dfh_version) {
-+	case 0:
-+		/*
-+		 * DFHv0 only provides MMIO resource information for each feature
-+		 * in the DFL header.  There is no generic interrupt information.
-+		 * Instead, features with interrupt functionality provide
-+		 * the information in feature specific registers.
-+		 */
-+		type = feature_dev_id_type(binfo->feature_dev);
-+		if (type == PORT_ID) {
-+			switch (fid) {
-+			case PORT_FEATURE_ID_UINT:
-+				v = readq(base + PORT_UINT_CAP);
-+				ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-+				inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-+				break;
-+			case PORT_FEATURE_ID_ERROR:
-+				v = readq(base + PORT_ERROR_CAP);
-+				ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-+				inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-+				break;
-+			}
-+		} else if (type == FME_ID) {
-+			switch (fid) {
-+			case FME_FEATURE_ID_GLOBAL_ERR:
-+				v = readq(base + FME_ERROR_CAP);
-+				ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-+				inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-+				break;
-+			}
-+		}
-+		break;
- 
--	/*
--	 * Ideally DFL framework should only read info from DFL header, but
--	 * current version DFL only provides mmio resources information for
--	 * each feature in DFL Header, no field for interrupt resources.
--	 * Interrupt resource information is provided by specific mmio
--	 * registers of each private feature which supports interrupt. So in
--	 * order to parse and assign irq resources, DFL framework has to look
--	 * into specific capability registers of these private features.
--	 *
--	 * Once future DFL version supports generic interrupt resource
--	 * information in common DFL headers, the generic interrupt parsing
--	 * code will be added. But in order to be compatible to old version
--	 * DFL, the driver may still fall back to these quirks.
--	 */
--	if (type == PORT_ID) {
--		switch (fid) {
--		case PORT_FEATURE_ID_UINT:
--			v = readq(base + PORT_UINT_CAP);
--			ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
--			inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
--			break;
--		case PORT_FEATURE_ID_ERROR:
--			v = readq(base + PORT_ERROR_CAP);
--			ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
--			inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-+	case 1:
-+		/*
-+		 * DFHv1 provides interrupt resource information in DFHv1
-+		 * parameter blocks.
-+		 */
-+		p = find_param(params, finfo->param_size, DFHv1_PARAM_ID_MSI_X);
-+		if (!p)
- 			break;
--		}
--	} else if (type == FME_ID) {
--		if (fid == FME_FEATURE_ID_GLOBAL_ERR) {
--			v = readq(base + FME_ERROR_CAP);
--			ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
--			inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
--		}
 +
-+		p++;
-+		ibase = FIELD_GET(DFHv1_PARAM_MSI_X_STARTV, *p);
-+		inr = FIELD_GET(DFHv1_PARAM_MSI_X_NUMV, *p);
++	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
++	if (!p)
++		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
++
++	p++;
++	uart->port.uartclk = *p;
++
++	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN);
++	if (!p)
++		return dev_err_probe(dev, -EINVAL, "missing FIFO_LEN param\n");
++
++	p++;
++	fifo_len = *p;
++	switch (fifo_len) {
++	case 32:
++		uart->port.type = PORT_ALTR_16550_F32;
++		break;
++
++	case 64:
++		uart->port.type = PORT_ALTR_16550_F64;
++		break;
++
++	case 128:
++		uart->port.type = PORT_ALTR_16550_F128;
 +		break;
 +
 +	default:
-+		dev_warn(binfo->dev, "unexpected DFH version %d\n", finfo->dfh_version);
-+		break;
- 	}
- 
- 	if (!inr) {
--		*irq_base = 0;
--		*nr_irqs = 0;
-+		finfo->irq_base = 0;
-+		finfo->nr_irqs = 0;
- 		return 0;
- 	}
- 
-@@ -1006,12 +1083,37 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
- 		}
- 	}
- 
--	*irq_base = ibase;
--	*nr_irqs = inr;
-+	finfo->irq_base = ibase;
-+	finfo->nr_irqs = inr;
- 
- 	return 0;
- }
- 
-+static int dfh_get_psize(void __iomem *dfh_base, resource_size_t max)
-+{
-+	int size = 0;
-+	u64 v, next;
-+
-+	if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS,
-+		       readq(dfh_base + DFHv1_CSR_SIZE_GRP)))
-+		return 0;
-+
-+	while (size + DFHv1_PARAM_HDR < max) {
-+		v = readq(dfh_base + DFHv1_PARAM_HDR + size);
-+
-+		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
-+		if (!next)
-+			return -EINVAL;
-+
-+		size += next * sizeof(u64);
-+
-+		if (FIELD_GET(DFHv1_PARAM_HDR_NEXT_EOP, v))
-+			return size;
++		return dev_err_probe(dev, -EINVAL, "unsupported FIFO_LEN %llu\n", fifo_len);
 +	}
 +
-+	return -ENOENT;
++	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
++	if (!p)
++		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT param\n");
++
++	p++;
++	uart->port.regshift = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_SHIFT, *p);
++	reg_width = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_WIDTH, *p);
++	switch (reg_width) {
++	case 4:
++		uart->port.iotype = UPIO_MEM32;
++		break;
++
++	case 2:
++		uart->port.iotype = UPIO_MEM16;
++		break;
++
++	default:
++		return dev_err_probe(dev, -EINVAL, "unsupported reg-width %u\n", reg_width);
++
++	}
++
++	return 0;
 +}
 +
- /*
-  * when create sub feature instances, for private features, it doesn't need
-  * to provide resource size and feature id as they could be read from DFH
-@@ -1023,39 +1125,69 @@ static int
- create_feature_instance(struct build_feature_devs_info *binfo,
- 			resource_size_t ofst, resource_size_t size, u16 fid)
- {
--	unsigned int irq_base, nr_irqs;
- 	struct dfl_feature_info *finfo;
-+	resource_size_t start, end;
-+	int dfh_psize = 0;
- 	u8 revision = 0;
-+	u64 v, addr_off;
-+	u8 dfh_ver = 0;
- 	int ret;
--	u64 v;
- 
- 	if (fid != FEATURE_ID_AFU) {
- 		v = readq(binfo->ioaddr + ofst);
- 		revision = FIELD_GET(DFH_REVISION, v);
--
-+		dfh_ver = FIELD_GET(DFH_VERSION, v);
- 		/* read feature size and id if inputs are invalid */
- 		size = size ? size : feature_size(v);
- 		fid = fid ? fid : feature_id(v);
-+		if (dfh_ver == 1) {
-+			dfh_psize = dfh_get_psize(binfo->ioaddr + ofst, size);
-+			if (dfh_psize < 0) {
-+				dev_err(binfo->dev,
-+					"failed to read size of DFHv1 parameters %d\n",
-+					dfh_psize);
-+				return dfh_psize;
-+			}
-+			dev_dbg(binfo->dev, "dfhv1_psize %d\n", dfh_psize);
-+		}
- 	}
- 
- 	if (binfo->len - ofst < size)
- 		return -EINVAL;
- 
--	ret = parse_feature_irqs(binfo, ofst, fid, &irq_base, &nr_irqs);
--	if (ret)
--		return ret;
--
--	finfo = kzalloc(sizeof(*finfo), GFP_KERNEL);
-+	finfo = kzalloc(sizeof(*finfo) + dfh_psize, GFP_KERNEL);
- 	if (!finfo)
- 		return -ENOMEM;
- 
-+	memcpy_fromio(finfo->params, binfo->ioaddr + ofst + DFHv1_PARAM_HDR, dfh_psize);
-+	finfo->param_size = dfh_psize;
++static int dfl_uart_probe(struct dfl_device *dfl_dev)
++{
++	struct device *dev = &dfl_dev->dev;
++	struct uart_8250_port uart = { };
++	struct dfl_uart *dfluart;
++	int ret;
 +
- 	finfo->fid = fid;
- 	finfo->revision = revision;
--	finfo->mmio_res.start = binfo->start + ofst;
--	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
-+	finfo->dfh_version = dfh_ver;
-+	if (dfh_ver == 1) {
-+		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_ADDR);
-+		addr_off = FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
-+		if (FIELD_GET(DFHv1_CSR_ADDR_REL, v))
-+			start = addr_off << 1;
-+		else
-+			start = binfo->start + ofst + addr_off;
++	uart.port.flags = UPF_IOREMAP;
++	uart.port.mapbase = dfl_dev->mmio_res.start;
++	uart.port.mapsize = resource_size(&dfl_dev->mmio_res);
 +
-+		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_SIZE_GRP);
-+		end = start + FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v) - 1;
-+	} else {
-+		start = binfo->start + ofst;
-+		end = start + size - 1;
-+	}
- 	finfo->mmio_res.flags = IORESOURCE_MEM;
--	finfo->irq_base = irq_base;
--	finfo->nr_irqs = nr_irqs;
-+	finfo->mmio_res.start = start;
-+	finfo->mmio_res.end = end;
++	ret = dfl_uart_get_params(dfl_dev, &uart);
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "failed uart feature walk\n");
 +
-+	ret = parse_feature_irqs(binfo, ofst, finfo);
-+	if (ret) {
-+		kfree(finfo);
-+		return ret;
-+	}
- 
- 	list_add_tail(&finfo->node, &binfo->sub_features);
- 	binfo->feature_num++;
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index fc59f33367ee..a21065cec04e 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -111,6 +111,10 @@
- #define DFHv1_PARAM_HDR_NEXT_EOP	BIT_ULL(32)
- #define DFHv1_PARAM_DATA		0x08  /* Offset of Param data from Param header */
- 
-+#define DFHv1_PARAM_ID_MSI_X		0x1
-+#define DFHv1_PARAM_MSI_X_NUMV		GENMASK_ULL(63, 32)
-+#define DFHv1_PARAM_MSI_X_STARTV	GENMASK_ULL(31, 0)
++	if (dfl_dev->num_irqs == 1)
++		uart.port.irq = dfl_dev->irqs[0];
 +
- /* Next AFU Register Bitfield */
- #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
++	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
++	if (!dfluart)
++		return -ENOMEM;
++
++	dfluart->line = serial8250_register_8250_port(&uart);
++	if (dfluart->line < 0)
++		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
++
++	dev_set_drvdata(dev, dfluart);
++
++	return 0;
++}
++
++static void dfl_uart_remove(struct dfl_device *dfl_dev)
++{
++	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
++
++	serial8250_unregister_port(dfluart->line);
++}
++
++#define FME_FEATURE_ID_UART 0x24
++
++static const struct dfl_device_id dfl_uart_ids[] = {
++	{ FME_ID, FME_FEATURE_ID_UART },
++	{ }
++};
++MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
++
++static struct dfl_driver dfl_uart_driver = {
++	.drv = {
++		.name = "dfl-uart",
++	},
++	.id_table = dfl_uart_ids,
++	.probe = dfl_uart_probe,
++	.remove = dfl_uart_remove,
++};
++module_dfl_driver(dfl_uart_driver);
++
++MODULE_DESCRIPTION("DFL Intel UART driver");
++MODULE_AUTHOR("Intel Corporation");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
+index b0f62345bc84..08af2acd4645 100644
+--- a/drivers/tty/serial/8250/Kconfig
++++ b/drivers/tty/serial/8250/Kconfig
+@@ -370,6 +370,18 @@ config SERIAL_8250_FSL
+ 	  erratum for Freescale 16550 UARTs in the 8250 driver. It also
+ 	  enables support for ACPI enumeration.
  
-@@ -272,11 +276,14 @@ struct dfl_feature_irq_ctx {
-  * @ops: ops of this sub feature.
-  * @ddev: ptr to the dfl device of this sub feature.
-  * @priv: priv data of this feature.
-+ * @param_size: size of dfh parameters
-+ * @params: point to memory copy of dfh parameters
-  */
- struct dfl_feature {
- 	struct platform_device *dev;
- 	u16 id;
- 	u8 revision;
-+	u8 dfh_version;
- 	int resource_index;
- 	void __iomem *ioaddr;
- 	struct dfl_feature_irq_ctx *irq_ctx;
-@@ -284,6 +291,8 @@ struct dfl_feature {
- 	const struct dfl_feature_ops *ops;
- 	struct dfl_device *ddev;
- 	void *priv;
-+	unsigned int param_size;
-+	void *params;
- };
- 
- #define FEATURE_DEV_ID_UNUSED	(-1)
-diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-index 431636a0dc78..a9b7ae84e5fd 100644
---- a/include/linux/dfl.h
-+++ b/include/linux/dfl.h
-@@ -39,9 +39,12 @@ struct dfl_device {
- 	u16 type;
- 	u16 feature_id;
- 	u8 revision;
-+	u8 dfh_version;
- 	struct resource mmio_res;
- 	int *irqs;
- 	unsigned int num_irqs;
-+	unsigned int param_size;
-+	void *params;
- 	struct dfl_fpga_cdev *cdev;
- 	const struct dfl_device_id *id_entry;
- };
-@@ -84,4 +87,5 @@ void dfl_driver_unregister(struct dfl_driver *dfl_drv);
- 	module_driver(__dfl_driver, dfl_driver_register, \
- 		      dfl_driver_unregister)
- 
-+u64 *dfh_find_param(struct dfl_device *dfl_dev, int param);
- #endif /* __LINUX_DFL_H */
++config SERIAL_8250_DFL
++	tristate "DFL bus driver for Altera 16550 UART"
++	depends on SERIAL_8250 && FPGA_DFL
++	help
++	  This option enables support for a Device Feature List (DFL) bus
++	  driver for the Altera 16650 UART. One or more Altera 16650 UARTs
++	  can be instantiated in a FPGA and then be discovered during
++	  enumeration of the DFL bus.
++
++	  To compile this driver as a module, chose M here: the
++	  module will be called 8250_dfl.
++
+ config SERIAL_8250_DW
+ 	tristate "Support for Synopsys DesignWare 8250 quirks"
+ 	depends on SERIAL_8250
+diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
+index 1615bfdde2a0..4e1a32812683 100644
+--- a/drivers/tty/serial/8250/Makefile
++++ b/drivers/tty/serial/8250/Makefile
+@@ -28,6 +28,7 @@ obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
+ obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
+ obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
+ obj-$(CONFIG_SERIAL_8250_MEN_MCB)	+= 8250_men_mcb.o
++obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
+ obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
+ obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
+ obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
 -- 
 2.25.1
 
