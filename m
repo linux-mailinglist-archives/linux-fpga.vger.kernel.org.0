@@ -2,41 +2,41 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74DB648A44
-	for <lists+linux-fpga@lfdr.de>; Fri,  9 Dec 2022 22:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D27A648A46
+	for <lists+linux-fpga@lfdr.de>; Fri,  9 Dec 2022 22:47:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiLIVpd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 9 Dec 2022 16:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S230099AbiLIVpe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 9 Dec 2022 16:45:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiLIVpE (ORCPT
+        with ESMTP id S229995AbiLIVpE (ORCPT
         <rfc822;linux-fpga@vger.kernel.org>); Fri, 9 Dec 2022 16:45:04 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41603D381;
-        Fri,  9 Dec 2022 13:45:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293503D388;
+        Fri,  9 Dec 2022 13:45:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670622303; x=1702158303;
+  t=1670622304; x=1702158304;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mwMQmcynqENJ3y9naQPa+ubp3a09jXnV9/AxFHnqRKo=;
-  b=eEyHE4BqpIBEmztxPevIm5xRhUVH7m8UPktBJ668ZE9kyvr637QJ1c9A
-   FrlNKBRLvtFgCaq7E4T1eS4bIi1aYDTxrO0q/kIA5/Zw5jPvEY1Xm4QD+
-   Jvw9ihpSmKuS5s9oGMIo/93zbD5CqcUJc8gZWYu+2fPj2FJcY35DSPZ2z
-   vdBzR8AGQsC30EJikr3AdDuQFKugW7OZkeomckac8pO2jElOQ0tH3i3d6
-   c3ACwzdKgndUTgANAB3yytAIb++0ADsp8V6pcQ2G7jkGo9HX3in0veQ0i
-   yqFbutys3PUcw+F0Ipu0g/xP5HOhdXOHZj9ijMKv8Ls19W7GeiwtiLFWY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="300975530"
+  bh=+Troux3plCX6Y7bEBUpvaNT3RYvxGKTZirOxEMP6luE=;
+  b=F3zquobitMngiZSbxEo4KanY6JtWTI6QwlsMjUxbxq2UhTRCoeUr+zcz
+   C/q6b2SMrnh9fx7qR7cExxD9XbH+Jzu5b/wN40q+Al+KfYRvshzMy8e2Q
+   SLZFzzMtalQghiqNEL4esA+ubbpBgZQDYKgDv6cELxKajHlDQeZU4h4Dr
+   cAfEIBSAXimVtmrVoREGC4NK2PWIVreSrVLs6dtAobyOkMpZFTzPmeloZ
+   Atf8wRmBhAbIgVPOd5iZEO7qg4nDYwsAygSYDADB+vStbSD7EQUwusHVM
+   scvpX7kaRr6akeBkUCd3mfhJTuX4w2JJfEAOgfk6jxFfMtPF76dD8yNYD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="300975543"
 X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="300975530"
+   d="scan'208";a="300975543"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:45:01 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="711031688"
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:45:03 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="711031700"
 X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="711031688"
+   d="scan'208";a="711031700"
 Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:45:00 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:45:01 -0800
 From:   matthew.gerlach@linux.intel.com
 To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
@@ -49,10 +49,12 @@ To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
         niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
         johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
         marpagan@redhat.com
-Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v6 1/4] Documentation: fpga: dfl: Add documentation for DFHv1
-Date:   Fri,  9 Dec 2022 13:45:20 -0800
-Message-Id: <20221209214523.3484193-2-matthew.gerlach@linux.intel.com>
+Cc:     Basheer Ahmed Muddebihal 
+        <basheer.ahmed.muddebihal@linux.intel.com>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v6 2/4] fpga: dfl: Add DFHv1 Register Definitions
+Date:   Fri,  9 Dec 2022 13:45:21 -0800
+Message-Id: <20221209214523.3484193-3-matthew.gerlach@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221209214523.3484193-1-matthew.gerlach@linux.intel.com>
 References: <20221209214523.3484193-1-matthew.gerlach@linux.intel.com>
@@ -68,143 +70,86 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
 
-Add documentation describing the extensions provided by Version
-1 of the Device Feature Header (DFHv1).
+This patch adds the definitions for DFHv1 header and related register
+bitfields.
 
+Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+Co-developed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-v5: use neested list for field descriptions
-    clean up prose
-    add reviewed-by and comments from Ilpo Järvinen
+v6: remove parameter definitions from include/linux/dfl.h
 
-v4: Remove marketing speak and separate v0 and v1 descriptions.
-    Fix errors reported by "make htmldocs".
+v5: consistently use fields for parameter data
+    s/EOL/EOP/ to match doc
+    remove unneeded mask
+    added Co-developed-by
 
-v3: no change
+v4: s/MSIX/MSI_X/g
+    move kerneldoc to implementation
+    don't change copyright date
 
-v2: s/GUILD/GUID/
-    add picture
+v3:
+    keep DFHv1 definitions "hidden" in drivers/fpga/dfl.h
+
+v2: clean up whitespace and one line comments
+    remove extra space in commit
+    use uniform number of digits in constants
+    don't change copyright date because of removed content
 ---
- Documentation/fpga/dfl.rst | 103 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 103 insertions(+)
+ drivers/fpga/dfl.h | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index 15b670926084..606b4b070c33 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -561,6 +561,109 @@ new DFL feature via UIO direct access, its feature id should be added to the
- driver's id_table.
+diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+index 06cfcd5e84bb..fc59f33367ee 100644
+--- a/drivers/fpga/dfl.h
++++ b/drivers/fpga/dfl.h
+@@ -74,11 +74,43 @@
+ #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
+ #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
+ #define DFH_EOL			BIT_ULL(40)		/* End of list */
++#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
+ #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
+ #define DFH_TYPE_AFU		1
+ #define DFH_TYPE_PRIVATE	3
+ #define DFH_TYPE_FIU		4
  
++/*
++ * DFHv1 Register Offset definitons
++ * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
++ * as common header registers
++ */
++#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
++#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
++#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
++
++/*
++ * CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
++ * 1'b1 = absolute (ARM or other non-PCIe use)
++ */
++#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
++
++/* CSR Header Register Bit Definitions */
++#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
++
++/* CSR SIZE Goup Register Bit Definitions */
++#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
++#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
++#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
++#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
++
++/* PARAM Header Register Bit Definitions */
++#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
++#define DFHv1_PARAM_HDR_VER		GENMASK_ULL(31, 16) /* Version Param */
++#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 35) /* Offset of next Param */
++#define DFHv1_PARAM_HDR_NEXT_EOP	BIT_ULL(32)
++#define DFHv1_PARAM_DATA		0x08  /* Offset of Param data from Param header */
++
+ /* Next AFU Register Bitfield */
+ #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
  
-+Device Feature Header - Version 0
-+===========================================
-+Version 0 (DFHv0) is the original version of the Device Feature Header.
-+The format of DFHv0 is shown below::
-+
-+    +-----------------------------------------------------------------------+
-+    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0| 0x00
-+    +-----------------------------------------------------------------------+
-+    |63                                 GUID_L                             0| 0x08
-+    +-----------------------------------------------------------------------+
-+    |63                                 GUID_H                             0| 0x10
-+    +-----------------------------------------------------------------------+
-+
-+- Offset 0x00
-+
-+  * Type - The type of DFH (e.g. FME, AFU, or private feature).
-+  * DFH VER - The version of the DFH.
-+  * Rsvd - Currently unused.
-+  * EOL - Set if this DFH is the end of the Device Feature List (DFL).
-+  * Next - The offset of the next DFH in the DFL from the start of the DFH. If EOL is set, Next is the size of MMIO ofthe last feature in the list.
-+  * ID - The ID of the feature if Type is private feature.
-+
-+- Offset 0x08
-+
-+  * GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier (present only if Type is FME or AFU).
-+
-+- Offset 0x10
-+
-+  * GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier (present only if Type is FME or AFU).
-+
-+
-+Device Feature Header - Version 1
-+===========================================
-+Version 1 (DFHv1) of the Device Feature Header adds the following functionality:
-+
-+* Provides a standardized mechanism for features to describe parameters/capabilities to software.
-+* Standardize the use of a GUID for all DFHv1 types.
-+* Decouples the location of the DFH from the register space of the feature itself.
-+
-+The format of Version 1 of the Device Feature Header (DFH) is shown below::
-+
-+    +-----------------------------------------------------------------------+
-+    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0| 0x00
-+    +-----------------------------------------------------------------------+
-+    |63                                 GUID_L                             0| 0x08
-+    +-----------------------------------------------------------------------+
-+    |63                                 GUID_H                             0| 0x10
-+    +-----------------------------------------------------------------------+
-+    |63                   Reg Address/Offset                      1|  Rel  0| 0x18
-+    +-----------------------------------------------------------------------+
-+    |63        Reg Size       32|Params 31|30 Group    16|15 Instance      0| 0x20
-+    +-----------------------------------------------------------------------+
-+    |63 Next    35|34RSV33|EOP32|31 Param Version 16|15 Param ID           0| 0x28
-+    +-----------------------------------------------------------------------+
-+    |63                 Parameter Data                                     0| 0x30
-+    +-----------------------------------------------------------------------+
-+
-+                                  ...
-+
-+    +-----------------------------------------------------------------------+
-+    |63 Next    35|34RSV33|EOP32|31 Param Version 16|15 Param ID           0|
-+    +-----------------------------------------------------------------------+
-+    |63                 Parameter Data                                     0|
-+    +-----------------------------------------------------------------------+
-+
-+- Offset 0x00
-+
-+  * Type - The type of DFH (e.g. FME, AFU, or private feature).
-+  * DFH VER - The version of the DFH.
-+  * Rsvd - Currently unused.
-+  * EOL - Set if this DFH is the end of the Device Feature List (DFL).
-+  * Next - The offset of the next DFH in the DFL from the start of the DFH.
-+  * ID - The ID of the feature if Type is private feature.
-+
-+- Offset 0x08
-+
-+  * GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier.
-+
-+- Offset 0x10
-+
-+  * GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier.
-+
-+- Offset 0x18
-+
-+  * Reg Address/Offset - If Rel bit is set, then the value is the high 63 bits of a 16 bit aligned absolute address of the feature's registers. If Rel bit is clear, then the value is the offset from the start of the DFH of the feature's registers.
-+
-+- Offset 0x20
-+
-+  * Reg Size - Size of feature's register set in bytes.
-+  * Params - Set if DFH has a list of parameter blocks.
-+  * Group - Id of group if feature is part of a group.
-+  * Instance - Id of instance of feature within a group.
-+
-+- Offset 0x28 if feature has parameters
-+
-+  * Next - Offset to the next parameter block in 8 byte words. If EOP set, size in 8 byte words of last parameter.
-+  * Param Version - Version of Param ID.
-+  * Param ID - ID of parameter.
-+
-+- Offset 0x30
-+
-+  * Parameter Data - Parameter data whose size and format is defined by version and ID of the parameter.
-+
- Open discussion
- ===============
- FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
 -- 
 2.25.1
 
