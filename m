@@ -2,43 +2,43 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E2A64AF72
-	for <lists+linux-fpga@lfdr.de>; Tue, 13 Dec 2022 06:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF14064AF83
+	for <lists+linux-fpga@lfdr.de>; Tue, 13 Dec 2022 06:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233964AbiLMFsZ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 13 Dec 2022 00:48:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
+        id S234253AbiLMFx4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 13 Dec 2022 00:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233968AbiLMFsW (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 13 Dec 2022 00:48:22 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4BA5FCC;
-        Mon, 12 Dec 2022 21:48:21 -0800 (PST)
+        with ESMTP id S233843AbiLMFxz (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 13 Dec 2022 00:53:55 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B7F1A388;
+        Mon, 12 Dec 2022 21:53:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670910501; x=1702446501;
+  t=1670910835; x=1702446835;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=w6volb3O+OcaI6PQOEDGNu0O+6CGT0a131Nd+zZOpLk=;
-  b=UOXxPTlwlgFWlbuNunp8cjgsCIJDYZgIy/lmZH7OTzOJUbSGHp5xlqWN
-   wQXBei7TiubUC9GjRNiEpsSnXs3tdQ+ae4lsxaitBiI9rrphJOQa8wzNo
-   Sj85tA4Tke19KOkTUur2TA8N8TVrdig/Qev1JwX01I8dJB20C4e8nwraW
-   MUwsKxW1sgtEcocq4XjLCk9H9a49J0aumv2Bvv3uVHCSaIzPuXNhLHGLu
-   383qXyzIRZ1dtxHkSCPAXCxlOErn8ZanajdUq5Fh7uao9EveQpAl7zS7m
-   4QtxoD+GXtpnc3eruYBtd/FSAguUROD5GxLpuBs7ZqZTRPvIBTIjGwPAL
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="380255027"
+  bh=O0o4lAUzDqGUs/CLDXsUApPxOyhZc014w9/u54eWA28=;
+  b=MVWSV7DG6lml2aSomrpqcsph/vhy7gtYOu1Kl8n74hMqSfTswYeZejSC
+   m2/VR3F5PHFXdA/vigMNPNb0HS1a2FS54WvPRyEnzc5QKHBfKRgFZ1po7
+   hnCjjOOpqkGmf4nUAxxtFZesigWmKNzeM6ygIAik7aucTUQV6yn9/342w
+   DhIHXJMnC+bSy/rYhZPRBS56F9KyS8H423WOiXhFWBXk+kjfX7uVhSKdd
+   agHidKYiVhIC3rLvVaN1WkuCs/VOwsy1Ntb6v0xic1lnFvKtgIGIwFbAk
+   3y3vrAUtsUXl5RW12I3CbCnyC+MrJOs2pSm6juk3ODdcFYCDaMHrlZEL+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="316752061"
 X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="380255027"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 21:48:05 -0800
+   d="scan'208";a="316752061"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 21:53:54 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="893782221"
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="977328613"
 X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="893782221"
+   d="scan'208";a="977328613"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Dec 2022 21:48:02 -0800
-Date:   Tue, 13 Dec 2022 13:38:11 +0800
+  by fmsmga005.fm.intel.com with ESMTP; 12 Dec 2022 21:53:52 -0800
+Date:   Tue, 13 Dec 2022 13:44:00 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
@@ -51,16 +51,15 @@ Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
         Greg KH <gregkh@linuxfoundation.org>,
         Marco Pagani <marpagan@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/8] mfd: intel-m10-bmc: Support multiple CSR register
- layouts
-Message-ID: <Y5gPw0NBA6CbD9JK@yilunxu-OptiPlex-7050>
+Subject: Re: [PATCH v4 5/8] fpga: intel-m10-bmc: Rework flash read/write
+Message-ID: <Y5gRII0QLyX5Dl7k@yilunxu-OptiPlex-7050>
 References: <20221211103913.5287-1-ilpo.jarvinen@linux.intel.com>
- <20221211103913.5287-5-ilpo.jarvinen@linux.intel.com>
+ <20221211103913.5287-6-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221211103913.5287-5-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20221211103913.5287-6-ilpo.jarvinen@linux.intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -70,16 +69,20 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2022-12-11 at 12:39:09 +0200, Ilpo Järvinen wrote:
-> There are different addresses for the MAX10 CSR registers. Introducing
-> a new data structure m10bmc_csr_map for the register definition of
-> MAX10 CSR.
+On 2022-12-11 at 12:39:10 +0200, Ilpo Järvinen wrote:
+> Access to flash staging area is different for N6000 from that of the
+> SPI interfaced counterparts. To make it easier to differentiate flash
+> access path, move read/write into new functions where the new access
+> path can be easily placed into. Rework the unaligned access such the
+> behavior it matches for both read and write.
 > 
-> Provide the csr_map for SPI.
+> This change also renames m10bmc_sec_write() to m10bmc_sec_fw_write() as
+> it would have a name conflict otherwise.
 > 
 > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
 > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+Acked-by: Xu Yilun <yilun.xu@intel.com>
