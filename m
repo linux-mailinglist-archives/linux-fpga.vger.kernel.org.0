@@ -2,136 +2,125 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592726538CB
-	for <lists+linux-fpga@lfdr.de>; Wed, 21 Dec 2022 23:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F15654FF1
+	for <lists+linux-fpga@lfdr.de>; Fri, 23 Dec 2022 13:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235037AbiLUWhO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 21 Dec 2022 17:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S236190AbiLWL67 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 23 Dec 2022 06:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235100AbiLUWgj (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 21 Dec 2022 17:36:39 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8C0E36;
-        Wed, 21 Dec 2022 14:36:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671662198; x=1703198198;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=CSuTSRNf7BVJ26/vVNpg852swFu8pb0DaMkyR4IOx0Y=;
-  b=bd7CwxMNEUCU38Bf0Ez+ThbRhw/sW+Nuy4hpsVvdmdw039NEE/fLrXYh
-   LrMjBDkAh/YHPytNFnK3rgwU0quePCa0qZZOfXRy69aqDHYgGPmBw2qib
-   vfuw/zun33jio6aFMEEqAYQI7oX1zf0McZRDO8F2mCSOHEXh8osuYGdRA
-   0CiP1eHzeFN4pbFvazF0TgwHWXkl1P1rHCNch1u6jeRXjRb/kwkuWnriA
-   4/sow9Du8xUFgDk9bGPdse6Hjfwb9ba6vRn/55VsEWZLCgUjXNIenGjPv
-   7RU4Q2bBQvV1dX8xDpR6D5btvnfI9MRN7T0SYv34k7/PlV4gY3ufU6D2C
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="303419288"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="303419288"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 14:36:38 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="758693326"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="758693326"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 14:36:37 -0800
-Date:   Wed, 21 Dec 2022 14:37:02 -0800 (PST)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Marco Pagani <marpagan@redhat.com>
-cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        bagasdotme@gmail.com
-Subject: Re: [PATCH v7 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-In-Reply-To: <70c7daf8-379e-1479-aba5-4476c4a93b9f@redhat.com>
-Message-ID: <alpine.DEB.2.22.394.2212211434520.570436@rhweight-WRK1>
-References: <20221220163652.499831-1-matthew.gerlach@linux.intel.com> <20221220163652.499831-5-matthew.gerlach@linux.intel.com> <Y6HsQJQMDnHgTesF@smile.fi.intel.com> <d34b021c-eec4-905e-f352-734db2d8338a@redhat.com>
- <70c7daf8-379e-1479-aba5-4476c4a93b9f@redhat.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S236196AbiLWL66 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 23 Dec 2022 06:58:58 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351D32A51A;
+        Fri, 23 Dec 2022 03:58:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SEQ631FeYKYXY7B2Ec0Yio6DD0wxCluUXV2LF2Oz9aVPk/fOCGkEX/7MFG/dUHqi4wPLdaVoCge+1UTutSZlXO8hsD3knTC2BrKc8HP8GOXo1uty7MpsP+uvqtRM4eVMxR5baOvPPEC09/PVDz+GvZUsdpNUWSG7shzyKoD++RGrMwcZ1q3jfdNLM2s6+//a/qQnfviWiPKDY3kq1pjZy2984gyCUVZ8NxmkhVfnCAVJm328mti9yytcWIASgcmLq1HOdZVo029YWKcHK0xddqwdUdRG1c29ZIwia+0+pBkovK+mhnHTGclL4LL8A4VA9t85+NpoLUymMFaTHnwczg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KFI0vTJgcbO0NK3OpvzH8+7HeFCmRCzwGBNiZMeGkGQ=;
+ b=Gx5jELZr9+RFQVxwXY5XJ9h9QHHuTRnQHvqKvKL1jNjHdKFCIOeSx36qBfyvG0uQPWz+Yp2cp4XcKDPgTDU9978dYGqqk8U5P9FvdFa5pZ4T2XbKNw3KO2eg4+XrtUyAZhwk4JI4+rG6LBjDRTTrONRb3Ojh7bzNUAK/DCEZonbZIMqi68svln40yvVIZNhvTqy7Q6rfDAyXcwbBL0RJoJMzRhfe8zQB7ZLpQWUaYodT1DTAMDnLIugjFeF7V78yQBkiBzHBaEocq2b5omJw9wBQ8KRf9HM80g0H+weUo/9ETeCiIlio9THriQbokjzvmyoZ1gP9hE99ND3sK2LFXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=xilinx.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KFI0vTJgcbO0NK3OpvzH8+7HeFCmRCzwGBNiZMeGkGQ=;
+ b=St4GLlEIxoqs9bAUtsMj+sRX+SUiiO70BKYt2CAjpdp6FpizRfkFBUZEAPJAcXsHrBnikphCCwaZ1r3bRSGzeB/dxVLAiqDOiHk6EYQNifh1BWUP5C8aLM1/D4XsbLzmB3g00hI9M/7GS2+SB5Dhb/BqDD3ofLQPDPYVE9CgZE0=
+Received: from DM6PR18CA0010.namprd18.prod.outlook.com (2603:10b6:5:15b::23)
+ by BL1PR12MB5945.namprd12.prod.outlook.com (2603:10b6:208:398::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Fri, 23 Dec
+ 2022 11:58:55 +0000
+Received: from CY4PEPF0000C970.namprd02.prod.outlook.com
+ (2603:10b6:5:15b:cafe::ee) by DM6PR18CA0010.outlook.office365.com
+ (2603:10b6:5:15b::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.13 via Frontend
+ Transport; Fri, 23 Dec 2022 11:58:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000C970.mail.protection.outlook.com (10.167.242.8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5944.8 via Frontend Transport; Fri, 23 Dec 2022 11:58:54 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 23 Dec
+ 2022 05:58:53 -0600
+From:   Nava kishore Manne <nava.kishore.manne@amd.com>
+To:     <michal.simek@xilinx.com>, <mdf@kernel.org>, <hao.wu@intel.com>,
+        <yilun.xu@intel.com>, <trix@redhat.com>, <ronak.jain@xilinx.com>,
+        <gregkh@linuxfoundation.org>, <tanmay.shah@xilinx.com>,
+        <ben.levinsky@amd.com>, <harsha.harsha@xilinx.com>,
+        <rajan.vaja@xilinx.com>, <nava.kishore.manne@amd.com>,
+        <mathieu.poirier@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>
+Subject: [PATCH v4 0/2]Adds status interface for zynqmp-fpga
+Date:   Fri, 23 Dec 2022 17:28:48 +0530
+Message-ID: <20221223115850.2572573-1-nava.kishore.manne@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C970:EE_|BL1PR12MB5945:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f763756-2494-4335-3582-08dae4dd1104
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l89YQ7MprlMeVB9TDvFzgZfxz/KBfajLDnBIpXwxBxVE6ZwXvZ2PaQ3GMz18H0nNtGx/I2WfLL6uoP9cyAAcXYqkYWaYkan0oxg0ErznJi+XYnUAi7PjoLvN2ghOklR+u2lJcIv+eLb31wA5sG6ibrwe7dP9QtGXFxVjPZSgTapr261Sb6X3hwYviIUu2204fFBnC5Ql+wVueIok9tS7btlek6haK/+N9ZMNPdCY/61wlQaFVWJgh4N876VAQXGMRgXjFSPy+MMQ20Q5J13+l3eZDlYbtGJa55tuoSo1pwxujqF5ke1MboBJXjrdqRdkTdRdEInQp/RPEzO5FZL03xFuXoa4bUAiFAndgvE+R/mt/SI01i2hd40AjWCAKtZ9GoQf6A5CdatvEAhs4N8s+CuFi0VZ5+3NZVWKMb4qqKHxko2BEU6zewFM8CFvA6ijVdyAUQblsv6v5IQhVDrIrI1uJFAOF6Yxpz2u371gwz8wZGN3btU7/QhySEPGjSZRwUTqycKann/fN2hqHnIux20NZgH2uLdn8kccJvafzrGgLXpNjOQEQ26552mSypxu83BZFhtYW44IfFeS81PF6VrvZa5yRIzxW0WSKJvdIei8TTGJwiM95oGWn1QLOV2jo6JlJHXyQeEFkkxBlCUzcby3T5cfRgt0loGY9zk3d4oobnrKzlwE1xNWLguqXjY4aBRKKK1+xpgGhPpsPZffjhqnHz5goi3tsonaDz3JBfs86z0wGKqtALw7zDKQm6WYz8W72JrHwFswwQ2RFFWy5eSDYEHFVQPmJEDNQ0/gQ6LZ1xGNIRsA+1GwO3IBTfmEsGGceEDnXFHr6lgMhPv6RA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(396003)(136003)(451199015)(36840700001)(40470700004)(46966006)(336012)(47076005)(186003)(41300700001)(316002)(40460700003)(8936002)(8676002)(2616005)(110136005)(16526019)(36756003)(70206006)(70586007)(1076003)(81166007)(82310400005)(356005)(921005)(36860700001)(86362001)(4744005)(5660300002)(40480700001)(82740400003)(103116003)(426003)(2906002)(966005)(478600001)(6666004)(26005)(2101003)(83996005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2022 11:58:54.9646
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f763756-2494-4335-3582-08dae4dd1104
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C970.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5945
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+Adds status interface for zynqmp-fpga, It's a read only interface
+which allows the user to get the Programmable Logic(PL) status.
+ -Device Initialization error.
+ -Device internal signal error.
+ -All I/Os are placed in High-Z state.
+ -Device start-up sequence error.
+ -Firmware error.
 
+For more details refer the ug570.
+https://docs.xilinx.com/v/u/en-US/ug570-ultrascale-configuration
 
-On Wed, 21 Dec 2022, Marco Pagani wrote:
+Nava kishore Manne (2):
+  firmware: xilinx: Add pm api function for PL config reg readback
+  fpga: zynqmp-fpga: Adds status interface
 
->
-> On 2022-12-21 18:26, Marco Pagani wrote:
->>
->>
->> On 2022-12-20 18:09, Andy Shevchenko wrote:
->>> On Tue, Dec 20, 2022 at 08:36:52AM -0800, matthew.gerlach@linux.intel.com wrote:
->>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>
->>>> Add a Device Feature List (DFL) bus driver for the Altera
->>>> 16550 implementation of UART.
->>>
->>> In general the code here looks good to me, but one thing to discuss due to
->>> comment to the previous patch(es).
->>>
->>> ...
->>>
->>>> +	u64 *p;
->>>> +
->>>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
->>>> +	if (!p)
->>>> +		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
->>>> +
->>>> +	p++;
->>>> +	uart->port.uartclk = *p;
->>>
->>> So, here and the below is using always the second u64 from the returned data.
->>> Does it mean:
->>> - we always skip the first u64 from the returned buffer and hence... (see below)
->>> - we may actually return the second u64 as a plain number (not a pointer) from
->>>   (an additional?) API? In such case we would not need to take care about this
->>>   p++; lines here and there.
->>> - we have fixed length of the data, returned by find_param(), i.e. 2 u64 words?
->>>
->>
->> I also had the impression that this method of getting and incrementing a pointer
->> to the beginning of the parameter block is a bit more error-prone than necessary.
->> Since parameter blocks are now standardized, wouldn't be easier and safer to wrap
->> the access logic into a helper function like:
->>
->> u16 dfh_get_param_data(struct dfl_device *dfl_dev, u16 param_id, u64 *data)
->>
->> that directly provides a copy of the parameter's data into a pointer provided by
->> the caller and returns the parameter version or an error if not found?
->
-> Please ignore the last part of my reply. The diagram in the documentation made
-> me think that parameter data are always 64-bit wide. Since the parameter data
-> "payload" size depends on the version and ID, an eventual helper function could
-> then return a pointer to the data payload and the version number to the caller.
+ drivers/firmware/xilinx/zynqmp.c     | 33 +++++++++++
+ drivers/fpga/zynqmp-fpga.c           | 87 ++++++++++++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h | 10 ++++
+ 3 files changed, 130 insertions(+)
 
-Certainly helper functions should be created to make accessing the actual 
-parameter easier and safer.
+-- 
+2.25.1
 
-Thanks for the feedback,
-Matthew Gerlach
-
->
-> Thanks,
-> Marco
->
->
->
