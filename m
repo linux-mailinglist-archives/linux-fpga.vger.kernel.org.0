@@ -2,105 +2,104 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079D46591C2
-	for <lists+linux-fpga@lfdr.de>; Thu, 29 Dec 2022 21:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9370165943E
+	for <lists+linux-fpga@lfdr.de>; Fri, 30 Dec 2022 03:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbiL2Uo4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 29 Dec 2022 15:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
+        id S234126AbiL3CoM (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 29 Dec 2022 21:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234179AbiL2UoF (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 29 Dec 2022 15:44:05 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104F6192BE;
-        Thu, 29 Dec 2022 12:41:21 -0800 (PST)
+        with ESMTP id S229473AbiL3CoL (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 29 Dec 2022 21:44:11 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48E12189;
+        Thu, 29 Dec 2022 18:44:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672346481; x=1703882481;
+  t=1672368250; x=1703904250;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8nFJfj1L6ajQNAz63881lx/5UMY+BMa5JW/kyHbHarg=;
-  b=GXETx/eOQ6wJQKFq8g8SPyslTtREOI3zGXXH+OO0OH0DbaYtDsX805PS
-   7sulWRPOSDE7BWDFodDcI0LYhH/hDlSFSqsn4O7iHVCkJ05fjGcHbQX2e
-   vrDwCBOnapOtGYhY/0QZVtpNfISs8AJ60hNG2iQ5xXKCWO4nt9dZX9XsD
-   pywvIcj5XGjSERekM6G63FG2Oo8WkOBnnVC+Jw6k68FXrqj64pCSnxD3t
-   MEp6i/IniP21dJjpC75+a+0A4IoVxOAiq3bHD7+aX0DH184oY69sDspcr
-   gObzAjwUTSxlLzCcwFhDtYm0TA/FfRi/tMLSnnArJC6jnzTA/+owyg5sm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="300801858"
-X-IronPort-AV: E=Sophos;i="5.96,285,1665471600"; 
-   d="scan'208";a="300801858"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 12:41:20 -0800
+  bh=W1cu+psy3UKnw7BrB+yN0znRmXff8NyPQPr+AbOVv7Y=;
+  b=PMfVaeZK3hfe0LDWvsE7cq6UKdR7FhiaiIiba+JbGH4Wi0tCQx8fl6wT
+   m/VlyWbS3UrvF98uZsfdUyHLbpP0Nno1tUnl2agFqtDVWZJS2KJWMvGnA
+   8F+sStnDXd8s6ZvN3ZjuuLWjySYlfXaPHqSp7QmamzW45aO/gZ++8DeD7
+   F4/dOSWt+6XzjHvzye5jE+6v4ASTIJSWt2Wgem76b72GkDSLv7EVJaozU
+   Zeyl2yYD5UYy5eSij8urwGyIBsjzlXWg5aFD3ddzW3CLnmNTVTA0ze6U9
+   oAFvRSprYpkqk77nYRKUUSBJ932lhVJUUflgnZE/5Y2kotdPUTiUITyOd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="385574965"
+X-IronPort-AV: E=Sophos;i="5.96,286,1665471600"; 
+   d="scan'208";a="385574965"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 18:44:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="716996496"
-X-IronPort-AV: E=Sophos;i="5.96,285,1665471600"; 
-   d="scan'208";a="716996496"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Dec 2022 12:41:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pAziD-001Kfc-0V;
-        Thu, 29 Dec 2022 22:41:13 +0200
-Date:   Thu, 29 Dec 2022 22:41:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
-        yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tianfei.zhang@intel.com,
-        corbet@lwn.net, gregkh@linuxfoundation.org,
-        linux-serial@vger.kernel.org, jirislaby@kernel.org,
-        geert+renesas@glider.be, niklas.soderlund+renesas@ragnatech.se,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
-        ilpo.jarvinen@linux.intel.com, marpagan@redhat.com,
-        bagasdotme@gmail.com
-Subject: Re: [PATCH v8 3/4] fpga: dfl: add basic support for DFHv1
-Message-ID: <Y637aBTrbRloUtvD@smile.fi.intel.com>
-References: <20221228181624.1793433-1-matthew.gerlach@linux.intel.com>
- <20221228181624.1793433-4-matthew.gerlach@linux.intel.com>
- <628c125a-5a84-e1bd-7724-2637315cc35e@redhat.com>
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="796120600"
+X-IronPort-AV: E=Sophos;i="5.96,286,1665471600"; 
+   d="scan'208";a="796120600"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Dec 2022 18:44:07 -0800
+Date:   Fri, 30 Dec 2022 10:34:00 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     Zheng Yongjun <zhengyongjun3@huawei.com>, mdf@kernel.org,
+        hao.wu@intel.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, trix@redhat.com
+Subject: Re: [PATCH] fpga: stratix10-soc: Fix return value check in
+ s10_ops_write_init()
+Message-ID: <Y65OGF4UPnjFOutm@yilunxu-OptiPlex-7050>
+References: <20221126071430.19540-1-zhengyongjun3@huawei.com>
+ <bdb1a752-ed47-1f9f-8a71-7b85e80bd547@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <628c125a-5a84-e1bd-7724-2637315cc35e@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <bdb1a752-ed47-1f9f-8a71-7b85e80bd547@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 08:18:03AM -0800, Tom Rix wrote:
-> On 12/28/22 10:16 AM, matthew.gerlach@linux.intel.com wrote:
+On 2022-11-28 at 17:26:23 -0800, Russ Weight wrote:
+> 
+> 
+> On 11/25/22 23:14, Zheng Yongjun wrote:
+> > In case of error, the function stratix10_svc_allocate_memory()
+> > returns ERR_PTR() and never returns NULL. The NULL test in the
+> > return value check should be replaced with IS_ERR().
+> >
+> > Fixes: e7eef1d7633a ("fpga: add intel stratix10 soc fpga manager driver")
+> 
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
 
-...
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-> >   struct dfl_feature_info {
-> >   	u16 fid;
-> >   	u8 revision;
-> > +	u8 dfh_version;
-> >   	struct resource mmio_res;
-> >   	void __iomem *ioaddr;
-> >   	struct list_head node;
-> >   	unsigned int irq_base;
-> >   	unsigned int nr_irqs;
-> > +	unsigned int param_size;
-> > +	u64 params[];
-> u64 *params
+Applied to for-6.2 and Cc: stable@vger.kernel.org
 
-This will break the overflow.h macros, no?
-Besides that it will break the code for sure as it's not an equivalent.
-
-> >   };
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> > ---
+> >  drivers/fpga/stratix10-soc.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+> > index 357cea58ec98..f7f01982a512 100644
+> > --- a/drivers/fpga/stratix10-soc.c
+> > +++ b/drivers/fpga/stratix10-soc.c
+> > @@ -213,9 +213,9 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
+> >  	/* Allocate buffers from the service layer's pool. */
+> >  	for (i = 0; i < NUM_SVC_BUFS; i++) {
+> >  		kbuf = stratix10_svc_allocate_memory(priv->chan, SVC_BUF_SIZE);
+> > -		if (!kbuf) {
+> > +		if (IS_ERR(kbuf)) {
+> >  			s10_free_buffers(mgr);
+> > -			ret = -ENOMEM;
+> > +			ret = PTR_ERR(kbuf);
+> >  			goto init_done;
+> >  		}
+> >
+> > --
+> > 2.17.1
+> >
+> 
