@@ -2,63 +2,63 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716C465B67B
-	for <lists+linux-fpga@lfdr.de>; Mon,  2 Jan 2023 19:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F10165B693
+	for <lists+linux-fpga@lfdr.de>; Mon,  2 Jan 2023 19:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236345AbjABSJc (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 2 Jan 2023 13:09:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S231454AbjABSYi (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 2 Jan 2023 13:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236324AbjABSJa (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 2 Jan 2023 13:09:30 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3EBA464;
-        Mon,  2 Jan 2023 10:09:29 -0800 (PST)
+        with ESMTP id S229447AbjABSYh (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 2 Jan 2023 13:24:37 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD3FAE61;
+        Mon,  2 Jan 2023 10:24:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672682969; x=1704218969;
+  t=1672683876; x=1704219876;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=u0cKWq5UhALwaWgyRXoKx+AMTrECSa5KGHsicEUKVqU=;
-  b=ZzyH9Hyu9pwVzzKnwpCVHaEe1zppWmCNHqz9bz+RsMLVqlh9a/TD+DlR
-   2Dzij87CpvlxaB13RhVrZksC9OynJdnh2J2cCINGj9XRRt9bKPMymzx1H
-   qvPsr2AlJvfpDaOOIBYsPkIhethifL6jy+oq4LqHSCmNkR9EFvbIw/Nmu
-   ksxZfgx1KcLmA1xqbKISCi5m9b1Fy8GFcvn6xax+2bwUpBL6KRb/9w42E
-   47xFxgP6Nbndkv+HB95HRU1ZjEyvYdHFmE1Fnz67H/+A6G58bhlf9YVR1
-   1wpocqfr1cmfuBKrTj45oBgIyfnocbJuQLuVqVcHKTkjc00wGvS362jNQ
+  bh=FYxGH9Ph+n77uzV1dLGl69MdPA8nU2VvfHoq8OrT4zU=;
+  b=NEnzzPPeBeFDHVp4mhDJ21tdaasbz5M+pSBNBOkaD8uLYVhyarN+iC5Y
+   GHNnmcAQr83thw7LyJQbmmOhqGgN3D/5jyaSx5BhBxoNhPWu/aBm2jXUc
+   2ZZjxZl2qtYslZoXEAvZDqAu/PyxQS1h5Y8v42GGztJXDk11maZuci8b+
+   DpN50FGbzhOZXI+wCd3FnHgV0LkIGT7bslIt11OjCdn1pnZORNu7LVZLc
+   b0YHzerMqw6H52oE2sqv56M8wcObDGJxoyk2A5HeD6s5eCDbKCRkX1q9c
+   aKkoZAS2gy2w6BHJBrH2Qa/VZdzkUSrRaUniGD49j+pPCwlLan+HnvQfy
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="323515068"
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="301898999"
 X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
-   d="scan'208";a="323515068"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 10:09:29 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="828629888"
+   d="scan'208";a="301898999"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 10:24:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="723029911"
 X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
-   d="scan'208";a="828629888"
+   d="scan'208";a="723029911"
 Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 10:09:25 -0800
-Date:   Mon, 2 Jan 2023 10:09:45 -0800 (PST)
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 10:24:35 -0800
+Date:   Mon, 2 Jan 2023 10:25:00 -0800 (PST)
 From:   matthew.gerlach@linux.intel.com
 X-X-Sender: mgerlach@rhweight-WRK1
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     Tom Rix <trix@redhat.com>, hao.wu@intel.com, yilun.xu@intel.com,
-        russell.h.weight@intel.com, basheer.ahmed.muddebihal@intel.com,
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
         mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         tianfei.zhang@intel.com, corbet@lwn.net,
         gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
         jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
         niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
         johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
         marpagan@redhat.com, bagasdotme@gmail.com
 Subject: Re: [PATCH v8 3/4] fpga: dfl: add basic support for DFHv1
-In-Reply-To: <Y7MUOQ/X/ls5/+RP@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2301020955550.2536944@rhweight-WRK1>
-References: <20221228181624.1793433-1-matthew.gerlach@linux.intel.com> <20221228181624.1793433-4-matthew.gerlach@linux.intel.com> <628c125a-5a84-e1bd-7724-2637315cc35e@redhat.com> <Y637aBTrbRloUtvD@smile.fi.intel.com> <alpine.DEB.2.22.394.2301020852500.2516029@rhweight-WRK1>
- <Y7MT6e8c2VLCjZuw@smile.fi.intel.com> <Y7MUOQ/X/ls5/+RP@smile.fi.intel.com>
+In-Reply-To: <Y66uB8/xj+YF4oEr@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2301021021350.2536944@rhweight-WRK1>
+References: <20221228181624.1793433-1-matthew.gerlach@linux.intel.com> <20221228181624.1793433-4-matthew.gerlach@linux.intel.com> <Y66uB8/xj+YF4oEr@yilunxu-OptiPlex-7050>
 User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: multipart/mixed; boundary="8323328-860723572-1672683901=:2536944"
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -68,50 +68,136 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-860723572-1672683901=:2536944
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 
 
-On Mon, 2 Jan 2023, Andy Shevchenko wrote:
 
-> On Mon, Jan 02, 2023 at 07:27:06PM +0200, Andy Shevchenko wrote:
->> On Mon, Jan 02, 2023 at 08:54:48AM -0800, matthew.gerlach@linux.intel.com wrote:
->>> On Thu, 29 Dec 2022, Andy Shevchenko wrote:
->>>> On Thu, Dec 29, 2022 at 08:18:03AM -0800, Tom Rix wrote:
->>>>> On 12/28/22 10:16 AM, matthew.gerlach@linux.intel.com wrote:
+On Fri, 30 Dec 2022, Xu Yilun wrote:
+
+> On 2022-12-28 at 10:16:23 -0800, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Version 1 of the Device Feature Header (DFH) definition adds
+>> functionality to the DFL bus.
+>>
+>> A DFHv1 header may have one or more parameter blocks that
+>> further describes the HW to SW.  Add support to the DFL bus
+>> to parse the MSI-X parameter.
+>>
+>> The location of a feature's register set is explicitly
+>> described in DFHv1 and can be relative to the base of the DFHv1
+>> or an absolute address.  Parse the location and pass the information
+>> to DFL driver.
+>>
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+>> ---
+>> v8: use struct_size() from overflow.h
+>>     add dfh_get_u64_param_vals()
 >
-> ...
->
->>>>>> +	u64 params[];
->>>>> u64 *params
->>
->>>> This will break the overflow.h macros, no?
->>>> Besides that it will break the code for sure as it's not an equivalent.
->>
->>> I don't understand how this will break the overflow.h macros. The definition
->>> of struct dfl_feature_info and all of its uses are in a single file, dfl.c.
->>
->> Hint: __must_be_array()
->>
->> As I said, the proposed change is not acceptable since it's not an equivalent.
->
-> Ah, you meant that there is no use of macros from overflow in the dfl.c?
-> IIRC we discussed that some of the code may make use of them, or am I
-> mistaken?
+> Could you help check my comments?
+> https://lore.kernel.org/linux-fpga/alpine.DEB.2.22.394.2212211421210.570436@rhweight-WRK1/T/#md86e3836130ebacd3c088f5c512ba741aac8a4d1
 
-There currently is one usage of struct_size() from overflow.h in dfl.c, 
-and my patch adds another usage of struct_size(). struct dfl_feature_info 
-ends with a trailing array of u64.
 
-I think the confusion is with struct dfl_feature and/or struct struct 
-dfl_device. Those structs don't end with a trailing array, and those 
-structs are not used with macros from overview.h.
+Sorry I missed your earlier comments. I have since responded to them 
+specificially.
+
+
+>
+> [...]
+>
+>>
+>> +static u64 *find_param(u64 *params, resource_size_t max, int param_id)
+>> +{
+>> +	u64 *end = params + max / sizeof(u64);
+>> +	u64 v, next;
+>> +
+>> +	while (params < end) {
+>> +		v = *params;
+>> +		if (param_id == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
+>> +			return params;
+>> +
+>> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+>> +		params += next;
+>> +		if (FIELD_GET(DFHv1_PARAM_HDR_NEXT_EOP, v))
+>> +			break;
+>> +	}
+>> +
+>> +	return NULL;
+>> +}
+>> +
+>> +/**
+>> + * dfh_find_param() - find parameter block for the given parameter id
+>> + * @dfl_dev: dfl device
+>> + * @param: id of dfl parameter
+>> + *
+>> + * Return: pointer to start of parameter block, NULL otherwise.
+>> + */
+>> +u64 *dfh_find_param(struct dfl_device *dfl_dev, int param_id)
+>> +{
+>> +	return find_param(dfl_dev->params, dfl_dev->param_size, param_id);
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfh_find_param);
+>
+> Didn't find where to use it?
+
+I understand. Don't export a function unless there is a comsumer for it.
+
+>
+>> +
+>> +/**
+>> + * dfh_get_u64_param_vals() - get array of u64 param values for given parameter id
+>
+> There is no rule to say one u64 for each property in the parameter block.
+> So I don't see the reason for DFL core to provide u64 array for the API,
+> And the size of the parameter block is decided by HW, why make the user
+> input the value?
+>
+> As we discussed before, dfl core doesn't try to look into the parameter
+> block. So please just provide the const void *data & data_size for drivers.
+> This is the most common way to represent a data block.
+
+I will move the parameter parsing helper function to the driver itself.
 
 Thanks for the feedback,
 Matthew Gerlach
 
 >
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+> Thanks,
+> Yilun
 >
+>> + * @dfl_dev: dfl device
+>> + * @param: id of dfl parameter
+>> + * @pval: location of parameter data destination
+>> + * @nvals: number of u64 elements of parameter data
+>> + *
+>> + * Return: pointer to start of parameter block, PTR_ERR otherwise
+>> + */
+>> +u64 *dfh_get_u64_param_vals(struct dfl_device *dfl_dev, int param_id, u64 *pval, int nvals)
+>> +{
+>> +	u64 *param = find_param(dfl_dev->params, dfl_dev->param_size, param_id);
+>> +	u64 next;
+>> +	int i;
+>> +
+>> +	if (!param)
+>> +		return ERR_PTR(-ENOENT);
+>> +
+>> +	next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, *param);
+>> +
+>> +	if (nvals >= next)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	for (i = 0; i < nvals; i++)
+>> +		*pval++ = param[i + 1];
+>> +
+>> +	return param;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfh_get_u64_param_vals);
+>> +
 >
->
+--8323328-860723572-1672683901=:2536944--
