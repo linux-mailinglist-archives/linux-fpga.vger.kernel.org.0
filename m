@@ -2,61 +2,64 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7717F65BFB2
-	for <lists+linux-fpga@lfdr.de>; Tue,  3 Jan 2023 13:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A0865C7BD
+	for <lists+linux-fpga@lfdr.de>; Tue,  3 Jan 2023 20:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237280AbjACMM3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 3 Jan 2023 07:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S233690AbjACTtg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 3 Jan 2023 14:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237343AbjACMMY (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 3 Jan 2023 07:12:24 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFCDFAEE;
-        Tue,  3 Jan 2023 04:12:23 -0800 (PST)
+        with ESMTP id S233130AbjACTte (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 3 Jan 2023 14:49:34 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4544EDEF9;
+        Tue,  3 Jan 2023 11:49:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672747943; x=1704283943;
+  t=1672775373; x=1704311373;
   h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=ypK3kprOdq+1u4Sc+7K9g6EUg4k4efMhRgGnMRZfCRI=;
-  b=f24OAfQJ9tg82p96YSFLHvq+H+xGGr3LcpLdonuGNArG0Hz7ucrtEFEH
-   acMp50HPWXyitZ/lc5EtuR0K7SzGF9ViGsWUvFcQS93NOG5T4yGNr1l79
-   /VGhQd589+oyWK9AZd+oTjsBzg8IzA6xVuLY5ldqNehwpbQ8G1yorG5dZ
-   fi5MBOYnGsXXKnTWR/qrwczfDifM1MIItAj04ZYZquEySZB31VnGeWZmD
-   8BMHaMgjoW9fq5ORUXitNsYYGQZtb2poMExGY0CM7lJSnSgcQ74+/S6TP
-   wsuvwmU9+cx/MvGYJR+cN9kZaJnzpgFwcacTyMGr2U44RLfoo5WI8eN0p
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="309416148"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="309416148"
+   references:mime-version;
+  bh=bIDOws5tUz92tzu0nSJr/AIN8r/xnDLdvwP+8eGsVh8=;
+  b=INudEYLMYdw7PLUunJ3fMahdmgDPuocWixrOxlEF7F+PBulf89XPn37K
+   +U/2XBkAUCJmOdJXskVknvIS5i594cSUIIFWsI1sHCTzCfvFMJbwKQaE6
+   7Iq0I1ZTQQtvWqjxO1/kYnYwDkH7bZfLZJ2n6ydyLsECBNlWeEJKuvBWa
+   dgO6JIaCTdSHVgBEH1klE6KYObUGrZLL81XcQOfWQJxuZYmuMH572xvCV
+   bAkyWsU7T3kknVgHsM8Ym7kLNLfuNjMGVVWD0Tsvk2kxKVfdW4gTNlNkG
+   54ieXZ/8Ov57OStNj5tyw3p2DbUtCDiii3ggbQmJpDL6xJEOZZTSOq2Vh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="348963674"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="348963674"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 04:12:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="654768987"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="654768987"
-Received: from pdaniel-mobl1.ger.corp.intel.com ([10.252.48.214])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 04:12:14 -0800
-Date:   Tue, 3 Jan 2023 14:12:12 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 11:49:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="654908255"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="654908255"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 11:49:32 -0800
+Date:   Tue, 3 Jan 2023 11:50:04 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
 To:     Xu Yilun <yilun.xu@intel.com>
-cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 08/10] fpga: m10bmc-sec: Differentiate rsu status from
- doorbell in csr map
-In-Reply-To: <Y7P2nu3Lg65kvGxH@yilunxu-OptiPlex-7050>
-Message-ID: <ae468081-32fb-97dc-a640-e9343468c751@linux.intel.com>
-References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com> <20221226175849.13056-9-ilpo.jarvinen@linux.intel.com> <Y65p0kEZjyVt2pgr@yilunxu-OptiPlex-7050> <6d9ccd20-2c13-e352-c9e9-804ea3dadf@linux.intel.com> <Y7P2nu3Lg65kvGxH@yilunxu-OptiPlex-7050>
+cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v7 3/4] fpga: dfl: add basic support for DFHv1
+In-Reply-To: <Y7OteZ2FuLtHfg5D@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2301031143420.4963@rhweight-WRK1>
+References: <20221220163652.499831-1-matthew.gerlach@linux.intel.com> <20221220163652.499831-4-matthew.gerlach@linux.intel.com> <Y6HqyjFkiUDeNmH1@smile.fi.intel.com> <alpine.DEB.2.22.394.2212211105490.570436@rhweight-WRK1> <Y6kR632DYwilj505@yilunxu-OptiPlex-7050>
+ <alpine.DEB.2.22.394.2212311237320.2138420@rhweight-WRK1> <Y7OteZ2FuLtHfg5D@yilunxu-OptiPlex-7050>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-200732233-1672739707=:1634"
-Content-ID: <4dcd9d7a-a35a-c3b0-c5c2-be74bd176cce@linux.intel.com>
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
@@ -67,172 +70,187 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-200732233-1672739707=:1634
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <be1c8dac-4cce-cb78-a5c7-4abdac509f9@linux.intel.com>
 
 On Tue, 3 Jan 2023, Xu Yilun wrote:
 
-> On 2022-12-30 at 12:23:18 +0200, Ilpo Järvinen wrote:
-> > On Fri, 30 Dec 2022, Xu Yilun wrote:
-> > 
-> > > On 2022-12-26 at 19:58:47 +0200, Ilpo Järvinen wrote:
-> > > > The rsu_status field moves from the doorbell register to the auth
-> > > > result register in the PMCI implementation of the MAX10 BMC. Refactor
-> > > > the sec update driver code to handle two distinct registers (rsu_status
-> > > > field was added into csr map already when it was introduced but it was
-> > > > unused until now).
-> > > > 
-> > > > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > > > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > > > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> > > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > > ---
-> > > >  drivers/fpga/intel-m10-bmc-sec-update.c | 68 ++++++++++++++++---------
-> > > >  include/linux/mfd/intel-m10-bmc.h       |  2 +-
-> > > >  2 files changed, 46 insertions(+), 24 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-> > > > index 6e58a463619c..1fe8b7ff594c 100644
-> > > > --- a/drivers/fpga/intel-m10-bmc-sec-update.c
-> > > > +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-> > > > @@ -251,7 +251,7 @@ static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
-> > > >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> > > >  	u32 auth_result;
-> > > >  
-> > > > -	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
-> > > > +	dev_err(sec->dev, "Doorbell: 0x%08x\n", doorbell);
-> > > >  
-> > > >  	if (!m10bmc_sys_read(sec->m10bmc, csr_map->auth_result, &auth_result))
-> > > >  		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
-> > > > @@ -279,6 +279,30 @@ static bool rsu_progress_busy(u32 progress)
-> > > >  		progress == RSU_PROG_PROGRAM_KEY_HASH);
-> > > >  }
-> > > >  
-> > > > +static int m10bmc_sec_progress_status(struct m10bmc_sec *sec, u32 *doorbell,
-> > > 
-> > > Please try to rename the parameters, to indicate u32 *doorbell is the
-> > > raw value from doorbell register, and u32 *progress & status are
-> > > software managed info.
-> > 
-> > I'll try to do that.
-> >  
-> > > > +				      u32 *progress, u32 *status)
-> > > > +{
-> > > > +	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> > > > +	u32 status_reg;
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, doorbell);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	if (csr_map->doorbell != csr_map->rsu_status) {
-> > > 
-> > > I prefer not to complicate the csr map filling in intel-m10-bmc, just invalid
-> > > the addr value if there is no such register for the board.
-> > 
-> > I'm sorry but I didn't get the meaning of your comment. Could you please 
-> > rephrase?
-> > 
-> > My guess is that you might have tried to say that if there's no register 
-> > for rsu_status, mark it not existing in csr map? But the field exists in 
-> 
-> Yes, this is what I mean, but I see I was wrong.
-> 
-> > both cases, it's just part of a different register (doorbell or 
-> 
-> I was thinking there was no AUTH_RESULT for N3000, sorry for the
-> mistake.
-> 
-> > auth_result) so if I use that kind of "register doesn't exist" condition, 
-> > it would apply to both cases.
-> > 
-> > > > @@ -330,21 +350,20 @@ static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
-> > > >  	if (ret)
-> > > >  		return FW_UPLOAD_ERR_RW_ERROR;
-> > > >  
-> > > > -	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> > > > -				       csr_map->base + csr_map->doorbell,
-> > > > -				       doorbell,
-> > > > -				       rsu_start_done(doorbell),
-> > > > -				       NIOS_HANDSHAKE_INTERVAL_US,
-> > > > -				       NIOS_HANDSHAKE_TIMEOUT_US);
-> > > > +	ret = read_poll_timeout(m10bmc_sec_progress_status, err,
-> > > > +				err < 0 || rsu_start_done(doorbell, progress, status),
-> > > > +				NIOS_HANDSHAKE_INTERVAL_US,
-> > > > +				NIOS_HANDSHAKE_TIMEOUT_US,
-> > > > +				false,
-> > > > +				sec, &doorbell, &progress, &status);
-> > > >  
-> > > >  	if (ret == -ETIMEDOUT) {
-> > > >  		log_error_regs(sec, doorbell);
-> > > >  		return FW_UPLOAD_ERR_TIMEOUT;
-> > > > -	} else if (ret) {
-> > > > +	} else if (err) {
-> > > >  		return FW_UPLOAD_ERR_RW_ERROR;
-> > > >  	}
-> > > >  
-> > > > -	status = rsu_stat(doorbell);
-> > > >  	if (status == RSU_STAT_WEAROUT) {
-> > > >  		dev_warn(sec->dev, "Excessive flash update count detected\n");
-> > > >  		return FW_UPLOAD_ERR_WEAROUT;
-> > > > @@ -393,7 +412,7 @@ static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
-> > > >  static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
-> > > >  {
-> > > >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> > > > -	u32 doorbell;
-> > > > +	u32 doorbell, status;
-> > > >  	int ret;
-> > > >  
-> > > >  	ret = regmap_update_bits(sec->m10bmc->regmap,
-> > > > @@ -418,7 +437,10 @@ static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
-> > > >  		return FW_UPLOAD_ERR_RW_ERROR;
-> > > >  	}
-> > > >  
-> > > > -	if (!rsu_status_ok(rsu_stat(doorbell))) {
-> > > > +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->rsu_status, &status);
-> > > 
-> > > Same as above, please just handle the detailed register definition 
-> > > differences in this driver, not in csr map.
-> > 
-> > Earlier you were having the exactly opposite opinion:
-> > 
-> > https://lore.kernel.org/linux-fpga/20221108144305.45424-1-ilpo.jarvinen@linux.intel.com/T/#me2d20e60d7feeafcdeeab4d58bd82787acf3ada9
-> 
-> Ah, I'm sorry. I was thinking just move one register to another addr at
-> that time. I was not aware that actually the detailed register field
-> definitions are changed in same registers.
-> 
-> > 
-> > So which way you want it? Should I have the board types here in the sec 
-> > update drivers as a second layer of differentiation or not?
-> 
-> I think the different register field definitions for the same registers
-> are specific to secure driver. So please differentiate them in secure
-> driver.
-> 
-> But with the change, enum m10bmc_type could still be removed, is it?
+> On 2022-12-31 at 12:46:28 -0800, matthew.gerlach@linux.intel.com wrote:
+>>
+>>
+>> On Mon, 26 Dec 2022, Xu Yilun wrote:
+>>
+>>> On 2022-12-21 at 11:14:59 -0800, matthew.gerlach@linux.intel.com wrote:
+>>>>
+>>>>
+>>>> On Tue, 20 Dec 2022, Andy Shevchenko wrote:
+>>>>
+>>>>> On Tue, Dec 20, 2022 at 08:36:51AM -0800, matthew.gerlach@linux.intel.com wrote:
+>>>>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>>>>>
+>>>>>> Version 1 of the Device Feature Header (DFH) definition adds
+>>>>>> functionality to the DFL bus.
+>>>>>>
+>>>>>> A DFHv1 header may have one or more parameter blocks that
+>>>>>> further describes the HW to SW.  Add support to the DFL bus
+>>>>>> to parse the MSI-X parameter.
+>>>>>>
+>>>>>> The location of a feature's register set is explicitly
+>>>>>> described in DFHv1 and can be relative to the base of the DFHv1
+>>>>>> or an absolute address.  Parse the location and pass the information
+>>>>>> to DFL driver.
+>>>>>
+>>>>> ...
+>>>>>
+>>>>>> +/**
+>>>>>> + * dfh_find_param() - find data for the given parameter id
+>>>>>> + * @dfl_dev: dfl device
+>>>>>> + * @param: id of dfl parameter
+>>>>>> + *
+>>>>>> + * Return: pointer to parameter header on success, NULL otherwise.
+>>>>>
+>>>>> header is a bit confusing here, does it mean we give and ID and we got
+>>>>> something more than just a data as summary above suggests?
+>>>>
+>>>> Yes, the summary is not correct.  It should say "find the parameter block
+>>>> for the given parameter id".
+>>>>
+>>>>>
+>>>>> In such case summary and this text should clarify what exactly we get
+>>>>> and layout of the data. Since this is a pointer, who is responsible of
+>>>>> checking out-of-boundary accesses? For instance, if the parameters are
+>>>>> variadic by length the length should be returned as well. Otherwise it
+>>>>> should be specified as a constant somewhere, right?
+>>>>
+>>>> The parameter header has the next/size field; so the caller of
+>>>> dfh_find_param should perform boundary checking as part of interpreting the
+>>>> parameter data.  I think a function to perform this checking and data
+>>>> interpretation would help here.
+>>>
+>>> It is better the DFL core provides the size of the parameter block, just
+>>> in this API. It provides the pointer and should be ensured the memory
+>>> for the pointer be correctly understood.
+>>
+>> Ok, how about the following API for dfh_find_param?
+>>
+>> /**
+>>  * dfh_find_param() - find parameter block for the given parameter id
+>>  * @dfl_dev: dfl device
+>>  * @param_id: id of dfl parameter
+>>  * @pver: destination to store parameter version
+>>  * @pcount: destination to store size of parameter data in u64 bit words
 >
-> And having the register addr differentiations in m10bmc mfd driver is good to
-> me, cause with a different board type, the register offsets for all subdevs
-> are often globally re-arranged. But I don't want the HW change within a
-> single IP block been specified in m10bmc mfd driver.
+> The size of the parameter data could just be number of bytes (size_t is
+> ok?), this is the most common way for a data block.
+>
+>>  *
+>>  * Return: pointer to start of parameter data, PTR_ERR otherwise.
+>>  */
+>> void *dfh_find_param(struct dfl_device *dfl_dev, int param_id, unsigned
+>> *pver, unsigned *pcount)
+>
+> For now no driver is caring about parameter version, so we could just have
+> a simplified API without version, like:
+>
+>  void *dfh_find_param(struct dfl_device *dfl_dev, int param_id, size_t *psize)
 
-Okay. I'll add ops for it then:
+Using size_t and the simplified API you suggest is fine with me.
 
-struct m10bmc_sec_ops {
-       int (*rsu_status)(struct m10bmc_sec *sec);
-};
+>
+> I assume this simplified API should be most commonly used by drivers,
+> changing the layout of the parameter block is not such a good idea to
+> me, try best not to do so.
+>
+> If more property is to be added without changing the existing fields,
+> drivers could be aware of this just by the parameter size?
+>
+>
+> Anyway, if version is really needed in future, create another API like:
+>
+>  void *dfh_find_param_version(struct dfl_device *dfl_dev, int param_id,
+>  			       size_t *psize, unsigned int *pver)
 
-Type enum won't be necessary. Those ops will be useful for other things 
-too which are not included to this patch set.
+Sure, we can add API when it is actually used, as you point out, the 
+structure of a particular paramater should not change very often.
 
--- 
- i.
---8323329-200732233-1672739707=:1634--
+>
+> Thanks,
+> Yilun
+>
+>>
+>>
+>>>
+>>>>
+>>>>>
+>>>>>> + */
+>>>>>> +u64 *dfh_find_param(struct dfl_device *dfl_dev, int param_id)
+>>>>>> +{
+>>>>>> +	return find_param(dfl_dev->params, dfl_dev->param_size, param_id);
+>>>>>> +}
+>>>>>> +EXPORT_SYMBOL_GPL(dfh_find_param);
+>>>>>
+>>>>> ...
+>>>>>
+>>>>>> +	finfo = kzalloc(sizeof(*finfo) + dfh_psize, GFP_KERNEL);
+>>>>>
+>>>>> It sounds like a candidate for struct_size() from overflow.h.
+>>>>> I.o.w. check that header and come up with the best what can
+>>>>> suit your case.
+>>>>
+>>>> 	finfo = kzalloc(struct_size(finfo, params, dfh_psize/sizeof(u64)),
+>>>> GFP_KERNEL);
+>>>>
+>>>> Does seem better.
+>>>
+>>> How about we change the dfh_get_psize() to like dfh_get_pcount(), so we
+>>> don't have to multiply & divide back and forth.
+>>
+>> We need the size in bytes for calls to kmemdup, devm_kmemdup, and
+>
+> When the count of u64 is caculated, you could still convert it to size of
+> bytes when needed.
+
+We need to use number of bytes more often than than count of u64.  How 
+would calculating bytes from counts of u64 three times be better than 
+calculating counts of u64 once, like it is now?
+
+Thanks,
+Matthew Gerlach
+
+>
+>> memcpy_fromio, but we only need to divide once here.
+>>
+>>
+>>>
+>>> Or we just use size_add()?
+>>
+>> I think using struct_size is better because the params member of struct
+>> dfl_feature_info is a trailing flexible array.
+>
+> That's OK.
+>
+>>
+>> Thanks for the feedback,
+>> Matthew
+>>
+>>
+>>>
+>>> Thanks,
+>>> Yilun
+>>>
+>>>>
+>>>> Thanks for the suggestion,
+>>>> Matthew Gerlach
+>>>>
+>>>>
+>>>>>
+>>>>>>  	if (!finfo)
+>>>>>>  		return -ENOMEM;
+>>>>>
+>>>>> --
+>>>>> With Best Regards,
+>>>>> Andy Shevchenko
+>>>>>
+>>>>>
+>>>>>
+>>>
+>
