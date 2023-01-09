@@ -2,115 +2,140 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2DB661EAD
-	for <lists+linux-fpga@lfdr.de>; Mon,  9 Jan 2023 07:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E19D661EE2
+	for <lists+linux-fpga@lfdr.de>; Mon,  9 Jan 2023 07:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbjAIGXh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 9 Jan 2023 01:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S233619AbjAIGzF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 9 Jan 2023 01:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjAIGXg (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 9 Jan 2023 01:23:36 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F366ABE13;
-        Sun,  8 Jan 2023 22:23:35 -0800 (PST)
+        with ESMTP id S233865AbjAIGzB (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 9 Jan 2023 01:55:01 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8969E1275B;
+        Sun,  8 Jan 2023 22:54:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673245415; x=1704781415;
+  t=1673247299; x=1704783299;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=99wwgki3vDnEuMvkqt8gVpIBfAzSTXbaAFnjD0Am8uM=;
-  b=TXG/k2G1zpRCIiXnwkuyIceCGcUQ+ZtORd2/8z91bG5M28QxdhUgtPrO
-   NYKDCfzdU7GegSGOte3dKTFspB5MJr9Qod/VFMwb0SYfm8M/GGTOOwa42
-   6gtACUS52Wz0Dk23hsfZKU99uocLhQUeEBqw6xshDPdf/X+aJbAh4IiDI
-   YpUvvJbvM6A+mbXkrxwEBSwk5vSqB7nBhdS818P5Jn1LFmCkYr8HTD2Ux
-   qUQFSgH0cqSBzHRo2RPnTWQQlrsZfih9DGja8VYlDGa9A7EpLESxWK4XV
-   H2UgTouRSXpTdmSp3VhSES2qP2PVr82xS2+uq/w6lekm6FmKGGCMx708Z
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="302501575"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=h14Ky+gxZkW2WnGWN9E+VGFINdCzmMuf5XUAHnYvEro=;
+  b=GnU4WhmCVCAIUKxylujt/9qepmSppyZX756eF7tK+zg2kVo784y9E2YT
+   nUSgyMnUll1FW/4MsKJs7rliOI0ys9U1Gh33dTTG+t5nWVomKF/QweWOY
+   cgGMqTFGubnZDd3/l0bVirAKi6aMFBNrS+gws8CKMTc1jqkYR+WZBiu3P
+   g9a1xoEJqy2JiR4MtZU1zBq1oWTW5OlElvTRUUeYadLYWWyYCNs25U6se
+   XEpzi/1WxjNt0YzoBrtMXTj4u3zFglKnacF9kYZTGdGkChEJZQWBOFLsc
+   7LNX7ipBMhBzAO3nLo+7F/JywQmCR2/I2nYoIpbDg9SsdiTPlyUav2jht
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="321509833"
 X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="302501575"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2023 22:23:35 -0800
+   d="scan'208";a="321509833"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2023 22:54:59 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="649919372"
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="798914008"
 X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="649919372"
+   d="scan'208";a="798914008"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga007.jf.intel.com with ESMTP; 08 Jan 2023 22:23:32 -0800
-Date:   Mon, 9 Jan 2023 14:13:16 +0800
+  by fmsmga001.fm.intel.com with ESMTP; 08 Jan 2023 22:54:53 -0800
+Date:   Mon, 9 Jan 2023 14:44:37 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     linux-fpga@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v5 0/3] Reliability improvements for Microchip MPF FPGA
- manager
-Message-ID: <Y7uwfCPAl15Db8G6@yilunxu-OptiPlex-7050>
-References: <20221230092922.18822-1-i.bornyakov@metrotek.ru>
- <20230109054742.ola6gafnn2ikyuqa@x260>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v9 3/4] fpga: dfl: add basic support for DFHv1
+Message-ID: <Y7u31S8aba1L+VeA@yilunxu-OptiPlex-7050>
+References: <20230104232253.24743-1-matthew.gerlach@linux.intel.com>
+ <20230104232253.24743-4-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230109054742.ola6gafnn2ikyuqa@x260>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230104232253.24743-4-matthew.gerlach@linux.intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2023-01-09 at 08:47:42 +0300, Ivan Bornyakov wrote:
-> On Fri, Dec 30, 2022 at 12:29:19PM +0300, Ivan Bornyakov wrote:
-> > A couple of reliability improvements for Microchip Polarfire FPGA
-> > manager:
-> >  * move SPI I/O buffers out of stack
-> >  * rewrite status polling routine in a time measurable way
-> > 
-> > Also improve mpf_ops_write() code readability by separating single data
-> > frame writing routine.
-> > 
-> > ChangeLog:
-> >   v1:
-> > [https://lore.kernel.org/linux-fpga/20221223123854.8023-1-i.bornyakov@metrotek.ru/]
-> >   v2:
-> >     * split into 3 distinct patches
-> > [https://lore.kernel.org/linux-fpga/20221226142326.8111-1-i.bornyakov@metrotek.ru/]
-> >   v3:
-> >     * fix polling stop condition in mpf_poll_status() as Ilpo suggested.
-> > [https://lore.kernel.org/linux-fpga/20221227100450.2257-1-i.bornyakov@metrotek.ru/]
-> >   v4:
-> >     * more verbose comment for mpf_poll_status()
-> > [https://lore.kernel.org/linux-fpga/20221229104604.2496-1-i.bornyakov@metrotek.ru/]
-> >   v5:
-> >     * revord "fpga: microchip-spi: move SPI I/O buffers out of stack"
-> >       commit message "Use allocated buffers" -> "Use cacheline aligned
-> >       buffers"
-> >     * drop __aligned(ARCH_KMALLOC_MINALIGN) attribute of struct mpf_priv
-> >       member "rx". tx and rx are used synchronously by dma, they could
-> >       share a cacheline.
-> > 
-> > Ivan Bornyakov (3):
-> >   fpga: microchip-spi: move SPI I/O buffers out of stack
-> >   fpga: microchip-spi: rewrite status polling in a time measurable way
-> >   fpga: microchip-spi: separate data frame write routine
-> > 
-> >  drivers/fpga/microchip-spi.c | 145 +++++++++++++++++++----------------
-> >  1 file changed, 79 insertions(+), 66 deletions(-)
-> > 
-> > -- 
-> > 2.38.2
-> > 
+On 2023-01-04 at 15:22:52 -0800, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> Friendly ping.
+> Version 1 of the Device Feature Header (DFH) definition adds
+> functionality to the Device Feature List (DFL) bus.
 > 
+> A DFHv1 header may have one or more parameter blocks that
+> further describes the HW to SW. Add support to the DFL bus
+> to parse the MSI-X parameter.
+> 
+> The location of a feature's register set is explicitly
+> described in DFHv1 and can be relative to the base of the DFHv1
+> or an absolute address. Parse the location and pass the information
+> to DFL driver.
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+>
 
-Patch #1 is good to me now. And applied this series to for-next
+[...]
+  
+> +static u64 *find_param(u64 *params, resource_size_t max, int param_id)
+> +{
+> +	u64 *end = params + max / sizeof(u64);
+> +	u64 v, next;
+> +
+> +	while (params < end) {
+> +		v = *params;
+> +		if (param_id == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
+> +			return params;
+> +
+> +		if (FIELD_GET(DFHv1_PARAM_HDR_NEXT_EOP, v))
+> +			break;
+> +
+> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+> +		params += next;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +/**
+> + * dfh_find_param() - find parameter block for the given parameter id
+> + * @dfl_dev: dfl device
+> + * @param_id: id of dfl parameter
+> + * @pcount: destination to store size of parameter data in u64 bit words
+
+As I mentioned before, could the size of the parameter data just be number
+of bytes? This is the most common way for a data block.
 
 Thanks,
 Yilun
+
+> + *
+> + * Return: pointer to start of parameter data, PTR_ERR otherwise.
+> + */
+> +void *dfh_find_param(struct dfl_device *dfl_dev, int param_id, size_t *pcount)
+> +{
+> +	u64 *phdr = find_param(dfl_dev->params, dfl_dev->param_size, param_id);
+> +
+> +	if (!phdr)
+> +		return ERR_PTR(-ENOENT);
+> +
+> +	if (pcount)
+> +		*pcount = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, *phdr) - 1;
+> +
+> +	return phdr + 1;
+> +}
+> +EXPORT_SYMBOL_GPL(dfh_find_param);
