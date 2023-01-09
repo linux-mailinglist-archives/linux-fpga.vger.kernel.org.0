@@ -2,297 +2,227 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935F0662B70
-	for <lists+linux-fpga@lfdr.de>; Mon,  9 Jan 2023 17:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDCD662D14
+	for <lists+linux-fpga@lfdr.de>; Mon,  9 Jan 2023 18:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbjAIQkn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 9 Jan 2023 11:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
+        id S233499AbjAIRns (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 9 Jan 2023 12:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233666AbjAIQk0 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 9 Jan 2023 11:40:26 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553BF1C928;
-        Mon,  9 Jan 2023 08:40:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673282425; x=1704818425;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=bKBjn2mW2FE+vH8pSgLn7FxbJRs046nNQ3GlEkmoTvE=;
-  b=NjTZcnCVzywAD7VE6jgSJncva1LZNWL6KpWx27CapbApVnI/LtJ8rG7j
-   KuQoHC1NGvrFOKWPgvtkuwsUrXuJo3/amlHCcSQSoLSIgn6pQSCPf3AxU
-   zUi+KbkPEkKSwOzf00lQqCrWsZ6V2mqehQIa1nain/f/pJyLknLNXaJSj
-   VNG9AX6PMDN6jSjBQawStMxwVwEp60SoXuIpMTyQxVufOQo6LME6fC434
-   B/RRIRh7WZOpJlBuqLUb446N4fuyPVhgz4ogf/EFWnXesBcGx9UvoQT9S
-   9oioCY+XcB+GGF4CgA49AGnrYkX9yDqJMWmCEIuWydudDKMBwlRPUCjNI
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="306434898"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="306434898"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 08:40:05 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="634271084"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="634271084"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 08:40:05 -0800
-Date:   Mon, 9 Jan 2023 08:40:37 -0800 (PST)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Tom Rix <trix@redhat.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tianfei.zhang@intel.com,
-        corbet@lwn.net, gregkh@linuxfoundation.org,
-        linux-serial@vger.kernel.org, jirislaby@kernel.org,
-        geert+renesas@glider.be, andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v9 1/4] Documentation: fpga: dfl: Add documentation for
- DFHv1
-In-Reply-To: <4e7f84ff-8bab-019d-3858-4c545834a354@redhat.com>
-Message-ID: <alpine.DEB.2.22.394.2301090840020.211949@rhweight-WRK1>
-References: <20230104232253.24743-1-matthew.gerlach@linux.intel.com> <20230104232253.24743-2-matthew.gerlach@linux.intel.com> <4e7f84ff-8bab-019d-3858-4c545834a354@redhat.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S237319AbjAIRnj (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 9 Jan 2023 12:43:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E663D1ADA8;
+        Mon,  9 Jan 2023 09:43:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A332EB80EBB;
+        Mon,  9 Jan 2023 17:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B43BC433EF;
+        Mon,  9 Jan 2023 17:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673286215;
+        bh=OusFUpHUgWztm0MPCMtNFsLIBDzi7S02luxqwtlv1DM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r1jT4Ppjc4S7ABOJSmqD/07hlwETehUj7z3PHaDFC8nK+au5Nz2vVgIbRQIuTOuCe
+         Mgr6IBPGbGEAENlmZvVzn1IEYwjUcDSySmgaghootojXndzO7meMzf74t9b7FuAm7N
+         BsMwR3PlFR9CGCVEWIAzmQE3UxwsEKW+aTH50uJKjuALl4ObPMpWUWchfU04dt5Bg+
+         1QUgnCwMmVpcfKu2HYB1heFjX1LxValNM6zmbYvgpfIjfhFZXaIH1Ue3apZh8ziIZY
+         sfTULc149f8XwQYxhqgv0qEvRAPiI4K+rdeD+xXIemmiYxqx1Y6JjAm5K6qCwu3z2p
+         GeSm1T76X0QBw==
+Date:   Mon, 9 Jan 2023 17:43:29 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 01/10] mfd: intel-m10-bmc: Create m10bmc_platform_info
+ for type specific info
+Message-ID: <Y7xSQde3pzcOIu+X@google.com>
+References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com>
+ <20221226175849.13056-2-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-119339409-1673282443=:211949"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221226175849.13056-2-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
 
---8323328-119339409-1673282443=:211949
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+> BMC type specific info is currently set by a switch/case block. The
+> size of this info is expected to grow as more dev types and features
+> are added which would have made the switch block bloaty.
+> 
+> Store type specific info into struct and place them into .driver_data
+> instead because it makes things a bit cleaner.
+> 
+> The m10bmc_type enum can be dropped as the differentiation is now
+> fully handled by the platform info.
+> 
+> The info member of struct intel_m10bmc that is added here is not used
+> yet in this change but its addition logically still belongs to this
+> change. The CSR map change that comes after this change needs to have
+> the info member.
+> 
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/mfd/intel-m10-bmc.c       | 53 ++++++++++++++-----------------
+>  include/linux/mfd/intel-m10-bmc.h | 12 +++++++
+>  2 files changed, 36 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> index 7e3319e5b22f..12c522c16d83 100644
+> --- a/drivers/mfd/intel-m10-bmc.c
+> +++ b/drivers/mfd/intel-m10-bmc.c
+> @@ -13,12 +13,6 @@
+>  #include <linux/regmap.h>
+>  #include <linux/spi/spi.h>
+>  
+> -enum m10bmc_type {
+> -	M10_N3000,
+> -	M10_D5005,
+> -	M10_N5010,
+> -};
+> -
+>  static struct mfd_cell m10bmc_d5005_subdevs[] = {
+>  	{ .name = "d5005bmc-hwmon" },
+>  	{ .name = "d5005bmc-sec-update" }
+> @@ -162,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+>  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  {
+>  	const struct spi_device_id *id = spi_get_device_id(spi);
+> +	const struct intel_m10bmc_platform_info *info;
+>  	struct device *dev = &spi->dev;
+> -	struct mfd_cell *cells;
+>  	struct intel_m10bmc *ddata;
+> -	int ret, n_cell;
+> +	int ret;
+>  
+>  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
+>  	if (!ddata)
+>  		return -ENOMEM;
+>  
+> +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+> +	ddata->info = info;
 
+Why are you keeping it?
 
+>  	ddata->dev = dev;
+>  
+>  	ddata->regmap =
+> @@ -189,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  		return ret;
+>  	}
+>  
+> -	switch (id->driver_data) {
+> -	case M10_N3000:
+> -		cells = m10bmc_pacn3000_subdevs;
+> -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
+> -		break;
+> -	case M10_D5005:
+> -		cells = m10bmc_d5005_subdevs;
+> -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> -		break;
+> -	case M10_N5010:
+> -		cells = m10bmc_n5010_subdevs;
+> -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> -		break;
+> -	default:
+> -		return -ENODEV;
+> -	}
+> -
+> -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
+> +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+> +				   info->cells, info->n_cells,
+>  				   NULL, 0, NULL);
+>  	if (ret)
+>  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+> @@ -214,10 +194,25 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  	return ret;
+>  }
+>  
+> +static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
+> +	.cells = m10bmc_pacn3000_subdevs,
+> +	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
+> +};
 
-On Mon, 9 Jan 2023, Tom Rix wrote:
+Not seeing how adding a whole new structure and swapping out 4 lines to
+describe a device for a different 4 lines per device is better?
 
->
-> On 1/4/23 3:22 PM, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> 
->> Add documentation describing the extensions provided by Version
->> 1 of the Device Feature Header (DFHv1).
->> 
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->
-> Thanks for the changes.
->
-> Reviewed-by: Tom Rix <trix@redhat.com>
+I'm not necessarily against it.  Just seems like a bit of a pointless
+exercise.
 
-Thanks for the review,
-Matthew Gerlach
+> +static const struct intel_m10bmc_platform_info m10bmc_spi_d5005 = {
+> +	.cells = m10bmc_d5005_subdevs,
+> +	.n_cells = ARRAY_SIZE(m10bmc_d5005_subdevs),
+> +};
+> +
+> +static const struct intel_m10bmc_platform_info m10bmc_spi_n5010 = {
+> +	.cells = m10bmc_n5010_subdevs,
+> +	.n_cells = ARRAY_SIZE(m10bmc_n5010_subdevs),
+> +};
+> +
+>  static const struct spi_device_id m10bmc_spi_id[] = {
+> -	{ "m10-n3000", M10_N3000 },
+> -	{ "m10-d5005", M10_D5005 },
+> -	{ "m10-n5010", M10_N5010 },
+> +	{ "m10-n3000", (kernel_ulong_t)&m10bmc_spi_n3000 },
+> +	{ "m10-d5005", (kernel_ulong_t)&m10bmc_spi_d5005 },
+> +	{ "m10-n5010", (kernel_ulong_t)&m10bmc_spi_n5010 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> index f0044b14136e..725b51ea4aee 100644
+> --- a/include/linux/mfd/intel-m10-bmc.h
+> +++ b/include/linux/mfd/intel-m10-bmc.h
+> @@ -118,14 +118,26 @@
+>  /* Address of 4KB inverted bit vector containing staging area FLASH count */
+>  #define STAGING_FLASH_COUNT	0x17ffb000
+>  
+> +/**
+> + * struct intel_m10bmc_platform_info - Intel MAX 10 BMC platform specific information
+> + * @cells: MFD cells
+> + * @n_cells: MFD cells ARRAY_SIZE()
+> + */
+> +struct intel_m10bmc_platform_info {
+> +	struct mfd_cell *cells;
+> +	int n_cells;
+> +};
+> +
+>  /**
+>   * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
+>   * @dev: this device
+>   * @regmap: the regmap used to access registers by m10bmc itself
+> + * @info: the platform information for MAX10 BMC
+>   */
+>  struct intel_m10bmc {
+>  	struct device *dev;
+>  	struct regmap *regmap;
+> +	const struct intel_m10bmc_platform_info *info;
+>  };
+>  
+>  /*
+> -- 
+> 2.30.2
+> 
 
-
->
->> ---
->> v9: move DFH definitions to after the Overview
->>      fix name of feature revision field
->>      clarify next field in DFH
->> 
->> v8: fix section titles
->> 
->> v7: shorten long lines and wording suggestions by bagasdotme@gmail.com
->> 
->> v6: no change
->> 
->> v5: use nested list for field descriptions
->>      clean up prose
->>      add reviewed-by and comments from Ilpo Järvinen
->> 
->> v4: Remove marketing speak and separate v0 and v1 descriptions.
->>      Fix errors reported by "make htmldocs".
->> 
->> v3: no change
->> 
->> v2: s/GUILD/GUID/
->>      add picture
->> ---
->>   Documentation/fpga/dfl.rst | 117 +++++++++++++++++++++++++++++++++++++
->>   1 file changed, 117 insertions(+)
->> 
->> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
->> index 15b670926084..7e015249785b 100644
->> --- a/Documentation/fpga/dfl.rst
->> +++ b/Documentation/fpga/dfl.rst
->> @@ -75,6 +75,123 @@ convenient for software to locate each feature by 
->> walking through this list,
->>   and can be implemented in register regions of any FPGA device.
->>     +Device Feature Header - Version 0
->> +=================================
->> +Version 0 (DFHv0) is the original version of the Device Feature Header.
->> +The format of DFHv0 is shown below::
->> +
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 REV 12|11 ID 
->> 0| 0x00
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63                                 GUID_L 
->> 0| 0x08
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63                                 GUID_H 
->> 0| 0x10
->> + 
->> +-----------------------------------------------------------------------+
->> +
->> +- Offset 0x00
->> +
->> +  * Type - The type of DFH (e.g. FME, AFU, or private feature).
->> +  * DFH VER - The version of the DFH.
->> +  * Rsvd - Currently unused.
->> +  * EOL - Set if the DFH is the end of the Device Feature List (DFL).
->> +  * Next - The offset in bytes of the next DFH in the DFL from the DFH 
->> start,
->> +    and the start of a DFH must be aligned to an 8 byte boundary.
->> +    If EOL is set, Next is the size of MMIO of the last feature in the 
->> list.
->> +  * REV - The revision of the feature associated with this header.
->> +  * ID - The feature ID if Type is private feature.
->> +
->> +- Offset 0x08
->> +
->> +  * GUID_L - Least significant 64 bits of a 128-bit Globally Unique 
->> Identifier
->> +    (present only if Type is FME or AFU).
->> +
->> +- Offset 0x10
->> +
->> +  * GUID_H - Most significant 64 bits of a 128-bit Globally Unique 
->> Identifier
->> +    (present only if Type is FME or AFU).
->> +
->> +
->> +Device Feature Header - Version 1
->> +=================================
->> +Version 1 (DFHv1) of the Device Feature Header adds the following 
->> functionality:
->> +
->> +* Provides a standardized mechanism for features to describe
->> +  parameters/capabilities to software.
->> +* Standardize the use of a GUID for all DFHv1 types.
->> +* Decouples the DFH location from the register space of the feature 
->> itself.
->> +
->> +The format of Version 1 of the Device Feature Header (DFH) is shown 
->> below::
->> +
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 REV 12|11 ID 
->> 0| 0x00
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63                                 GUID_L 
->> 0| 0x08
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63                                 GUID_H 
->> 0| 0x10
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63                   Reg Address/Offset                      1|  Rel 
->> 0| 0x18
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63        Reg Size       32|Params 31|30 Group    16|15 Instance 
->> 0| 0x20
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63 Next    35|34RSV33|EOP32|31 Param Version 16|15 Param ID 
->> 0| 0x28
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63                 Parameter Data 
->> 0| 0x30
->> + 
->> +-----------------------------------------------------------------------+
->> +
->> +                                  ...
->> +
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63 Next    35|34RSV33|EOP32|31 Param Version 16|15 Param ID 
->> 0|
->> + 
->> +-----------------------------------------------------------------------+
->> +    |63                 Parameter Data 
->> 0|
->> + 
->> +-----------------------------------------------------------------------+
->> +
->> +- Offset 0x00
->> +
->> +  * Type - The type of DFH (e.g. FME, AFU, or private feature).
->> +  * DFH VER - The version of the DFH.
->> +  * Rsvd - Currently unused.
->> +  * EOL - Set if the DFH is the end of the Device Feature List (DFL).
->> +  * Next - The offset in bytes of the next DFH in the DFL from the DFH 
->> start,
->> +    and the start of a DFH must be aligned to an 8 byte boundary.
->> +    If EOL is set, Next is the size of MMIO of the last feature in the 
->> list.
->> +  * REV - The revision of the feature associated with this header.
->> +  * ID - The feature ID if Type is private feature.
->> +
->> +- Offset 0x08
->> +
->> +  * GUID_L - Least significant 64 bits of a 128-bit Globally Unique 
->> Identifier.
->> +
->> +- Offset 0x10
->> +
->> +  * GUID_H - Most significant 64 bits of a 128-bit Globally Unique 
->> Identifier.
->> +
->> +- Offset 0x18
->> +
->> +  * Reg Address/Offset - If Rel bit is set, then the value is the high 63 
->> bits
->> +    of a 16-bit aligned absolute address of the feature's registers. 
->> Otherwise
->> +    the value is the offset from the start of the DFH of the feature's 
->> registers.
->> +
->> +- Offset 0x20
->> +
->> +  * Reg Size - Size of feature's register set in bytes.
->> +  * Params - Set if DFH has a list of parameter blocks.
->> +  * Group - Id of group if feature is part of a group.
->> +  * Instance - Id of feature instance within a group.
->> +
->> +- Offset 0x28 if feature has parameters
->> +
->> +  * Next - Offset to the next parameter block in 8 byte words. If EOP set,
->> +    size in 8 byte words of last parameter.
->> +  * Param Version - Version of Param ID.
->> +  * Param ID - ID of parameter.
->> +
->> +- Offset 0x30
->> +
->> +  * Parameter Data - Parameter data whose size and format is defined by
->> +    version and ID of the parameter.
->> +
->> +
->>   FIU - FME (FPGA Management Engine)
->>   ==================================
->>   The FPGA Management Engine performs reconfiguration and other 
->> infrastructure
->
->
---8323328-119339409-1673282443=:211949--
+-- 
+Lee Jones [李琼斯]
