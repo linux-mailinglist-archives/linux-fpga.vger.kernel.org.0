@@ -2,61 +2,63 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCC9662E22
-	for <lists+linux-fpga@lfdr.de>; Mon,  9 Jan 2023 19:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2DE662E20
+	for <lists+linux-fpga@lfdr.de>; Mon,  9 Jan 2023 19:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237319AbjAISF6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 9 Jan 2023 13:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
+        id S237685AbjAISFb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 9 Jan 2023 13:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237613AbjAISF1 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 9 Jan 2023 13:05:27 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69D4B7EA;
-        Mon,  9 Jan 2023 10:04:34 -0800 (PST)
+        with ESMTP id S237650AbjAISEu (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 9 Jan 2023 13:04:50 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF4A43E64;
+        Mon,  9 Jan 2023 10:04:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673287474; x=1704823474;
+  t=1673287451; x=1704823451;
   h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=tfZgR4XNGZMxtPhVY1tXUnRBRyh0EiF8aAzA04nEmzk=;
-  b=VVatoS9MiWzrRH5Egs/A4A1v9EjMkRchDpMtsOXGwIPRyVTDXtIr0zed
-   2J6JRkujpIDuiayVFwCi1cddMmup5T91z1MRb+5uM1RkwCajVLC15UU9m
-   BEtSHNFtDvb1ynUITa9l0Xae+KDUS6YYj2oNR2SAETWMU5o6KETRaeAGt
-   3xrCjrwG6MGMUj9OfvUvcVGNySZQ4+LAmEFmGVVGrMupMSWdpk6ScKNhH
-   OP+IK0giHcWtF6LOPdxNABo1cqdwo2zJyphClk3EzvO+ysp6FHd/loXe6
-   zpATQUs3COiHFnhf3RsCXHIiJgyAmf2P/wjX4iBPp6OXplu7/0rvKwa+V
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="324946503"
+   references:mime-version;
+  bh=yGPCCnwR0gm5/eGURTOcLZCYZz5bk0RgAbSzmUX9Ns8=;
+  b=cVwpJ8mBtyoLk82bjToU/p5W0H5TUBnQzneQkb9mxWFZS37FBr5FKn7m
+   47Vav6FbUO0DfaxyGO04Cpv6lyElEOgMHui1f0wn4AiOj7Szoh3QBoPQc
+   3YZwUismwjXtBooTpiBKKTgrp5nvt45w1QdZXsd4ax1bGEmXQWAbavcMA
+   AEAUsXRIO8AEbfRU+jpjXzqIweWfBJmvX/JecRG+nMkLit07wld3N5zU8
+   AqlBIkDBJ6Co1pilbS6V2qn4dBDquUwedzOETPsg2tgXnoXvzx18EXIXS
+   EOrQjwUXCz6IRPhVnKnPghIknXGWFPRk/4E98AjgRjWhW8shg7Le5w9j5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="323016827"
 X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="324946503"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 10:04:34 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="689110569"
+   d="scan'208";a="323016827"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 10:04:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="745452384"
 X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="689110569"
-Received: from aabdilla-mobl.amr.corp.intel.com ([10.251.221.240])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 10:04:28 -0800
-Date:   Mon, 9 Jan 2023 20:04:28 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lee Jones <lee@kernel.org>
-cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 01/10] mfd: intel-m10-bmc: Create m10bmc_platform_info
- for type specific info
-In-Reply-To: <Y7xSQde3pzcOIu+X@google.com>
-Message-ID: <1ffa5844-f5ce-e56a-7ed9-9ba434904b6d@linux.intel.com>
-References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com> <20221226175849.13056-2-ilpo.jarvinen@linux.intel.com> <Y7xSQde3pzcOIu+X@google.com>
+   d="scan'208";a="745452384"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 10:04:09 -0800
+Date:   Mon, 9 Jan 2023 10:04:32 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v9 3/4] fpga: dfl: add basic support for DFHv1
+In-Reply-To: <Y7u31S8aba1L+VeA@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2301091003330.801533@rhweight-WRK1>
+References: <20230104232253.24743-1-matthew.gerlach@linux.intel.com> <20230104232253.24743-4-matthew.gerlach@linux.intel.com> <Y7u31S8aba1L+VeA@yilunxu-OptiPlex-7050>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1942689431-1673287225=:1694"
-Content-ID: <f488e6fa-c85-f421-49e9-ef2e546e7ef@linux.intel.com>
+Content-Type: multipart/mixed; boundary="8323328-1694820295-1673287487=:801533"
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -69,136 +71,89 @@ X-Mailing-List: linux-fpga@vger.kernel.org
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1942689431-1673287225=:1694
-Content-Type: text/plain; CHARSET=ISO-8859-15
+--8323328-1694820295-1673287487=:801533
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: 8BIT
-Content-ID: <123c7f5d-a9bb-3179-fbc8-fe64cd85741@linux.intel.com>
-
-On Mon, 9 Jan 2023, Lee Jones wrote:
-
-> On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
-> 
-> > BMC type specific info is currently set by a switch/case block. The
-> > size of this info is expected to grow as more dev types and features
-> > are added which would have made the switch block bloaty.
-> > 
-> > Store type specific info into struct and place them into .driver_data
-> > instead because it makes things a bit cleaner.
-> > 
-> > The m10bmc_type enum can be dropped as the differentiation is now
-> > fully handled by the platform info.
-> > 
-> > The info member of struct intel_m10bmc that is added here is not used
-> > yet in this change but its addition logically still belongs to this
-> > change. The CSR map change that comes after this change needs to have
-> > the info member.
-> > 
-> > Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  drivers/mfd/intel-m10-bmc.c       | 53 ++++++++++++++-----------------
-> >  include/linux/mfd/intel-m10-bmc.h | 12 +++++++
-> >  2 files changed, 36 insertions(+), 29 deletions(-)
-> > 
-> > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-> > index 7e3319e5b22f..12c522c16d83 100644
-> > --- a/drivers/mfd/intel-m10-bmc.c
-> > +++ b/drivers/mfd/intel-m10-bmc.c
-> > @@ -13,12 +13,6 @@
-> >  #include <linux/regmap.h>
-> >  #include <linux/spi/spi.h>
-> >  
-> > -enum m10bmc_type {
-> > -	M10_N3000,
-> > -	M10_D5005,
-> > -	M10_N5010,
-> > -};
-> > -
-> >  static struct mfd_cell m10bmc_d5005_subdevs[] = {
-> >  	{ .name = "d5005bmc-hwmon" },
-> >  	{ .name = "d5005bmc-sec-update" }
-> > @@ -162,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
-> >  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> >  {
-> >  	const struct spi_device_id *id = spi_get_device_id(spi);
-> > +	const struct intel_m10bmc_platform_info *info;
-> >  	struct device *dev = &spi->dev;
-> > -	struct mfd_cell *cells;
-> >  	struct intel_m10bmc *ddata;
-> > -	int ret, n_cell;
-> > +	int ret;
-> >  
-> >  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
-> >  	if (!ddata)
-> >  		return -ENOMEM;
-> >  
-> > +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
-> > +	ddata->info = info;
-> 
-> Why are you keeping it?
-
-There are plenty of users starting from patch 04. There will more users 
-and members in the changes not included into this series. Thus, storing 
-csr_map instead of info would not be forward-looking enough.
-
-> >  	ddata->dev = dev;
-> >  
-> >  	ddata->regmap =
-> > @@ -189,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> >  		return ret;
-> >  	}
-> >  
-> > -	switch (id->driver_data) {
-> > -	case M10_N3000:
-> > -		cells = m10bmc_pacn3000_subdevs;
-> > -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
-> > -		break;
-> > -	case M10_D5005:
-> > -		cells = m10bmc_d5005_subdevs;
-> > -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
-> > -		break;
-> > -	case M10_N5010:
-> > -		cells = m10bmc_n5010_subdevs;
-> > -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
-> > -		break;
-> > -	default:
-> > -		return -ENODEV;
-> > -	}
-> > -
-> > -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
-> > +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
-> > +				   info->cells, info->n_cells,
-> >  				   NULL, 0, NULL);
-> >  	if (ret)
-> >  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
-> > @@ -214,10 +194,25 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> >  	return ret;
-> >  }
-> >  
-> > +static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
-> > +	.cells = m10bmc_pacn3000_subdevs,
-> > +	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
-> > +};
-> 
-> Not seeing how adding a whole new structure and swapping out 4 lines to
-> describe a device for a different 4 lines per device is better?
-> 
-> I'm not necessarily against it.  Just seems like a bit of a pointless
-> exercise.
-
-After the BMC core/SPI split in a later patch in this series, there will 
-be an init func in m10bmc core that will be called from spi side and 
-after PMCI is added, from there too. 
-
-With a structure, only a pointer to that will have to be passed to the 
-init func rather than n parameters (there will be more members added into 
-the info structure too both by changes in this series and in the ones not 
-included to this series).
 
 
-Thanks for the review.
 
--- 
- i.
---8323329-1942689431-1673287225=:1694--
+On Mon, 9 Jan 2023, Xu Yilun wrote:
+
+> On 2023-01-04 at 15:22:52 -0800, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Version 1 of the Device Feature Header (DFH) definition adds
+>> functionality to the Device Feature List (DFL) bus.
+>>
+>> A DFHv1 header may have one or more parameter blocks that
+>> further describes the HW to SW. Add support to the DFL bus
+>> to parse the MSI-X parameter.
+>>
+>> The location of a feature's register set is explicitly
+>> described in DFHv1 and can be relative to the base of the DFHv1
+>> or an absolute address. Parse the location and pass the information
+>> to DFL driver.
+>>
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+>>
+>
+> [...]
+>
+>> +static u64 *find_param(u64 *params, resource_size_t max, int param_id)
+>> +{
+>> +	u64 *end = params + max / sizeof(u64);
+>> +	u64 v, next;
+>> +
+>> +	while (params < end) {
+>> +		v = *params;
+>> +		if (param_id == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
+>> +			return params;
+>> +
+>> +		if (FIELD_GET(DFHv1_PARAM_HDR_NEXT_EOP, v))
+>> +			break;
+>> +
+>> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+>> +		params += next;
+>> +	}
+>> +
+>> +	return NULL;
+>> +}
+>> +
+>> +/**
+>> + * dfh_find_param() - find parameter block for the given parameter id
+>> + * @dfl_dev: dfl device
+>> + * @param_id: id of dfl parameter
+>> + * @pcount: destination to store size of parameter data in u64 bit words
+>
+> As I mentioned before, could the size of the parameter data just be number
+> of bytes? This is the most common way for a data block.
+
+returning a void* and a size_t in bytes would be more consistent.  I will 
+make your suggested change.
+
+Thanks,
+Matthew Gerlach
+
+>
+> Thanks,
+> Yilun
+>
+>> + *
+>> + * Return: pointer to start of parameter data, PTR_ERR otherwise.
+>> + */
+>> +void *dfh_find_param(struct dfl_device *dfl_dev, int param_id, size_t *pcount)
+>> +{
+>> +	u64 *phdr = find_param(dfl_dev->params, dfl_dev->param_size, param_id);
+>> +
+>> +	if (!phdr)
+>> +		return ERR_PTR(-ENOENT);
+>> +
+>> +	if (pcount)
+>> +		*pcount = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, *phdr) - 1;
+>> +
+>> +	return phdr + 1;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfh_find_param);
+>
+--8323328-1694820295-1673287487=:801533--
