@@ -2,335 +2,194 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1D166364B
-	for <lists+linux-fpga@lfdr.de>; Tue, 10 Jan 2023 01:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5469A663D83
+	for <lists+linux-fpga@lfdr.de>; Tue, 10 Jan 2023 11:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237675AbjAJAaD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 9 Jan 2023 19:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S231215AbjAJKFf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 10 Jan 2023 05:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237486AbjAJA35 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 9 Jan 2023 19:29:57 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4883F114;
-        Mon,  9 Jan 2023 16:29:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673310597; x=1704846597;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=N3L6uklDTD5RH/HovFT3ZTmePQvuPs1vn2oU+ecGJ/M=;
-  b=i7X7MDRz3nXGumiUI9UoML1Z4OsrXO5Vnu7d0O29V0gIES2j66Ae680q
-   d+/4ylyJStCDg+tLm6pDBQorEAzBiTACvDl0aWwe8O4R53bG4IjEKZoNv
-   KLlx5zIKJ5spH7aaUyz9ONPeDqZfe8RMyTkq5t0C7fdT3kfW/TG4izdzO
-   F9CO02uQxkT9OUH4brMbBZLqjYJ4SUIaAcO692Kayj2PQBS9HyWlmLo6c
-   V4ZE3XVXQ+BQBCd5xbclPg7TbpBjSeoJd8TRMshaxU/s2LXZQpmsT6QSD
-   meNRKAm9m+kVK1lxIltCUIe1KQ7m5kE6reilodjtPsucxMSLhb/ejYUAN
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="324265569"
-X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
-   d="scan'208";a="324265569"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 16:29:53 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="687381584"
-X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
-   d="scan'208";a="687381584"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 16:29:53 -0800
-From:   matthew.gerlach@linux.intel.com
-To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v10 4/4] tty: serial: 8250: add DFL bus driver for Altera 16550.
-Date:   Mon,  9 Jan 2023 16:30:29 -0800
-Message-Id: <20230110003029.806022-5-matthew.gerlach@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230110003029.806022-1-matthew.gerlach@linux.intel.com>
-References: <20230110003029.806022-1-matthew.gerlach@linux.intel.com>
+        with ESMTP id S231329AbjAJKFb (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 10 Jan 2023 05:05:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5300850061;
+        Tue, 10 Jan 2023 02:05:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B199AB81133;
+        Tue, 10 Jan 2023 10:05:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A12C433EF;
+        Tue, 10 Jan 2023 10:05:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673345127;
+        bh=9jjmUW62X5BAqte0/4wI9dpcaebEZ8SUIffif9k/TY8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X9MPj+MQ6WMeEBx8Qp0R49zCdRaJv8S0llfLSlMrSSnzR9ko9kwbT+38huoOFjk+U
+         96wMYq7WDgmwT3SLLvDONmA+ElEHfurgIewosvml8fvxHUMNhd7WPHbrVgmSDyGrSI
+         k8oHNRMbYu0ZDD0gQkaS6u22lGY7LEgBgBejRpW5oQvNt9oU+SvkxwLSYUgmI1qBkV
+         bg3uxRhpt5nscuJq+s/LQkEv9Qla7C0s8OS885bzafwUiEwWd25KCkR8gib7h05TMZ
+         4h/t0HcAQ7GGFo9j7FnShRz8gmQTskotBNqYzD7Q+oaX8PP1QssnLhweLIKCXClBJK
+         RHvnV1AHWnKpw==
+Date:   Tue, 10 Jan 2023 10:05:20 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 01/10] mfd: intel-m10-bmc: Create m10bmc_platform_info
+ for type specific info
+Message-ID: <Y704YEVolcdwY7L4@google.com>
+References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com>
+ <20221226175849.13056-2-ilpo.jarvinen@linux.intel.com>
+ <Y7xSQde3pzcOIu+X@google.com>
+ <1ffa5844-f5ce-e56a-7ed9-9ba434904b6d@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1ffa5844-f5ce-e56a-7ed9-9ba434904b6d@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On Mon, 09 Jan 2023, Ilpo Järvinen wrote:
 
-Add a Device Feature List (DFL) bus driver for the Altera
-16550 implementation of UART.
+> On Mon, 9 Jan 2023, Lee Jones wrote:
+> 
+> > On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
+> > 
+> > > BMC type specific info is currently set by a switch/case block. The
+> > > size of this info is expected to grow as more dev types and features
+> > > are added which would have made the switch block bloaty.
+> > > 
+> > > Store type specific info into struct and place them into .driver_data
+> > > instead because it makes things a bit cleaner.
+> > > 
+> > > The m10bmc_type enum can be dropped as the differentiation is now
+> > > fully handled by the platform info.
+> > > 
+> > > The info member of struct intel_m10bmc that is added here is not used
+> > > yet in this change but its addition logically still belongs to this
+> > > change. The CSR map change that comes after this change needs to have
+> > > the info member.
+> > > 
+> > > Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> > > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > ---
+> > >  drivers/mfd/intel-m10-bmc.c       | 53 ++++++++++++++-----------------
+> > >  include/linux/mfd/intel-m10-bmc.h | 12 +++++++
+> > >  2 files changed, 36 insertions(+), 29 deletions(-)
+> > > 
+> > > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> > > index 7e3319e5b22f..12c522c16d83 100644
+> > > --- a/drivers/mfd/intel-m10-bmc.c
+> > > +++ b/drivers/mfd/intel-m10-bmc.c
+> > > @@ -13,12 +13,6 @@
+> > >  #include <linux/regmap.h>
+> > >  #include <linux/spi/spi.h>
+> > >  
+> > > -enum m10bmc_type {
+> > > -	M10_N3000,
+> > > -	M10_D5005,
+> > > -	M10_N5010,
+> > > -};
+> > > -
+> > >  static struct mfd_cell m10bmc_d5005_subdevs[] = {
+> > >  	{ .name = "d5005bmc-hwmon" },
+> > >  	{ .name = "d5005bmc-sec-update" }
+> > > @@ -162,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+> > >  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  {
+> > >  	const struct spi_device_id *id = spi_get_device_id(spi);
+> > > +	const struct intel_m10bmc_platform_info *info;
+> > >  	struct device *dev = &spi->dev;
+> > > -	struct mfd_cell *cells;
+> > >  	struct intel_m10bmc *ddata;
+> > > -	int ret, n_cell;
+> > > +	int ret;
+> > >  
+> > >  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
+> > >  	if (!ddata)
+> > >  		return -ENOMEM;
+> > >  
+> > > +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+> > > +	ddata->info = info;
+> > 
+> > Why are you keeping it?
+> 
+> There are plenty of users starting from patch 04. There will more users 
+> and members in the changes not included into this series. Thus, storing 
+> csr_map instead of info would not be forward-looking enough.
+> 
+> > >  	ddata->dev = dev;
+> > >  
+> > >  	ddata->regmap =
+> > > @@ -189,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > -	switch (id->driver_data) {
+> > > -	case M10_N3000:
+> > > -		cells = m10bmc_pacn3000_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
+> > > -		break;
+> > > -	case M10_D5005:
+> > > -		cells = m10bmc_d5005_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> > > -		break;
+> > > -	case M10_N5010:
+> > > -		cells = m10bmc_n5010_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> > > -		break;
+> > > -	default:
+> > > -		return -ENODEV;
+> > > -	}
+> > > -
+> > > -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
+> > > +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+> > > +				   info->cells, info->n_cells,
+> > >  				   NULL, 0, NULL);
+> > >  	if (ret)
+> > >  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+> > > @@ -214,10 +194,25 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  	return ret;
+> > >  }
+> > >  
+> > > +static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
+> > > +	.cells = m10bmc_pacn3000_subdevs,
+> > > +	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
+> > > +};
+> > 
+> > Not seeing how adding a whole new structure and swapping out 4 lines to
+> > describe a device for a different 4 lines per device is better?
+> > 
+> > I'm not necessarily against it.  Just seems like a bit of a pointless
+> > exercise.
+> 
+> After the BMC core/SPI split in a later patch in this series, there will 
+> be an init func in m10bmc core that will be called from spi side and 
+> after PMCI is added, from there too. 
+> 
+> With a structure, only a pointer to that will have to be passed to the 
+> init func rather than n parameters (there will be more members added into 
+> the info structure too both by changes in this series and in the ones not 
+> included to this series).
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v10: track change to dfh_find_param()
+Very well.  Please consider these review comments as tentative, until I
+get a chance to dig deeper into the patch-set.
 
-v9: add Rb Andy Shevchenko
-    move dfh_get_u64_param_vals to static version of dfh_get_u64_param_val
-
-v8: use dfh_get_u64_param_vals()
-
-v7: no change
-
-v6: move driver specific parameter definitions to limit scope
-
-v5: removed unneeded blank line
-    removed unneeded includes
-    included device.h and types.h
-    removed unneeded local variable
-    remove calls to dev_dbg
-    memset -> { }
-    remove space after period
-    explicitly include used headers
-    remove redundant Inc from Copyright
-    fix format specifier
-
-v4: use dev_err_probe() everywhere that is appropriate
-    clean up noise
-    change error messages to use the word, unsupported
-    tried again to sort Makefile and KConfig better
-    reorder probe function for easier error handling
-    use new dfh_find_param API
-
-v3: use passed in location of registers
-    use cleaned up functions for parsing parameters
-
-v2: clean up error messages
-    alphabetize header files
-    fix 'missing prototype' error by making function static
-    tried to sort Makefile and Kconfig better
-
-8250
----
- drivers/tty/serial/8250/8250_dfl.c | 167 +++++++++++++++++++++++++++++
- drivers/tty/serial/8250/Kconfig    |  12 +++
- drivers/tty/serial/8250/Makefile   |   1 +
- 3 files changed, 180 insertions(+)
- create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-
-diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
-new file mode 100644
-index 000000000000..1df443cab02e
---- /dev/null
-+++ b/drivers/tty/serial/8250/8250_dfl.c
-@@ -0,0 +1,167 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for FPGA UART
-+ *
-+ * Copyright (C) 2022 Intel Corporation.
-+ *
-+ * Authors:
-+ *   Ananda Ravuri <ananda.ravuri@intel.com>
-+ *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/device.h>
-+#include <linux/dfl.h>
-+#include <linux/errno.h>
-+#include <linux/ioport.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/types.h>
-+
-+#include <linux/serial.h>
-+#include <linux/serial_8250.h>
-+
-+#define DFHv1_PARAM_ID_CLK_FRQ    0x2
-+#define DFHv1_PARAM_ID_FIFO_LEN   0x3
-+
-+#define DFHv1_PARAM_ID_REG_LAYOUT	0x4
-+#define DFHv1_PARAM_REG_LAYOUT_WIDTH	GENMASK_ULL(63, 32)
-+#define DFHv1_PARAM_REG_LAYOUT_SHIFT	GENMASK_ULL(31, 0)
-+
-+struct dfl_uart {
-+	int line;
-+};
-+
-+static int dfh_get_u64_param_val(struct dfl_device *dfl_dev, int param_id, u64 *pval)
-+{
-+	size_t psize;
-+	u64 *p;
-+
-+	p = dfh_find_param(dfl_dev, param_id, &psize);
-+	if (IS_ERR(p))
-+		return PTR_ERR(p);
-+
-+	if (psize != sizeof(u64))
-+		return -EINVAL;
-+
-+	*pval = *p;
-+
-+	return 0;
-+}
-+
-+static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
-+{
-+	struct device *dev = &dfl_dev->dev;
-+	u64 fifo_len, clk_freq, reg_layout;
-+	u32 reg_width;
-+	int ret;
-+
-+	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ, &clk_freq);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "missing CLK_FRQ param\n");
-+
-+	uart->port.uartclk = clk_freq;
-+
-+	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN, &fifo_len);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "missing FIFO_LEN param\n");
-+
-+	switch (fifo_len) {
-+	case 32:
-+		uart->port.type = PORT_ALTR_16550_F32;
-+		break;
-+
-+	case 64:
-+		uart->port.type = PORT_ALTR_16550_F64;
-+		break;
-+
-+	case 128:
-+		uart->port.type = PORT_ALTR_16550_F128;
-+		break;
-+
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "unsupported FIFO_LEN %llu\n", fifo_len);
-+	}
-+
-+	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT, &reg_layout);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "missing REG_LAYOUT param\n");
-+
-+	uart->port.regshift = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_SHIFT, reg_layout);
-+	reg_width = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_WIDTH, reg_layout);
-+	switch (reg_width) {
-+	case 4:
-+		uart->port.iotype = UPIO_MEM32;
-+		break;
-+
-+	case 2:
-+		uart->port.iotype = UPIO_MEM16;
-+		break;
-+
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "unsupported reg-width %u\n", reg_width);
-+
-+	}
-+
-+	return 0;
-+}
-+
-+static int dfl_uart_probe(struct dfl_device *dfl_dev)
-+{
-+	struct device *dev = &dfl_dev->dev;
-+	struct uart_8250_port uart = { };
-+	struct dfl_uart *dfluart;
-+	int ret;
-+
-+	uart.port.flags = UPF_IOREMAP;
-+	uart.port.mapbase = dfl_dev->mmio_res.start;
-+	uart.port.mapsize = resource_size(&dfl_dev->mmio_res);
-+
-+	ret = dfl_uart_get_params(dfl_dev, &uart);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed uart feature walk\n");
-+
-+	if (dfl_dev->num_irqs == 1)
-+		uart.port.irq = dfl_dev->irqs[0];
-+
-+	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
-+	if (!dfluart)
-+		return -ENOMEM;
-+
-+	dfluart->line = serial8250_register_8250_port(&uart);
-+	if (dfluart->line < 0)
-+		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
-+
-+	dev_set_drvdata(dev, dfluart);
-+
-+	return 0;
-+}
-+
-+static void dfl_uart_remove(struct dfl_device *dfl_dev)
-+{
-+	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
-+
-+	serial8250_unregister_port(dfluart->line);
-+}
-+
-+#define FME_FEATURE_ID_UART 0x24
-+
-+static const struct dfl_device_id dfl_uart_ids[] = {
-+	{ FME_ID, FME_FEATURE_ID_UART },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
-+
-+static struct dfl_driver dfl_uart_driver = {
-+	.drv = {
-+		.name = "dfl-uart",
-+	},
-+	.id_table = dfl_uart_ids,
-+	.probe = dfl_uart_probe,
-+	.remove = dfl_uart_remove,
-+};
-+module_dfl_driver(dfl_uart_driver);
-+
-+MODULE_DESCRIPTION("DFL Intel UART driver");
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-index b0f62345bc84..08af2acd4645 100644
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -370,6 +370,18 @@ config SERIAL_8250_FSL
- 	  erratum for Freescale 16550 UARTs in the 8250 driver. It also
- 	  enables support for ACPI enumeration.
- 
-+config SERIAL_8250_DFL
-+	tristate "DFL bus driver for Altera 16550 UART"
-+	depends on SERIAL_8250 && FPGA_DFL
-+	help
-+	  This option enables support for a Device Feature List (DFL) bus
-+	  driver for the Altera 16650 UART. One or more Altera 16650 UARTs
-+	  can be instantiated in a FPGA and then be discovered during
-+	  enumeration of the DFL bus.
-+
-+	  To compile this driver as a module, chose M here: the
-+	  module will be called 8250_dfl.
-+
- config SERIAL_8250_DW
- 	tristate "Support for Synopsys DesignWare 8250 quirks"
- 	depends on SERIAL_8250
-diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
-index 1615bfdde2a0..4e1a32812683 100644
---- a/drivers/tty/serial/8250/Makefile
-+++ b/drivers/tty/serial/8250/Makefile
-@@ -28,6 +28,7 @@ obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
- obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
- obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
- obj-$(CONFIG_SERIAL_8250_MEN_MCB)	+= 8250_men_mcb.o
-+obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
- obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
- obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
- obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
