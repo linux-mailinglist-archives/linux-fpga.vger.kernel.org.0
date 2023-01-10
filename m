@@ -2,112 +2,105 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E958663DB6
-	for <lists+linux-fpga@lfdr.de>; Tue, 10 Jan 2023 11:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430C6663E12
+	for <lists+linux-fpga@lfdr.de>; Tue, 10 Jan 2023 11:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjAJKNh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 10 Jan 2023 05:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40298 "EHLO
+        id S232517AbjAJKW5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 10 Jan 2023 05:22:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237624AbjAJKNb (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 10 Jan 2023 05:13:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4032C759;
-        Tue, 10 Jan 2023 02:13:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F5EA61586;
-        Tue, 10 Jan 2023 10:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4051CC433F2;
-        Tue, 10 Jan 2023 10:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673345610;
-        bh=SnvkqEhLd09ugaM10bvD3ElpJbUNEcWAngfeAOXd5N0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mll4gLKa48vWvuHjN5jOL0zrJb6uKMUaqxeiJHKnD03ecS6aHIcWjP0j21nMLN93e
-         7upO4q6CX2nkDC5dNXkD+jVm9gDqdrYvllPbm3Dl+4+YECwWGKDlbX7Ws+/7JT1B5/
-         Fc3DXB+HwO0S7Zr71UEjU/is32HbkO4by0rlVlvmiD+aJlxluaNIHVvDX9F51Z4uZW
-         Dj4pvkFX/kf/2CLSxv/8Oj4eUimgquzbJYSMPYrSbbWEJxcLhpEtIqV8RTWdv4Smnd
-         31S+iYl5YJEuQ6oyDDDrcZLlmSmYpcDH4GFDI2Mm5c8VjTl70PmP7CJnBcgHpEOq3N
-         k2fJiSxjZzutA==
-Date:   Tue, 10 Jan 2023 10:13:24 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 02/10] mfd: intel-m10-bmc: Rename the local variables
-Message-ID: <Y706RErtx9TvpvmB@google.com>
-References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com>
- <20221226175849.13056-3-ilpo.jarvinen@linux.intel.com>
- <Y7xXzxqG+9Sv/Nf9@google.com>
- <c35cb9ff-dc16-a897-4721-931020995cf8@linux.intel.com>
+        with ESMTP id S231210AbjAJKWe (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 10 Jan 2023 05:22:34 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0AD5AC55;
+        Tue, 10 Jan 2023 02:21:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673346104; x=1704882104;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PkKqqmBLchSYZl+hz18MXJzVs0JIqEvfTbNCyQox3Kg=;
+  b=l4HmJekwWMewq0ZaT40iKFit+vY69pAYZGQUfo76PO0kBnsdAevlGBB3
+   iuK/xwp0rqnvleewzfGuX5eY3/KvR63An3HH1o5QseCY3CZM/NEXfsAan
+   pYZ4ICv273K7o1aUk0nDpXazU8U5T/U4SF9bB1Y3hmW4KM2//sSSDmq2h
+   NxotBgCkKS17VF/WnApKL2OnayQ+hP/b943auGlcNFQPRODlF6vYOX7zl
+   1Mtv0OwiBk9UsfIbxJc8xS1U/6DGhdyscPtm2jcKSRJK3bemBKFIbKAta
+   DveKSMaxBVKd08KmTF4+g8JLxINE3MD0RFPb7mn6SxzGXrGXowp2ZuntN
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="306625517"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="306625517"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 02:21:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="658937444"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="658937444"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Jan 2023 02:21:38 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pFBlA-006yvn-04;
+        Tue, 10 Jan 2023 12:21:36 +0200
+Date:   Tue, 10 Jan 2023 12:21:35 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v10 3/4] fpga: dfl: add basic support for DFHv1
+Message-ID: <Y708L2rRc1RDVkui@smile.fi.intel.com>
+References: <20230110003029.806022-1-matthew.gerlach@linux.intel.com>
+ <20230110003029.806022-4-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c35cb9ff-dc16-a897-4721-931020995cf8@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230110003029.806022-4-matthew.gerlach@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, 09 Jan 2023, Ilpo Järvinen wrote:
-
-> On Mon, 9 Jan 2023, Lee Jones wrote:
+On Mon, Jan 09, 2023 at 04:30:28PM -0800, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> > On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
-> > 
-> > > Local variables directly interact with dev_get_drvdata/dev_set_drvdata
-> > > should be named ddata.
-> > > 
-> > > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > 
-> > It took 2 people to rename some variables? :)
+> Version 1 of the Device Feature Header (DFH) definition adds
+> functionality to the Device Feature List (DFL) bus.
 > 
-> It took one person to rename the variables, and other to prepare it into a 
-> series which required some changes to the original patch (which is when 
-> I added my SoB). But I can remove Tianfei (Andy mentioned earlier for 
-> simple changes it's okay).
+> A DFHv1 header may have one or more parameter blocks that
+> further describes the HW to SW. Add support to the DFL bus
+> to parse the MSI-X parameter.
+> 
+> The location of a feature's register set is explicitly
+> described in DFHv1 and can be relative to the base of the DFHv1
+> or an absolute address. Parse the location and pass the information
+> to DFL driver.
 
-It's not a blocker.  I just found it humorous. :)
+...
 
-> > > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > > Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> > > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > ---
-> > >  drivers/mfd/intel-m10-bmc.c | 10 +++++-----
-> > >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-> > > index 12c522c16d83..2c26203c4799 100644
-> > > --- a/drivers/mfd/intel-m10-bmc.c
-> > > +++ b/drivers/mfd/intel-m10-bmc.c
-> > > @@ -81,15 +81,15 @@ static DEVICE_ATTR_RO(bmcfw_version);
-> > >  static ssize_t mac_address_show(struct device *dev,
-> > >  				struct device_attribute *attr, char *buf)
-> > >  {
-> > > -	struct intel_m10bmc *max10 = dev_get_drvdata(dev);
-> > > +	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
-> > 
-> > In general I'm all for the use of 'ddata' for driver data.
-> > 
-> > For my own reference (apply this as-is to your sign-off block):
-> >                                                        
-> > Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+> v10: change dfh_find_param to return size of parameter data in bytes
 
+The problem that might occur with this approach is byte ordering.
+When we have u64 items, we know that they all are placed in CPU
+ordering by the bottom layer. What's the contract now? Can it be
+a problematic? Please double check this (always keep in mind BE32
+as most interesting case for u64/unsigned long representation and
+other possible byte ordering outcomes).
 
 -- 
-Lee Jones [李琼斯]
+With Best Regards,
+Andy Shevchenko
+
+
