@@ -2,452 +2,177 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198F5669BC5
-	for <lists+linux-fpga@lfdr.de>; Fri, 13 Jan 2023 16:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A3366A2A7
+	for <lists+linux-fpga@lfdr.de>; Fri, 13 Jan 2023 20:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjAMPRe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 13 Jan 2023 10:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
+        id S230202AbjAMTEl (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 13 Jan 2023 14:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjAMPQ5 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 13 Jan 2023 10:16:57 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E5A84F8A;
-        Fri, 13 Jan 2023 07:08:27 -0800 (PST)
+        with ESMTP id S229889AbjAMTEh (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 13 Jan 2023 14:04:37 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF275D405;
+        Fri, 13 Jan 2023 11:04:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673622507; x=1705158507;
+  t=1673636675; x=1705172675;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=fSzzRkB2qtST/cVbscjlg0cgvmJcg/PP+6UVkv8GtXI=;
-  b=Qi/hzw+Ik6Ijdq8ATzzUtDM/RCcbXtkYK25WcXJ8n3eQ6sxwwWJxvnaC
-   9sVbZvtTk5IHRRzekIl5lchwzOjs95Tt3tBnwPzVZvj2pNEGtwSEnjv4V
-   iq6V8gUIe+ng0w5X8Pv2iXDEsqBOT/dp25GGOJ6x6qr1gqrU/T1wPnSeW
-   yDgjbMbWdDPPH9iTpUfIAw64osxNrdFEJ2A/mk2KSk7281EEk4WsH31nn
-   9K3sGBCftsnyvbq9VTVQGBgle8X+s2I3CLH7INwFT1KSZPo4ngjGCNXWv
-   1b5VlRLD7l6THp4Lot/j5b2sak0SUSLwiC9g73Z1gp9WQxYrFC/txTx5W
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="388505773"
+  bh=7H+c/VpvYq+UNviR3pZvrval0VSjRocGl0CoGfUil34=;
+  b=C0o1aB1oAn4OOPHwn4gNgvtYoIrLiXimPQFAr4eMxydLt5Uk/wDJfzS7
+   koXxv8S5rmP7YLXRSg7hUoQx2DVbHeAClK//t9s670ld2P0QfPDKGfINx
+   th/1NhFGjMt6uyiYoaIqWz4qJWTDdetT+MOSJjakXJWyI9WTC0IMB/IYN
+   8PAlb4SLXnsEWAgdO802xM9998hzCK+/57xEw/ZZc6rpTc06hpshNhmIX
+   It3tnY1/Q87teUBs6FZlp3ktSU0RNscnW2SE1K/eZlBYUNSL1ao7/vI60
+   nj/TWLeE1Vi7B85ntYxos40fdVuWHc609SO0N9diut9rM4WsAtQ8Pmeu5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="325332256"
 X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="388505773"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 07:08:26 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="690533744"
+   d="scan'208";a="325332256"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 11:04:33 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="635873047"
 X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="690533744"
-Received: from akoska-mobl1.ger.corp.intel.com ([10.252.51.98])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 07:08:21 -0800
-Date:   Fri, 13 Jan 2023 17:08:15 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lee Jones <lee@kernel.org>
-cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 09/10] mfd: intel-m10-bmc: Add PMCI driver
-In-Reply-To: <Y8FtRPKvfEcniX9Z@google.com>
-Message-ID: <8ba4963-cd39-4ab7-dd28-65434264443@linux.intel.com>
-References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com> <20221226175849.13056-10-ilpo.jarvinen@linux.intel.com> <Y8FtRPKvfEcniX9Z@google.com>
+   d="scan'208";a="635873047"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 11:04:33 -0800
+Date:   Fri, 13 Jan 2023 11:05:06 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v10 3/4] fpga: dfl: add basic support for DFHv1
+In-Reply-To: <Y8DAb3R3bP/M7f0v@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2301131056020.1326035@rhweight-WRK1>
+References: <20230110003029.806022-1-matthew.gerlach@linux.intel.com> <20230110003029.806022-4-matthew.gerlach@linux.intel.com> <Y708L2rRc1RDVkui@smile.fi.intel.com> <alpine.DEB.2.22.394.2301101310150.815911@rhweight-WRK1> <Y74bSzUBLYH4cLDh@yilunxu-OptiPlex-7050>
+ <Y7/ggajPS2WNrPPU@smile.fi.intel.com> <alpine.DEB.2.22.394.2301120732500.845139@rhweight-WRK1> <Y8DAb3R3bP/M7f0v@yilunxu-OptiPlex-7050>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-2145620619-1673622504=:1600"
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-2145620619-1673622504=:1600
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
 
-On Fri, 13 Jan 2023, Lee Jones wrote:
+On Fri, 13 Jan 2023, Xu Yilun wrote:
 
-> On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
-> 
-> > Add the mfd driver for the Platform Management Component Interface
-> > (PMCI) based interface of Intel MAX10 BMC controller.
-> > 
-> > PMCI is a software-visible interface, connected to card BMC which
-> > provided the basic functionality of read/write BMC register. The access
-> > to the register is done indirectly via a hardware controller/bridge
-> > that handles read/write/clear commands and acknowledgments for the
-> > commands.
-> > 
-> > Previously, intel-m10-bmc provided sysfs under
-> > /sys/bus/spi/devices/... which is generalized in this change because
-> > not all MAX10 BMC appear under SPI anymore.
-> > 
-> > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > Co-developed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  .../ABI/testing/sysfs-driver-intel-m10-bmc    |   8 +-
-> >  drivers/mfd/Kconfig                           |  12 +
-> >  drivers/mfd/Makefile                          |   1 +
-> >  drivers/mfd/intel-m10-bmc-pmci.c              | 253 ++++++++++++++++++
-> >  4 files changed, 270 insertions(+), 4 deletions(-)
-> >  create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
-> > index 9773925138af..a8ab58035c95 100644
-> > --- a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
-> > +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
-> > @@ -1,4 +1,4 @@
-> > -What:		/sys/bus/spi/devices/.../bmc_version
-> > +What:		/sys/bus/.../drivers/intel-m10-bmc/.../bmc_version
-> >  Date:		June 2020
-> >  KernelVersion:	5.10
-> >  Contact:	Xu Yilun <yilun.xu@intel.com>
-> > @@ -6,7 +6,7 @@ Description:	Read only. Returns the hardware build version of Intel
-> >  		MAX10 BMC chip.
-> >  		Format: "0x%x".
-> >  
-> > -What:		/sys/bus/spi/devices/.../bmcfw_version
-> > +What:		/sys/bus/.../drivers/intel-m10-bmc/.../bmcfw_version
-> >  Date:		June 2020
-> >  KernelVersion:	5.10
-> >  Contact:	Xu Yilun <yilun.xu@intel.com>
-> > @@ -14,7 +14,7 @@ Description:	Read only. Returns the firmware version of Intel MAX10
-> >  		BMC chip.
-> >  		Format: "0x%x".
-> >  
-> > -What:		/sys/bus/spi/devices/.../mac_address
-> > +What:		/sys/bus/.../drivers/intel-m10-bmc/.../mac_address
-> >  Date:		January 2021
-> >  KernelVersion:  5.12
-> >  Contact:	Russ Weight <russell.h.weight@intel.com>
-> > @@ -25,7 +25,7 @@ Description:	Read only. Returns the first MAC address in a block
-> >  		space.
-> >  		Format: "%02x:%02x:%02x:%02x:%02x:%02x".
-> >  
-> > -What:		/sys/bus/spi/devices/.../mac_count
-> > +What:		/sys/bus/.../drivers/intel-m10-bmc/.../mac_count
-> >  Date:		January 2021
-> >  KernelVersion:  5.12
-> >  Contact:	Russ Weight <russell.h.weight@intel.com>
-> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > index a09d4ac60dc7..82f13614d98a 100644
-> > --- a/drivers/mfd/Kconfig
-> > +++ b/drivers/mfd/Kconfig
-> > @@ -2238,6 +2238,18 @@ config MFD_INTEL_M10_BMC_SPI
-> >            additional drivers must be enabled in order to use the functionality
-> >            of the device.
-> >  
-> > +config MFD_INTEL_M10_BMC_PMCI
-> > +	tristate "Intel MAX 10 Board Management Controller with PMCI"
-> > +	depends on FPGA_DFL
-> > +	select MFD_INTEL_M10_BMC_CORE
-> > +	select REGMAP
-> > +	help
-> > +	  Support for the Intel MAX 10 board management controller via PMCI.
-> > +
-> > +	  This driver provides common support for accessing the device,
-> > +	  additional drivers must be enabled in order to use the functionality
-> > +	  of the device.
-> > +
-> >  config MFD_RSMU_I2C
-> >  	tristate "Renesas Synchronization Management Unit with I2C"
-> >  	depends on I2C && OF
-> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > index 5d1f308ee2a7..c90fb96cad2a 100644
-> > --- a/drivers/mfd/Makefile
-> > +++ b/drivers/mfd/Makefile
-> > @@ -274,6 +274,7 @@ obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
-> >  
-> >  obj-$(CONFIG_MFD_INTEL_M10_BMC_CORE)	+= intel-m10-bmc-core.o
-> >  obj-$(CONFIG_MFD_INTEL_M10_BMC_SPI)	+= intel-m10-bmc-spi.o
-> > +obj-$(CONFIG_MFD_INTEL_M10_BMC_PMCI)	+= intel-m10-bmc-pmci.o
-> >  
-> >  obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
-> >  obj-$(CONFIG_MFD_ATC260X_I2C)	+= atc260x-i2c.o
-> > diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
-> > new file mode 100644
-> > index 000000000000..63ec0f6aba8b
-> > --- /dev/null
-> > +++ b/drivers/mfd/intel-m10-bmc-pmci.c
-> > @@ -0,0 +1,253 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * MFD driver for Platform Management Component Interface (PMCI) based
-> 
-> Please remove any mention of MFD.
-> 
-> This includes the MODULE_*() macros in all patches please.
-> 
-> Better to use terms like 'core' instead.
-> 
-> > + * interface to MAX10 BMC.
-> > + *
-> > + * Copyright (C) 2020-2022 Intel Corporation.
-> > + */
-> > +
-> > +#include <linux/device.h>
-> > +#include <linux/dfl.h>
-> > +#include <linux/mfd/core.h>
-> > +#include <linux/mfd/intel-m10-bmc.h>
-> > +#include <linux/module.h>
-> > +#include <linux/regmap.h>
-> > +
-> > +#define M10BMC_PMCI_INDIRECT_BASE	0x400
-> > +
-> > +#define M10BMC_N6000_SYS_BASE		0x0
-> > +#define M10BMC_N6000_SYS_END		0xfff
-> > +
-> > +#define M10BMC_N6000_DOORBELL		0x1c0
-> > +#define M10BMC_N6000_AUTH_RESULT	0x1c4
-> > +
-> > +/* Telemetry registers */
-> > +#define M10BMC_N6000_TELEM_START	0x400
-> > +#define M10BMC_N6000_TELEM_END		0x78c
-> > +
-> > +#define M10BMC_N6000_BUILD_VER		0x0
-> > +#define NIOS2_N6000_FW_VERSION		0x4
-> > +#define M10BMC_N6000_MAC_LOW		0x20
-> > +#define M10BMC_N6000_MAC_HIGH		(M10BMC_N6000_MAC_LOW + 4)
-> > +
-> > +/* Addresses for security related data in FLASH */
-> > +#define M10BMC_N6000_BMC_REH_ADDR	0x7ffc004
-> > +#define M10BMC_N6000_BMC_PROG_ADDR	0x7ffc000
-> > +#define M10BMC_N6000_BMC_PROG_MAGIC	0x5746
-> > +
-> > +#define M10BMC_N6000_SR_REH_ADDR	0x7ffd004
-> > +#define M10BMC_N6000_SR_PROG_ADDR	0x7ffd000
-> > +#define M10BMC_N6000_SR_PROG_MAGIC	0x5253
-> > +
-> > +#define M10BMC_N6000_PR_REH_ADDR	0x7ffe004
-> > +#define M10BMC_N6000_PR_PROG_ADDR	0x7ffe000
-> > +#define M10BMC_N6000_PR_PROG_MAGIC	0x5250
-> > +
-> > +#define M10BMC_N6000_STAGING_FLASH_COUNT	0x7ff5000
-> > +
-> > +struct m10bmc_pmci_device {
-> > +	void __iomem *base;
-> > +	struct intel_m10bmc m10bmc;
-> > +};
-> > +
-> > +/*
-> > + * Intel FGPA indirect register access via hardware controller/bridge.
-> > + */
-> > +#define INDIRECT_CMD_OFF	0
-> > +#define INDIRECT_CMD_CLR	0
-> > +#define INDIRECT_CMD_RD		BIT(0)
-> > +#define INDIRECT_CMD_WR		BIT(1)
-> > +#define INDIRECT_CMD_ACK	BIT(2)
-> > +
-> > +#define INDIRECT_ADDR_OFF	0x4
-> > +#define INDIRECT_RD_OFF		0x8
-> > +#define INDIRECT_WR_OFF		0xc
-> > +
-> > +#define INDIRECT_INT_US		1
-> > +#define INDIRECT_TIMEOUT_US	10000
-> > +
-> > +struct indirect_ctx {
-> > +        void __iomem *base;
-> > +        struct device *dev;
-> > +};
-> > +
-> > +static int indirect_clear_cmd(struct indirect_ctx *ctx)
-> > +{
-> > +	unsigned int cmd;
-> > +	int ret;
-> > +
-> > +	writel(INDIRECT_CMD_CLR, ctx->base + INDIRECT_CMD_OFF);
-> > +
-> > +	ret = readl_poll_timeout(ctx->base + INDIRECT_CMD_OFF, cmd,
-> > +				 cmd == INDIRECT_CMD_CLR,
-> > +				 INDIRECT_INT_US, INDIRECT_TIMEOUT_US);
-> > +	if (ret)
-> > +		dev_err(ctx->dev, "timed out waiting clear cmd (residual cmd=0x%x)\n", cmd);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int indirect_reg_read(void *context, unsigned int reg, unsigned int *val)
-> > +{
-> > +	struct indirect_ctx *ctx = context;
-> > +	unsigned int cmd, ack, tmpval;
-> > +	int ret;
-> > +
-> > +	cmd = readl(ctx->base + INDIRECT_CMD_OFF);
-> > +	if (cmd != INDIRECT_CMD_CLR)
-> > +		dev_warn(ctx->dev, "residual cmd 0x%x on read entry\n", cmd);
-> > +
-> > +	writel(reg, ctx->base + INDIRECT_ADDR_OFF);
-> > +	writel(INDIRECT_CMD_RD, ctx->base + INDIRECT_CMD_OFF);
-> > +
-> > +	ret = readl_poll_timeout(ctx->base + INDIRECT_CMD_OFF, ack,
-> > +				 (ack & INDIRECT_CMD_ACK) == INDIRECT_CMD_ACK,
-> > +				 INDIRECT_INT_US, INDIRECT_TIMEOUT_US);
-> > +	if (ret)
-> > +		dev_err(ctx->dev, "read timed out on reg 0x%x ack 0x%x\n", reg, ack);
-> > +	else
-> > +		tmpval = readl(ctx->base + INDIRECT_RD_OFF);
-> > +
-> > +	if (indirect_clear_cmd(ctx)) 
-> 
-> What are the chances of the above readl_poll_timeout() failing, then the
-> subsequent one in indirect_clear_cmd() passing?
+> On 2023-01-12 at 07:36:29 -0800, matthew.gerlach@linux.intel.com wrote:
+>>
+>>
+>> On Thu, 12 Jan 2023, Andy Shevchenko wrote:
+>>
+>>> On Wed, Jan 11, 2023 at 10:13:31AM +0800, Xu Yilun wrote:
+>>>> On 2023-01-10 at 14:07:16 -0800, matthew.gerlach@linux.intel.com wrote:
+>>>>> On Tue, 10 Jan 2023, Andy Shevchenko wrote:
+>>>>>> On Mon, Jan 09, 2023 at 04:30:28PM -0800, matthew.gerlach@linux.intel.com wrote:
+>>>>>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>>
+>>> ...
+>>>
+>>>>>>> v10: change dfh_find_param to return size of parameter data in bytes
+>>>>>>
+>>>>>> The problem that might occur with this approach is byte ordering.
+>>>>>> When we have u64 items, we know that they all are placed in CPU
+>>>>>> ordering by the bottom layer. What's the contract now? Can it be
+>>>>>> a problematic? Please double check this (always keep in mind BE32
+>>>>>> as most interesting case for u64/unsigned long representation and
+>>>>>> other possible byte ordering outcomes).
+>>>>>
+>>>>> A number of u64 items certainly states explicit alignment of the memory, but
+>>>>> I think byte ordering is a different issue.
+>>>>>
+>>>>> The bottom layer, by design, is still enforcing a number u64 items under the
+>>>>> hood. So the contract has not changed. Changing units of size from u64s to
+>>>>> bytes was suggested to match the general practice of size of memory being in
+>>>>> bytes. I think the suggestion was made because the return type for
+>>>>> dfh_find_param() changed from u64* to void* in version 9, when indirectly
+>>>>> returning the size of the parameter data was introduced.  So a void * with a
+>>>>> size in bytes makes sense. On the other hand, returning a u64 * is a more
+>>>>> precise reflection of the data alignment. I think the API should be as
+>>>>
+>>>> I prefer (void *) + bytes. The properties in the parameter block are not
+>>>> guarateed to be u64 for each, e.g. the REG_LAYOUT, so (void *) could better
+>>>> indicate it is not. It is just a block of data unknown to DFL core and to
+>>>> be parsed by drivers.
+>>>
+>>> If the hardware / protocol is capable of communicating the arbitrary lengths
+>>> of parameters, then yes, bytes make sense. But this should be clear what byte
+>>> ordering is there if the items can be words / dwords / qwords.
+>>
+>> The hardware does communicate the arbitrary lengths of the parameter data;
+>> so bytes make sense.  I will update Documentation/fpga/dfl.rst to explicitly
+>> say that multi-byte quantities are little-endian.
+>>
+>>>
+>>> TL;DR: The Q is: Is the parameter block a byte stream? If yes, then your
+>>> proposal is okay. If no, no void * should be used. In the latter it should
+>>> be union of possible items or a like as defined by a protocol.
+>>
+>> The parameter block is not a byte stream; so void * should be used.
+>
+> Mm.. I think Andy's idea is, if the parameter block is not a byte stream,
+> void * should NOT be used.
+>
+> My understanding is, The parameter block is not a byte stream in HW, it is
+> some items (or properties) of various lengths. They are compacted in the
+> parameter block. But the layout is not generally defined, each parameter
+> block could have its own layout.
 
-I don't have a good answer to what the chances are but the clear command 
-deals with the indirect controller/bridge so failures aren't necessarily 
-1:1. At worst it just causes wait that is double of the poll timeout which 
-doesn't seem that big problem.
+Your understanding is correct that the parameter block is a set of items 
+(or properties) of variouse lengths in HW. The parameter blocks are 
+comparable to PCI capabilities in PCI config space. Each capability has its own 
+defined stucture.
 
-> As I rule, I tend to dislike calling functions from inside if()
-> statements.  If there is no way to work this hunk around, probably
-> better to place the return value inside another variable or use another
-> variable entirely and call indirect_clear_cmd() in the traditional way,
-> like you do everywhere else.
+>
+> The definition and layout of the parameter block is specific to each device,
+> that is, people design the parameter block for the device when they design
+> the device. So DFL core doesn't try to generalize all the layouts, they
+> are unlimited. DFL core just see it as a block of untouched data to be parsed
+> by each driver. So from DFL core's perspective, it is a byte stream.
 
-I can add the second variable for that.
+Yes, from the DFL core's perspective, the parameter blocks are opaque 
+chunks of data. This would affirm your preference of using (void *) and 
+byte size in the API for the function, dfh_find_param.
 
-> > +		if (!ret)
-> > +			ret = -ETIMEDOUT;
-> > +		goto out;
-> > +	}
-> > +
-> > +	*val = tmpval;
-> 
-> If readl_poll_timeout() fails and indirect_clear_cmd() succeeds, you'll
-> return, at best, junk.
+Thanks,
+Matthew Gerlach
 
-Thanks, I already fixed this problem once and now managed to reintroduce 
-it myself. :-(
-
-> > +out:
-> > +	return ret;
-> > +}
-> > +
-> > +static int indirect_reg_write(void *context, unsigned int reg, unsigned int val)
-> > +{
-> > +	struct indirect_ctx *ctx = context;
-> > +	unsigned int cmd, ack;
-> > +	int ret;
-> > +
-> > +	cmd = readl(ctx->base + INDIRECT_CMD_OFF);
-> > +	if (cmd != INDIRECT_CMD_CLR)
-> > +		dev_warn(ctx->dev, "residual cmd 0x%x on write entry\n", cmd);
-> > +
-> > +	writel(val, ctx->base + INDIRECT_WR_OFF);
-> > +	writel(reg, ctx->base + INDIRECT_ADDR_OFF);
-> > +	writel(INDIRECT_CMD_WR, ctx->base + INDIRECT_CMD_OFF);
-> > +
-> > +	ret = readl_poll_timeout(ctx->base + INDIRECT_CMD_OFF, ack,
-> > +				 (ack & INDIRECT_CMD_ACK) == INDIRECT_CMD_ACK,
-> > +				 INDIRECT_INT_US, INDIRECT_TIMEOUT_US);
-> > +	if (ret)
-> > +		dev_err(ctx->dev, "write timed out on reg 0x%x ack 0x%x\n", reg, ack);
-> > +
-> > +	if (indirect_clear_cmd(ctx)) {
-> > +		if (!ret)
-> > +			ret = -ETIMEDOUT;
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static const struct regmap_range m10bmc_pmci_regmap_range[] = {
-> > +	regmap_reg_range(M10BMC_N6000_SYS_BASE, M10BMC_N6000_SYS_END),
-> > +};
-> > +
-> > +static const struct regmap_access_table m10bmc_pmci_access_table = {
-> > +	.yes_ranges	= m10bmc_pmci_regmap_range,
-> > +	.n_yes_ranges	= ARRAY_SIZE(m10bmc_pmci_regmap_range),
-> > +};
-> > +
-> > +static struct regmap_config m10bmc_pmci_regmap_config = {
-> > +	.reg_bits = 32,
-> > +	.reg_stride = 4,
-> > +	.val_bits = 32,
-> > +	.wr_table = &m10bmc_pmci_access_table,
-> > +	.rd_table = &m10bmc_pmci_access_table,
-> > +	.reg_read = &indirect_reg_read,
-> > +	.reg_write = &indirect_reg_write,
-> > +	.max_register = M10BMC_N6000_SYS_END,
-> > +};
-> > +
-> > +static struct mfd_cell m10bmc_pmci_n6000_bmc_subdevs[] = {
-> > +	{ .name = "n6000bmc-hwmon" },
-> > +};
-> > +
-> > +static const struct m10bmc_csr_map m10bmc_n6000_csr_map = {
-> > +	.base = M10BMC_N6000_SYS_BASE,
-> > +	.build_version = M10BMC_N6000_BUILD_VER,
-> > +	.fw_version = NIOS2_N6000_FW_VERSION,
-> > +	.mac_low = M10BMC_N6000_MAC_LOW,
-> > +	.mac_high = M10BMC_N6000_MAC_HIGH,
-> > +	.doorbell = M10BMC_N6000_DOORBELL,
-> > +	.auth_result = M10BMC_N6000_AUTH_RESULT,
-> > +	.rsu_status = M10BMC_N6000_AUTH_RESULT,
-> > +	.bmc_prog_addr = M10BMC_N6000_BMC_PROG_ADDR,
-> > +	.bmc_reh_addr = M10BMC_N6000_BMC_REH_ADDR,
-> > +	.bmc_magic = M10BMC_N6000_BMC_PROG_MAGIC,
-> > +	.sr_prog_addr = M10BMC_N6000_SR_PROG_ADDR,
-> > +	.sr_reh_addr = M10BMC_N6000_SR_REH_ADDR,
-> > +	.sr_magic = M10BMC_N6000_SR_PROG_MAGIC,
-> > +	.pr_prog_addr = M10BMC_N6000_PR_PROG_ADDR,
-> > +	.pr_reh_addr = M10BMC_N6000_PR_REH_ADDR,
-> > +	.pr_magic = M10BMC_N6000_PR_PROG_MAGIC,
-> > +	.rsu_update_counter = M10BMC_N6000_STAGING_FLASH_COUNT,
-> > +};
-> > +
-> > +static const struct intel_m10bmc_platform_info m10bmc_pmci_n6000 = {
-> > +	.cells = m10bmc_pmci_n6000_bmc_subdevs,
-> > +	.n_cells = ARRAY_SIZE(m10bmc_pmci_n6000_bmc_subdevs),
-> > +	.csr_map = &m10bmc_n6000_csr_map,
-> > +};
-> > +
-> > +static int m10bmc_pmci_probe(struct dfl_device *ddev)
-> > +{
-> > +	struct device *dev = &ddev->dev;
-> > +	struct m10bmc_pmci_device *pmci;
-> > +	struct indirect_ctx *ctx;
-> > +
-> > +	pmci = devm_kzalloc(dev, sizeof(*pmci), GFP_KERNEL);
-> > +	if (!pmci)
-> > +		return -ENOMEM;
-> > +
-> > +	pmci->m10bmc.dev = dev;
-> > +
-> > +	pmci->base = devm_ioremap_resource(dev, &ddev->mmio_res);
-> > +	if (IS_ERR(pmci->base))
-> > +		return PTR_ERR(pmci->base);
-> > +
-> > +	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-> > +	if (!ctx)
-> > +		return -ENOMEM;
-> > +
-> > +	ctx->base = pmci->base + M10BMC_PMCI_INDIRECT_BASE;
-> > +	ctx->dev = dev;
-> 
-> Why do we need to cache dev twice in two different structures? 
-
-This indirect register access thing is kinda different from this PMCI 
-driver. It's a generic mechanism to access registers in Intel FPGAs. The
-indirect register access code used to be separately among regmap code in 
-the earlier versions of this series but since PMCI driver is currently the 
-only user and lacks in the genericness of the indirect code, it eventually 
-got included into this PMCI driver file.
-
-Do you prefer I use m10bmc_pmci_device instead?
-
--- 
- i.
-
---8323329-2145620619-1673622504=:1600--
+> Thanks,
+> Yilun
+>
+>>
+>> Thanks,
+>> Matthew Gerlach
+>>
+>>
+>>>
+>>>> And why users/drivers need to care about the alignment of the parameter
+>>>> block?
+>>>>
+>>>>> follows:
+>>>
+>>> --
+>>> With Best Regards,
+>>> Andy Shevchenko
+>>>
+>>>
+>>>
+>
