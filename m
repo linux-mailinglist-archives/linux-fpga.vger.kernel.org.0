@@ -2,135 +2,142 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5409166AC34
-	for <lists+linux-fpga@lfdr.de>; Sat, 14 Jan 2023 16:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B73E66AC6F
+	for <lists+linux-fpga@lfdr.de>; Sat, 14 Jan 2023 17:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjANPku (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 14 Jan 2023 10:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
+        id S230199AbjANQFK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 14 Jan 2023 11:05:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjANPkt (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 14 Jan 2023 10:40:49 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D3A7EC7;
-        Sat, 14 Jan 2023 07:40:49 -0800 (PST)
+        with ESMTP id S230184AbjANQFJ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 14 Jan 2023 11:05:09 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E078903A;
+        Sat, 14 Jan 2023 08:05:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673710849; x=1705246849;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M25GkKQeLh+R1ElCPcHFYj/TtwVpy9Dn41SV9soMg2E=;
-  b=C2jM6sgIJubCy5U+TNhlK+DQz4DX2vYx8zZzmuMTdqUiADmXDdvjcCni
-   VjXHiJgZwuc1ViQ9E8Urjv7IxqaD3Fe3++xwllREKJgVh7EVwKno0j9w+
-   G84496xI2N6aCHt11W8lbQDCp22r/Ca9Ool7/kYb1cvdcn06DB0RQTgBi
-   GPiPb++rVnFIi8CergiXkoajSkH2dsL/sdObwAs5pv8cqMT2SgsLrSjeG
-   ScuI1aFd/tdzB1xbImziNNmJmPGZL5nEw40/ClPHfVukcRwcPCFtqvvcb
-   mVUyYk5rl7rAS4Bw4ajzMzNkzd/o4wFPISK9gECHE2uU+3vD+i+EmF49Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10590"; a="303902081"
+  t=1673712309; x=1705248309;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kuWsyWIvywj0tHgOXuTlfBAihSjHtVUPvzJ5T6gRDb8=;
+  b=OuOK+JqD6tDW46J6HJRewO/69YZNun/M4Z5GQTXogGyb4r1l5J/dUdxt
+   Wv3efDg4eljOmK3KhKoTBRSqMSpNnOVtguPqRIygA1eNP5ET2YHo6CZw4
+   GS+5qHr73XclN82485jelLelkPCIGT+cr/Nh6/34y0BTxgsJVX3X37pRV
+   gFZR6MVl4g20Bukx1CMXXeb1jgXxVgHd6JR69+AgngvnUmYVuyM+XWF/N
+   +rgOMZC1IvjagJoILWTYDLUMjLx0nK2+JDkT9k8c+PvvUdMfz6Allq+i9
+   s4Q35Mpn7PUH8wcuMj9+C9hP0Y6GefF+MYIwdnRJ1et184N7j9+Jk4ber
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10590"; a="388698712"
 X-IronPort-AV: E=Sophos;i="5.97,216,1669104000"; 
-   d="scan'208";a="303902081"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2023 07:40:48 -0800
+   d="scan'208";a="388698712"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2023 08:05:08 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10590"; a="800916238"
+X-IronPort-AV: E=McAfee;i="6500,9779,10590"; a="721846041"
 X-IronPort-AV: E=Sophos;i="5.97,216,1669104000"; 
-   d="scan'208";a="800916238"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Jan 2023 07:40:46 -0800
-Date:   Sat, 14 Jan 2023 23:30:24 +0800
+   d="scan'208";a="721846041"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.165])
+  by fmsmga008.fm.intel.com with ESMTP; 14 Jan 2023 08:05:06 -0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH] fpga: dfl: kernel-doc corrections
-Message-ID: <Y8LKkPktA9fUuUnX@yilunxu-OptiPlex-7050>
-References: <20230113063720.10668-1-rdunlap@infradead.org>
+To:     rdunlap@infradead.org, hao.wu@intel.com, trix@redhat.com,
+        mdf@kernel.org, yilun.xu@intel.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] fpga: dfl: more kernel-doc corrections
+Date:   Sat, 14 Jan 2023 23:54:44 +0800
+Message-Id: <20230114155444.794712-1-yilun.xu@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113063720.10668-1-rdunlap@infradead.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2023-01-12 at 22:37:20 -0800, Randy Dunlap wrote:
-> Fix W=1 kernel-doc warnings in drivers/fpga/:
-> 
-> drivers/fpga/dfl.c:54: warning: cannot understand function prototype: 'struct dfl_dev_info '
-> drivers/fpga/dfl.c:74: warning: cannot understand function prototype: 'struct dfl_chardev_info '
-> drivers/fpga/dfl-fme-pr.c:175: warning: Function parameter or member 'feature' not described in 'dfl_fme_create_mgr'
-> drivers/fpga/dfl-fme-pr.c:280: warning: expecting prototype for dfl_fme_destroy_bridge(). Prototype was for dfl_fme_destroy_bridges() instead
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Fix more kernel-doc warnings in drivers/fpga/:
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+$ ./scripts/kernel-doc -none drivers/fpga/*
+drivers/fpga/dfl-afu.h:61: warning: expecting prototype for struct fpga_afu_dma_region. Prototype was for struct dfl_afu_dma_region instead
+drivers/fpga/dfl-afu-region.c:52: warning: Function parameter or member 'pdata' not described in 'afu_mmio_region_add'
+drivers/fpga/dfl-fme-perf.c:161: warning: Function parameter or member 'node' not described in 'fme_perf_priv'
+drivers/fpga/dfl-fme-pr.h:70: warning: expecting prototype for struct dfl_fme_bridge_pdata. Prototype was for struct dfl_fme_br_pdata instead
+drivers/fpga/dfl.h:256: warning: Function parameter or member 'revision' not described in 'dfl_feature'
 
-Applied to for-next
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+---
+ drivers/fpga/dfl-afu-region.c | 1 +
+ drivers/fpga/dfl-afu.h        | 2 +-
+ drivers/fpga/dfl-fme-perf.c   | 2 +-
+ drivers/fpga/dfl-fme-pr.h     | 2 +-
+ drivers/fpga/dfl.h            | 1 +
+ 5 files changed, 5 insertions(+), 3 deletions(-)
 
-> Cc: Wu Hao <hao.wu@intel.com>
-> Cc: Tom Rix <trix@redhat.com>
-> Cc: Moritz Fischer <mdf@kernel.org>
-> Cc: Xu Yilun <yilun.xu@intel.com>
-> Cc: linux-fpga@vger.kernel.org
-> ---
->  drivers/fpga/dfl-fme-pr.c |    4 ++--
->  drivers/fpga/dfl.c        |    5 +++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff -- a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -45,7 +45,7 @@ static const char *dfl_pdata_key_strings
->  };
->  
->  /**
-> - * dfl_dev_info - dfl feature device information.
-> + * struct dfl_dev_info - dfl feature device information.
->   * @name: name string of the feature platform device.
->   * @dfh_id: id value in Device Feature Header (DFH) register by DFL spec.
->   * @id: idr id of the feature dev.
-> @@ -67,7 +67,7 @@ static struct dfl_dev_info dfl_devs[] =
->  };
->  
->  /**
-> - * dfl_chardev_info - chardev information of dfl feature device
-> + * struct dfl_chardev_info - chardev information of dfl feature device
->   * @name: nmae string of the char device.
->   * @devt: devt of the char device.
->   */
-> @@ -708,6 +708,7 @@ struct build_feature_devs_info {
->   * struct dfl_feature_info - sub feature info collected during feature dev build
->   *
->   * @fid: id of this sub feature.
-> + * @revision: revision value of this sub feature.
->   * @mmio_res: mmio resource of this sub feature.
->   * @ioaddr: mapped base address of mmio resource.
->   * @node: node in sub_features linked list.
-> diff -- a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
-> --- a/drivers/fpga/dfl-fme-pr.c
-> +++ b/drivers/fpga/dfl-fme-pr.c
-> @@ -164,7 +164,7 @@ free_exit:
->  
->  /**
->   * dfl_fme_create_mgr - create fpga mgr platform device as child device
-> - *
-> + * @feature: sub feature info
->   * @pdata: fme platform_device's pdata
->   *
->   * Return: mgr platform device if successful, and error code otherwise.
-> @@ -273,7 +273,7 @@ static void dfl_fme_destroy_bridge(struc
->  }
->  
->  /**
-> - * dfl_fme_destroy_bridge - destroy all fpga bridge platform device
-> + * dfl_fme_destroy_bridges - destroy all fpga bridge platform device
->   * @pdata: fme platform device's pdata
->   */
->  static void dfl_fme_destroy_bridges(struct dfl_feature_platform_data *pdata)
+diff --git a/drivers/fpga/dfl-afu-region.c b/drivers/fpga/dfl-afu-region.c
+index 0804b7a0c298..2e7b41629406 100644
+--- a/drivers/fpga/dfl-afu-region.c
++++ b/drivers/fpga/dfl-afu-region.c
+@@ -39,6 +39,7 @@ static struct dfl_afu_mmio_region *get_region_by_index(struct dfl_afu *afu,
+ /**
+  * afu_mmio_region_add - add a mmio region to given feature dev.
+  *
++ * @pdata: afu platform device's pdata.
+  * @region_index: region index.
+  * @region_size: region size.
+  * @phys: region's physical address of this region.
+diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
+index e5020e2b1f3d..674e9772f0ea 100644
+--- a/drivers/fpga/dfl-afu.h
++++ b/drivers/fpga/dfl-afu.h
+@@ -41,7 +41,7 @@ struct dfl_afu_mmio_region {
+ };
+ 
+ /**
+- * struct fpga_afu_dma_region - afu DMA region data structure
++ * struct dfl_afu_dma_region - afu DMA region data structure
+  *
+  * @user_addr: region userspace virtual address.
+  * @length: region length.
+diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
+index 587c82be12f7..7422d2bc6f37 100644
+--- a/drivers/fpga/dfl-fme-perf.c
++++ b/drivers/fpga/dfl-fme-perf.c
+@@ -141,7 +141,7 @@
+  * @fab_port_id: used to indicate current working mode of fabric counters.
+  * @fab_lock: lock to protect fabric counters working mode.
+  * @cpu: active CPU to which the PMU is bound for accesses.
+- * @cpuhp_node: node for CPU hotplug notifier link.
++ * @node: node for CPU hotplug notifier link.
+  * @cpuhp_state: state for CPU hotplug notification;
+  */
+ struct fme_perf_priv {
+diff --git a/drivers/fpga/dfl-fme-pr.h b/drivers/fpga/dfl-fme-pr.h
+index 096a699089d3..761f80f63312 100644
+--- a/drivers/fpga/dfl-fme-pr.h
++++ b/drivers/fpga/dfl-fme-pr.h
+@@ -58,7 +58,7 @@ struct dfl_fme_bridge {
+ };
+ 
+ /**
+- * struct dfl_fme_bridge_pdata - platform data for FME bridge platform device.
++ * struct dfl_fme_br_pdata - platform data for FME bridge platform device.
+  *
+  * @cdev: container device.
+  * @port_id: port id.
+diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+index 06cfcd5e84bb..5fc424d505c8 100644
+--- a/drivers/fpga/dfl.h
++++ b/drivers/fpga/dfl.h
+@@ -231,6 +231,7 @@ struct dfl_feature_irq_ctx {
+  *
+  * @dev: ptr to pdev of the feature device which has the sub feature.
+  * @id: sub feature id.
++ * @revision: revision value of this sub feature.
+  * @resource_index: each sub feature has one mmio resource for its registers.
+  *		    this index is used to find its mmio resource from the
+  *		    feature dev (platform device)'s resources.
+-- 
+2.25.1
+
