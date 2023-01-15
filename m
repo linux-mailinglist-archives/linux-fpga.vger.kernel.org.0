@@ -2,144 +2,114 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263F266ACC7
-	for <lists+linux-fpga@lfdr.de>; Sat, 14 Jan 2023 18:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0038866B1F5
+	for <lists+linux-fpga@lfdr.de>; Sun, 15 Jan 2023 16:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjANRAi (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 14 Jan 2023 12:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        id S231136AbjAOPO2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 15 Jan 2023 10:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjANRAh (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 14 Jan 2023 12:00:37 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD6F93D6;
-        Sat, 14 Jan 2023 09:00:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=hxvdnhmwFp7Gsig4e5Q1Y6Qn7meRx4ipVDxeSJr2N/I=; b=qhiRzFhRl8ur4ty/gR9+zsmxaY
-        ExY6aECA3/f7ZiUxblQJTV65jd+gnpqpmIlNOtarhuv8v7eI2vZfNArxxIS7S9F87UQmObgPLVSZ9
-        Aiuw5kKflJx43iN3MY/6R6hq3xPGJ+ZDWRu5IjZF4RJN08VA3hLP7J3IG1x+EvDlgrXux/uLC53UY
-        zHnrw0IIhdW30b6UxubuKnMHMNxFhnnBkawITfWjz0CQNuE+Ky1iv+uytdxgrP95k+s0llYsEi+ai
-        7TcMlPxiDXtWAU+3ezEO7Wcq8Qie/CoxK6ugdKKvHyw6c3jBoP8tpIudc+Jp9vLiwPGKUoqzmRKOg
-        UyNzCHhw==;
-Received: from [2601:1c2:d80:3110::9307]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGjtK-006Fa9-Gx; Sat, 14 Jan 2023 17:00:26 +0000
-Message-ID: <78d502cf-9e68-5477-5685-cf0cc53b9b86@infradead.org>
-Date:   Sat, 14 Jan 2023 09:00:23 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] fpga: dfl: more kernel-doc corrections
-To:     Xu Yilun <yilun.xu@intel.com>, hao.wu@intel.com, trix@redhat.com,
+        with ESMTP id S231420AbjAOPOU (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 15 Jan 2023 10:14:20 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2011041E;
+        Sun, 15 Jan 2023 07:14:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673795653; x=1705331653;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+iOufPRgopYuYmLXRsJEiPulQI4xkelEme+NJan0C7s=;
+  b=g7Md2yfx8ltlvtAyJu5MsgZNB2nSp7x/khwi2OvQS1VVeQQvoXS4Z0Js
+   y2OrZGb+LANIhRliBYvrcj3GM4xU5GU4+xoXnMlYZZG9+i5lbhoG26Iat
+   6Noxx4eJ5n8Bm0sjlqRJLb52iz8Hqm/ShdSJC8YVe+d6L+XnsetArit2d
+   XW8Rpz6vDhzoc+TOdgPTm1L1K4QB236YjU9IJewDiw1eKqYKCZhpzMe9M
+   JjHwIouEub602iIhrTP/hBbyAuYP2MXNwAYusKJouJtME847CLJG8f9df
+   R8OEvTyylSr/LJn/3X3t33bWNdELmU9W1W2HaIIhZj6I4HDqqPaeN8+/u
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="386648428"
+X-IronPort-AV: E=Sophos;i="5.97,218,1669104000"; 
+   d="scan'208";a="386648428"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2023 07:14:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="722047868"
+X-IronPort-AV: E=Sophos;i="5.97,218,1669104000"; 
+   d="scan'208";a="722047868"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2023 07:14:12 -0800
+From:   matthew.gerlach@linux.intel.com
+To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
         mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230114155444.794712-1-yilun.xu@intel.com>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230114155444.794712-1-yilun.xu@intel.com>
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v11 0/4] Enhance definition of DFH and use enhancements for UART driver
+Date:   Sun, 15 Jan 2023 07:14:43 -0800
+Message-Id: <20230115151447.1353428-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
+This patchset enhances the definition of the Device Feature Header (DFH) used by
+the Device Feature List (DFL) bus and then uses the new enhancements in a UART
+driver.
 
-On 1/14/23 07:54, Xu Yilun wrote:
-> Fix more kernel-doc warnings in drivers/fpga/:
-> 
-> $ ./scripts/kernel-doc -none drivers/fpga/*
-> drivers/fpga/dfl-afu.h:61: warning: expecting prototype for struct fpga_afu_dma_region. Prototype was for struct dfl_afu_dma_region instead
-> drivers/fpga/dfl-afu-region.c:52: warning: Function parameter or member 'pdata' not described in 'afu_mmio_region_add'
-> drivers/fpga/dfl-fme-perf.c:161: warning: Function parameter or member 'node' not described in 'fme_perf_priv'
-> drivers/fpga/dfl-fme-pr.h:70: warning: expecting prototype for struct dfl_fme_bridge_pdata. Prototype was for struct dfl_fme_br_pdata instead
-> drivers/fpga/dfl.h:256: warning: Function parameter or member 'revision' not described in 'dfl_feature'
-> 
-> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+The enhancements to the DFH includes the introduction of parameter blocks.
+Like PCI capabilities, the DFH parameter blocks further describe
+the hardware to software. In the case of the UART, the parameter blocks
+provide information for the interrupt, clock frequency, and register layout.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Duplication of code parsing of the parameter blocks in multiple DFL drivers
+is a concern. Using swnodes was considered to help minimize parsing code 
+duplication, but their use did not help the problem. Furthermore the highly
+changeable nature of FPGAs employing the DFL bus makes the use of swnodes
+inappropriate. 
 
-Thanks.
+Patch 1 updates the DFL documentation to describe the added functionality to DFH.
 
-> ---
->  drivers/fpga/dfl-afu-region.c | 1 +
->  drivers/fpga/dfl-afu.h        | 2 +-
->  drivers/fpga/dfl-fme-perf.c   | 2 +-
->  drivers/fpga/dfl-fme-pr.h     | 2 +-
->  drivers/fpga/dfl.h            | 1 +
->  5 files changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/fpga/dfl-afu-region.c b/drivers/fpga/dfl-afu-region.c
-> index 0804b7a0c298..2e7b41629406 100644
-> --- a/drivers/fpga/dfl-afu-region.c
-> +++ b/drivers/fpga/dfl-afu-region.c
-> @@ -39,6 +39,7 @@ static struct dfl_afu_mmio_region *get_region_by_index(struct dfl_afu *afu,
->  /**
->   * afu_mmio_region_add - add a mmio region to given feature dev.
->   *
-> + * @pdata: afu platform device's pdata.
->   * @region_index: region index.
->   * @region_size: region size.
->   * @phys: region's physical address of this region.
-> diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
-> index e5020e2b1f3d..674e9772f0ea 100644
-> --- a/drivers/fpga/dfl-afu.h
-> +++ b/drivers/fpga/dfl-afu.h
-> @@ -41,7 +41,7 @@ struct dfl_afu_mmio_region {
->  };
->  
->  /**
-> - * struct fpga_afu_dma_region - afu DMA region data structure
-> + * struct dfl_afu_dma_region - afu DMA region data structure
->   *
->   * @user_addr: region userspace virtual address.
->   * @length: region length.
-> diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
-> index 587c82be12f7..7422d2bc6f37 100644
-> --- a/drivers/fpga/dfl-fme-perf.c
-> +++ b/drivers/fpga/dfl-fme-perf.c
-> @@ -141,7 +141,7 @@
->   * @fab_port_id: used to indicate current working mode of fabric counters.
->   * @fab_lock: lock to protect fabric counters working mode.
->   * @cpu: active CPU to which the PMU is bound for accesses.
-> - * @cpuhp_node: node for CPU hotplug notifier link.
-> + * @node: node for CPU hotplug notifier link.
->   * @cpuhp_state: state for CPU hotplug notification;
->   */
->  struct fme_perf_priv {
-> diff --git a/drivers/fpga/dfl-fme-pr.h b/drivers/fpga/dfl-fme-pr.h
-> index 096a699089d3..761f80f63312 100644
-> --- a/drivers/fpga/dfl-fme-pr.h
-> +++ b/drivers/fpga/dfl-fme-pr.h
-> @@ -58,7 +58,7 @@ struct dfl_fme_bridge {
->  };
->  
->  /**
-> - * struct dfl_fme_bridge_pdata - platform data for FME bridge platform device.
-> + * struct dfl_fme_br_pdata - platform data for FME bridge platform device.
->   *
->   * @cdev: container device.
->   * @port_id: port id.
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 06cfcd5e84bb..5fc424d505c8 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -231,6 +231,7 @@ struct dfl_feature_irq_ctx {
->   *
->   * @dev: ptr to pdev of the feature device which has the sub feature.
->   * @id: sub feature id.
-> + * @revision: revision value of this sub feature.
->   * @resource_index: each sub feature has one mmio resource for its registers.
->   *		    this index is used to find its mmio resource from the
->   *		    feature dev (platform device)'s resources.
+Patch 2 adds the definitions for DFHv1.
+
+Patch 3 adds basic support for DFHv1. It adds functionality to parse parameter blocks
+and adds the functionality to parse the explicit location of a feature's register set.
+
+Patch 4 adds a DFL UART driver that makes use of the new features of DFHv1.
+
+Basheer Ahmed Muddebihal (1):
+  fpga: dfl: Add DFHv1 Register Definitions
+
+Matthew Gerlach (3):
+  Documentation: fpga: dfl: Add documentation for DFHv1
+  fpga: dfl: add basic support for DFHv1
+  tty: serial: 8250: add DFL bus driver for Altera 16550.
+
+ Documentation/fpga/dfl.rst         | 119 ++++++++++++++
+ drivers/fpga/dfl.c                 | 245 +++++++++++++++++++++++------
+ drivers/fpga/dfl.h                 |  43 +++++
+ drivers/tty/serial/8250/8250_dfl.c | 167 ++++++++++++++++++++
+ drivers/tty/serial/8250/Kconfig    |  12 ++
+ drivers/tty/serial/8250/Makefile   |   1 +
+ include/linux/dfl.h                |   8 +
+ 7 files changed, 544 insertions(+), 51 deletions(-)
+ create mode 100644 drivers/tty/serial/8250/8250_dfl.c
 
 -- 
-~Randy
+2.25.1
+
