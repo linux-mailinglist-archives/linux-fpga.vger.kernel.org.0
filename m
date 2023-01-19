@@ -2,207 +2,120 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E13367349D
-	for <lists+linux-fpga@lfdr.de>; Thu, 19 Jan 2023 10:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1EC6736D8
+	for <lists+linux-fpga@lfdr.de>; Thu, 19 Jan 2023 12:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjASJjC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 19 Jan 2023 04:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S229792AbjASL2G (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 19 Jan 2023 06:28:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjASJjA (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 19 Jan 2023 04:39:00 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDA36C55E;
-        Thu, 19 Jan 2023 01:38:46 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id jm10so1765478plb.13;
-        Thu, 19 Jan 2023 01:38:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JfBVelv4aEwBb1YzL1pBGhsM2qMsLGoSKaCTLvIA0+8=;
-        b=gD7dQBEZntcLnhi3RB0+MltROhlLsf5/kauy3NlLvWIlHO4r+oXbj2VSr0s7alIWbJ
-         ahCizbBH0629aGlsniSEGqgst8nnu5pOsHdVnjx4giV5VSPeiXvRfUNvabaRnGCkXciK
-         e+nYdaGEdgamTMI93jakjkyz9/q5tn2o61CBWveHQg2VX5lagXmC+zFJ5pm6yzaGwf7v
-         R4fUach8vU3WR8YRaL4+wL7xBNgVI3e81WbxDU5/KDwlAEiP1RMr6Ukp3xxRxTTVKMHb
-         HPGJ4SODFhxwj9rkrOD1t7OmIf1mD1apjcC992ySJXg508UpkqW24dsjHmgFWJ0jO5eM
-         Ecqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JfBVelv4aEwBb1YzL1pBGhsM2qMsLGoSKaCTLvIA0+8=;
-        b=guZ8oQL8ESj0c1Cq04Cr8TJ6/GZJoPDldxxnXgBCfHV5fATKgFRKtbRgFIWwtflZS9
-         uFntH1o7ZeUGrVPPPFPF96EkNLIqACAghIXrozCSRWGNlitFPr8nC+i3UbjU16RjiSuy
-         I3ppeTNuEsKaQPuJq7mZtsxoAJOW3Pw1h6IQlr3aS0teMIhG/3g8p5fvHIatbrji60o+
-         veEMgVS34t0zpB5E3pwsza7fVd6X61IgbOuopBQjVmTBbAfeZFYW35vWNEQRXs73IJm4
-         OKEijcOnsPLcCkU3xhK7jATjwWcGtcvFzugDM8bPoRc+D2dLs9BLmxX3B74vh0L7zBgl
-         Pvkg==
-X-Gm-Message-State: AFqh2krkLiCX4H8OliQN6ybMQW9X7KGHTwYuO9/ycjBSqYhuqYyhGBMc
-        A5jr3AovHd4hMFKoDPBWQO8=
-X-Google-Smtp-Source: AMrXdXs5XnufN19FRhDIUPqVcKaRcXpI/o3i6WXBhY2Ma29PsyPKg1QDVY4pRPpdqeTdsS2FHynAiw==
-X-Received: by 2002:a17:902:7042:b0:189:7548:2096 with SMTP id h2-20020a170902704200b0018975482096mr9808913plt.45.1674121125970;
-        Thu, 19 Jan 2023 01:38:45 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-69.three.co.id. [180.214.232.69])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170903110300b00189f2fdbdd0sm24604975plh.234.2023.01.19.01.38.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 01:38:45 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id E4998105027; Thu, 19 Jan 2023 16:38:41 +0700 (WIB)
-Date:   Thu, 19 Jan 2023 16:38:41 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Tianfei Zhang <tianfei.zhang@intel.com>, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-fpga@vger.kernel.org,
-        lukas@wunner.de, kabel@kernel.org, mani@kernel.org,
-        pali@kernel.org, mdf@kernel.org, hao.wu@intel.com,
-        yilun.xu@intel.com, trix@redhat.com, jgg@ziepe.ca,
-        ira.weiny@intel.com, andriy.shevchenko@linux.intel.com,
-        dan.j.williams@intel.com, keescook@chromium.org, rafael@kernel.org,
-        russell.h.weight@intel.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
-        lee@kernel.org, gregkh@linuxfoundation.org,
-        matthew.gerlach@linux.intel.com
-Subject: Re: [PATCH v1 12/12] Documentation: fpga: add description of fpgahp
- driver
-Message-ID: <Y8kPoXnCNyB7AwUv@debian.me>
+        with ESMTP id S229724AbjASL2C (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 19 Jan 2023 06:28:02 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484F126A2;
+        Thu, 19 Jan 2023 03:27:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674127677; x=1705663677;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Bccrp8lmZ8ukBj/EyZ3CSpmIYfTSsrD0V3yh5r4NP20=;
+  b=h5CHOQLjr7BXR84chydtbnMLgHqT9OQ1e4/4Ery8A+pE2ww9PG3nQYTq
+   hft/2VYsSYsq7UirUTGef9yYFTCTu6XOS8OrnlW16+0JsPjOQSCzESTB5
+   IxLYumJexMfW3+vz/0AqZdsZgVOjcNQWZpR0QxsHfxQeAz3lYKy0KfeH6
+   j+iahKkEDMADowNP8DOUJ7aM46iVXWcwpJbOvKUo4nDtPo+7FDc1w9nr9
+   c5UJ0ZxZg3PI8co0uJ/m2YM6sJIi9KbNZb/OSxZcBt/YB7tKz1g5orF1V
+   tW1HYtM3gryKQLe33TYc4FzFdsJqRK8QstVFDItA2p9x74L3zthZD/2R6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="323947823"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="323947823"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 03:27:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="728628016"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="728628016"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Jan 2023 03:27:41 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pIT51-00BcYE-0X;
+        Thu, 19 Jan 2023 13:27:39 +0200
+Date:   Thu, 19 Jan 2023 13:27:38 +0200
+From:   "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>
+Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "lukas@wunner.de" <lukas@wunner.de>,
+        "kabel@kernel.org" <kabel@kernel.org>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "mdf@kernel.org" <mdf@kernel.org>, "Wu, Hao" <hao.wu@intel.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>, "Rix, Tom" <trix@redhat.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "Weiny, Ira" <ira.weiny@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "Weight, Russell H" <russell.h.weight@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH v1 00/12] add FPGA hotplug manager driver
+Message-ID: <Y8kpKm51YryPz9F5@smile.fi.intel.com>
 References: <20230119013602.607466-1-tianfei.zhang@intel.com>
- <20230119013602.607466-13-tianfei.zhang@intel.com>
+ <20230119080606.tnjqwkseial7vpyq@pali>
+ <BN9PR11MB54839E8851853A4251451719E3C49@BN9PR11MB5483.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qVl6dm7wN+8OEMm3"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230119013602.607466-13-tianfei.zhang@intel.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BN9PR11MB54839E8851853A4251451719E3C49@BN9PR11MB5483.namprd11.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 08:17:05AM +0000, Zhang, Tianfei wrote:
+> > From: Pali Rohár <pali@kernel.org>
+> > Sent: Thursday, January 19, 2023 4:06 PM
+> > On Wednesday 18 January 2023 20:35:50 Tianfei Zhang wrote:
 
---qVl6dm7wN+8OEMm3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Wed, Jan 18, 2023 at 08:36:02PM -0500, Tianfei Zhang wrote:
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> +FPGA Hotplug Manager Driver
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> +
-> +Authors:
-> +
-> +- Tianfei Zhang <tianfei.zhang@intel.com>
-> +
-> +There are some board managements for PCIe-based FPGA card like burning t=
-he entire
-> +image, loading a new FPGA image or BMC firmware in FPGA deployment of da=
-ta center
-> +or cloud. For example, loading a new FPGA image, the driver needs to rem=
-ove all of
-> +PCI devices like PFs/VFs and as well as any other types of devices (plat=
-form, etc.)
-> +defined within the FPGA. After triggering the image load of the FPGA car=
-d via BMC,
-> +the driver reconfigures the PCI bus. The FPGA Hotplug Manager (fpgahp) d=
-river manages
-> +those devices and functions leveraging the PCI hotplug framework to deal=
- with the
-> +reconfiguration of the PCI bus and removal/probe of PCI devices below th=
-e FPGA card.
-> +
-> +This fpgahp driver adds 2 new callbacks to extend the hotplug mechanism =
-to
-> +allow selecting and loading a new FPGA image.
-> +
-> + - available_images: Optional: called to return the available images of =
-a FPGA card.
-> + - image_load: Optional: called to load a new image for a FPGA card.
-> +
-> +In general, the fpgahp driver provides some sysfs files::
-> +
-> +        /sys/bus/pci/slots/<X-X>/available_images
-> +        /sys/bus/pci/slots/<X-X>/image_load
+> > > To change the FPGA image, the kernel burns a new image into the flash
+> > > on the card, and then triggers the card BMC to load the new image into FPGA.
+> > > A new FPGA hotplug manager driver is introduced that leverages the
+> > > PCIe hotplug framework to trigger and manage the update of the FPGA
+> > > image, including the disappearance and reappearance of the card on the PCIe bus.
+> > > The fpgahp driver uses APIs from the pciehp driver.
+> > 
+> > Just I'm thinking about one thing. PCIe cards can support PCIe hotplug mechanism
+> > (via standard PCIe capabilities). So what would happen when FPGA based PCIe card is
+> > also hotplug-able? Will be there two PCI hotplug drivers/devices (one fpgahp and
+> > one pciehp)? Or just one and which?
+> 
+> For our Intel PAC N3000 and N6000 FPGA card, there are not support PCIe
+> hotplug capability from hardware side now, but from software perspective, the
+> process of FPGA image load is very similar with PCIe hotplug, like removing
+> all of devices under PCIe bridge, re-scan the PCIe device under the bridge,
+> so we are looking for the PCIe hotplug framework and APIs from pciehp driver
+> to manager this process, and reduce some duplicate code.
 
-The doc reads a rather confused to me, so I have to make wording improv:
+Exactly, from the OS perspective they both should be equivalent.
 
----- >8 ----
-diff --git a/Documentation/fpga/fpgahp.rst b/Documentation/fpga/fpgahp.rst
-index 3ec34bbffde10c..73f1b53de1cf85 100644
---- a/Documentation/fpga/fpgahp.rst
-+++ b/Documentation/fpga/fpgahp.rst
-@@ -8,22 +8,22 @@ Authors:
-=20
- - Tianfei Zhang <tianfei.zhang@intel.com>
-=20
--There are some board managements for PCIe-based FPGA card like burning the=
- entire
--image, loading a new FPGA image or BMC firmware in FPGA deployment of data=
- center
--or cloud. For example, loading a new FPGA image, the driver needs to remov=
-e all of
--PCI devices like PFs/VFs and as well as any other types of devices (platfo=
-rm, etc.)
--defined within the FPGA. After triggering the image load of the FPGA card =
-via BMC,
--the driver reconfigures the PCI bus. The FPGA Hotplug Manager (fpgahp) dri=
-ver manages
--those devices and functions leveraging the PCI hotplug framework to deal w=
-ith the
--reconfiguration of the PCI bus and removal/probe of PCI devices below the =
-FPGA card.
-=20
--This fpgahp driver adds 2 new callbacks to extend the hotplug mechanism to
--allow selecting and loading a new FPGA image.
-+The FPGA Hotplug Manager (fpgahp) manages PCIe-based FPGA card devices.
-+The PCI bus reconfiguration and device probe for devices below the FPGA
-+card are done by leveraging the PCI hotplug framework.
-=20
-- - available_images: Optional: called to return the available images of a =
-FPGA card.
-- - image_load: Optional: called to load a new image for a FPGA card.
-+The driver can be helpful in device management tasks like burning the enti=
-re
-+image and loading a new FPGA image or BMC firmware in FPGA deployment of d=
-ata
-+center or cloud. For example, when loading the image, the driver needs to
-+remove all of PCI devices like PFs/VFs and as well as any other types of
-+devices (platform, etc.) defined within the FPGA. After triggering the ima=
-ge
-+load of the FPGA card via BMC, the driver reconfigures the appropriate PCI=
- bus.
-=20
--In general, the fpgahp driver provides some sysfs files::
-+The driver adds 2 new sysfs callbacks to extend the hotplug mechanism to
-+allow selecting and loading a new FPGA image:
-+
-+ - ``/sys/bus/pci/slots/<X-X>/available_images``: list available images for
-+   a FPGA card.
-+ - ``/sys/bus/pci/slots/<X-X>/image_load``: load the image.
-=20
--        /sys/bus/pci/slots/<X-X>/available_images
--        /sys/bus/pci/slots/<X-X>/image_load
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks.
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---qVl6dm7wN+8OEMm3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8kPmwAKCRD2uYlJVVFO
-o3lrAQCct9H3y0zT3VjVNdLXNHJtFvNc7pF6h6RyrlsIR6FxAQD+KDkAExbGLjkL
-pruDqPa1E0ukAI5fDYmeWbWLP7kPaAw=
-=Eigz
------END PGP SIGNATURE-----
-
---qVl6dm7wN+8OEMm3--
