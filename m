@@ -2,140 +2,89 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094D0672E4F
-	for <lists+linux-fpga@lfdr.de>; Thu, 19 Jan 2023 02:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F47E67323E
+	for <lists+linux-fpga@lfdr.de>; Thu, 19 Jan 2023 08:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjASBeU (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 18 Jan 2023 20:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
+        id S229670AbjASHOT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 19 Jan 2023 02:14:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjASBbQ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 18 Jan 2023 20:31:16 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457D26C56D;
-        Wed, 18 Jan 2023 17:29:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674091759; x=1705627759;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Txos19R8DyvDzhERcj8uKGox4wLE09dcHL2zQgioezU=;
-  b=mzbI3w4OcbcTydS5LbrNrf1WUybgd4bXfsssC0iDOCyf9EBupRSbEafO
-   NwkCiguYwrqhU/hyMG1JXJpvNKV4o3TQi6CIboyhb4AbZE1aPJJtHAAAW
-   RhA+IESmlmfDoZ+zjOM/OROXQWHliONfh7uO2uj6rEAAJwlNA3YwPmKmm
-   qzVjCuPZ7/Y6aIxwaGgkrq8d1XS7p7H6wI9Is6Z3VjDebKgSCtDBbUgME
-   NvKden6Ho+Kx4VFIGBqPmptk/lPAzhgNIEGBzM7HTyWW0xtIVyBFFTNvH
-   +ekwmJF9sEqGt2a0tbEQ8r0nfl9327bP5i3EzSQwMyS4xtYggVjtzeHYu
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="322847637"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="322847637"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 17:29:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="767995719"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="767995719"
-Received: from unknown (HELO fedora.sh.intel.com) ([10.238.175.104])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Jan 2023 17:29:07 -0800
-From:   Tianfei Zhang <tianfei.zhang@intel.com>
-To:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-fpga@vger.kernel.org, lukas@wunner.de, kabel@kernel.org,
-        mani@kernel.org, pali@kernel.org, mdf@kernel.org, hao.wu@intel.com,
-        yilun.xu@intel.com, trix@redhat.com, jgg@ziepe.ca,
-        ira.weiny@intel.com, andriy.shevchenko@linux.intel.com,
-        dan.j.williams@intel.com, keescook@chromium.org, rafael@kernel.org,
-        russell.h.weight@intel.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
-        lee@kernel.org, gregkh@linuxfoundation.org,
-        matthew.gerlach@linux.intel.com
-Cc:     Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v1 12/12] Documentation: fpga: add description of fpgahp driver
-Date:   Wed, 18 Jan 2023 20:36:02 -0500
-Message-Id: <20230119013602.607466-13-tianfei.zhang@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230119013602.607466-1-tianfei.zhang@intel.com>
-References: <20230119013602.607466-1-tianfei.zhang@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229653AbjASHOR (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 19 Jan 2023 02:14:17 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7791604A0;
+        Wed, 18 Jan 2023 23:14:14 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NyDQD5dC0z501Ss;
+        Thu, 19 Jan 2023 15:14:12 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.99.176])
+        by mse-fl2.zte.com.cn with SMTP id 30J7E58d018922;
+        Thu, 19 Jan 2023 15:14:05 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 19 Jan 2023 15:14:07 +0800 (CST)
+Date:   Thu, 19 Jan 2023 15:14:07 +0800 (CST)
+X-Zmail-TransId: 2af963c8edbfffffffffcfd598c6
+X-Mailer: Zmail v1.0
+Message-ID: <202301191514074846351@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <yilun.xu@intel.com>
+Cc:     <mdf@kernel.org>, <hao.wu@intel.com>, <trix@redhat.com>,
+        <michal.simek@xilinx.com>, <linux-fpga@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGZwZ2E6IHhpbGlueC1wci1kZWNvdXBsZXI6IFVzZcKgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 30J7E58d018922
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63C8EDC4.000/4NyDQD5dC0z501Ss
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add the description of fpgahp driver.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
+
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- Documentation/fpga/fpgahp.rst | 29 +++++++++++++++++++++++++++++
- Documentation/fpga/index.rst  |  1 +
- MAINTAINERS                   |  1 +
- 3 files changed, 31 insertions(+)
- create mode 100644 Documentation/fpga/fpgahp.rst
+ drivers/fpga/xilinx-pr-decoupler.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/Documentation/fpga/fpgahp.rst b/Documentation/fpga/fpgahp.rst
-new file mode 100644
-index 000000000000..3ec34bbffde1
---- /dev/null
-+++ b/Documentation/fpga/fpgahp.rst
-@@ -0,0 +1,29 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+===========================
-+FPGA Hotplug Manager Driver
-+===========================
-+
-+Authors:
-+
-+- Tianfei Zhang <tianfei.zhang@intel.com>
-+
-+There are some board managements for PCIe-based FPGA card like burning the entire
-+image, loading a new FPGA image or BMC firmware in FPGA deployment of data center
-+or cloud. For example, loading a new FPGA image, the driver needs to remove all of
-+PCI devices like PFs/VFs and as well as any other types of devices (platform, etc.)
-+defined within the FPGA. After triggering the image load of the FPGA card via BMC,
-+the driver reconfigures the PCI bus. The FPGA Hotplug Manager (fpgahp) driver manages
-+those devices and functions leveraging the PCI hotplug framework to deal with the
-+reconfiguration of the PCI bus and removal/probe of PCI devices below the FPGA card.
-+
-+This fpgahp driver adds 2 new callbacks to extend the hotplug mechanism to
-+allow selecting and loading a new FPGA image.
-+
-+ - available_images: Optional: called to return the available images of a FPGA card.
-+ - image_load: Optional: called to load a new image for a FPGA card.
-+
-+In general, the fpgahp driver provides some sysfs files::
-+
-+        /sys/bus/pci/slots/<X-X>/available_images
-+        /sys/bus/pci/slots/<X-X>/image_load
-diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
-index f80f95667ca2..8973a8a3f066 100644
---- a/Documentation/fpga/index.rst
-+++ b/Documentation/fpga/index.rst
-@@ -8,6 +8,7 @@ fpga
-     :maxdepth: 1
- 
-     dfl
-+    fpgahp
- 
- .. only::  subproject and html
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 85d4e3a0e986..569c7f680229 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8169,6 +8169,7 @@ L:	linux-fpga@vger.kernel.org
- L:	linux-pci@vger.kernel.org
- S:	Maintained
- F:	Documentation/ABI/testing/sysfs-driver-fpgahp
-+F:	Documentation/fpga/fpgahp.rst
- F:	drivers/pci/hotplug/fpgahp.c
- F:	include/linux/fpga/fpgahp_manager.h
- 
+diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
+index 2d9c491f7be9..0039cf11ddd5 100644
+--- a/drivers/fpga/xilinx-pr-decoupler.c
++++ b/drivers/fpga/xilinx-pr-decoupler.c
+@@ -108,7 +108,6 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
+ 	struct xlnx_pr_decoupler_data *priv;
+ 	struct fpga_bridge *br;
+ 	int err;
+-	struct resource *res;
+
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+@@ -122,8 +121,7 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
+ 			priv->ipconfig = match->data;
+ 	}
+
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	priv->io_base = devm_ioremap_resource(&pdev->dev, res);
++	priv->io_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+ 	if (IS_ERR(priv->io_base))
+ 		return PTR_ERR(priv->io_base);
+
 -- 
-2.38.1
-
+2.25.1
