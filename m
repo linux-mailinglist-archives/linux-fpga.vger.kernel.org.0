@@ -2,76 +2,128 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062B16790F9
-	for <lists+linux-fpga@lfdr.de>; Tue, 24 Jan 2023 07:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 401A46796B5
+	for <lists+linux-fpga@lfdr.de>; Tue, 24 Jan 2023 12:33:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjAXGaq (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 24 Jan 2023 01:30:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43814 "EHLO
+        id S234064AbjAXLbt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 24 Jan 2023 06:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbjAXG37 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 24 Jan 2023 01:29:59 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B7F3E09C;
-        Mon, 23 Jan 2023 22:29:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4u7sdeygL2SI0vuOn3AQXqOOeojipj5nJ8JBXiSMSP4=; b=Y1N1Bp85zWT1Yc4mWO5RM/5swn
-        z1s/ae7nZBU1XI2LeDBAOv+06U0Bu1PJWHXCDrEjlbbph1xr+oh6cmoXIod4hdcTSIhg05KsUMsH6
-        Mt0SAUZbeNMdj95LikeyPio6/J/WyHzPQbupOE2KMJ+OXZv8xSLLdBNtO7Ot/A8dx2JalSA7ubKi2
-        aFuBB1XW7qW1wiu2y2b/BJd4x/N6dLqevlGltWAruZGC7j2J5NPe6Xz6f5IgVH1uIF87LFk4mGzQ9
-        1iI2DWcT8gQ30YpVU8YQ5BM2WIzRNm5oNr5lR1NU6lLpwGy0B15qzrZcjDOK9MRUi3zNGYFfM5749
-        r4m38yZA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKCny-002Vim-8c; Tue, 24 Jan 2023 06:29:14 +0000
-Date:   Mon, 23 Jan 2023 22:29:14 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
-        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch, linuxppc-dev@lists.ozlabs.org,
-        linux-fpga@vger.kernel.org, linux-rdma@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org,
-        bpf@vger.kernel.org, rds-devel@oss.oracle.com,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 01/19] mm: Introduce vm_account
-Message-ID: <Y896ugI8HoXDRjp3@infradead.org>
-References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
- <748338ffe4c42d86669923159fe0426808ecb04d.1674538665.git-series.apopple@nvidia.com>
+        with ESMTP id S234057AbjAXLbs (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 24 Jan 2023 06:31:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0560D2C651
+        for <linux-fpga@vger.kernel.org>; Tue, 24 Jan 2023 03:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674559864;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=W1Z3yo6YNn+U1mSRAjq+bBj48Ek+sNGL1L2Z6GAsWx4=;
+        b=XBhasdmssoNKP52qFjRzBz1OF9DzGKiX/Z2yOj+XBlG19iKTBMr7kuoZ3FD9Fx2TEaN1i2
+        TjO9319dWBV4LJFl149pjVWuAyL9P22nIG39QQHFqbQQrr/1vglD2mfIfjN/tevBajwoKA
+        hIHEq3QLbPU2u2eMhrEhuezKO0y5Dyo=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-132-k07DK_rlOaCFEztFHpJneQ-1; Tue, 24 Jan 2023 06:31:03 -0500
+X-MC-Unique: k07DK_rlOaCFEztFHpJneQ-1
+Received: by mail-qk1-f200.google.com with SMTP id a3-20020a05620a438300b007069b068069so10717969qkp.2
+        for <linux-fpga@vger.kernel.org>; Tue, 24 Jan 2023 03:31:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W1Z3yo6YNn+U1mSRAjq+bBj48Ek+sNGL1L2Z6GAsWx4=;
+        b=MHVed1bMXVnzKQzKWXZGfZmptSu1BVMWT/VtfvohjIcfjESu3RgWpqYURgDThB2G0k
+         GCgEwWSNGD1KeD5uQgu21Feriq7Lsv9ZVqdK31YtUKM6mR+cXudFnl8FFTgj7So1qjso
+         C6ifPFh2BiC2OHESBxrSTl/JAFxD90DH+xlLJ+XtQqGjqnqx2ZyZ9yTLEr9EBbXR+KgQ
+         NlZ4JcFCMSAtKHVWs12hFFW73Se00O3y1X12B1torevYV3GJVzdPYfsxpfI4eVkMK3/B
+         rMAblTeZzJshW3GoHQEZIdBE1mWOg5vHrHXnEdPwTWzCkwoLoEPhEEwNBVtKTdYhwGsh
+         da0g==
+X-Gm-Message-State: AFqh2kokPGbMJSG5WAfqy5GOEgth5e/VqlUhHE4tO1sNPE7gmh2/GFQE
+        4HJSc1P7LEI8ImDtG5h4NQiFdah8izA79Gb3DHyceoClBio0P7TrifLe0r+mz5QB1nVa5U5rKMp
+        z33ois/x1f2QkSvA1QZIN
+X-Received: by 2002:ac8:608:0:b0:3a8:dae:d985 with SMTP id d8-20020ac80608000000b003a80daed985mr60841464qth.14.1674559862306;
+        Tue, 24 Jan 2023 03:31:02 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvt2py71n2IPOqEwwEHXZpwF+QswBW5iGJotYPdAgToxylejDBwN1E0rtPWJk/mJNgfD7PvUw==
+X-Received: by 2002:ac8:608:0:b0:3a8:dae:d985 with SMTP id d8-20020ac80608000000b003a80daed985mr60841438qth.14.1674559862014;
+        Tue, 24 Jan 2023 03:31:02 -0800 (PST)
+Received: from klayman.redhat.com (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
+        by smtp.gmail.com with ESMTPSA id 18-20020ac856f2000000b0039cd4d87aacsm1070142qtu.15.2023.01.24.03.30.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 03:31:01 -0800 (PST)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] fpga: bridge: return errors in the show() method of the "state" attribute
+Date:   Tue, 24 Jan 2023 12:30:50 +0100
+Message-Id: <20230124113050.117645-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <748338ffe4c42d86669923159fe0426808ecb04d.1674538665.git-series.apopple@nvidia.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-> +/**
-> + * vm_account_init - Initialise a new struct vm_account.
-> + * @vm_account: pointer to uninitialised vm_account.
-> + * @task: task to charge against.
-> + * @user: user to charge against. Must be non-NULL for VM_ACCOUNT_USER.
-> + * @flags: flags to use when charging to vm_account.
-> + *
-> + * Initialise a new uninitialiused struct vm_account. Takes references
-> + * on the task/mm/user/cgroup as required although callers must ensure
-> + * any references passed in remain valid for the duration of this
-> + * call.
-> + */
-> +void vm_account_init(struct vm_account *vm_account, struct task_struct *task,
-> +		struct user_struct *user, enum vm_account_flags flags);
+This patch changes the show() method of the "state" sysfs attribute to
+return an error if the bridge's enable_show() op returns an error code.
+In this way, the userspace can distinguish between when the bridge is
+actually "enabled" (i.e., allowing signals to pass) or "disabled"
+(i.e., gating signals), or when there is an error (e.g., the state of
+the bridge cannot be determined).
 
+Currently, enable_show() returns an integer representing the bridge's
+state (enabled or disabled) or an error code. However, this integer
+value is interpreted in state_show() as a bool, resulting in the method
+printing "enabled" (i.e., the bridge allows signals to pass), without
+propagating the error, even when enable_show() returns an error code.
 
-kerneldoc comments are supposed to be next to the implementation, and
-not the declaration in the header.
+Another possibility could be to change the signature of enable_show()
+to return a bool for symmetry with the enable_set() "setter" method.
+However, this would prevent enable_show() from returning error codes
+and may break the HPS bridge driver (altera-hps2fpga.c +53).
+
+Thanks
+
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
+ drivers/fpga/fpga-bridge.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+index 727704431f61..5cd40acab5bf 100644
+--- a/drivers/fpga/fpga-bridge.c
++++ b/drivers/fpga/fpga-bridge.c
+@@ -293,12 +293,15 @@ static ssize_t state_show(struct device *dev,
+ 			  struct device_attribute *attr, char *buf)
+ {
+ 	struct fpga_bridge *bridge = to_fpga_bridge(dev);
+-	int enable = 1;
++	int state = 1;
+ 
+-	if (bridge->br_ops && bridge->br_ops->enable_show)
+-		enable = bridge->br_ops->enable_show(bridge);
++	if (bridge->br_ops && bridge->br_ops->enable_show) {
++		state = bridge->br_ops->enable_show(bridge);
++		if (state < 0)
++			return state;
++	}
+ 
+-	return sprintf(buf, "%s\n", enable ? "enabled" : "disabled");
++	return sysfs_emit(buf, "%s\n", state ? "enabled" : "disabled");
+ }
+ 
+ static DEVICE_ATTR_RO(name);
+-- 
+2.39.1
 
