@@ -2,67 +2,67 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381D7689FFB
-	for <lists+linux-fpga@lfdr.de>; Fri,  3 Feb 2023 18:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 063F6689FFE
+	for <lists+linux-fpga@lfdr.de>; Fri,  3 Feb 2023 18:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjBCRIN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 3 Feb 2023 12:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
+        id S233387AbjBCRIR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 3 Feb 2023 12:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbjBCRIL (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 3 Feb 2023 12:08:11 -0500
+        with ESMTP id S233068AbjBCRIO (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 3 Feb 2023 12:08:14 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770CD9D076
-        for <linux-fpga@vger.kernel.org>; Fri,  3 Feb 2023 09:07:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC2DA9D48
+        for <linux-fpga@vger.kernel.org>; Fri,  3 Feb 2023 09:07:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675444038;
+        s=mimecast20190719; t=1675444039;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QQmhmkEzd3xkaSu4HvpTV2rx3eqChwz0npZXZDCowYk=;
-        b=S9i4U2qQ5Ir1g6CBxz5LWKY11qvlu8k1V7XZRpMSpmHop/GAM8rnaSg250xeI5B2115qug
-        pLWAFQ7teKXJzvKPJVppCHqk0G8aycJvbFaOqgOVw2mUnXlsQ58xKCYgvT5NtPZ2MLYabn
-        tRVJ2woXBJAs6lOgUiQ1L04h7mgGKvs=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=nXijhy+bLVt2oImSC5wDtd/ir3c5z1uIhiC8dhyhZro=;
+        b=X06ttQ8KlPTVhyicR6iKpuLkV+4csxRITmp1NrJgQso21/MK8Fmw1m+a/UhTIkNXEDW14f
+        Z1CEoat9igZFUTfHbgL7yKJxiStRsaWzb5u3D3hPcbdDpsyyKk4doMyEjkvDLyPqapZCT0
+        GQreuOCBV1vWdcZoetdzyT69LAuRtQ8=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-659-HBMYz4vSO4SuQGV0cNi0Cw-1; Fri, 03 Feb 2023 12:07:17 -0500
-X-MC-Unique: HBMYz4vSO4SuQGV0cNi0Cw-1
-Received: by mail-qk1-f200.google.com with SMTP id s7-20020ae9f707000000b007294677a6e8so3672537qkg.17
-        for <linux-fpga@vger.kernel.org>; Fri, 03 Feb 2023 09:07:17 -0800 (PST)
+ us-mta-433-BP9-zXKPMSizziC9GxrtQw-1; Fri, 03 Feb 2023 12:07:18 -0500
+X-MC-Unique: BP9-zXKPMSizziC9GxrtQw-1
+Received: by mail-qt1-f199.google.com with SMTP id l3-20020a05622a174300b003b9b6101f65so2942755qtk.11
+        for <linux-fpga@vger.kernel.org>; Fri, 03 Feb 2023 09:07:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QQmhmkEzd3xkaSu4HvpTV2rx3eqChwz0npZXZDCowYk=;
-        b=4mYP5VemXhnhs8nWUJobqf+Vb3iz3LH9uhUFwRHx1E0SjJmVcNBW9DVYgtTp202Qif
-         XdO4aeIP4Sr5olVaFRqfSwBO7OPH+l5mESR6i7AYJE2U5VVrWgJ2OALWIBzi57DbXAfN
-         gboBv+NWXZhLoV/aT0LtzRf59UAdHqPe5E7HnrooWqilK96e6+26ynidwKUU73wO7H/T
-         Q9LRNwFn5Z6uU6MFjPcSjyLFAlyX9AS7MtRTsxPDud2PXnWiv+pkXbTo2SBff7HGsEfT
-         Z1WRQ5nMidAuXn/IYv+tJxt20YsrKf9/wmzk6FBAFFCxNmlfZQ/L86S+phbPxpN0evr9
-         N2PQ==
-X-Gm-Message-State: AO0yUKXCj+K4ue/kMtgjBbw+J+WHuPt7qnA0w3PGr9niM0d+0MOi48o2
-        arnbsePgHC4e4uIhkBvvwPgt3HLoZJwNM7OTfapyl13z5MZ+Vd6H5WXMQrIGsRz56dBLHhtFIBz
-        6kpik5D4FbTFKWbxvraj1
-X-Received: by 2002:a05:622a:14ca:b0:3b8:58d0:b4e4 with SMTP id u10-20020a05622a14ca00b003b858d0b4e4mr19562219qtx.33.1675444036418;
-        Fri, 03 Feb 2023 09:07:16 -0800 (PST)
-X-Google-Smtp-Source: AK7set9x8dWaBd+yCZwsjADawRgWA+tKJHY1o36x7wjhrDbsFVesaFoSBOd4OrnSGwH5yKnajeSjig==
-X-Received: by 2002:a05:622a:14ca:b0:3b8:58d0:b4e4 with SMTP id u10-20020a05622a14ca00b003b858d0b4e4mr19562176qtx.33.1675444036095;
-        Fri, 03 Feb 2023 09:07:16 -0800 (PST)
+        bh=nXijhy+bLVt2oImSC5wDtd/ir3c5z1uIhiC8dhyhZro=;
+        b=rIV48J3k63H+pK3Q/Xw+cDpGgQMRIbcmCykoSTVwwjOLbOcCi5wl9l8Ot4MJOeb9X/
+         GEEa5f4RYzMrqPqSSinv7qhXEE1adisVVl34SoBhfytE2mTVOHFXkmlUDc/pWs2jSp4g
+         qedW2Ap70q/c4t8aig8gLnne9AOoRxDBj6ETTBR2rHk2CLZVkXtx9pzWgwmStDmvw98Z
+         NAAFlWfVoKB2il3NG27k85mRD56ddnKPm2/FZ/yJkSFSgu+rWSY6+uQEkIjQTiUCAQ0i
+         HgsRoOC+UP+/z7TEpdtV5d82T6VtWnoldwxou0e4m+Hm77ZZ0ck/9IwhEsckMYTLWPVc
+         KGZQ==
+X-Gm-Message-State: AO0yUKU2ptreIC/mviWZlv6HpT/f6Hh3pmtXf3G4R/t5Yyh1kf0B2BUQ
+        Qt3rMdvZn6oFceAiPhmso/9CTbtJ6uWo+USV+bKnn88+BmSfuzoaDp+/CCwT1esUNG6XepIrpQa
+        hf4l6XqdhO2s998oDDJtp
+X-Received: by 2002:a05:622a:24e:b0:3a9:8cc6:d4b2 with SMTP id c14-20020a05622a024e00b003a98cc6d4b2mr9749346qtx.5.1675444038085;
+        Fri, 03 Feb 2023 09:07:18 -0800 (PST)
+X-Google-Smtp-Source: AK7set93MmWHhJVO/vDfU+RgYuWcx9JCpyyECVBzD234/JkYM24DN0DejklXMjtE26rBQV2BTbxlaQ==
+X-Received: by 2002:a05:622a:24e:b0:3a9:8cc6:d4b2 with SMTP id c14-20020a05622a024e00b003a98cc6d4b2mr9749315qtx.5.1675444037771;
+        Fri, 03 Feb 2023 09:07:17 -0800 (PST)
 Received: from klayman.redhat.com (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
-        by smtp.gmail.com with ESMTPSA id b13-20020ac801cd000000b003a6a19ee4f0sm1884287qtg.33.2023.02.03.09.07.14
+        by smtp.gmail.com with ESMTPSA id b13-20020ac801cd000000b003a6a19ee4f0sm1884287qtg.33.2023.02.03.09.07.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 09:07:15 -0800 (PST)
+        Fri, 03 Feb 2023 09:07:17 -0800 (PST)
 From:   Marco Pagani <marpagan@redhat.com>
 To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
         Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
 Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
         linux-fpga@vger.kernel.org
-Subject: [RFC PATCH 1/4] fpga: add initial KUnit test suite
-Date:   Fri,  3 Feb 2023 18:06:50 +0100
-Message-Id: <20230203170653.414990-2-marpagan@redhat.com>
+Subject: [RFC PATCH 2/4] fpga: add fake FPGA region
+Date:   Fri,  3 Feb 2023 18:06:51 +0100
+Message-Id: <20230203170653.414990-3-marpagan@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230203170653.414990-1-marpagan@redhat.com>
 References: <20230203170653.414990-1-marpagan@redhat.com>
@@ -78,372 +78,252 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Introduce an initial KUnit suite to test the core components of the
-FPGA subsystem.
-
-The test suite consists of two test cases. The first test case checks
-the programming of a static image on a fake FPGA with a single hardware
-bridge. The FPGA is first programmed using a test image stored in a
-buffer, and then with the same image linked to a single-entry
-scatter-gather list.
-
-The second test case models dynamic partial reconfiguration. The FPGA
-is first configured with a static image that implements a
-reconfigurable design containing a sub-region controlled by two soft
-bridges. Then, the reconfigurable sub-region is reconfigured using
-a fake partial bitstream image. After the reconfiguration, the test
-checks that the soft bridges have been correctly activated.
+Add fake FPGA region platform driver with support functions. This
+module is part of the KUnit test suite for the FPGA subsystem.
 
 Signed-off-by: Marco Pagani <marpagan@redhat.com>
 ---
- drivers/fpga/Kconfig            |   2 +
- drivers/fpga/Makefile           |   3 +
- drivers/fpga/tests/.kunitconfig |   5 +
- drivers/fpga/tests/Kconfig      |  15 ++
- drivers/fpga/tests/Makefile     |   6 +
- drivers/fpga/tests/fpga-tests.c | 264 ++++++++++++++++++++++++++++++++
- 6 files changed, 295 insertions(+)
- create mode 100644 drivers/fpga/tests/.kunitconfig
- create mode 100644 drivers/fpga/tests/Kconfig
- create mode 100644 drivers/fpga/tests/Makefile
- create mode 100644 drivers/fpga/tests/fpga-tests.c
+ drivers/fpga/tests/fake-fpga-region.c | 186 ++++++++++++++++++++++++++
+ drivers/fpga/tests/fake-fpga-region.h |  37 +++++
+ 2 files changed, 223 insertions(+)
+ create mode 100644 drivers/fpga/tests/fake-fpga-region.c
+ create mode 100644 drivers/fpga/tests/fake-fpga-region.h
 
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index 0a00763b9f28..2f689ac4ba3a 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
- 	  FPGA manager driver support for Lattice FPGAs programming over slave
- 	  SPI sysCONFIG interface.
- 
-+source "drivers/fpga/tests/Kconfig"
-+
- endif # FPGA
-diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-index 72e554b4d2f7..352a2612623e 100644
---- a/drivers/fpga/Makefile
-+++ b/drivers/fpga/Makefile
-@@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
- 
- # Drivers for FPGAs which implement DFL
- obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
-+
-+# KUnit tests
-+obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
-diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
+diff --git a/drivers/fpga/tests/fake-fpga-region.c b/drivers/fpga/tests/fake-fpga-region.c
 new file mode 100644
-index 000000000000..a1c2a2974c39
+index 000000000000..095397e41837
 --- /dev/null
-+++ b/drivers/fpga/tests/.kunitconfig
-@@ -0,0 +1,5 @@
-+CONFIG_KUNIT=y
-+CONFIG_FPGA=y
-+CONFIG_FPGA_REGION=y
-+CONFIG_FPGA_BRIDGE=y
-+CONFIG_FPGA_KUNIT_TESTS=y
-diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
-new file mode 100644
-index 000000000000..5198e605b38d
---- /dev/null
-+++ b/drivers/fpga/tests/Kconfig
-@@ -0,0 +1,15 @@
-+config FPGA_KUNIT_TESTS
-+	tristate "FPGA KUnit tests" if !KUNIT_ALL_TESTS
-+	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Builds unit tests for the FPGA subsystem. This option
-+	  is not useful for distributions or general kernels,
-+	  but only for kernel developers working on the FPGA
-+	  subsystem and its associated drivers.
-+
-+	  For more information on KUnit and unit tests in general,
-+	  please refer to the KUnit documentation in
-+	  Documentation/dev-tools/kunit/.
-+
-+	  If in doubt, say "N".
-diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
-new file mode 100644
-index 000000000000..74346ae62457
---- /dev/null
-+++ b/drivers/fpga/tests/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-mgr.o
-+obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-region.o
-+obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-bridge.o
-+obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-tests.o
-diff --git a/drivers/fpga/tests/fpga-tests.c b/drivers/fpga/tests/fpga-tests.c
-new file mode 100644
-index 000000000000..33f04079b32f
---- /dev/null
-+++ b/drivers/fpga/tests/fpga-tests.c
-@@ -0,0 +1,264 @@
++++ b/drivers/fpga/tests/fake-fpga-region.c
+@@ -0,0 +1,186 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Test suite for the FPGA subsystem
++ * Driver for fake FPGA region
 + *
 + * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
 + *
 + * Author: Marco Pagani <marpagan@redhat.com>
 + */
 +
-+#include <kunit/test.h>
++#include <linux/device.h>
 +#include <linux/platform_device.h>
-+#include <linux/scatterlist.h>
-+
 +#include <linux/fpga/fpga-mgr.h>
 +#include <linux/fpga/fpga-region.h>
 +#include <linux/fpga/fpga-bridge.h>
++#include <kunit/test.h>
 +
 +#include "fake-fpga-region.h"
-+#include "fake-fpga-bridge.h"
-+#include "fake-fpga-mgr.h"
 +
-+#define FAKE_BIT_BLOCKS		16
-+#define FAKE_BIT_SIZE		(FPGA_TEST_BIT_BLOCK * FAKE_BIT_BLOCKS)
++#define FAKE_FPGA_REGION_DEV_NAME	"fake_fpga_region"
 +
-+static u8 fake_bit[FAKE_BIT_SIZE];
++struct fake_region_priv {
++	int id;
++	struct kunit *test;
++};
 +
-+static int init_sgt_bit(struct sg_table *sgt, void *bit, size_t len)
++struct fake_region_data {
++	struct fpga_manager *mgr;
++	struct kunit *test;
++};
++
++/**
++ * fake_fpga_region_register - register a fake FPGA region
++ * @region_ctx: fake FPGA region context data structure.
++ * @test: KUnit test context object.
++ *
++ * Return: 0 if registration succeeded, an error code otherwise.
++ */
++int fake_fpga_region_register(struct fake_fpga_region *region_ctx,
++			      struct fpga_manager *mgr, struct kunit *test)
 +{
++	struct fake_region_data pdata;
++	struct fake_region_priv *priv;
 +	int ret;
 +
-+	ret = sg_alloc_table(sgt, 1, GFP_KERNEL);
-+	if (ret)
-+		return ret;
++	pdata.mgr = mgr;
++	pdata.test = test;
 +
-+	sg_init_one(sgt->sgl, bit, len);
++	region_ctx->pdev = platform_device_alloc(FAKE_FPGA_REGION_DEV_NAME,
++						 PLATFORM_DEVID_AUTO);
++	if (IS_ERR(region_ctx->pdev)) {
++		pr_err("Fake FPGA region device allocation failed\n");
++		return -ENOMEM;
++	}
++
++	platform_device_add_data(region_ctx->pdev, &pdata, sizeof(pdata));
++
++	ret = platform_device_add(region_ctx->pdev);
++	if (ret) {
++		pr_err("Fake FPGA region device add failed\n");
++		platform_device_put(region_ctx->pdev);
++		return ret;
++	}
++
++	region_ctx->region = platform_get_drvdata(region_ctx->pdev);
++
++	if (test) {
++		priv = region_ctx->region->priv;
++		kunit_info(test, "Fake FPGA region %d registered\n", priv->id);
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(fake_fpga_region_register);
++
++/**
++ * fake_fpga_region_unregister - unregister a fake FPGA region
++ * @region_ctx: fake FPGA region context data structure.
++ */
++void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx)
++{
++	struct fake_region_priv *priv;
++	struct kunit *test;
++	int id;
++
++	priv = region_ctx->region->priv;
++	test = priv->test;
++	id = priv->id;
++
++	if (region_ctx->pdev) {
++		platform_device_unregister(region_ctx->pdev);
++		if (test)
++			kunit_info(test, "Fake FPGA region %d unregistered\n", id);
++	}
++}
++EXPORT_SYMBOL_GPL(fake_fpga_region_unregister);
++
++/**
++ * fake_fpga_region_add_bridge - add a bridge to a fake FPGA region
++ * @region_ctx: fake FPGA region context data structure.
++ * @bridge: FPGA bridge.
++ *
++ * Return: 0 if registration succeeded, an error code otherwise.
++ */
++int fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
++				struct fpga_bridge *bridge)
++{
++	struct fake_region_priv *priv;
++	int ret;
++
++	priv = region_ctx->region->priv;
++
++	ret = fpga_bridge_get_to_list(bridge->dev.parent, NULL,
++				      &region_ctx->region->bridge_list);
++
++	if (priv->test && !ret)
++		kunit_info(priv->test, "Bridge added to fake FPGA region %d\n",
++			   priv->id);
 +
 +	return ret;
 +}
++EXPORT_SYMBOL_GPL(fake_fpga_region_add_bridge);
 +
-+static void free_sgt_bit(struct sg_table *sgt)
++static int fake_fpga_region_probe(struct platform_device *pdev)
 +{
-+	if (sgt)
-+		sg_free_table(sgt);
-+}
++	struct device *dev;
++	struct fpga_region *region;
++	struct fpga_manager *mgr;
++	struct fake_region_data *pdata;
++	struct fake_region_priv *priv;
++	static int id_count;
 +
-+static void fpga_build_base_sys(struct kunit *test, struct fake_fpga_mgr *mgr_ctx,
-+				struct fake_fpga_bridge *bridge_ctx,
-+				struct fake_fpga_region *region_ctx)
-+{
-+	int ret;
++	dev = &pdev->dev;
++	pdata = dev_get_platdata(dev);
 +
-+	ret = fake_fpga_mgr_register(mgr_ctx, test);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
 +
-+	ret = fake_fpga_bridge_register(bridge_ctx, test);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
++	mgr = fpga_mgr_get(pdata->mgr->dev.parent);
++	if (IS_ERR(mgr))
++		return PTR_ERR(mgr);
 +
-+	ret = fake_fpga_region_register(region_ctx, mgr_ctx->mgr, test);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
++	/*
++	 * No get_bridges() method since the bridges list is
++	 * pre-built using fake_fpga_region_add_bridge()
++	 */
++	region = fpga_region_register(dev, mgr, NULL);
++	if (IS_ERR(region)) {
++		fpga_mgr_put(mgr);
++		return PTR_ERR(region);
++	}
 +
-+	ret = fake_fpga_region_add_bridge(region_ctx, bridge_ctx->bridge);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+}
++	priv->test = pdata->test;
++	priv->id = id_count++;
++	region->priv = priv;
 +
-+static void fpga_free_base_sys(struct fake_fpga_mgr *mgr_ctx,
-+			       struct fake_fpga_bridge *bridge_ctx,
-+			       struct fake_fpga_region *region_ctx)
-+{
-+	if (region_ctx)
-+		fake_fpga_region_unregister(region_ctx);
-+
-+	if (bridge_ctx)
-+		fake_fpga_bridge_unregister(bridge_ctx);
-+
-+	if (region_ctx)
-+		fake_fpga_mgr_unregister(mgr_ctx);
-+}
-+
-+static int fpga_suite_init(struct kunit_suite *suite)
-+{
-+	fake_fpga_mgr_fill_header(fake_bit);
++	platform_set_drvdata(pdev, region);
 +
 +	return 0;
 +}
 +
-+static void fpga_base_test(struct kunit *test)
++static int fake_fpga_region_remove(struct platform_device *pdev)
 +{
-+	int ret;
++	struct fpga_region *region = platform_get_drvdata(pdev);
++	struct fpga_manager *mgr = region->mgr;
 +
-+	struct fake_fpga_mgr mgr_ctx;
-+	struct fake_fpga_bridge base_bridge_ctx;
-+	struct fake_fpga_region base_region_ctx;
++	fpga_mgr_put(mgr);
++	fpga_bridges_put(&region->bridge_list);
++	fpga_region_unregister(region);
 +
-+	struct fpga_image_info *test_img_info;
-+
-+	struct sg_table sgt_bit;
-+
-+	fpga_build_base_sys(test, &mgr_ctx, &base_bridge_ctx, &base_region_ctx);
-+
-+	/* Allocate a fake test image using a buffer */
-+	test_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_img_info);
-+
-+	test_img_info->buf = fake_bit;
-+	test_img_info->count = sizeof(fake_bit);
-+
-+	kunit_info(test, "fake bitstream size: %zu\n", test_img_info->count);
-+
-+	KUNIT_EXPECT_EQ(test, 0, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-+
-+	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_state(&base_bridge_ctx));
-+	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-+
-+	/* Program the fake FPGA using the image buffer */
-+	base_region_ctx.region->info = test_img_info;
-+	ret = fpga_region_program_fpga(base_region_ctx.region);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	fake_fpga_mgr_check_write_buf(&mgr_ctx);
-+
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-+
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-+
-+	fpga_image_info_free(test_img_info);
-+
-+	/* Allocate another fake test image using a scatter list */
-+	test_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_img_info);
-+
-+	ret = init_sgt_bit(&sgt_bit, fake_bit, FAKE_BIT_SIZE);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	test_img_info->sgt = &sgt_bit;
-+
-+	/* Re-program the fake FPGA using the image scatter list */
-+	base_region_ctx.region->info = test_img_info;
-+	ret = fpga_region_program_fpga(base_region_ctx.region);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	fake_fpga_mgr_check_write_sg(&mgr_ctx);
-+
-+	KUNIT_EXPECT_EQ(test, 2, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-+
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
-+	KUNIT_EXPECT_EQ(test, 2, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-+
-+	free_sgt_bit(&sgt_bit);
-+	fpga_image_info_free(test_img_info);
-+	fpga_free_base_sys(&mgr_ctx, &base_bridge_ctx, &base_region_ctx);
++	return 0;
 +}
 +
-+static void fpga_pr_test(struct kunit *test)
-+{
-+	int ret;
-+
-+	struct fake_fpga_mgr mgr_ctx;
-+	struct fake_fpga_bridge base_bridge_ctx;
-+	struct fake_fpga_region base_region_ctx;
-+
-+	struct fake_fpga_bridge pr_bridge_0_ctx;
-+	struct fake_fpga_bridge pr_bridge_1_ctx;
-+	struct fake_fpga_region pr_region_ctx;
-+
-+	struct fpga_image_info *test_static_img_info;
-+	struct fpga_image_info *test_pr_img_info;
-+
-+	fpga_build_base_sys(test, &mgr_ctx, &base_bridge_ctx, &base_region_ctx);
-+
-+	/* Allocate a fake test image using a buffer */
-+	test_static_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_static_img_info);
-+
-+	test_static_img_info->buf = fake_bit;
-+	test_static_img_info->count = sizeof(fake_bit);
-+
-+	kunit_info(test, "fake bitstream size: %zu\n", test_static_img_info->count);
-+
-+	KUNIT_EXPECT_EQ(test, 0, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-+
-+	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_state(&base_bridge_ctx));
-+	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-+
-+	/* Program the fake FPGA using the image buffer */
-+	base_region_ctx.region->info = test_static_img_info;
-+	ret = fpga_region_program_fpga(base_region_ctx.region);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	fake_fpga_mgr_check_write_buf(&mgr_ctx);
-+
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-+
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-+
-+	/* The static image contains a reconfigurable sub-region with two soft bridges */
-+	ret = fake_fpga_bridge_register(&pr_bridge_0_ctx, test);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = fake_fpga_bridge_register(&pr_bridge_1_ctx, test);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = fake_fpga_region_register(&pr_region_ctx, mgr_ctx.mgr, test);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = fake_fpga_region_add_bridge(&pr_region_ctx, pr_bridge_0_ctx.bridge);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = fake_fpga_region_add_bridge(&pr_region_ctx, pr_bridge_1_ctx.bridge);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	/* Allocate a fake partial test image using a buffer */
-+	test_pr_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_pr_img_info);
-+
-+	test_pr_img_info->buf = fake_bit;
-+	test_pr_img_info->count = sizeof(fake_bit) / 2;
-+	test_pr_img_info->flags = FPGA_MGR_PARTIAL_RECONFIG;
-+
-+	kunit_info(test, "fake partial bitstream size: %zu\n", test_pr_img_info->count);
-+
-+	/* Program the reconfigurable sub-region */
-+	pr_region_ctx.region->info = test_pr_img_info;
-+	ret = fpga_region_program_fpga(pr_region_ctx.region);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	fake_fpga_mgr_check_write_buf(&mgr_ctx);
-+
-+	KUNIT_EXPECT_EQ(test, 2, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-+
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&pr_bridge_0_ctx));
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&pr_bridge_0_ctx));
-+
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&pr_bridge_1_ctx));
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&pr_bridge_1_ctx));
-+
-+	/* Check that the base bridge has not been disabled */
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
-+	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-+
-+	fpga_image_info_free(test_pr_img_info);
-+	fpga_image_info_free(test_static_img_info);
-+
-+	fake_fpga_region_unregister(&pr_region_ctx);
-+	fake_fpga_bridge_unregister(&pr_bridge_0_ctx);
-+	fake_fpga_bridge_unregister(&pr_bridge_1_ctx);
-+
-+	fpga_free_base_sys(&mgr_ctx, &base_bridge_ctx, &base_region_ctx);
-+}
-+
-+static struct kunit_case fpga_test_cases[] = {
-+	KUNIT_CASE(fpga_base_test),
-+	KUNIT_CASE(fpga_pr_test),
-+	{},
++static struct platform_driver fake_fpga_region_drv = {
++	.driver = {
++		.name = FAKE_FPGA_REGION_DEV_NAME
++	},
++	.probe = fake_fpga_region_probe,
++	.remove = fake_fpga_region_remove,
 +};
 +
-+static struct kunit_suite fpga_test_suite = {
-+	.name = "fpga-tests",
-+	.suite_init = fpga_suite_init,
-+	.test_cases = fpga_test_cases,
++module_platform_driver(fake_fpga_region_drv);
++
++MODULE_AUTHOR("Marco Pagani <marpagan@redhat.com>");
++MODULE_DESCRIPTION("Fake FPGA Bridge");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/fpga/tests/fake-fpga-region.h b/drivers/fpga/tests/fake-fpga-region.h
+new file mode 100644
+index 000000000000..55b2df3f04ba
+--- /dev/null
++++ b/drivers/fpga/tests/fake-fpga-region.h
+@@ -0,0 +1,37 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Header file for fake FPGA region
++ *
++ * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
++ *
++ * Author: Marco Pagani <marpagan@redhat.com>
++ */
++
++#ifndef __FPGA_FAKE_RGN_H
++#define __FPGA_FAKE_RGN_H
++
++#include <linux/platform_device.h>
++#include <kunit/test.h>
++#include <linux/fpga/fpga-mgr.h>
++#include <linux/fpga/fpga-bridge.h>
++
++/**
++ * struct fake_fpga_region - fake FPGA region context data structure
++ *
++ * @region: FPGA region.
++ * @pdev: platform device of the FPGA region.
++ */
++struct fake_fpga_region {
++	struct fpga_region *region;
++	struct platform_device *pdev;
 +};
 +
-+kunit_test_suite(fpga_test_suite);
++int fake_fpga_region_register(struct fake_fpga_region *region_ctx,
++			      struct fpga_manager *mgr, struct kunit *test);
++
++int fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
++				struct fpga_bridge *bridge);
++
++void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx);
++
++#endif /* __FPGA_FAKE_RGN_H */
 -- 
 2.39.1
 
