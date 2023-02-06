@@ -2,223 +2,196 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1960E68B6E8
-	for <lists+linux-fpga@lfdr.de>; Mon,  6 Feb 2023 08:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD44468C3E2
+	for <lists+linux-fpga@lfdr.de>; Mon,  6 Feb 2023 17:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjBFHvF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 6 Feb 2023 02:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S229488AbjBFQve (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 6 Feb 2023 11:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjBFHuv (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 6 Feb 2023 02:50:51 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20603.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::603])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67EA18AA4;
-        Sun,  5 Feb 2023 23:50:31 -0800 (PST)
+        with ESMTP id S229722AbjBFQvc (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 6 Feb 2023 11:51:32 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930572A16D;
+        Mon,  6 Feb 2023 08:51:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675702275; x=1707238275;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=gc1RiiisLLIHoU8Vp6PWUdegZGo7AQSj8h8EARNwiN4=;
+  b=BfgEg5xZvbc0XBolTpWtj4IUPqJoHb+1VbPkQqkH/sqkk8P5l2cDhbf2
+   Itdmq6FzYy3SJk4CaRH8/ZdztkeAhnH/tZz92GeQIQEZ6TXbVP6vJ1FfM
+   SaUuOxSKA0cjAMEkOHgAcjasf5E9SE9r+otqOcnrzqcdUHeELTaYJtAME
+   hxndaR12mys46AJLdBYtsv0WqZPFmkHgbhXccMvvCJxYsgYtI3zLKczbJ
+   79nZ4FeXCnGlAvBixPyBhRzYg7zwapp4yIm3CR0YHNZ9IjNZzEPOHbCA+
+   NZgK3Om29dYG+k4aeyKGpo5BtngIXbulD456kXxTU9JKGyVuJ9x0X/V2r
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="393851725"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="393851725"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 08:50:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="698896470"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="698896470"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga001.jf.intel.com with ESMTP; 06 Feb 2023 08:50:40 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 6 Feb 2023 08:50:39 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 6 Feb 2023 08:50:39 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.47) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 6 Feb 2023 08:50:39 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LPvQxGiTkoiWrZ5zej42gaaZmCy0r2LFi2JJxCW5pegeXGXROCuhL+wljc/9MFIA8/zc3hF/gtTiy/fD0EDoeNIuKceTpu2APp8dCPhkK6GvkW5KQO6loRUhLjXAOL5AGClnyvFLB29kX49a5fe3wJrHH9RgYEDJOWucAgtRxXCKbIMxkhD7Fran/EhydcMnhw0mb5hAl7Te+S3ohdcQNIXeATXKBVZKU2lg8MTz17SCQeZeIEP7GQ0HMAeUSd+O249vEpkhcJdOAXtYhNvMy1qMOWBlZS+JM+q92jv3wFB/aOcqzc1QtIseO+8RVHXGt9FRcohfWEzqiIduevaT5A==
+ b=MfLCWlPFUbJPFWjlcU3n4qvH2vQdjXh5+3LvbzfJ+xggPr78AdA3HzoxABnbX8D0qKgY6J8+3ESj3ua498lkFhN7cRjlibD0w5KOdFEG7lNWI1P9BwJfxxutnoPjK24IUKiPbNvGY6aFsPgXbvi0hA00+FJ0hviM0oiEqwyhWsH5LQ/vPXHyOg3LyLL46ILCl17SKuOTmrlYkJQI6/irmgeZFWHyjmBOMT6QneUFV5zIu8R0xXXZ5FtG+POeug0ySh3cU1MI9tdL1ydpQFvzJyFPDqJpak29zheIC9nrir+sJ0TvVafPoIHu/ZzUiE8Bn283RWFnm2ic4H1itT0OxQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BwomzvkBEgGdYf53g0ZL4eXFuNuoN5c1QyS6vm/9qcg=;
- b=HvGq/9Db+VX9JBQK9/VtN4fT1wA1SjRB/GMrkFnhITV9x2rN+I8CzIo6M9CeAes612bAqsi+LqiRgWnp1NNw6wD1ViQR/SN2BHl3XfKOeUEHR8Vua1djfXbISmMVO6wT4V43KysUbHvwhSMqzUOHeZVrZeJDXLXrl1uaOnPL0BI5s1vLxHvMHdGNwv5r6atA1RfOA83ieNVWlr1cWJ/myDWxVdBsIYwQzX3Ycze7WkKi2rpit+EUG7eWk3Z4kbMMPqg0TzbIPwwHMo8YpgqT8QaIB+qogAur3xBiw4uHW+F+bqIJ75vN8HpMpbzYa9g64iA1qaivvcEyfp4UeWD7QQ==
+ bh=5GTURChVqvyqluWyn/G7fxcX/RahDfm0Eh+8VH08sL4=;
+ b=dJ6XORGe+iXr86nbChiO/bJ5u/eRK0UdAmEBOGvjiQ2hE8rJjk6T0xnksF7pE1QVFHcvKRsQXhcVdPwhA757wwzUGTkkjyF1k6xDsG3x11equww6msn8eQXE+wefXa4SYG7reWMnK0nO0logRxZ6Du4s/olTjmqw2vnAkt0WJRCDFGA3jUjR0ZlxKaSEub8T9Wxzv9G8JGzUgVovaT8XWkujA8zVNfDjogxUKRqbIaH4ADXMHGSCPkB0hXeuvIE5UrLhE/f8WVYzo7rCLMpnYYFCuQmYz/M6xxFiyW/bJX7+L7MDX1NdE+d1tYB/bn/PBZ70b57aviU+2v9yT1Jakw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BwomzvkBEgGdYf53g0ZL4eXFuNuoN5c1QyS6vm/9qcg=;
- b=szKlcEMHt1BgLN5SGRfE+C6PmQoXkp0dTCEshpWFI/Smn6e5C+3VYLY2QZzhs3jW5Zr7Wb/+8xkUe/R4GNRV+cmPWyFKJL8Rtr9kBvKwp3wwldrosMOZQ3UIpx5OzAWgfJTO92qN5mGGd9qIo11rdP7k19YYqVqCHD9Jwlu5k6n83GJqUsitF+DtgNz/H+KWLy8+f5on9rsznstPZHuGI34hmt2ynwQbuw/phRbFl5Ax34Z1QisK+TUxM+R2451e3RmAO8/TsTWUYggivf2fiJuilRN4NluWPVknhV7EPnUE8NEfTowCMIVRHcPY5sjsFOxFtNnxAdD7+VElgb+BPg==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by DS0PR12MB8573.namprd12.prod.outlook.com (2603:10b6:8:162::15) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com (2603:10b6:3:10b::14)
+ by CH0PR11MB5491.namprd11.prod.outlook.com (2603:10b6:610:d6::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Mon, 6 Feb
- 2023 07:49:40 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::4bd4:de67:b676:67df]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::4bd4:de67:b676:67df%6]) with mapi id 15.20.6064.032; Mon, 6 Feb 2023
- 07:49:40 +0000
-From:   Alistair Popple <apopple@nvidia.com>
-To:     linux-mm@kvack.org, cgroups@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
-        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch,
-        "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        linux-fpga@vger.kernel.org
-Subject: [PATCH 13/19] fpga: dfl: afu: convert to use vm_account
-Date:   Mon,  6 Feb 2023 18:47:50 +1100
-Message-Id: <4c3fcdfd0617ca7e21bb826c8749adcf00bfe956.1675669136.git-series.apopple@nvidia.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
-References: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SY6PR01CA0093.ausprd01.prod.outlook.com
- (2603:10c6:10:111::8) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
+ 2023 16:50:36 +0000
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::d151:74c0:20d6:d5fc]) by DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::d151:74c0:20d6:d5fc%6]) with mapi id 15.20.6064.034; Mon, 6 Feb 2023
+ 16:50:36 +0000
+Message-ID: <777498f0-9a0f-6ff7-ecc6-9fc53e8c558d@intel.com>
+Date:   Mon, 6 Feb 2023 08:50:31 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH] fpga: dfl-afu-region: Add overflow checks for region size
+ and offset
+Content-Language: en-US
+To:     <k1rh4.lee@gmail.com>, Wu Hao <hao.wu@intel.com>
+CC:     Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>, <linux-fpga@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230206054326.89323-1-k1rh4.lee@gmail.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+In-Reply-To: <20230206054326.89323-1-k1rh4.lee@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0125.namprd04.prod.outlook.com
+ (2603:10b6:303:84::10) To DM5PR11MB1899.namprd11.prod.outlook.com
+ (2603:10b6:3:10b::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|DS0PR12MB8573:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6822060c-def8-45db-664e-08db0816b399
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1899:EE_|CH0PR11MB5491:EE_
+X-MS-Office365-Filtering-Correlation-Id: 311fe19e-39c4-4152-aa3f-08db08624518
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CDx0ysmFC40w7m91S+8U0DYJ94WMQ65n7J0cRFi/UtBy+LhuTz1paH0LNMooPPPAwwoUiWDvrBRLq6zdNVn3EgJnZ3/WM+gt/leFaI1d8EJLYnBapMlpCaKp0JsEoLLxw5Js6bRcx5q0d0q1PrvIpltXVuzWguf+Z3HP3cFF7A0AgKY7vJkFRRAiOFon/UFq7VC2+gAZVr0iFCk8cqRV4AziMgAJx+qPcKOj4qrHeaK6AEOLeAQ7SsEsopTKcU8mRvs8f7E72FKGmVUadgCFf4LGKb6RKep4Do/GxPfcp0XFfh0YoUYbzj1mRNdOpwDXDJePg5juc1Q8Ja4E4BKxOeZHny8+oaYfVAiZ9HdKjdgCZNhpk8FNYrMuN0Ac7e+DoGV7jXm2m/8zJvYzD/8QokrSWJcmktaKERy43LJSTorXKNLcjHSQm9NU4/Y0G8o/Ayb+0Qflj4ad3fvypFFATZJnCjATWTBg4zpCNmD+MRHVaexhn172/4x7+3aKBxJV8nRYyVISxSgQywE3l+zsi+bOQXTApmge0Eu8ZdoDpCN0pDuzmMLqpT9D1OxAWuae/Qi1/SBgotzY/hbwQtB9RvjSUJ2ZQvvpPBndsbz05Ohs0cGfiTCVVDV78pzDgNLv21gTnsFJoZNyEV8dae6TTQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(136003)(39860400002)(366004)(346002)(451199018)(54906003)(316002)(86362001)(6666004)(6486002)(38100700002)(186003)(2616005)(6506007)(26005)(478600001)(6512007)(7416002)(5660300002)(83380400001)(2906002)(36756003)(66946007)(8936002)(4326008)(41300700001)(66476007)(8676002)(66556008);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: +YI109zP7LfHfBpdEJLYl1JnklO2jmie8p1SzL+WaLwfW6OLEr1DEDZXIZozn4UEozir4WpTNYBacb+ABA4+pfS/uM/VJgEs2+f/IwEPofH3T0qFU2p3DxdKaPr0TuI3upzlQIMDATdXzJka1lGYghAsbAVUdFxVb2WUGqqd4NfDTAdYMN6btAfV+FewloiK7M0R3KgUohtjwJ6MeBG0LdS0KbjBzFuOjAZ4JJNLEoffQJra8cyDDEEAfANKa9DuWx4vdcLkxkaRqxAaOfQ8m+pVEXmSTYhGuvpQkrLvXnN/EGkyZZVUEC6mMyqmH1RJoLl+MFESqm8+p8RDmg6j00obiO3LnUVQVzxaOfpFVYth7dAklW/KDc/ibzFNTQwHxeqBgK79S3FPRFMfoxvhJ8BGadWtxbKnssaUg4LgH+cHmZuW3sAWEFfK5fg753zSE8JN/27ZIPhAA345tvPmJKCnbZxsvjyqEDKPDqQC+732CExwO8dRhBN6gRw9fS6S4cnXFbpLeIrTXsVlzr9a5qFGD+8qoOgMBWNz5hieQCMyu4Zsy77ki8VBrbr+cMX7MpIJO4q1nGG+4l3WDO3eZOz/rsKkwB+JTTb08GxHXio+/+H1cDEC1qU3n7E2Z49iNpOGqmCM+VRvgWT1blCTFMkJs1B8WAb8Si33gzYFSvf8YgzEKCjM8JYhmCVBY7T6oYbbkUpvrKITaa/wATVxFJ74eeT1VkWuQ7cbFfhPh9s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1899.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(396003)(136003)(346002)(376002)(451199018)(66476007)(82960400001)(83380400001)(66946007)(38100700002)(5660300002)(6862004)(8936002)(478600001)(66556008)(4326008)(41300700001)(8676002)(6486002)(2906002)(6666004)(6506007)(53546011)(2616005)(186003)(54906003)(6512007)(26005)(31696002)(37006003)(316002)(6636002)(36756003)(86362001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NUtzb5X5UNLvv4FIgh9XzomWui5nSY1LhzIKgG5erK9DlDJ2L/PSsivDrcH0?=
- =?us-ascii?Q?cHzGAlnAYoXc5X7cdLoCEcShz3j2GEdKTPozqdOxrqfoVCEbAUl73y16R7IK?=
- =?us-ascii?Q?BFEBrb2RU/SrJnLmxLzyex5ex3hzR425ULvO1bxKFtC6RIjqqvzIrYcVchUZ?=
- =?us-ascii?Q?OjC31sqHbLGzUZx8tBOAFDagaoUPKa79Q9RUdjJzsqIRNXG+kojmlRmYgKQq?=
- =?us-ascii?Q?cNlE2voSqhZ6npKQt+zE/+EdwjHvYw+MoLR/O0/aHteZ38qlkQPRqsEs099J?=
- =?us-ascii?Q?0nxRTZNpV9Nk4m9luE7fx3DimDybanGTnOoOkLf5WgY7mfkVec0ZmyIqx6Wl?=
- =?us-ascii?Q?+QOsWuJ0bhM8vmk2wOYgu+sxjhosYCXzhyfmBE2OtdnPcjHH591A94RZ6wX6?=
- =?us-ascii?Q?4k+CSW0Bcsr5kxY+b8A/4FNvBa79Ea3gI+alzRlVOeH1pnyyEvQCu0uBSzCt?=
- =?us-ascii?Q?9ra9uJDZd/HTrEt892XabY9oqxdqKvJXrWYl0FaViLtsZMbuuyY34kmSXHwz?=
- =?us-ascii?Q?7tx+2ke+ewFK3GxZCmMRQevOA8ZS8FGKP3ShhHYOI5nMpHEvR1eaBKa1oyuu?=
- =?us-ascii?Q?Vh4rUxWACeXzBBExcz4tnU24gOjlRvRXOrVM6V13DktiQ9GDDKBNcCSy1PVz?=
- =?us-ascii?Q?iLToEVduz3c7T8liZYjE1lJw0uy/ifOcf0y3MKWLqGBUoA7zzMoO35UwWTbq?=
- =?us-ascii?Q?YuFD45Bhy2X18OIWIRVP/d6rsn3N8MvWlwIzghJhP1lHaKGY/IzfN5wtoQiO?=
- =?us-ascii?Q?Z+4Ry932Yk9h2fP7DWpSTQHCDUpp6fc4c3NQnbtWtZud64goBnp26McW9/mu?=
- =?us-ascii?Q?/pFXXq1HsSa+FE2lb5JOz8svDn2aS9UHsuJ5MT4e7idfU5KmT0adRrsHHbz1?=
- =?us-ascii?Q?QMiAvG1d639nXZmwJ251V/rhT2JNC2yS4BvxbsbvNgCr6uAxpFGGK9VC/+nm?=
- =?us-ascii?Q?7SPK5G7V3z2oDCKrEBwre/lXGRWg+c780adQSNmFS+JmUngkQwLBUFPMbXQY?=
- =?us-ascii?Q?4gVjzsrZy4rMageeG/Y5ZX5sZ5nomG0H1BXGtM8gy5WyftyeHCEpLO5bPfSz?=
- =?us-ascii?Q?dV3+LEuuuItsLc2bT1WXgZppQMrIntUkmLk/jiiEdf+PjciuIorbOuOjvWko?=
- =?us-ascii?Q?USE5AtXVFvLa5DWl49dcT+gtbmaSDi7wcWIn96RezwuZ7pjDVZ9hpUgvY0dm?=
- =?us-ascii?Q?TF3AR+x1RyA4aY7hAgLuaCesRFZkTquRwfnNAsAG2SWCCxv9l8vs3dfoHrdR?=
- =?us-ascii?Q?t6YCRsybyMzG4ZVmP4YgWIcUBF7YzRoUwHn16BJ1VfBwSb/1XHdn5s68Pa0w?=
- =?us-ascii?Q?7zN2A3afidhBy3FqUKas6utRFSSPvLsian1jnJ8TnHrJJiodu5mY9qya1j53?=
- =?us-ascii?Q?KKs77rlOw9RhkTTAkEUmTMx0GvF/98S3p/C2rm+cC+HSbPkR1up32LhW7WNt?=
- =?us-ascii?Q?c0ckcjYXza4YLoenZe41C3qw+y8KAFsBG6V5tD5Nj3BqVZndmE3K/4NC8McS?=
- =?us-ascii?Q?cDBnUCYfrnxeRHumNpOKCHjgn7wOAcTwMS+Nnx7aig2S6pnEtLWNshmWNeCi?=
- =?us-ascii?Q?qV+d3htScxdnes0VaAJMeYxKlpF2KAVDPl9y6uu2?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6822060c-def8-45db-664e-08db0816b399
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?enROekV3eXpZdmZNYVBhbzZzdWcxTVBrbXdkNHNIRjVqelRYSDV1aWlrSlY3?=
+ =?utf-8?B?Q2NlV3lTa056LzVCRlFadlc0cnF4TUlvOFd5Rnp3ZmhxOGtYQ2FvdU5rbnJv?=
+ =?utf-8?B?cnd0V0hRNFBqQmhzSW5McWhXNTZ1VHNhU3JGVDJMdVBCMC8zcjY3R1NxMlNn?=
+ =?utf-8?B?UWhIVVJEN3Y5VjNWRnQ3ZkxSMGY5cG9HRnhrSk45QUxWV21oSll3RWxTa21m?=
+ =?utf-8?B?S055NDIwZGpNRTZWN3ZzNER4cGN6VUwzekVvTE0yNTNYWkZxTFZRV0ZlU21R?=
+ =?utf-8?B?aGhVR3ZFU3BXT1ZtWnpXQ0EyTVhZT1lWYitMcnhUUWN3dExaNjJJS3JEWjhH?=
+ =?utf-8?B?MFhpQlhYQy9FV1lrTzBKWEVBNDJHSDdwUFVDaitjeFV3ZWRDQ0pic3F1WGdw?=
+ =?utf-8?B?V1B5ZDVnbiswQStYMFhOUk01SVg4cWdGNUQ5TEk4NXQydVlSNFEzSjFXejAx?=
+ =?utf-8?B?dlU1N1V6dlU4M3VmMEs5MmRoaEM3bVdUOXJyMUtPMjEyYm9BMlhtUkRmdWYy?=
+ =?utf-8?B?dUxuVWFNeGJMb1k0Tzk1MmE0cldiVmRJaktpTDU4NmgxZU9zOEtCeEt2TmZH?=
+ =?utf-8?B?dmtqOHBwbmdSaCtPeS9aTllwRUEyREdVSklnN1dmcmRoTU9Cb2ovV21zaG8y?=
+ =?utf-8?B?UFZWK1M2Sm5Ca05xVTd6ZFVieW9nek1mdVIyeFVQV1VjeThtN3pZU2tIZUFI?=
+ =?utf-8?B?R0VmVkFBRGFTQm8vUTRkYXBWWjNUM0dlZ2NSa3FFaGdTcGkzUnU0ejVjYW1N?=
+ =?utf-8?B?VjBKNmlrVWZscWc0YUZ6VktyQUZYL24zYlF4T3VDWGJyN0R1Mk1zN1U3eXdG?=
+ =?utf-8?B?aGF3YmdyR0xQK0hmL05COEkwbUlhUC8vekkyYVVocnpvbWJxQkpmM1hXSnZo?=
+ =?utf-8?B?QklyRFB4YnloZnRPUytJSHJFeDdPajJWczNIeDkxSm84Ym83ZWRwUi8yblgr?=
+ =?utf-8?B?dGRQdlBvdmpSdWRFdDQyd25nb0trNG8yUjd5UlhhNlZjNWZMWHNlNFVZVSti?=
+ =?utf-8?B?cTZOOWJZelpKN3I0cG1DZzhxVmYvaHFRNGNNK2wrSFNKaGxWbWRRcTFpcGFI?=
+ =?utf-8?B?dnp2ZCtOZVRvWWpnem4xRjcxWng4T3BhYjZZbWpkTlZzcVdSQlRxc1FwUXA4?=
+ =?utf-8?B?dVplTXBKZXlRK0FhMjlyVFk2cGRtUWVSdDB4b2RuOHpVUmtSSzA5S0lRODFk?=
+ =?utf-8?B?MHRNK1V5MlRtcjh1ZTFPalFjeFdoKzdhMVRCbGhrdnhnaUtCZS9jcEh2L0lr?=
+ =?utf-8?B?OC8wZXl1SWo5anl2RHpUaFpzTlJRc2lvNGFrQzJEUFcvSzdjR2FVUWFKMEpO?=
+ =?utf-8?B?YlFZZlhscFRLbEtocFU3NTFESlpnTm0wYkNaaHlPNXF1MGszSVlQZlVnUjVB?=
+ =?utf-8?B?RnZFaUNHazM4YVpTbjJWSzlkUkV2QVg3NVp6WS83QWs1L0V6KzNXM2puT2dm?=
+ =?utf-8?B?VGhxS2EraVdEcklKWFAwNlJnR29ZN2tCc21lRjRPMTE0RnZEVTZqRkZ6bnhV?=
+ =?utf-8?B?Mmh1d2ZnSWxaVVVuRW1BY09qNCtiUEtPSVgzUURWbVFyY2NuMXc2dUdJd3Zw?=
+ =?utf-8?B?b3Jmd3BhVHRXeVczNjcvMjhnVTQvL0JKaW45VXUwamlpRWlhekxTQXRWRmVo?=
+ =?utf-8?B?UXVXQ3JsdlplSTczWTJTaWFjd0RTWjI5RVJuZmh4SlZHNzdNMWxwd3BDcWdv?=
+ =?utf-8?B?Ri9OSXo0OHRjbzAzQVM0NmdCcHBkMnQ0ZWlZNGg1Nzl2aUJjb01HMElsaUpJ?=
+ =?utf-8?B?MUwzQ3ZjUlhHUU9BMzdmTi9BbGRTMXdGcVY4UldVd0tmOW1veFMzY2FXdEoy?=
+ =?utf-8?B?NTB1NitNK3UxUk9UVGROaW5PZXBQWW9kWURxS3ZoUzc5VVdlOEhoL2o2Y1d0?=
+ =?utf-8?B?NGg5YUM3ZytaaHdCQm80OTVMaGVmVkFRcmpjSWZ1TXhXdEd2MDBVYWYzbEJO?=
+ =?utf-8?B?MUQ2YnprRTRDZ2Fsckg3OTJEWWFoZVlYWCtzWlJBc1NoVEp0ekpaQXJWNTl0?=
+ =?utf-8?B?czI5M1FCZ01RMThiZHlCNXlRZDZqcnVURjN2UnNMS2hHczhUNHBEeSt1SmJT?=
+ =?utf-8?B?QitWUThKeUxqaE5RT3BpcnBWbWxoYTk2RXNGMG8xWEo0eDB2ckRpbUVNNHY1?=
+ =?utf-8?B?MGUxRlBnb0lIeXIwekk0T2kzM0hqTU5WRVlhdVJPTGlaM2E5VSsyUnhKSjJ1?=
+ =?utf-8?B?dFE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 311fe19e-39c4-4152-aa3f-08db08624518
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1899.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 07:49:40.0254
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 16:50:36.5243
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CuSL9rlvFjl/HyfoUGZRCwT31ulEpvCM2H5SkvAPmqtVS9b6f+w2qAPpJbKBV/EgUo2/N114qMiod9Bw2sS2cg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8573
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: qHgGqbtwxXRF1I3jhoNP/9yFikKAewiTHXiovADnl4bF7J1Ns+pL8uYEH9lxQDVA+1Ixwvezeo5m6LCeBpTj6Pv6vNsUf32VW9eg+q13sjI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5491
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-To charge pinned pages against the pins cgroup drivers must use the
-vm_account_pinned() functions which requires initialisation of a
-struct vm_account. Convert the dfl-afu-region code to do this and
-charge any pins to the pins cgroup.
 
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Cc: Wu Hao <hao.wu@intel.com>
-Cc: Tom Rix <trix@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>
-Cc: Xu Yilun <yilun.xu@intel.com>
-Cc: linux-fpga@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/fpga/dfl-afu-dma-region.c | 11 ++++++++---
- drivers/fpga/dfl-afu.h            |  2 ++
- 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
-index 02b60fd..3b99784 100644
---- a/drivers/fpga/dfl-afu-dma-region.c
-+++ b/drivers/fpga/dfl-afu-dma-region.c
-@@ -38,7 +38,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
- 	struct device *dev = &pdata->dev->dev;
- 	int ret, pinned;
- 
--	ret = account_locked_vm(current->mm, npages, true);
-+	ret = vm_account_pinned(&region->vm_account, npages);
- 	if (ret)
- 		return ret;
- 
-@@ -67,7 +67,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
- free_pages:
- 	kfree(region->pages);
- unlock_vm:
--	account_locked_vm(current->mm, npages, false);
-+	vm_unaccount_pinned(&region->vm_account, npages);
- 	return ret;
- }
- 
-@@ -87,7 +87,7 @@ static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
- 
- 	unpin_user_pages(region->pages, npages);
- 	kfree(region->pages);
--	account_locked_vm(current->mm, npages, false);
-+	vm_unaccount_pinned(&region->vm_account, npages);
- 
- 	dev_dbg(dev, "%ld pages unpinned\n", npages);
- }
-@@ -223,6 +223,7 @@ void afu_dma_region_destroy(struct dfl_feature_platform_data *pdata)
- 			afu_dma_unpin_pages(pdata, region);
- 
- 		node = rb_next(node);
-+		vm_account_release(&region->vm_account);
- 		kfree(region);
- 	}
- }
-@@ -322,6 +323,8 @@ int afu_dma_map_region(struct dfl_feature_platform_data *pdata,
- 	region->user_addr = user_addr;
- 	region->length = length;
- 
-+	vm_account_init_current(&region->vm_account);
-+
- 	/* Pin the user memory region */
- 	ret = afu_dma_pin_pages(pdata, region);
- 	if (ret) {
-@@ -365,6 +368,7 @@ int afu_dma_map_region(struct dfl_feature_platform_data *pdata,
- unpin_pages:
- 	afu_dma_unpin_pages(pdata, region);
- free_region:
-+	vm_account_release(&region->vm_account);
- 	kfree(region);
- 	return ret;
- }
-@@ -399,6 +403,7 @@ int afu_dma_unmap_region(struct dfl_feature_platform_data *pdata, u64 iova)
- 	dma_unmap_page(dfl_fpga_pdata_to_parent(pdata),
- 		       region->iova, region->length, DMA_BIDIRECTIONAL);
- 	afu_dma_unpin_pages(pdata, region);
-+	vm_account_release(&region->vm_account);
- 	kfree(region);
- 
- 	return 0;
-diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
-index e5020e2..2ca6117 100644
---- a/drivers/fpga/dfl-afu.h
-+++ b/drivers/fpga/dfl-afu.h
-@@ -18,6 +18,7 @@
- #define __DFL_AFU_H
- 
- #include <linux/mm.h>
-+#include <linux/vm_account.h>
- 
- #include "dfl.h"
- 
-@@ -51,6 +52,7 @@ struct dfl_afu_mmio_region {
-  * @in_use: flag to indicate if this region is in_use.
-  */
- struct dfl_afu_dma_region {
-+	struct vm_account vm_account;
- 	u64 user_addr;
- 	u64 length;
- 	u64 iova;
--- 
-git-series 0.9.1
+On 2/5/23 21:43, k1rh4.lee@gmail.com wrote:
+> From: Sangsup Lee <k1rh4.lee@gmail.com>
+>
+> The size + offset is able to be integer overflow value and it lead to mis-allocate region.
+Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Sangsup Lee <k1rh4.lee@gmail.com>
+> ---
+>  drivers/fpga/dfl-afu-region.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/fpga/dfl-afu-region.c b/drivers/fpga/dfl-afu-region.c
+> index 2e7b41629406..82b530111601 100644
+> --- a/drivers/fpga/dfl-afu-region.c
+> +++ b/drivers/fpga/dfl-afu-region.c
+> @@ -151,12 +151,17 @@ int afu_mmio_region_get_by_offset(struct dfl_feature_platform_data *pdata,
+>  	struct dfl_afu_mmio_region *region;
+>  	struct dfl_afu *afu;
+>  	int ret = 0;
+> +	u64 region_size = 0;
+>  
+>  	mutex_lock(&pdata->lock);
+> +	if (check_add_overflow(offset, size, &region_size)) {
+> +		ret = -EINVAL;
+> +		goto exit;
+> +	}
+>  	afu = dfl_fpga_pdata_get_private(pdata);
+>  	for_each_region(region, afu)
+>  		if (region->offset <= offset &&
+> -		    region->offset + region->size >= offset + size) {
+> +		    region->offset + region->size >= region_size) {
+>  			*pregion = *region;
+>  			goto exit;
+>  		}
+
