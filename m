@@ -2,289 +2,536 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615FC693DF3
-	for <lists+linux-fpga@lfdr.de>; Mon, 13 Feb 2023 06:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0926954E4
+	for <lists+linux-fpga@lfdr.de>; Tue, 14 Feb 2023 00:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjBMFvE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 13 Feb 2023 00:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
+        id S230509AbjBMXke (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 13 Feb 2023 18:40:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjBMFvD (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 13 Feb 2023 00:51:03 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2083.outbound.protection.outlook.com [40.107.102.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A0AEC5B;
-        Sun, 12 Feb 2023 21:51:01 -0800 (PST)
+        with ESMTP id S229789AbjBMXkd (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 13 Feb 2023 18:40:33 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651FBCA3A;
+        Mon, 13 Feb 2023 15:40:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676331626; x=1707867626;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=k3o8AsMAZzzeeRLJ8WMo56GkScdDiFraCfWOUWnK2bQ=;
+  b=Vl32GZcFtRvtgSKUDdJ1b88uuMZhvAu3XOZV9pdvrVvzKSlyLVUyy6TN
+   CDzKQx58I5Ec4JYLRiEH4Usmyuujxqa8obXN5P5k0dC3CVZgXc0vxZanD
+   prkZBnHzNKMIrWQXEcrH+riWEwdUH6fKVlgeTw4Hnw2onSac9sGb10ZNi
+   v/rV7utxK7DfUjDJvAIz/tmpEjO4aOcQGEK7tb7icnL8uyFOlRwOdL2eS
+   SCcef4yeIWAcXgzFYuo+Scgk9yFW+3f/WM6pzILOrxpFCJTO/5rco8J9c
+   SyNV4FuwIMkTKfnUdBeLxt53JB+6hG3K7p/MLrRDxQlEuycJsz6Sl36SQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="332341119"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="332341119"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 15:37:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="842955339"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="842955339"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 13 Feb 2023 15:37:26 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 13 Feb 2023 15:37:26 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 15:37:26 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.46) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 13 Feb 2023 15:37:24 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kTqNSBMMPwG26rlsYk+OWL2yQesYRBazHz9XnZyGewZ9fv4OTFSafRMfFkDAL4C5qHsG3A/3omTvajdOCVmnKnrEIv1sBRd4GFw1g/61ygHsu08/KMDLSw962ym2yaGgmLc1Hu8ZBf2ox2LkCz7cIPVGNzl+ra4KkOXzknmfYZ7j4GgSCnshrAzsRQG5CFvRTCgYfxscBy5uc5vLjf/nVU/xTc2CxWIIO4W//Jcr35306kvcO4emkMc3QqrxTvwxYM/HQsrL247xLeT7zDzvlQwmKyANib4ng7V9Xkj+51Ap7mnjZ5JiWt3dDlYKgB6Kot0o/0E2mer9Ytltgy+O3g==
+ b=M9tucrOyclZzKWPpqDLWKf0dxuxoJCU7Qa5zTliZEIC9fQxD9/SaNRETdaG85tvu6kj5BivTQlrcM9MUNvoIudzgDE37ebV0N4e1ma116NKCzHsm1NZio+JxJj+4xMYbuKQGi6AWB2bzhy7x+W1blnja8R7uwcy1ItkmuX9XfC0xZVyQF9CURCQo9ew0UE8J6QYsdgPcOxtnoc81mMu7h/BLsLv63vQAZgz8lnllC39F5KW8tHOqe94/3EqIjCfXfwruzl3FqrAEF8azEYok6CCjOdV58rhRH7Latv/J1kZUkemdgsFaVwjstIzkRhQifahvxXGpm/EkZu9w2HwT7w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wN6CeIBzYfDHcA3PqKchAe8G3VU4VsyFAmlOi6fvIXg=;
- b=dN8TVEN90tGTRwtXH8akeD2MeofqMcUrCbi+fEnUOuiqCJe6i6Rmytm1q+DHxITeLdkfJ6MOnX+XfCTgOwin6a/9+1qCy61YpBca+lo4a2H118f2W52cZkxNloYBcEdO63wFcffTI4V6jo1AVJ7DZzhDLXwxqgOftPCpEoz5a07H8GCxmESPgbL7K8Ck4GB+Pr0HimkfH8HgQUuAtMShsR+SDbCwY0FznpAJbK63edQz1D7lqS+CSzKvQDCGnMTNzl52r6XpI+ZnGscdX3DH0pg6HmlovPGsUxbrrelaIUP/LbFRtETFNsENkDKnpcYtBdGAyfXCyFIFqgNrMK+5jA==
+ bh=0nQGvmMBC7prpkwZg6U5mZxoknmiAWEN3ZgcUo//r3E=;
+ b=ZICN6GY5S0eOXrGxUdS2BUMImewJzeTZ72jND857nxrDXH9qZAGgSUYquwP6Y9jlA9hR6ksKjU4B710+Jl1XQLh+2eWAqINPdJQ+9ugrUHazcMgg1VOQv3EsxE0Fek6Xp9dqueBIg8DWuMxZuPiEfOx/dP23XWsszduCnzvx9idbfUVbjbA/ts8X1T5Qg8cVfrRtSPHVzOBs44OnB9ByDwd5B6D+xENvMOkvu/boUDHemifgJuqpUAHw7KZ+AeAq5Ro0VMUE1pTAzxgxZhwluGWKP7FmeD7D3u8/jb+I1Jacnm/taXDKEUwqYeSasUcmKvOWJgX1nz3sE0vwZGmtRA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wN6CeIBzYfDHcA3PqKchAe8G3VU4VsyFAmlOi6fvIXg=;
- b=rMSnTl35uZtpkxIaVI7xQx5DhMZxo0Os8uhJgnnVbfxMNkWRyiTlaG/v2oKEIWnwJCBaprN+e/vxf2ypvgYYGp1RgFd+0SKOz+veuJZaZoOylJxuZmQTx38LYQNgWnsnBndwOIrrmH25Bp+3FbWarJTdvCW0mHi8TWNrvT1dAh4=
-Received: from DM6PR12MB3993.namprd12.prod.outlook.com (2603:10b6:5:1c5::29)
- by SA0PR12MB4381.namprd12.prod.outlook.com (2603:10b6:806:70::14) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com (2603:10b6:3:10b::14)
+ by BL3PR11MB6481.namprd11.prod.outlook.com (2603:10b6:208:3bc::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Mon, 13 Feb
- 2023 05:50:58 +0000
-Received: from DM6PR12MB3993.namprd12.prod.outlook.com
- ([fe80::cf25:1ed8:5dd0:104d]) by DM6PR12MB3993.namprd12.prod.outlook.com
- ([fe80::cf25:1ed8:5dd0:104d%3]) with mapi id 15.20.6086.024; Mon, 13 Feb 2023
- 05:50:58 +0000
-From:   "Manne, Nava kishore" <nava.kishore.manne@amd.com>
-To:     Marco Pagani <marpagan@redhat.com>
-CC:     Nava kishore Manne <nava.manne@xilinx.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "yilun.xu@intel.com" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] fpga: mgr: Update the state to provide the exact error
- code
-Thread-Topic: [PATCH] fpga: mgr: Update the state to provide the exact error
- code
-Thread-Index: AQHZOtrgezsWkMy/N0WXVCFTXXm+Ea7Dz68AgAESlNCAAL+IAIAGw/+w
-Date:   Mon, 13 Feb 2023 05:50:58 +0000
-Message-ID: <DM6PR12MB399309D9406A79D58BB7C763CDDD9@DM6PR12MB3993.namprd12.prod.outlook.com>
-References: <20230207095915.169146-1-nava.kishore.manne@amd.com>
- <8d34bc43-deb4-4166-83ad-34561ee5ac33@redhat.com>
- <DM6PR12MB3993232B3EB5DE00CBC9B452CDD89@DM6PR12MB3993.namprd12.prod.outlook.com>
- <c69b76d8-fc72-b52f-4c64-b8c4cd498649@redhat.com>
-In-Reply-To: <c69b76d8-fc72-b52f-4c64-b8c4cd498649@redhat.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.22; Mon, 13 Feb
+ 2023 23:37:21 +0000
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::d151:74c0:20d6:d5fc]) by DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::d151:74c0:20d6:d5fc%6]) with mapi id 15.20.6086.024; Mon, 13 Feb 2023
+ 23:37:20 +0000
+Message-ID: <3588ad2f-f33f-8979-ba05-29c367716610@intel.com>
+Date:   Mon, 13 Feb 2023 15:37:16 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 1/4] fpga: add initial KUnit test suite
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR12MB3993:EE_|SA0PR12MB4381:EE_
-x-ms-office365-filtering-correlation-id: fc6b19a8-7deb-4e5b-a905-08db0d8647cf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cLlqbY+anCI6JhoBgKzFR0kDsRgaKhNx4MHsBjRfvLEK+qLL+8jMEh3UoP76Fgo+C271gyzH9wKhS+D2cnLhMX4p+Roqulg9GMfx3OGbv3/NlyXfX2MFJ3kdwhtsKwMO3fJG81viiSlDKAUkqaWkBHTt5t1AI5NYxnnRnFMGn6a1ZmrsW0D9OZ5GT/SBLZg2gbKppQ1a8FJEAyUclCMrzlZ3fWojebfq3VO9TYDErjlE/5T37B1JCwLJO+9R73glDNfeaksTowQhkTJibCbRhPDIKwMDdzFgy+QgRAe4PLV1d1JM1ISboexVTHSa6jsaecsSALQ76ZJ+lx1uhY/FBbwcSrGukA9VjTvquuf8xQtAUib5RUJlzqPaXKrZqKZC0HvWIep5bvsMUc+nnFIw54rsTbh76hHrIBUxR3jR6qvmPDM1Y+yQezVKG5tkt2fndcg/h7vVi34TJYE151W1orRjDZc+irq5z1AT/xkuuD8W4Htpnzie3V8nhYOVmDIQrGi3TzCDTc8XBTphqmZwwOOBlrHsSBMvEcMeEPzNhfRF5988GyUl8qQ7LmMStzXor4BvgKiLZVzcRi8JJgfwn3nDoLVdUXLl8/lydz/yPAcXYKvoVjEH9O4JzknXT/FcWTZzS9U0XMEcx0RYot3ivnifbOVULRQwkOagAM5/XDbuHAzdoSAVTlANzHbjSsEdvtk9IR0HrEe5r7h8MYtgyg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3993.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(396003)(136003)(346002)(39860400002)(451199018)(83380400001)(5660300002)(41300700001)(8936002)(52536014)(38100700002)(122000001)(33656002)(86362001)(38070700005)(55016003)(15650500001)(2906002)(7696005)(316002)(6506007)(53546011)(54906003)(26005)(186003)(9686003)(71200400001)(6916009)(4326008)(478600001)(66446008)(8676002)(66476007)(64756008)(66556008)(66946007)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YjBXeVEyOTVib3ErMXA4WDJwVUp0TXh5c1RqWmxzWE5QQU5UN0gzN1RFdUVG?=
- =?utf-8?B?dkFyVWRORzhpaG9Oc1FXWG5yRGNjejlRZHRwOC9Sck1SS3dST2pBREdLYStF?=
- =?utf-8?B?VVZMSVEyQUZnTW1LQXM2TjZUVGkyeTFuTzUxdjc5eXlPWGFuWlRKQThlUjho?=
- =?utf-8?B?dE13Rkx1YThlNEJORHB5VDF4WHRVNzF1NEN6eXBuSGVPY3lsNklkM082ZTBj?=
- =?utf-8?B?UzJMM21qazZ0T3VvTFRRN2tkNHcxZ01sdTR5endkVHhKYjl3NTlMemIyTm9Q?=
- =?utf-8?B?aGFremk0Rm5Cc2VuV3Y1aEJDcWpCNmx1cnV6eGZONktqd0V5WVY4L21JcEtU?=
- =?utf-8?B?VkhtbHRpOGZhNkZXenllRnFLUEMydWw3aXcrRy9pTm1XbjdqaFlzVDNibWJt?=
- =?utf-8?B?VmFMVkRyOXRzRWNXRUl5RExFN3BLbU9KQ1BJZ2lYMkpGdHN1TnpFdjZpNlUx?=
- =?utf-8?B?c0hINk5zUHlpQlNLQ1NLZ0dYSDVSOFlyZTU5SW1oVGdwN2x2aE1jTEtQaENv?=
- =?utf-8?B?TElRdWx2aUhlN3NrMURKbWEweU5wZXlCdlFzK2tRR3VUT0VDdUt5bmx3OFRx?=
- =?utf-8?B?Z25KeXg3MzFlYys1Z1F4eWV2b0hVNGdWZXhjazdQUGVDSGhuZTNET2ZGVjlD?=
- =?utf-8?B?ZGRvT3FqN1l1MEV6RC93Z1RnK3hiV0Zjc08yTFpOUU91QmVzZHF4S1dWTzhW?=
- =?utf-8?B?WFgzKzAvbDhPQk1HRVRsL2ZFR29yZ2swMXlBUC9ta1hiYWo5TnV2RnBmTnFo?=
- =?utf-8?B?U0dTVVFMbi9zV0U1enFLZWxjUmo3Ty9icjlIQ2o0MjliSzdISGZJN3dSQ2p1?=
- =?utf-8?B?NG9heENIZi94ZThsdjRXTmNKRDdNSFFtNFpOcTl6cXowRFRnL1g2YjNxYWt2?=
- =?utf-8?B?UFl1dVk2ejNmL3Z1MFVLNnpTcS9TM1h5LzYrUGVlUTFJUmFtL281ZzE5bE5a?=
- =?utf-8?B?dHNlYlQxZFNYV243bjAxOHpMYVBqSE9NQ0FqWkdQQ1d3dDhLSnA0V1VRVXBa?=
- =?utf-8?B?YTBqdGFnbmV5czAwMlZvY3JsL1BCRjFDS2FQZlBPZmgxR004VlRvYmVPMm1X?=
- =?utf-8?B?MlFYVmErcmdyOGpuUTV4dENPN0lMZGFLQ1AwUE8vMktzcFQrMlltcWtKVDFy?=
- =?utf-8?B?eFU0Q0lTT0hSZ0licHVsOXk0TWdGZjEraG8ySVZpMlRsNXNKOUsyRWlKcGlC?=
- =?utf-8?B?ZDhFZTdjMXdCMEpLT2xsdjh6b056NmtudUdraVh1M0thOFdHOHdJMjF5RUhp?=
- =?utf-8?B?MnM4b0haaERST1F5djFKVU9PdlBSYmNmVmRxMm03YkV0SUtZZk9rVVl6NWFl?=
- =?utf-8?B?alBRTENPVUpZNFIrUG9iMXAzeFpPZE5jMU10V3Y5OEVpMkowWXR3TFBEdTF1?=
- =?utf-8?B?REFPUnZVcUJ5SGZ3N1FuODFQUWRja3BhUytrSGY5VzZ2TUxjQVRScW40ZEV4?=
- =?utf-8?B?SGhueFlISkxwWFpaaUR0UHJEdlN0aTVXQklBdGpRZ2lFK2NHSFFPNk9yUWl0?=
- =?utf-8?B?dXpVSjN1OWVjSkwwN3l1bEVLclp6NkFsdmVDY3luclNQWmpMYlJ2YmhXREly?=
- =?utf-8?B?b2xZdDIrU0dJdjZ2VUZjU3RXdjJtUW1kWEttZWRuWDExeVNvLzhtZFhDYlR4?=
- =?utf-8?B?VkZxVktkK3RwS0lDZHZ4Z1VxTXNiejYzbFgzbis5UGhKbnhNVjBCZkhzdCt3?=
- =?utf-8?B?VWZDQXgweG1WYkJHMkRPVTV4QXUvYkNRSWREam94UVptdEszSGY5RUhLVTdU?=
- =?utf-8?B?MlF3U2IwVDkrakVMd2s0engwTjcrNnhYRThrS1dNeFhKOFFsTnI2M1U3TVFI?=
- =?utf-8?B?SVArS3ZPYS9IdzdBTzdnRXozb0lvWWphaXhvNEtJMkZRRThyZ3ZnMnlESytS?=
- =?utf-8?B?eHVBWWNTaG5abDN6M1pZVXZ4KzNldHBKRDZJUGg5Y3g5c0g3eGdCeWZHWlYr?=
- =?utf-8?B?OWd5WEdkM1BhM2laNSswN2p1NHRZa01rYWxpR25oYW13aC85c1hlNldtVTNo?=
- =?utf-8?B?TkN6UURTSUVuYStOZ1dQQTJiUzZBWC92SEpIVXdnQ2R3c2wyaE5WUnNjYnJw?=
- =?utf-8?B?cVd4L1ozaXZGWU9YakgvSm55R0dZeVJjOVltM0NnNnpBdnQ2R2RWQThIcUl3?=
- =?utf-8?Q?DJRc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+To:     Marco Pagani <marpagan@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, "Wu Hao" <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>
+References: <20230203170653.414990-1-marpagan@redhat.com>
+ <20230203170653.414990-2-marpagan@redhat.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+In-Reply-To: <20230203170653.414990-2-marpagan@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR03CA0003.namprd03.prod.outlook.com
+ (2603:10b6:303:8f::8) To DM5PR11MB1899.namprd11.prod.outlook.com
+ (2603:10b6:3:10b::14)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1899:EE_|BL3PR11MB6481:EE_
+X-MS-Office365-Filtering-Correlation-Id: cfd7fafe-463a-481d-b654-08db0e1b400f
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Yl8E1F9dbmyW6hnn69C9iUgyfZxuc0dV6o1ULujKt6fKyPUhQjac/eX4zmaDRrUJnjLSm4oUONjblOTilZ7C811Vy6uFSVzuKHLYJFR8SlkKzZqYs+0EBtr3dVH8810AYmy8aVfpCWZikfRurLaLn+u35zLAZcbRfyrtRGkrwDndcY75kjJ1OJKfUxVwkDxUAWC6clt6Qws0rrZbYj+3j1woNSC//DLDv4aBu5skIS7Jb0yemzq5KEBk8pM3KOy9xkjD0jjKn36p91hNCCweUtuqVsrawn90fpFru6eem7EWUaWIP4OnSIAdvi2fUKwfp1cvDgI77dbhl0Lo0U9bI9KkyWxa2+RAk8maxXEnOhHSOdlk+wnaZpbDNmyhdc97THkKG/RITv4ox0WxaUiAwVhhn3cYd06y8tfPYaF2JHQXNpYLfrxoR5fTp7jChP/1wiWbcDWelx9gI06ONHqldIpXKdM6u7kFCQNXjIy3ZUv/e18R1BcWreiWwUbihufglr7ofUqCX4bdf/I0n3N0dOVKWavK3QONQEb2lBL0AQrJHVvw4AutqTd5a5XldPllN+ncOPl/1PdHLR+PLXu198fCnMOhwYFaWi8wD3YO3nSEN+Z+uyXB3u3BIkMuOR9fUgdjrbvaa6d8gRyyaQBmdhk1VXfi1t+dNnbEPo1UXjX1BZz9mipLxqfYaZzWPyyHd+EnGrWXaMhIsBrlxqmjFR8LqnWBwLgAbC0SxMXp+pY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1899.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199018)(31686004)(110136005)(82960400001)(2616005)(6666004)(6512007)(38100700002)(6506007)(316002)(478600001)(6486002)(86362001)(31696002)(186003)(53546011)(26005)(30864003)(66476007)(36756003)(4326008)(8676002)(8936002)(2906002)(5660300002)(66556008)(83380400001)(41300700001)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?THd4Zi9naGdzQkJpY201M2FNZ29BYXo0b2lXRzY1amVma3E2Q0lVYzZnQ1c0?=
+ =?utf-8?B?akJQOTRVeURMTWgrdjEvVWhsdGM4aGlTcCtLcWd4VXlSek0yTFRDSlJMbllP?=
+ =?utf-8?B?L3hQbGtvUkphT1B5US9GZzN1N2ZZdHNyVXNYam42SkV4ZFdoM2xnNmFKc0l1?=
+ =?utf-8?B?dEd0RTRwR1cvRUdWbGJNam5DRGxIZDgrVHF3cEg1dEtDMXdsaWprcm5qM2M3?=
+ =?utf-8?B?NEcwRFVtdnhXYzFiT0NRZldzR1N5cGszS1hQMGJnb3ZKR3E3aWMvSjgzcnlF?=
+ =?utf-8?B?bU5BOGtmOTZOWHZ3bHNHUEE0VTZGV0ZhWjRWRWlLQmVnUm5qb1hyUjhuWnhD?=
+ =?utf-8?B?bHZzY0FXTUgyOTIzcFhVZkVlL25SU2NGcStWc0pwSHJhVHJaZTJwWEsvcE80?=
+ =?utf-8?B?dG03anVKTzgwWU44RmdnRWdNbWtOSGthRVJ5dVlWRlI1MkRqdGhrZXE0ak5V?=
+ =?utf-8?B?R2tDMTVOYUxQcG13Q3hBaVpBL3VxZURPRmZITFNLa2gyVTBrUEhwSUpQVXRn?=
+ =?utf-8?B?azFKM1IrR1VEcE1CaWg5ZmcycmJ2WnJ0YkJjb3g5bTlHdXd3QWh5S2RhU1Ey?=
+ =?utf-8?B?VkxDTDJRVXdzbWppTjNnWnNkcmYyNmdjK3lkc0FiYUFnVjliRVA0TG5FQmtm?=
+ =?utf-8?B?NUVSREMrR3pOSlljUEtVOG01YmJUVUU3NGRoM3lsaTNwQUtPTG1iWUo5Z3py?=
+ =?utf-8?B?VkRtVkt1RVRpYUk1cDlJUC9YTlUwV3RXbWk5bXNZWnQxdGhBSEFEaWFRNzBl?=
+ =?utf-8?B?NEtZcFFNeXpwOUpTWWY3QmVxaHZXT3p1YWZOWUVOdW51bG1Za2R4b0JLcU1F?=
+ =?utf-8?B?UVdVcWtteHY5b0I3b3d1UXMyRzFVaDd0SU15aklWelZ5VUUrU3ZHRDU4cmpE?=
+ =?utf-8?B?aHBpaEtaVlVHbzloakZoem9BVVBqbVZ0MENsZFg5ZDdKeGtnSmx3ZGt3Z1Vk?=
+ =?utf-8?B?YWliL1RUNkMvM0VpRWpOaER2NE5FOStMa1lMQ2tQZXhRd2d3aXFUaWFKTFcy?=
+ =?utf-8?B?MUhYd1JsbEMyVGdna3ZRdGNWWDY3cGRKUDdTc0JjZW1GRE01c3VDSk1OSWJX?=
+ =?utf-8?B?RFJsQ3AxekhyQk1US0J5OFdTdjlodGJKaWZLbHdTVkgzR25qT2xwTy85K1V2?=
+ =?utf-8?B?cWV0UHRLYUlsYzVTS3F0WVhXMXpqUnFiQS90NjRaVkdjZEhTQ1hPZ1dLVzJF?=
+ =?utf-8?B?YjNyNERZSDROVllJTHc2cGk5bHQ2QUJaZ3FOcmtnYXZSNmpZWEY4NHJqZk05?=
+ =?utf-8?B?VEdnYU91Qmt3WnI1cGRSajM0STBNaHZPQnNKNFE4d0g4bHR6SWpjQVlrRVlD?=
+ =?utf-8?B?TlNBM2JOK0w2WVE0VFZvME5mQ1ZYeFIzZm1EYnltSEhYUmE0MXErVm9nVUo0?=
+ =?utf-8?B?Q25xWUt6MFVHZS9zc21mR0Q0Q3FGQ01ac01HbENzK2I0TE8zVnlFcVlndU95?=
+ =?utf-8?B?NUFvQm0yV1N6TFlrU2hETXhCR2w2bDFRZjgrRlJtRXk2QjV5QjZuOWtzbkN0?=
+ =?utf-8?B?RVhpL21mRG1kWWpjNFNJZ2pBMTVBcUdiajMxV2pLVGE4M3E2UHd1UXNLMFF0?=
+ =?utf-8?B?L1B0WW5ueE9JODBZMkNTWGxkSVZHV01YcWxDSmN5MGV0QnMvaFZDYUNSR3VH?=
+ =?utf-8?B?WFEzU0pTRFVmendDZlRqdHFwL0xkZHZKdHdyKzhiKzVHUTZaT21SUmgzcXFx?=
+ =?utf-8?B?V01HRHdqMTFmMXpzQU81NnltY1dUNC9kYnZHRzVnd1BGSzZjNzk5M1luemZK?=
+ =?utf-8?B?NURjemlxazVPWEFiRWRoUGx4cGdKak4zd2pzYW5WeTlKWHhuWWZ2Y1RJaVhI?=
+ =?utf-8?B?UHR0bEtUUWlqbXFLM0tIeG8yWHRabXlFcWdVK1ZtQkhtVWlqTm9aZkVwQTdk?=
+ =?utf-8?B?N1BqeGtIRk1UWE1EU29nRWUvZE5xRUc2YSs4VmNVbjFWN09MSXBxTzBMWTc1?=
+ =?utf-8?B?dnpua0twVkJjWUIyWlBjU0dDczViczJFTEVnbTRSTWZSOHd4cFF5Y1VscEFM?=
+ =?utf-8?B?UUlPZUYxNk1oaG9taVZWMnNmd05kNEttemxHUk1Fd0JCS0dsOEtKQlVqcTE0?=
+ =?utf-8?B?M2tZNGdGZ1NScFBaTmVaeHFLYy9BUVBLNGdKUkhTcVlIYVh3MENzTE1HQ0dZ?=
+ =?utf-8?B?Z0kreEhRTW5DV3hiVFdOYU5HRUtTV0N0SWdiSm5NNEhNTVMyaXBRUFNqTDZ1?=
+ =?utf-8?B?VkE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: cfd7fafe-463a-481d-b654-08db0e1b400f
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1899.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3993.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc6b19a8-7deb-4e5b-a905-08db0d8647cf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2023 05:50:58.4471
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 23:37:20.8015
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: i9ewFdC51DfKiVqJFTbWD7o4wWhvJwZbACnLtP5vs/DANCrD171I0i4x/pRo3eyS
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4381
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 71s+rzNpO7r8yRh12RIegsCtrDMGBwDgwcCyRqAc9KEMKKWEsUamNQDx6sOD01UUCpOQjfN01IkwG204CTGFGYnGivJS+1eizMZk8Ise4lY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6481
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-SGkgTWFyY28sDQoNCglQbGVhc2UgZmluZCBteSByZXNwb25zZSBpbmxpbmUuDQoNCj4gLS0tLS1P
-cmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWFyY28gUGFnYW5pIDxtYXJwYWdhbkByZWRo
-YXQuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgRmVicnVhcnkgOSwgMjAyMyAzOjUyIEFNDQo+IFRv
-OiBNYW5uZSwgTmF2YSBraXNob3JlIDxuYXZhLmtpc2hvcmUubWFubmVAYW1kLmNvbT4NCj4gQ2M6
-IE5hdmEga2lzaG9yZSBNYW5uZSA8bmF2YS5tYW5uZUB4aWxpbnguY29tPjsgbWRmQGtlcm5lbC5v
-cmc7DQo+IGhhby53dUBpbnRlbC5jb207IHRyaXhAcmVkaGF0LmNvbTsgeWlsdW4ueHVAaW50ZWwu
-Y29tOyBsaW51eC0NCj4gZnBnYUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
-cm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSF0gZnBnYTogbWdyOiBVcGRhdGUgdGhlIHN0
-YXRlIHRvIHByb3ZpZGUgdGhlIGV4YWN0IGVycm9yDQo+IGNvZGUNCj4gDQo+IA0KPiBPbiAyMDIz
-LTAyLTA4IDEyOjAxLCBNYW5uZSwgTmF2YSBraXNob3JlIHdyb3RlOg0KPiA+IEhpIE1hcmNvLA0K
-PiA+DQo+ID4gCVRoYW5rcyBmb3IgcHJvdmlkaW5nIHRoZSByZXZpZXcgY29tbWVudHMuDQo+ID4g
-UGxlYXNlIGZpbmQgbXkgcmVzcG9uc2UgaW5saW5lIGJlbG93Lg0KPiA+DQo+ID4+IC0tLS0tT3Jp
-Z2luYWwgTWVzc2FnZS0tLS0tDQo+ID4+IEZyb206IE1hcmNvIFBhZ2FuaSA8bWFycGFnYW5AcmVk
-aGF0LmNvbT4NCj4gPj4gU2VudDogV2VkbmVzZGF5LCBGZWJydWFyeSA4LCAyMDIzIDEyOjA0IEFN
-DQo+ID4+IFRvOiBOYXZhIGtpc2hvcmUgTWFubmUgPG5hdmEubWFubmVAeGlsaW54LmNvbT4NCj4g
-Pj4gQ2M6IE1hbm5lLCBOYXZhIGtpc2hvcmUgPG5hdmEua2lzaG9yZS5tYW5uZUBhbWQuY29tPjsN
-Cj4gbWRmQGtlcm5lbC5vcmc7DQo+ID4+IGhhby53dUBpbnRlbC5jb207IHRyaXhAcmVkaGF0LmNv
-bTsgeWlsdW4ueHVAaW50ZWwuY29tOw0KPiA+PiBsaW51eC1mcGdhQHZnZXIua2VybmVsLm9yZzsg
-bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiA+PiBTdWJqZWN0OiBSZTogW1BBVENIXSBm
-cGdhOiBtZ3I6IFVwZGF0ZSB0aGUgc3RhdGUgdG8gcHJvdmlkZSB0aGUgZXhhY3QNCj4gPj4gZXJy
-b3IgY29kZQ0KPiA+Pg0KPiA+Pg0KPiA+PiBPbiAyMDIzLTAyLTA3IDEwOjU5LCBOYXZhIGtpc2hv
-cmUgTWFubmUgd3JvdGU6DQo+ID4+PiBGcm9tOiBOYXZhIGtpc2hvcmUgTWFubmUgPG5hdmEubWFu
-bmVAeGlsaW54LmNvbT4NCj4gPj4+DQo+ID4+PiBVcCBvbiBmcGdhIGNvbmZpZ3VyYXRpb24gZmFp
-bHVyZSwgdGhlIGV4aXN0aW5nIHN5c2ZzIHN0YXRlIGludGVyZmFjZQ0KPiA+Pj4gaXMganVzdCBw
-cm92aWRpbmcgdGhlIGdlbmVyaWMgZXJyb3IgbWVzc2FnZSByYXRoZXIgdGhhbiBwcm92aWRpbmcN
-Cj4gPj4+IHRoZSBleGFjdCBlcnJvciBjb2RlLiBUaGlzIHBhdGNoIGV4dGVuZHMgc3lzZnMgc3Rh
-dGUgaW50ZXJmYWNlIHRvDQo+ID4+PiBwcm92aWRlIHRoZSBleGFjdCBlcnJvciByZWNlaXZlZCBm
-cm9tIHRoZSBsb3dlciBsYXllciBhbG9uZyB3aXRoIHRoZQ0KPiA+Pj4gZXhpc3RpbmcgZ2VuZXJp
-YyBlcnJvciBtZXNzYWdlLg0KPiA+Pj4NCj4gPj4+IFNpZ25lZC1vZmYtYnk6IE5hdmEga2lzaG9y
-ZSBNYW5uZSA8bmF2YS5tYW5uZUB4aWxpbnguY29tPg0KPiA+Pj4gLS0tDQo+ID4+PiAgZHJpdmVy
-cy9mcGdhL2ZwZ2EtbWdyLmMgICAgICAgfCAyMCArKysrKysrKysrKysrKysrKysrLQ0KPiA+Pj4g
-IGluY2x1ZGUvbGludXgvZnBnYS9mcGdhLW1nci5oIHwgIDIgKysNCj4gPj4+ICAyIGZpbGVzIGNo
-YW5nZWQsIDIxIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gPj4+DQo+ID4+PiBkaWZm
-IC0tZ2l0IGEvZHJpdmVycy9mcGdhL2ZwZ2EtbWdyLmMgYi9kcml2ZXJzL2ZwZ2EvZnBnYS1tZ3Iu
-YyBpbmRleA0KPiA+Pj4gOGVmYTY3NjIwZTIxLi5iMmQ3NDcwNWE1YTIgMTAwNjQ0DQo+ID4+PiAt
-LS0gYS9kcml2ZXJzL2ZwZ2EvZnBnYS1tZ3IuYw0KPiA+Pj4gKysrIGIvZHJpdmVycy9mcGdhL2Zw
-Z2EtbWdyLmMNCj4gPj4+IEBAIC02MSwxMiArNjEsMTQgQEAgc3RhdGljIGlubGluZSBpbnQgZnBn
-YV9tZ3Jfd3JpdGVfY29tcGxldGUoc3RydWN0DQo+ID4+PiBmcGdhX21hbmFnZXIgKm1nciwgIHsN
-Cj4gPj4+ICAJaW50IHJldCA9IDA7DQo+ID4+Pg0KPiA+Pj4gKwltZ3ItPmVyciA9IDA7DQo+ID4+
-PiAgCW1nci0+c3RhdGUgPSBGUEdBX01HUl9TVEFURV9XUklURV9DT01QTEVURTsNCj4gPj4+ICAJ
-aWYgKG1nci0+bW9wcy0+d3JpdGVfY29tcGxldGUpDQo+ID4+PiAgCQlyZXQgPSBtZ3ItPm1vcHMt
-PndyaXRlX2NvbXBsZXRlKG1nciwgaW5mbyk7DQo+ID4+PiAgCWlmIChyZXQpIHsNCj4gPj4+ICAJ
-CWRldl9lcnIoJm1nci0+ZGV2LCAiRXJyb3IgYWZ0ZXIgd3JpdGluZyBpbWFnZSBkYXRhIHRvDQo+
-ID4+IEZQR0FcbiIpOw0KPiA+Pj4gIAkJbWdyLT5zdGF0ZSA9IEZQR0FfTUdSX1NUQVRFX1dSSVRF
-X0NPTVBMRVRFX0VSUjsNCj4gPj4+ICsJCW1nci0+ZXJyID0gcmV0Ow0KPiA+Pj4gIAkJcmV0dXJu
-IHJldDsNCj4gPj4+ICAJfQ0KPiA+Pj4gIAltZ3ItPnN0YXRlID0gRlBHQV9NR1JfU1RBVEVfT1BF
-UkFUSU5HOyBAQCAtMTU0LDYgKzE1Niw3IEBADQo+ID4+IHN0YXRpYw0KPiA+Pj4gaW50IGZwZ2Ff
-bWdyX3BhcnNlX2hlYWRlcl9tYXBwZWQoc3RydWN0IGZwZ2FfbWFuYWdlciAqbWdyLCAgew0KPiA+
-Pj4gIAlpbnQgcmV0Ow0KPiA+Pj4NCj4gPj4+ICsJbWdyLT5lcnIgPSAwOw0KPiA+Pj4gIAltZ3It
-PnN0YXRlID0gRlBHQV9NR1JfU1RBVEVfUEFSU0VfSEVBREVSOw0KPiA+Pj4gIAlyZXQgPSBmcGdh
-X21ncl9wYXJzZV9oZWFkZXIobWdyLCBpbmZvLCBidWYsIGNvdW50KTsNCj4gPj4+DQo+ID4+PiBA
-QCAtMTY1LDYgKzE2OCw3IEBAIHN0YXRpYyBpbnQNCj4gZnBnYV9tZ3JfcGFyc2VfaGVhZGVyX21h
-cHBlZChzdHJ1Y3QNCj4gPj4gZnBnYV9tYW5hZ2VyICptZ3IsDQo+ID4+PiAgCWlmIChyZXQpIHsN
-Cj4gPj4+ICAJCWRldl9lcnIoJm1nci0+ZGV2LCAiRXJyb3Igd2hpbGUgcGFyc2luZyBGUEdBIGlt
-YWdlDQo+ID4+IGhlYWRlclxuIik7DQo+ID4+PiAgCQltZ3ItPnN0YXRlID0gRlBHQV9NR1JfU1RB
-VEVfUEFSU0VfSEVBREVSX0VSUjsNCj4gPj4+ICsJCW1nci0+ZXJyID0gcmV0Ow0KPiA+Pj4gIAl9
-DQo+ID4+Pg0KPiA+Pj4gIAlyZXR1cm4gcmV0Ow0KPiA+Pj4gQEAgLTE4NSw2ICsxODksNyBAQCBz
-dGF0aWMgaW50IGZwZ2FfbWdyX3BhcnNlX2hlYWRlcl9zZ19maXJzdChzdHJ1Y3QNCj4gPj4gZnBn
-YV9tYW5hZ2VyICptZ3IsDQo+ID4+PiAgCWludCByZXQ7DQo+ID4+Pg0KPiA+Pj4gIAltZ3ItPnN0
-YXRlID0gRlBHQV9NR1JfU1RBVEVfUEFSU0VfSEVBREVSOw0KPiA+Pj4gKwltZ3ItPmVyciA9IDA7
-DQo+ID4+Pg0KPiA+Pj4gIAlzZ19taXRlcl9zdGFydCgmbWl0ZXIsIHNndC0+c2dsLCBzZ3QtPm5l
-bnRzLCBTR19NSVRFUl9GUk9NX1NHKTsNCj4gPj4+ICAJaWYgKHNnX21pdGVyX25leHQoJm1pdGVy
-KSAmJg0KPiA+Pj4gQEAgLTE5Nyw2ICsyMDIsNyBAQCBzdGF0aWMgaW50IGZwZ2FfbWdyX3BhcnNl
-X2hlYWRlcl9zZ19maXJzdChzdHJ1Y3QNCj4gPj4gZnBnYV9tYW5hZ2VyICptZ3IsDQo+ID4+PiAg
-CWlmIChyZXQgJiYgcmV0ICE9IC1FQUdBSU4pIHsNCj4gPj4+ICAJCWRldl9lcnIoJm1nci0+ZGV2
-LCAiRXJyb3Igd2hpbGUgcGFyc2luZyBGUEdBIGltYWdlDQo+ID4+IGhlYWRlclxuIik7DQo+ID4+
-PiAgCQltZ3ItPnN0YXRlID0gRlBHQV9NR1JfU1RBVEVfUEFSU0VfSEVBREVSX0VSUjsNCj4gPj4+
-ICsJCW1nci0+ZXJyID0gcmV0Ow0KPiA+Pj4gIAl9DQo+ID4+Pg0KPiA+Pj4gIAlyZXR1cm4gcmV0
-Ow0KPiA+Pj4gQEAgLTI0OSw2ICsyNTUsNyBAQCBzdGF0aWMgdm9pZCAqZnBnYV9tZ3JfcGFyc2Vf
-aGVhZGVyX3NnKHN0cnVjdA0KPiA+PiBmcGdhX21hbmFnZXIgKm1nciwNCj4gPj4+ICAJaWYgKHJl
-dCkgew0KPiA+Pj4gIAkJZGV2X2VycigmbWdyLT5kZXYsICJFcnJvciB3aGlsZSBwYXJzaW5nIEZQ
-R0EgaW1hZ2UNCj4gPj4gaGVhZGVyXG4iKTsNCj4gPj4+ICAJCW1nci0+c3RhdGUgPSBGUEdBX01H
-Ul9TVEFURV9QQVJTRV9IRUFERVJfRVJSOw0KPiA+Pj4gKwkJbWdyLT5lcnIgPSByZXQ7DQo+ID4+
-PiAgCQlrZnJlZShidWYpOw0KPiA+Pj4gIAkJYnVmID0gRVJSX1BUUihyZXQpOw0KPiA+Pj4gIAl9
-DQo+ID4+PiBAQCAtMjcyLDYgKzI3OSw3IEBAIHN0YXRpYyBpbnQgZnBnYV9tZ3Jfd3JpdGVfaW5p
-dF9idWYoc3RydWN0DQo+ID4+IGZwZ2FfbWFuYWdlciAqbWdyLA0KPiA+Pj4gIAlzaXplX3QgaGVh
-ZGVyX3NpemUgPSBpbmZvLT5oZWFkZXJfc2l6ZTsNCj4gPj4+ICAJaW50IHJldDsNCj4gPj4+DQo+
-ID4+PiArCW1nci0+ZXJyID0gMDsNCj4gPj4+ICAJbWdyLT5zdGF0ZSA9IEZQR0FfTUdSX1NUQVRF
-X1dSSVRFX0lOSVQ7DQo+ID4+Pg0KPiA+Pj4gIAlpZiAoaGVhZGVyX3NpemUgPiBjb3VudCkNCj4g
-Pj4+IEBAIC0yODQsNiArMjkyLDcgQEAgc3RhdGljIGludCBmcGdhX21ncl93cml0ZV9pbml0X2J1
-ZihzdHJ1Y3QNCj4gPj4gZnBnYV9tYW5hZ2VyICptZ3IsDQo+ID4+PiAgCWlmIChyZXQpIHsNCj4g
-Pj4+ICAJCWRldl9lcnIoJm1nci0+ZGV2LCAiRXJyb3IgcHJlcGFyaW5nIEZQR0EgZm9yIHdyaXRp
-bmdcbiIpOw0KPiA+Pj4gIAkJbWdyLT5zdGF0ZSA9IEZQR0FfTUdSX1NUQVRFX1dSSVRFX0lOSVRf
-RVJSOw0KPiA+Pj4gKwkJbWdyLT5lcnIgPSByZXQ7DQo+ID4+PiAgCQlyZXR1cm4gcmV0Ow0KPiA+
-Pj4gIAl9DQo+ID4+Pg0KPiA+Pj4gQEAgLTM3MCw2ICszNzksNyBAQCBzdGF0aWMgaW50IGZwZ2Ff
-bWdyX2J1Zl9sb2FkX3NnKHN0cnVjdA0KPiA+Pj4gZnBnYV9tYW5hZ2VyICptZ3IsDQo+ID4+Pg0K
-PiA+Pj4gIAkvKiBXcml0ZSB0aGUgRlBHQSBpbWFnZSB0byB0aGUgRlBHQS4gKi8NCj4gPj4+ICAJ
-bWdyLT5zdGF0ZSA9IEZQR0FfTUdSX1NUQVRFX1dSSVRFOw0KPiA+Pj4gKwltZ3ItPmVyciA9IDA7
-DQo+ID4+PiAgCWlmIChtZ3ItPm1vcHMtPndyaXRlX3NnKSB7DQo+ID4+PiAgCQlyZXQgPSBmcGdh
-X21ncl93cml0ZV9zZyhtZ3IsIHNndCk7DQo+ID4+PiAgCX0gZWxzZSB7DQo+ID4+PiBAQCAtNDA1
-LDYgKzQxNSw3IEBAIHN0YXRpYyBpbnQgZnBnYV9tZ3JfYnVmX2xvYWRfc2coc3RydWN0DQo+ID4+
-IGZwZ2FfbWFuYWdlciAqbWdyLA0KPiA+Pj4gIAlpZiAocmV0KSB7DQo+ID4+PiAgCQlkZXZfZXJy
-KCZtZ3ItPmRldiwgIkVycm9yIHdoaWxlIHdyaXRpbmcgaW1hZ2UgZGF0YSB0bw0KPiA+PiBGUEdB
-XG4iKTsNCj4gPj4+ICAJCW1nci0+c3RhdGUgPSBGUEdBX01HUl9TVEFURV9XUklURV9FUlI7DQo+
-ID4+PiArCQltZ3ItPmVyciA9IHJldDsNCj4gPj4+ICAJCXJldHVybiByZXQ7DQo+ID4+PiAgCX0N
-Cj4gPj4+DQo+ID4+PiBAQCAtNDM3LDEwICs0NDgsMTIgQEAgc3RhdGljIGludCBmcGdhX21ncl9i
-dWZfbG9hZF9tYXBwZWQoc3RydWN0DQo+ID4+IGZwZ2FfbWFuYWdlciAqbWdyLA0KPiA+Pj4gIAkg
-KiBXcml0ZSB0aGUgRlBHQSBpbWFnZSB0byB0aGUgRlBHQS4NCj4gPj4+ICAJICovDQo+ID4+PiAg
-CW1nci0+c3RhdGUgPSBGUEdBX01HUl9TVEFURV9XUklURTsNCj4gPj4+ICsJbWdyLT5lcnIgPSAw
-Ow0KPiA+Pj4gIAlyZXQgPSBmcGdhX21ncl93cml0ZShtZ3IsIGJ1ZiwgY291bnQpOw0KPiA+Pj4g
-IAlpZiAocmV0KSB7DQo+ID4+PiAgCQlkZXZfZXJyKCZtZ3ItPmRldiwgIkVycm9yIHdoaWxlIHdy
-aXRpbmcgaW1hZ2UgZGF0YSB0bw0KPiA+PiBGUEdBXG4iKTsNCj4gPj4+ICAJCW1nci0+c3RhdGUg
-PSBGUEdBX01HUl9TVEFURV9XUklURV9FUlI7DQo+ID4+PiArCQltZ3ItPmVyciA9IHJldDsNCj4g
-Pj4+ICAJCXJldHVybiByZXQ7DQo+ID4+PiAgCX0NCj4gPj4+DQo+ID4+PiBAQCAtNTQ0LDEwICs1
-NTcsMTEgQEAgc3RhdGljIGludCBmcGdhX21ncl9maXJtd2FyZV9sb2FkKHN0cnVjdA0KPiA+PiBm
-cGdhX21hbmFnZXIgKm1nciwNCj4gPj4+ICAJZGV2X2luZm8oZGV2LCAid3JpdGluZyAlcyB0byAl
-c1xuIiwgaW1hZ2VfbmFtZSwgbWdyLT5uYW1lKTsNCj4gPj4+DQo+ID4+PiAgCW1nci0+c3RhdGUg
-PSBGUEdBX01HUl9TVEFURV9GSVJNV0FSRV9SRVE7DQo+ID4+PiAtDQo+ID4+PiArCW1nci0+ZXJy
-ID0gMDsNCj4gPj4+ICAJcmV0ID0gcmVxdWVzdF9maXJtd2FyZSgmZncsIGltYWdlX25hbWUsIGRl
-dik7DQo+ID4+PiAgCWlmIChyZXQpIHsNCj4gPj4+ICAJCW1nci0+c3RhdGUgPSBGUEdBX01HUl9T
-VEFURV9GSVJNV0FSRV9SRVFfRVJSOw0KPiA+Pj4gKwkJbWdyLT5lcnIgPSByZXQ7DQo+ID4+PiAg
-CQlkZXZfZXJyKGRldiwgIkVycm9yIHJlcXVlc3RpbmcgZmlybXdhcmUgJXNcbiIsDQo+ID4+IGlt
-YWdlX25hbWUpOw0KPiA+Pj4gIAkJcmV0dXJuIHJldDsNCj4gPj4+ICAJfQ0KPiA+Pj4gQEAgLTYy
-Niw2ICs2NDAsMTAgQEAgc3RhdGljIHNzaXplX3Qgc3RhdGVfc2hvdyhzdHJ1Y3QgZGV2aWNlICpk
-ZXYsICB7DQo+ID4+PiAgCXN0cnVjdCBmcGdhX21hbmFnZXIgKm1nciA9IHRvX2ZwZ2FfbWFuYWdl
-cihkZXYpOw0KPiA+Pj4NCj4gPj4+ICsJaWYgKG1nci0+ZXJyKQ0KPiA+Pj4gKwkJcmV0dXJuIHNw
-cmludGYoYnVmLCAiJXM6IDB4JXhcbiIsDQo+ID4+PiArCQkJICAgICAgIHN0YXRlX3N0clttZ3It
-PnN0YXRlXSwgbWdyLT5lcnIpOw0KPiA+Pj4gKw0KPiA+Pj4gIAlyZXR1cm4gc3ByaW50ZihidWYs
-ICIlc1xuIiwgc3RhdGVfc3RyW21nci0+c3RhdGVdKTsNCj4gPj4NCj4gPj4NCj4gPj4gSWYgb25l
-IG9mIHRoZSBmcGdhIG1hbmFnZXIgb3BzIGZhaWxzLCB0aGUgbG93LWxldmVsIGVycm9yIGNvZGUg
-aXMNCj4gPj4gYWxyZWFkeSByZXR1cm5lZCB0byB0aGUgY2FsbGVyLiBXb3VsZG4ndCBpdCBiZSBi
-ZXR0ZXIgdG8gcmVseSBvbiB0aGlzDQo+ID4+IGluc3RlYWQgb2YgcHJpbnRpbmcgdGhlIGxvdy1s
-ZXZlbCBlcnJvciBjb2RlIGluIGEgc3lzZnMgYXR0cmlidXRlIGFuZCBzZW5kaW5nDQo+IGl0IHRv
-IHRoZSB1c2Vyc3BhY2U/DQo+ID4+DQo+ID4gQWdyZWUsIHRoZSBsb3ctbGV2ZWwgZXJyb3IgY29k
-ZSBpcyBhbHJlYWR5IHJldHVybmVkIHRvIHRoZSBjYWxsZXIgYnV0DQo+ID4gdGhlIHVzZXIgYXBw
-bGljYXRpb24gd2lsbCBub3QgaGF2ZSBhbnkgYWNjZXNzIHRvIHJlYWQgdGhpcyBlcnJvciBpbmZv
-Lg0KPiA+IFNvLCBJIGZlZWwgdGhpcyBwYXRjaCBwcm92aWRlcyB0aGF0IGZsZXhpYmlsaXR5IHRv
-IHRoZSB1c2VyIGFwcGxpY2F0aW9uIHRvIGdldCB0aGUNCj4gZXhhY3QgZXJyb3IgaW5mby4NCj4g
-PiBwbGVhc2UgbGV0IG1lIGtub3cgaWYgeW91IGhhdmUgYW55IG90aGVyIHRob3VnaHRzIHdpbGwg
-aW1wbGVtZW50IHRoYXQuDQo+ID4NCj4gPiBSZWdhcmRzLA0KPiA+IE5hdmFraXNob3JlLg0KPiAN
-Cj4gDQo+IEhpIE5hdmEsDQo+IA0KPiBUaGFua3MgZm9yIHlvdXIgcXVpY2sgcmVwbHkuIEkgdW5k
-ZXJzdGFuZCB0aGUgbmVlZCB0byBhY2Nlc3MgdGhlIGxvdy1sZXZlbA0KPiBlcnJvciBjb2RlIGZy
-b20gdXNlcnNwYWNlIGlmIHRoZSBjb25maWd1cmF0aW9uIGdvZXMgd3JvbmcuDQo+IA0KPiBIb3dl
-dmVyLCBpbiBteSB1bmRlcnN0YW5kaW5nLCB0aGUgbG93LWxldmVsIGRyaXZlciBpcyBzdXBwb3Nl
-ZCB0byBleHBvcnQNCj4gcmVjb25maWd1cmF0aW9uIGVycm9ycyBieSBpbXBsZW1lbnRpbmcgdGhl
-IHN0YXR1cyBvcCBhbmQgcmV0dXJuaW5nIGEgYml0IGZpZWxkDQo+IHNldCB1c2luZyB0aGUgbWFj
-cm9zIGRlZmluZWQgaW4gZnBnYS1tZ3IuaCArMTg5Lg0KPiBUaGUgZnBnYSBtYW5hZ2VyIHdpbGws
-IGluIHR1cm4sIG1ha2UgdGhlIGVycm9ycyB2aXNpYmxlIHRvIHVzZXJzcGFjZSB0aHJvdWdoDQo+
-IHRoZSBzdGF0dXMgYXR0cmlidXRlLiBJZiB0aGUgYXZhaWxhYmxlIGVycm9yIGJpdHMgYXJlbid0
-IGRlc2NyaXB0aXZlIGVub3VnaCwNCj4gd291bGRuJ3QgaXQgYmUgYmV0dGVyIHRvIGFkZCBtb3Jl
-IGVycm9yIG1hY3JvcyBpbnN0ZWFkIG9mICJvdmVybG9hZGluZyIgdGhlDQo+IHN0YXRlIGF0dHJp
-YnV0ZT8NCj4gDQo+IE1vcmVvdmVyLCBpdCBzZWVtcyB0byBtZSB0aGF0IGlmIHRoZSByZWNvbmZp
-Z3VyYXRpb24gaXMgZG9uZSBieSBsb2FkaW5nIGENCj4gZGV2aWNlIHRyZWUgb3ZlcmxheSBmcm9t
-IHVzZXJzcGFjZSwgdGhlIGVycm9yIGNvZGUgZ2V0cyBwcm9wYWdhdGVkIGJhY2sNCj4gdGhyb3Vn
-aCB0aGUgbm90aWZpZXIgaW4gb2YtZnBnYS1yZWdpb24uIEFtIEkgY29ycmVjdD8NCj4gDQoNCkFG
-QUlLIFRoZSBzdGF0ZSBhbmQgc3RhdHVzIGludGVyZmFjZSB1c2UgY2FzZXMgYXJlIGRpZmZlcmVu
-dC4gVGhlIFN0YXR1cyBpbnRlcmZhY2Ugd2lsbCBwcm92aWRlIHRoZSBIL1cgZXJyb3IgaW5mby4N
-CndoZXJlYXMgdGhlIHN0YXRlIGludGVyZmFjZSBwcm92aWRlcyB0aGUgRlBHQSBtYW5hZ2VyIGRy
-aXZlciBzdGF0ZShpbmNsdWRpbmcgRXJyb3Igc3RyaW5ncykuwqANClBsZWFzZSBSZWZlcjogRG9j
-dW1lbnRhdGlvbi9BQkkvdGVzdGluZy9zeXNmcy1jbGFzcy1mcGdhLW1hbmFnZXIgKGZvciBFcnJv
-ciBzdHJpbmdzIGluZm9ybWF0aW9uKS4NCg0KV2l0aCB0aGUgZXhpc3RpbmcgaW1wbGVtZW50YXRp
-b24gdXNpbmcgRFQtT3ZlcmxheSB0aGUgQ29uZmlndXJhdGlvbi9SZWNvbmZpZ3VyYXRpb24gbG93
-ZXItbGV2ZWwNCmRyaXZlciBlcnJvcnMgYXJlIG5vdCBwcm9wYWdhdGluZyB0byB1c2Vyc3BhY2Uu
-DQoNClBsZWFzZSBjb3JyZWN0IG1lIGlmIG15IHVuZGVyc3RhbmRpbmcgaXMgd3JvbmcuDQoNClJl
-Z2FyZHMsDQpOYXZha2lzaG9yZS4NCg0K
+
+
+On 2/3/23 09:06, Marco Pagani wrote:
+> Introduce an initial KUnit suite to test the core components of the
+> FPGA subsystem.
+>
+> The test suite consists of two test cases. The first test case checks
+> the programming of a static image on a fake FPGA with a single hardware
+> bridge. The FPGA is first programmed using a test image stored in a
+> buffer, and then with the same image linked to a single-entry
+> scatter-gather list.
+>
+> The second test case models dynamic partial reconfiguration. The FPGA
+> is first configured with a static image that implements a
+> reconfigurable design containing a sub-region controlled by two soft
+> bridges. Then, the reconfigurable sub-region is reconfigured using
+> a fake partial bitstream image. After the reconfiguration, the test
+> checks that the soft bridges have been correctly activated.
+>
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> ---
+>  drivers/fpga/Kconfig            |   2 +
+>  drivers/fpga/Makefile           |   3 +
+>  drivers/fpga/tests/.kunitconfig |   5 +
+>  drivers/fpga/tests/Kconfig      |  15 ++
+>  drivers/fpga/tests/Makefile     |   6 +
+>  drivers/fpga/tests/fpga-tests.c | 264 ++++++++++++++++++++++++++++++++
+>  6 files changed, 295 insertions(+)
+>  create mode 100644 drivers/fpga/tests/.kunitconfig
+>  create mode 100644 drivers/fpga/tests/Kconfig
+>  create mode 100644 drivers/fpga/tests/Makefile
+>  create mode 100644 drivers/fpga/tests/fpga-tests.c
+>
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 0a00763b9f28..2f689ac4ba3a 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
+>  	  FPGA manager driver support for Lattice FPGAs programming over slave
+>  	  SPI sysCONFIG interface.
+>  
+> +source "drivers/fpga/tests/Kconfig"
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 72e554b4d2f7..352a2612623e 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+>  
+>  # Drivers for FPGAs which implement DFL
+>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
+> +
+> +# KUnit tests
+> +obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
+> diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
+> new file mode 100644
+> index 000000000000..a1c2a2974c39
+> --- /dev/null
+> +++ b/drivers/fpga/tests/.kunitconfig
+> @@ -0,0 +1,5 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_FPGA=y
+> +CONFIG_FPGA_REGION=y
+> +CONFIG_FPGA_BRIDGE=y
+> +CONFIG_FPGA_KUNIT_TESTS=y
+> diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
+> new file mode 100644
+> index 000000000000..5198e605b38d
+> --- /dev/null
+> +++ b/drivers/fpga/tests/Kconfig
+> @@ -0,0 +1,15 @@
+> +config FPGA_KUNIT_TESTS
+> +	tristate "FPGA KUnit tests" if !KUNIT_ALL_TESTS
+> +	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  Builds unit tests for the FPGA subsystem. This option
+> +	  is not useful for distributions or general kernels,
+> +	  but only for kernel developers working on the FPGA
+> +	  subsystem and its associated drivers.
+> +
+> +	  For more information on KUnit and unit tests in general,
+> +	  please refer to the KUnit documentation in
+> +	  Documentation/dev-tools/kunit/.
+> +
+> +	  If in doubt, say "N".
+> diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
+> new file mode 100644
+> index 000000000000..74346ae62457
+> --- /dev/null
+> +++ b/drivers/fpga/tests/Makefile
+> @@ -0,0 +1,6 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-mgr.o
+> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-region.o
+> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-bridge.o
+> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-tests.o
+> diff --git a/drivers/fpga/tests/fpga-tests.c b/drivers/fpga/tests/fpga-tests.c
+> new file mode 100644
+> index 000000000000..33f04079b32f
+> --- /dev/null
+> +++ b/drivers/fpga/tests/fpga-tests.c
+> @@ -0,0 +1,264 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Test suite for the FPGA subsystem
+> + *
+> + * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
+> + *
+> + * Author: Marco Pagani <marpagan@redhat.com>
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/scatterlist.h>
+> +
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/fpga/fpga-region.h>
+> +#include <linux/fpga/fpga-bridge.h>
+> +
+> +#include "fake-fpga-region.h"
+> +#include "fake-fpga-bridge.h"
+> +#include "fake-fpga-mgr.h"
+> +
+> +#define FAKE_BIT_BLOCKS		16
+> +#define FAKE_BIT_SIZE		(FPGA_TEST_BIT_BLOCK * FAKE_BIT_BLOCKS)
+> +
+> +static u8 fake_bit[FAKE_BIT_SIZE];
+
+I take it "bit" in fake_bit and sgt_bit is short for "bitstream". Initially,
+I found this confusing as I tend to think of a bit as a single bit. It might
+be better to expand that something like "fake_bitstream" or "fake_image".
+
+- Russ
+> +
+> +static int init_sgt_bit(struct sg_table *sgt, void *bit, size_t len)
+> +{
+> +	int ret;
+> +
+> +	ret = sg_alloc_table(sgt, 1, GFP_KERNEL);
+> +	if (ret)
+> +		return ret;
+> +
+> +	sg_init_one(sgt->sgl, bit, len);
+> +
+> +	return ret;
+> +}
+> +
+> +static void free_sgt_bit(struct sg_table *sgt)
+> +{
+> +	if (sgt)
+> +		sg_free_table(sgt);
+> +}
+> +
+> +static void fpga_build_base_sys(struct kunit *test, struct fake_fpga_mgr *mgr_ctx,
+> +				struct fake_fpga_bridge *bridge_ctx,
+> +				struct fake_fpga_region *region_ctx)
+> +{
+> +	int ret;
+> +
+> +	ret = fake_fpga_mgr_register(mgr_ctx, test);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	ret = fake_fpga_bridge_register(bridge_ctx, test);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	ret = fake_fpga_region_register(region_ctx, mgr_ctx->mgr, test);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	ret = fake_fpga_region_add_bridge(region_ctx, bridge_ctx->bridge);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +}
+> +
+> +static void fpga_free_base_sys(struct fake_fpga_mgr *mgr_ctx,
+> +			       struct fake_fpga_bridge *bridge_ctx,
+> +			       struct fake_fpga_region *region_ctx)
+> +{
+> +	if (region_ctx)
+> +		fake_fpga_region_unregister(region_ctx);
+> +
+> +	if (bridge_ctx)
+> +		fake_fpga_bridge_unregister(bridge_ctx);
+> +
+> +	if (region_ctx)
+> +		fake_fpga_mgr_unregister(mgr_ctx);
+> +}
+> +
+> +static int fpga_suite_init(struct kunit_suite *suite)
+> +{
+> +	fake_fpga_mgr_fill_header(fake_bit);
+> +
+> +	return 0;
+> +}
+> +
+> +static void fpga_base_test(struct kunit *test)
+> +{
+> +	int ret;
+> +
+> +	struct fake_fpga_mgr mgr_ctx;
+> +	struct fake_fpga_bridge base_bridge_ctx;
+> +	struct fake_fpga_region base_region_ctx;
+> +
+> +	struct fpga_image_info *test_img_info;
+> +
+> +	struct sg_table sgt_bit;
+> +
+> +	fpga_build_base_sys(test, &mgr_ctx, &base_bridge_ctx, &base_region_ctx);
+> +
+> +	/* Allocate a fake test image using a buffer */
+> +	test_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_img_info);
+> +
+> +	test_img_info->buf = fake_bit;
+> +	test_img_info->count = sizeof(fake_bit);
+> +
+> +	kunit_info(test, "fake bitstream size: %zu\n", test_img_info->count);
+> +
+> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
+> +
+> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_state(&base_bridge_ctx));
+> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
+> +
+> +	/* Program the fake FPGA using the image buffer */
+> +	base_region_ctx.region->info = test_img_info;
+> +	ret = fpga_region_program_fpga(base_region_ctx.region);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	fake_fpga_mgr_check_write_buf(&mgr_ctx);
+> +
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
+> +
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
+> +
+> +	fpga_image_info_free(test_img_info);
+> +
+> +	/* Allocate another fake test image using a scatter list */
+> +	test_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_img_info);
+> +
+> +	ret = init_sgt_bit(&sgt_bit, fake_bit, FAKE_BIT_SIZE);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	test_img_info->sgt = &sgt_bit;
+> +
+> +	/* Re-program the fake FPGA using the image scatter list */
+> +	base_region_ctx.region->info = test_img_info;
+> +	ret = fpga_region_program_fpga(base_region_ctx.region);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	fake_fpga_mgr_check_write_sg(&mgr_ctx);
+> +
+> +	KUNIT_EXPECT_EQ(test, 2, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
+> +
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
+> +	KUNIT_EXPECT_EQ(test, 2, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
+> +
+> +	free_sgt_bit(&sgt_bit);
+> +	fpga_image_info_free(test_img_info);
+> +	fpga_free_base_sys(&mgr_ctx, &base_bridge_ctx, &base_region_ctx);
+> +}
+> +
+> +static void fpga_pr_test(struct kunit *test)
+> +{
+> +	int ret;
+> +
+> +	struct fake_fpga_mgr mgr_ctx;
+> +	struct fake_fpga_bridge base_bridge_ctx;
+> +	struct fake_fpga_region base_region_ctx;
+> +
+> +	struct fake_fpga_bridge pr_bridge_0_ctx;
+> +	struct fake_fpga_bridge pr_bridge_1_ctx;
+> +	struct fake_fpga_region pr_region_ctx;
+> +
+> +	struct fpga_image_info *test_static_img_info;
+> +	struct fpga_image_info *test_pr_img_info;
+> +
+> +	fpga_build_base_sys(test, &mgr_ctx, &base_bridge_ctx, &base_region_ctx);
+> +
+> +	/* Allocate a fake test image using a buffer */
+> +	test_static_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_static_img_info);
+> +
+> +	test_static_img_info->buf = fake_bit;
+> +	test_static_img_info->count = sizeof(fake_bit);
+> +
+> +	kunit_info(test, "fake bitstream size: %zu\n", test_static_img_info->count);
+> +
+> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
+> +
+> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_state(&base_bridge_ctx));
+> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
+> +
+> +	/* Program the fake FPGA using the image buffer */
+> +	base_region_ctx.region->info = test_static_img_info;
+> +	ret = fpga_region_program_fpga(base_region_ctx.region);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	fake_fpga_mgr_check_write_buf(&mgr_ctx);
+> +
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
+> +
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
+> +
+> +	/* The static image contains a reconfigurable sub-region with two soft bridges */
+> +	ret = fake_fpga_bridge_register(&pr_bridge_0_ctx, test);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	ret = fake_fpga_bridge_register(&pr_bridge_1_ctx, test);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	ret = fake_fpga_region_register(&pr_region_ctx, mgr_ctx.mgr, test);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	ret = fake_fpga_region_add_bridge(&pr_region_ctx, pr_bridge_0_ctx.bridge);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	ret = fake_fpga_region_add_bridge(&pr_region_ctx, pr_bridge_1_ctx.bridge);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	/* Allocate a fake partial test image using a buffer */
+> +	test_pr_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_pr_img_info);
+> +
+> +	test_pr_img_info->buf = fake_bit;
+> +	test_pr_img_info->count = sizeof(fake_bit) / 2;
+> +	test_pr_img_info->flags = FPGA_MGR_PARTIAL_RECONFIG;
+> +
+> +	kunit_info(test, "fake partial bitstream size: %zu\n", test_pr_img_info->count);
+> +
+> +	/* Program the reconfigurable sub-region */
+> +	pr_region_ctx.region->info = test_pr_img_info;
+> +	ret = fpga_region_program_fpga(pr_region_ctx.region);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	fake_fpga_mgr_check_write_buf(&mgr_ctx);
+> +
+> +	KUNIT_EXPECT_EQ(test, 2, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
+> +
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&pr_bridge_0_ctx));
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&pr_bridge_0_ctx));
+> +
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&pr_bridge_1_ctx));
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&pr_bridge_1_ctx));
+> +
+> +	/* Check that the base bridge has not been disabled */
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
+> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
+> +
+> +	fpga_image_info_free(test_pr_img_info);
+> +	fpga_image_info_free(test_static_img_info);
+> +
+> +	fake_fpga_region_unregister(&pr_region_ctx);
+> +	fake_fpga_bridge_unregister(&pr_bridge_0_ctx);
+> +	fake_fpga_bridge_unregister(&pr_bridge_1_ctx);
+> +
+> +	fpga_free_base_sys(&mgr_ctx, &base_bridge_ctx, &base_region_ctx);
+> +}
+> +
+> +static struct kunit_case fpga_test_cases[] = {
+> +	KUNIT_CASE(fpga_base_test),
+> +	KUNIT_CASE(fpga_pr_test),
+> +	{},
+> +};
+> +
+> +static struct kunit_suite fpga_test_suite = {
+> +	.name = "fpga-tests",
+> +	.suite_init = fpga_suite_init,
+> +	.test_cases = fpga_test_cases,
+> +};
+> +
+> +kunit_test_suite(fpga_test_suite);
+
