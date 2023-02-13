@@ -2,559 +2,289 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09B1692EBE
-	for <lists+linux-fpga@lfdr.de>; Sat, 11 Feb 2023 07:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 615FC693DF3
+	for <lists+linux-fpga@lfdr.de>; Mon, 13 Feb 2023 06:52:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbjBKGcr (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 11 Feb 2023 01:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S229476AbjBMFvE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 13 Feb 2023 00:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjBKGcq (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 11 Feb 2023 01:32:46 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCD47BFFD;
-        Fri, 10 Feb 2023 22:32:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676097162; x=1707633162;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Wzk9mWaLMo0rwvo/hQCoxR+8KMMSEc5/gR2wAlTw7XY=;
-  b=AwLAoc5xvibce/xhetMP7w5PTurka8YJGNy+DLuH1xIatvy7RHJg2G9d
-   s2dnfvwENgP9+GSEaSJYZP1c9x6dk0TWJWq2KYmAf7W5OYgbkvgzzICwM
-   1v/xWRjuyH5B7WSZyxk/q4Bw5YKuzfSVisyCsrVfaU9bEznA001SG9vUh
-   UBrLrBteAhTLSnUBlgZ9CcCs6k/fKhtvApFEVG8Mz8kVdAby/wZEenVQQ
-   MuHtcBIrmdNKW8umPbJ8vvIS5b4fc/tW/Ynl43G6EJWEUGUou2Vlx7stC
-   Dbyz927CAWcJax2sak3Tpn6c0hgqh4wep1i1Ph+jYKUiVmweiFwS+fbhc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="357993015"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="357993015"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 22:32:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="661631031"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="661631031"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga007.jf.intel.com with ESMTP; 10 Feb 2023 22:32:38 -0800
-Date:   Sat, 11 Feb 2023 14:21:50 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Wu Hao <hao.wu@intel.com>, Lee Jones <lee@kernel.org>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: Re: [PATCH 1/1] fpga: intel-m10-bmc-log: Create MAX 10 BMC log driver
-Message-ID: <Y+cz/lUA9f9HVAQv@yilunxu-OptiPlex-7050>
-References: <20230209111329.15791-1-ilpo.jarvinen@linux.intel.com>
- <Y+YSoJguy32umIj2@yilunxu-OptiPlex-7050>
- <e52ec21b-a1f3-7fab-e66e-5c4243d89c2b@intel.com>
+        with ESMTP id S229552AbjBMFvD (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 13 Feb 2023 00:51:03 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2083.outbound.protection.outlook.com [40.107.102.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A0AEC5B;
+        Sun, 12 Feb 2023 21:51:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kTqNSBMMPwG26rlsYk+OWL2yQesYRBazHz9XnZyGewZ9fv4OTFSafRMfFkDAL4C5qHsG3A/3omTvajdOCVmnKnrEIv1sBRd4GFw1g/61ygHsu08/KMDLSw962ym2yaGgmLc1Hu8ZBf2ox2LkCz7cIPVGNzl+ra4KkOXzknmfYZ7j4GgSCnshrAzsRQG5CFvRTCgYfxscBy5uc5vLjf/nVU/xTc2CxWIIO4W//Jcr35306kvcO4emkMc3QqrxTvwxYM/HQsrL247xLeT7zDzvlQwmKyANib4ng7V9Xkj+51Ap7mnjZ5JiWt3dDlYKgB6Kot0o/0E2mer9Ytltgy+O3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wN6CeIBzYfDHcA3PqKchAe8G3VU4VsyFAmlOi6fvIXg=;
+ b=dN8TVEN90tGTRwtXH8akeD2MeofqMcUrCbi+fEnUOuiqCJe6i6Rmytm1q+DHxITeLdkfJ6MOnX+XfCTgOwin6a/9+1qCy61YpBca+lo4a2H118f2W52cZkxNloYBcEdO63wFcffTI4V6jo1AVJ7DZzhDLXwxqgOftPCpEoz5a07H8GCxmESPgbL7K8Ck4GB+Pr0HimkfH8HgQUuAtMShsR+SDbCwY0FznpAJbK63edQz1D7lqS+CSzKvQDCGnMTNzl52r6XpI+ZnGscdX3DH0pg6HmlovPGsUxbrrelaIUP/LbFRtETFNsENkDKnpcYtBdGAyfXCyFIFqgNrMK+5jA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wN6CeIBzYfDHcA3PqKchAe8G3VU4VsyFAmlOi6fvIXg=;
+ b=rMSnTl35uZtpkxIaVI7xQx5DhMZxo0Os8uhJgnnVbfxMNkWRyiTlaG/v2oKEIWnwJCBaprN+e/vxf2ypvgYYGp1RgFd+0SKOz+veuJZaZoOylJxuZmQTx38LYQNgWnsnBndwOIrrmH25Bp+3FbWarJTdvCW0mHi8TWNrvT1dAh4=
+Received: from DM6PR12MB3993.namprd12.prod.outlook.com (2603:10b6:5:1c5::29)
+ by SA0PR12MB4381.namprd12.prod.outlook.com (2603:10b6:806:70::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Mon, 13 Feb
+ 2023 05:50:58 +0000
+Received: from DM6PR12MB3993.namprd12.prod.outlook.com
+ ([fe80::cf25:1ed8:5dd0:104d]) by DM6PR12MB3993.namprd12.prod.outlook.com
+ ([fe80::cf25:1ed8:5dd0:104d%3]) with mapi id 15.20.6086.024; Mon, 13 Feb 2023
+ 05:50:58 +0000
+From:   "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+To:     Marco Pagani <marpagan@redhat.com>
+CC:     Nava kishore Manne <nava.manne@xilinx.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "yilun.xu@intel.com" <yilun.xu@intel.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] fpga: mgr: Update the state to provide the exact error
+ code
+Thread-Topic: [PATCH] fpga: mgr: Update the state to provide the exact error
+ code
+Thread-Index: AQHZOtrgezsWkMy/N0WXVCFTXXm+Ea7Dz68AgAESlNCAAL+IAIAGw/+w
+Date:   Mon, 13 Feb 2023 05:50:58 +0000
+Message-ID: <DM6PR12MB399309D9406A79D58BB7C763CDDD9@DM6PR12MB3993.namprd12.prod.outlook.com>
+References: <20230207095915.169146-1-nava.kishore.manne@amd.com>
+ <8d34bc43-deb4-4166-83ad-34561ee5ac33@redhat.com>
+ <DM6PR12MB3993232B3EB5DE00CBC9B452CDD89@DM6PR12MB3993.namprd12.prod.outlook.com>
+ <c69b76d8-fc72-b52f-4c64-b8c4cd498649@redhat.com>
+In-Reply-To: <c69b76d8-fc72-b52f-4c64-b8c4cd498649@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR12MB3993:EE_|SA0PR12MB4381:EE_
+x-ms-office365-filtering-correlation-id: fc6b19a8-7deb-4e5b-a905-08db0d8647cf
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cLlqbY+anCI6JhoBgKzFR0kDsRgaKhNx4MHsBjRfvLEK+qLL+8jMEh3UoP76Fgo+C271gyzH9wKhS+D2cnLhMX4p+Roqulg9GMfx3OGbv3/NlyXfX2MFJ3kdwhtsKwMO3fJG81viiSlDKAUkqaWkBHTt5t1AI5NYxnnRnFMGn6a1ZmrsW0D9OZ5GT/SBLZg2gbKppQ1a8FJEAyUclCMrzlZ3fWojebfq3VO9TYDErjlE/5T37B1JCwLJO+9R73glDNfeaksTowQhkTJibCbRhPDIKwMDdzFgy+QgRAe4PLV1d1JM1ISboexVTHSa6jsaecsSALQ76ZJ+lx1uhY/FBbwcSrGukA9VjTvquuf8xQtAUib5RUJlzqPaXKrZqKZC0HvWIep5bvsMUc+nnFIw54rsTbh76hHrIBUxR3jR6qvmPDM1Y+yQezVKG5tkt2fndcg/h7vVi34TJYE151W1orRjDZc+irq5z1AT/xkuuD8W4Htpnzie3V8nhYOVmDIQrGi3TzCDTc8XBTphqmZwwOOBlrHsSBMvEcMeEPzNhfRF5988GyUl8qQ7LmMStzXor4BvgKiLZVzcRi8JJgfwn3nDoLVdUXLl8/lydz/yPAcXYKvoVjEH9O4JzknXT/FcWTZzS9U0XMEcx0RYot3ivnifbOVULRQwkOagAM5/XDbuHAzdoSAVTlANzHbjSsEdvtk9IR0HrEe5r7h8MYtgyg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3993.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(396003)(136003)(346002)(39860400002)(451199018)(83380400001)(5660300002)(41300700001)(8936002)(52536014)(38100700002)(122000001)(33656002)(86362001)(38070700005)(55016003)(15650500001)(2906002)(7696005)(316002)(6506007)(53546011)(54906003)(26005)(186003)(9686003)(71200400001)(6916009)(4326008)(478600001)(66446008)(8676002)(66476007)(64756008)(66556008)(66946007)(76116006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YjBXeVEyOTVib3ErMXA4WDJwVUp0TXh5c1RqWmxzWE5QQU5UN0gzN1RFdUVG?=
+ =?utf-8?B?dkFyVWRORzhpaG9Oc1FXWG5yRGNjejlRZHRwOC9Sck1SS3dST2pBREdLYStF?=
+ =?utf-8?B?VVZMSVEyQUZnTW1LQXM2TjZUVGkyeTFuTzUxdjc5eXlPWGFuWlRKQThlUjho?=
+ =?utf-8?B?dE13Rkx1YThlNEJORHB5VDF4WHRVNzF1NEN6eXBuSGVPY3lsNklkM082ZTBj?=
+ =?utf-8?B?UzJMM21qazZ0T3VvTFRRN2tkNHcxZ01sdTR5endkVHhKYjl3NTlMemIyTm9Q?=
+ =?utf-8?B?aGFremk0Rm5Cc2VuV3Y1aEJDcWpCNmx1cnV6eGZONktqd0V5WVY4L21JcEtU?=
+ =?utf-8?B?VkhtbHRpOGZhNkZXenllRnFLUEMydWw3aXcrRy9pTm1XbjdqaFlzVDNibWJt?=
+ =?utf-8?B?VmFMVkRyOXRzRWNXRUl5RExFN3BLbU9KQ1BJZ2lYMkpGdHN1TnpFdjZpNlUx?=
+ =?utf-8?B?c0hINk5zUHlpQlNLQ1NLZ0dYSDVSOFlyZTU5SW1oVGdwN2x2aE1jTEtQaENv?=
+ =?utf-8?B?TElRdWx2aUhlN3NrMURKbWEweU5wZXlCdlFzK2tRR3VUT0VDdUt5bmx3OFRx?=
+ =?utf-8?B?Z25KeXg3MzFlYys1Z1F4eWV2b0hVNGdWZXhjazdQUGVDSGhuZTNET2ZGVjlD?=
+ =?utf-8?B?ZGRvT3FqN1l1MEV6RC93Z1RnK3hiV0Zjc08yTFpOUU91QmVzZHF4S1dWTzhW?=
+ =?utf-8?B?WFgzKzAvbDhPQk1HRVRsL2ZFR29yZ2swMXlBUC9ta1hiYWo5TnV2RnBmTnFo?=
+ =?utf-8?B?U0dTVVFMbi9zV0U1enFLZWxjUmo3Ty9icjlIQ2o0MjliSzdISGZJN3dSQ2p1?=
+ =?utf-8?B?NG9heENIZi94ZThsdjRXTmNKRDdNSFFtNFpOcTl6cXowRFRnL1g2YjNxYWt2?=
+ =?utf-8?B?UFl1dVk2ejNmL3Z1MFVLNnpTcS9TM1h5LzYrUGVlUTFJUmFtL281ZzE5bE5a?=
+ =?utf-8?B?dHNlYlQxZFNYV243bjAxOHpMYVBqSE9NQ0FqWkdQQ1d3dDhLSnA0V1VRVXBa?=
+ =?utf-8?B?YTBqdGFnbmV5czAwMlZvY3JsL1BCRjFDS2FQZlBPZmgxR004VlRvYmVPMm1X?=
+ =?utf-8?B?MlFYVmErcmdyOGpuUTV4dENPN0lMZGFLQ1AwUE8vMktzcFQrMlltcWtKVDFy?=
+ =?utf-8?B?eFU0Q0lTT0hSZ0licHVsOXk0TWdGZjEraG8ySVZpMlRsNXNKOUsyRWlKcGlC?=
+ =?utf-8?B?ZDhFZTdjMXdCMEpLT2xsdjh6b056NmtudUdraVh1M0thOFdHOHdJMjF5RUhp?=
+ =?utf-8?B?MnM4b0haaERST1F5djFKVU9PdlBSYmNmVmRxMm03YkV0SUtZZk9rVVl6NWFl?=
+ =?utf-8?B?alBRTENPVUpZNFIrUG9iMXAzeFpPZE5jMU10V3Y5OEVpMkowWXR3TFBEdTF1?=
+ =?utf-8?B?REFPUnZVcUJ5SGZ3N1FuODFQUWRja3BhUytrSGY5VzZ2TUxjQVRScW40ZEV4?=
+ =?utf-8?B?SGhueFlISkxwWFpaaUR0UHJEdlN0aTVXQklBdGpRZ2lFK2NHSFFPNk9yUWl0?=
+ =?utf-8?B?dXpVSjN1OWVjSkwwN3l1bEVLclp6NkFsdmVDY3luclNQWmpMYlJ2YmhXREly?=
+ =?utf-8?B?b2xZdDIrU0dJdjZ2VUZjU3RXdjJtUW1kWEttZWRuWDExeVNvLzhtZFhDYlR4?=
+ =?utf-8?B?VkZxVktkK3RwS0lDZHZ4Z1VxTXNiejYzbFgzbis5UGhKbnhNVjBCZkhzdCt3?=
+ =?utf-8?B?VWZDQXgweG1WYkJHMkRPVTV4QXUvYkNRSWREam94UVptdEszSGY5RUhLVTdU?=
+ =?utf-8?B?MlF3U2IwVDkrakVMd2s0engwTjcrNnhYRThrS1dNeFhKOFFsTnI2M1U3TVFI?=
+ =?utf-8?B?SVArS3ZPYS9IdzdBTzdnRXozb0lvWWphaXhvNEtJMkZRRThyZ3ZnMnlESytS?=
+ =?utf-8?B?eHVBWWNTaG5abDN6M1pZVXZ4KzNldHBKRDZJUGg5Y3g5c0g3eGdCeWZHWlYr?=
+ =?utf-8?B?OWd5WEdkM1BhM2laNSswN2p1NHRZa01rYWxpR25oYW13aC85c1hlNldtVTNo?=
+ =?utf-8?B?TkN6UURTSUVuYStOZ1dQQTJiUzZBWC92SEpIVXdnQ2R3c2wyaE5WUnNjYnJw?=
+ =?utf-8?B?cVd4L1ozaXZGWU9YakgvSm55R0dZeVJjOVltM0NnNnpBdnQ2R2RWQThIcUl3?=
+ =?utf-8?Q?DJRc=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e52ec21b-a1f3-7fab-e66e-5c4243d89c2b@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3993.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc6b19a8-7deb-4e5b-a905-08db0d8647cf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2023 05:50:58.4471
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: i9ewFdC51DfKiVqJFTbWD7o4wWhvJwZbACnLtP5vs/DANCrD171I0i4x/pRo3eyS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4381
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2023-02-10 at 15:37:01 -0800, Russ Weight wrote:
-> Hi Yilun,
-> 
-> On 2/10/23 01:47, Xu Yilun wrote:
-> > On 2023-02-09 at 13:13:28 +0200, Ilpo Järvinen wrote:
-> >> Add MAX 10 BMC log driver for accessing BMC event log, FPGA image
-> >> directory, and bill-of-materials (BOM) info partitions on FPGA card's
-> >> flash. Use the nvmem API to expose the event MAX 10 BMC event logs to
-> >> userspace.
-> > I didn't look into the details yet, but I suppose this driver is not
-> > for FPGA domain, which focuses on FPGA region re-configuration and
-> > re-enumeration of devices in FPGA region.
-> 
-> This driver was originally placed (without much thought) under drivers/mfd. It is
-> a sub-device of the BMC, not a multi-function device. I have looked for other
-> instances of log drivers and they seem to be grouped with the technology they are
-> logging for. For example:
-> 
-> ./net/bridge/netfilter/ebt_log.c
-> ./net/bridge/netfilter/ebt_nflog.c
-> ./net/netfilter/nft_log.c
-> ./net/netfilter/nfnetlink_log.c
-
-I see these log drivers interacts with net core. But what this log
-driver is doing, is just to provide the nvmem interface for BMC flash.
-
-> 
-> There is no drivers/log subdirectory. Since this driver is used exclusively with
-> FPGA devices, drivers/fpga seemed like the best option. Do you have any suggestions
-
-Try not to include all kinds of sub device drivers in FPGA domain. Most
-sub devices in FPGA act the same as in ASIC.
-
-> for a better place to put this driver?
-
-I'm not quite sure. Maybe drivers/nvmem?
-
-Thanks,
-Yilun
-
-> 
-> Thanks,
-> - Russ
-> 
-> >
-> > Thanks,
-> > Yilun
-> >
-> >> The PMCI MAX 10 BMC contains high and low timestamp registers that are
-> >> periodically written by the host driver to facilitate BMC event logs.
-> >> Add a kernel worker thread to update the BMC timestamp registers. The
-> >> frequency of timestamp updates is controlled through sysfs file (the
-> >> default frequency is once per minute).
-> >>
-> >> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> >> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> >> Co-developed-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> >> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> >> Co-developed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> >> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> >> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> >> ---
-> >>
-> >> This requires commit 4f43a6e80ba9 ("fpga: m10bmc-sec: Add support for
-> >> N6000") from ib-mfd-fpga-hwmon-6.3-1 (the 11th patch of the M10 BMC split
-> >> series that wasn't picked up at first and still isn't in for-fpga-v6.3-rc1).
-> >>
-> >>  .../testing/sysfs-driver-intel-m10-bmc-log    |  37 +++
-> >>  MAINTAINERS                                   |   4 +-
-> >>  drivers/fpga/Kconfig                          |   9 +
-> >>  drivers/fpga/Makefile                         |   3 +-
-> >>  drivers/fpga/intel-m10-bmc-log.c              | 264 ++++++++++++++++++
-> >>  drivers/mfd/intel-m10-bmc-pmci.c              |   1 +
-> >>  include/linux/mfd/intel-m10-bmc.h             |  13 +
-> >>  7 files changed, 329 insertions(+), 2 deletions(-)
-> >>  create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-log
-> >>  create mode 100644 drivers/fpga/intel-m10-bmc-log.c
-> >>
-> >> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-log b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-log
-> >> new file mode 100644
-> >> index 000000000000..a170e675d11e
-> >> --- /dev/null
-> >> +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-log
-> >> @@ -0,0 +1,37 @@
-> >> +What: /sys/bus/platform/devices/intel-m10-bmc-log.*.auto/time_sync_frequency
-> >> +Date:		Apr 2023
-> >> +KernelVersion:	6.3
-> >> +Contact:	Russ Weight <russell.h.weight@intel.com>
-> >> +Description:	Read/write. This sysfs node controls the frequency (in
-> >> +		seconds) that the host writes to the MAX10 BMC registers
-> >> +		to synchronize the timestamp registers used for the BMC
-> >> +		event log. Write zero to stop the timestamp synchronization.
-> >> +		Write a non-zero integer value to restart or modify the
-> >> +		update frequency. Reading from this file will return the
-> >> +		same integer value.
-> >> +		Format: %u
-> >> +
-> >> +What:		/sys/bus/platform/devices/intel-m10-bmc-log.*.auto/bmc_event_log*/nvmem
-> >> +Date:		Apr 2023
-> >> +KernelVersion:	6.3
-> >> +Contact:	Tianfei zhang <tianfei.zhang@intel.com>
-> >> +Description:	Read-only. This file returns the contents of the "evemt log"
-> >> +		partition in flash. This partition includes the event and
-> >> +		error info for the BMC.
-> >> +
-> >> +What:		/sys/bus/platform/devices/intel-m10-bmc-log.*.auto/fpga_image_directory*/nvmem
-> >> +Date:		Apr 2023
-> >> +KernelVersion:	6.3
-> >> +Contact:	Tianfei zhang <tianfei.zhang@intel.com>
-> >> +Description:	Read-only. This file returns the contents of the "FPGA image
-> >> +		directory" partition in flash. This partition includes
-> >> +		information like the FPGA Image versions and state.
-> >> +
-> >> +What:		/sys/bus/platform/devices/intel-m10-bmc-log.*.auto/bom_info*/nvmem
-> >> +Date:		Apr 2023
-> >> +KernelVersion:	6.3
-> >> +Contact:	Tianfei zhang <tianfei.zhang@intel.com>
-> >> +Description:	Read-only. This file returns the contents of the "BOM info"
-> >> +		partition in flash. This partition includes information such
-> >> +		as the bill of materials (BOM) critical components like
-> >> +		PBA#, MMID.
-> >> diff --git a/MAINTAINERS b/MAINTAINERS
-> >> index ddfa4f8b3c80..1b2427ba6729 100644
-> >> --- a/MAINTAINERS
-> >> +++ b/MAINTAINERS
-> >> @@ -8075,11 +8075,13 @@ F:	Documentation/fpga/
-> >>  F:	drivers/fpga/
-> >>  F:	include/linux/fpga/
-> >>  
-> >> -INTEL MAX10 BMC SECURE UPDATES
-> >> +INTEL MAX10 BMC SUBDRIVERS
-> >>  M:	Russ Weight <russell.h.weight@intel.com>
-> >>  L:	linux-fpga@vger.kernel.org
-> >>  S:	Maintained
-> >> +F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-log
-> >>  F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-> >> +F:	drivers/fpga/intel-m10-bmc-log.c
-> >>  F:	drivers/fpga/intel-m10-bmc-sec-update.c
-> >>  
-> >>  MICROCHIP POLARFIRE FPGA DRIVERS
-> >> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> >> index 0a00763b9f28..773667e3b027 100644
-> >> --- a/drivers/fpga/Kconfig
-> >> +++ b/drivers/fpga/Kconfig
-> >> @@ -244,6 +244,15 @@ config FPGA_MGR_VERSAL_FPGA
-> >>  
-> >>  	  To compile this as a module, choose M here.
-> >>  
-> >> +config FPGA_M10_BMC_LOG
-> >> +	tristate "Intel MAX 10 Board Management Controller Log Driver"
-> >> +	depends on MFD_INTEL_M10_BMC_CORE
-> >> +	help
-> >> +	  Support for the Intel MAX 10 Board Management Controller (BMC)
-> >> +	  event log, event log timestamp synchronization, and other
-> >> +	  information on flash partitions (available images and
-> >> +	  bill-of-materials critical information).
-> >> +
-> >>  config FPGA_M10_BMC_SEC_UPDATE
-> >>  	tristate "Intel MAX10 BMC Secure Update driver"
-> >>  	depends on MFD_INTEL_M10_BMC_CORE
-> >> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> >> index 72e554b4d2f7..1db25ad3d76a 100644
-> >> --- a/drivers/fpga/Makefile
-> >> +++ b/drivers/fpga/Makefile
-> >> @@ -25,7 +25,8 @@ obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG_SPI)	+= lattice-sysconfig-spi.o
-> >>  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
-> >>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
-> >>  
-> >> -# FPGA Secure Update Drivers
-> >> +# MAX10 subdrivers
-> >> +obj-$(CONFIG_FPGA_M10_BMC_LOG)		+= intel-m10-bmc-log.o
-> >>  obj-$(CONFIG_FPGA_M10_BMC_SEC_UPDATE)	+= intel-m10-bmc-sec-update.o
-> >>  
-> >>  # FPGA Bridge Drivers
-> >> diff --git a/drivers/fpga/intel-m10-bmc-log.c b/drivers/fpga/intel-m10-bmc-log.c
-> >> new file mode 100644
-> >> index 000000000000..4e7a54afe786
-> >> --- /dev/null
-> >> +++ b/drivers/fpga/intel-m10-bmc-log.c
-> >> @@ -0,0 +1,264 @@
-> >> +// SPDX-License-Identifier: GPL-2.0-only
-> >> +/*
-> >> + * Intel Max10 Board Management Controller Log Driver
-> >> + *
-> >> + * Copyright (C) 2021-2023 Intel Corporation.
-> >> + */
-> >> +
-> >> +#include <linux/bitfield.h>
-> >> +#include <linux/dev_printk.h>
-> >> +#include <linux/kernel.h>
-> >> +#include <linux/module.h>
-> >> +#include <linux/platform_device.h>
-> >> +#include <linux/nvmem-provider.h>
-> >> +#include <linux/mod_devicetable.h>
-> >> +#include <linux/types.h>
-> >> +
-> >> +#include <linux/mfd/intel-m10-bmc.h>
-> >> +
-> >> +#define M10BMC_TIMESTAMP_FREQ			60	/* 60 secs between updates */
-> >> +
-> >> +struct m10bmc_log_cfg {
-> >> +	int el_size;
-> >> +	unsigned long el_off;
-> >> +
-> >> +	int id_size;
-> >> +	unsigned long id_off;
-> >> +
-> >> +	int bi_size;
-> >> +	unsigned long bi_off;
-> >> +};
-> >> +
-> >> +struct m10bmc_log {
-> >> +	struct device *dev;
-> >> +	struct intel_m10bmc *m10bmc;
-> >> +	unsigned int freq_s;		/* update frequency in seconds */
-> >> +	struct delayed_work dwork;
-> >> +	const struct m10bmc_log_cfg *log_cfg;
-> >> +	struct nvmem_device *bmc_event_log_nvmem;
-> >> +	struct nvmem_device *fpga_image_dir_nvmem;
-> >> +	struct nvmem_device *bom_info_nvmem;
-> >> +};
-> >> +
-> >> +static void m10bmc_log_time_sync(struct work_struct *work)
-> >> +{
-> >> +	struct delayed_work *dwork = to_delayed_work(work);
-> >> +	const struct m10bmc_csr_map *csr_map;
-> >> +	struct m10bmc_log *log;
-> >> +	s64 time_ms;
-> >> +	int ret;
-> >> +
-> >> +	log = container_of(dwork, struct m10bmc_log, dwork);
-> >> +	csr_map = log->m10bmc->info->csr_map;
-> >> +
-> >> +	time_ms = ktime_to_ms(ktime_get_real());
-> >> +	ret = regmap_write(log->m10bmc->regmap, csr_map->base + M10BMC_N6000_TIME_HIGH,
-> >> +			   upper_32_bits(time_ms));
-> >> +	if (!ret) {
-> >> +		ret = regmap_write(log->m10bmc->regmap, csr_map->base + M10BMC_N6000_TIME_LOW,
-> >> +				   lower_32_bits(time_ms));
-> >> +	}
-> >> +	if (ret)
-> >> +		dev_err_once(log->dev, "Failed to update BMC timestamp: %d\n", ret);
-> >> +
-> >> +	schedule_delayed_work(&log->dwork, log->freq_s * HZ);
-> >> +}
-> >> +
-> >> +static ssize_t time_sync_frequency_store(struct device *dev, struct device_attribute *attr,
-> >> +					 const char *buf, size_t count)
-> >> +{
-> >> +	struct m10bmc_log *ddata = dev_get_drvdata(dev);
-> >> +	unsigned int old_freq = ddata->freq_s;
-> >> +	int ret;
-> >> +
-> >> +	ret = kstrtouint(buf, 0, &ddata->freq_s);
-> >> +	if (ret)
-> >> +		return ret;
-> >> +
-> >> +	if (old_freq)
-> >> +		cancel_delayed_work_sync(&ddata->dwork);
-> >> +
-> >> +	if (ddata->freq_s)
-> >> +		m10bmc_log_time_sync(&ddata->dwork.work);
-> >> +
-> >> +	return count;
-> >> +}
-> >> +
-> >> +static ssize_t time_sync_frequency_show(struct device *dev, struct device_attribute *attr,
-> >> +					char *buf)
-> >> +{
-> >> +	struct m10bmc_log *ddata = dev_get_drvdata(dev);
-> >> +
-> >> +	return sysfs_emit(buf, "%u\n", ddata->freq_s);
-> >> +}
-> >> +static DEVICE_ATTR_RW(time_sync_frequency);
-> >> +
-> >> +static struct attribute *m10bmc_log_attrs[] = {
-> >> +	&dev_attr_time_sync_frequency.attr,
-> >> +	NULL,
-> >> +};
-> >> +ATTRIBUTE_GROUPS(m10bmc_log);
-> >> +
-> >> +static int bmc_nvmem_read(struct m10bmc_log *ddata, unsigned int addr,
-> >> +			  unsigned int off, void *val, size_t count)
-> >> +{
-> >> +	struct intel_m10bmc *m10bmc = ddata->m10bmc;
-> >> +	int ret;
-> >> +
-> >> +	ret = m10bmc->flash_bulk_ops->read(m10bmc, val, addr + off, count);
-> >> +	if (ret) {
-> >> +		if (ret != -EBUSY)
-> >> +			dev_err(ddata->dev, "failed to read flash %x (%d)\n", addr, ret);
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static int bmc_event_log_nvmem_read(void *priv, unsigned int off, void *val, size_t count)
-> >> +{
-> >> +	struct m10bmc_log *ddata = priv;
-> >> +
-> >> +	return bmc_nvmem_read(ddata, ddata->log_cfg->el_off, off, val, count);
-> >> +}
-> >> +
-> >> +static int fpga_image_dir_nvmem_read(void *priv, unsigned int off, void *val, size_t count)
-> >> +{
-> >> +	struct m10bmc_log *ddata = priv;
-> >> +
-> >> +	return bmc_nvmem_read(ddata, ddata->log_cfg->id_off, off, val, count);
-> >> +}
-> >> +
-> >> +static int bom_info_nvmem_read(void *priv, unsigned int off, void *val, size_t count)
-> >> +{
-> >> +	struct m10bmc_log *ddata = priv;
-> >> +
-> >> +	return bmc_nvmem_read(ddata, ddata->log_cfg->bi_off, off, val, count);
-> >> +}
-> >> +
-> >> +static struct nvmem_config bmc_event_log_nvmem_config = {
-> >> +	.name = "bmc_event_log",
-> >> +	.stride = 4,
-> >> +	.word_size = 1,
-> >> +	.reg_read = bmc_event_log_nvmem_read,
-> >> +	.id = NVMEM_DEVID_AUTO,
-> >> +};
-> >> +
-> >> +static struct nvmem_config fpga_image_dir_nvmem_config = {
-> >> +	.name = "fpga_image_directory",
-> >> +	.stride = 4,
-> >> +	.word_size = 1,
-> >> +	.reg_read = fpga_image_dir_nvmem_read,
-> >> +	.id = NVMEM_DEVID_AUTO,
-> >> +};
-> >> +
-> >> +static struct nvmem_config bom_info_nvmem_config = {
-> >> +	.name = "bom_info",
-> >> +	.stride = 4,
-> >> +	.word_size = 1,
-> >> +	.reg_read = bom_info_nvmem_read,
-> >> +	.id = NVMEM_DEVID_AUTO,
-> >> +};
-> >> +
-> >> +static int m10bmc_log_probe(struct platform_device *pdev)
-> >> +{
-> >> +	const struct platform_device_id *id = platform_get_device_id(pdev);
-> >> +	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
-> >> +	struct nvmem_config nvconfig;
-> >> +	struct m10bmc_log *ddata;
-> >> +
-> >> +	if (WARN_ON_ONCE(!m10bmc->flash_bulk_ops))
-> >> +		return -ENODEV;
-> >> +
-> >> +	ddata = devm_kzalloc(&pdev->dev, sizeof(*ddata), GFP_KERNEL);
-> >> +	if (!ddata)
-> >> +		return -ENOMEM;
-> >> +
-> >> +	ddata->dev = &pdev->dev;
-> >> +	ddata->m10bmc = m10bmc;
-> >> +	ddata->freq_s = M10BMC_TIMESTAMP_FREQ;
-> >> +	INIT_DELAYED_WORK(&ddata->dwork, m10bmc_log_time_sync);
-> >> +	ddata->log_cfg = (struct m10bmc_log_cfg *)id->driver_data;
-> >> +	dev_set_drvdata(&pdev->dev, ddata);
-> >> +
-> >> +	if (ddata->log_cfg->el_size > 0) {
-> >> +		m10bmc_log_time_sync(&ddata->dwork.work);
-> >> +
-> >> +		memcpy(&nvconfig, &bmc_event_log_nvmem_config, sizeof(bmc_event_log_nvmem_config));
-> >> +		nvconfig.dev = ddata->dev;
-> >> +		nvconfig.priv = ddata;
-> >> +		nvconfig.size = ddata->log_cfg->el_size;
-> >> +
-> >> +		ddata->bmc_event_log_nvmem = devm_nvmem_register(ddata->dev, &nvconfig);
-> >> +		if (IS_ERR(ddata->bmc_event_log_nvmem))
-> >> +			return PTR_ERR(ddata->bmc_event_log_nvmem);
-> >> +	}
-> >> +
-> >> +	if (ddata->log_cfg->id_size > 0) {
-> >> +		memcpy(&nvconfig, &fpga_image_dir_nvmem_config, sizeof(fpga_image_dir_nvmem_config));
-> >> +		nvconfig.dev = ddata->dev;
-> >> +		nvconfig.priv = ddata;
-> >> +		nvconfig.size = ddata->log_cfg->id_size;
-> >> +
-> >> +		ddata->fpga_image_dir_nvmem = devm_nvmem_register(ddata->dev, &nvconfig);
-> >> +		if (IS_ERR(ddata->fpga_image_dir_nvmem))
-> >> +			return PTR_ERR(ddata->fpga_image_dir_nvmem);
-> >> +	}
-> >> +
-> >> +	if (ddata->log_cfg->bi_size > 0) {
-> >> +		memcpy(&nvconfig, &bom_info_nvmem_config, sizeof(bom_info_nvmem_config));
-> >> +		nvconfig.dev = ddata->dev;
-> >> +		nvconfig.priv = ddata;
-> >> +		nvconfig.size = ddata->log_cfg->bi_size;
-> >> +
-> >> +		ddata->bom_info_nvmem = devm_nvmem_register(ddata->dev, &nvconfig);
-> >> +		if (IS_ERR(ddata->bom_info_nvmem))
-> >> +			return PTR_ERR(ddata->bom_info_nvmem);
-> >> +	}
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static int m10bmc_log_remove(struct platform_device *pdev)
-> >> +{
-> >> +	struct m10bmc_log *ddata = dev_get_drvdata(&pdev->dev);
-> >> +
-> >> +	cancel_delayed_work_sync(&ddata->dwork);
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static const struct m10bmc_log_cfg m10bmc_log_n6000_cfg = {
-> >> +	.el_size = M10BMC_N6000_ERROR_LOG_SIZE,
-> >> +	.el_off = M10BMC_N6000_ERROR_LOG_ADDR,
-> >> +
-> >> +	.id_size = M10BMC_N6000_FPGA_IMAGE_DIR_SIZE,
-> >> +	.id_off = M10BMC_N6000_FPGA_IMAGE_DIR_ADDR,
-> >> +
-> >> +	.bi_size = M10BMC_N6000_BOM_INFO_SIZE,
-> >> +	.bi_off = M10BMC_N6000_BOM_INFO_ADDR,
-> >> +};
-> >> +
-> >> +static const struct platform_device_id intel_m10bmc_log_ids[] = {
-> >> +	{
-> >> +		.name = "n6000bmc-log",
-> >> +		.driver_data = (unsigned long)&m10bmc_log_n6000_cfg,
-> >> +	},
-> >> +	{ }
-> >> +};
-> >> +
-> >> +static struct platform_driver intel_m10bmc_log_driver = {
-> >> +	.probe = m10bmc_log_probe,
-> >> +	.remove = m10bmc_log_remove,
-> >> +	.driver = {
-> >> +		.name = "intel-m10-bmc-log",
-> >> +		.dev_groups = m10bmc_log_groups,
-> >> +	},
-> >> +	.id_table = intel_m10bmc_log_ids,
-> >> +};
-> >> +module_platform_driver(intel_m10bmc_log_driver);
-> >> +
-> >> +MODULE_DEVICE_TABLE(platform, intel_m10bmc_log_ids);
-> >> +MODULE_AUTHOR("Intel Corporation");
-> >> +MODULE_DESCRIPTION("Intel MAX 10 BMC log driver");
-> >> +MODULE_LICENSE("GPL");
-> >> diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
-> >> index 8821f1876dd6..f8803b7bb98e 100644
-> >> --- a/drivers/mfd/intel-m10-bmc-pmci.c
-> >> +++ b/drivers/mfd/intel-m10-bmc-pmci.c
-> >> @@ -350,6 +350,7 @@ static struct regmap_config m10bmc_pmci_regmap_config = {
-> >>  static struct mfd_cell m10bmc_pmci_n6000_bmc_subdevs[] = {
-> >>  	{ .name = "n6000bmc-hwmon" },
-> >>  	{ .name = "n6000bmc-sec-update" },
-> >> +	{ .name = "n6000bmc-log" },
-> >>  };
-> >>  
-> >>  static const struct m10bmc_csr_map m10bmc_n6000_csr_map = {
-> >> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-> >> index 1812ebfa11a8..1079e580e9e6 100644
-> >> --- a/include/linux/mfd/intel-m10-bmc.h
-> >> +++ b/include/linux/mfd/intel-m10-bmc.h
-> >> @@ -125,6 +125,9 @@
-> >>  #define M10BMC_N6000_SYS_BASE			0x0
-> >>  #define M10BMC_N6000_SYS_END			0xfff
-> >>  
-> >> +#define M10BMC_N6000_TIME_LOW			0x178
-> >> +#define M10BMC_N6000_TIME_HIGH			0x17c
-> >> +
-> >>  #define M10BMC_N6000_DOORBELL			0x1c0
-> >>  #define M10BMC_N6000_AUTH_RESULT		0x1c4
-> >>  #define AUTH_RESULT_RSU_STATUS			GENMASK(23, 16)
-> >> @@ -134,6 +137,16 @@
-> >>  #define M10BMC_N6000_MAC_LOW			0x20
-> >>  #define M10BMC_N6000_MAC_HIGH			(M10BMC_N6000_MAC_LOW + 4)
-> >>  
-> >> +/* Addresses for BMC log data in FLASH */
-> >> +#define M10BMC_N6000_ERROR_LOG_ADDR		0x7fb0000
-> >> +#define M10BMC_N6000_ERROR_LOG_SIZE		0x40000
-> >> +
-> >> +#define M10BMC_N6000_FPGA_IMAGE_DIR_ADDR	0x7ff6000
-> >> +#define M10BMC_N6000_FPGA_IMAGE_DIR_SIZE	0x3000
-> >> +
-> >> +#define M10BMC_N6000_BOM_INFO_ADDR		0x7ff0000
-> >> +#define M10BMC_N6000_BOM_INFO_SIZE		0x2000
-> >> +
-> >>  /* Addresses for security related data in FLASH */
-> >>  #define M10BMC_N6000_BMC_REH_ADDR		0x7ffc004
-> >>  #define M10BMC_N6000_BMC_PROG_ADDR		0x7ffc000
-> >> -- 
-> >> 2.30.2
-> >>
-> 
+SGkgTWFyY28sDQoNCglQbGVhc2UgZmluZCBteSByZXNwb25zZSBpbmxpbmUuDQoNCj4gLS0tLS1P
+cmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWFyY28gUGFnYW5pIDxtYXJwYWdhbkByZWRo
+YXQuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgRmVicnVhcnkgOSwgMjAyMyAzOjUyIEFNDQo+IFRv
+OiBNYW5uZSwgTmF2YSBraXNob3JlIDxuYXZhLmtpc2hvcmUubWFubmVAYW1kLmNvbT4NCj4gQ2M6
+IE5hdmEga2lzaG9yZSBNYW5uZSA8bmF2YS5tYW5uZUB4aWxpbnguY29tPjsgbWRmQGtlcm5lbC5v
+cmc7DQo+IGhhby53dUBpbnRlbC5jb207IHRyaXhAcmVkaGF0LmNvbTsgeWlsdW4ueHVAaW50ZWwu
+Y29tOyBsaW51eC0NCj4gZnBnYUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
+cm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSF0gZnBnYTogbWdyOiBVcGRhdGUgdGhlIHN0
+YXRlIHRvIHByb3ZpZGUgdGhlIGV4YWN0IGVycm9yDQo+IGNvZGUNCj4gDQo+IA0KPiBPbiAyMDIz
+LTAyLTA4IDEyOjAxLCBNYW5uZSwgTmF2YSBraXNob3JlIHdyb3RlOg0KPiA+IEhpIE1hcmNvLA0K
+PiA+DQo+ID4gCVRoYW5rcyBmb3IgcHJvdmlkaW5nIHRoZSByZXZpZXcgY29tbWVudHMuDQo+ID4g
+UGxlYXNlIGZpbmQgbXkgcmVzcG9uc2UgaW5saW5lIGJlbG93Lg0KPiA+DQo+ID4+IC0tLS0tT3Jp
+Z2luYWwgTWVzc2FnZS0tLS0tDQo+ID4+IEZyb206IE1hcmNvIFBhZ2FuaSA8bWFycGFnYW5AcmVk
+aGF0LmNvbT4NCj4gPj4gU2VudDogV2VkbmVzZGF5LCBGZWJydWFyeSA4LCAyMDIzIDEyOjA0IEFN
+DQo+ID4+IFRvOiBOYXZhIGtpc2hvcmUgTWFubmUgPG5hdmEubWFubmVAeGlsaW54LmNvbT4NCj4g
+Pj4gQ2M6IE1hbm5lLCBOYXZhIGtpc2hvcmUgPG5hdmEua2lzaG9yZS5tYW5uZUBhbWQuY29tPjsN
+Cj4gbWRmQGtlcm5lbC5vcmc7DQo+ID4+IGhhby53dUBpbnRlbC5jb207IHRyaXhAcmVkaGF0LmNv
+bTsgeWlsdW4ueHVAaW50ZWwuY29tOw0KPiA+PiBsaW51eC1mcGdhQHZnZXIua2VybmVsLm9yZzsg
+bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiA+PiBTdWJqZWN0OiBSZTogW1BBVENIXSBm
+cGdhOiBtZ3I6IFVwZGF0ZSB0aGUgc3RhdGUgdG8gcHJvdmlkZSB0aGUgZXhhY3QNCj4gPj4gZXJy
+b3IgY29kZQ0KPiA+Pg0KPiA+Pg0KPiA+PiBPbiAyMDIzLTAyLTA3IDEwOjU5LCBOYXZhIGtpc2hv
+cmUgTWFubmUgd3JvdGU6DQo+ID4+PiBGcm9tOiBOYXZhIGtpc2hvcmUgTWFubmUgPG5hdmEubWFu
+bmVAeGlsaW54LmNvbT4NCj4gPj4+DQo+ID4+PiBVcCBvbiBmcGdhIGNvbmZpZ3VyYXRpb24gZmFp
+bHVyZSwgdGhlIGV4aXN0aW5nIHN5c2ZzIHN0YXRlIGludGVyZmFjZQ0KPiA+Pj4gaXMganVzdCBw
+cm92aWRpbmcgdGhlIGdlbmVyaWMgZXJyb3IgbWVzc2FnZSByYXRoZXIgdGhhbiBwcm92aWRpbmcN
+Cj4gPj4+IHRoZSBleGFjdCBlcnJvciBjb2RlLiBUaGlzIHBhdGNoIGV4dGVuZHMgc3lzZnMgc3Rh
+dGUgaW50ZXJmYWNlIHRvDQo+ID4+PiBwcm92aWRlIHRoZSBleGFjdCBlcnJvciByZWNlaXZlZCBm
+cm9tIHRoZSBsb3dlciBsYXllciBhbG9uZyB3aXRoIHRoZQ0KPiA+Pj4gZXhpc3RpbmcgZ2VuZXJp
+YyBlcnJvciBtZXNzYWdlLg0KPiA+Pj4NCj4gPj4+IFNpZ25lZC1vZmYtYnk6IE5hdmEga2lzaG9y
+ZSBNYW5uZSA8bmF2YS5tYW5uZUB4aWxpbnguY29tPg0KPiA+Pj4gLS0tDQo+ID4+PiAgZHJpdmVy
+cy9mcGdhL2ZwZ2EtbWdyLmMgICAgICAgfCAyMCArKysrKysrKysrKysrKysrKysrLQ0KPiA+Pj4g
+IGluY2x1ZGUvbGludXgvZnBnYS9mcGdhLW1nci5oIHwgIDIgKysNCj4gPj4+ICAyIGZpbGVzIGNo
+YW5nZWQsIDIxIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gPj4+DQo+ID4+PiBkaWZm
+IC0tZ2l0IGEvZHJpdmVycy9mcGdhL2ZwZ2EtbWdyLmMgYi9kcml2ZXJzL2ZwZ2EvZnBnYS1tZ3Iu
+YyBpbmRleA0KPiA+Pj4gOGVmYTY3NjIwZTIxLi5iMmQ3NDcwNWE1YTIgMTAwNjQ0DQo+ID4+PiAt
+LS0gYS9kcml2ZXJzL2ZwZ2EvZnBnYS1tZ3IuYw0KPiA+Pj4gKysrIGIvZHJpdmVycy9mcGdhL2Zw
+Z2EtbWdyLmMNCj4gPj4+IEBAIC02MSwxMiArNjEsMTQgQEAgc3RhdGljIGlubGluZSBpbnQgZnBn
+YV9tZ3Jfd3JpdGVfY29tcGxldGUoc3RydWN0DQo+ID4+PiBmcGdhX21hbmFnZXIgKm1nciwgIHsN
+Cj4gPj4+ICAJaW50IHJldCA9IDA7DQo+ID4+Pg0KPiA+Pj4gKwltZ3ItPmVyciA9IDA7DQo+ID4+
+PiAgCW1nci0+c3RhdGUgPSBGUEdBX01HUl9TVEFURV9XUklURV9DT01QTEVURTsNCj4gPj4+ICAJ
+aWYgKG1nci0+bW9wcy0+d3JpdGVfY29tcGxldGUpDQo+ID4+PiAgCQlyZXQgPSBtZ3ItPm1vcHMt
+PndyaXRlX2NvbXBsZXRlKG1nciwgaW5mbyk7DQo+ID4+PiAgCWlmIChyZXQpIHsNCj4gPj4+ICAJ
+CWRldl9lcnIoJm1nci0+ZGV2LCAiRXJyb3IgYWZ0ZXIgd3JpdGluZyBpbWFnZSBkYXRhIHRvDQo+
+ID4+IEZQR0FcbiIpOw0KPiA+Pj4gIAkJbWdyLT5zdGF0ZSA9IEZQR0FfTUdSX1NUQVRFX1dSSVRF
+X0NPTVBMRVRFX0VSUjsNCj4gPj4+ICsJCW1nci0+ZXJyID0gcmV0Ow0KPiA+Pj4gIAkJcmV0dXJu
+IHJldDsNCj4gPj4+ICAJfQ0KPiA+Pj4gIAltZ3ItPnN0YXRlID0gRlBHQV9NR1JfU1RBVEVfT1BF
+UkFUSU5HOyBAQCAtMTU0LDYgKzE1Niw3IEBADQo+ID4+IHN0YXRpYw0KPiA+Pj4gaW50IGZwZ2Ff
+bWdyX3BhcnNlX2hlYWRlcl9tYXBwZWQoc3RydWN0IGZwZ2FfbWFuYWdlciAqbWdyLCAgew0KPiA+
+Pj4gIAlpbnQgcmV0Ow0KPiA+Pj4NCj4gPj4+ICsJbWdyLT5lcnIgPSAwOw0KPiA+Pj4gIAltZ3It
+PnN0YXRlID0gRlBHQV9NR1JfU1RBVEVfUEFSU0VfSEVBREVSOw0KPiA+Pj4gIAlyZXQgPSBmcGdh
+X21ncl9wYXJzZV9oZWFkZXIobWdyLCBpbmZvLCBidWYsIGNvdW50KTsNCj4gPj4+DQo+ID4+PiBA
+QCAtMTY1LDYgKzE2OCw3IEBAIHN0YXRpYyBpbnQNCj4gZnBnYV9tZ3JfcGFyc2VfaGVhZGVyX21h
+cHBlZChzdHJ1Y3QNCj4gPj4gZnBnYV9tYW5hZ2VyICptZ3IsDQo+ID4+PiAgCWlmIChyZXQpIHsN
+Cj4gPj4+ICAJCWRldl9lcnIoJm1nci0+ZGV2LCAiRXJyb3Igd2hpbGUgcGFyc2luZyBGUEdBIGlt
+YWdlDQo+ID4+IGhlYWRlclxuIik7DQo+ID4+PiAgCQltZ3ItPnN0YXRlID0gRlBHQV9NR1JfU1RB
+VEVfUEFSU0VfSEVBREVSX0VSUjsNCj4gPj4+ICsJCW1nci0+ZXJyID0gcmV0Ow0KPiA+Pj4gIAl9
+DQo+ID4+Pg0KPiA+Pj4gIAlyZXR1cm4gcmV0Ow0KPiA+Pj4gQEAgLTE4NSw2ICsxODksNyBAQCBz
+dGF0aWMgaW50IGZwZ2FfbWdyX3BhcnNlX2hlYWRlcl9zZ19maXJzdChzdHJ1Y3QNCj4gPj4gZnBn
+YV9tYW5hZ2VyICptZ3IsDQo+ID4+PiAgCWludCByZXQ7DQo+ID4+Pg0KPiA+Pj4gIAltZ3ItPnN0
+YXRlID0gRlBHQV9NR1JfU1RBVEVfUEFSU0VfSEVBREVSOw0KPiA+Pj4gKwltZ3ItPmVyciA9IDA7
+DQo+ID4+Pg0KPiA+Pj4gIAlzZ19taXRlcl9zdGFydCgmbWl0ZXIsIHNndC0+c2dsLCBzZ3QtPm5l
+bnRzLCBTR19NSVRFUl9GUk9NX1NHKTsNCj4gPj4+ICAJaWYgKHNnX21pdGVyX25leHQoJm1pdGVy
+KSAmJg0KPiA+Pj4gQEAgLTE5Nyw2ICsyMDIsNyBAQCBzdGF0aWMgaW50IGZwZ2FfbWdyX3BhcnNl
+X2hlYWRlcl9zZ19maXJzdChzdHJ1Y3QNCj4gPj4gZnBnYV9tYW5hZ2VyICptZ3IsDQo+ID4+PiAg
+CWlmIChyZXQgJiYgcmV0ICE9IC1FQUdBSU4pIHsNCj4gPj4+ICAJCWRldl9lcnIoJm1nci0+ZGV2
+LCAiRXJyb3Igd2hpbGUgcGFyc2luZyBGUEdBIGltYWdlDQo+ID4+IGhlYWRlclxuIik7DQo+ID4+
+PiAgCQltZ3ItPnN0YXRlID0gRlBHQV9NR1JfU1RBVEVfUEFSU0VfSEVBREVSX0VSUjsNCj4gPj4+
+ICsJCW1nci0+ZXJyID0gcmV0Ow0KPiA+Pj4gIAl9DQo+ID4+Pg0KPiA+Pj4gIAlyZXR1cm4gcmV0
+Ow0KPiA+Pj4gQEAgLTI0OSw2ICsyNTUsNyBAQCBzdGF0aWMgdm9pZCAqZnBnYV9tZ3JfcGFyc2Vf
+aGVhZGVyX3NnKHN0cnVjdA0KPiA+PiBmcGdhX21hbmFnZXIgKm1nciwNCj4gPj4+ICAJaWYgKHJl
+dCkgew0KPiA+Pj4gIAkJZGV2X2VycigmbWdyLT5kZXYsICJFcnJvciB3aGlsZSBwYXJzaW5nIEZQ
+R0EgaW1hZ2UNCj4gPj4gaGVhZGVyXG4iKTsNCj4gPj4+ICAJCW1nci0+c3RhdGUgPSBGUEdBX01H
+Ul9TVEFURV9QQVJTRV9IRUFERVJfRVJSOw0KPiA+Pj4gKwkJbWdyLT5lcnIgPSByZXQ7DQo+ID4+
+PiAgCQlrZnJlZShidWYpOw0KPiA+Pj4gIAkJYnVmID0gRVJSX1BUUihyZXQpOw0KPiA+Pj4gIAl9
+DQo+ID4+PiBAQCAtMjcyLDYgKzI3OSw3IEBAIHN0YXRpYyBpbnQgZnBnYV9tZ3Jfd3JpdGVfaW5p
+dF9idWYoc3RydWN0DQo+ID4+IGZwZ2FfbWFuYWdlciAqbWdyLA0KPiA+Pj4gIAlzaXplX3QgaGVh
+ZGVyX3NpemUgPSBpbmZvLT5oZWFkZXJfc2l6ZTsNCj4gPj4+ICAJaW50IHJldDsNCj4gPj4+DQo+
+ID4+PiArCW1nci0+ZXJyID0gMDsNCj4gPj4+ICAJbWdyLT5zdGF0ZSA9IEZQR0FfTUdSX1NUQVRF
+X1dSSVRFX0lOSVQ7DQo+ID4+Pg0KPiA+Pj4gIAlpZiAoaGVhZGVyX3NpemUgPiBjb3VudCkNCj4g
+Pj4+IEBAIC0yODQsNiArMjkyLDcgQEAgc3RhdGljIGludCBmcGdhX21ncl93cml0ZV9pbml0X2J1
+ZihzdHJ1Y3QNCj4gPj4gZnBnYV9tYW5hZ2VyICptZ3IsDQo+ID4+PiAgCWlmIChyZXQpIHsNCj4g
+Pj4+ICAJCWRldl9lcnIoJm1nci0+ZGV2LCAiRXJyb3IgcHJlcGFyaW5nIEZQR0EgZm9yIHdyaXRp
+bmdcbiIpOw0KPiA+Pj4gIAkJbWdyLT5zdGF0ZSA9IEZQR0FfTUdSX1NUQVRFX1dSSVRFX0lOSVRf
+RVJSOw0KPiA+Pj4gKwkJbWdyLT5lcnIgPSByZXQ7DQo+ID4+PiAgCQlyZXR1cm4gcmV0Ow0KPiA+
+Pj4gIAl9DQo+ID4+Pg0KPiA+Pj4gQEAgLTM3MCw2ICszNzksNyBAQCBzdGF0aWMgaW50IGZwZ2Ff
+bWdyX2J1Zl9sb2FkX3NnKHN0cnVjdA0KPiA+Pj4gZnBnYV9tYW5hZ2VyICptZ3IsDQo+ID4+Pg0K
+PiA+Pj4gIAkvKiBXcml0ZSB0aGUgRlBHQSBpbWFnZSB0byB0aGUgRlBHQS4gKi8NCj4gPj4+ICAJ
+bWdyLT5zdGF0ZSA9IEZQR0FfTUdSX1NUQVRFX1dSSVRFOw0KPiA+Pj4gKwltZ3ItPmVyciA9IDA7
+DQo+ID4+PiAgCWlmIChtZ3ItPm1vcHMtPndyaXRlX3NnKSB7DQo+ID4+PiAgCQlyZXQgPSBmcGdh
+X21ncl93cml0ZV9zZyhtZ3IsIHNndCk7DQo+ID4+PiAgCX0gZWxzZSB7DQo+ID4+PiBAQCAtNDA1
+LDYgKzQxNSw3IEBAIHN0YXRpYyBpbnQgZnBnYV9tZ3JfYnVmX2xvYWRfc2coc3RydWN0DQo+ID4+
+IGZwZ2FfbWFuYWdlciAqbWdyLA0KPiA+Pj4gIAlpZiAocmV0KSB7DQo+ID4+PiAgCQlkZXZfZXJy
+KCZtZ3ItPmRldiwgIkVycm9yIHdoaWxlIHdyaXRpbmcgaW1hZ2UgZGF0YSB0bw0KPiA+PiBGUEdB
+XG4iKTsNCj4gPj4+ICAJCW1nci0+c3RhdGUgPSBGUEdBX01HUl9TVEFURV9XUklURV9FUlI7DQo+
+ID4+PiArCQltZ3ItPmVyciA9IHJldDsNCj4gPj4+ICAJCXJldHVybiByZXQ7DQo+ID4+PiAgCX0N
+Cj4gPj4+DQo+ID4+PiBAQCAtNDM3LDEwICs0NDgsMTIgQEAgc3RhdGljIGludCBmcGdhX21ncl9i
+dWZfbG9hZF9tYXBwZWQoc3RydWN0DQo+ID4+IGZwZ2FfbWFuYWdlciAqbWdyLA0KPiA+Pj4gIAkg
+KiBXcml0ZSB0aGUgRlBHQSBpbWFnZSB0byB0aGUgRlBHQS4NCj4gPj4+ICAJICovDQo+ID4+PiAg
+CW1nci0+c3RhdGUgPSBGUEdBX01HUl9TVEFURV9XUklURTsNCj4gPj4+ICsJbWdyLT5lcnIgPSAw
+Ow0KPiA+Pj4gIAlyZXQgPSBmcGdhX21ncl93cml0ZShtZ3IsIGJ1ZiwgY291bnQpOw0KPiA+Pj4g
+IAlpZiAocmV0KSB7DQo+ID4+PiAgCQlkZXZfZXJyKCZtZ3ItPmRldiwgIkVycm9yIHdoaWxlIHdy
+aXRpbmcgaW1hZ2UgZGF0YSB0bw0KPiA+PiBGUEdBXG4iKTsNCj4gPj4+ICAJCW1nci0+c3RhdGUg
+PSBGUEdBX01HUl9TVEFURV9XUklURV9FUlI7DQo+ID4+PiArCQltZ3ItPmVyciA9IHJldDsNCj4g
+Pj4+ICAJCXJldHVybiByZXQ7DQo+ID4+PiAgCX0NCj4gPj4+DQo+ID4+PiBAQCAtNTQ0LDEwICs1
+NTcsMTEgQEAgc3RhdGljIGludCBmcGdhX21ncl9maXJtd2FyZV9sb2FkKHN0cnVjdA0KPiA+PiBm
+cGdhX21hbmFnZXIgKm1nciwNCj4gPj4+ICAJZGV2X2luZm8oZGV2LCAid3JpdGluZyAlcyB0byAl
+c1xuIiwgaW1hZ2VfbmFtZSwgbWdyLT5uYW1lKTsNCj4gPj4+DQo+ID4+PiAgCW1nci0+c3RhdGUg
+PSBGUEdBX01HUl9TVEFURV9GSVJNV0FSRV9SRVE7DQo+ID4+PiAtDQo+ID4+PiArCW1nci0+ZXJy
+ID0gMDsNCj4gPj4+ICAJcmV0ID0gcmVxdWVzdF9maXJtd2FyZSgmZncsIGltYWdlX25hbWUsIGRl
+dik7DQo+ID4+PiAgCWlmIChyZXQpIHsNCj4gPj4+ICAJCW1nci0+c3RhdGUgPSBGUEdBX01HUl9T
+VEFURV9GSVJNV0FSRV9SRVFfRVJSOw0KPiA+Pj4gKwkJbWdyLT5lcnIgPSByZXQ7DQo+ID4+PiAg
+CQlkZXZfZXJyKGRldiwgIkVycm9yIHJlcXVlc3RpbmcgZmlybXdhcmUgJXNcbiIsDQo+ID4+IGlt
+YWdlX25hbWUpOw0KPiA+Pj4gIAkJcmV0dXJuIHJldDsNCj4gPj4+ICAJfQ0KPiA+Pj4gQEAgLTYy
+Niw2ICs2NDAsMTAgQEAgc3RhdGljIHNzaXplX3Qgc3RhdGVfc2hvdyhzdHJ1Y3QgZGV2aWNlICpk
+ZXYsICB7DQo+ID4+PiAgCXN0cnVjdCBmcGdhX21hbmFnZXIgKm1nciA9IHRvX2ZwZ2FfbWFuYWdl
+cihkZXYpOw0KPiA+Pj4NCj4gPj4+ICsJaWYgKG1nci0+ZXJyKQ0KPiA+Pj4gKwkJcmV0dXJuIHNw
+cmludGYoYnVmLCAiJXM6IDB4JXhcbiIsDQo+ID4+PiArCQkJICAgICAgIHN0YXRlX3N0clttZ3It
+PnN0YXRlXSwgbWdyLT5lcnIpOw0KPiA+Pj4gKw0KPiA+Pj4gIAlyZXR1cm4gc3ByaW50ZihidWYs
+ICIlc1xuIiwgc3RhdGVfc3RyW21nci0+c3RhdGVdKTsNCj4gPj4NCj4gPj4NCj4gPj4gSWYgb25l
+IG9mIHRoZSBmcGdhIG1hbmFnZXIgb3BzIGZhaWxzLCB0aGUgbG93LWxldmVsIGVycm9yIGNvZGUg
+aXMNCj4gPj4gYWxyZWFkeSByZXR1cm5lZCB0byB0aGUgY2FsbGVyLiBXb3VsZG4ndCBpdCBiZSBi
+ZXR0ZXIgdG8gcmVseSBvbiB0aGlzDQo+ID4+IGluc3RlYWQgb2YgcHJpbnRpbmcgdGhlIGxvdy1s
+ZXZlbCBlcnJvciBjb2RlIGluIGEgc3lzZnMgYXR0cmlidXRlIGFuZCBzZW5kaW5nDQo+IGl0IHRv
+IHRoZSB1c2Vyc3BhY2U/DQo+ID4+DQo+ID4gQWdyZWUsIHRoZSBsb3ctbGV2ZWwgZXJyb3IgY29k
+ZSBpcyBhbHJlYWR5IHJldHVybmVkIHRvIHRoZSBjYWxsZXIgYnV0DQo+ID4gdGhlIHVzZXIgYXBw
+bGljYXRpb24gd2lsbCBub3QgaGF2ZSBhbnkgYWNjZXNzIHRvIHJlYWQgdGhpcyBlcnJvciBpbmZv
+Lg0KPiA+IFNvLCBJIGZlZWwgdGhpcyBwYXRjaCBwcm92aWRlcyB0aGF0IGZsZXhpYmlsaXR5IHRv
+IHRoZSB1c2VyIGFwcGxpY2F0aW9uIHRvIGdldCB0aGUNCj4gZXhhY3QgZXJyb3IgaW5mby4NCj4g
+PiBwbGVhc2UgbGV0IG1lIGtub3cgaWYgeW91IGhhdmUgYW55IG90aGVyIHRob3VnaHRzIHdpbGwg
+aW1wbGVtZW50IHRoYXQuDQo+ID4NCj4gPiBSZWdhcmRzLA0KPiA+IE5hdmFraXNob3JlLg0KPiAN
+Cj4gDQo+IEhpIE5hdmEsDQo+IA0KPiBUaGFua3MgZm9yIHlvdXIgcXVpY2sgcmVwbHkuIEkgdW5k
+ZXJzdGFuZCB0aGUgbmVlZCB0byBhY2Nlc3MgdGhlIGxvdy1sZXZlbA0KPiBlcnJvciBjb2RlIGZy
+b20gdXNlcnNwYWNlIGlmIHRoZSBjb25maWd1cmF0aW9uIGdvZXMgd3JvbmcuDQo+IA0KPiBIb3dl
+dmVyLCBpbiBteSB1bmRlcnN0YW5kaW5nLCB0aGUgbG93LWxldmVsIGRyaXZlciBpcyBzdXBwb3Nl
+ZCB0byBleHBvcnQNCj4gcmVjb25maWd1cmF0aW9uIGVycm9ycyBieSBpbXBsZW1lbnRpbmcgdGhl
+IHN0YXR1cyBvcCBhbmQgcmV0dXJuaW5nIGEgYml0IGZpZWxkDQo+IHNldCB1c2luZyB0aGUgbWFj
+cm9zIGRlZmluZWQgaW4gZnBnYS1tZ3IuaCArMTg5Lg0KPiBUaGUgZnBnYSBtYW5hZ2VyIHdpbGws
+IGluIHR1cm4sIG1ha2UgdGhlIGVycm9ycyB2aXNpYmxlIHRvIHVzZXJzcGFjZSB0aHJvdWdoDQo+
+IHRoZSBzdGF0dXMgYXR0cmlidXRlLiBJZiB0aGUgYXZhaWxhYmxlIGVycm9yIGJpdHMgYXJlbid0
+IGRlc2NyaXB0aXZlIGVub3VnaCwNCj4gd291bGRuJ3QgaXQgYmUgYmV0dGVyIHRvIGFkZCBtb3Jl
+IGVycm9yIG1hY3JvcyBpbnN0ZWFkIG9mICJvdmVybG9hZGluZyIgdGhlDQo+IHN0YXRlIGF0dHJp
+YnV0ZT8NCj4gDQo+IE1vcmVvdmVyLCBpdCBzZWVtcyB0byBtZSB0aGF0IGlmIHRoZSByZWNvbmZp
+Z3VyYXRpb24gaXMgZG9uZSBieSBsb2FkaW5nIGENCj4gZGV2aWNlIHRyZWUgb3ZlcmxheSBmcm9t
+IHVzZXJzcGFjZSwgdGhlIGVycm9yIGNvZGUgZ2V0cyBwcm9wYWdhdGVkIGJhY2sNCj4gdGhyb3Vn
+aCB0aGUgbm90aWZpZXIgaW4gb2YtZnBnYS1yZWdpb24uIEFtIEkgY29ycmVjdD8NCj4gDQoNCkFG
+QUlLIFRoZSBzdGF0ZSBhbmQgc3RhdHVzIGludGVyZmFjZSB1c2UgY2FzZXMgYXJlIGRpZmZlcmVu
+dC4gVGhlIFN0YXR1cyBpbnRlcmZhY2Ugd2lsbCBwcm92aWRlIHRoZSBIL1cgZXJyb3IgaW5mby4N
+CndoZXJlYXMgdGhlIHN0YXRlIGludGVyZmFjZSBwcm92aWRlcyB0aGUgRlBHQSBtYW5hZ2VyIGRy
+aXZlciBzdGF0ZShpbmNsdWRpbmcgRXJyb3Igc3RyaW5ncykuwqANClBsZWFzZSBSZWZlcjogRG9j
+dW1lbnRhdGlvbi9BQkkvdGVzdGluZy9zeXNmcy1jbGFzcy1mcGdhLW1hbmFnZXIgKGZvciBFcnJv
+ciBzdHJpbmdzIGluZm9ybWF0aW9uKS4NCg0KV2l0aCB0aGUgZXhpc3RpbmcgaW1wbGVtZW50YXRp
+b24gdXNpbmcgRFQtT3ZlcmxheSB0aGUgQ29uZmlndXJhdGlvbi9SZWNvbmZpZ3VyYXRpb24gbG93
+ZXItbGV2ZWwNCmRyaXZlciBlcnJvcnMgYXJlIG5vdCBwcm9wYWdhdGluZyB0byB1c2Vyc3BhY2Uu
+DQoNClBsZWFzZSBjb3JyZWN0IG1lIGlmIG15IHVuZGVyc3RhbmRpbmcgaXMgd3JvbmcuDQoNClJl
+Z2FyZHMsDQpOYXZha2lzaG9yZS4NCg0K
