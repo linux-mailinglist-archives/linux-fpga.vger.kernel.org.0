@@ -2,81 +2,163 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A26E697B1E
-	for <lists+linux-fpga@lfdr.de>; Wed, 15 Feb 2023 12:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4EF698120
+	for <lists+linux-fpga@lfdr.de>; Wed, 15 Feb 2023 17:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbjBOLsO (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 15 Feb 2023 06:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
+        id S229552AbjBOQnu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 15 Feb 2023 11:43:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233771AbjBOLsN (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 15 Feb 2023 06:48:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE85838026
-        for <linux-fpga@vger.kernel.org>; Wed, 15 Feb 2023 03:47:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676461631;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gWla4IxpPAIr1RMijB2VmvTQNQGZkqTx/F5Sx1IMUPQ=;
-        b=AovHE+nJ4dA01xPC1U6nlUxnvU0RCuhdZJlurF8yM4mrGJzaQcjvje4lQGpx06+EuBg2uF
-        vBUVv5AEIxbFxyS037XSpyjStjbWxHcsxlOKNSHo+8SNteyOOneEBMySk5OrYNZSaBdw6z
-        fFXTzjMxmcltPPE0oOhaX8wjc9iCI1Y=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-65-k02T97ZHOWuhwLlet0gMjw-1; Wed, 15 Feb 2023 06:47:10 -0500
-X-MC-Unique: k02T97ZHOWuhwLlet0gMjw-1
-Received: by mail-qk1-f198.google.com with SMTP id s7-20020ae9f707000000b007294677a6e8so11317294qkg.17
-        for <linux-fpga@vger.kernel.org>; Wed, 15 Feb 2023 03:47:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gWla4IxpPAIr1RMijB2VmvTQNQGZkqTx/F5Sx1IMUPQ=;
-        b=ipXe/1MlZ//dlwcJN+A0P20KC1DfQoA8upxz/qFRF18ukf/qAYNGdfnF4bgAffuvkL
-         SnqiWnob4iDcdR9ZzhDR6sXWAPgqGj5Gw6bt2GKcvY6ZfYGBF7rT7oo9ZSUbq/tqO23e
-         FRrMSNuWQf7ncWThSF/YpF00FzY0kf/HFdnSkMxqevObh5lD8FHIDVVbbY3GfKXoYhxF
-         0C5dZ2ZsS6rkiLCo0r0vuyyv6IRIqoXcjBvEyNpkgjnyvUMLyTkz5C1FJSwWexwgcWeI
-         VmGZcYKTN+LEGvl4cWdsLe8/puUAXFh1JMhLHkVMfxRDJ9uiJZpSY1tRHU18KRLeb9K8
-         0L6w==
-X-Gm-Message-State: AO0yUKUaMLzNwqOC08qLBRqpSbDj6A9spmXLo4pQpi55pWZ5krRmF+sO
-        OtslYVlYGSmJuHgzF+fusyj6KoTLSX962mtDxEcjrNawjITKlitXKEXXThlC4oQ7pDWY/BC2htR
-        hmZH1b/eC+55/Iuo9Vr2Yudx5IA==
-X-Received: by 2002:ac8:59d3:0:b0:3b6:9817:18e4 with SMTP id f19-20020ac859d3000000b003b6981718e4mr2848994qtf.49.1676461630136;
-        Wed, 15 Feb 2023 03:47:10 -0800 (PST)
-X-Google-Smtp-Source: AK7set+ONFsJKriqgRyboXfngZUgoqZTtSrpSfRrC8VyIHG33OdFC+XpiAkZDvoCkfM/mItot1Aa7Q==
-X-Received: by 2002:ac8:59d3:0:b0:3b6:9817:18e4 with SMTP id f19-20020ac859d3000000b003b6981718e4mr2848979qtf.49.1676461629870;
-        Wed, 15 Feb 2023 03:47:09 -0800 (PST)
-Received: from [192.168.9.16] (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
-        by smtp.gmail.com with ESMTPSA id cc5-20020a05622a410500b003995f6513b9sm5931170qtb.95.2023.02.15.03.47.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 03:47:09 -0800 (PST)
-Message-ID: <93039f92-3462-e2a2-6052-830668419a4d@redhat.com>
-Date:   Wed, 15 Feb 2023 12:47:02 +0100
-MIME-Version: 1.0
+        with ESMTP id S229505AbjBOQnt (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 15 Feb 2023 11:43:49 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1791F4B2;
+        Wed, 15 Feb 2023 08:43:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676479428; x=1708015428;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Q4flZDBD/JlR3YbZX4lsavg7V/kt6yWMp1TRvj4mkqw=;
+  b=GBvX1j9DuWHMiupj7jS2H5hsSb92+frNJqhe0eI4FtaI9mv9oWtHq2UR
+   2fhY7FDdc5TLb1a8iSkvKS8+igToUjdBGn2yIBnmW0BoY2FaBjGEHhmcm
+   tq2clKDAxXsuIxH0Gg750gapf6jddZ158PwM4mBYvdm7GFoJn6ajF8LZL
+   f+9vcbIq3+bAv1wpdSv6vjQstAgr/vEnOVQJS6g0j0c+MNCXZ2UQ/mOIL
+   E1IA3/6jP4MoMrI9oj1r5vvV8zCCHDaKYeivPGs/EVYJQ8qkyYUfjmnYz
+   K2XeLIt2W/BpPoXeqzGPvj5bisHLxe1LCnLJsn2Us8P1/IJ9GYm5zWF2+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="311840253"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="311840253"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 08:43:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="663025033"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="663025033"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga007.jf.intel.com with ESMTP; 15 Feb 2023 08:43:47 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 15 Feb 2023 08:43:47 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 15 Feb 2023 08:43:46 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 15 Feb 2023 08:43:46 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 15 Feb 2023 08:43:46 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=coZqLJt2Go+XppHB9Y5z6VHHIYXtu7WU0VuUCOVBKzcWlpwgMtLUQrtgDdHF4cCGHMvC9h8Id8dW3xZCOZfpnsm92ySWl53H7comlZkZ/tB2RpqStFWFGMnAQku2rezaYqDEQvIDXHQ1iq7stNHoF2SavJS7mTA75ZjPb1K/JgkVoQMu5Vdczorwx8eckhUO+MCTnRnTWwz8N2xHFGDkVWOX/uXFzhoNwyTs77r77WyWUq/ccSTPG2cK87QtNkVHrN0XdmCYuzQDfMQZrUOsMU0jVNCZv8OCVm0HvHrbQlSYnMDnuYZV5FBxq9oOJHU2J+doe9dLgQ82/aDG2G6XEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q4flZDBD/JlR3YbZX4lsavg7V/kt6yWMp1TRvj4mkqw=;
+ b=POlG9iHYLqTklK1Eu2U9F7QpjVCVRRgIefNthGTpLa8HgAQlyfJ57BEBjkvPGDYGqj2rXezKS2s3igXskDRfs+Z0xITifDjRqdNYTTuJj50DtFLcNxPC1cbAScGhHyADI78hQQd9xNa+g+xXGcVl8CL0imCealzsfbRYs/hC2IHGB8xbyYsp6zTKpq5hhkL3gWG69Eip+RBsLQ+kYuWDA9hlyvwFak5J/eefppnWDVTBANODmiyhcNGPzivWikihOC4a9uhNXTmvaWoSd5QWEoldoVSUh4wjW5iAPM1c6oG5GcfZtW5MJuRg97Z8fuPiEkopYbK5c3PnqwY0i1gpoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com (2603:10b6:3:10b::14)
+ by SN7PR11MB6850.namprd11.prod.outlook.com (2603:10b6:806:2a2::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Wed, 15 Feb
+ 2023 16:43:44 +0000
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::d151:74c0:20d6:d5fc]) by DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::d151:74c0:20d6:d5fc%6]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
+ 16:43:44 +0000
+Message-ID: <516993be-f33e-64cf-811b-cb8272b1d844@intel.com>
+Date:   Wed, 15 Feb 2023 08:43:38 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 1/4] fpga: add initial KUnit test suite
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 0/4] fpga: add initial KUnit test suite for the
+ subsystem
 Content-Language: en-US
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+To:     Marco Pagani <marpagan@redhat.com>
+CC:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
         Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
+        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>
 References: <20230203170653.414990-1-marpagan@redhat.com>
- <20230203170653.414990-2-marpagan@redhat.com>
- <3588ad2f-f33f-8979-ba05-29c367716610@intel.com>
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <3588ad2f-f33f-8979-ba05-29c367716610@intel.com>
-Content-Type: text/plain; charset=UTF-8
+ <05f6238e-4ad8-f30c-38da-74c343e6abb5@intel.com>
+ <01fd3850-af54-c0f0-ec2f-ae672420ce17@redhat.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+In-Reply-To: <01fd3850-af54-c0f0-ec2f-ae672420ce17@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-ClientProxiedBy: MW4PR03CA0013.namprd03.prod.outlook.com
+ (2603:10b6:303:8f::18) To DM5PR11MB1899.namprd11.prod.outlook.com
+ (2603:10b6:3:10b::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1899:EE_|SN7PR11MB6850:EE_
+X-MS-Office365-Filtering-Correlation-Id: 483411cd-a0db-438f-abad-08db0f73cc89
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rUq+nWL+5v5EbHkZbOYFDnRK3gWQ+xpUEg6SPqeeoNpJILA0pl0rRO6SlOlI34g1FyLiJEaOka/lq3/ZWQwP0feF+5sg2X4Bq+zHdFvhIrv98e+fehcu73wK60aLA9ltNRhx9PGojlOiKvG9dpuuIvI1LS7PSa7Z//PzjEC8m8MznY4kEpXp8fDzLADAq3LhnzSUY+1agycTWUUU6aE4At+RvxvpxB7n1at3w/f8hq//lw+rGd5tMZCawFLQcbP0E79ppOOIZNqMV+a84f4/6joifDJWYwSAiLhG4q4GsK538aAlHUCyk+DePOjbclovcQB5fwzjeFRjfibsc8l1diqf8sKsjF7fnkxmk96A2tUGKcoQvviIT8nQ+F3A+fExc4HO2gZSL2qjmZ+S0C7wfKK/6PEyTEFiz9BQ6FMWAU4rZH/f+5qIs7c61JHh7IoQaHZVWmCm7eKNpRaASB4ygGMLQiIhz1q6h52hWPDYDu6rSxbr6jpHWOrQ53/ZGRGZBHe3jr4EWIAk92lnYB6AsOZ7NINNmoB6bQNvAZSDDQ/Zl1reuYK2hD/LNEGp4Vk9LJEM2WuWJqvXVWXaN3FIq3EmtGuf3aOgXbhnnGKaiOX46J3mKor5mVxvrnOkYBAjIrTg0Z/2YPc1efWuTpre6rEg656QvYYimQc5P3MjZYnIwh/SRugXlEVDDl72A2w7jIw9Tt7PCeiO9y9hRoG1HSCWhz0ltdzQaDEWheVKXvk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1899.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(396003)(39860400002)(346002)(136003)(366004)(451199018)(31686004)(186003)(83380400001)(5660300002)(26005)(2906002)(36756003)(2616005)(86362001)(6506007)(6666004)(41300700001)(478600001)(6486002)(53546011)(31696002)(8936002)(6512007)(66946007)(66556008)(8676002)(66476007)(316002)(4326008)(82960400001)(54906003)(6916009)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjJEMVVueWJFVWdjQmt4S0dnT2RDYks0U0oyVlRMbnFRN1VMSm04K3E4RE5Q?=
+ =?utf-8?B?TThTR0RYa05IVWxmVE9NL2hqUWlodlpmNGFrWnZ0bHhlelU3bGROeVJGVVpN?=
+ =?utf-8?B?MFhmNjNraGJtZjRFcm1IVi90QkJzNXdlczZwcE1zZ1dodWYzSUdEL2ZJRDVF?=
+ =?utf-8?B?NnVkQldzUTUrNytjK2IreThUSnNJeVd3clVBMjc2TmRSZHhLVGw1N0hFbEFi?=
+ =?utf-8?B?ZlN0UXFKZkJhRUdHRWFFUDU4bk1HQkxycW91blgxek1hMzYzK0p5RDVNakFZ?=
+ =?utf-8?B?dGRaUGNtb21NV1FkNWRXMURJSkFZeDZpUFFETW1iSXNhSEJqSVZWSk1Fc0NW?=
+ =?utf-8?B?ekhTZ1FpT3o4R1E2Q3dtM3lIb3c5b2NSV2hWenU0MTFxWkwxV1VLK1dGZ3RO?=
+ =?utf-8?B?S2YxaU5DemZiQ1NpZ1pBTVcvWjNjVEhYNElHMHI0WTg1eXk3MExZYUpaNFB0?=
+ =?utf-8?B?NHFNK3JVa3lSK1FEVStVSm1HVUNaak91dGpMeU4zK1ZzM1ZIWjZ6UVJ0MllQ?=
+ =?utf-8?B?OWVDVEVOVFZuUGhZeFdqR1FDc3ZGWUgxVXJSQXI4QjZaTjROUTNXNnRMcjUr?=
+ =?utf-8?B?MzFzNGc0ODlXK0tkUnV4N0h4NU5IZnpzMFE3USsrcTY0Z2tmdDlNRm80TTV0?=
+ =?utf-8?B?cmh5U0RpTWFBcWx1TlZiY1BuOWpncEg0cFk3Y2J4NzIzVEtnenhTNVhWVkli?=
+ =?utf-8?B?RUx6bFZHVzBhWEgxb3hlQ2p0Q1RjcndSZTF5QlpHNi93SWs0KzVSd3p1bjl0?=
+ =?utf-8?B?UWxTMzd3YjBMU1dYZUFydEZsVHJlRktTYVF6ZXBBUGdXOTVlc3lQOU53RHov?=
+ =?utf-8?B?eWg5N21xMTQ1dDNqKzlrY1hhOExtaSt1UnVHZXNyQVVZL1czOEpDK0tWUWpD?=
+ =?utf-8?B?UE1hMmRVQ29YM1JMMkZ5bXdpN3NJRW5LZXhWYU9obGc2Wng5WWxqRGkxckg4?=
+ =?utf-8?B?ZkZ0SVRrb2xsK3FqRFBieVJPUWFKVlRwR2VnQUpoeHhTbzQ3cmdmTmtEYVQ5?=
+ =?utf-8?B?a2locGRCb0ZGdllsVlZIUzZXMzRGY3BQL29LUU85T2RCN0FENWQrYi8yOEVS?=
+ =?utf-8?B?YTNzZmMxQ293WFdOUmdIalMrZHhyQitpK1BzdXE1elVXYU1QMW80cmVKVjd4?=
+ =?utf-8?B?TFI5cHFHamdkZ1NZL3g2UEM5YUlUb1VXWERGQUxwVVM4bnR1N2plZFNyVlpB?=
+ =?utf-8?B?d1dCRS9CeGFZaXYybGE2Um5MVlFsR2tiTUVYUFVBQ3JFY0NPMlMzNGJRaXkv?=
+ =?utf-8?B?dk8xTFdEbFQxUUx5UEVzRlpUOGNNWFZnVTJzNFlUTEtCNThFczUwVmVWTElB?=
+ =?utf-8?B?bnhWSytUNE5kMG1QMVQxU3djR3NqUmZyTmU5S3BqVzBpeFJabXhVdFlMQ25Z?=
+ =?utf-8?B?ZzZxaHI4ZXdoUFNGZFYwNkhoWHdNTHpWODgrMGtyY0dyRTFMbjBKK1gySWpY?=
+ =?utf-8?B?MWc5MXhtOWM2dnczMlhvNS9LcThjWm9oaytKUkVXSko1OE5xR29zVGsrM1BM?=
+ =?utf-8?B?bVgrMDh6WHd6OUk2OVNQanRSZWNmSEc3TEg3anl0a2plbXNsc1hDVi9iZElL?=
+ =?utf-8?B?NkhhMjAwN2R1SnZrdDNSZHMwUFAwQXNlbXFXTzlBUHhFVjlYSWdDVkY1WXo2?=
+ =?utf-8?B?RFdMMEo3WDRIM1dBenB2M09LY1hKejVwZUV2T1h2ZEFDUzVkOWxrR2VHOXFT?=
+ =?utf-8?B?amFHZWZiNS9RVzJUcW1EMWJhS1Y5MUIrY1RYRkx4SUZxcXF6TXJKa0o2SkhX?=
+ =?utf-8?B?NDE3ZWJiNlgvZXNidmVzcjEwMzFkY0d2YnBKNE5nUGFCMGxSVmRVVzRyZUVK?=
+ =?utf-8?B?R1JjWWpGOVMyL01GWnRVVmVhTlNvdXZoNkQrOFhST2pwL09VTzMzMDRZcWIx?=
+ =?utf-8?B?bDZzdmp6VkF1SXNwdktjNGswR01PMTF4Snozck9XVmJpMk1wYjFYUGlvS25S?=
+ =?utf-8?B?elVxQ2JWcm5YbEFGSzNESmVFbHRSdFpQeGxaWXlNRnJFaXlCVUNuMDhWTWtk?=
+ =?utf-8?B?VlQxS2hhUTdWa1NDNHA4dTlzaitGZWVFR29JMEdUeFY4Sm5ZbDk5VnJ1bVRm?=
+ =?utf-8?B?S3owRzhkTkt2MnkvWkc0bE9aaGNFRm1FMEo2OG04anlsR21PSnc4RFFhZTln?=
+ =?utf-8?B?ZWlWcVdzR25RWmt3czB3ZG5EaGNpRlVacDA3ZHpQNHVHKy81c29zNnZWZjVO?=
+ =?utf-8?B?bVE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 483411cd-a0db-438f-abad-08db0f73cc89
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1899.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 16:43:44.7473
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AcUTG5L3IBWOUbbf1yGPfvWeCyy5RPPuk32qez/36EnKqrjs2v83NaXZli2SFIzJXIwR4DQllCAVVKYyK+G1iG0ebwpE8MSOA1Vqt8xH4yk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6850
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,62 +167,22 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 
-On 2023-02-14 00:37, Russ Weight wrote:
-> 
-> 
-> On 2/3/23 09:06, Marco Pagani wrote:
->> Introduce an initial KUnit suite to test the core components of the
->> FPGA subsystem.
+On 2/15/23 03:19, Marco Pagani wrote:
+>> When I tried running these tests, I got an error until I created this file:
 >>
->> The test suite consists of two test cases. The first test case checks
->> the programming of a static image on a fake FPGA with a single hardware
->> bridge. The FPGA is first programmed using a test image stored in a
->> buffer, and then with the same image linked to a single-entry
->> scatter-gather list.
+>> drivers/fpga/tests/.kunitconfig:
+>> CONFIG_KUNIT=y
+>> CONFIG_FPGA=y
+>> CONFIG_FPGA_REGION=y
+>> CONFIG_FPGA_BRIDGE=y
+>> CONFIG_FPGA_KUNIT_TESTS=y
 >>
->> The second test case models dynamic partial reconfiguration. The FPGA
->> is first configured with a static image that implements a
->> reconfigurable design containing a sub-region controlled by two soft
->> bridges. Then, the reconfigurable sub-region is reconfigured using
->> a fake partial bitstream image. After the reconfiguration, the test
->> checks that the soft bridges have been correctly activated.
+>> I think this file needs to be included in your patchset?
 >>
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->> ---
->>  drivers/fpga/Kconfig            |   2 +
->>  drivers/fpga/Makefile           |   3 +
->>  drivers/fpga/tests/.kunitconfig |   5 +
->>  drivers/fpga/tests/Kconfig      |  15 ++
->>  drivers/fpga/tests/Makefile     |   6 +
->>  drivers/fpga/tests/fpga-tests.c | 264 ++++++++++++++++++++++++++++++++
->>  6 files changed, 295 insertions(+)
->>  create mode 100644 drivers/fpga/tests/.kunitconfig
->>  create mode 100644 drivers/fpga/tests/Kconfig
->>  create mode 100644 drivers/fpga/tests/Makefile
->>  create mode 100644 drivers/fpga/tests/fpga-tests.c
+>> - Russ
 >>
->> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
->> index 0a00763b9f28..2f689ac4ba3a 100644
->> --- a/drivers/fpga/Kconfig
->> +++ b/drivers/fpga/Kconfig
->> @@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
->>  	  FPGA manager driver support for Lattice FPGAs programming over slave
->>  	  SPI sysCONFIG interface.
->>  
->> +source "drivers/fpga/tests/Kconfig"
->> +
->>  endif # FPGA
->> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
->> index 72e554b4d2f7..352a2612623e 100644
->> --- a/drivers/fpga/Makefile
->> +++ b/drivers/fpga/Makefile
->> @@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
->>  
->>  # Drivers for FPGAs which implement DFL
->>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
->> +
->> +# KUnit tests
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
+> Patch 1/4 includes a .kunitconfig file with these configs set =y
+>
 >> diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
 >> new file mode 100644
 >> index 000000000000..a1c2a2974c39
@@ -152,83 +194,15 @@ On 2023-02-14 00:37, Russ Weight wrote:
 >> +CONFIG_FPGA_REGION=y
 >> +CONFIG_FPGA_BRIDGE=y
 >> +CONFIG_FPGA_KUNIT_TESTS=y
->> diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
->> new file mode 100644
->> index 000000000000..5198e605b38d
->> --- /dev/null
->> +++ b/drivers/fpga/tests/Kconfig
->> @@ -0,0 +1,15 @@
->> +config FPGA_KUNIT_TESTS
->> +	tristate "FPGA KUnit tests" if !KUNIT_ALL_TESTS
->> +	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT
->> +	default KUNIT_ALL_TESTS
->> +	help
->> +	  Builds unit tests for the FPGA subsystem. This option
->> +	  is not useful for distributions or general kernels,
->> +	  but only for kernel developers working on the FPGA
->> +	  subsystem and its associated drivers.
->> +
->> +	  For more information on KUnit and unit tests in general,
->> +	  please refer to the KUnit documentation in
->> +	  Documentation/dev-tools/kunit/.
->> +
->> +	  If in doubt, say "N".
->> diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
->> new file mode 100644
->> index 000000000000..74346ae62457
->> --- /dev/null
->> +++ b/drivers/fpga/tests/Makefile
->> @@ -0,0 +1,6 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-mgr.o
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-region.o
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-bridge.o
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-tests.o
->> diff --git a/drivers/fpga/tests/fpga-tests.c b/drivers/fpga/tests/fpga-tests.c
->> new file mode 100644
->> index 000000000000..33f04079b32f
->> --- /dev/null
->> +++ b/drivers/fpga/tests/fpga-tests.c
->> @@ -0,0 +1,264 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Test suite for the FPGA subsystem
->> + *
->> + * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
->> + *
->> + * Author: Marco Pagani <marpagan@redhat.com>
->> + */
->> +
->> +#include <kunit/test.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/scatterlist.h>
->> +
->> +#include <linux/fpga/fpga-mgr.h>
->> +#include <linux/fpga/fpga-region.h>
->> +#include <linux/fpga/fpga-bridge.h>
->> +
->> +#include "fake-fpga-region.h"
->> +#include "fake-fpga-bridge.h"
->> +#include "fake-fpga-mgr.h"
->> +
->> +#define FAKE_BIT_BLOCKS		16
->> +#define FAKE_BIT_SIZE		(FPGA_TEST_BIT_BLOCK * FAKE_BIT_BLOCKS)
->> +
->> +static u8 fake_bit[FAKE_BIT_SIZE];
-> 
-> I take it "bit" in fake_bit and sgt_bit is short for "bitstream". Initially,
-> I found this confusing as I tend to think of a bit as a single bit. It might
-> be better to expand that something like "fake_bitstream" or "fake_image".
-> 
-> - Russ
-
-
-You're right. Using "bit" in the name can be confusing. I'll change it
-to "fake_image" or maybe "fake_image_buf" to be consistent with the naming
-convention used in the subsystem. I'll also change "test_img_info"
-to "fake_img_info" to improve naming consistency.
+> To double-check for any patch format errors, I downloaded the patch set
+> from lore.kernel.org and applied it on a fresh tree with Git (version
+> 2.39.1) using git am. In my case, Git created the .kunitconfig file and
+> I was able to run the tests.
+>
+>
+I can see the .kunitconfig file in the emailed patch. I had to resolve
+some conflicts when I applied patch #1 - I must have missed this file
+when I committed the changes.
 
 Thanks,
-Marco
-
+- Russ
