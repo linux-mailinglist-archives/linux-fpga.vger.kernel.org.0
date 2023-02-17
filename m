@@ -2,263 +2,371 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48ABE69AACF
-	for <lists+linux-fpga@lfdr.de>; Fri, 17 Feb 2023 12:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F280969AB04
+	for <lists+linux-fpga@lfdr.de>; Fri, 17 Feb 2023 13:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjBQLu6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 17 Feb 2023 06:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
+        id S229756AbjBQMFx (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 17 Feb 2023 07:05:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjBQLuy (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 17 Feb 2023 06:50:54 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4418366CF0;
-        Fri, 17 Feb 2023 03:50:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FPNi8R8hIw3JVtnd50q2ZIgqUv6W9N5LHb+NiB+IxbyaRDF/kDAQ49j7FvX7EMqysqOIMq1f7KQ+W5r6IV3AF4L+KJ2HBdQ09wJF/ctBK94t5+wvkoU7URn5IvSgr+VuengXC+WfYGB53gjJ/TZHqi8njtdwOeJiUBQtw8Z8ZEEwLJ8uKFvetbp29gsby5AreB7KHobKkkUhn6CW2JooVNPe6AMPLkm1BxBqS6wMqZeQw5sEDR/bFn7OBHFTAskrisHuPclyByGzAxCpOh0Cpd5jsfxgbxD+wX5wL3mjCW+ZuLQ6xZyrwNnLv264MVSFcl7EzR24SP7yjj5ehy7ONQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=caIZEBUyI7NEf7NX/nbnttRbx4pfU4zy5ti6dk3Dq6M=;
- b=RfpPpUHyDDeSsbKRW++7TUyF/EMJ8j96wO1HS+LuDpdygbMjwSI+RAVmdEgHAbvbl79fkZ0sbazdcfAcgYeNIr4GQM1aSwBMuGhaHIHNhZV3pn/IUCAsDVctZMb6V5KmTYl8RUM19IidhbmYqKGdyFos0LNy9fkHPfgzEWy8EpXfeSUp+UYgjHmq/+tFxVvY11sJiBEb0VOerLFw6XsIWrWOMNARDRC/qKrRHbNLfdDVDXg0KKcrVv89pA09yc/DNsjqVGgXRoNbSlbLb8Ck0yXrZDeLNk4P61eIUu9Xgycvdy5S2UNYOI0PpxYd0NFKjwrRsfGj+3MtWOTxcXlmmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=xilinx.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=caIZEBUyI7NEf7NX/nbnttRbx4pfU4zy5ti6dk3Dq6M=;
- b=GFUSoJtXjIV9Bfz/5PcD3lMxYujYjnQ09Alre6JGTJnDwcUL0KGhJI8tr8K0CXn9aSralgp20iOeChe1n2sUQu4YKAcP3AhAITmBB5vXgdhgXZNddYwAUXKMauV1zXuL49ABmafsoTiDJIVhTqVEmEdBiv/WB1ho+y7NX95PNko=
-Received: from BN9PR03CA0178.namprd03.prod.outlook.com (2603:10b6:408:f4::33)
- by PH8PR12MB6986.namprd12.prod.outlook.com (2603:10b6:510:1bd::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.15; Fri, 17 Feb
- 2023 11:50:48 +0000
-Received: from BN8NAM11FT081.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f4:cafe::76) by BN9PR03CA0178.outlook.office365.com
- (2603:10b6:408:f4::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13 via Frontend
- Transport; Fri, 17 Feb 2023 11:50:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT081.mail.protection.outlook.com (10.13.177.233) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6111.15 via Frontend Transport; Fri, 17 Feb 2023 11:50:48 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 17 Feb
- 2023 05:50:46 -0600
-From:   Nava kishore Manne <nava.kishore.manne@amd.com>
-To:     <michal.simek@xilinx.com>, <mdf@kernel.org>, <hao.wu@intel.com>,
-        <yilun.xu@intel.com>, <trix@redhat.com>,
-        <nava.kishore.manne@amd.com>, <ronak.jain@xilinx.com>,
-        <gregkh@linuxfoundation.org>, <tanmay.shah@xilinx.com>,
-        <mathieu.poirier@linaro.org>, <ben.levinsky@amd.com>,
-        <rajan.vaja@xilinx.com>, <harsha.harsha@xilinx.com>,
-        <arnd@arndb.de>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>
-Subject: [PATCH v6 2/2] fpga: zynqmp-fpga: Adds status interface
-Date:   Fri, 17 Feb 2023 17:20:36 +0530
-Message-ID: <20230217115036.2617396-3-nava.kishore.manne@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230217115036.2617396-1-nava.kishore.manne@amd.com>
-References: <20230217115036.2617396-1-nava.kishore.manne@amd.com>
+        with ESMTP id S229523AbjBQMFw (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 17 Feb 2023 07:05:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A633E644DD
+        for <linux-fpga@vger.kernel.org>; Fri, 17 Feb 2023 04:05:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676635509;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MeZ8ZIY1zOjEqjndKoMlTNhFCshjmhCchSEF4RkJN3A=;
+        b=iRaysUEiunQz/Hw49po6/3wY2uyWO3RXHWioDDg1qjoUDs8Vfn/xnzbEfABaKb/yR2UH4Y
+        YkHtK8CqkxNKSPhCK5wCKieHny4mgwbN5e1N8s9u5V5sktxerU5ePDowcNYHVcbEnSVybq
+        GqrOd5whRoSykQWXO7VRSP3H3+6wc0w=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-670-9GbWROGxMnmu7fyxo0QdYQ-1; Fri, 17 Feb 2023 07:05:08 -0500
+X-MC-Unique: 9GbWROGxMnmu7fyxo0QdYQ-1
+Received: by mail-qt1-f198.google.com with SMTP id p18-20020ac84612000000b003ba3c280fabso179662qtn.2
+        for <linux-fpga@vger.kernel.org>; Fri, 17 Feb 2023 04:05:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MeZ8ZIY1zOjEqjndKoMlTNhFCshjmhCchSEF4RkJN3A=;
+        b=aiac37Fxl4vB0+xU2Gk9dA44CnMZfs91R3IRTKXD46KwFX9zhh6WMEigODrWsH/8vd
+         MhCdRso1Tj5uOO22ua4ZCkGXpeJkdR7PLhJnyGX+je/HhDptIpjb8HgvforE6y7eBb9d
+         QH5L0rNkON/XicT/s355d2G0dG/kV2+NRXXzYC6yjuZ8kJLC8UMQe+fsVgXAkMuCc/9z
+         lqyCKP5zOP16vpF/rsaU9IxGoN003c6Qa+bZbXiP/NXh3t4LcZIZArbhzpKU88WNQieW
+         E0DHXW0frfk6zMGJkxTyuMGiqU+6cYbcp4fMeuUjU19yD4zntYRG2BSNFRnsgr8y1UU8
+         uglA==
+X-Gm-Message-State: AO0yUKXOB3fxSYvv8UnQFs1QdvZB8/CGbmEHA2ZSU7GQeaiE0K8ertEF
+        WDpjrwIOCj25jGdlSDWopol3cvKAAAg021J9GrKEzmRKzgGAKUXUPRlHB8skegXloQ8P9anEs4n
+        z6PxMqRtGz2MyZJi9NDez
+X-Received: by 2002:ac8:5a43:0:b0:3b8:3391:bde5 with SMTP id o3-20020ac85a43000000b003b83391bde5mr1862476qta.26.1676635508269;
+        Fri, 17 Feb 2023 04:05:08 -0800 (PST)
+X-Google-Smtp-Source: AK7set9vu+JJtAzOiIVcSatdvoOydcZVm8RnYaOetCCeIlhUKYkTJk3f3mzKzsaA1fup3DVktpT3OA==
+X-Received: by 2002:ac8:5a43:0:b0:3b8:3391:bde5 with SMTP id o3-20020ac85a43000000b003b83391bde5mr1862441qta.26.1676635507987;
+        Fri, 17 Feb 2023 04:05:07 -0800 (PST)
+Received: from [192.168.9.16] (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
+        by smtp.gmail.com with ESMTPSA id s4-20020a372c04000000b006f9f3c0c63csm3179081qkh.32.2023.02.17.04.05.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 04:05:07 -0800 (PST)
+Message-ID: <ddd17066-ce40-118b-28d8-33e14a3de876@redhat.com>
+Date:   Fri, 17 Feb 2023 13:05:04 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] fpga: mgr: Update the state to provide the exact error
+ code
+To:     "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+Cc:     Nava kishore Manne <nava.manne@xilinx.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "yilun.xu@intel.com" <yilun.xu@intel.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230207095915.169146-1-nava.kishore.manne@amd.com>
+ <8d34bc43-deb4-4166-83ad-34561ee5ac33@redhat.com>
+ <DM6PR12MB3993232B3EB5DE00CBC9B452CDD89@DM6PR12MB3993.namprd12.prod.outlook.com>
+ <c69b76d8-fc72-b52f-4c64-b8c4cd498649@redhat.com>
+ <DM6PR12MB399309D9406A79D58BB7C763CDDD9@DM6PR12MB3993.namprd12.prod.outlook.com>
+Content-Language: en-US
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <DM6PR12MB399309D9406A79D58BB7C763CDDD9@DM6PR12MB3993.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT081:EE_|PH8PR12MB6986:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9eb6a570-1607-44c0-197c-08db10dd35e7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hR7K3RZCJw96g/O8P1hRgWBDcqzgneU1X/kIXq7A96RY9o7cQ/FSvW2eShm3d6Z4j4qyM+GbMqdKMPhR74azwQAjyp5g/ypE6oT4lkwX1SmPM1yA0fLEfzUP6JPfSSdktL/da3J8xFJaOqlXHQLdAFrEaN2IemuSy4leAm6+LkDqWpFyjisIJmIhj+ruIVOvgXT8vlEDQHlF/hvhtP+PjOGz/HHqXrJjrjLaH80KY37RZDM+Zs3AcVNqb1gFCmaCixABURYFngM0c/Jitmu02MJQ/ePx4g55etGt3X2jHqmZSURAoJkrg+CqBFbIlh79eSezs55FjgWqbzOrC1i6rmxeAPLNSliqFteHidXwJL9UziJGG0cgIObK2SF/RshOn7RnJ+AaXNW+WcLR2JWAX+HVKLXi/3uk5XHt0vL2PIaC6zFrRYPuSCUKpEeCxchGQDIPxPA8dricDj5kIakOdP9/rFcSNrVDZhj2Qkg57zUufcrWQqeeRL2NTXoPRzHN00i6iruHsHKfUCTKMerKg3l2241IX0uUt+L8mjyk2fm8gZOBvkN6fYI/4f5SmJSAc/Ma8t1yFmj0N4Lr5ZT6hhxTLaPEtRYAND5kErVsM2dw9vkIut/PwU/wTXI0yra63J7xeCjjUutg4gxJ1ynEPxv8EtnXt/KCb0uoJV45jCjXL1db78LL5nxuxGtAIhFHWiOPseW41ip/BUQ7hVq2F2Zg/r3pzScvHNsmcE4n9Gbpfgr6Ul8eKGec3dYyc8HWNDlrcm2VsfUR0+0DIkkoYjBHQnV5VQCuZHkmMFhL1Pw=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(376002)(346002)(136003)(451199018)(40470700004)(46966006)(36840700001)(82310400005)(82740400003)(81166007)(36860700001)(103116003)(36756003)(316002)(110136005)(40480700001)(921005)(356005)(478600001)(83380400001)(40460700003)(47076005)(426003)(336012)(2616005)(6666004)(16526019)(26005)(186003)(1076003)(2906002)(7416002)(5660300002)(8936002)(41300700001)(86362001)(70206006)(8676002)(70586007)(83996005)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 11:50:48.0430
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9eb6a570-1607-44c0-197c-08db10dd35e7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT081.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6986
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Adds status interface for zynqmp-fpga, It's a read only interface
-which allows the user to get the Programmable Logic(PL) configuration
-status.
 
-Usage:
-To read the Programmable Logic(PL) configuration status
-	cat /sys/bus/platform/drivers/zynqmp_fpga_manager/
-firmware:zynqmp-firmware:pcap/status
 
-Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
----
-hanges for v2:
-              - Updated status messages handling logic as suggested by Xu Yilun.
+On 2023-02-13 06:50, Manne, Nava kishore wrote:
+> Hi Marco,
+> 
+> 	Please find my response inline.
+> 
+>> -----Original Message-----
+>> From: Marco Pagani <marpagan@redhat.com>
+>> Sent: Thursday, February 9, 2023 3:52 AM
+>> To: Manne, Nava kishore <nava.kishore.manne@amd.com>
+>> Cc: Nava kishore Manne <nava.manne@xilinx.com>; mdf@kernel.org;
+>> hao.wu@intel.com; trix@redhat.com; yilun.xu@intel.com; linux-
+>> fpga@vger.kernel.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH] fpga: mgr: Update the state to provide the exact error
+>> code
+>>
+>>
+>> On 2023-02-08 12:01, Manne, Nava kishore wrote:
+>>> Hi Marco,
+>>>
+>>> 	Thanks for providing the review comments.
+>>> Please find my response inline below.
+>>>
+>>>> -----Original Message-----
+>>>> From: Marco Pagani <marpagan@redhat.com>
+>>>> Sent: Wednesday, February 8, 2023 12:04 AM
+>>>> To: Nava kishore Manne <nava.manne@xilinx.com>
+>>>> Cc: Manne, Nava kishore <nava.kishore.manne@amd.com>;
+>> mdf@kernel.org;
+>>>> hao.wu@intel.com; trix@redhat.com; yilun.xu@intel.com;
+>>>> linux-fpga@vger.kernel.org; linux-kernel@vger.kernel.org
+>>>> Subject: Re: [PATCH] fpga: mgr: Update the state to provide the exact
+>>>> error code
+>>>>
+>>>>
+>>>> On 2023-02-07 10:59, Nava kishore Manne wrote:
+>>>>> From: Nava kishore Manne <nava.manne@xilinx.com>
+>>>>>
+>>>>> Up on fpga configuration failure, the existing sysfs state interface
+>>>>> is just providing the generic error message rather than providing
+>>>>> the exact error code. This patch extends sysfs state interface to
+>>>>> provide the exact error received from the lower layer along with the
+>>>>> existing generic error message.
+>>>>>
+>>>>> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+>>>>> ---
+>>>>>  drivers/fpga/fpga-mgr.c       | 20 +++++++++++++++++++-
+>>>>>  include/linux/fpga/fpga-mgr.h |  2 ++
+>>>>>  2 files changed, 21 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c index
+>>>>> 8efa67620e21..b2d74705a5a2 100644
+>>>>> --- a/drivers/fpga/fpga-mgr.c
+>>>>> +++ b/drivers/fpga/fpga-mgr.c
+>>>>> @@ -61,12 +61,14 @@ static inline int fpga_mgr_write_complete(struct
+>>>>> fpga_manager *mgr,  {
+>>>>>  	int ret = 0;
+>>>>>
+>>>>> +	mgr->err = 0;
+>>>>>  	mgr->state = FPGA_MGR_STATE_WRITE_COMPLETE;
+>>>>>  	if (mgr->mops->write_complete)
+>>>>>  		ret = mgr->mops->write_complete(mgr, info);
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error after writing image data to
+>>>> FPGA\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_COMPLETE_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		return ret;
+>>>>>  	}
+>>>>>  	mgr->state = FPGA_MGR_STATE_OPERATING; @@ -154,6 +156,7 @@
+>>>> static
+>>>>> int fpga_mgr_parse_header_mapped(struct fpga_manager *mgr,  {
+>>>>>  	int ret;
+>>>>>
+>>>>> +	mgr->err = 0;
+>>>>>  	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
+>>>>>  	ret = fpga_mgr_parse_header(mgr, info, buf, count);
+>>>>>
+>>>>> @@ -165,6 +168,7 @@ static int
+>> fpga_mgr_parse_header_mapped(struct
+>>>> fpga_manager *mgr,
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error while parsing FPGA image
+>>>> header\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  	}
+>>>>>
+>>>>>  	return ret;
+>>>>> @@ -185,6 +189,7 @@ static int fpga_mgr_parse_header_sg_first(struct
+>>>> fpga_manager *mgr,
+>>>>>  	int ret;
+>>>>>
+>>>>>  	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
+>>>>> +	mgr->err = 0;
+>>>>>
+>>>>>  	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
+>>>>>  	if (sg_miter_next(&miter) &&
+>>>>> @@ -197,6 +202,7 @@ static int fpga_mgr_parse_header_sg_first(struct
+>>>> fpga_manager *mgr,
+>>>>>  	if (ret && ret != -EAGAIN) {
+>>>>>  		dev_err(&mgr->dev, "Error while parsing FPGA image
+>>>> header\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  	}
+>>>>>
+>>>>>  	return ret;
+>>>>> @@ -249,6 +255,7 @@ static void *fpga_mgr_parse_header_sg(struct
+>>>> fpga_manager *mgr,
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error while parsing FPGA image
+>>>> header\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		kfree(buf);
+>>>>>  		buf = ERR_PTR(ret);
+>>>>>  	}
+>>>>> @@ -272,6 +279,7 @@ static int fpga_mgr_write_init_buf(struct
+>>>> fpga_manager *mgr,
+>>>>>  	size_t header_size = info->header_size;
+>>>>>  	int ret;
+>>>>>
+>>>>> +	mgr->err = 0;
+>>>>>  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
+>>>>>
+>>>>>  	if (header_size > count)
+>>>>> @@ -284,6 +292,7 @@ static int fpga_mgr_write_init_buf(struct
+>>>> fpga_manager *mgr,
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_INIT_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		return ret;
+>>>>>  	}
+>>>>>
+>>>>> @@ -370,6 +379,7 @@ static int fpga_mgr_buf_load_sg(struct
+>>>>> fpga_manager *mgr,
+>>>>>
+>>>>>  	/* Write the FPGA image to the FPGA. */
+>>>>>  	mgr->state = FPGA_MGR_STATE_WRITE;
+>>>>> +	mgr->err = 0;
+>>>>>  	if (mgr->mops->write_sg) {
+>>>>>  		ret = fpga_mgr_write_sg(mgr, sgt);
+>>>>>  	} else {
+>>>>> @@ -405,6 +415,7 @@ static int fpga_mgr_buf_load_sg(struct
+>>>> fpga_manager *mgr,
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error while writing image data to
+>>>> FPGA\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		return ret;
+>>>>>  	}
+>>>>>
+>>>>> @@ -437,10 +448,12 @@ static int fpga_mgr_buf_load_mapped(struct
+>>>> fpga_manager *mgr,
+>>>>>  	 * Write the FPGA image to the FPGA.
+>>>>>  	 */
+>>>>>  	mgr->state = FPGA_MGR_STATE_WRITE;
+>>>>> +	mgr->err = 0;
+>>>>>  	ret = fpga_mgr_write(mgr, buf, count);
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error while writing image data to
+>>>> FPGA\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		return ret;
+>>>>>  	}
+>>>>>
+>>>>> @@ -544,10 +557,11 @@ static int fpga_mgr_firmware_load(struct
+>>>> fpga_manager *mgr,
+>>>>>  	dev_info(dev, "writing %s to %s\n", image_name, mgr->name);
+>>>>>
+>>>>>  	mgr->state = FPGA_MGR_STATE_FIRMWARE_REQ;
+>>>>> -
+>>>>> +	mgr->err = 0;
+>>>>>  	ret = request_firmware(&fw, image_name, dev);
+>>>>>  	if (ret) {
+>>>>>  		mgr->state = FPGA_MGR_STATE_FIRMWARE_REQ_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		dev_err(dev, "Error requesting firmware %s\n",
+>>>> image_name);
+>>>>>  		return ret;
+>>>>>  	}
+>>>>> @@ -626,6 +640,10 @@ static ssize_t state_show(struct device *dev,  {
+>>>>>  	struct fpga_manager *mgr = to_fpga_manager(dev);
+>>>>>
+>>>>> +	if (mgr->err)
+>>>>> +		return sprintf(buf, "%s: 0x%x\n",
+>>>>> +			       state_str[mgr->state], mgr->err);
+>>>>> +
+>>>>>  	return sprintf(buf, "%s\n", state_str[mgr->state]);
+>>>>
+>>>>
+>>>> If one of the fpga manager ops fails, the low-level error code is
+>>>> already returned to the caller. Wouldn't it be better to rely on this
+>>>> instead of printing the low-level error code in a sysfs attribute and sending
+>> it to the userspace?
+>>>>
+>>> Agree, the low-level error code is already returned to the caller but
+>>> the user application will not have any access to read this error info.
+>>> So, I feel this patch provides that flexibility to the user application to get the
+>> exact error info.
+>>> please let me know if you have any other thoughts will implement that.
+>>>
+>>> Regards,
+>>> Navakishore.
+>>
+>>
+>> Hi Nava,
+>>
+>> Thanks for your quick reply. I understand the need to access the low-level
+>> error code from userspace if the configuration goes wrong.
+>>
+>> However, in my understanding, the low-level driver is supposed to export
+>> reconfiguration errors by implementing the status op and returning a bit field
+>> set using the macros defined in fpga-mgr.h +189.
+>> The fpga manager will, in turn, make the errors visible to userspace through
+>> the status attribute. If the available error bits aren't descriptive enough,
+>> wouldn't it be better to add more error macros instead of "overloading" the
+>> state attribute?
+>>
+>> Moreover, it seems to me that if the reconfiguration is done by loading a
+>> device tree overlay from userspace, the error code gets propagated back
+>> through the notifier in of-fpga-region. Am I correct?
+>>
+> 
+> AFAIK The state and status interface use cases are different. The Status interface will provide the H/W error info.
+> whereas the state interface provides the FPGA manager driver state(including Error strings). 
+> Please Refer: Documentation/ABI/testing/sysfs-class-fpga-manager (for Error strings information).
+>
 
-Changes for v3:
-              - Updated status interface handling logic (Restrict the status
-                interface to the device-specific instead of handled by the core)
-                as suggested by Xu Yilun.
+I didn't say that state and status interfaces have the same use case. 
 
-Changes for v4:
-              - Limit the error strings to one word for each as suggested by
-                Xu Yilun
+Instead, I suggested that the state interface shouldn't be used to
+report low-lever errors since this "responsibility" belongs to the
+status interface.
 
-Changes for v5:
-              - Added new sysfs-driver-zynqmp-fpga file.
+The ABI documentation you cited states: "the intent [of the status
+interface] is to provide more detailed information for FPGA
+programming errors to userspace".
 
-Changes for v6:
-              - Updated the sysfs interface to cat /sys/bus/platform/drivers/...
-		as suggested by Xu Yilun.
-              - Exported raw hex value instead of multiple error strings
-                as suggested by Greg.
+> With the existing implementation using DT-Overlay the Configuration/Reconfiguration lower-level
+> driver errors are not propagating to userspace.
+> 
+> Please correct me if my understanding is wrong.
 
- .../ABI/testing/sysfs-driver-zynqmp-fpga      | 72 +++++++++++++++++++
- drivers/fpga/zynqmp-fpga.c                    | 23 ++++++
- 2 files changed, 95 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
+Out of curiosity, I ran a couple of tests on the QEMU arm "virt"
+platform using linux-xlnx and linux-socfpga kernels and the fake
+FPGA manager from the KUnit RFC. I modified the fake manager to
+fail the write op returning a specific error code.
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga b/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
-new file mode 100644
-index 000000000000..af5d42916dd1
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
-@@ -0,0 +1,72 @@
-+What:		/sys/bus/platform/drivers/zynqmp_fpga_manager/firmware:zynqmp-firmware:pcap/status
-+Date:		Jan 2023
-+KernelVersion:	6.2
-+Contact:	Nava kishore Manne <nava.kishore.manne@amd.com>
-+Description:	(RO) Read fpga status.
-+		Read returns a hexadecimal value that tells the current status
-+                of the FPGA device. Each bit position in the status value is
-+                described Below(see ug570 chapter 9).
-+
-+		======================  ==============================================
-+		BIT(0)			0: No CRC error
-+					1: CRC error
-+
-+		BIT(1)			0: Decryptor security not set
-+					1: Decryptor security set
-+
-+		BIT(2)			0: MMCMs/PLLs are not locked
-+					1: MMCMs/PLLs are locked
-+
-+		BIT(3)			0: DCI not matched
-+					1: DCI matched
-+
-+		BIT(4)			0: Start-up sequence has not finished
-+					1: Start-up sequence has finished
-+
-+		BIT(5)			0: All I/Os are placed in High-Z state
-+					1: All I/Os behave as configured
-+
-+		BIT(6)			0: Flip-flops and block RAM are write disabled
-+					1: Flip-flops and block RAM are write enabled
-+
-+		BIT(7)			0: GHIGH_B_STATUS asserted
-+					1: GHIGH_B_STATUS deasserted
-+
-+		BIT(8) to BIT(10)	Status of the mode pins
-+
-+		BIT(11)			0: Initialization has not finished
-+					1: Initialization finished
-+
-+		BIT(12)			Value on INIT_B_PIN pin
-+
-+		BIT(13)			0: Signal not released
-+					1: Signal released
-+
-+		BIT(14)			Value on DONE_PIN pin.
-+
-+		BIT(15)			0: No IDCODE_ERROR
-+					1: IDCODE_ERROR
-+
-+		BIT(16)			0: No SECURITY_ERROR
-+					1: SECURITY_ERROR
-+
-+		BIT(17)			System Monitor over-temperature if set
-+
-+		BIT(18) to BIT(20)	Start-up state machine (0 to 7)
-+					Phase 0 = 000
-+					Phase 1 = 001
-+					Phase 2 = 011
-+					Phase 3 = 010
-+					Phase 4 = 110
-+					Phase 5 = 111
-+					Phase 6 = 101
-+					Phase 7 = 100
-+
-+		BIT(25) to BIT(26)	Indicates the detected bus width
-+					00 = x1
-+					01 = x8
-+					10 = x16
-+					11 = x32
-+		======================  ==============================================
-+
-+		The other bits are reserved.
-diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
-index c60f20949c47..0c58ca27319f 100644
---- a/drivers/fpga/zynqmp-fpga.c
-+++ b/drivers/fpga/zynqmp-fpga.c
-@@ -77,6 +77,28 @@ static enum fpga_mgr_states zynqmp_fpga_ops_state(struct fpga_manager *mgr)
- 	return FPGA_MGR_STATE_UNKNOWN;
- }
- 
-+static ssize_t status_show(struct device *dev,
-+			   struct device_attribute *attr, char *buf)
-+{
-+	u32 status;
-+	int ret;
-+
-+	ret = zynqmp_pm_fpga_get_config_status(&status);
-+	if (ret)
-+		return ret;
-+
-+	return sprintf(buf, "0x%x\n", status);
-+}
-+
-+static DEVICE_ATTR_RO(status);
-+
-+static struct attribute *zynqmp_fpga_attrs[] = {
-+	&dev_attr_status.attr,
-+	NULL,
-+};
-+
-+ATTRIBUTE_GROUPS(zynqmp_fpga);
-+
- static const struct fpga_manager_ops zynqmp_fpga_ops = {
- 	.state = zynqmp_fpga_ops_state,
- 	.write_init = zynqmp_fpga_ops_write_init,
-@@ -113,6 +135,7 @@ static struct platform_driver zynqmp_fpga_driver = {
- 	.driver = {
- 		.name = "zynqmp_fpga_manager",
- 		.of_match_table = of_match_ptr(zynqmp_fpga_of_match),
-+		.dev_groups = zynqmp_fpga_groups,
- 	},
- };
- 
--- 
-2.25.1
+static int op_write(struct fpga_manager ...)
+{
+	[...]
+
+        return -202302;
+}
+
+The op error code is visible from the message log on both kernels when
+the overlay application fails:
+
+[   23.958015] fpga_manager fpga0: writing fake.bin to Fake FPGA Manager
+[   23.959119] fpga_manager fpga0: Error while writing image data to FPGA
+[   23.959341] fpga_region region0: failed to load FPGA image
+[   23.959472] OF: overlay: overlay changeset pre-apply notifier error -202302, target: /test_region
+[   23.959622] create_overlay: Failed to create overlay (err=-202302)
+
+However, I feel this part of the discussion is more speculative since
+the DT overlay configFS interface is not mainline. 
+
+> Regards,
+> Navakishore.
+> 
+
+Thanks,
+Marco
 
