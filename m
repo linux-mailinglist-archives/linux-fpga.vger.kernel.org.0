@@ -2,192 +2,117 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD1F6A27DC
-	for <lists+linux-fpga@lfdr.de>; Sat, 25 Feb 2023 09:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450726A3358
+	for <lists+linux-fpga@lfdr.de>; Sun, 26 Feb 2023 19:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjBYIM3 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 25 Feb 2023 03:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
+        id S229628AbjBZSBu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 26 Feb 2023 13:01:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjBYIM2 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 25 Feb 2023 03:12:28 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D429B11E82;
-        Sat, 25 Feb 2023 00:12:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677312746; x=1708848746;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P1QZMTFRt/gCcckpVneXrNNscsR4SIg0AgfC8vIFN7o=;
-  b=TkFJeooQytddLWTq7H9k0IVBr7z4oqMCRtgvDEOE9t9kyKjl8DiqMXqU
-   R8+8oH2cvogdK0q8HnPGQjCasRaiySDF8C6L/7jdhzTEWdsX7jyJnI94C
-   UGMNshJ+40uwXbQ4tXv/E0qKBw+exdGTzd6ASY/tyTN4Qe3dfugWn/ybD
-   x8Yp0F4h6cg2WdzCVH6lRWNll/OVP3e0Ct8/7tZm8ORgYvZlBXc15cBd1
-   yXJaIQcvPCtVR82ojjQzqK2l+L8Tt01kUyY3PohXYu87THytHWeqUctKd
-   y/Brai140ZUYs/rS3ZtvXheKTSRi71KFc/hYJf4sdTSohhWkmHO8nng09
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="332334440"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="332334440"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 00:12:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="796989551"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="796989551"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga004.jf.intel.com with ESMTP; 25 Feb 2023 00:12:19 -0800
-Date:   Sat, 25 Feb 2023 16:01:18 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
-        trix@redhat.com, ronak.jain@xilinx.com, gregkh@linuxfoundation.org,
-        tanmay.shah@xilinx.com, mathieu.poirier@linaro.org,
-        ben.levinsky@amd.com, rajan.vaja@xilinx.com,
-        harsha.harsha@xilinx.com, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S229445AbjBZSBt (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 26 Feb 2023 13:01:49 -0500
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4EAC166;
+        Sun, 26 Feb 2023 10:01:48 -0800 (PST)
+Received: by mail-io1-f51.google.com with SMTP id m22so1304439ioy.4;
+        Sun, 26 Feb 2023 10:01:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gSUnq8xRtOagq4E41s+KbYjKwfOmBG7Es9wmftqohqU=;
+        b=y9U9DqwM+vFDkuVVUbHCrV+f+p2Htz17rYPauyIgXhSPfMLGA20U/z2zmG4Ax1sF/Y
+         /wJA38I0HoPXo4I//jKYWWKAzEe5VJwDzN8C6DrhNrbUeK/1nzR5ulIzwxt5r+vhlNd7
+         Xj7hNv7wYRUIH9zQPvTQzplVMNSBbtCMBDjJn++C/kyBKvQqLIyyTl5YqasOpuqW2usN
+         +c9skBMDlK2ZcRQ+0p3eMI7JdFxcOyWnogwKC6w4n7mPkhjLr2m7GewFb9BuWaNRPHk1
+         TvKN5Bclb5SEiuO/U3kVsuw3veUcmIySCCJABcH7t+bYWfQqnLXW1vO0pycMPz9l0D3B
+         XCgg==
+X-Gm-Message-State: AO0yUKUxpnJ5m5Qgoxex++JhK0pBTP2hFg8k7HG52Qw48ABRwlng5F3r
+        znRUIzedI9zT6pn67mtwxmXVEm+PgA==
+X-Google-Smtp-Source: AK7set+3Ok4qG7EMNR+nPCTdYBuutxqpvNu4gD21+j2oWwh0QKKh9T2K+w1r/DIfDQboVOtz+yGwMQ==
+X-Received: by 2002:a5d:904f:0:b0:74c:d67a:6fa0 with SMTP id v15-20020a5d904f000000b0074cd67a6fa0mr2414345ioq.7.1677434507245;
+        Sun, 26 Feb 2023 10:01:47 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:8069:8ddf:ff6b:c94c:94fd:4442])
+        by smtp.gmail.com with ESMTPSA id h2-20020a5ecb42000000b00734ac8a5ef7sm1598081iok.25.2023.02.26.10.01.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 10:01:46 -0800 (PST)
+Received: (nullmailer pid 101541 invoked by uid 1000);
+        Sun, 26 Feb 2023 18:01:43 -0000
+Date:   Sun, 26 Feb 2023 12:01:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Xu Yilun <yilun.xu@intel.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v7 1/2] firmware: xilinx: Add pm api function for PL
- config reg readback
-Message-ID: <Y/nATlazfFZrDZRr@yilunxu-OptiPlex-7050>
-References: <20230224120738.329416-1-nava.kishore.manne@amd.com>
- <20230224120738.329416-2-nava.kishore.manne@amd.com>
+Subject: Re: [PATCH v1 2/6] dt-bindings: soc: microchip: add a property for
+ system controller flash
+Message-ID: <20230226180143.GA96766-robh@kernel.org>
+References: <20230217164023.14255-1-conor@kernel.org>
+ <20230217164023.14255-3-conor@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230224120738.329416-2-nava.kishore.manne@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230217164023.14255-3-conor@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2023-02-24 at 17:37:37 +0530, Nava kishore Manne wrote:
-> Adds PM API for performing Programmable Logic(PL) configuration
-> register readback. It provides an interface to the firmware(pmufw)
-> to readback the FPGA configuration register.
+On Fri, Feb 17, 2023 at 04:40:19PM +0000, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-
+> The system controller "shares" a SPI flash device with a QSPI controller
+> in the MSS. This flash is used to store FPGA bitstreams & other
+> metadata. IAP and Auto Upgrade both write images to this flash that the
+> System Controller will use to re-program the FPGA.
+> 
+> Add a phandle property signifying which flash device is connected to the
+> system controller.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
-> changes for v2:
->               - None.
+>  .../soc/microchip/microchip,mpfs-sys-controller.yaml   | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> Changes for v3:
->               - Updated API and config reg read-back handling logic
->               - Updated the commit msg to align with the changes.
-> 
-> Changes for v4:
->               - Fixed some minor coding issues. No functional changes.
->               - Updated Return value comments as suggested by Xu Yilun.
-> 
-> Changes for v5:
->               - Fixed some minor coding issues as suggested by Xu Yilun.
->                 No functional changes.
-> 
-> Changes for v6:
->               - None.
-> 
-> Changes for v7:
->               - None.
-> 
->  drivers/firmware/xilinx/zynqmp.c     | 33 ++++++++++++++++++++++++++++
->  include/linux/firmware/xlnx-zynqmp.h | 11 ++++++++++
->  2 files changed, 44 insertions(+)
-> 
-> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-> index 129f68d7a6f5..3d8cc6795b43 100644
-> --- a/drivers/firmware/xilinx/zynqmp.c
-> +++ b/drivers/firmware/xilinx/zynqmp.c
-> @@ -948,6 +948,39 @@ int zynqmp_pm_fpga_get_status(u32 *value)
->  }
->  EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_status);
+> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> index 04ffee3a7c59..97a7cb74cbf9 100644
+> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> @@ -26,6 +26,16 @@ properties:
+>    compatible:
+>      const: microchip,mpfs-sys-controller
 >  
-> +/**
-> + * zynqmp_pm_fpga_get_config_status - Get the FPGA configuration status.
-> + * @value: Buffer to store FPGA configuration status.
-> + *
-> + * This function provides access to the pmufw to get the FPGA configuration
-> + * status
-> + *
-> + * Return: 0 on success, a negative value on error
-> + */
-> +int zynqmp_pm_fpga_get_config_status(u32 *value)
-> +{
-> +	u32 ret_payload[PAYLOAD_ARG_CNT];
-> +	u32 buf, lower_addr, upper_addr;
-> +	int ret;
+> +  microchip,bitstream-flash:
+> +    $ref: "/schemas/types.yaml#/definitions/phandle"
+
+Drop quotes.
+
+With that,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +    description:
+> +      The SPI flash connected to the system controller's QSPI controller.
+> +      The system controller may retrieve FPGA bitstreams from this flash to
+> +      perform In-Application Programming (IAP) or during device initialisation
+> +      for Auto Update. The MSS and system controller have separate QSPI
+> +      controllers and this flash is connected to both. Software running in the
+> +      MSS can write bitstreams to the flash.
 > +
-> +	if (!value)
-> +		return -EINVAL;
-> +
-> +	lower_addr = lower_32_bits((u64)&buf);
-> +	upper_addr = upper_32_bits((u64)&buf);
-> +
-> +	ret = zynqmp_pm_invoke_fn(PM_FPGA_READ,
-> +				  XILINX_ZYNQMP_PM_FPGA_CONFIG_STAT_OFFSET,
-> +				  lower_addr, upper_addr,
-> +				  XILINX_ZYNQMP_PM_FPGA_READ_CONFIG_REG,
-> +				  ret_payload);
-> +
-> +	*value = ret_payload[1];
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_config_status);
-> +
->  /**
->   * zynqmp_pm_pinctrl_request - Request Pin from firmware
->   * @pin: Pin number to request
-> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-> index b09f443d3ab9..ce37d55ffa44 100644
-> --- a/include/linux/firmware/xlnx-zynqmp.h
-> +++ b/include/linux/firmware/xlnx-zynqmp.h
-> @@ -71,6 +71,10 @@
->  #define XILINX_ZYNQMP_PM_FPGA_FULL	0x0U
->  #define XILINX_ZYNQMP_PM_FPGA_PARTIAL	BIT(0)
->  
-> +/* FPGA Status Reg */
-> +#define XILINX_ZYNQMP_PM_FPGA_CONFIG_STAT_OFFSET	7U
-> +#define XILINX_ZYNQMP_PM_FPGA_READ_CONFIG_REG		0U
-> +
->  /*
->   * Node IDs for the Error Events.
->   */
-> @@ -120,6 +124,7 @@ enum pm_api_id {
->  	PM_CLOCK_GETRATE = 42,
->  	PM_CLOCK_SETPARENT = 43,
->  	PM_CLOCK_GETPARENT = 44,
-> +	PM_FPGA_READ = 46,
->  	PM_SECURE_AES = 47,
->  	PM_FEATURE_CHECK = 63,
->  };
-> @@ -515,6 +520,7 @@ int zynqmp_pm_aes_engine(const u64 address, u32 *out);
->  int zynqmp_pm_sha_hash(const u64 address, const u32 size, const u32 flags);
->  int zynqmp_pm_fpga_load(const u64 address, const u32 size, const u32 flags);
->  int zynqmp_pm_fpga_get_status(u32 *value);
-> +int zynqmp_pm_fpga_get_config_status(u32 *value);
->  int zynqmp_pm_write_ggs(u32 index, u32 value);
->  int zynqmp_pm_read_ggs(u32 index, u32 *value);
->  int zynqmp_pm_write_pggs(u32 index, u32 value);
-> @@ -721,6 +727,11 @@ static inline int zynqmp_pm_fpga_get_status(u32 *value)
->  	return -ENODEV;
->  }
->  
-> +static inline int zynqmp_pm_fpga_get_config_status(u32 *value)
-> +{
-> +	return -ENODEV;
-> +}
-> +
->  static inline int zynqmp_pm_write_ggs(u32 index, u32 value)
->  {
->  	return -ENODEV;
+>  required:
+>    - compatible
+>    - mboxes
 > -- 
-> 2.25.1
+> 2.39.1
 > 
