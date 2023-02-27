@@ -2,261 +2,215 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0E96A3FEE
-	for <lists+linux-fpga@lfdr.de>; Mon, 27 Feb 2023 12:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229456A4DBD
+	for <lists+linux-fpga@lfdr.de>; Mon, 27 Feb 2023 23:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjB0LDJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 27 Feb 2023 06:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S229917AbjB0WFE (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 27 Feb 2023 17:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjB0LCo (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 27 Feb 2023 06:02:44 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B5521293;
-        Mon, 27 Feb 2023 03:02:21 -0800 (PST)
+        with ESMTP id S230170AbjB0WFD (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 27 Feb 2023 17:05:03 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E5325BA9;
+        Mon, 27 Feb 2023 14:05:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677535501; x=1709071501;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=55LANcZrdBP3N403LyGCoiZlCSUIVc5RtfKtqXiQaUo=;
+  b=cRRtX7tgWlOn/LiszJDQ7rRMntpbE93QcMRThC8gW6wmughO0JGfJ4FE
+   CR0cpRQC0i9ZseT3KJG6HRYP/3Mntk5KL6LHZVM9idB+jE/ugELv8FS2t
+   I7DeiM7Hgglzy8wuY9+TyFlhJSgoMimNsiLQnhxT/3ZU3blZBNM50Ajrw
+   IlOHNCgUM1X5nF8bRxhhniAq487e4Vxia9b1lgidKqAiUukIlrBH5kTkc
+   Q2r/5xqqWCEB+h3gl32n+RuOxpBRILXu2uFqc80kHWZyyZWppXMlCGo6l
+   OhcZlH02Eoo7apWsp1Sb/J2X3lvO6HqWaqssgcI9xJgQq5LC/4qCd9HB7
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="314404685"
+X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
+   d="scan'208";a="314404685"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:05:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="848006974"
+X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
+   d="scan'208";a="848006974"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga005.jf.intel.com with ESMTP; 27 Feb 2023 14:05:00 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 27 Feb 2023 14:04:59 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 27 Feb 2023 14:04:59 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.105)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 27 Feb 2023 14:04:58 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D6w+SOYdyXLp7qkfmkZS6uOnSDzsCXgrEHMyRJosrYB+PkP/SPQsxgIAPT0C6ft6VZoHK3SQeZ/N7dfK5X6EDv2tpB2xKA8EUAggqEZQIqg6o5QoxlHm9rF+H9M31/zmTFdLKQGG+MCEbAN2Zw9QogqZTFxmR8HEqb4dcQq27+LEPRfiEVXvQBlJzwd2hBQ9eKAkZzxGCGo8llIYcLNIZl5JV8R0Wot8R/EbqErPs1Dc+sukpIcOE/t2zbStgCGAHN5fvQ8jO32OTh5Jz3uIjV7VEm8E93UBwSbnEnp3nFyD0iZlD33kEloTM34B3PBKw/ZbBLTGUMWmIgekHn8/vQ==
+ b=MfuxQ0Z0BIeY4K2yzaFhYdBW+VPkyc6NcpCH/FXvgEHyXKKVcGdYOuZ67TDtaCM3x/daKVqzBFw0QgPnZ8Cn8l+MY8mnbYjT72a/qJAfBsjkZ6uxX6cWvM/e7MLkKv93jkYgN3RFMLfRBStm3fQzDp6z68LcaipOa1pFnRFvr9yQXQ1H43T2/dU4IT0QdhHRMKX8QfW8lSWeXKXv1HP9J5LCTKaU7twENcPax2LR4ND/2Tqe7raCdGLw3YHh4shEK+GzrHIs/pjLr6AiMA2PHebmWpVo2iYZNPHRCo1SJnsPk4sMXp2mZmCSom2+GiZYD6HHKs11RPPjoj5qaLWXCw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=inTQOEUUDG0KqvuoJ1owR3dG7MXRHZRv2VFt18WKHFg=;
- b=VrE+/9K9dz4RNdEhWFZTTSt+tr6le8xwtX1AMktp7XCh5wtZDAMxi5vJa7k8HdQYB6I8jf869DJDITs1fzGiHyJhJ6DJa6woThh6bsZHIIiPgXcia2opSg9xGl3rLa+w83MQbQw5iazYgxPmtuGmA/DkqBom8OLAgrh4c1esDpsgwyqfg0rntXTbsbvbloyhhmWduAQfgTYyQfGau2Ki/3A9E6ilahM+dLo/XR/xQelcMrwJl9/sLBMWtDXrb1q3aTONPLUXkwl6QRaVR8kFe4Y72RnKhbf8IqPgHcnPCAqv0ycBQqU78FfZf4sass2ENr/q66ysH/dm6N61hmNLlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=inTQOEUUDG0KqvuoJ1owR3dG7MXRHZRv2VFt18WKHFg=;
- b=4X/Gaj2ffv0eqhi8Va2aD8a5VYue1hnlrzG5UhmAJ7VZJfv6UAsLEvfe4hszMGyN51FTYpwAZkqRdrLYAw0kegdZkUpg+YjIbVWZgsZiTCAdpvNxVwyWMGw/z6Tf3HPDsdHHPYDAXjsBqBgqXtu7XndgUkhMlqxmbodj1bHoq7E=
-Received: from DM6PR03CA0047.namprd03.prod.outlook.com (2603:10b6:5:100::24)
- by DM4PR12MB5231.namprd12.prod.outlook.com (2603:10b6:5:39b::19) with
+ bh=55LANcZrdBP3N403LyGCoiZlCSUIVc5RtfKtqXiQaUo=;
+ b=ZD07d8TNVuhZ1H9j3uS5AQjFZoK5k93iTLKv9ke8nHV49BgefCEv6rB8skkBQfsHBgpjpmIGJfCrY/+hpkpNpJEBlSuEL6InVKDNRu7Ro00xmG8A20AOEs/Bu96A3vPc4Fdfr6XiVt8KvHLMi81clG64Qj+OVvNmQ4IpqYe+0E5xXDmm+ymwiu4NttAFKwsIgcIhUi3RiGHZgzBxu/WfgCUR8QUnuf/CmjukV0sgEP8ruSJkjgG7rBAYVUz1hDe+7ifEFWBWuAkLj0gK+tg+pKGTm0b5ZnhQTYeoA6K5r6VKKvfi+oifCr8LEhqp/DWwgZXZRU5m2CxLgpICpWb8HA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com (2603:10b6:3:10b::14)
+ by BN9PR11MB5419.namprd11.prod.outlook.com (2603:10b6:408:100::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Mon, 27 Feb
- 2023 11:02:17 +0000
-Received: from DS1PEPF0000E62E.namprd02.prod.outlook.com
- (2603:10b6:5:100:cafe::2e) by DM6PR03CA0047.outlook.office365.com
- (2603:10b6:5:100::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.28 via Frontend
- Transport; Mon, 27 Feb 2023 11:02:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000E62E.mail.protection.outlook.com (10.167.17.132) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.12 via Frontend Transport; Mon, 27 Feb 2023 11:02:17 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 27 Feb
- 2023 05:02:16 -0600
-From:   Nava kishore Manne <nava.kishore.manne@amd.com>
-To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
-        <trix@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <michal.simek@xilinx.com>,
-        <nava.kishore.manne@amd.com>, <linux-fpga@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] dt-bindings: fpga: xilinx-spi: convert bindings to json-schema
-Date:   Mon, 27 Feb 2023 16:32:13 +0530
-Message-ID: <20230227110213.291225-1-nava.kishore.manne@amd.com>
-X-Mailer: git-send-email 2.25.1
+ 2023 22:04:54 +0000
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::dcb3:5ba7:4576:d776]) by DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::dcb3:5ba7:4576:d776%6]) with mapi id 15.20.6134.021; Mon, 27 Feb 2023
+ 22:04:54 +0000
+Message-ID: <21bebf9d-eb27-5607-b0a9-274c46ef8aa3@intel.com>
+Date:   Mon, 27 Feb 2023 14:04:36 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v1 0/6] PolarFire SoC Auto Update Support
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Xu Yilun <yilun.xu@intel.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, <linux-riscv@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-fpga@vger.kernel.org>
+References: <20230217164023.14255-1-conor@kernel.org>
+ <Y/ht1eHgtRrLxIhC@yilunxu-OptiPlex-7050> <Y/h1KFGSw13OabYw@wendy>
+From:   Russ Weight <russell.h.weight@intel.com>
+In-Reply-To: <Y/h1KFGSw13OabYw@wendy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR03CA0334.namprd03.prod.outlook.com
+ (2603:10b6:303:dc::9) To DM5PR11MB1899.namprd11.prod.outlook.com
+ (2603:10b6:3:10b::14)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E62E:EE_|DM4PR12MB5231:EE_
-X-MS-Office365-Filtering-Correlation-Id: ee8b0091-19db-42b8-ac6e-08db18b216fe
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1899:EE_|BN9PR11MB5419:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9b32686d-a052-459f-a36e-08db190ea7ac
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nSeoAMbKYkLa4Lr1pR2cFyGe7geRQTklY76XjaNUxywQKfSRUVK1ckKb25TREcC5z1VaLol6m466GKYvjbWXuklqP38kKIkCc/lnqdEOgAyg1/UjSJxw80MmACp9hJvZoivCLGWEYMY5tovq6iI1H1Du06IAGiHi4ZLOKOVichZpjBmcwKQSRzXALpGnfyEeJafEhk+LW62nchzC5RNx0BpdNy3l3nxF0vlLFIhwNMr35XhK3lowd/CMhl60ytGWin+zzkJU+68yOz4+B25/2tqcwjAkf5gYz8pPlY1zxJ8U/jNJWv1ciR4ZhVb3+Y3w8Mj72mH12XM1oQflXmbo8vVxA8XAToGjzYDlDRFzjfrBjwCVXIY7VV/WULo6nsyW0gYxTVBVWT4CfUQvSLt0cNUNeHgIONwrFJ0PUAXWp4UbPymZiS5A0M5nz4Tdxm4wKPDMFHmvUtL/MPutjYEqkT/xfMQGPU/dFZi1L59zRMRlqJnN4/u7HJNqRXe+VMbHgToUcZl2osq7o947nbtxrvzyJPDqf/g+w6n5vLX23rb0AuB2P5Qg4LEnYvj+3O94znKCLOlSVuzyLRYcK9lx9yPispci3Uq3RrCYNs0G9xPLu95tCJ9SixVI4vOEz6CZcIs69FvuY/M9uvKR1nzXnzIAeeX0j9SRVlItpvn0iX0BwL5DwFQ4KjF6QoKYAlRD30nyxioJ7ThO+m3EMnbGr2Fwl3HL/8tCom+h7CxykosQhXk7ugY3shY865PrY2w+RcjtgaHsdnDLdGlyvZkIuGM12NBCOPgqIa64TL6pT8BmuHsMjE2Idb8Iwb3QlKac1xQWqLolU4e/Ew6lasExQg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199018)(46966006)(40470700004)(36840700001)(40460700003)(16526019)(186003)(81166007)(82740400003)(83380400001)(921005)(356005)(8936002)(70586007)(70206006)(41300700001)(2906002)(7416002)(36860700001)(5660300002)(8676002)(40480700001)(336012)(47076005)(478600001)(1076003)(426003)(6666004)(26005)(966005)(2616005)(316002)(103116003)(36756003)(110136005)(86362001)(82310400005)(83996005)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 11:02:17.1310
+X-Microsoft-Antispam-Message-Info: 9K3PLDWF00C73iUGAgwF532sHWVtDPVyrewKagNXjTYllqxfU3XfWzKxThGZvfVn1JtjxJ6JNRuMq861nN7oqjKRLo6HhRJ45rqLK2S/1R1W7d7snwJZL8u7Wt3yWd/ErhWnxqk8LpZlVBW3JTwWIWgecnPe50OGOaAB/Gj8PLhvXP9KDRzvuUFO2WLwZxtWRVsun4fWNz4/54uO//Re7KX4k5sLZBJhRjRJYJwEuizb/tiHB7fYZWpe5z+RhMl6935CdhoV8xQ5H6ITWwRaREid+py/ZhbWc2bpdtBZJmvdCWlTfxjdJ2VOXhKDiMWgIddt+nqNBMIsQrU5p/fgeQQJo+/0akq07MtwR9JR3mBrRRyq/SfQb1X7nsjVWBFusWHztUzJX3xyHvlEuzo1n+y3U8E85DW9ZuQnoMl6I/lHchStbqiymSvFQo+UQaOIiMajiKbd9fIQXBeAjoLF7wimz83Y5AOXNsLXuJhfXkmiSF+YOsUy7rqJNqse/iP0iNg1xKbxtGDEc2WiocWlaw5lQu6uH75bwqVgF0ja1baIfwfL00Z0GpBkkPqOZx7m/t7Tn/NucgL0YHd6o9Rs0dE+940QciJJPwdXvvIiqWr6/6mXfi4aLRMz/lgMf6A47p4Ieg2Bo/k89Zh5R8AHP3qpfe8GypNXIRIjrfyj2NSLcMdizZsLWYdirPOtmAo8lF7jpDWbG9hvJoiew0Ev0gjlaFyJId/hBg52gxa4JGktCPckgT87eLuZDjfV263JMVt3ajjBrkk4Pnk/t5Gwjg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1899.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(376002)(136003)(396003)(39860400002)(451199018)(36756003)(110136005)(6636002)(54906003)(316002)(83380400001)(6666004)(66476007)(6486002)(966005)(6512007)(2616005)(6506007)(26005)(478600001)(186003)(8936002)(53546011)(41300700001)(2906002)(86362001)(31696002)(66946007)(5660300002)(7416002)(15650500001)(66556008)(8676002)(38100700002)(4326008)(82960400001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWk2U0IrTVpsTUppeTU1TXdNU1ZPTzBQNTZmVDNQd01HeGU4enpVQzN2ZG81?=
+ =?utf-8?B?aWQxMk5lTGRwQzIrdGY4ZWFCc1NuVjBXbng1dEhZdXRQKy82U1ZESHIwMlFH?=
+ =?utf-8?B?TWoySnQzOWJiOVA4TGljWEVkaHRXYjJiNWJQTHNRS2lKWlk5MGtYeHZvVU5y?=
+ =?utf-8?B?dk40d2RiamUxdXlPakYzazdCT05OKzQ5NHJ5dTFzQ1g0TlErN250eGd0bXY5?=
+ =?utf-8?B?cVBGOGEvS3hseEpOU1lEZVVkVGtVVExxSzNRWXhUc1JvdE1xVUJDWllVQVpa?=
+ =?utf-8?B?WVpOd3VnV3psbWo1bVY5SC9PYk1oNnkxN1UxdllwaXlORzBIQlJLNytqZ1VK?=
+ =?utf-8?B?bnVZcW5UL29tMk52YUJQTkhvMDRpbjJvWlhlN28xYmx4aU1rN2VTYm9Xektp?=
+ =?utf-8?B?S2VlakJRMDZjNVNuTzh2TkRkOFNiM3lkVXdibnZvbElTbThsbDgrV3Qvck5C?=
+ =?utf-8?B?WGRoOW5MQjZkZnJUTGhsOHZaYW5YVkFaWDdMbVVObFgxWGJyOWpVS2NXUWpH?=
+ =?utf-8?B?QXhzeXo1dWNOMUtvQUk3Ryszc1QvSEtSNFpoc3dnT1d4QkFBY2dML2pyTGd0?=
+ =?utf-8?B?Y1pBYXR3NkZydER6MlNTMHdVQWt3VjVtS3AyTjBKbXVUQUNNeXB0NmJVOWlR?=
+ =?utf-8?B?VEFXWkh2b1FITndXM0FJbVZydUEzaTlJMmRDUFRKNE9FZDRmblNVRk1iOURp?=
+ =?utf-8?B?UFJUOXdKUUlkaE80cHZDaFRzTmpOK0YxUDJFMlh2RnJHSlhpcTJBSW5mU2E1?=
+ =?utf-8?B?NDh1Nnh0NWxhdHhjNFFwODYxSzQ5Zkl5cUM5cDdrTDlDR1prN1R4SDJPcHph?=
+ =?utf-8?B?SHFwNWgwcmpqMnZMdzI3MXBwTXV0aE5tQkdPb1F0UDBQREhVNmhTaTZwQjhZ?=
+ =?utf-8?B?cVFEOHBkdjRmczA2dFcrVG42SEN4VkhlOTUyMmYvQ2ZRNXNFaHJJTldUVktV?=
+ =?utf-8?B?b0xVc3lyWnBFWUwvR0FhKzU3bDJHbFNYUVJYbUo0WVdCQXM4YnFBYzB5eHNC?=
+ =?utf-8?B?ODJrblE3QUNRWFVRbGMrL3I3REhoK1VwRHhMOEhsYlpUTGhPMXp0OGtNcnlJ?=
+ =?utf-8?B?S3RHazBPN3JSS0p2R2FCSEFSTlRtQTN6c2ptUGhNdm0ydy9FcDVENGFndDVt?=
+ =?utf-8?B?R1RZQzk2Tm9VWWZKL1h6NTA2OFZnWEVXQ1hnaGNua0tmK1l0ZTdicmtTMTJs?=
+ =?utf-8?B?dmlkQnJmRDhxblZvanlocWhxcXBwZ1d1YXVIeFhLWlQ1MFU3UjlJOUN6RTl2?=
+ =?utf-8?B?Y1ozMSt1c09BVnpINS9IMWVtb213V2FzVDVmWG4zR25JOERTbXkvYTFsaTVW?=
+ =?utf-8?B?eHBKUjlLeFRmeHR5N29LbXYrK0xWbDc0WXk2SndBMk5IV2NqMmF0cFlJQ1g0?=
+ =?utf-8?B?QVMrTGN5R29wRHBlaHRPaXlhL01Ka3l6UWRqU2YyMnBBaEdLTHpJMFFnQ2NS?=
+ =?utf-8?B?bVdqK3NQU1JuOFpPZUhlNUM5UkJtU2x0bUorcVVMMkx0Q3F6aHZxMlZOWkpz?=
+ =?utf-8?B?R2R6cWJ2a2RxM2JkMEhrT2JMTE9hbmpySnZPT2h6aVRMMk1yN0YwY1hwUjhp?=
+ =?utf-8?B?VHJHVmF6NG5ISFhJSnBkQ3BHR0c5NTU2MjVUVVNpUHhickxNc3NzdGpYUFFm?=
+ =?utf-8?B?VDA2YitXbktNc0M4ejQ5aU5MMHlNbEhHM3ZnSUpudERhRWQzQS9vWjZKdy9x?=
+ =?utf-8?B?Rm1hekF6Qy8ybXhUbkIwakhwZCswc3VPUHhaR05jR0Y3aXJOd3M3cjNNQ1dX?=
+ =?utf-8?B?bE9qelJ1S3h2QXhtV0QxUGFFK3ZERDNTR2VXR1dxYmdKOXlpMFFtbEF0NEZS?=
+ =?utf-8?B?K1VpRHZselJHZWRmVVhPV1psMVdpZWNVaWovMndHeFVGODlORnJab1NmR2Yx?=
+ =?utf-8?B?RExmMHo4UXg2aGxMMmpLMEwrY0RVMzVVT2VqNFU5dUMzc3NCR0VtZGovaFpN?=
+ =?utf-8?B?QlR1cnJaWXRHN2QrUUtoMnY0WStacVVzTDFTK001VXI5WFk4NlAxQ2Uxdmx4?=
+ =?utf-8?B?cnJCeUdwbElHbGN3dnBERDlYeUZYOTVMUGZKa0taLzR3SjhySkRVWFcrcGVo?=
+ =?utf-8?B?V0hOSTZBbXA4cW9Rb2ZIaE5VcUpzYi9FUjB2bjB1ajRnS2FVWWlMR1VwNmNW?=
+ =?utf-8?B?NWVUb3RvejZCQTF0a0oweElyK2FqV2pESko3cFpBTlQxekNhMVAyNTloRStl?=
+ =?utf-8?B?L0E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b32686d-a052-459f-a36e-08db190ea7ac
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1899.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 22:04:53.9058
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee8b0091-19db-42b8-ac6e-08db18b216fe
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E62E.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5231
-X-Spam-Status: No, score=1.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8UQ6VJKOE/2SBQxlf03I2hyuBmvdrPsXEAM4QdvCbBRO97T41J+iy7/LCZEEOH/id3vz/OwQQmhMduInGwtis1bRDoWJxmUxFYIJsWGd5CI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5419
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Convert xilinx-spi bindings to DT schema format using json-schema.
+Hi Conor,
 
-Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
----
-Changes for v2:
-              - Removed 'fpga-region.txt' relevant info from the description
-                and addressed some minor comments as suggested by Krzysztof.
+On 2/24/23 00:28, Conor Dooley wrote:
+> On Fri, Feb 24, 2023 at 03:57:09PM +0800, Xu Yilun wrote:
+>> On 2023-02-17 at 16:40:17 +0000, Conor Dooley wrote:
+>>> This patchset adds support for the "Auto Update" feature on PolarFire
+>>> SoC that allows for writing an FPGA bistream to the SPI flash connected
+>>> to the system controller.
+>> I haven't fully checked the patches yet, just some quick comments:
+>>
+>> Since this feature is just to R/W the flash, and would not affect the
+>> runtime FPGA region, I don't think an FPGA manager is actually needed.
+>> Why not just use the MTD uAPI? There is a set of exsiting MTD uAPI &
+>> MTD tool if I remember correctly.
+> A lack of interest in opening up the system controller to userspace!
+> You're right in that the writing of the image can be done that way, and
+> while I was testing I used the userspace bits of mtd along the way - but
+> for validating that the image we are writing we rely on the system
+> controller.
+> I'm really not interested in exposing the system controller's
+> functionality, especially the bitstream manipulation parts, to userspace
+> due to the risk of input validation bugs, so at least that side of
+> things should remain in the kernel.
+> I suppose I could implement something custom in drivers/soc that does
+> the validation only, and push the rest out to userspace. Just seemed
+> fitting to do the whole lot in drivers/fpga.
+Conor,
 
- .../bindings/fpga/xilinx-slave-serial.txt     | 51 ------------
- .../bindings/fpga/xlnx,fpga-slave-serial.yaml | 80 +++++++++++++++++++
- 2 files changed, 80 insertions(+), 51 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/fpga/xilinx-slave-serial.txt
- create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
+In case you haven't already looked at the new firmware-upload
+support in the firmware-loader, I'll give you some references
+here to see if it fit you needs. This would only support the
+write (not the read) but it would allow the controller to do
+validation on the write.
 
-diff --git a/Documentation/devicetree/bindings/fpga/xilinx-slave-serial.txt b/Documentation/devicetree/bindings/fpga/xilinx-slave-serial.txt
-deleted file mode 100644
-index 5ef659c1394d..000000000000
---- a/Documentation/devicetree/bindings/fpga/xilinx-slave-serial.txt
-+++ /dev/null
-@@ -1,51 +0,0 @@
--Xilinx Slave Serial SPI FPGA Manager
--
--Xilinx Spartan-6 and 7 Series FPGAs support a method of loading the
--bitstream over what is referred to as "slave serial" interface.
--The slave serial link is not technically SPI, and might require extra
--circuits in order to play nicely with other SPI slaves on the same bus.
--
--See:
--- https://www.xilinx.com/support/documentation/user_guides/ug380.pdf
--- https://www.xilinx.com/support/documentation/user_guides/ug470_7Series_Config.pdf
--- https://www.xilinx.com/support/documentation/application_notes/xapp583-fpga-configuration.pdf
--
--Required properties:
--- compatible: should contain "xlnx,fpga-slave-serial"
--- reg: spi chip select of the FPGA
--- prog_b-gpios: config pin (referred to as PROGRAM_B in the manual)
--- done-gpios: config status pin (referred to as DONE in the manual)
--
--Optional properties:
--- init-b-gpios: initialization status and configuration error pin
--                (referred to as INIT_B in the manual)
--
--Example for full FPGA configuration:
--
--	fpga-region0 {
--		compatible = "fpga-region";
--		fpga-mgr = <&fpga_mgr_spi>;
--		#address-cells = <0x1>;
--		#size-cells = <0x1>;
--	};
--
--	spi1: spi@10680 {
--		compatible = "marvell,armada-xp-spi", "marvell,orion-spi";
--		pinctrl-0 = <&spi0_pins>;
--		pinctrl-names = "default";
--		#address-cells = <1>;
--		#size-cells = <0>;
--		cell-index = <1>;
--		interrupts = <92>;
--		clocks = <&coreclk 0>;
--
--		fpga_mgr_spi: fpga-mgr@0 {
--			compatible = "xlnx,fpga-slave-serial";
--			spi-max-frequency = <60000000>;
--			spi-cpha;
--			reg = <0>;
--			prog_b-gpios = <&gpio0 29 GPIO_ACTIVE_LOW>;
--			init-b-gpios = <&gpio0 28 GPIO_ACTIVE_LOW>;
--			done-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml b/Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
-new file mode 100644
-index 000000000000..614d86ad825f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/xlnx,fpga-slave-serial.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Xilinx Slave Serial SPI FPGA
-+
-+maintainers:
-+  - Nava kishore Manne <nava.kishore.manne@amd.com>
-+
-+description: |
-+  Xilinx Spartan-6 and 7 Series FPGAs support a method of loading the bitstream
-+  over what is referred to as slave serial interface.The slave serial link is
-+  not technically SPI, and might require extra circuits in order to play nicely
-+  with other SPI slaves on the same bus.
-+
-+  Datasheets:
-+    https://www.xilinx.com/support/documentation/user_guides/ug380.pdf
-+    https://www.xilinx.com/support/documentation/user_guides/ug470_7Series_Config.pdf
-+    https://www.xilinx.com/support/documentation/application_notes/xapp583-fpga-configuration.pdf
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - xlnx,fpga-slave-serial
-+
-+  spi-cpha: true
-+
-+  spi-max-frequency:
-+    maximum: 60000000
-+
-+  reg:
-+    maxItems: 1
-+
-+  prog_b-gpios:
-+    description:
-+      config pin (referred to as PROGRAM_B in the manual)
-+    maxItems: 1
-+
-+  done-gpios:
-+    description:
-+      config status pin (referred to as DONE in the manual)
-+    maxItems: 1
-+
-+  init-b-gpios:
-+    description:
-+      initialization status and configuration error pin
-+      (referred to as INIT_B in the manual)
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - prog_b-gpios
-+  - done-gpios
-+  - init-b-gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    spi {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      fpga_mgr_spi: fpga-mgr@0 {
-+        compatible = "xlnx,fpga-slave-serial";
-+        spi-max-frequency = <60000000>;
-+        spi-cpha;
-+        reg = <0>;
-+        prog_b-gpios = <&gpio0 29 GPIO_ACTIVE_LOW>;
-+        init-b-gpios = <&gpio0 28 GPIO_ACTIVE_LOW>;
-+        done-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
-+      };
-+    };
-+...
--- 
-2.25.1
+The is the cover letter which shows a usage example:
+https://lore.kernel.org/lkml/20220421212204.36052-1-russell.h.weight@intel.com/
+
+And this is a pointer to the latest documentation for it:
+https://docs.kernel.org/driver-api/firmware/fw_upload.html
+
+The only current user is: drivers/fpga/intel-m10-bmc-sec-update.c
+
+- Russ
+
+>
+> Cheers,
+> Conor.
+>
 
