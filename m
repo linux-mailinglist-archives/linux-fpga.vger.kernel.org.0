@@ -2,85 +2,157 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87D96AF920
-	for <lists+linux-fpga@lfdr.de>; Tue,  7 Mar 2023 23:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2186AFD71
+	for <lists+linux-fpga@lfdr.de>; Wed,  8 Mar 2023 04:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbjCGWmh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 7 Mar 2023 17:42:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S229670AbjCHDcX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 7 Mar 2023 22:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbjCGWmD (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 7 Mar 2023 17:42:03 -0500
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC33A21A9;
-        Tue,  7 Mar 2023 14:41:24 -0800 (PST)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1763e201bb4so16901597fac.1;
-        Tue, 07 Mar 2023 14:41:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678228877;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SdL/R02qmyzFiSBcSjVn/CMgNSN3krQ7Vn67jKjzdW0=;
-        b=PoWCFtj/I6vQziL3U8sD8ZNl8qCBnOE/4erOTBYtuS4OvhjJ4wfj4BkpUyqWYHfQZR
-         i6iAhZ1MGwnUx3YGGa4OYsiG0LFzN9w28VhlJxxu11lKs6FsQ4VXhl2FUmvHC/M97XfO
-         lsHQyTBTNRDRldiUarLUaD967Q3tqch1Vma5Qsixr5z9G+XyhNUpy/sq1+Q12NhCdD7l
-         zuYsBcd/7lqqYYKb6XzWBpQAM6YYXh6la6ADie5ti3lbksfLMJ7IbzgqHQ6LsHtMdLPT
-         sPjXBlN09h7jfzLC02H1J7g4TmxRjP+L0TxThWpQ2akQa5Yb26FbRjJrm2T52s778OdD
-         iqXA==
-X-Gm-Message-State: AO0yUKV+IvhG/kndF46fODi2R/+GJlVlZlgVW06lgkcPt6LaWknUTlT8
-        AXzhhT4SuL+7MzYQPSV00s+0rL62c9dj
-X-Google-Smtp-Source: AK7set8tUxbhN3A3pCUrkwop9UL6fMQuERje7A26njTW++SNyE/+tZM8yIR+tNqcnjaZ6E8Vdx9xfQ==
-X-Received: by 2002:a05:6870:5486:b0:176:5258:51ba with SMTP id f6-20020a056870548600b00176525851bamr11425417oan.51.1678228877585;
-        Tue, 07 Mar 2023 14:41:17 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id dx4-20020a056870768400b0017255c79736sm5530198oab.43.2023.03.07.14.41.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 14:41:17 -0800 (PST)
-Received: (nullmailer pid 281021 invoked by uid 1000);
-        Tue, 07 Mar 2023 22:41:16 -0000
-Date:   Tue, 7 Mar 2023 16:41:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     yilun.xu@intel.com, robh+dt@kernel.org, mdf@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, michal.simek@xilinx.com,
-        hao.wu@intel.com, linux-arm-kernel@lists.infradead.org,
-        trix@redhat.com, devicetree@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: fpga: xilinx-spi: convert bindings to
- json-schema
-Message-ID: <167822887485.280954.7540905992697547856.robh@kernel.org>
-References: <20230227110213.291225-1-nava.kishore.manne@amd.com>
+        with ESMTP id S229544AbjCHDcW (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 7 Mar 2023 22:32:22 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015CA5B5D5;
+        Tue,  7 Mar 2023 19:32:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678246340; x=1709782340;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jBsAnFm+Ma7M1DI6zr3HskpDarLdNlJ+SxBINm9NwgE=;
+  b=gOHzbSipsvIRrmAJUrJtjk53RWtyPG6P5GM8lhq/tkhx23zRPkEYa6Dy
+   5ENIuJ645C9YXMxl44fWT+00FfDJeZfGZ7iCqV63TYCn+6q4m6Gfp9pGE
+   SL1eI7LKE/Eyz3DVVTTM1oAqTe7XUxPtDXqge4ESRp0d7Uf1AqDfuCtMH
+   5mu1zW/nMsrrFBDKVS4nu7MYi33YVbCmGingbZc0kV8MP/OGDX388KawM
+   bn/iTtuTAljJAYL4gqsZARKZGwPzPFdicJ7AI2pX8TPnRfgfxKlO4+Wkc
+   ewcY3AXOZFwU8uJiNM83Z7ViM1qc7Ht+c0F6UFF2WkQHaqoXzNUSvFB8W
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="363680825"
+X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
+   d="scan'208";a="363680825"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 19:32:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="626762760"
+X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
+   d="scan'208";a="626762760"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga003.jf.intel.com with ESMTP; 07 Mar 2023 19:32:18 -0800
+Date:   Wed, 8 Mar 2023 11:21:06 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH] fpga: dfl-pci: Drop redundant
+ pci_enable_pcie_error_reporting()
+Message-ID: <ZAf/Isgkh6GoApp4@yilunxu-OptiPlex-7050>
+References: <20230307201937.880084-1-helgaas@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230227110213.291225-1-nava.kishore.manne@amd.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230307201937.880084-1-helgaas@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-
-On Mon, 27 Feb 2023 16:32:13 +0530, Nava kishore Manne wrote:
-> Convert xilinx-spi bindings to DT schema format using json-schema.
+On 2023-03-07 at 14:19:37 -0600, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> pci_enable_pcie_error_reporting() enables the device to send ERR_*
+> Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is
+> native"), the PCI core does this for all devices during enumeration, so the
+> driver doesn't need to do it itself.
+> 
+> Remove the redundant pci_enable_pcie_error_reporting() call from the
+> driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
+> from the driver .remove() path.
+> 
+> Note that this only controls ERR_* Messages from the device.  An ERR_*
+> Message may cause the Root Port to generate an interrupt, depending on the
+> AER Root Error Command register managed by the AER service driver.
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+
+I see f26e58bf6f54 in v6.2, so I think it's OK to apply to for-6.3
+
+Thanks,
+Yilun
+
 > ---
-> Changes for v2:
->               - Removed 'fpga-region.txt' relevant info from the description
->                 and addressed some minor comments as suggested by Krzysztof.
+>  drivers/fpga/dfl-pci.c | 20 ++++++--------------
+>  1 file changed, 6 insertions(+), 14 deletions(-)
 > 
->  .../bindings/fpga/xilinx-slave-serial.txt     | 51 ------------
->  .../bindings/fpga/xlnx,fpga-slave-serial.yaml | 80 +++++++++++++++++++
->  2 files changed, 80 insertions(+), 51 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/fpga/xilinx-slave-serial.txt
->  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
+> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> index 0914e7328b1a..1bc04378118c 100644
+> --- a/drivers/fpga/dfl-pci.c
+> +++ b/drivers/fpga/dfl-pci.c
+> @@ -21,7 +21,6 @@
+>  #include <linux/module.h>
+>  #include <linux/stddef.h>
+>  #include <linux/errno.h>
+> -#include <linux/aer.h>
+>  
+>  #include "dfl.h"
+>  
+> @@ -376,10 +375,6 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
+>  		return ret;
+>  	}
+>  
+> -	ret = pci_enable_pcie_error_reporting(pcidev);
+> -	if (ret && ret != -EINVAL)
+> -		dev_info(&pcidev->dev, "PCIE AER unavailable %d.\n", ret);
+> -
+>  	pci_set_master(pcidev);
+>  
+>  	ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(64));
+> @@ -387,24 +382,22 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
+>  		ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(32));
+>  	if (ret) {
+>  		dev_err(&pcidev->dev, "No suitable DMA support available.\n");
+> -		goto disable_error_report_exit;
+> +		return ret;
+>  	}
+>  
+>  	ret = cci_init_drvdata(pcidev);
+>  	if (ret) {
+>  		dev_err(&pcidev->dev, "Fail to init drvdata %d.\n", ret);
+> -		goto disable_error_report_exit;
+> +		return ret;
+>  	}
+>  
+>  	ret = cci_enumerate_feature_devs(pcidev);
+> -	if (!ret)
+> +	if (ret) {
+> +		dev_err(&pcidev->dev, "enumeration failure %d.\n", ret);
+>  		return ret;
+> +	}
+>  
+> -	dev_err(&pcidev->dev, "enumeration failure %d.\n", ret);
+> -
+> -disable_error_report_exit:
+> -	pci_disable_pcie_error_reporting(pcidev);
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  static int cci_pci_sriov_configure(struct pci_dev *pcidev, int num_vfs)
+> @@ -448,7 +441,6 @@ static void cci_pci_remove(struct pci_dev *pcidev)
+>  		cci_pci_sriov_configure(pcidev, 0);
+>  
+>  	cci_remove_feature_devs(pcidev);
+> -	pci_disable_pcie_error_reporting(pcidev);
+>  }
+>  
+>  static struct pci_driver cci_pci_driver = {
+> -- 
+> 2.25.1
 > 
-
-Applied, thanks!
-
