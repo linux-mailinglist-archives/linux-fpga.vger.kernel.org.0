@@ -2,69 +2,76 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE246B9FFA
-	for <lists+linux-fpga@lfdr.de>; Tue, 14 Mar 2023 20:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E62A6BA056
+	for <lists+linux-fpga@lfdr.de>; Tue, 14 Mar 2023 21:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjCNTqx (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 14 Mar 2023 15:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        id S230264AbjCNUBK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 14 Mar 2023 16:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjCNTqw (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 14 Mar 2023 15:46:52 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE2033477;
-        Tue, 14 Mar 2023 12:46:51 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id y189so5406921pgb.10;
-        Tue, 14 Mar 2023 12:46:51 -0700 (PDT)
+        with ESMTP id S230235AbjCNUBJ (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 14 Mar 2023 16:01:09 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A80D93E9;
+        Tue, 14 Mar 2023 13:01:08 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so16338836pjp.2;
+        Tue, 14 Mar 2023 13:01:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678823211;
+        d=gmail.com; s=20210112; t=1678824068;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iURV2AOyYGau4vP4rS069VdtxAgygFv9QiO+hFuMu9o=;
-        b=CWZRoul+rm/KlKBeiBCF9ukeErpi6C8pRVO9lJ9WxtNipbSCFEdK3q9BWnV/HGPoXR
-         E66JB372oOXoRQZzd8+TUw1uEdHrskrXveWqAHz/gscMtuNGIPy+BPzvPEgtriKK1G43
-         4SKYpXGvmPhhi3pcbl5UtXSBXh9hQ1sijk819TjZTu8FZ5+9O8KXJ37CDQ4tUYjCSYYb
-         CORdwmCbxM6SXsw9PJvHfomRJZFZdneccC1H7CH66TWZgO3aJSCm/XAIq3aLiTO7pkdM
-         DBx+8vY4uXmykwVq/XBrfngDoG6CDRLvDMpwA4mMoi/9a0uNbAHcmIt1pWse51h+chVh
-         eegA==
+        bh=jM1ID9LcDqIM45H8MEzh+CBxaYNRYYgq6IYrxeICah4=;
+        b=WnDrncbZghPhaqYD0V+AWUUzLbi28wJ50KTDsV5emYahZ8TVw+BxLl3zdDEhTvk2Ob
+         2Yhy5f4ClB6sYbP+W8IWVscRT8aLQG+TTjSS5UCR1TYqvnB4msBQX4zSlv7xTGLTy05Q
+         xjt+hAxnHmR0Pc+Mw8XnJEykUbqutb6VyRxXUvNFNdQUdU0g7f3SsXL1y0FMLN+XhTQC
+         +QHs2FBIoaH1gUFudcGjEPE0N/m6dVHqmQyA88byNQt4+poeGS8/KoCboaCyupK4nxxt
+         Pso3mcn5WFhtN8dc8rSGbWORj+oOQWoYUHcoFV0S6HZw/b4fcs7YnAd/B1KCr1CZvukP
+         L8iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678823211;
+        d=1e100.net; s=20210112; t=1678824068;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iURV2AOyYGau4vP4rS069VdtxAgygFv9QiO+hFuMu9o=;
-        b=nrBCeGSi4xhU79oLr1OqIpkf72lRSGRzl9z3uWQ2r1ChXPK1FLJje1XsS9z1YRPECT
-         ycinmbNpQ75papolN46oPOhvzaqjVX6Xp1xUP/ww0RZXwZz98aeiE2Tu3G3f/GjSLM+U
-         sOiuDXCaDEPbR17zWlNZa+qlswAEDIJL9Ugl8CaEq7i4S+SWlL5DJ3iHKTfGBzGiJVCJ
-         aedLTV9l/p8UG2vTCfJ9vtLV4WCGK2c7tcAfYNxlBnqSD1IfcypGxU7bTwQvzj3slDok
-         ENqxy5tg9b1W87YUlq/l69iid5nUTKWJiNt6YuTF4wg2vPV/VlGHsq/kAgONjBESOQZC
-         On2g==
-X-Gm-Message-State: AO0yUKVdzTeIGNBLukHxN8tQdHHftzGbwaMmyDcSBT2zJuy0HQlqhdoN
-        +a1gebp+Gq7vkGV6jXpeQZqluuGp28M=
-X-Google-Smtp-Source: AK7set+aqzG2i1Mz9f/pyM3Auc6uWtxMo6D+kT+V68fKNiMX0xMNgCPrp6Gv4tN6uxZDzlUDPIK8lQ==
-X-Received: by 2002:aa7:8591:0:b0:625:6439:657a with SMTP id w17-20020aa78591000000b006256439657amr3047109pfn.0.1678823211127;
-        Tue, 14 Mar 2023 12:46:51 -0700 (PDT)
+        bh=jM1ID9LcDqIM45H8MEzh+CBxaYNRYYgq6IYrxeICah4=;
+        b=Spw9gPgCp1t2qDM7ks6tmN853c2sk9BYeWcWza8BsLflaeF0A3yCEaZKrhK+ZcGtyS
+         LFYlC8XaxNOaBiewF4QNPAeRjToRmj2b4rRs2UTZefcGWAnvIMxqJKm+ZoQElDpReOKt
+         JXmZlq2xSSzcEmI3O/JvBbUaZsOtTjGC2JzsNrXY/ncYVcYhLv6DA/z97Wino4zmN0YJ
+         ENLSS1hxyI35RzQ63ceTd7dk/weiJFKnmsaqm3lCyFnYRr7X0Bkhh9JN6lx/sYJd7jRf
+         Q1dyb352v0RoCDcMGI1p5JDCJ2KGkkWAwemMl4zMbFV0xdbPyCs5RzAmf/oapCJLMcLt
+         c+xg==
+X-Gm-Message-State: AO0yUKUeHLrHoLZAyg5IbiippGEll2AovB0cxpgAnvmM6MQ4SqVygpLK
+        Im6iE+4X7BN7+Mu40usGZ0p3KPfxQ58=
+X-Google-Smtp-Source: AK7set+8GqSO+eC4lQUSdYK4LG83zTFGuJfnLoetBgVyNvZEQwgfBtsjGPEoSQj+PoPcKQbq8607Hg==
+X-Received: by 2002:a17:90a:355:b0:23d:4030:d11 with SMTP id 21-20020a17090a035500b0023d40300d11mr1104061pjf.1.1678824067948;
+        Tue, 14 Mar 2023 13:01:07 -0700 (PDT)
 Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id w11-20020a65534b000000b00502f1256674sm1954812pgr.41.2023.03.14.12.46.49
+        by smtp.gmail.com with ESMTPSA id z4-20020a63e544000000b004fbb4a55b64sm1949652pgj.86.2023.03.14.13.01.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 12:46:50 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 12:46:48 -0700
+        Tue, 14 Mar 2023 13:01:07 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 13:01:05 -0700
 From:   Richard Cochran <richardcochran@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Tianfei Zhang <tianfei.zhang@intel.com>, netdev@vger.kernel.org,
-        linux-fpga@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
-        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, vinicius.gomes@intel.com,
-        Raghavendra Khadatare <raghavendrax.anand.khadatare@intel.com>
+To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "Weight, Russell H" <russell.h.weight@intel.com>,
+        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "Gomes, Vinicius" <vinicius.gomes@intel.com>,
+        "Khadatare, RaghavendraX Anand" 
+        <raghavendrax.anand.khadatare@intel.com>
 Subject: Re: [PATCH v1] ptp: add ToD device driver for Intel FPGA cards
-Message-ID: <ZBDPKA7968sWd0+P@hoboy.vegasvil.org>
+Message-ID: <ZBDSgVFNVqCWkbxR@hoboy.vegasvil.org>
 References: <20230313030239.886816-1-tianfei.zhang@intel.com>
  <ZA9wUe33pMkhMu0e@hoboy.vegasvil.org>
- <ZBBQpwGhXK/YYGCB@smile.fi.intel.com>
+ <BN9PR11MB5483E675D4FA5B37B2A86F76E3BE9@BN9PR11MB5483.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBBQpwGhXK/YYGCB@smile.fi.intel.com>
+In-Reply-To: <BN9PR11MB5483E675D4FA5B37B2A86F76E3BE9@BN9PR11MB5483.namprd11.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,18 +82,15 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 12:47:03PM +0200, Andy Shevchenko wrote:
-> The semantics of the above is similar to gpiod_get_optional() and since NULL
-> is a valid return in such cases, the PTP has to handle this transparently to
-> the user. Otherwise it's badly designed API which has to be fixed.
+On Tue, Mar 14, 2023 at 07:16:28AM +0000, Zhang, Tianfei wrote:
 
-Does it now?  Whatever.
+> > Need to handle NULL as well...
+> 
+> It looks like that it doesn't need check NULL for ptp_clock_register(), it handle the NULL case internally and return ERR_PTR(-ENOMEM).
 
-> TL;DR: If I'm mistaken, I would like to know why.
+You aren't looking in the right place.
 
-git log.  git blame.
-
-Get to know the tools of trade.
+Go back and READ the KernelDoc that I posted and you cut from your reply.
 
 Thanks,
 Richard
