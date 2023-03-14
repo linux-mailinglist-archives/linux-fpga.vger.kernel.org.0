@@ -2,224 +2,156 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0706B8BCF
-	for <lists+linux-fpga@lfdr.de>; Tue, 14 Mar 2023 08:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C516B8EF3
+	for <lists+linux-fpga@lfdr.de>; Tue, 14 Mar 2023 10:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjCNHQf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 14 Mar 2023 03:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S229864AbjCNJmg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 14 Mar 2023 05:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjCNHQe (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 14 Mar 2023 03:16:34 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F0918B0D;
-        Tue, 14 Mar 2023 00:16:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678778193; x=1710314193;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=kffmGS3kwBU8NyFmhEeZ800VaFy//yxpWZAO/jTuLx0=;
-  b=KNUEIBkSGqGN3FA6GUOzvykIrsInn0wiAC5aksZ2Ge85i6YE3676LeQh
-   0uKK0bD/xU5S9uGwIWN2LW0rC8k0mlGTkVGYgXtGyZ1RVsC8J8jjq4OqK
-   iX0D5R+Mzke5/MSIztvlJHwE3sBJB6mxxXRkIl4w5KMIWzmjnObsp1kSg
-   jaHI2Q7WkdFJZxDyGhdVHr4DpQY4i5T8WYcD7fXwbOMbvLjbp4PDkWzhq
-   pNw56BynGUJ2/maS8bbjXHPGQi6OkpB3HKVJQqGk5KLCwpvIW7z5aPW2U
-   f+/MD6HfEpKKtKI5p/KjSFItGN/nSOPRy379EnGurVk9CbTdgGxgJ8aOQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="317737843"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="317737843"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 00:16:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="678991848"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="678991848"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga002.jf.intel.com with ESMTP; 14 Mar 2023 00:16:31 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 14 Mar 2023 00:16:31 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 14 Mar 2023 00:16:30 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 14 Mar 2023 00:16:30 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.105)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 14 Mar 2023 00:16:30 -0700
+        with ESMTP id S230474AbjCNJmc (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 14 Mar 2023 05:42:32 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78EF93E25;
+        Tue, 14 Mar 2023 02:42:27 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q0SFHq92DM7MWNT4xtZ7VOGUw8zrLWWrcmcXg6j7L4z39EoI6yFsq5G8fKwGHKRTsSAHr9IMjla1frbbk//3VRZj6DIhVTKP82pJwh84+rzAZf8K/sPT4E/MuTdDbg3qsP/vdmNbogJ51DDV5fiYnLA3NsS5pxPvSHPgB179NcDehDXDqoiLpf2Ql9g4A+XznvaERdzXwUSNY1zE8yV5vh2yWmvTRbl91wlC5z0l+K2RdeMr0NMt7zGDTHuG1JaQYXv1M1mDdb0hkHpsqei5Gtio2uAmIZtFdwTA7O8lrNaeB+tE5Z3I8jTCfZ7GwWs7+z66l8g0ZPo92O8gxCbDBg==
+ b=DD5Gm3lwLnBFaIDxlzdnvg/DX80wEnCQujuyr1jpCE3kBUiShMsnIboO1Zsm0JlxCYu3K7636rLJu5X63NwFx40XPMy95tzsayq/dw2FLVyOnw/+s3KMSq/4fX6ZOqjwwb6xxErAx7O5qsCxI429ZYh2fbOlOldWZmW5qLhU/kaNW3C4z3dFPc8rLPaSxwVW5jb/S2LlzqIcignkzXJ+3oTo+2NUjE3t0l4Nlj6ATYzh8kN0YFuHGYKohk1frgkWuOKZrLd0M3mh4X7mbzZRT8HGEmPWflVW0j4WZOxKWSMQm5wnv1gOqTxKVvrIsEHICDv5HE9JPg6AbppLxQ4u6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=baXfaK/mps7kKUNxhsonY9Y3BQE2rcuxXEBMdsfAk34=;
- b=YzcARy2MxoawiQFP8rqnfU3GuCJ5ZIlGj+oruvXj6/ZTb67u4PD3Fq78Pv7dq5fq+yQaEH/Yh934NWJzDkkIatVQ75r8UKTqv4fu28X9JPZUL1t+ZG5by66L3rKrpIu9yGXvlVkU/3Zq5rCNR8QHx+NiS8mfzgcrTSBdGRVxy4Of2GBug01H5dD973N5+MxLeb4xWukpOX2+1c+EDcKVNDA/Hp9Yop3dKN8GXw77Vot8UM4p/NmX5Q/8zUECmyXA/Ltqcd0yIMW5lWcIdD5cIUSsDW0xlGbJspTdNZjPRL5ZZ4tPcWIhjP6AUjusmQvvtFG3wfyApshVtBLim9e4Rw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
- by DS0PR11MB8072.namprd11.prod.outlook.com (2603:10b6:8:12f::12) with
+ bh=/Z69c7WM4rC1yEaAa+JumfL+MFI2E1NVoMA+og4oSWk=;
+ b=MKw9RsE/CO0P+t6M4K7bqNu21bHXrpSP2xD5PKchirgBSBmn6xyTjzy8VLbzxmHKsSoof+ff7v3BxE5kf0QJnKGUrMZdzPlUfebxpZ2q3oTUo+Mw7C4syGI84DUwa4Sy92T8ZAntA4fwXT8wHVYS0wboW4iB7FHFDDY6qbMHvC1JbOWzs6GBzeusQ5Ij1O1HG77EStmFuFv2ICU+zOwG1SRpEoII53uz97BrJPoaW2mwYdi3J5M4IQ9mAzj1Xq+iX2OtlGjqq73iN6nTTZNvcYOIlbSd4S2PKthTxj9ZMdGbTy2+vEHpSX67XsyGDzKRkpsnLmvQkS6xm1jlas2bvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/Z69c7WM4rC1yEaAa+JumfL+MFI2E1NVoMA+og4oSWk=;
+ b=I/rwCIrRjApZjo4KuLbXhdXNQ81ed6+aOW55iszcY1cEXlXHnsm/ARAFZPh/gLCPa2Kz/LlowllAJvVCQNeGctBQe7ow2DzEIN5qQKuND4SPqhbEf93MIFgduX0EVhe5XDBwSQHHF/jzqZP2+Reqsty5ioMA+EdGYKTGync74Tg=
+Received: from DM6PR08CA0056.namprd08.prod.outlook.com (2603:10b6:5:1e0::30)
+ by CY8PR12MB8196.namprd12.prod.outlook.com (2603:10b6:930:78::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
- 2023 07:16:29 +0000
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::af70:de56:4a6f:b2cc]) by BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::af70:de56:4a6f:b2cc%8]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
- 07:16:28 +0000
-From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
-To:     Richard Cochran <richardcochran@gmail.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "Weight, Russell H" <russell.h.weight@intel.com>,
-        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "Gomes, Vinicius" <vinicius.gomes@intel.com>,
-        "Khadatare, RaghavendraX Anand" 
-        <raghavendrax.anand.khadatare@intel.com>
-Subject: RE: [PATCH v1] ptp: add ToD device driver for Intel FPGA cards
-Thread-Topic: [PATCH v1] ptp: add ToD device driver for Intel FPGA cards
-Thread-Index: AQHZVVb9Plq7k2o7S0K9BdoAv1tvk675DoOAgADPMsA=
-Date:   Tue, 14 Mar 2023 07:16:28 +0000
-Message-ID: <BN9PR11MB5483E675D4FA5B37B2A86F76E3BE9@BN9PR11MB5483.namprd11.prod.outlook.com>
-References: <20230313030239.886816-1-tianfei.zhang@intel.com>
- <ZA9wUe33pMkhMu0e@hoboy.vegasvil.org>
-In-Reply-To: <ZA9wUe33pMkhMu0e@hoboy.vegasvil.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5483:EE_|DS0PR11MB8072:EE_
-x-ms-office365-filtering-correlation-id: adb4401a-2e36-4f07-a4f0-08db245c07c3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HyCfgjmB/fDzkcFS2Kk59CF99pHI3gpTZOpGHBWVVD767eNp0GYQl0RRNwgh44Jp+O6QAeV9DfZmFNHI7i7GMga5pBOIt0B98ofiRLsjMKJCwtmKdr0QggTEmr7oemgB79zoGCghYpw6Q3DIaEILrU0C1vd0BbXpA9XRB4vjPeS41lhAhBSHoZwo/wYt+sAfjDDePavF7FY62kQSy1ztdeRJDWhiDpfD0q+o9ytb5lREXnVaZ9jG33FZ1/Dylhc7Z/zzPAI4V5sLEmSrHraAYxsJ4HDm8KOoN3uYg3YIZCAP0C5Cjzh5B/9ayRkFz0UaDXte0LgsyJ4HCVeaH7r8STUeIwpukWcpPWERDER0QrmQIoBedXemo8MYnt4fA5bbg78Fpu6PUL27i7Iie9mA5Ttd0E9Ye1sjgR7aDU6a/CmtUGK3Lln3wGHmhIYF2olV2OhEPH6rp2tnChRBM0aLB33jv7BjbPbEb65T7asX75MxckxGhZz/Rawek72cpHYKke6yj9abynLJ1aoXikS+/p14S++5M+i3pEU+57HAphsdG587iw0sinf4g2wWV7Rjnxqh7K5F/syr9rrM2iPWMshkhDE/HdjFkCsNNl1EaFr0pDGyTJPVRmfIfLELPCdEjPj7BtIcmsNVpYtvqn4UxRG0Mihx2NNe7Vh4YbTlefda5iPoQ0KU+8eK/MByLbB5VU5a3AnJHAtkyKQaTbRztA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(136003)(376002)(346002)(396003)(451199018)(86362001)(186003)(9686003)(33656002)(38070700005)(53546011)(6506007)(38100700002)(71200400001)(2906002)(122000001)(82960400001)(7696005)(5660300002)(8676002)(41300700001)(55016003)(478600001)(52536014)(83380400001)(316002)(8936002)(4326008)(6916009)(66556008)(76116006)(66476007)(64756008)(66446008)(54906003)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TT1damXJNzTondMj5i5le9Vf//xzo04MmDwqFFgWxHEhWl9G9mAyishdPgLx?=
- =?us-ascii?Q?Jl43GWB7ipK4D17Ngv3oKNunUb+cZ22CUnzayGDkft9PUk/ekdOb1uULpOuC?=
- =?us-ascii?Q?g1xHa0c594xlYMuG63FvJ3ZapBO4VRmnJd6g9CaRtx/VKxSduaj3uFw7M3HX?=
- =?us-ascii?Q?kPTxTekayLzkYqUvT2zQUhENJlfkj0rE3IJSmtAK1YvyUxIrBg7fBwQDsGBT?=
- =?us-ascii?Q?bHAuuNteO7tTBhLst7uvwXfk+XHOmbAJkzWBraPF79jHx8syUw09s9Cccfj9?=
- =?us-ascii?Q?GIWaeAjo/vS+lhlCX3QA3QBWGIJRxY944+e0d6TO+37DoUizEb0DTb7lUTQF?=
- =?us-ascii?Q?17+Ti4ATRwGtGSlJ3bKB5n3jWAI+TUZhF65z8qvAxfHDjQ97YNELatMP1Jtb?=
- =?us-ascii?Q?HrXOfzUVkN6+xNh7ItoTWE9f0L5z2FKXAgxjukf2raIw55gyrcEs2VTKWhKG?=
- =?us-ascii?Q?z1tY9kXPPK59qUWzPX3k+z6ZbnsX3QB3e1tB1ZLCwHexz8Et87vnu7egC+8K?=
- =?us-ascii?Q?SxatPcIS5lTcEuGfXxqsO8lKbmqkzNIjlZhtKCbVhx2eHoSZgLpJ52eOq3Wk?=
- =?us-ascii?Q?1YWH14/DmsBen4r+g1vivcXf8Uv9GccI1jxWOPFazX5a+nFuy02XcNMEFAS3?=
- =?us-ascii?Q?KW2F+/LGLXry0odkq0LqE6z98jQsKb5WyLFdnMLcjaDq4HJ6blwAAhPUrZ5i?=
- =?us-ascii?Q?aWKII0+gdLhRFaNj+2wVTIKuTSSplG9RKuCTNQbwnyJiM4OhDeFA83Ap9mka?=
- =?us-ascii?Q?OeIrDjGE8vub1nS9kVUSPzj+EeTk82Mnf6VlcmBK1nt1NoggS9Sf5quS8Lxo?=
- =?us-ascii?Q?w8iwjAF5QhHVI3YerCvV3+2dyR+U14KzvK+jDbutCXxmLvvgBscING/7Gw+C?=
- =?us-ascii?Q?1KD85m4VlbG8C4LgmhHfZ/nVWSdFv6WB61rC+mqNFyMNe+eeZgXrRb3FTbEb?=
- =?us-ascii?Q?iIk+sCks1N5/vsyVy6oe7GMmGFYAoiN83+vSICTxMJ0qpCpkNscx+JOZqp2k?=
- =?us-ascii?Q?Up7kRwk1DKZEPzaFglS3BGSok7XSRu5jGViMOKQTbnkvENElGSoJaxfM4I27?=
- =?us-ascii?Q?wo7QN5Ou2vY5rDyLqqYFVIntmpcLIv4ZZhoAB3G0LyzIsAMEM8yoqN2d9Z+7?=
- =?us-ascii?Q?NHRq80l59UO6vMC/OCcCATjLHF8/tFXnxn+z73PNulpqur9g+Qtp3VE/TRxA?=
- =?us-ascii?Q?lj+RfJFe+VVBRhRT+2cgY1zJOGYbz0pS7NB6Hz56UwDylljuyycMcpnqwEVW?=
- =?us-ascii?Q?/ePnrCrNgplFVZ8N8Z/YqKQhaPQRyFv5HgRhDGvzr+t6wJtXpT4SGQtp90sA?=
- =?us-ascii?Q?Zy93rUrqirgPz1IYWwp7i475TvLSWsX0wM+jz2xgZCKtXEZd5HV7dH+woEzu?=
- =?us-ascii?Q?4gBTU6mP2q24Pe3C5F6zpB1ikY3qbH+Z6FXWgDkt5S0sBP5HsRW2bQmsFcH1?=
- =?us-ascii?Q?vksPxy+xukyw2RQhrgg2SzXYLDsN+QXqvxHIUiO0Hub5VlTRV/oK8KBDaNdA?=
- =?us-ascii?Q?lp20tlIZa4bSlNQv0vMloHSBw7MTc5/0xRaQbaZp0Oqkdw+P9ksOBD6sSpgT?=
- =?us-ascii?Q?jdeCEue9P2xALHtFKvBSXA5vNnB4lhc+GQLi97jeESW9p5UQ+sn7oKSf+J2B?=
- =?us-ascii?Q?BGV/1exaec6Ppw25bkHkAuiO5e/RLIe57EwhA+xAdb6q?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ 2023 09:42:25 +0000
+Received: from DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1e0:cafe::f9) by DM6PR08CA0056.outlook.office365.com
+ (2603:10b6:5:1e0::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26 via Frontend
+ Transport; Tue, 14 Mar 2023 09:42:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT025.mail.protection.outlook.com (10.13.172.197) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6178.25 via Frontend Transport; Tue, 14 Mar 2023 09:42:25 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 14 Mar
+ 2023 04:42:24 -0500
+From:   Nava kishore Manne <nava.kishore.manne@amd.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <michal.simek@xilinx.com>,
+        <linux-fpga@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] fpga: zynqmp: Make word align the configuration data
+Date:   Tue, 14 Mar 2023 15:12:22 +0530
+Message-ID: <20230314094222.66916-1-nava.kishore.manne@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: adb4401a-2e36-4f07-a4f0-08db245c07c3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Mar 2023 07:16:28.8285
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT025:EE_|CY8PR12MB8196:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25c6848b-b32d-4f30-4be9-08db24706b1e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CaJ0CdzlhFLbMfG8hs2o/qEK3KfZac9/YLUPZX9FDBiI2d8IaWl7w51yeQi5mCbYqW44vjGhYP+sylkw7/v+jS3cTxkhJfqz4bYt4Gzw3TdZTbaujwE4A3ebUim7QiU2KMm3lsWyubmuIJGgxqAXPtwV5MoQx9WOp/RvzGyD0OaBPgSz76DfdcgTviIUJxbiapKtHONQq6YnVTSFHW50edhN2rk2y59lytJnd0fc7kU23ytu6PzI6Wqh5ZXgRdzk6uBwzmJGDGZxS+KjEJacilON11a1ttTjAzXMDSCTRRd3ouW/WhZuq/M0ezTTjVQLGAzZrt3GeyG1dIvtZLl6Hdndqle/R6mikrAmG4MOdm7nJZ9JcQ6PKfH7tysGybjXhKxRN8RRh0qclm4TCu7gfTQZPALK0g5ovMaPzSMg8wZyP1WsMh20vYtTkTOobACZptMz+RhG/NkVxggwCBaJhBh6i49cUKAYZUGayOsTFVqt3ZVfQ8NjYs8XeaGp7mmVjvQEmfRHn1gzV6pzhra1xzuAJ6IbpJJjC7j4qrgP+ZM1HuRxKwS5IHAwrn6i+LOl41kWBsVEMBgvEr4Sd9Y4PWl9Y4wkFhzlnoJEjENUSARquMQ2DV2/PtYwPU/UEXyYhnp0CFywsnoc0+IQut2f1CXrhN+XMw0siCXgDT99gK7HFCaOF+9yczXsL5aA/Og9wUFv4ea3lzvvNQHljEZtrlzJTL51BFLHAAoldWRnh2vFbRA5kNgmetSF3QfQW7g4
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(136003)(39860400002)(346002)(451199018)(36840700001)(46966006)(40470700004)(86362001)(356005)(36756003)(103116003)(36860700001)(82740400003)(81166007)(8936002)(2906002)(41300700001)(5660300002)(40480700001)(40460700003)(82310400005)(2616005)(16526019)(186003)(26005)(1076003)(83380400001)(426003)(336012)(47076005)(316002)(110136005)(8676002)(70586007)(70206006)(478600001)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 09:42:25.4360
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Tl6ln5ejnZjWY2qdikiZ8ZqPZAGt75PsQGRtyzkXeouOCSOCwDkcTYP2kgFIvhMJhVvlaagW28bAh86yGbWoPA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB8072
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25c6848b-b32d-4f30-4be9-08db24706b1e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8196
+X-Spam-Status: No, score=-0.6 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+To avoid unwanted copies at firmware(PMUFW) this patch provides a fix
+to align programmable logic(PL) configuration data if the data is not
+word-aligned. To align the configuration data this patch adds a few
+padding bytes and these additional padding bytes will not create any
+functional impact on the PL configuration.
 
+Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+---
+ drivers/fpga/zynqmp-fpga.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-> -----Original Message-----
-> From: Richard Cochran <richardcochran@gmail.com>
-> Sent: Tuesday, March 14, 2023 2:50 AM
-> To: Zhang, Tianfei <tianfei.zhang@intel.com>
-> Cc: netdev@vger.kernel.org; linux-fpga@vger.kernel.org;
-> ilpo.jarvinen@linux.intel.com; andriy.shevchenko@linux.intel.com; Weight,=
- Russell H
-> <russell.h.weight@intel.com>; matthew.gerlach@linux.intel.com; pierre-
-> louis.bossart@linux.intel.com; Gomes, Vinicius <vinicius.gomes@intel.com>=
-;
-> Khadatare, RaghavendraX Anand <raghavendrax.anand.khadatare@intel.com>
-> Subject: Re: [PATCH v1] ptp: add ToD device driver for Intel FPGA cards
->=20
-> On Sun, Mar 12, 2023 at 11:02:39PM -0400, Tianfei Zhang wrote:
->=20
->=20
-> > +static int dfl_tod_probe(struct dfl_device *ddev) {
-> > +	struct device *dev =3D &ddev->dev;
-> > +	struct dfl_tod *dt;
-> > +
-> > +	dt =3D devm_kzalloc(dev, sizeof(*dt), GFP_KERNEL);
-> > +	if (!dt)
-> > +		return -ENOMEM;
-> > +
-> > +	dt->tod_ctrl =3D devm_ioremap_resource(dev, &ddev->mmio_res);
-> > +	if (IS_ERR(dt->tod_ctrl))
-> > +		return PTR_ERR(dt->tod_ctrl);
-> > +
-> > +	dt->dev =3D dev;
-> > +	spin_lock_init(&dt->tod_lock);
-> > +	dev_set_drvdata(dev, dt);
-> > +
-> > +	dt->ptp_clock_ops =3D dfl_tod_clock_ops;
-> > +
-> > +	dt->ptp_clock =3D ptp_clock_register(&dt->ptp_clock_ops, dev);
-> > +	if (IS_ERR(dt->ptp_clock))
-> > +		return dev_err_probe(dt->dev, PTR_ERR(dt->ptp_clock),
-> > +				     "Unable to register PTP clock\n");
->=20
-> Need to handle NULL as well...
-
-It looks like that it doesn't need check NULL for ptp_clock_register(), it =
-handle the NULL case internally and return ERR_PTR(-ENOMEM).
-
-struct ptp_clock *ptp_clock_register()
-{
-             err =3D -ENOMEM;
-              ptp =3D kzalloc(sizeof(struct ptp_clock), GFP_KERNEL);
-	if (ptp =3D=3D NULL)
-		goto no_memory;
-
-              ...
-          =20
-            return ptp;
-
-no_memory:
-	return ERR_PTR(err);
-}
+diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
+index c60f20949c47..70a12dc6e15c 100644
+--- a/drivers/fpga/zynqmp-fpga.c
++++ b/drivers/fpga/zynqmp-fpga.c
+@@ -15,6 +15,9 @@
+ /* Constant Definitions */
+ #define IXR_FPGA_DONE_MASK	BIT(3)
+ 
++#define DUMMY_PAD_BYTE		0xFF
++#define FPGA_WORD_SIZE		4
++
+ /**
+  * struct zynqmp_fpga_priv - Private data structure
+  * @dev:	Device data structure
+@@ -41,18 +44,26 @@ static int zynqmp_fpga_ops_write(struct fpga_manager *mgr,
+ 				 const char *buf, size_t size)
+ {
+ 	struct zynqmp_fpga_priv *priv;
++	int word_align, ret, index;
+ 	dma_addr_t dma_addr;
+ 	u32 eemi_flags = 0;
+ 	char *kbuf;
+-	int ret;
+ 
+ 	priv = mgr->priv;
++	word_align = size % FPGA_WORD_SIZE;
++	if (word_align)
++		word_align = FPGA_WORD_SIZE - word_align;
++
++	size = size + word_align;
+ 
+ 	kbuf = dma_alloc_coherent(priv->dev, size, &dma_addr, GFP_KERNEL);
+ 	if (!kbuf)
+ 		return -ENOMEM;
+ 
+-	memcpy(kbuf, buf, size);
++	for (index = 0; index < word_align; index++)
++		kbuf[index] = DUMMY_PAD_BYTE;
++
++	memcpy(&kbuf[index], buf, size - index);
+ 
+ 	wmb(); /* ensure all writes are done before initiate FW call */
+ 
+-- 
+2.25.1
 
