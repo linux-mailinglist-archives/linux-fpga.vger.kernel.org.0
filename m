@@ -2,102 +2,97 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B242C6BB570
-	for <lists+linux-fpga@lfdr.de>; Wed, 15 Mar 2023 15:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0EC66BB66F
+	for <lists+linux-fpga@lfdr.de>; Wed, 15 Mar 2023 15:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232549AbjCOOAB (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 15 Mar 2023 10:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S232411AbjCOOph (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 15 Mar 2023 10:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbjCON77 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 15 Mar 2023 09:59:59 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E3483C0;
-        Wed, 15 Mar 2023 06:59:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678888790; x=1710424790;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rbIZoXywsCDn4QFmR1753mHwinQQuUjTjoialLrDo+E=;
-  b=BsZP/b0eO+FXgm/9YnerdKPlpdy+VK2NwsogbUiJfHOE56OATXuvX5ir
-   qPUDewkJlrtm/DIzpYkMp0QeLiu65X3YlXJaUgDxc3sEl/WH1B28XAWSr
-   JQQJXtKPkHGzU8d8PBE+dTf979kLfA/7lesZ5Z3oEHonnajU8YrxmDvh5
-   rACfd1oC68VuXn4HE2hK/mPw6vXc0+M3LTQ9W46ZPyaE7kfSUiWEQPggV
-   K7Om4js6Wci07DsXM/nuDPn1tTzAxAQOwzw1q8fKe3wyt4ycs07eJuQqX
-   o6BKJAet7PQJKs2p9I4p+zrGsnKEbyEFy212mREG1ypuQB3+c0maOs8z8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="365390009"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="365390009"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 06:59:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="709692220"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="709692220"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 15 Mar 2023 06:59:46 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pcRfM-003rBX-17;
-        Wed, 15 Mar 2023 15:59:44 +0200
-Date:   Wed, 15 Mar 2023 15:59:43 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Richard Cochran <richardcochran@gmail.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Nicolas Pitre <npitre@baylibre.com>
-Cc:     Tianfei Zhang <tianfei.zhang@intel.com>, netdev@vger.kernel.org,
-        linux-fpga@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
-        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
+        with ESMTP id S232428AbjCOOpe (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 15 Mar 2023 10:45:34 -0400
+X-Greylist: delayed 300 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 07:45:26 PDT
+Received: from pb-smtp21.pobox.com (pb-smtp21.pobox.com [173.228.157.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29167EA20;
+        Wed, 15 Mar 2023 07:45:26 -0700 (PDT)
+Received: from pb-smtp21.pobox.com (unknown [127.0.0.1])
+        by pb-smtp21.pobox.com (Postfix) with ESMTP id 384A91D921D;
+        Wed, 15 Mar 2023 10:38:06 -0400 (EDT)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
+        :to:cc:subject:in-reply-to:message-id:references:mime-version
+        :content-type; s=sasl; bh=8Ds3JLlU3ZJmZmiZUtD6R+cBbPOkpvU3DsMgfb
+        GlsxE=; b=STdy0djzpt9M+ifpcPtYKAY9lP0RddDLxgwwopGzN51qlZ91b6msJG
+        K+9atvhSo1ACXR6Xww21ywHUhq0HUCPzKlFNbH5dvhM6/b8Xl1IdE91GFN7UOfCL
+        t56gF2HUskyDJMOZf0ZfRs7c4CUnS1HGiqsuPz9pf9SaOZvQudnEc=
+Received: from pb-smtp21.sea.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp21.pobox.com (Postfix) with ESMTP id 30FE81D921C;
+        Wed, 15 Mar 2023 10:38:06 -0400 (EDT)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=8Ds3JLlU3ZJmZmiZUtD6R+cBbPOkpvU3DsMgfbGlsxE=; b=MXktN4i/RMHxvZz5Rv608tCPS5wznBuQh7QgEypXw1REwmwmVBmIfoO75kbtXX/P4SwZIVxmgEtKJWo8nd3ZpqCPqOElgfi15FI86Kn+AQ+q8gIwh0xvYP/0mER9GJTQ+5vzUjMezfDbveJOUsLcbYpQhpWve81esQZ0TIiNPZE=
+Received: from yoda.home (unknown [96.21.170.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp21.pobox.com (Postfix) with ESMTPSA id 03A0C1D9217;
+        Wed, 15 Mar 2023 10:38:01 -0400 (EDT)
+        (envelope-from nico@fluxnic.net)
+Received: from xanadu.home (xanadu [192.168.2.2])
+        by yoda.home (Postfix) with ESMTPSA id 766006B15AE;
+        Wed, 15 Mar 2023 10:37:58 -0400 (EDT)
+Date:   Wed, 15 Mar 2023 10:37:58 -0400 (EDT)
+From:   Nicolas Pitre <nico@fluxnic.net>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     Richard Cochran <richardcochran@gmail.com>,
+        Tianfei Zhang <tianfei.zhang@intel.com>,
+        netdev@vger.kernel.org, linux-fpga@vger.kernel.org,
+        ilpo.jarvinen@linux.intel.com, russell.h.weight@intel.com,
+        matthew.gerlach@linux.intel.com,
         pierre-louis.bossart@linux.intel.com, vinicius.gomes@intel.com,
         Raghavendra Khadatare <raghavendrax.anand.khadatare@intel.com>
 Subject: Re: [PATCH v1] ptp: add ToD device driver for Intel FPGA cards
-Message-ID: <ZBHPTz8yH57N1g8J@smile.fi.intel.com>
-References: <20230313030239.886816-1-tianfei.zhang@intel.com>
- <ZA9wUe33pMkhMu0e@hoboy.vegasvil.org>
- <ZBBQpwGhXK/YYGCB@smile.fi.intel.com>
- <ZBDPKA7968sWd0+P@hoboy.vegasvil.org>
+In-Reply-To: <ZBHPTz8yH57N1g8J@smile.fi.intel.com>
+Message-ID: <73rqs90r-nn9o-s981-9557-q70no2435176@syhkavp.arg>
+References: <20230313030239.886816-1-tianfei.zhang@intel.com> <ZA9wUe33pMkhMu0e@hoboy.vegasvil.org> <ZBBQpwGhXK/YYGCB@smile.fi.intel.com> <ZBDPKA7968sWd0+P@hoboy.vegasvil.org> <ZBHPTz8yH57N1g8J@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBDPKA7968sWd0+P@hoboy.vegasvil.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID: FC851F90-C33E-11ED-BF80-B31D44D1D7AA-78420484!pb-smtp21.pobox.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-+Cc: Nicolas
+On Wed, 15 Mar 2023, Andy Shevchenko wrote:
 
-On Tue, Mar 14, 2023 at 12:46:48PM -0700, Richard Cochran wrote:
-> On Tue, Mar 14, 2023 at 12:47:03PM +0200, Andy Shevchenko wrote:
-> > The semantics of the above is similar to gpiod_get_optional() and since NULL
-> > is a valid return in such cases, the PTP has to handle this transparently to
-> > the user. Otherwise it's badly designed API which has to be fixed.
+> +Cc: Nicolas
 > 
-> Does it now?  Whatever.
+> On Tue, Mar 14, 2023 at 12:46:48PM -0700, Richard Cochran wrote:
+> > On Tue, Mar 14, 2023 at 12:47:03PM +0200, Andy Shevchenko wrote:
+> > > The semantics of the above is similar to gpiod_get_optional() and since NULL
+> > > is a valid return in such cases, the PTP has to handle this transparently to
+> > > the user. Otherwise it's badly designed API which has to be fixed.
+> > 
+> > Does it now?  Whatever.
+> > 
+> > > TL;DR: If I'm mistaken, I would like to know why.
+> > 
+> > git log.  git blame.
+> > 
+> > Get to know the tools of trade.
 > 
-> > TL;DR: If I'm mistaken, I would like to know why.
+> So, the culprit seems the commit d1cbfd771ce8 ("ptp_clock: Allow for it
+> to be optional") which did it half way.
 > 
-> git log.  git blame.
+> Now I would like to know why the good idea got bad implementation.
 > 
-> Get to know the tools of trade.
+> Nicolas?
 
-So, the culprit seems the commit d1cbfd771ce8 ("ptp_clock: Allow for it
-to be optional") which did it half way.
-
-Now I would like to know why the good idea got bad implementation.
-
-Nicolas?
-
--- 
-With Best Regards,
-Andy Shevchenko
+I'd be happy to help but as presented I simply don't know what you're 
+talking about. Please give me more context.
 
 
+Nicolas
