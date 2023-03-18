@@ -2,131 +2,101 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C94A96BF942
-	for <lists+linux-fpga@lfdr.de>; Sat, 18 Mar 2023 11:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7306BF948
+	for <lists+linux-fpga@lfdr.de>; Sat, 18 Mar 2023 11:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjCRJ74 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 18 Mar 2023 05:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
+        id S229680AbjCRKKy (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 18 Mar 2023 06:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjCRJ7z (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 18 Mar 2023 05:59:55 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E431367E2;
-        Sat, 18 Mar 2023 02:59:54 -0700 (PDT)
+        with ESMTP id S229599AbjCRKKx (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 18 Mar 2023 06:10:53 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C567EF2;
+        Sat, 18 Mar 2023 03:10:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679133594; x=1710669594;
+  t=1679134244; x=1710670244;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rqzxt1VGupOEfYGONcYiToQW8wfRtVs/qcIF0suXze8=;
-  b=P55ym5g7WeZnFEABgFdls/g7Rrbl6KC4QPnehVqtE6a9wGSEaTOSqmNl
-   /F5+blLpHhdVl3vZLo0HeRQs0qyfo2gFJF8w8pV0np8t9TJAG6PJMAEZE
-   u5rtEahKpQgWCia0inLokBNM01W+ZzAaQt9aEBclZkZHF7ghhydL317Ct
-   RxFw4a4dnpRYmlx0ZhKVDk5h/XRBP/FlrOaQNzjM/pJgxuERZUdSTAu6D
-   SmCnwuShRHNg4Gd76HIGNglM0VjgsxDOq3+gsLYWfQEAmO7IBGx8MX8jj
-   wO4S2BMM4LvMaXwqaQTHvU3VF6tNc7yd3Kxxy4RXZ1uUuAj5tIsi7vue3
+  bh=i/ijir56tdBUgAEBFOFtWVndt9Fv/1cvvyoH3zkEQNA=;
+  b=WfUSsNV7h9ioLldJGQywXHj53wxsbaLAz0zcBNrzQuffVBmekef/ZvSi
+   8AU9wGt6LiOrU5Ta6H1tMdHYHN/WZen1yNkykKMF8GOVqXJZRIMFAa0xN
+   FbFMM0oIlHeJg03jxXqicY4fIklZVMogJf1BrqW+PaUra70U4/x/QpYUO
+   0TYVfYJPt2tjz+jYSWBqKlbg6/JPOiW6pHq1Ll7nJeje8FOOmslKsP+dp
+   ovL4k4wLdocoRFUhPAxCNYGX+iW6ekZU5/0WdsBGoJ/+N/S50Mnj+A6kz
+   8vhQOaV7gch5HDJpkDKVjWLFUtxlykFyp1h6kMpADuLD74rm01mS91ikL
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="326786538"
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="322271179"
 X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="326786538"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 02:59:53 -0700
+   d="scan'208";a="322271179"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 03:10:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="804381771"
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="769655413"
 X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="804381771"
+   d="scan'208";a="769655413"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga004.jf.intel.com with ESMTP; 18 Mar 2023 02:59:50 -0700
-Date:   Sat, 18 Mar 2023 17:48:29 +0800
+  by FMSMGA003.fm.intel.com with ESMTP; 18 Mar 2023 03:10:41 -0700
+Date:   Sat, 18 Mar 2023 17:59:20 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: zynq: Add parse_header ops support
-Message-ID: <ZBWI7TrwssjjRsc9@yilunxu-OptiPlex-7050>
-References: <20230314121754.297264-1-nava.kishore.manne@amd.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
+        nathan@kernel.org, ndesaulniers@google.com,
+        linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove unused
+ xlnx_pr_decouple_read function
+Message-ID: <ZBWLeC7UuDf+4dJE@yilunxu-OptiPlex-7050>
+References: <20230317230617.1673923-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230314121754.297264-1-nava.kishore.manne@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230317230617.1673923-1-trix@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2023-03-14 at 17:47:54 +0530, Nava kishore Manne wrote:
-> The commit 3cc624beba63 ("fpga: fpga-mgr: support bitstream offset in
-> image buffer") added a new parse_header ops to handle the header related
-> stuff in the fpga framework. So moved the header validation logic from
-> write_init() to parse_header().
+On 2023-03-17 at 19:06:17 -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
+> static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
+>                   ^
+> This static function is not used, so remove it.
+
+I prefer to move the description as the first section. If you agree, I
+could do it before apply.
+
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+
 > 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->  drivers/fpga/zynq-fpga.c | 23 ++++++++++++++++-------
->  1 file changed, 16 insertions(+), 7 deletions(-)
+>  drivers/fpga/xilinx-pr-decoupler.c | 6 ------
+>  1 file changed, 6 deletions(-)
 > 
-> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-> index ae0da361e6c6..6e5df0193028 100644
-> --- a/drivers/fpga/zynq-fpga.c
-> +++ b/drivers/fpga/zynq-fpga.c
-> @@ -248,6 +248,21 @@ static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
->  	return false;
+> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
+> index 2d9c491f7be9..b6f18c07c752 100644
+> --- a/drivers/fpga/xilinx-pr-decoupler.c
+> +++ b/drivers/fpga/xilinx-pr-decoupler.c
+> @@ -34,12 +34,6 @@ static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
+>  	writel(val, d->io_base + offset);
 >  }
 >  
-> +static int zynq_fpga_ops_parse_header(struct fpga_manager *mgr,
-> +				      struct fpga_image_info *info,
-> +				      const char *buf, size_t count)
-> +{
-> +	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
-> +		if (!zynq_fpga_has_sync(buf, count)) {
-
-FPGA manager may pass in the whole image if it is already mapped, maybe
-only info->header_size should be checked?
-
-Thanks,
-Yilun
-
-> +			dev_err(&mgr->dev,
-> +				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
->  				    struct fpga_image_info *info,
->  				    const char *buf, size_t count)
-> @@ -275,13 +290,6 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
->  
->  	/* don't globally reset PL if we're doing partial reconfig */
->  	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
-> -		if (!zynq_fpga_has_sync(buf, count)) {
-> -			dev_err(&mgr->dev,
-> -				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
-> -			err = -EINVAL;
-> -			goto out_err;
-> -		}
+> -static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
+> -					u32 offset)
+> -{
+> -	return readl(d->io_base + offset);
+> -}
 > -
->  		/* assert AXI interface resets */
->  		regmap_write(priv->slcr, SLCR_FPGA_RST_CTRL_OFFSET,
->  			     FPGA_RST_ALL_MASK);
-> @@ -545,6 +553,7 @@ static enum fpga_mgr_states zynq_fpga_ops_state(struct fpga_manager *mgr)
->  static const struct fpga_manager_ops zynq_fpga_ops = {
->  	.initial_header_size = 128,
->  	.state = zynq_fpga_ops_state,
-> +	.parse_header = zynq_fpga_ops_parse_header,
->  	.write_init = zynq_fpga_ops_write_init,
->  	.write_sg = zynq_fpga_ops_write,
->  	.write_complete = zynq_fpga_ops_write_complete,
+>  static int xlnx_pr_decoupler_enable_set(struct fpga_bridge *bridge, bool enable)
+>  {
+>  	int err;
 > -- 
-> 2.25.1
+> 2.27.0
 > 
