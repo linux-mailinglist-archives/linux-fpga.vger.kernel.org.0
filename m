@@ -2,184 +2,163 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CB26C0B87
-	for <lists+linux-fpga@lfdr.de>; Mon, 20 Mar 2023 08:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5988C6C0FF4
+	for <lists+linux-fpga@lfdr.de>; Mon, 20 Mar 2023 11:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCTHkr (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 20 Mar 2023 03:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
+        id S231160AbjCTK5J (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 20 Mar 2023 06:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjCTHkp (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 20 Mar 2023 03:40:45 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2080.outbound.protection.outlook.com [40.107.100.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A589D2D76;
-        Mon, 20 Mar 2023 00:40:41 -0700 (PDT)
+        with ESMTP id S231192AbjCTK4w (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 20 Mar 2023 06:56:52 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC99C2823D;
+        Mon, 20 Mar 2023 03:53:23 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WbkhVctNw7oow43wv/guyctDEliuE1m8bn55sADEWmH7tSo65CETnuCooBsCFmOEhdlv+wCs8eRRmhZgRQOuf36i4ItzqyuCCP/gBYvIoiHMnFoYpe97PjhXQ0IghGqDuvHsngW8AwJIEgfvHm5dvkPn9jD2L4+Mhv+2Ki/3pajizW0zr+6YE405P1kgelt634xpVkaq+zuv+Jxc5idQ9B8EqABR4wd/PdydwpbRPA+i2ASfmJpKiSFOqhq+3H2GKOZT3MTVT7cX+4ZxvpSj3a5kSSPyB/K/gdEEMl1mYcymMrAcGahqrYlvdu8t2u6SJ1KoUI1o0n3LottzqEr3Ew==
+ b=ACdCtQXczCcu+TBPpfYItOyAyVb3xuwqPdiQN/EOF9AWWWukEFjLzgGKrNArgdRvsZrQ6wrcplru8P25uwk66p5UBGNzEIDnTtWAf2chOgSpnx6t1d/u018ecbT38z+JmgGF9V6cuNf0TQq/Tm/TiDn/LKLUIY6hh5y8kabruFQ9VNL2ughvOFvvCvNq20fJKkg/MthQqjf8wnPwt/n0+VLYkv8TutQ3OwYfrNbb7nr/zBB2KWhHyE587b5V1JkXfTH6Qe3RFJXxBJdP/6yOb+7MjNC3ZrmNLQ+v2/t2op8yOiMddN8YqztyHxb1x9vRU3GfunUD43Z6iQoZ2U7iaA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lBgFXAWph7HkBwyDPK/PJEAQ3F2/w4GxqJi4NR7EgHk=;
- b=fseitYIKnkFy+ln/5AcibtNj8YpMbFG1Ic0Ct+oPDS72P1+2liBGhs1ivx62Lz85i6i67gOTZ6nqNNDZjAs5OBCnd8A/OroVaRFxgonKyzDgCT21RfZys/Vdqc5YrOPnx2jIukVccwD6OkituTb4gX3hobCf1QwNmyEYiYPp3X1A9z3biEThne26OR1E36W8UeTLXmwoXhGDDSq1lcTQC4o0t9YmcXIh05EXpmYxXKnxV5a7LLPeitFOMfMlPXeU42oK7U4zELSSvf5CF5yiUs4u52vhI8buea0P35KXe73Ch5Gq++1aGJksO9ovwl6KXBZu1ZazkrCGdOnhosSsmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=9G5x9tVVA8+tjN9Skd3JGVYtnjetlYUwM8hAeUgGsiY=;
+ b=DpavIvBx+tao5U0oLkpWDaZ8s7g79UTSFVkkyeCp9IqlBpBFkyW2ZVQ38yJ247/YU0Dp6kXSbGmwb0kuha66qAj0irsEi2DsP3LVJTZ//670xYsR+Yf5baN7LtvgUP/RYOYP6grlVJV0L+22vJIpO6Fz7HsbMjRF9Ot+S2wbiGsobSQzJ6xdUQ535A12rHjR6J33T0BHw4k4MTTJrSUoVAvWzMB+s6VwwDV5NNkOxpAu2+LojBjjsygBFKcIwSGuzJ++/KNndPIIZssnnRXt+CKc2FKWgk9iF1t8qnbD3f0QZj9xQA7QUd+KqsBFrnncn15oAsp7aHs//DLB5VGHnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lBgFXAWph7HkBwyDPK/PJEAQ3F2/w4GxqJi4NR7EgHk=;
- b=K0zWuEtXeEZDoN0LJI79GrmHj7qfZqtQCjJ8flMTEVSAEN42hUee6SR35hbcGU1Yo0NtlDmCLSIJK/6rLr7swb9P77LJOHprUGSp8yOvlbJIdXQ1WvKd97BMyxOT7YBYXoALKlpcUDG5OmyE2OWFqyvGHRwk0ktqhzR6Zvxy4JE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by DS0PR12MB8217.namprd12.prod.outlook.com (2603:10b6:8:f1::15) with
+ bh=9G5x9tVVA8+tjN9Skd3JGVYtnjetlYUwM8hAeUgGsiY=;
+ b=1ojHXRY3jmrk6cr8RooBHCH/9Pyxz2olUj1YN1p7INv+mmEopPmEn3+ZPygn/2s1dVyv4h0eFcjpceDgEGV9Qg035AAR6O7Lzd0x8rr99LVwePR3+AVS5LKThZZqc+Q6LJf4MvoW3VM9nSp4heGa57qYMtAeDS0tKntx7hA1i98=
+Received: from DS7PR03CA0238.namprd03.prod.outlook.com (2603:10b6:5:3ba::33)
+ by DM4PR12MB5296.namprd12.prod.outlook.com (2603:10b6:5:39d::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 07:40:35 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::4d07:7f52:c833:9603]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::4d07:7f52:c833:9603%6]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 07:40:39 +0000
-Message-ID: <c8eaefed-e1fd-e0c1-7e8f-561c20632646@amd.com>
-Date:   Mon, 20 Mar 2023 08:40:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove unused
- xlnx_pr_decouple_read function
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, mdf@kernel.org, hao.wu@intel.com,
-        yilun.xu@intel.com, michal.simek@xilinx.com, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230317230617.1673923-1-trix@redhat.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20230317230617.1673923-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR02CA0049.eurprd02.prod.outlook.com
- (2603:10a6:802:14::20) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
+ 2023 10:52:58 +0000
+Received: from DM6NAM11FT035.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3ba:cafe::bc) by DS7PR03CA0238.outlook.office365.com
+ (2603:10b6:5:3ba::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Mon, 20 Mar 2023 10:52:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT035.mail.protection.outlook.com (10.13.172.100) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6222.15 via Frontend Transport; Mon, 20 Mar 2023 10:52:58 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 20 Mar
+ 2023 05:52:57 -0500
+From:   Nava kishore Manne <nava.kishore.manne@amd.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <michal.simek@xilinx.com>,
+        <linux-fpga@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] fpga: zynq: Add parse_header ops support
+Date:   Mon, 20 Mar 2023 16:22:54 +0530
+Message-ID: <20230320105254.2214736-1-nava.kishore.manne@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|DS0PR12MB8217:EE_
-X-MS-Office365-Filtering-Correlation-Id: b9d9e40e-edb3-4386-be72-08db291666a1
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT035:EE_|DM4PR12MB5296:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1c096865-08ba-46a6-bf51-08db293144a7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r7qjR7cAFgQfA/vObpH/9Jl6nAtUCev/LeU1mZVa9c5cTNVE/oXG0/jnUpN6HgG+J33vy741Sf8nOD3TET64DF+T86Ln6kF232+ffRnslAzuY1Ob2+ztMa1NO9QCR9AagIB8ViyjOcKK11o9tpgz7qc0Vlq2or002xp0b8Iogrdvv3BiQlqdBf3p0152zDARo3GwgvTX11DrCOqqIImqf0LWfWLiQwYQHjqJISZmFXKDzJJogT3dAqCtSmfnNd36DOu/0p0p/Cq3HsGF08nmpU/kYVERXDX1u6cIrhsDQV8yV9ntYnGEnqQCqPic3d8XAa7s/ieEjhl0BdVC++Dp5tWnYkj5zZvMaLb1hi7pr3F+nMVKdzmVeOx3HtuO2LC82Bh8c63ccHRY69K5cIMScP68Es/q5An2tuNyeIQ8vS1lsXwU7YyKCrHmAUidC6peSosMKc/hd8G8NTqDAKaOLZsapWZipg7o9p/MjnbZ9B/knS1ks/VES807owj9mJeQ0Nku0n3rixNNmJrhxg3BH/5kfgmPZBvSwT6hLNJcZ24PfFEW7y6L7yzJuoCdE4M/ImNJdYLgTsHSQRNRt7P+lIrYXN0rIbmRLHd56rzDbcLmQ1tl0NrvP9oIL3JSyxAZTOml+oIgyfpm9eEg8fJXmch8wsmsDnjEIkZQd3MlWRQulbw3dyuj5Il00Spn4q2EWegIKNNvLh/QUQX6CSP7W4mBXgj6f2giqxEpPrZ2HPI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(346002)(366004)(396003)(39860400002)(451199018)(186003)(6666004)(478600001)(31686004)(6486002)(83380400001)(6512007)(6506007)(26005)(53546011)(2616005)(316002)(66946007)(8676002)(66476007)(66556008)(4326008)(8936002)(44832011)(7416002)(5660300002)(41300700001)(38100700002)(2906002)(86362001)(36756003)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R3RhdjZKU3kvcmtXbjRiVHNkRVorZ0FTeXJsOFBGamFISG4wYVZLUDhzY2xh?=
- =?utf-8?B?RUczWU5kS0gyYU43eHkveEQrelFyODdsZ1o1ajdMaHdyRStFY3VBMnFhVUtN?=
- =?utf-8?B?bXplZ3JRSXd5eEx5d2F2M1dDWG11MWVjTzBBRDE3Y0NTWjlPWXBiYkdGWFVq?=
- =?utf-8?B?TWQ3UGI3aGZMdUpyNVFxemFCVGorTUhHQ3VXTUZxV0lhTXpyZEVDdmViU0pl?=
- =?utf-8?B?Uk1DdWw2V0xVNEpyT01MbDhxaHBmL3pDOG9sckxFcjJVNVpINlZjRC81RVFL?=
- =?utf-8?B?dW8vMkxZS3N0UHZONWFJYTRJTEhCaGlKZzZIVWVGUlYxS3BKYTlhTTJudy9Q?=
- =?utf-8?B?SkpLNWZpZURic0dUMFYyY2dVaGI3UUtiQkY1cmttRTRzSnVpMEprZEJ3Z2dI?=
- =?utf-8?B?d25xVlpaWmVPbWVTSlhkUTA4MHJxVG80TGcrbDJLbkxxd1pVc0VtZ0lOcWd4?=
- =?utf-8?B?dTh0MXdndFBHMVVrVGh1QlVDcFgvU3JNZnJBVWFSeFZkVmNSN3l1ZTFQVlJt?=
- =?utf-8?B?MlV4QTVBczF4NTFqSmRFTUlBbmo0S1REWFhORGtsbzRjbHhlMHB0dmZvV0Zh?=
- =?utf-8?B?bXJwL0V2TUtVMnJnTVlVRHhYZjNxdTdSNzk2YVhiTzdBVWxGenY3UjNSVVU3?=
- =?utf-8?B?eDhQcUZjYXYveElRakVoaFNOTWMvdzU5NEtqdmQzYWp0aDdHN3B6Q3J5WnhJ?=
- =?utf-8?B?dGJka2JFTUlGWDlMWEYwbDVnbUZwM2RTV0FFa1NmNktsQXBDVjN5M2hVS3pk?=
- =?utf-8?B?ZWF1djZqdkkybm1hR25tMEtzRkJYNUIzNm93WG12b2lvcW9uMFpEcjFNSkcr?=
- =?utf-8?B?eWlhVXNPM1VYdGQ1Qmh4d2tTeDhJTVFpUDJXekcwbmFhVmxBTm1NRlZYbS9L?=
- =?utf-8?B?NkRYMHFvK0ZnTFMrMHU2V3RPVzB1TVFqdDMrdlR2VWRpY1VyTkFxVEowNTRG?=
- =?utf-8?B?ZmsyU1dkOXpwcnJpek5VZkx1Nm1KdVlXN1JpVE9ZemxKUVY5TkdrQ2o3VWdq?=
- =?utf-8?B?SENFN0lxejNTb3h4TnpJNkxDNjB1SUQxTkJHNjdNb2xKM1QrV2ZFSm43djdG?=
- =?utf-8?B?aU1BK0ZQSHV4b2VKbTdJYlZhRGh3ODBkZU1oZ1BCS1VMS2tqZGk5VWM5emh6?=
- =?utf-8?B?SWVZKys3NFAyV1Q1c0FFN1R2OUZQUWU1M082UjRUakp3RTJGeGNqY2ZGYlAr?=
- =?utf-8?B?enNUWGIwL0VCZk11dkdGOEszK3FSV244RFVOSFB6ZFIyQzNDNG4vWnVnZ0s1?=
- =?utf-8?B?Und2QXhRSWM2RzQwQzFHQ1FtWlNwQkNJZjQ2S0d5a25rd2R6RWJ5NEV1aldj?=
- =?utf-8?B?MExjUk1DUjVsZXY1L3RqZExoc3FBTGVvbk45OG5WZVF4WXNOMjVlQ092VjlL?=
- =?utf-8?B?bllzN1FGQ2hiellXK0JrMEFKVWl6ZXVKdmV4c2VZTDF3STBSUWdiNXcxRGJs?=
- =?utf-8?B?U3M1OFNzT0V2cVB2bFlkaHFtNE5KVE4wMmNXY1JSdW9RMVFKSmo0bmdCVitn?=
- =?utf-8?B?cWlIUGhHL2pXKzE0K2ZTcjJNc2hvWlJvcUtwOUJ0VnpvNDAxNkVtY1FabWpw?=
- =?utf-8?B?NmV0SElJMk1RaU01cWozbkZ6K1p1U3RwY2YrOUVTYWU5NHZDZ1Yxc200cW9l?=
- =?utf-8?B?VjZYS0U5R0lVOUl4akJuMTcxYzUxY1RPUzZmWERoRmNkeVlyNE5FUFBJMHdl?=
- =?utf-8?B?bXFlUW1LZWlXdk4xL3p1amptckpoY2dSSWpsRHF3V29vRDRaT3l3OE8xOGQr?=
- =?utf-8?B?YmxsZkdtay9HS0FUL1hRUUdNSjVZb01HTUNMaU04TzFWcXpma01LSnpTZm5M?=
- =?utf-8?B?TjN0WHBTMU43eStJeWt6Smk2SlZYZUFwVzBXNzYzWnRGcEdzVDQvV0dqaFpa?=
- =?utf-8?B?Zms0ak8zUmZZQ3lyZEpLK0daOW5uTUZTeTJKODNJYzFNS0VWUkptMFFpejQ0?=
- =?utf-8?B?MWQ4UHZyUG0vWCs1U09MRWhxSHpreUNGTm9lUkxVUm85VncrMkQ4b1FIbWtB?=
- =?utf-8?B?TW1nc3hYM3Y5MnY2QVRpVDVlOUhRa2UzaUYvN0RaWGp2RU9ubVFHMVp6VDVt?=
- =?utf-8?B?enhERjBwNTFoZ0VVSjdjaFgxTnd3b1FoVnhUSTNMdTdaUmNrUGtLY1ltTFlP?=
- =?utf-8?Q?zG+jeI6+RfN0kgQTjI5SQoRj2?=
+X-Microsoft-Antispam-Message-Info: FWV+t0+kM+xdDCdQv+Kj1rTbARR09B9+WNYkSixeLJzdPqWGTmYNDKdm3WkqwENrypNezexi0n8fRhIN8VPBAHCOw8CYxWEx8rPs04IJXAEXzcKw+eFVlAU0Ncyk8pDdwQSXHFqvSZwJlvO+BXwinodQSh0LuXKI1556F0draMibkmmSoHh3pCv+YCgDQXbIO8Cw5YB/gvvzFltOP2PH9jegm7/f6Eq3uin0HTor40obfbKt4AoQEGj3nrAPcogglMB3C9VIsfUxxuK2SExIW/9wP0/3L6418w7W9E9jFRLXBHJLIQXJtj6UjCUyJZ3Ck6lrsKQm7CG2UUxDZhST/5TKYlIc62RJOZ4zQUJVMEDVlVr9VY91S1RueOUbFp6xp08+HTPPEPNYaAHUqTmM6Xsu8fWHDSe230dbULL+zsNi8UhE1OHaeRgvmIEJB8+XzYABY0sAquZttMAwbyNT4fj1gs8Ccf1tESZ//IXYtgNMQCeEO+satkAiUlhGQ3jBMfRetSH1drzlkn5vNCJaWNEo6fEwdzK321f86OUNJjjZE655M/2LjdUnfRfzIJ2TLKr451K3ru5WUH1EKBPzVOo1qAt8tGZsYqLXh5Dm9R2fwBSOjgIwga4QZSyrgjA+dqpvSSAAr8UtoOIg7jEHepOemzvkgYEmYoabU2CAVUKGhFEImNpulqRROdSI7tNKxs/zh1ohofUFqSXxGKRaPpEwRiEMsxqXD61R1baXpGWiYQKpdY6rI8ggGsf4QsoR
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(39860400002)(136003)(376002)(451199018)(40470700004)(46966006)(36840700001)(82310400005)(83380400001)(426003)(2616005)(47076005)(336012)(40460700003)(86362001)(356005)(36860700001)(70206006)(40480700001)(82740400003)(70586007)(36756003)(8676002)(41300700001)(81166007)(2906002)(5660300002)(8936002)(110136005)(103116003)(16526019)(1076003)(186003)(26005)(316002)(478600001)(6666004)(2101003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9d9e40e-edb3-4386-be72-08db291666a1
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 07:40:39.1733
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 10:52:58.4256
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c096865-08ba-46a6-bf51-08db293144a7
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: k4r+LmxfDLmx6EXebK0ISAJtsnFd1G4PQId1w7MyEfed56Z5zZ8EQZbwOpkXwE1c
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8217
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT035.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5296
+X-Spam-Status: No, score=-0.6 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+The commit 3cc624beba63 ("fpga: fpga-mgr: support bitstream offset in
+image buffer") added a new parse_header ops to handle the header related
+stuff in the fpga framework. So moved the header validation logic from
+write_init() to parse_header().
 
+Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+---
+Changes for v2:
+              - Limit the sync pattern validation size to header_size
+                as suggested Yilun.
 
-On 3/18/23 00:06, Tom Rix wrote:
-> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
-> 
-> 
-> clang with W=1 reports
-> drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
-> static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
->                    ^
-> This static function is not used, so remove it.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->   drivers/fpga/xilinx-pr-decoupler.c | 6 ------
->   1 file changed, 6 deletions(-)
-> 
-> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-> index 2d9c491f7be9..b6f18c07c752 100644
-> --- a/drivers/fpga/xilinx-pr-decoupler.c
-> +++ b/drivers/fpga/xilinx-pr-decoupler.c
-> @@ -34,12 +34,6 @@ static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
->          writel(val, d->io_base + offset);
->   }
-> 
-> -static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
-> -                                       u32 offset)
-> -{
-> -       return readl(d->io_base + offset);
-> -}
-> -
->   static int xlnx_pr_decoupler_enable_set(struct fpga_bridge *bridge, bool enable)
->   {
->          int err;
-> --
-> 2.27.0
-> 
+ drivers/fpga/zynq-fpga.c | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
-It should be fixed like this instead.
-
-Thanks,
-Michal
-
-diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-index 2d9c491f7be9..58508f44cd49 100644
---- a/drivers/fpga/xilinx-pr-decoupler.c
-+++ b/drivers/fpga/xilinx-pr-decoupler.c
-@@ -69,7 +69,7 @@ static int xlnx_pr_decoupler_enable_show(struct fpga_bridge 
-*bridge)
-         if (err)
-                 return err;
-
--       status = readl(priv->io_base);
-+       status = xlnx_pr_decouple_read(priv);
-
-         clk_disable(priv->clk);
+diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+index ae0da361e6c6..61024434a3d0 100644
+--- a/drivers/fpga/zynq-fpga.c
++++ b/drivers/fpga/zynq-fpga.c
+@@ -248,6 +248,21 @@ static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
+ 	return false;
+ }
+ 
++static int zynq_fpga_ops_parse_header(struct fpga_manager *mgr,
++				      struct fpga_image_info *info,
++				      const char *buf, size_t count)
++{
++	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
++		if (!zynq_fpga_has_sync(buf, info->header_size)) {
++			dev_err(&mgr->dev,
++				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
+ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
+ 				    struct fpga_image_info *info,
+ 				    const char *buf, size_t count)
+@@ -275,13 +290,6 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
+ 
+ 	/* don't globally reset PL if we're doing partial reconfig */
+ 	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
+-		if (!zynq_fpga_has_sync(buf, count)) {
+-			dev_err(&mgr->dev,
+-				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
+-			err = -EINVAL;
+-			goto out_err;
+-		}
+-
+ 		/* assert AXI interface resets */
+ 		regmap_write(priv->slcr, SLCR_FPGA_RST_CTRL_OFFSET,
+ 			     FPGA_RST_ALL_MASK);
+@@ -545,6 +553,7 @@ static enum fpga_mgr_states zynq_fpga_ops_state(struct fpga_manager *mgr)
+ static const struct fpga_manager_ops zynq_fpga_ops = {
+ 	.initial_header_size = 128,
+ 	.state = zynq_fpga_ops_state,
++	.parse_header = zynq_fpga_ops_parse_header,
+ 	.write_init = zynq_fpga_ops_write_init,
+ 	.write_sg = zynq_fpga_ops_write,
+ 	.write_complete = zynq_fpga_ops_write_complete,
+-- 
+2.25.1
 
