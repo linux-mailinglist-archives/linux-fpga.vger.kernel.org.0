@@ -2,95 +2,126 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAB56C35C8
-	for <lists+linux-fpga@lfdr.de>; Tue, 21 Mar 2023 16:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6CC6C35D1
+	for <lists+linux-fpga@lfdr.de>; Tue, 21 Mar 2023 16:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbjCUPdn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 21 Mar 2023 11:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S230324AbjCUPft (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 21 Mar 2023 11:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjCUPdn (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 21 Mar 2023 11:33:43 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FECE1B57E;
-        Tue, 21 Mar 2023 08:33:42 -0700 (PDT)
+        with ESMTP id S231332AbjCUPfr (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 21 Mar 2023 11:35:47 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2089.outbound.protection.outlook.com [40.107.94.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98153193DB;
+        Tue, 21 Mar 2023 08:35:45 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ez4sVw5QZJVWFt/Lkc3WrUIWjeEu3U4WBZM8pbacuQReXDZl0XhUGw+FmWy55TLv4g+UbotWJ/p4x8XXF2CoYgjHDxQxx08JjY8iLAd1gzNUq5mKHVpTVVGNLQQReM/WrKxVjCTb8AZvE1pn51+sYzB4HqNwrOWbrL70DztrLqddNTGkfWv7Anu+AE/IrOvTRAQB6frKv/cif3GX4NTkNbLVVUpGAnGJLccxuWda8ndW78hoF+mMi6e593iO4g1/KXx5dUoVN7arT3DBdZ8wcyTjG2oZWK6Tef+64BG/h0/7cdbqI/+RqQFL7wIg+yyiajodAdEnWPZoZki/5DuBVA==
+ b=m+tW3AdcjQLtWeip8u/u1zPXkDAtOmPVD4dM9WuFOlqdmLkz2363cBRa26o6K+xgT5/yr2gm5U+Zoh6EgbyCQ78nyfL3OjCMVzCewA6irWkNV2k01XNasNkpmHWrDjlbnEmDfga81StEvcZd5Z5yDkf1XR3tYpiSAaXBavfvpSA0t4BEYLqDbKxO6986Vsovr5BlBqKbetiQ0up65ICPdiul3i4JkQUcxDdF3vqQCk7OYRPcJLUpsLIGNdzwcMGk53A5ad8T65LO5DN1TEkeHH17bt3av9wfhgQ5dA+Hm4YQ0VGNKazVCFM/wD9PP2xEfTkahBxCojwNFJLy2+ZxfA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DOjan4i38dWPg5PkKOBvj2iXDWkLQeEIGXG301DH8dk=;
- b=jBsPW0i87lksZM6ulEdHnGHM1hF2PNWCQn2n77vwsG1hSdsr9DJwaqToGONYhAAGVjTO9TwUzUx9ci5tw25hh5UowsO458KJ5uuftIXda3jo/4nRq+9xuubt6n3XHFmwxxa/uKaBkpHIEZ1ugWLlGDiE+fAFMMEbUTazW8hJlJbQjXyyt4nEiwcWiq49K/siv/UxmkBWih9IPZHCoHjJ5wPVZYtNt+DYgMizvrdwS5xKaoLgJ5ulDv+lLfAKm0ww4aye9mr20hdkCshh6WZBOHVsq/AcXw7keYJER4+4PczCnU/ruiLReqkHKkt9cm7pA4mzyPE/JkhyxCyhvHo0rQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
+ bh=dkwt7n76p+MAy/XMtlEvMzJ2m87XZvtLHHDjGUQUSyM=;
+ b=dX0Gz6OPxU7p6iH4C2TVfspBAy0OhodrnOowpwi2Z5ruQLYScilW+hEWgayU40YCuxVvzciJ+cntixqGJfPqq+LD1bTFEPeL0sFMGYH/Il3EApURSlEvu1jkVLsOj8KI4MZo/xWEXNzyYFGmBkRKlg08Ah5rM+0PDc2/tWve8aphdKWYz+9OJWvCFB4f/TEnM9Xy+yAOViVryfBuqNh7hIZ3sAQJsoYltserXDJRm+hk6BIt1WkXxwYZDR5pxFD4tW9EoDspnuTw7Zuzfyx180XvsgmrHHJS3ipjj6OPp/tsK6vFo5U2peVkhUawDAJDunc4rO/nLfLHu/Y6wi8VTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DOjan4i38dWPg5PkKOBvj2iXDWkLQeEIGXG301DH8dk=;
- b=xYhO11OZvZVvD698DreMQuStuLeaSfMZ0obhNJQuAAAsbhKkAOtevwXmIZhPcW3CBI++87Vr7IOAif9IVAxYUAxJuiSKNDO+vHel8Bj+FAgIPFCyT30RCsbhNMMVzBAenu1xHI2hb9m+JOEKEo2/HDrq48UwrkjKKdMjYCntB5w=
-Received: from MW4PR03CA0011.namprd03.prod.outlook.com (2603:10b6:303:8f::16)
- by SA1PR12MB8987.namprd12.prod.outlook.com (2603:10b6:806:386::22) with
+ bh=dkwt7n76p+MAy/XMtlEvMzJ2m87XZvtLHHDjGUQUSyM=;
+ b=l2ucIKwxMy/FP8w8GTAn2A2mp1c8PmlQLqCOM+R/8VdjApYlF07AZZy/dlOmXKgvlEIyq3LngHFJo3tFG871r2JUd/WOn1qmuQafmoSI5WUfp4Nd6mNyDJZwU6+TTa5V2+DqRhZr6Sy3eUt96sMzNwUSWCaNuTYi7UZFKcHLiWU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
+ by CY8PR12MB8193.namprd12.prod.outlook.com (2603:10b6:930:71::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
- 2023 15:33:40 +0000
-Received: from CO1NAM11FT096.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8f:cafe::90) by MW4PR03CA0011.outlook.office365.com
- (2603:10b6:303:8f::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Tue, 21 Mar 2023 15:33:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT096.mail.protection.outlook.com (10.13.175.84) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6222.16 via Frontend Transport; Tue, 21 Mar 2023 15:33:39 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 21 Mar
- 2023 10:33:37 -0500
+ 2023 15:35:43 +0000
+Received: from BYAPR12MB4758.namprd12.prod.outlook.com
+ ([fe80::4d07:7f52:c833:9603]) by BYAPR12MB4758.namprd12.prod.outlook.com
+ ([fe80::4d07:7f52:c833:9603%6]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 15:35:43 +0000
+Message-ID: <94930302-571a-6712-c1a2-109a04ced418@amd.com>
+Date:   Tue, 21 Mar 2023 16:35:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     Tom Rix <trix@redhat.com>, Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
+        nathan@kernel.org, ndesaulniers@google.com,
+        linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230317230617.1673923-1-trix@redhat.com>
+ <c8eaefed-e1fd-e0c1-7e8f-561c20632646@amd.com>
+ <ZBhqutJChvRkUsRL@yilunxu-OptiPlex-7050>
+ <2dc1f25d-d621-ec04-6de5-f731f2a8bb41@redhat.com>
+ <5fb2fa11-5a58-1856-7cb9-9687637d0741@redhat.com>
 From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>
-CC:     Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fpga@vger.kernel.org>
-Subject: [PATCH] fpga: xilinx-pr-decoupler: Use readl wrapper instead of pure readl
-Date:   Tue, 21 Mar 2023 16:33:23 +0100
-Message-ID: <0381e4e8061c2fee182a104768e84feff3a82d25.1679412800.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
+Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove unused
+ xlnx_pr_decouple_read function
+In-Reply-To: <5fb2fa11-5a58-1856-7cb9-9687637d0741@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
+X-ClientProxiedBy: VI1PR0602CA0012.eurprd06.prod.outlook.com
+ (2603:10a6:800:bc::22) To BYAPR12MB4758.namprd12.prod.outlook.com
+ (2603:10b6:a03:a5::28)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT096:EE_|SA1PR12MB8987:EE_
-X-MS-Office365-Filtering-Correlation-Id: b09906de-a9fb-41d5-c3dd-08db2a21a556
+X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|CY8PR12MB8193:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c5066c9-9f0b-4943-cbd8-08db2a21ee93
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DdsKw28i7MOvWj/K5KTZWP5HN1ZvnKb5/Beb0FJib2EVH5zF4g+SsoZNNuFkbRbRcwjJBqAlQN5qM9PBkv++oVO78ncwMXtXPB6OD6aO3gBO4D1lJBtNEGS7lDSks93WcJ61MHZyP/Dl3dsD9S4cnuwIra3IrdLkNbt2ItluqZn2RfKt5OQdGIR2JyiXYuS1cfjQMTQuMsmf9biek3GbHKKmZvLVvmBwTxSUOlutiragGxZbO7xrXAwrZQebS0jK6wCSlMtv9UWPQLaFuBB1B6voqMnKvTdqos19zgDy7Eoy/YTOkatQFhgWMfUHxmrGz4t87xQAOsixmzssJM8nZRBuKRXlnH8wYg+jVy7XMnprThVhtqRFNVh8Wt/Qq8/BiCIl3my9WtPOaBfsKZRwUx6YN55kUdo74CD6CUFRsij1Yea+EB4p+5fyjQsGx7Z02aGOeIiNlxFF6jir1DootCPbR56X0V+BGFbx1iojx4LMyutk8FzXEepWmmJ3Ve5xfIJaQ+6YoUTxm74FkvfHoN+FSjSBExFb+0pxBVOBqvUKFJlRkpUF097YSmm5gS1Tgpil4ZBJTZ7s5aKuiEK6TgzmerYyAJOZ5djf+mV4S+2/fAkQbaAKBVf6S6r4XTCYBdhZVI0j3hR2yO2+qiqu1wGOStrFO8h6OSTgw7bjSkmYKaRFwTo4IKvgYvAk9UTIosZCbWnXmUZi5swqZF8GXmxx0R5tWGske2+tC/KDxMWZraqvNgUBcriVLHG7qaEO
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199018)(46966006)(40470700004)(36840700001)(40460700003)(40480700001)(5660300002)(2616005)(70206006)(8676002)(70586007)(6666004)(54906003)(4744005)(316002)(4326008)(41300700001)(44832011)(36860700001)(8936002)(336012)(26005)(110136005)(47076005)(16526019)(83380400001)(186003)(966005)(426003)(478600001)(82310400005)(86362001)(36756003)(82740400003)(2906002)(356005)(81166007)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Fbb8TPZ4MpU+6szqzyymVnR2Iv+25o/eiJAyUEzUZm2gzKXUoYUdtLxN1nhQ6qSHfYT9doyW3K/39WX7CmFKF1NZpK0xK2On8v5sDp+Hd8B6w327xdEsznkq/alferi4Voa6k5cu/V7n2VNp+bBQhsh2DS59M1qHj6HugenEZwW/ObCcra6bOTzeVzFA3OLz+C5GtGChF8RSLGucjvlYwbCQSlNkEdy7dCi9K56aIxbmCLCYpJBouah9ZnS1nxZRBq18C5RVS4i6swDnkZF+U5ZF8EAfvTU/W3IBpoAq8B3FOWv2TxHI3YLnS73zaNimTgQ+TommF0G7Djnvp7KR+bc8EZ0vTRV9g2H/GYylRF4rH72KWC3ev5AdiuX0nmj7+TdbeWXRXjEv18QCdRv6vfe9qegLDgvmNATeu77yNSfRSD8dhojR6E4kIXDSo+bkYhckSmB2PxznSjO/5Q6G5L1Y48E0obkwWYd6H72Kr6j3YlcIku6vza8VCpcj79zLqVcsfC6XRgkCwaU08/Ih9OR/NaSqV2Y2UnFbnOFXGdQrO/62DyLDGWH65ryJ/CY/7T0Fx08a61LEw/CtIc8F5AXHddWqF1ZLhfnrtLk9OLl3GqUulqXqTa8pZri7kkw1/Q7Iwv61MQjg3f3al8YAlY4owXK3dkRUcsTahxlG1gYmjuvy/5I+J6haAbFMCvkPJk+d6X2JzGiTmdhGmspTzQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(376002)(136003)(39860400002)(346002)(451199018)(8936002)(41300700001)(7416002)(5660300002)(44832011)(31696002)(36756003)(86362001)(38100700002)(4326008)(2906002)(83380400001)(6506007)(31686004)(53546011)(6512007)(478600001)(6666004)(186003)(26005)(6486002)(966005)(8676002)(66476007)(66556008)(66946007)(2616005)(110136005)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?STJ2NUtKSEJMTTNjdm45ZFk2UWtETUVGSkd4cGp1bi84cDg3cmxVRU42alYw?=
+ =?utf-8?B?VnpmL2dIc0dQclVPdHgwcmgyL3pqVXRtejgwNGQvd24zeE92T0cyT05oVzhm?=
+ =?utf-8?B?N013cnN0RXVPZXMzV2FHbFBPSS90OTNyVDJlWStuZ09HVEpxbVRiUjdHUjFx?=
+ =?utf-8?B?aWNPeUtteGhnb2cvMmk0Z293R29ha1dqM0FhUUcwa2RxREl2QmZldm9Hemx4?=
+ =?utf-8?B?WGNKWThRN3RURVlVYWZ4cm8xQmptOThNNWt4RWxGTWtHRHNLanZoNGViWGVT?=
+ =?utf-8?B?RWVMNGVWcVhRTE1Mek9lOUNUSnJ2cEJqd1N2NUhmNHc1T0R6MTVtUDBuWFBz?=
+ =?utf-8?B?NWY5V3FYTUJGaWhoWVBsYkkrYlNtbHVhV09GT2NPYytDSmo0dmVkeDFra3pW?=
+ =?utf-8?B?NGFxaDJUdzdVblhSMDIwcTlyVUU3OUxTenBhazVvcC9KVlYzcHlNNzZZNFpo?=
+ =?utf-8?B?em1CaDkzVTFWbmJqbnRvUW5xYnBNbFlhc3VwMjcwekFDRWlzZ3JkR3ZwU2pi?=
+ =?utf-8?B?c2Voa3cxWHJNL1JhUGlXZnRWNHpPOHMwM1AvQStYcWlmTUtkYU5uK2h1eGVV?=
+ =?utf-8?B?T0gzY1ZzQjRmeUVRd3pjQWxYbzQrM1V5czB0c1lKMkU1NXp0UkEyOVZya1Y5?=
+ =?utf-8?B?VDZEdzJEbUFMbVArSXVxUFFwT0pybW52L2l4MStZYTFHajZaNjZCRlZoTk5C?=
+ =?utf-8?B?NFZyaSsyV3p5U1RVS25WQmV0Vy9KUVNmcDk1c05CbkZwa0ZwWVBlYmZiM0tw?=
+ =?utf-8?B?cWxGRy9IWWRTUkVrc0VwdHpuOERWRktzbStjTGpDVm83Y2FPYUt6U0xPMlNY?=
+ =?utf-8?B?cU5qSzlNWVVGbFdBcHd2c2FQamFkYWUzMTlKUFlmNWJFZ082Skwvd01pL0xi?=
+ =?utf-8?B?SGJuNkFHeGNhUUhiSGV2YjN1YVV4SDBxUlZqUCt4TUt0NDF2UWY5cWRYZGh0?=
+ =?utf-8?B?YlRhc2xpTy9PeFkyUEdMZ0w4U21Sdmp6SlY1QnNubnROeE1zQTJUMWlHdUdY?=
+ =?utf-8?B?d3dpV3lkSExIR3oydjd4NmhTWWpMMVFEcXJUTncwNitnVmgzZXBSZTdzaWI4?=
+ =?utf-8?B?cGQyNFVVWC9ibGpmdmk3TDhlL3VlMHJjZWlqRDlDZ3ZyVzB2anRqbXlpVUFS?=
+ =?utf-8?B?TkZrVE1zMkNTQW9heVZEWG1Zck1BU3NTZlRVZnQ0SDhEQVFJcXQwb2I1Vm9Q?=
+ =?utf-8?B?cWNUZ2doNjRUZHFmdGZFRWk1RmZkTnYybEl1Z052aHBnUTV0ZCt0eEFZS1M0?=
+ =?utf-8?B?ZUM3VEdTcTNmV0JVanM1Zm1DcVRsNjlVL0hicTNDTFp5bVJKbEhjRmN4b0NV?=
+ =?utf-8?B?TVdZSmdFUnBkUGdOLy9RcW94YUdJclYwQ0VWZzBSMlBLZWRjRmROTk9tT2hw?=
+ =?utf-8?B?aEtFYW1NN1VVamtoZW16bDdGTlhLZnZ1OWs1Qk16dlk1RGdERU95RktjSDBD?=
+ =?utf-8?B?eDFuc001RFdPdjlTS2RXV1NRMkJjVGJwd0trVXVic01XMzJUMGR3QllWSHRr?=
+ =?utf-8?B?MkZaMlhPYlZvWDRXWEUzM3JTRHRKbFlTQmxPSTBZRXN5QXNCWlo5MkpOWWJF?=
+ =?utf-8?B?UjZCZThaQ2tEaTFUMG9DNld5NUMrVTE5Z3grWGw4a1BVRDFnampVRnFFbm52?=
+ =?utf-8?B?NWJ3MkJmVmp4OHFWSmsrbGhWejQyZUI2RmVLcmQ1VDhMZVlHWHpNNWY5aFVQ?=
+ =?utf-8?B?bWhPMktNZnFMR0pmMng0WnVEZWlMb21COEtOdVZnaStXc0tudzVOVXpkTmtC?=
+ =?utf-8?B?L3M3d25oOENFSktuZG1LTDBFY2YzekdOOTNhcTUrYlpmMGNRcDBQS3pwUExK?=
+ =?utf-8?B?dWtnYk53eTN2NGFvamo2eE9MZEdjOHN0ekRxeEx5QjhlZnVVTVVuQld1aS91?=
+ =?utf-8?B?Q2FFTWJZN1lvTStLa1RCMHVEYWRYV3lycWYwNUV2dEk0UUttbnVER1dOYi9h?=
+ =?utf-8?B?Tlp4dlR0TjFnSXcxOEkzMFJYY0w4bEpFWWZTUUxrak9aU2xOVGJFYXZueFFZ?=
+ =?utf-8?B?Y01YOUJOTEpCNDd6dXZuK3IwOTJ2U2QvajRoNFU1c29FNGl0VnZvdW1HWWN0?=
+ =?utf-8?B?Q1VCazZNQ3p1UGszdzkvL1A3djU5Y09rK1ppbzlmcnMwSXlCdXZkbDEyRERJ?=
+ =?utf-8?Q?sjtrhswdf9GGTjzHL4iTmRjgo?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 15:33:39.7708
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c5066c9-9f0b-4943-cbd8-08db2a21ee93
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 15:35:43.0507
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b09906de-a9fb-41d5-c3dd-08db2a21a556
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT096.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8987
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JK/4hNXn7R31E7Xu9TiEtP/jkAQnY/bqx9R+YHrBsH0sa62Jb2yUxu944ZdZaSMX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8193
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -99,32 +130,100 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Driver has IO wrappers but xlnx_pr_decouple_read() is not used and readl is
-used instead which is just wrong.
-It is also generating sparse issue that xlnx_pr_decouple_read() is unused.
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
 
-Created based on discussion with Tom here
-https://lore.kernel.org/r/20230317230617.1673923-1-trix@redhat.com
----
- drivers/fpga/xilinx-pr-decoupler.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 3/20/23 21:05, Tom Rix wrote:
+> 
+> On 3/20/23 9:24 AM, Tom Rix wrote:
+>>
+>> On 3/20/23 7:16 AM, Xu Yilun wrote:
+>>> On 2023-03-20 at 08:40:22 +0100, Michal Simek wrote:
+>>>>
+>>>> On 3/18/23 00:06, Tom Rix wrote:
+>>>>> CAUTION: This message has originated from an External Source. Please use 
+>>>>> proper judgment and caution when opening attachments, clicking links, or 
+>>>>> responding to this email.
+>>>>>
+>>>>>
+>>>>> clang with W=1 reports
+>>>>> drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 
+>>>>> 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
+>>>>> static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data 
+>>>>> *d,
+>>>>>                     ^
+>>>>> This static function is not used, so remove it.
+>>>>>
+>>>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>>>> ---
+>>>>>    drivers/fpga/xilinx-pr-decoupler.c | 6 ------
+>>>>>    1 file changed, 6 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/fpga/xilinx-pr-decoupler.c 
+>>>>> b/drivers/fpga/xilinx-pr-decoupler.c
+>>>>> index 2d9c491f7be9..b6f18c07c752 100644
+>>>>> --- a/drivers/fpga/xilinx-pr-decoupler.c
+>>>>> +++ b/drivers/fpga/xilinx-pr-decoupler.c
+>>>>> @@ -34,12 +34,6 @@ static inline void xlnx_pr_decoupler_write(struct 
+>>>>> xlnx_pr_decoupler_data *d,
+>>>>>           writel(val, d->io_base + offset);
+>>>>>    }
+>>>>>
+>>>>> -static inline u32 xlnx_pr_decouple_read(const struct 
+>>>>> xlnx_pr_decoupler_data *d,
+>>>>> -                                       u32 offset)
+>>>>> -{
+>>>>> -       return readl(d->io_base + offset);
+>>>>> -}
+>>>>> -
+>>>>>    static int xlnx_pr_decoupler_enable_set(struct fpga_bridge *bridge, bool 
+>>>>> enable)
+>>>>>    {
+>>>>>           int err;
+>>>>> -- 
+>>>>> 2.27.0
+>>>>>
+>>>> It should be fixed like this instead.
+>>>>
+>>>> Thanks,
+>>>> Michal
+>>>>
+>>>> diff --git a/drivers/fpga/xilinx-pr-decoupler.c 
+>>>> b/drivers/fpga/xilinx-pr-decoupler.c
+>>>> index 2d9c491f7be9..58508f44cd49 100644
+>>>> --- a/drivers/fpga/xilinx-pr-decoupler.c
+>>>> +++ b/drivers/fpga/xilinx-pr-decoupler.c
+>>>> @@ -69,7 +69,7 @@ static int xlnx_pr_decoupler_enable_show(struct
+>>>> fpga_bridge *bridge)
+>>>>          if (err)
+>>>>                  return err;
+>>>>
+>>>> -       status = readl(priv->io_base);
+>>>> +       status = xlnx_pr_decouple_read(priv);
+>>> OK, I'll drop the previous fix, and waiting for the new one.
+>>
+>> Michal,
+>>
+>> Will you make this change ?
+> 
+> Let me provide some context.
+> 
+> I am cleaning up about 70 similar unused functions all over the tree.
+> 
+> I have removed a lot of one liner wrappers that look like this.
+> 
+> My opinion, to be useful the wrapper needs to be used multiple places and/or do 
+> something non trival otherwise we will bloat the codebase with with 5x lines of 
+> code to do a simple readl.
+> 
+> But this is subjection. If you want this change, you should make it.
 
-diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-index 2d9c491f7be9..b76d85449b8f 100644
---- a/drivers/fpga/xilinx-pr-decoupler.c
-+++ b/drivers/fpga/xilinx-pr-decoupler.c
-@@ -69,7 +69,7 @@ static int xlnx_pr_decoupler_enable_show(struct fpga_bridge *bridge)
- 	if (err)
- 		return err;
- 
--	status = readl(priv->io_base);
-+	status = xlnx_pr_decouple_read(priv, CTRL_OFFSET);
- 
- 	clk_disable(priv->clk);
- 
--- 
-2.36.1
+I understand your position. From my perspective when drivers use these wrappers 
+around io functions they are pretty much prepared to be easily extended for 
+other access method. And also it helps with debugging.
+
+I sent the patch here.
+https://lore.kernel.org/r/0381e4e8061c2fee182a104768e84feff3a82d25.1679412800.git.michal.simek@amd.com
+
+Thanks,
+Michal
 
