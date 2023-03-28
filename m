@@ -2,120 +2,88 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1856CC327
-	for <lists+linux-fpga@lfdr.de>; Tue, 28 Mar 2023 16:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680256CCE2F
+	for <lists+linux-fpga@lfdr.de>; Wed, 29 Mar 2023 01:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbjC1Ot7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 28 Mar 2023 10:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
+        id S229689AbjC1Xpd (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 28 Mar 2023 19:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233306AbjC1Oto (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 28 Mar 2023 10:49:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AFBE04B
-        for <linux-fpga@vger.kernel.org>; Tue, 28 Mar 2023 07:49:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA3A46181D
-        for <linux-fpga@vger.kernel.org>; Tue, 28 Mar 2023 14:49:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAAA5C433EF;
-        Tue, 28 Mar 2023 14:49:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680014949;
-        bh=+VWbyQBxRxbuoIFyaBdMXRSSVTR3ezzmLyjGexD6PpE=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=Dfw11QL18hd/OBQBiU2/1JyCzkjDO3h/71RtiORTDkPHQFmMcndCKQ8TaHVWGqT0l
-         eNxnCkfU3FhTuxyq2ibZ3qqqhJGtXSQHcNzhu/3WfC8/RhEih1JraTKlJLHrNTBBxB
-         382dFfoaXkQaTIk5fYDbWTbo+8IGRvTeBqdeGnMhC5ewjCWcYWJPpGnECY6H3CbvF/
-         r9RY6RkDH2us1fq/dAboxVodJXJJJwFSuZpSbxzIHkKYp/pGKs0u+eexBXVgREBc1F
-         UbQjAZn7eEs0/j4BpDUSdoppBkAugWNecklfgudXFeSuDfEQiOUiKc+9gnOON9cgeu
-         ZZAWMx/BaNzFg==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 9B85C27C0054;
-        Tue, 28 Mar 2023 10:49:07 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 28 Mar 2023 10:49:07 -0400
-X-ME-Sender: <xms:Y_4iZMfnZ9A0Ehjv_jdOdGjtyxf5nqSkt8f9t8--emu_efPGZudVgQ>
-    <xme:Y_4iZOOV5JvrF-vSLtT0EPa7WiwYuMhta7sZbbFaX0FmGc66706u-81SCyPkoYKGK
-    bXQXkncCdUidM_w_18>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehgedgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
-    grthhtvghrnhepvdeviefgtedugeevieelvdfgveeuvdfgteegfeeiieejjeffgeeghedu
-    gedtveehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedt
-    vdegqddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrd
-    guvg
-X-ME-Proxy: <xmx:Y_4iZNgbor1sjUDZlxu9J_xsiBokoL3scJt6wCxBKwtmGpBPSun2kQ>
-    <xmx:Y_4iZB9XDaPojiVBvyV2id_QPmyKciyDy0ljBN5Mh9bvxnN_fu-3xA>
-    <xmx:Y_4iZIu2y9feZSJe5-sJJRNwxKTqL6UUr3LV0sMsoMO45jOjJmHuMQ>
-    <xmx:Y_4iZJkBiclyflKS7ffTpEfQlq0DZAhO-rdVntCbfMNWs6YtaNk5qg>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0D58EB6008F; Tue, 28 Mar 2023 10:49:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-237-g62623e8e3f-fm-20230327.001-g62623e8e
-Mime-Version: 1.0
-Message-Id: <acd9a75d-4363-4e64-97e7-7b53cbcc9b3b@app.fastmail.com>
-In-Reply-To: <ZCL8veyS5xNUMCCt@hoboy.vegasvil.org>
-References: <20230328142455.481146-1-tianfei.zhang@intel.com>
- <ZCL8veyS5xNUMCCt@hoboy.vegasvil.org>
-Date:   Tue, 28 Mar 2023 16:48:45 +0200
-From:   "Arnd Bergmann" <arnd@kernel.org>
-To:     "Richard Cochran" <richardcochran@gmail.com>,
-        "Tianfei Zhang" <tianfei.zhang@intel.com>
-Cc:     Netdev <netdev@vger.kernel.org>, linux-fpga@vger.kernel.org,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        with ESMTP id S229567AbjC1Xpd (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 28 Mar 2023 19:45:33 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8732E211D;
+        Tue, 28 Mar 2023 16:45:32 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a25eabf3f1so1066855ad.0;
+        Tue, 28 Mar 2023 16:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680047132;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wcsC89TMs/40DIXf2vcZ1a58DRyiXyVzzYB42lI7f2w=;
+        b=j1jl6MeIHKYDclcvMtg6crxh2h9kwOaof761LHGakGnGzW3xJKdPZ4vRXhl6zSxjt8
+         RVb+9fOXnrCNgRywWT2H+YKftkKK6hj9wdVafFHpVqF8BhVZS6BRRbRzRV6M1tea17yx
+         bgemOSsRx1onpK8+vQP1A9KGiEB6uFy5Lp6YT0aIzOxZdi+NQWYTRUwcZ6lxayl/gL9H
+         V9p4ZFeIGCYpApjZuISofWklN5QnnOJ+SkEYuNRzB1dp6LeQgSZjzzVs/d2KRAAgsvwp
+         guVrb2oG8is+KDFQEHxGq29IckVWwcgfj80AZhN4Jqo8qc4XN9g4eBLHKIwpdV2RcldI
+         harQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680047132;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wcsC89TMs/40DIXf2vcZ1a58DRyiXyVzzYB42lI7f2w=;
+        b=rzoxW0wBe8RUrVJd4IWvD5+SzeDtZGwF3WIKoMA+DBzfSAvCuYUE4i+Ozl0Ojakp6I
+         v20IrmVRydRsAeUrS89bLPOBXhMyEEwwkO2kOOn8L+kql5zwx93LeNhc+o/4kHVEnZET
+         Kcbg6kVYihFn2i0FxqRODcMckHY1dOZEiTRGp+6VFGtCcZL4gy2awrILt6o9HzLuBu2Z
+         frt0rX81KC2gIYzY1JXnIO5iMf2srCcxnTpr2tjD3ocA+LKanM80E3t1WEkYtmPjMHgE
+         3HBkK928T9/vPIQJv7qsghVy2bYfcYSayrAMY8rR/TNJonCVTbqcvJAMIQXfUJBPgdRW
+         +Q6A==
+X-Gm-Message-State: AAQBX9eKYT9eDw8l4jYeLiRKNY7K+El2XKOcXc2cjbhEE0dRCoVYhN8Q
+        pan1Puwaw6P2k63ovgwiapE=
+X-Google-Smtp-Source: AKy350Yy6wWamxWoUo7byfc/Mvun9eQ71grBhbBB99TAbVWU1032ssp0iKlugg9kuehgACpXjZYCdg==
+X-Received: by 2002:a05:6a00:4215:b0:5db:aa2d:9ea0 with SMTP id cd21-20020a056a00421500b005dbaa2d9ea0mr14771205pfb.2.1680047132052;
+        Tue, 28 Mar 2023 16:45:32 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id v7-20020a62a507000000b005e5b11335b3sm21595481pfm.57.2023.03.28.16.45.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 16:45:31 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 16:45:29 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Tianfei Zhang <tianfei.zhang@intel.com>,
+        Netdev <netdev@vger.kernel.org>, linux-fpga@vger.kernel.org,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         vinicius.gomes@intel.com, pierre-louis.bossart@linux.intel.com,
         marpagan@redhat.com, russell.h.weight@intel.com,
-        matthew.gerlach@linux.intel.com,
-        "Nicolas Pitre" <nico@fluxnic.net>,
-        "Raghavendra Khadatare" <raghavendrax.anand.khadatare@intel.com>
+        matthew.gerlach@linux.intel.com, Nicolas Pitre <nico@fluxnic.net>,
+        Raghavendra Khadatare <raghavendrax.anand.khadatare@intel.com>
 Subject: Re: [PATCH v3] ptp: add ToD device driver for Intel FPGA cards
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <ZCN8Gew/PIcfo6cY@hoboy.vegasvil.org>
+References: <20230328142455.481146-1-tianfei.zhang@intel.com>
+ <ZCL8veyS5xNUMCCt@hoboy.vegasvil.org>
+ <acd9a75d-4363-4e64-97e7-7b53cbcc9b3b@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acd9a75d-4363-4e64-97e7-7b53cbcc9b3b@app.fastmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Mar 28, 2023, at 16:42, Richard Cochran wrote:
-> On Tue, Mar 28, 2023 at 10:24:55AM -0400, Tianfei Zhang wrote:
->
->> v3:
->> - add PTP_1588_CLOCK dependency for PTP_DFL_TOD in Kconfig file.
->> - don't need handle NULL case for ptp_clock_register() after adding
->>   PTP_1588_CLOCK dependency.
->
-> Sorry, but this isn't how it is done...
->
->> +config PTP_DFL_TOD
->> +	tristate "FPGA DFL ToD Driver"
->> +	depends on FPGA_DFL
->> +	depends on PTP_1588_CLOCK
->
-> Try these commands:
->
->    git grep "depends on PTP_1588_CLOCK_OPTIONAL"
->    git grep "depends on PTP_1588_CLOCK_OPTIONAL" | grep -v OPTIONAL
->
-> Driver must depend on PTP_1588_CLOCK_OPTIONAL and then handle the NULL
-> case correctly.
+On Tue, Mar 28, 2023 at 04:48:45PM +0200, Arnd Bergmann wrote:
+> Using PTP_1588_CLOCK_OPTIONAL as a dependency for PTP_DFL_TOD would
+> allow enabling the driver even when PTP_1588_CLOCK is completely
+> disabled, which would cleanly build but not do anything useful
+> because the driver only handles PTP and not also networking.
 
-I think this one is one of the (few) cases where the 'depends on
-PTP_1588_CLOCK' is correct and 'depends on PTP_1588_CLOCK_OPTIONAL'
-would be wrong:
+Okay, thanks for the explanation,
 
-Using PTP_1588_CLOCK_OPTIONAL as a dependency for PTP_DFL_TOD would
-allow enabling the driver even when PTP_1588_CLOCK is completely
-disabled, which would cleanly build but not do anything useful
-because the driver only handles PTP and not also networking.
-
-     Arnd
+Richard
