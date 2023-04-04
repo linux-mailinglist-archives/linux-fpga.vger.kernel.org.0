@@ -2,25 +2,25 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFE26D63C7
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479C06D63CA
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbjDDNrL (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Apr 2023 09:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
+        id S235077AbjDDNr2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 Apr 2023 09:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235035AbjDDNqy (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:46:54 -0400
+        with ESMTP id S235361AbjDDNrM (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:47:12 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5EC109;
-        Tue,  4 Apr 2023 06:46:26 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTYF3yQhz67bZZ;
-        Tue,  4 Apr 2023 21:45:37 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DE13C02;
+        Tue,  4 Apr 2023 06:46:57 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTYr4H7Kz67dcg;
+        Tue,  4 Apr 2023 21:46:08 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 4 Apr 2023 14:46:23 +0100
+ 15.1.2507.23; Tue, 4 Apr 2023 14:46:53 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -48,9 +48,9 @@ CC:     <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
         Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Liang Kan <kan.liang@linux.intel.com>
-Subject: [PATCH 08/32] perf/arm_cspmu: Assign parents for event_source devices
-Date:   Tue, 4 Apr 2023 14:42:01 +0100
-Message-ID: <20230404134225.13408-9-Jonathan.Cameron@huawei.com>
+Subject: [PATCH 09/32] Documentation: xgene-pmu: Use /sys/bus/event_source/devices paths
+Date:   Tue, 4 Apr 2023 14:42:02 +0100
+Message-ID: <20230404134225.13408-10-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
 References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
@@ -70,28 +70,27 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Currently all these devices appear directly under /sys/devices/
-Only root busses should appear there, so instead assign the pmu->dev
-parents to be the platform device.
+To allow setting an appropriate parent for the struct pmu device
+remove existing references to /sys/devices/ path.
 
-Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/perf/arm_cspmu/arm_cspmu.c | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/admin-guide/perf/xgene-pmu.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
-index e31302ab7e37..4390e4fb1e95 100644
---- a/drivers/perf/arm_cspmu/arm_cspmu.c
-+++ b/drivers/perf/arm_cspmu/arm_cspmu.c
-@@ -1155,6 +1155,7 @@ static int arm_cspmu_register_pmu(struct arm_cspmu *cspmu)
- 	cspmu->pmu = (struct pmu){
- 		.task_ctx_nr	= perf_invalid_context,
- 		.module		= THIS_MODULE,
-+		.parent		= cspmu->dev,
- 		.pmu_enable	= arm_cspmu_enable,
- 		.pmu_disable	= arm_cspmu_disable,
- 		.event_init	= arm_cspmu_event_init,
+diff --git a/Documentation/admin-guide/perf/xgene-pmu.rst b/Documentation/admin-guide/perf/xgene-pmu.rst
+index 644f8ed89152..98ccb8e777c4 100644
+--- a/Documentation/admin-guide/perf/xgene-pmu.rst
++++ b/Documentation/admin-guide/perf/xgene-pmu.rst
+@@ -13,7 +13,7 @@ PMU (perf) driver
+ 
+ The xgene-pmu driver registers several perf PMU drivers. Each of the perf
+ driver provides description of its available events and configuration options
+-in sysfs, see /sys/devices/<l3cX/iobX/mcbX/mcX>/.
++in sysfs, see /sys/bus/event_source/devices/<l3cX/iobX/mcbX/mcX>/.
+ 
+ The "format" directory describes format of the config (event ID),
+ config1 (agent ID) fields of the perf_event_attr structure. The "events"
 -- 
 2.37.2
 
