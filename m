@@ -2,25 +2,25 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0159A6D63B6
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040536D63BA
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235438AbjDDNpb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Apr 2023 09:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35500 "EHLO
+        id S235049AbjDDNpw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 Apr 2023 09:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234588AbjDDNpL (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:45:11 -0400
+        with ESMTP id S235441AbjDDNpe (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:45:34 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F4530E3;
-        Tue,  4 Apr 2023 06:44:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD754ECF;
+        Tue,  4 Apr 2023 06:45:24 -0700 (PDT)
 Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTV52mkjz6J7Bm;
-        Tue,  4 Apr 2023 21:42:53 +0800 (CST)
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTSM2J44z67lVS;
+        Tue,  4 Apr 2023 21:41:23 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 4 Apr 2023 14:44:50 +0100
+ 15.1.2507.23; Tue, 4 Apr 2023 14:45:21 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -48,9 +48,9 @@ CC:     <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
         Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Liang Kan <kan.liang@linux.intel.com>
-Subject: [PATCH 05/32] Documentation: hns-pmu: Use /sys/bus/event_source/devices paths
-Date:   Tue, 4 Apr 2023 14:41:58 +0100
-Message-ID: <20230404134225.13408-6-Jonathan.Cameron@huawei.com>
+Subject: [PATCH 06/32] perf/hisi-hns3: Assign parents for event_source device
+Date:   Tue, 4 Apr 2023 14:41:59 +0100
+Message-ID: <20230404134225.13408-7-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
 References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
@@ -58,7 +58,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
@@ -70,48 +70,28 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-To allow setting an appropriate parent for the struct pmu device
-remove existing references to /sys/devices/ path.
+Currently the PMU device appears directly under /sys/devices/
+Only root busses should appear there, so instead assign the pmu->dev
+parent to be the PCI device.
 
+Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- Documentation/admin-guide/perf/hns3-pmu.rst | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/perf/hisilicon/hns3_pmu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/admin-guide/perf/hns3-pmu.rst b/Documentation/admin-guide/perf/hns3-pmu.rst
-index 75a40846d47f..1195e570f2d6 100644
---- a/Documentation/admin-guide/perf/hns3-pmu.rst
-+++ b/Documentation/admin-guide/perf/hns3-pmu.rst
-@@ -16,7 +16,7 @@ HNS3 PMU driver
- 
- The HNS3 PMU driver registers a perf PMU with the name of its sicl id.::
- 
--  /sys/devices/hns3_pmu_sicl_<sicl_id>
-+  /sys/bus/event_source/devices/hns3_pmu_sicl_<sicl_id>
- 
- PMU driver provides description of available events, filter modes, format,
- identifier and cpumask in sysfs.
-@@ -40,9 +40,9 @@ device.
- 
- Example usage of checking event code and subevent code::
- 
--  $# cat /sys/devices/hns3_pmu_sicl_0/events/dly_tx_normal_to_mac_time
-+  $# cat /sys/bus/event_source/devices/hns3_pmu_sicl_0/events/dly_tx_normal_to_mac_time
-   config=0x00204
--  $# cat /sys/devices/hns3_pmu_sicl_0/events/dly_tx_normal_to_mac_packet_num
-+  $# cat /sys/bus/event_source/devices/hns3_pmu_sicl_0/events/dly_tx_normal_to_mac_packet_num
-   config=0x10204
- 
- Each performance statistic has a pair of events to get two values to
-@@ -60,7 +60,7 @@ computation to calculate real performance data is:::
- 
- Example usage of checking supported filter mode::
- 
--  $# cat /sys/devices/hns3_pmu_sicl_0/filtermode/bw_ssu_rpu_byte_num
-+  $# cat /sys/bus/event_source/devices/hns3_pmu_sicl_0/filtermode/bw_ssu_rpu_byte_num
-   filter mode supported: global/port/port-tc/func/func-queue/
- 
- Example usage of perf::
+diff --git a/drivers/perf/hisilicon/hns3_pmu.c b/drivers/perf/hisilicon/hns3_pmu.c
+index e0457d84af6b..8ddffd8cc1f1 100644
+--- a/drivers/perf/hisilicon/hns3_pmu.c
++++ b/drivers/perf/hisilicon/hns3_pmu.c
+@@ -1419,6 +1419,7 @@ static int hns3_pmu_alloc_pmu(struct pci_dev *pdev, struct hns3_pmu *hns3_pmu)
+ 	hns3_pmu->pmu = (struct pmu) {
+ 		.name		= name,
+ 		.module		= THIS_MODULE,
++		.parent		= &pdev->dev,
+ 		.event_init	= hns3_pmu_event_init,
+ 		.pmu_enable	= hns3_pmu_enable,
+ 		.pmu_disable	= hns3_pmu_disable,
 -- 
 2.37.2
 
