@@ -2,31 +2,31 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C136D65B3
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 16:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5136D65C8
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 16:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbjDDOpV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Apr 2023 10:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
+        id S231406AbjDDOu7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 Apr 2023 10:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbjDDOpU (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 10:45:20 -0400
+        with ESMTP id S231348AbjDDOu6 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 10:50:58 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 625D8198;
-        Tue,  4 Apr 2023 07:45:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A01330C5;
+        Tue,  4 Apr 2023 07:50:57 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B307FEC;
-        Tue,  4 Apr 2023 07:46:02 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8759D75;
+        Tue,  4 Apr 2023 07:51:41 -0700 (PDT)
 Received: from [10.57.53.173] (unknown [10.57.53.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5841F3F73F;
-        Tue,  4 Apr 2023 07:45:13 -0700 (PDT)
-Message-ID: <6e208366-6c28-6015-b80c-9cf2257d6414@arm.com>
-Date:   Tue, 4 Apr 2023 15:45:11 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C53553F73F;
+        Tue,  4 Apr 2023 07:50:52 -0700 (PDT)
+Message-ID: <1fe0de39-c98b-e4e8-44df-8c899efb3019@arm.com>
+Date:   Tue, 4 Apr 2023 15:50:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH 19/32] perf/arm-cci: Assign parents for event_source
- device
+Subject: Re: [PATCH 08/32] perf/arm_cspmu: Assign parents for event_source
+ devices
 To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -53,9 +53,9 @@ Cc:     linuxarm@huawei.com, Dan Williams <dan.j.williams@intel.com>,
         Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
         Liang Kan <kan.liang@linux.intel.com>
 References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
- <20230404134225.13408-20-Jonathan.Cameron@huawei.com>
+ <20230404134225.13408-9-Jonathan.Cameron@huawei.com>
 From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230404134225.13408-20-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20230404134225.13408-9-Jonathan.Cameron@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=NICE_REPLY_A,
@@ -68,30 +68,27 @@ List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 On 04/04/2023 14:42, Jonathan Cameron wrote:
-> Currently the PMU device appears directly under /sys/devices/
+> Currently all these devices appear directly under /sys/devices/
 > Only root busses should appear there, so instead assign the pmu->dev
-> parent to be the platform device.
+> parents to be the platform device.
 > 
 > Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
 > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-
-
 > ---
->   drivers/perf/arm-cci.c | 1 +
+>   drivers/perf/arm_cspmu/arm_cspmu.c | 1 +
 >   1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/perf/arm-cci.c b/drivers/perf/arm-cci.c
-> index 03b1309875ae..502581ba7d15 100644
-> --- a/drivers/perf/arm-cci.c
-> +++ b/drivers/perf/arm-cci.c
-> @@ -1412,6 +1412,7 @@ static int cci_pmu_init(struct cci_pmu *cci_pmu, struct platform_device *pdev)
->   
->   	cci_pmu->pmu = (struct pmu) {
->   		.module		= THIS_MODULE,
-> +		.parent		= &pdev->dev,
->   		.name		= cci_pmu->model->name,
+> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
+> index e31302ab7e37..4390e4fb1e95 100644
+> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
+> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
+> @@ -1155,6 +1155,7 @@ static int arm_cspmu_register_pmu(struct arm_cspmu *cspmu)
+>   	cspmu->pmu = (struct pmu){
 >   		.task_ctx_nr	= perf_invalid_context,
->   		.pmu_enable	= cci_pmu_enable,
+>   		.module		= THIS_MODULE,
+> +		.parent		= cspmu->dev,
+>   		.pmu_enable	= arm_cspmu_enable,
+>   		.pmu_disable	= arm_cspmu_disable,
+>   		.event_init	= arm_cspmu_event_init,
 
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
