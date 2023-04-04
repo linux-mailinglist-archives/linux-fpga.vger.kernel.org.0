@@ -2,25 +2,25 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4166D6425
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6596D641A
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235517AbjDDNyu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Apr 2023 09:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S235775AbjDDNyD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 Apr 2023 09:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235693AbjDDNxQ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:53:16 -0400
+        with ESMTP id S235753AbjDDNxn (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:53:43 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BAE4C2B;
-        Tue,  4 Apr 2023 06:53:07 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrThy6qHhz67RhJ;
-        Tue,  4 Apr 2023 21:52:18 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B13AF;
+        Tue,  4 Apr 2023 06:53:38 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrThB5X5vz6J6rq;
+        Tue,  4 Apr 2023 21:51:38 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 4 Apr 2023 14:53:04 +0100
+ 15.1.2507.23; Tue, 4 Apr 2023 14:53:35 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -48,9 +48,9 @@ CC:     <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
         Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Liang Kan <kan.liang@linux.intel.com>
-Subject: [PATCH 21/32] perf/arm-cmn: Assign parents for event_source device
-Date:   Tue, 4 Apr 2023 14:42:14 +0100
-Message-ID: <20230404134225.13408-22-Jonathan.Cameron@huawei.com>
+Subject: [PATCH 22/32] perf/arm-dmc620: Assign parents for event_source device
+Date:   Tue, 4 Apr 2023 14:42:15 +0100
+Message-ID: <20230404134225.13408-23-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
 References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
@@ -58,7 +58,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
@@ -77,21 +77,21 @@ parent to be the platform device.
 Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/perf/arm-cmn.c | 1 +
+ drivers/perf/arm_dmc620_pmu.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
-index c9689861be3f..7731eb0e2a4a 100644
---- a/drivers/perf/arm-cmn.c
-+++ b/drivers/perf/arm-cmn.c
-@@ -2284,6 +2284,7 @@ static int arm_cmn_probe(struct platform_device *pdev)
- 	cmn->cpu = cpumask_local_spread(0, dev_to_node(cmn->dev));
- 	cmn->pmu = (struct pmu) {
+diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
+index 54aa4658fb36..c99360cc8f6d 100644
+--- a/drivers/perf/arm_dmc620_pmu.c
++++ b/drivers/perf/arm_dmc620_pmu.c
+@@ -644,6 +644,7 @@ static int dmc620_pmu_device_probe(struct platform_device *pdev)
+ 
+ 	dmc620_pmu->pmu = (struct pmu) {
  		.module = THIS_MODULE,
-+		.parent = &pdev->dev,
- 		.attr_groups = arm_cmn_attr_groups,
- 		.capabilities = PERF_PMU_CAP_NO_EXCLUDE,
- 		.task_ctx_nr = perf_invalid_context,
++		.parent		= &pdev->dev,
+ 		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
+ 		.task_ctx_nr	= perf_invalid_context,
+ 		.event_init	= dmc620_pmu_event_init,
 -- 
 2.37.2
 
