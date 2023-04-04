@@ -2,25 +2,25 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28136D63DA
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9028C6D63E2
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235337AbjDDNtK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Apr 2023 09:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
+        id S235490AbjDDNt7 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 Apr 2023 09:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234852AbjDDNtB (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:49:01 -0400
+        with ESMTP id S235321AbjDDNtp (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:49:45 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7F8AF;
-        Tue,  4 Apr 2023 06:49:00 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTcD1g5Dz67fB8;
-        Tue,  4 Apr 2023 21:48:12 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC504C21;
+        Tue,  4 Apr 2023 06:49:31 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTcp5kBPz67WVs;
+        Tue,  4 Apr 2023 21:48:42 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 4 Apr 2023 14:48:57 +0100
+ 15.1.2507.23; Tue, 4 Apr 2023 14:49:28 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -48,9 +48,9 @@ CC:     <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
         Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Liang Kan <kan.liang@linux.intel.com>
-Subject: [PATCH 13/32] perf/riscv: Assign parents for event_source devices
-Date:   Tue, 4 Apr 2023 14:42:06 +0100
-Message-ID: <20230404134225.13408-14-Jonathan.Cameron@huawei.com>
+Subject: [PATCH 14/32] Documentation: qcom-pmu: Use /sys/bus/event_source/devices paths
+Date:   Tue, 4 Apr 2023 14:42:07 +0100
+Message-ID: <20230404134225.13408-15-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
 References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
@@ -70,51 +70,41 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Currently all these devices appear directly under /sys/devices/
-Only root busses should appear there, so instead assign the pmu->dev
-parents to be the appropriate platform devices.
+To allow setting an appropriate parent for the struct pmu device
+remove existing references to /sys/devices/ path.
 
-Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
-Cc: Atish Patra <atishp@atishpatra.org>
-CC: Anup Patel <anup@brainfault.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
 ---
+ Documentation/admin-guide/perf/qcom_l2_pmu.rst | 2 +-
+ Documentation/admin-guide/perf/qcom_l3_pmu.rst | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Untested.
-
-This is minimal change, but could be made more elegant either by
-making one of the existing initialization functions take a struct device *
-or by embedding one in struct riscv_pmu
----
- drivers/perf/riscv_pmu_legacy.c | 1 +
- drivers/perf/riscv_pmu_sbi.c    | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/perf/riscv_pmu_legacy.c b/drivers/perf/riscv_pmu_legacy.c
-index ca9e20bfc7ac..8c4a0d915dc7 100644
---- a/drivers/perf/riscv_pmu_legacy.c
-+++ b/drivers/perf/riscv_pmu_legacy.c
-@@ -102,6 +102,7 @@ static int pmu_legacy_device_probe(struct platform_device *pdev)
- 	pmu = riscv_pmu_alloc();
- 	if (!pmu)
- 		return -ENOMEM;
-+	pmu->pmu.parent = &pdev->dev;
- 	pmu_legacy_init(pmu);
+diff --git a/Documentation/admin-guide/perf/qcom_l2_pmu.rst b/Documentation/admin-guide/perf/qcom_l2_pmu.rst
+index c130178a4a55..c37c6be9b8d8 100644
+--- a/Documentation/admin-guide/perf/qcom_l2_pmu.rst
++++ b/Documentation/admin-guide/perf/qcom_l2_pmu.rst
+@@ -10,7 +10,7 @@ There is one logical L2 PMU exposed, which aggregates the results from
+ the physical PMUs.
  
- 	return 0;
-diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-index 70cb50fd41c2..f138fbc00a66 100644
---- a/drivers/perf/riscv_pmu_sbi.c
-+++ b/drivers/perf/riscv_pmu_sbi.c
-@@ -880,6 +880,7 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
- 	}
+ The driver provides a description of its available events and configuration
+-options in sysfs, see /sys/devices/l2cache_0.
++options in sysfs, see /sys/bus/event_source/devices/l2cache_0.
  
- 	pmu->pmu.attr_groups = riscv_pmu_attr_groups;
-+	pmu->pmu.parent = &pdev->dev;
- 	pmu->cmask = cmask;
- 	pmu->ctr_start = pmu_sbi_ctr_start;
- 	pmu->ctr_stop = pmu_sbi_ctr_stop;
+ The "format" directory describes the format of the events.
+ 
+diff --git a/Documentation/admin-guide/perf/qcom_l3_pmu.rst b/Documentation/admin-guide/perf/qcom_l3_pmu.rst
+index a3d014a46bfd..a66556b7e985 100644
+--- a/Documentation/admin-guide/perf/qcom_l3_pmu.rst
++++ b/Documentation/admin-guide/perf/qcom_l3_pmu.rst
+@@ -9,7 +9,7 @@ PMU with device name l3cache_<socket>_<instance>. User space is responsible
+ for aggregating across slices.
+ 
+ The driver provides a description of its available events and configuration
+-options in sysfs, see /sys/devices/l3cache*. Given that these are uncore PMUs
++options in sysfs, see /sys/bus/event_source/devices/l3cache*. Given that these are uncore PMUs
+ the driver also exposes a "cpumask" sysfs attribute which contains a mask
+ consisting of one CPU per socket which will be used to handle all the PMU
+ events on that socket.
 -- 
 2.37.2
 
