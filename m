@@ -2,50 +2,65 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1176A6D630F
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E916D6391
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235261AbjDDNeg (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Apr 2023 09:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44956 "EHLO
+        id S234437AbjDDNmY (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 Apr 2023 09:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235237AbjDDNeY (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:34:24 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1478649CE;
-        Tue,  4 Apr 2023 06:33:59 -0700 (PDT)
-Received: (Authenticated sender: alexis.lothore@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6B34AE000B;
-        Tue,  4 Apr 2023 13:33:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680615238;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mo3HjqG41gQvCICstu9RcQV968d5yyBtvPhjoFmW600=;
-        b=GxlHdy4eBR/YbPceBaocXsvSxmEp3u/fxMIh5Dfb7A4Bd5lliBXi5bYo8oWgLeEEAY1IR6
-        1g/7+TL7i91+ve8ld8/wrQ8JExZ21LTjjzHhshte3ZXRryQqRpVJnNnjdCti5JiE/4HO7z
-        aYCg7r9U0lFDOkcJ1azl8GuYvArkws8O682QhF2tqfvD5LB4ZSnYpZfUnRQ59Adeqk6qs+
-        4g8K6YtgbypzAVxcGf/MZTx1DR4XC+CrrGkpB+M8Di1DavMH5M1SmpzeGyqDYH4fXP47ca
-        u5D7zA7OEkzMdid0Ys2itN2N6XDwcxl9xPhOUfnw+uWSIqN8qXZdSliDFq+Bcw==
-From:   alexis.lothore@bootlin.com
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, russell.h.weight@intel.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     thomas.petazzoni@bootlin.com, nicolas.carrier@orolia.com
-Subject: [PATCH] fpga: bridge: properly initialize bridge device before populating children
-Date:   Tue,  4 Apr 2023 15:31:02 +0200
-Message-Id: <20230404133102.2837535-2-alexis.lothore@bootlin.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230404133102.2837535-1-alexis.lothore@bootlin.com>
-References: <20230404133102.2837535-1-alexis.lothore@bootlin.com>
+        with ESMTP id S234493AbjDDNmW (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:42:22 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3550AA;
+        Tue,  4 Apr 2023 06:42:19 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTNn3bhJz67mZc;
+        Tue,  4 Apr 2023 21:38:17 +0800 (CST)
+Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 4 Apr 2023 14:42:15 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Will Deacon <will@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Robert Richter <rric@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Frank Li <Frank.li@nxp.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Liang Kan <kan.liang@linux.intel.com>
+Subject: [PATCH 00/32] Add parents to struct pmu -> dev
+Date:   Tue, 4 Apr 2023 14:41:53 +0100
+Message-ID: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.122.247.231]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,50 +68,110 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Alexis Lothoré <alexis.lothore@bootlin.com>
+These are the low hanging fruit following GregKH's feedback that
+all the devices registered via perf_pmu_register() should have parents.
 
-The current code path can lead to warnings because of uninitialized device,
-which contains, as a consequence, uninitialized kobject. The uninitialized
-device is passed to of_platform_populate, which will at some point, while
-creating child device, try to get a reference on uninitialized parent,
-resulting in the following warning:
+Note that this causes potential ABI breakage.
 
-kobject: '(null)' ((ptrval)): is not initialized, yet kobject_get() is
-being called.
+It may fall in the category of it isn't breakage if no one notices
+but I can't be certain of that.  Whilst it is arguable that
+no one should be been accessing PMUs except via the event_source
+bus, there was documentation suggesting /sys/devices/ for particular
+PMUs (because it was a shorter path?)
 
-The warning is observed after migrating a kernel 5.10.x to 6.1.x.
-Reverting commit 0d70af3c2530 ("fpga: bridge: Use standard dev_release for
-class driver") seems to remove the warning.
-This commit aggregates device_initialize() and device_add() into
-device_register() but this new call is done AFTER of_platform_populate
+The first patch is pulled out of the series:
+https://lore.kernel.org/linux-cxl/20230327170247.6968-1-Jonathan.Cameron@huawei.com/
+[PATCH v3 0/5] CXL 3.0 Performance Monitoring Unit support
 
-Fixes: 0d70af3c2530 ("fpga: bridge: Use standard dev_release for class driver")
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
----
- drivers/fpga/fpga-bridge.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+In that particular case it is very useful to be able to figure out which
+CXL device the PMU device is associated with and looking at it's parents
+in the device model as shown with ls -lh /sys/bus/event_sources/devices/
+is a very easy way to do this (once it is correctly parented).
 
-diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-index 727704431f61..13918c8c839e 100644
---- a/drivers/fpga/fpga-bridge.c
-+++ b/drivers/fpga/fpga-bridge.c
-@@ -360,7 +360,6 @@ fpga_bridge_register(struct device *parent, const char *name,
- 	bridge->dev.parent = parent;
- 	bridge->dev.of_node = parent->of_node;
- 	bridge->dev.id = id;
--	of_platform_populate(bridge->dev.of_node, NULL, NULL, &bridge->dev);
- 
- 	ret = dev_set_name(&bridge->dev, "br%d", id);
- 	if (ret)
-@@ -372,6 +371,8 @@ fpga_bridge_register(struct device *parent, const char *name,
- 		return ERR_PTR(ret);
- 	}
- 
-+	of_platform_populate(bridge->dev.of_node, NULL, NULL, &bridge->dev);
-+
- 	return bridge;
- 
- error_device:
+Addressing all the other instances of struct pmu not covered by this series
+is likely to be a more complex discussion but unlikely to have an affect
+on what is proposed here.
+
+Documentation updates deliberately 'fixed' in separate patches before
+changing the path to highlight that using /sys/bus/event_source/devices
+path is unchanged by this series and that is presumed to be the
+most common way these files are accessed.
+
+Jonathan Cameron (32):
+  perf: Allow a PMU to have a parent
+  perf/hisi-pcie: Assign parent for event_source device
+  Documentation: hisi-pmu: Drop reference to /sys/devices path
+  perf/hisi-uncore: Assign parents for event_source devices
+  Documentation: hns-pmu: Use /sys/bus/event_source/devices paths
+  perf/hisi-hns3: Assign parents for event_source device
+  perf/amlogic: Assign parents for event_source devices
+  perf/arm_cspmu: Assign parents for event_source devices
+  Documentation: xgene-pmu: Use /sys/bus/event_source/devices paths
+  perf/xgene: Assign parents for event_source devices
+  Documentation: thunderx2-pmu:  Use /sys/bus/event_source/devices paths
+  perf/thunderx2: Assign parents for event_source devices
+  perf/riscv: Assign parents for event_source devices
+  Documentation: qcom-pmu: Use /sys/bus/event_source/devices paths
+  perf/qcom: Assign parents for event_source devices
+  perf/imx_ddr: Assign parents for event_source devices
+  perf/arm_pmu: Assign parents for event_source devices
+  perf/alibaba_uncore: Assign parents for event_source device
+  perf/arm-cci: Assign parents for event_source device
+  perf/arm-ccn: Assign parents for event_source device
+  perf/arm-cmn: Assign parents for event_source device
+  perf/arm-dmc620: Assign parents for event_source device
+  perf/arm-dsu: Assign parents for event_source device
+  perf/arm-smmuv3: Assign parents for event_source device
+  perf/arm-spe: Assign parents for event_source device
+  arc: Assign parents for event_source devices
+  ARM: imx: Assign parents for mmdc event_source devices
+  dmaengine: idxd: Assign parent for event_source device
+  fpga: dfl: Assign parent for event_source device
+  drivers/nvdimm: Assign parent for event_source device
+  Documentation: ABI + trace: hisi_ptt: update paths to bus/event_source
+  hwtracing: hisi_ptt: Assign parent for event_source device
+
+ ...i_ptt => sysfs-bus-event_source-devices-hisi_ptt} | 12 ++++++------
+ Documentation/admin-guide/perf/hisi-pmu.rst          |  1 -
+ Documentation/admin-guide/perf/hns3-pmu.rst          |  8 ++++----
+ Documentation/admin-guide/perf/qcom_l2_pmu.rst       |  2 +-
+ Documentation/admin-guide/perf/qcom_l3_pmu.rst       |  2 +-
+ Documentation/admin-guide/perf/thunderx2-pmu.rst     |  2 +-
+ Documentation/admin-guide/perf/xgene-pmu.rst         |  2 +-
+ Documentation/trace/hisi-ptt.rst                     |  4 ++--
+ MAINTAINERS                                          |  2 +-
+ arch/arc/kernel/perf_event.c                         |  1 +
+ arch/arm/mach-imx/mmdc.c                             |  1 +
+ drivers/dma/idxd/perfmon.c                           |  1 +
+ drivers/fpga/dfl-fme-perf.c                          |  1 +
+ drivers/hwtracing/ptt/hisi_ptt.c                     |  1 +
+ drivers/nvdimm/nd_perf.c                             |  1 +
+ drivers/perf/alibaba_uncore_drw_pmu.c                |  1 +
+ drivers/perf/amlogic/meson_ddr_pmu_core.c            |  1 +
+ drivers/perf/arm-cci.c                               |  1 +
+ drivers/perf/arm-ccn.c                               |  1 +
+ drivers/perf/arm-cmn.c                               |  1 +
+ drivers/perf/arm_cspmu/arm_cspmu.c                   |  1 +
+ drivers/perf/arm_dmc620_pmu.c                        |  1 +
+ drivers/perf/arm_dsu_pmu.c                           |  1 +
+ drivers/perf/arm_pmu_platform.c                      |  1 +
+ drivers/perf/arm_smmuv3_pmu.c                        |  1 +
+ drivers/perf/arm_spe_pmu.c                           |  1 +
+ drivers/perf/fsl_imx8_ddr_perf.c                     |  1 +
+ drivers/perf/hisilicon/hisi_pcie_pmu.c               |  1 +
+ drivers/perf/hisilicon/hisi_uncore_pmu.c             |  1 +
+ drivers/perf/hisilicon/hns3_pmu.c                    |  1 +
+ drivers/perf/qcom_l2_pmu.c                           |  1 +
+ drivers/perf/qcom_l3_pmu.c                           |  1 +
+ drivers/perf/riscv_pmu_legacy.c                      |  1 +
+ drivers/perf/riscv_pmu_sbi.c                         |  1 +
+ drivers/perf/thunderx2_pmu.c                         |  1 +
+ drivers/perf/xgene_pmu.c                             |  1 +
+ include/linux/perf_event.h                           |  1 +
+ kernel/events/core.c                                 |  1 +
+ 38 files changed, 46 insertions(+), 18 deletions(-)
+ rename Documentation/ABI/testing/{sysfs-devices-hisi_ptt => sysfs-bus-event_source-devices-hisi_ptt} (83%)
+
 -- 
-2.40.0
+2.37.2
 
