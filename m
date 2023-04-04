@@ -2,34 +2,42 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF296D6581
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 16:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D806D63F5
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 15:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbjDDOfI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Apr 2023 10:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        id S235355AbjDDNvR (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 Apr 2023 09:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234223AbjDDOfH (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 10:35:07 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE68A3C02;
-        Tue,  4 Apr 2023 07:35:05 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTlp3vfmz67fjf;
-        Tue,  4 Apr 2023 21:54:46 +0800 (CST)
-Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
- lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 4 Apr 2023 14:58:44 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
+        with ESMTP id S235288AbjDDNvN (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 09:51:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A867A44B2;
+        Tue,  4 Apr 2023 06:51:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34A7E63440;
+        Tue,  4 Apr 2023 13:51:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170C9C4339B;
+        Tue,  4 Apr 2023 13:51:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680616270;
+        bh=M01kLJmuFwVJVH5Fd0jHURY66CemX7oncliKZevP7g0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fZw4cbD5umDKL/ZgCvOKS5mpwCGR1BQ72STMVfgjCvL67KREjRVIEZmqVvDB8kqED
+         bGD9pkjFw8YLyi8S10/+HeO11YvX1wNqbgoqIA2MhWfZYy+uphB+8exKR4ZUng1kj7
+         dIOuCdpMDWX3ARB9MwpySfrJKcHrjLWNdsjdNd/8=
+Date:   Tue, 4 Apr 2023 15:51:07 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
+        Dan Williams <dan.j.williams@intel.com>,
         Shaokun Zhang <zhangshaokun@hisilicon.com>,
         Yicong Yang <yangyicong@hisilicon.com>,
         Jiucheng Xu <jiucheng.xu@amlogic.com>,
@@ -45,55 +53,44 @@ CC:     <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Liang Kan <kan.liang@linux.intel.com>
-Subject: [PATCH 32/32] hwtracing: hisi_ptt: Assign parent for event_source device
-Date:   Tue, 4 Apr 2023 14:42:25 +0100
-Message-ID: <20230404134225.13408-33-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH 00/32] Add parents to struct pmu -> dev
+Message-ID: <2023040447-music-purgatory-1985@gregkh>
 References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Currently the PMU device appears directly under /sys/devices/
-Only root busses should appear there, so instead assign the pmu->dev
-parent to be the PCI device.
+On Tue, Apr 04, 2023 at 02:41:53PM +0100, Jonathan Cameron wrote:
+> These are the low hanging fruit following GregKH's feedback that
+> all the devices registered via perf_pmu_register() should have parents.
+> 
+> Note that this causes potential ABI breakage.
+> 
+> It may fall in the category of it isn't breakage if no one notices
+> but I can't be certain of that.  Whilst it is arguable that
+> no one should be been accessing PMUs except via the event_source
+> bus, there was documentation suggesting /sys/devices/ for particular
+> PMUs (because it was a shorter path?)
 
-Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
-Cc: Yicong Yang <yangyicong@hisilicon.com>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
----
- drivers/hwtracing/ptt/hisi_ptt.c | 1 +
- 1 file changed, 1 insertion(+)
+devices can always move around /sys/devices/ as there is not a guarantee
+that they will ever be in the same place.  That's what /sys/class/ is
+used to find (and /sys/bus/ in some cases.)
 
-diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-index 30f1525639b5..3868d43e9e3c 100644
---- a/drivers/hwtracing/ptt/hisi_ptt.c
-+++ b/drivers/hwtracing/ptt/hisi_ptt.c
-@@ -871,6 +871,7 @@ static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
- 
- 	hisi_ptt->hisi_ptt_pmu = (struct pmu) {
- 		.module		= THIS_MODULE,
-+		.parent		= &hisi_ptt->pdev->dev,
- 		.capabilities	= PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
- 		.task_ctx_nr	= perf_sw_context,
- 		.attr_groups	= hisi_ptt_pmu_groups,
--- 
-2.37.2
+And even then, the naming scheme is variable, and can and will change
+(i.e. bus ids), so that too is not required to stay the same.
 
+thanks for doing this work, I'll add it to my review queue...
+
+greg k-h
