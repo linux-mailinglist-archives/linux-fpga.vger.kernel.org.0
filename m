@@ -2,25 +2,25 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28BE76D64F5
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 16:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D85D16D6507
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 16:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235576AbjDDOML (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Apr 2023 10:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
+        id S235045AbjDDORH (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 Apr 2023 10:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235500AbjDDOMK (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 10:12:10 -0400
+        with ESMTP id S235079AbjDDORG (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 10:17:06 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5823AB9;
-        Tue,  4 Apr 2023 07:12:06 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTmX1Qxvz67XcG;
-        Tue,  4 Apr 2023 21:55:24 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E141E99;
+        Tue,  4 Apr 2023 07:17:05 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTn71T0gz67VxZ;
+        Tue,  4 Apr 2023 21:55:55 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 4 Apr 2023 14:56:09 +0100
+ 15.1.2507.23; Tue, 4 Apr 2023 14:56:40 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -48,9 +48,9 @@ CC:     <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
         Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Liang Kan <kan.liang@linux.intel.com>
-Subject: [PATCH 27/32] ARM: imx: Assign parents for mmdc event_source devices
-Date:   Tue, 4 Apr 2023 14:42:20 +0100
-Message-ID: <20230404134225.13408-28-Jonathan.Cameron@huawei.com>
+Subject: [PATCH 28/32] dmaengine: idxd: Assign parent for event_source device
+Date:   Tue, 4 Apr 2023 14:42:21 +0100
+Message-ID: <20230404134225.13408-29-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
 References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
@@ -72,27 +72,28 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 Currently the PMU device appears directly under /sys/devices/
 Only root busses should appear there, so instead assign the pmu->dev
-parent to be the platform device.
+parent to be the iDXD PCI Device.
 
 Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
-Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- arch/arm/mach-imx/mmdc.c | 1 +
+ drivers/dma/idxd/perfmon.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/mach-imx/mmdc.c b/arch/arm/mach-imx/mmdc.c
-index b9efe9da06e0..a015e0ea915d 100644
---- a/arch/arm/mach-imx/mmdc.c
-+++ b/arch/arm/mach-imx/mmdc.c
-@@ -436,6 +436,7 @@ static int mmdc_pmu_init(struct mmdc_pmu *pmu_mmdc,
- {
- 	*pmu_mmdc = (struct mmdc_pmu) {
- 		.pmu = (struct pmu) {
-+			.parent		= dev,
- 			.task_ctx_nr    = perf_invalid_context,
- 			.attr_groups    = attr_groups,
- 			.event_init     = mmdc_pmu_event_init,
+diff --git a/drivers/dma/idxd/perfmon.c b/drivers/dma/idxd/perfmon.c
+index d73004f47cf4..4d61334a814a 100644
+--- a/drivers/dma/idxd/perfmon.c
++++ b/drivers/dma/idxd/perfmon.c
+@@ -478,6 +478,7 @@ static void idxd_pmu_init(struct idxd_pmu *idxd_pmu)
+ 	}
+ 
+ 	idxd_pmu->pmu.name		= idxd_pmu->name;
++	idxd_pmu->pmu.parent		= &idxd_pmu->idxd->pdev->dev;
+ 	idxd_pmu->pmu.attr_groups	= perfmon_attr_groups;
+ 	idxd_pmu->pmu.task_ctx_nr	= perf_invalid_context;
+ 	idxd_pmu->pmu.event_init	= perfmon_pmu_event_init;
 -- 
 2.37.2
 
