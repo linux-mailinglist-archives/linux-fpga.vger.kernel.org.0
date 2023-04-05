@@ -2,31 +2,30 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3FB6D65DB
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Apr 2023 16:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB166D72C1
+	for <lists+linux-fpga@lfdr.de>; Wed,  5 Apr 2023 05:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbjDDOwb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 4 Apr 2023 10:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
+        id S236228AbjDEDu4 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 4 Apr 2023 23:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjDDOwa (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 10:52:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05C7330DC;
-        Tue,  4 Apr 2023 07:52:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42F17D75;
-        Tue,  4 Apr 2023 07:53:14 -0700 (PDT)
-Received: from [10.57.53.173] (unknown [10.57.53.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B64B3F73F;
-        Tue,  4 Apr 2023 07:52:24 -0700 (PDT)
-Message-ID: <9fb9b1d7-2acb-d2cf-e81b-4b86a1cb9d62@arm.com>
-Date:   Tue, 4 Apr 2023 15:52:23 +0100
+        with ESMTP id S236000AbjDEDuz (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 4 Apr 2023 23:50:55 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599E12691;
+        Tue,  4 Apr 2023 20:50:53 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0VfNxCDL_1680666644;
+Received: from 30.240.113.3(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VfNxCDL_1680666644)
+          by smtp.aliyun-inc.com;
+          Wed, 05 Apr 2023 11:50:47 +0800
+Message-ID: <9cb06879-d743-e3b2-b8e3-23962b458202@linux.alibaba.com>
+Date:   Wed, 5 Apr 2023 11:50:40 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH 23/32] perf/arm-dsu: Assign parents for event_source
- device
+Subject: Re: [PATCH 18/32] perf/alibaba_uncore: Assign parents for
+ event_source device
+Content-Language: en-US
 To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -44,22 +43,22 @@ Cc:     linuxarm@huawei.com, Dan Williams <dan.j.williams@intel.com>,
         Anup Patel <anup@brainfault.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Vineet Gupta <vgupta@kernel.org>,
+        Frank Li <Frank.li@nxp.com>, Vineet Gupta <vgupta@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
         Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
         Liang Kan <kan.liang@linux.intel.com>
 References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
- <20230404134225.13408-24-Jonathan.Cameron@huawei.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230404134225.13408-24-Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20230404134225.13408-19-Jonathan.Cameron@huawei.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20230404134225.13408-19-Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-9.9 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,29 +66,37 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 04/04/2023 14:42, Jonathan Cameron wrote:
+
+
+On 2023/4/4 PM9:42, Jonathan Cameron wrote:
 > Currently the PMU device appears directly under /sys/devices/
 > Only root busses should appear there, so instead assign the pmu->dev
 > parent to be the platform device.
 > 
 > Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
+> Cc: Shuai Xue <xueshuai@linux.alibaba.com>
 > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > ---
->   drivers/perf/arm_dsu_pmu.c | 1 +
->   1 file changed, 1 insertion(+)
+>  drivers/perf/alibaba_uncore_drw_pmu.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/perf/arm_dsu_pmu.c b/drivers/perf/arm_dsu_pmu.c
-> index fe2abb412c00..de75c00cb456 100644
-> --- a/drivers/perf/arm_dsu_pmu.c
-> +++ b/drivers/perf/arm_dsu_pmu.c
-> @@ -751,6 +751,7 @@ static int dsu_pmu_device_probe(struct platform_device *pdev)
->   
->   	dsu_pmu->pmu = (struct pmu) {
->   		.task_ctx_nr	= perf_invalid_context,
+> diff --git a/drivers/perf/alibaba_uncore_drw_pmu.c b/drivers/perf/alibaba_uncore_drw_pmu.c
+> index a7689fecb49d..0d129acf3f84 100644
+> --- a/drivers/perf/alibaba_uncore_drw_pmu.c
+> +++ b/drivers/perf/alibaba_uncore_drw_pmu.c
+> @@ -683,6 +683,7 @@ static int ali_drw_pmu_probe(struct platform_device *pdev)
+>  
+>  	drw_pmu->pmu = (struct pmu) {
+>  		.module		= THIS_MODULE,
 > +		.parent		= &pdev->dev,
->   		.module		= THIS_MODULE,
->   		.pmu_enable	= dsu_pmu_enable,
->   		.pmu_disable	= dsu_pmu_disable,
+>  		.task_ctx_nr	= perf_invalid_context,
+>  		.event_init	= ali_drw_pmu_event_init,
+>  		.add		= ali_drw_pmu_add,
 
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+
+Thank you.
+
+Best Regards,
+Shuai
