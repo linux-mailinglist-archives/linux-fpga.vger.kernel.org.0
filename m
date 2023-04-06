@@ -2,43 +2,50 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818726D9E35
-	for <lists+linux-fpga@lfdr.de>; Thu,  6 Apr 2023 19:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151CC6DA201
+	for <lists+linux-fpga@lfdr.de>; Thu,  6 Apr 2023 21:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjDFRIv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 6 Apr 2023 13:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
+        id S237677AbjDFTul (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 6 Apr 2023 15:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjDFRIu (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 6 Apr 2023 13:08:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6901A83F2;
-        Thu,  6 Apr 2023 10:08:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07547649B3;
-        Thu,  6 Apr 2023 17:08:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9CBEC433EF;
-        Thu,  6 Apr 2023 17:08:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680800928;
-        bh=1B1sR1zgH1Xw7J4RVXwXydm6RpI/xuxwQ0JKdZa9ZfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wJTj3+bpSdYGnEZdPQ24xH1ZlnIUwErVNzn8xF0c2H/eorEakxi/FWD9BM1Ba1PoL
-         hXZ/veihjgi0oxxvQQOVmZNjTEz5+K2k1QZt4SwwLTdywEnkVz/0bdXgB+hLQwbEEF
-         YPbpZQFV10T6m8wAIk3VpSBqFwn66yObRxEeTqxM=
-Date:   Thu, 6 Apr 2023 19:08:45 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
+        with ESMTP id S237372AbjDFTuk (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 6 Apr 2023 15:50:40 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D819F;
+        Thu,  6 Apr 2023 12:50:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DmGtZh90fpEw0TretC9nRQhMQvDnjMB5G00Z5+VRCJQ=; b=L08PtDFWYx1ukCT2pPv1pyufFB
+        S/61aVSjNkOOM63Ny2OG1fCAj6zQtUgcmDOgAM7d/jq+jgX65UTy81ClnAelmLd3S4kGYc9kzqv/w
+        xkfUcb9SJhyrS0FBk7obbDWej4fKjzqX6WD/OvBKrhMpoIqb8Cx6yaS+3MhLLswoPbfukR+FyKKXs
+        jn+wrwG897iS2qDRIfcoB9rKEFxKxSH/lhbpeqGJ3TElnk0N6SbjGnywb/yqyfslxVOnQjzWZpZvD
+        2GRC0D3Td2KCUPT8fYFu3xAbrYgwNBNU8rKxZCLpPm3NgBvL0QAk0N0x4zEdCWgLaQ+WGbXH8xXtk
+        EZYiUzrQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pkVc7-00073v-2j; Thu, 06 Apr 2023 19:49:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1CA09300202;
+        Thu,  6 Apr 2023 21:49:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EC4D32625225B; Thu,  6 Apr 2023 21:49:38 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 21:49:38 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Yicong Yang <yangyicong@huawei.com>,
+Cc:     Yicong Yang <yangyicong@huawei.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, yangyicong@hisilicon.com,
-        linuxarm@huawei.com, Dan Williams <dan.j.williams@intel.com>,
+        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
+        yangyicong@hisilicon.com, linuxarm@huawei.com,
+        Dan Williams <dan.j.williams@intel.com>,
         Shaokun Zhang <zhangshaokun@hisilicon.com>,
         Jiucheng Xu <jiucheng.xu@amlogic.com>,
         Khuong Dinh <khuong@os.amperecomputing.com>,
@@ -57,7 +64,7 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Liang Kan <kan.liang@linux.intel.com>
 Subject: Re: [PATCH 01/32] perf: Allow a PMU to have a parent
-Message-ID: <2023040610-morbidly-supermom-e81c@gregkh>
+Message-ID: <20230406194938.GB405948@hirez.programming.kicks-ass.net>
 References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
  <20230404134225.13408-2-Jonathan.Cameron@huawei.com>
  <61f8e489-ae76-38d6-2da0-43cf3c17853d@huawei.com>
@@ -68,9 +75,9 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230406174445.0000235c@Huawei.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -94,18 +101,16 @@ On Thu, Apr 06, 2023 at 05:44:45PM +0100, Jonathan Cameron wrote:
 > > 
 > 
 > It was tempting :) "Warning: Parentless PMU: try a different architecture."
-> 
+
+Haha!
+
 > I'd love some inputs on what the x86 PMU devices parents should be?
 > CPU counters in general tend to just spin out of deep in the architecture code.
-> 
+
+For the 'simple' ones I suppose we can use the CPU device.
+
 > My overall favorite is an l2 cache related PMU that is spun up in
 > arch/arm/kernel/irq.c init_IRQ()
-> 
-> I'm just not going to try and figure out why...
 
-Why not change the api to force a parent to be passed in?  And if one
-isn't, we make it a "virtual" device and throw it in the class for them?
-
-thanks,
-
-greg k-h
+Yeah, we're going to have a ton of them as well. Some of them are PCI
+devices and have a clear parent, others, not so much :/
