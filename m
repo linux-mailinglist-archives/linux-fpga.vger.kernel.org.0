@@ -2,120 +2,124 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E0C6DDA23
-	for <lists+linux-fpga@lfdr.de>; Tue, 11 Apr 2023 13:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DD06DD24F
+	for <lists+linux-fpga@lfdr.de>; Tue, 11 Apr 2023 07:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjDKLy6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 11 Apr 2023 07:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S229986AbjDKF50 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 11 Apr 2023 01:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjDKLy5 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 11 Apr 2023 07:54:57 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FDEE67;
-        Tue, 11 Apr 2023 04:54:56 -0700 (PDT)
+        with ESMTP id S229831AbjDKF5Y (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 11 Apr 2023 01:57:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276AC3A91;
+        Mon, 10 Apr 2023 22:56:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681214096; x=1712750096;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=C8TGZFhmbYFm4VBWTD8elks6yBJ/GjsydWyFRQRkG+k=;
-  b=ko+3sF1vlYNwuLeWcd2oSYbURWxLIMSaZ81N61TulHIZVVWsURamrqgY
-   7V81iSBHPJsv5iCjPvIFk/aUm0GeAtqPFQFU+2LwSEZWWB0yYjkOB8yBd
-   Y3kpXN2lf3U7txp6lKVS6L5d3J5CJ0B7PDvCmo6PZcvg/oBlAUWrxIORi
-   0VgC6ddHqfb/C47gotW0xHug4PwSk4RhWGPiqo8c3V34q+Rz17cqH+Kkx
-   wrCo4Z+m+L/8ZPPUqxhULsmnwRwgLYLGCDZmpyJUYX2rGfi1ZG3yUkZ7v
-   gj3RZdH1i7vz0pye+3OrgCvt96ZjrDFW6gkK4Arr/QueeYASv4gi8+sG/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341087922"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="341087922"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:54:56 -0700
+  t=1681192610; x=1712728610;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EF3DS2gvz2bYEhotwKHn4GGVCCEzg7c8/8/hl25mbs4=;
+  b=nT7boguw3zlPBEYBxPmB9IplCdf9PpF+iXPPA14SnLIVpBFxNIGNE9HS
+   pCCDzJ68h91BaXDVAZPFDITxCvPHZZlDfJZ+305sNwGgbiVZb1S3WZ+w0
+   zeTe56EwtgkEVFvSrg5TewZ44Er69LAp8NPzz0Drv2SdOvBs346UJaVcj
+   xHSdXJkVavdsvK7m6HE7UcrscuiOeMFidApRzQnBoFSBYZ9XOuf+UVJSZ
+   iz+fIyc6Xb1GytAzjhGPnH1Xmf58rPQBmv3e0t981xxyStoYtFX9gjipH
+   OExxUOBQ0/88G3kIMMX5DTi6cHBMnloJn1dsGWEzhqftSAbQE9TGqaAug
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="343535100"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="343535100"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 22:56:20 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="832314039"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="832314039"
-Received: from rwambsga-mobl.ger.corp.intel.com ([10.251.212.142])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:54:53 -0700
-Date:   Tue, 11 Apr 2023 14:54:58 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="757692648"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="757692648"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Apr 2023 22:56:17 -0700
+Date:   Tue, 11 Apr 2023 13:57:00 +0000
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
         Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
-        Russ Weight <russell.h.weight@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
- handshake registers
-In-Reply-To: <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
-Message-ID: <fb95c8da-c828-12b8-aae-56bd867cff41@linux.intel.com>
-References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com> <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com> <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
+        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] fpga: dfl-fme: constify pointers to hwmon_channel_info
+Message-ID: <ZDVnLDpnkycl+Uz8@yilunxu-OptiPlex-7050>
+References: <20230407150112.79854-1-krzysztof.kozlowski@linaro.org>
+ <0e41f48f-229d-389f-1dec-7230f13e1600@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1451428716-1681214103=:2109"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0e41f48f-229d-389f-1dec-7230f13e1600@roeck-us.net>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1451428716-1681214103=:2109
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-
-On Fri, 7 Apr 2023, Xu Yilun wrote:
-
-> On 2023-04-05 at 11:01:52 +0300, Ilpo Järvinen wrote:
-> > On some MAX 10 cards, the BMC firmware is not available to service
-> > handshake registers during secure update erase and write phases at
-> > normal speeds. This problem affects at least hwmon driver. When the MAX
-> > 10 hwmon driver tries to read the sensor values during a secure update,
-> > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
-> > which is magnitudes worse than the normal <0.02s).
+On 2023-04-07 at 16:08:45 -0700, Guenter Roeck wrote:
+> On 4/7/23 08:01, Krzysztof Kozlowski wrote:
+> > Statically allocated array of pointed to hwmon_channel_info can be made
+> > const for safety.
 > > 
-> > Manage access to the handshake registers using a rw semaphore and a FW
-> > state variable to prevent accesses during those secure update phases
-> > and return -EBUSY instead.
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > > 
-> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > > ---
-> >  drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
-> >  drivers/mfd/intel-m10-bmc-core.c        | 63 ++++++++++++++++++++++++-
-> >  drivers/mfd/intel-m10-bmc-pmci.c        |  4 ++
-> >  drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
-> >  include/linux/mfd/intel-m10-bmc.h       | 27 +++++++++++
-> >  5 files changed, 120 insertions(+), 5 deletions(-)
-> >
+> > 
+> > This depends on hwmon core patch:
+> > https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+> > 
+> > Therefore I propose this should also go via hwmon tree.
 > 
-> [...]
->  
-> >  
-> > +void m10bmc_fw_state_set(struct intel_m10bmc *m10bmc, enum m10bmc_fw_state new_state)
-> > +{
-> > +	down_write(&m10bmc->bmcfw_lock);
-> > +	m10bmc->bmcfw_state = new_state;
-> > +	up_write(&m10bmc->bmcfw_lock);
+> I am not going to apply patches for 10+ subsystems through the hwmon tree.
+> This can only result in chaos. The dependent patch is available at
 > 
-> Could we also skip this if no handshake is possible like for PMCI?
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
+> 
+> or wait until after the next commit window to apply this patch.
 
-Did you mean guarding it with !m10bmc->info->handshake_sys_reg_nranges ?
-If yes, it's doable (+ I'd add comment mentioning it since it's slightly 
-trappy to not always have that state updated).
+OK, I could apply this patch to linux-fpga in next cycle.
 
+Thanks,
+Yilun
 
--- 
- i.
-
---8323329-1451428716-1681214103=:2109--
+> 
+> Thanks,
+> Guenter
+> 
+> > 
+> > Cc: Jean Delvare <jdelvare@suse.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: linux-hwmon@vger.kernel.org
+> > ---
+> >   drivers/fpga/dfl-fme-main.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
+> > index 77ea04d4edbe..bcb5d34b3b82 100644
+> > --- a/drivers/fpga/dfl-fme-main.c
+> > +++ b/drivers/fpga/dfl-fme-main.c
+> > @@ -265,7 +265,7 @@ static const struct hwmon_ops thermal_hwmon_ops = {
+> >   	.read = thermal_hwmon_read,
+> >   };
+> > -static const struct hwmon_channel_info *thermal_hwmon_info[] = {
+> > +static const struct hwmon_channel_info * const thermal_hwmon_info[] = {
+> >   	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_EMERGENCY |
+> >   				 HWMON_T_MAX   | HWMON_T_MAX_ALARM |
+> >   				 HWMON_T_CRIT  | HWMON_T_CRIT_ALARM),
+> > @@ -465,7 +465,7 @@ static const struct hwmon_ops power_hwmon_ops = {
+> >   	.write = power_hwmon_write,
+> >   };
+> > -static const struct hwmon_channel_info *power_hwmon_info[] = {
+> > +static const struct hwmon_channel_info * const power_hwmon_info[] = {
+> >   	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT |
+> >   				  HWMON_P_MAX   | HWMON_P_MAX_ALARM |
+> >   				  HWMON_P_CRIT  | HWMON_P_CRIT_ALARM),
+> 
