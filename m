@@ -2,157 +2,120 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929496DDA1E
-	for <lists+linux-fpga@lfdr.de>; Tue, 11 Apr 2023 13:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E0C6DDA23
+	for <lists+linux-fpga@lfdr.de>; Tue, 11 Apr 2023 13:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjDKLv6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 11 Apr 2023 07:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S230086AbjDKLy6 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 11 Apr 2023 07:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjDKLv5 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 11 Apr 2023 07:51:57 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28238A3;
-        Tue, 11 Apr 2023 04:51:56 -0700 (PDT)
+        with ESMTP id S229721AbjDKLy5 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 11 Apr 2023 07:54:57 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FDEE67;
+        Tue, 11 Apr 2023 04:54:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681213917; x=1712749917;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IDNwN+L7zB55OJP9jBjVVnbHvsXbaSOmUpcPGO60Xi0=;
-  b=y6tZ5QJqGx0WOu5sYUUvPTBL0Q+1hLNCRisloQAxHWy/BR057l2KG4Sh
-   1AdESo3KeW8NHY8rDn7ezr7IzdYClYZozjKRUMVSd1N82627NyWlOjaiK
-   b4KmMNVD3C1QUF0P5HqIir4hShgCDq0QwxpHJm5IQ1aUhnSqQoZRK0A69
-   iyNouS3wKThWbHbx3EnxV8q7sJ8jkMNNmBy8SE8/J2dekItC1re8JKoXJ
-   dHTJiOpkzbSkVQGRtSb+DUv4sb3UXRS2sU7fQAa31o2wHpNzqYX6lIYvD
-   dW5mIpJXI7J+NYtuARQXWRuZuZ8USA/v4zwhZ3mBMZzxQh4kMdX83wTHE
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,336,1673938800"; 
-   d="asc'?scan'208";a="205928204"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2023 04:51:56 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 11 Apr 2023 04:51:51 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 11 Apr 2023 04:51:49 -0700
-Date:   Tue, 11 Apr 2023 12:51:34 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681214096; x=1712750096;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=C8TGZFhmbYFm4VBWTD8elks6yBJ/GjsydWyFRQRkG+k=;
+  b=ko+3sF1vlYNwuLeWcd2oSYbURWxLIMSaZ81N61TulHIZVVWsURamrqgY
+   7V81iSBHPJsv5iCjPvIFk/aUm0GeAtqPFQFU+2LwSEZWWB0yYjkOB8yBd
+   Y3kpXN2lf3U7txp6lKVS6L5d3J5CJ0B7PDvCmo6PZcvg/oBlAUWrxIORi
+   0VgC6ddHqfb/C47gotW0xHug4PwSk4RhWGPiqo8c3V34q+Rz17cqH+Kkx
+   wrCo4Z+m+L/8ZPPUqxhULsmnwRwgLYLGCDZmpyJUYX2rGfi1ZG3yUkZ7v
+   gj3RZdH1i7vz0pye+3OrgCvt96ZjrDFW6gkK4Arr/QueeYASv4gi8+sG/
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341087922"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="341087922"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:54:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="832314039"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="832314039"
+Received: from rwambsga-mobl.ger.corp.intel.com ([10.251.212.142])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:54:53 -0700
+Date:   Tue, 11 Apr 2023 14:54:58 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Xu Yilun <yilun.xu@intel.com>
-CC:     <linux-fpga@vger.kernel.org>, <conor@kernel.org>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 6/7] fpga: add PolarFire SoC Auto Update support
-Message-ID: <20230411-tinsmith-matchless-af5c7c41d23b@wendy>
-References: <20230331071823.956087-1-conor.dooley@microchip.com>
- <20230331071823.956087-7-conor.dooley@microchip.com>
- <ZClfjuLa/pRATwCp@yilunxu-OptiPlex-7050>
+cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
+ handshake registers
+In-Reply-To: <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
+Message-ID: <fb95c8da-c828-12b8-aae-56bd867cff41@linux.intel.com>
+References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com> <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com> <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="dLzJ91lPjUUfUd6j"
-Content-Disposition: inline
-In-Reply-To: <ZClfjuLa/pRATwCp@yilunxu-OptiPlex-7050>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1451428716-1681214103=:2109"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
---dLzJ91lPjUUfUd6j
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Sun, Apr 02, 2023 at 06:57:18PM +0800, Xu Yilun wrote:
-> On 2023-03-31 at 08:18:22 +0100, Conor Dooley wrote:
-> > Add support for Auto Update reprogramming of the FPGA fabric on
-> > PolarFire SoC, using the fw_upload mechanism a la the
-> > intel-m10-bmc-sec-update driver.
->=20
-> I'm not an expert of MTD and have several concerns about the mtd
-> writing part:
->=20
-> - This seems a generic case that writing a file content into the
->   driver restricted offset on mtd.
+--8323329-1451428716-1681214103=:2109
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-Right, writing at an offset is pretty generic.
+On Fri, 7 Apr 2023, Xu Yilun wrote:
 
-> - Seems the firmware update interface could be created for mtd device,
->   like the nvmem interface?
+> On 2023-04-05 at 11:01:52 +0300, Ilpo Järvinen wrote:
+> > On some MAX 10 cards, the BMC firmware is not available to service
+> > handshake registers during secure update erase and write phases at
+> > normal speeds. This problem affects at least hwmon driver. When the MAX
+> > 10 hwmon driver tries to read the sensor values during a secure update,
+> > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
+> > which is magnitudes worse than the normal <0.02s).
+> > 
+> > Manage access to the handshake registers using a rw semaphore and a FW
+> > state variable to prevent accesses during those secure update phases
+> > and return -EBUSY instead.
+> > 
+> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
+> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
+> >  drivers/mfd/intel-m10-bmc-core.c        | 63 ++++++++++++++++++++++++-
+> >  drivers/mfd/intel-m10-bmc-pmci.c        |  4 ++
+> >  drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
+> >  include/linux/mfd/intel-m10-bmc.h       | 27 +++++++++++
+> >  5 files changed, 120 insertions(+), 5 deletions(-)
+> >
+> 
+> [...]
+>  
+> >  
+> > +void m10bmc_fw_state_set(struct intel_m10bmc *m10bmc, enum m10bmc_fw_state new_state)
+> > +{
+> > +	down_write(&m10bmc->bmcfw_lock);
+> > +	m10bmc->bmcfw_state = new_state;
+> > +	up_write(&m10bmc->bmcfw_lock);
+> 
+> Could we also skip this if no handshake is possible like for PMCI?
 
-I'm not entirely sure what you mean by this one.
-Are you saying that there should be a generic way to do "firmware"
-uploads to mtd devices, based on some sort of structure defined in
-devicetree etc?
-And perhaps then, this driver would register as a consumer of that
-interface, pushing all of the direct mtd stuff out to that interface?
-
-> - I assume the purpose of the fw upload interface is to protect
->   unexpected writing from user. So how to protect the mtd be
->   written by other user interfaces like mtdchar/block or nvmem?
-
-I'm not very good with the security knobs so I don't have an answer for
-you here (yet). But your assumption about the rationale here is correct
-and I would like to block access.
-
-> For other parts:
->=20
-> - directory block check, fw upload don't touch this block, so why check
->   it in fw upload process.
-
-I don't know what you mean. The mtd device could be empty and the
-directory would need to be populated with the image address etc.
-Or, it could previously have been used for something else, and then it
-would be required to reconfigure it correctly for Auto Upgrade.
-
-Maybe I am misunderstanding you?
-
->=20
-> - image verification, no matter pass or fail, fw upload is actually done,
->   the flash is written and no way to rollback. So may remove from fw
->   upload process.
-
-The FPGA is flash based, so writing to the mtd device is not going to
-actually program the FPGA with this content. The original image/bitstream
-in the mtd device is either going to be a) equivalent to what is already
-programmed in the FPGA, b) not an upgrade over what is current in the
-FPGA, c) something that was uploaded since the last time the device was
-restarted.
-I don't think that overwriting any of those is problematic, as if the
-verification fails, the original bitstream will continue being used
-until an image that does actually pass is provided.
-
-Without doing the verification though, there's no way to tell for certain
-if the FPGA is actually going to perform an upgrade to this new bitstream
-once it is restarted, so I think there is value in keeping this.
-
-If you're still very sceptical about whether this belongs in
-drivers/fpga, I can always dump it in drivers/soc instead I guess.
-
-Cheers,
-Conor.
+Did you mean guarding it with !m10bmc->info->handshake_sys_reg_nranges ?
+If yes, it's doable (+ I'd add comment mentioning it since it's slightly 
+trappy to not always have that state updated).
 
 
---dLzJ91lPjUUfUd6j
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+ i.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDVJxgAKCRB4tDGHoIJi
-0pQSAP97BT4XTrsoYV/lQtiljkj5kbrxBzArbNkTmg8edtrX3AD/YwdgiW+cA4vP
-ZYY9qhOwvbAJtvjq6hlGsI6hYBRkIg4=
-=9y6K
------END PGP SIGNATURE-----
-
---dLzJ91lPjUUfUd6j--
+--8323329-1451428716-1681214103=:2109--
