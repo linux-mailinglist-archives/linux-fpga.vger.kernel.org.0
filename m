@@ -2,56 +2,74 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9706DD311
-	for <lists+linux-fpga@lfdr.de>; Tue, 11 Apr 2023 08:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFE66DF144
+	for <lists+linux-fpga@lfdr.de>; Wed, 12 Apr 2023 11:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjDKGlU (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 11 Apr 2023 02:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
+        id S229485AbjDLJ5A (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 12 Apr 2023 05:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjDKGlK (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 11 Apr 2023 02:41:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21A7100
-        for <linux-fpga@vger.kernel.org>; Mon, 10 Apr 2023 23:41:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681195261; x=1712731261;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=msWl0/tD4R6LRitU6uwLx4yI+PVRYSGDKfJ7WwPwNvc=;
-  b=S+uhppCz52iCavSlUlBJy81O71tUgxk4XQLjYsiso9fmVzPqlTgt1WC0
-   V9hFxnj17fz0T6W9xUuXQNXwrWxpiWOfDzuQExfzFbAqRNyr8ED56k9++
-   CmAm49I/W6/ef8klxKzRP9oXitjcRBNFWh+q6exWrmwGcPpW3fA1/LcEx
-   /+LZS6roGH6Slf7FpC4v2RRP9dnvKIqdreyC4bEvsgAhVFqUiwMC5+AWg
-   2qUAjnRRn5R+4LxLXzYCGQ2fV0XOcfYTjCicgL2nvFTTVjswHaYvamDbM
-   pBUlO6H9ugAAoSv0h2mERNVpqQdbd5Nqzf+d46d9i704LZfM1mX+qiVkf
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="342303663"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="342303663"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 23:41:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="638703957"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="638703957"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga003.jf.intel.com with ESMTP; 10 Apr 2023 23:40:59 -0700
-Date:   Tue, 11 Apr 2023 14:41:42 +0000
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     gregkh@linuxfoundation.org
-Cc:     yilun.xu@intel.com, linux-fpga@vger.kernel.org, hao.wu@intel.com,
-        mdf@kernel.org
-Subject: [GIT PULL] FPGA Manager changes for 6.3-final
-Message-ID: <ZDVxpv10vXppm8T/@yilunxu-OptiPlex-7050>
+        with ESMTP id S229964AbjDLJ47 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 12 Apr 2023 05:56:59 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6737295;
+        Wed, 12 Apr 2023 02:56:57 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PxJ2w0HmHz6J6wc;
+        Wed, 12 Apr 2023 17:54:32 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 12 Apr
+ 2023 10:56:53 +0100
+Date:   Wed, 12 Apr 2023 10:56:50 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Yicong Yang <yangyicong@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Will Deacon <will@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <yangyicong@hisilicon.com>,
+        <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        "Khuong Dinh" <khuong@os.amperecomputing.com>,
+        Robert Richter <rric@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Frank Li <Frank.li@nxp.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Liang Kan <kan.liang@linux.intel.com>
+Subject: Re: [PATCH 01/32] perf: Allow a PMU to have a parent
+Message-ID: <20230412105650.000014f9@Huawei.com>
+In-Reply-To: <2023040610-morbidly-supermom-e81c@gregkh>
+References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
+        <20230404134225.13408-2-Jonathan.Cameron@huawei.com>
+        <61f8e489-ae76-38d6-2da0-43cf3c17853d@huawei.com>
+        <20230406111607.00007be5@Huawei.com>
+        <20230406124040.GD392176@hirez.programming.kicks-ass.net>
+        <20230406174445.0000235c@Huawei.com>
+        <2023040610-morbidly-supermom-e81c@gregkh>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,58 +77,48 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+On Thu, 6 Apr 2023 19:08:45 +0200
+Greg KH <gregkh@linuxfoundation.org> wrote:
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+> On Thu, Apr 06, 2023 at 05:44:45PM +0100, Jonathan Cameron wrote:
+> > On Thu, 6 Apr 2023 14:40:40 +0200
+> > Peter Zijlstra <peterz@infradead.org> wrote:
+> >   
+> > > On Thu, Apr 06, 2023 at 11:16:07AM +0100, Jonathan Cameron wrote:
+> > >   
+> > > > In the long run I agree it would be good.  Short term there are more instances of
+> > > > struct pmu that don't have parents than those that do (even after this series).
+> > > > We need to figure out what to do about those before adding checks on it being
+> > > > set.    
+> > > 
+> > > Right, I don't think you've touched *any* of the x86 PMUs for example,
+> > > and getting everybody that boots an x86 kernel a warning isn't going to
+> > > go over well :-)
+> > >   
+> > 
+> > It was tempting :) "Warning: Parentless PMU: try a different architecture."
+> > 
+> > I'd love some inputs on what the x86 PMU devices parents should be?
+> > CPU counters in general tend to just spin out of deep in the architecture code.
+> > 
+> > My overall favorite is an l2 cache related PMU that is spun up in
+> > arch/arm/kernel/irq.c init_IRQ()
+> > 
+> > I'm just not going to try and figure out why...  
+> 
+> Why not change the api to force a parent to be passed in?  And if one
+> isn't, we make it a "virtual" device and throw it in the class for them?
 
-are available in the Git repository at:
+Longer term I'd be fine doing that, but I'd like to identify the right parents
+rather than end up sweeping it under the carpet.  Anything we either get completely
+stuck on (or decide we don't care about) could indeed fall back to a virtual
+device.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga tags/fpga-for-6.3-final
+Jonathan
 
-for you to fetch changes up to dc70eb868b9cd2ca01313e5a394e6ea001d513e9:
 
-  fpga: bridge: properly initialize bridge device before populating children (2023-04-07 00:10:04 +0800)
+> 
+> thanks,
+> 
+> greg k-h
 
-----------------------------------------------------------------
-FPGA Manager changes for 6.3-final
-
-Intel m10 bmc secure update:
-
-- Ilpo's change fixes the return value of driver internal function
-
-DFL PCI driver:
-
-- Bjorn's change drops redundant pci_enable_pcie_error_reporting()
-
-Xilinx:
-
-- Michal's change uses xlnx_pr_decouple_read() instead of readl() to
-  resolve sparse issue.
-
-FPGA core:
-
-- Alexis's change fixes kernel warning on fpga bridge register
-
-All patches have been reviewed on the mailing list, and have been in the
-last linux-next releases (as part of our fixes branch)
-
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-
-----------------------------------------------------------------
-Alexis Lothoré (1):
-      fpga: bridge: properly initialize bridge device before populating children
-
-Bjorn Helgaas (1):
-      fpga: dfl-pci: Drop redundant pci_enable_pcie_error_reporting()
-
-Ilpo Järvinen (1):
-      fpga: m10bmc-sec: Fix rsu_send_data() to return FW_UPLOAD_ERR_HW_ERROR
-
-Michal Simek (1):
-      fpga: xilinx-pr-decoupler: Use readl wrapper instead of pure readl
-
- drivers/fpga/dfl-pci.c                  | 20 ++++++--------------
- drivers/fpga/fpga-bridge.c              |  3 ++-
- drivers/fpga/intel-m10-bmc-sec-update.c |  2 +-
- drivers/fpga/xilinx-pr-decoupler.c      |  2 +-
- 4 files changed, 10 insertions(+), 17 deletions(-)
