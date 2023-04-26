@@ -2,75 +2,75 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A91E6EF7EA
-	for <lists+linux-fpga@lfdr.de>; Wed, 26 Apr 2023 17:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E3A6EF85C
+	for <lists+linux-fpga@lfdr.de>; Wed, 26 Apr 2023 18:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239625AbjDZPpm (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 26 Apr 2023 11:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
+        id S231902AbjDZQWe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 26 Apr 2023 12:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjDZPpl (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 26 Apr 2023 11:45:41 -0400
+        with ESMTP id S229822AbjDZQWd (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 26 Apr 2023 12:22:33 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83ECB4ECA
-        for <linux-fpga@vger.kernel.org>; Wed, 26 Apr 2023 08:44:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2307683
+        for <linux-fpga@vger.kernel.org>; Wed, 26 Apr 2023 09:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682523892;
+        s=mimecast20190719; t=1682526105;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DlTRL1GwTI6pzsbx4OaM4kh9mkITLAPIxP7UTNVAlK8=;
-        b=erCIXVYog8mhh3X5V0DGxIQjiMz91q5qvxfFh2LrwRWL7bwhRYfRGNwLk7wlXUfZNowFa/
-        E4YM9gN7Ny1TtLnwvvcICbpTOcs0M2MIjxBW67SifAhsnrR7psCXw5tHxk5BuTCztaF+O3
-        b2whkX45uO8u8mihQE+km2GEkXUKdp8=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=2OXep4zNHi4qTSZ6NcQM7JQ/r5lnL1zw8lhoPMi+9jk=;
+        b=CI38XK2osJ7MFJbFAfWWwfdNG8DIH4rmUK0p5hZvz8KQ4+IBmxGl3f2IoP7sJqH65XlJ+e
+        MzhJze+rEOPOKlHW9wIHMq0wFLRBXX9p9TL008fWl/07xPWD0RrHpuxFmtjpNvCcCjGjXg
+        Co0xs3fvJbdzFy2X0Uv4qZyGpDsmy0I=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-416-NTiUXoSUMU6kyB5KToWtDA-1; Wed, 26 Apr 2023 11:44:51 -0400
-X-MC-Unique: NTiUXoSUMU6kyB5KToWtDA-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-5ef41c0847cso48152086d6.1
-        for <linux-fpga@vger.kernel.org>; Wed, 26 Apr 2023 08:44:51 -0700 (PDT)
+ us-mta-558-C8lAP-QQPlOFSoWneXumWg-1; Wed, 26 Apr 2023 12:21:44 -0400
+X-MC-Unique: C8lAP-QQPlOFSoWneXumWg-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-2fa5d643cd8so2290710f8f.2
+        for <linux-fpga@vger.kernel.org>; Wed, 26 Apr 2023 09:21:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682523891; x=1685115891;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682526103; x=1685118103;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DlTRL1GwTI6pzsbx4OaM4kh9mkITLAPIxP7UTNVAlK8=;
-        b=cCZ412Kx3TNRGc9IOv1Zt/LA+A3ajAjXw/SC3TjIA2slHiMLyNnUBxSY3V812ccyJS
-         eL53qtLEgyMvJB5qN64nBd2tPdmoQ3NSEPVzssAPCSYDk5+PQXISI3BhjkKA2+ucyH8+
-         ZkynVrsgVS1t7U0UtjEspYZ9lasgX3YYiX3jGo6Qq4+yHTF+fzONrYih/mLW/oJghEAJ
-         7SDQ/zNepIrpAGZ+aBLTesUHJMpeZMFFqQMg9KFwPT6fBtVRK2YL6uaz9/QUipMpNn9h
-         5o3m8mB/6Z7TQ/jxruoC0vc36rwcR/ZAglXymUN64F5aEcNynQaRykdcyVuMTIGZP8zr
-         BIxw==
-X-Gm-Message-State: AAQBX9d9UpxJyooaA0sGP4XY1KiM8yuDZ2sxO4PGnKGDu73kBvA3zFei
-        kjs6E2+XBrl/P7A5/GZUFIhb4ovPbJRC/S0bBlYh6KunROkxsxqxpr6gpJpwzq8QKjaqS69NTiw
-        2fD6mU/wg9duI0zOrlPrF
-X-Received: by 2002:a05:6214:508b:b0:5ba:8af3:5d58 with SMTP id kk11-20020a056214508b00b005ba8af35d58mr34268483qvb.36.1682523890745;
-        Wed, 26 Apr 2023 08:44:50 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YViSiODlulDMbtHjvRL5wFLcXzLKj33VGz6WyYQ2WVgR465YYm/EzU1tG2QFHHSgy4h8jkbQ==
-X-Received: by 2002:a05:6214:508b:b0:5ba:8af3:5d58 with SMTP id kk11-20020a056214508b00b005ba8af35d58mr34268439qvb.36.1682523890374;
-        Wed, 26 Apr 2023 08:44:50 -0700 (PDT)
+        bh=2OXep4zNHi4qTSZ6NcQM7JQ/r5lnL1zw8lhoPMi+9jk=;
+        b=iolBvpYxTIYqbppVJVMpMXWyrN6cMXmjOcllLl3j3WS1Bhy+9aCAhRqPLhM7yNU7HK
+         HLUiod5VS1TcfvlhoodFXY4wxtS7rur1aJyE6C4oadK8zp/A7RnZ2VrFb+850fKlmDTH
+         533y/4YoXLSkAfCexg5XyCja/0WJaWHpPSLQLuuhQJYQr06eBENl3LCaI77PO/xf7OoF
+         zliSk0Amd2IG3QDxJ0IBDR6gFgKNIaUC/ZZtn9sE1wjp5j0l9c5+QI7lgAsuRfkXHfs1
+         386iE6xzRkEC21nJHnFXxqnGDjoTRIXJVozn3P/8eOec2Mg81uEl6tz5j6ZugiSNDwhT
+         H2ZA==
+X-Gm-Message-State: AAQBX9e6o7npG0NdGilg9TeugP5LfNireusAoZX3p48zQKCsBnG3Ifzv
+        5J1AxhFxDgYTa7HrFtsS1/0QbR8GEmhLlSm2PjhpEu363olutNKOntN095OCxNjxlf9gOPpMgHx
+        lQtOLMyQSbYxTjpsr1tjx
+X-Received: by 2002:a5d:5962:0:b0:2cf:ee9d:ce2f with SMTP id e34-20020a5d5962000000b002cfee9dce2fmr14816126wri.19.1682526103053;
+        Wed, 26 Apr 2023 09:21:43 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZgaMKAQ4zUgM/jX2m3kP07MpmtQjNVd1W0IKLIq3RH/cyKshdQu/7VDp2BGOEiWd4a3fA/wA==
+X-Received: by 2002:a5d:5962:0:b0:2cf:ee9d:ce2f with SMTP id e34-20020a5d5962000000b002cfee9dce2fmr14816105wri.19.1682526102688;
+        Wed, 26 Apr 2023 09:21:42 -0700 (PDT)
 Received: from [192.168.9.16] (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
-        by smtp.gmail.com with ESMTPSA id z21-20020ac86b95000000b003e64ea3faf7sm5411514qts.59.2023.04.26.08.44.48
+        by smtp.gmail.com with ESMTPSA id x9-20020a5d60c9000000b002fbdb797483sm16101222wrt.49.2023.04.26.09.21.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 08:44:50 -0700 (PDT)
-Message-ID: <cef792a1-42c1-b262-b07e-529006fdcb6d@redhat.com>
-Date:   Wed, 26 Apr 2023 17:44:46 +0200
+        Wed, 26 Apr 2023 09:21:42 -0700 (PDT)
+Message-ID: <eebddf51-c83b-29f0-8ee7-703c2e383070@redhat.com>
+Date:   Wed, 26 Apr 2023 18:21:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [RFC PATCH v4 1/4] fpga: add fake FPGA manager
+Subject: Re: [RFC PATCH v4 3/4] fpga: add fake FPGA region
+Content-Language: en-US
 To:     Xu Yilun <yilun.xu@intel.com>
 Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
         Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
         linux-fpga@vger.kernel.org
 References: <20230417122308.131453-1-marpagan@redhat.com>
- <20230417122308.131453-2-marpagan@redhat.com>
- <ZEGE+UqTyKGTyv9h@yilunxu-OptiPlex-7050>
-Content-Language: en-US
+ <20230417122308.131453-4-marpagan@redhat.com>
+ <ZEGGpNQfUxsMUOnh@yilunxu-OptiPlex-7050>
 From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZEGE+UqTyKGTyv9h@yilunxu-OptiPlex-7050>
+In-Reply-To: <ZEGGpNQfUxsMUOnh@yilunxu-OptiPlex-7050>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -85,495 +85,346 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 
-On 2023-04-20 20:31, Xu Yilun wrote:
-> On 2023-04-17 at 14:23:05 +0200, Marco Pagani wrote:
->> Add fake FPGA manager platform driver with support functions.
->> The driver checks the programming sequence using KUnit expectations.
->> This module is part of the KUnit tests for the FPGA subsystem.
+On 2023-04-20 20:38, Xu Yilun wrote:
+> On 2023-04-17 at 14:23:07 +0200, Marco Pagani wrote:
+>> Add fake FPGA region platform driver with support functions. This
+>> module is part of the KUnit tests for the FPGA subsystem.
 >>
 >> Signed-off-by: Marco Pagani <marpagan@redhat.com>
 >> ---
->>  drivers/fpga/tests/fake-fpga-mgr.c | 386 +++++++++++++++++++++++++++++
->>  drivers/fpga/tests/fake-fpga-mgr.h |  43 ++++
->>  2 files changed, 429 insertions(+)
->>  create mode 100644 drivers/fpga/tests/fake-fpga-mgr.c
->>  create mode 100644 drivers/fpga/tests/fake-fpga-mgr.h
+>>  drivers/fpga/tests/fake-fpga-region.c | 259 ++++++++++++++++++++++++++
+>>  drivers/fpga/tests/fake-fpga-region.h |  40 ++++
+>>  2 files changed, 299 insertions(+)
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-region.c
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-region.h
 >>
->> diff --git a/drivers/fpga/tests/fake-fpga-mgr.c b/drivers/fpga/tests/fake-fpga-mgr.c
+>> diff --git a/drivers/fpga/tests/fake-fpga-region.c b/drivers/fpga/tests/fake-fpga-region.c
 >> new file mode 100644
->> index 000000000000..636df637b291
+>> index 000000000000..b23ae5e94fe6
 >> --- /dev/null
->> +++ b/drivers/fpga/tests/fake-fpga-mgr.c
->> @@ -0,0 +1,386 @@
+>> +++ b/drivers/fpga/tests/fake-fpga-region.c
+>> @@ -0,0 +1,259 @@
 >> +// SPDX-License-Identifier: GPL-2.0
 >> +/*
->> + * Driver for the fake FPGA manager
+>> + * Driver for the fake FPGA region
 >> + *
 >> + * Copyright (C) 2023 Red Hat, Inc.
 >> + *
 >> + * Author: Marco Pagani <marpagan@redhat.com>
 >> + */
 >> +
->> +#include <linux/types.h>
 >> +#include <linux/device.h>
+>> +#include <linux/list.h>
 >> +#include <linux/platform_device.h>
 >> +#include <linux/fpga/fpga-mgr.h>
+>> +#include <linux/fpga/fpga-region.h>
+>> +#include <linux/fpga/fpga-bridge.h>
 >> +#include <kunit/test.h>
 >> +
->> +#include "fake-fpga-mgr.h"
+>> +#include "fake-fpga-region.h"
 >> +
->> +#define FAKE_FPGA_MGR_DEV_NAME	"fake_fpga_mgr"
+>> +#define FAKE_FPGA_REGION_DEV_NAME	"fake_fpga_region"
 >> +
->> +#define FAKE_HEADER_BYTE	0x3f
->> +#define FAKE_HEADER_SIZE	FPGA_IMG_BLOCK
->> +
->> +struct fake_mgr_priv {
->> +	int rcfg_count;
->> +	bool op_parse_header;
->> +	bool op_write_init;
->> +	bool op_write;
->> +	bool op_write_sg;
->> +	bool op_write_complete;
+>> +struct fake_region_priv {
+>> +	int id;
 >> +	struct kunit *test;
+>> +	struct list_head bridge_list;
 >> +};
 >> +
->> +struct fake_mgr_data {
->> +	struct kunit *test;
+>> +struct bridge_elem {
+>> +	struct fpga_bridge *bridge;
+>> +	struct list_head node;
 >> +};
 >> +
->> +static void check_header(struct kunit *test, const u8 *buf);
->> +
->> +static enum fpga_mgr_states op_state(struct fpga_manager *mgr)
->> +{
->> +	struct fake_mgr_priv *priv;
->> +
->> +	priv = mgr->priv;
->> +
->> +	if (priv->test)
->> +		kunit_info(priv->test, "Fake FPGA manager: state\n");
->> +
->> +	return FPGA_MGR_STATE_UNKNOWN;
->> +}
->> +
->> +static u64 op_status(struct fpga_manager *mgr)
->> +{
->> +	struct fake_mgr_priv *priv;
->> +
->> +	priv = mgr->priv;
->> +
->> +	if (priv->test)
->> +		kunit_info(priv->test, "Fake FPGA manager: status\n");
->> +
->> +	return 0;
->> +}
->> +
->> +static int op_parse_header(struct fpga_manager *mgr, struct fpga_image_info *info,
->> +			   const char *buf, size_t count)
->> +{
->> +	struct fake_mgr_priv *priv;
->> +
->> +	priv = mgr->priv;
->> +
->> +	if (priv->test) {
->> +		kunit_info(priv->test, "Fake FPGA manager: parse_header\n");
->> +
->> +		KUNIT_EXPECT_EQ(priv->test, mgr->state,
->> +				FPGA_MGR_STATE_PARSE_HEADER);
->> +
->> +		check_header(priv->test, buf);
->> +	}
->> +
->> +	priv->op_parse_header = true;
->> +
->> +	return 0;
->> +}
->> +
->> +static int op_write_init(struct fpga_manager *mgr, struct fpga_image_info *info,
->> +			 const char *buf, size_t count)
->> +{
->> +	struct fake_mgr_priv *priv;
->> +
->> +	priv = mgr->priv;
->> +
->> +	if (priv->test) {
->> +		kunit_info(priv->test, "Fake FPGA manager: write_init\n");
->> +
->> +		KUNIT_EXPECT_EQ(priv->test, mgr->state,
->> +				FPGA_MGR_STATE_WRITE_INIT);
->> +	}
->> +
->> +	priv->op_write_init = true;
->> +
->> +	return 0;
->> +}
->> +
->> +static int op_write(struct fpga_manager *mgr, const char *buf, size_t count)
->> +{
->> +	struct fake_mgr_priv *priv;
->> +
->> +	priv = mgr->priv;
->> +
->> +	if (priv->test) {
->> +		kunit_info(priv->test, "Fake FPGA manager: write\n");
->> +
->> +		KUNIT_EXPECT_EQ(priv->test, mgr->state,
->> +				FPGA_MGR_STATE_WRITE);
->> +	}
->> +
->> +	priv->op_write = true;
->> +
->> +	return 0;
->> +}
->> +
->> +static int op_write_sg(struct fpga_manager *mgr, struct sg_table *sgt)
->> +{
->> +	struct fake_mgr_priv *priv;
->> +
->> +	priv = mgr->priv;
->> +
->> +	if (priv->test) {
->> +		kunit_info(priv->test, "Fake FPGA manager: write_sg\n");
->> +
->> +		KUNIT_EXPECT_EQ(priv->test, mgr->state,
->> +				FPGA_MGR_STATE_WRITE);
->> +	}
->> +
->> +	priv->op_write_sg = true;
->> +
->> +	return 0;
->> +}
->> +
->> +static int op_write_complete(struct fpga_manager *mgr, struct fpga_image_info *info)
->> +{
->> +	struct fake_mgr_priv *priv;
->> +
->> +	priv = mgr->priv;
->> +
->> +	if (priv->test) {
->> +		kunit_info(priv->test, "Fake FPGA manager: write_complete\n");
->> +
->> +		KUNIT_EXPECT_EQ(priv->test, mgr->state,
->> +				FPGA_MGR_STATE_WRITE_COMPLETE);
->> +	}
->> +
->> +	priv->op_write_complete = true;
->> +	priv->rcfg_count++;
->> +
->> +	return 0;
->> +}
->> +
->> +static void op_fpga_remove(struct fpga_manager *mgr)
->> +{
->> +	struct fake_mgr_priv *priv;
->> +
->> +	priv = mgr->priv;
->> +
->> +	if (priv->test)
->> +		kunit_info(priv->test, "Fake FPGA manager: remove\n");
->> +}
->> +
->> +static const struct fpga_manager_ops fake_fpga_mgr_ops = {
->> +	.initial_header_size = FAKE_HEADER_SIZE,
->> +	.skip_header = false,
->> +	.state = op_state,
->> +	.status = op_status,
->> +	.parse_header = op_parse_header,
->> +	.write_init = op_write_init,
->> +	.write = op_write,
->> +	.write_sg = op_write_sg,
->> +	.write_complete = op_write_complete,
->> +	.fpga_remove = op_fpga_remove,
+>> +struct fake_region_data {
+>> +	struct fpga_manager *mgr;
+>> +	struct kunit *test;
 >> +};
 >> +
 >> +/**
->> + * fake_fpga_mgr_register() - register a fake FPGA manager.
->> + * @mgr_ctx: fake FPGA manager context data structure.
+>> + * fake_fpga_region_register() - register a fake FPGA region.
+>> + * @mgr: associated FPGA manager.
+>> + * @parent: parent device.
 >> + * @test: KUnit test context object.
 >> + *
->> + * Return: pointer to a new fake FPGA manager on success, an ERR_PTR()
->> + * encoded error code on failure.
+>> + * Return: pointer to a new fake FPGA region on success, an ERR_PTR() encoded
+>> + * error code on failure.
 >> + */
->> +struct fake_fpga_mgr *
->> +fake_fpga_mgr_register(struct kunit *test, struct device *parent)
+>> +struct fake_fpga_region *
+>> +fake_fpga_region_register(struct fpga_manager *mgr, struct device *parent,
+>> +			  struct kunit *test)
 >> +{
->> +	struct fake_fpga_mgr *mgr_ctx;
->> +	struct fake_mgr_data pdata;
+>> +	struct fake_fpga_region *region_ctx;
+>> +	struct fake_region_data pdata;
+>> +	struct fake_region_priv *priv;
 >> +	int ret;
 >> +
->> +	mgr_ctx = kzalloc(sizeof(*mgr_ctx), GFP_KERNEL);
->> +	if (!mgr_ctx) {
+>> +	region_ctx = kzalloc(sizeof(*region_ctx), GFP_KERNEL);
+>> +	if (!region_ctx) {
 >> +		ret = -ENOMEM;
 >> +		goto err_mem;
 >> +	}
 >> +
->> +	mgr_ctx->pdev = platform_device_alloc(FAKE_FPGA_MGR_DEV_NAME,
->> +					      PLATFORM_DEVID_AUTO);
->> +	if (!mgr_ctx->pdev) {
->> +		pr_err("Fake FPGA manager device allocation failed\n");
+>> +	region_ctx->pdev = platform_device_alloc(FAKE_FPGA_REGION_DEV_NAME,
+>> +						 PLATFORM_DEVID_AUTO);
+>> +	if (!region_ctx->pdev) {
+>> +		pr_err("Fake FPGA region device allocation failed\n");
 >> +		ret = -ENOMEM;
 >> +		goto err_mem;
 >> +	}
 >> +
+>> +	pdata.mgr = mgr;
 >> +	pdata.test = test;
->> +	platform_device_add_data(mgr_ctx->pdev, &pdata, sizeof(pdata));
+>> +	platform_device_add_data(region_ctx->pdev, &pdata, sizeof(pdata));
 >> +
->> +	mgr_ctx->pdev->dev.parent = parent;
->> +	ret = platform_device_add(mgr_ctx->pdev);
+>> +	region_ctx->pdev->dev.parent = parent;
+>> +	ret = platform_device_add(region_ctx->pdev);
 >> +	if (ret) {
->> +		pr_err("Fake FPGA manager device add failed\n");
+>> +		pr_err("Fake FPGA region device add failed\n");
 >> +		goto err_pdev;
 >> +	}
 >> +
->> +	mgr_ctx->mgr = platform_get_drvdata(mgr_ctx->pdev);
+>> +	region_ctx->region = platform_get_drvdata(region_ctx->pdev);
 >> +
->> +	if (test)
->> +		kunit_info(test, "Fake FPGA manager registered\n");
+>> +	if (test) {
+>> +		priv = region_ctx->region->priv;
+>> +		kunit_info(test, "Fake FPGA region %d registered\n", priv->id);
+>> +	}
 >> +
->> +	return mgr_ctx;
+>> +	return region_ctx;
 >> +
 >> +err_pdev:
->> +	platform_device_put(mgr_ctx->pdev);
->> +	kfree(mgr_ctx);
+>> +	platform_device_put(region_ctx->pdev);
+>> +	kfree(region_ctx);
 >> +err_mem:
 >> +	return ERR_PTR(ret);
 >> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_register);
+>> +EXPORT_SYMBOL_GPL(fake_fpga_region_register);
 >> +
 >> +/**
->> + * fake_fpga_mgr_unregister() - unregister a fake FPGA manager.
->> + * @mgr_ctx: fake FPGA manager context data structure.
+>> + * fake_fpga_region_unregister() - unregister a fake FPGA region.
+>> + * @region_ctx: fake FPGA region context data structure.
 >> + */
->> +void fake_fpga_mgr_unregister(struct fake_fpga_mgr *mgr_ctx)
+>> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx)
 >> +{
->> +	struct fake_mgr_priv *priv;
+>> +	struct fake_region_priv *priv;
 >> +	struct kunit *test;
+>> +	int id;
 >> +
->> +	if (!mgr_ctx)
+>> +	if (!region_ctx)
 >> +		return;
 >> +
->> +	priv = mgr_ctx->mgr->priv;
+>> +	priv = region_ctx->region->priv;
 >> +	test = priv->test;
+>> +	id = priv->id;
 >> +
->> +	if (mgr_ctx->pdev) {
->> +		platform_device_unregister(mgr_ctx->pdev);
+>> +	if (region_ctx->pdev) {
+>> +		platform_device_unregister(region_ctx->pdev);
 >> +		if (test)
->> +			kunit_info(test, "Fake FPGA manager unregistered\n");
+>> +			kunit_info(test, "Fake FPGA region %d unregistered\n", id);
 >> +	}
 >> +
->> +	kfree(mgr_ctx);
+>> +	kfree(region_ctx);
 >> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_unregister);
+>> +EXPORT_SYMBOL_GPL(fake_fpga_region_unregister);
 >> +
 >> +/**
->> + * fake_fpga_mgr_get_rcfg_count() - get the number of reconfigurations.
->> + * @mgr_ctx: fake FPGA manager context data structure.
+>> + * fake_fpga_region_add_bridge() - add a bridge to a fake FPGA region.
+>> + * @region_ctx: fake FPGA region context data structure.
+>> + * @bridge: FPGA bridge.
 >> + *
->> + * Return: number of reconfigurations.
+>> + * Return: 0 if registration succeeded, an error code otherwise.
 >> + */
->> +int fake_fpga_mgr_get_rcfg_count(const struct fake_fpga_mgr *mgr_ctx)
+>> +int fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
+>> +				struct fpga_bridge *bridge)
 >> +{
->> +	struct fake_mgr_priv *priv;
+>> +	struct fake_region_priv *priv;
+>> +	struct bridge_elem *elem;
 >> +
->> +	priv = mgr_ctx->mgr->priv;
+>> +	priv = region_ctx->region->priv;
 >> +
->> +	return priv->rcfg_count;
+>> +	elem = devm_kzalloc(&region_ctx->pdev->dev, sizeof(*elem), GFP_KERNEL);
+>> +	if (!elem)
+>> +		return -ENOMEM;
+>> +
+>> +	/* Add bridge to the list of bridges in the private context */
+>> +	elem->bridge = bridge;
+>> +	list_add(&elem->node, &priv->bridge_list);
+>> +
+>> +	if (priv->test)
+>> +		kunit_info(priv->test, "Bridge added to fake FPGA region %d\n",
+>> +			   priv->id);
+>> +
+>> +	return 0;
 >> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_get_rcfg_count);
->> +
->> +/**
->> + * fake_fpga_mgr_fill_header() - fill an image buffer with the test header.
->> + * @buf: image buffer.
->> + */
->> +void fake_fpga_mgr_fill_header(u8 *buf)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < FAKE_HEADER_SIZE; i++)
->> +		buf[i] = FAKE_HEADER_BYTE;
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_fill_header);
->> +
->> +static void check_header(struct kunit *test, const u8 *buf)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < FAKE_HEADER_SIZE; i++)
->> +		KUNIT_EXPECT_EQ(test, buf[i], FAKE_HEADER_BYTE);
->> +}
->> +
->> +static void clear_op_flags(struct fake_mgr_priv *priv)
->> +{
->> +	priv->op_parse_header = false;
->> +	priv->op_write_init = false;
->> +	priv->op_write = false;
->> +	priv->op_write_sg = false;
->> +	priv->op_write_complete = false;
->> +}
->> +
->> +/**
->> + * fake_fpga_mgr_check_write_buf() - check if programming using a buffer succeeded.
->> + * @mgr_ctx: fake FPGA manager context data structure.
->> + */
->> +void fake_fpga_mgr_check_write_buf(struct fake_fpga_mgr *mgr_ctx)
->> +{
->> +	struct fake_mgr_priv *priv;
->> +
->> +	priv = mgr_ctx->mgr->priv;
->> +
->> +	if (priv->test) {
->> +		KUNIT_EXPECT_EQ(priv->test, priv->op_parse_header, true);
->> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write_init, true);
->> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write, true);
->> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write_complete, true);
->> +	}
->> +
->> +	clear_op_flags(priv);
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_check_write_buf);
->> +
->> +/**
->> + * fake_fpga_mgr_check_write_sgt() - check if programming using a s.g. table succeeded.
->> + * @mgr_ctx: fake FPGA manager context data structure.
->> + */
->> +void fake_fpga_mgr_check_write_sgt(struct fake_fpga_mgr *mgr_ctx)
->> +{
->> +	struct fake_mgr_priv *priv;
->> +
->> +	priv = mgr_ctx->mgr->priv;
->> +
->> +	if (priv->test) {
->> +		KUNIT_EXPECT_EQ(priv->test, priv->op_parse_header, true);
->> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write_init, true);
->> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write_sg, true);
->> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write_complete, true);
->> +	}
->> +
->> +	clear_op_flags(priv);
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_check_write_sgt);
+>> +EXPORT_SYMBOL_GPL(fake_fpga_region_add_bridge);
 > 
-> I'm wondering, if we could move all these exported functions out of
-> fake_fpga driver module. And make this driver module serves FPGA
-> mgr framework only, just like other fpga drivers do.
-> 
-> I assume the main requirement is to check the statistics produced
-> by the fake fpga driver. Directly accessing mgr->priv outside the
-> driver could be unwanted.  To solve this, could we create a shared
-> buffer for the statistics and pass to fake drivers by platform data.
-> 
-> I hope move all the tester's actions in fpga-test.c, so that people
-> could easily see from code what a user need to do to enable fpga
-> reprogramming and what are expected in one file. The fake drivers could
-> be kept as simple, they only move the process forward and produce
-> statistics.
+> To move these exported functions out of fake driver, could we also provide
+> the bridge list in platform_data?
 > 
 > Thanks,
 > Yilun
->
 
-I agree with you. Initially, I wanted to keep all KUnit test assertions
-and expectations contained in fpga-test. However, I could not find a simple
-way to test that the FPGA manager performs the correct state transitions
-during programming. So I ended up putting KUnit assertions in the methods
-of the low-level fake driver as a first solution.
-
-I like your suggestion of using a shared buffer to have a cleaner
-implementation. My only concern is that it would make the code more complex.
-I will work on this for V5.
+I feel that the function for adding bridges to the fake region should belong
+to the region driver itself rather than the fpga-test module. However, I can
+certainly include the bridge list also in platform_data.
 
 Thanks,
 Marco
 
 
+> 
 >> +
->> +static int fake_fpga_mgr_probe(struct platform_device *pdev)
+>> +int fake_fpga_region_program(struct fake_fpga_region *region_ctx)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret = fpga_region_program_fpga(region_ctx->region);
+>> +
+>> +	/* fpga_region_program_fpga() already puts the bridges in case of errors */
+>> +	if (!ret)
+>> +		fpga_bridges_put(&region_ctx->region->bridge_list);
+>> +
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(fake_fpga_region_program);
+>> +
+>> +static int fake_region_get_bridges(struct fpga_region *region)
+>> +{
+>> +	struct fake_region_priv *priv;
+>> +	struct bridge_elem *elem;
+>> +	int ret;
+>> +
+>> +	priv = region->priv;
+>> +
+>> +	/* Copy the list of bridges from the private context to the region */
+>> +	list_for_each_entry(elem, &priv->bridge_list, node) {
+>> +		ret = fpga_bridge_get_to_list(elem->bridge->dev.parent,
+>> +					      region->info,
+>> +					      &region->bridge_list);
+>> +		if (ret)
+>> +			break;
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int fake_fpga_region_probe(struct platform_device *pdev)
 >> +{
 >> +	struct device *dev;
->> +	struct fake_mgr_priv *priv;
->> +	struct fake_mgr_data *pdata;
+>> +	struct fpga_region *region;
 >> +	struct fpga_manager *mgr;
+>> +	struct fake_region_data *pdata;
+>> +	struct fake_region_priv *priv;
+>> +	struct fpga_region_info info;
+>> +	static int id_count;
 >> +
 >> +	dev = &pdev->dev;
 >> +	pdata = dev_get_platdata(dev);
+>> +
+>> +	if (!pdata) {
+>> +		dev_err(&pdev->dev, "Missing platform data\n");
+>> +		return -EINVAL;
+>> +	}
 >> +
 >> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
 >> +	if (!priv)
 >> +		return -ENOMEM;
 >> +
->> +	if (pdata)
->> +		priv->test = pdata->test;
->> +
->> +	mgr = devm_fpga_mgr_register(dev, "Fake FPGA Manager",
->> +				     &fake_fpga_mgr_ops, priv);
+>> +	mgr = fpga_mgr_get(pdata->mgr->dev.parent);
 >> +	if (IS_ERR(mgr))
 >> +		return PTR_ERR(mgr);
 >> +
->> +	platform_set_drvdata(pdev, mgr);
+>> +	INIT_LIST_HEAD(&priv->bridge_list);
+>> +	priv->id = id_count++;
+>> +	priv->test = pdata->test;
+>> +
+>> +	memset(&info, 0, sizeof(info));
+>> +	info.priv = priv;
+>> +	info.mgr = mgr;
+>> +	info.get_bridges = fake_region_get_bridges;
+>> +
+>> +	region = fpga_region_register_full(dev, &info);
+>> +	if (IS_ERR(region)) {
+>> +		fpga_mgr_put(mgr);
+>> +		return PTR_ERR(region);
+>> +	}
+>> +
+>> +	platform_set_drvdata(pdev, region);
 >> +
 >> +	return 0;
 >> +}
 >> +
->> +static struct platform_driver fake_fpga_mgr_drv = {
+>> +static int fake_fpga_region_remove(struct platform_device *pdev)
+>> +{
+>> +	struct fpga_region *region = platform_get_drvdata(pdev);
+>> +	struct fpga_manager *mgr = region->mgr;
+>> +
+>> +	fpga_mgr_put(mgr);
+>> +	fpga_region_unregister(region);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static struct platform_driver fake_fpga_region_drv = {
 >> +	.driver = {
->> +		.name = FAKE_FPGA_MGR_DEV_NAME
+>> +		.name = FAKE_FPGA_REGION_DEV_NAME
 >> +	},
->> +	.probe = fake_fpga_mgr_probe,
+>> +	.probe = fake_fpga_region_probe,
+>> +	.remove = fake_fpga_region_remove,
 >> +};
 >> +
->> +module_platform_driver(fake_fpga_mgr_drv);
+>> +module_platform_driver(fake_fpga_region_drv);
 >> +
 >> +MODULE_AUTHOR("Marco Pagani <marpagan@redhat.com>");
->> +MODULE_DESCRIPTION("Fake FPGA Manager");
+>> +MODULE_DESCRIPTION("Fake FPGA Bridge");
 >> +MODULE_LICENSE("GPL v2");
->> diff --git a/drivers/fpga/tests/fake-fpga-mgr.h b/drivers/fpga/tests/fake-fpga-mgr.h
+>> diff --git a/drivers/fpga/tests/fake-fpga-region.h b/drivers/fpga/tests/fake-fpga-region.h
 >> new file mode 100644
->> index 000000000000..453672b5df72
+>> index 000000000000..976982c192bc
 >> --- /dev/null
->> +++ b/drivers/fpga/tests/fake-fpga-mgr.h
->> @@ -0,0 +1,43 @@
+>> +++ b/drivers/fpga/tests/fake-fpga-region.h
+>> @@ -0,0 +1,40 @@
 >> +/* SPDX-License-Identifier: GPL-2.0 */
 >> +/*
->> + * Header file for the fake FPGA manager
+>> + * Header file for the fake FPGA region
 >> + *
 >> + * Copyright (C) 2023 Red Hat, Inc.
 >> + *
 >> + * Author: Marco Pagani <marpagan@redhat.com>
 >> + */
 >> +
->> +#ifndef __FPGA_FAKE_MGR_H
->> +#define __FPGA_FAKE_MGR_H
+>> +#ifndef __FPGA_FAKE_RGN_H
+>> +#define __FPGA_FAKE_RGN_H
 >> +
->> +#include <linux/fpga/fpga-mgr.h>
 >> +#include <linux/platform_device.h>
 >> +#include <kunit/test.h>
->> +
->> +#define FPGA_IMG_BLOCK	1024
+>> +#include <linux/fpga/fpga-mgr.h>
+>> +#include <linux/fpga/fpga-bridge.h>
 >> +
 >> +/**
->> + * struct fake_fpga_mgr - fake FPGA manager context data structure
+>> + * struct fake_fpga_region - fake FPGA region context data structure
 >> + *
->> + * @mgr: FPGA manager.
->> + * @pdev: platform device of the FPGA manager.
+>> + * @region: FPGA region.
+>> + * @pdev: platform device of the FPGA region.
 >> + */
->> +struct fake_fpga_mgr {
->> +	struct fpga_manager *mgr;
+>> +struct fake_fpga_region {
+>> +	struct fpga_region *region;
 >> +	struct platform_device *pdev;
 >> +};
 >> +
->> +struct fake_fpga_mgr *
->> +fake_fpga_mgr_register(struct kunit *test, struct device *parent);
+>> +struct fake_fpga_region *
+>> +fake_fpga_region_register(struct fpga_manager *mgr, struct device *parent,
+>> +			  struct kunit *test);
 >> +
->> +void fake_fpga_mgr_unregister(struct fake_fpga_mgr *mgr_ctx);
+>> +int fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
+>> +				struct fpga_bridge *bridge);
 >> +
->> +int fake_fpga_mgr_get_rcfg_count(const struct fake_fpga_mgr *mgr_ctx);
+>> +int fake_fpga_region_program(struct fake_fpga_region *region_ctx);
 >> +
->> +void fake_fpga_mgr_fill_header(u8 *buf);
+>> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx);
 >> +
->> +void fake_fpga_mgr_check_write_buf(struct fake_fpga_mgr *mgr_ctx);
->> +
->> +void fake_fpga_mgr_check_write_sgt(struct fake_fpga_mgr *mgr_ctx);
->> +
->> +#endif /* __FPGA_FAKE_MGR_H */
+>> +#endif /* __FPGA_FAKE_RGN_H */
 >> -- 
 >> 2.39.2
 >>
