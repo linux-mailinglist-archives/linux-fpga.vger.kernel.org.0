@@ -2,38 +2,43 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBEC36F1D0C
-	for <lists+linux-fpga@lfdr.de>; Fri, 28 Apr 2023 18:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFEF6F1D4C
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Apr 2023 19:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjD1Q4A (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 28 Apr 2023 12:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
+        id S1346080AbjD1RTn (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 28 Apr 2023 13:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjD1Qz7 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 28 Apr 2023 12:55:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9334E1FC3;
-        Fri, 28 Apr 2023 09:55:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F54D6449D;
-        Fri, 28 Apr 2023 16:55:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049E1C433EF;
-        Fri, 28 Apr 2023 16:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682700957;
-        bh=xj0NIzvVgCJvBTwvWFN6SAMCNUTQVUTdpSyWpNpNl8k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KNmfeAbx1Zo/ImwjopCtaCiKZRBGd3BpMzJgZls2FdFOx/oGeUTokC+NKVddIEQh7
-         zzOsBHlwORGIkqKJeT4u3SVWEwld+h7BSKudUNaNYf53DSoOUDNTX6bbmsA2ZYl/cJ
-         szY566mQnld9m17ClWfBk7nTUWDBcVW3q7Rb7seswhIVUq7s6zswA3U5BiZbQer9vy
-         ZazEfZjd1y4XvWVH8wwoCcPOphzEjXWvjojPCE5bLaBVyBmh1BTQakgz9lMY0YpeN5
-         qPLn+ZYOwBunbPsjWn6pFAcXfzxrXVUnRE9KKJwAUaO4Ebq9HjUyGk58IQTglC8gEu
-         ioBxMt7bJDmOg==
-Date:   Fri, 28 Apr 2023 17:55:52 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+        with ESMTP id S229997AbjD1RTm (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 28 Apr 2023 13:19:42 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEF22720;
+        Fri, 28 Apr 2023 10:19:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=nObl18fJ9OlLxUMBboQjJbVHX9jb/qswhdthtRflySw=;
+        b=Ug5ycDX4WCSeEugTjpZ0ORd71VZpPbDrR3639bcmnOQz3ubsHGwZt9qi2B56f7YvAhnwdz9d8JPXk
+         y2PkbQvWvXICuH2mJqynM3z+OzBMIgzRgG28dBEZz6JNiSw0dkek4TrK7UQm0QcB8Wl/xjjBKwvaIq
+         3XKpW/O/ppVKJmZpuzhkyGlYtDVfjBqPUju4bpW1q1BfQHrPY+Lg2eYidnxsm3U5KQ1HIkska2nv+9
+         T8u+8Qk1Lq/GhaAfw1HTNY3pOowqjjpgZeir+s7SB1Iyo+6i3ou/szqbXVsjY3eSxpMKz/75Kg3WTJ
+         354mV9p9JNql+JFpK8o/q65ID+K5g6A==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.17.2.1477, Stamp: 3], Multi: [Enabled, t: (0.000009,0.005251)], BW: [Enabled, t: (0.000015,0.000001)], RTDA: [Enabled, t: (0.085530), Hit: No, Details: v2.49.0; Id: 15.wqtlv.1gv4e0pno.smbv; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([78.37.166.219])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Fri, 28 Apr 2023 20:19:19 +0300
+Date:   Fri, 28 Apr 2023 20:19:17 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Conor Dooley <conor@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
         Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
         Tom Rix <trix@redhat.com>, Rob Herring <robh+dt@kernel.org>,
@@ -42,54 +47,39 @@ Cc:     linux-kernel@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
         Vladimir Georgiev <v.georgiev@metrotek.ru>, system@metrotek.ru,
         linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH v2 0/2] replace Ivan Bornyakov maintainership
-Message-ID: <20230428-marine-halogen-57d4b3c2ca0f@spud>
+Message-ID: <20230428171917.k5cdt7wb5pjof6di@x260>
 References: <20230428140150.2592-1-i.bornyakov@metrotek.ru>
+ <20230428-marine-halogen-57d4b3c2ca0f@spud>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="m8l/4nIjr6I81ows"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230428140150.2592-1-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230428-marine-halogen-57d4b3c2ca0f@spud>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+On Fri, Apr 28, 2023 at 05:55:52PM +0100, Conor Dooley wrote:
+> On Fri, Apr 28, 2023 at 05:01:48PM +0300, Ivan Bornyakov wrote:
+> > As I'm leaving Metrotek, hand over my maintainership duties to Vladimir.
+> 
+> As I said yesterday, good luck!
+> 
 
---m8l/4nIjr6I81ows
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thank you!
 
-On Fri, Apr 28, 2023 at 05:01:48PM +0300, Ivan Bornyakov wrote:
-> As I'm leaving Metrotek, hand over my maintainership duties to Vladimir.
+> > ChangeLog:
+> > v1:
+> > https://lore.kernel.org/lkml/20230426073519.9167-1-i.bornyakov@metrotek.ru/
+> > v2:
+> >   * instead of replacing my Metrotek email to a shared Metrotek System
+> >     Team mailbox, assign Vladimir to my former maintainership.
+> 
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Thanks,
+> Conor.
 
-As I said yesterday, good luck!
 
-> ChangeLog:
-> v1:
-> https://lore.kernel.org/lkml/20230426073519.9167-1-i.bornyakov@metrotek.ru/
-> v2:
->   * instead of replacing my Metrotek email to a shared Metrotek System
->     Team mailbox, assign Vladimir to my former maintainership.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
---m8l/4nIjr6I81ows
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEv6mAAKCRB4tDGHoIJi
-0useAP9+jA39d34FnLCJS+/xi4qzWK2rUMT+9RE7bzvH1kDXaQD/WXJD6YsaHWTT
-TJKjZ9QchCKQ8oGlv8oPWAjE8I7vEAc=
-=N8ks
------END PGP SIGNATURE-----
-
---m8l/4nIjr6I81ows--
