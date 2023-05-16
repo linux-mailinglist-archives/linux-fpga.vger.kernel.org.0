@@ -2,37 +2,39 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811B77050AB
-	for <lists+linux-fpga@lfdr.de>; Tue, 16 May 2023 16:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADEF70521F
+	for <lists+linux-fpga@lfdr.de>; Tue, 16 May 2023 17:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233490AbjEPOZo (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 16 May 2023 10:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
+        id S233852AbjEPP3A (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 16 May 2023 11:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbjEPOZn (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 16 May 2023 10:25:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A823772BD;
-        Tue, 16 May 2023 07:25:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233111AbjEPP25 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 16 May 2023 11:28:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37075FF1;
+        Tue, 16 May 2023 08:28:56 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-191-196.ewe-ip-backbone.de [91.248.191.196])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09A7D63AB8;
-        Tue, 16 May 2023 14:25:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3223DC4339B;
-        Tue, 16 May 2023 14:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684247138;
-        bh=56JVyKy+1Eo3iWQR1rFM2KRacIvVANlyt7QmXSsxXog=;
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E5ABC66058F4;
+        Tue, 16 May 2023 16:28:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684250935;
+        bh=9Zbfci1TdhO6S4+wcLiRqTU98Ygr/MBClVVcg3Aacnc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sw7ItSmQIbLslllD7oBOkdF9j/FlOj5dsXDqMdAVYTGXVePqgKGiqHLCWvHm2ORRr
-         6kGi23wPgbqtWH++GyKPDbfnOGJYRSItd42GnFFL9NiTCxbS5MlCYoaE7cja5CINAl
-         MBeAVXmYMLL0CaHOeAmMhwc3cfLmYm36VluT5zcF9NizSc+259zobJFUL5N3gEno4X
-         9u5F6216HG+frqCDI12sd/qoLpfPnHwDmm/KK8Xl+b3WsdT+JxGuGo+K5vAgHOJtRQ
-         LNksR965SsJyjo9psN0LiFLlQFkAsgnNiK5I91CtB8U03VZ1stI7eAzP3ggkislL7X
-         wgwUE3IVrbIFA==
-Date:   Tue, 16 May 2023 23:25:33 +0900
-From:   Mark Brown <broonie@kernel.org>
+        b=C1QarmdofT6VuceBRnhEC8QA2IPFK3B3SaZk26W0KRWVXlGUlIglp+j8hZXgrPxdG
+         LTeVPM0qZvYgHO1l9oqgcIEQn0gJwiSqEucxe+xaM0LYqLk1TqIBiVuL7Gm/oIKhD5
+         68Ij32npBTDNc0taR6+PPTMFtvQjsQliy8dnEghJQqd3bRIcYv9L9xVTFgNE6/C5qv
+         rBzBOGihvBPpFDnLWeiA1xKeSk1SGhShAPSdghTQx/XCF15KRTI3kVqum3t9PXxGeq
+         WzzNxjfsKP6UZPDajDyqisD4fYCP66aPFjXp91/mZypwjMcmGd6P5NQ7HYSNuTbIt/
+         LUOnsiSpa0Xdg==
+Received: by mercury (Postfix, from userid 1000)
+        id E1D901060F7F; Tue, 16 May 2023 17:28:51 +0200 (CEST)
+Date:   Tue, 16 May 2023 17:28:51 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Michal Simek <michal.simek@amd.com>
 Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
         sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
@@ -59,12 +61,12 @@ Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
         Linus Walleij <linus.walleij@linaro.org>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
         Manish Narani <manish.narani@xilinx.com>,
+        Mark Brown <broonie@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Moritz Fischer <mdf@kernel.org>,
         Rajan Vaja <rajan.vaja@xilinx.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
         Srinivas Neeli <srinivas.neeli@amd.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -80,18 +82,17 @@ Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
         linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-watchdog@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-Message-ID: <ZGOSXZs3H0wNxoOn@finisterre.sirena.org.uk>
+Message-ID: <20230516152851.74xcwa7naaniox6x@mercury.elektranox.org>
 References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fdGB4dh9xyA/RRNs"
+        protocol="application/pgp-signature"; boundary="uzdssvofxc7p4teh"
 Content-Disposition: inline
 In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -99,29 +100,44 @@ List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
 
---fdGB4dh9xyA/RRNs
+--uzdssvofxc7p4teh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+
+Hi,
 
 On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
 > @xilinx.com is still working but better to switch to new amd.com after
 > AMD/Xilinx acquisition.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+[...]
 
---fdGB4dh9xyA/RRNs
+>  .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 2 +-
+
+[...]
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+--uzdssvofxc7p4teh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRjkl0ACgkQJNaLcl1U
-h9DxbAf+IuWAJWHJfAChVJ2LTNEpiPn0Mmuqlf3KjNCljNWlid6xXrK7PpDqYv57
-CudgrzknJ/lP9snwYZ91h2fY4sOq/WBLUY1lZlxH6sracfVVk3TkIUW5UKZXevF3
-PkB6wC87xozR2QVCGSUGz99xymbPuCE6GOiQ5fY9/vXNvXtKHCtQiUKukggj8Iaz
-jSMJB2YZutlpAIumPt4YIDaAbEQtw0Qq56CDc0/A3m9creP1/088rm2okN2cPGI5
-8Ubhinc4INz/rXmxXOo6HULZ9ym6Bq4Lc0uE9fpFVnY2dXIVou+bRC7ilmxrPMmU
-xecoraefCIfYW/zmw3mnSGKzXaf30A==
-=tMxy
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRjoSkACgkQ2O7X88g7
++pqZnA//TDDMhr+y5x6WtK0aAHgdZNjN+PvDZjdFdHabNv9Ne7ZbkH8zfacX2Ixj
+vcRQLK7IEndRfP76oe/Yd30gDh3af+G/6sGDihy7qDIYKFZ4U59e52eijzGtzOzd
+bIQd+nK7rVLLPD6TCQnIMd59dX0YBGWW1NQsc9viEUKa73617ANSXPmUS9/z7BAc
+TB9a9Wh11wWkmndxV32Fquuq7mTmmqfBMh7rPnKm8WIqxWfdMZeZy2UvZMBVj2YB
+yXzEskCayveuLHQMKZoHrj8nUpItatw6BOupTR5Df1VQ8aZGpiedTulY/dVgusiR
+4qO9zXCKpjpRb7X4CgfvWM9L8qVEG1X47iepFNX+CEQXv+3EJCHZEF8QSyPxAk8P
+85aI/FZOmLHKjTlu9TMJspG1ruxDaPyhxtfZEpI7+xGhiH4OQN48QRk+PfIpIEqt
+9c+PCUCXosIGpX7sNn3hrXGQhPRItiRGDEX2tqt0SWyn3/V2GvG+8rOqIv3F42Bg
+5vRf8LlcgEZlAeu0CNwUFmi4T/Wu+/77sa7Tbm+HDIqEo1kHJnlLJTs2LRjSgqSR
+/vlgH3m61YKqg9jy5xrmuFeH6Yg2GQQVtig9l1+r1XmHTUXrTvROk5kQ8AgTOYZh
+ZAqxk1Gb2IdIBXK0U6iG/7jHEhu3spe5gSzqdFc/+FUfveluN/o=
+=1MS+
 -----END PGP SIGNATURE-----
 
---fdGB4dh9xyA/RRNs--
+--uzdssvofxc7p4teh--
