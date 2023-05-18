@@ -2,165 +2,83 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3F7707E6B
-	for <lists+linux-fpga@lfdr.de>; Thu, 18 May 2023 12:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56FB7081A5
+	for <lists+linux-fpga@lfdr.de>; Thu, 18 May 2023 14:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjERKqF (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 18 May 2023 06:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
+        id S229919AbjERMoj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 18 May 2023 08:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjERKqD (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 18 May 2023 06:46:03 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2041.outbound.protection.outlook.com [40.107.220.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D90410D8;
-        Thu, 18 May 2023 03:46:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ns9SK9wL30wTOCqtYqSkspI43Zt3BD8EmBGTJd3YKsCzNFgBSyeSjJ9Wrt6upy3ng4Qk6DtKykIA0243lUGM3QNwSHABSLl+PhkiHWlYEt/hmm4WO9Oj3Vcme9jOuYbFWQv/jWPW8x1bqKj3PYYFnwYccmG6LjfVBdNTuKSZSXFY5N6JhC1aFY/InChsRkQtkpGRWYFLN/ia9ASCCmBDaY4X3dR+wTlpD8LdA18Pzv/HVhlwbwH8pZBFvtHBLUlizZkZGDjFi+8zKigW0D9FjPoSQY88koQ2UmKlcICpM4ZedtA2isbI+7LapXWp979rE6w0B6QqZjgpKlhBgEF0LA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zgG52cfylsN99bm4Vj4x3TNKL1ezCzLg8m+LQg9FHFU=;
- b=I79Yotpw+EdyKryhgVKYxdTCoqq4S24QH88KdbdIXH5TYZ+o1eO3vxENEkr+X7tycKtE0j6IOyVRypIjMbz13UFPnw3qcV7x+0/9MI/6oAHnV5/83XQgBAX6TttOGSdQSWPF0CP9I1COHvLDQ9CQ+XJLy7fYaNxq6bgVXWbdLGTPXTOWDiTTmKjFYSwRlb2/WAu11AsHHCcLBUuhqvuxDPxo9vghjGKBveabegUrhklfPCSi5d0MZsFVD3hCR4VCmmVYGHt4to53KblMdG343srLzr+HoEIrQAL40BY7mgWcSCXm/RzwzA0eruuER07Oe6kSNsYlqx9QUKIlZoLO2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zgG52cfylsN99bm4Vj4x3TNKL1ezCzLg8m+LQg9FHFU=;
- b=Sg2mE75qykbR9+ZgDLRZee2+yups9B70qdAw9pcUZ6kdeEPsgWjGwCIMNf4DJJf26pXCZnL5D7zf/31Ubfumi2tu8XG3QN+TYshy7S1GDZFs5hRmL/E4p83G/yjUDS022iJVA3Xa885tvTrbKvQaGAYEo5ef+rskCd1Sva55HlA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by DM6PR12MB4169.namprd12.prod.outlook.com (2603:10b6:5:215::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
- 2023 10:45:57 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::e78e:b7da:7b9a:a578]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::e78e:b7da:7b9a:a578%4]) with mapi id 15.20.6411.019; Thu, 18 May 2023
- 10:45:56 +0000
-Message-ID: <fe90f121-3e7e-7071-f654-6d77a7a8102e@amd.com>
-Date:   Thu, 18 May 2023 12:45:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-Content-Language: en-US
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
-        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
-        vishal.sagar@amd.com, kalyani.akula@amd.com,
-        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jolly Shah <jolly.shah@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
- <CABb+yY2JaC8b-HFEU_WnSBSCr2edgEezXJkfMUYqjeLBA1MvYw@mail.gmail.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <CABb+yY2JaC8b-HFEU_WnSBSCr2edgEezXJkfMUYqjeLBA1MvYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: VI1PR10CA0099.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:803:28::28) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
+        with ESMTP id S229914AbjERMoj (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 18 May 2023 08:44:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00448106
+        for <linux-fpga@vger.kernel.org>; Thu, 18 May 2023 05:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684413830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KGFOlYgs9yiTXXHlUFyD+9RUZz2pUrP3MHmsVP+sEYA=;
+        b=BbEr3kbsK8Z1JYbVmI3Y/DtU+Wta+wPqUmA9n4VDyHy2wx8B5uI7fvToekla56GSjDPHYK
+        Q/88V0y09Bb775Qmsco7wM3+ZoXcTnhidA7AC/GX+0+zmxHw14gRVa6HbltO9OWxzT9mrx
+        k0H7l89bv28kJC3hK1gIHVAdzDY8lOE=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-299-DPkfn0VtP_-nB--PDWz7OQ-1; Thu, 18 May 2023 08:43:49 -0400
+X-MC-Unique: DPkfn0VtP_-nB--PDWz7OQ-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-50bcbb5724aso2147727a12.1
+        for <linux-fpga@vger.kernel.org>; Thu, 18 May 2023 05:43:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684413828; x=1687005828;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KGFOlYgs9yiTXXHlUFyD+9RUZz2pUrP3MHmsVP+sEYA=;
+        b=C9DqAWzmq1sVCzHhm9M4bsF0zmRLANi1yf/DuOn3NdzaCnvLt9Ml4lXxeKFgLX4dUq
+         3D3MhmkBzlv2m32HuVEL5/KUbqn4o9EbhzcG9IvSdEyzDruEpU4xdak3Kfnk5tWLpq4k
+         8eaWy0/9Xlqb+52HCF27EHa8m4HVxRw/BuO4y27/vN31OoZZVdbRzELbJHVdUgAjZl+8
+         qyEAnhZOTugTV3V35iG9odULUvItlIs42ig9SM7gajlpqnfqkcJu4OXxGjbu3XkGggn1
+         rw4OGKDjPkFalGX2HKO2e/b5jQtUvfNMY+v/WbGb7JBfnK1FqY8rwIEBLrKqYBhcT6LY
+         46xg==
+X-Gm-Message-State: AC+VfDxYsLI7bIpkXmFHFvMChuTl0VAZ7voblp/8ADbB4yj3TV6SUK3j
+        tRTkZJJco8AVvYFEQl/uqUT8yilHR0E343A8V3yLonx8anYZ8EgzX1uu848zP06FzCP3tp6k3u2
+        IL6YW8SVINlxYN7LrZCdH
+X-Received: by 2002:a05:6402:1489:b0:510:e556:c842 with SMTP id e9-20020a056402148900b00510e556c842mr1823553edv.23.1684413827830;
+        Thu, 18 May 2023 05:43:47 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6S/mjmYvAQCOuz0IhicZsygKCZlE5h31DxVl0j2/IE41XTTHE030AIoeeAwWfv9KPVGmF5+g==
+X-Received: by 2002:a05:6402:1489:b0:510:e556:c842 with SMTP id e9-20020a056402148900b00510e556c842mr1823541edv.23.1684413827511;
+        Thu, 18 May 2023 05:43:47 -0700 (PDT)
+Received: from [192.168.9.16] (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
+        by smtp.gmail.com with ESMTPSA id k5-20020a05640212c500b0050d988bf956sm549255edx.45.2023.05.18.05.43.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 05:43:46 -0700 (PDT)
+Message-ID: <f9b7d388-9a8b-0663-ea02-892606950907@redhat.com>
+Date:   Thu, 18 May 2023 14:43:45 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|DM6PR12MB4169:EE_
-X-MS-Office365-Filtering-Correlation-Id: 139c61e8-0e11-4501-c53b-08db578d0eb4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nNxcxbO1ZyA8v3QXLrLu1RZCAhkAg5XTPt+/NpY2K9pd0a7iedl6t0bIWl2fAKhfpCdB6kXY3vy24R32C8mvSL5HWebPqi1fpxgrhZBtQ+tw6zY8TjYVvVi+jF0o/WE/FvGm5CgRILU/uE8jteJoQy2YXfhJmhs2Jus4A97zvGzXtK/CYJX47unLpMFH3BLDq6iAi1qdVcLGLEGpQZSK6EYSIW9DfhMrnw3+IGegRBthtPNJnjlLfY8e5+XxahA4j7eGtYMfOg7EikxA4VfJriXXPzX9lDAjFtM3/BlAyt8LwQrdgdGoFMgFDRCHbXpaeDpIGBrN7KKsNodPddc2abXvW6O6lNz7HjxOjjE8LeuT34jAHrbE5k8hxpmGvASUrmR2opIJqNQqeuzzztu2tEjDSF5GbZ7K0FeXzeMhFK0T/PDJq9uxcEokNOPZL+1A+vqcKXuoo6F71xwiCGJD7Ah90VS2BOPUgfaFwDdRHq1ouGh9nK2g9jb39k4NJSLrC1XQgHPdqpSqTp0rDAOZVqR1YsPgAJcCRfUlBbENAFMwU8AX9OVgk28DoXsfVFb9pEK4hmaoy7VlJ0yM2/FGtKvaljAnZavCwjtNJ4bWffQlKUVBgbc4ZlSpO/9ZPgr+vvo5tg3YTDP3AHmR0xGNsg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(396003)(39860400002)(136003)(451199021)(26005)(6506007)(6512007)(53546011)(36756003)(2616005)(83380400001)(31696002)(86362001)(38100700002)(186003)(6486002)(54906003)(44832011)(7416002)(7406005)(7366002)(478600001)(2906002)(316002)(31686004)(8936002)(4326008)(8676002)(6916009)(41300700001)(5660300002)(66476007)(66946007)(66556008)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NThMaTdpK0VaRjd6M3BWbkNPYVJocmo2OFJZdEMvVThBazZqR0sxN2tMeUxT?=
- =?utf-8?B?dk4rcG1SV0pmeWcxMlhVdUxRdEhFUFVuNzkwVTJwRVFJb2FGd0RpamtwWjZy?=
- =?utf-8?B?Y2dBQVc4NFMybmNBMmdRWGJ6QWZ2QkRydnN2anBCcDYwQ2dRY1VhSXBBZitW?=
- =?utf-8?B?aGN4d2FGejB1eFhRWHQ3V0QrSkl6Y2hrNFU2RFFOY0NUSDFRMzcvUURBbW9R?=
- =?utf-8?B?MkN4cWkvejRQL2JINXJia2pUOG1TQVVyS2dxSVZtVnVSMTBxcFcvTXpPTjZQ?=
- =?utf-8?B?dG5MWFpUOTh5aDFnaXdDc05Pd1lVcUxaZTZOU2s1TlhhWVdLUENDZ3gwSzY0?=
- =?utf-8?B?WE5GYXEreHhLMTNYdmRtOWIrU2JqVEs3S3JTcTRBUGxmam1XRjQ3Qjh2d0JH?=
- =?utf-8?B?NlEvdW92WE9hK2pxZGpLN1lRV1g2MG94WVpCMWhrcTJGd1IzamRXc0MyakZJ?=
- =?utf-8?B?dmlGOGhOWnJ6d2JkS2tKb3JvZnM2TGpnVEJWamxqcXV4RTFhVVY2MmVGY2wx?=
- =?utf-8?B?aW1FVk0wYkFySnIxeXEwcUl5UkdsU2JGWEhIdS9ISEhvWDFETUp2dklCcWN5?=
- =?utf-8?B?Z25jeFR4YktLUUp6Rm5oUnpPSndKSERmL2xTeTArTXd3K1pkWjE1RVlpSXNt?=
- =?utf-8?B?N0M3VFZNQTZFK0Q3Skd4YkhzSlJ4OWFUK1JNbFFmSGp3WC9XTTYrdVpMQ2lm?=
- =?utf-8?B?bmV1STZzUGNwSGVjUkcwbjU3NjdGZmRhYit2ajZjdHFIZ3BkS3BQRkY5WHRs?=
- =?utf-8?B?czYvZHJJbFBrNGZ0YTJPbHlMdTR4dUViMGdaSHZaVEZ2ODBIcllIK0Z5NGM3?=
- =?utf-8?B?NG5zdytRY3JydXRlVjhvVTd0QzZId1oxazZGOWhzR3ZCQ0pSaDBrblRRNTdU?=
- =?utf-8?B?Z3dMd0M3L1NsbzVuRnpQWUo1R09lMTZ1K0tSTzdmdi9BNG1nVTFza0p0cFJ6?=
- =?utf-8?B?QWxualNYS3VzNjFIY0c4QTd2VC9wV3Urb3R6NzIzUnFIU01wc1hJai85Q1Ir?=
- =?utf-8?B?RjRWY3pmTXUzazlWdm5sTUs2TlNtVUtURVdXT3JzdC9RalhzaW00MnpVcGg3?=
- =?utf-8?B?bGt1UTA2aDdFdGhFQlNKbnRHVmcxMm5KcHRUYmR2dDNGbUVZN1cwSE9xL1BI?=
- =?utf-8?B?LzVzaFY0UkFZMjdUWG1xRkpJd2RFS1JXN2F6WkhlNHhzWU9pM1llbkFCb2lk?=
- =?utf-8?B?TW9OTG8rN0hQT1lFTU8yN1pYemQxcC8xcmd1Z01aNFg0MkpET1U3Mk5WcTVB?=
- =?utf-8?B?aFJjSnNIcE5zRndSZklUa0J5Njd1WC8yZnAwa2dBT1FvSEhCNDRyc1VBYUpl?=
- =?utf-8?B?RGJxMTRGWnRhbjArbnc3d2ovc2dlb0Jpa2tXMDB1czdSVVE5eFBFWFpnSTdt?=
- =?utf-8?B?cW5rbHJ5STErcHYwOG8zalZ1d3V4SUdwazhUazZGTjE2anIxRzZQUjJMVFA2?=
- =?utf-8?B?Ymw4N2hOdk9hSnk5aHREQ3VWWER1UlJiQ0NrSkg1QlFiOEloZXdSMi9LTnFK?=
- =?utf-8?B?U0JmeVhDRkVJbGNlVlVqNk91UzJabnZMWHZjN0U0Q1RxK0V5c1VobWtUdHZB?=
- =?utf-8?B?WDNjaldtZ1F4UVJkZXIzcVk0TW1KbGp0V0QxbklBS1pEeldxV01aUnNUWVZw?=
- =?utf-8?B?Z3RSWFRGYWlDb0k1b1JOUjlxWks1Ykd5V21xTE5zdlNCc1gzelViTldsbHlB?=
- =?utf-8?B?K3JXRXE2V2NETWd2VXgzb05ySVo5Mi8reXljSXlGVjVWRENOY2tzOE5sUjVR?=
- =?utf-8?B?M2sxVFdKa05CSkRjUnFaMlkrYjNJSDk3Z2ZuU3I1QlJLRmVvcFJlM1psRWNZ?=
- =?utf-8?B?T1pxQ3A2aGNnUHFmMytUVHd5VjRtSWF6eThMK1dFYUtkY1hPeXduNEQ3eHhy?=
- =?utf-8?B?NHN5Q0h3RXQrMGljMnlTUjUwQ0g3MGpnbmNHbjRWcllUQklsMUNJVUN1ZmZj?=
- =?utf-8?B?Q1VLOGM5aGt4eFMzbFM3YkJZdTluZ0wvYzNiTExydFZib1lzY0t3TEk1SEFY?=
- =?utf-8?B?cmR2b2VmQUErSVlIOS96TnVVM2F6em1sUXpmTFp1NlBobFI0d21MTGNxZ3Aw?=
- =?utf-8?B?K3UwV2JnbEpOWHlpd1E5MmhpVmYxWTlsSnh2RU9LM3F2cnVLbDQyQlNVcG9k?=
- =?utf-8?Q?OAEqqTVcjKJxC4XXXeR2O6Ti3?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 139c61e8-0e11-4501-c53b-08db578d0eb4
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 10:45:55.7579
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6uZrmYD6r6sRW89Dt84pAx+OxwD6OlCnhivy0DFHHJjHbPhyEpwOrBfXE7lpxyRz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4169
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH v5 4/4] fpga: add initial KUnit test suites
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20230511141922.437328-1-marpagan@redhat.com>
+ <20230511141922.437328-5-marpagan@redhat.com>
+ <ZF/LpdlyBu2Z1uQE@yilunxu-OptiPlex-7050>
+ <a50022a6-59e1-6b53-2c5b-c6eb44277876@redhat.com>
+ <ZGSmtCkPwi2TMW7K@yilunxu-OptiPlex-7050>
+Content-Language: en-US
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZGSmtCkPwi2TMW7K@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -169,69 +87,168 @@ X-Mailing-List: linux-fpga@vger.kernel.org
 
 
 
-On 5/17/23 16:16, Jassi Brar wrote:
-> On Tue, May 16, 2023 at 8:51 AM Michal Simek <michal.simek@amd.com> wrote:
+On 2023-05-17 12:04, Xu Yilun wrote:
+> On 2023-05-15 at 19:24:07 +0200, Marco Pagani wrote:
 >>
->> @xilinx.com is still working but better to switch to new amd.com after
->> AMD/Xilinx acquisition.
 >>
->> Signed-off-by: Michal Simek <michal.simek@amd.com>
->> ---
+>> On 2023-05-13 19:40, Xu Yilun wrote:
+>>> On 2023-05-11 at 16:19:22 +0200, Marco Pagani wrote:
+>>>> Introduce initial KUnit tests for the FPGA subsystem. Tests are organized
+>>>> into three test suites. The first suite tests the FPGA Manager.
+>>>> The second suite tests the FPGA Bridge. Finally, the last test suite
+>>>> models a complete FPGA platform and tests static and partial reconfiguration.
+>>>>
+>>>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
 >>
->>   Documentation/devicetree/bindings/arm/xilinx.yaml             | 2 +-
->>   Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml     | 2 +-
->>   .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml       | 2 +-
->>   Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml  | 2 +-
->>   Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml | 4 ++--
->>   .../bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml        | 2 +-
->>   .../devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml        | 2 +-
->>   Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml  | 2 +-
->>   .../devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml       | 2 +-
->>   Documentation/devicetree/bindings/gpio/gpio-zynq.yaml         | 2 +-
->>   Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml  | 2 +-
->>   .../devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml    | 2 +-
->>   Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 2 +-
->>   .../devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml  | 2 +-
->>   .../devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml       | 2 +-
->>   .../bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml      | 2 +-
->>   .../bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml       | 2 +-
->>   Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml  | 2 +-
->>   .../devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml        | 2 +-
->>   .../devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml      | 2 +-
->>   .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 2 +-
->>   Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml    | 2 +-
->>   Documentation/devicetree/bindings/serial/cdns,uart.yaml       | 2 +-
->>   Documentation/devicetree/bindings/spi/spi-cadence.yaml        | 2 +-
->>   Documentation/devicetree/bindings/spi/spi-xilinx.yaml         | 2 +-
->>   Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml    | 2 +-
->>   Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml     | 2 +-
->>   Documentation/devicetree/bindings/timer/cdns,ttc.yaml         | 2 +-
->>   .../devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml   | 4 ++--
->>   29 files changed, 31 insertions(+), 31 deletions(-)
+>> [...]
 >>
-> .....
->> diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
->> index 374ffe64016f..aeaddbf574b0 100644
->> --- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
->> +++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
->> @@ -33,7 +33,7 @@ description: |
->>                 +------------------------------------------+
+>>>> +static void fpga_bridge_test_get_put_list(struct kunit *test)
+>>>> +{
+>>>> +	struct list_head bridge_list;
+>>>> +	struct fake_fpga_bridge *bridge_0_ctx, *bridge_1_ctx;
+>>>> +	int ret;
+>>>> +
+>>>> +	bridge_0_ctx = test->priv;
+>>>> +
+>>>> +	/* Register another bridge for this test */
+>>>> +	bridge_1_ctx = fake_fpga_bridge_register(test, NULL);
+>>>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(bridge_1_ctx));
+>>>
+>>> I think bridge_1 could also be initialized in test_init together with
+>>> bridge_0
 >>
->>   maintainers:
->> -  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
->> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+>> I can do it, but it would remain unused in the previous test case.
+>>  
+>>>> +
+>>>> +	INIT_LIST_HEAD(&bridge_list);
+>>>> +
+>>>> +	/* Get bridge_0 and add it to the list */
+>>>> +	ret = fpga_bridge_get_to_list(bridge_1_ctx->bridge->dev.parent, NULL,
+>>>> +				      &bridge_list);
+>>>> +	KUNIT_EXPECT_EQ(test, ret, 0);
+>>>> +
+>>>> +	KUNIT_EXPECT_PTR_EQ(test, bridge_1_ctx->bridge,
+>>>> +			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
+>>>
+>>> Should operate on bridge_0_ctx?
 >>
->>   properties:
->>     compatible:
+>> Yes, sorry. Code and comments are reversed. I'll fix it in the next version.
 >>
-> Acked-by: Jassi Brar <jassisinghbrar@gmail.com>
+>>>> +
+>>>> +	/* Get bridge_1 and add it to the list */
+>>>> +	ret = fpga_bridge_get_to_list(bridge_0_ctx->bridge->dev.parent, NULL,
+>>>> +				      &bridge_list);
+>>>> +	KUNIT_EXPECT_EQ(test, ret, 0);
+>>>> +
+>>>> +	KUNIT_EXPECT_PTR_EQ(test, bridge_0_ctx->bridge,
+>>>> +			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
+>>>
+>>> Should operate on bridge_1_ctx?
+>>
+>> Same.
+>>
+>>>> +
+>>>> +	/* Disable an then enable both bridges from the list */
+>>>> +	KUNIT_EXPECT_TRUE(test, bridge_0_ctx->stats.enable);
+>>>
+>>> Why expect enable without fpga_bridges_enable()?
+>>
+>> To check that the bridge is initialized in the correct (enabled) state.
+>>
+>> [...]
+>>
+>>>> +static void fpga_test_partial_rcfg(struct kunit *test)
+>>>> +{
+>>>> +	struct fpga_base_ctx *base_ctx;
+>>>> +	struct fake_fpga_region *sub_region_0_ctx, *sub_region_1_ctx;
+>>>> +	struct fake_fpga_bridge *sub_bridge_0_ctx, *sub_bridge_1_ctx;
+>>>> +	struct fpga_image_info *partial_img_info;
+>>>> +	int ret;
+>>>> +
+>>>> +	base_ctx = test->priv;
+>>>> +
+>>>> +	/*
+>>>> +	 * Add two reconfigurable sub-regions, each controlled by a bridge. The
+>>>> +	 * reconfigurable sub-region are children of their bridges which are,
+>>>> +	 * in turn, children of the base region. For simplicity, the same image
+>>>> +	 * is used to configure reconfigurable regions
+>>>> +	 */
+>>>> +	sub_bridge_0_ctx = fake_fpga_bridge_register(test,
+>>>> +						     &base_ctx->region_ctx->region->dev);
+>>>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_bridge_0_ctx));
+>>>> +
+>>>> +	sub_region_0_ctx = fake_fpga_region_register(test, base_ctx->mgr_ctx->mgr,
+>>>> +						     &sub_bridge_0_ctx->bridge->dev);
+>>>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_region_0_ctx));
+>>>> +
+>>>> +	ret = fake_fpga_region_add_bridge(sub_region_0_ctx, sub_bridge_0_ctx->bridge);
+>>>> +	KUNIT_ASSERT_EQ(test, ret, 0);
+>>>> +
+>>>> +	sub_bridge_1_ctx = fake_fpga_bridge_register(test,
+>>>> +						     &base_ctx->region_ctx->region->dev);
+>>>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_bridge_1_ctx));
+>>>> +
+>>>> +	sub_region_1_ctx = fake_fpga_region_register(test, base_ctx->mgr_ctx->mgr,
+>>>> +						     &sub_bridge_1_ctx->bridge->dev);
+>>>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_region_1_ctx));
+>>>> +
+>>>> +	ret = fake_fpga_region_add_bridge(sub_region_1_ctx, sub_bridge_1_ctx->bridge);
+>>>> +	KUNIT_ASSERT_EQ(test, ret, 0);
+>>>
+>>> I'm wondering if we need to construct the topology for partial
+>>> reconfiguration test. The FPGA core doesn't actually check the topology.
+>>> It is OK to do partial reconfiguration for a region without parents as
+>>> long as its associated FPGA manager device has the capability.
+>>>
+>>> Thanks,
+>>> Yilun
+>>
+>> I agree with you. Creating a hierarchical layout is rather unnecessary.
+>>
 > 
-> Just curious, some developers' ids are left unchanged, and not all
-> devs have S.O.B.
+> I assume the following sections have nothing to do with hierarchial
+> layout, is it?
+>
 
-I want to go over all xilinx.com emails and move that bindings to proper person 
-if that current person is no more active.
+It was a general summary to put things in perspective and ask your opinion
+before moving forward with the next version.
+
+>> Initially, the idea was to test that all components behave as expected
+>> in a complete setup, e.g., only the bridge of the specific reconfigurable
+>> region gets disabled during programming and then re-enabled.
+>>
+>> However, after some iterations, I'm starting to think that it would be
+>> better to restructure the whole test code into a set of self-contained
+>> test modules, one for each core component. 
+>>
+>> In that way, each module would contain the implementation of the fake/mock
+>> low-level driver and the related tests. For instance, the manager module
+>> would contain the implementation of the fake manager and the test_img_load_buf
+>> and test_img_load_sgt test cases. Similarly, the bridge module would contain
+>> the fake/mock bridge implementation and the test_toggle and test_get_put_list
+>> cases.
+>>
+>> I think that in this way, the code would be simpler and more adherent to the
+>> unit testing methodology. The downside is that making tests that need multiple
+>> components would be more cumbersome and possibly lead to code duplication.
+>> For instance, testing the region's fpga_region_program_fpga() would require
+>> implementing additional local mock/fakes for the manager and bridge.
+> 
+> This way is good to me.
+>
+
+Okay, I'll move toward multiple test modules for v6.
+ 
+>>
+>> What do you think?
+>>
+>> Thanks,
+>> Marco
+>>
+>> [...]
+>>
+>
 
 Thanks,
-Michal
+Marco
 
