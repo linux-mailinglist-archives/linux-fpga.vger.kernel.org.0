@@ -2,253 +2,143 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56FB7081A5
-	for <lists+linux-fpga@lfdr.de>; Thu, 18 May 2023 14:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97037094F9
+	for <lists+linux-fpga@lfdr.de>; Fri, 19 May 2023 12:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjERMoj (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 18 May 2023 08:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
+        id S231431AbjESKcz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 19 May 2023 06:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjERMoj (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 18 May 2023 08:44:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00448106
-        for <linux-fpga@vger.kernel.org>; Thu, 18 May 2023 05:43:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684413830;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KGFOlYgs9yiTXXHlUFyD+9RUZz2pUrP3MHmsVP+sEYA=;
-        b=BbEr3kbsK8Z1JYbVmI3Y/DtU+Wta+wPqUmA9n4VDyHy2wx8B5uI7fvToekla56GSjDPHYK
-        Q/88V0y09Bb775Qmsco7wM3+ZoXcTnhidA7AC/GX+0+zmxHw14gRVa6HbltO9OWxzT9mrx
-        k0H7l89bv28kJC3hK1gIHVAdzDY8lOE=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-299-DPkfn0VtP_-nB--PDWz7OQ-1; Thu, 18 May 2023 08:43:49 -0400
-X-MC-Unique: DPkfn0VtP_-nB--PDWz7OQ-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-50bcbb5724aso2147727a12.1
-        for <linux-fpga@vger.kernel.org>; Thu, 18 May 2023 05:43:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684413828; x=1687005828;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KGFOlYgs9yiTXXHlUFyD+9RUZz2pUrP3MHmsVP+sEYA=;
-        b=C9DqAWzmq1sVCzHhm9M4bsF0zmRLANi1yf/DuOn3NdzaCnvLt9Ml4lXxeKFgLX4dUq
-         3D3MhmkBzlv2m32HuVEL5/KUbqn4o9EbhzcG9IvSdEyzDruEpU4xdak3Kfnk5tWLpq4k
-         8eaWy0/9Xlqb+52HCF27EHa8m4HVxRw/BuO4y27/vN31OoZZVdbRzELbJHVdUgAjZl+8
-         qyEAnhZOTugTV3V35iG9odULUvItlIs42ig9SM7gajlpqnfqkcJu4OXxGjbu3XkGggn1
-         rw4OGKDjPkFalGX2HKO2e/b5jQtUvfNMY+v/WbGb7JBfnK1FqY8rwIEBLrKqYBhcT6LY
-         46xg==
-X-Gm-Message-State: AC+VfDxYsLI7bIpkXmFHFvMChuTl0VAZ7voblp/8ADbB4yj3TV6SUK3j
-        tRTkZJJco8AVvYFEQl/uqUT8yilHR0E343A8V3yLonx8anYZ8EgzX1uu848zP06FzCP3tp6k3u2
-        IL6YW8SVINlxYN7LrZCdH
-X-Received: by 2002:a05:6402:1489:b0:510:e556:c842 with SMTP id e9-20020a056402148900b00510e556c842mr1823553edv.23.1684413827830;
-        Thu, 18 May 2023 05:43:47 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6S/mjmYvAQCOuz0IhicZsygKCZlE5h31DxVl0j2/IE41XTTHE030AIoeeAwWfv9KPVGmF5+g==
-X-Received: by 2002:a05:6402:1489:b0:510:e556:c842 with SMTP id e9-20020a056402148900b00510e556c842mr1823541edv.23.1684413827511;
-        Thu, 18 May 2023 05:43:47 -0700 (PDT)
-Received: from [192.168.9.16] (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
-        by smtp.gmail.com with ESMTPSA id k5-20020a05640212c500b0050d988bf956sm549255edx.45.2023.05.18.05.43.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 05:43:46 -0700 (PDT)
-Message-ID: <f9b7d388-9a8b-0663-ea02-892606950907@redhat.com>
-Date:   Thu, 18 May 2023 14:43:45 +0200
+        with ESMTP id S229970AbjESKcy (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 19 May 2023 06:32:54 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5D7E66;
+        Fri, 19 May 2023 03:32:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E4CgYiEtWt+RAaT+DEpruhiNPPPIn9lOxpBIZYyh8RqHihNFdPItnuHJd9LFJIHiG1+rwzvZLgU3PUlogB9kCNXVYxmWBm2+8VYs3c3RPGUyvXuySIqjkFYWWaMeqzCvwB5lRZgyBNS88kvFZtsya+u0CV4X3K39RN5tWfPGdZkVnp4oFhBee/c4Dj+NoPjO3Q3/1JjCYQN+Xwuo0xzLbpjXRUTTh0ZUUkPc/BbI08WNoBqOp/TXDco7blhMEDSBRujvEbYk7d8YnUzOfCHyjgUbCiKsH23l3Y06TsPlbHi0wtphgza42FkqfKE13X01bkg38eRPcgWQ7+rKfFmbUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FWQJu2T43YyHtjgCZdIDWouC5oLWu6GppEerJQ4kabU=;
+ b=H1pbISKpYU/nd7kt1q6LNM/HESpacUEmMBVnSdpAzu9zczCPR3k0Wv3XfKTPfASx7F2tSLhK2Kasy78zBH62Ylj3LSSZ3I0dQYSobsEvKLzMvz+y3C8w7bfQX7+jzwz9nR9eC/OIGPszo1djbGtC/ae8nWmA0npJcI50PJb9kmcABPnuCjg9EkS4Bq3k14nIaX4i52TCbNDXBT/eb4XyljbsDwTSA+DSbpCrBZfoWngjKay/IXEF2+KBEtpAUARt8McHjLWwwgTGaBAv5zMdQrgt9GWs+1tJJxP2dkmvUa7ZJEvFM5yiVH1Hj7GVwAUrId436l0BQHWcMMBCRL3+WQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FWQJu2T43YyHtjgCZdIDWouC5oLWu6GppEerJQ4kabU=;
+ b=11eBNdrpV/AolUW542s2swMuQ4cnL946k5+E6apm3nU4DwB21dppgmDSSQ1ObbB7jF9JcCwWT7hZQ4vB2YPm4QTSXOehh2TZlFZNobLeY2/s0dJncjIHgbjHRd54h3rcix6mh/NIx7pj0IIjLrm0mIGh0zqtmJKcJRekmguV5Vk=
+Received: from MW4PR04CA0292.namprd04.prod.outlook.com (2603:10b6:303:89::27)
+ by SA3PR12MB9177.namprd12.prod.outlook.com (2603:10b6:806:39d::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
+ 2023 10:32:50 +0000
+Received: from CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:89:cafe::81) by MW4PR04CA0292.outlook.office365.com
+ (2603:10b6:303:89::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19 via Frontend
+ Transport; Fri, 19 May 2023 10:32:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT010.mail.protection.outlook.com (10.13.175.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.21 via Frontend Transport; Fri, 19 May 2023 10:32:49 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 19 May
+ 2023 05:32:46 -0500
+From:   Nava kishore Manne <nava.kishore.manne@amd.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <michal.simek@amd.com>,
+        <linux-fpga@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+Subject: [PATCH] fpga: zynq-fpga: Ensure proper xCAP interface switch
+Date:   Fri, 19 May 2023 16:02:32 +0530
+Message-ID: <20230519103232.3009096-1-nava.kishore.manne@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH v5 4/4] fpga: add initial KUnit test suites
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-References: <20230511141922.437328-1-marpagan@redhat.com>
- <20230511141922.437328-5-marpagan@redhat.com>
- <ZF/LpdlyBu2Z1uQE@yilunxu-OptiPlex-7050>
- <a50022a6-59e1-6b53-2c5b-c6eb44277876@redhat.com>
- <ZGSmtCkPwi2TMW7K@yilunxu-OptiPlex-7050>
-Content-Language: en-US
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZGSmtCkPwi2TMW7K@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT010:EE_|SA3PR12MB9177:EE_
+X-MS-Office365-Filtering-Correlation-Id: e7499261-05d0-427c-9275-08db585464ad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: n08S1QJUpgSJQRBZ7yFuAGBytdjoCqdZ5ap0vt0hySTUf/9LZ2kSR9afzLy4tZMkdBqytx6oaik7yXtqJesJWO3zOPV0JIy/pKuyBb8kRixL83XfD86PGMpZQKx4oViBz1ArGmPgcJgcD5FSOF7ouXGMNf6IAcYpRxBGJXKLJXupY3EN24wdgcizhzhDfZySEQo+zjjwHeHsS2lcqC+TwbFVr8yHykvV4PMqSrVKqI++Bseu7yfT/uPMj/9o4THMeJlJjSMOLwsqrgAuA9tjOLP3w5ATq1SETcnTUbYWj1+9RTOzA/ahx61M0bTSgudp9cfQ1VNNDsVoFBWmw6c1ag6tL/XPR+uu1JthDS86E3IcSfCVBox6wW8PygRsH9oP3pCiCyBc8e1JVecm87op0YK4JfBGI4kBnvk7QNt1BRhY70FyBUK3bI5Dy2y50qgJRHrX8huA8KFlbFjABbixsITUyIRHUXGnh+vWRWxgnGPARCNta/A6UTRq2MU1gyVohVn55Khnkc8cNJ+spD643QJ8DdRUFH4+r5Tfk9NgFO5ns2KTiuqPh2jSbXFyNrHlS6DB8RuQ0l+tVh6yLI984qpuiQmVkdx78BuYDI9Ts6CGGf/BnMUT3YVzZwj49nGfz3m9vONs70aKgkVSLi9mVGcVHk/eDMKlMIM73xdgmLFXkAEs6OCsUv0om45G6fFTKnlFXd6BjqeILlgTCJ2MpWVvdP6bpmTo1RyphQGySmSxb+oKzXnrZxgLe0CqGcyGZrtQ9vF4k7UvdljoPSm+gjwGCYexE2zJnt5uSKdz6ow=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199021)(46966006)(40470700004)(36840700001)(478600001)(316002)(5660300002)(8936002)(8676002)(41300700001)(4326008)(110136005)(2906002)(40460700003)(70206006)(70586007)(36860700001)(36756003)(103116003)(40480700001)(6666004)(16526019)(1076003)(186003)(26005)(82740400003)(86362001)(47076005)(2616005)(356005)(81166007)(336012)(82310400005)(426003)(83380400001)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 10:32:49.1088
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7499261-05d0-427c-9275-08db585464ad
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9177
+X-Spam-Status: No, score=1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
+From: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
 
+Ensure that the low-level fpga-manager driver for Zynq-7000 devices
+switches between reconfiguration interfaces as specified in the TRM
+(section 6.5.1: "Ensure that all outstanding transactions are completed
+before changing interfaces"); device (re)configuration may fail otherwise
 
-On 2023-05-17 12:04, Xu Yilun wrote:
-> On 2023-05-15 at 19:24:07 +0200, Marco Pagani wrote:
->>
->>
->> On 2023-05-13 19:40, Xu Yilun wrote:
->>> On 2023-05-11 at 16:19:22 +0200, Marco Pagani wrote:
->>>> Introduce initial KUnit tests for the FPGA subsystem. Tests are organized
->>>> into three test suites. The first suite tests the FPGA Manager.
->>>> The second suite tests the FPGA Bridge. Finally, the last test suite
->>>> models a complete FPGA platform and tests static and partial reconfiguration.
->>>>
->>>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->>
->> [...]
->>
->>>> +static void fpga_bridge_test_get_put_list(struct kunit *test)
->>>> +{
->>>> +	struct list_head bridge_list;
->>>> +	struct fake_fpga_bridge *bridge_0_ctx, *bridge_1_ctx;
->>>> +	int ret;
->>>> +
->>>> +	bridge_0_ctx = test->priv;
->>>> +
->>>> +	/* Register another bridge for this test */
->>>> +	bridge_1_ctx = fake_fpga_bridge_register(test, NULL);
->>>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(bridge_1_ctx));
->>>
->>> I think bridge_1 could also be initialized in test_init together with
->>> bridge_0
->>
->> I can do it, but it would remain unused in the previous test case.
->>  
->>>> +
->>>> +	INIT_LIST_HEAD(&bridge_list);
->>>> +
->>>> +	/* Get bridge_0 and add it to the list */
->>>> +	ret = fpga_bridge_get_to_list(bridge_1_ctx->bridge->dev.parent, NULL,
->>>> +				      &bridge_list);
->>>> +	KUNIT_EXPECT_EQ(test, ret, 0);
->>>> +
->>>> +	KUNIT_EXPECT_PTR_EQ(test, bridge_1_ctx->bridge,
->>>> +			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
->>>
->>> Should operate on bridge_0_ctx?
->>
->> Yes, sorry. Code and comments are reversed. I'll fix it in the next version.
->>
->>>> +
->>>> +	/* Get bridge_1 and add it to the list */
->>>> +	ret = fpga_bridge_get_to_list(bridge_0_ctx->bridge->dev.parent, NULL,
->>>> +				      &bridge_list);
->>>> +	KUNIT_EXPECT_EQ(test, ret, 0);
->>>> +
->>>> +	KUNIT_EXPECT_PTR_EQ(test, bridge_0_ctx->bridge,
->>>> +			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
->>>
->>> Should operate on bridge_1_ctx?
->>
->> Same.
->>
->>>> +
->>>> +	/* Disable an then enable both bridges from the list */
->>>> +	KUNIT_EXPECT_TRUE(test, bridge_0_ctx->stats.enable);
->>>
->>> Why expect enable without fpga_bridges_enable()?
->>
->> To check that the bridge is initialized in the correct (enabled) state.
->>
->> [...]
->>
->>>> +static void fpga_test_partial_rcfg(struct kunit *test)
->>>> +{
->>>> +	struct fpga_base_ctx *base_ctx;
->>>> +	struct fake_fpga_region *sub_region_0_ctx, *sub_region_1_ctx;
->>>> +	struct fake_fpga_bridge *sub_bridge_0_ctx, *sub_bridge_1_ctx;
->>>> +	struct fpga_image_info *partial_img_info;
->>>> +	int ret;
->>>> +
->>>> +	base_ctx = test->priv;
->>>> +
->>>> +	/*
->>>> +	 * Add two reconfigurable sub-regions, each controlled by a bridge. The
->>>> +	 * reconfigurable sub-region are children of their bridges which are,
->>>> +	 * in turn, children of the base region. For simplicity, the same image
->>>> +	 * is used to configure reconfigurable regions
->>>> +	 */
->>>> +	sub_bridge_0_ctx = fake_fpga_bridge_register(test,
->>>> +						     &base_ctx->region_ctx->region->dev);
->>>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_bridge_0_ctx));
->>>> +
->>>> +	sub_region_0_ctx = fake_fpga_region_register(test, base_ctx->mgr_ctx->mgr,
->>>> +						     &sub_bridge_0_ctx->bridge->dev);
->>>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_region_0_ctx));
->>>> +
->>>> +	ret = fake_fpga_region_add_bridge(sub_region_0_ctx, sub_bridge_0_ctx->bridge);
->>>> +	KUNIT_ASSERT_EQ(test, ret, 0);
->>>> +
->>>> +	sub_bridge_1_ctx = fake_fpga_bridge_register(test,
->>>> +						     &base_ctx->region_ctx->region->dev);
->>>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_bridge_1_ctx));
->>>> +
->>>> +	sub_region_1_ctx = fake_fpga_region_register(test, base_ctx->mgr_ctx->mgr,
->>>> +						     &sub_bridge_1_ctx->bridge->dev);
->>>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_region_1_ctx));
->>>> +
->>>> +	ret = fake_fpga_region_add_bridge(sub_region_1_ctx, sub_bridge_1_ctx->bridge);
->>>> +	KUNIT_ASSERT_EQ(test, ret, 0);
->>>
->>> I'm wondering if we need to construct the topology for partial
->>> reconfiguration test. The FPGA core doesn't actually check the topology.
->>> It is OK to do partial reconfiguration for a region without parents as
->>> long as its associated FPGA manager device has the capability.
->>>
->>> Thanks,
->>> Yilun
->>
->> I agree with you. Creating a hierarchical layout is rather unnecessary.
->>
-> 
-> I assume the following sections have nothing to do with hierarchial
-> layout, is it?
->
+Signed-off-by: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+Tested-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+---
+ drivers/fpga/zynq-fpga.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-It was a general summary to put things in perspective and ask your opinion
-before moving forward with the next version.
-
->> Initially, the idea was to test that all components behave as expected
->> in a complete setup, e.g., only the bridge of the specific reconfigurable
->> region gets disabled during programming and then re-enabled.
->>
->> However, after some iterations, I'm starting to think that it would be
->> better to restructure the whole test code into a set of self-contained
->> test modules, one for each core component. 
->>
->> In that way, each module would contain the implementation of the fake/mock
->> low-level driver and the related tests. For instance, the manager module
->> would contain the implementation of the fake manager and the test_img_load_buf
->> and test_img_load_sgt test cases. Similarly, the bridge module would contain
->> the fake/mock bridge implementation and the test_toggle and test_get_put_list
->> cases.
->>
->> I think that in this way, the code would be simpler and more adherent to the
->> unit testing methodology. The downside is that making tests that need multiple
->> components would be more cumbersome and possibly lead to code duplication.
->> For instance, testing the region's fpga_region_program_fpga() would require
->> implementing additional local mock/fakes for the manager and bridge.
-> 
-> This way is good to me.
->
-
-Okay, I'll move toward multiple test modules for v6.
+diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+index ae0da361e6c6..88db9ac36887 100644
+--- a/drivers/fpga/zynq-fpga.c
++++ b/drivers/fpga/zynq-fpga.c
+@@ -493,15 +493,16 @@ static int zynq_fpga_ops_write_complete(struct fpga_manager *mgr,
+ 	if (err)
+ 		return err;
  
->>
->> What do you think?
->>
->> Thanks,
->> Marco
->>
->> [...]
->>
->
-
-Thanks,
-Marco
+-	/* Release 'PR' control back to the ICAP */
+-	zynq_fpga_write(priv, CTRL_OFFSET,
+-		zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
+-
+ 	err = zynq_fpga_poll_timeout(priv, INT_STS_OFFSET, intr_status,
+ 				     intr_status & IXR_PCFG_DONE_MASK,
+ 				     INIT_POLL_DELAY,
+ 				     INIT_POLL_TIMEOUT);
+ 
++	/* Release 'PR' control back to the ICAP */
++	zynq_fpga_write(priv, CTRL_OFFSET,
++			zynq_fpga_read(priv, CTRL_OFFSET)
++			& ~CTRL_PCAP_PR_MASK);
++
+ 	clk_disable(priv->clk);
+ 
+ 	if (err)
+-- 
+2.25.1
 
