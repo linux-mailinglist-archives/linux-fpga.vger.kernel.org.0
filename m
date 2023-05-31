@@ -2,155 +2,154 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024C0717C8C
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 May 2023 11:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C02717C97
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 May 2023 11:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235754AbjEaJzp (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 31 May 2023 05:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S235764AbjEaJ4k (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 31 May 2023 05:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235698AbjEaJzb (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 31 May 2023 05:55:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE92139
-        for <linux-fpga@vger.kernel.org>; Wed, 31 May 2023 02:54:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685526882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t8p5As54IODAWEuMUBGCZ69QipPSMaA1FAFPHeV+xLY=;
-        b=BnbfF8JprJkw67XN/uH56bW4OI5CgPvTRwgPpSyMsC/nKUaGX3/4AmgaLRlbPyFhZmHE9N
-        4It05ywHAgxO/QbRb20pys9wo9nPNdsUtsyMsQ3DtWIaTlzUZqzsfcxP0skFkHatZ0/QVq
-        72/xT4X450GN8I5BzfFTryRN/iGwBRs=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-487-3CfuOrMpNtqiGBUljdZFsA-1; Wed, 31 May 2023 05:54:41 -0400
-X-MC-Unique: 3CfuOrMpNtqiGBUljdZFsA-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75b04cf87c0so417550785a.2
-        for <linux-fpga@vger.kernel.org>; Wed, 31 May 2023 02:54:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685526881; x=1688118881;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t8p5As54IODAWEuMUBGCZ69QipPSMaA1FAFPHeV+xLY=;
-        b=E9MeXLWHRSxr6j87LnyLdMXgIB/DgVjRH3Y/OKHoeYHHn6aa2ZluL7Qb0gKkDYnY1P
-         +MYz61x3yQeiHSUSHhWXGfgcLAezhuu6A9ODd1otemmGT43mQD25gncLeIp4PZ4y2quc
-         LpVlFtKJLTyt0TTC3wm89UxJrmjB5LSV86o3tTx497BGO/h2/ElXbXCWm2hh6YQYRRoL
-         RJDFSp4vAxcTIefpouxmbhdiZXa3EFnyiH5QxBcYcIHwUEKGwVde8BaLAQxleNKkWUAY
-         mklq9W31L65GxZXS73obLtelpuCmJ0IVQ4Zac3RBv0Be7/NlUNKpsLlWBtOz+AQt8VAd
-         wwJg==
-X-Gm-Message-State: AC+VfDyXnemjq6Y1mWkDx3bwBwpZxw3p8YuMfCHziehE3LnzLeWKeR8C
-        hHeTo8t54Jok3dMVb3F9twZVJpmFWTByEy5ZxhJ4/Yfsle+7bJRRUYFMVkzvlnpyB/urbJ31HBA
-        YQehP6kHKxoN0v7oHA3ln
-X-Received: by 2002:a05:620a:4481:b0:75b:23a0:e7cc with SMTP id x1-20020a05620a448100b0075b23a0e7ccmr6788998qkp.45.1685526880645;
-        Wed, 31 May 2023 02:54:40 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6btEUgAGW57fh8lfK7D9Rww+Idw1YOrqlgxEjca9xiHjbnfhPZLBevKQ1JKsPq43k04SQ8JA==
-X-Received: by 2002:a05:620a:4481:b0:75b:23a0:e7cc with SMTP id x1-20020a05620a448100b0075b23a0e7ccmr6788987qkp.45.1685526880422;
-        Wed, 31 May 2023 02:54:40 -0700 (PDT)
-Received: from klayman.redhat.com (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
-        by smtp.gmail.com with ESMTPSA id k25-20020a05620a139900b0074def53eca5sm4902404qki.53.2023.05.31.02.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 02:54:40 -0700 (PDT)
-From:   Marco Pagani <marpagan@redhat.com>
-To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: [RFC PATCH v6 4/4] fpga: add configuration for the KUnit test suites.
-Date:   Wed, 31 May 2023 11:54:05 +0200
-Message-Id: <20230531095405.342080-5-marpagan@redhat.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230531095405.342080-1-marpagan@redhat.com>
-References: <20230531095405.342080-1-marpagan@redhat.com>
+        with ESMTP id S235587AbjEaJ4i (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 31 May 2023 05:56:38 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2084.outbound.protection.outlook.com [40.107.102.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A48C132;
+        Wed, 31 May 2023 02:56:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rho5cfQ978DD3NBwuH5F8kVzo0mnLuA5zVb1bb93r/bWgmNzqdz6plbOS/m15k5Ugd3Jf2Txv7H21D7kYHyz7w6jfYOqK3URYh7vBkDGiwyfTW4CRU6sa22Va/OvfV5zaWQjhSLuCp4wk/jt05IUFHxubKjCNxYXK7TTWQHwYn5bqg1Jp1TMa83COpjf7Lfl4Al60boxclWs4SqlHr2z6/E5+q/872TH/i1S3RsHNJ1fuZ9GAbtIywu0SsttW9Ny4d2bknMi9z3LCDiOm6/5hLZ/pKmpRwhjJuZ86bg/pEenvvWricy1X5VLDH3iwSLM8MWr7UDaQFOJ21xee2Y9hQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UBDSnOwHD/6z1qxcjGDdNCgWTAo23doghi/f3sNJJLo=;
+ b=LV+31/Q1WdOtJvSpyVGs65oTs6SZAhS1Hjv58o8hGX9wQwqd7PNse6N27+kJgKR74rB/ha/Sgxy6tQQWZIJkSdZ9lb3pz1QQ2Z4+CQswF8DuS28O7Of71qVf6emwbao7/tzZF28eZK+hETZsa1LgEFP+bi/j28ALu/v7yoYttRpTbffdcACXYrmf/+ZVZMfSvnAchQenyZlpsDEVCv0dmaydIjP3lkfxzwFbn88UFr5mrszfZ1Z8e7CmiM8riAkoC65goJOxKbeDm100bWdGcYh+1FjjD3KOGc6R/0JJG89LsuIcGu+h3FqyYZjCoW4Y5Lpfh7xrxTcI4ehxmr/Z7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UBDSnOwHD/6z1qxcjGDdNCgWTAo23doghi/f3sNJJLo=;
+ b=PJacP/PokDKH1YVy9HmBgg4rvxwBMDlEHvT8iWK00iNJJz0Q64QRN7miVnEOXkKgexVABJ+GZXIdNUP1zJjycKb5ujSSxbDMMS9NWQ9M2ujmP6gCnpq15qSsC2lg+C2VLcCvknB/Z/KfAsWtFB4yvrmxZomxvTY0HkgKq5vMjdM=
+Received: from BN0PR10CA0009.namprd10.prod.outlook.com (2603:10b6:408:143::6)
+ by CY5PR12MB6527.namprd12.prod.outlook.com (2603:10b6:930:30::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
+ 2023 09:56:29 +0000
+Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:143:cafe::69) by BN0PR10CA0009.outlook.office365.com
+ (2603:10b6:408:143::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22 via Frontend
+ Transport; Wed, 31 May 2023 09:56:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.22 via Frontend Transport; Wed, 31 May 2023 09:56:29 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 31 May
+ 2023 04:56:27 -0500
+From:   Nava kishore Manne <nava.kishore.manne@amd.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <michal.simek@amd.com>,
+        <linux-fpga@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+Subject: [PATCH v2] fpga: zynq-fpga: Ensure proper xCAP interface switch
+Date:   Wed, 31 May 2023 15:26:24 +0530
+Message-ID: <20230531095624.1802757-1-nava.kishore.manne@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT059:EE_|CY5PR12MB6527:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70c81b88-430b-47ac-c9ce-08db61bd4e6b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: psmqx7XL4WKQNmoq3KNol+qXDuJvJTLLiO/O9IonS3C6c2R2mVel5H70J7641V+gEb1nHf9CNZGvCxIppUY3IgPrGIBpB714kLWE+e9JGy6Huy3sS62uv7jSjqIawOZMSBGUMADkzQssCz1ufSCIvPhR2gHZt65UwsU5HqETm1eAqPrRxNlJa3jNhGua6vIairLpUIUvLXlgQ6mNIB459RnloN4e4dWOQi/TCRP7z6//iK2ZgD0Hz7C1XRRmykHWs5nzz441unEdvDO6+ztjfsIZpQ/9Tahoj227MArbPPLo9CRFU/JtpGgrzz+/ZqCGaW1hTxrUWDBakFjw9CirvGjCTRVFyBdBDr/wswvBSEkgt5gS6JH5ZQtL49PJi0gxM9Y5lweg7P2Y9QwW8YXtdrj2SY+mHnz1AHFFuJMIckw08qe9Jh7IAUQwCW1SdxAM4ttc6kLxtemN7EQ/BOcx0+8Kp+B5hlYbhynszPFxNk5md5LCqDjtdVh6Qh9bGsD8kxtA+JUxtoUIG8pgPwKbsrhifpy/dPh6RVZOKXrJuy0amwVrrj8zzRWXI5/58aay6DvTFy8C84pBVG3zS8fBTDkmyZA5YWcXqoI0tt/NYtT6HtXlSOmas3sTru8HdtxmcfGMlt7vDphhO4TmQ9VySyP/uoeVf3ID6E3ezzWX+ZU5fCtw0vsswMpGxnWmF+L6RC0tMA/qJmm2ANc4381P4Z3D/7NOfHIt2237BjKlmq1HKhvOz1sALZnejM/BzV00//Ks6OwKjZKFkxPfisXrVAoeYlRtwL4Oqvzx2bueXGM=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(46966006)(40470700004)(36840700001)(8936002)(8676002)(5660300002)(110136005)(478600001)(966005)(41300700001)(316002)(6666004)(1076003)(26005)(16526019)(186003)(70206006)(70586007)(4326008)(2616005)(426003)(2906002)(40460700003)(336012)(47076005)(83380400001)(81166007)(356005)(82740400003)(40480700001)(36860700001)(82310400005)(86362001)(103116003)(36756003)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 09:56:29.4988
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70c81b88-430b-47ac-c9ce-08db61bd4e6b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6527
+X-Spam-Status: No, score=-0.6 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
- drivers/fpga/Kconfig            |  2 ++
- drivers/fpga/Makefile           |  3 +++
- drivers/fpga/tests/.kunitconfig |  5 +++++
- drivers/fpga/tests/Kconfig      | 11 +++++++++++
- drivers/fpga/tests/Makefile     |  5 +++++
- 5 files changed, 26 insertions(+)
- create mode 100644 drivers/fpga/tests/.kunitconfig
- create mode 100644 drivers/fpga/tests/Kconfig
- create mode 100644 drivers/fpga/tests/Makefile
+From: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
 
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index 0a00763b9f28..2f689ac4ba3a 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
- 	  FPGA manager driver support for Lattice FPGAs programming over slave
- 	  SPI sysCONFIG interface.
+The Zynq platform has PCAP, ICAP and JTAG interfaces for configuring
+programmable logic (PL). The existing driver implementation uses the
+PCAP interface to configure the PL. Before switching the PL configuration
+interface from PCAP to ICAP make sure that all outstanding Transactions
+relevant to the PL configuration should be completed by the PCAP interface
+otherwise it may lead to PL configuration issues.
+
+This patch provides a required fix to ensure that all existing PL
+transactions are completed before switching from PCAP to ICAP.
+
+For detailed information relevant to PL configuration interfaces refer
+Zynq 7000 TRM (section 6.5.1).
+Link: https://docs.xilinx.com/v/u/en-US/ug585-Zynq-7000-TRM
+
+Signed-off-by: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+---
+Changes for v2:
+              - Updated commit message and added Doc link as suggested by Yilun.
+
+ drivers/fpga/zynq-fpga.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+index ae0da361e6c6..88db9ac36887 100644
+--- a/drivers/fpga/zynq-fpga.c
++++ b/drivers/fpga/zynq-fpga.c
+@@ -493,15 +493,16 @@ static int zynq_fpga_ops_write_complete(struct fpga_manager *mgr,
+ 	if (err)
+ 		return err;
  
-+source "drivers/fpga/tests/Kconfig"
-+
- endif # FPGA
-diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-index 72e554b4d2f7..352a2612623e 100644
---- a/drivers/fpga/Makefile
-+++ b/drivers/fpga/Makefile
-@@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+-	/* Release 'PR' control back to the ICAP */
+-	zynq_fpga_write(priv, CTRL_OFFSET,
+-		zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
+-
+ 	err = zynq_fpga_poll_timeout(priv, INT_STS_OFFSET, intr_status,
+ 				     intr_status & IXR_PCFG_DONE_MASK,
+ 				     INIT_POLL_DELAY,
+ 				     INIT_POLL_TIMEOUT);
  
- # Drivers for FPGAs which implement DFL
- obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
++	/* Release 'PR' control back to the ICAP */
++	zynq_fpga_write(priv, CTRL_OFFSET,
++			zynq_fpga_read(priv, CTRL_OFFSET)
++			& ~CTRL_PCAP_PR_MASK);
 +
-+# KUnit tests
-+obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
-diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
-new file mode 100644
-index 000000000000..a1c2a2974c39
---- /dev/null
-+++ b/drivers/fpga/tests/.kunitconfig
-@@ -0,0 +1,5 @@
-+CONFIG_KUNIT=y
-+CONFIG_FPGA=y
-+CONFIG_FPGA_REGION=y
-+CONFIG_FPGA_BRIDGE=y
-+CONFIG_FPGA_KUNIT_TESTS=y
-diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
-new file mode 100644
-index 000000000000..e4a64815f16d
---- /dev/null
-+++ b/drivers/fpga/tests/Kconfig
-@@ -0,0 +1,11 @@
-+config FPGA_KUNIT_TESTS
-+	tristate "KUnit test for the FPGA subsystem" if !KUNIT_ALL_TESTS
-+	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT=y
-+	default KUNIT_ALL_TESTS
-+        help
-+          This builds unit tests for the FPGA subsystem
-+
-+          For more information on KUnit and unit tests in general,
-+          please refer to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+          If unsure, say N.
-diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
-new file mode 100644
-index 000000000000..faa5fa230ab0
---- /dev/null
-+++ b/drivers/fpga/tests/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-mgr-test.o
-+obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-bridge-test.o
-+obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-region-test.o
+ 	clk_disable(priv->clk);
+ 
+ 	if (err)
 -- 
-2.40.1
+2.25.1
 
