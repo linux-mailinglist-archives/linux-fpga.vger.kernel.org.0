@@ -2,106 +2,101 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D74471552C
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 May 2023 07:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83C1717424
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 May 2023 05:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjE3FuI (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 30 May 2023 01:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S231342AbjEaDIq (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 30 May 2023 23:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjE3FuG (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 30 May 2023 01:50:06 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB50E5
-        for <linux-fpga@vger.kernel.org>; Mon, 29 May 2023 22:50:04 -0700 (PDT)
+        with ESMTP id S231793AbjEaDIp (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 30 May 2023 23:08:45 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A18E11C;
+        Tue, 30 May 2023 20:08:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685425804; x=1716961804;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cJaUbBJqIwgBcTiOFuCJmKjYigELpgOVcO8+uSBdYKs=;
-  b=IeCuToHtu5gBNH2FKWWF4q8L+Sm3qW6/JKd3Kcpvu5CvJEStnfj37Wqn
-   w/FNxoWYVe/nNFxRyXv9O6sUNvRNfgrWRJgkK0Zn75usBJE10FO2xP87m
-   4U4aH7l6fcV6dzIm5+IRecxlzUO3ouCdHVD2DaJlff7I+HXC/Xxwl1CCe
-   rfFXnYNTMblp+LTt3mxrg/sFoxGglifDImMUWG9Qvxbd/bmHIwQvVf2rg
-   OEZ+a9mnRmjp2L5QSP+tttaBAIigguCuyGAaZ/kOKiCOJ6mJC61QLNutL
-   Xk5zUqxOBUm9hqkmNZ3PKoV8xmdgP3c73VxgX5gz6CQ+PVjD53BmkXfZP
+  t=1685502523; x=1717038523;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V3cDe9f+7Mze6MfLPs/WzCyH4ERi8cL+6UprwLcnMEk=;
+  b=XEmxiPTrWFkaN7P0TJrcI+phJoR7jzR0i2fd8822EOlxGR0pz9gdup87
+   kmgE9qmnja4XAaHmMW+324EZY4d3Rrr9jr674jNSiYJtjKnHe3KpU9e/x
+   Lm+yMr+PxSzkZqImzzVZPT+XyIvGpP5qirCEhSPEbSvtpJ5qnW+YkTAKv
+   7kINQ0s6HZWOS4TO1USHNVTbZgdin9UGnA3wW459h5Vwum+1pMQnD55tb
+   8TgrQ5T6gSlVsanUdRaO12359dNURUmUCqB4tY9okMGr68tuo3l9a7uNH
+   rYFgbYuMGOAsvGiFI9OLJ+TJIe2Y39zWb9sdGiUXEtRhRtpQjOV/QRy0K
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="420581544"
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="420581544"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 22:50:04 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="357505742"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="357505742"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 20:08:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="952982496"
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="952982496"
-Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.165])
-  by fmsmga006.fm.intel.com with ESMTP; 29 May 2023 22:50:03 -0700
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-fpga@vger.kernel.org, hao.wu@intel.com, mdf@kernel.org
-Subject: [PATCH 2/2] dt-bindings: fpga: replace Ivan Bornyakov maintainership
-Date:   Tue, 30 May 2023 21:49:36 +0800
-Message-Id: <20230530134936.634370-3-yilun.xu@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230530134936.634370-1-yilun.xu@intel.com>
-References: <20230530134936.634370-1-yilun.xu@intel.com>
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="851045452"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="851045452"
+Received: from scc823097.zsc7.intel.com ([10.148.153.229])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 20:08:41 -0700
+From:   Peter Colberg <peter.colberg@intel.com>
+To:     hao.wu@intel.com, yilun.xu@intel.com, gregkh@linuxfoundation.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     aaron.j.grier@intel.com, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
+        marpagan@redhat.com, lgoncalv@redhat.com,
+        Peter Colberg <peter.colberg@intel.com>
+Subject: [PATCH] uio: dfl: add vendor-specific feature id
+Date:   Tue, 30 May 2023 23:07:37 -0400
+Message-Id: <20230531030737.12989-1-peter.colberg@intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Add a Device Feature List (DFL) feature id as a generic mechanism
+to expose a vendor-specific FPGA IP to user space. The feature id
+is intended for use with IPs that do not need any kernel services
+beyond exposure to user space through the UIO DFL driver.
 
-As I'm leaving Metrotek, hand over Lattice Slave SPI sysCONFIG FPGA
-manager and Microchip Polarfire FPGA manager maintainership duties to
-Vladimir.
+The feature id is used in, e.g., Intel Oak Springs Canyon IPUs
+to expose various IPs to user space, e.g., Network Controller
+Sideband Interface (NC-SI), BaseNIC, and VirtIO management.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Vladimir Georgiev <v.georgiev@metrotek.ru>
-Acked-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20230429104838.5064-3-i.bornyakov@metrotek.ru
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+Link: https://github.com/OPAE/dfl-feature-id
+Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Reviewed-by: Russ Weight <russell.h.weight@intel.com>
 ---
- Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml   | 2 +-
- .../devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/uio/uio_dfl.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-index 4fb05eb84e2a..164331eb6275 100644
---- a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-+++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Lattice Slave SPI sysCONFIG FPGA manager
+diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
+index 69e93f3e7faf..6d99e5a06ae8 100644
+--- a/drivers/uio/uio_dfl.c
++++ b/drivers/uio/uio_dfl.c
+@@ -46,11 +46,13 @@ static int uio_dfl_probe(struct dfl_device *ddev)
  
- maintainers:
--  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+  - Vladimir Georgiev <v.georgiev@metrotek.ru>
+ #define FME_FEATURE_ID_ETH_GROUP	0x10
+ #define FME_FEATURE_ID_HSSI_SUBSYS	0x15
++#define FME_FEATURE_ID_VENDOR_SPECIFIC	0x23
+ #define PORT_FEATURE_ID_IOPLL_USRCLK	0x14
  
- description: |
-   Lattice sysCONFIG port, which is used for FPGA configuration, among others,
-diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-index 527532f039ce..a157eecfb5fc 100644
---- a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-+++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Microchip Polarfire FPGA manager.
- 
- maintainers:
--  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+  - Vladimir Georgiev <v.georgiev@metrotek.ru>
- 
- description:
-   Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
+ static const struct dfl_device_id uio_dfl_ids[] = {
+ 	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+ 	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
++	{ FME_ID, FME_FEATURE_ID_VENDOR_SPECIFIC },
+ 	{ PORT_ID, PORT_FEATURE_ID_IOPLL_USRCLK },
+ 	{ }
+ };
 -- 
-2.25.1
+2.28.0
 
