@@ -2,101 +2,141 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83C1717424
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 May 2023 05:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D2B717C85
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 May 2023 11:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbjEaDIq (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 30 May 2023 23:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S235656AbjEaJzD (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 31 May 2023 05:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231793AbjEaDIp (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 30 May 2023 23:08:45 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A18E11C;
-        Tue, 30 May 2023 20:08:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685502523; x=1717038523;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=V3cDe9f+7Mze6MfLPs/WzCyH4ERi8cL+6UprwLcnMEk=;
-  b=XEmxiPTrWFkaN7P0TJrcI+phJoR7jzR0i2fd8822EOlxGR0pz9gdup87
-   kmgE9qmnja4XAaHmMW+324EZY4d3Rrr9jr674jNSiYJtjKnHe3KpU9e/x
-   Lm+yMr+PxSzkZqImzzVZPT+XyIvGpP5qirCEhSPEbSvtpJ5qnW+YkTAKv
-   7kINQ0s6HZWOS4TO1USHNVTbZgdin9UGnA3wW459h5Vwum+1pMQnD55tb
-   8TgrQ5T6gSlVsanUdRaO12359dNURUmUCqB4tY9okMGr68tuo3l9a7uNH
-   rYFgbYuMGOAsvGiFI9OLJ+TJIe2Y39zWb9sdGiUXEtRhRtpQjOV/QRy0K
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="357505742"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="357505742"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 20:08:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="851045452"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="851045452"
-Received: from scc823097.zsc7.intel.com ([10.148.153.229])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 20:08:41 -0700
-From:   Peter Colberg <peter.colberg@intel.com>
-To:     hao.wu@intel.com, yilun.xu@intel.com, gregkh@linuxfoundation.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     aaron.j.grier@intel.com, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
-        marpagan@redhat.com, lgoncalv@redhat.com,
-        Peter Colberg <peter.colberg@intel.com>
-Subject: [PATCH] uio: dfl: add vendor-specific feature id
-Date:   Tue, 30 May 2023 23:07:37 -0400
-Message-Id: <20230531030737.12989-1-peter.colberg@intel.com>
-X-Mailer: git-send-email 2.28.0
+        with ESMTP id S234500AbjEaJzB (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 31 May 2023 05:55:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E3F113
+        for <linux-fpga@vger.kernel.org>; Wed, 31 May 2023 02:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685526853;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4FZ3pIxtK0+0afJMzjTGCDky4aLUv5zQ5hfVyGzhYL8=;
+        b=YwQRAJ3dpkxPtK8wWDcYT3CviAhZwe/VH51T/AZPXJqHiBpSx91W8AOOyscGD2jZ8XxTHB
+        Fm985OpjcBZqEO9KcArqt9z71PYCXiDBWcmG5e1EiICQHzS7ib0U6b/wp9NzIsNwdBo7/U
+        5SjMvfzzmnfyQMMG1PuR0vtPDvpZrgQ=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-518-uKiwJvYlMl-ngN7XRYm2Bw-1; Wed, 31 May 2023 05:54:12 -0400
+X-MC-Unique: uKiwJvYlMl-ngN7XRYm2Bw-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-75d0a182bdfso136597585a.3
+        for <linux-fpga@vger.kernel.org>; Wed, 31 May 2023 02:54:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685526852; x=1688118852;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4FZ3pIxtK0+0afJMzjTGCDky4aLUv5zQ5hfVyGzhYL8=;
+        b=ZuqBLzNixVOnn0xXi+GVtdpTBVcZVx50JOrcobRyGeY8izl9BusFiiqnxtkpF3+ere
+         14F3JzbtIztxW7No7dfzLgf8g0O1DQ1mvLKOzo8InhH3LofzC4V5PcZ94bpIqiq5Eqw9
+         yg5SsPeqkrQeVDVMfBHLxr8WNdaTpjiiCmXN0JNiz2ozyA59rPuH7S2sJRFLfTR3i60c
+         NVHg85NvkrmhmFzCH2X07aKDXja9a4EBAgKHqU1M4w+Au9iTw6tMesA1YTGz62Ap4kpZ
+         hGYBvX+2766SU47wDqmR0uJVpa9qXkZjBGbxRmGUSTWPbF7Q+QW1i+0RKU2Gh0b9GAEU
+         gXJg==
+X-Gm-Message-State: AC+VfDxkSxSjwmvSxmburv/ToPmyYMhbe8p3Ra5zu9TYCVa2ybDkqH9t
+        RDhFnbtMfulsj8p6Vvvq3McnkOHqTTP0IK9PUUnS1y6DQjsoU9R1JawrIMcZzrKORsIZXZvn6J7
+        6416ZwuDJ7s5UcsDYbW97YWD2yzvH
+X-Received: by 2002:a37:ad17:0:b0:75b:23a0:dec9 with SMTP id f23-20020a37ad17000000b0075b23a0dec9mr4287378qkm.71.1685526852231;
+        Wed, 31 May 2023 02:54:12 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5wQpBa+LPgHJQdgdmjdC5g6ia+cugRsaJGrbtx70LY/oqRkx8o3X2jc76h92f418EZytGrjA==
+X-Received: by 2002:a37:ad17:0:b0:75b:23a0:dec9 with SMTP id f23-20020a37ad17000000b0075b23a0dec9mr4287364qkm.71.1685526851983;
+        Wed, 31 May 2023 02:54:11 -0700 (PDT)
+Received: from klayman.redhat.com (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
+        by smtp.gmail.com with ESMTPSA id k25-20020a05620a139900b0074def53eca5sm4902404qki.53.2023.05.31.02.54.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 02:54:11 -0700 (PDT)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: [RFC PATCH v6 0/4] fpga: add initial KUnit tests for the subsystem
+Date:   Wed, 31 May 2023 11:54:01 +0200
+Message-Id: <20230531095405.342080-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add a Device Feature List (DFL) feature id as a generic mechanism
-to expose a vendor-specific FPGA IP to user space. The feature id
-is intended for use with IPs that do not need any kernel services
-beyond exposure to user space through the UIO DFL driver.
+This patch set introduces initial KUnit test suites for the core components
+of the FPGA subsystem.
 
-The feature id is used in, e.g., Intel Oak Springs Canyon IPUs
-to expose various IPs to user space, e.g., Network Controller
-Sideband Interface (NC-SI), BaseNIC, and VirtIO management.
+Tests can be run using:
+[user@localhost linux]$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/fpga/tests
 
-Link: https://github.com/OPAE/dfl-feature-id
-Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Reviewed-by: Russ Weight <russell.h.weight@intel.com>
----
- drivers/uio/uio_dfl.c | 2 ++
- 1 file changed, 2 insertions(+)
+v6:
+- Restructured the code into self-contained test modules
+- Added tests for the basic behaviors of the components
+- Improved programming tests for the FPGA Manager
+- Fixed code/comments mismatch in the list of Bridges test case
 
-diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
-index 69e93f3e7faf..6d99e5a06ae8 100644
---- a/drivers/uio/uio_dfl.c
-+++ b/drivers/uio/uio_dfl.c
-@@ -46,11 +46,13 @@ static int uio_dfl_probe(struct dfl_device *ddev)
- 
- #define FME_FEATURE_ID_ETH_GROUP	0x10
- #define FME_FEATURE_ID_HSSI_SUBSYS	0x15
-+#define FME_FEATURE_ID_VENDOR_SPECIFIC	0x23
- #define PORT_FEATURE_ID_IOPLL_USRCLK	0x14
- 
- static const struct dfl_device_id uio_dfl_ids[] = {
- 	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
- 	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
-+	{ FME_ID, FME_FEATURE_ID_VENDOR_SPECIFIC },
- 	{ PORT_ID, PORT_FEATURE_ID_IOPLL_USRCLK },
- 	{ }
- };
+v5:
+- Removed most of the exported functions using shared buffers for stats
+- Moved all KUnit expectations/assertions to the main test module
+- Removed standalone use case to simplify the code
+- Removed instances counters from fake components (using device.id instead)
+- Set header size in the .parse_header op
+- Improved bridge get_put_list test case
+
+v4:
+- Fix build error
+
+v3:
+- Calling fpga_bridges_put() between reconfigurations
+- Functions for registering fake modules allocate and return context structs
+
+v2:
+- Restructured code into multiple suites to test components in isolation
+- Reduced code duplication using init and exit methods
+- Using a get_bridges() method to build the list of bridges just before programming
+- Regions and Bridges are organized topologically
+- Changed bitstream/bit to images
+- Allocate images dynamically
+- Renamed fpga-tests to fpga-test
+- Simplified Kconfig
+- Add license info to the fpga-test module
+
+Marco Pagani (4):
+  fpga: add an initial KUnit suite for the FPGA Manager
+  fpga: add an initial KUnit suite for the FPGA Bridge
+  fpga: add an initial KUnit suite for the FPGA Region
+  fpga: add configuration for the KUnit test suites.
+
+ drivers/fpga/Kconfig                  |   2 +
+ drivers/fpga/Makefile                 |   3 +
+ drivers/fpga/tests/.kunitconfig       |   5 +
+ drivers/fpga/tests/Kconfig            |  11 +
+ drivers/fpga/tests/Makefile           |   5 +
+ drivers/fpga/tests/fpga-bridge-test.c | 164 +++++++++++++++
+ drivers/fpga/tests/fpga-mgr-test.c    | 289 ++++++++++++++++++++++++++
+ drivers/fpga/tests/fpga-region-test.c | 186 +++++++++++++++++
+ 8 files changed, 665 insertions(+)
+ create mode 100644 drivers/fpga/tests/.kunitconfig
+ create mode 100644 drivers/fpga/tests/Kconfig
+ create mode 100644 drivers/fpga/tests/Makefile
+ create mode 100644 drivers/fpga/tests/fpga-bridge-test.c
+ create mode 100644 drivers/fpga/tests/fpga-mgr-test.c
+ create mode 100644 drivers/fpga/tests/fpga-region-test.c
+
+
+base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
 -- 
-2.28.0
+2.40.1
 
