@@ -2,156 +2,154 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612367224FC
-	for <lists+linux-fpga@lfdr.de>; Mon,  5 Jun 2023 13:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3398722D2A
+	for <lists+linux-fpga@lfdr.de>; Mon,  5 Jun 2023 19:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbjFELy5 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 5 Jun 2023 07:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
+        id S231868AbjFEQ7q (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 5 Jun 2023 12:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbjFELyn (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 5 Jun 2023 07:54:43 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2050.outbound.protection.outlook.com [40.107.93.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EC1A7;
-        Mon,  5 Jun 2023 04:54:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kgB+imNbUrwa4vb3M1TvQ5vo8I1JJvMuzatfnjN6JnRfyxV2MKcWmR7tNmyuVj/qU2dKyAM9yWivMdvfmxROeJCRfAqtV/4hFKliu+sWFpFvYLJ3NrQbOqBo+v2hCu5HTFD56qaz9L4F17/2j1x5sQML8jB20fOWRO+CSTOSD1oToHRltM+RvRdroVT4csxcq8ajKrDfxfY/elyOEoZxxguQXz+qOzknIKHJMQlKNGli3lTriMW4AShMllAcmzc65bUVNKScDlsg6IrOUrD/ZX3BPNW5ifv9HXd8Np803qq8L9YQbMyjAPeiGTjywB0yOIdnpA0RIhcRUQcE6dYKCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YrGMBjdJkwVeshHVlAcxK07lRl7eSuPUuPgMMMa6Zvo=;
- b=hs78UsZg/eIiLaCoI935KDq2Ice8S7WObERl+zRM1jR3Zn72BCK20pMUvSVDGtkWw5WF7MQ7wJWAwZbYtUptFbioROFWxwf1QUTgUEuxkBidUMOP2Mx3oB19tns+FEHF/rm6uLGzZ8er5Qs9WbErpshRfZ5Smtt3FcdkIKy+NVF7JDEOtSczwSDW2E7Y+2n9ycWOqynrADIaIHxS3qmJL9Poc0UJWuQRQzHrrnrGU7z8yJDh7m4tOe2ya/erD3Q+Q/MbxUi5xTbx7YwibgrUu9vgIemUYB+wyvBzgF+NMF50XlmWT/IX2QGJ3HefvWFVDwujobgWVotERfpqPnjMDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YrGMBjdJkwVeshHVlAcxK07lRl7eSuPUuPgMMMa6Zvo=;
- b=nS9aAXhlITTPa8QBCtQ44zWtTi7KCqX8zYOj5Dd0SivV+rgnhj+24yHFPt6zJxSuzOQJ5zdU3XG3J9fJg2GCPpBLWmpGQ9alTiPR8C7YMZssbHW4d4IcBy/GjfB/6IwMae/sMYUaRwEoOAIetAkhCUnb4fgzAMUU77TUs7bTQvQ=
-Received: from SJ0PR13CA0225.namprd13.prod.outlook.com (2603:10b6:a03:2c1::20)
- by DS0PR12MB7608.namprd12.prod.outlook.com (2603:10b6:8:13b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
- 2023 11:54:37 +0000
-Received: from DM6NAM11FT090.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:2c1:cafe::97) by SJ0PR13CA0225.outlook.office365.com
- (2603:10b6:a03:2c1::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.18 via Frontend
- Transport; Mon, 5 Jun 2023 11:54:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT090.mail.protection.outlook.com (10.13.172.184) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.32 via Frontend Transport; Mon, 5 Jun 2023 11:54:36 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 5 Jun
- 2023 06:54:35 -0500
-From:   Nava kishore Manne <nava.kishore.manne@amd.com>
-To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
-        <trix@redhat.com>, <michal.simek@amd.com>,
-        <linux-fpga@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
-Subject: [PATCH v3] fpga: zynq-fpga: Ensure proper xCAP interface switch
-Date:   Mon, 5 Jun 2023 17:24:33 +0530
-Message-ID: <20230605115433.186087-1-nava.kishore.manne@amd.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231449AbjFEQ7p (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 5 Jun 2023 12:59:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4276EA
+        for <linux-fpga@vger.kernel.org>; Mon,  5 Jun 2023 09:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685984341;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y50p/0+oWHhhFYPgth0jR3BiuBMuj4lSU+BTc9jCgts=;
+        b=KtoEH3nYofiGPYN+6C0QDCGB18lj4aBWTuy0KG5vYnnVqtpTDxs40ALAR/hEJPY8aI5Ny/
+        JF7EWh96A7ailXpXEluOk7wMhTM9Qnz8WvOkSTuNesY3L1pjZ+687NvaR+w3vcH/pjm3bV
+        bhZviqFayICofKhpYhlmHnfn0Rv3TQY=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-131-4LnkkGRFNtyrKeSXxucgVw-1; Mon, 05 Jun 2023 12:59:00 -0400
+X-MC-Unique: 4LnkkGRFNtyrKeSXxucgVw-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75d4a453d80so286425385a.1
+        for <linux-fpga@vger.kernel.org>; Mon, 05 Jun 2023 09:59:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685984340; x=1688576340;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y50p/0+oWHhhFYPgth0jR3BiuBMuj4lSU+BTc9jCgts=;
+        b=e6kBrHuPrti7aJKUF0UT59LuGlLCIwZ7TvR2UCk9IrWEzyWjgNYQRfLbovkySTvihV
+         CFyvl+1XIrs8YMIeadwNKcy8Xb+HX45tAszMc2Ir9Mhb7OUpHhl+26cRUZP9ijunrYhi
+         Y1U01Qtp21tZ9bD2oeDRsesjUsxWWbe9ObuiHXqNPpwLrXhT0rkewZILh8P3suIc5H/M
+         jAcTk2qOUiXkF1lD74Iwg4z2d701QqKP/saO8KTAlLgYyd/9nK4QQyNzS+uuoBxqBtBN
+         oQb6XR7VaLXg0jVdO6jPNORFpZhLNvU5gm5Qek2aTz1OUPLN0xn+Iw27kasB0g+VfzDP
+         YsmA==
+X-Gm-Message-State: AC+VfDyQbO88m4dozhxcX6uSZ8WPOJFDKjHwZFKRg6Pepbhe63Q7RJeE
+        sWiZCPvZ4X6EqfmCcTbpwT9lwbbCVXrOwQDoRVF+7/c+pKm0/f+AqAiN8R89WDuSKbHo6Pnr77L
+        9QKwFa6bXA8Kr1CGypXS7RBok5gIX
+X-Received: by 2002:a05:620a:880f:b0:75e:2a27:2543 with SMTP id qj15-20020a05620a880f00b0075e2a272543mr431016qkn.15.1685984340032;
+        Mon, 05 Jun 2023 09:59:00 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7XKn25F/+47ap22TpytuchRa8fmxTRyMtZwMCrtzmwBQq2cuxamoKOIdEfGkOGAgCXeQ7viw==
+X-Received: by 2002:a05:620a:880f:b0:75e:2a27:2543 with SMTP id qj15-20020a05620a880f00b0075e2a272543mr431004qkn.15.1685984339796;
+        Mon, 05 Jun 2023 09:58:59 -0700 (PDT)
+Received: from [192.168.9.16] (net-2-34-28-201.cust.vodafonedsl.it. [2.34.28.201])
+        by smtp.gmail.com with ESMTPSA id f16-20020a05620a12f000b0075ca4cd03d4sm4308552qkl.64.2023.06.05.09.58.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 09:58:59 -0700 (PDT)
+Message-ID: <d1ef2f9a-f416-e7d6-7481-d81c1941702e@redhat.com>
+Date:   Mon, 5 Jun 2023 18:58:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT090:EE_|DS0PR12MB7608:EE_
-X-MS-Office365-Filtering-Correlation-Id: df60a1da-97ca-48ab-9957-08db65bba2e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uof64TwQCGzLDkCy9DaryiY1Xz+SGHjFzSlz4B8y75Vuh4n0YN1TMo7TsivLsdOgy+fBrE8AF6VCM78cacQ8mMSK7uD54rOIXCouiyWC/VcQDFrQxiMuflJpUZXbRFwAsuvrv1moPD12HBwK/gg452OykA4OOXRpX5rOSdIzWZZVhiuu1AIRluhlMOc64PAhGbZuNwhmCn+jSRn88V8T4rxADP9LUZ+LBCf1zmf4Y7Sk2gzactljvEJ+SMalMSIDJgbrqldoVQ/ZubJ1HfJ8d051fQDAZDI98x2t0TY4RhEnP108ZVgthFGKFrttmLA0N9260e4Xp5zOWVHtzMYYZUw3LNCtSJ1awKA0QI00avZ3n1glU5BJ0nGlkKx77padnmXNGQE5igXD++QmYlmwgHKpiS9bQNTrPjlIceO4Lq81DGj2iBoG6sF47rf2ILKKQWJ7ifnAC3/B4u0AHmvdZrJ8+w+jLelyFHPdaTWpc2J74lDnMIlBqNLJG9tJiBBEEnIN8UPOm1HXY+nKmUDCzPL2JC7nk2WrIkj2glnw0jiL75XrUIV0VgObMyu+uffLh/JSKI1Ya4NNJwUl3ktiQsA0Fhvp//9WRR64rC8fURDhUZWTuE2TAH13y35gQqHqXvHqXPnP+NAjFucveSbnxsuI6IJZlLLQu+BeTacvmXefe+q3h/+lH/8HJmGPBgPltvDADNrYiRB1ClXO6cQw2js6nWX7mM2DX1A8c7o1ynOF2yFn0R+SH7pEYsX/JwVAalFtcA6LnOAcFxpA9Z6YB0LFuGabKov1CS4S6G7xGM4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(376002)(136003)(451199021)(40470700004)(36840700001)(46966006)(16526019)(186003)(336012)(426003)(2616005)(966005)(1076003)(26005)(47076005)(36860700001)(82310400005)(81166007)(356005)(82740400003)(70586007)(36756003)(70206006)(4326008)(478600001)(40460700003)(83380400001)(103116003)(40480700001)(8936002)(8676002)(86362001)(5660300002)(110136005)(316002)(2906002)(41300700001)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 11:54:36.8718
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: df60a1da-97ca-48ab-9957-08db65bba2e8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT090.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7608
-X-Spam-Status: No, score=1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH v6 3/4] fpga: add an initial KUnit suite for the FPGA
+ Region
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20230531095405.342080-1-marpagan@redhat.com>
+ <20230531095405.342080-4-marpagan@redhat.com>
+ <ZHuQc7WfN1zKOeTE@yilunxu-OptiPlex-7050>
+Content-Language: en-US
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZHuQc7WfN1zKOeTE@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
 
-The Zynq platform has PCAP, ICAP and JTAG interfaces for configuring
-programmable logic (PL). The existing driver implementation uses the
-PCAP interface to configure the PL. Before switching the PL configuration
-interface from PCAP to ICAP make sure that all outstanding Transactions
-relevant to the PL configuration should be completed by the PCAP interface
-otherwise it may lead to PL configuration issues.
 
-This patch provides a required fix to ensure that all existing PL
-transactions are completed before switching from PCAP to ICAP.
+On 2023-06-03 21:11, Xu Yilun wrote:
+> On 2023-05-31 at 11:54:04 +0200, Marco Pagani wrote:
+>> The suite tests the programming of an FPGA Region with a Bridge
+>> and the function for finding a particular Region.
+>>
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>> ---
+>>  drivers/fpga/tests/fpga-region-test.c | 186 ++++++++++++++++++++++++++
+>>  1 file changed, 186 insertions(+)
+>>  create mode 100644 drivers/fpga/tests/fpga-region-test.c
 
-For detailed information relevant to PL configuration interfaces refer
-Zynq 7000 TRM (section 6.5.1).
-Link: https://docs.xilinx.com/v/u/en-US/ug585-Zynq-7000-TRM
+[...]
 
-Signed-off-by: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
-Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
----
-Changes for v3:
-              - Fixed some minor code alignment issues.
-
-Changes for v2:
-              - Updated commit message and added Doc link as suggested by Yilun.
  
- drivers/fpga/zynq-fpga.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> Maybe better just put all tests in one module, and have unified
+> fake_mgr_ops/mgr_stats/fake_bridge_ops/bridge_stats across all tests.
+> 
+> In previous thread, I said I'm good to the self-contained test module
+> but I didn't actually follow the idea. Sorry for that.
+> 
+> The concern is why in this region test, the write_count and only the
+> write_count is taken care of.
+> 
+> Although fpga_mgr_load() test covers all mgr_ops, but does that
+> means these ops are still good for more complex case like
+> fpga_region_program_fpga()? And there is no guarantee
+> fpga_region_program_fpga() would always call mgr_ops the same way
+> as fpga_mgr_load() in future.
+> 
+> Similar for fpga_bridge. Maybe a complete setup for fpga_region is
+> still necessary.
 
-diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-index ae0da361e6c6..f8214cae9b6e 100644
---- a/drivers/fpga/zynq-fpga.c
-+++ b/drivers/fpga/zynq-fpga.c
-@@ -493,15 +493,15 @@ static int zynq_fpga_ops_write_complete(struct fpga_manager *mgr,
- 	if (err)
- 		return err;
+I think that putting all tests in a single module (like in previous
+versions) goes against the principles of unit testing, making the
+code more similar to an integration test.
+
+Unit tests should be focused on a single behavior. The programming
+test case included in the Region's suite should test only the behavior
+of the Region itself. Specifically, that fpga_region_program_fpga() calls
+get_bridges(), to get and control bridges, and then the Manager for the
+actual programming.
+
+The programming sequence itself is outside the responsibilities of the
+Region, and its correctness is already ensured by the Manager suite.
+Similarly, the correctness of the Bridge's methods used by the Region
+for getting and controlling multiple bridges is already ensured by the
+Bridge test suite.
+
+For this reason, the Manager and Bridge fakes used in the Region suite
+implement only the minimal set of operations necessary to ensure the
+correctness of the Region's behavior. If I used a "full" Manager (and
+tested all mgr_ops), then the test case would have become an integration
+test rather than a unit test for the Region.
+> BTW: I like the way that fake drivers are removed. Looks much straight
+> forward.
+
+I appreciate that.
  
--	/* Release 'PR' control back to the ICAP */
--	zynq_fpga_write(priv, CTRL_OFFSET,
--		zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
--
- 	err = zynq_fpga_poll_timeout(priv, INT_STS_OFFSET, intr_status,
- 				     intr_status & IXR_PCFG_DONE_MASK,
- 				     INIT_POLL_DELAY,
- 				     INIT_POLL_TIMEOUT);
- 
-+	/* Release 'PR' control back to the ICAP */
-+	zynq_fpga_write(priv, CTRL_OFFSET,
-+			zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
-+
- 	clk_disable(priv->clk);
- 
- 	if (err)
--- 
-2.25.1
+> Thanks,
+> Yilun
+>
+
+Thanks,
+Marco
+
+[...]
 
