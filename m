@@ -2,153 +2,235 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6A9735E08
-	for <lists+linux-fpga@lfdr.de>; Mon, 19 Jun 2023 21:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A197361F3
+	for <lists+linux-fpga@lfdr.de>; Tue, 20 Jun 2023 05:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjFST5i (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 19 Jun 2023 15:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
+        id S230198AbjFTDDb (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 19 Jun 2023 23:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjFST5h (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 19 Jun 2023 15:57:37 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A6A106;
-        Mon, 19 Jun 2023 12:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687204656; x=1718740656;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NjOonhgv6kRqKYJYsh94+vyKxX8XtR0LJuZNpxoQawo=;
-  b=DY9SV6k49fJEnhMBBSRjcNtVDyZg6Oyvd9gbmF9pa8Dadi8lADXAsNlN
-   7IgwnvLAmyThnFwfz5FcfvNchOxKIRZ58RGwEblAXY3MlRGLDrdP55AB/
-   hHw0HuMYj2lIXRFGX+JyR0JGwPZYqRnGoLqMJj4iZpTVTZsqmB1vEYxZX
-   kENF1CIPSLZvCJj6t+qfJPu+aqhMqmZemenI81WAs7yYF+7LNdo6HX8Mq
-   1MqfXQKglkyfl4X30KHNXUM9/UoP6FrOE9eBtV6ItXX5y4Y6C3UWuaPcI
-   ncPpBAGRqtIZVo2eN9IuXke8DaA2KQx7jaLYWM6lbn9OMif9DUBCanHki
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="446081600"
-X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
-   d="scan'208";a="446081600"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 12:57:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="713808239"
-X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
-   d="scan'208";a="713808239"
-Received: from scc823097.zsc7.intel.com ([10.148.153.229])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 12:57:13 -0700
-From:   Peter Colberg <peter.colberg@intel.com>
-To:     hao.wu@intel.com, yilun.xu@intel.com, gregkh@linuxfoundation.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     aaron.j.grier@intel.com, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
-        marpagan@redhat.com, lgoncalv@redhat.com,
-        Peter Colberg <peter.colberg@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2] fpga: dfl: afu: use PFN_DOWN() and PFN_PHYS() helper macros
-Date:   Mon, 19 Jun 2023 15:56:34 -0400
-Message-Id: <20230619195634.11366-1-peter.colberg@intel.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <2023061908-subscribe-persuader-9b9f@gregkh>
-References: <2023061908-subscribe-persuader-9b9f@gregkh>
+        with ESMTP id S230125AbjFTDDA (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 19 Jun 2023 23:03:00 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C20110D0
+        for <linux-fpga@vger.kernel.org>; Mon, 19 Jun 2023 20:02:39 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5187aa18410so4333128a12.0
+        for <linux-fpga@vger.kernel.org>; Mon, 19 Jun 2023 20:02:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687230158; x=1689822158;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BrbG7JxveYysVe86t5gOLnlc9dkaosvcFTwxzJdTEvM=;
+        b=VA71AHLdPjDxB1us3CY/FazSahjFBapAGu8ci/Ubut7gbg6/0nhTN1Z5EUYGcfJl1d
+         aqcB0+9N9UoarJjlMJEZMfseRMGnk3P5oKToGd4zMCMdjtcgJK/XiDx8g9oUFIEC7sBc
+         PCo1OFuD9NkEWVP/1PqwxQxRl2+nlbUsfNDPzHPBXaC33B9CCtah8Zl8gvzyr2rnUFOR
+         zEvLMP42yPVvujeNFGefyw7LNKcmoRWqGXXwhyHGdQ44qNVWZuaTnOQlQ6pXvQBngM0k
+         YF9CZdB9AQdwWgkVpY7v3mQN4WwA0Lx8hgXIZrWwrAhJI3UTqgfAb7Ewp7Yff7IjbnDr
+         AzZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687230158; x=1689822158;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BrbG7JxveYysVe86t5gOLnlc9dkaosvcFTwxzJdTEvM=;
+        b=bNVY2BPnTS/AhzBrSvp0U8Njtvaw7wCJuUKUxf48t0uXEFLOFAbu8pdbB60edOojNs
+         SVHiuLVsPUa0S35H+KWmX2MbBM4wyJJMYwNpUeLnBgl5qkxMAamOg8Y6Sb205cjWsiq9
+         ocSW59AM4f7CG6l+vfzhhof8U8m8lOMHELINFEFuVVZB9Fpb+ozt9hcEicTk0IrWxMhr
+         4oIjtnfW5l6RNhPssNYv29aJO5pbTXC0aFyV/2inlUY58GaYZv1UlraTSHxIpvdS0auQ
+         voxUOj1woOAKFSom4PpoBQEsWPAVt93fn0P/aOOT+bIwg4ztUcYkip66plA+r08vVo1W
+         jnew==
+X-Gm-Message-State: AC+VfDz6aF+vVA6fJ2a2GUl13ozOioOtov6JoEdEWNON9XjqEwqvJHfF
+        gNhLOuKlEtiX1NUPUId5crc7sCUkOcCCwZli0zU=
+X-Google-Smtp-Source: ACHHUZ6RSPXXZjTqIBoWBNxttnBoQKmAsaBMVM/k5buQS9nOQMh8VF4DVk2Crx+t7dNS8+jyPA7/qHwP1a5co2BeDeU=
+X-Received: by 2002:a17:907:1607:b0:982:c69c:8c4b with SMTP id
+ hb7-20020a170907160700b00982c69c8c4bmr10953526ejc.1.1687230157881; Mon, 19
+ Jun 2023 20:02:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:4a90:b0:986:545c:2dc5 with HTTP; Mon, 19 Jun 2023
+ 20:02:37 -0700 (PDT)
+From:   United Nations <cindylove276@gmail.com>
+Date:   Mon, 19 Jun 2023 23:02:37 -0400
+Message-ID: <CANHmF4DjKezutLyHqD3DGYJ-42LikyO7vabk+fXqEip8N0KNQw@mail.gmail.com>
+Subject: Congratulations
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FORM_FRAUD_5,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
+        MONEY_FORM,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:52d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [cindylove276[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [cindylove276[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Replace all shifts by PAGE_SHIFT with PFN_DOWN() and PFN_PHYS() helper
-macros to convert between physical addresses and page frame numbers.
+V=C3=A1=C5=BEen=C3=BD vlastn=C3=ADk e-mailu/p=C5=99=C3=ADjemce fondu,
 
-These changes are cosmetic only; no functional changes.
+Neodvolateln=C3=BD platebn=C3=AD p=C5=99=C3=ADkaz p=C5=99es western union
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2:
-- Comment in commit message that changes are cosmetic only
----
- drivers/fpga/dfl-afu-dma-region.c | 7 ++++---
- drivers/fpga/dfl-afu-main.c       | 5 +++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+Byli jsme pov=C4=9B=C5=99eni gener=C3=A1ln=C3=ADm tajemn=C3=ADkem Organizac=
+e spojen=C3=BDch n=C3=A1rod=C5=AF a
+=C5=99=C3=ADd=C3=ADc=C3=ADm org=C3=A1nem m=C4=9Bnov=C3=A9 jednotky OSN, aby=
+chom pro=C5=A1et=C5=99ili zbyte=C4=8Dn=C3=A9
+zpo=C5=BEd=C4=9Bn=C3=AD platby doporu=C4=8Den=C3=A9 a schv=C3=A1len=C3=A9 v=
+e v=C3=A1=C5=A1 prosp=C4=9Bch. B=C4=9Bhem na=C5=A1eho
+vy=C5=A1et=C5=99ov=C3=A1n=C3=AD jsme se zd=C4=9B=C5=A1en=C3=ADm zjistili, =
+=C5=BEe va=C5=A1e platba byla zbyte=C4=8Dn=C4=9B
+zdr=C5=BEov=C3=A1na zkorumpovan=C3=BDmi =C3=BA=C5=99edn=C3=ADky banky, kte=
+=C5=99=C3=AD se sna=C5=BEili p=C5=99esm=C4=9Brovat
+va=C5=A1e prost=C5=99edky na jejich soukrom=C3=A9 =C3=BA=C4=8Dty.
 
-diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
-index 02b60fde0430..e8d54cfbb301 100644
---- a/drivers/fpga/dfl-afu-dma-region.c
-+++ b/drivers/fpga/dfl-afu-dma-region.c
-@@ -10,6 +10,7 @@
-  */
- 
- #include <linux/dma-mapping.h>
-+#include <linux/pfn.h>
- #include <linux/sched/signal.h>
- #include <linux/uaccess.h>
- #include <linux/mm.h>
-@@ -34,7 +35,7 @@ void afu_dma_region_init(struct dfl_feature_platform_data *pdata)
- static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
- 			     struct dfl_afu_dma_region *region)
- {
--	int npages = region->length >> PAGE_SHIFT;
-+	int npages = PFN_DOWN(region->length);
- 	struct device *dev = &pdata->dev->dev;
- 	int ret, pinned;
- 
-@@ -82,7 +83,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
- static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
- 				struct dfl_afu_dma_region *region)
- {
--	long npages = region->length >> PAGE_SHIFT;
-+	long npages = PFN_DOWN(region->length);
- 	struct device *dev = &pdata->dev->dev;
- 
- 	unpin_user_pages(region->pages, npages);
-@@ -101,7 +102,7 @@ static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
-  */
- static bool afu_dma_check_continuous_pages(struct dfl_afu_dma_region *region)
- {
--	int npages = region->length >> PAGE_SHIFT;
-+	int npages = PFN_DOWN(region->length);
- 	int i;
- 
- 	for (i = 0; i < npages - 1; i++)
-diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index 7f621e96d3b8..048c9b418c8b 100644
---- a/drivers/fpga/dfl-afu-main.c
-+++ b/drivers/fpga/dfl-afu-main.c
-@@ -16,6 +16,7 @@
- 
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/pfn.h>
- #include <linux/uaccess.h>
- #include <linux/fpga-dfl.h>
- 
-@@ -816,7 +817,7 @@ static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
- 
- 	pdata = dev_get_platdata(&pdev->dev);
- 
--	offset = vma->vm_pgoff << PAGE_SHIFT;
-+	offset = PFN_PHYS(vma->vm_pgoff);
- 	ret = afu_mmio_region_get_by_offset(pdata, offset, size, &region);
- 	if (ret)
- 		return ret;
-@@ -837,7 +838,7 @@ static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
- 	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
- 
- 	return remap_pfn_range(vma, vma->vm_start,
--			(region.phys + (offset - region.offset)) >> PAGE_SHIFT,
-+			PFN_DOWN(region.phys + (offset - region.offset)),
- 			size, vma->vm_page_prot);
- }
- 
--- 
-2.28.0
+Aby se tomu p=C5=99ede=C5=A1lo, bylo zabezpe=C4=8Den=C3=AD va=C5=A1ich fina=
+n=C4=8Dn=C3=ADch prost=C5=99edk=C5=AF
+zorganizov=C3=A1no ve form=C4=9B kontroln=C3=ADch =C4=8D=C3=ADsel p=C5=99ev=
+odu pen=C4=9Bz (MTCN) v
+Western Union, co=C5=BE v=C3=A1m umo=C5=BEn=C3=AD m=C3=ADt p=C5=99=C3=ADmou=
+ kontrolu nad va=C5=A1imi
+finan=C4=8Dn=C3=ADmi prost=C5=99edky prost=C5=99ednictv=C3=ADm Western Unio=
+n. Tuto platbu
+budeme sami sledovat, abychom se vyhnuli bezv=C3=BDchodn=C3=A9 situaci, kte=
+rou
+vytvo=C5=99ili =C3=BA=C5=99edn=C3=ADci banky.
 
+Skupina Sv=C4=9Btov=C3=A9 banky a Mezin=C3=A1rodn=C3=AD m=C4=9Bnov=C3=BD fo=
+nd (MMF) na va=C5=A1i platbu
+vystavily neodvolatelnou platebn=C3=AD z=C3=A1ruku. Jsme v=C5=A1ak r=C3=A1d=
+i, =C5=BEe v=C3=A1m
+m=C5=AF=C5=BEeme ozn=C3=A1mit, =C5=BEe na z=C3=A1klad=C4=9B na=C5=A1eho dop=
+oru=C4=8Den=C3=AD/pokyn=C5=AF; va=C5=A1e kompletn=C3=AD
+finan=C4=8Dn=C3=AD prost=C5=99edky byly p=C5=99ips=C3=A1ny ve v=C3=A1=C5=A1=
+ prosp=C4=9Bch prost=C5=99ednictv=C3=ADm
+pen=C4=9B=C5=BEenky western union a western union v=C3=A1m bude pos=C3=ADla=
+t =C4=8D=C3=A1stku p=C4=9Bt
+tis=C3=ADc dolar=C5=AF denn=C4=9B, dokud nebude celkov=C3=A1 =C4=8D=C3=A1st=
+ka kompenzace dokon=C4=8Dena.
+
+Proto V=C3=A1m doporu=C4=8Dujeme kontaktovat:
+
+pan=C3=AD Olga Martinezov=C3=A1
+=C5=98editel platebn=C3=ADho odd=C4=9Blen=C3=AD
+Glob=C3=A1ln=C3=AD obnova spot=C5=99ebitele
+Podpora operac=C3=AD Fcc
+E-mailov=C3=A1 adresa: (olgapatygmartinez@fastservice.com)
+
+Kontaktujte ji nyn=C3=AD a =C5=99ekn=C4=9Bte j=C3=AD, aby v=C3=A1m poradila=
+, jak obdr=C5=BEet prvn=C3=AD
+platbu. Jakmile s n=C3=AD nav=C3=A1=C5=BEete kontakt, nasm=C4=9Bruje v=C3=
+=A1s, co m=C3=A1te d=C4=9Blat, a
+p=C5=99es Western Union budete dost=C3=A1vat =C4=8D=C3=A1stku p=C4=9Bt tis=
+=C3=ADc dolar=C5=AF (5000
+dolar=C5=AF) denn=C4=9B, dokud nebude celkov=C3=A1 =C4=8D=C3=A1stka dokon=
+=C4=8Dena.
+
+Kdy=C5=BE ji budete kontaktovat, m=C4=9Bli byste ji kontaktovat se sv=C3=BD=
+mi =C3=BAdaji,
+jak je uvedeno n=C3=AD=C5=BEe:
+
+1. Va=C5=A1e cel=C3=A9 jm=C3=A9no:
+2. Va=C5=A1e adresa:
+3. V=C3=A1=C5=A1 v=C4=9Bk:
+4. Povol=C3=A1n=C3=AD:
+5. Telefonn=C3=AD =C4=8D=C3=ADsla:
+6. Zem=C4=9B:
+
+Pozn=C3=A1mka: Doporu=C4=8Dujeme v=C3=A1m, abyste pan=C3=AD Olze Martinezov=
+=C3=A9 poskytli
+spr=C3=A1vn=C3=A9 a platn=C3=A9 =C3=BAdaje. Bu=C4=8Fte tak=C3=A9 informov=
+=C3=A1ni, =C5=BEe va=C5=A1e celkov=C3=A1 =C4=8D=C3=A1stka
+m=C3=A1 hodnotu 1 000 000 00 $. Gratulujeme.
+
+Zpr=C3=A1va od prof=C3=ADka
+Spojen=C3=A9 n=C3=A1rody
+...................................................
+Dear email owner/fund beneficiary,
+
+Irrevocable payment order via western union
+
+We have been authorized by the United Nations' secretary general, and
+the governing body of the United Nations' monetary unit, to
+investigate the unnecessary delay on the payment recommended and
+approved in your favor. During our investigation, we discovered with
+dismay that your payment has been unnecessarily delayed by corrupt
+officials of the bank who were trying to divert your funds into their
+private accounts.
+
+To forestall this, security for your funds was organized in the form
+of money transfer control numbers (MTCN) in western union, and this
+will enable only you to have direct control over your funds via
+western union. We will monitor this payment ourselves to avoid the
+hopeless situation created by the officials of the bank.
+
+An irrevocable payment guarantee has been issued by the World Bank
+group and the international monetary fund (IMF) on your payment.
+However, we are happy to inform you that based on our
+recommendation/instructions; your complete funds have been credited in
+your favor through western union wallet, and western union will be
+sending to you the sum of five thousand dollars per day until the
+total compensation amount is completed.
+
+You are therefore advised to contact:
+
+Mrs. Olga Martinez
+Director payment department
+Global consumer reinstatement
+Fcc operations support
+Email address:  (olgapatygmartinez@naver.com)
+
+Contact her now and tell her to advise you on how to receive your
+first payment. As soon as you establish a contact with her, she will
+direct you on what to do, and you will be receiving the sum of five
+thousand dollars ($5000) via western union per day until the total sum
+is completed.
+
+When contacting her, you should contact her with your data as stated below:
+
+1. Your full name:
+2. Your address:
+3. Your age:
+4. Occupation:
+5. Telephone numbers:
+6. Country:
+
+Note: you are advised to furnish Mrs. Olga Martinez with your correct
+and valid details. Also be informed that your total sum is valued $1,
+000, 000, 00. Congratulations.
+
+Message from the pro
+United Nations
