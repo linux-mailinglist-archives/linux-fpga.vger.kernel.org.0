@@ -2,168 +2,169 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3B773CF71
-	for <lists+linux-fpga@lfdr.de>; Sun, 25 Jun 2023 10:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE31173F487
+	for <lists+linux-fpga@lfdr.de>; Tue, 27 Jun 2023 08:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjFYIke (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 25 Jun 2023 04:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S229635AbjF0G1v (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 27 Jun 2023 02:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbjFYIk2 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 25 Jun 2023 04:40:28 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31567E79;
-        Sun, 25 Jun 2023 01:40:27 -0700 (PDT)
+        with ESMTP id S229562AbjF0G1u (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 27 Jun 2023 02:27:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C15BF;
+        Mon, 26 Jun 2023 23:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687682427; x=1719218427;
+  t=1687847269; x=1719383269;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=cRVFCF4mtNPdsbtTnxitA36EVp3W2SMrxezjERCImME=;
-  b=GZzZe2ZJ4bBf0M3FXktEr1bTiUi41r+tt2YBblzHqtdxxsqRWSjd86cK
-   HkA25UgRVNMnNTLXLLRd+8bTJTEcyoK3ZPr3k0yxpJlnuOFH/9TBpBhu8
-   q7rVA8QTSVNIxIlMIbh9BooizTUrJ0xxkt6iDHiLUNkE6UWvJc/08Ot5X
-   3uudfRE7UknfhLusZj5WdT9XFphurmg8xhlRQBFZUyt98NElf5j4G2wxw
-   StlMlk08VJqjjBHX08p2M610AFsWNcRNB/CLkcwomufLo4bsESafR2mue
-   hOXRCY+x5+ulFJdAicoHA8US9vzBh5/hI14HtXtS9AwCJh7PfaMZy08Nx
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="364489985"
-X-IronPort-AV: E=Sophos;i="6.01,157,1684825200"; 
-   d="scan'208";a="364489985"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 01:40:26 -0700
+  bh=o+fthfSZXkNKVIgP62MykaV0f/1LQv8WAEt1GlzZMG0=;
+  b=Pw71a3s3sW5DcaClrjyFSptbOQH4VgiYHFiTRZSQZAE3H3cK9dhkpbA4
+   LU9yqi4Jb5CrWUflE4AsO5ziyDWDqMLSebCRXruAl3fcM6chEkX9xOWx/
+   4bXQoA5CjDTbyJnmP0sVryCPdjpHyJTpfV9RlETN8LnhVV7Rkp7Gcdepm
+   z/T+9rlLoTjbpHOy7dWwkAMIxmqfcKmZtGIIHWt2BEWDsYd4DiCOlmVXO
+   o4/IFZWWi0bvKPbBaHwZlxaxeP//EisrPCinN+59qrWBObZdTTQsIKIG2
+   2qO40q6zF+X+QHjuf6kMOAm6qTev1gZ0btRYu0vzhH5aw+27MNIhf9c9d
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="425155126"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="425155126"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 23:27:40 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="781065373"
-X-IronPort-AV: E=Sophos;i="6.01,157,1684825200"; 
-   d="scan'208";a="781065373"
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="786463017"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="786463017"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Jun 2023 01:40:24 -0700
-Date:   Sun, 25 Jun 2023 16:39:17 +0800
+  by fmsmga004.fm.intel.com with ESMTP; 26 Jun 2023 23:27:36 -0700
+Date:   Tue, 27 Jun 2023 14:26:27 +0800
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     "Manne, Nava kishore" <nava.kishore.manne@amd.com>
-Cc:     "mdf@kernel.org" <mdf@kernel.org>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
-Subject: Re: [RFC PATCH] fpga: fpga-bridge: Add manual set option via sysfs
-Message-ID: <ZJf9NSGaNkrXJUCe@yilunxu-OptiPlex-7050>
-References: <20230525095438.2766625-1-nava.kishore.manne@amd.com>
- <DM6PR12MB3993C315D875CE44CA1A0B29CD5DA@DM6PR12MB3993.namprd12.prod.outlook.com>
+To:     Peter Colberg <peter.colberg@intel.com>
+Cc:     hao.wu@intel.com, gregkh@linuxfoundation.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        aaron.j.grier@intel.com, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
+        marpagan@redhat.com, lgoncalv@redhat.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2] fpga: dfl: afu: use PFN_DOWN() and PFN_PHYS() helper
+ macros
+Message-ID: <ZJqBE1mCjSaRIvyt@yilunxu-OptiPlex-7050>
+References: <2023061908-subscribe-persuader-9b9f@gregkh>
+ <20230619195634.11366-1-peter.colberg@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM6PR12MB3993C315D875CE44CA1A0B29CD5DA@DM6PR12MB3993.namprd12.prod.outlook.com>
+In-Reply-To: <20230619195634.11366-1-peter.colberg@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2023-06-21 at 04:00:53 +0000, Manne, Nava kishore wrote:
-> Ping!
+On 2023-06-19 at 15:56:34 -0400, Peter Colberg wrote:
+> Replace all shifts by PAGE_SHIFT with PFN_DOWN() and PFN_PHYS() helper
+> macros to convert between physical addresses and page frame numbers.
 > 
-> > -----Original Message-----
-> > From: Manne, Nava kishore <nava.kishore.manne@amd.com>
-> > Sent: Thursday, May 25, 2023 3:25 PM
-> > To: mdf@kernel.org; hao.wu@intel.com; yilun.xu@intel.com;
-> > trix@redhat.com; Manne, Nava kishore <nava.kishore.manne@amd.com>;
-> > linux-kernel@vger.kernel.org; linux-fpga@vger.kernel.org
-> > Subject: [RFC PATCH] fpga: fpga-bridge: Add manual set option via sysfs
-> > 
-> > This patch is intended for manual testing only.
+> These changes are cosmetic only; no functional changes.
+> 
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2:
+> - Comment in commit message that changes are cosmetic only
+> ---
+>  drivers/fpga/dfl-afu-dma-region.c | 7 ++++---
+>  drivers/fpga/dfl-afu-main.c       | 5 +++--
+>  2 files changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
+> index 02b60fde0430..e8d54cfbb301 100644
+> --- a/drivers/fpga/dfl-afu-dma-region.c
+> +++ b/drivers/fpga/dfl-afu-dma-region.c
+> @@ -10,6 +10,7 @@
+>   */
+>  
+>  #include <linux/dma-mapping.h>
+> +#include <linux/pfn.h>
+>  #include <linux/sched/signal.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/mm.h>
+> @@ -34,7 +35,7 @@ void afu_dma_region_init(struct dfl_feature_platform_data *pdata)
+>  static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
+>  			     struct dfl_afu_dma_region *region)
+>  {
+> -	int npages = region->length >> PAGE_SHIFT;
+> +	int npages = PFN_DOWN(region->length);
 
-Debug interfaces should be in debugfs. But before that, I'm not
-convinced why we need this interface. Even with DEBUG or debugfs we try
-best not to break the system. But this bridge enable/disable interface
-will break the functionality of FPGA region silently.
+I don't much prefer this change, it is not doing the phy addr to pfn
+convertion. The macro name doesn't match what is doing here.
 
-Thanks
-Yilun
+>  	struct device *dev = &pdata->dev->dev;
+>  	int ret, pinned;
+>  
+> @@ -82,7 +83,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
+>  static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
+>  				struct dfl_afu_dma_region *region)
+>  {
+> -	long npages = region->length >> PAGE_SHIFT;
+> +	long npages = PFN_DOWN(region->length);
 
-> > It is provide an option to manually test bridges.
-> > 
-> > Enabling bridge (!0 values are handled)
-> > br1# echo 1 > /sys/class/fpga_bridge/<bridge>/set
-> > 
-> > Disable bridge
-> > br1# echo 0 > /sys/class/fpga_bridge/<bridge>/set
-> > 
-> > Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> > ---
-> >  .../ABI/testing/sysfs-class-fpga-bridge       |  9 ++++++
-> >  drivers/fpga/fpga-bridge.c                    | 30 +++++++++++++++++++
-> >  2 files changed, 39 insertions(+)
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-class-fpga-bridge
-> > b/Documentation/ABI/testing/sysfs-class-fpga-bridge
-> > index 312ae2c579d8..e157eb737bfb 100644
-> > --- a/Documentation/ABI/testing/sysfs-class-fpga-bridge
-> > +++ b/Documentation/ABI/testing/sysfs-class-fpga-bridge
-> > @@ -9,3 +9,12 @@ Date:		January 2016
-> >  KernelVersion:	4.5
-> >  Contact:	Alan Tull <atull@opensource.altera.com>
-> >  Description:	Show bridge state as "enabled" or "disabled"
-> > +
-> > +What:		/sys/class/fpga_bridge/<bridge>/set
-> > +Date:		May 2023
-> > +KernelVersion:	6.4
-> > +Contact:	Nava kishore Manne <nava.kishore.manne@amd.com>
-> > +Description:	Manual set bridge state (0-disable, !0 enable).
-> > +		Enabling this option requires that the module is
-> > +		compiled with #define DEBUG which is enabled by default
-> > +		when CONFIG_DEBUG_KERNEL is setup.
-> > diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c index
-> > a6c25dee9cc1..54d15b709b10 100644
-> > --- a/drivers/fpga/fpga-bridge.c
-> > +++ b/drivers/fpga/fpga-bridge.c
-> > @@ -13,6 +13,12 @@
-> >  #include <linux/slab.h>
-> >  #include <linux/spinlock.h>
-> > 
-> > +/* For enabling manual bridge set(enable/disable) function */ #ifdef
-> > +CONFIG_DEBUG_KERNEL #undef DEBUG #define DEBUG #endif
-> > +
-> >  static DEFINE_IDA(fpga_bridge_ida);
-> >  static struct class *fpga_bridge_class;
-> > 
-> > @@ -307,9 +313,33 @@ static ssize_t state_show(struct device *dev,  static
-> > DEVICE_ATTR_RO(name);  static DEVICE_ATTR_RO(state);
-> > 
-> > +#ifdef DEBUG
-> > +static ssize_t set_store(struct device *dev,
-> > +			 struct device_attribute *attr,
-> > +			 const char *buf, size_t count)
-> > +{
-> > +	struct fpga_bridge *bridge = to_fpga_bridge(dev);
-> > +	long enable;
-> > +	int ret;
-> > +
-> > +	ret = kstrtol(buf, 16, &enable);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	if (bridge->br_ops && bridge->br_ops->enable_set)
-> > +		enable = bridge->br_ops->enable_set(bridge, !!enable);
-> > +
-> > +	return count;
-> > +}
-> > +static DEVICE_ATTR_WO(set);
-> > +#endif
-> > +
-> >  static struct attribute *fpga_bridge_attrs[] = {
-> >  	&dev_attr_name.attr,
-> >  	&dev_attr_state.attr,
-> > +#ifdef DEBUG
-> > +	&dev_attr_set.attr,
-> > +#endif
-> >  	NULL,
-> >  };
-> >  ATTRIBUTE_GROUPS(fpga_bridge);
-> > --
-> > 2.25.1
+ditto
+
+>  	struct device *dev = &pdata->dev->dev;
+>  
+>  	unpin_user_pages(region->pages, npages);
+> @@ -101,7 +102,7 @@ static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
+>   */
+>  static bool afu_dma_check_continuous_pages(struct dfl_afu_dma_region *region)
+>  {
+> -	int npages = region->length >> PAGE_SHIFT;
+> +	int npages = PFN_DOWN(region->length);
+
+ditto
+
+>  	int i;
+>  
+>  	for (i = 0; i < npages - 1; i++)
+> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
+> index 7f621e96d3b8..048c9b418c8b 100644
+> --- a/drivers/fpga/dfl-afu-main.c
+> +++ b/drivers/fpga/dfl-afu-main.c
+> @@ -16,6 +16,7 @@
+>  
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <linux/pfn.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/fpga-dfl.h>
+>  
+> @@ -816,7 +817,7 @@ static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
+>  
+>  	pdata = dev_get_platdata(&pdev->dev);
+>  
+> -	offset = vma->vm_pgoff << PAGE_SHIFT;
+> +	offset = PFN_PHYS(vma->vm_pgoff);
+
+ditto. The variables are offsets within file, not phys addr & pfn.
+
+>  	ret = afu_mmio_region_get_by_offset(pdata, offset, size, &region);
+>  	if (ret)
+>  		return ret;
+> @@ -837,7 +838,7 @@ static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
+>  	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+>  
+>  	return remap_pfn_range(vma, vma->vm_start,
+> -			(region.phys + (offset - region.offset)) >> PAGE_SHIFT,
+> +			PFN_DOWN(region.phys + (offset - region.offset)),
+>  			size, vma->vm_page_prot);
+>  }
+>  
+> -- 
+> 2.28.0
 > 
