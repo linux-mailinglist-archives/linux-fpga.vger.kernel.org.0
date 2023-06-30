@@ -2,124 +2,154 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFBC741CE1
-	for <lists+linux-fpga@lfdr.de>; Thu, 29 Jun 2023 02:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5620D743ECB
+	for <lists+linux-fpga@lfdr.de>; Fri, 30 Jun 2023 17:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjF2AXP (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 28 Jun 2023 20:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
+        id S232565AbjF3P0U (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 30 Jun 2023 11:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjF2AXN (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 28 Jun 2023 20:23:13 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A091FE5;
-        Wed, 28 Jun 2023 17:23:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687998192; x=1719534192;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NSIVlTxQFEP8tWo4aGIX3eAE9P84KZXLcEh9LxBzi54=;
-  b=C8uXwh2iJblUjKMu/kVoYCyz48HTuGDMdcUA8nbDV2bZL0jAZz4XyOP1
-   2gYcHBxyZFJm5GtQ+5SY33tVnRi5NUNiwfjvaG0oOyWcBIYeLKateIes/
-   vH3qusoxD0sdxhRzWCyxpiU4H1XSGinYVXB6tC/ItqlR+F2vLZnA3q4+f
-   FIVvG4FeBsP37WfslyK9ccgQp4TAC+us3o+F5tJ87TNCaZJRCRVgmbAgT
-   2z/IciqehnrHHpoAHXRGQ20xmUltJkHRThadCffi/FyWt4svZoUUGxMWq
-   w/xlIpDNfxu6dr47C3MrZd9nI/0WwOtKcUYSgBAOQ9y+RkY9jOoB+PEil
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="425662788"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="425662788"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 17:23:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="807122983"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="807122983"
-Received: from scc823097.zsc7.intel.com ([10.148.153.229])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 17:23:11 -0700
-From:   Peter Colberg <peter.colberg@intel.com>
-To:     hao.wu@intel.com, yilun.xu@intel.com, gregkh@linuxfoundation.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     aaron.j.grier@intel.com, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
-        marpagan@redhat.com, lgoncalv@redhat.com,
-        Peter Colberg <peter.colberg@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v3] fpga: dfl: afu: use PFN_DOWN() helper macro
-Date:   Wed, 28 Jun 2023 20:22:55 -0400
-Message-Id: <20230629002255.25262-1-peter.colberg@intel.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <ZJvLlHpJwr/tv3gq@yilunxu-OptiPlex-7050>
-References: <ZJvLlHpJwr/tv3gq@yilunxu-OptiPlex-7050>
+        with ESMTP id S232647AbjF3P0T (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 30 Jun 2023 11:26:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6AE3ABE
+        for <linux-fpga@vger.kernel.org>; Fri, 30 Jun 2023 08:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688138725;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pTZLRXwcw8c+1Shghlas5G3dNG4xAQUuz+2LmMHOLAw=;
+        b=PYTcmn6uVtor3OTPWhZXAz8eLcMjPDgpBI7MvAZHSd/0032GuWs4HmedD+KQTbhYtNZN2W
+        fT52H3Et9vJ52vsxqDhQDjRblB5S+u5OErFJt1KZQiNVj/g8PkgxM/4lyqfBg2yYh3O5r2
+        Ths1diHZC3uzL3ipvetw3oJxFGmciIU=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-633-pWKlAY4TNeKSac0QLC6MSQ-1; Fri, 30 Jun 2023 11:25:23 -0400
+X-MC-Unique: pWKlAY4TNeKSac0QLC6MSQ-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-51bef8bb689so2334391a12.1
+        for <linux-fpga@vger.kernel.org>; Fri, 30 Jun 2023 08:25:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688138722; x=1690730722;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pTZLRXwcw8c+1Shghlas5G3dNG4xAQUuz+2LmMHOLAw=;
+        b=Wd5a8nBxohfswbWRcl3eKieShYyIGguzR4Ja74uELS3N+IIgC7xYBP3qVlF7w1ZA+/
+         s11KLAa3MBrJkvypWm1W4+jlkfoofR4h8wPWKBhsjEP21rGsOBOQREX1rFkJv6V8KMMX
+         WuGysMhSC5YNOxSVzpLm1nS/hzcUnFdiVzIqJe3qc0HhvdhnfO+L6XrMEErulO6PQAWV
+         t0QEiQpxc/BG882IlsK3sVzUvvCN7glia5S8X2vy4brDjWMnRrowwMtqO4aWey7fD/7M
+         If7lsBIlnUR63slnbIHDRp+zLrVrjL9XbB0Q03f2sc8UTh/nFMrp3XEqV8COski3d+6z
+         uqpQ==
+X-Gm-Message-State: ABy/qLZJ0JxRCY3I8wRFAKOdMeJACB8yyherDBvKOiagViJo0h7OOPRP
+        Rrz5OeIffH+iCfOzsM6g3mIB91NZSVamkTE5hmZ13DLbXYCoi69oWAi2rFOZWYcdnv0JgAc4Rdj
+        wIjLlb8QJSZUpVyfkUghS
+X-Received: by 2002:aa7:d94f:0:b0:51d:a2d9:85a3 with SMTP id l15-20020aa7d94f000000b0051da2d985a3mr3181561eds.8.1688138722426;
+        Fri, 30 Jun 2023 08:25:22 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGpZ1E3ISdqu1dZGV3xOqoRPZ2q3DWDuGhB8rfauzXHCbp83s8SSHSQdnEbEC1AbMJKRq2piw==
+X-Received: by 2002:aa7:d94f:0:b0:51d:a2d9:85a3 with SMTP id l15-20020aa7d94f000000b0051da2d985a3mr3181547eds.8.1688138722167;
+        Fri, 30 Jun 2023 08:25:22 -0700 (PDT)
+Received: from klayman.station (net-2-34-24-242.cust.vodafonedsl.it. [2.34.24.242])
+        by smtp.gmail.com with ESMTPSA id k24-20020aa7c398000000b0051def9be785sm813230edq.85.2023.06.30.08.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 08:25:21 -0700 (PDT)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: [PATCH v8 0/4] fpga: add initial KUnit tests for the subsystem
+Date:   Fri, 30 Jun 2023 17:25:03 +0200
+Message-ID: <20230630152507.30219-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Replace right shifts by PAGE_SHIFT with PFN_DOWN() helper macro to convert
-from physical addresses to page frame numbers.
+This patch set introduces an initial set of KUnit test suites for the
+core components of the FPGA subsystem.
 
-These changes are cosmetic only; no functional changes.
+Tests can be run using:
+[user@localhost linux]$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/fpga/tests
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
+v8:
+- Using memset to set header and payload of the test image
+- Using sg_miter_* functions to check the image in the write_sg op
+- Includes sorted in alphabetical order
+- Add commas for fpga_bridge_ops
+- Improved Makefile
+
+v7:
+- Dropped RFC prefix
+- Add comments to explain fakes and helper functions
+- Changed the implementation of the Bridge used in the Region suite
+
+v6:
+- Restructured the code into self-contained test modules
+- Added tests for the basic behaviors of the components
+- Improved programming tests for the FPGA Manager
+- Fixed code/comments mismatch in the list of Bridges test case
+
+v5:
+- Removed most of the exported functions using shared buffers for stats
+- Moved all KUnit expectations/assertions to the main test module
+- Removed standalone use case to simplify the code
+- Removed instances counters from fake components (using device.id instead)
+- Set header size in the .parse_header op
+- Improved bridge get_put_list test case
+
+v4:
+- Fix build error
+
 v3:
-- Revert afu_mmap(), which calculates file offsets, not physical pages
-v2:
-- Comment in commit message that changes are cosmetic only
----
- drivers/fpga/dfl-afu-dma-region.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+- Calling fpga_bridges_put() between reconfigurations
+- Functions for registering fake modules allocate and return context structs
 
-diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
-index 02b60fde0430..e8d54cfbb301 100644
---- a/drivers/fpga/dfl-afu-dma-region.c
-+++ b/drivers/fpga/dfl-afu-dma-region.c
-@@ -10,6 +10,7 @@
-  */
- 
- #include <linux/dma-mapping.h>
-+#include <linux/pfn.h>
- #include <linux/sched/signal.h>
- #include <linux/uaccess.h>
- #include <linux/mm.h>
-@@ -34,7 +35,7 @@ void afu_dma_region_init(struct dfl_feature_platform_data *pdata)
- static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
- 			     struct dfl_afu_dma_region *region)
- {
--	int npages = region->length >> PAGE_SHIFT;
-+	int npages = PFN_DOWN(region->length);
- 	struct device *dev = &pdata->dev->dev;
- 	int ret, pinned;
- 
-@@ -82,7 +83,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
- static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
- 				struct dfl_afu_dma_region *region)
- {
--	long npages = region->length >> PAGE_SHIFT;
-+	long npages = PFN_DOWN(region->length);
- 	struct device *dev = &pdata->dev->dev;
- 
- 	unpin_user_pages(region->pages, npages);
-@@ -101,7 +102,7 @@ static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
-  */
- static bool afu_dma_check_continuous_pages(struct dfl_afu_dma_region *region)
- {
--	int npages = region->length >> PAGE_SHIFT;
-+	int npages = PFN_DOWN(region->length);
- 	int i;
- 
- 	for (i = 0; i < npages - 1; i++)
+v2:
+- Restructured code into multiple suites to test components in isolation
+- Reduced code duplication using init and exit methods
+- Using a get_bridges() method to build the list of bridges just before programming
+- Regions and Bridges are organized topologically
+- Changed bitstream/bit to images
+- Allocate images dynamically
+- Renamed fpga-tests to fpga-test
+- Simplified Kconfig
+- Add license info to the fpga-test module
+
+Marco Pagani (4):
+  fpga: add an initial KUnit suite for the FPGA Manager
+  fpga: add an initial KUnit suite for the FPGA Bridge
+  fpga: add an initial KUnit suite for the FPGA Region
+  fpga: add configuration for the FPGA KUnit test suites.
+
+ drivers/fpga/Kconfig                  |   2 +
+ drivers/fpga/Makefile                 |   3 +
+ drivers/fpga/tests/.kunitconfig       |   5 +
+ drivers/fpga/tests/Kconfig            |  11 +
+ drivers/fpga/tests/Makefile           |   6 +
+ drivers/fpga/tests/fpga-bridge-test.c | 175 +++++++++++++++
+ drivers/fpga/tests/fpga-mgr-test.c    | 311 ++++++++++++++++++++++++++
+ drivers/fpga/tests/fpga-region-test.c | 211 +++++++++++++++++
+ 8 files changed, 724 insertions(+)
+ create mode 100644 drivers/fpga/tests/.kunitconfig
+ create mode 100644 drivers/fpga/tests/Kconfig
+ create mode 100644 drivers/fpga/tests/Makefile
+ create mode 100644 drivers/fpga/tests/fpga-bridge-test.c
+ create mode 100644 drivers/fpga/tests/fpga-mgr-test.c
+ create mode 100644 drivers/fpga/tests/fpga-region-test.c
+
+
+base-commit: 45a3e24f65e90a047bef86f927ebdc4c710edaa1
 -- 
-2.28.0
+2.41.0
 
