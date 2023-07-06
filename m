@@ -2,163 +2,125 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A3E749F00
-	for <lists+linux-fpga@lfdr.de>; Thu,  6 Jul 2023 16:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D585874A5EB
+	for <lists+linux-fpga@lfdr.de>; Thu,  6 Jul 2023 23:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjGFO3K (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 6 Jul 2023 10:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S229640AbjGFVak (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 6 Jul 2023 17:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbjGFO3J (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 6 Jul 2023 10:29:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B372410F5
-        for <linux-fpga@vger.kernel.org>; Thu,  6 Jul 2023 07:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688653705;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EiEyy1Zz1RJBfezlwrqTDqR5fyYdhtm3nESopN9SQeo=;
-        b=D0XDS8yXcZurDxsqStmZ0yRA3GMX5I1D+Qw+qFqW7L3nOQAt4lzU0r3YrmXNZCHDSlZJzR
-        BR2kbV1PV8b6nUP+nQkSkiDJWccRxdiZF6A7KR4hxCrncVhGmsz9KSEX9M6jsVBudxmeBm
-        Y6BBwGTjwwH7f8bejblRAuueJ4KQRXo=
-Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com
- [209.85.217.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-39-tAoWLpnBMwKO22l0M0QTuQ-1; Thu, 06 Jul 2023 10:28:24 -0400
-X-MC-Unique: tAoWLpnBMwKO22l0M0QTuQ-1
-Received: by mail-vs1-f70.google.com with SMTP id ada2fe7eead31-440aef0aa27so60563137.3
-        for <linux-fpga@vger.kernel.org>; Thu, 06 Jul 2023 07:28:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688653704; x=1691245704;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EiEyy1Zz1RJBfezlwrqTDqR5fyYdhtm3nESopN9SQeo=;
-        b=PhJiW9QrBKkfwqM0zlHFevJVcPaQKl6LzhaPJWSxwsYXuDrGvb7GObAS+aqj+JKFBa
-         oOthRgOalL0grPQobGEQ3+dNzMHpbP9es4Xn6IidEw/NhibebtUJPsRjvu667v/4A7g6
-         caqmvnUZ63oWNpXCLlV1MZNZ28q+3+KxcaI1VR3Vvu9ZS4KZH6ovwPxK8Cvxbt8RKPMd
-         0C1CmQFN0UxDoLve/T2srVd35B+Xnai10w48kHzwHDlhuKX1rCM6GZ5adRnC6T5X8C5a
-         UuH/GRqVR/oVVaZh2ocKf66fIx2W2TXTWzOEdejmFnEoQ2Y4VHZn9bhSzN5Dqj0gU++U
-         g5Aw==
-X-Gm-Message-State: ABy/qLZTyaKEAgBmJYY23Wz9QKhCtN5aephVR4kFrS1sSKqr8b17rkCw
-        oflG7CB2jMIUVbEjJy+XP5aBr4WJV8d34PbZ+7wQoGLZ3WKrUl7YnmIbAhfns5nJsaTj5LRQ8u9
-        HpiH9oc5UjNmksEjxJjE+
-X-Received: by 2002:a67:f78f:0:b0:443:6792:38a with SMTP id j15-20020a67f78f000000b004436792038amr666512vso.34.1688653704259;
-        Thu, 06 Jul 2023 07:28:24 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHsmH9Qe69ZAE1m+BF0AQJAAi8Bt5cjaVucwH0fzIP7WDlWRFShHuVChIX7676PUfZkjjSNSQ==
-X-Received: by 2002:a67:f78f:0:b0:443:6792:38a with SMTP id j15-20020a67f78f000000b004436792038amr666502vso.34.1688653703990;
-        Thu, 06 Jul 2023 07:28:23 -0700 (PDT)
-Received: from klayman.redhat.com (net-2-34-24-242.cust.vodafonedsl.it. [2.34.24.242])
-        by smtp.gmail.com with ESMTPSA id r21-20020a0cb295000000b0063631be090csm923526qve.125.2023.07.06.07.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 07:28:23 -0700 (PDT)
-From:   Marco Pagani <marpagan@redhat.com>
-To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: [RFC PATCH 2/2] fpga: bridge: fix kernel-doc
-Date:   Thu,  6 Jul 2023 16:27:55 +0200
-Message-ID: <20230706142755.124879-3-marpagan@redhat.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230706142755.124879-1-marpagan@redhat.com>
-References: <20230706142755.124879-1-marpagan@redhat.com>
+        with ESMTP id S229507AbjGFVak (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 6 Jul 2023 17:30:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07116DD;
+        Thu,  6 Jul 2023 14:30:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=P3Xuz8GELhidqUWZPKJGYu1EEf8xRrAUuqFDiYa20Q8=; b=sGzArAHOcn5houvQZ2a+lrpen4
+        0HGYVnjMLS5ao9ND1Sjj7pKfwOrEV9CrHKVrbdozHgjxcBmjnbmcABaYGnZGEhZuwKk3MAE9pGB/D
+        lssWql6M6JuK4YsIhfWhXHtaTi8lnjtjq7VPqIL7TIblYv9RBRC7xT0T3XP78mInyCud4Aa9yj9Vk
+        Zyql8PpxbZkXftg95KLpqS4lERtnQhUcfjJSZ3/Prwun4IFDsDLuMEVO7QOeI+ewKjQc1D4iD1ra2
+        RYc3G9GekKWqdsMAczUvAP8rXF0t+uf/La+96SNomP73JjMPZxuthE0zdV8zZwvsV5m1lYwVkmrNy
+        EaELAxqQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qHWYc-002jaa-2e;
+        Thu, 06 Jul 2023 21:30:34 +0000
+Message-ID: <e5dae9f1-8492-3046-f694-80d13c9927e9@infradead.org>
+Date:   Thu, 6 Jul 2023 14:30:34 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC PATCH 1/2] fpga: region: fix kernel-doc
+Content-Language: en-US
+To:     Marco Pagani <marpagan@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
+References: <20230706142755.124879-1-marpagan@redhat.com>
+ <20230706142755.124879-2-marpagan@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230706142755.124879-2-marpagan@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Fix the following warnings issued by the kernel-doc script:
+Hi--
 
-drivers/fpga/fpga-bridge.c:99: warning: No description found for return value of 'of_fpga_bridge_get'
-drivers/fpga/fpga-bridge.c:163: warning: No description found for return value of 'fpga_bridges_enable'
-drivers/fpga/fpga-bridge.c:187: warning: No description found for return value of 'fpga_bridges_disable'
-drivers/fpga/fpga-bridge.c:238: warning: No description found for return value of 'of_fpga_bridge_get_to_list'
-drivers/fpga/fpga-bridge.c:268: warning: No description found for return value of 'fpga_bridge_get_to_list'
+On 7/6/23 07:27, Marco Pagani wrote:
+> - Fix the following warnings issued by the kernel-doc script:
+> 
+> drivers/fpga/fpga-region.c:46: warning: No description found for return value of 'fpga_region_get'
+> drivers/fpga/fpga-region.c:97: warning: No description found for return value of 'fpga_region_program_fpga'
+> drivers/fpga/fpga-region.c:295: warning: No description found for return value of 'fpga_region_init'
+> 
+> - Remove the "and registers a reconfig notifier" part from the description
+>   of fpga_region_init() since it does not register an of_overlay notifier
+>   anymore.
+> 
+> - Remove the outdated "if @np is not an FPGA Region" case from the return
+>   description of fpga_region_get() and replace it with the case when
+>   try_module_get() fails.
+> 
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
 
-- Extend the return description of of_fpga_bridge_get() to include the
-  case when try_module_get() fails.
+Looks good. Thanks.
 
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
- drivers/fpga/fpga-bridge.c | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-index a6c25dee9cc1..0b76c67c50e5 100644
---- a/drivers/fpga/fpga-bridge.c
-+++ b/drivers/fpga/fpga-bridge.c
-@@ -87,12 +87,13 @@ static struct fpga_bridge *__fpga_bridge_get(struct device *dev,
- /**
-  * of_fpga_bridge_get - get an exclusive reference to an fpga bridge
-  *
-- * @np: node pointer of an FPGA bridge
-- * @info: fpga image specific information
-+ * @np: node pointer of an FPGA bridge.
-+ * @info: fpga image specific information.
-  *
-- * Return fpga_bridge struct if successful.
-- * Return -EBUSY if someone already has a reference to the bridge.
-- * Return -ENODEV if @np is not an FPGA Bridge.
-+ * Return:
-+ * * fpga_bridge struct pointer if successful.
-+ * * -EBUSY if someone already has a reference to the bridge.
-+ * * -ENODEV if @np is not an FPGA Bridge or can't take parent driver refcount.
-  */
- struct fpga_bridge *of_fpga_bridge_get(struct device_node *np,
- 				       struct fpga_image_info *info)
-@@ -155,9 +156,9 @@ EXPORT_SYMBOL_GPL(fpga_bridge_put);
-  * fpga_bridges_enable - enable bridges in a list
-  * @bridge_list: list of FPGA bridges
-  *
-- * Enable each bridge in the list.  If list is empty, do nothing.
-+ * Enable each bridge in the list. If list is empty, do nothing.
-  *
-- * Return 0 for success or empty bridge list; return error code otherwise.
-+ * Return: 0 for success or empty bridge list or an error code otherwise.
-  */
- int fpga_bridges_enable(struct list_head *bridge_list)
- {
-@@ -179,9 +180,9 @@ EXPORT_SYMBOL_GPL(fpga_bridges_enable);
-  *
-  * @bridge_list: list of FPGA bridges
-  *
-- * Disable each bridge in the list.  If list is empty, do nothing.
-+ * Disable each bridge in the list. If list is empty, do nothing.
-  *
-- * Return 0 for success or empty bridge list; return error code otherwise.
-+ * Return: 0 for success or empty bridge list or an error code otherwise.
-  */
- int fpga_bridges_disable(struct list_head *bridge_list)
- {
-@@ -230,7 +231,7 @@ EXPORT_SYMBOL_GPL(fpga_bridges_put);
-  *
-  * Get an exclusive reference to the bridge and it to the list.
-  *
-- * Return 0 for success, error code from of_fpga_bridge_get() otherwise.
-+ * Return: 0 for success, error code from of_fpga_bridge_get() otherwise.
-  */
- int of_fpga_bridge_get_to_list(struct device_node *np,
- 			       struct fpga_image_info *info,
-@@ -260,7 +261,7 @@ EXPORT_SYMBOL_GPL(of_fpga_bridge_get_to_list);
-  *
-  * Get an exclusive reference to the bridge and it to the list.
-  *
-- * Return 0 for success, error code from fpga_bridge_get() otherwise.
-+ * Return: 0 for success, error code from fpga_bridge_get() otherwise.
-  */
- int fpga_bridge_get_to_list(struct device *dev,
- 			    struct fpga_image_info *info,
+> ---
+>  drivers/fpga/fpga-region.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+> index ccf6fdab1360..c9d065a6961b 100644
+> --- a/drivers/fpga/fpga-region.c
+> +++ b/drivers/fpga/fpga-region.c
+> @@ -38,9 +38,10 @@ EXPORT_SYMBOL_GPL(fpga_region_class_find);
+>   *
+>   * Caller should call fpga_region_put() when done with region.
+>   *
+> - * Return fpga_region struct if successful.
+> - * Return -EBUSY if someone already has a reference to the region.
+> - * Return -ENODEV if @np is not an FPGA Region.
+> + * Return:
+> + * * fpga_region struct if successful.
+> + * * -EBUSY if someone already has a reference to the region.
+> + * * -ENODEV if can't take parent driver module refcount.
+>   */
+>  static struct fpga_region *fpga_region_get(struct fpga_region *region)
+>  {
+> @@ -91,7 +92,7 @@ static void fpga_region_put(struct fpga_region *region)
+>   * The caller will need to call fpga_bridges_put() before attempting to
+>   * reprogram the region.
+>   *
+> - * Return 0 for success or negative error code.
+> + * Return: 0 for success or negative error code.
+>   */
+>  int fpga_region_program_fpga(struct fpga_region *region)
+>  {
+> @@ -288,8 +289,9 @@ static void fpga_region_dev_release(struct device *dev)
+>  }
+>  
+>  /**
+> - * fpga_region_init - init function for fpga_region class
+> - * Creates the fpga_region class and registers a reconfig notifier.
+> + * fpga_region_init - creates the fpga_region class.
+> + *
+> + * Return: 0 on success or ERR_PTR() on error.
+>   */
+>  static int __init fpga_region_init(void)
+>  {
+
 -- 
-2.41.0
-
+~Randy
