@@ -2,161 +2,147 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C22375284F
-	for <lists+linux-fpga@lfdr.de>; Thu, 13 Jul 2023 18:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A7A75299C
+	for <lists+linux-fpga@lfdr.de>; Thu, 13 Jul 2023 19:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbjGMQ2y (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 13 Jul 2023 12:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S231564AbjGMRLy (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 13 Jul 2023 13:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232854AbjGMQ2x (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 13 Jul 2023 12:28:53 -0400
+        with ESMTP id S230170AbjGMRLr (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 13 Jul 2023 13:11:47 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00092D43
-        for <linux-fpga@vger.kernel.org>; Thu, 13 Jul 2023 09:28:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E022719
+        for <linux-fpga@vger.kernel.org>; Thu, 13 Jul 2023 10:10:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689265689;
+        s=mimecast20190719; t=1689268259;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wWVveJ30j+awpC6r3B537VP9iS5QEq83jfrgh734Zoc=;
-        b=cIJif7q8EEYMJQi8b2sniU7ZABGeoH5QphxSg1h+D3iv67tv+1VtQU1ZDbUnVtfLGy6tv5
-        zxbHIkO9zINCuI98tekU+xp9dyu6XpzRUGSn8OU35Hd5H2gMMFKHFgL4skhlJmXP41BkWG
-        W4LjWFBgDa/aLKvJ3A1kLcZGgIVoWik=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=+UPgPFBGvQHuZjwqO9ik4oPicS3MZwipCdBIqa3Pous=;
+        b=LfQNLsC+9rUN6nDXpJh9bJPEa/8hMG5DCXVRj5Oeyu51TyEWDKOjjpur6/cxrmNuUKHOnC
+        NQHilZNg4i3zUNZ+0IOQUEL++nlNjCe8peXyFt+qqE8ei7mHuRT9rAMypsdQRxj5rm6/Ir
+        hPNvo1AGXWYin1KAvmnITOwpIPtXeow=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-546-Z1MvrpNZNVOYtbVA9AjufA-1; Thu, 13 Jul 2023 12:28:08 -0400
-X-MC-Unique: Z1MvrpNZNVOYtbVA9AjufA-1
-Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-565fb39bd5eso1370644eaf.2
-        for <linux-fpga@vger.kernel.org>; Thu, 13 Jul 2023 09:28:08 -0700 (PDT)
+ us-mta-70-vclzISmaP5-3clTC2QWokQ-1; Thu, 13 Jul 2023 13:10:58 -0400
+X-MC-Unique: vclzISmaP5-3clTC2QWokQ-1
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-345c1f3dcc8so4533615ab.3
+        for <linux-fpga@vger.kernel.org>; Thu, 13 Jul 2023 10:10:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689265688; x=1691857688;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wWVveJ30j+awpC6r3B537VP9iS5QEq83jfrgh734Zoc=;
-        b=S8Bolrb85vbRTRhhUfVmGR0w+eUb6AFimy4fVoCVN5KFw4jEOvkTFYgjOj7+1lbJ08
-         3xvSTHf4ZL+y2Gqt8ySJCKgoGRzTMx6h3hhKknvVgUwULsWSbLultRWxkL3rBZaHJGq8
-         k+NbxUiXaiaOO2pc/fdmFv5bL+y3tUJvwvyPGoW+M33qgwdJ8J8y5VuhHpN+aerBpxJR
-         uI7xbMJbY7OfaXJtXsCD7C9U46Qq7EMU/Pltvn9PioCe1UCPGHfiBr/bguXWP25agzh9
-         JBqVTTD7tabJZ7H+NP/oNU0jaXl+3WVDZj/Dwcw0YEbrODh15R4w8FQWlUj0gx0VjMJ5
-         /mDQ==
-X-Gm-Message-State: ABy/qLbFoxklfX3oAGBN1DAi6hq7RDCUUUGhVvfn6odDI3XJ2VDmhdFy
-        zavoa5DxSwBYsJhUghqm9CRRpllQZwJfAQrqaItWfFoP8fH33PRmz6e1Y/hAFKD7A+xja72Difw
-        lYMyuWRfBrxNdk+aW2MHoPDTuJma1
-X-Received: by 2002:a05:6358:5e0c:b0:12b:ed77:8b66 with SMTP id q12-20020a0563585e0c00b0012bed778b66mr2046488rwn.7.1689265687774;
-        Thu, 13 Jul 2023 09:28:07 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEYJq50pG1mqKAGjMEGWllFZXoPDQDA26oc7CbIG+2WUGSjQlqgGXpb/reRGfhmQCOyognUtA==
-X-Received: by 2002:a05:6358:5e0c:b0:12b:ed77:8b66 with SMTP id q12-20020a0563585e0c00b0012bed778b66mr2046469rwn.7.1689265687405;
-        Thu, 13 Jul 2023 09:28:07 -0700 (PDT)
-Received: from klayman.redhat.com (net-2-34-24-242.cust.vodafonedsl.it. [2.34.24.242])
-        by smtp.gmail.com with ESMTPSA id u17-20020a0cf1d1000000b00637873ff0f3sm3206582qvl.15.2023.07.13.09.28.05
+        d=1e100.net; s=20221208; t=1689268257; x=1691860257;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+UPgPFBGvQHuZjwqO9ik4oPicS3MZwipCdBIqa3Pous=;
+        b=Nq3V0wAtsymqf70zLeSk59yL8+/OTsanzt3wlBJmIAXge+3xtCjVV1WaPrQki3+1xM
+         5CYzIwVubZtGAphEMq1A1sp9WD8+f6/ANNrCgPdrnXI8zUZuQJCcH5TxIFKwp6MX/h/W
+         Yce/BewB0viMxUxw0YnOfaLVh7RDjn1GS9Hm9H/83UXWbybBcfzXEE6ylmtmQJjtd3K7
+         bcr2DETNuEJ4lBBqcXvg2M+dlyB2FAbwpwBlxpIJ8s2hh/AL1db6cJcjO2FEXmH/JVKo
+         TiBPa7xMFFZm16gP0SBH6ZUg4dURNeKYbH4yTIvubeMvdH5eubLmtE02ci6X75eViewb
+         ht0w==
+X-Gm-Message-State: ABy/qLbLl1LRWQUyl44NVgwsUW9hwv/Se22oRFWwOA03lxp+mT9oRoe1
+        GH8QlK127toosUW6DyB0VHbCUecUB4I+D5taQRTn7HyUm03ZKOWgNNp1QTY1bL689KZ1+PUy6VS
+        ntH16mUL9onFfA//6P1JzIQ==
+X-Received: by 2002:a92:c105:0:b0:345:6ffa:63c5 with SMTP id p5-20020a92c105000000b003456ffa63c5mr1980572ile.32.1689268257117;
+        Thu, 13 Jul 2023 10:10:57 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEYzBd2cy5+vbqrqBW5hcL0Nlt03XvoKU7EVc2Oqt6qt/39DAJLG7+eJes4a+aimrEVLy/slQ==
+X-Received: by 2002:a92:c105:0:b0:345:6ffa:63c5 with SMTP id p5-20020a92c105000000b003456ffa63c5mr1980544ile.32.1689268256865;
+        Thu, 13 Jul 2023 10:10:56 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id el20-20020a0566384d9400b0042b61a5087csm1948085jab.132.2023.07.13.10.10.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jul 2023 09:28:07 -0700 (PDT)
-From:   Marco Pagani <marpagan@redhat.com>
-To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: [PATCH v9 4/4] fpga: add configuration for the FPGA KUnit test suites.
-Date:   Thu, 13 Jul 2023 18:27:31 +0200
-Message-ID: <20230713162731.211669-5-marpagan@redhat.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230713162731.211669-1-marpagan@redhat.com>
-References: <20230713162731.211669-1-marpagan@redhat.com>
+        Thu, 13 Jul 2023 10:10:56 -0700 (PDT)
+Date:   Thu, 13 Jul 2023 11:10:54 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        linux-usb@vger.kernel.org, Matthew Rosato <mjrosato@linux.ibm.com>,
+        Paul Durrant <paul@xen.org>, Tom Rix <trix@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        dri-devel@lists.freedesktop.org, Michal Hocko <mhocko@kernel.org>,
+        linux-mm@kvack.org, Kirti Wankhede <kwankhede@nvidia.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Fei Li <fei1.li@intel.com>, x86@kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Ingo Molnar <mingo@redhat.com>,
+        intel-gfx@lists.freedesktop.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-fpga@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Jason Herne <jjherne@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        linuxppc-dev@lists.ozlabs.org, Eric Auger <eric.auger@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, kvm@vger.kernel.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>, cgroups@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        virtualization@lists.linux-foundation.org,
+        intel-gvt-dev@lists.freedesktop.org, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, Tony Krowiak <akrowiak@linux.ibm.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Xu Yilun <yilun.xu@intel.com>, jaz@semihalf.com
+Subject: Re: [PATCH 0/2] eventfd: simplify signal helpers
+Message-ID: <20230713111054.75cdf2b8.alex.williamson@redhat.com>
+In-Reply-To: <20230713-vfs-eventfd-signal-v1-0-7fda6c5d212b@kernel.org>
+References: <20230713-vfs-eventfd-signal-v1-0-7fda6c5d212b@kernel.org>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Add configuration for the KUnit test suites for the core components
-of the FPGA subsystem.
+On Thu, 13 Jul 2023 12:05:36 +0200
+Christian Brauner <brauner@kernel.org> wrote:
 
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
----
- drivers/fpga/Kconfig            |  2 ++
- drivers/fpga/Makefile           |  3 +++
- drivers/fpga/tests/.kunitconfig |  5 +++++
- drivers/fpga/tests/Kconfig      | 11 +++++++++++
- drivers/fpga/tests/Makefile     |  6 ++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 drivers/fpga/tests/.kunitconfig
- create mode 100644 drivers/fpga/tests/Kconfig
- create mode 100644 drivers/fpga/tests/Makefile
+> Hey everyone,
+> 
+> This simplifies the eventfd_signal() and eventfd_signal_mask() helpers
+> by removing the count argument which is effectively unused.
 
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index 0a00763b9f28..2f689ac4ba3a 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
- 	  FPGA manager driver support for Lattice FPGAs programming over slave
- 	  SPI sysCONFIG interface.
- 
-+source "drivers/fpga/tests/Kconfig"
-+
- endif # FPGA
-diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-index 72e554b4d2f7..352a2612623e 100644
---- a/drivers/fpga/Makefile
-+++ b/drivers/fpga/Makefile
-@@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
- 
- # Drivers for FPGAs which implement DFL
- obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
-+
-+# KUnit tests
-+obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
-diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
-new file mode 100644
-index 000000000000..a1c2a2974c39
---- /dev/null
-+++ b/drivers/fpga/tests/.kunitconfig
-@@ -0,0 +1,5 @@
-+CONFIG_KUNIT=y
-+CONFIG_FPGA=y
-+CONFIG_FPGA_REGION=y
-+CONFIG_FPGA_BRIDGE=y
-+CONFIG_FPGA_KUNIT_TESTS=y
-diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
-new file mode 100644
-index 000000000000..e4a64815f16d
---- /dev/null
-+++ b/drivers/fpga/tests/Kconfig
-@@ -0,0 +1,11 @@
-+config FPGA_KUNIT_TESTS
-+	tristate "KUnit test for the FPGA subsystem" if !KUNIT_ALL_TESTS
-+	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT=y
-+	default KUNIT_ALL_TESTS
-+        help
-+          This builds unit tests for the FPGA subsystem
-+
-+          For more information on KUnit and unit tests in general,
-+          please refer to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+          If unsure, say N.
-diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
-new file mode 100644
-index 000000000000..bb78215c645c
---- /dev/null
-+++ b/drivers/fpga/tests/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for KUnit test suites for the FPGA subsystem
-+#
-+
-+obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-mgr-test.o fpga-bridge-test.o fpga-region-test.o
--- 
-2.41.0
+We have a patch under review which does in fact make use of the
+signaling value:
+
+https://lore.kernel.org/all/20230630155936.3015595-1-jaz@semihalf.com/
+
+Thanks,
+Alex
 
