@@ -2,172 +2,136 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20BA574FCEC
-	for <lists+linux-fpga@lfdr.de>; Wed, 12 Jul 2023 04:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD1C751E73
+	for <lists+linux-fpga@lfdr.de>; Thu, 13 Jul 2023 12:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjGLCBu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 11 Jul 2023 22:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S234581AbjGMKGk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 13 Jul 2023 06:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjGLCBt (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 11 Jul 2023 22:01:49 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E8BE7E;
-        Tue, 11 Jul 2023 19:01:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689127308; x=1720663308;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tnDgXuyxN6TFU9q9l7GfKXwskzKHJdUAYGiVK1N0+ME=;
-  b=Mci8O9yO6zoJ8HYJiaGncfaTQ9Uj2jZwQAOHPjIL6GgvZwdNg8KiYf6o
-   c/KvkUZUJmNcPK4b+QW0X0Uh7lsiYA5gL8ppR4Amp7/twICWbejFQexxe
-   3FeIdK4BuE7JK9GmleY1Y8MXH+U1fm/vfrZ95kHLzhXDtkNkHcWioDK5B
-   /cpNQU/FTbaZxYSD+neC+Zxp0v94/djdLizrUxWyX6LfR8CaMzHHpYRuv
-   oBFeD/OQW8ZGo1mPrI60LrH7q0vWv6jRHXzi0qzshQv9iP+SZsWUU4mlt
-   6pupn/4/hHIFSMP1hvBr9NfOwg6qMo4CQMucRzN31HjfQIBPfK2uGKm7o
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="362247653"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="362247653"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 19:01:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="786858030"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="786858030"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Jul 2023 19:01:46 -0700
-Date:   Wed, 12 Jul 2023 10:00:16 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v8 1/4] fpga: add an initial KUnit suite for the FPGA
- Manager
-Message-ID: <ZK4JMDZfdVyFkN92@yilunxu-OptiPlex-7050>
-References: <20230630152507.30219-1-marpagan@redhat.com>
- <20230630152507.30219-2-marpagan@redhat.com>
- <ZKuMosEu242BrY0K@yilunxu-OptiPlex-7050>
- <1d03a695-d603-a4d5-b726-4b0ff6bc33f8@redhat.com>
+        with ESMTP id S234583AbjGMKGT (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 13 Jul 2023 06:06:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16961270F;
+        Thu, 13 Jul 2023 03:06:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BF4A608D5;
+        Thu, 13 Jul 2023 10:06:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6875C433C8;
+        Thu, 13 Jul 2023 10:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689242764;
+        bh=uxBF/65cfGgFc9NUZsYBWMo4c7yjkoqCGF6QeEUJdAY=;
+        h=From:Subject:Date:To:Cc:From;
+        b=fMIucUY7GArhLgcLDCFIQxCyAzXRgRPE8TkbNnY5GyU1HBPhbd5464W8Yg6jjQ1lL
+         m6CWFlXeaqd10iV8ptWkOllE56aJPowyXSs5WiPty1Qsblb5rDh7+XYZZkXkukuQUD
+         2oiaMlw7C0sww3ot9gyUkCaU1j297MtNOoU25HevXc+ptbrPhHq2Zk21bLHu2o2olV
+         KM6Bl/kUQtYvAIUPH+MSd/KGQP+HX58eb57Amnb444A4mU/RQ41PTUTV2bTgUUDM37
+         0Ncnb1LvDeYFhV3bcDM22YynZx1G+N6CQHl4PYcq4tdmwsqnstpRPCpNQMucQad6SH
+         v0+dq9gbDJkNg==
+From:   Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/2] eventfd: simplify signal helpers
+Date:   Thu, 13 Jul 2023 12:05:36 +0200
+Message-Id: <20230713-vfs-eventfd-signal-v1-0-7fda6c5d212b@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1d03a695-d603-a4d5-b726-4b0ff6bc33f8@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHDMr2QC/x3MwQrCMAyA4VcZORtpN9jAVxEPaZtuAY3SSBHG3
+ t3o8Tv8/w7GTdjgMuzQuIvJUx3xNEDeSFdGKW4YwziFJU7YqyF31nctaLIq3TGkUOK8UJk5g4e
+ vxlU+/+n15k5kjKmR5u238sP5IZbhOL4kMfO0fwAAAA==
+To:     linux-fsdevel@vger.kernel.org
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paul Durrant <paul@xen.org>, Oded Gabbay <ogabbay@kernel.org>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>, Fei Li <fei1.li@intel.com>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Kirti Wankhede <kwankhede@nvidia.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fpga@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-aio@kvack.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=276; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=uxBF/65cfGgFc9NUZsYBWMo4c7yjkoqCGF6QeEUJdAY=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSsP1PLoVi0NYRvYnj1752/FbjTRLb2F5/eK1jjLMP8OeoE
+ g8DNjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIlwrGT4n2l3WEWjd0VXqt6ih11Ns1
+ YfjrROvjc3V73IYWbr0apscUaGq6+my1lGuQtz2O564OagKGE5qVEnsLx/a9H1rIRnpwXZAA==
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2023-07-11 at 16:02:44 +0200, Marco Pagani wrote:
-> 
-> 
-> On 2023-07-10 06:44, Xu Yilun wrote:
-> > On 2023-06-30 at 17:25:04 +0200, Marco Pagani wrote:
-> >> The suite tests the basic behaviors of the FPGA Manager including
-> >> programming using a single contiguous buffer and a scatter gather table.
-> >>
-> >> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> >> ---
-> >>  drivers/fpga/tests/fpga-mgr-test.c | 311 +++++++++++++++++++++++++++++
-> >>  1 file changed, 311 insertions(+)
-> >>  create mode 100644 drivers/fpga/tests/fpga-mgr-test.c
-> >>
-> >> diff --git a/drivers/fpga/tests/fpga-mgr-test.c b/drivers/fpga/tests/fpga-mgr-test.c
-> >> new file mode 100644
-> >> index 000000000000..6fd2e235f195
-> >> --- /dev/null
-> >> +++ b/drivers/fpga/tests/fpga-mgr-test.c
-> >> @@ -0,0 +1,311 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * KUnit test for the FPGA Manager
-> >> + *
-> >> + * Copyright (C) 2023 Red Hat, Inc.
-> >> + *
-> >> + * Author: Marco Pagani <marpagan@redhat.com>
-> >> + */
-> >> +
-> 
-> [...]
-> 
-> >> +static int op_write(struct fpga_manager *mgr, const char *buf, size_t count)
-> >> +{
-> >> +	struct mgr_stats *stats = mgr->priv;
-> >> +	size_t i;
-> >> +
-> >> +	/* Check the image */
-> >> +	stats->image_match = true;
-> >> +	for (i = 0; i < count; i++)
-> >> +		if (buf[i] != IMAGE_FILL)
-> >> +			stats->image_match = false;
-> >> +
-> >> +	stats->op_write_state = mgr->state;
-> >> +	stats->op_write_seq = stats->seq_num++;
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static int op_write_sg(struct fpga_manager *mgr, struct sg_table *sgt)
-> >> +{
-> >> +	struct mgr_stats *stats = mgr->priv;
-> >> +	struct sg_mapping_iter miter;
-> >> +	char *img;
-> >> +	size_t i;
-> >> +
-> >> +	/*
-> >> +	 * Check the image, but first skip the header since write_sg will get
-> >> +	 * the whole image in sg_table.
-> >> +	 */
-> >> +	stats->image_match = true;
-> >> +	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
-> >> +
-> >> +	if (!sg_miter_skip(&miter, HEADER_SIZE))
-> >> +		stats->image_match = false;
-> > 
-> > If this fails, should we continue?
-> 
-> Would it be okay to set the image_match flag to false and then
-> return 0 if sg_miter_skip() fails?
+Hey everyone,
 
-That's good to me.
+This simplifies the eventfd_signal() and eventfd_signal_mask() helpers
+by removing the count argument which is effectively unused.
 
-> 
-> I think returning an error code to the FPGA manager would not
-> be beneficial in this case since if an op fails, it is a failure
-> of the FPGA manager itself, not the low-level driver that tests
-> the FPGA manager.
+---
 
-So the idea is we never return error code in any fake driver ops?
-That's OK. Please add some comments in code for it and the reason.
 
-Thanks,
-Yilun
 
-> 
-> 
-> > 
-> >> +
-> >> +	while (sg_miter_next(&miter)) {
-> >> +		img = miter.addr;
-> >> +		for (i = 0; i < miter.length; i++) {
-> >> +			if (img[i] != IMAGE_FILL)
-> >> +				stats->image_match = false;
-> >> +		}
-> >> +	}
-> >> +
-> >> +	sg_miter_stop(&miter);
-> >> +
-> >> +	stats->op_write_sg_state = mgr->state;
-> >> +	stats->op_write_sg_seq = stats->seq_num++;
-> >> +
-> >> +	return 0;
-> >> +}
-> > 
-> 
+---
+base-commit: 6be357f00aad4189130147fdc6f568cf776a4909
+change-id: 20230713-vfs-eventfd-signal-0b0d167ad6ec
+
