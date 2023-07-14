@@ -2,140 +2,190 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D9D753ECB
-	for <lists+linux-fpga@lfdr.de>; Fri, 14 Jul 2023 17:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5330D7540F6
+	for <lists+linux-fpga@lfdr.de>; Fri, 14 Jul 2023 19:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235988AbjGNPYv (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 14 Jul 2023 11:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
+        id S235841AbjGNRpf (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 14 Jul 2023 13:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235491AbjGNPYt (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 14 Jul 2023 11:24:49 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BA01BD4
-        for <linux-fpga@vger.kernel.org>; Fri, 14 Jul 2023 08:24:48 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-3a04e5baffcso1633019b6e.3
-        for <linux-fpga@vger.kernel.org>; Fri, 14 Jul 2023 08:24:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689348287; x=1691940287;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KKCPDDjyadziwl2/AK/7bwW5AQLCnpdzpQfQJ+yWANU=;
-        b=VkfHth5MNAZHQQpEhdDGh0pq0hoDNb/IkCyvJyfZlohZ7FEqc/tc2UlGQlp5P+ls2k
-         LP4Az77bQs/0UVX1KSsNiwTlKtw8ZJErPfpgp4NpbjjW9RxzvWKdoj5q9JZGtbqYKyMw
-         IkbeE1z0uT48kd4G5uv3BxnFhNNELaU6M+7XHRszPJ3LTmAtfce0FwO0kiq6qtWbZVLj
-         +GaUqzfPkfSAQcQuVfYKAUHYwjH4iU0nqNSXmWkPMWsXsceycWdUU7PI1Bdr+PTPu7X6
-         X/OpA3sg1LJmtBpK2xUftGMYHz3Z91vTuIVh4aBU1pURrsic+RJAvN3CFStnNYgOJO/U
-         rXPA==
+        with ESMTP id S235555AbjGNRpe (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 14 Jul 2023 13:45:34 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952004211;
+        Fri, 14 Jul 2023 10:44:58 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-77a62a84855so87543239f.1;
+        Fri, 14 Jul 2023 10:44:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689348287; x=1691940287;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KKCPDDjyadziwl2/AK/7bwW5AQLCnpdzpQfQJ+yWANU=;
-        b=OxwqdYpVTANcYfM9IT18UzfMiwqc4lQ2pg1xJWsK7t0f23M5b5nRTiMyBDrFMWGJp2
-         +06Jrk2uekXuBWA3daPUzTNSgdp6JM8RjtsF/WIxMGw97ubOwiEwlC7DDsPY0qXXb5UO
-         E0ujJT7J+MKyHRtvrGIQK6R2jaxHjShK1LX3JPgaV53K16osqLGt4zETeWwViQSiK0bc
-         ejVqrIjKOSwrQS71b1UpbVAHP1iImMArUSI2Mug9Gs8uVO937hcGQ4+LncePO+M1MMDe
-         KQFn9cXoA7DgOiZilT3/cnmaoYLjcep3unrUXI5Y70kZAncd8+bc2ktDcrb88o0Lb07x
-         okUA==
-X-Gm-Message-State: ABy/qLaTmYLH6cVm8hjTkbMKahwMJMc4/6ELU0q4vBrtsRrHyFmxG+wY
-        gKgzhcEL0eDsZXp0RFkTujGApg==
-X-Google-Smtp-Source: APBJJlH+MwWcaUVg/7akbj8keBMvf8gq7EKuq9vDRBoNFYJ4+ezTmB048XjMLkW7GX8JAT8v1K03Sg==
-X-Received: by 2002:a05:6808:2226:b0:3a3:eceb:7bbc with SMTP id bd38-20020a056808222600b003a3eceb7bbcmr7147567oib.54.1689348287397;
-        Fri, 14 Jul 2023 08:24:47 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id x19-20020a17090aa39300b00263154aab24sm1230248pjp.57.2023.07.14.08.24.46
+        d=1e100.net; s=20221208; t=1689356697; x=1691948697;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PqfHU9/jof2n+eltFOXNaUlea7YTW9U5AL0XDRpcvbQ=;
+        b=DSKpWn5A6mtOjq7RVrcNMIjIRYLeABfPuf3q0vX4fGaPKhUKNw30VLti00uShyFPFo
+         juAqumcRrT0/2rBi8TeZM70Gi59ar7NnH+AtNrlBWhsPhv5NjkQfiqAT5FVZ6o2o5V45
+         4S+QwZgRVvnt4YojSp+9dTaGwiZ0Mv6C+dAvm+yzFgUNQBi2SN3I3BfLoxVAGNGPGM20
+         6wKqk0a0HjUw9WUyuTwUB1DoJeN7Vj897g34NW84QsbZax9HqPeeZXdqhML9rVZM5Z9T
+         zXLqoBNd9isMpeqBHXjpwQbAd71N9+fV44rExftJyQDe5WhYIDLTB7iVSq573gMzkfQ6
+         P8IA==
+X-Gm-Message-State: ABy/qLb9F+Jt8Mm0Ciy/1tmMuxNTxugl/E4vlkA3fj0t5fadq+HNQA6B
+        yfPc0McC9EU4DSorrk3B1Q==
+X-Google-Smtp-Source: APBJJlGqidc7FR4pp1OFipkVAh6jg4XeFaJZWlf6SWayCHN6GNVV5PeDvJ4WqDNSobo6mLD6zaMjDg==
+X-Received: by 2002:a6b:760e:0:b0:787:f94:5133 with SMTP id g14-20020a6b760e000000b007870f945133mr4908622iom.2.1689356697247;
+        Fri, 14 Jul 2023 10:44:57 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id c4-20020a6bec04000000b00786f50d6bf5sm2683997ioh.19.2023.07.14.10.44.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jul 2023 08:24:46 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qKKez-0017NL-5i;
-        Fri, 14 Jul 2023 12:24:45 -0300
-Date:   Fri, 14 Jul 2023 12:24:45 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        linux-usb@vger.kernel.org, Matthew Rosato <mjrosato@linux.ibm.com>,
-        Paul Durrant <paul@xen.org>, Tom Rix <trix@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        dri-devel@lists.freedesktop.org, Michal Hocko <mhocko@kernel.org>,
-        linux-mm@kvack.org, Kirti Wankhede <kwankhede@nvidia.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Fei Li <fei1.li@intel.com>, x86@kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        intel-gfx@lists.freedesktop.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-fpga@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Jason Herne <jjherne@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-s390@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linuxppc-dev@lists.ozlabs.org, Eric Auger <eric.auger@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, kvm@vger.kernel.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>, cgroups@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        virtualization@lists.linux-foundation.org,
-        intel-gvt-dev@lists.freedesktop.org, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, Tony Krowiak <akrowiak@linux.ibm.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Xu Yilun <yilun.xu@intel.com>, jaz@semihalf.com
-Subject: Re: [PATCH 0/2] eventfd: simplify signal helpers
-Message-ID: <ZLFovYocElAD7gJ0@ziepe.ca>
-References: <20230630155936.3015595-1-jaz@semihalf.com>
- <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
+        Fri, 14 Jul 2023 10:44:56 -0700 (PDT)
+Received: (nullmailer pid 4055297 invoked by uid 1000);
+        Fri, 14 Jul 2023 17:44:55 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Vladimir Georgiev <v.georgiev@metrotek.ru>
+Cc:     devicetree@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] fpga: Explicitly include correct DT includes
+Date:   Fri, 14 Jul 2023 11:44:48 -0600
+Message-Id: <20230714174449.4055156-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 09:05:21AM +0200, Christian Brauner wrote:
+The DT of_device.h and of_platform.h date back to the separate
+of_platform_bus_type before it as merged into the regular platform bus.
+As part of that merge prepping Arm DT support 13 years ago, they
+"temporarily" include each other. They also include platform_device.h
+and of.h. As a result, there's a pretty much random mix of those include
+files used throughout the tree. In order to detangle these headers and
+replace the implicit includes with struct declarations, users need to
+explicitly include the correct includes.
 
-> I have no skin in the game aside from having to drop this conversion
-> which I'm fine to do if there are actually users for this btu really,
-> that looks a lot like abusing an api that really wasn't designed for
-> this.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/fpga/altera-fpga2sdram.c      | 2 +-
+ drivers/fpga/altera-freeze-bridge.c   | 7 +++----
+ drivers/fpga/altera-pr-ip-core-plat.c | 3 ++-
+ drivers/fpga/microchip-spi.c          | 2 +-
+ drivers/fpga/of-fpga-region.c         | 2 ++
+ drivers/fpga/stratix10-soc.c          | 1 +
+ 6 files changed, 10 insertions(+), 7 deletions(-)
 
-Yeah, I think so too. The ACPI thing should use its own FD if it wants
-to feed actual data..
-
-Jason
+diff --git a/drivers/fpga/altera-fpga2sdram.c b/drivers/fpga/altera-fpga2sdram.c
+index ff3a646fd9e3..1fa2ccc321ab 100644
+--- a/drivers/fpga/altera-fpga2sdram.c
++++ b/drivers/fpga/altera-fpga2sdram.c
+@@ -27,7 +27,7 @@
+ #include <linux/kernel.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/of.h>
+ #include <linux/regmap.h>
+ 
+ #define ALT_SDR_CTL_FPGAPORTRST_OFST		0x80
+diff --git a/drivers/fpga/altera-freeze-bridge.c b/drivers/fpga/altera-freeze-bridge.c
+index 445f4b011167..db5977725a51 100644
+--- a/drivers/fpga/altera-freeze-bridge.c
++++ b/drivers/fpga/altera-freeze-bridge.c
+@@ -7,8 +7,9 @@
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+-#include <linux/of_device.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
++#include <linux/platform_device.h>
+ #include <linux/fpga/fpga-bridge.h>
+ 
+ #define FREEZE_CSR_STATUS_OFFSET		0
+@@ -198,13 +199,11 @@ static const struct fpga_bridge_ops altera_freeze_br_br_ops = {
+ 	.enable_show = altera_freeze_br_enable_show,
+ };
+ 
+-#ifdef CONFIG_OF
+ static const struct of_device_id altera_freeze_br_of_match[] = {
+ 	{ .compatible = "altr,freeze-bridge-controller", },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, altera_freeze_br_of_match);
+-#endif
+ 
+ static int altera_freeze_br_probe(struct platform_device *pdev)
+ {
+@@ -270,7 +269,7 @@ static struct platform_driver altera_freeze_br_driver = {
+ 	.remove = altera_freeze_br_remove,
+ 	.driver = {
+ 		.name	= "altera_freeze_br",
+-		.of_match_table = of_match_ptr(altera_freeze_br_of_match),
++		.of_match_table = altera_freeze_br_of_match,
+ 	},
+ };
+ 
+diff --git a/drivers/fpga/altera-pr-ip-core-plat.c b/drivers/fpga/altera-pr-ip-core-plat.c
+index b008a6b8d2d3..b1244ca182e4 100644
+--- a/drivers/fpga/altera-pr-ip-core-plat.c
++++ b/drivers/fpga/altera-pr-ip-core-plat.c
+@@ -9,7 +9,8 @@
+  */
+ #include <linux/fpga/altera-pr-ip-core.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
+ 
+ static int alt_pr_platform_probe(struct platform_device *pdev)
+ {
+diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+index d6070e7f5205..2a82c726d6e5 100644
+--- a/drivers/fpga/microchip-spi.c
++++ b/drivers/fpga/microchip-spi.c
+@@ -8,7 +8,7 @@
+ #include <linux/fpga/fpga-mgr.h>
+ #include <linux/iopoll.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/spi/spi.h>
+ 
+ #define	MPF_SPI_ISC_ENABLE	0x0B
+diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
+index ae82532fc127..a6affd83f275 100644
+--- a/drivers/fpga/of-fpga-region.c
++++ b/drivers/fpga/of-fpga-region.c
+@@ -12,7 +12,9 @@
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+ #include <linux/module.h>
++#include <linux/of.h>
+ #include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ 
+diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+index f7f01982a512..cacb9cc5757e 100644
+--- a/drivers/fpga/stratix10-soc.c
++++ b/drivers/fpga/stratix10-soc.c
+@@ -10,6 +10,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ 
+ /*
+  * FPGA programming requires a higher level of privilege (EL3), per the SoC
+-- 
+2.40.1
 
