@@ -2,60 +2,64 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799C9755E7E
-	for <lists+linux-fpga@lfdr.de>; Mon, 17 Jul 2023 10:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCE5756CD9
+	for <lists+linux-fpga@lfdr.de>; Mon, 17 Jul 2023 21:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbjGQI3t (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 17 Jul 2023 04:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S229696AbjGQTJV (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 17 Jul 2023 15:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjGQI3s (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 17 Jul 2023 04:29:48 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EE0E3
-        for <linux-fpga@vger.kernel.org>; Mon, 17 Jul 2023 01:29:46 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-345d6dc271dso22491625ab.0
-        for <linux-fpga@vger.kernel.org>; Mon, 17 Jul 2023 01:29:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google; t=1689582586; x=1692174586;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KrEcIar0BkfpmBL+8BCmNKqe2TUSK3LL+WBdNYsOjsM=;
-        b=e52IJgo7nORao0Gl4I5dRpwwbrYRCXZTSuwaC/thRVodGrQS/Ih+iZx/Zsqn89WU3w
-         pQgXUWQS+Vk59/Fh6rrIEqzCQJkEny2i0gy7zEPOvxwj9yUxhnNvrizRbt8YsZpplHpx
-         RjVLFZyrzR9wafddakUgpMo5lLKlNumHP6uiacp/wGVyLbBbCgrHIUP/7snpf7XV2sof
-         jlaeLm95LpwgAuzcjO7UCvT+e3bh2UJ0I6TbCUpKBOZvGLRTw6wJXY5zbY52dacz1/1P
-         iPPOvh8ArwyYCroEOLn3Y8OJKVgd78PUACDF8tTPiPB+Om3hyy+66x8dhT2yU/74h83y
-         v2JA==
+        with ESMTP id S230197AbjGQTJU (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 17 Jul 2023 15:09:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11F2116
+        for <linux-fpga@vger.kernel.org>; Mon, 17 Jul 2023 12:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689620916;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ir1J/k3wLKNYp7LI2ijvFBF6ZKrDfOA6Drq2a2Jon50=;
+        b=B4DThB0Lv+ETPz9tIxnhsTUh5Kp+TOxJvpk8PPAEd97110jklxpxktgtbNDlizQhQoSAvQ
+        HZjPR1G3S0xmT0JBFNTa6k2Ue4F6y+TxzVQiHf3wepfXw4yccXvaXlHhA2gjW3b7dumZS5
+        7UT2PTW3mg/Yi9wPoBAcjZyKoDqE3H8=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-453-bDjV7RRXOzysZ9-qQm5OaQ-1; Mon, 17 Jul 2023 15:08:35 -0400
+X-MC-Unique: bDjV7RRXOzysZ9-qQm5OaQ-1
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3487b412e41so17281965ab.1
+        for <linux-fpga@vger.kernel.org>; Mon, 17 Jul 2023 12:08:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689582586; x=1692174586;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KrEcIar0BkfpmBL+8BCmNKqe2TUSK3LL+WBdNYsOjsM=;
-        b=N1vcg7tDTZaFs5UnyXvWAiYrClWs/O4NGIPc3YXmOCVY8X+egaNNuZkiyyhj5BkJa4
-         vjy2LA8d5QLrUiKL+N5G9fUhdwG0gPIzMpGvlyTPwUY8SaDBxmJ5nUzB4nRBwpMYG3CZ
-         BUlDGfG2xsNE24YrJ9QujQSUGKc6F24HwOVb5dAqTvVMBzvm/xqHgFD6VmF5606axMM0
-         GLQCe6XUC2HjfNv8ltfZZ2dYQ6recAnUXRBU9LsU3SDacOy8l1S1HNzCvvvFwurcAdh3
-         SW7mv/kM42WRn79rC9b7z7rlRnK4TEDcYCfUsJjNYPrSoNGnYOHZNE3/nCalGoWIuIpX
-         tH2g==
-X-Gm-Message-State: ABy/qLZiBhB4/NWY8HHtHWWzZVmxuEvuvYMufA07tJjw823jQxBIiu6Y
-        4gXsEZQjDNY6k22wuNCDXLlR8dbevJHrfK+Uj2XOpA==
-X-Google-Smtp-Source: APBJJlGE7jn73weZAb7Q+GH4ouydfCd9ILtA9ynYfWdyB1I4k5TGE6qNhhrOJBaOwSkah9YrBoRDKcKZ9t95G975sJc=
-X-Received: by 2002:a92:d4d2:0:b0:345:d470:baa6 with SMTP id
- o18-20020a92d4d2000000b00345d470baa6mr9664500ilm.29.1689582586220; Mon, 17
- Jul 2023 01:29:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230630155936.3015595-1-jaz@semihalf.com> <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
-In-Reply-To: <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Mon, 17 Jul 2023 10:29:34 +0200
-Message-ID: <CAH76GKPF4BjJLrzLBW8k12ATaAGADeMYc2NQ9+j0KgRa0pomUw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] eventfd: simplify signal helpers
-To:     Christian Brauner <brauner@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        d=1e100.net; s=20221208; t=1689620914; x=1692212914;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ir1J/k3wLKNYp7LI2ijvFBF6ZKrDfOA6Drq2a2Jon50=;
+        b=kOQNHlsjPG4FLeJTNBxOBwzvScCOL6odVnHdLszoTkTMDEU/EBpn3h1v1NP49L+nsl
+         sCC7NLLfZxhFS+OVsxCVaCjx3OuljpN4UZ6c6OXLmGKTevCQNos4jDLEQS+uYjl90Gym
+         GE0ZzG2dY6iTGABov+MbqWmZC3spU9xlGeR02S4wkE6sBlgi3Poiag6vSDN9i48oojXq
+         VpzVYUq94IdV/JtmTmMO/wZ/deIL8kZsczxVP6oLxl++Ob3zUIbRFKRQC+F3fPV521p+
+         l+PZMBtFsw5SGDsa520UdCzzYG5GTl+v84qFiza4K1NZzXH/mZLBIoE35ApUTU2o6DSc
+         TvwQ==
+X-Gm-Message-State: ABy/qLbPuZ+6lo0Su3/2qilnrkyzYSnxoaLbEjdc8P03+PFhoNbG77J8
+        5cGpKibFu34jwGtggBjtAj2jUWPJcnex066xXRGerQQw7Dq4O2AFIT2rUMI9awzjTl/twDTcEIH
+        QW1gTHDbdxR+569BEYGIyKw==
+X-Received: by 2002:a05:6e02:1a8b:b0:348:8542:a673 with SMTP id k11-20020a056e021a8b00b003488542a673mr578070ilv.22.1689620914122;
+        Mon, 17 Jul 2023 12:08:34 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlH8IAKDk/Qq0r0DbEq84CfbH5y70uroq/83Nyu0gFtjM6u4GlatJgupAE/Bg/5ujaAlXs4PMg==
+X-Received: by 2002:a05:6e02:1a8b:b0:348:8542:a673 with SMTP id k11-20020a056e021a8b00b003488542a673mr578040ilv.22.1689620913830;
+        Mon, 17 Jul 2023 12:08:33 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id o9-20020a92dac9000000b003460b456030sm129837ilq.60.2023.07.17.12.08.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jul 2023 12:08:33 -0700 (PDT)
+Date:   Mon, 17 Jul 2023 13:08:31 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Grzegorz Jaszczyk <jaz@semihalf.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
         linux-usb@vger.kernel.org, Matthew Rosato <mjrosato@linux.ibm.com>,
         Paul Durrant <paul@xen.org>, Tom Rix <trix@redhat.com>,
         Jason Wang <jasowang@redhat.com>,
@@ -110,11 +114,20 @@ Cc:     linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
         Xu Yilun <yilun.xu@intel.com>,
         Dominik Behr <dbehr@chromium.org>,
         Marcin Wojtas <mw@semihalf.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 0/2] eventfd: simplify signal helpers
+Message-ID: <20230717130831.0f18381a.alex.williamson@redhat.com>
+In-Reply-To: <CAH76GKPF4BjJLrzLBW8k12ATaAGADeMYc2NQ9+j0KgRa0pomUw@mail.gmail.com>
+References: <20230630155936.3015595-1-jaz@semihalf.com>
+        <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
+        <CAH76GKPF4BjJLrzLBW8k12ATaAGADeMYc2NQ9+j0KgRa0pomUw@mail.gmail.com>
+Organization: Red Hat
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,64 +135,90 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-pt., 14 lip 2023 o 09:05 Christian Brauner <brauner@kernel.org> napisa=C5=
-=82(a):
->
-> On Thu, Jul 13, 2023 at 11:10:54AM -0600, Alex Williamson wrote:
-> > On Thu, 13 Jul 2023 12:05:36 +0200
-> > Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > > Hey everyone,
-> > >
-> > > This simplifies the eventfd_signal() and eventfd_signal_mask() helper=
-s
-> > > by removing the count argument which is effectively unused.
-> >
-> > We have a patch under review which does in fact make use of the
-> > signaling value:
-> >
-> > https://lore.kernel.org/all/20230630155936.3015595-1-jaz@semihalf.com/
->
-> Huh, thanks for the link.
->
-> Quoting from
-> https://patchwork.kernel.org/project/kvm/patch/20230307220553.631069-1-ja=
-z@semihalf.com/#25266856
->
-> > Reading an eventfd returns an 8-byte value, we generally only use it
-> > as a counter, but it's been discussed previously and IIRC, it's possibl=
-e
-> > to use that value as a notification value.
->
-> So the goal is to pipe a specific value through eventfd? But it is
-> explicitly a counter. The whole thing is written around a counter and
-> each write and signal adds to the counter.
->
-> The consequences are pretty well described in the cover letter of
-> v6 https://lore.kernel.org/all/20230630155936.3015595-1-jaz@semihalf.com/
->
-> > Since the eventfd counter is used as ACPI notification value
-> > placeholder, the eventfd signaling needs to be serialized in order to
-> > not end up with notification values being coalesced. Therefore ACPI
-> > notification values are buffered and signalized one by one, when the
-> > previous notification value has been consumed.
->
-> But isn't this a good indication that you really don't want an eventfd
-> but something that's explicitly designed to associate specific data with
-> a notification? Using eventfd in that manner requires serialization,
-> buffering, and enforces ordering.
->
-> I have no skin in the game aside from having to drop this conversion
-> which I'm fine to do if there are actually users for this btu really,
-> that looks a lot like abusing an api that really wasn't designed for
-> this.
+On Mon, 17 Jul 2023 10:29:34 +0200
+Grzegorz Jaszczyk <jaz@semihalf.com> wrote:
 
-https://patchwork.kernel.org/project/kvm/patch/20230307220553.631069-1-jaz@=
-semihalf.com/
-was posted at the beginig of March and one of the main things we've
-discussed was the mechanism for propagating acpi notification value.
-We've endup with eventfd as the best mechanism and have actually been
-using it from v2. I really do not want to waste this effort, I think
-we are quite advanced with v6 now. Additionally we didn't actually
-modify any part of eventfd support that was in place, we only used it
-in a specific (and discussed beforehand) way.
+> pt., 14 lip 2023 o 09:05 Christian Brauner <brauner@kernel.org> napisa=C5=
+=82(a):
+> >
+> > On Thu, Jul 13, 2023 at 11:10:54AM -0600, Alex Williamson wrote: =20
+> > > On Thu, 13 Jul 2023 12:05:36 +0200
+> > > Christian Brauner <brauner@kernel.org> wrote:
+> > > =20
+> > > > Hey everyone,
+> > > >
+> > > > This simplifies the eventfd_signal() and eventfd_signal_mask() help=
+ers
+> > > > by removing the count argument which is effectively unused. =20
+> > >
+> > > We have a patch under review which does in fact make use of the
+> > > signaling value:
+> > >
+> > > https://lore.kernel.org/all/20230630155936.3015595-1-jaz@semihalf.com=
+/ =20
+> >
+> > Huh, thanks for the link.
+> >
+> > Quoting from
+> > https://patchwork.kernel.org/project/kvm/patch/20230307220553.631069-1-=
+jaz@semihalf.com/#25266856
+> > =20
+> > > Reading an eventfd returns an 8-byte value, we generally only use it
+> > > as a counter, but it's been discussed previously and IIRC, it's possi=
+ble
+> > > to use that value as a notification value. =20
+> >
+> > So the goal is to pipe a specific value through eventfd? But it is
+> > explicitly a counter. The whole thing is written around a counter and
+> > each write and signal adds to the counter.
+> >
+> > The consequences are pretty well described in the cover letter of
+> > v6 https://lore.kernel.org/all/20230630155936.3015595-1-jaz@semihalf.co=
+m/
+> > =20
+> > > Since the eventfd counter is used as ACPI notification value
+> > > placeholder, the eventfd signaling needs to be serialized in order to
+> > > not end up with notification values being coalesced. Therefore ACPI
+> > > notification values are buffered and signalized one by one, when the
+> > > previous notification value has been consumed. =20
+> >
+> > But isn't this a good indication that you really don't want an eventfd
+> > but something that's explicitly designed to associate specific data with
+> > a notification? Using eventfd in that manner requires serialization,
+> > buffering, and enforces ordering.
+
+What would that mechanism be?  We've been iterating on getting the
+serialization and buffering correct, but I don't know of another means
+that combines the notification with a value, so we'd likely end up with
+an eventfd only for notification and a separate ring buffer for
+notification values.
+
+As this series demonstrates, the current in-kernel users only increment
+the counter and most userspace likely discards the counter value, which
+makes the counter largely a waste.  While perhaps unconventional,
+there's no requirement that the counter may only be incremented by one,
+nor any restriction that I see in how userspace must interpret the
+counter value.
+
+As I understand the ACPI notification proposal that Grzegorz links
+below, a notification with an interpreted value allows for a more
+direct userspace implementation when dealing with a series of discrete
+notification with value events.  Thanks,
+
+Alex
+
+> > I have no skin in the game aside from having to drop this conversion
+> > which I'm fine to do if there are actually users for this btu really,
+> > that looks a lot like abusing an api that really wasn't designed for
+> > this. =20
+>=20
+> https://patchwork.kernel.org/project/kvm/patch/20230307220553.631069-1-ja=
+z@semihalf.com/
+> was posted at the beginig of March and one of the main things we've
+> discussed was the mechanism for propagating acpi notification value.
+> We've endup with eventfd as the best mechanism and have actually been
+> using it from v2. I really do not want to waste this effort, I think
+> we are quite advanced with v6 now. Additionally we didn't actually
+> modify any part of eventfd support that was in place, we only used it
+> in a specific (and discussed beforehand) way.
+
