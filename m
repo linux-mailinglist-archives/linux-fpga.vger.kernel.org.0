@@ -2,165 +2,161 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2764C757013
-	for <lists+linux-fpga@lfdr.de>; Tue, 18 Jul 2023 00:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143E0757CEB
+	for <lists+linux-fpga@lfdr.de>; Tue, 18 Jul 2023 15:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjGQWxe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Mon, 17 Jul 2023 18:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        id S231388AbjGRNIt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 18 Jul 2023 09:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjGQWxd (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Mon, 17 Jul 2023 18:53:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F07133
-        for <linux-fpga@vger.kernel.org>; Mon, 17 Jul 2023 15:52:12 -0700 (PDT)
+        with ESMTP id S232935AbjGRNIf (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 18 Jul 2023 09:08:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F171720
+        for <linux-fpga@vger.kernel.org>; Tue, 18 Jul 2023 06:06:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689634332;
+        s=mimecast20190719; t=1689685574;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8wy84DSSq8n2YYiK0mWellsvoswCFp/2kMAmdZ+UHHc=;
-        b=YSk1JlSPWnconUwKXTf5rg4sQ0JD0tmcrSQ3UtaPlPP8C+hRi28ErHV9ioc6MVpbIp16HE
-        9mdZODidJQLOAbujhPprxpDbDZddsiIt3tg7QcQ2ffahZMgZmkXC5F+pjF4FpspWT4jpqE
-        AM2KfY7aEaGCgrlKvliOV54+lmoz0E8=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=T5QD2fsjtTcZ/589j4SQYIRD/EBKlbJl3ariQjPHEPM=;
+        b=QeFr+QTJnQJ+oJXWn5ekML9qlgIv11iySXeSvij2o0B7r1cyOLDIPn20Y8GHDI7LQoqvbM
+        61LKsGelmf+xnQ6QiUHEyz2UEAdzUs70NQNnLqPcPXm5OpzTVOUSJJw7wvg94zm6tQFqIB
+        EHvPMfUk+FwoVe7NFZiLFkjfpC80Chc=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-49-0UaGQS50OW2vA2dQnJix4A-1; Mon, 17 Jul 2023 18:52:07 -0400
-X-MC-Unique: 0UaGQS50OW2vA2dQnJix4A-1
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-786d9d4d9a6so318099939f.2
-        for <linux-fpga@vger.kernel.org>; Mon, 17 Jul 2023 15:52:07 -0700 (PDT)
+ us-mta-124-BJFJyjUSPh2bVFBakZONeQ-1; Tue, 18 Jul 2023 09:03:16 -0400
+X-MC-Unique: BJFJyjUSPh2bVFBakZONeQ-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-635eeb952b8so64552076d6.3
+        for <linux-fpga@vger.kernel.org>; Tue, 18 Jul 2023 06:03:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689634327; x=1692226327;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8wy84DSSq8n2YYiK0mWellsvoswCFp/2kMAmdZ+UHHc=;
-        b=Afu0zZ4XslWKWql5GVi5rsYC2pylVnb6r32vR7dnwYZgjes993lIow1LYNbGiLYQan
-         MeDWHvDy+XA77TdkJRWENou/V+kUY3/Te4CCY8S1YsFKh6Nb30ZTAfTwnl2djSEaOYw8
-         GM+daPXoOwNJlgmFjeZo21KEi04CrJ8KmKvSV/PR/2xr1T+NS5gdcRqThCMJa39C+/IL
-         62aYKdlwL0sOv6lQxbmsGaPkvOJH2SxX643Yn/x0fhikjei4jtUIPR5VNK99u1DfP3hO
-         17QgUxoSGkiBqwKXSzqiK1z2XZaME2HbZwXJw1ljr3qgW2ZHXfmuXQNc/G0d0RnEP9kn
-         /QdA==
-X-Gm-Message-State: ABy/qLY/cb1SwS8nad9jJ11Pg2Z5WTDthZn4Z6XXhFd0p7VeBIrVJgcJ
-        /wnFWXIEhjovsXtYTQdTDtXbJRsgED5zxr9UYP7lqn6HXvKRk40NgtNquoCDXAhbSLdu2/8RuQc
-        gb9BqRduqPPxKQffttz4NOA==
-X-Received: by 2002:a92:c651:0:b0:347:693a:7300 with SMTP id 17-20020a92c651000000b00347693a7300mr1012018ill.26.1689634327045;
-        Mon, 17 Jul 2023 15:52:07 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGlBYmCdY1EaUds5QDcX7E6PqePOm9wJTOwk2wgOBkeJp+9wxIVvWJlHjSTuTXhWw/m+atXtQ==
-X-Received: by 2002:a92:c651:0:b0:347:693a:7300 with SMTP id 17-20020a92c651000000b00347693a7300mr1012015ill.26.1689634326829;
-        Mon, 17 Jul 2023 15:52:06 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id d10-20020a92ddca000000b00341c0710169sm242627ilr.46.2023.07.17.15.52.04
+        d=1e100.net; s=20221208; t=1689685396; x=1692277396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T5QD2fsjtTcZ/589j4SQYIRD/EBKlbJl3ariQjPHEPM=;
+        b=LXyi/xZucbiTzdUQd6aGycfNDWIrqsM8kUBE/tlmCl6T5yXx64ZELPnvAYw0zfS4XF
+         o/sUvTS+BhoIQKbVAuVpVtf057u9u3xsQKuwGwjz9coZceKSv91kh3LUhOJVuYe6QHP8
+         XOGOfYTEIPkfLMWM2LGMOPgAvb8ZcOxovEkxcakWUvfYZk3axJUHFfqdfXAaGH9Y6dAl
+         7bJ6aYUogayCxy8YZMonLYLyO19FPoYMr+tE8+8hbbDtbPT2Y0e98q8vx+QBD15L9rbd
+         rgJCfcHkzQaLUP6aOX+26mPQc4HXu76RhCbwIecBKNmPkhDlpJ6gfzxia6ECvJWZll+e
+         8LIQ==
+X-Gm-Message-State: ABy/qLbf+4/H1lkoJcoG7z0Ewa4dqNMLFE6+Y5C+n86lvwUBilRWtK/o
+        WqxBG+2gAnnx4AXVZ2Bj3AxXbwSefSHj93cWNFf0xxDbICKN5a5F2AxSDU3jyBfo4jYZzY9uo/Q
+        zbxgasVx48nIoIshT13vl
+X-Received: by 2002:a0c:b305:0:b0:635:f35c:3f87 with SMTP id s5-20020a0cb305000000b00635f35c3f87mr14409625qve.8.1689685395841;
+        Tue, 18 Jul 2023 06:03:15 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGT6ykKWcrEdp+40wspG3hIKFDRxl7eVhKuyVgB+xl2dEZ67+NazgxWX2u3xZ55qSle5LKEnA==
+X-Received: by 2002:a0c:b305:0:b0:635:f35c:3f87 with SMTP id s5-20020a0cb305000000b00635f35c3f87mr14409611qve.8.1689685395570;
+        Tue, 18 Jul 2023 06:03:15 -0700 (PDT)
+Received: from klayman.redhat.com (net-2-34-27-228.cust.vodafonedsl.it. [2.34.27.228])
+        by smtp.gmail.com with ESMTPSA id h18-20020a05620a10b200b00765ab6d3e81sm550221qkk.122.2023.07.18.06.03.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jul 2023 15:52:06 -0700 (PDT)
-Date:   Mon, 17 Jul 2023 16:52:03 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        linux-usb@vger.kernel.org, Matthew Rosato <mjrosato@linux.ibm.com>,
-        Paul Durrant <paul@xen.org>, Tom Rix <trix@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        dri-devel@lists.freedesktop.org, Michal Hocko <mhocko@kernel.org>,
-        linux-mm@kvack.org, Kirti Wankhede <kwankhede@nvidia.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Fei Li <fei1.li@intel.com>, x86@kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        intel-gfx@lists.freedesktop.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-fpga@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Jason Herne <jjherne@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-s390@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linuxppc-dev@lists.ozlabs.org, Eric Auger <eric.auger@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, kvm@vger.kernel.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>, cgroups@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        virtualization@lists.linux-foundation.org,
-        intel-gvt-dev@lists.freedesktop.org, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, Tony Krowiak <akrowiak@linux.ibm.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Dominik Behr <dbehr@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>
-Subject: Re: [PATCH 0/2] eventfd: simplify signal helpers
-Message-ID: <20230717165203.4ee6b1e6.alex.williamson@redhat.com>
-In-Reply-To: <ZLW8wEzkhBxd0O0L@ziepe.ca>
-References: <20230630155936.3015595-1-jaz@semihalf.com>
-        <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
-        <CAH76GKPF4BjJLrzLBW8k12ATaAGADeMYc2NQ9+j0KgRa0pomUw@mail.gmail.com>
-        <20230717130831.0f18381a.alex.williamson@redhat.com>
-        <ZLW8wEzkhBxd0O0L@ziepe.ca>
-Organization: Red Hat
+        Tue, 18 Jul 2023 06:03:15 -0700 (PDT)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: [PATCH v10 0/4] fpga: add initial KUnit tests for the subsystem
+Date:   Tue, 18 Jul 2023 15:03:00 +0200
+Message-ID: <20230718130304.87048-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Mon, 17 Jul 2023 19:12:16 -0300
-Jason Gunthorpe <jgg@ziepe.ca> wrote:
+This patch set introduces an initial set of KUnit test suites for the
+core components of the FPGA subsystem.
 
-> On Mon, Jul 17, 2023 at 01:08:31PM -0600, Alex Williamson wrote:
-> 
-> > What would that mechanism be?  We've been iterating on getting the
-> > serialization and buffering correct, but I don't know of another means
-> > that combines the notification with a value, so we'd likely end up with
-> > an eventfd only for notification and a separate ring buffer for
-> > notification values.  
-> 
-> All FDs do this. You just have to make a FD with custom
-> file_operations that does what this wants. The uAPI shouldn't be able
-> to tell if the FD is backing it with an eventfd or otherwise. Have the
-> kernel return the FD instead of accepting it. Follow the basic design
-> of eg mlx5vf_save_fops
+Tests can be run using:
+[user@localhost linux]$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/fpga/tests
 
-Sure, userspace could poll on any fd and read a value from it, but at
-that point we're essentially duplicating a lot of what eventfd provides
-for a minor(?) semantic difference over how the counter value is
-interpreted.  Using an actual eventfd allows the ACPI notification to
-work as just another interrupt index within the existing vfio IRQ uAPI.
-Thanks,
+v10:
+- Improved code style and fixed comment typos for FPGA Manager ops
 
-Alex
+v9:
+- Improved and commented test ops for the FPGA Manager test suite
+- Fixed minor capitalization discrepancies
+
+v8:
+- Using memset to set header and payload of the test image
+- Using sg_miter_* functions to check the image in the write_sg op
+- Includes sorted in alphabetical order
+- Add commas for fpga_bridge_ops
+- Improved Makefile
+
+v7:
+- Dropped RFC prefix
+- Add comments to explain fakes and helper functions
+- Changed the implementation of the Bridge used in the Region suite
+
+v6:
+- Restructured the code into self-contained test modules
+- Added tests for the basic behaviors of the components
+- Improved programming tests for the FPGA Manager
+- Fixed code/comments mismatch in the list of Bridges test case
+
+v5:
+- Removed most of the exported functions using shared buffers for stats
+- Moved all KUnit expectations/assertions to the main test module
+- Removed standalone use case to simplify the code
+- Removed instances counters from fake components (using device.id instead)
+- Set header size in the .parse_header op
+- Improved bridge get_put_list test case
+
+v4:
+- Fix build error
+
+v3:
+- Calling fpga_bridges_put() between reconfigurations
+- Functions for registering fake modules allocate and return context structs
+
+v2:
+- Restructured code into multiple suites to test components in isolation
+- Reduced code duplication using init and exit methods
+- Using a get_bridges() method to build the list of bridges just before programming
+- Regions and Bridges are organized topologically
+- Changed bitstream/bit to images
+- Allocate images dynamically
+- Renamed fpga-tests to fpga-test
+- Simplified Kconfig
+- Add license info to the fpga-test module
+
+Marco Pagani (4):
+  fpga: add an initial KUnit suite for the FPGA Manager
+  fpga: add an initial KUnit suite for the FPGA Bridge
+  fpga: add an initial KUnit suite for the FPGA Region
+  fpga: add configuration for the FPGA KUnit test suites.
+
+ drivers/fpga/Kconfig                  |   2 +
+ drivers/fpga/Makefile                 |   3 +
+ drivers/fpga/tests/.kunitconfig       |   5 +
+ drivers/fpga/tests/Kconfig            |  11 +
+ drivers/fpga/tests/Makefile           |   6 +
+ drivers/fpga/tests/fpga-bridge-test.c | 175 ++++++++++++++
+ drivers/fpga/tests/fpga-mgr-test.c    | 327 ++++++++++++++++++++++++++
+ drivers/fpga/tests/fpga-region-test.c | 211 +++++++++++++++++
+ 8 files changed, 740 insertions(+)
+ create mode 100644 drivers/fpga/tests/.kunitconfig
+ create mode 100644 drivers/fpga/tests/Kconfig
+ create mode 100644 drivers/fpga/tests/Makefile
+ create mode 100644 drivers/fpga/tests/fpga-bridge-test.c
+ create mode 100644 drivers/fpga/tests/fpga-mgr-test.c
+ create mode 100644 drivers/fpga/tests/fpga-region-test.c
+
+
+base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
+-- 
+2.41.0
 
