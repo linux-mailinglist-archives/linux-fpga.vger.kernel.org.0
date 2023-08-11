@@ -2,193 +2,258 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1230A777F11
-	for <lists+linux-fpga@lfdr.de>; Thu, 10 Aug 2023 19:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99AD37785D0
+	for <lists+linux-fpga@lfdr.de>; Fri, 11 Aug 2023 05:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbjHJRWX (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 10 Aug 2023 13:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
+        id S229487AbjHKDMN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 10 Aug 2023 23:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235089AbjHJRWV (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 10 Aug 2023 13:22:21 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C892733;
-        Thu, 10 Aug 2023 10:22:19 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fe247796ccso2345015e9.1;
-        Thu, 10 Aug 2023 10:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691688138; x=1692292938;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nm5CzUEsnxqhaEVu4VzCbvkfQqrKkziEtlUo4iZJpC8=;
-        b=V05ckOHRS5w9+RSk3PTcklQxh9iiEp/YGMPAUsd0VbN1idJG1WJgX/LjRBxf6XMQ1F
-         3FrYvc4gssnQusqAHEui1m7Mw2VRxbOBxRviuEOEJJDkyCf9ogrHJLt9G0UmkvzE4zp/
-         LiCtJ9ZWzokkj/Sq/zQn6Al13OpBrkfJlCobByApT3ybJcByy1Mi0MjcWzrn7AXvaeV3
-         TAt2zBSjVAsOMR/rGtTgBf5X7BDl/pfRs5bv7/wLbc4zozjW1B3oH8moLE5HnPJiCfTQ
-         sSWA7t1ei6BCp6oZWffZ3ZcuUmD6xxLeXcjQDC0GOkkqPhm/+BzC0jkGpVOGbayu+npe
-         l0pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691688138; x=1692292938;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nm5CzUEsnxqhaEVu4VzCbvkfQqrKkziEtlUo4iZJpC8=;
-        b=gOesnmEI0Zqn1YdZheDtRHzg8ggTXNbbktmilau2eSxaRE36sWiMqy98ESsy/JR8mj
-         DmZmNeVyCLOkBSQRoBuifSg2y3GPVHJbjZH49RxbZSm8fcUpJ3v6PY3yRN85LoeHdn2i
-         UtHvfPC8+fp/S9Y5l/hpBxD/S5gAwWE2ScZCPFhsmS7FVo8EY/81Oq9UPDWDENgALNTH
-         jMebZHdhoSJ1lezVzJAYtm4ilkljViOKE8xK5uZuzzGstWUyyROyyQsDC+zaWfcXBaLv
-         IQAqg9zQ5QSjY4KBODxcm47rJjdCARvru9ue9J5bYQxnQuIeixrtZj/kVVd7UItYAzhd
-         u/fA==
-X-Gm-Message-State: AOJu0YxbVdSxl1Hdz1OHMQKDUIC/iuon3/zgelo/E+NYBkkx8Ji2Sfnq
-        tkrnIptX435y6paraTqHHzg=
-X-Google-Smtp-Source: AGHT+IHdMEGYvDD01uD6H3/hRGSeQWKfud6ga2tbleMEXnZZ3eRqiyTAqJllkJfXqkZHK0HQWs9eGQ==
-X-Received: by 2002:a5d:4fc5:0:b0:317:3d35:b809 with SMTP id h5-20020a5d4fc5000000b003173d35b809mr2590542wrw.2.1691688137578;
-        Thu, 10 Aug 2023 10:22:17 -0700 (PDT)
-Received: from ivan-HLYL-WXX9.. ([141.136.93.153])
-        by smtp.gmail.com with ESMTPSA id l18-20020a5d4112000000b003144b95e1ecsm2715754wrp.93.2023.08.10.10.22.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 10:22:17 -0700 (PDT)
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
-Subject: [PATCH 3/3] fpga: region: make fpga_region_class a static const structure
-Date:   Thu, 10 Aug 2023 21:22:10 +0400
-Message-Id: <20230810172210.6338-3-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230810172210.6338-1-ivan.orlov0322@gmail.com>
+        with ESMTP id S229457AbjHKDMM (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 10 Aug 2023 23:12:12 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFAF2722;
+        Thu, 10 Aug 2023 20:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691723532; x=1723259532;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R0cVCAmjdhuKUT2bA+/8NwDGCtyxdM9aSZgqdQJYyZY=;
+  b=HqGIkhqocaq+GyZCkRZ8frkV5+xGWVEkvoKH0es0QyfAnC9H35S7bkPE
+   uDiTVrz6K2/w+HGIhdrXHjVjL5bOouQKimxTLzKGRHR2DUswWjqe6hY50
+   buXwAevG88QljuryfQBEkXdguXID5l4yxLWP64y+1nQsd14DzI0mgeY3r
+   8okR0LfZbMeKgSQSp3UPLPlETu3ztBDyz/Q0R0XYUPF1IFBrrlh9iyREq
+   ofBIsQ9us1d1wjIXWLju3+Nere4YFW/6RU9it7wv6vzQLxngs+FtPr66v
+   RJLAOzzABBMMP2DpBeEfT5fSY127B+OKUgv22+ts7RPRgDF80PE/JhtvD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="351898439"
+X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
+   d="scan'208";a="351898439"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 20:12:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="906284310"
+X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
+   d="scan'208";a="906284310"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga005.jf.intel.com with ESMTP; 10 Aug 2023 20:12:08 -0700
+Date:   Fri, 11 Aug 2023 11:09:56 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH 1/3] fpga: bridge: make fpga_bridge_class a static const
+ structure
+Message-ID: <ZNWmhLCeEu07AMPK@yilunxu-OptiPlex-7050>
 References: <20230810172210.6338-1-ivan.orlov0322@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230810172210.6338-1-ivan.orlov0322@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Now that the driver core allows for struct class to be in read-only
-memory, move the fpga_region_class structure to be declared at build
-time placing it into read-only memory, instead of having to be
-dynamically allocated at boot time.
+On 2023-08-10 at 21:22:08 +0400, Ivan Orlov wrote:
+> Now that the driver core allows for struct class to be in read-only
+> memory, move the fpga_bridge_class structure to be declared at build
+> time placing it into read-only memory, instead of having to be
+> dynamically allocated at boot time.
+> 
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+> ---
+>  drivers/fpga/fpga-bridge.c | 106 ++++++++++++++++++-------------------
+>  1 file changed, 52 insertions(+), 54 deletions(-)
+> 
+> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+> index a6c25dee9cc1..6e38ddaf16cf 100644
+> --- a/drivers/fpga/fpga-bridge.c
+> +++ b/drivers/fpga/fpga-bridge.c
+> @@ -14,7 +14,6 @@
+>  #include <linux/spinlock.h>
+>  
+>  static DEFINE_IDA(fpga_bridge_ida);
+> -static struct class *fpga_bridge_class;
 
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
- drivers/fpga/fpga-region.c | 64 ++++++++++++++++++--------------------
- 1 file changed, 31 insertions(+), 33 deletions(-)
+Could we still use the forward declaration, to avoid moving too
+much code block.
 
-diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
-index ccf6fdab1360..01cf4c2f83d1 100644
---- a/drivers/fpga/fpga-region.c
-+++ b/drivers/fpga/fpga-region.c
-@@ -16,21 +16,6 @@
- #include <linux/spinlock.h>
- 
- static DEFINE_IDA(fpga_region_ida);
--static struct class *fpga_region_class;
--
--struct fpga_region *
--fpga_region_class_find(struct device *start, const void *data,
--		       int (*match)(struct device *, const void *))
--{
--	struct device *dev;
--
--	dev = class_find_device(fpga_region_class, start, data, match);
--	if (!dev)
--		return NULL;
--
--	return to_fpga_region(dev);
--}
--EXPORT_SYMBOL_GPL(fpga_region_class_find);
- 
- /**
-  * fpga_region_get - get an exclusive reference to an fpga region
-@@ -179,6 +164,34 @@ static struct attribute *fpga_region_attrs[] = {
- };
- ATTRIBUTE_GROUPS(fpga_region);
- 
-+static void fpga_region_dev_release(struct device *dev)
-+{
-+	struct fpga_region *region = to_fpga_region(dev);
-+
-+	ida_free(&fpga_region_ida, region->dev.id);
-+	kfree(region);
-+}
-+
-+static const struct class fpga_region_class = {
-+	.name = "fpga_region",
-+	.dev_groups = fpga_region_groups,
-+	.dev_release = fpga_region_dev_release,
-+};
-+
-+struct fpga_region *
-+fpga_region_class_find(struct device *start, const void *data,
-+		       int (*match)(struct device *, const void *))
-+{
-+	struct device *dev;
-+
-+	dev = class_find_device(&fpga_region_class, start, data, match);
-+	if (!dev)
-+		return NULL;
-+
-+	return to_fpga_region(dev);
-+}
-+EXPORT_SYMBOL_GPL(fpga_region_class_find);
-+
- /**
-  * fpga_region_register_full - create and register an FPGA Region device
-  * @parent: device parent
-@@ -216,7 +229,7 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
- 	mutex_init(&region->mutex);
- 	INIT_LIST_HEAD(&region->bridge_list);
- 
--	region->dev.class = fpga_region_class;
-+	region->dev.class = &fpga_region_class;
- 	region->dev.parent = parent;
- 	region->dev.of_node = parent->of_node;
- 	region->dev.id = id;
-@@ -279,33 +292,18 @@ void fpga_region_unregister(struct fpga_region *region)
- }
- EXPORT_SYMBOL_GPL(fpga_region_unregister);
- 
--static void fpga_region_dev_release(struct device *dev)
--{
--	struct fpga_region *region = to_fpga_region(dev);
--
--	ida_free(&fpga_region_ida, region->dev.id);
--	kfree(region);
--}
--
- /**
-  * fpga_region_init - init function for fpga_region class
-  * Creates the fpga_region class and registers a reconfig notifier.
-  */
- static int __init fpga_region_init(void)
- {
--	fpga_region_class = class_create("fpga_region");
--	if (IS_ERR(fpga_region_class))
--		return PTR_ERR(fpga_region_class);
--
--	fpga_region_class->dev_groups = fpga_region_groups;
--	fpga_region_class->dev_release = fpga_region_dev_release;
--
--	return 0;
-+	return class_register(&fpga_region_class);
- }
- 
- static void __exit fpga_region_exit(void)
- {
--	class_destroy(fpga_region_class);
-+	class_unregister(&fpga_region_class);
- 	ida_destroy(&fpga_region_ida);
- }
- 
--- 
-2.34.1
+>  
+>  /* Lock for adding/removing bridges to linked lists*/
+>  static DEFINE_SPINLOCK(bridge_list_lock);
+> @@ -84,6 +83,53 @@ static struct fpga_bridge *__fpga_bridge_get(struct device *dev,
+>  	return ERR_PTR(ret);
+>  }
+>  
+> +static ssize_t name_show(struct device *dev,
+> +			 struct device_attribute *attr, char *buf)
+> +{
+> +	struct fpga_bridge *bridge = to_fpga_bridge(dev);
+> +
+> +	return sprintf(buf, "%s\n", bridge->name);
+> +}
+> +
+> +static ssize_t state_show(struct device *dev,
+> +			  struct device_attribute *attr, char *buf)
+> +{
+> +	struct fpga_bridge *bridge = to_fpga_bridge(dev);
+> +	int state = 1;
+> +
+> +	if (bridge->br_ops && bridge->br_ops->enable_show) {
+> +		state = bridge->br_ops->enable_show(bridge);
+> +		if (state < 0)
+> +			return state;
+> +	}
+> +
+> +	return sysfs_emit(buf, "%s\n", state ? "enabled" : "disabled");
+> +}
+> +
+> +static DEVICE_ATTR_RO(name);
+> +static DEVICE_ATTR_RO(state);
+> +
+> +static struct attribute *fpga_bridge_attrs[] = {
+> +	&dev_attr_name.attr,
+> +	&dev_attr_state.attr,
+> +	NULL,
+> +};
+> +ATTRIBUTE_GROUPS(fpga_bridge);
+> +
+> +static void fpga_bridge_dev_release(struct device *dev)
+> +{
+> +	struct fpga_bridge *bridge = to_fpga_bridge(dev);
+> +
+> +	ida_free(&fpga_bridge_ida, bridge->dev.id);
+> +	kfree(bridge);
+> +}
+> +
+> +static const struct class fpga_bridge_class = {
+> +	.name = "fpga_bridge",
+> +	.dev_groups = fpga_bridge_groups,
+> +	.dev_release = fpga_bridge_dev_release,
+> +};
 
+Insert them between __fpga_bridge_get() and of_fpga_bridge_get() is not
+preferred. See below comments.
+
+> +
+>  /**
+>   * of_fpga_bridge_get - get an exclusive reference to an fpga bridge
+>   *
+> @@ -99,7 +145,7 @@ struct fpga_bridge *of_fpga_bridge_get(struct device_node *np,
+>  {
+>  	struct device *dev;
+>  
+> -	dev = class_find_device_by_of_node(fpga_bridge_class, np);
+> +	dev = class_find_device_by_of_node(&fpga_bridge_class, np);
+>  	if (!dev)
+>  		return ERR_PTR(-ENODEV);
+>  
+> @@ -126,7 +172,7 @@ struct fpga_bridge *fpga_bridge_get(struct device *dev,
+>  {
+>  	struct device *bridge_dev;
+>  
+> -	bridge_dev = class_find_device(fpga_bridge_class, NULL, dev,
+> +	bridge_dev = class_find_device(&fpga_bridge_class, NULL, dev,
+>  				       fpga_bridge_dev_match);
+>  	if (!bridge_dev)
+>  		return ERR_PTR(-ENODEV);
+> @@ -281,39 +327,6 @@ int fpga_bridge_get_to_list(struct device *dev,
+>  }
+>  EXPORT_SYMBOL_GPL(fpga_bridge_get_to_list);
+>  
+> -static ssize_t name_show(struct device *dev,
+> -			 struct device_attribute *attr, char *buf)
+> -{
+> -	struct fpga_bridge *bridge = to_fpga_bridge(dev);
+> -
+> -	return sprintf(buf, "%s\n", bridge->name);
+> -}
+> -
+> -static ssize_t state_show(struct device *dev,
+> -			  struct device_attribute *attr, char *buf)
+> -{
+> -	struct fpga_bridge *bridge = to_fpga_bridge(dev);
+> -	int state = 1;
+> -
+> -	if (bridge->br_ops && bridge->br_ops->enable_show) {
+> -		state = bridge->br_ops->enable_show(bridge);
+> -		if (state < 0)
+> -			return state;
+> -	}
+> -
+> -	return sysfs_emit(buf, "%s\n", state ? "enabled" : "disabled");
+> -}
+> -
+> -static DEVICE_ATTR_RO(name);
+> -static DEVICE_ATTR_RO(state);
+> -
+> -static struct attribute *fpga_bridge_attrs[] = {
+> -	&dev_attr_name.attr,
+> -	&dev_attr_state.attr,
+> -	NULL,
+> -};
+> -ATTRIBUTE_GROUPS(fpga_bridge);
+> -
+>  /**
+>   * fpga_bridge_register - create and register an FPGA Bridge device
+>   * @parent:	FPGA bridge device from pdev
+> @@ -359,7 +372,7 @@ fpga_bridge_register(struct device *parent, const char *name,
+>  	bridge->priv = priv;
+>  
+>  	bridge->dev.groups = br_ops->groups;
+> -	bridge->dev.class = fpga_bridge_class;
+> +	bridge->dev.class = &fpga_bridge_class;
+>  	bridge->dev.parent = parent;
+>  	bridge->dev.of_node = parent->of_node;
+>  	bridge->dev.id = id;
+> @@ -407,29 +420,14 @@ void fpga_bridge_unregister(struct fpga_bridge *bridge)
+>  }
+>  EXPORT_SYMBOL_GPL(fpga_bridge_unregister);
+>  
+> -static void fpga_bridge_dev_release(struct device *dev)
+> -{
+> -	struct fpga_bridge *bridge = to_fpga_bridge(dev);
+> -
+> -	ida_free(&fpga_bridge_ida, bridge->dev.id);
+> -	kfree(bridge);
+> -}
+> -
+
+How about put the fpga_bridge_class definition here?
+
+Thanks,
+Yilun
+
+>  static int __init fpga_bridge_dev_init(void)
+>  {
+> -	fpga_bridge_class = class_create("fpga_bridge");
+> -	if (IS_ERR(fpga_bridge_class))
+> -		return PTR_ERR(fpga_bridge_class);
+> -
+> -	fpga_bridge_class->dev_groups = fpga_bridge_groups;
+> -	fpga_bridge_class->dev_release = fpga_bridge_dev_release;
+> -
+> -	return 0;
+> +	return class_register(&fpga_bridge_class);
+>  }
+>  
+>  static void __exit fpga_bridge_dev_exit(void)
+>  {
+> -	class_destroy(fpga_bridge_class);
+> +	class_unregister(&fpga_bridge_class);
+>  	ida_destroy(&fpga_bridge_ida);
+>  }
+>  
+> -- 
+> 2.34.1
+> 
