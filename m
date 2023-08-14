@@ -2,75 +2,61 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905EA779295
-	for <lists+linux-fpga@lfdr.de>; Fri, 11 Aug 2023 17:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D139077B30C
+	for <lists+linux-fpga@lfdr.de>; Mon, 14 Aug 2023 09:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjHKPLa (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 11 Aug 2023 11:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S234345AbjHNHvz (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Mon, 14 Aug 2023 03:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234748AbjHKPL2 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 11 Aug 2023 11:11:28 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A822F171F;
-        Fri, 11 Aug 2023 08:11:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691766688; x=1723302688;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Cjpcej3exmxfLa8oaOup6NX7xPqbLEY+b/Fz8WNpEn0=;
-  b=ifYAl46JNZNadbffRsn+AIr7NmlL4HRgMKu1pNPf/mvhTsiWXkrTXZ40
-   f2JTUWfJUfUySyRn1ciFoJfcOXqWXgbjQDEY8Yci6Z9awtwyZWI+16262
-   qZISMKLi6FHYlUqhDvZ+3B5wPPGgMsUCPO5/zihybcnPMvWvouMnjd4um
-   ByyA4xu5n5iFPr/aJGW4ZTn9h9tiVmQXJieHJOfIImH7t6mqAgICSphcJ
-   JCJmCgg2BLf2PQ5/unzIFlsGCrku16rEGRUX8OolCIJUplKT4QAgoKeJM
-   bmiIO4WRSv4Y3T/0pAR9Sgp/H6YI7R8YQRBBfTiYHJBG+OJhvZXFkxzDu
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="370595516"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="370595516"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 08:11:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="682574137"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="682574137"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga003.jf.intel.com with ESMTP; 11 Aug 2023 08:11:25 -0700
-Date:   Fri, 11 Aug 2023 23:09:13 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Orlov <ivan.orlov0322@gmail.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v2 1/3] fpga: bridge: make fpga_bridge_class a static
- const structure
-Message-ID: <ZNZPGa8u43v6UKsI@yilunxu-OptiPlex-7050>
-References: <20230811073043.52808-1-ivan.orlov0322@gmail.com>
+        with ESMTP id S234342AbjHNHvg (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Mon, 14 Aug 2023 03:51:36 -0400
+Received: from mail.commercesolutions.pl (unknown [162.19.155.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C489F
+        for <linux-fpga@vger.kernel.org>; Mon, 14 Aug 2023 00:51:36 -0700 (PDT)
+Received: by mail.commercesolutions.pl (Postfix, from userid 1002)
+        id 0FF1C22CA1; Mon, 14 Aug 2023 07:51:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=commercesolutions.pl;
+        s=mail; t=1691999495;
+        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
+        h=Date:From:To:Subject:From;
+        b=wrkPdfOBxGsbCkOvBGtm9bKvbWcxTPKjDXLsYpu5JCcxwoHI4eZhQHWI2XqRL7jt1
+         mNQkMi8BruhXvung21NIrVsq/3f3gA8GAD7tZ7qQD+jwoaju5UL84wMwmlevfcW48o
+         5lB7lMYQqRsIWAGHWhS9mOa+1MgiJcXUvf7Ije0jH3xyiRqkx4r5K/Gv9zcv1hS2hO
+         eOtI4LS2ONLDJuXWIi3LmeUhmduFxuwEuIDU+6259jeAJN+qP2HDUgxqSXWexE/HkS
+         n2cZz1nLTmf8Yy8T24EzvtD40aSIuL8RC6QMI7+gxU8/ven0XjhlsBZU8juh8laNGT
+         TnXrzO7lnDUrQ==
+Received: by mail.commercesolutions.pl for <linux-fpga@vger.kernel.org>; Mon, 14 Aug 2023 07:51:16 GMT
+Message-ID: <20230814064500-0.1.80.1fkt8.0.0bvfh7leem@commercesolutions.pl>
+Date:   Mon, 14 Aug 2023 07:51:16 GMT
+From:   "Kamil Tralewski" <kamil.tralewski@commercesolutions.pl>
+To:     <linux-fpga@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.commercesolutions.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230811073043.52808-1-ivan.orlov0322@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2023-08-11 at 11:30:41 +0400, Ivan Orlov wrote:
-> Now that the driver core allows for struct class to be in read-only
-> memory, move the fpga_bridge_class structure to be declared at build
-> time placing it into read-only memory, instead of having to be
-> dynamically allocated at boot time.
-> 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org> 
-> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+Dzie=C5=84 dobry,
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-Applied this series.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+
+Pozdrawiam
+Kamil Tralewski
