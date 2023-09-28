@@ -2,118 +2,154 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7B07B21F0
-	for <lists+linux-fpga@lfdr.de>; Thu, 28 Sep 2023 18:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E147B22DA
+	for <lists+linux-fpga@lfdr.de>; Thu, 28 Sep 2023 18:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbjI1QD0 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 28 Sep 2023 12:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
+        id S231704AbjI1QsT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 28 Sep 2023 12:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbjI1QDZ (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 28 Sep 2023 12:03:25 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F40D6;
-        Thu, 28 Sep 2023 09:03:24 -0700 (PDT)
+        with ESMTP id S231743AbjI1QsS (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 28 Sep 2023 12:48:18 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A16D1B5;
+        Thu, 28 Sep 2023 09:48:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695917004; x=1727453004;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2WJ2JHUZMGgvXYHvfCZXwdKMPR5M8xkDsvfLanYSBWw=;
-  b=iHGXLIic3ZYAiRcya92TSOTrrxI3muWNJzpiDhR3aj+CeYt6j1AWhqXT
-   JlOpnevWAOkDq8ICCcWal+3OqB02+sRqlGb9Q97lv2gnIXkdR0aNaXxMy
-   BtKesaZO5EwycwxE7XiE4vTjk3hfKZG73YBVPcUiOWkxQ8FmQOQKwXLs4
-   cB8YA/9xqGwFiaplN0zzo8alJymL/lkemhbiOLfz5HM4uzyydpO8zbv1r
-   s532ooi1uXiCDw1LEFHBJ582SzG+yYiLDsXRD+jQV1oqA/Y0dgDAGJNp5
-   HzAQEjKCQCEjosmM9JTbtmYPcD1kgSRK5GLKaBBf8Bg2UkyZHZX8VkY6D
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="382008973"
+  t=1695919695; x=1727455695;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rqXFJQ3cmV4se0ZtA61R0LZgTz5dEDuPK5aPKg+fNgw=;
+  b=ClRTaLX/LopAXahD9z1XcFK29uOextfloJHlpA+M7UeS4C5fcC1f7iEq
+   1SHn3fyKBFN5EOwmRXGQrbIXntxrqAibBuxphZt8DCR/h+M+QPFH5w5nD
+   y+W0Mp3xK0LnlEvG0iKVb9cGvU6utrtAWlI/bwqMZqeiQ7FwssyJTUCOW
+   umqAPS38tap9I6pJMOb5JfUYHPBHJYED/ligbdve37+gip1KXFgF2/fcb
+   oEzO2TdxRnyZtHzxHH7CXsOLoheRouBGsxFJnH9l0TxXbAukZsV4qV8k0
+   GiVunAMAdqyCplI3c3SDHCVoKusxRcI0O6/RVozt8apeUm5OPRx4upc4t
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="380995922"
 X-IronPort-AV: E=Sophos;i="6.03,184,1694761200"; 
-   d="scan'208";a="382008973"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 09:02:06 -0700
+   d="scan'208";a="380995922"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 09:47:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="699329280"
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="819926662"
 X-IronPort-AV: E=Sophos;i="6.03,184,1694761200"; 
-   d="scan'208";a="699329280"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2023 09:02:03 -0700
-Date:   Fri, 29 Sep 2023 00:01:26 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH 1/4] fpga: add helpers for the FPGA KUnit test suites.
-Message-ID: <ZRWjVkMYNosNvlt3@yilunxu-OptiPlex-7050>
-References: <20230926163911.66114-1-marpagan@redhat.com>
- <20230926163911.66114-2-marpagan@redhat.com>
+   d="scan'208";a="819926662"
+Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.209.8.12])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 09:47:56 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     matthew.gerlach@linux.intel.com, peter.colberg@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH 2/3] fpga: m10bmc-sec: Change contact for secure update driver
+Date:   Thu, 28 Sep 2023 09:47:53 -0700
+Message-Id: <20230928164753.278684-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230926163911.66114-2-marpagan@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On 2023-09-26 at 18:39:08 +0200, Marco Pagani wrote:
-> Add helpers to facilitate the registration of minimal platform drivers
-> to support the parent platform devices used for testing.
-> 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> ---
->  drivers/fpga/tests/fpga-test-helpers.h | 29 ++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 drivers/fpga/tests/fpga-test-helpers.h
-> 
-> diff --git a/drivers/fpga/tests/fpga-test-helpers.h b/drivers/fpga/tests/fpga-test-helpers.h
-> new file mode 100644
-> index 000000000000..fcad3249be68
-> --- /dev/null
-> +++ b/drivers/fpga/tests/fpga-test-helpers.h
-> @@ -0,0 +1,29 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * KUnit test for the FPGA Manager
-> + *
-> + * Copyright (C) 2023 Red Hat, Inc.
-> + *
-> + * Author: Marco Pagani <marpagan@redhat.com>
-> + */
-> +
-> +#ifndef FPGA_KUNIT_HELPERS_
-> +#define FPGA_KUNIT_HELPERS_
+Change the maintainer for the Intel MAX10 BMC Secure Update driver from
+Russ Weight to Peter Colberg. Update the ABI documentation contact
+information as well.
 
-How about _FPGA_KUNIT_HELPERS_H
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+---
+ .../testing/sysfs-driver-intel-m10-bmc-sec-update  | 14 +++++++-------
+ MAINTAINERS                                        |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-Others LGTM for this series.
+diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+index 0a41afe0ab4c..9051695d2211 100644
+--- a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
++++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+@@ -1,7 +1,7 @@
+ What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/sr_root_entry_hash
+ Date:		Sep 2022
+ KernelVersion:	5.20
+-Contact:	Russ Weight <russell.h.weight@intel.com>
++Contact:	Peter Colberg <peter.colberg@intel.com>
+ Description:	Read only. Returns the root entry hash for the static
+ 		region if one is programmed, else it returns the
+ 		string: "hash not programmed".  This file is only
+@@ -11,7 +11,7 @@ Description:	Read only. Returns the root entry hash for the static
+ What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/pr_root_entry_hash
+ Date:		Sep 2022
+ KernelVersion:	5.20
+-Contact:	Russ Weight <russell.h.weight@intel.com>
++Contact:	Peter Colberg <peter.colberg@intel.com>
+ Description:	Read only. Returns the root entry hash for the partial
+ 		reconfiguration region if one is programmed, else it
+ 		returns the string: "hash not programmed".  This file
+@@ -21,7 +21,7 @@ Description:	Read only. Returns the root entry hash for the partial
+ What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/bmc_root_entry_hash
+ Date:		Sep 2022
+ KernelVersion:	5.20
+-Contact:	Russ Weight <russell.h.weight@intel.com>
++Contact:	Peter Colberg <peter.colberg@intel.com>
+ Description:	Read only. Returns the root entry hash for the BMC image
+ 		if one is programmed, else it returns the string:
+ 		"hash not programmed".  This file is only visible if the
+@@ -31,7 +31,7 @@ Description:	Read only. Returns the root entry hash for the BMC image
+ What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/sr_canceled_csks
+ Date:		Sep 2022
+ KernelVersion:	5.20
+-Contact:	Russ Weight <russell.h.weight@intel.com>
++Contact:	Peter Colberg <peter.colberg@intel.com>
+ Description:	Read only. Returns a list of indices for canceled code
+ 		signing keys for the static region. The standard bitmap
+ 		list format is used (e.g. "1,2-6,9").
+@@ -39,7 +39,7 @@ Description:	Read only. Returns a list of indices for canceled code
+ What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/pr_canceled_csks
+ Date:		Sep 2022
+ KernelVersion:	5.20
+-Contact:	Russ Weight <russell.h.weight@intel.com>
++Contact:	Peter Colberg <peter.colberg@intel.com>
+ Description:	Read only. Returns a list of indices for canceled code
+ 		signing keys for the partial reconfiguration region. The
+ 		standard bitmap list format is used (e.g. "1,2-6,9").
+@@ -47,7 +47,7 @@ Description:	Read only. Returns a list of indices for canceled code
+ What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/bmc_canceled_csks
+ Date:		Sep 2022
+ KernelVersion:	5.20
+-Contact:	Russ Weight <russell.h.weight@intel.com>
++Contact:	Peter Colberg <peter.colberg@intel.com>
+ Description:	Read only. Returns a list of indices for canceled code
+ 		signing keys for the BMC.  The standard bitmap list format
+ 		is used (e.g. "1,2-6,9").
+@@ -55,7 +55,7 @@ Description:	Read only. Returns a list of indices for canceled code
+ What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/flash_count
+ Date:		Sep 2022
+ KernelVersion:	5.20
+-Contact:	Russ Weight <russell.h.weight@intel.com>
++Contact:	Peter Colberg <peter.colberg@intel.com>
+ Description:	Read only. Returns number of times the secure update
+ 		staging area has been flashed.
+ 		Format: "%u".
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b97ee6f50679..8006c35956bb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10755,7 +10755,7 @@ F:	drivers/mfd/intel-m10-bmc*
+ F:	include/linux/mfd/intel-m10-bmc.h
+ 
+ INTEL MAX10 BMC SECURE UPDATES
+-M:	Russ Weight <russell.h.weight@intel.com>
++M:	Peter Colberg <peter.colberg@intel.com>
+ L:	linux-fpga@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+-- 
+2.25.1
 
-Thanks,
-Yilun
-
-> +
-> +#define TEST_PDEV_NAME	"fpga-test-pdev"
-> +
-> +#define TEST_PLATFORM_DRIVER(__drv_name)			\
-> +	__TEST_PLATFORM_DRIVER(__drv_name, TEST_PDEV_NAME)
-> +/*
-> + * Helper macro for defining a minimal platform driver that can
-> + * be registered to support the parent platform devices used for
-> + * testing.
-> + */
-> +#define __TEST_PLATFORM_DRIVER(__drv_name, __dev_name)		\
-> +static struct platform_driver __drv_name = {			\
-> +	.driver = {						\
-> +		.name = __dev_name,				\
-> +	},							\
-> +}
-> +
-> +#endif	/* FPGA_KUNIT_HELPERS_ */
-> -- 
-> 2.41.0
-> 
