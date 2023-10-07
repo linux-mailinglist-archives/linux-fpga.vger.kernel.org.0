@@ -2,97 +2,165 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828C87BC57A
-	for <lists+linux-fpga@lfdr.de>; Sat,  7 Oct 2023 09:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8CD7BC5B8
+	for <lists+linux-fpga@lfdr.de>; Sat,  7 Oct 2023 09:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343673AbjJGHRh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 7 Oct 2023 03:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
+        id S1343718AbjJGHog (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 7 Oct 2023 03:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343644AbjJGHRb (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 7 Oct 2023 03:17:31 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8238B9;
-        Sat,  7 Oct 2023 00:17:29 -0700 (PDT)
+        with ESMTP id S1343715AbjJGHoe (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 7 Oct 2023 03:44:34 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AAFBF;
+        Sat,  7 Oct 2023 00:44:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696663049; x=1728199049;
+  t=1696664673; x=1728200673;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=gLXJeDyuHUbqo88VCpEmeE/4yFNV+xV2FELdzhx9+f8=;
-  b=QStIkWfETkcPD2fFGt3DNDy4oIhPoyW3Q+Ok6QB6dbMk1wsMytacnEIe
-   OEDwOhB7QGZDRkORKHV22tQJWx/mRwhqus14hvHuqJStcz6l104umT9a/
-   mStAiZNMs2Q0KIloFYCpn5+2/YtfdeqzNOq63eNjNYRQCcprPHFTKVuvR
-   tSeTvyh2PpTgTYdAdujpMjqudeFLr91fonp0q1dRZccWCDZiMjvOhMy1P
-   hbaIaZvSo25/IGJcxY5U45YHYjXgpNdT353pUBg1eGgg6HDriH8ma0KMF
-   /00UpG/teLqKnlMArK9paCLUy3/QTWzduUvm5xdirY0X03SAKcMrecNod
+  bh=sRng9T4/el7qzEq59uhXR9KsL4yghIT/iUgkp07WwMA=;
+  b=IFRTYhnQWdq5vUq1WLYzIO/BG98iDrFQ9X/wbIy8bnyrQCVtn8zu7UqW
+   LxY4UTJsuRLPQNtl0Wr1MmjFixnpphr7jzsCBlivWnsbsu4nuLKcF9JIt
+   BlMXyL5X3PsWwTIlGsvloVJOJgu9W8M4NIAqur+K1LifOL56TttGufyH9
+   JOKpPIvx2Skrfw87lY4ZkQsfYcPofy1N8NNTtAIzkcKS8kH+QZgUx9A7P
+   4edhXNShGzAOj7VwU8b3k31DciFJJ0hE5kJBKcPsQ72AFzmexl57pyLMO
+   cJNysxboI6N9IJx81FYu4jvgk7bEgvEa42R4vDiTpPz1iwk2PfiDKRS28
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="383784289"
+X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="386742001"
 X-IronPort-AV: E=Sophos;i="6.03,205,1694761200"; 
-   d="scan'208";a="383784289"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2023 00:17:29 -0700
+   d="scan'208";a="386742001"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2023 00:44:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="843124782"
+X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="702316267"
 X-IronPort-AV: E=Sophos;i="6.03,205,1694761200"; 
-   d="scan'208";a="843124782"
+   d="scan'208";a="702316267"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Oct 2023 00:17:27 -0700
-Date:   Sat, 7 Oct 2023 15:16:37 +0800
+  by orsmga003.jf.intel.com with ESMTP; 07 Oct 2023 00:44:30 -0700
+Date:   Sat, 7 Oct 2023 15:43:41 +0800
 From:   Xu Yilun <yilun.xu@linux.intel.com>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: Re: [PATCH] fpga: versal: Add support for 44-bit DMA operations
-Message-ID: <ZSEF1TOpd13BkCXL@yilunxu-OptiPlex-7050>
-References: <20231003071409.4165149-1-nava.kishore.manne@amd.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: altera-ps-spi: Use spi_get_device_match_data()
+Message-ID: <ZSEMLQS+9gFEAX89@yilunxu-OptiPlex-7050>
+References: <20231006224624.444857-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231003071409.4165149-1-nava.kishore.manne@amd.com>
+In-Reply-To: <20231006224624.444857-1-robh@kernel.org>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Tue, Oct 03, 2023 at 12:44:09PM +0530, Nava kishore Manne wrote:
-> The existing implementation support only 32-bit DMA operation.
-> So, it fails to load the bitstream for the high DDR designs(Beyond 4GB).
-> To fix this issue update the DMA mask handling logic to support 44-bit
-
-This is the HW defined DMA addressing capability. Does the device
-only support up to 44 bits DMA? Any Doc?
-
-Thanks,
-Yilun
-
-> DMA operations.
+On Fri, Oct 06, 2023 at 05:46:24PM -0500, Rob Herring wrote:
+> Use preferred spi_get_device_match_data() instead of of_match_device() and
+> spi_get_device_id() to get the driver match data. With this, adjust the
+> includes to explicitly include the correct headers.
 > 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+
+Applied.
+
 > ---
->  drivers/fpga/versal-fpga.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/fpga/altera-ps-spi.c | 44 ++++--------------------------------
+>  1 file changed, 5 insertions(+), 39 deletions(-)
 > 
-> diff --git a/drivers/fpga/versal-fpga.c b/drivers/fpga/versal-fpga.c
-> index e1601b3a345b..3710e8f01be2 100644
-> --- a/drivers/fpga/versal-fpga.c
-> +++ b/drivers/fpga/versal-fpga.c
-> @@ -48,7 +48,7 @@ static int versal_fpga_probe(struct platform_device *pdev)
->  	struct fpga_manager *mgr;
->  	int ret;
+> diff --git a/drivers/fpga/altera-ps-spi.c b/drivers/fpga/altera-ps-spi.c
+> index 5e1e009dba89..6be7410e4f09 100644
+> --- a/drivers/fpga/altera-ps-spi.c
+> +++ b/drivers/fpga/altera-ps-spi.c
+> @@ -18,8 +18,7 @@
+>  #include <linux/fpga/fpga-mgr.h>
+>  #include <linux/gpio/consumer.h>
+>  #include <linux/module.h>
+> -#include <linux/of_gpio.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>  #include <linux/spi/spi.h>
+>  #include <linux/sizes.h>
 >  
-> -	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-> +	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(44));
->  	if (ret < 0) {
->  		dev_err(dev, "no usable DMA configuration\n");
->  		return ret;
+> @@ -72,12 +71,6 @@ static struct altera_ps_data a10_data = {
+>  	.t_st2ck_us = 10, /* min(t_ST2CK) */
+>  };
+>  
+> -/* Array index is enum altera_ps_devtype */
+> -static const struct altera_ps_data *altera_ps_data_map[] = {
+> -	&c5_data,
+> -	&a10_data,
+> -};
+> -
+>  static const struct of_device_id of_ef_match[] = {
+>  	{ .compatible = "altr,fpga-passive-serial", .data = &c5_data },
+>  	{ .compatible = "altr,fpga-arria10-passive-serial", .data = &a10_data },
+> @@ -237,43 +230,16 @@ static const struct fpga_manager_ops altera_ps_ops = {
+>  	.write_complete = altera_ps_write_complete,
+>  };
+>  
+> -static const struct altera_ps_data *id_to_data(const struct spi_device_id *id)
+> -{
+> -	kernel_ulong_t devtype = id->driver_data;
+> -	const struct altera_ps_data *data;
+> -
+> -	/* someone added a altera_ps_devtype without adding to the map array */
+> -	if (devtype >= ARRAY_SIZE(altera_ps_data_map))
+> -		return NULL;
+> -
+> -	data = altera_ps_data_map[devtype];
+> -	if (!data || data->devtype != devtype)
+> -		return NULL;
+> -
+> -	return data;
+> -}
+> -
+>  static int altera_ps_probe(struct spi_device *spi)
+>  {
+>  	struct altera_ps_conf *conf;
+> -	const struct of_device_id *of_id;
+>  	struct fpga_manager *mgr;
+>  
+>  	conf = devm_kzalloc(&spi->dev, sizeof(*conf), GFP_KERNEL);
+>  	if (!conf)
+>  		return -ENOMEM;
+>  
+> -	if (spi->dev.of_node) {
+> -		of_id = of_match_device(of_ef_match, &spi->dev);
+> -		if (!of_id)
+> -			return -ENODEV;
+> -		conf->data = of_id->data;
+> -	} else {
+> -		conf->data = id_to_data(spi_get_device_id(spi));
+> -		if (!conf->data)
+> -			return -ENODEV;
+> -	}
+> -
+> +	conf->data = spi_get_device_match_data(spi);
+>  	conf->spi = spi;
+>  	conf->config = devm_gpiod_get(&spi->dev, "nconfig", GPIOD_OUT_LOW);
+>  	if (IS_ERR(conf->config)) {
+> @@ -308,9 +274,9 @@ static int altera_ps_probe(struct spi_device *spi)
+>  }
+>  
+>  static const struct spi_device_id altera_ps_spi_ids[] = {
+> -	{ "cyclone-ps-spi", CYCLONE5 },
+> -	{ "fpga-passive-serial", CYCLONE5 },
+> -	{ "fpga-arria10-passive-serial", ARRIA10 },
+> +	{ "cyclone-ps-spi", (uintptr_t)&c5_data },
+> +	{ "fpga-passive-serial", (uintptr_t)&c5_data },
+> +	{ "fpga-arria10-passive-serial", (uintptr_t)&a10_data },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(spi, altera_ps_spi_ids);
 > -- 
-> 2.25.1
+> 2.40.1
 > 
