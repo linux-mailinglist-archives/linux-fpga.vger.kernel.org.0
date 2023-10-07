@@ -2,168 +2,97 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A807BC537
-	for <lists+linux-fpga@lfdr.de>; Sat,  7 Oct 2023 08:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828C87BC57A
+	for <lists+linux-fpga@lfdr.de>; Sat,  7 Oct 2023 09:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343605AbjJGGxl (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 7 Oct 2023 02:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S1343673AbjJGHRh (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sat, 7 Oct 2023 03:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343577AbjJGGxk (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 7 Oct 2023 02:53:40 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C80DCE;
-        Fri,  6 Oct 2023 23:53:39 -0700 (PDT)
+        with ESMTP id S1343644AbjJGHRb (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sat, 7 Oct 2023 03:17:31 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8238B9;
+        Sat,  7 Oct 2023 00:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696661619; x=1728197619;
+  t=1696663049; x=1728199049;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zYyn229Imi9+jfEFbjdwAuVZqcq7yJRjraALGvsoCu0=;
-  b=G2RbUon17wJC/xWSTVKdygPWZigKJ2bbONrZugMu6lybbNKDpsuqJCys
-   tR/bxol4+8wy4byjF9mKRhRtCLyj8tsUJYsPsaUmf3kYFSRN8Bgq54G3I
-   s8PLWsaC5l0pjvfPnu/ABDEVKMWjeHOQmOJSHbqUr/mt0vrs/sehuUKoL
-   ZYma+PpQt0Ov5fUIqxZhTHj5/0tkndtCGFrCcDnLPO553ZxT8GAeow2Jr
-   tBpYDe56A7l0gk9pLdiD8s78xTdNZgcuuLXmDkzErR0JYp1LHUYzjbBmV
-   WHDD1vOgxNm87mJoIOdeRJsEX7NjJ6UC2hyqAL/vQuQ9KgoKFyYXwNFj7
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="363256380"
+  bh=gLXJeDyuHUbqo88VCpEmeE/4yFNV+xV2FELdzhx9+f8=;
+  b=QStIkWfETkcPD2fFGt3DNDy4oIhPoyW3Q+Ok6QB6dbMk1wsMytacnEIe
+   OEDwOhB7QGZDRkORKHV22tQJWx/mRwhqus14hvHuqJStcz6l104umT9a/
+   mStAiZNMs2Q0KIloFYCpn5+2/YtfdeqzNOq63eNjNYRQCcprPHFTKVuvR
+   tSeTvyh2PpTgTYdAdujpMjqudeFLr91fonp0q1dRZccWCDZiMjvOhMy1P
+   hbaIaZvSo25/IGJcxY5U45YHYjXgpNdT353pUBg1eGgg6HDriH8ma0KMF
+   /00UpG/teLqKnlMArK9paCLUy3/QTWzduUvm5xdirY0X03SAKcMrecNod
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="383784289"
 X-IronPort-AV: E=Sophos;i="6.03,205,1694761200"; 
-   d="scan'208";a="363256380"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2023 23:53:38 -0700
+   d="scan'208";a="383784289"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2023 00:17:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="896174420"
+X-IronPort-AV: E=McAfee;i="6600,9927,10855"; a="843124782"
 X-IronPort-AV: E=Sophos;i="6.03,205,1694761200"; 
-   d="scan'208";a="896174420"
+   d="scan'208";a="843124782"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Oct 2023 23:52:02 -0700
-Date:   Sat, 7 Oct 2023 14:52:46 +0800
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Oct 2023 00:17:27 -0700
+Date:   Sat, 7 Oct 2023 15:16:37 +0800
 From:   Xu Yilun <yilun.xu@linux.intel.com>
-To:     "Colberg, Peter" <peter.colberg@intel.com>
-Cc:     "russ.weight@linux.dev" <russ.weight@linux.dev>,
-        "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>, "Rix, Tom" <trix@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
-Subject: Re: [PATCH 2/3] fpga: m10bmc-sec: Change contact for secure update
- driver
-Message-ID: <ZSEAPvn6FS2Rcesq@yilunxu-OptiPlex-7050>
-References: <20230928164753.278684-1-russell.h.weight@intel.com>
- <7e67b2684e5b58bd61fcc7110ca90e1387f5e0ea.camel@intel.com>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: Re: [PATCH] fpga: versal: Add support for 44-bit DMA operations
+Message-ID: <ZSEF1TOpd13BkCXL@yilunxu-OptiPlex-7050>
+References: <20231003071409.4165149-1-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7e67b2684e5b58bd61fcc7110ca90e1387f5e0ea.camel@intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231003071409.4165149-1-nava.kishore.manne@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Oct 04, 2023 at 11:19:30PM +0000, Colberg, Peter wrote:
-> On Thu, 2023-09-28 at 09:47 -0700, Russ Weight wrote:
-> > Change the maintainer for the Intel MAX10 BMC Secure Update driver from
-> > Russ Weight to Peter Colberg. Update the ABI documentation contact
-> > information as well.
-> > 
-> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> 
-> Acked-by: Peter Colberg <peter.colberg@intel.com>
+On Tue, Oct 03, 2023 at 12:44:09PM +0530, Nava kishore Manne wrote:
+> The existing implementation support only 32-bit DMA operation.
+> So, it fails to load the bitstream for the high DDR designs(Beyond 4GB).
+> To fix this issue update the DMA mask handling logic to support 44-bit
 
-Applied.
+This is the HW defined DMA addressing capability. Does the device
+only support up to 44 bits DMA? Any Doc?
 
 Thanks,
 Yilun
 
+> DMA operations.
 > 
-> > ---
-> >  .../testing/sysfs-driver-intel-m10-bmc-sec-update  | 14 +++++++-------
-> >  MAINTAINERS                                        |  2 +-
-> >  2 files changed, 8 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-> > index 0a41afe0ab4c..9051695d2211 100644
-> > --- a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-> > +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-> > @@ -1,7 +1,7 @@
-> >  What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/sr_root_entry_hash
-> >  Date:		Sep 2022
-> >  KernelVersion:	5.20
-> > -Contact:	Russ Weight <russell.h.weight@intel.com>
-> > +Contact:	Peter Colberg <peter.colberg@intel.com>
-> >  Description:	Read only. Returns the root entry hash for the static
-> >  		region if one is programmed, else it returns the
-> >  		string: "hash not programmed".  This file is only
-> > @@ -11,7 +11,7 @@ Description:	Read only. Returns the root entry hash for the static
-> >  What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/pr_root_entry_hash
-> >  Date:		Sep 2022
-> >  KernelVersion:	5.20
-> > -Contact:	Russ Weight <russell.h.weight@intel.com>
-> > +Contact:	Peter Colberg <peter.colberg@intel.com>
-> >  Description:	Read only. Returns the root entry hash for the partial
-> >  		reconfiguration region if one is programmed, else it
-> >  		returns the string: "hash not programmed".  This file
-> > @@ -21,7 +21,7 @@ Description:	Read only. Returns the root entry hash for the partial
-> >  What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/bmc_root_entry_hash
-> >  Date:		Sep 2022
-> >  KernelVersion:	5.20
-> > -Contact:	Russ Weight <russell.h.weight@intel.com>
-> > +Contact:	Peter Colberg <peter.colberg@intel.com>
-> >  Description:	Read only. Returns the root entry hash for the BMC image
-> >  		if one is programmed, else it returns the string:
-> >  		"hash not programmed".  This file is only visible if the
-> > @@ -31,7 +31,7 @@ Description:	Read only. Returns the root entry hash for the BMC image
-> >  What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/sr_canceled_csks
-> >  Date:		Sep 2022
-> >  KernelVersion:	5.20
-> > -Contact:	Russ Weight <russell.h.weight@intel.com>
-> > +Contact:	Peter Colberg <peter.colberg@intel.com>
-> >  Description:	Read only. Returns a list of indices for canceled code
-> >  		signing keys for the static region. The standard bitmap
-> >  		list format is used (e.g. "1,2-6,9").
-> > @@ -39,7 +39,7 @@ Description:	Read only. Returns a list of indices for canceled code
-> >  What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/pr_canceled_csks
-> >  Date:		Sep 2022
-> >  KernelVersion:	5.20
-> > -Contact:	Russ Weight <russell.h.weight@intel.com>
-> > +Contact:	Peter Colberg <peter.colberg@intel.com>
-> >  Description:	Read only. Returns a list of indices for canceled code
-> >  		signing keys for the partial reconfiguration region. The
-> >  		standard bitmap list format is used (e.g. "1,2-6,9").
-> > @@ -47,7 +47,7 @@ Description:	Read only. Returns a list of indices for canceled code
-> >  What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/bmc_canceled_csks
-> >  Date:		Sep 2022
-> >  KernelVersion:	5.20
-> > -Contact:	Russ Weight <russell.h.weight@intel.com>
-> > +Contact:	Peter Colberg <peter.colberg@intel.com>
-> >  Description:	Read only. Returns a list of indices for canceled code
-> >  		signing keys for the BMC.  The standard bitmap list format
-> >  		is used (e.g. "1,2-6,9").
-> > @@ -55,7 +55,7 @@ Description:	Read only. Returns a list of indices for canceled code
-> >  What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/flash_count
-> >  Date:		Sep 2022
-> >  KernelVersion:	5.20
-> > -Contact:	Russ Weight <russell.h.weight@intel.com>
-> > +Contact:	Peter Colberg <peter.colberg@intel.com>
-> >  Description:	Read only. Returns number of times the secure update
-> >  		staging area has been flashed.
-> >  		Format: "%u".
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index b97ee6f50679..8006c35956bb 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -10755,7 +10755,7 @@ F:	drivers/mfd/intel-m10-bmc*
-> >  F:	include/linux/mfd/intel-m10-bmc.h
-> >  
-> >  INTEL MAX10 BMC SECURE UPDATES
-> > -M:	Russ Weight <russell.h.weight@intel.com>
-> > +M:	Peter Colberg <peter.colberg@intel.com>
-> >  L:	linux-fpga@vger.kernel.org
-> >  S:	Maintained
-> >  F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> ---
+>  drivers/fpga/versal-fpga.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/versal-fpga.c b/drivers/fpga/versal-fpga.c
+> index e1601b3a345b..3710e8f01be2 100644
+> --- a/drivers/fpga/versal-fpga.c
+> +++ b/drivers/fpga/versal-fpga.c
+> @@ -48,7 +48,7 @@ static int versal_fpga_probe(struct platform_device *pdev)
+>  	struct fpga_manager *mgr;
+>  	int ret;
+>  
+> -	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+> +	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(44));
+>  	if (ret < 0) {
+>  		dev_err(dev, "no usable DMA configuration\n");
+>  		return ret;
+> -- 
+> 2.25.1
 > 
