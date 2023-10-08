@@ -2,43 +2,66 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6027BC67F
-	for <lists+linux-fpga@lfdr.de>; Sat,  7 Oct 2023 11:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA367BCCBC
+	for <lists+linux-fpga@lfdr.de>; Sun,  8 Oct 2023 08:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233085AbjJGJoK (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sat, 7 Oct 2023 05:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S1344426AbjJHG3n (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 8 Oct 2023 02:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbjJGJoK (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sat, 7 Oct 2023 05:44:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C96BC
-        for <linux-fpga@vger.kernel.org>; Sat,  7 Oct 2023 02:44:08 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4S2gJn6PNPzVlMB;
-        Sat,  7 Oct 2023 17:40:41 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Sat, 7 Oct
- 2023 17:44:05 +0800
-From:   Jinjie Ruan <ruanjinjie@huawei.com>
-To:     <linux-fpga@vger.kernel.org>, Moritz Fischer <mdf@kernel.org>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        Tom Rix <trix@redhat.com>, Marco Pagani <marpagan@redhat.com>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH] fpga: Fix memory leak for fpga_region_test_class_find()
-Date:   Sat, 7 Oct 2023 17:43:21 +0800
-Message-ID: <20231007094321.3447084-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S1344423AbjJHG3m (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 8 Oct 2023 02:29:42 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E40C6
+        for <linux-fpga@vger.kernel.org>; Sat,  7 Oct 2023 23:29:40 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-77433d61155so235151685a.2
+        for <linux-fpga@vger.kernel.org>; Sat, 07 Oct 2023 23:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696746580; x=1697351380; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ItEGZOzHy+Mpn2qFsqD5x6rXjpPpn6ArW6TM+N4oOT8=;
+        b=PuFdsrlkxhTSO1SExSPFvqsBIrY/SqBsrj8xyRoMnS/UcWALkQjKnuPrtE7ulzot+D
+         qAuHuSrw87/q5yj0w8qyySQBTp+ZgMS2oZlNW1JD2MVSE6F3Z0Nk9RlnGcwWYU4A1y8F
+         7TzJpf0DarQutqlWjWGa1S5BIbO8Md4Nn2GLvdDfTk9LKKmxz8MRroMvfJh+S63okc62
+         RfHNO52A9CaK9oMR3p19IIvQ5IJUfq2pVSRiXQTg6CYaqdIO4m4SdSuaEqozxtOOmrC6
+         o8VbaoCyOm1xTz9KHcxrIpVao+BinerNvkotit7dvPPrMqamiYD8iCa0+ZMdVWixQWT9
+         yRGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696746580; x=1697351380;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ItEGZOzHy+Mpn2qFsqD5x6rXjpPpn6ArW6TM+N4oOT8=;
+        b=EmvcWWrCSHqx/d+Xt89gBIOP3AaIsF0JHTBxAv3yiljdVuPq/q2yoNNf2NmMfZ2zUp
+         tC1vjsbpaQgUmJgBUJMSJe4n5oKjnUvzUxKAKa1/YNLuRqEARBlubUimNcC0na0/qpXl
+         Of5q1USCvrBsFhDfuLy1rbN4wOWCQlQB94QKtv0KCbme48Ubt45P+L4EPiFxWqwx2rY7
+         qzSIlJFHCf19Wc4VHcXDkcE3djmFuzJ00Rv/SoZSpLbNNkY7GKgQxCUP9AVpYnOxR0SE
+         znYp2dv2y5AG8WftWBKusMiq4C0GkeHAOoZPyhpsWKgQaJ5maXrm7sRpIfK/C08mtkx4
+         o1aw==
+X-Gm-Message-State: AOJu0YyV6dataR5kfg/YMXEmy7V0A2wLmJFnBfckugThg+OQe2Dy67c2
+        eV7UXLyDSfFFiUEjtrpPsqK5ZtfnPS4/LbfyNO4Feg==
+X-Google-Smtp-Source: AGHT+IFR7ku6jUa4lT8Jsgu5yGQDMYmTaI/Tm7GH7oUPHYc4oFvxnWIOHjESkJeZ2K3LlXYkvfWuomkc4+6RqlWtWig=
+X-Received: by 2002:a05:620a:6102:b0:774:3933:1f30 with SMTP id
+ oq2-20020a05620a610200b0077439331f30mr12110121qkn.8.1696746579671; Sat, 07
+ Oct 2023 23:29:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sun, 8 Oct 2023 11:59:28 +0530
+Message-ID: <CA+G9fYuOYvGL9ugszrpJdqO3EibfJz=1a1pg4mcUukjDwMQPSA@mail.gmail.com>
+Subject: Kunit: BUG: KASAN: null-ptr-deref in __fpga_bridge_get+0x88/0x100 [fpga_bridge]
+To:     kunit-dev@googlegroups.com,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        linux-fpga@vger.kernel.org, David Gow <davidgow@google.com>,
+        Rae Moar <rmoar@google.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,87 +69,207 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-When CONFIG_FPGA_KUNIT_TESTS=m and making CONFIG_DEBUG_KMEMLEAK=y
-and CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN=y, modprobe fpga-region-test and then
-rmmod fpga-region-test, the below memory leak is detected.
+Following kernel bug and warning noticed while running fpga_bridge on
+arm64 Juno-r2 device running Linux next 6.6.0-rc4-next-20231006 tag.
 
-fpga_region_class_find() in fpga_region_test_class_find() will call
-get_device() if the data is matched, which will increment refcount for
-dev->kobj, so it should call put_device() to decrement refcount for
-dev->kobj to free the region, because fpga_region_unregister() will call
-fpga_region_dev_release() only when the refcount for dev->kobj is zero
-but fpga_region_test_init() call device_register() in
-fpga_region_register_full(), which also increment refcount.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-So call put_device() after calling fpga_region_class_find() in
-fpga_region_test_class_find(). After applying this patch, the following
-memory leak is never detected.
+KUNIT_TEST_MODULE=snd-hda-cirrus-scodec-test.ko
+[  239.069569] KTAP version 1
+[  239.072540] 1..1
+[  239.074962]     KTAP version 1
+[  239.078060]     # Subtest: fpga_bridge
+[  239.081928]     # module: fpga_bridge_test
+[  239.082011]     1..3
+[  239.100750] ==================================================================
+[  239.108037] BUG: KASAN: null-ptr-deref in
+__fpga_bridge_get+0x88/0x100 [fpga_bridge]
+[  239.115958] Read of size 8 at addr 0000000000000010 by task
+kunit_try_catch/2052
+[  239.123410]
+[  239.124932] CPU: 3 PID: 2052 Comm: kunit_try_catch Tainted: G    B
+          N 6.6.0-rc4-next-20231006 #1
+[  239.134660] Hardware name: ARM Juno development board (r2) (DT)
+[  239.140624] Call trace:
+[  239.143097]  dump_backtrace+0x9c/0x128
+[  239.146913]  show_stack+0x20/0x38
+[  239.150278]  dump_stack_lvl+0x60/0xb0
+[  239.154005]  print_report+0x2f0/0x5d8
+[  239.157729]  kasan_report+0xc8/0x118
+[  239.161362]  __asan_load8+0x68/0xc0
+[  239.164911]  __fpga_bridge_get+0x88/0x100 [fpga_bridge]
+[  239.170290]  fpga_bridge_get+0x48/0x78 [fpga_bridge]
+[  239.175405]  fpga_bridge_test_get+0xa0/0x1a8 [fpga_bridge_test]
+[  239.181469]  kunit_try_run_case+0x84/0x110
+[  239.185633]  kunit_generic_run_threadfn_adapter+0x38/0x60
+[  239.191109]  kthread+0x18c/0x1a8
+[  239.194385]  ret_from_fork+0x10/0x20
+[  239.198017] ==================================================================
+[  239.205450] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000010
+[  239.214507] Mem abort info:
+[  239.217327]   ESR = 0x0000000096000004
+[  239.221158]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  239.226533]   SET = 0, FnV = 0
+[  239.229608]   EA = 0, S1PTW = 0
+[  239.233339]   FSC = 0x04: level 0 translation fault
+[  239.238263] Data abort info:
+[  239.241181]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+[  239.246716]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[  239.251820]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[  239.257179] user pgtable: 4k pages, 48-bit VAs, pgdp=00000008ac6ec000
+[  239.263670] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
+[  239.270544] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+[  239.276840] Modules linked in: fpga_bridge_test(+) fpga_bridge
+tda998x hdlcd onboard_usb_hub cec crct10dif_ce drm_dma_helper
+drm_kms_helper drm fuse backlight dm_mod ip_tables x_tables
+[  239.293440] CPU: 1 PID: 2052 Comm: kunit_try_catch Tainted: G    B
+          N 6.6.0-rc4-next-20231006 #1
+[  239.303135] Hardware name: ARM Juno development board (r2) (DT)
+[  239.309076] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  239.316066] pc : __fpga_bridge_get+0x88/0x100 [fpga_bridge]
+[  239.321710] lr : __fpga_bridge_get+0x88/0x100 [fpga_bridge]
+[  239.327341] sp : ffff800089237d00
+[  239.330666] x29: ffff800089237d00 x28: 0000000000000000 x27: 0000000000000000
+[  239.337849] x26: ffff000800a6c600 x25: ffff8000892673e8 x24: ffff8000809cc528
+[  239.345031] x23: ffff000800a6c108 x22: 0000000000000000 x21: ffff000828683000
+[  239.352215] x20: ffff000828683300 x19: ffff000828683008 x18: 0000000000000000
+[  239.359400] x17: 3d3d3d3d3d3d3d3d x16: 3d3d3d3d3d3d3d3d x15: 3d3d3d3d3d3d3d3d
+[  239.366585] x14: 3d3d3d3d3d3d3d3d x13: 3d3d3d3d3d3d3d3d x12: ffff700010eb79f1
+[  239.373765] x11: 1ffff00010eb79f0 x10: ffff700010eb79f0 x9 : dfff800000000000
+[  239.380948] x8 : 00008fffef148610 x7 : ffff8000875bcf87 x6 : 0000000000000001
+[  239.388130] x5 : ffff8000875bcf80 x4 : ffff700010eb79f1 x3 : 0000000000000000
+[  239.395309] x2 : 0000000000040020 x1 : ffff00082d182300 x0 : 0000000000000001
+[  239.402488] Call trace:
+[  239.404943]  __fpga_bridge_get+0x88/0x100 [fpga_bridge]
+[  239.410232]  fpga_bridge_get+0x48/0x78 [fpga_bridge]
+[  239.415254]  fpga_bridge_test_get+0xa0/0x1a8 [fpga_bridge_test]
+[  239.421230]  kunit_try_run_case+0x84/0x110
+[  239.425362]  kunit_generic_run_threadfn_adapter+0x38/0x60
+[  239.430799]  kthread+0x18c/0x1a8
+[  239.434047]  ret_from_fork+0x10/0x20
+[  239.437656] Code: 9431930e f94036d6 910042c0 9431930b (f9400ac0)
+[  239.443769] ---[ end trace 0000000000000000 ]---
+[  545.778709]     # fpga_bridge_test_get: try timed out
+[  545.783886] ------------[ cut here ]------------
+[  545.788568] refcount_t: addition on 0; use-after-free.
+[  545.793835] WARNING: CPU: 1 PID: 2051 at lib/refcount.c:25
+refcount_warn_saturate+0x14c/0x178
+[  545.802410] Modules linked in: fpga_bridge_test(+) fpga_bridge
+tda998x hdlcd onboard_usb_hub cec crct10dif_ce drm_dma_helper
+drm_kms_helper drm fuse backlight dm_mod ip_tables x_tables
+[  545.819009] CPU: 1 PID: 2051 Comm: modprobe Tainted: G    B D
+   N 6.6.0-rc4-next-20231006 #1
+[  545.828090] Hardware name: ARM Juno development board (r2) (DT)
+[  545.834028] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  545.841017] pc : refcount_warn_saturate+0x14c/0x178
+[  545.845919] lr : refcount_warn_saturate+0x14c/0x178
+[  545.850819] sp : ffff8000892670c0
+[  545.854145] x29: ffff8000892670c0 x28: ffff8000820cdf40 x27: ffff80007f8d7480
+[  545.861328] x26: ffff8000892673f8 x25: ffff00082d182300 x24: ffff8000892673d0
+[  545.868510] x23: ffff800089267410 x22: ffff00082ea86e00 x21: ffff00082d182328
+[  545.875690] x20: ffff00082d182328 x19: 0000000000000002 x18: 0000000000000000
+[  545.882869] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+[  545.890047] x14: 0000000000000000 x13: 2e656572662d7265 x12: ffff70001124cdb9
+[  545.897225] x11: 1ffff0001124cdb8 x10: ffff70001124cdb8 x9 : ffff8000801a10b8
+[  545.904405] x8 : 00008fffeedb3248 x7 : ffff800089266dc7 x6 : 0000000000000001
+[  545.911583] x5 : ffff800089266dc0 x4 : ffff70001124cdb9 x3 : dfff800000000000
+[  545.918762] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff00082d9e3480
+[  545.925940] Call trace:
+[  545.928394]  refcount_warn_saturate+0x14c/0x178
+[  545.932947]  kthread_stop+0x230/0x318
+[  545.936629]  kunit_try_catch_run+0x248/0x2a8
+[  545.940927]  kunit_run_case_catch_errors+0xdc/0x1b0
+[  545.945831]  kunit_run_tests+0x6d8/0x860
+[  545.949776]  __kunit_test_suites_init+0x9c/0xf0
+[  545.954332]  kunit_exec_run_tests+0x9c/0xb8
+[  545.958539]  kunit_module_notify+0x2f0/0x318
+[  545.962832]  notifier_call_chain+0x90/0x1c8
+[  545.967038]  blocking_notifier_call_chain_robust+0xc8/0x148
+[  545.972637]  load_module+0x296c/0x2d50
+[  545.976408]  init_module_from_file+0xdc/0x138
+[  545.980789]  __arm64_sys_finit_module+0x23c/0x458
+[  545.985517]  invoke_syscall+0x68/0x198
+[  545.989290]  el0_svc_common.constprop.0+0x80/0x150
+[  545.994108]  do_el0_svc+0x38/0x50
+[  545.997438]  el0_svc+0x3c/0x80
+[  546.000516]  el0t_64_sync_handler+0x120/0x130
+[  546.004897]  el0t_64_sync+0x190/0x198
+[  546.008577] ---[ end trace 0000000000000000 ]---
+[  546.013383] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000000
+[  546.022243] Mem abort info:
+[  546.025101]   ESR = 0x0000000096000004
+[  546.028922]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  546.034303]   SET = 0, FnV = 0
+[  546.037422]   EA = 0, S1PTW = 0
+[  546.040622]   FSC = 0x04: level 0 translation fault
+[  546.045556] Data abort info:
+[  546.048477]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+[  546.054019]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[  546.059128]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[  546.064501] user pgtable: 4k pages, 48-bit VAs, pgdp=00000008b2af1000
+[  546.071027] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+[  546.077909] Internal error: Oops: 0000000096000004 [#2] PREEMPT SMP
+[  546.084206] Modules linked in: fpga_bridge_test(+) fpga_bridge
+tda998x hdlcd onboard_usb_hub cec crct10dif_ce drm_dma_helper
+drm_kms_helper drm fuse backlight dm_mod ip_tables x_tables
+[  546.100801] CPU: 1 PID: 2051 Comm: modprobe Tainted: G    B D W
+   N 6.6.0-rc4-next-20231006 #1
+[  546.109884] Hardware name: ARM Juno development board (r2) (DT)
+[  546.115823] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  546.122811] pc : kthread_stop+0x1f4/0x318
+[  546.126846] lr : kthread_stop+0x78/0x318
+[  546.130788] sp : ffff8000892670e0
+[  546.134118] x29: ffff8000892670e0 x28: ffff8000820cdf40 x27: ffff80007f8d7480
+[  546.141300] x26: ffff8000892673f8 x25: ffff00082d182300 x24: ffff8000892673d0
+[  546.148480] x23: ffff800089267410 x22: ffff00082ea86e00 x21: ffff00082d182328
+[  546.155661] x20: 0000000000000000 x19: ffff00082d182300 x18: 0000000000000000
+[  546.162840] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+[  546.170017] x14: 0000000000000000 x13: 2e656572662d7265 x12: ffff70001124cdb9
+[  546.177196] x11: 1ffff0001124cdb8 x10: ffff70001124cdb8 x9 : ffff8000801a10b8
+[  546.184375] x8 : ffff8000892670c0 x7 : 0000000000000000 x6 : 0000000000000001
+[  546.191559] x5 : 0000000000000000 x4 : ffff00082d9e3480 x3 : 0000000000000000
+[  546.198737] x2 : 0000000000000001 x1 : ffff80008760bd60 x0 : 0000000000000001
+[  546.205920] Call trace:
+[  546.208373]  kthread_stop+0x1f4/0x318
+[  546.212056]  kunit_try_catch_run+0x248/0x2a8
+[  546.216354]  kunit_run_case_catch_errors+0xdc/0x1b0
+[  546.221259]  kunit_run_tests+0x6d8/0x860
+[  546.225207]  __kunit_test_suites_init+0x9c/0xf0
+[  546.229762]  kunit_exec_run_tests+0x9c/0xb8
+[  546.233970]  kunit_module_notify+0x2f0/0x318
+[  546.238263]  notifier_call_chain+0x90/0x1c8
+[  546.242467]  blocking_notifier_call_chain_robust+0xc8/0x148
+[  546.248069]  load_module+0x296c/0x2d50
+[  546.251841]  init_module_from_file+0xdc/0x138
+[  546.256222]  __arm64_sys_finit_module+0x23c/0x458
+[  546.260954]  invoke_syscall+0x68/0x198
+[  546.264730]  el0_svc_common.constprop.0+0x80/0x150
+[  546.269548]  do_el0_svc+0x38/0x50
+[  546.272878]  el0_svc+0x3c/0x80
+[  546.275954]  el0t_64_sync_handler+0x120/0x130
+[  546.280336]  el0t_64_sync+0x190/0x198
+[  546.284024] Code: c8017e60 35ffffa1 17ffffae f9800291 (c85f7e80)
+[  546.290138] ---[ end trace 0000000000000000 ]---
+Segmentation fault
+modprobe-fpga-bridge-test fail
 
-unreferenced object 0xffff88810c8ef000 (size 1024):
-  comm "kunit_try_catch", pid 1875, jiffies 4294715298 (age 836.836s)
-  hex dump (first 32 bytes):
-    b8 d1 fb 05 81 88 ff ff 08 f0 8e 0c 81 88 ff ff  ................
-    08 f0 8e 0c 81 88 ff ff 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff817ebad7>] kmalloc_trace+0x27/0xa0
-    [<ffffffffa02385e1>] fpga_region_register_full+0x51/0x430 [fpga_region]
-    [<ffffffffa0228e47>] 0xffffffffa0228e47
-    [<ffffffff829c479d>] kunit_try_run_case+0xdd/0x250
-    [<ffffffff829c9f2a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
-    [<ffffffff81238b85>] kthread+0x2b5/0x380
-    [<ffffffff81097ded>] ret_from_fork+0x2d/0x70
-    [<ffffffff810034d1>] ret_from_fork_asm+0x11/0x20
-unreferenced object 0xffff888105fbd1b8 (size 8):
-  comm "kunit_try_catch", pid 1875, jiffies 4294715298 (age 836.836s)
-  hex dump (first 8 bytes):
-    72 65 67 69 6f 6e 30 00                          region0.
-  backtrace:
-    [<ffffffff817ec023>] __kmalloc_node_track_caller+0x53/0x150
-    [<ffffffff82995590>] kvasprintf+0xb0/0x130
-    [<ffffffff83f713b1>] kobject_set_name_vargs+0x41/0x110
-    [<ffffffff8304ac1b>] dev_set_name+0xab/0xe0
-    [<ffffffffa02388a2>] fpga_region_register_full+0x312/0x430 [fpga_region]
-    [<ffffffffa0228e47>] 0xffffffffa0228e47
-    [<ffffffff829c479d>] kunit_try_run_case+0xdd/0x250
-    [<ffffffff829c9f2a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
-    [<ffffffff81238b85>] kthread+0x2b5/0x380
-    [<ffffffff81097ded>] ret_from_fork+0x2d/0x70
-    [<ffffffff810034d1>] ret_from_fork_asm+0x11/0x20
-unreferenced object 0xffff88810b3b8a00 (size 256):
-  comm "kunit_try_catch", pid 1875, jiffies 4294715298 (age 836.836s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 08 8a 3b 0b 81 88 ff ff  ..........;.....
-    08 8a 3b 0b 81 88 ff ff e0 ac 04 83 ff ff ff ff  ..;.............
-  backtrace:
-    [<ffffffff817ebad7>] kmalloc_trace+0x27/0xa0
-    [<ffffffff83056d7a>] device_add+0xa2a/0x15e0
-    [<ffffffffa02388b1>] fpga_region_register_full+0x321/0x430 [fpga_region]
-    [<ffffffffa0228e47>] 0xffffffffa0228e47
-    [<ffffffff829c479d>] kunit_try_run_case+0xdd/0x250
-    [<ffffffff829c9f2a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
-    [<ffffffff81238b85>] kthread+0x2b5/0x380
-    [<ffffffff81097ded>] ret_from_fork+0x2d/0x70
-    [<ffffffff810034d1>] ret_from_fork_asm+0x11/0x20
+Links:
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231006/testrun/20279429/suite/log-parser-test/test/check-kernel-bug/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231006/testrun/20279429/suite/log-parser-test/tests/
+ - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2WO7UKXuHh4Z2jX19cmUhNchbyq
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RQfyDFoIvCa0HgqR2mRxOu8/
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RQfyDFoIvCa0HgqR2mRxOu8/config
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RQfyDFoIvCa0HgqR2mRxOu8/vmlinux.xz
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RQfyDFoIvCa0HgqR2mRxOu8/System.map
 
-Fixes: 64a5f972c93d ("fpga: add an initial KUnit suite for the FPGA Region")
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- drivers/fpga/tests/fpga-region-test.c | 2 ++
- 1 file changed, 2 insertions(+)
+Step to reproduce:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RQfyDFoIvCa0HgqR2mRxOu8/tuxmake_reproducer.sh
+ - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2WO7UKXuHh4Z2jX19cmUhNchbyq/reproducer
 
-diff --git a/drivers/fpga/tests/fpga-region-test.c b/drivers/fpga/tests/fpga-region-test.c
-index 5ff688b394f9..7cd2667d52be 100644
---- a/drivers/fpga/tests/fpga-region-test.c
-+++ b/drivers/fpga/tests/fpga-region-test.c
-@@ -95,6 +95,8 @@ static void fpga_region_test_class_find(struct kunit *test)
- 
- 	region = fpga_region_class_find(NULL, &ctx->region_pdev->dev, fake_region_match);
- 	KUNIT_EXPECT_PTR_EQ(test, region, ctx->region);
-+
-+	put_device(&region->dev);
- }
- 
- /*
--- 
-2.34.1
 
+
+--
+Linaro LKFT
+https://lkft.linaro.org
