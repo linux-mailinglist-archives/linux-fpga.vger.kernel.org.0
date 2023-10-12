@@ -2,121 +2,98 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC227BF44A
-	for <lists+linux-fpga@lfdr.de>; Tue, 10 Oct 2023 09:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C247C645A
+	for <lists+linux-fpga@lfdr.de>; Thu, 12 Oct 2023 07:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442672AbjJJH0C (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 10 Oct 2023 03:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
+        id S235240AbjJLFFe (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 12 Oct 2023 01:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442669AbjJJHYk (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 10 Oct 2023 03:24:40 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03olkn2013.outbound.protection.outlook.com [40.92.58.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2E1184;
-        Tue, 10 Oct 2023 00:24:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N6Zd5xpaqdN4vlxTEvvrAelkLwujZ84ZiZBztMDONo0i7Iiz4mV7xrP7Qep1XWBEJqF2j/bjTd3mFnaeimqkYsVPUEPb1hIspBl3OVq2cG6x6fwyI0gB/LFajCGAxuNamYcI6Cs9T2mbkar7qd6ENUTkR6mvBroAHaXWdB4mh6p+WTQFII5GgrsgVK0Qzv4AxaFVAopAxpDVzLLuvV7HuwrohFkN2lfsJMfJ0U28JiFhjzKFTt/bKsSBlDLWGHOW2ohgzbU4O/eWQFz6S8xBNfLtjE/9zllhZRI4FCRGJOkbJWg7aFHpY7xViF8A/VuTLxAM1RyP7Ost7utyFkaUBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jY2beGmCFAXwKd6f2q05xeG5Y7NhL/3MgjNQXTcjJfw=;
- b=AWkI0bwR6TbK7lyllyHcNOnkqGUegf4ZdxEADonaC4YPHbpHntGta7wht0Sh66APoCSp6GQ823ZeOAjMp68nVE7fEoW1VA7pm4Hd7TskLh4lcFLguOCN4Vwwz0uS35f9w90hy/iTOTD6yPePJdxOAYkIyaTzTohDQUOXonV/PiJw61acg7CXaGzYX6Zx3RZaLVLS91v+5daakNTMFhvK+zZuIkXU/fAB2vNzmiGRQ5AMKDR/U5/ky9xRH2SMRRUU5bQ8RRtDsfhzp2vdhBaBjN/+o7Xk+NbgKYrn/ceL7WnLm9ZOEJZH0Tebf0Kc3+XjIfWTeDBI19cXgg0gppObUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jY2beGmCFAXwKd6f2q05xeG5Y7NhL/3MgjNQXTcjJfw=;
- b=OKv76C7y+EZuNoY+bT9+VkjUftnPQYbEuE0wn2+J0UKlB4LWjMQ7wCUPwGiEWDX0haFqcyr7DEbN13N0dT/KubqChe5CDVHmoL1mOr+x/Mv9AzQHW1WWOFERVT2oRHaDq/ZBeTTNVG00AzLuUvJelR/67eEW52D8rEgxLQ371dQMabB+JBTa/xqCG1WD4tbDpn+BLEYQZ4ORQaLPpEGIS+Sgbrvaw29AT47r1CblkSygzpMgu12cWxXYSns23ECyc7XMlYIdLvO8dH5Ea5NCVDss4IiZiE8htLBytlAG86qy42+9HMypa3mGF7p43rYFg/j+sCrNBm0gjZS5VvLZRQ==
-Received: from AM9PR02MB7010.eurprd02.prod.outlook.com (2603:10a6:20b:266::16)
- by PAXPR02MB7800.eurprd02.prod.outlook.com (2603:10a6:102:223::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Tue, 10 Oct
- 2023 07:24:04 +0000
-Received: from AM9PR02MB7010.eurprd02.prod.outlook.com
- ([fe80::ecb7:be77:2f83:d9f6]) by AM9PR02MB7010.eurprd02.prod.outlook.com
- ([fe80::ecb7:be77:2f83:d9f6%5]) with mapi id 15.20.6863.032; Tue, 10 Oct 2023
- 07:24:04 +0000
-From:   Ms Jacquelyn Mitchard <dousamurai@hotmail.com>
-Subject: Re; contact me to my email: ms.jacquelynmit@hotmail.com
-Thread-Topic: Re; contact me to my email: ms.jacquelynmit@hotmail.com
-Thread-Index: AQHZ+0q/imRVcp1TrE+c7eqF5l/aZw==
-Date:   Tue, 10 Oct 2023 07:24:03 +0000
-Message-ID: <AM9PR02MB7010634FC293F4B4348D3787C1CDA@AM9PR02MB7010.eurprd02.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [gquoouuIa6guRQHGQl+RihmnUNM8WVoP]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR02MB7010:EE_|PAXPR02MB7800:EE_
-x-ms-office365-filtering-correlation-id: ec05ee4a-3ad4-45ce-b01a-08dbc961e1bd
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RKmbBSflJ7T/QdcuOa9T1cpgpL1AP5thYijpwy5RVIrMLUavlJ7tRQqgZ0bN9fPIBmclK4gf+dNG/H9dC12x4WcWVKUTQKhCOIqUI9CaV2ct724MZw7gt+zKUktbsiR4H2vD9nb04n2tDFLqgXvFJud/5fQb3WM41OCj+yMy6JGm+mWvk5lnz2G/VUYz2VfAdXdM2wKnnfaKasGdX8PU9EAr6XtDGYLePITui1Ho63kJkYkp4p7tH1x7LyAAHA/fBOjAuA9GXbwtOdHn7ut2QwJYZ+I8cFoKsT/J/J8QVUMNpuAkLk1E9AREcjTRTLbMKBcPg4u8WjpZGNLPxZFSpfo+ZpvAT48WdGzlV2biLiGvPGr55i+DSwjx8WUoZAU4c4akRySHYiN+4Gkw+SJQ9G/nR+28r++3VdTqYu4o1IZqoz9VANdXnIXfDjUUqI8LrE2Gl00/SQV+Md5X7etilsjUyM0anq6vdENVzIQaQZK7fzwwU1Fk0OkQQNiDCW0TbnfNkmYzk7ZqXt5y38ko5PShnGuBJ1NOKn35PmyV4UCIQn7ls3WxWXSt8yvn93ZQ
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?GkbZK93eLCv/XaJAXHUOvshooR3EnLOuSXGsW+9NUzUrr4GDtXj+uvc2f4?=
- =?iso-8859-1?Q?2/B1Z1p6DrcV0Jhws1TBs4AKfg+DLayb2Pdbefzc+MDMfSMdTm+rszWbNc?=
- =?iso-8859-1?Q?08Jc1p0MVY6lbIcNosXFmZvkRPMVUhl4HCmeKysNG7qrS1Rw0V7BYut5s1?=
- =?iso-8859-1?Q?57MvBnQPxRsB4qayuB+uuHF9fsxPPZ9aQvHm1vGGnMWUvoSzvWcrk2/lWY?=
- =?iso-8859-1?Q?TbaATP7B3zq7X5eweIbBDhIWDk5WxtaP1pcZZrTsd33U0OfZNwkxexlx/+?=
- =?iso-8859-1?Q?122FWxkaKKaa0AaSwsT9TBbamVKYnyxZt7j256BwVeVFOiQSjgXcjKoYm0?=
- =?iso-8859-1?Q?4AM5kt1BUlrZkNog8giB01sA94wkXCTvLPUuFTiKrfTezdg7JVMVmt5Bs0?=
- =?iso-8859-1?Q?OzkOk1FOei5jw8dNCc0DiWgfDga23lPmG5lZB0KR5dCoQ+bWnZanjLMbYj?=
- =?iso-8859-1?Q?z5djOHB5a2My/Yvn490LJsVNPlQ7sZvs5AjgKKSqmDa7o1Lwv9HdwT/X1d?=
- =?iso-8859-1?Q?N0vJ6fAG+mggGx/kvD3URj2xPMyPmFGYQ/gUYrZaF1IDhZ3XpsIVPuSS0R?=
- =?iso-8859-1?Q?h050n/mZa12s/9GWvGYy3K/E9MpqPvJGZ36Qk3nAoP0Ss7khrLK81B4+Nk?=
- =?iso-8859-1?Q?+lcnttAuo3rLzyIGzSNfokIQffxAGnTzsL00VyS1Wzk2jzWKPZuDqfUBLO?=
- =?iso-8859-1?Q?iQvdX1VSVjZqx9TR9HakwC9xn+yc+6lNOk0/HRrH6/dH4T7hAWORwUoW+n?=
- =?iso-8859-1?Q?K/SwjpkHSOlXo4CPwgEBsTDTFgavAwIhKQmnlo+ykCqKRqnguBrKmTWYjA?=
- =?iso-8859-1?Q?7QdTsV1aSdhyM6H0Zr2zLV/EY8WWks5HYHXaEIYy2KUzxDcK5vzCdnnkFU?=
- =?iso-8859-1?Q?/bim+obUQIKgr9Rx1iz36BPQT78xzAfdbui/bSGB7lAgn9S3EctiRABknw?=
- =?iso-8859-1?Q?n/b9Wa3yL5QyzGGcDaH0Isvj2rN3NIk7wWI56SCL96BtdRvpvvVuslSKii?=
- =?iso-8859-1?Q?Sv447S061pCLSShDWLOi9Dcl6YO5o1eenkChD13JfhX6LoT34V8LipAwd8?=
- =?iso-8859-1?Q?vWh1mSy36LniEoRmhY8nAtv09jGh7SJPCmtT+dw2HyW+sVUusN4BP9wbUv?=
- =?iso-8859-1?Q?xDue7er4/QN1IzklB+krvdYPUx//ZT+62tqa82siabXASXXx72NVmu6Z4m?=
- =?iso-8859-1?Q?//ckYZW9IolwtQsAMv9rwe0d1jZN0UnA7BksX7XktARPd8XNTlIFm8+eOx?=
- =?iso-8859-1?Q?Cj2Jw7vcWq2MPvUEYRCQ=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S235228AbjJLFFd (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 12 Oct 2023 01:05:33 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB6890;
+        Wed, 11 Oct 2023 22:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697087132; x=1728623132;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=qAqfjH4EeTiWuaON92xe5Ip4YWDBD4AvbFVckiNoGcs=;
+  b=h/GgI+PdFp/Y/bnhHOuHXxjEk0/nGWMGwZCDNji5f5wZ7trSrsLzGGXk
+   gCU+p96bvuKOGuQN0GBZK+PqJDxaWuRZmNRwbsSBWZXOKLKHfDExWUxE7
+   ThOPuDJF/mwOKaElcxwugs/D+n0HkczgzdGOke4tSbQ3zKGJ89Oe+HBjm
+   DZcr0D4Ex1pVda+H15R4as7oe+a9/4x+E7pm75tmIMoc7d74DZ6Ik/Yfh
+   VWdzMhklCXCA8SQvE+Vku6e8MO1y8w0rHwOu/+QjLmNgPHNQIGL6h5FcS
+   LazqihB8E92Zr3eRh3wSeRKxX86yo5un0eOO+oHSB0ax8i5Jztp3AL3rb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="382073058"
+X-IronPort-AV: E=Sophos;i="6.03,217,1694761200"; 
+   d="scan'208";a="382073058"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 22:05:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="870418848"
+X-IronPort-AV: E=Sophos;i="6.03,217,1694761200"; 
+   d="scan'208";a="870418848"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Oct 2023 22:05:30 -0700
+Date:   Thu, 12 Oct 2023 13:04:34 +0800
+From:   Xu Yilun <yilun.xu@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: altera-ps-spi: Use spi_get_device_match_data()
+Message-ID: <ZSd+YgDbS5L7jNPJ@yilunxu-OptiPlex-7050>
+References: <20231006224624.444857-1-robh@kernel.org>
+ <ZSEMLQS+9gFEAX89@yilunxu-OptiPlex-7050>
+ <ZSEO5NrJl/kxd7LG@yilunxu-OptiPlex-7050>
+ <CAL_JsqKB4gqT06NnWj0Qkd0TuryYA15tjMSom1f+dMJfevy2Zw@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-bcc80.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR02MB7010.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec05ee4a-3ad4-45ce-b01a-08dbc961e1bd
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Oct 2023 07:24:03.8823
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR02MB7800
-X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        MISSING_HEADERS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqKB4gqT06NnWj0Qkd0TuryYA15tjMSom1f+dMJfevy2Zw@mail.gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-=0A=
-=0A=
-=0A=
-Hello,=0A=
-=0A=
-My name is Ms Jacquelyn Mitchard, a banker by profession. I apologize=0A=
-for contacting you in this manner but the situation at hand demands=0A=
-urgent attention from presumed beneficiary. I have an important=0A=
-subject to share with you, regarding late customer fund's=0A=
-domicile in our bank.=0A=
-=0A=
-Kindly contact me to my email: ms.jacquelynmit@hotmail.com=0A=
-for more detailed information.=0A=
-=0A=
-Thanks=0A=
-Ms Jacq.=
+On Mon, Oct 09, 2023 at 07:48:07AM -0500, Rob Herring wrote:
+> On Sat, Oct 7, 2023 at 2:56 AM Xu Yilun <yilun.xu@linux.intel.com> wrote:
+> >
+> > On Sat, Oct 07, 2023 at 03:43:41PM +0800, Xu Yilun wrote:
+> > > On Fri, Oct 06, 2023 at 05:46:24PM -0500, Rob Herring wrote:
+> > > > Use preferred spi_get_device_match_data() instead of of_match_device() and
+> > > > spi_get_device_id() to get the driver match data. With this, adjust the
+> > > > includes to explicitly include the correct headers.
+> > > >
+> > > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > >
+> > > Acked-by: Xu Yilun <yilun.xu@intel.com>
+> > >
+> > > Applied.
+> > >
+> > > >
+> > > >  static const struct spi_device_id altera_ps_spi_ids[] = {
+> > > > -   { "cyclone-ps-spi", CYCLONE5 },
+> > > > -   { "fpga-passive-serial", CYCLONE5 },
+> > > > -   { "fpga-arria10-passive-serial", ARRIA10 },
+> > > > +   { "cyclone-ps-spi", (uintptr_t)&c5_data },
+> > > > +   { "fpga-passive-serial", (uintptr_t)&c5_data },
+> > > > +   { "fpga-arria10-passive-serial", (uintptr_t)&a10_data },
+> >
+> > Sorry, one more. Should cast to kernel_ulong_t?
+> 
+> Either will work. uintptr_t is somewhat new in the kernel and
+> preferred now I think.
+
+LGTM, Applied.
+
+> 
+> Rob
