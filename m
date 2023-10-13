@@ -2,83 +2,72 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90D47C76A4
-	for <lists+linux-fpga@lfdr.de>; Thu, 12 Oct 2023 21:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF5A7C81B9
+	for <lists+linux-fpga@lfdr.de>; Fri, 13 Oct 2023 11:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344140AbjJLTWA (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 12 Oct 2023 15:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S230160AbjJMJNw (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 13 Oct 2023 05:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjJLTV7 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 12 Oct 2023 15:21:59 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C57AB7;
-        Thu, 12 Oct 2023 12:21:58 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF8BC433C8;
-        Thu, 12 Oct 2023 19:21:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697138517;
-        bh=wmAcJHNXIbXS2mL72Nqv5JNfiEX38pTlqswII+cQDeI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Iz6QB+RKMbsnELvBdNMZG0SFsuTbIWHMTTnVZDSIalACMaPtvi879bZbZwXYfeMGo
-         /XTjW8VC/5kZW2VoeS6Q+G8OWZza5GZpYBy/YZyQhV+CnclGYbjPuVEqax02ZmbhCh
-         jhXvfznEk8pPvBGPs8FlqueqYX5RCi/ULIAv9qBF0+PP0jFPIkyfCu71xRTB2kipv+
-         8dJNKcOZOTUzlmMiR6S8QWaiXq+iEfv5c/LFFYvqmXUDFQdgH5p85wwu+Ctk4rHcxk
-         GkWrLd749DW7MQrHoLGYJZHLefVMcwvJAhUPBSSEzQxA6onub4ZRqF6G5Vc3SsXPS9
-         FRBGxkiIZuEgA==
-Received: (nullmailer pid 1546513 invoked by uid 1000);
-        Thu, 12 Oct 2023 19:21:55 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Michal Simek <michal.simek@amd.com>
-Cc:     kernel test robot <lkp@intel.com>, linux-fpga@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] fpga: xilinx-pr-decoupler: Fix unused xlnx_pr_decoupler_of_match warning for !CONFIG_OF
-Date:   Thu, 12 Oct 2023 14:21:48 -0500
-Message-ID: <20231012192149.1546368-1-robh@kernel.org>
-X-Mailer: git-send-email 2.42.0
+        with ESMTP id S229921AbjJMJNu (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 13 Oct 2023 05:13:50 -0400
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E2A95;
+        Fri, 13 Oct 2023 02:13:45 -0700 (PDT)
+Received: from unicom146.biz-email.net
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id JLB00035;
+        Fri, 13 Oct 2023 17:13:35 +0800
+Received: from localhost.localdomain (10.94.11.7) by
+ jtjnmail201621.home.langchao.com (10.100.2.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Fri, 13 Oct 2023 17:13:33 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>
+CC:     <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] fpga: stratix10-soc: Fix double word in comments
+Date:   Fri, 13 Oct 2023 05:13:27 -0400
+Message-ID: <20231013091327.3382-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.94.11.7]
+X-ClientProxiedBy: Jtjnmail201615.home.langchao.com (10.100.2.15) To
+ jtjnmail201621.home.langchao.com (10.100.2.21)
+tUid:   2023101317133605d075ae4fa25beb7c39785e3198e508
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Commit 8c966aadcc02 ("fpga: Use device_get_match_data()") dropped the
-unconditional use of xlnx_pr_decoupler_of_match resulting in this
-warning:
+Remove the repeated word "if" in comments.
 
-drivers/fpga/xilinx-pr-decoupler.c:94:34: warning: unused variable 'xlnx_pr_decoupler_of_match' [-Wunused-const-variable]
-
-The fix is to drop of_match_ptr() which is not necessary because DT is
-always used for this driver.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202310100247.Y7BFcalX-lkp@intel.com/
-Signed-off-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Bo Liu <liubo03@inspur.com>
 ---
- drivers/fpga/xilinx-pr-decoupler.c | 2 +-
+ drivers/fpga/stratix10-soc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-index 0c012d0f616d..68835896f180 100644
---- a/drivers/fpga/xilinx-pr-decoupler.c
-+++ b/drivers/fpga/xilinx-pr-decoupler.c
-@@ -167,7 +167,7 @@ static struct platform_driver xlnx_pr_decoupler_driver = {
- 	.remove = xlnx_pr_decoupler_remove,
- 	.driver = {
- 		.name = "xlnx_pr_decoupler",
--		.of_match_table = of_match_ptr(xlnx_pr_decoupler_of_match),
-+		.of_match_table = xlnx_pr_decoupler_of_match,
- 	},
- };
+diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+index cacb9cc5757e..a8f632fc8350 100644
+--- a/drivers/fpga/stratix10-soc.c
++++ b/drivers/fpga/stratix10-soc.c
+@@ -286,7 +286,7 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
  
+ 	/*
+ 	 * Loop waiting for buffers to be returned.  When a buffer is returned,
+-	 * reuse it to send more data or free if if all data has been sent.
++	 * reuse it to send more data or free if all data has been sent.
+ 	 */
+ 	while (count > 0 || s10_free_buffer_count(mgr) != NUM_SVC_BUFS) {
+ 		reinit_completion(&priv->status_return_completion);
 -- 
-2.42.0
+2.27.0
 
