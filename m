@@ -2,110 +2,120 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A817C824D
-	for <lists+linux-fpga@lfdr.de>; Fri, 13 Oct 2023 11:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CAD7C8690
+	for <lists+linux-fpga@lfdr.de>; Fri, 13 Oct 2023 15:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbjJMJhS (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Fri, 13 Oct 2023 05:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S231293AbjJMNQJ (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 13 Oct 2023 09:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjJMJhR (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Fri, 13 Oct 2023 05:37:17 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9593795;
-        Fri, 13 Oct 2023 02:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697189836; x=1728725836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UrEbenIXGfNrxoFbHyeBMYdN4ubBHqzWO0s1RMba6Ds=;
-  b=SH5Yy4Gj2lDIlEyVDxm3dcAib8WO/TF9YLxoScC1hU3cnIwzJSBz8+jg
-   wFWo/Z1pfcgh6Ebvwskyr/3CQznApHXnKV0+tRfyWIxJyWWaZFqpirIev
-   rZRNQoUi9gZB+XOD/9UfdwRk+JNjhWimwbvWiXYiZ1kMEfVSLjq1DwfKZ
-   VsZ4svv4U6S4wJaUiOzAm0qAghe8j3jXjIyDhOII/Y5mmIzTBb+FA7C0C
-   7oc/TPNUz5XPsP/CKhjVroiNihctu1XsZhPjYy2Nadj49ooY40MPU+5Zf
-   59tEfm4yVWrGkUrDLTIhluUFFbeKMRLikqlLtoCs3nzmm4glzpVRZ9Bt9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="364506756"
-X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="364506756"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 02:37:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="928352273"
-X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="928352273"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga005.jf.intel.com with ESMTP; 13 Oct 2023 02:37:11 -0700
-Date:   Fri, 13 Oct 2023 17:36:13 +0800
-From:   Xu Yilun <yilun.xu@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>
+        with ESMTP id S231590AbjJMNQH (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 13 Oct 2023 09:16:07 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC49B91;
+        Fri, 13 Oct 2023 06:16:06 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52048C433C9;
+        Fri, 13 Oct 2023 13:16:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697202966;
+        bh=AeyLxzVXp4snQoUowgdXYGOaSazywtRR9uBrWP/FXDg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FbFN9cK7+7/w/muL8+KXexz1HLGb3n6ZTN9qmc/GyDP6LNOA50t0/CsYdbXZtt6ao
+         8PjCBQobr+sYezwCxR77wktQt2zJruVXxS/Kid27wolCLAlsVeYPgRW8qkv/4G6sNU
+         OXygYsgXKGQGH6Ycf+DbdZOUnsO+KUlxibmP38KCYz6KEtVZdCxsREn/Z4QfkzuUqs
+         Uc/v8bkDRpA/qEiOPfyTswyPHld5ZyK80iYD/xA41tU9iy5ac3/yetBzo+RJozY4V5
+         XYeTWLg9qEsjyhkTv+BgLpG9WWT+yqw+tx7rhty1xtKfSvIuST22+X6NSrZx2vm/8q
+         cGSu9brb7srPg==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5041d6d8b10so2814546e87.2;
+        Fri, 13 Oct 2023 06:16:06 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwaoOVgLnYvvsLhUKIWZ+TavAbXigZRsbvnUX3MrB4yOrk9kzLp
+        vUtb2E0+wI5+GRqzYEs9BCSKdRhKG+MOQJUemA==
+X-Google-Smtp-Source: AGHT+IF5wN1WRycCZTTLhq1TMC9nlzoXrbnKcsIup2bCQrX2FztreQWlk5fXuvhjl7rkoOJE0TWx+nh4lFUZa/AtE0k=
+X-Received: by 2002:a05:6512:3f4:b0:504:7dc9:671a with SMTP id
+ n20-20020a05651203f400b005047dc9671amr18824302lfq.69.1697202964533; Fri, 13
+ Oct 2023 06:16:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231012192149.1546368-1-robh@kernel.org> <ZSkPjRp/xPfVQ/NB@yilunxu-OptiPlex-7050>
+In-Reply-To: <ZSkPjRp/xPfVQ/NB@yilunxu-OptiPlex-7050>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 13 Oct 2023 08:15:51 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLHKTQi0i-V4C5UA6WJjnMeen0WR4jjcA4YSRXOYZOrZA@mail.gmail.com>
+Message-ID: <CAL_JsqLHKTQi0i-V4C5UA6WJjnMeen0WR4jjcA4YSRXOYZOrZA@mail.gmail.com>
+Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: Fix unused xlnx_pr_decoupler_of_match
+ warning for !CONFIG_OF
+To:     Xu Yilun <yilun.xu@linux.intel.com>
 Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
         Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
         Michal Simek <michal.simek@amd.com>,
         kernel test robot <lkp@intel.com>,
         linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: Fix unused
- xlnx_pr_decoupler_of_match warning for !CONFIG_OF
-Message-ID: <ZSkPjRp/xPfVQ/NB@yilunxu-OptiPlex-7050>
-References: <20231012192149.1546368-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231012192149.1546368-1-robh@kernel.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Oct 12, 2023 at 02:21:48PM -0500, Rob Herring wrote:
-> Commit 8c966aadcc02 ("fpga: Use device_get_match_data()") dropped the
+On Fri, Oct 13, 2023 at 4:37=E2=80=AFAM Xu Yilun <yilun.xu@linux.intel.com>=
+ wrote:
+>
+> On Thu, Oct 12, 2023 at 02:21:48PM -0500, Rob Herring wrote:
+> > Commit 8c966aadcc02 ("fpga: Use device_get_match_data()") dropped the
+>
+> Hi rob:
+>
+> Unfortunately I re-applied Commit 8c966aadcc02 and the previous commit
+> id is lost.
+>
+> Since the 2 patches are not upstreamed yet, could I just merge them into
+> one?
 
-Hi rob:
+Yes, that's fine.
 
-Unfortunately I re-applied Commit 8c966aadcc02 and the previous commit
-id is lost.
+Rob
 
-Since the 2 patches are not upstreamed yet, could I just merge them into
-one?
-
-Thanks,
-Yilun
-
-> unconditional use of xlnx_pr_decoupler_of_match resulting in this
-> warning:
-> 
-> drivers/fpga/xilinx-pr-decoupler.c:94:34: warning: unused variable 'xlnx_pr_decoupler_of_match' [-Wunused-const-variable]
-> 
-> The fix is to drop of_match_ptr() which is not necessary because DT is
-> always used for this driver.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202310100247.Y7BFcalX-lkp@intel.com/
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  drivers/fpga/xilinx-pr-decoupler.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-> index 0c012d0f616d..68835896f180 100644
-> --- a/drivers/fpga/xilinx-pr-decoupler.c
-> +++ b/drivers/fpga/xilinx-pr-decoupler.c
-> @@ -167,7 +167,7 @@ static struct platform_driver xlnx_pr_decoupler_driver = {
->  	.remove = xlnx_pr_decoupler_remove,
->  	.driver = {
->  		.name = "xlnx_pr_decoupler",
-> -		.of_match_table = of_match_ptr(xlnx_pr_decoupler_of_match),
-> +		.of_match_table = xlnx_pr_decoupler_of_match,
->  	},
->  };
->  
-> -- 
-> 2.42.0
-> 
+>
+> Thanks,
+> Yilun
+>
+> > unconditional use of xlnx_pr_decoupler_of_match resulting in this
+> > warning:
+> >
+> > drivers/fpga/xilinx-pr-decoupler.c:94:34: warning: unused variable 'xln=
+x_pr_decoupler_of_match' [-Wunused-const-variable]
+> >
+> > The fix is to drop of_match_ptr() which is not necessary because DT is
+> > always used for this driver.
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202310100247.Y7BFcalX-lkp=
+@intel.com/
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  drivers/fpga/xilinx-pr-decoupler.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-p=
+r-decoupler.c
+> > index 0c012d0f616d..68835896f180 100644
+> > --- a/drivers/fpga/xilinx-pr-decoupler.c
+> > +++ b/drivers/fpga/xilinx-pr-decoupler.c
+> > @@ -167,7 +167,7 @@ static struct platform_driver xlnx_pr_decoupler_dri=
+ver =3D {
+> >       .remove =3D xlnx_pr_decoupler_remove,
+> >       .driver =3D {
+> >               .name =3D "xlnx_pr_decoupler",
+> > -             .of_match_table =3D of_match_ptr(xlnx_pr_decoupler_of_mat=
+ch),
+> > +             .of_match_table =3D xlnx_pr_decoupler_of_match,
+> >       },
+> >  };
+> >
+> > --
+> > 2.42.0
+> >
