@@ -2,98 +2,106 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25F07C9DB0
-	for <lists+linux-fpga@lfdr.de>; Mon, 16 Oct 2023 05:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 443D17CC6F2
+	for <lists+linux-fpga@lfdr.de>; Tue, 17 Oct 2023 17:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjJPDTC (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 15 Oct 2023 23:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
+        id S1343953AbjJQPCN (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 17 Oct 2023 11:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjJPDTB (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 15 Oct 2023 23:19:01 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DA1C5;
-        Sun, 15 Oct 2023 20:19:00 -0700 (PDT)
+        with ESMTP id S1343644AbjJQPCM (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 17 Oct 2023 11:02:12 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B649F0
+        for <linux-fpga@vger.kernel.org>; Tue, 17 Oct 2023 08:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697426340; x=1728962340;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=fcUG58giWoEKU3oiVPmtUtFpvJmOfLyRlGKMLMYYUw0=;
-  b=EMtuULL9t2117FxPLXwjEhlKQ/p3+6nWEpHnPU3BQi9CUgKFc/K0Lomn
-   mNY3a64QiM15/dg8HaoR5BgrO2P5f7Z11Pnb4MMCdVpTM13Uy4nYI7yIo
-   +rlZ2Ep/jf2868yu3tXw02bdCnGvGT0ZWi4RYQdhljOJfLUP67qdk50jy
-   gJz1kDz5eEpFJDtL0VmMdRYBVnF24WRPZ0AHgTb3b+LROmpYUmvbHkXyj
-   e+6t7Qg3sSRNrglac+WvfgpxsmvIe67A4TMwX7hK1uuwxb8sUp0+Hi8Fj
-   HbC9wI8NA/iKpCq/CqLnDbC8KYiKpCaYVGx844FMjuRJ7jUDMDYVuuvWW
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="416504819"
-X-IronPort-AV: E=Sophos;i="6.03,228,1694761200"; 
-   d="scan'208";a="416504819"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2023 20:19:00 -0700
+  t=1697554931; x=1729090931;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ys7o5zFW0EmY2khd07AhUXnZe9JleFOyc+f9QMD00X0=;
+  b=O5OTz6dz6gDh3GDAHh9d661rrdIkZiq4r1k0jcEBuh27ymX4m+ktAG06
+   cGMhto2QRysEVWcBPO0VpEER0qBYEoi+wCMGIiUlpuxgSlcBJmTwfRbDd
+   YPJac4cMsnTRVNvENKA78rjBmqHQti+VjEEF/Yhj7sSo3kfdWjheMOqOn
+   zZTf9Of1bSzKMn/r2b0DTY7eXJowXKmRiivVsACm47xJCtDte//w9bX7M
+   VA5oKnGY+mwwU/7EyI2nCj4DNErDCLUXJ/dWWRH5+5UEhtvVTHku46bE0
+   V3Cp2C7BsFwLtPt8Xek6BTW704ivXxF2l55Kq2QlySorGyES7AXTB8Wxz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="383026172"
+X-IronPort-AV: E=Sophos;i="6.03,232,1694761200"; 
+   d="scan'208";a="383026172"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 08:01:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="929209406"
-X-IronPort-AV: E=Sophos;i="6.03,228,1694761200"; 
-   d="scan'208";a="929209406"
+X-IronPort-AV: E=Sophos;i="6.03,232,1694761200"; 
+   d="scan'208";a="4116321"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga005.jf.intel.com with ESMTP; 15 Oct 2023 20:18:57 -0700
-Date:   Mon, 16 Oct 2023 11:17:55 +0800
+  by fmviesa001.fm.intel.com with ESMTP; 17 Oct 2023 08:01:32 -0700
+Date:   Tue, 17 Oct 2023 23:00:22 +0800
 From:   Xu Yilun <yilun.xu@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Michal Simek <michal.simek@amd.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: Fix unused
- xlnx_pr_decoupler_of_match warning for !CONFIG_OF
-Message-ID: <ZSyrY+hQvR3+fwP5@yilunxu-OptiPlex-7050>
-References: <20231012192149.1546368-1-robh@kernel.org>
- <ZSkPjRp/xPfVQ/NB@yilunxu-OptiPlex-7050>
- <CAL_JsqLHKTQi0i-V4C5UA6WJjnMeen0WR4jjcA4YSRXOYZOrZA@mail.gmail.com>
- <CAL_JsqLuKF3Cnu38F9CY+_yeU8eCBpBBh82_8E6FcoAa_jU=sw@mail.gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     yilun.xu@linux.intel.com, yilun.xu@intel.com,
+        linux-fpga@vger.kernel.org, hao.wu@intel.com, mdf@kernel.org
+Subject: [GIT PULL] FPGA Manager changes for 6.6-final
+Message-ID: <ZS6hhlvjUcqyv8zL@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqLuKF3Cnu38F9CY+_yeU8eCBpBBh82_8E6FcoAa_jU=sw@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Fri, Oct 13, 2023 at 01:36:28PM -0500, Rob Herring wrote:
-> On Fri, Oct 13, 2023 at 8:15 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Fri, Oct 13, 2023 at 4:37 AM Xu Yilun <yilun.xu@linux.intel.com> wrote:
-> > >
-> > > On Thu, Oct 12, 2023 at 02:21:48PM -0500, Rob Herring wrote:
-> > > > Commit 8c966aadcc02 ("fpga: Use device_get_match_data()") dropped the
-> > >
-> > > Hi rob:
-> > >
-> > > Unfortunately I re-applied Commit 8c966aadcc02 and the previous commit
-> > > id is lost.
-> > >
-> > > Since the 2 patches are not upstreamed yet, could I just merge them into
-> > > one?
-> >
-> > Yes, that's fine.
-> 
-> Looks like altera-ps-spi.c also needs the same fix. Do you mind making
-> the same change there?
+The following changes since commit 6465e260f48790807eef06b583b38ca9789b6072:
 
-Fixed & applied.
+  Linux 6.6-rc3 (2023-09-24 14:31:13 -0700)
 
-Thanks,
-Yilun
+are available in the Git repository at:
 
-> 
-> Rob
+  git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga tags/fpga-for-6.6-final
+
+for you to fetch changes up to 6a935361500a21ef11a82814ee66fc58e59813f7:
+
+  fpga: Fix memory leak for fpga_region_test_class_find() (2023-10-12 12:59:29 +0800)
+
+----------------------------------------------------------------
+FPGA Manager changes for 6.6-final
+
+FPGA KUnit test:
+
+- Marco's change fixes null-ptr-deref when try_module_get()
+- Jinjie's change fixes a memory leak issue
+
+Intel m10 bmc secure update:
+
+- Maintainer change from Russ Weight to Peter Colberg
+
+All patches have been reviewed on the mailing list, and have been in the
+last linux-next releases (as part of our fixes branch)
+
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+
+----------------------------------------------------------------
+Jinjie Ruan (1):
+      fpga: Fix memory leak for fpga_region_test_class_find()
+
+Marco Pagani (4):
+      fpga: add helpers for the FPGA KUnit test suites.
+      fpga: add a platform driver to the FPGA Manager test suite
+      fpga: add a platform driver to the FPGA Bridge test suite
+      fpga: add a platform driver to the FPGA Region test suite
+
+Russ Weight (1):
+      fpga: m10bmc-sec: Change contact for secure update driver
+
+ .../testing/sysfs-driver-intel-m10-bmc-sec-update  | 14 +++++------
+ MAINTAINERS                                        |  2 +-
+ drivers/fpga/tests/fpga-bridge-test.c              | 18 +++++++++++++-
+ drivers/fpga/tests/fpga-mgr-test.c                 | 18 +++++++++++++-
+ drivers/fpga/tests/fpga-region-test.c              | 28 +++++++++++++++++----
+ drivers/fpga/tests/fpga-test-helpers.h             | 29 ++++++++++++++++++++++
+ 6 files changed, 94 insertions(+), 15 deletions(-)
+ create mode 100644 drivers/fpga/tests/fpga-test-helpers.h
