@@ -2,161 +2,105 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547AE7CE1BC
-	for <lists+linux-fpga@lfdr.de>; Wed, 18 Oct 2023 17:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935FF7CE30C
+	for <lists+linux-fpga@lfdr.de>; Wed, 18 Oct 2023 18:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbjJRPuu (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Wed, 18 Oct 2023 11:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
+        id S230097AbjJRQjk (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Wed, 18 Oct 2023 12:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbjJRPuq (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Wed, 18 Oct 2023 11:50:46 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7923F132
-        for <linux-fpga@vger.kernel.org>; Wed, 18 Oct 2023 08:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697644244; x=1729180244;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GuJ1f1bjJF6OZ+GE1vLTgaUuXZg46euMxpklR4EiUCs=;
-  b=RwhGrlHxL7LN221jKwyQzsMloAXIjBf9iaaSKUoBKUh479SqK8Tpco3l
-   wdIMPUxX2HT960eCf3ckfKzEjig/hJXMN1OFYv2rxgMHwNmjoCgr06gxN
-   Ucc2HSdcIYlYGKMBEe6zdPHIUwFLVacRc9+AJCAwmE+/plFqLO3M3ODSh
-   VSWvmt0bCiHWLntOFZUkD6P45CA2EUxRgiJcqZf68md9GomVN5mvHqOu2
-   MYVdW1XcUaagmE7mnItAE92KbLNuNbwzRPHlAjEqWeP7GjBYQN2j2SWP1
-   GM+8j8harJd19iv/VPBe/i+nGE5pS7T6IM6mG6NUUCU8n7JN2+YyyHhAs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="365392440"
-X-IronPort-AV: E=Sophos;i="6.03,235,1694761200"; 
-   d="scan'208";a="365392440"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2023 08:50:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="756632306"
-X-IronPort-AV: E=Sophos;i="6.03,235,1694761200"; 
-   d="scan'208";a="756632306"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga002.jf.intel.com with ESMTP; 18 Oct 2023 08:50:41 -0700
-Date:   Wed, 18 Oct 2023 23:49:36 +0800
-From:   Xu Yilun <yilun.xu@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     yilun.xu@intel.com, linux-fpga@vger.kernel.org, hao.wu@intel.com,
-        mdf@kernel.org
-Subject: Re: [GIT PULL] FPGA Manager changes for 6.6-final
-Message-ID: <ZS/+kM3dT2Sg4QkG@yilunxu-OptiPlex-7050>
-References: <ZS6hhlvjUcqyv8zL@yilunxu-OptiPlex-7050>
- <2023101730-budding-spree-1471@gregkh>
- <ZS88oHe8T69/Kks7@yilunxu-OptiPlex-7050>
- <2023101825-ligament-undergrad-cc4d@gregkh>
+        with ESMTP id S229482AbjJRQjj (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Wed, 18 Oct 2023 12:39:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09CCAB
+        for <linux-fpga@vger.kernel.org>; Wed, 18 Oct 2023 09:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1697647130;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oHj6EwFz8BHjW/yggtu6OM4m0PkCRoLlO9ayp66fdYs=;
+        b=Fvuo2dRe6Pnh1E6AzdCNxO8DVWiqZFU3vh1T4w9P9QNvKhuZVLWT90LB2sOktczaQxyYx6
+        MIpoxO+qkataLEhTp3/NE1X5ct9qtAcTDN5KQL0RAs+ClM7zVMRHY8CfSEsOMUVhrXBkzs
+        YUwsLk1t4nPWBpyb9pFvjByVtaJasn8=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-207-ZdhNh5RcPgGLiQVH36mfaQ-1; Wed, 18 Oct 2023 12:38:34 -0400
+X-MC-Unique: ZdhNh5RcPgGLiQVH36mfaQ-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-66d0ceb78cbso76686426d6.1
+        for <linux-fpga@vger.kernel.org>; Wed, 18 Oct 2023 09:38:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697647113; x=1698251913;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oHj6EwFz8BHjW/yggtu6OM4m0PkCRoLlO9ayp66fdYs=;
+        b=EbAYv7YA8f+bWp/68KrcmrHxxvR7QIea/hAwEg8pUodWBAxM30nSM7vm16Bq8zfJLD
+         UAJ1eukim6pAl6tFGBrRv/uFTfzEgQVzeWkpHSrgKymYuOCz2MS1yCOPslKRJdA3GE4u
+         NJ1SH9zPD//gsRedqdtEnzIsemsVWwUtCdlmRrpjU/pVz0cMedG19FSmKHXGD4BEH+Rd
+         4SSUMf8SduT+ohjGhdvAkYRE/RFDXNnwgvaq6DqdSvfT7JJh7ytMabiT0MUkCPhkBJNG
+         9k7VVHnN7WWIBpnlua9SQ1zqyn7LPjpv6qJlYLNVAoXeheWeMxr90kgWwoa6r64f+aXz
+         5Afw==
+X-Gm-Message-State: AOJu0YzcsrLGj+tpiiwBG9m0RQGItKr3q1G2gPWzAhMoGc+tW7T2aKF2
+        jk8oU4/qrkY8AbN6KIYt57taQFa1hEGocImnb/CTCPIkOg1QkeR3l+juJjkIG6H9+efdOXK+5YO
+        wgD29Cxs5YlnIm4IWS+/g
+X-Received: by 2002:ad4:5b8b:0:b0:66d:43fd:f4e4 with SMTP id 11-20020ad45b8b000000b0066d43fdf4e4mr5312163qvp.45.1697647113734;
+        Wed, 18 Oct 2023 09:38:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFRD+Ge85kWm9yZdvPOOqG6RtGusTbEBje3/ErVCbJtUf+gccGOsYnKb7S21qIV56jPHTesKA==
+X-Received: by 2002:ad4:5b8b:0:b0:66d:43fd:f4e4 with SMTP id 11-20020ad45b8b000000b0066d43fdf4e4mr5312147qvp.45.1697647113412;
+        Wed, 18 Oct 2023 09:38:33 -0700 (PDT)
+Received: from klayman.redhat.com (net-2-34-31-107.cust.vodafonedsl.it. [2.34.31.107])
+        by smtp.gmail.com with ESMTPSA id mi1-20020a056214558100b0066d15724ff7sm81896qvb.52.2023.10.18.09.38.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Oct 2023 09:38:33 -0700 (PDT)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] fpga: disable KUnit test suites when module support is enabled
+Date:   Wed, 18 Oct 2023 18:38:13 +0200
+Message-ID: <20231018163814.100803-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023101825-ligament-undergrad-cc4d@gregkh>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Wed, Oct 18, 2023 at 09:50:37AM +0200, Greg KH wrote:
-> On Wed, Oct 18, 2023 at 10:02:08AM +0800, Xu Yilun wrote:
-> > On Tue, Oct 17, 2023 at 07:17:29PM +0200, Greg KH wrote:
-> > > On Tue, Oct 17, 2023 at 11:00:22PM +0800, Xu Yilun wrote:
-> > > > The following changes since commit 6465e260f48790807eef06b583b38ca9789b6072:
-> > > > 
-> > > >   Linux 6.6-rc3 (2023-09-24 14:31:13 -0700)
-> > > > 
-> > > > are available in the Git repository at:
-> > > > 
-> > > >   git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga tags/fpga-for-6.6-final
-> > > > 
-> > > > for you to fetch changes up to 6a935361500a21ef11a82814ee66fc58e59813f7:
-> > > > 
-> > > >   fpga: Fix memory leak for fpga_region_test_class_find() (2023-10-12 12:59:29 +0800)
-> > > > 
-> > > > ----------------------------------------------------------------
-> > > > FPGA Manager changes for 6.6-final
-> > > > 
-> > > > FPGA KUnit test:
-> > > > 
-> > > > - Marco's change fixes null-ptr-deref when try_module_get()
-> > > > - Jinjie's change fixes a memory leak issue
-> > > > 
-> > > > Intel m10 bmc secure update:
-> > > > 
-> > > > - Maintainer change from Russ Weight to Peter Colberg
-> > > > 
-> > > > All patches have been reviewed on the mailing list, and have been in the
-> > > > last linux-next releases (as part of our fixes branch)
-> > > > 
-> > > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > > > 
-> > > > ----------------------------------------------------------------
-> > > > Jinjie Ruan (1):
-> > > >       fpga: Fix memory leak for fpga_region_test_class_find()
-> > > > 
-> > > > Marco Pagani (4):
-> > > >       fpga: add helpers for the FPGA KUnit test suites.
-> > > >       fpga: add a platform driver to the FPGA Manager test suite
-> > > >       fpga: add a platform driver to the FPGA Bridge test suite
-> > > >       fpga: add a platform driver to the FPGA Region test suite
-> > > 
-> > > Why are all of these test suite patches here?  They are not relevant for
-> > > 6.6-final as they do not resolve anything.
-> > 
-> > Maybe the subjects indicate no bug fixing, but they fix null-ptr-deref
-> > issues when modprobe fpga-mgr/bridge/region-test.
-> 
-> That's not obvious, sorry.  So are the tests broken right now so that
-> they don't work at all?
-> 
-> > In fpga-mgr-test, the pdev->dev->driver is not assigned, so when
-> > 
-> >   fpga_mgr_test_get()->try_module_get(dev->parent->driver->owner)
-> 
-> That's a horrible line and should be fixed.  How do you know if a device
-> has a parent, or if that parent has a driver?  You don't, that should be
-> fixed instead.
-> 
-> And module_get on a driver pointer is also never a good idea for other
-> reasons, why is this happening at all?  It shouldn't be needed if the
-> code is set up properly (i.e. the unloading of a driver will handle the
-> shutdown and reference counting properly, no need to try to use module
-> references at all.)
-> 
-> > NULL ptr is referenced.
-> > 
-> > So do fpga-bridge/region-test.
-> > 
-> > Patch #1 adds a common helper to generate a platform driver.
-> 
-> Don't abuse platform devices/drivers like this, this is not a platform
-> device or driver.  If you really want to do this, use a real driver and
-> device, not a platform one please.
-> 
-> > Patch #2/3/4 fix the issues by matching the driver to pdev.
-> > 
-> > See:
-> > Closes: https://lore.kernel.org/linux-fpga/4d51e87f-830a-adae-d6f7-6aed9433fdc6@huawei.com/
-> > Closes: https://lore.kernel.org/linux-fpga/f2b30203-1a67-4533-eddc-b380044e2e68@huawei.com/
-> > Closes: https://lore.kernel.org/linux-fpga/d557b4ee-4b3a-8747-bdda-0ed480212a63@huawei.com/
-> 
-> Want to just disable all of these from the build entirely for now and
-> then fix them up properly for 6.7?
+The fpga core currently assumes that all manager, bridge, and region
+devices have a parent device associated with a driver that can be used
+to take the module's refcount. This behavior causes the fpga test suites
+to crash with a null-ptr-deref since parent fake devices do not have a
+driver. This patch disables all fpga KUnit test suites when loadable
+module support is enabled until the fpga core is fixed. Test suites
+can still be run using the KUnit default UML kernel.
 
-I'm OK this way.
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
+ drivers/fpga/tests/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Macro, could you send a patch to Greg for diabling them? And let's do
-proper fix up in FPGA core for 6.7.
+diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
+index e4a64815f16d..d4e55204c092 100644
+--- a/drivers/fpga/tests/Kconfig
++++ b/drivers/fpga/tests/Kconfig
+@@ -1,6 +1,6 @@
+ config FPGA_KUNIT_TESTS
+-	tristate "KUnit test for the FPGA subsystem" if !KUNIT_ALL_TESTS
+-	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT=y
++	bool "KUnit test for the FPGA subsystem" if !KUNIT_ALL_TESTS
++	depends on FPGA=y && FPGA_REGION=y && FPGA_BRIDGE=y && KUNIT=y && MODULES=n
+ 	default KUNIT_ALL_TESTS
+         help
+           This builds unit tests for the FPGA subsystem
+-- 
+2.41.0
 
-Thanks,
-Yilun
-
-> 
-> thanks,
-> 
-> greg k-h
