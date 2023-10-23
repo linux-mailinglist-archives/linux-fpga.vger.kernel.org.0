@@ -2,59 +2,52 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEAA57D068E
-	for <lists+linux-fpga@lfdr.de>; Fri, 20 Oct 2023 04:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090A07D291A
+	for <lists+linux-fpga@lfdr.de>; Mon, 23 Oct 2023 05:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235587AbjJTCjt (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 19 Oct 2023 22:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S233315AbjJWDap (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Sun, 22 Oct 2023 23:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235581AbjJTCjt (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 19 Oct 2023 22:39:49 -0400
+        with ESMTP id S233345AbjJWDaX (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Sun, 22 Oct 2023 23:30:23 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4AC124;
-        Thu, 19 Oct 2023 19:39:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADC910C8;
+        Sun, 22 Oct 2023 20:30:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697769588; x=1729305588;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=etfoBUI+RIl0nB/b1xlmfwQfjInOYn8Ns5BsaA0hVE0=;
-  b=VkV071Ac7j9RR07FWXqUyEPH4foUFk7rqJy5rH3/EYLrYTZnXG45yrzD
-   nDu97lSWEExdyzw9RCz3pRHUptCJXOIwXTFhCRjHb8wr6exKZXoelrW6i
-   FYY9Tk+BOLQT8ql+c63IxOx9LyH/eZCKa/Tra8jHnYWBQCdmQhkk6mAst
-   b8HUmac+MCPj9PpGhKRGrEBnFPP6LsETS/X7urNi0XAcHhDzi+Mkp+bAZ
-   qZ85I5TrQOO237K4n1voCG0Y6A4/6Xj1t8NorZkA1tcd4lRj9VN7Bg4DK
-   yJGjpL+5Amgarfjqw1ab/LJaJjOm5tb4lOF3Z09G8Z0arYHpizaVy9HaT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="5025590"
-X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="5025590"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2023 19:39:47 -0700
+  t=1698031811; x=1729567811;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TzAs4WqG+fJiSTBAokWdOF+N9p7/TQYUdpoHehE7fZ8=;
+  b=XD3gMSF+6qfwW3ICwuGTPAi3HBXvqbbhD/fBIihhu1me1AfVH0cpkRkd
+   qQwtxf9GDrTuqt3sdD+XJ8UGwNJyxr+wep6XZSGrLA9YMxIZNDKMxviHb
+   udH+lMqhhwzSL1dA996J8rTV/raKPGAoOSY78khmGbQg5s9+KXGWulXD2
+   uODdYxiTxg1cVuBmjz7LZWhA3dNTjnb8W1sEorVHbASNnZgvP/8aswept
+   AM9mJZL+fIaVa/q204GzfwDNlxUMkae5nrmYRYP5vE7Im0XXmSz/YdyJ7
+   lMaQOOaDXvrPisjqpzH9LHgxpsWXqAaEr2DR5lIOrxWW5LC52X7ueuiYy
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10871"; a="5380104"
+X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
+   d="scan'208";a="5380104"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2023 20:30:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="750761812"
-X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="750761812"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga007.jf.intel.com with ESMTP; 19 Oct 2023 19:39:45 -0700
-Date:   Fri, 20 Oct 2023 10:38:38 +0800
+X-IronPort-AV: E=McAfee;i="6600,9927,10871"; a="881617666"
+X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
+   d="scan'208";a="881617666"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.165])
+  by orsmga004.jf.intel.com with ESMTP; 22 Oct 2023 20:30:08 -0700
 From:   Xu Yilun <yilun.xu@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Marco Pagani <marpagan@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: disable KUnit test suites when module support is
- enabled
-Message-ID: <ZTHoLv4Ttvz4++H/@yilunxu-OptiPlex-7050>
-References: <20231018163814.100803-1-marpagan@redhat.com>
- <ZTFBi7vfmEpR9TB0@yilunxu-OptiPlex-7050>
- <2023101924-hunk-conjuror-2d35@gregkh>
+To:     gregkh@linuxfoundation.org
+Cc:     hao.wu@intel.com, mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yilun.xu@intel.com
+Subject: [RESEND PATCH 0/2] FPGA Remaining fix patches for 6.6-final
+Date:   Mon, 23 Oct 2023 11:28:55 +0800
+Message-Id: <20231023032857.902699-1-yilun.xu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023101924-hunk-conjuror-2d35@gregkh>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -64,38 +57,29 @@ Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Oct 19, 2023 at 07:33:08PM +0200, Greg KH wrote:
-> On Thu, Oct 19, 2023 at 10:47:39PM +0800, Xu Yilun wrote:
-> > On Wed, Oct 18, 2023 at 06:38:13PM +0200, Marco Pagani wrote:
-> > > The fpga core currently assumes that all manager, bridge, and region
-> > > devices have a parent device associated with a driver that can be used
-> > > to take the module's refcount. This behavior causes the fpga test suites
-> > > to crash with a null-ptr-deref since parent fake devices do not have a
-> > > driver. This patch disables all fpga KUnit test suites when loadable
-> > > module support is enabled until the fpga core is fixed. Test suites
-> > > can still be run using the KUnit default UML kernel.
-> > > 
-> > > Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> > 
-> > LGTM, I've tested on my machine.
-> > 
-> > Acked-by: Xu Yilun <yilun.xu@intel.com>
-> > 
-> > Hi Greg:
-> > 
-> > Could you help review and pull it in for 6.6-final if it's OK.
-> > 
-> > https://lore.kernel.org/linux-fpga/2023101825-ligament-undergrad-cc4d@gregkh/
-> 
-> Needs a "Fixes:" tag please, you can provide it here in this email
-> thread and b4 will pick it up automatically for me.
+Hi Greg:
 
-Fixes: ccbc1c302115 ("fpga: add an initial KUnit suite for the FPGA Manager")
+We have settled the issue of some patches in FPGA pull request for
+6.6-final.
+https://lore.kernel.org/all/2023101924-hunk-conjuror-2d35@gregkh/
 
-Thanks,
-Yilun
+There are 2 more patches which seem OK but not get pulled in this pull
+request.
+https://lore.kernel.org/all/2023101730-budding-spree-1471@gregkh/
 
-> 
-> thanks,
-> 
-> greg k-h
+Could you help review and merge?
+
+Jinjie Ruan (1):
+  fpga: Fix memory leak for fpga_region_test_class_find()
+
+Russ Weight (1):
+  fpga: m10bmc-sec: Change contact for secure update driver
+
+ .../testing/sysfs-driver-intel-m10-bmc-sec-update  | 14 +++++++-------
+ MAINTAINERS                                        |  2 +-
+ drivers/fpga/tests/fpga-region-test.c              |  2 ++
+ 3 files changed, 10 insertions(+), 8 deletions(-)
+
+-- 
+2.25.1
+
