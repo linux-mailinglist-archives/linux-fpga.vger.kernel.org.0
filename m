@@ -2,147 +2,60 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080CB7D2917
-	for <lists+linux-fpga@lfdr.de>; Mon, 23 Oct 2023 05:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B77DB7D49D0
+	for <lists+linux-fpga@lfdr.de>; Tue, 24 Oct 2023 10:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233290AbjJWDax (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Sun, 22 Oct 2023 23:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S233662AbjJXIQA (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Tue, 24 Oct 2023 04:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233353AbjJWDaY (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Sun, 22 Oct 2023 23:30:24 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A517C10D3;
-        Sun, 22 Oct 2023 20:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698031815; x=1729567815;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KyMoHWShCcyV3MRbZKpVC/E1DYBRT6LqwzkBXptqrAo=;
-  b=MVYBsTvjipWSPUfEAWKwEazuwuFGsD9t8K10AxLyA567jfWDB0D2+rnb
-   4qndguMndfcI8U+nOsc700nL0kRL+3tn4EUVpfYflNSMKzQVXij6Fhn0M
-   cSjQbYCQCrRaovgoZi9bnOoKV+ZKjEyiFCL9xlRl9k9LU+kwl742LIjVe
-   UVAK/oxeax8xlOdQ0FZ48jzOm/SJOERgHgIWpDqnF5TKGRUjz1YUIklJo
-   n3hQxii/pOxwVbwpuOqBvZCPido/E1OgiFDropS5OIkdyVgA4YBLaZx8t
-   xA7Bjsn+4vEmq3jSq+TXyzZgo8HqJ5eQRxMfuqJcYDm11g8zlm0v1WDcp
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10871"; a="5380110"
-X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
-   d="scan'208";a="5380110"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2023 20:30:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10871"; a="881617680"
-X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
-   d="scan'208";a="881617680"
-Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.165])
-  by orsmga004.jf.intel.com with ESMTP; 22 Oct 2023 20:30:13 -0700
-From:   Xu Yilun <yilun.xu@linux.intel.com>
-To:     gregkh@linuxfoundation.org
-Cc:     hao.wu@intel.com, mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yilun.xu@intel.com
-Subject: [RESEND PATCH 2/2] fpga: Fix memory leak for fpga_region_test_class_find()
-Date:   Mon, 23 Oct 2023 11:28:57 +0800
-Message-Id: <20231023032857.902699-3-yilun.xu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231023032857.902699-1-yilun.xu@linux.intel.com>
-References: <20231023032857.902699-1-yilun.xu@linux.intel.com>
+        with ESMTP id S233668AbjJXIP7 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Tue, 24 Oct 2023 04:15:59 -0400
+Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98D9D7C
+        for <linux-fpga@vger.kernel.org>; Tue, 24 Oct 2023 01:15:55 -0700 (PDT)
+Received: by mail.citycodes.pl (Postfix, from userid 1001)
+        id 8665921709; Tue, 24 Oct 2023 10:15:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
+        t=1698135354; bh=fClkhHu/p6gIm8tbpvFwCqGX3kXIMdqjiuDdSiYGEkk=;
+        h=Date:From:To:Subject:From;
+        b=d3e43e6OKcNH4qASflt9mEDRSbPXKF6wvxP4wna3J+Z8SqaIinETG5/hgJHBD+CZm
+         +xJQxZpSTOWseghDxwc4wyjKiA5SXI+9X9e8LONn6PwIrAewePalUr3bLzf12WXap3
+         MGIXhuH/9RFkMruLQHyTQj9LprAODlIBEzWhX4CwlN6K8E618bksv0rGyRvIau0BvO
+         mgN25EgEoQMEkzyWjFFPeYaCM7Q8JQO2SOabtm5Wpsg7XVF645fe6nlAhQ2CLS4n8+
+         Et34GjMygrzQZSC/MsPI/ayMR0ondYVr1qOuX6XIRVh6l1UpOg+Jpg49AvfWJf6QVd
+         PiKa92ROWtt1A==
+Received: by mail.citycodes.pl for <linux-fpga@vger.kernel.org>; Tue, 24 Oct 2023 08:15:29 GMT
+Message-ID: <20231024084500-0.1.8a.l8t5.0.sr94gg20q9@citycodes.pl>
+Date:   Tue, 24 Oct 2023 08:15:29 GMT
+From:   "Kamil Lasek" <kamil.lasek@citycodes.pl>
+To:     <linux-fpga@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.citycodes.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-From: Jinjie Ruan <ruanjinjie@huawei.com>
+Dzie=C5=84 dobry,
 
-fpga_region_class_find() in fpga_region_test_class_find() will call
-get_device() if the data is matched, which will increment refcount for
-dev->kobj, so it should call put_device() to decrement refcount for
-dev->kobj to free the region, because fpga_region_unregister() will call
-fpga_region_dev_release() only when the refcount for dev->kobj is zero
-but fpga_region_test_init() call device_register() in
-fpga_region_register_full(), which also increment refcount.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-So call put_device() after calling fpga_region_class_find() in
-fpga_region_test_class_find(). After applying this patch, the following
-memory leak is never detected.
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej.
 
-unreferenced object 0xffff88810c8ef000 (size 1024):
-  comm "kunit_try_catch", pid 1875, jiffies 4294715298 (age 836.836s)
-  hex dump (first 32 bytes):
-    b8 d1 fb 05 81 88 ff ff 08 f0 8e 0c 81 88 ff ff  ................
-    08 f0 8e 0c 81 88 ff ff 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff817ebad7>] kmalloc_trace+0x27/0xa0
-    [<ffffffffa02385e1>] fpga_region_register_full+0x51/0x430 [fpga_region]
-    [<ffffffffa0228e47>] 0xffffffffa0228e47
-    [<ffffffff829c479d>] kunit_try_run_case+0xdd/0x250
-    [<ffffffff829c9f2a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
-    [<ffffffff81238b85>] kthread+0x2b5/0x380
-    [<ffffffff81097ded>] ret_from_fork+0x2d/0x70
-    [<ffffffff810034d1>] ret_from_fork_asm+0x11/0x20
-unreferenced object 0xffff888105fbd1b8 (size 8):
-  comm "kunit_try_catch", pid 1875, jiffies 4294715298 (age 836.836s)
-  hex dump (first 8 bytes):
-    72 65 67 69 6f 6e 30 00                          region0.
-  backtrace:
-    [<ffffffff817ec023>] __kmalloc_node_track_caller+0x53/0x150
-    [<ffffffff82995590>] kvasprintf+0xb0/0x130
-    [<ffffffff83f713b1>] kobject_set_name_vargs+0x41/0x110
-    [<ffffffff8304ac1b>] dev_set_name+0xab/0xe0
-    [<ffffffffa02388a2>] fpga_region_register_full+0x312/0x430 [fpga_region]
-    [<ffffffffa0228e47>] 0xffffffffa0228e47
-    [<ffffffff829c479d>] kunit_try_run_case+0xdd/0x250
-    [<ffffffff829c9f2a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
-    [<ffffffff81238b85>] kthread+0x2b5/0x380
-    [<ffffffff81097ded>] ret_from_fork+0x2d/0x70
-    [<ffffffff810034d1>] ret_from_fork_asm+0x11/0x20
-unreferenced object 0xffff88810b3b8a00 (size 256):
-  comm "kunit_try_catch", pid 1875, jiffies 4294715298 (age 836.836s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 08 8a 3b 0b 81 88 ff ff  ..........;.....
-    08 8a 3b 0b 81 88 ff ff e0 ac 04 83 ff ff ff ff  ..;.............
-  backtrace:
-    [<ffffffff817ebad7>] kmalloc_trace+0x27/0xa0
-    [<ffffffff83056d7a>] device_add+0xa2a/0x15e0
-    [<ffffffffa02388b1>] fpga_region_register_full+0x321/0x430 [fpga_region]
-    [<ffffffffa0228e47>] 0xffffffffa0228e47
-    [<ffffffff829c479d>] kunit_try_run_case+0xdd/0x250
-    [<ffffffff829c9f2a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
-    [<ffffffff81238b85>] kthread+0x2b5/0x380
-    [<ffffffff81097ded>] ret_from_fork+0x2d/0x70
-    [<ffffffff810034d1>] ret_from_fork_asm+0x11/0x20
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
-Fixes: 64a5f972c93d ("fpga: add an initial KUnit suite for the FPGA Region")
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-Reviewed-by: Marco Pagani <marpagan@redhat.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-Link: https://lore.kernel.org/r/20231007094321.3447084-1-ruanjinjie@huawei.com
-[yilun.xu@intel.com: slightly changes the commit message]
-Signed-off-by: Xu Yilun <yilun.xu@linux.intel.com>
----
- drivers/fpga/tests/fpga-region-test.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/fpga/tests/fpga-region-test.c b/drivers/fpga/tests/fpga-region-test.c
-index 9f9d50ee7871..baab07e3fc59 100644
---- a/drivers/fpga/tests/fpga-region-test.c
-+++ b/drivers/fpga/tests/fpga-region-test.c
-@@ -93,6 +93,8 @@ static void fpga_region_test_class_find(struct kunit *test)
- 
- 	region = fpga_region_class_find(NULL, &ctx->region_pdev->dev, fake_region_match);
- 	KUNIT_EXPECT_PTR_EQ(test, region, ctx->region);
-+
-+	put_device(&region->dev);
- }
- 
- /*
--- 
-2.25.1
-
+Pozdrawiam,
+Kamil Lasek
