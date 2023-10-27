@@ -2,60 +2,237 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77DB7D49D0
-	for <lists+linux-fpga@lfdr.de>; Tue, 24 Oct 2023 10:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC80D7D9CFF
+	for <lists+linux-fpga@lfdr.de>; Fri, 27 Oct 2023 17:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbjJXIQA (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Tue, 24 Oct 2023 04:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S235125AbjJ0Pa2 (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Fri, 27 Oct 2023 11:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbjJXIP7 (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Tue, 24 Oct 2023 04:15:59 -0400
-Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98D9D7C
-        for <linux-fpga@vger.kernel.org>; Tue, 24 Oct 2023 01:15:55 -0700 (PDT)
-Received: by mail.citycodes.pl (Postfix, from userid 1001)
-        id 8665921709; Tue, 24 Oct 2023 10:15:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
-        t=1698135354; bh=fClkhHu/p6gIm8tbpvFwCqGX3kXIMdqjiuDdSiYGEkk=;
-        h=Date:From:To:Subject:From;
-        b=d3e43e6OKcNH4qASflt9mEDRSbPXKF6wvxP4wna3J+Z8SqaIinETG5/hgJHBD+CZm
-         +xJQxZpSTOWseghDxwc4wyjKiA5SXI+9X9e8LONn6PwIrAewePalUr3bLzf12WXap3
-         MGIXhuH/9RFkMruLQHyTQj9LprAODlIBEzWhX4CwlN6K8E618bksv0rGyRvIau0BvO
-         mgN25EgEoQMEkzyWjFFPeYaCM7Q8JQO2SOabtm5Wpsg7XVF645fe6nlAhQ2CLS4n8+
-         Et34GjMygrzQZSC/MsPI/ayMR0ondYVr1qOuX6XIRVh6l1UpOg+Jpg49AvfWJf6QVd
-         PiKa92ROWtt1A==
-Received: by mail.citycodes.pl for <linux-fpga@vger.kernel.org>; Tue, 24 Oct 2023 08:15:29 GMT
-Message-ID: <20231024084500-0.1.8a.l8t5.0.sr94gg20q9@citycodes.pl>
-Date:   Tue, 24 Oct 2023 08:15:29 GMT
-From:   "Kamil Lasek" <kamil.lasek@citycodes.pl>
-To:     <linux-fpga@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.citycodes.pl
+        with ESMTP id S235119AbjJ0Pa2 (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Fri, 27 Oct 2023 11:30:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB806C1
+        for <linux-fpga@vger.kernel.org>; Fri, 27 Oct 2023 08:29:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1698420583;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=J/UFA7u/XXiPmDgo1cL607vFxp7ihV1o+SEyqiKodo8=;
+        b=i+aaeEqYbhKGD2Pnm2Vl10y6YS6hkpDzaqeOQ6F1v+z1E3c14+GQMG1Rbz21y6y1pteyp9
+        v2zqKQwSIVqlNcCndwU556TZJpZHcwCe5/YAT9eFyQWnba+FEx6gT+SYb0BJCook3Rpa9u
+        JTAjCqTPuab0/EMeNx0d9hrKVCA9PRQ=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-212-mShHnQdlOoKb3dLxupR3AA-1; Fri, 27 Oct 2023 11:29:42 -0400
+X-MC-Unique: mShHnQdlOoKb3dLxupR3AA-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-66cfd45de06so27848606d6.0
+        for <linux-fpga@vger.kernel.org>; Fri, 27 Oct 2023 08:29:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698420582; x=1699025382;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J/UFA7u/XXiPmDgo1cL607vFxp7ihV1o+SEyqiKodo8=;
+        b=HJMe1/gcDhSECx9mg+DA8xYDTv/tJemK1YqG0UwtKN1cH9fcz1snRbtVkTJiSeHSue
+         nyHC7mWaHXzD7lofeZ2rZUyGpaMMEoH3VBrxRJ1oxFiwmWTSWzFEgiiAqEjszVO5j8pR
+         Y4KnrrL7IqZTjhEkxf+Ax++7zqDNWtSriCyfNiN4f6D62+syHcPfKDmeRnxPp6TsRLni
+         V10bgsR0be2ou2nGtLO5YojuOm7xG2o78tmUzJNQH3b84tUuLw9cfRDSLf0MMgGEOuJg
+         ZEVepcE+Cko5Za5OUP7Blx9S1EeD80ohaVsDkx320Y8tBnOIO5Ruv4SXGFBFuc6zVX7u
+         SivA==
+X-Gm-Message-State: AOJu0Yw+rfi21OVrKsGKIy6ghPyGm/4/0BqKECFn8nf0yTAzIxPpvLdE
+        6MiNMhG0M2u8NtLZ/7ewXV9IbryZ8gNotxwy/RTRYr60O65Z4DoxMHRUD7WUYfRJduzBREP+4kN
+        KdY8e2nfU4X3YTakWHRpb7G/lXPpi
+X-Received: by 2002:ad4:5967:0:b0:66d:6406:1301 with SMTP id eq7-20020ad45967000000b0066d64061301mr3464098qvb.20.1698420581917;
+        Fri, 27 Oct 2023 08:29:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHD9Epz9kEMnsy1wUN/xUndNfSWqDRJNS4eaHXxHkAvrvn5vu3+dm9wvm9JKKrowFf30f0iUw==
+X-Received: by 2002:ad4:5967:0:b0:66d:6406:1301 with SMTP id eq7-20020ad45967000000b0066d64061301mr3464084qvb.20.1698420581621;
+        Fri, 27 Oct 2023 08:29:41 -0700 (PDT)
+Received: from klayman.redhat.com (net-2-34-31-107.cust.vodafonedsl.it. [2.34.31.107])
+        by smtp.gmail.com with ESMTPSA id fc8-20020ad44f28000000b0066d32666a27sm691316qvb.66.2023.10.27.08.29.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Oct 2023 08:29:41 -0700 (PDT)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Alan Tull <atull@opensource.altera.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] fpga: remove module reference counting from core components
+Date:   Fri, 27 Oct 2023 17:29:27 +0200
+Message-ID: <20231027152928.184012-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Remove unnecessary module reference counting from the core components
+of the subsystem. Low-level driver modules cannot be removed before
+core modules since they use their exported symbols.
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+For more context, refer to this thread:
+https://lore.kernel.org/linux-fpga/ZS6hhlvjUcqyv8zL@yilunxu-OptiPlex-7050
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej.
+Other changes:
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+In  __fpga_bridge_get(): do a (missing ?) get_device() and bind the
+image to the bridge only after the mutex has been acquired.
 
+In __fpga_mgr_get(): do a get_device(). Currently, get_device() is
+called when allocating an image in fpga_image_info_alloc().
+However, since there are still two (of_)fpga_mgr_get() functions
+exposed by the core, I think they should behave as expected.
 
-Pozdrawiam,
-Kamil Lasek
+In fpga_region_get() / fpga_region_put(): call get_device() before
+acquiring the mutex and put_device() after having released the mutex
+to avoid races.
+
+Fixes: 654ba4cc0f3e ("fpga manager: ensure lifetime with of_fpga_mgr_get")
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
+ drivers/fpga/fpga-bridge.c | 24 +++++++-----------------
+ drivers/fpga/fpga-mgr.c    |  8 +-------
+ drivers/fpga/fpga-region.c | 14 ++++----------
+ 3 files changed, 12 insertions(+), 34 deletions(-)
+
+diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+index a024be2b84e2..3bcc9c9849c5 100644
+--- a/drivers/fpga/fpga-bridge.c
++++ b/drivers/fpga/fpga-bridge.c
+@@ -58,30 +58,21 @@ EXPORT_SYMBOL_GPL(fpga_bridge_disable);
+ static struct fpga_bridge *__fpga_bridge_get(struct device *dev,
+ 					     struct fpga_image_info *info)
+ {
+-	struct fpga_bridge *bridge;
+-	int ret = -ENODEV;
+-
+-	bridge = to_fpga_bridge(dev);
++	struct fpga_bridge *bridge = to_fpga_bridge(dev);
+ 
+-	bridge->info = info;
++	get_device(dev);
+ 
+ 	if (!mutex_trylock(&bridge->mutex)) {
+-		ret = -EBUSY;
+-		goto err_dev;
++		dev_dbg(dev, "%s: FPGA Bridge already in use\n", __func__);
++		put_device(dev);
++		return ERR_PTR(-EBUSY);
+ 	}
+ 
+-	if (!try_module_get(dev->parent->driver->owner))
+-		goto err_ll_mod;
++	bridge->info = info;
+ 
+ 	dev_dbg(&bridge->dev, "get\n");
+ 
+ 	return bridge;
+-
+-err_ll_mod:
+-	mutex_unlock(&bridge->mutex);
+-err_dev:
+-	put_device(dev);
+-	return ERR_PTR(ret);
+ }
+ 
+ /**
+@@ -93,7 +84,7 @@ static struct fpga_bridge *__fpga_bridge_get(struct device *dev,
+  * Return:
+  * * fpga_bridge struct pointer if successful.
+  * * -EBUSY if someone already has a reference to the bridge.
+- * * -ENODEV if @np is not an FPGA Bridge or can't take parent driver refcount.
++ * * -ENODEV if @np is not an FPGA Bridge.
+  */
+ struct fpga_bridge *of_fpga_bridge_get(struct device_node *np,
+ 				       struct fpga_image_info *info)
+@@ -146,7 +137,6 @@ void fpga_bridge_put(struct fpga_bridge *bridge)
+ 	dev_dbg(&bridge->dev, "put\n");
+ 
+ 	bridge->info = NULL;
+-	module_put(bridge->dev.parent->driver->owner);
+ 	mutex_unlock(&bridge->mutex);
+ 	put_device(&bridge->dev);
+ }
+diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+index 06651389c592..6c355eafd18f 100644
+--- a/drivers/fpga/fpga-mgr.c
++++ b/drivers/fpga/fpga-mgr.c
+@@ -670,14 +670,9 @@ static struct fpga_manager *__fpga_mgr_get(struct device *dev)
+ 
+ 	mgr = to_fpga_manager(dev);
+ 
+-	if (!try_module_get(dev->parent->driver->owner))
+-		goto err_dev;
++	get_device(&mgr->dev);
+ 
+ 	return mgr;
+-
+-err_dev:
+-	put_device(dev);
+-	return ERR_PTR(-ENODEV);
+ }
+ 
+ static int fpga_mgr_dev_match(struct device *dev, const void *data)
+@@ -727,7 +722,6 @@ EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
+  */
+ void fpga_mgr_put(struct fpga_manager *mgr)
+ {
+-	module_put(mgr->dev.parent->driver->owner);
+ 	put_device(&mgr->dev);
+ }
+ EXPORT_SYMBOL_GPL(fpga_mgr_put);
+diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+index b364a929425c..c299956cafdc 100644
+--- a/drivers/fpga/fpga-region.c
++++ b/drivers/fpga/fpga-region.c
+@@ -41,22 +41,17 @@ EXPORT_SYMBOL_GPL(fpga_region_class_find);
+  * Return:
+  * * fpga_region struct if successful.
+  * * -EBUSY if someone already has a reference to the region.
+- * * -ENODEV if can't take parent driver module refcount.
+  */
+ static struct fpga_region *fpga_region_get(struct fpga_region *region)
+ {
+ 	struct device *dev = &region->dev;
+ 
++	get_device(dev);
++
+ 	if (!mutex_trylock(&region->mutex)) {
+ 		dev_dbg(dev, "%s: FPGA Region already in use\n", __func__);
+-		return ERR_PTR(-EBUSY);
+-	}
+-
+-	get_device(dev);
+-	if (!try_module_get(dev->parent->driver->owner)) {
+ 		put_device(dev);
+-		mutex_unlock(&region->mutex);
+-		return ERR_PTR(-ENODEV);
++		return ERR_PTR(-EBUSY);
+ 	}
+ 
+ 	dev_dbg(dev, "get\n");
+@@ -75,9 +70,8 @@ static void fpga_region_put(struct fpga_region *region)
+ 
+ 	dev_dbg(dev, "put\n");
+ 
+-	module_put(dev->parent->driver->owner);
+-	put_device(dev);
+ 	mutex_unlock(&region->mutex);
++	put_device(dev);
+ }
+ 
+ /**
+-- 
+2.41.0
+
