@@ -2,87 +2,91 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C337E645B
-	for <lists+linux-fpga@lfdr.de>; Thu,  9 Nov 2023 08:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A41C7E64ED
+	for <lists+linux-fpga@lfdr.de>; Thu,  9 Nov 2023 09:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbjKIHaU (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 9 Nov 2023 02:30:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S232816AbjKIIGm (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 9 Nov 2023 03:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232742AbjKIHaT (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 9 Nov 2023 02:30:19 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C00271F;
-        Wed,  8 Nov 2023 23:30:13 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE60AC433C7;
-        Thu,  9 Nov 2023 07:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1699515013;
-        bh=FA3I58jU0wFxNV8uXganb4fGiYQhPijI/pg4Lq7JIz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fBB4lTjtqObDudXAPQ5ggKg62fOtfqvJgyZuLFSAMbD5h4x+rieC0Qs7i07wYIYdA
-         TYr2IYya9lVKeMJmLvQleOg4E+jR/Sk/0ArueekVX3zrNnooqPFq63MJAedinMHCrG
-         m24NHJT5+UA+IQbASzYl33wOMcyIVdI+fnj3rnGw=
-Date:   Thu, 9 Nov 2023 08:30:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Xu Yilun <yilun.xu@linux.intel.com>
-Cc:     Marco Pagani <marpagan@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Alan Tull <atull@opensource.altera.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] fpga: remove module reference counting from core
- components
-Message-ID: <2023110918-showroom-choosy-ad14@gregkh>
-References: <20231027152928.184012-1-marpagan@redhat.com>
- <ZT9qENE9fE3Z0KCW@yilunxu-OptiPlex-7050>
- <ae202b70-b106-4805-9ce0-ffbb2738bb04@redhat.com>
- <ZUuu1CgVd4h3Qqu7@yilunxu-OptiPlex-7050>
- <2023110839-jam-relapsing-7f5d@gregkh>
- <ZUxpHk/8pCusjXOb@yilunxu-OptiPlex-7050>
- <2023110922-lurk-subdivide-4962@gregkh>
- <ZUyHSs+oI9AsQdZE@yilunxu-OptiPlex-7050>
+        with ESMTP id S231376AbjKIIGm (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 9 Nov 2023 03:06:42 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7BC269F;
+        Thu,  9 Nov 2023 00:06:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699517200; x=1731053200;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lOWmxm9+hlLDd/bFPxc4FNd/WQuv+HVFpFCjdXz4HsU=;
+  b=LUG5/aWxtxElw7HN3Rn/DrqERPwX84v8HkNLsdp1BbC4mvocCsT2AcxN
+   k3jap7iYSBo1vKEdc834meV7gEY2+VVe1tSEaYKxNzW+IbD41IxZBE25t
+   f84r67nl75ys1qcDNaAGc8+m5oz0ZwqX8GZhuWstHiujTitY24aj01cGF
+   HR3z/2e5NTV6w7cFdTtAzbukVVnzkloxjm99kDBTqFfj/kiJAR/Zadh+w
+   HbdHd4Uc8cDMk3J/cAvwaHloobxkxxUvOiupRyaYBNcM0izKxyx6DSM+/
+   DtDVVrel9d61YjHf5YDSi+SLDWfS/tEoRYqxNAauRH6eMNBmf+K0hz7uy
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="392811257"
+X-IronPort-AV: E=Sophos;i="6.03,288,1694761200"; 
+   d="scan'208";a="392811257"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 00:06:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,288,1694761200"; 
+   d="scan'208";a="11068757"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa001.jf.intel.com with ESMTP; 09 Nov 2023 00:06:37 -0800
+Date:   Thu, 9 Nov 2023 16:05:01 +0800
+From:   Xu Yilun <yilun.xu@linux.intel.com>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, michal.simek@amd.com, linux-fpga@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nava kishore Manne <nava.manne@xilinx.com>
+Subject: Re: [PATCH] fpga: zynq: Fix incorrect variable type
+Message-ID: <ZUySrZ4Cc/qdzWXX@yilunxu-OptiPlex-7050>
+References: <20231109062823.3268724-1-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZUyHSs+oI9AsQdZE@yilunxu-OptiPlex-7050>
+In-Reply-To: <20231109062823.3268724-1-nava.kishore.manne@amd.com>
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Nov 09, 2023 at 03:16:26PM +0800, Xu Yilun wrote:
-> On Thu, Nov 09, 2023 at 06:27:24AM +0100, Greg Kroah-Hartman wrote:
-> > On Thu, Nov 09, 2023 at 01:07:42PM +0800, Xu Yilun wrote:
-> > > On Wed, Nov 08, 2023 at 05:20:53PM +0100, Greg Kroah-Hartman wrote:
-> > > > On Wed, Nov 08, 2023 at 11:52:52PM +0800, Xu Yilun wrote:
-> > > > > > >>
-> > > > > > >> In fpga_region_get() / fpga_region_put(): call get_device() before
-> > > > > > >> acquiring the mutex and put_device() after having released the mutex
-> > > > > > >> to avoid races.
-> > > > 
-> > > > Why do you need another reference count with a lock?  You already have
-> > > > that with the calls to get/put_device().
-> > > 
-> > > The low-level driver module could still be possibly unloaded at the same
-> > > time, if so, when FPGA core run some callbacks provided by low-level driver
-> > > module, its referenced page of code is unmapped...
-> > 
-> > Then something is designed wrong here, the unloading of the low-level
-> > driver should remove the access to the device itself.  Perhaps fix that?
+On Thu, Nov 09, 2023 at 11:58:23AM +0530, Nava kishore Manne wrote:
+> From: Nava kishore Manne <nava.manne@xilinx.com>
 > 
-> Actually the low-level driver module on its own has no way to garantee its
-> own code page of callbacks not accessed. It *is* accessing its code page
-> when it tries (to release) any protection.
+> zynq_fpga_has_sync () API is expecting "u8 *" but the
+> formal parameter that was passed is of type "const char *".
+> To fix this issue cast the const char pointer to u8 pointer.
 
-It is not up to the low-level driver to do this, it's up to the code
-that calls into it (i.e. the fpga core code) to handle the proper
-reference counting.
+Any error log found? I assume this is just implicit cast and doesn't
+worth a fix.
 
-> Core code must help, and something like file_operations.owner is an
-> effective way.
+Thanks,
+Yilun
 
-Yes, that should be all that you need.
-
-thanks,
-
-greg k-h
+> 
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> ---
+>  drivers/fpga/zynq-fpga.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+> index 96611d424a10..988853137ac6 100644
+> --- a/drivers/fpga/zynq-fpga.c
+> +++ b/drivers/fpga/zynq-fpga.c
+> @@ -275,7 +275,7 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
+>  
+>  	/* don't globally reset PL if we're doing partial reconfig */
+>  	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
+> -		if (!zynq_fpga_has_sync(buf, count)) {
+> +		if (!zynq_fpga_has_sync((u8 *)buf, count)) {
+>  			dev_err(&mgr->dev,
+>  				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
+>  			err = -EINVAL;
+> -- 
+> 2.25.1
+> 
