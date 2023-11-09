@@ -2,91 +2,114 @@ Return-Path: <linux-fpga-owner@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A41C7E64ED
-	for <lists+linux-fpga@lfdr.de>; Thu,  9 Nov 2023 09:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 740907E69C1
+	for <lists+linux-fpga@lfdr.de>; Thu,  9 Nov 2023 12:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbjKIIGm (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
-        Thu, 9 Nov 2023 03:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
+        id S231839AbjKILeT (ORCPT <rfc822;lists+linux-fpga@lfdr.de>);
+        Thu, 9 Nov 2023 06:34:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbjKIIGm (ORCPT
-        <rfc822;linux-fpga@vger.kernel.org>); Thu, 9 Nov 2023 03:06:42 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7BC269F;
-        Thu,  9 Nov 2023 00:06:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699517200; x=1731053200;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lOWmxm9+hlLDd/bFPxc4FNd/WQuv+HVFpFCjdXz4HsU=;
-  b=LUG5/aWxtxElw7HN3Rn/DrqERPwX84v8HkNLsdp1BbC4mvocCsT2AcxN
-   k3jap7iYSBo1vKEdc834meV7gEY2+VVe1tSEaYKxNzW+IbD41IxZBE25t
-   f84r67nl75ys1qcDNaAGc8+m5oz0ZwqX8GZhuWstHiujTitY24aj01cGF
-   HR3z/2e5NTV6w7cFdTtAzbukVVnzkloxjm99kDBTqFfj/kiJAR/Zadh+w
-   HbdHd4Uc8cDMk3J/cAvwaHloobxkxxUvOiupRyaYBNcM0izKxyx6DSM+/
-   DtDVVrel9d61YjHf5YDSi+SLDWfS/tEoRYqxNAauRH6eMNBmf+K0hz7uy
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="392811257"
-X-IronPort-AV: E=Sophos;i="6.03,288,1694761200"; 
-   d="scan'208";a="392811257"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 00:06:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,288,1694761200"; 
-   d="scan'208";a="11068757"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa001.jf.intel.com with ESMTP; 09 Nov 2023 00:06:37 -0800
-Date:   Thu, 9 Nov 2023 16:05:01 +0800
-From:   Xu Yilun <yilun.xu@linux.intel.com>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, michal.simek@amd.com, linux-fpga@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nava kishore Manne <nava.manne@xilinx.com>
-Subject: Re: [PATCH] fpga: zynq: Fix incorrect variable type
-Message-ID: <ZUySrZ4Cc/qdzWXX@yilunxu-OptiPlex-7050>
-References: <20231109062823.3268724-1-nava.kishore.manne@amd.com>
+        with ESMTP id S230123AbjKILeT (ORCPT
+        <rfc822;linux-fpga@vger.kernel.org>); Thu, 9 Nov 2023 06:34:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD1193
+        for <linux-fpga@vger.kernel.org>; Thu,  9 Nov 2023 03:33:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1699529610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b0/quQNOBlAdk14iiPX40Ta6yaF3Yz+E6qmQXuIdetM=;
+        b=g8L2ovXJyYTmof6W69vvX06CNHc2dWSd+K4TgyoFT7JnY3HQtRRXHmTau6bPFClZCMCKcY
+        EFkRRGaMZ5uinkXL04AxvC7adEq477nUqekeu/629JFGH70R/pXX/IBvRC+q9h2ue8xYvi
+        0UJJvTwdubRYSnoJoEwbrvgOjgr72KM=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-425-zD9OdVafPJKtduiQZwlFag-1; Thu, 09 Nov 2023 06:33:29 -0500
+X-MC-Unique: zD9OdVafPJKtduiQZwlFag-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-66d4aa946ceso12558576d6.1
+        for <linux-fpga@vger.kernel.org>; Thu, 09 Nov 2023 03:33:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699529608; x=1700134408;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b0/quQNOBlAdk14iiPX40Ta6yaF3Yz+E6qmQXuIdetM=;
+        b=v2fU/DwplmKd1Sv27ZflPuAybNxlcjHetSJoEfaqXsx1dF2D0F5ZJWZK0LxV9T44nG
+         FUM1XjjKZkJ+UaczavLbUjBP/W7kZdvhPGsq5Fl5o0Or02aHdsnj482zLCE+IEG+avPs
+         ThhtDDSDtZZALrbVP0m/Ql+WYOjn8bTp3sIwqZKgel/MGpxlzwVW9uUnfTbcb5hozimM
+         RBmfwUIaqJSJYk/+oneHWcUQQASlmqDm8r/td9QJt3wKO02aSYWDIEaT/cqZuvE+aSYy
+         e560XQo3YBmN/BM0na3/ucozJSkNHj2zYvTJsxZIZw+6aID8fM1YpE3ud9nhiqdKVTQK
+         gF1w==
+X-Gm-Message-State: AOJu0YzRWwtwA+XceC5pUKNYkMk26HaY53AE+GasTErdhpYzdHs5IGjk
+        vRvN3JCkAoB7/YBHDD/vTTvpNQu/B9GWyEQxJdfa9/8wTmpZPR2TCNKsrFMq+K6hveQscbVxgEr
+        av0USaVJIX4xdfGG5e3b7
+X-Received: by 2002:ad4:4f26:0:b0:66c:fd38:2266 with SMTP id fc6-20020ad44f26000000b0066cfd382266mr10980587qvb.25.1699529608620;
+        Thu, 09 Nov 2023 03:33:28 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHjyn1I+jQkjnsW+kMx1XvjQpiOy2FQXtJYFQHQt3wvgj7QX0Oz2mZdg85jfwAtjAIH9fCnqQ==
+X-Received: by 2002:ad4:4f26:0:b0:66c:fd38:2266 with SMTP id fc6-20020ad44f26000000b0066cfd382266mr10980575qvb.25.1699529608394;
+        Thu, 09 Nov 2023 03:33:28 -0800 (PST)
+Received: from [192.168.9.16] (net-2-34-31-107.cust.vodafonedsl.it. [2.34.31.107])
+        by smtp.gmail.com with ESMTPSA id pp25-20020a056214139900b00655e428604esm1979952qvb.137.2023.11.09.03.33.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Nov 2023 03:33:28 -0800 (PST)
+Message-ID: <1fbdf0d8-d8c5-4616-ab49-bda4112771e8@redhat.com>
+Date:   Thu, 9 Nov 2023 12:33:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231109062823.3268724-1-nava.kishore.manne@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] fpga: remove module reference counting from core
+ components
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Xu Yilun <yilun.xu@linux.intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Alan Tull <atull@opensource.altera.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231027152928.184012-1-marpagan@redhat.com>
+ <ZT9qENE9fE3Z0KCW@yilunxu-OptiPlex-7050>
+ <ae202b70-b106-4805-9ce0-ffbb2738bb04@redhat.com>
+ <ZUuu1CgVd4h3Qqu7@yilunxu-OptiPlex-7050>
+ <2023110839-jam-relapsing-7f5d@gregkh>
+Content-Language: en-US
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <2023110839-jam-relapsing-7f5d@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-fpga.vger.kernel.org>
 X-Mailing-List: linux-fpga@vger.kernel.org
 
-On Thu, Nov 09, 2023 at 11:58:23AM +0530, Nava kishore Manne wrote:
-> From: Nava kishore Manne <nava.manne@xilinx.com>
-> 
-> zynq_fpga_has_sync () API is expecting "u8 *" but the
-> formal parameter that was passed is of type "const char *".
-> To fix this issue cast the const char pointer to u8 pointer.
 
-Any error log found? I assume this is just implicit cast and doesn't
-worth a fix.
+
+On 2023-11-08 17:20, Greg Kroah-Hartman wrote:
+> On Wed, Nov 08, 2023 at 11:52:52PM +0800, Xu Yilun wrote:
+>>>>>
+>>>>> In fpga_region_get() / fpga_region_put(): call get_device() before
+>>>>> acquiring the mutex and put_device() after having released the mutex
+>>>>> to avoid races.
+> 
+> Why do you need another reference count with a lock?  You already have
+> that with the calls to get/put_device().
+>
+
+My understanding is that the lock is there not for reference counting
+but to prevent concurrent reprogramming of the region by in-kernel API
+consumers.
+
+>>>> Could you help elaborate more about the race?
+>>>>
+>>>
+>>> I accidentally misused the word race. My concern was that memory might
+>>> be released after the last put_device(), causing mutex_unlock() to be
+>>> called on a mutex that does not exist anymore. It should not happen
+>>> for the moment since the region does not use devres, but I think it
+>>> still makes the code more brittle.
+>>
+>> It makes sense.
+>>
 
 Thanks,
-Yilun
+Marco
 
-> 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> ---
->  drivers/fpga/zynq-fpga.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-> index 96611d424a10..988853137ac6 100644
-> --- a/drivers/fpga/zynq-fpga.c
-> +++ b/drivers/fpga/zynq-fpga.c
-> @@ -275,7 +275,7 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
->  
->  	/* don't globally reset PL if we're doing partial reconfig */
->  	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
-> -		if (!zynq_fpga_has_sync(buf, count)) {
-> +		if (!zynq_fpga_has_sync((u8 *)buf, count)) {
->  			dev_err(&mgr->dev,
->  				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
->  			err = -EINVAL;
-> -- 
-> 2.25.1
-> 
