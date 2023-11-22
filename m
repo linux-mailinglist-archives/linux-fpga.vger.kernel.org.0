@@ -1,226 +1,130 @@
-Return-Path: <linux-fpga+bounces-23-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-24-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1A417F46E4
-	for <lists+linux-fpga@lfdr.de>; Wed, 22 Nov 2023 13:50:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2FC17F48FD
+	for <lists+linux-fpga@lfdr.de>; Wed, 22 Nov 2023 15:33:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00CDE1C20AB4
-	for <lists+linux-fpga@lfdr.de>; Wed, 22 Nov 2023 12:50:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CFC62815B4
+	for <lists+linux-fpga@lfdr.de>; Wed, 22 Nov 2023 14:33:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8623B4C600;
-	Wed, 22 Nov 2023 12:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF304D5AB;
+	Wed, 22 Nov 2023 14:33:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fcF4pxKR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gk1ilWA5"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D2B495FB;
-	Wed, 22 Nov 2023 12:50:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467BDC433CB;
-	Wed, 22 Nov 2023 12:49:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700657408;
-	bh=aU2J72Xp3JKGs0IOk/3BX7BmnbVjjSktFzc5W0fL98s=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=fcF4pxKRziGSAF2FOqxImPOzC2PEVz+iXrlHdDaPyM6/v6o+f16jjdAN+lC2pUX0Z
-	 c6Vj4pEReJ7qSGBsgd/Etcb/Bx/NFbs8vsXFZDe0htqh1OD5+o81eDXmshIPtuoyBK
-	 lUfl8SFejNcIDe347vDzewRE22FCt1MWsk2CM4stuQE/3LK9tJj9skrI0zg5sl10Ot
-	 aC+S7ghlxwZ2rYR03/mACnTcLYZ3VnGDGFga1iJsrVdoW+9CIorT0HYAGwO2anWZen
-	 uIJ0oJqCh8DfwGg5lQlRhQShmsIUNUkRjdY2uwh1ov0dsfb3jgNLqtI1PY54/gVbLF
-	 del/29joBTz5A==
-From: Christian Brauner <brauner@kernel.org>
-Date: Wed, 22 Nov 2023 13:48:25 +0100
-Subject: [PATCH v2 4/4] eventfd: make eventfd_signal{_mask}() void
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59781AC
+	for <linux-fpga@vger.kernel.org>; Wed, 22 Nov 2023 06:33:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700663581;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=if0lTIQhFuWRokgwIBfp5g8FVKKy/4t3RxOoc3DJYVs=;
+	b=gk1ilWA5LbM9XhSDOKnA/LEwYStHGxY18hT3mHTEUwYjfl4WbFxAFqYYyQUPOEQmH1wlLx
+	ftk/s1dtzi0fAKFVdMNLd7B7izA2z69onAKjz90U/xLdmIcRrOJWATduixkn15Hfc2G61Y
+	dKx43slSZEmdH+BgpNYQBhVPxlECojk=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-561-TiF3zzp9NwuNDelMOC5yog-1; Wed, 22 Nov 2023 09:32:59 -0500
+X-MC-Unique: TiF3zzp9NwuNDelMOC5yog-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-421b20c9893so94838291cf.0
+        for <linux-fpga@vger.kernel.org>; Wed, 22 Nov 2023 06:32:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700663579; x=1701268379;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=if0lTIQhFuWRokgwIBfp5g8FVKKy/4t3RxOoc3DJYVs=;
+        b=qc5CoeuDytPdZyjoKCX1I7lsfFarw1E9mAGQEVjfNzkWIokGsknl50bw1sPswqG+uU
+         ytHvFf3dOyS7NX0ErrS0ZU9Qe1CKvwKuw/5LO3x0cnE4BQ+ldZ8t4CYB8cy7zvg/Qts+
+         6lTwJ/TYaepgOmzQbn/H3RE/TNrj01QwsJ4hG5waWtUoh5SJeszSk0c/e0QbOwhahj8k
+         HLkeungeef2fmjoFRfLwydARHsI75JDXzk5aO2oMvPF94rSUT0Yk/0jhYLo0phFQGqEY
+         MHBKspqANMGH9dGPZ7pwGBh6cIx3HIISxC4VXN6+QPzu36iWgDGHuSJZTYZwE/sL68uh
+         aMXw==
+X-Gm-Message-State: AOJu0Yyy2xfPnOvy5OFpzaoGnbbmAJKei1+hOHkJLbh+y83cOPP3603n
+	QY9L0HezxJrRhih0iy3hQFKJmUcI2sH69Nw53tcbJNChReo18aEkdcSuRJ/BfScP0xzpWObkcHy
+	BvZzGlrHhiBQpyj6WDmVY
+X-Received: by 2002:a05:622a:120e:b0:421:c3a9:1e52 with SMTP id y14-20020a05622a120e00b00421c3a91e52mr2696728qtx.31.1700663579317;
+        Wed, 22 Nov 2023 06:32:59 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHxPsf924/xjwAZvoG0CEZ1YKtPUQiLpYymPo32gafiI5TVBLwkn6DBRalXtRx2dAlFoLJdYA==
+X-Received: by 2002:a05:622a:120e:b0:421:c3a9:1e52 with SMTP id y14-20020a05622a120e00b00421c3a91e52mr2696697qtx.31.1700663578935;
+        Wed, 22 Nov 2023 06:32:58 -0800 (PST)
+Received: from klayman.redhat.com (net-2-34-24-178.cust.vodafonedsl.it. [2.34.24.178])
+        by smtp.gmail.com with ESMTPSA id v7-20020ac87487000000b0041950c7f6d8sm4430101qtq.60.2023.11.22.06.32.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Nov 2023 06:32:58 -0800 (PST)
+From: Marco Pagani <marpagan@redhat.com>
+To: Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Marco Pagani <marpagan@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-fpga@vger.kernel.org
+Subject: [RFC PATCH 0/2] fpga: improve protection against low-level modules unloading
+Date: Wed, 22 Nov 2023 15:32:50 +0100
+Message-ID: <20231122143252.181680-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231122-vfs-eventfd-signal-v2-4-bd549b14ce0c@kernel.org>
-References: <20231122-vfs-eventfd-signal-v2-0-bd549b14ce0c@kernel.org>
-In-Reply-To: <20231122-vfs-eventfd-signal-v2-0-bd549b14ce0c@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>, 
- Vitaly Kuznetsov <vkuznets@redhat.com>, 
- Sean Christopherson <seanjc@google.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>, 
- Oded Gabbay <ogabbay@kernel.org>, Wu Hao <hao.wu@intel.com>, 
- Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>, 
- Xu Yilun <yilun.xu@intel.com>, Zhenyu Wang <zhenyuw@linux.intel.com>, 
- Zhi Wang <zhi.a.wang@intel.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
- Rodrigo Vivi <rodrigo.vivi@intel.com>, 
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, 
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
- Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
- Frederic Barrat <fbarrat@linux.ibm.com>, 
- Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Eric Farman <farman@linux.ibm.com>, Matthew Rosato <mjrosato@linux.ibm.com>, 
- Halil Pasic <pasic@linux.ibm.com>, Vineeth Vijayan <vneethv@linux.ibm.com>, 
- Peter Oberparleiter <oberpar@linux.ibm.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Tony Krowiak <akrowiak@linux.ibm.com>, 
- Jason Herne <jjherne@linux.ibm.com>, 
- Harald Freudenberger <freude@linux.ibm.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
- Diana Craciun <diana.craciun@oss.nxp.com>, 
- Alex Williamson <alex.williamson@redhat.com>, 
- Eric Auger <eric.auger@redhat.com>, Fei Li <fei1.li@intel.com>, 
- Benjamin LaHaise <bcrl@kvack.org>, Christian Brauner <brauner@kernel.org>, 
- Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
- Roman Gushchin <roman.gushchin@linux.dev>, 
- Shakeel Butt <shakeelb@google.com>, Muchun Song <muchun.song@linux.dev>, 
- Kirti Wankhede <kwankhede@nvidia.com>, kvm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linux-fpga@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org, 
- intel-gfx@lists.freedesktop.org, linux-rdma@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
- linux-usb@vger.kernel.org, virtualization@lists.linux-foundation.org, 
- netdev@vger.kernel.org, linux-aio@kvack.org, cgroups@vger.kernel.org, 
- linux-mm@kvack.org, Jens Axboe <axboe@kernel.dk>, 
- Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-X-Mailer: b4 0.13-dev-26615
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3854; i=brauner@kernel.org;
- h=from:subject:message-id; bh=aU2J72Xp3JKGs0IOk/3BX7BmnbVjjSktFzc5W0fL98s=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTG/lj73/5dRNiNYIfwQ9VnNb8kSHjtMQlc94/11mwNB
- qlLZUUiHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABP5zcjwh+t1UN76vf945tSW
- T/rxjCHQpq4w94r2Zqm/ATIn/7GqSjMyvH01XYi3/rDPbk7Hf182bChuXbCzsfD2+Wr+47+PXN/
- CxAMA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-No caller care about the return value.
+This RFC proposes a possible solution to keep protecting the fpga
+manager against the unexpected unloading of low-level control modules
+while addressing the limitations of the current implementation. The
+current implementation assumes that the low-level module registers a
+platform driver for the parent device, which can later be used by the
+fpga manager (through the parent device pointer) to take the low-level
+module's refcount. This proposal removes this limitation by adding a
+module owner field to the fpga_manager and fpga_manager_ops structs.
+Low-level control modules can statically set the owner field to
+THIS_MODULE. Later, the fpga manager can use the owner field to take
+the module's refcount.
 
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- fs/eventfd.c            | 40 +++++++++++++++-------------------------
- include/linux/eventfd.h | 16 +++++++---------
- 2 files changed, 22 insertions(+), 34 deletions(-)
+For more context, please refer to these threads:
+https://lore.kernel.org/linux-fpga/ZS6hhlvjUcqyv8zL@yilunxu-OptiPlex-7050
+https://lore.kernel.org/linux-fpga/ZT9qENE9fE3Z0KCW@yilunxu-OptiPlex-7050
 
-diff --git a/fs/eventfd.c b/fs/eventfd.c
-index a9a6de920fb4..13be2fb7fc96 100644
---- a/fs/eventfd.c
-+++ b/fs/eventfd.c
-@@ -43,10 +43,19 @@ struct eventfd_ctx {
- 	int id;
- };
- 
--__u64 eventfd_signal_mask(struct eventfd_ctx *ctx, __poll_t mask)
-+/**
-+ * eventfd_signal - Adds @n to the eventfd counter.
-+ * @ctx: [in] Pointer to the eventfd context.
-+ * @mask: [in] poll mask
-+ *
-+ * This function is supposed to be called by the kernel in paths that do not
-+ * allow sleeping. In this function we allow the counter to reach the ULLONG_MAX
-+ * value, and we signal this as overflow condition by returning a EPOLLERR
-+ * to poll(2).
-+ */
-+void eventfd_signal_mask(struct eventfd_ctx *ctx, __poll_t mask)
- {
- 	unsigned long flags;
--	__u64 n = 1;
- 
- 	/*
- 	 * Deadlock or stack overflow issues can happen if we recurse here
-@@ -57,37 +66,18 @@ __u64 eventfd_signal_mask(struct eventfd_ctx *ctx, __poll_t mask)
- 	 * safe context.
- 	 */
- 	if (WARN_ON_ONCE(current->in_eventfd))
--		return 0;
-+		return;
- 
- 	spin_lock_irqsave(&ctx->wqh.lock, flags);
- 	current->in_eventfd = 1;
--	if (ULLONG_MAX - ctx->count < n)
--		n = ULLONG_MAX - ctx->count;
--	ctx->count += n;
-+	if (ctx->count < ULLONG_MAX)
-+		ctx->count++;
- 	if (waitqueue_active(&ctx->wqh))
- 		wake_up_locked_poll(&ctx->wqh, EPOLLIN | mask);
- 	current->in_eventfd = 0;
- 	spin_unlock_irqrestore(&ctx->wqh.lock, flags);
--
--	return n == 1;
--}
--
--/**
-- * eventfd_signal - Adds @n to the eventfd counter.
-- * @ctx: [in] Pointer to the eventfd context.
-- *
-- * This function is supposed to be called by the kernel in paths that do not
-- * allow sleeping. In this function we allow the counter to reach the ULLONG_MAX
-- * value, and we signal this as overflow condition by returning a EPOLLERR
-- * to poll(2).
-- *
-- * Returns the amount by which the counter was incremented.
-- */
--__u64 eventfd_signal(struct eventfd_ctx *ctx)
--{
--	return eventfd_signal_mask(ctx, 0);
- }
--EXPORT_SYMBOL_GPL(eventfd_signal);
-+EXPORT_SYMBOL_GPL(eventfd_signal_mask);
- 
- static void eventfd_free_ctx(struct eventfd_ctx *ctx)
- {
-diff --git a/include/linux/eventfd.h b/include/linux/eventfd.h
-index 4f8aac7eb62a..fea7c4eb01d6 100644
---- a/include/linux/eventfd.h
-+++ b/include/linux/eventfd.h
-@@ -35,8 +35,7 @@ void eventfd_ctx_put(struct eventfd_ctx *ctx);
- struct file *eventfd_fget(int fd);
- struct eventfd_ctx *eventfd_ctx_fdget(int fd);
- struct eventfd_ctx *eventfd_ctx_fileget(struct file *file);
--__u64 eventfd_signal(struct eventfd_ctx *ctx);
--__u64 eventfd_signal_mask(struct eventfd_ctx *ctx, __poll_t mask);
-+void eventfd_signal_mask(struct eventfd_ctx *ctx, __poll_t mask);
- int eventfd_ctx_remove_wait_queue(struct eventfd_ctx *ctx, wait_queue_entry_t *wait,
- 				  __u64 *cnt);
- void eventfd_ctx_do_read(struct eventfd_ctx *ctx, __u64 *cnt);
-@@ -58,14 +57,8 @@ static inline struct eventfd_ctx *eventfd_ctx_fdget(int fd)
- 	return ERR_PTR(-ENOSYS);
- }
- 
--static inline int eventfd_signal(struct eventfd_ctx *ctx)
-+static inline void eventfd_signal_mask(struct eventfd_ctx *ctx, unsigned mask)
- {
--	return -ENOSYS;
--}
--
--static inline int eventfd_signal_mask(struct eventfd_ctx *ctx, unsigned mask)
--{
--	return -ENOSYS;
- }
- 
- static inline void eventfd_ctx_put(struct eventfd_ctx *ctx)
-@@ -91,5 +84,10 @@ static inline void eventfd_ctx_do_read(struct eventfd_ctx *ctx, __u64 *cnt)
- 
- #endif
- 
-+static inline void eventfd_signal(struct eventfd_ctx *ctx)
-+{
-+	eventfd_signal_mask(ctx, 0);
-+}
-+
- #endif /* _LINUX_EVENTFD_H */
- 
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
 
+Marco Pagani (2):
+  fpga: add a module owner field to fpga_manager and fpga_manager_ops
+  fpga: set owner of fpga_manager_ops for existing low-level modules
+
+ drivers/fpga/altera-cvp.c             |  1 +
+ drivers/fpga/altera-pr-ip-core.c      |  1 +
+ drivers/fpga/altera-ps-spi.c          |  1 +
+ drivers/fpga/dfl-fme-mgr.c            |  1 +
+ drivers/fpga/fpga-mgr.c               | 56 +++++++++++++++++++--------
+ drivers/fpga/ice40-spi.c              |  1 +
+ drivers/fpga/lattice-sysconfig.c      |  1 +
+ drivers/fpga/machxo2-spi.c            |  1 +
+ drivers/fpga/microchip-spi.c          |  1 +
+ drivers/fpga/socfpga-a10.c            |  1 +
+ drivers/fpga/socfpga.c                |  1 +
+ drivers/fpga/stratix10-soc.c          |  1 +
+ drivers/fpga/tests/fpga-mgr-test.c    |  1 +
+ drivers/fpga/tests/fpga-region-test.c |  1 +
+ drivers/fpga/ts73xx-fpga.c            |  1 +
+ drivers/fpga/versal-fpga.c            |  1 +
+ drivers/fpga/xilinx-spi.c             |  1 +
+ drivers/fpga/zynq-fpga.c              |  1 +
+ drivers/fpga/zynqmp-fpga.c            |  1 +
+ include/linux/fpga/fpga-mgr.h         |  4 ++
+ 20 files changed, 62 insertions(+), 16 deletions(-)
+
+
+base-commit: 98b1cc82c4affc16f5598d4fa14b1858671b2263
 -- 
 2.42.0
 
