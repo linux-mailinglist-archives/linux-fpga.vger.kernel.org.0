@@ -1,233 +1,139 @@
-Return-Path: <linux-fpga+bounces-11-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-12-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE2437EFF5B
-	for <lists+linux-fpga@lfdr.de>; Sat, 18 Nov 2023 13:00:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA5D27F3D51
+	for <lists+linux-fpga@lfdr.de>; Wed, 22 Nov 2023 06:31:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA5C31C20803
-	for <lists+linux-fpga@lfdr.de>; Sat, 18 Nov 2023 12:00:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E415281F9F
+	for <lists+linux-fpga@lfdr.de>; Wed, 22 Nov 2023 05:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8995ED2F0;
-	Sat, 18 Nov 2023 12:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5736E1172A;
+	Wed, 22 Nov 2023 05:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SNeQDyEq"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="zlfMrK+B"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A51910DC;
-	Sat, 18 Nov 2023 04:00:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700308825; x=1731844825;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fxjGbp6z375T/wv3Ke5q/Sx0xqZd3DeBe7rcNSl2Oqk=;
-  b=SNeQDyEqSCL8rJJUeAXhyIcFGXY7xBeNorhIg3q8uoa0h77zsVQ+BZ7Y
-   h20JR3r7srWOa3/dRkGAvmeF6CwEUmGnnLPPIdBHXfCMAvhrF+kunO0dK
-   qfCoiLCT4SXcRM/wbdV+gzAoXqBTBAG5IHaIHV5PsAjz+zKorMTo969wS
-   rpWIq/W/h++RUNb6p12sQu8wi9bOiGnk4Ha6VQUqZcJh34F/QV/1Z837V
-   KKObKnhWMG5Q7kyqK6ukWMFl6qo0f491QxSW5MRoLtapXI/7oSmnmRstO
-   ji4Wz7/3d7UKXAfrLiJGfU9lw7vXci8NMrp0n0NXVZnICoQtprUGFDTrO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="455719517"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="455719517"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 04:00:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="883394552"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="883394552"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Nov 2023 04:00:21 -0800
-Date: Sat, 18 Nov 2023 19:58:34 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Marco Pagani <marpagan@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>, Alan Tull <atull@opensource.altera.com>,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] fpga: remove module reference counting from core
- components
-Message-ID: <ZVim6pjPjtme+61M@yilunxu-OptiPlex-7050>
-References: <20231027152928.184012-1-marpagan@redhat.com>
- <ZT9qENE9fE3Z0KCW@yilunxu-OptiPlex-7050>
- <ae202b70-b106-4805-9ce0-ffbb2738bb04@redhat.com>
- <ZUuu1CgVd4h3Qqu7@yilunxu-OptiPlex-7050>
- <5c3c3905-67c2-4cc2-8477-c6fc74676fc9@redhat.com>
- <ZVMZZNyLE0+YtKYz@yilunxu-OptiPlex-7050>
- <2b26d45d-7577-4824-bad9-d5c85f5a098a@redhat.com>
- <2023111756-geometry-amplifier-38ce@gregkh>
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2045.outbound.protection.outlook.com [40.107.100.45])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A08195;
+	Tue, 21 Nov 2023 21:31:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AgQ4wgucdU9lcF29Z5PLYcTrIkOj2snv+LzZsNtJprIvdKDP7NTOZiQXR2+43lsUXqSTCD22BIiYG7ahdX6JrIHdqU59lBKQseUdWTTykMn8PYVztqYoMue0gAcu+23iOrEa7ffwgXySjhqDHP6BA5Oa+3K/a7fWsaUqsd9ZbCpuPPKYqgxAXY1uwYeOkMDpC+OE6mGfgU/GOdmfTM+XS2MuY5HGLFw6AavCr9gMnF1kLhik5gUsiNlsdrXpL/eQC/IENzVDCwPh3jdkMm6mMng1adG3penc64fyjLDH86iGoSD7+ijEMYFaurHKn1ATXSJyvV0Ls+YKvp9ejN9Kqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QbPMeGxszExTFGX3wOXJekuTkAN28MGnaWFeO6lrGDo=;
+ b=CyimvQj5IjOFMdbh7LghfDgumUxkLbZjdsENkIoiv8db6VoqyNkbU8FVnkx8RqGsqLmt9NWNicoq7VcAWpgok15+goPY+E9UbReqA7lEegL89UQsWVEV1fOXZ+viK1FaRts1nK0QvBJanHNnwzqDvf/lmVqHEtpAswJVMwqoTprTpcBpAVw9LS2YvQQ3SuKrRM7o/RgZWG9Ax+8dX+6wLhtr/DHrEJ6kQ3tS7tqKlcONWanE5Slu/4sDKEksUBX2GySHWZfEHsbSuU1kWlTC0SAUkLcJGKiVKCpoPYhNh7D1wi4P1IUGowWFL+r789bfzsmRJLALhfL4zQfOHh/lsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QbPMeGxszExTFGX3wOXJekuTkAN28MGnaWFeO6lrGDo=;
+ b=zlfMrK+BnbFdggakS2V33hgHt/KyOb7DhPMEMQGYM0j8PgZ840IsHy5DU6jeXIjA0u10YEhrhokHP6ug6v/xYK3np06pWnj/PoxnBhEE4Qn6Ow4ko2JVr/gk7FM8U5Wmmh1yT29k4pkRWTRrS2fVYiVc4U8uBkVCLWQgExYlFTw=
+Received: from MN2PR05CA0040.namprd05.prod.outlook.com (2603:10b6:208:236::9)
+ by CY8PR12MB8068.namprd12.prod.outlook.com (2603:10b6:930:75::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.27; Wed, 22 Nov
+ 2023 05:31:01 +0000
+Received: from BL6PEPF0001AB4B.namprd04.prod.outlook.com
+ (2603:10b6:208:236:cafe::72) by MN2PR05CA0040.outlook.office365.com
+ (2603:10b6:208:236::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.16 via Frontend
+ Transport; Wed, 22 Nov 2023 05:31:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF0001AB4B.mail.protection.outlook.com (10.167.242.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7025.12 via Frontend Transport; Wed, 22 Nov 2023 05:31:01 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Tue, 21 Nov
+ 2023 23:31:00 -0600
+From: Nava kishore Manne <nava.kishore.manne@amd.com>
+To: <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+	<trix@redhat.com>, <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
+	<linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+	<linaro-mm-sig@lists.linaro.org>
+Subject: [RFC 0/2]fpga: Add fpga configuration support from a pre-allocated dma-able buffer
+Date: Wed, 22 Nov 2023 11:00:33 +0530
+Message-ID: <20231122053035.3758124-1-nava.kishore.manne@amd.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023111756-geometry-amplifier-38ce@gregkh>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4B:EE_|CY8PR12MB8068:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d9a0210-bada-4d6c-d55d-08dbeb1c36f4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	3sb9HveYSaasxoYA0KV1YqVkMdh0JCvz3tus5IW0o7WgEqu8+40MM48PU/NGuKEe+8dQI0++g/CMieLIKlA/DTAVkcyoXV87XUy5DjHoWleSBVOQa8Ghg5MPwSNzOb84SipJFXyLQ8rKwmZlEKJg5Q+UpuYlovbaNW5KhbOeTRqOYnvBY64SuqBHl/kdJY5M68tSHnhm2dljWB7uMLk2tnNEhT4HLG3Yp1M8x9GWpxB7ADNmMJnWzTJ3jTQvdnFCn2m+LmmSCd3rEVGTLW3KdIzVw7sFYksY3bmWPYhwNAoja3D6cS1u9dApcHANcmygplg6gfAlUUs8b/g0hGB2redSGFp0XH+gm8jShikxPLwHtZfq5rw9fR9xYLzLtJayLHhZlfKbgGy4JOY5K+6upf1p1MJ+D4o8K9QPDTZCY2xALqfTYqjQXTo2Gm9ITsvpBvSzKiJOy5QfqQ5DtjgNhvEPGGeUIY0jRag0vc2hzWMgcR/ccUK8Tm9IJPnQjLt90Oe0FFBVPCJtKH0UfZ+bOIBmHEDSYqfFvBnSSNg2eBZBs9clZMjZhOYa7pShumfAWXRdGnLtDBZYDJ9g58I6Kfs7+Z9C9zgufENPMlLzZ/0DjpZVe+m4SXQ2EuysSogqMVVW0TJ2Tf1s0QcbvAE7Za3cOdhjBnZADvDVWXbk54l6FBqHKFVRudwCEtZHHWhB4XL7JGthHM6qdlRiQPYm7I2WYXrr1pIZqxsImSv1Wm3WJtAsf4oRJsIAVU8EPb2A1P2Pq9UkXdX2e3c5jZxrEFFStTfvf/kQYL/uXkTkOUI=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(396003)(346002)(39860400002)(230922051799003)(186009)(1800799012)(82310400011)(451199024)(64100799003)(40470700004)(46966006)(36840700001)(16526019)(26005)(83380400001)(1076003)(478600001)(336012)(82740400003)(426003)(81166007)(356005)(6666004)(47076005)(70206006)(36860700001)(40480700001)(316002)(2616005)(70586007)(110136005)(8936002)(5660300002)(86362001)(2906002)(40460700003)(7416002)(8676002)(103116003)(41300700001)(921008)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2023 05:31:01.6215
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d9a0210-bada-4d6c-d55d-08dbeb1c36f4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB4B.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8068
+X-Spam-Level: *
 
-On Fri, Nov 17, 2023 at 05:06:16PM -0500, Greg Kroah-Hartman wrote:
-> On Fri, Nov 17, 2023 at 10:58:59PM +0100, Marco Pagani wrote:
-> > 
-> > 
-> > On 2023-11-14 07:53, Xu Yilun wrote:
-> > > On Fri, Nov 10, 2023 at 11:58:37PM +0100, Marco Pagani wrote:
-> > >>
-> > >>
-> > >> On 2023-11-08 16:52, Xu Yilun wrote:
-> > >>> On Fri, Nov 03, 2023 at 09:31:02PM +0100, Marco Pagani wrote:
-> > >>>>
-> > >>>>
-> > >>>> On 2023-10-30 09:32, Xu Yilun wrote:
-> > >>>>> On Fri, Oct 27, 2023 at 05:29:27PM +0200, Marco Pagani wrote:
-> > >>>>>> Remove unnecessary module reference counting from the core components
-> > >>>>>> of the subsystem. Low-level driver modules cannot be removed before
-> > >>>>>> core modules since they use their exported symbols.
-> > >>>>>
-> > >>>>> Could you help show the code for this conclusion?
-> > >>>>>
-> > >>>>> This is different from what I remember, a module cannot be removed when
-> > >>>>> its exported symbols are being used by other modules. IOW, the core
-> > >>>>> modules cannot be removed when there exist related low-level driver
-> > >>>>> modules. But the low-level driver modules could be removed freely
-> > >>>>> without other protecting mechanism.
-> > >>>>>
-> > >>>>
-> > >>>> My understanding was that we wanted to remove module reference counting
-> > >>>> from the fpga core and ease it from the responsibility of preventing
-> > >>>> low-level driver modules from being unloaded. 
-> > >>>
-> > >>> FPGA core needs to prevent low-level driver module unloading sometimes,
-> > >>> e.g. when region reprograming is in progress. That's why we get fpga
-> > >>> region driver modules & bridge modules in fpga_region_program_fpga().
-> > >>>
-> > >>> But we try best to get them only necessary. Blindly geting them all the
-> > >>> time results in no way to unload all modules (core & low level modules).
-> > >>>
-> > >>>>
-> > >>>> If we want to keep reference counting in the fpga core, we could add a
-> > >>>> struct module *owner field in the struct fpga_manager_ops (and others
-> > >>>> core *_ops) so that the low-level driver can set it to THIS_MODULE.
-> > >>>> In this way, we can later use it in fpga_mgr_register() to bump up the
-> > >>>
-> > >>> Yes, we should pass the module owner in fpga_mgr_register(), but could
-> > >>> not bump up its refcount at once.
-> > >>>
-> > >>>> refcount of the low-level driver module by calling
-> > >>>> try_module_get(mgr->mops->owner) directly when it registers the manager.
-> > >>>> Finally, fpga_mgr_unregister() would call module_put(mgr->mops->owner)
-> > >>>> to allow unloading the low-level driver module.
-> > >>>
-> > >>> As mentioned above, that makes problem. Most of the low level driver
-> > >>> modules call fpga_mgr_unregister() on module_exit(), but bumping up
-> > >>> their module refcount prevents module_exit() been executed. That came
-> > >>> out to be a dead lock.
-> > >>>
-> > >>
-> > >> Initially, I considered calling try_module_get(mgr->mops->owner)
-> > >> in fpga_mgr_get(). But then, the new kernel-doc description of
-> > >> try_module_get() (1) made me question the safety of that approach.
-> > >> My concern is that the low-level driver could be removed right when
-> > >> someone is calling fpga_mgr_get() and hasn't yet reached
-> > >> try_module_get(mgr->mops->owner). In that case, the struct mops
-> > >> (along with the entire low-level driver module) and the manager dev
-> > >> would "disappear" under the feet of fpga_mgr_get().
-> > > 
-> > > I don't get what's the problem. fpga_mgr_get() would first of all
-> > > look for mgr_dev via class_find_device(), if low-level module is
-> > > unloaded, then you cannot find the mgr_dev and gracefully error out.
-> > > 
-> > > If class_find_device() succeed, mgr_dev got a reference and won't
-> > > disappear. Finally we may still found module removed when
-> > > try_module_get(), but should be another graceful error out.
-> > > 
-> > > Am I missing anything?
-> > > 
-> > 
-> > My concern is: suppose that you successfully got the mgr dev from
-> > class_find_device(), and now you are in __fpga_mgr_get(), right before
-> > try_module_get(mgr->mops->owner). At that point, you get descheduled,
-> > and while you are not running, someone unloads the low-level driver
-> > module that ends its life by calling fpga_mgr_unregister(). When you
-> > wake up, you find yourself with a reference to a device that does not
-> > exist anymore, trying to get a module that does not exist anymore
+Lots of embedded systems have memory constraints but they need to load
+very large configuration files.The FPGA subsystem allows drivers to
+request this configuration image be loaded from the filesystem,but this
+requires that the entire configuration data be loaded into kernel memory
+first before it's provided to the driver.This can lead to a situation where
+we map the configuration data twice, once to load the configuration data
+into kernel memory and once to copy the configuration data into the final
+resting place which is nothing but a dma-able continuous buffer.
 
-I may get the problem. The mgr device is still exists, but the module
-is removed, so the mgr->mops & owner pointers are invalid..
+This creates needless memory pressure and delays due to multiple copies.
+Let's add a dmabuf handling support to the fpga manager framework that
+allows drivers to load the Configuration data directly from a pre-allocated
+buffer. This skips the intermediate step of allocating a buffer in kernel
+memory to hold the Configuration data.
 
-> > through one of its symbols (module *owner in mops).
-> 
-> Then the user gets to keep the multiple pieces that their kernel is now
-> in :)
-> 
-> Seriously, as module unload can never happen except by explicit ask,
-> this should only possibly be an issue that a developer who is working on
-> the code would hit, so don't work too hard to resolve something that
-> isn't anything an actual user can hit.
-> 
-> > Greg suggested checking if this can really happen and eventually
-> > protecting fpga_mgr_get() and fpga_mgr_unregister() with a lock for
-> > mops (if I understood correctly). In that case, considering the same
-> > scenario described above:
-> > 
-> > fpga_mgr_get() gets the mops lock and the mgr dev but is suspended
-> > before calling try_module_get().
-> > 
-> > Someone unloads the low-level driver, delete_modules progresses
-> > (the module's recount hasn't yet been incremented) but blocks while
-> > calling fpga_mgr_unregister() since fpga_mgr_get() is holding the lock.
-> > 
-> > fpga_mgr_get() resumes and tries to get the module through one of its
-> > symbols (mgr->mops->owner). The module's memory hasn't yet been freed
-> > (delete_modules is blocked), and the refcount is zero, so
-> > try_module_get() fails safely, and we can put the mgr dev that is
-> > still present since fpga_mgr_unregister() is blocked.
-> > 
-> > fpga_mgr_unregister() resumes and unregisters the mgr dev.
-> 
-> That seems a bit reasonable, try it and see!
+This implementation allows the lower-level drivers to request the FPGA
+Configuration image be loaded from pre-allocated dma-able continuous
+buffer and also it avoid needless memory pressure and delays due to
+multiple copies.
 
-It also looks good to me.
+Please take a look at the changes and let us know if any improvements
+are required.
 
-Thanks,
-Yilun
+Nava kishore Manne (2):
+  fpga: support loading from a pre-allocated buffer
+  fpga: versal: Use the scatterlist interface
 
-> 
-> > I'm still thinking about the possible implications. On the one hand,
-> > it looks safe in this case, but on the other hand, it feels brittle.
-> > In my understanding, the root problem is that there will always be a
-> > critical window (when you have taken a reference to the device but
-> > not yet to the low-level driver module) when unloading the module
-> > could be potentially unsafe depending on the current implementation
-> > and the preemption model.
-> > 
-> > I still feel that it would be simpler and safer if we could bump
-> > up the refcount during fpga_mgr_register() and maybe have a sysfs
-> > attribute to unlock the low-level driver (if no one has taken the
-> > mgr dev refcount).
-> 
-> Ick, no, that shouldn't be needed.
-> 
-> > That way, it would be safer by design since the
-> > refcount will be bumped up right during the module load procedure,
-> > and we could guarantee that the lifetime of the mgr device is
-> > entirely contained in the lifetime of the low-level driver module.
-> 
-> Remember, there are two different things here, code and data.  Trying to
-> tie one ref count to the other is almost always going to cause problems,
-> try to keep them independent if at all possible.
-> 
-> Or better yet, just don't use module reference counts at all and
-> properly drop the device when the specific module is unloaded, like
-> network drivers do.  That might take more work to restructure things,
-> which might be useless work given that again, this is something that no
-> user will ever hit, only developers if at all.
-> 
-> thanks,
-> 
-> greg k-h
+ drivers/fpga/fpga-mgr.c       | 113 ++++++++++++++++++++++++++++++++++
+ drivers/fpga/versal-fpga.c    |  13 ++++
+ include/linux/fpga/fpga-mgr.h |  10 +++
+ 3 files changed, 136 insertions(+)
+
+-- 
+2.25.1
+
 
