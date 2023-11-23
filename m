@@ -1,163 +1,208 @@
-Return-Path: <linux-fpga+bounces-33-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-34-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EDA17F4D3B
-	for <lists+linux-fpga@lfdr.de>; Wed, 22 Nov 2023 17:50:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 862BB7F5545
+	for <lists+linux-fpga@lfdr.de>; Thu, 23 Nov 2023 01:26:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 479752810CD
-	for <lists+linux-fpga@lfdr.de>; Wed, 22 Nov 2023 16:50:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3B0C1C20ABA
+	for <lists+linux-fpga@lfdr.de>; Thu, 23 Nov 2023 00:26:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C3C4F21B;
-	Wed, 22 Nov 2023 16:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D76193;
+	Thu, 23 Nov 2023 00:26:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eO3sCieP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a0RMRtdr"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD874E62E;
-	Wed, 22 Nov 2023 16:50:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E08C433C7;
-	Wed, 22 Nov 2023 16:50:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700671844;
-	bh=Gy6ICgLvnTaxWqv9MeYnCJN9AaV4Dv5/UPWRNSFp3n8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eO3sCiePyO9mju04v/x+bzylbjrmjfLSXFi24QPC7IrjsqVwpV345L93YY432JMAY
-	 4uUghDamU1fVxyA8H7hZowYS5tX2tm3CuVFdUh0AHKLs7oJeHO1pYVsAA6B59l8Fbb
-	 6VItSWg2kYQfm/gj4CHChRNtiWDr1geCJ3irm1Ag/gNeysgcYxvOO5PK9rPtKXjMmS
-	 LG7vfpuC9lwQQWv3uy6pk7gecJkI8sStxZWpXyaYwzXIvPaLEI0ZOvpQX8CI1g0NIi
-	 /VDKiflfgrmZM5Ufwn3KRAZec9J1OQE/dPpiyRrpp32w1/egGH1cLQanEsJTbJp5k+
-	 Z9AQdxDV0XPaQ==
-Date: Wed, 22 Nov 2023 16:50:37 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc: mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, michal.simek@amd.com,
-	mathieu.poirier@linaro.org, ben.levinsky@amd.com,
-	sai.krishna.potthuri@amd.com, tanmay.shah@amd.com,
-	dhaval.r.shah@amd.com, arnd@arndb.de, shubhrajyoti.datta@amd.com,
-	linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH 1/3] dt-bindings: fpga: Add support for user-key
- encrypted bitstream loading
-Message-ID: <20231122-exert-gleeful-e4476851c489@spud>
-References: <20231122054404.3764288-1-nava.kishore.manne@amd.com>
- <20231122054404.3764288-2-nava.kishore.manne@amd.com>
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAFA1B3;
+	Wed, 22 Nov 2023 16:26:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700699164; x=1732235164;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=kMJqNQrPFkouBUmP1tIxtozSsYheDkR/LnL4F11wiis=;
+  b=a0RMRtdr45SnsHLYk3kiLIfZs2Z292eQtCjDOGkSajq4kJgqoPyPz1Z8
+   xhWoNH51ino8oe9+Nmimsn7SFdTQgw8cA/qSM06asNrV9XlVmhWFA6efE
+   bx/KJxGEkz9CgKaAcRip2AVvQj244oSCMbQ2SV3R4DIR0CTNKXPPkI00S
+   8UPzwDbKGWrNEIvyOLU2GF23JoceIic+G88FMkrhNsWS/7MACg0sIjNMf
+   ijDW0ytrIcjGYvd6MSyu2liYjeaUIruC6bgfya5Y7v4Nc28NcFQbnBBQQ
+   f0zW1UCdi/Sb7g9NYp8o9b8iKurHqbTYEdk8doLf35VPgtN8OmhSA3u25
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="389323011"
+X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
+   d="asc'?scan'208";a="389323011"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 16:26:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="716903060"
+X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
+   d="asc'?scan'208";a="716903060"
+Received: from debian-skl.sh.intel.com (HELO debian-skl) ([10.239.160.45])
+  by orsmga003.jf.intel.com with ESMTP; 22 Nov 2023 16:25:45 -0800
+Date: Thu, 23 Nov 2023 08:24:24 +0800
+From: Zhenyu Wang <zhenyuw@linux.intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+	Jan Kara <jack@suse.cz>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
+	Oded Gabbay <ogabbay@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Zhenyu Wang <zhenyuw@linux.intel.com>,
+	Zhi Wang <zhi.a.wang@intel.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Frederic Barrat <fbarrat@linux.ibm.com>,
+	Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Eric Farman <farman@linux.ibm.com>,
+	Matthew Rosato <mjrosato@linux.ibm.com>,
+	Halil Pasic <pasic@linux.ibm.com>,
+	Vineeth Vijayan <vneethv@linux.ibm.com>,
+	Peter Oberparleiter <oberpar@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Tony Krowiak <akrowiak@linux.ibm.com>,
+	Jason Herne <jjherne@linux.ibm.com>,
+	Harald Freudenberger <freude@linux.ibm.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Diana Craciun <diana.craciun@oss.nxp.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Eric Auger <eric.auger@redhat.com>, Fei Li <fei1.li@intel.com>,
+	Benjamin LaHaise <bcrl@kvack.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeelb@google.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Kirti Wankhede <kwankhede@nvidia.com>, kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fpga@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+	linux-aio@kvack.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] i915: make inject_virtual_interrupt() void
+Message-ID: <ZV6buHrQy2+CJ7xX@debian-scheme>
+Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
+References: <20231122-vfs-eventfd-signal-v2-0-bd549b14ce0c@kernel.org>
+ <20231122-vfs-eventfd-signal-v2-1-bd549b14ce0c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="fQgRGi9CRaM/leib"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="ehCOKC0wDaVXxQlM"
 Content-Disposition: inline
-In-Reply-To: <20231122054404.3764288-2-nava.kishore.manne@amd.com>
+In-Reply-To: <20231122-vfs-eventfd-signal-v2-1-bd549b14ce0c@kernel.org>
 
 
---fQgRGi9CRaM/leib
-Content-Type: text/plain; charset=utf-8
+--ehCOKC0wDaVXxQlM
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 22, 2023 at 11:14:02AM +0530, Nava kishore Manne wrote:
-> Adds =E2=80=98encrypted-key-name=E2=80=99 property to support user-key en=
-crypted
-> bitstream loading use case.
+On 2023.11.22 13:48:22 +0100, Christian Brauner wrote:
+> The single caller of inject_virtual_interrupt() ignores the return value
+> anyway. This allows us to simplify eventfd_signal() in follow-up
+> patches.
 >=20
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
 > ---
->  .../devicetree/bindings/fpga/fpga-region.txt  | 32 +++++++++++++++++++
-
-Is there a reason that this has not yet been converted to yaml?
-
->  1 file changed, 32 insertions(+)
+>  drivers/gpu/drm/i915/gvt/interrupt.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 >=20
-> diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt b/Doc=
-umentation/devicetree/bindings/fpga/fpga-region.txt
-> index 528df8a0e6d8..309334558b3f 100644
-> --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
-> @@ -177,6 +177,9 @@ Optional properties:
->  	it indicates that the FPGA has already been programmed with this image.
->  	If this property is in an overlay targeting an FPGA region, it is a
->  	request to program the FPGA with that image.
-> +- encrypted-key-name : should contain the name of an encrypted key file =
-located
-> +	on the firmware search path. It will be used to decrypt the FPGA image
-> +	file with user-key.
-
-I might be misreading things, but your driver code seems to assume that
-this is an aes key. Nothing here seems to document that this is supposed
-to be a key of a particular type.
-
-Cheers,
-Conor.
-
->  - fpga-bridges : should contain a list of phandles to FPGA Bridges that =
-must be
->  	controlled during FPGA programming along with the parent FPGA bridge.
->  	This property is optional if the FPGA Manager handles the bridges.
-> @@ -459,6 +462,35 @@ programming is the FPGA based bridge of fpga_region1.
->  	};
->  };
+> diff --git a/drivers/gpu/drm/i915/gvt/interrupt.c b/drivers/gpu/drm/i915/=
+gvt/interrupt.c
+> index de3f5903d1a7..9665876b4b13 100644
+> --- a/drivers/gpu/drm/i915/gvt/interrupt.c
+> +++ b/drivers/gpu/drm/i915/gvt/interrupt.c
+> @@ -422,7 +422,7 @@ static void init_irq_map(struct intel_gvt_irq *irq)
+>  #define MSI_CAP_DATA(offset) (offset + 8)
+>  #define MSI_CAP_EN 0x1
 > =20
-> +Device Tree Example: Configure/Reconfigure Encrypted Image With User Key
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +Users can encrypt FPGA configuration Images with their own key. While de=
-crypting
-> +the configuration Image the user needs to provide the same key.
-> +"encrypted-key-name" Specifies the name of the FPGA image encrypted key =
-file on
-> +the firmware search path. The search path is described in the firmware c=
-lass
-> +documentation.
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +&fpga_region0 {
-> +	#address-cells =3D <1>;
-> +	#size-cells =3D <1>;
-> +
-> +	firmware-name =3D "soc_image2.rbf";
-> +	encrypted-key-name =3D "key.nky";
-> +
-> +	gpio@10040 {
-> +		compatible =3D "altr,pio-1.0";
-> +		reg =3D <0x10040 0x20>;
-> +		clocks =3D <0x2>;
-> +		altr,ngpio =3D <0x4>;
-> +		#gpio-cells =3D <0x2>;
-> +		gpio-controller;
-> +	};
-> +};
-> +
->  Constraints
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> -static int inject_virtual_interrupt(struct intel_vgpu *vgpu)
+> +static void inject_virtual_interrupt(struct intel_vgpu *vgpu)
+>  {
+>  	unsigned long offset =3D vgpu->gvt->device_info.msi_cap_offset;
+>  	u16 control, data;
+> @@ -434,10 +434,10 @@ static int inject_virtual_interrupt(struct intel_vg=
+pu *vgpu)
 > =20
+>  	/* Do not generate MSI if MSIEN is disabled */
+>  	if (!(control & MSI_CAP_EN))
+> -		return 0;
+> +		return;
+> =20
+>  	if (WARN(control & GENMASK(15, 1), "only support one MSI format\n"))
+> -		return -EINVAL;
+> +		return;
+> =20
+>  	trace_inject_msi(vgpu->id, addr, data);
+> =20
+> @@ -451,10 +451,10 @@ static int inject_virtual_interrupt(struct intel_vg=
+pu *vgpu)
+>  	 * returned and don't inject interrupt into guest.
+>  	 */
+>  	if (!test_bit(INTEL_VGPU_STATUS_ATTACHED, vgpu->status))
+> -		return -ESRCH;
+> -	if (vgpu->msi_trigger && eventfd_signal(vgpu->msi_trigger, 1) !=3D 1)
+> -		return -EFAULT;
+> -	return 0;
+> +		return;
+> +	if (!vgpu->msi_trigger)
+> +		return;
+> +	eventfd_signal(vgpu->msi_trigger, 1);
+>  }
+
+I think it's a little simpler to write as
+    if (vgpu->msi_trigger)
+            eventfd_signal(vgpu->msi_trigger, 1);
+
+Looks fine with me.
+
+Reviewed-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+
+Thanks!
+
+> =20
+>  static void propagate_event(struct intel_gvt_irq *irq,
+>=20
 > --=20
-> 2.25.1
+> 2.42.0
 >=20
 
---fQgRGi9CRaM/leib
+--ehCOKC0wDaVXxQlM
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZV4xXQAKCRB4tDGHoIJi
-0loFAP9yglWDOnl90C+JIFNKoS8fMwEsVxZA1KeM+gtNfT8IBAEAjdZP9R4ySbJQ
-anmnejBPkAFFim8ousuPXHi+3dEazAM=
-=4Jh2
+iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCZV6bswAKCRCxBBozTXgY
+JySHAJ4qE2jv0i0ZauQv+Bv/bGwHt0ZrbACeJadIIL6gQC6kmoICLhyqplCwOeo=
+=1+t0
 -----END PGP SIGNATURE-----
 
---fQgRGi9CRaM/leib--
+--ehCOKC0wDaVXxQlM--
 
