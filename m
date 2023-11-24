@@ -1,61 +1,60 @@
-Return-Path: <linux-fpga+bounces-42-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-43-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BADD17F7817
-	for <lists+linux-fpga@lfdr.de>; Fri, 24 Nov 2023 16:46:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D1E27F781E
+	for <lists+linux-fpga@lfdr.de>; Fri, 24 Nov 2023 16:49:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D157B20FDC
-	for <lists+linux-fpga@lfdr.de>; Fri, 24 Nov 2023 15:46:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E14C1C20E3B
+	for <lists+linux-fpga@lfdr.de>; Fri, 24 Nov 2023 15:49:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4CB31726;
-	Fri, 24 Nov 2023 15:46:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 201C63173C;
+	Fri, 24 Nov 2023 15:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ItUZL7O+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Lgvtqm2v"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11F51998
-	for <linux-fpga@vger.kernel.org>; Fri, 24 Nov 2023 07:46:11 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-a00a9c6f283so296533066b.0
-        for <linux-fpga@vger.kernel.org>; Fri, 24 Nov 2023 07:46:11 -0800 (PST)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E1119A2
+	for <linux-fpga@vger.kernel.org>; Fri, 24 Nov 2023 07:49:11 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-544455a4b56so2793520a12.1
+        for <linux-fpga@vger.kernel.org>; Fri, 24 Nov 2023 07:49:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700840770; x=1701445570; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=d9wSiZKBdjfk9WzYTONxAZ9gvH4l3ttkbnn/4rhktlQ=;
-        b=ItUZL7O+Spdo5mhWiQhw3cVmhiv8+EQrtHcOV0b7rP6+k4B7OhE2/fiW43xF4G83iO
-         bMS8wE52QsVHyvPsi2+Big0irmUgK/6BxJEnzHkOBDJImcc+WjF/OfaeTMX3GXXHxygC
-         Y7mNaLKZmHpWEmxxCSU0WUlfFYm28QIOR8AcVkrLSP09tIv8fNQgqaCP/34SY9C9V1JX
-         u89UvRO2JmRjdJDZfVrvyuKLq6yfF76XVpsnX1+QXp4qFf8v5ki5X4p/g04uXKnpaA/p
-         RaAcjWdM3rIb53HPtFQnQxT/vCrCkL5dbMS1OQL4RJiYRWWkrtJqoiUcMErZd8Xup+5y
-         V5Hg==
+        d=linaro.org; s=google; t=1700840950; x=1701445750; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0K2EXE8gQExfH+IDrBMFiSFCOrHiT67rlvW6OkLmIQc=;
+        b=Lgvtqm2vdgbIyRYi0mXRPmujODsHOI9R0lt5uWHM6uqaH29oavWLw4gR6gFvif/kKk
+         SEPwKtQnhasHtEuxUDbptLOk51p9CUY9JJNV5m+criervnkUV/l8Bg+uqriNSbukuL6g
+         f0k15OIUzJpyHf4ItUHLlgaUOuvDlDFom6eKx1XdjF/3Wt7K89g74KA0VmlVbHgKQ6Lw
+         YYr9Okc+9VLLQJ/tJNK9MAqOSQwDZRz5w7+NFONf6+hRAogY5TuWHqCaB1u/ucHF9LYs
+         o1Fh/0Z4+DfUcw7jcY+3O27fpZSjU3vBK4Qa+hshSzgWPskhcwFoVtUrDg9KIxd5iIcw
+         xfrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700840770; x=1701445570;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d9wSiZKBdjfk9WzYTONxAZ9gvH4l3ttkbnn/4rhktlQ=;
-        b=bpCLzbXfAlbERhJuPnDMtGF8rvFJ2UmzL0lr2ggo8Fzep15h0lPRizi2BGHqYzzyub
-         wVjTz62e2cwssHTg/VCx2ImbLqWSUlmz6pHcYtUy1STZK948/bXXU8ft8GgQKYu11Kuj
-         QcKZqHhphG96iehqHJUj+210ytYFmmX0mbkt31/pYcDcFTG7bgmMt3/sMI8rMgGCemgl
-         lMgPg51qT+TNf5alxZK1cliuC8SF9Zevsal3YgpkAjBgF58Q/wqv2iH/WY0dj3Y1KlC5
-         17NpiZ+t3A1mNBZ5ldvTqfqg9kVUAWcat51RKP7EO7IU2ew1hnVYnFUNNDC7n+QtCXwL
-         D5SQ==
-X-Gm-Message-State: AOJu0YwqmYPoJCskIvUNr9PgC/Fkm29OYDZT6wLuI7kgYsqG/S+8g8rD
-	6EQ1bgqJED900++Gs2gs74ESnA==
-X-Google-Smtp-Source: AGHT+IEksiLkwKJQbymecKFwdLHhu3BPyuhIcGdFn8R9s1GjBEva7JTyYDQrcquzbeC14VA7EPVqXg==
-X-Received: by 2002:a17:907:1a42:b0:9be:77cd:4c2c with SMTP id mf2-20020a1709071a4200b009be77cd4c2cmr1951910ejc.28.1700840770183;
-        Fri, 24 Nov 2023 07:46:10 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700840950; x=1701445750;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0K2EXE8gQExfH+IDrBMFiSFCOrHiT67rlvW6OkLmIQc=;
+        b=TzjiGmONrCSFBAqT7fpQCS00WZ2V4th7w2I6nwpI8M1oQrYNqiAbG0fH44taJTGmxs
+         sZ7lC8ypwfzSaZYl4oOTwKFN4UIEXj6VNsCpL3M5be78KViryfLJTUImLqnIpBqx4RSo
+         QHiJj5hdeuDUdQhfBM97ZsDES6NTjMd8EfhspydvMgqhzV/v8JR3XS2qEG9Ob6fV38ii
+         XWDvjGe52PEz/lMcUYE614LnQDUU+Z/HBrMtoz1G7RlymIAGW+oLpYLkH/FHU8D9KJO1
+         fXNVJnJm10w0arKLc2duL9j7NV6liGem2Op4z5R/cBSp9Lj+uIQpjab732i942Fnp1iJ
+         28Vg==
+X-Gm-Message-State: AOJu0YyvS8dkjPXeSWsgVz12ZTYZhA0RrgY4o5ZnbjGiuJZ8fYuHM3mq
+	73y3TXqeORz9oAdJQb3FyvcqGA==
+X-Google-Smtp-Source: AGHT+IE6JEZIq2K7IIOxSgnJ5L7np3XYKNvUoPeNTphLa0M1kNcmMvyILOwbtufQRuoKg4a056MbiA==
+X-Received: by 2002:a50:9e0f:0:b0:547:b96:1172 with SMTP id z15-20020a509e0f000000b005470b961172mr2620072ede.28.1700840950070;
+        Fri, 24 Nov 2023 07:49:10 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.100])
-        by smtp.gmail.com with ESMTPSA id v12-20020a170906338c00b009f2b7282387sm2176544eja.46.2023.11.24.07.46.07
+        by smtp.gmail.com with ESMTPSA id m6-20020a056402430600b0054af73f3c72sm762887edc.11.2023.11.24.07.49.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Nov 2023 07:46:09 -0800 (PST)
-Message-ID: <a90d980e-71a1-4b90-b1cb-66ac45d79031@linaro.org>
-Date: Fri, 24 Nov 2023 16:46:06 +0100
+        Fri, 24 Nov 2023 07:49:09 -0800 (PST)
+Message-ID: <c2f9d247-752f-429d-8c20-e105b1117be2@linaro.org>
+Date: Fri, 24 Nov 2023 16:49:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -63,33 +62,17 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/3] dt-bindings: fpga: Add support for user-key
- encrypted bitstream loading
-To: Conor Dooley <conor@kernel.org>,
- "Manne, Nava kishore" <nava.kishore.manne@amd.com>
-Cc: "mdf@kernel.org" <mdf@kernel.org>, "hao.wu@intel.com" <hao.wu@intel.com>,
- "yilun.xu@intel.com" <yilun.xu@intel.com>, "trix@redhat.com"
- <trix@redhat.com>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
- "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "Simek, Michal" <michal.simek@amd.com>,
- "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
- "Levinsky, Ben" <ben.levinsky@amd.com>,
- "Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>,
- "Shah, Tanmay" <tanmay.shah@amd.com>,
- "dhaval.r.shah@amd.com" <dhaval.r.shah@amd.com>,
- "arnd@arndb.de" <arnd@arndb.de>,
- "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
- "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-References: <20231122054404.3764288-1-nava.kishore.manne@amd.com>
- <20231122054404.3764288-2-nava.kishore.manne@amd.com>
- <20231122-exert-gleeful-e4476851c489@spud>
- <DM6PR12MB3993F0EC4930E68C54299B36CDB8A@DM6PR12MB3993.namprd12.prod.outlook.com>
- <20231124-tweezers-slug-0349a2188802@spud>
+Subject: Re: [RFC PATCH 0/3]fpga: Add encrypted Bitstream loading support
 Content-Language: en-US
+To: Nava kishore Manne <nava.kishore.manne@amd.com>, mdf@kernel.org,
+ hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ michal.simek@amd.com, mathieu.poirier@linaro.org, ben.levinsky@amd.com,
+ sai.krishna.potthuri@amd.com, tanmay.shah@amd.com, dhaval.r.shah@amd.com,
+ arnd@arndb.de, shubhrajyoti.datta@amd.com, linux-fpga@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20231122054404.3764288-1-nava.kishore.manne@amd.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -135,89 +118,27 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231124-tweezers-slug-0349a2188802@spud>
+In-Reply-To: <20231122054404.3764288-1-nava.kishore.manne@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 24/11/2023 13:48, Conor Dooley wrote:
-> On Fri, Nov 24, 2023 at 06:35:19AM +0000, Manne, Nava kishore wrote:
->> Hi Conor,
->>
->> 	Thanks for providing the review comments.
->> Please find my response inline.
->>
->>> -----Original Message-----
->>> From: Conor Dooley <conor@kernel.org>
->>> Sent: Wednesday, November 22, 2023 10:21 PM
->>> To: Manne, Nava kishore <nava.kishore.manne@amd.com>
->>> Cc: mdf@kernel.org; hao.wu@intel.com; yilun.xu@intel.com;
->>> trix@redhat.com; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
->>> conor+dt@kernel.org; Simek, Michal <michal.simek@amd.com>;
->>> mathieu.poirier@linaro.org; Levinsky, Ben <ben.levinsky@amd.com>;
->>> Potthuri, Sai Krishna <sai.krishna.potthuri@amd.com>; Shah, Tanmay
->>> <tanmay.shah@amd.com>; dhaval.r.shah@amd.com; arnd@arndb.de;
->>> Datta, Shubhrajyoti <shubhrajyoti.datta@amd.com>; linux-
->>> fpga@vger.kernel.org; devicetree@vger.kernel.org; linux-
->>> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
->>> Subject: Re: [RFC PATCH 1/3] dt-bindings: fpga: Add support for user-key
->>> encrypted bitstream loading
->>>
->>> On Wed, Nov 22, 2023 at 11:14:02AM +0530, Nava kishore Manne wrote:
->>>> Adds ‘encrypted-key-name’ property to support user-key encrypted
->>>> bitstream loading use case.
->>>>
->>>> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
->>>> ---
->>>>  .../devicetree/bindings/fpga/fpga-region.txt  | 32
->>>> +++++++++++++++++++
->>>
->>> Is there a reason that this has not yet been converted to yaml?
->>>
->> I am not sure about the complication involved here why it's not converted to yaml format.
->> Due to time constraints, I couldn’t spend much time so I have used this existing legacy format
->> to add my changes.
->>
->>>>  1 file changed, 32 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt
->>>> b/Documentation/devicetree/bindings/fpga/fpga-region.txt
->>>> index 528df8a0e6d8..309334558b3f 100644
->>>> --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
->>>> +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
->>>> @@ -177,6 +177,9 @@ Optional properties:
->>>>  	it indicates that the FPGA has already been programmed with this
->>> image.
->>>>  	If this property is in an overlay targeting an FPGA region, it is a
->>>>  	request to program the FPGA with that image.
->>>> +- encrypted-key-name : should contain the name of an encrypted key file
->>> located
->>>> +	on the firmware search path. It will be used to decrypt the FPGA
->>> image
->>>> +	file with user-key.
->>>
->>> I might be misreading things, but your driver code seems to assume that this
->>> is an aes key. Nothing here seems to document that this is supposed to be a
->>> key of a particular type.
->>>
->>
->> Yes, these changes are intended to add the support for Aes user-key encrypted bitstream loading use case.
->> Will fix it in v2, something like below.
->> aes-key-file-name : Should contain the AES key file name on the firmware search path.
->> 		      The key file contains the AES key and it will be used to decrypt the FPGA image.
-> 
-> Then when someone comes along looking for a different type of encryption
-> we will end up with national-pride-foo-file-name etc. I think I'd rather
-> have a second property that notes what type of cipher is being used and
-> if that property is not present default to AES.
+On 22/11/2023 06:44, Nava kishore Manne wrote:
+> For user-key encrypted bitstream loading use case, users can encrypt
+> FPGA configuration Images with their own key.While decrypting the
+> configuration Image the user needs to provide the same key.To support
+> this use case with the existing FPGA manager framework is not possible
+> because it doesn’t have a mechanism to get the required inputs from
+> the user. So this patch series adds the required changes to the FPGA
+> manager framework to support user-key encrypted bitstream image loading
 
-I wonder why does it need to be in DT in the first place? Why it cannot
-be appended to the FPGA binary image itself? Which also points to
-dubious security aspect of this approach... Shipping FPGA encrypted
-image with its decryption key sounds like marvelous idea.
-
-Even if this is suitable, why not using more arguments of firmware-name?
-This would scale even for multiple FPGA firmwares with different keys
-(although such need seems unlikely).
+Wasn't the entire point of encrypted FPGA bistreams that the key is
+fused into the FPGA and the FPGA does the decrypting? Otherwise it's
+like security through obscurity - the only trouble for attacker is to
+decode DTB to find the filename of key, so actually not even really
+obscure. Then the attacker retrieves the key and bitstream from
+filesystem (by taking out the Zynq-based SoM out or booting from own
+system or just accessing storage pins directly) and voila: encrypted key
+is available.
 
 Best regards,
 Krzysztof
