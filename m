@@ -1,165 +1,172 @@
-Return-Path: <linux-fpga+bounces-40-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-41-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E29DA7F6D1D
-	for <lists+linux-fpga@lfdr.de>; Fri, 24 Nov 2023 08:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BA5D7F7433
+	for <lists+linux-fpga@lfdr.de>; Fri, 24 Nov 2023 13:49:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EA07281B8F
-	for <lists+linux-fpga@lfdr.de>; Fri, 24 Nov 2023 07:48:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4375D281CFA
+	for <lists+linux-fpga@lfdr.de>; Fri, 24 Nov 2023 12:49:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A28C38C13;
-	Fri, 24 Nov 2023 07:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAC201864D;
+	Fri, 24 Nov 2023 12:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cgJMC0Yj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpqsmpXj"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A108C18;
-	Fri, 24 Nov 2023 07:48:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C4BC433C7;
-	Fri, 24 Nov 2023 07:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71D61799E;
+	Fri, 24 Nov 2023 12:49:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97706C433C8;
+	Fri, 24 Nov 2023 12:49:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700812116;
-	bh=wuXwn6H3IYOQTJYurH/LAKoS23w/GwU7ryzU1+Vs8b4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cgJMC0Yj3JRcUDF8O8XpdEdYA/5STjclZLwUWXfVMJwJnFCmcyrJDVup7Rscs2p84
-	 1lIevByzmjhiYL9n/DPGwW0r1qVsQ45xdWW1cCKjcoubJ/Np/IRSX/dXnPPAZi1lyB
-	 ETOprEE5xY+akdxk7DWnyVkIziLf3Nu7PWCfTmFB985JDwr0PPgc9yJ4BLOQhlh8Nx
-	 7J3VH6h2rRYlPJhbqQ9tIol8mM/LtKts+YBDNQd03tji9lqn5ZFKRzSp7zz5eJxPSA
-	 m4YJmobEWMvUVEr6S2NJRsz4v9jSzMIYOHwn/4yZmgFOE0FpvuIzzDTt4O8YISu59u
-	 jwN2CAG1O1gvw==
-From: Christian Brauner <brauner@kernel.org>
-To: linux-fsdevel@vger.kernel.org,
-	Christian Brauner <brauner@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>,
-	Jan Kara <jack@suse.cz>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	David Woodhouse <dwmw2@infradead.org>,
-	Paul Durrant <paul@xen.org>,
-	Oded Gabbay <ogabbay@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	Moritz Fischer <mdf@kernel.org>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Zhenyu Wang <zhenyuw@linux.intel.com>,
-	Zhi Wang <zhi.a.wang@intel.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Leon Romanovsky <leon@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Frederic Barrat <fbarrat@linux.ibm.com>,
-	Andrew Donnellan <ajd@linux.ibm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Eric Farman <farman@linux.ibm.com>,
-	Matthew Rosato <mjrosato@linux.ibm.com>,
-	Halil Pasic <pasic@linux.ibm.com>,
-	Vineeth Vijayan <vneethv@linux.ibm.com>,
-	Peter Oberparleiter <oberpar@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Tony Krowiak <akrowiak@linux.ibm.com>,
-	Jason Herne <jjherne@linux.ibm.com>,
-	Harald Freudenberger <freude@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Diana Craciun <diana.craciun@oss.nxp.com>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Eric Auger <eric.auger@redhat.com>,
-	Fei Li <fei1.li@intel.com>,
-	Benjamin LaHaise <bcrl@kvack.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeelb@google.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Kirti Wankhede <kwankhede@nvidia.com>,
-	kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-fpga@vger.kernel.org,
-	intel-gvt-dev@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	linux-rdma@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	virtualization@lists.linux-foundation.org,
-	netdev@vger.kernel.org,
-	linux-aio@kvack.org,
-	cgroups@vger.kernel.org,
-	linux-mm@kvack.org,
-	Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	io-uring@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] eventfd: simplify signal helpers
-Date: Fri, 24 Nov 2023 08:47:57 +0100
-Message-ID: <20231124-traurig-halunken-6defdd66e8f2@brauner>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231122-vfs-eventfd-signal-v2-0-bd549b14ce0c@kernel.org>
-References: <20231122-vfs-eventfd-signal-v2-0-bd549b14ce0c@kernel.org>
+	s=k20201202; t=1700830145;
+	bh=0/fjlCNQfvRSIG2DQIR0FRU4Xx3x1rDhMmjCSc2dHTE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LpqsmpXjNkQvLIxL/ylXUZ91zdM7G+iqppgN2q7cz2T4+sGCGpPVZdZYRXvKojtif
+	 JM1HZFTmyyVMXmO/BbzyQ1IraS78klmcvBQdJCm1GsPKnnbzwQ+818lecrSVzitWTN
+	 2uhykAVa1811461fU36jc0eW6sVL+OaFoRntPPbx75HzI5hNu740qxbX+QZUh3lY1J
+	 VPs1Xa0LdBXirImjN7pSx+f9R0UyAq/8sI8izlhzDjvfjHVL5qpzznGNeczlnflsk7
+	 CQa9N7TiTQfB5l9jnLNPWdF0A2GJAarSigH0aXAUHITc9K1pmVrwOwcXyzQA8RvTJ4
+	 wsrCRFJonRdIA==
+Date: Fri, 24 Nov 2023 12:48:59 +0000
+From: Conor Dooley <conor@kernel.org>
+To: "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+Cc: "mdf@kernel.org" <mdf@kernel.org>,
+	"hao.wu@intel.com" <hao.wu@intel.com>,
+	"yilun.xu@intel.com" <yilun.xu@intel.com>,
+	"trix@redhat.com" <trix@redhat.com>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"Simek, Michal" <michal.simek@amd.com>,
+	"mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
+	"Levinsky, Ben" <ben.levinsky@amd.com>,
+	"Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>,
+	"Shah, Tanmay" <tanmay.shah@amd.com>,
+	"dhaval.r.shah@amd.com" <dhaval.r.shah@amd.com>,
+	"arnd@arndb.de" <arnd@arndb.de>,
+	"Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
+	"linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [RFC PATCH 1/3] dt-bindings: fpga: Add support for user-key
+ encrypted bitstream loading
+Message-ID: <20231124-tweezers-slug-0349a2188802@spud>
+References: <20231122054404.3764288-1-nava.kishore.manne@amd.com>
+ <20231122054404.3764288-2-nava.kishore.manne@amd.com>
+ <20231122-exert-gleeful-e4476851c489@spud>
+ <DM6PR12MB3993F0EC4930E68C54299B36CDB8A@DM6PR12MB3993.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1378; i=brauner@kernel.org; h=from:subject:message-id; bh=wuXwn6H3IYOQTJYurH/LAKoS23w/GwU7ryzU1+Vs8b4=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQmhOr8Nb88ObVn73mvUyobyi/8m/y5yi2fL80o6/sb9 3cTN/yd21HKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCR7iBGhq1L7YSDDTVSee+x X1xccNDei/91c9MuqdqsiYtj7lg17WdkWCP3faH/qkmK79OnL3ut4/Vo+e0nB564XJ5mY6ruNdX 4JgMA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="i9ugnADt+2no1y19"
+Content-Disposition: inline
+In-Reply-To: <DM6PR12MB3993F0EC4930E68C54299B36CDB8A@DM6PR12MB3993.namprd12.prod.outlook.com>
 
-On Wed, 22 Nov 2023 13:48:21 +0100, Christian Brauner wrote:
-> Hey everyone,
-> 
-> This simplifies the eventfd_signal() and eventfd_signal_mask() helpers
-> significantly. They can be made void and not take any unnecessary
-> arguments.
-> 
-> I've added a few more simplifications based on Sean's suggestion.
-> 
-> [...]
 
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
+--i9ugnADt+2no1y19
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+On Fri, Nov 24, 2023 at 06:35:19AM +0000, Manne, Nava kishore wrote:
+> Hi Conor,
+>=20
+> 	Thanks for providing the review comments.
+> Please find my response inline.
+>=20
+> > -----Original Message-----
+> > From: Conor Dooley <conor@kernel.org>
+> > Sent: Wednesday, November 22, 2023 10:21 PM
+> > To: Manne, Nava kishore <nava.kishore.manne@amd.com>
+> > Cc: mdf@kernel.org; hao.wu@intel.com; yilun.xu@intel.com;
+> > trix@redhat.com; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> > conor+dt@kernel.org; Simek, Michal <michal.simek@amd.com>;
+> > mathieu.poirier@linaro.org; Levinsky, Ben <ben.levinsky@amd.com>;
+> > Potthuri, Sai Krishna <sai.krishna.potthuri@amd.com>; Shah, Tanmay
+> > <tanmay.shah@amd.com>; dhaval.r.shah@amd.com; arnd@arndb.de;
+> > Datta, Shubhrajyoti <shubhrajyoti.datta@amd.com>; linux-
+> > fpga@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
+> > Subject: Re: [RFC PATCH 1/3] dt-bindings: fpga: Add support for user-key
+> > encrypted bitstream loading
+> >=20
+> > On Wed, Nov 22, 2023 at 11:14:02AM +0530, Nava kishore Manne wrote:
+> > > Adds =E2=80=98encrypted-key-name=E2=80=99 property to support user-ke=
+y encrypted
+> > > bitstream loading use case.
+> > >
+> > > Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> > > ---
+> > >  .../devicetree/bindings/fpga/fpga-region.txt  | 32
+> > > +++++++++++++++++++
+> >=20
+> > Is there a reason that this has not yet been converted to yaml?
+> >=20
+> I am not sure about the complication involved here why it's not converted=
+ to yaml format.
+> Due to time constraints, I couldn=E2=80=99t spend much time so I have use=
+d this existing legacy format
+> to add my changes.
+>=20
+> > >  1 file changed, 32 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > index 528df8a0e6d8..309334558b3f 100644
+> > > --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > @@ -177,6 +177,9 @@ Optional properties:
+> > >  	it indicates that the FPGA has already been programmed with this
+> > image.
+> > >  	If this property is in an overlay targeting an FPGA region, it is a
+> > >  	request to program the FPGA with that image.
+> > > +- encrypted-key-name : should contain the name of an encrypted key f=
+ile
+> > located
+> > > +	on the firmware search path. It will be used to decrypt the FPGA
+> > image
+> > > +	file with user-key.
+> >=20
+> > I might be misreading things, but your driver code seems to assume that=
+ this
+> > is an aes key. Nothing here seems to document that this is supposed to =
+be a
+> > key of a particular type.
+> >=20
+>=20
+> Yes, these changes are intended to add the support for Aes user-key encry=
+pted bitstream loading use case.
+> Will fix it in v2, something like below.
+> aes-key-file-name : Should contain the AES key file name on the firmware =
+search path.
+> 		      The key file contains the AES key and it will be used to decrypt =
+the FPGA image.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+Then when someone comes along looking for a different type of encryption
+we will end up with national-pride-foo-file-name etc. I think I'd rather
+have a second property that notes what type of cipher is being used and
+if that property is not present default to AES.
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+--i9ugnADt+2no1y19
+Content-Type: application/pgp-signature; name="signature.asc"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
+-----BEGIN PGP SIGNATURE-----
 
-[1/4] i915: make inject_virtual_interrupt() void
-      https://git.kernel.org/vfs/vfs/c/858848719210
-[2/4] eventfd: simplify eventfd_signal()
-      https://git.kernel.org/vfs/vfs/c/ded0f31f825f
-[3/4] eventfd: simplify eventfd_signal_mask()
-      https://git.kernel.org/vfs/vfs/c/45ee1c990e88
-[4/4] eventfd: make eventfd_signal{_mask}() void
-      https://git.kernel.org/vfs/vfs/c/37d5d473e749
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZWCbuwAKCRB4tDGHoIJi
+0vV7AQCqNqM2cmGU/BCfxWj5TJvLx3rZlbmMCQx94IZ0wEBgcgD/SwPOUEDaTgm7
+9HEV331ZuK9GycuqRUL7gyLlrRb7Fgw=
+=n0AP
+-----END PGP SIGNATURE-----
+
+--i9ugnADt+2no1y19--
 
