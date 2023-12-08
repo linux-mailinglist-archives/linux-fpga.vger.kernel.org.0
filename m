@@ -1,100 +1,397 @@
-Return-Path: <linux-fpga+bounces-51-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-52-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F259A806FA2
-	for <lists+linux-fpga@lfdr.de>; Wed,  6 Dec 2023 13:27:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8125780AD8C
+	for <lists+linux-fpga@lfdr.de>; Fri,  8 Dec 2023 21:08:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2FCA281AEB
-	for <lists+linux-fpga@lfdr.de>; Wed,  6 Dec 2023 12:27:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3751328174E
+	for <lists+linux-fpga@lfdr.de>; Fri,  8 Dec 2023 20:08:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD6B6364D0;
-	Wed,  6 Dec 2023 12:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB6625639B;
+	Fri,  8 Dec 2023 20:08:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UlRCcDlx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L0BHjBTX"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82630364C7;
-	Wed,  6 Dec 2023 12:27:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1BDC433C8;
-	Wed,  6 Dec 2023 12:27:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701865634;
-	bh=SFu4/bR/AMrjm4JlTuMfP6+O1LKZw8xcETHgeCdmOcw=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UlRCcDlxBcdIYtZoPpzMTuhqHXiPWCYfA6idr0x7B3j3Y2UMcQ+waxv51fpaH13zM
-	 zxfEclP72Liv5bjZpSgP6sDpzhrxzmK3JYaucrIB1EAhBZjXvf4/sAPiDQBTtVJAhX
-	 AaGDCeqqHHBAhSRQF7QuWR3OnECuf/4QxAY40FEZf31Tla//HUoSY+Pgvm0AJ/fn3j
-	 7dfkSQgkmcJJtou2/vXNZMiW0yDZuj7jH49rmmPIlZSL0zZAMSfR+smj12+l1E3BNJ
-	 wnQ1zNYJ1Y624VCEyb3EArLu3uKZgp/f7+o+lHj+NmiWNUFj6Gu/R3Cj4GK20GbDSt
-	 z+2M1Lo5wc4UQ==
-From: Conor Dooley <conor@kernel.org>
-To: soc@kernel.org,
-	Conor Dooley <conor@kernel.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	Russ Weight <russell.h.weight@intel.com>,
-	linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v3 0/6] PolarFire SoC Auto Update Support
-Date: Wed,  6 Dec 2023 12:25:58 +0000
-Message-Id: <20231206-catfight-trailing-47b7b547e79b@spud>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231020-agreeably-filing-3d48708e6262@spud>
-References: <20231020-agreeably-filing-3d48708e6262@spud>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221401BCE
+	for <linux-fpga@vger.kernel.org>; Fri,  8 Dec 2023 12:08:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1702066105;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vbUydnrXhVSmCz0/LKzXohrdr/oWo7h1yxnSiq7vXxY=;
+	b=L0BHjBTX1AlOlRbV1JtmN67pfPH/gUL0AGpot3kjD+LZR/CYQhwF4tTrvXVsVfkLrcpBED
+	4nuLYamMtogKD60MJfJJ2Oh7YOTA/jWIjOvbc3fU4Zk4XRE2UIm/9Yi3CaaSXVRUlBqgPZ
+	p+EV4rrSBT8w1M0Tf5eYqdjWMURkY8c=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-249-sz9N38NLNaGM_YP_IvsxEQ-1; Fri, 08 Dec 2023 15:08:23 -0500
+X-MC-Unique: sz9N38NLNaGM_YP_IvsxEQ-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-77f2a52bddbso239420985a.3
+        for <linux-fpga@vger.kernel.org>; Fri, 08 Dec 2023 12:08:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702066102; x=1702670902;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vbUydnrXhVSmCz0/LKzXohrdr/oWo7h1yxnSiq7vXxY=;
+        b=wCdjKdUxvCPDdeSLSTQjWz6kKqQ0FseDWKtrO2Qp8HqCXTQ2Lpo9adQza2nv5PTuND
+         lFIbi8OnUj8YmdT3l+h8mUCw118uioVB/rQ3qnuUH24N8VcvKzEolfmAOxxGF1Z/3lI/
+         LfYFOZyWkOKNHeTPvfCcjPf+OF3TwlLv33JcsEhy/HX+lXhlnwkcvrJ0zs1lODWdB9mq
+         tVLwuDg91lzhtqmK0Gg7CmfX4VBB9LGxZA/zWc/JzBQuVcagfe8JKJvQGtvl1GRHXZIY
+         ftr4ARGKJp/ISusXY5RjKu5JKjVySr6/FUyw4tGedJ//UnQsmWTauJ1ZFb+lvfUs60cq
+         XX1Q==
+X-Gm-Message-State: AOJu0Yx/p8wCiVYErBOygoTaI/hp59WxZTbggLUD2o5ZeSqtgZkBSPTd
+	o0+AIMsfQrmu726jD2zOdAu6hzulJryYGskcTxiamA5NJKvS5D0a+rE0zH7hJM65rctcbcpsovk
+	Of8C0SIaJ0pTNUUXRrWTbiMW5CRwY
+X-Received: by 2002:a05:620a:2946:b0:77e:fba3:4f08 with SMTP id n6-20020a05620a294600b0077efba34f08mr694303qkp.94.1702066102415;
+        Fri, 08 Dec 2023 12:08:22 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFYuyIwP2O5WfDuTI+7sYPGSHJ8agIcYEkscw35mJnmxrv/4yPsBqTVbyMJA28oZzK6qhNUXw==
+X-Received: by 2002:a05:620a:2946:b0:77e:fba3:4f08 with SMTP id n6-20020a05620a294600b0077efba34f08mr694287qkp.94.1702066102032;
+        Fri, 08 Dec 2023 12:08:22 -0800 (PST)
+Received: from [192.168.9.34] (net-2-34-30-38.cust.vodafonedsl.it. [2.34.30.38])
+        by smtp.gmail.com with ESMTPSA id re22-20020a05620a8e1600b0077891d2d12dsm928398qkn.43.2023.12.08.12.08.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Dec 2023 12:08:21 -0800 (PST)
+Message-ID: <5a8819ad-3551-475e-a645-1a300d3373f1@redhat.com>
+Date: Fri, 8 Dec 2023 21:08:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1335; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=zTxZ7tRHD+kYdL3Atrz/x5KAMx98vgPG50Y04wXmGgk=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKkFGcHW+uFcuo67KtRWbXzAJcHVK2PBLG9zq8H3gOyPZ 98fK7zrKGVhEONgkBVTZEm83dcitf6Pyw7nnrcwc1iZQIYwcHEKwETq/jD8szAQym13+xgbeTva UWzKI+W50QJ8bS6WPW6nejyqOk5/YGRofxHUuPRLGNept/eWWBrNfvnPZIqGxIOCdzyLy81bgt/ zAwA=
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Marco Pagani <marpagan@redhat.com>
+Subject: Re: [RFC PATCH v2 1/2] fpga: add a module owner field to fpga_manager
+ and fpga_manager_ops
+To: Xu Yilun <yilun.xu@linux.intel.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
+References: <20231124162807.238724-1-marpagan@redhat.com>
+ <20231124162807.238724-2-marpagan@redhat.com>
+ <ZWG6Tg0egX6Cy9j5@yilunxu-OptiPlex-7050>
+ <7004d215-5185-4cce-a51e-42e131a30453@redhat.com>
+ <ZWsgFViqdJuC7N1d@yilunxu-OptiPlex-7050>
+Content-Language: en-US
+In-Reply-To: <ZWsgFViqdJuC7N1d@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Conor Dooley <conor.dooley@microchip.com>
 
-On Fri, 20 Oct 2023 14:18:38 +0100, Conor Dooley wrote:
-> Hey all,
+
+On 2023-12-02 13:16, Xu Yilun wrote:
+> On Thu, Nov 30, 2023 at 11:42:36AM +0100, Marco Pagani wrote:
+>>
+>>
+>> On 2023-11-25 10:11, Xu Yilun wrote:
+>>> On Fri, Nov 24, 2023 at 05:28:06PM +0100, Marco Pagani wrote:
+>>>> Add a module *owner field to the fpga_manager_ops and fpga_manager
+>>>> structs to protect the fpga manager against the unloading of the
+>>>> low-level control module while someone is holding a reference to the
+>>>> manager device. Low-level control modules should statically set the
+>>>> owner field of the fpga_manager_ops struct to THIS_MODULE. Then, when
+>>>> the manager is registered using fpga_mgr_register(), the value is copied
+>>>> into the owner field of the fpga_manager struct (that contains the
+>>>> device context). In this way, the manager can later use it in
+>>>> fpga_mgr_get() to take the low-level module's refcount. To prevent races
+>>>> while unloading the low-level control module, fpga_mgr_get() and part of
+>>>> the fpga_mgr_unregister() methods are protected with a mutex.
+>>>>
+>>>> Other changes: move put_device() from __fpga_mgr_get() to fpga_mgr_get()
+>>>> and of_fpga_mgr_get() to improve code clarity.
+>>>>
+>>>> Fixes: 654ba4cc0f3e ("fpga manager: ensure lifetime with of_fpga_mgr_get")
+>>>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>>>> ---
+>>>>  drivers/fpga/fpga-mgr.c       | 56 +++++++++++++++++++++++++----------
+>>>>  include/linux/fpga/fpga-mgr.h |  4 +++
+>>>>  2 files changed, 44 insertions(+), 16 deletions(-)
+>>>>
+>>>> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+>>>> index 06651389c592..608605d59860 100644
+>>>> --- a/drivers/fpga/fpga-mgr.c
+>>>> +++ b/drivers/fpga/fpga-mgr.c
+>>>> @@ -21,6 +21,8 @@
+>>>>  static DEFINE_IDA(fpga_mgr_ida);
+>>>>  static const struct class fpga_mgr_class;
+>>>>  
+>>>> +static DEFINE_MUTEX(mgr_lock);
+>>>> +
+>>>>  struct fpga_mgr_devres {
+>>>>  	struct fpga_manager *mgr;
+>>>>  };
+>>>> @@ -667,17 +669,15 @@ ATTRIBUTE_GROUPS(fpga_mgr);
+>>>>  static struct fpga_manager *__fpga_mgr_get(struct device *dev)
+>>>>  {
+>>>>  	struct fpga_manager *mgr;
+>>>> +	struct module *owner;
+>>>>  
+>>>>  	mgr = to_fpga_manager(dev);
+>>>> +	owner = mgr->owner;
+>>>>  
+>>>> -	if (!try_module_get(dev->parent->driver->owner))
+>>>> -		goto err_dev;
+>>>> +	if (owner && !try_module_get(owner))
+>>>
+>>> No need to test owner == NULL, try_module_get() does this.
+>>
+>> You are right. I'll remove it in the next version.
+>>
+>>>
+>>>> +		mgr = ERR_PTR(-ENODEV);
+>>>>  
+>>>>  	return mgr;
+>>>> -
+>>>> -err_dev:
+>>>> -	put_device(dev);
+>>>> -	return ERR_PTR(-ENODEV);
+>>>>  }
+>>>>  
+>>>>  static int fpga_mgr_dev_match(struct device *dev, const void *data)
+>>>> @@ -693,12 +693,22 @@ static int fpga_mgr_dev_match(struct device *dev, const void *data)
+>>>>   */
+>>>>  struct fpga_manager *fpga_mgr_get(struct device *dev)
+>>>>  {
+>>>> -	struct device *mgr_dev = class_find_device(&fpga_mgr_class, NULL, dev,
+>>>> -						   fpga_mgr_dev_match);
+>>>> +	struct fpga_manager *mgr = ERR_PTR(-ENODEV);
+>>>> +	struct device *mgr_dev;
+>>>> +
+>>>> +	mutex_lock(&mgr_lock);
+>>>> +
+>>>> +	mgr_dev = class_find_device(&fpga_mgr_class, NULL, dev, fpga_mgr_dev_match);
+>>>>  	if (!mgr_dev)
+>>>> -		return ERR_PTR(-ENODEV);
+>>>> +		goto out;
+>>>> +
+>>>> +	mgr = __fpga_mgr_get(mgr_dev);
+>>>> +	if (IS_ERR(mgr))
+>>>> +		put_device(mgr_dev);
+>>>>  
+>>>> -	return __fpga_mgr_get(mgr_dev);
+>>>> +out:
+>>>> +	mutex_unlock(&mgr_lock);
+>>>> +	return mgr;
+>>>>  }
+>>>>  EXPORT_SYMBOL_GPL(fpga_mgr_get);
+>>>>  
+>>>> @@ -711,13 +721,22 @@ EXPORT_SYMBOL_GPL(fpga_mgr_get);
+>>>>   */
+>>>>  struct fpga_manager *of_fpga_mgr_get(struct device_node *node)
+>>>>  {
+>>>> -	struct device *dev;
+>>>> +	struct fpga_manager *mgr = ERR_PTR(-ENODEV);
+>>>> +	struct device *mgr_dev;
+>>>> +
+>>>> +	mutex_lock(&mgr_lock);
+>>>> +
+>>>> +	mgr_dev = class_find_device_by_of_node(&fpga_mgr_class, node);
+>>>> +	if (!mgr_dev)
+>>>> +		goto out;
+>>>>  
+>>>> -	dev = class_find_device_by_of_node(&fpga_mgr_class, node);
+>>>> -	if (!dev)
+>>>> -		return ERR_PTR(-ENODEV);
+>>>> +	mgr = __fpga_mgr_get(mgr_dev);
+>>>> +	if (IS_ERR(mgr))
+>>>> +		put_device(mgr_dev);
+>>>>  
+>>>> -	return __fpga_mgr_get(dev);
+>>>> +out:
+>>>> +	mutex_unlock(&mgr_lock);
+>>>> +	return mgr;
+>>>>  }
+>>>>  EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
+>>>>  
+>>>> @@ -727,7 +746,7 @@ EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
+>>>>   */
+>>>>  void fpga_mgr_put(struct fpga_manager *mgr)
+>>>>  {
+>>>> -	module_put(mgr->dev.parent->driver->owner);
+>>>> +	module_put(mgr->owner);
+>>>>  	put_device(&mgr->dev);
+>>>>  }
+>>>>  EXPORT_SYMBOL_GPL(fpga_mgr_put);
+>>>> @@ -806,6 +825,7 @@ fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *in
+>>>>  
+>>>>  	mgr->name = info->name;
+>>>>  	mgr->mops = info->mops;
+>>>> +	mgr->owner = info->mops->owner;
+>>>>  	mgr->priv = info->priv;
+>>>>  	mgr->compat_id = info->compat_id;
+>>>>  
+>>>> @@ -888,7 +908,11 @@ void fpga_mgr_unregister(struct fpga_manager *mgr)
+>>>>  	 */
+>>>>  	fpga_mgr_fpga_remove(mgr);
+>>>>  
+>>>> +	mutex_lock(&mgr_lock);
+>>>> +
+>>>>  	device_unregister(&mgr->dev);
+>>>> +
+>>>> +	mutex_unlock(&mgr_lock);
+>>>
+>>> Why this part should be protected rather than the whole
+>>> fpga_mgr_unregister()?
+>>>
+>>
+>> Protecting the fpga_remove() op seems unnecessary to me because it
+>> does not affect the manager device's lifetime. Moreover, it may hold
+>> the mutex for a long time since it was intended to interact with the
+>> hardware to put it in a specific state before removing the driver.
+>>
+>>> I feel the scope of the protection is unclear to me in this patch. What
+>>> data should be protected from concurrent access by this mutex? From the
+>>> code seems the racing of mgr dev should be protected but apparently it
+>>> doesn't have to.
+>>
+>> The mutex is there to ensure the lifetime of the manager device and
+>> its context (struct fpga_manager) if fpga_mgr_get() happens to run
+>> concurrently with the removal of the low-level module.
+>>
+>>>
+>>> And with this mutex, the get/put/unregister() for one mgr should be
+>>> exclusive with another mgr, but that also seems not necessary.
+>>>
+>>
+>> I decided to use a static mutex because I thought putting the mutex
+>> in the manager's context would be unsafe since its life would be tied
+>> to the manager's life. For instance, consider the following sequence:
+>>
+>> - A removes the low-level control module, and delete_module progresses
+>> up to the point when it calls the module's exit function, which in turn
+>> calls fpga_mgr_unregister().
+>>
+>> - fpga_mgr_unregister() takes the mutex but gets descheduled before
+>> completing the unregistering of the manager device.
+>>
+>> - Meanwhile, B wants to get the manager (it is still there) and calls
+>> fpga_mgr_get(), which tries to take the mutex but gets suspended since
+>> it is held by A.
+>>
+>> - A resumes and fpga_mgr_unregister() releases the manager device and
 > 
-> This patchset adds support for the "Auto Update" feature on PolarFire
-> SoC that allows for writing an FPGA bistream to the SPI flash connected
-> to the system controller.
-> On powercycle (or reboot depending on how the firmware implements the
-> openSBI SRST extension) "Auto Update" will take place, and program the
-> FPGA with the contents of the SPI flash - provided that that image is
-> valid and an actual upgrade from that already programmed.
+> The lifecycle of the manager device is not entirely decided by
+> fpga_mgr_unregister(), this func just puts/decreases the device
+> refcount.
+
+Right, but here I'm considering the case where no one has previously
+taken the manager device. In that specific case, the refcount will be
+decremented to zero, and the device (with its context) will be released.
+
+However, you got me thinking about how the mutex is causing the problem
+in this case.
+
 > 
-> [...]
+> Remember fpga_mgr_get() gets the device via
+> class_find_device()->get_device(). I assume if the valid device pointer
+> could be returned by class_find_device(), it would never be released by
+> other nice players. So I have no worry about the per manager mutex.
+> 
+>> its context, including the mutex on which B is suspended.
+>>
+>> We could mitigate this specific case using mutex_trylock(). However,
+>> there will still be other problematic cases, like if fpga_mgr_get()
+>> gets suspended right before taking the mutex and then delete_module
+>> proceeds up to when fpga_mgr_unregister() frees the manager device
+>> and its context.
+>>
+>>> I think the mgr->owner & mgr->ops should be protected from concurrent
+>>> access of delete_module & fpga_mgr_get/put(), so how about:
+>>>
+>>> struct fpga_manager_ops {
+>>> 	struct module *owner;
+>>> 	...
+>>> };
+>>>
+>>> struct fpga_manager {
+>>> 	...
+>>> 	struct mutex mops_lock;
+>>> 	const struct fpga_manager_ops *mops;
+>>> 	...
+>>> };
+>>>
+>>>
+>>> static struct fpga_manager *__fpga_mgr_get(struct device *dev)
+>>> {
+>>> 	struct fpga_manager *mgr;
+>>>
+>>> 	mgr = to_fpga_manager(dev);
+>>>
+>>> 	mutex_lock(&mgr->mops_lock);
+>>>
+>>> 	if (!mgr->mops || !try_module_get(mgr->mops->owner))
+>>> 		mgr = ERR_PTR(-ENODEV);
+>>>
+>>> 	mutex_unlock(&mgr->mops_lock);
+>>> 		
+>>> 	return mgr;
+>>> }
+>>>
+>>> void fpga_mgr_unregister(struct fpga_manager *mgr)
+>>> {
+>>> 	fpga_mgr_fpga_remove(mgr);	
+>>>
+>>> 	mutex_lock(&mgr->ops_lock);
+>>> 	mgr->mops = NULL;
+>>> 	mutex_unlock(&mgr->ops_lock);
+>>>
+>>> 	device_unregister(&mgr->dev);	
+>>> }
+>>>
+>>> Not actually tested.
+>>>
+>>
+>> I think protecting the only the ops is not enough for the same reasons.
+>> If fpga_mgr_get() gets suspended right after class_find_device(),and
+>> meanwhile the low-level module is removed, it resumes with a reference
+>> to a manager device that no longer exists.
+>>
+>> In a certain sense, however, using a mutex seems like a mitigation
+>> that does not solve the problem at its root. I honestly still think
+>> that taking the module's refcount right when registering the manager
+>> is the only way that is both safe and robust against code changes.
+> 
+> I would nak either. As mentioned above, that makes rmmod vendor module
+> impossible. Introducing another user interface to release the module's
+> refcount is also a bad idea. Who decides to take the ref, who releases
+> it. A user has no knowledge of what is happening inside and should not
+> enforce.
+> 
+>> However, my proposal was rejected.
+>>
+>> So, if you prefer, I can drop the mutex entirely in the next version,
+>> and we leave the responsibility of keeping all kernel pieces to the
+> 
+> No, please try to fix it. Could you please reconsider my proposal?
+> 
 
-Arnd, I've gone and applied this stuff since things have been dead
-since I sent it & will send it to you for the upcoming mw in a few weeks.
+I have considered it and thought about it. However, I don't think we need a
+mutex to protect mgr->mops. This is because the low-level module's refcount has
+already been decremented when fpga_mgr_unregister() is called by the module's
+exit function. So, when we get to the point of executing fpga_mgr_unregister(),
+any concurrent call to try_module_get() will fail (if no one has taken the
+module before) without the need to check mops first.
 
-[1/6] dt-bindings: soc: microchip: add a property for system controller flash
-      https://git.kernel.org/conor/c/98d62e97c39f
-[2/6] soc: microchip: mpfs: enable access to the system controller's flash
-      https://git.kernel.org/conor/c/742aa6c563d2
-[3/6] soc: microchip: mpfs: print service status in warning message
-      https://git.kernel.org/conor/c/a8f00589be7b
-[4/6] soc: microchip: mpfs: add auto-update subdev to system controller
-      https://git.kernel.org/conor/c/fad13b5b73e0
-[5/6] firmware: microchip: add PolarFire SoC Auto Update support
-      https://git.kernel.org/conor/c/ec5b0f1193ad
+If we assume (as you pointed out) that class_find_device() can be safely
+executed concurrently with device_unregister() (returning either a valid dev
+pointer or null) and, consequently, the manager context is guaranteed to exist
+after that point. Then, we should be good without the mutex if we call
+try_module_get() on a copy of the owner pointer stored in the manager context.
+
+>> user. It will still be an improvement over taking the low-level
+>> module's refcount through the parent device's driver pointer.
+>>
 
 Thanks,
-Conor.
+Marco
+
 
