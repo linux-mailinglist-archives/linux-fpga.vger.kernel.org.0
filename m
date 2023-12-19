@@ -1,38 +1,38 @@
-Return-Path: <linux-fpga+bounces-72-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-74-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A014818E2E
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Dec 2023 18:32:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C32C818E32
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Dec 2023 18:32:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF34E1F22CC9
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Dec 2023 17:32:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD03B287423
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Dec 2023 17:32:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B8C23769;
-	Tue, 19 Dec 2023 17:32:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C9A82D7A7;
+	Tue, 19 Dec 2023 17:32:37 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715E237D0C
-	for <linux-fpga@vger.kernel.org>; Tue, 19 Dec 2023 17:32:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A80337D02
+	for <linux-fpga@vger.kernel.org>; Tue, 19 Dec 2023 17:32:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rFdxC-0005vG-8u; Tue, 19 Dec 2023 18:32:26 +0100
+	id 1rFdxC-0005vH-8w; Tue, 19 Dec 2023 18:32:26 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rFdxA-0004Go-GL; Tue, 19 Dec 2023 18:32:25 +0100
+	id 1rFdxA-0004Gr-MR; Tue, 19 Dec 2023 18:32:25 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rFdxB-000CpP-AE; Tue, 19 Dec 2023 18:32:25 +0100
+	id 1rFdxB-000CpT-GI; Tue, 19 Dec 2023 18:32:25 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: Moritz Fischer <mdf@kernel.org>,
 	Wu Hao <hao.wu@intel.com>,
@@ -40,9 +40,9 @@ To: Moritz Fischer <mdf@kernel.org>,
 Cc: Tom Rix <trix@redhat.com>,
 	linux-fpga@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: [PATCH 01/13] fpga: altera-fpga2sdram: Convert to platform remove callback returning void
-Date: Tue, 19 Dec 2023 18:31:59 +0100
-Message-ID:  <017b9e17a0c88b2a633467633d304639e7765926.1703006638.git.u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 02/13] fpga: altera-freeze-bridge: Convert to platform remove callback returning void
+Date: Tue, 19 Dec 2023 18:32:00 +0100
+Message-ID:  <7f4fcb23b25400c6711848105823081e032c5266.1703006638.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1703006638.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1703006638.git.u.kleine-koenig@pengutronix.de>
@@ -53,7 +53,7 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1756; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=/O0zBG+j6BZWO8a8WR2bbHOJAzd+6kfq+RkQkZ+8ZWc=; b=owGbwMvMwMXY3/A7olbonx/jabUkhtTGy/1JflZCa684bV4i8aX33rZfd7bcNvsY+0fjzM5uH baHaUxPOxmNWRgYuRhkxRRZ7BvXZFpVyUV2rv13GWYQKxPIFAYuTgGYiEU4B8OE3Udj37TFzOmr F9AQ1N3BX8rKxccdWsitX6xz7UXWVE/TtFN//3qeWcYtf4ctUze03FFiT0PxvL2KFWkrV6Yuf3h XzyDXqdk17eB1nd1+lowmRU2/fya4nFSLZq9I2b6r3FP057VPf1IrNiXPrTm9Zd/DsNylNZy3OU Q7XYILg+on/XLunq8tI+eX8aeei9NW2KTE5stpz/MfTjF3PuEJ45jZ8EMl1d4wJj/D45R34jL1r 9GbSr7Lau1t2WelPtU1jTHhK98/ewmxfP2/lbocH6d01bwV9f3fpdHJsETuvmqHUMjv1ImHbm+u 6QzhuvHn84sHAtnl33Ui77zdeu6h3PXpmjVfpJm1d0cBAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1711; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=xiSiCsZnqLmGC3n7yIqy4nLCQmQIom9WtygnyouKV5c=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlgdOQpusgm15GGAXfytldR9Eh16j1/NeUwEuSp 8djRXxRLP6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZYHTkAAKCRCPgPtYfRL+ Tq5FB/4s2a49afCLXeZIHj9nCU0QPLGkM3ajyQHb26L3WPz8whY8A86sWLBYRMQ/5oeI6RfY5xZ xBz999sCyAXivYW1metycn2qpUMjsbHQGEWZ7G2c8SwtBqINyR26MNc1kkHAZP10GLZoW6vmPQt Uwq0eNve/UsJaflvJCcDK5N05E3GGvvtn+U6HwLUaAagWdm1Abpi/6HvRwelttBJfRhkNCVav8a AFWWGK4ROuobTg0CbmLRmaCOuVG1aKfvLC6J+7xmpM52G0dRz9h3gudqA3jQC+fRMz98+VYiJkr oVpDH84+017r+2bGVePxzEjUkeyzykAQdw+ew0IDyO0KWQ36
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -76,19 +76,19 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/fpga/altera-fpga2sdram.c | 6 ++----
+ drivers/fpga/altera-freeze-bridge.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/fpga/altera-fpga2sdram.c b/drivers/fpga/altera-fpga2sdram.c
-index 1fa2ccc321ab..6b60ca004345 100644
---- a/drivers/fpga/altera-fpga2sdram.c
-+++ b/drivers/fpga/altera-fpga2sdram.c
-@@ -147,20 +147,18 @@ static int alt_fpga_bridge_probe(struct platform_device *pdev)
- 	return ret;
+diff --git a/drivers/fpga/altera-freeze-bridge.c b/drivers/fpga/altera-freeze-bridge.c
+index 0c3fb8226908..44061cb16f87 100644
+--- a/drivers/fpga/altera-freeze-bridge.c
++++ b/drivers/fpga/altera-freeze-bridge.c
+@@ -253,18 +253,16 @@ static int altera_freeze_br_probe(struct platform_device *pdev)
+ 	return 0;
  }
  
--static int alt_fpga_bridge_remove(struct platform_device *pdev)
-+static void alt_fpga_bridge_remove(struct platform_device *pdev)
+-static int altera_freeze_br_remove(struct platform_device *pdev)
++static void altera_freeze_br_remove(struct platform_device *pdev)
  {
  	struct fpga_bridge *br = platform_get_drvdata(pdev);
  
@@ -97,15 +97,13 @@ index 1fa2ccc321ab..6b60ca004345 100644
 -	return 0;
  }
  
- MODULE_DEVICE_TABLE(of, altera_fpga_of_match);
- 
- static struct platform_driver altera_fpga_driver = {
- 	.probe = alt_fpga_bridge_probe,
--	.remove = alt_fpga_bridge_remove,
-+	.remove_new = alt_fpga_bridge_remove,
+ static struct platform_driver altera_freeze_br_driver = {
+ 	.probe = altera_freeze_br_probe,
+-	.remove = altera_freeze_br_remove,
++	.remove_new = altera_freeze_br_remove,
  	.driver = {
- 		.name	= "altera_fpga2sdram_bridge",
- 		.of_match_table = of_match_ptr(altera_fpga_of_match),
+ 		.name	= "altera_freeze_br",
+ 		.of_match_table = altera_freeze_br_of_match,
 -- 
 2.42.0
 
