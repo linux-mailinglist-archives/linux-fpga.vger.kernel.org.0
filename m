@@ -1,22 +1,22 @@
-Return-Path: <linux-fpga+bounces-76-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-71-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C117E818E34
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Dec 2023 18:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9783B818E2B
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Dec 2023 18:32:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5D701C21CA9
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Dec 2023 17:32:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA4B51C2167E
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Dec 2023 17:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B582E633;
-	Tue, 19 Dec 2023 17:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 361A937D0B;
+	Tue, 19 Dec 2023 17:32:36 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FB937D0F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7158837D0A
 	for <linux-fpga@vger.kernel.org>; Tue, 19 Dec 2023 17:32:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -24,15 +24,15 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rFdxC-0005wA-Vj; Tue, 19 Dec 2023 18:32:26 +0100
+	id 1rFdxD-0005wF-62; Tue, 19 Dec 2023 18:32:27 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rFdxB-0004H7-G8; Tue, 19 Dec 2023 18:32:26 +0100
+	id 1rFdxB-0004HD-ML; Tue, 19 Dec 2023 18:32:26 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rFdxC-000Cpj-A3; Tue, 19 Dec 2023 18:32:26 +0100
+	id 1rFdxC-000Cpn-G2; Tue, 19 Dec 2023 18:32:26 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: Wu Hao <hao.wu@intel.com>,
 	Moritz Fischer <mdf@kernel.org>,
@@ -40,9 +40,9 @@ To: Wu Hao <hao.wu@intel.com>,
 Cc: Tom Rix <trix@redhat.com>,
 	linux-fpga@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: [PATCH 06/13] fpga: dfl-fme-main: Convert to platform remove callback returning void
-Date: Tue, 19 Dec 2023 18:32:04 +0100
-Message-ID:  <438bb4797984fbfd0cef501010a64fa1e42ad9f4.1703006638.git.u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 07/13] fpga: dfl-fme-region: Convert to platform remove callback returning void
+Date: Tue, 19 Dec 2023 18:32:05 +0100
+Message-ID:  <13187db1642f81f04e55be0a26045f09ccc95d37.1703006638.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1703006638.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1703006638.git.u.kleine-koenig@pengutronix.de>
@@ -53,7 +53,7 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1665; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=qfB5i+dUHckThGJDxVawBxUYk6jLLVFxmgRke5aDk5g=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlgdOU73secTwGqydXpibi+xQrgc/9aeuncTw7m e1cc6XjucqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZYHTlAAKCRCPgPtYfRL+ Tv5ACACYffed80Ns9oh/1aOfFBm6L+Xngs3B9JWXma3660ouHgK3qKXhYWoIiAkdUNP3TvH9ImO imZJ4xya2+xh1er6VWlhdD8ELyse5LosyJFYIIwHd4EAGIfUmdyQM+OWKs9hMKvNOS2VMnugfSC jlT4R1Ue/V5HEykfp3pR4lANSmuVqzsKZRXzmaWSGXgbCX8NUafCQbXe+5bIz0dzPqY6IWxtv54 3LcN3jyyqWwqMJ8D4KRMbOtUk9t7r5jgPWj3NKipUlD8WOZjTPBo98weHBqMlxUqYvhEHC/Edpl SQkFHX2/3dXjLhbBpBE98Cq4ZqiH6exRtnHFssMigsHUx884
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1785; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=dBaTbnikILumgVfq0dE0u3xfKKC6APd7/tEpjPEswMA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlgdOV+b4GsCu/7+cejuJ84AstdN1zJc+UtPhJt BIDT7LgExqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZYHTlQAKCRCPgPtYfRL+ Tl+mB/9ae2NShiLTGcM6GiGfGq+8ets1CV9LC+taPkRkg15YAQ16wcq9JyQCvF2bEEyBDdA3PoJ 8C9c68VgqREZFu7iwHK7sqi6IoPBsbFzHwCGP5Iij2UZvkUjIbbqXeRevPTPcyEiw5Ymx0SsAoU HYzdkm/oJmlLdTWnzXATHZBgXmyH5gl5oSOT2uV1KY3FxtznD1wYGFgtwmzA5wuYT58pi0tqXxg ZpdZX5EdqqXAyNuFG2Wn7hg1C946koow35vSMW7NfjPYQx2T+94AEo1Llk3pRD9dB9CEzPEB5q9 ZvAUpRMA5Z+f69SSZi8qvajKKqq3K0MT07q6RBl+hxPmrYVv
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -76,37 +76,39 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/fpga/dfl-fme-main.c | 6 ++----
+ drivers/fpga/dfl-fme-region.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
-index 3dcf990bd261..a2b5da0093da 100644
---- a/drivers/fpga/dfl-fme-main.c
-+++ b/drivers/fpga/dfl-fme-main.c
-@@ -730,13 +730,11 @@ static int fme_probe(struct platform_device *pdev)
+diff --git a/drivers/fpga/dfl-fme-region.c b/drivers/fpga/dfl-fme-region.c
+index 4aebde0a7f1c..71616f8b4982 100644
+--- a/drivers/fpga/dfl-fme-region.c
++++ b/drivers/fpga/dfl-fme-region.c
+@@ -61,15 +61,13 @@ static int fme_region_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int fme_remove(struct platform_device *pdev)
-+static void fme_remove(struct platform_device *pdev)
+-static int fme_region_remove(struct platform_device *pdev)
++static void fme_region_remove(struct platform_device *pdev)
  {
- 	dfl_fpga_dev_ops_unregister(pdev);
- 	dfl_fpga_dev_feature_uinit(pdev);
- 	fme_dev_destroy(pdev);
+ 	struct fpga_region *region = platform_get_drvdata(pdev);
+ 	struct fpga_manager *mgr = region->mgr;
+ 
+ 	fpga_region_unregister(region);
+ 	fpga_mgr_put(mgr);
 -
 -	return 0;
  }
  
- static const struct attribute_group *fme_dev_groups[] = {
-@@ -751,7 +749,7 @@ static struct platform_driver fme_driver = {
- 		.dev_groups = fme_dev_groups,
+ static struct platform_driver fme_region_driver = {
+@@ -77,7 +75,7 @@ static struct platform_driver fme_region_driver = {
+ 		.name    = DFL_FPGA_FME_REGION,
  	},
- 	.probe   = fme_probe,
--	.remove  = fme_remove,
-+	.remove_new = fme_remove,
+ 	.probe   = fme_region_probe,
+-	.remove  = fme_region_remove,
++	.remove_new = fme_region_remove,
  };
  
- module_platform_driver(fme_driver);
+ module_platform_driver(fme_region_driver);
 -- 
 2.42.0
 
