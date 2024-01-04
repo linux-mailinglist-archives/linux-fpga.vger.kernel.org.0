@@ -1,307 +1,385 @@
-Return-Path: <linux-fpga+bounces-91-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-92-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25D3C82302F
-	for <lists+linux-fpga@lfdr.de>; Wed,  3 Jan 2024 16:02:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B106823B94
+	for <lists+linux-fpga@lfdr.de>; Thu,  4 Jan 2024 05:52:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16C5C1C20CCA
-	for <lists+linux-fpga@lfdr.de>; Wed,  3 Jan 2024 15:02:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFED428827E
+	for <lists+linux-fpga@lfdr.de>; Thu,  4 Jan 2024 04:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6561B274;
-	Wed,  3 Jan 2024 15:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB0515EA6;
+	Thu,  4 Jan 2024 04:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bvpCkP+1"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LStWGe7i"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2076.outbound.protection.outlook.com [40.107.102.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300961B270
-	for <linux-fpga@vger.kernel.org>; Wed,  3 Jan 2024 15:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704294152;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9YzjbOUgpmBQjCOcD8mqfwxZd0BBuvIZGME9zIgMdSg=;
-	b=bvpCkP+11r7CMuEUvC9ckmz+92LfP/dRt0rdwF50BPN0jb6X226T4qfvgmlhGH+pu/h1bP
-	X2xFpxZ0T0QnUVUkzZOZpFxeGPtxvNwQcRC+bqc1qDNUU83kMImAzFsE7+E39Y5l92uSq6
-	G1waExlgMY7gSSwGb8Cl9cP62V/M/8U=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-498-SkJbTZQFPzimduOCkg3DKQ-1; Wed, 03 Jan 2024 10:02:30 -0500
-X-MC-Unique: SkJbTZQFPzimduOCkg3DKQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-40d42061a35so91198955e9.0
-        for <linux-fpga@vger.kernel.org>; Wed, 03 Jan 2024 07:02:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704294149; x=1704898949;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9YzjbOUgpmBQjCOcD8mqfwxZd0BBuvIZGME9zIgMdSg=;
-        b=UICkAflljTVsro2SyXI1wVbSWglQc1CMT1XG6wZUYxjtOwMdOK9byO1G1nppEOhh4x
-         9V4Dribf67tKAHl3843QBw4f/lG2P3DC2sahEVj3gvbko1BTAiZaNy+9wE9giQ4jbxzG
-         pSMS7bT/tDX96FvGHUUafAFe2Hf9zsTb3x6HJVQ++jfaGJbuP6oywpmIifmD857BwlzI
-         mw7Mhf2XgQtBg6p8N0Dy63rcL5c2IeELP1EIFeJAH/5yNR9IAfU7RIs5MWsR4MLJK0HO
-         7Z857gZl8zWdXN/Zho6Wtq40QULUtXkyjdtXqPoKR4YowIywbR8HSy9jNK7u89z4UCGn
-         HxcQ==
-X-Gm-Message-State: AOJu0YwXF0CX6gHkmoDKofFFXDERVBy4sM0fs2rxSjx9Tq2IZmdBdi9M
-	daIAfRcqhobwwJpGFdNrxr4H6oLfOt75diLO1iLzqyz5mamW9bzUNENS+KkXiaqL1iewkuANR7H
-	3Hub8ZajJEzHNMsoSx3brjns7snNG
-X-Received: by 2002:a7b:c3c6:0:b0:40c:de2:148c with SMTP id t6-20020a7bc3c6000000b0040c0de2148cmr9814046wmj.47.1704294149638;
-        Wed, 03 Jan 2024 07:02:29 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGf2xvpgewPhCy7SJJa8JoELXLbO3OMO+jKcvhfVqh41Qo5YGyItbjrI41gXQAgNxq5coAqjQ==
-X-Received: by 2002:a7b:c3c6:0:b0:40c:de2:148c with SMTP id t6-20020a7bc3c6000000b0040c0de2148cmr9814036wmj.47.1704294149263;
-        Wed, 03 Jan 2024 07:02:29 -0800 (PST)
-Received: from [192.168.9.34] (net-2-34-31-72.cust.vodafonedsl.it. [2.34.31.72])
-        by smtp.gmail.com with ESMTPSA id n19-20020a05600c4f9300b0040d8d023760sm2574803wmq.5.2024.01.03.07.02.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jan 2024 07:02:28 -0800 (PST)
-Message-ID: <67bd8de1-f4a2-43bd-a973-3add86cc2b26@redhat.com>
-Date: Wed, 3 Jan 2024 16:02:27 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F8115485;
+	Thu,  4 Jan 2024 04:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T4rOdDepmXXzTh6bVPOQVGUYR7VMtzU484oH6ZXdMzwoMfQgF2lIb9d/6wAcBssPLaX72actKNVz+FUca4LbmhknBy0fA157eyohyvbOmmL1N7D6Y2qrVUDuAayeuzzMqZruj/sQAqIKnOIGuPChRTOdhcCh9+nfy3GOmULK2b9ArdZxmnlEiIC0x/63NBY9mORiViRwsykH1c2UQsFkPXMSCOMuQd6G/z5D4YVka0y4g3zcOD9HZZfNBOBX4D+WpFvTo6HJY1/fSEwIMfxKZyRHA59aSzLbFH7raMeQ9qZCIKkPTH9Ihs0Ly7HfXkmQRU4CDUkjSdXZgPCa0lepjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4pqB1YrR1pUmofr1Nur8tPilzqJVBFMJcQfKdTDzqtc=;
+ b=nGnNqnYERocT0l9xG1jeCRl6Y+uzYPlr7qtr6H+Q0VpVzfVaW/thhIftCmQw5irYeKgEXw+j7zX/X45+H0GpXCGsZxSBB281IMv90g61zWN6oYLpxAlwE5pny1PnPa0stJaMCnLVjGKjgdNv3xeIES9ZGP2uYN6m6VoqJo46nZbL2HI4cDpxY9DoknGjxtz1POMGeRfJYZJiMmhWJHdla5RwoPG5AjdXlipImCuSd4tD/JAIqXa/6xF2DzRNT1bkludYR1Tlxs2yMvkgjtp62FelET/1lkpCvPG2NpqnN2gheS0mHewNVWZ+wZkacYEabHbwmZaKqQQvqlJu1iRNIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4pqB1YrR1pUmofr1Nur8tPilzqJVBFMJcQfKdTDzqtc=;
+ b=LStWGe7iiZQ/edzflvzjQzCy+HCr8noE4jz4Rn3iwpcPVEsXOfUgMcXRJqJuWTiUnKjaxA+5+8G5i8ACcwxTRcZvPbduLGuY0H8OojAfiJEOj39trTo/bhjCcxXy1MI1YlvG23tCtJTidwzRIY/7TIrcPPPkqhF5DuTuNcIqhwI=
+Received: from DM6PR12MB3993.namprd12.prod.outlook.com (2603:10b6:5:1c5::29)
+ by MN6PR12MB8541.namprd12.prod.outlook.com (2603:10b6:208:47a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7135.25; Thu, 4 Jan
+ 2024 04:52:15 +0000
+Received: from DM6PR12MB3993.namprd12.prod.outlook.com
+ ([fe80::b46:e1e6:ac2a:4386]) by DM6PR12MB3993.namprd12.prod.outlook.com
+ ([fe80::b46:e1e6:ac2a:4386%7]) with mapi id 15.20.7113.027; Thu, 4 Jan 2024
+ 04:52:15 +0000
+From: "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+To: "mdf@kernel.org" <mdf@kernel.org>, "hao.wu@intel.com" <hao.wu@intel.com>,
+	"yilun.xu@intel.com" <yilun.xu@intel.com>, "trix@redhat.com"
+	<trix@redhat.com>, "peter.colberg@intel.com" <peter.colberg@intel.com>,
+	"conor.dooley@microchip.com" <conor.dooley@microchip.com>,
+	"v.georgiev@metrotek.ru" <v.georgiev@metrotek.ru>, "Simek, Michal"
+	<michal.simek@amd.com>, Marco Pagani <marpagan@redhat.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"ruanjinjie@huawei.com" <ruanjinjie@huawei.com>, "linux-fpga@vger.kernel.org"
+	<linux-fpga@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "git (AMD-Xilinx)" <git@amd.com>
+Subject: [RFC] FPGA Subsystem User Space Interface Proposal
+Thread-Topic: [RFC] FPGA Subsystem User Space Interface Proposal
+Thread-Index: Ado+yABjPiRB0KySRY6DC56HOLfe9A==
+Date: Thu, 4 Jan 2024 04:52:15 +0000
+Message-ID:
+ <DM6PR12MB3993D5ECA50B27682AEBE19FCD67A@DM6PR12MB3993.namprd12.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR12MB3993:EE_|MN6PR12MB8541:EE_
+x-ms-office365-filtering-correlation-id: 5470966f-9c40-4d86-8900-08dc0ce0ebfa
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ L8k6wkfZ5BWoNy/7AhJ9kLeQQAMEyvOhqaRaTreEcDETMhqLCHDPhdhQihTKa/EljgcmVuz0yBLj5Qq+b/7+zTVCU+SUyoCsMgMXOOK96K3Ls2YoP2j9cnRP+QEhnklYwqqFH1Kxzif+U/rA0lL2ktkrmo0/xENAQJSAyQdRFKVxldOdQqDUaTe/kygyeWoUDYtov73yUBQL+VkS8cN/GHgNiIhoyuIQvtDJg1DzGNknDmnf6m76+XnibUJOWA04JVfADvMvxhN9thKpv4D4NuL9QBRc0Dld9dNKMmgktaphkSAQfeiNVD8WMTPv2xgdex4o0GO8fTLa0VMgVlNezNMe+ZdIzpuzJMbwXk+czAdAI+6b2xem8+CVZE8Tv2V04SN1wsACIkZKDxoagQNqIVyjJmI1y3bmcybJnu4pmbilSOxrGquDA+LZdj34a4Fvn1Sht2DJcMuk8YBUCZN25AXWSihbgSIZJ93riX3ILQFpayhBLDkDYoG0ZjtEVjykrF0h1jzwUZGwjsj0C5VJqaLbOdNUyIDh9JJAq9tROOd+bbJ5yv/V3OGDXZr7GbHJQJEtHaCI1YDeFX+sYqi1ssheZVDrlDd6kaJHEEpMtAWniwIjHOCpEGjpeIaDMfDusDiTyGZdT36LGCJ3AyQyiA==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3993.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(346002)(376002)(396003)(136003)(39860400002)(230922051799003)(1800799012)(64100799003)(186009)(451199024)(26005)(71200400001)(122000001)(3613699003)(921011)(66556008)(83380400001)(38100700002)(110136005)(66946007)(76116006)(966005)(64756008)(66476007)(316002)(66446008)(6636002)(478600001)(86362001)(5660300002)(52536014)(7416002)(2906002)(8936002)(8676002)(33656002)(55016003)(38070700009)(9686003)(7696005)(6506007)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?LOx4hEK2VSusPKYj8wkk2cgA4AcBJRkWhKaTrI1yyiRJX4WsN8adkU4u61Uo?=
+ =?us-ascii?Q?LNd2tlbi7h6hJ/LpMgstzeRGpmptO+u/kNAqA+xSqYrSxE+lNguhYpJtjEa+?=
+ =?us-ascii?Q?oHXLK9QMN5DxzjLHLvszAzFFTm+K1aD2/axdrdjYxo2zBuNQXGN0fkRf+vFg?=
+ =?us-ascii?Q?B8FcMMUQFTonRU15T9PwxqeePAl/oSPpYB+bWlT5sEUp9qMKMIC8QpOA/SeK?=
+ =?us-ascii?Q?QXaXHbIWgc0UWS9X1ltNCjXrdfYK3EvsHvBPx9ikKieaA2G1GK9hhAm90Qf0?=
+ =?us-ascii?Q?NZxGtAlMTuycehJFTCGcgOtIHkDALG2h7DBlX9C2LEWomgxFtxPGdccTiUz4?=
+ =?us-ascii?Q?sLWnMEd2355QHoRLaQ7aqn2NI+OecSMARvfoK2Qzx3/vqC0krfM5JyyG5Tb/?=
+ =?us-ascii?Q?quuhoNuRjM7fBKGXn105auLWjav6fEq9N0rE3g28PSX6VnutkAAtaMio35jg?=
+ =?us-ascii?Q?zNL2opqBAk0cKhq18jkMlf6Xhr7Co7sP74AWM3oDAbJheeyH9WxyF3VCCE4p?=
+ =?us-ascii?Q?Gbwfs10mc0BoAX/RC0HhikZBpEjNfiD+wBs5V9rS9dx/JFyvoLvblgBmHmA2?=
+ =?us-ascii?Q?NRd6GjY9rlbGp+jC4nXPo3/XfIyqIrB1q2EbVaNtXl5VfwF0oH6sKwlGPq1V?=
+ =?us-ascii?Q?48lGS8WyXUO0sVhp2kKwbhnoGX7Yiq1dioVucMi5MMvcKBb0W5/PViP0d2zG?=
+ =?us-ascii?Q?7sZmbzwoAt+EnHm/ZkxAhQMfbZYzH5RY9vtC4DFvQDzD3TRZYtcg4quxWXWc?=
+ =?us-ascii?Q?aCXbuWw0hLVKK8/bAxtlmyuwU2zXuuCuWQ1ynTk7cTVA/TEYdFZWu6LILb30?=
+ =?us-ascii?Q?ZpW6EhqjpEA869DRNfvaOgd9XlTQqSybjXDAbDAL5QKSMglNCBVsaaoM1xfm?=
+ =?us-ascii?Q?5LYRN+dRYhfwqdJvdSGCxbR3LKtdai91k6MYH1ZvfeU9GXfGBXFHg2e46QVC?=
+ =?us-ascii?Q?AIdRzUmBvc204F7Xez2Kw35Mg6FKC8gp5MZofLe9QTW+aaS7zvgB6i5nMxVQ?=
+ =?us-ascii?Q?GdPLgcVMclrjckyeetytYu00eoEtAn6Z3PoG6z2rvcubU66cG0eFR7vw0LOd?=
+ =?us-ascii?Q?HUTkVlozlt8VPR/XS8PrLty+EUfpGjtjub4YvtLfFpX5jGfiI8tn6Sj+tTo5?=
+ =?us-ascii?Q?83VhUdc8XWZgkZeO+5SGso4oZNsBTruJPrsbI68YnePitGWXExyXu49dArZV?=
+ =?us-ascii?Q?GAS8xxgXQRALQHyNYhnLlyv7CtxJFfGwh7nuQOtyP7gzKgWnGT/fuyTkN6UE?=
+ =?us-ascii?Q?f5lerxUMPDR1AEILwebyln+HYmXgsfwQ9Y9k7nC63rCd4n+++cp8Nqf8/rP8?=
+ =?us-ascii?Q?vwgs2ouF494OSWD9S9pjU9bxSiSjJ3UtN3tiV9Xqx8/gEWsFqKgHFTQoJ5O1?=
+ =?us-ascii?Q?tryH601cqipi5mqm3BEuQWuwGwodjPLylGZTLWpQhNNV0NEIKu8tDdNBroL8?=
+ =?us-ascii?Q?bhf9NpmPlvfm3lnOOXGhHCzHf9PX0k2+yW0jzHEEtqEQIiyanoVmVRffr/Wl?=
+ =?us-ascii?Q?nbwocQ698etzVxA9QHEoxnWt5M9pQo3Y8p+egUwK4/B96lTgFDb+4lH0LrJi?=
+ =?us-ascii?Q?byxX7HzGdlIl8PQS4+I=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v3 1/2] fpga: add an owner field and use it to take
- the low-level module's refcount
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
- Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-References: <20231218202809.84253-1-marpagan@redhat.com>
- <20231218202809.84253-2-marpagan@redhat.com>
- <ZYkoIdrbqJ9w+EHg@yilunxu-OptiPlex-7050>
-Content-Language: en-US
-From: Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZYkoIdrbqJ9w+EHg@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3993.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5470966f-9c40-4d86-8900-08dc0ce0ebfa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jan 2024 04:52:15.0709
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NOMBqcR7DAuoOsXxjjtm1AST+fLf61SgEE8YA0pJEE/QeKSa9wS49Qt8fqwC9S82
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8541
 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+| Introduction                                                        |
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+This document provides a detailed overview of the proposed Kernel feature f=
+or FPGA Manager subsystem user interface.
+It describes the problem statement behind the proposal, the problem to be s=
+olved, a top-level solution design.
 
+Table of Contents:
+------------------
+A. Problem Statement and Background
+B. Scope and Out of scope of the proposal
+     B.1 Scope
+     B.2 Out of scope
+C. Proposed Solution
+D. Proposed User Interface Details
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+| A. Problem Statement and Background                                      =
+  |
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+The existing FPGA manager subsystem didn't have any user space interface (o=
+ther than the status/state in sysfs) in Kernel.=20
+Basically, FPGAs are semiconductor devices that can be reprogrammed for des=
+ired hardware functionality.
+FPGAs can be reprogrammed at runtime with different types of logic and IPs =
+as per user need and hence there is a need to use device tree overlays for =
+removing/updating/adding the devices at runtime for the IPs/controllers tha=
+t are present in FPGA.=20
+But we don't have any user interface in kernel for updating the device tree=
+ at runtime.
 
-On 2023-12-25 07:58, Xu Yilun wrote:
-> On Mon, Dec 18, 2023 at 09:28:08PM +0100, Marco Pagani wrote:
->> Add a module owner field to the fpga_manager_ops struct and use it to
->> take the low-level control module's refcount instead of relying on the
->> parent device's driver pointer. Low-level control modules should
->> statically set the owner field to THIS_MODULE. To detect when the owner
-> 
-> Don't be so strict, people could pass in any owner module they think it
-> is correct.
->
+Sometime back there was a series sent by Pantelis Antoniou (https://lore.ke=
+rnel.org/lkml/1414528565-10907-4-git-send-email-pantelis.antoniou@konsulko.=
+com/).
+This patch introduced a user interface configfs for Device Tree overlays, a=
+ method of dynamically altering the kernel's live Device Tree. However,  th=
+is patch series was not accepted in mainline due to various concerns.
+For more details refer to this link: https://elinux.org/Frank%27s_Evolving_=
+Overlay_Thoughts#issues_and_what_needs_to_be_completed_--_Not_an_exhaustive=
+_list
 
-I'm planning to use a helper macro to set the owner field at registration,
-as suggested by Greg K-H. So, I would change this sentence anyway.
- 
->> module pointer becomes stale, set the mops pointer to null during
->> fpga_mgr_unregister() (called by the low-level module exit function) and
-> 
-> No need the side note, people could call fpga_mgr_unregister() at any
-> time they think it is correct.
->
+One of the major valid concerns that were raised with this configfs interfa=
+ce was security as it opens up the interface to users for modifying the liv=
+e device tree.
 
-Okay, I'll drop this line.
+So, in order to configure/program the FPGA devices, All the major vendors o=
+f FPGA are using this configfs series as out-of-tree patch for configuring =
+the FPGAs
+and there was never an attempt to introduce a generic interface to configur=
+e/program the FPGA in upstream and hence upstream kernel ended up in not ha=
+ving proper support for FPGAs.
 
->> test it before taking the module's refcount. Use a mutex to avoid a
->> crash that can happen if __fpga_mgr_get() gets suspended between testing
->> the mops pointer and taking the low-level refcount and then resumes when
->> the low-level module has already been freed.
->>
->> Thanks to Xu Yilun for suggesting the locking pattern.
-> 
-> I appreciate that but don't put it in changelog. A Suggested-by is
-> appropriate.
-> 
+The proposal below tries to address this gap of FPGA programmability by pro=
+viding an interface to the user.
 
-Okay.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+| B. Proposed Solution                                                |
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+The proposed interface adds a new sysfs interface (of-fpga-region.c) as par=
+t of the fpga subsystem and it is responsible for supporting the below func=
+tionalities.
+--> Provide the user interface for the FPGA subsystem to handle the below F=
+PGA relevant stuff.
+         - Bridges.
+         - FPGA Configuration.
+         - Driver - Probe/Remove
+                               =20
+--> The new sysfs interface uses Device Tree overlay (DTO) files to configu=
+re/ reprogram an FPGA while an operating system is running.
+                - Restrict the overlay's subsystem usage only to FPGA regio=
+ns in order to mitigate the major security concern with configfs.
+                - Do validation checks on the user provided DTO files.
+                                - If the user provided DTO doesn't target a=
+n FPGA Region which is already part of the running kernel, then return -INV=
+ALID error.
+                                - If the DTO file contains multiple targets=
+, then return -INVALID error.
+                                - It will allow only Child nodes which are =
+part of targeted FPGA Region.
+                - It avoids Overlay notification calls . So that it will no=
+t interrupt the other subsystem's(Like; GPIO, I2C.....etc) exists in the ke=
+rnel.
+               =20
+-->This proposed solution will not change the existing sequence When a=20
+-->DT overlay that targets an FPGA Region is applied
+                - The FPGA Region will do the following:
+                - 1. Disable appropriate FPGA bridges.
+                - 2. Program the FPGA using the FPGA manager.
+                - 3. Enable the FPGA bridges.
+                - 4. The Device Tree overlay is accepted into the live tree=
+.
+                - 5. Child devices are populated.
+                - When the overlay is removed, the child nodes will be remo=
+ved, and the FPGA Region will disable the bridges.
+      =20
+                                                                    . -----=
+---------------------------------.                       .-----------------=
+------------------------.                       =20
+                                                                   |       =
+                                             |                     |       =
+                                                 |
+                                                                   |       =
+                    .------------------|                     |-------------=
+--------.                           |
+                                                                   |       =
+                    | sysfs_load() |<=3D=3D=3D=3D=3D=3D=3D> |Overaly_apply(=
+)|                          |=20
+.---------------------------------.                     |                  =
+         '------------------|                     |---------------------'  =
+                         |
+|                                          |                     |         =
+                                           |                     |         =
+                                               |
+|    New Sysfs interface   |        =3D=3D=3D=3D>   |       of-fpga-region =
+.c               |                     |            DT Overlay.c           =
+           |
+|       load/unload             |                      |                   =
+                                |                     |                    =
+                                    |
+'--------------------------------'                      |                  =
+    .---------------------|                     |-------------------------.=
+                     |
+                                                                    |      =
+               | sysfs_unload() |<=3D=3D=3D=3D=3D=3D=3D> | Overlay_remove()=
+ |                    |
+                                                                    |      =
+                '-------------------- |                     |--------------=
+-----------'                     |
+                                                                    |      =
+                                             |                     |       =
+                                                |
+                                                                     '-----=
+------------------------------ --'                       '-----------------=
+-------------------------'
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+| D. Proposed User Interface Details                                       =
+        |
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+How to use the fpga sysfs interface.
 
->>
->> Other changes: move put_device() from __fpga_mgr_get() to fpga_mgr_get()
-> 
-> Opportunistically move put_device() ...
-> 
-> The point is, try to imply the *Other* changes are simple and relative to
-> the main change, or we should split the patch.
-> 
-> Sorry but seeing the actual change, please split. The whole change is
-> small and the put_device() part contributes 40% code ...
-> 
+To load Image:
+	 - echo "DTBO file" > /sys/class/of-fpga_region/<region>/load
 
-Make sense. I would prefer to rephrase the message and do everything in a
-single patch since moving put_device() is a small change related to the
-mechanism for getting the manager.
+To unload Image:
+	 - /sys/class/of-fpga_region/<region>/unload
 
-Thanks,
-Marco
+To get the image status (Load/Unload):
+	 - cat /sys/class/of-fpga_region/<region>/status
 
->> and of_fpga_mgr_get() to improve code clarity.
->>
->> Fixes: 654ba4cc0f3e ("fpga manager: ensure lifetime with of_fpga_mgr_get")
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->> ---
->>  drivers/fpga/fpga-mgr.c       | 50 ++++++++++++++++++++++++-----------
->>  include/linux/fpga/fpga-mgr.h |  4 +++
->>  2 files changed, 38 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
->> index 06651389c592..a32b7d40080d 100644
->> --- a/drivers/fpga/fpga-mgr.c
->> +++ b/drivers/fpga/fpga-mgr.c
->> @@ -664,20 +664,20 @@ static struct attribute *fpga_mgr_attrs[] = {
->>  };
->>  ATTRIBUTE_GROUPS(fpga_mgr);
->>  
->> -static struct fpga_manager *__fpga_mgr_get(struct device *dev)
->> +static struct fpga_manager *__fpga_mgr_get(struct device *mgr_dev)
->>  {
->>  	struct fpga_manager *mgr;
->>  
->> -	mgr = to_fpga_manager(dev);
->> +	mgr = to_fpga_manager(mgr_dev);
->>  
->> -	if (!try_module_get(dev->parent->driver->owner))
->> -		goto err_dev;
->> +	mutex_lock(&mgr->mops_mutex);
->>  
->> -	return mgr;
->> +	if (!mgr->mops || !try_module_get(mgr->mops->owner))
->> +		mgr = ERR_PTR(-ENODEV);
->>  
->> -err_dev:
->> -	put_device(dev);
->> -	return ERR_PTR(-ENODEV);
->> +	mutex_unlock(&mgr->mops_mutex);
->> +
->> +	return mgr;
->>  }
->>  
->>  static int fpga_mgr_dev_match(struct device *dev, const void *data)
->> @@ -693,12 +693,18 @@ static int fpga_mgr_dev_match(struct device *dev, const void *data)
->>   */
->>  struct fpga_manager *fpga_mgr_get(struct device *dev)
->>  {
->> -	struct device *mgr_dev = class_find_device(&fpga_mgr_class, NULL, dev,
->> -						   fpga_mgr_dev_match);
->> +	struct fpga_manager *mgr;
->> +	struct device *mgr_dev;
->> +
->> +	mgr_dev = class_find_device(&fpga_mgr_class, NULL, dev, fpga_mgr_dev_match);
->>  	if (!mgr_dev)
->>  		return ERR_PTR(-ENODEV);
->>  
->> -	return __fpga_mgr_get(mgr_dev);
->> +	mgr = __fpga_mgr_get(mgr_dev);
->> +	if (IS_ERR(mgr))
->> +		put_device(mgr_dev);
->> +
->> +	return mgr;
->>  }
->>  EXPORT_SYMBOL_GPL(fpga_mgr_get);
->>  
->> @@ -711,13 +717,18 @@ EXPORT_SYMBOL_GPL(fpga_mgr_get);
->>   */
->>  struct fpga_manager *of_fpga_mgr_get(struct device_node *node)
->>  {
->> -	struct device *dev;
->> +	struct fpga_manager *mgr;
->> +	struct device *mgr_dev;
->>  
->> -	dev = class_find_device_by_of_node(&fpga_mgr_class, node);
->> -	if (!dev)
->> +	mgr_dev = class_find_device_by_of_node(&fpga_mgr_class, node);
->> +	if (!mgr_dev)
->>  		return ERR_PTR(-ENODEV);
->>  
->> -	return __fpga_mgr_get(dev);
->> +	mgr = __fpga_mgr_get(mgr_dev);
->> +	if (IS_ERR(mgr))
->> +		put_device(mgr_dev);
->> +
->> +	return mgr;
->>  }
->>  EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
->>  
->> @@ -727,7 +738,7 @@ EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
->>   */
->>  void fpga_mgr_put(struct fpga_manager *mgr)
->>  {
->> -	module_put(mgr->dev.parent->driver->owner);
->> +	module_put(mgr->mops->owner);
->>  	put_device(&mgr->dev);
->>  }
->>  EXPORT_SYMBOL_GPL(fpga_mgr_put);
->> @@ -803,6 +814,7 @@ fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *in
->>  	}
->>  
->>  	mutex_init(&mgr->ref_mutex);
->> +	mutex_init(&mgr->mops_mutex);
->>  
->>  	mgr->name = info->name;
->>  	mgr->mops = info->mops;
->> @@ -888,6 +900,12 @@ void fpga_mgr_unregister(struct fpga_manager *mgr)
->>  	 */
->>  	fpga_mgr_fpga_remove(mgr);
->>  
->> +	mutex_lock(&mgr->mops_mutex);
->> +
->> +	mgr->mops = NULL;
->> +
->> +	mutex_unlock(&mgr->mops_mutex);
->> +
->>  	device_unregister(&mgr->dev);
->>  }
->>  EXPORT_SYMBOL_GPL(fpga_mgr_unregister);
->> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
->> index 54f63459efd6..b4d9413cb444 100644
->> --- a/include/linux/fpga/fpga-mgr.h
->> +++ b/include/linux/fpga/fpga-mgr.h
->> @@ -162,6 +162,7 @@ struct fpga_manager_info {
->>   * @write_complete: set FPGA to operating state after writing is done
->>   * @fpga_remove: optional: Set FPGA into a specific state during driver remove
->>   * @groups: optional attribute groups.
->> + * @owner: owner module containing the ops.
->>   *
->>   * fpga_manager_ops are the low level functions implemented by a specific
->>   * fpga manager driver.  The optional ones are tested for NULL before being
->> @@ -184,6 +185,7 @@ struct fpga_manager_ops {
->>  			      struct fpga_image_info *info);
->>  	void (*fpga_remove)(struct fpga_manager *mgr);
->>  	const struct attribute_group **groups;
->> +	struct module *owner;
->>  };
->>  
->>  /* FPGA manager status: Partial/Full Reconfiguration errors */
->> @@ -201,6 +203,7 @@ struct fpga_manager_ops {
->>   * @state: state of fpga manager
->>   * @compat_id: FPGA manager id for compatibility check.
->>   * @mops: pointer to struct of fpga manager ops
->> + * @mops_mutex: protects mops from low-level module removal
->>   * @priv: low level driver private date
->>   */
->>  struct fpga_manager {
->> @@ -209,6 +212,7 @@ struct fpga_manager {
->>  	struct mutex ref_mutex;
->>  	enum fpga_mgr_states state;
->>  	struct fpga_compat_id *compat_id;
->> +	struct mutex mops_mutex;
->>  	const struct fpga_manager_ops *mops;
->>  	void *priv;
->>  };
->> -- 
->> 2.43.0
->>
->>
-> 
+Base Image
+               - Also called the "static image"
+               - An FPGA image that is designed to do full reconfiguration =
+of the FPGA.
+               - A base image may set up a set of partial reconfiguration r=
+egions that may later be reprogrammed.
 
+     .-----------------------.                       .---------------------=
+-----------------------.
+    | Host CPU              |                   |             FPGA         =
+                             |
+    |                                |                   |                 =
+                                           |
+    |                           -- -|                   |                  =
+-----------             ---------  |
+    |                         | H |                   |       |=3D=3D>| Bri=
+dge0 |<=3D=3D>| PRR0 | |
+    |                         | W|                   |       |         ----=
+-------             --------    |
+    |                         |     |                   |       |          =
+                                         |
+    |                         | B |<=3D=3D=3D=3D=3D>    |<=3D=3D |         =
+-----------             --------   |
+    |                         | R |                   |        |=3D=3D>| Br=
+idge1 |<=3D=3D>| PRR1| |
+    |                         |  I |                   |        |        --=
+---------              --------   |
+    |                         | D |                  |        |            =
+                                       |
+    |                         | G |                  |        |         ---=
+--------               -------   |
+    |                         | E |                   |        |=3D=3D>| Br=
+idge2 |<=3D=3D>| PRR2 ||
+    |                          ----|                  |                   -=
+----------               --------  |
+    |                               |                  |                   =
+                                           |
+     '-----------------------'                     '-----------------------=
+----------------------'
+
+In the above diagram a typical FPGA is setup with a base image that created=
+ three regions.
+Each region (PRR0 - 2) gets its own split of the busses that is independent=
+ly gated by a soft logic bridge (Bridge0 - 2) in the FPGA.
+The contents of each PRR can be reprogrammed independently while the rest o=
+f the system continues to function.
+
+Form the above tropology the sysfs interface looks like as follows.
+
+For Base/static region:
+To load Image:
+                - echo "DTBO file" > /sys/class/of-fpga_region/FPGA/load
+
+To unload Image:
+                - /sys/class/of-fpga_region/FPGA/unload
+
+To get the image status (Load/Unload):
+                - cat /sys/class/of-fpga_region/FPGA/status
+
+For PRR0:
+To load Image:
+                - echo "DTBO file" >   /sys/class/of-fpga_region/PRR0/load
+
+To unload Image:
+                - /sys/class/of-fpga_region/PRR0/unload
+
+To get the image status (Load/Unload):
+                - cat /sys/class/of-fpga_region/PRR0/status
+
+For PRR1:
+To load Image:
+                - echo "DTBO file" >   /sys/class/of-fpga_region/PRR1/load
+
+To unload Image:
+                - /sys/class/of-fpga_region/PRR1/unload
+
+To get the image status (Load/Unload):
+                - cat /sys/class/of-fpga_region/PRR1/status
+
+For PRR1:
+To load Image:
+                - echo "DTBO file" >   /sys/class/of-fpga_region/PRR1/load
+
+To unload Image:
+                - /sys/class/of-fpga_region/PRR1/unload
+
+To get the image status (Load/Unload):
+                - cat /sys/class/of-fpga_region/PRR1/status
 
