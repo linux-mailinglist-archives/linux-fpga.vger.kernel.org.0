@@ -1,486 +1,243 @@
-Return-Path: <linux-fpga+bounces-97-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-98-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DFEC825D16
-	for <lists+linux-fpga@lfdr.de>; Sat,  6 Jan 2024 00:16:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE83482680F
+	for <lists+linux-fpga@lfdr.de>; Mon,  8 Jan 2024 07:35:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7B3BB22F6A
-	for <lists+linux-fpga@lfdr.de>; Fri,  5 Jan 2024 23:16:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7EC50B20D7D
+	for <lists+linux-fpga@lfdr.de>; Mon,  8 Jan 2024 06:35:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E987364C3;
-	Fri,  5 Jan 2024 23:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8054B79DE;
+	Mon,  8 Jan 2024 06:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DRSSTCdy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R4sySwq/"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8986E364BC
-	for <linux-fpga@vger.kernel.org>; Fri,  5 Jan 2024 23:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704496548;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ukoUyY9CpA1JQFCcB78gmQv52XE6fexVGQ9tweiN0dI=;
-	b=DRSSTCdyVPqVWwcKd1djFQdMoD3IwZM6hRLp9/GxHRdso/ec23MSBwniS+EwNQIiIaPjB/
-	P8ghkynxbGlIJ7EfWcxSKzn8cycaxLH3iHBOFtmba3B7Pjl7AwSM/bIQa1pddS0/x2HPHl
-	pjjmrnV9UL/yXV/2aBMlDKZDLaAueMU=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-357-Ya48vkzPP7-BfF4HoSZi-A-1; Fri, 05 Jan 2024 18:15:46 -0500
-X-MC-Unique: Ya48vkzPP7-BfF4HoSZi-A-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-781720619f9so7915985a.1
-        for <linux-fpga@vger.kernel.org>; Fri, 05 Jan 2024 15:15:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704496546; x=1705101346;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ukoUyY9CpA1JQFCcB78gmQv52XE6fexVGQ9tweiN0dI=;
-        b=Kdcy7yuJZFkVMjYFpMYxp8a5rUhKDR33lZMpJGexQI0T0dHv7QM9Dfj/8tUFHmMcbQ
-         wu0h+M+W22hitzqAn4BKQtJ0Bxjw0hX3mPQA/FKwvGJWcjPtzMSKSUtQSDWjj5REXdXi
-         oYAcIlYFOMm9C/3AsxO1Izhj0z+Y/XM4/jFi+i5qQk7LYEkzSsvcjvSo1h1Ga0N3JG05
-         y83rlNFvfuUB4hbBCmURhuP7qf8mt5W/+w5VKqasSt9xYrGw113MoKxv/j4j0gNYN/CT
-         BEHOhX4ZkU+QaVHkosGVu33vUXmpjR9xWhZWIbqW2JdDGnnLB85CTQABAmDqSKvPlepd
-         TrOA==
-X-Gm-Message-State: AOJu0Yz5P/VzCh3+6tn52Co/onWdGKey/XXFvX3ocdlbtt68eaC7yA+n
-	IULng9Nn+Syshev2C7HayUStLvO+szRuic+2IB45Hv3SoGueZEVQibayTYYV094bq2v+uhEC6OL
-	5KY4I8xvYRpbsjN4+AAlLjqOAhNN/
-X-Received: by 2002:a05:620a:44:b0:781:65c9:f49c with SMTP id t4-20020a05620a004400b0078165c9f49cmr132415qkt.150.1704496546188;
-        Fri, 05 Jan 2024 15:15:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFspJ6GOTtRXA+SBkpbezYMJLBXKgfSVmM7M+LcmQDx3YZrw7aR3ZDcmxl1Jngj1jkOrJjvXQ==
-X-Received: by 2002:a05:620a:44:b0:781:65c9:f49c with SMTP id t4-20020a05620a004400b0078165c9f49cmr132403qkt.150.1704496545910;
-        Fri, 05 Jan 2024 15:15:45 -0800 (PST)
-Received: from klayman.redhat.com (net-2-34-31-72.cust.vodafonedsl.it. [2.34.31.72])
-        by smtp.gmail.com with ESMTPSA id i9-20020a05620a0a0900b00781bd8b06f8sm935915qka.62.2024.01.05.15.15.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jan 2024 15:15:45 -0800 (PST)
-From: Marco Pagani <marpagan@redhat.com>
-To: Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Marco Pagani <marpagan@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-fpga@vger.kernel.org
-Subject: [RFC PATCH v4 1/1] fpga: add an owner and use it to take the low-level module's refcount
-Date: Sat,  6 Jan 2024 00:15:26 +0100
-Message-ID: <20240105231526.109247-2-marpagan@redhat.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240105231526.109247-1-marpagan@redhat.com>
-References: <20240105231526.109247-1-marpagan@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890747493;
+	Mon,  8 Jan 2024 06:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704695716; x=1736231716;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T+u9j3c47yhngrz+FM6tbbFm2Vqtd0o68a0TMjK4crM=;
+  b=R4sySwq/sUYvWSAItiniso9A8ubRtD+6CvatlZFMcGe9fgEZhBVCFTn8
+   U4YBLU+NzhnxodCg4ET7nHJOy45WpZKq1PtbYAPNFMGNxn23fRgHJcTYv
+   +3JQTfjM7IuHDbVOc4n/PPgIg64zyUGQyFmSo2nzrm2ANazIQ9nEmsayF
+   cVo9Tf1l0sOWdUMECR7R09tFMiNcwcyo5LHiMuVqW5546eT6mrGLcqLwg
+   2p0HElOjBcXtGJiOZjA/wFOakqhuYczYPo4bwx2dA6zw+z75AK8YYaZnU
+   4wLm1Y8gSea0GxV0Kuel2k5FhwKOu7i57Zo5Wg8Gnp21nricaghe3Z3F4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10946"; a="396685622"
+X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
+   d="scan'208";a="396685622"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2024 22:35:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
+   d="scan'208";a="23073387"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa002.jf.intel.com with ESMTP; 07 Jan 2024 22:35:11 -0800
+Date: Mon, 8 Jan 2024 14:32:14 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+Cc: "mdf@kernel.org" <mdf@kernel.org>,
+	"hao.wu@intel.com" <hao.wu@intel.com>,
+	"yilun.xu@intel.com" <yilun.xu@intel.com>,
+	"trix@redhat.com" <trix@redhat.com>,
+	"peter.colberg@intel.com" <peter.colberg@intel.com>,
+	"conor.dooley@microchip.com" <conor.dooley@microchip.com>,
+	"v.georgiev@metrotek.ru" <v.georgiev@metrotek.ru>,
+	"Simek, Michal" <michal.simek@amd.com>,
+	Marco Pagani <marpagan@redhat.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"ruanjinjie@huawei.com" <ruanjinjie@huawei.com>,
+	"linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"git (AMD-Xilinx)" <git@amd.com>
+Subject: Re: [RFC] FPGA Subsystem User Space Interface Proposal
+Message-ID: <ZZuW7rQv22xEreu0@yilunxu-OptiPlex-7050>
+References: <DM6PR12MB3993D5ECA50B27682AEBE19FCD67A@DM6PR12MB3993.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR12MB3993D5ECA50B27682AEBE19FCD67A@DM6PR12MB3993.namprd12.prod.outlook.com>
 
-Add a module owner field to the fpga_manager struct to take the
-low-level control module refcount instead of assuming that the parent
-device has a driver and using its owner pointer. The owner is now
-passed as an additional argument at registration time. To this end,
-the functions for registration have been modified to take an additional
-owner parameter and renamed to avoid conflicts. The old function names
-are now used for helper macros that automatically set the module that
-registers the fpga manager as the owner. This ensures compatibility
-with existing low-level control modules and reduces the chances of
-registering a manager without setting the owner.
+On Thu, Jan 04, 2024 at 04:52:15AM +0000, Manne, Nava kishore wrote:
+> =======================================================================
+> | Introduction                                                        |
+> =======================================================================
+> This document provides a detailed overview of the proposed Kernel feature for FPGA Manager subsystem user interface.
+> It describes the problem statement behind the proposal, the problem to be solved, a top-level solution design.
+> 
+> Table of Contents:
+> ------------------
+> A. Problem Statement and Background
+> B. Scope and Out of scope of the proposal
+>      B.1 Scope
+>      B.2 Out of scope
+> C. Proposed Solution
+> D. Proposed User Interface Details
+> =======================================================================
+> | A. Problem Statement and Background                                        |
+> =======================================================================
+> The existing FPGA manager subsystem didn't have any user space interface (other than the status/state in sysfs) in Kernel. 
+> Basically, FPGAs are semiconductor devices that can be reprogrammed for desired hardware functionality.
+> FPGAs can be reprogrammed at runtime with different types of logic and IPs as per user need and hence there is a need to use device tree overlays for removing/updating/adding the devices at runtime for the IPs/controllers that are present in FPGA. 
+> But we don't have any user interface in kernel for updating the device tree at runtime.
+> 
+> Sometime back there was a series sent by Pantelis Antoniou (https://lore.kernel.org/lkml/1414528565-10907-4-git-send-email-pantelis.antoniou@konsulko.com/).
+> This patch introduced a user interface configfs for Device Tree overlays, a method of dynamically altering the kernel's live Device Tree. However,  this patch series was not accepted in mainline due to various concerns.
+> For more details refer to this link: https://elinux.org/Frank%27s_Evolving_Overlay_Thoughts#issues_and_what_needs_to_be_completed_--_Not_an_exhaustive_list
+> 
+> One of the major valid concerns that were raised with this configfs interface was security as it opens up the interface to users for modifying the live device tree.
+> 
+> So, in order to configure/program the FPGA devices, All the major vendors of FPGA are using this configfs series as out-of-tree patch for configuring the FPGAs
+> and there was never an attempt to introduce a generic interface to configure/program the FPGA in upstream and hence upstream kernel ended up in not having proper support for FPGAs.
+> 
+> The proposal below tries to address this gap of FPGA programmability by providing an interface to the user.
+> 
+> =======================================================================
+> | B. Proposed Solution                                                |
+> =======================================================================
+> The proposed interface adds a new sysfs interface (of-fpga-region.c) as part of the fpga subsystem and it is responsible for supporting the below functionalities.
 
-To detect when the owner module pointer becomes stale, set the mops
-pointer to null during fpga_mgr_unregister() and test it before taking
-the module's refcount. Use a mutex to protect against a crash that can
-happen if __fpga_mgr_get() gets suspended between testing the mops
-pointer and taking the refcount while the low-level module is being
-unloaded.
+Why only for of-fpga-region? There are also FPGA regions that don't rely
+on OF. My quick idea is that an interface for /sys/class/fpga-region/
+and OF could be one of the implementation.
 
-Other changes: opportunistically move put_device() from __fpga_mgr_get()
-to fpga_mgr_get() and of_fpga_mgr_get() to improve code clarity since
-the device refcount in taken in these functions.
+Thanks,
+Yilun
 
-Fixes: 654ba4cc0f3e ("fpga manager: ensure lifetime with of_fpga_mgr_get")
-Suggested-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
- drivers/fpga/fpga-mgr.c       | 93 ++++++++++++++++++++++-------------
- include/linux/fpga/fpga-mgr.h | 80 +++++++++++++++++++++++++++---
- 2 files changed, 134 insertions(+), 39 deletions(-)
-
-diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-index 06651389c592..d7bfbdfdf2fc 100644
---- a/drivers/fpga/fpga-mgr.c
-+++ b/drivers/fpga/fpga-mgr.c
-@@ -664,20 +664,20 @@ static struct attribute *fpga_mgr_attrs[] = {
- };
- ATTRIBUTE_GROUPS(fpga_mgr);
- 
--static struct fpga_manager *__fpga_mgr_get(struct device *dev)
-+static struct fpga_manager *__fpga_mgr_get(struct device *mgr_dev)
- {
- 	struct fpga_manager *mgr;
- 
--	mgr = to_fpga_manager(dev);
-+	mgr = to_fpga_manager(mgr_dev);
- 
--	if (!try_module_get(dev->parent->driver->owner))
--		goto err_dev;
-+	mutex_lock(&mgr->mops_mutex);
- 
--	return mgr;
-+	if (!mgr->mops || !try_module_get(mgr->mops_owner))
-+		mgr = ERR_PTR(-ENODEV);
- 
--err_dev:
--	put_device(dev);
--	return ERR_PTR(-ENODEV);
-+	mutex_unlock(&mgr->mops_mutex);
-+
-+	return mgr;
- }
- 
- static int fpga_mgr_dev_match(struct device *dev, const void *data)
-@@ -693,12 +693,18 @@ static int fpga_mgr_dev_match(struct device *dev, const void *data)
-  */
- struct fpga_manager *fpga_mgr_get(struct device *dev)
- {
--	struct device *mgr_dev = class_find_device(&fpga_mgr_class, NULL, dev,
--						   fpga_mgr_dev_match);
-+	struct fpga_manager *mgr;
-+	struct device *mgr_dev;
-+
-+	mgr_dev = class_find_device(&fpga_mgr_class, NULL, dev, fpga_mgr_dev_match);
- 	if (!mgr_dev)
- 		return ERR_PTR(-ENODEV);
- 
--	return __fpga_mgr_get(mgr_dev);
-+	mgr = __fpga_mgr_get(mgr_dev);
-+	if (IS_ERR(mgr))
-+		put_device(mgr_dev);
-+
-+	return mgr;
- }
- EXPORT_SYMBOL_GPL(fpga_mgr_get);
- 
-@@ -711,13 +717,18 @@ EXPORT_SYMBOL_GPL(fpga_mgr_get);
-  */
- struct fpga_manager *of_fpga_mgr_get(struct device_node *node)
- {
--	struct device *dev;
-+	struct fpga_manager *mgr;
-+	struct device *mgr_dev;
- 
--	dev = class_find_device_by_of_node(&fpga_mgr_class, node);
--	if (!dev)
-+	mgr_dev = class_find_device_by_of_node(&fpga_mgr_class, node);
-+	if (!mgr_dev)
- 		return ERR_PTR(-ENODEV);
- 
--	return __fpga_mgr_get(dev);
-+	mgr = __fpga_mgr_get(mgr_dev);
-+	if (IS_ERR(mgr))
-+		put_device(mgr_dev);
-+
-+	return mgr;
- }
- EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
- 
-@@ -727,7 +738,7 @@ EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
-  */
- void fpga_mgr_put(struct fpga_manager *mgr)
- {
--	module_put(mgr->dev.parent->driver->owner);
-+	module_put(mgr->mops_owner);
- 	put_device(&mgr->dev);
- }
- EXPORT_SYMBOL_GPL(fpga_mgr_put);
-@@ -766,9 +777,10 @@ void fpga_mgr_unlock(struct fpga_manager *mgr)
- EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
- 
- /**
-- * fpga_mgr_register_full - create and register an FPGA Manager device
-+ * __fpga_mgr_register_full - create and register an FPGA Manager device
-  * @parent:	fpga manager device from pdev
-  * @info:	parameters for fpga manager
-+ * @owner:	owner module containing the ops
-  *
-  * The caller of this function is responsible for calling fpga_mgr_unregister().
-  * Using devm_fpga_mgr_register_full() instead is recommended.
-@@ -776,7 +788,8 @@ EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
-  * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-  */
- struct fpga_manager *
--fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info)
-+__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-+			 struct module *owner)
- {
- 	const struct fpga_manager_ops *mops = info->mops;
- 	struct fpga_manager *mgr;
-@@ -803,6 +816,9 @@ fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *in
- 	}
- 
- 	mutex_init(&mgr->ref_mutex);
-+	mutex_init(&mgr->mops_mutex);
-+
-+	mgr->mops_owner = owner;
- 
- 	mgr->name = info->name;
- 	mgr->mops = info->mops;
-@@ -841,14 +857,15 @@ fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *in
- 
- 	return ERR_PTR(ret);
- }
--EXPORT_SYMBOL_GPL(fpga_mgr_register_full);
-+EXPORT_SYMBOL_GPL(__fpga_mgr_register_full);
- 
- /**
-- * fpga_mgr_register - create and register an FPGA Manager device
-+ * __fpga_mgr_register - create and register an FPGA Manager device
-  * @parent:	fpga manager device from pdev
-  * @name:	fpga manager name
-  * @mops:	pointer to structure of fpga manager ops
-  * @priv:	fpga manager private data
-+ * @owner:	owner module containing the ops
-  *
-  * The caller of this function is responsible for calling fpga_mgr_unregister().
-  * Using devm_fpga_mgr_register() instead is recommended. This simple
-@@ -859,8 +876,8 @@ EXPORT_SYMBOL_GPL(fpga_mgr_register_full);
-  * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-  */
- struct fpga_manager *
--fpga_mgr_register(struct device *parent, const char *name,
--		  const struct fpga_manager_ops *mops, void *priv)
-+__fpga_mgr_register(struct device *parent, const char *name,
-+		    const struct fpga_manager_ops *mops, void *priv, struct module *owner)
- {
- 	struct fpga_manager_info info = { 0 };
- 
-@@ -868,9 +885,9 @@ fpga_mgr_register(struct device *parent, const char *name,
- 	info.mops = mops;
- 	info.priv = priv;
- 
--	return fpga_mgr_register_full(parent, &info);
-+	return __fpga_mgr_register_full(parent, &info, owner);
- }
--EXPORT_SYMBOL_GPL(fpga_mgr_register);
-+EXPORT_SYMBOL_GPL(__fpga_mgr_register);
- 
- /**
-  * fpga_mgr_unregister - unregister an FPGA manager
-@@ -888,6 +905,12 @@ void fpga_mgr_unregister(struct fpga_manager *mgr)
- 	 */
- 	fpga_mgr_fpga_remove(mgr);
- 
-+	mutex_lock(&mgr->mops_mutex);
-+
-+	mgr->mops = NULL;
-+
-+	mutex_unlock(&mgr->mops_mutex);
-+
- 	device_unregister(&mgr->dev);
- }
- EXPORT_SYMBOL_GPL(fpga_mgr_unregister);
-@@ -900,9 +923,10 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
- }
- 
- /**
-- * devm_fpga_mgr_register_full - resource managed variant of fpga_mgr_register()
-+ * __devm_fpga_mgr_register_full - resource managed variant of fpga_mgr_register()
-  * @parent:	fpga manager device from pdev
-  * @info:	parameters for fpga manager
-+ * @owner:	owner module containing the ops
-  *
-  * Return:  fpga manager pointer on success, negative error code otherwise.
-  *
-@@ -910,7 +934,8 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
-  * function will be called automatically when the managing device is detached.
-  */
- struct fpga_manager *
--devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info)
-+__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-+			      struct module *owner)
- {
- 	struct fpga_mgr_devres *dr;
- 	struct fpga_manager *mgr;
-@@ -919,7 +944,7 @@ devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_inf
- 	if (!dr)
- 		return ERR_PTR(-ENOMEM);
- 
--	mgr = fpga_mgr_register_full(parent, info);
-+	mgr = __fpga_mgr_register_full(parent, info, owner);
- 	if (IS_ERR(mgr)) {
- 		devres_free(dr);
- 		return mgr;
-@@ -930,14 +955,15 @@ devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_inf
- 
- 	return mgr;
- }
--EXPORT_SYMBOL_GPL(devm_fpga_mgr_register_full);
-+EXPORT_SYMBOL_GPL(__devm_fpga_mgr_register_full);
- 
- /**
-- * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
-+ * __devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
-  * @parent:	fpga manager device from pdev
-  * @name:	fpga manager name
-  * @mops:	pointer to structure of fpga manager ops
-  * @priv:	fpga manager private data
-+ * @owner:	owner module containing the ops
-  *
-  * Return:  fpga manager pointer on success, negative error code otherwise.
-  *
-@@ -946,8 +972,9 @@ EXPORT_SYMBOL_GPL(devm_fpga_mgr_register_full);
-  * device is detached.
-  */
- struct fpga_manager *
--devm_fpga_mgr_register(struct device *parent, const char *name,
--		       const struct fpga_manager_ops *mops, void *priv)
-+__devm_fpga_mgr_register(struct device *parent, const char *name,
-+			 const struct fpga_manager_ops *mops, void *priv,
-+			 struct module *owner)
- {
- 	struct fpga_manager_info info = { 0 };
- 
-@@ -955,9 +982,9 @@ devm_fpga_mgr_register(struct device *parent, const char *name,
- 	info.mops = mops;
- 	info.priv = priv;
- 
--	return devm_fpga_mgr_register_full(parent, &info);
-+	return __devm_fpga_mgr_register_full(parent, &info, owner);
- }
--EXPORT_SYMBOL_GPL(devm_fpga_mgr_register);
-+EXPORT_SYMBOL_GPL(__devm_fpga_mgr_register);
- 
- static void fpga_mgr_dev_release(struct device *dev)
- {
-diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
-index 54f63459efd6..967540311462 100644
---- a/include/linux/fpga/fpga-mgr.h
-+++ b/include/linux/fpga/fpga-mgr.h
-@@ -201,6 +201,8 @@ struct fpga_manager_ops {
-  * @state: state of fpga manager
-  * @compat_id: FPGA manager id for compatibility check.
-  * @mops: pointer to struct of fpga manager ops
-+ * @mops_mutex: protects mops from low-level module removal
-+ * @mops_owner: module containing the mops
-  * @priv: low level driver private date
-  */
- struct fpga_manager {
-@@ -210,6 +212,8 @@ struct fpga_manager {
- 	enum fpga_mgr_states state;
- 	struct fpga_compat_id *compat_id;
- 	const struct fpga_manager_ops *mops;
-+	struct mutex mops_mutex;
-+	struct module *mops_owner;
- 	void *priv;
- };
- 
-@@ -222,6 +226,7 @@ void fpga_image_info_free(struct fpga_image_info *info);
- int fpga_mgr_load(struct fpga_manager *mgr, struct fpga_image_info *info);
- 
- int fpga_mgr_lock(struct fpga_manager *mgr);
-+
- void fpga_mgr_unlock(struct fpga_manager *mgr);
- 
- struct fpga_manager *of_fpga_mgr_get(struct device_node *node);
-@@ -230,18 +235,81 @@ struct fpga_manager *fpga_mgr_get(struct device *dev);
- 
- void fpga_mgr_put(struct fpga_manager *mgr);
- 
-+/**
-+ * fpga_mgr_register_full - create and register an FPGA Manager device
-+ * @parent:	fpga manager device from pdev
-+ * @info:	parameters for fpga manager
-+ *
-+ * The caller of this function is responsible for calling fpga_mgr_unregister().
-+ * Using devm_fpga_mgr_register_full() instead is recommended.
-+ *
-+ * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-+ */
-+#define fpga_mgr_register_full(parent, info) \
-+	__fpga_mgr_register_full(parent, info, THIS_MODULE)
-+
- struct fpga_manager *
--fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
-+__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-+			 struct module *owner);
-+/**
-+ * fpga_mgr_register - create and register an FPGA Manager device
-+ * @parent:	fpga manager device from pdev
-+ * @name:	fpga manager name
-+ * @mops:	pointer to structure of fpga manager ops
-+ * @priv:	fpga manager private data
-+ *
-+ * The caller of this function is responsible for calling fpga_mgr_unregister().
-+ * Using devm_fpga_mgr_register() instead is recommended. This simple
-+ * version of the register function should be sufficient for most users. The
-+ * fpga_mgr_register_full() function is available for users that need to pass
-+ * additional, optional parameters.
-+ *
-+ * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-+ */
-+#define fpga_mgr_register(parent, name, mops, priv) \
-+	__fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
- 
- struct fpga_manager *
--fpga_mgr_register(struct device *parent, const char *name,
--		  const struct fpga_manager_ops *mops, void *priv);
-+__fpga_mgr_register(struct device *parent, const char *name,
-+		    const struct fpga_manager_ops *mops, void *priv, struct module *owner);
-+
- void fpga_mgr_unregister(struct fpga_manager *mgr);
- 
-+/**
-+ * devm_fpga_mgr_register_full - resource managed variant of fpga_mgr_register()
-+ * @parent:	fpga manager device from pdev
-+ * @info:	parameters for fpga manager
-+ *
-+ * Return:  fpga manager pointer on success, negative error code otherwise.
-+ *
-+ * This is the devres variant of fpga_mgr_register_full() for which the unregister
-+ * function will be called automatically when the managing device is detached.
-+ */
-+#define devm_fpga_mgr_register_full(parent, info) \
-+	__devm_fpga_mgr_register_full(parent, info, THIS_MODULE)
-+
- struct fpga_manager *
--devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
-+__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-+			      struct module *owner);
-+/**
-+ * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
-+ * @parent:	fpga manager device from pdev
-+ * @name:	fpga manager name
-+ * @mops:	pointer to structure of fpga manager ops
-+ * @priv:	fpga manager private data
-+ *
-+ * Return:  fpga manager pointer on success, negative error code otherwise.
-+ *
-+ * This is the devres variant of fpga_mgr_register() for which the
-+ * unregister function will be called automatically when the managing
-+ * device is detached.
-+ */
-+#define devm_fpga_mgr_register(parent, name, mops, priv) \
-+	__devm_fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
-+
- struct fpga_manager *
--devm_fpga_mgr_register(struct device *parent, const char *name,
--		       const struct fpga_manager_ops *mops, void *priv);
-+__devm_fpga_mgr_register(struct device *parent, const char *name,
-+			 const struct fpga_manager_ops *mops, void *priv,
-+			 struct module *owner);
- 
- #endif /*_LINUX_FPGA_MGR_H */
--- 
-2.43.0
-
+> --> Provide the user interface for the FPGA subsystem to handle the below FPGA relevant stuff.
+>          - Bridges.
+>          - FPGA Configuration.
+>          - Driver - Probe/Remove
+>                                 
+> --> The new sysfs interface uses Device Tree overlay (DTO) files to configure/ reprogram an FPGA while an operating system is running.
+>                 - Restrict the overlay's subsystem usage only to FPGA regions in order to mitigate the major security concern with configfs.
+>                 - Do validation checks on the user provided DTO files.
+>                                 - If the user provided DTO doesn't target an FPGA Region which is already part of the running kernel, then return -INVALID error.
+>                                 - If the DTO file contains multiple targets, then return -INVALID error.
+>                                 - It will allow only Child nodes which are part of targeted FPGA Region.
+>                 - It avoids Overlay notification calls . So that it will not interrupt the other subsystem's(Like; GPIO, I2C.....etc) exists in the kernel.
+>                 
+> -->This proposed solution will not change the existing sequence When a 
+> -->DT overlay that targets an FPGA Region is applied
+>                 - The FPGA Region will do the following:
+>                 - 1. Disable appropriate FPGA bridges.
+>                 - 2. Program the FPGA using the FPGA manager.
+>                 - 3. Enable the FPGA bridges.
+>                 - 4. The Device Tree overlay is accepted into the live tree.
+>                 - 5. Child devices are populated.
+>                 - When the overlay is removed, the child nodes will be removed, and the FPGA Region will disable the bridges.
+>        
+>                                                                     . --------------------------------------.                       .-----------------------------------------.                        
+>                                                                    |                                                    |                     |                                                        |
+>                                                                    |                           .------------------|                     |---------------------.                           |
+>                                                                    |                           | sysfs_load() |<=======> |Overaly_apply()|                          | 
+> .---------------------------------.                     |                           '------------------|                     |---------------------'                           |
+> |                                          |                     |                                                    |                     |                                                        |
+> |    New Sysfs interface   |        ====>   |       of-fpga-region .c               |                     |            DT Overlay.c                      |
+> |       load/unload             |                      |                                                   |                     |                                                        |
+> '--------------------------------'                      |                      .---------------------|                     |-------------------------.                     |
+>                                                                     |                     | sysfs_unload() |<=======> | Overlay_remove() |                    |
+>                                                                     |                      '-------------------- |                     |-------------------------'                     |
+>                                                                     |                                                   |                     |                                                       |
+>                                                                      '----------------------------------- --'                       '------------------------------------------'
+> =======================================================================
+> | D. Proposed User Interface Details                                               |
+> =======================================================================
+> How to use the fpga sysfs interface.
+> 
+> To load Image:
+> 	 - echo "DTBO file" > /sys/class/of-fpga_region/<region>/load
+> 
+> To unload Image:
+> 	 - /sys/class/of-fpga_region/<region>/unload
+> 
+> To get the image status (Load/Unload):
+> 	 - cat /sys/class/of-fpga_region/<region>/status
+> 
+> Base Image
+>                - Also called the "static image"
+>                - An FPGA image that is designed to do full reconfiguration of the FPGA.
+>                - A base image may set up a set of partial reconfiguration regions that may later be reprogrammed.
+> 
+>      .-----------------------.                       .--------------------------------------------.
+>     | Host CPU              |                   |             FPGA                                      |
+>     |                                |                   |                                                            |
+>     |                           -- -|                   |                  -----------             ---------  |
+>     |                         | H |                   |       |==>| Bridge0 |<==>| PRR0 | |
+>     |                         | W|                   |       |         -----------             --------    |
+>     |                         |     |                   |       |                                                   |
+>     |                         | B |<=====>    |<== |         -----------             --------   |
+>     |                         | R |                   |        |==>| Bridge1 |<==>| PRR1| |
+>     |                         |  I |                   |        |        -----------              --------   |
+>     |                         | D |                  |        |                                                   |
+>     |                         | G |                  |        |         -----------               -------   |
+>     |                         | E |                   |        |==>| Bridge2 |<==>| PRR2 ||
+>     |                          ----|                  |                   -----------               --------  |
+>     |                               |                  |                                                              |
+>      '-----------------------'                     '---------------------------------------------'
+> 
+> In the above diagram a typical FPGA is setup with a base image that created three regions.
+> Each region (PRR0 - 2) gets its own split of the busses that is independently gated by a soft logic bridge (Bridge0 - 2) in the FPGA.
+> The contents of each PRR can be reprogrammed independently while the rest of the system continues to function.
+> 
+> Form the above tropology the sysfs interface looks like as follows.
+> 
+> For Base/static region:
+> To load Image:
+>                 - echo "DTBO file" > /sys/class/of-fpga_region/FPGA/load
+> 
+> To unload Image:
+>                 - /sys/class/of-fpga_region/FPGA/unload
+> 
+> To get the image status (Load/Unload):
+>                 - cat /sys/class/of-fpga_region/FPGA/status
+> 
+> For PRR0:
+> To load Image:
+>                 - echo "DTBO file" >   /sys/class/of-fpga_region/PRR0/load
+> 
+> To unload Image:
+>                 - /sys/class/of-fpga_region/PRR0/unload
+> 
+> To get the image status (Load/Unload):
+>                 - cat /sys/class/of-fpga_region/PRR0/status
+> 
+> For PRR1:
+> To load Image:
+>                 - echo "DTBO file" >   /sys/class/of-fpga_region/PRR1/load
+> 
+> To unload Image:
+>                 - /sys/class/of-fpga_region/PRR1/unload
+> 
+> To get the image status (Load/Unload):
+>                 - cat /sys/class/of-fpga_region/PRR1/status
+> 
+> For PRR1:
+> To load Image:
+>                 - echo "DTBO file" >   /sys/class/of-fpga_region/PRR1/load
+> 
+> To unload Image:
+>                 - /sys/class/of-fpga_region/PRR1/unload
+> 
+> To get the image status (Load/Unload):
+>                 - cat /sys/class/of-fpga_region/PRR1/status
+> 
 
