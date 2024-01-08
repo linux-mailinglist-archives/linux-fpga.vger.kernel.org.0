@@ -1,71 +1,67 @@
-Return-Path: <linux-fpga+bounces-98-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-99-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE83482680F
-	for <lists+linux-fpga@lfdr.de>; Mon,  8 Jan 2024 07:35:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D24F08268E1
+	for <lists+linux-fpga@lfdr.de>; Mon,  8 Jan 2024 08:49:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7EC50B20D7D
-	for <lists+linux-fpga@lfdr.de>; Mon,  8 Jan 2024 06:35:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E649B1C21A81
+	for <lists+linux-fpga@lfdr.de>; Mon,  8 Jan 2024 07:49:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8054B79DE;
-	Mon,  8 Jan 2024 06:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4FFA8C06;
+	Mon,  8 Jan 2024 07:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R4sySwq/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KITGLv8y"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890747493;
-	Mon,  8 Jan 2024 06:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DA08BF3;
+	Mon,  8 Jan 2024 07:49:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704695716; x=1736231716;
+  t=1704700161; x=1736236161;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=T+u9j3c47yhngrz+FM6tbbFm2Vqtd0o68a0TMjK4crM=;
-  b=R4sySwq/sUYvWSAItiniso9A8ubRtD+6CvatlZFMcGe9fgEZhBVCFTn8
-   U4YBLU+NzhnxodCg4ET7nHJOy45WpZKq1PtbYAPNFMGNxn23fRgHJcTYv
-   +3JQTfjM7IuHDbVOc4n/PPgIg64zyUGQyFmSo2nzrm2ANazIQ9nEmsayF
-   cVo9Tf1l0sOWdUMECR7R09tFMiNcwcyo5LHiMuVqW5546eT6mrGLcqLwg
-   2p0HElOjBcXtGJiOZjA/wFOakqhuYczYPo4bwx2dA6zw+z75AK8YYaZnU
-   4wLm1Y8gSea0GxV0Kuel2k5FhwKOu7i57Zo5Wg8Gnp21nricaghe3Z3F4
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10946"; a="396685622"
+  bh=3JUd2u6+WmcDLRkS6SGeD8yDlGeehHUpeG8fD2943NU=;
+  b=KITGLv8yEpsIJKwrOUN9uzoHyomcAguat2ouHa+IA0iJFiM87hB3dfbd
+   oDSUZa65N61GRRi0+l0esMGaJnEntwf+/rW2241H2htlDJ5vi78HQMFAZ
+   8VMfEEKNtWgatc1MynZT81K2bSG7scqMTQe73lv3R0r6tMyhEgrqvjpet
+   cKVx71LbjpHdtIVMSb/E+oBTssMIEI29785XE09h0o7SlMbcs/l4Y7fnr
+   fWVhtUGwWs2YMtFQpjlHG9P0e3h+uYfMttuPL+8xamL4SDK5/OsGJ9cXp
+   UG8ZTa3os9yOufz/S/oRCGvNR8RrMV3pOeJu5ywA/Vl4miZAlIX5/QcJP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10946"; a="4898552"
 X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
-   d="scan'208";a="396685622"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2024 22:35:15 -0800
+   d="scan'208";a="4898552"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2024 23:49:20 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10946"; a="851709196"
 X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
-   d="scan'208";a="23073387"
+   d="scan'208";a="851709196"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa002.jf.intel.com with ESMTP; 07 Jan 2024 22:35:11 -0800
-Date: Mon, 8 Jan 2024 14:32:14 +0800
+  by fmsmga004.fm.intel.com with ESMTP; 07 Jan 2024 23:49:16 -0800
+Date: Mon, 8 Jan 2024 15:46:20 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: "Manne, Nava kishore" <nava.kishore.manne@amd.com>
-Cc: "mdf@kernel.org" <mdf@kernel.org>,
-	"hao.wu@intel.com" <hao.wu@intel.com>,
-	"yilun.xu@intel.com" <yilun.xu@intel.com>,
-	"trix@redhat.com" <trix@redhat.com>,
-	"peter.colberg@intel.com" <peter.colberg@intel.com>,
-	"conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-	"v.georgiev@metrotek.ru" <v.georgiev@metrotek.ru>,
-	"Simek, Michal" <michal.simek@amd.com>,
-	Marco Pagani <marpagan@redhat.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"ruanjinjie@huawei.com" <ruanjinjie@huawei.com>,
-	"linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"git (AMD-Xilinx)" <git@amd.com>
-Subject: Re: [RFC] FPGA Subsystem User Space Interface Proposal
-Message-ID: <ZZuW7rQv22xEreu0@yilunxu-OptiPlex-7050>
-References: <DM6PR12MB3993D5ECA50B27682AEBE19FCD67A@DM6PR12MB3993.namprd12.prod.outlook.com>
+To: Michal Simek <michal.simek@amd.com>
+Cc: linux-kernel@vger.kernel.org, monstr@monstr.eu, michal.simek@xilinx.com,
+	git@xilinx.com, Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Moritz Fischer <mdf@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	"open list:FPGA MANAGER FRAMEWORK" <linux-fpga@vger.kernel.org>
+Subject: Re: [PATCH 2/2] dt-bindings: fpga: altera: Convert bridge bindings
+ to yaml
+Message-ID: <ZZuoTG2wdXQvLlAa@yilunxu-OptiPlex-7050>
+References: <3100bbc4723643ec1ec7d4548e9ab353c856b564.1704470663.git.michal.simek@amd.com>
+ <e738a64f742982bba6c7a8ea3cbc660f81316d2b.1704470663.git.michal.simek@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -74,170 +70,284 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM6PR12MB3993D5ECA50B27682AEBE19FCD67A@DM6PR12MB3993.namprd12.prod.outlook.com>
+In-Reply-To: <e738a64f742982bba6c7a8ea3cbc660f81316d2b.1704470663.git.michal.simek@amd.com>
 
-On Thu, Jan 04, 2024 at 04:52:15AM +0000, Manne, Nava kishore wrote:
-> =======================================================================
-> | Introduction                                                        |
-> =======================================================================
-> This document provides a detailed overview of the proposed Kernel feature for FPGA Manager subsystem user interface.
-> It describes the problem statement behind the proposal, the problem to be solved, a top-level solution design.
+On Fri, Jan 05, 2024 at 05:04:31PM +0100, Michal Simek wrote:
+> Convert Altera's bridges to yaml with using fpga-bridge.yaml.
 > 
-> Table of Contents:
-> ------------------
-> A. Problem Statement and Background
-> B. Scope and Out of scope of the proposal
->      B.1 Scope
->      B.2 Out of scope
-> C. Proposed Solution
-> D. Proposed User Interface Details
-> =======================================================================
-> | A. Problem Statement and Background                                        |
-> =======================================================================
-> The existing FPGA manager subsystem didn't have any user space interface (other than the status/state in sysfs) in Kernel. 
-> Basically, FPGAs are semiconductor devices that can be reprogrammed for desired hardware functionality.
-> FPGAs can be reprogrammed at runtime with different types of logic and IPs as per user need and hence there is a need to use device tree overlays for removing/updating/adding the devices at runtime for the IPs/controllers that are present in FPGA. 
-> But we don't have any user interface in kernel for updating the device tree at runtime.
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
 > 
-> Sometime back there was a series sent by Pantelis Antoniou (https://lore.kernel.org/lkml/1414528565-10907-4-git-send-email-pantelis.antoniou@konsulko.com/).
-> This patch introduced a user interface configfs for Device Tree overlays, a method of dynamically altering the kernel's live Device Tree. However,  this patch series was not accepted in mainline due to various concerns.
-> For more details refer to this link: https://elinux.org/Frank%27s_Evolving_Overlay_Thoughts#issues_and_what_needs_to_be_completed_--_Not_an_exhaustive_list
+>  .../fpga/altera-fpga2sdram-bridge.txt         | 13 ----
+>  .../fpga/altera-fpga2sdram-bridge.yaml        | 34 ++++++++++
+>  .../bindings/fpga/altera-freeze-bridge.txt    | 20 ------
+>  .../bindings/fpga/altera-freeze-bridge.yaml   | 41 ++++++++++++
+>  .../bindings/fpga/altera-hps2fpga-bridge.txt  | 36 -----------
+>  .../bindings/fpga/altera-hps2fpga-bridge.yaml | 63 +++++++++++++++++++
+>  6 files changed, 138 insertions(+), 69 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/fpga/altera-fpga2sdram-bridge.txt
+>  create mode 100644 Documentation/devicetree/bindings/fpga/altera-fpga2sdram-bridge.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/fpga/altera-freeze-bridge.txt
+>  create mode 100644 Documentation/devicetree/bindings/fpga/altera-freeze-bridge.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/fpga/altera-hps2fpga-bridge.txt
+>  create mode 100644 Documentation/devicetree/bindings/fpga/altera-hps2fpga-bridge.yaml
 > 
-> One of the major valid concerns that were raised with this configfs interface was security as it opens up the interface to users for modifying the live device tree.
-> 
-> So, in order to configure/program the FPGA devices, All the major vendors of FPGA are using this configfs series as out-of-tree patch for configuring the FPGAs
-> and there was never an attempt to introduce a generic interface to configure/program the FPGA in upstream and hence upstream kernel ended up in not having proper support for FPGAs.
-> 
-> The proposal below tries to address this gap of FPGA programmability by providing an interface to the user.
-> 
-> =======================================================================
-> | B. Proposed Solution                                                |
-> =======================================================================
-> The proposed interface adds a new sysfs interface (of-fpga-region.c) as part of the fpga subsystem and it is responsible for supporting the below functionalities.
+> diff --git a/Documentation/devicetree/bindings/fpga/altera-fpga2sdram-bridge.txt b/Documentation/devicetree/bindings/fpga/altera-fpga2sdram-bridge.txt
+> deleted file mode 100644
+> index 5dd0ff0f7b4e..000000000000
+> --- a/Documentation/devicetree/bindings/fpga/altera-fpga2sdram-bridge.txt
+> +++ /dev/null
+> @@ -1,13 +0,0 @@
+> -Altera FPGA To SDRAM Bridge Driver
+> -
+> -Required properties:
+> -- compatible		: Should contain "altr,socfpga-fpga2sdram-bridge"
+> -
+> -See Documentation/devicetree/bindings/fpga/fpga-bridge.txt for generic bindings.
+> -
+> -Example:
+> -	fpga_bridge3: fpga-bridge@ffc25080 {
+> -		compatible = "altr,socfpga-fpga2sdram-bridge";
+> -		reg = <0xffc25080 0x4>;
+> -		bridge-enable = <0>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/fpga/altera-fpga2sdram-bridge.yaml b/Documentation/devicetree/bindings/fpga/altera-fpga2sdram-bridge.yaml
+> new file mode 100644
+> index 000000000000..a3f3fe2729f2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/fpga/altera-fpga2sdram-bridge.yaml
+> @@ -0,0 +1,34 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/fpga/altera-fpga2sdram-bridge.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Altera FPGA To SDRAM Bridge
+> +
+> +maintainers:
+> +  - Xu Yilun <yilun.xu@intel.com>
+> +
+> +allOf:
+> +  - $ref: fpga-bridge.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: altr,socfpga-fpga2sdram-bridge
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
 
-Why only for of-fpga-region? There are also FPGA regions that don't rely
-on OF. My quick idea is that an interface for /sys/class/fpga-region/
-and OF could be one of the implementation.
+Is the 'reg' required? I didn't see it in original txt.
 
-Thanks,
-Yilun
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    fpga-bridge@ffc25080 {
+> +        compatible = "altr,socfpga-fpga2sdram-bridge";
+> +        reg = <0xffc25080 0x4>;
+> +        bridge-enable = <0>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/fpga/altera-freeze-bridge.txt b/Documentation/devicetree/bindings/fpga/altera-freeze-bridge.txt
+> deleted file mode 100644
+> index 8b26fbcff3c6..000000000000
+> --- a/Documentation/devicetree/bindings/fpga/altera-freeze-bridge.txt
+> +++ /dev/null
+> @@ -1,20 +0,0 @@
+> -Altera Freeze Bridge Controller Driver
+> -
+> -The Altera Freeze Bridge Controller manages one or more freeze bridges.
+> -The controller can freeze/disable the bridges which prevents signal
+> -changes from passing through the bridge.  The controller can also
+> -unfreeze/enable the bridges which allows traffic to pass through the
+> -bridge normally.
+> -
+> -Required properties:
+> -- compatible		: Should contain "altr,freeze-bridge-controller"
+> -- regs			: base address and size for freeze bridge module
+> -
+> -See Documentation/devicetree/bindings/fpga/fpga-bridge.txt for generic bindings.
+> -
+> -Example:
+> -	freeze-controller@100000450 {
+> -		compatible = "altr,freeze-bridge-controller";
+> -		regs = <0x1000 0x10>;
+> -		bridge-enable = <0>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/fpga/altera-freeze-bridge.yaml b/Documentation/devicetree/bindings/fpga/altera-freeze-bridge.yaml
+> new file mode 100644
+> index 000000000000..4a89e3980669
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/fpga/altera-freeze-bridge.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/fpga/altera-freeze-bridge.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Altera Freeze Bridge Controller
+> +
+> +description: |
+> +  The Altera Freeze Bridge Controller manages one or more freeze bridges.
+> +  The controller can freeze/disable the bridges which prevents signal
+> +  changes from passing through the bridge. The controller can also
+> +  unfreeze/enable the bridges which allows traffic to pass through the bridge
+> +  normally.
+> +
+> +maintainers:
+> +  - Xu Yilun <yilun.xu@intel.com>
+> +
+> +allOf:
+> +  - $ref: fpga-bridge.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: altr,freeze-bridge-controller
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    fpga-bridge@100000450 {
+> +        compatible = "altr,freeze-bridge-controller";
+> +        reg = <0x1000 0x10>;
+> +        bridge-enable = <0>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/fpga/altera-hps2fpga-bridge.txt b/Documentation/devicetree/bindings/fpga/altera-hps2fpga-bridge.txt
+> deleted file mode 100644
+> index 68cce3945b10..000000000000
+> --- a/Documentation/devicetree/bindings/fpga/altera-hps2fpga-bridge.txt
+> +++ /dev/null
+> @@ -1,36 +0,0 @@
+> -Altera FPGA/HPS Bridge Driver
+> -
+> -Required properties:
+> -- regs		: base address and size for AXI bridge module
+> -- compatible	: Should contain one of:
+> -		  "altr,socfpga-lwhps2fpga-bridge",
+> -		  "altr,socfpga-hps2fpga-bridge", or
+> -		  "altr,socfpga-fpga2hps-bridge"
+> -- resets	: Phandle and reset specifier for this bridge's reset
+> -- clocks	: Clocks used by this module.
+> -
+> -See Documentation/devicetree/bindings/fpga/fpga-bridge.txt for generic bindings.
+> -
+> -Example:
+> -	fpga_bridge0: fpga-bridge@ff400000 {
+> -		compatible = "altr,socfpga-lwhps2fpga-bridge";
+> -		reg = <0xff400000 0x100000>;
+> -		resets = <&rst LWHPS2FPGA_RESET>;
+> -		clocks = <&l4_main_clk>;
+> -		bridge-enable = <0>;
+> -	};
+> -
+> -	fpga_bridge1: fpga-bridge@ff500000 {
+> -		compatible = "altr,socfpga-hps2fpga-bridge";
+> -		reg = <0xff500000 0x10000>;
+> -		resets = <&rst HPS2FPGA_RESET>;
+> -		clocks = <&l4_main_clk>;
+> -		bridge-enable = <1>;
+> -	};
+> -
+> -	fpga_bridge2: fpga-bridge@ff600000 {
+> -		compatible = "altr,socfpga-fpga2hps-bridge";
+> -		reg = <0xff600000 0x100000>;
+> -		resets = <&rst FPGA2HPS_RESET>;
+> -		clocks = <&l4_main_clk>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/fpga/altera-hps2fpga-bridge.yaml b/Documentation/devicetree/bindings/fpga/altera-hps2fpga-bridge.yaml
+> new file mode 100644
+> index 000000000000..f8210449dfed
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/fpga/altera-hps2fpga-bridge.yaml
+> @@ -0,0 +1,63 @@
 
-> --> Provide the user interface for the FPGA subsystem to handle the below FPGA relevant stuff.
->          - Bridges.
->          - FPGA Configuration.
->          - Driver - Probe/Remove
->                                 
-> --> The new sysfs interface uses Device Tree overlay (DTO) files to configure/ reprogram an FPGA while an operating system is running.
->                 - Restrict the overlay's subsystem usage only to FPGA regions in order to mitigate the major security concern with configfs.
->                 - Do validation checks on the user provided DTO files.
->                                 - If the user provided DTO doesn't target an FPGA Region which is already part of the running kernel, then return -INVALID error.
->                                 - If the DTO file contains multiple targets, then return -INVALID error.
->                                 - It will allow only Child nodes which are part of targeted FPGA Region.
->                 - It avoids Overlay notification calls . So that it will not interrupt the other subsystem's(Like; GPIO, I2C.....etc) exists in the kernel.
->                 
-> -->This proposed solution will not change the existing sequence When a 
-> -->DT overlay that targets an FPGA Region is applied
->                 - The FPGA Region will do the following:
->                 - 1. Disable appropriate FPGA bridges.
->                 - 2. Program the FPGA using the FPGA manager.
->                 - 3. Enable the FPGA bridges.
->                 - 4. The Device Tree overlay is accepted into the live tree.
->                 - 5. Child devices are populated.
->                 - When the overlay is removed, the child nodes will be removed, and the FPGA Region will disable the bridges.
->        
->                                                                     . --------------------------------------.                       .-----------------------------------------.                        
->                                                                    |                                                    |                     |                                                        |
->                                                                    |                           .------------------|                     |---------------------.                           |
->                                                                    |                           | sysfs_load() |<=======> |Overaly_apply()|                          | 
-> .---------------------------------.                     |                           '------------------|                     |---------------------'                           |
-> |                                          |                     |                                                    |                     |                                                        |
-> |    New Sysfs interface   |        ====>   |       of-fpga-region .c               |                     |            DT Overlay.c                      |
-> |       load/unload             |                      |                                                   |                     |                                                        |
-> '--------------------------------'                      |                      .---------------------|                     |-------------------------.                     |
->                                                                     |                     | sysfs_unload() |<=======> | Overlay_remove() |                    |
->                                                                     |                      '-------------------- |                     |-------------------------'                     |
->                                                                     |                                                   |                     |                                                       |
->                                                                      '----------------------------------- --'                       '------------------------------------------'
-> =======================================================================
-> | D. Proposed User Interface Details                                               |
-> =======================================================================
-> How to use the fpga sysfs interface.
+Is the License identifier also needed?
+
+
+Otherwise, Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+
+Thanks
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/fpga/altera-hps2fpga-bridge.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Altera FPGA/HPS Bridge
+> +
+> +maintainers:
+> +  - Xu Yilun <yilun.xu@intel.com>
+> +
+> +allOf:
+> +  - $ref: fpga-bridge.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - altr,socfpga-lwhps2fpga-bridge
+> +      - altr,socfpga-hps2fpga-bridge
+> +      - altr,socfpga-fpga2hps-bridge
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - resets
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/reset/altr,rst-mgr.h>
+> +
+> +    fpga-bridge@ff400000 {
+> +      compatible = "altr,socfpga-lwhps2fpga-bridge";
+> +      reg = <0xff400000 0x100000>;
+> +      bridge-enable = <0>;
+> +      clocks = <&l4_main_clk>;
+> +      resets = <&rst LWHPS2FPGA_RESET>;
+> +    };
+> +
+> +    fpga_bridge1: fpga-bridge@ff500000 {
+> +      compatible = "altr,socfpga-hps2fpga-bridge";
+> +      reg = <0xff500000 0x10000>;
+> +      bridge-enable = <1>;
+> +      clocks = <&l4_main_clk>;
+> +      resets = <&rst HPS2FPGA_RESET>;
+> +    };
+> +
+> +    fpga_bridge2: fpga-bridge@ff600000 {
+> +      compatible = "altr,socfpga-fpga2hps-bridge";
+> +      reg = <0xff600000 0x100000>;
+> +      clocks = <&l4_main_clk>;
+> +      resets = <&rst FPGA2HPS_RESET>;
+> +    };
+> -- 
+> 2.36.1
 > 
-> To load Image:
-> 	 - echo "DTBO file" > /sys/class/of-fpga_region/<region>/load
-> 
-> To unload Image:
-> 	 - /sys/class/of-fpga_region/<region>/unload
-> 
-> To get the image status (Load/Unload):
-> 	 - cat /sys/class/of-fpga_region/<region>/status
-> 
-> Base Image
->                - Also called the "static image"
->                - An FPGA image that is designed to do full reconfiguration of the FPGA.
->                - A base image may set up a set of partial reconfiguration regions that may later be reprogrammed.
-> 
->      .-----------------------.                       .--------------------------------------------.
->     | Host CPU              |                   |             FPGA                                      |
->     |                                |                   |                                                            |
->     |                           -- -|                   |                  -----------             ---------  |
->     |                         | H |                   |       |==>| Bridge0 |<==>| PRR0 | |
->     |                         | W|                   |       |         -----------             --------    |
->     |                         |     |                   |       |                                                   |
->     |                         | B |<=====>    |<== |         -----------             --------   |
->     |                         | R |                   |        |==>| Bridge1 |<==>| PRR1| |
->     |                         |  I |                   |        |        -----------              --------   |
->     |                         | D |                  |        |                                                   |
->     |                         | G |                  |        |         -----------               -------   |
->     |                         | E |                   |        |==>| Bridge2 |<==>| PRR2 ||
->     |                          ----|                  |                   -----------               --------  |
->     |                               |                  |                                                              |
->      '-----------------------'                     '---------------------------------------------'
-> 
-> In the above diagram a typical FPGA is setup with a base image that created three regions.
-> Each region (PRR0 - 2) gets its own split of the busses that is independently gated by a soft logic bridge (Bridge0 - 2) in the FPGA.
-> The contents of each PRR can be reprogrammed independently while the rest of the system continues to function.
-> 
-> Form the above tropology the sysfs interface looks like as follows.
-> 
-> For Base/static region:
-> To load Image:
->                 - echo "DTBO file" > /sys/class/of-fpga_region/FPGA/load
-> 
-> To unload Image:
->                 - /sys/class/of-fpga_region/FPGA/unload
-> 
-> To get the image status (Load/Unload):
->                 - cat /sys/class/of-fpga_region/FPGA/status
-> 
-> For PRR0:
-> To load Image:
->                 - echo "DTBO file" >   /sys/class/of-fpga_region/PRR0/load
-> 
-> To unload Image:
->                 - /sys/class/of-fpga_region/PRR0/unload
-> 
-> To get the image status (Load/Unload):
->                 - cat /sys/class/of-fpga_region/PRR0/status
-> 
-> For PRR1:
-> To load Image:
->                 - echo "DTBO file" >   /sys/class/of-fpga_region/PRR1/load
-> 
-> To unload Image:
->                 - /sys/class/of-fpga_region/PRR1/unload
-> 
-> To get the image status (Load/Unload):
->                 - cat /sys/class/of-fpga_region/PRR1/status
-> 
-> For PRR1:
-> To load Image:
->                 - echo "DTBO file" >   /sys/class/of-fpga_region/PRR1/load
-> 
-> To unload Image:
->                 - /sys/class/of-fpga_region/PRR1/unload
-> 
-> To get the image status (Load/Unload):
->                 - cat /sys/class/of-fpga_region/PRR1/status
 > 
 
