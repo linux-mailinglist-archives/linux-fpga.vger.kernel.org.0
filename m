@@ -1,537 +1,211 @@
-Return-Path: <linux-fpga+bounces-109-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-110-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 466D0827DEF
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jan 2024 05:43:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74926827FF0
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jan 2024 08:59:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB00CB22ED5
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jan 2024 04:43:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1ECB7287E60
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jan 2024 07:59:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C868F48;
-	Tue,  9 Jan 2024 04:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3CA7BA2B;
+	Tue,  9 Jan 2024 07:59:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EGNU35rE"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="rXdZ45by"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A968F40;
-	Tue,  9 Jan 2024 04:43:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704775411; x=1736311411;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jOMwNKvIfjv4Fsetfkvjkj+JAgBBt815NJyzX5jdaxU=;
-  b=EGNU35rE2gdABmn5wMQ8aF0AaErrKCjvjbjgt7yM8CQ5JgRsuWY2JvRM
-   ruvUeGuENccAPuxSH2FKygQaHEbQm6nbR9Oi433w71UNlXSDEQjevUTRi
-   iTg8m9C86ISqYtFi8APgKdTDRPpmBasgccogW853Iu6PU0nN9w0njH4E6
-   7YTwtot4Nk9bo0PfBEuQCGtWNDSsifcuVa3ikL6eWEVbpKQPoM61C+I/7
-   vqWMcWf7zrmizpmlDNrv5I9hikR8O85LEVsQvHML7Fa/0Y03G9Hqnk1W+
-   y3Aoe53GDaGhQo0D0N9HNIw/y8Tto0bhSwIlVvEWUJxA0A0tZuBYEgElg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="462361466"
-X-IronPort-AV: E=Sophos;i="6.04,181,1695711600"; 
-   d="scan'208";a="462361466"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2024 20:43:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="905021361"
-X-IronPort-AV: E=Sophos;i="6.04,181,1695711600"; 
-   d="scan'208";a="905021361"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga004.jf.intel.com with ESMTP; 08 Jan 2024 20:43:28 -0800
-Date: Tue, 9 Jan 2024 12:40:31 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-Subject: Re: [RFC PATCH v4 1/1] fpga: add an owner and use it to take the
- low-level module's refcount
-Message-ID: <ZZzOPwV5laWA0Jv/@yilunxu-OptiPlex-7050>
-References: <20240105231526.109247-1-marpagan@redhat.com>
- <20240105231526.109247-2-marpagan@redhat.com>
- <ZZu7Uf3kC1i3zho3@yilunxu-OptiPlex-7050>
- <c2026945-76ab-4224-b3af-b6991e16d282@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3B1B671;
+	Tue,  9 Jan 2024 07:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SY/UIv32jMDPVAldUh44gwM7f1ZIvkrLA55lQvUfex4fvtDBEQTKk0VzLrmrf1dP8xD6QqJN70K8w4ONp5QWbw65OXdh+EdijoINgrVloUd2L2FnGfaeH0q6BpoAIoCS2wlKTzlLOsvAe9O9JJS58kAGxgfvrDgS/h/xoTO4Wlct8xi18CjsGU4/b7b1in+T0RqIRmHkVlZhLvlB7mE3k1Nb22wax53416mOJpm98IMdi/S9VOnLW7V+SUvCvKQuxciD6quU0IRPA5Cn9xReqYMdvdCMmaaOnTVvxh5TzphotKMwFS2y4IXdfO380LU5C0Pg23ZOZTYUsXQ00fxbpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=No8xZSXNf7q+H/H6+wrUIpgop+QcIZ4y1csZnRTe1Yk=;
+ b=Vk8aGAJFdgNalXh3RVdbrDdbQbeyWxShOLnwAfmGJJ8JJOd6H0MEn/FkjbN2tf1B3OeLalLNQPoV5dQ6laHnVY2MKU5qfPkCwu87THtwzMDF0q4xo1XIc2CvagMnhl063+DoUR1ZkI741uqXOucvLAHNCJqypLwVb70Es00FN/jiG+6f6psjTJB6Eda4tou0Gpb7sde2aMIQOYlqvZgyMh9r3+tu1+yr++6xvRWAyfA/vpcfHuH5QTl8zudWvoUqTXfChm3wcbdPAdrGV/B353PvflJymW6jjrEE7HfTwjbypYRIEVvhHHTXC/wB4YR//x9z05yyJ+zjAGmAAFXxNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=No8xZSXNf7q+H/H6+wrUIpgop+QcIZ4y1csZnRTe1Yk=;
+ b=rXdZ45by3rHMmQiZOVjKFdQ6GfyEDEUy7q4tKdgYzf1K78O8EdPcAUH/1ZTzjfGeLla2ACn/X+WffqFIuvptBPbU6XLtN9LpzI56jrGJPPyfaRLpUry0OOtVqrYsHO3zgmmi3nGb1C3i46p3Yceiehtt/JHUP5wH9goffBi0LXk=
+Received: from SJ0PR13CA0012.namprd13.prod.outlook.com (2603:10b6:a03:2c0::17)
+ by DM6PR12MB4958.namprd12.prod.outlook.com (2603:10b6:5:20a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.23; Tue, 9 Jan
+ 2024 07:59:20 +0000
+Received: from SJ1PEPF00001CE7.namprd03.prod.outlook.com
+ (2603:10b6:a03:2c0:cafe::28) by SJ0PR13CA0012.outlook.office365.com
+ (2603:10b6:a03:2c0::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.16 via Frontend
+ Transport; Tue, 9 Jan 2024 07:59:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ1PEPF00001CE7.mail.protection.outlook.com (10.167.242.23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7181.14 via Frontend Transport; Tue, 9 Jan 2024 07:59:19 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Tue, 9 Jan
+ 2024 01:59:11 -0600
+From: Michal Simek <michal.simek@amd.com>
+To: <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
+	<michal.simek@xilinx.com>, <git@xilinx.com>
+CC: Xu Yilun <yilun.xu@intel.com>, Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Moritz Fischer
+	<mdf@kernel.org>, Rob Herring <robh+dt@kernel.org>, Tom Rix
+	<trix@redhat.com>, Wu Hao <hao.wu@intel.com>, "open list:OPEN FIRMWARE AND
+ FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, kishore Manne
+	<nava.kishore.manne@amd.com>, "open list:FPGA MANAGER FRAMEWORK"
+	<linux-fpga@vger.kernel.org>
+Subject: [PATCH v2 1/2] dt-bindings: fpga: Convert bridge binding to yaml
+Date: Tue, 9 Jan 2024 08:58:46 +0100
+Message-ID: <5740b48543a94b7e2cde04acfca06f4e5eb5d981.1704787119.git.michal.simek@amd.com>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c2026945-76ab-4224-b3af-b6991e16d282@redhat.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3203; i=michal.simek@amd.com; h=from:subject:message-id; bh=sgsQVsMYHGsdTbWNLKcM3aBLMFTsG9CaWeKD2lYN6vM=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhtQ5fzbuT7y6Ul8ljsXgqdfSR/uOTzgloF3waz0rz5EDh 3jVOrJOdcSyMAgyMciKKbJI21w5s7dyxhThi4flYOawMoEMYeDiFICJdHUxzJV+vYtnel1ObFmP 8YULjywTtkfz32eYH+mS8+SgqeV2s+26p2VbPC7e2/12CQA=
+X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE7:EE_|DM6PR12MB4958:EE_
+X-MS-Office365-Filtering-Correlation-Id: eb60997f-6d5d-4e13-9d80-08dc10e8e285
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	XCJzfoTLTDhAFoODa2+x7DYPZ4Z0siTqkcCOJz8xPP+bY2U1FFn5QJmIIdeFlw2ipJCeBwBo5w05lTfiZp88V9jFXSqKP8vp0UURYhXLLrKbe0Eq5RJvqPVjZYdxS4PebpYRHGmMLD+3dthMD7X03Hnqs1tZA8o8U3BkofB8f1pWS45K4K8bgypKhbxEE708ZqB5LBVy35mwrfqOoZr/q2qJfWTr/XP/b7kCKOCaZ6nwtQkvDmHnIOhHyRd06ciNgW7BumyL4BtRSyA+oiGC+Nrm9Vlg8NWAtPr98Gj2OTu1h0mtIXGbiD2DGbQlE1LGANPrkMrP6TnHcxoRS7I0/Mk+IDbxsewxLcI11qG+JjjoA5m0zLSmd/tqunDDgyvNwaTzFxAM9Yf18UnVsY74g1u2p3fSjvZ6fJt0Lt+KLtHsL7gA5B00+R3gPpxOEn9/Sk9UtjyxnIU8gQ7HuR4TaU7TitF8ypwCnx84WxOtNVoayouajN84afay4S50K/sryV7qmkFrA1QJVqtCDJuNZnMKNn/ADnVZ4e7nNIyBZpjVhBIxxX8Fx0H/kq7UOQd8TjmyPP7Up1PA6kZHIAEgNq5JqxM8ja9neNpMib1iDBoDNcSVAalzJP+AjNrlyWv7Pei5uF8rxSFNmuZa3oGxWGl5uSGPOL6SAN6fcom5V2rXWX/c+adwcZUKdYIkYIvoRIXpDnUfGcdDL/UaO/mzw5Ff8J9t/fPnoy5yfgzsOXg7EZ60ukiWQ7S3QuWDSrBDsjyYsUYDOXJPPiS8hMIyR52Ht0F14K2BRqVcByoMoTqcPxrN+kJE3e19iM5lghaf
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(136003)(396003)(376002)(39860400002)(230922051799003)(451199024)(82310400011)(186009)(1800799012)(64100799003)(36840700001)(46966006)(40470700004)(16526019)(426003)(83380400001)(336012)(47076005)(40480700001)(26005)(2616005)(36860700001)(4326008)(44832011)(6666004)(40460700003)(478600001)(966005)(82740400003)(356005)(316002)(54906003)(70586007)(70206006)(110136005)(8936002)(8676002)(81166007)(36756003)(2906002)(86362001)(41300700001)(5660300002)(7416002)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2024 07:59:19.7382
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb60997f-6d5d-4e13-9d80-08dc10e8e285
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CE7.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4958
 
-On Mon, Jan 08, 2024 at 06:24:55PM +0100, Marco Pagani wrote:
-> 
-> 
-> On 2024-01-08 10:07, Xu Yilun wrote:
-> > On Sat, Jan 06, 2024 at 12:15:26AM +0100, Marco Pagani wrote:
-> >> Add a module owner field to the fpga_manager struct to take the
-> >> low-level control module refcount instead of assuming that the parent
-> >> device has a driver and using its owner pointer. The owner is now
-> >> passed as an additional argument at registration time. To this end,
-> >> the functions for registration have been modified to take an additional
-> >> owner parameter and renamed to avoid conflicts. The old function names
-> >> are now used for helper macros that automatically set the module that
-> >> registers the fpga manager as the owner. This ensures compatibility
-> >> with existing low-level control modules and reduces the chances of
-> >> registering a manager without setting the owner.
-> >>
-> >> To detect when the owner module pointer becomes stale, set the mops
-> >> pointer to null during fpga_mgr_unregister() and test it before taking
-> >> the module's refcount. Use a mutex to protect against a crash that can
-> >> happen if __fpga_mgr_get() gets suspended between testing the mops
-> >> pointer and taking the refcount while the low-level module is being
-> >> unloaded.
-> >>
-> >> Other changes: opportunistically move put_device() from __fpga_mgr_get()
-> >> to fpga_mgr_get() and of_fpga_mgr_get() to improve code clarity since
-> >> the device refcount in taken in these functions.
-> >>
-> >> Fixes: 654ba4cc0f3e ("fpga manager: ensure lifetime with of_fpga_mgr_get")
-> >> Suggested-by: Xu Yilun <yilun.xu@intel.com>
-> >> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> >> ---
-> >>  drivers/fpga/fpga-mgr.c       | 93 ++++++++++++++++++++++-------------
-> >>  include/linux/fpga/fpga-mgr.h | 80 +++++++++++++++++++++++++++---
-> >>  2 files changed, 134 insertions(+), 39 deletions(-)
-> >>
-> >> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> >> index 06651389c592..d7bfbdfdf2fc 100644
-> >> --- a/drivers/fpga/fpga-mgr.c
-> >> +++ b/drivers/fpga/fpga-mgr.c
-> >> @@ -664,20 +664,20 @@ static struct attribute *fpga_mgr_attrs[] = {
-> >>  };
-> >>  ATTRIBUTE_GROUPS(fpga_mgr);
-> >>  
-> >> -static struct fpga_manager *__fpga_mgr_get(struct device *dev)
-> >> +static struct fpga_manager *__fpga_mgr_get(struct device *mgr_dev)
-> >>  {
-> >>  	struct fpga_manager *mgr;
-> >>  
-> >> -	mgr = to_fpga_manager(dev);
-> >> +	mgr = to_fpga_manager(mgr_dev);
-> >>  
-> >> -	if (!try_module_get(dev->parent->driver->owner))
-> >> -		goto err_dev;
-> >> +	mutex_lock(&mgr->mops_mutex);
-> >>  
-> >> -	return mgr;
-> >> +	if (!mgr->mops || !try_module_get(mgr->mops_owner))
-> > 
-> > Why move the owner out of struct fpga_manager_ops? The owner within the
-> > ops struct makes more sense to me, it better illustrates what the mutex
-> > is protecting.
-> >
-> 
-> I think having the owner in fpga_manager_ops made sense when it was
-> meant to be set while initializing the struct in the low-level module.
-> However, since the owner is now passed as an argument and set at
-> registration time, keeping it in the FPGA manager context seems more
-> straightforward to me.
+Convert the generic fpga bridge DT binding to json-schema.
 
-That's OK. But then why not directly check mops_owner here?
+Signed-off-by: Michal Simek <michal.simek@amd.com>
+Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 
-> 
->  
-> >> +		mgr = ERR_PTR(-ENODEV);
-> >>  
-> >> -err_dev:
-> >> -	put_device(dev);
-> >> -	return ERR_PTR(-ENODEV);
-> >> +	mutex_unlock(&mgr->mops_mutex);
-> >> +
-> >> +	return mgr;
-> >>  }
-> >>  
-> >>  static int fpga_mgr_dev_match(struct device *dev, const void *data)
-> >> @@ -693,12 +693,18 @@ static int fpga_mgr_dev_match(struct device *dev, const void *data)
-> >>   */
-> >>  struct fpga_manager *fpga_mgr_get(struct device *dev)
-> >>  {
-> >> -	struct device *mgr_dev = class_find_device(&fpga_mgr_class, NULL, dev,
-> >> -						   fpga_mgr_dev_match);
-> >> +	struct fpga_manager *mgr;
-> >> +	struct device *mgr_dev;
-> >> +
-> >> +	mgr_dev = class_find_device(&fpga_mgr_class, NULL, dev, fpga_mgr_dev_match);
-> >>  	if (!mgr_dev)
-> >>  		return ERR_PTR(-ENODEV);
-> >>  
-> >> -	return __fpga_mgr_get(mgr_dev);
-> >> +	mgr = __fpga_mgr_get(mgr_dev);
-> >> +	if (IS_ERR(mgr))
-> >> +		put_device(mgr_dev);
-> >> +
-> >> +	return mgr;
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(fpga_mgr_get);
-> >>  
-> >> @@ -711,13 +717,18 @@ EXPORT_SYMBOL_GPL(fpga_mgr_get);
-> >>   */
-> >>  struct fpga_manager *of_fpga_mgr_get(struct device_node *node)
-> >>  {
-> >> -	struct device *dev;
-> >> +	struct fpga_manager *mgr;
-> >> +	struct device *mgr_dev;
-> >>  
-> >> -	dev = class_find_device_by_of_node(&fpga_mgr_class, node);
-> >> -	if (!dev)
-> >> +	mgr_dev = class_find_device_by_of_node(&fpga_mgr_class, node);
-> >> +	if (!mgr_dev)
-> >>  		return ERR_PTR(-ENODEV);
-> >>  
-> >> -	return __fpga_mgr_get(dev);
-> >> +	mgr = __fpga_mgr_get(mgr_dev);
-> >> +	if (IS_ERR(mgr))
-> >> +		put_device(mgr_dev);
-> >> +
-> >> +	return mgr;
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
-> >>  
-> >> @@ -727,7 +738,7 @@ EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
-> >>   */
-> >>  void fpga_mgr_put(struct fpga_manager *mgr)
-> >>  {
-> >> -	module_put(mgr->dev.parent->driver->owner);
-> >> +	module_put(mgr->mops_owner);
-> >>  	put_device(&mgr->dev);
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(fpga_mgr_put);
-> >> @@ -766,9 +777,10 @@ void fpga_mgr_unlock(struct fpga_manager *mgr)
-> >>  EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
-> >>  
-> >>  /**
-> >> - * fpga_mgr_register_full - create and register an FPGA Manager device
-> >> + * __fpga_mgr_register_full - create and register an FPGA Manager device
-> >>   * @parent:	fpga manager device from pdev
-> >>   * @info:	parameters for fpga manager
-> >> + * @owner:	owner module containing the ops
-> >>   *
-> >>   * The caller of this function is responsible for calling fpga_mgr_unregister().
-> >>   * Using devm_fpga_mgr_register_full() instead is recommended.
-> >> @@ -776,7 +788,8 @@ EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
-> >>   * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-> >>   */
-> >>  struct fpga_manager *
-> >> -fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info)
-> >> +__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-> >> +			 struct module *owner)
-> >>  {
-> >>  	const struct fpga_manager_ops *mops = info->mops;
-> >>  	struct fpga_manager *mgr;
-> >> @@ -803,6 +816,9 @@ fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *in
-> >>  	}
-> >>  
-> >>  	mutex_init(&mgr->ref_mutex);
-> >> +	mutex_init(&mgr->mops_mutex);
-> >> +
-> >> +	mgr->mops_owner = owner;
-> >>  
-> >>  	mgr->name = info->name;
-> >>  	mgr->mops = info->mops;
-> >> @@ -841,14 +857,15 @@ fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *in
-> >>  
-> >>  	return ERR_PTR(ret);
-> >>  }
-> >> -EXPORT_SYMBOL_GPL(fpga_mgr_register_full);
-> >> +EXPORT_SYMBOL_GPL(__fpga_mgr_register_full);
-> >>  
-> >>  /**
-> >> - * fpga_mgr_register - create and register an FPGA Manager device
-> >> + * __fpga_mgr_register - create and register an FPGA Manager device
-> >>   * @parent:	fpga manager device from pdev
-> >>   * @name:	fpga manager name
-> >>   * @mops:	pointer to structure of fpga manager ops
-> >>   * @priv:	fpga manager private data
-> >> + * @owner:	owner module containing the ops
-> >>   *
-> >>   * The caller of this function is responsible for calling fpga_mgr_unregister().
-> >>   * Using devm_fpga_mgr_register() instead is recommended. This simple
-> >> @@ -859,8 +876,8 @@ EXPORT_SYMBOL_GPL(fpga_mgr_register_full);
-> >>   * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-> >>   */
-> >>  struct fpga_manager *
-> >> -fpga_mgr_register(struct device *parent, const char *name,
-> >> -		  const struct fpga_manager_ops *mops, void *priv)
-> >> +__fpga_mgr_register(struct device *parent, const char *name,
-> >> +		    const struct fpga_manager_ops *mops, void *priv, struct module *owner)
-> >>  {
-> >>  	struct fpga_manager_info info = { 0 };
-> >>  
-> >> @@ -868,9 +885,9 @@ fpga_mgr_register(struct device *parent, const char *name,
-> >>  	info.mops = mops;
-> >>  	info.priv = priv;
-> >>  
-> >> -	return fpga_mgr_register_full(parent, &info);
-> >> +	return __fpga_mgr_register_full(parent, &info, owner);
-> >>  }
-> >> -EXPORT_SYMBOL_GPL(fpga_mgr_register);
-> >> +EXPORT_SYMBOL_GPL(__fpga_mgr_register);
-> >>  
-> >>  /**
-> >>   * fpga_mgr_unregister - unregister an FPGA manager
-> >> @@ -888,6 +905,12 @@ void fpga_mgr_unregister(struct fpga_manager *mgr)
-> >>  	 */
-> >>  	fpga_mgr_fpga_remove(mgr);
-> >>  
-> >> +	mutex_lock(&mgr->mops_mutex);
-> >> +
-> >> +	mgr->mops = NULL;
+(no changes since v1)
 
-Same here, is it better set mgr->mops_owner = NULL?
+ .../devicetree/bindings/fpga/fpga-bridge.txt  | 13 --------
+ .../devicetree/bindings/fpga/fpga-bridge.yaml | 30 +++++++++++++++++++
+ .../bindings/fpga/xlnx,pr-decoupler.yaml      |  5 +++-
+ 3 files changed, 34 insertions(+), 14 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/fpga/fpga-bridge.txt
+ create mode 100644 Documentation/devicetree/bindings/fpga/fpga-bridge.yaml
 
-> >> +
-> >> +	mutex_unlock(&mgr->mops_mutex);
-> >> +
-> >>  	device_unregister(&mgr->dev);
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(fpga_mgr_unregister);
-> >> @@ -900,9 +923,10 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
-> >>  }
-> >>  
-> >>  /**
-> >> - * devm_fpga_mgr_register_full - resource managed variant of fpga_mgr_register()
-> >> + * __devm_fpga_mgr_register_full - resource managed variant of fpga_mgr_register()
-> >>   * @parent:	fpga manager device from pdev
-> >>   * @info:	parameters for fpga manager
-> >> + * @owner:	owner module containing the ops
-> >>   *
-> >>   * Return:  fpga manager pointer on success, negative error code otherwise.
-> >>   *
-> >> @@ -910,7 +934,8 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
-> >>   * function will be called automatically when the managing device is detached.
-> >>   */
-> >>  struct fpga_manager *
-> >> -devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info)
-> >> +__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-> >> +			      struct module *owner)
-> >>  {
-> >>  	struct fpga_mgr_devres *dr;
-> >>  	struct fpga_manager *mgr;
-> >> @@ -919,7 +944,7 @@ devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_inf
-> >>  	if (!dr)
-> >>  		return ERR_PTR(-ENOMEM);
-> >>  
-> >> -	mgr = fpga_mgr_register_full(parent, info);
-> >> +	mgr = __fpga_mgr_register_full(parent, info, owner);
-> >>  	if (IS_ERR(mgr)) {
-> >>  		devres_free(dr);
-> >>  		return mgr;
-> >> @@ -930,14 +955,15 @@ devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_inf
-> >>  
-> >>  	return mgr;
-> >>  }
-> >> -EXPORT_SYMBOL_GPL(devm_fpga_mgr_register_full);
-> >> +EXPORT_SYMBOL_GPL(__devm_fpga_mgr_register_full);
-> >>  
-> >>  /**
-> >> - * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
-> >> + * __devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
-> >>   * @parent:	fpga manager device from pdev
-> >>   * @name:	fpga manager name
-> >>   * @mops:	pointer to structure of fpga manager ops
-> >>   * @priv:	fpga manager private data
-> >> + * @owner:	owner module containing the ops
-> >>   *
-> >>   * Return:  fpga manager pointer on success, negative error code otherwise.
-> >>   *
-> >> @@ -946,8 +972,9 @@ EXPORT_SYMBOL_GPL(devm_fpga_mgr_register_full);
-> >>   * device is detached.
-> >>   */
-> >>  struct fpga_manager *
-> >> -devm_fpga_mgr_register(struct device *parent, const char *name,
-> >> -		       const struct fpga_manager_ops *mops, void *priv)
-> >> +__devm_fpga_mgr_register(struct device *parent, const char *name,
-> >> +			 const struct fpga_manager_ops *mops, void *priv,
-> >> +			 struct module *owner)
-> >>  {
-> >>  	struct fpga_manager_info info = { 0 };
-> >>  
-> >> @@ -955,9 +982,9 @@ devm_fpga_mgr_register(struct device *parent, const char *name,
-> >>  	info.mops = mops;
-> >>  	info.priv = priv;
-> >>  
-> >> -	return devm_fpga_mgr_register_full(parent, &info);
-> >> +	return __devm_fpga_mgr_register_full(parent, &info, owner);
-> >>  }
-> >> -EXPORT_SYMBOL_GPL(devm_fpga_mgr_register);
-> >> +EXPORT_SYMBOL_GPL(__devm_fpga_mgr_register);
-> >>  
-> >>  static void fpga_mgr_dev_release(struct device *dev)
-> >>  {
-> >> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
-> >> index 54f63459efd6..967540311462 100644
-> >> --- a/include/linux/fpga/fpga-mgr.h
-> >> +++ b/include/linux/fpga/fpga-mgr.h
-> >> @@ -201,6 +201,8 @@ struct fpga_manager_ops {
-> >>   * @state: state of fpga manager
-> >>   * @compat_id: FPGA manager id for compatibility check.
-> >>   * @mops: pointer to struct of fpga manager ops
-> >> + * @mops_mutex: protects mops from low-level module removal
+diff --git a/Documentation/devicetree/bindings/fpga/fpga-bridge.txt b/Documentation/devicetree/bindings/fpga/fpga-bridge.txt
+deleted file mode 100644
+index 72e06917288a..000000000000
+--- a/Documentation/devicetree/bindings/fpga/fpga-bridge.txt
++++ /dev/null
+@@ -1,13 +0,0 @@
+-FPGA Bridge Device Tree Binding
+-
+-Optional properties:
+-- bridge-enable		: 0 if driver should disable bridge at startup
+-			  1 if driver should enable bridge at startup
+-			  Default is to leave bridge in current state.
+-
+-Example:
+-	fpga_bridge3: fpga-bridge@ffc25080 {
+-		compatible = "altr,socfpga-fpga2sdram-bridge";
+-		reg = <0xffc25080 0x4>;
+-		bridge-enable = <0>;
+-	};
+diff --git a/Documentation/devicetree/bindings/fpga/fpga-bridge.yaml b/Documentation/devicetree/bindings/fpga/fpga-bridge.yaml
+new file mode 100644
+index 000000000000..248639c6b560
+--- /dev/null
++++ b/Documentation/devicetree/bindings/fpga/fpga-bridge.yaml
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/fpga/fpga-bridge.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: FPGA Bridge
++
++maintainers:
++  - Michal Simek <michal.simek@amd.com>
++
++properties:
++  $nodename:
++    pattern: "^fpga-bridge(@.*)?$"
++
++  bridge-enable:
++    description: |
++      0 if driver should disable bridge at startup
++      1 if driver should enable bridge at startup
++      Default is to leave bridge in current state.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [ 0, 1 ]
++
++additionalProperties: true
++
++examples:
++  - |
++    fpga-bridge {
++        bridge-enable = <0>;
++    };
+diff --git a/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml b/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
+index a7d4b8e59e19..5bf731f9d99a 100644
+--- a/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
++++ b/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
+@@ -9,6 +9,9 @@ title: Xilinx LogiCORE Partial Reconfig Decoupler/AXI shutdown manager Softcore
+ maintainers:
+   - Nava kishore Manne <nava.kishore.manne@amd.com>
+ 
++allOf:
++  - $ref: fpga-bridge.yaml#
++
+ description: |
+   The Xilinx LogiCORE Partial Reconfig(PR) Decoupler manages one or more
+   decouplers/fpga bridges. The controller can decouple/disable the bridges
+@@ -51,7 +54,7 @@ required:
+   - clocks
+   - clock-names
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+-- 
+2.36.1
 
-Same here, change the doc if needed.
-
-> >> + * @mops_owner: module containing the mops
-> >>   * @priv: low level driver private date
-> >>   */
-> >>  struct fpga_manager {
-> >> @@ -210,6 +212,8 @@ struct fpga_manager {
-> >>  	enum fpga_mgr_states state;
-> >>  	struct fpga_compat_id *compat_id;
-> >>  	const struct fpga_manager_ops *mops;
-> >> +	struct mutex mops_mutex;
-> >> +	struct module *mops_owner;
-> >>  	void *priv;
-> >>  };
-> >>  
-> >> @@ -222,6 +226,7 @@ void fpga_image_info_free(struct fpga_image_info *info);
-> >>  int fpga_mgr_load(struct fpga_manager *mgr, struct fpga_image_info *info);
-> >>  
-> >>  int fpga_mgr_lock(struct fpga_manager *mgr);
-> >> +
-> > 
-> > Why adding a line?
-> >
-> 
-> I'll remove the line.
->  
-> >>  void fpga_mgr_unlock(struct fpga_manager *mgr);
-> >>  
-> >>  struct fpga_manager *of_fpga_mgr_get(struct device_node *node);
-> >> @@ -230,18 +235,81 @@ struct fpga_manager *fpga_mgr_get(struct device *dev);
-> >>  
-> >>  void fpga_mgr_put(struct fpga_manager *mgr);
-> >>  
-> >> +/**
-> >> + * fpga_mgr_register_full - create and register an FPGA Manager device
-> >> + * @parent:	fpga manager device from pdev
-> >> + * @info:	parameters for fpga manager
-> >> + *
-> >> + * The caller of this function is responsible for calling fpga_mgr_unregister().
-> >> + * Using devm_fpga_mgr_register_full() instead is recommended.
-> >> + *
-> >> + * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-> >> + */
-> > 
-> > No need to duplicate the doc, just remove it.
-> > Same for the rest of code.
-> 
-> Do you mean keeping the kernel-doc comments only for the __fpga_mgr_*
-> functions in fpga-mgr.c?
-> 
-> > 
-> >> +#define fpga_mgr_register_full(parent, info) \
-> >> +	__fpga_mgr_register_full(parent, info, THIS_MODULE)
-> >> +
-> > 
-> > Delete the line, and ...
-> > 
-> >>  struct fpga_manager *
-> >> -fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
-> >> +__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-> >> +			 struct module *owner);
-> > 
-> > Add a line here, to make the related functions packed.
-> > Same for the rest of code.
-> 
-> Do you prefer having the macro just above the function prototype? Like:
-> 
-> #define devm_fpga_mgr_register(parent, name, mops, priv) \
-> 	__devm_fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
-> struct fpga_manager *
-> __devm_fpga_mgr_register(struct device *parent, const char *name,
-> 			 const struct fpga_manager_ops *mops, void *priv,
-> 			 struct module *owner);
-
-Yes, that's it.
-
-Thanks,
-Yilun
-
-> 
-> > 
-> >> +/**
-> >> + * fpga_mgr_register - create and register an FPGA Manager device
-> >> + * @parent:	fpga manager device from pdev
-> >> + * @name:	fpga manager name
-> >> + * @mops:	pointer to structure of fpga manager ops
-> >> + * @priv:	fpga manager private data
-> >> + *
-> >> + * The caller of this function is responsible for calling fpga_mgr_unregister().
-> >> + * Using devm_fpga_mgr_register() instead is recommended. This simple
-> >> + * version of the register function should be sufficient for most users. The
-> >> + * fpga_mgr_register_full() function is available for users that need to pass
-> >> + * additional, optional parameters.
-> >> + *
-> >> + * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-> >> + */
-> >> +#define fpga_mgr_register(parent, name, mops, priv) \
-> >> +	__fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
-> >>  
-> >>  struct fpga_manager *
-> >> -fpga_mgr_register(struct device *parent, const char *name,
-> >> -		  const struct fpga_manager_ops *mops, void *priv);
-> >> +__fpga_mgr_register(struct device *parent, const char *name,
-> >> +		    const struct fpga_manager_ops *mops, void *priv, struct module *owner);
-> >> +
-> >>  void fpga_mgr_unregister(struct fpga_manager *mgr);
-> >>  
-> >> +/**
-> >> + * devm_fpga_mgr_register_full - resource managed variant of fpga_mgr_register()
-> >> + * @parent:	fpga manager device from pdev
-> >> + * @info:	parameters for fpga manager
-> >> + *
-> >> + * Return:  fpga manager pointer on success, negative error code otherwise.
-> >> + *
-> >> + * This is the devres variant of fpga_mgr_register_full() for which the unregister
-> >> + * function will be called automatically when the managing device is detached.
-> >> + */
-> >> +#define devm_fpga_mgr_register_full(parent, info) \
-> >> +	__devm_fpga_mgr_register_full(parent, info, THIS_MODULE)
-> >> +
-> >>  struct fpga_manager *
-> >> -devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
-> >> +__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-> >> +			      struct module *owner);
-> >> +/**
-> >> + * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
-> >> + * @parent:	fpga manager device from pdev
-> >> + * @name:	fpga manager name
-> >> + * @mops:	pointer to structure of fpga manager ops
-> >> + * @priv:	fpga manager private data
-> >> + *
-> >> + * Return:  fpga manager pointer on success, negative error code otherwise.
-> >> + *
-> >> + * This is the devres variant of fpga_mgr_register() for which the
-> >> + * unregister function will be called automatically when the managing
-> >> + * device is detached.
-> >> + */
-> >> +#define devm_fpga_mgr_register(parent, name, mops, priv) \
-> >> +	__devm_fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
-> >> +
-> >>  struct fpga_manager *
-> >> -devm_fpga_mgr_register(struct device *parent, const char *name,
-> >> -		       const struct fpga_manager_ops *mops, void *priv);
-> >> +__devm_fpga_mgr_register(struct device *parent, const char *name,
-> >> +			 const struct fpga_manager_ops *mops, void *priv,
-> >> +			 struct module *owner);
-> >>  
-> >>  #endif /*_LINUX_FPGA_MGR_H */
-> >> -- 
-> >> 2.43.0
-> >>
-> >>
-> > 
-> 
 
