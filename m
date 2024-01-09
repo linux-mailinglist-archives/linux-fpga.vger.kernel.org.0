@@ -1,64 +1,64 @@
-Return-Path: <linux-fpga+bounces-114-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-115-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76E8382801B
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jan 2024 09:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DD2582802B
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jan 2024 09:12:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FBB21C25650
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jan 2024 08:10:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4708D1C21722
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Jan 2024 08:12:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE567C15D;
-	Tue,  9 Jan 2024 08:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7807313FE7;
+	Tue,  9 Jan 2024 08:12:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hzDBrMVN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LTVVvRB7"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA3FC14F
-	for <linux-fpga@vger.kernel.org>; Tue,  9 Jan 2024 08:10:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D5379C4
+	for <linux-fpga@vger.kernel.org>; Tue,  9 Jan 2024 08:12:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-557a3ce8b72so2195823a12.1
-        for <linux-fpga@vger.kernel.org>; Tue, 09 Jan 2024 00:10:27 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a28da6285c1so470765366b.0
+        for <linux-fpga@vger.kernel.org>; Tue, 09 Jan 2024 00:12:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704787826; x=1705392626; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1704787942; x=1705392742; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=i8hG9/xOVo1/DVSw1oYQcI6XP0EdXBlA7r2K4+2BAvE=;
-        b=hzDBrMVNn88FxvbbeZlwAYHal7kf4Mi7FU9vBCyuHA6CTAvHsCZlgNbQwQ+njK83qq
-         bhuXYXph1AQiWcofnHnPf5tNU74CctHMZRUfmCIZeJnQIyJoTNwKkvCry+XKoTQgjx3Z
-         Yt3A00jFHboOkrK6d9DdN5fw7dHbGk35YDrYBHrku2e8KT2UlLN4hcf9xIHVSNdDD3dk
-         QeM0kewsAqhLkOi6HIMzTFB6fdri2uoEMefifeJ6Gn5E7aKM2Zx3qT7wChCOORkvSyKq
-         x3NU9nD7tP3NmziGVSt2Qsb5T0dSiHx/T2IqdISs5WpmQWzVzjzJWZelMA1OWj/hXXl7
-         rNAw==
+        bh=5sqUPdk1x/ipb5KD+sXwSmDw9Qgc/KQGuYkQjYcn78E=;
+        b=LTVVvRB7ibdmosvRgLL7GvFB/Wae5FRVZAaDj7gR2se1sIz/QwRepFLn/IzwgauXCF
+         3QLKgS4S8VgY3XBcqLviTkxiky/ENnYjD5nhPKv0We83VfT0lMCcCjHPq3OKVe7rvxAL
+         RH7OD49vzyw1MDAc3xp+WP/G7LPx6Q3Pk/HTSz6DrUkwcqjeMLHv0UkZ+Z9DljEQnY4W
+         uqW9fIC2Am+NW92tSr8JqVG+zSonLaObfhGmO9gfJyxrKJsCj+kEPJ79fFlYYnjzz4to
+         q9PlBKk19Zr5SYhJ7UN5d/8DUMnZVd6IA3adVSpz/36GfWyKkiBQgLGrf/eNb3aR2u5D
+         RjkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704787826; x=1705392626;
+        d=1e100.net; s=20230601; t=1704787942; x=1705392742;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i8hG9/xOVo1/DVSw1oYQcI6XP0EdXBlA7r2K4+2BAvE=;
-        b=VtEvMEsVviaFDZovYfrnZSz/9m5loNWbhA/vdkeg4u0t5hHlMwLpVG6xYuCVuPzN21
-         sMIXea33FFoCp2y3jJJWHhTBDWkt+ZBY7oxmOPTT1tP+mTekQgkt7ETP+s7srfDNsfIL
-         fUwGMDMp6GaGx1fTn4NPzG9TxhEEWl1Yq6cFFB6cMIa1/vv2g1bMPutMralJGRfU+7SQ
-         gtm4bvrwjKnqQ2oGRp6OeR1bQZMzePHjtum4xWCiET8pjb/xRUb3b6lYNfQfgOEpW30B
-         H/CdE+M3HUA+yviiLcsbodPwI6RWDd6+olkYbndKHWKct+tUiiVcHFISq31e6fLpHrCW
-         IhVw==
-X-Gm-Message-State: AOJu0Yz4fTyL9HiQdOu+bIUCwDfFbFFfOIoax4mRxgyUQG62dpLEDgEr
-	DDmDmC89sVWL4YuK1+h8z9joZpMMuCkRpg==
-X-Google-Smtp-Source: AGHT+IHH/icqqHfL/mpwlo6cO4t8TQGBmILCvZQYsNQjg3vg2MfAlhSOX2eyuJwqtOZ9Xd97wYmQ2Q==
-X-Received: by 2002:a50:c30a:0:b0:557:416b:e99b with SMTP id a10-20020a50c30a000000b00557416be99bmr2515491edb.37.1704787826370;
-        Tue, 09 Jan 2024 00:10:26 -0800 (PST)
+        bh=5sqUPdk1x/ipb5KD+sXwSmDw9Qgc/KQGuYkQjYcn78E=;
+        b=BWegxxBTgJdoJQac1zCrpcZEBxml8kXATeR1p7kk3Vnlrar/gQCSoqg6pYAAGFhDfp
+         NkJALhxdBQ17xnA6RxgDCfiBcemNMYyC1whPVe884JQ2Y+xZVo3pMJgRtJkZMvWUlvvl
+         U6MFH1KVpB1y989c0LwMnSCASAWhNBNIX+YsMD3T+5fFrLmKArWcKkbPq+wLUjn2BTyd
+         +XnLU4CrWIleb67IpChkuAKajMRfkPeZ+xIvC5oFhh34VcTj52lcAvdSQMljgQezos3z
+         cnJ0vEO45QLWqvuFle4cTXeFaXFWdj3GBpgYUKy2aAXxzzUyJfd4IGIVmc/U3z44TL3c
+         EdQw==
+X-Gm-Message-State: AOJu0YxaceQil3kJ7xUwsjJ898AKtHxVaWnf5Faj+46+OhkyIi6DxqRD
+	Bv9irUJcpLfxXwTq2RGYUl5InaIUuoB9Mg==
+X-Google-Smtp-Source: AGHT+IEMAMOPsUzG1AthC3qrXsQ9n/WDtuYKrcQ/p3GLiahm3Dttkz8r+64MF1/mzRxnmyb2VHMz7g==
+X-Received: by 2002:a17:907:77c1:b0:a2a:19eb:9144 with SMTP id kz1-20020a17090777c100b00a2a19eb9144mr367373ejc.1.1704787941470;
+        Tue, 09 Jan 2024 00:12:21 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.223.112])
-        by smtp.gmail.com with ESMTPSA id dm3-20020a05640222c300b0054b53aacd86sm668956edb.65.2024.01.09.00.10.24
+        by smtp.gmail.com with ESMTPSA id f7-20020a05640214c700b005574ffc25a0sm679403edx.31.2024.01.09.00.12.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jan 2024 00:10:25 -0800 (PST)
-Message-ID: <6b2fcb18-640e-41d7-9b94-6a6c613ac391@linaro.org>
-Date: Tue, 9 Jan 2024 09:10:24 +0100
+        Tue, 09 Jan 2024 00:12:20 -0800 (PST)
+Message-ID: <7a34d737-52d3-4c89-b9da-c363f437652a@linaro.org>
+Date: Tue, 9 Jan 2024 09:12:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -66,7 +66,8 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: fpga: Convert bridge binding to yaml
+Subject: Re: [PATCH v2 2/2] dt-bindings: fpga: altera: Convert bridge bindings
+ to yaml
 Content-Language: en-US
 To: Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
  monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
@@ -75,9 +76,10 @@ Cc: Xu Yilun <yilun.xu@intel.com>, Conor Dooley <conor+dt@kernel.org>,
  Moritz Fischer <mdf@kernel.org>, Rob Herring <robh+dt@kernel.org>,
  Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>,
  "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, kishore Manne <nava.kishore.manne@amd.com>,
+ <devicetree@vger.kernel.org>,
  "open list:FPGA MANAGER FRAMEWORK" <linux-fpga@vger.kernel.org>
 References: <5740b48543a94b7e2cde04acfca06f4e5eb5d981.1704787119.git.michal.simek@amd.com>
+ <a9497e5e3e2cc683a1673b64a8c06d692e9dfa86.1704787119.git.michal.simek@amd.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -123,75 +125,19 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <5740b48543a94b7e2cde04acfca06f4e5eb5d981.1704787119.git.michal.simek@amd.com>
+In-Reply-To: <a9497e5e3e2cc683a1673b64a8c06d692e9dfa86.1704787119.git.michal.simek@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 09/01/2024 08:58, Michal Simek wrote:
-> Convert the generic fpga bridge DT binding to json-schema.
+> Convert Altera's bridges to yaml with using fpga-bridge.yaml.
 > 
 > Signed-off-by: Michal Simek <michal.simek@amd.com>
 > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 > 
-> (no changes since v1)
-> 
->  .../devicetree/bindings/fpga/fpga-bridge.txt  | 13 --------
->  .../devicetree/bindings/fpga/fpga-bridge.yaml | 30 +++++++++++++++++++
->  .../bindings/fpga/xlnx,pr-decoupler.yaml      |  5 +++-
->  3 files changed, 34 insertions(+), 14 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/fpga/fpga-bridge.txt
->  create mode 100644 Documentation/devicetree/bindings/fpga/fpga-bridge.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/fpga/fpga-bridge.txt b/Documentation/devicetree/bindings/fpga/fpga-bridge.txt
-> deleted file mode 100644
-> index 72e06917288a..000000000000
-> --- a/Documentation/devicetree/bindings/fpga/fpga-bridge.txt
-> +++ /dev/null
-> @@ -1,13 +0,0 @@
-> -FPGA Bridge Device Tree Binding
-> -
-> -Optional properties:
-> -- bridge-enable		: 0 if driver should disable bridge at startup
-> -			  1 if driver should enable bridge at startup
-> -			  Default is to leave bridge in current state.
-> -
-> -Example:
-> -	fpga_bridge3: fpga-bridge@ffc25080 {
-> -		compatible = "altr,socfpga-fpga2sdram-bridge";
-> -		reg = <0xffc25080 0x4>;
-> -		bridge-enable = <0>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/fpga/fpga-bridge.yaml b/Documentation/devicetree/bindings/fpga/fpga-bridge.yaml
-> new file mode 100644
-> index 000000000000..248639c6b560
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/fpga/fpga-bridge.yaml
-> @@ -0,0 +1,30 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/fpga/fpga-bridge.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: FPGA Bridge
-> +
-> +maintainers:
-> +  - Michal Simek <michal.simek@amd.com>
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^fpga-bridge(@.*)?$"
 
-Either I misunderstood previous messages or something is still wrong.
-
-One message said: always unit address, so there will be no
-fpga-bridge-1. This means "?" is not correct.
-
-Other message was saying "reg" is not required in one of the bindings,
-thus "fpga-bridge-1" is reasonable if there are more than one bridge
-(which was already said as possibility?).
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
