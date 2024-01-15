@@ -1,207 +1,263 @@
-Return-Path: <linux-fpga+bounces-132-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-134-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3063982DE2C
-	for <lists+linux-fpga@lfdr.de>; Mon, 15 Jan 2024 18:09:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40DD382E1BA
+	for <lists+linux-fpga@lfdr.de>; Mon, 15 Jan 2024 21:23:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4996C1C21E5F
-	for <lists+linux-fpga@lfdr.de>; Mon, 15 Jan 2024 17:09:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A871D1F22C85
+	for <lists+linux-fpga@lfdr.de>; Mon, 15 Jan 2024 20:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC0F182DD;
-	Mon, 15 Jan 2024 17:08:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IsWaigLg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF6A19473;
+	Mon, 15 Jan 2024 20:23:27 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6C1182A1
-	for <linux-fpga@vger.kernel.org>; Mon, 15 Jan 2024 17:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705338516;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P1P61my+Bw8+fnvo70xyLGssKK24tkeqWAOxKcUoi5E=;
-	b=IsWaigLgBWnJWUMDVhFaXIa8BS+0Bw+khEWGsMx7gZaO68OmcPX5/aFYiydQLc3smFITt7
-	p3re+pWPMyqk78dBlTuwWNn11aStIEEhA/DTF7DZI46/ROae85e2S9pCPzY3FMGj9GlQsg
-	WBMwMXbk9oftjTTQDvLodMnxrmKVN/Q=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-412-Pir5Y38SM8qhFSLFuXrnxw-1; Mon, 15 Jan 2024 12:08:35 -0500
-X-MC-Unique: Pir5Y38SM8qhFSLFuXrnxw-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-427b56e96a6so138997071cf.3
-        for <linux-fpga@vger.kernel.org>; Mon, 15 Jan 2024 09:08:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705338515; x=1705943315;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1P61my+Bw8+fnvo70xyLGssKK24tkeqWAOxKcUoi5E=;
-        b=TvLt6d+8qr53KXCWXIIzIJx3yiM3AiStCbC6tomKqdgDQIPEy3V0Ska3xKO6QnqOnM
-         vaDwOGgZnOvLLDwc7Q7dvKDDiYby8PJLjEF/Rm7YJtmWIlWwFcG/Ws5RpWDPzvIBGB1t
-         r0XP3g+GG5kkN24TYCL/YEXahtUF20/qyqzCJzpRAvlm5xf3MhSY7m/o4RVchirocg8W
-         +6o7Y1kMR7sptsKU4BY4xIbRWzG7ndOi2rL8vwynFz+zaxajMppdFl+BkVX9HU92A3Gi
-         57UnUz0eE0w6jeE61xa4PvGZzcnG1rfnppeRxPESrDuJDMT/nHTvQlPLiRiXwaUGsHPv
-         3xuA==
-X-Gm-Message-State: AOJu0YzUQf3KXRjk3VGoqVK9D1vfF4F74E4CjYWpbrDj9NnGZL47trmJ
-	+YoBlz0c9RV/i9IzOeLA40wZs2Wge45wB9kLCUtmNA1U2aLgJDX1MF/JaNwgJz0ZLojVBGZLhGS
-	8QfUbDYLeXu+UD9auSTiCv3I12EBd
-X-Received: by 2002:a05:622a:1b9e:b0:429:cfa7:2694 with SMTP id bp30-20020a05622a1b9e00b00429cfa72694mr8278454qtb.132.1705338514909;
-        Mon, 15 Jan 2024 09:08:34 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGSo27e4aZe4IMLfNfuibFhqawYh2aJcFoKYMMlbNu9QIdvCFbQvArA0Ru5fOqmfL7xiIx6vQ==
-X-Received: by 2002:a05:622a:1b9e:b0:429:cfa7:2694 with SMTP id bp30-20020a05622a1b9e00b00429cfa72694mr8278439qtb.132.1705338514643;
-        Mon, 15 Jan 2024 09:08:34 -0800 (PST)
-Received: from [192.168.9.34] (net-2-34-31-72.cust.vodafonedsl.it. [2.34.31.72])
-        by smtp.gmail.com with ESMTPSA id fv11-20020a05622a4a0b00b00427fb1d6b44sm4089985qtb.5.2024.01.15.09.08.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jan 2024 09:08:34 -0800 (PST)
-Message-ID: <12b50394-3d02-4fe2-9b00-97788b2a64ef@redhat.com>
-Date: Mon, 15 Jan 2024 18:08:31 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E65118E1F
+	for <linux-fpga@vger.kernel.org>; Mon, 15 Jan 2024 20:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rPTSJ-0004fv-Vc; Mon, 15 Jan 2024 21:21:12 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rPTSC-0005fw-T0; Mon, 15 Jan 2024 21:21:04 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rPTSC-000N73-2E;
+	Mon, 15 Jan 2024 21:21:04 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Mark Brown <broonie@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-spi@vger.kernel.org,
+	kernel@pengutronix.de,
+	Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-fpga@vger.kernel.org,
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-wpan@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	linux-iio@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-input@vger.kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rayyan Ansari <rayyan@ansari.sh>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Martin Tuma <martin.tuma@digiteqautomotive.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	Sergey Kozlov <serjk@netup.ru>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	linux-mmc@vger.kernel.org,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>,
+	Rob Herring <robh@kernel.org>,
+	linux-mtd@lists.infradead.org,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	=?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+	Ronald Wahl <ronald.wahl@raritan.com>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev,
+	Michal Simek <michal.simek@amd.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	greybus-dev@lists.linaro.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	Herve Codina <herve.codina@bootlin.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-usb@vger.kernel.org,
+	Helge Deller <deller@gmx.de>,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Kalle Valo <kvalo@kernel.org>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	libertas-dev@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	James Clark <james.clark@arm.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	linux-doc@vger.kernel.org
+Subject: [PATCH 00/33] spi: get rid of some legacy macros
+Date: Mon, 15 Jan 2024 21:12:46 +0100
+Message-ID: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Marco Pagani <marpagan@redhat.com>
-Subject: Re: [RFC 1/2] fpga: support loading from a pre-allocated buffer
-To: Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc: mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
- sumit.semwal@linaro.org, christian.koenig@amd.com,
- linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
- dri-devel@lists.freedesktop.org
-References: <20231122053035.3758124-1-nava.kishore.manne@amd.com>
- <20231122053035.3758124-2-nava.kishore.manne@amd.com>
-Content-Language: en-US
-In-Reply-To: <20231122053035.3758124-2-nava.kishore.manne@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6320; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=4XhGTLODNw8yhIWMecN5LnSB/9sNwzZ7ZtVxoa/j52s=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlpZHAtVz/M7HYOTe/qdG2V00aOQMH7pbvHciH8 Vd+hMtY79eJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZaWRwAAKCRCPgPtYfRL+ TmMcB/9KE9qwNyMSSIfdofdQbKyCv4Jl+hXy0kKEYM/VNzbklICtWwj9498FhxF8B9thFSDK3gp DulZCe7rJn+MKx/eJphonzR1LVWev1YTJ2kkqaeBZRIN4i1mYHInwS35ESw2q+zwzVxxA5C1ESX kW25rOyy4D74faKClkI6O9XJ8+8hTw+2V1FDTJCM3vzxmqJnOLbi+YQW48FklGIPMoSqjx8aCyd SI61u1H7VyOe/EymwrynrT3G6SCnlHBYtfL1qLmsfALHT2BaON0BD/T5W5/wZjxuPBbtdlD253K rqyhVZMP3ez427R7zZKU1qhJqs7O6YTGrydt0et9PARzYGe0
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
+
+Hello,
+
+In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
+some functions were renamed. Further some compat defines were introduced
+to map the old names to the new ones.
+
+In this series all drivers still using the old names are changed to use
+the new ones and then in patch #32 the compat defines are dropped.
+Variables and struct members of type pointer to struct spi_controller that were
+named "master" (matching the old name of spi_controller) were renamed to
+"ctlr", which slightly increased the count of touched lines, but is nice
+for consistency.
+
+Patch #18 and #19 touch the same driver, otherwise the patches #1 - #31
+are pairwise independent and could be applied by their respective
+maintainers. The alternative is to let all patches go via the spi tree.
+Mark, what's your preference here?
+
+Patch #33 updates the documentation. (This one is a bit fuzzy, because
+it also does some s/master/host/ which doesn't match the remainder of
+the series). Also patch #18 is an improvement I noticed while touching
+this driver that doesn't match the series' topic. I still kept it
+included here. If you should not like it, it can just be dropped.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (33):
+  fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
+  ieee802154: ca8210: Follow renaming of SPI "master" to "controller"
+  iio: adc: ad_sigma_delta: Follow renaming of SPI "master" to "controller"
+  Input: pxspad - follow renaming of SPI "master" to "controller"
+  Input: synaptics-rmi4 - follow renaming of SPI "master" to "controller"
+  media: mgb4: Follow renaming of SPI "master" to "controller"
+  media: netup_unidvb: Follow renaming of SPI "master" to "controller"
+  media: usb/msi2500: Follow renaming of SPI "master" to "controller"
+  media: v4l2-subdev: Follow renaming of SPI "master" to "controller"
+  misc: gehc-achc: Follow renaming of SPI "master" to "controller"
+  mmc: mmc_spi: Follow renaming of SPI "master" to "controller"
+  mtd: dataflash: Follow renaming of SPI "master" to "controller"
+  mtd: rawnand: fsl_elbc: Let .probe retry if local bus is missing
+  net: ks8851: Follow renaming of SPI "master" to "controller"
+  net: vertexcom: mse102x: Follow renaming of SPI "master" to "controller"
+  platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to "controller"
+  spi: bitbang: Follow renaming of SPI "master" to "controller"
+  spi: cadence-quadspi: Don't emit error message on allocation error
+  spi: cadence-quadspi: Follow renaming of SPI "master" to "controller"
+  spi: cavium: Follow renaming of SPI "master" to "controller"
+  spi: geni-qcom: Follow renaming of SPI "master" to "controller"
+  spi: loopback-test: Follow renaming of SPI "master" to "controller"
+  spi: slave-mt27xx: Follow renaming of SPI "master" to "controller"
+  spi: spidev: Follow renaming of SPI "master" to "controller"
+  staging: fbtft: Follow renaming of SPI "master" to "controller"
+  staging: greybus: spi: Follow renaming of SPI "master" to "controller"
+  tpm_tis_spi: Follow renaming of SPI "master" to "controller"
+  usb: gadget: max3420_udc: Follow renaming of SPI "master" to "controller"
+  video: fbdev: mmp: Follow renaming of SPI "master" to "controller"
+  wifi: libertas: Follow renaming of SPI "master" to "controller"
+  spi: fsl-lib: Follow renaming of SPI "master" to "controller"
+  spi: Drop compat layer from renaming "master" to "controller"
+  Documentation: spi: Update documentation for renaming "master" to "controller"
+
+ .../driver-api/driver-model/devres.rst        |  2 +-
+ Documentation/spi/spi-summary.rst             | 74 +++++++++----------
+ drivers/char/tpm/tpm_tis_spi_main.c           |  4 +-
+ drivers/fpga/ice40-spi.c                      |  4 +-
+ drivers/iio/adc/ad_sigma_delta.c              | 14 ++--
+ drivers/input/joystick/psxpad-spi.c           |  4 +-
+ drivers/input/rmi4/rmi_spi.c                  |  2 +-
+ drivers/media/pci/mgb4/mgb4_core.c            | 14 ++--
+ .../media/pci/netup_unidvb/netup_unidvb_spi.c | 48 ++++++------
+ drivers/media/usb/msi2500/msi2500.c           | 38 +++++-----
+ drivers/media/v4l2-core/v4l2-spi.c            |  4 +-
+ drivers/misc/gehc-achc.c                      |  8 +-
+ drivers/mmc/host/mmc_spi.c                    |  6 +-
+ drivers/mtd/devices/mtd_dataflash.c           |  2 +-
+ drivers/mtd/nand/raw/fsl_elbc_nand.c          |  3 +-
+ drivers/net/ethernet/micrel/ks8851_spi.c      |  4 +-
+ drivers/net/ethernet/vertexcom/mse102x.c      |  2 +-
+ drivers/net/ieee802154/ca8210.c               |  2 +-
+ .../net/wireless/marvell/libertas/if_spi.c    |  2 +-
+ drivers/platform/chrome/cros_ec_spi.c         |  8 +-
+ drivers/spi/spi-ath79.c                       |  4 +-
+ drivers/spi/spi-bitbang.c                     | 64 ++++++++--------
+ drivers/spi/spi-butterfly.c                   |  6 +-
+ drivers/spi/spi-cadence-quadspi.c             |  7 +-
+ drivers/spi/spi-cavium.c                      |  6 +-
+ drivers/spi/spi-cavium.h                      |  2 +-
+ drivers/spi/spi-davinci.c                     |  6 +-
+ drivers/spi/spi-fsl-lib.c                     | 14 ++--
+ drivers/spi/spi-geni-qcom.c                   |  2 +-
+ drivers/spi/spi-gpio.c                        |  2 +-
+ drivers/spi/spi-lm70llp.c                     |  6 +-
+ drivers/spi/spi-loopback-test.c               |  4 +-
+ drivers/spi/spi-oc-tiny.c                     |  6 +-
+ drivers/spi/spi-omap-uwire.c                  |  4 +-
+ drivers/spi/spi-slave-mt27xx.c                |  2 +-
+ drivers/spi/spi-xilinx.c                      |  4 +-
+ drivers/spi/spi-xtensa-xtfpga.c               |  2 +-
+ drivers/spi/spi.c                             |  2 +-
+ drivers/spi/spidev.c                          |  2 +-
+ drivers/staging/fbtft/fbtft-core.c            |  4 +-
+ drivers/staging/greybus/spilib.c              | 66 ++++++++---------
+ drivers/usb/gadget/udc/max3420_udc.c          |  2 +-
+ drivers/video/fbdev/mmp/hw/mmp_spi.c          | 26 +++----
+ include/linux/spi/spi.h                       | 20 +----
+ include/linux/spi/spi_bitbang.h               |  2 +-
+ include/media/v4l2-common.h                   |  6 +-
+ 46 files changed, 249 insertions(+), 267 deletions(-)
 
 
-
-On 2023-11-22 06:30, Nava kishore Manne wrote:
-> Some systems are memory constrained but they need to load very
-> large Configuration files. The FPGA subsystem allows drivers to
-> request this Configuration image be loaded from the filesystem,
-> but this requires that the entire configuration data be loaded
-> into kernel memory first before it's provided to the driver.
-> This can lead to a situation where we map the configuration
-> data twice, once to load the configuration data into kernel
-> memory and once to copy the configuration data into the final
-> resting place which is nothing but a dma-able continuous buffer.
-> 
-> This creates needless memory pressure and delays due to multiple
-> copies. Let's add a dmabuf handling support to the fpga manager
-> framework that allows drivers to load the Configuration data
-> directly from a pre-allocated buffer. This skips the intermediate
-> step of allocating a buffer in kernel memory to hold the
-> Configuration data.
-
-Sharing images/bitstreams using dma-buf to avoid multiple copies
-make sense to me to have a fast path for partial reconfiguration.
-However, implementing the userspace interface for importing the
-buffer at the manager level seems questionable, considering that
-the manager should be responsible only for writing images.
-
-Wouldn't it be conceptually cleaner to implement the interface for
-importing dma-buf as a separate layer on top of the manager? Such a
-layer could then program the FPGA using the standard write_sg 
-interface exported by the manager. In this way, each component would
-have its own responsibility.
-
-> 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> ---
->  drivers/fpga/fpga-mgr.c       | 113 ++++++++++++++++++++++++++++++++++
->  include/linux/fpga/fpga-mgr.h |  10 +++
->  2 files changed, 123 insertions(+)
-> 
-> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> index 06651389c592..23d2b4d45827 100644
-> --- a/drivers/fpga/fpga-mgr.c
-> +++ b/drivers/fpga/fpga-mgr.c
-> @@ -8,6 +8,8 @@
->   * With code from the mailing list:
->   * Copyright (C) 2013 Xilinx, Inc.
->   */
-> +#include <linux/dma-buf.h>
-> +#include <linux/dma-map-ops.h>
->  #include <linux/firmware.h>
->  #include <linux/fpga/fpga-mgr.h>
->  #include <linux/idr.h>
-> @@ -519,6 +521,39 @@ static int fpga_mgr_buf_load(struct fpga_manager *mgr,
->  	return rc;
->  }
->  
-> +static int fpga_dmabuf_load(struct fpga_manager *mgr,
-> +			    struct fpga_image_info *info)
-> +{
-> +	struct dma_buf_attachment *attach;
-> +	struct sg_table *sgt;
-> +	int ret;
-> +
-> +	/* create attachment for dmabuf with the user device */
-> +	attach = dma_buf_attach(mgr->dmabuf, &mgr->dev);
-> +	if (IS_ERR(attach)) {
-> +		pr_err("failed to attach dmabuf\n");
-> +		ret = PTR_ERR(attach);
-> +		goto fail_put;
-> +	}
-> +
-> +	sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
-> +	if (IS_ERR(sgt)) {
-> +		ret = PTR_ERR(sgt);
-> +		goto fail_detach;
-> +	}
-> +
-> +	info->sgt = sgt;
-> +	ret = fpga_mgr_buf_load_sg(mgr, info, info->sgt);
-> +	dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
-> +
-> +fail_detach:
-> +	dma_buf_detach(mgr->dmabuf, attach);
-> +fail_put:
-> +	dma_buf_put(mgr->dmabuf);
-> +
-> +	return ret;
-> +}
-> +
->  /**
->   * fpga_mgr_firmware_load - request firmware and load to fpga
->   * @mgr:	fpga manager
-> @@ -573,6 +608,8 @@ int fpga_mgr_load(struct fpga_manager *mgr, struct fpga_image_info *info)
->  {
->  	info->header_size = mgr->mops->initial_header_size;
->  
-> +	if (mgr->flags & FPGA_MGR_CONFIG_DMA_BUF)
-> +		return fpga_dmabuf_load(mgr, info);
-
-I'm not understanding the whole picture. After the dma-buf has been
-imported from userspace, who is supposed to call fpga_mgr_load() or
-fpga_region_program_fpga()? And who should load and export the dma-buf
-containing the image in the first place?
-
-I think it would be interesting to have a system that buffers a set of
-alternative configurations for each (reconfigurable) region. Alternative
-configurations could be represented and activated through a sysfs
-interface. The user could request a specific configuration by writing in
-the corresponding sysfs file, and the system would use the preloaded
-image and optionally the overlay to configure the region. What do you
-think?
-
-> [...]
-
-Thanks,
-Marco
+base-commit: 8d04a7e2ee3fd6aabb8096b00c64db0d735bc874
+-- 
+2.43.0
 
 
