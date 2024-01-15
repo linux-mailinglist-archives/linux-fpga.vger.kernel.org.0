@@ -1,64 +1,70 @@
-Return-Path: <linux-fpga+bounces-131-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-132-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1026482DC2B
-	for <lists+linux-fpga@lfdr.de>; Mon, 15 Jan 2024 16:15:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3063982DE2C
+	for <lists+linux-fpga@lfdr.de>; Mon, 15 Jan 2024 18:09:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8635C1F228D5
-	for <lists+linux-fpga@lfdr.de>; Mon, 15 Jan 2024 15:15:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4996C1C21E5F
+	for <lists+linux-fpga@lfdr.de>; Mon, 15 Jan 2024 17:09:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EAB17985;
-	Mon, 15 Jan 2024 15:15:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC0F182DD;
+	Mon, 15 Jan 2024 17:08:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jJeXsAZ+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IsWaigLg"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E38F17980
-	for <linux-fpga@vger.kernel.org>; Mon, 15 Jan 2024 15:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-557e76e1bd6so8465566a12.1
-        for <linux-fpga@vger.kernel.org>; Mon, 15 Jan 2024 07:15:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705331706; x=1705936506; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wDEQEBN9gLO6683loCAz8Gcv3e9K7DtmlKI7Bpi49YI=;
-        b=jJeXsAZ+olukHyJSC43JwEEKolqnHhjMr3/HQIkT8tvPRGJILxFZKGOM/TWc5ILdj0
-         pFy4kLiuqWvys1Eu6VwaREIj0NgPIP5K2406W7mynN4xYHsf6dNHTfaSzJNGc60H+YR/
-         z1KqL9OryfbLXGRrb5uLikiryQ8Cx9acyF8Y2MlWZuQzgaI8RqL5mXwrXJwsGuCDtJlD
-         vu3PbuAL8BJnD7uAETd1JiYP4R9FGmh0l+tfIEniVnv0ztutvbqQsE6O7196LvrxQt7N
-         9sth5X1KEIHrQI2onUlPRi56yYKxMmw9OSXQ3NAB35JrX0y8eYCNByetF7yZ6WNKhjMn
-         jn7g==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6C1182A1
+	for <linux-fpga@vger.kernel.org>; Mon, 15 Jan 2024 17:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705338516;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=P1P61my+Bw8+fnvo70xyLGssKK24tkeqWAOxKcUoi5E=;
+	b=IsWaigLgBWnJWUMDVhFaXIa8BS+0Bw+khEWGsMx7gZaO68OmcPX5/aFYiydQLc3smFITt7
+	p3re+pWPMyqk78dBlTuwWNn11aStIEEhA/DTF7DZI46/ROae85e2S9pCPzY3FMGj9GlQsg
+	WBMwMXbk9oftjTTQDvLodMnxrmKVN/Q=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-412-Pir5Y38SM8qhFSLFuXrnxw-1; Mon, 15 Jan 2024 12:08:35 -0500
+X-MC-Unique: Pir5Y38SM8qhFSLFuXrnxw-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-427b56e96a6so138997071cf.3
+        for <linux-fpga@vger.kernel.org>; Mon, 15 Jan 2024 09:08:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705331706; x=1705936506;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1705338515; x=1705943315;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wDEQEBN9gLO6683loCAz8Gcv3e9K7DtmlKI7Bpi49YI=;
-        b=s41V7rH1ojxRdy4S6mKXUL2V1XuDIZL+OyVhoo8U58INxAl2qpstlNV5qWp3zQs2I7
-         N9nIz1xr/7qSQGh9g6QTuscI7AAoWzVcoupScFuWcZ8TJAjsMS++j4zExiHVafHqQpu6
-         hUj7EGsGR29ZHRtO+aVa+xzYapl4xFuXekwCDYAugeY9VuydPmyRaZ7NOiitGWZurl3k
-         M+fDgX59V2lcKJm6ZYVlCF1pwiweTR1eczjdyZDxvqUdf3p49VSMlmcGPRakt+NNdw0Q
-         tY8b49g4xYm/XhKbTYYONKaaFh2xWz7+GjuaXpgxvTlUyBxQLJxxHgLMYaxMA9JeEJF/
-         UJvw==
-X-Gm-Message-State: AOJu0Yw7mYEr0u0WlfvHCbBcyE428tT0vgxYwVkPepvDukxUHsbBMyc7
-	5oSCEfpZSRTL7U6Eppiw5sFPHBbZjbjgdg==
-X-Google-Smtp-Source: AGHT+IFy/5kCjTUmSlWt2ID8uQhME/XCKfRmJU7CsIWmN2JCpGLrboapEyArtvQhTUxYpuRHg+cAuQ==
-X-Received: by 2002:a50:99d9:0:b0:557:2b83:195 with SMTP id n25-20020a5099d9000000b005572b830195mr3164546edb.38.1705331706392;
-        Mon, 15 Jan 2024 07:15:06 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id n7-20020a056402434700b0055915dc8e74sm2715851edc.81.2024.01.15.07.15.04
+        bh=P1P61my+Bw8+fnvo70xyLGssKK24tkeqWAOxKcUoi5E=;
+        b=TvLt6d+8qr53KXCWXIIzIJx3yiM3AiStCbC6tomKqdgDQIPEy3V0Ska3xKO6QnqOnM
+         vaDwOGgZnOvLLDwc7Q7dvKDDiYby8PJLjEF/Rm7YJtmWIlWwFcG/Ws5RpWDPzvIBGB1t
+         r0XP3g+GG5kkN24TYCL/YEXahtUF20/qyqzCJzpRAvlm5xf3MhSY7m/o4RVchirocg8W
+         +6o7Y1kMR7sptsKU4BY4xIbRWzG7ndOi2rL8vwynFz+zaxajMppdFl+BkVX9HU92A3Gi
+         57UnUz0eE0w6jeE61xa4PvGZzcnG1rfnppeRxPESrDuJDMT/nHTvQlPLiRiXwaUGsHPv
+         3xuA==
+X-Gm-Message-State: AOJu0YzUQf3KXRjk3VGoqVK9D1vfF4F74E4CjYWpbrDj9NnGZL47trmJ
+	+YoBlz0c9RV/i9IzOeLA40wZs2Wge45wB9kLCUtmNA1U2aLgJDX1MF/JaNwgJz0ZLojVBGZLhGS
+	8QfUbDYLeXu+UD9auSTiCv3I12EBd
+X-Received: by 2002:a05:622a:1b9e:b0:429:cfa7:2694 with SMTP id bp30-20020a05622a1b9e00b00429cfa72694mr8278454qtb.132.1705338514909;
+        Mon, 15 Jan 2024 09:08:34 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGSo27e4aZe4IMLfNfuibFhqawYh2aJcFoKYMMlbNu9QIdvCFbQvArA0Ru5fOqmfL7xiIx6vQ==
+X-Received: by 2002:a05:622a:1b9e:b0:429:cfa7:2694 with SMTP id bp30-20020a05622a1b9e00b00429cfa72694mr8278439qtb.132.1705338514643;
+        Mon, 15 Jan 2024 09:08:34 -0800 (PST)
+Received: from [192.168.9.34] (net-2-34-31-72.cust.vodafonedsl.it. [2.34.31.72])
+        by smtp.gmail.com with ESMTPSA id fv11-20020a05622a4a0b00b00427fb1d6b44sm4089985qtb.5.2024.01.15.09.08.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jan 2024 07:15:05 -0800 (PST)
-Message-ID: <c3c92468-a1db-498b-b4a2-7926b84cb5ea@linaro.org>
-Date: Mon, 15 Jan 2024 16:15:03 +0100
+        Mon, 15 Jan 2024 09:08:34 -0800 (PST)
+Message-ID: <12b50394-3d02-4fe2-9b00-97788b2a64ef@redhat.com>
+Date: Mon, 15 Jan 2024 18:08:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -66,310 +72,136 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: fpga: Conver fpga-region binding to yaml
+From: Marco Pagani <marpagan@redhat.com>
+Subject: Re: [RFC 1/2] fpga: support loading from a pre-allocated buffer
+To: Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc: mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+ sumit.semwal@linaro.org, christian.koenig@amd.com,
+ linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+ dri-devel@lists.freedesktop.org
+References: <20231122053035.3758124-1-nava.kishore.manne@amd.com>
+ <20231122053035.3758124-2-nava.kishore.manne@amd.com>
 Content-Language: en-US
-To: Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
- monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
-Cc: Conor Dooley <conor+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Moritz Fischer <mdf@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>,
- Xu Yilun <yilun.xu@intel.com>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>,
- "open list:FPGA MANAGER FRAMEWORK" <linux-fpga@vger.kernel.org>
-References: <39e1362352959706b1f67c6feaeec2639ead4610.1705062319.git.michal.simek@amd.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
- m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
- HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
- XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
- mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
- v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
- cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
- rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
- qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
- aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
- gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
- dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
- NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
- hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
- oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
- H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
- yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
- 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
- 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
- +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
- FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
- 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
- DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
- oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
- 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
- Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
- qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
- /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
- qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
- EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
- KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
- fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <39e1362352959706b1f67c6feaeec2639ead4610.1705062319.git.michal.simek@amd.com>
+In-Reply-To: <20231122053035.3758124-2-nava.kishore.manne@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/01/2024 13:25, Michal Simek wrote:
-> Convert the generic fpga region DT binding to json-schema.
-> There are some differences compare to txt version.
-> 1. DT overlay can't be described in example that's why directly include
-> information from overlay to node which was referenced. It is visible in
-> example with /* DT Overlay contains: &... */
+
+
+On 2023-11-22 06:30, Nava kishore Manne wrote:
+> Some systems are memory constrained but they need to load very
+> large Configuration files. The FPGA subsystem allows drivers to
+> request this Configuration image be loaded from the filesystem,
+> but this requires that the entire configuration data be loaded
+> into kernel memory first before it's provided to the driver.
+> This can lead to a situation where we map the configuration
+> data twice, once to load the configuration data into kernel
+> memory and once to copy the configuration data into the final
+> resting place which is nothing but a dma-able continuous buffer.
 > 
-> 2. All example have been rewritten to be simpler and describe only full
-> reconfiguration and partial reconfiguration with one bridge.
-> Completely drop the case where fpga region can inside partial
-> reconfiguration region which is already described in description
+> This creates needless memory pressure and delays due to multiple
+> copies. Let's add a dmabuf handling support to the fpga manager
+> framework that allows drivers to load the Configuration data
+> directly from a pre-allocated buffer. This skips the intermediate
+> step of allocating a buffer in kernel memory to hold the
+> Configuration data.
+
+Sharing images/bitstreams using dma-buf to avoid multiple copies
+make sense to me to have a fast path for partial reconfiguration.
+However, implementing the userspace interface for importing the
+buffer at the manager level seems questionable, considering that
+the manager should be responsible only for writing images.
+
+Wouldn't it be conceptually cleaner to implement the interface for
+importing dma-buf as a separate layer on top of the manager? Such a
+layer could then program the FPGA using the standard write_sg 
+interface exported by the manager. In this way, each component would
+have its own responsibility.
+
 > 
-> 3. Fixed some typos in descriptions compare to txt version but most of it
-> is just c&p from txt file.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
 > ---
+>  drivers/fpga/fpga-mgr.c       | 113 ++++++++++++++++++++++++++++++++++
+>  include/linux/fpga/fpga-mgr.h |  10 +++
+>  2 files changed, 123 insertions(+)
 > 
-> Please let me know if there is a way to describe overlays to dt root to be
-> able to reference fpga region back.
-> ---
+> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> index 06651389c592..23d2b4d45827 100644
+> --- a/drivers/fpga/fpga-mgr.c
+> +++ b/drivers/fpga/fpga-mgr.c
+> @@ -8,6 +8,8 @@
+>   * With code from the mailing list:
+>   * Copyright (C) 2013 Xilinx, Inc.
+>   */
+> +#include <linux/dma-buf.h>
+> +#include <linux/dma-map-ops.h>
+>  #include <linux/firmware.h>
+>  #include <linux/fpga/fpga-mgr.h>
+>  #include <linux/idr.h>
+> @@ -519,6 +521,39 @@ static int fpga_mgr_buf_load(struct fpga_manager *mgr,
+>  	return rc;
+>  }
+>  
+> +static int fpga_dmabuf_load(struct fpga_manager *mgr,
+> +			    struct fpga_image_info *info)
+> +{
+> +	struct dma_buf_attachment *attach;
+> +	struct sg_table *sgt;
+> +	int ret;
+> +
+> +	/* create attachment for dmabuf with the user device */
+> +	attach = dma_buf_attach(mgr->dmabuf, &mgr->dev);
+> +	if (IS_ERR(attach)) {
+> +		pr_err("failed to attach dmabuf\n");
+> +		ret = PTR_ERR(attach);
+> +		goto fail_put;
+> +	}
+> +
+> +	sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
+> +	if (IS_ERR(sgt)) {
+> +		ret = PTR_ERR(sgt);
+> +		goto fail_detach;
+> +	}
+> +
+> +	info->sgt = sgt;
+> +	ret = fpga_mgr_buf_load_sg(mgr, info, info->sgt);
+> +	dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
+> +
+> +fail_detach:
+> +	dma_buf_detach(mgr->dmabuf, attach);
+> +fail_put:
+> +	dma_buf_put(mgr->dmabuf);
+> +
+> +	return ret;
+> +}
+> +
+>  /**
+>   * fpga_mgr_firmware_load - request firmware and load to fpga
+>   * @mgr:	fpga manager
+> @@ -573,6 +608,8 @@ int fpga_mgr_load(struct fpga_manager *mgr, struct fpga_image_info *info)
+>  {
+>  	info->header_size = mgr->mops->initial_header_size;
+>  
+> +	if (mgr->flags & FPGA_MGR_CONFIG_DMA_BUF)
+> +		return fpga_dmabuf_load(mgr, info);
 
-...
+I'm not understanding the whole picture. After the dma-buf has been
+imported from userspace, who is supposed to call fpga_mgr_load() or
+fpga_region_program_fpga()? And who should load and export the dma-buf
+containing the image in the first place?
 
-> ---
-> -[1] www.altera.com/content/dam/altera-www/global/en_US/pdfs/literature/ug/ug_partrecon.pdf
-> -[2] tspace.library.utoronto.ca/bitstream/1807/67932/1/Byma_Stuart_A_201411_MAS_thesis.pdf
-> -[3] https://www.xilinx.com/support/documentation/sw_manuals/xilinx14_1/ug702.pdf
-> diff --git a/Documentation/devicetree/bindings/fpga/fpga-region.yaml b/Documentation/devicetree/bindings/fpga/fpga-region.yaml
-> new file mode 100644
-> index 000000000000..bf4bb54bfbfa
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/fpga/fpga-region.yaml
-> @@ -0,0 +1,372 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+I think it would be interesting to have a system that buffers a set of
+alternative configurations for each (reconfigurable) region. Alternative
+configurations could be represented and activated through a sysfs
+interface. The user could request a specific configuration by writing in
+the corresponding sysfs file, and the system would use the preloaded
+image and optionally the overlay to configure the region. What do you
+think?
 
-You relicense the GPL-2.0, so you need to ask all copyright holders to
-ack your patch. At least try to identify them...
+> [...]
 
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/fpga/fpga-region.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: FPGA Region
-> +
-> +maintainers:
-> +  - Michal Simek <michal.simek@amd.com>
-> +
-> +description: |
-> +  CONTENTS
-> +   - Introduction
-> +   - Terminology
-> +   - Sequence
-> +   - FPGA Region
-> +   - Supported Use Models
-> +   - Constraints
-
-
-...
-
-
-> +  Constraints
-> +  ===========
-> +
-> +  It is beyond the scope of this document to fully describe all the FPGA design
-> +  constraints required to make partial reconfiguration work[1] [2] [3], but a few
-> +  deserve quick mention.
-> +
-> +  A persona must have boundary connections that line up with those of the partition
-> +  or region it is designed to go into.
-> +
-> +  During programming, transactions through those connections must be stopped and
-> +  the connections must be held at a fixed logic level.  This can be achieved by
-> +  FPGA Bridges that exist on the FPGA fabric prior to the partial reconfiguration.
-> +
-> +  --
-> +  [1] www.altera.com/content/dam/altera-www/global/en_US/pdfs/literature/ug/ug_partrecon.pdf
-> +  [2] tspace.library.utoronto.ca/bitstream/1807/67932/1/Byma_Stuart_A_201411_MAS_thesis.pdf
-> +  [3] https://www.xilinx.com/support/documentation/sw_manuals/xilinx14_1/ug702.pdf
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^fpga-region([0-9]|[1-9][0-9]+)?$"
-
-Missing -:
-
-"^fpga-region(-([0-9]|[1-9][0-9]+))?$"
-
-
-> +
-> +  compatible:
-> +    const: fpga-region
-> +
-> +  ranges: true
-
-This does not feel right - you do not allow any unit address, so ranges
-should cause warnings.
-
-> +  "#address-cells": true
-> +  "#size-cells": true
-> +
-> +  config-complete-timeout-us:
-> +    description:
-> +      The maximum time in microseconds time for the FPGA to go to operating
-> +      mode after the region has been programmed.
-> +
-> +  encrypted-fpga-config:
-> +    type: boolean
-> +    description:
-> +      Set if the bitstream is encrypted.
-> +
-> +  external-fpga-config:
-> +    type: boolean
-> +    description:
-> +      Set if the FPGA has already been configured prior to OS boot up.
-> +
-> +  firmware-name:
-> +    $ref: /schemas/types.yaml#/definitions/string
-
-This already has a type: string-array. You need maxItems instead.
-
-> +    description:
-> +      Should contain the name of an FPGA image file located on the firmware
-> +      search path. If this property shows up in a live device tree it indicates
-> +      that the FPGA has already been programmed with this image.
-> +      If this property is in an overlay targeting an FPGA region, it is
-> +      a request to program the FPGA with that image.
-> +
-> +  fpga-bridges:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Should contain a list of phandles to FPGA Bridges that must be
-
-This says list of phandles, but you allow only one.
-
-> +      controlled during FPGA programming along with the parent FPGA bridge.
-> +      This property is optional if the FPGA Manager handles the bridges.
-> +      If the fpga-region is  the child of an fpga-bridge, the list should not
-> +      contain the parent bridge.
-> +
-> +  fpga-mgr:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Should contain a phandle to an FPGA Manager.  Child FPGA Regions
-> +      inherit this property from their ancestor regions.  An fpga-mgr property
-> +      in a region will override any inherited FPGA manager.
-> +
-> +  partial-fpga-config:
-> +    type: boolean
-> +    description:
-> +      Set if partial reconfiguration is to be done, otherwise full
-> +      reconfiguration is done.
-> +
-> +  region-freeze-timeout-us:
-> +    description:
-> +      The maximum time in microseconds to wait for bridges to successfully
-> +      become disabled before the region has been programmed.
-> +
-> +  region-unfreeze-timeout-us:
-> +    description:
-> +      The maximum time in microseconds to wait for bridges to successfully
-> +      become enabled after the region has been programmed.
-> +
-> +patternProperties:
-> +  "@[0-9a-f]+$":
-> +    type: object
-> +
-> +required:
-> +  - compatible
-> +  - ranges
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - fpga-mgr
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    /*
-> +     * Full Reconfiguration without Bridges
-> +     */
-> +    fpga_mgr0: fpga-mgr@f8007000 {
-> +      compatible = "xlnx,zynq-devcfg-1.0";
-> +      reg = <0xf8007000 0x100>;
-> +      clocks = <&clkc 12>;
-> +      clock-names = "ref_clk";
-> +      interrupt-parent = <&intc>;
-> +      interrupts = <0 8 4>;
-> +      syscon = <&slcr>;
-> +    };
-> +
-> +    fpga_region0: fpga-region0 {
-
-fpga-region {
-
-> +      compatible = "fpga-region";
-> +      ranges;
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
-> +      fpga-mgr = <&fpga_mgr0>;
-> +
-> +      /* DT Overlay contains: &fpga_region0 */
-> +      firmware-name = "zynq-gpio.bin";
-> +      gpio@40000000 {
-> +        compatible = "xlnx,xps-gpio-1.00.a";
-> +        reg = <0x40000000 0x10000>;
-> +        gpio-controller;
-> +        #gpio-cells = <2>;
-> +      };
-> +    };
-> +
-> +  - |
-> +    /*
-> +     * Partial reconfiguration with Bridges
-> +     */
-> +    fpga_mgr1: fpga-mgr@f8007000 {
-> +      compatible = "xlnx,zynq-devcfg-1.0";
-> +      reg = <0xf8007000 0x100>;
-> +      clocks = <&clkc 12>;
-> +      clock-names = "ref_clk";
-> +      interrupt-parent = <&intc>;
-> +      interrupts = <0 8 4>;
-> +      syscon = <&slcr>;
-> +    };
-> +
-> +    fpga_bridge1: fpga-bridge@100000450 {
-> +      compatible = "xlnx,pr-decoupler-1.00", "xlnx,pr-decoupler";
-> +      reg = <0x10000045 0x10>;
-> +      clocks = <&clkc 15>;
-> +      clock-names = "aclk";
-> +    };
-> +
-> +    fpga_region1: fpga-region1 {
-
-fpga-region {
-
-> +      compatible = "fpga-region";
-
-
-Best regards,
-Krzysztof
+Thanks,
+Marco
 
 
