@@ -1,165 +1,138 @@
-Return-Path: <linux-fpga+bounces-154-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-155-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F22D9837D3A
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Jan 2024 02:25:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41BAD83856C
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Jan 2024 03:41:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4BDBAB30B51
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Jan 2024 01:17:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0EB91F23EAD
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Jan 2024 02:41:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 939BC1586DD;
-	Tue, 23 Jan 2024 00:28:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 915933C2C;
+	Tue, 23 Jan 2024 02:23:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="BRNBDGZB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="goO5vUZ4"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC310157E78
-	for <linux-fpga@vger.kernel.org>; Tue, 23 Jan 2024 00:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757DF2570;
+	Tue, 23 Jan 2024 02:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705969735; cv=none; b=jZaTe5r1azDBoypcJAZHJWKwxreMuBl2sq0Pwl23D8pcwB1Kl/6O9GNWjbJhBt8gwi9cF/fToV/CxVMQQRabsyVqoUrz6wtOoQVECeT+JPTKVXG3/n8yGXCbx9ZnOGcwYQMWLf9fu4NzwMP4bmDS+ZyYHBgKP8S93lYw/OxeTmY=
+	t=1705976630; cv=none; b=dsLgyBQb3xTqJCdphOqIuul87XQN2B6Ppm3aCkjq30Vmz/i54qhSceo3nK71sKeswo3rVG3zy6vk0d1f8YiOvK68WVg6sG+uQu/DO/3W1sIrU06CRjhvXGpDJnqpWBiktaAZ0MkS4v+uZpJVOK6lWk0YjlWVDuaE9osCxIerKYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705969735; c=relaxed/simple;
-	bh=0vuR7p4ixw0RrC8ylPzI4bPxnFYZtvJs/dMTgGJ5vZw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Pg1YG62kmVK7jyqTsFHEfuv0dIlvX7NmlT3SCoMtd+CBzQeMbAkLboudDzMy2G8fJAGuHFTkQN/d4ZN4iMH09i6JkqNTJ6Cf2Dpn4ycKLXnZS4AWqfXcxMXzDaWDqHCm2krnpNWCP8VcRxjX3toB5EscyjHvQyY3Jdji+ikPfnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=BRNBDGZB; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-598ee012192so1638173eaf.1
-        for <linux-fpga@vger.kernel.org>; Mon, 22 Jan 2024 16:28:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1705969732; x=1706574532; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+mzYhNEk22l7ZoNe1NF04GNMHFMRe0cWF2yVmwT+ra0=;
-        b=BRNBDGZBMSAU9aDoATTUHu12p7MdSaKxA5X0EYOjPiDMomzyErl5tyrfoZkAvHTAFK
-         k2tVSRquwV4dwqcx+G1nYmapU4n2kMr0FBoG3+1tEFeM9Zm8wNE4TMWOHGKqKxsuyWEF
-         cYpDs0aBE87MIqfRD/EvQJ/eboax76PWm7Epc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705969732; x=1706574532;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+mzYhNEk22l7ZoNe1NF04GNMHFMRe0cWF2yVmwT+ra0=;
-        b=uEMZBAzERVgUTAK+Rrpd2pJokmOAZuZd3hyslheBFFoLIz/PApOtwOVtXuH9DMrrbZ
-         R9qEMuLbVhHjZ5QcHz2JfEAIxVbxqoyQO94SjuKerjjK0aTgosZx49F5973cLrkHYA6G
-         IqZHHfDP4WD8hlTOttZfyBBMfEyWLGwSx5bDUs+9kaATcZDV6tA7PItoFl+kxChTEXxN
-         5eQP6BjTilRLVle4ZfST+tebMxHOOiRaAnKkmkeULgwKrz2SVA7EbqitsC26vdjvHdQ9
-         IVEYVTc3ZRGRHfpEh15EOSYCSMYKFtcO6d1Cd7hh0N9qeyNKyZ/dCKzGWnKLMeuR35+C
-         o0mw==
-X-Gm-Message-State: AOJu0YxamIZuweysPOFrqJkcmqdA/rPoLtABcQ2tLzeajCnhhs38PSxt
-	OdAT2ABIBE8R9gYrn5fnOgH0D7DZ4ZPCdmfklytGrtQ3H2wDlN67/szZmWfUTA==
-X-Google-Smtp-Source: AGHT+IEFFCjcvvjDs5VhZZKQMfxmfaEe58OGTZO8rYGeZSl+4Oabsb2rR0IG6UNlABUS+Hoo2bYUkQ==
-X-Received: by 2002:a05:6358:89c:b0:176:302b:addf with SMTP id m28-20020a056358089c00b00176302baddfmr2445145rwj.11.1705969731980;
-        Mon, 22 Jan 2024 16:28:51 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t3-20020a628103000000b006d842c1eb6fsm10623083pfd.210.2024.01.22.16.28.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jan 2024 16:28:49 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: linux-hardening@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	Moritz Fischer <mdf@kernel.org>,
-	Xu Yilun <yilun.xu@intel.com>,
-	linux-fpga@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 20/82] fpga: dfl: Refactor intentional wrap-around calculation
-Date: Mon, 22 Jan 2024 16:26:55 -0800
-Message-Id: <20240123002814.1396804-20-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240122235208.work.748-kees@kernel.org>
-References: <20240122235208.work.748-kees@kernel.org>
+	s=arc-20240116; t=1705976630; c=relaxed/simple;
+	bh=JeB4i+pR0KhtpVTA4opmZxB6zloih/QMQdza1YMB5Sk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ozTBd5be3op9yIBavyCKChjjm9W3a0mNumQTjzibVK1Novf//NAfrwO8Gv+Sor/FmMl88oNmz03Vo+SHOPSzKE5kg5BB0DPhuJJ4C0epZfAtqA4sDj8ff3oj8UDvJApXDxPUrhNCuk+EfVynid02ZCIWanzlS7bYRPvEXWOeTrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=goO5vUZ4; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705976629; x=1737512629;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JeB4i+pR0KhtpVTA4opmZxB6zloih/QMQdza1YMB5Sk=;
+  b=goO5vUZ4S/LftCGbsM8qOix7k+tT6udCc3oFolYGAAReVzNYglNnCyBW
+   d3oGW5JL/mxR23w8pXQjwS0s7xCRwVJndeDtwht26VWZKpuTaob+iErNp
+   EuLJF+z9a9m/SCoKWTBKHAotrwZ8sPkKX9A8k/sbKqJ5Ixr6Hhnxi0ytY
+   2sUAlX4RIVL6fsAbOkTCli5ynHpymDK4WkEk0xVC8W2QVBtQUZE6Ypplw
+   Tyt6S7qXhmtanCfTT7eP7qwo6m4NR05Zjq3DWy6muruOSk4l9Ac9C6NlS
+   A3aSqbunnJ9SXfVL1A6WKeIPqGJrHZRfGldyh27qnMf7dJMUw/3ApPT+0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10961"; a="1272591"
+X-IronPort-AV: E=Sophos;i="6.05,213,1701158400"; 
+   d="scan'208";a="1272591"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 18:23:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,213,1701158400"; 
+   d="scan'208";a="1431375"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa003.fm.intel.com with ESMTP; 22 Jan 2024 18:23:45 -0800
+Date: Tue, 23 Jan 2024 10:20:29 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: dfl: afu: update initialization of port_hdr driver
+Message-ID: <Za8ibeJc82Xkbpct@yilunxu-OptiPlex-7050>
+References: <20240122172433.537525-1-matthew.gerlach@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2215; i=keescook@chromium.org;
- h=from:subject; bh=0vuR7p4ixw0RrC8ylPzI4bPxnFYZtvJs/dMTgGJ5vZw=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlrwgGHtjsSSN/FMeEK+eLhH3Rf2IQ7QXdGbQOh
- GLaFivRK7SJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZa8IBgAKCRCJcvTf3G3A
- JjwFEACq/xltKSW9/AcV8nURH4w+OhwZyCA5rN6lx9nRT19Yrrpsyh46ZacM7qLIRfXPyb9Wd+q
- W/ZaxHD6dec3ZWn2vr6dNx/S+6JulWL69SBFoD/Nui8MMG67egljBLYBcYz0NnTxdUaEovsRTjs
- 00TCrQdq8uFVTCZ6uIY4TiHMPbUNMZSIsloMUE3cCSpElU7skC9RHl61eYgW3OZmEsMsFvxzNhS
- tSy6oEkp4ETYdA1qEZq5V7aiH2rIziK7CNNrYg5GM1xUrqRTAikI8yponLWEPC0Dm5IDWnB6ong
- LiLqB0xMeQYRH8YCAJLBZB5KVyHCESLS6n26/HQaNYaMcbMYmOCTuboxWSCxaJiz3OkSuxqErlH
- gpN5tMaUpGQzYwm39f2CsadQgOfSyR7i+g9+pFDdfY5st1jylp+v8o+Xc+b9M8gasnUpNSMyBKC
- i/KFVGgFOBzwf/a/iMqg81pPkTDiic9cMAzjQAni6b2u5Itiad2QmvNntQb8BMkqbhPwTMPJ8HB
- AMTt1Ok+GwJ+55EPC7JPQC73k/jEvTR3KlvYL98PqXom6c/pD+V9a1jSgu8JGydxhunOYziZ8Fm
- nCglfYM7BRv+8zjUyvboX5/hptVcbwqXJuzoAzMJd4vXJpZFuQ+bjhaph5jUnAq3ffbU6UEpTRw /dzTrO4kzPwetig==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240122172433.537525-1-matthew.gerlach@linux.intel.com>
 
-In an effort to separate intentional arithmetic wrap-around from
-unexpected wrap-around, we need to refactor places that depend on this
-kind of math. One of the most common code patterns of this is:
+On Mon, Jan 22, 2024 at 09:24:33AM -0800, Matthew Gerlach wrote:
+> Revision 2 of the Device Feature List (DFL) Port feature has
+> slightly different requirements than revision 1. Revision 2
+> does not need the port to reset at driver startup. In fact,
 
-	VAR + value < VAR
+Please help illustrate what's the difference between Revision 1 & 2, and
+why revision 2 needs not.
 
-Notably, this is considered "undefined behavior" for signed and pointer
-types, which the kernel works around by using the -fno-strict-overflow
-option in the build[1] (which used to just be -fwrapv). Regardless, we
-want to get the kernel source to the position where we can meaningfully
-instrument arithmetic wrap-around conditions and catch them when they
-are unexpected, regardless of whether they are signed[2], unsigned[3],
-or pointer[4] types.
+> performing a port reset during driver initialization can cause
+> driver race conditions when the port is connected to a different
 
-Refactor open-coded unsigned wrap-around addition test to use
-check_add_overflow(), retaining the result for later usage (which removes
-the redundant open-coded addition). This paves the way to enabling the
-wrap-around sanitizers in the future.
+Please reorganize this part, in this description there seems be a
+software racing bug and the patch is a workaround. But the fact is port
+reset shouldn't been done for a new HW.
 
-Link: https://git.kernel.org/linus/68df3755e383e6fecf2354a67b08f92f18536594 [1]
-Link: https://github.com/KSPP/linux/issues/26 [2]
-Link: https://github.com/KSPP/linux/issues/27 [3]
-Link: https://github.com/KSPP/linux/issues/344 [4]
-Cc: Wu Hao <hao.wu@intel.com>
-Cc: Tom Rix <trix@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>
-Cc: Xu Yilun <yilun.xu@intel.com>
-Cc: linux-fpga@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/fpga/dfl.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+BTW: Is there a way to tell whether the port is connected to a different
+PF? Any guarantee that revision 3, 4 ... would need a port reset or not?
 
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index e6d12fbab653..7d10780e3a98 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -1939,15 +1939,16 @@ static int do_set_irq_trigger(struct dfl_feature *feature, unsigned int idx,
- int dfl_fpga_set_irq_triggers(struct dfl_feature *feature, unsigned int start,
- 			      unsigned int count, int32_t *fds)
- {
-+	unsigned int sum;
- 	unsigned int i;
- 	int ret = 0;
- 
- 	/* overflow */
--	if (unlikely(start + count < start))
-+	if (unlikely(check_add_overflow(start, count, &sum)))
- 		return -EINVAL;
- 
- 	/* exceeds nr_irqs */
--	if (start + count > feature->nr_irqs)
-+	if (sum > feature->nr_irqs)
- 		return -EINVAL;
- 
- 	for (i = 0; i < count; i++) {
--- 
-2.34.1
+Thanks,
+Yilun
 
+> PCIe Physical Function (PF) than the management PF performing
+> the actual port reset.
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+>  drivers/fpga/dfl-afu-main.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
+> index c0a75ca360d6..7d7f80cd264f 100644
+> --- a/drivers/fpga/dfl-afu-main.c
+> +++ b/drivers/fpga/dfl-afu-main.c
+> @@ -417,7 +417,18 @@ static const struct attribute_group port_hdr_group = {
+>  static int port_hdr_init(struct platform_device *pdev,
+>  			 struct dfl_feature *feature)
+>  {
+> -	port_reset(pdev);
+> +	void __iomem *base;
+> +	u8 rev;
+> +
+> +	base = dfl_get_feature_ioaddr_by_id(&pdev->dev, PORT_FEATURE_ID_HEADER);
+> +
+> +	rev = dfl_feature_revision(base);
+> +
+> +	if (rev < 2)
+> +		port_reset(pdev);
+> +
+> +	if (rev > 2)
+> +		dev_info(&pdev->dev, "unexpected port feature revision, %u\n", rev);
+
+Remove the print. It is indicating an error but the function returns OK.
+
+Thanks,
+Yilun
+
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.34.1
+> 
+> 
 
