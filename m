@@ -1,138 +1,139 @@
-Return-Path: <linux-fpga+bounces-155-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-156-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41BAD83856C
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Jan 2024 03:41:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1484583AD2E
+	for <lists+linux-fpga@lfdr.de>; Wed, 24 Jan 2024 16:24:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0EB91F23EAD
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Jan 2024 02:41:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7040281421
+	for <lists+linux-fpga@lfdr.de>; Wed, 24 Jan 2024 15:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 915933C2C;
-	Tue, 23 Jan 2024 02:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4094177656;
+	Wed, 24 Jan 2024 15:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="goO5vUZ4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hBCFQQWu"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757DF2570;
-	Tue, 23 Jan 2024 02:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BF317C67
+	for <linux-fpga@vger.kernel.org>; Wed, 24 Jan 2024 15:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705976630; cv=none; b=dsLgyBQb3xTqJCdphOqIuul87XQN2B6Ppm3aCkjq30Vmz/i54qhSceo3nK71sKeswo3rVG3zy6vk0d1f8YiOvK68WVg6sG+uQu/DO/3W1sIrU06CRjhvXGpDJnqpWBiktaAZ0MkS4v+uZpJVOK6lWk0YjlWVDuaE9osCxIerKYY=
+	t=1706109880; cv=none; b=Vk32OSCNbN5JHvA9hJcJPCyjUpFoWKCPPHMj1mn2Is65lB/QrnKXC4e0nsyW7v4WssLUShyjE+ZXfY49JyK8sqJ9ruV/VKSddJaCbrokJ4BlvMsUdcr/F3sH3vULjQig9N/akOPStVu9XB14mbzY6iSmuJh39/j/xGWd3a9fDoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705976630; c=relaxed/simple;
-	bh=JeB4i+pR0KhtpVTA4opmZxB6zloih/QMQdza1YMB5Sk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ozTBd5be3op9yIBavyCKChjjm9W3a0mNumQTjzibVK1Novf//NAfrwO8Gv+Sor/FmMl88oNmz03Vo+SHOPSzKE5kg5BB0DPhuJJ4C0epZfAtqA4sDj8ff3oj8UDvJApXDxPUrhNCuk+EfVynid02ZCIWanzlS7bYRPvEXWOeTrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=goO5vUZ4; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705976629; x=1737512629;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JeB4i+pR0KhtpVTA4opmZxB6zloih/QMQdza1YMB5Sk=;
-  b=goO5vUZ4S/LftCGbsM8qOix7k+tT6udCc3oFolYGAAReVzNYglNnCyBW
-   d3oGW5JL/mxR23w8pXQjwS0s7xCRwVJndeDtwht26VWZKpuTaob+iErNp
-   EuLJF+z9a9m/SCoKWTBKHAotrwZ8sPkKX9A8k/sbKqJ5Ixr6Hhnxi0ytY
-   2sUAlX4RIVL6fsAbOkTCli5ynHpymDK4WkEk0xVC8W2QVBtQUZE6Ypplw
-   Tyt6S7qXhmtanCfTT7eP7qwo6m4NR05Zjq3DWy6muruOSk4l9Ac9C6NlS
-   A3aSqbunnJ9SXfVL1A6WKeIPqGJrHZRfGldyh27qnMf7dJMUw/3ApPT+0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10961"; a="1272591"
-X-IronPort-AV: E=Sophos;i="6.05,213,1701158400"; 
-   d="scan'208";a="1272591"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 18:23:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,213,1701158400"; 
-   d="scan'208";a="1431375"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa003.fm.intel.com with ESMTP; 22 Jan 2024 18:23:45 -0800
-Date: Tue, 23 Jan 2024 10:20:29 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: dfl: afu: update initialization of port_hdr driver
-Message-ID: <Za8ibeJc82Xkbpct@yilunxu-OptiPlex-7050>
-References: <20240122172433.537525-1-matthew.gerlach@linux.intel.com>
+	s=arc-20240116; t=1706109880; c=relaxed/simple;
+	bh=TIoLI0NOg9IhGkDnZ07u3QedeQaS0I76rjo0TfaQbW0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KNc6Orrl14Hkw05gpKre/3M/Bn+OVEIx05O9jU+xa2bC7ggE5GUIm1lXy+tNCSso6D2ViZGzmKm6AmyN+17eKiM4bGdgdCTxvsNtYHUyLvgH+LyoxqqlICwWFl1k8TLzCQFLuOJa3K+aKoDN/+iCLL7L0Df3FnigSWLjmyn2gKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hBCFQQWu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706109877;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+IWdzfKReTN2PlVowzK8vMbbI1VNfdZNNhWBnWl7Hmk=;
+	b=hBCFQQWuMf48OjUr1SSOpkR/4xOwyGp15CJ6XlNsq60j5Id7FbQasL9Q63Cws59gAVKihp
+	u8gtbzKsoqbnoCGFW6ZKYqFjnmKkJCsFjrvFsYolhQ5NfCHC2WHIGiisdHhFAKYrhzetwC
+	GNaXC/nenrYGnYA3T4g3UULy3nuPQbg=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-383-kE-1Dyn5NSKhrxKYF63HWA-1; Wed, 24 Jan 2024 10:24:36 -0500
+X-MC-Unique: kE-1Dyn5NSKhrxKYF63HWA-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-781720619f9so858741985a.1
+        for <linux-fpga@vger.kernel.org>; Wed, 24 Jan 2024 07:24:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706109875; x=1706714675;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+IWdzfKReTN2PlVowzK8vMbbI1VNfdZNNhWBnWl7Hmk=;
+        b=WOhmeRKsJtodgT1hu1mi90s/lVXAUOa+iFj2RfntqnllbRVxLUxOMSb3W9KBSw9XjS
+         hjSuWDOmYL7vpIBZyVPyxQFXe5inPcaW7LYu3pzD1NUzQ1uXsIdsjgjbEq1hHiq+lae1
+         jNcWKiEoutwmtykM+eYriv2/N82AP1iz0JW1BMArQN9grxYSrMozIlbdrv6yZtopVUJe
+         L8OL7z/sjFHlTuZV3j5sMO2Y0kh26i3TOKWhGllymXwd5wMSWru9cDQWBxanqSDzLlCx
+         tdfuivgJGuxckHml5Fzkib7Wj2G50tiNiINJlMjVTiiwod5tSUK6Hbd1IxnZhQAgyh4M
+         ifNg==
+X-Gm-Message-State: AOJu0YyTFwpHvG6rIncIKAib52nVZ6fw+qgx0n6Cswn91HW/rj+Lkcyl
+	4cZCVI37HzMVhBP/MZ0YEkRu9+H0LUWls0LZtDMtctEpnOFwEnbXITQvDzeYaHVyR7EUKyxqfB2
+	lwn/p/FHa4P47UD6bGp25VonOoo0/bxCflipCfEMTtZROXHJib29342RhbWhuLG8Isw==
+X-Received: by 2002:a05:620a:b09:b0:781:4d22:da3 with SMTP id t9-20020a05620a0b0900b007814d220da3mr8139810qkg.138.1706109875716;
+        Wed, 24 Jan 2024 07:24:35 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE2BfiDB5CsRVcuehc5tORKDkuTL/4NqMavF8HAKOEJDcAoQ4Tj24hFb/oste1KOxPQfa0OQQ==
+X-Received: by 2002:a05:620a:b09:b0:781:4d22:da3 with SMTP id t9-20020a05620a0b0900b007814d220da3mr8139801qkg.138.1706109875523;
+        Wed, 24 Jan 2024 07:24:35 -0800 (PST)
+Received: from klayman.redhat.com (net-2-34-24-75.cust.vodafonedsl.it. [2.34.24.75])
+        by smtp.gmail.com with ESMTPSA id pa15-20020a05620a830f00b007815b84dbb3sm4126401qkn.49.2024.01.24.07.24.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jan 2024 07:24:35 -0800 (PST)
+From: Marco Pagani <marpagan@redhat.com>
+To: Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>
+Cc: Marco Pagani <marpagan@redhat.com>,
+	linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] fpga: remove redundant checks for bridge ops
+Date: Wed, 24 Jan 2024 16:24:07 +0100
+Message-ID: <20240124152408.88068-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240122172433.537525-1-matthew.gerlach@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 22, 2024 at 09:24:33AM -0800, Matthew Gerlach wrote:
-> Revision 2 of the Device Feature List (DFL) Port feature has
-> slightly different requirements than revision 1. Revision 2
-> does not need the port to reset at driver startup. In fact,
+Commit 0d70af3c2530 ("fpga: bridge: Use standard dev_release for class
+driver") introduced a check in fpga_bridge_register() that prevents
+registering a bridge without ops, making checking on every call
+redundant.
 
-Please help illustrate what's the difference between Revision 1 & 2, and
-why revision 2 needs not.
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
+ drivers/fpga/fpga-bridge.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> performing a port reset during driver initialization can cause
-> driver race conditions when the port is connected to a different
+diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+index a024be2b84e2..e0a5ef318f5e 100644
+--- a/drivers/fpga/fpga-bridge.c
++++ b/drivers/fpga/fpga-bridge.c
+@@ -30,7 +30,7 @@ int fpga_bridge_enable(struct fpga_bridge *bridge)
+ {
+ 	dev_dbg(&bridge->dev, "enable\n");
+ 
+-	if (bridge->br_ops && bridge->br_ops->enable_set)
++	if (bridge->br_ops->enable_set)
+ 		return bridge->br_ops->enable_set(bridge, 1);
+ 
+ 	return 0;
+@@ -48,7 +48,7 @@ int fpga_bridge_disable(struct fpga_bridge *bridge)
+ {
+ 	dev_dbg(&bridge->dev, "disable\n");
+ 
+-	if (bridge->br_ops && bridge->br_ops->enable_set)
++	if (bridge->br_ops->enable_set)
+ 		return bridge->br_ops->enable_set(bridge, 0);
+ 
+ 	return 0;
+@@ -401,7 +401,7 @@ void fpga_bridge_unregister(struct fpga_bridge *bridge)
+ 	 * If the low level driver provides a method for putting bridge into
+ 	 * a desired state upon unregister, do it.
+ 	 */
+-	if (bridge->br_ops && bridge->br_ops->fpga_bridge_remove)
++	if (bridge->br_ops->fpga_bridge_remove)
+ 		bridge->br_ops->fpga_bridge_remove(bridge);
+ 
+ 	device_unregister(&bridge->dev);
 
-Please reorganize this part, in this description there seems be a
-software racing bug and the patch is a workaround. But the fact is port
-reset shouldn't been done for a new HW.
+base-commit: c849ecb2ae8413f86c84627cb0af06dffce4e215
+-- 
+2.43.0
 
-BTW: Is there a way to tell whether the port is connected to a different
-PF? Any guarantee that revision 3, 4 ... would need a port reset or not?
-
-Thanks,
-Yilun
-
-> PCIe Physical Function (PF) than the management PF performing
-> the actual port reset.
-> 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->  drivers/fpga/dfl-afu-main.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-> index c0a75ca360d6..7d7f80cd264f 100644
-> --- a/drivers/fpga/dfl-afu-main.c
-> +++ b/drivers/fpga/dfl-afu-main.c
-> @@ -417,7 +417,18 @@ static const struct attribute_group port_hdr_group = {
->  static int port_hdr_init(struct platform_device *pdev,
->  			 struct dfl_feature *feature)
->  {
-> -	port_reset(pdev);
-> +	void __iomem *base;
-> +	u8 rev;
-> +
-> +	base = dfl_get_feature_ioaddr_by_id(&pdev->dev, PORT_FEATURE_ID_HEADER);
-> +
-> +	rev = dfl_feature_revision(base);
-> +
-> +	if (rev < 2)
-> +		port_reset(pdev);
-> +
-> +	if (rev > 2)
-> +		dev_info(&pdev->dev, "unexpected port feature revision, %u\n", rev);
-
-Remove the print. It is indicating an error but the function returns OK.
-
-Thanks,
-Yilun
-
->  
->  	return 0;
->  }
-> -- 
-> 2.34.1
-> 
-> 
 
