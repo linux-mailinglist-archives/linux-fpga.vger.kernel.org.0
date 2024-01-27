@@ -1,133 +1,123 @@
-Return-Path: <linux-fpga+bounces-164-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-165-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F35CE83D0C7
-	for <lists+linux-fpga@lfdr.de>; Fri, 26 Jan 2024 00:37:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E72483EDB7
+	for <lists+linux-fpga@lfdr.de>; Sat, 27 Jan 2024 15:55:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B31FB24A65
-	for <lists+linux-fpga@lfdr.de>; Thu, 25 Jan 2024 23:37:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD3DD1C214AB
+	for <lists+linux-fpga@lfdr.de>; Sat, 27 Jan 2024 14:55:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7689B134AA;
-	Thu, 25 Jan 2024 23:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B86EB28DA7;
+	Sat, 27 Jan 2024 14:55:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gfn7Cm28"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="IdZGCCjL"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 358EB134A3;
-	Thu, 25 Jan 2024 23:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851C31E4BC;
+	Sat, 27 Jan 2024 14:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706225846; cv=none; b=b0x3KvVNKmkjWx4nGZUZ0xWJWI7TXVWiw2ZwNpwwGb/AjQy4lCzBkBgZTv/qSq+34LcEI+zRkVQCex/vLH/z2gqNaRCYXWmMAU+nt4Ug8OUNi3uju2aX4IBtGCdPqRgXC+gxshBtCHoOrCZeRQxx+9Eaioa4TEaB2Pv3g5LDj00=
+	t=1706367351; cv=none; b=YyYP/2prn4OPr1a7KcwRzh1dO4GmkU38Otbqz0UeGZRXP8bd5yDs5TzKXApAmk+vkXrbp4FnRU8kWycgzjtexhzDQI8mEWooGNmfsP8NO6NxVUL/lg0CBKZ499AerL+INYnMKzS4F8kaZXPB6zWroJzWl1uAE4gCVV4hTNuCqlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706225846; c=relaxed/simple;
-	bh=5fg1PyjF1qY+gL8AMkkGVfAPj1wrcLCzNxUgqTuKi+8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sN7EfKgxJQ4MrjDhOtchR1t3iHfC2m4nDXoSF2imXsRzpGJXCjjYfdADNL6Xicag/SDHk81M8bKqAFAQcDePoPGttyc13H7TiAdBMCFTvlcjF6zkMZKSDYOcpn0HGcumLkK+XGWyBkpvLiJ3aZNToFyqa9LVrFVlt/dNrkGr0Ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gfn7Cm28; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706225844; x=1737761844;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5fg1PyjF1qY+gL8AMkkGVfAPj1wrcLCzNxUgqTuKi+8=;
-  b=gfn7Cm28IkprGcCl2EFC+lIY+Mhbsx4UtgISI+EoF8usHXTLA65tTT1c
-   v/Y5BUolCSP29Sg3qrTIeRxJAnULWQbywg0+WieMDSukJQJ4R8M8EU+X7
-   b609I9WN6wQW9P1CVJJ5eTw+KZ8npzkv8aqSuJph6pPjUCyvUZuzxQ05/
-   G1JKYBf73YJ1TSPkwJ5oyag7P0gU84RbjaktTBPP6kthu6qxg6KJMEsWA
-   /9cfo/eeexb2MJ1dls7PX4EbTgPZAnGxzI1pf2DZa/frxh2/PWULD8OKn
-   ln8d38iDwNDlOTLL5zrk4wvIM4StZHEH60dNepMosgVeR9T0TrhXEdv95
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="9452709"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="9452709"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 15:37:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="877210628"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="877210628"
-Received: from sj-2308-osc3.sj.intel.com ([10.233.115.64])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 15:37:22 -0800
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-To: hao.wu@intel.com,
-	trix@redhat.com,
-	mdf@kernel.org,
-	yilun.xu@intel.com,
-	linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v2] fpga: dfl: afu: support Rev 2 of DFL Port feature
-Date: Thu, 25 Jan 2024 15:37:15 -0800
-Message-Id: <20240125233715.861883-1-matthew.gerlach@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1706367351; c=relaxed/simple;
+	bh=5oTGBMsVoy/AmE5qx0ytIoyZm6Kw/DezMl4EgLexEVs=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=K8lIguF/1240DDtx5DIzfB/lEXqJs13mgHKGuJ2QuEn9Vp4bVF2T0uIki7HKHQ/TkkRTS3hJhU+iJ0RRDpjMCjIe51vv5Y0Tmy/4uJ9s6xMlNSvJv4IOpNhPtiBKcjl9bE5GgTOAx6ECsgENqhNzhQne+yNEV++auQ9LKkROZRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=IdZGCCjL; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+	t=1706367326; x=1706972126; i=markus.elfring@web.de;
+	bh=5oTGBMsVoy/AmE5qx0ytIoyZm6Kw/DezMl4EgLexEVs=;
+	h=X-UI-Sender-Class:Date:To:Cc:From:Subject;
+	b=IdZGCCjLmfazUcmtSLsqsWkQ43R2iVHyoPtZl3X0VUGbT9oOHL9/9qpsbHFvB588
+	 3OKutBw9QWhLrndD0ItJ9yy63pzyPQaEvAPBNUxD92zEOTVZn8fwBYBsOd3aHQ5gE
+	 rScWys2ILPC73S2TxWGQGymRD3NW52YhXvATOvtwjmtr00SqV/A7F7G6bvjgtfrbn
+	 Nw2CZohrwvIYqtEg5uPKj+6kCTlAg9UZxABiHxIh9s/ijwVp1C7lXuD1mCOIvGcOq
+	 EbAHyW0IKxkw3uEANTV6IvxSMCjdNJyDaE8zYUhXXHZgZnmTlmly+KuoR+FmJ229Z
+	 /Ljtvv01tD4vOih0zQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.81.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MsaS7-1rEojd1hPP-00u4CP; Sat, 27
+ Jan 2024 15:55:26 +0100
+Message-ID: <d94376b6-12e8-45bb-a9be-4887bb316d35@web.de>
+Date: Sat, 27 Jan 2024 15:55:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+To: linux-fpga@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Luwei Kang <luwei.kang@intel.com>, Moritz Fischer <mdf@kernel.org>,
+ Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>,
+ Xu Yilun <yilun.xu@intel.com>
+Content-Language: en-GB
+Cc: LKML <linux-kernel@vger.kernel.org>, Kunwu Chan <chentao@kylinos.cn>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] fpga: dfl: fme: Return directly after a failed
+ devm_kasprintf() call in fme_perf_pmu_register()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:6vcd10ZQQqZU6BgRQxdXosyK07D6p+07N3r8mPyYUd2TY5RTWH6
+ Et773/a2KpVp/IC+I774nwVlQ1yPUO3/KFv6ueurCMi48EkAUR+eTmuPn2GEkGHod/rKqWD
+ ch7o79nE3RVJutNmad++NdSOwSVk+lk2QmlFY9FZhUE3dZGPqrMqRtPqde2V5So8rChZs4j
+ uUXDr4TjhC4xmGpDfLF+Q==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:LAWx3IAIWPo=;JLeqcNkLoARB1EISitBbSSocVOb
+ AT+M8c+Rd7wyNZJLbjMnnCIoDPNDCeMRXVze2CuZ6JmZ/zPyVe9opsOYk//1NgOWT/oigx6OL
+ G9xVGNlsJ3IuenoEzVshoblk+3MM9uLcVhh946eYn/vFf2Ga/4+8g49QASSWhxe/jiqFjzbZu
+ P4NoVcggljqoZvMwDQOSfxuGP++ef0PifZBRQIvqVUdNIARFiaZ22BmdqvnG30MWmK/ub9vZi
+ Hb1lqVD+5jRvCWq27viTnYeZUMoc0Xrpgj5844oMUHfec8BhJvvgY6o19kbFOXGMlQk7+Wdin
+ QQoR0mMmWuUvXrAwS9xuuLz5kFFXnLxQWboL9bVZiUUAyw4xBmBUedew9s80ihz9pkIxKSM34
+ hur+WNTrsp1W2mtZwwmOip1SyqDaB4jOf5WvXGFraAVLprwnXB6AndFlhRzUNUEKEuqC7mu6R
+ KohZNBOLFqR5rVAEtedHbtveoLdULNNlMmESrUhRK6HXDNkQEM0gJQFKmiZgwslLPwSjejcJ6
+ smZTj/2fOpSZOSPwbnQ1q094y5D6H7t4YdT61Rrqq1YiLhSemM2f0DNYJpYOIG30bMXfIpXFm
+ JjLviA6rjk47/5eBlF1ZCzv6UncLcvJivZeeAMjqX/8y6y2ET3kPWsVKPRYn3dxHce0spqQGm
+ yl4+8fCY3H1XNiNJu1ot81JcXz2YczVOf3MDENKXWkXAdxwdbMSPqJS35czyxZaHnULrSOqji
+ MPfMcWEBqExH0bFlMPixXbdzaDaDnTRuGMv4TQhDhy4UoIGRSxrSB1P+Mnmo/vt69Fs+LhWBS
+ NWvK4G/QKPe7KhZF7feMsIG8odTMafNiOWUjAiRaTvF1jCZ+LO86K36I5odhDRcd+94LVwnsR
+ idnkah2Uh4Rcsq1p6l/0dzJHvPhVQ69q9eFtWDaoEy8SqaWrQDNJLQziJPRU8V4N8RBdOp5PJ
+ GfiThzazYbdcYi0mUoFYG9BlBlg=
 
-Revision 2 of the Device Feature List (DFL) Port feature
-adds support for connecting the contents of the port to
-multiple PCIe Physical Functions (PF).
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Sat, 27 Jan 2024 15:43:42 +0100
 
-This new functionality requires changing the port reset
-behavior during FPGA and software initialization from
-revision 1 of the port feature. With revision 1, the initial
-state of the logic inside the port was not guaranteed to
-be valid until a port reset was performed by software during
-driver initialization. With revision 2, the initial state
-of the logic inside the port is guaranteed to be valid,
-and a port reset is not required during driver initialization.
+The result from a call of the function =E2=80=9Cdevm_kasprintf=E2=80=9D wa=
+s passed to
+a subsequent function call without checking for a null pointer before
+(according to a memory allocation failure).
+This issue was detected by using the Coccinelle software.
 
-This change in port reset behavior avoids a potential race
-condition during PCI enumeration when a port is connected to
-multiple PFs. Problems can occur if the driver attached to
-the PF managing the port asserts reset in its probe function
-when a driver attached to another PF accesses the port in its
-own probe function. The potential problems include failed or hung
-transaction layer packet (TLP) transactions and invalid data
-being returned.
+Thus return directly after a failed devm_kasprintf() call.
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Fixes: 724142f8c42a7 ("fpga: dfl: fme: add performance reporting support")
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/fpga/dfl-fme-perf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
----
-v2:
-- Update commit message for clarity
-- Remove potentially confusing dev_info message.
----
- drivers/fpga/dfl-afu-main.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
+index 7422d2bc6f37..db56d52411ef 100644
+=2D-- a/drivers/fpga/dfl-fme-perf.c
++++ b/drivers/fpga/dfl-fme-perf.c
+@@ -925,6 +925,8 @@ static int fme_perf_pmu_register(struct platform_devic=
+e *pdev,
+ 				PERF_PMU_CAP_NO_EXCLUDE;
 
-diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index c0a75ca360d6..42fe27660ab7 100644
---- a/drivers/fpga/dfl-afu-main.c
-+++ b/drivers/fpga/dfl-afu-main.c
-@@ -417,7 +417,15 @@ static const struct attribute_group port_hdr_group = {
- static int port_hdr_init(struct platform_device *pdev,
- 			 struct dfl_feature *feature)
- {
--	port_reset(pdev);
-+	void __iomem *base;
-+	u8 rev;
-+
-+	base = dfl_get_feature_ioaddr_by_id(&pdev->dev, PORT_FEATURE_ID_HEADER);
-+
-+	rev = dfl_feature_revision(base);
-+
-+	if (rev < 2)
-+		port_reset(pdev);
- 
- 	return 0;
- }
--- 
-2.34.1
+ 	name =3D devm_kasprintf(priv->dev, GFP_KERNEL, "dfl_fme%d", pdev->id);
++	if (!name)
++		return -ENOMEM;
+
+ 	ret =3D perf_pmu_register(pmu, name, -1);
+ 	if (ret)
+=2D-
+2.43.0
 
 
