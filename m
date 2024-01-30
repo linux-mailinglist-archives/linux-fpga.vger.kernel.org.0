@@ -1,182 +1,122 @@
-Return-Path: <linux-fpga+bounces-187-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-188-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55703842A6D
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 18:06:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0FA8842A7F
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 18:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5612F1C240BC
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 17:06:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B05328360F
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 17:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A6A81292E1;
-	Tue, 30 Jan 2024 17:05:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 592861292D6;
+	Tue, 30 Jan 2024 17:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="eqES57fC"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="J+6Fj07r"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59CF91272B3;
-	Tue, 30 Jan 2024 17:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8FD967A0F;
+	Tue, 30 Jan 2024 17:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706634348; cv=none; b=m/0ZA5KnP6X4lj6SgHXpxacxwJxxtAAfT/XCrMM5tcIY39IR6AwEXDn5jB6UPxZnJE81yRIc7Z83VbsbFgMWE0KC93FvSb4gFnApXgueGmRXIyDaANLsXxEP9UU5XpHkh8iB8yoMMs4uzU9iTmZj6SCf9D6TqPLdWWtWasypNcE=
+	t=1706634626; cv=none; b=YIebvrXXZDEHyDiA6qnYqz89RCmEL8vmPsAWmxNLfnxHbZ45N/LfB118o/5a0MLYpqI2rRaFWsbg3M6wVFW5OjY6q0VqaFXBevO0U3X/qcHxdkoK22UMFp48WJ010pawYKzRQWjw7rzu+Ba15ps1p5JnMt43O/2421z1rFfW8VU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706634348; c=relaxed/simple;
-	bh=hpDRdXzHEo7dqJPrheRt+XnM62iW2iSoYjncPoUe3Yg=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=C7o8btyds331Coh398ju3phY5xygnQjzhSgs+8mOcjQQO7j8mt5GpInWDjy0Ve43zpO1X76VsZIMFJsXPE4PaJRl+Hs3uc10GuYNvCoTHRpA0o3X8gqZXytIBrCIBGQODeXUItFEmFuuFuHV2NUTKu3FwCDqGga1bI1mlrmu5rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=eqES57fC; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id AEFB59C2AFE;
-	Tue, 30 Jan 2024 12:05:42 -0500 (EST)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id hUzHhLT9IF8K; Tue, 30 Jan 2024 12:05:42 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 1D5979C43DE;
-	Tue, 30 Jan 2024 12:05:42 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 1D5979C43DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1706634342; bh=XXd7XiuvbCRYYqsWJYmmkuqPRSOSc2fWYgYpeZCmzxI=;
-	h=Date:From:To:Message-ID:MIME-Version;
-	b=eqES57fCdoNJ30MYLcVtr2jFm8qBeKKBsLrfB0ppmcKTNKtHwyzfr20LLfI0nmmk6
-	 X2cWVeY9HGC9nrKp4lindTKuXujFaz5j/Zb4r7OcGa5qM6aE47G7rT3Qm+Nsv8AHeF
-	 9zi1kZrbGmUyDKyh5UZbb4GHJx8NCJSY23SacZYZrx6VR1WMyrRev0EiP/C6H1dbGC
-	 frpLgSUcMRUzxJPZkfhht6bFc/orY8toDdzQgcYEqYYcIEdv7zxrHkA1kcYp//ghQT
-	 j50z4+YU5AsTdmGZ9foz6Ccjco4Gk8NHZg82Pco3Sq2JXjEfI9rHdj1sz4gFjVLsCX
-	 xrAjWP1flWdaw==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id hU5IVIrtvwir; Tue, 30 Jan 2024 12:05:42 -0500 (EST)
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [192.168.48.237])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id E68719C2AFE;
-	Tue, 30 Jan 2024 12:05:41 -0500 (EST)
-Date: Tue, 30 Jan 2024 12:05:41 -0500 (EST)
-From: Charles Perry <charles.perry@savoirfairelinux.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: mdf <mdf@kernel.org>, hao wu <hao.wu@intel.com>, 
-	yilun xu <yilun.xu@intel.com>, trix <trix@redhat.com>, 
-	krzysztof kozlowski+dt <krzysztof.kozlowski+dt@linaro.org>, 
-	Brian CODY <bcody@markem-imaje.com>, 
-	Allen VANDIVER <avandiver@markem-imaje.com>, 
-	linux-fpga <linux-fpga@vger.kernel.org>, 
-	devicetree <devicetree@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <154341320.386005.1706634341891.JavaMail.zimbra@savoirfairelinux.com>
-In-Reply-To: <32669bc7-90b5-48d9-8845-2e072a477c6e@linaro.org>
-References: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com> <20240129225602.3832449-2-charles.perry@savoirfairelinux.com> <f3cfffa0-5089-4bf7-b424-d5e949e36d67@linaro.org> <1489222458.382780.1706629544559.JavaMail.zimbra@savoirfairelinux.com> <32669bc7-90b5-48d9-8845-2e072a477c6e@linaro.org>
-Subject: Re: [PATCH 2/3] dt-bindings: fpga: xlnx,fpga-slave-selectmap: add
- DT schema
+	s=arc-20240116; t=1706634626; c=relaxed/simple;
+	bh=QOE3n4Szn+LSvifyAKQARBkvfKb6ykLiCedZCr70OAc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dG+Aih0qDVjW1iL1Bv6pIQRkW70fyrdbq6oSkKxFehIPDWy5rIUiu5/IIvRpkbg5+2m4/OIeKm0u3FetPhX+5cPwedFZetqxOOlX9PO4irqfewK7jun3swJn3QefjohsMqiPuc7vwACtGknJjIExMj1bWHRY8tcgB3uF+l/KiV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=J+6Fj07r; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+	t=1706634579; x=1707239379; i=markus.elfring@web.de;
+	bh=QOE3n4Szn+LSvifyAKQARBkvfKb6ykLiCedZCr70OAc=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=J+6Fj07r4h5QMBXDL3yWwpiIA4YuvymFHWYwCxF/fzliYafXYoOq3aQtKLmhjf0D
+	 bqX39felXEEv+IP0w3LMd51AMFBFbMm68ZYjTA4rFJ/Y+bIkojaWxHgbH0b1gsmBV
+	 4FMCqe1u0IeT84V+o0nPlPU1zn79Y0R2Aljqwqd1K0UQSbNT07Ns4FJx8G1gcVJAr
+	 ZYgrZnZAbW5LhqBB60wsFsQ3NUH2wEkJ+HXdM2l1tpoxjgPseDdcFQPDQXnwVPXNx
+	 e1YyzasYf+LFyKbvYztTq2wCkfJXpQyuUgCDqgndpNFtIJB4QQ7uilxtfgHmE+ORX
+	 1OnoxGHdYQBpRyCGHQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.81.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MPrLN-1riQNs2kRX-00N4Bk; Tue, 30
+ Jan 2024 18:09:39 +0100
+Message-ID: <e760bd1b-30bf-489f-b745-128d05397feb@web.de>
+Date: Tue, 30 Jan 2024 18:09:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: fpga: dfl: fme: Return directly after a failed devm_kasprintf()
+ call in fme_perf_pmu_register()
+To: Dan Carpenter <dan.carpenter@linaro.org>, linux-fpga@vger.kernel.org,
+ kernel-janitors@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
+ Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Kunwu Chan <chentao@kylinos.cn>
+References: <d94376b6-12e8-45bb-a9be-4887bb316d35@web.de>
+ <b7e2e9d1-5e3e-44b2-a4b7-327d334b776d@moroto.mountain>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <b7e2e9d1-5e3e-44b2-a4b7-327d334b776d@moroto.mountain>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Mailer: Zimbra 8.8.15_GA_4581 (ZimbraWebClient - FF120 (Linux)/8.8.15_GA_4581)
-Thread-Topic: dt-bindings: fpga: xlnx,fpga-slave-selectmap: add DT schema
-Thread-Index: JqmEycYRB0Gse9pTEDZu2SmsjtJ+PA==
+X-Provags-ID: V03:K1:s0VR/FQjS8xqSh6FSezEsTEJZaJ+Kbc9lwjc4qySvtM5vk5B9d5
+ 1A86barTpJ5n2bgZDN5MoVCNBa80vBQkveD0xtfiR8zwKgJK17Fbiykcsn92243jpl5F1Sa
+ yKrRaZrlnO42TK+fXz8ihIQJc4X+NNA8iDTgt+nMs9/N19uQrJ2SwdTalhBVDuYNLgtKltC
+ b67oz431eomL1htQGsTZA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:0Ig/6CYNJlQ=;YAvJJnUV3C50hnqV3RKw+y4p40z
+ HRPxUrOm3NJcdxxv7ApPGPAiGPdYFa0TTdcXTYuT5M6ULSPUCcAdxaqLgxfOQ0YzyOh5NVpdk
+ H7LqAPx3y9n3IUWIwhjJ5AofSXgatsrCYpUvZguDkQyhakpEtbiQJ8P1CN1KT721GpgRBs0hq
+ HbB2mElLGM9EDcKw39u9UJyF3K+pknXdh6nh67D1O7bgsk0/HlPFjvnZY9FA6FgQg0M8QhsLt
+ qPYzcvIwKOu0xzX6fcu15F3VlUK2Y2gut0MsuNGj7u2GIfgRjN056xO9sApZPoFen+T3MUgB4
+ 70YdYfnJ+dq0q1pmfNjn0Dzh9Cc6QVGav3hYGfl5PtK/3nZ4KH/LiqZNb4zXLksOCOcanfQL+
+ owOBCvM7lPv3gT7NP5cQ+DkeNoM32nRQOowc2LPzLuJjwf5lxC3zh6HnIH9oY+xhOSEwBxcIm
+ rEOrosjz/LVz1Njifyoqayk01llh8mR5eXS1J6IjCSFUM3WbhlXi9nX3hh2YVpnsOpj7Ri/tT
+ 7+ZD2L3VN8L5muWAcFWoaiS810RbMWNwtOeh7q7kR1cVb5wiFaEnhoRVBPnr18b6hoSgO+Tlm
+ 6IZn/fwhMPi9lGyAMMHJMERQWFbMZbImjOgEyrGcVvDO8S3WN8x3YMXhqewLX5SUG5TLSnht7
+ hi5fe+wCBTod7q+ft761AHmHUlO1b8Jec+vubhCQukeNunFE73Y0yS/ufAh1liv/XeoD4fjYd
+ Y2tTa26NoK7l2OhHIIUyJ1X3bvg28A1bH41xx1vGpVTLwLejIHe2rvAkN5QmicoKkAwOQZpbT
+ oL2IPYYLf9peo0nWNXD7M3Egz1Dc5i1tQkpyiKlv8AgTQutwpW0lpn5E++rrixJiiplUXNCdB
+ rR/Se+9eXfFZdcJDM9Bdg54bZ3sGtG15+AAq4Mc2WISzEJPrAceGnMgufWE6O/Zqb0adxZYPJ
+ hCOolA==
 
+>> Thus return directly after a failed devm_kasprintf() call.
+>>
+>> Fixes: 724142f8c42a7 ("fpga: dfl: fme: add performance reporting suppor=
+t")
+>
+> This basically doesn't affect runtime because perf_pmu_register() checks
+> for NULL so no need for a Fixes tag.
 
+I suggest to clarify this view a bit more also according to statements
+like the following.
 
------ On Jan 30, 2024, at 11:05 AM, Krzysztof Kozlowski krzysztof.kozlowski=
-@linaro.org wrote:
+1. https://elixir.bootlin.com/linux/v6.8-rc2/source/kernel/events/core.c#L=
+11532
+   perf_pmu_register:
+   =E2=80=A6
+	pmu->name =3D name;
+   =E2=80=A6
 
-> On 30/01/2024 16:45, Charles Perry wrote:
->>=20
->>>> +
->>>> +  reg:
->>>> +    description:
->>>> +      At least 1 byte of memory mapped IO
->>>> +    maxItems: 1
->>>> +
->>>> +  prog_b-gpios:
->>>
->>>
->>> No underscores in names.
->>>
->>=20
->> This is heavily based on "xlnx,fpga-slave-serial.yaml" which uses an und=
-erscore.
->> I can use a dash instead but that would make things inconsistent across =
-the two
->> schemas.
->=20
-> Inconsistency is not a problem. Duplicating technical debt is.
->=20
->>=20
->>>
->>>> +    description:
->>>> +      config pin (referred to as PROGRAM_B in the manual)
->>>> +    maxItems: 1
->>>> +
->>>> +  done-gpios:
->>>> +    description:
->>>> +      config status pin (referred to as DONE in the manual)
->>>> +    maxItems: 1
->>>> +
->>>> +  init-b-gpios:
->>>
->>> Is there init-a? Open other bindings and look how these are called ther=
-e.
->>>
->>=20
->> No, the "-b" is there to denote that the signal is active low. I think i=
-ts
->> shorthand
->> for "bar" which is the overline (=E2=80=BE) that electronic engineer put=
- on top of the
->> name of the
->> signal on schematics. It comes from the datasheet.
->=20
-> Then just "init-gpios"
->=20
-> ...
->=20
->>>> +required:
->>>> +  - compatible
->>>> +  - reg
->>>> +  - prog_b-gpios
->>>> +  - done-gpios
->>>> +  - init-b-gpios
->>>> +
->>>> +additionalProperties: true
->>>
->>> Nope, this cannot bue true.
->>>
->>=20
->> Ok, I'll put this to false but I'm not quite sure I understand the impli=
-cations.
->>=20
->> My reasoning behind assigning this to true was that the FPGA is an exter=
-nal
->> device on a bus that needs to be configured by a bus controller. The bus
->> controller
->> would be the parent of the fpga DT node and the later would contain prop=
-erties
->> parsed by the bus controller driver.
->=20
-> Which bus controller? MMIO bus does not parse children properties.
-> Anyway, if that's the case you miss $ref to respective
-> peripheral-props.yaml matching your bus and then "unevaluatedProperties:
-> false".
+2. https://elixir.bootlin.com/linux/v6.8-rc2/source/kernel/events/core.c#L=
+11472
+   pmu_dev_alloc:
+   =E2=80=A6
+	ret =3D dev_set_name(pmu->dev, "%s", pmu->name);
+   =E2=80=A6
 
-This one: https://elixir.bootlin.com/linux/v6.8-rc2/source/Documentation/de=
-vicetree/bindings/bus/imx-weim.txt#L56
-
->=20
-> Best regards,
-> Krzysztof
 
 Regards,
-Charles
+Markus
 
