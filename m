@@ -1,110 +1,131 @@
-Return-Path: <linux-fpga+bounces-170-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-171-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A41B841768
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 01:21:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D315B841B0C
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 05:34:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 111AB2860C4
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 00:21:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7445C1F271A2
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 04:34:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 098F92594;
-	Tue, 30 Jan 2024 00:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ED3D381AB;
+	Tue, 30 Jan 2024 04:34:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U1WLJsFk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VLPlyD1L"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE12410FD;
-	Tue, 30 Jan 2024 00:21:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64376381A2;
+	Tue, 30 Jan 2024 04:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706574106; cv=none; b=gDXVfLbwOekqEk9dwtqNyV9+grsWGHnHQCxZHNVF9ON3slnICQPGnB7m6stBdINpY1x5+YxhYnnrHlhIO2GbBF0Y+7KWuEQQCw+nyb5CoS9WMPXk15yg4/ml1lJTYsh0WcuytI2yoFXYiNye0eHHNkIw1i5SbgGOopODQ8jIgUI=
+	t=1706589275; cv=none; b=VkPvLLBV9IXN7o072Bhi0gPjH2wWjTKTeEM+sfu+tb6vOKgTnM4lhiNj9uEORbFBCRkPyBcOLSmXEOtL9NL6h0S2PrASqO9rCS2Z/LPsvZodSvO9U4e99bt4io2hKGcOpNfWgWdEeGivCfJSZqxf/6JSWxAgfzQJbLKtLfstAtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706574106; c=relaxed/simple;
-	bh=WwZr4D28HIW9IF6cl2zLedh8M7SwhhFpFoQUPwdLlsU=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=l5zsGrEWQgK+d70/nRVL2ZrF7UC0E+1eIvflE2twF0IF4OxHVa3nAceHN5WaQycFjorr3KiEVwyGYHncDIKSVlOho8kS3LPOurLpYPtas2j60UYx4lItvqfXBKSv81SsmAG982vMbWnVDFy6gkJv6TkXSXsN0EVlMR5KADt0m5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U1WLJsFk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10EA5C433C7;
-	Tue, 30 Jan 2024 00:21:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706574106;
-	bh=WwZr4D28HIW9IF6cl2zLedh8M7SwhhFpFoQUPwdLlsU=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=U1WLJsFkOGJjOIY1YaD79ArO8XZDUAkFrGAEv5/FI30ISmVlBJb2nFf1vMZdjD6ZJ
-	 rYzCVoLxXRWjVMXzNy8DZLDqTSYMy6cu18EdnSTXA2mGe0K+opaK70UnwJuHqP8SMq
-	 DJPZEKFzfsPlFyyKaUaX+wpsskdJOFmH/ZvMQ9zGnd/6FO+rZ4s0ZrQ09lIq94TwlF
-	 8TqsximYHyRRNHBiQG8SXo5YQcVpkXAf9Cy/CVgBZWiW63wMkFWAFOQ1B0WKhj8rUy
-	 LZpi3hK1DPnnr2m43sk5vd0xIoJ0/KiALRxMDAeHGz9BLcpxJosc/kt8sP612TOiW2
-	 DQrldaHAo7qcQ==
-Date: Mon, 29 Jan 2024 18:21:45 -0600
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+	s=arc-20240116; t=1706589275; c=relaxed/simple;
+	bh=xriwrT8PK5ZnMFWSAiOQ0+sQh4cRZ169864/lire6Kw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YegMJT1XXxuWrjpp8mrYe6EupJ8MblTFLS0TqewLiLdzfP1bMGD3Fux8z59PGZmogLA0JHcOi7O8gC5r1om9g0TU5yXVSHHMMGP39Ut97If9oyzXCIbnaIsS3FD19NnJ6PsYM5pnRLIigpznDVvb172LYooFQRHl5rKByLP1/oU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VLPlyD1L; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706589273; x=1738125273;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xriwrT8PK5ZnMFWSAiOQ0+sQh4cRZ169864/lire6Kw=;
+  b=VLPlyD1LSzMSQed3d83ih9aHEWWGMSz16eiNeUKZvWNIXkc/7uNI/px/
+   MWuGqArH2pBrmCdn+R1vxFsk01eSFlYUV7r28mKxau4rdaW62UlCkVwJc
+   /2QzW0iXwRe95Ihdr5sZc7eDI9gHTFDOxaPWRyy3p8v9FSzIXAd18c/JJ
+   IjeE95Z5SW0FUqtq3mZ7b8/KBVpMCnxXp8AXark5GKcDY6tvqCgH7IKnA
+   nhmbyOwe5efOZUM4NZepo2aLr2CjgNMJXcHxD/ie5pox2eT8IBnceWaGD
+   7aavG403yYpTOtjR2LgFt6zP3QvqVcJIkDd99mt7djUbTqH/tzVNUKap9
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="3042805"
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="3042805"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 20:34:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="30022513"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa001.fm.intel.com with ESMTP; 29 Jan 2024 20:34:29 -0800
+Date: Tue, 30 Jan 2024 12:31:04 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Marco Pagani <marpagan@redhat.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Tull <atull@opensource.altera.com>,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fpga@vger.kernel.org
+Subject: Re: [RFC PATCH v5 1/1] fpga: add an owner and use it to take the
+ low-level module's refcount
+Message-ID: <Zbh7iO9wlm9ekzB7@yilunxu-OptiPlex-7050>
+References: <20240111160242.149265-1-marpagan@redhat.com>
+ <20240111160242.149265-2-marpagan@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: Charles Perry <charles.perry@savoirfairelinux.com>
-Cc: bcody@markem-imaje.com, yilun.xu@intel.com, trix@redhat.com, 
- avandiver@markem-imaje.com, linux-fpga@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- krzysztof.kozlowski+dt@linaro.org, hao.wu@intel.com, mdf@kernel.org
-In-Reply-To: <20240129225602.3832449-2-charles.perry@savoirfairelinux.com>
-References: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com>
- <20240129225602.3832449-2-charles.perry@savoirfairelinux.com>
-Message-Id: <170657410397.50510.3267645071897066696.robh@kernel.org>
-Subject: Re: [PATCH 2/3] dt-bindings: fpga: xlnx,fpga-slave-selectmap: add
- DT schema
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240111160242.149265-2-marpagan@redhat.com>
 
+> +#define fpga_mgr_register_full(parent, info) \
+> +	__fpga_mgr_register_full(parent, info, THIS_MODULE)
+>  struct fpga_manager *
+> -fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
+> +__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
+> +			 struct module *owner);
+>  
+> +#define fpga_mgr_register(parent, name, mops, priv) \
+> +	__fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
+>  struct fpga_manager *
+> -fpga_mgr_register(struct device *parent, const char *name,
+> -		  const struct fpga_manager_ops *mops, void *priv);
+> +__fpga_mgr_register(struct device *parent, const char *name,
+> +		    const struct fpga_manager_ops *mops, void *priv, struct module *owner);
+> +
+>  void fpga_mgr_unregister(struct fpga_manager *mgr);
+>  
+> +#define devm_fpga_mgr_register_full(parent, info) \
+> +	__devm_fpga_mgr_register_full(parent, info, THIS_MODULE)
+>  struct fpga_manager *
+> -devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
+> +__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
+> +			      struct module *owner);
 
-On Mon, 29 Jan 2024 17:56:01 -0500, Charles Perry wrote:
-> Document the slave SelectMAP interface of Xilinx 7 series FPGA.
+Add a line here. I can do it myself if you agree.
+
+There is still a RFC prefix for this patch. Are you ready to get it merged?
+If yes, Acked-by: Xu Yilun <yilun.xu@intel.com>
+
+Next time if you think patches are ready for serious review and merge, drop
+the RFC prefix. That avoids an extra query.
+
+Thanks,
+Yilun
+
+> +#define devm_fpga_mgr_register(parent, name, mops, priv) \
+> +	__devm_fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
+>  struct fpga_manager *
+> -devm_fpga_mgr_register(struct device *parent, const char *name,
+> -		       const struct fpga_manager_ops *mops, void *priv);
+> +__devm_fpga_mgr_register(struct device *parent, const char *name,
+> +			 const struct fpga_manager_ops *mops, void *priv,
+> +			 struct module *owner);
+>  
+>  #endif /*_LINUX_FPGA_MGR_H */
+> -- 
+> 2.43.0
 > 
-> Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
-> ---
->  .../fpga/xlnx,fpga-slave-selectmap.yaml       | 85 +++++++++++++++++++
->  1 file changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-selectmap.yaml
 > 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-selectmap.yaml: 'maintainers' is a required property
-	hint: Metaschema for devicetree binding documentation
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-Error: Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-selectmap.example.dts:19.9-14 syntax error
-FATAL ERROR: Unable to parse input tree
-make[2]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-selectmap.example.dtb] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1428: dt_binding_check] Error 2
-make: *** [Makefile:240: __sub-make] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240129225602.3832449-2-charles.perry@savoirfairelinux.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
 
