@@ -1,109 +1,103 @@
-Return-Path: <linux-fpga+bounces-180-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-181-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C85C38421F2
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 11:51:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29DD8842694
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 15:03:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 070591C2677D
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 10:51:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C53D41F2729D
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 14:03:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20FDB664B9;
-	Tue, 30 Jan 2024 10:50:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BEA76D1CF;
+	Tue, 30 Jan 2024 14:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Gtd7Q019"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ew4Uhpl8"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.4])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB969657BC;
-	Tue, 30 Jan 2024 10:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC19E6D1B1;
+	Tue, 30 Jan 2024 14:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706611823; cv=none; b=LDOzQSChaO+hLjFRxLibABHmtRKqiT5qtmLtcEXAoThu3ggO1Ls+8FZmQ5u3O5io1vGKMuCmXdbukdxYJasAxnQ6ZyyBCKD7Rju1wwB094lhbkNX4SP1fCVte8tM9CbBfabD4wwLCXRRXVz1uVD1wcBPuobuOhS/vl4Maw2GWzE=
+	t=1706623392; cv=none; b=bk4DJS3xgcxNlTCS4TRlvOtWSHQgUT6mujFsLepR0cuNG9CGiNEGcOy1+UcQwlgA6CrpxKQ+znBhZeOPdzA7AyDzPo/KeR0yWRESQprRw0pJwrZyRJ7Co2TKOO7V8UNDg2snQhBK5CINExi1M0cE8bYGvAuhKtIXjlUotSE7rEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706611823; c=relaxed/simple;
-	bh=ak+VEmhPjrrv3eoPoWuXgfFeFRuBlQCGLMapi9FoAXo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OvO9mOVjSL5f1jN6nsKP23MrFe9i7R86IlAEl9nvxYf8/pe2PTb9A3mpvxu/uiuMwokrkYFoefNvlzGW1B/EvHTMN8BwWZyRxHXB3Gtb9Rl+H4/up2Hmrzru0PY0+UvkYKtSdmF69KeW8+r5QbAs5RCS4YekXpQcEQVxgVAwg5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Gtd7Q019; arc=none smtp.client-ip=212.227.15.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-	t=1706611772; x=1707216572; i=markus.elfring@web.de;
-	bh=ak+VEmhPjrrv3eoPoWuXgfFeFRuBlQCGLMapi9FoAXo=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=Gtd7Q019bwtpKAt4oJqIODulE3pzRxHXZCbFV/YNNIn979A3j04JjjkbW+2I+W2K
-	 OoItXwHLACd+yG9fPyCSPWgALUNFSdIZplFrQD/12xz3qrV9sz2BehRNbZujnbxY7
-	 j0dJmFvjWh6sVhaSX2JZk0vcyI7im0plAwmDfD48CYLHNWkzTt1JGGbMegCmckZRY
-	 S1mp9Pe2qDqkuaV/BM1EBS3863pbWES36h340SBuE00gAStMl3IU4jrIGkx1q4XQ0
-	 2VFr2bEK5LUHf8Vx1aTancffJSVvOYyW5TOMmnZTYBxftc79Br8U27yKw6/tYq7+V
-	 AQIsC7esd3vjQX+xyw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.81.95]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mvbik-1rEbyU2W1O-00sveS; Tue, 30
- Jan 2024 11:49:32 +0100
-Message-ID: <49183574-ea83-4517-8e34-5d6e87ede064@web.de>
-Date: Tue, 30 Jan 2024 11:48:31 +0100
+	s=arc-20240116; t=1706623392; c=relaxed/simple;
+	bh=DzsaNEVFKguc0ZC4CtlzX7lscBOx1aUABMiNF9+SE+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OEJw6NG92SI7I/aiNmOisJc6Tfx4nMc5n0+FMknJINtoxP64pHFb6PVwFxw56AOwpsjO/jgjF73/GIh2GA4IUeqxA4kMOtyHnKxS9XidSyEw9wkLx3G7hNjBLEmxkPV7u/l3M64ZxbzgobRH4ZdPfZ8VI6+Kdn0G5VgLw51IIFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ew4Uhpl8; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706623391; x=1738159391;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DzsaNEVFKguc0ZC4CtlzX7lscBOx1aUABMiNF9+SE+U=;
+  b=Ew4Uhpl8Ue1muczcA+RtPNqyl3P1jfCDZE+NCtFLmXw4FV5vw5FG8Z/Z
+   dr9DWeJ6Yl8vJUPe+AtrSfspSlM8giu9d2m/wlWZkPWWsXwahZj1W8kzi
+   UKp9x4SMu+/BvmwpnhESLl4Q5PcdpV/GMU7PgBXqKYemaPjYCfdCPwjAU
+   hemVJNMGBjAFWRrnWN9XtPpcb4Rpt4NZoQuPsO4t6zA7OdVXlnMwmdO8A
+   RKNdzDhQ0hstSdN00fzl+HJt52tTeq+96RiIPVVUuF4efSjLkWn4FZHqQ
+   PcvCMS0vadwJO9p9aQlrI2uEHs2g8b+8UjCqPxQdzEuAZ/A15wqJg8Id2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="10676692"
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="10676692"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 06:03:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="3697226"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa005.fm.intel.com with ESMTP; 30 Jan 2024 06:03:08 -0800
+Date: Tue, 30 Jan 2024 21:59:42 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: linux-fpga@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Luwei Kang <luwei.kang@intel.com>, Moritz Fischer <mdf@kernel.org>,
+	Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+	Kunwu Chan <chentao@kylinos.cn>
+Subject: Re: fpga: dfl: fme: Return directly after a failed devm_kasprintf()
+ call in fme_perf_pmu_register()
+Message-ID: <ZbkAziPCX+RDSgfP@yilunxu-OptiPlex-7050>
+References: <d94376b6-12e8-45bb-a9be-4887bb316d35@web.de>
+ <ZbjJYMlDifIv0WId@yilunxu-OptiPlex-7050>
+ <ZbjPDX1y2I9Heanq@yilunxu-OptiPlex-7050>
+ <49183574-ea83-4517-8e34-5d6e87ede064@web.de>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: fpga: dfl: fme: Return directly after a failed devm_kasprintf()
- call in fme_perf_pmu_register()
-To: Xu Yilun <yilun.xu@linux.intel.com>, linux-fpga@vger.kernel.org,
- kernel-janitors@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Luwei Kang <luwei.kang@intel.com>, Moritz Fischer <mdf@kernel.org>,
- Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>,
- Xu Yilun <yilun.xu@intel.com>, LKML <linux-kernel@vger.kernel.org>,
- Kunwu Chan <chentao@kylinos.cn>
-References: <d94376b6-12e8-45bb-a9be-4887bb316d35@web.de>
- <ZbjJYMlDifIv0WId@yilunxu-OptiPlex-7050>
- <ZbjPDX1y2I9Heanq@yilunxu-OptiPlex-7050>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <ZbjPDX1y2I9Heanq@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:7VTb9LLznircDPxFLGcyGvPsGEb+ynPhRgQeOkBmMkBT4hJ0Dkf
- SUTcEQH/5r8NmS4GGMGw+F8BSDJ8AZFEWL4ImF1zTOjuEhLWBm84d84vGAWMaIA0N7lugAl
- sF95PywaopbOLFyFntygqjg1F1I65LQ5zdqTp2Fd6B6XXUeVomR7CKglERdK8ryfIc48J9G
- l7MNYLt15UtN6Otgd2vaw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:diN0LIWrJRI=;0d0L3w3qZ7vY2fg7r8ey+304ViY
- gMwinlg+WZSc4nfK2sn90qgDNLocc+wUxGW2Dx3Y/iRJAIIZSHy80G5Gb6IEjAbMuNqkc33Fp
- McOmQemZuP/D99uUVQ6+Y7PnwXJbI5yxTCN5gdFAG2AkLkAqZnMCAhk7+QZtWRQI6SGnLN3nC
- /24l1NHCyO2KllwuvOtdnCJRt61wDV9kjN64ltbGze7YgS4YiU/OswomXz5t9Z5DrlWwVOu/b
- M1t6IroKQ9G/IKOt1wkbzbubrz0wLwCQBHKFSn1hepn3fxU6qx1m+oKjavUj+zquFKD7DqXGe
- G/KMdX6KgZ2yB/+amtE/qbEpEnRqlHuWDDmjWcp0LQwFWFO5H1RLdFmgO+8LxKFSe0QDxI0h+
- aaaP0YL1TkOOlMo54xuwmM9DAj65pL+ov4PQbJggqzhR1b0VpBsO4fQoevWDLIPJmEvU9PrU5
- /D8l2ATXyC1JK5damWiW75EfHHg/K4XQdFoW5+T/bYMLYOmpR6Sxl4xCsIukyFd/I3WVAIed4
- 6eFYTDCrnEnyvyGEs4dyd8+F3emuOZ0IHT9+61y3L/bgsf+lK3sAO/lsiT4d6QJ8fz1+T8rug
- L0Y6NYvedsrVqSCeaiFT66grRjh7Go2eZDZ3MUAW4gsDnocjNQ7ReJJO9k6kAYYs/dtxeye28
- rSPM+uAgsUjlE//Ts1SkyR4rZdL0Guz2OIucRtlWSY0BdADZZwX6Ni/bGGzQtFMAh5R7exS52
- 1D821E1rdWdzxeO/7P0WnX9Kr/BEBj2mTIW5r63Kpp42ItGyemT/w4hklpLFZedumPobfSsIP
- SVWXP/ZZ9uYNPe1C1G/ynz6e/FiG6+0WR8VhTk+PSOHxN0+Ma5Q7PL0a6T9m5glHDIku7Vu4u
- mDW/KCpoJPfoy9/OUKDqUT0I6L3SXrGSRAwo4acN0BiXHd46UG+NiuK4Nqw7Jbho0mBWHldkc
- FT36Ww==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <49183574-ea83-4517-8e34-5d6e87ede064@web.de>
 
->>> Thus return directly after a failed devm_kasprintf() call.
->>>
->>> Fixes: 724142f8c42a7 ("fpga: dfl: fme: add performance reporting suppo=
-rt")
->
-> One more char of sha.
+On Tue, Jan 30, 2024 at 11:48:31AM +0100, Markus Elfring wrote:
+> >>> Thus return directly after a failed devm_kasprintf() call.
+> >>>
+> >>> Fixes: 724142f8c42a7 ("fpga: dfl: fme: add performance reporting support")
+> >
+> > One more char of sha.
+> 
+> There are different preferences involved.
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.8-rc2#n109
 
-There are different preferences involved.
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.8-rc2#n109
+Ah, I mean you use 13 chars, but 12 chars is better. Also the doc
+doens't seem to enforce 12 chars, but checkpatch warns on that. So just
+follow the 12 chars style.
 
-Regards,
-Markus
+Thanks,
+Yilun
+
+> 
+> Regards,
+> Markus
 
