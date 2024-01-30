@@ -1,233 +1,131 @@
-Return-Path: <linux-fpga+bounces-174-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-175-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 256B5841D0F
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 08:56:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B964D841F43
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 10:21:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 460D71C2393B
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 07:56:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AAB31F27AE9
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 09:21:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25525466D;
-	Tue, 30 Jan 2024 07:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5633B58ACF;
+	Tue, 30 Jan 2024 09:21:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jabtirok"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wa8blGB5"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB8353E1A
-	for <linux-fpga@vger.kernel.org>; Tue, 30 Jan 2024 07:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA84D5821A;
+	Tue, 30 Jan 2024 09:21:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706601366; cv=none; b=m9wT+x1PFMAOSp0DSjGBWm1SrBT8Dk9PO+qtTHRvFCT9yjTgr2dh9UiZ2B/P845DDCTRGSniTr4rvNqC3HQI+cew+CY1sO3HFlgT9CBgFieDATgoB/pf1ht0hSNhqCRessca44JB/0wzAKy3mAXz5KE3Bfd3qpkYzs/oGQOFFps=
+	t=1706606490; cv=none; b=tlL0bXZBRfKCF4NP5zO42/0bSnqSQBG8uSGoGYgl8rL1/hKDq14Cmr98YfBelcG+puJwNE38wmJaXXZ4TEtH6ytFFopSy6iV02W1J4W/M8i6yPOZIfkZlBiJ0+pmH36AaT34t+D1n5sjzJZGDkre7r2r5PiuEH+ZenqhsiQH+dU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706601366; c=relaxed/simple;
-	bh=wHR2CwdXVam+dMxen82xzir/2gKlgyfk9KNbt22I+O0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oXYYHMJ4fu/kMdINIJl7VFU3c+7w0lxLOdKeANAT4/EbZzOzQZj29KrQ4lHU2vnfaRCRoMJHe8bioPEbHsASVCEy9A1M5V49HEPd7p68f67WJ0Jj+S/JkcW5IXpeOzjzxqkyWudsPuet2fb89Ohi5+qxTxmQ06fi+4P/xEbpj3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jabtirok; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-55ad2a47b7aso3642252a12.3
-        for <linux-fpga@vger.kernel.org>; Mon, 29 Jan 2024 23:56:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706601363; x=1707206163; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ngybv8O9iGjxqt6rcpROCs4pkncSLIQiKAAur4B+yfo=;
-        b=jabtirokNvFgtX1HOVMrgGHwJH+0S7lxe9NZTn1DjRFO4gecjR3R2pZSYoHJPloYNU
-         CdyGlgaPWP6eqQ4sRNSrfysD3OA3RR9pvA3GAbuq1yC9+da4/ZNImwEozpXd1wjaHEpV
-         WdLyCrJmy4bn6tyngxgS0DTuVv6GhyoeRuSJ4DwVTWBdmjRAKWq8/RLuik5nflLPXUuB
-         llEpwZetew2YJ0YlsgTYTdvMpciTxFH7tW5OqYVkSY1slDkskcJUQEQqGcNhxLDFimZs
-         S4dg3urJafwTRY4jbxLaTFLlanzNYTv1kLRHI9Sy2//51chJ/ZT1iUWxgae7UmiAM5+x
-         zTGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706601363; x=1707206163;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ngybv8O9iGjxqt6rcpROCs4pkncSLIQiKAAur4B+yfo=;
-        b=wyAFKICmdz0vdyZjWPo15AeQ2Xm5n49omSPI8Z+ZYT1kT1di83XPlXxj59xSczDp41
-         rC5SpPmSIj3LxdozQMt4+9hCOB3LfD5ddECGucOJP+lUPTnvriEU33ljs6nMujYNr8HV
-         dd7gMv20HH7fqy9OOYby/KOwTGQvFiNNh9hG+CC/1oZl1QE+Gdeg9jnjQSJfcT2EPmBe
-         I4j1Q+WRvIWDfmIdRGKR34Xh5yuvbtbQcuvdwNptFTruF+NAB8EYaYNopC47KoSBM2XO
-         FguRY/XZ0pixPsx1oPWFysHG7aTDXtLCb/mmM7C1WcNO40XCWqYuAr3pzYrlnE3krtz2
-         K18g==
-X-Gm-Message-State: AOJu0YxaH5/VYCtxPakJqCZLDqZz46aqQ0j3/0w3/0/2sWfms/eO85y2
-	jkWu/obWpDTbRDKGzN9walICKaUY++qEOfV2n+k0JmasfzRc0Cyj907nYAh6F4o=
-X-Google-Smtp-Source: AGHT+IE46CauFpE6SAwlaWiivSPbB1RSG4Kax6PdpZuyNZjKAXh2tKtWGWtZ6rkn7MrohhkAUxxV+Q==
-X-Received: by 2002:a05:6402:17ce:b0:55f:1ae8:2f1d with SMTP id s14-20020a05640217ce00b0055f1ae82f1dmr2044451edy.11.1706601363429;
-        Mon, 29 Jan 2024 23:56:03 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id d15-20020a056402000f00b0055f1af929c2sm1205360edu.28.2024.01.29.23.56.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jan 2024 23:56:03 -0800 (PST)
-Message-ID: <4c6a7898-d300-468c-9e2f-13f639ca4407@linaro.org>
-Date: Tue, 30 Jan 2024 08:56:01 +0100
+	s=arc-20240116; t=1706606490; c=relaxed/simple;
+	bh=ifAlKUG+CxYISCTy0oT7pt8UtA4YNwpiVo6jZ1ymT/U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oaVwDhBP8G9dgXqHSFh8zw98vJFN41lnuq0EoqNv2a6dVT30FruDPFtx5yPa0v7mn+EG8hJHyO4Rl7s1nuFxM/DlO58/A5aH7FJcSzq6tVPUHt8fvrzepecSl5wTXyDJCT4S/8AFH4zULbHrqUqWGKjzpq9CdlWR9p5mcW3p/A4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wa8blGB5; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706606489; x=1738142489;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ifAlKUG+CxYISCTy0oT7pt8UtA4YNwpiVo6jZ1ymT/U=;
+  b=Wa8blGB5KLyjj0pjJxyWB2dZrrDAyNFQIGJ19R/mm3a7FYPNHxhv1J0W
+   FsfRifQC4hwOOXr+bIaCEZ7bqdDkR6knvpIyLlRc6Yp6fjbdvpGG42Vzh
+   /eUvDmz+iyqj3t4dntAwuu6y0eppuFINIqcN50LPm73nPwRQD8746w7rc
+   PbI5PtzLfdp9KQ5L5Hnp2r2MzT7PPPKCjX6O/tFxqf09VZwGMTJEm4JgA
+   HwRHz0hgjxSmZX+lRttsBGoafoMS0Nitg1LTarr7O9S4B8Igh32WoAJtk
+   XwH+UyZ7w7O0GTR7zR/a3TRkIgP790P4ZFHoPOrFX2ARRWXwEUEJiz3D+
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="3078810"
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="3078810"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 01:21:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="1119198673"
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="1119198673"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Jan 2024 01:21:25 -0800
+Date: Tue, 30 Jan 2024 17:18:00 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Marco Pagani <marpagan@redhat.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: remove redundant checks for bridge ops
+Message-ID: <Zbi+yJC7KNvl9med@yilunxu-OptiPlex-7050>
+References: <20240124152408.88068-1-marpagan@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] fpga: xilinx-selectmap: add new driver
-Content-Language: en-US
-To: Charles Perry <charles.perry@savoirfairelinux.com>, mdf@kernel.org
-Cc: hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
- krzysztof.kozlowski+dt@linaro.org, bcody@markem-imaje.com,
- avandiver@markem-imaje.com, linux-fpga@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com>
- <20240129225602.3832449-3-charles.perry@savoirfairelinux.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240129225602.3832449-3-charles.perry@savoirfairelinux.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240124152408.88068-1-marpagan@redhat.com>
 
-On 29/01/2024 23:56, Charles Perry wrote:
-> Xilinx 7 series FPGA can be programmed using a slave parallel port named
-> the SelectMAP interface in the datasheet. This slave interface is
-> compatible with the i.MX6 EIM bus controller but other types of external
-> memory mapped parallel bus might work.
+On Wed, Jan 24, 2024 at 04:24:07PM +0100, Marco Pagani wrote:
+> Commit 0d70af3c2530 ("fpga: bridge: Use standard dev_release for class
+> driver") introduced a check in fpga_bridge_register() that prevents
+> registering a bridge without ops, making checking on every call
+> redundant.
 > 
-> xilinx-selectmap currently only supports the x8 mode where data is loaded
-> at one byte per rising edge of the clock, with the MSb of each byte
-> presented to the D0 pin.
-> 
-> The following DT fragment shows a valid configuration on a custom i.MX6
-> board (pinctrl not shown for readability):
-> 
-> &weim {
->     status = "okay";
->     ranges = <0 0 0x08000000 0x04000000>;
-> 
->     fpga_mgr: fpga_programmer@0,0 {
->         compatible = "xlnx,fpga-slave-selectmap";
->         reg = <0 0 0x4000000>;
->         fsl,weim-cs-timing = <0x00070031 0x00000142
->                               0x00020000 0x00000000
->                               0x0c000645 0x00000000>;
->         prog_b-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>;
->         init-b-gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
->         done-gpios = <&gpio2 30 GPIO_ACTIVE_HIGH>;
->         csi-b-gpios = <&gpio3 19 GPIO_ACTIVE_LOW>;
->         rdwr-b-gpios = <&gpio3 10 GPIO_ACTIVE_LOW>;
->     };
-> };
-
-Drop that example. First, it is not correct. Second, a correct one in
-bindings is enough.
-
-> 
-> Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
 > ---
+>  drivers/fpga/fpga-bridge.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+> index a024be2b84e2..e0a5ef318f5e 100644
+> --- a/drivers/fpga/fpga-bridge.c
+> +++ b/drivers/fpga/fpga-bridge.c
+> @@ -30,7 +30,7 @@ int fpga_bridge_enable(struct fpga_bridge *bridge)
+>  {
+>  	dev_dbg(&bridge->dev, "enable\n");
+>  
+> -	if (bridge->br_ops && bridge->br_ops->enable_set)
+> +	if (bridge->br_ops->enable_set)
+>  		return bridge->br_ops->enable_set(bridge, 1);
+>  
+>  	return 0;
+> @@ -48,7 +48,7 @@ int fpga_bridge_disable(struct fpga_bridge *bridge)
+>  {
+>  	dev_dbg(&bridge->dev, "disable\n");
+>  
+> -	if (bridge->br_ops && bridge->br_ops->enable_set)
+> +	if (bridge->br_ops->enable_set)
+>  		return bridge->br_ops->enable_set(bridge, 0);
+>  
+>  	return 0;
+> @@ -401,7 +401,7 @@ void fpga_bridge_unregister(struct fpga_bridge *bridge)
+>  	 * If the low level driver provides a method for putting bridge into
+>  	 * a desired state upon unregister, do it.
+>  	 */
+> -	if (bridge->br_ops && bridge->br_ops->fpga_bridge_remove)
+> +	if (bridge->br_ops->fpga_bridge_remove)
+>  		bridge->br_ops->fpga_bridge_remove(bridge);
 
-...
+Also for state_show()?
 
-> +static int xilinx_selectmap_probe(struct platform_device *pdev)
-> +{
-> +	struct xilinx_selectmap_conf *conf;
-> +	struct resource *r;
-> +	void __iomem *base;
-> +
-> +	conf = devm_kzalloc(&pdev->dev, sizeof(*conf), GFP_KERNEL);
-> +	if (!conf)
-> +		return -ENOMEM;
-> +
-> +	base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
-> +	if (IS_ERR(base))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(base), "ioremap error\n");
-> +	conf->base = base;
-> +
-> +	/* CSI_B is active low */
-> +	conf->csi_b = devm_gpiod_get_optional(&pdev->dev, "csi-b", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(conf->csi_b))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(conf->csi_b),
-> +				     "Failed to get CSI_B gpio\n");
-> +
-> +	/* RDWR_B is active low */
-> +	conf->rdwr_b = devm_gpiod_get_optional(&pdev->dev, "rdwr-b", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(conf->rdwr_b))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(conf->rdwr_b),
-> +				     "Failed to get RDWR_B gpio\n");
-> +
-> +	return xilinx_core_probe(&conf->core, &pdev->dev,
-> +							xilinx_selectmap_write,
-> +							xilinx_selectmap_apply_padding);
+Thanks,
+Yilun
 
-Totally messed indentation. Please run scripts/checkpatch.pl and fix
-reported warnings. Some warnings can be ignored, but the code here looks
-like it needs a fix. Feel free to get in touch if the warning is not clear.
-
-> +}
-> +
-> +static const struct of_device_id xlnx_selectmap_of_match[] = {
-> +		{ .compatible = "xlnx,fpga-slave-selectmap", },
-> +		{}
-> +};
-> +MODULE_DEVICE_TABLE(of, xlnx_selectmap_of_match);
-> +
-> +static struct platform_driver xilinx_slave_selectmap_driver = {
-> +	.driver = {
-> +		.name = "xilinx-slave-selectmap",
-> +		.of_match_table = of_match_ptr(xlnx_selectmap_of_match),
-
-Drop of_match_ptr, it leads to warnings.
-
-> +	},
-> +	.probe  = xilinx_selectmap_probe,
-> +};
-
-Best regards,
-Krzysztof
-
+>  
+>  	device_unregister(&bridge->dev);
+> 
+> base-commit: c849ecb2ae8413f86c84627cb0af06dffce4e215
+> -- 
+> 2.43.0
+> 
+> 
 
