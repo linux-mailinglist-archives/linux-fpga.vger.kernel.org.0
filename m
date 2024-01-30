@@ -1,74 +1,73 @@
-Return-Path: <linux-fpga+bounces-173-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-174-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A56C4841D07
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 08:54:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 256B5841D0F
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 08:56:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1A951C23906
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 07:54:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 460D71C2393B
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 07:56:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FDE253E08;
-	Tue, 30 Jan 2024 07:53:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25525466D;
+	Tue, 30 Jan 2024 07:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HSVBKq41"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jabtirok"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12E256448
-	for <linux-fpga@vger.kernel.org>; Tue, 30 Jan 2024 07:53:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB8353E1A
+	for <linux-fpga@vger.kernel.org>; Tue, 30 Jan 2024 07:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706601239; cv=none; b=qI5w2OWvbWrQl9yAobUTGyP3Us86juTA8kL2uO4Bi5bJJ+/wrSA+dHtMGGCIZYiFXI7hbvhbqYg2apMbTvGHybdPLw7gdPzqJOpeoRgNEfhmBkixR0GCOfaVslSj1ZxpqrPGcyy2k3/6XR6cs0wsfwAvai5u1jQrf2vXkThxH2I=
+	t=1706601366; cv=none; b=m9wT+x1PFMAOSp0DSjGBWm1SrBT8Dk9PO+qtTHRvFCT9yjTgr2dh9UiZ2B/P845DDCTRGSniTr4rvNqC3HQI+cew+CY1sO3HFlgT9CBgFieDATgoB/pf1ht0hSNhqCRessca44JB/0wzAKy3mAXz5KE3Bfd3qpkYzs/oGQOFFps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706601239; c=relaxed/simple;
-	bh=3NRFhG0LFEEZz4jUxyIebYTcUYAZx7C9kx83JRBYHI4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=CJJ1L2MB6COsiys59M3V08k7WLXHJm3NENp5VMq5cApqycxnCUvZI4e8eEcUXKyIdv7iKIoXq5QqRpysqQybXv8sXeyHfMj7oK+crsvvWdB0kCtDaQVcaxRYMv/TQ2435VOOD3GT1e3AK9wFfkPwrd+zDMtdXDC6V26rWJwuzw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HSVBKq41; arc=none smtp.client-ip=209.85.208.41
+	s=arc-20240116; t=1706601366; c=relaxed/simple;
+	bh=wHR2CwdXVam+dMxen82xzir/2gKlgyfk9KNbt22I+O0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oXYYHMJ4fu/kMdINIJl7VFU3c+7w0lxLOdKeANAT4/EbZzOzQZj29KrQ4lHU2vnfaRCRoMJHe8bioPEbHsASVCEy9A1M5V49HEPd7p68f67WJ0Jj+S/JkcW5IXpeOzjzxqkyWudsPuet2fb89Ohi5+qxTxmQ06fi+4P/xEbpj3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jabtirok; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-55ee686b5d5so2769591a12.0
-        for <linux-fpga@vger.kernel.org>; Mon, 29 Jan 2024 23:53:57 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-55ad2a47b7aso3642252a12.3
+        for <linux-fpga@vger.kernel.org>; Mon, 29 Jan 2024 23:56:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706601236; x=1707206036; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=3NRFhG0LFEEZz4jUxyIebYTcUYAZx7C9kx83JRBYHI4=;
-        b=HSVBKq410O5toRQHWhhXK1+a810MJIkq2CkDDSa8x+W3TqHoVt5aA1n6PjDF4PA2hs
-         cP1+ttlQVke9rEOwizLU7MtnGtLkD6PhZV0A0Rnm3rnloelxEeb00rm0Tzrj2grphqjC
-         P8aPaNpnTfxSIDMIF4RosTjS0IJ4DXzxKpHJqciZ1vGRAfk9tw2HaKdnK9aw/Lc0P9vk
-         D7FT6JdToISoQnHSNKvus724J9pt3icsBBvtk5KYWC0zy0S3cms0SQYbt+qd8oH97IBU
-         Ey9K+DGS2hUuuGxht2rNGN5tYHFORydJs1qvHZ/Tb3US3YbMhTVsGbWMeG2iAFBOyPXM
-         hS0A==
+        d=linaro.org; s=google; t=1706601363; x=1707206163; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ngybv8O9iGjxqt6rcpROCs4pkncSLIQiKAAur4B+yfo=;
+        b=jabtirokNvFgtX1HOVMrgGHwJH+0S7lxe9NZTn1DjRFO4gecjR3R2pZSYoHJPloYNU
+         CdyGlgaPWP6eqQ4sRNSrfysD3OA3RR9pvA3GAbuq1yC9+da4/ZNImwEozpXd1wjaHEpV
+         WdLyCrJmy4bn6tyngxgS0DTuVv6GhyoeRuSJ4DwVTWBdmjRAKWq8/RLuik5nflLPXUuB
+         llEpwZetew2YJ0YlsgTYTdvMpciTxFH7tW5OqYVkSY1slDkskcJUQEQqGcNhxLDFimZs
+         S4dg3urJafwTRY4jbxLaTFLlanzNYTv1kLRHI9Sy2//51chJ/ZT1iUWxgae7UmiAM5+x
+         zTGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706601236; x=1707206036;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3NRFhG0LFEEZz4jUxyIebYTcUYAZx7C9kx83JRBYHI4=;
-        b=LLhNF77nIKS1WuzUlNbLgiXnmCVx3Y/fFqpUQ+sI0zvp0j0igq1AhKg7IElWQ2ERE8
-         nkPV/7HDse0f/v8wNoT/n2HERUAsCUiwHKGaDoXMYa/yL8RD5pQO7VddKEqgH+B5xrI5
-         IgmWgAhaJjG0VQsWvnwyOsqXlnjTFmLPpmeUPi0EZupn2puHeecL11hK+cOPKsUFtaRx
-         378OJyBkZEZ5AYJXpyCH81VwTVhjJPadzdaKJdOGiOEGBPYm0ywWg6OGN4oGDgl05dTM
-         N8qS336Jeucvts0ueHG6aSxZ6bYoXYqVsro7enTYscdc7wJ7poU9EJDRoswT0RB3s5CC
-         CAkg==
-X-Gm-Message-State: AOJu0YwsQW5p/ss/d6hNTS5O2l1zwVN4v7455oyBBOWJVejG7d7pnq5n
-	Zm48czl+6DOmjlQMkeGP4l1ObmqEtTmD4+RSyKW+h5+sJSt7dz7GUXSTD70uB9g=
-X-Google-Smtp-Source: AGHT+IG0xIN6Wq+CQaIprYFhoRfHcs4BZgDz9GXKxO3R9oBCKqyMFB6tqBufNM2RSjJQe7z66OXbFg==
-X-Received: by 2002:a17:906:b893:b0:a35:46d8:53ce with SMTP id hb19-20020a170906b89300b00a3546d853cemr5596503ejb.18.1706601236109;
-        Mon, 29 Jan 2024 23:53:56 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706601363; x=1707206163;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ngybv8O9iGjxqt6rcpROCs4pkncSLIQiKAAur4B+yfo=;
+        b=wyAFKICmdz0vdyZjWPo15AeQ2Xm5n49omSPI8Z+ZYT1kT1di83XPlXxj59xSczDp41
+         rC5SpPmSIj3LxdozQMt4+9hCOB3LfD5ddECGucOJP+lUPTnvriEU33ljs6nMujYNr8HV
+         dd7gMv20HH7fqy9OOYby/KOwTGQvFiNNh9hG+CC/1oZl1QE+Gdeg9jnjQSJfcT2EPmBe
+         I4j1Q+WRvIWDfmIdRGKR34Xh5yuvbtbQcuvdwNptFTruF+NAB8EYaYNopC47KoSBM2XO
+         FguRY/XZ0pixPsx1oPWFysHG7aTDXtLCb/mmM7C1WcNO40XCWqYuAr3pzYrlnE3krtz2
+         K18g==
+X-Gm-Message-State: AOJu0YxaH5/VYCtxPakJqCZLDqZz46aqQ0j3/0w3/0/2sWfms/eO85y2
+	jkWu/obWpDTbRDKGzN9walICKaUY++qEOfV2n+k0JmasfzRc0Cyj907nYAh6F4o=
+X-Google-Smtp-Source: AGHT+IE46CauFpE6SAwlaWiivSPbB1RSG4Kax6PdpZuyNZjKAXh2tKtWGWtZ6rkn7MrohhkAUxxV+Q==
+X-Received: by 2002:a05:6402:17ce:b0:55f:1ae8:2f1d with SMTP id s14-20020a05640217ce00b0055f1ae82f1dmr2044451edy.11.1706601363429;
+        Mon, 29 Jan 2024 23:56:03 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id ss6-20020a170907c00600b00a3533f17981sm3846787ejc.219.2024.01.29.23.53.54
+        by smtp.gmail.com with ESMTPSA id d15-20020a056402000f00b0055f1af929c2sm1205360edu.28.2024.01.29.23.56.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jan 2024 23:53:55 -0800 (PST)
-Message-ID: <d2ea2261-5581-46d7-8ac1-3441425566ac@linaro.org>
-Date: Tue, 30 Jan 2024 08:53:54 +0100
+        Mon, 29 Jan 2024 23:56:03 -0800 (PST)
+Message-ID: <4c6a7898-d300-468c-9e2f-13f639ca4407@linaro.org>
+Date: Tue, 30 Jan 2024 08:56:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -76,18 +75,16 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] dt-bindings: fpga: xlnx,fpga-slave-selectmap: add DT
- schema
+Subject: Re: [PATCH 3/3] fpga: xilinx-selectmap: add new driver
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Charles Perry <charles.perry@savoirfairelinux.com>, mdf@kernel.org
 Cc: hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
  krzysztof.kozlowski+dt@linaro.org, bcody@markem-imaje.com,
  avandiver@markem-imaje.com, linux-fpga@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com>
- <20240129225602.3832449-2-charles.perry@savoirfairelinux.com>
- <f3cfffa0-5089-4bf7-b424-d5e949e36d67@linaro.org>
+ <20240129225602.3832449-3-charles.perry@savoirfairelinux.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -132,16 +129,103 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <f3cfffa0-5089-4bf7-b424-d5e949e36d67@linaro.org>
+In-Reply-To: <20240129225602.3832449-3-charles.perry@savoirfairelinux.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 30/01/2024 08:52, Krzysztof Kozlowski wrote:
-> Please run your patch through Xilinx folks before sending.
+On 29/01/2024 23:56, Charles Perry wrote:
+> Xilinx 7 series FPGA can be programmed using a slave parallel port named
+> the SelectMAP interface in the datasheet. This slave interface is
+> compatible with the i.MX6 EIM bus controller but other types of external
+> memory mapped parallel bus might work.
+> 
+> xilinx-selectmap currently only supports the x8 mode where data is loaded
+> at one byte per rising edge of the clock, with the MSb of each byte
+> presented to the D0 pin.
+> 
+> The following DT fragment shows a valid configuration on a custom i.MX6
+> board (pinctrl not shown for readability):
+> 
+> &weim {
+>     status = "okay";
+>     ranges = <0 0 0x08000000 0x04000000>;
+> 
+>     fpga_mgr: fpga_programmer@0,0 {
+>         compatible = "xlnx,fpga-slave-selectmap";
+>         reg = <0 0 0x4000000>;
+>         fsl,weim-cs-timing = <0x00070031 0x00000142
+>                               0x00020000 0x00000000
+>                               0x0c000645 0x00000000>;
+>         prog_b-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>;
+>         init-b-gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
+>         done-gpios = <&gpio2 30 GPIO_ACTIVE_HIGH>;
+>         csi-b-gpios = <&gpio3 19 GPIO_ACTIVE_LOW>;
+>         rdwr-b-gpios = <&gpio3 10 GPIO_ACTIVE_LOW>;
+>     };
+> };
 
-Uh, you are not Xilinx folk, so disregard that. Yet still amount of
-trivial issues here point that you need to start from scratch from
-existing schema or example-schema.
+Drop that example. First, it is not correct. Second, a correct one in
+bindings is enough.
+
+> 
+> Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
+> ---
+
+...
+
+> +static int xilinx_selectmap_probe(struct platform_device *pdev)
+> +{
+> +	struct xilinx_selectmap_conf *conf;
+> +	struct resource *r;
+> +	void __iomem *base;
+> +
+> +	conf = devm_kzalloc(&pdev->dev, sizeof(*conf), GFP_KERNEL);
+> +	if (!conf)
+> +		return -ENOMEM;
+> +
+> +	base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
+> +	if (IS_ERR(base))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(base), "ioremap error\n");
+> +	conf->base = base;
+> +
+> +	/* CSI_B is active low */
+> +	conf->csi_b = devm_gpiod_get_optional(&pdev->dev, "csi-b", GPIOD_OUT_HIGH);
+> +	if (IS_ERR(conf->csi_b))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(conf->csi_b),
+> +				     "Failed to get CSI_B gpio\n");
+> +
+> +	/* RDWR_B is active low */
+> +	conf->rdwr_b = devm_gpiod_get_optional(&pdev->dev, "rdwr-b", GPIOD_OUT_HIGH);
+> +	if (IS_ERR(conf->rdwr_b))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(conf->rdwr_b),
+> +				     "Failed to get RDWR_B gpio\n");
+> +
+> +	return xilinx_core_probe(&conf->core, &pdev->dev,
+> +							xilinx_selectmap_write,
+> +							xilinx_selectmap_apply_padding);
+
+Totally messed indentation. Please run scripts/checkpatch.pl and fix
+reported warnings. Some warnings can be ignored, but the code here looks
+like it needs a fix. Feel free to get in touch if the warning is not clear.
+
+> +}
+> +
+> +static const struct of_device_id xlnx_selectmap_of_match[] = {
+> +		{ .compatible = "xlnx,fpga-slave-selectmap", },
+> +		{}
+> +};
+> +MODULE_DEVICE_TABLE(of, xlnx_selectmap_of_match);
+> +
+> +static struct platform_driver xilinx_slave_selectmap_driver = {
+> +	.driver = {
+> +		.name = "xilinx-slave-selectmap",
+> +		.of_match_table = of_match_ptr(xlnx_selectmap_of_match),
+
+Drop of_match_ptr, it leads to warnings.
+
+> +	},
+> +	.probe  = xilinx_selectmap_probe,
+> +};
 
 Best regards,
 Krzysztof
