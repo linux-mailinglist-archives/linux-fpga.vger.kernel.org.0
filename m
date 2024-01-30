@@ -1,157 +1,198 @@
-Return-Path: <linux-fpga+bounces-192-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-193-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3659842B61
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 19:00:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CA3084314B
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 00:32:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5D8A1C23C86
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 18:00:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F246F287530
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 23:32:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08EA8151CE2;
-	Tue, 30 Jan 2024 18:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D76178B7B;
+	Tue, 30 Jan 2024 23:32:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lFL+5f2P"
+	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="XbUNHyDS"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E53157E80;
-	Tue, 30 Jan 2024 18:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED6E7EEFD;
+	Tue, 30 Jan 2024 23:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706637619; cv=none; b=Q/daLKlE/mv84gkEHu1obiWuJZ4ixeKe/Er7Rcdzl2mH2+TvDykH/9lFnAkFcx1J6QKIxm3fk+UfKElorip0yge+ZiVd6RcjX5npO3fJUAojAQubmP2ZM9MOVkxRVfyA9aPpKLdhnZSFL/jbz5fU8s3IlvuaPy1TFo6tBKtdeS4=
+	t=1706657543; cv=none; b=bX4JFNjJFaQckUDPFWtSawUkjqIq098gRBqNRsEHmTLgK9eSnaXsrBqneJctCYVDKq1jO+HOwQ32Dr7MlyHcxKbjl9U18R2mHwpZxcek1D3CznRCgRYu/4eJkKgtSO/yTvxro8sMWMA4ByyhwiAbycpckOzIxzOc4gY8cFrgMdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706637619; c=relaxed/simple;
-	bh=lQZ/GbyZBd0xDNQpWfIqUsdS0F8dX+qiur/y3oKYous=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=twgchil86/Lev478EWf+ZnLRwi19RX/zTIXoPYPkW1llGOtL4N1Jj+ZVLTv7gWyrO2oCByjDACWNx3zLf4fUFZhbZGzGEt3grNDbSWLDgw0GniqJdRH1021qYmHFlGrvGWsrdJryPOBvgD21netfZSFLEwqCeBNycLLqUyZl3sI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lFL+5f2P; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706637618; x=1738173618;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=lQZ/GbyZBd0xDNQpWfIqUsdS0F8dX+qiur/y3oKYous=;
-  b=lFL+5f2PoJnLQp6fnt81EA8oxR++pSZ/DeQZfMVo7mjuoGvdSwo/shhU
-   j/yd86HqflGnivNnprye9myI9fuIkbQ3MlAVwFCPe+eR7fb3orElmsF5h
-   ZfUQpKRIbc+BUEevRmq6mXSGLkXbssDFEaUI/4enMt2aLRbgoK08Hu9ty
-   Euiu0jh/kIjS/dsPckyYcI53K90QywDd8LL8eIS+QKnhRMcNlFN14aCXh
-   q6uJN1EvLt7cQBHyPblk4Cs/jlHK4HD7EOkitim5tCrKB6Za/ptJTPEbI
-   hDV1gCOLCInHQcm0Qh1iDSLxQpofjgpCzMEiB8muzwesBbI2JANO/G9lM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="10104265"
-X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
-   d="scan'208";a="10104265"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 10:00:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
-   d="scan'208";a="3875247"
-Received: from sj-4150-psse-sw-opae-dev2.sj.intel.com ([10.233.115.162])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 10:00:16 -0800
-Date: Tue, 30 Jan 2024 10:00:16 -0800 (PST)
-From: matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@sj-4150-psse-sw-opae-dev2
-To: Xu Yilun <yilun.xu@linux.intel.com>
-cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com, 
-    linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fpga: dfl: afu: support Rev 2 of DFL Port feature
-In-Reply-To: <ZbjHl8ptQG5FdHvC@yilunxu-OptiPlex-7050>
-Message-ID: <alpine.DEB.2.22.394.2401300948590.112016@sj-4150-psse-sw-opae-dev2>
-References: <20240125233715.861883-1-matthew.gerlach@linux.intel.com> <ZbjHl8ptQG5FdHvC@yilunxu-OptiPlex-7050>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+	s=arc-20240116; t=1706657543; c=relaxed/simple;
+	bh=LNLe7G+sUEBgyWggG7WM7RWLo2yZedbsnX7Ohqrkqa4=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=mq469gZV+yYE/+U39hFMkTY5/j9BBfvGQ26ZzV8cOTr8UJQAuWsj53yl6Ol6qwkw6Tc+catinJ8Sn2OU/XqM747PszteM4RLvaEasUhqPwMMdbtkzOomNmBP44ub7TI6zYKTg2KGoPMmyyCQjUos8+axpL+6jjqVbmYoPZdladg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=XbUNHyDS; arc=none smtp.client-ip=208.88.110.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id BED8A9C47A8;
+	Tue, 30 Jan 2024 18:32:12 -0500 (EST)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id ihIR16aTfH4Y; Tue, 30 Jan 2024 18:32:12 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 0B4FF9C47AB;
+	Tue, 30 Jan 2024 18:32:12 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 0B4FF9C47AB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+	t=1706657532; bh=BA4JQridKzT3Qj0Bblif/Dl05zQNFxAGDsMmT6xiiWA=;
+	h=Date:From:To:Message-ID:MIME-Version;
+	b=XbUNHyDSl0gBsr4cCsjFR4BlqmGJ5WErUDf2j384p7TLk7L0IPzhdQldARfor5h3B
+	 xOCshe42bzEydP0Yyl4VZpsUedUnQxI8Cl/T+h/LQLABxp2OipfJw04WMssHnzULPj
+	 7QwtEDEZuU7n+tfXVG5HPRklYF80zhVFpor2xyTSGGSb9iSrIP53Q8/ogWUzzJEFN0
+	 EoVfgVqJdq/oLkLTZ5CMgySGNht7JuRJ6MzEhq4dpR3bwenCJvFgLI48h6/aHbJQYx
+	 7EOB6VTMzn3AI9Ir6l+bpwk6PBQXM8o7tQTOPv4qo3zL8uuEXujtbYkUV4GFq9Q/kD
+	 mv/BF4CVMwTrQ==
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id VukIkSh6H6CV; Tue, 30 Jan 2024 18:32:11 -0500 (EST)
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [192.168.48.237])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id D49819C47A8;
+	Tue, 30 Jan 2024 18:32:11 -0500 (EST)
+Date: Tue, 30 Jan 2024 18:32:11 -0500 (EST)
+From: Charles Perry <charles.perry@savoirfairelinux.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: mdf <mdf@kernel.org>, hao wu <hao.wu@intel.com>, 
+	yilun xu <yilun.xu@intel.com>, trix <trix@redhat.com>, 
+	krzysztof kozlowski+dt <krzysztof.kozlowski+dt@linaro.org>, 
+	Brian CODY <bcody@markem-imaje.com>, 
+	Allen VANDIVER <avandiver@markem-imaje.com>, 
+	linux-fpga <linux-fpga@vger.kernel.org>, 
+	devicetree <devicetree@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1723200717.393172.1706657531814.JavaMail.zimbra@savoirfairelinux.com>
+In-Reply-To: <cee1ca11-03bf-4a0b-9ff3-490457f9fbe8@linaro.org>
+References: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com> <20240129225602.3832449-2-charles.perry@savoirfairelinux.com> <f3cfffa0-5089-4bf7-b424-d5e949e36d67@linaro.org> <1489222458.382780.1706629544559.JavaMail.zimbra@savoirfairelinux.com> <32669bc7-90b5-48d9-8845-2e072a477c6e@linaro.org> <154341320.386005.1706634341891.JavaMail.zimbra@savoirfairelinux.com> <cee1ca11-03bf-4a0b-9ff3-490457f9fbe8@linaro.org>
+Subject: Re: [PATCH 2/3] dt-bindings: fpga: xlnx,fpga-slave-selectmap: add
+ DT schema
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Zimbra 8.8.15_GA_4581 (ZimbraWebClient - FF120 (Linux)/8.8.15_GA_4581)
+Thread-Topic: dt-bindings: fpga: xlnx,fpga-slave-selectmap: add DT schema
+Thread-Index: bDEku0F6XFcq/uoMeZdjacG4xvsqgA==
 
 
+----- On Jan 30, 2024, at 12:58 PM, Krzysztof Kozlowski krzysztof.kozlowski=
+@linaro.org wrote:
 
-On Tue, 30 Jan 2024, Xu Yilun wrote:
+> On 30/01/2024 18:05, Charles Perry wrote:
+>>=20
+>>=20
+>> ----- On Jan 30, 2024, at 11:05 AM, Krzysztof Kozlowski
+>> krzysztof.kozlowski@linaro.org wrote:
+>>=20
+>>> On 30/01/2024 16:45, Charles Perry wrote:
+>>>>
+>>>>>> +
+>>>>>> +  reg:
+>>>>>> +    description:
+>>>>>> +      At least 1 byte of memory mapped IO
+>>>>>> +    maxItems: 1
+>>>>>> +
+>>>>>> +  prog_b-gpios:
+>>>>>
+>>>>>
+>>>>> No underscores in names.
+>>>>>
+>>>>
+>>>> This is heavily based on "xlnx,fpga-slave-serial.yaml" which uses an u=
+nderscore.
+>>>> I can use a dash instead but that would make things inconsistent acros=
+s the two
+>>>> schemas.
+>>>
+>>> Inconsistency is not a problem. Duplicating technical debt is.
+>>>
+>>>>
+>>>>>
+>>>>>> +    description:
+>>>>>> +      config pin (referred to as PROGRAM_B in the manual)
+>>>>>> +    maxItems: 1
+>>>>>> +
+>>>>>> +  done-gpios:
+>>>>>> +    description:
+>>>>>> +      config status pin (referred to as DONE in the manual)
+>>>>>> +    maxItems: 1
+>>>>>> +
+>>>>>> +  init-b-gpios:
+>>>>>
+>>>>> Is there init-a? Open other bindings and look how these are called th=
+ere.
+>>>>>
+>>>>
+>>>> No, the "-b" is there to denote that the signal is active low. I think=
+ its
+>>>> shorthand
+>>>> for "bar" which is the overline (=E2=80=BE) that electronic engineer p=
+ut on top of the
+>>>> name of the
+>>>> signal on schematics. It comes from the datasheet.
+>>>
+>>> Then just "init-gpios"
+>>>
+>>> ...
+>>>
+>>>>>> +required:
+>>>>>> +  - compatible
+>>>>>> +  - reg
+>>>>>> +  - prog_b-gpios
+>>>>>> +  - done-gpios
+>>>>>> +  - init-b-gpios
+>>>>>> +
+>>>>>> +additionalProperties: true
+>>>>>
+>>>>> Nope, this cannot bue true.
+>>>>>
+>>>>
+>>>> Ok, I'll put this to false but I'm not quite sure I understand the imp=
+lications.
+>>>>
+>>>> My reasoning behind assigning this to true was that the FPGA is an ext=
+ernal
+>>>> device on a bus that needs to be configured by a bus controller. The b=
+us
+>>>> controller
+>>>> would be the parent of the fpga DT node and the later would contain pr=
+operties
+>>>> parsed by the bus controller driver.
+>>>
+>>> Which bus controller? MMIO bus does not parse children properties.
+>>> Anyway, if that's the case you miss $ref to respective
+>>> peripheral-props.yaml matching your bus and then "unevaluatedProperties=
+:
+>>> false".
+>>=20
+>> This one:
+>> https://elixir.bootlin.com/linux/v6.8-rc2/source/Documentation/devicetre=
+e/bindings/bus/imx-weim.txt#L56
+>=20
+> Eh, ok, so after fast check WEIM looks like some memory interface bus,
+> so the bus bindings should be moved to memory-controllers and converted
+> to YAML. Then you add child node properties to own schema and reference
+> in mc-peripheral-props, which is then referenced in your binding here,
+> as I mentioned.
+>=20
+> Best regards,
+> Krzysztof
 
-> On Thu, Jan 25, 2024 at 03:37:15PM -0800, Matthew Gerlach wrote:
->> Revision 2 of the Device Feature List (DFL) Port feature
->> adds support for connecting the contents of the port to
->> multiple PCIe Physical Functions (PF).
->>
->> This new functionality requires changing the port reset
->> behavior during FPGA and software initialization from
->> revision 1 of the port feature. With revision 1, the initial
->> state of the logic inside the port was not guaranteed to
->> be valid until a port reset was performed by software during
->> driver initialization. With revision 2, the initial state
->> of the logic inside the port is guaranteed to be valid,
->> and a port reset is not required during driver initialization.
->>
->> This change in port reset behavior avoids a potential race
->> condition during PCI enumeration when a port is connected to
->> multiple PFs. Problems can occur if the driver attached to
->> the PF managing the port asserts reset in its probe function
->> when a driver attached to another PF accesses the port in its
->> own probe function. The potential problems include failed or hung
->
-> Only racing during probe functions? I assume any time port_reset()
-> would fail TLPs for the other PF. And port_reset() could be triggered
-> at runtime by ioctl().
+Thank you for pointing that out, mc-peripheral-props.yaml seems to be
+exactly what I was looking for.
 
-Yes, a port_reset() triggered by ioctl could result in failed TLP for the 
-other PFs. The user space SW performing the ioctl needs to ensure all PFs 
-involved are properly quiesced before the port_reset is performed.
-
-Do you want me to update the commit message with this information?
-
-Thanks,
-Matthew
-
->
-> Thanks,
-> Yilun
->
->> transaction layer packet (TLP) transactions and invalid data
->> being returned.
->>
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> ---
->> v2:
->> - Update commit message for clarity
->> - Remove potentially confusing dev_info message.
->> ---
->>  drivers/fpga/dfl-afu-main.c | 10 +++++++++-
->>  1 file changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
->> index c0a75ca360d6..42fe27660ab7 100644
->> --- a/drivers/fpga/dfl-afu-main.c
->> +++ b/drivers/fpga/dfl-afu-main.c
->> @@ -417,7 +417,15 @@ static const struct attribute_group port_hdr_group = {
->>  static int port_hdr_init(struct platform_device *pdev,
->>  			 struct dfl_feature *feature)
->>  {
->> -	port_reset(pdev);
->> +	void __iomem *base;
->> +	u8 rev;
->> +
->> +	base = dfl_get_feature_ioaddr_by_id(&pdev->dev, PORT_FEATURE_ID_HEADER);
->> +
->> +	rev = dfl_feature_revision(base);
->> +
->> +	if (rev < 2)
->> +		port_reset(pdev);
->>
->>  	return 0;
->>  }
->> --
->> 2.34.1
->>
->>
->
+Regards,
+Charles
 
