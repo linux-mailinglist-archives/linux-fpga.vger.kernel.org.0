@@ -1,53 +1,53 @@
-Return-Path: <linux-fpga+bounces-197-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-198-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDFFF84381F
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 08:44:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A38FA84384D
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 08:51:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94A101F25D16
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 07:44:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E5151F21D4E
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 07:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7828D54BDE;
-	Wed, 31 Jan 2024 07:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0FD254F9C;
+	Wed, 31 Jan 2024 07:51:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Hi2dSkbn"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="YrCcDfV/"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from mout.web.de (mout.web.de [212.227.15.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75D45788C;
-	Wed, 31 Jan 2024 07:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32845810C;
+	Wed, 31 Jan 2024 07:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706687027; cv=none; b=tev0TbaGdYh9zoNya802e+1XiN+nXwqwI49LhSiDApgRL+rYZ1b/XZHHSwwwpKl07RtVU/SrLC7qJYFwnDygsPtxSd494mMVHXWwtNu7W7kFHAEpK2jhBYmyWeDNXSyKAw8hjU4UDLDv4bGKUDHWQvKDueHwO39qhpSQD0WwdAA=
+	t=1706687497; cv=none; b=D/hF1NpXLo7iM94YwYygPMB7v2uqhAHuvTby88AuLqrN98Pz5dQI0TKC1rH56/D+TgGcJs0R5coi09eEiwsbgcHvTZwqcQoK9grJw8+MiAmexYlC5UN6JewOxMZmbfnuKtA//sUHK/nIwrLv2H4uOIidhh2F3MQUa82l0A1Tmv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706687027; c=relaxed/simple;
-	bh=3UtEEurfF0DcUrGrZ1swp8W+Hl3SyFmpYaEjxHY/nFM=;
+	s=arc-20240116; t=1706687497; c=relaxed/simple;
+	bh=RCpx2LOg9/ZmAaeB9rFYkX9ZLKhwvnqQppjV3dOKF78=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D6nkqe/VZBoRS65K4tHpkO6BMc1lxmxApdIOmLfGPdBCv8MA8OJuwpzo2o0xbvX6YKOmJwR9AShl62CS/Q9L0IzSHI8SP9dldFyw4QI6vk8brEKf/pPxg7WlDjhD++PgBeWfTcdSxXa0fsKEw16V+4J2kiwDHuoxcsmLB8o6na4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Hi2dSkbn; arc=none smtp.client-ip=212.227.15.14
+	 In-Reply-To:Content-Type; b=peTHoKYwLHSQr6IKSoLpQ5WJzDg/XCBbuzKjPtjtQYN5rbiMONWmWOCBTmcgo6DIG7QlJKng/UAqCKKTXs7wl3xc1oPYJehO33N19bJ5T/JhEXE9dH6yRb/ZDKetrLa79ab23QOSmzg+ybei5vyvaKE3OlNThAhZjykijptNP/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=YrCcDfV/; arc=none smtp.client-ip=212.227.15.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-	t=1706686983; x=1707291783; i=markus.elfring@web.de;
-	bh=3UtEEurfF0DcUrGrZ1swp8W+Hl3SyFmpYaEjxHY/nFM=;
+	t=1706687464; x=1707292264; i=markus.elfring@web.de;
+	bh=RCpx2LOg9/ZmAaeB9rFYkX9ZLKhwvnqQppjV3dOKF78=;
 	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
 	 In-Reply-To;
-	b=Hi2dSkbnv9yYiXpDMjayehX07BUp1NW/nccsYAxYCPV5mE6R4t6DmUT/6vxxz+5M
-	 pGnC1IpV0RwV4ZgkvrtWqWEMxi1Bhh643Ri3Lv+na+Xf8WyCn/bU0ccCHh8jmskR9
-	 WHfhT8QssDTM9Qg9MSn0v1eM4Oy/khfHyjJu1iTTDUe3h4qpKze9R9/337nSEU0UD
-	 V/v+lV287r7TThCeCwOzyuPiqOe94OGWfodjSEVA9SLfQL62d6i7m7QSvDemEGyAa
-	 IcXp8exYI8v48cyhbKk7zcH2s9dq+n7BhgPa2MghCNpGTg+FQ3XJuouP2PTD8vZcO
-	 PkLYx0yQnbbuy4Yw/Q==
+	b=YrCcDfV/YvrBQAMq1T8G78gtbH3KS2AwJOZJYkHFFOnIVVTLrDczUsxGgDZgAKqv
+	 STfA2c4sAXxrLmmUaMYeg6imxW7oY+gd7rfYOvqPOpp4vETYlK0OpIcPVw7PBYtVi
+	 0kmGPHapdqh13Prk6rNx/oA5jcO65k+/B8my+PyxbJI96RjDhWvCoIKIwSSEnpf66
+	 JIvxnwFBZYKbl/iqFZwLA/cyAQ1rusJXn6d1wc7Q/l1UzfiR8Da6WcTEEKdhCBFgb
+	 HuOsB+h88m5oz85ozx9EyuMvFoJj4AInNIQC1guYL1SQ5y045tEmuhQ1vXeOE0CIQ
+	 AlUHyr7XeQTvs7y9rA==
 X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
 Received: from [192.168.178.21] ([94.31.81.95]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1N6sG3-1qzCMy0ngF-01871C; Wed, 31
- Jan 2024 08:43:03 +0100
-Message-ID: <4cabce20-b5ff-4586-8492-60d2d198a13b@web.de>
-Date: Wed, 31 Jan 2024 08:42:33 +0100
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MPaII-1rikLS1lly-00Munv; Wed, 31
+ Jan 2024 08:51:04 +0100
+Message-ID: <35f48b58-8687-4620-a859-e16a0ef142e5@web.de>
+Date: Wed, 31 Jan 2024 08:51:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -57,55 +57,51 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: fpga: dfl: fme: Return directly after a failed devm_kasprintf()
  call in fme_perf_pmu_register()
-To: Xu Yilun <yilun.xu@linux.intel.com>, linux-fpga@vger.kernel.org,
+Content-Language: en-GB
+To: Dan Carpenter <dan.carpenter@linaro.org>, linux-fpga@vger.kernel.org,
  kernel-janitors@vger.kernel.org,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
- Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
- linux-doc@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>, Kunwu Chan <chentao@kylinos.cn>,
- Jonathan Corbet <corbet@lwn.net>
+ Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Kunwu Chan <chentao@kylinos.cn>
 References: <d94376b6-12e8-45bb-a9be-4887bb316d35@web.de>
- <ZbjJYMlDifIv0WId@yilunxu-OptiPlex-7050>
- <ZbjPDX1y2I9Heanq@yilunxu-OptiPlex-7050>
- <49183574-ea83-4517-8e34-5d6e87ede064@web.de>
- <ZbkAziPCX+RDSgfP@yilunxu-OptiPlex-7050>
-Content-Language: en-GB
+ <b7e2e9d1-5e3e-44b2-a4b7-327d334b776d@moroto.mountain>
+ <e760bd1b-30bf-489f-b745-128d05397feb@web.de>
+ <5a3a1c80-47ae-45c7-86ca-8aa40566551b@moroto.mountain>
 From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <ZbkAziPCX+RDSgfP@yilunxu-OptiPlex-7050>
+In-Reply-To: <5a3a1c80-47ae-45c7-86ca-8aa40566551b@moroto.mountain>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:f1i1yJGnQvsaxMF3ysU2Q3MKc0v1ZqMlnGlCdOdQU92xqESrmLC
- 32faYZJASuGhAlIO1E7rIPuiYDDHUMRwWK7t12GSAZGvlacqjnORhc7IGR3zf9OpnD8Cnok
- owulZmVQZGYjwklX5tNvBFEOgQDgpjctV+Kc6aA8vUF8tDuv39SrlXnoyZ2DSDnBYurCaos
- NBRHokiFOULLbfKjHuyug==
+X-Provags-ID: V03:K1:ezTFH0oi9O4DbezQPSoY98o1En7nW7T6V/09QuY+3PKrMaNo/CX
+ f/ojdEBeK4DGkzVDOmK1Bl/r5M+rJFw2fjirevGhIvvjweZKnO6eEJgMyxDIfCcjBK0/2En
+ vJ19HiQtGQfu7C+GTOBjyyTCmtptPPFoZ737xD6zUza44cA1Lkje+cX4hvOBUp0PvVthVzK
+ OQi3+J7oM1Q/lFwBy2u+w==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ABEuiVqcTWA=;1S/Q+gJchbADRcMSwHok6Y9Hd08
- uDJu05/UPgVsiwfgqqdlhtfugE1vcwAK550Z8CzzKwnSzVjL4wRZpj1FMnHT4nZh3NXviP2vj
- oKTgjvTwi9f3E5qCXrz+FpXFjaDB0XkofknRjvMrAVQYZ8XdVTSsJqAhzjLpT3QsuWfyaJsQL
- VXuH0H7SbzuW7FOHQA911Gq9nKGTuBp00AmdBe73DUi9LFOrlBc9MI0SdiKN1JZ5R2gKEW6eP
- MuFfYx2ObubBlRc+1sDxFeKUOExjSwUqzLhrZSFFXJt+ENW/WSFqZlCQmo+b+pDy7TCNvYV6u
- +8V6rIBPQypboe24aZOPbKpC/BGaUTZL/b8mc9GcMKv+OeEyWXUHGhbGGj08ajmUKn9mBQTgS
- ogop3U8YgYpW0UXryh9ZyHRSJANbfEBRU5lnMrsS1HZtteXnywDNCWJBOjpICF2DNiR5rhHhi
- z+VUu+asPEu+Kcq1M2jurGEwU+iPFu1XSuOK8w+sw+BosErPquRELXS/TSUWdSznXihZ0u32T
- ajVFatxSX69Cn1brc6eT101YHVTBN5aILW1p4oQCadDj4JjEKgJGqbXga6DUuWA3vZ0ueOs9H
- mFrdFa1pKZKl1K16g/0fnC2467i/LaF0X+R2arcUfruKKW2wQXHo+DQ8Fr87RRoKGThEMKbWy
- wmbBaXh2W7t2LXW/yVOX7Hv6B0qqm5ibmayV3zaJLvFEs78XkSpy7d7r7/9+B/aRfBFzS0lpW
- VIn2Noib8w3KRbVn0i7K4geUNIOBjdXNjlsX4GGbg2l3OhR5H1iMG7lyo/K8xP5HYZH8mbvaS
- x9bhjxl7izXwZk69Ebu+ZtZoyiOm4oqSD3S5ACWtGGwCTE7sAlr3fco65F5aX/ZKdOPUFw+g1
- qrdsPS5aTlU6K80eypoV152l6hqYFcq8ZJLAAqTshff366m3ahFee4RdQCot9+82q1Wp6WNVt
- bO65kM6EyE/lb7/E/0awB/9IrZ4=
+UI-OutboundReport: notjunk:1;M01:P0:vPoORXPt/OI=;jr5MxVXfcURfY/GOeGuCh6k6qZW
+ 7gaJYMLUtiOWDy0jdnkrTyPREOPJ0lazjBV/hWpObpx7D+YLylL5FHuMzRwdaBp6zqbcpWi4p
+ S3LBzbRIGwSro+waOYYyCUe3AnjR/NMRFAW/yOU7iBVT3IDKpeOYwavnrlYzKSkNlBc+yxPbL
+ k/d63Uzth8qHRpTnu7thtGhNyEgEsmldl8C+TipxEqG3CgKqQCNvnLkEZ9o6ANIXFnBBPsU/I
+ PzhvTxldQAIKYvEKSK9pxhbVwaYxzWPAMJMKZmZqi2Mxvo6e4GzyzFbpRHWCPDn4KR+Pe3RZe
+ lQNxJQITSPCQvzmKjHceHmW56NApZbIRUYVntDwoUD25/AHg5QKpnXCG50i0Hi+a0eOjtyFYM
+ OcCHPOEsPngcW9Bv7wx+YQHsvWScL3yI5R38zdv/K3C4MHdMIZsTlkcPgDM8pXey9U5t3uwTp
+ oVj6MAgbcPfWeIsjdu7OzBkyp9tUizWMHLlXd+nXYoJwFTMzDIci1JaQNKaSK88oYgIJWkeSv
+ EbAA0cbx8M/kPzNJ3UYuky3xlFFlIvAZXnJp+9UNSgwOOVfkeM/BbGZpGynyQLw1NEyh2eGmd
+ 8nEI0uY9reHFaPsAOExbW0BDT2vcJceT+LtI3vg0HfkrWnsS9yPfgPS/vcO4EGA9QJaYO90Nr
+ p/K8d0IxvIn7usOdGAHTyWNBZe+JEs2CcP1r2w9/k0JGbl+i1laOqIP2tk4D/f1sNYIlg13sA
+ qg07Cu/4XVarbG/R0yYnfY+B9DKFsD0uWMIiD32IXBd/z9GONfacApCeHS5iFI2KF8g290h6B
+ PTJNOae7LEOrdqdw9a0bMNPAIf8dHkc3vHqfL+IdC5P/Ei4GCmLMi9Ya+spZAnYoMyKwumg5v
+ PU1rgnbk3RRt5c46ucQw2pSNKmWysO6PtN8nOYKN2CitslON/79aY3mxYKZVdFTwmODrmgFdF
+ XO76BA==
 
->> There are different preferences involved.
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/process/submitting-patches.rst?h=3Dv6.8-rc2#n109
+> The check is right before that on line 11527.
 >
-> Ah, I mean you use 13 chars, but 12 chars is better. Also the doc
-> doens't seem to enforce 12 chars, but checkpatch warns on that.
+> https://elixir.bootlin.com/linux/v6.8-rc2/source/kernel/events/core.c#L1=
+1527
 
-Would the specification =E2=80=9Cat least=E2=80=9D become supported at fur=
-ther places
-for such hash lengths?
+Do you find a warning message like =E2=80=9CCan not register anonymous pmu=
+.=E2=80=9D acceptable
+in addition to eventual other indications for memory allocation failures s=
+o far?
 
 Regards,
 Markus
