@@ -1,198 +1,169 @@
-Return-Path: <linux-fpga+bounces-193-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-194-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CA3084314B
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 00:32:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 147698434EF
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 06:03:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F246F287530
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Jan 2024 23:32:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03CCEB257C3
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 05:03:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D76178B7B;
-	Tue, 30 Jan 2024 23:32:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27A323D0B5;
+	Wed, 31 Jan 2024 05:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="XbUNHyDS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Td4WUMu+"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED6E7EEFD;
-	Tue, 30 Jan 2024 23:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D88B3D0B3;
+	Wed, 31 Jan 2024 05:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706657543; cv=none; b=bX4JFNjJFaQckUDPFWtSawUkjqIq098gRBqNRsEHmTLgK9eSnaXsrBqneJctCYVDKq1jO+HOwQ32Dr7MlyHcxKbjl9U18R2mHwpZxcek1D3CznRCgRYu/4eJkKgtSO/yTvxro8sMWMA4ByyhwiAbycpckOzIxzOc4gY8cFrgMdk=
+	t=1706677397; cv=none; b=B7HvCFaYhHa8m1WZRQJRwjyIWllqwCLAp8PryGrDYgi44547cnAiJZPDMJ3wA1hha8AaAWul+hQNNL8kuKMDiEUAJtgnK50tl+xwT3nwVGp6SBUZc4wMbdYNHhkHdr+OneNa5ZCaxcftB2srXxzN5z4rvLFbj3HdERTZnOJvkRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706657543; c=relaxed/simple;
-	bh=LNLe7G+sUEBgyWggG7WM7RWLo2yZedbsnX7Ohqrkqa4=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=mq469gZV+yYE/+U39hFMkTY5/j9BBfvGQ26ZzV8cOTr8UJQAuWsj53yl6Ol6qwkw6Tc+catinJ8Sn2OU/XqM747PszteM4RLvaEasUhqPwMMdbtkzOomNmBP44ub7TI6zYKTg2KGoPMmyyCQjUos8+axpL+6jjqVbmYoPZdladg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=XbUNHyDS; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id BED8A9C47A8;
-	Tue, 30 Jan 2024 18:32:12 -0500 (EST)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id ihIR16aTfH4Y; Tue, 30 Jan 2024 18:32:12 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 0B4FF9C47AB;
-	Tue, 30 Jan 2024 18:32:12 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 0B4FF9C47AB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1706657532; bh=BA4JQridKzT3Qj0Bblif/Dl05zQNFxAGDsMmT6xiiWA=;
-	h=Date:From:To:Message-ID:MIME-Version;
-	b=XbUNHyDSl0gBsr4cCsjFR4BlqmGJ5WErUDf2j384p7TLk7L0IPzhdQldARfor5h3B
-	 xOCshe42bzEydP0Yyl4VZpsUedUnQxI8Cl/T+h/LQLABxp2OipfJw04WMssHnzULPj
-	 7QwtEDEZuU7n+tfXVG5HPRklYF80zhVFpor2xyTSGGSb9iSrIP53Q8/ogWUzzJEFN0
-	 EoVfgVqJdq/oLkLTZ5CMgySGNht7JuRJ6MzEhq4dpR3bwenCJvFgLI48h6/aHbJQYx
-	 7EOB6VTMzn3AI9Ir6l+bpwk6PBQXM8o7tQTOPv4qo3zL8uuEXujtbYkUV4GFq9Q/kD
-	 mv/BF4CVMwTrQ==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id VukIkSh6H6CV; Tue, 30 Jan 2024 18:32:11 -0500 (EST)
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [192.168.48.237])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id D49819C47A8;
-	Tue, 30 Jan 2024 18:32:11 -0500 (EST)
-Date: Tue, 30 Jan 2024 18:32:11 -0500 (EST)
-From: Charles Perry <charles.perry@savoirfairelinux.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: mdf <mdf@kernel.org>, hao wu <hao.wu@intel.com>, 
-	yilun xu <yilun.xu@intel.com>, trix <trix@redhat.com>, 
-	krzysztof kozlowski+dt <krzysztof.kozlowski+dt@linaro.org>, 
-	Brian CODY <bcody@markem-imaje.com>, 
-	Allen VANDIVER <avandiver@markem-imaje.com>, 
-	linux-fpga <linux-fpga@vger.kernel.org>, 
-	devicetree <devicetree@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <1723200717.393172.1706657531814.JavaMail.zimbra@savoirfairelinux.com>
-In-Reply-To: <cee1ca11-03bf-4a0b-9ff3-490457f9fbe8@linaro.org>
-References: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com> <20240129225602.3832449-2-charles.perry@savoirfairelinux.com> <f3cfffa0-5089-4bf7-b424-d5e949e36d67@linaro.org> <1489222458.382780.1706629544559.JavaMail.zimbra@savoirfairelinux.com> <32669bc7-90b5-48d9-8845-2e072a477c6e@linaro.org> <154341320.386005.1706634341891.JavaMail.zimbra@savoirfairelinux.com> <cee1ca11-03bf-4a0b-9ff3-490457f9fbe8@linaro.org>
-Subject: Re: [PATCH 2/3] dt-bindings: fpga: xlnx,fpga-slave-selectmap: add
- DT schema
+	s=arc-20240116; t=1706677397; c=relaxed/simple;
+	bh=3A3KWNJcACtPoEMNnBT3nWG60WJk0RJJbmzMM+Klf5c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r8bARrehmFk/G9zEjAnISAVumNVcHKPBtEzYD9YbMtCjRbI2hSUnDFFk/4LNcfSsd/V2/3EoNZTFo3ADnylNZ+9AHuCfP/my3YqJuurhdoMvT5GU/C+XNjI8uhtSZe8wQAHnnslv47UnGAA8smg1EIdF1F9rvVYUhp6oB19nx1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Td4WUMu+; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706677396; x=1738213396;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3A3KWNJcACtPoEMNnBT3nWG60WJk0RJJbmzMM+Klf5c=;
+  b=Td4WUMu+CCHY8qqu/K4VfmVMlWuMnPgtLJBDCaiqX2M7W3BOUBNRe69r
+   cWy/L/mXGjD/EVn1I3kUS5or5I7j3RZ7uZpPsClnnEGoobAii3M2UsX5V
+   9pUFqLH7s6NSPRRs0GZZ+PBXN5HGuKAOAUQCFvtzRLWVT7eDDYOlgCFXG
+   DMot532C0CYZZ6/b/uZJ01gIQ3Q2EWpi1z5ijq1SHh0UpRUWdK5J0c0rv
+   CijBXbV7+YbyEtJRvxuCGpNnW4hCzlnLm9KosoHrMCfc8SdVuxinI62Ni
+   9f+0bXBtgod3ExZzoFPuIjHhg/hvjHBjk0qm6Xv6J4dN3xPlkEEcwbHGa
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="22004111"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="22004111"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 21:03:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="36737953"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa001.jf.intel.com with ESMTP; 30 Jan 2024 21:03:12 -0800
+Date: Wed, 31 Jan 2024 12:59:45 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: matthew.gerlach@linux.intel.com
+Cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: dfl: afu: update initialization of port_hdr driver
+Message-ID: <ZbnTwcomGXOGs9SG@yilunxu-OptiPlex-7050>
+References: <20240122172433.537525-1-matthew.gerlach@linux.intel.com>
+ <Za8ibeJc82Xkbpct@yilunxu-OptiPlex-7050>
+ <alpine.DEB.2.22.394.2401241106550.77559@sj-4150-psse-sw-opae-dev2>
+ <ZbjC501oRClByual@yilunxu-OptiPlex-7050>
+ <alpine.DEB.2.22.394.2401300825020.112016@sj-4150-psse-sw-opae-dev2>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Zimbra 8.8.15_GA_4581 (ZimbraWebClient - FF120 (Linux)/8.8.15_GA_4581)
-Thread-Topic: dt-bindings: fpga: xlnx,fpga-slave-selectmap: add DT schema
-Thread-Index: bDEku0F6XFcq/uoMeZdjacG4xvsqgA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2401300825020.112016@sj-4150-psse-sw-opae-dev2>
 
+On Tue, Jan 30, 2024 at 09:13:56AM -0800, matthew.gerlach@linux.intel.com wrote:
+> 
+> 
+> On Tue, 30 Jan 2024, Xu Yilun wrote:
+> 
+> > On Wed, Jan 24, 2024 at 11:40:05AM -0800, matthew.gerlach@linux.intel.com wrote:
+> > > 
+> > > 
+> > > On Tue, 23 Jan 2024, Xu Yilun wrote:
+> > > 
+> > > > On Mon, Jan 22, 2024 at 09:24:33AM -0800, Matthew Gerlach wrote:
+> > > > > Revision 2 of the Device Feature List (DFL) Port feature has
+> > > > > slightly different requirements than revision 1. Revision 2
+> > > > > does not need the port to reset at driver startup. In fact,
+> > > > 
+> > > > Please help illustrate what's the difference between Revision 1 & 2, and
+> > > > why revision 2 needs not.
+> > > 
+> > > I will update the commit message to clarify the differences between revision
+> > > 1 and 2.
+> > > 
+> > > > 
+> > > > > performing a port reset during driver initialization can cause
+> > > > > driver race conditions when the port is connected to a different
+> > > > 
+> > > > Please reorganize this part, in this description there seems be a
+> > > > software racing bug and the patch is a workaround. But the fact is port
+> > > > reset shouldn't been done for a new HW.
+> > > 
+> > > Reorganizing the commit message a bit will help to clarify why port reset
+> > > should not be performed during driver initialization with revision 2 of the
+> > > hardware.
+> > > 
+> > > > 
+> > > > BTW: Is there a way to tell whether the port is connected to a different
+> > > > PF? Any guarantee that revision 3, 4 ... would need a port reset or not?
+> > > 
+> > > The use of revision 2 of the port_hdr IP block indicates that the port can
+> > > be connected multiple PFs, but there is nothing explicitly stating which PFs
+> > 
+> > Sorry, I mean any specific indicator other than enumerate the revision
+> > number? As you said below, checking revision number may not make further
+> > things right, then you need to amend code each time.
+> 
+> Using a revision number to indicate the level of functionality for a
+> particular IP block seems to be a widely used approach. What other indicator
 
------ On Jan 30, 2024, at 12:58 PM, Krzysztof Kozlowski krzysztof.kozlowski=
-@linaro.org wrote:
+If you still want to make the existing driver work, some capability indication
+would have more compatibility. That's more reasonable approach. Or you
+need to change existing behavior for each new revision, that's not
+actually widely used.
 
-> On 30/01/2024 18:05, Charles Perry wrote:
->>=20
->>=20
->> ----- On Jan 30, 2024, at 11:05 AM, Krzysztof Kozlowski
->> krzysztof.kozlowski@linaro.org wrote:
->>=20
->>> On 30/01/2024 16:45, Charles Perry wrote:
->>>>
->>>>>> +
->>>>>> +  reg:
->>>>>> +    description:
->>>>>> +      At least 1 byte of memory mapped IO
->>>>>> +    maxItems: 1
->>>>>> +
->>>>>> +  prog_b-gpios:
->>>>>
->>>>>
->>>>> No underscores in names.
->>>>>
->>>>
->>>> This is heavily based on "xlnx,fpga-slave-serial.yaml" which uses an u=
-nderscore.
->>>> I can use a dash instead but that would make things inconsistent acros=
-s the two
->>>> schemas.
->>>
->>> Inconsistency is not a problem. Duplicating technical debt is.
->>>
->>>>
->>>>>
->>>>>> +    description:
->>>>>> +      config pin (referred to as PROGRAM_B in the manual)
->>>>>> +    maxItems: 1
->>>>>> +
->>>>>> +  done-gpios:
->>>>>> +    description:
->>>>>> +      config status pin (referred to as DONE in the manual)
->>>>>> +    maxItems: 1
->>>>>> +
->>>>>> +  init-b-gpios:
->>>>>
->>>>> Is there init-a? Open other bindings and look how these are called th=
-ere.
->>>>>
->>>>
->>>> No, the "-b" is there to denote that the signal is active low. I think=
- its
->>>> shorthand
->>>> for "bar" which is the overline (=E2=80=BE) that electronic engineer p=
-ut on top of the
->>>> name of the
->>>> signal on schematics. It comes from the datasheet.
->>>
->>> Then just "init-gpios"
->>>
->>> ...
->>>
->>>>>> +required:
->>>>>> +  - compatible
->>>>>> +  - reg
->>>>>> +  - prog_b-gpios
->>>>>> +  - done-gpios
->>>>>> +  - init-b-gpios
->>>>>> +
->>>>>> +additionalProperties: true
->>>>>
->>>>> Nope, this cannot bue true.
->>>>>
->>>>
->>>> Ok, I'll put this to false but I'm not quite sure I understand the imp=
-lications.
->>>>
->>>> My reasoning behind assigning this to true was that the FPGA is an ext=
-ernal
->>>> device on a bus that needs to be configured by a bus controller. The b=
-us
->>>> controller
->>>> would be the parent of the fpga DT node and the later would contain pr=
-operties
->>>> parsed by the bus controller driver.
->>>
->>> Which bus controller? MMIO bus does not parse children properties.
->>> Anyway, if that's the case you miss $ref to respective
->>> peripheral-props.yaml matching your bus and then "unevaluatedProperties=
-:
->>> false".
->>=20
->> This one:
->> https://elixir.bootlin.com/linux/v6.8-rc2/source/Documentation/devicetre=
-e/bindings/bus/imx-weim.txt#L56
->=20
-> Eh, ok, so after fast check WEIM looks like some memory interface bus,
-> so the bus bindings should be moved to memory-controllers and converted
-> to YAML. Then you add child node properties to own schema and reference
-> in mc-peripheral-props, which is then referenced in your binding here,
-> as I mentioned.
->=20
-> Best regards,
-> Krzysztof
+> of functionality level did you have in mind?
 
-Thank you for pointing that out, mc-peripheral-props.yaml seems to be
-exactly what I was looking for.
+I'm not trying to make the design. You tell me.
 
-Regards,
-Charles
+If finally no indicator could be used, we have to use revision number. That's
+OK but make SW work harder, so I'm asking if anything could be done to
+avoid that.
+
+> 
+> The revision number of an IP block would change when new functionality is
+> added to an IP block or the behavior of the IP block changes. It would be
+> expected that SW might need to change in order to use the new functionality
+> or to handle the change in behavior of the IP block. Ideally the new
+> revision of an IP block would be compatible with existing SW, but that
+> cannot be guaranteed.
+
+People make the IP block, and be compatible should be the concern if it
+want upstream support.
+
+Thanks,
+Yilun
+
+> 
+> Thanks,
+> Matthew
+> 
+> > 
+> > Thanks,
+> > Yilun
+> > 
+> > > the port is connected to.
+> > > 
+> > > It is hard to predict the requirements and implementation of a future
+> > > revision of an IP block. If a requirement of a future revision is to work
+> > > with existing software, then the future revision would not require a port
+> > > reset at driver initialization.
+> > > 
+> > 
 
