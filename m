@@ -1,125 +1,138 @@
-Return-Path: <linux-fpga+bounces-200-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-201-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39EEC84486E
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 21:09:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F116844CA2
+	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 00:24:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E3041C23945
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 20:09:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B87961F2240B
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 23:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67ED03F8F0;
-	Wed, 31 Jan 2024 20:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEFBB3AC34;
+	Wed, 31 Jan 2024 23:06:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kmQOhVug"
+	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="mF/Ok2ZD"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371493EA76;
-	Wed, 31 Jan 2024 20:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AD33AC2D;
+	Wed, 31 Jan 2024 23:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706731758; cv=none; b=cW5gcQPunCrm2NEeDTZO7YPjCw1ugqhT0Bq+9uxR09Keqns+T/k4gzkWIT3iDjrak4vEEl2AFA66pwM5CIOxppdfK06NfxhIWfmxFS6g05ABKkCEvQw0PXEJmARiS9ccMwOooRer54NAWhFGNfncYpXeR26Gk5fSF8DdvksnjqY=
+	t=1706742379; cv=none; b=NHdzikaBiJ106ZF3ZlgvV1evvG7l+vB12Kn9K9C3D6/Bba+uu32ibl93JjHioPh80yg3yD0nhP25YlO1fU4nZ9q3aSpt7oZn+CkhHSNp5p/iS/00WmoO3c7P0o4HrhyofL7KEAMov92ihF21Vt/kQLdqIbo9jgxUsxkfj5k9xSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706731758; c=relaxed/simple;
-	bh=iwCzJJpR5ei5UHsd7esL/VrKFPOdfTAP5MDzAArWRNA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tpBaXTIyTyxvvp/d3RGaanWEJBUY2DkuCopjFLm7CjJQMEWaXbvW2L/66+dW7DrRwmPf/A9NusJdXItkc23tc/yrxRQ79v6CJblKc4Y1XcIU0eHfUUgPvOtSwV4kQgTy6OzTsgD1DCkKED915Hz4IRUE0itewuLYdSo5H/hn0hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kmQOhVug; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C893C433F1;
-	Wed, 31 Jan 2024 20:09:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706731757;
-	bh=iwCzJJpR5ei5UHsd7esL/VrKFPOdfTAP5MDzAArWRNA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kmQOhVugMUw9TR2k2kay4pVZfPaf1Ocn7V9d3OZzHBriRaUvREKZHclk0j1oYrXVC
-	 kQABLihhuPnqItT2NLn4b/a4CopARHyt9EqyuCicY3fDuPfxq9cGp9x4sl3uHOv938
-	 bRC3QkQPd/cWfuyURMQI8+y3jjaNrFtd98qQeAuaxFpN9Esp8p5eqBg+12AiEy1CeN
-	 F3RQYz2va/J6vxfgNag6ahMJWnO020EQxLnlq+FSsdr31U8xMgECghO+qTc7Tn96uP
-	 71zVGHsavZGcXFBKdvVWREogJjtyF1S0nnP7mJg0bySkbJDpH+lEUup/SjPLjivfsY
-	 H51I2JRNMd67g==
-Date: Wed, 31 Jan 2024 14:09:15 -0600
-From: Rob Herring <robh@kernel.org>
-To: Michal Simek <michal.simek@amd.com>
-Cc: michal.simek@xilinx.com, linux-kernel@vger.kernel.org,
-	Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-	git@xilinx.com, Moritz Fischer <mdf@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>, monstr@monstr.eu,
+	s=arc-20240116; t=1706742379; c=relaxed/simple;
+	bh=yQ5sSp/srX5L79aKi05FfTRn8K15X3L/qJZyRoFxKgs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rBBNt7qEkcyZwUkC3vbOoU6w1/wlrh7BxglYGizILmXDikt7pwylEHACoT4lpubW+vgVxL7vQTEkIdvJ4apF2iQH22YXEcJet3b/jS/Uv1fFGBaqgX3GQxC7HqamGtZelWwRCfhYqpRk2rXbgyMyPt4MSo7pkvIb2+8AbJVDND4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=mF/Ok2ZD; arc=none smtp.client-ip=208.88.110.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 54A179C0490;
+	Wed, 31 Jan 2024 18:06:15 -0500 (EST)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id IIYOHo_50m_G; Wed, 31 Jan 2024 18:06:14 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 1F4AB9C443E;
+	Wed, 31 Jan 2024 18:06:14 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 1F4AB9C443E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+	t=1706742374; bh=YyNZx9Kwr8uHCYcqYCuicqbnXCLiCFYtvBTXF0+LUw4=;
+	h=From:To:Date:Message-ID:MIME-Version;
+	b=mF/Ok2ZDiSGhdWQqS+QVDX286AyN/NDizeBLKr/O/in21PI9WIqOa8d9hxpmlaxX1
+	 BLaSknULAL5EDKkFuuBaqAsp92c/wWmv5a/xjE787MvtRV0W15ElzUgJkj1e/Kx1aE
+	 4NCmfIGa/6XfadWi3T55rTiYqiDcLEN+NsoXl9tYfpbVJO+36VpYlyBgtRMs+3Z1DK
+	 71Ht45tQ2cy5/Uxityg9vvawsN3pzpaJWvOSF8PSs1Z2mDB5fNrtRmWcbs+umFaFyT
+	 6FgGxFpIGVxBK0bRllmkAZcIjhOkGgXFSJd91g4vFP3huXY5q69c93It5Jq/2dr/Cw
+	 yriiyZzOFgLgQ==
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id biSyfPgtlLx9; Wed, 31 Jan 2024 18:06:14 -0500 (EST)
+Received: from pcperry.mtl.sfl (unknown [192.168.51.254])
+	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id D4ACE9C0490;
+	Wed, 31 Jan 2024 18:06:13 -0500 (EST)
+From: Charles Perry <charles.perry@savoirfairelinux.com>
+To: mdf@kernel.org
+Cc: avandiver@markem-imaje.com,
+	bcody@markem-imaje.com,
+	Charles Perry <charles.perry@savoirfairelinux.com>,
+	Wu Hao <hao.wu@intel.com>,
 	Xu Yilun <yilun.xu@intel.com>,
-	"open list:FPGA MANAGER FRAMEWORK" <linux-fpga@vger.kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4] dt-bindings: fpga: Convert fpga-region binding to yaml
-Message-ID: <170673175226.2219463.1221634595095812617.robh@kernel.org>
-References: <37b107d86b39ef4bc9c482b57b27de8b92c3fa43.1706530726.git.michal.simek@amd.com>
+	Conor Dooley <conor+dt@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	linux-fpga@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/3] fpga: xilinx-selectmap: add new driver
+Date: Wed, 31 Jan 2024 18:05:30 -0500
+Message-ID: <20240131230542.3993409-1-charles.perry@savoirfairelinux.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com>
+References: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <37b107d86b39ef4bc9c482b57b27de8b92c3fa43.1706530726.git.michal.simek@amd.com>
+Content-Transfer-Encoding: quoted-printable
 
+Hello,
 
-On Mon, 29 Jan 2024 13:18:53 +0100, Michal Simek wrote:
-> Convert the generic fpga region DT binding to json-schema.
-> There are some differences compare to txt version.
-> 1. DT overlay can't be described in example that's why directly include
-> information from overlay to node which was referenced. It is visible in
-> example with /* DT Overlay contains: &... */
-> 
-> 2. All example have been rewritten to be simpler and describe only full
-> reconfiguration and partial reconfiguration with one bridge.
-> Completely drop the case where fpga region can inside partial
-> reconfiguration region which is already described in description
-> 
-> 3. Fixed some typos in descriptions compare to txt version but most of it
-> is just c&p from txt file.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
-> Changes in v4:
-> - permit only object type as additionalProperties
-> - describe also optional reg/ranges properties and remove required
->   #address/size-cells properties
-> 
-> Changes in v3:
-> - drop fpga bridge and mgr descriptions in example
-> - use additionalProperties: true
-> - use fixed-factor-clock instead
-> - fixed matching pattern
-> 
-> Changes in v2:
-> - Fix typo in subject
-> - Fix comment in bridge example
-> - Change license back to gpl-2.0 only
-> - Do not define firware-name type and add maxItems 1
-> - Make fpga-bridge phandle-array
-> - Drop ranges property because of missing reg property of fpga-region
-> - Also describe case with fixed clock node and axi bus
-> - Fix fpga-region names in example
-> 
-> Please let me know if there is a way to describe overlays to dt root to be
-> able to reference fpga region back.
-> 
-> fpga-region without MMIO access is also permitted that's why there is no
-> need to describe reg/ranges and #.*cells properties for these cases.
-> 
-> ---
->  .../devicetree/bindings/fpga/fpga-region.txt  | 479 ------------------
->  .../devicetree/bindings/fpga/fpga-region.yaml | 358 +++++++++++++
->  2 files changed, 358 insertions(+), 479 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/fpga/fpga-region.txt
->  create mode 100644 Documentation/devicetree/bindings/fpga/fpga-region.yaml
-> 
+This patchset adds a new driver for the 7 series FPGA's SelectMAP
+interface.
 
-Applied, thanks!
+The SelectMAP interface shares a common GPIO protocol with the SPI
+interface which is already in the kernel (drivers/fpga/xilinx-spi.c).
+The approach proposed in this patchset is to refactor xilinx-spi.c into
+xilinx-core.c which would handle the common GPIO protocol. This is then
+used to build two drivers, the already existing xilinx-spi.c driver and
+a newly added xilinx-selectmap.c driver.
 
+The SelectMAP driver proposed only supports 8 bit mode. This is because
+the 16 and 32 bits mode have limitations with regards to compressed
+bitstream support as well as introducing endianness considerations.
+
+I'm testing xilinx-selectmap.c on a custom i.MX6 board connected to an
+Artix 7 FPGA. Flashing a 913K bitstream takes 0.44 seconds.
+
+v2: From Krzysztof Kozlowski review's:
+  * Use more conventional names for gpio DT bindings
+  * fix example in DT bindings
+  * add mc-peripheral-props.yaml to DT bindings
+  * fix various formatting mistakes
+  * Remove all occurences of the "slave" word.
+
+Charles Perry (3):
+  fpga: xilinx-spi: extract a common driver core
+  dt-bindings: fpga: xlnx,fpga-slave-selectmap: add DT schema
+  fpga: xilinx-selectmap: add new driver
+
+ .../bindings/fpga/xlnx,fpga-selectmap.yaml    |  83 +++++++
+ drivers/fpga/Kconfig                          |  12 +
+ drivers/fpga/Makefile                         |   2 +
+ drivers/fpga/xilinx-core.c                    | 215 ++++++++++++++++++
+ drivers/fpga/xilinx-core.h                    |  28 +++
+ drivers/fpga/xilinx-selectmap.c               | 106 +++++++++
+ drivers/fpga/xilinx-spi.c                     | 205 ++---------------
+ 7 files changed, 462 insertions(+), 189 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,fpga-sele=
+ctmap.yaml
+ create mode 100644 drivers/fpga/xilinx-core.c
+ create mode 100644 drivers/fpga/xilinx-core.h
+ create mode 100644 drivers/fpga/xilinx-selectmap.c
+
+--
+2.43.0
 
