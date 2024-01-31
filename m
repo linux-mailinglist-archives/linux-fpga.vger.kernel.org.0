@@ -1,119 +1,112 @@
-Return-Path: <linux-fpga+bounces-195-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-197-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8328B84362A
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 06:43:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDFFF84381F
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 08:44:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8B061C26194
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 05:43:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94A101F25D16
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 07:44:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFFC03D992;
-	Wed, 31 Jan 2024 05:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7828D54BDE;
+	Wed, 31 Jan 2024 07:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IYe3npgp"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Hi2dSkbn"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111303D982
-	for <linux-fpga@vger.kernel.org>; Wed, 31 Jan 2024 05:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75D45788C;
+	Wed, 31 Jan 2024 07:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706679825; cv=none; b=pTX8p2GA9DHQycxEZv5vtvh8sePL1QXfEuCHIah0Mu88HlfBwOu5+GL5gi+r2gAEHgyo9DD9OJUsy+wfUrgEykLEyT8hnrFWvej6Up6xSqGYh5xmVn8O6tc8CRpFpXVhNFI/51wI4cujF+p/CsrwG1YN2J2/jpemPlq9qnmj+GQ=
+	t=1706687027; cv=none; b=tev0TbaGdYh9zoNya802e+1XiN+nXwqwI49LhSiDApgRL+rYZ1b/XZHHSwwwpKl07RtVU/SrLC7qJYFwnDygsPtxSd494mMVHXWwtNu7W7kFHAEpK2jhBYmyWeDNXSyKAw8hjU4UDLDv4bGKUDHWQvKDueHwO39qhpSQD0WwdAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706679825; c=relaxed/simple;
-	bh=Tcb7EvZ7CF8K0fkMJwChWAO7kgbOJfPWxzgUv0R1F0U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KURNdzsjZr1CQdZI+oEsxxWyTtromiSCJ5XXmTcEIpLtnPWhIUM060q5xDJFLQt61u08LbKUCpyrs8Wlu08+BFjPtZAj6maGL6VZNKpzMLNgH2Ou5S4pLGsrnUQpytjrMqcy1EaohQV3gxAyvbbGpTQ+7Z17T34BASqevAROr8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IYe3npgp; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3392b045e0aso3283879f8f.2
-        for <linux-fpga@vger.kernel.org>; Tue, 30 Jan 2024 21:43:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706679822; x=1707284622; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Z6paO3eoxO/TfvLc58kRuFFfKLKXd3dLqXEc7Va4H4A=;
-        b=IYe3npgpVgXmB6ksEA+VPYQQ7l5eKvI18zL+FAC+c6CMpYpjF9VG42EB5k5g/E1TGI
-         fu/AfqNyCG8nmTRGyWlzqmWFPrfZOypZQMvQSRtv1+F0pBAqNUWee8ZdmasM93IG1q2o
-         Dx4/GzS74bdizvfyug/QWgwr2veSGekOo8PexFs45zBDA5wKW7as69e983JWsPu4Fd7+
-         C0jfHo95RNmye42w5nby8qsHKopYF8PJ+W0ciUlXiHR/H6PSTzTg/WEUREcvg4whsE6I
-         KPstOnY71Npe6ZtpAn1/QL2+nMj5aRcBrOpX40k5m0L2CbrXZy2nw/VgAB4xE5pVYMOO
-         D9lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706679822; x=1707284622;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z6paO3eoxO/TfvLc58kRuFFfKLKXd3dLqXEc7Va4H4A=;
-        b=S8f834Em0/aBLGMW+ENhcEN9NnRO5cY+7DxmcvOAkHtFUgjOc49l7stLC5MDoia9Ey
-         uyeRqQamu6YmsmUwQ7m7cSCU8K0VoIyflPekqqCVdY+7YzSkK5jIgCjE3cKcSDIZcdAP
-         MAERsegOFHRBpX0SP+Fsbj578YmGXcBAaeEEvrrmX1I1CQOKab8RdYQ7c2ZUFrhVRbGu
-         tjmP5tzVDHoAyliL5dB5EMI1Muj7rrm8prrzrZcewDSXnR8nIIPvKD+R+PyBDFJB442s
-         ZDSkRa4MXhh7NmbcGrTrpRVF0wWVfSTfpFy23Fpcl/HA2Sebdw9yW2ZQjEPsxtbHkX3n
-         iokw==
-X-Gm-Message-State: AOJu0YxjD1oqAOslprj71o0Glpbb1J9h6dpakfSKc37CchLImF+1aIQk
-	izm/xAlSD6sgTJJCRoW4lytOBLQGSOXP7mikzTZmOf7q4ZnTQLnSsVzUPlTmhqw=
-X-Google-Smtp-Source: AGHT+IE3FuFxpDZMN/qaH8Qvlb1Bni7EQMvftW5X6bNwAjF2dsc8Ac7zFpnPHnALypt/FgdcBNQOsA==
-X-Received: by 2002:a5d:5348:0:b0:33a:ea38:6453 with SMTP id t8-20020a5d5348000000b0033aea386453mr410173wrv.45.1706679822271;
-        Tue, 30 Jan 2024 21:43:42 -0800 (PST)
-Received: from localhost ([102.140.226.10])
-        by smtp.gmail.com with ESMTPSA id eo9-20020a056000428900b0033ae9e7f6b6sm8191928wrb.111.2024.01.30.21.43.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 21:43:41 -0800 (PST)
-Date: Wed, 31 Jan 2024 08:43:37 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-fpga@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
-	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Kunwu Chan <chentao@kylinos.cn>
-Subject: Re: fpga: dfl: fme: Return directly after a failed devm_kasprintf()
- call in fme_perf_pmu_register()
-Message-ID: <5a3a1c80-47ae-45c7-86ca-8aa40566551b@moroto.mountain>
-References: <d94376b6-12e8-45bb-a9be-4887bb316d35@web.de>
- <b7e2e9d1-5e3e-44b2-a4b7-327d334b776d@moroto.mountain>
- <e760bd1b-30bf-489f-b745-128d05397feb@web.de>
+	s=arc-20240116; t=1706687027; c=relaxed/simple;
+	bh=3UtEEurfF0DcUrGrZ1swp8W+Hl3SyFmpYaEjxHY/nFM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D6nkqe/VZBoRS65K4tHpkO6BMc1lxmxApdIOmLfGPdBCv8MA8OJuwpzo2o0xbvX6YKOmJwR9AShl62CS/Q9L0IzSHI8SP9dldFyw4QI6vk8brEKf/pPxg7WlDjhD++PgBeWfTcdSxXa0fsKEw16V+4J2kiwDHuoxcsmLB8o6na4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Hi2dSkbn; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+	t=1706686983; x=1707291783; i=markus.elfring@web.de;
+	bh=3UtEEurfF0DcUrGrZ1swp8W+Hl3SyFmpYaEjxHY/nFM=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=Hi2dSkbnv9yYiXpDMjayehX07BUp1NW/nccsYAxYCPV5mE6R4t6DmUT/6vxxz+5M
+	 pGnC1IpV0RwV4ZgkvrtWqWEMxi1Bhh643Ri3Lv+na+Xf8WyCn/bU0ccCHh8jmskR9
+	 WHfhT8QssDTM9Qg9MSn0v1eM4Oy/khfHyjJu1iTTDUe3h4qpKze9R9/337nSEU0UD
+	 V/v+lV287r7TThCeCwOzyuPiqOe94OGWfodjSEVA9SLfQL62d6i7m7QSvDemEGyAa
+	 IcXp8exYI8v48cyhbKk7zcH2s9dq+n7BhgPa2MghCNpGTg+FQ3XJuouP2PTD8vZcO
+	 PkLYx0yQnbbuy4Yw/Q==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.81.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1N6sG3-1qzCMy0ngF-01871C; Wed, 31
+ Jan 2024 08:43:03 +0100
+Message-ID: <4cabce20-b5ff-4586-8492-60d2d198a13b@web.de>
+Date: Wed, 31 Jan 2024 08:42:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e760bd1b-30bf-489f-b745-128d05397feb@web.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: fpga: dfl: fme: Return directly after a failed devm_kasprintf()
+ call in fme_perf_pmu_register()
+To: Xu Yilun <yilun.xu@linux.intel.com>, linux-fpga@vger.kernel.org,
+ kernel-janitors@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
+ Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+ linux-doc@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Kunwu Chan <chentao@kylinos.cn>,
+ Jonathan Corbet <corbet@lwn.net>
+References: <d94376b6-12e8-45bb-a9be-4887bb316d35@web.de>
+ <ZbjJYMlDifIv0WId@yilunxu-OptiPlex-7050>
+ <ZbjPDX1y2I9Heanq@yilunxu-OptiPlex-7050>
+ <49183574-ea83-4517-8e34-5d6e87ede064@web.de>
+ <ZbkAziPCX+RDSgfP@yilunxu-OptiPlex-7050>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <ZbkAziPCX+RDSgfP@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:f1i1yJGnQvsaxMF3ysU2Q3MKc0v1ZqMlnGlCdOdQU92xqESrmLC
+ 32faYZJASuGhAlIO1E7rIPuiYDDHUMRwWK7t12GSAZGvlacqjnORhc7IGR3zf9OpnD8Cnok
+ owulZmVQZGYjwklX5tNvBFEOgQDgpjctV+Kc6aA8vUF8tDuv39SrlXnoyZ2DSDnBYurCaos
+ NBRHokiFOULLbfKjHuyug==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:ABEuiVqcTWA=;1S/Q+gJchbADRcMSwHok6Y9Hd08
+ uDJu05/UPgVsiwfgqqdlhtfugE1vcwAK550Z8CzzKwnSzVjL4wRZpj1FMnHT4nZh3NXviP2vj
+ oKTgjvTwi9f3E5qCXrz+FpXFjaDB0XkofknRjvMrAVQYZ8XdVTSsJqAhzjLpT3QsuWfyaJsQL
+ VXuH0H7SbzuW7FOHQA911Gq9nKGTuBp00AmdBe73DUi9LFOrlBc9MI0SdiKN1JZ5R2gKEW6eP
+ MuFfYx2ObubBlRc+1sDxFeKUOExjSwUqzLhrZSFFXJt+ENW/WSFqZlCQmo+b+pDy7TCNvYV6u
+ +8V6rIBPQypboe24aZOPbKpC/BGaUTZL/b8mc9GcMKv+OeEyWXUHGhbGGj08ajmUKn9mBQTgS
+ ogop3U8YgYpW0UXryh9ZyHRSJANbfEBRU5lnMrsS1HZtteXnywDNCWJBOjpICF2DNiR5rhHhi
+ z+VUu+asPEu+Kcq1M2jurGEwU+iPFu1XSuOK8w+sw+BosErPquRELXS/TSUWdSznXihZ0u32T
+ ajVFatxSX69Cn1brc6eT101YHVTBN5aILW1p4oQCadDj4JjEKgJGqbXga6DUuWA3vZ0ueOs9H
+ mFrdFa1pKZKl1K16g/0fnC2467i/LaF0X+R2arcUfruKKW2wQXHo+DQ8Fr87RRoKGThEMKbWy
+ wmbBaXh2W7t2LXW/yVOX7Hv6B0qqm5ibmayV3zaJLvFEs78XkSpy7d7r7/9+B/aRfBFzS0lpW
+ VIn2Noib8w3KRbVn0i7K4geUNIOBjdXNjlsX4GGbg2l3OhR5H1iMG7lyo/K8xP5HYZH8mbvaS
+ x9bhjxl7izXwZk69Ebu+ZtZoyiOm4oqSD3S5ACWtGGwCTE7sAlr3fco65F5aX/ZKdOPUFw+g1
+ qrdsPS5aTlU6K80eypoV152l6hqYFcq8ZJLAAqTshff366m3ahFee4RdQCot9+82q1Wp6WNVt
+ bO65kM6EyE/lb7/E/0awB/9IrZ4=
 
-On Tue, Jan 30, 2024 at 06:09:14PM +0100, Markus Elfring wrote:
-> >> Thus return directly after a failed devm_kasprintf() call.
-> >>
-> >> Fixes: 724142f8c42a7 ("fpga: dfl: fme: add performance reporting support")
-> >
-> > This basically doesn't affect runtime because perf_pmu_register() checks
-> > for NULL so no need for a Fixes tag.
-> 
-> I suggest to clarify this view a bit more also according to statements
-> like the following.
-> 
-> 1. https://elixir.bootlin.com/linux/v6.8-rc2/source/kernel/events/core.c#L11532
->    perf_pmu_register:
->    …
-> 	pmu->name = name;
->    …
+>> There are different preferences involved.
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/process/submitting-patches.rst?h=3Dv6.8-rc2#n109
+>
+> Ah, I mean you use 13 chars, but 12 chars is better. Also the doc
+> doens't seem to enforce 12 chars, but checkpatch warns on that.
 
-The check is right before that on line 11527.
+Would the specification =E2=80=9Cat least=E2=80=9D become supported at fur=
+ther places
+for such hash lengths?
 
-https://elixir.bootlin.com/linux/v6.8-rc2/source/kernel/events/core.c#L11527
-
-regards,
-dan carpenter
-
+Regards,
+Markus
 
