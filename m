@@ -1,321 +1,197 @@
-Return-Path: <linux-fpga+bounces-204-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-205-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5931B844CA7
-	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 00:25:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97CD7844D67
+	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 00:53:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A2A31C25BF0
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 23:25:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C9A6285F22
+	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 23:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0992045BF3;
-	Wed, 31 Jan 2024 23:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 355CA3B190;
+	Wed, 31 Jan 2024 23:53:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="lcdBO6Hj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GcFM99Ol"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1554B40C15;
-	Wed, 31 Jan 2024 23:06:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47163B187;
+	Wed, 31 Jan 2024 23:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706742383; cv=none; b=rwS/t4oItrpYKxzcZfoxqj5ruZOor5YfkErnXFOlNbbbtc0zYjk9uV5N1QbiM69dOXK5WMNtwgklB4FS6gco12NnmuXmlVnXYWViq/Eq+h+bLYrf0bzSVq6bD7UitIcQgq3znQsvmRNyl1mW/eExVFyafZnjOZrThHwzkiUsPW0=
+	t=1706745216; cv=none; b=bqKVOdtAcpOLXH8a+nTxglMVIO08K7Ae31j6rUtrxxf03WGTnq6tQoOohKITmIEVr55sDaMPUhocrZAo9wDYtYdiWBLpazGBIn/QIdv64uaZVCMS+9xpp31blvE5HpZQkfiOtW9LW7bDtnrZiij1mqA8+zvwDfGr+5ZGPTRti3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706742383; c=relaxed/simple;
-	bh=ZDxIxgfYVx76FAwLMeo/MWXr5O9I56F+fJe5SZLXxts=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ntG0z5RF4dQB0/Yw3SL8g7cDbyXR6N6lAObAOBsCPpQY2kZlTvrJdIFefifQmPI4kEqPg9jOnxCheNga19pdf6K9cfmrP8e3HaqlnTZHS26e+xy5i+SIdwqH5K0f+r0O6pwmxqqrs70H/JSvXHJ63AH2zmfKX03+S2eKgWwdxHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=lcdBO6Hj; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 429BD9C3278;
-	Wed, 31 Jan 2024 18:06:21 -0500 (EST)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id m8zlYKJ5ghfD; Wed, 31 Jan 2024 18:06:20 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 625E49C443E;
-	Wed, 31 Jan 2024 18:06:20 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 625E49C443E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1706742380; bh=lSmF8cHelUJ4wmBZ9/AGS4jpTRm1smUqT8nHydzlEJQ=;
-	h=From:To:Date:Message-ID:MIME-Version;
-	b=lcdBO6HjrdLI66IVX8l2mF91N9VIOI7JSCT93xa2a2iXlnFFY1UYoWcGJ7snzeXa/
-	 htDUtd8vYoF7gx3oHXfepGejISQ1qfAPlvqnf3KNv3rb0PO4zUZX7QR+up1LZIvvjB
-	 jblt8H8avZfByXg/nSw1nfUKXBTdAtFEqlUgS8Nx4apL4IGc494jPcpzqXDGTvnsrP
-	 YLL8pwQNbwgaLCjdduCvF2svpvv4nxOgeuhYPh+oBGHOjj84aMl1Z3kKr6C7dx+VFx
-	 pGr4rm4oSoZABz/vhS2jaEZYUtr4SL3RhO1FbZvLSXgsWUpmPyPdcffzyEgyaMybdx
-	 i8lhBzeNumRww==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id MVL6h6YUiCts; Wed, 31 Jan 2024 18:06:20 -0500 (EST)
-Received: from pcperry.mtl.sfl (unknown [192.168.51.254])
-	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 3F3059C3278;
-	Wed, 31 Jan 2024 18:06:20 -0500 (EST)
-From: Charles Perry <charles.perry@savoirfairelinux.com>
-To: mdf@kernel.org
-Cc: avandiver@markem-imaje.com,
-	bcody@markem-imaje.com,
-	Charles Perry <charles.perry@savoirfairelinux.com>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michal Simek <michal.simek@amd.com>,
-	linux-fpga@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 3/3] fpga: xilinx-selectmap: add new driver
-Date: Wed, 31 Jan 2024 18:05:33 -0500
-Message-ID: <20240131230542.3993409-4-charles.perry@savoirfairelinux.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240131230542.3993409-1-charles.perry@savoirfairelinux.com>
-References: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com>
- <20240131230542.3993409-1-charles.perry@savoirfairelinux.com>
+	s=arc-20240116; t=1706745216; c=relaxed/simple;
+	bh=He45rS3/X09I0lLu/frI9lfYU+Wtb0SyCW45+MrWfsM=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=bW+Q5sPVe2ijYayrACDCC+PWGKWElOdUrJFicgntH1QYw2Gq+IG7iCvgjU3RoSeGlzESJUu7ZlqzMaX6JbKkocVw88pGpckjmW0qr80CqftNs38TuXhlcQRnrtMSe+Y7OC/mwd5/1Brz1n9jp7lPHYQ42ZxpC+nQojy7DgDMV90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GcFM99Ol; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706745214; x=1738281214;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=He45rS3/X09I0lLu/frI9lfYU+Wtb0SyCW45+MrWfsM=;
+  b=GcFM99OlwGBQauar3QVVV4HPkSD5JZIvM/hy9xpKp88mXd6gK/xDWlGD
+   gia2zG3P5ZvBdllSVLqlspaDb0ZgpEwcKxrbwpQIck7NP94BPgE+bzNyN
+   YdzcfaXlPVeWpyJbQVJHvYq+UOeLo3bhajuKu1kIsZ2j0+q63CwviQDyM
+   rdongsRz07hhqku2ABgfJ8f+EqJS4LAOWHtvOrkiirRTUHxxttHTi/O/6
+   hjDw4GSXHEdFJC2gXc0HQ8c7qOubgaKGGquRYQ9i4BP7QIgPAJGBET6/x
+   M6DRL7apRMMWPPumIEOx+UvKefaf0a5sfrk0khE8v04kWnfcJGXcpUju/
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="2697424"
+X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
+   d="scan'208";a="2697424"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 15:53:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
+   d="scan'208";a="4209873"
+Received: from sj-4150-psse-sw-opae-dev2.sj.intel.com ([10.233.115.162])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 15:53:24 -0800
+Date: Wed, 31 Jan 2024 15:53:23 -0800 (PST)
+From: matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@sj-4150-psse-sw-opae-dev2
+To: Xu Yilun <yilun.xu@linux.intel.com>
+cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com, 
+    linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: dfl: afu: update initialization of port_hdr
+ driver
+In-Reply-To: <ZbnTwcomGXOGs9SG@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2401311433120.112016@sj-4150-psse-sw-opae-dev2>
+References: <20240122172433.537525-1-matthew.gerlach@linux.intel.com> <Za8ibeJc82Xkbpct@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401241106550.77559@sj-4150-psse-sw-opae-dev2> <ZbjC501oRClByual@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401300825020.112016@sj-4150-psse-sw-opae-dev2>
+ <ZbnTwcomGXOGs9SG@yilunxu-OptiPlex-7050>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 
-Xilinx 7 series FPGA can be programmed using a slave parallel port named
-the SelectMAP interface in the datasheet. This slave interface is
-compatible with the i.MX6 EIM bus controller but other types of external
-memory mapped parallel bus might work.
 
-xilinx-selectmap currently only supports the x8 mode where data is loaded
-at one byte per rising edge of the clock, with the MSb of each byte
-presented to the D0 pin.
 
-Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
----
- drivers/fpga/Kconfig            |   8 +++
- drivers/fpga/Makefile           |   1 +
- drivers/fpga/xilinx-core.c      |  11 +++-
- drivers/fpga/xilinx-core.h      |   3 +-
- drivers/fpga/xilinx-selectmap.c | 106 ++++++++++++++++++++++++++++++++
- drivers/fpga/xilinx-spi.c       |   3 +-
- 6 files changed, 127 insertions(+), 5 deletions(-)
- create mode 100644 drivers/fpga/xilinx-selectmap.c
+On Wed, 31 Jan 2024, Xu Yilun wrote:
 
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index d27a1ebf40838..37b35f58f0dfb 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -67,6 +67,14 @@ config FPGA_MGR_STRATIX10_SOC
- config FPGA_MGR_XILINX_CORE
- 	tristate
-=20
-+config FPGA_MGR_XILINX_SELECTMAP
-+	tristate "Xilinx Configuration over SelectMAP"
-+	depends on HAS_IOMEM
-+	select FPGA_MGR_XILINX_CORE
-+	help
-+	  FPGA manager driver support for Xilinx FPGA configuration
-+	  over SelectMAP interface.
-+
- config FPGA_MGR_XILINX_SPI
- 	tristate "Xilinx Configuration over Slave Serial (SPI)"
- 	depends on SPI
-diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-index 7ec795b6a5a70..aeb89bb13517e 100644
---- a/drivers/fpga/Makefile
-+++ b/drivers/fpga/Makefile
-@@ -16,6 +16,7 @@ obj-$(CONFIG_FPGA_MGR_SOCFPGA_A10)	+=3D socfpga-a10.o
- obj-$(CONFIG_FPGA_MGR_STRATIX10_SOC)	+=3D stratix10-soc.o
- obj-$(CONFIG_FPGA_MGR_TS73XX)		+=3D ts73xx-fpga.o
- obj-$(CONFIG_FPGA_MGR_XILINX_CORE)	+=3D xilinx-core.o
-+obj-$(CONFIG_FPGA_MGR_XILINX_SELECTMAP)	+=3D xilinx-selectmap.o
- obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+=3D xilinx-spi.o
- obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+=3D zynq-fpga.o
- obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+=3D zynqmp-fpga.o
-diff --git a/drivers/fpga/xilinx-core.c b/drivers/fpga/xilinx-core.c
-index aff40e9394085..64117759be100 100644
---- a/drivers/fpga/xilinx-core.c
-+++ b/drivers/fpga/xilinx-core.c
-@@ -180,21 +180,26 @@ static const struct fpga_manager_ops xilinx_core_op=
-s =3D {
-=20
- int xilinx_core_probe(struct xilinx_fpga_core *core, struct device *dev,
- 		      xilinx_write_func write,
--		      xilinx_write_one_dummy_byte_func write_one_dummy_byte)
-+		      xilinx_write_one_dummy_byte_func write_one_dummy_byte,
-+		      const char *prog_con_id, const char *init_con_id)
- {
- 	struct fpga_manager *mgr;
-=20
-+	if (!core || !dev || !write || !write_one_dummy_byte || !prog_con_id ||
-+	    !init_con_id)
-+		return -EINVAL;
-+
- 	core->dev =3D dev;
- 	core->write =3D write;
- 	core->write_one_dummy_byte =3D write_one_dummy_byte;
-=20
- 	/* PROGRAM_B is active low */
--	core->prog_b =3D devm_gpiod_get(dev, "prog_b", GPIOD_OUT_LOW);
-+	core->prog_b =3D devm_gpiod_get(dev, prog_con_id, GPIOD_OUT_LOW);
- 	if (IS_ERR(core->prog_b))
- 		return dev_err_probe(dev, PTR_ERR(core->prog_b),
- 				     "Failed to get PROGRAM_B gpio\n");
-=20
--	core->init_b =3D devm_gpiod_get_optional(dev, "init-b", GPIOD_IN);
-+	core->init_b =3D devm_gpiod_get_optional(dev, init_con_id, GPIOD_IN);
- 	if (IS_ERR(core->init_b))
- 		return dev_err_probe(dev, PTR_ERR(core->init_b),
- 				     "Failed to get INIT_B gpio\n");
-diff --git a/drivers/fpga/xilinx-core.h b/drivers/fpga/xilinx-core.h
-index 40e120945ba70..817f0e551d093 100644
---- a/drivers/fpga/xilinx-core.h
-+++ b/drivers/fpga/xilinx-core.h
-@@ -22,6 +22,7 @@ struct xilinx_fpga_core {
-=20
- int xilinx_core_probe(struct xilinx_fpga_core *core, struct device *dev,
- 		      xilinx_write_func write,
--		      xilinx_write_one_dummy_byte_func write_one_dummy_byte);
-+		      xilinx_write_one_dummy_byte_func write_one_dummy_byte,
-+		      const char *prog_con_id, const char *init_con_id);
-=20
- #endif /* __XILINX_CORE_H */
-diff --git a/drivers/fpga/xilinx-selectmap.c b/drivers/fpga/xilinx-select=
-map.c
-new file mode 100644
-index 0000000000000..08054e19bb498
---- /dev/null
-+++ b/drivers/fpga/xilinx-selectmap.c
-@@ -0,0 +1,106 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Xilinx Spartan6 and 7 Series SelectMAP interface driver
-+ *
-+ * (C) 2024 Charles Perry <charles.perry@savoirfairelinux.com>
-+ *
-+ * Manage Xilinx FPGA firmware loaded over the SelectMAP configuration
-+ * interface.
-+ */
-+
-+#include "xilinx-core.h"
-+
-+#include <linux/platform_device.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/of.h>
-+#include <linux/io.h>
-+
-+struct xilinx_selectmap_conf {
-+	struct xilinx_fpga_core core;
-+	void __iomem *base;
-+	struct gpio_desc *csi_b;
-+	struct gpio_desc *rdwr_b;
-+};
-+
-+#define to_xilinx_selectmap_conf(obj) \
-+	container_of(obj, struct xilinx_selectmap_conf, core)
-+
-+static int xilinx_selectmap_write(struct xilinx_fpga_core *core,
-+				  const char *buf, size_t count)
-+{
-+	struct xilinx_selectmap_conf *conf =3D to_xilinx_selectmap_conf(core);
-+	u32 i;
-+
-+	for (i =3D 0; i < count; ++i)
-+		writeb(buf[i], conf->base);
-+
-+	return 0;
-+}
-+
-+static int xilinx_selectmap_apply_padding(struct xilinx_fpga_core *core)
-+{
-+	struct xilinx_selectmap_conf *conf =3D to_xilinx_selectmap_conf(core);
-+
-+	writeb(0xFF, conf->base);
-+	return 0;
-+}
-+
-+static int xilinx_selectmap_probe(struct platform_device *pdev)
-+{
-+	struct xilinx_selectmap_conf *conf;
-+	struct resource *r;
-+	void __iomem *base;
-+
-+	conf =3D devm_kzalloc(&pdev->dev, sizeof(*conf), GFP_KERNEL);
-+	if (!conf)
-+		return -ENOMEM;
-+
-+	base =3D devm_platform_get_and_ioremap_resource(pdev, 0, &r);
-+	if (IS_ERR(base))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(base),
-+				     "ioremap error\n");
-+	conf->base =3D base;
-+
-+	/* CSI_B is active low */
-+	conf->csi_b =3D
-+		devm_gpiod_get_optional(&pdev->dev, "csi", GPIOD_OUT_HIGH);
-+	if (IS_ERR(conf->csi_b))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(conf->csi_b),
-+				     "Failed to get CSI_B gpio\n");
-+
-+	/* RDWR_B is active low */
-+	conf->rdwr_b =3D
-+		devm_gpiod_get_optional(&pdev->dev, "rdwr", GPIOD_OUT_HIGH);
-+	if (IS_ERR(conf->rdwr_b))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(conf->rdwr_b),
-+				     "Failed to get RDWR_B gpio\n");
-+
-+	return xilinx_core_probe(&conf->core, &pdev->dev,
-+				 xilinx_selectmap_write,
-+				 xilinx_selectmap_apply_padding, "prog",
-+				 "init");
-+}
-+
-+static const struct of_device_id xlnx_selectmap_of_match[] =3D {
-+	{
-+		.compatible =3D "xlnx,fpga-selectmap",
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, xlnx_selectmap_of_match);
-+
-+static struct platform_driver xilinx_selectmap_driver =3D {
-+	.driver =3D {
-+		.name =3D "xilinx-selectmap",
-+		.of_match_table =3D xlnx_selectmap_of_match,
-+	},
-+	.probe  =3D xilinx_selectmap_probe,
-+};
-+
-+module_platform_driver(xilinx_selectmap_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Charles Perry <charles.perry@savoirfairelinux.com>");
-+MODULE_DESCRIPTION("Load Xilinx FPGA firmware over SelectMap");
-diff --git a/drivers/fpga/xilinx-spi.c b/drivers/fpga/xilinx-spi.c
-index ec128dee97312..b9ab3d5da004c 100644
---- a/drivers/fpga/xilinx-spi.c
-+++ b/drivers/fpga/xilinx-spi.c
-@@ -74,7 +74,8 @@ static int xilinx_spi_probe(struct spi_device *spi)
- 	conf->spi =3D spi;
-=20
- 	return xilinx_core_probe(&conf->core, &spi->dev, xilinx_spi_write,
--				 xilinx_spi_apply_cclk_cycles);
-+				 xilinx_spi_apply_cclk_cycles, "prog_b",
-+				 "init-b");
- }
-=20
- #ifdef CONFIG_OF
---=20
-2.43.0
+> On Tue, Jan 30, 2024 at 09:13:56AM -0800, matthew.gerlach@linux.intel.com wrote:
+>>
+>>
+>> On Tue, 30 Jan 2024, Xu Yilun wrote:
+>>
+>>> On Wed, Jan 24, 2024 at 11:40:05AM -0800, matthew.gerlach@linux.intel.com wrote:
+>>>>
+>>>>
+>>>> On Tue, 23 Jan 2024, Xu Yilun wrote:
+>>>>
+>>>>> On Mon, Jan 22, 2024 at 09:24:33AM -0800, Matthew Gerlach wrote:
+>>>>>> Revision 2 of the Device Feature List (DFL) Port feature has
+>>>>>> slightly different requirements than revision 1. Revision 2
+>>>>>> does not need the port to reset at driver startup. In fact,
+>>>>>
+>>>>> Please help illustrate what's the difference between Revision 1 & 2, and
+>>>>> why revision 2 needs not.
+>>>>
+>>>> I will update the commit message to clarify the differences between revision
+>>>> 1 and 2.
+>>>>
+>>>>>
+>>>>>> performing a port reset during driver initialization can cause
+>>>>>> driver race conditions when the port is connected to a different
+>>>>>
+>>>>> Please reorganize this part, in this description there seems be a
+>>>>> software racing bug and the patch is a workaround. But the fact is port
+>>>>> reset shouldn't been done for a new HW.
+>>>>
+>>>> Reorganizing the commit message a bit will help to clarify why port reset
+>>>> should not be performed during driver initialization with revision 2 of the
+>>>> hardware.
+>>>>
+>>>>>
+>>>>> BTW: Is there a way to tell whether the port is connected to a different
+>>>>> PF? Any guarantee that revision 3, 4 ... would need a port reset or not?
+>>>>
+>>>> The use of revision 2 of the port_hdr IP block indicates that the port can
+>>>> be connected multiple PFs, but there is nothing explicitly stating which PFs
+>>>
+>>> Sorry, I mean any specific indicator other than enumerate the revision
+>>> number? As you said below, checking revision number may not make further
+>>> things right, then you need to amend code each time.
+>>
+>> Using a revision number to indicate the level of functionality for a
+>> particular IP block seems to be a widely used approach. What other indicator
+>
+> If you still want to make the existing driver work, some capability indication
+> would have more compatibility. That's more reasonable approach. Or you
+> need to change existing behavior for each new revision, that's not
+> actually widely used.
 
+I understand some capability indication would be better for compatibility 
+implementation. A revision number change is not as explicit or precise as 
+capability lists.
+
+>
+>> of functionality level did you have in mind?
+>
+> I'm not trying to make the design. You tell me.
+
+One could use parameter blocks introduced in version 1 of the Device 
+Feature Header (DFH), or capability registers could be added the IP block.
+In this particular case it seems the least impact to upstreamed software is
+to keep the DFH and the register map unchanged, except for an incremented
+revision number field.
+
+>
+> If finally no indicator could be used, we have to use revision number. That's
+> OK but make SW work harder, so I'm asking if anything could be done to
+> avoid that.
+
+In this case, I don't think anything else can be done without bigger 
+impacts to the SW.
+
+>
+>>
+>> The revision number of an IP block would change when new functionality is
+>> added to an IP block or the behavior of the IP block changes. It would be
+>> expected that SW might need to change in order to use the new functionality
+>> or to handle the change in behavior of the IP block. Ideally the new
+>> revision of an IP block would be compatible with existing SW, but that
+>> cannot be guaranteed.
+>
+> People make the IP block, and be compatible should be the concern if it
+> want upstream support.
+
+Agreed, and making sure some capability mechanism exists when an IP is 
+created would be a great start.
+
+Thanks,
+Matthew
+
+>
+> Thanks,
+> Yilun
+>
+>>
+>> Thanks,
+>> Matthew
+>>
+>>>
+>>> Thanks,
+>>> Yilun
+>>>
+>>>> the port is connected to.
+>>>>
+>>>> It is hard to predict the requirements and implementation of a future
+>>>> revision of an IP block. If a requirement of a future revision is to work
+>>>> with existing software, then the future revision would not require a port
+>>>> reset at driver initialization.
+>>>>
+>>>
+>
+>
 
