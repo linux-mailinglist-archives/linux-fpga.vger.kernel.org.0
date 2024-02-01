@@ -1,152 +1,179 @@
-Return-Path: <linux-fpga+bounces-209-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-210-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A374F845C7A
-	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 17:07:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A26B6845FD8
+	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 19:26:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6996DB311F1
-	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 16:00:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB47C1F2AB07
+	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 18:26:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6D9779FD;
-	Thu,  1 Feb 2024 15:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E80D284FBD;
+	Thu,  1 Feb 2024 18:25:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UgxXoyMV"
+	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="hAzdaJWD"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A705F48A
-	for <linux-fpga@vger.kernel.org>; Thu,  1 Feb 2024 15:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D857E118;
+	Thu,  1 Feb 2024 18:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706803045; cv=none; b=FP9y7VZ9Gcg2czkWrM7hgLaOEzNRsKJZ2uGbVgOx+rqjeTRRWE8CCDyMfiU4lA9tDrY/vgRuF5GpxBvFeAk9NC8Dhe1clVnkY9UM0+b4Q2oEf6NM88m7gReXXjH9gaEDhsLefe+t4hfTGq13hPbfqbJz+ozgiualqjQ9wm56xl4=
+	t=1706811904; cv=none; b=TFu5DLki6kF+oBj+KVbGkky3I9YQSMhpco0CxwCXf2VQV+kcEcUEQnHFHWJ0bwWmekhDyK5JhVFajJincxVygVT2XT7H+M6EdfcHNp3Z6mVJVUHCjChZt6q8yGdArVd2iKOsbGeuld6anHb1TSq6uJ3DryOJOge3w48rk289efU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706803045; c=relaxed/simple;
-	bh=Ct9xSYNdsoUYPlLCIr1Z8RBdDVFWjZUVGlWdpOnjEPM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kt+fqkT3gtRnP1AbBFf7uQEKw5GPfDYJT6IUJeU4Z1XovtDP377jxWHORC8EaFiQLJBAs6VET5XmB/6jD8545eh8Ab/kspwuI/0GowSrYRajE0mofIWvIsffgRkjfK8w153mLcDqnAe39x1t20QDJa4IxlASwHddLKO3WA5F850=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UgxXoyMV; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706803042;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=maGHN87wG8MBtliTQkYWRfmgkGSGFEAxdtgNEgO8IZs=;
-	b=UgxXoyMVr+kpoYiJ2/c9Udil7WsOFk8Ze395n8VS05Ipll/pkCArJGlsZS5Zokthtpz4Uh
-	DBR8RuSXKrnTrOauQW8dQO4W9NdZtiCwuootn2yCUEsinNB/mWhdY8iBu6MBpUVkr1T31O
-	lkEuPfB2V+pkdx0q/WKV/w5AHcKUWH0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-582-lO5yVx8UOr-WvURb1TPPHQ-1; Thu, 01 Feb 2024 10:57:20 -0500
-X-MC-Unique: lO5yVx8UOr-WvURb1TPPHQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-40eb06001c2so6350985e9.0
-        for <linux-fpga@vger.kernel.org>; Thu, 01 Feb 2024 07:57:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706803039; x=1707407839;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=maGHN87wG8MBtliTQkYWRfmgkGSGFEAxdtgNEgO8IZs=;
-        b=jAfPxd+INBpxwD0e4C7kVm6hzNos1UoJRjMNWB69ng194GgPr5T80TdEEapCgNnRO5
-         r3xI6KYED0lxIZR1lJhPUnJQF8A7CPK/xnpWgo1IEfYW6TK4zkAtm1sftnbpHJn4OqoF
-         a8cuisn3kBlfDNMfMV+p7ZSUeG2U00IQawN0FlHQSvkDwd+haI48DIwPDoPcmuE7PN8h
-         DD2U1c6Ex4fAPyc+kv9QtaMFCsj0dPWNLw3augjkazhCSqqjKpr5Nav0l4j8iEzuof4g
-         btKZg1wmMimcsXSmGPLCUakVBhj5gpISyE6DQLQ2wC0dmC0x6gtUd0ieH97OzImrRw2p
-         fIcA==
-X-Gm-Message-State: AOJu0YxllgBca9GhGCbROkASP1cI/iuYv+G5pmyLoaSlDTz6a5sA8cTE
-	90NcMoaEsvdtuisVR0S4akXigtLXLD2+jt6YizxbLl2GxiLH0T04HKNq2PiLG9d40dgcrLDAdsN
-	u3H9XNYc+KiCeXsMD2ysOi7liXEY4xje7jjhiQ/oxRwuLoV4e3EhSHn/XLA==
-X-Received: by 2002:a05:600c:314b:b0:40f:993e:35ae with SMTP id h11-20020a05600c314b00b0040f993e35aemr4442920wmo.14.1706803039754;
-        Thu, 01 Feb 2024 07:57:19 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH0W0gGAxhS7AvbYOR9IEMsbmKNAe1JnmjE9uWIlOec2Coqj66ic87Sx6Ko0Th2X1uXOusXgg==
-X-Received: by 2002:a05:600c:314b:b0:40f:993e:35ae with SMTP id h11-20020a05600c314b00b0040f993e35aemr4442906wmo.14.1706803039457;
-        Thu, 01 Feb 2024 07:57:19 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVVL2cyWQ+Jf0SpCRWNSmfCwuUPXNMVjyTUc7J9FC2UlhRkR+a2gh3QC4k94e6OappUvffd+ushGyqs8r0EsvRO/mmZ9tPh5KB+vCQhj/wqPvw0lVp06H6006DvZPfLw+NEyZGaxH0K97AMtex95t5Q9YaW2gsC/5MKO2OZks9jKEOWGKPFk+pQVhZgcqWg5KZL3M6pjrJzxisPuO7rdpo=
-Received: from klayman.redhat.com (net-2-34-24-75.cust.vodafonedsl.it. [2.34.24.75])
-        by smtp.gmail.com with ESMTPSA id v8-20020a05600c444800b0040e54f15d3dsm4849557wmn.31.2024.02.01.07.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Feb 2024 07:57:19 -0800 (PST)
-From: Marco Pagani <marpagan@redhat.com>
-To: Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>
-Cc: Marco Pagani <marpagan@redhat.com>,
-	linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] fpga: remove redundant checks for bridge ops
-Date: Thu,  1 Feb 2024 16:57:12 +0100
-Message-ID: <20240201155713.82898-1-marpagan@redhat.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1706811904; c=relaxed/simple;
+	bh=/R9DkbDmp4Tl/QovYyBD7frKHT8dWwGZkwDKQuI1NFA=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=VYkDZtHhmjeLcTFgBI/2M4ovlO8yH8Xo/bdgfrCbqaBasFfeQ2w5eAqIGgwCA3M/rTvNRAn5DESdEnAr+FDxy3b9nf4awJCxFTsJoleat2M10QgM2E/FA8q9Ym6INC1paG5AvN3c7OaWepk1XidPInnjCrKVnZ6EP2zIWF8JO1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=hAzdaJWD; arc=none smtp.client-ip=208.88.110.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 0E55F9C33AF;
+	Thu,  1 Feb 2024 13:24:54 -0500 (EST)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id ZNGdl7d-JH7h; Thu,  1 Feb 2024 13:24:53 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 202DF9C2C74;
+	Thu,  1 Feb 2024 13:24:53 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 202DF9C2C74
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+	t=1706811893; bh=WUJ0xiWlw9xRPJdK54m22egoVgIAQyxZK6o/wNJkTao=;
+	h=Date:From:To:Message-ID:MIME-Version;
+	b=hAzdaJWDg2GDYPP84GxKXgMt+u9Q+eTH24HnnZ3OOfsteDUpEf1j770iBFYmQRhdv
+	 plPutFLy/rr9ALL8PW7mOzRNDIVdEs9IfwTQ3eplvR2tnlmHb/hs6YKlqghAKdf9L9
+	 rM6xdQX75PelHtlALlZmSwcQDSt2TGVYu7SyebPOxtV7IYKR0FUGdfVxi+gfCmYPYz
+	 N6BkjRya3QqiVKmQuQdT6gBp01U5aOPPE2HUaEQC6MQaGPPjjdR/rWXS1139Ch/mrP
+	 UB4lAJ/kZ3ecowl0OQ24FjQ7tpoE8KbxBhgP2KTyhtfMLBWaTI+znDdHSJLupakSD6
+	 iRl+y5SV3vvpA==
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id jciq3CuDmZsX; Thu,  1 Feb 2024 13:24:53 -0500 (EST)
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [192.168.48.237])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id D9CC89C2B7A;
+	Thu,  1 Feb 2024 13:24:52 -0500 (EST)
+Date: Thu, 1 Feb 2024 13:24:52 -0500 (EST)
+From: Charles Perry <charles.perry@savoirfairelinux.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: mdf <mdf@kernel.org>, Allen VANDIVER <avandiver@markem-imaje.com>, 
+	Brian CODY <bcody@markem-imaje.com>, hao wu <hao.wu@intel.com>, 
+	yilun xu <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	krzysztof kozlowski+dt <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, 
+	Michal Simek <michal.simek@amd.com>, 
+	linux-fpga <linux-fpga@vger.kernel.org>, 
+	devicetree <devicetree@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-arm-kernel@lists.infradead.org
+Message-ID: <1391244934.434321.1706811892834.JavaMail.zimbra@savoirfairelinux.com>
+In-Reply-To: <d5fe1ec2-b647-4902-a599-fb866e96e9cf@linaro.org>
+References: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com> <20240131230542.3993409-1-charles.perry@savoirfairelinux.com> <20240131230542.3993409-3-charles.perry@savoirfairelinux.com> <d5fe1ec2-b647-4902-a599-fb866e96e9cf@linaro.org>
+Subject: Re: [PATCH 2/3] dt-bindings: fpga: xlnx,fpga-slave-selectmap: add
+ DT schema
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: Zimbra 8.8.15_GA_4581 (ZimbraWebClient - FF120 (Linux)/8.8.15_GA_4581)
+Thread-Topic: dt-bindings: fpga: xlnx,fpga-slave-selectmap: add DT schema
+Thread-Index: aG2eE2gfRdKUBYCYyXilt6Ey1bVw9w==
 
-Commit 0d70af3c2530 ("fpga: bridge: Use standard dev_release for class
-driver") introduced a check in fpga_bridge_register() that prevents
-registering a bridge without ops, making checking on every call
-redundant.
 
-v2:
-- removed ops check also in state_show()
 
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
- drivers/fpga/fpga-bridge.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+----- On Feb 1, 2024, at 3:07 AM, Krzysztof Kozlowski krzysztof.kozlowski@linaro.org wrote:
 
-diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-index a024be2b84e2..79c473b3c7c3 100644
---- a/drivers/fpga/fpga-bridge.c
-+++ b/drivers/fpga/fpga-bridge.c
-@@ -30,7 +30,7 @@ int fpga_bridge_enable(struct fpga_bridge *bridge)
- {
- 	dev_dbg(&bridge->dev, "enable\n");
- 
--	if (bridge->br_ops && bridge->br_ops->enable_set)
-+	if (bridge->br_ops->enable_set)
- 		return bridge->br_ops->enable_set(bridge, 1);
- 
- 	return 0;
-@@ -48,7 +48,7 @@ int fpga_bridge_disable(struct fpga_bridge *bridge)
- {
- 	dev_dbg(&bridge->dev, "disable\n");
- 
--	if (bridge->br_ops && bridge->br_ops->enable_set)
-+	if (bridge->br_ops->enable_set)
- 		return bridge->br_ops->enable_set(bridge, 0);
- 
- 	return 0;
-@@ -296,7 +296,7 @@ static ssize_t state_show(struct device *dev,
- 	struct fpga_bridge *bridge = to_fpga_bridge(dev);
- 	int state = 1;
- 
--	if (bridge->br_ops && bridge->br_ops->enable_show) {
-+	if (bridge->br_ops->enable_show) {
- 		state = bridge->br_ops->enable_show(bridge);
- 		if (state < 0)
- 			return state;
-@@ -401,7 +401,7 @@ void fpga_bridge_unregister(struct fpga_bridge *bridge)
- 	 * If the low level driver provides a method for putting bridge into
- 	 * a desired state upon unregister, do it.
- 	 */
--	if (bridge->br_ops && bridge->br_ops->fpga_bridge_remove)
-+	if (bridge->br_ops->fpga_bridge_remove)
- 		bridge->br_ops->fpga_bridge_remove(bridge);
- 
- 	device_unregister(&bridge->dev);
+> On 01/02/2024 00:05, Charles Perry wrote:
+>> Document the slave SelectMAP interface of Xilinx 7 series FPGA.
+>> 
+>> Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
+>> ---
+>>  .../bindings/fpga/xlnx,fpga-selectmap.yaml    | 83 +++++++++++++++++++
+>>  1 file changed, 83 insertions(+)
+>>  create mode 100644
+>>  Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
+>> b/Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
+>> new file mode 100644
+>> index 0000000000000..c9a446b43cdd9
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
+>> @@ -0,0 +1,83 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/fpga/xlnx,fpga-selectmap.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Xilinx SelectMAP FPGA interface
+>> +
+>> +maintainers:
+>> +  - Charles Perry <charles.perry@savoirfairelinux.com>
+>> +
+>> +description: |
+>> +  Xilinx 7 Series FPGAs support a method of loading the bitstream over a
+>> +  parallel port named the SelectMAP interface in the documentation. Only
+>> +  the x8 mode is supported where data is loaded at one byte per rising edge of
+>> +  the clock, with the MSB of each byte presented to the D0 pin.
+>> +
+>> +  Datasheets:
+>> +
+>> https://www.xilinx.com/support/documentation/user_guides/ug470_7Series_Config.pdf
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/memory-controllers/mc-peripheral-props.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - xlnx,fpga-selectmap
+> 
+> Your description mentions "7 Series" which is not present in compatible
+> and title. What is exactly the product here? Interface usually is not
+> the final binding, so is this specific to some particular FPGA or SoC?
+> 
+> 
+> Best regards,
+> Krzysztof
 
-base-commit: c849ecb2ae8413f86c84627cb0af06dffce4e215
--- 
-2.43.0
+This is specific to the FPGA, the 7 series encompass the following part
+family:
+ * Spartan-7 (XC7S6, XC7S15, ... XC7S100)
+ * Artix-7 (XC7A12T, XC7A15T, ... XC7A200T)
+ * Kintex-7 (XC7K70T, XC7K160T, ... XC7K480T)
+ * Virtex-7 (XC7V585T, XC7V2000T, 
+             XC7VX330T, XC7VX415T, ... XC7VX1140T,
+             XC7VH580T, XC7VH870T)
+
+
+The configuration guide of Xilinx [1] tells us that all those devices
+share a common programming scheme.
+
+I do agree that having a mention of "7 series" in the compatible name
+would be beneficial as Xilinx has more FPGA than just the 7 series.
+The name was inspired from "xlnx,fpga-slave-serial" which is the compatible
+for the serial interface.
+
+What about "xlnx,fpga-xc7-selectmap" ?
+
+I'm also seeing that I missed some mention of the "slave" word in the
+commit message, will fix.
+
+Regards,
+Charles
+
+[1] https://www.xilinx.com/support/documentation/user_guides/ug470_7Series_Config.pdf
+
 
 
