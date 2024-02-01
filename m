@@ -1,71 +1,69 @@
-Return-Path: <linux-fpga+bounces-205-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-206-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97CD7844D67
-	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 00:53:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E669844DCC
+	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 01:26:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C9A6285F22
-	for <lists+linux-fpga@lfdr.de>; Wed, 31 Jan 2024 23:53:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32F721C21E51
+	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 00:26:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 355CA3B190;
-	Wed, 31 Jan 2024 23:53:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6408D7F4;
+	Thu,  1 Feb 2024 00:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GcFM99Ol"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kgWG9fUv"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47163B187;
-	Wed, 31 Jan 2024 23:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB61A47;
+	Thu,  1 Feb 2024 00:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706745216; cv=none; b=bqKVOdtAcpOLXH8a+nTxglMVIO08K7Ae31j6rUtrxxf03WGTnq6tQoOohKITmIEVr55sDaMPUhocrZAo9wDYtYdiWBLpazGBIn/QIdv64uaZVCMS+9xpp31blvE5HpZQkfiOtW9LW7bDtnrZiij1mqA8+zvwDfGr+5ZGPTRti3U=
+	t=1706747191; cv=none; b=kpxeSZacnR+R8i2Sv/CIG1wM7soz+8tDe6wDth69X7cws8l3jk+uCxpYKv1IH3aF2soQNSTgzQJguAw7L7Yuj2ZfiYlQP9a3K/tbyL3aIV4HWSVxQkGV2Ap5HrV6xl1PVu5e1rrH8C1av8abqtNy1TqMRYeDUB1l0fbOZkNp9+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706745216; c=relaxed/simple;
-	bh=He45rS3/X09I0lLu/frI9lfYU+Wtb0SyCW45+MrWfsM=;
+	s=arc-20240116; t=1706747191; c=relaxed/simple;
+	bh=qdnqAPbbknE1XK+gc+6AwQ/uKL55CyVGkPj7KCOXSd8=;
 	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=bW+Q5sPVe2ijYayrACDCC+PWGKWElOdUrJFicgntH1QYw2Gq+IG7iCvgjU3RoSeGlzESJUu7ZlqzMaX6JbKkocVw88pGpckjmW0qr80CqftNs38TuXhlcQRnrtMSe+Y7OC/mwd5/1Brz1n9jp7lPHYQ42ZxpC+nQojy7DgDMV90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GcFM99Ol; arc=none smtp.client-ip=192.198.163.13
+	 MIME-Version:Content-Type; b=AV1wkw/5g2eMvh0J2jJWG6WbmPjtcROpAHX4D/fx6IonV+wDQOll0FA8GeV8pqIPzx2V4J78aKBBd+b69YkJkr53fo1O8FnmH7wOzk4HGptfgm5w+V8DOQ6Jgh2IBI5ocygpvRzuHPMlBNC3UK5J1eigigglUnBhnEraIvMOrhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kgWG9fUv; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706745214; x=1738281214;
+  t=1706747188; x=1738283188;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=He45rS3/X09I0lLu/frI9lfYU+Wtb0SyCW45+MrWfsM=;
-  b=GcFM99OlwGBQauar3QVVV4HPkSD5JZIvM/hy9xpKp88mXd6gK/xDWlGD
-   gia2zG3P5ZvBdllSVLqlspaDb0ZgpEwcKxrbwpQIck7NP94BPgE+bzNyN
-   YdzcfaXlPVeWpyJbQVJHvYq+UOeLo3bhajuKu1kIsZ2j0+q63CwviQDyM
-   rdongsRz07hhqku2ABgfJ8f+EqJS4LAOWHtvOrkiirRTUHxxttHTi/O/6
-   hjDw4GSXHEdFJC2gXc0HQ8c7qOubgaKGGquRYQ9i4BP7QIgPAJGBET6/x
-   M6DRL7apRMMWPPumIEOx+UvKefaf0a5sfrk0khE8v04kWnfcJGXcpUju/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="2697424"
+  bh=qdnqAPbbknE1XK+gc+6AwQ/uKL55CyVGkPj7KCOXSd8=;
+  b=kgWG9fUvl/T9D20xaTYcr8zlr4h5PzhDhAf2U6zV1ncgodIyvHsBdDjv
+   gJCDqyX6Dfs62stLSSFzKLy8drn2uAuAXmOlvjZcqKCMDdgNqV+cviV4z
+   LOvrO6MyIxmrnS4qELVeSQY8Zf2cys4CWWyvoA95bSMAt0ouryo9EmuPm
+   ww0hse0gAAuHFmoscdMc20AJDLMbxAgvcUQwCNBnq2vMvpuiBnHM00Uf4
+   SB/csZwY6i893Be87e+HCZ+1XDGMtm2y8dlfKZFT73tZL8Pqh2aQ1eg24
+   xsc3SHttDpl5OFMkWQuc4vKnCSvK7qjRCtxsNrSZrRPf/KFzDgd2FPvZu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="10403458"
 X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
-   d="scan'208";a="2697424"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 15:53:24 -0800
+   d="scan'208";a="10403458"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 16:26:28 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
-   d="scan'208";a="4209873"
+   d="scan'208";a="4252558"
 Received: from sj-4150-psse-sw-opae-dev2.sj.intel.com ([10.233.115.162])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 15:53:24 -0800
-Date: Wed, 31 Jan 2024 15:53:23 -0800 (PST)
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 16:26:27 -0800
+Date: Wed, 31 Jan 2024 16:26:27 -0800 (PST)
 From: matthew.gerlach@linux.intel.com
 X-X-Sender: mgerlach@sj-4150-psse-sw-opae-dev2
 To: Xu Yilun <yilun.xu@linux.intel.com>
 cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com, 
     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: dfl: afu: update initialization of port_hdr
- driver
-In-Reply-To: <ZbnTwcomGXOGs9SG@yilunxu-OptiPlex-7050>
-Message-ID: <alpine.DEB.2.22.394.2401311433120.112016@sj-4150-psse-sw-opae-dev2>
-References: <20240122172433.537525-1-matthew.gerlach@linux.intel.com> <Za8ibeJc82Xkbpct@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401241106550.77559@sj-4150-psse-sw-opae-dev2> <ZbjC501oRClByual@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401300825020.112016@sj-4150-psse-sw-opae-dev2>
- <ZbnTwcomGXOGs9SG@yilunxu-OptiPlex-7050>
+Subject: Re: [PATCH v2] fpga: dfl: afu: support Rev 2 of DFL Port feature
+In-Reply-To: <Zbnd8W1ciTKeoKc4@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2401311610020.112016@sj-4150-psse-sw-opae-dev2>
+References: <20240125233715.861883-1-matthew.gerlach@linux.intel.com> <ZbjHl8ptQG5FdHvC@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401300948590.112016@sj-4150-psse-sw-opae-dev2> <Zbnd8W1ciTKeoKc4@yilunxu-OptiPlex-7050>
 User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
@@ -79,95 +77,49 @@ Content-Type: text/plain; charset=US-ASCII; format=flowed
 
 On Wed, 31 Jan 2024, Xu Yilun wrote:
 
-> On Tue, Jan 30, 2024 at 09:13:56AM -0800, matthew.gerlach@linux.intel.com wrote:
+> On Tue, Jan 30, 2024 at 10:00:16AM -0800, matthew.gerlach@linux.intel.com wrote:
 >>
 >>
 >> On Tue, 30 Jan 2024, Xu Yilun wrote:
 >>
->>> On Wed, Jan 24, 2024 at 11:40:05AM -0800, matthew.gerlach@linux.intel.com wrote:
+>>> On Thu, Jan 25, 2024 at 03:37:15PM -0800, Matthew Gerlach wrote:
+>>>> Revision 2 of the Device Feature List (DFL) Port feature
+>>>> adds support for connecting the contents of the port to
+>>>> multiple PCIe Physical Functions (PF).
 >>>>
+>>>> This new functionality requires changing the port reset
+>>>> behavior during FPGA and software initialization from
+>>>> revision 1 of the port feature. With revision 1, the initial
+>>>> state of the logic inside the port was not guaranteed to
+>>>> be valid until a port reset was performed by software during
+>>>> driver initialization. With revision 2, the initial state
+>>>> of the logic inside the port is guaranteed to be valid,
+>>>> and a port reset is not required during driver initialization.
 >>>>
->>>> On Tue, 23 Jan 2024, Xu Yilun wrote:
->>>>
->>>>> On Mon, Jan 22, 2024 at 09:24:33AM -0800, Matthew Gerlach wrote:
->>>>>> Revision 2 of the Device Feature List (DFL) Port feature has
->>>>>> slightly different requirements than revision 1. Revision 2
->>>>>> does not need the port to reset at driver startup. In fact,
->>>>>
->>>>> Please help illustrate what's the difference between Revision 1 & 2, and
->>>>> why revision 2 needs not.
->>>>
->>>> I will update the commit message to clarify the differences between revision
->>>> 1 and 2.
->>>>
->>>>>
->>>>>> performing a port reset during driver initialization can cause
->>>>>> driver race conditions when the port is connected to a different
->>>>>
->>>>> Please reorganize this part, in this description there seems be a
->>>>> software racing bug and the patch is a workaround. But the fact is port
->>>>> reset shouldn't been done for a new HW.
->>>>
->>>> Reorganizing the commit message a bit will help to clarify why port reset
->>>> should not be performed during driver initialization with revision 2 of the
->>>> hardware.
->>>>
->>>>>
->>>>> BTW: Is there a way to tell whether the port is connected to a different
->>>>> PF? Any guarantee that revision 3, 4 ... would need a port reset or not?
->>>>
->>>> The use of revision 2 of the port_hdr IP block indicates that the port can
->>>> be connected multiple PFs, but there is nothing explicitly stating which PFs
+>>>> This change in port reset behavior avoids a potential race
+>>>> condition during PCI enumeration when a port is connected to
+>>>> multiple PFs. Problems can occur if the driver attached to
+>>>> the PF managing the port asserts reset in its probe function
+>>>> when a driver attached to another PF accesses the port in its
+>>>> own probe function. The potential problems include failed or hung
 >>>
->>> Sorry, I mean any specific indicator other than enumerate the revision
->>> number? As you said below, checking revision number may not make further
->>> things right, then you need to amend code each time.
+>>> Only racing during probe functions? I assume any time port_reset()
+>>> would fail TLPs for the other PF. And port_reset() could be triggered
+>>> at runtime by ioctl().
 >>
->> Using a revision number to indicate the level of functionality for a
->> particular IP block seems to be a widely used approach. What other indicator
+>> Yes, a port_reset() triggered by ioctl could result in failed TLP for the
+>> other PFs. The user space SW performing the ioctl needs to ensure all PFs
+>> involved are properly quiesced before the port_reset is performed.
 >
-> If you still want to make the existing driver work, some capability indication
-> would have more compatibility. That's more reasonable approach. Or you
-> need to change existing behavior for each new revision, that's not
-> actually widely used.
+> How would user get an insight into other PF drivers to know everything
+> is quiesced?  I mean do we need driver level management for this?
 
-I understand some capability indication would be better for compatibility 
-implementation. A revision number change is not as explicit or precise as 
-capability lists.
-
->
->> of functionality level did you have in mind?
->
-> I'm not trying to make the design. You tell me.
-
-One could use parameter blocks introduced in version 1 of the Device 
-Feature Header (DFH), or capability registers could be added the IP block.
-In this particular case it seems the least impact to upstreamed software is
-to keep the DFH and the register map unchanged, except for an incremented
-revision number field.
-
->
-> If finally no indicator could be used, we have to use revision number. That's
-> OK but make SW work harder, so I'm asking if anything could be done to
-> avoid that.
-
-In this case, I don't think anything else can be done without bigger 
-impacts to the SW.
-
->
->>
->> The revision number of an IP block would change when new functionality is
->> added to an IP block or the behavior of the IP block changes. It would be
->> expected that SW might need to change in order to use the new functionality
->> or to handle the change in behavior of the IP block. Ideally the new
->> revision of an IP block would be compatible with existing SW, but that
->> cannot be guaranteed.
->
-> People make the IP block, and be compatible should be the concern if it
-> want upstream support.
-
-Agreed, and making sure some capability mechanism exists when an IP is 
-created would be a great start.
+Since this is an FPGA, the number of other PFs and the drivers bound to 
+those PFs depends on the FPGA image. There would also be user space 
+software stacks involved with the other PFs as well. The user would have 
+to ensure all the SW stacks and drivers are quiesced as appropriate for the 
+FPGA image. I don't think the driver performing the port_reset() can know 
+all the components to be able to provide any meaningful management.
 
 Thanks,
 Matthew
@@ -177,21 +129,10 @@ Matthew
 > Yilun
 >
 >>
+>> Do you want me to update the commit message with this information?
+>>
 >> Thanks,
 >> Matthew
->>
->>>
->>> Thanks,
->>> Yilun
->>>
->>>> the port is connected to.
->>>>
->>>> It is hard to predict the requirements and implementation of a future
->>>> revision of an IP block. If a requirement of a future revision is to work
->>>> with existing software, then the future revision would not require a port
->>>> reset at driver initialization.
->>>>
->>>
 >
 >
 
