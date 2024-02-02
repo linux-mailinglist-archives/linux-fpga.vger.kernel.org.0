@@ -1,138 +1,114 @@
-Return-Path: <linux-fpga+bounces-211-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-212-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA9BF8462C7
-	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 22:47:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B7928469E3
+	for <lists+linux-fpga@lfdr.de>; Fri,  2 Feb 2024 08:58:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9918B1C22F45
-	for <lists+linux-fpga@lfdr.de>; Thu,  1 Feb 2024 21:47:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D44EB211F4
+	for <lists+linux-fpga@lfdr.de>; Fri,  2 Feb 2024 07:58:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35E943EA71;
-	Thu,  1 Feb 2024 21:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9773817BB5;
+	Fri,  2 Feb 2024 07:58:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYhAJw//"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="XpQlNfzf"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B0F39AE1;
-	Thu,  1 Feb 2024 21:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0848217BA8;
+	Fri,  2 Feb 2024 07:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706824053; cv=none; b=Uak3q6fovuTrGQ6irIPfGICYVR6/6afdPLjz5lGScydMdAvIKR/Ha7ZIPGsrj8heY0Ul5oFuu9USIkaIAmsbS2Wh/ipeb4gjhrXDLzP7rEYiWVRvrELSdlwX1XSIfR1w2P79RKfrvzAbn89EXGPA6OMhjEYh+YXMgar4h6gDgzs=
+	t=1706860705; cv=none; b=EjWzR3h8b68Fo1w5vFBkOHWhmoLNZ52LVAUlKornar0hvxAOAi0wnJjSJdFZUz1yzgVAcQUiC0leTqo4S+Fih/YNwycSI7owWlqIPRGwtlrPGXVz1yuFd8jrSFAQ7nq00xIGdRk1moc4ANrQIFTjhlQd5OBxmWug0A+QHv64HZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706824053; c=relaxed/simple;
-	bh=ONdXqAS27cKeOgWX4XGTKCxg4rE0mzWElHVnnYMMb0Y=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=khxhwSxLDnLzjIdYRf0JZGlz3N+SgDTU1UeUf+6SBoSQeUBK47wAcA3uuk18bvU3k9yTfrG83HMqz2/VEq/jaA28iuim+dgoqHSgNBcucMECnn/FwC7u904JZr5lKQUlIl0uxu6CALvToLATsy7OmaqQxjriTPztTHU9S2cVVvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KYhAJw//; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEEB5C433C7;
-	Thu,  1 Feb 2024 21:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706824052;
-	bh=ONdXqAS27cKeOgWX4XGTKCxg4rE0mzWElHVnnYMMb0Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KYhAJw//yARcM3TA6pVCkI4LUiBLE5XWbQdyIJ2IOE9XeeW9PXuRT0u1fpPxxrkwp
-	 Hurjt/dBf8xwi23T1FksMdv9e36XHyjvhrDNFhBSr1xRnTYLMYbJE3ILCL/Xokm/MD
-	 5zQO0eFXQidwjXeacacwmmo5pMdGivYcXVl5OsSlyzb4uDD6zF3QHkW/ipNCSyCrkX
-	 ruFySuh4tDJV4Rf4YFiYpBgTsdWdhvZKAcl5M+3wneiWVFJ2zo1QtBfWDecyRoxa73
-	 fETXEmGDyXWVSu/j1Xloaznpi7OcrAoyx70CgInqn+hTw2H52XDK3rA5SorsXzUwVT
-	 KByKrTZWMbAOA==
+	s=arc-20240116; t=1706860705; c=relaxed/simple;
+	bh=WXu4/0SmNlUw9ukdfS1oTJfdOj9hOaYnoUFtTE5PiCw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M0OAmfEzXY4+5Jibn4jSCHO4U9vvHrefEz8WQlIWwcweu6w3TkD/iB/U3f6HPUgHug0gVk7TRiTd0l9GyQqT9+VISRISzGTM4xe9h12snHJebJ+iXC/wfqcQGz6mk0E0FKi1zDKYQBS6Ha7Np5AsGWuViZLS6udm9vOIbXzsb34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=XpQlNfzf; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+	t=1706860685; x=1707465485; i=markus.elfring@web.de;
+	bh=WXu4/0SmNlUw9ukdfS1oTJfdOj9hOaYnoUFtTE5PiCw=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=XpQlNfzfNN7R/qHoN6/4ryLK6Wjb03ahHvwl/TItpslkoxaLO2w3IAvV0DZYi/Jo
+	 jNlCNfCw4EyTDJJP6nfKMR+0u4UdprCru4th+GOtDsgjcfDKN3CcX57dIEEV694mQ
+	 BZXcLTi6IETSLJAy6dUSnzKMpRCR3WwS/ZfHa88qIPKB3ZvMbXLm7M2F/8Tf/qddL
+	 uFH2CeVBXgnsJ5Ap2v9JgUZBT8AWoZ7aLbdDqhLxnGyANPvREBSNpxtT+QSC9+mOh
+	 iwy2fgtpP79h/O/x/lt059XjukifSqxZvWzBXOxNN0qNWFSC3nQKM7j1+vbOlU49U
+	 YvngotXnnrbJ7txkaQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.81.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1M6YNJ-1rPVye0Mqf-006dAH; Fri, 02
+ Feb 2024 08:58:05 +0100
+Message-ID: <0008614d-bd62-4e05-a063-b1ce6ced90d1@web.de>
+Date: Fri, 2 Feb 2024 08:57:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: fpga: dfl: fme: Return directly after a failed devm_kasprintf()
+ call in fme_perf_pmu_register()
+To: Dan Carpenter <dan.carpenter@linaro.org>, linux-fpga@vger.kernel.org,
+ kernel-janitors@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
+ Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Kunwu Chan <chentao@kylinos.cn>
+References: <d94376b6-12e8-45bb-a9be-4887bb316d35@web.de>
+ <b7e2e9d1-5e3e-44b2-a4b7-327d334b776d@moroto.mountain>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <b7e2e9d1-5e3e-44b2-a4b7-327d334b776d@moroto.mountain>
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 01 Feb 2024 23:47:13 +0200
-Message-Id: <CYU2MG4IOJ0Q.2UJOTK999FCCC@suppilovahvero>
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Mark Brown" <broonie@kernel.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>
-Cc: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- <kernel@pengutronix.de>, "Moritz Fischer" <mdf@kernel.org>, "Wu Hao"
- <hao.wu@intel.com>, "Xu Yilun" <yilun.xu@intel.com>, "Tom Rix"
- <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Alexander Aring" <alex.aring@gmail.com>,
- "Stefan Schmidt" <stefan@datenfreihafen.org>, "Miquel Raynal"
- <miquel.raynal@bootlin.com>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, <linux-wpan@vger.kernel.org>,
- <netdev@vger.kernel.org>, "Lars-Peter Clausen" <lars@metafoo.de>, "Michael
- Hennerich" <Michael.Hennerich@analog.com>, "Jonathan Cameron"
- <jic23@kernel.org>, <linux-iio@vger.kernel.org>, "Dmitry Torokhov"
- <dmitry.torokhov@gmail.com>, <linux-input@vger.kernel.org>, "Ulf Hansson"
- <ulf.hansson@linaro.org>, "Rayyan Ansari" <rayyan@ansari.sh>, "Andy
- Shevchenko" <andriy.shevchenko@linux.intel.com>, "Jonathan Cameron"
- <Jonathan.Cameron@huawei.com>, "Martin Tuma"
- <martin.tuma@digiteqautomotive.com>, "Mauro Carvalho Chehab"
- <mchehab@kernel.org>, <linux-media@vger.kernel.org>, "Sergey Kozlov"
- <serjk@netup.ru>, "Arnd Bergmann" <arnd@arndb.de>, "Yang Yingliang"
- <yangyingliang@huawei.com>, <linux-mmc@vger.kernel.org>, "Richard
- Weinberger" <richard@nod.at>, "Vignesh Raghavendra" <vigneshr@ti.com>, "Rob
- Herring" <robh@kernel.org>, "Heiko Stuebner" <heiko@sntech.de>, "Michal
- Simek" <michal.simek@amd.com>, "Amit Kumar Mahapatra via Alsa-devel"
- <alsa-devel@alsa-project.org>, <linux-mtd@lists.infradead.org>, "Martin
- Blumenstingl" <martin.blumenstingl@googlemail.com>, "Geert Uytterhoeven"
- <geert+renesas@glider.be>, =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
- "Simon Horman" <horms@kernel.org>, "Ronald Wahl" <ronald.wahl@raritan.com>,
- "Benson Leung" <bleung@chromium.org>, "Tzung-Bi Shih" <tzungbi@kernel.org>,
- "Guenter Roeck" <groeck@chromium.org>, <chrome-platform@lists.linux.dev>,
- "Max Filippov" <jcmvbkbc@gmail.com>, <linux-spi@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, "Bjorn Andersson"
- <andersson@kernel.org>, "Konrad Dybcio" <konrad.dybcio@linaro.org>,
- <linux-arm-msm@vger.kernel.org>, "Matthias Brugger"
- <matthias.bgg@gmail.com>, "AngeloGioacchino Del Regno"
- <angelogioacchino.delregno@collabora.com>,
- <linux-mediatek@lists.infradead.org>, "Thomas Zimmermann"
- <tzimmermann@suse.de>, "Javier Martinez Canillas" <javierm@redhat.com>,
- "Amit Kumar Mahapatra" <amit.kumar-mahapatra@amd.com>,
- <dri-devel@lists.freedesktop.org>, <linux-fbdev@vger.kernel.org>,
- <linux-staging@lists.linux.dev>, "Viresh Kumar" <vireshk@kernel.org>, "Rui
- Miguel Silva" <rmfrfs@gmail.com>, "Johan Hovold" <johan@kernel.org>, "Alex
- Elder" <elder@kernel.org>, <greybus-dev@lists.linaro.org>, "Peter Huewe"
- <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- <linux-integrity@vger.kernel.org>, "Herve Codina"
- <herve.codina@bootlin.com>, "Alan Stern" <stern@rowland.harvard.edu>, "Aaro
- Koskinen" <aaro.koskinen@iki.fi>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski@linaro.org>, <linux-usb@vger.kernel.org>, "Helge
- Deller" <deller@gmx.de>, "Dario Binacchi"
- <dario.binacchi@amarulasolutions.com>, "Kalle Valo" <kvalo@kernel.org>,
- "Dmitry Antipov" <dmantipov@yandex.ru>, <libertas-dev@lists.infradead.org>,
- <linux-wireless@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
- "James Clark" <james.clark@arm.com>, "Bjorn Helgaas" <bhelgaas@google.com>,
- <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v2 00/33] spi: get rid of some legacy macros
-X-Mailer: aerc 0.15.2
-References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
- <2024012417-prissy-sworn-bc55@gregkh>
- <c1e38a30-5075-4d01-af24-ac684e77cf29@sirena.org.uk>
-In-Reply-To: <c1e38a30-5075-4d01-af24-ac684e77cf29@sirena.org.uk>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Gd9FMzio+eEpJUmNTbX9PyQNmf38A2yTnU3187dIPcNgwsbWayg
+ 3XhyF35zXqWOaNupGrh1+HQZqwf8DJnXujVs6zMb3FKwBKEvIb7Z8fU0C1lorcf7+tKTcGE
+ SBCcLTctYYXZYPakUQe/a/I99h2yNQfO0NE79pq4tz5YYdnKsM5e3qHtRBWGHkhwQUVt2zo
+ HRSe5bs02Cczj3RL447eg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:zC3BJmvRg6I=;B4Of8fxqFhJqj4E8sLHvqF/ZqIS
+ 6tYr22rkX8WtAHtd4b+AKHUAT23I2xvzyQhy1eO/5NjNKcVppHb5erefO01dCn+kbUuKOSKrB
+ Pknh3SQP+b+xWQ/7k908VapY3lyWp6v0nrUmvaXJIDiFbFTITq15a7xYfUmchhEL5pOjaNLf3
+ Bz7BVWuc82KErFpmEkbw+kUQ02CaR7BDrA3T9VVYH0+9a7K7M4N9TNpIMK6miEjVIU4Mm1bZu
+ W7bmrkWZcliQ1RATqEvKMqDtNaxkXQ5ekz2tcn1ZsXllVXhMAXOpiljY9BjpfxiLC2j6IUN45
+ g1FN9IaXlNOdeLxvEMStlqLexEXUFtn46DsumT6+3YZZvI7oNXthyB9EExhfFXcMzt5BGoVz1
+ cAkn06U3g4jeA/WL6wDKyNzzhxp1Bf8ZV82FGAI4ZXhATFTgZ8QFsooVt5X/R2SIvYGtWO5In
+ BPQexypSymRH/yDPhRFQgy5Xe8nzdXMY8HgLbO5/dgUXLLPE+Xxmi6oP8xf0BU3NKVRSfiCPW
+ Q6jO46uZahQLEHaugJWgcsrBbSR32erekNeFc9cYnIPvmiedsw+3ycaZfE0Ep8ms+JqW1uPQY
+ 9KJDOzwBuwJ+HnGxmRytCgnhmrSmnujR0TRHAOgc9P1/sHIhi1aOQjMKBSz/1YmoBr/1wpHwU
+ /kT+qeNIxSbUlAaJbX7fXJujLtdyQh8s7iOQ/cHe+8iLBud/AK8jEgxCjJ7ngxFDAjzhr9IP3
+ D/Kapw8H1nehDYvz1EHH7BSzJqI0q6Q4uQHRbGkpbtItlw30Y4oKjP7t4ubDs/rIE27XvYoLz
+ DXo12Wr7aDyzVk3qp0ucKER4H0FKaY5Fc9/SnUn7Y5Cuk=
 
-On Wed Jan 24, 2024 at 7:22 PM EET, Mark Brown wrote:
-> On Wed, Jan 24, 2024 at 09:13:49AM -0800, Greg Kroah-Hartman wrote:
-> > On Mon, Jan 22, 2024 at 07:06:55PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+>> Thus return directly after a failed devm_kasprintf() call.
+>>
+>> Fixes: 724142f8c42a7 ("fpga: dfl: fme: add performance reporting suppor=
+t")
 >
-> > > Note that Jonathan Cameron has already applied patch 3 to his tree, i=
-t
-> > > didn't appear in a public tree though yet. I still included it here t=
-o
-> > > make the kernel build bots happy.
->
-> > Are we supposed to take the individual changes in our different
-> > subsystem trees, or do you want them all to go through the spi tree?
->
-> Given that the final patch removes the legacy interfaces I'm expecting
-> to take them via SPI.
+> This basically doesn't affect runtime because perf_pmu_register() checks=
+ for NULL
 
-+1
+https://elixir.bootlin.com/linux/v6.8-rc2/source/kernel/events/core.c#L115=
+27
 
-least fuss approach
+Do you prefer the usage of the error code =E2=80=9C-ENOMEM=E2=80=9D instea=
+d of =E2=80=9C-EINVAL=E2=80=9D
+as an indication for a failed memory allocation?
 
-BR, Jarkko
+
+> so no need for a Fixes tag.
+
+Does the selection of a more appropriate error code qualify for this tag?
+
+Regards,
+Markus
 
