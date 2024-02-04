@@ -1,127 +1,148 @@
-Return-Path: <linux-fpga+bounces-217-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-218-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9644A847AC7
-	for <lists+linux-fpga@lfdr.de>; Fri,  2 Feb 2024 21:53:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15EA4848B2F
+	for <lists+linux-fpga@lfdr.de>; Sun,  4 Feb 2024 06:19:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 347AD1F26432
-	for <lists+linux-fpga@lfdr.de>; Fri,  2 Feb 2024 20:53:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF4D4B240B8
+	for <lists+linux-fpga@lfdr.de>; Sun,  4 Feb 2024 05:19:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E9757A71F;
-	Fri,  2 Feb 2024 20:53:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC236AA2;
+	Sun,  4 Feb 2024 05:19:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="HKYY2VFE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DVkmGt+L"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385831804E;
-	Fri,  2 Feb 2024 20:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED12A6119;
+	Sun,  4 Feb 2024 05:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706907233; cv=none; b=Y6tU4BhsoCiL/76BPQdiVSaFkahHd2vxVm2m/ccUbI0ISwV5masbmvmc7sXiuN0xmsgR4iO9JRgf5gPDE7sj/vWq0f1MW9U3RitA6NtgpC+mh9oPlmBqzCDPlV2SXcR+Rv359ci5qRyBz+r/bvD0gweX0DUI2kPYiNWSuQ7tv20=
+	t=1707023953; cv=none; b=FwWIp9xkCNdm5oqzMPHVAfNL+ullsOoUEYRw7BdrSW+FaoMc9YvCsUkNlElT5uexFiUSfTo+lk2Z/SeKsE/y3+vOboUh3aG2/OCewfg7iDGUb+5XZSEhgjTZ4ZibcjCm+GSAdy6L99NKs8BfQop1YNfNP0swRvAED97gb5mvd6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706907233; c=relaxed/simple;
-	bh=ckGZUBoQ1F3whDLkHoQyHfSZkTvxaDN5wvB2UmzpAOo=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=QeJ+KxrXHpaZFcU3lxaV/kqx81K4RbDPRgNsZXjl9TweQo9wTKR1MYPDDFtXh3+bJHWpBdh3UC+XAIZxJTP8E/+n3cIER4vloKCWaOpXrHvOAhH4elKhSecGqWRLtvyJZGtt5FJG3fVFT0SU8f/Z9/ILjFwibkQ0xIzrje9NpSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=HKYY2VFE; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 3A50A9C15A8;
-	Fri,  2 Feb 2024 15:53:48 -0500 (EST)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id flMfL2uwBDPh; Fri,  2 Feb 2024 15:53:47 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id ABDC79C33F3;
-	Fri,  2 Feb 2024 15:53:47 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com ABDC79C33F3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1706907227; bh=HjOTfW84z6WlZLIlDp5/qd2mO3qsjLhZuFlY6j+xp40=;
-	h=Date:From:To:Message-ID:MIME-Version;
-	b=HKYY2VFERClr2sLusdFwB/qs6d2WuD5xRmO8YOUZ5wo7Z6aXgssF1t0OjNxgE4t7K
-	 WPKbvdG9hpzJsWgFnVWM/PmpG6c31+1+Ah7wmEMU9X0f/050sJniTHgPS5UL7UqggQ
-	 Ky05T4qYP7jfUKviCkYj5tLHF7355DkUKYTLbItOnUUarQ67DkrDgibQH8W2YyPEZE
-	 4LPYjDaItdWQfTB5gw25e2f49zPldxGtVvgcICeqAo/terZzMk3WWfzfMwkuaBZ3pC
-	 ZGzEH4cW9GQ2AAteiZqrCcsSEqLXYantDq5EqbbdlPmIs59cMn/5feTPQZ5oVWjgFo
-	 bHTtmw2p6yD7w==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id 4-9MN7DBNiAY; Fri,  2 Feb 2024 15:53:47 -0500 (EST)
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [192.168.48.237])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 759A99C15A8;
-	Fri,  2 Feb 2024 15:53:47 -0500 (EST)
-Date: Fri, 2 Feb 2024 15:53:47 -0500 (EST)
-From: Charles Perry <charles.perry@savoirfairelinux.com>
-To: Rob Herring <robh@kernel.org>
-Cc: mdf <mdf@kernel.org>, Allen VANDIVER <avandiver@markem-imaje.com>, 
-	Brian CODY <bcody@markem-imaje.com>, hao wu <hao.wu@intel.com>, 
-	yilun xu <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
-	krzysztof kozlowski+dt <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, 
-	Michal Simek <michal.simek@amd.com>, 
-	linux-fpga <linux-fpga@vger.kernel.org>, 
-	devicetree <devicetree@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Message-ID: <840358370.469058.1706907227423.JavaMail.zimbra@savoirfairelinux.com>
-In-Reply-To: <20240202201646.GA903809-robh@kernel.org>
-References: <20240129225602.3832449-1-charles.perry@savoirfairelinux.com> <20240131230542.3993409-1-charles.perry@savoirfairelinux.com> <20240202201646.GA903809-robh@kernel.org>
-Subject: Re: [PATCH 0/3] fpga: xilinx-selectmap: add new driver
+	s=arc-20240116; t=1707023953; c=relaxed/simple;
+	bh=P6VGiDl0jduaJYu6jiH+VhGE0WfXIZzpvflkq0mKjH4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TiwuX0CWgeqXJuwVM9JA60kpe3mhM3WMIMCWvk3x/sBd5bPHcnh7HLq8bj6tiQF+WKJHLQ9G2s5qdPS61ssdC5fn46GV2TudhDZ8QsOLgCI2+dOzPgkKz6pcQGMcqnIkmF22PgCzyIiPlrMaFslziPYRTjtb+JCZFocea7t4wBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DVkmGt+L; arc=none smtp.client-ip=134.134.136.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707023952; x=1738559952;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P6VGiDl0jduaJYu6jiH+VhGE0WfXIZzpvflkq0mKjH4=;
+  b=DVkmGt+L+gvx+1jrSn94ZVGw7jn9EePrfnUiO1KIMFg7nyXQ9NdwaSaP
+   yLUfc84f8vCNqxbHAGkaX/Cv2dLEu4qHq4W3VFEoxVQlEsISGO6A9N95U
+   i/ZFh+rFQH/Gfgm9V5IEhcksH/pN7glLC7Bu1hGgjX0hNhZKWkCF09hhZ
+   +ROFFYK5yz1GxETiQFU+lUdIXuP5oq1LmJQaldgEcF6bgzCW37vma+BYT
+   llVdOfdUjVajkWzlBFje2jHli1x+c5YurDYqbKryI6tX1S2w+sXE9dJ5c
+   o2WLvoToBs0Va3t1GGP5e1yn4aZiaaecpXK8dp0HhS/2SaJk27EcRHr7L
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="394787343"
+X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
+   d="scan'208";a="394787343"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 21:19:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
+   d="scan'208";a="23694652"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa002.fm.intel.com with ESMTP; 03 Feb 2024 21:19:08 -0800
+Date: Sun, 4 Feb 2024 13:15:35 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Marco Pagani <marpagan@redhat.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Tull <atull@opensource.altera.com>,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fpga@vger.kernel.org
+Subject: Re: [RFC PATCH v5 1/1] fpga: add an owner and use it to take the
+ low-level module's refcount
+Message-ID: <Zb8dd9af0Ru/fzGi@yilunxu-OptiPlex-7050>
+References: <20240111160242.149265-1-marpagan@redhat.com>
+ <20240111160242.149265-2-marpagan@redhat.com>
+ <Zbh7iO9wlm9ekzB7@yilunxu-OptiPlex-7050>
+ <0720eb91-72f9-4781-8558-8a1b0a3691c2@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: Zimbra 8.8.15_GA_4581 (ZimbraWebClient - GC120 (Linux)/8.8.15_GA_4581)
-Thread-Topic: fpga: xilinx-selectmap: add new driver
-Thread-Index: MPhuH8qDC3JIZ5Xmftm01iQPgu4MyA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0720eb91-72f9-4781-8558-8a1b0a3691c2@redhat.com>
 
-On Feb 2, 2024, at 3:16 PM, Rob Herring robh@kernel.org wrote:
-> On Wed, Jan 31, 2024 at 06:05:30PM -0500, Charles Perry wrote:
->> Hello,
->> 
->> This patchset adds a new driver for the 7 series FPGA's SelectMAP
->> interface.
->> 
->> The SelectMAP interface shares a common GPIO protocol with the SPI
->> interface which is already in the kernel (drivers/fpga/xilinx-spi.c).
->> The approach proposed in this patchset is to refactor xilinx-spi.c into
->> xilinx-core.c which would handle the common GPIO protocol. This is then
->> used to build two drivers, the already existing xilinx-spi.c driver and
->> a newly added xilinx-selectmap.c driver.
->> 
->> The SelectMAP driver proposed only supports 8 bit mode. This is because
->> the 16 and 32 bits mode have limitations with regards to compressed
->> bitstream support as well as introducing endianness considerations.
->> 
->> I'm testing xilinx-selectmap.c on a custom i.MX6 board connected to an
->> Artix 7 FPGA. Flashing a 913K bitstream takes 0.44 seconds.
->> 
->> v2: From Krzysztof Kozlowski review's:
->>   * Use more conventional names for gpio DT bindings
->>   * fix example in DT bindings
->>   * add mc-peripheral-props.yaml to DT bindings
->>   * fix various formatting mistakes
->>   * Remove all occurences of the "slave" word.
+On Fri, Feb 02, 2024 at 06:44:01PM +0100, Marco Pagani wrote:
 > 
-> Please label the series with the version number and don't send new
-> versions as replies to the previous version.
 > 
-> Rob
+> On 2024-01-30 05:31, Xu Yilun wrote:
+> >> +#define fpga_mgr_register_full(parent, info) \
+> >> +	__fpga_mgr_register_full(parent, info, THIS_MODULE)
+> >>  struct fpga_manager *
+> >> -fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
+> >> +__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
+> >> +			 struct module *owner);
+> >>  
+> >> +#define fpga_mgr_register(parent, name, mops, priv) \
+> >> +	__fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
+> >>  struct fpga_manager *
+> >> -fpga_mgr_register(struct device *parent, const char *name,
+> >> -		  const struct fpga_manager_ops *mops, void *priv);
+> >> +__fpga_mgr_register(struct device *parent, const char *name,
+> >> +		    const struct fpga_manager_ops *mops, void *priv, struct module *owner);
+> >> +
+> >>  void fpga_mgr_unregister(struct fpga_manager *mgr);
+> >>  
+> >> +#define devm_fpga_mgr_register_full(parent, info) \
+> >> +	__devm_fpga_mgr_register_full(parent, info, THIS_MODULE)
+> >>  struct fpga_manager *
+> >> -devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
+> >> +__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
+> >> +			      struct module *owner);
+> > 
+> > Add a line here. I can do it myself if you agree.
+> 
+> Sure, that is fine by me. I also spotted a typo in the commit log body
+> (in taken -> is taken). Do you want me to send a v6, or do you prefer
+> to fix that in place?
 
-Ok, will do.
+No need, I can fix it.
 
-Regards,
-Charles
+> 
+> > 
+> > There is still a RFC prefix for this patch. Are you ready to get it merged?
+> > If yes, Acked-by: Xu Yilun <yilun.xu@intel.com>
+> 
+> I'm ready for the patch to be merged. However, I recently sent an RFC
+> to propose a safer implementation of try_module_get() that would
+> simplify the code and may also benefit other subsystems. What do you
+> think?
+> 
+> https://lore.kernel.org/linux-modules/20240130193614.49772-1-marpagan@redhat.com/
+
+I suggest take your fix to linux-fpga/for-next now. If your try_module_get()
+proposal is applied before the end of this cycle, we could re-evaluate
+this patch.
+
+Thanks,
+Yilun
+
+> 
+> > Next time if you think patches are ready for serious review and merge, drop
+> > the RFC prefix. That avoids an extra query.
+> 
+> Okay, I'll do it like that next time.
+> 
+> Thanks,
+> Marco
+> 
 
