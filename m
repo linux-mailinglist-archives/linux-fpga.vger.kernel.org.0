@@ -1,140 +1,159 @@
-Return-Path: <linux-fpga+bounces-222-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-223-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7971848F2B
-	for <lists+linux-fpga@lfdr.de>; Sun,  4 Feb 2024 17:13:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2392C84926B
+	for <lists+linux-fpga@lfdr.de>; Mon,  5 Feb 2024 03:35:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81AAE1F21508
-	for <lists+linux-fpga@lfdr.de>; Sun,  4 Feb 2024 16:13:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF94F1F216DE
+	for <lists+linux-fpga@lfdr.de>; Mon,  5 Feb 2024 02:35:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F9222EED;
-	Sun,  4 Feb 2024 16:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8908F47;
+	Mon,  5 Feb 2024 02:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=marliere.net header.i=@marliere.net header.b="CKOk89Wj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bU8cl9ku"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6972122EE0;
-	Sun,  4 Feb 2024 16:13:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878F68F49;
+	Mon,  5 Feb 2024 02:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707063218; cv=none; b=FIGuWBXtX+hYiZH6vMJFWUBGaLP40EdogcX9NSv5ybwaqDkv0WRyRNponuHbHRRX2n5T4EMcWiThMYYRZ7GP7LsJ8KuXMoFdzVKt6f6vUxZgC7E2ZTxwFOCOUXEEr9V81ZkXhwIq3vJv5YVzDCrJtc+Ovbt9UjF2hStPKJdbJWw=
+	t=1707100520; cv=none; b=PAbEN4k/hoav+3hLpACGbAY4kfzvItdqmuwKweN/Owz40JX4DacpToui3DnqTRpXruWoa902IF2dv60r+2l8+YTGqtRX/QhsFW7/cRGhadl71Qw7pz164C1SE33wEHmd2ez+tQzp643VBEBQTOueemlGtTjn5S3owTWSJ7X7BKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707063218; c=relaxed/simple;
-	bh=TgShaFHPoP3Kn1TopBdrlrcCUbL7pn3NVxXgfCNsZ/Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=TDcMfFTkriH3rV/cFuetxg5wEKsES4Xr2+pIbr/ScVohB41aBOz3gC3t7+Gf3i8MhYz0sRm4gVraBUToWlpOlqm+e84A1f+i3IXEVTd2oo8Vlo02KV6BOGk/G32fdw947I86VgVpotlqLpU6mYu+OhnxyzaRhB5wANOwF2HMXMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=fail (0-bit key) header.d=marliere.net header.i=@marliere.net header.b=CKOk89Wj reason="key not found in DNS"; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2906773c7e9so2378574a91.1;
-        Sun, 04 Feb 2024 08:13:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707063217; x=1707668017;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j895wKcHeXQZJMdGzfGU+B0tFjcF0tffVFSqSapa/yQ=;
-        b=eTb3rWQ1ID02EynVC0A8yL+gzAYRa0XLiwR4lEkHfqLZZ307T1NXkWhPc3paiJap6Z
-         kJwcK5fzJSBxL332lL3ZaLzalLHaKG9N08a+e3WamiNIOxOYEIfvJ/zcSy4gJBUqB++A
-         P4SsdtBP9GUfq2gcD6POnVLJHEqBnCHLMwgdN34lHTN+NLyrtm1JrPrivprTWLLNfzYZ
-         I/Hplw+idWGWm09Yelfwd05N2BiYjv/a8OIPi1GF57dfIro5nq9t/fQixgAVeu/k8kYO
-         bJi9jJQRKJwO/DzZaIItxH9mdaeq6aSuzFy7vkbpzVCnZTPz23CqS2jbeXILrFqdsrNS
-         +aHg==
-X-Gm-Message-State: AOJu0Ywy3vECWB9bBeU9jdH/wP2bV3ypf2Btt+KmNr+BXxI9zXNnq/YF
-	qs3Jj2FNFAOunvU3WrTVi1D997uqJoLtLaRd5VecvmMdGxx8fyDs
-X-Google-Smtp-Source: AGHT+IE7wftt5fJcizab0kosuFSovjbMuArVg2IktHPYXrVXjlsP67gFbimtBhExDvESA7jQicw3OA==
-X-Received: by 2002:a17:90a:f48f:b0:28c:3e2:2d8a with SMTP id bx15-20020a17090af48f00b0028c03e22d8amr12143414pjb.23.1707063216757;
-        Sun, 04 Feb 2024 08:13:36 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXQpIItCKC4/HggsTvDjo0xAjnl48o6jSC3Nfo8ez6+5H8nuSj5eUWxjLABSD3usb22oEFQgZMcbjq2YKh3iJV0noz0BhC2Rl+serF34uMj4K3xQJ2G70F/b8DkdDXXvTGi8AoimFy8CHjTrsja9jvyHWysJtLrwTuqVWjtg7yHUXu6bMLFHYQWyRxN6oKu4jBrLMkSenHVURtUe95M
-Received: from mail.marliere.net ([24.199.118.162])
-        by smtp.gmail.com with ESMTPSA id jg1-20020a17090326c100b001d8d3b94404sm4709310plb.137.2024.02.04.08.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Feb 2024 08:13:35 -0800 (PST)
-From: "Ricardo B. Marliere" <ricardo@marliere.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=2023; t=1707063214;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=j895wKcHeXQZJMdGzfGU+B0tFjcF0tffVFSqSapa/yQ=;
-	b=CKOk89WjQlOhcXFU/ySoTySlPOYLXIg2LIimX62ojk1MB5KqimYWtUX9DJ2wdhN12RTq8R
-	UV9Y0QvRIT7uOqe3NNPQS0ws20hhUOmJP7299aCy5OMUSRdxkDMqdcXcH/nyaBiBW5j/Ao
-	f/LuXrxcYOc0BmwFgLTMuQlMwe6Qun1ZNNZAP0D5rTxD+Z6w/z+Avvh2WMGxTvnN9TAmFM
-	ETT13fDkpiKJUxId1JL5SMhakTOg3WkWk0kRQtihFEx944A4w2M+DBM2U72m0Qfby/B7RY
-	FvHJ6s/p8PJjjT9Af0qQ5XbxXvAs+hbYqi8PwxM3ak7BVVvx3fM2oC4Jbf0DQQ==
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
-Date: Sun, 04 Feb 2024 13:14:05 -0300
-Subject: [PATCH] fpga: dfl: make dfl_bus_type const
+	s=arc-20240116; t=1707100520; c=relaxed/simple;
+	bh=dr9DDXAdyJ3pofZryHHuOExHQj18z6GN6Uo15RMgnGE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sOFikHWKDNsy0uXU1Qakis7PriMPbJjw2SzEVvDL9zWiVrDqoLDYd/YbwcetooF7PULSQx5Z9Wy0iM8M+ellnhZN8CqPjmZICBv7uAgQwPdfPjKlAusqkY6+xp/UG+Nw7tclJZ74GqIwLZ2N3vFKOg8z1LvcltJ1J6wvv+IHLlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bU8cl9ku; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707100518; x=1738636518;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dr9DDXAdyJ3pofZryHHuOExHQj18z6GN6Uo15RMgnGE=;
+  b=bU8cl9ku77XvPknmX2Z3J8clMdML2+8fP02DhAUnEK7jEKTg+Smu9fDs
+   HJf5KG9fApx3vfID6twUUMgdTE7Ry3DalB1kU7TlyW1gRkYogpCZeucSy
+   G0Kg7W2D+MHz8VYgex620vldLzx6Nv2V8Wf1pAYVJDpuk+XVEjJe4HtCp
+   rtHU5slC3qvgqf5JRcFQj6HO7/iw25UOa8djFv3YsBhuC4WcLm8qog0rd
+   IzVbBByeJg8C3nkOtjOH7GqxjHLfO6iv1DIRJWnvwBOkIOMOXRldw40g6
+   RjWg1K+r5YNT5tMfOE4Es8E1RNnqCaQAeeQQdILtBYjQ+ZuLCnSvRBWqh
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="11794809"
+X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
+   d="scan'208";a="11794809"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2024 18:35:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
+   d="scan'208";a="802734"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa008.fm.intel.com with ESMTP; 04 Feb 2024 18:35:15 -0800
+Date: Mon, 5 Feb 2024 10:31:41 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: matthew.gerlach@linux.intel.com
+Cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] fpga: dfl: afu: support Rev 2 of DFL Port feature
+Message-ID: <ZcBIjcFJjGKf0qcO@yilunxu-OptiPlex-7050>
+References: <20240125233715.861883-1-matthew.gerlach@linux.intel.com>
+ <ZbjHl8ptQG5FdHvC@yilunxu-OptiPlex-7050>
+ <alpine.DEB.2.22.394.2401300948590.112016@sj-4150-psse-sw-opae-dev2>
+ <Zbnd8W1ciTKeoKc4@yilunxu-OptiPlex-7050>
+ <alpine.DEB.2.22.394.2401311610020.112016@sj-4150-psse-sw-opae-dev2>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240204-bus_cleanup-fpga-v1-1-dae8b5bf7220@marliere.net>
-X-B4-Tracking: v=1; b=H4sIAMy3v2UC/x3MTQqAIBBA4avErBNM+6OrRITZaANhohhBePek5
- bd474WIgTDCVL0Q8KZIlyto6gr0oZxFRnsxCC5aLnjLthRXfaJyyTPjrWI4otRy73qxDVAyH9D
- Q8y/nJecPURkuYWIAAAA=
-To: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>, 
- Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>
-Cc: linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Ricardo B. Marliere" <ricardo@marliere.net>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1066; i=ricardo@marliere.net;
- h=from:subject:message-id; bh=TgShaFHPoP3Kn1TopBdrlrcCUbL7pn3NVxXgfCNsZ/Y=;
- b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBlv7fNm4LCLEaZHRrxilHOODNiUcZydOc/yohJU
- iBzzwwA0HyJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZb+3zQAKCRDJC4p8Y4ZY
- pm7jEACJb0uv0JqkxMe2d7g/ah6Y6i7cCaXIC8eyG2pFX0dWNYfpfXY4DAJTzuz+xGlnSpF6eSl
- sWBma8Kv7oYslPVXRJyC8ynMo5auW7iQheR3DLpY8Z7HnW8BXrghvR/Is2V9cZzJK828vD/eejU
- OCRc/FhDZaLrRgZyosHnU9zD5299lRfSRtnAhrndR2bLIGE1bGvIrwir1w1UBL/u4/VUbssFczp
- n9pbO2j0LzVV0jlKmc6ONmr8rZ0Wv8fbD+qb5s+02L2gFd9k3MnB6QqOxndb9/11D+Ako/orjUS
- 6GZ2xgPkvDfroqgBHD96d/54zQBKsq9d7L3yd4KZyMs5tMI+WQLNnZXJofEWRMAgUtQ06Y+CX8x
- QBae/0sLLTc97GUozedbYHC/mySDa8lCy5Ivk06IYmnIEy1U8HsAfpVc5LTlz93h0lHjtm2H6as
- 3kR7xM6aDJqOrBtr6l1DZ4pg72G2cNOgUv5DKOAI5pTbyZP1f6tv87ZsVCdXxHXX33Y8r7Lnifw
- QetAliHzNO5xkq7OvC+D5PmqraOgY7JzNKaqOS/GV599Q1HDgHE+nM71TT9xAdrbP+kfJm3YLhB
- nr73nICL6fwkqK3cERZbAQlQg6xWHQPOsizbYbf9ndYGz/xkSvCjwKTrC/MWcakBt3OCrVxY6c/
- miIr8pAYkhpTsrg==
-X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
- fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2401311610020.112016@sj-4150-psse-sw-opae-dev2>
 
-Now that the driver core can properly handle constant struct bus_type,
-move the dfl_bus_type variable to be a constant structure as well,
-placing it into read-only memory which can not be modified at runtime.
+On Wed, Jan 31, 2024 at 04:26:27PM -0800, matthew.gerlach@linux.intel.com wrote:
+> 
+> 
+> On Wed, 31 Jan 2024, Xu Yilun wrote:
+> 
+> > On Tue, Jan 30, 2024 at 10:00:16AM -0800, matthew.gerlach@linux.intel.com wrote:
+> > > 
+> > > 
+> > > On Tue, 30 Jan 2024, Xu Yilun wrote:
+> > > 
+> > > > On Thu, Jan 25, 2024 at 03:37:15PM -0800, Matthew Gerlach wrote:
+> > > > > Revision 2 of the Device Feature List (DFL) Port feature
+> > > > > adds support for connecting the contents of the port to
+> > > > > multiple PCIe Physical Functions (PF).
+> > > > > 
+> > > > > This new functionality requires changing the port reset
+> > > > > behavior during FPGA and software initialization from
+> > > > > revision 1 of the port feature. With revision 1, the initial
+> > > > > state of the logic inside the port was not guaranteed to
+> > > > > be valid until a port reset was performed by software during
+> > > > > driver initialization. With revision 2, the initial state
+> > > > > of the logic inside the port is guaranteed to be valid,
+> > > > > and a port reset is not required during driver initialization.
+> > > > > 
+> > > > > This change in port reset behavior avoids a potential race
+> > > > > condition during PCI enumeration when a port is connected to
+> > > > > multiple PFs. Problems can occur if the driver attached to
+> > > > > the PF managing the port asserts reset in its probe function
+> > > > > when a driver attached to another PF accesses the port in its
+> > > > > own probe function. The potential problems include failed or hung
+> > > > 
+> > > > Only racing during probe functions? I assume any time port_reset()
+> > > > would fail TLPs for the other PF. And port_reset() could be triggered
+> > > > at runtime by ioctl().
+> > > 
+> > > Yes, a port_reset() triggered by ioctl could result in failed TLP for the
+> > > other PFs. The user space SW performing the ioctl needs to ensure all PFs
+> > > involved are properly quiesced before the port_reset is performed.
+> > 
+> > How would user get an insight into other PF drivers to know everything
+> > is quiesced?  I mean do we need driver level management for this?
+> 
+> Since this is an FPGA, the number of other PFs and the drivers bound to
+> those PFs depends on the FPGA image. There would also be user space software
+> stacks involved with the other PFs as well. The user would have to ensure
+> all the SW stacks and drivers are quiesced as appropriate for the FPGA
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
----
- drivers/fpga/dfl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+User may not know everything about the device, they only get part of the
+controls that drivers grant. This is still true for vfio + userspace
+drivers.
 
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index e6d12fbab653..094ee97ea26c 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -327,7 +327,7 @@ static struct attribute *dfl_dev_attrs[] = {
- };
- ATTRIBUTE_GROUPS(dfl_dev);
- 
--static struct bus_type dfl_bus_type = {
-+static const struct bus_type dfl_bus_type = {
- 	.name		= "dfl",
- 	.match		= dfl_bus_match,
- 	.probe		= dfl_bus_probe,
+> image. I don't think the driver performing the port_reset() can know all the
 
----
-base-commit: 8680970410625875c34d6b97b6fd89d7d62a74ec
-change-id: 20240204-bus_cleanup-fpga-e8e3c3d562b7
+Other PF drivers should know their own components. They should be aware
+that their devices are being reset. 
 
-Best regards,
--- 
-Ricardo B. Marliere <ricardo@marliere.net>
+> components to be able to provide any meaningful management.
 
+If the reset provider and reset consumer are not in the same driver,
+they should interact with each other. IIRC, some reset controller class
+works for this purpose.
+
+Thanks,
+Yilun
+
+> 
+> Thanks,
+> Matthew
+> 
+> > 
+> > Thanks,
+> > Yilun
+> > 
+> > > 
+> > > Do you want me to update the commit message with this information?
+> > > 
+> > > Thanks,
+> > > Matthew
+> > 
+> > 
 
