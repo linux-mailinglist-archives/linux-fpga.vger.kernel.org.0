@@ -1,247 +1,255 @@
-Return-Path: <linux-fpga+bounces-261-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-264-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE7FA84D0D8
-	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 19:11:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B236584D1B1
+	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 19:52:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08E67B2A053
-	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 18:11:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA9301C227B7
+	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 18:52:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70FF986ACD;
-	Wed,  7 Feb 2024 18:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="Z0TS9kxt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9C3A82883;
+	Wed,  7 Feb 2024 18:44:50 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC47B85C55;
-	Wed,  7 Feb 2024 18:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD0182889
+	for <linux-fpga@vger.kernel.org>; Wed,  7 Feb 2024 18:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707328958; cv=none; b=dgKGc+xgZpNhANUJMSXYlnr3xX72jkr5XZoBXJsvLOo4oGKHt2K1RwsdVUI73+GpP4WZkIbUDnRvhBW+ZVJyUgc6Yar8zdA9RzV8AHkz0USlgofCtOvGPfhNMKAdk/2ermDntQocWUrkXXMn/RQTMYaR6SEDF/aPmj9+rtLQVmA=
+	t=1707331490; cv=none; b=nm11weKhcebWq51vl+FwNYMRmAG4FMmgHQsR1hJyibs7r/9qWxsOkfLpvp4CJc4UdIzQ5Dtwt/Ga7OJ01bb7Prh+4M9lCQO/UUY/wMlu9i7N17HHEWN3knYqaeBBhkLZlbH4P0pnGcpUvJ+7YbnBjh3gemP8jm/pCMOJWUzY4FU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707328958; c=relaxed/simple;
-	bh=NR5SjOtitKYacXAEEruvJ6JXFK2gpzJixBo6UISsrYc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pPfCeICGglyi08o7tRfiA27E62HtLtxzyQnP93xPSKi+K9ZU1QkEafYIv2xQ0rAmzC6atbeBG+pJLxYeh3UMxbXmwH1968e3AM+DM6+AB7bRjpBAslLrakMEdAc8Dr/t8r99bLjmHujTMRSYauKvaLBVh/sx4FxAxcst7nfZer4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=Z0TS9kxt; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id C7BB39C48F1;
-	Wed,  7 Feb 2024 13:02:35 -0500 (EST)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id f3bXL3Gt-X3n; Wed,  7 Feb 2024 13:02:35 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 249669C48F9;
-	Wed,  7 Feb 2024 13:02:35 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 249669C48F9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1707328955; bh=ly1997o8a0kUOAeldUVP9gf71MeRB6+Tnu3YuBit5iE=;
-	h=From:To:Date:Message-ID:MIME-Version;
-	b=Z0TS9kxtpVoBjChlAkWCmhChshibcq3f4A1pEdaQDbMPnMTAnWVIBKs/lRMYyno1Q
-	 gjKc3dyV1RAO9YhK7Z2ZpiI955OBKDdoeTyQWyznAqDGJitW2ltU/k8Dytc6Pr8b+9
-	 tKn6VoWj53twKfFVOkVMeoLn7dzsucIREuxtk2ME0ynXaCst0hY9u/tVAgbvgPTVEQ
-	 i+c49eN+zzfdk6Qv+/vWDZ/nIKBd3DDN62gY5BPiBAV2pwwyiURPsfQpU90kQjNW3z
-	 L9IxN42QqTajrFEmYk2nR3eaLXMH1/3RFPETKM9st6aNf4ZMDXz/aztmmx9noNa5Vj
-	 VkSqMT7ZAkUPw==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id bdq_3Q6xO9jO; Wed,  7 Feb 2024 13:02:35 -0500 (EST)
-Received: from pcperry.mtl.sfl (unknown [192.168.51.254])
-	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 0194A9C48F1;
-	Wed,  7 Feb 2024 13:02:35 -0500 (EST)
-From: Charles Perry <charles.perry@savoirfairelinux.com>
-To: mdf@kernel.org
-Cc: avandiver@markem-imaje.com,
-	bcody@markem-imaje.com,
-	Charles Perry <charles.perry@savoirfairelinux.com>,
+	s=arc-20240116; t=1707331490; c=relaxed/simple;
+	bh=s51zDtEtzddF+fOLbQ8v2gtuX5PVGr2PxCfCP0eStY0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=I+mCg4zlgk+XKWdTNo6ajErttDjiRvXYOl1Z4iRQ/XKpFVjEbe9uoNQtMKMwK/0SboXp5FMmji5WUkRtpTjY61cFDVBfAFnP6aF5ZpBRBtsOaVamVxDNHc+auE+oNLHD6faYN+lNJQgUReEwwXE7/cl3mW7U4xu0M9YDblilXkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rXmtA-0007PF-WC; Wed, 07 Feb 2024 19:43:17 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rXmt1-0054Wo-Fo; Wed, 07 Feb 2024 19:43:07 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rXmt1-00HRrh-0y;
+	Wed, 07 Feb 2024 19:43:07 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: kernel@pengutronix.de,
+	Moritz Fischer <mdf@kernel.org>,
 	Wu Hao <hao.wu@intel.com>,
 	Xu Yilun <yilun.xu@intel.com>,
 	Tom Rix <trix@redhat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michal Simek <michal.simek@amd.com>,
-	kishore Manne <nava.kishore.manne@amd.com>,
 	linux-fpga@vger.kernel.org,
-	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 5/5] fpga: xilinx-selectmap: add new driver
-Date: Wed,  7 Feb 2024 13:01:28 -0500
-Message-ID: <20240207180142.79625-6-charles.perry@savoirfairelinux.com>
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-wpan@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	linux-iio@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-input@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Martin Tuma <martin.tuma@digiteqautomotive.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	Sergey Kozlov <serjk@netup.ru>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	linux-mmc@vger.kernel.org,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Rob Herring <robh@kernel.org>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>,
+	linux-mtd@lists.infradead.org,
+	Simon Horman <horms@kernel.org>,
+	Ronald Wahl <ronald.wahl@raritan.com>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev,
+	Michal Simek <michal.simek@amd.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	Viresh Kumar <vireshk@kernel.org>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	greybus-dev@lists.linaro.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	Herve Codina <herve.codina@bootlin.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-usb@vger.kernel.org,
+	Helge Deller <deller@gmx.de>,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Kalle Valo <kvalo@kernel.org>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	libertas-dev@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	James Clark <james.clark@arm.com>,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v3 00/32] spi: get rid of some legacy macros
+Date: Wed,  7 Feb 2024 19:40:14 +0100
+Message-ID: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240207180142.79625-1-charles.perry@savoirfairelinux.com>
-References: <20240207180142.79625-1-charles.perry@savoirfairelinux.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5860; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=s51zDtEtzddF+fOLbQ8v2gtuX5PVGr2PxCfCP0eStY0=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlw86QixivRCd8jxsnKPB8Ssu0rmVV57zjiJehV Ejr/jxfufWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZcPOkAAKCRCPgPtYfRL+ TqoZB/9v16XZw2mKXG2KBm/qLQpqoIFtAvhj1rhNwGsvXv87uFIurzYxaSWRcHnoydLYAUjcWin wLRECa33v1gti0Be6oV9BMfvx+Pvhq4lk4RnaSn96oPtZRpq+OTzE2mMSgz0Rgm3Al2XVM+wtll cMJhm+DE3KYghNi+61ohTBgmqcQSwjofaml1oAIf8F12/QJkYPMbKHLFo3eYUENR8f8KW6xfzcA Auq9djKc8DcVzUnZlQ8jFBRc78e3H4Wwojwi6fhxTf6BorMOWK2zEE8p+1QpcaPMCBrTOJnRdaw ZunuM2tkWRUATbyKWfDc9YAdTKZGkKDoDmegK95iBOzv5EQf
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
 
-Xilinx 7 series FPGA can be programmed using a parallel port named
-the SelectMAP interface in the datasheet. This interface is compatible
-with the i.MX6 EIM bus controller but other types of external memory
-mapped parallel bus might work.
+Changes since v2
+(https://lore.kernel.org/linux-spi/cover.1705944943.git.u.kleine-koenig@pengutronix.de):
 
-xilinx-selectmap currently only supports the x8 mode where data is loaded
-at one byte per rising edge of the clock, with the MSb of each byte
-presented to the D0 pin.
+ - Drop patch "mtd: rawnand: fsl_elbc: Let .probe retry if local bus is
+   missing" which doesn't belong into this series.
+ - Fix a build failure noticed by the kernel build bot in
+   drivers/spi/spi-au1550.c. (I failed to catch this because this driver
+   is mips only, but not enabled in a mips allmodconfig. That's a bit
+   unfortunate, but not easily fixable.)
+ - Add the Reviewed-by: and Acked-by: tags I received for v2.
 
-Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
----
- drivers/fpga/Kconfig            |  8 +++
- drivers/fpga/Makefile           |  1 +
- drivers/fpga/xilinx-selectmap.c | 97 +++++++++++++++++++++++++++++++++
- 3 files changed, 106 insertions(+)
- create mode 100644 drivers/fpga/xilinx-selectmap.c
+Mark already announced for v2 that he is willing to apply the whole
+series to his spi tree. Assuming no other show stoper are found in this
+v3, I assume that's the plan still for this series now.
 
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index d27a1ebf40838..37b35f58f0dfb 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -67,6 +67,14 @@ config FPGA_MGR_STRATIX10_SOC
- config FPGA_MGR_XILINX_CORE
- 	tristate
-=20
-+config FPGA_MGR_XILINX_SELECTMAP
-+	tristate "Xilinx Configuration over SelectMAP"
-+	depends on HAS_IOMEM
-+	select FPGA_MGR_XILINX_CORE
-+	help
-+	  FPGA manager driver support for Xilinx FPGA configuration
-+	  over SelectMAP interface.
-+
- config FPGA_MGR_XILINX_SPI
- 	tristate "Xilinx Configuration over Slave Serial (SPI)"
- 	depends on SPI
-diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-index 7ec795b6a5a70..aeb89bb13517e 100644
---- a/drivers/fpga/Makefile
-+++ b/drivers/fpga/Makefile
-@@ -16,6 +16,7 @@ obj-$(CONFIG_FPGA_MGR_SOCFPGA_A10)	+=3D socfpga-a10.o
- obj-$(CONFIG_FPGA_MGR_STRATIX10_SOC)	+=3D stratix10-soc.o
- obj-$(CONFIG_FPGA_MGR_TS73XX)		+=3D ts73xx-fpga.o
- obj-$(CONFIG_FPGA_MGR_XILINX_CORE)	+=3D xilinx-core.o
-+obj-$(CONFIG_FPGA_MGR_XILINX_SELECTMAP)	+=3D xilinx-selectmap.o
- obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+=3D xilinx-spi.o
- obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+=3D zynq-fpga.o
- obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+=3D zynqmp-fpga.o
-diff --git a/drivers/fpga/xilinx-selectmap.c b/drivers/fpga/xilinx-select=
-map.c
-new file mode 100644
-index 0000000000000..b63f4623f8b2c
---- /dev/null
-+++ b/drivers/fpga/xilinx-selectmap.c
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Xilinx Spartan6 and 7 Series SelectMAP interface driver
-+ *
-+ * (C) 2024 Charles Perry <charles.perry@savoirfairelinux.com>
-+ *
-+ * Manage Xilinx FPGA firmware loaded over the SelectMAP configuration
-+ * interface.
-+ */
-+
-+#include "xilinx-core.h"
-+
-+#include <linux/platform_device.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/of.h>
-+#include <linux/io.h>
-+
-+struct xilinx_selectmap_conf {
-+	struct xilinx_fpga_core core;
-+	void __iomem *base;
-+};
-+
-+#define to_xilinx_selectmap_conf(obj) \
-+	container_of(obj, struct xilinx_selectmap_conf, core)
-+
-+static int xilinx_selectmap_write(struct xilinx_fpga_core *core,
-+				  const char *buf, size_t count)
-+{
-+	struct xilinx_selectmap_conf *conf =3D to_xilinx_selectmap_conf(core);
-+	u32 i;
-+
-+	for (i =3D 0; i < count; ++i)
-+		writeb(buf[i], conf->base);
-+
-+	return 0;
-+}
-+
-+static int xilinx_selectmap_probe(struct platform_device *pdev)
-+{
-+	struct xilinx_selectmap_conf *conf;
-+	struct resource *r;
-+	void __iomem *base;
-+	struct gpio_desc *csi_b;
-+	struct gpio_desc *rdwr_b;
-+
-+	conf =3D devm_kzalloc(&pdev->dev, sizeof(*conf), GFP_KERNEL);
-+	if (!conf)
-+		return -ENOMEM;
-+
-+	conf->core.dev =3D &pdev->dev;
-+	conf->core.write =3D xilinx_selectmap_write;
-+
-+	base =3D devm_platform_get_and_ioremap_resource(pdev, 0, &r);
-+	if (IS_ERR(base))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(base),
-+				     "ioremap error\n");
-+	conf->base =3D base;
-+
-+	/* CSI_B is active low */
-+	csi_b =3D devm_gpiod_get_optional(&pdev->dev, "csi", GPIOD_OUT_HIGH);
-+	if (IS_ERR(csi_b))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(csi_b),
-+				     "Failed to get CSI_B gpio\n");
-+
-+	/* RDWR_B is active low */
-+	rdwr_b =3D devm_gpiod_get_optional(&pdev->dev, "rdwr", GPIOD_OUT_HIGH);
-+	if (IS_ERR(rdwr_b))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(rdwr_b),
-+				     "Failed to get RDWR_B gpio\n");
-+
-+	return xilinx_core_probe(&conf->core);
-+}
-+
-+static const struct of_device_id xlnx_selectmap_of_match[] =3D {
-+	{ .compatible =3D "xlnx,fpga-xc7s-selectmap", }, // Spartan-7
-+	{ .compatible =3D "xlnx,fpga-xc7a-selectmap", }, // Artix-7
-+	{ .compatible =3D "xlnx,fpga-xc7k-selectmap", }, // Kintex-7
-+	{ .compatible =3D "xlnx,fpga-xc7v-selectmap", }, // Virtex-7
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, xlnx_selectmap_of_match);
-+
-+static struct platform_driver xilinx_selectmap_driver =3D {
-+	.driver =3D {
-+		.name =3D "xilinx-selectmap",
-+		.of_match_table =3D xlnx_selectmap_of_match,
-+	},
-+	.probe  =3D xilinx_selectmap_probe,
-+};
-+
-+module_platform_driver(xilinx_selectmap_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Charles Perry <charles.perry@savoirfairelinux.com>");
-+MODULE_DESCRIPTION("Load Xilinx FPGA firmware over SelectMap");
---=20
+Thanks
+Uwe
+
+Uwe Kleine-König (32):
+  fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
+  ieee802154: ca8210: Follow renaming of SPI "master" to "controller"
+  iio: adc: ad_sigma_delta: Follow renaming of SPI "master" to "controller"
+  Input: pxspad - follow renaming of SPI "master" to "controller"
+  Input: synaptics-rmi4 - follow renaming of SPI "master" to "controller"
+  media: mgb4: Follow renaming of SPI "master" to "controller"
+  media: netup_unidvb: Follow renaming of SPI "master" to "controller"
+  media: usb/msi2500: Follow renaming of SPI "master" to "controller"
+  media: v4l2-subdev: Follow renaming of SPI "master" to "controller"
+  misc: gehc-achc: Follow renaming of SPI "master" to "controller"
+  mmc: mmc_spi: Follow renaming of SPI "master" to "controller"
+  mtd: dataflash: Follow renaming of SPI "master" to "controller"
+  net: ks8851: Follow renaming of SPI "master" to "controller"
+  net: vertexcom: mse102x: Follow renaming of SPI "master" to "controller"
+  platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to "controller"
+  spi: bitbang: Follow renaming of SPI "master" to "controller"
+  spi: cadence-quadspi: Don't emit error message on allocation error
+  spi: cadence-quadspi: Follow renaming of SPI "master" to "controller"
+  spi: cavium: Follow renaming of SPI "master" to "controller"
+  spi: geni-qcom: Follow renaming of SPI "master" to "controller"
+  spi: loopback-test: Follow renaming of SPI "master" to "controller"
+  spi: slave-mt27xx: Follow renaming of SPI "master" to "controller"
+  spi: spidev: Follow renaming of SPI "master" to "controller"
+  staging: fbtft: Follow renaming of SPI "master" to "controller"
+  staging: greybus: spi: Follow renaming of SPI "master" to "controller"
+  tpm_tis_spi: Follow renaming of SPI "master" to "controller"
+  usb: gadget: max3420_udc: Follow renaming of SPI "master" to "controller"
+  video: fbdev: mmp: Follow renaming of SPI "master" to "controller"
+  wifi: libertas: Follow renaming of SPI "master" to "controller"
+  spi: fsl-lib: Follow renaming of SPI "master" to "controller"
+  spi: Drop compat layer from renaming "master" to "controller"
+  Documentation: spi: Update documentation for renaming "master" to "controller"
+
+ .../driver-api/driver-model/devres.rst        |  2 +-
+ Documentation/spi/spi-summary.rst             | 74 +++++++++----------
+ drivers/char/tpm/tpm_tis_spi_main.c           |  4 +-
+ drivers/fpga/ice40-spi.c                      |  4 +-
+ drivers/iio/adc/ad_sigma_delta.c              | 14 ++--
+ drivers/input/joystick/psxpad-spi.c           |  4 +-
+ drivers/input/rmi4/rmi_spi.c                  |  2 +-
+ drivers/media/pci/mgb4/mgb4_core.c            | 14 ++--
+ .../media/pci/netup_unidvb/netup_unidvb_spi.c | 48 ++++++------
+ drivers/media/usb/msi2500/msi2500.c           | 38 +++++-----
+ drivers/media/v4l2-core/v4l2-spi.c            |  4 +-
+ drivers/misc/gehc-achc.c                      |  8 +-
+ drivers/mmc/host/mmc_spi.c                    |  6 +-
+ drivers/mtd/devices/mtd_dataflash.c           |  2 +-
+ drivers/net/ethernet/micrel/ks8851_spi.c      |  4 +-
+ drivers/net/ethernet/vertexcom/mse102x.c      |  2 +-
+ drivers/net/ieee802154/ca8210.c               |  2 +-
+ .../net/wireless/marvell/libertas/if_spi.c    |  2 +-
+ drivers/platform/chrome/cros_ec_spi.c         |  8 +-
+ drivers/spi/spi-ath79.c                       |  4 +-
+ drivers/spi/spi-au1550.c                      |  2 +-
+ drivers/spi/spi-bitbang.c                     | 64 ++++++++--------
+ drivers/spi/spi-butterfly.c                   |  6 +-
+ drivers/spi/spi-cadence-quadspi.c             |  7 +-
+ drivers/spi/spi-cavium.c                      |  6 +-
+ drivers/spi/spi-cavium.h                      |  2 +-
+ drivers/spi/spi-davinci.c                     |  6 +-
+ drivers/spi/spi-fsl-lib.c                     | 14 ++--
+ drivers/spi/spi-geni-qcom.c                   |  2 +-
+ drivers/spi/spi-gpio.c                        |  2 +-
+ drivers/spi/spi-lm70llp.c                     |  6 +-
+ drivers/spi/spi-loopback-test.c               |  4 +-
+ drivers/spi/spi-oc-tiny.c                     |  6 +-
+ drivers/spi/spi-omap-uwire.c                  |  4 +-
+ drivers/spi/spi-sh-sci.c                      | 10 +--
+ drivers/spi/spi-slave-mt27xx.c                |  2 +-
+ drivers/spi/spi-xilinx.c                      |  4 +-
+ drivers/spi/spi-xtensa-xtfpga.c               |  2 +-
+ drivers/spi/spi.c                             |  2 +-
+ drivers/spi/spidev.c                          |  2 +-
+ drivers/staging/fbtft/fbtft-core.c            |  4 +-
+ drivers/staging/greybus/spilib.c              | 66 ++++++++---------
+ drivers/usb/gadget/udc/max3420_udc.c          |  2 +-
+ drivers/video/fbdev/mmp/hw/mmp_spi.c          | 26 +++----
+ include/linux/spi/spi.h                       | 20 +----
+ include/linux/spi/spi_bitbang.h               |  2 +-
+ include/media/v4l2-common.h                   |  6 +-
+ 47 files changed, 253 insertions(+), 272 deletions(-)
+
+
+base-commit: b9b98f594b6f4c0b0fb2da4493453aef183bca4b
+-- 
 2.43.0
 
 
