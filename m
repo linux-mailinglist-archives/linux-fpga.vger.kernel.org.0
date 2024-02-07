@@ -1,142 +1,178 @@
-Return-Path: <linux-fpga+bounces-255-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-256-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A74A84CCE8
-	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 15:35:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF03584CF27
+	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 17:41:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C4A0B26F86
-	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 14:35:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DEBD1C26BA1
+	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 16:41:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E63367F461;
-	Wed,  7 Feb 2024 14:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5139F7E769;
+	Wed,  7 Feb 2024 16:40:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M5iqqdt6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUe7EqeK"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FD77E773
-	for <linux-fpga@vger.kernel.org>; Wed,  7 Feb 2024 14:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468041E498;
+	Wed,  7 Feb 2024 16:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707316516; cv=none; b=JNtvuLh/KrZTjHesu9JaJbsIyqOXm9jfnO78UkHjuZrRaG8vFKoHSWmiOzFGLp8Z0nTPSS8HaUVCNZYGrXx4DiJbKMCbaNJ0MAKFsjsa+QnlOB/rvYD+gjKtx4yFOS8hV4vq3T5L8oYH+TVVCAUinbwiNXery7yPxDZjbr/R6tU=
+	t=1707324058; cv=none; b=CTl0sg/F4wSZbo4X8438gw9VlB6BOEC6Mi9jIYu0+yMvxqyjpmOWD661S64sr9lyALA5Eaiga0GYImCMay937moskB6FxcXLAkQoV48n2sMqcU+ifwcPeRITPqbpPvQSiRPMt7CAOUBgR0f2W+z6UFXyMGil0uBlHMp25IKFa8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707316516; c=relaxed/simple;
-	bh=gpczSAxiMi16s36upVGETQy331v3qZNDG6hZpWEIo9A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mspDeil0ZSoq0EmV4gjTrhgv3k2mNM2KJUEybawXM/7Tgm1fYGNXHxbCDVLTfw6TD/hD1MsEfZHO68LTiP5XIBMwKhUPB9fnHjRPQWjfhEDZBZl6Q26T9YDAcefAmmCnGoCEQs+uRwGkdS3VqMr3L8ELsYtIJLvpJizX6qfjxWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M5iqqdt6; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707316513;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GS8oKSLwKnX/1OmCvP477VoPbNUPt8nzRLpvXwaBKqk=;
-	b=M5iqqdt6fMOfUpJ7w/iD60/e/WCnJ4tmWJA+TEQ3KqKN4Sk5dLVoG8GruAsn1H9VYSvUEt
-	C3oFqXfMrLEGrxOUwhLaqTn1w2/Bt2IZxcgVglisxYSuucJxW2x8Q1ubnywW7OZmPbSh1p
-	pgw5CwNuEQGr2uLq/4OU1HDsWkmVnfo=
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
- [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-48-FbVa4q6gPaOhcH1kYPNvkw-1; Wed, 07 Feb 2024 09:35:12 -0500
-X-MC-Unique: FbVa4q6gPaOhcH1kYPNvkw-1
-Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-dc6b26783b4so881081276.0
-        for <linux-fpga@vger.kernel.org>; Wed, 07 Feb 2024 06:35:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707316512; x=1707921312;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GS8oKSLwKnX/1OmCvP477VoPbNUPt8nzRLpvXwaBKqk=;
-        b=WpyfMj9Mg+SBxC59jdW/1dwf437Q70wZBYm8DBtFfBoeXdErwFsqHxiwNOQiAoqomr
-         OUaQdmcD/rKQ0Z1rpMXxqoTU3v2Z/9UYaHhRWBrQrhw6jeGVmHrGdDLTI8KthvJ1mFuz
-         6gTnNGtuwCc81BTfiUdv04zMHc/9RqLforrMnS3d5rvKzLnoMv37slRr8nsyUUKmhyR3
-         WrW9IH4CCIUGATVQ6kqnkKLRp6XZibgnEAFM3If9giKcU88SZcy4DAxa7pKam15fSTwK
-         yVBaN0o2OCD8iIWnJCb4KA70CaDKU2kQ0Kft/ucxVJuYfwJeN4DekRG/IyBYZcxd8orT
-         DwxA==
-X-Forwarded-Encrypted: i=1; AJvYcCVNoRNu/YbNK6l9vDRMdIodY3ijplVOmRMrGbM3ZHT4R3zXwUl5OtnoE0VjF8tuPOaBqdb8vlLgrLEL2snbcRux2szPTalO/Kfbkg==
-X-Gm-Message-State: AOJu0Yz5fDJ0r052QB4g+Miy/OBgj6IyEzuBcpnyIT0KLJ+iRSIZeqRC
-	Srtz/QvXBS15ryzVhUY2/s2cHiGRsIZZKd1dyyYSZlyvgvkmlBrEfUdS7ydY7bK+59P7gOg/z0i
-	SGSy+HlWj9BtgizDwXEasZTzXc7kXZ37zecf3zCEIvSKVvwymcF2sHN0Kg4oZouQsfZHbOzhV9K
-	ghG31RbCxI24Y26sIGCoUil92JHtwXLsXDSQ==
-X-Received: by 2002:a25:ac4a:0:b0:dc2:6698:2c7f with SMTP id r10-20020a25ac4a000000b00dc266982c7fmr4891948ybd.33.1707316512038;
-        Wed, 07 Feb 2024 06:35:12 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHE++5w1moQLuHaAqcodu9tX5wQSeMmoBwfQu91lEa9262GLOPvEjAZwMad0/0OUSEvws/4fl6Yzjr0KEw6orY=
-X-Received: by 2002:a25:ac4a:0:b0:dc2:6698:2c7f with SMTP id
- r10-20020a25ac4a000000b00dc266982c7fmr4891893ybd.33.1707316511720; Wed, 07
- Feb 2024 06:35:11 -0800 (PST)
+	s=arc-20240116; t=1707324058; c=relaxed/simple;
+	bh=66AduItov+Ar031GsDXa/BoNmYe2A6qwD+bgC4xBNLE=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Crie2QH1vBexV6aEHuUm4+1xkcMC0QO/ExZEhNpYLQx5MzhmNUAhDVDhcIoQaWOaef+RT+vkgYwMyYuT16MkTNZnuIMlnVw283fN4NIDNIktUwDubgIqY0uKk/JR0ZqsN9Z9/iX1E0FokH19ylPr0a9DUD4KSAd+oB2ID1YVa60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUe7EqeK; arc=none smtp.client-ip=192.55.52.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707324056; x=1738860056;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=66AduItov+Ar031GsDXa/BoNmYe2A6qwD+bgC4xBNLE=;
+  b=HUe7EqeKR41B2RDCUG5/fd+Zrjs/xIcOYNkS3Gu84EPKuLXix+okt839
+   HYqXtEyVP+9lmxLs7IhgbtYM+KatmmmshN42oMYS5A335kMhmwqrXmJDe
+   vQe9Tr/NfOJhGxne/frymIkBqTWAjcAHEDBPj/Yb7Naxq8K9+UHTUjIdM
+   MqpwcHYqGEin0UAMuByCdB4FSHMkZ1Kyogmmz2wnLtzgds8pAm27he9m5
+   83aNqizqz7i4ePJDYeXS3mHeHC84E2idFG9O7S4U0+H2WUb/Hih77XMtm
+   V6BOFUTTlAZwHRbHJYrwCCW65bvyRu5ep3XjO/G9K3MlzKI83F8O7YPqG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="436161675"
+X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
+   d="scan'208";a="436161675"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 08:40:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
+   d="scan'208";a="1402855"
+Received: from sj-4150-psse-sw-opae-dev2.sj.intel.com ([10.233.115.162])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 08:40:55 -0800
+Date: Wed, 7 Feb 2024 08:40:55 -0800 (PST)
+From: matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@sj-4150-psse-sw-opae-dev2
+To: Xu Yilun <yilun.xu@linux.intel.com>
+cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com, 
+    linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] fpga: dfl: afu: support Rev 2 of DFL Port feature
+In-Reply-To: <ZcBIjcFJjGKf0qcO@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2402051600190.122158@sj-4150-psse-sw-opae-dev2>
+References: <20240125233715.861883-1-matthew.gerlach@linux.intel.com> <ZbjHl8ptQG5FdHvC@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401300948590.112016@sj-4150-psse-sw-opae-dev2> <Zbnd8W1ciTKeoKc4@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401311610020.112016@sj-4150-psse-sw-opae-dev2>
+ <ZcBIjcFJjGKf0qcO@yilunxu-OptiPlex-7050>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231122-vfs-eventfd-signal-v2-0-bd549b14ce0c@kernel.org> <20231122-vfs-eventfd-signal-v2-2-bd549b14ce0c@kernel.org>
-In-Reply-To: <20231122-vfs-eventfd-signal-v2-2-bd549b14ce0c@kernel.org>
-From: Paolo Bonzini <pbonzini@redhat.com>
-Date: Wed, 7 Feb 2024 15:34:59 +0100
-Message-ID: <CABgObfaSVv=TFmwh+bxjaw3fpWAnemnf1Z5Us5kJtNN=oeGrag@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] eventfd: simplify eventfd_signal()
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>, 
-	Vitaly Kuznetsov <vkuznets@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>, Oded Gabbay <ogabbay@kernel.org>, 
-	Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>, 
-	Xu Yilun <yilun.xu@intel.com>, Zhenyu Wang <zhenyuw@linux.intel.com>, 
-	Zhi Wang <zhi.a.wang@intel.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Frederic Barrat <fbarrat@linux.ibm.com>, Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Eric Farman <farman@linux.ibm.com>, 
-	Matthew Rosato <mjrosato@linux.ibm.com>, Halil Pasic <pasic@linux.ibm.com>, 
-	Vineeth Vijayan <vneethv@linux.ibm.com>, Peter Oberparleiter <oberpar@linux.ibm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Tony Krowiak <akrowiak@linux.ibm.com>, 
-	Jason Herne <jjherne@linux.ibm.com>, Harald Freudenberger <freude@linux.ibm.com>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Diana Craciun <diana.craciun@oss.nxp.com>, 
-	Alex Williamson <alex.williamson@redhat.com>, Eric Auger <eric.auger@redhat.com>, 
-	Fei Li <fei1.li@intel.com>, Benjamin LaHaise <bcrl@kvack.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeelb@google.com>, Muchun Song <muchun.song@linux.dev>, 
-	Kirti Wankhede <kwankhede@nvidia.com>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-fpga@vger.kernel.org, 
-	intel-gvt-dev@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
-	linux-rdma@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-s390@vger.kernel.org, linux-usb@vger.kernel.org, 
-	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org, 
-	linux-aio@kvack.org, cgroups@vger.kernel.org, linux-mm@kvack.org, 
-	Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 
-On Wed, Nov 22, 2023 at 1:49=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
+
+
+On Mon, 5 Feb 2024, Xu Yilun wrote:
+
+> On Wed, Jan 31, 2024 at 04:26:27PM -0800, matthew.gerlach@linux.intel.com wrote:
+>>
+>>
+>> On Wed, 31 Jan 2024, Xu Yilun wrote:
+>>
+>>> On Tue, Jan 30, 2024 at 10:00:16AM -0800, matthew.gerlach@linux.intel.com wrote:
+>>>>
+>>>>
+>>>> On Tue, 30 Jan 2024, Xu Yilun wrote:
+>>>>
+>>>>> On Thu, Jan 25, 2024 at 03:37:15PM -0800, Matthew Gerlach wrote:
+>>>>>> Revision 2 of the Device Feature List (DFL) Port feature
+>>>>>> adds support for connecting the contents of the port to
+>>>>>> multiple PCIe Physical Functions (PF).
+>>>>>>
+>>>>>> This new functionality requires changing the port reset
+>>>>>> behavior during FPGA and software initialization from
+>>>>>> revision 1 of the port feature. With revision 1, the initial
+>>>>>> state of the logic inside the port was not guaranteed to
+>>>>>> be valid until a port reset was performed by software during
+>>>>>> driver initialization. With revision 2, the initial state
+>>>>>> of the logic inside the port is guaranteed to be valid,
+>>>>>> and a port reset is not required during driver initialization.
+>>>>>>
+>>>>>> This change in port reset behavior avoids a potential race
+>>>>>> condition during PCI enumeration when a port is connected to
+>>>>>> multiple PFs. Problems can occur if the driver attached to
+>>>>>> the PF managing the port asserts reset in its probe function
+>>>>>> when a driver attached to another PF accesses the port in its
+>>>>>> own probe function. The potential problems include failed or hung
+>>>>>
+>>>>> Only racing during probe functions? I assume any time port_reset()
+>>>>> would fail TLPs for the other PF. And port_reset() could be triggered
+>>>>> at runtime by ioctl().
+>>>>
+>>>> Yes, a port_reset() triggered by ioctl could result in failed TLP for the
+>>>> other PFs. The user space SW performing the ioctl needs to ensure all PFs
+>>>> involved are properly quiesced before the port_reset is performed.
+>>>
+>>> How would user get an insight into other PF drivers to know everything
+>>> is quiesced?  I mean do we need driver level management for this?
+>>
+>> Since this is an FPGA, the number of other PFs and the drivers bound to
+>> those PFs depends on the FPGA image. There would also be user space software
+>> stacks involved with the other PFs as well. The user would have to ensure
+>> all the SW stacks and drivers are quiesced as appropriate for the FPGA
 >
-> Ever since the evenfd type was introduced back in 2007 in commit
-> e1ad7468c77d ("signal/timer/event: eventfd core") the eventfd_signal()
-> function only ever passed 1 as a value for @n. There's no point in
-> keeping that additional argument.
+> User may not know everything about the device, they only get part of the
+> controls that drivers grant. This is still true for vfio + userspace
+> drivers.
+
+A user performing a port reset would have to know the impact to the 
+specific FPGA image being run in order to ensure all SW stacks are ready 
+for the reset.
+
 >
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
-> ---
->  arch/x86/kvm/hyperv.c                     |  2 +-
->  arch/x86/kvm/xen.c                        |  2 +-
->  virt/kvm/eventfd.c                        |  4 ++--
->  30 files changed, 60 insertions(+), 63 deletions(-)
+>> image. I don't think the driver performing the port_reset() can know all the
+>
+> Other PF drivers should know their own components. They should be aware
+> that their devices are being reset.
 
-For KVM:
+The other PF drivers depend on the actual FPGA image being run.
 
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+>
+>> components to be able to provide any meaningful management.
+>
+> If the reset provider and reset consumer are not in the same driver,
+> they should interact with each other. IIRC, some reset controller class
+> works for this purpose.
 
+The other PFs in many cases can present as standard devices with existing 
+drivers like virtio-net or virtio-blk. It does not seem desireable 
+to have to change existing drivers for a particular FPGA implementation
+
+Thanks,
+Matthew
+>
+> Thanks,
+> Yilun
+>
+>>
+>> Thanks,
+>> Matthew
+>>
+>>>
+>>> Thanks,
+>>> Yilun
+>>>
+>>>>
+>>>> Do you want me to update the commit message with this information?
+>>>>
+>>>> Thanks,
+>>>> Matthew
+>>>
+>>>
+>
+>
 
