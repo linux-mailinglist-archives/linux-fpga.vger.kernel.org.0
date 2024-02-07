@@ -1,178 +1,158 @@
-Return-Path: <linux-fpga+bounces-256-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-258-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF03584CF27
-	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 17:41:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD3B384D0CE
+	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 19:11:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DEBD1C26BA1
-	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 16:41:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E4ACB29D6D
+	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 18:11:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5139F7E769;
-	Wed,  7 Feb 2024 16:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB88285953;
+	Wed,  7 Feb 2024 18:02:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUe7EqeK"
+	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="Gk0hqWXx"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468041E498;
-	Wed,  7 Feb 2024 16:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B1B82D84;
+	Wed,  7 Feb 2024 18:02:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707324058; cv=none; b=CTl0sg/F4wSZbo4X8438gw9VlB6BOEC6Mi9jIYu0+yMvxqyjpmOWD661S64sr9lyALA5Eaiga0GYImCMay937moskB6FxcXLAkQoV48n2sMqcU+ifwcPeRITPqbpPvQSiRPMt7CAOUBgR0f2W+z6UFXyMGil0uBlHMp25IKFa8w=
+	t=1707328955; cv=none; b=Ola3che+0VE5HmQY/qYASAYpWsQ/2KMp/trz/lrXsE6nA5SG/5K1c+lKItKGWOviOtSViAPJCPW439o/OG/3nfnvA90HR4UCehTFXK8S5bEgnOiMcQkwRzCjq7KRIlb/lEra/HqJ4oQ6SoC69FtxGj84gNkq42Jq1nHYy3sgso4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707324058; c=relaxed/simple;
-	bh=66AduItov+Ar031GsDXa/BoNmYe2A6qwD+bgC4xBNLE=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Crie2QH1vBexV6aEHuUm4+1xkcMC0QO/ExZEhNpYLQx5MzhmNUAhDVDhcIoQaWOaef+RT+vkgYwMyYuT16MkTNZnuIMlnVw283fN4NIDNIktUwDubgIqY0uKk/JR0ZqsN9Z9/iX1E0FokH19ylPr0a9DUD4KSAd+oB2ID1YVa60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUe7EqeK; arc=none smtp.client-ip=192.55.52.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707324056; x=1738860056;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=66AduItov+Ar031GsDXa/BoNmYe2A6qwD+bgC4xBNLE=;
-  b=HUe7EqeKR41B2RDCUG5/fd+Zrjs/xIcOYNkS3Gu84EPKuLXix+okt839
-   HYqXtEyVP+9lmxLs7IhgbtYM+KatmmmshN42oMYS5A335kMhmwqrXmJDe
-   vQe9Tr/NfOJhGxne/frymIkBqTWAjcAHEDBPj/Yb7Naxq8K9+UHTUjIdM
-   MqpwcHYqGEin0UAMuByCdB4FSHMkZ1Kyogmmz2wnLtzgds8pAm27he9m5
-   83aNqizqz7i4ePJDYeXS3mHeHC84E2idFG9O7S4U0+H2WUb/Hih77XMtm
-   V6BOFUTTlAZwHRbHJYrwCCW65bvyRu5ep3XjO/G9K3MlzKI83F8O7YPqG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="436161675"
-X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="436161675"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 08:40:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="1402855"
-Received: from sj-4150-psse-sw-opae-dev2.sj.intel.com ([10.233.115.162])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 08:40:55 -0800
-Date: Wed, 7 Feb 2024 08:40:55 -0800 (PST)
-From: matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@sj-4150-psse-sw-opae-dev2
-To: Xu Yilun <yilun.xu@linux.intel.com>
-cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com, 
-    linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fpga: dfl: afu: support Rev 2 of DFL Port feature
-In-Reply-To: <ZcBIjcFJjGKf0qcO@yilunxu-OptiPlex-7050>
-Message-ID: <alpine.DEB.2.22.394.2402051600190.122158@sj-4150-psse-sw-opae-dev2>
-References: <20240125233715.861883-1-matthew.gerlach@linux.intel.com> <ZbjHl8ptQG5FdHvC@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401300948590.112016@sj-4150-psse-sw-opae-dev2> <Zbnd8W1ciTKeoKc4@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401311610020.112016@sj-4150-psse-sw-opae-dev2>
- <ZcBIjcFJjGKf0qcO@yilunxu-OptiPlex-7050>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+	s=arc-20240116; t=1707328955; c=relaxed/simple;
+	bh=z136LXKA0PuDP+pN22K+c15MG1s8hrUVhUwd7Mft7wE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Km0NZZu8Y4Uk4Rm/OTpxA9dGUFgkTVoS78lxf09s7xSNmduAq3DQX649JibPLHETvjbBPx3kKfsKJOQNGLHJquSE850Oxegzgh+bSq+stp0fbH/v+zIOk3oThYEgzVsITQlwoOOrO3AF0/onSIip04N7hXrjUMbuITcOVcnbWnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=Gk0hqWXx; arc=none smtp.client-ip=208.88.110.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 2845C9C2AE3;
+	Wed,  7 Feb 2024 13:02:25 -0500 (EST)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id YY61-W2GsUDK; Wed,  7 Feb 2024 13:02:24 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 769599C43A3;
+	Wed,  7 Feb 2024 13:02:24 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 769599C43A3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+	t=1707328944; bh=+4oiaVsOGXYuHSRiXQ/YZSZiOgTybQ6dnCa8ipMKIHI=;
+	h=From:To:Date:Message-ID:MIME-Version;
+	b=Gk0hqWXxjUOFAZK+OfhFJod/epU3atRo76l9vXrCj7E2NBPwvJJHrHVnVeSe9yLu8
+	 RXT8UDZVGyQUoD9OTpW1ATD6a3OkIRXI+8wnWS9/reViCZqEFVq6qET0Dyo7Da8zdE
+	 vKOGwPyxDOFJhQlJdUsSuLoprecrq/HiieozIgAF1L2t7Y25/xi1NLf07Ts28MWBpG
+	 WDLdlOgyJSgJYScl8/T1+sV0sA9IPmBLswcMT1jTJY7mzCa4p/hTGIbOfj9A/z1YJ9
+	 eZOdUBsolxIxoJl6N3rNjEkBaO7laCJPptNxaiVO/oVNGnvt3M+UB9zhfJaMv52H5R
+	 w26g0BXJmvPqw==
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id pQNA9LgsY3MQ; Wed,  7 Feb 2024 13:02:24 -0500 (EST)
+Received: from pcperry.mtl.sfl (unknown [192.168.51.254])
+	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 2FBB39C2AE3;
+	Wed,  7 Feb 2024 13:02:24 -0500 (EST)
+From: Charles Perry <charles.perry@savoirfairelinux.com>
+To: mdf@kernel.org
+Cc: avandiver@markem-imaje.com,
+	bcody@markem-imaje.com,
+	Charles Perry <charles.perry@savoirfairelinux.com>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	kishore Manne <nava.kishore.manne@amd.com>,
+	linux-fpga@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/5] fpga: xilinx-selectmap: add new driver
+Date: Wed,  7 Feb 2024 13:01:23 -0500
+Message-ID: <20240207180142.79625-1-charles.perry@savoirfairelinux.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+This patchset adds a new driver for the 7 series FPGA's SelectMAP
+interface.
+
+The SelectMAP interface shares a common GPIO protocol with the SPI
+interface which is already in the kernel (drivers/fpga/xilinx-spi.c).
+The approach proposed in this patchset is to refactor xilinx-spi.c into
+xilinx-core.c which would handle the common GPIO protocol. This is then
+used to build two drivers, the already existing xilinx-spi.c driver and
+a newly added xilinx-selectmap.c driver.
+
+The SelectMAP driver proposed only supports 8 bit mode. This is because
+the 16 and 32 bits mode have limitations with regards to compressed
+bitstream support as well as introducing endianness considerations.
+
+I'm testing xilinx-selectmap.c on a custom i.MX6 board connected to an
+Artix 7 FPGA. Flashing a 913K bitstream takes 0.44 seconds.
+
+Changes since v2:
+ * Inserted patch 2 and 3 which rename "prog_b" and "init-b" into "prog"
+   and "init" for the SPI driver.
+ * From Krzysztof Kozlowski review's:
+   * Use more specific compatible names
+   * Remove other missing occurences of the slave word missed in v2.
+ * From Xu Yilun review's:
+   * Fix vertical whitespace in get_done_gpio().
+   * Combine write() and write_one_dummy_byte() together.
+   * Eliminate most of the xilinx_core_probe() arguments, the driver
+     needs to populate those directly into the xilinx_fpga_core struct.
+     Added some documentation to struct xilinx_fpga_core to clarify
+     this.
+   * Removed typedefs from xilinx-core.h.
+   * Moved null checks in xilinx_core_probe() to first patch.
+   * Move csi_b and rdwr_b out of xilinx_selectmap_conf as they are not
+     used out of the probe function.
+
+Changes since v1: (from Krzysztof Kozlowski review's)
+  * Use more conventional names for gpio DT bindings
+  * fix example in DT bindings
+  * add mc-peripheral-props.yaml to DT bindings
+  * fix various formatting mistakes
+  * Remove all occurences of the "slave" word.
 
 
+Charles Perry (5):
+  fpga: xilinx-spi: extract a common driver core
+  dt-bindings: fpga: xlnx,fpga-slave-serial: rename gpios
+  fpga: xilinx-core: rename "prog_b" and "init-b" gpios
+  dt-bindings: fpga: xlnx,fpga-selectmap: add DT schema
+  fpga: xilinx-selectmap: add new driver
 
-On Mon, 5 Feb 2024, Xu Yilun wrote:
+ .../bindings/fpga/xlnx,fpga-selectmap.yaml    |  86 +++++++
+ .../bindings/fpga/xlnx,fpga-slave-serial.yaml |  12 +-
+ drivers/fpga/Kconfig                          |  12 +
+ drivers/fpga/Makefile                         |   2 +
+ drivers/fpga/xilinx-core.c                    | 232 ++++++++++++++++++
+ drivers/fpga/xilinx-core.h                    |  28 +++
+ drivers/fpga/xilinx-selectmap.c               |  97 ++++++++
+ drivers/fpga/xilinx-spi.c                     | 212 +---------------
+ 8 files changed, 476 insertions(+), 205 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,fpga-sele=
+ctmap.yaml
+ create mode 100644 drivers/fpga/xilinx-core.c
+ create mode 100644 drivers/fpga/xilinx-core.h
+ create mode 100644 drivers/fpga/xilinx-selectmap.c
 
-> On Wed, Jan 31, 2024 at 04:26:27PM -0800, matthew.gerlach@linux.intel.com wrote:
->>
->>
->> On Wed, 31 Jan 2024, Xu Yilun wrote:
->>
->>> On Tue, Jan 30, 2024 at 10:00:16AM -0800, matthew.gerlach@linux.intel.com wrote:
->>>>
->>>>
->>>> On Tue, 30 Jan 2024, Xu Yilun wrote:
->>>>
->>>>> On Thu, Jan 25, 2024 at 03:37:15PM -0800, Matthew Gerlach wrote:
->>>>>> Revision 2 of the Device Feature List (DFL) Port feature
->>>>>> adds support for connecting the contents of the port to
->>>>>> multiple PCIe Physical Functions (PF).
->>>>>>
->>>>>> This new functionality requires changing the port reset
->>>>>> behavior during FPGA and software initialization from
->>>>>> revision 1 of the port feature. With revision 1, the initial
->>>>>> state of the logic inside the port was not guaranteed to
->>>>>> be valid until a port reset was performed by software during
->>>>>> driver initialization. With revision 2, the initial state
->>>>>> of the logic inside the port is guaranteed to be valid,
->>>>>> and a port reset is not required during driver initialization.
->>>>>>
->>>>>> This change in port reset behavior avoids a potential race
->>>>>> condition during PCI enumeration when a port is connected to
->>>>>> multiple PFs. Problems can occur if the driver attached to
->>>>>> the PF managing the port asserts reset in its probe function
->>>>>> when a driver attached to another PF accesses the port in its
->>>>>> own probe function. The potential problems include failed or hung
->>>>>
->>>>> Only racing during probe functions? I assume any time port_reset()
->>>>> would fail TLPs for the other PF. And port_reset() could be triggered
->>>>> at runtime by ioctl().
->>>>
->>>> Yes, a port_reset() triggered by ioctl could result in failed TLP for the
->>>> other PFs. The user space SW performing the ioctl needs to ensure all PFs
->>>> involved are properly quiesced before the port_reset is performed.
->>>
->>> How would user get an insight into other PF drivers to know everything
->>> is quiesced?  I mean do we need driver level management for this?
->>
->> Since this is an FPGA, the number of other PFs and the drivers bound to
->> those PFs depends on the FPGA image. There would also be user space software
->> stacks involved with the other PFs as well. The user would have to ensure
->> all the SW stacks and drivers are quiesced as appropriate for the FPGA
->
-> User may not know everything about the device, they only get part of the
-> controls that drivers grant. This is still true for vfio + userspace
-> drivers.
-
-A user performing a port reset would have to know the impact to the 
-specific FPGA image being run in order to ensure all SW stacks are ready 
-for the reset.
-
->
->> image. I don't think the driver performing the port_reset() can know all the
->
-> Other PF drivers should know their own components. They should be aware
-> that their devices are being reset.
-
-The other PF drivers depend on the actual FPGA image being run.
-
->
->> components to be able to provide any meaningful management.
->
-> If the reset provider and reset consumer are not in the same driver,
-> they should interact with each other. IIRC, some reset controller class
-> works for this purpose.
-
-The other PFs in many cases can present as standard devices with existing 
-drivers like virtio-net or virtio-blk. It does not seem desireable 
-to have to change existing drivers for a particular FPGA implementation
-
-Thanks,
-Matthew
->
-> Thanks,
-> Yilun
->
->>
->> Thanks,
->> Matthew
->>
->>>
->>> Thanks,
->>> Yilun
->>>
->>>>
->>>> Do you want me to update the commit message with this information?
->>>>
->>>> Thanks,
->>>> Matthew
->>>
->>>
->
->
+--
+2.43.0
 
