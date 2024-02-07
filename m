@@ -1,116 +1,106 @@
-Return-Path: <linux-fpga+bounces-263-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-265-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2285D84D17B
-	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 19:45:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F42C84D4C0
+	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 22:52:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70545B27CAD
-	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 18:45:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDFEC2843E7
+	for <lists+linux-fpga@lfdr.de>; Wed,  7 Feb 2024 21:52:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C14127B5F;
-	Wed,  7 Feb 2024 18:43:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0040F15F32D;
+	Wed,  7 Feb 2024 21:26:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hl3hCxpQ"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DB285952
-	for <linux-fpga@vger.kernel.org>; Wed,  7 Feb 2024 18:43:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBDEE15DF1D;
+	Wed,  7 Feb 2024 21:25:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707331403; cv=none; b=L+p44Ju6WiXpOqsJM55/BkY1xyMzZlkXvwGnyOEbCJpgHW2n041xtIzTXf1CNFois3yyPqtH/erboeZQg0XKsehXm8Cbhjq8kuWknHonHi7Z1/muAVPUj+xDqfl6gSnEswPUTQx6S8GPGlU+dKF1bHK6rkBMfUCZUX6Z1qbGZLQ=
+	t=1707341159; cv=none; b=c4KJODKMHCt7mDBrgiRAULtMsheFtL1pinEJL4n5AEZs8cG/UGOB9278fIhvcJ0ogPDyL02R5upYuOJjUSxAUR2IhdUHtWyi4kvJk7zjsUqAbqs1oKUPXeosFjzOfoa7oXQS0EpzYbJPeh7G42L8GUxHtdaYlIliTvQON29gD3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707331403; c=relaxed/simple;
-	bh=wUvKlZOylTR25ACwo1tz3FpcLw1cTa0qMahNcZYRNf0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Kk5CgVZvHZ01utzSRt+XZlv7KW5BAA/HrdXGdmquyo0jvUjWEJ8iBLaFh/QuokDTtHtRTfQOcNvPfxaRpmx3X7FgEURpRXwW29bPI7TTEdyl+PKqLuvBltD2eiuflxXv9lVHrucYFqBoJD9I3ySjSH/lvrPs7LnIlqTpaXMbOLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rXmt4-0007PG-4K; Wed, 07 Feb 2024 19:43:10 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rXmt1-0054Wq-JH; Wed, 07 Feb 2024 19:43:07 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rXmt1-00HRrk-1b;
-	Wed, 07 Feb 2024 19:43:07 +0100
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: kernel@pengutronix.de,
-	Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v3 01/32] fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
-Date: Wed,  7 Feb 2024 19:40:15 +0100
-Message-ID:  <6a3ddedc955cf55dddbc68ccf5ff5e46af5e8b6f.1707324793.git.u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
+	s=arc-20240116; t=1707341159; c=relaxed/simple;
+	bh=e+Z2YkeWHVp4lNUuM47W5BZGrVfrvL38YMqC+CmljIM=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=sUHR9DSy2Z77X+8Lb9baipiplf3U/sTHBGk6h+ySO9XLOS38xUOa4qDEoX099C1T8lL9oIDxox9JFCvPe1uOtfA4hEM6EhoVd6ZeVRIrO+S+qsIy27oXYtjzNwx44wPr6Qo1fmDUFWCq72d9ZxS8RdVIdvx7RiaJ6igAj6clhb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hl3hCxpQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24EA9C433C7;
+	Wed,  7 Feb 2024 21:25:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707341159;
+	bh=e+Z2YkeWHVp4lNUuM47W5BZGrVfrvL38YMqC+CmljIM=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=hl3hCxpQs3nZiA1Cfh0NDG/eOrfjD5H7qfTLdu8uBoKH62DkZVPbLOFWSJkCqWVDC
+	 0NBRSeCa80sfou54B9gt34GlGZX/eL5vgUpGfOL4kIqwo/kz+nqpvLKkrk61p0Awzd
+	 4yFlThgspST435hR4UowPVFyg16910/+x+tInsLegxwhlzY/GvCa3e48BEe8OkgxSK
+	 lrzM1GB8mb6f6hnK2seoSg+TGObb3ntQEVkwod+rPx7S2ljkSNwfNze4lsXenYPpK6
+	 3ubDyh+FJhVhZnP672fLPJ2hINoIN8ZJyRJliOWVVCz0YEJPCdVprpeXlcaGShcVEG
+	 tOlDrkGbaalqQ==
+Date: Wed, 07 Feb 2024 21:25:57 +0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1202; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=wUvKlZOylTR25ACwo1tz3FpcLw1cTa0qMahNcZYRNf0=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlw86WUHAWkGcRfm4ejb22wIJkr4J5rq2dd4nnu y/Az1s+R7eJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZcPOlgAKCRCPgPtYfRL+ TvfOB/0VlX4j2NqYav7kvi55bMy4jP6iZ3BIVkH0MRTghLES4nrb+1y5l4G/49O2EKKyPIW4iVs go4FGGmaiaNPY4RUMrddvye1xfL+JfeIJy/1TvY+kc4F094/W32Is0aoqpVvXw5RtuEnRNVQjMd 1K6kOOcg/fveKQ+rkk7YMlS/EzchGWPv7NIFg+la+rls+KqpPspsyJcHW4gamQE0tBlMLGKRxna oL1SM66D2wVkaEaon/Je5Jlo+8LTIeYZAk43xU/CGJsw5kEySsTm/S+iLwSTBkbXPwU3GLTJV1n /Af9dbfu5M4DV54F/wxpKUAWLRJIKBNvNobOQI8y7rKkhx0e
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
+From: Rob Herring <robh@kernel.org>
+To: Charles Perry <charles.perry@savoirfairelinux.com>
+Cc: Rob Herring <robh+dt@kernel.org>, avandiver@markem-imaje.com, 
+ bcody@markem-imaje.com, mdf@kernel.org, linux-fpga@vger.kernel.org, 
+ kishore Manne <nava.kishore.manne@amd.com>, devicetree@vger.kernel.org, 
+ Wu Hao <hao.wu@intel.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ linux-kernel@vger.kernel.org, Michal Simek <michal.simek@amd.com>, 
+ linux-arm-kernel@lists.infradead.org, Conor Dooley <conor+dt@kernel.org>, 
+ Tom Rix <trix@redhat.com>, Xu Yilun <yilun.xu@intel.com>
+In-Reply-To: <20240207180142.79625-5-charles.perry@savoirfairelinux.com>
+References: <20240207180142.79625-1-charles.perry@savoirfairelinux.com>
+ <20240207180142.79625-5-charles.perry@savoirfairelinux.com>
+Message-Id: <170734115258.3199432.9793593609172465868.robh@kernel.org>
+Subject: Re: [PATCH v3 4/5] dt-bindings: fpga: xlnx,fpga-selectmap: add DT
+ schema
 
-In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-some functions and struct members were renamed. To not break all drivers
-compatibility macros were provided.
 
-To be able to remove these compatibility macros push the renaming into
-this driver.
+On Wed, 07 Feb 2024 13:01:27 -0500, Charles Perry wrote:
+> Document the SelectMAP interface of Xilinx 7 series FPGA.
+> 
+> Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
+> ---
+>  .../bindings/fpga/xlnx,fpga-selectmap.yaml    | 86 +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
+> 
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/fpga/ice40-spi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
-index 7cbb3558b844..c0028ae4c5b7 100644
---- a/drivers/fpga/ice40-spi.c
-+++ b/drivers/fpga/ice40-spi.c
-@@ -66,7 +66,7 @@ static int ice40_fpga_ops_write_init(struct fpga_manager *mgr,
- 	}
- 
- 	/* Lock the bus, assert CRESET_B and SS_B and delay >200ns */
--	spi_bus_lock(dev->master);
-+	spi_bus_lock(dev->controller);
- 
- 	gpiod_set_value(priv->reset, 1);
- 
-@@ -94,7 +94,7 @@ static int ice40_fpga_ops_write_init(struct fpga_manager *mgr,
- 	ret = spi_sync_locked(dev, &message);
- 
- fail:
--	spi_bus_unlock(dev->master);
-+	spi_bus_unlock(dev->controller);
- 
- 	return ret;
- }
--- 
-2.43.0
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.example.dtb: /example-0/fpga-mgr@8000000: failed to match any schema with compatible: ['xlnx,fpga-selectmap']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240207180142.79625-5-charles.perry@savoirfairelinux.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
