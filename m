@@ -1,113 +1,126 @@
-Return-Path: <linux-fpga+bounces-267-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-268-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2663884DDD6
-	for <lists+linux-fpga@lfdr.de>; Thu,  8 Feb 2024 11:09:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72B7384DE4B
+	for <lists+linux-fpga@lfdr.de>; Thu,  8 Feb 2024 11:29:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 593C01C27F2C
-	for <lists+linux-fpga@lfdr.de>; Thu,  8 Feb 2024 10:09:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 271961F229B9
+	for <lists+linux-fpga@lfdr.de>; Thu,  8 Feb 2024 10:29:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C926E2CB;
-	Thu,  8 Feb 2024 10:09:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29C146A347;
+	Thu,  8 Feb 2024 10:28:42 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A116E2D2;
-	Thu,  8 Feb 2024 10:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00716F06C
+	for <linux-fpga@vger.kernel.org>; Thu,  8 Feb 2024 10:28:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707386955; cv=none; b=Cx+yDUyWcHDbnc5kYCn3fFzJrTe+NNiLBxzakSJAis6SJoUn32SEz7oV95uT3X4GmaoMUUGJcmIjqY0PpLCORt10Jf8zBnHwD6DUAjzM/rGi23EVnveqFC1P66j5rie5olWHb8b7M6H8jhdB7vruC/udFR5fb6JYDd2VNcEIb/Q=
+	t=1707388122; cv=none; b=BI/mO6ksgN2NSY9JkOHbY0RKzxi/LZbuwH/sYXIsNG4/gQS0bpL2DzUBi/LAMAMRx9FSJs71XQmz6fGxDgc4vCQuKGeD8ABDqNszhfJRFtdrKcs6QBlH7b/RoUHgwWyIesj4mzdAvyxO7VWvcaa0z05PIPu5+tA+BNjtjtg3Y/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707386955; c=relaxed/simple;
-	bh=eX4H6MobqqX00wXLqxZ8M5ifpIIFJsbVcwdXpee0Yc0=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UfNxzpNtqZXiSbhjMlYz2f2X7MBw/qOn5CsVnd+ykpNLRm0Oo1RARW1cW4Hg4KNbhzSKslywPXZjxrc6CeaQtOfLPEpwz2Ch6XbexoMobgUoTj4VGTmXWVwRNz3JO5jqWGhia0ZSjhYQ6TnRNj3KEsH7F3xG6uysOZCVa613LGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TVt0Y26nlz6K610;
-	Thu,  8 Feb 2024 18:05:49 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 85B33140595;
-	Thu,  8 Feb 2024 18:09:10 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 8 Feb
- 2024 10:09:10 +0000
-Date: Thu, 8 Feb 2024 10:09:09 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-CC: Mark Brown <broonie@kernel.org>, <kernel@pengutronix.de>, Moritz Fischer
-	<mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
+	s=arc-20240116; t=1707388122; c=relaxed/simple;
+	bh=rlNgloJk1bbDe0doAWtnBreqlo1LG7i1MjEav7L5J7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OCCzBK3Azg/uXpS/5c7Tf1ZjaQEqnEpBnSWUkFqZg7gbIAEvVOt9UFpAXFM4RKNw0nz9AofMurj4n6mT4rV5nR5acUBx2NE3ElcEtJ9Xw4RdWOHhjv16hBIiTEB+CWmObRC0IODUQKxqDj5i5+desoVMuWQJakneU3hUOPvOMFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rY1dq-0002O7-Gf; Thu, 08 Feb 2024 11:28:26 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rY1do-005C8j-01; Thu, 08 Feb 2024 11:28:24 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rY1dn-000H0S-2w;
+	Thu, 08 Feb 2024 11:28:23 +0100
+Date: Thu, 8 Feb 2024 11:28:23 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>, Moritz Fischer <mdf@kernel.org>, 
+	kernel@pengutronix.de, Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>
 Subject: Re: [PATCH v3 01/32] fpga: ice40-spi: Follow renaming of SPI
  "master" to "controller"
-Message-ID: <20240208100909.00000432@Huawei.com>
-In-Reply-To: <6a3ddedc955cf55dddbc68ccf5ff5e46af5e8b6f.1707324793.git.u.kleine-koenig@pengutronix.de>
+Message-ID: <2ofekkoan42mm2v3uf6dc2mjlrzjekjc2k6iaoucrus3yy3e3p@vaco3ina7ohz>
 References: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
-	<6a3ddedc955cf55dddbc68ccf5ff5e46af5e8b6f.1707324793.git.u.kleine-koenig@pengutronix.de>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+ <6a3ddedc955cf55dddbc68ccf5ff5e46af5e8b6f.1707324793.git.u.kleine-koenig@pengutronix.de>
+ <20240208100909.00000432@Huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="v2poqeekbi3ytyuk"
+Content-Disposition: inline
+In-Reply-To: <20240208100909.00000432@Huawei.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
+
+
+--v2poqeekbi3ytyuk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Wed, 7 Feb 2024 19:40:15 +0100
-Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> wrote:
-
-> In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-> some functions and struct members were renamed. To not break all drivers
-> compatibility macros were provided.
+On Thu, Feb 08, 2024 at 10:09:09AM +0000, Jonathan Cameron wrote:
+> On Wed, 7 Feb 2024 19:40:15 +0100
+> Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> wrote:
 >=20
-> To be able to remove these compatibility macros push the renaming into
-> this driver.
->=20
-> Acked-by: Xu Yilun <yilun.xu@intel.com>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Looks like b4 or similar got carried away. I've no objection to any of these
-but the ack was only really meant to be for the IIO one.
+> > In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
+> > some functions and struct members were renamed. To not break all drivers
+> > compatibility macros were provided.
+> >=20
+> > To be able to remove these compatibility macros push the renaming into
+> > this driver.
+> >=20
+> > Acked-by: Xu Yilun <yilun.xu@intel.com>
+> > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Looks like b4 or similar got carried away. I've no objection to any of th=
+ese
+> but the ack was only really meant to be for the IIO one.
 
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/fpga/ice40-spi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
-> index 7cbb3558b844..c0028ae4c5b7 100644
-> --- a/drivers/fpga/ice40-spi.c
-> +++ b/drivers/fpga/ice40-spi.c
-> @@ -66,7 +66,7 @@ static int ice40_fpga_ops_write_init(struct fpga_manage=
-r *mgr,
->  	}
-> =20
->  	/* Lock the bus, assert CRESET_B and SS_B and delay >200ns */
-> -	spi_bus_lock(dev->master);
-> +	spi_bus_lock(dev->controller);
-> =20
->  	gpiod_set_value(priv->reset, 1);
-> =20
-> @@ -94,7 +94,7 @@ static int ice40_fpga_ops_write_init(struct fpga_manage=
-r *mgr,
->  	ret =3D spi_sync_locked(dev, &message);
-> =20
->  fail:
-> -	spi_bus_unlock(dev->master);
-> +	spi_bus_unlock(dev->controller);
-> =20
->  	return ret;
->  }
+Ah, indeed. b4 interpreted your ack as applying to the whole series
+because it was given in reply to the cover letter.
 
+If you're indifferent here (and want to improve your ack count :-) I'd
+keep it as is. I'd expect that Mark will apply the series, if there
+appears a need for a v4 I can drop your Acks again.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--v2poqeekbi3ytyuk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXErMcACgkQj4D7WH0S
+/k4Hogf9HLrGzV4g1B8aJCI/9VGhK81OKO7hhvB6XIncH9JZ4umzZkTEG/qmc4oC
+idSEZBxlITL4Xli3P7aiVeS+FWWM1RzqGh71M8+2421qIkZtRHSy7MFJVRhaCfd7
+S6OkFS2ZgB1LuUrntbY5ORA246YA8FArHBQRN2eg5D8CmWNIbOLBMPDiP2hTH8vj
+nVc8rmKmWZaNSFaZKtBWfYHB6A9NVXFtwR1fZxis0mymW9JYFD8k0JK/wKL1U55t
+GdJAXY7z5Cu3TkXd4upzYjfwHgAK2CNjU6SYsLBU6UI4QK/p2rXfxSrukT9bcPxG
+Y87G0/T7crT1mVOtuMtz+igZN/fzNA==
+=XutH
+-----END PGP SIGNATURE-----
+
+--v2poqeekbi3ytyuk--
 
