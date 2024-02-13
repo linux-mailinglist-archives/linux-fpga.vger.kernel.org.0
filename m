@@ -1,220 +1,127 @@
-Return-Path: <linux-fpga+bounces-272-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-273-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5B17851815
-	for <lists+linux-fpga@lfdr.de>; Mon, 12 Feb 2024 16:33:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4294F853D67
+	for <lists+linux-fpga@lfdr.de>; Tue, 13 Feb 2024 22:42:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15D2A1C209A9
-	for <lists+linux-fpga@lfdr.de>; Mon, 12 Feb 2024 15:33:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F06D528121A
+	for <lists+linux-fpga@lfdr.de>; Tue, 13 Feb 2024 21:42:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81E373C6BC;
-	Mon, 12 Feb 2024 15:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE905629F9;
+	Tue, 13 Feb 2024 21:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Co2aU8UO"
+	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="hbXXMyCc"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165C43C497;
-	Mon, 12 Feb 2024 15:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7FE626DB;
+	Tue, 13 Feb 2024 21:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707752001; cv=none; b=S/BayAzGdPR3klvxlZiO1LUgqlCfOoEDK3A4Q5FWj9HKntQaI5WEP5wrcajsUD+iJGMdGLRYWNeiOebLF3LNR+QMpOCI7NhG4AAw4yyZ+2tOT2kn2EJ5inMYbyhypL4z7qI0ixQmTI+BNrt1TEtTI09PH0PE9jDWT98ZI88VEbA=
+	t=1707860424; cv=none; b=pCt5nSyZb7EWMSuYv2cq78nQWHs3LV6VzgV4/9dBXaOiKjW9aVMYsg48pRGz/P9OWiM6XNL/7shpur2eHOU5nqLT7DREzKxnykhFRgq+Indu3eP9DWB/2aUHZG9J3ooC2KpmY5F1YkUlJqd1rruW8cjW2jNBNBJe7fS7Uq1zMUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707752001; c=relaxed/simple;
-	bh=GFsfkdOmJKsuZtWQAq7OhjxHg4IKHiDCDNVd+Gd58aw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=MmRv28evJMFIXRjQdtHazGe3+puM5+3YvnVkl9fCoH/skTwqYCQ86cssWz3+SzaivKYcGElJhwYgM9XBfewGWXwDSbbf5wnCNfilgG3W8HgwIVomPFjg7leCuzwja53AP7K89FNPXItD6EjIsS9BRMsm2b2VPXa8qzx7eZd4tFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Co2aU8UO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD66C433F1;
-	Mon, 12 Feb 2024 15:33:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707752000;
-	bh=GFsfkdOmJKsuZtWQAq7OhjxHg4IKHiDCDNVd+Gd58aw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Co2aU8UOdKL4W8SUaaEqV0BTVAuiZ9niMqI5QuXmkWRQqRD+bsuUp32djuJPfJQ7M
-	 J0AdS/WqPhUm+WDhNwj0PIl1NFZPSx4kaz74w8AVaBO2niEWSvmitVVz0AuwMwTUcd
-	 8MtOvRT2s7ojnBMUpDpCQjuzEzxH0//zOgasqtDHJDU6fjIDBJFEa6lJkzge7aVnIn
-	 65sRlXZGfvNWKRj6hhoF+/MvmClp/yoVXWTT6Lqc/PTFBqTwhuA4fpNCA+K8uTOths
-	 DH2aamg+A5g3aeMmWit1ZUc4X0oSEYy8EtlcvJyPFhdziLYkgWINAXOkx2oWF2pGNL
-	 vlKQQFPbdC2Dw==
-From: Mark Brown <broonie@kernel.org>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: kernel@pengutronix.de, Moritz Fischer <mdf@kernel.org>, 
- Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, 
- Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Alexander Aring <alex.aring@gmail.com>, 
- Stefan Schmidt <stefan@datenfreihafen.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- linux-wpan@vger.kernel.org, netdev@vger.kernel.org, 
- Lars-Peter Clausen <lars@metafoo.de>, 
- Michael Hennerich <Michael.Hennerich@analog.com>, 
- Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, linux-input@vger.kernel.org, 
- Ulf Hansson <ulf.hansson@linaro.org>, Rayyan Ansari <rayyan@ansari.sh>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
- Martin Tuma <martin.tuma@digiteqautomotive.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
- Sergey Kozlov <serjk@netup.ru>, Arnd Bergmann <arnd@arndb.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Yang Yingliang <yangyingliang@huawei.com>, linux-mmc@vger.kernel.org, 
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Rob Herring <robh@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
- Michal Simek <michal.simek@amd.com>, 
- Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>, 
- linux-mtd@lists.infradead.org, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
- Simon Horman <horms@kernel.org>, Ronald Wahl <ronald.wahl@raritan.com>, 
- Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
- Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev, 
- Max Filippov <jcmvbkbc@gmail.com>, linux-spi@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, linux-arm-msm@vger.kernel.org, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- linux-mediatek@lists.infradead.org, Thomas Zimmermann <tzimmermann@suse.de>, 
- Javier Martinez Canillas <javierm@redhat.com>, 
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
- dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org, 
- linux-staging@lists.linux.dev, Viresh Kumar <vireshk@kernel.org>, 
- Rui Miguel Silva <rmfrfs@gmail.com>, Johan Hovold <johan@kernel.org>, 
- Alex Elder <elder@kernel.org>, greybus-dev@lists.linaro.org, 
- Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
- Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org, 
- Herve Codina <herve.codina@bootlin.com>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Aaro Koskinen <aaro.koskinen@iki.fi>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- linux-usb@vger.kernel.org, Helge Deller <deller@gmx.de>, 
- Dario Binacchi <dario.binacchi@amarulasolutions.com>, 
- Kalle Valo <kvalo@kernel.org>, Dmitry Antipov <dmantipov@yandex.ru>, 
- libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org, 
- Jonathan Corbet <corbet@lwn.net>, James Clark <james.clark@arm.com>, 
- Bjorn Helgaas <bhelgaas@google.com>, linux-doc@vger.kernel.org
-In-Reply-To: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
-Subject: Re: (subset) [PATCH v2 00/33] spi: get rid of some legacy macros
-Message-Id: <170775198078.46149.4700126128576800564.b4-ty@kernel.org>
-Date: Mon, 12 Feb 2024 15:33:00 +0000
+	s=arc-20240116; t=1707860424; c=relaxed/simple;
+	bh=Am0SdY5XDfkfN9XClvIWzxvrMD3Ma/uMq9rRKBz1zVM=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=N3hXwcOya6zAjAvPwBj/xuZSkphJPBdtQfgHuwvXDrLv/hONLDhfq2OV4JYyxbeJ7U15c9vcTihlr0byHH0l20S8lMphV0WJ5g0H1UroL97czyqHgPMXG2m1aJS1t5iS6NB7L6Nyzq9i3uceOQoxdqXerBQXqGpEHFxMqJi+gmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=hbXXMyCc; arc=none smtp.client-ip=208.88.110.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 549859C4408;
+	Tue, 13 Feb 2024 16:40:13 -0500 (EST)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id 0AR89831jv7z; Tue, 13 Feb 2024 16:40:12 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id AB8A99C48F2;
+	Tue, 13 Feb 2024 16:40:12 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com AB8A99C48F2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+	t=1707860412; bh=OLowQGLdyAKcj7Y0FKOcf7tGXW+sq0JROGANmY0A+Wo=;
+	h=Date:From:To:Message-ID:MIME-Version;
+	b=hbXXMyCcnSbiDOis84z1rPH366GZ/q0jOZVSHbHn0xnHvkXnwSMCSxR9jgMzNWM+v
+	 +WBSNXUDBCfLaVYa3cibhNRdQnV+nbladEQVdqH1XFbrPlQH50Uf7zIIf2AqEIlmHG
+	 nKBMswF0NeFMsaz29PxRdtEsZbldtvsEj9SQdOEexxvDh7V+CtSfjg6t9s0AkOPpAg
+	 8scqu6e+i2ymw+OOB+BEv63fKn2ieEptqDJdssZT/Ecsi9jJ390xwrmKcNpTnzUIDU
+	 e81yECbOHQTVxhu3+VBA5TCIQKeBAYkDYZrQPDlG16O4FHzEqDneUJ1HiMPSil3Wri
+	 r/bW5/g7MlgCw==
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id W4wzPNlSx12O; Tue, 13 Feb 2024 16:40:12 -0500 (EST)
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [192.168.48.237])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 6FBCD9C4408;
+	Tue, 13 Feb 2024 16:40:12 -0500 (EST)
+Date: Tue, 13 Feb 2024 16:40:12 -0500 (EST)
+From: Charles Perry <charles.perry@savoirfairelinux.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: mdf <mdf@kernel.org>, Allen VANDIVER <avandiver@markem-imaje.com>, 
+	Brian CODY <bcody@markem-imaje.com>, hao wu <hao.wu@intel.com>, 
+	yilun xu <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	krzysztof kozlowski+dt <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, 
+	Michal Simek <michal.simek@amd.com>, 
+	kishore Manne <nava.kishore.manne@amd.com>, 
+	linux-fpga <linux-fpga@vger.kernel.org>, 
+	devicetree <devicetree@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Message-ID: <1139371633.970589.1707860412394.JavaMail.zimbra@savoirfairelinux.com>
+In-Reply-To: <69679d9a-02e9-498f-8f5a-7c029059a8c1@linaro.org>
+References: <20240207180142.79625-1-charles.perry@savoirfairelinux.com> <20240207180142.79625-3-charles.perry@savoirfairelinux.com> <69679d9a-02e9-498f-8f5a-7c029059a8c1@linaro.org>
+Subject: Re: [PATCH v3 2/5] dt-bindings: fpga: xlnx,fpga-slave-serial:
+ rename gpios
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-a684c
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: Zimbra 8.8.15_GA_4581 (ZimbraWebClient - FF120 (Linux)/8.8.15_GA_4581)
+Thread-Topic: dt-bindings: fpga: xlnx,fpga-slave-serial: rename gpios
+Thread-Index: JNVv3qISWN3DobtT0S2yFs/0J3QuiQ==
 
-On Mon, 22 Jan 2024 19:06:55 +0100, Uwe Kleine-König wrote:
-> this is v2 of this patch set.
+On Feb 11, 2024, at 10:39 AM, Krzysztof Kozlowski krzysztof.kozlowski@linaro.org wrote:
+> On 07/02/2024 19:01, Charles Perry wrote:
+>> By convention, gpio consumer names should not contain underscores
+>> (prog_b here) and shouldn't contain active low suffixes (-b here).
+>> 
+>> Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
+>> ---
+>>  .../bindings/fpga/xlnx,fpga-slave-serial.yaml        | 12 ++++++------
+>>  1 file changed, 6 insertions(+), 6 deletions(-)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
+>> b/Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
+>> index 614d86ad825f3..650a4d8792b64 100644
+>> --- a/Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
+>> +++ b/Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
+>> @@ -36,7 +36,7 @@ properties:
+>>    reg:
+>>      maxItems: 1
+>>  
+>> -  prog_b-gpios:
+>> +  prog-gpios:
 > 
-> Changes since (implicit) v1, sent with Message-Id:
-> cover.1705348269.git.u.kleine-koenig@pengutronix.de:
+> Please deprecate old property and add allOf excluding the usage of both.
+> Driver still parses old property, so we should have it documented.
 > 
->  - Rebase to v6.8-rc1
->  - Fix a build failure on sh
->  - Added the tags received in (implicit) v1.
+> https://lore.kernel.org/all/20230118163208.GA117919-robh@kernel.org/
 > 
-> [...]
+> Best regards,
+> Krzysztof
 
-Applied to
+Ok. Thank you for the example.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[01/33] fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
-        commit: 227ab73b89d66e3064b3c2bcb5fe382b1815763d
-[02/33] ieee802154: ca8210: Follow renaming of SPI "master" to "controller"
-        commit: 167b78446706bb4d19f7dd93ca320aed25ae1bbd
-[03/33] iio: adc: ad_sigma_delta: Follow renaming of SPI "master" to "controller"
-        commit: 2780e7b716a605781dbee753ef4983d775a65427
-[04/33] Input: pxspad - follow renaming of SPI "master" to "controller"
-        commit: a78acec53b8524593afeed7258a442adc3450818
-[05/33] Input: synaptics-rmi4 - follow renaming of SPI "master" to "controller"
-        commit: 1245633c61baf159fcc1303d7f0855f49831b9c1
-[06/33] media: mgb4: Follow renaming of SPI "master" to "controller"
-        commit: 2c2f93fbfba7186cc081e23120f169eac3b5b62a
-[07/33] media: netup_unidvb: Follow renaming of SPI "master" to "controller"
-        commit: cfa13a64bd631d8f04a1c385923706fcef9a63ed
-[08/33] media: usb/msi2500: Follow renaming of SPI "master" to "controller"
-        commit: dd868ae646d5770f80f90dc056d06eb2e6d39c62
-[09/33] media: v4l2-subdev: Follow renaming of SPI "master" to "controller"
-        commit: d920b3a672b7f79cd13b341234aebd49233f836c
-[10/33] misc: gehc-achc: Follow renaming of SPI "master" to "controller"
-        commit: 26dcf09ee5d9ceba2c627ae3ba174a229f25638f
-[11/33] mmc: mmc_spi: Follow renaming of SPI "master" to "controller"
-        commit: b0a6776e53403aa380411f2a43cdefb9f00ff50a
-[12/33] mtd: dataflash: Follow renaming of SPI "master" to "controller"
-        commit: 44ee998db9eef84bf005c39486566a67cb018354
-[14/33] net: ks8851: Follow renaming of SPI "master" to "controller"
-        commit: 1cc711a72ae7fd44e90839f0c8d3226664de55a2
-[15/33] net: vertexcom: mse102x: Follow renaming of SPI "master" to "controller"
-        commit: 7969b98b80c0332f940c547f84650a20aab33841
-[16/33] platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to "controller"
-        commit: 85ad0ec049a771c4910c8aebb2d0bd9ce9311fd9
-[17/33] spi: bitbang: Follow renaming of SPI "master" to "controller"
-        commit: 2259233110d90059187c5ba75537eb93eba8417b
-[18/33] spi: cadence-quadspi: Don't emit error message on allocation error
-        commit: e71011dacc3413bed4118d2c42f10736ffcd762c
-[19/33] spi: cadence-quadspi: Follow renaming of SPI "master" to "controller"
-        commit: 28e59d8bf1ace0ddf05f989a48d6824d75731267
-[20/33] spi: cavium: Follow renaming of SPI "master" to "controller"
-        commit: 1747fbdedba8b6b3fd459895ed5d57e534549884
-[21/33] spi: geni-qcom: Follow renaming of SPI "master" to "controller"
-        commit: 14cea92338a0776c1615994150e738ac0f5fbb2c
-[22/33] spi: loopback-test: Follow renaming of SPI "master" to "controller"
-        commit: 2c2310c17fac13aa7e78756d7f3780c7891f9397
-[23/33] spi: slave-mt27xx: Follow renaming of SPI "master" to "controller"
-        commit: 8197b136bbbe64a7cab1020a4b067020e5977d98
-[24/33] spi: spidev: Follow renaming of SPI "master" to "controller"
-        commit: d934cd6f0e5d0052772612db4b07df60cb9da387
-[25/33] staging: fbtft: Follow renaming of SPI "master" to "controller"
-        commit: bbd25d7260eeeaef89f7371cbadcd33dd7f7bff9
-[26/33] staging: greybus: spi: Follow renaming of SPI "master" to "controller"
-        commit: ee3c668dda3d2783b0fff4091461356fe000e4d8
-[27/33] tpm_tis_spi: Follow renaming of SPI "master" to "controller"
-        commit: b6af14eacc8814b0986e20507df423cebe9fd859
-[28/33] usb: gadget: max3420_udc: Follow renaming of SPI "master" to "controller"
-        commit: 8c716f4a3d4fcbec976247e3443d36cbc24c0512
-[29/33] video: fbdev: mmp: Follow renaming of SPI "master" to "controller"
-        commit: b23031e730e72ec9067b7c38c25e776c5e27e116
-[30/33] wifi: libertas: Follow renaming of SPI "master" to "controller"
-        commit: 30060d57cee194d6b70283f2faf787e2fdc61b6e
-[31/33] spi: fsl-lib: Follow renaming of SPI "master" to "controller"
-        commit: 801185efa2402dce57828930e9684884fc8d62da
-[32/33] spi: Drop compat layer from renaming "master" to "controller"
-        commit: 620d269f29a569ba37419cc03cf1da2d55f6252a
-[33/33] Documentation: spi: Update documentation for renaming "master" to "controller"
-        commit: 76b31eb4c2da3ddb3195cc14f6aad24908adf524
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Regards,
+Charles
 
