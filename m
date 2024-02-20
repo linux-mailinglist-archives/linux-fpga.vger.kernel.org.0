@@ -1,188 +1,142 @@
-Return-Path: <linux-fpga+bounces-279-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-280-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C0C3859625
-	for <lists+linux-fpga@lfdr.de>; Sun, 18 Feb 2024 11:09:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17D4885B8F4
+	for <lists+linux-fpga@lfdr.de>; Tue, 20 Feb 2024 11:25:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 810681C21097
-	for <lists+linux-fpga@lfdr.de>; Sun, 18 Feb 2024 10:09:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A1D61C22810
+	for <lists+linux-fpga@lfdr.de>; Tue, 20 Feb 2024 10:25:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB44A1BC2D;
-	Sun, 18 Feb 2024 10:09:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 368B2612CD;
+	Tue, 20 Feb 2024 10:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HWJ1naDu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T8aXIan1"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBDCA1B268;
-	Sun, 18 Feb 2024 10:09:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AA7612C4
+	for <linux-fpga@vger.kernel.org>; Tue, 20 Feb 2024 10:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708250966; cv=none; b=reKuXV9FNFjkAoXvelB48gqM04ecCQ3RHqLelSdGA49Xba7XdabknxOJym1yV5y/0Iw73dUsB/MBCRTLRhC8TUzBE5rmpZR9rJfeT8+RsFuZ9f28Yo+4OjXJUEIpdUtnQ1aHEdcdH8//MgEUOWHXIyhBHlXN3sCnW3pFZVLaVIA=
+	t=1708424725; cv=none; b=r6a3/gD2CAyF/VKApgPHePFgtNSsqhAAybUNALg++N0QWlNlX7gFdnIz6FOlZ8GsdObdaF3807GC0OQPlsjoyIEDwXwEG+vQ7A04n8MLEVXXzNcdXec+1VF0HPEfaWo4iMC0uheMKbaWBkQDW/N6AVr8xUjH6ttwve4jInvPktg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708250966; c=relaxed/simple;
-	bh=gpO1hWemLGbG90Ib1MxMCi6X7rW07hi3Fb31+1OFqKk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=snjnLiVjs2yj3+veQWVWNm1YTAcVhfHw19c/BjvS0Ev/u7fVrdtHGkVDmOm7OloIFoOif8/3nYRzCZBr8te1PhBgz96hqoNtUMKGnmNLeGl/virs9qV3kTwNV6WWG2xylqSUtITaZTaG5q8CW8lUcRHRopLbh+5tH7voSrqS6aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HWJ1naDu; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708250965; x=1739786965;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gpO1hWemLGbG90Ib1MxMCi6X7rW07hi3Fb31+1OFqKk=;
-  b=HWJ1naDuGuhUzu7fsVbKrf7FYZGB3k2pAXABYC+xf705t66nyrImLZzk
-   PeTuIwwFJAS6r9YGWYSQ0dHlyvi/SXNSdrL0vVezq1rg1Kmq7+SKSCW0t
-   FOBlJzwNNg+dOzl6w1+Wc5XXiNRLnnwtlkMl8jmsL65PTWuGpQ8V3HTM9
-   r7MDC4e2ubylHf/vbT+NXLe7BaCc49BBg4mGhC0zmdgUFC0VKBVNJ9J2Q
-   ind6RVfA8lWYz6pmU+UoYeURpDQcGVAN0tVa1TnKvHsz/3VDIo7KgoBoV
-   hqtlXLMl6ysrJcQkR+OXLc07Q4ZmVjAPbCpGBX6alRG0O/tqJ9xK8Lnfp
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="2206283"
-X-IronPort-AV: E=Sophos;i="6.06,168,1705392000"; 
-   d="scan'208";a="2206283"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2024 02:09:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,168,1705392000"; 
-   d="scan'208";a="8904755"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa003.jf.intel.com with ESMTP; 18 Feb 2024 02:09:20 -0800
-Date: Sun, 18 Feb 2024 18:05:29 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Tull <atull@opensource.altera.com>,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fpga@vger.kernel.org
-Subject: Re: [RFC PATCH v5 1/1] fpga: add an owner and use it to take the
- low-level module's refcount
-Message-ID: <ZdHWaeU+/On6LmHX@yilunxu-OptiPlex-7050>
-References: <20240111160242.149265-1-marpagan@redhat.com>
- <20240111160242.149265-2-marpagan@redhat.com>
- <Zbh7iO9wlm9ekzB7@yilunxu-OptiPlex-7050>
- <0720eb91-72f9-4781-8558-8a1b0a3691c2@redhat.com>
- <Zb8dd9af0Ru/fzGi@yilunxu-OptiPlex-7050>
- <4aaa131a-4b64-4b86-9548-68aef63c87b3@redhat.com>
+	s=arc-20240116; t=1708424725; c=relaxed/simple;
+	bh=E1tm9W/v3jXRclKbHPuBtzfAnLGGVmHa4BlPy0BxmEc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MBZaEeMxK4gakHHfmW8IzmdInGM0hzhjjrmZ/KCEOqImjQKYnTUUcP+16CDO/iDOk27nsWj+39qtVHEKEQ4Rdcskj60yvW/1k2MnCTtleG25eTzqUYaf9eLWKp6nf9j/SAILHtAlUr6uy4inqIcXAPGlzPHMXMzBUrnlzyCzEqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T8aXIan1; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708424721;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vYDQrIFcrmGFEDFd/lQJSQdjifAhTBQLYF8vyTIdB5w=;
+	b=T8aXIan1md6zROmthD9dHf/wZuasBQ7Abn+MslOy86tK3Udvr1MQOnJNN/fNSu1CJgx7kk
+	UytDlkf9BOcUdEsBOGv7yQzVgc19TVk/kHl2z/sXazA15+B8TygRrsvt2HNJFv40SOqqpG
+	8Zodgoeql2BLD6EoFzQD3uCGn3aYkqE=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-17-NZAokajwN-6Kl-tjfzLOkQ-1; Tue, 20 Feb 2024 05:25:19 -0500
+X-MC-Unique: NZAokajwN-6Kl-tjfzLOkQ-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-68f3893d688so59280716d6.0
+        for <linux-fpga@vger.kernel.org>; Tue, 20 Feb 2024 02:25:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708424719; x=1709029519;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vYDQrIFcrmGFEDFd/lQJSQdjifAhTBQLYF8vyTIdB5w=;
+        b=lYpwE0hhUvkL0yrazrvJPzkmRMPIEnHqH+Zun0Uf2PqUea8EhT6rOcVi7v+MpMY4lm
+         cJtDRn//NqmrM1uB70e0rcAtVtKg/EteEtV7G2feETICKAPw2hv+37hSp+6hm2RWS+5K
+         +yRM+XjOED/v86uYzavmyEU84bxh70bj7hYUbY9MtF6RtrJw2BiI0X33Nu6YegOPuw7A
+         hQ0ImkdF8lj8sH52ThbOTVdB2RGGUXbk6lUIZItZ8mVZvHfWhqvXk3DSOyPnxRAKF0Im
+         jUvfbtu26YI5XkE8/OMBsQ/A77MQaHWcOfmNRgHXB4ixF3+RIgRM2/+uSdorAMTvQf3Y
+         rLzg==
+X-Forwarded-Encrypted: i=1; AJvYcCVOJQOFKgAxieikOv+wI80TqF85H1za9ETo9CNf4XIvF92z0OrJSgN2DUcLYt0ZFHRY7DpqLlI8S9vvhgg39h7Q86cL1H7jP4Echw==
+X-Gm-Message-State: AOJu0YxYPKlhnhhgjNpEeMUNEnObX71nidWLYc2UmKeEK13YOfMtmgA8
+	CGaQEgIwmt1aD3+MRsTI7g4osG/y/NmYuuSVBNLWl/BBj4gBOi8ID6yvIcjg/McqRZdHfydKitm
+	nfqXHI80+IGaVPhuO+rYzs5few/Q7pysv9ii2u6sgqVUgm0hmIeM4lhJWDw==
+X-Received: by 2002:a05:6214:5d0f:b0:68f:4df8:fef1 with SMTP id me15-20020a0562145d0f00b0068f4df8fef1mr9410793qvb.11.1708424719103;
+        Tue, 20 Feb 2024 02:25:19 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IG+3X6kRD0ZBg35AivR50jCJRUjHWkEAJBbACG4V/5NAALyyxhyTn6cv52exRIgQQkHwGN+DQ==
+X-Received: by 2002:a05:6214:5d0f:b0:68f:4df8:fef1 with SMTP id me15-20020a0562145d0f00b0068f4df8fef1mr9410777qvb.11.1708424718810;
+        Tue, 20 Feb 2024 02:25:18 -0800 (PST)
+Received: from [192.168.9.34] (net-2-34-24-75.cust.vodafonedsl.it. [2.34.24.75])
+        by smtp.gmail.com with ESMTPSA id u7-20020a05620a022700b007871a4b423fsm3244801qkm.110.2024.02.20.02.25.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Feb 2024 02:25:18 -0800 (PST)
+Message-ID: <129e1b9d-ed1c-4dcf-86eb-7fee32bbcd7c@redhat.com>
+Date: Tue, 20 Feb 2024 11:25:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4aaa131a-4b64-4b86-9548-68aef63c87b3@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] fpga: remove redundant checks for bridge ops
+To: Xu Yilun <yilun.xu@linux.intel.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+ linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240201155713.82898-1-marpagan@redhat.com>
+ <ZdGByar/ZmzA81cc@yilunxu-OptiPlex-7050>
+Content-Language: en-US
+From: Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZdGByar/ZmzA81cc@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 05, 2024 at 06:47:34PM +0100, Marco Pagani wrote:
+
+
+On 2024-02-18 05:04, Xu Yilun wrote:
+> On Thu, Feb 01, 2024 at 04:57:12PM +0100, Marco Pagani wrote:
+>> Commit 0d70af3c2530 ("fpga: bridge: Use standard dev_release for class
+>> driver") introduced a check in fpga_bridge_register() that prevents
+>> registering a bridge without ops, making checking on every call
+>> redundant.
+>>
+>> v2:
+>> - removed ops check also in state_show()
 > 
+> Don't put the history in changelog. 
+
+You're right, sorry.
+
 > 
-> On 2024-02-04 06:15, Xu Yilun wrote:
-> > On Fri, Feb 02, 2024 at 06:44:01PM +0100, Marco Pagani wrote:
-> >>
-> >>
-> >> On 2024-01-30 05:31, Xu Yilun wrote:
-> >>>> +#define fpga_mgr_register_full(parent, info) \
-> >>>> +	__fpga_mgr_register_full(parent, info, THIS_MODULE)
-> >>>>  struct fpga_manager *
-> >>>> -fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
-> >>>> +__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-> >>>> +			 struct module *owner);
-> >>>>  
-> >>>> +#define fpga_mgr_register(parent, name, mops, priv) \
-> >>>> +	__fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
-> >>>>  struct fpga_manager *
-> >>>> -fpga_mgr_register(struct device *parent, const char *name,
-> >>>> -		  const struct fpga_manager_ops *mops, void *priv);
-> >>>> +__fpga_mgr_register(struct device *parent, const char *name,
-> >>>> +		    const struct fpga_manager_ops *mops, void *priv, struct module *owner);
-> >>>> +
-> >>>>  void fpga_mgr_unregister(struct fpga_manager *mgr);
-> >>>>  
-> >>>> +#define devm_fpga_mgr_register_full(parent, info) \
-> >>>> +	__devm_fpga_mgr_register_full(parent, info, THIS_MODULE)
-> >>>>  struct fpga_manager *
-> >>>> -devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
-> >>>> +__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-> >>>> +			      struct module *owner);
-> >>>
-> >>> Add a line here. I can do it myself if you agree.
-> >>
-> >> Sure, that is fine by me. I also spotted a typo in the commit log body
-> >> (in taken -> is taken). Do you want me to send a v6, or do you prefer
-> >> to fix that in place?
-> > 
-> > No need, I can fix it.
-> > 
-> >>
-> >>>
-> >>> There is still a RFC prefix for this patch. Are you ready to get it merged?
-> >>> If yes, Acked-by: Xu Yilun <yilun.xu@intel.com>
-> >>
-> >> I'm ready for the patch to be merged. However, I recently sent an RFC
-> >> to propose a safer implementation of try_module_get() that would
-> >> simplify the code and may also benefit other subsystems. What do you
-> >> think?
-> >>
-> >> https://lore.kernel.org/linux-modules/20240130193614.49772-1-marpagan@redhat.com/
-> > 
-> > I suggest take your fix to linux-fpga/for-next now. If your try_module_get()
-> > proposal is applied before the end of this cycle, we could re-evaluate
-> > this patch.
+> I could fix it.
+> Acked-by: Xu Yilun <yilun.xu@intel.com>
 > 
-> That's fine by me.
 
-Sorry, I still found issues about this solution.
+Yes, please.
 
-void fpga_mgr_unregister(struct fpga_manager *mgr)
-{
-        dev_info(&mgr->dev, "%s %s\n", __func__, mgr->name);
+>>
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> ---
+> v2:
+> - XXXX
+> 
+> This way the history could be discarded when apply.
+> 
+>> ---
+>>  drivers/fpga/fpga-bridge.c | 8 ++++----
+>>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+>> index a024be2b84e2..79c473b3c7c3 100644
+>> --- a/drivers/fpga/fpga-bridge.c
+>> +++ b/drivers/fpga/fpga-bridge.c
 
-        /*
-         * If the low level driver provides a method for putting fpga into
-         * a desired state upon unregister, do it.
-         */
-        fpga_mgr_fpga_remove(mgr);
-
-        mutex_lock(&mgr->mops_mutex);
-
-        mgr->mops = NULL;
-
-        mutex_unlock(&mgr->mops_mutex);
-
-        device_unregister(&mgr->dev);
-}
-
-Note that fpga_mgr_unregister() doesn't have to be called in module_exit().
-So if we do fpga_mgr_get() then fpga_mgr_unregister(), We finally had a
-fpga_manager dev without mops, this is not what the user want and cause
-problem when using this fpga_manager dev for other FPGA APIs.
-
-I have this concern when I was reviewing the same improvement for fpga
-bridge. The change for fpga bridge seems workable, the mutex keeps hold
-until fpga_bridge_put(). But I somewhat don't prefer the unregistration
-been unnecessarily blocked for long term.
-
-I think your try_module_get_safe() patch may finally solve the invalid
-module owner issue. Some options now, we ignore the invalid module owner
-issue (it exists before this change) and merge the rest of the
-improvements, or we wait for your patch accepted then re-evaluate. I
-prefer the former.
-
+[...]
 Thanks,
-Yilun
+Marco
 
-> 
-> Thanks,
-> Marco
-> 
 
