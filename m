@@ -1,226 +1,236 @@
-Return-Path: <linux-fpga+bounces-282-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-283-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5199885CD8C
-	for <lists+linux-fpga@lfdr.de>; Wed, 21 Feb 2024 02:49:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE42085E00F
+	for <lists+linux-fpga@lfdr.de>; Wed, 21 Feb 2024 15:42:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B505D1F2160D
-	for <lists+linux-fpga@lfdr.de>; Wed, 21 Feb 2024 01:49:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E14121C21046
+	for <lists+linux-fpga@lfdr.de>; Wed, 21 Feb 2024 14:42:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4114D443E;
-	Wed, 21 Feb 2024 01:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A3A80606;
+	Wed, 21 Feb 2024 14:41:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dx5oGHMH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OX9yqpzF"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4F820E4;
-	Wed, 21 Feb 2024 01:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F256C80052;
+	Wed, 21 Feb 2024 14:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708480168; cv=none; b=IBzuc0pakclaNnId0D3Gzk4aUSyXO0jOfIhwguZWvNaRijeW4UCb78SRNq32hj63ybI/AY8R+dEXAuDX+exj0c8SGYU/JAxfXd6sd36YvBPwJC32dQPPlxmDRjqWlNqAViYws47fICnTy2JjilpebN00CdmCFzpZH94IP/t6orc=
+	t=1708526479; cv=none; b=YGq7JPqeKf9T7X6LCaYIJS5RazGS74eAkPskSWJhMB5njHCfOmmYFTm7F28vkkDaQQShMkZbZAjL15noOyJ5f2iUQSgPmq5ZknRcWgyQrnux9C/TD3N6RD+M68H3KP8OXYpZ4byATWx8AoxxhC+Gq71t7ZXk1ozCZuLFec+ZaxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708480168; c=relaxed/simple;
-	bh=lwuyW/GBXLuu2hlfhCsl6S4z6xmDhNYp6k+ZbZvS4+g=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=jSMJUQzJE2WQ6ZdgNz7s3giIpRI8kpkjzy1WCnt9PS+cgf+sYGb9+ltPVcBAaq1xvgLJj/Wm4tmPWqPQtmeHLdjXML1lSz/Xoz+7Y1HhpQ2I084NGmTSJR4EolkdTOYC+M2n9hKHC/cCaFqiBl6KW6Gwvmzln1mKDUAS5FxNy/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dx5oGHMH; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1708526479; c=relaxed/simple;
+	bh=fGy1ZeYlSSA1oBp701WLKo8Ii38jlfVIpfInS3YAkG0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sqrcIY2CcBWs5R3J/4Ji/4tP8NU9sBh9YvswaDTlEkk7Bi1a24+xQMjX/OGRZm5c0wvmQveV6LuF17YNV4k2ceyGwz/AEysTb4JtC0ooTmC7fs4NrXkrhUm5weBWZ6Kd2vkwNENG5TuWux5Ldg/3pGYc9dSC2cUOUDmAlGI8WaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OX9yqpzF; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708480167; x=1740016167;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=lwuyW/GBXLuu2hlfhCsl6S4z6xmDhNYp6k+ZbZvS4+g=;
-  b=Dx5oGHMH3O9VojvSTxRXoiG2oFjY0Y5NcPMAcs4QtpZLMUvWgGhvQcUf
-   YwG9dQf/Fxr1ZQVd2x2mTeMijuIPoYEopEyZEe+U0cB86/l1iU72DljAL
-   9yzpRwPFXpTqhy9QmbgbNxN759DiyhKezd6seNNQxjFMthfhKHlEN7Vug
-   Eqx3ujZnCRIeA9XgfNdDisiPGi9hUmi5t7ihVeKsUdWoFRKefCddoEkz1
-   wLkxbRv7R9BXt2VwqThHw/NACFAb+hPGGR3OcAu8JRITkscrjkbjHk3ES
-   pYc61KoLpmmHYrNBslYunL/VCoRRtUFsQmir6SuR6BeKznDwIB6FhsECt
+  t=1708526477; x=1740062477;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fGy1ZeYlSSA1oBp701WLKo8Ii38jlfVIpfInS3YAkG0=;
+  b=OX9yqpzFG/HhJHwYntijMEsD1WDOPQ0RbQl6UZ5mNceiVPKR81whzxwP
+   KGNjozORukipANRZmqQgX4leGGsZmQAhygwFG72OAlqBTNpudhZIMw6sf
+   rnIy3PR+EgJhLpGtIDRe2gYx/R57sV2S798jT8qExiB8fHNjd6U3S00ul
+   dERcBe5+34dzaujzkk4vTIBGmXAV66hzmcNYzTxQChkSkoWBeWwzHkPvI
+   hbKYxqN/+5LFFq2qcbIbVXWvGt7vwK0yHxjPn+8bvPCvgOIp+p26iIEmA
+   gQbS6EIG2PVVgi1dfYHCvtuJ7GtVmz5i/kSsSGSUGJPuEWPtHioHoLRb5
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="2489483"
-X-IronPort-AV: E=Sophos;i="6.06,174,1705392000"; 
-   d="scan'208";a="2489483"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 17:49:26 -0800
+X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="20228461"
+X-IronPort-AV: E=Sophos;i="6.06,175,1705392000"; 
+   d="scan'208";a="20228461"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 06:41:16 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,174,1705392000"; 
-   d="scan'208";a="35740831"
-Received: from sj-4150-psse-sw-opae-dev2.sj.intel.com ([10.233.115.162])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 17:49:25 -0800
-Date: Tue, 20 Feb 2024 17:49:04 -0800 (PST)
-From: matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@sj-4150-psse-sw-opae-dev2
-To: Xu Yilun <yilun.xu@linux.intel.com>
-cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com, 
-    linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fpga: dfl: afu: support Rev 2 of DFL Port feature
-In-Reply-To: <ZdF4JvYQQL8irnbW@yilunxu-OptiPlex-7050>
-Message-ID: <alpine.DEB.2.22.394.2402201658400.191484@sj-4150-psse-sw-opae-dev2>
-References: <20240125233715.861883-1-matthew.gerlach@linux.intel.com> <ZbjHl8ptQG5FdHvC@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401300948590.112016@sj-4150-psse-sw-opae-dev2> <Zbnd8W1ciTKeoKc4@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401311610020.112016@sj-4150-psse-sw-opae-dev2>
- <ZcBIjcFJjGKf0qcO@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2402051600190.122158@sj-4150-psse-sw-opae-dev2> <ZdF4JvYQQL8irnbW@yilunxu-OptiPlex-7050>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+X-IronPort-AV: E=Sophos;i="6.06,175,1705392000"; 
+   d="scan'208";a="5321684"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa008.fm.intel.com with ESMTP; 21 Feb 2024 06:41:13 -0800
+Date: Wed, 21 Feb 2024 22:37:17 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Marco Pagani <marpagan@redhat.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Tull <atull@opensource.altera.com>,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fpga@vger.kernel.org
+Subject: Re: [RFC PATCH v5 1/1] fpga: add an owner and use it to take the
+ low-level module's refcount
+Message-ID: <ZdYKnZxdTCvu5THG@yilunxu-OptiPlex-7050>
+References: <20240111160242.149265-1-marpagan@redhat.com>
+ <20240111160242.149265-2-marpagan@redhat.com>
+ <Zbh7iO9wlm9ekzB7@yilunxu-OptiPlex-7050>
+ <0720eb91-72f9-4781-8558-8a1b0a3691c2@redhat.com>
+ <Zb8dd9af0Ru/fzGi@yilunxu-OptiPlex-7050>
+ <4aaa131a-4b64-4b86-9548-68aef63c87b3@redhat.com>
+ <ZdHWaeU+/On6LmHX@yilunxu-OptiPlex-7050>
+ <9a9d4018-fd65-49be-9e0a-1eecc9cbf15d@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a9d4018-fd65-49be-9e0a-1eecc9cbf15d@redhat.com>
 
+On Tue, Feb 20, 2024 at 12:11:26PM +0100, Marco Pagani wrote:
+> 
+> 
+> On 2024-02-18 11:05, Xu Yilun wrote:
+> > On Mon, Feb 05, 2024 at 06:47:34PM +0100, Marco Pagani wrote:
+> >>
+> >>
+> >> On 2024-02-04 06:15, Xu Yilun wrote:
+> >>> On Fri, Feb 02, 2024 at 06:44:01PM +0100, Marco Pagani wrote:
+> >>>>
+> >>>>
+> >>>> On 2024-01-30 05:31, Xu Yilun wrote:
+> >>>>>> +#define fpga_mgr_register_full(parent, info) \
+> >>>>>> +	__fpga_mgr_register_full(parent, info, THIS_MODULE)
+> >>>>>>  struct fpga_manager *
+> >>>>>> -fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
+> >>>>>> +__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
+> >>>>>> +			 struct module *owner);
+> >>>>>>  
+> >>>>>> +#define fpga_mgr_register(parent, name, mops, priv) \
+> >>>>>> +	__fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
+> >>>>>>  struct fpga_manager *
+> >>>>>> -fpga_mgr_register(struct device *parent, const char *name,
+> >>>>>> -		  const struct fpga_manager_ops *mops, void *priv);
+> >>>>>> +__fpga_mgr_register(struct device *parent, const char *name,
+> >>>>>> +		    const struct fpga_manager_ops *mops, void *priv, struct module *owner);
+> >>>>>> +
+> >>>>>>  void fpga_mgr_unregister(struct fpga_manager *mgr);
+> >>>>>>  
+> >>>>>> +#define devm_fpga_mgr_register_full(parent, info) \
+> >>>>>> +	__devm_fpga_mgr_register_full(parent, info, THIS_MODULE)
+> >>>>>>  struct fpga_manager *
+> >>>>>> -devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
+> >>>>>> +__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
+> >>>>>> +			      struct module *owner);
+> >>>>>
+> >>>>> Add a line here. I can do it myself if you agree.
+> >>>>
+> >>>> Sure, that is fine by me. I also spotted a typo in the commit log body
+> >>>> (in taken -> is taken). Do you want me to send a v6, or do you prefer
+> >>>> to fix that in place?
+> >>>
+> >>> No need, I can fix it.
+> >>>
+> >>>>
+> >>>>>
+> >>>>> There is still a RFC prefix for this patch. Are you ready to get it merged?
+> >>>>> If yes, Acked-by: Xu Yilun <yilun.xu@intel.com>
+> >>>>
+> >>>> I'm ready for the patch to be merged. However, I recently sent an RFC
+> >>>> to propose a safer implementation of try_module_get() that would
+> >>>> simplify the code and may also benefit other subsystems. What do you
+> >>>> think?
+> >>>>
+> >>>> https://lore.kernel.org/linux-modules/20240130193614.49772-1-marpagan@redhat.com/
+> >>>
+> >>> I suggest take your fix to linux-fpga/for-next now. If your try_module_get()
+> >>> proposal is applied before the end of this cycle, we could re-evaluate
+> >>> this patch.
+> >>
+> >> That's fine by me.
+> > 
+> > Sorry, I still found issues about this solution.
+> > 
+> > void fpga_mgr_unregister(struct fpga_manager *mgr)
+> > {
+> >         dev_info(&mgr->dev, "%s %s\n", __func__, mgr->name);
+> > 
+> >         /*
+> >          * If the low level driver provides a method for putting fpga into
+> >          * a desired state upon unregister, do it.
+> >          */
+> >         fpga_mgr_fpga_remove(mgr);
+> > 
+> >         mutex_lock(&mgr->mops_mutex);
+> > 
+> >         mgr->mops = NULL;
+> > 
+> >         mutex_unlock(&mgr->mops_mutex);
+> > 
+> >         device_unregister(&mgr->dev);
+> > }
+> > 
+> > Note that fpga_mgr_unregister() doesn't have to be called in module_exit().
+> > So if we do fpga_mgr_get() then fpga_mgr_unregister(), We finally had a
+> > fpga_manager dev without mops, this is not what the user want and cause
+> > problem when using this fpga_manager dev for other FPGA APIs.
+> 
+> How about moving mgr->mops = NULL from fpga_mgr_unregister() to
+> class->dev_release()? In that way, mops will be set to NULL only when the
+> manager dev refcount reaches 0.
 
+I'm afraid it doesn't help.  The lifecycle of the module and the fpga
+mgr dev is different.
 
-On Sun, 18 Feb 2024, Xu Yilun wrote:
+We use mops = NULL to indicate module has been freed or will be freed in no
+time.  On the other hand mops != NULL means module is still there, so
+that try_module_get() could be safely called.  It is possible someone
+has got fpga mgr dev but not the module yet, at that time the module is
+unloaded, then try_module_get() triggers crash.
 
-> On Wed, Feb 07, 2024 at 08:40:55AM -0800, matthew.gerlach@linux.intel.com wrote:
->>
->>
->> On Mon, 5 Feb 2024, Xu Yilun wrote:
->>
->>> On Wed, Jan 31, 2024 at 04:26:27PM -0800, matthew.gerlach@linux.intel.com wrote:
->>>>
->>>>
->>>> On Wed, 31 Jan 2024, Xu Yilun wrote:
->>>>
->>>>> On Tue, Jan 30, 2024 at 10:00:16AM -0800, matthew.gerlach@linux.intel.com wrote:
->>>>>>
->>>>>>
->>>>>> On Tue, 30 Jan 2024, Xu Yilun wrote:
->>>>>>
->>>>>>> On Thu, Jan 25, 2024 at 03:37:15PM -0800, Matthew Gerlach wrote:
->>>>>>>> Revision 2 of the Device Feature List (DFL) Port feature
->>>>>>>> adds support for connecting the contents of the port to
->>>>>>>> multiple PCIe Physical Functions (PF).
->>>>>>>>
->>>>>>>> This new functionality requires changing the port reset
->>>>>>>> behavior during FPGA and software initialization from
->>>>>>>> revision 1 of the port feature. With revision 1, the initial
->>>>>>>> state of the logic inside the port was not guaranteed to
->>>>>>>> be valid until a port reset was performed by software during
->>>>>>>> driver initialization. With revision 2, the initial state
->>>>>>>> of the logic inside the port is guaranteed to be valid,
->>>>>>>> and a port reset is not required during driver initialization.
->>>>>>>>
->>>>>>>> This change in port reset behavior avoids a potential race
->>>>>>>> condition during PCI enumeration when a port is connected to
->>>>>>>> multiple PFs. Problems can occur if the driver attached to
->>>>>>>> the PF managing the port asserts reset in its probe function
->>>>>>>> when a driver attached to another PF accesses the port in its
->>>>>>>> own probe function. The potential problems include failed or hung
->>>>>>>
->>>>>>> Only racing during probe functions? I assume any time port_reset()
->>>>>>> would fail TLPs for the other PF. And port_reset() could be triggered
->>>>>>> at runtime by ioctl().
->>>>>>
->>>>>> Yes, a port_reset() triggered by ioctl could result in failed TLP for the
->>>>>> other PFs. The user space SW performing the ioctl needs to ensure all PFs
->>>>>> involved are properly quiesced before the port_reset is performed.
->>>>>
->>>>> How would user get an insight into other PF drivers to know everything
->>>>> is quiesced?  I mean do we need driver level management for this?
->>>>
->>>> Since this is an FPGA, the number of other PFs and the drivers bound to
->>>> those PFs depends on the FPGA image. There would also be user space software
->>>> stacks involved with the other PFs as well. The user would have to ensure
->>>> all the SW stacks and drivers are quiesced as appropriate for the FPGA
->>>
->>> User may not know everything about the device, they only get part of the
->>> controls that drivers grant. This is still true for vfio + userspace
->>> drivers.
->>
->> A user performing a port reset would have to know the impact to the specific
->> FPGA image being run in order to ensure all SW stacks are ready for the
->> reset.
->
-> We are not going to change the logic of the whole driver model just
-> because the device is backed up by an FPGA image.  The *driver* should be
-> fully responsible for matched devices.  A HW reset unaware to the
-> device driver is not wanted.  Assuming that the userspace could control
-> every access to device makes no sense.
->
-> For your case, there is no garantee userspace could block every access
-> to "other PF" initiated by "other PF" driver.  There is also no
-> notification to "other PF" driver that userspace is doing reset to
-> "other PF" via "management PF" interface.  "other PF" driver just break
-> on reset.
+> 
+> If fpga_mgr_unregister() is called from module_exit(), we are sure that nobody
+> got the manager dev earlier using fpga_mgr_get(), or it would have bumped up
 
-Hi Yilun,
+No, someone may get the manager dev but not the module yet, and been
+scheduled out.
 
-I think this conversation has gotten a little off track. This patch 
-only changes the port reset behavior at driver initialization for revision 
-2 of the port IP. The behavior and the requirements of port reset during 
-run time have not changed. The existing implementation requires the user 
-performing the port reset to ensure appropriate SW was quiesced. This 
-patch does not change this requirement.
-
->
->>
->>>
->>>> image. I don't think the driver performing the port_reset() can know all the
->>>
->>> Other PF drivers should know their own components. They should be aware
->>> that their devices are being reset.
->>
->> The other PF drivers depend on the actual FPGA image being run.
->>
->>>
->>>> components to be able to provide any meaningful management.
->>>
->>> If the reset provider and reset consumer are not in the same driver,
->>> they should interact with each other. IIRC, some reset controller class
->>> works for this purpose.
->>
->> The other PFs in many cases can present as standard devices with existing
->> drivers like virtio-net or virtio-blk. It does not seem desireable to have
->> to change existing drivers for a particular FPGA implementation
->
-> If you have to use a specific method for reset, it is not a standard virtio
-> pci device, and you have to make some change.
-
-From the perspective of the PCI PF/VF implementing the virtio or 
-other standard device, the pci endpoint is completely compliant to the 
-standard, and no driver changes should be required. As mentioned above, 
-this patch does nothing to change any of this behavior. Consider a port 
-reset that is part of a partial configuration flow. The virtio endpoint 
-can become something completely different with a completely different 
-driver. This patch does not affect this flow either.
-
-Thanks,
-Matthew
-
->
+> the module's refcount, preventing its removal in the first place. In this case,
+> when device_unregister() is called, it will trigger dev_release() since the
+> manager dev refcount has reached 0.
+> 
+> If fpga_mgr_unregister() is called elsewhere in the module that registered the
+> manager (1), we have two subcases:
+> 
+> a) someone got the manager dev earlier and bumped the module's refcount. Hence,
+> the ops are safe since the module cannot be removed until the manager dev is
+> released by calling (the last) put_device(). This, in turn, will trigger
+> class->dev_release().
+> 
+> b) no one got manager dev. In this case, class->dev_release() will be called
+> immediately.
+> 
+> (1) The caller of fpga_mgr_register_*() is responsible for calling
+> fpga_mgr_unregister(), as specified in the docs.
+> 
+> > I have this concern when I was reviewing the same improvement for fpga
+> > bridge. The change for fpga bridge seems workable, the mutex keeps hold
+> > until fpga_bridge_put(). But I somewhat don't prefer the unregistration
+> > been unnecessarily blocked for long term.
+> 
+> I also don't like the idea of potentially blocking the unregistration, but I
+> could not find a better solution for the bridge at the moment.
+> 
+> > I think your try_module_get_safe() patch may finally solve the invalid
+> > module owner issue. Some options now, we ignore the invalid module owner
+> > issue (it exists before this change) and merge the rest of the
+> > improvements, or we wait for your patch accepted then re-evaluate. I
+> > prefer the former.
+> 
+> Yeah, try_module_get_safe() would make things simpler and easier. I'm currently
+> working on a series of selftests to demonstrate that the function is safe from
+> deadlocks, as requested by the maintainer. I hope I can convince people of the
+> advantages.
+> 
 > Thanks,
-> Yilun
->
->>
->> Thanks,
->> Matthew
->>>
->>> Thanks,
->>> Yilun
->>>
->>>>
->>>> Thanks,
->>>> Matthew
->>>>
->>>>>
->>>>> Thanks,
->>>>> Yilun
->>>>>
->>>>>>
->>>>>> Do you want me to update the commit message with this information?
->>>>>>
->>>>>> Thanks,
->>>>>> Matthew
->>>>>
->>>>>
->>>
->>>
->
+> Marco
+> 
 
