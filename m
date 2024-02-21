@@ -1,240 +1,226 @@
-Return-Path: <linux-fpga+bounces-281-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-282-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73D1A85BA13
-	for <lists+linux-fpga@lfdr.de>; Tue, 20 Feb 2024 12:12:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5199885CD8C
+	for <lists+linux-fpga@lfdr.de>; Wed, 21 Feb 2024 02:49:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BEA12835CE
-	for <lists+linux-fpga@lfdr.de>; Tue, 20 Feb 2024 11:12:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B505D1F2160D
+	for <lists+linux-fpga@lfdr.de>; Wed, 21 Feb 2024 01:49:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A6367E91;
-	Tue, 20 Feb 2024 11:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4114D443E;
+	Wed, 21 Feb 2024 01:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UbsgpHMq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dx5oGHMH"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6520367E96
-	for <linux-fpga@vger.kernel.org>; Tue, 20 Feb 2024 11:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4F820E4;
+	Wed, 21 Feb 2024 01:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708427496; cv=none; b=nev+PpiBy/xTVzaU9nMSMYfK8+ubl8NCN3PbBrl///nMaXQyuxrcyk/5r/lJ8MOau/Rc240dYcPWUtcLIzmPIYSgKQgrYnTnp4/HGrrU29nOjG9eYiNYsIWTVdGxxbLc6Fzd44FC+VfE9GQzCrou+qQ/P3wAJeanUucXs0oHFXk=
+	t=1708480168; cv=none; b=IBzuc0pakclaNnId0D3Gzk4aUSyXO0jOfIhwguZWvNaRijeW4UCb78SRNq32hj63ybI/AY8R+dEXAuDX+exj0c8SGYU/JAxfXd6sd36YvBPwJC32dQPPlxmDRjqWlNqAViYws47fICnTy2JjilpebN00CdmCFzpZH94IP/t6orc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708427496; c=relaxed/simple;
-	bh=C91A5rLZ2ygagCyh3jj0WuRiDBihrW1zf2K5r9Y6ciQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nIxfdQrYzBD4kjpMGV+4xzEozVNTi4DZQGjbrRS+sFWI1zdkahmzy2Ti5VgdWUCS4R8P1wpnHDXIhDSH9gp6PmI1UyYUq7ugQWw3GhVF7gJ4b/19B5qgqWhy3H9jho6MiEe3kpUq8+MdvRQdKjemSrQno4Har5QSjg9Ejd+Fld0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UbsgpHMq; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708427493;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2MSipKiPs67DEWw5wlFB16YMhuuCHo3NiTgEwpzrbFk=;
-	b=UbsgpHMqbCxrPljrpBhHTt4pEM5vuN+uWs+q3kQAIHisEC/fpbReNJtLcKbr+EbsA7hHAB
-	qbTpRJlaz6W5zQUf0TgAY0hThFJOfe3uKk3tfmWsvkhI83mpPanWvTpsXB2XxuAyK1oKbg
-	WizUSoRWzaTYmQsNkzdAqK/a+WFmXXk=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-468-afEOQixvNwubF7Pkgu-oCQ-1; Tue, 20 Feb 2024 06:11:31 -0500
-X-MC-Unique: afEOQixvNwubF7Pkgu-oCQ-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-68f5fc425ffso24352166d6.1
-        for <linux-fpga@vger.kernel.org>; Tue, 20 Feb 2024 03:11:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708427491; x=1709032291;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2MSipKiPs67DEWw5wlFB16YMhuuCHo3NiTgEwpzrbFk=;
-        b=a/iToaTkn4ML6UtV79hmryYP+Q0Qj/0B+NMrZS88XZpqz+Bc9Xm9b9Fsdibj842rde
-         r18Bs55XL94e7fZ2GgMuhqhTZfU9Tk99bdXN1175KpfbNwdWUefYlksGKyw6G2w+Mqg/
-         jzSdfI9807q9+mSocCddhmGhfrhxdq2j93G5GQrpPtgesCON+iOOjHBcucybtPk+J32D
-         uXfXGBRNK5sLpVvko0hVxSNrUq4O6ZQfIKp+yxREDU2fg3Hx28Fa57oY8Vbidj6AMo6x
-         8+/M8RoNLihzNjxt2h3kLk9FJY85vna2W3ikJqRzrPxrRF2gJIQMbFzZadLWzlSmum7b
-         4LeA==
-X-Forwarded-Encrypted: i=1; AJvYcCVYrnV9VjmYAzOVvlGgIIXqvZsGEDrN0RRiImx0Fp0OKk/olwDLeTp9s95itoPsfP47/+1KBQiZ4Fkiz03bCT6kHeChbTpItqCezg==
-X-Gm-Message-State: AOJu0Yxz6sdF20T2oZa9ynmTkDeZJjziLl0QU25B1vZpj8sJ2knlIQA7
-	BPSipQYEaKMx9i1Qh+CnL7QDKp1jNZX2M4HRLqSFnZv/oSgViMJekVRcYRTYiKrl3ao1RYG29Te
-	sf325NBPlevVvjZbto+80yKltRL+KjkJGmf9DLeCXpWo9YGNe7H3vPaqIiQ==
-X-Received: by 2002:a0c:f2c4:0:b0:68f:7c62:ccc7 with SMTP id c4-20020a0cf2c4000000b0068f7c62ccc7mr3525563qvm.52.1708427490864;
-        Tue, 20 Feb 2024 03:11:30 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH3e+rHiy7BLRRb2Bxlp90Q8E0Y8sYInFwg93yTV1yB+OetOFhQ+ojoYWpsW8esQ9yXtq0xnw==
-X-Received: by 2002:a0c:f2c4:0:b0:68f:7c62:ccc7 with SMTP id c4-20020a0cf2c4000000b0068f7c62ccc7mr3525546qvm.52.1708427490567;
-        Tue, 20 Feb 2024 03:11:30 -0800 (PST)
-Received: from [192.168.9.34] (net-2-34-24-75.cust.vodafonedsl.it. [2.34.24.75])
-        by smtp.gmail.com with ESMTPSA id l4-20020a0cee24000000b0068f6e1c3582sm255279qvs.146.2024.02.20.03.11.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Feb 2024 03:11:30 -0800 (PST)
-Message-ID: <9a9d4018-fd65-49be-9e0a-1eecc9cbf15d@redhat.com>
-Date: Tue, 20 Feb 2024 12:11:26 +0100
+	s=arc-20240116; t=1708480168; c=relaxed/simple;
+	bh=lwuyW/GBXLuu2hlfhCsl6S4z6xmDhNYp6k+ZbZvS4+g=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=jSMJUQzJE2WQ6ZdgNz7s3giIpRI8kpkjzy1WCnt9PS+cgf+sYGb9+ltPVcBAaq1xvgLJj/Wm4tmPWqPQtmeHLdjXML1lSz/Xoz+7Y1HhpQ2I084NGmTSJR4EolkdTOYC+M2n9hKHC/cCaFqiBl6KW6Gwvmzln1mKDUAS5FxNy/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dx5oGHMH; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708480167; x=1740016167;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=lwuyW/GBXLuu2hlfhCsl6S4z6xmDhNYp6k+ZbZvS4+g=;
+  b=Dx5oGHMH3O9VojvSTxRXoiG2oFjY0Y5NcPMAcs4QtpZLMUvWgGhvQcUf
+   YwG9dQf/Fxr1ZQVd2x2mTeMijuIPoYEopEyZEe+U0cB86/l1iU72DljAL
+   9yzpRwPFXpTqhy9QmbgbNxN759DiyhKezd6seNNQxjFMthfhKHlEN7Vug
+   Eqx3ujZnCRIeA9XgfNdDisiPGi9hUmi5t7ihVeKsUdWoFRKefCddoEkz1
+   wLkxbRv7R9BXt2VwqThHw/NACFAb+hPGGR3OcAu8JRITkscrjkbjHk3ES
+   pYc61KoLpmmHYrNBslYunL/VCoRRtUFsQmir6SuR6BeKznDwIB6FhsECt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="2489483"
+X-IronPort-AV: E=Sophos;i="6.06,174,1705392000"; 
+   d="scan'208";a="2489483"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 17:49:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,174,1705392000"; 
+   d="scan'208";a="35740831"
+Received: from sj-4150-psse-sw-opae-dev2.sj.intel.com ([10.233.115.162])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 17:49:25 -0800
+Date: Tue, 20 Feb 2024 17:49:04 -0800 (PST)
+From: matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@sj-4150-psse-sw-opae-dev2
+To: Xu Yilun <yilun.xu@linux.intel.com>
+cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com, 
+    linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] fpga: dfl: afu: support Rev 2 of DFL Port feature
+In-Reply-To: <ZdF4JvYQQL8irnbW@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2402201658400.191484@sj-4150-psse-sw-opae-dev2>
+References: <20240125233715.861883-1-matthew.gerlach@linux.intel.com> <ZbjHl8ptQG5FdHvC@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401300948590.112016@sj-4150-psse-sw-opae-dev2> <Zbnd8W1ciTKeoKc4@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2401311610020.112016@sj-4150-psse-sw-opae-dev2>
+ <ZcBIjcFJjGKf0qcO@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2402051600190.122158@sj-4150-psse-sw-opae-dev2> <ZdF4JvYQQL8irnbW@yilunxu-OptiPlex-7050>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v5 1/1] fpga: add an owner and use it to take the
- low-level module's refcount
-Content-Language: en-US
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
- Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alan Tull <atull@opensource.altera.com>, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-fpga@vger.kernel.org
-References: <20240111160242.149265-1-marpagan@redhat.com>
- <20240111160242.149265-2-marpagan@redhat.com>
- <Zbh7iO9wlm9ekzB7@yilunxu-OptiPlex-7050>
- <0720eb91-72f9-4781-8558-8a1b0a3691c2@redhat.com>
- <Zb8dd9af0Ru/fzGi@yilunxu-OptiPlex-7050>
- <4aaa131a-4b64-4b86-9548-68aef63c87b3@redhat.com>
- <ZdHWaeU+/On6LmHX@yilunxu-OptiPlex-7050>
-From: Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZdHWaeU+/On6LmHX@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 
 
 
-On 2024-02-18 11:05, Xu Yilun wrote:
-> On Mon, Feb 05, 2024 at 06:47:34PM +0100, Marco Pagani wrote:
+On Sun, 18 Feb 2024, Xu Yilun wrote:
+
+> On Wed, Feb 07, 2024 at 08:40:55AM -0800, matthew.gerlach@linux.intel.com wrote:
 >>
 >>
->> On 2024-02-04 06:15, Xu Yilun wrote:
->>> On Fri, Feb 02, 2024 at 06:44:01PM +0100, Marco Pagani wrote:
+>> On Mon, 5 Feb 2024, Xu Yilun wrote:
+>>
+>>> On Wed, Jan 31, 2024 at 04:26:27PM -0800, matthew.gerlach@linux.intel.com wrote:
 >>>>
 >>>>
->>>> On 2024-01-30 05:31, Xu Yilun wrote:
->>>>>> +#define fpga_mgr_register_full(parent, info) \
->>>>>> +	__fpga_mgr_register_full(parent, info, THIS_MODULE)
->>>>>>  struct fpga_manager *
->>>>>> -fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
->>>>>> +__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
->>>>>> +			 struct module *owner);
->>>>>>  
->>>>>> +#define fpga_mgr_register(parent, name, mops, priv) \
->>>>>> +	__fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
->>>>>>  struct fpga_manager *
->>>>>> -fpga_mgr_register(struct device *parent, const char *name,
->>>>>> -		  const struct fpga_manager_ops *mops, void *priv);
->>>>>> +__fpga_mgr_register(struct device *parent, const char *name,
->>>>>> +		    const struct fpga_manager_ops *mops, void *priv, struct module *owner);
->>>>>> +
->>>>>>  void fpga_mgr_unregister(struct fpga_manager *mgr);
->>>>>>  
->>>>>> +#define devm_fpga_mgr_register_full(parent, info) \
->>>>>> +	__devm_fpga_mgr_register_full(parent, info, THIS_MODULE)
->>>>>>  struct fpga_manager *
->>>>>> -devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
->>>>>> +__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
->>>>>> +			      struct module *owner);
+>>>> On Wed, 31 Jan 2024, Xu Yilun wrote:
+>>>>
+>>>>> On Tue, Jan 30, 2024 at 10:00:16AM -0800, matthew.gerlach@linux.intel.com wrote:
+>>>>>>
+>>>>>>
+>>>>>> On Tue, 30 Jan 2024, Xu Yilun wrote:
+>>>>>>
+>>>>>>> On Thu, Jan 25, 2024 at 03:37:15PM -0800, Matthew Gerlach wrote:
+>>>>>>>> Revision 2 of the Device Feature List (DFL) Port feature
+>>>>>>>> adds support for connecting the contents of the port to
+>>>>>>>> multiple PCIe Physical Functions (PF).
+>>>>>>>>
+>>>>>>>> This new functionality requires changing the port reset
+>>>>>>>> behavior during FPGA and software initialization from
+>>>>>>>> revision 1 of the port feature. With revision 1, the initial
+>>>>>>>> state of the logic inside the port was not guaranteed to
+>>>>>>>> be valid until a port reset was performed by software during
+>>>>>>>> driver initialization. With revision 2, the initial state
+>>>>>>>> of the logic inside the port is guaranteed to be valid,
+>>>>>>>> and a port reset is not required during driver initialization.
+>>>>>>>>
+>>>>>>>> This change in port reset behavior avoids a potential race
+>>>>>>>> condition during PCI enumeration when a port is connected to
+>>>>>>>> multiple PFs. Problems can occur if the driver attached to
+>>>>>>>> the PF managing the port asserts reset in its probe function
+>>>>>>>> when a driver attached to another PF accesses the port in its
+>>>>>>>> own probe function. The potential problems include failed or hung
+>>>>>>>
+>>>>>>> Only racing during probe functions? I assume any time port_reset()
+>>>>>>> would fail TLPs for the other PF. And port_reset() could be triggered
+>>>>>>> at runtime by ioctl().
+>>>>>>
+>>>>>> Yes, a port_reset() triggered by ioctl could result in failed TLP for the
+>>>>>> other PFs. The user space SW performing the ioctl needs to ensure all PFs
+>>>>>> involved are properly quiesced before the port_reset is performed.
 >>>>>
->>>>> Add a line here. I can do it myself if you agree.
+>>>>> How would user get an insight into other PF drivers to know everything
+>>>>> is quiesced?  I mean do we need driver level management for this?
 >>>>
->>>> Sure, that is fine by me. I also spotted a typo in the commit log body
->>>> (in taken -> is taken). Do you want me to send a v6, or do you prefer
->>>> to fix that in place?
+>>>> Since this is an FPGA, the number of other PFs and the drivers bound to
+>>>> those PFs depends on the FPGA image. There would also be user space software
+>>>> stacks involved with the other PFs as well. The user would have to ensure
+>>>> all the SW stacks and drivers are quiesced as appropriate for the FPGA
 >>>
->>> No need, I can fix it.
->>>
->>>>
->>>>>
->>>>> There is still a RFC prefix for this patch. Are you ready to get it merged?
->>>>> If yes, Acked-by: Xu Yilun <yilun.xu@intel.com>
->>>>
->>>> I'm ready for the patch to be merged. However, I recently sent an RFC
->>>> to propose a safer implementation of try_module_get() that would
->>>> simplify the code and may also benefit other subsystems. What do you
->>>> think?
->>>>
->>>> https://lore.kernel.org/linux-modules/20240130193614.49772-1-marpagan@redhat.com/
->>>
->>> I suggest take your fix to linux-fpga/for-next now. If your try_module_get()
->>> proposal is applied before the end of this cycle, we could re-evaluate
->>> this patch.
+>>> User may not know everything about the device, they only get part of the
+>>> controls that drivers grant. This is still true for vfio + userspace
+>>> drivers.
 >>
->> That's fine by me.
-> 
-> Sorry, I still found issues about this solution.
-> 
-> void fpga_mgr_unregister(struct fpga_manager *mgr)
-> {
->         dev_info(&mgr->dev, "%s %s\n", __func__, mgr->name);
-> 
->         /*
->          * If the low level driver provides a method for putting fpga into
->          * a desired state upon unregister, do it.
->          */
->         fpga_mgr_fpga_remove(mgr);
-> 
->         mutex_lock(&mgr->mops_mutex);
-> 
->         mgr->mops = NULL;
-> 
->         mutex_unlock(&mgr->mops_mutex);
-> 
->         device_unregister(&mgr->dev);
-> }
-> 
-> Note that fpga_mgr_unregister() doesn't have to be called in module_exit().
-> So if we do fpga_mgr_get() then fpga_mgr_unregister(), We finally had a
-> fpga_manager dev without mops, this is not what the user want and cause
-> problem when using this fpga_manager dev for other FPGA APIs.
+>> A user performing a port reset would have to know the impact to the specific
+>> FPGA image being run in order to ensure all SW stacks are ready for the
+>> reset.
+>
+> We are not going to change the logic of the whole driver model just
+> because the device is backed up by an FPGA image.  The *driver* should be
+> fully responsible for matched devices.  A HW reset unaware to the
+> device driver is not wanted.  Assuming that the userspace could control
+> every access to device makes no sense.
+>
+> For your case, there is no garantee userspace could block every access
+> to "other PF" initiated by "other PF" driver.  There is also no
+> notification to "other PF" driver that userspace is doing reset to
+> "other PF" via "management PF" interface.  "other PF" driver just break
+> on reset.
 
-How about moving mgr->mops = NULL from fpga_mgr_unregister() to
-class->dev_release()? In that way, mops will be set to NULL only when the
-manager dev refcount reaches 0.
+Hi Yilun,
 
-If fpga_mgr_unregister() is called from module_exit(), we are sure that nobody
-got the manager dev earlier using fpga_mgr_get(), or it would have bumped up
-the module's refcount, preventing its removal in the first place. In this case,
-when device_unregister() is called, it will trigger dev_release() since the
-manager dev refcount has reached 0.
+I think this conversation has gotten a little off track. This patch 
+only changes the port reset behavior at driver initialization for revision 
+2 of the port IP. The behavior and the requirements of port reset during 
+run time have not changed. The existing implementation requires the user 
+performing the port reset to ensure appropriate SW was quiesced. This 
+patch does not change this requirement.
 
-If fpga_mgr_unregister() is called elsewhere in the module that registered the
-manager (1), we have two subcases:
+>
+>>
+>>>
+>>>> image. I don't think the driver performing the port_reset() can know all the
+>>>
+>>> Other PF drivers should know their own components. They should be aware
+>>> that their devices are being reset.
+>>
+>> The other PF drivers depend on the actual FPGA image being run.
+>>
+>>>
+>>>> components to be able to provide any meaningful management.
+>>>
+>>> If the reset provider and reset consumer are not in the same driver,
+>>> they should interact with each other. IIRC, some reset controller class
+>>> works for this purpose.
+>>
+>> The other PFs in many cases can present as standard devices with existing
+>> drivers like virtio-net or virtio-blk. It does not seem desireable to have
+>> to change existing drivers for a particular FPGA implementation
+>
+> If you have to use a specific method for reset, it is not a standard virtio
+> pci device, and you have to make some change.
 
-a) someone got the manager dev earlier and bumped the module's refcount. Hence,
-the ops are safe since the module cannot be removed until the manager dev is
-released by calling (the last) put_device(). This, in turn, will trigger
-class->dev_release().
-
-b) no one got manager dev. In this case, class->dev_release() will be called
-immediately.
-
-(1) The caller of fpga_mgr_register_*() is responsible for calling
-fpga_mgr_unregister(), as specified in the docs.
-
-> I have this concern when I was reviewing the same improvement for fpga
-> bridge. The change for fpga bridge seems workable, the mutex keeps hold
-> until fpga_bridge_put(). But I somewhat don't prefer the unregistration
-> been unnecessarily blocked for long term.
-
-I also don't like the idea of potentially blocking the unregistration, but I
-could not find a better solution for the bridge at the moment.
-
-> I think your try_module_get_safe() patch may finally solve the invalid
-> module owner issue. Some options now, we ignore the invalid module owner
-> issue (it exists before this change) and merge the rest of the
-> improvements, or we wait for your patch accepted then re-evaluate. I
-> prefer the former.
-
-Yeah, try_module_get_safe() would make things simpler and easier. I'm currently
-working on a series of selftests to demonstrate that the function is safe from
-deadlocks, as requested by the maintainer. I hope I can convince people of the
-advantages.
+From the perspective of the PCI PF/VF implementing the virtio or 
+other standard device, the pci endpoint is completely compliant to the 
+standard, and no driver changes should be required. As mentioned above, 
+this patch does nothing to change any of this behavior. Consider a port 
+reset that is part of a partial configuration flow. The virtio endpoint 
+can become something completely different with a completely different 
+driver. This patch does not affect this flow either.
 
 Thanks,
-Marco
+Matthew
 
+>
+> Thanks,
+> Yilun
+>
+>>
+>> Thanks,
+>> Matthew
+>>>
+>>> Thanks,
+>>> Yilun
+>>>
+>>>>
+>>>> Thanks,
+>>>> Matthew
+>>>>
+>>>>>
+>>>>> Thanks,
+>>>>> Yilun
+>>>>>
+>>>>>>
+>>>>>> Do you want me to update the commit message with this information?
+>>>>>>
+>>>>>> Thanks,
+>>>>>> Matthew
+>>>>>
+>>>>>
+>>>
+>>>
+>
 
