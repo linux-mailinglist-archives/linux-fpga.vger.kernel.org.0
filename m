@@ -1,49 +1,51 @@
-Return-Path: <linux-fpga+bounces-290-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-291-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAD0B85FF33
-	for <lists+linux-fpga@lfdr.de>; Thu, 22 Feb 2024 18:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C880D860370
+	for <lists+linux-fpga@lfdr.de>; Thu, 22 Feb 2024 21:03:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 087701C217FE
-	for <lists+linux-fpga@lfdr.de>; Thu, 22 Feb 2024 17:23:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C01F1C23DCA
+	for <lists+linux-fpga@lfdr.de>; Thu, 22 Feb 2024 20:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04991552E7;
-	Thu, 22 Feb 2024 17:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5wfFBM+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B67FE6E5E8;
+	Thu, 22 Feb 2024 20:03:13 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78362154C0D;
-	Thu, 22 Feb 2024 17:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4AA6AFBA
+	for <linux-fpga@vger.kernel.org>; Thu, 22 Feb 2024 20:03:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708622589; cv=none; b=e7699K0xDqPsQHi6pSBlVtvN38/k1A4AyjbFAkVOdxBOun8uQm8SRiHNjfpzG5i8K8e58uZi2HYRY3oOW9t6SvQjfzMl+SB0BRjhoxW82lDf62Q9rNI32y/yT4aTGszoFdVXHM/OhWTK2w6s9ZBD08zo8+FJVbOYLuwsNi00oZo=
+	t=1708632193; cv=none; b=eXrA1IR1YmcoYr1KhXM7UHcmaOH9GOTVYSGZEl9ubmDbLqL5ub1P7qWxLvUCJswDQDeEitlcPwA+TMG+hMty0VvZ50AMdbaWKrx/glF48/pn4u3B3ck58wJam236xnebuMG/QhLyMoWXNxoIO97SXh8y7NG7yJ4sA37IElV4Yqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708622589; c=relaxed/simple;
-	bh=whE7yGI1jDtv+L8JN0rRe8ZMguT96zB+uF5cIX3kmb4=;
+	s=arc-20240116; t=1708632193; c=relaxed/simple;
+	bh=CX160NET1Fcfq2rMl6x/JBoCh5EQAykHpH7T6BBqCrw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H05gav3wDqDrF+/uXTbUpGJG6moSEFiqRUeuNA6iggllGgflhrVpnV9pCUwZZIu/5iL8yqbC0JvtnvH2XtXQFhkfFQNlSi9FlUsjdbw9JpDD2MQeyNaRa1d+IkVByJX0GAXAh6q0Uh7NCZX0Qk4bDog0mIl0o+w9ZEY4VP2uQbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5wfFBM+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E8BC433C7;
-	Thu, 22 Feb 2024 17:23:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708622589;
-	bh=whE7yGI1jDtv+L8JN0rRe8ZMguT96zB+uF5cIX3kmb4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U5wfFBM+hzmcbaABMJE470Ntk+lgCi7AqGPSqbZqV9nvzvcIdOg6n0iPZ4DJvKq+K
-	 1pxM6ooCO9fNKyH/n41/ul7zFudrVaa5Pk+yonXqVWVMMTQz1abvRsaKVdUouVNhU5
-	 ZCMsgI+4mNY22npdFAhIfZ05mTUmafjk+PS3rWrxcX6OE4VXmVVNGfnWcKnElXMnij
-	 CG7h7NtKu4k0K5xbonJCU1VoqPwFt+bf3zL5mRNtP1waXIFQgQQOHy/kdh8oR8XRZF
-	 5a1kbub+ebNtkevzxQm0NZ4LSWPfaSb2GM+lJ1R9WRAeKaOS3ReMbCWKDamT/BMbzr
-	 alWgaGLUrmKPg==
-Date: Thu, 22 Feb 2024 17:23:04 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Marco Felsch <m.felsch@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=VjMVW/8J7jGklxgYgzxa9tz+baBsJ5/I/136lhuOuzjXwzHJIyLp2/+73ETgOfha6Gco9nyGB/zs5moVOfhHycsKujMFjqSW1M01pOrjcudMyD6uKKtyr8RQOO6/HUT144C//zAv2RhNKoJYEt+2w6j2lt89SAKpt00O/amHens=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1rdFH6-0006yI-D8; Thu, 22 Feb 2024 21:02:32 +0100
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1rdFH4-002I2v-6x; Thu, 22 Feb 2024 21:02:30 +0100
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1rdFH4-002rcW-0M;
+	Thu, 22 Feb 2024 21:02:30 +0100
+Date: Thu, 22 Feb 2024 21:02:30 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Conor Dooley <conor@kernel.org>
 Cc: conor.dooley@microchip.com, v.georgiev@metrotek.ru, mdf@kernel.org,
 	hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
 	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -51,82 +53,100 @@ Cc: conor.dooley@microchip.com, v.georgiev@metrotek.ru, mdf@kernel.org,
 	kernel@pengutronix.de
 Subject: Re: [PATCH] dt-bindings: fpga: microchip,mpf-spi-fpga-mgr: document
  CPOL/CPHA support
-Message-ID: <20240222-rotten-truck-cf5e4b681ac1@spud>
+Message-ID: <20240222200230.ulhguouu37nm6inu@pengutronix.de>
 References: <20240221191247.3643671-1-m.felsch@pengutronix.de>
+ <20240222-rotten-truck-cf5e4b681ac1@spud>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="2O3aSUv9rd47PiBb"
-Content-Disposition: inline
-In-Reply-To: <20240221191247.3643671-1-m.felsch@pengutronix.de>
-
-
---2O3aSUv9rd47PiBb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240222-rotten-truck-cf5e4b681ac1@spud>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-fpga@vger.kernel.org
 
-On Wed, Feb 21, 2024 at 08:12:47PM +0100, Marco Felsch wrote:
-> Microchip FPGAs can communicate in different modes, so document them to
-> avoid dt-validate warnings.
+On 24-02-22, Conor Dooley wrote:
+> On Wed, Feb 21, 2024 at 08:12:47PM +0100, Marco Felsch wrote:
+> > Microchip FPGAs can communicate in different modes, so document them to
+> > avoid dt-validate warnings.
+> 
+> Are you sure it can "communicate in different modes"?
 
-Are you sure it can "communicate in different modes"? The documentation
-actually says "Motorla SPI Mode 3 is required to communicate with M2S,
-M2GL, and MPF devices using dedicated system controller SPI port" with
-mode 3 being SPO =3D SPH =3D 1:
-https://www.microsemi.com/document-portal/doc_view/137543-spi-directc-sp1-v=
-2-0-user-guide
+No I'm not but I didn't found an overview within the FPGA datasheet [1]
+which modes are supported. What I did found was an note which says:
 
-I suspect the answer is that it can actually communicate in different
-modes (because I don't recall setting those options), but the binding
-should enforce the correct way of doing it IMO.
+"""
+1. Parameters are referenced to the active edge of SCK, which depends on
+the configured SPI protocol (for example, Motorola SPI mode uses rising
+edge as active edge if SPO = 0)
+"""
 
-Cheers,
-Conor.
+Therefore I thought that this can be configured somehow differently.
 
->=20
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> ---
->  .../devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml   | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpg=
-a-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-=
-mgr.yaml
-> index a157eecfb5fc..bb9a7d16db60 100644
-> --- a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.y=
-aml
-> +++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.y=
-aml
-> @@ -22,6 +22,9 @@ properties:
->      description: SPI chip select
->      maxItems: 1
-> =20
-> +  spi-cpol: true
-> +  spi-cpha: true
-> +
->  required:
->    - compatible
->    - reg
-> --=20
-> 2.39.2
->=20
->=20
+[1] https://www.microsemi.com/document-portal/doc_view/136519-ds0141-polarfire-fpga-datasheet
 
---2O3aSUv9rd47PiBb
-Content-Type: application/pgp-signature; name="signature.asc"
+> The documentation actually says "Motorla SPI Mode 3 is required to
+> communicate with M2S, M2GL, and MPF devices using dedicated system
+> controller SPI port" with mode 3 being SPO = SPH = 1:
+> https://www.microsemi.com/document-portal/doc_view/137543-spi-directc-sp1-v2-0-user-guide
 
------BEGIN PGP SIGNATURE-----
+Thanks for the Pointer, there are plenty documents for the Polarfire
+FPGA.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdeC+AAKCRB4tDGHoIJi
-0oHjAQDn+CtPxsHmH1HbAnZxGrFN2XNw9ZiIecm7+uMc0TL60gEAiz9XnYW94d0n
-V5purDR7N3JY473miS4tnfziAcnS9A0=
-=nkrk
------END PGP SIGNATURE-----
+> I suspect the answer is that it can actually communicate in different
+> modes (because I don't recall setting those options), but the binding
+> should enforce the correct way of doing it IMO.
 
---2O3aSUv9rd47PiBb--
+Sure, I will rephrase my commit message to:
+
+"""
+dt-bindings: fpga: microchip,mpf-spi-fpga-mgr: document CPOL/CPHA
+
+Using the dedicated system controller SPI port requires Motorola SPI
+Mode 3 according the SPI-DirectC v2.0 User Guid [1]. So require the
+spi-cpol and spi-cpha to be set.
+
+[1] https://www.microsemi.com/document-portal/doc_view/137543-spi-directc-sp1-v2-0-user-guide
+"""
+
+Regards,
+  Marco
+
+
+
+> 
+> Cheers,
+> Conor.
+> 
+> > 
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> >  .../devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml   | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> > index a157eecfb5fc..bb9a7d16db60 100644
+> > --- a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> > +++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> > @@ -22,6 +22,9 @@ properties:
+> >      description: SPI chip select
+> >      maxItems: 1
+> >  
+> > +  spi-cpol: true
+> > +  spi-cpha: true
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > -- 
+> > 2.39.2
+> > 
+> > 
+
+
 
