@@ -1,270 +1,216 @@
-Return-Path: <linux-fpga+bounces-299-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-300-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6E7886C710
-	for <lists+linux-fpga@lfdr.de>; Thu, 29 Feb 2024 11:37:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDF4D86DB20
+	for <lists+linux-fpga@lfdr.de>; Fri,  1 Mar 2024 06:30:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A0C91F284CB
-	for <lists+linux-fpga@lfdr.de>; Thu, 29 Feb 2024 10:37:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73CF92821BC
+	for <lists+linux-fpga@lfdr.de>; Fri,  1 Mar 2024 05:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8818F79DB4;
-	Thu, 29 Feb 2024 10:37:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0CFA50A7E;
+	Fri,  1 Mar 2024 05:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dx1gwm0r"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RNepKFy/"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB1B7995E
-	for <linux-fpga@vger.kernel.org>; Thu, 29 Feb 2024 10:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B7350275;
+	Fri,  1 Mar 2024 05:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709203040; cv=none; b=WKUrbEJsajF5k1h/kRj7eTHHCPMljdALwr55IcR5BaZXCEw4Hg79uRcgOY+fgaUCTYxuQN/wwX3QBsZtQJYv6A35QFkLG99nTb1qqoM36LHzgnfw4eQdtAfPtX5kNs0upN5CY0mkPU/gY1IICkn/e97TEuUUXt8GA8qGKRR7WW8=
+	t=1709271008; cv=none; b=KtWnuBVi2giCScKcu9GxXyGRT53Ow6IDToUJPcx1tNTYeRr7fZIY5gnyUdsaOxvbBIC7gBfmiqpTWKB4rtyoasP8NVHTE/dgrXMQArZKjSmvXhCti31vFXZhsnA8OA/zOAooaobIGZ3pCKXHq0hXKLa9TA8o1d4OaVEv3xPvhnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709203040; c=relaxed/simple;
-	bh=xkeld8Lk8IBplM8fZKyDA8lxo+4YDzsa8AtbNMPtOrg=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Gng3Y+DejndQkhvrnHuVfWPWx6tZJcsVyEk+WwqcGIek1yYROLn5MBK+rS77YKZ7kX6n7O7fFxvHIcC5hsFpOU1OErqL9ghfZSWkvxmjwz5jiL8dMU03LdDs6unU1ELqww3nzv14v3MUvWdNSEVy6LaN59DvRxwnDgv/+SgXNmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dx1gwm0r; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709203036;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VmmqZdgeBo5f2z5C02fBhM61/leQCIABlPf1lTPL92E=;
-	b=dx1gwm0rj0sDbUxjo/004aecaRCGsul2qlWW+AWCv1ILmmBdovZUrZ5McfwLiZYIku65e8
-	7sbyc5SzqBp6sI5r6u5cSk2FItigCnogsMXSjOLLqz1jtLacZC33oAB123r8X0AzyC1A4R
-	L5SELf9nTUdoiVrrD4I5FX+uPNXL3RQ=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-93-YzUH27xqMAeDQEKVk64t1A-1; Thu, 29 Feb 2024 05:37:15 -0500
-X-MC-Unique: YzUH27xqMAeDQEKVk64t1A-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-42e93b1a1d0so8602021cf.0
-        for <linux-fpga@vger.kernel.org>; Thu, 29 Feb 2024 02:37:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709203034; x=1709807834;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VmmqZdgeBo5f2z5C02fBhM61/leQCIABlPf1lTPL92E=;
-        b=LgpYKCKOCRxMmWCNSBCd5sTKnpxPqiJlwsrNIU66/1yuRehU6Xx7dZVKamd7gYSARp
-         J343FmPH0RrQaXnpc9tTEPQxJGvqhQ2x7GOSINTGO5FTv0OK+yWsHuLzrmPYbdr12RiG
-         kXOB/HvkMQwPwAAt2JTzY32e2w7uYAaZKOr1Hibyx/4AGuTLiomsGEcmR8AxeIMwXz45
-         RD9ORI5NTAvPwAUSgI0g9L94p4+ZIWk2lYATZCbsHQ5fhIMwyu+QTVwE1I6ziZYXOi90
-         lsxU8Fr60EMkHEiT7g9QWCYuKsXlURUc34YqOHpubmZ7/5K2pm3BqujsPA+eGrfFnXLF
-         lSCw==
-X-Forwarded-Encrypted: i=1; AJvYcCUL2/jjIGULLrNpAT5Fy33ruAdtu+zZyoZLFqARYCvt9tWeiT4OsRnMCWmnGwHN+r1VX43eR2bNh2gj/eISRkkTJRjv2KHpI9BemQ==
-X-Gm-Message-State: AOJu0YzMzt2cH8fXFgw9jjgfUbWF0+hwgl/F7+Gs60SaDpHEGRlINOI6
-	Zy3Txdiqfwss1rAmLcqpI2kWa13LOZAaJsqN3tcWspOhYakMOcP9kbPZukbZaY6xNV1wbcjUFYr
-	wGICpjkskLw03ns+SJ98OGHlzChMt31MkeaqU43iktG5yphM+KV8blRF4XQ==
-X-Received: by 2002:ac8:57d1:0:b0:42e:8145:8589 with SMTP id w17-20020ac857d1000000b0042e81458589mr1720854qta.2.1709203034640;
-        Thu, 29 Feb 2024 02:37:14 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGvjZZh4qSQgCFe2Zwl1bZvlNHTz+j+elx5TttakPKlYeodm3M1v9KlIIjfLmbzsJBo6Cq7pw==
-X-Received: by 2002:ac8:57d1:0:b0:42e:8145:8589 with SMTP id w17-20020ac857d1000000b0042e81458589mr1720840qta.2.1709203034266;
-        Thu, 29 Feb 2024 02:37:14 -0800 (PST)
-Received: from [192.168.9.34] (net-2-34-30-118.cust.vodafonedsl.it. [2.34.30.118])
-        by smtp.gmail.com with ESMTPSA id d3-20020ac851c3000000b0042c61b99f42sm582123qtn.46.2024.02.29.02.37.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Feb 2024 02:37:13 -0800 (PST)
-Message-ID: <0c885ff2-44bc-4158-b5dd-3d7513cb2857@redhat.com>
-Date: Thu, 29 Feb 2024 11:37:10 +0100
+	s=arc-20240116; t=1709271008; c=relaxed/simple;
+	bh=v8uHwN2PJh+Xe+D+PYp1wLDxludjuNeHLdkTRY0cZXE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hunTxXTOfmNcFqoR9KZIkZT3IsYS/XFGyd8ul6H2eSM4QlFfeurI/qGpFaQ6K2AGz5P1bsTTg57tn8COUEyDoJVUiETzRjM6ZiVyydwuBJdLVX3DOHAYD9WBs+nrBqeD4YO869Fitg4bGATZIySd5Kifib/Ps1wl01RRcuCpbhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RNepKFy/; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709271006; x=1740807006;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v8uHwN2PJh+Xe+D+PYp1wLDxludjuNeHLdkTRY0cZXE=;
+  b=RNepKFy/roypuLPA5dbtADzf2b2J3yJdc16HrVbfvG4rRWsDuPHhM8qJ
+   iOAg21h3zeugVhKBkyBycWO7z85YvUe4Qv+n3RTIzPW1bvj4LIWp/Zm6L
+   voS79/BPVvUikkxyEszh/8vf1ZfvMfU96Nxvkys+LwICkIV+kg3DmybZH
+   EiDlpZLuh586A5+PdmiLTA5OZ1QLcrbNoPzlfgrFH+uyQbhvAQGp5xCz3
+   a8668WhSuflzYA5dG/AY563jVb8nWh+3CxOLCPaM9khv9Hk80G5Hw5CX7
+   XbjCWJIfXnvVDR1EygXd+jsL2PLCUBVzR0NmeX4bpj7KL4kpg6LhXN1aX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="15226234"
+X-IronPort-AV: E=Sophos;i="6.06,195,1705392000"; 
+   d="scan'208";a="15226234"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 21:30:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,195,1705392000"; 
+   d="scan'208";a="12766626"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 29 Feb 2024 21:29:59 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rfvT2-000DZ3-2E;
+	Fri, 01 Mar 2024 05:29:56 +0000
+Date: Fri, 1 Mar 2024 13:29:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Charles Perry <charles.perry@savoirfairelinux.com>, mdf@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, avandiver@markem-imaje.com,
+	bcody@markem-imaje.com,
+	Charles Perry <charles.perry@savoirfairelinux.com>,
+	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Michal Simek <monstr@monstr.eu>,
+	linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/3] fpga: xilinx-spi: extract a common driver core
+Message-ID: <202403011334.uEOiA7Q0-lkp@intel.com>
+References: <20240221195058.1281973-2-charles.perry@savoirfairelinux.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Marco Pagani <marpagan@redhat.com>
-Subject: Re: [RFC PATCH v5 1/1] fpga: add an owner and use it to take the
- low-level module's refcount
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
- Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alan Tull <atull@opensource.altera.com>, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-fpga@vger.kernel.org
-References: <20240111160242.149265-1-marpagan@redhat.com>
- <20240111160242.149265-2-marpagan@redhat.com>
- <Zbh7iO9wlm9ekzB7@yilunxu-OptiPlex-7050>
- <0720eb91-72f9-4781-8558-8a1b0a3691c2@redhat.com>
- <Zb8dd9af0Ru/fzGi@yilunxu-OptiPlex-7050>
- <4aaa131a-4b64-4b86-9548-68aef63c87b3@redhat.com>
- <ZdHWaeU+/On6LmHX@yilunxu-OptiPlex-7050>
- <9a9d4018-fd65-49be-9e0a-1eecc9cbf15d@redhat.com>
- <ZdYKnZxdTCvu5THG@yilunxu-OptiPlex-7050>
- <ae3cd81b-82af-4977-91d7-fa809c6fc45a@redhat.com>
- <Zd7cff43ffbJOGNY@yilunxu-OptiPlex-7050>
-Content-Language: en-US
-In-Reply-To: <Zd7cff43ffbJOGNY@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240221195058.1281973-2-charles.perry@savoirfairelinux.com>
 
+Hi Charles,
 
-On 2024-02-28 08:10, Xu Yilun wrote:
-> On Tue, Feb 27, 2024 at 12:49:06PM +0100, Marco Pagani wrote:
->>
->>
->> On 2024-02-21 15:37, Xu Yilun wrote:
->>> On Tue, Feb 20, 2024 at 12:11:26PM +0100, Marco Pagani wrote:
->>>>
->>>>
->>>> On 2024-02-18 11:05, Xu Yilun wrote:
->>>>> On Mon, Feb 05, 2024 at 06:47:34PM +0100, Marco Pagani wrote:
->>>>>>
->>>>>>
->>>>>> On 2024-02-04 06:15, Xu Yilun wrote:
->>>>>>> On Fri, Feb 02, 2024 at 06:44:01PM +0100, Marco Pagani wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>> On 2024-01-30 05:31, Xu Yilun wrote:
->>>>>>>>>> +#define fpga_mgr_register_full(parent, info) \
->>>>>>>>>> +	__fpga_mgr_register_full(parent, info, THIS_MODULE)
->>>>>>>>>>  struct fpga_manager *
->>>>>>>>>> -fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
->>>>>>>>>> +__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
->>>>>>>>>> +			 struct module *owner);
->>>>>>>>>>  
->>>>>>>>>> +#define fpga_mgr_register(parent, name, mops, priv) \
->>>>>>>>>> +	__fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
->>>>>>>>>>  struct fpga_manager *
->>>>>>>>>> -fpga_mgr_register(struct device *parent, const char *name,
->>>>>>>>>> -		  const struct fpga_manager_ops *mops, void *priv);
->>>>>>>>>> +__fpga_mgr_register(struct device *parent, const char *name,
->>>>>>>>>> +		    const struct fpga_manager_ops *mops, void *priv, struct module *owner);
->>>>>>>>>> +
->>>>>>>>>>  void fpga_mgr_unregister(struct fpga_manager *mgr);
->>>>>>>>>>  
->>>>>>>>>> +#define devm_fpga_mgr_register_full(parent, info) \
->>>>>>>>>> +	__devm_fpga_mgr_register_full(parent, info, THIS_MODULE)
->>>>>>>>>>  struct fpga_manager *
->>>>>>>>>> -devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
->>>>>>>>>> +__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
->>>>>>>>>> +			      struct module *owner);
->>>>>>>>>
->>>>>>>>> Add a line here. I can do it myself if you agree.
->>>>>>>>
->>>>>>>> Sure, that is fine by me. I also spotted a typo in the commit log body
->>>>>>>> (in taken -> is taken). Do you want me to send a v6, or do you prefer
->>>>>>>> to fix that in place?
->>>>>>>
->>>>>>> No need, I can fix it.
->>>>>>>
->>>>>>>>
->>>>>>>>>
->>>>>>>>> There is still a RFC prefix for this patch. Are you ready to get it merged?
->>>>>>>>> If yes, Acked-by: Xu Yilun <yilun.xu@intel.com>
->>>>>>>>
->>>>>>>> I'm ready for the patch to be merged. However, I recently sent an RFC
->>>>>>>> to propose a safer implementation of try_module_get() that would
->>>>>>>> simplify the code and may also benefit other subsystems. What do you
->>>>>>>> think?
->>>>>>>>
->>>>>>>> https://lore.kernel.org/linux-modules/20240130193614.49772-1-marpagan@redhat.com/
->>>>>>>
->>>>>>> I suggest take your fix to linux-fpga/for-next now. If your try_module_get()
->>>>>>> proposal is applied before the end of this cycle, we could re-evaluate
->>>>>>> this patch.
->>>>>>
->>>>>> That's fine by me.
->>>>>
->>>>> Sorry, I still found issues about this solution.
->>>>>
->>>>> void fpga_mgr_unregister(struct fpga_manager *mgr)
->>>>> {
->>>>>         dev_info(&mgr->dev, "%s %s\n", __func__, mgr->name);
->>>>>
->>>>>         /*
->>>>>          * If the low level driver provides a method for putting fpga into
->>>>>          * a desired state upon unregister, do it.
->>>>>          */
->>>>>         fpga_mgr_fpga_remove(mgr);
->>>>>
->>>>>         mutex_lock(&mgr->mops_mutex);
->>>>>
->>>>>         mgr->mops = NULL;
->>>>>
->>>>>         mutex_unlock(&mgr->mops_mutex);
->>>>>
->>>>>         device_unregister(&mgr->dev);
->>>>> }
->>>>>
->>>>> Note that fpga_mgr_unregister() doesn't have to be called in module_exit().
->>>>> So if we do fpga_mgr_get() then fpga_mgr_unregister(), We finally had a
->>>>> fpga_manager dev without mops, this is not what the user want and cause
->>>>> problem when using this fpga_manager dev for other FPGA APIs.
->>>>
->>>> How about moving mgr->mops = NULL from fpga_mgr_unregister() to
->>>> class->dev_release()? In that way, mops will be set to NULL only when the
->>>> manager dev refcount reaches 0.
->>>
->>> I'm afraid it doesn't help.  The lifecycle of the module and the fpga
->>> mgr dev is different.
->>>
->>> We use mops = NULL to indicate module has been freed or will be freed in no
->>> time.  On the other hand mops != NULL means module is still there, so
->>> that try_module_get() could be safely called.  It is possible someone
->>> has got fpga mgr dev but not the module yet, at that time the module is
->>> unloaded, then try_module_get() triggers crash.
->>>
->>>>
->>>> If fpga_mgr_unregister() is called from module_exit(), we are sure that nobody
->>>> got the manager dev earlier using fpga_mgr_get(), or it would have bumped up
->>>
->>> No, someone may get the manager dev but not the module yet, and been
->>> scheduled out.
->>>
->>
->> You are right. Overall, it's a bad idea. How about then using an additional 
->> bool flag instead of "overloading" the mops pointer? Something like:
->>
->> get:
->> 	if (!mgr->owner_valid || !try_module_get(mgr->mops_owner))
->>
->> remove:
->> 	mgr->owner_valid = false;
-> 
-> I'm not quite sure which function is actually mentioned by "remove".  I
-> assume it should be fpga_mgr_unregister().
+kernel test robot noticed the following build warnings:
 
-Yes, I was referring to fpga_mgr_unregister().
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master xilinx-xlnx/master v6.8-rc6 next-20240229]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> IIUC this flag means no more reference to fpga mgr, but existing
-> references are still valid.
+url:    https://github.com/intel-lab-lkp/linux/commits/Charles-Perry/fpga-xilinx-spi-extract-a-common-driver-core/20240222-040453
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240221195058.1281973-2-charles.perry%40savoirfairelinux.com
+patch subject: [PATCH v4 1/3] fpga: xilinx-spi: extract a common driver core
+config: hexagon-randconfig-r063-20240229 (https://download.01.org/0day-ci/archive/20240301/202403011334.uEOiA7Q0-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403011334.uEOiA7Q0-lkp@intel.com/reproduce)
 
-Yes.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403011334.uEOiA7Q0-lkp@intel.com/
 
-> 
-> It works for me. But the name of this flag could be reconsidered to
-> avoid misunderstanding.  The owner is still valid (we still need to put
-> the owner) but allows no more reference.  Maybe "owner_inactive"?
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-Right, owner_valid might be misleading. How about removing any
-reference to the owner module and name the flag unreg?
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spmi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/block/brd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/block/ublk_drv.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/scsi_common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/host/nvme-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/host/nvme-fabrics.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvmet.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvme-loop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvmet-fc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-fsl-lib.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/firewire-uapi-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/phy/phy-am335x-control.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/phy/phy-am335x.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/ezusb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/chipidea/ci_hdrc_msm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/libcomposite.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_acm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/u_serial.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_serial.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_obex.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/u_ether.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_ncm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_ecm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_ecm_subset.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_rndis.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_mass_storage.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_fs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_hid.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_tcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/touchscreen/cyttsp_i2c_common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-qup.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/rc-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/twl4030_wdt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/ts4800_wdt.o
+WARNING: modpost: drivers/mmc/host/davinci_mmc: section mismatch in reference: davinci_mmcsd_driver+0x8 (section: .data) -> davinci_mmcsd_remove (section: .exit.text)
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/of_mmc_spi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/tmio_mmc_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/renesas_sdhi_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/pwrseq_sd8787.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/pwrseq_emmc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/sdio_uart.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/blink/leds-bcm63138.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-aureal.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-betopff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cherry.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-dr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-emsff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elecom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gyration.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lcpower.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-letsketch.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lg-g15.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-dj.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-hidpp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-maltron.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ntrig.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-razer.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-saitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-samsung.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-semitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sony.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-steelseries.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sunplus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tmff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-twinhan.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-uclogic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-power-supply.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-pwm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-sdio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-spi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/fbtft/fbtft.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
+WARNING: modpost: drivers/memory/emif: section mismatch in reference: emif_driver+0x8 (section: .data) -> emif_remove (section: .exit.text)
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_brcm_nvram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_u-boot-env.o
+ERROR: modpost: missing MODULE_LICENSE() in drivers/fpga/xilinx-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/xilinx-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/spmi-pmic-arb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_pruss.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/corsair-cpro.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/ingenic-adc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-hub.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-scom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_text.o
+>> WARNING: modpost: "xilinx_core_probe" [drivers/fpga/xilinx-spi.ko] undefined!
 
-__fpga_mgr_get:
-	if (mgr->unreg || !try_module_get(mgr->mops_owner))
-		mgr = ERR_PTR(-ENODEV);
-
-fpga_mgr_unregister:
- 	mgr->unreg = true;
-
-> I still wanna this owner reference change been splitted, so that
-> we could simply revert it when the try_module_get_safe() got accepted.
-
-I guess it may take some time to have try_module_get_safe() accepted.
-What do you prefer to do with the bridge and the region in the
-meantime?
-
-Thanks,
-Marco
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
