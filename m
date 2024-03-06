@@ -1,508 +1,259 @@
-Return-Path: <linux-fpga+bounces-320-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-321-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C76ED87278B
-	for <lists+linux-fpga@lfdr.de>; Tue,  5 Mar 2024 20:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B1932872F5B
+	for <lists+linux-fpga@lfdr.de>; Wed,  6 Mar 2024 08:14:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B44528B38C
-	for <lists+linux-fpga@lfdr.de>; Tue,  5 Mar 2024 19:29:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68D02288029
+	for <lists+linux-fpga@lfdr.de>; Wed,  6 Mar 2024 07:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D3058128;
-	Tue,  5 Mar 2024 19:29:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FF265C605;
+	Wed,  6 Mar 2024 07:14:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BADaAP4F"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ODMG4cU0"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8894CB28
-	for <linux-fpga@vger.kernel.org>; Tue,  5 Mar 2024 19:29:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C695C604;
+	Wed,  6 Mar 2024 07:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709666983; cv=none; b=R0mNu3Hp/ZZqP0zQhgE0PpAdujKKYctDsBqYZ3Z1RE8zV/2OZsOEYd1EAw+MX89F9bqEs5LcM8tI2oqmeGkVQZwJ3oeZNFU+6jjYOtyF9zxw+gGlKppL/e02na5C6lNQtqecPySFBxpaNygCQ71Q4q3q1yweaWQWwtmaAcDRWOY=
+	t=1709709278; cv=none; b=PcWihtHWGAifJbgNhj0UUakvYfyN3YaB5Ov/JS6tPAJWw4Mlt8Dz4BnhaVN+6DbdvOVC4IaL566dWUW7uwSeR5MIvctVGdHME494+/0NB0LdFxeES3rLFg/lPWgAfI8IHN89tD23GE++coELl6AMnV0pL2FfkCBG4UCsv0KlGtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709666983; c=relaxed/simple;
-	bh=ssfHvI3PdVFTlI1Hudg8G2iWRrUy4dO/pOmlHiKneuo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BAQhd3c79QODHSLDdLkebSoanVPkle+h1rssdmxBSUP6WVPQyrcazCyCEJzz4qE0oIHIwTnvMzByL5Lx8By85pjm1IYK6g7qeB0CBSn93kThAY1KQoIu6ssds2Ialvy6Wq7DQ7TngZJibLBwZChm8zwlu1XcNxzNnFtwwhEexQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BADaAP4F; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709666980;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=MsLmeEDDRautWLVWhy7nZWLo1w0biW+49BFJ3rP2YaY=;
-	b=BADaAP4FFWX1JlDwpjM+RoKPY5kZnHSAf8K3sEG1Gly9uVzSr/0dkIlcM5gFozykZiPMYE
-	RtEfprIfDOKYFdzySbjduA/03UcCmO55deu2NZO3+DuEHMLmDQetthKFFwQTywgnlIOmnG
-	lpjX/VmLKcL9ZfhZs/wxVigz28R8eKk=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-275-FrI0bZt8OZ2tf7j7GMrP2g-1; Tue, 05 Mar 2024 14:29:35 -0500
-X-MC-Unique: FrI0bZt8OZ2tf7j7GMrP2g-1
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6e4a0e8e282so5101866a34.2
-        for <linux-fpga@vger.kernel.org>; Tue, 05 Mar 2024 11:29:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709666972; x=1710271772;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MsLmeEDDRautWLVWhy7nZWLo1w0biW+49BFJ3rP2YaY=;
-        b=BmAPyRBIinCxzL7jdwDt9NuazVCj0JqH4DRIIRoW4uh36kk7tfGM7dYLADtsIaQhNc
-         aeXbl87QdM01EvE/vLjMUh2cHNnxaabQfsSC0jhccP7o5fmFv2ByxIeNYtt20xHcvqN/
-         6b61qQwIso+HLsRUcWA0PRbT13ZUXJ3nw8G/COu/khFyuELstsMHNEfeY+cCB/OCeg2X
-         QQTbBI1NmoK8PgxhMB9vqLltCzBwyGHdbzpjXv2P98tffDXSL66ry1PAUnMEgtLfK6w+
-         A9n7Y3UgO3VFupU7N8S+l0yIlOw42Ipc5iMjvT4VV4HpzYPwZ4OwXOJ9si2KLTOehf9q
-         wW4g==
-X-Forwarded-Encrypted: i=1; AJvYcCUIPGJqjsxkxN3E9SWzYP5NnaiU8ynWE7fD7bnsgcTcLyxkKxiKLvuDovdQ9BXDOC0i0Z03tgps2CIie9jinGYTZf34NYI3eFuywA==
-X-Gm-Message-State: AOJu0YyJhNzosSDpyNK09BnIU84Vt24vv6OJXRLb/DQG3NvsC/Aitqdg
-	MvgKSMyHQf1qJ2o8BxFfT9uFiQ7SX/JtNIxSS0r3rwifuWxa8hNhTq2IQN1ds6oZzlbj1wA6DBu
-	ww/VEDFt/QnHcOKXpoyTq1VxFYnO0MZC74KZsVs7kqj7yz3HVsF2XxFLtww==
-X-Received: by 2002:a05:6870:249c:b0:221:1f78:563f with SMTP id s28-20020a056870249c00b002211f78563fmr3105960oaq.2.1709666972229;
-        Tue, 05 Mar 2024 11:29:32 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFUddroAJ9Zuif3frVwkR0AZHih7biF91mvnZ/RgbfULxqOo1rQccouZZK5SKKa+piHIfB1Ag==
-X-Received: by 2002:a05:6870:249c:b0:221:1f78:563f with SMTP id s28-20020a056870249c00b002211f78563fmr3105932oaq.2.1709666971937;
-        Tue, 05 Mar 2024 11:29:31 -0800 (PST)
-Received: from klayman.redhat.com (net-2-34-28-168.cust.vodafonedsl.it. [2.34.28.168])
-        by smtp.gmail.com with ESMTPSA id vr1-20020a05620a55a100b007881e40ce0bsm3432992qkn.83.2024.03.05.11.29.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 11:29:31 -0800 (PST)
-From: Marco Pagani <marpagan@redhat.com>
-To: Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
+	s=arc-20240116; t=1709709278; c=relaxed/simple;
+	bh=Q4jNS53sz6z+xgVv/481OuFX1jfdnAmQc8opmwqbePw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YpDTs6hVR/xnKnBUYPnNerRXEK4UysFSpEkE34PQq08RQKnJEb3cYYWaTkBzVlhoe9liI+6UNoAwkBk+mvnmXxZEyOaOS6qmn1FPVlhE6Upc1FzWeIgyI4GhaqpTX8qITDzX5tc8hZyvvJPxkzgZa+IJ9E3djcJxXgcLYaxyCgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ODMG4cU0; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709709277; x=1741245277;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q4jNS53sz6z+xgVv/481OuFX1jfdnAmQc8opmwqbePw=;
+  b=ODMG4cU0lRQrleCoQw0ha0qTW3R8SPVUawB+P/fmDE39Om2uTONFIVTG
+   5aiqY1XBIEHXfNG1gECHvVnCWMmxkplwcJ+CFEtgcgZtYmL0zAlML0lOZ
+   Te4Kld7vzzJ95963siWDtyB99xtwQpb19lLRLoB1UYFmk7qYVtyy5fsFW
+   0I5yJAkCvwrR6sY72acmMBUICii16a8TAsw5fzgyrinQxqVkjA0RD1Vtd
+   DYx93oUWF+yA8ZNbYf6VPMVzAxesBFQw8XBHO8v8eLs22z/ne6Jk4O/+x
+   XcCJVqPmtvGDymYzNnzUQNl/9fe+Pf8TW/7CkoPkXygL4lzQ+lchjR3WN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="4164856"
+X-IronPort-AV: E=Sophos;i="6.06,207,1705392000"; 
+   d="scan'208";a="4164856"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 23:14:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,207,1705392000"; 
+   d="scan'208";a="14319175"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa003.jf.intel.com with ESMTP; 05 Mar 2024 23:14:31 -0800
+Date: Wed, 6 Mar 2024 15:10:17 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Charles Perry <charles.perry@savoirfairelinux.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	yilun xu <yilun.xu@intel.com>, Rob Herring <robh+dt@kernel.org>,
+	mdf <mdf@kernel.org>, Allen VANDIVER <avandiver@markem-imaje.com>,
+	Brian CODY <bcody@markem-imaje.com>, hao wu <hao.wu@intel.com>,
 	Tom Rix <trix@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Tull <atull@opensource.altera.com>
-Cc: Marco Pagani <marpagan@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-fpga@vger.kernel.org
-Subject: [PATCH v6] fpga: manager: add owner module and take its refcount
-Date: Tue,  5 Mar 2024 20:29:26 +0100
-Message-ID: <20240305192926.84886-1-marpagan@redhat.com>
-X-Mailer: git-send-email 2.44.0
+	krzysztof kozlowski+dt <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	linux-fpga <linux-fpga@vger.kernel.org>,
+	devicetree <devicetree@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v4 2/3] dt-bindings: fpga: xlnx,fpga-selectmap: add DT
+ schema
+Message-ID: <ZegW2QpgO0Kk1Iip@yilunxu-OptiPlex-7050>
+References: <20240221195058.1281973-1-charles.perry@savoirfairelinux.com>
+ <20240221195058.1281973-3-charles.perry@savoirfairelinux.com>
+ <4a9f0eef-590b-45df-92bc-b63ad9282e18@linaro.org>
+ <1012793477.1508198.1709486517581.JavaMail.zimbra@savoirfairelinux.com>
+ <cb51aadd-c350-42e2-9684-ac4f7dbf864c@linaro.org>
+ <d377f0ea-2df2-4d4e-b1bc-8a4ca55eec15@linaro.org>
+ <23887452.1534761.1709605624728.JavaMail.zimbra@savoirfairelinux.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23887452.1534761.1709605624728.JavaMail.zimbra@savoirfairelinux.com>
 
-The current implementation of the fpga manager assumes that the low-level
-module registers a driver for the parent device and uses its owner pointer
-to take the module's refcount. This approach is problematic since it can
-lead to a null pointer dereference while attempting to get the manager if
-the parent device does not have a driver.
+On Mon, Mar 04, 2024 at 09:27:04PM -0500, Charles Perry wrote:
+> 
+> 
+> On Mar 4, 2024, at 12:31 AM, Krzysztof Kozlowski krzysztof.kozlowski@linaro.org wrote:
+> 
+> > On 04/03/2024 08:30, Krzysztof Kozlowski wrote:
+> >> On 03/03/2024 18:21, Charles Perry wrote:
+> >>> On Feb 27, 2024, at 3:10 AM, Krzysztof Kozlowski krzysztof.kozlowski@linaro.org
+> >>> wrote:
+> >>>
+> >>>> On 21/02/2024 20:50, Charles Perry wrote:
+> >>>>> Document the SelectMAP interface of Xilinx 7 series FPGA.
+> >>>>>
+> >>>>> Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
+> >>>>> ---
+> >>>>>  .../bindings/fpga/xlnx,fpga-selectmap.yaml    | 86 +++++++++++++++++++
+> >>>>>  1 file changed, 86 insertions(+)
+> >>>>>  create mode 100644
+> >>>>>  Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
+> >>>>> b/Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
+> >>>>> new file mode 100644
+> >>>>> index 0000000000000..08a5e92781657
+> >>>>> --- /dev/null
+> >>>>> +++ b/Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
+> >>>>> @@ -0,0 +1,86 @@
+> >>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>>>> +%YAML 1.2
+> >>>>> +---
+> >>>>> +$id: http://devicetree.org/schemas/fpga/xlnx,fpga-selectmap.yaml#
+> >>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>>>> +
+> >>>>> +title: Xilinx SelectMAP FPGA interface
+> >>>>> +
+> >>>>> +maintainers:
+> >>>>> +  - Charles Perry <charles.perry@savoirfairelinux.com>
+> >>>>> +
+> >>>>> +description: |
+> >>>>> +  Xilinx 7 Series FPGAs support a method of loading the bitstream over a
+> >>>>> +  parallel port named the SelectMAP interface in the documentation. Only
+> >>>>> +  the x8 mode is supported where data is loaded at one byte per rising edge of
+> >>>>> +  the clock, with the MSB of each byte presented to the D0 pin.
+> >>>>> +
+> >>>>> +  Datasheets:
+> >>>>> +
+> >>>>> https://www.xilinx.com/support/documentation/user_guides/ug470_7Series_Config.pdf
+> >>>>> +
+> >>>>> +allOf:
+> >>>>> +  - $ref: /schemas/memory-controllers/mc-peripheral-props.yaml#
+> >>>>> +
+> >>>>> +properties:
+> >>>>> +  compatible:
+> >>>>> +    enum:
+> >>>>> +      - xlnx,fpga-xc7s-selectmap
+> >>>>> +      - xlnx,fpga-xc7a-selectmap
+> >>>>> +      - xlnx,fpga-xc7k-selectmap
+> >>>>> +      - xlnx,fpga-xc7v-selectmap
+> >>>>> +
+> >>>>> +  reg:
+> >>>>> +    description:
+> >>>>> +      At least 1 byte of memory mapped IO
+> >>>>> +    maxItems: 1
+> >>>>> +
+> >>>>> +  prog_b-gpios:
+> >>>>
+> >>>> I commented on this and still see underscore. Nothing in commit msg
+> >>>> explains why this should have underscore. Changelog is also vague -
+> >>>> describes that you brought back underscores, instead of explaining why
+> >>>> you did it.
+> >>>>
+> >>>> So the same comments as usual:
+> >>>>
+> >>>> No underscores in names.
+> >>>>
+> >>>> Best regards,
+> >>>> Krzysztof
+> >>>
+> >>> Hello Krzysztof,
+> >>>
+> >>> Yes, I've gone full circle on that issue. Here's what I tried so far:
+> >> 
+> >> And what part of the commit description allows me to understand this?
+> >> 
+> 
+> I have a changelog in the cover letter:
+> https://lore.kernel.org/all/20240221195058.1281973-1-charles.perry@savoirfairelinux.com/
+> 
+> >>>
+> >>>  1) Reuse the same gpio names: Duplicates errors of the past, Krzysztof
+> >>>     doesn't like it.
+> >>>  2) Different gpio names for new driver only: Makes the driver code
+> >>>     overly complicated, Yilun doesn't like it.
+> >> 
+> >> That's a new driver, right? So what is complicated here? You have new
+> >> code and you take prog-b or prog_b?
+> >> 
+> >>>  3) Change gpio names for both drivers, deprecate the old names: Makes
+> >>>     the DT binding and the driver code overly complicated, Rob doesn't
+> >>>     like it.
+> >> 
+> >> I don't think I proposed changing existing bindings.
+> >> 
+> >>>
+> >>> I think that while the driver code shouldn't be the driving force for
+> >>> the DT spec, it can be a good indication that the spec is unpractical to
+> >>> implement.
+> >> 
+> >> What is impractical in implementing this? You just pass either A or B to
+> >> function requesting GPIO. Just choose proper name.
+> >>
+> 
+> It's not complicated but it requires more code than if "prog_b" had been
+> used. 
+>  
+> >>>
+> >>> In this case, there are two interfaces on a chip that uses the same GPIO
+> >>> protocol, it would only make sense that they use the same names, this
+> >>> discards solution #2.
+> >> 
+> >> I don't understand this. You have devm_gpiod_get() in your new code. Why
+> >> is it difficult to use different name?
+> 
+> Yilun asked to avoid changing the names between the two drivers.
+> First comment in this mail:
+> https://lore.kernel.org/all/Zb9GkY6cMtR+4xOX@yilunxu-OptiPlex-7050/
+> 
+> Yilun, let me know if this is something you'd accept as this is a concern
+> for the device tree maintainers.
 
-To address this problem, add a module owner pointer to the fpga_manager
-struct and use it to take the module's refcount. Modify the functions for
-registering the manager to take an additional owner module parameter and
-rename them to avoid conflicts. Use the old function names for helper
-macros that automatically set the module that registers the manager as the
-owner. This ensures compatibility with existing low-level control modules
-and reduces the chances of registering a manager without setting the owner.
+I agree that deprecated names should not be used for new DT bindings, while
+keeping backward compatibility to exsiting ones, unless there is other
+DT side concern.
 
-Also, update the documentation to keep it consistent with the new interface
-for registering an fpga manager.
+I'm also good that the driver adapts to the DT binding change.
 
-Other changes: opportunistically move put_device() from __fpga_mgr_get() to
-fpga_mgr_get() and of_fpga_mgr_get() to improve code clarity since the
-manager device is taken in these functions.
+What I'm concerned is the driver API:
 
-Fixes: 654ba4cc0f3e ("fpga manager: ensure lifetime with of_fpga_mgr_get")
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Suggested-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
+  int xilinx_core_probe(struct xilinx_fpga_core *core, struct device *dev,
+		      xilinx_write_func write,
+  -		      xilinx_write_one_dummy_byte_func write_one_dummy_byte)
+  +		      xilinx_write_one_dummy_byte_func write_one_dummy_byte,
+  +		      const char *prog_con_id, const char *init_con_id)
 
-v6:
-- Split out protection against races while taking the mod's refcount
-v5:
-- Updated the documentation
-- Removed kernel-doc comments for helper macros
-v4:
-- Use helper macros to set the owner module
-v3:
-- Improved locking
-v2:
-- Fixed protection against races during module removal
----
- Documentation/driver-api/fpga/fpga-mgr.rst | 34 +++++----
- drivers/fpga/fpga-mgr.c                    | 82 +++++++++++++---------
- include/linux/fpga/fpga-mgr.h              | 26 +++++--
- 3 files changed, 89 insertions(+), 53 deletions(-)
+You don't have to make every bus driver input the gpio names.  The core
+falls back to use old gpio names only for existing devices
+(.compatible = "xlnx,fpga-slave-serial").  Then the issue could be
+solved?
 
-diff --git a/Documentation/driver-api/fpga/fpga-mgr.rst b/Documentation/driver-api/fpga/fpga-mgr.rst
-index 49c0a9512653..8d2b79f696c1 100644
---- a/Documentation/driver-api/fpga/fpga-mgr.rst
-+++ b/Documentation/driver-api/fpga/fpga-mgr.rst
-@@ -24,7 +24,8 @@ How to support a new FPGA device
- --------------------------------
- 
- To add another FPGA manager, write a driver that implements a set of ops.  The
--probe function calls fpga_mgr_register() or fpga_mgr_register_full(), such as::
-+probe function calls ``fpga_mgr_register()`` or ``fpga_mgr_register_full()``,
-+such as::
- 
- 	static const struct fpga_manager_ops socfpga_fpga_ops = {
- 		.write_init = socfpga_fpga_ops_configure_init,
-@@ -69,10 +70,11 @@ probe function calls fpga_mgr_register() or fpga_mgr_register_full(), such as::
- 	}
- 
- Alternatively, the probe function could call one of the resource managed
--register functions, devm_fpga_mgr_register() or devm_fpga_mgr_register_full().
--When these functions are used, the parameter syntax is the same, but the call
--to fpga_mgr_unregister() should be removed. In the above example, the
--socfpga_fpga_remove() function would not be required.
-+register functions, ``devm_fpga_mgr_register()`` or
-+``devm_fpga_mgr_register_full()``.  When these functions are used, the
-+parameter syntax is the same, but the call to ``fpga_mgr_unregister()`` should be
-+removed. In the above example, the ``socfpga_fpga_remove()`` function would not be
-+required.
- 
- The ops will implement whatever device specific register writes are needed to
- do the programming sequence for this particular FPGA.  These ops return 0 for
-@@ -125,15 +127,19 @@ API for implementing a new FPGA Manager driver
- * struct fpga_manager -  the FPGA manager struct
- * struct fpga_manager_ops -  Low level FPGA manager driver ops
- * struct fpga_manager_info -  Parameter structure for fpga_mgr_register_full()
--* fpga_mgr_register_full() -  Create and register an FPGA manager using the
-+* __fpga_mgr_register_full() -  Create and register an FPGA manager using the
-   fpga_mgr_info structure to provide the full flexibility of options
--* fpga_mgr_register() -  Create and register an FPGA manager using standard
-+* __fpga_mgr_register() -  Create and register an FPGA manager using standard
-   arguments
--* devm_fpga_mgr_register_full() -  Resource managed version of
--  fpga_mgr_register_full()
--* devm_fpga_mgr_register() -  Resource managed version of fpga_mgr_register()
-+* __devm_fpga_mgr_register_full() -  Resource managed version of
-+  __fpga_mgr_register_full()
-+* __devm_fpga_mgr_register() -  Resource managed version of __fpga_mgr_register()
- * fpga_mgr_unregister() -  Unregister an FPGA manager
- 
-+Helper macros ``fpga_mgr_register_full()``, ``fpga_mgr_register()``,
-+``devm_fpga_mgr_register_full()``, and ``devm_fpga_mgr_register()`` are available
-+to ease the registration.
-+
- .. kernel-doc:: include/linux/fpga/fpga-mgr.h
-    :functions: fpga_mgr_states
- 
-@@ -147,16 +153,16 @@ API for implementing a new FPGA Manager driver
-    :functions: fpga_manager_info
- 
- .. kernel-doc:: drivers/fpga/fpga-mgr.c
--   :functions: fpga_mgr_register_full
-+   :functions: __fpga_mgr_register_full
- 
- .. kernel-doc:: drivers/fpga/fpga-mgr.c
--   :functions: fpga_mgr_register
-+   :functions: __fpga_mgr_register
- 
- .. kernel-doc:: drivers/fpga/fpga-mgr.c
--   :functions: devm_fpga_mgr_register_full
-+   :functions: __devm_fpga_mgr_register_full
- 
- .. kernel-doc:: drivers/fpga/fpga-mgr.c
--   :functions: devm_fpga_mgr_register
-+   :functions: __devm_fpga_mgr_register
- 
- .. kernel-doc:: drivers/fpga/fpga-mgr.c
-    :functions: fpga_mgr_unregister
-diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-index 06651389c592..0f4035b089a2 100644
---- a/drivers/fpga/fpga-mgr.c
-+++ b/drivers/fpga/fpga-mgr.c
-@@ -664,20 +664,16 @@ static struct attribute *fpga_mgr_attrs[] = {
- };
- ATTRIBUTE_GROUPS(fpga_mgr);
- 
--static struct fpga_manager *__fpga_mgr_get(struct device *dev)
-+static struct fpga_manager *__fpga_mgr_get(struct device *mgr_dev)
- {
- 	struct fpga_manager *mgr;
- 
--	mgr = to_fpga_manager(dev);
-+	mgr = to_fpga_manager(mgr_dev);
- 
--	if (!try_module_get(dev->parent->driver->owner))
--		goto err_dev;
-+	if (!try_module_get(mgr->mops_owner))
-+		mgr = ERR_PTR(-ENODEV);
- 
- 	return mgr;
--
--err_dev:
--	put_device(dev);
--	return ERR_PTR(-ENODEV);
- }
- 
- static int fpga_mgr_dev_match(struct device *dev, const void *data)
-@@ -693,12 +689,18 @@ static int fpga_mgr_dev_match(struct device *dev, const void *data)
-  */
- struct fpga_manager *fpga_mgr_get(struct device *dev)
- {
--	struct device *mgr_dev = class_find_device(&fpga_mgr_class, NULL, dev,
--						   fpga_mgr_dev_match);
-+	struct fpga_manager *mgr;
-+	struct device *mgr_dev;
-+
-+	mgr_dev = class_find_device(&fpga_mgr_class, NULL, dev, fpga_mgr_dev_match);
- 	if (!mgr_dev)
- 		return ERR_PTR(-ENODEV);
- 
--	return __fpga_mgr_get(mgr_dev);
-+	mgr = __fpga_mgr_get(mgr_dev);
-+	if (IS_ERR(mgr))
-+		put_device(mgr_dev);
-+
-+	return mgr;
- }
- EXPORT_SYMBOL_GPL(fpga_mgr_get);
- 
-@@ -711,13 +713,18 @@ EXPORT_SYMBOL_GPL(fpga_mgr_get);
-  */
- struct fpga_manager *of_fpga_mgr_get(struct device_node *node)
- {
--	struct device *dev;
-+	struct fpga_manager *mgr;
-+	struct device *mgr_dev;
- 
--	dev = class_find_device_by_of_node(&fpga_mgr_class, node);
--	if (!dev)
-+	mgr_dev = class_find_device_by_of_node(&fpga_mgr_class, node);
-+	if (!mgr_dev)
- 		return ERR_PTR(-ENODEV);
- 
--	return __fpga_mgr_get(dev);
-+	mgr = __fpga_mgr_get(mgr_dev);
-+	if (IS_ERR(mgr))
-+		put_device(mgr_dev);
-+
-+	return mgr;
- }
- EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
- 
-@@ -727,7 +734,7 @@ EXPORT_SYMBOL_GPL(of_fpga_mgr_get);
-  */
- void fpga_mgr_put(struct fpga_manager *mgr)
- {
--	module_put(mgr->dev.parent->driver->owner);
-+	module_put(mgr->mops_owner);
- 	put_device(&mgr->dev);
- }
- EXPORT_SYMBOL_GPL(fpga_mgr_put);
-@@ -766,9 +773,10 @@ void fpga_mgr_unlock(struct fpga_manager *mgr)
- EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
- 
- /**
-- * fpga_mgr_register_full - create and register an FPGA Manager device
-+ * __fpga_mgr_register_full - create and register an FPGA Manager device
-  * @parent:	fpga manager device from pdev
-  * @info:	parameters for fpga manager
-+ * @owner:	owner module containing the ops
-  *
-  * The caller of this function is responsible for calling fpga_mgr_unregister().
-  * Using devm_fpga_mgr_register_full() instead is recommended.
-@@ -776,7 +784,8 @@ EXPORT_SYMBOL_GPL(fpga_mgr_unlock);
-  * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-  */
- struct fpga_manager *
--fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info)
-+__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-+			 struct module *owner)
- {
- 	const struct fpga_manager_ops *mops = info->mops;
- 	struct fpga_manager *mgr;
-@@ -804,6 +813,8 @@ fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *in
- 
- 	mutex_init(&mgr->ref_mutex);
- 
-+	mgr->mops_owner = owner;
-+
- 	mgr->name = info->name;
- 	mgr->mops = info->mops;
- 	mgr->priv = info->priv;
-@@ -841,14 +852,15 @@ fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *in
- 
- 	return ERR_PTR(ret);
- }
--EXPORT_SYMBOL_GPL(fpga_mgr_register_full);
-+EXPORT_SYMBOL_GPL(__fpga_mgr_register_full);
- 
- /**
-- * fpga_mgr_register - create and register an FPGA Manager device
-+ * __fpga_mgr_register - create and register an FPGA Manager device
-  * @parent:	fpga manager device from pdev
-  * @name:	fpga manager name
-  * @mops:	pointer to structure of fpga manager ops
-  * @priv:	fpga manager private data
-+ * @owner:	owner module containing the ops
-  *
-  * The caller of this function is responsible for calling fpga_mgr_unregister().
-  * Using devm_fpga_mgr_register() instead is recommended. This simple
-@@ -859,8 +871,8 @@ EXPORT_SYMBOL_GPL(fpga_mgr_register_full);
-  * Return: pointer to struct fpga_manager pointer or ERR_PTR()
-  */
- struct fpga_manager *
--fpga_mgr_register(struct device *parent, const char *name,
--		  const struct fpga_manager_ops *mops, void *priv)
-+__fpga_mgr_register(struct device *parent, const char *name,
-+		    const struct fpga_manager_ops *mops, void *priv, struct module *owner)
- {
- 	struct fpga_manager_info info = { 0 };
- 
-@@ -868,9 +880,9 @@ fpga_mgr_register(struct device *parent, const char *name,
- 	info.mops = mops;
- 	info.priv = priv;
- 
--	return fpga_mgr_register_full(parent, &info);
-+	return __fpga_mgr_register_full(parent, &info, owner);
- }
--EXPORT_SYMBOL_GPL(fpga_mgr_register);
-+EXPORT_SYMBOL_GPL(__fpga_mgr_register);
- 
- /**
-  * fpga_mgr_unregister - unregister an FPGA manager
-@@ -900,9 +912,10 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
- }
- 
- /**
-- * devm_fpga_mgr_register_full - resource managed variant of fpga_mgr_register()
-+ * __devm_fpga_mgr_register_full - resource managed variant of fpga_mgr_register()
-  * @parent:	fpga manager device from pdev
-  * @info:	parameters for fpga manager
-+ * @owner:	owner module containing the ops
-  *
-  * Return:  fpga manager pointer on success, negative error code otherwise.
-  *
-@@ -910,7 +923,8 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
-  * function will be called automatically when the managing device is detached.
-  */
- struct fpga_manager *
--devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info)
-+__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-+			      struct module *owner)
- {
- 	struct fpga_mgr_devres *dr;
- 	struct fpga_manager *mgr;
-@@ -919,7 +933,7 @@ devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_inf
- 	if (!dr)
- 		return ERR_PTR(-ENOMEM);
- 
--	mgr = fpga_mgr_register_full(parent, info);
-+	mgr = __fpga_mgr_register_full(parent, info, owner);
- 	if (IS_ERR(mgr)) {
- 		devres_free(dr);
- 		return mgr;
-@@ -930,14 +944,15 @@ devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_inf
- 
- 	return mgr;
- }
--EXPORT_SYMBOL_GPL(devm_fpga_mgr_register_full);
-+EXPORT_SYMBOL_GPL(__devm_fpga_mgr_register_full);
- 
- /**
-- * devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
-+ * __devm_fpga_mgr_register - resource managed variant of fpga_mgr_register()
-  * @parent:	fpga manager device from pdev
-  * @name:	fpga manager name
-  * @mops:	pointer to structure of fpga manager ops
-  * @priv:	fpga manager private data
-+ * @owner:	owner module containing the ops
-  *
-  * Return:  fpga manager pointer on success, negative error code otherwise.
-  *
-@@ -946,8 +961,9 @@ EXPORT_SYMBOL_GPL(devm_fpga_mgr_register_full);
-  * device is detached.
-  */
- struct fpga_manager *
--devm_fpga_mgr_register(struct device *parent, const char *name,
--		       const struct fpga_manager_ops *mops, void *priv)
-+__devm_fpga_mgr_register(struct device *parent, const char *name,
-+			 const struct fpga_manager_ops *mops, void *priv,
-+			 struct module *owner)
- {
- 	struct fpga_manager_info info = { 0 };
- 
-@@ -955,9 +971,9 @@ devm_fpga_mgr_register(struct device *parent, const char *name,
- 	info.mops = mops;
- 	info.priv = priv;
- 
--	return devm_fpga_mgr_register_full(parent, &info);
-+	return __devm_fpga_mgr_register_full(parent, &info, owner);
- }
--EXPORT_SYMBOL_GPL(devm_fpga_mgr_register);
-+EXPORT_SYMBOL_GPL(__devm_fpga_mgr_register);
- 
- static void fpga_mgr_dev_release(struct device *dev)
- {
-diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
-index 54f63459efd6..0d4fe068f3d8 100644
---- a/include/linux/fpga/fpga-mgr.h
-+++ b/include/linux/fpga/fpga-mgr.h
-@@ -201,6 +201,7 @@ struct fpga_manager_ops {
-  * @state: state of fpga manager
-  * @compat_id: FPGA manager id for compatibility check.
-  * @mops: pointer to struct of fpga manager ops
-+ * @mops_owner: module containing the mops
-  * @priv: low level driver private date
-  */
- struct fpga_manager {
-@@ -210,6 +211,7 @@ struct fpga_manager {
- 	enum fpga_mgr_states state;
- 	struct fpga_compat_id *compat_id;
- 	const struct fpga_manager_ops *mops;
-+	struct module *mops_owner;
- 	void *priv;
- };
- 
-@@ -230,18 +232,30 @@ struct fpga_manager *fpga_mgr_get(struct device *dev);
- 
- void fpga_mgr_put(struct fpga_manager *mgr);
- 
-+#define fpga_mgr_register_full(parent, info) \
-+	__fpga_mgr_register_full(parent, info, THIS_MODULE)
- struct fpga_manager *
--fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
-+__fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-+			 struct module *owner);
- 
-+#define fpga_mgr_register(parent, name, mops, priv) \
-+	__fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
- struct fpga_manager *
--fpga_mgr_register(struct device *parent, const char *name,
--		  const struct fpga_manager_ops *mops, void *priv);
-+__fpga_mgr_register(struct device *parent, const char *name,
-+		    const struct fpga_manager_ops *mops, void *priv, struct module *owner);
-+
- void fpga_mgr_unregister(struct fpga_manager *mgr);
- 
-+#define devm_fpga_mgr_register_full(parent, info) \
-+	__devm_fpga_mgr_register_full(parent, info, THIS_MODULE)
- struct fpga_manager *
--devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info);
-+__devm_fpga_mgr_register_full(struct device *parent, const struct fpga_manager_info *info,
-+			      struct module *owner);
-+#define devm_fpga_mgr_register(parent, name, mops, priv) \
-+	__devm_fpga_mgr_register(parent, name, mops, priv, THIS_MODULE)
- struct fpga_manager *
--devm_fpga_mgr_register(struct device *parent, const char *name,
--		       const struct fpga_manager_ops *mops, void *priv);
-+__devm_fpga_mgr_register(struct device *parent, const char *name,
-+			 const struct fpga_manager_ops *mops, void *priv,
-+			 struct module *owner);
- 
- #endif /*_LINUX_FPGA_MGR_H */
+Thanks,
+Yilun
 
-base-commit: b1a91ca25f15b6d7b311de4465854a5981dee3d3
--- 
-2.44.0
-
+> 
+> > 
+> > And I forgot to emphasize: none of these is mentioned in commit msg, so
+> > for v5 you will get exactly the same complains. And for every other
+> > patch which repeats the same and does not clarify caveats or exceptions.
+> > 
+> > Best regards,
+> > Krzysztof
+> 
+> Should I keep my changelog in the individual commits? I thought the norm
+> was to put this the cover letter.
+> 
+> Regards,
+> Charles
+> 
 
