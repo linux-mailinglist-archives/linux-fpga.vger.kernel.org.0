@@ -1,270 +1,902 @@
-Return-Path: <linux-fpga+bounces-323-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-324-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAE3487391A
-	for <lists+linux-fpga@lfdr.de>; Wed,  6 Mar 2024 15:29:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 058D18769C9
+	for <lists+linux-fpga@lfdr.de>; Fri,  8 Mar 2024 18:23:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 321E31F22232
-	for <lists+linux-fpga@lfdr.de>; Wed,  6 Mar 2024 14:29:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29B7D1C21483
+	for <lists+linux-fpga@lfdr.de>; Fri,  8 Mar 2024 17:23:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E74C132482;
-	Wed,  6 Mar 2024 14:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89F4236132;
+	Fri,  8 Mar 2024 17:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="k//9SzX+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AQR0BDMD"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7873E130E40;
-	Wed,  6 Mar 2024 14:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B9F2C688;
+	Fri,  8 Mar 2024 17:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709735375; cv=none; b=rIydPHIVvGWNJVIgQv4sWbPoCSFLlrjzdWrKNtgeT8T6x0049YCidg1i6HUw2GBTtpIGgfonHGkJ16Vp+bRo3SjTK9w8AqNa0RpVeTgIeZkGH9Rlz0kMKym/qHnaxJCth1L/il+48wgPlpGUGUCbQ2hOaVeLuRksTOH2Umry4fA=
+	t=1709918619; cv=none; b=I/gBXxK2M7zX/4HNLCGKTcB4tQwV+EIBB3wcEolW8aSwNXYTd0gejtj7qfVqrNZZ6JLpCgOZ2oKRMSQjqzCToVzIPwNRdBDvTvNxiFItGPTk4PkUzHZp6he61RdHMGXjZnvOBco2+ZxK/XD0Noo26obMze4ujBK7YIHXsAOFCko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709735375; c=relaxed/simple;
-	bh=iUoXceyOBV/ws1djDAITsDI/ZqYvM1zbY4UGkVGQJC8=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=ewafGUwyA8mlR+RNM1JdttL/YD6Pr0XNQ9mMPiCP3nSJtFTF4sZEEboIwVQarx8hNmoUHr6OeVlquSP7eRRhw2wIYvT5sRFpUOQquD2fP7I3nazO0g4V3FwkW+IeN5XE6Yb77RpSDmGAIgKvvqbhnk8QSI2bGNFvctDq7X7wHvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=k//9SzX+; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 27B669C2B79;
-	Wed,  6 Mar 2024 09:29:24 -0500 (EST)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id sHKIN4qoKvzI; Wed,  6 Mar 2024 09:29:22 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 386199C3E18;
-	Wed,  6 Mar 2024 09:29:22 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 386199C3E18
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1709735362; bh=IUKuimCQWhxaM2GiQyc2C+Bt5el/PCO2HoKbdWeZ4MA=;
-	h=Date:From:To:Message-ID:MIME-Version;
-	b=k//9SzX+/1bm3+fQrQam+kxjFWcBs2rftK3gTyAATPGDRqZufHssFZAdPBaymnuQt
-	 ySVm/cveu1EX/ztnx4PVBljDsbJ0PJdpQSJv7+GTydVDs9AMd3NslJVgT1HlCJCV7S
-	 K8VcI7arJOJlubRYbgMxUqhpFYIvoRKG5deMNmIg+Z+Z9dYd5NcMe5Q1uK4gL2gowN
-	 MBr2dUhxTaRDUDJcvQc8zib6qFbXkyZDMS1XHKDlL2/1qt8METOdSf8wdBResA1P4Q
-	 TetqnxPwFI2kCV5JEpMZaPcPulRVQW/p7F9IsLp7kSBbv1Ewx1bkBp8GBPkb+CRwYw
-	 ezj833i0+QEbw==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id xc-8fRViBrWV; Wed,  6 Mar 2024 09:29:22 -0500 (EST)
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [192.168.48.237])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id E93BD9C2B79;
-	Wed,  6 Mar 2024 09:29:21 -0500 (EST)
-Date: Wed, 6 Mar 2024 09:29:21 -0500 (EST)
-From: Charles Perry <charles.perry@savoirfairelinux.com>
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	yilun xu <yilun.xu@intel.com>, Rob Herring <robh+dt@kernel.org>, 
-	mdf <mdf@kernel.org>, Allen VANDIVER <avandiver@markem-imaje.com>, 
-	Brian CODY <bcody@markem-imaje.com>, hao wu <hao.wu@intel.com>, 
-	Tom Rix <trix@redhat.com>, 
-	krzysztof kozlowski+dt <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, 
-	Michal Simek <michal.simek@amd.com>, 
-	linux-fpga <linux-fpga@vger.kernel.org>, 
-	devicetree <devicetree@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Message-ID: <1394848790.1570451.1709735361852.JavaMail.zimbra@savoirfairelinux.com>
-In-Reply-To: <ZegW2QpgO0Kk1Iip@yilunxu-OptiPlex-7050>
-References: <20240221195058.1281973-1-charles.perry@savoirfairelinux.com> <20240221195058.1281973-3-charles.perry@savoirfairelinux.com> <4a9f0eef-590b-45df-92bc-b63ad9282e18@linaro.org> <1012793477.1508198.1709486517581.JavaMail.zimbra@savoirfairelinux.com> <cb51aadd-c350-42e2-9684-ac4f7dbf864c@linaro.org> <d377f0ea-2df2-4d4e-b1bc-8a4ca55eec15@linaro.org> <23887452.1534761.1709605624728.JavaMail.zimbra@savoirfairelinux.com> <ZegW2QpgO0Kk1Iip@yilunxu-OptiPlex-7050>
-Subject: Re: [PATCH v4 2/3] dt-bindings: fpga: xlnx,fpga-selectmap: add DT
- schema
+	s=arc-20240116; t=1709918619; c=relaxed/simple;
+	bh=7pybq3ivbQtDZAM0lQNQw3lwQmpOKg14usk+xCTS9VI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fpIgklbmi0A0rfdgXdeZDrSJ/NP8SOCpbR/paexY/bfHbPm9DArdYkgKP4WA6trDuF8+L+cnwCDlAWuA5P+QtTikJmEset+3bNz78zure3Rey/+K95ZviwVAYN0G37rfRQRaUJxtb1auAlngN/pT6JrZ7J9NRMz788t3ylx0mrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AQR0BDMD; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709918618; x=1741454618;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7pybq3ivbQtDZAM0lQNQw3lwQmpOKg14usk+xCTS9VI=;
+  b=AQR0BDMD0uxEa/knIZMEEmM/RapRKNiIleebClTgnPeqh9ENAMkw1c/K
+   rEp7PnpiGCKi87W2ZaYbltCIn2HsrgMfxharSaRUb2rfZUg/vZKjd56Lc
+   L8bVTZiFvJUlLWQCavw4bI+ECEwKobadFHVj8fJwcoCfbFXAM9qyCCjdN
+   HxGfjuflHMVbk5V1sLm084lEwH7EnY2/s9SeWwMDWXgElghJ2reE2M2vT
+   g1rfA9FFScq20MLQc/3wEE1dpsE1jWJEBdHIhvws6x+o9fcBSJRsJjutw
+   OewKwCWzfmsKhHnx4c8fDPV/xfuCuNJy0CUUtxbh4ldlaURmE84r431vS
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11007"; a="16076797"
+X-IronPort-AV: E=Sophos;i="6.07,110,1708416000"; 
+   d="scan'208";a="16076797"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 09:23:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,110,1708416000"; 
+   d="scan'208";a="10442015"
+Received: from sj-2308-osc3.sj.intel.com ([10.233.115.64])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 09:23:35 -0800
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+To: hao.wu@intel.com,
+	trix@redhat.com,
+	mdf@kernel.org,
+	yilun.xu@intel.com,
+	linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Tim Whisonant <tim.whisonant@intel.com>,
+	Ananda Ravuri <ananda.ravuri@intel.com>,
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH] fpga: add DFL driver for CXL Cache IP block
+Date: Fri,  8 Mar 2024 09:23:27 -0800
+Message-Id: <20240308172327.1970160-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: Zimbra 8.8.15_GA_4581 (ZimbraWebClient - FF123 (Linux)/8.8.15_GA_4581)
-Thread-Topic: dt-bindings: fpga: xlnx,fpga-selectmap: add DT schema
-Thread-Index: KNMsqjL9L9auFXvtX747YpLdEB0org==
+Content-Transfer-Encoding: 8bit
 
+From: Tim Whisonant <tim.whisonant@intel.com>
 
+Add a Device Feature List (DFL) driver for the
+Intel CXL Cache IP block. The driver
+provides a means of accessing the device MMIO and the
+capability to pin buffers and program their physical
+addresses into the HE-Cache registers. User interface
+is exposed via /dev/dfl-cxl-cache.X as described in
+include/uapi/linux/fpga-dfl.h.
 
------ On Mar 6, 2024, at 12:10 AM, Xu Yilun yilun.xu@linux.intel.com wrote:
+Signed-off-by: Tim Whisonant <tim.whisonant@intel.com>
+Co-developed-by: Ananda Ravuri <ananda.ravuri@intel.com>
+Signed-off-by: Ananda Ravuri <ananda.ravuri@intel.com>
+Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+---
+ drivers/fpga/Kconfig          |  11 +
+ drivers/fpga/Makefile         |   1 +
+ drivers/fpga/dfl-cxl-cache.c  | 645 ++++++++++++++++++++++++++++++++++
+ include/uapi/linux/fpga-dfl.h |  98 ++++++
+ 4 files changed, 755 insertions(+)
+ create mode 100644 drivers/fpga/dfl-cxl-cache.c
 
-> On Mon, Mar 04, 2024 at 09:27:04PM -0500, Charles Perry wrote:
->> 
->> 
->> On Mar 4, 2024, at 12:31 AM, Krzysztof Kozlowski krzysztof.kozlowski@linaro.org
->> wrote:
->> 
->> > On 04/03/2024 08:30, Krzysztof Kozlowski wrote:
->> >> On 03/03/2024 18:21, Charles Perry wrote:
->> >>> On Feb 27, 2024, at 3:10 AM, Krzysztof Kozlowski krzysztof.kozlowski@linaro.org
->> >>> wrote:
->> >>>
->> >>>> On 21/02/2024 20:50, Charles Perry wrote:
->> >>>>> Document the SelectMAP interface of Xilinx 7 series FPGA.
->> >>>>>
->> >>>>> Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
->> >>>>> ---
->> >>>>>  .../bindings/fpga/xlnx,fpga-selectmap.yaml    | 86 +++++++++++++++++++
->> >>>>>  1 file changed, 86 insertions(+)
->> >>>>>  create mode 100644
->> >>>>>  Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
->> >>>>>
->> >>>>> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
->> >>>>> b/Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
->> >>>>> new file mode 100644
->> >>>>> index 0000000000000..08a5e92781657
->> >>>>> --- /dev/null
->> >>>>> +++ b/Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
->> >>>>> @@ -0,0 +1,86 @@
->> >>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> >>>>> +%YAML 1.2
->> >>>>> +---
->> >>>>> +$id: http://devicetree.org/schemas/fpga/xlnx,fpga-selectmap.yaml#
->> >>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> >>>>> +
->> >>>>> +title: Xilinx SelectMAP FPGA interface
->> >>>>> +
->> >>>>> +maintainers:
->> >>>>> +  - Charles Perry <charles.perry@savoirfairelinux.com>
->> >>>>> +
->> >>>>> +description: |
->> >>>>> +  Xilinx 7 Series FPGAs support a method of loading the bitstream over a
->> >>>>> +  parallel port named the SelectMAP interface in the documentation. Only
->> >>>>> +  the x8 mode is supported where data is loaded at one byte per rising edge of
->> >>>>> +  the clock, with the MSB of each byte presented to the D0 pin.
->> >>>>> +
->> >>>>> +  Datasheets:
->> >>>>> +
->> >>>>> https://www.xilinx.com/support/documentation/user_guides/ug470_7Series_Config.pdf
->> >>>>> +
->> >>>>> +allOf:
->> >>>>> +  - $ref: /schemas/memory-controllers/mc-peripheral-props.yaml#
->> >>>>> +
->> >>>>> +properties:
->> >>>>> +  compatible:
->> >>>>> +    enum:
->> >>>>> +      - xlnx,fpga-xc7s-selectmap
->> >>>>> +      - xlnx,fpga-xc7a-selectmap
->> >>>>> +      - xlnx,fpga-xc7k-selectmap
->> >>>>> +      - xlnx,fpga-xc7v-selectmap
->> >>>>> +
->> >>>>> +  reg:
->> >>>>> +    description:
->> >>>>> +      At least 1 byte of memory mapped IO
->> >>>>> +    maxItems: 1
->> >>>>> +
->> >>>>> +  prog_b-gpios:
->> >>>>
->> >>>> I commented on this and still see underscore. Nothing in commit msg
->> >>>> explains why this should have underscore. Changelog is also vague -
->> >>>> describes that you brought back underscores, instead of explaining why
->> >>>> you did it.
->> >>>>
->> >>>> So the same comments as usual:
->> >>>>
->> >>>> No underscores in names.
->> >>>>
->> >>>> Best regards,
->> >>>> Krzysztof
->> >>>
->> >>> Hello Krzysztof,
->> >>>
->> >>> Yes, I've gone full circle on that issue. Here's what I tried so far:
->> >> 
->> >> And what part of the commit description allows me to understand this?
->> >> 
->> 
->> I have a changelog in the cover letter:
->> https://lore.kernel.org/all/20240221195058.1281973-1-charles.perry@savoirfairelinux.com/
->> 
->> >>>
->> >>>  1) Reuse the same gpio names: Duplicates errors of the past, Krzysztof
->> >>>     doesn't like it.
->> >>>  2) Different gpio names for new driver only: Makes the driver code
->> >>>     overly complicated, Yilun doesn't like it.
->> >> 
->> >> That's a new driver, right? So what is complicated here? You have new
->> >> code and you take prog-b or prog_b?
->> >> 
->> >>>  3) Change gpio names for both drivers, deprecate the old names: Makes
->> >>>     the DT binding and the driver code overly complicated, Rob doesn't
->> >>>     like it.
->> >> 
->> >> I don't think I proposed changing existing bindings.
->> >> 
->> >>>
->> >>> I think that while the driver code shouldn't be the driving force for
->> >>> the DT spec, it can be a good indication that the spec is unpractical to
->> >>> implement.
->> >> 
->> >> What is impractical in implementing this? You just pass either A or B to
->> >> function requesting GPIO. Just choose proper name.
->> >>
->> 
->> It's not complicated but it requires more code than if "prog_b" had been
->> used.
->>  
->> >>>
->> >>> In this case, there are two interfaces on a chip that uses the same GPIO
->> >>> protocol, it would only make sense that they use the same names, this
->> >>> discards solution #2.
->> >> 
->> >> I don't understand this. You have devm_gpiod_get() in your new code. Why
->> >> is it difficult to use different name?
->> 
->> Yilun asked to avoid changing the names between the two drivers.
->> First comment in this mail:
->> https://lore.kernel.org/all/Zb9GkY6cMtR+4xOX@yilunxu-OptiPlex-7050/
->> 
->> Yilun, let me know if this is something you'd accept as this is a concern
->> for the device tree maintainers.
-> 
-> I agree that deprecated names should not be used for new DT bindings, while
-> keeping backward compatibility to exsiting ones, unless there is other
-> DT side concern.
-> 
-> I'm also good that the driver adapts to the DT binding change.
-> 
-> What I'm concerned is the driver API:
-> 
->  int xilinx_core_probe(struct xilinx_fpga_core *core, struct device *dev,
->		      xilinx_write_func write,
->  -		      xilinx_write_one_dummy_byte_func write_one_dummy_byte)
->  +		      xilinx_write_one_dummy_byte_func write_one_dummy_byte,
->  +		      const char *prog_con_id, const char *init_con_id)
-> 
-> You don't have to make every bus driver input the gpio names.  The core
-> falls back to use old gpio names only for existing devices
-> (.compatible = "xlnx,fpga-slave-serial").  Then the issue could be
-> solved?
-> 
-> Thanks,
-> Yilun
-> 
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 2f689ac4ba3a..00931a3deebf 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -257,6 +257,17 @@ config FPGA_M10_BMC_SEC_UPDATE
+ 	  (BMC) and provides support for secure updates for the BMC image,
+ 	  the FPGA image, the Root Entry Hashes, etc.
+ 
++config FPGA_DFL_CXL_CACHE
++	tristate "Intel CXL cache driver"
++	depends on DRM && FPGA_DFL
++	help
++	  This is the driver for CXL cache Accelerated Function Unit
++	  (AFU) which configures the IP and provides DMA buffer management
++	  to user space.
++
++	  To compile this driver as a module, chose M here: the
++	  module will be called dfl_cxl_cache.
++
+ config FPGA_MGR_MICROCHIP_SPI
+ 	tristate "Microchip Polarfire SPI FPGA manager"
+ 	depends on SPI
+diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+index 352a2612623e..970902810845 100644
+--- a/drivers/fpga/Makefile
++++ b/drivers/fpga/Makefile
+@@ -55,6 +55,7 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+ 
+ # Drivers for FPGAs which implement DFL
+ obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
++obj-$(CONFIG_FPGA_DFL_CXL_CACHE)	+= dfl-cxl-cache.o
+ 
+ # KUnit tests
+ obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
+diff --git a/drivers/fpga/dfl-cxl-cache.c b/drivers/fpga/dfl-cxl-cache.c
+new file mode 100644
+index 000000000000..ee2ae04ac058
+--- /dev/null
++++ b/drivers/fpga/dfl-cxl-cache.c
+@@ -0,0 +1,645 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * DFL device driver for Host Exerciser Cache private feature.
++ *
++ * Provides a means of accessing the device MMIO and the
++ * capability to pin buffers and program their physical
++ * addresses into the HE-Cache registers. User interface
++ * is exposed via /dev/dfl-cxl-cache.X as described in
++ * include/uapi/linux/fpga-dfl.h.
++ *
++ * Copyright (C) 2023 Intel Corporation, Inc.
++ *
++ * Authors:
++ *   Tim Whisonant <tim.whisonant@intel.com>
++ *   Ananda Ravuri <ananda.ravuri@intel.com>
++ */
++
++#include <linux/bitfield.h>
++#include <linux/cdev.h>
++#include <linux/cleanup.h>
++#include <linux/container_of.h>
++#include <linux/dfl.h>
++#include <linux/errno.h>
++#include <linux/fpga-dfl.h>
++#include <linux/highmem.h>
++#include <linux/io.h>
++#include <linux/mmap_lock.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/pgtable.h>
++#include <linux/slab.h>
++#include <linux/spinlock.h>
++#include <linux/types.h>
++
++#include <drm/drm_cache.h>
++
++#define DFL_CXL_CACHE_DRIVER_NAME	"dfl-cxl-cache"
++#define FME_FEATURE_ID_CXL_CACHE	0x25
++
++struct dfl_cxl_cache_buffer_region {
++	struct rb_node node;
++	u32 flags;
++	u64 user_addr;
++	u64 length;
++	struct page **pages;
++	phys_addr_t phys;
++	u64 offset[DFL_ARRAY_MAX_SIZE];
++};
++
++struct dfl_cxl_cache {
++	struct cdev cdev;
++	struct dfl_device *ddev;
++	int id;
++	struct device *dev;
++	atomic_t opened;
++	void __iomem *mmio_base;
++	int mmio_size;
++	struct dfl_cxl_cache_region_info rinfo;
++	struct rb_root dma_regions;
++};
++
++static DEFINE_MUTEX(dfl_cxl_cache_class_lock);
++static struct class *dfl_cxl_cache_class;
++static dev_t dfl_cxl_cache_devt;
++static int dfl_cxl_cache_devices;
++
++static int dfl_cxl_cache_open(struct inode *inode, struct file *filp)
++{
++	struct dfl_cxl_cache *cxl_cache = container_of(inode->i_cdev, struct dfl_cxl_cache, cdev);
++
++	if (atomic_cmpxchg(&cxl_cache->opened, 0, 1))
++		return -EBUSY;
++
++	filp->private_data = cxl_cache;
++
++	return 0;
++}
++
++static long cxl_cache_ioctl_check_extension(struct dfl_cxl_cache *cxl_cache, unsigned long arg)
++{
++	/* No extension support for now */
++	return 0;
++}
++
++static long cxl_cache_ioctl_get_region_info(struct dfl_cxl_cache *cxl_cache, void __user *arg)
++{
++	struct dfl_cxl_cache_region_info rinfo;
++	unsigned long minsz;
++
++	minsz = offsetofend(struct dfl_cxl_cache_region_info, offset);
++	if (copy_from_user(&rinfo, arg, minsz))
++		return -EFAULT;
++
++	if (rinfo.argsz < minsz)
++		return -EINVAL;
++
++	rinfo.flags = cxl_cache->rinfo.flags;
++	rinfo.size = cxl_cache->rinfo.size;
++	rinfo.offset = cxl_cache->rinfo.offset;
++
++	if (copy_to_user(arg, &rinfo, sizeof(rinfo)))
++		return -EFAULT;
++
++	return 0;
++}
++
++static void cxl_cache_unpin_pages(struct device *dev, struct page ***pages, unsigned long length)
++{
++	const long npages = PFN_DOWN(length);
++
++	if (!*pages)
++		return;
++
++	unpin_user_pages(*pages, npages);
++	kfree(*pages);
++	*pages = NULL;
++	account_locked_vm(current->mm, npages, false);
++}
++
++static bool cxl_cache_check_continuous_pages(struct page **pages, unsigned long length)
++{
++	int i;
++	const int npages = PFN_DOWN(length);
++
++	for (i = 0; i < npages - 1; i++)
++		if (page_to_pfn(pages[i]) + 1 != page_to_pfn(pages[i + 1]))
++			return false;
++
++	return true;
++}
++
++static int cxl_cache_dma_pin_pages(struct dfl_cxl_cache *cxl_cache,
++				   struct dfl_cxl_cache_buffer_region *region)
++{
++	int ret, pinned;
++	unsigned int flags = FOLL_LONGTERM;
++	const int npages = PFN_DOWN(region->length);
++
++	ret = account_locked_vm(current->mm, npages, true);
++	if (ret) {
++		dev_err(cxl_cache->dev, "account_locked_vm() failed: %d\n", ret);
++		return ret;
++	}
++
++	region->pages = kcalloc(npages, sizeof(struct page *), GFP_KERNEL);
++	if (!region->pages) {
++		ret = -ENOMEM;
++		goto unlock_vm;
++	}
++
++	if (region->flags & DFL_CXL_BUFFER_MAP_WRITABLE)
++		flags |= FOLL_WRITE;
++
++	pinned = pin_user_pages_fast(region->user_addr, npages, flags, region->pages);
++	if (pinned == npages)
++		return 0;
++
++	ret = -EFAULT;
++	if (pinned > 0)
++		unpin_user_pages(region->pages, pinned);
++
++	kfree(region->pages);
++unlock_vm:
++	account_locked_vm(current->mm, npages, false);
++	return ret;
++}
++
++static void cxl_cache_dma_region_remove(struct dfl_cxl_cache *cxl_cache,
++					struct dfl_cxl_cache_buffer_region *region)
++{
++	rb_erase(&region->node, &cxl_cache->dma_regions);
++}
++
++static bool dma_region_check_user_addr(struct dfl_cxl_cache_buffer_region *region, u64 user_addr,
++				       u64 size)
++{
++	if (!size && region->user_addr != user_addr)
++		return false;
++
++	return (region->user_addr <= user_addr) &&
++		(region->length + region->user_addr >= user_addr + size);
++}
++
++static struct dfl_cxl_cache_buffer_region*
++cxl_cache_dma_region_find(struct dfl_cxl_cache *cxl_cache, u64 user_addr, u64 size)
++{
++	struct rb_node *node = cxl_cache->dma_regions.rb_node;
++
++	while (node) {
++		struct dfl_cxl_cache_buffer_region *region;
++
++		region = container_of(node, struct dfl_cxl_cache_buffer_region, node);
++
++		if (dma_region_check_user_addr(region, user_addr, size))
++			return region;
++
++		if (user_addr < region->user_addr)
++			node = node->rb_left;
++		else if (user_addr > region->user_addr)
++			node = node->rb_right;
++		else
++			break;
++	}
++
++	return NULL;
++}
++
++static int cxl_cache_dma_region_add(struct dfl_cxl_cache *cxl_cache,
++				    struct dfl_cxl_cache_buffer_region *region)
++{
++	struct rb_node **new, *parent = NULL;
++
++	new = &cxl_cache->dma_regions.rb_node;
++
++	while (*new) {
++		struct dfl_cxl_cache_buffer_region *this;
++
++		this = container_of(*new, struct dfl_cxl_cache_buffer_region, node);
++		parent = *new;
++
++		if (dma_region_check_user_addr(this, region->user_addr, region->length))
++			return -EEXIST;
++
++		if (region->user_addr < this->user_addr)
++			new = &((*new)->rb_left);
++		else if (region->user_addr > this->user_addr)
++			new = &((*new)->rb_right);
++		else
++			return -EEXIST;
++	}
++
++	rb_link_node(&region->node, parent, new);
++	rb_insert_color(&region->node, &cxl_cache->dma_regions);
++
++	return 0;
++}
++
++static void fixup_ptes(struct mm_struct *mm, unsigned long start, unsigned long end)
++{
++	unsigned long addr;
++	pgd_t *pgd;
++	p4d_t *p4d;
++	pud_t *pud;
++	pmd_t *pmd;
++	pte_t *pte;
++
++	for (addr = start; addr < end; addr += PAGE_SIZE) {
++		pgd = pgd_offset(mm, addr);
++		if (pgd_bad(*pgd) || pgd_none(*pgd))
++			continue;
++
++		p4d = p4d_offset(pgd, addr);
++		if (p4d_bad(*p4d) || p4d_none(*p4d))
++			continue;
++
++		pud = pud_offset(p4d, addr);
++		if (pud_bad(*pud) || pud_none(*pud))
++			continue;
++
++		pmd = pmd_offset(pud, addr);
++		if (pmd_bad(*pmd) || pmd_none(*pmd))
++			continue;
++
++		pte = pte_offset_kernel(pmd, addr);
++		if (!pte_none(*pte) && pte_present(*pte))
++			*pte = pte_wrprotect(*pte);
++	}
++}
++
++static long cxl_cache_set_region_read_only(struct dfl_cxl_cache *cxl_cache,
++					   struct dfl_cxl_cache_buffer_region *region)
++{
++	struct vm_area_struct *vma;
++	long ret = 0;
++
++	vma = vma_lookup(current->mm, region->user_addr);
++	if (IS_ERR(vma)) {
++		ret = PTR_ERR(vma);
++		dev_err(cxl_cache->dev, "vma_lookup() failed: %ld\n", ret);
++		return ret;
++	}
++
++	mmap_write_lock(current->mm);
++
++	/* Mark the pages as non-cached and write-protected. */
++	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
++	vm_flags_clear(vma, VM_WRITE);
++
++	fixup_ptes(current->mm, vma->vm_start, vma->vm_end);
++
++	mmap_write_unlock(current->mm);
++
++	/* Flush all remaining cache entries. */
++	drm_clflush_virt_range(page_address(region->pages[0]), region->length);
++
++	return ret;
++}
++
++static long cxl_cache_ioctl_numa_buffer_map(struct dfl_cxl_cache *cxl_cache, void __user *arg)
++{
++	int i = 0;
++	unsigned long minsz = 0;
++	long ret = 0;
++	struct dfl_cxl_cache_buffer_map dma_map;
++	struct dfl_cxl_cache_buffer_region *region;
++
++	minsz = offsetofend(struct dfl_cxl_cache_buffer_map, csr_array);
++	if (copy_from_user(&dma_map, arg, minsz)) {
++		dev_err(cxl_cache->dev, "fails to copy from user space buffer\n");
++		return -EFAULT;
++	}
++	if (dma_map.argsz < minsz) {
++		dev_err(cxl_cache->dev, "invalid ioctl buffer size\n");
++		return -EINVAL;
++	}
++
++	/* Check Inputs, only accept page-aligned user memory region with valid length */
++	if (!PAGE_ALIGNED(dma_map.user_addr) || !PAGE_ALIGNED(dma_map.length) ||
++	    !(dma_map.length)) {
++		dev_err(cxl_cache->dev, "length is not page-aligned or the length is zero\n");
++		return -EINVAL;
++	}
++
++	/* Check overflow */
++	if (dma_map.user_addr + dma_map.length < dma_map.user_addr) {
++		dev_err(cxl_cache->dev, "dma buffer check overflow\n");
++		return -EINVAL;
++	}
++
++	region = kzalloc(sizeof(*region), GFP_KERNEL);
++	if (!region)
++		return -ENOMEM;
++
++	region->flags = dma_map.flags;
++	region->user_addr = dma_map.user_addr;
++	region->length = dma_map.length;
++
++	/* Pin the user memory region */
++	ret = cxl_cache_dma_pin_pages(cxl_cache, region);
++	if (ret) {
++		dev_err(cxl_cache->dev, "failed to pin pages\n");
++		goto free_region;
++	}
++
++	/* Only accept continuous pages, return error else */
++	if (!cxl_cache_check_continuous_pages(region->pages, region->length)) {
++		dev_err(cxl_cache->dev, "pages are not continuous\n");
++		ret = -EINVAL;
++		goto out_unpin_pages;
++	}
++
++	if (!(region->flags & DFL_CXL_BUFFER_MAP_WRITABLE)) {
++		ret = cxl_cache_set_region_read_only(cxl_cache, region);
++		if (ret)
++			goto out_unpin_pages;
++	}
++
++	ret = cxl_cache_dma_region_add(cxl_cache, region);
++	if (ret) {
++		dev_err(cxl_cache->dev, "failed to add dma region\n");
++		goto out_unpin_pages;
++	}
++
++	region->phys = page_to_phys(region->pages[0]);
++
++	for (i = 0; i < DFL_ARRAY_MAX_SIZE; i++) {
++		if (dma_map.csr_array[i] && dma_map.csr_array[i] < cxl_cache->rinfo.size)
++			writeq(region->phys, cxl_cache->mmio_base + dma_map.csr_array[i]);
++	}
++
++	return 0;
++
++out_unpin_pages:
++	cxl_cache_unpin_pages(cxl_cache->dev, &region->pages, region->length);
++free_region:
++	kfree(region);
++	return ret;
++}
++
++static long cxl_cache_ioctl_numa_buffer_unmap(struct dfl_cxl_cache *cxl_cache, void __user *arg)
++{
++	unsigned long minsz = 0;
++	long ret = 0;
++	int i = 0;
++	struct dfl_cxl_cache_buffer_unmap dma_unmap;
++	struct dfl_cxl_cache_buffer_region *region;
++
++	minsz = offsetofend(struct dfl_cxl_cache_buffer_unmap, csr_array);
++	if (copy_from_user(&dma_unmap, arg, minsz)) {
++		dev_err(cxl_cache->dev, "fails to copy from user space buffer\n");
++		return -EFAULT;
++	}
++	if (dma_unmap.argsz < minsz) {
++		dev_err(cxl_cache->dev, "invalid ioctl buffer size\n");
++		return -EINVAL;
++	}
++
++	region = cxl_cache_dma_region_find(cxl_cache, dma_unmap.user_addr, dma_unmap.length);
++	if (!region) {
++		dev_err(cxl_cache->dev, "fails to find buffer\n");
++		return -EINVAL;
++	}
++
++	cxl_cache_dma_region_remove(cxl_cache, region);
++	cxl_cache_unpin_pages(cxl_cache->dev, &region->pages, region->length);
++
++	for (i = 0; i < DFL_ARRAY_MAX_SIZE; i++) {
++		if (dma_unmap.csr_array[i] && dma_unmap.csr_array[i] < cxl_cache->rinfo.size)
++			writeq(0, cxl_cache->mmio_base + dma_unmap.csr_array[i]);
++	}
++
++	kfree(region);
++	return ret;
++}
++
++static long dfl_cxl_cache_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
++{
++	struct dfl_cxl_cache *cxl_cache = filp->private_data;
++
++	switch (cmd) {
++	case DFL_FPGA_GET_API_VERSION:
++		return DFL_FPGA_GET_API_VERSION;
++	case DFL_FPGA_CHECK_EXTENSION:
++		return cxl_cache_ioctl_check_extension(cxl_cache, arg);
++	case DFL_CXL_CACHE_GET_REGION_INFO:
++		return cxl_cache_ioctl_get_region_info(cxl_cache, (void __user *)arg);
++	case DFL_CXL_CACHE_NUMA_BUFFER_MAP:
++		return cxl_cache_ioctl_numa_buffer_map(cxl_cache, (void __user *)arg);
++	case DFL_CXL_CACHE_NUMA_BUFFER_UNMAP:
++		return cxl_cache_ioctl_numa_buffer_unmap(cxl_cache, (void __user *)arg);
++	default:
++		return -EINVAL;
++	}
++}
++
++static const struct vm_operations_struct cxl_cache_vma_ops = {
++#ifdef CONFIG_HAVE_IOREMAP_PROT
++	.access = generic_access_phys,
++#endif
++};
++
++static int dfl_cxl_cache_mmap(struct file *filp, struct vm_area_struct *vma)
++{
++	struct dfl_cxl_cache *cxl_cache = filp->private_data;
++	u64 size = vma->vm_end - vma->vm_start;
++	u64 offset;
++
++	if (!(vma->vm_flags & VM_SHARED))
++		return -EINVAL;
++
++	if (!(cxl_cache->rinfo.flags & DFL_CXL_CACHE_REGION_MMAP))
++		return -EINVAL;
++
++	if ((vma->vm_flags & VM_READ) && !(cxl_cache->rinfo.flags & DFL_CXL_CACHE_REGION_READ))
++		return -EPERM;
++
++	if ((vma->vm_flags & VM_WRITE) && !(cxl_cache->rinfo.flags & DFL_CXL_CACHE_REGION_WRITE))
++		return -EPERM;
++
++	offset = PFN_PHYS(vma->vm_pgoff);
++
++	/* Support debug access to the mapping */
++	vma->vm_ops = &cxl_cache_vma_ops;
++
++	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
++
++	return remap_pfn_range(vma, vma->vm_start,
++			       PFN_DOWN(cxl_cache->ddev->mmio_res.start +
++			       (offset - cxl_cache->rinfo.offset)),
++			       size, vma->vm_page_prot);
++}
++
++static void cxl_cache_dma_region_destroy(struct dfl_cxl_cache *cxl_cache)
++{
++	struct rb_node *node = rb_first(&cxl_cache->dma_regions);
++	struct dfl_cxl_cache_buffer_region *region;
++
++	while (node) {
++		region = container_of(node, struct dfl_cxl_cache_buffer_region, node);
++
++		rb_erase(node, &cxl_cache->dma_regions);
++
++		if (region->pages)
++			cxl_cache_unpin_pages(cxl_cache->dev, &region->pages, region->length);
++
++		node = rb_next(node);
++		kfree(region);
++	}
++}
++
++static int dfl_cxl_cache_release(struct inode *inode, struct file *filp)
++{
++	struct dfl_cxl_cache *cxl_cache = filp->private_data;
++
++	cxl_cache_dma_region_destroy(cxl_cache);
++	atomic_set(&cxl_cache->opened, 0);
++	return 0;
++}
++
++static const struct file_operations dfl_cxl_cache_fops = {
++	.owner = THIS_MODULE,
++	.open = dfl_cxl_cache_open,
++	.release = dfl_cxl_cache_release,
++	.unlocked_ioctl = dfl_cxl_cache_ioctl,
++	.mmap = dfl_cxl_cache_mmap,
++};
++
++static void cxl_cache_dev_release(struct device *dev)
++{
++	struct dfl_cxl_cache *cxl_cache = dev_get_drvdata(dev);
++
++	cdev_del(&cxl_cache->cdev);
++}
++
++static void cxl_cache_chardev_uinit(struct dfl_cxl_cache *cxl_cache)
++{
++	device_destroy(dfl_cxl_cache_class,
++		       MKDEV(MAJOR(dfl_cxl_cache_devt), cxl_cache->id));
++}
++
++static int cxl_cache_chardev_init(struct dfl_cxl_cache *cxl_cache,
++				  struct dfl_device *ddev,
++				  void __iomem *mmio_base)
++{
++	int ret;
++
++	dev_set_drvdata(&ddev->dev, cxl_cache);
++	cxl_cache->ddev = ddev;
++	cxl_cache->mmio_base = mmio_base;
++	cxl_cache->id = dfl_cxl_cache_devices++;
++	cxl_cache->dma_regions = RB_ROOT;
++
++	cxl_cache->rinfo.argsz = sizeof(struct dfl_cxl_cache_region_info);
++	cxl_cache->rinfo.flags = DFL_CXL_CACHE_REGION_READ | DFL_CXL_CACHE_REGION_WRITE |
++			   DFL_CXL_CACHE_REGION_MMAP;
++	cxl_cache->rinfo.size = resource_size(&ddev->mmio_res);
++	cxl_cache->rinfo.offset = 0;
++
++	cxl_cache->dev = device_create(dfl_cxl_cache_class, &ddev->dev,
++				       MKDEV(MAJOR(dfl_cxl_cache_devt), cxl_cache->id),
++				       cxl_cache, DFL_CXL_CACHE_DRIVER_NAME ".%d",
++				       cxl_cache->id);
++
++	if (IS_ERR(cxl_cache->dev)) {
++		ret = PTR_ERR(cxl_cache->dev);
++		dev_err(&ddev->dev, "device_create failed: %d\n", ret);
++		cxl_cache->dev = NULL;
++		return ret;
++	}
++	cxl_cache->dev->release = cxl_cache_dev_release;
++
++	cdev_init(&cxl_cache->cdev, &dfl_cxl_cache_fops);
++	cxl_cache->cdev.owner = THIS_MODULE;
++	cxl_cache->cdev.ops = &dfl_cxl_cache_fops;
++
++	ret = cdev_add(&cxl_cache->cdev, cxl_cache->dev->devt, 1);
++	if (ret)
++		dev_err(cxl_cache->dev, "cdev_add failed: %d\n", ret);
++
++	return ret;
++}
++
++static int dfl_cxl_cache_probe(struct dfl_device *ddev)
++{
++	int ret = 0;
++	void __iomem *mmio_base;
++	struct dfl_cxl_cache *cxl_cache;
++
++	guard(mutex)(&dfl_cxl_cache_class_lock);
++
++	if (!dfl_cxl_cache_class) {
++		dfl_cxl_cache_class = class_create(DFL_CXL_CACHE_DRIVER_NAME);
++		if (IS_ERR(dfl_cxl_cache_class)) {
++			ret = PTR_ERR(dfl_cxl_cache_class);
++			dfl_cxl_cache_class = NULL;
++			dev_err_probe(&ddev->dev, ret, "class_create failed\n");
++			return ret;
++		}
++	}
++
++	if (!MAJOR(dfl_cxl_cache_devt)) {
++		ret = alloc_chrdev_region(&dfl_cxl_cache_devt, 0,
++					  MINORMASK,
++					  DFL_CXL_CACHE_DRIVER_NAME);
++		if (ret) {
++			dev_err_probe(&ddev->dev, ret, "alloc_chrdev_region failed\n");
++			dfl_cxl_cache_devt = MKDEV(0, 0);
++			return ret;
++		}
++	}
++
++	mmio_base = devm_ioremap_resource(&ddev->dev, &ddev->mmio_res);
++	if (IS_ERR(mmio_base))
++		return PTR_ERR(mmio_base);
++
++	cxl_cache = devm_kzalloc(&ddev->dev, sizeof(*cxl_cache), GFP_KERNEL);
++	if (!cxl_cache)
++		return -ENOMEM;
++
++	ret = cxl_cache_chardev_init(cxl_cache, ddev, mmio_base);
++	if (ret)
++		dev_err_probe(&ddev->dev, ret, "cxl_cache_chardev_init failed\n");
++
++	return ret;
++}
++
++static void dfl_cxl_cache_remove(struct dfl_device *ddev)
++{
++	struct dfl_cxl_cache *cxl_cache = dev_get_drvdata(&ddev->dev);
++
++	guard(mutex)(&dfl_cxl_cache_class_lock);
++	cxl_cache_chardev_uinit(cxl_cache);
++
++	if (dfl_cxl_cache_devices-- == 0) {
++		if (dfl_cxl_cache_class) {
++			class_destroy(dfl_cxl_cache_class);
++			dfl_cxl_cache_class = NULL;
++		}
++
++		if (MAJOR(dfl_cxl_cache_devt)) {
++			unregister_chrdev_region(dfl_cxl_cache_devt, MINORMASK);
++			dfl_cxl_cache_devt = MKDEV(0, 0);
++		}
++	}
++}
++
++static const struct dfl_device_id dfl_cxl_cache_ids[] = {
++	{ FME_ID, FME_FEATURE_ID_CXL_CACHE },
++	{ }
++};
++MODULE_DEVICE_TABLE(dfl, dfl_cxl_cache_ids);
++
++static struct dfl_driver dfl_cxl_cache_driver = {
++	.drv	= {
++		.name	= DFL_CXL_CACHE_DRIVER_NAME,
++	},
++	.id_table = dfl_cxl_cache_ids,
++	.probe   = dfl_cxl_cache_probe,
++	.remove = dfl_cxl_cache_remove,
++};
++module_dfl_driver(dfl_cxl_cache_driver);
++
++MODULE_DESCRIPTION("DFL CXL Cache driver");
++MODULE_AUTHOR("Intel Corporation");
++MODULE_LICENSE("GPL");
+diff --git a/include/uapi/linux/fpga-dfl.h b/include/uapi/linux/fpga-dfl.h
+index 1621b077bf21..866f50b99eb6 100644
+--- a/include/uapi/linux/fpga-dfl.h
++++ b/include/uapi/linux/fpga-dfl.h
+@@ -31,6 +31,7 @@
+ #define DFL_FPGA_BASE 0
+ #define DFL_PORT_BASE 0x40
+ #define DFL_FME_BASE 0x80
++#define DFL_CXL_CACHE_BASE 0xA0
+ 
+ /* Common IOCTLs for both FME and AFU file descriptor */
+ 
+@@ -276,4 +277,101 @@ struct dfl_fpga_fme_port_pr {
+ 					     DFL_FME_BASE + 4,	\
+ 					     struct dfl_fpga_irq_set)
+ 
++ /**
++  * DFL_CXL_CACHE_GET_REGION_INFO - _IOWR(DFL_FPGA_MAGIC, DFL_CXL_CACHE_BASE + 0,
++  *                                      struct dfl_cxl_cache_region_info)
++  *
++  * Retrieve information about a device memory region.
++  * Caller provides struct dfl_cxl_cache_region_info with flags.
++  * Driver returns the region info in other fields.
++  * Return: 0 on success, -errno on failure.
++  */
++
++#define DFL_CXL_CACHE_GET_REGION_INFO _IO(DFL_FPGA_MAGIC, DFL_CXL_CACHE_BASE + 0)
++
++  /**
++   * struct dfl_cxl_cache_region_info - CXL cache region information
++   * @argsz: structure length
++   * @flags: access permission
++   * @size: region size (bytes)
++   * @offset: region offset from start of device fd
++   *
++   * to retrieve  information about a device memory region
++   */
++struct dfl_cxl_cache_region_info {
++	__u32 argsz;
++	__u32 flags;
++#define DFL_CXL_CACHE_REGION_READ	_BITUL(0)
++#define DFL_CXL_CACHE_REGION_WRITE	_BITUL(1)
++#define DFL_CXL_CACHE_REGION_MMAP	_BITUL(2)
++	__u64 size;
++	__u64 offset;
++};
++
++/**
++ * DFL_CXL_CACHE_NUMA_BUFFER_MAP - _IOWR(DFL_FPGA_MAGIC, DFL_CXL_CACHE_BASE + 1,
++ *                                      struct dfl_cxl_cache_buffer_map)
++ *
++ * Map the user memory per user_addr, length and numa node which are
++ * provided by caller. The driver allocates memory on the numa node,
++ * converts the user's virtual addressto a continuous physical address,
++ * and writes the physical address to the cxl cache read/write address table CSR.
++ *
++ * This interface only accepts page-size aligned user memory for mapping.
++ * Return: 0 on success, -errno on failure.
++ */
++
++#define DFL_ARRAY_MAX_SIZE   0x10
++
++#define DFL_CXL_CACHE_NUMA_BUFFER_MAP    _IO(DFL_FPGA_MAGIC,  DFL_CXL_CACHE_BASE + 1)
++
++/**
++ * struct dfl_cxl_cache_buffer_map - maps user address to physical address.
++ * @argsz: structure length
++ * @flags: flags
++ * @user_addr: user mmap virtual address
++ * @length: length of mapping (bytes)
++ * @csr_array: array of region address offset
++ *
++ * maps user allocated virtual address to physical address.
++ */
++struct dfl_cxl_cache_buffer_map {
++	__u32 argsz;
++#define DFL_CXL_BUFFER_MAP_WRITABLE	1
++	__u32 flags;
++	__u64 user_addr;
++	__u64 length;
++	__u64 csr_array[DFL_ARRAY_MAX_SIZE];
++};
++
++/**
++ * DFL_CXL_CACHE_NUMA_BUFFER_UNMAP - _IOWR(DFL_FPGA_MAGIC, DFL_CXL_CACHE_BASE + 1,
++ *                                      struct dfl_cxl_cache_buffer_unmap)
++ *
++ * Unmaps the user memory per user_addr and length which are provided by caller
++ * The driver deletes the physical pages of the user address and writes a zero
++ * to the read/write address table CSR.
++ * Return: 0 on success, -errno on failure.
++ */
++
++#define DFL_CXL_CACHE_NUMA_BUFFER_UNMAP  _IO(DFL_FPGA_MAGIC,  DFL_CXL_CACHE_BASE + 2)
++
++/**
++ * struct dfl_cxl_cache_buffer_unmap - unmaps user allocated memory.
++ * @argsz: structure length
++ * @flags: flags
++ * @user_addr: user mmap virtual address
++ * @length: length of mapping (bytes)
++ * @csr_array: array of region address offset
++ *
++ * unmaps user allocated memory.
++ */
++struct dfl_cxl_cache_buffer_unmap {
++	__u32 argsz;
++	__u32 flags;
++	__u64 user_addr;
++	__u64 length;
++	__u64 csr_array[DFL_ARRAY_MAX_SIZE];
++};
++
+ #endif /* _UAPI_LINUX_FPGA_DFL_H */
+-- 
+2.34.1
 
-Ok, thank you for the guidance.
-
-Regards,
-Charles
-
->> 
->> > 
->> > And I forgot to emphasize: none of these is mentioned in commit msg, so
->> > for v5 you will get exactly the same complains. And for every other
->> > patch which repeats the same and does not clarify caveats or exceptions.
->> > 
->> > Best regards,
->> > Krzysztof
->> 
->> Should I keep my changelog in the individual commits? I thought the norm
->> was to put this the cover letter.
->> 
->> Regards,
->> Charles
 
