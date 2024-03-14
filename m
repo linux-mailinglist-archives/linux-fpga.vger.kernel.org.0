@@ -1,305 +1,154 @@
-Return-Path: <linux-fpga+bounces-331-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-332-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44C5087B4BC
-	for <lists+linux-fpga@lfdr.de>; Wed, 13 Mar 2024 23:58:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 781D887B838
+	for <lists+linux-fpga@lfdr.de>; Thu, 14 Mar 2024 08:03:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6BC91F23394
-	for <lists+linux-fpga@lfdr.de>; Wed, 13 Mar 2024 22:58:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 093E8283DFF
+	for <lists+linux-fpga@lfdr.de>; Thu, 14 Mar 2024 07:03:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE4E5E06B;
-	Wed, 13 Mar 2024 22:58:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A00DDF59;
+	Thu, 14 Mar 2024 07:02:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="e42UWxxR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S6Nt9uBw"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDCF5D732;
-	Wed, 13 Mar 2024 22:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB45A5664
+	for <linux-fpga@vger.kernel.org>; Thu, 14 Mar 2024 07:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710370695; cv=none; b=tCLUCqShbQfsh+AyXzmcL0xdAj8u+RkZPzItdLWJoRkODZ8w+q3T8sCI2dqji/s7AarbLyTMPKz3/sS2UjfgLJRUBu4/f1zQr95EME/MmHDfizLsAtSK/3k/IrOaHjrYoY5tk9b+/km331HcnyRKCJSyz80kwj4Igf6lXmTBrDE=
+	t=1710399775; cv=none; b=P/zQzU2Ud2GfFvfIulPCT/Kcb8roJ6MG9dgpfSeAiIxjfzmVcrlVOutdsKOyhj1km4QhvEL5tu5envFyDhb/43h/79B0qMQQ9O3bycoXJlageMei0aTdlTTBfeCOvaGOdzo7h2oCs18cfG7tSAsSRUI1r6aBF/Midio7dAv2e9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710370695; c=relaxed/simple;
-	bh=KF+lq4YcH6Xp00756RYp+wxJMi6yCrGpi1MQUqaB15I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PLJrC+dHX2iAnHkPWgGvthKLm8ENaZhu76PQld3XY19/whod8waikVDVleTTkIboqIYn15jUBAx5F80OckJBEtmaTNfmn+NwaOU+rtBAxgi5fOTPuda+ddizx/rcLLZIv7OnaNAI9pFBQkW7/6CjdFNlqF+Dt64yFZdWeGmPNPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=e42UWxxR; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 62F8D9C5407;
-	Wed, 13 Mar 2024 18:58:12 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id lKd-ydaZrGzp; Wed, 13 Mar 2024 18:58:10 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id CA5DB9C540A;
-	Wed, 13 Mar 2024 18:58:10 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com CA5DB9C540A
+	s=arc-20240116; t=1710399775; c=relaxed/simple;
+	bh=gltKRNHkGYhjnfPA1nbl8ExWD565N0Jl+xIBswKees4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Fc9GQC4K+iZYND67KasXVuRrsTLUo1D0BzuuVmwUhr8/oPVIfLy2h77DUG924IbC6zqBnKgrdlq5xYJSLkGRNtOoWAq6jzOQuA/shFA2TSPSBGO7CsYFH+sj/9y+e7uKof8rSTK8S9ECYRFP5QjKIAaAtuZIrgRoD2s/mEkor08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=S6Nt9uBw; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-33e8e9a4edaso699632f8f.2
+        for <linux-fpga@vger.kernel.org>; Thu, 14 Mar 2024 00:02:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1710370690; bh=QuEtk/uQ5emxPDFdbuSL173B4llg7dyYsWnwoFXcz1o=;
-	h=From:To:Date:Message-ID:MIME-Version;
-	b=e42UWxxRUCSxgMAgM4JlPbrjr6FGfHJVyEvM8fSws3p8KQ1Ruhuq1st23XMi/TKNC
-	 slMZA//IZtg+xB++8zKtjhsG7wCsdlFY5T1OrOllqB5avKyeJrQlOEgPp67gnLEc5V
-	 UO5dss9L/Xo+GPqoc4QHusBPpyUkLGZEoGS0xLIb6Vu42804WMVnt/IfENi720YJls
-	 Xjpf77+y+Rsq5k7iagywD1UXc0aDxt6kkhR3BpK8dnMmmqD73kdsC7r6OHGObEznW4
-	 F5cb+YAkH1Bgm6GfZMQ74UcYDbnvxzX7Ex4OC8YUKx+6lGARxeovceUa7O7P785/m6
-	 SCw06oHwnWF0g==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id Ovi_2tKXUoMl; Wed, 13 Mar 2024 18:58:10 -0400 (EDT)
-Received: from pcperry.mtl.sfl (unknown [192.168.51.254])
-	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id A90FE9C5409;
-	Wed, 13 Mar 2024 18:58:10 -0400 (EDT)
-From: Charles Perry <charles.perry@savoirfairelinux.com>
-To: mdf@kernel.org
-Cc: avandiver@markem-imaje.com,
-	bcody@markem-imaje.com,
-	Charles Perry <charles.perry@savoirfairelinux.com>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michal Simek <michal.simek@amd.com>,
-	linux-fpga@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 3/3] fpga: xilinx-selectmap: add new driver
-Date: Wed, 13 Mar 2024 18:57:37 -0400
-Message-ID: <20240313225746.489253-4-charles.perry@savoirfairelinux.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240313225746.489253-1-charles.perry@savoirfairelinux.com>
-References: <20240313225746.489253-1-charles.perry@savoirfairelinux.com>
+        d=linaro.org; s=google; t=1710399771; x=1711004571; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0urfCLsc7Z4YHkUv8RROpJvzN1pyQGtClFTbqTjWmMM=;
+        b=S6Nt9uBw1hosm5vpZF17YyPbguPNOccD4eshJdHRvyuu/hteMQw/rGuv2p9VRFyxqZ
+         a6hbyRv5Z58EJ207A6KVT0mxRmH9AG4PfZNxKo2MWGNWRTM3yX77sB/eAjh+IIF2+OkN
+         mJEsmHolxHJnrraqhGC72zb27RTdGrwk6zx8P34UEwLMeGIgEuYOocJ56IEO35nv2pkV
+         hCsvdgkxPCxSmoLPGOhKXRHVo3FTav1Iq2qQ0Ph4f4FcK7hvQ62PZKwMhA1CnEiIJBUa
+         OVZiro+O7TclAssvK4SaX8z0f17i988OZSFLk5AP9sd78MmqMGU3tdV/baRgmR74Lbe6
+         BKqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710399771; x=1711004571;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0urfCLsc7Z4YHkUv8RROpJvzN1pyQGtClFTbqTjWmMM=;
+        b=KSV4MOKZ6xObfQNedjWkI16QYJZPOKfEvcUkcukNjmxabVJq0OQ1m5oAvBLA0NBB4e
+         KfpXY7H+0Ok6sNVwWFw1L9dv93JsCEVBpaAYM592JxHt/1gX4VIML/ZwE0N4Fs8MF4C3
+         wsPsVgt3ZowGUie56P0Ce2toovYQnURd8XYAHyOfQXms5T8kKMssE1V0jwAoU5rgMDyJ
+         iO5Y+9A0TP2+8vf1L6Kbj+kUiF+2vDQkE06EGpno4VHK5DUFuNG456MpMWR4xfwG1Syc
+         olNOR4QLldBO257lqf7q2M/oA2b0S9ll0Cwdt7WRQfq2EVXNUW/udjPVBZ+o83XG7jyX
+         JbzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV9VvJ5WNMoBQiNJ5y4loi6Tv+RCshexpd2As8oJxHkC1Cp80Y2aq3dIF+1I7idAxb+cT1UQ59uoBEGiGsBuO9orx3GGrVxx9fZbw==
+X-Gm-Message-State: AOJu0YzF7nU9xa1QbHNG4sTCeySwhXfo0aYwK9Fa7hdrJv4jK5V6lZ3n
+	fHdyXLUhxcp/SVixPN1Tvqe0y6WQtFrbizNNFG2WuIrmgh6u572ZZyYm2BnjBJY=
+X-Google-Smtp-Source: AGHT+IF8/NyD2OqhndZPqt6vi3pgpH6Zn/atEOSYCSM1zN5o8jFxuOk2VY157837mDGAdIgozI/gbw==
+X-Received: by 2002:a5d:68cc:0:b0:33e:6efa:757e with SMTP id p12-20020a5d68cc000000b0033e6efa757emr645561wrw.22.1710399771304;
+        Thu, 14 Mar 2024 00:02:51 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id v29-20020adfa1dd000000b0033ec3c2e410sm15902wrv.23.2024.03.14.00.02.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Mar 2024 00:02:50 -0700 (PDT)
+Message-ID: <59ba59f4-a1ab-4959-bf52-a7dca795536f@linaro.org>
+Date: Thu, 14 Mar 2024 08:02:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/3] dt-bindings: fpga: xlnx,fpga-selectmap: add DT
+ schema
+Content-Language: en-US
+To: Charles Perry <charles.perry@savoirfairelinux.com>, mdf@kernel.org
+Cc: avandiver@markem-imaje.com, bcody@markem-imaje.com,
+ Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+ Tom Rix <trix@redhat.com>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Michal Simek <michal.simek@amd.com>,
+ linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20240313225746.489253-1-charles.perry@savoirfairelinux.com>
+ <20240313225746.489253-3-charles.perry@savoirfairelinux.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240313225746.489253-3-charles.perry@savoirfairelinux.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Xilinx 7 series FPGA can be programmed using a parallel port named
-the SelectMAP interface in the datasheet. This interface is compatible
-with the i.MX6 EIM bus controller but other types of external memory
-mapped parallel bus might work.
+On 13/03/2024 23:57, Charles Perry wrote:
+> Document the SelectMAP interface of Xilinx 7 series FPGA.
+> 
+> Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
+> ---
+> Changes since v4: (from Yilun and Krzysztof review)
 
-xilinx-selectmap currently only supports the x8 mode where data is loaded
-at one byte per rising edge of the clock, with the MSb of each byte
-presented to the D0 pin.
 
-Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
----
-Changes since v4: (from Yilun review)
- * xilinx-core: select between prog/init and prog_b/init-b
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
- drivers/fpga/Kconfig            |  8 +++
- drivers/fpga/Makefile           |  1 +
- drivers/fpga/xilinx-core.c      | 29 +++++++++-
- drivers/fpga/xilinx-selectmap.c | 97 +++++++++++++++++++++++++++++++++
- 4 files changed, 133 insertions(+), 2 deletions(-)
- create mode 100644 drivers/fpga/xilinx-selectmap.c
+Best regards,
+Krzysztof
 
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index d27a1ebf40838..37b35f58f0dfb 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -67,6 +67,14 @@ config FPGA_MGR_STRATIX10_SOC
- config FPGA_MGR_XILINX_CORE
- 	tristate
-
-+config FPGA_MGR_XILINX_SELECTMAP
-+	tristate "Xilinx Configuration over SelectMAP"
-+	depends on HAS_IOMEM
-+	select FPGA_MGR_XILINX_CORE
-+	help
-+	  FPGA manager driver support for Xilinx FPGA configuration
-+	  over SelectMAP interface.
-+
- config FPGA_MGR_XILINX_SPI
- 	tristate "Xilinx Configuration over Slave Serial (SPI)"
- 	depends on SPI
-diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-index 7ec795b6a5a70..aeb89bb13517e 100644
---- a/drivers/fpga/Makefile
-+++ b/drivers/fpga/Makefile
-@@ -16,6 +16,7 @@ obj-$(CONFIG_FPGA_MGR_SOCFPGA_A10)	+=3D socfpga-a10.o
- obj-$(CONFIG_FPGA_MGR_STRATIX10_SOC)	+=3D stratix10-soc.o
- obj-$(CONFIG_FPGA_MGR_TS73XX)		+=3D ts73xx-fpga.o
- obj-$(CONFIG_FPGA_MGR_XILINX_CORE)	+=3D xilinx-core.o
-+obj-$(CONFIG_FPGA_MGR_XILINX_SELECTMAP)	+=3D xilinx-selectmap.o
- obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+=3D xilinx-spi.o
- obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+=3D zynq-fpga.o
- obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+=3D zynqmp-fpga.o
-diff --git a/drivers/fpga/xilinx-core.c b/drivers/fpga/xilinx-core.c
-index a35c43382dd5f..ccdeb45eba4ee 100644
---- a/drivers/fpga/xilinx-core.c
-+++ b/drivers/fpga/xilinx-core.c
-@@ -171,6 +171,29 @@ static int xilinx_core_write_complete(struct fpga_ma=
-nager *mgr,
- 	return -ETIMEDOUT;
- }
-
-+/**
-+ * xilinx_core_devm_gpiod_get - Obtain a resource-managed GPIO using a
-+ *                              legacy consumer name fallback.
-+ *
-+ * @dev:           Device managing the GPIO
-+ * @con_id:        Consumer id
-+ * @legacy_con_id: Legacy consumer id
-+ * @flags:         optional GPIO initialization flags
-+ */
-+static inline struct gpio_desc *
-+xilinx_core_devm_gpiod_get(struct device *dev, const char *con_id,
-+			   const char *legacy_con_id, enum gpiod_flags flags)
-+{
-+	struct gpio_desc *desc;
-+
-+	desc =3D devm_gpiod_get(dev, con_id, flags);
-+	if (IS_ERR(desc) && PTR_ERR(desc) =3D=3D -ENOENT &&
-+	    of_device_is_compatible(dev->of_node, "xlnx,fpga-slave-serial"))
-+		desc =3D devm_gpiod_get(dev, legacy_con_id, flags);
-+
-+	return desc;
-+}
-+
- static const struct fpga_manager_ops xilinx_core_ops =3D {
- 	.state =3D xilinx_core_state,
- 	.write_init =3D xilinx_core_write_init,
-@@ -186,12 +209,14 @@ int xilinx_core_probe(struct xilinx_fpga_core *core=
-)
- 		return -EINVAL;
-
- 	/* PROGRAM_B is active low */
--	core->prog_b =3D devm_gpiod_get(core->dev, "prog_b", GPIOD_OUT_LOW);
-+	core->prog_b =3D xilinx_core_devm_gpiod_get(core->dev, "prog", "prog_b"=
-,
-+						  GPIOD_OUT_LOW);
- 	if (IS_ERR(core->prog_b))
- 		return dev_err_probe(core->dev, PTR_ERR(core->prog_b),
- 				     "Failed to get PROGRAM_B gpio\n");
-
--	core->init_b =3D devm_gpiod_get_optional(core->dev, "init-b", GPIOD_IN)=
-;
-+	core->init_b =3D xilinx_core_devm_gpiod_get(core->dev, "init", "init-b"=
-,
-+						  GPIOD_IN);
- 	if (IS_ERR(core->init_b))
- 		return dev_err_probe(core->dev, PTR_ERR(core->init_b),
- 				     "Failed to get INIT_B gpio\n");
-diff --git a/drivers/fpga/xilinx-selectmap.c b/drivers/fpga/xilinx-select=
-map.c
-new file mode 100644
-index 0000000000000..b63f4623f8b2c
---- /dev/null
-+++ b/drivers/fpga/xilinx-selectmap.c
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Xilinx Spartan6 and 7 Series SelectMAP interface driver
-+ *
-+ * (C) 2024 Charles Perry <charles.perry@savoirfairelinux.com>
-+ *
-+ * Manage Xilinx FPGA firmware loaded over the SelectMAP configuration
-+ * interface.
-+ */
-+
-+#include "xilinx-core.h"
-+
-+#include <linux/platform_device.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/of.h>
-+#include <linux/io.h>
-+
-+struct xilinx_selectmap_conf {
-+	struct xilinx_fpga_core core;
-+	void __iomem *base;
-+};
-+
-+#define to_xilinx_selectmap_conf(obj) \
-+	container_of(obj, struct xilinx_selectmap_conf, core)
-+
-+static int xilinx_selectmap_write(struct xilinx_fpga_core *core,
-+				  const char *buf, size_t count)
-+{
-+	struct xilinx_selectmap_conf *conf =3D to_xilinx_selectmap_conf(core);
-+	u32 i;
-+
-+	for (i =3D 0; i < count; ++i)
-+		writeb(buf[i], conf->base);
-+
-+	return 0;
-+}
-+
-+static int xilinx_selectmap_probe(struct platform_device *pdev)
-+{
-+	struct xilinx_selectmap_conf *conf;
-+	struct resource *r;
-+	void __iomem *base;
-+	struct gpio_desc *csi_b;
-+	struct gpio_desc *rdwr_b;
-+
-+	conf =3D devm_kzalloc(&pdev->dev, sizeof(*conf), GFP_KERNEL);
-+	if (!conf)
-+		return -ENOMEM;
-+
-+	conf->core.dev =3D &pdev->dev;
-+	conf->core.write =3D xilinx_selectmap_write;
-+
-+	base =3D devm_platform_get_and_ioremap_resource(pdev, 0, &r);
-+	if (IS_ERR(base))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(base),
-+				     "ioremap error\n");
-+	conf->base =3D base;
-+
-+	/* CSI_B is active low */
-+	csi_b =3D devm_gpiod_get_optional(&pdev->dev, "csi", GPIOD_OUT_HIGH);
-+	if (IS_ERR(csi_b))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(csi_b),
-+				     "Failed to get CSI_B gpio\n");
-+
-+	/* RDWR_B is active low */
-+	rdwr_b =3D devm_gpiod_get_optional(&pdev->dev, "rdwr", GPIOD_OUT_HIGH);
-+	if (IS_ERR(rdwr_b))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(rdwr_b),
-+				     "Failed to get RDWR_B gpio\n");
-+
-+	return xilinx_core_probe(&conf->core);
-+}
-+
-+static const struct of_device_id xlnx_selectmap_of_match[] =3D {
-+	{ .compatible =3D "xlnx,fpga-xc7s-selectmap", }, // Spartan-7
-+	{ .compatible =3D "xlnx,fpga-xc7a-selectmap", }, // Artix-7
-+	{ .compatible =3D "xlnx,fpga-xc7k-selectmap", }, // Kintex-7
-+	{ .compatible =3D "xlnx,fpga-xc7v-selectmap", }, // Virtex-7
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, xlnx_selectmap_of_match);
-+
-+static struct platform_driver xilinx_selectmap_driver =3D {
-+	.driver =3D {
-+		.name =3D "xilinx-selectmap",
-+		.of_match_table =3D xlnx_selectmap_of_match,
-+	},
-+	.probe  =3D xilinx_selectmap_probe,
-+};
-+
-+module_platform_driver(xilinx_selectmap_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Charles Perry <charles.perry@savoirfairelinux.com>");
-+MODULE_DESCRIPTION("Load Xilinx FPGA firmware over SelectMap");
---
-2.43.0
 
