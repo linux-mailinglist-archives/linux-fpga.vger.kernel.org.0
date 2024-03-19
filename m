@@ -1,72 +1,74 @@
-Return-Path: <linux-fpga+bounces-334-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-335-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4788387F64B
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 05:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB63587F65D
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 05:25:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F31B51F21A4F
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 04:08:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 921A91F22092
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 04:25:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7C5D7C082;
-	Tue, 19 Mar 2024 04:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293437C086;
+	Tue, 19 Mar 2024 04:24:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lgNWNKmY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mdpkWybJ"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0AF07BAFE;
-	Tue, 19 Mar 2024 04:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D0B5F544;
+	Tue, 19 Mar 2024 04:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710821330; cv=none; b=lmjY+FU+Gog3m7iFGFCWN1B0c3r647oDYaf11cQp8Hp/krBQD2eGMCvPFNNik+bOjR8Z2SQOoBkXpQ/ca3nVJvalYL1TAG9NVFgqKcEh2E22FcDTJKCOl1QiILgELjR78jR4aHOpXvnmKLRKkIfLXeWN4zONokBUOJn4/KPnQnI=
+	t=1710822294; cv=none; b=E3O24uuruA7HrZUOkpJKbnjH2dP6lflJEfTR/gJnkxQJyrK6dBeV3TBzCHw0o4nwDpvuCYIvfXGGAjUZRL+KyWb43drVecgYJWjok+vUlZNejADtImtgkUsvi2Z5o7DjWYnQufNJmWsniRTKxh+kn+SWtMscfMbKrnpafX0JcRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710821330; c=relaxed/simple;
-	bh=FXJUWaXDFajafiGH9N/Lk6GWxmCJ3Z1AE7/I+I2yb60=;
+	s=arc-20240116; t=1710822294; c=relaxed/simple;
+	bh=8COTqAO78HYhmDSxjg8TTpsRSgxaVPz9po3QmqxHMyA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NvIjxc8rXTiMpXI7B+Y9NyA2w+X6oqaNYYn4uUShV1esia5gUKd8Ckzb9PoTeGovKy+P2YPyXcWawTKBCbejPdgC0SVwFAnowa5IBhnD/8mKXq7EJqj6sh9St7zutfM33ARA9AA5l3Br9KmOU0hyjHn+O8rdmeSavSLct6UuO0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lgNWNKmY; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=rRAEJtSrAVT4IjZXpTrYx2KyeEEUzxIBd1kCur7Ujr2meEYCEJCzHvRAPo/WcHjTAmMNoZq24ZiA8Pu8x1utJw45WZdvrB92UCtFCvUv50gYch6dHBDNZn/aOL+G4rIfwjPVidpR/+MO1nlgAl6GNFuBDc/DDw/9cb4lOXKYLFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mdpkWybJ; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710821329; x=1742357329;
+  t=1710822292; x=1742358292;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=FXJUWaXDFajafiGH9N/Lk6GWxmCJ3Z1AE7/I+I2yb60=;
-  b=lgNWNKmYoIp55fPt+7/MkjjnnWqiSzq9u4msetrwfnjplwOamyhDZ3LW
-   kFt7u4C6G3UEfxjZZPN5dw5ltHy/hpfKoCJ0Pur25Ehx1ZX38wB8DSnhn
-   C3V5rneWXF5Jo1hL/WefwWdyVEPXrwZ3k6C6skMqN0F7+slKCls3jr9rk
-   F0wwGe2aeWRFLmOeKsOPuCw5Z7NhwMlNXLsm8kbaHEWNXX10GfpJgbi1o
-   OmkqwDcLNEFxvHeIcTs27+StkSABIUTNW+ldvdbMmRE8jJq1ppw2g6hTx
-   lyAFhdons97eAVSYpgfDRDgemzyZNesHxoUT/nnk3Nbcpdx9hPZP7tc0C
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11017"; a="31100354"
+  bh=8COTqAO78HYhmDSxjg8TTpsRSgxaVPz9po3QmqxHMyA=;
+  b=mdpkWybJg0oQLh7VDqqnVeY7ZQ9Uxi7u+g5so/ZLpXEf1Z6mjJeECiQD
+   eZg0iQEh0G8QpaE5J58xhP7cYJwJeRp+Yv3h4bokXpjlbQ9BLQevEdsqD
+   LHmwMi8Icnmu8GHUNHJVXCMrBWoEsKGfkZLBx4HBI8YJMaZdHeY91zTLy
+   Fd6ZWufro/6Mzbs3dD257ltfS2/ZPr/75aQ7dwFRGxVX/AXy3BieYoQ3w
+   jJfrOmMPRu+Sm4CJAjJm0YXbHwwf8INKIl4dh6bxpBBh7x2+7GdVbo+VB
+   CX3xgVllAzXrNxO4rqNVWqeYzzUO22JF427Xj5Vo8oJH7w2ap7JhNv/pf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11017"; a="23174513"
 X-IronPort-AV: E=Sophos;i="6.07,135,1708416000"; 
-   d="scan'208";a="31100354"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 21:08:48 -0700
+   d="scan'208";a="23174513"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 21:24:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,135,1708416000"; 
-   d="scan'208";a="13566078"
+   d="scan'208";a="14146453"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa010.fm.intel.com with ESMTP; 18 Mar 2024 21:08:45 -0700
-Date: Tue, 19 Mar 2024 12:04:13 +0800
+  by orviesa007.jf.intel.com with ESMTP; 18 Mar 2024 21:24:47 -0700
+Date: Tue, 19 Mar 2024 12:20:15 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Tull <atull@opensource.altera.com>,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v6] fpga: manager: add owner module and take its refcount
-Message-ID: <ZfkOvXslEjgU+fc1@yilunxu-OptiPlex-7050>
-References: <20240305192926.84886-1-marpagan@redhat.com>
+To: Charles Perry <charles.perry@savoirfairelinux.com>
+Cc: mdf@kernel.org, avandiver@markem-imaje.com, bcody@markem-imaje.com,
+	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michal Simek <michal.simek@amd.com>, linux-fpga@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 1/3] fpga: xilinx-spi: extract a common driver core
+Message-ID: <ZfkSf6QG5nIY0zpx@yilunxu-OptiPlex-7050>
+References: <20240313225746.489253-1-charles.perry@savoirfairelinux.com>
+ <20240313225746.489253-2-charles.perry@savoirfairelinux.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -75,36 +77,42 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240305192926.84886-1-marpagan@redhat.com>
+In-Reply-To: <20240313225746.489253-2-charles.perry@savoirfairelinux.com>
 
-On Tue, Mar 05, 2024 at 08:29:26PM +0100, Marco Pagani wrote:
-> The current implementation of the fpga manager assumes that the low-level
-> module registers a driver for the parent device and uses its owner pointer
-> to take the module's refcount. This approach is problematic since it can
-> lead to a null pointer dereference while attempting to get the manager if
-> the parent device does not have a driver.
-> 
-> To address this problem, add a module owner pointer to the fpga_manager
-> struct and use it to take the module's refcount. Modify the functions for
-> registering the manager to take an additional owner module parameter and
-> rename them to avoid conflicts. Use the old function names for helper
-> macros that automatically set the module that registers the manager as the
-> owner. This ensures compatibility with existing low-level control modules
-> and reduces the chances of registering a manager without setting the owner.
-> 
-> Also, update the documentation to keep it consistent with the new interface
-> for registering an fpga manager.
-> 
-> Other changes: opportunistically move put_device() from __fpga_mgr_get() to
-> fpga_mgr_get() and of_fpga_mgr_get() to improve code clarity since the
-> manager device is taken in these functions.
-> 
-> Fixes: 654ba4cc0f3e ("fpga manager: ensure lifetime with of_fpga_mgr_get")
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Suggested-by: Xu Yilun <yilun.xu@intel.com>
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> +/**
+> + * struct xilinx_fpga_core - interface between the driver and the core manager
+> + *                           of Xilinx 7 Series FPGA manager
+> + * @dev:       device node
+> + * @write:     write callback of the driver
+> + * @prog_b:    PROGRAM_B gpio descriptor
+> + * @init_b:    INIT_B gpio descriptor
+> + * @done:      DONE gpio descriptor
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Please re-check the Documentation again:
+"Structure fields that are inside a private: area are not listed in the generated output documentation"
 
-Will apply to v6.9-rc1
+> + */
+> +struct xilinx_fpga_core {
+> +/* public: */
+> +	struct device *dev;
+> +	int (*write)(struct xilinx_fpga_core *core, const char *buf,
+> +		     size_t count);
+> +/* private: handled by xilinx-core */
+> +	struct gpio_desc *prog_b;
+> +	struct gpio_desc *init_b;
+> +	struct gpio_desc *done;
+> +};
+> +
+[...]
+> -
+>  static int xilinx_spi_probe(struct spi_device *spi)
+>  {
+> -	struct xilinx_spi_conf *conf;
+> -	struct fpga_manager *mgr;
+> +	struct xilinx_fpga_core *conf;
+
+Why do you name it conf? Maybe "core" is better?
+
+Thanks,
+Yilun
 
