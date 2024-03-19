@@ -1,145 +1,341 @@
-Return-Path: <linux-fpga+bounces-340-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-341-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D714387FE7D
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 14:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2722088034B
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 18:20:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9297428417F
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 13:18:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5BC3282665
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 17:20:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAB8C7F7ED;
-	Tue, 19 Mar 2024 13:18:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8746E18EC0;
+	Tue, 19 Mar 2024 17:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="SJdGJMfS"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i7E5y/Pr"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8F35A782;
-	Tue, 19 Mar 2024 13:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4051804A
+	for <linux-fpga@vger.kernel.org>; Tue, 19 Mar 2024 17:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710854300; cv=none; b=f55MNtyrAN2JW+DBqQOjhfzNrsgCIv9y0rkqlFlMGgbThLpyisasfwx/nW4EDPbc0uTi3FNI3PjDzDheRfmRuy9+c/3mBw4vSZZ/nHYwCMWBm52nxKdonWThGLXpcQEuu+1xLcnRHgrikCswTEHLwaqVX5waujDQCfAqWACcQ+U=
+	t=1710868847; cv=none; b=L5X2U/Dsf+Kut4Ky9S0C9XEXlDTBIeKy2JGkhsY0zYcVn0TrQRhiwy/2VjWdoQ059dsh3cJKg+nlTSJgyT4Fc6L7kBlJRmk4ty30NthJacxHsRY9EQE3pvbPxUkF0EIGaHxV9CNpXCsbNdovReuwWWD2aHDjN/Fp2ah8jf6pXK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710854300; c=relaxed/simple;
-	bh=RR0UkwWsm9OdmDGh3lOnlD7zBWisNdtOai4hXsNHFOk=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=dEegX4EVuG8hW9ZfAVWWlJpA99xFf0+w6sGvbgH0391oGBhHTWlf3JhLBESdwtLY2yecHzX3L67eXi1q9BcJlwNd9j0LAR2Z9XRigoKFWvPnikaXFf4DgYgD2EkrhvFjy5XqO/3nvs3wBHYFkdjORpUT0vDxa8ppJRelO0RK8hY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=SJdGJMfS; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 777579C0760;
-	Tue, 19 Mar 2024 09:18:15 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id a_6GA9s-CbIi; Tue, 19 Mar 2024 09:18:14 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id B99AD9C2CD7;
-	Tue, 19 Mar 2024 09:18:14 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com B99AD9C2CD7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1710854294; bh=5NKRHP1QMpxeSgJzCg5KTSkhGY8m7eqimBDOmXZzCLo=;
-	h=Date:From:To:Message-ID:MIME-Version;
-	b=SJdGJMfSRh5WdHCGswWdQRFF4PVrxtImtEsTGzei+w/QPMSKnvQqCoGuZWzXzR2Fe
-	 fB+QURY728WBm53LR19tDhwhESEa3MstokJ546DyRtbFAtw4bVSz/ZWwlo6GqJcx3Q
-	 OAJnT1s2NJ+K/JlT3rVsbPtgp2bS+ffKXP68acObQbMRA6Jj4++mhhwDzCIjDkFftH
-	 V6NlKRaEaSq78ob2fOkyTmsnzFwTAuUUON1iJ8FHTu/GyteR9ANqTGXqLcCgOZRF+k
-	 gPtxQpaTxg9stn8zuIVjsm8ZdEMyDvyhRlW0ibNTXO1uFRaAVRCpjNkm09hjnKkWYp
-	 qhhMDJF0r1nqQ==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id heRr1KKMJ06R; Tue, 19 Mar 2024 09:18:14 -0400 (EDT)
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [192.168.48.237])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 8891C9C0760;
-	Tue, 19 Mar 2024 09:18:14 -0400 (EDT)
-Date: Tue, 19 Mar 2024 09:18:14 -0400 (EDT)
-From: Charles Perry <charles.perry@savoirfairelinux.com>
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: mdf <mdf@kernel.org>, Allen VANDIVER <avandiver@markem-imaje.com>, 
-	Brian CODY <bcody@markem-imaje.com>, hao wu <hao.wu@intel.com>, 
-	yilun xu <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	krzysztof kozlowski+dt <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, 
-	Michal Simek <michal.simek@amd.com>, 
-	linux-fpga <linux-fpga@vger.kernel.org>, 
-	devicetree <devicetree@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Message-ID: <2023855820.1872598.1710854294497.JavaMail.zimbra@savoirfairelinux.com>
-In-Reply-To: <ZfkSf6QG5nIY0zpx@yilunxu-OptiPlex-7050>
-References: <20240313225746.489253-1-charles.perry@savoirfairelinux.com> <20240313225746.489253-2-charles.perry@savoirfairelinux.com> <ZfkSf6QG5nIY0zpx@yilunxu-OptiPlex-7050>
-Subject: Re: [PATCH v5 1/3] fpga: xilinx-spi: extract a common driver core
+	s=arc-20240116; t=1710868847; c=relaxed/simple;
+	bh=Vh9lCoaKMDmTBh3akSE8GiDLO339gYIbqJ18ntD/V64=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b0yri8KY5K8JtJad6APJLfdYKBmEqxRR74XF1rHFAyo0OkXsdmhq88GmvU2FANBiaQTP9peCUp8gBlo6rUya5NCsZSvD2FDokTuMnYwFfUTI8B40ycvj+tx0nVtNvChFzHLMV2C5LhN7tlwWyuz6xSVG4b5acDCL9uDMjmogig0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i7E5y/Pr; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710868844;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8ztau3JQ36amubeJuz0wWTtDljNmlC67km863EzzBpM=;
+	b=i7E5y/PrgFyQWjTSj1zwHOrTYwxa85LgunrISBwuCvMv5w5j77V+y+BAhc1G8lluRWyrGV
+	9F64VLgb+YyUpA7eHwum0Oew188+ScKWNDTvJLDvXvapsl5y2Pzl7Mel83zbutugead3eg
+	7/gGyjKsp/S3Qw3lFSrWzkFvdrWLG8k=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-98-s3vq3rFXMdyrpj_LJAuSoQ-1; Tue, 19 Mar 2024 13:20:41 -0400
+X-MC-Unique: s3vq3rFXMdyrpj_LJAuSoQ-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3418f237c0bso250307f8f.3
+        for <linux-fpga@vger.kernel.org>; Tue, 19 Mar 2024 10:20:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710868840; x=1711473640;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8ztau3JQ36amubeJuz0wWTtDljNmlC67km863EzzBpM=;
+        b=lNul+0RhJG41y0w8Mp3OhZ6aFX2q9p2PmcmybRWn2M/fjus2xXIXmLu9GDwThJEcWT
+         +mqDBAkUqm1LRRT5oLZy+jKjAqGTtQI/sx8CDEbTk8kgeFsRuyJ+HYnFAtVUQz9whe63
+         TIxs4qJdTmCf+D2mnPtPvLpZCVelUW0qtiht4v+DK38zFP+5MJSj3z6Md99qWTYKjAxt
+         VwW405bS84fhMJ3okoCf1mcRaZb9w+V0accVT+Z2d7mzw+KmVwLgRMXpdjmWAqynAvkU
+         EK4vzgBDSjYob2lXzuRxw137lFrc7gOrfDEltaPjGey8jO34ickqpR/TmKtO1NhVdtV1
+         vq0w==
+X-Forwarded-Encrypted: i=1; AJvYcCW8vWpPNdm3edsIWkDqhdHulwtuAvQT39BzMqw2JK0VhvEQtfk3956FmEMzwSEsKzA+FN0oigUQ9UV68M/NUNhuLmnr02VZQLKOaw==
+X-Gm-Message-State: AOJu0YxoHVCwLXgGatnEK33OrEf0Re6TAYU33jBsNHDtCteGampiWsAz
+	M/gANyibWJgvheHayLlOYgTieM4VTWSZm1sjI1Fl8+lOxcuEFxzRdQyCj/oY26SBB/sn2IuyEwl
+	DEBbgVnk/WX1KJc3ja+QwQuqegiSU/lYl2Rdx7IcCO0wbJAd0y8OcV71AhQ==
+X-Received: by 2002:adf:f483:0:b0:33e:7f5c:a75c with SMTP id l3-20020adff483000000b0033e7f5ca75cmr10435297wro.47.1710868840692;
+        Tue, 19 Mar 2024 10:20:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFx2PQc7A0h2l5AD0StizMnjKmdjOFZhxuFssnLI/hnV0ZMoZOE2qNPVg/1en+Qbw0s7fX2rg==
+X-Received: by 2002:adf:f483:0:b0:33e:7f5c:a75c with SMTP id l3-20020adff483000000b0033e7f5ca75cmr10435275wro.47.1710868840241;
+        Tue, 19 Mar 2024 10:20:40 -0700 (PDT)
+Received: from klayman.redhat.com (net-2-34-30-89.cust.vodafonedsl.it. [2.34.30.89])
+        by smtp.gmail.com with ESMTPSA id g4-20020adfe404000000b0033dd2a7167fsm12804568wrm.29.2024.03.19.10.20.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Mar 2024 10:20:39 -0700 (PDT)
+From: Marco Pagani <marpagan@redhat.com>
+To: Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Alan Tull <atull@opensource.altera.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Marco Pagani <marpagan@redhat.com>,
+	linux-fpga@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] fpga: bridge: add owner module and take its refcount
+Date: Tue, 19 Mar 2024 18:20:24 +0100
+Message-ID: <20240319172026.76142-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: Zimbra 8.8.15_GA_4581 (ZimbraWebClient - FF120 (Linux)/8.8.15_GA_4581)
-Thread-Topic: fpga: xilinx-spi: extract a common driver core
-Thread-Index: tkWcNpo3mWp8g/EUE0xd2oh6sbVbuw==
+Content-Transfer-Encoding: 8bit
 
+The current implementation of the fpga bridge assumes that the low-level
+module registers a driver for the parent device and uses its owner pointer
+to take the module's refcount. This approach is problematic since it can
+lead to a null pointer dereference while attempting to get the bridge if
+the parent device does not have a driver.
 
-On Mar 19, 2024, at 12:20 AM, Xu Yilun yilun.xu@linux.intel.com wrote:
->> +/**
->> + * struct xilinx_fpga_core - interface between the driver and the core manager
->> + *                           of Xilinx 7 Series FPGA manager
->> + * @dev:       device node
->> + * @write:     write callback of the driver
->> + * @prog_b:    PROGRAM_B gpio descriptor
->> + * @init_b:    INIT_B gpio descriptor
->> + * @done:      DONE gpio descriptor
-> 
-> Please re-check the Documentation again:
-> "Structure fields that are inside a private: area are not listed in the
-> generated output documentation"
-> 
+To address this problem, add a module owner pointer to the fpga_bridge
+struct and use it to take the module's refcount. Modify the function for
+registering a bridge to take an additional owner module parameter and
+rename it to avoid conflicts. Use the old function name for a helper macro
+that automatically sets the module that registers the bridge as the owner.
+This ensures compatibility with existing low-level control modules and
+reduces the chances of registering a bridge without setting the owner.
 
-I did generate the documentation for that struct and saw that the
-private fields are indeed removed. This hinted me into thinking that
-I should keep the private kernel-doc, because it's the generator job
-to remove those. Looking again at the kernel-doc.rst example on that
-topic, I understand that this is not the case, will fix.
+Also, update the documentation to keep it consistent with the new interface
+for registering an fpga bridge.
 
->> + */
->> +struct xilinx_fpga_core {
->> +/* public: */
->> +	struct device *dev;
->> +	int (*write)(struct xilinx_fpga_core *core, const char *buf,
->> +		     size_t count);
->> +/* private: handled by xilinx-core */
->> +	struct gpio_desc *prog_b;
->> +	struct gpio_desc *init_b;
->> +	struct gpio_desc *done;
->> +};
->> +
-> [...]
->> -
->>  static int xilinx_spi_probe(struct spi_device *spi)
->>  {
->> -	struct xilinx_spi_conf *conf;
->> -	struct fpga_manager *mgr;
->> +	struct xilinx_fpga_core *conf;
-> 
-> Why do you name it conf? Maybe "core" is better?
-> 
-> Thanks,
-> Yilun
+Other changes: opportunistically move put_device() from __fpga_bridge_get()
+to fpga_bridge_get() and of_fpga_bridge_get() to improve code clarity since
+the bridge device is taken in these functions.
 
-Yes, I changed the type but not the name.
+Fixes: 21aeda950c5f ("fpga: add fpga bridge framework")
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Suggested-by: Xu Yilun <yilun.xu@intel.com>
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
 
-Thank you for the review,
-Charles
+v2:
+- Split out protection against races while taking the mod's refcount
+---
+ Documentation/driver-api/fpga/fpga-bridge.rst |  7 ++-
+ drivers/fpga/fpga-bridge.c                    | 57 ++++++++++---------
+ include/linux/fpga/fpga-bridge.h              | 10 +++-
+ 3 files changed, 43 insertions(+), 31 deletions(-)
 
+diff --git a/Documentation/driver-api/fpga/fpga-bridge.rst b/Documentation/driver-api/fpga/fpga-bridge.rst
+index 604208534095..d831d5ab6b0d 100644
+--- a/Documentation/driver-api/fpga/fpga-bridge.rst
++++ b/Documentation/driver-api/fpga/fpga-bridge.rst
+@@ -6,9 +6,12 @@ API to implement a new FPGA bridge
+ 
+ * struct fpga_bridge - The FPGA Bridge structure
+ * struct fpga_bridge_ops - Low level Bridge driver ops
+-* fpga_bridge_register() - Create and register a bridge
++* __fpga_bridge_register() - Create and register a bridge
+ * fpga_bridge_unregister() - Unregister a bridge
+ 
++The helper macro ``fpga_bridge_register()`` automatically sets
++the module that registers the bridge as the owner.
++
+ .. kernel-doc:: include/linux/fpga/fpga-bridge.h
+    :functions: fpga_bridge
+ 
+@@ -16,7 +19,7 @@ API to implement a new FPGA bridge
+    :functions: fpga_bridge_ops
+ 
+ .. kernel-doc:: drivers/fpga/fpga-bridge.c
+-   :functions: fpga_bridge_register
++   :functions: __fpga_bridge_register
+ 
+ .. kernel-doc:: drivers/fpga/fpga-bridge.c
+    :functions: fpga_bridge_unregister
+diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+index 79c473b3c7c3..8ef395b49bf8 100644
+--- a/drivers/fpga/fpga-bridge.c
++++ b/drivers/fpga/fpga-bridge.c
+@@ -55,33 +55,26 @@ int fpga_bridge_disable(struct fpga_bridge *bridge)
+ }
+ EXPORT_SYMBOL_GPL(fpga_bridge_disable);
+ 
+-static struct fpga_bridge *__fpga_bridge_get(struct device *dev,
++static struct fpga_bridge *__fpga_bridge_get(struct device *bridge_dev,
+ 					     struct fpga_image_info *info)
+ {
+ 	struct fpga_bridge *bridge;
+-	int ret = -ENODEV;
+ 
+-	bridge = to_fpga_bridge(dev);
++	bridge = to_fpga_bridge(bridge_dev);
+ 
+ 	bridge->info = info;
+ 
+-	if (!mutex_trylock(&bridge->mutex)) {
+-		ret = -EBUSY;
+-		goto err_dev;
+-	}
++	if (!mutex_trylock(&bridge->mutex))
++		return ERR_PTR(-EBUSY);
+ 
+-	if (!try_module_get(dev->parent->driver->owner))
+-		goto err_ll_mod;
++	if (!try_module_get(bridge->br_ops_owner)) {
++		mutex_unlock(&bridge->mutex);
++		return ERR_PTR(-ENODEV);
++	}
+ 
+ 	dev_dbg(&bridge->dev, "get\n");
+ 
+ 	return bridge;
+-
+-err_ll_mod:
+-	mutex_unlock(&bridge->mutex);
+-err_dev:
+-	put_device(dev);
+-	return ERR_PTR(ret);
+ }
+ 
+ /**
+@@ -98,13 +91,18 @@ static struct fpga_bridge *__fpga_bridge_get(struct device *dev,
+ struct fpga_bridge *of_fpga_bridge_get(struct device_node *np,
+ 				       struct fpga_image_info *info)
+ {
+-	struct device *dev;
++	struct fpga_bridge *bridge;
++	struct device *bridge_dev;
+ 
+-	dev = class_find_device_by_of_node(&fpga_bridge_class, np);
+-	if (!dev)
++	bridge_dev = class_find_device_by_of_node(&fpga_bridge_class, np);
++	if (!bridge_dev)
+ 		return ERR_PTR(-ENODEV);
+ 
+-	return __fpga_bridge_get(dev, info);
++	bridge = __fpga_bridge_get(bridge_dev, info);
++	if (IS_ERR(bridge))
++		put_device(bridge_dev);
++
++	return bridge;
+ }
+ EXPORT_SYMBOL_GPL(of_fpga_bridge_get);
+ 
+@@ -125,6 +123,7 @@ static int fpga_bridge_dev_match(struct device *dev, const void *data)
+ struct fpga_bridge *fpga_bridge_get(struct device *dev,
+ 				    struct fpga_image_info *info)
+ {
++	struct fpga_bridge *bridge;
+ 	struct device *bridge_dev;
+ 
+ 	bridge_dev = class_find_device(&fpga_bridge_class, NULL, dev,
+@@ -132,7 +131,11 @@ struct fpga_bridge *fpga_bridge_get(struct device *dev,
+ 	if (!bridge_dev)
+ 		return ERR_PTR(-ENODEV);
+ 
+-	return __fpga_bridge_get(bridge_dev, info);
++	bridge = __fpga_bridge_get(bridge_dev, info);
++	if (IS_ERR(bridge))
++		put_device(bridge_dev);
++
++	return bridge;
+ }
+ EXPORT_SYMBOL_GPL(fpga_bridge_get);
+ 
+@@ -146,7 +149,7 @@ void fpga_bridge_put(struct fpga_bridge *bridge)
+ 	dev_dbg(&bridge->dev, "put\n");
+ 
+ 	bridge->info = NULL;
+-	module_put(bridge->dev.parent->driver->owner);
++	module_put(bridge->br_ops_owner);
+ 	mutex_unlock(&bridge->mutex);
+ 	put_device(&bridge->dev);
+ }
+@@ -316,18 +319,19 @@ static struct attribute *fpga_bridge_attrs[] = {
+ ATTRIBUTE_GROUPS(fpga_bridge);
+ 
+ /**
+- * fpga_bridge_register - create and register an FPGA Bridge device
++ * __fpga_bridge_register - create and register an FPGA Bridge device
+  * @parent:	FPGA bridge device from pdev
+  * @name:	FPGA bridge name
+  * @br_ops:	pointer to structure of fpga bridge ops
+  * @priv:	FPGA bridge private data
++ * @owner:	owner module containing the br_ops
+  *
+  * Return: struct fpga_bridge pointer or ERR_PTR()
+  */
+ struct fpga_bridge *
+-fpga_bridge_register(struct device *parent, const char *name,
+-		     const struct fpga_bridge_ops *br_ops,
+-		     void *priv)
++__fpga_bridge_register(struct device *parent, const char *name,
++		       const struct fpga_bridge_ops *br_ops,
++		       void *priv, struct module *owner)
+ {
+ 	struct fpga_bridge *bridge;
+ 	int id, ret;
+@@ -357,6 +361,7 @@ fpga_bridge_register(struct device *parent, const char *name,
+ 
+ 	bridge->name = name;
+ 	bridge->br_ops = br_ops;
++	bridge->br_ops_owner = owner;
+ 	bridge->priv = priv;
+ 
+ 	bridge->dev.groups = br_ops->groups;
+@@ -386,7 +391,7 @@ fpga_bridge_register(struct device *parent, const char *name,
+ 
+ 	return ERR_PTR(ret);
+ }
+-EXPORT_SYMBOL_GPL(fpga_bridge_register);
++EXPORT_SYMBOL_GPL(__fpga_bridge_register);
+ 
+ /**
+  * fpga_bridge_unregister - unregister an FPGA bridge
+diff --git a/include/linux/fpga/fpga-bridge.h b/include/linux/fpga/fpga-bridge.h
+index 223da48a6d18..94c4edd047e5 100644
+--- a/include/linux/fpga/fpga-bridge.h
++++ b/include/linux/fpga/fpga-bridge.h
+@@ -45,6 +45,7 @@ struct fpga_bridge_info {
+  * @dev: FPGA bridge device
+  * @mutex: enforces exclusive reference to bridge
+  * @br_ops: pointer to struct of FPGA bridge ops
++ * @br_ops_owner: module containing the br_ops
+  * @info: fpga image specific information
+  * @node: FPGA bridge list node
+  * @priv: low level driver private date
+@@ -54,6 +55,7 @@ struct fpga_bridge {
+ 	struct device dev;
+ 	struct mutex mutex; /* for exclusive reference to bridge */
+ 	const struct fpga_bridge_ops *br_ops;
++	struct module *br_ops_owner;
+ 	struct fpga_image_info *info;
+ 	struct list_head node;
+ 	void *priv;
+@@ -79,10 +81,12 @@ int of_fpga_bridge_get_to_list(struct device_node *np,
+ 			       struct fpga_image_info *info,
+ 			       struct list_head *bridge_list);
+ 
++#define fpga_bridge_register(parent, name, br_ops, priv) \
++	__fpga_bridge_register(parent, name, br_ops, priv, THIS_MODULE)
+ struct fpga_bridge *
+-fpga_bridge_register(struct device *parent, const char *name,
+-		     const struct fpga_bridge_ops *br_ops,
+-		     void *priv);
++__fpga_bridge_register(struct device *parent, const char *name,
++		       const struct fpga_bridge_ops *br_ops, void *priv,
++		       struct module *owner);
+ void fpga_bridge_unregister(struct fpga_bridge *br);
+ 
+ #endif /* _LINUX_FPGA_BRIDGE_H */
 
+base-commit: b1a91ca25f15b6d7b311de4465854a5981dee3d3
+-- 
+2.44.0
 
 
