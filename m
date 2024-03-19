@@ -1,74 +1,56 @@
-Return-Path: <linux-fpga+bounces-336-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-337-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75E5587F79E
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 07:42:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 601F387F8D3
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 09:04:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9985A1C20E30
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 06:42:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15905282DA5
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Mar 2024 08:04:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A4F550A63;
-	Tue, 19 Mar 2024 06:40:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E13F2537F2;
+	Tue, 19 Mar 2024 08:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aJgWBx65"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E/EBz4TP"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85FD5024E;
-	Tue, 19 Mar 2024 06:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EF5537E4;
+	Tue, 19 Mar 2024 08:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710830407; cv=none; b=Z4SfAPvA30CTuuwlnN782+rim0F2LkgpPnMsopJvG8l4AXQkhNL9dapDx85uCSBOjoXPU+hgI0SEbFLcUdZaZtTTDCmJOmbj62NTtqzBmUYYlUbd42bhBus43e6JwDvsMqueTKx/yUNLdLZwgqc2vCxOEVdON/QAWlKlsVkVazQ=
+	t=1710835436; cv=none; b=lLpbG/r1KlsBsRl8GF3HScK+D1iPjvCktQUwbeEt3xGhci9Z4GiRJApUSzrzBR9yfKp6/aTyYGYnWhsJHYlRRFc2m9B7UOUZi0k4bnu+aVbbMOpvlRV7QalhPjWpnCWkBAGp3lqrncdNmj+hbVy67hscHAOfWmxNLctAi0orumA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710830407; c=relaxed/simple;
-	bh=igetNCexyau5jpzxn3bC4vTACZALpnEId5+W6FhTmC4=;
+	s=arc-20240116; t=1710835436; c=relaxed/simple;
+	bh=5pMIwSL+oFaceFU0q+VQ+fxw61PUaymJCTKh5tTE8EM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JsbxUUc5up12HBG2CyRguDemXyTjKpZvcwCMsuqEBLSN55lGjhRcE/GP+eNxW+AIF45t40BMbUf4RgQ4mPp45ieIISYpa8iMwNIPHl6hN5OWOhAGc2YrSf9KvB4DYjomwEUuqLDrsbhhH0OR17xiw+m9yQO44IQJ7jJWT8nV94s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aJgWBx65; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710830406; x=1742366406;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=igetNCexyau5jpzxn3bC4vTACZALpnEId5+W6FhTmC4=;
-  b=aJgWBx65/Q5QqC3EvpO+ED1ZnyRFZ8S0SceM6sYLgXjVRfaiIJqzNRE/
-   FVwLEAXO3TjFgTJ3b9iy/cvaIfv1m2N4KfN54ykZ4JRXJ5vjklzmWvtdP
-   fDlWsFdMVSazQ60N0+IScKZ2Z89NmLt87hi0ix9eIdVYO2xS0z8ju2lG/
-   24e/gbzR1lE/aFCqrWMDzjUVi8mrSvXTrtqeIV1TIvqYFE8M2vZNzGkYV
-   rQhGL76jmCp04huNqW+2ipzXOLv5KHXMGgbPQhNj4gZ5IkocuciL4ZHka
-   72xDyd8JkNML/rh8aYCC+/bl4KdtxI20LdAO1EXE+G6wu6+GZOVP/SfAh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11017"; a="5527841"
-X-IronPort-AV: E=Sophos;i="6.07,136,1708416000"; 
-   d="scan'208";a="5527841"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 23:40:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,136,1708416000"; 
-   d="scan'208";a="18406359"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa005.jf.intel.com with ESMTP; 18 Mar 2024 23:40:01 -0700
-Date: Tue, 19 Mar 2024 14:35:29 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Charles Perry <charles.perry@savoirfairelinux.com>
-Cc: mdf@kernel.org, avandiver@markem-imaje.com, bcody@markem-imaje.com,
+	 Content-Type:Content-Disposition:In-Reply-To; b=ufFmRhevwMl345ve92GFkt44CTxKQhkK+Df6Z1Xc709zjsfcOgOLH/XrmBy43z+hd4uXVdScxnk8EZrRY3XbjI1NeJ7YcgtkXF4pISzcWbTIUPRo2rmofEeM8YdnNxYL2uGt1HpJK+fkQJoZh6XBwPQdgR0it3ohyO6a6Q84Ktw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E/EBz4TP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9AADC433F1;
+	Tue, 19 Mar 2024 08:03:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1710835436;
+	bh=5pMIwSL+oFaceFU0q+VQ+fxw61PUaymJCTKh5tTE8EM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E/EBz4TP05UV76e4ihRit4qedT8ItYeorbvPeugThFfi2vX7De3TcITjKglIRY95g
+	 pJ/Y5enNynI/uF0nTfb6yYOtekimQnUsV0TOLka5xF7KbGrOFd/ntpt2LkEtbaosGG
+	 Hdwbs8A4i7UQhNFQgQVinlNIVhnyLYoMgbvlwD6o=
+Date: Tue, 19 Mar 2024 09:01:32 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Xu Yilun <yilun.xu@linux.intel.com>
+Cc: Marco Pagani <marpagan@redhat.com>, Moritz Fischer <mdf@kernel.org>,
 	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michal Simek <michal.simek@amd.com>, linux-fpga@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 3/3] fpga: xilinx-selectmap: add new driver
-Message-ID: <ZfkyMSczuFUdy3tU@yilunxu-OptiPlex-7050>
-References: <20240313225746.489253-1-charles.perry@savoirfairelinux.com>
- <20240313225746.489253-4-charles.perry@savoirfairelinux.com>
+	Tom Rix <trix@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+	Alan Tull <atull@opensource.altera.com>,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fpga@vger.kernel.org
+Subject: Re: [PATCH v6] fpga: manager: add owner module and take its refcount
+Message-ID: <2024031906-radish-handbrake-93b4@gregkh>
+References: <20240305192926.84886-1-marpagan@redhat.com>
+ <ZfkOvXslEjgU+fc1@yilunxu-OptiPlex-7050>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -77,238 +59,44 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240313225746.489253-4-charles.perry@savoirfairelinux.com>
+In-Reply-To: <ZfkOvXslEjgU+fc1@yilunxu-OptiPlex-7050>
 
-On Wed, Mar 13, 2024 at 06:57:37PM -0400, Charles Perry wrote:
-> Xilinx 7 series FPGA can be programmed using a parallel port named
-> the SelectMAP interface in the datasheet. This interface is compatible
-> with the i.MX6 EIM bus controller but other types of external memory
-> mapped parallel bus might work.
+On Tue, Mar 19, 2024 at 12:04:13PM +0800, Xu Yilun wrote:
+> On Tue, Mar 05, 2024 at 08:29:26PM +0100, Marco Pagani wrote:
+> > The current implementation of the fpga manager assumes that the low-level
+> > module registers a driver for the parent device and uses its owner pointer
+> > to take the module's refcount. This approach is problematic since it can
+> > lead to a null pointer dereference while attempting to get the manager if
+> > the parent device does not have a driver.
+> > 
+> > To address this problem, add a module owner pointer to the fpga_manager
+> > struct and use it to take the module's refcount. Modify the functions for
+> > registering the manager to take an additional owner module parameter and
+> > rename them to avoid conflicts. Use the old function names for helper
+> > macros that automatically set the module that registers the manager as the
+> > owner. This ensures compatibility with existing low-level control modules
+> > and reduces the chances of registering a manager without setting the owner.
+> > 
+> > Also, update the documentation to keep it consistent with the new interface
+> > for registering an fpga manager.
+> > 
+> > Other changes: opportunistically move put_device() from __fpga_mgr_get() to
+> > fpga_mgr_get() and of_fpga_mgr_get() to improve code clarity since the
+> > manager device is taken in these functions.
+> > 
+> > Fixes: 654ba4cc0f3e ("fpga manager: ensure lifetime with of_fpga_mgr_get")
+> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Suggested-by: Xu Yilun <yilun.xu@intel.com>
+> > Signed-off-by: Marco Pagani <marpagan@redhat.com>
 > 
-> xilinx-selectmap currently only supports the x8 mode where data is loaded
-> at one byte per rising edge of the clock, with the MSb of each byte
-> presented to the D0 pin.
+> Acked-by: Xu Yilun <yilun.xu@intel.com>
 > 
-> Signed-off-by: Charles Perry <charles.perry@savoirfairelinux.com>
-> ---
-> Changes since v4: (from Yilun review)
->  * xilinx-core: select between prog/init and prog_b/init-b
-> 
->  drivers/fpga/Kconfig            |  8 +++
->  drivers/fpga/Makefile           |  1 +
->  drivers/fpga/xilinx-core.c      | 29 +++++++++-
->  drivers/fpga/xilinx-selectmap.c | 97 +++++++++++++++++++++++++++++++++
->  4 files changed, 133 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/fpga/xilinx-selectmap.c
-> 
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index d27a1ebf40838..37b35f58f0dfb 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -67,6 +67,14 @@ config FPGA_MGR_STRATIX10_SOC
->  config FPGA_MGR_XILINX_CORE
->  	tristate
-> 
-> +config FPGA_MGR_XILINX_SELECTMAP
-> +	tristate "Xilinx Configuration over SelectMAP"
-> +	depends on HAS_IOMEM
-> +	select FPGA_MGR_XILINX_CORE
-> +	help
-> +	  FPGA manager driver support for Xilinx FPGA configuration
-> +	  over SelectMAP interface.
-> +
->  config FPGA_MGR_XILINX_SPI
->  	tristate "Xilinx Configuration over Slave Serial (SPI)"
->  	depends on SPI
-> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> index 7ec795b6a5a70..aeb89bb13517e 100644
-> --- a/drivers/fpga/Makefile
-> +++ b/drivers/fpga/Makefile
-> @@ -16,6 +16,7 @@ obj-$(CONFIG_FPGA_MGR_SOCFPGA_A10)	+= socfpga-a10.o
->  obj-$(CONFIG_FPGA_MGR_STRATIX10_SOC)	+= stratix10-soc.o
->  obj-$(CONFIG_FPGA_MGR_TS73XX)		+= ts73xx-fpga.o
->  obj-$(CONFIG_FPGA_MGR_XILINX_CORE)	+= xilinx-core.o
-> +obj-$(CONFIG_FPGA_MGR_XILINX_SELECTMAP)	+= xilinx-selectmap.o
->  obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
->  obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
->  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
-> diff --git a/drivers/fpga/xilinx-core.c b/drivers/fpga/xilinx-core.c
-> index a35c43382dd5f..ccdeb45eba4ee 100644
-> --- a/drivers/fpga/xilinx-core.c
-> +++ b/drivers/fpga/xilinx-core.c
-> @@ -171,6 +171,29 @@ static int xilinx_core_write_complete(struct fpga_manager *mgr,
->  	return -ETIMEDOUT;
->  }
-> 
-> +/**
-> + * xilinx_core_devm_gpiod_get - Obtain a resource-managed GPIO using a
-> + *                              legacy consumer name fallback.
-> + *
-> + * @dev:           Device managing the GPIO
-> + * @con_id:        Consumer id
-> + * @legacy_con_id: Legacy consumer id
-> + * @flags:         optional GPIO initialization flags
-> + */
+> Will apply to v6.9-rc1
 
-No need to have kernel doc comments for internal functions.
+It is way too late for -rc1, sorry, this needs to wait for the next
+release.
 
-> +static inline struct gpio_desc *
-> +xilinx_core_devm_gpiod_get(struct device *dev, const char *con_id,
-> +			   const char *legacy_con_id, enum gpiod_flags flags)
-> +{
-> +	struct gpio_desc *desc;
-> +
-> +	desc = devm_gpiod_get(dev, con_id, flags);
-> +	if (IS_ERR(desc) && PTR_ERR(desc) == -ENOENT &&
-> +	    of_device_is_compatible(dev->of_node, "xlnx,fpga-slave-serial"))
-> +		desc = devm_gpiod_get(dev, legacy_con_id, flags);
-> +
-> +	return desc;
-> +}
-> +
->  static const struct fpga_manager_ops xilinx_core_ops = {
->  	.state = xilinx_core_state,
->  	.write_init = xilinx_core_write_init,
-> @@ -186,12 +209,14 @@ int xilinx_core_probe(struct xilinx_fpga_core *core)
->  		return -EINVAL;
-> 
->  	/* PROGRAM_B is active low */
-> -	core->prog_b = devm_gpiod_get(core->dev, "prog_b", GPIOD_OUT_LOW);
-> +	core->prog_b = xilinx_core_devm_gpiod_get(core->dev, "prog", "prog_b",
-> +						  GPIOD_OUT_LOW);
->  	if (IS_ERR(core->prog_b))
->  		return dev_err_probe(core->dev, PTR_ERR(core->prog_b),
->  				     "Failed to get PROGRAM_B gpio\n");
-> 
-> -	core->init_b = devm_gpiod_get_optional(core->dev, "init-b", GPIOD_IN);
-> +	core->init_b = xilinx_core_devm_gpiod_get(core->dev, "init", "init-b",
-> +						  GPIOD_IN);
->  	if (IS_ERR(core->init_b))
->  		return dev_err_probe(core->dev, PTR_ERR(core->init_b),
->  				     "Failed to get INIT_B gpio\n");
+thanks,
 
-Please make a separate patch for the naming change. This give a chance
-to explain why the change and how to correctly use the GPIO names.
-
-> diff --git a/drivers/fpga/xilinx-selectmap.c b/drivers/fpga/xilinx-selectmap.c
-> new file mode 100644
-> index 0000000000000..b63f4623f8b2c
-> --- /dev/null
-> +++ b/drivers/fpga/xilinx-selectmap.c
-> @@ -0,0 +1,97 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Xilinx Spartan6 and 7 Series SelectMAP interface driver
-> + *
-> + * (C) 2024 Charles Perry <charles.perry@savoirfairelinux.com>
-> + *
-> + * Manage Xilinx FPGA firmware loaded over the SelectMAP configuration
-> + * interface.
-> + */
-> +
-> +#include "xilinx-core.h"
-> +
-> +#include <linux/platform_device.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/of.h>
-> +#include <linux/io.h>
-
-alphabetical order please.
-
-> +
-> +struct xilinx_selectmap_conf {
-> +	struct xilinx_fpga_core core;
-> +	void __iomem *base;
-> +};
-> +
-> +#define to_xilinx_selectmap_conf(obj) \
-> +	container_of(obj, struct xilinx_selectmap_conf, core)
-> +
-> +static int xilinx_selectmap_write(struct xilinx_fpga_core *core,
-> +				  const char *buf, size_t count)
-> +{
-> +	struct xilinx_selectmap_conf *conf = to_xilinx_selectmap_conf(core);
-> +	u32 i;
-> +
-> +	for (i = 0; i < count; ++i)
-> +		writeb(buf[i], conf->base);
-> +
-> +	return 0;
-> +}
-> +
-> +static int xilinx_selectmap_probe(struct platform_device *pdev)
-> +{
-> +	struct xilinx_selectmap_conf *conf;
-> +	struct resource *r;
-> +	void __iomem *base;
-> +	struct gpio_desc *csi_b;
-> +	struct gpio_desc *rdwr_b;
-
-One gpio_desc is enough, is it?  We don't use these gpio_desc anywhere
-else.
-
-BTW, reverse Xmas tree is not strictly required, but please do it when it is easy to follow.
-
-> +
-> +	conf = devm_kzalloc(&pdev->dev, sizeof(*conf), GFP_KERNEL);
-> +	if (!conf)
-> +		return -ENOMEM;
-> +
-> +	conf->core.dev = &pdev->dev;
-> +	conf->core.write = xilinx_selectmap_write;
-> +
-> +	base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
-
-I can't find where 'r' is used.
-
-Thanks,
-Yilun
-
-> +	if (IS_ERR(base))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(base),
-> +				     "ioremap error\n");
-> +	conf->base = base;
-> +
-> +	/* CSI_B is active low */
-> +	csi_b = devm_gpiod_get_optional(&pdev->dev, "csi", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(csi_b))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(csi_b),
-> +				     "Failed to get CSI_B gpio\n");
-> +
-> +	/* RDWR_B is active low */
-> +	rdwr_b = devm_gpiod_get_optional(&pdev->dev, "rdwr", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(rdwr_b))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(rdwr_b),
-> +				     "Failed to get RDWR_B gpio\n");
-> +
-> +	return xilinx_core_probe(&conf->core);
-> +}
-> +
-> +static const struct of_device_id xlnx_selectmap_of_match[] = {
-> +	{ .compatible = "xlnx,fpga-xc7s-selectmap", }, // Spartan-7
-> +	{ .compatible = "xlnx,fpga-xc7a-selectmap", }, // Artix-7
-> +	{ .compatible = "xlnx,fpga-xc7k-selectmap", }, // Kintex-7
-> +	{ .compatible = "xlnx,fpga-xc7v-selectmap", }, // Virtex-7
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, xlnx_selectmap_of_match);
-> +
-> +static struct platform_driver xilinx_selectmap_driver = {
-> +	.driver = {
-> +		.name = "xilinx-selectmap",
-> +		.of_match_table = xlnx_selectmap_of_match,
-> +	},
-> +	.probe  = xilinx_selectmap_probe,
-> +};
-> +
-> +module_platform_driver(xilinx_selectmap_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Charles Perry <charles.perry@savoirfairelinux.com>");
-> +MODULE_DESCRIPTION("Load Xilinx FPGA firmware over SelectMap");
-> --
-> 2.43.0
-> 
+greg k-h
 
