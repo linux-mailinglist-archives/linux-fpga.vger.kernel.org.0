@@ -1,382 +1,311 @@
-Return-Path: <linux-fpga+bounces-365-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-366-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4C4F89218F
-	for <lists+linux-fpga@lfdr.de>; Fri, 29 Mar 2024 17:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBE9B892301
+	for <lists+linux-fpga@lfdr.de>; Fri, 29 Mar 2024 18:48:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FFF11F25781
-	for <lists+linux-fpga@lfdr.de>; Fri, 29 Mar 2024 16:23:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B7771F23386
+	for <lists+linux-fpga@lfdr.de>; Fri, 29 Mar 2024 17:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236528593D;
-	Fri, 29 Mar 2024 16:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED278136E26;
+	Fri, 29 Mar 2024 17:48:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="duVhGNeq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F0XfQ3mq"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AB564C
-	for <linux-fpga@vger.kernel.org>; Fri, 29 Mar 2024 16:23:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24CB130A5C
+	for <linux-fpga@vger.kernel.org>; Fri, 29 Mar 2024 17:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711729424; cv=none; b=VeYdHscGFLVICdXFuddC1izWLIT/VfPrcTNqN0jjZLjqA/h/z5mTp7HHMDPUZByQqGwyytAYcjAq8MbXtgGF2x32zieN2K4s/fi2+7+ANzGeS8pvdZ425p6wH28mkOAF4C6VnyXpVB3XCWwX+f5EGHGuKi+sAsPrelws9Me8ERQ=
+	t=1711734490; cv=none; b=TOPIjc3Do23BTBCWyHYOAj8cj7BlbeE23NbAKDFDquzM06pWVbhGehPNBc5VR4oN8rWb9ebDzKWl5oy5pGEVNsJhbfjg9a/EeuL+5nyDNXUtbr7pHDy0saUJ9Ag6sQQW8u/sKKPQfcOni/ANCiGfWDdOWBfhYjhyU7x+mbY5Mpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711729424; c=relaxed/simple;
-	bh=hnr5VJeKVb/XJj+Pu7r4ZWUHA5D3fNPK71h3si4hbpQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mHpnslXOgpgiehrttAvWIDbEX8FsH109VOHvjOtT9t/ZiJYk9RTGSZHJQy6xOgyy2ybESYOsWjLiQwtvbgsVPJ4magoS3PhenGMsjBzgliBcuDgfnTxchEg8Va1ZZzKnPYYHcv2OrFLHzJeV3JMxUgxds02eVB2GN283Eh8wMwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=duVhGNeq; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Fri, 29 Mar 2024 09:23:23 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711729419;
+	s=arc-20240116; t=1711734490; c=relaxed/simple;
+	bh=973ZqU4LV/o8oIgHaoOlO0jC2gNX0j0wWK0Yc79NMGM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HPy5Dd9C/qCHclsMzWMz8un5lvYR8nDRuvoTlgnIUVrxbDbwNlwqfm4IHfL0mNnhaUt5+dzZbHEbCHLY5ebFOt8ZXukhNbLwXmcC9lT6vTnggoEfNRacAEbB57Nr0cvjd9eweumfpLPV8nLADJsfzrAPh4hFVz8QQz6dnjRetg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F0XfQ3mq; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711734487;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xbxFMR4Dp4nHhYuSHrXuG22aSt+5HA+RqxLpyhQUnSk=;
-	b=duVhGNeqbNfXW93isgDW5kdw0SzrlIUcsvaqs9Egon4o+bnSgTVht3iZEkf8rSQZ8Sfhkg
-	VnoxVZ55HCSdqhqjgo3UjCQ61r9aZeEPIekN7qYVNqLmS/ymKwUXW4tNdDRPDhfvv9GUQe
-	Sk8tnfFe9PbuhfhQ5JPNYTs0di2+vGM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Russ Weight <russ.weight@linux.dev>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: tests: use KUnit devices instead of platform
- devices
-Message-ID: <20240329162323.6kj6vspb4gwacxos@4VRSMR2-DT.corp.robot.car>
-References: <20240327120818.148430-1-marpagan@redhat.com>
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=x3/DpX6QupEcauZLwMrHtNsSzaJ+r7G/yL5hqFelshU=;
+	b=F0XfQ3mqM1cx0l+fWRbRBwLxSdxXbR2wxiBMJTFQA98ZCSJxDAK9PgLCcUIxiM6oFpOkSZ
+	EWo4GpiNWKUjDJCMO5ZtfKTKxgwco/D5bXlbyVB0X+mqSXWz+rMiqqOSUACX7RJOYF4kLA
+	YbCPAIU30dsmkpcR+2MaT+i58m2W+kg=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-325-HqTxSNSQPeWIoR6KetootQ-1; Fri, 29 Mar 2024 13:48:04 -0400
+X-MC-Unique: HqTxSNSQPeWIoR6KetootQ-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-698f2c392aaso9659386d6.1
+        for <linux-fpga@vger.kernel.org>; Fri, 29 Mar 2024 10:48:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711734483; x=1712339283;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x3/DpX6QupEcauZLwMrHtNsSzaJ+r7G/yL5hqFelshU=;
+        b=gU0Ipc5i96I+uMxj2Lk19F+AQggUVqBC1eIGhPMOl7+3AjmZBSMNYrgmZxccdo6R4O
+         EehiWQYZbrTFhpNc+HVxoyOQg5n8Z/ZoqM0zgQbptDzzRPpqYESwYz9RMmR5za5WeWYC
+         obqhcXP0BtGz9o77A1DbGkUemOzt5RlKarI9YfhL06FQLvA3SVuVUtyRWd8jSSrRNTPL
+         aUfe9oCaHxP9KECeybWleSyYdIv+kMMo0fnVQTxAGZRCzskYiHSe8awOwlWiDzFpWy/i
+         zq5tmOgvR+M5F27O6NabLRbtQ5ErHSIQHAzgJ134dViJcVKLD4L0oYMBMfpKqyiBQvvU
+         lwZw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYcTYPAAxHyFNVROB7i6CK2cMTlU3/XDVryjC/VVYhCtL355hdbeQEcp9lH31fJsLhsLNKmq1J85JT2urrLjKiWKnCdRYMn5FFLw==
+X-Gm-Message-State: AOJu0YxoyVwtPTu4VSxHRgXbh9TmvagUkGlittfd2ers614NRkwHLKPR
+	73KeA2ueQ6ZNOTb6Vmt3re5U/uNdYAf/XjFkl+WCP6jNdLLA3ponlKm0u4Gjgwd/9/xZNhnGJXm
+	BvwvPJ6Eg/qEWfTDAQoXsSNXbUZNKum8DW/1IMCjp4IJKuKdBX0mfvwtS8w==
+X-Received: by 2002:ad4:448e:0:b0:696:2efd:ab27 with SMTP id m14-20020ad4448e000000b006962efdab27mr4627638qvt.16.1711734483545;
+        Fri, 29 Mar 2024 10:48:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGhaiRy9L/U2xYhifLOYfnfKwxe0YwCfdSfzeXDDjXLH0sS5Tk3kEF+w/OyhpGNxfkxPKmm1w==
+X-Received: by 2002:ad4:448e:0:b0:696:2efd:ab27 with SMTP id m14-20020ad4448e000000b006962efdab27mr4627617qvt.16.1711734483240;
+        Fri, 29 Mar 2024 10:48:03 -0700 (PDT)
+Received: from klayman.redhat.com (net-2-34-30-89.cust.vodafonedsl.it. [2.34.30.89])
+        by smtp.gmail.com with ESMTPSA id kk15-20020a056214508f00b00692bd4905c9sm1850291qvb.15.2024.03.29.10.48.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Mar 2024 10:48:02 -0700 (PDT)
+From: Marco Pagani <marpagan@redhat.com>
+To: Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Tull <atull@opensource.altera.com>
+Cc: Marco Pagani <marpagan@redhat.com>,
+	Russ Weight <russ.weight@linux.dev>,
+	linux-fpga@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] fpga: region: add owner module and take its refcount
+Date: Fri, 29 Mar 2024 18:47:28 +0100
+Message-ID: <20240329174729.248144-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240327120818.148430-1-marpagan@redhat.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+The current implementation of the fpga region assumes that the low-level
+module registers a driver for the parent device and uses its owner pointer
+to take the module's refcount. This approach is problematic since it can
+lead to a null pointer dereference while attempting to get the region
+during programming if the parent device does not have a driver.
 
-On Wed, Mar 27, 2024 at 01:08:17PM +0100, Marco Pagani wrote:
-> KUnit now provides helper functions to create fake devices, so use them
-> instead of relying on platform devices.
-> 
-> Other changes: remove an unnecessary white space in the fpga region suite.
-> 
+To address this problem, add a module owner pointer to the fpga_region
+struct and use it to take the module's refcount. Modify the functions for
+registering a region to take an additional owner module parameter and
+rename them to avoid conflicts. Use the old function names for helper
+macros that automatically set the module that registers the region as the
+owner. This ensures compatibility with existing low-level control modules
+and reduces the chances of registering a region without setting the owner.
+
+Also, update the documentation to keep it consistent with the new interface
+for registering an fpga region.
+
+Other changes: unlock the mutex before calling put_device() in
+fpga_region_put() to avoid potential use after release issues.
+
+Fixes: 0fa20cdfcc1f ("fpga: fpga-region: device tree control for FPGA")
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Suggested-by: Xu Yilun <yilun.xu@intel.com>
 Reviewed-by: Russ Weight <russ.weight@linux.dev>
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> ---
->  drivers/fpga/tests/fpga-bridge-test.c | 33 ++++++++++-----------
->  drivers/fpga/tests/fpga-mgr-test.c    | 16 +++++------
->  drivers/fpga/tests/fpga-region-test.c | 41 +++++++++++++--------------
->  3 files changed, 44 insertions(+), 46 deletions(-)
-> 
-> diff --git a/drivers/fpga/tests/fpga-bridge-test.c b/drivers/fpga/tests/fpga-bridge-test.c
-> index 1d258002cdd7..2f7a24f23808 100644
-> --- a/drivers/fpga/tests/fpga-bridge-test.c
-> +++ b/drivers/fpga/tests/fpga-bridge-test.c
-> @@ -7,8 +7,8 @@
->   * Author: Marco Pagani <marpagan@redhat.com>
->   */
->  
-> +#include <kunit/device.h>
->  #include <kunit/test.h>
-> -#include <linux/device.h>
->  #include <linux/fpga/fpga-bridge.h>
->  #include <linux/module.h>
->  #include <linux/types.h>
-> @@ -19,7 +19,7 @@ struct bridge_stats {
->  
->  struct bridge_ctx {
->  	struct fpga_bridge *bridge;
-> -	struct platform_device *pdev;
-> +	struct device *dev;
->  	struct bridge_stats stats;
->  };
->  
-> @@ -43,30 +43,31 @@ static const struct fpga_bridge_ops fake_bridge_ops = {
->  /**
->   * register_test_bridge() - Register a fake FPGA bridge for testing.
->   * @test: KUnit test context object.
-> + * @dev_name: name of the kunit device to be registered
->   *
->   * Return: Context of the newly registered FPGA bridge.
->   */
-> -static struct bridge_ctx *register_test_bridge(struct kunit *test)
-> +static struct bridge_ctx *register_test_bridge(struct kunit *test, const char *dev_name)
->  {
->  	struct bridge_ctx *ctx;
->  
->  	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
->  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
->  
-> -	ctx->pdev = platform_device_register_simple("bridge_pdev", PLATFORM_DEVID_AUTO, NULL, 0);
-> -	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->pdev);
-> +	ctx->dev = kunit_device_register(test, dev_name);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->dev);
->  
-> -	ctx->bridge = fpga_bridge_register(&ctx->pdev->dev, "Fake FPGA bridge", &fake_bridge_ops,
-> +	ctx->bridge = fpga_bridge_register(ctx->dev, "Fake FPGA bridge", &fake_bridge_ops,
->  					   &ctx->stats);
->  	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->bridge));
->  
->  	return ctx;
->  }
->  
-> -static void unregister_test_bridge(struct bridge_ctx *ctx)
-> +static void unregister_test_bridge(struct kunit *test, struct bridge_ctx *ctx)
->  {
->  	fpga_bridge_unregister(ctx->bridge);
-> -	platform_device_unregister(ctx->pdev);
-> +	kunit_device_unregister(test, ctx->dev);
->  }
->  
->  static void fpga_bridge_test_get(struct kunit *test)
-> @@ -74,10 +75,10 @@ static void fpga_bridge_test_get(struct kunit *test)
->  	struct bridge_ctx *ctx = test->priv;
->  	struct fpga_bridge *bridge;
->  
-> -	bridge = fpga_bridge_get(&ctx->pdev->dev, NULL);
-> +	bridge = fpga_bridge_get(ctx->dev, NULL);
->  	KUNIT_EXPECT_PTR_EQ(test, bridge, ctx->bridge);
->  
-> -	bridge = fpga_bridge_get(&ctx->pdev->dev, NULL);
-> +	bridge = fpga_bridge_get(ctx->dev, NULL);
->  	KUNIT_EXPECT_EQ(test, PTR_ERR(bridge), -EBUSY);
->  
->  	fpga_bridge_put(ctx->bridge);
-> @@ -105,19 +106,19 @@ static void fpga_bridge_test_get_put_list(struct kunit *test)
->  	int ret;
->  
->  	ctx_0 = test->priv;
-> -	ctx_1 = register_test_bridge(test);
-> +	ctx_1 = register_test_bridge(test, "fpga-bridge-test-dev-1");
->  
->  	INIT_LIST_HEAD(&bridge_list);
->  
->  	/* Get bridge 0 and add it to the list */
-> -	ret = fpga_bridge_get_to_list(&ctx_0->pdev->dev, NULL, &bridge_list);
-> +	ret = fpga_bridge_get_to_list(ctx_0->dev, NULL, &bridge_list);
->  	KUNIT_EXPECT_EQ(test, ret, 0);
->  
->  	KUNIT_EXPECT_PTR_EQ(test, ctx_0->bridge,
->  			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
->  
->  	/* Get bridge 1 and add it to the list */
-> -	ret = fpga_bridge_get_to_list(&ctx_1->pdev->dev, NULL, &bridge_list);
-> +	ret = fpga_bridge_get_to_list(ctx_1->dev, NULL, &bridge_list);
->  	KUNIT_EXPECT_EQ(test, ret, 0);
->  
->  	KUNIT_EXPECT_PTR_EQ(test, ctx_1->bridge,
-> @@ -141,19 +142,19 @@ static void fpga_bridge_test_get_put_list(struct kunit *test)
->  
->  	KUNIT_EXPECT_TRUE(test, list_empty(&bridge_list));
->  
-> -	unregister_test_bridge(ctx_1);
-> +	unregister_test_bridge(test, ctx_1);
->  }
->  
->  static int fpga_bridge_test_init(struct kunit *test)
->  {
-> -	test->priv = register_test_bridge(test);
-> +	test->priv = register_test_bridge(test, "fpga-bridge-test-dev-0");
->  
->  	return 0;
->  }
->  
->  static void fpga_bridge_test_exit(struct kunit *test)
->  {
-> -	unregister_test_bridge(test->priv);
-> +	unregister_test_bridge(test, test->priv);
->  }
->  
->  static struct kunit_case fpga_bridge_test_cases[] = {
-> diff --git a/drivers/fpga/tests/fpga-mgr-test.c b/drivers/fpga/tests/fpga-mgr-test.c
-> index 6acec55b60ce..125b3a4d43c6 100644
-> --- a/drivers/fpga/tests/fpga-mgr-test.c
-> +++ b/drivers/fpga/tests/fpga-mgr-test.c
-> @@ -7,8 +7,8 @@
->   * Author: Marco Pagani <marpagan@redhat.com>
->   */
->  
-> +#include <kunit/device.h>
->  #include <kunit/test.h>
-> -#include <linux/device.h>
->  #include <linux/fpga/fpga-mgr.h>
->  #include <linux/module.h>
->  #include <linux/scatterlist.h>
-> @@ -40,7 +40,7 @@ struct mgr_stats {
->  struct mgr_ctx {
->  	struct fpga_image_info *img_info;
->  	struct fpga_manager *mgr;
-> -	struct platform_device *pdev;
-> +	struct device *dev;
->  	struct mgr_stats stats;
->  };
->  
-> @@ -194,7 +194,7 @@ static void fpga_mgr_test_get(struct kunit *test)
->  	struct mgr_ctx *ctx = test->priv;
->  	struct fpga_manager *mgr;
->  
-> -	mgr = fpga_mgr_get(&ctx->pdev->dev);
-> +	mgr = fpga_mgr_get(ctx->dev);
->  	KUNIT_EXPECT_PTR_EQ(test, mgr, ctx->mgr);
->  
->  	fpga_mgr_put(ctx->mgr);
-> @@ -284,14 +284,14 @@ static int fpga_mgr_test_init(struct kunit *test)
->  	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
->  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
->  
-> -	ctx->pdev = platform_device_register_simple("mgr_pdev", PLATFORM_DEVID_AUTO, NULL, 0);
-> -	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->pdev);
-> +	ctx->dev = kunit_device_register(test, "fpga-manager-test-dev");
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->dev);
->  
-> -	ctx->mgr = devm_fpga_mgr_register(&ctx->pdev->dev, "Fake FPGA Manager", &fake_mgr_ops,
-> +	ctx->mgr = devm_fpga_mgr_register(ctx->dev, "Fake FPGA Manager", &fake_mgr_ops,
->  					  &ctx->stats);
->  	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->mgr));
->  
-> -	ctx->img_info = fpga_image_info_alloc(&ctx->pdev->dev);
-> +	ctx->img_info = fpga_image_info_alloc(ctx->dev);
->  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->img_info);
->  
->  	test->priv = ctx;
-> @@ -304,7 +304,7 @@ static void fpga_mgr_test_exit(struct kunit *test)
->  	struct mgr_ctx *ctx = test->priv;
->  
->  	fpga_image_info_free(ctx->img_info);
-> -	platform_device_unregister(ctx->pdev);
-> +	kunit_device_unregister(test, ctx->dev);
->  }
->  
->  static struct kunit_case fpga_mgr_test_cases[] = {
-> diff --git a/drivers/fpga/tests/fpga-region-test.c b/drivers/fpga/tests/fpga-region-test.c
-> index baab07e3fc59..bcf0651df261 100644
-> --- a/drivers/fpga/tests/fpga-region-test.c
-> +++ b/drivers/fpga/tests/fpga-region-test.c
-> @@ -7,12 +7,12 @@
->   * Author: Marco Pagani <marpagan@redhat.com>
->   */
->  
-> +#include <kunit/device.h>
->  #include <kunit/test.h>
->  #include <linux/fpga/fpga-bridge.h>
->  #include <linux/fpga/fpga-mgr.h>
->  #include <linux/fpga/fpga-region.h>
->  #include <linux/module.h>
-> -#include <linux/platform_device.h>
->  #include <linux/types.h>
->  
->  struct mgr_stats {
-> @@ -26,11 +26,11 @@ struct bridge_stats {
->  
->  struct test_ctx {
->  	struct fpga_manager *mgr;
-> -	struct platform_device *mgr_pdev;
-> +	struct device *mgr_dev;
->  	struct fpga_bridge *bridge;
-> -	struct platform_device *bridge_pdev;
-> +	struct device *bridge_dev;
->  	struct fpga_region *region;
-> -	struct platform_device *region_pdev;
-> +	struct device *region_dev;
->  	struct bridge_stats bridge_stats;
->  	struct mgr_stats mgr_stats;
->  };
-> @@ -91,7 +91,7 @@ static void fpga_region_test_class_find(struct kunit *test)
->  	struct test_ctx *ctx = test->priv;
->  	struct fpga_region *region;
->  
-> -	region = fpga_region_class_find(NULL, &ctx->region_pdev->dev, fake_region_match);
-> +	region = fpga_region_class_find(NULL, ctx->region_dev, fake_region_match);
->  	KUNIT_EXPECT_PTR_EQ(test, region, ctx->region);
->  
->  	put_device(&region->dev);
-> @@ -108,7 +108,7 @@ static void fpga_region_test_program_fpga(struct kunit *test)
->  	char img_buf[4];
->  	int ret;
->  
-> -	img_info = fpga_image_info_alloc(&ctx->mgr_pdev->dev);
-> +	img_info = fpga_image_info_alloc(ctx->mgr_dev);
->  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, img_info);
->  
->  	img_info->buf = img_buf;
-> @@ -148,32 +148,30 @@ static int fpga_region_test_init(struct kunit *test)
->  	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
->  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
->  
-> -	ctx->mgr_pdev = platform_device_register_simple("mgr_pdev", PLATFORM_DEVID_AUTO, NULL, 0);
-> -	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->mgr_pdev);
-> +	ctx->mgr_dev = kunit_device_register(test, "fpga-manager-test-dev");
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->mgr_dev);
->  
-> -	ctx->mgr = devm_fpga_mgr_register(&ctx->mgr_pdev->dev, "Fake FPGA Manager", &fake_mgr_ops,
-> -					  &ctx->mgr_stats);
-> +	ctx->mgr = devm_fpga_mgr_register(ctx->mgr_dev, "Fake FPGA Manager",
-> +					  &fake_mgr_ops, &ctx->mgr_stats);
->  	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->mgr));
->  
-> -	ctx->bridge_pdev = platform_device_register_simple("bridge_pdev", PLATFORM_DEVID_AUTO,
-> -							   NULL, 0);
-> -	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->bridge_pdev);
-> +	ctx->bridge_dev = kunit_device_register(test, "fpga-bridge-test-dev");
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->bridge_dev);
->  
-> -	ctx->bridge = fpga_bridge_register(&ctx->bridge_pdev->dev, "Fake FPGA Bridge",
-> +	ctx->bridge = fpga_bridge_register(ctx->bridge_dev, "Fake FPGA Bridge",
->  					   &fake_bridge_ops, &ctx->bridge_stats);
->  	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->bridge));
->  
->  	ctx->bridge_stats.enable = true;
->  
-> -	ctx->region_pdev = platform_device_register_simple("region_pdev", PLATFORM_DEVID_AUTO,
-> -							   NULL, 0);
-> -	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->region_pdev);
-> +	ctx->region_dev = kunit_device_register(test, "fpga-region-test-dev");
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->region_dev);
->  
->  	region_info.mgr = ctx->mgr;
->  	region_info.priv = ctx->bridge;
->  	region_info.get_bridges = fake_region_get_bridges;
->  
-> -	ctx->region = fpga_region_register_full(&ctx->region_pdev->dev, &region_info);
-> +	ctx->region = fpga_region_register_full(ctx->region_dev, &region_info);
->  	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->region));
->  
->  	test->priv = ctx;
-> @@ -186,18 +184,17 @@ static void fpga_region_test_exit(struct kunit *test)
->  	struct test_ctx *ctx = test->priv;
->  
->  	fpga_region_unregister(ctx->region);
-> -	platform_device_unregister(ctx->region_pdev);
-> +	kunit_device_unregister(test, ctx->region_dev);
->  
->  	fpga_bridge_unregister(ctx->bridge);
-> -	platform_device_unregister(ctx->bridge_pdev);
-> +	kunit_device_unregister(test, ctx->bridge_dev);
->  
-> -	platform_device_unregister(ctx->mgr_pdev);
-> +	kunit_device_unregister(test, ctx->mgr_dev);
->  }
->  
->  static struct kunit_case fpga_region_test_cases[] = {
->  	KUNIT_CASE(fpga_region_test_class_find),
->  	KUNIT_CASE(fpga_region_test_program_fpga),
-> -
->  	{}
->  };
->  
-> 
-> base-commit: b1a91ca25f15b6d7b311de4465854a5981dee3d3
-> -- 
-> 2.44.0
-> 
+v3:
+- Add reviewed-by Russ Weight
+v2:
+- Fixed typo in the documentation sets -> set
+- Renamed owner pointer get_br_owner -> br_owner
+---
+ Documentation/driver-api/fpga/fpga-region.rst | 13 ++++++----
+ drivers/fpga/fpga-region.c                    | 26 +++++++++++--------
+ include/linux/fpga/fpga-region.h              | 13 +++++++---
+ 3 files changed, 33 insertions(+), 19 deletions(-)
+
+diff --git a/Documentation/driver-api/fpga/fpga-region.rst b/Documentation/driver-api/fpga/fpga-region.rst
+index dc55d60a0b4a..77190a5ef330 100644
+--- a/Documentation/driver-api/fpga/fpga-region.rst
++++ b/Documentation/driver-api/fpga/fpga-region.rst
+@@ -46,13 +46,16 @@ API to add a new FPGA region
+ ----------------------------
+ 
+ * struct fpga_region - The FPGA region struct
+-* struct fpga_region_info - Parameter structure for fpga_region_register_full()
+-* fpga_region_register_full() -  Create and register an FPGA region using the
++* struct fpga_region_info - Parameter structure for __fpga_region_register_full()
++* __fpga_region_register_full() -  Create and register an FPGA region using the
+   fpga_region_info structure to provide the full flexibility of options
+-* fpga_region_register() -  Create and register an FPGA region using standard
++* __fpga_region_register() -  Create and register an FPGA region using standard
+   arguments
+ * fpga_region_unregister() -  Unregister an FPGA region
+ 
++Helper macros ``fpga_region_register()`` and ``fpga_region_register_full()``
++automatically set the module that registers the FPGA region as the owner.
++
+ The FPGA region's probe function will need to get a reference to the FPGA
+ Manager it will be using to do the programming.  This usually would happen
+ during the region's probe function.
+@@ -82,10 +85,10 @@ following APIs to handle building or tearing down that list.
+    :functions: fpga_region_info
+ 
+ .. kernel-doc:: drivers/fpga/fpga-region.c
+-   :functions: fpga_region_register_full
++   :functions: __fpga_region_register
+ 
+ .. kernel-doc:: drivers/fpga/fpga-region.c
+-   :functions: fpga_region_register
++   :functions: __fpga_region_register_full
+ 
+ .. kernel-doc:: drivers/fpga/fpga-region.c
+    :functions: fpga_region_unregister
+diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+index b364a929425c..1beb7415c2dc 100644
+--- a/drivers/fpga/fpga-region.c
++++ b/drivers/fpga/fpga-region.c
+@@ -53,7 +53,7 @@ static struct fpga_region *fpga_region_get(struct fpga_region *region)
+ 	}
+ 
+ 	get_device(dev);
+-	if (!try_module_get(dev->parent->driver->owner)) {
++	if (!try_module_get(region->br_owner)) {
+ 		put_device(dev);
+ 		mutex_unlock(&region->mutex);
+ 		return ERR_PTR(-ENODEV);
+@@ -75,9 +75,9 @@ static void fpga_region_put(struct fpga_region *region)
+ 
+ 	dev_dbg(dev, "put\n");
+ 
+-	module_put(dev->parent->driver->owner);
+-	put_device(dev);
++	module_put(region->br_owner);
+ 	mutex_unlock(&region->mutex);
++	put_device(dev);
+ }
+ 
+ /**
+@@ -181,14 +181,16 @@ static struct attribute *fpga_region_attrs[] = {
+ ATTRIBUTE_GROUPS(fpga_region);
+ 
+ /**
+- * fpga_region_register_full - create and register an FPGA Region device
++ * __fpga_region_register_full - create and register an FPGA Region device
+  * @parent: device parent
+  * @info: parameters for FPGA Region
++ * @owner: owner module containing the get_bridges function
+  *
+  * Return: struct fpga_region or ERR_PTR()
+  */
+ struct fpga_region *
+-fpga_region_register_full(struct device *parent, const struct fpga_region_info *info)
++__fpga_region_register_full(struct device *parent, const struct fpga_region_info *info,
++			    struct module *owner)
+ {
+ 	struct fpga_region *region;
+ 	int id, ret = 0;
+@@ -213,6 +215,7 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
+ 	region->compat_id = info->compat_id;
+ 	region->priv = info->priv;
+ 	region->get_bridges = info->get_bridges;
++	region->br_owner = owner;
+ 
+ 	mutex_init(&region->mutex);
+ 	INIT_LIST_HEAD(&region->bridge_list);
+@@ -241,13 +244,14 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
+ 
+ 	return ERR_PTR(ret);
+ }
+-EXPORT_SYMBOL_GPL(fpga_region_register_full);
++EXPORT_SYMBOL_GPL(__fpga_region_register_full);
+ 
+ /**
+- * fpga_region_register - create and register an FPGA Region device
++ * __fpga_region_register - create and register an FPGA Region device
+  * @parent: device parent
+  * @mgr: manager that programs this region
+  * @get_bridges: optional function to get bridges to a list
++ * @owner: owner module containing get_bridges function
+  *
+  * This simple version of the register function should be sufficient for most users.
+  * The fpga_region_register_full() function is available for users that need to
+@@ -256,17 +260,17 @@ EXPORT_SYMBOL_GPL(fpga_region_register_full);
+  * Return: struct fpga_region or ERR_PTR()
+  */
+ struct fpga_region *
+-fpga_region_register(struct device *parent, struct fpga_manager *mgr,
+-		     int (*get_bridges)(struct fpga_region *))
++__fpga_region_register(struct device *parent, struct fpga_manager *mgr,
++		       int (*get_bridges)(struct fpga_region *), struct module *owner)
+ {
+ 	struct fpga_region_info info = { 0 };
+ 
+ 	info.mgr = mgr;
+ 	info.get_bridges = get_bridges;
+ 
+-	return fpga_region_register_full(parent, &info);
++	return __fpga_region_register_full(parent, &info, owner);
+ }
+-EXPORT_SYMBOL_GPL(fpga_region_register);
++EXPORT_SYMBOL_GPL(__fpga_region_register);
+ 
+ /**
+  * fpga_region_unregister - unregister an FPGA region
+diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
+index 9d4d32909340..d175babc3d68 100644
+--- a/include/linux/fpga/fpga-region.h
++++ b/include/linux/fpga/fpga-region.h
+@@ -36,6 +36,7 @@ struct fpga_region_info {
+  * @mgr: FPGA manager
+  * @info: FPGA image info
+  * @compat_id: FPGA region id for compatibility check.
++ * @br_owner: module containing the get_bridges function
+  * @priv: private data
+  * @get_bridges: optional function to get bridges to a list
+  */
+@@ -46,6 +47,7 @@ struct fpga_region {
+ 	struct fpga_manager *mgr;
+ 	struct fpga_image_info *info;
+ 	struct fpga_compat_id *compat_id;
++	struct module *br_owner;
+ 	void *priv;
+ 	int (*get_bridges)(struct fpga_region *region);
+ };
+@@ -58,12 +60,17 @@ fpga_region_class_find(struct device *start, const void *data,
+ 
+ int fpga_region_program_fpga(struct fpga_region *region);
+ 
++#define fpga_region_register_full(parent, info) \
++	__fpga_region_register_full(parent, info, THIS_MODULE)
+ struct fpga_region *
+-fpga_region_register_full(struct device *parent, const struct fpga_region_info *info);
++__fpga_region_register_full(struct device *parent, const struct fpga_region_info *info,
++			    struct module *owner);
+ 
++#define fpga_region_register(parent, mgr, get_bridges) \
++	__fpga_region_register(parent, mgr, get_bridges, THIS_MODULE)
+ struct fpga_region *
+-fpga_region_register(struct device *parent, struct fpga_manager *mgr,
+-		     int (*get_bridges)(struct fpga_region *));
++__fpga_region_register(struct device *parent, struct fpga_manager *mgr,
++		       int (*get_bridges)(struct fpga_region *), struct module *owner);
+ void fpga_region_unregister(struct fpga_region *region);
+ 
+ #endif /* _FPGA_REGION_H */
+
+base-commit: b1a91ca25f15b6d7b311de4465854a5981dee3d3
+-- 
+2.44.0
+
 
