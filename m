@@ -1,976 +1,382 @@
-Return-Path: <linux-fpga+bounces-364-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-365-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42456892088
-	for <lists+linux-fpga@lfdr.de>; Fri, 29 Mar 2024 16:35:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4C4F89218F
+	for <lists+linux-fpga@lfdr.de>; Fri, 29 Mar 2024 17:23:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 655051C28443
-	for <lists+linux-fpga@lfdr.de>; Fri, 29 Mar 2024 15:35:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FFF11F25781
+	for <lists+linux-fpga@lfdr.de>; Fri, 29 Mar 2024 16:23:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD9F425778;
-	Fri, 29 Mar 2024 15:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236528593D;
+	Fri, 29 Mar 2024 16:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m1mBpHOm"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="duVhGNeq"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2438F2032C;
-	Fri, 29 Mar 2024 15:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AB564C
+	for <linux-fpga@vger.kernel.org>; Fri, 29 Mar 2024 16:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711726501; cv=none; b=VDjE/WrxqfbRAUW92Sodnx0NW/5AfBqySaIS39FiqNJdlZYKYVYHphCEmIUgfYtQH2sYsCcRNilDUwAOQlGquFdDZ1Rlf3v32FMskyOsEA0UmCY33fwrGPI1dF6bKP+bpWSq22Od04+RgShMd2LUSttNv2H0CQBs95UQfqq3Rlo=
+	t=1711729424; cv=none; b=VeYdHscGFLVICdXFuddC1izWLIT/VfPrcTNqN0jjZLjqA/h/z5mTp7HHMDPUZByQqGwyytAYcjAq8MbXtgGF2x32zieN2K4s/fi2+7+ANzGeS8pvdZ425p6wH28mkOAF4C6VnyXpVB3XCWwX+f5EGHGuKi+sAsPrelws9Me8ERQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711726501; c=relaxed/simple;
-	bh=PlqFtANZvTFkjRxADqMEAOJ7g+6Knr/SrGTQukJqw9E=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=YI29bk/CRpRkzVjuqQSqyiH/uh3AF0mGwLQU4tIhFtLN0FVzvYd7U2CqGAJWUYJI8UT0bcTErnlnZMOaRGWzPnNNgQHs+r+wmnS6YmnEzyCsv9Cj/gVk6J/AaZqIK9ibpshUldRLwX1bAgDY2/6tERBRhL2RUKu4lQ49obqnLL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m1mBpHOm; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711726499; x=1743262499;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=PlqFtANZvTFkjRxADqMEAOJ7g+6Knr/SrGTQukJqw9E=;
-  b=m1mBpHOmPcummwx1eCb90fl+79fTcIJU1x3YTkLPKXPWrzKSFOQudxcv
-   3GqR+1wkemkZZNieLZ/gLFs+HaB/SsHp84GujT0Txb6ZmgzRhFg/j4f/g
-   UadBWWcdsLxK08ckTJZbrOQ78K4D7SKcLL8/zPmN3fTQK1fsZEdvJU/eb
-   gN5Dt22iYHDTToarGxA8hWOEOxkB/JKH/booGV32/bhRb5ZpWB0+MJosT
-   Ef4noepE5QIpSE2Esmt8vHlWG2abamypHHD6tybjGxXvnv+bW3FbPgGlb
-   Pj05l9ERrCZUkEhIAAzq0i8qUPt+paRrI1prQFLbzgGwKIQuQIQOe6h/a
-   w==;
-X-CSE-ConnectionGUID: XHU7xvZgQuijqsNaFQWKAg==
-X-CSE-MsgGUID: yaspNmNjRhKxTp8TlppiLw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="10730628"
-X-IronPort-AV: E=Sophos;i="6.07,165,1708416000"; 
-   d="scan'208";a="10730628"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 08:34:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,165,1708416000"; 
-   d="scan'208";a="17058363"
-Received: from sj-4150-psse-sw-opae-dev2.sj.intel.com ([10.233.115.162])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 08:34:58 -0700
-Date: Fri, 29 Mar 2024 08:34:49 -0700 (PDT)
-From: matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@sj-4150-psse-sw-opae-dev2
-To: Xu Yilun <yilun.xu@linux.intel.com>
-cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com, 
-    linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    Tim Whisonant <tim.whisonant@intel.com>, 
-    Ananda Ravuri <ananda.ravuri@intel.com>
-Subject: Re: [PATCH] fpga: add DFL driver for CXL Cache IP block
-In-Reply-To: <ZflkK/VZO0wqiAhz@yilunxu-OptiPlex-7050>
-Message-ID: <alpine.DEB.2.22.394.2403281549070.340749@sj-4150-psse-sw-opae-dev2>
-References: <20240308172327.1970160-1-matthew.gerlach@linux.intel.com> <ZflkK/VZO0wqiAhz@yilunxu-OptiPlex-7050>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+	s=arc-20240116; t=1711729424; c=relaxed/simple;
+	bh=hnr5VJeKVb/XJj+Pu7r4ZWUHA5D3fNPK71h3si4hbpQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mHpnslXOgpgiehrttAvWIDbEX8FsH109VOHvjOtT9t/ZiJYk9RTGSZHJQy6xOgyy2ybESYOsWjLiQwtvbgsVPJ4magoS3PhenGMsjBzgliBcuDgfnTxchEg8Va1ZZzKnPYYHcv2OrFLHzJeV3JMxUgxds02eVB2GN283Eh8wMwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=duVhGNeq; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Fri, 29 Mar 2024 09:23:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711729419;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xbxFMR4Dp4nHhYuSHrXuG22aSt+5HA+RqxLpyhQUnSk=;
+	b=duVhGNeqbNfXW93isgDW5kdw0SzrlIUcsvaqs9Egon4o+bnSgTVht3iZEkf8rSQZ8Sfhkg
+	VnoxVZ55HCSdqhqjgo3UjCQ61r9aZeEPIekN7qYVNqLmS/ymKwUXW4tNdDRPDhfvv9GUQe
+	Sk8tnfFe9PbuhfhQ5JPNYTs0di2+vGM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Russ Weight <russ.weight@linux.dev>
+To: Marco Pagani <marpagan@redhat.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: tests: use KUnit devices instead of platform
+ devices
+Message-ID: <20240329162323.6kj6vspb4gwacxos@4VRSMR2-DT.corp.robot.car>
+References: <20240327120818.148430-1-marpagan@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240327120818.148430-1-marpagan@redhat.com>
+X-Migadu-Flow: FLOW_OUT
 
 
+On Wed, Mar 27, 2024 at 01:08:17PM +0100, Marco Pagani wrote:
+> KUnit now provides helper functions to create fake devices, so use them
+> instead of relying on platform devices.
+> 
+> Other changes: remove an unnecessary white space in the fpga region suite.
+> 
+Reviewed-by: Russ Weight <russ.weight@linux.dev>
 
-On Tue, 19 Mar 2024, Xu Yilun wrote:
-
-> On Fri, Mar 08, 2024 at 09:23:27AM -0800, Matthew Gerlach wrote:
->> From: Tim Whisonant <tim.whisonant@intel.com>
->>
->> Add a Device Feature List (DFL) driver for the
->> Intel CXL Cache IP block. The driver
->> provides a means of accessing the device MMIO and the
->
-> Why the device MMIO should be accessed by userspace?
-
-The definition of the MMIO space is actually dependent on the the 
-custom logic in the FPGA image. Given the variability of the custom 
-logic implemented in the FPGA, it seems burdensome to handle the variability in 
-kernel code.
-
->
->> capability to pin buffers and program their physical
->> addresses into the HE-Cache registers. User interface
->
-> Are these registers also exposed to userspace?
-
-These registers are currently exposed to user space as well. It probably 
-make sense to be consistent and let user space code handle these 
-registers, like all custom logic registers, in user space.
-
->
-> And this patch to support a new device/IP, please firstly describe
-> what the device/IP is doing.  I think not everyone(including me) here
-> is familar with CXL standard and how this IP block is implementing CXL
-> functionality.  Some reference documentation is also helpful.
-
-This is very good feedback. There are actually multiple IP blocks involved 
-here. There is a Hard IP block (HIP), and there is a FPGA/soft IP block 
-interfacing the HIP, and then there is custom logic implementing a desired 
-application.
-
->
-> After a quick skim of this patch, I can see user is trying to write a
-> set of physical addrs to some register, but have no idea why this
-> should be done. i.e. Do not reiterate what the code literally does.
-
-In this case, the physical addresses are being written to the custom, 
-application logic in the FPGA and should be moved to user space.
-
-If all MMIO to the custom logic is moved to user space, then this driver 
-is not really about CXL and hardware. This driver just provides services 
-of pinning/unpinning memory with numa node awareness. In this case, the 
-driver name is wrong because there is nothing related to CXL nor any 
-specific hardware implementation.
-
->
->> is exposed via /dev/dfl-cxl-cache.X as described in
->> include/uapi/linux/fpga-dfl.h.
->
-> And please split the patch, e.g. first add a skeleton of bus driver,
-> then add the skeleton of char interface, then add the functionalities
-> one by one.  This gives chances to clearly describe each function, and
-> why add it, etc.
-
-If this driver is only implementing a char interface to memory management, 
-does it make sense to split the code into separate patches?
-
->
-> But first of all, lets get to know the IP block.
-
-If this driver is agnostic of all IP, then there is no IP block to get to 
-know :)
-
-Thanks for the great feedback,
-
-Matthew
-
->
-> Thanks,
-> Yilun
->
->>
->> Signed-off-by: Tim Whisonant <tim.whisonant@intel.com>
->> Co-developed-by: Ananda Ravuri <ananda.ravuri@intel.com>
->> Signed-off-by: Ananda Ravuri <ananda.ravuri@intel.com>
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> ---
->>  drivers/fpga/Kconfig          |  11 +
->>  drivers/fpga/Makefile         |   1 +
->>  drivers/fpga/dfl-cxl-cache.c  | 645 ++++++++++++++++++++++++++++++++++
->>  include/uapi/linux/fpga-dfl.h |  98 ++++++
->>  4 files changed, 755 insertions(+)
->>  create mode 100644 drivers/fpga/dfl-cxl-cache.c
->>
->> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
->> index 2f689ac4ba3a..00931a3deebf 100644
->> --- a/drivers/fpga/Kconfig
->> +++ b/drivers/fpga/Kconfig
->> @@ -257,6 +257,17 @@ config FPGA_M10_BMC_SEC_UPDATE
->>  	  (BMC) and provides support for secure updates for the BMC image,
->>  	  the FPGA image, the Root Entry Hashes, etc.
->>
->> +config FPGA_DFL_CXL_CACHE
->> +	tristate "Intel CXL cache driver"
->> +	depends on DRM && FPGA_DFL
->> +	help
->> +	  This is the driver for CXL cache Accelerated Function Unit
->> +	  (AFU) which configures the IP and provides DMA buffer management
->> +	  to user space.
->> +
->> +	  To compile this driver as a module, chose M here: the
->> +	  module will be called dfl_cxl_cache.
->> +
->>  config FPGA_MGR_MICROCHIP_SPI
->>  	tristate "Microchip Polarfire SPI FPGA manager"
->>  	depends on SPI
->> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
->> index 352a2612623e..970902810845 100644
->> --- a/drivers/fpga/Makefile
->> +++ b/drivers/fpga/Makefile
->> @@ -55,6 +55,7 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
->>
->>  # Drivers for FPGAs which implement DFL
->>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
->> +obj-$(CONFIG_FPGA_DFL_CXL_CACHE)	+= dfl-cxl-cache.o
->>
->>  # KUnit tests
->>  obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
->> diff --git a/drivers/fpga/dfl-cxl-cache.c b/drivers/fpga/dfl-cxl-cache.c
->> new file mode 100644
->> index 000000000000..ee2ae04ac058
->> --- /dev/null
->> +++ b/drivers/fpga/dfl-cxl-cache.c
->> @@ -0,0 +1,645 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * DFL device driver for Host Exerciser Cache private feature.
->> + *
->> + * Provides a means of accessing the device MMIO and the
->> + * capability to pin buffers and program their physical
->> + * addresses into the HE-Cache registers. User interface
->> + * is exposed via /dev/dfl-cxl-cache.X as described in
->> + * include/uapi/linux/fpga-dfl.h.
->> + *
->> + * Copyright (C) 2023 Intel Corporation, Inc.
->> + *
->> + * Authors:
->> + *   Tim Whisonant <tim.whisonant@intel.com>
->> + *   Ananda Ravuri <ananda.ravuri@intel.com>
->> + */
->> +
->> +#include <linux/bitfield.h>
->> +#include <linux/cdev.h>
->> +#include <linux/cleanup.h>
->> +#include <linux/container_of.h>
->> +#include <linux/dfl.h>
->> +#include <linux/errno.h>
->> +#include <linux/fpga-dfl.h>
->> +#include <linux/highmem.h>
->> +#include <linux/io.h>
->> +#include <linux/mmap_lock.h>
->> +#include <linux/module.h>
->> +#include <linux/mutex.h>
->> +#include <linux/pgtable.h>
->> +#include <linux/slab.h>
->> +#include <linux/spinlock.h>
->> +#include <linux/types.h>
->> +
->> +#include <drm/drm_cache.h>
->> +
->> +#define DFL_CXL_CACHE_DRIVER_NAME	"dfl-cxl-cache"
->> +#define FME_FEATURE_ID_CXL_CACHE	0x25
->> +
->> +struct dfl_cxl_cache_buffer_region {
->> +	struct rb_node node;
->> +	u32 flags;
->> +	u64 user_addr;
->> +	u64 length;
->> +	struct page **pages;
->> +	phys_addr_t phys;
->> +	u64 offset[DFL_ARRAY_MAX_SIZE];
->> +};
->> +
->> +struct dfl_cxl_cache {
->> +	struct cdev cdev;
->> +	struct dfl_device *ddev;
->> +	int id;
->> +	struct device *dev;
->> +	atomic_t opened;
->> +	void __iomem *mmio_base;
->> +	int mmio_size;
->> +	struct dfl_cxl_cache_region_info rinfo;
->> +	struct rb_root dma_regions;
->> +};
->> +
->> +static DEFINE_MUTEX(dfl_cxl_cache_class_lock);
->> +static struct class *dfl_cxl_cache_class;
->> +static dev_t dfl_cxl_cache_devt;
->> +static int dfl_cxl_cache_devices;
->> +
->> +static int dfl_cxl_cache_open(struct inode *inode, struct file *filp)
->> +{
->> +	struct dfl_cxl_cache *cxl_cache = container_of(inode->i_cdev, struct dfl_cxl_cache, cdev);
->> +
->> +	if (atomic_cmpxchg(&cxl_cache->opened, 0, 1))
->> +		return -EBUSY;
->> +
->> +	filp->private_data = cxl_cache;
->> +
->> +	return 0;
->> +}
->> +
->> +static long cxl_cache_ioctl_check_extension(struct dfl_cxl_cache *cxl_cache, unsigned long arg)
->> +{
->> +	/* No extension support for now */
->> +	return 0;
->> +}
->> +
->> +static long cxl_cache_ioctl_get_region_info(struct dfl_cxl_cache *cxl_cache, void __user *arg)
->> +{
->> +	struct dfl_cxl_cache_region_info rinfo;
->> +	unsigned long minsz;
->> +
->> +	minsz = offsetofend(struct dfl_cxl_cache_region_info, offset);
->> +	if (copy_from_user(&rinfo, arg, minsz))
->> +		return -EFAULT;
->> +
->> +	if (rinfo.argsz < minsz)
->> +		return -EINVAL;
->> +
->> +	rinfo.flags = cxl_cache->rinfo.flags;
->> +	rinfo.size = cxl_cache->rinfo.size;
->> +	rinfo.offset = cxl_cache->rinfo.offset;
->> +
->> +	if (copy_to_user(arg, &rinfo, sizeof(rinfo)))
->> +		return -EFAULT;
->> +
->> +	return 0;
->> +}
->> +
->> +static void cxl_cache_unpin_pages(struct device *dev, struct page ***pages, unsigned long length)
->> +{
->> +	const long npages = PFN_DOWN(length);
->> +
->> +	if (!*pages)
->> +		return;
->> +
->> +	unpin_user_pages(*pages, npages);
->> +	kfree(*pages);
->> +	*pages = NULL;
->> +	account_locked_vm(current->mm, npages, false);
->> +}
->> +
->> +static bool cxl_cache_check_continuous_pages(struct page **pages, unsigned long length)
->> +{
->> +	int i;
->> +	const int npages = PFN_DOWN(length);
->> +
->> +	for (i = 0; i < npages - 1; i++)
->> +		if (page_to_pfn(pages[i]) + 1 != page_to_pfn(pages[i + 1]))
->> +			return false;
->> +
->> +	return true;
->> +}
->> +
->> +static int cxl_cache_dma_pin_pages(struct dfl_cxl_cache *cxl_cache,
->> +				   struct dfl_cxl_cache_buffer_region *region)
->> +{
->> +	int ret, pinned;
->> +	unsigned int flags = FOLL_LONGTERM;
->> +	const int npages = PFN_DOWN(region->length);
->> +
->> +	ret = account_locked_vm(current->mm, npages, true);
->> +	if (ret) {
->> +		dev_err(cxl_cache->dev, "account_locked_vm() failed: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	region->pages = kcalloc(npages, sizeof(struct page *), GFP_KERNEL);
->> +	if (!region->pages) {
->> +		ret = -ENOMEM;
->> +		goto unlock_vm;
->> +	}
->> +
->> +	if (region->flags & DFL_CXL_BUFFER_MAP_WRITABLE)
->> +		flags |= FOLL_WRITE;
->> +
->> +	pinned = pin_user_pages_fast(region->user_addr, npages, flags, region->pages);
->> +	if (pinned == npages)
->> +		return 0;
->> +
->> +	ret = -EFAULT;
->> +	if (pinned > 0)
->> +		unpin_user_pages(region->pages, pinned);
->> +
->> +	kfree(region->pages);
->> +unlock_vm:
->> +	account_locked_vm(current->mm, npages, false);
->> +	return ret;
->> +}
->> +
->> +static void cxl_cache_dma_region_remove(struct dfl_cxl_cache *cxl_cache,
->> +					struct dfl_cxl_cache_buffer_region *region)
->> +{
->> +	rb_erase(&region->node, &cxl_cache->dma_regions);
->> +}
->> +
->> +static bool dma_region_check_user_addr(struct dfl_cxl_cache_buffer_region *region, u64 user_addr,
->> +				       u64 size)
->> +{
->> +	if (!size && region->user_addr != user_addr)
->> +		return false;
->> +
->> +	return (region->user_addr <= user_addr) &&
->> +		(region->length + region->user_addr >= user_addr + size);
->> +}
->> +
->> +static struct dfl_cxl_cache_buffer_region*
->> +cxl_cache_dma_region_find(struct dfl_cxl_cache *cxl_cache, u64 user_addr, u64 size)
->> +{
->> +	struct rb_node *node = cxl_cache->dma_regions.rb_node;
->> +
->> +	while (node) {
->> +		struct dfl_cxl_cache_buffer_region *region;
->> +
->> +		region = container_of(node, struct dfl_cxl_cache_buffer_region, node);
->> +
->> +		if (dma_region_check_user_addr(region, user_addr, size))
->> +			return region;
->> +
->> +		if (user_addr < region->user_addr)
->> +			node = node->rb_left;
->> +		else if (user_addr > region->user_addr)
->> +			node = node->rb_right;
->> +		else
->> +			break;
->> +	}
->> +
->> +	return NULL;
->> +}
->> +
->> +static int cxl_cache_dma_region_add(struct dfl_cxl_cache *cxl_cache,
->> +				    struct dfl_cxl_cache_buffer_region *region)
->> +{
->> +	struct rb_node **new, *parent = NULL;
->> +
->> +	new = &cxl_cache->dma_regions.rb_node;
->> +
->> +	while (*new) {
->> +		struct dfl_cxl_cache_buffer_region *this;
->> +
->> +		this = container_of(*new, struct dfl_cxl_cache_buffer_region, node);
->> +		parent = *new;
->> +
->> +		if (dma_region_check_user_addr(this, region->user_addr, region->length))
->> +			return -EEXIST;
->> +
->> +		if (region->user_addr < this->user_addr)
->> +			new = &((*new)->rb_left);
->> +		else if (region->user_addr > this->user_addr)
->> +			new = &((*new)->rb_right);
->> +		else
->> +			return -EEXIST;
->> +	}
->> +
->> +	rb_link_node(&region->node, parent, new);
->> +	rb_insert_color(&region->node, &cxl_cache->dma_regions);
->> +
->> +	return 0;
->> +}
->> +
->> +static void fixup_ptes(struct mm_struct *mm, unsigned long start, unsigned long end)
->> +{
->> +	unsigned long addr;
->> +	pgd_t *pgd;
->> +	p4d_t *p4d;
->> +	pud_t *pud;
->> +	pmd_t *pmd;
->> +	pte_t *pte;
->> +
->> +	for (addr = start; addr < end; addr += PAGE_SIZE) {
->> +		pgd = pgd_offset(mm, addr);
->> +		if (pgd_bad(*pgd) || pgd_none(*pgd))
->> +			continue;
->> +
->> +		p4d = p4d_offset(pgd, addr);
->> +		if (p4d_bad(*p4d) || p4d_none(*p4d))
->> +			continue;
->> +
->> +		pud = pud_offset(p4d, addr);
->> +		if (pud_bad(*pud) || pud_none(*pud))
->> +			continue;
->> +
->> +		pmd = pmd_offset(pud, addr);
->> +		if (pmd_bad(*pmd) || pmd_none(*pmd))
->> +			continue;
->> +
->> +		pte = pte_offset_kernel(pmd, addr);
->> +		if (!pte_none(*pte) && pte_present(*pte))
->> +			*pte = pte_wrprotect(*pte);
->> +	}
->> +}
->> +
->> +static long cxl_cache_set_region_read_only(struct dfl_cxl_cache *cxl_cache,
->> +					   struct dfl_cxl_cache_buffer_region *region)
->> +{
->> +	struct vm_area_struct *vma;
->> +	long ret = 0;
->> +
->> +	vma = vma_lookup(current->mm, region->user_addr);
->> +	if (IS_ERR(vma)) {
->> +		ret = PTR_ERR(vma);
->> +		dev_err(cxl_cache->dev, "vma_lookup() failed: %ld\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	mmap_write_lock(current->mm);
->> +
->> +	/* Mark the pages as non-cached and write-protected. */
->> +	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
->> +	vm_flags_clear(vma, VM_WRITE);
->> +
->> +	fixup_ptes(current->mm, vma->vm_start, vma->vm_end);
->> +
->> +	mmap_write_unlock(current->mm);
->> +
->> +	/* Flush all remaining cache entries. */
->> +	drm_clflush_virt_range(page_address(region->pages[0]), region->length);
->> +
->> +	return ret;
->> +}
->> +
->> +static long cxl_cache_ioctl_numa_buffer_map(struct dfl_cxl_cache *cxl_cache, void __user *arg)
->> +{
->> +	int i = 0;
->> +	unsigned long minsz = 0;
->> +	long ret = 0;
->> +	struct dfl_cxl_cache_buffer_map dma_map;
->> +	struct dfl_cxl_cache_buffer_region *region;
->> +
->> +	minsz = offsetofend(struct dfl_cxl_cache_buffer_map, csr_array);
->> +	if (copy_from_user(&dma_map, arg, minsz)) {
->> +		dev_err(cxl_cache->dev, "fails to copy from user space buffer\n");
->> +		return -EFAULT;
->> +	}
->> +	if (dma_map.argsz < minsz) {
->> +		dev_err(cxl_cache->dev, "invalid ioctl buffer size\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	/* Check Inputs, only accept page-aligned user memory region with valid length */
->> +	if (!PAGE_ALIGNED(dma_map.user_addr) || !PAGE_ALIGNED(dma_map.length) ||
->> +	    !(dma_map.length)) {
->> +		dev_err(cxl_cache->dev, "length is not page-aligned or the length is zero\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	/* Check overflow */
->> +	if (dma_map.user_addr + dma_map.length < dma_map.user_addr) {
->> +		dev_err(cxl_cache->dev, "dma buffer check overflow\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	region = kzalloc(sizeof(*region), GFP_KERNEL);
->> +	if (!region)
->> +		return -ENOMEM;
->> +
->> +	region->flags = dma_map.flags;
->> +	region->user_addr = dma_map.user_addr;
->> +	region->length = dma_map.length;
->> +
->> +	/* Pin the user memory region */
->> +	ret = cxl_cache_dma_pin_pages(cxl_cache, region);
->> +	if (ret) {
->> +		dev_err(cxl_cache->dev, "failed to pin pages\n");
->> +		goto free_region;
->> +	}
->> +
->> +	/* Only accept continuous pages, return error else */
->> +	if (!cxl_cache_check_continuous_pages(region->pages, region->length)) {
->> +		dev_err(cxl_cache->dev, "pages are not continuous\n");
->> +		ret = -EINVAL;
->> +		goto out_unpin_pages;
->> +	}
->> +
->> +	if (!(region->flags & DFL_CXL_BUFFER_MAP_WRITABLE)) {
->> +		ret = cxl_cache_set_region_read_only(cxl_cache, region);
->> +		if (ret)
->> +			goto out_unpin_pages;
->> +	}
->> +
->> +	ret = cxl_cache_dma_region_add(cxl_cache, region);
->> +	if (ret) {
->> +		dev_err(cxl_cache->dev, "failed to add dma region\n");
->> +		goto out_unpin_pages;
->> +	}
->> +
->> +	region->phys = page_to_phys(region->pages[0]);
->> +
->> +	for (i = 0; i < DFL_ARRAY_MAX_SIZE; i++) {
->> +		if (dma_map.csr_array[i] && dma_map.csr_array[i] < cxl_cache->rinfo.size)
->> +			writeq(region->phys, cxl_cache->mmio_base + dma_map.csr_array[i]);
->> +	}
->> +
->> +	return 0;
->> +
->> +out_unpin_pages:
->> +	cxl_cache_unpin_pages(cxl_cache->dev, &region->pages, region->length);
->> +free_region:
->> +	kfree(region);
->> +	return ret;
->> +}
->> +
->> +static long cxl_cache_ioctl_numa_buffer_unmap(struct dfl_cxl_cache *cxl_cache, void __user *arg)
->> +{
->> +	unsigned long minsz = 0;
->> +	long ret = 0;
->> +	int i = 0;
->> +	struct dfl_cxl_cache_buffer_unmap dma_unmap;
->> +	struct dfl_cxl_cache_buffer_region *region;
->> +
->> +	minsz = offsetofend(struct dfl_cxl_cache_buffer_unmap, csr_array);
->> +	if (copy_from_user(&dma_unmap, arg, minsz)) {
->> +		dev_err(cxl_cache->dev, "fails to copy from user space buffer\n");
->> +		return -EFAULT;
->> +	}
->> +	if (dma_unmap.argsz < minsz) {
->> +		dev_err(cxl_cache->dev, "invalid ioctl buffer size\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	region = cxl_cache_dma_region_find(cxl_cache, dma_unmap.user_addr, dma_unmap.length);
->> +	if (!region) {
->> +		dev_err(cxl_cache->dev, "fails to find buffer\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	cxl_cache_dma_region_remove(cxl_cache, region);
->> +	cxl_cache_unpin_pages(cxl_cache->dev, &region->pages, region->length);
->> +
->> +	for (i = 0; i < DFL_ARRAY_MAX_SIZE; i++) {
->> +		if (dma_unmap.csr_array[i] && dma_unmap.csr_array[i] < cxl_cache->rinfo.size)
->> +			writeq(0, cxl_cache->mmio_base + dma_unmap.csr_array[i]);
->> +	}
->> +
->> +	kfree(region);
->> +	return ret;
->> +}
->> +
->> +static long dfl_cxl_cache_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->> +{
->> +	struct dfl_cxl_cache *cxl_cache = filp->private_data;
->> +
->> +	switch (cmd) {
->> +	case DFL_FPGA_GET_API_VERSION:
->> +		return DFL_FPGA_GET_API_VERSION;
->> +	case DFL_FPGA_CHECK_EXTENSION:
->> +		return cxl_cache_ioctl_check_extension(cxl_cache, arg);
->> +	case DFL_CXL_CACHE_GET_REGION_INFO:
->> +		return cxl_cache_ioctl_get_region_info(cxl_cache, (void __user *)arg);
->> +	case DFL_CXL_CACHE_NUMA_BUFFER_MAP:
->> +		return cxl_cache_ioctl_numa_buffer_map(cxl_cache, (void __user *)arg);
->> +	case DFL_CXL_CACHE_NUMA_BUFFER_UNMAP:
->> +		return cxl_cache_ioctl_numa_buffer_unmap(cxl_cache, (void __user *)arg);
->> +	default:
->> +		return -EINVAL;
->> +	}
->> +}
->> +
->> +static const struct vm_operations_struct cxl_cache_vma_ops = {
->> +#ifdef CONFIG_HAVE_IOREMAP_PROT
->> +	.access = generic_access_phys,
->> +#endif
->> +};
->> +
->> +static int dfl_cxl_cache_mmap(struct file *filp, struct vm_area_struct *vma)
->> +{
->> +	struct dfl_cxl_cache *cxl_cache = filp->private_data;
->> +	u64 size = vma->vm_end - vma->vm_start;
->> +	u64 offset;
->> +
->> +	if (!(vma->vm_flags & VM_SHARED))
->> +		return -EINVAL;
->> +
->> +	if (!(cxl_cache->rinfo.flags & DFL_CXL_CACHE_REGION_MMAP))
->> +		return -EINVAL;
->> +
->> +	if ((vma->vm_flags & VM_READ) && !(cxl_cache->rinfo.flags & DFL_CXL_CACHE_REGION_READ))
->> +		return -EPERM;
->> +
->> +	if ((vma->vm_flags & VM_WRITE) && !(cxl_cache->rinfo.flags & DFL_CXL_CACHE_REGION_WRITE))
->> +		return -EPERM;
->> +
->> +	offset = PFN_PHYS(vma->vm_pgoff);
->> +
->> +	/* Support debug access to the mapping */
->> +	vma->vm_ops = &cxl_cache_vma_ops;
->> +
->> +	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
->> +
->> +	return remap_pfn_range(vma, vma->vm_start,
->> +			       PFN_DOWN(cxl_cache->ddev->mmio_res.start +
->> +			       (offset - cxl_cache->rinfo.offset)),
->> +			       size, vma->vm_page_prot);
->> +}
->> +
->> +static void cxl_cache_dma_region_destroy(struct dfl_cxl_cache *cxl_cache)
->> +{
->> +	struct rb_node *node = rb_first(&cxl_cache->dma_regions);
->> +	struct dfl_cxl_cache_buffer_region *region;
->> +
->> +	while (node) {
->> +		region = container_of(node, struct dfl_cxl_cache_buffer_region, node);
->> +
->> +		rb_erase(node, &cxl_cache->dma_regions);
->> +
->> +		if (region->pages)
->> +			cxl_cache_unpin_pages(cxl_cache->dev, &region->pages, region->length);
->> +
->> +		node = rb_next(node);
->> +		kfree(region);
->> +	}
->> +}
->> +
->> +static int dfl_cxl_cache_release(struct inode *inode, struct file *filp)
->> +{
->> +	struct dfl_cxl_cache *cxl_cache = filp->private_data;
->> +
->> +	cxl_cache_dma_region_destroy(cxl_cache);
->> +	atomic_set(&cxl_cache->opened, 0);
->> +	return 0;
->> +}
->> +
->> +static const struct file_operations dfl_cxl_cache_fops = {
->> +	.owner = THIS_MODULE,
->> +	.open = dfl_cxl_cache_open,
->> +	.release = dfl_cxl_cache_release,
->> +	.unlocked_ioctl = dfl_cxl_cache_ioctl,
->> +	.mmap = dfl_cxl_cache_mmap,
->> +};
->> +
->> +static void cxl_cache_dev_release(struct device *dev)
->> +{
->> +	struct dfl_cxl_cache *cxl_cache = dev_get_drvdata(dev);
->> +
->> +	cdev_del(&cxl_cache->cdev);
->> +}
->> +
->> +static void cxl_cache_chardev_uinit(struct dfl_cxl_cache *cxl_cache)
->> +{
->> +	device_destroy(dfl_cxl_cache_class,
->> +		       MKDEV(MAJOR(dfl_cxl_cache_devt), cxl_cache->id));
->> +}
->> +
->> +static int cxl_cache_chardev_init(struct dfl_cxl_cache *cxl_cache,
->> +				  struct dfl_device *ddev,
->> +				  void __iomem *mmio_base)
->> +{
->> +	int ret;
->> +
->> +	dev_set_drvdata(&ddev->dev, cxl_cache);
->> +	cxl_cache->ddev = ddev;
->> +	cxl_cache->mmio_base = mmio_base;
->> +	cxl_cache->id = dfl_cxl_cache_devices++;
->> +	cxl_cache->dma_regions = RB_ROOT;
->> +
->> +	cxl_cache->rinfo.argsz = sizeof(struct dfl_cxl_cache_region_info);
->> +	cxl_cache->rinfo.flags = DFL_CXL_CACHE_REGION_READ | DFL_CXL_CACHE_REGION_WRITE |
->> +			   DFL_CXL_CACHE_REGION_MMAP;
->> +	cxl_cache->rinfo.size = resource_size(&ddev->mmio_res);
->> +	cxl_cache->rinfo.offset = 0;
->> +
->> +	cxl_cache->dev = device_create(dfl_cxl_cache_class, &ddev->dev,
->> +				       MKDEV(MAJOR(dfl_cxl_cache_devt), cxl_cache->id),
->> +				       cxl_cache, DFL_CXL_CACHE_DRIVER_NAME ".%d",
->> +				       cxl_cache->id);
->> +
->> +	if (IS_ERR(cxl_cache->dev)) {
->> +		ret = PTR_ERR(cxl_cache->dev);
->> +		dev_err(&ddev->dev, "device_create failed: %d\n", ret);
->> +		cxl_cache->dev = NULL;
->> +		return ret;
->> +	}
->> +	cxl_cache->dev->release = cxl_cache_dev_release;
->> +
->> +	cdev_init(&cxl_cache->cdev, &dfl_cxl_cache_fops);
->> +	cxl_cache->cdev.owner = THIS_MODULE;
->> +	cxl_cache->cdev.ops = &dfl_cxl_cache_fops;
->> +
->> +	ret = cdev_add(&cxl_cache->cdev, cxl_cache->dev->devt, 1);
->> +	if (ret)
->> +		dev_err(cxl_cache->dev, "cdev_add failed: %d\n", ret);
->> +
->> +	return ret;
->> +}
->> +
->> +static int dfl_cxl_cache_probe(struct dfl_device *ddev)
->> +{
->> +	int ret = 0;
->> +	void __iomem *mmio_base;
->> +	struct dfl_cxl_cache *cxl_cache;
->> +
->> +	guard(mutex)(&dfl_cxl_cache_class_lock);
->> +
->> +	if (!dfl_cxl_cache_class) {
->> +		dfl_cxl_cache_class = class_create(DFL_CXL_CACHE_DRIVER_NAME);
->> +		if (IS_ERR(dfl_cxl_cache_class)) {
->> +			ret = PTR_ERR(dfl_cxl_cache_class);
->> +			dfl_cxl_cache_class = NULL;
->> +			dev_err_probe(&ddev->dev, ret, "class_create failed\n");
->> +			return ret;
->> +		}
->> +	}
->> +
->> +	if (!MAJOR(dfl_cxl_cache_devt)) {
->> +		ret = alloc_chrdev_region(&dfl_cxl_cache_devt, 0,
->> +					  MINORMASK,
->> +					  DFL_CXL_CACHE_DRIVER_NAME);
->> +		if (ret) {
->> +			dev_err_probe(&ddev->dev, ret, "alloc_chrdev_region failed\n");
->> +			dfl_cxl_cache_devt = MKDEV(0, 0);
->> +			return ret;
->> +		}
->> +	}
->> +
->> +	mmio_base = devm_ioremap_resource(&ddev->dev, &ddev->mmio_res);
->> +	if (IS_ERR(mmio_base))
->> +		return PTR_ERR(mmio_base);
->> +
->> +	cxl_cache = devm_kzalloc(&ddev->dev, sizeof(*cxl_cache), GFP_KERNEL);
->> +	if (!cxl_cache)
->> +		return -ENOMEM;
->> +
->> +	ret = cxl_cache_chardev_init(cxl_cache, ddev, mmio_base);
->> +	if (ret)
->> +		dev_err_probe(&ddev->dev, ret, "cxl_cache_chardev_init failed\n");
->> +
->> +	return ret;
->> +}
->> +
->> +static void dfl_cxl_cache_remove(struct dfl_device *ddev)
->> +{
->> +	struct dfl_cxl_cache *cxl_cache = dev_get_drvdata(&ddev->dev);
->> +
->> +	guard(mutex)(&dfl_cxl_cache_class_lock);
->> +	cxl_cache_chardev_uinit(cxl_cache);
->> +
->> +	if (dfl_cxl_cache_devices-- == 0) {
->> +		if (dfl_cxl_cache_class) {
->> +			class_destroy(dfl_cxl_cache_class);
->> +			dfl_cxl_cache_class = NULL;
->> +		}
->> +
->> +		if (MAJOR(dfl_cxl_cache_devt)) {
->> +			unregister_chrdev_region(dfl_cxl_cache_devt, MINORMASK);
->> +			dfl_cxl_cache_devt = MKDEV(0, 0);
->> +		}
->> +	}
->> +}
->> +
->> +static const struct dfl_device_id dfl_cxl_cache_ids[] = {
->> +	{ FME_ID, FME_FEATURE_ID_CXL_CACHE },
->> +	{ }
->> +};
->> +MODULE_DEVICE_TABLE(dfl, dfl_cxl_cache_ids);
->> +
->> +static struct dfl_driver dfl_cxl_cache_driver = {
->> +	.drv	= {
->> +		.name	= DFL_CXL_CACHE_DRIVER_NAME,
->> +	},
->> +	.id_table = dfl_cxl_cache_ids,
->> +	.probe   = dfl_cxl_cache_probe,
->> +	.remove = dfl_cxl_cache_remove,
->> +};
->> +module_dfl_driver(dfl_cxl_cache_driver);
->> +
->> +MODULE_DESCRIPTION("DFL CXL Cache driver");
->> +MODULE_AUTHOR("Intel Corporation");
->> +MODULE_LICENSE("GPL");
->> diff --git a/include/uapi/linux/fpga-dfl.h b/include/uapi/linux/fpga-dfl.h
->> index 1621b077bf21..866f50b99eb6 100644
->> --- a/include/uapi/linux/fpga-dfl.h
->> +++ b/include/uapi/linux/fpga-dfl.h
->> @@ -31,6 +31,7 @@
->>  #define DFL_FPGA_BASE 0
->>  #define DFL_PORT_BASE 0x40
->>  #define DFL_FME_BASE 0x80
->> +#define DFL_CXL_CACHE_BASE 0xA0
->>
->>  /* Common IOCTLs for both FME and AFU file descriptor */
->>
->> @@ -276,4 +277,101 @@ struct dfl_fpga_fme_port_pr {
->>  					     DFL_FME_BASE + 4,	\
->>  					     struct dfl_fpga_irq_set)
->>
->> + /**
->> +  * DFL_CXL_CACHE_GET_REGION_INFO - _IOWR(DFL_FPGA_MAGIC, DFL_CXL_CACHE_BASE + 0,
->> +  *                                      struct dfl_cxl_cache_region_info)
->> +  *
->> +  * Retrieve information about a device memory region.
->> +  * Caller provides struct dfl_cxl_cache_region_info with flags.
->> +  * Driver returns the region info in other fields.
->> +  * Return: 0 on success, -errno on failure.
->> +  */
->> +
->> +#define DFL_CXL_CACHE_GET_REGION_INFO _IO(DFL_FPGA_MAGIC, DFL_CXL_CACHE_BASE + 0)
->> +
->> +  /**
->> +   * struct dfl_cxl_cache_region_info - CXL cache region information
->> +   * @argsz: structure length
->> +   * @flags: access permission
->> +   * @size: region size (bytes)
->> +   * @offset: region offset from start of device fd
->> +   *
->> +   * to retrieve  information about a device memory region
->> +   */
->> +struct dfl_cxl_cache_region_info {
->> +	__u32 argsz;
->> +	__u32 flags;
->> +#define DFL_CXL_CACHE_REGION_READ	_BITUL(0)
->> +#define DFL_CXL_CACHE_REGION_WRITE	_BITUL(1)
->> +#define DFL_CXL_CACHE_REGION_MMAP	_BITUL(2)
->> +	__u64 size;
->> +	__u64 offset;
->> +};
->> +
->> +/**
->> + * DFL_CXL_CACHE_NUMA_BUFFER_MAP - _IOWR(DFL_FPGA_MAGIC, DFL_CXL_CACHE_BASE + 1,
->> + *                                      struct dfl_cxl_cache_buffer_map)
->> + *
->> + * Map the user memory per user_addr, length and numa node which are
->> + * provided by caller. The driver allocates memory on the numa node,
->> + * converts the user's virtual addressto a continuous physical address,
->> + * and writes the physical address to the cxl cache read/write address table CSR.
->> + *
->> + * This interface only accepts page-size aligned user memory for mapping.
->> + * Return: 0 on success, -errno on failure.
->> + */
->> +
->> +#define DFL_ARRAY_MAX_SIZE   0x10
->> +
->> +#define DFL_CXL_CACHE_NUMA_BUFFER_MAP    _IO(DFL_FPGA_MAGIC,  DFL_CXL_CACHE_BASE + 1)
->> +
->> +/**
->> + * struct dfl_cxl_cache_buffer_map - maps user address to physical address.
->> + * @argsz: structure length
->> + * @flags: flags
->> + * @user_addr: user mmap virtual address
->> + * @length: length of mapping (bytes)
->> + * @csr_array: array of region address offset
->> + *
->> + * maps user allocated virtual address to physical address.
->> + */
->> +struct dfl_cxl_cache_buffer_map {
->> +	__u32 argsz;
->> +#define DFL_CXL_BUFFER_MAP_WRITABLE	1
->> +	__u32 flags;
->> +	__u64 user_addr;
->> +	__u64 length;
->> +	__u64 csr_array[DFL_ARRAY_MAX_SIZE];
->> +};
->> +
->> +/**
->> + * DFL_CXL_CACHE_NUMA_BUFFER_UNMAP - _IOWR(DFL_FPGA_MAGIC, DFL_CXL_CACHE_BASE + 1,
->> + *                                      struct dfl_cxl_cache_buffer_unmap)
->> + *
->> + * Unmaps the user memory per user_addr and length which are provided by caller
->> + * The driver deletes the physical pages of the user address and writes a zero
->> + * to the read/write address table CSR.
->> + * Return: 0 on success, -errno on failure.
->> + */
->> +
->> +#define DFL_CXL_CACHE_NUMA_BUFFER_UNMAP  _IO(DFL_FPGA_MAGIC,  DFL_CXL_CACHE_BASE + 2)
->> +
->> +/**
->> + * struct dfl_cxl_cache_buffer_unmap - unmaps user allocated memory.
->> + * @argsz: structure length
->> + * @flags: flags
->> + * @user_addr: user mmap virtual address
->> + * @length: length of mapping (bytes)
->> + * @csr_array: array of region address offset
->> + *
->> + * unmaps user allocated memory.
->> + */
->> +struct dfl_cxl_cache_buffer_unmap {
->> +	__u32 argsz;
->> +	__u32 flags;
->> +	__u64 user_addr;
->> +	__u64 length;
->> +	__u64 csr_array[DFL_ARRAY_MAX_SIZE];
->> +};
->> +
->>  #endif /* _UAPI_LINUX_FPGA_DFL_H */
->> --
->> 2.34.1
->>
->>
->
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> ---
+>  drivers/fpga/tests/fpga-bridge-test.c | 33 ++++++++++-----------
+>  drivers/fpga/tests/fpga-mgr-test.c    | 16 +++++------
+>  drivers/fpga/tests/fpga-region-test.c | 41 +++++++++++++--------------
+>  3 files changed, 44 insertions(+), 46 deletions(-)
+> 
+> diff --git a/drivers/fpga/tests/fpga-bridge-test.c b/drivers/fpga/tests/fpga-bridge-test.c
+> index 1d258002cdd7..2f7a24f23808 100644
+> --- a/drivers/fpga/tests/fpga-bridge-test.c
+> +++ b/drivers/fpga/tests/fpga-bridge-test.c
+> @@ -7,8 +7,8 @@
+>   * Author: Marco Pagani <marpagan@redhat.com>
+>   */
+>  
+> +#include <kunit/device.h>
+>  #include <kunit/test.h>
+> -#include <linux/device.h>
+>  #include <linux/fpga/fpga-bridge.h>
+>  #include <linux/module.h>
+>  #include <linux/types.h>
+> @@ -19,7 +19,7 @@ struct bridge_stats {
+>  
+>  struct bridge_ctx {
+>  	struct fpga_bridge *bridge;
+> -	struct platform_device *pdev;
+> +	struct device *dev;
+>  	struct bridge_stats stats;
+>  };
+>  
+> @@ -43,30 +43,31 @@ static const struct fpga_bridge_ops fake_bridge_ops = {
+>  /**
+>   * register_test_bridge() - Register a fake FPGA bridge for testing.
+>   * @test: KUnit test context object.
+> + * @dev_name: name of the kunit device to be registered
+>   *
+>   * Return: Context of the newly registered FPGA bridge.
+>   */
+> -static struct bridge_ctx *register_test_bridge(struct kunit *test)
+> +static struct bridge_ctx *register_test_bridge(struct kunit *test, const char *dev_name)
+>  {
+>  	struct bridge_ctx *ctx;
+>  
+>  	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
+>  
+> -	ctx->pdev = platform_device_register_simple("bridge_pdev", PLATFORM_DEVID_AUTO, NULL, 0);
+> -	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->pdev);
+> +	ctx->dev = kunit_device_register(test, dev_name);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->dev);
+>  
+> -	ctx->bridge = fpga_bridge_register(&ctx->pdev->dev, "Fake FPGA bridge", &fake_bridge_ops,
+> +	ctx->bridge = fpga_bridge_register(ctx->dev, "Fake FPGA bridge", &fake_bridge_ops,
+>  					   &ctx->stats);
+>  	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->bridge));
+>  
+>  	return ctx;
+>  }
+>  
+> -static void unregister_test_bridge(struct bridge_ctx *ctx)
+> +static void unregister_test_bridge(struct kunit *test, struct bridge_ctx *ctx)
+>  {
+>  	fpga_bridge_unregister(ctx->bridge);
+> -	platform_device_unregister(ctx->pdev);
+> +	kunit_device_unregister(test, ctx->dev);
+>  }
+>  
+>  static void fpga_bridge_test_get(struct kunit *test)
+> @@ -74,10 +75,10 @@ static void fpga_bridge_test_get(struct kunit *test)
+>  	struct bridge_ctx *ctx = test->priv;
+>  	struct fpga_bridge *bridge;
+>  
+> -	bridge = fpga_bridge_get(&ctx->pdev->dev, NULL);
+> +	bridge = fpga_bridge_get(ctx->dev, NULL);
+>  	KUNIT_EXPECT_PTR_EQ(test, bridge, ctx->bridge);
+>  
+> -	bridge = fpga_bridge_get(&ctx->pdev->dev, NULL);
+> +	bridge = fpga_bridge_get(ctx->dev, NULL);
+>  	KUNIT_EXPECT_EQ(test, PTR_ERR(bridge), -EBUSY);
+>  
+>  	fpga_bridge_put(ctx->bridge);
+> @@ -105,19 +106,19 @@ static void fpga_bridge_test_get_put_list(struct kunit *test)
+>  	int ret;
+>  
+>  	ctx_0 = test->priv;
+> -	ctx_1 = register_test_bridge(test);
+> +	ctx_1 = register_test_bridge(test, "fpga-bridge-test-dev-1");
+>  
+>  	INIT_LIST_HEAD(&bridge_list);
+>  
+>  	/* Get bridge 0 and add it to the list */
+> -	ret = fpga_bridge_get_to_list(&ctx_0->pdev->dev, NULL, &bridge_list);
+> +	ret = fpga_bridge_get_to_list(ctx_0->dev, NULL, &bridge_list);
+>  	KUNIT_EXPECT_EQ(test, ret, 0);
+>  
+>  	KUNIT_EXPECT_PTR_EQ(test, ctx_0->bridge,
+>  			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
+>  
+>  	/* Get bridge 1 and add it to the list */
+> -	ret = fpga_bridge_get_to_list(&ctx_1->pdev->dev, NULL, &bridge_list);
+> +	ret = fpga_bridge_get_to_list(ctx_1->dev, NULL, &bridge_list);
+>  	KUNIT_EXPECT_EQ(test, ret, 0);
+>  
+>  	KUNIT_EXPECT_PTR_EQ(test, ctx_1->bridge,
+> @@ -141,19 +142,19 @@ static void fpga_bridge_test_get_put_list(struct kunit *test)
+>  
+>  	KUNIT_EXPECT_TRUE(test, list_empty(&bridge_list));
+>  
+> -	unregister_test_bridge(ctx_1);
+> +	unregister_test_bridge(test, ctx_1);
+>  }
+>  
+>  static int fpga_bridge_test_init(struct kunit *test)
+>  {
+> -	test->priv = register_test_bridge(test);
+> +	test->priv = register_test_bridge(test, "fpga-bridge-test-dev-0");
+>  
+>  	return 0;
+>  }
+>  
+>  static void fpga_bridge_test_exit(struct kunit *test)
+>  {
+> -	unregister_test_bridge(test->priv);
+> +	unregister_test_bridge(test, test->priv);
+>  }
+>  
+>  static struct kunit_case fpga_bridge_test_cases[] = {
+> diff --git a/drivers/fpga/tests/fpga-mgr-test.c b/drivers/fpga/tests/fpga-mgr-test.c
+> index 6acec55b60ce..125b3a4d43c6 100644
+> --- a/drivers/fpga/tests/fpga-mgr-test.c
+> +++ b/drivers/fpga/tests/fpga-mgr-test.c
+> @@ -7,8 +7,8 @@
+>   * Author: Marco Pagani <marpagan@redhat.com>
+>   */
+>  
+> +#include <kunit/device.h>
+>  #include <kunit/test.h>
+> -#include <linux/device.h>
+>  #include <linux/fpga/fpga-mgr.h>
+>  #include <linux/module.h>
+>  #include <linux/scatterlist.h>
+> @@ -40,7 +40,7 @@ struct mgr_stats {
+>  struct mgr_ctx {
+>  	struct fpga_image_info *img_info;
+>  	struct fpga_manager *mgr;
+> -	struct platform_device *pdev;
+> +	struct device *dev;
+>  	struct mgr_stats stats;
+>  };
+>  
+> @@ -194,7 +194,7 @@ static void fpga_mgr_test_get(struct kunit *test)
+>  	struct mgr_ctx *ctx = test->priv;
+>  	struct fpga_manager *mgr;
+>  
+> -	mgr = fpga_mgr_get(&ctx->pdev->dev);
+> +	mgr = fpga_mgr_get(ctx->dev);
+>  	KUNIT_EXPECT_PTR_EQ(test, mgr, ctx->mgr);
+>  
+>  	fpga_mgr_put(ctx->mgr);
+> @@ -284,14 +284,14 @@ static int fpga_mgr_test_init(struct kunit *test)
+>  	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
+>  
+> -	ctx->pdev = platform_device_register_simple("mgr_pdev", PLATFORM_DEVID_AUTO, NULL, 0);
+> -	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->pdev);
+> +	ctx->dev = kunit_device_register(test, "fpga-manager-test-dev");
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->dev);
+>  
+> -	ctx->mgr = devm_fpga_mgr_register(&ctx->pdev->dev, "Fake FPGA Manager", &fake_mgr_ops,
+> +	ctx->mgr = devm_fpga_mgr_register(ctx->dev, "Fake FPGA Manager", &fake_mgr_ops,
+>  					  &ctx->stats);
+>  	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->mgr));
+>  
+> -	ctx->img_info = fpga_image_info_alloc(&ctx->pdev->dev);
+> +	ctx->img_info = fpga_image_info_alloc(ctx->dev);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->img_info);
+>  
+>  	test->priv = ctx;
+> @@ -304,7 +304,7 @@ static void fpga_mgr_test_exit(struct kunit *test)
+>  	struct mgr_ctx *ctx = test->priv;
+>  
+>  	fpga_image_info_free(ctx->img_info);
+> -	platform_device_unregister(ctx->pdev);
+> +	kunit_device_unregister(test, ctx->dev);
+>  }
+>  
+>  static struct kunit_case fpga_mgr_test_cases[] = {
+> diff --git a/drivers/fpga/tests/fpga-region-test.c b/drivers/fpga/tests/fpga-region-test.c
+> index baab07e3fc59..bcf0651df261 100644
+> --- a/drivers/fpga/tests/fpga-region-test.c
+> +++ b/drivers/fpga/tests/fpga-region-test.c
+> @@ -7,12 +7,12 @@
+>   * Author: Marco Pagani <marpagan@redhat.com>
+>   */
+>  
+> +#include <kunit/device.h>
+>  #include <kunit/test.h>
+>  #include <linux/fpga/fpga-bridge.h>
+>  #include <linux/fpga/fpga-mgr.h>
+>  #include <linux/fpga/fpga-region.h>
+>  #include <linux/module.h>
+> -#include <linux/platform_device.h>
+>  #include <linux/types.h>
+>  
+>  struct mgr_stats {
+> @@ -26,11 +26,11 @@ struct bridge_stats {
+>  
+>  struct test_ctx {
+>  	struct fpga_manager *mgr;
+> -	struct platform_device *mgr_pdev;
+> +	struct device *mgr_dev;
+>  	struct fpga_bridge *bridge;
+> -	struct platform_device *bridge_pdev;
+> +	struct device *bridge_dev;
+>  	struct fpga_region *region;
+> -	struct platform_device *region_pdev;
+> +	struct device *region_dev;
+>  	struct bridge_stats bridge_stats;
+>  	struct mgr_stats mgr_stats;
+>  };
+> @@ -91,7 +91,7 @@ static void fpga_region_test_class_find(struct kunit *test)
+>  	struct test_ctx *ctx = test->priv;
+>  	struct fpga_region *region;
+>  
+> -	region = fpga_region_class_find(NULL, &ctx->region_pdev->dev, fake_region_match);
+> +	region = fpga_region_class_find(NULL, ctx->region_dev, fake_region_match);
+>  	KUNIT_EXPECT_PTR_EQ(test, region, ctx->region);
+>  
+>  	put_device(&region->dev);
+> @@ -108,7 +108,7 @@ static void fpga_region_test_program_fpga(struct kunit *test)
+>  	char img_buf[4];
+>  	int ret;
+>  
+> -	img_info = fpga_image_info_alloc(&ctx->mgr_pdev->dev);
+> +	img_info = fpga_image_info_alloc(ctx->mgr_dev);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, img_info);
+>  
+>  	img_info->buf = img_buf;
+> @@ -148,32 +148,30 @@ static int fpga_region_test_init(struct kunit *test)
+>  	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
+>  
+> -	ctx->mgr_pdev = platform_device_register_simple("mgr_pdev", PLATFORM_DEVID_AUTO, NULL, 0);
+> -	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->mgr_pdev);
+> +	ctx->mgr_dev = kunit_device_register(test, "fpga-manager-test-dev");
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->mgr_dev);
+>  
+> -	ctx->mgr = devm_fpga_mgr_register(&ctx->mgr_pdev->dev, "Fake FPGA Manager", &fake_mgr_ops,
+> -					  &ctx->mgr_stats);
+> +	ctx->mgr = devm_fpga_mgr_register(ctx->mgr_dev, "Fake FPGA Manager",
+> +					  &fake_mgr_ops, &ctx->mgr_stats);
+>  	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->mgr));
+>  
+> -	ctx->bridge_pdev = platform_device_register_simple("bridge_pdev", PLATFORM_DEVID_AUTO,
+> -							   NULL, 0);
+> -	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->bridge_pdev);
+> +	ctx->bridge_dev = kunit_device_register(test, "fpga-bridge-test-dev");
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->bridge_dev);
+>  
+> -	ctx->bridge = fpga_bridge_register(&ctx->bridge_pdev->dev, "Fake FPGA Bridge",
+> +	ctx->bridge = fpga_bridge_register(ctx->bridge_dev, "Fake FPGA Bridge",
+>  					   &fake_bridge_ops, &ctx->bridge_stats);
+>  	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->bridge));
+>  
+>  	ctx->bridge_stats.enable = true;
+>  
+> -	ctx->region_pdev = platform_device_register_simple("region_pdev", PLATFORM_DEVID_AUTO,
+> -							   NULL, 0);
+> -	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->region_pdev);
+> +	ctx->region_dev = kunit_device_register(test, "fpga-region-test-dev");
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->region_dev);
+>  
+>  	region_info.mgr = ctx->mgr;
+>  	region_info.priv = ctx->bridge;
+>  	region_info.get_bridges = fake_region_get_bridges;
+>  
+> -	ctx->region = fpga_region_register_full(&ctx->region_pdev->dev, &region_info);
+> +	ctx->region = fpga_region_register_full(ctx->region_dev, &region_info);
+>  	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->region));
+>  
+>  	test->priv = ctx;
+> @@ -186,18 +184,17 @@ static void fpga_region_test_exit(struct kunit *test)
+>  	struct test_ctx *ctx = test->priv;
+>  
+>  	fpga_region_unregister(ctx->region);
+> -	platform_device_unregister(ctx->region_pdev);
+> +	kunit_device_unregister(test, ctx->region_dev);
+>  
+>  	fpga_bridge_unregister(ctx->bridge);
+> -	platform_device_unregister(ctx->bridge_pdev);
+> +	kunit_device_unregister(test, ctx->bridge_dev);
+>  
+> -	platform_device_unregister(ctx->mgr_pdev);
+> +	kunit_device_unregister(test, ctx->mgr_dev);
+>  }
+>  
+>  static struct kunit_case fpga_region_test_cases[] = {
+>  	KUNIT_CASE(fpga_region_test_class_find),
+>  	KUNIT_CASE(fpga_region_test_program_fpga),
+> -
+>  	{}
+>  };
+>  
+> 
+> base-commit: b1a91ca25f15b6d7b311de4465854a5981dee3d3
+> -- 
+> 2.44.0
+> 
 
