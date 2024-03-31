@@ -1,74 +1,76 @@
-Return-Path: <linux-fpga+bounces-368-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-369-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02D588931D0
-	for <lists+linux-fpga@lfdr.de>; Sun, 31 Mar 2024 15:53:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 101F68931FD
+	for <lists+linux-fpga@lfdr.de>; Sun, 31 Mar 2024 16:39:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31CBD1C20D9E
-	for <lists+linux-fpga@lfdr.de>; Sun, 31 Mar 2024 13:53:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CB5E1F21234
+	for <lists+linux-fpga@lfdr.de>; Sun, 31 Mar 2024 14:39:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF1C144D20;
-	Sun, 31 Mar 2024 13:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001FA2E40E;
+	Sun, 31 Mar 2024 14:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Aw5NpLdd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LEm0WQFx"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A78144D13;
-	Sun, 31 Mar 2024 13:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1682F3B;
+	Sun, 31 Mar 2024 14:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711893227; cv=none; b=EaHlHb7iabf99+W+XF0s18Hw45UaQvTdc+QHf9XMrWq7Sy4QKDegK2i0FxZoe0PaTaKShk3aQ964HIrrxhZM0ekaV7v1nbpnjfafd5p8bMxyEoqp4237OCaYcTFQWEdUSl8XzPazjNGLI3cmjGkeNvjIbu7RN/dQf/1jhyVlikE=
+	t=1711895974; cv=none; b=pka5zHYSs30EEMb+YctV+gJ5Dlv5FlvsvVHt97RFJwNN3qZ8nuYmKKLrQ/pfo69NjHJItANFPuHZbhnku3i1ketuEazZZB69xTnWVF37FITxtv87NpFlhUDHCCPYO5kgMJWV8tjywZaQJuuwAieIkoNg0ITomq4INewk2ytLcS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711893227; c=relaxed/simple;
-	bh=HZcoANQm+m6eHWitU14xeSVvP4uJHQVXHY2wtEadUVc=;
+	s=arc-20240116; t=1711895974; c=relaxed/simple;
+	bh=Yr7QgpoloklAjRb1NPaSLk0w+kU1jaHFGFJSCWmfwT4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jriDqskD3O5Iu2ZmyfKR7SoWMaJVsfkirQELfUW/b1lceQquXzf2j9kfWGPwM3KMZe7I7W2yN0r2YO070JBsB/xOqdOelWiBD7Dl7y3CRX2GZnjvlWQSxjHb8HszhjJf8upl9I7iTNbchvx5dwuBnwKPQ0N24W2DudhN1D/BdCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Aw5NpLdd; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=mDLMgadNwlAXku1SErvMOWkF8xz7j9m1II4lAasrXHPHd2GLG4BXQWy7XfS+T22JqfcyL0wvF4IAaXmwaIZZhYuQtpBALLsOvolslb4p6z6bUrIrLFw5XkjXWUv8mzuepRALz5WQM7nKgrms75125dYQQUyvV8qwX9RkVLVH2Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LEm0WQFx; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711893225; x=1743429225;
+  t=1711895973; x=1743431973;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=HZcoANQm+m6eHWitU14xeSVvP4uJHQVXHY2wtEadUVc=;
-  b=Aw5NpLddqUOsWbLgnP9S67YVMubFkiAgftYxkUl0uoXI2RcEgz9jJEtC
-   cJUptNxm5sNy0+WQy2AdlNa3yMF1TcHWxjWa9KkAgdUf1F1heg5yqjr07
-   mcEL0J5I5Hqb0N0Kk4tEde9pgf+jFW6pWkkg6cJwOfvVuylDDaJb8y1+x
-   J/TZEWns8yqNj1lUC/oHiwcEeSnNYrOhZvSqXdOl7/MZ4WE0oBROglRnV
-   0f6oPDtaWzsZqR8VI+bepjqDh6XD1BOfSZlk+G3UB1FdRPdku9zj1DAUP
-   cgv0yGjYoeW8PPCofeb6wTwL0xZMYmTPMC3GO40rq/7PP0SVImSRPttd/
+  bh=Yr7QgpoloklAjRb1NPaSLk0w+kU1jaHFGFJSCWmfwT4=;
+  b=LEm0WQFxDy6gTqAhxvcA9p1APciBhgR/hITlnViUY0Ke1sY+pRFdj9sa
+   o0xt0Ph9xKBGutkS2XSwqnAGzFAbmCYm0T8iSbwSOgFf2W/AELezDC7am
+   i/RlXZ3UimdGhVVuE2ZlOp+NwS2yLwh576mpv7nNwsrvXrAmziDJshK1S
+   NA0i1BXOuOrncpfHxNlRX85X/MFoVVf4lVBWFvYUkn8PYlnLy8WE/QneM
+   gSZusCng8IU6Qr0aw0PBgcRfFzSDd7Paoxjsoe0ClFn6F1rPjg+2klojb
+   Goer9hiekfmezvQmvk2Dj5vK7DyV7PxldTiv/W/PH8c4WWXJMK29f3OVM
    Q==;
-X-CSE-ConnectionGUID: 4z/g0kh8RlayBo8RQxEVnA==
-X-CSE-MsgGUID: sSxvBCWxSTeJFOhR7wLxEQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11030"; a="7240446"
+X-CSE-ConnectionGUID: 44bafuEdSyKUvjJzmwOMTw==
+X-CSE-MsgGUID: 0cyHvS0ZQ/W54qbAMEiVoQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11030"; a="17653424"
 X-IronPort-AV: E=Sophos;i="6.07,170,1708416000"; 
-   d="scan'208";a="7240446"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2024 06:53:43 -0700
+   d="scan'208";a="17653424"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2024 07:39:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,170,1708416000"; 
-   d="scan'208";a="21896299"
+   d="scan'208";a="18087295"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa005.fm.intel.com with ESMTP; 31 Mar 2024 06:53:41 -0700
-Date: Sun, 31 Mar 2024 21:48:52 +0800
+  by orviesa008.jf.intel.com with ESMTP; 31 Mar 2024 07:39:29 -0700
+Date: Sun, 31 Mar 2024 22:34:40 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Tull <atull@opensource.altera.com>,
-	Russ Weight <russ.weight@linux.dev>, linux-fpga@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] fpga: bridge: add owner module and take its refcount
-Message-ID: <ZglpxIFgiPkZ0sat@yilunxu-OptiPlex-7050>
-References: <20240322171839.233864-1-marpagan@redhat.com>
+To: Charles Perry <charles.perry@savoirfairelinux.com>
+Cc: mdf@kernel.org, avandiver@markem-imaje.com, bcody@markem-imaje.com,
+	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michal Simek <michal.simek@amd.com>, linux-fpga@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 3/4] fpga: xilinx-selectmap: add new driver
+Message-ID: <Zgl0gPt/pc+vXyGw@yilunxu-OptiPlex-7050>
+References: <20240321220447.3260065-1-charles.perry@savoirfairelinux.com>
+ <20240321220447.3260065-4-charles.perry@savoirfairelinux.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -77,37 +79,27 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240322171839.233864-1-marpagan@redhat.com>
+In-Reply-To: <20240321220447.3260065-4-charles.perry@savoirfairelinux.com>
 
-On Fri, Mar 22, 2024 at 06:18:37PM +0100, Marco Pagani wrote:
-> The current implementation of the fpga bridge assumes that the low-level
-> module registers a driver for the parent device and uses its owner pointer
-> to take the module's refcount. This approach is problematic since it can
-> lead to a null pointer dereference while attempting to get the bridge if
-> the parent device does not have a driver.
-> 
-> To address this problem, add a module owner pointer to the fpga_bridge
-> struct and use it to take the module's refcount. Modify the function for
-> registering a bridge to take an additional owner module parameter and
-> rename it to avoid conflicts. Use the old function name for a helper macro
-> that automatically sets the module that registers the bridge as the owner.
-> This ensures compatibility with existing low-level control modules and
-> reduces the chances of registering a bridge without setting the owner.
-> 
-> Also, update the documentation to keep it consistent with the new interface
-> for registering an fpga bridge.
-> 
-> Other changes: opportunistically move put_device() from __fpga_bridge_get()
-> to fpga_bridge_get() and of_fpga_bridge_get() to improve code clarity since
-> the bridge device is taken in these functions.
-> 
-> Fixes: 21aeda950c5f ("fpga: add fpga bridge framework")
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Suggested-by: Xu Yilun <yilun.xu@intel.com>
-> Reviewed-by: Russ Weight <russ.weight@linux.dev>
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> +static int xilinx_selectmap_write(struct xilinx_fpga_core *core,
+> +				  const char *buf, size_t count)
+> +{
+> +	struct xilinx_selectmap_conf *conf = to_xilinx_selectmap_conf(core);
+> +	u32 i;
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+comparing u32 with size_t is problematic.
 
-Applied to for-next.
+size_t i;
+
+I can fix it in place.
+
+Thanks,
+Yilun
+
+> +
+> +	for (i = 0; i < count; ++i)
+> +		writeb(buf[i], conf->base);
+> +
+> +	return 0;
+> +}
 
