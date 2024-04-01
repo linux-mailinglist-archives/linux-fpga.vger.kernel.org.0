@@ -1,70 +1,73 @@
-Return-Path: <linux-fpga+bounces-371-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-372-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A49789391E
-	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 10:42:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1560D893974
+	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 11:39:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D376B1F214D8
-	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 08:42:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5B432819FC
+	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 09:39:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 250DAB67D;
-	Mon,  1 Apr 2024 08:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE8AF10799;
+	Mon,  1 Apr 2024 09:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LdPisCMo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bOkBk/4p"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25985B671;
-	Mon,  1 Apr 2024 08:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3387DDB6;
+	Mon,  1 Apr 2024 09:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711960972; cv=none; b=G/NIztz07wrnFKT8sqzI6w6lo5F6/MoTM7YVWdwzgj3IOh4ik6MbP2vn986uGZJ+XrbKvsGm5PhGzETpPsHfhGXRfQ1x6Q+w6t1PX+FG00bf+UuCUt3Wdz0xv+ZRsLRvd2ysTit6WOQF7YwYOUw5Ew2K06dwTcVcyhwHO/IGesg=
+	t=1711964338; cv=none; b=LpqzrC1DX79P2eUAhyKq85/hmiUW4Hm9OzTvmjqjX6qIcAtyl13og8ssS04QCPBkm0sztF7jT7t+22whRyedySghZ7m4b5NZJUdb92DKFOBc9HFntSpm+xufXr01gVOS5P6ZLOTDlcD7Y3EReDMwBq+vbnrJSJ10FY6mbCTOsxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711960972; c=relaxed/simple;
-	bh=AI1XIUyqxzRSpghCdKpQAxauNOiZcpgN+8YqxMVM5Ks=;
+	s=arc-20240116; t=1711964338; c=relaxed/simple;
+	bh=kiZVMGBa1eAUPnAXQqslxytPb57aNml6Kj1vn0W2qBI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GRlMqcgXxdqPElDEuABaCUGhIUeXbhrEpvPr3mEbl6Fb9DDT5UiRHLmXtncarj7rFyr3Hvw6EBkmg0U+8xkUpbEjMpvPPwBeO1tSqjtmnBAK7dqJrhwKDp+70IE3U7+nHlGH29Bx95poIUuVkNdeI0I8EVXQyl9fMATJasDkwcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LdPisCMo; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=W48ATV1en7xb0wr3KZi6Augs7jMHJTOUT7Cjxr7pptZRCYXw0aO1dEruHBt7+IA7BQj4aRJH4VfYYqgGa31vr69dUV8NpszBjQX1fmZzfc+/5s3LW30nNprU1Cghpboj6bEdF7BOxZLw6m/TVNhJtckZTPUxs69XPhbvEc1iVLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bOkBk/4p; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711960970; x=1743496970;
+  t=1711964337; x=1743500337;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=AI1XIUyqxzRSpghCdKpQAxauNOiZcpgN+8YqxMVM5Ks=;
-  b=LdPisCMovB+VN3g5BPPCthObRlU48PO5DqznrqkZmW+UG0mT5gL4xY6T
-   e6heQGxJjQddNGMN8eAC+s44zpjcBpJ0hiSL3o0wlb0BFNNA+QNpu0WfP
-   UCWwpwuJG867EAeoOxUDH8GRi0HQEMftblR5X2WwHAALxrO89vNJjuzIO
-   uPWlUkJZIRYoP6Jv+h3LU2Y6fEvaKvL5to/BzU2TkpDTjLHS6Yx7sLiev
-   prB+8U36EiBbTeSYsFF9JWhSwj/yNSIS3TdR8G9JTHHerGf1lyeWqZLh8
-   O4c482G/ePAkkT8i0RBE1kuyRq501w+FM7u5FVFPxtkyT4JJWRYAPmkSt
-   w==;
-X-CSE-ConnectionGUID: yM/V7+wVQ1qp3a0WFWa1UQ==
-X-CSE-MsgGUID: cxck2C41SaOMGPyXavtX3Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11030"; a="7227301"
+  bh=kiZVMGBa1eAUPnAXQqslxytPb57aNml6Kj1vn0W2qBI=;
+  b=bOkBk/4pJQnME2L3qzPh3C4freXAxkNMnpA9/BrNigN0fqjhQMZrXlcq
+   EQ38eaKzS+DfPE2UwU6Y1VslNYZb5Gp9tfhSA8jSN89HS0ozt/7Ij5j4i
+   /LHvZbor2qK6iKz5KtA0f0mhiIY2UcuaT4zfmzX/LEMEOOJ6/fXWbjzYl
+   LF4GzFGI1rXuGc5gh1+tNZ/2VCc76lA5hyBB9fL5itmKUZrMxOKdyWu2B
+   4SUSCqPPJGWcZM0zWEv+1NBl9jvZ/oCnxK1bXEBjUt5yGN3fyMh0qaiql
+   c9tU337B0Sz5EYmg/uAlX06/cTnlccmpZuswSEAJHZQZUJbyUArXcMUaj
+   Q==;
+X-CSE-ConnectionGUID: 6AdeUXfXTI6IBo8xfElSbA==
+X-CSE-MsgGUID: ZjLlUBF7QaChgdkx3QVRQw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11030"; a="10043267"
 X-IronPort-AV: E=Sophos;i="6.07,171,1708416000"; 
-   d="scan'208";a="7227301"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 01:42:50 -0700
+   d="scan'208";a="10043267"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 02:38:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,171,1708416000"; 
-   d="scan'208";a="18286664"
+   d="scan'208";a="48858934"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa008.jf.intel.com with ESMTP; 01 Apr 2024 01:42:48 -0700
-Date: Mon, 1 Apr 2024 16:37:58 +0800
+  by fmviesa001.fm.intel.com with ESMTP; 01 Apr 2024 02:38:54 -0700
+Date: Mon, 1 Apr 2024 17:34:04 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Marco Pagani <marpagan@redhat.com>
 Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
 	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: altera: drop driver owner assignment
-Message-ID: <ZgpyZldW+TTCbCcH@yilunxu-OptiPlex-7050>
-References: <20240327174909.519796-1-krzysztof.kozlowski@linaro.org>
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Tull <atull@opensource.altera.com>, linux-fpga@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] fpga: region: add owner module and take its refcount
+Message-ID: <Zgp/jNst2yuXEbpU@yilunxu-OptiPlex-7050>
+References: <20240327160022.202934-1-marpagan@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -73,36 +76,65 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240327174909.519796-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240327160022.202934-1-marpagan@redhat.com>
 
-On Wed, Mar 27, 2024 at 06:49:09PM +0100, Krzysztof Kozlowski wrote:
-> Core in spi_register_driver() already sets the .owner, so driver
-> does not need to.
+On Wed, Mar 27, 2024 at 05:00:20PM +0100, Marco Pagani wrote:
+> The current implementation of the fpga region assumes that the low-level
+> module registers a driver for the parent device and uses its owner pointer
+> to take the module's refcount. This approach is problematic since it can
+> lead to a null pointer dereference while attempting to get the region
+> during programming if the parent device does not have a driver.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> To address this problem, add a module owner pointer to the fpga_region
+> struct and use it to take the module's refcount. Modify the functions for
+> registering a region to take an additional owner module parameter and
+> rename them to avoid conflicts. Use the old function names for helper
+> macros that automatically set the module that registers the region as the
+> owner. This ensures compatibility with existing low-level control modules
+> and reduces the chances of registering a region without setting the owner.
+> 
+> Also, update the documentation to keep it consistent with the new interface
+> for registering an fpga region.
+> 
+> Other changes: unlock the mutex before calling put_device() in
+> fpga_region_put() to avoid potential use after release issues.
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Please try not to mix different changes in one patch, especially for
+a "bug fix" as you said.
 
-Applied to for-next.
+And I do have concern about the fix, see below.
 
-> ---
->  drivers/fpga/altera-ps-spi.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/altera-ps-spi.c b/drivers/fpga/altera-ps-spi.c
-> index 740980e7cef8..d0ec3539b31f 100644
-> --- a/drivers/fpga/altera-ps-spi.c
-> +++ b/drivers/fpga/altera-ps-spi.c
-> @@ -284,7 +284,6 @@ MODULE_DEVICE_TABLE(spi, altera_ps_spi_ids);
->  static struct spi_driver altera_ps_driver = {
->  	.driver = {
->  		.name = "altera-ps-spi",
-> -		.owner = THIS_MODULE,
->  		.of_match_table = of_ef_match,
->  	},
->  	.id_table = altera_ps_spi_ids,
-> -- 
-> 2.34.1
-> 
-> 
+[...]
+
+> @@ -53,7 +53,7 @@ static struct fpga_region *fpga_region_get(struct fpga_region *region)
+>  	}
+>  
+>  	get_device(dev);
+> -	if (!try_module_get(dev->parent->driver->owner)) {
+> +	if (!try_module_get(region->br_owner)) {
+>  		put_device(dev);
+>  		mutex_unlock(&region->mutex);
+>  		return ERR_PTR(-ENODEV);
+> @@ -75,9 +75,9 @@ static void fpga_region_put(struct fpga_region *region)
+>  
+>  	dev_dbg(dev, "put\n");
+>  
+> -	module_put(dev->parent->driver->owner);
+> -	put_device(dev);
+> +	module_put(region->br_owner);
+>  	mutex_unlock(&region->mutex);
+
+If there is concern the region would be freed after put_device(), then
+why still keep the sequence in fpga_region_get()?
+
+And is it possible region is freed before get_device() in
+fpga_region_get()?
+
+Or we should clearly document how/when to use these functions?
+
+Thanks,
+Yilun
+
+> +	put_device(dev);
+>  }
 
