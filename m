@@ -1,138 +1,177 @@
-Return-Path: <linux-fpga+bounces-375-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-376-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5E95893C82
-	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 17:02:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 301738943E5
+	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 19:09:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AAE21F22385
-	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 15:02:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B4AAB212A4
+	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 17:09:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D9374501C;
-	Mon,  1 Apr 2024 15:02:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03A1C482DF;
+	Mon,  1 Apr 2024 17:09:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="knq7Zgm6"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RTj9Hu0D"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC63246525;
-	Mon,  1 Apr 2024 15:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11C7481B8
+	for <linux-fpga@vger.kernel.org>; Mon,  1 Apr 2024 17:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711983756; cv=none; b=lTrDI/Zg72CYgbVkBubnzrnKACb07/1dLdi2UmSw8OJY/CP/MAZJ8L+lAUy43s4WeImgDnhTGH2RJ1uq871NB66KPcDoU9/+BdmRzQmACsQ6J2tNW/3sxQL1KbyY+AideDzPByGGaZCYNCw5lo9v6vzqRKuN6AB9oFCSRIsOTjU=
+	t=1711991366; cv=none; b=E3tKe9CR+dlaIGVmR7Jk34zsvckx7nZ8IcTWAVXsjA3Q9Xt0wrjwpiDXJeZZt2BMAvZYrDNoCuFVU1jPodrqWG779sxLtdzvX48Z3k9SQnhpXGolqGUj2DjIKPX1B9N5lKHb/LCS4hROKxh4451Xz7x+aAO/KdrsP/ystipiYfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711983756; c=relaxed/simple;
-	bh=XHGJn6TzTehov6tjSa7o3b57YxPm8TU+Uf8wPfAwNKg=;
+	s=arc-20240116; t=1711991366; c=relaxed/simple;
+	bh=ot6xw/EmgVnST3njxlFas/su5E7yZBlVuz8eV3G6UPY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=po57hWaF1GDAzpH2V1uAkHPUVTm3O5Rjt+LQkS3ASOGKueCjfCoGXHFJjFO7UMzCk6fqFVeoFy4/hyueUJvUoCaVCpWsLmVKJCDOnXlwW4Or3Fj+KKeOLJ38SyWiOsF0CtMKWlDUQGZS8AYlnz1uST6HVc1mSs6CANo03VgdrCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=knq7Zgm6; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711983754; x=1743519754;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XHGJn6TzTehov6tjSa7o3b57YxPm8TU+Uf8wPfAwNKg=;
-  b=knq7Zgm6TIlPv7KU2UTBA3n8o/LogkuYLIP9buO77UPFPuxK/qro8x7z
-   MqMG/TTR51qoFZpo/cSZUOfaBdJW+7BMXimnG7MzBCdJHFCh3Kh8lw1Q3
-   AkGnkCuA7v3pPMYXOqovsr0bojboBAcjePSlujmqYPpQczhmQqqk/4ui8
-   nPEzBrDXBfbYXG44KUgZeBqzMDhkFx3H8hEH+ZMCuRvis9pJac5LyHFnv
-   uECdJkDhiIqg6Hii0FGiuubzYFvxE5m83SgRtHw7Df/xJXBVLeY++1gJY
-   AZMjxkijM0mk1DhBXYe9ERSQjL/A144YplCEcTiVYwb+WtI/Byov2YS2l
-   Q==;
-X-CSE-ConnectionGUID: Kg1PyfFOTgeC7bqJxynZxw==
-X-CSE-MsgGUID: rFfrU9gjRCW6SzmzpL3c3A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="7302970"
-X-IronPort-AV: E=Sophos;i="6.07,172,1708416000"; 
-   d="scan'208";a="7302970"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 08:02:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,172,1708416000"; 
-   d="scan'208";a="22428863"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa005.jf.intel.com with ESMTP; 01 Apr 2024 08:02:30 -0700
-Date: Mon, 1 Apr 2024 22:57:40 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Peter Colberg <peter.colberg@intel.com>
-Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Russ Weight <russ.weight@linux.dev>,
-	Marco Pagani <marpagan@redhat.com>,
-	Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: Re: [PATCH] fpga: dfl: afu: remove unused member pdata from struct
- dfl_afu
-Message-ID: <ZgrLZCl1nPDMcq/i@yilunxu-OptiPlex-7050>
-References: <20240328235417.7219-1-peter.colberg@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=bGKqWKGj0bDNF6RIB741FVKTLMaI7U1CyC8avcXM3eKgKLOxaNnA3JIvrMhp37F3dX6eT7WGGj4CjahNzkF3k9lHHpYwt1s2YER8DX5TuDe77uqL5h6O/xSeAkI288Lj9/KZ36PG05dzw9PmMRbYOATZYTq9Iy9J+zX5uZkAufw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RTj9Hu0D; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Mon, 1 Apr 2024 10:09:05 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711991361;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sexo4Zkg76Uel66nm+BJLgt6nMmfGgQ4IH7dkpFb5+A=;
+	b=RTj9Hu0DT2ERBTjCK3MMs7EpeNZMfQ1BGeQtNAdS24hwlbCzJ5ciAmy40V9LkSJqVv+3Wv
+	L5EdU9Qpu8tGgLjqCSDgn93dUlo6VJUUyWIQJfFduwPudROlxnZX4yWAuvllGPtdNorzCw
+	5xWxaDgf5iYx6vnIQLqLHTLA5o+Mhh0=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Russ Weight <russ.weight@linux.dev>
+To: Xu Yilun <yilun.xu@linux.intel.com>
+Cc: Peter Colberg <peter.colberg@intel.com>,
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	Lee Jones <lee@kernel.org>, linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Marco Pagani <marpagan@redhat.com>,
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Russ Weight <russell.h.weight@intel.com>
+Subject: Re: [PATCH] mfd: intel-m10-bmc: Change staging size to a variable
+Message-ID: <20240401170905.v2xin3fzoe3m3tmz@4VRSMR2-DT.corp.robot.car>
+References: <20240328233559.6949-1-peter.colberg@intel.com>
+ <ZgqCdfCSatazEkIj@yilunxu-OptiPlex-7050>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240328235417.7219-1-peter.colberg@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZgqCdfCSatazEkIj@yilunxu-OptiPlex-7050>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Mar 28, 2024 at 07:54:17PM -0400, Peter Colberg wrote:
-> The member pdata was added to struct dfl_afu in commit 857a26222ff7
-> ("fpga: dfl: afu: add afu sub feature support") and is set in function
-> afu_dev_init() but otherwise never used.
+On Mon, Apr 01, 2024 at 05:46:29PM +0800, Xu Yilun wrote:
+> On Thu, Mar 28, 2024 at 07:35:59PM -0400, Peter Colberg wrote:
+> > From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > 
+> > The size of the staging area in FLASH for FPGA updates is dependent on the
+> > size of the FPGA. Currently, the staging size is defined as a constant.
+> > Larger FPGAs are coming soon and it will soon be necessary to support
+> 
+> Soon? When? You cannot add some feature without a user case. If you do
+> have a use case, put the patch in the same patchset.
 
-Could you also help check if dfl_fme has the same issue?
+There may never be an up-streamed use-case. This is a very small
+change intended to make it easier for a third-party vendor to
+build a card that requires a larger staging area in FLASH. They
+would have to add a new "struct m10bmc_csr_map", but they
+wouldn't have to refactor this code as part of the change
 
-Thanks,
-Yilun
+This change does not introduce an unused function or variable.
+It is more of a clean-up, making the code more flexible.
+
+Can it not be taken as is?
+
+- Russ
 
 > 
-> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->  drivers/fpga/dfl-afu-main.c | 2 --
->  drivers/fpga/dfl-afu.h      | 3 ---
->  2 files changed, 5 deletions(-)
+> Thanks,
+> Yilun
 > 
-> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-> index c0a75ca360d6..6b97c073849e 100644
-> --- a/drivers/fpga/dfl-afu-main.c
-> +++ b/drivers/fpga/dfl-afu-main.c
-> @@ -858,8 +858,6 @@ static int afu_dev_init(struct platform_device *pdev)
->  	if (!afu)
->  		return -ENOMEM;
->  
-> -	afu->pdata = pdata;
-> -
->  	mutex_lock(&pdata->lock);
->  	dfl_fpga_pdata_set_private(pdata, afu);
->  	afu_mmio_region_init(pdata);
-> diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
-> index 674e9772f0ea..7bef3e300aa2 100644
-> --- a/drivers/fpga/dfl-afu.h
-> +++ b/drivers/fpga/dfl-afu.h
-> @@ -67,7 +67,6 @@ struct dfl_afu_dma_region {
->   * @regions: the mmio region linked list of this afu feature device.
->   * @dma_regions: root of dma regions rb tree.
->   * @num_umsgs: num of umsgs.
-> - * @pdata: afu platform device's pdata.
->   */
->  struct dfl_afu {
->  	u64 region_cur_offset;
-> @@ -75,8 +74,6 @@ struct dfl_afu {
->  	u8 num_umsgs;
->  	struct list_head regions;
->  	struct rb_root dma_regions;
-> -
-> -	struct dfl_feature_platform_data *pdata;
->  };
->  
->  /* hold pdata->lock when call __afu_port_enable/disable */
-> -- 
-> 2.44.0
-> 
-> 
+> > different sizes for the staging area. Add a new staging_size member to the
+> > csr_map structure to support a variable staging size.
+> > 
+> > The secure update driver does a sanity-check of the image size in
+> > comparison to the size of the staging area in FLASH. Change the
+> > staging size reference to a variable instead of a constant in order
+> > to more readily support future, larger FPGAs.
+> > 
+> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+> > ---
+> >  drivers/fpga/intel-m10-bmc-sec-update.c | 3 ++-
+> >  drivers/mfd/intel-m10-bmc-pmci.c        | 1 +
+> >  drivers/mfd/intel-m10-bmc-spi.c         | 1 +
+> >  include/linux/mfd/intel-m10-bmc.h       | 1 +
+> >  4 files changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> > index 89851b133709..7ac9f9f5af12 100644
+> > --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> > +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> > @@ -529,11 +529,12 @@ static enum fw_upload_err m10bmc_sec_prepare(struct fw_upload *fwl,
+> >  					     const u8 *data, u32 size)
+> >  {
+> >  	struct m10bmc_sec *sec = fwl->dd_handle;
+> > +	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> >  	u32 ret;
+> >  
+> >  	sec->cancel_request = false;
+> >  
+> > -	if (!size || size > M10BMC_STAGING_SIZE)
+> > +	if (!size || size > csr_map->staging_size)
+> >  		return FW_UPLOAD_ERR_INVALID_SIZE;
+> >  
+> >  	if (sec->m10bmc->flash_bulk_ops)
+> > diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
+> > index 0392ef8b57d8..698c5933938b 100644
+> > --- a/drivers/mfd/intel-m10-bmc-pmci.c
+> > +++ b/drivers/mfd/intel-m10-bmc-pmci.c
+> > @@ -370,6 +370,7 @@ static const struct m10bmc_csr_map m10bmc_n6000_csr_map = {
+> >  	.pr_reh_addr = M10BMC_N6000_PR_REH_ADDR,
+> >  	.pr_magic = M10BMC_N6000_PR_PROG_MAGIC,
+> >  	.rsu_update_counter = M10BMC_N6000_STAGING_FLASH_COUNT,
+> > +	.staging_size = M10BMC_STAGING_SIZE,
+> >  };
+> >  
+> >  static const struct intel_m10bmc_platform_info m10bmc_pmci_n6000 = {
+> > diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
+> > index cbeb7de9e041..d64d28199df6 100644
+> > --- a/drivers/mfd/intel-m10-bmc-spi.c
+> > +++ b/drivers/mfd/intel-m10-bmc-spi.c
+> > @@ -109,6 +109,7 @@ static const struct m10bmc_csr_map m10bmc_n3000_csr_map = {
+> >  	.pr_reh_addr = M10BMC_N3000_PR_REH_ADDR,
+> >  	.pr_magic = M10BMC_N3000_PR_PROG_MAGIC,
+> >  	.rsu_update_counter = M10BMC_N3000_STAGING_FLASH_COUNT,
+> > +	.staging_size = M10BMC_STAGING_SIZE,
+> >  };
+> >  
+> >  static struct mfd_cell m10bmc_d5005_subdevs[] = {
+> > diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> > index ee66c9751003..988f1cd90032 100644
+> > --- a/include/linux/mfd/intel-m10-bmc.h
+> > +++ b/include/linux/mfd/intel-m10-bmc.h
+> > @@ -205,6 +205,7 @@ struct m10bmc_csr_map {
+> >  	unsigned int pr_reh_addr;
+> >  	unsigned int pr_magic;
+> >  	unsigned int rsu_update_counter;
+> > +	unsigned int staging_size;
+> >  };
+> >  
+> >  /**
+> > -- 
+> > 2.44.0
+> > 
+> > 
 
