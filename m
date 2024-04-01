@@ -1,103 +1,138 @@
-Return-Path: <linux-fpga+bounces-374-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-375-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1017893B3B
-	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 15:08:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E95893C82
+	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 17:02:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F29681C20BE7
-	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 13:08:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AAE21F22385
+	for <lists+linux-fpga@lfdr.de>; Mon,  1 Apr 2024 15:02:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FB113EA71;
-	Mon,  1 Apr 2024 13:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D9374501C;
+	Mon,  1 Apr 2024 15:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="gKtEF0Vm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="knq7Zgm6"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from msa.smtpout.orange.fr (msa-209.smtpout.orange.fr [193.252.23.209])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC72383BA;
-	Mon,  1 Apr 2024 13:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.23.209
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC63246525;
+	Mon,  1 Apr 2024 15:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711976911; cv=none; b=UEdUH/Zu68KanzNjSc6dY9ZxPmnJooV5HvVMUIuRCbpzKzTbr4aSbPB9g6Su3EoLYS5n5yKgfK7SG9FG6id/QetcuvKEu/BXHtNWCRQS6Dk2XfB/x4SHb53WNPQslN0zhi/mze7Rj2Mxcuw/2jyMAGe6TbOwQguTRUsu/N4+rPA=
+	t=1711983756; cv=none; b=lTrDI/Zg72CYgbVkBubnzrnKACb07/1dLdi2UmSw8OJY/CP/MAZJ8L+lAUy43s4WeImgDnhTGH2RJ1uq871NB66KPcDoU9/+BdmRzQmACsQ6J2tNW/3sxQL1KbyY+AideDzPByGGaZCYNCw5lo9v6vzqRKuN6AB9oFCSRIsOTjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711976911; c=relaxed/simple;
-	bh=3j7ZintJt6IY5YGQgufV4/rhKwMzKzmHz80qDoMWNpw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ASQf53s+6DkcTkkPOQU7xjkL4aIturJuSZGCDxf8KZia1kFovQbXwUrF4F+E9Wk/8Pi68YQ91liWyCz03RGiHFW6SU10oyGdU+bYw3SOeHDztqNDd8aVLcQ8sXeEN2WEvzc7QXYhj+43DJsEPkrkzMfNHH4PKMvD2ykmEQPpd/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=gKtEF0Vm; arc=none smtp.client-ip=193.252.23.209
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.home ([86.243.17.157])
-	by smtp.orange.fr with ESMTPA
-	id rHOirI9t6uWdGrHOirOs7H; Mon, 01 Apr 2024 15:08:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1711976906;
-	bh=98Z2FPBJRx39uUlwlsoLLukd26uFSpPNJzTdkcV+H8w=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=gKtEF0Vm22hOmvVP8w6nKcQh5fM++77MKgJMF9Kn/o4hD9TNHriG3fQoUlowHZAHJ
-	 NC7HGj449Mwrhz6bFSTkQCeObs7suwY6heb8Myi68AYHyFT+BE0HZBXaCID9uW8KO7
-	 0BlTf4PgYxGFhUzKatCX00j2qZ0tLmuPmw5MjXVzw9Ah1C5TrSXy1lVyFhrcE/ihiH
-	 bbV/CsipxrgwoY443nyTUVWMOz2heEJSZNtbmYV95/IooilM647eM+YCo9y/8M82mV
-	 dVFQfsNonO2xFXqyNgWSI3AT5jmRYpg+wkT8bBZ1AJCgJCMtOz/NsH06r8EvVnUC0o
-	 kQ+5itbwPD8ng==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 01 Apr 2024 15:08:26 +0200
-X-ME-IP: 86.243.17.157
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-fpga@vger.kernel.org
-Subject: [PATCH] fpga: altera-cvp: Remove an unused field in struct altera_cvp_conf
-Date: Mon,  1 Apr 2024 15:08:21 +0200
-Message-ID: <7986690e79fa6f7880bc1db783cb0e46a1c2723e.1711976883.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1711983756; c=relaxed/simple;
+	bh=XHGJn6TzTehov6tjSa7o3b57YxPm8TU+Uf8wPfAwNKg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=po57hWaF1GDAzpH2V1uAkHPUVTm3O5Rjt+LQkS3ASOGKueCjfCoGXHFJjFO7UMzCk6fqFVeoFy4/hyueUJvUoCaVCpWsLmVKJCDOnXlwW4Or3Fj+KKeOLJ38SyWiOsF0CtMKWlDUQGZS8AYlnz1uST6HVc1mSs6CANo03VgdrCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=knq7Zgm6; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711983754; x=1743519754;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XHGJn6TzTehov6tjSa7o3b57YxPm8TU+Uf8wPfAwNKg=;
+  b=knq7Zgm6TIlPv7KU2UTBA3n8o/LogkuYLIP9buO77UPFPuxK/qro8x7z
+   MqMG/TTR51qoFZpo/cSZUOfaBdJW+7BMXimnG7MzBCdJHFCh3Kh8lw1Q3
+   AkGnkCuA7v3pPMYXOqovsr0bojboBAcjePSlujmqYPpQczhmQqqk/4ui8
+   nPEzBrDXBfbYXG44KUgZeBqzMDhkFx3H8hEH+ZMCuRvis9pJac5LyHFnv
+   uECdJkDhiIqg6Hii0FGiuubzYFvxE5m83SgRtHw7Df/xJXBVLeY++1gJY
+   AZMjxkijM0mk1DhBXYe9ERSQjL/A144YplCEcTiVYwb+WtI/Byov2YS2l
+   Q==;
+X-CSE-ConnectionGUID: Kg1PyfFOTgeC7bqJxynZxw==
+X-CSE-MsgGUID: rFfrU9gjRCW6SzmzpL3c3A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="7302970"
+X-IronPort-AV: E=Sophos;i="6.07,172,1708416000"; 
+   d="scan'208";a="7302970"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 08:02:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,172,1708416000"; 
+   d="scan'208";a="22428863"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa005.jf.intel.com with ESMTP; 01 Apr 2024 08:02:30 -0700
+Date: Mon, 1 Apr 2024 22:57:40 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Peter Colberg <peter.colberg@intel.com>
+Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Russ Weight <russ.weight@linux.dev>,
+	Marco Pagani <marpagan@redhat.com>,
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH] fpga: dfl: afu: remove unused member pdata from struct
+ dfl_afu
+Message-ID: <ZgrLZCl1nPDMcq/i@yilunxu-OptiPlex-7050>
+References: <20240328235417.7219-1-peter.colberg@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328235417.7219-1-peter.colberg@intel.com>
 
-In "struct altera_cvp_conf", the 'mgr' field is unused.
-Remove it.
+On Thu, Mar 28, 2024 at 07:54:17PM -0400, Peter Colberg wrote:
+> The member pdata was added to struct dfl_afu in commit 857a26222ff7
+> ("fpga: dfl: afu: add afu sub feature support") and is set in function
+> afu_dev_init() but otherwise never used.
 
-Found with cppcheck, unusedStructMember.
+Could you also help check if dfl_fme has the same issue?
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Apparently, it has never been used. It is not a left-over from a
-refactoring.
+Thanks,
+Yilun
 
-The address of the 'fpga_manager' is handled via pci_[s|g]et_drvdata().
-
-Compile tested only.
----
- drivers/fpga/altera-cvp.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-index 4ffb9da537d8..6b0914432445 100644
---- a/drivers/fpga/altera-cvp.c
-+++ b/drivers/fpga/altera-cvp.c
-@@ -72,7 +72,6 @@ static bool altera_cvp_chkcfg;
- struct cvp_priv;
- 
- struct altera_cvp_conf {
--	struct fpga_manager	*mgr;
- 	struct pci_dev		*pci_dev;
- 	void __iomem		*map;
- 	void			(*write_data)(struct altera_cvp_conf *conf,
--- 
-2.44.0
-
+> 
+> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+>  drivers/fpga/dfl-afu-main.c | 2 --
+>  drivers/fpga/dfl-afu.h      | 3 ---
+>  2 files changed, 5 deletions(-)
+> 
+> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
+> index c0a75ca360d6..6b97c073849e 100644
+> --- a/drivers/fpga/dfl-afu-main.c
+> +++ b/drivers/fpga/dfl-afu-main.c
+> @@ -858,8 +858,6 @@ static int afu_dev_init(struct platform_device *pdev)
+>  	if (!afu)
+>  		return -ENOMEM;
+>  
+> -	afu->pdata = pdata;
+> -
+>  	mutex_lock(&pdata->lock);
+>  	dfl_fpga_pdata_set_private(pdata, afu);
+>  	afu_mmio_region_init(pdata);
+> diff --git a/drivers/fpga/dfl-afu.h b/drivers/fpga/dfl-afu.h
+> index 674e9772f0ea..7bef3e300aa2 100644
+> --- a/drivers/fpga/dfl-afu.h
+> +++ b/drivers/fpga/dfl-afu.h
+> @@ -67,7 +67,6 @@ struct dfl_afu_dma_region {
+>   * @regions: the mmio region linked list of this afu feature device.
+>   * @dma_regions: root of dma regions rb tree.
+>   * @num_umsgs: num of umsgs.
+> - * @pdata: afu platform device's pdata.
+>   */
+>  struct dfl_afu {
+>  	u64 region_cur_offset;
+> @@ -75,8 +74,6 @@ struct dfl_afu {
+>  	u8 num_umsgs;
+>  	struct list_head regions;
+>  	struct rb_root dma_regions;
+> -
+> -	struct dfl_feature_platform_data *pdata;
+>  };
+>  
+>  /* hold pdata->lock when call __afu_port_enable/disable */
+> -- 
+> 2.44.0
+> 
+> 
 
