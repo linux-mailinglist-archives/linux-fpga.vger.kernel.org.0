@@ -1,75 +1,77 @@
-Return-Path: <linux-fpga+bounces-380-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-381-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C55A0894A05
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 05:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D889894A2A
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 05:52:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 651FFB20D02
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 03:34:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EC21B22AEA
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 03:52:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44E8615E89;
-	Tue,  2 Apr 2024 03:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59CE17589;
+	Tue,  2 Apr 2024 03:52:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VJYsoJ+V"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L388u013"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3C614286;
-	Tue,  2 Apr 2024 03:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5131179BC;
+	Tue,  2 Apr 2024 03:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712028836; cv=none; b=hkXcCpXk199KxtRCRGKUBt8rdT7T3q5IP2GWmJOTr/kEryOoIb9Zy/dxNRPq0tNxF2fpeDchq5WzkCVuB+RIjIXdQ1dONr3T9gvR3dpAZV+qpRyB/QsDic8EQ/Ug0KiFMlsZvFSFKeoysP8+PM33sBGaThw8Ufpjdihjux2Lw4c=
+	t=1712029930; cv=none; b=WT9tbLFxZFXikMVkJ+E+UoqE2JNlbrbImEH3xUY9hWOCO8KXch4dK6ePP3MYUDbIIYLPr37ebX6f4hLvqHHZqQdKyn2FmeaK4PJPNhkUJqdkduyYigem8XrmhHSVFxON4m0UZXQzE6DGOmFrQlBcVRT9+ed+hWnzh5SfM2LsAQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712028836; c=relaxed/simple;
-	bh=nm+nAlqpw3ca2xRqXTLmgegLhY4MxsydF/vxsaUw2M0=;
+	s=arc-20240116; t=1712029930; c=relaxed/simple;
+	bh=7gHW/qvQSs1Nc3EuoXfs26hkvGBC1r6itQPxwRNZFek=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PAU++oRdk8LUPi5Gpsc8DlvZKzHXDhjCYx0lhhgMBRWNuHk2AoDs1YfQ81DMBRJ9iXzKC+5IhpqcX8nwZekLQkwdt8eI/vB6H8NQhyhSW6b1anGFNnxlqZGGKjL61xxTpdp7xwSrSnksCXmy0WRKj+HYGa4z0K+HRbS/1rAnhK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VJYsoJ+V; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=SI1efpX6kL7v9YTtgAWJFII07Wxcemv6o/82XyyeFE78KAR4BEqj10pYzjDv4V4/vaMzxp3Db3kY00yxwtRzPVj0fllYSm7qY0U5ekx4Km4DtsJAQrSmkUvANO+OItivfM8v9FIO2LYAmW5nGfvFN7dy8k2Rtb8ohmzZTAjqAPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L388u013; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712028835; x=1743564835;
+  t=1712029929; x=1743565929;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=nm+nAlqpw3ca2xRqXTLmgegLhY4MxsydF/vxsaUw2M0=;
-  b=VJYsoJ+VfIuaCv5r9auzCwKTzQOA8AxZZiy2DOP6dibSnqjl94erSl/u
-   5KJn9USDVJ7CQaXCWqqBnsEEgkdzj8j1q3YXnfV46w6/JlWAGbBHXRQrD
-   6hjTYQCuTCkL21FX5DkLAoEaG38v25e9SeRZ+zvUVFh6qf11IHU20xd0K
-   uWt6ZQ18/CQC4o9TiV/LCpnZGkLz1yPUmeML34xr6a9we3IQ4xohw59g0
-   UX/D+MTqtKueAg+PyjFlUDyXaZENF4DZiM77vPNtrEq2Oy/XPGldoMoNt
-   VqNdO7I1mPhL3Q/5qt3od+hZlgV6IXs+tgC77wQOEBjyIaKjTPojIrwK5
-   Q==;
-X-CSE-ConnectionGUID: cOJwGq+CSjW5IU63M5OqUQ==
-X-CSE-MsgGUID: 1UUT7MF/QJS/IqMqBbUcvA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="10997135"
+  bh=7gHW/qvQSs1Nc3EuoXfs26hkvGBC1r6itQPxwRNZFek=;
+  b=L388u013YZb7SfLPzYdct0x67zWhnIahEaXBG4Stz7tPjBd1sCudBVO+
+   7edR+a9PZ8BNbY5n4vptQKc/xr17ERsOPUuzxWfhh81C2ab2cCEqREdk6
+   q0676fcHh467iUEbnZ/Ey47KzZzt5W8JmU+K19OI3f9XWXWdyOYnVQOrQ
+   4ef9HoNlbI8QWTZEmVz7zVgHzVw0kCKoR7gcD3OH1+lF9ZLiJdo0qtcCB
+   QVcIUIp/27dFkRvsyfvGZ2E1/42Ht1wzADnu0F2X9Z9WS0xxgoCHEPcba
+   GdWeSUJE2OboJISb6Xnb1gNoYGLJsdMffS0RNTFyxwW6FNeCfgT1dAy1r
+   g==;
+X-CSE-ConnectionGUID: PA8vrnaxTqyvtyWzZqDffw==
+X-CSE-MsgGUID: jEzjLMaMRwaVv12PvyTTiQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="18539075"
 X-IronPort-AV: E=Sophos;i="6.07,173,1708416000"; 
-   d="scan'208";a="10997135"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 20:33:54 -0700
+   d="scan'208";a="18539075"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 20:52:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,173,1708416000"; 
-   d="scan'208";a="22587250"
+   d="scan'208";a="22607322"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa004.fm.intel.com with ESMTP; 01 Apr 2024 20:33:51 -0700
-Date: Tue, 2 Apr 2024 11:29:00 +0800
+  by orviesa003.jf.intel.com with ESMTP; 01 Apr 2024 20:52:04 -0700
+Date: Tue, 2 Apr 2024 11:47:13 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
 To: Peter Colberg <peter.colberg@intel.com>
 Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
 	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Russ Weight <russ.weight@linux.dev>,
+	Alan Tull <atull@kernel.org>, Shiva Rao <shiva.rao@intel.com>,
+	Kang Luwei <luwei.kang@intel.com>,
+	Enno Luebbers <enno.luebbers@intel.com>, linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Russ Weight <russ.weight@linux.dev>,
 	Marco Pagani <marpagan@redhat.com>,
 	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH RESEND] fpga: dfl: omit unneeded casts of u64 values for
- dev_dbg()
-Message-ID: <Zgt7fA/Jfks/iKYi@yilunxu-OptiPlex-7050>
-References: <20240329000429.7493-1-peter.colberg@intel.com>
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] fpga: dfl: fme: fix kernel-doc comments for some
+ functions
+Message-ID: <Zgt/wftzm4xthfio@yilunxu-OptiPlex-7050>
+References: <20240329001542.8099-1-peter.colberg@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -78,62 +80,64 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240329000429.7493-1-peter.colberg@intel.com>
+In-Reply-To: <20240329001542.8099-1-peter.colberg@intel.com>
 
-On Thu, Mar 28, 2024 at 08:04:29PM -0400, Peter Colberg wrote:
-> Omit unneeded casts of u64 values to unsigned long long for use with
-> printk() format specifier %llx. Unlike user space, the kernel defines
-> u64 as unsigned long long for all architectures; see commit 2a7930bd77fe
-> ("Documentation/printk-formats.txt: No casts needed for u64/s64").
+On Thu, Mar 28, 2024 at 08:15:42PM -0400, Peter Colberg wrote:
+> From: Xu Yilun <yilun.xu@intel.com>
 
-The change is OK. But I suggest just delete the unnecessary dev_dbg()
-since now people normally don't want these "Hello, I'm here!" info.
+I didn't remember I wrote this exact patch, but anyway the patch itself
+is confusing.
 
 > 
-> These changes are cosmetic only; no functional changes.
+> lkp reported 2 build warnings:
 > 
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>    drivers/fpga/dfl/dfl-fme-pr.c:175: warning: Function parameter or member 'feature' not described in 'dfl_fme_create_mgr'
+> 
+> >> drivers/fpga/dfl/dfl-fme-pr.c:280: warning: expecting prototype for
+> >> dfl_fme_destroy_bridge(). Prototype was for dfl_fme_destroy_bridges()
+> >> instead
+> 
+> Fixes: 29de76240e86 ("fpga: dfl: fme: add partial reconfiguration sub feature support")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 > Signed-off-by: Peter Colberg <peter.colberg@intel.com>
 > ---
-> This is an unmodified resend of the second patch only from the series
-> "fpga: dfl: clean up string formatting for sysfs_emit() and dev_dbg()".
+>  drivers/fpga/dfl-fme-pr.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
+> index cdcf6dea4cc9..96cb24787ab1 100644
+> --- a/drivers/fpga/dfl-fme-pr.c
+> +++ b/drivers/fpga/dfl-fme-pr.c
+> @@ -166,6 +166,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
+>   * dfl_fme_create_mgr - create fpga mgr platform device as child device
+>   * @feature: sub feature info
 
-Why only pick this patch out of the series?
+The member 'feature' is described here. It still causes build warning?
 
-[...]
+>   * @pdata: fme platform_device's pdata
+> + * @feature: the dfl fme PR sub feature
 
-> diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
-> index ab228d8837a0..da3cb9c35de5 100644
-> --- a/drivers/fpga/dfl-fme-mgr.c
-> +++ b/drivers/fpga/dfl-fme-mgr.c
-> @@ -150,7 +150,7 @@ static int fme_mgr_write_init(struct fpga_manager *mgr,
->  	priv->pr_error = fme_mgr_pr_error_handle(fme_pr);
->  	if (priv->pr_error)
->  		dev_dbg(dev, "previous PR error detected %llx\n",
-> -			(unsigned long long)priv->pr_error);
-> +			priv->pr_error);
+Why adding a duplicated item would fix the warning?
 
-I'm not sure if this is an real problem. Maybe we could keep it.
-
+>   *
+>   * Return: mgr platform device if successful, and error code otherwise.
+>   */
+> @@ -273,7 +274,7 @@ static void dfl_fme_destroy_bridge(struct dfl_fme_bridge *fme_br)
+>  }
 >  
->  	dev_dbg(dev, "set PR port ID\n");
->  
-> @@ -242,8 +242,7 @@ static int fme_mgr_write_complete(struct fpga_manager *mgr,
->  	dev_dbg(dev, "PR operation complete, checking status\n");
->  	priv->pr_error = fme_mgr_pr_error_handle(fme_pr);
->  	if (priv->pr_error) {
-> -		dev_dbg(dev, "PR error detected %llx\n",
-> -			(unsigned long long)priv->pr_error);
-> +		dev_dbg(dev, "PR error detected %llx\n", priv->pr_error);
+>  /**
+> - * dfl_fme_destroy_bridges - destroy all fpga bridge platform device
 
-This is a real problem, is it? Change to dev_err()?
+The prototype is for dfl_fme_destroy_bridges(), why the warning?
 
-Thanks,
-Yilun
+> + * dfl_fme_destroy_bridges - destroy all fpga bridge platform devices
 
->  		return -EIO;
->  	}
->  
+Correct the plural form in description would fix the warning?
+
+>   * @pdata: fme platform device's pdata
+>   */
+>  static void dfl_fme_destroy_bridges(struct dfl_feature_platform_data *pdata)
 > -- 
 > 2.44.0
 > 
