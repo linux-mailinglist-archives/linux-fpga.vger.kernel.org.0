@@ -1,145 +1,157 @@
-Return-Path: <linux-fpga+bounces-381-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-382-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D889894A2A
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 05:52:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A483F894A8D
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 06:43:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EC21B22AEA
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 03:52:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EE56282922
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 04:43:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59CE17589;
-	Tue,  2 Apr 2024 03:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0234017BCA;
+	Tue,  2 Apr 2024 04:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L388u013"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="R/cS9EBR"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5131179BC;
-	Tue,  2 Apr 2024 03:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598012581;
+	Tue,  2 Apr 2024 04:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712029930; cv=none; b=WT9tbLFxZFXikMVkJ+E+UoqE2JNlbrbImEH3xUY9hWOCO8KXch4dK6ePP3MYUDbIIYLPr37ebX6f4hLvqHHZqQdKyn2FmeaK4PJPNhkUJqdkduyYigem8XrmhHSVFxON4m0UZXQzE6DGOmFrQlBcVRT9+ed+hWnzh5SfM2LsAQo=
+	t=1712032983; cv=none; b=VT5jqNVaJeqFCssMHUhP3ktmA7p3Z6DVC3gCYjNEj6GjLCEneFwtdyBNdclv4bd1ntlO4UdQ84n3juexabD/lC2KmgqtRtXFhlkEbZWtWECQ1lqVP3e26t3oV323pnHm2rGY9Q6Bmxob4YtYwbWr12h10DSX1BnRAM0L7VSo+1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712029930; c=relaxed/simple;
-	bh=7gHW/qvQSs1Nc3EuoXfs26hkvGBC1r6itQPxwRNZFek=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SI1efpX6kL7v9YTtgAWJFII07Wxcemv6o/82XyyeFE78KAR4BEqj10pYzjDv4V4/vaMzxp3Db3kY00yxwtRzPVj0fllYSm7qY0U5ekx4Km4DtsJAQrSmkUvANO+OItivfM8v9FIO2LYAmW5nGfvFN7dy8k2Rtb8ohmzZTAjqAPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L388u013; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712029929; x=1743565929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7gHW/qvQSs1Nc3EuoXfs26hkvGBC1r6itQPxwRNZFek=;
-  b=L388u013YZb7SfLPzYdct0x67zWhnIahEaXBG4Stz7tPjBd1sCudBVO+
-   7edR+a9PZ8BNbY5n4vptQKc/xr17ERsOPUuzxWfhh81C2ab2cCEqREdk6
-   q0676fcHh467iUEbnZ/Ey47KzZzt5W8JmU+K19OI3f9XWXWdyOYnVQOrQ
-   4ef9HoNlbI8QWTZEmVz7zVgHzVw0kCKoR7gcD3OH1+lF9ZLiJdo0qtcCB
-   QVcIUIp/27dFkRvsyfvGZ2E1/42Ht1wzADnu0F2X9Z9WS0xxgoCHEPcba
-   GdWeSUJE2OboJISb6Xnb1gNoYGLJsdMffS0RNTFyxwW6FNeCfgT1dAy1r
-   g==;
-X-CSE-ConnectionGUID: PA8vrnaxTqyvtyWzZqDffw==
-X-CSE-MsgGUID: jEzjLMaMRwaVv12PvyTTiQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="18539075"
-X-IronPort-AV: E=Sophos;i="6.07,173,1708416000"; 
-   d="scan'208";a="18539075"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 20:52:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,173,1708416000"; 
-   d="scan'208";a="22607322"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa003.jf.intel.com with ESMTP; 01 Apr 2024 20:52:04 -0700
-Date: Tue, 2 Apr 2024 11:47:13 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Peter Colberg <peter.colberg@intel.com>
-Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Alan Tull <atull@kernel.org>, Shiva Rao <shiva.rao@intel.com>,
-	Kang Luwei <luwei.kang@intel.com>,
-	Enno Luebbers <enno.luebbers@intel.com>, linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Russ Weight <russ.weight@linux.dev>,
-	Marco Pagani <marpagan@redhat.com>,
-	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] fpga: dfl: fme: fix kernel-doc comments for some
- functions
-Message-ID: <Zgt/wftzm4xthfio@yilunxu-OptiPlex-7050>
-References: <20240329001542.8099-1-peter.colberg@intel.com>
+	s=arc-20240116; t=1712032983; c=relaxed/simple;
+	bh=VY23z033UnkfMFSKC7qGity31SFRLGUYYweOjQ/nK54=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hyXu03vA67sWzRDf+iXlOFKKxVMzc8UpxVsmB6fUaJBQppjEJ3HASUjDmzcYvUMk1oIWoc9UzzcbkM7npoLk+5SeEsz1jQWY4xDeMqqMqyTUBvF0EFVwfXQW1qnhbbQV2Ps8AhicfxWd7ehjCSv9FTh4+wwLlLDgS9cXELwv/vQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=R/cS9EBR; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=zalD8cbpimqALrAnhU1MWxa0W1J+AI9zH7OB+CRpPSc=; b=R/cS9EBRYUnM4DUW2L+dBpBzHP
+	3CFf/FIwz7bEtUrbvMoOTa6p/Tu2IIWE9DLthRDasfNtKxmToM1E1hCq3fVbYiVv9ZCUk+yt0OmEB
+	M+9ab6kAVXgfAOj5nIsevvB6BBU8uR/1UO4yxCYQLAX9yM4eLYJk6f5ptFXibEmpQ5bTlcg3BVKcx
+	QtquFm/WheleB72QpICoaV6xtHXfpT4xNB37YTH28POVHfy3kunIMew26EfL+VnKZ9htPINjPmM/D
+	WlNj7xL8QvZ/FUCE7ZAlgFdVM6BUBjBRxyNR4Uxn2gkfrdEfY8oZ4BWSzwfs4xW/R6ql4lDiwHX88
+	flU5LD+A==;
+Received: from [50.53.2.121] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rrVz8-00000009hUR-1LGs;
+	Tue, 02 Apr 2024 04:42:58 +0000
+Message-ID: <fb49e921-a765-4828-bcfe-b2b4e623c5ea@infradead.org>
+Date: Mon, 1 Apr 2024 21:42:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240329001542.8099-1-peter.colberg@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] fpga: dfl: fme: fix kernel-doc comments for some
+ functions
+To: Xu Yilun <yilun.xu@linux.intel.com>,
+ Peter Colberg <peter.colberg@intel.com>
+Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+ Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+ Alan Tull <atull@kernel.org>, Shiva Rao <shiva.rao@intel.com>,
+ Kang Luwei <luwei.kang@intel.com>, Enno Luebbers <enno.luebbers@intel.com>,
+ linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Russ Weight <russ.weight@linux.dev>, Marco Pagani <marpagan@redhat.com>,
+ Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+ kernel test robot <lkp@intel.com>
+References: <20240329001542.8099-1-peter.colberg@intel.com>
+ <Zgt/wftzm4xthfio@yilunxu-OptiPlex-7050>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <Zgt/wftzm4xthfio@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 28, 2024 at 08:15:42PM -0400, Peter Colberg wrote:
-> From: Xu Yilun <yilun.xu@intel.com>
 
-I didn't remember I wrote this exact patch, but anyway the patch itself
-is confusing.
 
+On 4/1/24 8:47 PM, Xu Yilun wrote:
+> On Thu, Mar 28, 2024 at 08:15:42PM -0400, Peter Colberg wrote:
+>> From: Xu Yilun <yilun.xu@intel.com>
 > 
-> lkp reported 2 build warnings:
+> I didn't remember I wrote this exact patch, but anyway the patch itself
+> is confusing.
 > 
->    drivers/fpga/dfl/dfl-fme-pr.c:175: warning: Function parameter or member 'feature' not described in 'dfl_fme_create_mgr'
+>>
+>> lkp reported 2 build warnings:
+>>
+>>    drivers/fpga/dfl/dfl-fme-pr.c:175: warning: Function parameter or member 'feature' not described in 'dfl_fme_create_mgr'
+>>
+>>>> drivers/fpga/dfl/dfl-fme-pr.c:280: warning: expecting prototype for
+>>>> dfl_fme_destroy_bridge(). Prototype was for dfl_fme_destroy_bridges()
+>>>> instead
+>>
+>> Fixes: 29de76240e86 ("fpga: dfl: fme: add partial reconfiguration sub feature support")
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+>> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+
+All kernel-doc issues with this source file are already fixed in linux-next
+by this commit:
+
+commit 782d8e61b5d6
+Author: Randy Dunlap <rdunlap@infradead.org>
+Date:   Thu Jan 12 22:37:20 2023 -0800
+
+    fpga: dfl: kernel-doc corrections
+    
+    Fix W=1 kernel-doc warnings in drivers/fpga/:
+
+
+>> ---
+>>  drivers/fpga/dfl-fme-pr.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
+>> index cdcf6dea4cc9..96cb24787ab1 100644
+>> --- a/drivers/fpga/dfl-fme-pr.c
+>> +++ b/drivers/fpga/dfl-fme-pr.c
+>> @@ -166,6 +166,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
+>>   * dfl_fme_create_mgr - create fpga mgr platform device as child device
+>>   * @feature: sub feature info
 > 
-> >> drivers/fpga/dfl/dfl-fme-pr.c:280: warning: expecting prototype for
-> >> dfl_fme_destroy_bridge(). Prototype was for dfl_fme_destroy_bridges()
-> >> instead
+> The member 'feature' is described here. It still causes build warning?
 > 
-> Fixes: 29de76240e86 ("fpga: dfl: fme: add partial reconfiguration sub feature support")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-> ---
->  drivers/fpga/dfl-fme-pr.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>>   * @pdata: fme platform_device's pdata
+>> + * @feature: the dfl fme PR sub feature
 > 
-> diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
-> index cdcf6dea4cc9..96cb24787ab1 100644
-> --- a/drivers/fpga/dfl-fme-pr.c
-> +++ b/drivers/fpga/dfl-fme-pr.c
-> @@ -166,6 +166,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
->   * dfl_fme_create_mgr - create fpga mgr platform device as child device
->   * @feature: sub feature info
-
-The member 'feature' is described here. It still causes build warning?
-
->   * @pdata: fme platform_device's pdata
-> + * @feature: the dfl fme PR sub feature
-
-Why adding a duplicated item would fix the warning?
-
->   *
->   * Return: mgr platform device if successful, and error code otherwise.
->   */
-> @@ -273,7 +274,7 @@ static void dfl_fme_destroy_bridge(struct dfl_fme_bridge *fme_br)
->  }
->  
->  /**
-> - * dfl_fme_destroy_bridges - destroy all fpga bridge platform device
-
-The prototype is for dfl_fme_destroy_bridges(), why the warning?
-
-> + * dfl_fme_destroy_bridges - destroy all fpga bridge platform devices
-
-Correct the plural form in description would fix the warning?
-
->   * @pdata: fme platform device's pdata
->   */
->  static void dfl_fme_destroy_bridges(struct dfl_feature_platform_data *pdata)
-> -- 
-> 2.44.0
+> Why adding a duplicated item would fix the warning?
 > 
+>>   *
+>>   * Return: mgr platform device if successful, and error code otherwise.
+>>   */
+>> @@ -273,7 +274,7 @@ static void dfl_fme_destroy_bridge(struct dfl_fme_bridge *fme_br)
+>>  }
+>>  
+>>  /**
+>> - * dfl_fme_destroy_bridges - destroy all fpga bridge platform device
 > 
+> The prototype is for dfl_fme_destroy_bridges(), why the warning?
+> 
+>> + * dfl_fme_destroy_bridges - destroy all fpga bridge platform devices
+> 
+> Correct the plural form in description would fix the warning?
+> 
+>>   * @pdata: fme platform device's pdata
+>>   */
+>>  static void dfl_fme_destroy_bridges(struct dfl_feature_platform_data *pdata)
+>> -- 
+>> 2.44.0
+>>
+>>
+> 
+
+-- 
+#Randy
 
