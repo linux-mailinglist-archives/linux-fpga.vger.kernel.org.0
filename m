@@ -1,119 +1,129 @@
-Return-Path: <linux-fpga+bounces-385-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-386-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88D73894B82
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 08:35:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA769894BF4
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 08:57:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6F901C21918
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 06:35:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 177F41C21AEF
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 06:57:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B485424A04;
-	Tue,  2 Apr 2024 06:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F66D2D047;
+	Tue,  2 Apr 2024 06:57:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c3khOu2N"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W98QVcbY"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3A2249E4;
-	Tue,  2 Apr 2024 06:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F75D2C18D;
+	Tue,  2 Apr 2024 06:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712039754; cv=none; b=ATfO+jxyOjbi2kb6FuuNE8RImKsgM+wXQFdbLfZSnkN1s2p8yhgC58/DP0iA/b/Mk6A2dy8BnmRsrwSmLecCJNfBfm4Tv7dgnNNJ+VPZPD5O0VQOO9KR6z5JgYrLgYBqy6gh9aRN5vMca5q3JkZ5E2c9oHtbCiSnGm42NlrwzKE=
+	t=1712041071; cv=none; b=jrOFkM3fJKDjBHvcGnwRprJG/qk+IxhL33yP/38ayGIh99PR7qstZJiPxJ7eBJ6F4Rs/Pq7tspBIOjfrYJJL/J/lbGmUmaV1VhJsxk7jlg+/JYGvVkgY0KfaiO/5W1HKTXk3gdl7x673EjIIJ7O9S5t3i4M78g7anEVtDwSlapc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712039754; c=relaxed/simple;
-	bh=Feqjj4R3LtzqrmfPSc4AxFtg1P9nxO6x1fNkNugNZJw=;
+	s=arc-20240116; t=1712041071; c=relaxed/simple;
+	bh=C9VufDIku+v7A3R5bMpDMYs7kJPjF5QoKcrVsdVl56I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GOdBmLtyr+qol1ufV9agnc9NRVdyeLA5aNAPyskVw7tYenXbfx4PRp/xg9WGlVr/JURSLxLNTVmL5MMdxlcAOH5skLDGjLVj7yqolnIcJ8PwAyF0IDZEibSW2HEMYr/obCdBGaIrPpDJFnStexcnBpi5jFrkDoAMZNdaE3IxfT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c3khOu2N; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=piR0eC07d8BxM3VMC4ME457EDkG0+uEjX8CfdyM2i41uMVESmwG7ukpdk+//VG8y+eqSfoxjKjA1nq58KwLHqyLkQ1UhH0s2nePL47iv5YyspM1QVo/jtGp7CQyA0FBh6GXkvSUUGpeIqXO89E79aAOizdI8HK+VwEvnYYzwLrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W98QVcbY; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712039753; x=1743575753;
+  t=1712041069; x=1743577069;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Feqjj4R3LtzqrmfPSc4AxFtg1P9nxO6x1fNkNugNZJw=;
-  b=c3khOu2NdM2V0fD0EqN6gA1l/69wX05ds4CxY8Q/G7b0w7HEwqnBJ8wA
-   VELK99RFIS4HOu89u6253Dld4Uz5y73vqgWRC1yGBoGgy3DlEN9wjACDM
-   S4NQIBHBRO7Lu9QVpVgkzXlTWTDFOdnY7SXN6VP9pRXQLLNu14MmlaZKI
-   wCymdkbZBtlqpEfozJo9wR9ABTjhw/yEjHUETUTFqExV3srOX8mZsTVEy
-   36J86TTGlC/6tvH/HUk/Mn8SYzgUO0txlwip2RjMJm3I/+K6CKxIe+TyA
-   2lo1PgMckCi9u7T+QMo/6HEetxFl9kMXNPcczC49WqEgce/waGrrebS2e
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=C9VufDIku+v7A3R5bMpDMYs7kJPjF5QoKcrVsdVl56I=;
+  b=W98QVcbYcj7bmpBX2nQtQ1aTYf3WEXZ4W1XRE5g56QJaI8p24eIeD67y
+   Xe3jYUd9vWgvseJheeR46Et5faQn7Wmpg4Qi7BPiGRQ+ACqg/CCJyZHYc
+   JJpESWNkVpLNox5R7Tq6Q9dDpuaFeblTpjbLtwXO1umBWUSj4QyKKKMV0
+   opu9l6Y2zVSIjDig9ub0iStD0DL65Op3t7uJOQ0ZDipLtVrohJd5KEQ/F
+   pAxdckazB2QPs/10RuEhl3vsfOH7XQZz6Tl2C96Chz6sDZldOBghREg3z
+   zrevPeBQX89Q/prjyvVgozCyN2WkBnjEZW4Dvz4EHtYL9OeLMmE9Q583l
    A==;
-X-CSE-ConnectionGUID: VoxBJcvFQvSfIUkcPxb2iw==
-X-CSE-MsgGUID: ddVnmZ9ZS3WW58SS/DlbiA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="17810246"
+X-CSE-ConnectionGUID: KdII90wSTe2CmLF8Ate07A==
+X-CSE-MsgGUID: tOC8/gaoT3G/chtI3mR+Lw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="32592787"
 X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="17810246"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 23:35:49 -0700
+   d="scan'208";a="32592787"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 23:57:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="18043933"
+   d="scan'208";a="18044671"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa008.fm.intel.com with ESMTP; 01 Apr 2024 23:35:47 -0700
-Date: Tue, 2 Apr 2024 14:30:57 +0800
+  by fmviesa007.fm.intel.com with ESMTP; 01 Apr 2024 23:57:39 -0700
+Date: Tue, 2 Apr 2024 14:52:48 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+To: Russ Weight <russ.weight@linux.dev>
+Cc: Peter Colberg <peter.colberg@intel.com>,
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
 	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	linux-fpga@vger.kernel.org
-Subject: Re: [PATCH] fpga: altera-cvp: Remove an unused field in struct
- altera_cvp_conf
-Message-ID: <ZgumIQV3fUpxNqno@yilunxu-OptiPlex-7050>
-References: <7986690e79fa6f7880bc1db783cb0e46a1c2723e.1711976883.git.christophe.jaillet@wanadoo.fr>
+	Lee Jones <lee@kernel.org>, linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Marco Pagani <marpagan@redhat.com>,
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Russ Weight <russell.h.weight@intel.com>
+Subject: Re: [PATCH] mfd: intel-m10-bmc: Change staging size to a variable
+Message-ID: <ZgurQETbga0Q/PVE@yilunxu-OptiPlex-7050>
+References: <20240328233559.6949-1-peter.colberg@intel.com>
+ <ZgqCdfCSatazEkIj@yilunxu-OptiPlex-7050>
+ <20240401170905.v2xin3fzoe3m3tmz@4VRSMR2-DT.corp.robot.car>
+ <20240401171947.dncdvc3gxna33nxq@4VRSMR2-DT.corp.robot.car>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7986690e79fa6f7880bc1db783cb0e46a1c2723e.1711976883.git.christophe.jaillet@wanadoo.fr>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240401171947.dncdvc3gxna33nxq@4VRSMR2-DT.corp.robot.car>
 
-On Mon, Apr 01, 2024 at 03:08:21PM +0200, Christophe JAILLET wrote:
-> In "struct altera_cvp_conf", the 'mgr' field is unused.
-> Remove it.
+On Mon, Apr 01, 2024 at 10:19:47AM -0700, Russ Weight wrote:
 > 
-> Found with cppcheck, unusedStructMember.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> On Mon, Apr 01, 2024 at 10:09:05AM -0700, Russ Weight wrote:
+> > On Mon, Apr 01, 2024 at 05:46:29PM +0800, Xu Yilun wrote:
+> > > On Thu, Mar 28, 2024 at 07:35:59PM -0400, Peter Colberg wrote:
+> > > > From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > > 
+> > > > The size of the staging area in FLASH for FPGA updates is dependent on the
+> > > > size of the FPGA. Currently, the staging size is defined as a constant.
+> > > > Larger FPGAs are coming soon and it will soon be necessary to support
+> > > 
+> > > Soon? When? You cannot add some feature without a user case. If you do
+> > > have a use case, put the patch in the same patchset.
+> > 
+> > There may never be an up-streamed use-case. This is a very small
+> > change intended to make it easier for a third-party vendor to
+> > build a card that requires a larger staging area in FLASH. They
+> > would have to add a new "struct m10bmc_csr_map", but they
+> > wouldn't have to refactor this code as part of the change
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+I'm OK with this description.
 
-Applied to for-next.
+Peter, is that what you mean? Or you do have a board type to follow, in
+which case you need to submit the new board type as well.
 
-> ---
-> Apparently, it has never been used. It is not a left-over from a
-> refactoring.
+> > 
+> > This change does not introduce an unused function or variable.
+> > It is more of a clean-up, making the code more flexible.
+> > 
+> > Can it not be taken as is?
 > 
-> The address of the 'fpga_manager' is handled via pci_[s|g]et_drvdata().
+> Would it be acceptable to just change the commit message to something
+> like:
 > 
-> Compile tested only.
-> ---
->  drivers/fpga/altera-cvp.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-> index 4ffb9da537d8..6b0914432445 100644
-> --- a/drivers/fpga/altera-cvp.c
-> +++ b/drivers/fpga/altera-cvp.c
-> @@ -72,7 +72,6 @@ static bool altera_cvp_chkcfg;
->  struct cvp_priv;
->  
->  struct altera_cvp_conf {
-> -	struct fpga_manager	*mgr;
->  	struct pci_dev		*pci_dev;
->  	void __iomem		*map;
->  	void			(*write_data)(struct altera_cvp_conf *conf,
-> -- 
-> 2.44.0
-> 
-> 
+> Do not hardwire the staging size in the secure update driver. Move
+> the staging size to the m10bmc_csr_map structure to make the size
+> assignment more flexible.
+
+That would be much better.
+
+Thanks,
+Yilun
 
