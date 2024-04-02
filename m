@@ -1,72 +1,72 @@
-Return-Path: <linux-fpga+bounces-384-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-385-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB9C7894B58
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 08:25:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88D73894B82
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 08:35:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BA12B215D4
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 06:25:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6F901C21918
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 06:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2024019477;
-	Tue,  2 Apr 2024 06:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B485424A04;
+	Tue,  2 Apr 2024 06:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BrQAbdrA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c3khOu2N"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6442B18E29;
-	Tue,  2 Apr 2024 06:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3A2249E4;
+	Tue,  2 Apr 2024 06:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712039118; cv=none; b=nnJsYI/BZgHFIMx6XH5uzJHTFH/Pb9f9ScLxHXXpO2RX2rG0xzf7dJHlMNgEBeC1JPpiU7VtwKTd/HrsbHgkfb3yozu9DQRk9l+IiWhL9n+F3WtAk2heVV14eIqhPp+Er8UAYM94ahNEbYbzHg9btWD9PsFaLZhP0onr0iYNvY0=
+	t=1712039754; cv=none; b=ATfO+jxyOjbi2kb6FuuNE8RImKsgM+wXQFdbLfZSnkN1s2p8yhgC58/DP0iA/b/Mk6A2dy8BnmRsrwSmLecCJNfBfm4Tv7dgnNNJ+VPZPD5O0VQOO9KR6z5JgYrLgYBqy6gh9aRN5vMca5q3JkZ5E2c9oHtbCiSnGm42NlrwzKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712039118; c=relaxed/simple;
-	bh=zKIs5Rjm9Axb/VD3kkOHg5ZttvZfEfpr3Im0059bWQA=;
+	s=arc-20240116; t=1712039754; c=relaxed/simple;
+	bh=Feqjj4R3LtzqrmfPSc4AxFtg1P9nxO6x1fNkNugNZJw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bZYs59D3DEzuPCASFdfGYg3abBpajbcxrH4t3qN/mgg9KUhNm82OBQfU4gzXUKMQzBXud57RhBXWH5nEqjxzWX788IEGDYg/aw5MzjZSiGS+yJD0A5wB6pRyYrvcG/Wu+aRSUPXr4PmEbl5QOxTWtAILE7gHK//U8iao4wl8qAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BrQAbdrA; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=GOdBmLtyr+qol1ufV9agnc9NRVdyeLA5aNAPyskVw7tYenXbfx4PRp/xg9WGlVr/JURSLxLNTVmL5MMdxlcAOH5skLDGjLVj7yqolnIcJ8PwAyF0IDZEibSW2HEMYr/obCdBGaIrPpDJFnStexcnBpi5jFrkDoAMZNdaE3IxfT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c3khOu2N; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712039116; x=1743575116;
+  t=1712039753; x=1743575753;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zKIs5Rjm9Axb/VD3kkOHg5ZttvZfEfpr3Im0059bWQA=;
-  b=BrQAbdrADySWljbPqWq9/LO4KIStscjK1YMchAeDVMw8jmZYsjVQb9OZ
-   DFHvo3jcG9o6NxxANBrULFzokZzn2O1V4EAISW4QsBuEDKgOUcNKwvJPh
-   XAocKQ900CYq6G1/nmIyqiBB3Pg8tgMrCG0d7V/yZi0OC06VgWSxKBd7+
-   RJ6nqUJQdeWsoiHY2kzCwRyCb+4a0JaXvsWUhlFJ0N/mKFMQATPd6nWfL
-   cvqZImfkfopEWzZ0jqyGoFnctdSD5yQA6WGxmR6ZfyB+YVRRFYsRwKX+V
-   htLaEaSdFl+/VDE6lk6CteQ7b42j5PUn36OqEgeMB2xP5lGIlWR157aD9
-   Q==;
-X-CSE-ConnectionGUID: j4/zo/FfSdGqiA4s0M7YIw==
-X-CSE-MsgGUID: AVaSsbHhTimTsVzyebJ6mg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="7774956"
+  bh=Feqjj4R3LtzqrmfPSc4AxFtg1P9nxO6x1fNkNugNZJw=;
+  b=c3khOu2NdM2V0fD0EqN6gA1l/69wX05ds4CxY8Q/G7b0w7HEwqnBJ8wA
+   VELK99RFIS4HOu89u6253Dld4Uz5y73vqgWRC1yGBoGgy3DlEN9wjACDM
+   S4NQIBHBRO7Lu9QVpVgkzXlTWTDFOdnY7SXN6VP9pRXQLLNu14MmlaZKI
+   wCymdkbZBtlqpEfozJo9wR9ABTjhw/yEjHUETUTFqExV3srOX8mZsTVEy
+   36J86TTGlC/6tvH/HUk/Mn8SYzgUO0txlwip2RjMJm3I/+K6CKxIe+TyA
+   2lo1PgMckCi9u7T+QMo/6HEetxFl9kMXNPcczC49WqEgce/waGrrebS2e
+   A==;
+X-CSE-ConnectionGUID: VoxBJcvFQvSfIUkcPxb2iw==
+X-CSE-MsgGUID: ddVnmZ9ZS3WW58SS/DlbiA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="17810246"
 X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="7774956"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 23:25:15 -0700
+   d="scan'208";a="17810246"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 23:35:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="17928830"
+   d="scan'208";a="18043933"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa009.jf.intel.com with ESMTP; 01 Apr 2024 23:25:13 -0700
-Date: Tue, 2 Apr 2024 14:20:22 +0800
+  by fmviesa008.fm.intel.com with ESMTP; 01 Apr 2024 23:35:47 -0700
+Date: Tue, 2 Apr 2024 14:30:57 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Marco Pagani <marpagan@redhat.com>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
 	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Russ Weight <russ.weight@linux.dev>, linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fpga: tests: use KUnit devices instead of platform
- devices
-Message-ID: <ZgujpnLfHTp+WRNL@yilunxu-OptiPlex-7050>
-References: <20240329174849.248243-1-marpagan@redhat.com>
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-fpga@vger.kernel.org
+Subject: Re: [PATCH] fpga: altera-cvp: Remove an unused field in struct
+ altera_cvp_conf
+Message-ID: <ZgumIQV3fUpxNqno@yilunxu-OptiPlex-7050>
+References: <7986690e79fa6f7880bc1db783cb0e46a1c2723e.1711976883.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -75,21 +75,45 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240329174849.248243-1-marpagan@redhat.com>
+In-Reply-To: <7986690e79fa6f7880bc1db783cb0e46a1c2723e.1711976883.git.christophe.jaillet@wanadoo.fr>
 
-On Fri, Mar 29, 2024 at 06:48:47PM +0100, Marco Pagani wrote:
-> KUnit now provides helper functions to create fake devices, so use them
-> instead of relying on platform devices.
+On Mon, Apr 01, 2024 at 03:08:21PM +0200, Christophe JAILLET wrote:
+> In "struct altera_cvp_conf", the 'mgr' field is unused.
+> Remove it.
 > 
-> Other changes: remove an unnecessary white space in the fpga region suite.
+> Found with cppcheck, unusedStructMember.
 > 
-> Reviewed-by: Russ Weight <russ.weight@linux.dev>
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
 Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-Does this patch has dependency on module owner changes for fpga-mgr/bridge/region?
+Applied to for-next.
 
-Thanks,
-Yilun
+> ---
+> Apparently, it has never been used. It is not a left-over from a
+> refactoring.
+> 
+> The address of the 'fpga_manager' is handled via pci_[s|g]et_drvdata().
+> 
+> Compile tested only.
+> ---
+>  drivers/fpga/altera-cvp.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
+> index 4ffb9da537d8..6b0914432445 100644
+> --- a/drivers/fpga/altera-cvp.c
+> +++ b/drivers/fpga/altera-cvp.c
+> @@ -72,7 +72,6 @@ static bool altera_cvp_chkcfg;
+>  struct cvp_priv;
+>  
+>  struct altera_cvp_conf {
+> -	struct fpga_manager	*mgr;
+>  	struct pci_dev		*pci_dev;
+>  	void __iomem		*map;
+>  	void			(*write_data)(struct altera_cvp_conf *conf,
+> -- 
+> 2.44.0
+> 
+> 
 
