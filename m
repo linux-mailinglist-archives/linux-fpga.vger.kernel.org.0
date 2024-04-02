@@ -1,157 +1,170 @@
-Return-Path: <linux-fpga+bounces-382-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-383-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A483F894A8D
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 06:43:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49B01894A9C
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 06:49:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EE56282922
-	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 04:43:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CABD21F23917
+	for <lists+linux-fpga@lfdr.de>; Tue,  2 Apr 2024 04:49:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0234017BCA;
-	Tue,  2 Apr 2024 04:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394A017C61;
+	Tue,  2 Apr 2024 04:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="R/cS9EBR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FQaVlFg0"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598012581;
-	Tue,  2 Apr 2024 04:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F3B17BBA;
+	Tue,  2 Apr 2024 04:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712032983; cv=none; b=VT5jqNVaJeqFCssMHUhP3ktmA7p3Z6DVC3gCYjNEj6GjLCEneFwtdyBNdclv4bd1ntlO4UdQ84n3juexabD/lC2KmgqtRtXFhlkEbZWtWECQ1lqVP3e26t3oV323pnHm2rGY9Q6Bmxob4YtYwbWr12h10DSX1BnRAM0L7VSo+1I=
+	t=1712033339; cv=none; b=bhPimYtXDTXR5UWtXwzGDHcBaGLif2fqcJG1xTPy34A9N41iWLKey63hxDvOV6kBSUGYnDx2bawWTCgi9UHg6XlBDiLt8JFClTFZJB3kMQqbuaZk9pFJ8ALLhc/ZfpwB5yJ3iLqEUs8Zj6ISF4QGpTQ1B2Q14iq3dTdcy9s/uBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712032983; c=relaxed/simple;
-	bh=VY23z033UnkfMFSKC7qGity31SFRLGUYYweOjQ/nK54=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hyXu03vA67sWzRDf+iXlOFKKxVMzc8UpxVsmB6fUaJBQppjEJ3HASUjDmzcYvUMk1oIWoc9UzzcbkM7npoLk+5SeEsz1jQWY4xDeMqqMqyTUBvF0EFVwfXQW1qnhbbQV2Ps8AhicfxWd7ehjCSv9FTh4+wwLlLDgS9cXELwv/vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=R/cS9EBR; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=zalD8cbpimqALrAnhU1MWxa0W1J+AI9zH7OB+CRpPSc=; b=R/cS9EBRYUnM4DUW2L+dBpBzHP
-	3CFf/FIwz7bEtUrbvMoOTa6p/Tu2IIWE9DLthRDasfNtKxmToM1E1hCq3fVbYiVv9ZCUk+yt0OmEB
-	M+9ab6kAVXgfAOj5nIsevvB6BBU8uR/1UO4yxCYQLAX9yM4eLYJk6f5ptFXibEmpQ5bTlcg3BVKcx
-	QtquFm/WheleB72QpICoaV6xtHXfpT4xNB37YTH28POVHfy3kunIMew26EfL+VnKZ9htPINjPmM/D
-	WlNj7xL8QvZ/FUCE7ZAlgFdVM6BUBjBRxyNR4Uxn2gkfrdEfY8oZ4BWSzwfs4xW/R6ql4lDiwHX88
-	flU5LD+A==;
-Received: from [50.53.2.121] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rrVz8-00000009hUR-1LGs;
-	Tue, 02 Apr 2024 04:42:58 +0000
-Message-ID: <fb49e921-a765-4828-bcfe-b2b4e623c5ea@infradead.org>
-Date: Mon, 1 Apr 2024 21:42:54 -0700
+	s=arc-20240116; t=1712033339; c=relaxed/simple;
+	bh=9dnJjfacnC5NIXeRU42Rs8bqYi+ZfEdAnf1tJGX8DCc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Oy2SFSV9vACHj21c8qtKQYufNaUu8b785KjgRX9Et7iWmJnRfPBKCU5Mlz6RNVzAYW46JJvWu5q1VE27X0zilw94yX1dhyBbRhYlua6J6mf0wA7zTKb5220MFgQsZYc0Fsvrf98w/9ZZEkDbN9iMt90dS+2l/bP1hRfwvAjLEac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FQaVlFg0; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712033337; x=1743569337;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9dnJjfacnC5NIXeRU42Rs8bqYi+ZfEdAnf1tJGX8DCc=;
+  b=FQaVlFg0oLACqi4CtmMTHoHJ0zrqTj50S3M2l695jDqFds6K2B3gX2Bp
+   B86tH0mWyUFbEua76H8zbY5IiCi3v9RCFwMFK5C+uZQk6nO9puCOPmfJW
+   eOpK+YzuuLW+FvPgQi+GevJyE/3V0GNCPbeDvW9F9V9QOIbbei/43wLOX
+   DtXcxUFXP2fZjJ70FtOGfcTj+RorkLSQqw4jFAAFEnFsiLh8r7PbinQyp
+   Wejg99OKpyKwJx5RebCUx5xm8I9Kn1u6nj9uWxa0Ucp9UuOgaG13ye7zr
+   siJR1NOPmzmc8ZzmudP7klHWxCMJKCObnGtyDG6+KVdoTzZgQWbVfaTDh
+   Q==;
+X-CSE-ConnectionGUID: LkR//19HQR2ci2V1gQmFmw==
+X-CSE-MsgGUID: 2MvqGf7YQViSQWnT0TamUg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="24639104"
+X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
+   d="scan'208";a="24639104"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 21:48:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
+   d="scan'208";a="22601807"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa004.fm.intel.com with ESMTP; 01 Apr 2024 21:48:54 -0700
+Date: Tue, 2 Apr 2024 12:44:03 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: matthew.gerlach@linux.intel.com
+Cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Tim Whisonant <tim.whisonant@intel.com>,
+	Ananda Ravuri <ananda.ravuri@intel.com>
+Subject: Re: [PATCH] fpga: add DFL driver for CXL Cache IP block
+Message-ID: <ZguNE7mnDwNaT+/7@yilunxu-OptiPlex-7050>
+References: <20240308172327.1970160-1-matthew.gerlach@linux.intel.com>
+ <ZflkK/VZO0wqiAhz@yilunxu-OptiPlex-7050>
+ <alpine.DEB.2.22.394.2403281549070.340749@sj-4150-psse-sw-opae-dev2>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] fpga: dfl: fme: fix kernel-doc comments for some
- functions
-To: Xu Yilun <yilun.xu@linux.intel.com>,
- Peter Colberg <peter.colberg@intel.com>
-Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
- Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
- Alan Tull <atull@kernel.org>, Shiva Rao <shiva.rao@intel.com>,
- Kang Luwei <luwei.kang@intel.com>, Enno Luebbers <enno.luebbers@intel.com>,
- linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
- Russ Weight <russ.weight@linux.dev>, Marco Pagani <marpagan@redhat.com>,
- Matthew Gerlach <matthew.gerlach@linux.intel.com>,
- kernel test robot <lkp@intel.com>
-References: <20240329001542.8099-1-peter.colberg@intel.com>
- <Zgt/wftzm4xthfio@yilunxu-OptiPlex-7050>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Zgt/wftzm4xthfio@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2403281549070.340749@sj-4150-psse-sw-opae-dev2>
 
+On Fri, Mar 29, 2024 at 08:34:49AM -0700, matthew.gerlach@linux.intel.com wrote:
+> 
+> 
+> On Tue, 19 Mar 2024, Xu Yilun wrote:
+> 
+> > On Fri, Mar 08, 2024 at 09:23:27AM -0800, Matthew Gerlach wrote:
+> > > From: Tim Whisonant <tim.whisonant@intel.com>
+> > > 
+> > > Add a Device Feature List (DFL) driver for the
+> > > Intel CXL Cache IP block. The driver
+> > > provides a means of accessing the device MMIO and the
+> > 
+> > Why the device MMIO should be accessed by userspace?
+> 
+> The definition of the MMIO space is actually dependent on the the custom
+> logic in the FPGA image. Given the variability of the custom logic
+> implemented in the FPGA, it seems burdensome to handle the variability in
+> kernel code.
+> 
+> > 
+> > > capability to pin buffers and program their physical
+> > > addresses into the HE-Cache registers. User interface
+> > 
+> > Are these registers also exposed to userspace?
+> 
+> These registers are currently exposed to user space as well. It probably
+> make sense to be consistent and let user space code handle these registers,
+> like all custom logic registers, in user space.
+> 
+> > 
+> > And this patch to support a new device/IP, please firstly describe
+> > what the device/IP is doing.  I think not everyone(including me) here
+> > is familar with CXL standard and how this IP block is implementing CXL
+> > functionality.  Some reference documentation is also helpful.
+> 
+> This is very good feedback. There are actually multiple IP blocks involved
+> here. There is a Hard IP block (HIP), and there is a FPGA/soft IP block
+> interfacing the HIP, and then there is custom logic implementing a desired
+> application.
+> 
+> > 
+> > After a quick skim of this patch, I can see user is trying to write a
+> > set of physical addrs to some register, but have no idea why this
+> > should be done. i.e. Do not reiterate what the code literally does.
+> 
+> In this case, the physical addresses are being written to the custom,
+> application logic in the FPGA and should be moved to user space.
+> 
+> If all MMIO to the custom logic is moved to user space, then this driver is
+> not really about CXL and hardware. This driver just provides services of
+> pinning/unpinning memory with numa node awareness. In this case, the driver
+> name is wrong because there is nothing related to CXL nor any specific
+> hardware implementation.
 
+If this is not related to any hardware implementation. I'm afraid it is not
+just the naming. From the limited knowledge I've got, you just want an
+interface in memory management system, not in FPGA/DFL. You may send a
+patch to MM people (or VFIO) for review, their opinions are determinative.
+But my opinion is the patch is far from being ready to send. Some
+questions I can quickly think of, FYI:
 
-On 4/1/24 8:47 PM, Xu Yilun wrote:
-> On Thu, Mar 28, 2024 at 08:15:42PM -0400, Peter Colberg wrote:
->> From: Xu Yilun <yilun.xu@intel.com>
-> 
-> I didn't remember I wrote this exact patch, but anyway the patch itself
-> is confusing.
-> 
->>
->> lkp reported 2 build warnings:
->>
->>    drivers/fpga/dfl/dfl-fme-pr.c:175: warning: Function parameter or member 'feature' not described in 'dfl_fme_create_mgr'
->>
->>>> drivers/fpga/dfl/dfl-fme-pr.c:280: warning: expecting prototype for
->>>> dfl_fme_destroy_bridge(). Prototype was for dfl_fme_destroy_bridges()
->>>> instead
->>
->> Fixes: 29de76240e86 ("fpga: dfl: fme: add partial reconfiguration sub feature support")
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
->> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+1. A justification why a physical address(CPU's perspective) is needed in
+   userspace?
 
-All kernel-doc issues with this source file are already fixed in linux-next
-by this commit:
+2. If question #1 is related to device requirement, why a device needs a
+CPU physical address, rather than IOVA.
 
-commit 782d8e61b5d6
-Author: Randy Dunlap <rdunlap@infradead.org>
-Date:   Thu Jan 12 22:37:20 2023 -0800
+> 
+> > 
+> > > is exposed via /dev/dfl-cxl-cache.X as described in
+> > > include/uapi/linux/fpga-dfl.h.
+> > 
+> > And please split the patch, e.g. first add a skeleton of bus driver,
+> > then add the skeleton of char interface, then add the functionalities
+> > one by one.  This gives chances to clearly describe each function, and
+> > why add it, etc.
+> 
+> If this driver is only implementing a char interface to memory management,
+> does it make sense to split the code into separate patches?
 
-    fpga: dfl: kernel-doc corrections
-    
-    Fix W=1 kernel-doc warnings in drivers/fpga/:
+In general, it is alway good to split the whole code into small patches.
+That makes better understanding. But since it seems to be a different
+story now, the most important thing is to clearly tell the use case, what's
+the existing solution kernel have, why they are not fit for you? what
+are the possible options? why you choose this option? A general word that
+application logic demands is not helpful.
 
-
->> ---
->>  drivers/fpga/dfl-fme-pr.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
->> index cdcf6dea4cc9..96cb24787ab1 100644
->> --- a/drivers/fpga/dfl-fme-pr.c
->> +++ b/drivers/fpga/dfl-fme-pr.c
->> @@ -166,6 +166,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
->>   * dfl_fme_create_mgr - create fpga mgr platform device as child device
->>   * @feature: sub feature info
-> 
-> The member 'feature' is described here. It still causes build warning?
-> 
->>   * @pdata: fme platform_device's pdata
->> + * @feature: the dfl fme PR sub feature
-> 
-> Why adding a duplicated item would fix the warning?
-> 
->>   *
->>   * Return: mgr platform device if successful, and error code otherwise.
->>   */
->> @@ -273,7 +274,7 @@ static void dfl_fme_destroy_bridge(struct dfl_fme_bridge *fme_br)
->>  }
->>  
->>  /**
->> - * dfl_fme_destroy_bridges - destroy all fpga bridge platform device
-> 
-> The prototype is for dfl_fme_destroy_bridges(), why the warning?
-> 
->> + * dfl_fme_destroy_bridges - destroy all fpga bridge platform devices
-> 
-> Correct the plural form in description would fix the warning?
-> 
->>   * @pdata: fme platform device's pdata
->>   */
->>  static void dfl_fme_destroy_bridges(struct dfl_feature_platform_data *pdata)
->> -- 
->> 2.44.0
->>
->>
-> 
-
--- 
-#Randy
+Thanks,
+Yilun
 
