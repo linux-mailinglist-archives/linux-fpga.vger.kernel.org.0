@@ -1,156 +1,116 @@
-Return-Path: <linux-fpga+bounces-406-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-407-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D718A89744F
-	for <lists+linux-fpga@lfdr.de>; Wed,  3 Apr 2024 17:47:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 243908974E1
+	for <lists+linux-fpga@lfdr.de>; Wed,  3 Apr 2024 18:09:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76CE61F225D9
-	for <lists+linux-fpga@lfdr.de>; Wed,  3 Apr 2024 15:47:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BFE11C26710
+	for <lists+linux-fpga@lfdr.de>; Wed,  3 Apr 2024 16:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0194D14A4C4;
-	Wed,  3 Apr 2024 15:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 021E114E2E8;
+	Wed,  3 Apr 2024 16:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oHUUxulc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jcKjSobB"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2D6149DE1;
-	Wed,  3 Apr 2024 15:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B588C14E2DC;
+	Wed,  3 Apr 2024 16:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712159217; cv=none; b=DKgZgNlqdoUq3bemhF19nU1lH24s3tkgldD6T9lIKSPxbRXm5qoJS8SDdPNsv++i2/qqWkio1DhV3KiGrrbZG1zGWuIXVxvDtx+PUAWSk/gTJCQZ32gBQfXC/MejQ6i67He4f4S7lCvgY4RV7iEKESe9Uwv1AYlXAKDtFFP4A/w=
+	t=1712160590; cv=none; b=tMzNNRwvuL4xKu3ObIZreVIYllJX0VEwnt/9/8A9m83Y6EXAavLbiAO26dJm+dct40OW8b0IrFb4AK5wimx0arKEaeuS2QMi5484j3+J2fe0i2Kw8/+449DDCg2tvvusRqoDxEbwKaO0/n/RWy6vyas726DFXQ1J9mNIuI4cS+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712159217; c=relaxed/simple;
-	bh=XiYKyw+AJCXchrW+Wi7lqiXPYWcBscqK01H9Iv3gS30=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HG64FuEOiJ3K6w5ENQ5AleX/CO5u2LKhSGZYfxu4CrQkRxB0McmEvjNK81fXVpN5g2jQ6ETrbRfO4JRH26vKX1hPYabuZlNdNMZlL7h/74u/a2wuQ8Pu2/0aqTU0i7AwIAjZvDHL+znh2nPVpVGhrgFx4gmQObqy/UcVfKZm7jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oHUUxulc; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712159215; x=1743695215;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XiYKyw+AJCXchrW+Wi7lqiXPYWcBscqK01H9Iv3gS30=;
-  b=oHUUxulcunXc19oWfNx0NKZFpMw1euCvoGWDGhDnj9OhyrgkpfMWvEw4
-   YKWrr3/Y3al+3p599ax/io3gmUszdtnt9JnFCqZH6UOObfzC02K1qMygh
-   SrQkd76EZk+IEa65nFtwVyCZMRhdQCWXuPe++7xWtwVF69RCQINudiVp1
-   Mkkrq3YH7QgTOwKe1SM+fo7Wr5TiWQ+8GpOZAmz7S6xjt+vjaKiNGaCqN
-   WuOu6nLNkHXIe0YZ4XgdcrR7eZaSMeOQNttA+CvWNNYhbfUfseJ7CWFc9
-   E8l3+T38AO4Xrq/aXP6wPwb80qMYPIgdgkbfzWG7ovzjkrwdElGT+Vgqs
-   g==;
-X-CSE-ConnectionGUID: S9RLrCehTUKrWXVaYY4+AQ==
-X-CSE-MsgGUID: v16yJMztTtGy3gQZ7g8fpQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="17972612"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="17972612"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 08:46:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="915186749"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="915186749"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 08:46:30 -0700
-Received: from andy by smile with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rs2ol-00000001A3N-3xYM;
-	Wed, 03 Apr 2024 18:46:27 +0300
-Date: Wed, 3 Apr 2024 18:46:27 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-	linux-fpga@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>
-Subject: Re: [PATCH v1 1/1] fpga: dfl: pci: Use pci_find_vsec_capability()
- when looking for DFL
-Message-ID: <Zg1506TfukWTGRVa@smile.fi.intel.com>
-References: <20211109154127.18455-1-andriy.shevchenko@linux.intel.com>
- <8ccc133a-fb47-4548-fee3-d57775a5166d@redhat.com>
- <YYq4fSRoyzFE4Vei@smile.fi.intel.com>
- <39ac1f40-66ab-6c7e-0042-8fcdc062ed00@redhat.com>
- <YYuBz0tdduAk1c/6@smile.fi.intel.com>
- <3106bd57-9144-6a4d-8ad9-3ebf804018ab@redhat.com>
- <CAHp75Vf16mH4KQ232rip9MPLoSE1TmJ_jeiwVUzqxOH5b0RFJQ@mail.gmail.com>
- <Zg03BTubHLslIi_P@smile.fi.intel.com>
- <Zg1xZ+k8eZJwOs41@yilunxu-OptiPlex-7050>
+	s=arc-20240116; t=1712160590; c=relaxed/simple;
+	bh=8hzZGuG3Djlgf0qMwrfrn4bWy2pLWmCCjfypaPd6iaU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=tJaGtwjEjTezCb56WYqyDf0bl03EZxpj8BiJulTlSG/m95BaVKr7XaVQwgkSAHlT7aHjzTF8byu4fD6Lh10WsoKifcpnI1QoMsY5+pBvmZXSO+SCbj7Syb09/5iJK5uSjlrA9cgtNy0UxZxDgh73e+aHoeiV/tx/09miV/2PXc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jcKjSobB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D70C433B1;
+	Wed,  3 Apr 2024 16:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712160590;
+	bh=8hzZGuG3Djlgf0qMwrfrn4bWy2pLWmCCjfypaPd6iaU=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=jcKjSobBys2AwDWtHUg+nZNz255hX8YJ8clocbZnVtIj0h52DY808t+gVnLSzkMLC
+	 X2jjQFAvUGmd4lb2M/HiK8OYAD4oRg6oM2wRSk/RtDyPOErdicM/kRH7ZmaFffstdd
+	 A5uhuABW7lcrvZbj6juYMAQtimJyqGFQZcIGMI0EOpEDTaFtJn8kgeNnGah9Hgz94S
+	 IOzUjSSG8Dy1PPZNqM66yJrWCw2X5fzAFrh0GVmZ1l/EQYOliuMJ261ne92VmHIt0M
+	 aZaraEfx5h6OpkWv3gkSRGiGucYprWgAnxL9Gst4Y9JBTDvukYB1H1HajHS8VYD79T
+	 fVNVTde8ha+Ew==
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zg1xZ+k8eZJwOs41@yilunxu-OptiPlex-7050>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 03 Apr 2024 19:09:38 +0300
+Message-Id: <D0AM9RGC7D65.2V9TFGBOSF3LN@kernel.org>
+Subject: Re: [PATCH 33/34] drivers: remove incorrect of_match_ptr/ACPI_PTR
+ annotations
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Arnd Bergmann" <arnd@kernel.org>, <linux-kernel@vger.kernel.org>,
+ "Corey Minyard" <minyard@acm.org>, "Peter Huewe" <peterhuewe@gmx.de>,
+ "Vinod Koul" <vkoul@kernel.org>, "Moritz Fischer" <mdf@kernel.org>, "Wu
+ Hao" <hao.wu@intel.com>, "Xu Yilun" <yilun.xu@intel.com>, "Jiri Kosina"
+ <jikos@kernel.org>, "Benjamin Tissoires" <benjamin.tissoires@redhat.com>,
+ "Michael Hennerich" <michael.hennerich@analog.com>, "Peter Rosin"
+ <peda@axentia.se>, "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, "Iyappan
+ Subramanian" <iyappan@os.amperecomputing.com>, "Keyur Chudgar"
+ <keyur@os.amperecomputing.com>, "David S. Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Yisen Zhuang"
+ <yisen.zhuang@huawei.com>, "Salil Mehta" <salil.mehta@huawei.com>, "Tony
+ Lindgren" <tony@atomide.com>, "Liam Girdwood" <lgirdwood@gmail.com>, "Mark
+ Brown" <broonie@kernel.org>, "Alexandre Belloni"
+ <alexandre.belloni@bootlin.com>, "Xiang Chen" <chenxiang66@hisilicon.com>,
+ "James E.J. Bottomley" <jejb@linux.ibm.com>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Russell King" <linux@armlinux.org.uk>, "Jiri
+ Slaby" <jirislaby@kernel.org>, "Jacky Huang" <ychuang3@nuvoton.com>,
+ "Shan-Chun Hung" <schung@nuvoton.com>
+Cc: "Arnd Bergmann" <arnd@arndb.de>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Tom
+ Rix" <trix@redhat.com>, =?utf-8?q?Uwe_Kleine-K=C3=B6nig?=
+ <u.kleine-koenig@pengutronix.de>, "Randy Dunlap" <rdunlap@infradead.org>,
+ "Rob Herring" <robh@kernel.org>, "Linus Walleij"
+ <linus.walleij@linaro.org>, <openipmi-developer@lists.sourceforge.net>,
+ <linux-integrity@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+ <linux-fpga@vger.kernel.org>, <linux-input@vger.kernel.org>,
+ <linux-i2c@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-omap@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+ <linux-scsi@vger.kernel.org>, <linux-staging@lists.linux.dev>,
+ <linux-serial@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+X-Mailer: aerc 0.17.0
+References: <20240403080702.3509288-1-arnd@kernel.org>
+ <20240403080702.3509288-34-arnd@kernel.org>
+In-Reply-To: <20240403080702.3509288-34-arnd@kernel.org>
 
-On Wed, Apr 03, 2024 at 11:10:31PM +0800, Xu Yilun wrote:
-> On Wed, Apr 03, 2024 at 02:01:25PM +0300, Andy Shevchenko wrote:
-> > On Wed, Nov 10, 2021 at 06:59:25PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Nov 10, 2021 at 2:28 PM Tom Rix <trix@redhat.com> wrote:
-> > > > On 11/10/21 12:24 AM, Andy Shevchenko wrote:
-> > > > > On Tue, Nov 09, 2021 at 10:27:58AM -0800, Tom Rix wrote:
-> > > > >> On 11/9/21 10:05 AM, Andy Shevchenko wrote:
-> > > > >>> On Tue, Nov 09, 2021 at 07:55:43AM -0800, Tom Rix wrote:
-> > > > >>>> On 11/9/21 7:41 AM, Andy Shevchenko wrote:
+On Wed Apr 3, 2024 at 11:06 AM EEST, Arnd Bergmann wrote:
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_=
+tee.c
+> index 2ea4882251cf..0c453f3f928d 100644
+> --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> @@ -362,7 +362,7 @@ MODULE_DEVICE_TABLE(of, of_ftpm_tee_ids);
+>  static struct platform_driver ftpm_tee_plat_driver =3D {
+>  	.driver =3D {
+>  		.name =3D "ftpm-tee",
+> -		.of_match_table =3D of_match_ptr(of_ftpm_tee_ids),
+> +		.of_match_table =3D of_ftpm_tee_ids,
+>  	},
+>  	.shutdown =3D ftpm_plat_tee_shutdown,
+>  	.probe =3D ftpm_plat_tee_probe,
 
-...
+For this portion:
 
-> > > > >>>>> + voff = pci_find_vsec_capability(dev, PCI_VENDOR_ID_INTEL, PCI_VSEC_ID_INTEL_DFLS);
-> > > > >>>> This may be a weakness in the origin code, but intel isn't the exclusive
-> > > > >>>> user of DFL.
-> > > > >>> This does not change the original code. If you think so, this can be extended
-> > > > >>> later on.
-> > > > >> I would rather see this fixed now or explained why this isn't a problem.
-> > > > > This is out of scope of this change in a few ways:
-> > > > >   - we don't do 2+ things in one patch
-> > > > >   - the change doesn't change behaviour
-> > > > >   - the change is a simple cleanup
-> > > > >   - another vendor may well have quite different VSEC ID for DFL
-> > > > >
-> > > > > If you think that it should be needed, one can come up with it later on.
-> > > >
-> > > > Fixing a problem is more useful than a cleanup. The fix should come first.
-> > > 
-> > > What do you mean by that? The original code never worked with what you
-> > > are suggesting. There is nothing to fix in terms of "fix". What you
-> > > are proposing is a feature. And as we know the features are going into
-> > > the kernel in a natural order, means fixes - priority 1, cleanups /
-> > > refactoring as prerequisites to the feature enabling - priority 2,
-> > > feature - priority 3, other cleanups and code improvements - priority
-> > > 4.
-> > > 
-> > > That said, the proposed change definitely falls into category 2. It
-> > > makes the proposed feature to be easily realized.
-> > > 
-> > > Also, do not forget that vendor specific stuff is _by definition_
-> > > vendor specific, and the proposed feature is doubtful until you prove
-> > > there is another vendor-id pair.
-> > 
-> > Interestingly that you included
-> > 8607d9c1bd57 ("fpga: dfl-pci: Use pci_find_vsec_capability() to simplify the code")
-> > without even letting me know...
-> 
-> I'm sorry. Apparently I forgot what we've discussed in 2021.
-> 
-> In 2021, I was waiting for some more comments although I was already
-> good at your patch, but sadly I didn't follow up and missed it. In
-> 2023, I was pretty sure no more comment and I could just apply.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-The job is done and this is good. Thank you.
-One thing less to carry for me :-)
+[can be included to possible new revisions if it stays same]
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+BR, Jarkko
 
