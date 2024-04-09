@@ -1,140 +1,169 @@
-Return-Path: <linux-fpga+bounces-408-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-409-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6730089A903
-	for <lists+linux-fpga@lfdr.de>; Sat,  6 Apr 2024 07:20:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E4C589D074
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 04:43:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98D1D1C21230
-	for <lists+linux-fpga@lfdr.de>; Sat,  6 Apr 2024 05:20:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6ADB31C222A8
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 02:43:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F40520315;
-	Sat,  6 Apr 2024 05:20:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D948353E3B;
+	Tue,  9 Apr 2024 02:43:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HYazYNyp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eTaX7mYd"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EB218E02;
-	Sat,  6 Apr 2024 05:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFAF79DF;
+	Tue,  9 Apr 2024 02:43:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712380829; cv=none; b=YzbEaLpkY1uVjsGwaQO1u+GcmshnUnFAxY+GcJB8z7/W6G5GIZGCcfBcDEjXLvGBv0crdz8VkQIxs2kmrhvOykKr6zmbeQjKDQT+1V+GgFc8+UV9n4BO280BecUa/nF1cCe8vrCw/5HIHacvrFdeEATQ6v+RiMCvinEcdNzAKq8=
+	t=1712630624; cv=none; b=J3YoIWTkohl6mSrSXsJlPM8KQPI/WxyvDh5DyqPuMhtJrjt1XHbzNNj9vm+jtQFIGOAF2nOGF5fH4eoL3nRX/pWPatiDw5pO+WN0NaAQMAs1h3DbUJqi3fJ5PMcMvkaTIWQEk//+GvYO5pgeyMiaxQr9yYaga6B4+4hneCNUR8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712380829; c=relaxed/simple;
-	bh=TBj/hcnPrvS19ZOluMZ12evt8AeDaDrUTBeM5kaTuKY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=CZ8xfNFOwOwbOw+X7MQ2mypw2+89BHGbOVaiv57GMPQkzoP+kTI3Of0iGuMzFOUzREJ/5HG1uwWjOnb/738qFydKIOLZPWRcq+fRpVC2c83ScQZah+i6XKs06F3D3U/JknTPeBdxqgBUOHgAXMUknabfbbQJoG8FBKB5p8UrXSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HYazYNyp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3C5A9C433C7;
-	Sat,  6 Apr 2024 05:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712380828;
-	bh=TBj/hcnPrvS19ZOluMZ12evt8AeDaDrUTBeM5kaTuKY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=HYazYNypOS+iPe/PmwIZVgrP0OAjOmuWcCZaXmQBd5/DF3DU2Cm7HK1KTLKVM8W2j
-	 EfdrhznuDsHvbEh7NeV1r2EDMVkxTqo+hmKt5MdFIcqj68UTB4u7gvHG6geAe3ArfV
-	 cYxb7yc2nqhO3pPj8ToTFIgL78NntzPlzi3tNk1u8F7N5z7SqSGJ1Z/QhHbUaQaR1j
-	 GTv/7bDPNNXqFXoXNMGCl3bjIAtmML/lX++bgYkRjXumLNf6dEzpQPrpxdPeyVgSKh
-	 czfxRuHIWxcuBJ6wGSXEzVfHmRCYmRJdToESEDFulu3u4HF5IZUSSU3tkxxLhyQRAI
-	 TbkNIwkM8MMRA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 19C9BD84BAC;
-	Sat,  6 Apr 2024 05:20:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1712630624; c=relaxed/simple;
+	bh=oCdmaBKquHlDXJaYmN5qiPPs2PZNGRKv9+X6wyWuIT8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QPdrnGJhQzlZAbi8riqAvhOT5VHb4K7pH2EXgJbFgoyV8cC1BXT2E6a9IgDxXKYcslN8fo4HA8AI1efUf9s+xHJlKEYEFboa+dx0eXm71Sn8l0IViBGpBbC623x2Kn9M+h/K5a4LomyCUxoULork1hCyUssw/1daaSEi55quDnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eTaX7mYd; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712630624; x=1744166624;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=oCdmaBKquHlDXJaYmN5qiPPs2PZNGRKv9+X6wyWuIT8=;
+  b=eTaX7mYdY7REpRyTpgViIspTkD2jzJG7I/eZdihLb2fTeKUgyAGNPVsK
+   u+jt+LrnnnSIZtvDp4xWCLHRpfJgDdzNZStbZnp9lCG+mNfxjic2aAcAr
+   1yvgtEwcC2xeHbG1+W5V1ona07BIrQlkkpIDzUrUsyUe9DGb9ZKcc5CbQ
+   5wcKsXYheRUObd8QwtDAbh+XgRsTzKFIBwNTfapF6KxJgoO7jlvoggnob
+   AqeL2wUJTovILWzpDQvvoxZusCb6ZpHNip+E5Oo67lRm/1SEiiv00vmbv
+   5WX0i8oeKFJ8VNJguDwDIq3B9uu5rLm3tSP0HuHeUB0yu7EnE/s9V0KAh
+   A==;
+X-CSE-ConnectionGUID: 1SCRan1UTye1h/coyzEWLQ==
+X-CSE-MsgGUID: ntxeEcc4Sqy9SaX2TTC+pQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="11772836"
+X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
+   d="scan'208";a="11772836"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 19:43:43 -0700
+X-CSE-ConnectionGUID: /dHfDBL9TYCnJVP1UEBn4Q==
+X-CSE-MsgGUID: 9TqFKbGcQtehH8OGduKw3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
+   d="scan'208";a="20043004"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa010.fm.intel.com with ESMTP; 08 Apr 2024 19:43:39 -0700
+Date: Tue, 9 Apr 2024 10:38:39 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Peter Colberg <peter.colberg@intel.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	Lee Jones <lee@kernel.org>, linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Russ Weight <russ.weight@linux.dev>,
+	Marco Pagani <marpagan@redhat.com>,
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Russ Weight <russell.h.weight@intel.com>
+Subject: Re: [PATCH v2] mfd: intel-m10-bmc: Change staging size to a variable
+Message-ID: <ZhSqL6GhKwGc0ALv@yilunxu-OptiPlex-7050>
+References: <20240402184925.1065932-1-peter.colberg@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/34] address all -Wunused-const warnings
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171238082809.31617.17365732495689756509.git-patchwork-notify@kernel.org>
-Date: Sat, 06 Apr 2024 05:20:28 +0000
-References: <20240403080702.3509288-1-arnd@kernel.org>
-In-Reply-To: <20240403080702.3509288-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, arnd@arndb.de, mpe@ellerman.id.au,
- christophe.leroy@csgroup.eu, dlemoal@kernel.org, jikos@kernel.org,
- gregkh@linuxfoundation.org, minyard@acm.org, peterhuewe@gmx.de,
- jarkko@kernel.org, kristo@kernel.org, sboyd@kernel.org, abbotti@mev.co.uk,
- hsweeten@visionengravers.com, srinivas.pandruvada@linux.intel.com,
- lenb@kernel.org, rafael@kernel.org, john.allen@amd.com,
- herbert@gondor.apana.org.au, vkoul@kernel.org, ardb@kernel.org,
- andersson@kernel.org, mdf@kernel.org, liviu.dudau@arm.com,
- benjamin.tissoires@redhat.com, andi.shyti@kernel.org,
- michael.hennerich@analog.com, peda@axentia.se, lars@metafoo.de,
- jic23@kernel.org, dmitry.torokhov@gmail.com, markuss.broks@gmail.com,
- alexandre.torgue@foss.st.com, lee@kernel.org, kuba@kernel.org,
- Shyam-sundar.S-k@amd.com, iyappan@os.amperecomputing.com,
- yisen.zhuang@huawei.com, stf_xl@wp.pl, kvalo@kernel.org, sre@kernel.org,
- tony@atomide.com, broonie@kernel.org, alexandre.belloni@bootlin.com,
- chenxiang66@hisilicon.com, martin.petersen@oracle.com,
- neil.armstrong@linaro.org, heiko@sntech.de, krzysztof.kozlowski@linaro.org,
- hvaibhav.linux@gmail.com, elder@kernel.org, jirislaby@kernel.org,
- ychuang3@nuvoton.com, deller@gmx.de, hch@lst.de, robin.murphy@arm.com,
- rostedt@goodmis.org, mhiramat@kernel.org, akpm@linux-foundation.org,
- keescook@chromium.org, trond.myklebust@hammerspace.com, anna@kernel.org,
- masahiroy@kernel.org, nathan@kernel.org, tiwai@suse.com,
- linuxppc-dev@lists.ozlabs.org, linux-ide@vger.kernel.org,
- openipmi-developer@lists.sourceforge.net, linux-integrity@vger.kernel.org,
- linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-efi@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-fpga@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-fbdev@vger.kernel.org, iommu@lists.linux.dev,
- linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
- linux-hardening@vger.kernel.org, linux-nfs@vger.kernel.org,
- linux-kbuild@vger.kernel.org, alsa-devel@alsa-project.org,
- linux-sound@vger.kernel.org
+In-Reply-To: <20240402184925.1065932-1-peter.colberg@intel.com>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed,  3 Apr 2024 10:06:18 +0200 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Apr 02, 2024 at 02:49:25PM -0400, Peter Colberg wrote:
+> From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > 
-> Compilers traditionally warn for unused 'static' variables, but not
-> if they are constant. The reason here is a custom for C++ programmers
-> to define named constants as 'static const' variables in header files
-> instead of using macros or enums.
+> The secure update driver does a sanity-check of the image size in
+> comparison to the size of the staging area in FLASH. Instead of
+> hard-wiring M10BMC_STAGING_SIZE, move the staging size to the
+> m10bmc_csr_map structure to make the size assignment more flexible.
 > 
-> [...]
+> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
 
-Here is the summary with links:
-  - [05/34] 3c515: remove unused 'mtu' variable
-    https://git.kernel.org/netdev/net-next/c/17b35355c2c6
-  - [19/34] sunrpc: suppress warnings for unused procfs functions
-    (no matching commit)
-  - [26/34] isdn: kcapi: don't build unused procfs code
-    https://git.kernel.org/netdev/net-next/c/91188544af06
-  - [28/34] net: xgbe: remove extraneous #ifdef checks
-    https://git.kernel.org/netdev/net-next/c/0ef416e045ad
-  - [33/34] drivers: remove incorrect of_match_ptr/ACPI_PTR annotations
-    (no matching commit)
+Reviewed-by: Xu Yilun <yilun.xu@intel.com>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> ---
+> v2:
+> - Revise commit message to remove reference to nonexistent larger FPGAs.
+> ---
+>  drivers/fpga/intel-m10-bmc-sec-update.c | 3 ++-
+>  drivers/mfd/intel-m10-bmc-pmci.c        | 1 +
+>  drivers/mfd/intel-m10-bmc-spi.c         | 1 +
+>  include/linux/mfd/intel-m10-bmc.h       | 1 +
+>  4 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> index 89851b133709..7ac9f9f5af12 100644
+> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> @@ -529,11 +529,12 @@ static enum fw_upload_err m10bmc_sec_prepare(struct fw_upload *fwl,
+>  					     const u8 *data, u32 size)
+>  {
+>  	struct m10bmc_sec *sec = fwl->dd_handle;
+> +	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+>  	u32 ret;
+>  
+>  	sec->cancel_request = false;
+>  
+> -	if (!size || size > M10BMC_STAGING_SIZE)
+> +	if (!size || size > csr_map->staging_size)
+>  		return FW_UPLOAD_ERR_INVALID_SIZE;
+>  
+>  	if (sec->m10bmc->flash_bulk_ops)
+> diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
+> index 0392ef8b57d8..698c5933938b 100644
+> --- a/drivers/mfd/intel-m10-bmc-pmci.c
+> +++ b/drivers/mfd/intel-m10-bmc-pmci.c
+> @@ -370,6 +370,7 @@ static const struct m10bmc_csr_map m10bmc_n6000_csr_map = {
+>  	.pr_reh_addr = M10BMC_N6000_PR_REH_ADDR,
+>  	.pr_magic = M10BMC_N6000_PR_PROG_MAGIC,
+>  	.rsu_update_counter = M10BMC_N6000_STAGING_FLASH_COUNT,
+> +	.staging_size = M10BMC_STAGING_SIZE,
+>  };
+>  
+>  static const struct intel_m10bmc_platform_info m10bmc_pmci_n6000 = {
+> diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
+> index cbeb7de9e041..d64d28199df6 100644
+> --- a/drivers/mfd/intel-m10-bmc-spi.c
+> +++ b/drivers/mfd/intel-m10-bmc-spi.c
+> @@ -109,6 +109,7 @@ static const struct m10bmc_csr_map m10bmc_n3000_csr_map = {
+>  	.pr_reh_addr = M10BMC_N3000_PR_REH_ADDR,
+>  	.pr_magic = M10BMC_N3000_PR_PROG_MAGIC,
+>  	.rsu_update_counter = M10BMC_N3000_STAGING_FLASH_COUNT,
+> +	.staging_size = M10BMC_STAGING_SIZE,
+>  };
+>  
+>  static struct mfd_cell m10bmc_d5005_subdevs[] = {
+> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> index ee66c9751003..988f1cd90032 100644
+> --- a/include/linux/mfd/intel-m10-bmc.h
+> +++ b/include/linux/mfd/intel-m10-bmc.h
+> @@ -205,6 +205,7 @@ struct m10bmc_csr_map {
+>  	unsigned int pr_reh_addr;
+>  	unsigned int pr_magic;
+>  	unsigned int rsu_update_counter;
+> +	unsigned int staging_size;
+>  };
+>  
+>  /**
+> -- 
+> 2.44.0
+> 
+> 
 
