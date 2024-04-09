@@ -1,167 +1,169 @@
-Return-Path: <linux-fpga+bounces-409-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-410-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E4C589D074
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 04:43:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B3E889D147
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 05:44:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6ADB31C222A8
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 02:43:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AE6A1F253C7
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 03:44:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D948353E3B;
-	Tue,  9 Apr 2024 02:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C576A54F95;
+	Tue,  9 Apr 2024 03:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eTaX7mYd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TLIxgiXG"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFAF79DF;
-	Tue,  9 Apr 2024 02:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D13154BEF;
+	Tue,  9 Apr 2024 03:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712630624; cv=none; b=J3YoIWTkohl6mSrSXsJlPM8KQPI/WxyvDh5DyqPuMhtJrjt1XHbzNNj9vm+jtQFIGOAF2nOGF5fH4eoL3nRX/pWPatiDw5pO+WN0NaAQMAs1h3DbUJqi3fJ5PMcMvkaTIWQEk//+GvYO5pgeyMiaxQr9yYaga6B4+4hneCNUR8o=
+	t=1712634288; cv=none; b=NOjrgv47sgaxZrwJ2Fcj1Wi4qEUU2Q/Rczlz7ChryoIRPnqr1th/QQQVcSRZCCGkzvpnNxSPhAMgv9jSGykChyXjqIq0nhEXpnKj+XXQjbdUKNaw5YA9G20AVCbu9EIIK9JsBWqytiVmEJAz8Z+1vZco/ALEU3m4ghJ/in12WyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712630624; c=relaxed/simple;
-	bh=oCdmaBKquHlDXJaYmN5qiPPs2PZNGRKv9+X6wyWuIT8=;
+	s=arc-20240116; t=1712634288; c=relaxed/simple;
+	bh=RR5SyerU3swP7blXlrp09ILNLJGLjX1OuihRg3Zwf08=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QPdrnGJhQzlZAbi8riqAvhOT5VHb4K7pH2EXgJbFgoyV8cC1BXT2E6a9IgDxXKYcslN8fo4HA8AI1efUf9s+xHJlKEYEFboa+dx0eXm71Sn8l0IViBGpBbC623x2Kn9M+h/K5a4LomyCUxoULork1hCyUssw/1daaSEi55quDnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eTaX7mYd; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nkp4sfsR80LOmW7jQ5+yhozEwR+3ekS4AxEfC4+BQxxMKZq9mFIdTXXevebTwVkxTJM4MWh6pnNYYvS3zpOrJ7jvYDh3Wd0B1LjuN7Q61zgkN45hJj/sNtbHWFUkVFaFuRkXroKmg3MC5hitA2eXPkHpQ8eboZvIPasm7PteWRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TLIxgiXG; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712630624; x=1744166624;
+  t=1712634287; x=1744170287;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=oCdmaBKquHlDXJaYmN5qiPPs2PZNGRKv9+X6wyWuIT8=;
-  b=eTaX7mYdY7REpRyTpgViIspTkD2jzJG7I/eZdihLb2fTeKUgyAGNPVsK
-   u+jt+LrnnnSIZtvDp4xWCLHRpfJgDdzNZStbZnp9lCG+mNfxjic2aAcAr
-   1yvgtEwcC2xeHbG1+W5V1ona07BIrQlkkpIDzUrUsyUe9DGb9ZKcc5CbQ
-   5wcKsXYheRUObd8QwtDAbh+XgRsTzKFIBwNTfapF6KxJgoO7jlvoggnob
-   AqeL2wUJTovILWzpDQvvoxZusCb6ZpHNip+E5Oo67lRm/1SEiiv00vmbv
-   5WX0i8oeKFJ8VNJguDwDIq3B9uu5rLm3tSP0HuHeUB0yu7EnE/s9V0KAh
-   A==;
-X-CSE-ConnectionGUID: 1SCRan1UTye1h/coyzEWLQ==
-X-CSE-MsgGUID: ntxeEcc4Sqy9SaX2TTC+pQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="11772836"
+   mime-version:in-reply-to;
+  bh=RR5SyerU3swP7blXlrp09ILNLJGLjX1OuihRg3Zwf08=;
+  b=TLIxgiXGRHM7il4ctmA3N4NGvrRDMo9me1rQxheEqFq6EQUM5Pu9JaA8
+   +rnpMUu0MqB8w4VWCFy00MsIEqY3pRFyvq0QGVIVK8H1LVvClCRiPP+BO
+   TCcYnl8awUH0PiFjIfbbz3a+HQ78IRZdNFPOGKRpSwBPTqSghRXAPe6wa
+   3ryu7+xLiTI9pB094sO/09+DCx3kfgYsB9PbKFKNyqo522NPwnVcPBXfb
+   uDEZVnhwwdbNlQKxQyUcQgd9Y9HXQiQbqexHVYLPQrQieKYGHgCevsQY1
+   gFEJx+mtOY3jk33Gse1ojPzq/eC7b5y9ZPJIEZMPGETSrC3OPAI4/8RnK
+   Q==;
+X-CSE-ConnectionGUID: StNyYDN2R8yKa6Lrw6aWSw==
+X-CSE-MsgGUID: keU8WLW0QHOxC7DGTWRJog==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="30427936"
 X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="11772836"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 19:43:43 -0700
-X-CSE-ConnectionGUID: /dHfDBL9TYCnJVP1UEBn4Q==
-X-CSE-MsgGUID: 9TqFKbGcQtehH8OGduKw3g==
+   d="scan'208";a="30427936"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 20:44:46 -0700
+X-CSE-ConnectionGUID: ggQOrKGGT7iExxoFkcpFEg==
+X-CSE-MsgGUID: r2ZzOJOLTWafzvUNP/wPJA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="20043004"
+   d="scan'208";a="20533497"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa010.fm.intel.com with ESMTP; 08 Apr 2024 19:43:39 -0700
-Date: Tue, 9 Apr 2024 10:38:39 +0800
+  by orviesa007.jf.intel.com with ESMTP; 08 Apr 2024 20:44:43 -0700
+Date: Tue, 9 Apr 2024 11:39:42 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
 To: Peter Colberg <peter.colberg@intel.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Lee Jones <lee@kernel.org>, linux-fpga@vger.kernel.org,
+Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	Alan Tull <atull@kernel.org>, Shiva Rao <shiva.rao@intel.com>,
+	Kang Luwei <luwei.kang@intel.com>,
+	Enno Luebbers <enno.luebbers@intel.com>, linux-fpga@vger.kernel.org,
 	linux-kernel@vger.kernel.org, Russ Weight <russ.weight@linux.dev>,
 	Marco Pagani <marpagan@redhat.com>,
 	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Russ Weight <russell.h.weight@intel.com>
-Subject: Re: [PATCH v2] mfd: intel-m10-bmc: Change staging size to a variable
-Message-ID: <ZhSqL6GhKwGc0ALv@yilunxu-OptiPlex-7050>
-References: <20240402184925.1065932-1-peter.colberg@intel.com>
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] fpga: dfl: fme: revise kernel-doc comments for some
+ functions
+Message-ID: <ZhS4fuijYnstZ6Rt@yilunxu-OptiPlex-7050>
+References: <20240402204743.1069624-1-peter.colberg@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240402184925.1065932-1-peter.colberg@intel.com>
+In-Reply-To: <20240402204743.1069624-1-peter.colberg@intel.com>
 
-On Tue, Apr 02, 2024 at 02:49:25PM -0400, Peter Colberg wrote:
-> From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+On Tue, Apr 02, 2024 at 04:47:43PM -0400, Peter Colberg wrote:
+> From: Xu Yilun <yilun.xu@intel.com>
 > 
-> The secure update driver does a sanity-check of the image size in
-> comparison to the size of the staging area in FLASH. Instead of
-> hard-wiring M10BMC_STAGING_SIZE, move the staging size to the
-> m10bmc_csr_map structure to make the size assignment more flexible.
+> This amends commit 782d8e61b5d6 ("fpga: dfl: kernel-doc corrections"),
+> which separately addressed the kernel-doc warnings below. Add a more
+> precise description of the feature argument to dfl_fme_create_mgr(),
+> and also use plural in the description of dfl_fme_destroy_bridges().
 > 
-> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> lkp reported 2 build warnings:
+> 
+>    drivers/fpga/dfl/dfl-fme-pr.c:175: warning: Function parameter or member 'feature' not described in 'dfl_fme_create_mgr'
+> 
+> >> drivers/fpga/dfl/dfl-fme-pr.c:280: warning: expecting prototype for
+> >> dfl_fme_destroy_bridge(). Prototype was for dfl_fme_destroy_bridges()
+> >> instead
+
+Why still list the 2 warnings here? Do they still exsit even with commit
+782d8e61b5d6 ("fpga: dfl: kernel-doc corrections") ?
+
+> 
+> Fixes: 29de76240e86 ("fpga: dfl: fme: add partial reconfiguration sub feature support")
+
+You are still trying to fix this commit?
+
+
+I'm sorry, but please do check and test your patches before submit.
+Re-submitting quickly but full of errors makes people doubt if you are
+really serious about your patches. At least, I do have doubt if you did
+tests for all your patches, or if your test could sufficiently prove the
+issue exists or fixed.
+
+Do not just passively waiting for reviewers to find out the issue. Maybe
+you should again read the Documentation/process/*.rst
+
+
+Back to this patch, I think you can just drop it. Because:
+1. The previous fix works fine, the doc doesn't tell anything wrong.
+2. The 2 functions are internal, no outside users. Little value for the
+kernel doc.
+
+So no need a dedicated fix patch. The preferred practice is you point
+out the nits when the previous patch is not yet merged. Or you by the
+way include these fixes in some new patches which relates to these
+functions.
+
+Thanks,
+Yilun
+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 > Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-
 > ---
 > v2:
-> - Revise commit message to remove reference to nonexistent larger FPGAs.
+> - Correctly rebase patch onto commit 782d8e61b5d6.
 > ---
->  drivers/fpga/intel-m10-bmc-sec-update.c | 3 ++-
->  drivers/mfd/intel-m10-bmc-pmci.c        | 1 +
->  drivers/mfd/intel-m10-bmc-spi.c         | 1 +
->  include/linux/mfd/intel-m10-bmc.h       | 1 +
->  4 files changed, 5 insertions(+), 1 deletion(-)
+>  drivers/fpga/dfl-fme-pr.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-> index 89851b133709..7ac9f9f5af12 100644
-> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
-> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-> @@ -529,11 +529,12 @@ static enum fw_upload_err m10bmc_sec_prepare(struct fw_upload *fwl,
->  					     const u8 *data, u32 size)
->  {
->  	struct m10bmc_sec *sec = fwl->dd_handle;
-> +	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
->  	u32 ret;
->  
->  	sec->cancel_request = false;
->  
-> -	if (!size || size > M10BMC_STAGING_SIZE)
-> +	if (!size || size > csr_map->staging_size)
->  		return FW_UPLOAD_ERR_INVALID_SIZE;
->  
->  	if (sec->m10bmc->flash_bulk_ops)
-> diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
-> index 0392ef8b57d8..698c5933938b 100644
-> --- a/drivers/mfd/intel-m10-bmc-pmci.c
-> +++ b/drivers/mfd/intel-m10-bmc-pmci.c
-> @@ -370,6 +370,7 @@ static const struct m10bmc_csr_map m10bmc_n6000_csr_map = {
->  	.pr_reh_addr = M10BMC_N6000_PR_REH_ADDR,
->  	.pr_magic = M10BMC_N6000_PR_PROG_MAGIC,
->  	.rsu_update_counter = M10BMC_N6000_STAGING_FLASH_COUNT,
-> +	.staging_size = M10BMC_STAGING_SIZE,
->  };
->  
->  static const struct intel_m10bmc_platform_info m10bmc_pmci_n6000 = {
-> diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
-> index cbeb7de9e041..d64d28199df6 100644
-> --- a/drivers/mfd/intel-m10-bmc-spi.c
-> +++ b/drivers/mfd/intel-m10-bmc-spi.c
-> @@ -109,6 +109,7 @@ static const struct m10bmc_csr_map m10bmc_n3000_csr_map = {
->  	.pr_reh_addr = M10BMC_N3000_PR_REH_ADDR,
->  	.pr_magic = M10BMC_N3000_PR_PROG_MAGIC,
->  	.rsu_update_counter = M10BMC_N3000_STAGING_FLASH_COUNT,
-> +	.staging_size = M10BMC_STAGING_SIZE,
->  };
->  
->  static struct mfd_cell m10bmc_d5005_subdevs[] = {
-> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-> index ee66c9751003..988f1cd90032 100644
-> --- a/include/linux/mfd/intel-m10-bmc.h
-> +++ b/include/linux/mfd/intel-m10-bmc.h
-> @@ -205,6 +205,7 @@ struct m10bmc_csr_map {
->  	unsigned int pr_reh_addr;
->  	unsigned int pr_magic;
->  	unsigned int rsu_update_counter;
-> +	unsigned int staging_size;
->  };
+> diff --git a/drivers/fpga/dfl-fme-pr.c b/drivers/fpga/dfl-fme-pr.c
+> index cdcf6dea4cc9..b66f2c1e10a9 100644
+> --- a/drivers/fpga/dfl-fme-pr.c
+> +++ b/drivers/fpga/dfl-fme-pr.c
+> @@ -164,7 +164,7 @@ static int fme_pr(struct platform_device *pdev, unsigned long arg)
 >  
 >  /**
+>   * dfl_fme_create_mgr - create fpga mgr platform device as child device
+> - * @feature: sub feature info
+> + * @feature: the dfl fme PR sub feature
+>   * @pdata: fme platform_device's pdata
+>   *
+>   * Return: mgr platform device if successful, and error code otherwise.
+> @@ -273,7 +273,7 @@ static void dfl_fme_destroy_bridge(struct dfl_fme_bridge *fme_br)
+>  }
+>  
+>  /**
+> - * dfl_fme_destroy_bridges - destroy all fpga bridge platform device
+> + * dfl_fme_destroy_bridges - destroy all fpga bridge platform devices
+>   * @pdata: fme platform device's pdata
+>   */
+>  static void dfl_fme_destroy_bridges(struct dfl_feature_platform_data *pdata)
 > -- 
 > 2.44.0
 > 
