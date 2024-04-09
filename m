@@ -1,1245 +1,314 @@
-Return-Path: <linux-fpga+bounces-425-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-426-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B420289E648
-	for <lists+linux-fpga@lfdr.de>; Wed, 10 Apr 2024 01:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D3EA89E67F
+	for <lists+linux-fpga@lfdr.de>; Wed, 10 Apr 2024 01:56:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 064B61F21C00
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 23:43:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA1D11F2258A
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 23:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D2315B0F6;
-	Tue,  9 Apr 2024 23:42:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D9721591EA;
+	Tue,  9 Apr 2024 23:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XPqUC/El"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AO95fNXE"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11811591FB;
-	Tue,  9 Apr 2024 23:42:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712706128; cv=none; b=f91gPaaRJ6KHqpcKas4mGn1bLqnJEVf9AHZR8fsKUkLP6Q6Dy3eWYEM42WNIv6PNkMStRSpRgFXZgnVvgHnRXiDBX5eastTWcu6C6y29pk7E/Bdnj9uqaI2oR9UCUwJfF7HzPsm3n1o1OSoMpCfLafVo9fEWCmvnXhQseLOFX68=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712706128; c=relaxed/simple;
-	bh=3Y99arneMJVfMQm6s8x8tYzykQEmu0Y2RJQmQarRruE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IbkCAsRIhcbYYCnlKf0UjlmeIT4+lZa7x/2BfgJ2JgSd/WFkkpf85m9vjOyu3QJbn8EjIflFVkxBBU2IhjlTFkY5MQQIyyAKIcJp/+KEgqvJogCoRHJVPJDDAcVGjQc2IDpQtbuwbf09fAu0vRy/PIvwXLuu2Q2xnPYN4DVO1Rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XPqUC/El; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4B415921D;
+	Tue,  9 Apr 2024 23:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712706985; cv=fail; b=ROznL8Jv3kgHnu+OkkY9KMgGpsTgqppf58sTM/Eqh7jq/QLs9ZckSd25GWaqL4kI0JIHmvj/tFdNo4/uEu6MrpRwGg9bSM4WE+bySie3m7X0CvMm0+P8QskRQ+OPYxavzLtRB+Qmz49nosiUu28sO0HEvanh9aEfR4gaLWlgVvo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712706985; c=relaxed/simple;
+	bh=W1AP2WXZ5HjUacA8qESDhQJWZADiWVxalivAUaHFMPw=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=EM0Tz4LyNJ+DfEXUzfpYCXHEIAStx7m5HQrI4Sj332Q6PJ7pTQryat/dm5rNGvw1VJjgPrrUv1VkQgtKUZ3fG+s0HnEmV216/G09JubcaVLwJlDvtB7gw1giGVB3yPvtl1Pceh16fKhUT6zCKAa8SzU7SoGkzL84b3g06RkZ2n8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AO95fNXE; arc=fail smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712706126; x=1744242126;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3Y99arneMJVfMQm6s8x8tYzykQEmu0Y2RJQmQarRruE=;
-  b=XPqUC/Elpaq3kKxVkwjq3Iv8IM2KIfercbzdeq41SfoAcCC2/niLQEll
-   Zrywi3lJFydswx7EKfKDmqXVPl6WHRnI8NBy9kliRc+AJvM6wDtGiegav
-   ZG10qflWTLXfeDc0YVp5A9UIZ4D80Zw1KrkeMDHwdIGHHzZU+MTsbH4bL
-   DzQ5MYKe9LHL8lU+0quyXJNcE6J4TXVMoTJo4HcAnR/98sJGtdUewyib6
-   fJCQzMeWRS8SDBKixcpj43Gz7ik8BQlSF0a74OVs8zbGCc2+o1skr5JWZ
-   uq8RSoS0VlJ5trhrLUwi1Eo5xH+PygEo66Eneyjf/vmylAoT1erYyEwGJ
+  t=1712706983; x=1744242983;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=W1AP2WXZ5HjUacA8qESDhQJWZADiWVxalivAUaHFMPw=;
+  b=AO95fNXE5X7g/2MR3xdEJxzezZcYuBTY7Dl4MIzoJjRRAVrvUs3+HpVc
+   hLuOI89hTl1TN4bQSPfMU92JuHO6N5mNv0N0MX+hM0lm7QeRI3uXvGbsM
+   1FSncwsAClHmnHIMLQGIqQhJZC6ixDkReGydl95YhEOfFYkiwmrGPvNeQ
+   8EO0YgRGMdQeF25dJv6R+h6zhmHnCuo+hTa5iSi87QxM5puVyIl0yDY4i
+   9aIGxXKUvLV4oPG7SYXPRF6vJfGf/qVtjJptCByOvvVH6K5AH0H7sAe1f
+   1YJKFqpVruCz7oBhMOBS3C+1EEHNPs7k+uSzTa6FImefySkR855QLCAAs
    A==;
-X-CSE-ConnectionGUID: fuH86J3UQQCatCutnVE5Eg==
-X-CSE-MsgGUID: QIUd0aS7SVS6e7uiqktqxg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="33455130"
+X-CSE-ConnectionGUID: iqvd1TqiRQuYhEk6clPAhQ==
+X-CSE-MsgGUID: 9mowoJFQTBqdI5MTp137AQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="8227395"
 X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
-   d="scan'208";a="33455130"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 16:42:02 -0700
-X-CSE-ConnectionGUID: +Hl+AmQ1Rne1xW7z1Q/XPw==
-X-CSE-MsgGUID: lmg332V6QAqCY3yxx5DLIQ==
+   d="scan'208";a="8227395"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 16:56:23 -0700
+X-CSE-ConnectionGUID: 6bAp+b1jTuuNFgIsQZwrtw==
+X-CSE-MsgGUID: sWUN2RvmSgKl5UNqa236bQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
-   d="scan'208";a="20261851"
-Received: from sj-4150-psse-sw-opae-dev3.sj.intel.com ([10.233.115.74])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 16:42:01 -0700
-From: Peter Colberg <peter.colberg@intel.com>
-To: Wu Hao <hao.wu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	Moritz Fischer <mdf@kernel.org>,
-	Xu Yilun <yilun.xu@intel.com>,
-	linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Russ Weight <russ.weight@linux.dev>,
-	Marco Pagani <marpagan@redhat.com>,
-	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-	Russ Weight <russell.h.weight@intel.com>,
-	Peter Colberg <peter.colberg@intel.com>
-Subject: [RFC PATCH v2 9/9] fpga: dfl: fix kernel warning on port release/assign for SRIOV
-Date: Tue,  9 Apr 2024 19:39:42 -0400
-Message-ID: <20240409233942.828440-10-peter.colberg@intel.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240409233942.828440-1-peter.colberg@intel.com>
+   d="scan'208";a="20411807"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 09 Apr 2024 16:56:22 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 9 Apr 2024 16:56:22 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 9 Apr 2024 16:56:22 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Tue, 9 Apr 2024 16:56:22 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 9 Apr 2024 16:56:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gWVzkXlBCnPhaHgRzkrx8CKPDZ+fUsbPCQMC4tAcFSw304VtB3tOoCYX12fP9hTBdiK4l1QuGnILIDJguRxpOXdZMl+vFWw1uPz69eUFRiI+XNLB82SeMcGgVY+qavLNI0tDGW8fb/nrQNRNKC/Cqd+bg0LoLwDCbfuP56mORpopl4fNIlr4YU1n82TTrA3oMto5VRpGmImVKkohKuZb0ObGfIdquJSsTCK7o2HfGmRIFwFiF+CdK+hd7UJQIF2amsFZcX5jGComrg3W0NQZCb5c9JyANmB/Xbo4eBmiU2lC6u6vwrCXkzYtGdnnjWNKhMFE6SSYdQpcQNQbBAXWoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W1AP2WXZ5HjUacA8qESDhQJWZADiWVxalivAUaHFMPw=;
+ b=Vn4nUUUXkrjuQ2ucOfcCWT8EtaswbXGYL4bDGGLYX/vYmwFiIfN+eHiAtkQKMY4e4RbOljBUBm8Lv656WnDLaA42qce0CjF02ZdFX3UxbvAoeV3bCGkK0PCKFvHHOmpgc0Ym2AaYKmZJRrtXRc/WEERHCVR3P31WNwBHzK/mL+Z7YREuiNm1RIqlIlmqPtFkVbX4TnDRHRnrf3kYZLWbayyppqZRm3s4tTqAQM6/Dteu4wN6F2MKTx71aWuQI6HgIJfYZOAfIho431MHR5p2txAXo915nbr8XkT+bLuqd28QIo3Ob2dswz5btaN/KIkH7NTD7VMbPnU35qjUiFRtEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SN7PR11MB7590.namprd11.prod.outlook.com (2603:10b6:806:348::13)
+ by CO1PR11MB4929.namprd11.prod.outlook.com (2603:10b6:303:6d::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Tue, 9 Apr
+ 2024 23:56:19 +0000
+Received: from SN7PR11MB7590.namprd11.prod.outlook.com
+ ([fe80::f454:78c6:2602:4a6b]) by SN7PR11MB7590.namprd11.prod.outlook.com
+ ([fe80::f454:78c6:2602:4a6b%7]) with mapi id 15.20.7430.045; Tue, 9 Apr 2024
+ 23:56:19 +0000
+From: "Colberg, Peter" <peter.colberg@intel.com>
+To: "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
+	"linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>, "Xu, Yilun"
+	<yilun.xu@intel.com>, "Rix, Tom" <trix@redhat.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC: "russ.weight@linux.dev" <russ.weight@linux.dev>, "Pagani, Marco"
+	<marpagan@redhat.com>, "matthew.gerlach@linux.intel.com"
+	<matthew.gerlach@linux.intel.com>
+Subject: Re: [RFC PATCH v2 3/9] fpga: dfl: migrate AFU MMIO region management
+ driver to dfl_feature_dev_data
+Thread-Topic: [RFC PATCH v2 3/9] fpga: dfl: migrate AFU MMIO region management
+ driver to dfl_feature_dev_data
+Thread-Index: AQHaiteNpHD83WeT8kCnMCjh3oqZa7FgnVaA
+Date: Tue, 9 Apr 2024 23:56:19 +0000
+Message-ID: <1aa50550adfb3917e94dd4f553ee88005133cd15.camel@intel.com>
 References: <20240409233942.828440-1-peter.colberg@intel.com>
+	 <20240409233942.828440-4-peter.colberg@intel.com>
+In-Reply-To: <20240409233942.828440-4-peter.colberg@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN7PR11MB7590:EE_|CO1PR11MB4929:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DNLBgQDQP3pqMNFAFa1IAc43eXBPCY8PwCgC6fzGM/jSFmXebTZtvTmqA4xjE84O/XCKf+8hOAq97RN3Vj7rJtwXJvBO3V1JgwsfVKw5cSAqhulks8OybzD53UZlzF4Ar17e+iPxpFb1f/+Q23RAmbkMd+QB7TRFUjVCBGHou33ba/39YBzO0P+7cFMz/+qoue6Qe2QashRAC9GNmR0q/dZCMtOjjG0bK6uW64HLeNMkviqfdrUIXw+fcKBgLZbMhLr1QWWrchHfOm5TSGNX84G9eXxBjUQn/SFtQ7BRkQ4uJ3Pu50qgS6iLgOoO0SXqmwCnFHpohoGmY1r4W+1nrwyZOgh7RwB2DUCwEUk33woqHUHtfgUhsapbdAxWMVu/MIPGQySpyKx2C5J6vGLH/p+Z+KZXgQiPV+UVBWoOg/r0CWly12c7wUY57z7dDGyTcqFCmx7Z884A5t0CI46tH9RZTgEoHfRm17fCdjgxsyMuRCKFN+ZbsovLbgp+y4NQhCaja2ikT9oWSkPwkXFX9jhr5VvSIo3VBfLmlqYFBXl8FmGDrUeVCxFwqsWKRvHjY/+tvRK1DBGlfqxfH2hdVmVq9LpGyW4LhYttEYyUXjg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7590.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dTB2RGxLVnE1RkRSYmJLNVEvQy8zUUZ4a2Y0TnJPREx0aUh3eEEzbVd5UG9H?=
+ =?utf-8?B?QkhTdXpxMlgxWmJMdUd3YnhTZFBxS2gyN2xYV1NzMVNId2xxem1YSldsa2V5?=
+ =?utf-8?B?bmp6WDJnRVdMZ2t2Z2JPOXlhY1FCaEpvaVZEWGRKd1pzUnFHYU5vTWJ4S09v?=
+ =?utf-8?B?bkFLVW1yS0dOc1g1UGhiY1ZScnFtR2t0UXdtWk05OTRFWUxOSE5MeVFWYnhO?=
+ =?utf-8?B?THFaS2RYSkdYMzVCQmQ1aUdzUlJtV05YUEcwR1ZzY3J3a1hCR1lYQ2k3SSsr?=
+ =?utf-8?B?b0FpUFppNzNlTHR2M2Fta0w4aGlMVXJRbEFsbS9JZEhtVDY4bnRJZUFvYkU3?=
+ =?utf-8?B?eFZmcWRZV0NNTTFOU3d5cE1qNGNHTTlrK1BmY1M4QlExb1lHODZTejUyL0px?=
+ =?utf-8?B?VU9NcUtrMDYwdE1lQkFaQ2ZTbi9MRHRlUE1aeC9ZV1RhbnNzNWRib2VUS3NV?=
+ =?utf-8?B?SGNUWTJsZ1ZIWURQSFdEb3lGd213QVk2K1ZJclJDS1pEUWNBTmNpVElScWxC?=
+ =?utf-8?B?ZXpIWG9PeDVTMUYvWGxpa2xLWnVHdG1mMzZSVnpvbzc4aCtJVXZVMDlwTFlD?=
+ =?utf-8?B?RFFzOHI2Y0prZHNRMWV2SHRSZmFLcExIVS9uZWRNdVcwQXJtbzhrL3JmWjFl?=
+ =?utf-8?B?WnhZcExlSFVIVGM3eUs0aG9la3JSbjNsYXh4SzNnZHhtdzF1bjBoRlVGdDha?=
+ =?utf-8?B?WHM5YVVjcXNuS05hT082WHRmYjJCOWtEZ0JjZTZPOHFJcGNxcU94Wmxwem5G?=
+ =?utf-8?B?RUlpc3NBQUw3SXppRStIN00rMDRvSUd5WlN2bnB4SzJ2Sk1TKzNFbDhWeUdF?=
+ =?utf-8?B?S1lKSHIxL1ZRcFdYM0RoSmc0NEhPaXBKQVhXTGtFRG5Gc2xvdkgyL1FONXZ3?=
+ =?utf-8?B?QzkwOWJpczZTd2RrZnk1MFdVc096c0xiLzBoemQ2ZjlOVTVNNUVDSFFvcjdK?=
+ =?utf-8?B?ZWVhOUlGZGM5SnhVeERNTnc3T1NCNzR0dnNTckdkdy9XOEZTQVY5Q0Zxbzl2?=
+ =?utf-8?B?UkcxZEJmR2dWSndIc2dGVVcwajFpZnJNaEkvcDBMbHBkZ1p1N05UMzhvSDJ3?=
+ =?utf-8?B?cHlNNXE4OHY4L0E4NnNjWWVhRWJIczJjVDhtdXBkZkd5SlRmREk0N0RDbjBv?=
+ =?utf-8?B?MlRKZDNiRWZBYUZWZGh4QVNhaEQrdDZHdGNJQmhONWg1eHJmbFVzMzJGVUlN?=
+ =?utf-8?B?UFFzNmV6M3gxcXM0K1RqMnJkSmEyTkp3aGZOR0t3Y09LT2ErZGNyMmtaNUlU?=
+ =?utf-8?B?aTR2VnJJRmJHeWx3dmhOa2VrTjVNSkdYcHhqbzFVQXVhQ3ZkWHF5dmhCdlZG?=
+ =?utf-8?B?by9vU1ZxYVY1QVFvQUMvamhGZnV1bWxqemdzM3BnRThJdjNpQ2lTRU9jN2F1?=
+ =?utf-8?B?NVBLRUxRU0JLbTNINUhrUXRqaThkT1UvVWpSNWt2eEhudG9GOUsvaE5QZ2hu?=
+ =?utf-8?B?UjV6c3NjcnhCdEZ1U3RLY3F1R2ZCdlhmR3U1ZjE2UlIydWRHa3dHaEtTRStk?=
+ =?utf-8?B?QUlNV2NINWZYUGVLejZLeUNUV0lNQmZnYVFGUkVWd2NUSHJQRVB1VU9zRmo0?=
+ =?utf-8?B?WldGSm1kTVBqZ1Y2RXNIMGVtWFY2OTlhSThQUzA3azkxbFlBd3RVbUVSajI4?=
+ =?utf-8?B?ZHVyUHc5Y0xEVGx1ZHFIcitWMk1ZenVYc0Y3Z0srOVREcGNFYVhkK0hzbTU2?=
+ =?utf-8?B?TzQyelZpbXk0OTErYXI4M0RzNVBkQysvZndTWFRoLytDY05hV1BYU2NoZWJi?=
+ =?utf-8?B?NC9FRGN0NzA3U2Rwc2dhOXJaZzAyR2JxRE40OWI5VWJNYkFVOGpGaGc5Y1ky?=
+ =?utf-8?B?dEFvSXFubGNKVll5TWdKYWUwbGpJMzV4WjNWdll1TzI4eFFJRzFUZ1VEcVZp?=
+ =?utf-8?B?R0Y1WmVOU0t0VkZVbHFMY2twQ1E5dzRVMm9PaWEybWR2emhkOHZSajdpWnYz?=
+ =?utf-8?B?b1NCOXBkSHRpTXV0KzMwOTJPdGxzNUlaZFFMWjBySnJ3QzlIVFpGSS80T0RZ?=
+ =?utf-8?B?WmhLckpHcFoxSG10aWRrOWQ5RWtha1RnMGYwL2lGN25TSWFFMXVscEQxaFJw?=
+ =?utf-8?B?Mml2a0FDSkhjSnRTTVcrZEVFU1ZHd0R5bDc0djJFdkIvaWVrdE9rQXFkdFdS?=
+ =?utf-8?B?alBjMCs1NnVKK1N6NW8xMGR1MGtpRHR3c1JXS3ovdlhzcGFNRlk2RUVxTk43?=
+ =?utf-8?B?TUE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1633CE5623453A45888617F6DDD406F0@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7590.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 072e5403-4c66-4e2f-149c-08dc58f0a702
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2024 23:56:19.6498
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Odj82xFKJbuY9S+NofWYwoC6BSQPk7DgGol0KGp5+xLpmpVWbHNw/Kp0V0MQco0kf9de4dusoEKzZ4mSlDXkyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4929
+X-OriginatorOrg: intel.com
 
-From: Xu Yilun <yilun.xu@intel.com>
-
-DFL ports are registered as platform devices in PF mode. The port device
-should be removed from the host when the user wants to configure the
-port as a VF and pass through to a virtual machine. The FME device
-ioctls DFL_FPGA_FME_PORT_RELEASE/ASSIGN are designed for this purpose.
-
-In the previous implementation, the port platform device is not completely
-destroyed on port release: it is removed from the system by
-platform_device_del(), but the platform device instance is retained.
-When the port assign ioctl is called, the platform device is added back by
-platform_device_add(), which conflicts with this comment of device_add():
-"Do not call this routine more than once for any device structure", and
-will cause a kernel warning at runtime.
-
-This patch tries to completely unregister the port platform device on
-release and registers a new one on assign. But the main work is to remove
-the dependency on struct dfl_feature_platform_data for many internal DFL
-APIs. This structure holds many DFL enumeration infos for feature devices.
-Many DFL APIs are expected to work with these info even when the port
-platform device is unregistered. But with the change the platform_data will
-be freed in this case. So this patch introduces a new structure
-dfl_feature_dev_data for these APIs, which acts similarly to the previous
-dfl_feature_platform_data. The dfl_feature_platform_data then only needs a
-pointer to dfl_feature_dev_data to make the feature device driver work.
-
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-Signed-off-by: Peter Colberg <peter.colberg@intel.com>
----
-v2:
-- Split monolithic patch into series at request of maintainer
-- Substitute binfo->type for removed function feature_dev_id_type() in
-  parse_feature_irqs().
-- Return ERR_PTR(-ENOMEM) on !feature->params in
-  binfo_create_feature_dev_data().
-- Reorder cdev as first member of struct dfl_feature_platform_data
-  such that container_of() to obtain pdata evaluates to a no-op.
-- Align kernel-doc function name for __dfl_fpga_cdev_find_port_data().
----
- drivers/fpga/dfl-afu-main.c |   9 +-
- drivers/fpga/dfl-fme-br.c   |  24 +-
- drivers/fpga/dfl-fme-main.c |   6 +-
- drivers/fpga/dfl.c          | 430 +++++++++++++++++-------------------
- drivers/fpga/dfl.h          |  86 +++++---
- 5 files changed, 281 insertions(+), 274 deletions(-)
-
-diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index 42928cc7e42b..ead03b7aea70 100644
---- a/drivers/fpga/dfl-afu-main.c
-+++ b/drivers/fpga/dfl-afu-main.c
-@@ -143,9 +143,8 @@ static int port_reset(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int port_get_id(struct platform_device *pdev)
-+static int port_get_id(struct dfl_feature_dev_data *fdata)
- {
--	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(&pdev->dev);
- 	void __iomem *base;
- 
- 	base = dfl_get_feature_ioaddr_by_id(fdata, PORT_FEATURE_ID_HEADER);
-@@ -156,7 +155,8 @@ static int port_get_id(struct platform_device *pdev)
- static ssize_t
- id_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
--	int id = port_get_id(to_platform_device(dev));
-+	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(dev);
-+	int id = port_get_id(fdata);
- 
- 	return scnprintf(buf, PAGE_SIZE, "%d\n", id);
- }
-@@ -890,9 +890,8 @@ static int afu_dev_destroy(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int port_enable_set(struct platform_device *pdev, bool enable)
-+static int port_enable_set(struct dfl_feature_dev_data *fdata, bool enable)
- {
--	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(&pdev->dev);
- 	int ret;
- 
- 	mutex_lock(&fdata->lock);
-diff --git a/drivers/fpga/dfl-fme-br.c b/drivers/fpga/dfl-fme-br.c
-index 0b01b3895277..a298a041877b 100644
---- a/drivers/fpga/dfl-fme-br.c
-+++ b/drivers/fpga/dfl-fme-br.c
-@@ -22,34 +22,34 @@
- struct fme_br_priv {
- 	struct dfl_fme_br_pdata *pdata;
- 	struct dfl_fpga_port_ops *port_ops;
--	struct platform_device *port_pdev;
-+	struct dfl_feature_dev_data *port_fdata;
- };
- 
- static int fme_bridge_enable_set(struct fpga_bridge *bridge, bool enable)
- {
- 	struct fme_br_priv *priv = bridge->priv;
--	struct platform_device *port_pdev;
-+	struct dfl_feature_dev_data *port_fdata;
- 	struct dfl_fpga_port_ops *ops;
- 
--	if (!priv->port_pdev) {
--		port_pdev = dfl_fpga_cdev_find_port(priv->pdata->cdev,
--						    &priv->pdata->port_id,
--						    dfl_fpga_check_port_id);
--		if (!port_pdev)
-+	if (!priv->port_fdata) {
-+		port_fdata = dfl_fpga_cdev_find_port_data(priv->pdata->cdev,
-+							  &priv->pdata->port_id,
-+							  dfl_fpga_check_port_id);
-+		if (!port_fdata)
- 			return -ENODEV;
- 
--		priv->port_pdev = port_pdev;
-+		priv->port_fdata = port_fdata;
- 	}
- 
--	if (priv->port_pdev && !priv->port_ops) {
--		ops = dfl_fpga_port_ops_get(priv->port_pdev);
-+	if (priv->port_fdata && !priv->port_ops) {
-+		ops = dfl_fpga_port_ops_get(priv->port_fdata);
- 		if (!ops || !ops->enable_set)
- 			return -ENOENT;
- 
- 		priv->port_ops = ops;
- 	}
- 
--	return priv->port_ops->enable_set(priv->port_pdev, enable);
-+	return priv->port_ops->enable_set(priv->port_fdata, enable);
- }
- 
- static const struct fpga_bridge_ops fme_bridge_ops = {
-@@ -85,8 +85,6 @@ static void fme_br_remove(struct platform_device *pdev)
- 
- 	fpga_bridge_unregister(br);
- 
--	if (priv->port_pdev)
--		put_device(&priv->port_pdev->dev);
- 	if (priv->port_ops)
- 		dfl_fpga_port_ops_put(priv->port_ops);
- }
-diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
-index d271d1e60efd..e0a35c701121 100644
---- a/drivers/fpga/dfl-fme-main.c
-+++ b/drivers/fpga/dfl-fme-main.c
-@@ -612,7 +612,7 @@ static int fme_open(struct inode *inode, struct file *filp)
- 	if (WARN_ON(!pdata))
- 		return -ENODEV;
- 
--	fdata = pdata;
-+	fdata = pdata->fdata;
- 	mutex_lock(&fdata->lock);
- 	ret = dfl_feature_dev_use_begin(fdata, filp->f_flags & O_EXCL);
- 	if (!ret) {
-@@ -628,7 +628,7 @@ static int fme_open(struct inode *inode, struct file *filp)
- static int fme_release(struct inode *inode, struct file *filp)
- {
- 	struct dfl_feature_platform_data *pdata = filp->private_data;
--	struct dfl_feature_dev_data *fdata = pdata;
-+	struct dfl_feature_dev_data *fdata = pdata->fdata;
- 	struct platform_device *pdev = fdata->dev;
- 	struct dfl_feature *feature;
- 
-@@ -649,7 +649,7 @@ static int fme_release(struct inode *inode, struct file *filp)
- static long fme_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- {
- 	struct dfl_feature_platform_data *pdata = filp->private_data;
--	struct dfl_feature_dev_data *fdata = pdata;
-+	struct dfl_feature_dev_data *fdata = pdata->fdata;
- 	struct platform_device *pdev = fdata->dev;
- 	struct dfl_feature *f;
- 	long ret;
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index 219d52cce924..916db9960fa0 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -119,17 +119,6 @@ static void dfl_id_free(enum dfl_id_type type, int id)
- 	mutex_unlock(&dfl_id_mutex);
- }
- 
--static enum dfl_id_type feature_dev_id_type(struct platform_device *pdev)
--{
--	int i;
--
--	for (i = 0; i < ARRAY_SIZE(dfl_devs); i++)
--		if (!strcmp(dfl_devs[i].name, pdev->name))
--			return i;
--
--	return DFL_ID_MAX;
--}
--
- static enum dfl_id_type dfh_id_to_type(u16 id)
- {
- 	int i;
-@@ -161,7 +150,8 @@ static LIST_HEAD(dfl_port_ops_list);
-  *
-  * Please note that must dfl_fpga_port_ops_put after use the port_ops.
-  */
--struct dfl_fpga_port_ops *dfl_fpga_port_ops_get(struct platform_device *pdev)
-+struct dfl_fpga_port_ops *
-+dfl_fpga_port_ops_get(struct dfl_feature_dev_data *fdata)
- {
- 	struct dfl_fpga_port_ops *ops = NULL;
- 
-@@ -171,7 +161,7 @@ struct dfl_fpga_port_ops *dfl_fpga_port_ops_get(struct platform_device *pdev)
- 
- 	list_for_each_entry(ops, &dfl_port_ops_list, node) {
- 		/* match port_ops using the name of platform device */
--		if (!strcmp(pdev->name, ops->name)) {
-+		if (!strcmp(fdata->pdev_name, ops->name)) {
- 			if (!try_module_get(ops->owner))
- 				ops = NULL;
- 			goto done;
-@@ -227,22 +217,21 @@ EXPORT_SYMBOL_GPL(dfl_fpga_port_ops_del);
-  *
-  * Return: 1 if port device matches with given port id, otherwise 0.
-  */
--int dfl_fpga_check_port_id(struct platform_device *pdev, void *pport_id)
-+int dfl_fpga_check_port_id(struct dfl_feature_dev_data *fdata, void *pport_id)
- {
--	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
- 	struct dfl_fpga_port_ops *port_ops;
- 
--	if (pdata->id != FEATURE_DEV_ID_UNUSED)
--		return pdata->id == *(int *)pport_id;
-+	if (fdata->id != FEATURE_DEV_ID_UNUSED)
-+		return fdata->id == *(int *)pport_id;
- 
--	port_ops = dfl_fpga_port_ops_get(pdev);
-+	port_ops = dfl_fpga_port_ops_get(fdata);
- 	if (!port_ops || !port_ops->get_id)
- 		return 0;
- 
--	pdata->id = port_ops->get_id(pdev);
-+	fdata->id = port_ops->get_id(fdata);
- 	dfl_fpga_port_ops_put(port_ops);
- 
--	return pdata->id == *(int *)pport_id;
-+	return fdata->id == *(int *)pport_id;
- }
- EXPORT_SYMBOL_GPL(dfl_fpga_check_port_id);
- 
-@@ -351,10 +340,10 @@ static void release_dfl_dev(struct device *dev)
- }
- 
- static struct dfl_device *
--dfl_dev_add(struct dfl_feature_platform_data *pdata,
-+dfl_dev_add(struct dfl_feature_dev_data *fdata,
- 	    struct dfl_feature *feature)
- {
--	struct platform_device *pdev = pdata->dev;
-+	struct platform_device *pdev = fdata->dev;
- 	struct resource *parent_res;
- 	struct dfl_device *ddev;
- 	int id, i, ret;
-@@ -380,11 +369,11 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
- 	if (ret)
- 		goto put_dev;
- 
--	ddev->type = feature_dev_id_type(pdev);
-+	ddev->type = fdata->type;
- 	ddev->feature_id = feature->id;
- 	ddev->revision = feature->revision;
- 	ddev->dfh_version = feature->dfh_version;
--	ddev->cdev = pdata->dfl_cdev;
-+	ddev->cdev = fdata->dfl_cdev;
- 	if (feature->param_size) {
- 		ddev->params = kmemdup(feature->params, feature->param_size, GFP_KERNEL);
- 		if (!ddev->params) {
-@@ -435,11 +424,11 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
- 	return ERR_PTR(ret);
- }
- 
--static void dfl_devs_remove(struct dfl_feature_platform_data *pdata)
-+static void dfl_devs_remove(struct dfl_feature_dev_data *fdata)
- {
- 	struct dfl_feature *feature;
- 
--	dfl_fpga_dev_for_each_feature(pdata, feature) {
-+	dfl_fpga_dev_for_each_feature(fdata, feature) {
- 		if (feature->ddev) {
- 			device_unregister(&feature->ddev->dev);
- 			feature->ddev = NULL;
-@@ -447,13 +436,13 @@ static void dfl_devs_remove(struct dfl_feature_platform_data *pdata)
- 	}
- }
- 
--static int dfl_devs_add(struct dfl_feature_platform_data *pdata)
-+static int dfl_devs_add(struct dfl_feature_dev_data *fdata)
- {
- 	struct dfl_feature *feature;
- 	struct dfl_device *ddev;
- 	int ret;
- 
--	dfl_fpga_dev_for_each_feature(pdata, feature) {
-+	dfl_fpga_dev_for_each_feature(fdata, feature) {
- 		if (feature->ioaddr)
- 			continue;
- 
-@@ -462,7 +451,7 @@ static int dfl_devs_add(struct dfl_feature_platform_data *pdata)
- 			goto err;
- 		}
- 
--		ddev = dfl_dev_add(pdata, feature);
-+		ddev = dfl_dev_add(fdata, feature);
- 		if (IS_ERR(ddev)) {
- 			ret = PTR_ERR(ddev);
- 			goto err;
-@@ -474,7 +463,7 @@ static int dfl_devs_add(struct dfl_feature_platform_data *pdata)
- 	return 0;
- 
- err:
--	dfl_devs_remove(pdata);
-+	dfl_devs_remove(fdata);
- 	return ret;
- }
- 
-@@ -505,11 +494,12 @@ EXPORT_SYMBOL(dfl_driver_unregister);
- void dfl_fpga_dev_feature_uinit(struct platform_device *pdev)
- {
- 	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
-+	struct dfl_feature_dev_data *fdata = pdata->fdata;
- 	struct dfl_feature *feature;
- 
--	dfl_devs_remove(pdata);
-+	dfl_devs_remove(fdata);
- 
--	dfl_fpga_dev_for_each_feature(pdata, feature) {
-+	dfl_fpga_dev_for_each_feature(fdata, feature) {
- 		if (feature->ops) {
- 			if (feature->ops->uinit)
- 				feature->ops->uinit(pdev, feature);
-@@ -580,12 +570,13 @@ int dfl_fpga_dev_feature_init(struct platform_device *pdev,
- 			      struct dfl_feature_driver *feature_drvs)
- {
- 	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
-+	struct dfl_feature_dev_data *fdata = pdata->fdata;
- 	struct dfl_feature_driver *drv = feature_drvs;
- 	struct dfl_feature *feature;
- 	int ret;
- 
- 	while (drv->ops) {
--		dfl_fpga_dev_for_each_feature(pdata, feature) {
-+		dfl_fpga_dev_for_each_feature(fdata, feature) {
- 			if (dfl_feature_drv_match(feature, drv)) {
- 				ret = dfl_feature_instance_init(pdev, pdata,
- 								feature, drv);
-@@ -596,7 +587,7 @@ int dfl_fpga_dev_feature_init(struct platform_device *pdev,
- 		drv++;
- 	}
- 
--	ret = dfl_devs_add(pdata);
-+	ret = dfl_devs_add(fdata);
- 	if (ret)
- 		goto exit;
- 
-@@ -695,7 +686,7 @@ EXPORT_SYMBOL_GPL(dfl_fpga_dev_ops_unregister);
-  * @nr_irqs: number of irqs for all feature devices.
-  * @irq_table: Linux IRQ numbers for all irqs, indexed by local irq index of
-  *	       this device.
-- * @feature_dev: current feature device.
-+ * @type: the current FIU type.
-  * @ioaddr: header register region address of current FIU in enumeration.
-  * @start: register resource start of current FIU.
-  * @len: max register resource length of current FIU.
-@@ -708,7 +699,7 @@ struct build_feature_devs_info {
- 	unsigned int nr_irqs;
- 	int *irq_table;
- 
--	struct platform_device *feature_dev;
-+	enum dfl_id_type type;
- 	void __iomem *ioaddr;
- 	resource_size_t start;
- 	resource_size_t len;
-@@ -743,50 +734,51 @@ struct dfl_feature_info {
- 	u64 params[];
- };
- 
--static void dfl_fpga_cdev_add_port_dev(struct dfl_fpga_cdev *cdev,
--				       struct platform_device *port)
-+static void dfl_fpga_cdev_add_port_data(struct dfl_fpga_cdev *cdev,
-+					struct dfl_feature_dev_data *fdata)
- {
--	struct dfl_feature_platform_data *pdata = dev_get_platdata(&port->dev);
--
- 	mutex_lock(&cdev->lock);
--	list_add(&pdata->node, &cdev->port_dev_list);
--	get_device(&pdata->dev->dev);
-+	list_add(&fdata->node, &cdev->port_dev_list);
- 	mutex_unlock(&cdev->lock);
- }
- 
--/*
-- * register current feature device, it is called when we need to switch to
-- * another feature parsing or we have parsed all features on given device
-- * feature list.
-- */
--static int build_info_commit_dev(struct build_feature_devs_info *binfo)
-+static struct dfl_feature_dev_data *
-+binfo_create_feature_dev_data(struct build_feature_devs_info *binfo)
- {
--	struct platform_device *fdev = binfo->feature_dev;
--	struct dfl_feature_platform_data *pdata;
-+	enum dfl_id_type type = binfo->type;
- 	struct dfl_feature_info *finfo, *p;
--	enum dfl_id_type type;
-+	struct dfl_feature_dev_data *fdata;
- 	int ret, index = 0, res_idx = 0;
- 
--	type = feature_dev_id_type(fdev);
- 	if (WARN_ON_ONCE(type >= DFL_ID_MAX))
--		return -EINVAL;
-+		return ERR_PTR(-EINVAL);
- 
--	/*
--	 * we do not need to care for the memory which is associated with
--	 * the platform device. After calling platform_device_unregister(),
--	 * it will be automatically freed by device's release() callback,
--	 * platform_device_release().
--	 */
--	pdata = kzalloc(struct_size(pdata, features, binfo->feature_num), GFP_KERNEL);
--	if (!pdata)
--		return -ENOMEM;
-+	fdata = devm_kzalloc(binfo->dev, sizeof(*fdata), GFP_KERNEL);
-+	if (!fdata)
-+		return ERR_PTR(-ENOMEM);
-+
-+	fdata->features = devm_kcalloc(binfo->dev, binfo->feature_num,
-+				       sizeof(*fdata->features), GFP_KERNEL);
-+	if (!fdata->features)
-+		return ERR_PTR(-ENOMEM);
-+
-+	fdata->resources = devm_kcalloc(binfo->dev, binfo->feature_num,
-+					sizeof(*fdata->resources), GFP_KERNEL);
-+	if (!fdata->resources)
-+		return ERR_PTR(-ENOMEM);
-+
-+	fdata->type = type;
-+
-+	fdata->pdev_id = dfl_id_alloc(type, binfo->dev);
-+	if (fdata->pdev_id < 0)
-+		return ERR_PTR(fdata->pdev_id);
- 
--	pdata->dev = fdev;
--	pdata->num = binfo->feature_num;
--	pdata->dfl_cdev = binfo->cdev;
--	pdata->id = FEATURE_DEV_ID_UNUSED;
--	mutex_init(&pdata->lock);
--	lockdep_set_class_and_name(&pdata->lock, &dfl_pdata_keys[type],
-+	fdata->pdev_name = dfl_devs[type].name;
-+	fdata->num = binfo->feature_num;
-+	fdata->dfl_cdev = binfo->cdev;
-+	fdata->id = FEATURE_DEV_ID_UNUSED;
-+	mutex_init(&fdata->lock);
-+	lockdep_set_class_and_name(&fdata->lock, &dfl_pdata_keys[type],
- 				   dfl_pdata_key_strings[type]);
- 
- 	/*
-@@ -795,25 +787,15 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
- 	 * works properly for port device.
- 	 * and it should always be 0 for fme device.
- 	 */
--	WARN_ON(pdata->disable_count);
--
--	fdev->dev.platform_data = pdata;
--
--	/* each sub feature has one MMIO resource */
--	fdev->num_resources = binfo->feature_num;
--	fdev->resource = kcalloc(binfo->feature_num, sizeof(*fdev->resource),
--				 GFP_KERNEL);
--	if (!fdev->resource)
--		return -ENOMEM;
-+	WARN_ON(fdata->disable_count);
- 
- 	/* fill features and resource information for feature dev */
- 	list_for_each_entry_safe(finfo, p, &binfo->sub_features, node) {
--		struct dfl_feature *feature = &pdata->features[index++];
-+		struct dfl_feature *feature = &fdata->features[index++];
- 		struct dfl_feature_irq_ctx *ctx;
- 		unsigned int i;
- 
- 		/* save resource information for each feature */
--		feature->dev = fdev;
- 		feature->id = finfo->fid;
- 		feature->revision = finfo->revision;
- 		feature->dfh_version = finfo->dfh_version;
-@@ -823,7 +805,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
- 						       finfo->params, finfo->param_size,
- 						       GFP_KERNEL);
- 			if (!feature->params)
--				return -ENOMEM;
-+				return ERR_PTR(-ENOMEM);
- 
- 			feature->param_size = finfo->param_size;
- 		}
-@@ -839,19 +821,22 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
- 			feature->ioaddr =
- 				devm_ioremap_resource(binfo->dev,
- 						      &finfo->mmio_res);
--			if (IS_ERR(feature->ioaddr))
--				return PTR_ERR(feature->ioaddr);
-+			if (IS_ERR(feature->ioaddr)) {
-+				ret = PTR_ERR(feature->ioaddr);
-+				goto err_free_id;
-+			}
- 		} else {
- 			feature->resource_index = res_idx;
--			fdev->resource[res_idx++] = finfo->mmio_res;
-+			fdata->resources[res_idx++] = finfo->mmio_res;
- 		}
- 
- 		if (finfo->nr_irqs) {
- 			ctx = devm_kcalloc(binfo->dev, finfo->nr_irqs,
- 					   sizeof(*ctx), GFP_KERNEL);
--			if (!ctx)
--				return -ENOMEM;
--
-+			if (!ctx) {
-+				ret = -ENOMEM;
-+				goto err_free_id;
-+			}
- 			for (i = 0; i < finfo->nr_irqs; i++)
- 				ctx[i].irq =
- 					binfo->irq_table[finfo->irq_base + i];
-@@ -864,55 +849,90 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
- 		kfree(finfo);
- 	}
- 
--	ret = platform_device_add(binfo->feature_dev);
--	if (!ret) {
--		if (type == PORT_ID)
--			dfl_fpga_cdev_add_port_dev(binfo->cdev,
--						   binfo->feature_dev);
--		else
--			binfo->cdev->fme_dev =
--					get_device(&binfo->feature_dev->dev);
--		/*
--		 * reset it to avoid build_info_free() freeing their resource.
--		 *
--		 * The resource of successfully registered feature devices
--		 * will be freed by platform_device_unregister(). See the
--		 * comments in build_info_create_dev().
--		 */
--		binfo->feature_dev = NULL;
--	}
-+	fdata->resource_num = res_idx;
- 
--	return ret;
-+	return fdata;
-+
-+err_free_id:
-+	dfl_id_free(type, fdata->pdev_id);
-+
-+	return ERR_PTR(ret);
- }
- 
--static int
--build_info_create_dev(struct build_feature_devs_info *binfo,
--		      enum dfl_id_type type)
-+/*
-+ * register current feature device, it is called when we need to switch to
-+ * another feature parsing or we have parsed all features on given device
-+ * feature list.
-+ */
-+static int feature_dev_register(struct dfl_feature_dev_data *fdata)
- {
-+	struct dfl_feature_platform_data pdata = { 0 };
- 	struct platform_device *fdev;
-+	struct dfl_feature *feature;
-+	int ret;
- 
--	if (type >= DFL_ID_MAX)
--		return -EINVAL;
--
--	/*
--	 * we use -ENODEV as the initialization indicator which indicates
--	 * whether the id need to be reclaimed
--	 */
--	fdev = platform_device_alloc(dfl_devs[type].name, -ENODEV);
-+	fdev = platform_device_alloc(fdata->pdev_name, fdata->pdev_id);
- 	if (!fdev)
- 		return -ENOMEM;
- 
--	binfo->feature_dev = fdev;
--	binfo->feature_num = 0;
-+	fdata->dev = fdev;
- 
--	INIT_LIST_HEAD(&binfo->sub_features);
-+	fdev->dev.parent = &fdata->dfl_cdev->region->dev;
-+	fdev->dev.devt = dfl_get_devt(dfl_devs[fdata->type].devt_type,
-+				      fdev->id);
-+
-+	dfl_fpga_dev_for_each_feature(fdata, feature)
-+		feature->dev = fdev;
- 
--	fdev->id = dfl_id_alloc(type, &fdev->dev);
--	if (fdev->id < 0)
--		return fdev->id;
-+	ret = platform_device_add_resources(fdev, fdata->resources,
-+					    fdata->resource_num);
-+	if (ret)
-+		goto err_put_dev;
-+
-+	pdata.fdata = fdata;
-+	ret = platform_device_add_data(fdev, &pdata, sizeof(pdata));
-+	if (ret)
-+		goto err_put_dev;
- 
--	fdev->dev.parent = &binfo->cdev->region->dev;
--	fdev->dev.devt = dfl_get_devt(dfl_devs[type].devt_type, fdev->id);
-+	ret = platform_device_add(fdev);
-+	if (ret)
-+		goto err_put_dev;
-+
-+	return 0;
-+
-+err_put_dev:
-+	platform_device_put(fdev);
-+	fdata->dev = NULL;
-+
-+	return ret;
-+}
-+
-+static void feature_dev_unregister(struct dfl_feature_dev_data *fdata)
-+{
-+	platform_device_unregister(fdata->dev);
-+	fdata->dev = NULL;
-+}
-+
-+static int build_info_commit_dev(struct build_feature_devs_info *binfo)
-+{
-+	struct dfl_feature_dev_data *fdata;
-+	int ret;
-+
-+	fdata = binfo_create_feature_dev_data(binfo);
-+	if (IS_ERR(fdata))
-+		return PTR_ERR(fdata);
-+
-+	ret = feature_dev_register(fdata);
-+	if (ret)
-+		return ret;
-+
-+	if (binfo->type == PORT_ID)
-+		dfl_fpga_cdev_add_port_data(binfo->cdev, fdata);
-+	else
-+		binfo->cdev->fme_dev = get_device(&fdata->dev->dev);
-+
-+	/* reset the binfo for next FIU */
-+	binfo->type = DFL_ID_MAX;
- 
- 	return 0;
- }
-@@ -921,22 +941,11 @@ static void build_info_free(struct build_feature_devs_info *binfo)
- {
- 	struct dfl_feature_info *finfo, *p;
- 
--	/*
--	 * it is a valid id, free it. See comments in
--	 * build_info_create_dev()
--	 */
--	if (binfo->feature_dev && binfo->feature_dev->id >= 0) {
--		dfl_id_free(feature_dev_id_type(binfo->feature_dev),
--			    binfo->feature_dev->id);
--
--		list_for_each_entry_safe(finfo, p, &binfo->sub_features, node) {
--			list_del(&finfo->node);
--			kfree(finfo);
--		}
-+	list_for_each_entry_safe(finfo, p, &binfo->sub_features, node) {
-+		list_del(&finfo->node);
-+		kfree(finfo);
- 	}
- 
--	platform_device_put(binfo->feature_dev);
--
- 	devm_kfree(binfo->dev, binfo);
- }
- 
-@@ -1025,7 +1034,7 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
- 		 * Instead, features with interrupt functionality provide
- 		 * the information in feature specific registers.
- 		 */
--		type = feature_dev_id_type(binfo->feature_dev);
-+		type = binfo->type;
- 		if (type == PORT_ID) {
- 			switch (fid) {
- 			case PORT_FEATURE_ID_UINT:
-@@ -1217,7 +1226,7 @@ static int parse_feature_port_afu(struct build_feature_devs_info *binfo,
- 	return create_feature_instance(binfo, ofst, size, FEATURE_ID_AFU);
- }
- 
--#define is_feature_dev_detected(binfo) (!!(binfo)->feature_dev)
-+#define is_feature_dev_detected(binfo) ((binfo)->type != DFL_ID_MAX)
- 
- static int parse_feature_afu(struct build_feature_devs_info *binfo,
- 			     resource_size_t ofst)
-@@ -1227,12 +1236,11 @@ static int parse_feature_afu(struct build_feature_devs_info *binfo,
- 		return -EINVAL;
- 	}
- 
--	switch (feature_dev_id_type(binfo->feature_dev)) {
-+	switch (binfo->type) {
- 	case PORT_ID:
- 		return parse_feature_port_afu(binfo, ofst);
- 	default:
--		dev_info(binfo->dev, "AFU belonging to FIU %s is not supported yet.\n",
--			 binfo->feature_dev->name);
-+		dev_info(binfo->dev, "AFU belonging to FIU is not supported yet.\n");
- 	}
- 
- 	return 0;
-@@ -1273,6 +1281,7 @@ static void build_info_complete(struct build_feature_devs_info *binfo)
- static int parse_feature_fiu(struct build_feature_devs_info *binfo,
- 			     resource_size_t ofst)
- {
-+	enum dfl_id_type type;
- 	int ret = 0;
- 	u32 offset;
- 	u16 id;
-@@ -1294,10 +1303,13 @@ static int parse_feature_fiu(struct build_feature_devs_info *binfo,
- 	v = readq(binfo->ioaddr + DFH);
- 	id = FIELD_GET(DFH_ID, v);
- 
--	/* create platform device for dfl feature dev */
--	ret = build_info_create_dev(binfo, dfh_id_to_type(id));
--	if (ret)
--		return ret;
-+	type = dfh_id_to_type(id);
-+	if (type >= DFL_ID_MAX)
-+		return -EINVAL;
-+
-+	binfo->type = type;
-+	binfo->feature_num = 0;
-+	INIT_LIST_HEAD(&binfo->sub_features);
- 
- 	ret = create_feature_instance(binfo, 0, 0, 0);
- 	if (ret)
-@@ -1515,13 +1527,10 @@ EXPORT_SYMBOL_GPL(dfl_fpga_enum_info_add_irq);
- 
- static int remove_feature_dev(struct device *dev, void *data)
- {
--	struct platform_device *pdev = to_platform_device(dev);
--	enum dfl_id_type type = feature_dev_id_type(pdev);
--	int id = pdev->id;
--
--	platform_device_unregister(pdev);
-+	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(dev);
- 
--	dfl_id_free(type, id);
-+	feature_dev_unregister(fdata);
-+	dfl_id_free(fdata->type, fdata->pdev_id);
- 
- 	return 0;
- }
-@@ -1573,6 +1582,7 @@ dfl_fpga_feature_devs_enumerate(struct dfl_fpga_enum_info *info)
- 		goto unregister_region_exit;
- 	}
- 
-+	binfo->type = DFL_ID_MAX;
- 	binfo->dev = info->dev;
- 	binfo->cdev = cdev;
- 
-@@ -1614,25 +1624,10 @@ EXPORT_SYMBOL_GPL(dfl_fpga_feature_devs_enumerate);
-  */
- void dfl_fpga_feature_devs_remove(struct dfl_fpga_cdev *cdev)
- {
--	struct dfl_feature_platform_data *pdata, *ptmp;
--
- 	mutex_lock(&cdev->lock);
- 	if (cdev->fme_dev)
- 		put_device(cdev->fme_dev);
- 
--	list_for_each_entry_safe(pdata, ptmp, &cdev->port_dev_list, node) {
--		struct platform_device *port_dev = pdata->dev;
--
--		/* remove released ports */
--		if (!device_is_registered(&port_dev->dev)) {
--			dfl_id_free(feature_dev_id_type(port_dev),
--				    port_dev->id);
--			platform_device_put(port_dev);
--		}
--
--		list_del(&pdata->node);
--		put_device(&port_dev->dev);
--	}
- 	mutex_unlock(&cdev->lock);
- 
- 	remove_feature_devs(cdev);
-@@ -1643,7 +1638,7 @@ void dfl_fpga_feature_devs_remove(struct dfl_fpga_cdev *cdev)
- EXPORT_SYMBOL_GPL(dfl_fpga_feature_devs_remove);
- 
- /**
-- * __dfl_fpga_cdev_find_port - find a port under given container device
-+ * __dfl_fpga_cdev_find_port_data - find a port under given container device
-  *
-  * @cdev: container device
-  * @data: data passed to match function
-@@ -1656,23 +1651,21 @@ EXPORT_SYMBOL_GPL(dfl_fpga_feature_devs_remove);
-  *
-  * NOTE: you will need to drop the device reference with put_device() after use.
-  */
--struct platform_device *
--__dfl_fpga_cdev_find_port(struct dfl_fpga_cdev *cdev, void *data,
--			  int (*match)(struct platform_device *, void *))
-+struct dfl_feature_dev_data *
-+__dfl_fpga_cdev_find_port_data(struct dfl_fpga_cdev *cdev, void *data,
-+			       int (*match)(struct dfl_feature_dev_data *,
-+					    void *))
- {
--	struct dfl_feature_platform_data *pdata;
--	struct platform_device *port_dev;
--
--	list_for_each_entry(pdata, &cdev->port_dev_list, node) {
--		port_dev = pdata->dev;
-+	struct dfl_feature_dev_data *fdata;
- 
--		if (match(port_dev, data) && get_device(&port_dev->dev))
--			return port_dev;
-+	list_for_each_entry(fdata, &cdev->port_dev_list, node) {
-+		if (match(fdata, data))
-+			return fdata;
- 	}
- 
- 	return NULL;
- }
--EXPORT_SYMBOL_GPL(__dfl_fpga_cdev_find_port);
-+EXPORT_SYMBOL_GPL(__dfl_fpga_cdev_find_port_data);
- 
- static int __init dfl_fpga_init(void)
- {
-@@ -1706,33 +1699,29 @@ static int __init dfl_fpga_init(void)
-  */
- int dfl_fpga_cdev_release_port(struct dfl_fpga_cdev *cdev, int port_id)
- {
--	struct dfl_feature_platform_data *pdata;
--	struct platform_device *port_pdev;
-+	struct dfl_feature_dev_data *fdata;
- 	int ret = -ENODEV;
- 
- 	mutex_lock(&cdev->lock);
--	port_pdev = __dfl_fpga_cdev_find_port(cdev, &port_id,
--					      dfl_fpga_check_port_id);
--	if (!port_pdev)
-+	fdata = __dfl_fpga_cdev_find_port_data(cdev, &port_id,
-+					       dfl_fpga_check_port_id);
-+	if (!fdata)
- 		goto unlock_exit;
- 
--	if (!device_is_registered(&port_pdev->dev)) {
-+	if (!fdata->dev) {
- 		ret = -EBUSY;
--		goto put_dev_exit;
-+		goto unlock_exit;
- 	}
- 
--	pdata = dev_get_platdata(&port_pdev->dev);
--
--	mutex_lock(&pdata->lock);
--	ret = dfl_feature_dev_use_begin(pdata, true);
--	mutex_unlock(&pdata->lock);
-+	mutex_lock(&fdata->lock);
-+	ret = dfl_feature_dev_use_begin(fdata, true);
-+	mutex_unlock(&fdata->lock);
- 	if (ret)
--		goto put_dev_exit;
-+		goto unlock_exit;
- 
--	platform_device_del(port_pdev);
-+	feature_dev_unregister(fdata);
- 	cdev->released_port_num++;
--put_dev_exit:
--	put_device(&port_pdev->dev);
-+
- unlock_exit:
- 	mutex_unlock(&cdev->lock);
- 	return ret;
-@@ -1752,34 +1741,30 @@ EXPORT_SYMBOL_GPL(dfl_fpga_cdev_release_port);
-  */
- int dfl_fpga_cdev_assign_port(struct dfl_fpga_cdev *cdev, int port_id)
- {
--	struct dfl_feature_platform_data *pdata;
--	struct platform_device *port_pdev;
-+	struct dfl_feature_dev_data *fdata;
- 	int ret = -ENODEV;
- 
- 	mutex_lock(&cdev->lock);
--	port_pdev = __dfl_fpga_cdev_find_port(cdev, &port_id,
--					      dfl_fpga_check_port_id);
--	if (!port_pdev)
-+	fdata = __dfl_fpga_cdev_find_port_data(cdev, &port_id,
-+					       dfl_fpga_check_port_id);
-+	if (!fdata)
- 		goto unlock_exit;
- 
--	if (device_is_registered(&port_pdev->dev)) {
-+	if (fdata->dev) {
- 		ret = -EBUSY;
--		goto put_dev_exit;
-+		goto unlock_exit;
- 	}
- 
--	ret = platform_device_add(port_pdev);
-+	ret = feature_dev_register(fdata);
- 	if (ret)
--		goto put_dev_exit;
--
--	pdata = dev_get_platdata(&port_pdev->dev);
-+		goto unlock_exit;
- 
--	mutex_lock(&pdata->lock);
--	dfl_feature_dev_use_end(pdata);
--	mutex_unlock(&pdata->lock);
-+	mutex_lock(&fdata->lock);
-+	dfl_feature_dev_use_end(fdata);
-+	mutex_unlock(&fdata->lock);
- 
- 	cdev->released_port_num--;
--put_dev_exit:
--	put_device(&port_pdev->dev);
-+
- unlock_exit:
- 	mutex_unlock(&cdev->lock);
- 	return ret;
-@@ -1817,14 +1802,14 @@ static void config_port_access_mode(struct device *fme_dev, int port_id,
-  */
- void dfl_fpga_cdev_config_ports_pf(struct dfl_fpga_cdev *cdev)
- {
--	struct dfl_feature_platform_data *pdata;
-+	struct dfl_feature_dev_data *fdata;
- 
- 	mutex_lock(&cdev->lock);
--	list_for_each_entry(pdata, &cdev->port_dev_list, node) {
--		if (device_is_registered(&pdata->dev->dev))
-+	list_for_each_entry(fdata, &cdev->port_dev_list, node) {
-+		if (fdata->dev)
- 			continue;
- 
--		config_port_pf_mode(cdev->fme_dev, pdata->id);
-+		config_port_pf_mode(cdev->fme_dev, fdata->id);
- 	}
- 	mutex_unlock(&cdev->lock);
- }
-@@ -1843,7 +1828,7 @@ EXPORT_SYMBOL_GPL(dfl_fpga_cdev_config_ports_pf);
-  */
- int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vfs)
- {
--	struct dfl_feature_platform_data *pdata;
-+	struct dfl_feature_dev_data *fdata;
- 	int ret = 0;
- 
- 	mutex_lock(&cdev->lock);
-@@ -1857,11 +1842,11 @@ int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vfs)
- 		goto done;
- 	}
- 
--	list_for_each_entry(pdata, &cdev->port_dev_list, node) {
--		if (device_is_registered(&pdata->dev->dev))
-+	list_for_each_entry(fdata, &cdev->port_dev_list, node) {
-+		if (fdata->dev)
- 			continue;
- 
--		config_port_vf_mode(cdev->fme_dev, pdata->id);
-+		config_port_vf_mode(cdev->fme_dev, fdata->id);
- 	}
- done:
- 	mutex_unlock(&cdev->lock);
-@@ -1995,6 +1980,7 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
- 			       unsigned long arg)
- {
- 	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
-+	struct dfl_feature_dev_data *fdata = pdata->fdata;
- 	struct dfl_fpga_irq_set hdr;
- 	s32 *fds;
- 	long ret;
-@@ -2014,9 +2000,9 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
- 	if (IS_ERR(fds))
- 		return PTR_ERR(fds);
- 
--	mutex_lock(&pdata->lock);
-+	mutex_lock(&fdata->lock);
- 	ret = dfl_fpga_set_irq_triggers(feature, hdr.start, hdr.count, fds);
--	mutex_unlock(&pdata->lock);
-+	mutex_unlock(&fdata->lock);
- 
- 	kfree(fds);
- 	return ret;
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index 7ea96788a969..612592f374e6 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -17,6 +17,7 @@
- #include <linux/bitfield.h>
- #include <linux/cdev.h>
- #include <linux/delay.h>
-+#include <linux/dfl.h>
- #include <linux/eventfd.h>
- #include <linux/fs.h>
- #include <linux/interrupt.h>
-@@ -206,7 +207,7 @@
- #define PORT_UINT_CAP_INT_NUM	GENMASK_ULL(11, 0)	/* Interrupts num */
- #define PORT_UINT_CAP_FST_VECT	GENMASK_ULL(23, 12)	/* First Vector */
- 
--#define dfl_feature_dev_data dfl_feature_platform_data
-+struct dfl_feature_dev_data;
- 
- /**
-  * struct dfl_fpga_port_ops - port ops
-@@ -221,15 +222,16 @@ struct dfl_fpga_port_ops {
- 	const char *name;
- 	struct module *owner;
- 	struct list_head node;
--	int (*get_id)(struct platform_device *pdev);
--	int (*enable_set)(struct platform_device *pdev, bool enable);
-+	int (*get_id)(struct dfl_feature_dev_data *fdata);
-+	int (*enable_set)(struct dfl_feature_dev_data *fdata, bool enable);
- };
- 
- void dfl_fpga_port_ops_add(struct dfl_fpga_port_ops *ops);
- void dfl_fpga_port_ops_del(struct dfl_fpga_port_ops *ops);
--struct dfl_fpga_port_ops *dfl_fpga_port_ops_get(struct platform_device *pdev);
-+struct dfl_fpga_port_ops *
-+	dfl_fpga_port_ops_get(struct dfl_feature_dev_data *fdata);
- void dfl_fpga_port_ops_put(struct dfl_fpga_port_ops *ops);
--int dfl_fpga_check_port_id(struct platform_device *pdev, void *pport_id);
-+int dfl_fpga_check_port_id(struct dfl_feature_dev_data *fdata, void *pport_id);
- 
- /**
-  * struct dfl_feature_id - dfl private feature id
-@@ -302,26 +304,32 @@ struct dfl_feature {
- #define FEATURE_DEV_ID_UNUSED	(-1)
- 
- /**
-- * struct dfl_feature_platform_data - platform data for feature devices
-+ * struct dfl_feature_dev_data - dfl enumeration data for dfl feature dev.
-  *
-- * @node: node to link feature devs to container device's port_dev_list.
-- * @lock: mutex to protect platform data.
-- * @cdev: cdev of feature dev.
-- * @dev: ptr to platform device linked with this platform data.
-+ * @node: node to link the data structure to container device's port_dev_list.
-+ * @lock: mutex to protect feature dev data.
-+ * @dev: ptr to the feature's platform device linked with this structure.
-+ * @type: type of DFL FIU for the feature dev. See enum dfl_id_type.
-+ * @pdev_id: platform device id for the feature dev.
-+ * @pdev_name: platform device name for the feature dev.
-  * @dfl_cdev: ptr to container device.
-- * @id: id used for this feature device.
-+ * @id: id used for the feature device.
-  * @disable_count: count for port disable.
-  * @excl_open: set on feature device exclusive open.
-  * @open_count: count for feature device open.
-  * @num: number for sub features.
-  * @private: ptr to feature dev private data.
-- * @features: sub features of this feature dev.
-+ * @features: sub features for the feature dev.
-+ * @resource_num: number of resources for the feature dev.
-+ * @resources: resources for the feature dev.
-  */
--struct dfl_feature_platform_data {
-+struct dfl_feature_dev_data {
- 	struct list_head node;
- 	struct mutex lock;
--	struct cdev cdev;
- 	struct platform_device *dev;
-+	enum dfl_id_type type;
-+	int pdev_id;
-+	const char *pdev_name;
- 	struct dfl_fpga_cdev *dfl_cdev;
- 	int id;
- 	unsigned int disable_count;
-@@ -329,7 +337,20 @@ struct dfl_feature_platform_data {
- 	int open_count;
- 	void *private;
- 	int num;
--	struct dfl_feature features[];
-+	struct dfl_feature *features;
-+	int resource_num;
-+	struct resource *resources;
-+};
-+
-+/**
-+ * struct dfl_feature_platform_data - platform data for feature devices
-+ *
-+ * @cdev: cdev of feature dev.
-+ * @fdata: dfl enumeration data for the dfl feature device.
-+ */
-+struct dfl_feature_platform_data {
-+	struct cdev cdev;
-+	struct dfl_feature_dev_data *fdata;
- };
- 
- static inline
-@@ -407,7 +428,7 @@ struct platform_device *dfl_fpga_inode_to_feature_dev(struct inode *inode)
- 
- 	pdata = container_of(inode->i_cdev, struct dfl_feature_platform_data,
- 			     cdev);
--	return pdata->dev;
-+	return pdata->fdata->dev;
- }
- 
- #define dfl_fpga_dev_for_each_feature(fdata, feature)			    \
-@@ -438,7 +459,13 @@ dfl_get_feature_ioaddr_by_id(struct dfl_feature_dev_data *fdata, u16 id)
- 	return NULL;
- }
- 
--#define to_dfl_feature_dev_data dev_get_platdata
-+static inline struct dfl_feature_dev_data *
-+to_dfl_feature_dev_data(struct device *dev)
-+{
-+	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-+
-+	return pdata->fdata;
-+}
- 
- static inline
- struct device *dfl_fpga_fdata_to_parent(struct dfl_feature_dev_data *fdata)
-@@ -525,26 +552,23 @@ struct dfl_fpga_cdev *
- dfl_fpga_feature_devs_enumerate(struct dfl_fpga_enum_info *info);
- void dfl_fpga_feature_devs_remove(struct dfl_fpga_cdev *cdev);
- 
--/*
-- * need to drop the device reference with put_device() after use port platform
-- * device returned by __dfl_fpga_cdev_find_port and dfl_fpga_cdev_find_port
-- * functions.
-- */
--struct platform_device *
--__dfl_fpga_cdev_find_port(struct dfl_fpga_cdev *cdev, void *data,
--			  int (*match)(struct platform_device *, void *));
-+struct dfl_feature_dev_data *
-+__dfl_fpga_cdev_find_port_data(struct dfl_fpga_cdev *cdev, void *data,
-+			       int (*match)(struct dfl_feature_dev_data *,
-+					    void *));
- 
--static inline struct platform_device *
--dfl_fpga_cdev_find_port(struct dfl_fpga_cdev *cdev, void *data,
--			int (*match)(struct platform_device *, void *))
-+static inline struct dfl_feature_dev_data *
-+dfl_fpga_cdev_find_port_data(struct dfl_fpga_cdev *cdev, void *data,
-+			     int (*match)(struct dfl_feature_dev_data *,
-+					  void *))
- {
--	struct platform_device *pdev;
-+	struct dfl_feature_dev_data *fdata;
- 
- 	mutex_lock(&cdev->lock);
--	pdev = __dfl_fpga_cdev_find_port(cdev, data, match);
-+	fdata = __dfl_fpga_cdev_find_port_data(cdev, data, match);
- 	mutex_unlock(&cdev->lock);
- 
--	return pdev;
-+	return fdata;
- }
- 
- int dfl_fpga_cdev_release_port(struct dfl_fpga_cdev *cdev, int port_id);
--- 
-2.44.0
-
+T24gVHVlLCAyMDI0LTA0LTA5IGF0IDE5OjM5IC0wNDAwLCBQZXRlciBDb2xiZXJnIHdyb3RlOg0K
+PiBUaGlzIGNoYW5nZSBzZXBhcmF0ZXMgb3V0IG1vc3Qgb2YgdGhlIHN5bWJvbCBuYW1lIGNoYW5n
+ZXMgcmVxdWlyZWQgYnkgdGhpcw0KPiBwYXRjaCBzZXJpZXMgZm9yIHRoZSBmaWxlOiBkcml2ZXJz
+L2ZwZ2EvZGZsLWFmdS1yZWdpb24uYy4gVGhpcyBpcyBkb25lIHRvDQo+IHNwbGl0IGEgc2luZ2xl
+IG1vbm9saXRoaWMgY2hhbmdlIGludG8gbXVsdGlwbGUsIHNtYWxsZXIgcGF0Y2hlcyBhdCB0aGUN
+Cj4gcmVxdWVzdCBvZiB0aGUgbWFpbnRhaW5lci4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFBldGVy
+IENvbGJlcmcgPHBldGVyLmNvbGJlcmdAaW50ZWwuY29tPg0KPiAtLS0NCj4gdjI6DQo+IC0gU3Bs
+aXQgbW9ub2xpdGhpYyBwYXRjaCBpbnRvIHNlcmllcyBhdCByZXF1ZXN0IG9mIG1haW50YWluZXIN
+Cj4gLS0tDQo+ICBkcml2ZXJzL2ZwZ2EvZGZsLWFmdS1yZWdpb24uYyB8IDUxICsrKysrKysrKysr
+KysrKysrKy0tLS0tLS0tLS0tLS0tLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgMjYgaW5zZXJ0aW9u
+cygrKSwgMjUgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9mcGdhL2Rm
+bC1hZnUtcmVnaW9uLmMgYi9kcml2ZXJzL2ZwZ2EvZGZsLWFmdS1yZWdpb24uYw0KPiBpbmRleCAy
+ZTdiNDE2Mjk0MDYuLmIxMWE1YjIxZTY2NiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9mcGdhL2Rm
+bC1hZnUtcmVnaW9uLmMNCj4gKysrIGIvZHJpdmVycy9mcGdhL2RmbC1hZnUtcmVnaW9uLmMNCj4g
+QEAgLTEyLDExICsxMiwxMSBAQA0KPiAgDQo+ICAvKioNCj4gICAqIGFmdV9tbWlvX3JlZ2lvbl9p
+bml0IC0gaW5pdCBmdW5jdGlvbiBmb3IgYWZ1IG1taW8gcmVnaW9uIHN1cHBvcnQNCj4gLSAqIEBw
+ZGF0YTogYWZ1IHBsYXRmb3JtIGRldmljZSdzIHBkYXRhLg0KPiArICogQGZkYXRhOiBhZnUgZmVh
+dHVyZSBkZXYgZGF0YQ0KPiAgICovDQo+IC12b2lkIGFmdV9tbWlvX3JlZ2lvbl9pbml0KHN0cnVj
+dCBkZmxfZmVhdHVyZV9wbGF0Zm9ybV9kYXRhICpwZGF0YSkNCj4gK3ZvaWQgYWZ1X21taW9fcmVn
+aW9uX2luaXQoc3RydWN0IGRmbF9mZWF0dXJlX2Rldl9kYXRhICpmZGF0YSkNCj4gIHsNCj4gLQlz
+dHJ1Y3QgZGZsX2FmdSAqYWZ1ID0gZGZsX2ZwZ2FfcGRhdGFfZ2V0X3ByaXZhdGUocGRhdGEpOw0K
+PiArCXN0cnVjdCBkZmxfYWZ1ICphZnUgPSBkZmxfZnBnYV9mZGF0YV9nZXRfcHJpdmF0ZShmZGF0
+YSk7DQo+ICANCj4gIAlJTklUX0xJU1RfSEVBRCgmYWZ1LT5yZWdpb25zKTsNCj4gIH0NCj4gQEAg
+LTM5LDcgKzM5LDcgQEAgc3RhdGljIHN0cnVjdCBkZmxfYWZ1X21taW9fcmVnaW9uICpnZXRfcmVn
+aW9uX2J5X2luZGV4KHN0cnVjdCBkZmxfYWZ1ICphZnUsDQo+ICAvKioNCj4gICAqIGFmdV9tbWlv
+X3JlZ2lvbl9hZGQgLSBhZGQgYSBtbWlvIHJlZ2lvbiB0byBnaXZlbiBmZWF0dXJlIGRldi4NCj4g
+ICAqDQo+IC0gKiBAcGRhdGE6IGFmdSBwbGF0Zm9ybSBkZXZpY2UncyBwZGF0YS4NCj4gKyAqIEBm
+ZGF0YTogYWZ1IGZlYXR1cmUgZGV2IGRhdGENCj4gICAqIEByZWdpb25faW5kZXg6IHJlZ2lvbiBp
+bmRleC4NCj4gICAqIEByZWdpb25fc2l6ZTogcmVnaW9uIHNpemUuDQo+ICAgKiBAcGh5czogcmVn
+aW9uJ3MgcGh5c2ljYWwgYWRkcmVzcyBvZiB0aGlzIHJlZ2lvbi4NCj4gQEAgLTQ3LDE0ICs0Nywx
+NSBAQCBzdGF0aWMgc3RydWN0IGRmbF9hZnVfbW1pb19yZWdpb24gKmdldF9yZWdpb25fYnlfaW5k
+ZXgoc3RydWN0IGRmbF9hZnUgKmFmdSwNCj4gICAqDQo+ICAgKiBSZXR1cm46IDAgb24gc3VjY2Vz
+cywgbmVnYXRpdmUgZXJyb3IgY29kZSBvdGhlcndpc2UuDQo+ICAgKi8NCj4gLWludCBhZnVfbW1p
+b19yZWdpb25fYWRkKHN0cnVjdCBkZmxfZmVhdHVyZV9wbGF0Zm9ybV9kYXRhICpwZGF0YSwNCj4g
+K2ludCBhZnVfbW1pb19yZWdpb25fYWRkKHN0cnVjdCBkZmxfZmVhdHVyZV9kZXZfZGF0YSAqZmRh
+dGEsDQo+ICAJCQl1MzIgcmVnaW9uX2luZGV4LCB1NjQgcmVnaW9uX3NpemUsIHU2NCBwaHlzLCB1
+MzIgZmxhZ3MpDQo+ICB7DQo+ICsJc3RydWN0IGRldmljZSAqZGV2ID0gJmZkYXRhLT5kZXYtPmRl
+djsNCj4gIAlzdHJ1Y3QgZGZsX2FmdV9tbWlvX3JlZ2lvbiAqcmVnaW9uOw0KPiAgCXN0cnVjdCBk
+ZmxfYWZ1ICphZnU7DQo+ICAJaW50IHJldCA9IDA7DQo+ICANCj4gLQlyZWdpb24gPSBkZXZtX2t6
+YWxsb2MoJnBkYXRhLT5kZXYtPmRldiwgc2l6ZW9mKCpyZWdpb24pLCBHRlBfS0VSTkVMKTsNCj4g
+KwlyZWdpb24gPSBkZXZtX2t6YWxsb2MoZGV2LCBzaXplb2YoKnJlZ2lvbiksIEdGUF9LRVJORUwp
+Ow0KPiAgCWlmICghcmVnaW9uKQ0KPiAgCQlyZXR1cm4gLUVOT01FTTsNCj4gIA0KPiBAQCAtNjMs
+MTMgKzY0LDEzIEBAIGludCBhZnVfbW1pb19yZWdpb25fYWRkKHN0cnVjdCBkZmxfZmVhdHVyZV9w
+bGF0Zm9ybV9kYXRhICpwZGF0YSwNCj4gIAlyZWdpb24tPnBoeXMgPSBwaHlzOw0KPiAgCXJlZ2lv
+bi0+ZmxhZ3MgPSBmbGFnczsNCj4gIA0KPiAtCW11dGV4X2xvY2soJnBkYXRhLT5sb2NrKTsNCj4g
+KwltdXRleF9sb2NrKCZmZGF0YS0+bG9jayk7DQo+ICANCj4gLQlhZnUgPSBkZmxfZnBnYV9wZGF0
+YV9nZXRfcHJpdmF0ZShwZGF0YSk7DQo+ICsJYWZ1ID0gZGZsX2ZwZ2FfZmRhdGFfZ2V0X3ByaXZh
+dGUoZmRhdGEpOw0KPiAgDQo+ICAJLyogY2hlY2sgaWYgQGluZGV4IGFscmVhZHkgZXhpc3RzICov
+DQo+ICAJaWYgKGdldF9yZWdpb25fYnlfaW5kZXgoYWZ1LCByZWdpb25faW5kZXgpKSB7DQo+IC0J
+CW11dGV4X3VubG9jaygmcGRhdGEtPmxvY2spOw0KPiArCQltdXRleF91bmxvY2soJmZkYXRhLT5s
+b2NrKTsNCj4gIAkJcmV0ID0gLUVFWElTVDsNCj4gIAkJZ290byBleGl0Ow0KPiAgCX0NCj4gQEAg
+LTgwLDM3ICs4MSwzNyBAQCBpbnQgYWZ1X21taW9fcmVnaW9uX2FkZChzdHJ1Y3QgZGZsX2ZlYXR1
+cmVfcGxhdGZvcm1fZGF0YSAqcGRhdGEsDQo+ICANCj4gIAlhZnUtPnJlZ2lvbl9jdXJfb2Zmc2V0
+ICs9IHJlZ2lvbl9zaXplOw0KPiAgCWFmdS0+bnVtX3JlZ2lvbnMrKzsNCj4gLQltdXRleF91bmxv
+Y2soJnBkYXRhLT5sb2NrKTsNCj4gKwltdXRleF91bmxvY2soJmZkYXRhLT5sb2NrKTsNCj4gIA0K
+PiAgCXJldHVybiAwOw0KPiAgDQo+ICBleGl0Og0KPiAtCWRldm1fa2ZyZWUoJnBkYXRhLT5kZXYt
+PmRldiwgcmVnaW9uKTsNCj4gKwlkZXZtX2tmcmVlKGRldiwgcmVnaW9uKTsNCg0KQW4gaW50ZXJu
+YWwgcmV2aWV3ZXIgY29tbWVudGVkIHRoYXQgY2FsbGluZyBkZXZtX2tmcmVlKCkgaW4gYWxtb3N0
+IGFsbA0KY2FzZXMgc2hvd3MgYSBtaXN1bmRlcnN0YW5kaW5nIG9mIG9iamVjdCBsaWZldGltZSBh
+bmQgbWF5IHVudmVpbCBidWdzLg0KVGhleSBzdWdnZXN0ZWQgdG8gZWl0aGVyIGRyb3AgdGhlIGV4
+cGxpY2l0IGRldm1fa2ZyZWUoKSwgb3IgbW92ZSBmcm9tDQpkZXZtXyooKSB0byBwbGFpbiBhbGxv
+Y2F0aW9uLg0KDQpJIGNvdWxkIG5vdCBmaW5kIHNwZWNpZmljIGRvY3VtZW50YXRpb24gb24gdGhl
+IHJlY29tbWVuZGVkIHVzZSBjYXNlcw0KZm9yIGRldm1fa2ZyZWUoKSB0byBpbW1lZGlhdGVseSBm
+cmVlIGEgcmVzb3VyY2Ugb24gZXJyb3IsIGJ1dCB0aGUNCmRlc2NyaXB0aW9uIG9mIGRldnJlcyBn
+cm91cHMgYWR2aXNlcyB0aGF0IGV4cGxpY2l0IGZyZWVpbmcgdXNpbmcNCmRldnJlc19yZWxlYXNl
+X2dyb3VwKCkgaXMgdXN1YWxseSB1c2VmdWwgaW4gbWlkbGF5ZXIgZHJpdmVycyB3aGVyZQ0KaW50
+ZXJmYWNlIGZ1bmN0aW9ucyBzaG91bGQgbm90IGhhdmUgc2lkZSBlZmZlY3RzIFsxXS4NCg0KV2hp
+Y2ggaW1wbGVtZW50YXRpb24gd291bGQgeW91IHByZWZlciBhbmQgd2h5PyBEcm9wcGluZyBkZXZt
+X2tmcmVlKCksDQptb3ZpbmcgdG8gcGxhaW4gYWxsb2NhdGlvbiwgb3IgbGVhdmluZyBldmVyeXRo
+aW5nIGFzIGlzPw0KDQpbMV3CoGh0dHBzOi8vZG9jcy5rZXJuZWwub3JnL2RyaXZlci1hcGkvZHJp
+dmVyLW1vZGVsL2RldnJlcy5odG1sI2RldnJlcy1ncm91cCANCg0KVGhhbmtzLA0KUGV0ZXINCg0K
+PiAgCXJldHVybiByZXQ7DQo+ICB9DQo+ICANCj4gIC8qKg0KPiAgICogYWZ1X21taW9fcmVnaW9u
+X2Rlc3Ryb3kgLSBkZXN0cm95IGFsbCBtbWlvIHJlZ2lvbnMgdW5kZXIgZ2l2ZW4gZmVhdHVyZSBk
+ZXYuDQo+IC0gKiBAcGRhdGE6IGFmdSBwbGF0Zm9ybSBkZXZpY2UncyBwZGF0YS4NCj4gKyAqIEBm
+ZGF0YTogYWZ1IGZlYXR1cmUgZGV2IGRhdGENCj4gICAqLw0KPiAtdm9pZCBhZnVfbW1pb19yZWdp
+b25fZGVzdHJveShzdHJ1Y3QgZGZsX2ZlYXR1cmVfcGxhdGZvcm1fZGF0YSAqcGRhdGEpDQo+ICt2
+b2lkIGFmdV9tbWlvX3JlZ2lvbl9kZXN0cm95KHN0cnVjdCBkZmxfZmVhdHVyZV9kZXZfZGF0YSAq
+ZmRhdGEpDQo+ICB7DQo+IC0Jc3RydWN0IGRmbF9hZnUgKmFmdSA9IGRmbF9mcGdhX3BkYXRhX2dl
+dF9wcml2YXRlKHBkYXRhKTsNCj4gKwlzdHJ1Y3QgZGZsX2FmdSAqYWZ1ID0gZGZsX2ZwZ2FfZmRh
+dGFfZ2V0X3ByaXZhdGUoZmRhdGEpOw0KPiAgCXN0cnVjdCBkZmxfYWZ1X21taW9fcmVnaW9uICp0
+bXAsICpyZWdpb247DQo+ICANCj4gIAlsaXN0X2Zvcl9lYWNoX2VudHJ5X3NhZmUocmVnaW9uLCB0
+bXAsICZhZnUtPnJlZ2lvbnMsIG5vZGUpDQo+IC0JCWRldm1fa2ZyZWUoJnBkYXRhLT5kZXYtPmRl
+diwgcmVnaW9uKTsNCj4gKwkJZGV2bV9rZnJlZSgmZmRhdGEtPmRldi0+ZGV2LCByZWdpb24pOw0K
+PiAgfQ0KPiAgDQo+ICAvKioNCj4gICAqIGFmdV9tbWlvX3JlZ2lvbl9nZXRfYnlfaW5kZXggLSBm
+aW5kIGFuIGFmdSByZWdpb24gYnkgaW5kZXguDQo+IC0gKiBAcGRhdGE6IGFmdSBwbGF0Zm9ybSBk
+ZXZpY2UncyBwZGF0YS4NCj4gKyAqIEBmZGF0YTogYWZ1IGZlYXR1cmUgZGV2IGRhdGENCj4gICAq
+IEByZWdpb25faW5kZXg6IHJlZ2lvbiBpbmRleC4NCj4gICAqIEBwcmVnaW9uOiBwdHIgdG8gcmVn
+aW9uIGZvciByZXN1bHQuDQo+ICAgKg0KPiAgICogUmV0dXJuOiAwIG9uIHN1Y2Nlc3MsIG5lZ2F0
+aXZlIGVycm9yIGNvZGUgb3RoZXJ3aXNlLg0KPiAgICovDQo+IC1pbnQgYWZ1X21taW9fcmVnaW9u
+X2dldF9ieV9pbmRleChzdHJ1Y3QgZGZsX2ZlYXR1cmVfcGxhdGZvcm1fZGF0YSAqcGRhdGEsDQo+
+ICtpbnQgYWZ1X21taW9fcmVnaW9uX2dldF9ieV9pbmRleChzdHJ1Y3QgZGZsX2ZlYXR1cmVfZGV2
+X2RhdGEgKmZkYXRhLA0KPiAgCQkJCSB1MzIgcmVnaW9uX2luZGV4LA0KPiAgCQkJCSBzdHJ1Y3Qg
+ZGZsX2FmdV9tbWlvX3JlZ2lvbiAqcHJlZ2lvbikNCj4gIHsNCj4gQEAgLTExOCw4ICsxMTksOCBA
+QCBpbnQgYWZ1X21taW9fcmVnaW9uX2dldF9ieV9pbmRleChzdHJ1Y3QgZGZsX2ZlYXR1cmVfcGxh
+dGZvcm1fZGF0YSAqcGRhdGEsDQo+ICAJc3RydWN0IGRmbF9hZnUgKmFmdTsNCj4gIAlpbnQgcmV0
+ID0gMDsNCj4gIA0KPiAtCW11dGV4X2xvY2soJnBkYXRhLT5sb2NrKTsNCj4gLQlhZnUgPSBkZmxf
+ZnBnYV9wZGF0YV9nZXRfcHJpdmF0ZShwZGF0YSk7DQo+ICsJbXV0ZXhfbG9jaygmZmRhdGEtPmxv
+Y2spOw0KPiArCWFmdSA9IGRmbF9mcGdhX2ZkYXRhX2dldF9wcml2YXRlKGZkYXRhKTsNCj4gIAly
+ZWdpb24gPSBnZXRfcmVnaW9uX2J5X2luZGV4KGFmdSwgcmVnaW9uX2luZGV4KTsNCj4gIAlpZiAo
+IXJlZ2lvbikgew0KPiAgCQlyZXQgPSAtRUlOVkFMOw0KPiBAQCAtMTI3LDE0ICsxMjgsMTQgQEAg
+aW50IGFmdV9tbWlvX3JlZ2lvbl9nZXRfYnlfaW5kZXgoc3RydWN0IGRmbF9mZWF0dXJlX3BsYXRm
+b3JtX2RhdGEgKnBkYXRhLA0KPiAgCX0NCj4gIAkqcHJlZ2lvbiA9ICpyZWdpb247DQo+ICBleGl0
+Og0KPiAtCW11dGV4X3VubG9jaygmcGRhdGEtPmxvY2spOw0KPiArCW11dGV4X3VubG9jaygmZmRh
+dGEtPmxvY2spOw0KPiAgCXJldHVybiByZXQ7DQo+ICB9DQo+ICANCj4gIC8qKg0KPiAgICogYWZ1
+X21taW9fcmVnaW9uX2dldF9ieV9vZmZzZXQgLSBmaW5kIGFuIGFmdSBtbWlvIHJlZ2lvbiBieSBv
+ZmZzZXQgYW5kIHNpemUNCj4gICAqDQo+IC0gKiBAcGRhdGE6IGFmdSBwbGF0Zm9ybSBkZXZpY2Un
+cyBwZGF0YS4NCj4gKyAqIEBmZGF0YTogYWZ1IGZlYXR1cmUgZGV2IGRhdGENCj4gICAqIEBvZmZz
+ZXQ6IHJlZ2lvbiBvZmZzZXQgZnJvbSBzdGFydCBvZiB0aGUgZGV2aWNlIGZkLg0KPiAgICogQHNp
+emU6IHJlZ2lvbiBzaXplLg0KPiAgICogQHByZWdpb246IHB0ciB0byByZWdpb24gZm9yIHJlc3Vs
+dC4NCj4gQEAgLTE0NCw3ICsxNDUsNyBAQCBpbnQgYWZ1X21taW9fcmVnaW9uX2dldF9ieV9pbmRl
+eChzdHJ1Y3QgZGZsX2ZlYXR1cmVfcGxhdGZvcm1fZGF0YSAqcGRhdGEsDQo+ICAgKg0KPiAgICog
+UmV0dXJuOiAwIG9uIHN1Y2Nlc3MsIG5lZ2F0aXZlIGVycm9yIGNvZGUgb3RoZXJ3aXNlLg0KPiAg
+ICovDQo+IC1pbnQgYWZ1X21taW9fcmVnaW9uX2dldF9ieV9vZmZzZXQoc3RydWN0IGRmbF9mZWF0
+dXJlX3BsYXRmb3JtX2RhdGEgKnBkYXRhLA0KPiAraW50IGFmdV9tbWlvX3JlZ2lvbl9nZXRfYnlf
+b2Zmc2V0KHN0cnVjdCBkZmxfZmVhdHVyZV9kZXZfZGF0YSAqZmRhdGEsDQo+ICAJCQkJICB1NjQg
+b2Zmc2V0LCB1NjQgc2l6ZSwNCj4gIAkJCQkgIHN0cnVjdCBkZmxfYWZ1X21taW9fcmVnaW9uICpw
+cmVnaW9uKQ0KPiAgew0KPiBAQCAtMTUyLDggKzE1Myw4IEBAIGludCBhZnVfbW1pb19yZWdpb25f
+Z2V0X2J5X29mZnNldChzdHJ1Y3QgZGZsX2ZlYXR1cmVfcGxhdGZvcm1fZGF0YSAqcGRhdGEsDQo+
+ICAJc3RydWN0IGRmbF9hZnUgKmFmdTsNCj4gIAlpbnQgcmV0ID0gMDsNCj4gIA0KPiAtCW11dGV4
+X2xvY2soJnBkYXRhLT5sb2NrKTsNCj4gLQlhZnUgPSBkZmxfZnBnYV9wZGF0YV9nZXRfcHJpdmF0
+ZShwZGF0YSk7DQo+ICsJbXV0ZXhfbG9jaygmZmRhdGEtPmxvY2spOw0KPiArCWFmdSA9IGRmbF9m
+cGdhX2ZkYXRhX2dldF9wcml2YXRlKGZkYXRhKTsNCj4gIAlmb3JfZWFjaF9yZWdpb24ocmVnaW9u
+LCBhZnUpDQo+ICAJCWlmIChyZWdpb24tPm9mZnNldCA8PSBvZmZzZXQgJiYNCj4gIAkJICAgIHJl
+Z2lvbi0+b2Zmc2V0ICsgcmVnaW9uLT5zaXplID49IG9mZnNldCArIHNpemUpIHsNCj4gQEAgLTE2
+Miw2ICsxNjMsNiBAQCBpbnQgYWZ1X21taW9fcmVnaW9uX2dldF9ieV9vZmZzZXQoc3RydWN0IGRm
+bF9mZWF0dXJlX3BsYXRmb3JtX2RhdGEgKnBkYXRhLA0KPiAgCQl9DQo+ICAJcmV0ID0gLUVJTlZB
+TDsNCj4gIGV4aXQ6DQo+IC0JbXV0ZXhfdW5sb2NrKCZwZGF0YS0+bG9jayk7DQo+ICsJbXV0ZXhf
+dW5sb2NrKCZmZGF0YS0+bG9jayk7DQo+ICAJcmV0dXJuIHJldDsNCj4gIH0NCg0K
 
