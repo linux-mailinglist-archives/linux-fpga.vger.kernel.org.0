@@ -1,76 +1,89 @@
-Return-Path: <linux-fpga+bounces-413-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-414-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C21A989D1AD
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 06:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 26AD589DB40
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 15:54:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 045581C21EFD
-	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 04:57:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 587871C21937
+	for <lists+linux-fpga@lfdr.de>; Tue,  9 Apr 2024 13:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F189433CC;
-	Tue,  9 Apr 2024 04:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63C5D1311B4;
+	Tue,  9 Apr 2024 13:48:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ffBJyQM8"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jk/4sfVz"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8828C18C22;
-	Tue,  9 Apr 2024 04:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D10130E47;
+	Tue,  9 Apr 2024 13:48:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712638649; cv=none; b=nn0iKegetvXO/08Gj2dSnEntT+s+MyYrsR+E37fOJE84DhzyaBVI9JSXyNG+FZ4/gOF39wAvU9M76//6Y/OuiDcLrMMKr70MChrQbJN0AXIBgzWGYoJtnz10wr/ZHrWhezkhm/auhbCIq28iyTncEP5f76+PNn9m+3L85ixXpJs=
+	t=1712670512; cv=none; b=puMoAlSsR0M7Avc1e9YJGeBV32yNL7a/CB3yyAgH7a8SRf7W/soqv76FDfi4/TnJ3m1dUgIBLGvJSopnorGzrdK13HoVK27l+RszdsArvOPobPDOWDVwuALPaJd445vf/qD5jZTCzSzW46w+gEYzkVJ19uS46MBYc0uBWzMcuIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712638649; c=relaxed/simple;
-	bh=y3DPqrmDYg+MO0wxN9GdgxxnrMB3pGs4A5+jP7hLYOQ=;
+	s=arc-20240116; t=1712670512; c=relaxed/simple;
+	bh=lY/4wKOh/DIkoH73lXxAFPUPx0Fw/2iox1dE6fYg0V4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VM1szrftcbcTXfMmBb4HXvuOYMIvjkGP3ujjk5ufSyXEB92lJ5qltYFtmPpn0U0Uziicyoe24vQ7nLxxtlV5t8+FVsesEBxi6R8b/6X/RICpSTH0qwyPI7cZ9tA9HVsyZetbUGR2Gd1Dmv4gopPQ++ngQEN3e6bDmGexolTXE1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ffBJyQM8; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712638648; x=1744174648;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=y3DPqrmDYg+MO0wxN9GdgxxnrMB3pGs4A5+jP7hLYOQ=;
-  b=ffBJyQM8E1sLKb8X5Y8+5rzuoUr34bRMLML7wO8xdZxjZaM81d2V5LMx
-   Nch7zMBeNbZquWWo0k2rnAonQHGNK+xbjhHXLC5jCHc77+Z6uvHC33rfS
-   tQJI4Qz4HQa7KCY14WFdNEb/0EfThtoJAFpZwlMP91vtT6BotCi3/qRjc
-   Wi8ICbpjL4xlBWaFZZPXifMabvOBb/J+7VAvJh7D7JKtJId3BQ671jYb/
-   qrs6W13jo2FKLDtQB9DO23VXAuA0RtYd1zNQ6InCsnSWXZsHofTyF7IeV
-   GfdNH7q/CAvWoAm5k3uE7B+zOJ0EtPD+2Uv7Ut3bW/b9sdY8cschPuGvw
-   A==;
-X-CSE-ConnectionGUID: TSML/XADScCZBBR8HQRmOg==
-X-CSE-MsgGUID: /MrgmMRGRs+3MMyMIIoifQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="18507204"
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="18507204"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 21:57:27 -0700
-X-CSE-ConnectionGUID: 9R9JY7zIQcS9rJf31x4vNQ==
-X-CSE-MsgGUID: kgeVztYLTC6i9mpR7cz60w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="24808411"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa003.jf.intel.com with ESMTP; 08 Apr 2024 21:57:25 -0700
-Date: Tue, 9 Apr 2024 12:52:24 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Russ Weight <russ.weight@linux.dev>, linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fpga: tests: use KUnit devices instead of platform
- devices
-Message-ID: <ZhTJiJmtewFbAJ/2@yilunxu-OptiPlex-7050>
-References: <20240329174849.248243-1-marpagan@redhat.com>
- <ZgujpnLfHTp+WRNL@yilunxu-OptiPlex-7050>
- <9d49402e-c5d4-4002-954f-7d2c48fdcfe4@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=WKOkVx6CJCij7ToaAzas08ZvRO3hl8jAJ0c6RwraY2gCypi9iIzYUBmxI0One/inPv57BFQTB8QJPnLKNtkRR9FpYFzvuyA5pL5BfV3h2aAMCJW5PCxl9RFRiFPeqVZW0XpaplPY/bsuktjguK1Wr8ZEvssnMSbG1JFXKTxpkoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jk/4sfVz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8499DC433C7;
+	Tue,  9 Apr 2024 13:48:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1712670511;
+	bh=lY/4wKOh/DIkoH73lXxAFPUPx0Fw/2iox1dE6fYg0V4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jk/4sfVzp/FqUu/E9Kv984LFB+BDnS4hpA6X7Xur98C4l2OpU0LQqrhXzdPxhLC5g
+	 maOM8QLXXPrlFxo+/o9nCh64QqB7E3dqEk4OBCFZ6kUJK0CQyaBup3A2HduHoP68sP
+	 nI956a18HBaBun5llmCJ9uH74oCtXxtH8ceqT1oI=
+Date: Tue, 9 Apr 2024 15:48:28 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Corey Minyard <minyard@acm.org>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Peter Rosin <peda@axentia.se>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+	Keyur Chudgar <keyur@os.amperecomputing.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Xiang Chen <chenxiang66@hisilicon.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Tom Rix <trix@redhat.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Randy Dunlap <rdunlap@infradead.org>, Rob Herring <robh@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	openipmi-developer@lists.sourceforge.net,
+	linux-integrity@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+	linux-omap@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 33/34] drivers: remove incorrect of_match_ptr/ACPI_PTR
+ annotations
+Message-ID: <2024040921-propose-scorer-a319@gregkh>
+References: <20240403080702.3509288-1-arnd@kernel.org>
+ <20240403080702.3509288-34-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -79,31 +92,36 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9d49402e-c5d4-4002-954f-7d2c48fdcfe4@redhat.com>
+In-Reply-To: <20240403080702.3509288-34-arnd@kernel.org>
 
-On Wed, Apr 03, 2024 at 03:40:20PM +0200, Marco Pagani wrote:
+On Wed, Apr 03, 2024 at 10:06:51AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
+> When building with CONFIG_OF and/or CONFIG_ACPI disabled but W=1 extra
+> warnings enabled, a lot of driver cause a warning about an unused
+> ID table:
 > 
-> On 2024-04-02 08:20, Xu Yilun wrote:
-> > On Fri, Mar 29, 2024 at 06:48:47PM +0100, Marco Pagani wrote:
-> >> KUnit now provides helper functions to create fake devices, so use them
-> >> instead of relying on platform devices.
-> >>
-> >> Other changes: remove an unnecessary white space in the fpga region suite.
-> >>
-> >> Reviewed-by: Russ Weight <russ.weight@linux.dev>
-> >> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> > 
-> > Acked-by: Xu Yilun <yilun.xu@intel.com>
-> > 
-> > Does this patch has dependency on module owner changes for fpga-mgr/bridge/region?
+> drivers/char/tpm/tpm_ftpm_tee.c:356:34: error: unused variable 'of_ftpm_tee_ids' [-Werror,-Wunused-const-variable]
+> drivers/dma/img-mdc-dma.c:863:34: error: unused variable 'mdc_dma_of_match' [-Werror,-Wunused-const-variable]
+> drivers/fpga/versal-fpga.c:62:34: error: unused variable 'versal_fpga_of_match' [-Werror,-Wunused-const-variable]
+> drivers/i2c/muxes/i2c-mux-ltc4306.c:200:34: error: unused variable 'ltc4306_of_match' [-Werror,-Wunused-const-variable]
+> drivers/i2c/muxes/i2c-mux-reg.c:242:34: error: unused variable 'i2c_mux_reg_of_match' [-Werror,-Wunused-const-variable]
+> drivers/memory/pl353-smc.c:62:34: error: unused variable 'pl353_smc_supported_children' [-Werror,-Wunused-const-variable]
+> drivers/regulator/pbias-regulator.c:136:34: error: unused variable 'pbias_of_match' [-Werror,-Wunused-const-variable]
+> drivers/regulator/twl-regulator.c:552:34: error: unused variable 'twl_of_match' [-Werror,-Wunused-const-variable]
+> drivers/regulator/twl6030-regulator.c:645:34: error: unused variable 'twl_of_match' [-Werror,-Wunused-const-variable]
+> drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:3635:36: error: unused variable 'sas_v2_acpi_match' [-Werror,-Wunused-const-variable]
+> drivers/staging/pi433/pi433_if.c:1359:34: error: unused variable 'pi433_dt_ids' [-Werror,-Wunused-const-variable]
+> drivers/tty/serial/amba-pl011.c:2945:34: error: unused variable 'sbsa_uart_of_match' [-Werror,-Wunused-const-variable]
 > 
-> There is no dependency on module owner changes for mgr/bridge/region.
+> The fix is always to just remove the of_match_ptr() and ACPI_PTR() wrappers
+> that remove the reference, rather than adding another #ifdef just for build
+> testing for a configuration that doesn't matter in practice.
+> 
+> I considered splitting up the large patch into per subsystem patches, but since
+> it's really just the same thing everywhere it feels better to do it all at once.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Fine. Applied to for-next.
-
-> 
-> Thanks,
-> Marco
-> 
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
