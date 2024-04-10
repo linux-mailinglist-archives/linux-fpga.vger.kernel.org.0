@@ -1,148 +1,136 @@
-Return-Path: <linux-fpga+bounces-427-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-428-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A466689E977
-	for <lists+linux-fpga@lfdr.de>; Wed, 10 Apr 2024 07:11:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E22C89ECF8
+	for <lists+linux-fpga@lfdr.de>; Wed, 10 Apr 2024 10:02:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ECF7284A14
-	for <lists+linux-fpga@lfdr.de>; Wed, 10 Apr 2024 05:11:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB5381C20E7A
+	for <lists+linux-fpga@lfdr.de>; Wed, 10 Apr 2024 08:02:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42CA10A1F;
-	Wed, 10 Apr 2024 05:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ajd4XDUW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589DF13D52C;
+	Wed, 10 Apr 2024 08:02:37 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8198F44;
-	Wed, 10 Apr 2024 05:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C136613D505;
+	Wed, 10 Apr 2024 08:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712725857; cv=none; b=JYtclgxOQp1QzkUlV+g3xCziSi0CvSgtDxAL8DyUzcWaVJh70dYXbh0W4mt7UYsg73Q6XCxS0toMt0iplSDgDmdTPP36VsbJmN6kn9r86qPEv21NFkT8/8kW3U+tlzeY9MV0pP/a67nreoT0NEti0d3k7/2BT3DpzviNIwwOZGQ=
+	t=1712736157; cv=none; b=nj/+XoOjnt/sStNX6gfPlRLy8FTwBCskCz30eSIsVqUodK36V209VjYYOJi5V2aZ6Zj9dQtWPi+X3Ja6/aJDWJWci3Id2lZkkUrr0XpNx1CbblCfphl+dhgBfkzTZ3lfCQOr3hTTA9hf372bgjVMkEX/rizVMYq3g1EvhPUutvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712725857; c=relaxed/simple;
-	bh=Ev66Q3yLfKaQHYAO5YNQ46lKeOiioLbkndZx5BAZRRQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cZY6C+j92b+Gt1zCyCuBIg2Fqv7evKEpMsQUz3wiQqkI/qRJYQWh2TRKcoHGdwQr2tT4VHGcES5zDi7CnG01menV1/EzWeIZd+1D2JOrjpGWGT7wAItnkDQnBJ2+cjvxsvFg4esw/7NGk2e7WFAQTkz/LyHMxkPWmU6T3OuqiQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ajd4XDUW; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712725856; x=1744261856;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ev66Q3yLfKaQHYAO5YNQ46lKeOiioLbkndZx5BAZRRQ=;
-  b=Ajd4XDUWQbxUnLiI3YutJXJoRHRAGJuKYcebrKiW0REbZbljasx5RbQT
-   Sxxh4vrPtjRw8Hbk8JyldWeI+Gb0gl+tQT2M2uwxF4zko+/5tvcCEp+wK
-   8SnS45haZVesKMoXFoUPz6J23UHLEWDKfFSoCgqdGG+0On7ettPrROsDO
-   hdMnyya38+aVqWIg33wLTKUbf9jserXyyYRQnK92/7lR+Mrns6n3ATHDa
-   ZW61L3QSxaUBKU6ApSOBR7WOhbpfz64+T8loE2t3A7CJNn5RipGmn5F3A
-   hj4tHQchViYPuf4VJSBG2Li93wirPcmNk0I4PQzq+aYHSwnoQYLzEjqY/
-   Q==;
-X-CSE-ConnectionGUID: Jy0MYAgVSnGy9jRgU9tc7w==
-X-CSE-MsgGUID: r4tTlUwMRSaSmPH+J+yMUw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="11909951"
-X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
-   d="scan'208";a="11909951"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 22:10:55 -0700
-X-CSE-ConnectionGUID: JhtbbJM5Q8Wuqpfs+SP14A==
-X-CSE-MsgGUID: kUWyeqd3SU6MCCUMZY10rQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
-   d="scan'208";a="43692927"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa002.fm.intel.com with ESMTP; 09 Apr 2024 22:10:52 -0700
-Date: Wed, 10 Apr 2024 13:05:50 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: "Colberg, Peter" <peter.colberg@intel.com>
-Cc: lkp <lkp@intel.com>,
-	"enno.luebbers@intel.com" <enno.luebbers@intel.com>,
-	"Xu, Yilun" <yilun.xu@intel.com>,
-	"linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-	"mdf@kernel.org" <mdf@kernel.org>,
-	"luwei.kang@intel.com" <luwei.kang@intel.com>,
-	"Wu, Hao" <hao.wu@intel.com>, "atull@kernel.org" <atull@kernel.org>,
-	"shiva.rao@intel.com" <shiva.rao@intel.com>,
-	"russ.weight@linux.dev" <russ.weight@linux.dev>,
-	"Rix, Tom" <trix@redhat.com>, "Pagani, Marco" <marpagan@redhat.com>,
-	"matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] fpga: dfl: fme: revise kernel-doc comments for some
- functions
-Message-ID: <ZhYeLvVJ49Bq1QCu@yilunxu-OptiPlex-7050>
-References: <20240402204743.1069624-1-peter.colberg@intel.com>
- <ZhS4fuijYnstZ6Rt@yilunxu-OptiPlex-7050>
- <5106eb7c65599eca583f146bd18a5fd1836e9600.camel@intel.com>
+	s=arc-20240116; t=1712736157; c=relaxed/simple;
+	bh=KElYbch9PwjyMMyu6DqQ19Q1q06S1GdiKB4kYIvJsOA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=bBAtC04DaDVwHEUOOiFSRuslrl4QmXJkNwIxlynnpCJTLQoVrWUVTlO89Clpnhd/aF12w6oTjHuxnvrJymhY+Q8tm+0OxOvE8XUv/x2Dczi3ELoLd/y8qIsK+MyeonrFwSjZ3eR5Bs0oaVVpccWwZSXhKQxXPM80iFWgxUzQYEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EDFDC43390;
+	Wed, 10 Apr 2024 08:02:36 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id 324081063262; Wed, 10 Apr 2024 10:02:32 +0200 (CEST)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Michael Ellerman <mpe@ellerman.id.au>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Damien Le Moal <dlemoal@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Corey Minyard <minyard@acm.org>, Peter Huewe <peterhuewe@gmx.de>, 
+ Jarkko Sakkinen <jarkko@kernel.org>, Tero Kristo <kristo@kernel.org>, 
+ Stephen Boyd <sboyd@kernel.org>, Ian Abbott <abbotti@mev.co.uk>, 
+ H Hartley Sweeten <hsweeten@visionengravers.com>, 
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+ Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ John Allen <john.allen@amd.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+ Vinod Koul <vkoul@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
+ Bjorn Andersson <andersson@kernel.org>, Moritz Fischer <mdf@kernel.org>, 
+ Liviu Dudau <liviu.dudau@arm.com>, 
+ Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+ Andi Shyti <andi.shyti@kernel.org>, 
+ Michael Hennerich <michael.hennerich@analog.com>, 
+ Peter Rosin <peda@axentia.se>, Lars-Peter Clausen <lars@metafoo.de>, 
+ Jonathan Cameron <jic23@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Markuss Broks <markuss.broks@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, Lee Jones <lee@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+ Iyappan Subramanian <iyappan@os.amperecomputing.com>, 
+ Yisen Zhuang <yisen.zhuang@huawei.com>, Stanislaw Gruszka <stf_xl@wp.pl>, 
+ Kalle Valo <kvalo@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+ Tony Lindgren <tony@atomide.com>, Mark Brown <broonie@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Xiang Chen <chenxiang66@hisilicon.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Heiko Stuebner <heiko@sntech.de>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Vaibhav Hiremath <hvaibhav.linux@gmail.com>, Alex Elder <elder@kernel.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Jacky Huang <ychuang3@nuvoton.com>, 
+ Helge Deller <deller@gmx.de>, Christoph Hellwig <hch@lst.de>, 
+ Robin Murphy <robin.murphy@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Kees Cook <keescook@chromium.org>, 
+ Trond Myklebust <trond.myklebust@hammerspace.com>, 
+ Anna Schumaker <anna@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Takashi Iwai <tiwai@suse.com>, 
+ linuxppc-dev@lists.ozlabs.org, linux-ide@vger.kernel.org, 
+ openipmi-developer@lists.sourceforge.net, linux-integrity@vger.kernel.org, 
+ linux-omap@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org, 
+ dmaengine@vger.kernel.org, linux-efi@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-fpga@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org, 
+ linux-leds@vger.kernel.org, linux-wireless@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev, 
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-fbdev@vger.kernel.org, iommu@lists.linux.dev, 
+ linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
+ linux-hardening@vger.kernel.org, linux-nfs@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, alsa-devel@alsa-project.org, 
+ linux-sound@vger.kernel.org
+In-Reply-To: <20240403080702.3509288-1-arnd@kernel.org>
+References: <20240403080702.3509288-1-arnd@kernel.org>
+Subject: Re: (subset) [PATCH 00/34] address all -Wunused-const warnings
+Message-Id: <171273615213.1094883.18382201508159771859.b4-ty@collabora.com>
+Date: Wed, 10 Apr 2024 10:02:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5106eb7c65599eca583f146bd18a5fd1836e9600.camel@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-On Tue, Apr 09, 2024 at 06:30:45PM +0000, Colberg, Peter wrote:
-> On Tue, 2024-04-09 at 11:39 +0800, Xu Yilun wrote:
-> > On Tue, Apr 02, 2024 at 04:47:43PM -0400, Peter Colberg wrote:
-> > > From: Xu Yilun <yilun.xu@intel.com>
-> > > 
-> > > This amends commit 782d8e61b5d6 ("fpga: dfl: kernel-doc corrections"),
-> > > which separately addressed the kernel-doc warnings below. Add a more
-> > > precise description of the feature argument to dfl_fme_create_mgr(),
-> > > and also use plural in the description of dfl_fme_destroy_bridges().
-> > > 
-> > > lkp reported 2 build warnings:
-> > > 
-> > >    drivers/fpga/dfl/dfl-fme-pr.c:175: warning: Function parameter or member 'feature' not described in 'dfl_fme_create_mgr'
-> > > 
-> > > > > drivers/fpga/dfl/dfl-fme-pr.c:280: warning: expecting prototype for
-> > > > > dfl_fme_destroy_bridge(). Prototype was for dfl_fme_destroy_bridges()
-> > > > > instead
-> > 
-> > Why still list the 2 warnings here? Do they still exsit even with commit
-> > 782d8e61b5d6 ("fpga: dfl: kernel-doc corrections") ?
-> > 
-> > > 
-> > > Fixes: 29de76240e86 ("fpga: dfl: fme: add partial reconfiguration sub feature support")
-> > 
-> > You are still trying to fix this commit?
+
+On Wed, 03 Apr 2024 10:06:18 +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> I included the commit message from your original patch in full to show
-> the initial motivation for the patch. As described, the issue has been
-
-The out-of-date initial motivation, the commit 782d8e61b5d6, the listed
-logs are not related to your change. It shouldn't appear in this patch.
-
-Remember the commit message goes into git if the patch is merged. People
-get confused about these information.
-
-> addressed already; your patch merely polishes the the doc strings.
-
-When you decide to submit a patch public, it is *YOUR* patch. You should
-not list all the history and expect the original author decides what to
-do.
-
+> Compilers traditionally warn for unused 'static' variables, but not
+> if they are constant. The reason here is a custom for C++ programmers
+> to define named constants as 'static const' variables in header files
+> instead of using macros or enums.
 > 
-> > I'm sorry, but please do check and test your patches before submit.
-> > Re-submitting quickly but full of errors makes people doubt if you are
-> > really serious about your patches. At least, I do have doubt if you did
-> > tests for all your patches, or if your test could sufficiently prove the
-> > issue exists or fixed.
-> 
-> Apologies for sending the v1 patch, which had been rebased incorrectly.
+> [...]
 
-This is not about the v1 patch, every new comer makes mistake. I just
-don't like that you sent patches too quickly but didn't address the
-previous concern.
+Applied, thanks!
 
-Thanks,
-Yilun
+[09/34] power: rt9455: hide unused rt9455_boost_voltage_values
+        commit: 452d8950db3e839aba1bb13bc5378f4bac11fa04
+
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
+
 
