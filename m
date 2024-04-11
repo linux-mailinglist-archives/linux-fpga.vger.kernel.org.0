@@ -1,74 +1,70 @@
-Return-Path: <linux-fpga+bounces-433-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-434-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2364A8A0B62
-	for <lists+linux-fpga@lfdr.de>; Thu, 11 Apr 2024 10:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E91498A0B97
+	for <lists+linux-fpga@lfdr.de>; Thu, 11 Apr 2024 10:48:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6BFC1F23370
-	for <lists+linux-fpga@lfdr.de>; Thu, 11 Apr 2024 08:36:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 881711F212FE
+	for <lists+linux-fpga@lfdr.de>; Thu, 11 Apr 2024 08:48:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4645313FD7C;
-	Thu, 11 Apr 2024 08:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9410613FD61;
+	Thu, 11 Apr 2024 08:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BPXu9+eT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wly2BFPL"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789AB10A11;
-	Thu, 11 Apr 2024 08:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84F535F18
+	for <linux-fpga@vger.kernel.org>; Thu, 11 Apr 2024 08:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712824384; cv=none; b=efVBS9ywmpCOrWCFSI8dOU7WkK3A3apKHtxGs3thD8fuMCgaIawke1b8bVuye/TME41jCxY14+Vip67dw8em8MadpRBgRWfq3ir2ClDDQ51CXCcfOrBDUoFLZj08Zc1FjMf5j+EIPVHyvlnFozIUgWZ+t1hFCK26/db1j+jEurY=
+	t=1712825294; cv=none; b=OHPWiFGfRnGQVqvChI5mb7Q3DBErY0qWs+ohGE81Y4qWIW85uywzJz/9HvGQqyGReC7Pk20eA/WL2eKFuFbKy6OV4y5IVHqN4u+E0hJZx5Lxz+jtTlRttIAXXd9fccrIl/FIXB/UzyXFl51isL5L1bs4wKaq2yUdFafnETmLA+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712824384; c=relaxed/simple;
-	bh=aexm0NXn3rPt3OrBmKftet9jNwR1IawzCnXNhC1JeUg=;
+	s=arc-20240116; t=1712825294; c=relaxed/simple;
+	bh=EDAON+0zjlGNvHRUwu6VIDk4gpNv3gQNV2Tio1X/8HE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZhGI23u5iv8agiRQGJdmEk3g/ZfHMS1+d2gHDWcYLEAnbU7lE5+tnumJYZ7sAq81TEiN79MpzVVHTQmhV4nkXW6DAJoz6azYGz2PJwevr2yBrp1/BwSUBN9yKNKlFpQ/u6R7oLYgEk/hE7u8K1rKEAQNh42x+6zoCxyCxhzt8+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BPXu9+eT; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=stihW0J9nvSD/mEVcR/cB7y6AoGvWyzQKkP6uIp0QOB6V4DmjDqjICkN6wu+KVWxqJZdS7wfhHxejmIfS4JSj2cjT6wDdCNeHEwFv7L4L7NQSV01xZBZGONlshauptNIG9uTX/Xdd/xKkfBil3qyQDGU5gvpg006xmnML7sORrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wly2BFPL; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712824383; x=1744360383;
+  t=1712825293; x=1744361293;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=aexm0NXn3rPt3OrBmKftet9jNwR1IawzCnXNhC1JeUg=;
-  b=BPXu9+eTPoLiA0oZVcbUf6A/TWl6mh5icekYN32u8UudyhsvDcb+dDBL
-   X1GnmWx2FVkcGU9ygxAd2/QcQVHTVf3e0CSP/cEI0+Lx7lbGJ9ZUNn7sQ
-   0cJBgVdOWLA0A4SZwbdkz/uVrgUKo+GR8yTUtfYnJsMa8M1W+ZZ2g5tTP
-   fPW2k0WPcrJZVHxYk/khT6OQVX1G4vZnJateeEdg/iXm3RpgvMAzlMjcs
-   QYQIM80foea/I238aXoEmSv8wloV7D8+H/DAaohZzVCRUBmU4NLvkUMTO
-   RWhTCCbXzzkMawbwNxRGhJTm/smw6IaI/hmTz49z2ff/zw1d4D+sEzeLu
-   Q==;
-X-CSE-ConnectionGUID: pPNlVvK2TCesQXAyGYPXOA==
-X-CSE-MsgGUID: ukhF62avTcCYw3vlNdhRDg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="8348258"
-X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
-   d="scan'208";a="8348258"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 01:33:02 -0700
-X-CSE-ConnectionGUID: ms12RMvwQjiRcdPkrrMqfQ==
-X-CSE-MsgGUID: QBXARUcxQ3qb6WdEdfJcgw==
+  bh=EDAON+0zjlGNvHRUwu6VIDk4gpNv3gQNV2Tio1X/8HE=;
+  b=Wly2BFPLQU9mr5VUy6b0YAULbry3J0NKrMw3r3+pzzKJOaQB7Hckakgt
+   7UmggBE8yJhE8HYx1ohhAWYt+isa/S8l6OhTf6mDnIeMteqkO0Pv5/YMK
+   ZCdCSooXKMA7ettGqUrohw+dDkc4HGnh0KFQTpKCIuOnlf1cVA0DIS9KA
+   4r3/I1TE/BiF3c4Gzn3BcukMBq4pDZy1Rgu5K3wOaWZrt17aYxbAH/Gzs
+   scN2xckYYk73j/pqCqo7PsMCD0VQeXR4RtMv7O7B5hgM9NawcwuGDFJ3C
+   /XnGsZAx8pGZkQTWEKxVvDCflVaMPan+t72goUP5iFsnHB+IfDMXMWEQx
+   g==;
+X-CSE-ConnectionGUID: tqbjBMxFQOOC6Cyb3cSQ5g==
+X-CSE-MsgGUID: vTsMbId+RbaMbaTy+l9eRQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="8350557"
+X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
+   d="scan'208";a="8350557"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 01:48:12 -0700
+X-CSE-ConnectionGUID: sxMcKS3aSCu+GKgObjOlkA==
+X-CSE-MsgGUID: 8hkowe1iSRmqXc+mFy+iUQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
-   d="scan'208";a="52020816"
+X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
+   d="scan'208";a="20914901"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa001.fm.intel.com with ESMTP; 11 Apr 2024 01:32:59 -0700
-Date: Thu, 11 Apr 2024 16:27:54 +0800
+  by fmviesa008.fm.intel.com with ESMTP; 11 Apr 2024 01:48:11 -0700
+Date: Thu, 11 Apr 2024 16:43:07 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH v1 1/1] fpga: ice40-spi: Remove unused of_gpio.h
-Message-ID: <ZhefCsYbABNmVV/d@yilunxu-OptiPlex-7050>
-References: <20240304175723.1200249-1-andriy.shevchenko@linux.intel.com>
- <ZhbyQSUzQ0wdqpcU@smile.fi.intel.com>
+To: David Gideon <gideonda32@gmail.com>
+Cc: linux-fpga@vger.kernel.org
+Subject: Re: info->header_size always 0, breaks fpga-zynq.c driver
+Message-ID: <Zheim/iQP31H1pMh@yilunxu-OptiPlex-7050>
+References: <CAOLMD=xWnfEVEobNnE+ipMwi=x7wNA7ZfQo1+9CH8UyUVAffQA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -77,24 +73,72 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZhbyQSUzQ0wdqpcU@smile.fi.intel.com>
+In-Reply-To: <CAOLMD=xWnfEVEobNnE+ipMwi=x7wNA7ZfQo1+9CH8UyUVAffQA@mail.gmail.com>
 
-On Wed, Apr 10, 2024 at 11:10:41PM +0300, Andy Shevchenko wrote:
-> On Mon, Mar 04, 2024 at 07:57:23PM +0200, Andy Shevchenko wrote:
-> > of_gpio.h is deprecated and subject to remove.
-> > The driver doesn't use it, simply remove the unused header.
+On Thu, Apr 11, 2024 at 02:16:24PM +1000, David Gideon wrote:
+> Hi Everyone,
 > 
-> Any comment on this? Can it be applied?
+> Our Xilinx FPGA driver (zynq-fpga.c) is no longer compatible with
+> fpga-mgr.c and barfs with:
+> 
+>       "Invalid bitstream, could not find a sync word. Bitstream must
+> be a byte swapped .bin file"
+> 
+> It seems to come from here (inside fpga_mgr_write_init_buf()):
+>       size_t header_size = info->header_size;
+> 
+> It uses header_size to decide whether or not to call
+> fpga_mgr_write_init() with a NULL buffer and a 0 size, or use a real
+> buffer and real size, like this:
+> 
+>     if (header_size > count)
+>         ret = -EINVAL;
+>     else if (!header_size)
+>         ret = fpga_mgr_write_init(mgr, info, NULL, 0);
+>     else
+>         ret = fpga_mgr_write_init(mgr, info, buf, count);
+> 
+> The trouble is, that if I follow my code path, info->header_size isn't
+> set by anyone.  So it's **ALWAYS** zero.  But the value **should** be
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+From your link below, I see info->header_size is set here:
 
-Applied to for-next.
+@@ -404,6 +571,8 @@ static int fpga_mgr_firmware_load(struct fpga_manager *mgr,
+  */
+ int fpga_mgr_load(struct fpga_manager *mgr, struct fpga_image_info *info)
+ {
++	info->header_size = mgr->mops->initial_header_size;
++
+ 	if (info->sgt)
+ 		return fpga_mgr_buf_load_sg(mgr, info, info->sgt);
 
+Thanks,
+Yilun
+
+> 128:
 > 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+>     static const struct fpga_manager_ops zynq_fpga_ops = {
+>          .initial_header_size = 128,
+>         ...
+>     };
+> 
+> The issue seems to have been introduced as part of commit 3cc624beba
+> which I have linked to here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/fpga/fpga-mgr.c?id=3cc624beba6310a8a534fb00841f22445a200d54
 > 
 > 
+> What I find really interesting is that the original mailing list patch
+> submission didn't have this bug, and would have worked for us:
+> 
+>     + if (info->header_size)
+>         + header_size = info->header_size;
+>     + else
+>         + header_size = mgr->mops->initial_header_size;
+> 
+> Could this be a viable way to ensure that the FPGA manager driver is
+> compatible with the zynq-fpga.c driver again?
+> 
+> 
+> - DG
 > 
 
