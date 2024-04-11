@@ -1,78 +1,79 @@
-Return-Path: <linux-fpga+bounces-435-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-436-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46F7F8A0BB3
-	for <lists+linux-fpga@lfdr.de>; Thu, 11 Apr 2024 10:56:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F04538A0C16
+	for <lists+linux-fpga@lfdr.de>; Thu, 11 Apr 2024 11:16:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69FF91C21992
-	for <lists+linux-fpga@lfdr.de>; Thu, 11 Apr 2024 08:56:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C69D1F216AF
+	for <lists+linux-fpga@lfdr.de>; Thu, 11 Apr 2024 09:16:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 180CA1419A6;
-	Thu, 11 Apr 2024 08:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9B4C143C72;
+	Thu, 11 Apr 2024 09:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bJhbCR/D"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PoIk+CP1"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4313D2EAE5;
-	Thu, 11 Apr 2024 08:56:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF21A143C51;
+	Thu, 11 Apr 2024 09:16:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712825799; cv=none; b=Ge+Is5iCdO3CgaH/Ctog6LDHKlGTyo9vs2ZtZxB45rZLTR6d4kQOuynPXZlDKh3RaWahsB90qemLB7quZgu6sKswhnXCN1QMaAhy4+j3HrdzGD1O/khzcChvTWsAItdJCxiy/N+xSpxGJeQpagYuu56ntw7SMJi/YQ/FXpeGdV0=
+	t=1712827012; cv=none; b=pws5G/Q+a5cCyxCpBBvyAzjOccgB9ocolGtMdFijgjCzt8rOABjONtO7B3GrIqAZjb7oeBDct+dIbM1i1fjypAYJh6EL/lZlTLoSUJGGbVUE/NYrGZGMk/MqsUGEw6Si+uJ70aaxhFiBjxYrJdRmCOQG3BXsXqMoIM4gB9fxl6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712825799; c=relaxed/simple;
-	bh=k8fFue18W94abooyIMFAlQnDea6863DidxB+KxV3RgM=;
+	s=arc-20240116; t=1712827012; c=relaxed/simple;
+	bh=hYm53TXlQfcyeB+z5vDUlyedpFv/vu34UbEEPPHY+XE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LypqsiJnZFt3RCEBnke0UW5vvbcAl6VVHZwWSstmoDvIZZVAIsH2tWzLnDfOWBBiKrcA4sNBqUpZKfFAmTGgipV8gzDWEu022BiPnBSvifCvP2RcDl3KC/XkFS4cFHdATN6IU+CpUzbdIZiMvLKPyxzO/hOl2OUG2AYgdhx408A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bJhbCR/D; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=ROmw8WazikpYpOxxFHaNyV1qkTstG9VuPJpU5kC7rctQTIbbc9oKEe9XlcA+puwvN3Dirv4VkQyuRbxAa6bxCN4gIMLGs9wFv2S3wItD9Ad9GLOjSe2GF9qpqvuEykS5VkzmVkHwlZCnnP0BZA5Qr98RfehaxI6QXjoYlxvqpOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PoIk+CP1; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712825798; x=1744361798;
+  t=1712827011; x=1744363011;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=k8fFue18W94abooyIMFAlQnDea6863DidxB+KxV3RgM=;
-  b=bJhbCR/D1DYoSvzjedFLHl/uGFrItxonPTVXzVZckohmxe3awOWFZWBH
-   ISQ6YphD9fGE90xGHPW3XHC3V1IUeBugQotlk73X5RIakcZjql0A/yL5w
-   jjTKDkZJimt/Xp4+U8OQopr+cDEp7fYmBhLLS/3d/7h2Ec01Pe0Owy/7s
-   6YX21aEMpNwz5ITOH60Gq5yBhBzsDnehuETm1B8oMb9isPGa0KAMi3HaL
-   UnKPhXX+f7DKkrJtAFMakbySeuDoSRVH/xhD9zjOLVREmOFrn6y+Yui4R
-   NX2YnIhftr49HsG7mjlrPoJkm6S7xSvCQ2pCB/Por6BPA6gvgt47kmkLd
-   w==;
-X-CSE-ConnectionGUID: 89I6Aes+RqeOunEEiFe/lQ==
-X-CSE-MsgGUID: kpxFlBElRZO4QqvxA7m7Tg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="8141990"
+  bh=hYm53TXlQfcyeB+z5vDUlyedpFv/vu34UbEEPPHY+XE=;
+  b=PoIk+CP13PNb+y6MSoFicDJzZIQyW8Hk9FBtHIuUO0KE85dTN6LHsLGs
+   Akdf7XKHnqb3kjZ6fmJJ+bbCBZ41tlm1j4rZPsGUdMq6HUgAXQP012SSQ
+   rjNz/K0yYfmzdJ0Hsl+ZuYPLepI/XD+BQVXSPMPwiu/Dwq1RbumLL//gw
+   C799E9B9kiETTBdcyhfviraOd/UoT9tzARxADcz4F8D7q3J1Wbb6ICDof
+   7M9B0TIgYWSUo4p3peKszgr5a2t1G02lCl153JDPFuM5tPa1mQtfiVMqw
+   fOyCtROQU9A8SwybRT9PR3qsy5odNwyMCnHURl8vJRMbCO3FXULEEWYsM
+   A==;
+X-CSE-ConnectionGUID: du3qVAslQUa9NNgrEpIxfQ==
+X-CSE-MsgGUID: b4o/dJqiQhCp70JHU5q8Uw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="11187719"
 X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="8141990"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 01:56:37 -0700
-X-CSE-ConnectionGUID: 6XhPDa+nR8WsO8BtIm9stw==
-X-CSE-MsgGUID: wgcDGyClSQSWw2tpSpZceg==
+   d="scan'208";a="11187719"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 02:16:50 -0700
+X-CSE-ConnectionGUID: AoAFNDtVSGCeodYJQe9kWw==
+X-CSE-MsgGUID: 2hhegYBSSI6eLdjjaGCipA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="25609000"
+   d="scan'208";a="20803972"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa004.jf.intel.com with ESMTP; 11 Apr 2024 01:56:33 -0700
-Date: Thu, 11 Apr 2024 16:51:30 +0800
+  by orviesa009.jf.intel.com with ESMTP; 11 Apr 2024 02:16:47 -0700
+Date: Thu, 11 Apr 2024 17:11:43 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
 To: Marco Pagani <marpagan@redhat.com>
 Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
 	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
-	Alan Tull <atull@opensource.altera.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Russ Weight <russ.weight@linux.dev>, linux-fpga@vger.kernel.org,
+	Alan Tull <atull@opensource.altera.com>, linux-fpga@vger.kernel.org,
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] fpga: region: add owner module and take its refcount
-Message-ID: <Zhekkm6F9eYeFD33@yilunxu-OptiPlex-7050>
-References: <20240403144611.65507-1-marpagan@redhat.com>
- <ZhTFPLWGkh0oRhL/@yilunxu-OptiPlex-7050>
- <47d8db3f-6f36-4004-a5a6-3e5de383f7d4@redhat.com>
+Subject: Re: [PATCH v2] fpga: region: add owner module and take its refcount
+Message-ID: <ZhepT8emGl27Fo5N@yilunxu-OptiPlex-7050>
+References: <20240327160022.202934-1-marpagan@redhat.com>
+ <Zgp/jNst2yuXEbpU@yilunxu-OptiPlex-7050>
+ <64c1685a-b544-408e-97e4-8c3cff6aca6c@redhat.com>
+ <ZhS/M6pa9AHyvb0y@yilunxu-OptiPlex-7050>
+ <9d016f83-8e7f-4bdf-8610-e3d0b49f7097@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -81,215 +82,126 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <47d8db3f-6f36-4004-a5a6-3e5de383f7d4@redhat.com>
+In-Reply-To: <9d016f83-8e7f-4bdf-8610-e3d0b49f7097@redhat.com>
 
-On Wed, Apr 10, 2024 at 11:49:34AM +0200, Marco Pagani wrote:
+On Wed, Apr 10, 2024 at 11:42:23AM +0200, Marco Pagani wrote:
 > 
 > 
-> On 2024-04-09 06:34, Xu Yilun wrote:
-> > On Wed, Apr 03, 2024 at 04:46:09PM +0200, Marco Pagani wrote:
-> >> The current implementation of the fpga region assumes that the low-level
-> >> module registers a driver for the parent device and uses its owner pointer
-> >> to take the module's refcount. This approach is problematic since it can
-> >> lead to a null pointer dereference while attempting to get the region
-> >> during programming if the parent device does not have a driver.
+> On 2024-04-09 06:08, Xu Yilun wrote:
+> > On Wed, Apr 03, 2024 at 03:34:22PM +0200, Marco Pagani wrote:
 > >>
-> >> To address this problem, add a module owner pointer to the fpga_region
-> >> struct and use it to take the module's refcount. Modify the functions for
-> >> registering a region to take an additional owner module parameter and
-> >> rename them to avoid conflicts. Use the old function names for helper
-> >> macros that automatically set the module that registers the region as the
-> >> owner. This ensures compatibility with existing low-level control modules
-> >> and reduces the chances of registering a region without setting the owner.
 > >>
-> >> Also, update the documentation to keep it consistent with the new interface
-> >> for registering an fpga region.
+> >> On 2024-04-01 11:34, Xu Yilun wrote:
+> >>> On Wed, Mar 27, 2024 at 05:00:20PM +0100, Marco Pagani wrote:
+> >>>> The current implementation of the fpga region assumes that the low-level
+> >>>> module registers a driver for the parent device and uses its owner pointer
+> >>>> to take the module's refcount. This approach is problematic since it can
+> >>>> lead to a null pointer dereference while attempting to get the region
+> >>>> during programming if the parent device does not have a driver.
+> >>>>
+> >>>> To address this problem, add a module owner pointer to the fpga_region
+> >>>> struct and use it to take the module's refcount. Modify the functions for
+> >>>> registering a region to take an additional owner module parameter and
+> >>>> rename them to avoid conflicts. Use the old function names for helper
+> >>>> macros that automatically set the module that registers the region as the
+> >>>> owner. This ensures compatibility with existing low-level control modules
+> >>>> and reduces the chances of registering a region without setting the owner.
+> >>>>
+> >>>> Also, update the documentation to keep it consistent with the new interface
+> >>>> for registering an fpga region.
+> >>>>
+> >>>> Other changes: unlock the mutex before calling put_device() in
+> >>>> fpga_region_put() to avoid potential use after release issues.
+> >>>
+> >>> Please try not to mix different changes in one patch, especially for
+> >>> a "bug fix" as you said.
 > >>
-> >> Fixes: 0fa20cdfcc1f ("fpga: fpga-region: device tree control for FPGA")
-> >> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >> Suggested-by: Xu Yilun <yilun.xu@intel.com>
-> >> Reviewed-by: Russ Weight <russ.weight@linux.dev>
-> >> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> >> ---
+> >> You are right. I'll split out the change and eventually send it as a
+> >> separate patch.
 > >>
-> >> v4:
-> >> - Split out the swap between put_device() and mutex_unlock() while
-> >>   releasing the region to avoid potential use after release issues
-> >> v3:
-> >> - Add reviewed-by Russ Weight
-> >> v2:
-> >> - Fixed typo in the documentation sets -> set
-> >> - Renamed owner pointer get_br_owner -> br_owner
-> >> ---
-> >>  Documentation/driver-api/fpga/fpga-region.rst | 13 ++++++----
-> >>  drivers/fpga/fpga-region.c                    | 24 +++++++++++--------
-> >>  include/linux/fpga/fpga-region.h              | 13 +++++++---
-> >>  3 files changed, 32 insertions(+), 18 deletions(-)
+> >>> And I do have concern about the fix, see below.
+> >>>
+> >>> [...]
+> >>>
+> >>>> @@ -53,7 +53,7 @@ static struct fpga_region *fpga_region_get(struct fpga_region *region)
+> >>>>  	}
+> >>>>  
+> >>>>  	get_device(dev);
+> >>>> -	if (!try_module_get(dev->parent->driver->owner)) {
+> >>>> +	if (!try_module_get(region->br_owner)) {
+> >>>>  		put_device(dev);
+> >>>>  		mutex_unlock(&region->mutex);
+> >>>>  		return ERR_PTR(-ENODEV);
+> >>>> @@ -75,9 +75,9 @@ static void fpga_region_put(struct fpga_region *region)
+> >>>>  
+> >>>>  	dev_dbg(dev, "put\n");
+> >>>>  
+> >>>> -	module_put(dev->parent->driver->owner);
+> >>>> -	put_device(dev);
+> >>>> +	module_put(region->br_owner);
+> >>>>  	mutex_unlock(&region->mutex);
+> >>>
+> >>> If there is concern the region would be freed after put_device(), then
+> >>> why still keep the sequence in fpga_region_get()?
 > >>
-> >> diff --git a/Documentation/driver-api/fpga/fpga-region.rst b/Documentation/driver-api/fpga/fpga-region.rst
-> >> index dc55d60a0b4a..77190a5ef330 100644
-> >> --- a/Documentation/driver-api/fpga/fpga-region.rst
-> >> +++ b/Documentation/driver-api/fpga/fpga-region.rst
-> >> @@ -46,13 +46,16 @@ API to add a new FPGA region
-> >>  ----------------------------
-> >>  
-> >>  * struct fpga_region - The FPGA region struct
-> >> -* struct fpga_region_info - Parameter structure for fpga_region_register_full()
-> >> -* fpga_region_register_full() -  Create and register an FPGA region using the
-> >> +* struct fpga_region_info - Parameter structure for __fpga_region_register_full()
-> >> +* __fpga_region_register_full() -  Create and register an FPGA region using the
-> >>    fpga_region_info structure to provide the full flexibility of options
-> >> -* fpga_region_register() -  Create and register an FPGA region using standard
-> >> +* __fpga_region_register() -  Create and register an FPGA region using standard
-> >>    arguments
-> >>  * fpga_region_unregister() -  Unregister an FPGA region
-> >>  
-> >> +Helper macros ``fpga_region_register()`` and ``fpga_region_register_full()``
-> >> +automatically set the module that registers the FPGA region as the owner.
-> >> +
-> >>  The FPGA region's probe function will need to get a reference to the FPGA
-> >>  Manager it will be using to do the programming.  This usually would happen
-> >>  during the region's probe function.
-> >> @@ -82,10 +85,10 @@ following APIs to handle building or tearing down that list.
-> >>     :functions: fpga_region_info
-> >>  
-> >>  .. kernel-doc:: drivers/fpga/fpga-region.c
-> >> -   :functions: fpga_region_register_full
-> >> +   :functions: __fpga_region_register
-> >>  
-> >>  .. kernel-doc:: drivers/fpga/fpga-region.c
-> >> -   :functions: fpga_region_register
-> >> +   :functions: __fpga_region_register_full
+> >> Ouch, sorry, I forgot to make the change also in fpga_region_get().
+> >>
+> >>> And is it possible region is freed before get_device() in
+> >>> fpga_region_get()?
+> >>
+> >> If the user follows the usual pattern (i.e., waiting for
 > > 
-> > Why you swap the order? You didn't do that for fpga-mgr.
-> 
-> Ouch, it's a typo.
-> 
-> >>  
-> >>  .. kernel-doc:: drivers/fpga/fpga-region.c
-> >>     :functions: fpga_region_unregister
-> >> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
-> >> index b364a929425c..d50ab1509989 100644
-> >> --- a/drivers/fpga/fpga-region.c
-> >> +++ b/drivers/fpga/fpga-region.c
-> >> @@ -53,7 +53,7 @@ static struct fpga_region *fpga_region_get(struct fpga_region *region)
-> >>  	}
-> >>  
-> >>  	get_device(dev);
-> >> -	if (!try_module_get(dev->parent->driver->owner)) {
-> >> +	if (!try_module_get(region->br_owner)) {
-> >>  		put_device(dev);
-> >>  		mutex_unlock(&region->mutex);
-> >>  		return ERR_PTR(-ENODEV);
-> >> @@ -75,7 +75,7 @@ static void fpga_region_put(struct fpga_region *region)
-> >>  
-> >>  	dev_dbg(dev, "put\n");
-> >>  
-> >> -	module_put(dev->parent->driver->owner);
-> >> +	module_put(region->br_owner);
-> >>  	put_device(dev);
-> >>  	mutex_unlock(&region->mutex);
-> >>  }
-> >> @@ -181,14 +181,16 @@ static struct attribute *fpga_region_attrs[] = {
-> >>  ATTRIBUTE_GROUPS(fpga_region);
-> >>  
-> >>  /**
-> >> - * fpga_region_register_full - create and register an FPGA Region device
-> >> + * __fpga_region_register_full - create and register an FPGA Region device
-> >>   * @parent: device parent
-> >>   * @info: parameters for FPGA Region
-> >> + * @owner: owner module containing the get_bridges function
-> >>   *
-> >>   * Return: struct fpga_region or ERR_PTR()
-> >>   */
-> >>  struct fpga_region *
-> >> -fpga_region_register_full(struct device *parent, const struct fpga_region_info *info)
-> >> +__fpga_region_register_full(struct device *parent, const struct fpga_region_info *info,
-> >> +			    struct module *owner)
-> >>  {
-> >>  	struct fpga_region *region;
-> >>  	int id, ret = 0;
-> >> @@ -213,6 +215,7 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
-> >>  	region->compat_id = info->compat_id;
-> >>  	region->priv = info->priv;
-> >>  	region->get_bridges = info->get_bridges;
-> >> +	region->br_owner = owner;
-> >>  
-> >>  	mutex_init(&region->mutex);
-> >>  	INIT_LIST_HEAD(&region->bridge_list);
-> >> @@ -241,13 +244,14 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
-> >>  
-> >>  	return ERR_PTR(ret);
-> >>  }
-> >> -EXPORT_SYMBOL_GPL(fpga_region_register_full);
-> >> +EXPORT_SYMBOL_GPL(__fpga_region_register_full);
-> >>  
-> >>  /**
-> >> - * fpga_region_register - create and register an FPGA Region device
-> >> + * __fpga_region_register - create and register an FPGA Region device
-> >>   * @parent: device parent
-> >>   * @mgr: manager that programs this region
-> >>   * @get_bridges: optional function to get bridges to a list
-> >> + * @owner: owner module containing get_bridges function
-> >>   *
-> >>   * This simple version of the register function should be sufficient for most users.
-> >>   * The fpga_region_register_full() function is available for users that need to
-> >> @@ -256,17 +260,17 @@ EXPORT_SYMBOL_GPL(fpga_region_register_full);
-> >>   * Return: struct fpga_region or ERR_PTR()
-> >>   */
-> >>  struct fpga_region *
-> >> -fpga_region_register(struct device *parent, struct fpga_manager *mgr,
-> >> -		     int (*get_bridges)(struct fpga_region *))
-> >> +__fpga_region_register(struct device *parent, struct fpga_manager *mgr,
-> >> +		       int (*get_bridges)(struct fpga_region *), struct module *owner)
-> >>  {
-> >>  	struct fpga_region_info info = { 0 };
-> >>  
-> >>  	info.mgr = mgr;
-> >>  	info.get_bridges = get_bridges;
-> >>  
-> >> -	return fpga_region_register_full(parent, &info);
-> >> +	return __fpga_region_register_full(parent, &info, owner);
-> >>  }
-> >> -EXPORT_SYMBOL_GPL(fpga_region_register);
-> >> +EXPORT_SYMBOL_GPL(__fpga_region_register);
-> >>  
-> >>  /**
-> >>   * fpga_region_unregister - unregister an FPGA region
-> >> diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
-> >> index 9d4d32909340..d175babc3d68 100644
-> >> --- a/include/linux/fpga/fpga-region.h
-> >> +++ b/include/linux/fpga/fpga-region.h
-> >> @@ -36,6 +36,7 @@ struct fpga_region_info {
-> >>   * @mgr: FPGA manager
-> >>   * @info: FPGA image info
-> >>   * @compat_id: FPGA region id for compatibility check.
-> >> + * @br_owner: module containing the get_bridges function
+> > I can see the only safe way is fpga_region_program_fpga() or fpga_region_get()
+> > should be included in:
 > > 
-> > I'm a little confused that you call it br_owner, just because there is
-> > only one get_bridge() callback provided by low-level module. If we
-> > further have another callback, the name & all the doc would be a problem.
-> > And It is really the owner of the region module, not the bridge module.
+> >   region = fpga_region_class_find();
+> >   ...
+> >   put_device(&region->dev);
 > > 
-> > Maybe just name it owner, or ops_owner?
+> > That is to say, fpga_region_get() should not be called when there is no
+> > region dev reference hold beforehand. In this case, no use after release
+> > risk. That's why I was thinking about some documentation.
+> > 
+> > Another concern is we'd better keep the get/put operations symmetrical
+> > for easy maintaining, as long as it doesn't cause problem.
 > 
-> Right, it makes sense to me. How about rg_ops_owner for symmetry with
-> the manager and bridge?
+> Now I see your point. So, you suggest changing only the docs to clarify
+> that the region must be taken with fpga_region_class_find() before
+> programming it with fpga_region_program_fpga()?
 
-I think ops_owner is better. First it is a member for region related
-structure, no need to emphasize the 'region' again. Second I didn't see
-any 'rg' in fpga core files, I think it is less understandable to
-everyone.
+Like:
 
-'br' is more widely used, so it's OK.
+The reference to the region must already been hold. E.g. by
+fpga_region_class_find().
+
+> 
+> That's fine by me. However, this made me wonder why we need to take the
+> region dev with get_device() in fpga_region_program_fpga()->fpga_region_get().
+> If we assume that the user must always call fpga_region_class_find()
+> before programming with fpga_region_program_fpga(), why do we need the
+> double get?
+
+Yeah, I have the same concern when I visit this part. I don't think it
+is necessary.
 
 Thanks,
-Yilun.
+Yilun
 
-> 
 > 
 > Thanks,
 > Marco
-> 
+>  
+> >> fpga_region_program_fpga() to complete before calling
+> >> fpga_region_unregister()) there should be no problem. However, I think
+> >> releasing the device before unlocking the mutex contained in the context
+> >> associated with the device makes the code brittle and more prone to
+> >> problems.
+> >>
+> >>> Or we should clearly document how/when to use these functions?
+> >>  
+> >> I think it is not necessary to change the documentation since the
+> >> in-kernel programming API will not be affected by the change.
+> >>
+> [...]
 > 
 
