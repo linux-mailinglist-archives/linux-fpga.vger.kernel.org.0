@@ -1,77 +1,64 @@
-Return-Path: <linux-fpga+bounces-442-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-443-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBD1F8A32FF
-	for <lists+linux-fpga@lfdr.de>; Fri, 12 Apr 2024 17:59:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49FB48A3350
+	for <lists+linux-fpga@lfdr.de>; Fri, 12 Apr 2024 18:11:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56918B24C76
-	for <lists+linux-fpga@lfdr.de>; Fri, 12 Apr 2024 15:59:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78D961C20C8D
+	for <lists+linux-fpga@lfdr.de>; Fri, 12 Apr 2024 16:11:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D9C148FFC;
-	Fri, 12 Apr 2024 15:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mby8F6jc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41A86148829;
+	Fri, 12 Apr 2024 16:11:02 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90CB14884C;
-	Fri, 12 Apr 2024 15:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD591487F6;
+	Fri, 12 Apr 2024 16:10:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712937521; cv=none; b=OE4QTMc8bJ3etpmINNHKeZfJnMPLzsYoF7IDe022a+ISEES0WZJUBrHmiLQ7vyEyujTmIw8BsOhOvVWCtIe9383iuEnqlgU7yAehnbNbt3BgVaCd2nqz75EvkeL6uuDjYrDyT9/AQ1XRb2YKXZRaGsCmwdAG6gUNHGPfGfp2HCs=
+	t=1712938262; cv=none; b=nU9pbeqrPgbmL5pR2eOSq/NMdalY4dwHwoWPT3hpbD/6+7UCYPMf0TV3h0HsGzYKI/ZdZ1OtlsvI/YPro0iewD8J2SxlIU0dMnRxHHtCN2p+2z9TwLSucMOoA+Ffs6im9Z4ms5SkTQ3xzTIwgTwe4b5w5fbqtsEROvi8DxulVP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712937521; c=relaxed/simple;
-	bh=uWba588n4UF9O6oCEqHQ/rQZoozxVX+XVJ77lMRZTzg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oi7TEDSLJNeLxiqsRTIgDh1N1mBUy64OBQO148d5e6fHc90q5wpv8a1i+tgAltPL2xZk2+H3D5Knr066uUHV79C9XgtyPg/ssIA8dlhxm17CzBaQsQX2BBQUaFsh4ZyRpOulMd9kbJZunSt9xlqR52ud6yGh8OvRUhzOeJrd4k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mby8F6jc; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712937520; x=1744473520;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uWba588n4UF9O6oCEqHQ/rQZoozxVX+XVJ77lMRZTzg=;
-  b=Mby8F6jcFfvF+hnwg3MuRmEfbAiCpknie1VzbUZtSPOWyAPEqmLTOfQ0
-   Xdld5rvfa2EyevpQTILXbMVI/svRkwATyY6HuUWmalfmXOy2uKmTn0Prc
-   4c+VuYgxtjn2JtGIHNl/meycXcul7/jxrd9XSdtL8tavwKTgpaxYzaDIV
-   ahMJ5lWVKOus12ovkV+PhYOlnDp7Br658jjelT2vMDkd6Fr9DtP7VL77u
-   ax+qFklbls3PJAxV/Nj7qFVNS2zyORlJ/reAF5kB4ecs+Y1W3fg5nD6r4
-   LHsulrim2BXqaMCYwrhpqW6sDEFJ8dCE9hexmEI2hDAr+aRW1y4qQ1ODz
-   w==;
-X-CSE-ConnectionGUID: phwb1nEqSeeRH4D9mDiBkw==
-X-CSE-MsgGUID: ETwxBrKyQQKbILieWeSkhw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="8267137"
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="8267137"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 08:58:39 -0700
-X-CSE-ConnectionGUID: vb7lRsB+SGma6h9FaBee4A==
-X-CSE-MsgGUID: X8nCT/rBQHmfpd49t+pIzw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="21352506"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa008.fm.intel.com with ESMTP; 12 Apr 2024 08:58:37 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id BE135E7; Fri, 12 Apr 2024 18:58:35 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH v1 1/1] fpga: ice40-spi: Remove redundant of_match_ptr() macros
-Date: Fri, 12 Apr 2024 18:58:30 +0300
-Message-ID: <20240412155830.96137-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	s=arc-20240116; t=1712938262; c=relaxed/simple;
+	bh=dzWGOiLimSBZrDtlr7rjGJQge1jpYnra93ATu1ihuSs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=i5x3V3Mh667pL4Ao4zm/bvx1EORmyMfOr5CzCTZol3H3w17SwyekbP/t3FQols0xgDiDCwbNeaqgPmm3GrCshtdw8739Vb6JrsJ1GIrJhSc1LpRLYIWZOjNCUnYPGPldIV6jRQEcWTU9JusK6vHEywW/nUOJD7FFBLnpFs/nUNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VGM2F3Pbyz6J9xD;
+	Sat, 13 Apr 2024 00:09:09 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 64041140B3C;
+	Sat, 13 Apr 2024 00:10:55 +0800 (CST)
+Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Fri, 12 Apr 2024 17:10:54 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra
+	<peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de
+ Melo <acme@kernel.org>, Will Deacon <will@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<gregkh@linuxfoundation.org>
+CC: <linuxarm@huawei.com>, Shaokun Zhang <zhangshaokun@hisilicon.com>, Yicong
+ Yang <yangyicong@hisilicon.com>, Jiucheng Xu <jiucheng.xu@amlogic.com>,
+	Khuong Dinh <khuong@os.amperecomputing.com>, Atish Patra
+	<atishp@atishpatra.org>, Anup Patel <anup@brainfault.org>, Andy Gross
+	<agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Frank Li
+	<Frank.li@nxp.com>, Shuai Xue <xueshuai@linux.alibaba.com>, Vineet Gupta
+	<vgupta@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Fenghua Yu
+	<fenghua.yu@intel.com>, Dave Jiang <dave.jiang@intel.com>, Wu Hao
+	<hao.wu@intel.com>, Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Liang Kan
+	<kan.liang@linux.intel.com>
+Subject: [PATCH v2 00/30] Add parents to struct pmu -> dev
+Date: Fri, 12 Apr 2024 17:10:27 +0100
+Message-ID: <20240412161057.14099-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -79,44 +66,111 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Since the driver hi6421-regulator depends on CONFIG_OF,
-it makes no difference to wrap of_match_ptr() here.
+Robin posted a patch for the cmn and that reminded me that I never
+sent a v2.
 
-Remove of_match_ptr() macros to clean it up.
+v2: Drop first patch that added a parent to struct pmu as that has been
+    upstream for a year.
+    Drop the arm-cmn change as Robin has dealt with that one.
+    Gathered tags.
 
-While at it, add missing mod_devicetable.h.
+Updated cover letter:
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/r/20240412151147.22a059ff@canb.auug.org.au
-Fixes: 5d04660b29fb ("fpga: ice40-spi: Remove unused of_gpio.h")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/fpga/ice40-spi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+These are the low hanging fruit following GregKH's feedback that
+all the devices registered via perf_pmu_register() should have parents.
 
-diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
-index 46927945f1b9..62c30266130d 100644
---- a/drivers/fpga/ice40-spi.c
-+++ b/drivers/fpga/ice40-spi.c
-@@ -10,6 +10,7 @@
- 
- #include <linux/fpga/fpga-mgr.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/spi/spi.h>
- #include <linux/stringify.h>
-@@ -198,7 +199,7 @@ static struct spi_driver ice40_fpga_driver = {
- 	.probe = ice40_fpga_probe,
- 	.driver = {
- 		.name = "ice40spi",
--		.of_match_table = of_match_ptr(ice40_fpga_of_match),
-+		.of_match_table = ice40_fpga_of_match,
- 	},
- 	.id_table = ice40_fpga_spi_ids,
- };
+Note that this causes potential ABI breakage.
+
+It may fall in the category of it isn't breakage if no one notices
+but I can't be certain of that.  Whilst it is arguable that
+no one should be been accessing PMUs except via the event_source
+bus, there was documentation suggesting /sys/devices/ for particular
+PMUs (because it was a shorter path?)
+
+Addressing all the other instances of struct pmu not covered by this series
+is likely to be a more complex discussion but unlikely to have an affect
+on what is proposed here.
+
+Documentation updates deliberately 'fixed' in separate patches before
+changing the path to highlight that using /sys/bus/event_source/devices
+path is unchanged by this series and that is presumed to be the
+most common way these files are accessed.
+
+Jonathan Cameron (30):
+  perf/hisi-pcie: Assign parent for event_source device
+  Documentation: hisi-pmu: Drop reference to /sys/devices path
+  perf/hisi-uncore: Assign parents for event_source devices
+  Documentation: hns-pmu: Use /sys/bus/event_source/devices paths
+  perf/hisi-hns3: Assign parents for event_source device
+  perf/amlogic: Assign parents for event_source devices
+  perf/arm_cspmu: Assign parents for event_source devices
+  Documentation: xgene-pmu: Use /sys/bus/event_source/devices paths
+  perf/xgene: Assign parents for event_source devices
+  Documentation: thunderx2-pmu: Use /sys/bus/event_source/devices paths
+  perf/thunderx2: Assign parents for event_source devices
+  perf/riscv: Assign parents for event_source devices
+  Documentation: qcom-pmu: Use /sys/bus/event_source/devices paths
+  perf/qcom: Assign parents for event_source devices
+  perf/imx_ddr: Assign parents for event_source devices
+  perf/arm_pmu: Assign parents for event_source devices
+  perf/alibaba_uncore: Assign parents for event_source device
+  perf/arm-cci: Assign parents for event_source device
+  perf/arm-ccn: Assign parents for event_source device
+  perf/arm-dmc620: Assign parents for event_source device
+  perf/arm-dsu: Assign parents for event_source device
+  perf/arm-smmuv3: Assign parents for event_source device
+  perf/arm-spe: Assign parents for event_source device
+  arc: Assign parents for event_source devices
+  ARM: imx: Assign parents for mmdc event_source devices
+  dmaengine: idxd: Assign parent for event_source device
+  fpga: dfl: Assign parent for event_source device
+  drivers/nvdimm: Assign parent for event_source device
+  Documentation: ABI + trace: hisi_ptt: update paths to bus/event_source
+  hwtracing: hisi_ptt: Assign parent for event_source device
+
+ ...i_ptt => sysfs-bus-event_source-devices-hisi_ptt} | 12 ++++++------
+ Documentation/admin-guide/perf/hisi-pmu.rst          |  1 -
+ Documentation/admin-guide/perf/hns3-pmu.rst          |  8 ++++----
+ Documentation/admin-guide/perf/qcom_l2_pmu.rst       |  2 +-
+ Documentation/admin-guide/perf/qcom_l3_pmu.rst       |  2 +-
+ Documentation/admin-guide/perf/thunderx2-pmu.rst     |  2 +-
+ Documentation/admin-guide/perf/xgene-pmu.rst         |  2 +-
+ Documentation/trace/hisi-ptt.rst                     |  4 ++--
+ MAINTAINERS                                          |  2 +-
+ arch/arc/kernel/perf_event.c                         |  1 +
+ arch/arm/mach-imx/mmdc.c                             |  1 +
+ drivers/dma/idxd/perfmon.c                           |  1 +
+ drivers/fpga/dfl-fme-perf.c                          |  1 +
+ drivers/hwtracing/ptt/hisi_ptt.c                     |  1 +
+ drivers/nvdimm/nd_perf.c                             |  1 +
+ drivers/perf/alibaba_uncore_drw_pmu.c                |  1 +
+ drivers/perf/amlogic/meson_ddr_pmu_core.c            |  1 +
+ drivers/perf/arm-cci.c                               |  1 +
+ drivers/perf/arm-ccn.c                               |  1 +
+ drivers/perf/arm_cspmu/arm_cspmu.c                   |  1 +
+ drivers/perf/arm_dmc620_pmu.c                        |  1 +
+ drivers/perf/arm_dsu_pmu.c                           |  1 +
+ drivers/perf/arm_pmu_platform.c                      |  1 +
+ drivers/perf/arm_smmuv3_pmu.c                        |  1 +
+ drivers/perf/arm_spe_pmu.c                           |  1 +
+ drivers/perf/fsl_imx8_ddr_perf.c                     |  1 +
+ drivers/perf/hisilicon/hisi_pcie_pmu.c               |  1 +
+ drivers/perf/hisilicon/hisi_uncore_pmu.c             |  1 +
+ drivers/perf/hisilicon/hns3_pmu.c                    |  1 +
+ drivers/perf/qcom_l2_pmu.c                           |  1 +
+ drivers/perf/qcom_l3_pmu.c                           |  1 +
+ drivers/perf/riscv_pmu_legacy.c                      |  1 +
+ drivers/perf/riscv_pmu_sbi.c                         |  1 +
+ drivers/perf/thunderx2_pmu.c                         |  1 +
+ drivers/perf/xgene_pmu.c                             |  1 +
+ 35 files changed, 43 insertions(+), 18 deletions(-)
+ rename Documentation/ABI/testing/{sysfs-devices-hisi_ptt => sysfs-bus-event_source-devices-hisi_ptt} (90%)
+
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
+2.39.2
 
 
