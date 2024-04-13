@@ -1,64 +1,64 @@
-Return-Path: <linux-fpga+bounces-478-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-479-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6A2C8A3AAD
-	for <lists+linux-fpga@lfdr.de>; Sat, 13 Apr 2024 05:36:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F1758A3AB4
+	for <lists+linux-fpga@lfdr.de>; Sat, 13 Apr 2024 05:44:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66C341F24359
-	for <lists+linux-fpga@lfdr.de>; Sat, 13 Apr 2024 03:36:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEA252830DA
+	for <lists+linux-fpga@lfdr.de>; Sat, 13 Apr 2024 03:44:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19FBD18AF4;
-	Sat, 13 Apr 2024 03:36:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D22E1AAC4;
+	Sat, 13 Apr 2024 03:44:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fc8mBwkR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mc6Z3TMJ"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FEE10A19;
-	Sat, 13 Apr 2024 03:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CDB18E10;
+	Sat, 13 Apr 2024 03:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712979365; cv=none; b=UWTNM4cal3ZmFq007AAjqpvGGfvbQr1cYT+6UH1doQQhciEiqHXuBGlbJChQ7I7SRLWxvxgP6WdG7d0UnM70YF7qF00ddtXAT4/mLwh6Zj/hHtl9RWTLqZjSbK/wawk2JIfelpmxKB7GH4HKhi5kgLQisDv1W3uhYXK00lUh0iY=
+	t=1712979851; cv=none; b=ZlKhzdVAZMrJmdlbW7eSibEhqBDWE3E4uE77VhgmV8tdodkO6nhiWMrk4STU7Pzw9E+9QhmZ3qcwOT4nkjhJQstqMvwt5uZ+pJeks40WzKgMPmGyJWZBWtojnQC495fWPxijWcoGV5QVju2q7ljzaaDGpUBh/S1T94hfajLcAxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712979365; c=relaxed/simple;
-	bh=vVsY1U7XLodsMzLioPoPKonjThgbBUdmWS00CWigBdg=;
+	s=arc-20240116; t=1712979851; c=relaxed/simple;
+	bh=tGCnwsdjZOKULuycZTSN66sgNddpxVkqLbRd/ca6hGQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RTzHEEht1XnLIHJjNf232LJEekK5i8adIeLZpX5SXlrOeEmhViz/OVE6CjU/Qph3sD3WTLPxaLsOigWIbae9TmhHyvKdJdWQTnUH368G8Tb10E8X2p3kCgp5PkuUSwf46JTeB4USSqMIItW12VDOLAd5hTAG0wOlE0fn981odaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fc8mBwkR; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=TAlTdZfG+cKp8Epqj13S0YRZbyyGpg0oAN/ex31CWjQQgqbS1o/UD16+VSotUCc0hDauYP5UIJSGvui49U+w7aO4tu60HIcYK9peJAEvBgEYaO+ndWsqvs1NVGJEtG8SKPonEELbHQ+Q5ilghs+hxv6BfE8OK5raZ6fsJCI3+Ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mc6Z3TMJ; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712979363; x=1744515363;
+  t=1712979851; x=1744515851;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=vVsY1U7XLodsMzLioPoPKonjThgbBUdmWS00CWigBdg=;
-  b=fc8mBwkRulRNlQzPW+nkQsnLdMnyZjAADmLw4IO+YTbOFOh3U6UGkSps
-   Y83mWKn0FDkQ2K+/U6yjUUD04GNptHInx+V8q1xzD0LJO1OnpGFrhd5S9
-   cNXVWbFE+qkCLz0ZHC/UjFjXB6LWTPnTqRqpgBjIC/+8VLvxubJDVSsFe
-   sQqjnePDxpQzbm7pwReKP4xJKbdE1aTYxp6cumfR5oi0uD89BWPN63vX+
-   L2TO/Ny6EwjZu8WhIaxkL8Fpzgk8OLDO8mua3Ok2CigiL/ILabl2xLn65
-   KFzf8D4oCmL+/SeSbUnaMIHMScYkMWS0nFRw948GNn5CY+Sv9VLkDBe/i
-   Q==;
-X-CSE-ConnectionGUID: Lkh0oMkoTqWRmTi9o6/9Kg==
-X-CSE-MsgGUID: K9xID6Q5TyuBFKxr8VtREQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="8666608"
+  bh=tGCnwsdjZOKULuycZTSN66sgNddpxVkqLbRd/ca6hGQ=;
+  b=mc6Z3TMJ00Oqxb9ISsXT51mnwWqzGyQ5YIFaaL2QPFrvHBC6FqGOJ1PX
+   PHwvQ+3k0/MYa2J53AutGo2sQl7eE+/fNoJM7zbWCrrmMY4m0+RarebIJ
+   HWW5FooR1ZRPCazzxJ2OmsslJFAU9cnE/mf7pbi6LG0gMecdffgoWuTGE
+   scuiNh5J/vh8HPqhFgBd7aAKQ0CF6zHymA+HRAIQ2InKOlU7JqhPQ8OIN
+   Ja+bYUPbBTTNKNX5iMM+BlG4D6qlzsusCkVg3lc12GWFQ/kDBIXnwNc5j
+   low7EQHyg/eaB3BapbgYXvXkF8qzwwhgkf+O9JeSEwaLzy0dsH2Srf323
+   g==;
+X-CSE-ConnectionGUID: xN29MbL9TMWn3i80RlHMoA==
+X-CSE-MsgGUID: sU6EAj/4Qba6gzt04xUzAg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="19593861"
 X-IronPort-AV: E=Sophos;i="6.07,198,1708416000"; 
-   d="scan'208";a="8666608"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 20:36:02 -0700
-X-CSE-ConnectionGUID: EGRpeF/WQJWE1Gvie7acmQ==
-X-CSE-MsgGUID: C+hQWB6cS/KhX0IUU2IMrg==
+   d="scan'208";a="19593861"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 20:44:09 -0700
+X-CSE-ConnectionGUID: 8LI87pW7Sg6MjEC4ibNBuQ==
+X-CSE-MsgGUID: BonyupnfRz69GPS5TafKtA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,198,1708416000"; 
-   d="scan'208";a="26208564"
+   d="scan'208";a="26102840"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa005.jf.intel.com with ESMTP; 12 Apr 2024 20:36:00 -0700
-Date: Sat, 13 Apr 2024 11:30:54 +0800
+  by orviesa003.jf.intel.com with ESMTP; 12 Apr 2024 20:44:06 -0700
+Date: Sat, 13 Apr 2024 11:39:00 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
 To: Peter Colberg <peter.colberg@intel.com>
 Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
@@ -67,11 +67,9 @@ Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
 	Russ Weight <russ.weight@linux.dev>,
 	Marco Pagani <marpagan@redhat.com>,
 	Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: Re: [PATCH v2] fpga: dfl: remove unused member pdata from struct
- dfl_{afu,fme}
-Message-ID: <Zhn8bjex94DpkGBw@yilunxu-OptiPlex-7050>
-References: <20240401184915.714603-1-peter.colberg@intel.com>
- <Zhn3npCOy2h1SYm4@yilunxu-OptiPlex-7050>
+Subject: Re: [PATCH] fpga: dfl: remove unused function is_dfl_feature_present
+Message-ID: <Zhn+VHyaD9rZ0X/w@yilunxu-OptiPlex-7050>
+References: <20240402222038.1438718-1-peter.colberg@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -80,35 +78,44 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zhn3npCOy2h1SYm4@yilunxu-OptiPlex-7050>
+In-Reply-To: <20240402222038.1438718-1-peter.colberg@intel.com>
 
-On Sat, Apr 13, 2024 at 11:10:22AM +0800, Xu Yilun wrote:
-> On Mon, Apr 01, 2024 at 02:49:15PM -0400, Peter Colberg wrote:
-> > The member pdata was added to struct dfl_afu in commit 857a26222ff7 ("fpga:
-> > dfl: afu: add afu sub feature support") and to struct dfl_fme in commit
+On Tue, Apr 02, 2024 at 06:20:38PM -0400, Peter Colberg wrote:
+> The function is_dfl_feature_present was added in commit 5b57d02a2f94
+> ("fpga: dfl: add feature device infrastructure") but never used.
 
-Sorry, I didn't apply. Please don't wrap the git commit description. Put
-them in a new line but no wrap, if you have to reference git commit in
-changelog.
+Same git commit reference problem, please see:
 
-> > 29de76240e86 ("fpga: dfl: fme: add partial reconfiguration sub feature
-> > support").
-
-This sentence is actually not useful, I suggest you just remove it and
-add a Fix: tag below. That makes reviewers quickly find what the
-problem. Also avoid the git commit references fragments the changelog
-too much.
+https://lore.kernel.org/all/Zhn8bjex94DpkGBw@yilunxu-OptiPlex-7050/
 
 Thanks,
 Yilun
 
-> > It is set in function {afu,fme}_dev_init() but never used.
-> > 
-> > Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-> > Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> Acked-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+>  drivers/fpga/dfl.h | 5 -----
+>  1 file changed, 5 deletions(-)
 > 
-> Applied to for-next.
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 1d724a28f00a..5063d73b0d82 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -437,11 +437,6 @@ void __iomem *dfl_get_feature_ioaddr_by_id(struct device *dev, u16 id)
+>  	return NULL;
+>  }
+>  
+> -static inline bool is_dfl_feature_present(struct device *dev, u16 id)
+> -{
+> -	return !!dfl_get_feature_ioaddr_by_id(dev, id);
+> -}
+> -
+>  static inline
+>  struct device *dfl_fpga_pdata_to_parent(struct dfl_feature_platform_data *pdata)
+>  {
+> -- 
+> 2.44.0
+> 
 > 
 
