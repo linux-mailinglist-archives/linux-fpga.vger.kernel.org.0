@@ -1,125 +1,180 @@
-Return-Path: <linux-fpga+bounces-474-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-475-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9C088A33D7
-	for <lists+linux-fpga@lfdr.de>; Fri, 12 Apr 2024 18:28:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1630C8A3A86
+	for <lists+linux-fpga@lfdr.de>; Sat, 13 Apr 2024 04:41:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06A5D1C20D1A
-	for <lists+linux-fpga@lfdr.de>; Fri, 12 Apr 2024 16:28:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 264391C214AD
+	for <lists+linux-fpga@lfdr.de>; Sat, 13 Apr 2024 02:41:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE3F0149011;
-	Fri, 12 Apr 2024 16:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFD5417722;
+	Sat, 13 Apr 2024 02:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MdLKaNzr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Df2AIMIR"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3B3143899;
-	Fri, 12 Apr 2024 16:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D3C8C1A;
+	Sat, 13 Apr 2024 02:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712939242; cv=none; b=REj4QZIj3kQj2gnUj1PLXZotWLKjFQhju2NWsSEpwZaYIXmWSDwbszEoTPVGU6htkzhZeeT/WNNei0NnpATMU4ku3No0KgPpnI76tI540g7i1BK5zj8RqRCV0b/CuSZYgevDgh8LPHFszdMcMCTgDBkglrwb0gRuKvVVGg5YKoE=
+	t=1712976067; cv=none; b=gsEkCAMLDbtvp/TGZ1nAkglV/YD7qmm2pmNw5u+1YuegjW94BUJEtHCuZVfwl4vn54sEVmnNjstiSZZmgo5MwcTvg07ubaUs7+gPLycyELTFmZBvsqny/R38dZVofxol5frYEAi1upX5I1x0R6CV9hvyMsOJ7cRaV+u2mnxWGv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712939242; c=relaxed/simple;
-	bh=gcsTPT2VbxnCy4/hmONC+PzW5Mk8k6HOzDqVSrQaYwA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PaqTGQ4xrNxoXL+P991Dn8pG18vU8/JrPqeq2TgGoLQRCxJJieT6Qd/Cue+bPzx5zkuhbSKWE6d+T/P6UR0ONcTKYAEraONjffcZotTVQM3k9KKQ5DJHOOjdKJ0LsLypFg63g1XjyBJppbDOpVCS7xD7ToWS08Hb+tbH9eoVP9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MdLKaNzr; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712976067; c=relaxed/simple;
+	bh=axMJ7bTjXsx72XR3DZUHb3cgP4ohIiTGFHZNUvsGHSM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jQ3KojnobEVlPE/jXwFAM04Yjdrsc9N8UjA0mwtCS4KS2A2cQj5N125qEVAuArx/5YVAmEj4SIC8nguboe5eZnQ2Qc9CAE0hzqzhOKwpo1uWbAQrT49W1vXdgjaYBpPQc+DqHJehqvjOsS+tEOMUdDjGOA3BgpFvh1QRmzP0cgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Df2AIMIR; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712939241; x=1744475241;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gcsTPT2VbxnCy4/hmONC+PzW5Mk8k6HOzDqVSrQaYwA=;
-  b=MdLKaNzrbsZCSSDWXgiQ9fiMSaxxPt2AFwKtiANKAahaQUdZmgfzJZn1
-   ccgwPiDYHMTccQpXO+rYNe2ChM19zeaU4Jv4J093jkZVzMPixAgvmjXtq
-   bkw5hnJXMJMYonat52Dpfrjf1RZR2mobr9CvpqnK2bmPo4NNB9v9un8z7
-   6mD6gG/4qgKRYwky649nrzcqIpl7jzkZgK+2dOxLPIxrAgnZ96/Gux6jd
-   cby9ai7+g3zuCf0mkHeOytgYeGUf8QiA6H7HTYZ06B7ODkfLR9cNowQyA
-   378HvMAkQNWhXaIZVsOVKQ3uEfoMSdsMso3dhrDCl19ao8vWnIuIbneZw
-   A==;
-X-CSE-ConnectionGUID: XcCAQ859QdeyUTtJM3NGDQ==
-X-CSE-MsgGUID: HxR5ZNwNQlyDAdwrLiNtAg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="19796051"
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="19796051"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 09:27:21 -0700
-X-CSE-ConnectionGUID: Mm1CB60SSDWVM0xvwac6iw==
-X-CSE-MsgGUID: nH7qB1XQTMen7psDVDJiFg==
+  t=1712976064; x=1744512064;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=axMJ7bTjXsx72XR3DZUHb3cgP4ohIiTGFHZNUvsGHSM=;
+  b=Df2AIMIRIZeaVZ5zzK2Z2mwbcHaiFDBbzztL7XAMOZ2B0MMmMeDsMuOb
+   LrG6awYWZ/6YJCEiTSZsMdxUqyjAkdG9y4rTgwZhS0+NIT9oH7XB9jziK
+   1o+Aekr8Ebf/fNKXRA/oA8juDwDSD1n4FQY1KzHssYzBjkwXBeTkQtTE1
+   +anrLRBq7wooqymQNdZWLqU9xsXbidCrPlF3zGPWjuCpOR64Xn1ra5vmc
+   TGOrhlL5JduN93dL0xVtlxZ1O01RNRTYZqBRsfIgkII/uymcPWqEttKc2
+   v9j5KnZmsBBnxxi7Vl5kqHNUarBUT7rkijDdS0I0HJjbVZ6vC9wYvkoqK
+   Q==;
+X-CSE-ConnectionGUID: Q1dPpqK0QRKuJoogrKWZ3A==
+X-CSE-MsgGUID: ImpDt05nSNKTELzT+qECAw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="19839619"
+X-IronPort-AV: E=Sophos;i="6.07,198,1708416000"; 
+   d="scan'208";a="19839619"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 19:41:03 -0700
+X-CSE-ConnectionGUID: NNm7cw+nRwaDjs5oPjLO2Q==
+X-CSE-MsgGUID: y5xzLG7qRymsgK360LjoVw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="26077121"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.34.215]) ([10.212.34.215])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 09:27:19 -0700
-Message-ID: <1a397659-2163-4582-ac5c-2eab7f30c925@intel.com>
-Date: Fri, 12 Apr 2024 09:27:17 -0700
+X-IronPort-AV: E=Sophos;i="6.07,198,1708416000"; 
+   d="scan'208";a="52353158"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa002.jf.intel.com with ESMTP; 12 Apr 2024 19:40:59 -0700
+Date: Sat, 13 Apr 2024 10:35:53 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Marco Pagani <marpagan@redhat.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Tull <atull@opensource.altera.com>,
+	Russ Weight <russ.weight@linux.dev>, linux-fpga@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] fpga: region: add owner module and take its refcount
+Message-ID: <ZhnviXAgnTdzUyV4@yilunxu-OptiPlex-7050>
+References: <20240411144811.121500-1-marpagan@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 26/30] dmaengine: idxd: Assign parent for event_source
- device
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org
-Cc: linuxarm@huawei.com, Shaokun Zhang <zhangshaokun@hisilicon.com>,
- Yicong Yang <yangyicong@hisilicon.com>, Jiucheng Xu
- <jiucheng.xu@amlogic.com>, Khuong Dinh <khuong@os.amperecomputing.com>,
- Atish Patra <atishp@atishpatra.org>, Anup Patel <anup@brainfault.org>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Frank Li <Frank.li@nxp.com>, Shuai Xue <xueshuai@linux.alibaba.com>,
- Vineet Gupta <vgupta@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Fenghua Yu <fenghua.yu@intel.com>, Wu Hao <hao.wu@intel.com>,
- Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
- Suzuki K Poulose <suzuki.poulose@arm.com>,
- Liang Kan <kan.liang@linux.intel.com>
-References: <20240412161057.14099-1-Jonathan.Cameron@huawei.com>
- <20240412161057.14099-27-Jonathan.Cameron@huawei.com>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20240412161057.14099-27-Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411144811.121500-1-marpagan@redhat.com>
 
+>  /**
+> - * fpga_region_register_full - create and register an FPGA Region device
+> + * __fpga_region_register_full - create and register an FPGA Region device
+>   * @parent: device parent
+>   * @info: parameters for FPGA Region
+> + * @owner: owner module containing the get_bridges function
 
+This is too specific and easily get unaligned if we add another
+callback. How about "module containing the region ops"?
 
-On 4/12/24 9:10 AM, Jonathan Cameron wrote:
-> Currently the PMU device appears directly under /sys/devices/
-> Only root busses should appear there, so instead assign the pmu->dev
-> parent to be the iDXD PCI Device.
-> 
-> Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
-> Cc: Fenghua Yu <fenghua.yu@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> ---
->  drivers/dma/idxd/perfmon.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/dma/idxd/perfmon.c b/drivers/dma/idxd/perfmon.c
-> index fdda6d604262..fbb586eed0b3 100644
-> --- a/drivers/dma/idxd/perfmon.c
-> +++ b/drivers/dma/idxd/perfmon.c
-> @@ -477,6 +477,7 @@ static void idxd_pmu_init(struct idxd_pmu *idxd_pmu)
->  	}
+>   *
+>   * Return: struct fpga_region or ERR_PTR()
+>   */
+>  struct fpga_region *
+> -fpga_region_register_full(struct device *parent, const struct fpga_region_info *info)
+> +__fpga_region_register_full(struct device *parent, const struct fpga_region_info *info,
+> +			    struct module *owner)
+>  {
+>  	struct fpga_region *region;
+>  	int id, ret = 0;
+> @@ -213,6 +215,7 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
+>  	region->compat_id = info->compat_id;
+>  	region->priv = info->priv;
+>  	region->get_bridges = info->get_bridges;
+> +	region->ops_owner = owner;
 >  
->  	idxd_pmu->pmu.name		= idxd_pmu->name;
-> +	idxd_pmu->pmu.parent		= &idxd_pmu->idxd->pdev->dev;
->  	idxd_pmu->pmu.attr_groups	= perfmon_attr_groups;
->  	idxd_pmu->pmu.task_ctx_nr	= perf_invalid_context;
->  	idxd_pmu->pmu.event_init	= perfmon_pmu_event_init;
+>  	mutex_init(&region->mutex);
+>  	INIT_LIST_HEAD(&region->bridge_list);
+> @@ -241,13 +244,14 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
+>  
+>  	return ERR_PTR(ret);
+>  }
+> -EXPORT_SYMBOL_GPL(fpga_region_register_full);
+> +EXPORT_SYMBOL_GPL(__fpga_region_register_full);
+>  
+>  /**
+> - * fpga_region_register - create and register an FPGA Region device
+> + * __fpga_region_register - create and register an FPGA Region device
+>   * @parent: device parent
+>   * @mgr: manager that programs this region
+>   * @get_bridges: optional function to get bridges to a list
+> + * @owner: owner module containing get_bridges function
+
+ditto
+
+>   *
+>   * This simple version of the register function should be sufficient for most users.
+>   * The fpga_region_register_full() function is available for users that need to
+> @@ -256,17 +260,17 @@ EXPORT_SYMBOL_GPL(fpga_region_register_full);
+>   * Return: struct fpga_region or ERR_PTR()
+>   */
+>  struct fpga_region *
+> -fpga_region_register(struct device *parent, struct fpga_manager *mgr,
+> -		     int (*get_bridges)(struct fpga_region *))
+> +__fpga_region_register(struct device *parent, struct fpga_manager *mgr,
+> +		       int (*get_bridges)(struct fpga_region *), struct module *owner)
+>  {
+>  	struct fpga_region_info info = { 0 };
+>  
+>  	info.mgr = mgr;
+>  	info.get_bridges = get_bridges;
+>  
+> -	return fpga_region_register_full(parent, &info);
+> +	return __fpga_region_register_full(parent, &info, owner);
+>  }
+> -EXPORT_SYMBOL_GPL(fpga_region_register);
+> +EXPORT_SYMBOL_GPL(__fpga_region_register);
+>  
+>  /**
+>   * fpga_region_unregister - unregister an FPGA region
+> diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
+> index 9d4d32909340..5fbc05fe70a6 100644
+> --- a/include/linux/fpga/fpga-region.h
+> +++ b/include/linux/fpga/fpga-region.h
+> @@ -36,6 +36,7 @@ struct fpga_region_info {
+>   * @mgr: FPGA manager
+>   * @info: FPGA image info
+>   * @compat_id: FPGA region id for compatibility check.
+> + * @ops_owner: module containing the get_bridges function
+
+ditto
+
+Thanks,
+Yilun
+
+>   * @priv: private data
+>   * @get_bridges: optional function to get bridges to a list
+>   */
+> @@ -46,6 +47,7 @@ struct fpga_region {
+>  	struct fpga_manager *mgr;
+>  	struct fpga_image_info *info;
+>  	struct fpga_compat_id *compat_id;
+> +	struct module *ops_owner;
+>  	void *priv;
+>  	int (*get_bridges)(struct fpga_region *region);
+>  };
 
