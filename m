@@ -1,74 +1,76 @@
-Return-Path: <linux-fpga+bounces-476-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-477-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1B8F8A3A8C
-	for <lists+linux-fpga@lfdr.de>; Sat, 13 Apr 2024 05:01:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 671668A3A95
+	for <lists+linux-fpga@lfdr.de>; Sat, 13 Apr 2024 05:15:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 75E67B21B69
-	for <lists+linux-fpga@lfdr.de>; Sat, 13 Apr 2024 03:01:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 041831F23849
+	for <lists+linux-fpga@lfdr.de>; Sat, 13 Apr 2024 03:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25DA217C6B;
-	Sat, 13 Apr 2024 03:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06C8C17C7C;
+	Sat, 13 Apr 2024 03:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X1DWx+A5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U8AnlmLx"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8028EDDA3;
-	Sat, 13 Apr 2024 03:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82634205E10;
+	Sat, 13 Apr 2024 03:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712977281; cv=none; b=nhhLl56pG14XTFPNhnlvEuFmSIOojVsvDxLeV70yIDchtVlkYTVXb6fPOPgmb0NhvVJdMB+OCDiPvZhgdcQbRlsQFqpSIUstx7M9i6+YmWihULN9OX6WqIfpPGLIoNMclb4VqzlEXtW3MO3nYqj3724mhfeN3tQXmAVse5mDpgI=
+	t=1712978133; cv=none; b=ecSqwBgtuzg3CH1oC/dK7/RusS89IkphDg/cHZpDklfnG64/d4sCDfrqz5T7sMKJ90iY0akXcMWf0kQbRk0msppbmFsCfhdZaLQtpTdQnuL7t384JwYfdi93EPR1NpDtCelcBDHaApb/u96P4nssCXRfWH7GfRad1YUuszDo5m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712977281; c=relaxed/simple;
-	bh=8B4dXVwNsbWRnPA1Cez35bEwsvvRzfY5buFL+zY6i+M=;
+	s=arc-20240116; t=1712978133; c=relaxed/simple;
+	bh=6Y1blPmYVYju6oJ421vu/j3UB8tqlSX/gApNox7y5pQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SikC6ggkZBlu/PERknBuH+T2+Kb+tLwfUMID5V/6XFXPfERiDcYuc0Q+tBp28u2rt2CUXiiN7pxDGoTBQji3YQkh4EPzAc+RhJHhOpMqs28XPSBk2KK1OmZovR3jT7O+s0U3FV3yDeqcnJu8+IkzQ14NqR4wGCTUWCrwgXXj3Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X1DWx+A5; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Po/IzSYyr66rxjCZoIGBg2JjsOPZLca+tvdSOXLMQdCL8f0XGvZTCrG6f5T0p0O/YEr8rZ12aM1UmEof/eqqeOXEAmNOnuJrX0sG1sVKpkpVLuQ8S9EdQLIitCGCufGFzbksZvg+WF7BLHlrqLA+CeLEdWkp4wlWyKcpBpFvLs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U8AnlmLx; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712977279; x=1744513279;
+  t=1712978132; x=1744514132;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8B4dXVwNsbWRnPA1Cez35bEwsvvRzfY5buFL+zY6i+M=;
-  b=X1DWx+A5HIUHw+ZRX+9J2kKwujkZ1+fnLOdyq+mJWU1W95pTiQyL7bxl
-   Pb0a8RClLAG7f6lwMWqNSaEvAxZVTBBm4WujiBDpw3zqOpeidG7/21EbF
-   QI2/SCrTm/psujf/jgYzC59/uEXlfVjvLhvFUv1Kg3B5ouBe6oM4Xb+/4
-   fbHp9kfFVZ0ykQ/qV4Y3qQ4nAn1tU1IeOjG+RBLnWE12Lb1lr1vvTsLTd
-   oKf4AW+UOFOyk/nComWdsRiONpY0DVyEerdXTItqMaFKQEvCGTsS5e2bw
-   ZJQ84vWZXFfwAoCia6IkmUWkywoondjW/QB75OuPN/9lg/gRqOjhqWO1H
-   A==;
-X-CSE-ConnectionGUID: BRMHpvZnQf21DBrwCca61w==
-X-CSE-MsgGUID: /d2TKY2eROa+6IvMXFz/lQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="8303263"
+  bh=6Y1blPmYVYju6oJ421vu/j3UB8tqlSX/gApNox7y5pQ=;
+  b=U8AnlmLxPRdcct+oObD6ZZ1aE5WOUiCAt2iwX2tBuJ1OoYVBaXY/ts5x
+   BseyCRE/4lCcEREhF6ZaInjDAJpJf+G0k9AbDtWHN1ADo6XHTUZ9YqiI7
+   w4/47xe08uTsoz4YtXWujPuNpQUZ1c8QybsWlV610aJbV+9CiVN+vQ7I9
+   t8dPyjoYC5HIeQEnktO3/6UQ9xMmVeA4SNUqVIU8gtGlCXVOwezpjqT5t
+   y0LH6Y5c+vFQEO86GjNccNIxKTOtlQ0sqd5M0H+R0Wqvd1AbOiHV01iyA
+   /EU3+0c35stLoJ2aowmK3kitripxfP0SfBtZXpVgKgFrYqgtTQTRtTJmU
+   Q==;
+X-CSE-ConnectionGUID: wfl37OF2QEaX5W2P0mZzAg==
+X-CSE-MsgGUID: 2Glp4Kn9Ty+tL0oAXVULdw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="8306173"
 X-IronPort-AV: E=Sophos;i="6.07,198,1708416000"; 
-   d="scan'208";a="8303263"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 20:01:18 -0700
-X-CSE-ConnectionGUID: c+KL3owMSdGb0EMfyrzRzw==
-X-CSE-MsgGUID: mBMPjBoHTzOL81oOd/848g==
+   d="scan'208";a="8306173"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 20:15:31 -0700
+X-CSE-ConnectionGUID: r0sgSk3xTu2Kr9Q/czL9zA==
+X-CSE-MsgGUID: M9S3P+bfRUynnFhaxF83YQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,198,1708416000"; 
-   d="scan'208";a="21388434"
+   d="scan'208";a="25824887"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa010.fm.intel.com with ESMTP; 12 Apr 2024 20:01:15 -0700
-Date: Sat, 13 Apr 2024 10:56:10 +0800
+  by fmviesa005.fm.intel.com with ESMTP; 12 Apr 2024 20:15:29 -0700
+Date: Sat, 13 Apr 2024 11:10:22 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v1 1/1] fpga: ice40-spi: Remove redundant of_match_ptr()
- macros
-Message-ID: <Zhn0SgGulHq8Bbk3@yilunxu-OptiPlex-7050>
-References: <20240412155830.96137-1-andriy.shevchenko@linux.intel.com>
+To: Peter Colberg <peter.colberg@intel.com>
+Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Russ Weight <russ.weight@linux.dev>,
+	Marco Pagani <marpagan@redhat.com>,
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH v2] fpga: dfl: remove unused member pdata from struct
+ dfl_{afu,fme}
+Message-ID: <Zhn3npCOy2h1SYm4@yilunxu-OptiPlex-7050>
+References: <20240401184915.714603-1-peter.colberg@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -77,59 +79,18 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240412155830.96137-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240401184915.714603-1-peter.colberg@intel.com>
 
-On Fri, Apr 12, 2024 at 06:58:30PM +0300, Andy Shevchenko wrote:
-> Since the driver hi6421-regulator depends on CONFIG_OF,
-                   ^
-It is ice40-spi
-
-> it makes no difference to wrap of_match_ptr() here.
+On Mon, Apr 01, 2024 at 02:49:15PM -0400, Peter Colberg wrote:
+> The member pdata was added to struct dfl_afu in commit 857a26222ff7 ("fpga:
+> dfl: afu: add afu sub feature support") and to struct dfl_fme in commit
+> 29de76240e86 ("fpga: dfl: fme: add partial reconfiguration sub feature
+> support"). It is set in function {afu,fme}_dev_init() but never used.
 > 
-> Remove of_match_ptr() macros to clean it up.
-> 
-> While at it, add missing mod_devicetable.h.
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/r/20240412151147.22a059ff@canb.auug.org.au
-> Fixes: 5d04660b29fb ("fpga: ice40-spi: Remove unused of_gpio.h")
+> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-Since 5d04660b29fb is not merged yet, could you just merge them into one?
-Or it breaks bisecting.
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/fpga/ice40-spi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
-> index 46927945f1b9..62c30266130d 100644
-> --- a/drivers/fpga/ice40-spi.c
-> +++ b/drivers/fpga/ice40-spi.c
-> @@ -10,6 +10,7 @@
->  
->  #include <linux/fpga/fpga-mgr.h>
->  #include <linux/gpio/consumer.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/module.h>
->  #include <linux/spi/spi.h>
->  #include <linux/stringify.h>
-> @@ -198,7 +199,7 @@ static struct spi_driver ice40_fpga_driver = {
->  	.probe = ice40_fpga_probe,
->  	.driver = {
->  		.name = "ice40spi",
-> -		.of_match_table = of_match_ptr(ice40_fpga_of_match),
-> +		.of_match_table = ice40_fpga_of_match,
-
-It works, thanks for quick fix.
-
-Yilun
-
->  	},
->  	.id_table = ice40_fpga_spi_ids,
->  };
-> -- 
-> 2.43.0.rc1.1336.g36b5255a03ac
-> 
-> 
+Applied to for-next.
 
