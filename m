@@ -1,78 +1,81 @@
-Return-Path: <linux-fpga+bounces-497-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-498-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD7088AAB38
-	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 11:10:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC1DF8AAF3D
+	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 15:24:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 653B4B20E43
-	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 09:10:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40D2EB22D63
+	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 13:24:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B76279950;
-	Fri, 19 Apr 2024 09:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC5F86651;
+	Fri, 19 Apr 2024 13:24:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hgfJxwHz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dco3AVnY"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047AA78276;
-	Fri, 19 Apr 2024 09:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C3141C66;
+	Fri, 19 Apr 2024 13:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713517825; cv=none; b=Sl3fsseZhsucIGdqQjlry6HPdk5t6fr5sqaZizyl+x/erWHn3h57Dydrvi6gmVHH3QXfjhQ/1xZtYX6GxmbrtHFWSe6iI4JgyxRvX0OZwDtBRVgmb6ZyMB/Xn/AXwn4O9Kpj+g+uYoUOqcpRe0VtarOv65wtj28qatv4NotZE+A=
+	t=1713533058; cv=none; b=VkaljOBUZ6JIA4Q8aFPZi2EP1EwVCzDPp7QPBdhupzr5qvOtI3BpURxR/ldhj4n2bvq9xPAMap5VCjhh3JtpV83219xe01pl2s1BNVKNLXGgKDmQfw9X8/meSr3Q5FECKNCWlXf0GU4x1GfUDYoE0caIDfvecTl4VbYzZbsVFus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713517825; c=relaxed/simple;
-	bh=LZkmvma4B22MpUpSB/Kxjj7wTeNAjYu4yV5s+TYTD2A=;
+	s=arc-20240116; t=1713533058; c=relaxed/simple;
+	bh=km0hypdLXwBb2Cs3HyM86DuFLSognrk/cCgNSgOGGAk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OAsNk/432sc7QyW7IT5rWxWFkYVXRDTfnszXMUDAzOhnEZQQLSjVzCIg1VO3xcNl4EE1x1ktcwup+/qxL0rUSkz6q//nphROcVsnZnJNP09hCCxOF94w32aqn/0kSKJ1TqfA67vwf4ZnQOBgthFLjspBLWyFyLBpD5/qV3m9uLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hgfJxwHz; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=kqFmvZjEs0V9dllf4Gn644XQoDyJbCsVfe4PnIqXiiJcHqY6F6jpWGWJTZ8UsdAzIwuqUKG7745x0vpC17v+GehmkQ3q44CfFqU1zLbuSeq4sZuYfox5Zt3wYE3N2zFcG/FbaEA95DWG3uO9XK2rScKEd37JvLkM1Y8uOL1Pub8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dco3AVnY; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713517824; x=1745053824;
+  t=1713533057; x=1745069057;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LZkmvma4B22MpUpSB/Kxjj7wTeNAjYu4yV5s+TYTD2A=;
-  b=hgfJxwHzo06nvdMpusV51LNmlbqFIRXFMkWKhgsP4v45VH6EdCid1K0x
-   e2MiKbN5+Yv/R4vVzad2B7qFyR7ZTtIxzajfAlh86lDJ8ZkHlvXwucwqt
-   FX52W2b2Pf5iJZ66jcQfzZiyknyX4si0/hoWJWGbZIyrLCiWeMWYvzCi7
-   fHNdud8dd1DJPqj2oWDnCirzYnTKDx3QxFl8/TLL7/4oU0VS8tSVy46J0
-   SzFK7YBc4zLLqejgkz1q1J3OAaziz9ApPQvjGHT7GD8T/EPP1cvlkZwTI
-   v8ubnk0YsXzMKuVLOqk1wWjWnzM9X2X3dM+MXHNlAjSJc3ccMNqbDL1av
+  bh=km0hypdLXwBb2Cs3HyM86DuFLSognrk/cCgNSgOGGAk=;
+  b=Dco3AVnYJfbdTybNpRdgjAm+SVQpzsIzN/jSOxf4LgWFG2+RZ2EVF6R+
+   Wni+QyNS6oaoDQWPXPifoDCz6XFG3ajkyTYAEguXVGk7mrq7z5Y5MKLdP
+   /Et6+jd88jA5tS3E4pUInemWvM8JzLnMAJCn4vSSad57PJMV0MdaEe1nu
+   9sx7RFntpkfAPV2PP2cNdTUoxAwoFYN8vGYQ4qhDxZAMoV1LNMHdfgWrJ
+   HM04TVYlpA30sR05tmsY+JAvzhWtJ6OzKYOWFRFWqJxcTrLqHWiiNN6i0
+   E23s7tC6shZ4DxYf7jt2FB75VsemC9yKVj7c3+tBgGEaVuiB2bgx0i6r7
    w==;
-X-CSE-ConnectionGUID: wBmgFU3tTpKlDp4iYxuCsg==
-X-CSE-MsgGUID: 6mIvrXiISg6n86kn62F/xw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="9268684"
+X-CSE-ConnectionGUID: X4RQQ0PaQ4q3GyMCq9VUzw==
+X-CSE-MsgGUID: z+JhTizxQrWQzYQwROHYPA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11049"; a="19828830"
 X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="9268684"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 02:10:24 -0700
-X-CSE-ConnectionGUID: ErvI0qQtSZeexIE1DwlAhg==
-X-CSE-MsgGUID: /hFhtf6bQGaJ3kynhS+r9g==
+   d="scan'208";a="19828830"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 06:24:16 -0700
+X-CSE-ConnectionGUID: IgoxUjZ5SsuDY6ybxc0Hag==
+X-CSE-MsgGUID: HD6Py7hGQIKPdZ/kHPL5lQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="27930136"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa003.jf.intel.com with ESMTP; 19 Apr 2024 02:10:21 -0700
-Date: Fri, 19 Apr 2024 17:05:06 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
+   d="scan'208";a="27954946"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 06:24:13 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rxoDr-00000000jCZ-1pBx;
+	Fri, 19 Apr 2024 16:24:11 +0300
+Date: Fri, 19 Apr 2024 16:24:11 +0300
+From: "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>
 To: "Colberg, Peter" <peter.colberg@intel.com>
-Cc: "Xu, Yilun" <yilun.xu@intel.com>,
+Cc: "yilun.xu@linux.intel.com" <yilun.xu@linux.intel.com>,
+	"Xu, Yilun" <yilun.xu@intel.com>,
 	"linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-	"mdf@kernel.org" <mdf@kernel.org>,
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-	"Wu, Hao" <hao.wu@intel.com>,
+	"mdf@kernel.org" <mdf@kernel.org>, "Wu, Hao" <hao.wu@intel.com>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"russ.weight@linux.dev" <russ.weight@linux.dev>,
 	"Pagani, Marco" <marpagan@redhat.com>, "Rix, Tom" <trix@redhat.com>,
 	"matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
 Subject: Re: [PATCH RESEND] fpga: dfl: omit unneeded casts of u64 values for
  dev_dbg()
-Message-ID: <ZiIzwjggxFmXvau8@yilunxu-OptiPlex-7050>
+Message-ID: <ZiJwe1hgizRkWcdo@smile.fi.intel.com>
 References: <20240329000429.7493-1-peter.colberg@intel.com>
  <Zgt7fA/Jfks/iKYi@yilunxu-OptiPlex-7050>
  <61cf643fda9b983b8a78b9f66c46290becf4f537.camel@intel.com>
@@ -85,48 +88,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <61cf643fda9b983b8a78b9f66c46290becf4f537.camel@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
 On Thu, Apr 18, 2024 at 09:30:48PM +0000, Colberg, Peter wrote:
 > On Tue, 2024-04-02 at 11:29 +0800, Xu Yilun wrote:
 > > On Thu, Mar 28, 2024 at 08:04:29PM -0400, Peter Colberg wrote:
-> > > Omit unneeded casts of u64 values to unsigned long long for use with
-> > > printk() format specifier %llx. Unlike user space, the kernel defines
-> > > u64 as unsigned long long for all architectures; see commit 2a7930bd77fe
-> > > ("Documentation/printk-formats.txt: No casts needed for u64/s64").
-> > 
-> > The change is OK. But I suggest just delete the unnecessary dev_dbg()
-> > since now people normally don't want these "Hello, I'm here!" info.
-> 
-> How would you like me to proceed? Should I remove dev_dbg() in all DFL
 
-I think do for all DFL would be enough. Usually you want something to
-follow up and do the related clean up in advance.
+...
 
-Thanks,
-Yilun
-
-> modules? There are "Hello, I'm here!" in non-DFL FPGA modules, too.
-> 
 > $ rg --sort=path -c dev_dbg drivers/fpga/
-> drivers/fpga/altera-freeze-bridge.c:7
-> drivers/fpga/altera-pr-ip-core.c:1
-> drivers/fpga/dfl-afu-dma-region.c:7
-> drivers/fpga/dfl-afu-error.c:1
-> drivers/fpga/dfl-afu-main.c:8
-> drivers/fpga/dfl-fme-error.c:1
-> drivers/fpga/dfl-fme-main.c:3
-> drivers/fpga/dfl-fme-mgr.c:12
-> drivers/fpga/dfl-fme-perf.c:2
-> drivers/fpga/dfl-fme-pr.c:1
-> drivers/fpga/dfl-fme-region.c:1
-> drivers/fpga/dfl-n3000-nios.c:1
-> drivers/fpga/dfl-pci.c:3
-> drivers/fpga/dfl.c:4
-> drivers/fpga/fpga-bridge.c:4
-> drivers/fpga/fpga-region.c:3
-> drivers/fpga/socfpga-a10.c:2
-> drivers/fpga/stratix10-soc.c:4
-> 
-> Thanks,
-> Peter
+
+Side Q: is 'rg' an alias to `git grep`?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
