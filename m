@@ -1,108 +1,158 @@
-Return-Path: <linux-fpga+bounces-498-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-499-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC1DF8AAF3D
-	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 15:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 598F58AB1EA
+	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 17:34:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40D2EB22D63
-	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 13:24:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 679C5B219CF
+	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 15:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC5F86651;
-	Fri, 19 Apr 2024 13:24:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BE2D12FB32;
+	Fri, 19 Apr 2024 15:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dco3AVnY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j1qmu3f6"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C3141C66;
-	Fri, 19 Apr 2024 13:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0422512F5AF;
+	Fri, 19 Apr 2024 15:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713533058; cv=none; b=VkaljOBUZ6JIA4Q8aFPZi2EP1EwVCzDPp7QPBdhupzr5qvOtI3BpURxR/ldhj4n2bvq9xPAMap5VCjhh3JtpV83219xe01pl2s1BNVKNLXGgKDmQfw9X8/meSr3Q5FECKNCWlXf0GU4x1GfUDYoE0caIDfvecTl4VbYzZbsVFus=
+	t=1713540804; cv=none; b=XGo7TSAMf2AGwC9KFAi0C98ZdmOC0Qtghf+2u5kpfCcPmaYc6nVtdbLfUP9n7qevxTPLC0tYJOfn3lEg8ZN1ccEpyiELW2Q0vGCsNtnTOB2Zt5iGpWRYvBoyrbyah3h9nwxB8vKqo1++JtCbZ3WeVDuBBd6R6BZEqcohe75GYfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713533058; c=relaxed/simple;
-	bh=km0hypdLXwBb2Cs3HyM86DuFLSognrk/cCgNSgOGGAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kqFmvZjEs0V9dllf4Gn644XQoDyJbCsVfe4PnIqXiiJcHqY6F6jpWGWJTZ8UsdAzIwuqUKG7745x0vpC17v+GehmkQ3q44CfFqU1zLbuSeq4sZuYfox5Zt3wYE3N2zFcG/FbaEA95DWG3uO9XK2rScKEd37JvLkM1Y8uOL1Pub8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dco3AVnY; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713533057; x=1745069057;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=km0hypdLXwBb2Cs3HyM86DuFLSognrk/cCgNSgOGGAk=;
-  b=Dco3AVnYJfbdTybNpRdgjAm+SVQpzsIzN/jSOxf4LgWFG2+RZ2EVF6R+
-   Wni+QyNS6oaoDQWPXPifoDCz6XFG3ajkyTYAEguXVGk7mrq7z5Y5MKLdP
-   /Et6+jd88jA5tS3E4pUInemWvM8JzLnMAJCn4vSSad57PJMV0MdaEe1nu
-   9sx7RFntpkfAPV2PP2cNdTUoxAwoFYN8vGYQ4qhDxZAMoV1LNMHdfgWrJ
-   HM04TVYlpA30sR05tmsY+JAvzhWtJ6OzKYOWFRFWqJxcTrLqHWiiNN6i0
-   E23s7tC6shZ4DxYf7jt2FB75VsemC9yKVj7c3+tBgGEaVuiB2bgx0i6r7
-   w==;
-X-CSE-ConnectionGUID: X4RQQ0PaQ4q3GyMCq9VUzw==
-X-CSE-MsgGUID: z+JhTizxQrWQzYQwROHYPA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11049"; a="19828830"
-X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="19828830"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 06:24:16 -0700
-X-CSE-ConnectionGUID: IgoxUjZ5SsuDY6ybxc0Hag==
-X-CSE-MsgGUID: HD6Py7hGQIKPdZ/kHPL5lQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="27954946"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 06:24:13 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rxoDr-00000000jCZ-1pBx;
-	Fri, 19 Apr 2024 16:24:11 +0300
-Date: Fri, 19 Apr 2024 16:24:11 +0300
-From: "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>
-To: "Colberg, Peter" <peter.colberg@intel.com>
-Cc: "yilun.xu@linux.intel.com" <yilun.xu@linux.intel.com>,
-	"Xu, Yilun" <yilun.xu@intel.com>,
-	"linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-	"mdf@kernel.org" <mdf@kernel.org>, "Wu, Hao" <hao.wu@intel.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"russ.weight@linux.dev" <russ.weight@linux.dev>,
-	"Pagani, Marco" <marpagan@redhat.com>, "Rix, Tom" <trix@redhat.com>,
-	"matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
-Subject: Re: [PATCH RESEND] fpga: dfl: omit unneeded casts of u64 values for
- dev_dbg()
-Message-ID: <ZiJwe1hgizRkWcdo@smile.fi.intel.com>
-References: <20240329000429.7493-1-peter.colberg@intel.com>
- <Zgt7fA/Jfks/iKYi@yilunxu-OptiPlex-7050>
- <61cf643fda9b983b8a78b9f66c46290becf4f537.camel@intel.com>
+	s=arc-20240116; t=1713540804; c=relaxed/simple;
+	bh=PF5nOun/ElSeyjH30Yzba7W8+NsxRZxYagsm6bk3ugw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cdxk7WmmYWIT+k+vbTpeMgqQNLQVHa20dRwP9fosjHHPFd1pF2yX6yFNWphFXUXbXsVRYGBmYYMMs6nHxv5Ha31RoU4l2/+fdeN6Y3h3PFgshP7uL/bDrr3Cd1/zk1ErzUlUnoT+UIpoo2b/kzwgn4HMvwLX6yayqUvQRTz3MoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j1qmu3f6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9E4C32782;
+	Fri, 19 Apr 2024 15:33:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713540803;
+	bh=PF5nOun/ElSeyjH30Yzba7W8+NsxRZxYagsm6bk3ugw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=j1qmu3f64YE+H5EhqFyjEzn3adDOYPJxZmMpa9qJKZ8XuyxHDIe2eLp8Gi/8NJoWd
+	 C3PgU9lnWeoBmNhVHg/nsV9QRf6nYnpjzHQKtFHbRGuKD64r93HOB8MmjymptFgN50
+	 RIul54GmRK/tadpJ8XPKvIJyOOj92+WmtwkTa+DJ1d7E+/yCCM5CxQKfmvodBrUuMQ
+	 DKsBSiDF1UsvUvX0BzxZrTsrKp0QaQwZVKNY0WFzWijjr9h2PGGDZohw4yOBMrMHZk
+	 jy/yyBUUlHAsY215Ja+svoFh+ezFM0+IG28dWIEWK+v1nJk4yb+H5TvKfQJ5FHlltq
+	 /1yMdfrKf029Q==
+From: Will Deacon <will@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	gregkh@linuxfoundation.org,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: catalin.marinas@arm.com,
+	kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	linuxarm@huawei.com,
+	Shaokun Zhang <zhangshaokun@hisilicon.com>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Jiucheng Xu <jiucheng.xu@amlogic.com>,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
+	Atish Patra <atishp@atishpatra.org>,
+	Anup Patel <anup@brainfault.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Frank Li <Frank.li@nxp.com>,
+	Shuai Xue <xueshuai@linux.alibaba.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Wu Hao <hao.wu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-fpga@vger.kernel.org,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Liang Kan <kan.liang@linux.intel.com>
+Subject: Re: [PATCH v2 00/30] Add parents to struct pmu -> dev
+Date: Fri, 19 Apr 2024 16:33:00 +0100
+Message-Id: <171353877337.24595.9649607787666856891.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20240412161057.14099-1-Jonathan.Cameron@huawei.com>
+References: <20240412161057.14099-1-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61cf643fda9b983b8a78b9f66c46290becf4f537.camel@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 18, 2024 at 09:30:48PM +0000, Colberg, Peter wrote:
-> On Tue, 2024-04-02 at 11:29 +0800, Xu Yilun wrote:
-> > On Thu, Mar 28, 2024 at 08:04:29PM -0400, Peter Colberg wrote:
+On Fri, 12 Apr 2024 17:10:27 +0100, Jonathan Cameron wrote:
+> Robin posted a patch for the cmn and that reminded me that I never
+> sent a v2.
+> 
+> v2: Drop first patch that added a parent to struct pmu as that has been
+>     upstream for a year.
+>     Drop the arm-cmn change as Robin has dealt with that one.
+>     Gathered tags.
+> 
+> [...]
 
-...
+Applied drivers/perf parts to will (for-next/perf), thanks!
 
-> $ rg --sort=path -c dev_dbg drivers/fpga/
+[01/30] perf/hisi-pcie: Assign parent for event_source device
+        https://git.kernel.org/will/c/1fb8950417a4
+[02/30] Documentation: hisi-pmu: Drop reference to /sys/devices path
+        https://git.kernel.org/will/c/d0412b6ecb4e
+[03/30] perf/hisi-uncore: Assign parents for event_source devices
+        https://git.kernel.org/will/c/16d417f6c45b
+[04/30] Documentation: hns-pmu: Use /sys/bus/event_source/devices paths
+        https://git.kernel.org/will/c/eff6af531335
+[05/30] perf/hisi-hns3: Assign parents for event_source device
+        https://git.kernel.org/will/c/3d957de12c65
+[06/30] perf/amlogic: Assign parents for event_source devices
+        https://git.kernel.org/will/c/1b7718fcc3f2
+[07/30] perf/arm_cspmu: Assign parents for event_source devices
+        https://git.kernel.org/will/c/3a1bb75ebc1b
+[08/30] Documentation: xgene-pmu: Use /sys/bus/event_source/devices paths
+        https://git.kernel.org/will/c/867ba6d204f1
+[09/30] perf/xgene: Assign parents for event_source devices
+        https://git.kernel.org/will/c/89e34f8bee6c
+[10/30] Documentation: thunderx2-pmu: Use /sys/bus/event_source/devices paths
+        https://git.kernel.org/will/c/90b4a1a927ee
+[11/30] perf/thunderx2: Assign parents for event_source devices
+        https://git.kernel.org/will/c/ecb79c21c189
+[12/30] perf/riscv: Assign parents for event_source devices
+        https://git.kernel.org/will/c/50650e5f3186
+[13/30] Documentation: qcom-pmu: Use /sys/bus/event_source/devices paths
+        https://git.kernel.org/will/c/556da1343452
+[14/30] perf/qcom: Assign parents for event_source devices
+        https://git.kernel.org/will/c/6148865dd57c
+[15/30] perf/imx_ddr: Assign parents for event_source devices
+        https://git.kernel.org/will/c/1d194ab8571b
+[16/30] perf/arm_pmu: Assign parents for event_source devices
+        https://git.kernel.org/will/c/7bf75431a9ba
+[17/30] perf/alibaba_uncore: Assign parents for event_source device
+        https://git.kernel.org/will/c/1919bd8e0be0
+[18/30] perf/arm-cci: Assign parents for event_source device
+        https://git.kernel.org/will/c/e7ec4791f903
+[19/30] perf/arm-ccn: Assign parents for event_source device
+        https://git.kernel.org/will/c/f4144be05a60
+[20/30] perf/arm-dmc620: Assign parents for event_source device
+        https://git.kernel.org/will/c/46bed4c740d5
+[21/30] perf/arm-dsu: Assign parents for event_source device
+        https://git.kernel.org/will/c/bc81ae2efbb3
+[22/30] perf/arm-smmuv3: Assign parents for event_source device
+        https://git.kernel.org/will/c/a8889fbf16bc
+[23/30] perf/arm-spe: Assign parents for event_source device
+        https://git.kernel.org/will/c/4052ce07d5d7
 
-Side Q: is 'rg' an alias to `git grep`?
-
+Cheers,
 -- 
-With Best Regards,
-Andy Shevchenko
+Will
 
-
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
 
