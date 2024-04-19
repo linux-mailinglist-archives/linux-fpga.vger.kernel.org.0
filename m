@@ -1,79 +1,72 @@
-Return-Path: <linux-fpga+bounces-491-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-492-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD57E8AA950
-	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 09:37:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0079A8AA95E
+	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 09:40:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D217F1C209F1
-	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 07:37:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 935071F2237D
+	for <lists+linux-fpga@lfdr.de>; Fri, 19 Apr 2024 07:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A61BD4317A;
-	Fri, 19 Apr 2024 07:37:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2EEB4317A;
+	Fri, 19 Apr 2024 07:40:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mKMZfcmE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F0wBlOj8"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8DA62AD1A;
-	Fri, 19 Apr 2024 07:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7264314E;
+	Fri, 19 Apr 2024 07:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713512244; cv=none; b=oNMt2Zyk5tll18s3UrUk6pLI7yR5zkuV2P4/OdOdFOECthpfhTqHWIJ2BGwdDwvdTeETyHesuEvnHApKoGy4fYGvkfJoKVuzmESwy3AgBC4N+0wWQnZ9g7lEz5+uo53RJoqGqGBGElUFfDxgfUKyPeTOtPvg8j6g5RCg9dxqeI4=
+	t=1713512452; cv=none; b=u1hxX2aLGqAXOj05puBAIWFZ5PjyztumGnN8gNhkWVW4iGm1E7T65k/Tv2adThAgI/+uDSYaSCVimaYMq2NelXx/0z8oDFKkvZxbdK3vb3Q5IKbfutgydy6b9+sSh3rRv3mwF91CsS5uSx+imcvdH5XGGFnHL25/VBNJRpm31II=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713512244; c=relaxed/simple;
-	bh=WH/TWNwyB1L7t0DkTK1GAarV0p0L0EueWHtAvZAq7rg=;
+	s=arc-20240116; t=1713512452; c=relaxed/simple;
+	bh=qZOTaYe15U2NKYw7NsaWXXCCYXLgb92jG31Z6M7FrEI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LzOL4uJSMa4rRpyO5T7YTKWTT1eOmesuSuWzmcvQd/LsNGQ6AkWDsnRN1YMWNNE43BrUYPMxuo2aAcmsl8+vwEb7oKESuXyx6jx5vzVRD2USdacrBZZO0ENZa4NEvsazQULppVBItxiqW78NXZYBpEdzSgEBx42uktIOTFmUtdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mKMZfcmE; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZebpEDOFio3kJckwHg3LaoVbnE7w8SuZTPvRuWC1lgt98MQnKfBTWKzfPjUHEyMCN8286qFgYkQgIwTU2QaItLLdtQK4zIlJy0/GNxvufCvmfntzlb3zcJgYaMl59dO0QsOb3YG12SX9aRN/fbRU0N4V9E8SZmJah+xptqZw4uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F0wBlOj8; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713512243; x=1745048243;
+  t=1713512451; x=1745048451;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WH/TWNwyB1L7t0DkTK1GAarV0p0L0EueWHtAvZAq7rg=;
-  b=mKMZfcmEiZVzsb+MQXHDxkkOducz+2zyhbWIsncm5iKGKFhd4a8nUHsN
-   veln5dTnAVZSLrjEYz9qbTCRqJW3wr860e9FCUrDy5KrvieyWKI4wySIG
-   QVJnoDV23cABB70a8QARP0KtwTNhg7Q4aQHox2bPtcA20kVVEHod+p0jZ
-   AL2oJg5eyjZ8dXiz7nr12XkERanL+EJgCG3oOy98iY1IGv9KuDxbk60+c
-   WvnSkzh6fr0yflLOdqXEQfvp6mSXy5RwN5EdJon3v85czDlzTrVVYMYll
-   4EIGRLh7JzLIcmtRA/lAgbK/xRGB7Xi2eMm74W618MA0g3UqKI7QRKmjT
+  bh=qZOTaYe15U2NKYw7NsaWXXCCYXLgb92jG31Z6M7FrEI=;
+  b=F0wBlOj8cc4DJJX2V06Vf/Ey3ScrT9HhdR5akMuwCPwpX/peJF4OAgVF
+   fAlkGiNInLGfU145qUZEr0aU5aIkYiMY2fl6TgvYyi2j1oHcGA4Z1ycVe
+   naWk6V5pMao+eFCU9zOVFMDOg51Cq/IgvTP7oCqPgI0209MAWZMp8XUN8
+   4URKmJe06UpFYhB8NMQ20MKq9o4ytLj9XF/vUG3o3C7zmQsen0rqBvRlD
+   BiPqtdfpU89TnZSb1SFtNsMnURMql/wuqAeQWBAaHM1JmPHHgLlkxbl96
+   xcpVPX5phKzB3Wuum5Ko9q0Z3ZsVJl81VW26uhoXSC5tjwzVzzeVpKtge
    w==;
-X-CSE-ConnectionGUID: /mEfzdxcTjCZGy4zHlGAng==
-X-CSE-MsgGUID: SaCLh30YTvGhejiV2LmGnw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="9217819"
+X-CSE-ConnectionGUID: BDmnLdu1ReufYVBW55Q5ug==
+X-CSE-MsgGUID: azS5vRgdQ8eSz41WlRzW5Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="19711393"
 X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="9217819"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 00:37:22 -0700
-X-CSE-ConnectionGUID: yDaNp2+dQdWidn2TlCgqcQ==
-X-CSE-MsgGUID: 4DX5CsrsS/6l5cwvv9bu0A==
+   d="scan'208";a="19711393"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 00:40:50 -0700
+X-CSE-ConnectionGUID: YIAcryn5RWuUzXu2oFTlNg==
+X-CSE-MsgGUID: DamULQioR/2laquRHHXpaQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="54179291"
+   d="scan'208";a="23233044"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa002.jf.intel.com with ESMTP; 19 Apr 2024 00:37:19 -0700
-Date: Fri, 19 Apr 2024 15:32:04 +0800
+  by orviesa009.jf.intel.com with ESMTP; 19 Apr 2024 00:40:48 -0700
+Date: Fri, 19 Apr 2024 15:35:34 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Tull <atull@opensource.altera.com>,
-	Russ Weight <russ.weight@linux.dev>, linux-fpga@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] fpga: region: add owner module and take its refcount
-Message-ID: <ZiId9CnGEjwMcXeX@yilunxu-OptiPlex-7050>
-References: <20240411144811.121500-1-marpagan@redhat.com>
- <ZhnviXAgnTdzUyV4@yilunxu-OptiPlex-7050>
- <669b8b55-df83-4c32-9c8f-41895db18b75@redhat.com>
- <e5f15ea4-f8e4-4a97-95f6-63a2099d084c@redhat.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH v1 1/1] fpga: ice40-spi: Don't use "proxy" headers
+Message-ID: <ZiIexi02eCIGQtib@yilunxu-OptiPlex-7050>
+References: <20240415142428.853812-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -82,139 +75,51 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e5f15ea4-f8e4-4a97-95f6-63a2099d084c@redhat.com>
+In-Reply-To: <20240415142428.853812-1-andriy.shevchenko@linux.intel.com>
 
-On Mon, Apr 15, 2024 at 07:11:03PM +0200, Marco Pagani wrote:
-> On 2024-04-15 14:19, Marco Pagani wrote:
-> > 
-> > 
-> > On 2024-04-13 04:35, Xu Yilun wrote:
-> >>>  /**
-> >>> - * fpga_region_register_full - create and register an FPGA Region device
-> >>> + * __fpga_region_register_full - create and register an FPGA Region device
-> >>>   * @parent: device parent
-> >>>   * @info: parameters for FPGA Region
-> >>> + * @owner: owner module containing the get_bridges function
-> >>
-> >> This is too specific and easily get unaligned if we add another
-> >> callback. How about "module containing the region ops"?
-> > 
-> > I had some concerns about using the name "region ops" in the kernel-doc
-> > comment since it was not supported by a struct definition nor referenced
-> > in the documentation. However, since the name is now referred to in the
-> > ops_owner pointer, making the change makes sense to me.
-> > 
+On Mon, Apr 15, 2024 at 05:23:28PM +0300, Andy Shevchenko wrote:
+> Update header inclusions to follow IWYU (Include What You Use)
+> principle.
 > 
-> On second thought, I think it would be better to leave the @owner
-> description to "module containing the get_bridges function" for the
-> moment. Otherwise, it could confuse the user by blurring the connection
-> between the @owner and @get_bridges parameters.
-> 
-> * __fpga_region_register - create and register an FPGA Region device
-> * [...]
-> * @get_bridges: optional function to get bridges to a list
-> * @owner: owner module containing get_bridges function
-> 
-> We can always modify the @owner description later, together with all the
-> necessary changes to add a new op, like grouping all ops in a structure
-> and changing the registration function signature.
-
-OK, it's good to me. I'll apply this patch to for-next.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 Acked-by: Xu Yilun <yilun.xu@intel.com>
 
+Applied to for-next.
+
+> ---
 > 
-> Thanks,
-> Marco
+> This is a replacement of previously sent:
+> fpga: ice40-spi: Remove unused of_gpio.h
+> fpga: ice40-spi: Remove redundant of_match_ptr() macros
 > 
-> > 
-> >>
-> >>>   *
-> >>>   * Return: struct fpga_region or ERR_PTR()
-> >>>   */
-> >>>  struct fpga_region *
-> >>> -fpga_region_register_full(struct device *parent, const struct fpga_region_info *info)
-> >>> +__fpga_region_register_full(struct device *parent, const struct fpga_region_info *info,
-> >>> +			    struct module *owner)
-> >>>  {
-> >>>  	struct fpga_region *region;
-> >>>  	int id, ret = 0;
-> >>> @@ -213,6 +215,7 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
-> >>>  	region->compat_id = info->compat_id;
-> >>>  	region->priv = info->priv;
-> >>>  	region->get_bridges = info->get_bridges;
-> >>> +	region->ops_owner = owner;
-> >>>  
-> >>>  	mutex_init(&region->mutex);
-> >>>  	INIT_LIST_HEAD(&region->bridge_list);
-> >>> @@ -241,13 +244,14 @@ fpga_region_register_full(struct device *parent, const struct fpga_region_info *
-> >>>  
-> >>>  	return ERR_PTR(ret);
-> >>>  }
-> >>> -EXPORT_SYMBOL_GPL(fpga_region_register_full);
-> >>> +EXPORT_SYMBOL_GPL(__fpga_region_register_full);
-> >>>  
-> >>>  /**
-> >>> - * fpga_region_register - create and register an FPGA Region device
-> >>> + * __fpga_region_register - create and register an FPGA Region device
-> >>>   * @parent: device parent
-> >>>   * @mgr: manager that programs this region
-> >>>   * @get_bridges: optional function to get bridges to a list
-> >>> + * @owner: owner module containing get_bridges function
-> >>
-> >> ditto
-> >>
-> >>>   *
-> >>>   * This simple version of the register function should be sufficient for most users.
-> >>>   * The fpga_region_register_full() function is available for users that need to
-> >>> @@ -256,17 +260,17 @@ EXPORT_SYMBOL_GPL(fpga_region_register_full);
-> >>>   * Return: struct fpga_region or ERR_PTR()
-> >>>   */
-> >>>  struct fpga_region *
-> >>> -fpga_region_register(struct device *parent, struct fpga_manager *mgr,
-> >>> -		     int (*get_bridges)(struct fpga_region *))
-> >>> +__fpga_region_register(struct device *parent, struct fpga_manager *mgr,
-> >>> +		       int (*get_bridges)(struct fpga_region *), struct module *owner)
-> >>>  {
-> >>>  	struct fpga_region_info info = { 0 };
-> >>>  
-> >>>  	info.mgr = mgr;
-> >>>  	info.get_bridges = get_bridges;
-> >>>  
-> >>> -	return fpga_region_register_full(parent, &info);
-> >>> +	return __fpga_region_register_full(parent, &info, owner);
-> >>>  }
-> >>> -EXPORT_SYMBOL_GPL(fpga_region_register);
-> >>> +EXPORT_SYMBOL_GPL(__fpga_region_register);
-> >>>  
-> >>>  /**
-> >>>   * fpga_region_unregister - unregister an FPGA region
-> >>> diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
-> >>> index 9d4d32909340..5fbc05fe70a6 100644
-> >>> --- a/include/linux/fpga/fpga-region.h
-> >>> +++ b/include/linux/fpga/fpga-region.h
-> >>> @@ -36,6 +36,7 @@ struct fpga_region_info {
-> >>>   * @mgr: FPGA manager
-> >>>   * @info: FPGA image info
-> >>>   * @compat_id: FPGA region id for compatibility check.
-> >>> + * @ops_owner: module containing the get_bridges function
-> >>
-> >> ditto
-> >>
-> >> Thanks,
-> >> Yilun
-> >>
-> >>>   * @priv: private data
-> >>>   * @get_bridges: optional function to get bridges to a list
-> >>>   */
-> >>> @@ -46,6 +47,7 @@ struct fpga_region {
-> >>>  	struct fpga_manager *mgr;
-> >>>  	struct fpga_image_info *info;
-> >>>  	struct fpga_compat_id *compat_id;
-> >>> +	struct module *ops_owner;
-> >>>  	void *priv;
-> >>>  	int (*get_bridges)(struct fpga_region *region);
-> >>>  };
-> >>
+>  drivers/fpga/ice40-spi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
+> index c0028ae4c5b7..62c30266130d 100644
+> --- a/drivers/fpga/ice40-spi.c
+> +++ b/drivers/fpga/ice40-spi.c
+> @@ -10,8 +10,8 @@
+>  
+>  #include <linux/fpga/fpga-mgr.h>
+>  #include <linux/gpio/consumer.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+> -#include <linux/of_gpio.h>
+>  #include <linux/spi/spi.h>
+>  #include <linux/stringify.h>
+>  
+> @@ -199,7 +199,7 @@ static struct spi_driver ice40_fpga_driver = {
+>  	.probe = ice40_fpga_probe,
+>  	.driver = {
+>  		.name = "ice40spi",
+> -		.of_match_table = of_match_ptr(ice40_fpga_of_match),
+> +		.of_match_table = ice40_fpga_of_match,
+>  	},
+>  	.id_table = ice40_fpga_spi_ids,
+>  };
+> -- 
+> 2.43.0.rc1.1336.g36b5255a03ac
 > 
 
