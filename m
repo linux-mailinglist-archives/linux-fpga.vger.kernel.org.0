@@ -1,76 +1,76 @@
-Return-Path: <linux-fpga+bounces-507-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-508-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 381CB8ADE73
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 09:44:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98D728ADFD3
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 10:33:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69F091C212F5
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 07:44:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CADDB1C21950
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 08:33:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920D747A5D;
-	Tue, 23 Apr 2024 07:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC6CB79D3;
+	Tue, 23 Apr 2024 08:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TCmTUS8r"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZSJcPr/E"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1091C698;
-	Tue, 23 Apr 2024 07:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B96F262BD;
+	Tue, 23 Apr 2024 08:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713858264; cv=none; b=XaRmYtH650PXhm0CLRgvAAbWdAbBCUn8IMsfLZKXb6SBPm724rGSTFP5ij5ZFrvRUEqDmyoyLXw0H3DJpyxA2Z/p3XQU2ANyflv3rpIcwM7f+O+yJwQeXkITOw7Q22RVP6SrXgZ3TaFjjiycblX4lp5rL1AFGOyUVMISMRQZZ9g=
+	t=1713861191; cv=none; b=WG++hm114rrwbjFaHJCmuL6BvtqCKiv3hFA2JHzRba9/Zka4Kodi/oRylzgfjBuhd2/RHWI1HAdYvaC5ksiTUeJSCYSHCL48xu80VLBjPYEX2QWXt/1bJY7boXB1HHrOyPLmYOPuBXO7+UdULqEZjopvAHs3pZtc2slbZqvEz80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713858264; c=relaxed/simple;
-	bh=JTZGZF6/n1PLTGlgTbj3EOnj4s2EN+2YlvWSFQvXm0I=;
+	s=arc-20240116; t=1713861191; c=relaxed/simple;
+	bh=hVmRLvRndrBf+S9tZPXFqqcz9HpV8GnsniOu8zvWmlM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=apYGz93hnQ8Y3qTQOq/aUhtyK20xJbkvdzyNsl7aapXWTo2mcqYPqjxHJFQrPwHKbVbpqGZ37aw9/XV2qBmiaQQk8FgA9zQpppYw/DiazURrIFuJihHHu4tKlH++8fu8+6FKsLYo6xL55TQlAutg26jtHr6CrvjdCWxxr331Z0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TCmTUS8r; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=OVcNUGvFwrv36b8bccPiMAO8gUm27Csf0a2RFR0bCMkGeIZWHFFKLIKT5tK54c+KfvvRhyGGgMSTmdcCLDq53ztzoZKC5kL4piN3gysJEqRQSkrq7dIlY9XRCoXBIhgLfY8bU4OZC52mzqHbXMwanPrVJoyim1CZbI6yw1a6s/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZSJcPr/E; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713858263; x=1745394263;
+  t=1713861190; x=1745397190;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JTZGZF6/n1PLTGlgTbj3EOnj4s2EN+2YlvWSFQvXm0I=;
-  b=TCmTUS8rBC5uPOUuPq6J5Umz6LOPXIjqb/c6sNrJpipvEYVRku2usNkL
-   xXyLiPXqaKJMQU1mXBaVaIgH+VJUNRIZmKDU5BHP4uSaq9N6Th2XFoGMD
-   2Yn5a/x3FfgTqv9rzPHIGqRwMVRK9W322NCd2AAogyuoA84XejIuzmm08
-   HtaK1mZpT1Mq4bMikXAIBrOiOQ9rlDUfphi2S8BwjEHXKhpNRmKLJfUXg
-   wh+RFFyWUlgaWBDT5ytEVAvqF9vp6tv1FbEoUDyRRJ4yJaaQ9WGWoNcFK
-   vVLGHwP/NevS+KBzGuXn9Yd2V4M9+oNo+Y78PelT7FYEM9QUawCeRPqO6
+  bh=hVmRLvRndrBf+S9tZPXFqqcz9HpV8GnsniOu8zvWmlM=;
+  b=ZSJcPr/EfHPSFDaYg4nUbOpVZUlNyzoQvl9G4IMe2hDSE/UPp5sSMjmp
+   6l35WXRBKyzeaDSkaw1RzbNOT+TQwPdRqruOugO33E7QMh/RbAu2LGSOC
+   QZuRKjovFxrZqc6aZ9DPe501UtSuSCzXecZM0MWeHKnWCDc3+B3Uqh/Qr
+   X2JY6JP1codY3XAh/069WOlpzyh3uvp550bC9iVhEtWl67QAlxCs6Kbu6
+   WVcuHS1aST5eLyWI0BJLZMfOZHIOG9QrOxFDeUweRrcxXerVIRTzQ3qqn
+   hreY30Nw1WmyInOK4t3paa2d3TVCLTowxDC6z0YiMrk++4FD6iw+aapSe
    g==;
-X-CSE-ConnectionGUID: 8BnXEuTLRX+9Pu7W1KA6Hg==
-X-CSE-MsgGUID: X8zM3DoQTsa5DMqa86bfMQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="9302929"
+X-CSE-ConnectionGUID: LIfAZirbRXqTqAWmaPedIQ==
+X-CSE-MsgGUID: YMdsTpMdSbWALJtTAqCaGQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="9652512"
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="9302929"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 00:44:22 -0700
-X-CSE-ConnectionGUID: v6rtPzSbT92u0dSUKcm7Eg==
-X-CSE-MsgGUID: MJbMIjI4Tn6JrDefDets/g==
+   d="scan'208";a="9652512"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 01:33:09 -0700
+X-CSE-ConnectionGUID: LoAngRZ9QJG2JogeH+ETtA==
+X-CSE-MsgGUID: ZagmzqyKR2Six0phluB9zA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="47565057"
+   d="scan'208";a="55496468"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa002.fm.intel.com with ESMTP; 23 Apr 2024 00:44:18 -0700
-Date: Tue, 23 Apr 2024 15:38:58 +0800
+  by fmviesa001.fm.intel.com with ESMTP; 23 Apr 2024 01:33:07 -0700
+Date: Tue, 23 Apr 2024 16:27:46 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Alan Tull <atull@opensource.altera.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Russ Weight <russ.weight@linux.dev>, linux-fpga@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] fpga: region: add owner module and take its refcount
-Message-ID: <ZidlkofF4YSj9xeW@yilunxu-OptiPlex-7050>
-References: <20240419083601.77403-1-marpagan@redhat.com>
+To: Peter Colberg <peter.colberg@intel.com>
+Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Russ Weight <russ.weight@linux.dev>,
+	Marco Pagani <marpagan@redhat.com>,
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: Re: [RFC PATCH v2 0/9] fpga: dfl: fix kernel warning on port
+ release/assign for SRIOV
+Message-ID: <ZidxApdiC4cOKYOp@yilunxu-OptiPlex-7050>
+References: <20240409233942.828440-1-peter.colberg@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -79,32 +79,42 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240419083601.77403-1-marpagan@redhat.com>
+In-Reply-To: <20240409233942.828440-1-peter.colberg@intel.com>
 
-On Fri, Apr 19, 2024 at 10:35:59AM +0200, Marco Pagani wrote:
-> The current implementation of the fpga region assumes that the low-level
-> module registers a driver for the parent device and uses its owner pointer
-> to take the module's refcount. This approach is problematic since it can
-> lead to a null pointer dereference while attempting to get the region
-> during programming if the parent device does not have a driver.
+On Tue, Apr 09, 2024 at 07:39:33PM -0400, Peter Colberg wrote:
+> DFL ports are registered as platform devices in PF mode. The port device
+> should be removed from the host when the user wants to configure the
+> port as a VF and pass through to a virtual machine. The FME device
+> ioctls DFL_FPGA_FME_PORT_RELEASE/ASSIGN are designed for this purpose.
 > 
-> To address this problem, add a module owner pointer to the fpga_region
-> struct and use it to take the module's refcount. Modify the functions for
-> registering a region to take an additional owner module parameter and
-> rename them to avoid conflicts. Use the old function names for helper
-> macros that automatically set the module that registers the region as the
-> owner. This ensures compatibility with existing low-level control modules
-> and reduces the chances of registering a region without setting the owner.
+> In the previous implementation, the port platform device is not completely
+> destroyed on port release: it is removed from the system by
+> platform_device_del(), but the platform device instance is retained.
+> When the port assign ioctl is called, the platform device is added back by
+> platform_device_add(), which conflicts with this comment of device_add():
+> "Do not call this routine more than once for any device structure", and
+> will cause a kernel warning at runtime.
 > 
-> Also, update the documentation to keep it consistent with the new interface
-> for registering an fpga region.
+> This patch tries to completely unregister the port platform device on
+> release and registers a new one on assign. But the main work is to remove
+> the dependency on struct dfl_feature_platform_data for many internal DFL
+> APIs. This structure holds many DFL enumeration infos for feature devices.
+> Many DFL APIs are expected to work with these info even when the port
+> platform device is unregistered. But with the change the platform_data will
+> be freed in this case. So this patch introduces a new structure
+> dfl_feature_dev_data for these APIs, which acts similarly to the previous
+> dfl_feature_platform_data. The dfl_feature_platform_data then only needs a
+> pointer to dfl_feature_dev_data to make the feature device driver work.
 > 
-> Fixes: 0fa20cdfcc1f ("fpga: fpga-region: device tree control for FPGA")
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Suggested-by: Xu Yilun <yilun.xu@intel.com>
-> Reviewed-by: Russ Weight <russ.weight@linux.dev>
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> Acked-by: Xu Yilun <yilun.xu@intel.com>
+> The single monolithic v1 patch is split into multiple, smaller patches
+> at the request of the maintainer. The first patch adds temporary macros
+> that alias dfl_feature_dev_data ("fdata") to dfl_feature_platform_data
+> ("pdata") and associated functions from the "fdata" to the corresponding
+> "pdata" variants. Subsequent patches separate out most of the symbol
+> name changes required by this patch series, one patch per file. The last
 
-Applied to for-next instead of v5
+One patch per file is not a requirement, simple replacement across
+multiple files won't cause trouble for reviewers. The important thing is
+that don't bury the key changes in these symbol replacement so that
+people can't get the point.
 
