@@ -1,64 +1,64 @@
-Return-Path: <linux-fpga+bounces-509-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-510-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 691C08AE097
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 11:07:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 759668AE13A
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 11:44:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CDA41C21217
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 09:07:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0446D1F216DE
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 09:44:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA15656772;
-	Tue, 23 Apr 2024 09:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0DD25914A;
+	Tue, 23 Apr 2024 09:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FmVwHJDI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h3cG41SD"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FAC5647B;
-	Tue, 23 Apr 2024 09:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34FE51016;
+	Tue, 23 Apr 2024 09:44:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713863233; cv=none; b=D1IgklT5CDEXFs1IAU5bb1YeSTq3YfQOQIwahT7HEd1Q14ooph11cojr2c9REMu42jL4Euwaj3P/R8NB+KWACriIKQeTKP5Cyzd3GOdIPw3nF6B0LX2MwKeP9dKiaFnu0BV6ZLF/MqaIDGz1Tma+yAbYm0GhQVJcubzINoNIa9Q=
+	t=1713865442; cv=none; b=d48BfsomMkzSLMYFcwVXAfYRHQKnPAvpOR/T6k1mWur7UoICp0iNJyUFkxeVBeTqpkyD3vuRMuredaQeG77Fvv1+u74SUMqHP4R2qlUAE5uh7j0Xlxy0iNLDMSJAB1pVnsBTO0VfOpXkJ1gArTQFXNAL/OEo07mr2Rk1b2jCwIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713863233; c=relaxed/simple;
-	bh=3sflhcA0hu5cpeDqgRxeLXG5DOKfuWBbLCsPck6cnnU=;
+	s=arc-20240116; t=1713865442; c=relaxed/simple;
+	bh=DumJhvG8fsGnw0uHUg1uUVDb/GabqHRZR1307Gu8s9M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SsEDWyrTacOCSGidvIlcVKKWSktE6grmQxm3/n85dCqYMqSK8nmd0Y8Vre9pYZ3zkrYVK5QsKd2n+8SS/bj6jXgitWlNuSdKP10u93SJwpH2P72DLKjRsHYzggYbkeJnb6NvEyP0WIvViR+R0WMwBb1vLfWhhXQNK9D5m6sG4lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FmVwHJDI; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=oGvErYiwAcgcK0TbPbgirhqYDUVvj60xLnqPePJ4EWncbFYFYnQQNJ7Ciorlo5ZxKD9Qxc8U29mb5G2GDZA2SY3eVvJKMuq2pjPGOmCOg5KYZfYTK9w+lOfGxYR4t6WhlNF0b/FO3OyOEMrPCY+SL15psF/aAdyLIddPL4g54uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h3cG41SD; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713863232; x=1745399232;
+  t=1713865441; x=1745401441;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3sflhcA0hu5cpeDqgRxeLXG5DOKfuWBbLCsPck6cnnU=;
-  b=FmVwHJDIe+FfyG/p/IVRVuEYGYh4jv3LdJ7vBAi4BLc7jYQ8X26CikuM
-   +qhz9of2amAkwNgJN7BkXS5zMhdgSOyjfa1yYyOa6R/RHq2McAT6Zfj8h
-   TFrDabbtK08haEnPEpDM3so/Kt15qVviNXeiW29X0GWY1JXhwsnQrSGCX
-   D50YWQj2oZw7h+pRcox5+IjQ85cSg8HDd9HLmphc9tZEzSW87sQXGkveb
-   1LjNp2NAZP22mNIQr98YCpshXzQ/nxVOn3Dw/WzuXUxMAu8vtwsXm65aZ
-   SckKmBjna/i6ZlJMN6k28Rt3rz0YH19HM4brJYRtFEpFWn9gKU29ZJCwz
-   w==;
-X-CSE-ConnectionGUID: jYvaClv6ShKUd2LqUux2xA==
-X-CSE-MsgGUID: 6aXRxPLkTiKVq9xDBTEguw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="9302210"
+  bh=DumJhvG8fsGnw0uHUg1uUVDb/GabqHRZR1307Gu8s9M=;
+  b=h3cG41SDm/nBFfs1oX56p2PgDp2U/YgU2APhV27s7Ihv8v6WEY0mRk4U
+   XzHvCucp0EmkfLkBZ2s10Q3BxiXwCiLN82owDX4ibhSkoBzLKUd3NpZM3
+   dyCLyQOEj2ifHFE/VCG0HODSkKYYeVtzxSWqkYn31ZmvlMVoFXYOQDtX0
+   NolJneYniCqMJZhfGnSXCIXfwGGi0ME5TVjPU28fdUG+TygiSXfJEBgit
+   AJoKP+ZpXcAPt7/nOquz4XzjjHpKiTz/lszSziZUyJe55qIKfIcVPbCY4
+   2YlgzGvEKSbbh/z5ifluP3tsR+toVyQjbPkCXIAerVbROPaVwvoxzGjCB
+   A==;
+X-CSE-ConnectionGUID: e/pfZVuTTGW0u/mhOfCTdQ==
+X-CSE-MsgGUID: 0lNFnT+7SuiWWZdU1tvWJw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="19990085"
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="9302210"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 02:07:12 -0700
-X-CSE-ConnectionGUID: z/rQpEQZRQqgs+rjy2bg0g==
-X-CSE-MsgGUID: 6D40TMoGTsadoQQyHbX4/Q==
+   d="scan'208";a="19990085"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 02:44:00 -0700
+X-CSE-ConnectionGUID: XVZWAwvQR66SJnsbejWocA==
+X-CSE-MsgGUID: LChqrwi+T5Oo5idjBqIjfg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="55247181"
+   d="scan'208";a="47598385"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa002.jf.intel.com with ESMTP; 23 Apr 2024 02:07:08 -0700
-Date: Tue, 23 Apr 2024 17:01:48 +0800
+  by fmviesa002.fm.intel.com with ESMTP; 23 Apr 2024 02:43:57 -0700
+Date: Tue, 23 Apr 2024 17:38:37 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
 To: Peter Colberg <peter.colberg@intel.com>
 Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
@@ -67,11 +67,11 @@ Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
 	Russ Weight <russ.weight@linux.dev>,
 	Marco Pagani <marpagan@redhat.com>,
 	Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: Re: [RFC PATCH v2 2/9] fpga: dfl: migrate AFU DMA region management
+Subject: Re: [RFC PATCH v2 4/9] fpga: dfl: migrate FPGA Management Engine
  driver to dfl_feature_dev_data
-Message-ID: <Zid4/GH1hL5YRboH@yilunxu-OptiPlex-7050>
+Message-ID: <ZieBnQBDGgowf+y7@yilunxu-OptiPlex-7050>
 References: <20240409233942.828440-1-peter.colberg@intel.com>
- <20240409233942.828440-3-peter.colberg@intel.com>
+ <20240409233942.828440-5-peter.colberg@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -80,115 +80,244 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240409233942.828440-3-peter.colberg@intel.com>
+In-Reply-To: <20240409233942.828440-5-peter.colberg@intel.com>
 
-On Tue, Apr 09, 2024 at 07:39:35PM -0400, Peter Colberg wrote:
+On Tue, Apr 09, 2024 at 07:39:37PM -0400, Peter Colberg wrote:
 > This change separates out most of the symbol name changes required by this
-> patch series for the file: drivers/fpga/dfl-afu-dma-region.c. 
-
-> This is done
-> to split a single monolithic change into multiple, smaller patches at the
+> patch series for the file: drivers/fpga/dfl-fme-main.c. This is done to
+> split a single monolithic change into multiple, smaller patches at the
 > request of the maintainer.
-
-This sentence provides no useful info.
-
 > 
 > Signed-off-by: Peter Colberg <peter.colberg@intel.com>
 > ---
 > v2:
 > - Split monolithic patch into series at request of maintainer
-> - Reorder local variables in afu_dma_unpin_pages() to reverse Christmas
->   tree order.
+> - Change fme_hdr_ioctl_*() to receive dfl_feature_dev_data instead of
+>   dfl_feature_platform_data.
+> - Remove unused local variable pdata in fme_dev_{init,destroy}().
 > ---
->  drivers/fpga/dfl-afu-dma-region.c | 119 +++++++++++++++---------------
->  1 file changed, 61 insertions(+), 58 deletions(-)
+>  drivers/fpga/dfl-fme-main.c | 68 ++++++++++++++++++++-----------------
+>  1 file changed, 36 insertions(+), 32 deletions(-)
 > 
-> diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
-> index 02b60fde0430..fb45e51b12af 100644
-> --- a/drivers/fpga/dfl-afu-dma-region.c
-> +++ b/drivers/fpga/dfl-afu-dma-region.c
-> @@ -16,26 +16,26 @@
+> diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
+> index 864924f68f5e..7f119b09b54e 100644
+> --- a/drivers/fpga/dfl-fme-main.c
+> +++ b/drivers/fpga/dfl-fme-main.c
+> @@ -135,10 +135,10 @@ static const struct attribute_group fme_hdr_group = {
+>  	.attrs = fme_hdr_attrs,
+>  };
 >  
->  #include "dfl-afu.h"
->  
-> -void afu_dma_region_init(struct dfl_feature_platform_data *pdata)
-> +void afu_dma_region_init(struct dfl_feature_dev_data *fdata)
+> -static long fme_hdr_ioctl_release_port(struct dfl_feature_platform_data *pdata,
+> +static long fme_hdr_ioctl_release_port(struct dfl_feature_dev_data *fdata,
+>  				       unsigned long arg)
 >  {
-> -	struct dfl_afu *afu = dfl_fpga_pdata_get_private(pdata);
-> +	struct dfl_afu *afu = dfl_fpga_fdata_get_private(fdata);
+> -	struct dfl_fpga_cdev *cdev = pdata->dfl_cdev;
+> +	struct dfl_fpga_cdev *cdev = fdata->dfl_cdev;
+>  	int port_id;
 >  
->  	afu->dma_regions = RB_ROOT;
+>  	if (get_user(port_id, (int __user *)arg))
+> @@ -147,10 +147,10 @@ static long fme_hdr_ioctl_release_port(struct dfl_feature_platform_data *pdata,
+>  	return dfl_fpga_cdev_release_port(cdev, port_id);
 >  }
 >  
->  /**
->   * afu_dma_pin_pages - pin pages of given dma memory region
-> - * @pdata: feature device platform data
-> + * @fdata: feature dev data
->   * @region: dma memory region to be pinned
->   *
->   * Pin all the pages of given dfl_afu_dma_region.
->   * Return 0 for success or negative error code.
->   */
-> -static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
-> +static int afu_dma_pin_pages(struct dfl_feature_dev_data *fdata,
->  			     struct dfl_afu_dma_region *region)
+> -static long fme_hdr_ioctl_assign_port(struct dfl_feature_platform_data *pdata,
+> +static long fme_hdr_ioctl_assign_port(struct dfl_feature_dev_data *fdata,
+>  				      unsigned long arg)
 >  {
->  	int npages = region->length >> PAGE_SHIFT;
-> -	struct device *dev = &pdata->dev->dev;
-> +	struct device *dev = &fdata->dev->dev;
->  	int ret, pinned;
+> -	struct dfl_fpga_cdev *cdev = pdata->dfl_cdev;
+> +	struct dfl_fpga_cdev *cdev = fdata->dfl_cdev;
+>  	int port_id;
 >  
->  	ret = account_locked_vm(current->mm, npages, true);
-> @@ -73,17 +73,17 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
->  
->  /**
->   * afu_dma_unpin_pages - unpin pages of given dma memory region
-> - * @pdata: feature device platform data
-> + * @fdata: feature dev data
->   * @region: dma memory region to be unpinned
->   *
->   * Unpin all the pages of given dfl_afu_dma_region.
->   * Return 0 for success or negative error code.
->   */
-> -static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
-> +static void afu_dma_unpin_pages(struct dfl_feature_dev_data *fdata,
->  				struct dfl_afu_dma_region *region)
+>  	if (get_user(port_id, (int __user *)arg))
+> @@ -163,13 +163,13 @@ static long fme_hdr_ioctl(struct platform_device *pdev,
+>  			  struct dfl_feature *feature,
+>  			  unsigned int cmd, unsigned long arg)
 >  {
->  	long npages = region->length >> PAGE_SHIFT;
-> -	struct device *dev = &pdata->dev->dev;
-> +	struct device *dev = &fdata->dev->dev;
->  
->  	unpin_user_pages(region->pages, npages);
->  	kfree(region->pages);
-> @@ -133,20 +133,21 @@ static bool dma_region_check_iova(struct dfl_afu_dma_region *region,
->  
->  /**
->   * afu_dma_region_add - add given dma region to rbtree
-> - * @pdata: feature device platform data
-> + * @fdata: feature dev data
->   * @region: dma region to be added
->   *
->   * Return 0 for success, -EEXIST if dma region has already been added.
->   *
-> - * Needs to be called with pdata->lock heold.
-> + * Needs to be called with fdata->lock held.
->   */
-> -static int afu_dma_region_add(struct dfl_feature_platform_data *pdata,
-> +static int afu_dma_region_add(struct dfl_feature_dev_data *fdata,
->  			      struct dfl_afu_dma_region *region)
->  {
-> -	struct dfl_afu *afu = dfl_fpga_pdata_get_private(pdata);
-> +	struct dfl_afu *afu = dfl_fpga_fdata_get_private(fdata);
-> +	struct device *dev = &fdata->dev->dev;
+> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
 
-Don't introduce any other unnecessary changes in the big
-symbol replacement patch.  People could read over all the same
-replacements quickly, even if they are massive. But if there are
-some other changes in between...
+Maybe firstly make a patch to:
 
->  	struct rb_node **new, *parent = NULL;
+  #define to_dfl_feature_platform_data	dev_get_platdata
+
+And s/to_dfl_feature_platform_data/dev_get_platdata
+
+Then we could do replacements in this patch more friendly.
+
+> +	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(&pdev->dev);
 >  
-> -	dev_dbg(&pdata->dev->dev, "add region (iova = %llx)\n",
-> +	dev_dbg(dev, "add region (iova = %llx)\n",
->  		(unsigned long long)region->iova);
+>  	switch (cmd) {
+>  	case DFL_FPGA_FME_PORT_RELEASE:
+> -		return fme_hdr_ioctl_release_port(pdata, arg);
+> +		return fme_hdr_ioctl_release_port(fdata, arg);
+>  	case DFL_FPGA_FME_PORT_ASSIGN:
+> -		return fme_hdr_ioctl_assign_port(pdata, arg);
+> +		return fme_hdr_ioctl_assign_port(fdata, arg);
+>  	}
+>  
+>  	return -ENODEV;
+> @@ -411,14 +411,14 @@ static int power_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>  static int power_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+>  			     u32 attr, int channel, long val)
+>  {
+> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev->parent);
+> +	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(dev);
+>  	struct dfl_feature *feature = dev_get_drvdata(dev);
+>  	int ret = 0;
+>  	u64 v;
+>  
+>  	val = clamp_val(val / MICRO, 0, PWR_THRESHOLD_MAX);
+>  
+> -	mutex_lock(&pdata->lock);
+> +	mutex_lock(&fdata->lock);
+>  
+>  	switch (attr) {
+>  	case hwmon_power_max:
+> @@ -438,7 +438,7 @@ static int power_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+>  		break;
+>  	}
+>  
+> -	mutex_unlock(&pdata->lock);
+> +	mutex_unlock(&fdata->lock);
+>  
+>  	return ret;
+>  }
+> @@ -589,7 +589,7 @@ static struct dfl_feature_driver fme_feature_drvs[] = {
+>  	},
+>  };
+>  
+> -static long fme_ioctl_check_extension(struct dfl_feature_platform_data *pdata,
+> +static long fme_ioctl_check_extension(struct dfl_feature_dev_data *fdata,
+>  				      unsigned long arg)
+>  {
+>  	/* No extension support for now */
+> @@ -600,19 +600,21 @@ static int fme_open(struct inode *inode, struct file *filp)
+>  {
+>  	struct platform_device *fdev = dfl_fpga_inode_to_feature_dev(inode);
+>  	struct dfl_feature_platform_data *pdata = dev_get_platdata(&fdev->dev);
+
+Why not do the same replacement here?
+
+> +	struct dfl_feature_dev_data *fdata;
+>  	int ret;
+>  
+>  	if (WARN_ON(!pdata))
+>  		return -ENODEV;
+>  
+> -	mutex_lock(&pdata->lock);
+> -	ret = dfl_feature_dev_use_begin(pdata, filp->f_flags & O_EXCL);
+> +	fdata = pdata;
+> +	mutex_lock(&fdata->lock);
+> +	ret = dfl_feature_dev_use_begin(fdata, filp->f_flags & O_EXCL);
+>  	if (!ret) {
+>  		dev_dbg(&fdev->dev, "Device File Opened %d Times\n",
+> -			dfl_feature_dev_use_count(pdata));
+> +			dfl_feature_dev_use_count(fdata));
+>  		filp->private_data = pdata;
+>  	}
+> -	mutex_unlock(&pdata->lock);
+> +	mutex_unlock(&fdata->lock);
+>  
+>  	return ret;
+>  }
+> @@ -620,19 +622,20 @@ static int fme_open(struct inode *inode, struct file *filp)
+>  static int fme_release(struct inode *inode, struct file *filp)
+>  {
+>  	struct dfl_feature_platform_data *pdata = filp->private_data;
+> -	struct platform_device *pdev = pdata->dev;
+> +	struct dfl_feature_dev_data *fdata = pdata;
+
+ditto.
+
+> +	struct platform_device *pdev = fdata->dev;
+>  	struct dfl_feature *feature;
+>  
+>  	dev_dbg(&pdev->dev, "Device File Release\n");
+>  
+> -	mutex_lock(&pdata->lock);
+> -	dfl_feature_dev_use_end(pdata);
+> +	mutex_lock(&fdata->lock);
+> +	dfl_feature_dev_use_end(fdata);
+>  
+> -	if (!dfl_feature_dev_use_count(pdata))
+> -		dfl_fpga_dev_for_each_feature(pdata, feature)
+> +	if (!dfl_feature_dev_use_count(fdata))
+> +		dfl_fpga_dev_for_each_feature(fdata, feature)
+>  			dfl_fpga_set_irq_triggers(feature, 0,
+>  						  feature->nr_irqs, NULL);
+> -	mutex_unlock(&pdata->lock);
+> +	mutex_unlock(&fdata->lock);
+>  
+>  	return 0;
+>  }
+> @@ -640,7 +643,8 @@ static int fme_release(struct inode *inode, struct file *filp)
+>  static long fme_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  {
+>  	struct dfl_feature_platform_data *pdata = filp->private_data;
+> -	struct platform_device *pdev = pdata->dev;
+> +	struct dfl_feature_dev_data *fdata = pdata;
+
+ditto
+
+> +	struct platform_device *pdev = fdata->dev;
+>  	struct dfl_feature *f;
+>  	long ret;
+>  
+> @@ -650,7 +654,7 @@ static long fme_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  	case DFL_FPGA_GET_API_VERSION:
+>  		return DFL_FPGA_API_VERSION;
+>  	case DFL_FPGA_CHECK_EXTENSION:
+> -		return fme_ioctl_check_extension(pdata, arg);
+> +		return fme_ioctl_check_extension(fdata, arg);
+>  	default:
+>  		/*
+>  		 * Let sub-feature's ioctl function to handle the cmd.
+> @@ -658,7 +662,7 @@ static long fme_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  		 * handled in this sub feature, and returns 0 or other
+>  		 * error code if cmd is handled.
+>  		 */
+> -		dfl_fpga_dev_for_each_feature(pdata, f) {
+> +		dfl_fpga_dev_for_each_feature(fdata, f) {
+>  			if (f->ops && f->ops->ioctl) {
+>  				ret = f->ops->ioctl(pdev, f, cmd, arg);
+>  				if (ret != -ENODEV)
+> @@ -672,27 +676,27 @@ static long fme_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  
+>  static int fme_dev_init(struct platform_device *pdev)
+>  {
+> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
+> +	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(&pdev->dev);
+>  	struct dfl_fme *fme;
+>  
+>  	fme = devm_kzalloc(&pdev->dev, sizeof(*fme), GFP_KERNEL);
+>  	if (!fme)
+>  		return -ENOMEM;
+>  
+> -	mutex_lock(&pdata->lock);
+> -	dfl_fpga_pdata_set_private(pdata, fme);
+> -	mutex_unlock(&pdata->lock);
+> +	mutex_lock(&fdata->lock);
+> +	dfl_fpga_fdata_set_private(fdata, fme);
+> +	mutex_unlock(&fdata->lock);
+>  
+>  	return 0;
+>  }
+>  
+>  static void fme_dev_destroy(struct platform_device *pdev)
+>  {
+> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(&pdev->dev);
+> +	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(&pdev->dev);
+>  
+> -	mutex_lock(&pdata->lock);
+> -	dfl_fpga_pdata_set_private(pdata, NULL);
+> -	mutex_unlock(&pdata->lock);
+> +	mutex_lock(&fdata->lock);
+> +	dfl_fpga_fdata_set_private(fdata, NULL);
+> +	mutex_unlock(&fdata->lock);
+>  }
+>  
+>  static const struct file_operations fme_fops = {
+> -- 
+> 2.44.0
+> 
+> 
 
