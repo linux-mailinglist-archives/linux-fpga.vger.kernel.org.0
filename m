@@ -1,110 +1,76 @@
-Return-Path: <linux-fpga+bounces-506-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-507-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C798ADE5C
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 09:38:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 381CB8ADE73
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 09:44:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5100B28176A
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 07:38:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69F091C212F5
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 07:44:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 793094778C;
-	Tue, 23 Apr 2024 07:38:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920D747A5D;
+	Tue, 23 Apr 2024 07:44:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g2nCNumm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TCmTUS8r"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F5F46441;
-	Tue, 23 Apr 2024 07:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1091C698;
+	Tue, 23 Apr 2024 07:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713857931; cv=none; b=auiBXftCscdy1v3JteyE6UXnPdDO023fsUB1RZrT0eJj5lV2XXQ6QbP+zXeaEOZ44AVWBEL0iCz7uz7rGedi0/ZODbdZJshyic8cKxewU4/L8JUzFqmk8ATaksWz1PQj5vNIH3QvGU7gWCamQaXqaBq0JwIx8wPT6V+MQ2AEBNc=
+	t=1713858264; cv=none; b=XaRmYtH650PXhm0CLRgvAAbWdAbBCUn8IMsfLZKXb6SBPm724rGSTFP5ij5ZFrvRUEqDmyoyLXw0H3DJpyxA2Z/p3XQU2ANyflv3rpIcwM7f+O+yJwQeXkITOw7Q22RVP6SrXgZ3TaFjjiycblX4lp5rL1AFGOyUVMISMRQZZ9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713857931; c=relaxed/simple;
-	bh=mjRkFfdBtZbVYBPrvsjPmWl58HkXWr16xgIBP3dQroM=;
+	s=arc-20240116; t=1713858264; c=relaxed/simple;
+	bh=JTZGZF6/n1PLTGlgTbj3EOnj4s2EN+2YlvWSFQvXm0I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=COuefhTOhK8DI4ss2fOuEjv8uAb0+mEcyP6subvAxUnwnFt4Xv/wA0S6q1dYcudFqWQs7E9pwGod0fmudnC0pU8PEWo9bLHx8OoSA/4XIUvV472TggvfkSVDmve/iE2brcMDUfSLkJuKQLMmq4XpcX09NUmVeRKEwaNGqwajEbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g2nCNumm; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=apYGz93hnQ8Y3qTQOq/aUhtyK20xJbkvdzyNsl7aapXWTo2mcqYPqjxHJFQrPwHKbVbpqGZ37aw9/XV2qBmiaQQk8FgA9zQpppYw/DiazURrIFuJihHHu4tKlH++8fu8+6FKsLYo6xL55TQlAutg26jtHr6CrvjdCWxxr331Z0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TCmTUS8r; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713857929; x=1745393929;
+  t=1713858263; x=1745394263;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=mjRkFfdBtZbVYBPrvsjPmWl58HkXWr16xgIBP3dQroM=;
-  b=g2nCNummvlRj+JVkPdJL1qOV+3rWgeywty2ipzANBbnJsXrpqJJhNC7x
-   dGhRdKrMZSNTTUv7zqboihF8yRIa41pCGR5wGmoqMRkgLsiM8PALfGbR1
-   QdhdVn+mJmY7z6GSblg/InVuNT9Rjr5AtxSwnZ3T6ufoZTK95L2gBnmWx
-   axZ/DlclZSuohycmHPNp5Se6llS/di/BlqDwFb3xVT7eUAq0rvYY2Du5K
-   lXp5pwMepesZQcGKV6qnCKNpwAwNpF8ae4EQ3zNICZrq10y2XAS9Y9ttD
-   omYiHR2SC0iie8sQ17O7EN5NbilH9cgNWuen1tOzmGrUrFS0yOTUm+Cb1
-   A==;
-X-CSE-ConnectionGUID: GvO6N5AUR2yId7/OmN5Dmw==
-X-CSE-MsgGUID: SWnKJNYuTzqKvj7J1LwpQg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="31918033"
+  bh=JTZGZF6/n1PLTGlgTbj3EOnj4s2EN+2YlvWSFQvXm0I=;
+  b=TCmTUS8rBC5uPOUuPq6J5Umz6LOPXIjqb/c6sNrJpipvEYVRku2usNkL
+   xXyLiPXqaKJMQU1mXBaVaIgH+VJUNRIZmKDU5BHP4uSaq9N6Th2XFoGMD
+   2Yn5a/x3FfgTqv9rzPHIGqRwMVRK9W322NCd2AAogyuoA84XejIuzmm08
+   HtaK1mZpT1Mq4bMikXAIBrOiOQ9rlDUfphi2S8BwjEHXKhpNRmKLJfUXg
+   wh+RFFyWUlgaWBDT5ytEVAvqF9vp6tv1FbEoUDyRRJ4yJaaQ9WGWoNcFK
+   vVLGHwP/NevS+KBzGuXn9Yd2V4M9+oNo+Y78PelT7FYEM9QUawCeRPqO6
+   g==;
+X-CSE-ConnectionGUID: 8BnXEuTLRX+9Pu7W1KA6Hg==
+X-CSE-MsgGUID: X8zM3DoQTsa5DMqa86bfMQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="9302929"
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="31918033"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 00:38:48 -0700
-X-CSE-ConnectionGUID: s/KDoHdVTiSM0XnX3bJmkw==
-X-CSE-MsgGUID: mzxAigJiRoSRJZwbwrOibA==
+   d="scan'208";a="9302929"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 00:44:22 -0700
+X-CSE-ConnectionGUID: v6rtPzSbT92u0dSUKcm7Eg==
+X-CSE-MsgGUID: MJbMIjI4Tn6JrDefDets/g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="24332315"
+   d="scan'208";a="47565057"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa006.fm.intel.com with ESMTP; 23 Apr 2024 00:38:37 -0700
-Date: Tue, 23 Apr 2024 15:33:16 +0800
+  by fmviesa002.fm.intel.com with ESMTP; 23 Apr 2024 00:44:18 -0700
+Date: Tue, 23 Apr 2024 15:38:58 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Corey Minyard <minyard@acm.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Peter Rosin <peda@axentia.se>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-	Keyur Chudgar <keyur@os.amperecomputing.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Xiang Chen <chenxiang66@hisilicon.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
+To: Marco Pagani <marpagan@redhat.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Alan Tull <atull@opensource.altera.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>, Arnd Bergmann <arnd@arndb.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Tom Rix <trix@redhat.com>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Randy Dunlap <rdunlap@infradead.org>, Rob Herring <robh@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	openipmi-developer@lists.sourceforge.net,
-	linux-integrity@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-	linux-omap@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 33/34] drivers: remove incorrect of_match_ptr/ACPI_PTR
- annotations
-Message-ID: <ZidkPHp27jz0t6t3@yilunxu-OptiPlex-7050>
-References: <20240403080702.3509288-1-arnd@kernel.org>
- <20240403080702.3509288-34-arnd@kernel.org>
+	Russ Weight <russ.weight@linux.dev>, linux-fpga@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] fpga: region: add owner module and take its refcount
+Message-ID: <ZidlkofF4YSj9xeW@yilunxu-OptiPlex-7050>
+References: <20240419083601.77403-1-marpagan@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -113,20 +79,32 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240403080702.3509288-34-arnd@kernel.org>
+In-Reply-To: <20240419083601.77403-1-marpagan@redhat.com>
 
-> diff --git a/drivers/fpga/versal-fpga.c b/drivers/fpga/versal-fpga.c
-> index 3710e8f01be2..e6189106c468 100644
-> --- a/drivers/fpga/versal-fpga.c
-> +++ b/drivers/fpga/versal-fpga.c
-> @@ -69,7 +69,7 @@ static struct platform_driver versal_fpga_driver = {
->  	.probe = versal_fpga_probe,
->  	.driver = {
->  		.name = "versal_fpga_manager",
-> -		.of_match_table = of_match_ptr(versal_fpga_of_match),
-> +		.of_match_table = versal_fpga_of_match,
+On Fri, Apr 19, 2024 at 10:35:59AM +0200, Marco Pagani wrote:
+> The current implementation of the fpga region assumes that the low-level
+> module registers a driver for the parent device and uses its owner pointer
+> to take the module's refcount. This approach is problematic since it can
+> lead to a null pointer dereference while attempting to get the region
+> during programming if the parent device does not have a driver.
+> 
+> To address this problem, add a module owner pointer to the fpga_region
+> struct and use it to take the module's refcount. Modify the functions for
+> registering a region to take an additional owner module parameter and
+> rename them to avoid conflicts. Use the old function names for helper
+> macros that automatically set the module that registers the region as the
+> owner. This ensures compatibility with existing low-level control modules
+> and reduces the chances of registering a region without setting the owner.
+> 
+> Also, update the documentation to keep it consistent with the new interface
+> for registering an fpga region.
+> 
+> Fixes: 0fa20cdfcc1f ("fpga: fpga-region: device tree control for FPGA")
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Suggested-by: Xu Yilun <yilun.xu@intel.com>
+> Reviewed-by: Russ Weight <russ.weight@linux.dev>
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-For this part
-
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Applied to for-next instead of v5
 
