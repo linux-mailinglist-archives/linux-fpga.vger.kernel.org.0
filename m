@@ -1,64 +1,64 @@
-Return-Path: <linux-fpga+bounces-514-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-515-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB7D48AEAEB
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 17:22:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D64C8AEB4D
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 17:41:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FCFD28AA2B
-	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 15:22:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F669B2124E
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Apr 2024 15:41:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0703113BADD;
-	Tue, 23 Apr 2024 15:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B981513C694;
+	Tue, 23 Apr 2024 15:41:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ERD2tFq9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UuQ45rdo"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D425820E;
-	Tue, 23 Apr 2024 15:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E94513BACF;
+	Tue, 23 Apr 2024 15:41:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713885716; cv=none; b=RlVKw1fZLvGs79yn/FSh9V4C8u0nnzXUNEZTtmKiZyTgf9whK9LecdkEsJc5Blc36O/5pIyfVm7G2AUaJ0JKXkCvl9WA0+WA0/cgrhebQcUO2zde68Hbf2jCTSZ+UmRtAqWk04nqw9PZVfVNvEx8haLhCwoBpkjvJ2UyuvQJfxE=
+	t=1713886895; cv=none; b=usJ3T7HR8hNES8S2yEvy3dah/Xl5CaIR0CI76mqvUP6qtZjg7iw8SH4ENqfmvHzIPPoxx9t2OBY285uLQ8Bg9qvicvgfRKe214yZj/12xNyyG7jrLkeZfSqOUhDhB2ieJM0UATbZnBssnG7k8jC65xbkOJykbLR4euyNkUAAj1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713885716; c=relaxed/simple;
-	bh=8q+5COullrGgMK603hfx3nS02g/+X5nJrkqKlC5uCik=;
+	s=arc-20240116; t=1713886895; c=relaxed/simple;
+	bh=2zaohWkr4/ZzVOQ18CabMhpIgO+D+z5wejwVM49hizY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ryXQk8Zz4miBocHsOav4uqJW5Ts9Qmpa7KtZ53nS7JY7egwuldu6U6kpd+7uSanWuih0MlBcJ4t5b9T68iiS97uR/BT9Nc0q8YJJcj9YZOhMR7lDe4Ljfoo2DgB3c/QXTm/l9d0U7cO5vBKOiqaZXeb7JQrokl6dzSUg/E7snNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ERD2tFq9; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=U0Bt4CVgRn2cDBUznAgnCuZaHnYv9z340a9ISi0g6pG1gTo34xVxVSww3Mz2tNHPhGirzlNc1hye+wVpehvIoyXyT52mlDLeiarwRrqeXYftySnlWhK7DnPIk+712qUqxflwOp18uETFcIVS3JjF0FdROHdU4GsJe4YiliToRYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UuQ45rdo; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713885715; x=1745421715;
+  t=1713886894; x=1745422894;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8q+5COullrGgMK603hfx3nS02g/+X5nJrkqKlC5uCik=;
-  b=ERD2tFq9NGvUyfNBN0HJwMVCssus1a4DKFVYTAn9I+v2NjO4arKSFOR7
-   MG1MhuZJ7u1P2mvu6kq4cuxxuZ7ItSjtGdd6LV3jXGQrsiqZgpYp1juX9
-   opBxLFSM/rh5ZTDwu692W09ZQ3gtxj0jj//VbYapeKS0q1k9LODTV3x5y
-   8F0rbEQnB0aBU3+7ZO+ZSLehsIcibYyG1GEOnxLETs+qbAgMfJe0zsXGI
-   3DNqW02DjEq+Mp27eRS0/Edh8d2bYc48YNXbIhqMzfWUQuffD/YamYEoh
-   HrCUfdYvF8OHr2/ezryzuTcRijAMgYAogWCHQYNSHSz1B+sw1MbkBuOhv
-   g==;
-X-CSE-ConnectionGUID: baCd5ciQSJeKZc01o3YAQg==
-X-CSE-MsgGUID: WfqL9q+JST+e+kAn+W6Z+g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="20894090"
+  bh=2zaohWkr4/ZzVOQ18CabMhpIgO+D+z5wejwVM49hizY=;
+  b=UuQ45rdoKNvNYqQS85d/giJl9YJV+RjDf8+DrNB+c/vX3PHFa/46pVaG
+   YYxX6t8W+neCClxD4fu8kiMRYx6m7kQlX3hg37kr2deJ3XHFQzO+fzf5F
+   YgZOtvNp7qCLlZzldG/8ut6HYgIdKO+Li8Ihg1y+hHy51df0ANvan9Gqv
+   ZcAfsTRJfXdwaU8v7TGEDqlY/80XBOhWQYO7vIDzyI+KFc/xe0u1cFhkN
+   5Ue1Dr0IvrdZdugpC7NH0bAZl9D+ZV7dC8wB5Jxmg8mJcV+19aCOnqJxt
+   GBtrCJ/i0y7jQcFJme4CAbmFjzjx231Mm1++4QvYifz0AGpwl7McD2Uya
+   A==;
+X-CSE-ConnectionGUID: GnVqRvyfRTWOKHps4alGEA==
+X-CSE-MsgGUID: UOhc6jXjTT6a8zCHIQUfoA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="9353066"
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="20894090"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 08:21:55 -0700
-X-CSE-ConnectionGUID: XBqXt0IKS+6PsV6aoAeJHA==
-X-CSE-MsgGUID: ICuqx3peTZ6KDBShrPd67g==
+   d="scan'208";a="9353066"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 08:41:25 -0700
+X-CSE-ConnectionGUID: q0DIaQ9RQC6k9uzKEUrLqg==
+X-CSE-MsgGUID: vL5W4u/1Sp+NCad6M2FZ0w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="24271344"
+   d="scan'208";a="24381468"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa010.jf.intel.com with ESMTP; 23 Apr 2024 08:21:52 -0700
-Date: Tue, 23 Apr 2024 23:16:31 +0800
+  by orviesa009.jf.intel.com with ESMTP; 23 Apr 2024 08:41:22 -0700
+Date: Tue, 23 Apr 2024 23:36:02 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
 To: Peter Colberg <peter.colberg@intel.com>
 Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
@@ -66,12 +66,13 @@ Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
 	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Russ Weight <russ.weight@linux.dev>,
 	Marco Pagani <marpagan@redhat.com>,
-	Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: Re: [RFC PATCH v2 8/9] fpga: dfl: migrate dfl_get_feature_by_id() to
- dfl_feature_dev_data
-Message-ID: <ZifQz/QJvYpFljMv@yilunxu-OptiPlex-7050>
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+	Russ Weight <russell.h.weight@intel.com>
+Subject: Re: [RFC PATCH v2 9/9] fpga: dfl: fix kernel warning on port
+ release/assign for SRIOV
+Message-ID: <ZifVYiMgssOFjM17@yilunxu-OptiPlex-7050>
 References: <20240409233942.828440-1-peter.colberg@intel.com>
- <20240409233942.828440-9-peter.colberg@intel.com>
+ <20240409233942.828440-10-peter.colberg@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -80,217 +81,87 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240409233942.828440-9-peter.colberg@intel.com>
+In-Reply-To: <20240409233942.828440-10-peter.colberg@intel.com>
 
-On Tue, Apr 09, 2024 at 07:39:41PM -0400, Peter Colberg wrote:
-> This change separates out most of the symbol name changes required by this
-> patch series for the function: dfl_get_feature_by_id(). This is done to
-> split a single monolithic change into multiple, smaller patches at the
-> request of the maintainer.
+On Tue, Apr 09, 2024 at 07:39:42PM -0400, Peter Colberg wrote:
+> From: Xu Yilun <yilun.xu@intel.com>
 > 
+> DFL ports are registered as platform devices in PF mode. The port device
+> should be removed from the host when the user wants to configure the
+> port as a VF and pass through to a virtual machine. The FME device
+> ioctls DFL_FPGA_FME_PORT_RELEASE/ASSIGN are designed for this purpose.
+> 
+> In the previous implementation, the port platform device is not completely
+> destroyed on port release: it is removed from the system by
+> platform_device_del(), but the platform device instance is retained.
+> When the port assign ioctl is called, the platform device is added back by
+> platform_device_add(), which conflicts with this comment of device_add():
+> "Do not call this routine more than once for any device structure", and
+> will cause a kernel warning at runtime.
+> 
+> This patch tries to completely unregister the port platform device on
+> release and registers a new one on assign. But the main work is to remove
+> the dependency on struct dfl_feature_platform_data for many internal DFL
+> APIs. This structure holds many DFL enumeration infos for feature devices.
+> Many DFL APIs are expected to work with these info even when the port
+> platform device is unregistered. But with the change the platform_data will
+> be freed in this case. So this patch introduces a new structure
+> dfl_feature_dev_data for these APIs, which acts similarly to the previous
+> dfl_feature_platform_data. The dfl_feature_platform_data then only needs a
+> pointer to dfl_feature_dev_data to make the feature device driver work.
+> 
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 > Signed-off-by: Peter Colberg <peter.colberg@intel.com>
 > ---
 > v2:
 > - Split monolithic patch into series at request of maintainer
+> - Substitute binfo->type for removed function feature_dev_id_type() in
+>   parse_feature_irqs().
+> - Return ERR_PTR(-ENOMEM) on !feature->params in
+>   binfo_create_feature_dev_data().
+> - Reorder cdev as first member of struct dfl_feature_platform_data
+>   such that container_of() to obtain pdata evaluates to a no-op.
+> - Align kernel-doc function name for __dfl_fpga_cdev_find_port_data().
 > ---
->  drivers/fpga/dfl-afu-error.c |  59 +++++++------
->  drivers/fpga/dfl-afu-main.c  | 166 ++++++++++++++++++-----------------
->  drivers/fpga/dfl-afu.h       |  26 +++---
->  drivers/fpga/dfl-fme-error.c |  98 +++++++++++----------
->  drivers/fpga/dfl-fme-main.c  |  18 ++--
->  drivers/fpga/dfl-fme-pr.c    |   6 +-
->  drivers/fpga/dfl.c           |   3 +-
->  drivers/fpga/dfl.h           |  13 ++-
->  8 files changed, 203 insertions(+), 186 deletions(-)
+>  drivers/fpga/dfl-afu-main.c |   9 +-
+>  drivers/fpga/dfl-fme-br.c   |  24 +-
+>  drivers/fpga/dfl-fme-main.c |   6 +-
+>  drivers/fpga/dfl.c          | 430 +++++++++++++++++-------------------
+>  drivers/fpga/dfl.h          |  86 +++++---
+>  5 files changed, 281 insertions(+), 274 deletions(-)
 > 
-> diff --git a/drivers/fpga/dfl-afu-error.c b/drivers/fpga/dfl-afu-error.c
-> index ab7be6217368..0f392d1f6d45 100644
-> --- a/drivers/fpga/dfl-afu-error.c
-> +++ b/drivers/fpga/dfl-afu-error.c
-> @@ -28,37 +28,36 @@
->  #define ERROR_MASK		GENMASK_ULL(63, 0)
->  
->  /* mask or unmask port errors by the error mask register. */
-> -static void __afu_port_err_mask(struct device *dev, bool mask)
-> +static void __afu_port_err_mask(struct dfl_feature_dev_data *fdata, bool mask)
-
-Maybe first replace all "struct device *dev" arguments with "struct
-dfl_feature_platform data *pdata", then you could do simple
-pdata->fdata replacement the same as other patches.
-
->  {
->  	void __iomem *base;
->  
-> -	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_ERROR);
-> +	base = dfl_get_feature_ioaddr_by_id(fdata, PORT_FEATURE_ID_ERROR);
->  
->  	writeq(mask ? ERROR_MASK : 0, base + PORT_ERROR_MASK);
->  }
->  
->  static void afu_port_err_mask(struct device *dev, bool mask)
->  {
-> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-> +	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(dev);
->  
-> -	mutex_lock(&pdata->lock);
-> -	__afu_port_err_mask(dev, mask);
-> -	mutex_unlock(&pdata->lock);
-> +	mutex_lock(&fdata->lock);
-> +	__afu_port_err_mask(fdata, mask);
-> +	mutex_unlock(&fdata->lock);
->  }
->  
->  /* clear port errors. */
->  static int afu_port_err_clear(struct device *dev, u64 err)
->  {
-> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-> -	struct platform_device *pdev = to_platform_device(dev);
-> +	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(dev);
->  	void __iomem *base_err, *base_hdr;
->  	int enable_ret = 0, ret = -EBUSY;
->  	u64 v;
->  
-> -	base_err = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_ERROR);
-> -	base_hdr = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
-> +	base_err = dfl_get_feature_ioaddr_by_id(fdata, PORT_FEATURE_ID_ERROR);
-> +	base_hdr = dfl_get_feature_ioaddr_by_id(fdata, PORT_FEATURE_ID_HEADER);
->  
-> -	mutex_lock(&pdata->lock);
-> +	mutex_lock(&fdata->lock);
->  
->  	/*
->  	 * clear Port Errors
-> @@ -80,12 +79,12 @@ static int afu_port_err_clear(struct device *dev, u64 err)
->  	}
->  
->  	/* Halt Port by keeping Port in reset */
-> -	ret = __afu_port_disable(pdev);
-> +	ret = __afu_port_disable(fdata);
->  	if (ret)
->  		goto done;
->  
->  	/* Mask all errors */
-> -	__afu_port_err_mask(dev, true);
-> +	__afu_port_err_mask(fdata, true);
->  
->  	/* Clear errors if err input matches with current port errors.*/
->  	v = readq(base_err + PORT_ERROR);
-> @@ -102,28 +101,28 @@ static int afu_port_err_clear(struct device *dev, u64 err)
->  	}
->  
->  	/* Clear mask */
-> -	__afu_port_err_mask(dev, false);
-> +	__afu_port_err_mask(fdata, false);
->  
->  	/* Enable the Port by clearing the reset */
-> -	enable_ret = __afu_port_enable(pdev);
-> +	enable_ret = __afu_port_enable(fdata);
->  
->  done:
-> -	mutex_unlock(&pdata->lock);
-> +	mutex_unlock(&fdata->lock);
->  	return enable_ret ? enable_ret : ret;
->  }
->  
->  static ssize_t errors_show(struct device *dev, struct device_attribute *attr,
->  			   char *buf)
->  {
-> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-> +	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(dev);
->  	void __iomem *base;
->  	u64 error;
->  
-> -	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_ERROR);
-> +	base = dfl_get_feature_ioaddr_by_id(fdata, PORT_FEATURE_ID_ERROR);
->  
-> -	mutex_lock(&pdata->lock);
-> +	mutex_lock(&fdata->lock);
->  	error = readq(base + PORT_ERROR);
-> -	mutex_unlock(&pdata->lock);
-> +	mutex_unlock(&fdata->lock);
->  
->  	return sprintf(buf, "0x%llx\n", (unsigned long long)error);
->  }
-> @@ -146,15 +145,15 @@ static DEVICE_ATTR_RW(errors);
->  static ssize_t first_error_show(struct device *dev,
->  				struct device_attribute *attr, char *buf)
->  {
-> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-> +	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(dev);
->  	void __iomem *base;
->  	u64 error;
->  
-> -	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_ERROR);
-> +	base = dfl_get_feature_ioaddr_by_id(fdata, PORT_FEATURE_ID_ERROR);
->  
-> -	mutex_lock(&pdata->lock);
-> +	mutex_lock(&fdata->lock);
->  	error = readq(base + PORT_FIRST_ERROR);
-> -	mutex_unlock(&pdata->lock);
-> +	mutex_unlock(&fdata->lock);
->  
->  	return sprintf(buf, "0x%llx\n", (unsigned long long)error);
->  }
-> @@ -164,16 +163,16 @@ static ssize_t first_malformed_req_show(struct device *dev,
->  					struct device_attribute *attr,
->  					char *buf)
->  {
-> -	struct dfl_feature_platform_data *pdata = dev_get_platdata(dev);
-> +	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(dev);
->  	void __iomem *base;
->  	u64 req0, req1;
->  
-> -	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_ERROR);
-> +	base = dfl_get_feature_ioaddr_by_id(fdata, PORT_FEATURE_ID_ERROR);
->  
-> -	mutex_lock(&pdata->lock);
-> +	mutex_lock(&fdata->lock);
->  	req0 = readq(base + PORT_MALFORMED_REQ0);
->  	req1 = readq(base + PORT_MALFORMED_REQ1);
-> -	mutex_unlock(&pdata->lock);
-> +	mutex_unlock(&fdata->lock);
->  
->  	return sprintf(buf, "0x%016llx%016llx\n",
->  		       (unsigned long long)req1, (unsigned long long)req0);
-> @@ -191,12 +190,14 @@ static umode_t port_err_attrs_visible(struct kobject *kobj,
->  				      struct attribute *attr, int n)
->  {
->  	struct device *dev = kobj_to_dev(kobj);
-> +	struct dfl_feature_dev_data *fdata;
->  
-> +	fdata = to_dfl_feature_dev_data(dev);
->  	/*
->  	 * sysfs entries are visible only if related private feature is
->  	 * enumerated.
->  	 */
-> -	if (!dfl_get_feature_by_id(dev, PORT_FEATURE_ID_ERROR))
-> +	if (!dfl_get_feature_by_id(fdata, PORT_FEATURE_ID_ERROR))
->  		return 0;
->  
->  	return attr->mode;
 > diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-> index 61868cdd5b0b..42928cc7e42b 100644
+> index 42928cc7e42b..ead03b7aea70 100644
 > --- a/drivers/fpga/dfl-afu-main.c
 > +++ b/drivers/fpga/dfl-afu-main.c
-> @@ -26,7 +26,7 @@
+> @@ -143,9 +143,8 @@ static int port_reset(struct platform_device *pdev)
+>  	return ret;
+>  }
 >  
->  /**
->   * __afu_port_enable - enable a port by clear reset
-> - * @pdev: port platform device.
-> + * @fdata: port feature dev data.
->   *
->   * Enable Port by clear the port soft reset bit, which is set by default.
->   * The AFU is unable to respond to any MMIO access while in reset.
-> @@ -35,18 +35,17 @@
->   *
->   * The caller needs to hold lock for protection.
->   */
-> -int __afu_port_enable(struct platform_device *pdev)
-> +int __afu_port_enable(struct dfl_feature_dev_data *fdata)
+> -static int port_get_id(struct platform_device *pdev)
+> +static int port_get_id(struct dfl_feature_dev_data *fdata)
+>  {
+> -	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(&pdev->dev);
+>  	void __iomem *base;
+>  
+>  	base = dfl_get_feature_ioaddr_by_id(fdata, PORT_FEATURE_ID_HEADER);
+> @@ -156,7 +155,8 @@ static int port_get_id(struct platform_device *pdev)
+>  static ssize_t
+>  id_show(struct device *dev, struct device_attribute *attr, char *buf)
+>  {
+> -	int id = port_get_id(to_platform_device(dev));
+> +	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(dev);
+> +	int id = port_get_id(fdata);
 
-Same suggestion. Replace "struct platform_device *pdev" with "struct
-dfl_feature_platform_data *pdata" first. Then do massive pdata->fdata
-replacement.
+My quick idea is we go with these steps:
+1. refactor struct dfl_feature_platform_data then replace all dev/pdev
+   arguments with pdata when necessary.
+2. factor out fdata from pdata, add fdata helpers.
+3. massive pdata->fdata replacement.
+4. delete all unused pdata helpers.
+
+Please check if it is possible.
 
 Thanks,
 Yilun
