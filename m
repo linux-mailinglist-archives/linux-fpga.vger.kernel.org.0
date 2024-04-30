@@ -1,69 +1,69 @@
-Return-Path: <linux-fpga+bounces-522-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-523-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 395AA8B681B
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Apr 2024 04:58:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36EFF8B6829
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Apr 2024 05:10:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 650911C21730
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Apr 2024 02:58:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E707E2820A9
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Apr 2024 03:10:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2326D53B;
-	Tue, 30 Apr 2024 02:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA6FDDA6;
+	Tue, 30 Apr 2024 03:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ixQll0cn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HOmkaCUd"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2586ED517
-	for <linux-fpga@vger.kernel.org>; Tue, 30 Apr 2024 02:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E04B7101C4
+	for <linux-fpga@vger.kernel.org>; Tue, 30 Apr 2024 03:10:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714445899; cv=none; b=ovsTxcOAsGl9ZKbXg97qoMhK21l2sa2vfat/THXsUxXnBFPAJErMGJHH9pwDTsVXWVniR3w1mFh4PvksRg9vW054HIv4xpygkzQrkxxm+Zw2+k9PNBe1XH43dxGCtjGmnYzeREO4+T79GQPN3dAQ5n6W/d7mEJLGTRdWF2rrgkQ=
+	t=1714446634; cv=none; b=qtDy93D66dPYDaYFYYSRvM3zAzUfeWmwdGYr+eIPQZRtlMjSN9xlGsXatAvzAeL8kiIf26OIGhu0h1YRGkJivrnqCcBbIc5o4G7v0UPzBCOIO6AFuHkZiXd0C1rs6mJ//Kd1KhHSiMlDBNDjawVpEZjLQdaW6G3yqMqJuYfNf5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714445899; c=relaxed/simple;
-	bh=ekn9qnZWUP0PBTxH6cdWo6gQQ5pRxGYziH1bSnTMp+4=;
+	s=arc-20240116; t=1714446634; c=relaxed/simple;
+	bh=UkjMtG6cSlvY8xJgHWQlDFSQopP6uHYif40hKxJIBj4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bVgAU+HT+33YlOBQVrQTtyff1Zw9KFwiMwi0oNkMHdLea3YsWwR3RmvknYJlRJ0K/weWniHaynADsBDPRSZWaMz4+o98AZNNDjSG92vuL/7IwHAMEDjHgX0CeEH4j8vgoL7ppsnA6RK8RWOQ0CIsLVB1p/1rmFvh+dyXZjssA/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ixQll0cn; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=UZt4ANcvz7xOZ1KyM14FETlJagC1Iz70kCTc8sflgslMFcziwrYvX5qsQQ9sDtRCruPeEJLsqDTEzoGPaFdcnkLNyIfAN8/pY6xinkGrpAmCu9OvvR4ygbULHu5ABmNndc4Us4muwzaEg9MzaHamwJKk2P9ly4Bs5v/IFPn4ESo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HOmkaCUd; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714445898; x=1745981898;
+  t=1714446633; x=1745982633;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ekn9qnZWUP0PBTxH6cdWo6gQQ5pRxGYziH1bSnTMp+4=;
-  b=ixQll0cn4SYGyH5WCQui95C6OwtLmzGt1LQsrNY4dcz2nX/rUD47PMrG
-   oyAgqA+oNAv4tVMqJGFEn9AOtWJTxL24rzxwyOASbRePwyGHZTnT3uhN+
-   09oLzaiyZ9i7CIfrbZ5ddPmT7Kas02APzByCocp16EY3R/7xbI/1uweuw
-   c3KdeNBTZMSpPnXA8a3fommcpU9ITbmTyA/SbK4HTTtejl7lKlvoehG4B
-   bP60WjZ09l810QNqPVuqdwnQmuyEHpBpYYU/2bCbqb4whQeW/c4BkY95O
-   tzfHwTgPrBfCimLiQbsmsOPq3R/Dr+03Alq5EzAOkTx0xeDJhptyyu9xQ
-   w==;
-X-CSE-ConnectionGUID: yMaQ6ZbcSIugnOIOF0chfA==
-X-CSE-MsgGUID: 7tw+H5RlQiaDmd4PaOgYVw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="10349375"
+  bh=UkjMtG6cSlvY8xJgHWQlDFSQopP6uHYif40hKxJIBj4=;
+  b=HOmkaCUdvhE27al55q38NeYonm5EMz78AswJ/aftW+jc4JtnuHP7aXNx
+   966DETAoYxHUbxnRT1cBdxw7GBtI79OuiPc4+lddhKqD5ooYkZlrosFGU
+   i+a2a+i1sV7l1OPlhwfiKrRy7gS7vW3P92O1szr1ZwxEl8AdpGXa9WaCd
+   ysjNbl/CDAlC9k1+UdNaej1DE3J/T9M6015hownReGElicJEtjmewfhF1
+   f/gmYOsjRM2I8UgFTTqeiaGH5odgVSP36YyJxBRoIlMr0J0fGFC+TRJYx
+   KLhMDJrQFU1CYg1onYJSx99TT/x6z3d3vX/IUIag1zuDSyvthGRf3HYyx
+   A==;
+X-CSE-ConnectionGUID: v9aHdF8vR7y6RVv8IycRjw==
+X-CSE-MsgGUID: Iu28fdZQRAWRiJh2qfBjYw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="21549055"
 X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
-   d="scan'208";a="10349375"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 19:58:17 -0700
-X-CSE-ConnectionGUID: P7yg9hDRTFmD8iPvBDHhCw==
-X-CSE-MsgGUID: n6sYSXXNSZ6cKF83pb/JgQ==
+   d="scan'208";a="21549055"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 20:10:32 -0700
+X-CSE-ConnectionGUID: J/ZwFeSdS4uPebOkdhaNxg==
+X-CSE-MsgGUID: /56DHDR7TOecoARhdNj2sg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
-   d="scan'208";a="26814005"
+   d="scan'208";a="26932492"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa007.jf.intel.com with ESMTP; 29 Apr 2024 19:58:15 -0700
-Date: Tue, 30 Apr 2024 10:52:46 +0800
+  by orviesa008.jf.intel.com with ESMTP; 29 Apr 2024 20:10:30 -0700
+Date: Tue, 30 Apr 2024 11:05:01 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
 To: gregkh@linuxfoundation.org
 Cc: yilun.xu@linux.intel.com, yilun.xu@intel.com,
 	linux-fpga@vger.kernel.org, hao.wu@intel.com, mdf@kernel.org
-Subject: [GIT PULL] FPGA Manager changes for 6.10-rc1
-Message-ID: <ZjBc/ta+Luxdp8Dr@yilunxu-OptiPlex-7050>
+Subject: [GIT PULL] FPGA Manager changes for 6.9 final
+Message-ID: <ZjBf3XLBKXFZMhoc@yilunxu-OptiPlex-7050>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -79,92 +79,28 @@ The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga tags/fpga-for-6.20-rc1
+  git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga tags/fpga-for-6.9-final
 
-for you to fetch changes up to b7c0e1ecee403a43abc89eb3e75672b01ff2ece9:
+for you to fetch changes up to bb1dbeceb1c20cfd81271e1bd69892ebd1ee38e0:
 
-  fpga: region: add owner module and take its refcount (2024-04-23 15:37:20 +0800)
-
-----------------------------------------------------------------
-FPGA Manager changes for 6.10-rc1
-
-FPGA MGR core:
-
-- Marco's change adds module owner parameter for all registration APIs.
-
-FPGA test:
-
-- Macro's change uses KUnit devices instead of platform devices.
-
-DFL:
-
-- Peter's change cleans up unused symbols.
-
-Xlinux:
-
-- Charles adds SelectMAP interface reprogramming support.
-- Andy's header inclusion cleanup.
-
-Altera:
-
-- Krzysztof & Christophe's cleanup for drivers.
+  fpga: dfl-pci: add PCI subdevice ID for Intel D5005 card (2024-04-26 12:14:28 +0800)
 
 ----------------------------------------------------------------
-Andy Shevchenko (1):
-      fpga: ice40-spi: Don't use "proxy" headers
+FPGA Manager changes for 6.9-final
 
-Charles Perry (4):
-      fpga: xilinx-spi: extract a common driver core
-      dt-bindings: fpga: xlnx,fpga-selectmap: add DT schema
-      fpga: xilinx-selectmap: add new driver
-      fpga: xilinx-core: add new gpio names for prog and init
+DFL
 
-Christophe JAILLET (1):
-      fpga: altera-cvp: Remove an unused field in struct altera_cvp_conf
+- Peter adds PCI ID table for Intel D5005 Stratix 10 FPGA card
 
-Krzysztof Kozlowski (1):
-      fpga: altera: drop driver owner assignment
+All patches have been reviewed on the mailing list, and have been in the
+last linux-next releases (as part of our fixes branch)
 
-Marco Pagani (4):
-      fpga: manager: add owner module and take its refcount
-      fpga: bridge: add owner module and take its refcount
-      fpga: tests: use KUnit devices instead of platform devices
-      fpga: region: add owner module and take its refcount
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 
-Peter Colberg (2):
-      fpga: dfl: remove unused function is_dfl_feature_present()
-      fpga: dfl: remove unused member pdata from struct dfl_{afu,fme}
+----------------------------------------------------------------
+Peter Colberg (1):
+      fpga: dfl-pci: add PCI subdevice ID for Intel D5005 card
 
- .../bindings/fpga/xlnx,fpga-selectmap.yaml         |  86 ++++++++
- Documentation/driver-api/fpga/fpga-bridge.rst      |   7 +-
- Documentation/driver-api/fpga/fpga-mgr.rst         |  34 +--
- Documentation/driver-api/fpga/fpga-region.rst      |  13 +-
- drivers/fpga/Kconfig                               |  12 ++
- drivers/fpga/Makefile                              |   2 +
- drivers/fpga/altera-cvp.c                          |   1 -
- drivers/fpga/altera-ps-spi.c                       |   1 -
- drivers/fpga/dfl-afu-main.c                        |   2 -
- drivers/fpga/dfl-afu.h                             |   3 -
- drivers/fpga/dfl-fme-main.c                        |   2 -
- drivers/fpga/dfl-fme.h                             |   2 -
- drivers/fpga/dfl.h                                 |   5 -
- drivers/fpga/fpga-bridge.c                         |  57 ++---
- drivers/fpga/fpga-mgr.c                            |  82 +++++---
- drivers/fpga/fpga-region.c                         |  24 ++-
- drivers/fpga/ice40-spi.c                           |   4 +-
- drivers/fpga/tests/fpga-bridge-test.c              |  33 +--
- drivers/fpga/tests/fpga-mgr-test.c                 |  16 +-
- drivers/fpga/tests/fpga-region-test.c              |  41 ++--
- drivers/fpga/xilinx-core.c                         | 229 +++++++++++++++++++++
- drivers/fpga/xilinx-core.h                         |  27 +++
- drivers/fpga/xilinx-selectmap.c                    |  95 +++++++++
- drivers/fpga/xilinx-spi.c                          | 224 ++------------------
- include/linux/fpga/fpga-bridge.h                   |  10 +-
- include/linux/fpga/fpga-mgr.h                      |  26 ++-
- include/linux/fpga/fpga-region.h                   |  13 +-
- 27 files changed, 676 insertions(+), 375 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,fpga-selectmap.yaml
- create mode 100644 drivers/fpga/xilinx-core.c
- create mode 100644 drivers/fpga/xilinx-core.h
- create mode 100644 drivers/fpga/xilinx-selectmap.c
+ drivers/fpga/dfl-pci.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
