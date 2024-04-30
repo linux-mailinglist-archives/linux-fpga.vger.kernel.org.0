@@ -1,99 +1,111 @@
-Return-Path: <linux-fpga+bounces-520-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-521-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B773E8B59B8
-	for <lists+linux-fpga@lfdr.de>; Mon, 29 Apr 2024 15:18:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93D4E8B67DE
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Apr 2024 04:16:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8FBA1C21315
-	for <lists+linux-fpga@lfdr.de>; Mon, 29 Apr 2024 13:18:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DCA31F22BE9
+	for <lists+linux-fpga@lfdr.de>; Tue, 30 Apr 2024 02:16:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6216854FAB;
-	Mon, 29 Apr 2024 13:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D809A8BF6;
+	Tue, 30 Apr 2024 02:16:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DXRZB7he"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PWJs5Rny"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CE46FE14;
-	Mon, 29 Apr 2024 13:18:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F251C33;
+	Tue, 30 Apr 2024 02:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714396720; cv=none; b=XdTIbbVwsFnRb6IH7kiAVcNlG7idga/eH8REeAxREXFoL34DNBYu+WMyZDuhQl1A1ubH2UxMVC/smm9hOP7h4/L8afI76HhZhd8jmsN+/z5Lka6UHin2qaGMNQwkykpzWr858qlA5jBd91PgFfUTSfSz7D0jyRlAywrw3fOMsDs=
+	t=1714443366; cv=none; b=Yef5Wup7UwE4giVVBBNDCUSSwXbrOn09pSbt+xtUo/XGAq8KbsKx/hfYzzg+zCJUvgZCeVOxxburdb5QFrQIgGlPhHB1ocBesNgWV0mu2OcT3QF0miucUwjzs8ulCRaCjt/eMmtAkBjbI092WOFtQ2aQKUhiBv4cQVZEMmO2J+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714396720; c=relaxed/simple;
-	bh=GzTVP+cnONGx8I7Xig2IilKrZZe4Kz4khWj5HS9ejQ8=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=YVhuAx7vpb8Qu0cVhlhEiI9V6EWcyRQ5Daj1M0kWN/JO3qbifoJiRj5dc/SMF7QM3MoHprlYuXoT+FNfNs5GSgm4X53x1JYNfU4Zrlscnt+vmSs7/keYzoaCjazYK8sHmF958ZZ2CfhPY3fT7u92bpJgVnbIkVWOtqhzHMnIlHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DXRZB7he; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-61acfd3fd3fso47671687b3.1;
-        Mon, 29 Apr 2024 06:18:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714396718; x=1715001518; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=5DrNmX/O5hzyTD3oW2jtllNOsgM2WyrTONwfmemwKBA=;
-        b=DXRZB7heafHsCDeWZUcoz+RaZrEqIBdJBDJVEwws1cN5+SmJUGM4RAj8ZXzS4+yhzw
-         evndIs2FiQianPEz0yAyq1Fj0+HAS6MAvsbQ7badJzRWkCSvchBXSbVdJj9PjC/l/6Oo
-         5OLei1LhMBhAFnfgqd8nL3UPTRdQVBEMqWpEZXAZWhj8zUn4k8A7jlFjmELL0fpCfEiE
-         gvNGdZ22YJXo9ha7SqijFL9/IRXsHtDxwKZGbF58X1k9GEGD2cwynRpEow9PQh3V9dvB
-         IsycfsfzakikzBjXiTrm2XuM4ndC8yX1kw+wP/+5CnEQO2eJhexaoVW5gqUAmsh+MglI
-         DhiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714396718; x=1715001518;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5DrNmX/O5hzyTD3oW2jtllNOsgM2WyrTONwfmemwKBA=;
-        b=thb+nJGQFP2MqVSQwZoCeDkk93cY1MxbzSTCAat7vHcZ8vAhaXG0Ir6xH16aNyxFHq
-         F+4ukGraahjnoJRj2cr5oqFgIofYptLKHrIQyDbfp5ks6m6dNJrGhG1RbIE7nMrgZm8U
-         Wsh/docet/3GXHD+frcM7Cqw7RK8Gc8iNAeeyi9tYmuUD229eEBawTCQMMeK8+fc3RaZ
-         9yNMcw3fEUCdWeWNm9Cmvr7utuyS1NUSmKxeXgjTELIgMx5vobY+lInMAzHOVhAeM2xA
-         d/5KHaUrE0MGkK0KyyEumv2FnTln0J26oyP4viuZszaTsXS6AVSNF1KlAXOXh2FSKZ+n
-         jN8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUYectS4huaYIRnsZo9s8xL6e2VrrfgT93qcb8qZ31X8VttWHJfVqc8MM0QUxoXZI6ahw6wfyzKA/IKPq2u2DJ471tUASBNuoofww==
-X-Gm-Message-State: AOJu0YwC458a02FwW9aD1m6NL3XVLpsf6z1FD/xjsgthhU59FTXDZ4+O
-	3GcDpgmZnE8ELgu023pPEssLdLrSm256ZuenQuf14tQBQs5iuKzzlw8U0+Gf14yPGP+QdCLjLDQ
-	1x5qRLWkFO+1BPMKkpFDzfzcz8gEXz5Kb
-X-Google-Smtp-Source: AGHT+IEEajCrlUb/3QTkb1ktXcly7kvHKmpfcjOnXNtOR6EpLBkfPPxV+knLS1Jw2S5EO2KTYc1niTKx5bbX+gOT3RA=
-X-Received: by 2002:a05:690c:387:b0:61a:e947:550d with SMTP id
- bh7-20020a05690c038700b0061ae947550dmr10138549ywb.44.1714396717862; Mon, 29
- Apr 2024 06:18:37 -0700 (PDT)
+	s=arc-20240116; t=1714443366; c=relaxed/simple;
+	bh=FEYx4JC+14yee2/OFeo1xzAi0y2DiicqS68he4KfFKE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OA/a4jIZ7Tjysl0qfctBD9gf/1ui9FYwlRD4I9D+UIFsuHIc4GE1WT+WLFSQScHNlbUexzHcT/FWx7I6V+P0bK9+wuzx1KyiNuuYnWmC/WSb0aO7XzuD+XcD7fAWyPuklFp49tT+RhxCTibQLoIuy+a4ik+6cUBj+wab3REcC64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PWJs5Rny; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714443365; x=1745979365;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FEYx4JC+14yee2/OFeo1xzAi0y2DiicqS68he4KfFKE=;
+  b=PWJs5RnyDA7l+p4uu0WHIvw57qOroAZMfHsXrB+a2dq1kCBjQZxovwGF
+   5nv8xRTFKpgSzdmHJSuTgf1VgYKNarzBbW4RATqVylnHr3vtRA3OIvtHy
+   7HSDcmFO/vJrFIhMfapPm7vQlqHirkAVU0/hd5nMwx8jv1X7+YAO49aPi
+   GUrr0xdEsJ/8MJ8iaRjxOJgTjtnKgkAvhzBSo+k5MVT8aHGITEZRFrTiO
+   FOvDlxxqobsd7qoPGkH/bw8BSb1ibdAl87ebO0gzdnww7e4EBbVCxbXoJ
+   rKUM28vAIhvIk4flU4diWEIXzoF7sWGqZxazS4nFQuWv3iobk5Q1FvJbu
+   g==;
+X-CSE-ConnectionGUID: EsFHEUz3QOKcSHgjuiQ54Q==
+X-CSE-MsgGUID: OB6TbK6bR+6w7kZXWij7fQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="20814396"
+X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
+   d="scan'208";a="20814396"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 19:16:01 -0700
+X-CSE-ConnectionGUID: /EVNWWnnRDWGAFoa5okH1Q==
+X-CSE-MsgGUID: v37V+LvyQAee/Q757M641g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
+   d="scan'208";a="26231973"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa009.fm.intel.com with ESMTP; 29 Apr 2024 19:15:58 -0700
+Date: Tue, 30 Apr 2024 10:10:29 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: "Colberg, Peter" <peter.colberg@intel.com>
+Cc: "Xu, Yilun" <yilun.xu@intel.com>,
+	"linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+	"mdf@kernel.org" <mdf@kernel.org>, "Wu, Hao" <hao.wu@intel.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"russ.weight@linux.dev" <russ.weight@linux.dev>,
+	"Pagani, Marco" <marpagan@redhat.com>, "Rix, Tom" <trix@redhat.com>,
+	"matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH] fpga: dfl-pci: add PCI subdevice ID for Intel D5005 card
+Message-ID: <ZjBTFViASK857NHL@yilunxu-OptiPlex-7050>
+References: <20240422230257.1959-1-peter.colberg@intel.com>
+ <ZispK+l5kWCxtfns@yilunxu-OptiPlex-7050>
+ <0081a4ba1304f37142e6b1714d022fd4e7c9821f.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Muni Sekhar <munisekharrms@gmail.com>
-Date: Mon, 29 Apr 2024 18:48:26 +0530
-Message-ID: <CAHhAz+iHtWqhvwa_dmTUv+mZhnZ2zHX0W53wDGF+uHhcgk7Gcg@mail.gmail.com>
-Subject: ALSA: Digital Microphone
-To: linux-sound@vger.kernel.org, alsa-devel <alsa-devel@alsa-project.org>, 
-	linux-fpga@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0081a4ba1304f37142e6b1714d022fd4e7c9821f.camel@intel.com>
 
-Hi all,
+On Fri, Apr 26, 2024 at 09:35:07PM +0000, Colberg, Peter wrote:
+> On Fri, 2024-04-26 at 12:10 +0800, Xu Yilun wrote:
+> > On Mon, Apr 22, 2024 at 07:02:57PM -0400, Peter Colberg wrote:
+> > > Add PCI subdevice ID for the Intel D5005 Stratix 10 FPGA card as
+> > > used with the Open FPGA Stack (OFS) FPGA Interface Manager (FIM).
+> > > 
+> > > Unlike the Intel D5005 PAC FIM which exposed a separate PCI device ID,
+> > > the OFS FIM reuses the same device ID for all DFL-based FPGA cards
+> > > and differentiates on the subdevice ID. The subdevice ID values were
+> > > chosen as the numeric part of the FPGA card names in hexadecimal.
+> > > 
+> > > Link: https://github.com/OFS/dfl-feature-id/pull/4
+> > 
+> > Any reason to put the Link in changelog. I didn't see it provide any
+> > extra info.
+> 
+> The link is provided to point to the corresponding change in the dfl-
+> pci-ids registry, for someone who might not be aware of its existence.
 
-We have a Digital Microphone block on a Xilinx FPGA board connected to
-x86 host CPU through PCIe, it basically emulates a Microphone sending
-data to DUT(device under test) in PDM format.
+I suggest you don't put it in changelog, few people care about
+this downstream history.  Put it below '---' if really necessary. I
+deleted this link when apply.
 
-Input to the Digital Microphone block is Signed 32-bit PCM sample.
-Xilinx FPGA code has logic to convert PCM samples to PDM with a
-Sigma-Delta Converter.
-
-Could you kindly recommend any specific ALSA driver within the Linux
-kernel that matches with my hardware setup.
-
- Additionally, if there are any relevant documentation or community
-discussions that you could point me to, it would be immensely helpful.
-
-
--- 
 Thanks,
-Sekhar
+Yilun
 
