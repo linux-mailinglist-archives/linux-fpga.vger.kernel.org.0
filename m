@@ -1,71 +1,102 @@
-Return-Path: <linux-fpga+bounces-525-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-526-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1C3C8B6B9C
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Apr 2024 09:29:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 408038B99C7
+	for <lists+linux-fpga@lfdr.de>; Thu,  2 May 2024 13:10:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0ED721C21D28
-	for <lists+linux-fpga@lfdr.de>; Tue, 30 Apr 2024 07:29:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0608D287AAC
+	for <lists+linux-fpga@lfdr.de>; Thu,  2 May 2024 11:10:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BEBE2C184;
-	Tue, 30 Apr 2024 07:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tXcPnNxX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8369A605CE;
+	Thu,  2 May 2024 11:10:11 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4616222618
-	for <linux-fpga@vger.kernel.org>; Tue, 30 Apr 2024 07:28:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881B45C8EF;
+	Thu,  2 May 2024 11:10:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714462130; cv=none; b=ZdIN4VLfEefu0AtIUw9uVL5sE9cpyEOny7ozz4g6EALuJuwvceth7E/qFvEr9J1VAgXvjEn3EIZQrXN7XNyS4Qbu+POqB/c/o9FQpqI+gtn6mjtq0Hd9SkN+PekcqlHMN7sOwilRBG6LPPA3Kztp0szGf98Pe+hqbzXhq2jC3gg=
+	t=1714648211; cv=none; b=g/0bu0jDLTBwMQCCg8PNAJ3+yieyWhvTDZvcuzhf/seD52Fwm4kkuvbohSZsE8G3hHo2DtpKW6UkS52zRHlebSOtNrCC4VHBns+q/I+coUtNDIjIB3+mrUtO1vPQZdnM0deYWvxC3r+PKafbxm9kVDX2gaRYsa6HbGHFSeXyb9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714462130; c=relaxed/simple;
-	bh=mN0xWTlyuuaZd32X2uPJWuSlufDfFSByR8tGkVprd+E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rit2YfjNUBXTIyFFvHF/IK7XDE75/8i3dATm+iRlRvatxfqlzZwhPGi2pv8XjqQov0yvhGQi/uqfx9i0DIEyRhN77l7oMGgzrRX09kSL3A0LpDLqgMlf1lplE4suC9qmcvZhtdvg3SAnxpZDf1MhkYXgyImFlced/iqJfe5LKs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tXcPnNxX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B1F0C2BBFC;
-	Tue, 30 Apr 2024 07:28:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1714462129;
-	bh=mN0xWTlyuuaZd32X2uPJWuSlufDfFSByR8tGkVprd+E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tXcPnNxXMEEFlTnEmWdQ3+ey4vn5I/tgr/x3pJABa1J3DItxIe31/UuGtYe390y6f
-	 WGqCwG+TZdXC1/TSBnl6hepsXgYPol3PYWFHU0TogQtpWk+1hyKEm0s56gFfZCFSgE
-	 zRgvUkWj3r25uOAqN9DlnrTMieEiFtpIHHZXTEYM=
-Date: Tue, 30 Apr 2024 09:28:13 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: yilun.xu@intel.com, linux-fpga@vger.kernel.org, hao.wu@intel.com,
-	mdf@kernel.org
-Subject: Re: [GIT PULL] FPGA Manager changes for 6.10-rc1
-Message-ID: <2024043006-chaffing-whisking-fe18@gregkh>
-References: <ZjBc/ta+Luxdp8Dr@yilunxu-OptiPlex-7050>
+	s=arc-20240116; t=1714648211; c=relaxed/simple;
+	bh=eRD7S5ev4HwAFKwLfJ4FGx6RKatqYxUYAdjtfKK0Ekk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=B3++t2tSnhZHyeAPrejk6CKYyF7dyI/QBOUUTH/TX+vascNSLkLOsm4XJ/ALUSdTwmFgMHWrtRcX2geSMBmE03rsqyt/PwlbagvPxx+pLRrS4LPY2hmFUXO7PygTLyCLlK5xy1X/ZJhO4ifC9GoKUafLZp/4E0X+EnPTZDWlA5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 235272F4;
+	Thu,  2 May 2024 04:10:29 -0700 (PDT)
+Received: from ewhatever.cambridge.arm.com (ewhatever.cambridge.arm.com [10.1.197.1])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 241AA3F793;
+	Thu,  2 May 2024 04:10:00 -0700 (PDT)
+From: Suzuki K Poulose <suzuki.poulose@arm.com>
+To: Ingo Molnar <mingo@redhat.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Will Deacon <will@kernel.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Liang Kan <kan.liang@linux.intel.com>,
+	Tom Rix <trix@redhat.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Shuai Xue <xueshuai@linux.alibaba.com>,
+	Atish Patra <atishp@atishpatra.org>,
+	Frank Li <Frank.li@nxp.com>,
+	linuxarm@huawei.com,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Jiucheng Xu <jiucheng.xu@amlogic.com>,
+	Anup Patel <anup@brainfault.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Shaokun Zhang <zhangshaokun@hisilicon.com>,
+	linux-fpga@vger.kernel.org,
+	Yicong Yang <yangyicong@hisilicon.com>
+Subject: Re: [PATCH v2 00/30] (subset) Add parents to struct pmu -> dev
+Date: Thu,  2 May 2024 12:09:52 +0100
+Message-Id: <171464809867.45069.16014660164973351494.b4-ty@arm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240412161057.14099-1-Jonathan.Cameron@huawei.com>
+References: <20240412161057.14099-1-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZjBc/ta+Luxdp8Dr@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 30, 2024 at 10:52:46AM +0800, Xu Yilun wrote:
-> The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+On Fri, 12 Apr 2024 17:10:27 +0100, Jonathan Cameron wrote:
+> Robin posted a patch for the cmn and that reminded me that I never
+> sent a v2.
 > 
->   Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
+> v2: Drop first patch that added a parent to struct pmu as that has been
+>     upstream for a year.
+>     Drop the arm-cmn change as Robin has dealt with that one.
+>     Gathered tags.
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga tags/fpga-for-6.20-rc1
+> [...]
 
-Pulled and pushed out, thanks.
+Applied, subset of patches to coresight/next. thanks!
 
-greg k-h
+[29/30] Documentation: ABI + trace: hisi_ptt: update paths to bus/event_source
+        https://git.kernel.org/coresight/c/1f82d58ddbe21ed75c04d04403d8268a95e0190a
+[30/30] hwtracing: hisi_ptt: Assign parent for event_source device
+        https://git.kernel.org/coresight/c/9b47d9982d1de5adf0abcb8f1a400e51d68cca1f
+
+Best regards,
+-- 
+Suzuki K Poulose <suzuki.poulose@arm.com>
 
