@@ -1,121 +1,126 @@
-Return-Path: <linux-fpga+bounces-541-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-542-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F94E903847
-	for <lists+linux-fpga@lfdr.de>; Tue, 11 Jun 2024 12:00:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 107F4903919
+	for <lists+linux-fpga@lfdr.de>; Tue, 11 Jun 2024 12:41:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E74D1C2326C
-	for <lists+linux-fpga@lfdr.de>; Tue, 11 Jun 2024 10:00:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A19CC285B07
+	for <lists+linux-fpga@lfdr.de>; Tue, 11 Jun 2024 10:41:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF5017107E;
-	Tue, 11 Jun 2024 10:00:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684FB17838E;
+	Tue, 11 Jun 2024 10:41:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NW503o1b"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="lo7vyE+0"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A43156E4;
-	Tue, 11 Jun 2024 10:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D61D7407C;
+	Tue, 11 Jun 2024 10:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718100025; cv=none; b=BZbUp2iu45HASfSno6c6ZfgOKFCKJFxpIMI7qw8svm8i9rMbMIrS7aOjODe3szIs6QivMuBOxXraT2fBGa7CLM8t0NWVOqMrQ9FRH4ICRZ9+9tQgPFE3lmBV30YodH5nciyMJieqcYmPozK61l+7+NkWRRCu/SuqHxDOW0v/Acc=
+	t=1718102492; cv=none; b=qlhXlzUTZYjFDn2NTrVpbsLjrtote4oAxECyopWsKtzv9pltw8hS8d+wIM1wh6jdRv3W3LgzEcds81kqntXjaz08nx5pF3FQbj9Cov/WAb4U+OxDm0MZJON9j2qqlUrcK2TTMxBkDqC9ARroi/POO8803ZRIt85hN2VbG1PCSug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718100025; c=relaxed/simple;
-	bh=reuenXmwGEIcJGmpB8cV2S2SV9wZJfvnXCYDCOBk/Q0=;
+	s=arc-20240116; t=1718102492; c=relaxed/simple;
+	bh=zyckEblzH74h7Tgi2pKhrriJeDUbb5iRCO7jCbK2v2U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ipvvkekddFiKnKRTg+Fp0ZGG8+Tlfc4PknW9Q/47scf+5L/YPypeUTNx2GmElVxazU7AgwTq3APLHc61UXt/X+QquM4RU5B13A2vpBKGpw2qREHZreep90TRzU1Bh/UkGU9lCHL8tsbMy+h40qkjc6vcIHP+AvMGOGcP+XHdF7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NW503o1b; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718100025; x=1749636025;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=reuenXmwGEIcJGmpB8cV2S2SV9wZJfvnXCYDCOBk/Q0=;
-  b=NW503o1bZGwelaOiVtP/ke04+VQZqufXeeu0yPFiAiKRxRPMMj4iQZip
-   eNJivNYv+Le/ZUd9rxEnA/PJBpL9KVO4g8+xcNWdkuBgqN9ggQkxFrpQ9
-   bja9SL6TK6qXwuw2P6g/b+AZI6HXyeX9oN4Jxp65DjdCoux4PhOLifPZS
-   oOdUnRZU2hjaHYhCS2aLTBG2T7kV1MNLcmzW+eUUuls1DCnK7tVXC4as5
-   7l6zbcsf8BXoLzlDr5El5iIsmP4a+RZZJPknkL3Og6OkomXhBXpuRbiYp
-   s/aro8LWoZVHT7J2KARicpVEpCG83DBUFCwo7uSgQz+3R2mSM9t2kIJ10
-   w==;
-X-CSE-ConnectionGUID: ome21UNgQ2+cnZMoE+wxlA==
-X-CSE-MsgGUID: 4LKlpGjoToCzI3EcOOvbEA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="14630996"
-X-IronPort-AV: E=Sophos;i="6.08,229,1712646000"; 
-   d="scan'208";a="14630996"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2024 03:00:24 -0700
-X-CSE-ConnectionGUID: WEFvd2UNTnW3FU/sPMafYg==
-X-CSE-MsgGUID: PgBW8CbETT+B7RMpjOEytA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,229,1712646000"; 
-   d="scan'208";a="70550460"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa001.fm.intel.com with ESMTP; 11 Jun 2024 03:00:21 -0700
-Date: Tue, 11 Jun 2024 17:53:52 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 RESEND] Revert "fpga: disable KUnit test suites when
- module support is enabled"
-Message-ID: <ZmgesCLjje6Q0yXh@yilunxu-OptiPlex-7050>
-References: <20240604102536.59010-1-marpagan@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=bkn78LwDgaGMUmW9BSH3ZmZreeAqKMjEQhBzkCuoImtyjvub1bMyEpSEuBK7Nn+xnFzjG2WE0jr8lcIUNGynz7b3jLQv8OPrgtDJUFHvjlHYcqb1+/iOdPo/3bJ9TYPRj37oUbPNMRLi/PShN8n3Nvd6JA8SvchnPHlkqyr7K/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=lo7vyE+0; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
+	:Subject; bh=EXhrNi9BJXwqxgk9P0Sn7kFh4jE63HviHZ8ME2QK1o4=; b=lo7vyE+0ks9EwPZa
+	431dVbtEFGWmIJsgkbGHeFCJGCF9JiJGKGCNpwEinMpAWQiioT6Y5mkSIQLy15MYYzB0Yl/HXFiaq
+	EdKnWYTWgp+CRnE/IrgULNCVUKtFUYlrMTy9e6jWdadtejlqrSLqVSRPxz6XxfMZ9+YZFZGbqlG61
+	CVVCaxJWzeEVw8Zr0/4SJLpm1ve0grQ/9wlzeu8f446h9z+MIdgnVGe7+1StjIUrGCQSTJwclNEXU
+	VCg8QTE1dfdOHTLG5vnZA1yIEu7SDkSlQ8QHVmKBxc7X0hO9JQ6YoYdt82MCSmj7ZzKByqH0O0Ah9
+	lL40e/Xw13zEa4pz5A==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1sGywN-005XCX-2U;
+	Tue, 11 Jun 2024 10:41:23 +0000
+Date: Tue, 11 Jun 2024 10:41:23 +0000
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
+To: Xu Yilun <yilun.xu@linux.intel.com>
+Cc: mdf@kernel.org, hao.wu@intel.com, linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: altera-fpga2sdram: remove unused struct 'prop_map'
+Message-ID: <Zmgp01iGuYb-hHLK@gallifrey>
+References: <20240530205245.125513-1-linux@treblig.org>
+ <ZmgH3FakPP2w/ksI@yilunxu-OptiPlex-7050>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240604102536.59010-1-marpagan@redhat.com>
+In-Reply-To: <ZmgH3FakPP2w/ksI@yilunxu-OptiPlex-7050>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
+X-Uptime: 10:40:32 up 33 days, 21:54,  1 user,  load average: 0.01, 0.02, 0.00
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-On Tue, Jun 04, 2024 at 12:25:35PM +0200, Marco Pagani wrote:
-> This reverts commit a3fad2e92c76587fe262a1a4a122045b29885354.
+* Xu Yilun (yilun.xu@linux.intel.com) wrote:
+> On Thu, May 30, 2024 at 09:52:45PM +0100, linux@treblig.org wrote:
+> > From: "Dr. David Alan Gilbert" <linux@treblig.org>
 > 
-> The core components of the subsystem no longer assume that low-level
-> modules register a driver for the parent device and rely on its owner
-> pointer to take the module's refcount. KUnit test suites can now be safely
-> re-enabled with loadable module support.
+> This is only needed if the person sending the patch is not the author.
 > 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> > 
+> > 'prop_map' has been unused since the original
+> > commit e5f8efa5c8bf ("ARM: socfpga: fpga bridge driver support").
+> 
+> Please use 'fixes:' tag.
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+I've avoided using fixes: on this series because it's not a bug;
+stable and downstream maintainers use Fixes: to indicate that they
+should pick up a patch on top of something they already have; there's
+no need for anyone to backport this.
 
-Applied to for-next.
+Dave
 
-> ---
+> Thanks,
+> Yilun
 > 
-> v2: reworked commit message
-> ---
->  drivers/fpga/tests/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > Remove it.
+> > 
+> > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+> > ---
+> >  drivers/fpga/altera-fpga2sdram.c | 6 ------
+> >  1 file changed, 6 deletions(-)
+> > 
+> > diff --git a/drivers/fpga/altera-fpga2sdram.c b/drivers/fpga/altera-fpga2sdram.c
+> > index 6b60ca004345..f4de3fea0b2d 100644
+> > --- a/drivers/fpga/altera-fpga2sdram.c
+> > +++ b/drivers/fpga/altera-fpga2sdram.c
+> > @@ -75,12 +75,6 @@ static int alt_fpga2sdram_enable_set(struct fpga_bridge *bridge, bool enable)
+> >  	return _alt_fpga2sdram_enable_set(bridge->priv, enable);
+> >  }
+> >  
+> > -struct prop_map {
+> > -	char *prop_name;
+> > -	u32 *prop_value;
+> > -	u32 prop_max;
+> > -};
+> > -
+> >  static const struct fpga_bridge_ops altera_fpga2sdram_br_ops = {
+> >  	.enable_set = alt_fpga2sdram_enable_set,
+> >  	.enable_show = alt_fpga2sdram_enable_show,
+> > -- 
+> > 2.45.1
+> > 
+> > 
 > 
-> diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
-> index d4e55204c092..e4a64815f16d 100644
-> --- a/drivers/fpga/tests/Kconfig
-> +++ b/drivers/fpga/tests/Kconfig
-> @@ -1,6 +1,6 @@
->  config FPGA_KUNIT_TESTS
-> -	bool "KUnit test for the FPGA subsystem" if !KUNIT_ALL_TESTS
-> -	depends on FPGA=y && FPGA_REGION=y && FPGA_BRIDGE=y && KUNIT=y && MODULES=n
-> +	tristate "KUnit test for the FPGA subsystem" if !KUNIT_ALL_TESTS
-> +	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT=y
->  	default KUNIT_ALL_TESTS
->          help
->            This builds unit tests for the FPGA subsystem
-> 
-> base-commit: b7c0e1ecee403a43abc89eb3e75672b01ff2ece9
-> -- 
-> 2.45.1
-> 
-> 
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
 
