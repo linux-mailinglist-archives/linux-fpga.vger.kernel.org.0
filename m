@@ -1,131 +1,99 @@
-Return-Path: <linux-fpga+bounces-546-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-548-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 132E291015B
-	for <lists+linux-fpga@lfdr.de>; Thu, 20 Jun 2024 12:21:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E39D3910360
+	for <lists+linux-fpga@lfdr.de>; Thu, 20 Jun 2024 13:50:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4CC9281541
-	for <lists+linux-fpga@lfdr.de>; Thu, 20 Jun 2024 10:21:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46A1428199D
+	for <lists+linux-fpga@lfdr.de>; Thu, 20 Jun 2024 11:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237511A8C2B;
-	Thu, 20 Jun 2024 10:21:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95A081ABCCB;
+	Thu, 20 Jun 2024 11:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="GTZJLFBT"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="H0He8Aox"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDEB81A8C04
-	for <linux-fpga@vger.kernel.org>; Thu, 20 Jun 2024 10:21:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64283CF6A
+	for <linux-fpga@vger.kernel.org>; Thu, 20 Jun 2024 11:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718878875; cv=none; b=aTV+PpF8UyFH1J+6YxZrAYbILZVOaOptMbXE4IGja2N6BdC4Zffs0vjcEGHe/xQ9CN3G+yJXLym7Sh4v3ULmit1d3TqI3s6AB1yu29CGX3XSpDBOxo4KyDfXHocwK6NkQORpD+QKBqQYYIK0Q3/+A6WlE896RDbJb0KUXld4aOQ=
+	t=1718884231; cv=none; b=rzfYoNqk8jaBdfr2AtRRKsqpH1G+kvgkdibsoIqlCO8BydO5AISZ5pOYtk7DLtZvyGrJmzvJ3zT4kH+RffM73WvV6WzAVdyUJwN1GyIpCKKQYki4241Oiqs6HbTLpmvq4PIheUBwZYOtLPKyLTH7GNn2v26nTvK4AA/WosqhRjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718878875; c=relaxed/simple;
-	bh=VySAUnc5zyycJcWSlkBDQsdcG2gx5xBxSB4r0CBXKsc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i43Nf/QwWkUsYQU0rKf/Cc2E/yKTcdi53XTnGae4nYr+XONHPRmHULuFqcgl3svMn+3k7a9EmIHNylV133IQ40meNnB2GABUiR6ZDXeu9scMMqPzbrEuJCVXx3N0C+RFWDJWknHhji8vmRbfys/j9Hg5SSf3GRGgt/h3ah1EAC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=GTZJLFBT; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1718884231; c=relaxed/simple;
+	bh=tZ29Bp2f8Ym6sgD8EffVFer8WDZrFv+PN8PF82wJutE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lfII4/OpDZEH2z8n6aT2tBv56U4/d1J8VYaHwSnmqYrY3RHmeH+26m2tN+MJoVJ5whlgD+ZVQh+e86MGA+0IhG5FDLcIFLuiCr4wNQZmAZLx24Tfv355mDR4ZLh+MTjUjyue8YbkMFJgynL/n5FH0BE+aUTNqtjlbnEtnvhG6G8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=H0He8Aox; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=6QvP
-	0748bCUTqO0uAOaBSr5w4kgzYGCPnOBesJKCbVI=; b=GTZJLFBTtLk78TI/p/eD
-	ectdwK0IgGoe6CvaiIkqJVKbTWCCaebezaECDEUs+dEI3RUOXRX+pd6qxfFTmUq6
-	ZOgMT0V4llgzBaMJrUDVWPAP8bNp1waN1c255iJ5+r1dShbe7VPKsL4d85q5x5zT
-	BZHVD5qSZaZ3HvleYoyQlmgDHS+FaLL65pj9qfBjWLqyT1uauKWknokJlFqnV225
-	NPHp9ysKRs9yKXBsY2ZR6e0/h5la5MtjZZxfgFesxT+NOGwF4mQ025FqMuPRXHCf
-	TP7ck/HjXk0ROhcfJVumhbEQDx8nOn+tuFHv04DM+3wBVBI/455N2eOZFUYVtP9S
-	QQ==
-Received: (qmail 976563 invoked from network); 20 Jun 2024 12:21:10 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Jun 2024 12:21:10 +0200
-X-UD-Smtp-Session: l3s3148p1@iAh8rE8bMrogAwDPXzjQABqqX1QYyOSW
-Date: Thu, 20 Jun 2024 12:21:10 +0200
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=jRp699soNP3K8A
+	3f8TIcQqsWYfIKLLW0r/ERAheWeyM=; b=H0He8Aox06YFOfIxHqpNP5PUEmF9HU
+	r753vMp8hieKLDYEcXrq7yI3ff8JyjWls0qEVGy6mk2aIoF/HsGeY2LN1ft0y87W
+	i6EbEnODgkEopUqSN+bJ3KzYrY9fzqif59ajzXFGY/oTayYdmFKmHMmdzsvAs329
+	+4mSYkjTyVvHZGuMYiqUQkXSzstxXDWx6fFWyEvDJZHoahFOguRkkAVvWaltdWSz
+	AgbsTzFMzgSztDuYhAIj4utSx/AUYK8RJjRoK6HKadlHUfX3/ot+h2/0Ehjc06Dc
+	a1yXoIT5Qdx8HdG5IehsCSzm5Tsbnyk9WJa+4EzBVdbav72WLD6OexDg==
+Received: (qmail 1002751 invoked from network); 20 Jun 2024 13:50:24 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Jun 2024 13:50:24 +0200
+X-UD-Smtp-Session: l3s3148p1@n6uQ61AbwpMgAwDPXzjQABqqX1QYyOSW
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: linux-crypto@vger.kernel.org, Moritz Fischer <mdf@kernel.org>, 
-	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
-	linux-fpga@vger.kernel.org
-Subject: Re: [PATCH 1/2] fpga: socfpga: use 'time_left' variable with
- wait_for_completion_interruptible_timeout()
-Message-ID: <g5xw3icobdq2cuubqzmfvkph5jd3ag7shbxkntnotposuxviis@ewfw2cyc4g7k>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Xu Yilun <yilun.xu@linux.intel.com>, linux-crypto@vger.kernel.org, Moritz Fischer <mdf@kernel.org>, 
-	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
-	linux-fpga@vger.kernel.org
-References: <20240502210038.11480-1-wsa+renesas@sang-engineering.com>
- <20240502210038.11480-2-wsa+renesas@sang-engineering.com>
- <ZmgGiuu/5Eqxb0uR@yilunxu-OptiPlex-7050>
+To: linux-kernel@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-fpga@vger.kernel.org,
+	Michal Simek <michal.simek@amd.com>,
+	Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>
+Subject: [PATCH v2 0/2] fpga: use 'time_left' instead of 'timeout' with wait_*() functions
+Date: Thu, 20 Jun 2024 13:50:20 +0200
+Message-ID: <20240620115022.24409-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tb3ejhpz355vq5oq"
-Content-Disposition: inline
-In-Reply-To: <ZmgGiuu/5Eqxb0uR@yilunxu-OptiPlex-7050>
+Content-Transfer-Encoding: 8bit
+
+There is a confusing pattern in the kernel to use a variable named 'timeout' to
+store the result of wait_*() functions causing patterns like:
+
+        timeout = wait_for_completion_timeout(...)
+        if (!timeout) return -ETIMEDOUT;
+
+with all kinds of permutations. Use 'time_left' as a variable to make the code
+obvious and self explaining.
+
+This is part of a tree-wide series. The rest of the patches can be found here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/time_left
+
+Because these patches are generated, I audit them before sending. This is why I
+will send series step by step. Build bot is happy with these patches, though.
+No functional changes intended.
+
+Changes since v1 are stated per patch. Summary: I addressed review
+comments and added acks.
 
 
---tb3ejhpz355vq5oq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Wolfram Sang (2):
+  fpga: socfpga: use 'time_left' variable with wait_for_completion*()
+  fpga: zynq-fpga: use 'time_left' variable with
+    wait_for_completion_timeout()
 
-Hi Yilun,
+ drivers/fpga/socfpga.c   | 7 ++++---
+ drivers/fpga/zynq-fpga.c | 8 ++++----
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-> Sorry for late reply.
+-- 
+2.43.0
 
-No worries, thank you for the review.
-
-> First of all, please limit your subject/shortlog/summary within 70
-> chars.
-
-I'll try but it will be hard when it contains such a long function name.
-
-> > There is a confusing pattern in the kernel to use a variable named 'tim=
-eout' to
->=20
-> Please make the changelog line wrapped at less than 75 chars.
-
-Good point. My scripts reformat generated paragraphs now accordingly.
-
-> > +	int ret =3D 0;
-> > +	long time_left;
->=20
-> Please use reverse xmas tree when it is easy to follow.
-
-Will fix.
-
-All the best,
-
-   Wolfram
-
-
---tb3ejhpz355vq5oq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZ0ApIACgkQFA3kzBSg
-KbYWBA//eSJ+HBgKDygwObdBJzw3riwudWm2kfTqZbQBg0v9ZvT75hrAf2jgODY0
-2viatD/wLDc9MQrSF23+gK7XG/PrqOMTmy146d4oW6iTF4D+WVr2h+dF1eJRhOHS
-PPV9THjycPreR/leGqlSc/f/npETprYEyPv/AwEQYziL3wPW7KHXASSjGGTmKKqc
-lzTzYmkmVbsPcDNwV47OlUY7ClQSS2oxHpxC0MbU2tyLngM/56/nBd+BSaLkCqQz
-wUlYMmIeDTZzXGH+iDUsPvjrpcQ8pzdzFIhfj5psATkoEeJKdpaqw4fCktNL5mmY
-k3yT7gqIXdcE5YfKLrwhcfEzh+XAFIbj3rprfT72zCIh9FWTHkMFh7tDJSXL0tH9
-ggdXtva6t5crumoOGkzbkKlMl/SAxAB9ZpfwMFqeoIYOcTCbeJ+psKQsI8tzV9dU
-LlUVsNphLAzN0KvyUpojoK+AM5Sf9E0NH72fTcNJovKjSPsBzULDhwOclx7idXqq
-EA9dtjoJMMPHiPKEhJSJaN3p+v2Qbi0ObXKCNv2n4F1hmiRtyj9GgCAECZWPdhKZ
-Ciuo/aIe7cT5iWJYWzP8yiG9YVfhEfwv+CvC2CnUmo7UbQ8rAOxXx9yocwCMcK+L
-UPNvV2Fv2+4TrJwr+uRJ4KonbWmMQvcFUB2JAhZj9l8ybCyefA4=
-=pYHh
------END PGP SIGNATURE-----
-
---tb3ejhpz355vq5oq--
 
