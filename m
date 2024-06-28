@@ -1,72 +1,72 @@
-Return-Path: <linux-fpga+bounces-565-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-566-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58B8A91C290
-	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 17:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 936D491C293
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 17:24:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAA691F22121
-	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 15:24:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48E351F22173
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 15:24:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17BB81C8FAB;
-	Fri, 28 Jun 2024 15:24:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B361C8FDB;
+	Fri, 28 Jun 2024 15:24:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LP8PC4b/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z3qvItiC"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5403B1C68BB;
-	Fri, 28 Jun 2024 15:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07441C8FC5;
+	Fri, 28 Jun 2024 15:24:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719588260; cv=none; b=bUHRkfxGKyo7fn8xWqL72lvjdSXy8tG6/9m7QZ+r+MBp90zYEljwltzJ+iRDuPL97s8ZF5LR/izFdERyvvZjdfnTnv7todCY0YiljTtdysZ2HWT5Zh38IKQ+BBJPYN9h8toq43O//hf9GtJ6xJapfsXeo+LOrHC2MYL8E+SD/ck=
+	t=1719588262; cv=none; b=NS2HXDQUcmwRatQQeqfYQqGa4MoJsW007aoc49KZokWCrhPo7Alat30Zf+embmqyMwh382Li9tjwEo63QnnWQj9gh9heqy2HzrzRPWg9cUClC2S19ZCYYq8CvCC7pz+n45AV3kV3r2JwO6jqftfC5B3O13ULE5dQErWJjDGa4mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719588260; c=relaxed/simple;
-	bh=u7IYOMTzp9xREiAi4wg3Mj/pxSjba5iiHOxXxGrFGWc=;
+	s=arc-20240116; t=1719588262; c=relaxed/simple;
+	bh=u7/YTPfkJAvo+RAL3M9xn1PEb7/40zQ1Yd5GJRvX0J0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pnKMUO4NjKMTy4Hw1LXf7iQLOvDgm6tcPsbLN0pHXT8ysQ3+jXAQFd2l2NE5yH0vsnSWvbmHzMxEqE6irecwsEmrjZp8VAh4taAqBb4WKLM4/cMy/+ngWg4ndDIFGIr6DjaOCxhry+5hd+jaqcUrPySm+r3EMYb84FMmQQ1Lx2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LP8PC4b/; arc=none smtp.client-ip=209.85.208.50
+	 MIME-Version; b=W9T3tZlc27sMzmK9+U2AZ2ZqpKNesXX7Iav/PsG+WA+KKVtxZvP3wqR7FLGn7YC7mU5c6qWiYli4aVBTJNJQIbFgc2MawHbqGRmUMl4tOWB5E7v3FjUE6w0wI/NwWdD+s87rpbxwNxYxxx1rJ70f8lIgK5SNuxWaw4XSUOEaDVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z3qvItiC; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57d1d614049so1034044a12.1;
-        Fri, 28 Jun 2024 08:24:18 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a6fdd947967so76495866b.2;
+        Fri, 28 Jun 2024 08:24:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719588257; x=1720193057; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719588259; x=1720193059; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g84bRW4nhMKxUt85kPwWVaoKgwu5Ry9pS3Tn/2CKkV4=;
-        b=LP8PC4b/Td+JrfT5wORf6OUxEg+fTpsBZMVsEWJuMTjTXlpFIGKGNIrkNv8UjfvzVY
-         /4NiXetIpAI9tgP9QiKyfZwV2//bSSLP008ExVJ/5zD3rUIPU/8dtJXkeZO92qc6DgJZ
-         0jxxeSVtC0efsspLp0xTlHN9Gi0pjelnlTGs4cv9WgS/mpTKaAVYuzS42F2UfpZUnKKx
-         8Pg2W0ODV4pvhx2dMFY5uPUYMngK8CdcI6Oj7qvvLaQ+ASS0DuQDEPPB+emDOK0nqyo1
-         WM2j1yAqHu0nBWeXmzcfoqCarVadlLnAuZfzztnU1OhdsUHjqj6YZVHKTX9h035wbsGQ
-         TycQ==
+        bh=UyhUDNd2cxLPE3+2Xa0aiyHUJwN9W1K/tIImYyLqEAM=;
+        b=Z3qvItiCtatvaYWcOYn8IPjr6Fi1GaQOjGA3I78O409cYtJWk2VL3lgBN+TEVhroCg
+         6oIbPdXprDLipc3PMIRIZ2nJIjwg9To1EhQRBjKDyuH+57alI7TmFIDNCvIhaEZmSDc4
+         DTsg4ExaX12a0hkSWHlt/DpUy0SOAtBvTA8HpB3qhEXDzYS4CoAJcdNzjV41svKsVnio
+         PRHdYdd8GFnkjM0K/exxY8tOOMvilyQa6OcnkobUSwyJQupGUQP9lU4oYgoPwUdsIHbe
+         ZnOOA9McqWlaqcY3EpgZmRSPtMjzI2uyCui1q9sx3xTZ8OsnP3T8uvs49fu2+ishnp/U
+         0Rrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719588257; x=1720193057;
+        d=1e100.net; s=20230601; t=1719588259; x=1720193059;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g84bRW4nhMKxUt85kPwWVaoKgwu5Ry9pS3Tn/2CKkV4=;
-        b=n78wAjtV/qH0dJUEX+ThNqgyhodIW+c0yUIfGO75tyrSrfQPkw5G8jigcTU308m+af
-         1VdnVHWc37qNPhG7dzN4LiFhGKG8rNpB2TVgDQnQaTWxiTbS74rjnYVBDjtSjVDA9gmN
-         jCRFiAkS6Rk9+/H65Mp9ZzjOdB+MXU2iC2kseQDU16qpjuKoOpvkE0a7r9GgU2HCv3EH
-         e0SP0v8zN0hwYVywim2G8HJxATYO8yg96f6ctWNUHZyJvFDFkBAUob4IOUN7MxKt9WBz
-         GmHHdwFSdA18v3DMmF2Hj9E7vXzalmLeScbeqzqoWP8TILEGqhV+k1/xcGX/KdZhg7g+
-         VTpA==
-X-Forwarded-Encrypted: i=1; AJvYcCWZ+qzvyBqGLP14CXxHmTbvvaCzajAAasN8RmmFWQkAJZbBN/tCyMvtODPS/NCnYUbWM7hNC3dqpvnORn9luyYL7cxYHfDrlyffXHp4ScL3qQCR6Brsg3gwyIBGJ1q/4GpEVnroVIzU8cTDjcwbElghFhoxW2VeDamNZjJmd+bVJzzJOk8=
-X-Gm-Message-State: AOJu0Yyk5YrYETNURSF6FuGDsA0DlHCxkEV1etmo14NHHSgFIViNy2IZ
-	w6fMieSTBDgBZBtq//EB5xi8k71D0UPQxqgTBMQuwBfctJkntwqhXiL1DQea
-X-Google-Smtp-Source: AGHT+IFN7jAipskD97GNCEauY07Bihj0lh+hHZxojUbtOj5vE8jdgonvZ72fKB4aBg7wup8Oo0MkuQ==
-X-Received: by 2002:a17:906:591:b0:a6f:5f8f:6c43 with SMTP id a640c23a62f3a-a7245c809e9mr1209900066b.56.1719588256409;
-        Fri, 28 Jun 2024 08:24:16 -0700 (PDT)
+        bh=UyhUDNd2cxLPE3+2Xa0aiyHUJwN9W1K/tIImYyLqEAM=;
+        b=E7ASR84IVXDXXJ51w67yPrJ6bidGiTKgxdPficUxyYEaJvnUMi16563LnIIf8TAwpL
+         xKhkjd/u5MLpvlibKW/ZuW3RFttLHDHcM5hOsuWMs+rtA1Gvyl989X7wkQDVbslK43c8
+         gBWQTi9rrBFYPSQp9tqt1ocO2PPgwqKDLmjW4LSdyamwchhT4C6JpnD7l+4xh0aj/8xJ
+         KmGz8NYFCz76lYHC/MC5YuZ2z4Oqk+o6l1XMMIPAojn+qiJSPpPL161yBkKRgDrpA2yw
+         C2mWeqyZedMzuxDgUPKq8DOmxIaquKc7N6TbhTG5bJPIyVuiQgTZZAW4OrdytRFvVrNa
+         X+GQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXFfmnjgPrRFU7V+GnQzgQPOfJP6T55DNw7gQVBvkJHllUAjRUeBR+F7OtSZYRJs+HpL/tF5xvQFMGQwR2Oj6Bk9yv89N6ZUT/dzCb9qDpeNNZQQh6VQM57w9JaeIO6soBO4qOBRsQdtilh/vsDLkG//P83q77thftAx+arR495y5YZeHY=
+X-Gm-Message-State: AOJu0Yy+dF7dW6n7UATvA7A7iicLVJjVhtnF/AAyvdPGR/bRc28L3GLK
+	wTuEGTqD8QtnjU09EvxstZ5xILVuAxrY9/fM/baFaYCA6zpoe2q4
+X-Google-Smtp-Source: AGHT+IHg5M76Ad7N6AJt7tENSmeLfZGVCsP9tkhiUlBsWSzuzsGhyJIFqnALq5yXkUnyFjWSPpsF2w==
+X-Received: by 2002:a17:906:a847:b0:a6f:6721:b065 with SMTP id a640c23a62f3a-a7245bb25e6mr1244135866b.32.1719588259199;
+        Fri, 28 Jun 2024 08:24:19 -0700 (PDT)
 Received: from iris-Ian.fritz.box (p200300eb5f2e9b00e0c268ab7636554b.dip0.t-ipconnect.de. [2003:eb:5f2e:9b00:e0c2:68ab:7636:554b])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72af0c9d06sm69644166b.18.2024.06.28.08.24.15
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72af0c9d06sm69644166b.18.2024.06.28.08.24.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jun 2024 08:24:16 -0700 (PDT)
+        Fri, 28 Jun 2024 08:24:18 -0700 (PDT)
 From: iansdannapel@gmail.com
 To: Moritz Fischer <mdf@kernel.org>,
 	Wu Hao <hao.wu@intel.com>,
@@ -87,9 +87,9 @@ To: Moritz Fischer <mdf@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Ian Dannapel <iansdannapel@gmail.com>
-Subject: [PATCH v2 2/3] dt-bindings: fpga: Add Efinix serial SPI programming bindings
-Date: Fri, 28 Jun 2024 17:23:47 +0200
-Message-Id: <20240628152348.61133-3-iansdannapel@gmail.com>
+Subject: [PATCH v2 3/3] dt-bindings: vendor-prefix: Add prefix for Efinix, Inc.
+Date: Fri, 28 Jun 2024 17:23:48 +0200
+Message-Id: <20240628152348.61133-4-iansdannapel@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240628152348.61133-1-iansdannapel@gmail.com>
 References: <20240620144217.124733-1-iansdannapel@gmail.com>
@@ -104,102 +104,26 @@ Content-Transfer-Encoding: 8bit
 
 From: Ian Dannapel <iansdannapel@gmail.com>
 
-Add device tree binding documentation for configuring Efinix FPGA
-using serial SPI passive programming mode.
+Add entry for Efinix, Inc. (https://www.efinixinc.com/)
 
 Signed-off-by: Ian Dannapel <iansdannapel@gmail.com>
 ---
- .../fpga/efinix,trion-spi-passive.yaml        | 81 +++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml b/Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml
-new file mode 100644
-index 000000000000..d44a9d0627b6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/efinix,trion-spi-passive.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Efinix SPI FPGA Manager
-+
-+maintainers:
-+  - Ian Dannapel <iansdannapel@gmail.com>
-+
-+description: |
-+  Efinix Trion and Titanium Series FPGAs support a method of loading the
-+  bitstream over what is referred to as "SPI Passive Programming".
-+  Only serial (1x bus width) is supported, setting the programming mode
-+  is not in the scope the this manager and must be done elsewhere.
-+
-+  References:
-+  - https://www.efinixinc.com/docs/an033-configuring-titanium-fpgas-v2.6.pdf
-+  - https://www.efinixinc.com/docs/an006-configuring-trion-fpgas-v6.0.pdf
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - efinix,trion-spi-passive
-+      - efinix,titanium-spi-passive
-+
-+  spi-cpha: true
-+
-+  spi-cpol: true
-+
-+  spi-max-frequency:
-+    maximum: 25000000
-+
-+  reg:
-+    maxItems: 1
-+
-+  creset-gpios:
-+    description:
-+      reset and re-configuration trigger pin (low active)
-+    maxItems: 1
-+
-+  cs-gpios:
-+    description:
-+      chip-select pin (low active)
-+    maxItems: 1
-+
-+  cdone-gpios:
-+    description:
-+      optional configuration done status pin (high active)
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - creset-gpios
-+  - cs-gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    spi {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      fpga_mgr_spi: fpga-mgr@0 {
-+        compatible = "efinix,trion-spi-passive";
-+        reg = <0>;
-+        spi-max-frequency = <25000000>;
-+        spi-cpha;
-+        spi-cpol;
-+        creset-gpios = <&gpio4 17 GPIO_ACTIVE_LOW>;
-+        cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
-+        cdone-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
-+      };
-+    };
-+...
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index fbf47f0bacf1..6175719c1fb6 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -422,6 +422,8 @@ patternProperties:
+     description: Emtop Embedded Solutions
+   "^eeti,.*":
+     description: eGalax_eMPIA Technology Inc
++  "^efinix,.*":
++    description: Efinix, Inc.
+   "^einfochips,.*":
+     description: Einfochips
+   "^eink,.*":
 -- 
 2.34.1
 
