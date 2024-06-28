@@ -1,72 +1,72 @@
-Return-Path: <linux-fpga+bounces-564-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-565-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59B4091C28D
-	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 17:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 58B8A91C290
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 17:24:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAED71F21F7A
-	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 15:24:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAA691F22121
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 15:24:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B871C68B3;
-	Fri, 28 Jun 2024 15:24:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17BB81C8FAB;
+	Fri, 28 Jun 2024 15:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fBjXhDzd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LP8PC4b/"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20831C6893;
-	Fri, 28 Jun 2024 15:24:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5403B1C68BB;
+	Fri, 28 Jun 2024 15:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719588257; cv=none; b=VI3mGngzBu93yq14AZMGwfPjzTNBVDEkREllAs0rU9hnHllYUiFvJxAnkfCcrN+tgdE9s6yuap01eSiYBLupUaLwc9UlP3tVtRSxsTC1+9HjwtLsneS9M3WPo2UvW1h/aAMHNd4piSsKVR6GWBy9VktL9MCv9L9/RyNLfbn0fPI=
+	t=1719588260; cv=none; b=bUHRkfxGKyo7fn8xWqL72lvjdSXy8tG6/9m7QZ+r+MBp90zYEljwltzJ+iRDuPL97s8ZF5LR/izFdERyvvZjdfnTnv7todCY0YiljTtdysZ2HWT5Zh38IKQ+BBJPYN9h8toq43O//hf9GtJ6xJapfsXeo+LOrHC2MYL8E+SD/ck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719588257; c=relaxed/simple;
-	bh=wv/tPHnVFDFxvkffOh2TWFigIzr8JgFTiRk6zfmBUEE=;
+	s=arc-20240116; t=1719588260; c=relaxed/simple;
+	bh=u7IYOMTzp9xREiAi4wg3Mj/pxSjba5iiHOxXxGrFGWc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rrfD667xhIcNoksalaebRUoGTBwl5xBZXLoICLeH9/Fo6if7IOyUYUwYOdv6DZR1B5L+o5VF66BYMi8xdfP+hLCMiVxqEpxHeTDAp2EOnu9GcrXhB5RRRfvLsX3MmociMx2xgX1oNpcvmC9Fg+d5nTSExC4swUnM/fUHknwnDU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fBjXhDzd; arc=none smtp.client-ip=209.85.167.54
+	 MIME-Version; b=pnKMUO4NjKMTy4Hw1LXf7iQLOvDgm6tcPsbLN0pHXT8ysQ3+jXAQFd2l2NE5yH0vsnSWvbmHzMxEqE6irecwsEmrjZp8VAh4taAqBb4WKLM4/cMy/+ngWg4ndDIFGIr6DjaOCxhry+5hd+jaqcUrPySm+r3EMYb84FMmQQ1Lx2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LP8PC4b/; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-52cdf2c7454so1439849e87.1;
-        Fri, 28 Jun 2024 08:24:15 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57d1d614049so1034044a12.1;
+        Fri, 28 Jun 2024 08:24:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719588254; x=1720193054; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719588257; x=1720193057; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=k7rugaJsrGdIm1Ix/ztb8hKsPqYUFKNp5tBPNxYhbtY=;
-        b=fBjXhDzdN52RlMqO0w+3HKoMMQpOVWZTliTsm0UaWVJFqCjNPAiqBw5xs8nSSgOUPX
-         b2ptuenyEWsPWV7LgbRrVP9qGgd6Ozw3/MWKtYedZI1/fe7J6a1CMYtlHDp9V0HeD3Jn
-         dKfk4jnwEPdZVWJSyATCYlFlhvVIdkvSqGWgR++ZMGV8kzhv/CPS4S/t8SwwDrvAmhKp
-         TMw6bAR7MDoCi0WaO6wFP9KcByOfpom9WNfKpyRDsJkTIHm/2dKPtcwvRC3pGSsIXvRt
-         vcMqHFlmhxC0cFeH5gx1R7hHeXJPnKo5ZL8qYREY4spS6HJDCO5x9ny2illP0uSnh5wl
-         Pd1g==
+        bh=g84bRW4nhMKxUt85kPwWVaoKgwu5Ry9pS3Tn/2CKkV4=;
+        b=LP8PC4b/Td+JrfT5wORf6OUxEg+fTpsBZMVsEWJuMTjTXlpFIGKGNIrkNv8UjfvzVY
+         /4NiXetIpAI9tgP9QiKyfZwV2//bSSLP008ExVJ/5zD3rUIPU/8dtJXkeZO92qc6DgJZ
+         0jxxeSVtC0efsspLp0xTlHN9Gi0pjelnlTGs4cv9WgS/mpTKaAVYuzS42F2UfpZUnKKx
+         8Pg2W0ODV4pvhx2dMFY5uPUYMngK8CdcI6Oj7qvvLaQ+ASS0DuQDEPPB+emDOK0nqyo1
+         WM2j1yAqHu0nBWeXmzcfoqCarVadlLnAuZfzztnU1OhdsUHjqj6YZVHKTX9h035wbsGQ
+         TycQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719588254; x=1720193054;
+        d=1e100.net; s=20230601; t=1719588257; x=1720193057;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=k7rugaJsrGdIm1Ix/ztb8hKsPqYUFKNp5tBPNxYhbtY=;
-        b=MUVFmMgxlgZ2ggyhYnj1MLMYTgExzLm/V7O056W9VSsSA0LBfwT/AlpRV8lI/aDlqX
-         QVc7Uff3bMxWpLUbxqxj1dZ8r477jNTUAnrxZN8Ku3iQfqEvxsDOG6bczNnXEORgW0OY
-         E4ft6lVJAzDOj7JCYVyCivqIo+vST83OoOqtR55vG/iHtYTcSEGZz15IcxhesVEMsrfK
-         aH9oU+HXFytnL5cBAxN1vURhakzSYHflaKpm3Hkt9wHkcalWZrBzW1CZK6+8IKwMmFGh
-         BAJx1YkQioMVqZ/dSKHbnXehBsBMMDeToxNim7/qGYa7mW6pUOR6ryektvUanPdzpZou
-         arcw==
-X-Forwarded-Encrypted: i=1; AJvYcCWRcepLeBZ+VA3RucRiXc6VTveyrLcWl9Jh2wKJWOBi8/SEVaaM87cjnWCSi2QuSdVFvPzdt7MFh45aeSJeSogFdavohzquM0dt4DNGG8xpNbIEL97Rp3HlclobcWUt8vfDPUit9k2xCU8NdJATQUv96JK4IRUc9QOP4jNILkHPn36y+/Q=
-X-Gm-Message-State: AOJu0YwO1p23YiOTnJ2VaMSKqbUBoX9EPcJDFSMXjuKBPKjSBBH6NTlB
-	0P5NV6/49NablJa03+QlTmg/uF2fBfOZdMl8QyERt962jMrk6ifj6No3AWOX
-X-Google-Smtp-Source: AGHT+IFuKP3l7KTlau26G0wM3mrPudUvVpa7DYY0H6Ojuh3YVjvGMiyjNumAP1yrCQKRD2PYbzQYlw==
-X-Received: by 2002:a19:ca4f:0:b0:52b:be6b:d16a with SMTP id 2adb3069b0e04-52ce183573fmr11851969e87.31.1719588253708;
-        Fri, 28 Jun 2024 08:24:13 -0700 (PDT)
+        bh=g84bRW4nhMKxUt85kPwWVaoKgwu5Ry9pS3Tn/2CKkV4=;
+        b=n78wAjtV/qH0dJUEX+ThNqgyhodIW+c0yUIfGO75tyrSrfQPkw5G8jigcTU308m+af
+         1VdnVHWc37qNPhG7dzN4LiFhGKG8rNpB2TVgDQnQaTWxiTbS74rjnYVBDjtSjVDA9gmN
+         jCRFiAkS6Rk9+/H65Mp9ZzjOdB+MXU2iC2kseQDU16qpjuKoOpvkE0a7r9GgU2HCv3EH
+         e0SP0v8zN0hwYVywim2G8HJxATYO8yg96f6ctWNUHZyJvFDFkBAUob4IOUN7MxKt9WBz
+         GmHHdwFSdA18v3DMmF2Hj9E7vXzalmLeScbeqzqoWP8TILEGqhV+k1/xcGX/KdZhg7g+
+         VTpA==
+X-Forwarded-Encrypted: i=1; AJvYcCWZ+qzvyBqGLP14CXxHmTbvvaCzajAAasN8RmmFWQkAJZbBN/tCyMvtODPS/NCnYUbWM7hNC3dqpvnORn9luyYL7cxYHfDrlyffXHp4ScL3qQCR6Brsg3gwyIBGJ1q/4GpEVnroVIzU8cTDjcwbElghFhoxW2VeDamNZjJmd+bVJzzJOk8=
+X-Gm-Message-State: AOJu0Yyk5YrYETNURSF6FuGDsA0DlHCxkEV1etmo14NHHSgFIViNy2IZ
+	w6fMieSTBDgBZBtq//EB5xi8k71D0UPQxqgTBMQuwBfctJkntwqhXiL1DQea
+X-Google-Smtp-Source: AGHT+IFN7jAipskD97GNCEauY07Bihj0lh+hHZxojUbtOj5vE8jdgonvZ72fKB4aBg7wup8Oo0MkuQ==
+X-Received: by 2002:a17:906:591:b0:a6f:5f8f:6c43 with SMTP id a640c23a62f3a-a7245c809e9mr1209900066b.56.1719588256409;
+        Fri, 28 Jun 2024 08:24:16 -0700 (PDT)
 Received: from iris-Ian.fritz.box (p200300eb5f2e9b00e0c268ab7636554b.dip0.t-ipconnect.de. [2003:eb:5f2e:9b00:e0c2:68ab:7636:554b])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72af0c9d06sm69644166b.18.2024.06.28.08.24.12
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72af0c9d06sm69644166b.18.2024.06.28.08.24.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jun 2024 08:24:13 -0700 (PDT)
+        Fri, 28 Jun 2024 08:24:16 -0700 (PDT)
 From: iansdannapel@gmail.com
 To: Moritz Fischer <mdf@kernel.org>,
 	Wu Hao <hao.wu@intel.com>,
@@ -87,9 +87,9 @@ To: Moritz Fischer <mdf@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Ian Dannapel <iansdannapel@gmail.com>
-Subject: [PATCH v2 1/3] fpga: Add Efinix Trion & Titanium serial SPI programming driver
-Date: Fri, 28 Jun 2024 17:23:46 +0200
-Message-Id: <20240628152348.61133-2-iansdannapel@gmail.com>
+Subject: [PATCH v2 2/3] dt-bindings: fpga: Add Efinix serial SPI programming bindings
+Date: Fri, 28 Jun 2024 17:23:47 +0200
+Message-Id: <20240628152348.61133-3-iansdannapel@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240628152348.61133-1-iansdannapel@gmail.com>
 References: <20240620144217.124733-1-iansdannapel@gmail.com>
@@ -104,273 +104,102 @@ Content-Transfer-Encoding: 8bit
 
 From: Ian Dannapel <iansdannapel@gmail.com>
 
-Add a new driver for loading binary firmware using "SPI passive
-programming" on Efinix FPGAs.
+Add device tree binding documentation for configuring Efinix FPGA
+using serial SPI passive programming mode.
 
 Signed-off-by: Ian Dannapel <iansdannapel@gmail.com>
 ---
- drivers/fpga/Kconfig                    |   8 +
- drivers/fpga/Makefile                   |   1 +
- drivers/fpga/efinix-trion-spi-passive.c | 219 ++++++++++++++++++++++++
- 3 files changed, 228 insertions(+)
- create mode 100644 drivers/fpga/efinix-trion-spi-passive.c
+ .../fpga/efinix,trion-spi-passive.yaml        | 81 +++++++++++++++++++
+ 1 file changed, 81 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml
 
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index 37b35f58f0df..25579510e49e 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -83,6 +83,14 @@ config FPGA_MGR_XILINX_SPI
- 	  FPGA manager driver support for Xilinx FPGA configuration
- 	  over slave serial interface.
- 
-+config FPGA_MGR_EFINIX_SPI
-+	tristate "Efinix FPGA configuration over SPI passive"
-+	depends on SPI
-+	help
-+	  This option enables support for the FPGA manager driver to
-+	  configure Efinix Trion and Titanium Series FPGAs over SPI
-+	  using passive serial mode.
-+
- config FPGA_MGR_ICE40_SPI
- 	tristate "Lattice iCE40 SPI"
- 	depends on OF && SPI
-diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-index aeb89bb13517..1a95124ff847 100644
---- a/drivers/fpga/Makefile
-+++ b/drivers/fpga/Makefile
-@@ -18,6 +18,7 @@ obj-$(CONFIG_FPGA_MGR_TS73XX)		+= ts73xx-fpga.o
- obj-$(CONFIG_FPGA_MGR_XILINX_CORE)	+= xilinx-core.o
- obj-$(CONFIG_FPGA_MGR_XILINX_SELECTMAP)	+= xilinx-selectmap.o
- obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
-+obj-$(CONFIG_FPGA_MGR_EFINIX_SPI)	+= efinix-trion-spi-passive.o
- obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
- obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
- obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
-diff --git a/drivers/fpga/efinix-trion-spi-passive.c b/drivers/fpga/efinix-trion-spi-passive.c
+diff --git a/Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml b/Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml
 new file mode 100644
-index 000000000000..eb2592e788b9
+index 000000000000..d44a9d0627b6
 --- /dev/null
-+++ b/drivers/fpga/efinix-trion-spi-passive.c
-@@ -0,0 +1,219 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Trion and Titanium Series FPGA SPI Passive Programming Driver
-+ *
-+ * Copyright (C) 2024 iris-GmbH infrared & intelligent sensors
-+ *
-+ * Ian Dannapel <iansdannapel@gmail.com>
-+ *
-+ * Manage Efinix FPGA firmware that is loaded over SPI using
-+ * the serial configuration interface.
-+ */
++++ b/Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml
+@@ -0,0 +1,81 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/fpga/efinix,trion-spi-passive.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/fpga/fpga-mgr.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/of.h>
-+#include <linux/spi/spi.h>
-+#include <linux/sizes.h>
++title: Efinix SPI FPGA Manager
 +
-+struct efinix_spi_conf {
-+	struct spi_device *spi;
-+	struct gpio_desc *cdone;
-+	struct gpio_desc *creset;
-+	struct gpio_desc *cs;
-+};
++maintainers:
++  - Ian Dannapel <iansdannapel@gmail.com>
 +
-+static int get_cdone_gpio(struct fpga_manager *mgr)
-+{
-+	struct efinix_spi_conf *conf = mgr->priv;
-+	int ret;
++description: |
++  Efinix Trion and Titanium Series FPGAs support a method of loading the
++  bitstream over what is referred to as "SPI Passive Programming".
++  Only serial (1x bus width) is supported, setting the programming mode
++  is not in the scope the this manager and must be done elsewhere.
 +
-+	ret = gpiod_get_value(conf->cdone);
-+	if (ret < 0)
-+		dev_err(&mgr->dev, "Error reading CDONE (%d)\n", ret);
++  References:
++  - https://www.efinixinc.com/docs/an033-configuring-titanium-fpgas-v2.6.pdf
++  - https://www.efinixinc.com/docs/an006-configuring-trion-fpgas-v6.0.pdf
 +
-+	return ret;
-+}
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
 +
-+static void reset(struct fpga_manager *mgr)
-+{
-+	struct efinix_spi_conf *conf = mgr->priv;
++properties:
++  compatible:
++    enum:
++      - efinix,trion-spi-passive
++      - efinix,titanium-spi-passive
 +
-+	gpiod_set_value(conf->creset, 1);
-+	/* wait tCRESET_N */
-+	usleep_range(5, 15);
-+	gpiod_set_value(conf->creset, 0);
-+}
++  spi-cpha: true
 +
-+static enum fpga_mgr_states efinix_spi_state(struct fpga_manager *mgr)
-+{
-+	struct efinix_spi_conf *conf = mgr->priv;
++  spi-cpol: true
 +
-+	if (conf->cdone && get_cdone_gpio(mgr) == 1)
-+		return FPGA_MGR_STATE_OPERATING;
++  spi-max-frequency:
++    maximum: 25000000
 +
-+	return FPGA_MGR_STATE_UNKNOWN;
-+}
++  reg:
++    maxItems: 1
 +
-+static int efinix_spi_apply_clk_cycles(struct fpga_manager *mgr)
-+{
-+	struct efinix_spi_conf *conf = mgr->priv;
-+	char data[13] = {0};
++  creset-gpios:
++    description:
++      reset and re-configuration trigger pin (low active)
++    maxItems: 1
 +
-+	return spi_write(conf->spi, data, sizeof(data));
-+}
++  cs-gpios:
++    description:
++      chip-select pin (low active)
++    maxItems: 1
 +
-+static int efinix_spi_write_init(struct fpga_manager *mgr,
-+				 struct fpga_image_info *info,
-+				 const char *buf, size_t count)
-+{
-+	struct efinix_spi_conf *conf = mgr->priv;
++  cdone-gpios:
++    description:
++      optional configuration done status pin (high active)
++    maxItems: 1
 +
-+	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
-+		dev_err(&mgr->dev, "Partial reconfiguration not supported\n");
-+		return -EINVAL;
-+	}
++required:
++  - compatible
++  - reg
++  - creset-gpios
++  - cs-gpios
 +
-+	/* reset with chip select active */
-+	gpiod_set_value(conf->cs, 1);
-+	usleep_range(5, 15);
-+	reset(mgr);
++additionalProperties: false
 +
-+	/* wait tDMIN */
-+	usleep_range(100, 150);
-+
-+	return 0;
-+}
-+
-+static int efinix_spi_write(struct fpga_manager *mgr, const char *buf,
-+			    size_t count)
-+{
-+	struct efinix_spi_conf *conf = mgr->priv;
-+	int ret;
-+
-+	ret = spi_write(conf->spi, buf, count);
-+	if (ret) {
-+		dev_err(&mgr->dev, "SPI error in firmware write: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	/* append at least 100 clock cycles */
-+	efinix_spi_apply_clk_cycles(mgr);
-+
-+	/* release chip select */
-+	gpiod_set_value(conf->cs, 0);
-+
-+	return 0;
-+}
-+
-+static int efinix_spi_write_complete(struct fpga_manager *mgr,
-+				     struct fpga_image_info *info)
-+{
-+	struct efinix_spi_conf *conf = mgr->priv;
-+	unsigned long timeout =
-+		jiffies + usecs_to_jiffies(info->config_complete_timeout_us);
-+	bool expired = false;
-+	int done;
-+
-+	if (conf->cdone) {
-+		while (!expired) {
-+			expired = time_after(jiffies, timeout);
-+
-+			done = get_cdone_gpio(mgr);
-+			if (done < 0)
-+				return done;
-+
-+			if (done)
-+				break;
-+		}
-+	}
-+
-+	if (expired)
-+		return -ETIMEDOUT;
-+
-+	/* wait tUSER */
-+	usleep_range(75, 125);
-+
-+	return 0;
-+}
-+
-+static const struct fpga_manager_ops efinix_spi_ops = {
-+	.state = efinix_spi_state,
-+	.write_init = efinix_spi_write_init,
-+	.write = efinix_spi_write,
-+	.write_complete = efinix_spi_write_complete,
-+};
-+
-+static int efinix_spi_probe(struct spi_device *spi)
-+{
-+	struct efinix_spi_conf *conf;
-+	struct fpga_manager *mgr;
-+
-+	conf = devm_kzalloc(&spi->dev, sizeof(*conf), GFP_KERNEL);
-+	if (!conf)
-+		return -ENOMEM;
-+
-+	conf->spi = spi;
-+
-+	conf->creset = devm_gpiod_get(&spi->dev, "creset", GPIOD_OUT_HIGH);
-+	if (IS_ERR(conf->creset))
-+		return dev_err_probe(&spi->dev, PTR_ERR(conf->creset),
-+				"Failed to get RESET gpio\n");
-+
-+	conf->cs = devm_gpiod_get(&spi->dev, "cs", GPIOD_OUT_HIGH);
-+	if (IS_ERR(conf->cs))
-+		return dev_err_probe(&spi->dev, PTR_ERR(conf->cs),
-+				"Failed to get CHIP_SELECT gpio\n");
-+
-+	if (!(spi->mode & SPI_CPHA) || !(spi->mode & SPI_CPOL))
-+		return dev_err_probe(&spi->dev, PTR_ERR(conf->cs),
-+				"Unsupported SPI mode, set CPHA and CPOL\n");
-+
-+	conf->cdone = devm_gpiod_get_optional(&spi->dev, "cdone", GPIOD_IN);
-+	if (IS_ERR(conf->cdone))
-+		return dev_err_probe(&spi->dev, PTR_ERR(conf->cdone),
-+				"Failed to get CDONE gpio\n");
-+
-+	mgr = devm_fpga_mgr_register(&spi->dev,
-+				"Efinix SPI Passive Programming FPGA Manager",
-+					&efinix_spi_ops, conf);
-+
-+	return PTR_ERR_OR_ZERO(mgr);
-+}
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id efnx_spi_of_match[] = {
-+	{ .compatible = "efinix,trion-spi-passive", },
-+	{ .compatible = "efinix,titanium-spi-passive", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, efnx_spi_of_match);
-+#endif
-+
-+static const struct spi_device_id efinix_ids[] = {
-+	{ "trion-spi-passive", 0 },
-+	{ "titanium-spi-passive", 0 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(spi, efinix_ids);
-+
-+
-+static struct spi_driver efinix_spi_passive_driver = {
-+	.driver = {
-+		.name = "efinix-fpga-spi-passive",
-+		.of_match_table = of_match_ptr(efnx_spi_of_match),
-+	},
-+	.probe = efinix_spi_probe,
-+	.id_table = efinix_ids,
-+};
-+
-+module_spi_driver(efinix_spi_passive_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Ian Dannapel <iansdannapel@gmail.com>");
-+MODULE_DESCRIPTION("Load Efinix FPGA firmware over SPI passive");
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    spi {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      fpga_mgr_spi: fpga-mgr@0 {
++        compatible = "efinix,trion-spi-passive";
++        reg = <0>;
++        spi-max-frequency = <25000000>;
++        spi-cpha;
++        spi-cpol;
++        creset-gpios = <&gpio4 17 GPIO_ACTIVE_LOW>;
++        cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
++        cdone-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
++      };
++    };
++...
 -- 
 2.34.1
 
