@@ -1,47 +1,47 @@
-Return-Path: <linux-fpga+bounces-567-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-568-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04F8F91C313
-	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 18:01:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF90091C34C
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 18:07:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 352981C22B4D
-	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 16:01:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A3381F239DC
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Jun 2024 16:07:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3A7A1C0DCC;
-	Fri, 28 Jun 2024 16:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DC351C8FC6;
+	Fri, 28 Jun 2024 16:07:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D7ZgCR7W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qb5KoASv"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B77182B9;
-	Fri, 28 Jun 2024 16:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F3A1C8FC3;
+	Fri, 28 Jun 2024 16:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719590443; cv=none; b=eb1RMUAagDVlG91eHgS3fXHdM2CG+IJtBFqXaXi//bFQQCYADAvbrDyAXqi9bcpmvIX0qCK9e6k40BOhwxDhtPMeOFFrwGlJqOmoWqHtgOXXvx30OQ4RDnNWddaePPXEVk29uXmxrqA1Ute+K+QBLIJU12NVArMOMqPX0c9vooI=
+	t=1719590857; cv=none; b=JWw50DSCa3RpzfmMjpZnoA16NCLx6vI4awvDzIfB1MAsjjkMVsjCjOmZIomRfg60BMKWtK/2sGjvBHzy31yrrMQGkdgTvBemRDXi2m6OkRvyH55zzaUzEOLbeCPCmjO+0yQq1Rq2Vd83UtX7dB3h8wKigagGRpndYLb4mAteJkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719590443; c=relaxed/simple;
-	bh=d9+vGavIHjuofdvT9YcleeT1YhLvXjb51TCcEY2RgGI=;
+	s=arc-20240116; t=1719590857; c=relaxed/simple;
+	bh=6LxtY49jDsVw/0AopONLbTm99sT9nlFRVwnYuBY4KBY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QG6p5I7mWbETR8k5QuCwF89wMK8zeEUK6QTUR9Oc6Fv3abVsoqdd+KjswDl3PquCrbzbyJYum/HeoLvuNeYATu4sdceNfClN6880Z/UBRx3Dem69xZIlPmX+ICP6OuH9TXIWp49/955akJknUQNKQJXPZ/YVYDfLY4n+oi/pqOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D7ZgCR7W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8531DC116B1;
-	Fri, 28 Jun 2024 16:00:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=lrRBv18Gs5XgphK8cGR6iTuwF+rJmiDXGE3TWzS3ZQQ6Lr6pbuBnKASDrf+v3ky9Y8h0pf22vUBPFBzAl/EWUsHvmVhxXRGrF3nN9es4K3luO8AykDjwKdTqkOhmnGLVVZDrhP/lOOBhRJD7Mw5zTl+VJNOVbtjBuSuXqd6y1xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qb5KoASv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D804DC116B1;
+	Fri, 28 Jun 2024 16:07:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719590443;
-	bh=d9+vGavIHjuofdvT9YcleeT1YhLvXjb51TCcEY2RgGI=;
+	s=k20201202; t=1719590856;
+	bh=6LxtY49jDsVw/0AopONLbTm99sT9nlFRVwnYuBY4KBY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D7ZgCR7W1RR8XTrsAVAvb9of2sucd2e/K7kgGry628m8JzAo1AVQQ3GIflWbdACVL
-	 YStgSOV9OrFI0jajAUxoKcPucGwGuKhuROG6JYZGBE+8K1KrVnSMrmo8CHlXp6ssJg
-	 8CQh6QBXjXLkAXk5V1L5PJSopXMRP3G2KfvH54DxcqRE0NxMIdkkI7/YcHIKSQoQC0
-	 gtGKYP1Deu1YwN0XY5+eBqUtU5DB7ENCUkQtoaKQ75/KMA89c+XLk7LLm8IPQCcFKb
-	 JVFwG7p/+SLFGmKDDCoTwrwzVdRaUGmRBRl7eldy6YWTnC6eRu2STatYDtcuvv5iLL
-	 TrUuypIzv/9IQ==
-Date: Fri, 28 Jun 2024 17:00:37 +0100
+	b=Qb5KoASvg9qnN13ml4xzw9BtB4EfqVyh/XzmB5zmYhsT8aVtC5GnuL/rWtkD0JtiM
+	 vZek/wXWB7WhRWPjMkS8SJzD08mqBQw9Wi4Nw2GAIq4IIkkKdK626qSYh4iCqRBPfy
+	 cekgsxhkfOhQMpbZpbw17EezC+jJc8aXxWRY2qOXja+iaKbWGjILOF7KcpL+j4Di//
+	 nTCQDC4QdeaCInwj0hyJk1zv9vSNvVD8fHD/7NyL8gyWqean2PD/iTmZE4LWrZo3CU
+	 p/v4vFgPp5CM2+sRvZP/5YLax6Dey54ZiyWSdERlOxW5heChZIvjIbSzR9aqgmXdn1
+	 ABKU4MACEBYmQ==
+Date: Fri, 28 Jun 2024 17:07:30 +0100
 From: Conor Dooley <conor@kernel.org>
 To: iansdannapel@gmail.com
 Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
@@ -59,12 +59,12 @@ Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
 	Linus Walleij <linus.walleij@linaro.org>,
 	linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-bindings: vendor-prefix: Add prefix for
- Efinix, Inc.
-Message-ID: <20240628-hash-prior-4efcc411aeb6@spud>
+Subject: Re: [PATCH v2 2/3] dt-bindings: fpga: Add Efinix serial SPI
+ programming bindings
+Message-ID: <20240628-wind-security-002879d225b5@spud>
 References: <20240620144217.124733-1-iansdannapel@gmail.com>
  <20240628152348.61133-1-iansdannapel@gmail.com>
- <20240628152348.61133-4-iansdannapel@gmail.com>
+ <20240628152348.61133-3-iansdannapel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -72,35 +72,40 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="++Rd30xAIlfdFz2F"
+	protocol="application/pgp-signature"; boundary="B1e1D9fkpt5Vkw7k"
 Content-Disposition: inline
-In-Reply-To: <20240628152348.61133-4-iansdannapel@gmail.com>
+In-Reply-To: <20240628152348.61133-3-iansdannapel@gmail.com>
 
 
---++Rd30xAIlfdFz2F
+--B1e1D9fkpt5Vkw7k
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 28, 2024 at 05:23:48PM +0200, iansdannapel@gmail.com wrote:
-> From: Ian Dannapel <iansdannapel@gmail.com>
->=20
-> Add entry for Efinix, Inc. (https://www.efinixinc.com/)
->=20
-> Signed-off-by: Ian Dannapel <iansdannapel@gmail.com>
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    spi {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      fpga_mgr_spi: fpga-mgr@0 {
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+nit: the label here isn't used and can be dropped.
+Otherwise this looks okay to me,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
---++Rd30xAIlfdFz2F
+Thanks,
+Conor.
+
+--B1e1D9fkpt5Vkw7k
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZn7eJQAKCRB4tDGHoIJi
-0t8gAP4p60AjNbDpk3hf65X2ivbOdXhL6s3iRXN8vLWp6k7TgwEA7D/ZwuyqkDAm
-Tf/kqqN12Tje3F4e97Kr2c9hOkF7JQI=
-=Rxew
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZn7fwgAKCRB4tDGHoIJi
+0pZ0AQDA0OySbczbwXcrTQ0Gaw6f2Ow5YADbDMpfMRUU5IewYgEA85pkZomawLT6
+ecNYbrRl+TnmpRwu8ITVEvdfFlznQAY=
+=k63c
 -----END PGP SIGNATURE-----
 
---++Rd30xAIlfdFz2F--
+--B1e1D9fkpt5Vkw7k--
 
