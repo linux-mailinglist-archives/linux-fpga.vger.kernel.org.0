@@ -1,78 +1,78 @@
-Return-Path: <linux-fpga+bounces-594-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-595-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C1739570FD
-	for <lists+linux-fpga@lfdr.de>; Mon, 19 Aug 2024 18:53:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C64D9570FF
+	for <lists+linux-fpga@lfdr.de>; Mon, 19 Aug 2024 18:53:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7008AB250E6
-	for <lists+linux-fpga@lfdr.de>; Mon, 19 Aug 2024 16:53:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9182D1C22F94
+	for <lists+linux-fpga@lfdr.de>; Mon, 19 Aug 2024 16:53:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60C4188016;
-	Mon, 19 Aug 2024 16:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05B2117ADF9;
+	Mon, 19 Aug 2024 16:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Id2ZCRvn"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hPBf1cLJ"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B882187848
-	for <linux-fpga@vger.kernel.org>; Mon, 19 Aug 2024 16:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E46C179953
+	for <linux-fpga@vger.kernel.org>; Mon, 19 Aug 2024 16:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724086361; cv=none; b=Om26g3KHZTZTIsexsUYMH/Zl1dpld2R+H3NFH3ZSf0T48kQd0tdspjZ7/0OVS7OTQYn168CRgJLts7dVJJlVTi3rQxOHlucCeyBUQA9MxmKmiRoKDZsSuoTKnuQWEzRxZTofqR7GLlSaKamfpIBhbQ1l6Vp4dmG0KH+QPXkNEdA=
+	t=1724086364; cv=none; b=Hh5AF4arOPTByWdI/oQNYL0atGMokUWBCmv7UT64K4s48Qm6m/ixuiDOOFBRerqAitiomGh/Fx2LPwU91pJ3AYXF1do4awcUXlzRa2kJYg8obI2s61k1B3Sfx3EZT3uRVCiDf8rgqZG/07Opxf2sNPPVAvQFpyKRSNeUOtPi/Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724086361; c=relaxed/simple;
-	bh=kHKzvvyyQCeBkpz1OciLUTykSAMmzD8brX9rJ76+fHY=;
+	s=arc-20240116; t=1724086364; c=relaxed/simple;
+	bh=Hf2mWMH7KZvv8gLE1T3MLfUSP0vtA13S6Exz9YAmEAw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U8PEJCw2RG/bV9xuRDyIruJY/5B9aQbB+T0V9HzWX6TTJeNePTuogorncHhchHOzpJb6o5JFEhwgEckop+2i9m3N27v1ewUFu464un7ESKnyeeDOPG2LebIIrp7BtmPEbUEiQPD45k+43ciORbHllIvpWJoQE2kyWPZRLEu1oKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Id2ZCRvn; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=cjpXQwbOcretpNtawoxRGrmKwNGNsdnKB1DmMZooYwV2q5Ap2iFREdQPbET5m8pYEQePAPMS+lL5icoSaoBIwbWvZXRUxcCDJLbL1/4MIyg0YfQG2nukPHMw5pEEneWkmkNEtPHwv349lCHA3K8dofv751NNlSpRSiMPpZPi3d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hPBf1cLJ; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724086359;
+	s=mimecast20190719; t=1724086362;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NwxbMRfa8A0AMonhiodSZXz8snc1ppjCUOJ6oxZMysE=;
-	b=Id2ZCRvnLknW6EWoTU1fA6d+ZQhARufmR0dbasNrfgIaeChytBHkO1zyKpkK+oMwuzOPO9
-	JJWJFs9ncex8rBNF4gqWTzFfijiPGnTlfGLMAfV+MQcieVKKGwu0ovv4ElVuCrTfep1LIL
-	9vhfwGnRrTc74dj0StSlXg282Xoyjlc=
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
- [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=H1gq3j2cCLpN/PPS7zpa0q0nk2Py/Mwk9dwym7YeAH0=;
+	b=hPBf1cLJ88JepCEu4rNFgnxo7QjC0NNrt6O9VfZgLPUhAKY6FEXy+ehPt1cbAikj21nJ6A
+	k7RXLtmimkcLbfpjTjwlrEItby8+HCiAHaZXGvYzxJc9CegQKGnxg3yRmvg1uhDld5PpRh
+	4fNqAA+ZzG4WnHtcw5AP1gAbDeQr/5g=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-687-UTwOrP-CMVOBY5ob-3JZlQ-1; Mon, 19 Aug 2024 12:52:36 -0400
-X-MC-Unique: UTwOrP-CMVOBY5ob-3JZlQ-1
-Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-84303cc34bdso77902241.3
-        for <linux-fpga@vger.kernel.org>; Mon, 19 Aug 2024 09:52:35 -0700 (PDT)
+ us-mta-443-KZE2pGlCMIe4JfrKHJaYkQ-1; Mon, 19 Aug 2024 12:52:41 -0400
+X-MC-Unique: KZE2pGlCMIe4JfrKHJaYkQ-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7a1d6c57f9fso9251085a.3
+        for <linux-fpga@vger.kernel.org>; Mon, 19 Aug 2024 09:52:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724086355; x=1724691155;
+        d=1e100.net; s=20230601; t=1724086361; x=1724691161;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NwxbMRfa8A0AMonhiodSZXz8snc1ppjCUOJ6oxZMysE=;
-        b=bfIo3YcpgF8u2WvQeKbmVqwUtXmlKKJenpb4kkJqft7RZ3lCz1mYzV111b4UBk0U4g
-         zYdmJYqbknFdRzhAN8QwNHhSYOwPYbOMotU9md6Fc5FsKynJS7bPrIYMxL7AfhyRH+Y7
-         bcACVAEegHrC6LsGJ27/oLN98hzpPpcTzUzcH3DqAuzpaQfgULn648K/F2YgNXcMczlG
-         Okgz3oA3Rz4ezxj1Ju4k2Erw5yOrPaM9xrHa7PgJtdCk3pMZMRbecf5pmUhsTQ1sc35n
-         jLgmWCLnX+dr3fcTgnJXaOdywSqYDchBwQ6P+dNR87tV3dOcq9GvbOeMkDeP2ZJzO9TF
-         hM+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXCWImW/GELbb4DnbnWmuwCMXOWTPcJShobuvhjq9ceYyn40cJROejaV0nEI8sL0cz6O2TB/rX7UKy3cpEZ9ZgcXs90vJulf1LuMg==
-X-Gm-Message-State: AOJu0YzV8mJrnFmICEeNVlD6YOoxAvtNCcB0/n7TNdiqBX9aYZfUCr9D
-	8GH1b3KiLOP8ITAYCcoknpDzTrDzvfrnowtS5zAc69UVgCB4Nj+PcqbNHx1Mj7hPBvGG1Ck1igP
-	MXtUVOhHdPhQ9yiQTDWzA4fXB1gOpEyXAhcrBdkjBrzcf24163mSGphzKcb8=
-X-Received: by 2002:a05:6102:5494:b0:495:c40b:f7ca with SMTP id ada2fe7eead31-4977bf0d2d4mr5497612137.3.1724086355218;
-        Mon, 19 Aug 2024 09:52:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHysbKKqXtZq0nkk+KqqjyQL404GAu1sdBPta+GD7btYSYi5SLJQ3pijiCStxEYNXypkns3Gw==
-X-Received: by 2002:a05:6102:5494:b0:495:c40b:f7ca with SMTP id ada2fe7eead31-4977bf0d2d4mr5497574137.3.1724086354811;
-        Mon, 19 Aug 2024 09:52:34 -0700 (PDT)
+        bh=H1gq3j2cCLpN/PPS7zpa0q0nk2Py/Mwk9dwym7YeAH0=;
+        b=mL/Eyl6hu6i7c14uWaHiLqFTIfqWuQm162ApLVYtTmtRrZU+DgJoVHivudkD1wHx3o
+         epgoaAleepufBZFZZd6g0v1n9fY/6L4zHp5Fr4nAjxtk80p6UUCBgxm3E6pQgPqOu24y
+         YrgHvPKwDyv8Wp6LkWXqjJMXgJFaYmU5+SBC31zY4uQCbF+vQb+M8ZJ9jNIzou3LO5UQ
+         UjR+j+F25nKKsEv7vWjY0OORkHBPKHDdZEx1Wmf0NvF/zT5NEpWSinn3e3Q7HmQPd2+t
+         Uq84d6DV32KnV6/Cw0zwa/AJmvxOCvK54UHNkKWk2Ixzu83SoZPFZU49uf2TlwScmhBd
+         8mnA==
+X-Forwarded-Encrypted: i=1; AJvYcCUDbPER+QkAawNMJ8Natfl86vGpHt3UWJhLlU0FuUVjWdBAwJp3zsHkFj9GNopyeE+YkY7i3fGyXXCF@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7O0ktOvtvdH9AgsQiwRZ0aINOAT5MOb4qEVBgRDxLYg3U4n75
+	Vxx5JUoybJCrWvxVw39T6tz/Vc2y5luSZt+uizWJuLeT8f43FRPxw/0/uD2qEIqZwoMaTkaUOTG
+	3n0mNBwPDyKKcsTJOJ3BI0LBPqM54e25Cbpn1FMQ41fcAGDvUi6FwJDn1zpo=
+X-Received: by 2002:a05:620a:401:b0:7a5:8f8:8b06 with SMTP id af79cd13be357-7a508f891afmr698686285a.1.1724086360751;
+        Mon, 19 Aug 2024 09:52:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGGDQD7k05CAjlfTOWOVMO5sw6hxjyjU2n/8i8XcW8KeWV0cEA9UCT2L0/OAyhNTDQ76PX01Q==
+X-Received: by 2002:a05:620a:401:b0:7a5:8f8:8b06 with SMTP id af79cd13be357-7a508f891afmr698682785a.1.1724086360215;
+        Mon, 19 Aug 2024 09:52:40 -0700 (PDT)
 Received: from eisenberg.muc.redhat.com (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a4ff01e293sm446579885a.26.2024.08.19.09.52.29
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a4ff01e293sm446579885a.26.2024.08.19.09.52.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2024 09:52:34 -0700 (PDT)
+        Mon, 19 Aug 2024 09:52:40 -0700 (PDT)
 From: Philipp Stanner <pstanner@redhat.com>
 To: onathan Corbet <corbet@lwn.net>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -116,9 +116,9 @@ Cc: linux-doc@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-pci@vger.kernel.org,
 	virtualization@lists.linux.dev
-Subject: [PATCH 1/9] PCI: Make pcim_release_region() a public function
-Date: Mon, 19 Aug 2024 18:51:41 +0200
-Message-ID: <20240819165148.58201-3-pstanner@redhat.com>
+Subject: [PATCH 2/9] PCI: Make pcim_iounmap_region() a public function
+Date: Mon, 19 Aug 2024 18:51:42 +0200
+Message-ID: <20240819165148.58201-4-pstanner@redhat.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240819165148.58201-2-pstanner@redhat.com>
 References: <20240819165148.58201-2-pstanner@redhat.com>
@@ -130,56 +130,54 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-pcim_release_region() is the managed counterpart of
-pci_release_region(). It can be useful in some cases where drivers want
-to manually release a requested region before the driver's remove()
-callback is invoked.
+The function pcim_iounmap_regions() is problematic because it uses a
+bitmask mechanism to release / iounmap multiple BARs at once. It, thus,
+prevents getting rid of the problematic iomap table mechanism which was
+deprecated in commit e354bb84a4c1 ("PCI: Deprecate pcim_iomap_table(),
+pcim_iomap_regions_request_all()").
 
-Make pcim_release_region() a public function.
+Make pcim_iounmap_region() public as the successor of
+pcim_iounmap_regions().
 
 Signed-off-by: Philipp Stanner <pstanner@redhat.com>
 ---
- drivers/pci/devres.c | 1 +
- drivers/pci/pci.h    | 1 -
+ drivers/pci/devres.c | 3 ++-
  include/linux/pci.h  | 1 +
- 3 files changed, 2 insertions(+), 1 deletion(-)
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/pci/devres.c b/drivers/pci/devres.c
-index b97589e99fad..608f13ef2a4b 100644
+index 608f13ef2a4b..30c813766e8b 100644
 --- a/drivers/pci/devres.c
 +++ b/drivers/pci/devres.c
-@@ -906,6 +906,7 @@ void pcim_release_region(struct pci_dev *pdev, int bar)
+@@ -771,7 +771,7 @@ EXPORT_SYMBOL(pcim_iomap_region);
+  * Unmap a BAR and release its region manually. Only pass BARs that were
+  * previously mapped by pcim_iomap_region().
+  */
+-static void pcim_iounmap_region(struct pci_dev *pdev, int bar)
++void pcim_iounmap_region(struct pci_dev *pdev, int bar)
+ {
+ 	struct pcim_addr_devres res_searched;
+ 
+@@ -782,6 +782,7 @@ static void pcim_iounmap_region(struct pci_dev *pdev, int bar)
  	devres_release(&pdev->dev, pcim_addr_resource_release,
  			pcim_addr_resources_match, &res_searched);
  }
-+EXPORT_SYMBOL(pcim_release_region);
- 
++EXPORT_SYMBOL(pcim_iounmap_region);
  
  /**
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index 2fe6055a334d..01b55ed2867c 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -889,7 +889,6 @@ static inline pci_power_t mid_pci_get_power_state(struct pci_dev *pdev)
- int pcim_intx(struct pci_dev *dev, int enable);
- int pcim_request_region_exclusive(struct pci_dev *pdev, int bar,
- 				  const char *name);
--void pcim_release_region(struct pci_dev *pdev, int bar);
- 
- /*
-  * Config Address for PCI Configuration Mechanism #1
+  * pcim_iomap_regions - Request and iomap PCI BARs (DEPRECATED)
 diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 01b9f1a351be..dfa9af3a9c22 100644
+index dfa9af3a9c22..7de75900854a 100644
 --- a/include/linux/pci.h
 +++ b/include/linux/pci.h
-@@ -2295,6 +2295,7 @@ void __iomem *pcim_iomap(struct pci_dev *pdev, int bar, unsigned long maxlen);
- void pcim_iounmap(struct pci_dev *pdev, void __iomem *addr);
- void __iomem * const *pcim_iomap_table(struct pci_dev *pdev);
- int pcim_request_region(struct pci_dev *pdev, int bar, const char *name);
-+void pcim_release_region(struct pci_dev *pdev, int bar);
+@@ -2298,6 +2298,7 @@ int pcim_request_region(struct pci_dev *pdev, int bar, const char *name);
+ void pcim_release_region(struct pci_dev *pdev, int bar);
  void __iomem *pcim_iomap_region(struct pci_dev *pdev, int bar,
  				       const char *name);
++void pcim_iounmap_region(struct pci_dev *pdev, int bar);
  int pcim_iomap_regions(struct pci_dev *pdev, int mask, const char *name);
+ int pcim_iomap_regions_request_all(struct pci_dev *pdev, int mask,
+ 				   const char *name);
 -- 
 2.46.0
 
