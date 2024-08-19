@@ -1,53 +1,53 @@
-Return-Path: <linux-fpga+bounces-603-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-604-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 500B19572A3
-	for <lists+linux-fpga@lfdr.de>; Mon, 19 Aug 2024 20:05:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C611957308
+	for <lists+linux-fpga@lfdr.de>; Mon, 19 Aug 2024 20:22:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51577B25081
-	for <lists+linux-fpga@lfdr.de>; Mon, 19 Aug 2024 18:05:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F7961C22C03
+	for <lists+linux-fpga@lfdr.de>; Mon, 19 Aug 2024 18:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F41189503;
-	Mon, 19 Aug 2024 18:04:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3A23188CDB;
+	Mon, 19 Aug 2024 18:22:19 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199D317C98C;
-	Mon, 19 Aug 2024 18:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F1F481B3;
+	Mon, 19 Aug 2024 18:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724090699; cv=none; b=lDbA0Tp6Z1QaGYjRBTBWka/By3N5N3LbY6LwOKvBDS11cNd58x4k37IDH5zMmIawDJgPXOC+95v7NgBFIZCUcEMFxE620f/BddCUORxRJWn0+8UChf5OVGWck+a9NC3IwhBZM7aJa737Er43oTu6GLnFbmOuJ96ut3nal46Xj74=
+	t=1724091739; cv=none; b=tZwvwX+oJO8+iHPK3HHWTPjDE2SCFddT0ycmj3BbrPV/mUMl6M2M2soWo6iRZ6JTN95iK8HDbbS1rWTvjEeQUQAY9FKRTJwx6sAc5gQ+bd/BcoXRx40WnaWOoH4D5dzGkSKMWI3ZcglFZWrmTES+g/XUEmXY5orilmRt6wdiE1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724090699; c=relaxed/simple;
-	bh=uhcHWPb2xTrhdnPGHS3qLJd7wXvBdsT9BOPncAM9mUI=;
+	s=arc-20240116; t=1724091739; c=relaxed/simple;
+	bh=TGitQyiTjXlGP5lHOJs59Bp25CgPkMnI84I+U/lfLvw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fiZukWVtTfbcMPii5WtDPtyHgSdq2I9SZ/AidVR1XzPRnbswybQH4q4/wgjKnvd6/zM35xay4J/+msOdVF/Q5gSbWUAsaJBugmwwDw7nhFgAKv/m4csEhPJG92+o69jGUxFqWLow3tTB4VJAbR7UVMX8YwMBRfKrfznrmYGuWbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=HZYnmwPpW5N/4dJTFZxE8CPpqe39lXFsO1qABg7GgC78y+8m1EnmGe0vP0f0CSBxDx2x5Ig6SBMoRiyPgnT8wi4K6yuo5D5Vyw35oBJ0eHZkHPU5Pb3v1iETYLtIdnmvC+syLcz+ZEjIN5kwjYwgmqh54YUhLFejGIxjLzIt8nE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: pZ8XfnpBRge2m6Qh8H1BJA==
-X-CSE-MsgGUID: Km54+G1dQjuHHcanrzTuSQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="22533078"
+X-CSE-ConnectionGUID: K06BtlvzSWaAGlzlOdKngQ==
+X-CSE-MsgGUID: RjMcjyVcR7ObbXHTjkQI7A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="22170851"
 X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
-   d="scan'208";a="22533078"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 11:04:54 -0700
-X-CSE-ConnectionGUID: tSCzEHZcRx6b1ETz2cciBg==
-X-CSE-MsgGUID: kxzUu48nQpaoQdK3Fh2GyA==
+   d="scan'208";a="22170851"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 11:22:17 -0700
+X-CSE-ConnectionGUID: uGiiHJy3T12f/c0Gx8z1pg==
+X-CSE-MsgGUID: MExTNVA3QwSs5bB5Xi2stg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
-   d="scan'208";a="91187343"
+   d="scan'208";a="65278665"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 11:04:46 -0700
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 11:22:09 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98)
 	(envelope-from <andy@kernel.org>)
-	id 1sg6kC-0000000H1wA-3FW0;
-	Mon, 19 Aug 2024 21:04:40 +0300
-Date: Mon, 19 Aug 2024 21:04:40 +0300
+	id 1sg712-0000000H2FI-2CHY;
+	Mon, 19 Aug 2024 21:22:04 +0300
+Date: Mon, 19 Aug 2024 21:22:04 +0300
 From: Andy Shevchenko <andy@kernel.org>
 To: Philipp Stanner <pstanner@redhat.com>
 Cc: onathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
@@ -81,62 +81,29 @@ Cc: onathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
 	linux-stm32@st-md-mailman.stormreply.com,
 	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
 	virtualization@lists.linux.dev
-Subject: Re: [PATCH 4/9] block: mtip32xx: Replace deprecated PCI functions
-Message-ID: <ZsOJONEA2x93bSpO@smile.fi.intel.com>
+Subject: Re: [PATCH 5/9] gpio: Replace deprecated PCI functions
+Message-ID: <ZsONTFn2A6AuIFEa@smile.fi.intel.com>
 References: <20240819165148.58201-2-pstanner@redhat.com>
- <20240819165148.58201-6-pstanner@redhat.com>
+ <20240819165148.58201-7-pstanner@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240819165148.58201-6-pstanner@redhat.com>
+In-Reply-To: <20240819165148.58201-7-pstanner@redhat.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Aug 19, 2024 at 06:51:44PM +0200, Philipp Stanner wrote:
+On Mon, Aug 19, 2024 at 06:51:45PM +0200, Philipp Stanner wrote:
 > pcim_iomap_regions() and pcim_iomap_table() have been deprecated by the
 > PCI subsystem in commit e354bb84a4c1 ("PCI: Deprecate
 > pcim_iomap_table(), pcim_iomap_regions_request_all()").
 > 
-> In mtip32xx, these functions can easily be replaced by their respective
-> successors, pcim_request_region() and pcim_iomap(). Moreover, the
-> driver's call to pcim_iounmap_regions() is not necessary, because it's
-> invoked in the remove() function. Cleanup can, hence, be performed by
-> PCI devres automatically.
-> 
-> Replace pcim_iomap_regions() and pcim_iomap_table().
-> 
-> Remove the call to pcim_iounmap_regions().
+> Replace those functions with calls to pcim_iomap_region().
 
-...
-
-int mtip_pci_probe()
-
->  setmask_err:
-> -	pcim_iounmap_regions(pdev, 1 << MTIP_ABAR);
-> +	pcim_release_region(pdev, MTIP_ABAR);
-
-But why?
-
-...
-
-mtip_pci_remove()
-
->  	pci_disable_msi(pdev);
->  
-> -	pcim_iounmap_regions(pdev, 1 << MTIP_ABAR);
-
-This is okay.
-
-...
-
->  	pci_set_drvdata(pdev, NULL);
-
-Side note: This is done by driver core for the last 10+ years…
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
 
 -- 
 With Best Regards,
