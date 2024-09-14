@@ -1,123 +1,222 @@
-Return-Path: <linux-fpga+bounces-708-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-709-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A464B969FB9
-	for <lists+linux-fpga@lfdr.de>; Tue,  3 Sep 2024 16:03:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6035979343
+	for <lists+linux-fpga@lfdr.de>; Sat, 14 Sep 2024 22:02:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABA5A28142F
-	for <lists+linux-fpga@lfdr.de>; Tue,  3 Sep 2024 14:03:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7350E1F21AA7
+	for <lists+linux-fpga@lfdr.de>; Sat, 14 Sep 2024 20:02:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5294E2C1BA;
-	Tue,  3 Sep 2024 14:03:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 343AE81742;
+	Sat, 14 Sep 2024 20:02:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FQkaZOGq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mpHylvlL"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61C22AE99
-	for <linux-fpga@vger.kernel.org>; Tue,  3 Sep 2024 14:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33771E871;
+	Sat, 14 Sep 2024 20:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725372183; cv=none; b=B+jrkinw2cdtIhw/4cupoVX+f5IMhQ1X2yPE/6HAcykSgDtKQCK/syuZ87EKIrkMn7/+1YsHlIOujstAOhRaY9t/bqffBZT51Hnv6WkoLTloYekK4m9iezIck5KecOy77J55pKHjjgt5HgxBysp11+T9doFR2IZ1x1VGxm5oOYI=
+	t=1726344137; cv=none; b=eHbMNqEjcumWp8gAYjESg5Y8NUNwgX8v16ZtI4gLSd3/CCmS0WoO/5i2zIYdh5NlgI5s5kHQVecRzceNs8p09fLahHSxCtp4IkW1LYfaxG45ogOun7ci5T24VC72ZmPpig3D+Qc7wAq8TR4boN1KlsXZHE22AwE/q4+VfsVMwHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725372183; c=relaxed/simple;
-	bh=KbVX5/WJLt/Z0+uhwnKhCH5C1tCBFTeakpeppFQXWBU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vEPjXY4snrA4MQlqsnY0sIrgHKueQKh6bmvAR+rIWKOj+I4jN6OiNdgpN8uXUVg2nQRet16JkkjMucIi66Bv0YGdGCNmxtPk1Hh8t8jyrn2I404ET3VsHMGusQFiFrk4kvt0SrTbdLKtoBMaKFfa4xjfoeoY1FhAbQrWMBQn5FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FQkaZOGq; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1725372180;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1T7shADQQm1E7ZhQRMDcUIIeoOERk2k982scWhmF05E=;
-	b=FQkaZOGq1HkCjS1ir7eYUkniDACow0MRuk3ISxs0D8MSaPLYY9BhgaRXvEhmK0QaMCD0th
-	yrQ1k72np2fy2LsnCZ/SCMDqHhqGiBSP5MepxVkwRuLYXc+LFrzhSrOXsGl+wsXMWiN6TV
-	OyBQilEmvV3sTCOr8XWFPWSgqgskn4A=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-322-TnbpzMzWO-CjrvsigT9hVA-1; Tue, 03 Sep 2024 10:02:46 -0400
-X-MC-Unique: TnbpzMzWO-CjrvsigT9hVA-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-374c960ee7aso1811995f8f.3
-        for <linux-fpga@vger.kernel.org>; Tue, 03 Sep 2024 07:02:45 -0700 (PDT)
+	s=arc-20240116; t=1726344137; c=relaxed/simple;
+	bh=9dUVbpJW4jJWQSo4KncGy0kT7E4QJ5g8bT5H/USDW+A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ex/JsEPSfkkbJx9dKQsBzLSAwTI5kCVD+6/SsmNX7+iUvhhN/X3vmEyWpOIg8LzhmNa8cowXn4xculcHjfLxpL3LbS375HgFe9MyVp8E/OC1g6KuecDDrDFhgZNP7OWz6Vl2S/yRKCskM6pdb5FFlMzlhqgp/0jh0jxniTpSoCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mpHylvlL; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-719232ade93so1698763b3a.2;
+        Sat, 14 Sep 2024 13:02:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726344135; x=1726948935; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Ofo5pDJUYMQ24jBO69i/k0FFrvSqnqt1LUGg2quvt0=;
+        b=mpHylvlLJmWtqGxCiT1qTYfVt+v4hNzq41wnh90L+i/ZePi32W1bR8ShhCAJaSHCbA
+         VabUxWXErZxRuAhUUgDYELVUYCEZkuHnGLBkhuv8zb8WL2gWcpD7d6agbmbERBISZTCO
+         5UM2W9hIGplMKiZPApmazZo+4sGiM+kSYtFUW9uavHzB206aV0Zjem2VzB6Cq38/ISZS
+         mwW/jrKjrXXytOOhtcbNPQoUtBRlG0qX3OHfojexAYK6Idh8CewaMkc2+DqSRaMMfq7H
+         0Aj4mlOEbjWD/kYGKKZuswdwx00KemabR7PnPzQ10uPvHqybNy41HR9BBt847nTUMqPo
+         DtsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725372164; x=1725976964;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1T7shADQQm1E7ZhQRMDcUIIeoOERk2k982scWhmF05E=;
-        b=tOI+ofVbIE8b/flFSZvJ7Akr5O+zPFnC2lxECIV8amWVhadCPr0gow4dCzIOG/qOkh
-         wbdp8+XWJbdy4bHkfem40ZHy+RCLYFuVfzZGF/BGBSskW7Exm42vD1tu9ynnXHvI8Pcz
-         hq7S+ORREAo7l+fQ3k9uZnq6NJ+vmfN0hh1eIwROUcDxgM71KleO5bfUc8Ysq8lR+E5f
-         /bbs7xxhM/rLsZfMhr92lI72zIrEsl8CAxaizGRKTNwT0SZRD5fz5UqjfJgWo7sR0fnM
-         UVGTjLmSWjwWTP8G7KR6FXON8t2KJPFzo7ckRBIvu5qMX/S2yv7b9NcJhUoRcTuR6I1/
-         cXxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW1OnkR071hJZiPj0YhLkM4LJKpQ8CdhaiCgLXfhyETQC56uCGCxyEAxlrjX/2+97Immy8Xj/+gxUYe@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZdXnkUggqHetxagAmtXl4RrMOOpxqDoyNxyTDBBbgHHF1cTHl
-	C/AUlVy7EIvAx/j1rdAuxVuHlBwFodHC2I4ld8s3ZL+sm+OgLWJnzsbB9EZOrzwzSeLLo5vYYjq
-	U1i0zKsKc1pxwRq27Dr4UOWkUJoGU06YN1D24fsinAuG7fRbwHeJbUEU6WzA=
-X-Received: by 2002:a5d:5c87:0:b0:374:c8eb:9b18 with SMTP id ffacd0b85a97d-374c8eb9b69mr5013547f8f.24.1725372164310;
-        Tue, 03 Sep 2024 07:02:44 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGG+gCA4emCQ8lN+v2r+4PD0Xf7gtP5260Hobybyq26ysa18Yk2eN574I3dEkpcvY9bhrHY7Q==
-X-Received: by 2002:a5d:5c87:0:b0:374:c8eb:9b18 with SMTP id ffacd0b85a97d-374c8eb9b69mr5013434f8f.24.1725372163170;
-        Tue, 03 Sep 2024 07:02:43 -0700 (PDT)
-Received: from [192.168.88.27] (146-241-55-250.dyn.eolo.it. [146.241.55.250])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3749ee9ba8esm14372770f8f.50.2024.09.03.07.02.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Sep 2024 07:02:42 -0700 (PDT)
-Message-ID: <c5658b79-f0bc-4b34-b113-825f40a57677@redhat.com>
-Date: Tue, 3 Sep 2024 16:02:39 +0200
+        d=1e100.net; s=20230601; t=1726344135; x=1726948935;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+Ofo5pDJUYMQ24jBO69i/k0FFrvSqnqt1LUGg2quvt0=;
+        b=FXnTf/cIMpyyKizOw29BQWraqejAbx9uK2/zVgk23i7msbleFBSzygsYVP/g6tTkMF
+         9Ae9IqCy+iWJIwCyeV2nBETBmiQHIgXtWWokG/dnuJwUT4VcqOqvM6Ll1pls1glFTOoa
+         GuJWpvZOdOeAREIIdC2mj1mClKo7QXgWgSNFe+WXbvdWKqxyp3Ll/K+OD3BdfbCl8IFJ
+         kxQpQ3Q/a0aqNz+by/lzdiRoeRElFFbT32J40OrYl3bg8EZV51P53Bay5jxWX7EpSKjQ
+         UukJbJXTBuXKrOdC31hstHZ10akGPHr7JRW6EIkvhVTVru6Hedgm+xb1YiNGu+gY6+E7
+         apWg==
+X-Forwarded-Encrypted: i=1; AJvYcCW4ICTOh6M7q0bm5DZhiSLi3tEtm8ee3t2aBifDbcyTafhvymKIRqoGmZA4nQBcS1+qOmSPoRvtobwIlQ==@vger.kernel.org, AJvYcCW55a724McfVOaqYLz2+R4uIrnjAvd1bvO2kmpW7JQ7T9bvgalZXmNCKhuK+r92PK2uvzQOhaYxUO6q@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8oizcfN6P2wC3Dt8HXLC0UKdrd3I7jriDEBJ0OwHAVVqp3Qfk
+	FcEJQ2j5Z2enGeS/zwgAWqN4abJ2+jXnf8X0jN/CB6f/a0UMW8Bg
+X-Google-Smtp-Source: AGHT+IEMXkGjnSf/8jktgEXXH/mMx/PLgKE6boDJZMCNK6utrJl9U8qLPHYhjNw0UMCKFI5OBnaSuw==
+X-Received: by 2002:a05:6a00:b56:b0:718:532f:5a3 with SMTP id d2e1a72fcca58-71936a4b630mr12612667b3a.7.1726344134725;
+        Sat, 14 Sep 2024 13:02:14 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:9233:d58b:c846:bbf8])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7db49992582sm1527723a12.74.2024.09.14.13.02.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Sep 2024 13:02:13 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: mdf@kernel.org
+Cc: hao.wu@intel.com,
+	yilun.xu@intel.com,
+	trix@redhat.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-fpga@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Fabio Estevam <festevam@denx.de>
+Subject: [PATCH] dt-bindings: fpga: altr,fpga-passive-serial: Convert to yaml
+Date: Sat, 14 Sep 2024 17:02:05 -0300
+Message-Id: <20240914200205.2472262-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 5/5] ethernet: cavium: Replace deprecated PCI functions
-To: Philipp Stanner <pstanner@redhat.com>, Jens Axboe <axboe@kernel.dk>,
- Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
- Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
- Andy Shevchenko <andy@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
- Richard Cochran <richardcochran@gmail.com>,
- Damien Le Moal <dlemoal@kernel.org>, Hannes Reinecke <hare@suse.de>,
- John Garry <john.g.garry@oracle.com>, Chaitanya Kulkarni <kch@nvidia.com>
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
- netdev@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20240902062342.10446-2-pstanner@redhat.com>
- <20240902062342.10446-7-pstanner@redhat.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20240902062342.10446-7-pstanner@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/2/24 08:23, Philipp Stanner wrote:
-> pcim_iomap_regions() and pcim_iomap_table() have been deprecated by
-> the PCI subsystem in commit e354bb84a4c1 ("PCI: Deprecate
-> pcim_iomap_table(), pcim_iomap_regions_request_all()").
-> 
-> Furthermore, the driver contains an unneeded call to
-> pcim_iounmap_regions() in its probe() function's error unwind path.
-> 
-> Replace the deprecated PCI functions with pcim_iomap_region().
-> 
-> Remove the unnecessary call to pcim_iounmap_regions().
-> 
-> Signed-off-by: Philipp Stanner <pstanner@redhat.com>
+From: Fabio Estevam <festevam@denx.de>
 
-Acked-by: Paolo Abeni <pabeni@redhat.com>
+Convert the Altera Passive Serial SPI FPGA Manager binding
+from text file to yaml format to allow devicetree validation.
+
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+ .../bindings/fpga/altera-passive-serial.txt   | 29 --------
+ .../fpga/altr,fpga-passive-serial.yaml        | 74 +++++++++++++++++++
+ 2 files changed, 74 insertions(+), 29 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/fpga/altera-passive-serial.txt
+ create mode 100644 Documentation/devicetree/bindings/fpga/altr,fpga-passive-serial.yaml
+
+diff --git a/Documentation/devicetree/bindings/fpga/altera-passive-serial.txt b/Documentation/devicetree/bindings/fpga/altera-passive-serial.txt
+deleted file mode 100644
+index 48478bc07e29..000000000000
+--- a/Documentation/devicetree/bindings/fpga/altera-passive-serial.txt
++++ /dev/null
+@@ -1,29 +0,0 @@
+-Altera Passive Serial SPI FPGA Manager
+-
+-Altera FPGAs support a method of loading the bitstream over what is
+-referred to as "passive serial".
+-The passive serial link is not technically SPI, and might require extra
+-circuits in order to play nicely with other SPI slaves on the same bus.
+-
+-See https://www.altera.com/literature/hb/cyc/cyc_c51013.pdf
+-
+-Required properties:
+-- compatible: Must be one of the following:
+-	"altr,fpga-passive-serial",
+-	"altr,fpga-arria10-passive-serial"
+-- reg: SPI chip select of the FPGA
+-- nconfig-gpios: config pin (referred to as nCONFIG in the manual)
+-- nstat-gpios: status pin (referred to as nSTATUS in the manual)
+-
+-Optional properties:
+-- confd-gpios: confd pin (referred to as CONF_DONE in the manual)
+-
+-Example:
+-	fpga: fpga@0 {
+-		compatible = "altr,fpga-passive-serial";
+-		spi-max-frequency = <20000000>;
+-		reg = <0>;
+-		nconfig-gpios = <&gpio4 9 GPIO_ACTIVE_LOW>;
+-		nstat-gpios = <&gpio4 11 GPIO_ACTIVE_LOW>;
+-		confd-gpios = <&gpio4 12 GPIO_ACTIVE_LOW>;
+-	};
+diff --git a/Documentation/devicetree/bindings/fpga/altr,fpga-passive-serial.yaml b/Documentation/devicetree/bindings/fpga/altr,fpga-passive-serial.yaml
+new file mode 100644
+index 000000000000..ffb7cc54556f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/fpga/altr,fpga-passive-serial.yaml
+@@ -0,0 +1,74 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/fpga/altr,fpga-passive-serial.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Altera Passive Serial SPI FPGA Manager
++
++maintainers:
++  - Fabio Estevam <festevam@denx.de>
++
++description: |
++  Altera FPGAs support a method of loading the bitstream over what is
++  referred to as "passive serial".
++  The passive serial link is not technically SPI, and might require extra
++  circuits in order to play nicely with other SPI slaves on the same bus.
++
++  See https://www.altera.com/literature/hb/cyc/cyc_c51013.pdf
++
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++properties:
++  compatible:
++    enum:
++      - altr,fpga-passive-serial
++      - altr,fpga-arria10-passive-serial
++
++  spi-max-frequency:
++    maximum: 20000000
++
++  reg:
++    maxItems: 1
++
++  nconfig-gpios:
++    description:
++      Config pin (referred to as nCONFIG in the manual).
++    maxItems: 1
++
++  nstat-gpios:
++    description:
++      Status pin (referred to as nSTATUS in the manual).
++    maxItems: 1
++
++  confd-gpios:
++    description:
++      confd pin (referred to as CONF_DONE in the manual)
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - nconfig-gpios
++  - nstat-gpios
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    spi {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      fpga@0 {
++        compatible = "altr,fpga-passive-serial";
++        reg = <0>;
++        nconfig-gpios = <&gpio4 18 GPIO_ACTIVE_LOW>;
++        nstat-gpios = <&gpio4 19 GPIO_ACTIVE_LOW>;
++        confd-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
++      };
++    };
++...
+-- 
+2.34.1
 
 
