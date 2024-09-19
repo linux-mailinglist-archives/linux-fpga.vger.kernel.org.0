@@ -1,61 +1,61 @@
-Return-Path: <linux-fpga+bounces-715-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-716-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D625597CE7E
-	for <lists+linux-fpga@lfdr.de>; Thu, 19 Sep 2024 22:35:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E30B97CE80
+	for <lists+linux-fpga@lfdr.de>; Thu, 19 Sep 2024 22:35:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 127C51C21588
-	for <lists+linux-fpga@lfdr.de>; Thu, 19 Sep 2024 20:35:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 239572830D0
+	for <lists+linux-fpga@lfdr.de>; Thu, 19 Sep 2024 20:35:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B85814F12C;
-	Thu, 19 Sep 2024 20:35:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A2A1531D6;
+	Thu, 19 Sep 2024 20:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K6X1Soiy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nj4UfAMQ"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8F314B941;
-	Thu, 19 Sep 2024 20:35:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C61114E2E1;
+	Thu, 19 Sep 2024 20:35:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726778108; cv=none; b=n80tA5BT+uduEt3TvVJb+mKjm6g6+g7R4WqzQ+5ASWBS3yZRcrwYG261Wg2GDc13Usjg+U9/c+zZdlPI3hVuGonRIKFo1M7NF6JIN+h9L/Ol8TAciQehEUHpw6+u38UPtxi+M4k3nksl3mDPh65YfpIgQL5GDy2Kg3MymXftV04=
+	t=1726778109; cv=none; b=Nj2WJRd7HZPhj9sNlB2sr4GdO2VDq68lIVLCFZQNFY521nWujVYCPCvCyk3mF7xn2ENjuzkqvMNtSHHgAmFn7zjFGPkOR/05ofkYyiIYSlA2jXMCkEam12lGLsXAWf+i0G1dQ56Obfkx3u54tSK533KWyaLWVmVgZSp2RvLjqyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726778108; c=relaxed/simple;
-	bh=7pDw73oAwTdRwnHeH+BpT6SaKdBgGtwnhyxAW3Q0XE4=;
+	s=arc-20240116; t=1726778109; c=relaxed/simple;
+	bh=G6yi6OBInB4Kt5f39NnXenJh5aR+D4w/IosKRGEAtpg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oNIhSDScTL13DGP8QQGjxhoq42meq9y06PNJO3VYSylLI10KyjzHGOcoxR9nCBn0FmCiO7veDgRHheFNSRW/UVn/vgfyOQHl+lIxiX/pEJ47KdI69zidCOAZT6t5xXVokft9ZVeUfvtIuPYQvR5laDMTCHxz2vE0+nLCdiDW6TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K6X1Soiy; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=cBsWnYdrywCDoc4AYjAe9Mu1jISE6zdOpUzWES5l8rmSVAY5Bo46nG3TAhjijIbpe1rgavza1yeb6T6TWsQbSf3xmXtma6p/D0Is2m/pVEFQRGp8hc3IpFMOaYCUgI9e5nSoFYMVMgLxRjAsmadkMWkHPw5Qhb/wG+mII5gVhF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nj4UfAMQ; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726778107; x=1758314107;
+  t=1726778108; x=1758314108;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7pDw73oAwTdRwnHeH+BpT6SaKdBgGtwnhyxAW3Q0XE4=;
-  b=K6X1SoiyrFXYF87SVkqLW7MRsVYbKIQbwPKemqoCEGyVX+WjEiHowmEq
-   bcJG1LmZxZR+McvJT1Magw5KjTHI0evpZrILSX83OvWfKlCJDfHUUgawQ
-   OLzum8m8mPcD0OVJNmCKFiFZS1TfVFf1xxydKHmio1/6WtrPJZfwtBP43
-   lHlrn8ZPxRrp/h5i25yvZfgUhBzvX0Zz0n6ml1HkeK2sDoGEgA3uD41/n
-   Ce90oNiAZLgC9ova1Gv6c+jpka3u7J4k1Fz2bF6xfnagkUWko+zZD9O/f
-   iOpnYYlbFfXQox3pXHrr6NVk3KUNllpNl1XFdSab6IgzpLAUOg4FoA1E9
-   g==;
-X-CSE-ConnectionGUID: /6TF+AwgT4KwAX9z1iOkzg==
-X-CSE-MsgGUID: Qhw+Yq3wTwG2ia3VDWT8SA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="25912943"
+  bh=G6yi6OBInB4Kt5f39NnXenJh5aR+D4w/IosKRGEAtpg=;
+  b=nj4UfAMQXW4p2oWFqsTY2M90P2/Hbv/tl7ZSgNKDl6/bvbGoba5iwGyb
+   s3pQTe85sMw56J2acn7ofCRHVfRRMLwmsIANwebeUDUGHGpRKJ2OmoTbq
+   T1i09nEvLbqNotFK5zk8J7IYVbJZVc/6jiwI+TO53sQN7Z0EdGm6+wY2L
+   s738+kahV/fPEIWbZU9SUqZd7fflI/a+uwrtwN9B/WoxcyvqPJ9NOyRfu
+   1/fjRdPy1jhmttpxO/9Jl9o6kEkLfxMnfsieilDogaIW/+PdH0UpqYwU7
+   DPDvF5fPPxanHyRsuWg8yT+Kx2eHws1hQ27Og32JeHMSYae+jEdsv4Nb0
+   A==;
+X-CSE-ConnectionGUID: hBduQWPWSDaIvgZGpYd0XQ==
+X-CSE-MsgGUID: KLPRCLwtSrCt+ftC7Ct0RQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="25912947"
 X-IronPort-AV: E=Sophos;i="6.10,242,1719903600"; 
-   d="scan'208";a="25912943"
+   d="scan'208";a="25912947"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
   by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2024 13:35:06 -0700
-X-CSE-ConnectionGUID: 0qK5STviSti0cJgLquQOyA==
-X-CSE-MsgGUID: hfQm4io+Q6Wilitgn9hfKQ==
+X-CSE-ConnectionGUID: x3dO0U62R+WLswTikSyWXg==
+X-CSE-MsgGUID: R98jBxpXQfWhDfb6Vu5nTQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,242,1719903600"; 
-   d="scan'208";a="93338321"
+   d="scan'208";a="93338324"
 Received: from sj-4150-psse-sw-opae-dev3.sj.altera.com ([10.244.138.109])
   by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2024 13:35:05 -0700
 From: Peter Colberg <peter.colberg@intel.com>
@@ -69,9 +69,9 @@ Cc: Russ Weight <russ.weight@linux.dev>,
 	Marco Pagani <marpagan@redhat.com>,
 	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
 	Peter Colberg <peter.colberg@intel.com>
-Subject: [PATCH v3 2/9] fpga: dfl: omit unneeded null pointer check from {afu,fme}_open()
-Date: Thu, 19 Sep 2024 16:34:23 -0400
-Message-ID: <20240919203430.1278067-3-peter.colberg@intel.com>
+Subject: [PATCH v3 3/9] fpga: dfl: afu: use parent device to log errors on port enable/disable
+Date: Thu, 19 Sep 2024 16:34:24 -0400
+Message-ID: <20240919203430.1278067-4-peter.colberg@intel.com>
 X-Mailer: git-send-email 2.46.1
 In-Reply-To: <20240919203430.1278067-1-peter.colberg@intel.com>
 References: <20240919203430.1278067-1-peter.colberg@intel.com>
@@ -83,81 +83,42 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The feature platform device is guaranteed to have an associated platform
-data. Refactor dfl_fpga_inode_to_feature_dev_data() to directly return
-the platform data and retrieve the device from the data.
+AFU port enable/disable may be triggered from userspace at any point,
+e.g., after a port has been released. This commit prepares a subsequent
+commit that destroys the port platform device on port release, which is
+then no longer available during port enable/disable. Use the parent,
+physical, e.g., PCIe FPGA device instead for logging errors.
 
 Signed-off-by: Peter Colberg <peter.colberg@intel.com>
 Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 ---
- drivers/fpga/dfl-afu-main.c | 8 ++------
- drivers/fpga/dfl-fme-main.c | 7 ++-----
- drivers/fpga/dfl.h          | 6 +++---
- 3 files changed, 7 insertions(+), 14 deletions(-)
+ drivers/fpga/dfl-afu-main.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index 6b97c073849e..6125e2faada8 100644
+index 6125e2faada8..c0f2db72b5b9 100644
 --- a/drivers/fpga/dfl-afu-main.c
 +++ b/drivers/fpga/dfl-afu-main.c
-@@ -595,14 +595,10 @@ static struct dfl_feature_driver port_feature_drvs[] = {
+@@ -60,7 +60,8 @@ int __afu_port_enable(struct platform_device *pdev)
+ 	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
+ 			       !(v & PORT_CTRL_SFTRST_ACK),
+ 			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
+-		dev_err(&pdev->dev, "timeout, failure to enable device\n");
++		dev_err(pdata->dfl_cdev->parent,
++			"timeout, failure to enable device\n");
+ 		return -ETIMEDOUT;
+ 	}
  
- static int afu_open(struct inode *inode, struct file *filp)
- {
--	struct platform_device *fdev = dfl_fpga_inode_to_feature_dev(inode);
--	struct dfl_feature_platform_data *pdata;
-+	struct dfl_feature_platform_data *pdata = dfl_fpga_inode_to_feature_dev_data(inode);
-+	struct platform_device *fdev = pdata->dev;
- 	int ret;
+@@ -99,7 +100,8 @@ int __afu_port_disable(struct platform_device *pdev)
+ 	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
+ 			       v & PORT_CTRL_SFTRST_ACK,
+ 			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
+-		dev_err(&pdev->dev, "timeout, failure to disable device\n");
++		dev_err(pdata->dfl_cdev->parent,
++			"timeout, failure to disable device\n");
+ 		return -ETIMEDOUT;
+ 	}
  
--	pdata = dev_get_platdata(&fdev->dev);
--	if (WARN_ON(!pdata))
--		return -ENODEV;
--
- 	mutex_lock(&pdata->lock);
- 	ret = dfl_feature_dev_use_begin(pdata, filp->f_flags & O_EXCL);
- 	if (!ret) {
-diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
-index 864924f68f5e..480a187289bb 100644
---- a/drivers/fpga/dfl-fme-main.c
-+++ b/drivers/fpga/dfl-fme-main.c
-@@ -598,13 +598,10 @@ static long fme_ioctl_check_extension(struct dfl_feature_platform_data *pdata,
- 
- static int fme_open(struct inode *inode, struct file *filp)
- {
--	struct platform_device *fdev = dfl_fpga_inode_to_feature_dev(inode);
--	struct dfl_feature_platform_data *pdata = dev_get_platdata(&fdev->dev);
-+	struct dfl_feature_platform_data *pdata = dfl_fpga_inode_to_feature_dev_data(inode);
-+	struct platform_device *fdev = pdata->dev;
- 	int ret;
- 
--	if (WARN_ON(!pdata))
--		return -ENODEV;
--
- 	mutex_lock(&pdata->lock);
- 	ret = dfl_feature_dev_use_begin(pdata, filp->f_flags & O_EXCL);
- 	if (!ret) {
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index 5063d73b0d82..2285215f444e 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -398,14 +398,14 @@ int dfl_fpga_dev_ops_register(struct platform_device *pdev,
- 			      struct module *owner);
- void dfl_fpga_dev_ops_unregister(struct platform_device *pdev);
- 
--static inline
--struct platform_device *dfl_fpga_inode_to_feature_dev(struct inode *inode)
-+static inline struct dfl_feature_platform_data *
-+dfl_fpga_inode_to_feature_dev_data(struct inode *inode)
- {
- 	struct dfl_feature_platform_data *pdata;
- 
- 	pdata = container_of(inode->i_cdev, struct dfl_feature_platform_data,
- 			     cdev);
--	return pdata->dev;
-+	return pdata;
- }
- 
- #define dfl_fpga_dev_for_each_feature(pdata, feature)			    \
 -- 
 2.46.1
 
