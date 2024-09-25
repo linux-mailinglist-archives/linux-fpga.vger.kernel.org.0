@@ -1,340 +1,151 @@
-Return-Path: <linux-fpga+bounces-735-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-736-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5C9B98419D
-	for <lists+linux-fpga@lfdr.de>; Tue, 24 Sep 2024 11:06:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4753B985773
+	for <lists+linux-fpga@lfdr.de>; Wed, 25 Sep 2024 12:57:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9A421C240C4
-	for <lists+linux-fpga@lfdr.de>; Tue, 24 Sep 2024 09:06:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0718F285B4A
+	for <lists+linux-fpga@lfdr.de>; Wed, 25 Sep 2024 10:57:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E4017332A;
-	Tue, 24 Sep 2024 09:04:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E60C165F1A;
+	Wed, 25 Sep 2024 10:57:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bA+OWzVh"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="GZGXRaEK"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EEFC1547D8;
-	Tue, 24 Sep 2024 09:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB3115B559
+	for <linux-fpga@vger.kernel.org>; Wed, 25 Sep 2024 10:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727168672; cv=none; b=m4YxDgAe/T1BNxIBGUrv+u/ChXp3E+fbi5iXN22tREhauY8w1riR9iEgupfUR4vbi5pFWkZRLzIM24MhbhHo33hfPl023CH2Q+XVcIIglCPKoMo/E8J5OScU1oTO5N1R5+ehURqBbP8NIZU9lRBlb1ZpqEd7ZJZ5HgzzQ4pb6qY=
+	t=1727261861; cv=none; b=M9iAJmyo/22ITd4fEzN0pnd01N2abIx4HTuoyQlny5SO+7p0LvDqCJCirNBMAby3CZ/XzSVrDWajmrZ/zf0GxUf1fIUmg69TdbjhNyjum8hVsndT4wgxlWpGs6rQyb/HTMt9rCV5+500U775R7XQ0nLEM3CP7Frev6y7lA7Fgqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727168672; c=relaxed/simple;
-	bh=pIur/2YekNHbuCPnewpPzwoLVqBZdsGCMI6j2U9lMjg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=utbqRiPH+tk96BXz9VTfOZ+lcpkgQkgBfJJisi1kgz9iRAxLVGeNBS0IunF4VlAn67mvwfTEyZ4eY4cjC66D20BFiaHtOtDIEbAJllTrwN0C5ooSX1CtlqT5i1YrG2fgN8kv43vm8R3oXVo8qOVRRwD/q9lr3SEatbBHNlHw/sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bA+OWzVh; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727168671; x=1758704671;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pIur/2YekNHbuCPnewpPzwoLVqBZdsGCMI6j2U9lMjg=;
-  b=bA+OWzVhfp1KtSoI4P2C9mNI9+7AqMlElCrodLOnLUUeaNtxOrVWVALH
-   kOdD3HaucP5kg1sc857D3klgTdjpnQPMewQWBkmXEbYgBSOliGXBITHj+
-   ft4eXEuLrMYuc8J2NdnZU3TlAUTVAjVrIwZUAURlIvDwS3IeO/fDxdzGA
-   fxspR/WI45O8cs1lvfr53NRCVih7f2b7Lnl0SgUGx8cg0pC/AziACcg0l
-   e+qACHif5IPI+4+a+ETJZ2baKvCzSYvYQsjiATN6Tu6BgwkfVRu1TWCvi
-   3vNU8ag/Fa9NrXmeBmaFj9nHYkJv7ovDGqjTHtqPb4RIS/dNEXepkOoDC
-   w==;
-X-CSE-ConnectionGUID: VhuA+ivtSMGA5DZelPZBMw==
-X-CSE-MsgGUID: I19P8SXoSaOylMQ1cSMCeA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11204"; a="26028131"
-X-IronPort-AV: E=Sophos;i="6.10,254,1719903600"; 
-   d="scan'208";a="26028131"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2024 02:04:30 -0700
-X-CSE-ConnectionGUID: /dmdixhVRRWJdy6G2vMw0w==
-X-CSE-MsgGUID: OfVKPM/gTTGwkk4XkhPoGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,254,1719903600"; 
-   d="scan'208";a="72178821"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa008.jf.intel.com with ESMTP; 24 Sep 2024 02:04:26 -0700
-Date: Tue, 24 Sep 2024 17:01:31 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Peter Colberg <peter.colberg@intel.com>
-Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Russ Weight <russ.weight@linux.dev>,
-	Marco Pagani <marpagan@redhat.com>,
-	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-	Russ Weight <russell.h.weight@intel.com>
-Subject: Re: [PATCH v3 9/9] fpga: dfl: fix kernel warning on port
- release/assign for SRIOV
-Message-ID: <ZvJ/6wHoU9VXJKh8@yilunxu-OptiPlex-7050>
-References: <20240919203430.1278067-1-peter.colberg@intel.com>
- <20240919203430.1278067-10-peter.colberg@intel.com>
+	s=arc-20240116; t=1727261861; c=relaxed/simple;
+	bh=NFZrRhE2Cg5/vS2f6vcyZD3u5B5L4qbPJxaBPliSDxM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=LE/fwK422it9SOSQzsNjT0qc+A04SPUGY1K0VfFxAjostJmPpV5PYMcpjmibCbng3XMedMZS7Ka9WDHDctz2j9qU3GDY7JKDPXcZzSZdV+tgFjuYKh9Jj2I2jm/6YXPclsJdrDuVkdKIUN/vn/UkuiX+Eh9da2DESSQnVnrKUxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=GZGXRaEK; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20240925105731epoutp026af42539e0d05493f8c45ff161504190~4d4CPR4pZ3051130511epoutp02b
+	for <linux-fpga@vger.kernel.org>; Wed, 25 Sep 2024 10:57:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20240925105731epoutp026af42539e0d05493f8c45ff161504190~4d4CPR4pZ3051130511epoutp02b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1727261851;
+	bh=72Teje+J0GMLBe7cCmif7G/jgQaPe8OMwdAf5mDxFi8=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=GZGXRaEK5laKP47p7isL1hQ2AfmhsaNttfcL7MgfZC/Spyacmz6uo34fhJBZu2Ueq
+	 nz6WythAbZDZ0deCMcnr3r/RkNdjG67c+4S4H4ZZCB5ESYbIe7Yt0ASBLKUdKa9+GX
+	 ndHQVZF0J2wUPBB0veuTLp7/pm56ErR+1mh4osSU=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+	epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20240925105730epcas1p2964c340504ac36fa00e621a52865fd6f~4d4B_HEo51979819798epcas1p2U;
+	Wed, 25 Sep 2024 10:57:30 +0000 (GMT)
+Received: from epsmgec1p1.samsung.com (unknown [182.195.36.133]) by
+	epsnrtp3.localdomain (Postfix) with ESMTP id 4XDDG22Nwrz4x9Pp; Wed, 25 Sep
+	2024 10:57:30 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+	epsmgec1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	A3.50.08992.A9CE3F66; Wed, 25 Sep 2024 19:57:30 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+	20240925105729epcas1p3b4f8a285198754e877cdf5c74b7609ea~4d4A7Exjy1639616396epcas1p3m;
+	Wed, 25 Sep 2024 10:57:29 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240925105729epsmtrp20daecc8647c130ce5737b0b8bbd94b6c~4d4A6XoaN3103031030epsmtrp2L;
+	Wed, 25 Sep 2024 10:57:29 +0000 (GMT)
+X-AuditID: b6c32a33-70bff70000002320-fe-66f3ec9abb01
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	95.84.08456.99CE3F66; Wed, 25 Sep 2024 19:57:29 +0900 (KST)
+Received: from jy7805-heo05.tn.corp.samsungelectronics.net (unknown
+	[10.250.132.180]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240925105729epsmtip1a1f59d59656b635f7f61afcb436cb6b7~4d4Atlnrj0942609426epsmtip1D;
+	Wed, 25 Sep 2024 10:57:29 +0000 (GMT)
+From: Joonyoung Heo <jy7805.heo@samsung.com>
+To: mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com
+Cc: trix@redhat.com, linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Heo Joonyoung <jy7805.heo@samsung.com>
+Subject: [PATCH] fpga: print return value in machxo2_cleanup()
+Date: Wed, 25 Sep 2024 19:57:25 +0900
+Message-Id: <20240925105725.1562327-1-jy7805.heo@samsung.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240919203430.1278067-10-peter.colberg@intel.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMKsWRmVeSWpSXmKPExsWy7bCmnu6sN5/TDFqf8Fg833aF2WLHk5NM
+	Fo9mfme3uLxrDpvF/EZ3i2tfTrNYXL20i8WB3WPxnpdMHptWdbJ5vN93lc2jb8sqRo/Pm+QC
+	WKOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOArlBS
+	KEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgW6BUn5haX5qXr5aWWWBkaGBiZAhUm
+	ZGcs+f6NtaCftaL9zHSWBsbFLF2MnBwSAiYSv+ceYu5i5OIQEtjBKNE2bT8bhPOJUeL99n3s
+	EM43RonFf/qYYFq6bt9mhEjsZZT4MuEqVEsXk8S9zm6wKjYBHYm+NZPZQWwRAQuJL+8+MIPY
+	zALlEr3LmsHiwgJ2Ep1HQSZxcrAIqEqsmvQarJdXwFZiy78NzBDb5CVmXvrODhEXlDg58wkL
+	xBx5ieats8EOlxA4xS4x6dJHqI9cJPofHmOFsIUlXh3fwg5hS0l8freXDcLOlvjbtwkqXiHR
+	NOMqI4RtL7F8zj6gXg6gBZoS63fpQ+zik3j3tQcsLCHAK9HRJgRRrSLxeeE9Jpjpv188gZri
+	IXF3xlGwa4QEYiV+ru1insAoNwvJB7OQfDALYdkCRuZVjGKpBcW56anJhgWG8JhMzs/dxAhO
+	fVrGOxgvz/+nd4iRiYPxEKMEB7OSCO+kmx/ThHhTEiurUovy44tKc1KLDzGaAsN0IrOUaHI+
+	MPnmlcQbmlgamJgZGZtYGJoZKonznrlSliokkJ5YkpqdmlqQWgTTx8TBKdXAxJNlftfk6atM
+	Pmv//gxGbeOTJ6PeLQydWzIj5l/22TpFn3krbvvZFFsHLXoz/9vm0qNZmzsP2u5j2Jp+VNjl
+	6KGTma8e1hqJJMrv3RG9aKKO+txs0fmHP1R/+vfdq0nO2ufn9k7N6sMaU745Lps+S6Jc+5xs
+	SU+kwvyHb1Z/sBRfOHElj+Tz9TFH3s9zm6N5qWHzfQ1J15Tk3TesbrziN6hQu8if8y9xj9Rq
+	t18/9qTXNvIHzeUUrIg5KMCuLbdl8/otK5Mb9GdMTG+/apMSp3Mp2clzlV+5+D4lZ6Vrb/ad
+	P3qS6fKKTq/TNaoHC5f4LzGaNPtbUdZTrcksE973Hv3UMfOV/YNJcz5ELNpWaqPEUpyRaKjF
+	XFScCABMFFiTBgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDLMWRmVeSWpSXmKPExsWy7bCSnO7MN5/TDDofqFk833aF2WLHk5NM
+	Fo9mfme3uLxrDpvF/EZ3i2tfTrNYXL20i8WB3WPxnpdMHptWdbJ5vN93lc2jb8sqRo/Pm+QC
+	WKO4bFJSczLLUov07RK4MpZ8/8Za0M9a0X5mOksD42KWLkZODgkBE4mu27cZuxi5OIQEdjNK
+	rN59hw0iISWx+vELIJsDyBaWOHy4GKKmg0niQFMjM0gNm4CORN+ayewgNSICNhLTu2JAwswC
+	1RL3dvUzgdjCAnYSnUdB5nNysAioSqya9BoszitgK7Hl3wZmiFXyEjMvfWeHiAtKnJz5hAVi
+	jrxE89bZzBMY+WYhSc1CklrAyLSKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM4QLW0
+	djDuWfVB7xAjEwfjIUYJDmYlEd5JNz+mCfGmJFZWpRblxxeV5qQWH2KU5mBREuf99ro3RUgg
+	PbEkNTs1tSC1CCbLxMEp1cDUOO/SpewPbZUbnlwUv7jnMNvB2e+mC5kvdTjaui0m1aotYerF
+	IM1C9VPbz0qGbGP0rNR7MZtpm0n44vfXmbzv/U/ytLKv2RVwqbW5Przvb+gKDzfVxkNyWset
+	BCZMY7a9wVXDd3ZV871W6aCJXLWpGVFfWhsMZUQMxMr9OLarM8XmpApH5wdU6TPdeyPpHSSy
+	rbZdwSf+zqIDJe+OMnv4CovtmLjgpN17l6u+aTN3B9z8tpTfsCrKuj2tdH9bvU640LWLxmxW
+	a3aovH1fLa25cmdYnEquRqPHLOOvjak573sYr34+vF1z4t182WOtvWnzNh/PeLZnlt3/Rpfi
+	GPGu6W2/Fkqpvp71+oF+tBJLcUaioRZzUXEiAEfeBm2/AgAA
+X-CMS-MailID: 20240925105729epcas1p3b4f8a285198754e877cdf5c74b7609ea
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240925105729epcas1p3b4f8a285198754e877cdf5c74b7609ea
+References: <CGME20240925105729epcas1p3b4f8a285198754e877cdf5c74b7609ea@epcas1p3.samsung.com>
 
-On Thu, Sep 19, 2024 at 04:34:30PM -0400, Peter Colberg wrote:
-> From: Xu Yilun <yilun.xu@intel.com>
-> 
+From: Heo Joonyoung <jy7805.heo@samsung.com>
 
-Please describe what this patch does at the beginning. And below
-background descriptions follow.
+print return value to check where it failed.
 
-> With the Intel FPGA PAC D5005, DFL ports are registered as platform
-> devices in PF mode. The port device must be removed from the host when
-> the user wants to configure the port as a VF for use by a user-space
-> driver, e.g., for pass-through to a virtual machine. The FME device
-> ioctls DFL_FPGA_FME_PORT_RELEASE/ASSIGN are assigned for this purpose.
-> 
-> In the previous implementation, the port platform device is not
-> completely destroyed on port release: it is removed from the system by
-> platform_device_del(), but the platform device instance is retained.
-> When DFL_FPGA_FME_PORT_ASSIGN is called, the platform device is added
-> back with platform_device_add(), which conflicts with this comment of
-> device_add(): "Do not call this routine more than once for any device
-> structure", and would previously cause a kernel warning at runtime.
-> 
-> This patch completely unregisters the port platform device on release
-> and registers a new device on assign. But the main work is to remove
+Signed-off-by: Heo Joonyoung <jy7805.heo@samsung.com>
+---
+ drivers/fpga/machxo2-spi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The main work of this series, not this patch.
+diff --git a/drivers/fpga/machxo2-spi.c b/drivers/fpga/machxo2-spi.c
+index 905607992a12..c9eaf313e9b8 100644
+--- a/drivers/fpga/machxo2-spi.c
++++ b/drivers/fpga/machxo2-spi.c
+@@ -166,7 +166,7 @@ static int machxo2_cleanup(struct fpga_manager *mgr)
+ 
+ 	return 0;
+ fail:
+-	dev_err(&mgr->dev, "Cleanup failed\n");
++	dev_err(&mgr->dev, "Cleanup failed, ret=%d\n", ret);
+ 
+ 	return ret;
+ }
+-- 
+2.25.1
 
-> the dependency on struct dfl_feature_platform_data for many internal DFL
-> APIs. This structure holds many DFL enumeration infos for feature
-> devices. Many DFL APIs are expected to work with these infos even when
-> the port platform device is unregistered. But after this change, the
-> platform_data will be freed on port release. Hence this patch introduces
-> a new structure dfl_feature_dev_data, which acts similarly to the
-> previous dfl_feature_platform_data. dfl_feature_platform_data then only
-> needs a pointer to dfl_feature_dev_data to query DFL enumeration infos.
-> 
-> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->  drivers/fpga/dfl-fme-br.c |   2 -
->  drivers/fpga/dfl.c        | 207 ++++++++++++++++++--------------------
->  drivers/fpga/dfl.h        |  57 +++++++----
->  3 files changed, 133 insertions(+), 133 deletions(-)
-> 
-> diff --git a/drivers/fpga/dfl-fme-br.c b/drivers/fpga/dfl-fme-br.c
-> index 5c60a38ec76c..a298a041877b 100644
-> --- a/drivers/fpga/dfl-fme-br.c
-> +++ b/drivers/fpga/dfl-fme-br.c
-> @@ -85,8 +85,6 @@ static void fme_br_remove(struct platform_device *pdev)
->  
->  	fpga_bridge_unregister(br);
->  
-> -	if (priv->port_fdata)
-> -		put_device(&priv->port_fdata->dev->dev);
-
-I can't remember why all the get_device/put_device() are not needed anymore.
-
->  	if (priv->port_ops)
->  		dfl_fpga_port_ops_put(priv->port_ops);
->  }
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 52f58d029ca4..a77d7692b170 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -160,7 +160,7 @@ struct dfl_fpga_port_ops *dfl_fpga_port_ops_get(struct dfl_feature_dev_data *fda
->  
->  	list_for_each_entry(ops, &dfl_port_ops_list, node) {
->  		/* match port_ops using the name of platform device */
-> -		if (!strcmp(fdata->dev->name, ops->name)) {
-> +		if (!strcmp(fdata->pdev_name, ops->name)) {
->  			if (!try_module_get(ops->owner))
->  				ops = NULL;
->  			goto done;
-> @@ -681,7 +681,6 @@ EXPORT_SYMBOL_GPL(dfl_fpga_dev_ops_unregister);
->   * @nr_irqs: number of irqs for all feature devices.
->   * @irq_table: Linux IRQ numbers for all irqs, indexed by local irq index of
->   *	       this device.
-> - * @feature_dev: current feature device.
->   * @type: the current FIU type.
->   * @ioaddr: header register region address of current FIU in enumeration.
->   * @start: register resource start of current FIU.
-> @@ -695,7 +694,6 @@ struct build_feature_devs_info {
->  	unsigned int nr_irqs;
->  	int *irq_table;
->  
-> -	struct platform_device *feature_dev;
->  	enum dfl_id_type type;
->  	void __iomem *ioaddr;
->  	resource_size_t start;
-> @@ -736,7 +734,6 @@ static void dfl_fpga_cdev_add_port_data(struct dfl_fpga_cdev *cdev,
->  {
->  	mutex_lock(&cdev->lock);
->  	list_add(&fdata->node, &cdev->port_dev_list);
-> -	get_device(&fdata->dev->dev);
->  	mutex_unlock(&cdev->lock);
->  }
->  
-> @@ -744,7 +741,6 @@ static struct dfl_feature_dev_data *
->  binfo_create_feature_dev_data(struct build_feature_devs_info *binfo)
->  {
->  	enum dfl_id_type type = binfo->type;
-> -	struct platform_device *fdev = binfo->feature_dev;
->  	struct dfl_feature_info *finfo, *p;
->  	struct dfl_feature_dev_data *fdata;
->  	int ret, index = 0, res_idx = 0;
-> @@ -752,18 +748,27 @@ binfo_create_feature_dev_data(struct build_feature_devs_info *binfo)
->  	if (WARN_ON_ONCE(type >= DFL_ID_MAX))
->  		return ERR_PTR(-EINVAL);
->  
-> -	/*
-> -	 * we do not need to care for the memory which is associated with
-> -	 * the platform device. After calling platform_device_unregister(),
-> -	 * it will be automatically freed by device's release() callback,
-> -	 * platform_device_release().
-> -	 */
-> -	fdata = kzalloc(struct_size(fdata, features, binfo->feature_num), GFP_KERNEL);
-> +	fdata = devm_kzalloc(binfo->dev, sizeof(*fdata), GFP_KERNEL);
->  	if (!fdata)
->  		return ERR_PTR(-ENOMEM);
->  
-> -	fdata->dev = fdev;
-> +	fdata->features = devm_kcalloc(binfo->dev, binfo->feature_num,
-> +				       sizeof(*fdata->features), GFP_KERNEL);
-> +	if (!fdata->features)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	fdata->resources = devm_kcalloc(binfo->dev, binfo->feature_num,
-> +					sizeof(*fdata->resources), GFP_KERNEL);
-> +	if (!fdata->resources)
-> +		return ERR_PTR(-ENOMEM);
-> +
->  	fdata->type = type;
-> +
-> +	fdata->pdev_id = dfl_id_alloc(type, binfo->dev);
-> +	if (fdata->pdev_id < 0)
-> +		return ERR_PTR(fdata->pdev_id);
-> +
-> +	fdata->pdev_name = dfl_devs[type].name;
->  	fdata->num = binfo->feature_num;
->  	fdata->dfl_cdev = binfo->cdev;
->  	fdata->id = FEATURE_DEV_ID_UNUSED;
-> @@ -779,15 +784,6 @@ binfo_create_feature_dev_data(struct build_feature_devs_info *binfo)
->  	 */
->  	WARN_ON(fdata->disable_count);
->  
-> -	fdev->dev.platform_data = fdata;
-> -
-> -	/* each sub feature has one MMIO resource */
-> -	fdev->num_resources = binfo->feature_num;
-> -	fdev->resource = kcalloc(binfo->feature_num, sizeof(*fdev->resource),
-> -				 GFP_KERNEL);
-> -	if (!fdev->resource)
-> -		return ERR_PTR(-ENOMEM);
-> -
->  	/* fill features and resource information for feature dev */
->  	list_for_each_entry_safe(finfo, p, &binfo->sub_features, node) {
->  		struct dfl_feature *feature = &fdata->features[index++];
-> @@ -795,7 +791,6 @@ binfo_create_feature_dev_data(struct build_feature_devs_info *binfo)
->  		unsigned int i;
->  
->  		/* save resource information for each feature */
-> -		feature->dev = fdev;
->  		feature->id = finfo->fid;
->  		feature->revision = finfo->revision;
->  		feature->dfh_version = finfo->dfh_version;
-> @@ -804,8 +799,10 @@ binfo_create_feature_dev_data(struct build_feature_devs_info *binfo)
->  			feature->params = devm_kmemdup(binfo->dev,
->  						       finfo->params, finfo->param_size,
->  						       GFP_KERNEL);
-> -			if (!feature->params)
-> -				return ERR_PTR(-ENOMEM);
-> +			if (!feature->params) {
-> +				ret = -ENOMEM;
-> +				goto err_free_id;
-> +			}
->  
->  			feature->param_size = finfo->param_size;
->  		}
-> @@ -823,19 +820,20 @@ binfo_create_feature_dev_data(struct build_feature_devs_info *binfo)
->  						      &finfo->mmio_res);
->  			if (IS_ERR(feature->ioaddr)) {
->  				ret = PTR_ERR(feature->ioaddr);
-> -				return ERR_PTR(ret);
-> +				goto err_free_id;
->  			}
->  		} else {
->  			feature->resource_index = res_idx;
-> -			fdev->resource[res_idx++] = finfo->mmio_res;
-> +			fdata->resources[res_idx++] = finfo->mmio_res;
->  		}
->  
->  		if (finfo->nr_irqs) {
->  			ctx = devm_kcalloc(binfo->dev, finfo->nr_irqs,
->  					   sizeof(*ctx), GFP_KERNEL);
-> -			if (!ctx)
-> -				return ERR_PTR(-ENOMEM);
-> -
-> +			if (!ctx) {
-> +				ret = -ENOMEM;
-> +				goto err_free_id;
-> +			}
->  			for (i = 0; i < finfo->nr_irqs; i++)
->  				ctx[i].irq =
->  					binfo->irq_table[finfo->irq_base + i];
-> @@ -848,36 +846,67 @@ binfo_create_feature_dev_data(struct build_feature_devs_info *binfo)
->  		kfree(finfo);
->  	}
->  
-> +	fdata->resource_num = res_idx;
-> +
->  	return fdata;
-> +
-> +err_free_id:
-> +	dfl_id_free(type, fdata->pdev_id);
-> +
-> +	return ERR_PTR(ret);
->  }
->  
-> -static int
-> -build_info_create_dev(struct build_feature_devs_info *binfo)
-> +/*
-> + * register current feature device, it is called when we need to switch to
-> + * another feature parsing or we have parsed all features on given device
-> + * feature list.
-> + */
-> +static int feature_dev_register(struct dfl_feature_dev_data *fdata)
->  {
-> -	enum dfl_id_type type = binfo->type;
-> +	struct dfl_feature_platform_data pdata = {};
->  	struct platform_device *fdev;
-> +	struct dfl_feature *feature;
-> +	int ret;
->  
-> -	/*
-> -	 * we use -ENODEV as the initialization indicator which indicates
-> -	 * whether the id need to be reclaimed
-> -	 */
-> -	fdev = platform_device_alloc(dfl_devs[type].name, -ENODEV);
-> +	fdev = platform_device_alloc(fdata->pdev_name, fdata->pdev_id);
-
-I see a part of the change is to delay the platform_device_alloc() so
-that the feature platform device registration work could be gathered in
-one function. Not sure if it is necessary for the port platform release
-issue, or could be an independent enhancement patch.
-
-I raise this cause I still feel hard to understand all these changes
-in this patch and look for any chance to further split it.
-
-
-BTW: Overall this series is much improved than the last version.
-
-Thanks,
-Yilun
 
