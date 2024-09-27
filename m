@@ -1,48 +1,48 @@
-Return-Path: <linux-fpga+bounces-742-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-743-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9188B988716
-	for <lists+linux-fpga@lfdr.de>; Fri, 27 Sep 2024 16:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 05EB2988719
+	for <lists+linux-fpga@lfdr.de>; Fri, 27 Sep 2024 16:27:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3A481C20B05
-	for <lists+linux-fpga@lfdr.de>; Fri, 27 Sep 2024 14:26:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 352AA1C20D03
+	for <lists+linux-fpga@lfdr.de>; Fri, 27 Sep 2024 14:27:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CFB6763F8;
-	Fri, 27 Sep 2024 14:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1A77136663;
+	Fri, 27 Sep 2024 14:27:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1ZQma4i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y7LD5Ifu"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0FB918B1A;
-	Fri, 27 Sep 2024 14:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9BE136354;
+	Fri, 27 Sep 2024 14:27:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727447179; cv=none; b=Oa/BxLChxEUlRoGq6ALumEZQfsd4jWxjt4nfksQcegz38AfSKE06Wi3UgfbG2MXnfyLqBFlY7Q55FMhyrFf4pJZXpaYRAkyN5oKuAdRUyHBCvu4dlwGRAuZxeCSl2F9YUGGgoFWF43SRZ5nuKQSk6KZjYopTv86oQyKaVNfk/gk=
+	t=1727447220; cv=none; b=ntOCG7GG0w4L7c3ru9/o89X1UYRsvJM+Eu1p9BKgl4EkQBqIv+pjc1xpMwRnLhCTTUsKgszj+FWxB7tpHe5Y9YoyqKxj5OHlH3aFy21XV24KkGdMoIKFgSyY7UfVMx9URwv5Rn/VlXhh0URdkvdBOynZtmSVQXNUbXjXgNgU2RU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727447179; c=relaxed/simple;
-	bh=rWNx8G6u4wjPkAWMYzAUZrCuVOjtknEM26E8OkXCZGQ=;
+	s=arc-20240116; t=1727447220; c=relaxed/simple;
+	bh=bp1ccEMJ8TRi+6hTBvnzjE2Vd4E1z4Lb7NPdi7RdmcU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=C/YxWWMqtBBT4zk8iv5nLdU8kz+tgSKMV+TbxEKk3VgQbt7RoUx00/GxeJXKNx4W19FrsiOQEOTiuIE3BwsyrVby89B3jZKgvDSCFcKu7716Wh1lUnePa24AGMiGmmLsg+vLhlxY9DzcQNXLwAJ3F090tgxb1vLCC3m24xaOImI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X1ZQma4i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F54C4CEC6;
-	Fri, 27 Sep 2024 14:26:13 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=F6UoD38uDnUu4O5TyZgpK7klnaxRtvBcCShbTxJ7BD/ecPzZ55ttXUtl3WWyJ53dpKCvapfRtqnhqXhg+Yjo1zr4XjIxRpVU+eBLevPJjzrfMiZo9Xjx4MgQ4UPsTokfnaABfcyoNfoT8WPFG7VxkYziplGwO1Eu9LOpA9SrY8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y7LD5Ifu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E91C4CEC4;
+	Fri, 27 Sep 2024 14:26:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727447178;
-	bh=rWNx8G6u4wjPkAWMYzAUZrCuVOjtknEM26E8OkXCZGQ=;
+	s=k20201202; t=1727447220;
+	bh=bp1ccEMJ8TRi+6hTBvnzjE2Vd4E1z4Lb7NPdi7RdmcU=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=X1ZQma4iONGSerivD0KqONYPChTg6SHZ3kKK8DuL9B65UM0pE4kjk/5X35eQEZiKp
-	 skllGtfQuFRxIzGWemVbo20mTKsImfA5f080Kzpwz9e3IB7rwRH9WcZFH1VGyg804N
-	 PCe4No9kYSpjymD50GMst/dq6szWNQyk6HujZV+9SDpEEVLFszjOkuiC8co0Kyl5fm
-	 88aOdqvzZjTRLJ27QenKGLOBC3P4Od6SSFGu1HYVqf/gv+Ozf3aVROGlRBgEqJpEjg
-	 EbCtetxJS/8/78JknLYY5M+/LGUvQHJIKanSQX1/ulEm1LGGqBkHSaLprcRkaD7w4C
-	 itE08vTMyw2GQ==
-Message-ID: <dd9ae106-3c39-423b-9413-5a7ca57f7aec@kernel.org>
-Date: Fri, 27 Sep 2024 16:26:11 +0200
+	b=Y7LD5Ifuees2F0z/iiqSzAQrFo6bmH6WTmLJbTmSQJeULCiqOuEXtgEaEmoQhFFVg
+	 WTE/+3IjgUj5RiOcIttE+NLvEm5iineT16SQFbksgkFbXijQmbHbdb8ORQorDaQ8Mt
+	 RxJyXePexiNmNqzyELCCqRaJBSQCuIRk0rkOWQIQsrlAPJIJ9vfBIM0lEVio5wycWp
+	 ByJJ8Pb7Ynt4bL5mH/koCjnB38e1CYeiGTg7R5l3Nv3T95lNbAxgBW5YQFx3HoAI+e
+	 RX+pW5t9M6HyxShdNeax1Ae74yLwF//9nlOyDgrB5zptuZgKFndwYaZTlV38TW+VDL
+	 gLZ33ii97voUA==
+Message-ID: <e0b7c4e6-e578-4348-85bf-27c93fe7c568@kernel.org>
+Date: Fri, 27 Sep 2024 16:26:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -50,15 +50,15 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] dt-bindings: fpga: Add Efinix serial SPI programming
- bindings
+Subject: Re: [PATCH 3/3] dt-bindings: vendor-prefix: Add prefix for Efinix,
+ Inc.
 To: iansdannapel@gmail.com, mdf@kernel.org, hao.wu@intel.com,
  yilun.xu@intel.com, trix@redhat.com, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, neil.armstrong@linaro.org, heiko.stuebner@cherry.de,
  rafal@milecki.pl, linus.walleij@linaro.org, linux-fpga@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20240927141445.157234-1-iansdannapel@gmail.com>
- <20240927141445.157234-2-iansdannapel@gmail.com>
+ <20240927141445.157234-3-iansdannapel@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,116 +104,24 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240927141445.157234-2-iansdannapel@gmail.com>
+In-Reply-To: <20240927141445.157234-3-iansdannapel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/09/2024 16:14, iansdannapel@gmail.com wrote:
 > From: Ian Dannapel <iansdannapel@gmail.com>
 > 
-> Add device tree binding documentation for configuring Efinix FPGA
-> using serial SPI passive programming mode.
+> Add entry for Efinix, Inc. (https://www.efinixinc.com/)
 > 
 > Signed-off-by: Ian Dannapel <iansdannapel@gmail.com>
 > ---
->  .../fpga/efinix,trion-spi-passive.yaml        | 85 +++++++++++++++++++
->  1 file changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml b/Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml
-> new file mode 100644
-> index 000000000000..ec6697fa6f44
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/fpga/efinix,trion-spi-passive.yaml
-> @@ -0,0 +1,85 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/fpga/efinix,trion-spi-passive.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Efinix SPI FPGA Manager
-> +
-> +maintainers:
-> +  - Ian Dannapel <iansdannapel@gmail.com>
-> +
-> +description: |
-> +  Efinix Trion and Titanium Series FPGAs support a method of loading the
-> +  bitstream over what is referred to as "SPI Passive Programming".
-> +  Only serial (1x bus width) is supported, setting the programming mode
-> +  is not in the scope the this manager and must be done elsewhere.
-> +
-> +  Warning: The slave serial link is not technically SPI and therefore it is
-> +  not recommended to have other devices on the same bus since it might
-> +  interfere or be interfered by other transmissions.
-> +
-> +  References:
-> +  - https://www.efinixinc.com/docs/an033-configuring-titanium-fpgas-v2.6.pdf
-> +  - https://www.efinixinc.com/docs/an006-configuring-trion-fpgas-v6.0.pdf
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - efinix,trion-spi-passive
-> +      - efinix,titanium-spi-passive
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-1. Your driver suggests these are compatible, so make them compatible
-with using fallback.
+Wrong order, this is supposed to be before first user.
 
-2. What is "spi-passive"? Compatible is supposed to be the name of the
-device, so I assume this is "trion"? Can trion be anything else than fpga?
-
-> +
-> +  spi-cpha: true
-> +
-> +  spi-cpol: true
-> +
-> +  spi-max-frequency:
-> +    maximum: 25000000
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  creset-gpios:
-
-reset-gpios
-
-Do not invent own properties.
-
-> +    description:
-> +      reset and re-configuration trigger pin (low active)
-> +    maxItems: 1
-> +
-> +  cs-gpios:
-> +    description:
-> +      chip-select pin (low active)
-
-Eee? That's a property of controller, not child. Aren't you duplicating
-existing controller property?
-
-> +    maxItems: 1
-> +
-> +  cdone-gpios:
-> +    description:
-> +      optional configuration done status pin (high active)
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - creset-gpios
-> +  - cs-gpios
-> +
-> +additionalProperties: false
-
-unevaluatedProperties instead
-
-> +
-
-
+BTW, same comment for device bindings - entire order is mixed up.
+Bindings come before users.
 
 Best regards,
 Krzysztof
