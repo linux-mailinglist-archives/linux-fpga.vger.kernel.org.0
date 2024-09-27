@@ -1,48 +1,48 @@
-Return-Path: <linux-fpga+bounces-743-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-744-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05EB2988719
-	for <lists+linux-fpga@lfdr.de>; Fri, 27 Sep 2024 16:27:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39F5E98871D
+	for <lists+linux-fpga@lfdr.de>; Fri, 27 Sep 2024 16:27:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 352AA1C20D03
-	for <lists+linux-fpga@lfdr.de>; Fri, 27 Sep 2024 14:27:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD3121F222D1
+	for <lists+linux-fpga@lfdr.de>; Fri, 27 Sep 2024 14:27:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1A77136663;
-	Fri, 27 Sep 2024 14:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E89013633F;
+	Fri, 27 Sep 2024 14:27:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y7LD5Ifu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kr3MeE29"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9BE136354;
-	Fri, 27 Sep 2024 14:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506B818B1A;
+	Fri, 27 Sep 2024 14:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727447220; cv=none; b=ntOCG7GG0w4L7c3ru9/o89X1UYRsvJM+Eu1p9BKgl4EkQBqIv+pjc1xpMwRnLhCTTUsKgszj+FWxB7tpHe5Y9YoyqKxj5OHlH3aFy21XV24KkGdMoIKFgSyY7UfVMx9URwv5Rn/VlXhh0URdkvdBOynZtmSVQXNUbXjXgNgU2RU=
+	t=1727447267; cv=none; b=E3IfSbuWLteWdKSjWMRVY/2tvva51jQzARqr+pdIjpp38UqH47qgADSlYxRukOYQqCmSIF2lrhW64IEZmmLzl3kiqA6z4wlc/Ne95S0ZEb4tXGIeqE29X+tQzK+ZdVHDai6bPXieWy5jZIkRf/y+ddTkEdsEAWo9DboJ2ibn1mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727447220; c=relaxed/simple;
-	bh=bp1ccEMJ8TRi+6hTBvnzjE2Vd4E1z4Lb7NPdi7RdmcU=;
+	s=arc-20240116; t=1727447267; c=relaxed/simple;
+	bh=FxZxgtfgqfHDxs3AOvc6shkAVLFSDrbmr7JB/qqnWco=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=F6UoD38uDnUu4O5TyZgpK7klnaxRtvBcCShbTxJ7BD/ecPzZ55ttXUtl3WWyJ53dpKCvapfRtqnhqXhg+Yjo1zr4XjIxRpVU+eBLevPJjzrfMiZo9Xjx4MgQ4UPsTokfnaABfcyoNfoT8WPFG7VxkYziplGwO1Eu9LOpA9SrY8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y7LD5Ifu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E91C4CEC4;
-	Fri, 27 Sep 2024 14:26:55 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Dyfa46ZOghh5mxTTt/JzUaeTQQc/ctapu2WH/M0IF7lAB88+PypwwCUdjC2iKssz6kuFkRvYctaJqHSScOy1T/9VtK/9SNvywkYzZkr1aSPz3o5ixDqQFUMUNdsHOMClJUhjk9Jhk3DIp4kcSUT7SgWbCqcC/VcGgKrPV3dr/zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kr3MeE29; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD741C4CEC4;
+	Fri, 27 Sep 2024 14:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727447220;
-	bh=bp1ccEMJ8TRi+6hTBvnzjE2Vd4E1z4Lb7NPdi7RdmcU=;
+	s=k20201202; t=1727447265;
+	bh=FxZxgtfgqfHDxs3AOvc6shkAVLFSDrbmr7JB/qqnWco=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=Y7LD5Ifuees2F0z/iiqSzAQrFo6bmH6WTmLJbTmSQJeULCiqOuEXtgEaEmoQhFFVg
-	 WTE/+3IjgUj5RiOcIttE+NLvEm5iineT16SQFbksgkFbXijQmbHbdb8ORQorDaQ8Mt
-	 RxJyXePexiNmNqzyELCCqRaJBSQCuIRk0rkOWQIQsrlAPJIJ9vfBIM0lEVio5wycWp
-	 ByJJ8Pb7Ynt4bL5mH/koCjnB38e1CYeiGTg7R5l3Nv3T95lNbAxgBW5YQFx3HoAI+e
-	 RX+pW5t9M6HyxShdNeax1Ae74yLwF//9nlOyDgrB5zptuZgKFndwYaZTlV38TW+VDL
-	 gLZ33ii97voUA==
-Message-ID: <e0b7c4e6-e578-4348-85bf-27c93fe7c568@kernel.org>
-Date: Fri, 27 Sep 2024 16:26:53 +0200
+	b=kr3MeE29xvsQXHtRIFLnzhbFSReUsFKqa3TrX6PLjYuvTV2h35qWua6EiKvRRHF/7
+	 g54iWlLTFL7TwwL9MCbUWnrjqGus8abP8HkYl3HzQ/dIj6P85v1tV9D+Nn2/OET6iw
+	 5vEfyDsB+lSqQKWcMgxfAQX7ufQSCDINStNqJ798X7ayF9thwZ6jyYU4BMVQpW7h3b
+	 Sz8iKTMCC8hY1tsNefIFSVn39CYVJTOAsrcMESowJnJ/b4nc9HZffXA5/1R/FjYj2p
+	 Wbio+4xEf9BRHCqVHncqRnig8BLFUmTme7WZkkAwmP39kiGsOknih2HTOwusCZVXjs
+	 fFkIs82QmXPTA==
+Message-ID: <374e7b60-d288-44a8-acc3-bec912e1d6b6@kernel.org>
+Date: Fri, 27 Sep 2024 16:27:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -50,15 +50,14 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] dt-bindings: vendor-prefix: Add prefix for Efinix,
- Inc.
+Subject: Re: [PATCH v3 0/3] Summary of changes
 To: iansdannapel@gmail.com, mdf@kernel.org, hao.wu@intel.com,
  yilun.xu@intel.com, trix@redhat.com, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, neil.armstrong@linaro.org, heiko.stuebner@cherry.de,
  rafal@milecki.pl, linus.walleij@linaro.org, linux-fpga@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20240927141445.157234-1-iansdannapel@gmail.com>
- <20240927141445.157234-3-iansdannapel@gmail.com>
+ <20240927141445.157234-4-iansdannapel@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,24 +103,20 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240927141445.157234-3-iansdannapel@gmail.com>
+In-Reply-To: <20240927141445.157234-4-iansdannapel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/09/2024 16:14, iansdannapel@gmail.com wrote:
-> From: Ian Dannapel <iansdannapel@gmail.com>
+> Dear Linux FPGA Maintainers,
 > 
-> Add entry for Efinix, Inc. (https://www.efinixinc.com/)
-> 
-> Signed-off-by: Ian Dannapel <iansdannapel@gmail.com>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> I did not found a way to use the struct spi_transfer to manage the chip
+> select the way this fpga programming requires. Since the chip select is 
+> managed by this driver alone, it may interfere with the communication 
+> with other devices on the bus, which I tried to make clear in 
 
-Wrong order, this is supposed to be before first user.
-
-BTW, same comment for device bindings - entire order is mixed up.
-Bindings come before users.
+Start using b4... or use proper --cover-letter argument for git
+format-patch. Your patchset is not correctly threaded.
 
 Best regards,
 Krzysztof
