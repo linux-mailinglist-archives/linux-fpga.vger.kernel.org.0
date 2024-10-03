@@ -1,107 +1,224 @@
-Return-Path: <linux-fpga+bounces-751-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-752-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3AA9989A7A
-	for <lists+linux-fpga@lfdr.de>; Mon, 30 Sep 2024 08:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BA6C98ED35
+	for <lists+linux-fpga@lfdr.de>; Thu,  3 Oct 2024 12:42:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A58DB214D9
-	for <lists+linux-fpga@lfdr.de>; Mon, 30 Sep 2024 06:23:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E613EB20B44
+	for <lists+linux-fpga@lfdr.de>; Thu,  3 Oct 2024 10:42:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84229433C4;
-	Mon, 30 Sep 2024 06:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AAFD14E2CC;
+	Thu,  3 Oct 2024 10:42:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="VozEvNlW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VW6RQD/l"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F8D23BE;
-	Mon, 30 Sep 2024 06:23:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F87113A24A;
+	Thu,  3 Oct 2024 10:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727677417; cv=none; b=dggTTqPesvqUh6KAOWuqTVssvFI/g4b6HRW7mV8LGF9EHSr5YBTZWzx/ebcyKc+mLuNGEV0e3gvE9X4jkB9b9PJcKsSHby/tX5U3CToruEo/U4puVPvxTcNONqg7p0MoNe3OGZfQJFN7D0w8laakbn1zGFcRH6g2RCiflqdNE+U=
+	t=1727952169; cv=none; b=XwNw3jDOuQ09rQdkgZHtcwk3BC7VtvuxH4F+DfaW/xK/G06FAJAxloTl4lIFYs68Jx0mSUYQlw3TJE72/kaUoIBCe6ch9epox5FO8qDH3K5dkY1cDwpAbW1M5gZiu/US8e9Ct04/OB7gnMvOVkC4OwyujeKhrNHKxDXTVlrtLyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727677417; c=relaxed/simple;
-	bh=KacTsB1rDIoVQtRILrYR7CSH9zw8PB+63mpb1v0klqs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cbWvQxJIInDv+WtwRKm+UnrnYrLgWlT366+Bk5uSzGrL9QS10L94b2OntYxX6kkjM2HI6N9HBzoQTw2NakbivD4F8ISX2K6PgsT2njIrFOM4702AhTNkPAFOZXJbYGnenI5f1yvNR9KkciH6v4KzOAsAv8gq96xtqCbnQCgc1CI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=VozEvNlW; arc=none smtp.client-ip=217.92.40.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 480E01486A9B;
-	Mon, 30 Sep 2024 08:23:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
-	t=1727677405; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=ibzyBjuzfNPPavMmEdBN1WsLI+EZeL5i4GIN1cYlFHk=;
-	b=VozEvNlWldunq8C8NmKVlf2t3Mmb0692CEG8R6PG9YyCUd7AsHvI9SoDetP2/e0x2owL1P
-	PVbw/sSwEQiNrHyK0JP5/wJwa4S23DuSwHA6CyENGCS0qOgj0HqcnDjrgY84wmLqnsdUYM
-	KYs8H+mZuiR/rQzU9YultDmaLkLU+l3kWynFBR4g0aU/vb6CVdTQZxEKqhfjp6r06KLwcJ
-	i+7XHvlup1hzGB54fUR2cHT7Y71MqBJjEBQJyELi0BOPSQ8WIZk/lRd1zvCfQoDQRiJIL9
-	DIiAdxjHjXC/84Q/15+c4akbgN88kFa14jYzymtjk0f4Nn/ffItXRUJLGENcGA==
-Date: Mon, 30 Sep 2024 08:23:12 +0200
-From: Alexander Dahl <ada@thorsis.com>
-To: iansdannapel@gmail.com
-Cc: mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	neil.armstrong@linaro.org, heiko.stuebner@cherry.de,
-	rafal@milecki.pl, linus.walleij@linaro.org,
-	linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] dt-bindings: vendor-prefix: Add prefix for Efinix,
- Inc.
-Message-ID: <20240930-tranquil-glitch-f48685f77942@thorsis.com>
-Mail-Followup-To: iansdannapel@gmail.com, mdf@kernel.org, hao.wu@intel.com,
-	yilun.xu@intel.com, trix@redhat.com, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, neil.armstrong@linaro.org,
-	heiko.stuebner@cherry.de, rafal@milecki.pl,
-	linus.walleij@linaro.org, linux-fpga@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240927141445.157234-1-iansdannapel@gmail.com>
- <20240927141445.157234-3-iansdannapel@gmail.com>
+	s=arc-20240116; t=1727952169; c=relaxed/simple;
+	bh=1z1JGA6U/odpvegzu5+AYDKhQPlTvvq6gUhBfx3KIQ4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mlSR4JIa/UfB3PqFls+3QFeb+fvMBgIkmcNptqCpysacEEOrQ3sSgFb+CCqO7FfpkKUDDotBlZttRBNv79Kkq6phDtWtOwqILwuIhphkknRZEi/ijNEv6+lzCf35zqiuZn4z3ydTPO9Bc3rIpBtb89+i1Pyn7Gc8EFoceG83S+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VW6RQD/l; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7db90a28cf6so1263223a12.0;
+        Thu, 03 Oct 2024 03:42:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727952167; x=1728556967; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ujiQHahtbaEY1X1bz4oE4Y4jHXdqg8dZdzZ+KxxOoFs=;
+        b=VW6RQD/lu2Hc1X5BzAxYmSh9Jv5dm4DBW+EuxeQ+MG3Bi8Rd8q5NElB3uyUlhLEJLE
+         SsM0gRzpqL+bWs3t7Psk8pZ8zewRwKFwKG8+890FZ3zMTuTBS0sEOwR8tw1QfZnNpR/v
+         SmQxEriy12wYePUu8Xn+14ecboy0J6jLjPnsUuKV4MgNyLE1vf665nTxhES2Pb2KA7K9
+         lAWqeu7ZC9Xqdn97ABPwOA29fCnMxBxYyng98Dwb+dFpV7PY5dbee+NlloYE0z3JZEdE
+         UFT9A2Ma2w8R52ujiaUb5BwAWIp08FXUTeAHr6N5AIxOua1hyIg63NH4iNJ/SdU1m+Sm
+         XuZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727952167; x=1728556967;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ujiQHahtbaEY1X1bz4oE4Y4jHXdqg8dZdzZ+KxxOoFs=;
+        b=e4VPYstGxnHakMFFViTX0JWw2yCAJa5oPFzJXrvuFbGS7sKc5P6c9/KCikdBgLA74E
+         zEeqjj0w8zxQNUGdtprpdCq1ZN5Ia6VKfRhBZmbVYmVznUKGLKEPJkbNoGpklheKoI9h
+         ojkjZNgpxiezLgRUKRLCr5hRdfWTMFb5803cXs4gWqFLb1VzHzAMeDNoxSU1pT/XhCKr
+         KHJLt7/p9Y8U89/7JS8mqy14eYkp+JupuLtJB4/o1JzWkssloFolJOYYp/VOsTbAWlTv
+         oK0A8fIPBy7Noa1Kn1UFrQip6lZ5rIxdT8Mrwy/MWvEndm2rOmrXL7bNPFt3i+zAmAbP
+         sbKw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+WPYLUqemy/P+j4+LU0Io+RcLMPYbEgpfgW/HuxpmXgvHfCkpvdZvYAb5JUNkhnUjBXrvy2aFnHg5@vger.kernel.org, AJvYcCWNDzniV+FeYgQlF1/h+Um/dm4gFtwJkEaPk0e7wILlz5rhJ1U6e/EAC9cZcBT7uCSjZ0H50Z+Uis1adA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YziDDHbbQaQn+B7NzdH7qYgz2JDP8zQF6OpqQmNIOUK6ZEGA8sS
+	LFriNwPHHLGpwhPbDncXdy5qA5C2l5TDDmNeIvx09ZgIw7CMYrpuW6tU5g==
+X-Google-Smtp-Source: AGHT+IFvxzNhIvczmb9INlw6qh/XNIabnid1kXj+lxTj6P0lKEG5/6WZHr/RmAq10UNUB9G6M9KFnA==
+X-Received: by 2002:a17:90b:148f:b0:2d8:7445:7ab2 with SMTP id 98e67ed59e1d1-2e1b392f6e7mr3370317a91.20.1727952166770;
+        Thu, 03 Oct 2024 03:42:46 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:b9a4:a119:38d1:3e69])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e1bfb1c102sm1228285a91.23.2024.10.03.03.42.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Oct 2024 03:42:46 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: robh@kernel.org
+Cc: krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	mdf@kernel.org,
+	hao.wu@intel.com,
+	yilun.xu@intel.com,
+	trix@redhat.com,
+	linux-fpga@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Fabio Estevam <festevam@denx.de>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH RESEND] dt-bindings: fpga: altr,fpga-passive-serial: Convert to yaml
+Date: Thu,  3 Oct 2024 07:42:30 -0300
+Message-Id: <20241003104230.1628813-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240927141445.157234-3-iansdannapel@gmail.com>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
-Hello Ian,
+From: Fabio Estevam <festevam@denx.de>
 
-Am Fri, Sep 27, 2024 at 04:14:44PM +0200 schrieb iansdannapel@gmail.com:
-> From: Ian Dannapel <iansdannapel@gmail.com>
-> 
-> Add entry for Efinix, Inc. (https://www.efinixinc.com/)
-> 
-> Signed-off-by: Ian Dannapel <iansdannapel@gmail.com>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index b320a39de7fe..cb92df951fa7 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -430,6 +430,8 @@ patternProperties:
->      description: Emtop Embedded Solutions
->    "^eeti,.*":
->      description: eGalax_eMPIA Technology Inc
-> +  "^efinix,.*":
-> +    description: Efinix, Inc.
->    "^einfochips,.*":
->      description: Einfochips
->    "^eink,.*":
+Convert the Altera Passive Serial SPI FPGA Manager binding
+from text file to yaml format to allow devicetree validation.
 
-Acked-by: Alexander Dahl <ada@thorsis.com>
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ .../bindings/fpga/altera-passive-serial.txt   | 29 --------
+ .../fpga/altr,fpga-passive-serial.yaml        | 74 +++++++++++++++++++
+ 2 files changed, 74 insertions(+), 29 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/fpga/altera-passive-serial.txt
+ create mode 100644 Documentation/devicetree/bindings/fpga/altr,fpga-passive-serial.yaml
 
-Greets
-Alex
+diff --git a/Documentation/devicetree/bindings/fpga/altera-passive-serial.txt b/Documentation/devicetree/bindings/fpga/altera-passive-serial.txt
+deleted file mode 100644
+index 48478bc07e29..000000000000
+--- a/Documentation/devicetree/bindings/fpga/altera-passive-serial.txt
++++ /dev/null
+@@ -1,29 +0,0 @@
+-Altera Passive Serial SPI FPGA Manager
+-
+-Altera FPGAs support a method of loading the bitstream over what is
+-referred to as "passive serial".
+-The passive serial link is not technically SPI, and might require extra
+-circuits in order to play nicely with other SPI slaves on the same bus.
+-
+-See https://www.altera.com/literature/hb/cyc/cyc_c51013.pdf
+-
+-Required properties:
+-- compatible: Must be one of the following:
+-	"altr,fpga-passive-serial",
+-	"altr,fpga-arria10-passive-serial"
+-- reg: SPI chip select of the FPGA
+-- nconfig-gpios: config pin (referred to as nCONFIG in the manual)
+-- nstat-gpios: status pin (referred to as nSTATUS in the manual)
+-
+-Optional properties:
+-- confd-gpios: confd pin (referred to as CONF_DONE in the manual)
+-
+-Example:
+-	fpga: fpga@0 {
+-		compatible = "altr,fpga-passive-serial";
+-		spi-max-frequency = <20000000>;
+-		reg = <0>;
+-		nconfig-gpios = <&gpio4 9 GPIO_ACTIVE_LOW>;
+-		nstat-gpios = <&gpio4 11 GPIO_ACTIVE_LOW>;
+-		confd-gpios = <&gpio4 12 GPIO_ACTIVE_LOW>;
+-	};
+diff --git a/Documentation/devicetree/bindings/fpga/altr,fpga-passive-serial.yaml b/Documentation/devicetree/bindings/fpga/altr,fpga-passive-serial.yaml
+new file mode 100644
+index 000000000000..ffb7cc54556f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/fpga/altr,fpga-passive-serial.yaml
+@@ -0,0 +1,74 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/fpga/altr,fpga-passive-serial.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Altera Passive Serial SPI FPGA Manager
++
++maintainers:
++  - Fabio Estevam <festevam@denx.de>
++
++description: |
++  Altera FPGAs support a method of loading the bitstream over what is
++  referred to as "passive serial".
++  The passive serial link is not technically SPI, and might require extra
++  circuits in order to play nicely with other SPI slaves on the same bus.
++
++  See https://www.altera.com/literature/hb/cyc/cyc_c51013.pdf
++
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++properties:
++  compatible:
++    enum:
++      - altr,fpga-passive-serial
++      - altr,fpga-arria10-passive-serial
++
++  spi-max-frequency:
++    maximum: 20000000
++
++  reg:
++    maxItems: 1
++
++  nconfig-gpios:
++    description:
++      Config pin (referred to as nCONFIG in the manual).
++    maxItems: 1
++
++  nstat-gpios:
++    description:
++      Status pin (referred to as nSTATUS in the manual).
++    maxItems: 1
++
++  confd-gpios:
++    description:
++      confd pin (referred to as CONF_DONE in the manual)
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - nconfig-gpios
++  - nstat-gpios
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    spi {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      fpga@0 {
++        compatible = "altr,fpga-passive-serial";
++        reg = <0>;
++        nconfig-gpios = <&gpio4 18 GPIO_ACTIVE_LOW>;
++        nstat-gpios = <&gpio4 19 GPIO_ACTIVE_LOW>;
++        confd-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
++      };
++    };
++...
+-- 
+2.34.1
 
 
