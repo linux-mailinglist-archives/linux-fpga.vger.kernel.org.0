@@ -1,68 +1,68 @@
-Return-Path: <linux-fpga+bounces-759-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-760-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34F72995EFA
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Oct 2024 07:30:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37CAB996075
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Oct 2024 09:15:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C550F1F216CB
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Oct 2024 05:30:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E51F6287879
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Oct 2024 07:15:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA85615CD49;
-	Wed,  9 Oct 2024 05:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6390A186616;
+	Wed,  9 Oct 2024 07:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FIlUGqCy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nn9D5q9s"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203E7149C50;
-	Wed,  9 Oct 2024 05:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F76D17DFE8;
+	Wed,  9 Oct 2024 07:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728451833; cv=none; b=aLafuEEii6cPByQ7Y8DEpz06puO8ZmztDMps9bPQMbmJm3KJtgikFZrTAUjk4i/j5G1LUrNh9/TzX8/M7oZPtE/H7SxLBkMuiCXb9rq1oKPjjhH5S7TSWOmr0GEWFE5XNujD69OfjemYXcXtUGGkKkUt+gU2cF9A6vmcgdl1LT0=
+	t=1728458083; cv=none; b=d/kXlck3PaEcEfgjmMr3N5l7qn5sFT6DZFVEW0q2lXLTKUyL1ZJBN61+9+KWM4KIdohHgyUWkwMmlqZAhSt7MyNX+LVmnCdL6Cl/FANbywbtvtQ0EP6cc7evWS6lXi3AIKTEAp8JxoKl5EGP9ATvob416KUyChvP7oKY7Xa9M3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728451833; c=relaxed/simple;
-	bh=VSUYUmtY8quANbEQtNDYVtgnqU7DGn2JR+gtgjQdhfI=;
+	s=arc-20240116; t=1728458083; c=relaxed/simple;
+	bh=m17sdrYRBmfrCEo9usomhJOmDw78sWaZlC5tm9EazsY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PlA74TxRteWlnFDX0ogTbayiLWYOMGqp9fEtw0jQqfZs8rGlK6Ar3ZrsyzDP/lXNEFkNjd+YIBhIFL3Ju3nvRtDw2lhqlDIA+yEEfMuAD90r4Sdzxv1PgZvAXw3plwXzEe0z/3fJgXzcI9E8u29Qf34qXUKiMwOLVJaZf2mM9cE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FIlUGqCy; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=PYl7P0dcqcfkn9HeGnhmz5gtB4Mq8g+XWm7M36FrdLCSgOouTXexJY44Wotm9YaeF+1Swip5pXNXJPZ0+cepV+DnQyzf8BaKlwu2biUDF63KUmPuNs4vBkEAqJv7Tgm4BOkFA2X1oFWKYrSYI/r/LWAjewy6epXJubo7A7lYdKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nn9D5q9s; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728451832; x=1759987832;
+  t=1728458082; x=1759994082;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=VSUYUmtY8quANbEQtNDYVtgnqU7DGn2JR+gtgjQdhfI=;
-  b=FIlUGqCyd0VEay7VtYh2FdAQDqUm50w++TexV5C/s0Z+GOxJ065Ww52x
-   1f1j74e5w3eOM7urb6PuCswmaoRU4pfH+LA4SKcXoupv+JUi3PHlEcGuB
-   DgbfeNCqsh4IiKGasSPXKXnBOSAmvmatHWCZjaFHorMtR90cjW8/afPKV
-   ZLBKhJ1I5iJ9IeFIs7NhiNE90U2n21r8Tctryh6+1ixqXKdRbwJ9CAXQ8
-   uITn9DChOTIm9m4kxiFrMWaDVBA7IM7n1k/sYymjelXDr2zNEA62GxujS
-   H4ULk94oDQmpuccyUpT0HLn8e6sFlvqjjyZ8YiyNEgXKD8Y/WtgVjZFmk
+  bh=m17sdrYRBmfrCEo9usomhJOmDw78sWaZlC5tm9EazsY=;
+  b=nn9D5q9sSeAzLoSBl+t8JplSDWQgF+nfABFP82679jQ76zYVv3Yx167g
+   DOtPwxuFq5yPB/wTcETQbjsfGuoEkPDIPEQnrkwzk6sF/oufC79WiXwbb
+   HinKhpFyFEwM0yQAwSWVNnRbtlvsgnH7Ap0T+L+CgsNDJwPeoPIdXeBg8
+   vs1Xfc9AsP1zbjf992FQrWZ7g/us9saNNny3OGgq5OBAgFKyS8wPPsTAq
+   ZQ6ryfYXlZbKgu4a5HS7oM3PNyiQ455TBXdyK/GMI23qSnNDAfJ6hU3yo
+   m7R7u2ThBP7qG8F91W4tCEYzf1oar7UUQXVKsiw62cLnLye6ohIyaHdz2
    g==;
-X-CSE-ConnectionGUID: iX47WNbKSqO9DWqLJzxppw==
-X-CSE-MsgGUID: f2oDss9QTM6VY3e9zhcXYQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="38315937"
+X-CSE-ConnectionGUID: CbHejmX9RrKPQZJC28hxJw==
+X-CSE-MsgGUID: kyV2snYbTdG6mQeAATyfCA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="45260807"
 X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="38315937"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 22:30:32 -0700
-X-CSE-ConnectionGUID: G0K6UK4bRL2KJG2uRRWW1Q==
-X-CSE-MsgGUID: 9nJqYqatTDq4Ckt1kyH8rg==
+   d="scan'208";a="45260807"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 00:14:41 -0700
+X-CSE-ConnectionGUID: 3+LEDsoyRZOe/UG+VQsOdg==
+X-CSE-MsgGUID: B+ITTU1YQsmd/+VIvVOkVA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="106891950"
+   d="scan'208";a="75741048"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 08 Oct 2024 22:30:29 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 09 Oct 2024 00:14:38 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1syPHH-0008my-0a;
-	Wed, 09 Oct 2024 05:30:27 +0000
-Date: Wed, 9 Oct 2024 13:29:50 +0800
+	id 1syQu4-0008vO-2F;
+	Wed, 09 Oct 2024 07:14:36 +0000
+Date: Wed, 9 Oct 2024 15:13:43 +0800
 From: kernel test robot <lkp@intel.com>
 To: David Zhang <yidong.zhang@amd.com>, linux-kernel@vger.kernel.org,
 	linux-fpga@vger.kernel.org, mdf@kernel.org, hao.wu@intel.com,
@@ -70,9 +70,9 @@ To: David Zhang <yidong.zhang@amd.com>, linux-kernel@vger.kernel.org,
 Cc: oe-kbuild-all@lists.linux.dev, Yidong Zhang <yidong.zhang@amd.com>,
 	lizhi.hou@amd.com, Nishad Saraf <nishads@amd.com>,
 	Prapul Krishnamurthy <prapulk@amd.com>
-Subject: Re: [PATCH V1 2/3] drivers/fpga/amd: Add communication with firmware
-Message-ID: <202410091338.c38eM1Hd-lkp@intel.com>
-References: <20241007220128.3023169-2-yidong.zhang@amd.com>
+Subject: Re: [PATCH V1 3/3] drivers/fpga/amd: Add remote queue service APIs
+Message-ID: <202410091512.rcCqJO6z-lkp@intel.com>
+References: <20241007220128.3023169-3-yidong.zhang@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -81,7 +81,7 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241007220128.3023169-2-yidong.zhang@amd.com>
+In-Reply-To: <20241007220128.3023169-3-yidong.zhang@amd.com>
 
 Hi David,
 
@@ -95,83 +95,53 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/David-Zhang/drivers-fpga-amd-Add-communication-with-firmware/20241008-060253
 base:   linus/master
-patch link:    https://lore.kernel.org/r/20241007220128.3023169-2-yidong.zhang%40amd.com
-patch subject: [PATCH V1 2/3] drivers/fpga/amd: Add communication with firmware
-config: i386-randconfig-054-20241009 (https://download.01.org/0day-ci/archive/20241009/202410091338.c38eM1Hd-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20241007220128.3023169-3-yidong.zhang%40amd.com
+patch subject: [PATCH V1 3/3] drivers/fpga/amd: Add remote queue service APIs
+config: i386-randconfig-054-20241009 (https://download.01.org/0day-ci/archive/20241009/202410091512.rcCqJO6z-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410091338.c38eM1Hd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410091512.rcCqJO6z-lkp@intel.com/
 
 cocci warnings: (new ones prefixed by >>)
->> drivers/fpga/amd/vmgmt-rm.c:183:2-3: Unneeded semicolon
---
->> drivers/fpga/amd/vmgmt-rm.c:498:10-17: WARNING: vzalloc should be used for buffer, instead of vmalloc/memset
+>> drivers/fpga/amd/vmgmt-rm-queue.c:280:2-3: Unneeded semicolon
 
-vim +183 drivers/fpga/amd/vmgmt-rm.c
+vim +280 drivers/fpga/amd/vmgmt-rm-queue.c
 
-   146	
-   147	int rm_queue_create_cmd(struct rm_device *rdev, enum rm_queue_opcode opcode,
-   148				struct rm_cmd **cmd_ptr)
-   149	{
-   150		struct rm_cmd *cmd = NULL;
-   151		int ret, id;
-   152		u16 size;
-   153	
-   154		if (rdev->firewall_tripped)
-   155			return -ENODEV;
-   156	
-   157		cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
-   158		if (!cmd)
-   159			return -ENOMEM;
-   160		cmd->rdev = rdev;
-   161	
-   162		switch (opcode) {
-   163		case RM_QUEUE_OP_LOAD_XCLBIN:
-   164			fallthrough;
-   165		case RM_QUEUE_OP_LOAD_FW:
-   166			fallthrough;
-   167		case RM_QUEUE_OP_LOAD_APU_FW:
-   168			size = sizeof(struct rm_cmd_sq_bin);
-   169			break;
-   170		case RM_QUEUE_OP_GET_LOG_PAGE:
-   171			size = sizeof(struct rm_cmd_sq_log_page);
-   172			break;
-   173		case RM_QUEUE_OP_IDENTIFY:
-   174			size = 0;
-   175			break;
-   176		case RM_QUEUE_OP_VMR_CONTROL:
-   177			size = sizeof(struct rm_cmd_sq_ctrl);
-   178			break;
-   179		default:
-   180			vmgmt_err(rdev->vdev, "Invalid cmd opcode %d", opcode);
-   181			ret = -EINVAL;
-   182			goto error;
- > 183		};
-   184	
-   185		cmd->opcode = opcode;
-   186		cmd->sq_msg.hdr.opcode = FIELD_PREP(RM_CMD_SQ_HDR_OPS_MSK, opcode);
-   187		cmd->sq_msg.hdr.msg_size = FIELD_PREP(RM_CMD_SQ_HDR_SIZE_MSK, size);
-   188	
-   189		id = ida_alloc_range(&rm_cmd_ids, RM_CMD_ID_MIN, RM_CMD_ID_MAX, GFP_KERNEL);
-   190		if (id < 0) {
-   191			vmgmt_err(rdev->vdev, "Failed to alloc cmd ID: %d", id);
-   192			ret = id;
-   193			goto error;
-   194		}
-   195		cmd->sq_msg.hdr.id = id;
-   196	
-   197		init_completion(&cmd->executed);
-   198	
-   199		*cmd_ptr = cmd;
-   200		return 0;
-   201	error:
-   202		kfree(cmd);
-   203		return ret;
-   204	}
-   205	
+   254	
+   255	static void rm_check_msg(struct work_struct *w)
+   256	{
+   257		struct rm_device *rdev = to_rdev_msg_monitor(w);
+   258		int ret;
+   259	
+   260		mutex_lock(&rdev->queue);
+   261	
+   262		ret = rm_queue_get_cidx(rdev, RM_QUEUE_SQ, &rdev->sq.cidx);
+   263		if (ret)
+   264			goto error;
+   265	
+   266		ret = rm_queue_get_pidx(rdev, RM_QUEUE_CQ, &rdev->cq.pidx);
+   267		if (ret)
+   268			goto error;
+   269	
+   270		while (rdev->cq.cidx < rdev->cq.pidx) {
+   271			ret = rm_process_msg(rdev);
+   272			if (ret)
+   273				break;
+   274	
+   275			rdev->cq.cidx++;
+   276	
+   277			ret = rm_queue_set_cidx(rdev, RM_QUEUE_CQ, rdev->cq.cidx);
+   278			if (ret)
+   279				break;
+ > 280		};
+   281	
+   282	error:
+   283		mutex_unlock(&rdev->queue);
+   284	}
+   285	
 
 -- 
 0-DAY CI Kernel Test Service
