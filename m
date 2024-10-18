@@ -1,124 +1,135 @@
-Return-Path: <linux-fpga+bounces-789-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-790-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50E6B9A3E81
-	for <lists+linux-fpga@lfdr.de>; Fri, 18 Oct 2024 14:36:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 912009A4437
+	for <lists+linux-fpga@lfdr.de>; Fri, 18 Oct 2024 18:58:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02167285E05
-	for <lists+linux-fpga@lfdr.de>; Fri, 18 Oct 2024 12:36:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A893C283624
+	for <lists+linux-fpga@lfdr.de>; Fri, 18 Oct 2024 16:58:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20F5F9E6;
-	Fri, 18 Oct 2024 12:36:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB61A2038B9;
+	Fri, 18 Oct 2024 16:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="maZaoGJ+"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD9C3207;
-	Fri, 18 Oct 2024 12:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8371320E312;
+	Fri, 18 Oct 2024 16:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729255006; cv=none; b=n+d3zUfsULLGiJFt0Jyr1FfEbbkpuU47CB5HeYVbVSp9kZiJKW5dB52izR1d2o3p/1OXZ3dFRmskk352Kev8/RpWWfJXRIwl33CmeIk+HW6onrxT+ZynEtFbfGr/REio3CXiOPcTwgeSY/31QDhpfIVtrnAU+SDm1QJW+nMMPmk=
+	t=1729270730; cv=none; b=ove5+4NMplHJ4ojojSZKsrO3l/fLG9Iixz1ZTUY/5LxH0wzs5Zxa0dRcswvjhoqgDJJA7sxi8S+mSROoL9HVJ1+ntKeinVi3aLF0mkqaMQQO1vgNrNpN88OlG+rNRHWMGR3nK4AhI07tnFUpB5ublLefvRq7Be7Ux9AhSr70+Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729255006; c=relaxed/simple;
-	bh=tyMewtQqpHxg4qbfOy5HqA9327malShWrnPYHfuO2vg=;
+	s=arc-20240116; t=1729270730; c=relaxed/simple;
+	bh=KmFDIPqq/FGkhdEs2nrrL6xlOMgGPriCuUSmr1XNq+U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K/jnKojaQEjhdZ/dbrb9d/GchnYJJJw6g0bQTaJq9dbjPoeDN1Q1T+tJrIu4n8xVUa3WhUJ/QEb2D/8rF1M/Cn3oIyg7wxjThN8X80+QMaGyxTT1ZiWlKbwq9443LC/rUnC91mKQTvGfmPKEI2k0ctFApUDN058gDswlTV7Wkho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: 0cXE/RMeS8il+576EWH2vg==
-X-CSE-MsgGUID: r0T/vuPmQYqRHeav2DZvew==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39326594"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="39326594"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 05:36:45 -0700
-X-CSE-ConnectionGUID: m9kwGWSOS+q+2j/CwHgoLQ==
-X-CSE-MsgGUID: Ks+uPRRJR+C757twukfZZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,213,1725346800"; 
-   d="scan'208";a="79663802"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 05:36:39 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andy@kernel.org>)
-	id 1t1mDa-00000004Sex-2cSq;
-	Fri, 18 Oct 2024 15:36:34 +0300
-Date: Fri, 18 Oct 2024 15:36:34 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Philipp Stanner <pstanner@redhat.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Wu Hao <hao.wu@intel.com>,
-	Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Damien Le Moal <dlemoal@kernel.org>, Hannes Reinecke <hare@suse.de>,
-	Chaitanya Kulkarni <kch@nvidia.com>,
-	Al Viro <viro@zeniv.linux.org.uk>, Li Zetao <lizetao1@huawei.com>,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-	netdev@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v8 2/6] PCI: Deprecate pcim_iounmap_regions()
-Message-ID: <ZxJWUoMg9vYyXwMW@smile.fi.intel.com>
-References: <20241016094911.24818-2-pstanner@redhat.com>
- <20241016094911.24818-4-pstanner@redhat.com>
- <Zw-XkFcaXjlF5az0@smile.fi.intel.com>
- <0cf0ffed63a8645c49f043877c526b2ab0abf96e.camel@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JKds+dOYjH1Rv3rsW6eNtfV3wh1kNaBnYrq912lPKlMXUwvbzW2yCl+BXQkotbIfsX+384XX8FHOtpgby+occ9jDIzBc0mLvEhlR/Bu324RSRkLZ3GXvv7jj3YhdxcDQfKTLcoPMnRddHqyw+mdLfonQxgdMwpSI2XYRIoR9Ba0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=maZaoGJ+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF723C4CEC3;
+	Fri, 18 Oct 2024 16:58:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729270730;
+	bh=KmFDIPqq/FGkhdEs2nrrL6xlOMgGPriCuUSmr1XNq+U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=maZaoGJ+ADlxQ7yODd0ZuD/qMi8agvLf+ypYlCT7bRwYaSgFrAA/4kG6CEqwH0sJP
+	 4WuS2q8zk+FrM0Xd/SmELc32Fi8Ea96D7gMYtTs/KYYoulz4ff+MZwyEXCeZNxV36M
+	 znxutkYSErKONN0AVj/Yb3au6G9e+RaZpsupwBJtI1wu/nMrxfz+fC8iaMYFXHYYaL
+	 7xqW6l6fK7Cpxi9eQxI7TeYTTbrkygR3QO3hu6fZuPf+CMRCUUJbZjawMkJ+hIEHVC
+	 X+Xdqr7xs/6nnCOPdMO7F87zwfXNcaAwxJKkrr0q06SLpaI+ernKjltXb2CBr3Yjel
+	 T9gMk+Bt0OkMA==
+Date: Fri, 18 Oct 2024 17:58:44 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Xu Yilun <yilun.xu@linux.intel.com>
+Cc: iansdannapel@gmail.com, mdf@kernel.org, hao.wu@intel.com,
+	yilun.xu@intel.com, trix@redhat.com, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, neil.armstrong@linaro.org,
+	heiko.stuebner@cherry.de, rafal@milecki.pl,
+	linus.walleij@linaro.org, linux-fpga@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] fpga: Add Efinix Trion & Titanium serial SPI
+ programming driver
+Message-ID: <20241018-chump-juvenile-dc368d3d2f2c@spud>
+References: <20240927141445.157234-1-iansdannapel@gmail.com>
+ <ZxG70kzjsvT3UBlQ@yilunxu-OptiPlex-7050>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="tJrW1TGs4m0tiOHr"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0cf0ffed63a8645c49f043877c526b2ab0abf96e.camel@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-
-On Fri, Oct 18, 2024 at 12:52:15PM +0200, Philipp Stanner wrote:
-> On Wed, 2024-10-16 at 13:38 +0300, Andy Shevchenko wrote:
-> > On Wed, Oct 16, 2024 at 11:49:05AM +0200, Philipp Stanner wrote:
-
-...
-
-> > > + * This function is DEPRECATED. Do not use it in new code.
-> > 
-> > Interestingly that the syntax of the DEPRECATED is not documented
-> > (yet?),
-> > however the sphinx parser hints us about **DEPRECATED** format — see
-> > Documentation/sphinx/parse-headers.pl:251. In any case the above
-> > seems
-> > like second used (in a form of the full sentence) and will be updated
-> > in accordance with the above mentioned script.
-> 
-> Can't completely follow – so one should always write "**DEPRECATED**",
-> correct?
-
-I can't answer to this, because there may be "rendered" form and in this case
-it should not be surrounded by double asterisks, otherwise it's better to have
-at the start.
-
-> Is that a blocker for you?
-
-Nope, I mentioned this in the last sentence in my previous reply.
-
-> All the docstrings in pci/pci.c and pci/devres.c so far just use
-> "DEPRECATED".
-
-Yeah, this, if ever needed, has to be changed at once.
-
--- 
-With Best Regards,
-Andy Shevchenko
+In-Reply-To: <ZxG70kzjsvT3UBlQ@yilunxu-OptiPlex-7050>
 
 
+--tJrW1TGs4m0tiOHr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Oct 18, 2024 at 09:37:22AM +0800, Xu Yilun wrote:
+> On Fri, Sep 27, 2024 at 04:14:42PM +0200, iansdannapel@gmail.com wrote:
+> > From: Ian Dannapel <iansdannapel@gmail.com>
+> >=20
+> > Add a new driver for loading binary firmware to volatile
+> > configuration RAM using "SPI passive programming" on Efinix FPGAs.
+> >=20
+> > Signed-off-by: Ian Dannapel <iansdannapel@gmail.com>
+> > ---
+> >  drivers/fpga/Kconfig                    |  10 ++
+> >  drivers/fpga/Makefile                   |   1 +
+> >  drivers/fpga/efinix-trion-spi-passive.c | 211 ++++++++++++++++++++++++
+> >  3 files changed, 222 insertions(+)
+> >  create mode 100644 drivers/fpga/efinix-trion-spi-passive.c
+> >=20
+> > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> > index 37b35f58f0df..eb1e44c4e3e0 100644
+> > --- a/drivers/fpga/Kconfig
+> > +++ b/drivers/fpga/Kconfig
+> > @@ -83,6 +83,16 @@ config FPGA_MGR_XILINX_SPI
+> >  	  FPGA manager driver support for Xilinx FPGA configuration
+> >  	  over slave serial interface.
+> > =20
+> > +config FPGA_MGR_EFINIX_SPI
+> > +	tristate "Efinix FPGA configuration over SPI passive"
+> > +	depends on SPI
+> > +	help
+> > +	  This option enables support for the FPGA manager driver to
+> > +	  configure Efinix Trion and Titanium Series FPGAs over SPI
+> > +	  using passive serial mode.
+> > +	  Warning: Do not activate this if there are other SPI devices
+> > +	  on the same bus as it might interfere with the transmission.
+>=20
+> Sorry, this won't work. As you can see, the conflict usage of CS causes
+> several concerns. Just a text here is far from enough.
+>=20
+> You need to actively work with SPI core/controller drivers to find a
+> solution that coordinate the usage of this pin.
+
+Why does it even impact other SPI devices on the bus? It's not /their/
+CS line that is being modified here, it is the line for the FPGA's
+programming interface, right?
+What am I missing here that makes it any different to any other SPI
+device that may need it's CS toggled?
+
+Cheers,
+Conor.
+
+--tJrW1TGs4m0tiOHr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZxKTxAAKCRB4tDGHoIJi
+0unKAP4h10isIjeybBw7doFylQ84VeFR2ViMNgdJM2A4tWYn7QEA/zAY7NQ4XxmE
+/uliSNdw8wCGnHuO7wIKjrkl6mnoJQs=
+=ipTB
+-----END PGP SIGNATURE-----
+
+--tJrW1TGs4m0tiOHr--
 
