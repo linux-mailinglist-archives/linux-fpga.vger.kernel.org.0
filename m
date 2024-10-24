@@ -1,137 +1,139 @@
-Return-Path: <linux-fpga+bounces-833-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-834-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2FB29AE853
-	for <lists+linux-fpga@lfdr.de>; Thu, 24 Oct 2024 16:22:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF8D19AEA9A
+	for <lists+linux-fpga@lfdr.de>; Thu, 24 Oct 2024 17:34:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87C9D28E715
-	for <lists+linux-fpga@lfdr.de>; Thu, 24 Oct 2024 14:22:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3304283D44
+	for <lists+linux-fpga@lfdr.de>; Thu, 24 Oct 2024 15:34:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B921D1F5824;
-	Thu, 24 Oct 2024 14:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A5761EBA12;
+	Thu, 24 Oct 2024 15:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ld+0kXID"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.tlmp.cc (unknown [148.135.104.50])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6631E282B;
-	Thu, 24 Oct 2024 14:13:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.135.104.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86CB1E8833;
+	Thu, 24 Oct 2024 15:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729779238; cv=none; b=JcUK9CR64Kf6O8wvpTwSKGkJf0j4r8q4CzWGMCTgK8HypsrIqtzPjjieFySoIZIk5J7TEpM1YrwxXNkEXgnb5fXA4Ssul5/40cfmbsDvug2HdmnyfmX06Re2BWYx+jHlYWovc0o9XBmS0S4V4FDq+4Pshci7MkbLWmfxgr8Yzns=
+	t=1729784076; cv=none; b=JxhOy8OMvhu2HQPxHKMwnaS5g/5GnUUZOoycw1+CKq9r3iYUbmTFn9O4GW6rwn2zYSBuficuHNCPeCdxwxMv4dKOx5vvYCqR/18cuGKCTBWEbQ2HhQlJE0gLJvOOCBaZByjA6/IH0uTTLPm9P+9zzlAhEWfB5FXmgRu+e+13Mxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729779238; c=relaxed/simple;
-	bh=FqtmwA94oipzr+62VsJdTfpQcYtuXccvlcXq2Sfzq50=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=au0COAI16dULNcXGdUNXTIlCCCN8p0UrTKKClTGFc0uKlFqvWQtzaanUE9v5OMLUoBz7kxP9rfQUlOrV5wNiBphk1gmpaVXI2I4PKpVEyZi1hhslLuyl39FuupbU87wJii41XnF8gJSTD/5RuOu0p2rwTPgQibTNqCQwvyhJmo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kremlin.ru; spf=fail smtp.mailfrom=kremlin.ru; arc=none smtp.client-ip=148.135.104.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kremlin.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kremlin.ru
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 434E85E5C5;
-	Thu, 24 Oct 2024 10:03:59 -0400 (EDT)
-From: Vladimir Vladimirovich Putin <vladimir_putin_rus@kremlin.ru>
-To: torvalds@linux-foundation.org
-Cc: aospan@netup.ru,
-	conor.dooley@microchip.com,
-	ddrokosov@sberdevices.ru,
-	dmaengine@vger.kernel.org,
-	dushistov@mail.ru,
-	fancer.lancer@gmail.com,
-	geert@linux-m68k.org,
-	gregkh@linuxfoundation.org,
-	hoan@os.amperecomputing.com,
-	ink@jurassic.park.msu.ru,
-	jeffbai@aosc.io,
-	kexybiscuit@aosc.io,
-	linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-fpga@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-ide@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	manivannan.sadhasivam@linaro.org,
-	mattst88@gmail.com,
-	netdev@vger.kernel.org,
-	nikita@trvn.ru,
-	ntb@lists.linux.dev,
-	patches@lists.linux.dev,
-	richard.henderson@linaro.org,
-	s.shtylyov@omp.ru,
-	serjk@netup.ru,
-	shc_work@mail.ru,
-	torvic9@mailbox.org,
-	tsbogend@alpha.franken.de,
-	v.georgiev@metrotek.ru,
-	wangyuli@uniontech.com,
-	wsa+renesas@sang-engineering.com,
-	xeb@mail.ru,
-	LKML <linux-kernel@vger.kernel.org>,
-	Vladimir Vladimirovich Putin <vladimir_putin_rus@kremlin.ru>
-Subject: [PATCH 0/2] MAINTAINERS: Remove few Chinese Entries
-Date: Thu, 24 Oct 2024 22:03:51 +0800
-Message-ID: <20241024140353.384881-1-vladimir_putin_rus@kremlin.ru>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
-References: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
+	s=arc-20240116; t=1729784076; c=relaxed/simple;
+	bh=r86jBE+8OoJgKUMUpwbaAODQYFEMIqxXdzxjdpA4+K8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jg1BwPpdTg+EJE6mV9cf+c663H7SyyagFOsyInnYSE/vtoASavwHjeab9oUdbRdcmWBrAx6ojOjuNMI0Ked+eM+KoVPra/gVcr+Ug93F1yxPMgvdKqhqzaiX8cI0qhkkmc4zUc/0dwf7jbICBJ5lvkggdoyOsbesMbHbI0XXQM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ld+0kXID; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729784074; x=1761320074;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r86jBE+8OoJgKUMUpwbaAODQYFEMIqxXdzxjdpA4+K8=;
+  b=ld+0kXIDKcNgIjNUFgEhSN/0wCutavhp5w4hLA2j3zHtskSWa5lO3hSk
+   0isPKcyVxkHXcIrC3OHIQTHf+ha93YPoOwe79bRW9ocAcF5gydB7L3JmL
+   oxUOcA1A3cRSHQvDrSdV/yUkUwsdwowhBIsXP1fEpeJ9Srolfd7xbMUun
+   9k5O0HNUSwelVLLhEOJF+HhYhjvtjPe2YYiXCkkZJyRgThCgZS61/3blU
+   uzK2kXr8l+t4tzGBj3yRBtkCWCbRqVLyNjfpAfyb3nLgw3xhLcZHpPkj2
+   R5b3VI6t7jZI6A+6TqfDw5mWowFNRfdQJe/i49FM5Nrga35N/blmeVNJ7
+   w==;
+X-CSE-ConnectionGUID: ss4YkRxfRU+Z3B3rXVUsHg==
+X-CSE-MsgGUID: 4GVsmTdKRpKR+zmT5lpKCA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="29322812"
+X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
+   d="scan'208";a="29322812"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 08:34:07 -0700
+X-CSE-ConnectionGUID: bDqK43xcSWaBDgv74YyBNg==
+X-CSE-MsgGUID: /8c3sObzRfmInXX3ETIyBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
+   d="scan'208";a="80916460"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa010.fm.intel.com with ESMTP; 24 Oct 2024 08:33:58 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 95E83252; Thu, 24 Oct 2024 18:33:57 +0300 (EEST)
+Date: Thu, 24 Oct 2024 18:33:57 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Cc: Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io,
+	gregkh@linuxfoundation.org, wangyuli@uniontech.com,
+	torvalds@linux-foundation.org, aospan@netup.ru,
+	conor.dooley@microchip.com, ddrokosov@sberdevices.ru,
+	dmaengine@vger.kernel.org, dushistov@mail.ru,
+	fancer.lancer@gmail.com, geert@linux-m68k.org,
+	hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru,
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-ide@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-spi@vger.kernel.org, manivannan.sadhasivam@linaro.org,
+	mattst88@gmail.com, netdev@vger.kernel.org, nikita@trvn.ru,
+	ntb@lists.linux.dev, patches@lists.linux.dev,
+	richard.henderson@linaro.org, s.shtylyov@omp.ru, serjk@netup.ru,
+	shc_work@mail.ru, tsbogend@alpha.franken.de, v.georgiev@metrotek.ru,
+	wsa+renesas@sang-engineering.com, xeb@mail.ru
+Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
+ compliance requirements."
+Message-ID: <Zxpo5VMY56iMOTWi@black.fi.intel.com>
+References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
+ <20241023080935.2945-2-kexybiscuit@aosc.io>
+ <64ef261c-82d0-4fad-ba8a-562f247340fb@metux.net>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64ef261c-82d0-4fad-ba8a-562f247340fb@metux.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi, Linux Community.
+On Thu, Oct 24, 2024 at 05:05:13PM +0200, Enrico Weigelt, metux IT consult wrote:
+> On 23.10.24 10:09, Kexy Biscuit wrote:
 
-If you haven't heard of Chinese sanctions yet, you should try to read
-the news some day.  And by "news", I don't mean Chinese
-state-sponsored spam like Central China Television some kind of BS.
+...
 
-So I hereby submit another two patches to remove the entries owned by
-two US-sanctioned entities Huawei[1] and LoongSon[2]. "They can come
-back in the future if sufficient documentation is provided."
+> I grew up in the GDR, which was factually Russian/Soviet-occupied for 40
+> years. I grew up behind the iron curtain. And part of my family coming
+> from near Mariuopol.
 
-Best Regards,
+Interesting. Let's have a beer at some point and may be talk about this
+(I'm from Donetsk, Ukraine).
 
-Vladimir Vladimirovich Putin
+> They also suffered from that horrible war (and many
+> of the wider family fled to Germany).
 
----
-Привет, Linux-сообщество.
+...
 
-Если вы еще не слышали о китайских санкциях, попробуйте прочитать
-новости когда-нибудь.  И под «новостями» я не имею в виду китайские
-спам, спонсируемый государством, типа Центрального китайского
-телевидения, какая-то чушь.
+> or maybe just having an .ru mail address
 
-Поэтому я отправляю еще два патча для удаления записей, принадлежащих
-две компании, находящиеся под санкциями США, Huawei[1] и LoongSon[2]. 
-«Они могут прийтив будущем, если будет предоставлена
-достаточная документация».
+It's not about .ru if you read the original patch.
 
-С наилучшими пожеланиями,
+...
 
-Владимир Владимирович Путин
+> Who's the only nation who used nuclear bombs against civilians ?
+> The US.
 
-[1]: https://sanctionssearch.ofac.treas.gov/Details.aspx?id=30947
-[2]: https://en.wikipedia.org/wiki/Loongson
-
-Vladimir Vladimirovich Putin (2):
-  MAINTAINERS: Remove Huawei due to compilance requirements.
-  MAINTAINERS: Remove Loongson due to compilance requirements.
-
- MAINTAINERS | 96 -----------------------------------------------------
- 1 file changed, 96 deletions(-)
+Since you haven't defined _how_ it was used, you are mistaken.
+In the 70-x Soviets did a lot of experiments with nuclear and
+you may find an information about, e.g., the underground nuke
+in the Donetsk (Donbass if speaking of coal mines) region in order
+to see if it improves the efficiency of the coal mining. It didn't,
+and as a consequences it becomes exactly the use against civilians.
 
 -- 
-2.47.0
+With Best Regards,
+Andy Shevchenko
+
 
 
