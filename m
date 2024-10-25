@@ -1,61 +1,61 @@
-Return-Path: <linux-fpga+bounces-896-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-897-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B5489B12C3
-	for <lists+linux-fpga@lfdr.de>; Sat, 26 Oct 2024 00:38:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A68BF9B12C5
+	for <lists+linux-fpga@lfdr.de>; Sat, 26 Oct 2024 00:38:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2557F282F7F
-	for <lists+linux-fpga@lfdr.de>; Fri, 25 Oct 2024 22:38:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35A631F21A21
+	for <lists+linux-fpga@lfdr.de>; Fri, 25 Oct 2024 22:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE732214435;
-	Fri, 25 Oct 2024 22:37:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CFD7215C50;
+	Fri, 25 Oct 2024 22:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nu020YXP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d1Jp6yr8"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A671620EA27;
-	Fri, 25 Oct 2024 22:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E85320EA57;
+	Fri, 25 Oct 2024 22:37:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729895860; cv=none; b=ZoslKDqOIhgU6zwZaqCbjUNqi3QqykcAxyVIoO1myiPOFAFgFeXviCvCrOa7gzvt/MaC7f5DMQAHISdt4Ynvq7Vv0PXuC21yyleVir0lBd8+XzGdBT03AkHUp0dgnYSk/Onj2zV1Pe5kPs1gYGbMPJoQiRKRUa+pJY3ArDPpBWY=
+	t=1729895861; cv=none; b=qKQ1Jk3wMs1wDci7fs2n8NIyfoOKgYaxaSFCzpfT0bR+hRYZrtDwhlpjM5459tWyLHrrOEerSqYjCLseENCHaJdL2vIiXddZmomRsrK6kSB1KiqnHylnaUiL+zhglENEDHdzBB9HJp9AbSvv/Yve6ZgNaE8t1CKwinOoPnld4IQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729895860; c=relaxed/simple;
-	bh=TIhPf4gICUkQlHeW3/dFU2F3Ui/ikGZEwT0j5BenxZo=;
+	s=arc-20240116; t=1729895861; c=relaxed/simple;
+	bh=4EpIr/QbHAf5VSnHA+eoSdbqRod75X1ulEa3Hi5vx4U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ogjpO8JYmvT78rkbUbwUdssar6gm80Ikv5AEfQCi+/hVz6cbyOGcwWSby0bgYdPHXlpZEngb8TYOp2lKAmRW0wFwjcdKHBf6MkL6ymMeFjbm0E3IVTfojgDuzl7KzPiS25il4Z10ajvy/xZnaTlY6pVN1RsSKQXW/5by00Wuhfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nu020YXP; arc=none smtp.client-ip=192.198.163.17
+	 MIME-Version; b=hiq115eYs4Wc045eNeFTlby8REvgkcE64Wc3xpPZhxoy/z8DqkPuyyZ/8+nnZk0X+AXOh6w0gDEN08XyneJ15JObzMcVohf5m2vJ3eagZhkfJ6KkGBxBQjPbQgEVCaqw2t5WsQ4H7w7kdqKtE69iCNG1wuwcLgabWsaXWeF2OVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d1Jp6yr8; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729895858; x=1761431858;
+  t=1729895859; x=1761431859;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TIhPf4gICUkQlHeW3/dFU2F3Ui/ikGZEwT0j5BenxZo=;
-  b=nu020YXPgApI4VvRKYYqH+25UkCfX7NwZtgTnO0PFlhvJNNJQHVk0JoP
-   7StNQTcxNdaqvTu3iaV03lmEXv+pVLRuwD2K/xG5Ow5tv4IVRp7wAFj0n
-   rlisRlmOAH62PEOfcLq1xvymvSumKnJwnonfsT1Rlw9dwQyNHUTvXkZ6N
-   k6uwrox+MkHWvMurXHH0wM8YXnsDtUjysQMDoTGNs6HbiuXq7IodPKj89
-   pW/drcfv71BaKECUXqmK6SUA2WHJFY4w3cZwrMXmgy4u6DfHFzrILMJTy
-   SE5iTYIO5WbPIIIaIJjysevwtQyjBpTITjcPZwz5YFrmpEpAwVbjOizE/
+  bh=4EpIr/QbHAf5VSnHA+eoSdbqRod75X1ulEa3Hi5vx4U=;
+  b=d1Jp6yr89m/JXcOCdcWub/nGCqLhUmuL+6ifo3WLQp6yAO/kq0HjYm0v
+   cOjbE2QnaLgaKMDBwa9m7F0dFI9u4SO9zmkOKmhpntm1nWv0OJrLBOssd
+   tP5q/xHNCRb9VEQc+N47330XO0xh885W+YsDEdFVxye2dtXw4j7rhzW2f
+   oI3O+s0drT1X3qeczUosPc+q4pMS/Ds/SxRJISHnhZNcNmnr8uxJYuPHs
+   RfDBizIJyLcf0OuBClZt8DZC5/Lzh1PPxd92bzgzNdFQEO49zyF8odIsx
+   6yjCvRnApnn55TiUpHVTl5hjGKzWAYdTbmgoznMLmL0s9TbQu9ZsPfnyw
    g==;
-X-CSE-ConnectionGUID: wxXPY2MWTB2afRqTl7k3hw==
-X-CSE-MsgGUID: 2Bt/RGEuQPWvb6cD4/aYkw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11236"; a="29474628"
+X-CSE-ConnectionGUID: jQ5ClB3cTFiPsMIn9IQvjQ==
+X-CSE-MsgGUID: ez2fxgVGS7STST6s7NjlrQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11236"; a="29474632"
 X-IronPort-AV: E=Sophos;i="6.11,233,1725346800"; 
-   d="scan'208";a="29474628"
+   d="scan'208";a="29474632"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 15:37:36 -0700
-X-CSE-ConnectionGUID: 8Vmv2uZYS9yXTdR0tvfu/A==
-X-CSE-MsgGUID: LTqm3GKNQlqBVFjMiBnP9w==
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 15:37:37 -0700
+X-CSE-ConnectionGUID: 0CyB29yATDiKLsDvmAkaLw==
+X-CSE-MsgGUID: 83NTp/o1TIyCo+Mo4COcjw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,233,1725346800"; 
-   d="scan'208";a="85596138"
+   d="scan'208";a="85596143"
 Received: from sj-4150-psse-sw-opae-dev3.sj.altera.com ([10.244.138.109])
   by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 15:37:37 -0700
 From: Peter Colberg <peter.colberg@intel.com>
@@ -70,9 +70,9 @@ Cc: Russ Weight <russ.weight@linux.dev>,
 	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
 	Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>,
 	Peter Colberg <peter.colberg@intel.com>
-Subject: [PATCH v4 03/19] fpga: dfl: afu: use parent device to log errors on port enable/disable
-Date: Fri, 25 Oct 2024 18:36:58 -0400
-Message-ID: <20241025223714.394533-4-peter.colberg@intel.com>
+Subject: [PATCH v4 04/19] fpga: dfl: afu: define local pointer to feature device
+Date: Fri, 25 Oct 2024 18:36:59 -0400
+Message-ID: <20241025223714.394533-5-peter.colberg@intel.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241025223714.394533-1-peter.colberg@intel.com>
 References: <20241025223714.394533-1-peter.colberg@intel.com>
@@ -84,49 +84,94 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-AFU port enable/disable may be triggered from userspace at any point,
-e.g., after a port has been released. This commit prepares a subsequent
-commit that destroys the port platform device on port release, which is
-then no longer available during port enable/disable. Use the parent,
-physical DFL, e.g., PCIe FPGA device instead for logging errors.
+Define local pointer to pdata->dev->dev to avoid repetition.
 
 Signed-off-by: Peter Colberg <peter.colberg@intel.com>
 Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Reviewed-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
 ---
 Changes since v3:
-- Replace "physical" with "physical DFL" (device) in description for
-  consistency with other patches.
+- No changes.
 
 Changes since v2:
 - New patch extracted from monolithic v1 patch.
 ---
- drivers/fpga/dfl-afu-main.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/fpga/dfl-afu-dma-region.c | 9 +++++----
+ drivers/fpga/dfl-afu-region.c     | 5 +++--
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index 6125e2faada8..c0f2db72b5b9 100644
---- a/drivers/fpga/dfl-afu-main.c
-+++ b/drivers/fpga/dfl-afu-main.c
-@@ -60,7 +60,8 @@ int __afu_port_enable(struct platform_device *pdev)
- 	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
- 			       !(v & PORT_CTRL_SFTRST_ACK),
- 			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
--		dev_err(&pdev->dev, "timeout, failure to enable device\n");
-+		dev_err(pdata->dfl_cdev->parent,
-+			"timeout, failure to enable device\n");
- 		return -ETIMEDOUT;
+diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
+index 02b60fde0430..814191e623e1 100644
+--- a/drivers/fpga/dfl-afu-dma-region.c
++++ b/drivers/fpga/dfl-afu-dma-region.c
+@@ -301,6 +301,7 @@ afu_dma_region_find_iova(struct dfl_feature_platform_data *pdata, u64 iova)
+ int afu_dma_map_region(struct dfl_feature_platform_data *pdata,
+ 		       u64 user_addr, u64 length, u64 *iova)
+ {
++	struct device *dev = &pdata->dev->dev;
+ 	struct dfl_afu_dma_region *region;
+ 	int ret;
+ 
+@@ -325,13 +326,13 @@ int afu_dma_map_region(struct dfl_feature_platform_data *pdata,
+ 	/* Pin the user memory region */
+ 	ret = afu_dma_pin_pages(pdata, region);
+ 	if (ret) {
+-		dev_err(&pdata->dev->dev, "failed to pin memory region\n");
++		dev_err(dev, "failed to pin memory region\n");
+ 		goto free_region;
  	}
  
-@@ -99,7 +100,8 @@ int __afu_port_disable(struct platform_device *pdev)
- 	if (readq_poll_timeout(base + PORT_HDR_CTRL, v,
- 			       v & PORT_CTRL_SFTRST_ACK,
- 			       RST_POLL_INVL, RST_POLL_TIMEOUT)) {
--		dev_err(&pdev->dev, "timeout, failure to disable device\n");
-+		dev_err(pdata->dfl_cdev->parent,
-+			"timeout, failure to disable device\n");
- 		return -ETIMEDOUT;
+ 	/* Only accept continuous pages, return error else */
+ 	if (!afu_dma_check_continuous_pages(region)) {
+-		dev_err(&pdata->dev->dev, "pages are not continuous\n");
++		dev_err(dev, "pages are not continuous\n");
+ 		ret = -EINVAL;
+ 		goto unpin_pages;
  	}
+@@ -342,7 +343,7 @@ int afu_dma_map_region(struct dfl_feature_platform_data *pdata,
+ 				    region->length,
+ 				    DMA_BIDIRECTIONAL);
+ 	if (dma_mapping_error(dfl_fpga_pdata_to_parent(pdata), region->iova)) {
+-		dev_err(&pdata->dev->dev, "failed to map for dma\n");
++		dev_err(dev, "failed to map for dma\n");
+ 		ret = -EFAULT;
+ 		goto unpin_pages;
+ 	}
+@@ -353,7 +354,7 @@ int afu_dma_map_region(struct dfl_feature_platform_data *pdata,
+ 	ret = afu_dma_region_add(pdata, region);
+ 	mutex_unlock(&pdata->lock);
+ 	if (ret) {
+-		dev_err(&pdata->dev->dev, "failed to add dma region\n");
++		dev_err(dev, "failed to add dma region\n");
+ 		goto unmap_dma;
+ 	}
+ 
+diff --git a/drivers/fpga/dfl-afu-region.c b/drivers/fpga/dfl-afu-region.c
+index 2e7b41629406..8f0e9485214a 100644
+--- a/drivers/fpga/dfl-afu-region.c
++++ b/drivers/fpga/dfl-afu-region.c
+@@ -50,11 +50,12 @@ static struct dfl_afu_mmio_region *get_region_by_index(struct dfl_afu *afu,
+ int afu_mmio_region_add(struct dfl_feature_platform_data *pdata,
+ 			u32 region_index, u64 region_size, u64 phys, u32 flags)
+ {
++	struct device *dev = &pdata->dev->dev;
+ 	struct dfl_afu_mmio_region *region;
+ 	struct dfl_afu *afu;
+ 	int ret = 0;
+ 
+-	region = devm_kzalloc(&pdata->dev->dev, sizeof(*region), GFP_KERNEL);
++	region = devm_kzalloc(dev, sizeof(*region), GFP_KERNEL);
+ 	if (!region)
+ 		return -ENOMEM;
+ 
+@@ -85,7 +86,7 @@ int afu_mmio_region_add(struct dfl_feature_platform_data *pdata,
+ 	return 0;
+ 
+ exit:
+-	devm_kfree(&pdata->dev->dev, region);
++	devm_kfree(dev, region);
+ 	return ret;
+ }
  
 -- 
 2.47.0
