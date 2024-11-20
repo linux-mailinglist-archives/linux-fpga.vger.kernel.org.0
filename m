@@ -1,61 +1,61 @@
-Return-Path: <linux-fpga+bounces-965-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-967-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5377A9D31C5
-	for <lists+linux-fpga@lfdr.de>; Wed, 20 Nov 2024 02:14:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5FB49D31C8
+	for <lists+linux-fpga@lfdr.de>; Wed, 20 Nov 2024 02:15:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14F24281D26
-	for <lists+linux-fpga@lfdr.de>; Wed, 20 Nov 2024 01:14:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50CFDB244B8
+	for <lists+linux-fpga@lfdr.de>; Wed, 20 Nov 2024 01:15:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09BA614F9E7;
-	Wed, 20 Nov 2024 01:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B8DA15532A;
+	Wed, 20 Nov 2024 01:11:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aTNh5pPn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WVMYIBjN"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B1514885D;
-	Wed, 20 Nov 2024 01:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DFC14F12D;
+	Wed, 20 Nov 2024 01:11:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732065111; cv=none; b=GWFHl3oKmHWMRNZsbVx83cMIXhUTtwDVEysxaC/63qNYoV/u58VbleQxIXbqTdbCuYG7Ak9j+p32UKM0MWKhdcvavJKjRlYv8AOridjV2CO2cYisnWpKI5aaX9hKVHRiG/ilBoc59BlfvO47wKX+9ftGpCFtwOD2OCx7L1l/Kn8=
+	t=1732065114; cv=none; b=ONcyp2582jzSAS790TOlopQofab4pmciDZ3N6glML/yH4ngo++m5dWklfzw7D4jPXSDyP910+qVhmsoR0FYz+Z36xU/f4c/J9ig68ylfqrWr+AYyPmvd2gQno+eVKdS0omqqhzrFQyuIG3OF7pbHY7+wCXDEPxsnm3jnUUytmSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732065111; c=relaxed/simple;
-	bh=J098Ry0xDLSZ5e33vmElAllzS+/5XVjHikmeVCGgdHU=;
+	s=arc-20240116; t=1732065114; c=relaxed/simple;
+	bh=RxW4J+F2v4aAnLswBVya46uekQUHr6rRIs+ONgrBVms=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kgdoWi0Qgcc81tVxLa/KlFxrA5SvZPE0ec0VZwgduHFUxpSySiVZ4aQtR1JY6WvtGTM+GbOaaKr9Wol52PyKwsYthouw8bgqNoQwluSo6etXdndthDxh6S98hQAfn8bkmQetGKJqXQayC1DjW99O/yW59vSWxho78q6K7jwyxZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aTNh5pPn; arc=none smtp.client-ip=198.175.65.11
+	 MIME-Version; b=YnbrxBJ3B+OFuWkR3Jf4YXwKhSwAc8Svq7hk6B3HqtcZtv6aj3u77gyhlZhmyjDjd0IHWEYtLn0Le+m+mcbyqcX6DLOa6nGh9TpOZT9Allwj/aHsMuO4lOWve+IFOuDleie2hw50mnsQogrkJ4DBBQ5P9WY8g4f+CtOOHi8qrek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WVMYIBjN; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732065110; x=1763601110;
+  t=1732065112; x=1763601112;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=J098Ry0xDLSZ5e33vmElAllzS+/5XVjHikmeVCGgdHU=;
-  b=aTNh5pPnThZRmCf1NmOph5sPxUEhjsGvhfx3q/WdO3CpWSO/P7Et7ORY
-   Keuc/nMmQrH+1O8wfsLP4/tsELnkde5iBn5nPwJKlD/zopZpQ484uFkXW
-   sQxJXHgH83wNHV+FIpOGvFaSdNtQo23NnogBiYuJ7Y9LC1m6pCT09NGfo
-   /c9aZy8a1HVwIrg8Sk4TD8lYZjbp7IlcQno7+VB621ChszAm1YAo6TWUe
-   0Cxr6FGXVluTRvTM98z2+QUZfSy8SPBqhLAmviOgL/Ai2R9WMPjhDPcBR
-   Xwzi4FbZvKDrubqYV6tvBZJxYAb17Ru3zjPpO6IDLOwh+5JWwRx0SV/5n
-   g==;
-X-CSE-ConnectionGUID: KI8euct7SMWWbExPoTfiAA==
-X-CSE-MsgGUID: udTWtG+0RdGNCpRfAu63wA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11261"; a="42613035"
+  bh=RxW4J+F2v4aAnLswBVya46uekQUHr6rRIs+ONgrBVms=;
+  b=WVMYIBjN9kF6oVfxvV3Ru8ZQeOOE6Gg3BD4cs51HkpxvUHdbaGhL1lcM
+   qdoBqJZHcJj6yDS2Ev15WfhI+o49LTBtP2LiHMEoYJRrbrMZSQKBsw+UO
+   a7bbWXOEdNadCiPvhG2u6zd0/fjj7UaRi8E6QqRitH0PiuT1OJfMVbmn0
+   sESHzWtZxCZ4Yr5EdM1zz4m0rZGYYA9itsi0/ToOL2+1u0zRU4OajmwY2
+   8ZbrAOcEtV0ee3X2D5h9Oo3kQOPSm4CpEiBptC0kUXBHTF8SpY8liEJfp
+   4KUhwwFxGZs0FGQvNAewavZYpgH6eRIYCXHg8ZwMCDfutP6r5pvcdl3PB
+   Q==;
+X-CSE-ConnectionGUID: A1J6WQOhQFiEYoRBFBn0SQ==
+X-CSE-MsgGUID: EFGN/TUeQfyrfFqqLdtRpQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11261"; a="42613036"
 X-IronPort-AV: E=Sophos;i="6.12,168,1728975600"; 
-   d="scan'208";a="42613035"
+   d="scan'208";a="42613036"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
   by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2024 17:11:41 -0800
-X-CSE-ConnectionGUID: xR6gDIG+RomifaTMvfIpnw==
-X-CSE-MsgGUID: Sye87lmRSYejCVBLTkOqkg==
+X-CSE-ConnectionGUID: PGl6GEhpTI+M3LxY+QUkhQ==
+X-CSE-MsgGUID: 9qf0cGapSHe0hVRjCZKFgA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,168,1728975600"; 
-   d="scan'208";a="93813619"
+   d="scan'208";a="93813622"
 Received: from sj-4150-psse-sw-opae-dev3.sj.altera.com ([10.244.138.109])
   by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2024 17:11:41 -0800
 From: Peter Colberg <peter.colberg@intel.com>
@@ -69,10 +69,11 @@ Cc: Russ Weight <russ.weight@linux.dev>,
 	Marco Pagani <marpagan@redhat.com>,
 	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
 	Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>,
+	Russ Weight <russell.h.weight@intel.com>,
 	Peter Colberg <peter.colberg@intel.com>
-Subject: [PATCH v5 17/18] fpga: dfl: drop unneeded get_device() and put_device() of feature device
-Date: Tue, 19 Nov 2024 20:10:33 -0500
-Message-ID: <20241120011035.230574-18-peter.colberg@intel.com>
+Subject: [PATCH v5 18/18] fpga: dfl: destroy/recreate feature platform device on port release/assign
+Date: Tue, 19 Nov 2024 20:10:34 -0500
+Message-ID: <20241120011035.230574-19-peter.colberg@intel.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241120011035.230574-1-peter.colberg@intel.com>
 References: <20241120011035.230574-1-peter.colberg@intel.com>
@@ -84,11 +85,22 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The feature device data was originally stored as platform data, hence
-the memory allocation was tied to the lifetime of the feature device.
-Now that the feature device data is tied to the lifetime of the DFL PCIe
-FPGA device instead, get_device() and put_device() are no longer needed.
+From: Xu Yilun <yilun.xu@intel.com>
 
+Now that the internal DFL APIs have been converted to consume DFL
+enumeration info from a separate structure, dfl_feature_dev_data, which
+lifetime is independent of the feature device, proceed to completely
+destroy and recreate the feature platform device on port release and
+assign, respectively. This resolves a longstanding issue in the use of
+platform_device_add(), which states to "not call this routine more than
+once for any device structure" and which used to print a kernel warning.
+
+The function feature_dev_unregister() resets the device pointer in the
+feature data to NULL to signal that the feature platform device has been
+destroyed. This substitutes the previous device_is_registered() checks.
+
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 Signed-off-by: Peter Colberg <peter.colberg@intel.com>
 Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Reviewed-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
@@ -100,114 +112,86 @@ Changes since v4:
 Changes since v3:
 - New patch extracted from last patch of v3 series.
 ---
- drivers/fpga/dfl-fme-br.c |  2 --
- drivers/fpga/dfl.c        | 16 +++++-----------
- drivers/fpga/dfl.h        |  5 -----
- 3 files changed, 5 insertions(+), 18 deletions(-)
+ drivers/fpga/dfl.c | 23 ++++++-----------------
+ 1 file changed, 6 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/fpga/dfl-fme-br.c b/drivers/fpga/dfl-fme-br.c
-index 5c60a38ec76c..a298a041877b 100644
---- a/drivers/fpga/dfl-fme-br.c
-+++ b/drivers/fpga/dfl-fme-br.c
-@@ -85,8 +85,6 @@ static void fme_br_remove(struct platform_device *pdev)
- 
- 	fpga_bridge_unregister(br);
- 
--	if (priv->port_fdata)
--		put_device(&priv->port_fdata->dev->dev);
- 	if (priv->port_ops)
- 		dfl_fpga_port_ops_put(priv->port_ops);
- }
 diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index 203b14e292b4..d4b8df4e0ebc 100644
+index d4b8df4e0ebc..b01fb446bc7c 100644
 --- a/drivers/fpga/dfl.c
 +++ b/drivers/fpga/dfl.c
-@@ -734,7 +734,6 @@ static void dfl_fpga_cdev_add_port_data(struct dfl_fpga_cdev *cdev,
+@@ -1630,21 +1630,10 @@ EXPORT_SYMBOL_GPL(dfl_fpga_feature_devs_enumerate);
+  */
+ void dfl_fpga_feature_devs_remove(struct dfl_fpga_cdev *cdev)
  {
+-	struct dfl_feature_dev_data *fdata, *ptmp;
+-
  	mutex_lock(&cdev->lock);
- 	list_add(&fdata->node, &cdev->port_dev_list);
--	get_device(&fdata->dev->dev);
+ 	if (cdev->fme_dev)
+ 		put_device(cdev->fme_dev);
+ 
+-	list_for_each_entry_safe(fdata, ptmp, &cdev->port_dev_list, node) {
+-		struct platform_device *port_dev = fdata->dev;
+-
+-		/* remove released ports */
+-		if (!device_is_registered(&port_dev->dev))
+-			platform_device_put(port_dev);
+-
+-		list_del(&fdata->node);
+-	}
  	mutex_unlock(&cdev->lock);
- }
  
-@@ -1645,7 +1644,6 @@ void dfl_fpga_feature_devs_remove(struct dfl_fpga_cdev *cdev)
- 			platform_device_put(port_dev);
+ 	remove_feature_devs(cdev);
+@@ -1724,7 +1713,7 @@ int dfl_fpga_cdev_release_port(struct dfl_fpga_cdev *cdev, int port_id)
+ 	if (!fdata)
+ 		goto unlock_exit;
  
- 		list_del(&fdata->node);
--		put_device(&port_dev->dev);
+-	if (!device_is_registered(&fdata->dev->dev)) {
++	if (!fdata->dev) {
+ 		ret = -EBUSY;
+ 		goto unlock_exit;
  	}
- 	mutex_unlock(&cdev->lock);
+@@ -1735,7 +1724,7 @@ int dfl_fpga_cdev_release_port(struct dfl_fpga_cdev *cdev, int port_id)
+ 	if (ret)
+ 		goto unlock_exit;
  
-@@ -1677,7 +1675,7 @@ __dfl_fpga_cdev_find_port_data(struct dfl_fpga_cdev *cdev, void *data,
- 	struct dfl_feature_dev_data *fdata;
+-	platform_device_del(fdata->dev);
++	feature_dev_unregister(fdata);
+ 	cdev->released_port_num++;
+ unlock_exit:
+ 	mutex_unlock(&cdev->lock);
+@@ -1765,12 +1754,12 @@ int dfl_fpga_cdev_assign_port(struct dfl_fpga_cdev *cdev, int port_id)
+ 	if (!fdata)
+ 		goto unlock_exit;
+ 
+-	if (device_is_registered(&fdata->dev->dev)) {
++	if (fdata->dev) {
+ 		ret = -EBUSY;
+ 		goto unlock_exit;
+ 	}
+ 
+-	ret = platform_device_add(fdata->dev);
++	ret = feature_dev_register(fdata);
+ 	if (ret)
+ 		goto unlock_exit;
+ 
+@@ -1820,7 +1809,7 @@ void dfl_fpga_cdev_config_ports_pf(struct dfl_fpga_cdev *cdev)
+ 
+ 	mutex_lock(&cdev->lock);
+ 	list_for_each_entry(fdata, &cdev->port_dev_list, node) {
+-		if (device_is_registered(&fdata->dev->dev))
++		if (fdata->dev)
+ 			continue;
+ 
+ 		config_port_pf_mode(cdev->fme_dev, fdata->id);
+@@ -1857,7 +1846,7 @@ int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vfs)
+ 	}
  
  	list_for_each_entry(fdata, &cdev->port_dev_list, node) {
--		if (match(fdata, data) && get_device(&fdata->dev->dev))
-+		if (match(fdata, data))
- 			return fdata;
- 	}
+-		if (device_is_registered(&fdata->dev->dev))
++		if (fdata->dev)
+ 			continue;
  
-@@ -1728,19 +1726,17 @@ int dfl_fpga_cdev_release_port(struct dfl_fpga_cdev *cdev, int port_id)
- 
- 	if (!device_is_registered(&fdata->dev->dev)) {
- 		ret = -EBUSY;
--		goto put_dev_exit;
-+		goto unlock_exit;
- 	}
- 
- 	mutex_lock(&fdata->lock);
- 	ret = dfl_feature_dev_use_begin(fdata, true);
- 	mutex_unlock(&fdata->lock);
- 	if (ret)
--		goto put_dev_exit;
-+		goto unlock_exit;
- 
- 	platform_device_del(fdata->dev);
- 	cdev->released_port_num++;
--put_dev_exit:
--	put_device(&fdata->dev->dev);
- unlock_exit:
- 	mutex_unlock(&cdev->lock);
- 	return ret;
-@@ -1771,20 +1767,18 @@ int dfl_fpga_cdev_assign_port(struct dfl_fpga_cdev *cdev, int port_id)
- 
- 	if (device_is_registered(&fdata->dev->dev)) {
- 		ret = -EBUSY;
--		goto put_dev_exit;
-+		goto unlock_exit;
- 	}
- 
- 	ret = platform_device_add(fdata->dev);
- 	if (ret)
--		goto put_dev_exit;
-+		goto unlock_exit;
- 
- 	mutex_lock(&fdata->lock);
- 	dfl_feature_dev_use_end(fdata);
- 	mutex_unlock(&fdata->lock);
- 
- 	cdev->released_port_num--;
--put_dev_exit:
--	put_device(&fdata->dev->dev);
- unlock_exit:
- 	mutex_unlock(&cdev->lock);
- 	return ret;
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index 2e38c42b3920..95539f1213cb 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -551,11 +551,6 @@ struct dfl_fpga_cdev *
- dfl_fpga_feature_devs_enumerate(struct dfl_fpga_enum_info *info);
- void dfl_fpga_feature_devs_remove(struct dfl_fpga_cdev *cdev);
- 
--/*
-- * need to drop the device reference with put_device() after use port platform
-- * device returned by __dfl_fpga_cdev_find_port and dfl_fpga_cdev_find_port
-- * functions.
-- */
- struct dfl_feature_dev_data *
- __dfl_fpga_cdev_find_port_data(struct dfl_fpga_cdev *cdev, void *data,
- 			       int (*match)(struct dfl_feature_dev_data *, void *));
+ 		config_port_vf_mode(cdev->fme_dev, fdata->id);
 -- 
 2.47.0
 
