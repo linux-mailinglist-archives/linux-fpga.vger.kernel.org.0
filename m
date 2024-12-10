@@ -1,84 +1,77 @@
-Return-Path: <linux-fpga+bounces-976-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-977-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B36A9EAB4F
-	for <lists+linux-fpga@lfdr.de>; Tue, 10 Dec 2024 10:07:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A38ED9EAB81
+	for <lists+linux-fpga@lfdr.de>; Tue, 10 Dec 2024 10:11:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AD88164A4E
-	for <lists+linux-fpga@lfdr.de>; Tue, 10 Dec 2024 09:07:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF9F2188BB2D
+	for <lists+linux-fpga@lfdr.de>; Tue, 10 Dec 2024 09:11:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E491231C88;
-	Tue, 10 Dec 2024 09:07:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81126231CA0;
+	Tue, 10 Dec 2024 09:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LsMzy5t5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MFNrg76K"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ACBF1B14FA;
-	Tue, 10 Dec 2024 09:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8435231CA8;
+	Tue, 10 Dec 2024 09:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733821622; cv=none; b=QEu8HZH6S28ZbNHF9mp3AKIjdt23dd2OK+jjIolZf15ITPHegkCyZi5wi4MjNlJ1ZDvfLK5WzZb3CRqgGxBLv7uvngXQiGi9MlMIKMs4vX9+oiGRnJXfI2b5qDa1+vPfX0hPzppgA7w1GP2Hb29fLtm70xh6dDa0HEMIqq21vb0=
+	t=1733821867; cv=none; b=OE6dJTETIza1Lps1z8xJvQv6eT2LXc9jyGj21m0JCGPY4/a3Erg7TOyE0yOWi1bsEgYYC8GeP4HdMBaVfwW3aT/6X5Jkr9Z+131MjykfnvmjVHdQ9dh+REVezT/1xEAHhy2iQLS9Wc070mO8byAb5OYvsTS48mHl6yC5329hRO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733821622; c=relaxed/simple;
-	bh=JSgeQGlVtBEPa2HNmBDtKw1WT+11BoxQYBOeQXtMxZw=;
+	s=arc-20240116; t=1733821867; c=relaxed/simple;
+	bh=K7q8ur2I754XLDpe3veQv4i82Utv3gqUbaOjkBdxSkw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hsYFnlVJMXiTMtd/GtmyXaCprOsdQcarwU/bs+iw5cRPx1bWvH3yc0p8O7DLA1+mwsOCDiLLeNwurfC58vQHLOzrkqSbNJ3z9LWa01bMvxEX0BE0CgDKR3mYIh36edME70rnmqSesv0VgUKBPRFkZdcxuzhclENYLh9v1MDGRms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LsMzy5t5; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=CSxicST/UaBQixjBvTiP0PDdYv4g8deYW924LVyPUhs//5FXoIqLS4EC47DEXNBp/OQK3ncukIsPFXBc9u55XXtys/BOpPP6WX/hfGj3lBR1lLvkG2oAe8bNq6WeAjUaRK6qt/HR0Blww9PaDq85gpl+15IPFMnpuxdDyAxMlX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MFNrg76K; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733821620; x=1765357620;
+  t=1733821866; x=1765357866;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JSgeQGlVtBEPa2HNmBDtKw1WT+11BoxQYBOeQXtMxZw=;
-  b=LsMzy5t51IrwKjJ+y1WS5vaDcwRJ9QPBdZhBBkekH7tf05lgm+yrEJdQ
-   7kMhGS3OVLVLye947rxj7btXwqKGXQebmz47QUHXrhaZD7jywzVO1/QEI
-   1yU8pkyCnmrrlAanEbCrSdCqWuIBPR1CMqQIsosRtLF+FjBaWark1JIOw
-   Le8dI7jfdZ6xADZk8uAw4SkOrj/FptBWx9L8cgvX9nWT4fz38kYIjVRpp
-   bTKEtCbJOhfew4zxQ4MEPm+fkTSq2/UUQxhCYtJ+AsdWJRlWmB5CTV+Qc
-   Hv7HBKnHRuCADP1L5MPniY/eciE4grBjiojGaDq2NRDo4R/gXKe20gCiM
-   g==;
-X-CSE-ConnectionGUID: MtZAu0ycS3yOOyGsrU0uAA==
-X-CSE-MsgGUID: pVhCVtupSYaSOCwxxCOfEg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="44828131"
+  bh=K7q8ur2I754XLDpe3veQv4i82Utv3gqUbaOjkBdxSkw=;
+  b=MFNrg76KsgSjJgVJNcE2Sw69IuoldSfnRIWlfRNwXfcE/xvoExq2A/2c
+   ugHBDvQAaTtIjdQmTGJzqsCGkI/UulHzbul0l7CW9JUYd9FRG1tlRcATx
+   4n6padMMlzjXLT+wcmR2xv0BwjrMY2VfQLbksZSjYSV8bKO8+7tGVXjax
+   OUbGjFhid/+uz9I6KxfBrgnAu0zFZMuSa3Vr+8T+FRe2yDZEtsNWPRuEC
+   mLkJdAII11yIbZJL3/hgBtus22+A7K5L8dPUmHSlW7NhFuOdk9JS1QuyY
+   Hjpgzpl9QyT8/DmCMHVCGaq9iuay0d648jOgi7lg1nPEVpEilTZ2aXWx4
+   w==;
+X-CSE-ConnectionGUID: aExNAmxeTuOe6r8DhSYQwA==
+X-CSE-MsgGUID: Xo+G+aidRWWAPYu/cCvEvA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="33491110"
 X-IronPort-AV: E=Sophos;i="6.12,222,1728975600"; 
-   d="scan'208";a="44828131"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 01:06:59 -0800
-X-CSE-ConnectionGUID: iRCEOdfURB+z/6siuqimIg==
-X-CSE-MsgGUID: C0UPB8POSF2NwL8g/gInWg==
+   d="scan'208";a="33491110"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 01:11:05 -0800
+X-CSE-ConnectionGUID: vwV80PtXQ3usQcvcxS0IeQ==
+X-CSE-MsgGUID: rHabBjFJSyGMTYwOEGo22Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,222,1728975600"; 
-   d="scan'208";a="95683861"
+   d="scan'208";a="95177582"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa010.fm.intel.com with ESMTP; 10 Dec 2024 01:06:57 -0800
-Date: Tue, 10 Dec 2024 17:03:41 +0800
+  by fmviesa007.fm.intel.com with ESMTP; 10 Dec 2024 01:10:54 -0800
+Date: Tue, 10 Dec 2024 17:07:39 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: "Manne, Nava kishore" <nava.kishore.manne@amd.com>
-Cc: "git (AMD-Xilinx)" <git@amd.com>, "mdf@kernel.org" <mdf@kernel.org>,
-	"hao.wu@intel.com" <hao.wu@intel.com>,
-	"yilun.xu@intel.com" <yilun.xu@intel.com>,
-	"trix@redhat.com" <trix@redhat.com>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"saravanak@google.com" <saravanak@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [RFC v2 1/1] fpga-region: Add generic IOCTL interface for
- runtime FPGA programming
-Message-ID: <Z1gD7QvhSN8p6//v@yilunxu-OptiPlex-7050>
-References: <20241029091734.3288005-1-nava.kishore.manne@amd.com>
- <20241029091734.3288005-2-nava.kishore.manne@amd.com>
- <ZzwQrYeWVF6cRtgA@yilunxu-OptiPlex-7050>
- <DS7PR12MB6070AAA0C413DBF26F685207CD222@DS7PR12MB6070.namprd12.prod.outlook.com>
- <Z0Z6socXrmHQ26C0@yilunxu-OptiPlex-7050>
- <DS7PR12MB6070F3DD9119CD7955EF8AFCCD372@DS7PR12MB6070.namprd12.prod.outlook.com>
+To: Peter Colberg <peter.colberg@intel.com>
+Cc: Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Russ Weight <russ.weight@linux.dev>,
+	Marco Pagani <marpagan@redhat.com>,
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+	Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+Subject: Re: [PATCH v5 00/18] fpga: dfl: fix kernel warning on port
+ release/assign for SRIOV
+Message-ID: <Z1gE2+q5Y766OHZt@yilunxu-OptiPlex-7050>
+References: <20241120011035.230574-1-peter.colberg@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -87,168 +80,41 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DS7PR12MB6070F3DD9119CD7955EF8AFCCD372@DS7PR12MB6070.namprd12.prod.outlook.com>
+In-Reply-To: <20241120011035.230574-1-peter.colberg@intel.com>
 
-On Wed, Dec 04, 2024 at 06:40:18AM +0000, Manne, Nava kishore wrote:
-> Hi Yilun,
+On Tue, Nov 19, 2024 at 08:10:16PM -0500, Peter Colberg wrote:
+> With the Intel FPGA PAC D5005, DFL ports are registered as platform
+> devices in PF mode. The port device must be removed from the host when
+> the user wants to configure the port as a VF for use by a user-space
+> driver, e.g., for pass-through to a virtual machine. The FME device
+> ioctls DFL_FPGA_FME_PORT_RELEASE/ASSIGN are assigned for this purpose.
 > 
-> > -----Original Message-----
-> > From: Xu Yilun <yilun.xu@linux.intel.com>
-> > Sent: Wednesday, November 27, 2024 7:20 AM
-> > To: Manne, Nava kishore <nava.kishore.manne@amd.com>
-> > Cc: git (AMD-Xilinx) <git@amd.com>; mdf@kernel.org; hao.wu@intel.com;
-> > yilun.xu@intel.com; trix@redhat.com; robh@kernel.org; saravanak@google.com;
-> > linux-kernel@vger.kernel.org; linux-fpga@vger.kernel.org;
-> > devicetree@vger.kernel.org
-> > Subject: Re: [RFC v2 1/1] fpga-region: Add generic IOCTL interface for runtime
-> > FPGA programming
-> > 
-> > > > > + * struct fpga_region_ops - ops for low level FPGA region ops for
-> > > > > +device
-> > > > > + * enumeration/removal
-> > > > > + * @region_status: returns the FPGA region status
-> > > > > + * @region_config_enumeration: Configure and enumerate the FPGA region.
-> > > > > + * @region_remove: Remove all devices within the FPGA region
-> > > > > + * (which are added as part of the enumeration).
-> > > > > + */
-> > > > > +struct fpga_region_ops {
-> > > > > +	int (*region_status)(struct fpga_region *region);
-> > > > > +	int (*region_config_enumeration)(struct fpga_region *region,
-> > > > > +					 struct fpga_region_config_info *config_info);
-> > > >
-> > > > My current concern is still about this combined API, it just
-> > > > offloads all work to low level, but we have some common flows.
-> > > > That's why we introduce a common FPGA reprograming API.
-> > > >
-> > > > I didn't see issue about the vendor specific pre configuration. They
-> > > > are generally needed to initialize the struct fpga_image_info, which
-> > > > is a common structure for fpga_region_program_fpga().
-> > > >
-> > > > For port IDs(AFU) inputs for DFL, I think it could also be changed
-> > > > (Don't have to be implemented in this patchset). Previously DFL
-> > > > provides an uAPI for the whole device, so it needs a port_id input
-> > > > to position which fpga_region within the device for programming. But
-> > > > now, we are introducing a per fpga_region programming interface, IIUC port_id
-> > should not be needed anymore.
-> > > >
-> > > > The combined API is truly simple for leveraging the existing
-> > > > of-fpga-region overlay apply mechanism. But IMHO that flow doesn't
-> > > > fit our new uAPI well. That flow is to adapt the generic configfs
-> > > > overlay interface, which comes to a dead end as you mentioned.
-> > > >
-> > > > My gut feeling for the generic programing flow should be:
-> > > >
-> > > >  1. Program the image to HW.
-> > > >  2. Enumerate the programmed image (apply the DT overlay)
-> > > >
-> > > > Why we have to:
-> > > >
-> > > >  1. Start enumeration.
-> > > >  2. On pre enumeration, programe the image.
-> > > >  3. Real enumeration.
-> > > >
-> > >
-> > > I agree with the approach of leveraging vendor-specific callbacks to
-> > > handle the distinct phases of the FPGA programming process.
-> > > Here's the proposed flow.
-> > >
-> > > Pre-Configuration:
-> > > A vendor-specific callback extracts the required pre-configuration
-> > > details and initializes struct fpga_image_info. This ensures that all
-> > > vendor-specific
-> > 
-> > Since we need to construct the fpga_image_info, initialize multiple field as needed,
-> > I'm wondering if configfs could be a solution for the uAPI?
-> > 
+> In the previous implementation, the port platform device is not
+> completely destroyed on port release: it is removed from the system by
+> platform_device_del(), but the platform device instance is retained.
+> When DFL_FPGA_FME_PORT_ASSIGN is called, the platform device is added
+> back with platform_device_add(), which conflicts with this comment of
+> device_add(): "Do not call this routine more than once for any device
+> structure", and would previously cause a kernel warning at runtime.
 > 
-> A configfs uAPI isn't necessary, we can manage this using the proposed IOCTL flow. 
-> The POC code looks as follows.
+> This patch completely unregisters the port platform device on release
+> and registers a new device on assign. But the main work is to remove
+> the dependency on struct dfl_feature_platform_data for many internal DFL
+> APIs. This structure holds many DFL enumeration infos for feature
+> devices. Many DFL APIs are expected to work with these infos even when
+> the port platform device is unregistered. But after this change, the
+> platform_data will be freed on port release. Hence this patch introduces
+> a new structure dfl_feature_dev_data, which acts similarly to the
+> previous dfl_feature_platform_data. dfl_feature_platform_data then only
+> needs a pointer to dfl_feature_dev_data to query DFL enumeration infos.
+> 
+> Link: https://lore.kernel.org/all/DM6PR11MB3819F9CCD0A6126B55BCB47685FB9@DM6PR11MB3819.namprd11.prod.outlook.com/T/#t
+> Link: https://patchwork.kernel.org/project/linux-fpga/cover/20240409233942.828440-1-peter.colberg@intel.com/
+> Link: https://patchwork.kernel.org/project/linux-fpga/cover/20240919203430.1278067-1-peter.colberg@intel.com/
+> Link: https://patchwork.kernel.org/project/linux-fpga/cover/20241025223714.394533-1-peter.colberg@intel.com/
 
-I prefer more to configfs cause it provides standard FS way to create
-the fpga_image_info object, e.g. which attributes are visible for
-OF/non-OF region, which attributes come from image blob and can only be
-RO, etc.
-
-Of couse ioctl() could achieve the same goal but would add much more
-specific rules (maybe flags/types) for user to follow.
+Applied this series to for-next.
 
 Thanks,
 Yilun
-
-> 
-> static long fpga_region_device_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-> {
-> 	struct fpga_region *region =  (struct fpga_region *)(file->private_data);
-> 	struct fpga_region_config_info config_info;
-> 	void __user *argp = (void __user *)arg;
-> 	struct device *dev = &region->dev;
-> 	struct fpga_image_info *info;
-> 	int err;
-> 
-> 	switch (cmd) {
-> 	case FPGA_REGION_IOCTL_LOAD:
-> 		if (copy_from_user(&config_info, argp, sizeof(struct fpga_region_config_info)))
-> 		return -EFAULT;
-> 
-> 		info = fpga_image_info_alloc(dev);
-> 		if (!info)
-> 			return ERR_PTR(-ENOMEM);
-> 
-> 		/* A vendor-specific callback extracts the required pre-configuration
-> 		 * details and initializes struct fpga_image_info. This ensures that all
-> 		 * vendor-specific requirements are handled before proceeding to
-> 		 * the programming phase.
-> 		 */
-> 		err = region->region_ops->region_preconfig(region, &config_info, info);
-> 		if (err)
-> 			return err;
-> 
-> 		/* The common API fpga_region_program_fpga() is used to program
-> 		 * the image to hardware.
-> 		 */
-> 		region->info = info;
-> 		err = fpga_region_program_fpga(region);
-> 		if (err) {
-> 			fpga_image_info_free(info);
-> 			region->info = NULL;
-> 		}
-> 
-> 		/* A vendor-specific callback is used for real enumeration, enabling
-> 		 * hardware specific customization.
-> 		 */
-> 		err = region->region_ops->region_enumeration(region, &config_info);
-> 
-> 		break;
-> 
-> 	case FPGA_REGION_IOCTL_REMOVE:
-> 		if (copy_from_user(&config_info, argp, sizeof(struct fpga_region_config_info)))
-> 			return -EFAULT;
-> 
-> 		err = region->region_ops->region_remove(region, &config_info);
-> 		if (err)
-> 			return err;
-> 
-> 		fpga_image_info_free(region->info);
-> 
-> 		break;
-> 
-> 	case FPGA_REGION_IOCTL_STATUS:
-> 		unsigned int status;
-> 
-> 		status = region->region_ops->region_status(region);
-> 
-> 		if (copy_to_user((void __user *)arg, &status, sizeof(status)))
-> 			err = -EFAULT;
-> 
-> 		break;
-> 
-> 	default:
-> 		err = -ENOTTY;
-> 	}
-> 
-> 	return err;
-> }
-> 
-> Regards,
-> Navakishore.
 
