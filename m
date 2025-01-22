@@ -1,66 +1,67 @@
-Return-Path: <linux-fpga+bounces-997-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-998-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F4170A18B7F
-	for <lists+linux-fpga@lfdr.de>; Wed, 22 Jan 2025 06:59:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85BADA18B83
+	for <lists+linux-fpga@lfdr.de>; Wed, 22 Jan 2025 06:59:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADBDF7A32DC
-	for <lists+linux-fpga@lfdr.de>; Wed, 22 Jan 2025 05:59:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF5B33ABF12
+	for <lists+linux-fpga@lfdr.de>; Wed, 22 Jan 2025 05:59:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA781AC892;
-	Wed, 22 Jan 2025 05:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14B1D192B66;
+	Wed, 22 Jan 2025 05:58:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vnl/W48c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T6QCP1KW"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3832199384;
-	Wed, 22 Jan 2025 05:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CBA1B21BD;
+	Wed, 22 Jan 2025 05:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737525535; cv=none; b=YiI+5i0aTEYh047yMpqkuUyJ6f5n6cJusXMHZo7k6QHcmH7Gj/VN8PvC1pFsRzll3r0bFumuIDj/qKUKUClfw6VBkvVUocIBWtCTE7uKM/cMhF7+XnIpsT6TY4sTvTDp8Q6u1E8KGVWdsXAUXCjNVFnapZn3bGBsXz1sX1tFFY8=
+	t=1737525539; cv=none; b=aY1bpLMlkAfAuELA3HnoyF6EHhcdy7upATG8P8nyTjs2PTyyVCECvlWXzgWiFTYAoHru5onKf8wSDW9ok4t1FsJ0hYNFnYVDcAlA+qii73U/balQwyEXYsuLVx4Nx8IghoqGN+fYo7/qZ+OpWFQsqoXvAi3paca28Znp28hofig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737525535; c=relaxed/simple;
-	bh=nVqNbeosntrJCyZgs2kQPJbHtJoOIeIK4d1BOT+/l5Y=;
+	s=arc-20240116; t=1737525539; c=relaxed/simple;
+	bh=BJQO0qdpzO4wnUrw1TLDsZZtcTqKgIqADSc+Uvw68x8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cVPOJB15DxL6VS26weAEqI9oPiZnCbL+jno5pKPn7USTU2ZPEmpmh+3tH9VF1XXLXJ+FwpMA3bk5gE/VMWSuU58S6tZeK5EWerKPb6ABgRdKVgnE2WyFDIfuoQlSifxD5G94L4gip3GLwg7Yi3GN/XU+kFQXObKXyK2ViTtFAjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vnl/W48c; arc=none smtp.client-ip=198.175.65.10
+	 In-Reply-To:To:Cc; b=p99rvOW3cPIsDd6AxIy5j3Xd3kk8jW66k2sxYnFzxvfGNs+bDU5ZyrcyEidp5vsR1BmPRsrmN2E80lojn96zGArtqiR4JIl8GoIZmeevc98J/Uqc+z49KPo/WOntJNM4B0RWNNloSF7uEsV0QjfyscQH+f5emrV7Q1YL2uzVemc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T6QCP1KW; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737525534; x=1769061534;
+  t=1737525537; x=1769061537;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=nVqNbeosntrJCyZgs2kQPJbHtJoOIeIK4d1BOT+/l5Y=;
-  b=Vnl/W48cMmRLR5b3Cb1i6sPk5VSGRW1GrxzwgbZ08HL2DpPEOcakEdE4
-   h+Eyz3bCb7Fy6zcyD8UAAmiHXmPpraCHzpE61s5vXIWht6y+UUdH+XqCj
-   MsUOenj7HxTBQj3WtEjTvpY0XeWixQHn1iagmugvkTOYXtg9cLl3Kwip2
-   mJ72cqO324U6qO+BYFE2BhWrVfLBLepm92cARZz02p3uDaXj5NyvbxYE0
-   cujWgPnR7hecGA01te3LTIx1ALeLczcvA5kEHj9YxQJfjEvmldGQJhdYt
-   95xX7Hh92xV9XoyQanJSw9hWxnR7323ZU1zO0M1Ijj5EipbVXkBEFw1lq
-   A==;
-X-CSE-ConnectionGUID: DjggtGkZRO2SjcWD65ZN/g==
-X-CSE-MsgGUID: XPp5z07XSRWT7BFjubNHJw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11322"; a="55381130"
+  bh=BJQO0qdpzO4wnUrw1TLDsZZtcTqKgIqADSc+Uvw68x8=;
+  b=T6QCP1KW1/wnuPhEscDSbEQSLXDVi+I6taHPHRlqihzFWirCLXqnFFvR
+   CJBVjrWyHCzwgtt/Ac2MG+yPWTq8ZADNt8jLFJoEH2PKeCo0KOpUj6hew
+   e4aCud87Cb1CqrqhsBlphj5Ce7B4D1xPgFq3ExGsHrqMVKkViwoBVrvdJ
+   GQd2I+J6gnIJ1EC42ri1Bqsg0eS0c07sRGCT1X3acDLs51RW3TilMUo1M
+   HnhH9fu0FJ7ofis9DMVt0QdrtX8CPzPMz+iP7Wsl8HfGCRa70ZsGjNDeA
+   Hm9+zOO/iZkCJwFjPtNBls3r26zm0HvemKoiT2FHqtt/JCIyyEbHzjp11
+   Q==;
+X-CSE-ConnectionGUID: Het1PIs8RMiV2V3e0QJz0g==
+X-CSE-MsgGUID: P0YMz1ANT8OwLbeViuM28w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11322"; a="55381135"
 X-IronPort-AV: E=Sophos;i="6.13,224,1732608000"; 
-   d="scan'208";a="55381130"
+   d="scan'208";a="55381135"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 21:58:53 -0800
-X-CSE-ConnectionGUID: 4t1rCwJvQBCY4v2hXthQMA==
-X-CSE-MsgGUID: mNtU/TyLR2Gx/K41yCLsPg==
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 21:58:57 -0800
+X-CSE-ConnectionGUID: oYKFYFZjSwun8VQFHncd6Q==
+X-CSE-MsgGUID: SccH6Ad2TiCRkA5cR4auuA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,224,1732608000"; 
-   d="scan'208";a="106851728"
+   d="scan'208";a="106851743"
 Received: from apgc00009.png.altera.com ([10.244.70.6])
-  by fmviesa006.fm.intel.com with ESMTP; 21 Jan 2025 21:58:50 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 21 Jan 2025 21:58:53 -0800
 From: Mahesh Rao <mahesh.rao@intel.com>
-Date: Wed, 22 Jan 2025 13:58:43 +0800
-Subject: [PATCH 1/3] dt-bindings: fpga: stratix10: Convert to json-schema
+Date: Wed, 22 Jan 2025 13:58:44 +0800
+Subject: [PATCH 2/3] dt-bindings: firmware: stratix10: Convert to
+ json-schema
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -69,7 +70,7 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250122-socfpga_sip_svc_misc-v1-1-cbdcd034ae34@intel.com>
+Message-Id: <20250122-socfpga_sip_svc_misc-v1-2-cbdcd034ae34@intel.com>
 References: <20250122-socfpga_sip_svc_misc-v1-0-cbdcd034ae34@intel.com>
 In-Reply-To: <20250122-socfpga_sip_svc_misc-v1-0-cbdcd034ae34@intel.com>
 To: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
@@ -81,85 +82,176 @@ Cc: linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, Mahesh Rao <mahesh.rao@altera.com>, 
  Mahesh Rao <mahesh.rao@intel.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737525526; l=2309;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737525526; l=6082;
  i=mahesh.rao@intel.com; s=20250107; h=from:subject:message-id;
- bh=nVqNbeosntrJCyZgs2kQPJbHtJoOIeIK4d1BOT+/l5Y=;
- b=0sM29CTX2K0K4M9YNT7uNXegAvONhHRNZocmoH2Ur6B7iuWB6mLbE+/vsFbRSf1ovRmjvyPRN
- 6Bf2YHzaVzHBlF7dCg253erzJVj7jHYpewy0DGBmydg9kMGTdvfXp7b
+ bh=BJQO0qdpzO4wnUrw1TLDsZZtcTqKgIqADSc+Uvw68x8=;
+ b=4plAXuYMeUcoLn2dDDOXi3mHUSmvBBiybXdNiytJhTTc6ks8FmeUBDZ7Lv3pRB4LMwH807peX
+ Ojm+zMQcT8wAxhm5NNRAosZYD1h33PbeJggmuEOZTCaKeLkqd6641BN
 X-Developer-Key: i=mahesh.rao@intel.com; a=ed25519;
  pk=tQiFUzoKxHrQLDtWeEeaeTeJTl/UfclUHWZy1fjSiyg=
 
-Convert intel,stratix10-soc fpga manager devicetree
+Convert intel,stratix10-svc service layer devicetree
 binding file from freeform format to json-schema.
 
 Signed-off-by: Mahesh Rao <mahesh.rao@intel.com>
 ---
- .../fpga/intel,stratix10-soc-fpga-mgr.yaml         | 32 ++++++++++++++++++++++
- .../bindings/fpga/intel-stratix10-soc-fpga-mgr.txt | 18 ------------
- 2 files changed, 32 insertions(+), 18 deletions(-)
+ .../bindings/firmware/intel,stratix10-svc.txt      | 57 ---------------
+ .../bindings/firmware/intel,stratix10-svc.yaml     | 84 ++++++++++++++++++++++
+ 2 files changed, 84 insertions(+), 57 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/fpga/intel,stratix10-soc-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/intel,stratix10-soc-fpga-mgr.yaml
+diff --git a/Documentation/devicetree/bindings/firmware/intel,stratix10-svc.txt b/Documentation/devicetree/bindings/firmware/intel,stratix10-svc.txt
+deleted file mode 100644
+index 6eff1afd8daf91714d6a18859667d2607e707da7..0000000000000000000000000000000000000000
+--- a/Documentation/devicetree/bindings/firmware/intel,stratix10-svc.txt
++++ /dev/null
+@@ -1,57 +0,0 @@
+-Intel Service Layer Driver for Stratix10 SoC
+-============================================
+-Intel Stratix10 SoC is composed of a 64 bit quad-core ARM Cortex A53 hard
+-processor system (HPS) and Secure Device Manager (SDM). When the FPGA is
+-configured from HPS, there needs to be a way for HPS to notify SDM the
+-location and size of the configuration data. Then SDM will get the
+-configuration data from that location and perform the FPGA configuration.
+-
+-To meet the whole system security needs and support virtual machine requesting
+-communication with SDM, only the secure world of software (EL3, Exception
+-Layer 3) can interface with SDM. All software entities running on other
+-exception layers must channel through the EL3 software whenever it needs
+-service from SDM.
+-
+-Intel Stratix10 service layer driver, running at privileged exception level
+-(EL1, Exception Layer 1), interfaces with the service providers and provides
+-the services for FPGA configuration, QSPI, Crypto and warm reset. Service layer
+-driver also manages secure monitor call (SMC) to communicate with secure monitor
+-code running in EL3.
+-
+-Required properties:
+--------------------
+-The svc node has the following mandatory properties, must be located under
+-the firmware node.
+-
+-- compatible: "intel,stratix10-svc" or "intel,agilex-svc"
+-- method: smc or hvc
+-        smc - Secure Monitor Call
+-        hvc - Hypervisor Call
+-- memory-region:
+-	phandle to the reserved memory node. See
+-	Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt
+-	for details
+-
+-Example:
+--------
+-
+-	reserved-memory {
+-                #address-cells = <2>;
+-                #size-cells = <2>;
+-                ranges;
+-
+-                service_reserved: svcbuffer@0 {
+-                        compatible = "shared-dma-pool";
+-                        reg = <0x0 0x0 0x0 0x1000000>;
+-                        alignment = <0x1000>;
+-                        no-map;
+-                };
+-        };
+-
+-	firmware {
+-		svc {
+-			compatible = "intel,stratix10-svc";
+-			method = "smc";
+-			memory-region = <&service_reserved>;
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/firmware/intel,stratix10-svc.yaml b/Documentation/devicetree/bindings/firmware/intel,stratix10-svc.yaml
 new file mode 100644
-index 0000000000000000000000000000000000000000..34e1bc2359672210ab69e1d5af73c4c637b7f584
+index 0000000000000000000000000000000000000000..b8aae996da87c16007efa7e5e12cced1432b62e9
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/intel,stratix10-soc-fpga-mgr.yaml
-@@ -0,0 +1,32 @@
++++ b/Documentation/devicetree/bindings/firmware/intel,stratix10-svc.yaml
+@@ -0,0 +1,84 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/fpga/intel,stratix10-soc-fpga-mgr.yaml#
++$id: http://devicetree.org/schemas/firmware/intel,stratix10-svc.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Intel Stratix10 SoC FPGA Manager
++title: Intel Service Layer Driver for Stratix10 SoC
 +
 +maintainers:
-+  - Moritz Fischer <mdf@kernel.org>
-+  - Wu Hao <hao.wu@intel.com>
-+  - Xu Yilun <yilun.xu@intel.com>
++  - Dinh Nguyen <dinguyen@kernel.org>
 +
 +description: |
-+  Bindings for the Intel Stratix10 SoC FPGA Manager.
++  Intel Stratix10 SoC is composed of a 64 bit quad-core ARM Cortex A53 hard
++  processor system (HPS) and Secure Device Manager (SDM). When the FPGA is
++  configured from HPS, there needs to be a way for HPS to notify SDM the
++  location and size of the configuration data. Then SDM will get the
++  configuration data from that location and perform the FPGA configuration.
++
++  To meet the whole system security needs and support virtual machine requesting
++  communication with SDM, only the secure world of software (EL3, Exception
++  Layer 3) can interface with SDM. All software entities running on other
++  exception layers must channel through the EL3 software whenever it needs
++  service from SDM.
++
++  Intel Stratix10 service layer driver, running at privileged exception level
++  (EL1, Exception Layer 1), interfaces with the service providers and provides
++  the services for FPGA configuration, QSPI, Crypto and warm reset. Service layer
++  driver also manages secure monitor call (SMC) to communicate with secure monitor
++  code running in EL3.
 +
 +properties:
 +  compatible:
 +    enum:
-+      - intel,stratix10-soc-fpga-mgr
-+      - intel,agilex-soc-fpga-mgr
++      - intel,stratix10-svc
++      - intel,agilex-svc
++
++  method:
++    enum: [smc, hvc]
++    description: supervisory call method to be used for the service layer.
++
++  memory-region:
++    maxItems: 1
++    description:
++      phandle to a reserved memory region for the service layer driver to
++      communicate with the secure device manager. For more details see
++      Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt.
++
++  fpga-mgr:
++    $ref: /schemas/fpga/intel,stratix10-soc-fpga-mgr.yaml
++    description: Optional child node for fpga manager to perform fabric configuration.
 +
 +required:
 +  - compatible
++  - method
++  - memory-region
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    fpga-mgr {
-+      compatible = "intel,stratix10-soc-fpga-mgr";
++    reserved-memory {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      service_reserved: svcbuffer@0 {
++              compatible = "shared-dma-pool";
++              reg = <0x0 0x0 0x0 0x1000000>;
++              alignment = <0x1000>;
++              no-map;
++      };
 +    };
-diff --git a/Documentation/devicetree/bindings/fpga/intel-stratix10-soc-fpga-mgr.txt b/Documentation/devicetree/bindings/fpga/intel-stratix10-soc-fpga-mgr.txt
-deleted file mode 100644
-index 0f874137ca4697820341b23eddb882634bb131d1..0000000000000000000000000000000000000000
---- a/Documentation/devicetree/bindings/fpga/intel-stratix10-soc-fpga-mgr.txt
-+++ /dev/null
-@@ -1,18 +0,0 @@
--Intel Stratix10 SoC FPGA Manager
--
--Required properties:
--The fpga_mgr node has the following mandatory property, must be located under
--firmware/svc node.
--
--- compatible : should contain "intel,stratix10-soc-fpga-mgr" or
--	       "intel,agilex-soc-fpga-mgr"
--
--Example:
--
--	firmware {
--		svc {
--			fpga_mgr: fpga-mgr {
--				compatible = "intel,stratix10-soc-fpga-mgr";
--			};
--		};
--	};
++
++    firmware {
++      svc {
++        compatible = "intel,stratix10-svc";
++        method = "smc";
++        memory-region = <&service_reserved>;
++
++        fpga-mgr {
++          compatible = "intel,stratix10-soc-fpga-mgr";
++        };
++      };
++    };
++
 
 -- 
 2.35.3
