@@ -1,80 +1,84 @@
-Return-Path: <linux-fpga+bounces-1014-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1015-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE3AFA1CE41
-	for <lists+linux-fpga@lfdr.de>; Sun, 26 Jan 2025 20:56:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF2FBA1CE47
+	for <lists+linux-fpga@lfdr.de>; Sun, 26 Jan 2025 20:58:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2B1F1887C27
-	for <lists+linux-fpga@lfdr.de>; Sun, 26 Jan 2025 19:56:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46CDA164EB0
+	for <lists+linux-fpga@lfdr.de>; Sun, 26 Jan 2025 19:58:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A9E01632C8;
-	Sun, 26 Jan 2025 19:56:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1FD1632C8;
+	Sun, 26 Jan 2025 19:58:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Un6iMaKX"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="j6lRa2Ia"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2056.outbound.protection.outlook.com [40.107.243.56])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2065.outbound.protection.outlook.com [40.107.236.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B14156C74;
-	Sun, 26 Jan 2025 19:56:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6183C156C74;
+	Sun, 26 Jan 2025 19:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.65
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737921384; cv=fail; b=hr1XSHDF2QGJ/mGWTz+kCV8VxrVBDW5ZJH5IF1FHrjOOD4MnZKyCPQfKCH0MmzPhxHGxQqcPBXxg0alvRaEDl+lax38M9m7w3KCoMpl51pgFS0wjjc0vrPZRcCIiiHGuU+Gt5WMWRl1A9lHEEL81CAfEdIyTgQ7atDf2NQdwHzw=
+	t=1737921486; cv=fail; b=PK7NAHdac5k8LAB7KEBQ/vDUOzdjEkYPTKkYPpJkJGMs0CW7gduXJnl+ZyXpZwJwFOm89+tpzIEU5mRspOtdBS9ujkTA02jWr2rGdtG7kcr51cFGKx8rUhv1eSczZJ54ZwXFTlRIFX93V2MEhwdMDCLQu0VZTx1fTR3sCduwUR4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737921384; c=relaxed/simple;
-	bh=VadaC94BUEbSr95vI1QQSk/wq9rJbjlX/JJnkLzQU04=;
+	s=arc-20240116; t=1737921486; c=relaxed/simple;
+	bh=Kv2bQsa3e798UH9+lVQbMi1CmLd5ZZICCiUwqWKXiFU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ej/uKUWz/KRPRnvOe3pf9TQOzVTpVnEHOUVy96GyKs0aaASy1yL+IDp+o55RHpWdx7BCikSmQtLYEpULq6y6rvaBDetkfML5iuNiVdl87rMYNVmARNQO5lYED+oJiCeMaPTChF18tequ8T/AdtjNtcqdq8m1JLwyv02FWhYU2mc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Un6iMaKX; arc=fail smtp.client-ip=40.107.243.56
+	 In-Reply-To:Content-Type; b=G0Ys5grj/ybJvTIDAzR9LGs4vZdlZjGCD1ZjQ+wwZj5Rz9SUUMhBXQkPGtNpfnAOHTmF61Bu8OIZNrc5Q2CZhx/lfPY4I9P9dI/Bi9dI2ZxAIcrDOLIkxwfaEZWbYRytDcZqF0QKnytrHp1DLrPj7fndY5oYSqe9FtAD6oC17NQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=j6lRa2Ia; arc=fail smtp.client-ip=40.107.236.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=R2Ho6+cik9iIfR+SwbYlGbRYAUMJYi6f1aNTtYxS/zd4UY5y7KgCbIbU2x0aLa/uzQ7UMDJi4+kbVQ/fsBvxQGkS9vR++MIf1v5x0GzZDq4bQ8QyqYndbl7z36S4JeHSCes/utYDzb5m7PvyZ0TzwUH03+XjaL7+aCltMtkxkP2koD/lMw/c5LajlUjgphSqB2oT3sdlaUMeST+xGbTOizhZuft4MXIuWSQt4ouExwR2eD46C5Ss6oGPFTTARbNMmaPcDQmGbphvikX4hH34mTRnfjwo/YY0qlP8SDhxZoyo8n9XLqL3yKGdNq4A8Lj4Rv8h57RDVmJXa28Pokk9Rw==
+ b=g/1a7VU+xoIIhyVjaXrvVsdk/qK6gzMIoYGmPtiCitJVn+147+v02UZOXJI4e5SSJ9j9ALMX/b+dp8e8vBWnOm566ag1T+PLRavg13KzixTY9RK9tiFPEj5EO/gRwaOveH7rYj6Q1q8QF8aq5LbNsTmlfIirYwZU8fpjIDBgSyM6HPwkhklrXC3eq706NY97Y2KVVJAkYnV+CVCvSz+BpT2+pqR0oi+lx2epYG0xqre3ce1RtlBinNNS4IWXdTrk4+z6sUFpNzc/UYgG1IlClZcUEfkpU6SnoRu1KURw9+Yz6Jf7NV3/L1Z/OQpnhpFXnQ+0Q6H5suLygovnlHFtQA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nHDzO2qqhbg4Ae5qTZGM09dVs1GoaLOfs6pJ9uDVtJQ=;
- b=ARxUeGzDwKcibkt/aRnYh6g81F92WEucJLf5zhck/YBBiujYZIxfGZjD+3Ltm1Tt9lR8U1WGclu36wjXiZyGqB0fLH1+PB84S1xuoi+Qg/IX4i7vxHtwIkw0ZE3iw5FMsg6/ip9r2gxme99NkzdUutwkyvA7CjtaVMtUr5hkDy6YIQNlh/95t4q9oRvuCdc9rzGMG/R1XJEYZFGmh1ZDBHI09PzlBEHEg7/AvETD6/vk7PzH3/xu5KMRKmvwGbgdJ/8SAJH84+DFj22PNd+Bv3lGuPmbpooNVdng8kWWmpC+zDMhkZ9pVsjYaTz0E8HAg+5RKk5GqPC1bOzXnUHiSg==
+ bh=iKYqb6OkTJFipDpP8RK/ut3Mrryv+CPT9F91SMGgKgg=;
+ b=tFyCYdz/TtE9NcVGt7QeYpYK2wHQURoFX+Ai1B0tPTRFs0ITdgdC4Kwe7zsH96ErfjjbfdkCVfQtFT3e+b1wofmWeIZ7msFHIunLEfkEwDfamg7Rxo5WMvPK3EYeaHtyBmHup5cxDeb4qDH1AT4rrCJWILtZ3nZoVqCVgX3aNoQvEdZ7R5V1bz8DWGoo+y+EP3Pw7kpexpfG6kGRs3X9UdrNEmhCaGdUlhXMr9kesqZvCAihEgJ0tLziINHNE3t/A+/1u4UY59dQlwNBUkssqSW5DYgnLFMlFzcAP91VewqcDhHQ9NRL6x0WMnn9B0eeFMszzzxVK+II0fYZ4d+dBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=wanadoo.fr smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nHDzO2qqhbg4Ae5qTZGM09dVs1GoaLOfs6pJ9uDVtJQ=;
- b=Un6iMaKXcL+Y1TNwIdOE52FLD3tn+aIBCgOl8ud3hEkDrYWuOpw3T0wcSAf+jdGTeAZCjYURD52POnxQRNZm/AI368Pvy/CUIyoibH2aLjEIzAYZL6YOY98iCM/soiVFbwRCJ9vPK5YynWVZAze4Q44k8NgqJCNxZh40//jlY1E=
-Received: from CH5P222CA0019.NAMP222.PROD.OUTLOOK.COM (2603:10b6:610:1ee::20)
- by CY5PR12MB6156.namprd12.prod.outlook.com (2603:10b6:930:24::15) with
+ bh=iKYqb6OkTJFipDpP8RK/ut3Mrryv+CPT9F91SMGgKgg=;
+ b=j6lRa2IaUUmQvl5BGDuXgQIJ9nbG6FU/YOMRVzJiquQR92GSvFHugQ7iFaBtTcDobU3fLGTT678L3fnln1UlOSCFo07Npk82B+l4Wv5VYDQ6JDSSbRwljhjvK65SEDzhvWi+ViAWiTZN60Y4qLkPzhzlRUBdKYWs6O/AMQZG8hg=
+Received: from BN9PR03CA0789.namprd03.prod.outlook.com (2603:10b6:408:13f::14)
+ by BY5PR12MB4179.namprd12.prod.outlook.com (2603:10b6:a03:211::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.17; Sun, 26 Jan
- 2025 19:56:19 +0000
-Received: from CH2PEPF0000013D.namprd02.prod.outlook.com
- (2603:10b6:610:1ee:cafe::ad) by CH5P222CA0019.outlook.office365.com
- (2603:10b6:610:1ee::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.22; Sun, 26 Jan
+ 2025 19:57:58 +0000
+Received: from BN2PEPF000044A8.namprd04.prod.outlook.com
+ (2603:10b6:408:13f:cafe::ff) by BN9PR03CA0789.outlook.office365.com
+ (2603:10b6:408:13f::14) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.8377.22 via Frontend Transport; Sun,
- 26 Jan 2025 19:56:19 +0000
+ 26 Jan 2025 19:57:58 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CH2PEPF0000013D.mail.protection.outlook.com (10.167.244.69) with Microsoft
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN2PEPF000044A8.mail.protection.outlook.com (10.167.243.102) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8398.14 via Frontend Transport; Sun, 26 Jan 2025 19:56:18 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.8377.8 via Frontend Transport; Sun, 26 Jan 2025 19:57:57 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 26 Jan
- 2025 13:56:18 -0600
+ 2025 13:57:57 -0600
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 26 Jan
+ 2025 13:57:56 -0600
 Received: from [172.19.74.139] (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Sun, 26 Jan 2025 13:56:17 -0600
-Message-ID: <b0a07e5a-fa0b-40fb-9d85-5f316f94a226@amd.com>
-Date: Sun, 26 Jan 2025 11:56:17 -0800
+ Transport; Sun, 26 Jan 2025 13:57:56 -0600
+Message-ID: <eb0eae5a-8429-48ff-85a8-43c0a94c07de@amd.com>
+Date: Sun, 26 Jan 2025 11:57:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -82,249 +86,136 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/4] drivers/fpga/amd: Add new driver amd versal-pci
+Subject: Re: [PATCH V2 2/4] drivers/fpga/amd: Add communication channel
 To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
 	<linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
 	<mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>
-CC: <lizhi.hou@amd.com>, DMG Karthik <Karthik.DMG@amd.com>, Nishad Saraf
-	<nishads@amd.com>, Prapul Krishnamurthy <prapulk@amd.com>, Hayden Laccabue
-	<hayden.laccabue@amd.com>
+CC: <lizhi.hou@amd.com>, Nishad Saraf <nishads@amd.com>
 References: <20241210183734.30803-1-yidong.zhang@amd.com>
- <20241210183734.30803-2-yidong.zhang@amd.com>
- <d156bc11-3d8e-44a0-b311-b4b931c54a7c@wanadoo.fr>
+ <20241210183734.30803-3-yidong.zhang@amd.com>
+ <f35c40fc-7afa-4fef-bab2-0b30302b9b21@wanadoo.fr>
 Content-Language: en-US
 From: Yidong Zhang <yidong.zhang@amd.com>
-In-Reply-To: <d156bc11-3d8e-44a0-b311-b4b931c54a7c@wanadoo.fr>
+In-Reply-To: <f35c40fc-7afa-4fef-bab2-0b30302b9b21@wanadoo.fr>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Received-SPF: None (SATLEXMB03.amd.com: yidong.zhang@amd.com does not
- designate permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF0000013D:EE_|CY5PR12MB6156:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd684ed3-34b1-40e4-3d25-08dd3e43802e
+X-MS-TrafficTypeDiagnostic: BN2PEPF000044A8:EE_|BY5PR12MB4179:EE_
+X-MS-Office365-Filtering-Correlation-Id: f45e1cd8-2765-4163-4a09-08dd3e43bae5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|376014|36860700013;
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VHBKcXd4SnFIOXpDVTdPNjVBRnQvRWkvRDFDbzBFMUNTcnpZWXU0TitzVUJK?=
- =?utf-8?B?Q1dNM0xteDJNVzBqYUlmTGdUNmcra0hFRjVNbXZIQUdwZXE5R2hpZy9zMXN2?=
- =?utf-8?B?RlVXaU00M0ZIRk0vKzYycDhCUDNROGFLTEttQVZWVDRrTzJHdEQ1bERKSGYx?=
- =?utf-8?B?SWgzRE9hdS8zeHVrWXhkeGVTRWFCR0V0alFGOVlBTlJjRzdKWkhGYmorKzZP?=
- =?utf-8?B?UnlhbEhud1ZWbzhob0Jka1hZYi9SOUtDWEY5WHcxUW1IZGlpcmlJRTFkd1d0?=
- =?utf-8?B?QkNTSDJVUXZRaHpka25sNllvMGdrbnhkTVlGZkJEdVl2UlJVVENIdXdibHZO?=
- =?utf-8?B?R3FaVzJBelZrNk9SLzZMWG5XMytoWlIvc2NaNjRlZ1diZEdJSzRqekl3M1Z1?=
- =?utf-8?B?ZzdsU3FyQnNFT1RGYytKeHZ3VGJuRyt2Wnc0dDFFQS9sd3lWY3hZc0hEZ1Vi?=
- =?utf-8?B?K3BRMHkxcDA1R2hMZ0o2b3ZhR1JBVXZKc3M1clZxQUZ1N280Q0JFRG9aQTJV?=
- =?utf-8?B?Mjk0blNiODRPT2ZrcklWYWlwbGVYaVFhcDRaVmk4N1oyOVNYT1lkdGlNV0tJ?=
- =?utf-8?B?aGRxak9uR3p2M0RHYWVBbHZLa2p0M0dtSnZuY0RjN3FpQ1ptNktHb3psUlY0?=
- =?utf-8?B?eE9GQng0ekdVb0VLRXF1Z1p2QjJMQkUzbGVWcEwyb0lDU0MvSW83TWdML1BI?=
- =?utf-8?B?cW9QQ0xyRWNMcWhLaWFmMzV5K3hrS3BTTHFOZWdxdGFmRlJleGFrcXlXdndN?=
- =?utf-8?B?Z3l6NnprVll6anNmbUtwYXhpVVhpU1RFZm1TYjRCSEo3T1ozTGFxWnlRNnkw?=
- =?utf-8?B?OE1XNTJNV21GSitMaGRkeXZ5SUlNZFdCUlUxNVVpcHNqUTZJb1BCMFhkaU0x?=
- =?utf-8?B?blI2ZytkTDRBbkU0NjVVbHpvaGpRMFJSTUl1WHVFeUVzOGQzMWZ3YVBsZUhm?=
- =?utf-8?B?ZGtXSHhzWVNGSlBTR0lPM1RZUGhDTjRtSnpDaDVpM01MK1MzbnlzSmw3S0tt?=
- =?utf-8?B?TnQ1SFFuVXdtVi9QOFdTQUtHaVV5V3RGUEd1UjVGME9mRFM5enFIZkhaVXRI?=
- =?utf-8?B?bVRmZVdDNUN1V2FFWW1Vd2M5VDhEcmw1YzBoMnZCY1dscDhjVHFlWWFpbkJQ?=
- =?utf-8?B?NUw0dnlxRFpSYjFRS2lyUVhoeHduWGlaV25QaENnMlQ4Ykgrb3BXOXZIKzRm?=
- =?utf-8?B?T1B3ZUpaZGdsUEFjOWpRQnBxaUpnd1pkQ0RyQlRMbDN4K1ArTENtcFdWTnVH?=
- =?utf-8?B?VnlUc2oxSDFaNms0aWsyMktYUDNvOXQ2TDM3a0JWOWN5VmI2dSsvTzZacWk0?=
- =?utf-8?B?VUVnSkFad1kyRiswMEdHUE9YeVBpYWUwOU8vUXlzZzN6RUwzQ3FrNWdBeFJs?=
- =?utf-8?B?OXM1aWlxWGpyMGRlbjF4RFJPeGpxQmZaY2hIOGJocDhGOVV4aGdzK3hrM3hX?=
- =?utf-8?B?RG1OYjBlUUVCOEFKRmFua2ZHSnYrOUM4amxvQ05xTU51K2psd0xwdzB6Y0NU?=
- =?utf-8?B?dENuam13TFFmT1diOWxwN01nQVdCMUhQY2o4T2JDVHQ0U0RpQ29JMjIwS25m?=
- =?utf-8?B?MzBXTXp2N2JNcVNIaFZDR0hUdGtFSHRQcGJvMUxuV2VleHo5eDRHOW5hTko5?=
- =?utf-8?B?MkdyTjc5Slo5UFJWSDBiZkNkcWxFVWVzUGVLQXdsOTdoWmtQVFBxcVY1TUdZ?=
- =?utf-8?B?VjBHdVRJa3pwZS9oN2RjckFPNkY4ZjRzNFk2SENvNllRSEk0UngwN1E0dWdT?=
- =?utf-8?B?ODlDd1ZsZkZ0QlNrNG4rV0pPZ1JSRDF0SS9SV3VWVkV5bWdEK01kd2Z2K3pS?=
- =?utf-8?B?YjhaeHowTkRlMEZyWHkrY2sraFNTSzdEcnR1ZXk5eHFuTlJpSnJRMFJNTGsz?=
- =?utf-8?B?SWlWMHR3SWFjbzluNGcvUlpmZERGbXhqblk4WTEzYjZSWmFybkx6UVdsOFdy?=
- =?utf-8?B?c3dGRWJUK2FEbnVXUXp3ZG5JOHJJT2x5NU5VL3o4cjJnTlpjQ0xZVmR3dU9U?=
- =?utf-8?Q?wfgsW+KO1a01sm3OU1SrIB5NHuJYHU=3D?=
+	=?utf-8?B?dDJOS1gzYkU4YmZ5MG5IaTRCcWJCLzN2QnljZHBrYlFZOGpaSERwOHh5bDZp?=
+ =?utf-8?B?eUsxTWN1ZWZ1VWU0RWJLT2ZTQW9oUWZoZlI1SWNwQ213am02SEM5NWswN1g2?=
+ =?utf-8?B?bDdrKzN3NTFsTzRGaytUQkNDejA2ZjgvOHJISXU5a3ZsNXA5eFB0MGE3Qmxn?=
+ =?utf-8?B?UmFOVk1iRGNqTVpkWHkydk05TGFPWXR3cXBhTFdGUEcwTnhlbDB5T1FpL3dT?=
+ =?utf-8?B?OHQ0TFYxZXhZd1VGSmlmMTBMejRqc2pDdHN6NWZrRUptekdSSVNKV3dPUGlw?=
+ =?utf-8?B?ZkVHSDhqK09BNFlQOUlIZFdRV1E1MnR1SCtLUjB1L21NZkRrS0ZKZE5VSEkx?=
+ =?utf-8?B?cTM0Mll1Mlo1RkF0dmx3MmYwUzU1MlhteFZtTVo5LzJjNW1ZbG9CTkZrUXZ4?=
+ =?utf-8?B?MmwwZ284UG1UcWdDeWJuZzFreXltbitOZGNaSVZ2R3Z2YXZTR0Fobmt5TE43?=
+ =?utf-8?B?YUZBdkh1b1VMSXAxdVZsVGh3blhrNUhjTU96MVdMcGhiMWRSditBQnh5UFYr?=
+ =?utf-8?B?N05GaEp3NGl4Q0p3M2tsZDdDK0dKYUNUT3FJc0JHTUduL2picVNBQ005RjVK?=
+ =?utf-8?B?dTFXMDNDb1VPYytRb3RaZkVjSkJJUkNGZ1lSb0RSTTVhVEx1RkQ0NWxlMGRx?=
+ =?utf-8?B?TVhqejVvQjAwSE53dllKc1JkV1REbVR2S1FtN2tuV3QvZnlHalpQL042S3ZF?=
+ =?utf-8?B?TzdGNTJyTElDQUFjTjJjcG9XKzQ4NC9lQUFuN2JKNld2dElna0tMMjVsUXV1?=
+ =?utf-8?B?VHZRc0dMdExqOVVpR0tKVzYyTFdxQkxqbmcwbTBwYVlFeHMwVFNnSlpCdGpW?=
+ =?utf-8?B?cERlU2ZON21UU1ZoanNjMTYzVFZHYitSN09DTWFINGlPYkhkb3NCalNpUVUw?=
+ =?utf-8?B?czI0ejhmclhoVGR5K1BjeEttM2IvOXFVWVB1cVNWdjh5cVNSVzg5ZXY5Kzdz?=
+ =?utf-8?B?Z2F0a2RiWnNWUFUzRkxOY1MyQzRhYUI5MC9ScjMxVmFOaDVITjNyOHV0eVVE?=
+ =?utf-8?B?VmMzNGVWSDVScTQwTkJ0WnphVENwYTFxcHM4R1V4Z0JQc0hneTRTWmpsKzd5?=
+ =?utf-8?B?YkRoNEV2aEliTWlIcWlLaXFNa1hKWXNDRFVxV2xadWlidTlHRGJzS1hwNHUz?=
+ =?utf-8?B?S1E2dzNycVUyNURPcnFjOGJZMnBkeGU2d0tFNSs5VkJlSytIMW9MS2VyYjFp?=
+ =?utf-8?B?UlhzYnduR3Q0WkhoNGU1dWVIelFDZzRxd2NxMVB6THJqcUdENDNmMzF4TXFv?=
+ =?utf-8?B?R3d2bHRDSWJkbFNjR1U1MG8xN1NRYXRmakhOaitpdHlQQmozVE5qS2ZoSWE1?=
+ =?utf-8?B?R0M2NkNjZFZVZHdwdDJOdHdyajdIek5zVEtIdkcyNElrSlZmV2tXSXNaYUVW?=
+ =?utf-8?B?K0hNcU04NUNIcVQ0Y1gyZDJESlJIZ0EvT3NORnc4OHZVK1RHelV4MFdFNkY4?=
+ =?utf-8?B?OFkwZFZYUDFpa0ROV1puN0t1VkpkeHlLSEM5ZEpSVFVRMWNpbVQvOG93a2ZM?=
+ =?utf-8?B?TERtS0VDLzJCWkVqT2xvUWg3UzNqSE9jbGI3bVRVa20vWHd2UVRqa05DM3pG?=
+ =?utf-8?B?UmpYeExhVFZOMDErdlIvU0pieklkUE41Z2tZeU9rSHZ6TE9IOHRkQ04zSnJz?=
+ =?utf-8?B?ckJuUWpYa2poVU9jcGFtNGgwVmE0UG12QWRQa2gwc0VhU3YydktKSU9TZ0dq?=
+ =?utf-8?B?T29mYlAvNkhleFhIZThJenZzcG1Kc0xQYXZ2NTJBMExob0ZHSldEaWNKdnF4?=
+ =?utf-8?B?ZFVPbUxhMkdqTHppRFEzRWNSZlBueXlySzZIeGpSd0FFbEE0aWxzYXZ3M0dR?=
+ =?utf-8?B?S01PTGFzNzA0V0VlbEhza3Y1TFNjQjZDQ3BEcUZPMmZGN0VodzZlL1Y1eVFh?=
+ =?utf-8?B?RmtlQUFhL1pPT2QrSnkvNGt6VzFpQTFvTHNnYVpvNW9Db1R5N251dEs0VWt1?=
+ =?utf-8?B?dC9FUHY5c2o3d1FEbnhaYzl6L1Nib0ZFZXc2dE1ENTd3NVhxRjhDQ2cybDJP?=
+ =?utf-8?Q?IvgdWOXZo6pJtp6rKu2Wo2aZJBrTkU=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(36860700013);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2025 19:56:18.9942
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2025 19:57:57.5017
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd684ed3-34b1-40e4-3d25-08dd3e43802e
+X-MS-Exchange-CrossTenant-Network-Message-Id: f45e1cd8-2765-4163-4a09-08dd3e43bae5
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF0000013D.namprd02.prod.outlook.com
+	BN2PEPF000044A8.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6156
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4179
 
 
 
-On 1/26/25 02:12, Christophe JAILLET wrote:
+On 1/26/25 02:19, Christophe JAILLET wrote:
 > Caution: This message originated from an External Source. Use proper 
 > caution when opening attachments, clicking links, or responding.
 > 
 > 
 > Le 10/12/2024 à 19:37, Yidong Zhang a écrit :
->> AMD Versal based PCIe card, including V70, is designed for AI inference
->> efficiency and is tuned for video analytics and natural language 
->> processing
->> applications.
+>> The communication channel (comm_chan) service is between versal-pci 
+>> and the
+>> user PF driver. When the user PF driver requests PL data download, the
+>> comm_chan service will handle the request by versal_pci_load_xclbin.
 > 
 > ...
 > 
->> +static void versal_pci_uuid_parse(struct versal_pci_device *vdev, 
->> uuid_t *uuid)
->> +{
->> +     char str[UUID_STRING_LEN];
->> +     u8 i, j;
->> +
->> +     /* parse uuid into a valid uuid string format */
->> +     for (i  = 0, j = 0; i < strlen(vdev->fw_id) && i < sizeof(str); 
->> i++) {
+>> +enum comm_chan_req_ops {
+>> +     COMM_CHAN_REQ_OPS_UNKNOWN               = 0,
+>> +     COMM_CHAN_REQ_OPS_HOT_RESET             = 5,
+>> +     COMM_CHAN_REQ_OPS_GET_PROTOCOL_VERSION  = 19,
+>> +     COMM_CHAN_REQ_OPS_LOAD_XCLBIN_UUID      = 20,
+>> +     COMM_CHAN_REQ_OPS_MAX,
 > 
-> Unneeded extra space in "i  = 0"
+> Unneeded comma after a terminator.
 
-Great catch! I will fix this.
+Will fix this.
 
 > 
-> I think that the compiler already does it on its own, but the strlen
-> could be computed before the for loop.
-
-I will change the code.
-
-> 
->> +             str[j++] = vdev->fw_id[i];
->> +             if (j == 8 || j == 13 || j == 18 || j == 23)
->> +                     str[j++] = '-';
->> +     }
->> +
->> +     uuid_parse(str, uuid);
->> +     vdev_info(vdev, "Interface uuid %pU", uuid);
->> +}
->> +
->> +static struct fpga_device *versal_pci_fpga_init(struct 
->> versal_pci_device *vdev)
->> +{
->> +     struct device *dev = &vdev->pdev->dev;
->> +     struct fpga_manager_info info = { 0 };
-> 
-> Is the { 0 } needed?
-> Isn't the assigment below enough?
-
-Right. I will remove the unnecessary { 0 }.
-
-> 
->> +     struct fpga_device *fdev;
->> +     int ret;
->> +
->> +     fdev = devm_kzalloc(dev, sizeof(*fdev), GFP_KERNEL);
->> +     if (!fdev)
->> +             return ERR_PTR(-ENOMEM);
->> +
->> +     fdev->vdev = vdev;
->> +
->> +     info = (struct fpga_manager_info) {
->> +             .name = "AMD Versal FPGA Manager",
->> +             .mops = &versal_pci_fpga_ops,
->> +             .priv = fdev,
->> +     };
->> +
->> +     fdev->mgr = fpga_mgr_register_full(dev, &info);
->> +     if (IS_ERR(fdev->mgr)) {
->> +             ret = PTR_ERR(fdev->mgr);
->> +             vdev_err(vdev, "Failed to register FPGA manager, err 
->> %d", ret);
->> +             return ERR_PTR(ret);
->> +     }
->> +
->> +     /* Place holder for rm_queue_get_fw_id(vdev->rdev) */
->> +     versal_pci_uuid_parse(vdev, &vdev->intf_uuid);
->> +
->> +     return fdev;
->> +}
+>> +};
 > 
 > ...
 > 
->> +static struct firmware_device *versal_pci_fw_upload_init(struct 
->> versal_pci_device *vdev)
+>> +static void comm_chan_check_request(struct work_struct *w)
 >> +{
->> +     struct device *dev = &vdev->pdev->dev;
->> +     struct firmware_device *fwdev;
->> +     u32 devid;
->> +
->> +     fwdev = devm_kzalloc(dev, sizeof(*fwdev), GFP_KERNEL);
->> +     if (!fwdev)
->> +             return ERR_PTR(-ENOMEM);
->> +
->> +     devid = versal_pci_devid(vdev);
->> +     fwdev->name = kasprintf(GFP_KERNEL, "%s%x", DRV_NAME, devid);
+>> +     struct comm_chan_device *ccdev = to_ccdev_work(w);
+>> +     u32 status = 0, request[COMM_CHAN_DATA_LEN] = {0};
 > 
-> Why is fwdev managed, and not fwdev->name?
-> It looks ok as-is, but using devm_kasprintf() would save a few lines of
-> code.
+> These 2 initialisations are not needed.
 
-I will change the code. Great suggestion.
+Will fix this.
 
 > 
->> +     if (!fwdev->name)
->> +             return ERR_PTR(-ENOMEM);
+>> +     struct comm_chan_hw_msg *hw_msg;
+>> +     u8 type, eom;
+>> +     int i;
 >> +
->> +     fwdev->fw = firmware_upload_register(THIS_MODULE, dev, fwdev->name,
->> +                                          &versal_pci_fw_ops, fwdev);
->> +     if (IS_ERR(fwdev->fw)) {
->> +             kfree(fwdev->name);
->> +             return ERR_CAST(fwdev->fw);
+>> +     status = comm_chan_read(ccdev, COMM_CHAN_REG_IS_OFF);
+>> +     if (!STATUS_IS_READY(status))
+>> +             return;
+>> +     if (STATUS_IS_ERROR(status)) {
+>> +             vdev_err(ccdev->vdev, "An error has occurred with comms");
+>> +             return;
 >> +     }
 >> +
->> +     fwdev->vdev = vdev;
+>> +     /* ACK status */
+>> +     comm_chan_write(ccdev, COMM_CHAN_REG_IS_OFF, status);
 >> +
->> +     return fwdev;
->> +}
-> 
-> ...
-> 
->> +static int versal_pci_probe(struct pci_dev *pdev, const struct 
->> pci_device_id *pdev_id)
->> +{
->> +     struct versal_pci_device *vdev;
->> +     int ret;
+>> +     for (i = 0; i < COMM_CHAN_DATA_LEN; i++)
+>> +             request[i] = comm_chan_read(ccdev, 
+>> COMM_CHAN_REG_RDDATA_OFF);
 >> +
->> +     vdev = devm_kzalloc(&pdev->dev, sizeof(*vdev), GFP_KERNEL);
->> +     if (!vdev)
->> +             return -ENOMEM;
->> +
->> +     pci_set_drvdata(pdev, vdev);
->> +     vdev->pdev = pdev;
->> +
->> +     ret = pcim_enable_device(pdev);
->> +     if (ret) {
->> +             vdev_err(vdev, "Failed to enable device %d", ret);
->> +             return ret;
->> +     }
->> +
->> +     vdev->io_regs = pcim_iomap_region(vdev->pdev, MGMT_BAR, DRV_NAME);
->> +     if (IS_ERR(vdev->io_regs)) {
->> +             vdev_err(vdev, "Failed to map RM shared memory BAR%d", 
->> MGMT_BAR);
->> +             return PTR_ERR(vdev->io_regs);
->> +     }
->> +
->> +     ret = versal_pci_device_setup(vdev);
->> +     if (ret) {
->> +             vdev_err(vdev, "Failed to setup Versal device %d", ret);
->> +             return ret;
->> +     }
->> +
->> +     vdev_dbg(vdev, "Successfully probed %s driver!", DRV_NAME);
-> 
-> Usually, such debug messages are not needed.
-> No strong opinion about it.
-
-I will remove this. The dbg only enable in the debug kernel, but this 
-line isn't necessary. I will fix it.
-
-> 
->> +     return 0;
->> +}
 > 
 > ...
 > 
