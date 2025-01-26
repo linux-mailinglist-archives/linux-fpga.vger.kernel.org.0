@@ -1,223 +1,488 @@
-Return-Path: <linux-fpga+bounces-1015-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1016-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF2FBA1CE47
-	for <lists+linux-fpga@lfdr.de>; Sun, 26 Jan 2025 20:58:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 609C8A1CEB8
+	for <lists+linux-fpga@lfdr.de>; Sun, 26 Jan 2025 22:13:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46CDA164EB0
-	for <lists+linux-fpga@lfdr.de>; Sun, 26 Jan 2025 19:58:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC43C3A4BFF
+	for <lists+linux-fpga@lfdr.de>; Sun, 26 Jan 2025 21:13:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1FD1632C8;
-	Sun, 26 Jan 2025 19:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD0F25A62A;
+	Sun, 26 Jan 2025 21:13:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="j6lRa2Ia"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bklfTBSO"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2065.outbound.protection.outlook.com [40.107.236.65])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6183C156C74;
-	Sun, 26 Jan 2025 19:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737921486; cv=fail; b=PK7NAHdac5k8LAB7KEBQ/vDUOzdjEkYPTKkYPpJkJGMs0CW7gduXJnl+ZyXpZwJwFOm89+tpzIEU5mRspOtdBS9ujkTA02jWr2rGdtG7kcr51cFGKx8rUhv1eSczZJ54ZwXFTlRIFX93V2MEhwdMDCLQu0VZTx1fTR3sCduwUR4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737921486; c=relaxed/simple;
-	bh=Kv2bQsa3e798UH9+lVQbMi1CmLd5ZZICCiUwqWKXiFU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=G0Ys5grj/ybJvTIDAzR9LGs4vZdlZjGCD1ZjQ+wwZj5Rz9SUUMhBXQkPGtNpfnAOHTmF61Bu8OIZNrc5Q2CZhx/lfPY4I9P9dI/Bi9dI2ZxAIcrDOLIkxwfaEZWbYRytDcZqF0QKnytrHp1DLrPj7fndY5oYSqe9FtAD6oC17NQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=j6lRa2Ia; arc=fail smtp.client-ip=40.107.236.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=g/1a7VU+xoIIhyVjaXrvVsdk/qK6gzMIoYGmPtiCitJVn+147+v02UZOXJI4e5SSJ9j9ALMX/b+dp8e8vBWnOm566ag1T+PLRavg13KzixTY9RK9tiFPEj5EO/gRwaOveH7rYj6Q1q8QF8aq5LbNsTmlfIirYwZU8fpjIDBgSyM6HPwkhklrXC3eq706NY97Y2KVVJAkYnV+CVCvSz+BpT2+pqR0oi+lx2epYG0xqre3ce1RtlBinNNS4IWXdTrk4+z6sUFpNzc/UYgG1IlClZcUEfkpU6SnoRu1KURw9+Yz6Jf7NV3/L1Z/OQpnhpFXnQ+0Q6H5suLygovnlHFtQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iKYqb6OkTJFipDpP8RK/ut3Mrryv+CPT9F91SMGgKgg=;
- b=tFyCYdz/TtE9NcVGt7QeYpYK2wHQURoFX+Ai1B0tPTRFs0ITdgdC4Kwe7zsH96ErfjjbfdkCVfQtFT3e+b1wofmWeIZ7msFHIunLEfkEwDfamg7Rxo5WMvPK3EYeaHtyBmHup5cxDeb4qDH1AT4rrCJWILtZ3nZoVqCVgX3aNoQvEdZ7R5V1bz8DWGoo+y+EP3Pw7kpexpfG6kGRs3X9UdrNEmhCaGdUlhXMr9kesqZvCAihEgJ0tLziINHNE3t/A+/1u4UY59dQlwNBUkssqSW5DYgnLFMlFzcAP91VewqcDhHQ9NRL6x0WMnn9B0eeFMszzzxVK+II0fYZ4d+dBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=wanadoo.fr smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iKYqb6OkTJFipDpP8RK/ut3Mrryv+CPT9F91SMGgKgg=;
- b=j6lRa2IaUUmQvl5BGDuXgQIJ9nbG6FU/YOMRVzJiquQR92GSvFHugQ7iFaBtTcDobU3fLGTT678L3fnln1UlOSCFo07Npk82B+l4Wv5VYDQ6JDSSbRwljhjvK65SEDzhvWi+ViAWiTZN60Y4qLkPzhzlRUBdKYWs6O/AMQZG8hg=
-Received: from BN9PR03CA0789.namprd03.prod.outlook.com (2603:10b6:408:13f::14)
- by BY5PR12MB4179.namprd12.prod.outlook.com (2603:10b6:a03:211::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.22; Sun, 26 Jan
- 2025 19:57:58 +0000
-Received: from BN2PEPF000044A8.namprd04.prod.outlook.com
- (2603:10b6:408:13f:cafe::ff) by BN9PR03CA0789.outlook.office365.com
- (2603:10b6:408:13f::14) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8377.22 via Frontend Transport; Sun,
- 26 Jan 2025 19:57:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN2PEPF000044A8.mail.protection.outlook.com (10.167.243.102) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8377.8 via Frontend Transport; Sun, 26 Jan 2025 19:57:57 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 26 Jan
- 2025 13:57:57 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 26 Jan
- 2025 13:57:56 -0600
-Received: from [172.19.74.139] (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Sun, 26 Jan 2025 13:57:56 -0600
-Message-ID: <eb0eae5a-8429-48ff-85a8-43c0a94c07de@amd.com>
-Date: Sun, 26 Jan 2025 11:57:51 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19FAF189905
+	for <linux-fpga@vger.kernel.org>; Sun, 26 Jan 2025 21:13:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737926009; cv=none; b=kmhrWyGsEWBGbPRHigjVUiYLCaEOlZIf6x1gP//WUe6aQm71BvduGbSs82Yu6ecfNO4h9RZTGMUKGdDXa0eXI2PeyU6wrVhRuFJ/r72Okb9a/292jbtl4QLJ1QFRzvtuMQUGe9x7+2jkHRr1+aoEzKPOasPKQ3VhOTKH4/dwKCI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737926009; c=relaxed/simple;
+	bh=nV6jifjlYVTpVfeYsDhrH+CYsrUiL0NmA8MENN9UK08=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fKdlHDgFnAkh5czULHcHZqq9TvRl31p2S6XuZRC/j1CixktD8vNkgKYOPTqKrFybTcnwV0LcsYby3pVcGwBARm8J0DsvPsJve3b/81Q4eGFie4u5INZqR16j4xupP/m7iG5Sc2MBHdDM49BSAd+NcXLzT64koQ7UELO2mWCHeQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bklfTBSO; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <00e5c1c1-a98e-4360-b7e5-ffaa384e1036@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1737925995;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/22ufbnK9lDcUFCGuRMmAaCHCE7LlR/Z6sietFd58vQ=;
+	b=bklfTBSOC3wqMnF5Wf4rAi6MLXTQsKk205abTM9CMOscJDIMwe3Egcb3JZJARDeCdUAdZU
+	vuAJhUdj6NEnvA70kfNZeDq+kj9e7STHH1NMtzgpWtA0RR+JloCsbTdQeXmNc6FnSA1UDB
+	jqRz49ldH19KoX91xZS7+jDWG1bwc44=
+Date: Sun, 26 Jan 2025 22:13:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 2/4] drivers/fpga/amd: Add communication channel
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	<linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
-	<mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>
-CC: <lizhi.hou@amd.com>, Nishad Saraf <nishads@amd.com>
-References: <20241210183734.30803-1-yidong.zhang@amd.com>
- <20241210183734.30803-3-yidong.zhang@amd.com>
- <f35c40fc-7afa-4fef-bab2-0b30302b9b21@wanadoo.fr>
+Subject: Re: [RFC v2 1/1] fpga-region: Add generic IOCTL interface for runtime
+ FPGA programming
+To: Xu Yilun <yilun.xu@linux.intel.com>
+Cc: Nava kishore Manne <nava.kishore.manne@amd.com>, git@amd.com,
+ mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+ robh@kernel.org, saravanak@google.com, linux-kernel@vger.kernel.org,
+ linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
+References: <20241029091734.3288005-1-nava.kishore.manne@amd.com>
+ <20241029091734.3288005-2-nava.kishore.manne@amd.com>
+ <ZzwQrYeWVF6cRtgA@yilunxu-OptiPlex-7050>
+ <9bfaf1cf-3313-4cb3-9963-2b4bad2d3165@redhat.com>
+ <Z0fIiQPCS69O2d/n@yilunxu-OptiPlex-7050>
 Content-Language: en-US
-From: Yidong Zhang <yidong.zhang@amd.com>
-In-Reply-To: <f35c40fc-7afa-4fef-bab2-0b30302b9b21@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF000044A8:EE_|BY5PR12MB4179:EE_
-X-MS-Office365-Filtering-Correlation-Id: f45e1cd8-2765-4163-4a09-08dd3e43bae5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dDJOS1gzYkU4YmZ5MG5IaTRCcWJCLzN2QnljZHBrYlFZOGpaSERwOHh5bDZp?=
- =?utf-8?B?eUsxTWN1ZWZ1VWU0RWJLT2ZTQW9oUWZoZlI1SWNwQ213am02SEM5NWswN1g2?=
- =?utf-8?B?bDdrKzN3NTFsTzRGaytUQkNDejA2ZjgvOHJISXU5a3ZsNXA5eFB0MGE3Qmxn?=
- =?utf-8?B?UmFOVk1iRGNqTVpkWHkydk05TGFPWXR3cXBhTFdGUEcwTnhlbDB5T1FpL3dT?=
- =?utf-8?B?OHQ0TFYxZXhZd1VGSmlmMTBMejRqc2pDdHN6NWZrRUptekdSSVNKV3dPUGlw?=
- =?utf-8?B?ZkVHSDhqK09BNFlQOUlIZFdRV1E1MnR1SCtLUjB1L21NZkRrS0ZKZE5VSEkx?=
- =?utf-8?B?cTM0Mll1Mlo1RkF0dmx3MmYwUzU1MlhteFZtTVo5LzJjNW1ZbG9CTkZrUXZ4?=
- =?utf-8?B?MmwwZ284UG1UcWdDeWJuZzFreXltbitOZGNaSVZ2R3Z2YXZTR0Fobmt5TE43?=
- =?utf-8?B?YUZBdkh1b1VMSXAxdVZsVGh3blhrNUhjTU96MVdMcGhiMWRSditBQnh5UFYr?=
- =?utf-8?B?N05GaEp3NGl4Q0p3M2tsZDdDK0dKYUNUT3FJc0JHTUduL2picVNBQ005RjVK?=
- =?utf-8?B?dTFXMDNDb1VPYytRb3RaZkVjSkJJUkNGZ1lSb0RSTTVhVEx1RkQ0NWxlMGRx?=
- =?utf-8?B?TVhqejVvQjAwSE53dllKc1JkV1REbVR2S1FtN2tuV3QvZnlHalpQL042S3ZF?=
- =?utf-8?B?TzdGNTJyTElDQUFjTjJjcG9XKzQ4NC9lQUFuN2JKNld2dElna0tMMjVsUXV1?=
- =?utf-8?B?VHZRc0dMdExqOVVpR0tKVzYyTFdxQkxqbmcwbTBwYVlFeHMwVFNnSlpCdGpW?=
- =?utf-8?B?cERlU2ZON21UU1ZoanNjMTYzVFZHYitSN09DTWFINGlPYkhkb3NCalNpUVUw?=
- =?utf-8?B?czI0ejhmclhoVGR5K1BjeEttM2IvOXFVWVB1cVNWdjh5cVNSVzg5ZXY5Kzdz?=
- =?utf-8?B?Z2F0a2RiWnNWUFUzRkxOY1MyQzRhYUI5MC9ScjMxVmFOaDVITjNyOHV0eVVE?=
- =?utf-8?B?VmMzNGVWSDVScTQwTkJ0WnphVENwYTFxcHM4R1V4Z0JQc0hneTRTWmpsKzd5?=
- =?utf-8?B?YkRoNEV2aEliTWlIcWlLaXFNa1hKWXNDRFVxV2xadWlidTlHRGJzS1hwNHUz?=
- =?utf-8?B?S1E2dzNycVUyNURPcnFjOGJZMnBkeGU2d0tFNSs5VkJlSytIMW9MS2VyYjFp?=
- =?utf-8?B?UlhzYnduR3Q0WkhoNGU1dWVIelFDZzRxd2NxMVB6THJqcUdENDNmMzF4TXFv?=
- =?utf-8?B?R3d2bHRDSWJkbFNjR1U1MG8xN1NRYXRmakhOaitpdHlQQmozVE5qS2ZoSWE1?=
- =?utf-8?B?R0M2NkNjZFZVZHdwdDJOdHdyajdIek5zVEtIdkcyNElrSlZmV2tXSXNaYUVW?=
- =?utf-8?B?K0hNcU04NUNIcVQ0Y1gyZDJESlJIZ0EvT3NORnc4OHZVK1RHelV4MFdFNkY4?=
- =?utf-8?B?OFkwZFZYUDFpa0ROV1puN0t1VkpkeHlLSEM5ZEpSVFVRMWNpbVQvOG93a2ZM?=
- =?utf-8?B?TERtS0VDLzJCWkVqT2xvUWg3UzNqSE9jbGI3bVRVa20vWHd2UVRqa05DM3pG?=
- =?utf-8?B?UmpYeExhVFZOMDErdlIvU0pieklkUE41Z2tZeU9rSHZ6TE9IOHRkQ04zSnJz?=
- =?utf-8?B?ckJuUWpYa2poVU9jcGFtNGgwVmE0UG12QWRQa2gwc0VhU3YydktKSU9TZ0dq?=
- =?utf-8?B?T29mYlAvNkhleFhIZThJenZzcG1Kc0xQYXZ2NTJBMExob0ZHSldEaWNKdnF4?=
- =?utf-8?B?ZFVPbUxhMkdqTHppRFEzRWNSZlBueXlySzZIeGpSd0FFbEE0aWxzYXZ3M0dR?=
- =?utf-8?B?S01PTGFzNzA0V0VlbEhza3Y1TFNjQjZDQ3BEcUZPMmZGN0VodzZlL1Y1eVFh?=
- =?utf-8?B?RmtlQUFhL1pPT2QrSnkvNGt6VzFpQTFvTHNnYVpvNW9Db1R5N251dEs0VWt1?=
- =?utf-8?B?dC9FUHY5c2o3d1FEbnhaYzl6L1Nib0ZFZXc2dE1ENTd3NVhxRjhDQ2cybDJP?=
- =?utf-8?Q?IvgdWOXZo6pJtp6rKu2Wo2aZJBrTkU=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2025 19:57:57.5017
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f45e1cd8-2765-4163-4a09-08dd3e43bae5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF000044A8.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4179
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Marco Pagani <marco.pagani@linux.dev>
+In-Reply-To: <Z0fIiQPCS69O2d/n@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
+On 2024-11-28 02:34, Xu Yilun wrote:
+> On Mon, Nov 25, 2024 at 12:26:06PM +0100, Marco Pagani wrote:
+>> On 2024-11-19 05:14, Xu Yilun wrote:
+>>> On Tue, Oct 29, 2024 at 02:47:34PM +0530, Nava kishore Manne wrote:
+>>>> Introduces an IOCTL interface within the fpga-region subsystem,
+>>>> providing a generic and standardized mechanism for configuring (or)
+>>>> reprogramming FPGAs during runtime. The newly added interface supports
+>>>> both OF (Open Firmware) and non-OF devices, leveraging vendor-specific
+>>>> callbacks (e.g., configuration + enumeration, removal, and status) to
+>>>> accommodate a wide range of device specific configurations.
+>>>>
+>>>> The IOCTL interface ensures compatibility with both OF and non-OF
+>>>> devices, allowing for seamless FPGA reprogramming across diverse
+>>>> platforms.
+>>>>
+>>>> Vendor-specific callbacks are integrated into the interface, enabling
+>>>> custom FPGA configuration + enumeration, removal, and status reporting
+>>>> mechanisms, ensuring flexibility for vendor implementations.
+>>>>
+>>>> This solution enhances FPGA runtime management, supporting various device
+>>>> types and vendors, while ensuring compatibility with the current FPGA
+>>>> configuration flow.
+>>>>
+>>>> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+>>>> ---
+>>>> Changes for v2:
+>>>>  - As discussed with Yilun, the implementation has been modified to utilize a
+>>>>  callback approach, enabling seamless handling of both OF and non-OF devices.
+>>>>
+>>>>  - As suggested by Yilun in the POC code, we have moved away from using  void *args
+>>>>  as a parameter for ICOTL inputs to obtain the required user inputs. Instead, we are
+>>>>  utilizing the fpga_region_config_info structure to gather user inputs. Currently,
+>>>>  this structure is implemented to support only OF devices, but we intend to extend
+>>>>  it by incorporating new members to accommodate non-OF devices in the future.
+>>>>
+>>>>  drivers/fpga/fpga-region.c       | 110 +++++++++++++++++++++++++++++++
+>>>>  drivers/fpga/of-fpga-region.c    |  91 ++++++++++++++++++++++++-
+>>>>  include/linux/fpga/fpga-region.h |  32 +++++++++
+>>>>  include/uapi/linux/fpga-region.h |  51 ++++++++++++++
+>>>>  4 files changed, 283 insertions(+), 1 deletion(-)
+>>>>  create mode 100644 include/uapi/linux/fpga-region.h
+>>>>
+>>>> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+>>>> index 753cd142503e..c6bea3c99a69 100644
+>>>> --- a/drivers/fpga/fpga-region.c
+>>>> +++ b/drivers/fpga/fpga-region.c
+>>>> @@ -8,6 +8,7 @@
+>>>>  #include <linux/fpga/fpga-bridge.h>
+>>>>  #include <linux/fpga/fpga-mgr.h>
+>>>>  #include <linux/fpga/fpga-region.h>
+>>>> +#include <linux/fpga-region.h>
+>>>>  #include <linux/idr.h>
+>>>>  #include <linux/kernel.h>
+>>>>  #include <linux/list.h>
+>>>> @@ -180,6 +181,67 @@ static struct attribute *fpga_region_attrs[] = {
+>>>>  };
+>>>>  ATTRIBUTE_GROUPS(fpga_region);
+>>>>  
+>>>> +static int fpga_region_device_open(struct inode *inode, struct file *file)
+>>>> +{
+>>>> +	struct miscdevice *miscdev = file->private_data;
+>>>> +	struct fpga_region *region = container_of(miscdev, struct fpga_region, miscdev);
+>>>> +
+>>>> +	file->private_data = region;
+>>>> +
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>> +static int fpga_region_device_release(struct inode *inode, struct file *file)
+>>>> +{
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>> +static long fpga_region_device_ioctl(struct file *file, unsigned int cmd,
+>>>> +				     unsigned long arg)
+>>>> +{
+>>>> +	int err;
+>>>> +	void __user *argp = (void __user *)arg;
+>>>> +	struct fpga_region_config_info config_info;
+>>>> +	struct fpga_region *region =  (struct fpga_region *)(file->private_data);
+>>>> +
+>>>> +	switch (cmd) {
+>>>> +	case FPGA_REGION_IOCTL_LOAD:
+>>>> +		if (copy_from_user(&config_info, argp, sizeof(struct fpga_region_config_info)))
+>>>> +			return -EFAULT;
+>>>> +
+>>>> +		err = region->region_ops->region_config_enumeration(region, &config_info);
+>>>> +
+>>>> +		break;
+>>>> +	case FPGA_REGION_IOCTL_REMOVE:
+>>>> +		if (copy_from_user(&config_info, argp, sizeof(struct fpga_region_config_info)))
+>>>> +			return -EFAULT;
+>>>> +
+>>>> +		err = region->region_ops->region_remove(region, &config_info);
+>>>> +
+>>>> +		break;
+>>>> +	case FPGA_REGION_IOCTL_STATUS:
+>>>> +		unsigned int status;
+>>>> +
+>>>> +		status = region->region_ops->region_status(region);
+>>>> +
+>>>> +		if (copy_to_user((void __user *)arg, &status, sizeof(status)))
+>>>> +			err = -EFAULT;
+>>>> +		break;
+>>>> +	default:
+>>>> +		err = -ENOTTY;
+>>>> +	}
+>>>> +
+>>>> +	return err;
+>>>> +}
+>>>> +
+>>>> +static const struct file_operations fpga_region_fops = {
+>>>> +	.owner		= THIS_MODULE,
+>>>> +	.open		= fpga_region_device_open,
+>>>> +	.release	= fpga_region_device_release,
+>>>> +	.unlocked_ioctl	= fpga_region_device_ioctl,
+>>>> +	.compat_ioctl	= fpga_region_device_ioctl,
+>>>> +};
+>>>> +
+>>>>  /**
+>>>>   * __fpga_region_register_full - create and register an FPGA Region device
+>>>>   * @parent: device parent
+>>>> @@ -229,8 +291,21 @@ __fpga_region_register_full(struct device *parent, const struct fpga_region_info
+>>>>  	if (ret)
+>>>>  		goto err_remove;
+>>>>  
+>>>> +	if (info->region_ops) {
+>>>> +		region->region_ops = info->region_ops;
+>>>> +		region->miscdev.minor = MISC_DYNAMIC_MINOR;
+>>>> +		region->miscdev.name = kobject_name(&region->dev.kobj);
+>>>> +		region->miscdev.fops = &fpga_region_fops;
+>>>> +		ret = misc_register(&region->miscdev);
+>>>> +		if (ret) {
+>>>> +			pr_err("fpga-region: failed to register misc device.\n");
+>>>> +			goto err_remove;
+>>>> +		}
+>>>> +	}
+>>>> +
+>>>>  	ret = device_register(&region->dev);
+>>>>  	if (ret) {
+>>>> +		misc_deregister(&region->miscdev);
+>>>>  		put_device(&region->dev);
+>>>>  		return ERR_PTR(ret);
+>>>>  	}
+>>>> @@ -272,6 +347,40 @@ __fpga_region_register(struct device *parent, struct fpga_manager *mgr,
+>>>>  }
+>>>>  EXPORT_SYMBOL_GPL(__fpga_region_register);
+>>>>  
+>>>> +/**
+>>>> + * __fpga_region_register_with_ops - create and register an FPGA Region device
+>>>> + * with user interface call-backs.
+>>>> + * @parent: device parent
+>>>> + * @mgr: manager that programs this region
+>>>> + * @region_ops: ops for low level FPGA region for device enumeration/removal
+>>>> + * @priv: of-fpga-region private data
+>>>> + * @get_bridges: optional function to get bridges to a list
+>>>> + * @owner: module containing the get_bridges function
+>>>> + *
+>>>> + * This simple version of the register function should be sufficient for most users.
+>>>> + * The fpga_region_register_full() function is available for users that need to
+>>>> + * pass additional, optional parameters.
+>>>> + *
+>>>> + * Return: struct fpga_region or ERR_PTR()
+>>>> + */
+>>>> +struct fpga_region *
+>>>> +__fpga_region_register_with_ops(struct device *parent, struct fpga_manager *mgr,
+>>>> +				const struct fpga_region_ops *region_ops,
+>>>> +				void *priv,
+>>>> +				int (*get_bridges)(struct fpga_region *),
+>>>> +				struct module *owner)
+>>>> +{
+>>>> +	struct fpga_region_info info = { 0 };
+>>>> +
+>>>> +	info.mgr = mgr;
+>>>> +	info.priv = priv;
+>>>> +	info.get_bridges = get_bridges;
+>>>> +	info.region_ops = region_ops;
+>>>> +
+>>>> +	return __fpga_region_register_full(parent, &info, owner);
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(__fpga_region_register_with_ops);
+>>>> +
+>>>>  /**
+>>>>   * fpga_region_unregister - unregister an FPGA region
+>>>>   * @region: FPGA region
+>>>> @@ -280,6 +389,7 @@ EXPORT_SYMBOL_GPL(__fpga_region_register);
+>>>>   */
+>>>>  void fpga_region_unregister(struct fpga_region *region)
+>>>>  {
+>>>> +	misc_deregister(&region->miscdev);
+>>>>  	device_unregister(&region->dev);
+>>>>  }
+>>>>  EXPORT_SYMBOL_GPL(fpga_region_unregister);
+>>>> diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
+>>>> index 8526a5a86f0c..63fe56e0466f 100644
+>>>> --- a/drivers/fpga/of-fpga-region.c
+>>>> +++ b/drivers/fpga/of-fpga-region.c
+>>>> @@ -8,6 +8,8 @@
+>>>>  #include <linux/fpga/fpga-bridge.h>
+>>>>  #include <linux/fpga/fpga-mgr.h>
+>>>>  #include <linux/fpga/fpga-region.h>
+>>>> +#include <linux/firmware.h>
+>>>> +#include <linux/fpga-region.h>
+>>>>  #include <linux/idr.h>
+>>>>  #include <linux/kernel.h>
+>>>>  #include <linux/list.h>
+>>>> @@ -18,6 +20,20 @@
+>>>>  #include <linux/slab.h>
+>>>>  #include <linux/spinlock.h>
+>>>>  
+>>>> +/**
+>>>> + * struct of_fpga_region_priv - Private data structure
+>>>> + * image.
+>>>> + * @dev:	Device data structure
+>>>> + * @fw:		firmware of coeff table.
+>>>> + * @path:	path of FPGA overlay image firmware file.
+>>>> + * @ovcs_id:	overlay changeset id.
+>>>> + */
+>>>> +struct of_fpga_region_priv {
+>>>> +	struct device *dev;
+>>>> +	const struct firmware *fw;
+>>>> +	int ovcs_id;
+>>>> +};
+>>>> +
+>>>>  static const struct of_device_id fpga_region_of_match[] = {
+>>>>  	{ .compatible = "fpga-region", },
+>>>>  	{},
+>>>> @@ -394,20 +410,93 @@ static struct notifier_block fpga_region_of_nb = {
+>>>>  	.notifier_call = of_fpga_region_notify,
+>>>>  };
+>>>>  
+>>>> +static int of_fpga_region_status(struct fpga_region *region)
+>>>> +{
+>>>> +	struct of_fpga_region_priv *ovcs = region->priv;
+>>>> +
+>>>> +	if (ovcs->ovcs_id)
+>>>> +		return FPGA_REGION_HAS_PL;
+>>>
+>>> Could you help specify what is PL?
+>>>
+>>>> +
+>>>> +	return FPGA_REGION_EMPTY;
+>>>> +}
+>>>> +
+>>>> +static int of_fpga_region_config_enumeration(struct fpga_region *region,
+>>>> +					     struct fpga_region_config_info *config_info)
+>>>> +{
+>>>> +	struct of_fpga_region_priv *ovcs = region->priv;
+>>>> +	int err;
+>>>> +
+>>>> +	/* if it's set do not allow changes */
+>>>> +	if (ovcs->ovcs_id)
+>>>> +		return -EPERM;
+>>>> +
+>>>> +	err = request_firmware(&ovcs->fw, config_info->firmware_name, NULL);
+>>>> +	if (err != 0)
+>>>> +		goto out_err;
+>>>> +
+>>>> +	err = of_overlay_fdt_apply((void *)ovcs->fw->data, ovcs->fw->size,
+>>>> +				   &ovcs->ovcs_id, NULL);
+>>>> +	if (err < 0) {
+>>>> +		pr_err("%s: Failed to create overlay (err=%d)\n",
+>>>> +		       __func__, err);
+>>>> +		release_firmware(ovcs->fw);
+>>>> +		goto out_err;
+>>>> +	}
+>>>> +
+>>>> +	return 0;
+>>>> +
+>>>> +out_err:
+>>>> +	ovcs->ovcs_id = 0;
+>>>> +	ovcs->fw = NULL;
+>>>> +
+>>>> +	return err;
+>>>> +}
+>>>> +
+>>>> +static int of_fpga_region_config_remove(struct fpga_region *region,
+>>>> +					struct fpga_region_config_info *config_info)
+>>>> +{
+>>>> +	struct of_fpga_region_priv *ovcs = region->priv;
+>>>> +
+>>>> +	if (!ovcs->ovcs_id)
+>>>> +		return -EPERM;
+>>>> +
+>>>> +	of_overlay_remove(&ovcs->ovcs_id);
+>>>> +	release_firmware(ovcs->fw);
+>>>> +
+>>>> +	ovcs->ovcs_id = 0;
+>>>> +	ovcs->fw = NULL;
+>>>> +
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>> +static const struct fpga_region_ops region_ops = {
+>>>> +	.region_status = of_fpga_region_status,
+>>>> +	.region_config_enumeration = of_fpga_region_config_enumeration,
+>>>> +	.region_remove = of_fpga_region_config_remove,
+>>>> +};
+>>>> +
+>>>>  static int of_fpga_region_probe(struct platform_device *pdev)
+>>>>  {
+>>>>  	struct device *dev = &pdev->dev;
+>>>>  	struct device_node *np = dev->of_node;
+>>>> +	struct of_fpga_region_priv *priv;
+>>>>  	struct fpga_region *region;
+>>>>  	struct fpga_manager *mgr;
+>>>>  	int ret;
+>>>>  
+>>>> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>>>> +	if (!priv)
+>>>> +		return -ENOMEM;
+>>>> +
+>>>> +	priv->dev = dev;
+>>>> +
+>>>>  	/* Find the FPGA mgr specified by region or parent region. */
+>>>>  	mgr = of_fpga_region_get_mgr(np);
+>>>>  	if (IS_ERR(mgr))
+>>>>  		return -EPROBE_DEFER;
+>>>>  
+>>>> -	region = fpga_region_register(dev, mgr, of_fpga_region_get_bridges);
+>>>> +	region = fpga_region_register_with_ops(dev, mgr, &region_ops, priv,
+>>>> +					       of_fpga_region_get_bridges);
+>>>>  	if (IS_ERR(region)) {
+>>>>  		ret = PTR_ERR(region);
+>>>>  		goto eprobe_mgr_put;
+>>>> diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
+>>>> index 5fbc05fe70a6..3a3ba6dbb5e1 100644
+>>>> --- a/include/linux/fpga/fpga-region.h
+>>>> +++ b/include/linux/fpga/fpga-region.h
+>>>> @@ -6,15 +6,35 @@
+>>>>  #include <linux/device.h>
+>>>>  #include <linux/fpga/fpga-mgr.h>
+>>>>  #include <linux/fpga/fpga-bridge.h>
+>>>> +#include <linux/fpga-region.h>
+>>>> +#include <linux/miscdevice.h>
+>>>>  
+>>>>  struct fpga_region;
+>>>>  
+>>>> +/**
+>>>> + * struct fpga_region_ops - ops for low level FPGA region ops for device
+>>>> + * enumeration/removal
+>>>> + * @region_status: returns the FPGA region status
+>>>> + * @region_config_enumeration: Configure and enumerate the FPGA region.
+>>>> + * @region_remove: Remove all devices within the FPGA region
+>>>> + * (which are added as part of the enumeration).
+>>>> + */
+>>>> +struct fpga_region_ops {
+>>>> +	int (*region_status)(struct fpga_region *region);
+>>>> +	int (*region_config_enumeration)(struct fpga_region *region,
+>>>> +					 struct fpga_region_config_info *config_info);
+>>>
+>>> My current concern is still about this combined API, it just offloads
+>>> all work to low level, but we have some common flows. That's why we
+>>> introduce a common FPGA reprograming API.
+>>>
+>>> I didn't see issue about the vendor specific pre configuration. They
+>>> are generally needed to initialize the struct fpga_image_info, which
+>>> is a common structure for fpga_region_program_fpga().
+>>>
+>>> For port IDs(AFU) inputs for DFL, I think it could also be changed
+>>> (Don't have to be implemented in this patchset). Previously DFL
+>>> provides an uAPI for the whole device, so it needs a port_id input to
+>>> position which fpga_region within the device for programming. But now,
+>>> we are introducing a per fpga_region programming interface, IIUC port_id
+>>> should not be needed anymore.
+>>>
+>>> The combined API is truly simple for leveraging the existing
+>>> of-fpga-region overlay apply mechanism. But IMHO that flow doesn't fit
+>>> our new uAPI well. That flow is to adapt the generic configfs overlay
+>>> interface, which comes to a dead end as you mentioned.
+>>>
+>>> My gut feeling for the generic programing flow should be:
+>>>
+>>>  1. Program the image to HW.
+>>>  2. Enumerate the programmed image (apply the DT overlay)
+>>>
+>>> Why we have to:
+>>>
+>>>  1. Start enumeration.
+>>>  2. On pre enumeration, programe the image.
+>>>  3. Real enumeration.
+>>
+>> I'm currently working on an RFC to propose a rework of the fpga
+>> subsystem in order to make it more aligned with the device model. One of
+>> the ideas I'm experimenting with is having a bus (struct bus_type) for
+>> fpga regions (devices) so that we can have region drivers that could
+>> handle internal device enumeration/management whenever a new region is
+>> configured on the fabric. Does this make sense in your opinions?
+> 
+> mm.. I didn't fully understand the need to have a region driver, what's
+> the issue to solve?
+> 
 
+Sorry for the late reply. The general idea is to handle regions in a way
+that is more aligned with the device model without having to resort to
+extra ops and additional devices.
 
-On 1/26/25 02:19, Christophe JAILLET wrote:
-> Caution: This message originated from an External Source. Use proper 
-> caution when opening attachments, clicking links, or responding.
-> 
-> 
-> Le 10/12/2024 à 19:37, Yidong Zhang a écrit :
->> The communication channel (comm_chan) service is between versal-pci 
->> and the
->> user PF driver. When the user PF driver requests PL data download, the
->> comm_chan service will handle the request by versal_pci_load_xclbin.
-> 
-> ...
-> 
->> +enum comm_chan_req_ops {
->> +     COMM_CHAN_REQ_OPS_UNKNOWN               = 0,
->> +     COMM_CHAN_REQ_OPS_HOT_RESET             = 5,
->> +     COMM_CHAN_REQ_OPS_GET_PROTOCOL_VERSION  = 19,
->> +     COMM_CHAN_REQ_OPS_LOAD_XCLBIN_UUID      = 20,
->> +     COMM_CHAN_REQ_OPS_MAX,
-> 
-> Unneeded comma after a terminator.
+Having an fpga bus would allow us to handle enumeration using proper
+region drivers (in the device model sense of the term, i.e., struct
+device_driver) instead of derived region devices.
 
-Will fix this.
+On second thought, I think having a reconfiguration interface at the
+fpga manager level is sounder than having it at the region level (one
+for each region).
 
-> 
->> +};
-> 
-> ...
-> 
->> +static void comm_chan_check_request(struct work_struct *w)
->> +{
->> +     struct comm_chan_device *ccdev = to_ccdev_work(w);
->> +     u32 status = 0, request[COMM_CHAN_DATA_LEN] = {0};
-> 
-> These 2 initialisations are not needed.
+With that in place, the fpga manager could request a firmware image,
+parse it, write the content into the fpga configuration memory, and then
+instantiate the region devices and add them to its fpga bus. Then, if
+there is a match, a specific region driver can handle the enumeration
+within the new region.
 
-Will fix this.
+What do you think?
 
-> 
->> +     struct comm_chan_hw_msg *hw_msg;
->> +     u8 type, eom;
->> +     int i;
->> +
->> +     status = comm_chan_read(ccdev, COMM_CHAN_REG_IS_OFF);
->> +     if (!STATUS_IS_READY(status))
->> +             return;
->> +     if (STATUS_IS_ERROR(status)) {
->> +             vdev_err(ccdev->vdev, "An error has occurred with comms");
->> +             return;
->> +     }
->> +
->> +     /* ACK status */
->> +     comm_chan_write(ccdev, COMM_CHAN_REG_IS_OFF, status);
->> +
->> +     for (i = 0; i < COMM_CHAN_DATA_LEN; i++)
->> +             request[i] = comm_chan_read(ccdev, 
->> COMM_CHAN_REG_RDDATA_OFF);
->> +
-> 
-> ...
-> 
-> CJ
+Thanks,
+Marco
+
 
