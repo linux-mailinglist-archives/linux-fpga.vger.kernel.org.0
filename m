@@ -1,63 +1,63 @@
-Return-Path: <linux-fpga+bounces-1018-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1019-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F434A1DAA5
-	for <lists+linux-fpga@lfdr.de>; Mon, 27 Jan 2025 17:31:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69B02A1DAFF
+	for <lists+linux-fpga@lfdr.de>; Mon, 27 Jan 2025 18:07:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70F553A8CA2
-	for <lists+linux-fpga@lfdr.de>; Mon, 27 Jan 2025 16:31:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9CFB3A30AA
+	for <lists+linux-fpga@lfdr.de>; Mon, 27 Jan 2025 17:07:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06E36152E12;
-	Mon, 27 Jan 2025 16:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F5F18859A;
+	Mon, 27 Jan 2025 17:07:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e/Ub9+g9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ablNZYVg"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E95C149C7D;
-	Mon, 27 Jan 2025 16:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A6E1885B3;
+	Mon, 27 Jan 2025 17:07:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737995495; cv=none; b=tJG5KXkEYDehpCK982HShxFSoFWvsdlUq/hAdp9W229gtpS/MgJ5lnh71x1D5N+BYlfz3plKxihxCso7k1zs9CVefI5Eis80HzBrzyyKvj/0tg5yC+4HGKb/yOxFJ337YTWiQyGXLoWpp72FC1NMDa9kGIFxp7X44VHN8//kwBc=
+	t=1737997638; cv=none; b=gJ52Sc5kA/6taSOA8RDKZo++KIELa8PjeO7RAfoxfMGa0ogh7I0Q8Zi1tvGVakckTzr0O4457DtwtxfPjljbeFfLN28qGALEh4m0SByBRp9guiOrOZ3RSh+sYR3qgsLhyCD7kA3tXpvIbatmZ5ObEN8e4c2xjWHfcK+LOlhJfQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737995495; c=relaxed/simple;
-	bh=1DjhvfxtjyVnF9bqJLbWN7eRDHmylbXDmbHfOvhv8kA=;
+	s=arc-20240116; t=1737997638; c=relaxed/simple;
+	bh=pUUB8KCG//LM2unGcwdG84Ht4M5/P2N62irppFkJmKw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lY4SS6v6WWm9bmNN+Q8cEG0hDjpgIU9P9HKhegGVgfVxhP4bqr1+quoGLmu/iBvqFKMqlZSIavHXkjiaIGo/1RfG4d6NPqNDRDm7pNfer2db8g9JzRXJR1ess5MIgtUrqjW3kkQFclzUq5T86djcE3L5zX78seQxw4TN90Xb5z0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e/Ub9+g9; arc=none smtp.client-ip=192.198.163.8
+	 MIME-Version; b=ruBOiJclIuPiKGriO364/8DM5XeiKeCUxB0S2Yu5wt95oQbaKJaLU7eo4j32+q6IuTyAivdpqfzqPcImfFeWKfQ0NZfwxPqbmsSSIMIgshOHYnTMp1tJmG8vNVg5RJM0BhXXvuAeXJ08ZxDKdtFisllzQP6UzxmXCTDJYtkmhmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ablNZYVg; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737995494; x=1769531494;
+  t=1737997636; x=1769533636;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1DjhvfxtjyVnF9bqJLbWN7eRDHmylbXDmbHfOvhv8kA=;
-  b=e/Ub9+g9D8wPoElkKeoMW794F7lGVJsAoyLNK1dhYvR8cWEDzvujighb
-   OB5dqYWBvwbIFOyIUEfE4x1eNorNJlwxHwJbs4JTXWSBtJV4oleB/pRM1
-   oYQtiuLd9TNlNSCgxoIrX3qQq7AnPNm0HNNo1QmzqgrPQanmb+W1bdy5f
-   DkLxIS5v5S0aud7Dva3IAYzLyly7NMu/rDbHrBGoPDEfXAW6QHtq6w/QQ
-   EisRnHkcuqK3Bed4kJAF1HlrMRK53p2JW42bZU6fVyyJYpG3rRi5K7Dxn
-   pMo+z0pz6BZjpb5iq6WHFTJv5fvIfkUVaShj5xupVaAp4qndF+magQVS9
+  bh=pUUB8KCG//LM2unGcwdG84Ht4M5/P2N62irppFkJmKw=;
+  b=ablNZYVggf89mP/sUC8WJPP0/WKkEOGKcrjh8+TVlj/TfKPhj7VbJ1fC
+   5Q/V7jPbvUy9dX3uHwlMsQ2yLu4v8WtYcdtiOAgPrdltUPa+aoxE94nuj
+   ekgljmECGmToYlwirXGeFsJ1qACjMx0GI0ieDTX8atvprIq5eE7/9k1Cu
+   yti+q+MWfD7bXoN3uGOHxw/BWfdJAJcf8YHOAOs1CNk0cVo+VywEVRccV
+   irN7ZUfD1YwOfnyNoWK261MUKzVpAVU84oNw/a1MgJCAN5t7cMsvyJHXk
+   fOoiiHD7YO6NECW5kp0QLXFDu67q9Q11T69AZ+NbBzMl4GR4jbne7mi0j
    Q==;
-X-CSE-ConnectionGUID: W7NnDVn7RR6MjmJCxrValQ==
-X-CSE-MsgGUID: 6er5z5d9S6OMktlZMqZ7sA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="56003919"
-X-IronPort-AV: E=Sophos;i="6.13,238,1732608000"; 
-   d="scan'208";a="56003919"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 08:31:33 -0800
-X-CSE-ConnectionGUID: WOXF0TtzTH+8nVtcK7xSRg==
-X-CSE-MsgGUID: y5CllUwXTTiXsj1EuI+OkQ==
+X-CSE-ConnectionGUID: J6zClvOUSAqrAQoanoIR4g==
+X-CSE-MsgGUID: 48MkT0FESiqEP/X5KOZozg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="42132364"
+X-IronPort-AV: E=Sophos;i="6.13,239,1732608000"; 
+   d="scan'208";a="42132364"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 09:07:15 -0800
+X-CSE-ConnectionGUID: IQ5gXYMaTT2Mt9HIK+ONuw==
+X-CSE-MsgGUID: MldP2UXrRcCTnDkgiRpHHg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,238,1732608000"; 
-   d="scan'208";a="113513051"
+X-IronPort-AV: E=Sophos;i="6.13,239,1732608000"; 
+   d="scan'208";a="108464717"
 Received: from apgc00009.png.altera.com ([10.244.70.6])
-  by orviesa004.jf.intel.com with ESMTP; 27 Jan 2025 08:31:29 -0800
+  by orviesa006.jf.intel.com with ESMTP; 27 Jan 2025 09:07:12 -0800
 From: Mahesh Rao <mahesh.rao@intel.com>
 To: conor@kernel.org
 Cc: conor+dt@kernel.org,
@@ -74,12 +74,12 @@ Cc: conor+dt@kernel.org,
 	robh@kernel.org,
 	trix@redhat.com,
 	yilun.xu@intel.com
-Subject: Re: [PATCH 1/3] dt-bindings: fpga: stratix10: Convert to json-schema
-Date: Tue, 28 Jan 2025 00:31:01 +0800
-Message-Id: <20250127163101.40369-1-mahesh.rao@intel.com>
+Subject: Re: [PATCH 2/3] dt-bindings: firmware: stratix10: Convert to json-schema
+Date: Tue, 28 Jan 2025 01:07:05 +0800
+Message-Id: <20250127170705.12988-1-mahesh.rao@intel.com>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20250122-duller-headwear-33d84e15a764@spud>
-References: <20250122-duller-headwear-33d84e15a764@spud>
+In-Reply-To: <20250122-decode-celtic-fb7a491957bb@spud>
+References: <20250122-decode-celtic-fb7a491957bb@spud>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -90,35 +90,40 @@ Content-Transfer-Encoding: 8bit
 
 Hi Conor Dooley,
 
-Thanks for reviewing the patch.
-
-On Wed, 22 Jan 2025 18:35:51 +0000, Conor Dooley wrote:
-> > Convert intel,stratix10-soc fpga manager devicetree binding file from
+On Wed, 22 Jan 2025 18:40:41 +0000, Conor Dooley wrote:
+> > Convert intel,stratix10-svc service layer devicetree binding file from
 > > freeform format to json-schema.
-> >
-> > Signed-off-by: Mahesh Rao <mahesh.rao@intel.com>
-> > +maintainers:
-> > +  - Moritz Fischer <mdf@kernel.org>
-> 
-> Are these maintainers actually correct? Does Moritz work on Altera stuff, or
-> did you just add him cos he is a subsystem maintainer? Really what's here
-> should be people that understand the hardware.
 > 
 
-Sorry I initially had added list from maintaner script,I will change to 
-people who works with the hardware in the next revision.
-
-> > +  - Wu Hao <hao.wu@intel.com>
-> > +  - Xu Yilun <yilun.xu@intel.com>
 > > +
-> > +description: |
+> > +  method:
+> > +    enum: [smc, hvc]
+> > +    description: supervisory call method to be used for the service layer.
 > 
-> The | here isn't needed, nor is point out that this is a binding in the line
-> below. Please describe what the hardware is here instead.
+> This looks to be missing a type (string) and an explanation of what "smc" and
+> "hvc" are.
 > 
 
-Sure I will update the info in the next revision.
+Thanks for pointing out , will do the change in next revision.
 
-Best regards
+> > +
+> > +  fpga-mgr:
+> > +    $ref: /schemas/fpga/intel,stratix10-soc-fpga-mgr.yaml
+> > +    description: Optional child node for fpga manager to perform fabric
+> configuration.
+> 
+> This is new and not justified in your commit message. Please explain where
+> this has come from in v2.
+> 
+> Cheers,
+> Conor.
+> 
+
+Sure, this is an optional child node/driver present in the device tree for
+the Agilex SoC devices, but it was not mentioned in the text documentation.
+Therefore, I had included it here. I will provide more details about this
+change in the next version.
+
+Best Regards
 Mahesh Rao
 
