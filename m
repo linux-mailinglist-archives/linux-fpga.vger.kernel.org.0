@@ -1,128 +1,137 @@
-Return-Path: <linux-fpga+bounces-1023-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1024-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35C93A22385
-	for <lists+linux-fpga@lfdr.de>; Wed, 29 Jan 2025 19:01:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1328AA23C11
+	for <lists+linux-fpga@lfdr.de>; Fri, 31 Jan 2025 11:17:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CD58163545
-	for <lists+linux-fpga@lfdr.de>; Wed, 29 Jan 2025 18:01:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 703E2188A3E0
+	for <lists+linux-fpga@lfdr.de>; Fri, 31 Jan 2025 10:17:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2011DE2DF;
-	Wed, 29 Jan 2025 18:01:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1D11A0BD7;
+	Fri, 31 Jan 2025 10:17:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mW24PutO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h1si7qW+"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFB5190696;
-	Wed, 29 Jan 2025 18:01:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3859517B50A;
+	Fri, 31 Jan 2025 10:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738173702; cv=none; b=U1W2w3ZaMcOykDhQXUVpSilZT0VMeV3zJYdGPH01PCHNsDK6uXjx+xK4wVDcV6lOROFkwVgvD17A/tRBgUCPbD3jMASw3LH+10mtQ/Ca0U+1PtiBjhfG6lQEvB7DzLilINagl3nK0u40N+FrFFbCceI6rJGiP4IeayTXNoobEY0=
+	t=1738318661; cv=none; b=Cbcdw3uMZzCHYizRpbOqVc3GOluoND7FfO68IJc3jGLM7/PiSZ1D8OQC3VGpzYoOryWDOI6wZdpHtGBuMZnE8IO6xRucX4vbUYU6q201uUVtRMQD+rRHUfNjrr06JJPlbfXem6FDjYwogqu4JgaIX65+7xrwjtWt0AYRSmuTa0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738173702; c=relaxed/simple;
-	bh=YCUyhaRoDJqojgBQgfjgIDWzf44BcOOrli9JHxA0gDg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SdZpqVWAon/qlxa5xOUmgbozM2LQ2RTz1B03BfshG8qeY5u4za+XZDNU61zrREkRspZpxu/VMmGWIs4QqxZaEctwNx2Glrt4VzpmyCQK2xgt0f6QnRbtjSvvYcpoLvYiHNvMQf7d0dZ4RgSVIec8RAFYpC9MqcQhLxgkqpRMIt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mW24PutO; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1738318661; c=relaxed/simple;
+	bh=A9/mYfP+OD/0j0zfraXjknqg/Xt/IbJ7KyXe9WJnOOg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GXQdYpWSFjoGWxPwXaJ89XgkgXPhOcHkqGA3PvIgW59QtdS/8hSJVlJ7YVnHF6sWBNTkAALyojRUB/CJwBIT9WZoQCT8RfLJq/yr7e3xBKHN4cp1L3XtS8W3BixgenU/r9UWhZzlfQDPq9X0jCHC7sgh/rH1XjIqH+Uxu/IoyOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h1si7qW+; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738173701; x=1769709701;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YCUyhaRoDJqojgBQgfjgIDWzf44BcOOrli9JHxA0gDg=;
-  b=mW24PutOkrrOx3F7OUiOpomr+tDV45ONMqh6Z4yKYmgeJvi5e3FW4Hp7
-   2YJjPmNbi3KQAWoLw9cJvQx9C6NZkkux43cqfoAiIOQ1QxQuVRA2puLyQ
-   NyoAeZXcn0V+g1URoNmh2rX+N6SbAb+pg/NfLp08c/znG9pUczYKvsEpJ
-   0gWdIDLk2BoIpXuWaqNmBrWi95stjwVAikgzOiEI+K8PFYKeysMXxhZZV
-   /l0FDTi8ZinRWVFWlMZ1U9HjjrQf3d4SKxrm0d3HDXYpMD9N5VBNVyrr1
-   umtnR2guEmEr8SskwQ2wPX4lWjeeU9U6pncsZ4Maf+0E4hQ5IdnZWkS93
+  t=1738318659; x=1769854659;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=A9/mYfP+OD/0j0zfraXjknqg/Xt/IbJ7KyXe9WJnOOg=;
+  b=h1si7qW+8o0J6SAPMjbqynoEAgfFVwCPVKT8yAMVKSuaTiW1KvhKoRfQ
+   91y0Nee8PyM9e8HfJwmRRVqgekjxtYRNplW3cZrFa9XCwXtvJnfspFkZs
+   mwMVeQQ25/xA7Qf0HSJuXfLCZYRODQ7kV5VSOEZ1LZIXLYAxzvVLctSeX
+   PUvyBnnWacnDz1fPbOjuadpUhdfvjhdF/StiywfePnoRODRx1UBZR4rbd
+   wALIIer60DQ4LXiyDmKUHRsnR0LGxaW0JqQnxoAiAJr+z1CN6I6H9oxUc
+   q0y9EDx2Q9eFuAOYTmH//T1ArhscCCKoTd5jnbB2KRoIkkOLKUxLibbZ2
    A==;
-X-CSE-ConnectionGUID: BpYv2x32RqOv+ZYXHxEaNQ==
-X-CSE-MsgGUID: enRa9aqIRAmDG9XjhqJWEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11330"; a="64063502"
-X-IronPort-AV: E=Sophos;i="6.13,244,1732608000"; 
-   d="scan'208";a="64063502"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 10:01:40 -0800
-X-CSE-ConnectionGUID: u9qfmyypSEuEfTgWD0qpNw==
-X-CSE-MsgGUID: DrMVmwTWSO26RK/SJXpM0A==
+X-CSE-ConnectionGUID: YMY9hY7VTAG7+nvuuhMCDw==
+X-CSE-MsgGUID: hi7zRDr7THKpUnao723muQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11331"; a="38777207"
+X-IronPort-AV: E=Sophos;i="6.13,248,1732608000"; 
+   d="scan'208";a="38777207"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2025 02:17:38 -0800
+X-CSE-ConnectionGUID: Ik9Mj5lLQ5SycvG65zzElw==
+X-CSE-MsgGUID: GRLBwycgRvqs9fmyICpi8w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="109551745"
+X-IronPort-AV: E=Sophos;i="6.13,248,1732608000"; 
+   d="scan'208";a="114596173"
 Received: from apgcp0c531115.png.altera.com ([10.244.76.209])
-  by orviesa007.jf.intel.com with ESMTP; 29 Jan 2025 10:01:36 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 31 Jan 2025 02:17:35 -0800
 From: Mahesh Rao <mahesh.rao@intel.com>
-To: yilun.xu@linux.intel.com
-Cc: conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	dinguyen@kernel.org,
-	hao.wu@intel.com,
-	krzk+dt@kernel.org,
-	krzysztof.kozlowski@linaro.org,
-	linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	mahesh.rao@altera.com,
-	mahesh.rao@intel.com,
-	mdf@kernel.org,
-	robh@kernel.org,
-	trix@redhat.com,
-	yilun.xu@intel.com
-Subject: Re: [PATCH 3/3] firmware: stratix10-svc: Add of_platform_default_populate()
-Date: Thu, 30 Jan 2025 02:01:13 +0800
-Message-Id: <20250129180113.17219-1-mahesh.rao@intel.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <Z5XyR9QE3kcQDOPe@yilunxu-OptiPlex-7050>
-References: <Z5XyR9QE3kcQDOPe@yilunxu-OptiPlex-7050>
+Subject: [PATCH v2 0/3] stratix10: miscellaneous changes and fix for child
+ driver probing
+Date: Fri, 31 Jan 2025 18:17:23 +0800
+Message-Id: <20250131-socfpga_sip_svc_misc-v2-0-eeed4ebc35f9@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADOjnGcC/22NywqDMBBFf0Vm3ZQxWvpY9T+KSDKJOlCNZCS0i
+ P/eVLrs8hy4564gPrIXuBUrRJ9YOEwZ9KEAGszUe8UuM2jUJyzxqiRQN/emFZ5bSdSOLKSsJdf
+ Zs0HUF8jTOfqOX3v20WQeWJYQ3/tLKr/2F9T6fzCVChVZRw6r2viqvvO0+OeRwgjNtm0fEQ49D
+ bgAAAA=
+X-Change-ID: 20250109-socfpga_sip_svc_misc-bbcdfb7a0028
+To: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>, 
+ Tom Rix <trix@redhat.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Wu Hao <hao.wu@intel.com>, Ho Yin <adrian.ho.yin.ng@altera.com>, 
+ Niravkumar L Rabara <nirav.rabara@altera.com>
+Cc: linux-fpga@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mahesh Rao <mahesh.rao@altera.com>, 
+ Mahesh Rao <mahesh.rao@intel.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1738318654; l=1582;
+ i=mahesh.rao@intel.com; s=20250107; h=from:subject:message-id;
+ bh=A9/mYfP+OD/0j0zfraXjknqg/Xt/IbJ7KyXe9WJnOOg=;
+ b=t4qytP/UpuSFd6rfZU7WuUJqJ0qJXcX2m+x6VSjFqpjAZ5hYZuIfs8zw/yb24D9xNLRdExing
+ Z9/3VpVxR5MCxFj+xRw/zdUgtdt6uTc5f4IG3K6WweezbvgQwlQPQ4c
+X-Developer-Key: i=mahesh.rao@intel.com; a=ed25519;
+ pk=tQiFUzoKxHrQLDtWeEeaeTeJTl/UfclUHWZy1fjSiyg=
 
-Hi Yilun,
-Thanks for reviewing the patch.
+The patch set includes the following changes:
 
-On Sun, 26 Jan 2025 16:28:55 +0800, Xu Yilun wrote:
-> > Add of_platform_default_populate() to stratix10-svc driver as the
-> > firmware/svc node was moved out of soc.
-> > This fixes the failed probing of child drivers of svc node.
-> >
-> > Fixes: 23c3ebed382a ("arm64: dts: socfpga: agilex: move firmware out
-> > of soc node")
+- Conversion of the devicetree binding file to JSON-schema for the Stratix10
+  SVC driver and its child stratix10 fpga manager driver.
+- Addition of support for probing the child driver. This fixes the failure
+  of child driver probing as the SVC driver node has been moved out of the
+  SoC node.
 
-> > +	ret = of_platform_default_populate(dev_of_node(dev), NULL, dev);
-> > +	if (ret < 0) {
-> 
-> 	if (ret)  is just fine.
+Signed-off-by: Mahesh Rao <mahesh.rao@intel.com>
+---
+Changes in v2:
+  * Added brief description on stratix10 soc fpga manager
+    in the binding files.
+  * method property in stratix10-svc binding file was
+    changed to array of strings.
+  * Updated/fixed the usage of of_platform_depopulate()
+    in the stratix10-svc driver.
 
-ok ,I will make the change.
+- Link to v1: https://lore.kernel.org/r/20250122-socfpga_sip_svc_misc-v1-0-cbdcd034ae34@intel.com
 
-> 
-> > +		of_platform_depopulate(dev);
-> > +		goto err_unregister_fcs_dev;
-> 
-> You wanna destroy everything even if some child drivers work?
+---
+Mahesh Rao (3):
+      dt-bindings: fpga: stratix10: Convert to json-schema
+      dt-bindings: firmware: stratix10: Convert to json-schema
+      firmware: stratix10-svc: Add of_platform_default_populate()
 
-Currently, there is no requirement to retain the driver if a child component fails.
-we will handle it if it is needed in the future.
+ .../bindings/firmware/intel,stratix10-svc.txt      | 57 -------------
+ .../bindings/firmware/intel,stratix10-svc.yaml     | 94 ++++++++++++++++++++++
+ .../fpga/intel,stratix10-soc-fpga-mgr.yaml         | 36 +++++++++
+ .../bindings/fpga/intel-stratix10-soc-fpga-mgr.txt | 18 -----
+ drivers/firmware/stratix10-svc.c                   | 14 +++-
+ 5 files changed, 141 insertions(+), 78 deletions(-)
+---
+base-commit: ffd294d346d185b70e28b1a28abe367bbfe53c04
+change-id: 20250109-socfpga_sip_svc_misc-bbcdfb7a0028
 
-> And do we need to do depopulation on driver remove?
+Best regards,
+-- 
+Mahesh Rao <mahesh.rao@intel.com>
 
-I think yes , I have missed this. I will add depopulate in the remove callback().
-
-> I'm actually a little confused how to handle populate() fail and depopulate().
-
-I think this was a mistake on my side. I will make the change in next revision.
-
-Best Regards,
-Mahesh Rao
 
