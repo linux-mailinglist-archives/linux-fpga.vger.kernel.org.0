@@ -1,102 +1,209 @@
-Return-Path: <linux-fpga+bounces-1038-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1039-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C261FA27C2F
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Feb 2025 20:55:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21934A29F90
+	for <lists+linux-fpga@lfdr.de>; Thu,  6 Feb 2025 05:16:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4395F3A2F67
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Feb 2025 19:55:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A071165C78
+	for <lists+linux-fpga@lfdr.de>; Thu,  6 Feb 2025 04:16:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F78C219E86;
-	Tue,  4 Feb 2025 19:50:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D447714A617;
+	Thu,  6 Feb 2025 04:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLMplIup"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RQqFdbdN"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF22219A99;
-	Tue,  4 Feb 2025 19:50:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1302042AB4;
+	Thu,  6 Feb 2025 04:16:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738698656; cv=none; b=HQ4DnLaNdR6YKUIJCyxJlIQL8jv5YF9YStHJRGsaYgM29uBxufjqxtY5gTP/1PlJkTeu7iziMZ1XrNZl2oCxRmQomv456njybriRoO/gJDlffLPLQcNqmECLKREwXJz49IKpGsGZ/i2s6RV+gfSwHJ9xQvdwkQrsMFpD9FQ1rcc=
+	t=1738815381; cv=none; b=XgckqGbu5r8XErmUIeT1o5uHDa/fjhkYX2LUJ5x4+PuTv/Y004nEQXky7UaYUPYn8cDQSJW2xyxI7v9UkLhHTTsGl33+9doPG1EN944XLaprrP3ZQoyJuReVR6O72lnn2bbzQbprpyY4HYRhy8BmdWqtDwwngcuty4XQyLqCNaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738698656; c=relaxed/simple;
-	bh=OovqO4nAjWOkKvXwDjcwT1vMzMriW/bXOE7S1Gw6O+A=;
+	s=arc-20240116; t=1738815381; c=relaxed/simple;
+	bh=4s3sILqFlowuVPjG6GdU0he0O6BERybC1R9EnR07xaU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KEJnLBPEIpmx0lxO4iaZLLHaM/+qv/96T2Yhzq1RlXqbUDvp9ctYk9Ii3S0yZ/bhAoa/CKKWUIR/qPHpj4MnNhD9ya8AP6e46YHlL6ni32HmydiqPrJ44jna7kx45qdB4xauxCQ3XVbG9Aja3i25AP2j4e3ddCKhlkdDcmWn0mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLMplIup; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C01C4CEDF;
-	Tue,  4 Feb 2025 19:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738698654;
-	bh=OovqO4nAjWOkKvXwDjcwT1vMzMriW/bXOE7S1Gw6O+A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iLMplIupfkQeXhR/6mGPWqq+yyfUrrfa/Dhm8GeTPtvcNTypY0baYC3du/bYLFkMq
-	 JlBGgSe3lzm8NMO7p7Db3M1lh6SP/njwz8Rk2hJSv0Fnx+zqi78KD5tApr7S8MOVjV
-	 fTcwbqydRI6iPE1a3bnNDWu62vtvgc/vHJLv1l7dHEilmV30w/9CZo6F1jv3a5lquY
-	 8N2CfRM5qnuRtT0M+8XGiXpM+4tK13M0HsZN6B08ceM8NyerXXtK+BnvguM8zfdpcz
-	 JyxaF0Q6llIdohmT1go+a+qN+XNoT9UYmu3Wj+IMRCStb/8rfaEZXPljYLrPLAma2L
-	 7eMX0z+f8e4dg==
-Date: Tue, 4 Feb 2025 19:50:49 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Mahesh Rao <mahesh.rao@intel.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Wu Hao <hao.wu@intel.com>, Ho Yin <adrian.ho.yin.ng@altera.com>,
-	Niravkumar L Rabara <nirav.rabara@altera.com>,
-	linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Mahesh Rao <mahesh.rao@altera.com>
-Subject: Re: [PATCH v3 2/3] dt-bindings: firmware: stratix10: Convert to
- json-schema
-Message-ID: <20250204-quintuple-chowder-59109fa8ff55@spud>
-References: <20250204-socfpga_sip_svc_misc-v3-0-697f7f153cfa@intel.com>
- <20250204-socfpga_sip_svc_misc-v3-2-697f7f153cfa@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tlArfX/Mp5fdV9eKmy6j2YKlpoijI+HCW6tG7/k6iF7ywg9giGPd1FhslRhOMSC3J7M9H9oFoncftXZxjlCUgiV8dOt9J7wuz5J3QHbDbMvslG/PqyF6XBWf6wmiDtkLVjXjQ5ffzm1hZrQEa3WG0a+9ki/ybuX5IS2XNZgEFAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RQqFdbdN; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738815381; x=1770351381;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4s3sILqFlowuVPjG6GdU0he0O6BERybC1R9EnR07xaU=;
+  b=RQqFdbdNMB7m1+wQNkea1yXXotl9nbLdND28ueJNY0Q/NXd6Yjq0Laj8
+   SmAzw+c4bFoduM6rdhEjvoJHlys3cw1iZNh3vrW6X4axGiUHlGpDtSEOI
+   mIq1dCwelPneHtr/azzMrWwYbZW+foh4cDKd74MLYHf9xP4es6KtF97Bf
+   nSBR0qgsZ5Rin4+48nb8qpeR0Xdg9SkUde1+DtqPokiKiqbGxlB10oaJ6
+   6g9BX6iPMEB8PCOom0g2fHS6k3MPiJIIhz3mDu0/BCzsdPRu8lIA1C5IT
+   aC72J6HtNU67VRzisz87MktqDUkA8K+XTf3CkGvjdPvcnpd9p0TzhAUTu
+   Q==;
+X-CSE-ConnectionGUID: P9kDzEzuSFOJcsUj0TSbow==
+X-CSE-MsgGUID: s5IrIscGQc25W9OcNapXbw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="49649784"
+X-IronPort-AV: E=Sophos;i="6.13,263,1732608000"; 
+   d="scan'208";a="49649784"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 20:16:19 -0800
+X-CSE-ConnectionGUID: GswcwIFiTOGXiY3G6tEpAA==
+X-CSE-MsgGUID: OLfJOYpMQ82w452uAM9kTA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="148292679"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa001.jf.intel.com with ESMTP; 05 Feb 2025 20:16:15 -0800
+Date: Thu, 6 Feb 2025 12:15:23 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Yidong Zhang <yidong.zhang@amd.com>
+Cc: linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+	mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+	lizhi.hou@amd.com, DMG Karthik <Karthik.DMG@amd.com>,
+	Nishad Saraf <nishads@amd.com>,
+	Prapul Krishnamurthy <prapulk@amd.com>,
+	Hayden Laccabue <hayden.laccabue@amd.com>
+Subject: Re: [PATCH V2 1/4] drivers/fpga/amd: Add new driver amd versal-pci
+Message-ID: <Z6Q3W2mUw/ZbtnWV@yilunxu-OptiPlex-7050>
+References: <20241210183734.30803-1-yidong.zhang@amd.com>
+ <20241210183734.30803-2-yidong.zhang@amd.com>
+ <Z5YPWHVmL29zuQNm@yilunxu-OptiPlex-7050>
+ <3b520bab-d948-470a-b06f-5494243ebc1a@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Ae6c9eOCQf7+ch1f"
-Content-Disposition: inline
-In-Reply-To: <20250204-socfpga_sip_svc_misc-v3-2-697f7f153cfa@intel.com>
-
-
---Ae6c9eOCQf7+ch1f
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <3b520bab-d948-470a-b06f-5494243ebc1a@amd.com>
 
-On Tue, Feb 04, 2025 at 08:58:06PM +0800, Mahesh Rao wrote:
-> Convert intel,stratix10-svc service layer devicetree
-> binding file from freeform format to json-schema.
->=20
-> Also added DT binding for optional stratix10-soc
-> FPGA manager child node.
->=20
-> Signed-off-by: Mahesh Rao <mahesh.rao@intel.com>
+On Sun, Jan 26, 2025 at 11:46:54AM -0800, Yidong Zhang wrote:
+> 
+> 
+> On 1/26/25 02:32, Xu Yilun wrote:
+> > Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
+> > 
+> > 
+> > On Tue, Dec 10, 2024 at 10:37:30AM -0800, Yidong Zhang wrote:
+> > > AMD Versal based PCIe card, including V70, is designed for AI inference
+> > > efficiency and is tuned for video analytics and natural language processing
+> > > applications.
+> > > 
+> > > The driver architecture:
+> > > 
+> > >    +---------+  Communication +---------+  Remote  +-----+------+
+> > >    |         |  Channel       |         |  Queue   |     |      |
+> > >    | User PF | <============> | Mgmt PF | <=======>| FW  | FPGA |
+> > >    +---------+                +---------+          +-----+------+
+> > >      PL Data                    base FW
+> > >                                 APU FW
+> > >                                 PL Data (copy)
+> > >   - PL (FPGA Program Logic)
+> > >   - FW (Firmware)
+> > > 
+> > > There are 2 separate drivers from the original XRT[1] design.
+> > >   - UserPF driver
+> > >   - MgmtPF driver
+> > > 
+> > > The new AMD versal-pci driver will replace the MgmtPF driver for Versal
+> > > PCIe card.
+> > > 
+> > > The XRT[1] is already open-sourced. It includes solution of runtime for
+> > > many different type of PCIe Based cards. It also provides utilities for
+> > > managing and programming the devices.
+> > > 
+> > > The AMD versal-pci stands for AMD Versal brand PCIe device management
+> > > driver. This driver provides the following functionalities:
+> > > 
+> > >     - module and PCI device initialization
+> > >       this driver will attach to specific device id of V70 card;
+> > >       the driver will initialize itself based on bar resources for
+> > >       - communication channel:
+> > >         a hardware message service between mgmt PF and user PF
+> > >       - remote queue:
+> > >         a hardware queue based ring buffer service between mgmt PF and PCIe
+> > >         hardware firmware for programming FPGA Program Logic, loading
+> > >         firmware and checking card healthy status.
+> > > 
+> > >     - programming FW
+> > >       - The base FW is downloaded onto the flash of the card.
+> > >       - The APU FW is downloaded once after a POR (power on reset).
+> > >       - Reloading the MgmtPF driver will not change any existing hardware.
+> > > 
+> > >     - programming FPGA hardware binaries - PL Data
+> > >      - using fpga framework ops to support re-programing FPGA
+> > >      - the re-programming request will be initiated from the existing UserPF
+> > >        driver only, and the MgmtPF driver load the matched PL Data after
+> > >        receiving request from the communication channel. The matching PL
+> > 
+> > I think this is not the way the FPGA generic framework should do. A FPGA
+> > region user (your userPF driver) should not also be the reprogram requester.
+> > The user driver cannot deal with the unexpected HW change if it happens.
+> > Maybe after reprogramming, the user driver cannot match the device
+> > anymore, and if user driver is still working on it, crash.
+> 
+> One thing to clarify. The current design is:
+> 
+> The userPF driver is the only requester. The mgmtPF has no uAPI to reprogram
+> the FPGA.
+> 
+> 
+> > 
+> > The expected behavior is, the FPGA region removes user devices (thus
+> > detaches user drivers), does reprogramming, re-enumerates/rescans and
+> > matches new devices with new drivers. And I think that's what Nava is
+> > working on.
+> > 
+> 
+> Nava's work is different than our current design, our current design is:
+> 
+> the separate userPF driver will detach all services before requesting to the
+> mgmtPF to program the FPGA, and after the programming is done, the userPF
+> will re-enumerate/rescan the matching new devices.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+That's not align with the Device-Driver Model, A device driver should not
+re-enumerate/rescan a matching device.
 
---Ae6c9eOCQf7+ch1f
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> The mgmtPF is a util driver which is responsible for communicating with the
+> mgmtPF PCIe bar resources.
+> 
+> 
+> > BTW, AFAICS the expected flow is easier to implement for of-fpga-region,
+> > but harder for PCI devices. But I think that's the right direction and
+> > should try to work it out.
+> 
+> Could I recap the suggested design if I understand that correctly...
+> 
+> You are thinking that the mgmtPF (aka. versal-pci) driver should have a uAPI
 
------BEGIN PGP SIGNATURE-----
+This should be the unified fpga-region class uAPI.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ6JvmQAKCRB4tDGHoIJi
-0hv6AQDL2BEpLLZYLr/aAh35VzjJvX3Y4W9xo3ASawXP3GbtYgEA4kiZaLP9Xi25
-tsTICtC7lMaQBTK4FWfj9Vd6F0otfw8=
-=vsa7
------END PGP SIGNATURE-----
+> to trigger the FPGA re-programing; and using Nava's callback ops to detach
+> the separate userPF driver; after re-programing is done, re-attch the userPF
 
---Ae6c9eOCQf7+ch1f--
+No need to detach a specific driver, remove all devices in the
+fpga-region. I imagine this could also be a generic flow for all PCI/e
+based FPGA cards.
+
+Thanks,
+Yilun
+
+> driver and allow the userPF driver re-enumerate all to match the new
+> hardware.
+> 
+> I think my understanding is correct, it is doable.
+> 
+> As long as we can keep our userPF driver as separate driver, the code change
+> won't be too big.
+> 
+> > 
+> > Thanks,
+> > Yilun
 
