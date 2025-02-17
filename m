@@ -1,110 +1,144 @@
-Return-Path: <linux-fpga+bounces-1054-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1055-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23D03A332C7
-	for <lists+linux-fpga@lfdr.de>; Wed, 12 Feb 2025 23:39:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A513A38764
+	for <lists+linux-fpga@lfdr.de>; Mon, 17 Feb 2025 16:19:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6411718895DC
-	for <lists+linux-fpga@lfdr.de>; Wed, 12 Feb 2025 22:39:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F4253B1CB2
+	for <lists+linux-fpga@lfdr.de>; Mon, 17 Feb 2025 15:18:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67185204594;
-	Wed, 12 Feb 2025 22:39:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8D721CC71;
+	Mon, 17 Feb 2025 15:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dwXaJWXz"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LT078Jkm"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21B2204591;
-	Wed, 12 Feb 2025 22:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7B42223719
+	for <linux-fpga@vger.kernel.org>; Mon, 17 Feb 2025 15:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739399970; cv=none; b=gh3C+RHn0xkreWm56Is+oV62rkMayrRTrKxKORHe1DQ0RLOlZRTe83zlz15/vUHG3XIP2wJ4nMvf1i/21cMRLp9bYZQ/xSpX85zlgNqZM6vv5a/JL8J6mAm7flU2oFsbwaYrBcQzPiOyf8A7ZoIyaqywKgS3pJXSz7kkpZ4A/vk=
+	t=1739805525; cv=none; b=UyXP29mLze40R03ZZhbxxXOR0ibiGKRySx176NFa1pSBN9O01ZifOpJqsDSqWvNpMeJ9didsZ9dtlSE4FB6B6DkS0JUm4HfjNVY3ESlF4WurIYVw8oqo+9mBLaXsnUKD2wDmVH2cb9Ni7a5p4rtC4na1Bh9OIDmFTAegltivTUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739399970; c=relaxed/simple;
-	bh=/3+mBVrE63/84GWfZK7OmV4Ny/tGhzzzgdhYFy/il4Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BgP2DKrqMRVbiwz95H5E6MEnEh/RQJMaPLremhR1eP5wMFnXOcKUkje1W+HbPZdeuuhRUrU6+bOIL02nwGZjveXDArN6pitQTSgXrPJBDkKNwcial61eYbzzjiIS+2MzBUoQR1jr2HuiIPY/Vxg2oOiSof42lLJ+7ey/+ERr47s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dwXaJWXz; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739399969; x=1770935969;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/3+mBVrE63/84GWfZK7OmV4Ny/tGhzzzgdhYFy/il4Q=;
-  b=dwXaJWXzEIkMh7yZx0JP65Wx1J1Xf/DHbb05opzTrmJuAZK6QlE0qHg7
-   wOoEbyclup0k4GWcpeJnX940Lem8dEbnIq6FNrE/x2mQRGbC/h1ErvnkQ
-   u6OnWi7hC0KmILtx98DM0CfTKShee3mvIB/dhlYh9Rm38CGyH66x3PzfF
-   nggLg4aEohrC2rmO6H4W3tbuhlLsAHoFXjIs3RTI8ljTVyjbYoc0dVUL4
-   eMYZVk6eSqQA1WwXV4EHDdwuGKpZiMMd4SL9Bw7+rTISbwq0BPM0H6Wcd
-   TzTOVAMwrBfWttWXJXTQXJBN+Dta1jljaaeE0fl7u6JCJNhSGdEQCfY3R
-   g==;
-X-CSE-ConnectionGUID: DFK5Dgk+RVq6teKzbf/C/A==
-X-CSE-MsgGUID: R8ly/kwhQ9OQOOV6VyIb+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="51477510"
-X-IronPort-AV: E=Sophos;i="6.13,281,1732608000"; 
-   d="scan'208";a="51477510"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 14:39:29 -0800
-X-CSE-ConnectionGUID: 05zNa/znTkyUTxknDH1uZw==
-X-CSE-MsgGUID: vC9d2BQfQe6i8Hbd2elhPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="117581233"
-Received: from pg15swiplab1181.png.altera.com ([10.244.232.167])
-  by fmviesa005.fm.intel.com with ESMTP; 12 Feb 2025 14:39:25 -0800
-From: Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@intel.com>
-To: Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@intel.com>,
-	kuhanh.murugasen.krishnan@altera.com
-Cc: Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: [PATCH] fpga: altera-cvp: PCIex8x8 ports
-Date: Thu, 13 Feb 2025 06:35:53 +0800
-Message-Id: <20250212223553.2717304-1-kuhanh.murugasen.krishnan@intel.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1739805525; c=relaxed/simple;
+	bh=rB1i4l2/XKVbabCGkwc2C9eIg8JP7iC5IOAbL9NDzD0=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=T2CgI9RBfrSP0z1EL1BBgtR1WrRyFT14z/k5laCiH8Kk+MI+8XPopAuG2iHJAwRsZbFtBIaxAJTvTXltYatDZSRrdOdORbeCejfBLY8aFjdmVO8uhhuACpg7YQuG9sHqaysb9Yi6cAq90f24wWjkmOLQVaX/qQG1nkSlo16FrL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LT078Jkm; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <a51c0c24-fd21-42b3-9c4a-39ebc0751f03@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1739805520;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SwKI7hWDzcyDyvWSyNtpef/iRsXjDY6W/TTp8ONOqXE=;
+	b=LT078JkmIhf9Ya+xQQ/Tt1YHNAOQkvwEdc8wVWxG/bpIHisnMEng06tzN+oKxTu5erE2K+
+	YTWOZMBqK9C+pWWjxdEJnIe8vUDFqJkaK5sn2RgRojuhJA8lEGQVTNCHdGUz1a4YylBcmY
+	0L9t3nqPl37PFUX401o65DsrL5hrOZM=
+Date: Mon, 17 Feb 2025 16:18:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Marco Pagani <marco.pagani@linux.dev>
+Subject: Re: [RFC v2 1/1] fpga-region: Add generic IOCTL interface for runtime
+ FPGA programming
+To: Xu Yilun <yilun.xu@linux.intel.com>
+Cc: Nava kishore Manne <nava.kishore.manne@amd.com>, git@amd.com,
+ mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+ robh@kernel.org, saravanak@google.com, linux-kernel@vger.kernel.org,
+ linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
+References: <20241029091734.3288005-1-nava.kishore.manne@amd.com>
+ <20241029091734.3288005-2-nava.kishore.manne@amd.com>
+ <ZzwQrYeWVF6cRtgA@yilunxu-OptiPlex-7050>
+ <9bfaf1cf-3313-4cb3-9963-2b4bad2d3165@redhat.com>
+ <Z0fIiQPCS69O2d/n@yilunxu-OptiPlex-7050>
+ <00e5c1c1-a98e-4360-b7e5-ffaa384e1036@linux.dev>
+ <Z6RRAXocxWHsZZLF@yilunxu-OptiPlex-7050>
+Content-Language: en-US
+In-Reply-To: <Z6RRAXocxWHsZZLF@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Enabling the possibility of supporting multiple
-PCIe devices from Intel Altera FPGA but with different
-device ids. The current driver registers itself
-to all device IDs which causes an incorrect driver
-association.
 
-Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
-Signed-off-by: Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@intel.com>
----
- drivers/fpga/altera-cvp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-index 5af0bd33890c..97e9d4d981ad 100644
---- a/drivers/fpga/altera-cvp.c
-+++ b/drivers/fpga/altera-cvp.c
-@@ -560,7 +560,7 @@ static int altera_cvp_probe(struct pci_dev *pdev,
- static void altera_cvp_remove(struct pci_dev *pdev);
+On 06/02/25 07:04, Xu Yilun wrote:
+>>>> I'm currently working on an RFC to propose a rework of the fpga
+>>>> subsystem in order to make it more aligned with the device model. One of
+>>>> the ideas I'm experimenting with is having a bus (struct bus_type) for
+>>>> fpga regions (devices) so that we can have region drivers that could
+>>>> handle internal device enumeration/management whenever a new region is
+>>>> configured on the fabric. Does this make sense in your opinions?
+>>>
+>>> mm.. I didn't fully understand the need to have a region driver, what's
+>>> the issue to solve?
+>>>
+>>
+>> Sorry for the late reply. The general idea is to handle regions in a way
+>> that is more aligned with the device model without having to resort to
+>> extra ops and additional devices.
+>>
+>> Having an fpga bus would allow us to handle enumeration using proper
+>> region drivers (in the device model sense of the term, i.e., struct
+>> device_driver) instead of derived region devices.
+>>
+>> On second thought, I think having a reconfiguration interface at the
+>> fpga manager level is sounder than having it at the region level (one
+>> for each region).
+> 
+> I don't think so. A firmware image may contain enumeration info, e.g.
+> of-fpga-region. And I think the fpga-region should parse these
+> enumeration info rather than fpga manager. fpga manager should only deal
+> with content writing stuff and not be exposed to user.
+
+I agree with that. In my proposal, the fpga manager should be
+responsible only for writing the image into the configuration memory
+and allocating region devices. In-region enumeration should be handled by
+the region drivers.
+
+My worry with having one reconfiguration interface for each region is
+that it does not reflect how the hardware works. To my knowledge, all
+major FPGA implementations use a DMA engine (controlled by the fpga
+manager) that performs the reconfiguration through a single port. So,
+having one interface per region might be conceptually confusing and give
+the impression that it is possible to configure regions independently in
+parallel.
+
+>> With that in place, the fpga manager could request a firmware image,
+>> parse it, write the content into the fpga configuration memory, and then
+>> instantiate the region devices and add them to its fpga bus. Then, if
+> 
+> I think an fpga-region is always there no matter it is cleared, being
+> reprogrammed, or working. So I don't think an fpga-region needs to be
+> re-instantated. The sub devices inside fpga-region needs
+> re-instantating. That's also why I'm hesitating to fpga bus.
+
+I think one of the issues with the current subsystem architecture is
+that it coalesces two cases: full and partial images. With partial
+images, it makes sense to keep the region devices and rerun the internal
+enumeration. With full images, I believe it makes sense to clear and
+reallocate new devices to set a new region tree.
  
- static struct pci_device_id altera_cvp_id_tbl[] = {
--	{ PCI_VDEVICE(ALTERA, PCI_ANY_ID) },
-+	{ PCI_VDEVICE(ALTERA, 0x00) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(pci, altera_cvp_id_tbl);
--- 
-2.25.1
+> Thanks,
+> Yilun
+> 
+>> there is a match, a specific region driver can handle the enumeration
+>> within the new region.
+>>
+>> What do you think?
+
+Thanks,
+Marco
 
 
