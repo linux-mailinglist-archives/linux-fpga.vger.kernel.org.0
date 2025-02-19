@@ -1,144 +1,105 @@
-Return-Path: <linux-fpga+bounces-1055-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1056-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A513A38764
-	for <lists+linux-fpga@lfdr.de>; Mon, 17 Feb 2025 16:19:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FCBEA3C5F9
+	for <lists+linux-fpga@lfdr.de>; Wed, 19 Feb 2025 18:20:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F4253B1CB2
-	for <lists+linux-fpga@lfdr.de>; Mon, 17 Feb 2025 15:18:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3244188973E
+	for <lists+linux-fpga@lfdr.de>; Wed, 19 Feb 2025 17:20:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8D721CC71;
-	Mon, 17 Feb 2025 15:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08F741FCFD3;
+	Wed, 19 Feb 2025 17:20:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LT078Jkm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pa8cGCiH"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7B42223719
-	for <linux-fpga@vger.kernel.org>; Mon, 17 Feb 2025 15:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1638286284;
+	Wed, 19 Feb 2025 17:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739805525; cv=none; b=UyXP29mLze40R03ZZhbxxXOR0ibiGKRySx176NFa1pSBN9O01ZifOpJqsDSqWvNpMeJ9didsZ9dtlSE4FB6B6DkS0JUm4HfjNVY3ESlF4WurIYVw8oqo+9mBLaXsnUKD2wDmVH2cb9Ni7a5p4rtC4na1Bh9OIDmFTAegltivTUY=
+	t=1739985617; cv=none; b=BIzCetLulOlDoDN+2uw1/Vgba+NmgnCwgRCvrfeecFtBzG6ac00ZR4uvq9GKNheEBL6nLrQ3dXPvOUUKAe2ILBZCLQFPc9moERUscCBBj4puONTCAx/DBM51stLpHKXbz+VrB/ES+/4PfimUWdhvEIetjBk/BH/txN/RQmjXTp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739805525; c=relaxed/simple;
-	bh=rB1i4l2/XKVbabCGkwc2C9eIg8JP7iC5IOAbL9NDzD0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=T2CgI9RBfrSP0z1EL1BBgtR1WrRyFT14z/k5laCiH8Kk+MI+8XPopAuG2iHJAwRsZbFtBIaxAJTvTXltYatDZSRrdOdORbeCejfBLY8aFjdmVO8uhhuACpg7YQuG9sHqaysb9Yi6cAq90f24wWjkmOLQVaX/qQG1nkSlo16FrL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LT078Jkm; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <a51c0c24-fd21-42b3-9c4a-39ebc0751f03@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1739805520;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SwKI7hWDzcyDyvWSyNtpef/iRsXjDY6W/TTp8ONOqXE=;
-	b=LT078JkmIhf9Ya+xQQ/Tt1YHNAOQkvwEdc8wVWxG/bpIHisnMEng06tzN+oKxTu5erE2K+
-	YTWOZMBqK9C+pWWjxdEJnIe8vUDFqJkaK5sn2RgRojuhJA8lEGQVTNCHdGUz1a4YylBcmY
-	0L9t3nqPl37PFUX401o65DsrL5hrOZM=
-Date: Mon, 17 Feb 2025 16:18:36 +0100
+	s=arc-20240116; t=1739985617; c=relaxed/simple;
+	bh=lhlb0oWuR17RNf0Vp0EHzjC/aagOic5Ps7J0XIlnC4o=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DV+h0mB33XteaITzhCnKmT6MSNsRUKt6kLXhxccoZeBY20rUpT9zWkr4TBJUSf9zrsCwPTaeVL+OvYV0/pqPMRcalwPq4TuZPBQxxufsGe2LNojC2CD6eGoz/SDZ+/eQIMLnTdtQ4PsyhLseC17DDhCFxtHuCSb3lGMcTJLRpGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pa8cGCiH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AB4ACC4CED1;
+	Wed, 19 Feb 2025 17:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739985617;
+	bh=lhlb0oWuR17RNf0Vp0EHzjC/aagOic5Ps7J0XIlnC4o=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Pa8cGCiHaTjL+YhKQKoIToWtNMrLwGZhWDWegbQiP3xTvPhOh1NQiw6IUvYs66+MM
+	 Mj3NRp8YSgMRCW24dpbFa9raqPOkCUY6W9TOgWjaFPs0cI0gegHpeh6+ws3cqEo8wc
+	 8iQeJB6LB6X3kekBk1n0Cus9CUMcH4L7KVBrEQyhlDqW3j1tUJj8d22Rc3JnypjkaQ
+	 5vz6BtkQVXFCV5JgJkuvOUYqa3xq9mTbJmphxdEN03zvmJpZK7CfydPJRiCamC3K3z
+	 Mz6IGl396/rd0ZDhilFi9qT1YdE2Fpeadnviyu3r7BFn6SJCpCoV7Q+tcjQi1AshQx
+	 AOrBW+CU5Drjg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3418C021AA;
+	Wed, 19 Feb 2025 17:20:17 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH 0/6] clk: clk-axi-clkgen: improvements and some fixes
+Date: Wed, 19 Feb 2025 17:20:18 +0000
+Message-Id: <20250219-dev-axi-clkgen-limits-v1-0-26f7ef14cd9c@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Marco Pagani <marco.pagani@linux.dev>
-Subject: Re: [RFC v2 1/1] fpga-region: Add generic IOCTL interface for runtime
- FPGA programming
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: Nava kishore Manne <nava.kishore.manne@amd.com>, git@amd.com,
- mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
- robh@kernel.org, saravanak@google.com, linux-kernel@vger.kernel.org,
- linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
-References: <20241029091734.3288005-1-nava.kishore.manne@amd.com>
- <20241029091734.3288005-2-nava.kishore.manne@amd.com>
- <ZzwQrYeWVF6cRtgA@yilunxu-OptiPlex-7050>
- <9bfaf1cf-3313-4cb3-9963-2b4bad2d3165@redhat.com>
- <Z0fIiQPCS69O2d/n@yilunxu-OptiPlex-7050>
- <00e5c1c1-a98e-4360-b7e5-ffaa384e1036@linux.dev>
- <Z6RRAXocxWHsZZLF@yilunxu-OptiPlex-7050>
-Content-Language: en-US
-In-Reply-To: <Z6RRAXocxWHsZZLF@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIANIStmcC/x3MQQqAIBBA0avErBtQw4iuEi1KxxoyC40IpLsnL
+ d/i/wyJIlOCvsoQ6ebERyiQdQVmncJCyLYYlFBaKNmhpRunh9H4baGAnne+EraNm4XRZJpuhtK
+ ekRw//3cY3/cDW3y8mWcAAAA=
+X-Change-ID: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+To: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org
+Cc: Stephen Boyd <sboyd@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1739985620; l=872;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=lhlb0oWuR17RNf0Vp0EHzjC/aagOic5Ps7J0XIlnC4o=;
+ b=gAGHHx90yruTZFfFG9Pro8Lq67D9hlStPBzCz/mR0e8R52paS8QpFwcLUfWcEuFb8xNCG79jR
+ 0WROiYBw1u/CS5Fyw5cwyNlHkh8oUBl0rVA8fs6P69TLTllJtp6+Gj9
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
+This series starts with a small fix and then a bunch of small
+improvements. The main change though is to allow detecting of
+struct axi_clkgen_limits during probe().
 
+---
+Nuno Sá (6):
+      clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
+      clk: clk-axi-clkgen: make sure to include mod_devicetable.h
+      include: fpga: adi-axi-common: add new helper macros
+      clk: clk-axi-clkgen: detect axi_clkgen_limits at runtime
+      clk: clk-axi-clkgen move to min/max()
+      clk: clk-axi-clkgen: fix coding style issues
 
-On 06/02/25 07:04, Xu Yilun wrote:
->>>> I'm currently working on an RFC to propose a rework of the fpga
->>>> subsystem in order to make it more aligned with the device model. One of
->>>> the ideas I'm experimenting with is having a bus (struct bus_type) for
->>>> fpga regions (devices) so that we can have region drivers that could
->>>> handle internal device enumeration/management whenever a new region is
->>>> configured on the fabric. Does this make sense in your opinions?
->>>
->>> mm.. I didn't fully understand the need to have a region driver, what's
->>> the issue to solve?
->>>
->>
->> Sorry for the late reply. The general idea is to handle regions in a way
->> that is more aligned with the device model without having to resort to
->> extra ops and additional devices.
->>
->> Having an fpga bus would allow us to handle enumeration using proper
->> region drivers (in the device model sense of the term, i.e., struct
->> device_driver) instead of derived region devices.
->>
->> On second thought, I think having a reconfiguration interface at the
->> fpga manager level is sounder than having it at the region level (one
->> for each region).
-> 
-> I don't think so. A firmware image may contain enumeration info, e.g.
-> of-fpga-region. And I think the fpga-region should parse these
-> enumeration info rather than fpga manager. fpga manager should only deal
-> with content writing stuff and not be exposed to user.
+ drivers/clk/clk-axi-clkgen.c        | 149 +++++++++++++++++++++++++-----------
+ include/linux/fpga/adi-axi-common.h |  35 +++++++++
+ 2 files changed, 141 insertions(+), 43 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+--
 
-I agree with that. In my proposal, the fpga manager should be
-responsible only for writing the image into the configuration memory
-and allocating region devices. In-region enumeration should be handled by
-the region drivers.
+Thanks!
+- Nuno Sá
 
-My worry with having one reconfiguration interface for each region is
-that it does not reflect how the hardware works. To my knowledge, all
-major FPGA implementations use a DMA engine (controlled by the fpga
-manager) that performs the reconfiguration through a single port. So,
-having one interface per region might be conceptually confusing and give
-the impression that it is possible to configure regions independently in
-parallel.
-
->> With that in place, the fpga manager could request a firmware image,
->> parse it, write the content into the fpga configuration memory, and then
->> instantiate the region devices and add them to its fpga bus. Then, if
-> 
-> I think an fpga-region is always there no matter it is cleared, being
-> reprogrammed, or working. So I don't think an fpga-region needs to be
-> re-instantated. The sub devices inside fpga-region needs
-> re-instantating. That's also why I'm hesitating to fpga bus.
-
-I think one of the issues with the current subsystem architecture is
-that it coalesces two cases: full and partial images. With partial
-images, it makes sense to keep the region devices and rerun the internal
-enumeration. With full images, I believe it makes sense to clear and
-reallocate new devices to set a new region tree.
- 
-> Thanks,
-> Yilun
-> 
->> there is a match, a specific region driver can handle the enumeration
->> within the new region.
->>
->> What do you think?
-
-Thanks,
-Marco
 
 
