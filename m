@@ -1,127 +1,138 @@
-Return-Path: <linux-fpga+bounces-1066-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1067-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E5A6A482D2
-	for <lists+linux-fpga@lfdr.de>; Thu, 27 Feb 2025 16:24:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65CA2A495B5
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Feb 2025 10:47:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34F3D3A7FFD
-	for <lists+linux-fpga@lfdr.de>; Thu, 27 Feb 2025 15:23:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71BD316385F
+	for <lists+linux-fpga@lfdr.de>; Fri, 28 Feb 2025 09:47:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0C5D26B090;
-	Thu, 27 Feb 2025 15:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ADA3256C8D;
+	Fri, 28 Feb 2025 09:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fQQnLoZm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jf/zCI9U"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A3225E473;
-	Thu, 27 Feb 2025 15:23:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2511DE4FA;
+	Fri, 28 Feb 2025 09:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740669838; cv=none; b=fed1eIewVVscYpyj3LZ59FPXJ2ZgqbXBfe5Q7d4Yimc05hd2+vfcvxzcvk+3wQ4i0VsCPcMsHR915wu4izpYYmBonXOz+qoWf1pdsNIIKgvRmj7HGrNjf7330mUfuGh2k3KGASYpK1P4mE0ZIiYKvWpJqvHj+eREIPNf3bKLIDw=
+	t=1740736061; cv=none; b=e2Z0e4BhBEtix7qPnxlNPjEDcp8IhQOIz4QCsgT0SoR9WbYw6b4A+kG9e7Y9YP+WbLxc5iESRxwtdo9Who8vC7jDgEwXbtOG9N3OVdQQpLZzQAW+18/glHah3mE0mTDd1HJS8FoMakRYFIPmVHMTjnrSCpSqFO4MHbu+iZfAqHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740669838; c=relaxed/simple;
-	bh=hEZgWF5jcuzJTlTXwHCEelOsenWw00az0sbOKJzuIjs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d0B85kIzQAcTyIBO2kpKh1fV+qujcOy7I6SS2OH5wuWS+IYOtBg2zwQHzrcmuxfBDHelQ/thRy7Rklxp251zcChnwsGnFGfqI0fPqD4R8bliGDb7umzNkdjmf5PYFtOGpC/sI3TirVwIs1hOK+65OBvvGRQVWO5sakV+1l0a5bU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fQQnLoZm; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740669837; x=1772205837;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hEZgWF5jcuzJTlTXwHCEelOsenWw00az0sbOKJzuIjs=;
-  b=fQQnLoZmKdaNfp3Ex90awzrYz1/XY9fjtuNzgBIJ1xB/PQSOHtdexhv+
-   FdPMfdC2MS5HRmLTizaaHWtGoonrZ3twRBboGr5vMf2HiyTzQXDYiNhd4
-   rbd6UASrbgpwS9JE9gaLJ/MwF0sXD/XoBI9hFsf+2Oj/arxjfmHitK606
-   scIthbG4P2leXgpJMgDdOn7i3bVzLgOxNb0tgt3sEfYO8LQ4FRBZjVV96
-   dOi1hmJ+7H6AFHERN/bFU2pRm8aAA9WiT+EIJafktn7FseKSmi4ixYFhd
-   M2jQLAR/dX1SAd6l77map2WJS+y9gicXdW5Swi4qkbBCYp3nJ/ctXt9Fd
-   Q==;
-X-CSE-ConnectionGUID: csLU+rl1TSOLlAwVrDpKhw==
-X-CSE-MsgGUID: hnN20fSdS2G2zceZtg8X4g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="40742561"
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="40742561"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 07:23:57 -0800
-X-CSE-ConnectionGUID: lz52O0lzRYyBZ25jMHRwTQ==
-X-CSE-MsgGUID: dkDwAZhSRGq/oPn17OU6/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="117568615"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 07:23:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tnfjo-0000000FdE8-2tBf;
-	Thu, 27 Feb 2025 17:23:48 +0200
-Date: Thu, 27 Feb 2025 17:23:48 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Richard Cochran <richardcochran@gmail.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	Arnd Bergmann <arnd@arndb.de>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Tianfei Zhang <tianfei.zhang@intel.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Calvin Owens <calvin@wbinvd.org>,
-	Philipp Stanner <pstanner@redhat.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-Subject: Re: [PATCH] RFC: ptp: add comment about register access race
-Message-ID: <Z8CDhIN5vhcSm1ge@smile.fi.intel.com>
-References: <20250227141749.3767032-1-arnd@kernel.org>
+	s=arc-20240116; t=1740736061; c=relaxed/simple;
+	bh=QYakFBEzWGJOW8oj2Cse/b47o6dWaHYM79yZLFoU59U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tkz+A8L0NYanZlUlTJu3FV8+j1l4SYHiRiBruiWXFziOrT9VWs3Xu0AEfPS+8kYZ/HtzMpCrDmmWg/6YH4gaXUJ1JuWpH4EdUQcFmKWE8npfNi11bbnCpyI7mz5ph1nTgApHTeEKYPu1xJNVwU9Kvg4QMlJo7iIvNGXr3BHtbRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jf/zCI9U; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e04861e7a6so3080033a12.1;
+        Fri, 28 Feb 2025 01:47:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740736057; x=1741340857; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vDGMfbuMuR3kBQiI4rogi0ibRohl5mipY0hH/p5U0xU=;
+        b=Jf/zCI9U26wkIdganPzairN3ySIE5k3Zg5Hvh1ymTYtCe1ghCHrFd4KS0eIgZE+cLL
+         xADTZMlfQUTyInarCy9HOY/e6xuokJpgnmFQNPvC2BmpG8AauqeEbA/jNIb3Tq7LsUr3
+         CsvOIZKxMr/y/88StC0QftN+xr35RyxDuuyhOLD7nuoSy5r7JNiU2lFsnYun3uEEn6Ib
+         EqEVobl2nVDtZgbU9ioh/D8QiicG2dH4UMQia7cDsfa4tqecd3uWV4PsTFmtnWRZiDQZ
+         kDLwy35VPA/xxt3HeJVNEh26rS/w0V/7zaYvKk7HG5ZHbOaOCQZJkjoA8ZqycbSMCU5t
+         kIfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740736057; x=1741340857;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vDGMfbuMuR3kBQiI4rogi0ibRohl5mipY0hH/p5U0xU=;
+        b=jtglKm/LI7MH7LZMW5e42CWEX0VUPh3Mi3I43aZcf8mNc/3GdlaIBvZbNaJ2vBfukf
+         7OeGALTpx0FFlBTBWeFWAoXkmSVkkAndicrEeVCYzS7qMGeg3d4zNQsnh/XYAxXZluFg
+         ap5+/ofq3DyTbTQGD8d8FU4q65uKrulNyun7Zz1UNgKewJZ5h2GnNy2HXaIh9J8iBRQt
+         oai4pOK4n/1TPMOesx05tqhQQBvo4KLHQlkk8Fc7iDIq9jClvDZKF4z+uPA2JFHqFjcE
+         z48Jqdzix+4hIBK91Q5zq2nppfiIN2GbZSjCP19FfNdMxYm16+AzMM8szkq5YL3QulFL
+         Bp6w==
+X-Forwarded-Encrypted: i=1; AJvYcCW0woCPYYDfT2vB69W9/CsJ5oQuAwhhM8YPAfI5n5guqAlbazHAVW0wY/sxF3mcQkGEoUviZNInbw+vRgTE@vger.kernel.org, AJvYcCWSYY0gptNxlTtoyqR7Tzr6wu9FqbHNtBODoq59DqSAe7VUtcrcCPJs4DWh1q49QwoL9jD3VIYYrM1R@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxxq1VHk2wux2u6MhTGVJ7qFm0Ij2IqRz2pkdcKJEn/BR7xVuOM
+	3PYzF0XNo85dBLWwy9FWSuLom6oUBURYn9c2xtd9paMPstSok34WBQn27oBC
+X-Gm-Gg: ASbGncu4kPiEagXtWSIsRXa6oJmud34hf0plLz7qAezf/XVoFejl8jbLYbCrv+9S/2v
+	2kXK7VTfcqpLelR+IBjwdOHNtsmoYJ9wbYHnt8hwD5WL3KYfypJxx6etgRr3lF661yvfPlZMrJo
+	c8F1rxed4ZkENuTcMP77iNeXnOGiMavddaY2HTihci1yPezfdOjclu+Cz8ZkPKSaA49NLQ//Zaz
+	8v81lZPQrzwpiqjOjnP/bcKaF0LJPY0OIXApJmVr99eHVLK4OXLh3Trxy2yd+YbTAWc5VBi8JFG
+	yemGBpAIHSeIQHfwIkqMfUV2OzP0y4BQhNlLKKJd1JZKbX2ObFbe2vgFxG1n7/uxGP1N8i8eJnn
+	NCAOPG0o/U93MfsrQR4xfPA==
+X-Google-Smtp-Source: AGHT+IEMlhGXm6Y/JnTOzt9A8nMyh8wvCRZshv6TEnEsqVpAdgmtrARjWrSl+UYBxnKInte+nizI7g==
+X-Received: by 2002:a17:907:7f91:b0:ab7:c358:2fec with SMTP id a640c23a62f3a-abf25da05d8mr307714266b.5.1740736056852;
+        Fri, 28 Feb 2025 01:47:36 -0800 (PST)
+Received: from iris-Ian.fritz.box (p200300eb5f0300004dcedf2362c26f55.dip0.t-ipconnect.de. [2003:eb:5f03:0:4dce:df23:62c2:6f55])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf1a60de5esm209289566b.100.2025.02.28.01.47.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Feb 2025 01:47:36 -0800 (PST)
+From: iansdannapel@gmail.com
+To: linux-fpga@vger.kernel.org
+Cc: Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+	Aradhya Bhatia <a-bhatia1@ti.com>,
+	Ian Dannapel <iansdannapel@gmail.com>,
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [v4 0/3] Add Efinix FPGA SPI programming support
+Date: Fri, 28 Feb 2025 10:47:29 +0100
+Message-ID: <20250228094732.54642-1-iansdannapel@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250227141749.3767032-1-arnd@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Feb 27, 2025 at 03:17:27PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> While reviewing a patch to the ioread64_hi_lo() helpers, I noticed
-> that there are several PTP drivers that use multiple register reads
-> to access a 64-bit hardware register in a racy way.
-> 
-> There are usually safe ways of doing this, but at least these four
-> drivers do that.  A third register read obviously makes the hardware
-> access 50% slower. If the low word counds nanoseconds and a single
-> register read takes on the order of 1µs, the resulting value is
-> wrong in one of 4 million cases, which is pretty rare but common
-> enough that it would be observed in practice.
+From: Ian Dannapel <iansdannapel@gmail.com>
 
-...
+This patch series introduces support for Efinix FPGA devices
+through SPI-based programming.
 
-> Sorry I hadn't sent this out as a proper patch so far. Any ideas
-> what we should do here?
+Currently, only Trion devices are tested. Topaz and Titanium series are 
+theoretically supported because of the similarity with Trion, but the
+driver is only documentation based.
 
-Actually this reminds me one of the discussion where it was some interesting
-HW design that latches the value on the first read of _low_ part (IIRC), but
-I might be mistaken with the details.
+Changes since v3:
+- major rework on the driver spi write approach
+    - indirect CS assert using spi_transfer instead of duplicating the
+  SPI controller property
+  - locked SPI bus transfer to avoid possible conflicts with other
+  devices on the bus
+- file name and compatible strings renamed to better match device
+- minor improvements/fixes
 
-That said, it's from HW to HW, it might be race-less in some cases.
+
+Ian Dannapel (3):
+  dt-bindings: vendor-prefix: Add prefix for Efinix, Inc.
+  dt-bindings: fpga: Add Efinix SPI programming bindings
+  fpga-mgr: Add Efinix SPI programming driver
+
+ .../devicetree/bindings/fpga/efinix,spi.yaml  |  81 +++++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ drivers/fpga/Kconfig                          |   7 +
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/efinix-spi.c                     | 212 ++++++++++++++++++
+ 5 files changed, 303 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/efinix,spi.yaml
+ create mode 100644 drivers/fpga/efinix-spi.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0
 
 
