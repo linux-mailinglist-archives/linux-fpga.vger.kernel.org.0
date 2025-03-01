@@ -1,48 +1,48 @@
-Return-Path: <linux-fpga+bounces-1078-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1079-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 853C3A4AB1F
-	for <lists+linux-fpga@lfdr.de>; Sat,  1 Mar 2025 14:10:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53FBDA4AB21
+	for <lists+linux-fpga@lfdr.de>; Sat,  1 Mar 2025 14:13:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3710F3B30AE
-	for <lists+linux-fpga@lfdr.de>; Sat,  1 Mar 2025 13:10:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D0011895522
+	for <lists+linux-fpga@lfdr.de>; Sat,  1 Mar 2025 13:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9081DED5C;
-	Sat,  1 Mar 2025 13:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61C0B1DF265;
+	Sat,  1 Mar 2025 13:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpXhEZzi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RmcMGo3U"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14051E4AB;
-	Sat,  1 Mar 2025 13:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8BA1DEFEE;
+	Sat,  1 Mar 2025 13:13:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740834647; cv=none; b=K+BjN6lP+APpyFguqlmJpTSgHLF2Lx6mYYLgvDNDTIVtvX7zWHEL7FcTKUSUp0BnI9zWtpK6G2DcahdWgGQaoXo9emDlHQBFnFSCxMhUjxRphH6LemG1E3HltNGLk3zUkpa43REOTaFw390pw4fXlvOhSa90hl5tLHATb4LKJYA=
+	t=1740834825; cv=none; b=GIV3NeRvY/g/q+ih8iko8/QrIwlxLSiZLd+hFCLbz5zlXa1ImjO5S6bMgD4rVAUQ945pDTOPVgIldSX13HeEdMM28DYTE92VgpFr4Vq+xJf8C0jZ8HtoR1OF1C4kkQAdj8auqlf/Wc2uxG62gjz7t/eBqePhorJQ/Vk5oHDkEQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740834647; c=relaxed/simple;
-	bh=dhn3QybKzy5AjNFBtu98HuvsYEj6NZ75fjhG99G+VBI=;
+	s=arc-20240116; t=1740834825; c=relaxed/simple;
+	bh=YfxsKJ5+yxq8wyJbCuPcN6CZ0Y0RsZRQOSZk7hpnJm0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OThQ8sTpcltNWq808UrhattFZ/h0r/L5KBS5pMmTdJXT3Ml93rdb0BDeIMdsUthRTus18i6tK0q4qNrW9ZMSUv4fLuPNaGRlMFTOiQxGZcn8hrP6wTXirnfnS9aOekjr8TdsL7X8LRJSMIkh0/vGn66LxCwCw4+CP3fB84t+Xw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpXhEZzi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7F7DC4CEDD;
-	Sat,  1 Mar 2025 13:10:41 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=kjO4UrGaII5fXRQ9eC5ohWI7y0huLLeZ06cuqdCAIwKTP0G+nomIX0u4O/ZtVIEn2H/WL+FGc+D3itU/iQVRb05O41YZo28NFhocmvwNVzPHjyD548rgRurhcd5nnVUd/DwK37sJKL0PKB63QNmSr2KC8oCMZgkLwD/3NnVJfWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RmcMGo3U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 573F8C4CEDD;
+	Sat,  1 Mar 2025 13:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740834647;
-	bh=dhn3QybKzy5AjNFBtu98HuvsYEj6NZ75fjhG99G+VBI=;
+	s=k20201202; t=1740834824;
+	bh=YfxsKJ5+yxq8wyJbCuPcN6CZ0Y0RsZRQOSZk7hpnJm0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LpXhEZzimrtFnAxfMU+dJlEZ558N7FlFd5I+djzGP5TIe+vFWRAoJ3zmZwSgKYmbY
-	 nRy3wqsVS/n0V53Ug8j9Uriq0CMgfcMnOkUFR9A1poLLALVnAynwx48YNkSJYkHvBe
-	 Q+4OczDyKeNOsVFI2XUVfKuZasbBiaPgMNFur2jfcHmGezkM583qm2ueTNvdDov2Tu
-	 rl6DxNG0YQHSkmsKf59il8xs2gYMZsYgL9/+oyzfy01G6dS3oJU3CUYgPsNNS1nHmZ
-	 J+Ex2loyMwKOHYfO+IWHiGhItPXZjPqBo1rrHIipzDVL2dcHsgftVU92RKoz+0bsLh
-	 aUWK3/ohqn+aw==
-Message-ID: <cf8b754e-f4b1-40f2-86df-e1f0cbf07189@kernel.org>
-Date: Sat, 1 Mar 2025 14:10:38 +0100
+	b=RmcMGo3Uo1oat5nsMFmmbFvc1zZPoiWg4Om8TxWw+JFH/yMjgWJvOSauHKoLqzoWg
+	 7cvtI3b+3U51++mbM32U0I7FAhcIWJmaaGjEuAR1mF7j3t32xlIiDtflUvbTJA9G+O
+	 3oP1szLNSD0HDgDMG0YFvglAaOpEIHadR3jfxgq0WflJw9sVyZnwjygtE53vsjG0nW
+	 DsYAd7zK46GzC7vF1WX8NT4EOLERIrQvt1lIe0dj0pqtdoZqk0nh2oh8R0P+8qPqxp
+	 h/LBOh81bZXAxtqh1Lr7gQDdSdRBy+t91wsCGA+ZZ4gAIWD+NzR7yP4jkbyxkvCz/v
+	 ioc8l2b+Mc2GQ==
+Message-ID: <e08dbe2b-6f0c-4021-9d6b-f2205bd1c273@kernel.org>
+Date: Sat, 1 Mar 2025 14:13:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [v4 1/3] dt-bindings: vendor-prefix: Add prefix for Efinix, Inc.
+Subject: Re: [v4 2/3] dt-bindings: fpga: Add Efinix SPI programming bindings
 To: iansdannapel@gmail.com, linux-fpga@vger.kernel.org
 Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
  Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
@@ -63,7 +63,7 @@ Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
  "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
  <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
 References: <20250228094732.54642-1-iansdannapel@gmail.com>
- <20250228094732.54642-2-iansdannapel@gmail.com>
+ <20250228094732.54642-3-iansdannapel@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,36 +109,35 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250228094732.54642-2-iansdannapel@gmail.com>
+In-Reply-To: <20250228094732.54642-3-iansdannapel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 28/02/2025 10:47, iansdannapel@gmail.com wrote:
-> From: Ian Dannapel <iansdannapel@gmail.com>
-> 
-> Add entry for Efinix, Inc. (https://www.efinixinc.com/)
-> 
-> Signed-off-by: Ian Dannapel <iansdannapel@gmail.com>
+> +
+> +  References:
+> +  - https://www.efinixinc.com/docs/an006-configuring-trion-fpgas-v6.3.pdf
+> +  - https://www.efinixinc.com/docs/an033-configuring-titanium-fpgas-v2.8.pdf
+> +  - https://www.efinixinc.com/docs/an061-configuring-topaz-fpgas-v1.1.pdf
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - efinix,trion-spi
+> +      - efinix,titanium-spi
+> +      - efinix,topaz-spi
 
-<form letter>
-This is a friendly reminder during the review process.
 
-It looks like you received a tag and forgot to add it.
+Same comments as before about compatibility. Address or implement.
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new versions
-of patchset, under or above your Signed-off-by tag, unless patch changed
-significantly (e.g. new properties added to the DT bindings). Tag is
-"received", when provided in a message replied to you on the mailing
-list. Tools like b4 can help here. However, there's no need to repost
-patches *only* to add the tags. The upstream maintainer will do that for
-tags received on the version they apply.
+> +      - efinix,fpga-spi
 
-Please read:
-https://elixir.bootlin.com/linux/v6.12-rc3/source/Documentation/process/submitting-patches.rst#L577
 
-If a tag was not added on purpose, please state why and what changed.
-</form letter>
+And this one is for which device? It is not even used.
+
 
 Best regards,
 Krzysztof
