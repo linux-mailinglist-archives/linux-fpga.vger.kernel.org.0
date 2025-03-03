@@ -1,122 +1,136 @@
-Return-Path: <linux-fpga+bounces-1098-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1099-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A93E7A4E70F
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 17:56:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82100A4EC5E
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 19:49:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4A4442371D
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 16:48:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E412718863B8
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 18:45:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2992356DC;
-	Tue,  4 Mar 2025 16:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2642E3368;
+	Tue,  4 Mar 2025 18:43:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m4we2YJ8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J1HPdinK"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
+Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2972261374
-	for <linux-fpga@vger.kernel.org>; Tue,  4 Mar 2025 16:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297A72E337A
+	for <linux-fpga@vger.kernel.org>; Tue,  4 Mar 2025 18:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.117
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741105597; cv=pass; b=iH0+sfVpf3XiQ6HnGedP5G15FKks6J6oI7YXuSiPL/6GUE4BM5QLYIzTnZ5HBprX8jyr7uyVsk7AcL8K7Yt5g6uFKHZWCyMNEUSeZJWKhodZqe73CmYUKWQE67QCtaQm/Ss4ZNpTDbn96EPWCD/Jc7Y3in/fw1P42083umMU9Dk=
+	t=1741113808; cv=fail; b=BkoZMjCn3r50Udtxxj7IBskFrXaZYS3Z5Rbmn5F7aSD+xikoBf9SJppgwdMU6dw3ZKSKvoRx74JlNgJAKqzmjYydy8GsyzCDTeb/reHXDlu5UOKuF4xgJI1iumnvTJQfM7UcmSw9McatkxQNjHc+0GZ3b3r1oxMwb6htI1yIZxk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741105597; c=relaxed/simple;
-	bh=dmWAA5A6KdZDZ5q6P5+UJ63tpLhJK4oP5t2qo+k2F0c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N+N8WCRpSAEnMJIzz0ifPv/n3EskuJMYbgEzPyqJz+2dRZmah5fV1glDZG9MdeM3OWL+Frkr0yV/nnPDmf9oQiJ+DXN3VSz6+crEcoGaDGU4YSc3oexi0wOIGfnsrSIQWw4F6QiXKzeVExj7uh3rqJE9PRLbTTI33f9/cy/AFm0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m4we2YJ8; arc=none smtp.client-ip=209.85.218.49; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; arc=pass smtp.client-ip=160.75.25.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1741113808; c=relaxed/simple;
+	bh=MRsuqGKDkpM+V3F9xTGFLKoSRBfvbpgCRGM3wSNsO4U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TpEBR7DGks7wAYoI8xfpieBTDe0blvB9cRxom6d1usNYJhd2GavlINRe+EhBZ+XUIeououQIrcZYbL6C6WumicNouOfhsxhXtn/+7lDW0TTES2/rDzf5EcGzjb5zfGX8eBiO/6KTrlO6pUJJmr6q1Ayg2XK2XjR0oyv1VcNMxec=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J1HPdinK reason="signature verification failed"; arc=none smtp.client-ip=192.198.163.15; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; arc=fail smtp.client-ip=160.75.25.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id 0723A40CF10A
-	for <linux-fpga@vger.kernel.org>; Tue,  4 Mar 2025 19:26:34 +0300 (+03)
+	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id 5948440D0500
+	for <linux-fpga@vger.kernel.org>; Tue,  4 Mar 2025 21:43:25 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=m4we2YJ8
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6gy51QPgzG388
-	for <linux-fpga@vger.kernel.org>; Tue,  4 Mar 2025 19:25:01 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6dS95ClZzFww0
+	for <linux-fpga@vger.kernel.org>; Tue,  4 Mar 2025 17:32:25 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id 4497C42760; Tue,  4 Mar 2025 19:24:49 +0300 (+03)
+	id 1E4A94272D; Tue,  4 Mar 2025 17:32:20 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m4we2YJ8
-X-Envelope-From: <linux-kernel+bounces-541684-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J1HPdinK
+X-Envelope-From: <linux-kernel+bounces-541107-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m4we2YJ8
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J1HPdinK
 Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id D06E54269A
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:17:18 +0300 (+03)
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id 6457F2DCE1
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:17:18 +0300 (+03)
+	by le2 (Postfix) with ESMTP id 1BCA441CBE
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:50:41 +0300 (+03)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id E6EFF2DCE5
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:50:40 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A371E3AA749
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:17:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7197B1892085
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 07:50:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 729B320F09B;
-	Mon,  3 Mar 2025 12:17:02 +0000 (UTC)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8161EEA49;
+	Mon,  3 Mar 2025 07:50:14 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4905C1E98E0;
-	Mon,  3 Mar 2025 12:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA561EE03D;
+	Mon,  3 Mar 2025 07:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741004219; cv=none; b=aXBOfUYtpW730HgXV97F0ET0LGbPhiZnq/KuarwjrwmwFLpU34VwXmyjQCwUsRZLu/niATOJEKYmOPcVjBEy9DHH8WRTv5IY77C/cUmlW86/Psx5wbKzUAsKAxZXg8sVPGFsgtQhWP3pFRwhtR1okkeEAq5rtGeOnygt6+275mg=
+	t=1740988211; cv=none; b=IQCPhjwz0kTcfBvoFS1hpOpl5Whi8VJo4kgLfEhmsT7MnpDbs7GNkATOI2l9r0e4zvXmbJXXDARu2L0ynFb8YVyBrU7InhDMb0r6HelWHAU4qz3im0J/wAADYGzJu9uWe9cueNGaWd9/JB+8CPpG8tL3qeAPZ65qHF7g+BwWJ0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741004219; c=relaxed/simple;
-	bh=dmWAA5A6KdZDZ5q6P5+UJ63tpLhJK4oP5t2qo+k2F0c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A7BHONeMlgfoRTavlgSUPnqpktSixSfSqp3DgVRkFJycHmY7ZXmpysXlTAbY1Wq3mwnNqUy+YsafU35bPY7yJbg3Nue5zsOgvYaZgOaWD/dLdYdXnOjflfojoSiyP5DOSkZ0v9LO8Ww8kd39emJQ5qEqjGGOUD34vTzuUifLO6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m4we2YJ8; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ac0cc83e9adso133241466b.0;
-        Mon, 03 Mar 2025 04:16:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741004216; x=1741609016; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dmWAA5A6KdZDZ5q6P5+UJ63tpLhJK4oP5t2qo+k2F0c=;
-        b=m4we2YJ8Bxxenvp4BVM0dakxRhLiGfYv/UOCZdadEeggZEVZ4pxAnSWao6i2PG46ya
-         vt7f5kxAlq6rLNd8cSHzWR3Jp+C9HmD5CakO1NsSidkS6Pw8q5+9+pWS/2QwNHABJPn+
-         fMOcRleUHCg1DlxiFuP+C1Q8GAZJJqtzhrUXJYN6Z0204a5X1ay/jjOcEF2txIi4WkG8
-         faDJKw9CzsO4UWQhSYQqxZGs4+YGqJ2esN2F6ZWciDdVA7jgF9Y2kShEQ+UheEYPBOgE
-         6hTCCwKbdcrx5YWCZ+PY2nFPcc+BxsWJBQaBdcmJF5Mgk6OSEwqbAKQ23Co6TcUn3cC8
-         +14A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741004216; x=1741609016;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dmWAA5A6KdZDZ5q6P5+UJ63tpLhJK4oP5t2qo+k2F0c=;
-        b=WzrKini5nywGL10xR0GZNfwtHUMHpthbmWuNUq83X3y6ixVI6QBsq+czBbSmJpuC+r
-         eZS2XNGB4O8nnLHZHF1112WuT2WNccAyI1BulI9VdKFOZb5lKARmE+N4Qbu1FD0rdOty
-         yX/qLf0d4KloNWzj9AbWtBjEMHhqYYkVatJJAsGD99a0ZAfstfGCtX0PaUPQuDoRr4ed
-         BrFINf5KMlBkiSyn3tjKtuKK+VNw1gHc8/LKftF0ESEFU7ejqTqqu6ID7lmcXpygErJE
-         fpIzqZMsPvR+NPuL8Q4Z8WMMp5vp9u8bxvpyRIzOE8Vo4L/aaCEM7cRKMFG2W6lAK/Rm
-         LVmw==
-X-Forwarded-Encrypted: i=1; AJvYcCUNpW6Oiy+Uzc3d7zIgTO1swH+pshVjiJ/2hlniqLjaqN8a/N/AX/cKK5fmL8vpk++T6RhOLS7mLWab@vger.kernel.org, AJvYcCUrM9PXtIz33sLwyNIm1ricnxbqMSnjCLiUFMWOXjfJHMv2ISY7Q7wSiGm3/QlYO7P4ej8XRsO32juTccYR@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMNdP4E97CD2JyZDBAYRZ/SkFA9kY2OZrmkwA03YCCanYDCA2m
-	sgU+p3Hr3rZMbt/TA2Wq66Lz90TsQQIL37uewD6pANORcX91z8G/sujeHmZCA46W/P7EQKKQgDS
-	AKSCipodkJlpBFXDoXGyk2uDZshI=
-X-Gm-Gg: ASbGncs2ZpW4oEQT0eLGW7ZMtOleRaDFu0QGmZRhC4k8v6eFWVRebWfainHBs5ZARR/
-	FPrfP52wWb/NA9gYWH7HZDbp+99Fr890AeyNFbNhGSKJ85yivLHsDwadNcEQVNGpat2Hn+D6MWB
-	TfM8tnxzWVsr3HXdX7hADkkfoKKHHFzqh9ukp/T1bclpfGaDkbHpBRoabhYA==
-X-Google-Smtp-Source: AGHT+IEWsg75v/hQusO92wYbok77xTnTZBB5fIXFZNML07kPJN+1v9SRSHAjW0zlT+EHg8Qt0iPZnwIWSqsWtbaE2Es=
-X-Received: by 2002:a17:906:9993:b0:abf:52e1:2617 with SMTP id
- a640c23a62f3a-abf52e13b44mr681831766b.25.1741004216262; Mon, 03 Mar 2025
- 04:16:56 -0800 (PST)
+	s=arc-20240116; t=1740988211; c=relaxed/simple;
+	bh=4aoAkVkWJ9rE1k/obWZXGikyJB41caL0MMe9Y2MIi4Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VBtNB85Sw4WHQCCFloQtUBFZwUduLThz4/f8j2OGTLnprvV1lfZZYPYrBWyfOdlmhdAnKoe//R0Nh0uJJY9/XtFdDzhyWrXPl+MaoN7V8yaoFc+xPt6ZgNJKxmmJNpvwdeLxST/Z2FPAiZILqmzhCt7VsulGKldayMrST91EcWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J1HPdinK; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740988210; x=1772524210;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=4aoAkVkWJ9rE1k/obWZXGikyJB41caL0MMe9Y2MIi4Q=;
+  b=J1HPdinK/KHhwgQv/bWmTAhKcU/J6BvYcJoHelipf0r3WU49WMITlKHJ
+   FdWx1Vxm27zOYt8/7WFW3kE35CIjvAx/f2TYK5uGFBebI2Ow/Vbr38YFe
+   IgQy6sSqVYqGbQru/lInxN2PdqscsrlonqOAo39mepYr8FlliEhxkbmaO
+   G3lmxGw5CAebtk0fv8mfzGI+58cgvvVWLKH4eoIr6YEONXbq2zMHiODfN
+   m0sfKih4ovJSMndfK9ORG1aj5XISwMWeBmgNrVlU5JsFyQVE2E6eWDs6f
+   aczZIFCgYj7i0UUS+jEsPwjOnaGGSmaw0ETEI2DwuITULXkaAM/w2eaTv
+   Q==;
+X-CSE-ConnectionGUID: AXQRHB34QcOtqvi2QUpwsQ==
+X-CSE-MsgGUID: FAG3B9gWRW6NFITqEzXHLw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="41974308"
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="41974308"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 23:50:09 -0800
+X-CSE-ConnectionGUID: r4EkK5uLTOOHRZNDHcCvsQ==
+X-CSE-MsgGUID: oK5Me+PZRnKJQDwsK0W+pA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="117733442"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 23:50:04 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tp0Yr-0000000GkI5-1VwS;
+	Mon, 03 Mar 2025 09:50:01 +0200
+Date: Mon, 3 Mar 2025 09:50:01 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Richard Cochran <richardcochran@gmail.com>
+Cc: Arnd Bergmann <arnd@kernel.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Arnd Bergmann <arnd@arndb.de>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Tianfei Zhang <tianfei.zhang@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Calvin Owens <calvin@wbinvd.org>,
+	Philipp Stanner <pstanner@redhat.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
+Subject: Re: [PATCH] RFC: ptp: add comment about register access race
+Message-ID: <Z8VfKYMGEKhvluJV@smile.fi.intel.com>
+References: <20250227141749.3767032-1-arnd@kernel.org>
+ <Z8CDhIN5vhcSm1ge@smile.fi.intel.com>
+ <Z8TFrPv1oajA3H4V@hoboy.vegasvil.org>
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
@@ -124,43 +138,71 @@ List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250228094732.54642-1-iansdannapel@gmail.com>
- <20250228094732.54642-4-iansdannapel@gmail.com> <DS7PR12MB607055136A599EE9A1895414CDC92@DS7PR12MB6070.namprd12.prod.outlook.com>
-In-Reply-To: <DS7PR12MB607055136A599EE9A1895414CDC92@DS7PR12MB6070.namprd12.prod.outlook.com>
-From: Ian Dannapel <iansdannapel@gmail.com>
-Date: Mon, 3 Mar 2025 13:16:45 +0100
-X-Gm-Features: AQ5f1JqygE9vrhI-0VSmBZEWXAxe5mQktxDfRVX1U01SZtvfEewck3e2d6EJxis
-Message-ID: <CAKrir7iKLw6QUgywW1BM7JF2WK7m_fBEoOt1h7DS-+i7qH2ZKA@mail.gmail.com>
-Subject: Re: [v4 3/3] fpga-mgr: Add Efinix SPI programming driver
-To: "Manne, Nava kishore" <nava.kishore.manne@amd.com>
-Cc: "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>, Moritz Fischer <mdf@kernel.org>, 
-	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
-	Aradhya Bhatia <a-bhatia1@ti.com>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <Z8TFrPv1oajA3H4V@hoboy.vegasvil.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Transfer-Encoding: quoted-printable
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6gy51QPgzG388
+X-ITU-Libra-ESVA-ID: 4Z6dS95ClZzFww0
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741710327.48733@MDrPzlMS73jnqZz2cpFiFQ
+X-ITU-Libra-ESVA-Watermark: 1741714155.92947@TuFS2Q21DgzuvaXaS9e6Og
 X-ITU-MailScanner-SpamCheck: not spam
 
-Hi Navakishore, thanks for the review.
+On Sun, Mar 02, 2025 at 12:55:08PM -0800, Richard Cochran wrote:
+> On Thu, Feb 27, 2025 at 05:23:48PM +0200, Andy Shevchenko wrote:
+> > On Thu, Feb 27, 2025 at 03:17:27PM +0100, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > >=20
+> > > While reviewing a patch to the ioread64_hi_lo() helpers, I noticed
+> > > that there are several PTP drivers that use multiple register reads
+> > > to access a 64-bit hardware register in a racy way.
+> > >=20
+> > > There are usually safe ways of doing this, but at least these four
+> > > drivers do that.  A third register read obviously makes the hardwar=
+e
+> > > access 50% slower. If the low word counds nanoseconds and a single
+> > > register read takes on the order of 1=B5s, the resulting value is
+> > > wrong in one of 4 million cases, which is pretty rare but common
+> > > enough that it would be observed in practice.
+>=20
+> If the hardware does NOT latch the registers together, then the driver =
+must do:
+>=20
+>   1. hi1 =3D read hi
+>   2. low =3D read lo
+>   3. hi2 =3D read h1
+>   4. if (hi2 =3D=3D hi1 return (hi1 << 32) | low;
+>   5. goto step 1.
+>=20
+> This for correctness, and correctness > performance.
 
-On Mon, Mar 3, 2025 at 12:57=E2=80=AFPM Manne, Nava kishore
-<nava.kishore.manne@amd.com> wrote:
+Right.
 
-> > +MODULE_DESCRIPTION("Efinix FPGA SPI Programming Driver (Topaz/Titanium
-> > +untested)");
->
-> If untested, it might be useful to mark them as experimental in Kconfig.
-Is a separate Kconfig for that preferred or maybe just a note in the
-help description?
+> > > Sorry I hadn't sent this out as a proper patch so far. Any ideas
+> > > what we should do here?
+>=20
+> Need to have driver authors check the data sheet because ...
+>=20
+> > Actually this reminds me one of the discussion where it was some inte=
+resting
+> > HW design that latches the value on the first read of _low_ part (IIR=
+C), but
+> > I might be mistaken with the details.
+> >=20
+> > That said, it's from HW to HW, it might be race-less in some cases.
+>=20
+> ... of this.
 
-Regards, Ian
+Perhaps it's still good to have a comment, but rephrase it that the code =
+is
+questionable depending on the HW behaviour that needs to be checked.
+
+--=20
+With Best Regards,
+Andy Shevchenko
+
+
 
 
