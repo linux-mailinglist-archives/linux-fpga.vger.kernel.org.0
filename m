@@ -1,138 +1,167 @@
-Return-Path: <linux-fpga+bounces-1085-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1086-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14C2DA4BC45
-	for <lists+linux-fpga@lfdr.de>; Mon,  3 Mar 2025 11:32:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEAA9A4BC5C
+	for <lists+linux-fpga@lfdr.de>; Mon,  3 Mar 2025 11:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FEF218945B7
-	for <lists+linux-fpga@lfdr.de>; Mon,  3 Mar 2025 10:31:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88D4018851C7
+	for <lists+linux-fpga@lfdr.de>; Mon,  3 Mar 2025 10:34:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A1C01F181F;
-	Mon,  3 Mar 2025 10:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 646671F2BA4;
+	Mon,  3 Mar 2025 10:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hQBIRLo6"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="fN4m84i5"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F22B1D63F7;
-	Mon,  3 Mar 2025 10:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6C11F17E5;
+	Mon,  3 Mar 2025 10:32:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740997782; cv=none; b=ExJ+yMzRXQkE/lcEsxC+PaM2FmwiNI/o/m+OSuLVNXb67yWgadRrZcCFvfmyp9M5WQ1T8WEdrGDeDW1UCuOwertJVNp/okNbeON4KERsAFtrCU7OXrlMrOCDtQ4qlhcScI+cExvBrNuFVaDebN9zmaRd4vUn1MEdgKpDpovlnd4=
+	t=1740997971; cv=none; b=It0qnx/WM10QIiKtRT+FBrIrB9C6F5DzMryZlL1VR1qeaioD4JTeHXqS6fODllX8t6/wHo6smen1sl1C5p7hp9dtEMmqagfllFD8O2v7ZV8c9vuhLJlfyEIk0MSUoM/JcHdOde0jnxkFfjA1Oc+2SmCknU+dtpDYlxJ3e0Im41c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740997782; c=relaxed/simple;
-	bh=+r4llVo+3ndkQm7rOEYR8s7Hv6cob7nTwsGObbvFHys=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qVa6MaRy8allvKWYdQ/3RxMJYCGwRPX9+QNSCwiZkcaELjGZ+LgpvblSn2s/EdVDAR1M8XML9eZz8zfy/L/fCSgmjkdU+h7RYuLrkZ8ztL14SfAGExJzYTrX5jjqMhkgrb66xdEL86ur6h7i88xabcFSfSaclZlXfOo8rbC9HOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hQBIRLo6; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5e4f5cc3172so4395999a12.0;
-        Mon, 03 Mar 2025 02:29:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740997779; x=1741602579; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b+97tgtpkrZhLd54RdqWzvDlP1FIh/jaXB6LeS6lQqQ=;
-        b=hQBIRLo6/jcCMeTaLmvNTbXTunvIjyEwut9vNMoFYg7Ik+efFTIKM9tJIOKao4xXxB
-         Q3CVPIBfIk7Qgff5IAvWoDVLZnSTZHcYhCrq1YfrKPIZ6tEyN7pENAwFLPGKrIjw2Gp/
-         HabY0/2vRaaT5pv+PoBfkCC1RWgUU5mDNK69M+lSQBmkLIlQwA4cPbqJXGFREMz/GAfk
-         Ypw6A5z+vxhTO9MBHiqhl1kMRiG+eNwgnv8zIpwsxZrcrGRK02q9H3+zL6Ptqmc91WOi
-         nOjt2pEEUHIbJnVjS6Y9OauthlLHdq5UJnuYW3vmwr0oD8rXJMA+wuVSH0iGqg4MogS5
-         sY5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740997779; x=1741602579;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b+97tgtpkrZhLd54RdqWzvDlP1FIh/jaXB6LeS6lQqQ=;
-        b=AoOvJUvLXJPU+kohkPqyWTf2Vw0BkBLsp0csp7LDcEikyyTwoB9bWqg/tWBlJawMt/
-         iC21rkCuwaipTGVcZB1okO61eG9XmhPWG0asjgifAkRkpKTCSHr4XQw3Th4UVPh4oAdM
-         oF7iUsFPqwYj87IFCiyuHDwXRINIw89Ezkb7QbG9o1Ar8S1BgrOqL5hk8GhMLLEgtNFb
-         0jFXgvzyEmQuRxvNKG2QLRNaNn64N1mApHLf+HNFtYPbRvCsl+cyZXRkDu6LLeTFlIly
-         Bxo/gd8WWOkUwG11Dr7hRQU3kQBnmJ90wj+5qeqQ/SewZz83teUgQ6exNZ6eWgZDY200
-         n/jw==
-X-Forwarded-Encrypted: i=1; AJvYcCUdjpyr1mk8yIbyg21EM703mMeKVKqV1Ocy3bgXsYKpCknYE36c0S+GlaQqzHNqH0BlY0E3wONQBk1z@vger.kernel.org, AJvYcCXVcdnP72oG/NungtnTXsnEEJw/mOKrKyvXvRzFKb74gBsBOsxSIKMOF7viadrlgg7YgIfF/euXg739pnCS@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0KcWMbEUWz/keK9CK1lr4B7BAbTyKHbNBdCol0LS7y254gHTK
-	IWjPhjYZLT6A+d4eufgyn2RMF+xKmPN2NkJIhUDgsW9L7TsAnKLdvvxznmsHUBO5hSlimxQ76ZF
-	+BugWag9g7gNrCe9emovkn8NadxE=
-X-Gm-Gg: ASbGncuT3OZeesgUuXAfFgSD9lslBQbZZ1cbiHKqDlpeQ0lSinbWX1Kuqb5GjZG/M8v
-	5vBqKZZDeLtq6f9mJ4Udm8WEYg54tXxJZCkYbV12Zd7d3SwKlHaewH1ZTrFVT0+EdNgbw5Yy4yS
-	cgGu6SoIOT//A5tgCmfA8lJJoEQcxPmcQAptMcAF1O4qca3Pte6P3OoaKvnA==
-X-Google-Smtp-Source: AGHT+IHxwrji66kSeeCeo2zzRKJg/oI/nnS7ZQ+3CFp3Q1n6jT/o8WlpvhYiYRpqYeJ/eBh3sTt9FSpzdIVV4X0U5yU=
-X-Received: by 2002:a17:907:9626:b0:abf:6389:6d19 with SMTP id
- a640c23a62f3a-abf63897b13mr688099566b.15.1740997778409; Mon, 03 Mar 2025
- 02:29:38 -0800 (PST)
+	s=arc-20240116; t=1740997971; c=relaxed/simple;
+	bh=fqF5ukVSFGV3EgFZXiEa4ck6u9+DJwi8aWwrJtLxWE8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LU/Bh0RbNCrQgkaHXRPMnVKZE7O9xbCBFS4TMzVpc/FpWLjtSzGWMxzxjRvp6y6H0TPzSuxw0MJRhr5KTSdS0LW/TpBT+UT87rw7jOh/hE1eCAe6NLzBwGGMSOasASn/JWJd57qm9IvAZxw2l5gzI1JVnL7zeBdm8k8x/c8YcPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=fN4m84i5; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1740997969; x=1772533969;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fqF5ukVSFGV3EgFZXiEa4ck6u9+DJwi8aWwrJtLxWE8=;
+  b=fN4m84i5wuM2djRp1cyPu7EKug3xiDx+M3EJwEZdNsaGiZGpwpxEizut
+   50geFW1oPgkLDeivXSPrxvNJlKY2CGC4YOOmRcW2mtqgfDxsOz/z+Avtz
+   mWXpcLdjzmnUiG/zU0rRo2V92546KxR2eDmzRup85u3lSWy/tDcGJrlsA
+   SB7dacCPLDxmV3fyMY/+TN0QUCWu+/Ni2AuUnwtKVthFHtM7Hlpa3RuW3
+   izeHBkJh5n3LoOqPuhZb9nSGU/65cEY5ihzxLnrx4IyFrnYXO8Ec8Q2M4
+   DNK8adAtLTFq3iyFQvE3YdqNF9+io9njdXcrUo5XKB4lcafRLc56ViVVd
+   A==;
+X-CSE-ConnectionGUID: I/+YZuCUTEWlY9bn8j7eEA==
+X-CSE-MsgGUID: q+QHdo2+QKqpUxRb+G3ZWQ==
+X-IronPort-AV: E=Sophos;i="6.13,329,1732604400"; 
+   d="asc'?scan'208";a="38333761"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Mar 2025 03:32:42 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 3 Mar 2025 03:32:33 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Mon, 3 Mar 2025 03:32:31 -0700
+Date: Mon, 3 Mar 2025 10:31:44 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Ian Dannapel <iansdannapel@gmail.com>
+CC: Conor Dooley <conor@kernel.org>, <linux-fpga@vger.kernel.org>, Moritz
+ Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun
+	<yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, Jonathan
+ Cameron <Jonathan.Cameron@huawei.com>, =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?=
+	<rafal@milecki.pl>, Aradhya Bhatia <a-bhatia1@ti.com>, "open list:OPEN
+ FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [v4 2/3] dt-bindings: fpga: Add Efinix SPI programming bindings
+Message-ID: <20250303-imply-ferocity-bbb6d866b149@wendy>
+References: <20250228094732.54642-1-iansdannapel@gmail.com>
+ <20250228094732.54642-3-iansdannapel@gmail.com>
+ <20250228-copilot-trekker-72a20709e9f7@spud>
+ <CAKrir7hdyP-bPKkZOpK3cFp=rvH_MJ98DLKnsRni_BWsQEg5yw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250228094732.54642-1-iansdannapel@gmail.com>
- <20250228094732.54642-3-iansdannapel@gmail.com> <20250228-copilot-trekker-72a20709e9f7@spud>
- <CAKrir7hdyP-bPKkZOpK3cFp=rvH_MJ98DLKnsRni_BWsQEg5yw@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="6qSyW+QWd6cb4mh+"
+Content-Disposition: inline
 In-Reply-To: <CAKrir7hdyP-bPKkZOpK3cFp=rvH_MJ98DLKnsRni_BWsQEg5yw@mail.gmail.com>
-From: Ian Dannapel <iansdannapel@gmail.com>
-Date: Mon, 3 Mar 2025 11:29:27 +0100
-X-Gm-Features: AQ5f1Jp0OX_vuxj4kEUePqY16WGoKNNDMGuRuGmS5FYBbipZRNwkqFirCWmH03o
-Message-ID: <CAKrir7gODeEfaxVg9Yd-suSEWE3dYUb8k6CE51Ma495TF+2LHA@mail.gmail.com>
-Subject: Re: [v4 2/3] dt-bindings: fpga: Add Efinix SPI programming bindings
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-fpga@vger.kernel.org, Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
-	Aradhya Bhatia <a-bhatia1@ti.com>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+
+--6qSyW+QWd6cb4mh+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Krzysztof, thanks for the quick response.
+On Mon, Mar 03, 2025 at 11:10:53AM +0100, Ian Dannapel wrote:
+> Hi Conor, thanks for the quick response.
+>=20
+> On Fri, Feb 28, 2025 at 7:28=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
+rote:
+> > > +description: |
+> > > +  Efinix FPGAs (Trion, Topaz, and Titanium families) support loading=
+ bitstreams
+> > > +  through "SPI Passive Mode".
+> > > +  Note 1: Only bus width 1x is supported.
+> > > +  Note 2: Additional pins hogs for bus width configuration must be s=
+et
+> > > +  elsewhere, if necessary.
+> > > +  Note 3: Topaz and Titanium support is based on documentation but r=
+emains
+> > > +  untested.
+> >
+> > Points 1 and 3 here seem to be driver limitations, and shouldn't really
+> > be present in a document describing the hardware?
+> >
+> Yes, they are driver limitations and probably do not belong here.
+>=20
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - efinix,trion-spi
+> > > +      - efinix,titanium-spi
+> > > +      - efinix,topaz-spi
+> >
+> > > +      - efinix,fpga-spi
+> >
+> > What hardware does this device represent? Other ones are obvious matches
+> > to the families you mention, but what is this one?
 
-On Sat, Mar 1, 2025 at 2:13=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
->
-> On 28/02/2025 10:47, iansdannapel@gmail.com wrote:
-> > +
-> > +  References:
-> > +  - https://www.efinixinc.com/docs/an006-configuring-trion-fpgas-v6.3.=
-pdf
-> > +  - https://www.efinixinc.com/docs/an033-configuring-titanium-fpgas-v2=
-.8.pdf
-> > +  - https://www.efinixinc.com/docs/an061-configuring-topaz-fpgas-v1.1.=
-pdf
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - efinix,trion-spi
-> > +      - efinix,titanium-spi
-> > +      - efinix,topaz-spi
->
->
-> Same comments as before about compatibility. Address or implement.
->
-The compatibles are implemented in the device match table, what
-exactly should be addressed or implemented here?
+> The proposed compatible is a generic fallback for any Efinix FPGA Series.
 
-> > +      - efinix,fpga-spi
->
->
-> And this one is for which device? It is not even used.
-The proposed compatible is a generic fallback for any Efinix FPGA
-Series. Isn't it used if the compatible is part of the drivers match
-table?
+If it is a fallback, your binding should look like:
+compatible:
+  items:
+    - enum:
+        - efinix,trion-spi
+        - efinix,titanium-spi
+        - efinix,topaz-spi
+    - const: efinix,fpga-spi
 
-Regards,
-Ian
+|+static const struct of_device_id efinix_spi_of_match[] =3D {
+|+       { .compatible =3D "efinix,trion-spi", },
+|+       { .compatible =3D "efinix,titanium-spi", },
+|+       { .compatible =3D "efinix,topaz-spi", },
+
+And these three compatibles can/should be removed from the driver, since
+the fallback is required.
+
+|+       { .compatible =3D "efinix,fpga-spi", },
+|+       {}
+|+};
+
+
+--6qSyW+QWd6cb4mh+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ8WFEAAKCRB4tDGHoIJi
+0mjaAP9sKCcpox/aH/Z7wfpAn1ngc3aHe9qRSNM9Pg58kBau0gD/Z0MX38lEpA6u
+9WckYxf5O3kqdLEngN8LcxlSx/Atggs=
+=3tRF
+-----END PGP SIGNATURE-----
+
+--6qSyW+QWd6cb4mh+--
 
