@@ -1,82 +1,133 @@
-Return-Path: <linux-fpga+bounces-1095-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1097-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99C84A4DC97
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 12:30:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5054A4E3E3
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 16:43:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5F9718887B0
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 11:30:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B11A19C5812
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 15:37:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C8D20011E;
-	Tue,  4 Mar 2025 11:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E512836AF;
+	Tue,  4 Mar 2025 15:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="szojJJVZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ioHZQeae"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
+Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE46D1FF7D5;
-	Tue,  4 Mar 2025 11:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741087813; cv=none; b=npt2OV2j/jlYALVokrRccU+9E3iroNwfppu2qnu9BbUBtgV/DfvhlKH/qC3xRwaGNOu7i09NqxEXEpOty3kuQlGCHJWTyvqhSyjiejJIUoG5mkLGOo6/K6ww0J5rwV2kwpxb4p225ftHWbu1sPYa9ag0k4HU3dAqavYRs8QpcEc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741087813; c=relaxed/simple;
-	bh=4NlApes1uMZR/fEzD45gw5HtUBzCox4wK22duVcC3eY=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F1B2862AE
+	for <linux-fpga@vger.kernel.org>; Tue,  4 Mar 2025 15:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.115
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741101886; cv=pass; b=e6mS+mt65HOH/8DvW1WiJG58xzUh4uG6LBREH2UWuiq1USRmiOuH3CG424sZUvIgLxvQw5cbAGIoGHiEpBdd/to9E2CbgEIaO/CGTyNvBTolT6x5pIX8gIfkpOXX1tYxK4IxaK++UFCGdmllH6mQfgDG3dY6XmN1oSkoXmwwAW0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741101886; c=relaxed/simple;
+	bh=Xta72Xtoqtmx6r5+q/pD/V08xqthdy7owZ3Wj5jOESY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qr67NKr0lX+030JT0ILFyTzNfcBt1Ad8zyo2QlWh6CEirKzZWue4PeKg61N9sM54pf3qmPtfL7erDc/ThB1bQS5gxvkz8bTlR+b+XJ5ZG29GKN7xaXDEpjfjz8GKOT+PdPRrbHpKhwJ+mlvLLdLAPajITbc+urJikqOIRNYjKKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=szojJJVZ; arc=none smtp.client-ip=217.92.40.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5B6411480850;
-	Tue,  4 Mar 2025 12:24:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
-	t=1741087453;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5abHVWwaHFEi1aRUSGkWCShuUKq/Uu+o+daM4oBhLRc=;
-	b=szojJJVZWk6XvOFPNdubWFEz43mbBbNVI+FB/KEk1K4r9ta2Gl+uI5T8z8P/l250boNeID
-	NjMViqUfeEzM+JoLZadkW4Ts7XUuc+pwSwa3vXIIDL+e1HXLp57r16IKMbx4pPOeV9DPHm
-	hEZJ+1R0nZYepTOgcTuvBVR576HtQVrxQ3Dh7t35Z+bKEG6lah6Bnt/K0TbKAT22bUrzMj
-	acNOqP0r4bYc7B4dwo8iRwKG7uuumXPrZtNFJv66c0je01nsbvzLyUJaIUODKg4Sf7sAYG
-	V65jMLIJYe9IRdBCINX5K21zFfa8JsY2Kg/cfqB5cvCs7uPHaRQo2eiQhLXpBA==
-Date: Tue, 4 Mar 2025 12:24:02 +0100
-From: Alexander Dahl <ada@thorsis.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: iansdannapel@gmail.com, linux-fpga@vger.kernel.org,
-	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-	Aradhya Bhatia <a-bhatia1@ti.com>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [v4 1/3] dt-bindings: vendor-prefix: Add prefix for Efinix, Inc.
-Message-ID: <20250304-despite-knee-8b528b8f7f4c@thorsis.com>
-Mail-Followup-To: Krzysztof Kozlowski <krzk@kernel.org>,
-	iansdannapel@gmail.com, linux-fpga@vger.kernel.org,
-	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-	Aradhya Bhatia <a-bhatia1@ti.com>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-References: <20250228094732.54642-1-iansdannapel@gmail.com>
- <20250228094732.54642-2-iansdannapel@gmail.com>
- <cf8b754e-f4b1-40f2-86df-e1f0cbf07189@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=YuzqmCTGLNId0Vni3HPifgPhnkvuZtGxe7RM9J0bNGk9JzKpi/669cLzo/2DZyA/TwuEX+bPoBhECPjjClRQKvDdWDycKnoRp5LKKuDY+oK3AijTmD6QrMCbqTyafWBszbjHT05pPvqfhfTVtIJ0seyDTfv+eRolAy0gnxB3xjg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ioHZQeae; arc=none smtp.client-ip=198.175.65.16; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; arc=pass smtp.client-ip=160.75.25.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
+Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id 12F7440D5707
+	for <linux-fpga@vger.kernel.org>; Tue,  4 Mar 2025 18:24:43 +0300 (+03)
+X-Envelope-From: <root@cc.itu.edu.tr>
+Authentication-Results: lesvatest1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ioHZQeae
+Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fZM13jLzG0Dk
+	for <linux-fpga@vger.kernel.org>; Tue,  4 Mar 2025 18:22:51 +0300 (+03)
+Received: by le1 (Postfix, from userid 0)
+	id 316E54272E; Tue,  4 Mar 2025 18:22:42 +0300 (+03)
+Authentication-Results: lesva1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ioHZQeae
+X-Envelope-From: <linux-kernel+bounces-541114-bozkiru=itu.edu.tr@vger.kernel.org>
+Authentication-Results: lesva2.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ioHZQeae
+Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
+	by le2 (Postfix) with ESMTP id 6BA374275E
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:59:38 +0300 (+03)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by fgw1.itu.edu.tr (Postfix) with SMTP id 441673063EFF
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:59:38 +0300 (+03)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D6CA1890707
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 07:59:44 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F561EE7D5;
+	Mon,  3 Mar 2025 07:59:26 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9310E1D63C0;
+	Mon,  3 Mar 2025 07:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740988763; cv=none; b=cHA4FZVry3usANG40EIUo9Crml2r9fnZpEKVI6pXdxtc4dpRCAnxVmHfTXeYyX5rkuHJTYfSRHWVANnu/gHiNhKqjOL0/GQpzlOqrOKSGkSN0E9lLYVAJdQqXlibki1Cqx/OPmxNA/AXZkppg1cASZRn2Z56QHiF1Q/mQ0ITyv0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740988763; c=relaxed/simple;
+	bh=Xta72Xtoqtmx6r5+q/pD/V08xqthdy7owZ3Wj5jOESY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RYftwOjIJBr9p57hWnpLEahwQhn1Nn8IGDE/PIMiujgKDaLafwstC3uGRw3kgFbZzJKqmxsO7R7QFvXnE3QHAu16a7YEkmAzgA5S8eAtX9PusQsTg2TkUeuuHH1Y2O+ATb6Zq93Rs1zqbYlDyJTA/4hVTyNc/BpCaKn3uB9L2uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ioHZQeae; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740988763; x=1772524763;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Xta72Xtoqtmx6r5+q/pD/V08xqthdy7owZ3Wj5jOESY=;
+  b=ioHZQeaer7zaLv6qiwY2bTO9G6gpTectTEVYECkcCVMzFDmvOrtMZtqR
+   Zsu66BqAfcwFbcjNhXonjDWbbsoZ3vtL6WFbotUEi4IkgOKvnheIJSOXU
+   HtJqMjS76aAKzsuszn4oLyuDj9t0942eQJ3ZiMiHM1iiINn/XAEI6lsX7
+   6LohKAmo6Zb1JtQmXxShM/DbX+jGNHkOSrxPS1sHTovb02DvxwFFZ1rBy
+   BpSbYhpSIsCKrNkt5+ogsz5v3YAEzT8X6qVak3WmNAw9DPGQcebgA5/ti
+   NPheqa2exD3HwkG+KKOFJf8Nq8lcQLnXCwwV5vQGDcTTHJERaxr8/HkiR
+   A==;
+X-CSE-ConnectionGUID: OwrjfLUlRW2BztUbRLZfNQ==
+X-CSE-MsgGUID: To3JaBQQTLWkZtQL92UYkA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="41975215"
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="41975215"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 23:59:22 -0800
+X-CSE-ConnectionGUID: tDUV7ep6QcGAfQ+7/1/EYQ==
+X-CSE-MsgGUID: k2oG920CShaV+Co+pDdUHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="118628401"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa009.fm.intel.com with ESMTP; 02 Mar 2025 23:59:11 -0800
+Date: Mon, 3 Mar 2025 15:57:06 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Yidong Zhang <yidong.zhang@amd.com>
+Cc: linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+	mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+	lizhi.hou@amd.com, DMG Karthik <Karthik.DMG@amd.com>,
+	Nishad Saraf <nishads@amd.com>,
+	Hayden Laccabue <hayden.laccabue@amd.com>
+Subject: Re: [PATCH V2 1/4] drivers/fpga/amd: Add new driver amd versal-pci
+Message-ID: <Z8Vg0nJ2T9ezHDVf@yilunxu-OptiPlex-7050>
+References: <Z6Q3W2mUw/ZbtnWV@yilunxu-OptiPlex-7050>
+ <796e2826-a423-4d0c-977a-105ed236e067@amd.com>
+ <Z6Vtz/Bb8wsIH0pG@yilunxu-OptiPlex-7050>
+ <7b9bd24f-8f89-4d6c-a079-47c4c0b88a35@amd.com>
+ <Z6WO2Ktc9HoqdUSU@yilunxu-OptiPlex-7050>
+ <e68be2e2-7fdd-4f09-b479-4b0e31af5be5@amd.com>
+ <Z6sT20uzjes7SGzr@yilunxu-OptiPlex-7050>
+ <84281771-52d8-4b1d-8478-1fedb6f31608@amd.com>
+ <Z8LDSjhcXvwnyeiF@yilunxu-OptiPlex-7050>
+ <790910eb-4876-49de-b8eb-0ac50868bc1f@amd.com>
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -85,49 +136,79 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf8b754e-f4b1-40f2-86df-e1f0cbf07189@kernel.org>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-X-Last-TLS-Session-Version: TLSv1.3
+In-Reply-To: <790910eb-4876-49de-b8eb-0ac50868bc1f@amd.com>
+X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
+X-ITU-Libra-ESVA-ID: 4Z6fZM13jLzG0Dk
+X-ITU-Libra-ESVA: No virus found
+X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
+X-ITU-Libra-ESVA-Watermark: 1741706580.15749@LI4dfS+OEglUGdlwkoFwpA
+X-ITU-MailScanner-SpamCheck: not spam
 
-Hello Ian,
-
-Am Sat, Mar 01, 2025 at 02:10:38PM +0100 schrieb Krzysztof Kozlowski:
-> On 28/02/2025 10:47, iansdannapel@gmail.com wrote:
-> > From: Ian Dannapel <iansdannapel@gmail.com>
+On Sat, Mar 01, 2025 at 11:03:29AM -0800, Yidong Zhang wrote:
+> 
+> 
+> On 3/1/25 00:20, Xu Yilun wrote:
+> > Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
 > > 
-> > Add entry for Efinix, Inc. (https://www.efinixinc.com/)
 > > 
-> > Signed-off-by: Ian Dannapel <iansdannapel@gmail.com>
+> > > My last question for this topic:
+> > > If we decide to upstream both userPF and mgmtPF driver together, could them
+> > > be both within the drivers/fpga/amd as in-tree driver? This will help user
+> > 
+> > I don't look into your full driver stack. Generally, if your drivers are
+> > all about reprogramming, then yes. If they are also about all kinds of
+> > accelaration functions you'd better split them out in different domains.
+> > I may not have enough knowledge to make them correct.
+> > 
 > 
-> <form letter>
-> This is a friendly reminder during the review process.
+> The driver has more features than just re-programing. The re-programing is
+> already done in the embedded firmware that's why the mgmtPF driver is just a
+> utility driver.
 > 
-> It looks like you received a tag and forgot to add it.
+> The userPF driver has features such as:
+>   xdma (already in drivers/xilinx/xdma as platform driver)
+>   qdma (already in drivers/amd/qdma as platform driver)
+>   mailbox and more which have not been upstreamed in linux kernel yet.
 > 
-> If you do not know the process, here is a short explanation:
-> Please add Acked-by/Reviewed-by/Tested-by tags when posting new versions
-> of patchset, under or above your Signed-off-by tag, unless patch changed
-> significantly (e.g. new properties added to the DT bindings). Tag is
-> "received", when provided in a message replied to you on the mailing
-> list. Tools like b4 can help here. However, there's no need to repost
-> patches *only* to add the tags. The upstream maintainer will do that for
-> tags received on the version they apply.
+> The driver architecture is:
 > 
-> Please read:
-> https://elixir.bootlin.com/linux/v6.12-rc3/source/Documentation/process/submitting-patches.rst#L577
+>   userPF driver (as pci_driver)
+>     qdma (as platform_driver)
+>     ..
+>     mailbox (as platform_driver)
+>        /\
+>        ||
+>        \/
+>     mailbox (as platform_driver)
+>   mgmtPF driver (as pci_driver)
+>        /\
+>        ||
+>        \/
+>     Embedded firmware (re-programing done here)
 > 
-> If a tag was not added on purpose, please state why and what changed.
-> </form letter>
+> Right now, I am working on upstreaming the mgmtPF driver as pci_driver.
+> In the future, I think the userPF driver should be fitting into the
+> "drivers/fpga", given that should manage all these platform_drivers and
 
-FWIW I guess this might refer to:
+No I think userPF driver should manage all these *platform_devices*.
+Platform_drivers could be independent and put into proper domain folders.
 
-https://lore.kernel.org/linux-fpga/20240930-tranquil-glitch-f48685f77942@thorsis.com/
+> utilize the fpga_region callbacks to online/offline services due to hardware
 
-Greets
-Alex
+fpga_region should online/offline platform devices. Not services, which is the
+job of each platform_driver.
 
+Thanks,
+Yilun
+
+> changes after re-programing.
 > 
-> Best regards,
-> Krzysztof
+> Thanks,
+> David
 > 
+> > Thanks,
+> > Yilun
+> > 
+> > > find source code easily.
+
 
