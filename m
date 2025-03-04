@@ -1,116 +1,144 @@
-Return-Path: <linux-fpga+bounces-1093-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1094-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDE80A4D25D
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 05:10:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87742A4D639
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 09:25:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45B103ADF96
-	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 04:09:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A366D169D6A
+	for <lists+linux-fpga@lfdr.de>; Tue,  4 Mar 2025 08:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B05211F461E;
-	Tue,  4 Mar 2025 04:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A3D1FBCA1;
+	Tue,  4 Mar 2025 08:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mMv3FZAs"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="NUq8Bkte";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xl53Kcz7"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B691F419F;
-	Tue,  4 Mar 2025 04:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE5A1F7580;
+	Tue,  4 Mar 2025 08:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741061363; cv=none; b=rN6opfk7uTzzPTv5gulWtdwuoGEctTBMdu3qbEhhMPZH90jS7W67BzKpqes+FahkC6hepkf+gqWe1n2AEP2+yZxwNKtsRJOi8RwkQ7ky8fKZvX3cQ0lcC8DPMH6B70OuKfiusacjIj0RtGocEtFSnObbiGFlhbAcYW8txqaO3wA=
+	t=1741076701; cv=none; b=GW/JBEnYu/76g5hSWIxsP0RVC4SOVEruSlOVihPQqZB/Dq2UUHsZWGG0bGtJHl8r1XJpj3MQewtdzsQsOO4dEv1UpoojYR8HEl3ZpWAa5+nOfQ34VeXE45+ze1H9O/9L7SMyGbz+XkP/5iL2IvSmTs0426Z6xk8e2ahbw+Bh2Pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741061363; c=relaxed/simple;
-	bh=QtGZ+48M+A4XErPJpnzcWrfq+nhpsQ5M6eGsMDSJ7Zc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oJ/hS/MOLvxEqB4opKWh4oJm6kfNtM6E46R3bYPwIlEZ71V4aD6W33VH+tCHPAE/NFCiE1I+CcxwsHytG3uxUyttjtrGoLmr5GrvaWkJK8UE4I6Al9ucDGVKBK2EiozTeQj58I6o40Hb7Sspw2fy32AMyyzz3fm9qOh10KXh2oc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mMv3FZAs; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2f9b91dff71so8280267a91.2;
-        Mon, 03 Mar 2025 20:09:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741061361; x=1741666161; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QtGZ+48M+A4XErPJpnzcWrfq+nhpsQ5M6eGsMDSJ7Zc=;
-        b=mMv3FZAszzKro/THwO9JI093IFc0WtlDMrxXIy5zRoud7b3l/lCisKnQQQaalLSqeK
-         3MZuwuJ7PHpubibCuQaBTFwKt8S1OHCmjA6y48p/sZ/eQM38ip5sHmty5yLf9+I97tdd
-         Dy1Tu1aMwA5MP4FpvSb2zvhL+UwN3y1j9HNNkCitwE+T7NLGXxXweP2GBWhVrobfwqjV
-         EO6HoLT5MDBsfxvB3eVo74ImWUMHBogvTmAFa6qdAm2h52U7ZhzVmNZwRj6UxLLzKXGa
-         SSwE9FRfo75P54Qe+auXqj7k5ybR5QrKEOvDnx8XCCAk1UQJDPALAU4b19zCWPfsTs2L
-         CVMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741061361; x=1741666161;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QtGZ+48M+A4XErPJpnzcWrfq+nhpsQ5M6eGsMDSJ7Zc=;
-        b=KZlzAKPthDbPqVLjPVN+hIaRqz67+8YrhAr2yoHvSl7JKPwlNj55CXMFVTm04LVaAx
-         wJXg99+PXCVGD/PJTHSGvwztcvnUepRagIUQJpnaq9IyMtYskz4IfD1gtvy3VwYQSRNc
-         kj/Jehts4ceL+cwChVwyEzFiKfgeEmS9KySawZixkatGaglx0Wioxyu1oLpqyqQmlgGo
-         gEg3qPbGYtkz0AhIVUvlpeVgy8nWbAlrueVvIGpXX6uoprwqjzn6im7bRcAoWIB1F34E
-         NVzX6KSziOUrXOIf7tbxqlVlaZtA0WzyXGlO4NnvP+zHqFGmG+/ROq7mIkg6/OAj2HmS
-         m2Vg==
-X-Forwarded-Encrypted: i=1; AJvYcCUHEYPNA+QbpmcdhayZoHpkIeCGKBYM/eMMWWhgzyRkY1yLm8LJqPvp4W3FBcb0YXp3YVFvK/cP@vger.kernel.org, AJvYcCW3ErhQJt4hQtFQ//uc5B+JqKOQRfMQuh6HRU6zYYd0DNHHDupnG6NmiOzmEkSzpxwKTsh5hFnjlIsitzgx@vger.kernel.org, AJvYcCXIsyCXc3glLLJcIEO8mVV1q15pkKbwwETiHDO1uqZWDxiNfbo+Aegsv4Qj5WVF66nXLADm5smtdXNJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWFX8ol8KjnrWQIbeqB985uwNi9xJ2eeuiygAg8L3mmhbA9YqP
-	ACYwkszerwBNsx9PLw0+o6tbRvXrHuWEQLt7FXh1IxGhONqJ1uWa
-X-Gm-Gg: ASbGncvgxYu+aAZG9rLJAHGD8J22ibYTFxIzR0SU/ro+dIDx7CHia8Efnq9n/k4sqa4
-	XLkxWX67DRydeOhxilIh8eHyu5j07GSW42H8Z6CPxDFSW5XpRMIRTftdvup2Hiq20aW1D95PeNy
-	8/Bw94uYw6qNKCaXlV1tipn0SS1GLAnoknYW/0LJgsnW79nhEYLqzX8LnHfhE+aRIAozkm2r+ES
-	vFKwjkV1cF71oZwxJ6+iYydz4vMQBJPFU0nE87WersdnRC7YmSXauOi2tG2xqmBculf2Wj7iUEH
-	bQyo2T0wwPY1mqi4e53zwhFZ9RY6L84ztIKjSBPQUJylt06m1s3FcPcGJ+Pu4M4u
-X-Google-Smtp-Source: AGHT+IE0xGWFuyaKz7xSNaqOF/UjIyP6Qm5Nry/Rj8pFeBQSgkdnwjA1FkIkdqwXGWdukbrbMn4twA==
-X-Received: by 2002:a17:90b:4ac6:b0:2ee:fdf3:38dd with SMTP id 98e67ed59e1d1-2febabf413amr18352992a91.23.1741061361374;
-        Mon, 03 Mar 2025 20:09:21 -0800 (PST)
-Received: from hoboy.vegasvil.org ([2600:1700:2430:6f6f:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223501f9e1asm85724885ad.65.2025.03.03.20.09.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Mar 2025 20:09:20 -0800 (PST)
-Date: Mon, 3 Mar 2025 20:09:18 -0800
-From: Richard Cochran <richardcochran@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	Arnd Bergmann <arnd@arndb.de>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Tianfei Zhang <tianfei.zhang@intel.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Calvin Owens <calvin@wbinvd.org>,
-	Philipp Stanner <pstanner@redhat.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-Subject: Re: [PATCH] RFC: ptp: add comment about register access race
-Message-ID: <Z8Z87mkuRqE6VOTy@hoboy.vegasvil.org>
-References: <20250227141749.3767032-1-arnd@kernel.org>
- <Z8CDhIN5vhcSm1ge@smile.fi.intel.com>
- <Z8TFrPv1oajA3H4V@hoboy.vegasvil.org>
- <Z8VfKYMGEKhvluJV@smile.fi.intel.com>
+	s=arc-20240116; t=1741076701; c=relaxed/simple;
+	bh=Y27aUZUPxKEH7unyFscw2X5BcFy8avKpTq7I1tRtmds=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=EHy1ay+x3+qGHY8obkU41y7UJFZl/aAhwnjOGRZd6p18yB76Azw8K7LFqTa1gioZL7th2JC3yxfN1fpsOnnQBLK/tDA0eMX9Xnxp3JKrA1pTvMBqffJaV0T8FKaI8TL8unNl2X5FhXBi1UTR56a+IUdXxsNk3laD9ffZH9pGEB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=NUq8Bkte; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=xl53Kcz7; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfout.phl.internal (Postfix) with ESMTP id 3755A138271B;
+	Tue,  4 Mar 2025 03:24:57 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-09.internal (MEProxy); Tue, 04 Mar 2025 03:24:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1741076697;
+	 x=1741163097; bh=zM8W7tdbTUdh4T3yYERRBHG5NlNdx6XcKTrnIct3zRg=; b=
+	NUq8BkteQO6SDuLIORjsSkvajlvhU0vmiYacEBWhSW03bgh650C3v0bWKr5s46Td
+	riWSiSr0oA8W18I3RoDBz8CPAHAkyUy7yEMDGasexuzv+Ycky3MnIBGB+k33c1nw
+	nmkQ01VFlBTOfAlWhJh1IkurVsumBzOLe9LnvC/tIqix95bQBamre4ja7OdKnq9N
+	mIqKikbutblaiAgDLTuPNF2dAKHScNfnbLaa1or3d9xnbhc8ZSUoVvcbiLlo7kIb
+	mnHXXJDYdaRhl83XYWEpHjLaLTTOZj7be4UzShhBuHYlrk6PSbJXGkQBS9sB+VQv
+	FQABJrie9F0CutJk+bTR0w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1741076697; x=
+	1741163097; bh=zM8W7tdbTUdh4T3yYERRBHG5NlNdx6XcKTrnIct3zRg=; b=x
+	l53Kcz7eoJFaWQ3J80H/MML1fxGTcZZVNXX6xkWLLDQc4Lmaw3N/mxQiO5vG2xRQ
+	AbF3v6GkKXcrfDs07L9QY0QfXUS86yTwVu1iy7Vvj3co519RCBsudtCAMG7xfDS1
+	yesQIgiG8Al68a3NzBAgB+1doLcgKSEv9c4wPesA5Eq7xP2bTr2iFY7NUEyz4rJt
+	iq1tp4C6z9uOiAz3DVYvdjMaAc91lceHrhRVnrHq8kRICJ2RONPEns4d8j1nlj1G
+	1dzhrvF0+U1RqlIaDU2klIdiTpFKpmE/YrgcWrpNQ12evxJ27xAZ3bD+IJRJJgKC
+	a9QtpDfwr7r6LSlqU1TVA==
+X-ME-Sender: <xms:2LjGZ2lX9OfR4lGZuLLRFZg7KDUv9_hRnViHfTziVrX3m07gNPsP3w>
+    <xme:2LjGZ92pUzSj-Ya5NUmKCsML3ldN90dsm3icq5Enp85JAb8Dgo4O-K726OPeQ6jtq
+    3R6P0iV0_XP-4Pexr0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdduheegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    udelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegurghvvghmsegurghvvghmlh
+    hofhhtrdhnvghtpdhrtghpthhtohepjhhonhgrthhhrghnrdhlvghmohhnsehgmhgrihhl
+    rdgtohhmpdhrtghpthhtoheprhhitghhrghruggtohgthhhrrghnsehgmhgrihhlrdgtoh
+    hmpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthho
+    pehtihgrnhhfvghirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheprghrnh
+    gusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepthhhohhmrghsrdifvghishhsshgthhhuhheslhhinhhuthhrohhnih
+    igrdguvgdprhgtphhtthhopehvrgguihhmrdhfvgguohhrvghnkhhosehlihhnuhigrdgu
+    vghv
+X-ME-Proxy: <xmx:2LjGZ0o5WKeDUjYeoVcADYBT1YDKDZrZMuwPclwev2XUMqDqG5_C7Q>
+    <xmx:2LjGZ6lMJMUzvr9YtGi3OE6Aoen1JeNiEGUZ6pWqfW6_9uNCsWxcHA>
+    <xmx:2LjGZ00-ZAOpXYzNNzMAdFkk56eWG7NSDp5nwVwHwh6ujX7mxIxZNw>
+    <xmx:2LjGZxtRijeuEEYADWPTTa007tr36CMAFgbpXtJ4ipsNvinR8QLJwg>
+    <xmx:2bjGZ7uvsRHe2_21oQ-V2KHV9q2qGTbCMXAvb9jx2m2DyDUA8JruI20p>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 29A7C2220072; Tue,  4 Mar 2025 03:24:56 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z8VfKYMGEKhvluJV@smile.fi.intel.com>
+Date: Tue, 04 Mar 2025 09:24:35 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Richard Cochran" <richardcochran@gmail.com>,
+ "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Cc: "Arnd Bergmann" <arnd@kernel.org>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ "Andrew Lunn" <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Tianfei Zhang" <tianfei.zhang@intel.com>,
+ "Jonathan Lemon" <jonathan.lemon@gmail.com>,
+ "Vadim Fedorenko" <vadim.fedorenko@linux.dev>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ "Calvin Owens" <calvin@wbinvd.org>, "Philipp Stanner" <pstanner@redhat.com>,
+ Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ linux-fpga@vger.kernel.org
+Message-Id: <7fd3c712-4c31-435c-80c1-1e042c9b5999@app.fastmail.com>
+In-Reply-To: <Z8Z87mkuRqE6VOTy@hoboy.vegasvil.org>
+References: <20250227141749.3767032-1-arnd@kernel.org>
+ <Z8CDhIN5vhcSm1ge@smile.fi.intel.com> <Z8TFrPv1oajA3H4V@hoboy.vegasvil.org>
+ <Z8VfKYMGEKhvluJV@smile.fi.intel.com> <Z8Z87mkuRqE6VOTy@hoboy.vegasvil.org>
+Subject: Re: [PATCH] RFC: ptp: add comment about register access race
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 03, 2025 at 09:50:01AM +0200, Andy Shevchenko wrote:
-> Perhaps it's still good to have a comment, but rephrase it that the code is
-> questionable depending on the HW behaviour that needs to be checked.
+On Tue, Mar 4, 2025, at 05:09, Richard Cochran wrote:
+> On Mon, Mar 03, 2025 at 09:50:01AM +0200, Andy Shevchenko wrote:
+>> Perhaps it's still good to have a comment, but rephrase it that the code is
+>> questionable depending on the HW behaviour that needs to be checked.
+>
+> IIRC both ixp4xx and the PCH are the same design and latch high reg on
+> read of low.
 
-IIRC both ixp4xx and the PCH are the same design and latch high reg on
-read of low.
+Ok, if that's a common thing, let's assume that the drivers are
+all correct for the respective hardware and discard my patch.
 
-Thanks,
-Richard
+With the patch I have queued up in the asm-generic tree, the
+behavior changes so ioread64_lo_hi() no longer gets turned
+into a single 64-bit access, and that is then more likely to
+be correct for both 32-bit and 64-bit architectures in case the
+device doesn't actually implement 64-bit transactions but does
+correctly latch the contents.
+
+      Arnd
 
