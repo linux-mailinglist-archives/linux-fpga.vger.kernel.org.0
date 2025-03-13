@@ -1,99 +1,113 @@
-Return-Path: <linux-fpga+bounces-1105-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1109-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FED8A5DFC2
-	for <lists+linux-fpga@lfdr.de>; Wed, 12 Mar 2025 16:07:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5EB9A5F95D
+	for <lists+linux-fpga@lfdr.de>; Thu, 13 Mar 2025 16:14:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3B573B215A
-	for <lists+linux-fpga@lfdr.de>; Wed, 12 Mar 2025 15:07:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CDCF179B85
+	for <lists+linux-fpga@lfdr.de>; Thu, 13 Mar 2025 15:14:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DB722500BE;
-	Wed, 12 Mar 2025 15:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D70CD268C63;
+	Thu, 13 Mar 2025 15:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IyEoDS2b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s8mBlLuJ"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDF72505B7;
-	Wed, 12 Mar 2025 15:07:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF09267F77;
+	Thu, 13 Mar 2025 15:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741792039; cv=none; b=AcrrXzKjXzKtXVXCgkKenUcV/B/64a5VXsX6kXdVi7vdSpZ+kkJ+847f0QDRwRvCu5szI6TbIlmUOKmmS0wkRTxlEOidIyPxb+HqdzuPFJazcwRk/MRA/8bEYLAlOCaePTGrZZYGkK1xI80pEBlxLMnBIZ+cv8y4Xsv6sQ7WL3c=
+	t=1741878881; cv=none; b=hXhblR7/hvbZWjfT+VzwJF/sqzuughvWLsBQiCxcfXKVdrpz8nk3DQKi2Kg67VDsAeLDA+H9ywejZw9+tjFrmiic2FSpxuX07FTeeZqNDRIrqyZXd0+KWXyt5+c0mNWtFYJSKV2Yc7MaWyQD1KQyP2ntezXe3M8lKScrpMI51tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741792039; c=relaxed/simple;
-	bh=Se7dJCOHygh/Ix4OxsOUpCvp5TXO6X3D/g2L8B6xnpo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jRuRp7T7tvf+2uHE+wp9D3ccK74m4yYxgS0T+8Y3sV3dG4BUWPjKpOkLnRWrvP547XjJC4168Faw0CHuW8PUTAb/jjf+BMeQBu0uZAWcdDZaErS2nzPpI45FMiPnnLlKP/r7iwOM00HDTL1rNafZH8kvDqsM9CAiTfDtVRHS5uQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IyEoDS2b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC5FC4CEDD;
-	Wed, 12 Mar 2025 15:07:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741792038;
-	bh=Se7dJCOHygh/Ix4OxsOUpCvp5TXO6X3D/g2L8B6xnpo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IyEoDS2bz1WD6BjY34unecgaTfdLyNJPi7H27yB0XxJo5MCRDbla05lmA3/23J5tM
-	 ECa5SNFKAaftjsXvGma1PkcH4EmLSCL0cYCs2mNSNY4aKPH5GkGXdQms+bQWKRiNdm
-	 mO9hYYtOPvNLlAiGtpPNDfH/7je04eyUvpEfwiXs=
-Date: Wed, 12 Mar 2025 16:07:15 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: Qasim Ijaz <qasdev00@gmail.com>, linux-fpga@vger.kernel.org,
-	stable@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	Marco Pagani <marpagan@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>, Tom Rix <trix@redhat.com>,
-	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>
-Subject: Re: [PATCH] fpga: fix potential null pointer deref in
- fpga_mgr_test_img_load_sgt()
-Message-ID: <2025031209-provider-docile-fbc3@gregkh>
-References: <20250311234509.15523-1-qasdev00@gmail.com>
- <27efccdc-3400-46b9-9359-4b2a6c8254e9@web.de>
+	s=arc-20240116; t=1741878881; c=relaxed/simple;
+	bh=zcGj1uOEL8WR4UP614EhP+WDUNi3KOZTpWDDpUBnmv0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lZaUKQbkOLeImqsjGOfhORNDRIR9xepw9YlZ9ptYjoyqgTiNwh43dEa8zzN2UlWEdKZx4yVSWxvx49Afj1ERmaXGcZ5iRuRi1xAzjBUlW4g0ggImnQg4hUC/8qDkrEy5510gbOj2D053vGa3m1pSf19/noMuF3ZnZlV8PXLrflo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s8mBlLuJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 07142C4CEDD;
+	Thu, 13 Mar 2025 15:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741878881;
+	bh=zcGj1uOEL8WR4UP614EhP+WDUNi3KOZTpWDDpUBnmv0=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=s8mBlLuJGnQR/Yd9aio0WV727q2o2yBudAk0vbuRvEyvHWQjWEcQBLVSaTIB+6Al6
+	 SEYLnonhfqK1TbFRNzLJwxd9qx42JgykZi5u4i1sGsX38j2eQdqS6t7yimg2X3fPDm
+	 3o84Iw3VdywC2MSL+tU/qlTew6tC/MlO3pJa3fJra1CiPQCZBo/t+DXAwIeziC5weQ
+	 pzj3T2P/ooIsX/whgegHI/96WQILrEhFe2st5Rt3rFSkvtbs6B1p60Sw/g1WsoBjoL
+	 yUUY7Pdekrz/FSvgtoOdMC1NS9KXdhd+JSvCnMFj5RjTCRCY1Eqneb5kY5bPf/fl4h
+	 pyqEXWFmkdSUg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5357C282DE;
+	Thu, 13 Mar 2025 15:14:40 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH v2 0/6] clk: clk-axi-clkgen: improvements and some fixes
+Date: Thu, 13 Mar 2025 15:14:42 +0000
+Message-Id: <20250313-dev-axi-clkgen-limits-v2-0-173ae2ad6311@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <27efccdc-3400-46b9-9359-4b2a6c8254e9@web.de>
+X-B4-Tracking: v=1; b=H4sIAGL20mcC/3WNwQ6CMBAFf4X07Jq2CIIn/8NwKGULG6E1LWkwp
+ P9uJfHocSZ583YW0BMGdit25jFSIGczyFPB9KTsiEBDZia5rLgUDQwYQW0Een6OaGGmhdYAdWl
+ 6rivUZdOzvH15NLQd3UeXeaKwOv8+bqL42l+x/VOMAjjI2lzRiIseWn1XVs1uPGu3sC6l9AF9n
+ do9uwAAAA==
+X-Change-ID: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+To: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org
+Cc: Stephen Boyd <sboyd@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741878886; l=1074;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=zcGj1uOEL8WR4UP614EhP+WDUNi3KOZTpWDDpUBnmv0=;
+ b=ElfHDd6UrzzxERpEEORfL8eDB3IhstNDMUwliSk6zJ3yJiMTKaTL63/+YKLInzQ23liTiBpUQ
+ o5jYG6ac+X8BA0jv0IF+tCvzSPHPqz1C1GKSksccbnDfpImNCWM4uwz
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-On Wed, Mar 12, 2025 at 02:01:48PM +0100, Markus Elfring wrote:
-> …
-> > zero it out. If the allocation fails then sgt will be NULL and the
-> …
->                                  failed?
-> 
-> 
-> Can a summary phrase like “Prevent null pointer dereference
-> in fpga_mgr_test_img_load_sgt()” be nicer?
-> 
-> Regards,
-> Markus
-> 
+This series starts with a small fix and then a bunch of small
+improvements. The main change though is to allow detecting of
+struct axi_clkgen_limits during probe().
 
-Hi,
+---
+Changes in v2:
+- Patch 3
+   * Rename adi_axi_fgpa_technology -> adi_axi_fpga_technology.
 
-This is the semi-friendly patch-bot of Greg Kroah-Hartman.
+- Link to v1: https://lore.kernel.org/r/20250219-dev-axi-clkgen-limits-v1-0-26f7ef14cd9c@analog.com
 
-Markus, you seem to have sent a nonsensical or otherwise pointless
-review comment to a patch submission on a Linux kernel developer mailing
-list.  I strongly suggest that you not do this anymore.  Please do not
-bother developers who are actively working to produce patches and
-features with comments that, in the end, are a waste of time.
+---
+Nuno Sá (6):
+      clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
+      clk: clk-axi-clkgen: make sure to include mod_devicetable.h
+      include: fpga: adi-axi-common: add new helper macros
+      clk: clk-axi-clkgen: detect axi_clkgen_limits at runtime
+      clk: clk-axi-clkgen move to min/max()
+      clk: clk-axi-clkgen: fix coding style issues
 
-Patch submitter, please ignore Markus's suggestion; you do not need to
-follow it at all.  The person/bot/AI that sent it is being ignored by
-almost all Linux kernel maintainers for having a persistent pattern of
-behavior of producing distracting and pointless commentary, and
-inability to adapt to feedback.  Please feel free to also ignore emails
-from them.
+ drivers/clk/clk-axi-clkgen.c        | 149 +++++++++++++++++++++++++-----------
+ include/linux/fpga/adi-axi-common.h |  35 +++++++++
+ 2 files changed, 141 insertions(+), 43 deletions(-)
+---
+base-commit: 82f69876ef45ad66c0b114b786c7c6ac0f6a4580
+change-id: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+--
 
-thanks,
+Thanks!
+- Nuno Sá
 
-greg k-h's patch email bot
+
 
