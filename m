@@ -1,291 +1,128 @@
-Return-Path: <linux-fpga+bounces-1123-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1124-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9349A661BB
-	for <lists+linux-fpga@lfdr.de>; Mon, 17 Mar 2025 23:35:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E73DDA6D860
+	for <lists+linux-fpga@lfdr.de>; Mon, 24 Mar 2025 11:36:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 232A1172822
-	for <lists+linux-fpga@lfdr.de>; Mon, 17 Mar 2025 22:35:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72B991698C6
+	for <lists+linux-fpga@lfdr.de>; Mon, 24 Mar 2025 10:36:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB5821FFC55;
-	Mon, 17 Mar 2025 22:34:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9907725DB14;
+	Mon, 24 Mar 2025 10:36:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="wyoPz4JP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F9oo3QVi"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011068.outbound.protection.outlook.com [52.101.62.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CB029CE8;
-	Mon, 17 Mar 2025 22:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742250898; cv=fail; b=Y0co42Qv+g1iYSmhTpiofJj5Fa3sUR1VqjUGQvUxwl3fduzveXAmoboEKWqcN596N6YUBGNZZTxt7p/TMLerkPTg826tj6dbtw+jBkc/kCP1RniFOtDpWenBA25ynt1eD9FrvXvEYM9U0YYCASjnCEyn5qJwuABYJ2BD+MhWK8g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742250898; c=relaxed/simple;
-	bh=6AAZwURMFgwG9oI6JxxNgoiu+UvJ4qySnxkHMK4iC4A=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=WkFP2mnX2WeyoRoJ0NS8oMl/YE9JMFjWsj6eKAdMmKQAJkRDcHuCFIVGhUAdrFu7P8gmB8APQHpfdvJzPRejTAyFfrwLwqhXypb+Nk2OLpwovuv18YZQJ36UXjX9L70pt8WfpspZ1lCPaWtJihTVEeNLx8WbnQ14T4Lsu4Fbz0c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=wyoPz4JP; arc=fail smtp.client-ip=52.101.62.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cqvvPf7ZnZOQiB6Yzqdq491o8J+keBYjEwegAtU9/jOcPVqhLFoVYZYEQnNsgoFysh7S9EBQaYcf8fIiSrJq4/CWW5WZtuGE4Oh8pLxm3ZOWI139MiQgAFCXrWpwNVjJsimWv8qGlF3T7F/AS1sU0dPJE8L7SFL2V/mYVhLg1JpKgbQUia4vO4TSfsyKamFoDFiR0PnTmyeW/gf2UslmJv9Uo6kjpv335qFsYupQ1O6/nCimrhLwACknvFr5LY67pVVR9WwFL3oEZlaQ2JyCbb9Ng2UWaXxIJSV703PFDX8LISQH4YSf+9MK0hBKTeCl3SvDBn+sBpwGoxU+OKesEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M7ZXO0X3++86ELs/gaJ4Kzq5+T2fD1qfY8HK5nO9StI=;
- b=nfaU7PoqnCN/Hc550OIXZ5mqEvyaY0SPRSv1KDqXc0G8l6x5OlG5Z9lhuQmavTrORYyAQ5jESrAqep1ExTHybQ6Kv+9xh6HmHjLCLA87lidB5qgyegW+AE3+f1YQmIRALUcK5QD94rQhbfy01rt3Fa4tfaa2qcf/LFoonw2FuHUnT+svkyQxiCL117uPymj6HrowBasQ9jHTk2J2viKOiaTBr1mD0asD1+tVNwoCGXvdl+l+BZ1Mhs9EkuVoMPc1U4y/uRkyidO4IhXbcW1f4aQFGFYMwWveqpcR0KOQSqdFtf9kAIOALOyS1QqdTixnfwFBKuapLU4BEvguPs/8AQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
- dkim=pass header.d=altera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M7ZXO0X3++86ELs/gaJ4Kzq5+T2fD1qfY8HK5nO9StI=;
- b=wyoPz4JPI6+UWQpH0ITMpOgy5Y5otIt19/eyaugJrizTKOYkCsMoW8cAvqRnUEp030/JtbXfyXqAybw1qA9+QkOoc/cfBRqokYaAHRsJ7ikqj+BPym1EzpbkmFsoB0XGwTuJe+nEaplBFiY6/AnGzLaqRbEah0CJcB9XUwxqx4JMUY9q4d6HI6HXWCCMqUH4TT1+uUGHAXAgcW6WqaZ4M6VWbbP0wh5dhU2MF0oeVNvLWpZFg/KboZySSfkJInsgW7m3RiWjczwRLLhPpVJ+JVoUbqNJHsofXyArWbWQsWODQd51dedCUCNZSvFq9er72n6qAdGw2WXifYsBq27K0Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=altera.com;
-Received: from BYAPR03MB3461.namprd03.prod.outlook.com (2603:10b6:a02:b4::23)
- by BN9PR03MB6090.namprd03.prod.outlook.com (2603:10b6:408:11b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Mon, 17 Mar
- 2025 22:34:49 +0000
-Received: from BYAPR03MB3461.namprd03.prod.outlook.com
- ([fe80::706b:dd15:bc81:313c]) by BYAPR03MB3461.namprd03.prod.outlook.com
- ([fe80::706b:dd15:bc81:313c%2]) with mapi id 15.20.8534.031; Mon, 17 Mar 2025
- 22:34:49 +0000
-Message-ID: <2b218680-ea43-43af-96a8-33f2609510f5@altera.com>
-Date: Mon, 17 Mar 2025 15:34:46 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] fpga: m10bmc-sec: change contact for secure update driver
-To: Peter Colberg <peter.colberg@altera.com>, Xu Yilun <yilun.xu@intel.com>,
- Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
- linux-fpga@vger.kernel.org
-Cc: Peter Colberg <peter@colberg.org>
-References: <20250317210136.72816-1-peter.colberg@altera.com>
-Content-Language: en-US
-From: "Gerlach, Matthew" <matthew.gerlach@altera.com>
-In-Reply-To: <20250317210136.72816-1-peter.colberg@altera.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR05CA0034.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::9) To BYAPR03MB3461.namprd03.prod.outlook.com
- (2603:10b6:a02:b4::23)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF151953A9;
+	Mon, 24 Mar 2025 10:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742812579; cv=none; b=F42GPR7RuUSEd5kTeCmnTGp0mhrPqRPLXqocRc2sGm4JkxPKM1xsJxHzAKEuoCMvV1+JsYNAD1kVt8iKOfmbMq5UvK5wpSe/VLZCDWM3SFX9qe5z5Bg32ZOYtrrQo+zAp/5gDCLyK6dhbacB1J816xSIfp+pAYfC1+d2OvJrbec=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742812579; c=relaxed/simple;
+	bh=g36vJ2OyxStHe8QDcLMn5mm8sOgJSZtKgCusIVzPoZA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T4ObK90MFTN+1qBJv1To7n6yrdVQils0/2ZqzRxRw2PTxhybyFgIBBMtpdSL+loc/4jw9SnW1A5GIx9/BOiy1CdqrRFQT3fHkgvZCVRl7bd3WjRiMz696C8oGn+npYVNB/ucMKXM53PwXd7JEUe9hfclRjSIhK9nt/4lqX8QF+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F9oo3QVi; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43ce70f9afbso41939765e9.0;
+        Mon, 24 Mar 2025 03:36:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742812576; x=1743417376; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5B/CeWfDacun7Zfi2gtOkvWcKPOtTpzUBlClnAfjEs=;
+        b=F9oo3QVihvndQWOrirZ2Qttb6g7oHm7NvMZ+4F4A7inJ3xxMKrG+jayLBFqPr0DncE
+         fUAxFJFx6lmaPs3ogpPdUbetaMBjI2P8+ztUj+Qx+E9ZreRtW2vpgrZJgiAHOJo6QSbo
+         j/bkvtiPEiFE7Ya+PhzBmTVIDORWK1iwkwe8LwoaitW7c5Rm2/gI9Oq6rkCo/Z4emMTm
+         uDFska4hzo3BX78pL9GVv+RNw9jjU1fV6j1KerrRkPj2D9tv0KhR+XuPh10vGLZm3XD9
+         O3Mm5cSQtvtDbO1brZCtEy2PYY47AthzmPAFOhES3B10vuRrjolNff/kIKkdSlThAjau
+         b4mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742812576; x=1743417376;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q5B/CeWfDacun7Zfi2gtOkvWcKPOtTpzUBlClnAfjEs=;
+        b=sVY0FyRhs9WqfJ7KxgeoFglerciXp1PtR8Dxs9UmYm7PcXB5G0fYHQf+tpmF+xt4KE
+         c3jcE/bE5chBWzk5yiqIZ2ryrs3+gsXsCdPI9vUznraINWlSDLEKDUrrTM+oQZm4Bgq4
+         P+And1HxittIT+JWza9IZcuiEkRrKFfkZWH1nzrKjRo/nyTx3umttnBmc7GrVvfQ2oaP
+         36EKJ1lxpafDEQzqqmBTgW8+NbRZH+ZCv/rUG1gUL2Bzf16egvJOaUFYolZ7/6BtdJob
+         SVxnM0BNzZ9edxit2sj8rKb2CojoX8L7zn9ZK77Wx76v0JQ+8IJ77CARQTdwTPHfntLY
+         n1mQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHDmPMGjFtSWDaia8rypaNBUBEeUn7rRjBGrMla5Gz911F8SdZqoOP7Bx40PMtRIXi9cyTwExU@vger.kernel.org, AJvYcCUTvKqmy4buf0TaDCzdLFNrxaM2xby3OJPN/CXfjIL7VoTT3iv0jEOikPTN5CWmjRMcf8Ss1X+8wMaqtaw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGpeRb4ZucPiIbl1/0Iu2tCu9Ax9AfbbRSkSKhpQGrV8f+grjZ
+	aKM1upnwucP/wegKKcisN3BRZirJyubq9CHQ1U1v2Y/oAJMKub65
+X-Gm-Gg: ASbGncuPp5bKYzPkYUalimQVYCSUjL6DofzLB0ZCDi6Xop66+k1fR8KdrPmWw50UitU
+	NyuS1Dlfe/a8VpMx0F1xr2rtTJuV6XJ8IYCFK/AbCKmYIyjwLypUp/moKH3rXq2VJsjwSCISHgQ
+	fdDUas8F+/IC8GXMs3qE5+MFlnSTUSu2ypU6kMQD2FWRyN4SUMHK4KE8VrTkTDNhAnPCx3v48Ea
+	lnEv6Ew2RBZjGpZA4vaf9sZVTk+2ja5zMr7H/GMj3AgNnw6MD/oVnl6H+OztPQjh8XtdDvaYWSd
+	6WvML9oZHhedcNtONDbCiH/lFX8BRmD1AdRFONsDIcCrbw==
+X-Google-Smtp-Source: AGHT+IFShNovJTwwGEmC89w1rjnLGPeYGnDCT0HO5gsvqMah4azhcYyuI3lba+zIt/Six4HniXcLoQ==
+X-Received: by 2002:a5d:6d0d:0:b0:391:41c9:7a87 with SMTP id ffacd0b85a97d-3997f940870mr11497856f8f.51.1742812575912;
+        Mon, 24 Mar 2025 03:36:15 -0700 (PDT)
+Received: from qasdev.Home ([2a02:c7c:6696:8300:6c2b:a0d1:ba6d:a00f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9eff9asm10760895f8f.92.2025.03.24.03.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Mar 2025 03:36:15 -0700 (PDT)
+From: Qasim Ijaz <qasdev00@gmail.com>
+To: mdf@kernel.org,
+	hao.wu@intel.com,
+	yilun.xu@intel.com,
+	trix@redhat.com,
+	marpagan@redhat.com,
+	russ.weight@linux.dev
+Cc: linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Marco Pagani <marco.pagani@linux.dev>,
+	stable@vger.kernel.org
+Subject: [PATCH RESEND] fpga: fix potential null pointer deref in fpga_mgr_test_img_load_sgt()
+Date: Mon, 24 Mar 2025 10:35:51 +0000
+Message-Id: <20250324103551.6350-1-qasdev00@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR03MB3461:EE_|BN9PR03MB6090:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4781fffb-bb7c-433a-fd00-08dd65a3ec99
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZEZnVDE4R09icGllWEJRcXV5S3llNlA4cnBiS04zQkxBOURMcjdIQ3hGaHpv?=
- =?utf-8?B?RG5VSkhFMGZDMXltQjlnRmR4UHBzQzZLN0wyOGdmbTB2d1A0c1NsMUQwVmtY?=
- =?utf-8?B?dEY2UmkzcWw1SHFjT0NHYWU2VjBZMGVPTXBoS1k4YTJOZ1Arcmw3U2QyN1Zt?=
- =?utf-8?B?bEtnV1RvUmQ2QjZzZmd4am9RWWVvRFpDQWx5MURyVm03YnJQQmQ5YWZkKzdz?=
- =?utf-8?B?dysyR1VPdFVRKzNtWGhuVGlMbUhjTVJueHgzdUExNzh0dnJmazU2cGdEcWlO?=
- =?utf-8?B?Z1VMRDFPV2ZxNFp1K1N6eFlsTFFNVVZoZFRka1VYT0Zralp3K0ZpRE1oOEc3?=
- =?utf-8?B?cm1lOWFCVlJhbkhwZWEvNEM3bHlqZERXMlUrcHJjc1JBS3B1S2lkVXlUcGds?=
- =?utf-8?B?SkQxZS9jSW02S0JiTmp2YTdqNUhuOEZVM09pZ09oUFV0SjNDUUlkR0N4cHdx?=
- =?utf-8?B?TWI5WFN2OVVtclBQYmVGRlBBVFRhbkpKVXo3eWV6OUdJNjFyUmQ0ZHlwd3lD?=
- =?utf-8?B?NFRYODkzRVVnK2V5SVh3bEtjQUV3Ym9XSUxoREc3c1dsRFRLNzZ3T3RrWGts?=
- =?utf-8?B?b2xsVDhIcE5kWTNKNW9JUTV5TTZJc1ZTdGJuTG8zanZGZVdhbkZnNDNSMXA3?=
- =?utf-8?B?U0x6NndUMk81WHVXOHl1TTJjK3hkY05qQmttYjNNRFhENC9WeWJuS1ZIUmt2?=
- =?utf-8?B?WFJsM3ZFOWRlajZTejhpYWlmejlIRC91akZXZk5YVHl3TkxLVWJHMnFzS1Ix?=
- =?utf-8?B?Y2hoOXBvMllXY1lacTlVZmVKSUNhbndJdURkclZKbFJXYWh0SGdVejFkR092?=
- =?utf-8?B?b3RaTWllbTlQZGdGcUJKNGdReExYa1dNaXhCcy93alVFeEtwS09FRDlLV2Vq?=
- =?utf-8?B?ZEFUWU9tTExTUFZGd1VFaE1SN1gxeHI4UDUvOHhzS3ViblcxVjZmaitNci9i?=
- =?utf-8?B?ejVhdzB1MDFoSWhYSUFyYUNwYmpRUGV6TjdmRUQ0Y01IeGxYdGlPYzllRTNr?=
- =?utf-8?B?KzJMVFRMSFRlcmRRZ2tZbERLeXNuYXBXVy8xek9xaGo1ckpKdUhWMzJieTF5?=
- =?utf-8?B?cXhzbjNWZERmWG1XeGhtbmlaS2luVklMTm5VMmd6T2VSMHVGNm0zY3ZaL1hL?=
- =?utf-8?B?WVk3b2Jubms5aXNabmlPVnkyZTNhQnRQSEQ3OXp3SnpMaE9LdTdQbnZoejMv?=
- =?utf-8?B?Q01BdXdaUVJIUlZydFEwMm80RUNlWE00ak4vNHBiT2Q2ZWNZRkN6YjhvSmpD?=
- =?utf-8?B?RU9mWFc3bUpqdWxFNUZmZldUNE9LVXgvVmpaNzBoU2Y4YmM5SVhOdXJ4YTBL?=
- =?utf-8?B?NmpUN3R5RjBCTjdOekhwYU9JalR0Y20rSFJQa3F2SWlkL0k2dCtWcXI4SXFZ?=
- =?utf-8?B?Q1c2OWZOdkJPdHhjWlUxMW1XTkVvZDV5d0xmZDBnbUpPbnIwL2hFaVNxemlp?=
- =?utf-8?B?WkhjSmM0cm5MSkJDNmJZU3dvZEZQRmFvNXpnV3BJeUdwaXNlaUlMUHpVVGdi?=
- =?utf-8?B?b1RKelQrVHI0U0JKSUM2WjQrTUVhdnQ1YWp2aXFFdkkxeVRubU0vcEhiVXVq?=
- =?utf-8?B?RlZMT0JjNVRMYXlKbzluTXVqV1M5RGt2MDdzak5uS2pOVCtqQkZFZGtQaDZj?=
- =?utf-8?B?TjlRbnBzVFIxRzV2MnBmSHUzOWVNbDlZWDIzek5od0MrZkNZK1NMWVNYVjRI?=
- =?utf-8?B?Rk5JOUNOeTNXMEZQZVFLZXVBOC9FUTVvUlZ5bkdVZGUxM0pEN05pTlJZdXY2?=
- =?utf-8?B?M0Vta3p6YitYSXE5QmN6TlJzVTJBSDRHOXRmZG1XVStkdHF6MzEyQ2dDTmpF?=
- =?utf-8?B?ZGIxaDRFbVkxNTFiOGFSb2NvaVhNTEJVV2VSK1gxSkFVUElpeGwxci82WkpT?=
- =?utf-8?Q?qWJkWzcGrAwX9?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3461.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TG93d0Y0V1l4SGUwdEFFU2dsOGd3K1NKRnNzd0t0cXRQRjFtM0RZbWNGcVNP?=
- =?utf-8?B?bzBubU0xTWNtdHVoM1h1Tm1NeUxZOE5vYWtHak54d2NBQ1dkek5INlZ6aUpG?=
- =?utf-8?B?M3lpL0M3MWg4cHlRcWVIcHBwdi9jVDN3QWJ0WktERkcxZmQ4TXpBT2N6eGN6?=
- =?utf-8?B?VG02eXJmMUZqV1FGTlFlZWw1QnNMR09lZ2RjeHE5Nkt4STI2VXQySHloV09q?=
- =?utf-8?B?d1NOdWcwWGVkWnV3YnVwTlZweVNzRE1KbzdsUGJYVUpYUUxuNGVMdjk3RHdz?=
- =?utf-8?B?MG0yNDBRbmdVa2wrSnQzTEpyZzBJMzNPS29wQUFhY3FpR3NYZFlad0F1c1Jl?=
- =?utf-8?B?ZUR3WkpnSmZuWUQrWXZPRUdrdEpTOFNRZG01d0lHcDlkQWhkdVZFUmppdVNL?=
- =?utf-8?B?OWhIRWRZR1RYWVczQlE4N2lHdGJnZHM4Qk1sLzhraWdaOFI1N1VkOWZ3Snpi?=
- =?utf-8?B?a2N6SGhWaTBZQlJUNko5OHhxMERMbmZ5Q0l5MDkwTFBkdHRzekcralA0MDVw?=
- =?utf-8?B?aDgwMTAvOW1oMk9CQm9KNEtJcmw5NEl0dmc1SFpjYkRHbW4rejFlcDgxeU52?=
- =?utf-8?B?K2dYOWE2RmdxU2hqWmlQMkw0RzMvWFFYU1p5ZzJRY05Sc3hLVHR1RXZrYmJx?=
- =?utf-8?B?V1RIbC8wbERNV1NPV2ZCMHVFNDBITjdWTUVNZjZsRjUyek1uckVsSnA0cWsz?=
- =?utf-8?B?UzFmb0NCSTRGdUF3cmRTZk52a3dKRm1neVd2VzVxZVQ1dkZEdzhzNk1CcG9W?=
- =?utf-8?B?bUxJenlkSHlRM2xvQkFBSGMxemZYS05mdWprRnNSYXV3dlFoeUlrTDJsQ1pq?=
- =?utf-8?B?ZDdkbDJiM21ablpiU1ZvWEF1dk9UckN6MktyTWdudUZHMHczaHIxM0sxVVNN?=
- =?utf-8?B?NWY3a3N4V3c4c3pjVGFoUHZnNnlTRFJmZk1ZZFZIVElBamttN1BWc3VKVmFs?=
- =?utf-8?B?RUdEZ2diSStsU3ozTGNhdnRERlgxNGhsYU1HZ2RyS0NNeVRaNVpCUU14cjV5?=
- =?utf-8?B?YU1RdmJORHBqUXNrQXZRYUJJZXZoRjZxanZlSUdCd0xyWDVCRFN3MjlLZ2sr?=
- =?utf-8?B?NGg1b2twNkxnaHEvZGdCaGZOTWo2QWdsclFubGJucm5SRFFzNmJHSW9TdUNB?=
- =?utf-8?B?bGUydTRYdlBSZFJ4dWRjbFhlUitwTGVXaUVWV1R0b0VEb0VGQmJ6NERubVlw?=
- =?utf-8?B?bTFIWHFtSVhrejIwY2JYL1gxdG44VkkxMGZMRkIzQ0RNVVhFaFB0T1gzbHVx?=
- =?utf-8?B?a3RQOUdQdU1FcVgrRTRkQThMTFJnWnhTM3YzRlVHUmRxUG8ySDl2MkZUQWdn?=
- =?utf-8?B?NE5iaGtZS0h2OUhZRVh0a3MreXNFTnpLd2NiMmxMNW5vZGlnYjdSdEE1WGtX?=
- =?utf-8?B?U1I1ZVVKUmNqNXVLNFpUelQ3M1V3RVBuZVhWUEV6b1FBSUVDUFNJZGhVSWk1?=
- =?utf-8?B?M0QwT3N5QkVsdlQwZyt2RXZOeGRTQSsxR2tyQUdJTTFsYjBneHN5dFFDdS8x?=
- =?utf-8?B?ajJqc0o3UkhuZnZBRTY1SElHcllzaUdkSk1QaEdMODJjdU84RFh2MDVDM3JN?=
- =?utf-8?B?Q0hpRHU0VFFxSmd5cThVaWVGWXpKY3hhQm01Q09GK0RtUEYyYXBrT1VZbmRU?=
- =?utf-8?B?dkk0OHJvODJrNU1Uc0tCK0Z3b1BBMUlFOXpyVi9TWjUreitDR2ppNjBLYWNh?=
- =?utf-8?B?MFFFNTc3bmtBM2N5aE82TUx2cll5N1EwVE5jR1lJc004SHBaTFJpSVJBT2Vh?=
- =?utf-8?B?WGJhVHVkcDM5NFhlbU5DU3ZxWkNHVzVaMUpEcFJSMDg0VmUvVXFOR0w4cmNM?=
- =?utf-8?B?bUtBaElxSUtQL0VwYzQwRldqY1RoNytwVVBIWit1R05SMVc2ci9USXNzOUlr?=
- =?utf-8?B?aDJ6OExieFdOWExKWFI3dEFhYWhxcGdIUVVJdEIyY2QybERqUnBwZyt0NXJZ?=
- =?utf-8?B?alZEeXlDWHF6Tk5rREFKTkxmQXg5QnNoQndtcGx2WkEwNG9XV3FFZzZSem9Y?=
- =?utf-8?B?ejQ0SHhzZ1U5WkVUWlhIdCtDMVBlWkpmRU5mWnZiaklCbVRqbDlXZEcvb04x?=
- =?utf-8?B?eW9aSXF2bTNzTDNReTczNVU1Mk5ySy9pcEhFZVBpZTlSWVdDTU5NWTJCYXpn?=
- =?utf-8?B?VkN6SXJ4cjVmUU5XeFY4aE12RlhlVHllM0w3VTZzMVdGeVJLYlNnZFNLdGxw?=
- =?utf-8?B?Tnc9PQ==?=
-X-OriginatorOrg: altera.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4781fffb-bb7c-433a-fd00-08dd65a3ec99
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3461.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2025 22:34:49.5663
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OyElMFO/fx+VwNMQA/Vst/9WWqNy9g4u1WLtteIvsM5EI39oQHi6tyOAcGuqzQhX92RAo1zr94RhTixN+9siZAI75PE92qFRdk9dvdXmqok=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR03MB6090
+Content-Transfer-Encoding: 8bit
 
+fpga_mgr_test_img_load_sgt() allocates memory for sgt using
+kunit_kzalloc() however it does not check if the allocation failed. 
+It then passes sgt to sg_alloc_table(), which passes it to
+__sg_alloc_table(). This function calls memset() on sgt in an attempt to
+zero it out. If the allocation fails then sgt will be NULL and the
+memset will trigger a NULL pointer dereference.
 
-On 3/17/2025 2:01 PM, Peter Colberg wrote:
-> Change the maintainer for the Intel MAX10 BMC Secure Update driver from
-> Peter Colberg to Matthew Gerlach and update the ABI documentation.
->
-> Signed-off-by: Peter Colberg <peter.colberg@altera.com>
-Acked-by: Matthew Gerlach <matthew.gerlach@altera.com>
-> ---
->   .../ABI/testing/sysfs-driver-intel-m10-bmc         |  4 ++--
->   .../testing/sysfs-driver-intel-m10-bmc-sec-update  | 14 +++++++-------
->   MAINTAINERS                                        |  2 +-
->   3 files changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
-> index a6e400364932..faeae8fedb14 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
-> +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
-> @@ -17,7 +17,7 @@ Description:	Read only. Returns the firmware version of Intel MAX10
->   What:		/sys/bus/.../drivers/intel-m10-bmc/.../mac_address
->   Date:		January 2021
->   KernelVersion:  5.12
-> -Contact:	Peter Colberg <peter.colberg@altera.com>
-> +Contact:	Matthew Gerlach <matthew.gerlach@altera.com>
->   Description:	Read only. Returns the first MAC address in a block
->   		of sequential MAC addresses assigned to the board
->   		that is managed by the Intel MAX10 BMC. It is stored in
-> @@ -28,7 +28,7 @@ Description:	Read only. Returns the first MAC address in a block
->   What:		/sys/bus/.../drivers/intel-m10-bmc/.../mac_count
->   Date:		January 2021
->   KernelVersion:  5.12
-> -Contact:	Peter Colberg <peter.colberg@altera.com>
-> +Contact:	Matthew Gerlach <matthew.gerlach@altera.com>
->   Description:	Read only. Returns the number of sequential MAC
->   		addresses assigned to the board managed by the Intel
->   		MAX10 BMC. This value is stored in FLASH and is mirrored
-> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-> index c69fd3894eb4..3a6ca780c75c 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-> +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-> @@ -1,7 +1,7 @@
->   What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/sr_root_entry_hash
->   Date:		Sep 2022
->   KernelVersion:	5.20
-> -Contact:	Peter Colberg <peter.colberg@altera.com>
-> +Contact:	Matthew Gerlach <matthew.gerlach@altera.com>
->   Description:	Read only. Returns the root entry hash for the static
->   		region if one is programmed, else it returns the
->   		string: "hash not programmed".  This file is only
-> @@ -11,7 +11,7 @@ Description:	Read only. Returns the root entry hash for the static
->   What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/pr_root_entry_hash
->   Date:		Sep 2022
->   KernelVersion:	5.20
-> -Contact:	Peter Colberg <peter.colberg@altera.com>
-> +Contact:	Matthew Gerlach <matthew.gerlach@altera.com>
->   Description:	Read only. Returns the root entry hash for the partial
->   		reconfiguration region if one is programmed, else it
->   		returns the string: "hash not programmed".  This file
-> @@ -21,7 +21,7 @@ Description:	Read only. Returns the root entry hash for the partial
->   What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/bmc_root_entry_hash
->   Date:		Sep 2022
->   KernelVersion:	5.20
-> -Contact:	Peter Colberg <peter.colberg@altera.com>
-> +Contact:	Matthew Gerlach <matthew.gerlach@altera.com>
->   Description:	Read only. Returns the root entry hash for the BMC image
->   		if one is programmed, else it returns the string:
->   		"hash not programmed".  This file is only visible if the
-> @@ -31,7 +31,7 @@ Description:	Read only. Returns the root entry hash for the BMC image
->   What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/sr_canceled_csks
->   Date:		Sep 2022
->   KernelVersion:	5.20
-> -Contact:	Peter Colberg <peter.colberg@altera.com>
-> +Contact:	Matthew Gerlach <matthew.gerlach@altera.com>
->   Description:	Read only. Returns a list of indices for canceled code
->   		signing keys for the static region. The standard bitmap
->   		list format is used (e.g. "1,2-6,9").
-> @@ -39,7 +39,7 @@ Description:	Read only. Returns a list of indices for canceled code
->   What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/pr_canceled_csks
->   Date:		Sep 2022
->   KernelVersion:	5.20
-> -Contact:	Peter Colberg <peter.colberg@altera.com>
-> +Contact:	Matthew Gerlach <matthew.gerlach@altera.com>
->   Description:	Read only. Returns a list of indices for canceled code
->   		signing keys for the partial reconfiguration region. The
->   		standard bitmap list format is used (e.g. "1,2-6,9").
-> @@ -47,7 +47,7 @@ Description:	Read only. Returns a list of indices for canceled code
->   What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/bmc_canceled_csks
->   Date:		Sep 2022
->   KernelVersion:	5.20
-> -Contact:	Peter Colberg <peter.colberg@altera.com>
-> +Contact:	Matthew Gerlach <matthew.gerlach@altera.com>
->   Description:	Read only. Returns a list of indices for canceled code
->   		signing keys for the BMC.  The standard bitmap list format
->   		is used (e.g. "1,2-6,9").
-> @@ -55,7 +55,7 @@ Description:	Read only. Returns a list of indices for canceled code
->   What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/flash_count
->   Date:		Sep 2022
->   KernelVersion:	5.20
-> -Contact:	Peter Colberg <peter.colberg@altera.com>
-> +Contact:	Matthew Gerlach <matthew.gerlach@altera.com>
->   Description:	Read only. Returns number of times the secure update
->   		staging area has been flashed.
->   		Format: "%u".
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3f60ff1957b0..9d22c4015e67 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11833,7 +11833,7 @@ F:	drivers/mfd/intel-m10-bmc*
->   F:	include/linux/mfd/intel-m10-bmc.h
->   
->   INTEL MAX10 BMC SECURE UPDATES
-> -M:	Peter Colberg <peter.colberg@altera.com>
-> +M:	Matthew Gerlach <matthew.gerlach@altera.com>
->   L:	linux-fpga@vger.kernel.org
->   S:	Maintained
->   F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+Fix this by checking the allocation with KUNIT_ASSERT_NOT_ERR_OR_NULL().
+
+Reviewed-by: Marco Pagani <marco.pagani@linux.dev>
+Fixes: ccbc1c302115 ("fpga: add an initial KUnit suite for the FPGA Manager")
+Cc: stable@vger.kernel.org
+Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
+---
+ drivers/fpga/tests/fpga-mgr-test.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/fpga/tests/fpga-mgr-test.c b/drivers/fpga/tests/fpga-mgr-test.c
+index 9cb37aefbac4..1902ebf5a298 100644
+--- a/drivers/fpga/tests/fpga-mgr-test.c
++++ b/drivers/fpga/tests/fpga-mgr-test.c
+@@ -263,6 +263,7 @@ static void fpga_mgr_test_img_load_sgt(struct kunit *test)
+ 	img_buf = init_test_buffer(test, IMAGE_SIZE);
+ 
+ 	sgt = kunit_kzalloc(test, sizeof(*sgt), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, sgt);
+ 	ret = sg_alloc_table(sgt, 1, GFP_KERNEL);
+ 	KUNIT_ASSERT_EQ(test, ret, 0);
+ 	sg_init_one(sgt->sgl, img_buf, IMAGE_SIZE);
+-- 
+2.39.5
+
 
