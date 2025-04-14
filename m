@@ -1,289 +1,181 @@
-Return-Path: <linux-fpga+bounces-1157-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1158-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BC74A88438
-	for <lists+linux-fpga@lfdr.de>; Mon, 14 Apr 2025 16:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 258FFA886CD
+	for <lists+linux-fpga@lfdr.de>; Mon, 14 Apr 2025 17:19:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1680F1888599
-	for <lists+linux-fpga@lfdr.de>; Mon, 14 Apr 2025 14:07:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B525A190381C
+	for <lists+linux-fpga@lfdr.de>; Mon, 14 Apr 2025 14:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C7B727584D;
-	Mon, 14 Apr 2025 13:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8155A2472B4;
+	Mon, 14 Apr 2025 14:53:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JvzbrGuO"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="Rp2iHfd2"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazolkn19010004.outbound.protection.outlook.com [52.103.20.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B24275859;
-	Mon, 14 Apr 2025 13:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744637594; cv=none; b=K61UmDPemXNZ0ydqPxNrrTXYziiLtX0OkAdFFoJBSSdQeZiaKo+u9KGS6OLfmshVnnLypoodICS7CvMxgEDWLtlTynU1b+ETJFmAInkRY1l8FythRWGgPHLBZ9Wz0VghWKF2qoKc7cXwapveMQ91LD5Qqq7+CWQgoR1jNowp75k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744637594; c=relaxed/simple;
-	bh=xZMfdb/PDvQf4pfNhJ82gLWfKrDvTmfQsSjWoHGDpkI=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=XjV5cfMlHXVCkK8GsnuenJQX/QwcOmSNm4ZmYUQc6yicyenAtRJ1C6Ggx3bgk4A/qPqm75uWKnRqoCRlL4p0YtqGXWIuYHiG7TquB1LaxRp0wmk65mP+g22DK9KsqlGHNP9neZ79/d3wQcdvuKwcT5SNDtL2QPvcI/haNVQq+PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JvzbrGuO; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744637592; x=1776173592;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=xZMfdb/PDvQf4pfNhJ82gLWfKrDvTmfQsSjWoHGDpkI=;
-  b=JvzbrGuOpjZ8vWcqnzSZ5Ejjfst5hj7ksLA8YQ2JYt+1/A2KKvUOwdSI
-   Ydbh0gjbP1vXUZBTysMStFh0akuMzuZtlEr1L7vZh1AxlWKQ7x/0suSCk
-   uGAdPHtbJy2G99SoUfn5KAouQsv0THXFKM7uu565n3Bu2EyW49SK+hubR
-   0j6Ty48MOvdzLhNKqGHmAF74owL7awgvxGCHeSiYNdIKRQZwcqXYhnBw4
-   4DzFJY2UpgiSkn9lLt3+yUOgVjtdLw02qiKPbLBRtFElGHoIdsaN4LvmL
-   u+bvto7WyDT5vIKr2ya5M9fga2BRTVpwtnziM50/sYCnf0nNm3nKWTxIw
-   A==;
-X-CSE-ConnectionGUID: lIYIZEvzTm2fYLt0S11qoA==
-X-CSE-MsgGUID: x58/t1stQ6adSM4v43t0rg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="49763976"
-X-IronPort-AV: E=Sophos;i="6.15,212,1739865600"; 
-   d="scan'208";a="49763976"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 06:33:09 -0700
-X-CSE-ConnectionGUID: L6ATAlVbRmWAh5vdEuAvNQ==
-X-CSE-MsgGUID: pSzhCCy4QXOWP9FEwxN28g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,212,1739865600"; 
-   d="scan'208";a="129780130"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.8])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 06:33:04 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 14 Apr 2025 16:33:01 +0300 (EEST)
-To: Lukas Wunner <lukas@wunner.de>
-cc: Bjorn Helgaas <helgaas@kernel.org>, 
-    Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>, 
-    Keith Busch <kbusch@kernel.org>, Yicong Yang <yangyicong@hisilicon.com>, 
-    linux-pci@vger.kernel.org, Stuart Hayes <stuart.w.hayes@gmail.com>, 
-    Mika Westerberg <mika.westerberg@linux.intel.com>, 
-    Joel Mathew Thomas <proxy0@tutamail.com>, 
-    Russ Weight <russ.weight@linux.dev>, 
-    Matthew Gerlach <matthew.gerlach@altera.com>, 
-    Yilun Xu <yilun.xu@intel.com>, linux-fpga@vger.kernel.org, 
-    Moshe Shemesh <moshe@nvidia.com>, Shay Drory <shayd@nvidia.com>, 
-    Saeed Mahameed <saeedm@nvidia.com>, 
-    Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: [PATCH 1/2] PCI: pciehp: Ignore Presence Detect Changed caused
- by DPC
-In-Reply-To: <fa264ff71952915c4e35a53c89eb0cde8455a5c5.1744298239.git.lukas@wunner.de>
-Message-ID: <03f5e7b9-e656-0252-167e-7f7df49de031@linux.intel.com>
-References: <cover.1744298239.git.lukas@wunner.de> <fa264ff71952915c4e35a53c89eb0cde8455a5c5.1744298239.git.lukas@wunner.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C2424728C
+	for <linux-fpga@vger.kernel.org>; Mon, 14 Apr 2025 14:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.20.4
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744642412; cv=fail; b=KlJ6c7NalXiTfF4Msz+VyHjkGdINRD0cXpkmVdX+zVYlclLmdnthMIYzoop8baY0PG8DB/LsnetGtRng5eoaZcJZKClxvlGkEVFhmQ6hpODhVB1uZi88XDBvL4kU/1tH35FW8Y8zvn+RoKMViyX07ocAt29YJ7R/AQcWzqiEWjY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744642412; c=relaxed/simple;
+	bh=3kREOD8mA/ic77n6U75MoBGSssjkdp3bVYjrFPTdr58=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=KU9GE/HD6UCDl1IsVE/CgtAjbTuSoNQUwRi6yU04eVCyvswOQlTyCR5po34fUhDU0FuDXuiiMNDn9eZGuIDeFc2AW5ScRp33Ezn55XAm8daSz6zDC2Vz842VFYStsywBsdV8Ewd0Jw0Sz5sB+IsTO2DVj3lsJvCGownN8YRFheg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=Rp2iHfd2; arc=fail smtp.client-ip=52.103.20.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ja/I3UmBJh+OHkEOX+zbScCvmLMBvxpjTbFg8+qh81UMMHVA9x2S5wc3nWM7/1Rf8E3LBacHXaaIixeBzH3k3utjqU/ysypoOzRIMFXbB3fPQDC1d3gG5IrgRd317zuktF5DQpJynb7i/INl1xR7EpTbBOujDwOaLas14rHln3rhF06AOkPBuJo1d2PeqAilNl33JiGRR+/sL5kbzrsIV7XGQwf6Wqax244Lsud0c7S/C/Vs0x97dgm5ssgQTtlwveziaQnbRxa4AjY03qyQsqK/MkGfOmYMOyQzGh8Unl0zfnJCufd2ak8kebNabsliRtJ5XmXPQh/ENfm1lE8Kbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3kREOD8mA/ic77n6U75MoBGSssjkdp3bVYjrFPTdr58=;
+ b=jZ+lo0Wv+AwV8yf175o/DHB6Qb9xG7kygVbOpY43/FgPTj9dEVLgcHiKznnp2dzzvJGt2uXqMfB470BVJUxVBIQRV/BJA0Mi0K3u/AorAxY+tdJMr5Rwtp4IvVkHoz9GFiDmBSQJV5wHvOabMPQpE0dvSgkvgXR3AoRSHusAr7MBJn9s+lH6S0I9LNVdt7D+ffX6jtxvdVxAYtwSsVy5R2DeCVrvfTGg4IHcZP1P0UA5Njuti99lsDPTb5kldxvTw3joL+djPq2pNiD/6GaXWPUVxjrNI3BUW1vQgu/FHLLHC24pDAwnE9frK4HwYokgpQvPODsieBMpQuROV+MCtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3kREOD8mA/ic77n6U75MoBGSssjkdp3bVYjrFPTdr58=;
+ b=Rp2iHfd2BiG1bHt7VDUU8g70Oh9jZNmvWxt50cX3EqlkxtHxUUnENzk+zHeNBIzwSxs0UIh120oD35IpvBcTdcCeX6aD5sy4tQTWqJcTc+kplM6bassh37FB5gYWFwoTzbJCOmn9dqA/U+SoM6cJ4KwWY9kK7S5Btj9+/hBZPIWW8WTS1Grj2vxJ+fiMsUwfYDxzigagVevda1crdq32popstRnza/vTkQu8eiu/szlYX81OGM+8LnSQx4L6Wo8zQ5T3bGT1E4fwn8R4lahBTu70Yi1agVV7fs5MsjVOtpv0teVmbMjM78XHYPeAmWChmke6/7ZoSfmeetc36JincQ==
+Received: from PH0PR04MB7818.namprd04.prod.outlook.com (2603:10b6:510:ec::16)
+ by SJ0PR04MB7709.namprd04.prod.outlook.com (2603:10b6:a03:329::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.27; Mon, 14 Apr
+ 2025 14:53:28 +0000
+Received: from PH0PR04MB7818.namprd04.prod.outlook.com
+ ([fe80::2e62:9013:9448:74ea]) by PH0PR04MB7818.namprd04.prod.outlook.com
+ ([fe80::2e62:9013:9448:74ea%4]) with mapi id 15.20.8632.030; Mon, 14 Apr 2025
+ 14:53:28 +0000
+From: Brenda Wilson <brenda.prospecttechconnect@outlook.com>
+To: "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
+Subject: RE: Unlock aerospace leads from MRO Americas 2025 attendee database
+Thread-Topic: RE: Unlock aerospace leads from MRO Americas 2025 attendee
+ database
+Thread-Index: Aduq6GakcHCLABl8QbaIR35AsaJBQQ==
+Disposition-Notification-To: Brenda Wilson
+	<brenda.prospecttechconnect@outlook.com>
+Date: Mon, 14 Apr 2025 14:53:28 +0000
+Message-ID:
+ <PH0PR04MB7818AFBB535368C91BB75D5F94B32@PH0PR04MB7818.namprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR04MB7818:EE_|SJ0PR04MB7709:EE_
+x-ms-office365-filtering-correlation-id: 060134f2-6b46-41c9-9664-08dd7b641ddd
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|19110799003|8062599003|461199028|15080799006|8060799006|440099028|3412199025|12091999003|41001999003|102099032|56899033;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?Y8NfCaFNkzPaWqIzWOa5CXz1Cpyt0GQ/NqS4xbUatNXmAAyT1xPYeswjZm?=
+ =?iso-8859-1?Q?NefT6DT9dHNfARLLiTFXXHVy1ulEkuNIDkeH1KkAwpv7lo2gPxtagMbbs4?=
+ =?iso-8859-1?Q?fsP0mTEVQ8dywH0KEqSddich7ny0HEtczNlkTCC3kVXZOUw8wh645q0gGl?=
+ =?iso-8859-1?Q?gfx5jegvJ7Rd9oW/g2XKeaZyFadmyBk7mGthVqIbXo6vGnKQZhBNGb0KlB?=
+ =?iso-8859-1?Q?H7BQFw+lEekXY+hU+xkPa91CmXm23omOvAaoRsKg3RS1JvFpKEPIG7ZJ2z?=
+ =?iso-8859-1?Q?CnBrDr7SX0gi5akeYcYLQhoc5EKpsD19LNofbCGRi68lokN7Zk88UJ22WH?=
+ =?iso-8859-1?Q?kIjVJ0oEzEWs3LNQW2ufuVrHvEitm4jufMpTJBDbH4Yc8G5MGAIQugDGpf?=
+ =?iso-8859-1?Q?8I2WMjROzTcIjNXLc3unWo7kyXdzdZdS8qaqUBYXu++EiLmmafUZeVP7ue?=
+ =?iso-8859-1?Q?2KFoI1L/p9ewt9zkxS83YXBIf2MaE/8rcxpZ7mLclKENS6UxD7fGrCevFU?=
+ =?iso-8859-1?Q?xsgl/YsLye5VSic1WbbcATva8HiGo8NNoIWhSePP6SEb2txrb64ZGfFjWb?=
+ =?iso-8859-1?Q?0CqvpDnbYZPwIY2korXvyF7iAQo3i2Vd939kDv5ZJxYASN5nGuqYv/LKaC?=
+ =?iso-8859-1?Q?w0TP23GC7zMOnTQ8Bmw5RurjD2pgzzZVblbY08NDaEqbs/I07MshY+9YZp?=
+ =?iso-8859-1?Q?/cbC+T4+YgN5riaJ55MBAMOWEe+dlFc1CcQqK7S4c1d4gabAxrNJdHxEGK?=
+ =?iso-8859-1?Q?j7+M3ZUmgOfgDTp7Vi0C+1pal1RDYJ1SQgqdub8hwmOiFqTyp/uQg6XUnl?=
+ =?iso-8859-1?Q?KAOaN5Utl1K53NEErrvUbVaFT6cPzroAMY/C1VyT5pfq9LAVICoUAqo94b?=
+ =?iso-8859-1?Q?JchvXKwfchqqsBeAvMplR40cxztKOZmhs6akNSn+v+YqSGtgU6E3zWL5x6?=
+ =?iso-8859-1?Q?4fwEe+dMdG0hSC2WPuLmwmq9mlm1nKrQa0GgktQ9/6z2sII8POUXWH7/B4?=
+ =?iso-8859-1?Q?qsDSRXgdjHqlPhXZWhmWDJ6NlpMlWgF2ll+SpCIB3ILCpgQcEs2LS6RRFv?=
+ =?iso-8859-1?Q?6uHWG1kWQGVuD7MuOIZqsKrsA6ClkP5AXvw2+1OMX5xLAh38Bcie5Xh/zO?=
+ =?iso-8859-1?Q?P4ETk47ujpgEdm6Ag068kvZ+oH1uxhJmyUrfBJhrkHlQBm2Ff0pTnGKzL7?=
+ =?iso-8859-1?Q?bNLFc1AU+na2uA=3D=3D?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?1EAGWHGYp/0Gl+nKSL9JtEU6RNzIytn5syBhpf9h1sBSSqujGP8npqVf+t?=
+ =?iso-8859-1?Q?uMgXlhpKlPO2kXfJgLh2c2QoANXBavIMhLIqDGXyJ5jSh2KBATZQzVBilt?=
+ =?iso-8859-1?Q?S26XecoQc0ZrzYVt1OjBXVWvzzPuE6c8yDh+p7pfryRzoagQExg1xGTd5c?=
+ =?iso-8859-1?Q?Of7V/YnBXnMEFBR9aAu6Q3fgkI1UdyCW1ieyHO9WRNZi3G8aJ1vhTEGG+Y?=
+ =?iso-8859-1?Q?gtRPtALkOxMXxhZ5DkU6RJbJmUSyuGd9PEqV1nu8nA6gRBHiFfkEOvxgYb?=
+ =?iso-8859-1?Q?gw1K4b3nXZtS/FBwcr9PEKSVfWlHC+dlNKHVIJqE0KI5IwQuWIC7UcifKo?=
+ =?iso-8859-1?Q?MNsf0kTsnpdKTsyP6VcatP8XgUtmEQyTJVxxNR4CexqSgA7mhEtkhRoNdK?=
+ =?iso-8859-1?Q?1R7uWf/6c0lDtNP2dsmDC7zcUjXj8qVaseY7MsQwTzjiIHioyNpgCmzXyA?=
+ =?iso-8859-1?Q?KPFmvYhHKIoCj9l2qLqhF/RxJ3V9EuLKaoAmbDQKe+B5H0zvrYzYrMaVNj?=
+ =?iso-8859-1?Q?11oYBPvm/du6WyT2BG3IyPJk+yQZ2hLGt7DdQSp0ZN+Y89tTpqN2i0PsMI?=
+ =?iso-8859-1?Q?VrXiieCXZBDKgLJeeTsde+Fp3tUoVJKoYH03luZeAXXqIeKsztCSVRXI4v?=
+ =?iso-8859-1?Q?Sn2XucbtW9uFkRgEzT11rFvQ9C8S1Ay2CtJ/WtF/Yho9j4J5ic4aAr+Ydk?=
+ =?iso-8859-1?Q?WA0LzNN6ZaYItMCUpAWaDM3k/wYN7HfjZ9SUkUm/93ZYLbsWBLacKNqxVA?=
+ =?iso-8859-1?Q?Q8vki036XFGcYqXPjwdhZF+7Flt7QImke9ox4AlNhTfKRHjfhax7bDUQy+?=
+ =?iso-8859-1?Q?A4qoLQy1iwPZbGMkdMkgWuyDrWLLHYXYk8OBkuX6FT3574UA4v853gXd/l?=
+ =?iso-8859-1?Q?HcHEuTCer1knhwd8zU2dgQIQnMCa+r8T+EGQoAedR2giTNk7Qd82uo9/gN?=
+ =?iso-8859-1?Q?+40wSZNVYmLhNnsAdTfvFNA7j7a56yrzVcfuXcPKWsvBD2o/5ZAtf4YJs6?=
+ =?iso-8859-1?Q?VKGB1mo1raIu0kggDnlX4JCbgf5akoFon3EWOU/xzxoFp/Q3CoVyLRNa3Z?=
+ =?iso-8859-1?Q?GW3qyRDOmZyBfbwNJ/SmY330duAh4JXFdVp/UJjjZtj5BZAn2KamX8KiBH?=
+ =?iso-8859-1?Q?9AN6xKAGi4ak6ypOKAj6XEDRdx4MXgJplgptL8xYWEuZQD/CW6R/R9tLLr?=
+ =?iso-8859-1?Q?kotdweCrLmR1pFQ7ETY3HwPfAjYlDxavZG0BqL4dztbDzqp15LwXk6DZcx?=
+ =?iso-8859-1?Q?+QYkVD2nd0bTVbBCqzzSf01Egpa4ZAcx9FzUq1OPk6AOWPJq3F9CZaq5Nq?=
+ =?iso-8859-1?Q?D3EdboYhjy0eGf39Uo8HeUSVih3ZE07R+odMotKp6aM99fKqcRxRoZuQ1H?=
+ =?iso-8859-1?Q?VVV2HCBVQ0b2U7zSg/vBePrkgYSeqPcQ=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-486195205-1744637581=:10563"
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7818.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 060134f2-6b46-41c9-9664-08dd7b641ddd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2025 14:53:28.3907
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR04MB7709
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323328-486195205-1744637581=:10563
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-On Thu, 10 Apr 2025, Lukas Wunner wrote:
-
-> Commit a97396c6eb13 ("PCI: pciehp: Ignore Link Down/Up caused by DPC")
-> amended PCIe hotplug to not bring down the slot upon Data Link Layer Stat=
-e
-> Changed events caused by Downstream Port Containment.
->=20
-> However Keith reports off-list that if the slot uses in-band presence
-> detect (i.e. Presence Detect State is derived from Data Link Layer Link
-> Active), DPC also causes a spurious Presence Detect Changed event.
->=20
-> This needs to be ignored as well.
->=20
-> Unfortunately there's no register indicating that in-band presence detect
-> is used.  PCIe r5.0 sec 7.5.3.10 introduced the In-Band PD Disable bit in
-> the Slot Control Register.  The PCIe hotplug driver sets this bit on
-> ports supporting it.  But older ports may still use in-band presence
-> detect.
->=20
-> If in-band presence detect can be disabled, Presence Detect Changed event=
-s
-> occurring during DPC must not be ignored because they signal device
-> replacement.  On all other ports, device replacement cannot be detected
-> reliably because the Presence Detect Changed event could be a side effect
-> of DPC.  On those (older) ports, perform a best-effort device replacement
-> check by comparing the Vendor ID, Device ID and other data in Config Spac=
-e
-> with the values cached in struct pci_dev.  Use the existing helper
-> pciehp_device_replaced() to accomplish this.  It is currently #ifdef'ed t=
-o
-> CONFIG_PM_SLEEP in pciehp_core.c, so move it to pciehp_hpc.c where most
-> other functions accessing config space reside.
->=20
-> Reported-by: Keith Busch <kbusch@kernel.org>
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-
-Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-
---
- i.
-
-> ---
->  drivers/pci/hotplug/pciehp.h      |  1 +
->  drivers/pci/hotplug/pciehp_core.c | 29 -----------------------
->  drivers/pci/hotplug/pciehp_hpc.c  | 49 +++++++++++++++++++++++++++++++++=
-------
->  3 files changed, 43 insertions(+), 36 deletions(-)
->=20
-> diff --git a/drivers/pci/hotplug/pciehp.h b/drivers/pci/hotplug/pciehp.h
-> index 273dd8c..debc79b0 100644
-> --- a/drivers/pci/hotplug/pciehp.h
-> +++ b/drivers/pci/hotplug/pciehp.h
-> @@ -187,6 +187,7 @@ struct controller {
->  int pciehp_card_present_or_link_active(struct controller *ctrl);
->  int pciehp_check_link_status(struct controller *ctrl);
->  int pciehp_check_link_active(struct controller *ctrl);
-> +bool pciehp_device_replaced(struct controller *ctrl);
->  void pciehp_release_ctrl(struct controller *ctrl);
-> =20
->  int pciehp_sysfs_enable_slot(struct hotplug_slot *hotplug_slot);
-> diff --git a/drivers/pci/hotplug/pciehp_core.c b/drivers/pci/hotplug/pcie=
-hp_core.c
-> index 997841c..f59baa9 100644
-> --- a/drivers/pci/hotplug/pciehp_core.c
-> +++ b/drivers/pci/hotplug/pciehp_core.c
-> @@ -284,35 +284,6 @@ static int pciehp_suspend(struct pcie_device *dev)
->  =09return 0;
->  }
-> =20
-> -static bool pciehp_device_replaced(struct controller *ctrl)
-> -{
-> -=09struct pci_dev *pdev __free(pci_dev_put) =3D NULL;
-> -=09u32 reg;
-> -
-> -=09if (pci_dev_is_disconnected(ctrl->pcie->port))
-> -=09=09return false;
-> -
-> -=09pdev =3D pci_get_slot(ctrl->pcie->port->subordinate, PCI_DEVFN(0, 0))=
-;
-> -=09if (!pdev)
-> -=09=09return true;
-> -
-> -=09if (pci_read_config_dword(pdev, PCI_VENDOR_ID, &reg) ||
-> -=09    reg !=3D (pdev->vendor | (pdev->device << 16)) ||
-> -=09    pci_read_config_dword(pdev, PCI_CLASS_REVISION, &reg) ||
-> -=09    reg !=3D (pdev->revision | (pdev->class << 8)))
-> -=09=09return true;
-> -
-> -=09if (pdev->hdr_type =3D=3D PCI_HEADER_TYPE_NORMAL &&
-> -=09    (pci_read_config_dword(pdev, PCI_SUBSYSTEM_VENDOR_ID, &reg) ||
-> -=09     reg !=3D (pdev->subsystem_vendor | (pdev->subsystem_device << 16=
-))))
-> -=09=09return true;
-> -
-> -=09if (pci_get_dsn(pdev) !=3D ctrl->dsn)
-> -=09=09return true;
-> -
-> -=09return false;
-> -}
-> -
->  static int pciehp_resume_noirq(struct pcie_device *dev)
->  {
->  =09struct controller *ctrl =3D get_service_data(dev);
-> diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pcieh=
-p_hpc.c
-> index 8a09fb6..388fbed 100644
-> --- a/drivers/pci/hotplug/pciehp_hpc.c
-> +++ b/drivers/pci/hotplug/pciehp_hpc.c
-> @@ -563,18 +563,48 @@ void pciehp_power_off_slot(struct controller *ctrl)
->  =09=09 PCI_EXP_SLTCTL_PWR_OFF);
->  }
-> =20
-> +bool pciehp_device_replaced(struct controller *ctrl)
-> +{
-> +=09struct pci_dev *pdev __free(pci_dev_put) =3D NULL;
-> +=09u32 reg;
-> +
-> +=09if (pci_dev_is_disconnected(ctrl->pcie->port))
-> +=09=09return false;
-> +
-> +=09pdev =3D pci_get_slot(ctrl->pcie->port->subordinate, PCI_DEVFN(0, 0))=
-;
-> +=09if (!pdev)
-> +=09=09return true;
-> +
-> +=09if (pci_read_config_dword(pdev, PCI_VENDOR_ID, &reg) ||
-> +=09    reg !=3D (pdev->vendor | (pdev->device << 16)) ||
-> +=09    pci_read_config_dword(pdev, PCI_CLASS_REVISION, &reg) ||
-> +=09    reg !=3D (pdev->revision | (pdev->class << 8)))
-> +=09=09return true;
-> +
-> +=09if (pdev->hdr_type =3D=3D PCI_HEADER_TYPE_NORMAL &&
-> +=09    (pci_read_config_dword(pdev, PCI_SUBSYSTEM_VENDOR_ID, &reg) ||
-> +=09     reg !=3D (pdev->subsystem_vendor | (pdev->subsystem_device << 16=
-))))
-> +=09=09return true;
-> +
-> +=09if (pci_get_dsn(pdev) !=3D ctrl->dsn)
-> +=09=09return true;
-> +
-> +=09return false;
-> +}
-> +
->  static void pciehp_ignore_dpc_link_change(struct controller *ctrl,
-> -=09=09=09=09=09  struct pci_dev *pdev, int irq)
-> +=09=09=09=09=09  struct pci_dev *pdev, int irq,
-> +=09=09=09=09=09  u16 ignored_events)
->  {
->  =09/*
->  =09 * Ignore link changes which occurred while waiting for DPC recovery.
->  =09 * Could be several if DPC triggered multiple times consecutively.
->  =09 */
->  =09synchronize_hardirq(irq);
-> -=09atomic_and(~PCI_EXP_SLTSTA_DLLSC, &ctrl->pending_events);
-> +=09atomic_and(~ignored_events, &ctrl->pending_events);
->  =09if (pciehp_poll_mode)
->  =09=09pcie_capability_write_word(pdev, PCI_EXP_SLTSTA,
-> -=09=09=09=09=09   PCI_EXP_SLTSTA_DLLSC);
-> +=09=09=09=09=09   ignored_events);
->  =09ctrl_info(ctrl, "Slot(%s): Link Down/Up ignored (recovered by DPC)\n"=
-,
->  =09=09  slot_name(ctrl));
-> =20
-> @@ -584,8 +614,8 @@ static void pciehp_ignore_dpc_link_change(struct cont=
-roller *ctrl,
->  =09 * Synthesize it to ensure that it is acted on.
->  =09 */
->  =09down_read_nested(&ctrl->reset_lock, ctrl->depth);
-> -=09if (!pciehp_check_link_active(ctrl))
-> -=09=09pciehp_request(ctrl, PCI_EXP_SLTSTA_DLLSC);
-> +=09if (!pciehp_check_link_active(ctrl) || pciehp_device_replaced(ctrl))
-> +=09=09pciehp_request(ctrl, ignored_events);
->  =09up_read(&ctrl->reset_lock);
->  }
-> =20
-> @@ -736,8 +766,13 @@ static irqreturn_t pciehp_ist(int irq, void *dev_id)
->  =09 */
->  =09if ((events & PCI_EXP_SLTSTA_DLLSC) && pci_dpc_recovered(pdev) &&
->  =09    ctrl->state =3D=3D ON_STATE) {
-> -=09=09events &=3D ~PCI_EXP_SLTSTA_DLLSC;
-> -=09=09pciehp_ignore_dpc_link_change(ctrl, pdev, irq);
-> +=09=09u16 ignored_events =3D PCI_EXP_SLTSTA_DLLSC;
-> +
-> +=09=09if (!ctrl->inband_presence_disabled)
-> +=09=09=09ignored_events |=3D events & PCI_EXP_SLTSTA_PDC;
-> +
-> +=09=09events &=3D ~ignored_events;
-> +=09=09pciehp_ignore_dpc_link_change(ctrl, pdev, irq, ignored_events);
->  =09}
-> =20
->  =09/*
->=20
---8323328-486195205-1744637581=:10563--
+Hi ,
+=A0
+Following up to see if you received my previous email.
+=A0
+Let me know if I can offer further information on the figures and pricing.
+=A0
+Regards
+Brenda
+Marketing Manager
+Prospect Tech Connect.,
+=A0
+Please reply with REMOVE if you don't wish to receive further emails
+=A0
+-----Original Message-----
+From: Brenda Wilson=20
+To:=20
+Subject: Unlock aerospace leads from MRO Americas 2025 attendee database
+=A0
+Hi ,
+=A0
+Is obtaining the attendee list from MRO Americas 2025 part of your plans?
+=A0
+Expo Name: =A0MRO Americas - Aviation Week
+Total Number of records: 12,000 records=20
+List includes: Company Name, Contact Name, Job Title, Mailing Address, Phon=
+e, Emails, etc.
+=A0
+Want to go ahead with these leads? I'll gladly provide the cost.
+=A0
+Excited for your reply
+=A0
+Regards
+Brenda
+Marketing Manager
+Prospect Tech Connect.,
+=A0
+Please reply with REMOVE if you don't wish to receive further emails
 
