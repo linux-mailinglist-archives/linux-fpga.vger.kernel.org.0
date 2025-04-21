@@ -1,102 +1,127 @@
-Return-Path: <linux-fpga+bounces-1162-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1164-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C33D0A92F42
-	for <lists+linux-fpga@lfdr.de>; Fri, 18 Apr 2025 03:26:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9116DA9532A
+	for <lists+linux-fpga@lfdr.de>; Mon, 21 Apr 2025 16:58:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E43A14A226F
-	for <lists+linux-fpga@lfdr.de>; Fri, 18 Apr 2025 01:26:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 207623AA750
+	for <lists+linux-fpga@lfdr.de>; Mon, 21 Apr 2025 14:58:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 105861BC099;
-	Fri, 18 Apr 2025 01:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0191C84B9;
+	Mon, 21 Apr 2025 14:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BlaLx2z0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HJxnKR26"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABB01A256B;
-	Fri, 18 Apr 2025 01:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B961C5F2C;
+	Mon, 21 Apr 2025 14:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744939608; cv=none; b=sqGD/kp76R+W6aOLLjaLRRJvtrP5p3LnCPw9q1sUdHKxF+ZJhBgTIPiUrwsjiW03vZr4MQuihAvq+hgXXpziW6w3rojEyeJRebZTHW2FaXkcqtZnsPRGfNNaOdDYvDFWmMW63C7Ozc+aTkS56xqA9H941NPPz0DvwhMDSX4dqZY=
+	t=1745247488; cv=none; b=gRYbb6C0LY3agdxgiZrnH4teCokHbsHgpCaP9Z7KWw5rtpmvL1PruRmBcteh7jqg4QtaXnKwNUpo66VzFMqYMqFmjVRchMEyFOb1EdbXXWXkulpsAdNc1TpfDfE2WhC/Kkj5nIC9juKjbHwvO8lr7iJ5AMr6cn55EzDfDmNmaoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744939608; c=relaxed/simple;
-	bh=U+F8ldFqzQFXlP4zcLsLMmWyIa7D3/1WsjChZtt/k74=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ksUrqZ/lVUiIpE0hA8cLrvV+2SxrPlQMmYnkxLYS9n4rVU09GZ4VedRdud725pUQoKjztvwh5knaBgmQFaHDCOTtsGqLpXUrhT3Ebjhp6nubW3ekXW+z3WXYjEdAsoAbwczR/oF70Fe+JTdQ76MhAmeUrO0+1bpovoj4RedlVqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BlaLx2z0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ABFDC4CEE4;
-	Fri, 18 Apr 2025 01:26:46 +0000 (UTC)
+	s=arc-20240116; t=1745247488; c=relaxed/simple;
+	bh=yjlz1+aLlRQYQhpF4+uSLLx9jArQyUOmwqytKlg1KfE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Kc7e3ismCoi8++1HYavH4Q6t9zAkGIbcKFGlf7s8Q7NEREjP+svByzzDIiX2CzMf6kmAHrS+ZOOPc6eGtj6Bj3pmslX9n80pTgRwL/wCAv8fyYgD8IKSm6eYq+ZosXX1w49vhyYCtKuJBStAupJuCEfS2LAiscjFDwh8AtrvgEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HJxnKR26; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A4A2C4CEEA;
+	Mon, 21 Apr 2025 14:58:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744939607;
-	bh=U+F8ldFqzQFXlP4zcLsLMmWyIa7D3/1WsjChZtt/k74=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BlaLx2z0k3VZNsGFsw3yraUscSurRVv5t5gAUWl+yGChD+u12vgFOAkK7JPh5hOx/
-	 Db80/f6aVVrYD1Jqy7PwqDFTT5He0HcaYvmIqih6SDd/v85QcRD7bGHOZrJFoH2aHl
-	 I1UhRIWtZUew2xCffT06tKKTLhlg/PY3IHLm04BtXDZrCB7P34VG7mBMP+LQLoW5At
-	 JmTFLpy4UA0Ans52CexoTj85UIPjqp9Wt5emD8PdMjdNlmRILEm/Es58ytScOi7iKA
-	 1HGD9fYG1sIV1d3Co5f5Rz6bOn2FpQEnNt+vQMog+AlqfpzzXyT1SMIJL9p5VACs56
-	 B9Cy0y6Dg3gig==
-Date: Thu, 17 Apr 2025 19:26:43 -0600
-From: Keith Busch <kbusch@kernel.org>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Bjorn Helgaas <helgaas@kernel.org>,
-	Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	Yicong Yang <yangyicong@hisilicon.com>, linux-pci@vger.kernel.org,
-	Stuart Hayes <stuart.w.hayes@gmail.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>,
-	Joel Mathew Thomas <proxy0@tutamail.com>,
-	Russ Weight <russ.weight@linux.dev>,
-	Matthew Gerlach <matthew.gerlach@altera.com>,
-	Yilun Xu <yilun.xu@intel.com>, linux-fpga@vger.kernel.org,
-	Moshe Shemesh <moshe@nvidia.com>, Shay Drory <shayd@nvidia.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: [PATCH 0/2] Ignore spurious PCIe hotplug events
-Message-ID: <aAGqUzMF5rn1gAMl@kbusch-mbp.dhcp.thefacebook.com>
-References: <cover.1744298239.git.lukas@wunner.de>
- <Z_7G3rq08FCFU0gy@kbusch-mbp.dhcp.thefacebook.com>
- <Z__Hb9-GBTkBRRyf@wunner.de>
+	s=k20201202; t=1745247487;
+	bh=yjlz1+aLlRQYQhpF4+uSLLx9jArQyUOmwqytKlg1KfE=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=HJxnKR26Mp1IEee21HLak1BmHcswiVou+e71QKNl2QJe+aFwODdEjHo2vAeWpIWHl
+	 E/uXMjqL/FwAm4Ac5d2r0m6ZHqWtV57QTuDn8UNWJPkRLfpLEAB13OjYELvQmhASG+
+	 uL4p/0cxPcBv8lepXCMRPdcBYnULfEWnwMgZD5/EXD8KRuAYY3438AZcG3vusvFuxk
+	 5lRq6C791CbDyT8KEtEtIUfsLEnZtLYQWsn+MDIPNJgfFi5P7WyzU49CziXwOr1u3p
+	 ymjl72PXeI+BmRWbDER3lbr9MNX96LDtXDYpTe1IRIFgFgTpunrT/usa4+FMIKLZIp
+	 CdsW/+C4hI+3Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73F56C369AB;
+	Mon, 21 Apr 2025 14:58:07 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH RESEND v3 0/6] clk: clk-axi-clkgen: improvements and some
+ fixes
+Date: Mon, 21 Apr 2025 15:58:01 +0100
+Message-Id: <20250421-dev-axi-clkgen-limits-v3-0-4203b4fed2c9@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z__Hb9-GBTkBRRyf@wunner.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAPlcBmgC/3XNQYvCMBAF4L8iOW+WJFMb68mDXvewe1w8xMmkH
+ aytNCW4SP+7oQgiS49vHvO9u4g0MEWxXd3FQIkj910O8LES2LiuJsk+Z2GUWSujN9JTku7GEtt
+ zTZ1s+cJjlCWEk8I1IWxOIv9eBwp8m91f8X34OXztxTHfG45jP/zNc0nP7VOuFuSkpZKmDJaCL
+ tBXuHOda/v6E/vLTCbzYkDDEmMyoy04Ms6XoPU/Bl5MoewSA5kBQBuMxcqX1RszTdMDweSwjVE
+ BAAA=
+X-Change-ID: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+To: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org
+Cc: Stephen Boyd <sboyd@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745247490; l=1653;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=yjlz1+aLlRQYQhpF4+uSLLx9jArQyUOmwqytKlg1KfE=;
+ b=arhBxZrC43kWNaK2hEX8qiJ3ugamENsnGipAbaj+I8fnsQGe4NHChb6MT04cclc6aVScZENSd
+ beRSHN9hLukCuJbZx3WJ+CwKgu2xnac8YpDlNUmJyqpvRLuPbHmhUMt
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-On Wed, Apr 16, 2025 at 05:06:23PM +0200, Lukas Wunner wrote:
-> On Tue, Apr 15, 2025 at 02:51:42PM -0600, Keith Busch wrote:
-> > On Thu, Apr 10, 2025 at 05:27:10PM +0200, Lukas Wunner wrote:
-> > > First of all, PCIe hotplug is deliberately ignoring link events occurring
-> > > as a side effect of Downstream Port Containment.  But it's not yet ignoring
-> > > Presence Detect Changed events.  These can happen if a hotplug bridge uses
-> > > in-band presence detect.  Reported by Keith Busch, patch [1/2] seeks to
-> > > fix it.
-> > 
-> > There are switches that let you
-> > toggle downstream connections to change what's attached and it causes a
-> > DPC event, swapping out the downstream device at the same time. So this
-> > change has the pci driver resume with the wrong device if you happen to
-> > be in such a situation. I don't have such switches anymore
-> 
-> What's the error type causing the DPC event?  Surprise Down?
-> 
-> Since commit 2ae8fbbe1cd4 ("PCI/DPC: Ignore Surprise Down error on hot
-> removal"), which went into v6.9, the DPC driver handles Surprise Down
-> silently and it tells the hotplug driver *not* to ignore the hotplug
-> event.  It does that by unconditionally clearing the PCI_DPC_RECOVERED
-> flag at the end of dpc_handle_surprise_removal().
-> 
-> Hence in the situation you're describing, the hotplug driver should
-> always bring down the slot and bring it back up with the new device.
+This series starts with a small fix and then a bunch of small
+improvements. The main change though is to allow detecting of
+struct axi_clkgen_limits during probe().
 
-I think you're right, thank you for the pointers.
+---
+Changes in v4:
+- EDITME: describe what is new in this series revision.
+- EDITME: use bulletpoints and terse descriptions.
+- Link to v3: https://lore.kernel.org/r/20250407-dev-axi-clkgen-limits-v3-0-33c7f27c9d69@analog.com
+
+Changes in v3:
+- Patch 6:
+    * Revert change and parenthesis back on 'if (((params->edge == 0) ^
+      (frac_divider == 1))'. While checkpatch complains, it's more
+      readable like this and in some configs we might even get -Wparentheses.
+- Link to v2: https://lore.kernel.org/r/20250313-dev-axi-clkgen-limits-v2-0-173ae2ad6311@analog.com
+
+Changes in v2:
+- Patch 3
+   * Rename adi_axi_fgpa_technology -> adi_axi_fpga_technology.
+
+- Link to v1: https://lore.kernel.org/r/20250219-dev-axi-clkgen-limits-v1-0-26f7ef14cd9c@analog.com
+
+---
+Nuno Sá (6):
+      clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
+      clk: clk-axi-clkgen: make sure to include mod_devicetable.h
+      include: fpga: adi-axi-common: add new helper macros
+      clk: clk-axi-clkgen: detect axi_clkgen_limits at runtime
+      clk: clk-axi-clkgen move to min/max()
+      clk: clk-axi-clkgen: fix coding style issues
+
+ drivers/clk/clk-axi-clkgen.c        | 147 +++++++++++++++++++++++++-----------
+ include/linux/fpga/adi-axi-common.h |  35 +++++++++
+ 2 files changed, 140 insertions(+), 42 deletions(-)
+---
+base-commit: 82f69876ef45ad66c0b114b786c7c6ac0f6a4580
+change-id: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+--
+
+Thanks!
+- Nuno Sá
+
+
 
