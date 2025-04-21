@@ -1,53 +1,53 @@
-Return-Path: <linux-fpga+bounces-1166-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1167-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 380C5A9532F
-	for <lists+linux-fpga@lfdr.de>; Mon, 21 Apr 2025 16:58:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68444A9532B
+	for <lists+linux-fpga@lfdr.de>; Mon, 21 Apr 2025 16:58:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D20DC3AC26C
-	for <lists+linux-fpga@lfdr.de>; Mon, 21 Apr 2025 14:58:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD1D97A20AA
+	for <lists+linux-fpga@lfdr.de>; Mon, 21 Apr 2025 14:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61E6F1C8611;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF601C863D;
 	Mon, 21 Apr 2025 14:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GE1kVDOx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6nGB5go"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312E71C6FF2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AB51C7009;
 	Mon, 21 Apr 2025 14:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745247488; cv=none; b=ctC6yJclqK6imet2bZMr9KmDxC04BFyEwaNA4x7V1PpHJRvkfZxB9bAvVMQnnL2SM0tJEHxVYvMAtju/g7qVHVl1rQ60uSbP70Pzz4MOKoGRezuu7IdgeZhglzhdMXZTxgy8QJIK51DwB8qw8JnFMcHv6yPberPShNCGsB7URGU=
+	t=1745247488; cv=none; b=og9BfCJ3j/aNHhnljd8ktOIFCITcjdAibR2nbdJrIFmUN0tVdaficIFm4ZTSffHBMRTQiDtHMOL5xM/YEndR/KxYrNnmbRnQ/VpOFsi3kTwx6RQGPWzchT8ABD3qilBy04eeOJ7WAcFnqV0oDks9wEb5meZVrkTzoOqwyEusji0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745247488; c=relaxed/simple;
-	bh=zU7qUe5tOFyK1gdGBXLbS8e/ReGYgRnf9vPbRIf94cM=;
+	bh=Iq+d8+KNth2nrBHa0/Mo3Pmi8HpSU+Mwsq7ExAcOZMk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oZbNSf//HV8+/Nw/qhBBDYZQNxHrqz4d+p1SIsQqByRxorlVK+fzN2iWfjkSxHLAFHMNhA8SzWzJ9oiZvbRbo2USHPn/aEZ6ogdmUyXQD4v8Mp/Ai3XTozOg5ef06ZYgjEGJZFQ5fMn+naO7j0rYQMxXCyt9K9/SycZCBFuhRDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GE1kVDOx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B86DFC4CEF0;
+	 In-Reply-To:To:Cc; b=MDhpqf94+wzdThNi4+oGhteAmVi6wWc4C7HKygypnXMsLq86IBnXLIr8mvJr1XLu1UcSASViXCfRUpGfdxGlETGp/YbhoU7JSH+RBZSs0cjzTuPbBvGkn/6ehqgv318HJHTUrkj3sOCnj2KnZhbo+UItcRKinCPtNKc82x63Rr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D6nGB5go; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CB6B9C4CEFA;
 	Mon, 21 Apr 2025 14:58:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1745247487;
-	bh=zU7qUe5tOFyK1gdGBXLbS8e/ReGYgRnf9vPbRIf94cM=;
+	bh=Iq+d8+KNth2nrBHa0/Mo3Pmi8HpSU+Mwsq7ExAcOZMk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=GE1kVDOxiT7/LYhjvvzw1PGspLpwsCXJh5xX9ODn9i5X043pS8fsoPEdkKiGy03In
-	 WiIA+pflpiB953gvSo+iYXrt4KKjms8A/oNn1awsKQFxA2PZEH38yX6z+XlZ+CPK9p
-	 OygAwv3lAnMon35wO96UKiPqzjKYSiFJN/lK13R6GVtv6NdTeut1w/aP7Ez1ILKLDO
-	 KLECsDmXJG8mHL5mCFEzuhKfmiLhTgLjtIDBD1PEDEYW/rr0nRcRiY/+b1VnQtXx1f
-	 QQBP2RZ6193dcdNaVGdn64NVeO3bxDKWL2iTX6Synmg6pjRX7PZPKoJtTl6nn9qHqv
-	 xDUUe3n+Ogcow==
+	b=D6nGB5go2dwZXkqUSVUiwf0UmA+SDc2wt2GgbOhJ5077GGuM4LpA/0dgyFCzQpq6H
+	 n41yajJZZ07VM7uxhzCBFQOtdZJjrvJ5knCwROub4uERX5La/ekUv/5Yl+7YOZUEhT
+	 ryuzeVLD6nrr05ol7d75Q8jWVsJp0bW002tsCi5s1Xfh4clssZLt/PgddanzrOMi7t
+	 uFyev0ubrzr48B440rHE1X/CNkEqgZmKDI4MeJob3kZ7S2u2Q8r9SF1vBNzLBrYj6r
+	 k6mOYPZI1M13/8iZoX6s/7uUt2XghGZgPbNcquabR3AMa8g+xWAKL1mZam3kHI8i9A
+	 Lt6RJipkxbKEA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC06EC369D5;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCAECC369C2;
 	Mon, 21 Apr 2025 14:58:07 +0000 (UTC)
 From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
-Date: Mon, 21 Apr 2025 15:58:04 +0100
-Subject: [PATCH RESEND v3 3/6] include: fpga: adi-axi-common: add new
- helper macros
+Date: Mon, 21 Apr 2025 15:58:05 +0100
+Subject: [PATCH RESEND v3 4/6] clk: clk-axi-clkgen: detect
+ axi_clkgen_limits at runtime
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250421-dev-axi-clkgen-limits-v3-3-4203b4fed2c9@analog.com>
+Message-Id: <20250421-dev-axi-clkgen-limits-v3-4-4203b4fed2c9@analog.com>
 References: <20250421-dev-axi-clkgen-limits-v3-0-4203b4fed2c9@analog.com>
 In-Reply-To: <20250421-dev-axi-clkgen-limits-v3-0-4203b4fed2c9@analog.com>
 To: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org
@@ -65,11 +65,11 @@ Cc: Stephen Boyd <sboyd@kernel.org>,
  Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
  Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745247490; l=2067;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745247490; l=3698;
  i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
- bh=+TkAxyW1xXsPUzdQREPOMhF0lodnEOmKT8NEfrr7xoI=;
- b=FtTDVc0F2kWPNERHxmcLatqiBwqIveh+PnOJ4fGM4Z//ffYbUlqaV48ePZgmGwoSUPnMpbGMP
- 2uskUwS1AIGDTcamrmcde6WV+isf9ignDlFxZVRmw+pBNWHerR0/gaq
+ bh=iBmfD8SeeesocRGR7ow2MXwCfnSXtfBsCbwFv9xpXxk=;
+ b=LuzPWuGlcvWJViUapjZFBMhpjT47GVwh4CGVblHb2Jr301byvavDVtV4OLaW78YY5xODRoFUh
+ uvyQmta57VCAToyS7oUuWurEvhCz6oTkmKhkdqdJk36fV/jGBUyPQ0n
 X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
  pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
 X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
@@ -79,65 +79,111 @@ Reply-To: nuno.sa@analog.com
 
 From: Nuno Sá <nuno.sa@analog.com>
 
-Add new helper macros and enums to help identifying the platform and some
-characteristics of it at runtime.
+This patch adds support for setting the limits in struct
+axi_clkgen_limits  in accordance with fpga speed grade, voltage,
+technology and family. This new information is extracted from
+two new registers implemented in the ip core that are only available
+for core versions higher or equal to 4.
 
 Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 ---
- include/linux/fpga/adi-axi-common.h | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ drivers/clk/clk-axi-clkgen.c | 62 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 61 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/fpga/adi-axi-common.h b/include/linux/fpga/adi-axi-common.h
-index 141ac3f251e6f256526812b9d55cd440a2a46e76..a832ef9b37473ca339a2a2ff8a4a5716d428fd29 100644
---- a/include/linux/fpga/adi-axi-common.h
-+++ b/include/linux/fpga/adi-axi-common.h
-@@ -12,6 +12,8 @@
- #define ADI_AXI_COMMON_H_
+diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
+index 2a95f9b220234a1245024a821c50e1eb9c104ac9..8c270ba7626bc24c4385615b7aa08ee95e198881 100644
+--- a/drivers/clk/clk-axi-clkgen.c
++++ b/drivers/clk/clk-axi-clkgen.c
+@@ -16,6 +16,8 @@
+ #include <linux/mod_devicetable.h>
+ #include <linux/err.h>
  
- #define ADI_AXI_REG_VERSION			0x0000
-+#define ADI_AXI_REG_FPGA_INFO			0x001C
-+#define ADI_AXI_REG_FPGA_VOLTAGE		0x0140
++#include <linux/fpga/adi-axi-common.h>
++
+ #define AXI_CLKGEN_V2_REG_RESET		0x40
+ #define AXI_CLKGEN_V2_REG_CLKSEL	0x44
+ #define AXI_CLKGEN_V2_REG_DRP_CNTRL	0x70
+@@ -497,6 +499,54 @@ static u8 axi_clkgen_get_parent(struct clk_hw *clk_hw)
+ 	return parent;
+ }
  
- #define ADI_AXI_PCORE_VER(major, minor, patch)	\
- 	(((major) << 16) | ((minor) << 8) | (patch))
-@@ -20,4 +22,37 @@
- #define ADI_AXI_PCORE_VER_MINOR(version)	(((version) >> 8) & 0xff)
- #define ADI_AXI_PCORE_VER_PATCH(version)	((version) & 0xff)
++static int axi_clkgen_setup_limits(struct axi_clkgen *axi_clkgen,
++				   struct device *dev)
++{
++	unsigned int tech, family, speed_grade, reg_value;
++
++	axi_clkgen_read(axi_clkgen, ADI_AXI_REG_FPGA_INFO, &reg_value);
++	tech = ADI_AXI_INFO_FPGA_TECH(reg_value);
++	family = ADI_AXI_INFO_FPGA_FAMILY(reg_value);
++	speed_grade = ADI_AXI_INFO_FPGA_SPEED_GRADE(reg_value);
++
++	axi_clkgen->limits.fpfd_min = 10000;
++	axi_clkgen->limits.fvco_min = 600000;
++
++	switch (speed_grade) {
++	case ADI_AXI_FPGA_SPEED_1 ... ADI_AXI_FPGA_SPEED_1LV:
++		axi_clkgen->limits.fvco_max = 1200000;
++		axi_clkgen->limits.fpfd_max = 450000;
++		break;
++	case ADI_AXI_FPGA_SPEED_2 ... ADI_AXI_FPGA_SPEED_2LV:
++		axi_clkgen->limits.fvco_max = 1440000;
++		axi_clkgen->limits.fpfd_max = 500000;
++		if (family == ADI_AXI_FPGA_FAMILY_KINTEX || family == ADI_AXI_FPGA_FAMILY_ARTIX) {
++			axi_clkgen_read(axi_clkgen, ADI_AXI_REG_FPGA_VOLTAGE,
++					&reg_value);
++			if (ADI_AXI_INFO_FPGA_VOLTAGE(reg_value) < 950) {
++				axi_clkgen->limits.fvco_max = 1200000;
++				axi_clkgen->limits.fpfd_max = 450000;
++			}
++		}
++		break;
++	case ADI_AXI_FPGA_SPEED_3:
++		axi_clkgen->limits.fvco_max = 1600000;
++		axi_clkgen->limits.fpfd_max = 550000;
++		break;
++	default:
++		return dev_err_probe(dev, -ENODEV, "Unknown speed grade %d\n",
++				     speed_grade);
++	};
++
++	/* Overwrite vco limits for ultrascale+ */
++	if (tech == ADI_AXI_FPGA_TECH_ULTRASCALE_PLUS) {
++		axi_clkgen->limits.fvco_max = 1600000;
++		axi_clkgen->limits.fvco_min = 800000;
++	}
++
++	return 0;
++}
++
+ static const struct clk_ops axi_clkgen_ops = {
+ 	.recalc_rate = axi_clkgen_recalc_rate,
+ 	.determine_rate = axi_clkgen_determine_rate,
+@@ -511,6 +561,7 @@ static int axi_clkgen_probe(struct platform_device *pdev)
+ {
+ 	const struct axi_clkgen_limits *dflt_limits;
+ 	struct axi_clkgen *axi_clkgen;
++	unsigned int pcore_version;
+ 	struct clk_init_data init;
+ 	const char *parent_names[2];
+ 	const char *clk_name;
+@@ -556,7 +607,16 @@ static int axi_clkgen_probe(struct platform_device *pdev)
+ 			return -EINVAL;
+ 	}
  
-+#define ADI_AXI_INFO_FPGA_TECH(info)            (((info) >> 24) & 0xff)
-+#define ADI_AXI_INFO_FPGA_FAMILY(info)          (((info) >> 16) & 0xff)
-+#define ADI_AXI_INFO_FPGA_SPEED_GRADE(info)     (((info) >> 8) & 0xff)
-+#define ADI_AXI_INFO_FPGA_VOLTAGE(val)          ((val) & 0xffff)
+-	memcpy(&axi_clkgen->limits, dflt_limits, sizeof(axi_clkgen->limits));
++	axi_clkgen_read(axi_clkgen, ADI_AXI_REG_VERSION, &pcore_version);
 +
-+enum adi_axi_fpga_technology {
-+	ADI_AXI_FPGA_TECH_UNKNOWN = 0,
-+	ADI_AXI_FPGA_TECH_SERIES7,
-+	ADI_AXI_FPGA_TECH_ULTRASCALE,
-+	ADI_AXI_FPGA_TECH_ULTRASCALE_PLUS,
-+};
-+
-+enum adi_axi_fpga_family {
-+	ADI_AXI_FPGA_FAMILY_UNKNOWN = 0,
-+	ADI_AXI_FPGA_FAMILY_ARTIX,
-+	ADI_AXI_FPGA_FAMILY_KINTEX,
-+	ADI_AXI_FPGA_FAMILY_VIRTEX,
-+	ADI_AXI_FPGA_FAMILY_ZYNQ,
-+};
-+
-+enum adi_axi_fpga_speed_grade {
-+	ADI_AXI_FPGA_SPEED_UNKNOWN      = 0,
-+	ADI_AXI_FPGA_SPEED_1    = 10,
-+	ADI_AXI_FPGA_SPEED_1L   = 11,
-+	ADI_AXI_FPGA_SPEED_1H   = 12,
-+	ADI_AXI_FPGA_SPEED_1HV  = 13,
-+	ADI_AXI_FPGA_SPEED_1LV  = 14,
-+	ADI_AXI_FPGA_SPEED_2    = 20,
-+	ADI_AXI_FPGA_SPEED_2L   = 21,
-+	ADI_AXI_FPGA_SPEED_2LV  = 22,
-+	ADI_AXI_FPGA_SPEED_3    = 30,
-+};
-+
- #endif /* ADI_AXI_COMMON_H_ */
++	if (ADI_AXI_PCORE_VER_MAJOR(pcore_version) > 0x04) {
++		ret = axi_clkgen_setup_limits(axi_clkgen, &pdev->dev);
++		if (ret)
++			return ret;
++	} else {
++		memcpy(&axi_clkgen->limits, dflt_limits,
++		       sizeof(axi_clkgen->limits));
++	}
+ 
+ 	clk_name = pdev->dev.of_node->name;
+ 	of_property_read_string(pdev->dev.of_node, "clock-output-names",
 
 -- 
 2.49.0
