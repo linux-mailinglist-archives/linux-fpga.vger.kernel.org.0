@@ -1,130 +1,155 @@
-Return-Path: <linux-fpga+bounces-1171-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1172-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5A03A97137
-	for <lists+linux-fpga@lfdr.de>; Tue, 22 Apr 2025 17:39:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68066A9A975
+	for <lists+linux-fpga@lfdr.de>; Thu, 24 Apr 2025 12:07:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59EA23B05E7
-	for <lists+linux-fpga@lfdr.de>; Tue, 22 Apr 2025 15:38:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A14961B6394B
+	for <lists+linux-fpga@lfdr.de>; Thu, 24 Apr 2025 10:07:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2598228FFDE;
-	Tue, 22 Apr 2025 15:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20F08220680;
+	Thu, 24 Apr 2025 10:06:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y1+LYod9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HscU/1vM"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC0828F92D;
-	Tue, 22 Apr 2025 15:37:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5596F1EB5D4;
+	Thu, 24 Apr 2025 10:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745336279; cv=none; b=Mh2572ZZtzAk3tKIh0BZwl0/K8DuOlGrJRTAxcd1cU4zDRhXbuXAzVxYZqscYVGzNmvPe+ScJtCWekmaY5mQ7z8xzRcBPgIMlNDs0/UE2CuL8d02i9Jp2G2E90z8UXROit9lI+tBBXFhQ7JMP/mBNpj0HQCpsc+KrpQKNpahLqU=
+	t=1745489210; cv=none; b=QmgFctegt34t02xynE9DnWO/8l5Kx2zBt7JDn8jPwYeiIPUqCQNPbQEgkxfKIDpPcnlIj0HACM9qW++mrj7pebwqlUEh24u95m2x2S9lcY8CxXVmHNyE+QLj95btuVuHMBUoZASkrdfCD8pFrhxnO4G0bJAckxbUm8MfPcZ+NbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745336279; c=relaxed/simple;
-	bh=wkljQJpf2uBwa/vHkF2k+MDlr9Ewo2RpAiy8uTu39Ks=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=vC34lXgj3cXWTCdqr1yFzczdTWWnWnCrtqvByelJfVrA6v8W1/fPc77a+EJUAYpjlLDLFfHZrRyANpjvjMlwbpz57M5D7AV9JyxnviH9sP88p8w9hL/zbhKgiGQxMW4VDY84t11rJMgytN4HkDFoudHBDVx5jMRWd0NkQooC8pY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y1+LYod9; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-440685d6afcso50331145e9.0;
-        Tue, 22 Apr 2025 08:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745336276; x=1745941076; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t97VeSNUpG2hiAo6wIqYqqcOXTDfHHY6JtBldkkckaA=;
-        b=Y1+LYod9fGBPv/QsNGBXWuAXbkd42lEMh3Lw8Gs5XOye102XlQiwLTpNyffhF33jGr
-         jjGJByjUVerL9uHpvXuSqyXEbjOttGhHNK3uqe95iLPJXMVZHtQj+qh97vc2Hil9zqRG
-         thR533IvVj0n9YxX8n/QZHZFLsH0KddbbEIQh3kQYrb53gJKOKb5PBCPxDJJHNTLHRmi
-         L3vtMq/OnXswAhO5W8eGJqnEeT4hQIK+bfy4yZ8+IMMrtfkoADsas5/4ULMwNBCSzZOK
-         KPmumgAA/KDeN4UOC9+VNb7ln28ihkZXp2J/ip6aE6O1eCW0uozUdaCLchTqc/pE2NU3
-         jltA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745336276; x=1745941076;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t97VeSNUpG2hiAo6wIqYqqcOXTDfHHY6JtBldkkckaA=;
-        b=TrUxNpFwaidKWEFzjf3PZa8jaxmeNmBOBGNf2c3yrUKqMZ8REtmDJY9NenM8RfkoAx
-         mJcsa5gZjTfDoQe6tG4TasibvBUQVisEmjPfEgbwEiB6u/aqaHriOn0V3eACrvcAm5Nd
-         L6KFHxS/Noi0huoK4uEylSrruDzrOEBb5QOpD2acFIv0QE/W/oKPCyLUXHuTVzpnNDYO
-         LZ/uPfaVpRl1SGRYYYgjLjSH9BJKxpK/GcYd9Cwbt5gFM+1IsU5rIx16EtGaKbWCFWqB
-         hhhSvwtJqLIdol6qgeWTstLOh9f7K8bKP0eYX91Ig2nmFvuGPuWV7jMedjKXzXacpqVp
-         sWzw==
-X-Forwarded-Encrypted: i=1; AJvYcCWC1aAkeLCsDokduoK0jzdyPsGuA9UiWMr3BT/W8PWpLhoubQk2TmWPoY7AGiix6jOdp7f0USXW5hs3deY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxH6z4emUtZV4d+QQ87pg9bnKuYA/w/joHhSZI5J5g/uOevn2dZ
-	phTuwquT/vx0LHTB6ilY9LlYES0XJA5b+38SBzGfpUkcWDdJnglt
-X-Gm-Gg: ASbGncsk8eoAEpLfPRCJNBGLftXgDg3UkwfrZNHGXfvJTfHGyzLd/ehb1cnD8VObKQK
-	Q5IFidnIlT72xN1ASHBb0viJa9YErNKEGeyy1SxMV2O2VljXt/8GH+LTMBJ+tKfftsxU4NCrfHz
-	CRsOmr9h7uUyNtz0RBYDYqaP23yL6jkr0XwTZ6EU8auWiGgAotRree6Zgg/s0KA3aCL8KqILMP2
-	vmrGemDT26kifDnpaLOAVMp37IrNh0+4gLtqVEYmKKqnaDpBLHnUupQGenQBfvAxPbz9UpKuNGw
-	Aj1aKcYjOkQJSkGzZDuHt8OEpGX+NblznZVRSzH53w==
-X-Google-Smtp-Source: AGHT+IGLPpRDDlkDW7Yin3pzT8Q0kiZj2p4DTstyz2bK/H34CFnMgNZd4wZTj9aaX9SHeRN+skhNaQ==
-X-Received: by 2002:a05:600c:4e4a:b0:43c:fffc:7855 with SMTP id 5b1f17b1804b1-4406aba7c2fmr148303565e9.15.1745336275381;
-        Tue, 22 Apr 2025 08:37:55 -0700 (PDT)
-Received: from qasdev.Home ([2a02:c7c:6696:8300:314a:dc00:e03f:5030])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4406d5bbd7fsm177321085e9.21.2025.04.22.08.37.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Apr 2025 08:37:55 -0700 (PDT)
-From: Qasim Ijaz <qasdev00@gmail.com>
-To: mdf@kernel.org,
-	hao.wu@intel.com,
-	yilun.xu@intel.com,
-	trix@redhat.com,
-	akpm@linux-foundation.org,
-	marpagan@redhat.com,
-	arnd@arndb.de
-Cc: linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Marco Pagani <marco.pagani@linux.dev>
-Subject: [PATCH v2 RESEND] fpga: fix potential null pointer deref in fpga_mgr_test_img_load_sgt()
-Date: Tue, 22 Apr 2025 16:37:37 +0100
-Message-Id: <20250422153737.5264-1-qasdev00@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1745489210; c=relaxed/simple;
+	bh=ohWISbUI5Hdqkvh3YTzjrPdr0SXkU3j2Fcx45MwThg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J2djdOD7RdLrJohAwY794QJ9EWB2N91V6RFafZzgJSUHiqE+p7AaoXaYMZrCmrsmyEuoXFIy5NCK8RgDVuGxAj4j+4PfHLNer32jStTaipfEHjCSvM8OUt4V1VMRPLA/xkwGaCfQdOB6uc3BPdYUKCzv11f3UEb52VUcYwi/q+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HscU/1vM; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745489209; x=1777025209;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ohWISbUI5Hdqkvh3YTzjrPdr0SXkU3j2Fcx45MwThg8=;
+  b=HscU/1vMSV66+z8117S8dr5HfKjK0+dU+JIW+5WvrXHaUSYDOgdVWDvK
+   IiGbB0fJsL+ZMw9fEmuF2CVtzXBuncIhppREMvwMRCJkgLvIVMtr9yPS/
+   kM5qqTJ8xLKIa86VlvM7a7yq4MY/x+HdZg5/gBknDzoiLEeaVOmDo2g/D
+   Jip3u3dkfe4P7qVA1KplNPcw8MwNQ+LoYoJkT7kdi8v9gXWrmQt7hNVfZ
+   bq/shjmWgYBe+51syxzSWDkZB5QgU8sVJGhwazp5vgPb8v6uFUZWb30i6
+   Fyqh7PACKM5KG1dDDVO8BfQfD/RzS9hKANDH4x9qV6Vt/d0u+Y8sUiUOk
+   w==;
+X-CSE-ConnectionGUID: Ku0crXDMRAu8c8PXxv8Idg==
+X-CSE-MsgGUID: UL13JzeWQiaGJOJHM4tI0w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11412"; a="46821430"
+X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
+   d="scan'208";a="46821430"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 03:06:44 -0700
+X-CSE-ConnectionGUID: M87gWBuhQQW769P5s2kxjA==
+X-CSE-MsgGUID: 8NT3xrSgTm60P/0pBA820Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
+   d="scan'208";a="169788122"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa001.jf.intel.com with ESMTP; 24 Apr 2025 03:06:40 -0700
+Date: Thu, 24 Apr 2025 18:02:05 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Sam Winchenbach <sam.winchenbach@framepointer.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-kernel@vger.kernel.org,
+	mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+	trix@redhat.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, michal.simek@amd.com,
+	linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Sam Winchenbach <swinchenbach@arka.org>
+Subject: Re: [PATCH 1/2] dt-bindings: fpga: zynq: Document ICAP on boot
+Message-ID: <aAoMHV4cPrMWPHNk@yilunxu-OptiPlex-7050>
+References: <20250328141944.119504-1-sam.winchenbach@framepointer.org>
+ <02496a88-3d9c-49ee-93ab-8f1400fc0c6b@kernel.org>
+ <p4bujnmgkcvsu4qipmgh2j2loedepmwgp7zlaxrurhaveb6tbc@ibqtbjnbzdzj>
+ <14b12882-119d-4c24-9634-e4cc37a39212@kernel.org>
+ <2ccsnpv67gsu354uo7xe7syrxs265ncj6hl26v3cwf2dfm7hyu@ihkemyajuiag>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ccsnpv67gsu354uo7xe7syrxs265ncj6hl26v3cwf2dfm7hyu@ihkemyajuiag>
 
-fpga_mgr_test_img_load_sgt() allocates memory for sgt using
-kunit_kzalloc() however it does not check if the allocation failed. 
-It then passes sgt to sg_alloc_table(), which passes it to
-__sg_alloc_table(). This function calls memset() on sgt in an attempt to
-zero it out. If the allocation fails then sgt will be NULL and the
-memset will trigger a NULL pointer dereference.
+On Mon, Mar 31, 2025 at 09:07:03AM -0400, Sam Winchenbach wrote:
+> On Mon, Mar 31, 2025 at 02:43:59PM +0200, Krzysztof Kozlowski wrote:
+> > On 31/03/2025 14:30, Sam Winchenbach wrote:
+> > >>
+> > >>> +    type: boolean
+> > >>> +    description: If present, the ICAP controller will be enabled when
+> > >>> +      the driver probes. This is useful if the fabric is loaded
+> > >>> +      during the boot process and contains a core, such as the SEM,
+> > >>
+> > >> I don't get how this is suitable for DT. If you decide to load the
+> > >> fabric from driver, that's driver decision so not DT.
+> > > 
+> > > Before writing the fabric to the FPGA the driver disables the ICAP, enabling
+> > > the PCAP. Once writing is complete it unconditionally disables the PCAP,
+> > > enabling the ICAP. This patch just makes it so, depending on the use case,
+> > > the ICAP can be enabled at boot. This will not prevent the system from being
+> > > able to load a fabric through the driver. I added in this boolean so existing
+> > > behavior would be maintained.
+> > > 
+> > > Do you recommend another approach such as writing to a sysfs attribute to
+> > > switch from PCAP to ICAP?
+> > Not sure yet. Can't you check the status of ICAP before programming and
+> > then enable it only if was enabled before?
+> 
+> I am having a bit of difficulty understanding this so let's talk about cases
+> where the ICAP is enabled/disabled -
+> 
+> 1. When writing the fabric from the driver
+>    In this situation it might make sense to read the state of the ICAP
+>    interface when preparing the fabric, before enabling PCAP. When the write
+>    completes you could re-enable the ICAP if it was previously enabled.
+> 
+>    This might be outside the scope of this change - and I am not comfortable
+>    enough with this use-case to understand potential side effects from doing
+>    this. Logically it makes sense, but there may be a very specific reason that
+>    the ICAP must be enabled after doing a fabric load or partial
+>    reconfiguration.
+> 
+> 2. When the FPGA driver loads and is probed by the DTS
+>    In this situation, which is covered by this patch, the FPGA is loaded by
+>    BootROM/FSBL but contains functionality that requires the ICAP. Unless the
+>    user has made modifications to the FSBL or 3rd stage bootloader there is no
+>    clear way to enable the ICAP interface. Checking to see if it had been
 
-Fix this by checking the allocation with KUNIT_ASSERT_NOT_ERR_OR_NULL().
+I don't think this should be a property for fpga_mgr device. It is for
+FPGA reprogramming. You insmod the reprograming driver not for
+reprogramming, just to enable the already programmed functionality.
 
-Reviewed-by: Marco Pagani <marco.pagani@linux.dev>
-Fixes: ccbc1c302115 ("fpga: add an initial KUnit suite for the FPGA Manager")
-Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
----
-v2:
-- Remove stable CC tag since its just a kunit test
+My idea is, to load the fpga_region with an image tagged "external-fpga-config".
 
- drivers/fpga/tests/fpga-mgr-test.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks,
+Yilun
 
-diff --git a/drivers/fpga/tests/fpga-mgr-test.c b/drivers/fpga/tests/fpga-mgr-test.c
-index 9cb37aefbac4..1902ebf5a298 100644
---- a/drivers/fpga/tests/fpga-mgr-test.c
-+++ b/drivers/fpga/tests/fpga-mgr-test.c
-@@ -263,6 +263,7 @@ static void fpga_mgr_test_img_load_sgt(struct kunit *test)
- 	img_buf = init_test_buffer(test, IMAGE_SIZE);
- 
- 	sgt = kunit_kzalloc(test, sizeof(*sgt), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, sgt);
- 	ret = sg_alloc_table(sgt, 1, GFP_KERNEL);
- 	KUNIT_ASSERT_EQ(test, ret, 0);
- 	sg_init_one(sgt->sgl, img_buf, IMAGE_SIZE);
--- 
-2.39.5
-
+>    enabled prior to loading this driver does not (in my opinion) make a lot of
+>    sense here.
+> 
+>    Perhaps the name of the DTS is confusing? The suffix '-on-load' was meant to
+>    indicate when the driver was loaded, not the fabric. Would the suffix
+>    '-on-probe' be more clear?
+> 
+> Let me know your thoughts,
+> -Sam
+> 
+> >
+> > Best regards,
+> > Krzysztof
+> 
 
