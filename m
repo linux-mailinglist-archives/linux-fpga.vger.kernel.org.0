@@ -1,239 +1,110 @@
-Return-Path: <linux-fpga+bounces-1188-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1189-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 545B7AA9B8C
-	for <lists+linux-fpga@lfdr.de>; Mon,  5 May 2025 20:30:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92C36AAA426
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 May 2025 01:24:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 859C13ACFA2
-	for <lists+linux-fpga@lfdr.de>; Mon,  5 May 2025 18:30:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0845161266
+	for <lists+linux-fpga@lfdr.de>; Mon,  5 May 2025 23:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76471227EBB;
-	Mon,  5 May 2025 18:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0A132FC2AF;
+	Mon,  5 May 2025 22:25:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N8cBZH+2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B4dYW9tM"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3834522087;
-	Mon,  5 May 2025 18:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9495E2FC2AA;
+	Mon,  5 May 2025 22:25:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746469814; cv=none; b=Uly7CJCAhSxEH1vILS4IaYwrOvKhndnXdIELOaGTq2Wu0BnXTPIa2R+iAWCZ+yUH8+bTIPGSpAQmcu0Lmw6n/Qpnv33/Kga3/smnfwL6LWrjbq2NkYpFumza5X+oCpVk0UTFXSUjaV2xJbivQsWhUBCeanigI8d7YV7LYn/AkpI=
+	t=1746483954; cv=none; b=qVHxGPX78Zped+o7wxtmZu1Aywh21SmvrNR9WYzw/PKuTd12VPLEAz8nC6900eGwjz6i6ByUkQhKXiuXoIaWp7dgfUfDrgqmToUd07P8+Yo/30x44Y0B6HJTD23wjmwS8X5M6l9AZeVAAk7oQUmc9Ew7pd2fVMCcjWb+RFVaeyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746469814; c=relaxed/simple;
-	bh=OiLVPZCoeejwWN1jL9K41mNLLGiUljL3GcilhESEOU0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J06nCWURo1MN6MeMvd0NbCOuXj1TYXhVjlttsCBuPT9dkmJ+jx+TtdffIQ6hy5qpdn+STi7chiwDjvsMpLdUPhcgAL050rBVdmJmxMhE1grlnFnivfPy7ClpJePswZikkwRBKSsvPnawyfvNqmUjGBTNwmZwcZ7suYpYi3ygzNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N8cBZH+2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED726C4CEE4;
-	Mon,  5 May 2025 18:30:04 +0000 (UTC)
+	s=arc-20240116; t=1746483954; c=relaxed/simple;
+	bh=W2Cu9hRPMdSBIn6W4sF6wD4Okx7o3185REUr24RV8oA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ThhFvcIgYlf/RF0493GPTwlTLP5XhBgceW4lBdqwAjQ/MKh5PFBEUqjB7klyoOj80TRcNSd87KErnsG0o2qpSxbEcVcMKPJgMrXV6ohTqWpl+JFlIXYXfU2Q6RLS9jsmtfpRL+2/Nol+Db5Er2CzagvF1NKFY5Ct7YUvNLk3gdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B4dYW9tM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65449C4CEEF;
+	Mon,  5 May 2025 22:25:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746469813;
-	bh=OiLVPZCoeejwWN1jL9K41mNLLGiUljL3GcilhESEOU0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=N8cBZH+27ciqDvOHNblhwoCAWao1ZtIMNm0D8rWXJkodPwlOYpF66dJztLWqctY9m
-	 HjJRoBjLOJ+GbJOruJm+JdPwapHfm/6yBhH/F3wwxa1WJ5PuA1qKZDuh5iiXkPy48u
-	 14N+ZCQywaERZvxzvGFpEOuB63MsswOWj5dt7Lf50xuoMmXRR3z6dlbi6yZmQLHLMK
-	 xEnhOj2/IBeOy/+5YIvhX3eHlHw0rpXAum0o+jEmiNN9ESgyox2GcDSAAvfT/zxMXF
-	 wsA1lGxTIlVeQ8p8hCofM2ciAGCF6oVohad9JKCLQ6nJPGYWxkwBPKEbQeVicerTut
-	 WbAaZQ33NoxIg==
-Date: Mon, 5 May 2025 19:30:01 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Nuno =?UTF-8?B?U8Oh?= via B4 Relay
- <devnull+nuno.sa.analog.com@kernel.org>
-Cc: nuno.sa@analog.com, linux-clk@vger.kernel.org,
- linux-fpga@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, Stephen Boyd
- <sboyd@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Moritz
- Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun
- <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, Vinod Koul
- <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
- <linux@roeck-us.net>, Michael Hennerich <Michael.Hennerich@analog.com>,
- Trevor Gamblin <tgamblin@baylibre.com>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5p?=
- =?UTF-8?B?Zw==?= <ukleinek@kernel.org>, David Lechner
- <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, Mike Turquette
- <mturquette@linaro.org>, Xu Yilun <yilun.xu@linux.intel.com>
-Subject: Re: [PATCH v4 3/7] include: linux: move adi-axi-common.h out of
- fpga
-Message-ID: <20250505193001.1183e7cc@jic23-huawei>
-In-Reply-To: <20250505-dev-axi-clkgen-limits-v4-3-3ad5124e19e1@analog.com>
-References: <20250505-dev-axi-clkgen-limits-v4-0-3ad5124e19e1@analog.com>
-	<20250505-dev-axi-clkgen-limits-v4-3-3ad5124e19e1@analog.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
+	s=k20201202; t=1746483954;
+	bh=W2Cu9hRPMdSBIn6W4sF6wD4Okx7o3185REUr24RV8oA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=B4dYW9tMP1Rqq2XnqgBEmnR2bTgfYk7TTpzKGYtYqHzFt+O61GXIUD7+dfTwzR6oT
+	 lcBS6nBkPb63iDrz3RR2yyM2ofpNkF4dDXswSz0aZHBEVIOqQS+cSg4kRDUiBqXDFq
+	 GyxGJgNCsTFzzvpp7kMeoMHCUBS+F5sdHMebuKlXhnFk/N+FZpwAL/C6LQSuYjd1N7
+	 BnHaFAJJB16O0ARAuiU5FTGJyBykmfe7VgyMrfVau7S/LFDAoHoMEpTx1w6uAyML/E
+	 JNGRnqWAYx8f+w0Ia7TweciuhFG1O/o7Bo+BF9A8h3O8sc6NNwgocXpk9+h/dSErcr
+	 7P+zI9xJMzp6w==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@intel.com>,
+	Ang Tien Sung <tien.sung.ang@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Xu Yilun <yilun.xu@linux.intel.com>,
+	Sasha Levin <sashal@kernel.org>,
+	mdf@kernel.org,
+	hao.wu@intel.com,
+	linux-fpga@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 288/642] fpga: altera-cvp: Increase credit timeout
+Date: Mon,  5 May 2025 18:08:24 -0400
+Message-Id: <20250505221419.2672473-288-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
+References: <20250505221419.2672473-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14.5
+Content-Transfer-Encoding: 8bit
 
-On Mon, 05 May 2025 17:41:34 +0100
-Nuno S=C3=A1 via B4 Relay <devnull+nuno.sa.analog.com@kernel.org> wrote:
+From: Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@intel.com>
 
-> From: Nuno S=C3=A1 <nuno.sa@analog.com>
->=20
-> The adi-axi-common.h header has some common defines used in various ADI
-> IPs. However they are not specific for any fpga manager so it's
-> questionable for the header to live under include/linux/fpga. Hence
-> let's just move one directory up and update all users.
->=20
-> Suggested-by: Xu Yilun <yilun.xu@linux.intel.com>
-> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+[ Upstream commit 0f05886a40fdc55016ba4d9ae0a9c41f8312f15b ]
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> # for IIO
+Increase the timeout for SDM (Secure device manager) data credits from
+20ms to 40ms. Internal stress tests running at 500 loops failed with the
+current timeout of 20ms. At the start of a FPGA configuration, the CVP
+host driver reads the transmit credits from SDM. It then sends bitstream
+FPGA data to SDM based on the total credits. Each credit allows the
+CVP host driver to send 4kBytes of data. There are situations whereby,
+the SDM did not respond in time during testing.
 
-> ---
->  drivers/clk/clk-axi-clkgen.c              | 2 ++
->  drivers/dma/dma-axi-dmac.c                | 2 +-
->  drivers/hwmon/axi-fan-control.c           | 2 +-
->  drivers/iio/adc/adi-axi-adc.c             | 3 +--
->  drivers/iio/dac/adi-axi-dac.c             | 2 +-
->  drivers/pwm/pwm-axi-pwmgen.c              | 2 +-
->  drivers/spi/spi-axi-spi-engine.c          | 2 +-
->  include/linux/{fpga =3D> }/adi-axi-common.h | 0
->  8 files changed, 8 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
-> index 2a95f9b220234a1245024a821c50e1eb9c104ac9..31915f8f5565f2ef5d17c0b4a=
-0c91a648005b3e6 100644
-> --- a/drivers/clk/clk-axi-clkgen.c
-> +++ b/drivers/clk/clk-axi-clkgen.c
-> @@ -16,6 +16,8 @@
->  #include <linux/mod_devicetable.h>
->  #include <linux/err.h>
-> =20
-> +#include <linux/adi-axi-common.h>
-> +
->  #define AXI_CLKGEN_V2_REG_RESET		0x40
->  #define AXI_CLKGEN_V2_REG_CLKSEL	0x44
->  #define AXI_CLKGEN_V2_REG_DRP_CNTRL	0x70
-> diff --git a/drivers/dma/dma-axi-dmac.c b/drivers/dma/dma-axi-dmac.c
-> index 36943b0c6d603cbe38606b0d7bde02535f529a9a..5b06b0dc67ee12017c165bf81=
-5fb7c0e1bf5abd8 100644
-> --- a/drivers/dma/dma-axi-dmac.c
-> +++ b/drivers/dma/dma-axi-dmac.c
-> @@ -6,6 +6,7 @@
->   *  Author: Lars-Peter Clausen <lars@metafoo.de>
->   */
-> =20
-> +#include <linux/adi-axi-common.h>
->  #include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/device.h>
-> @@ -22,7 +23,6 @@
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
->  #include <linux/slab.h>
-> -#include <linux/fpga/adi-axi-common.h>
-> =20
->  #include <dt-bindings/dma/axi-dmac.h>
-> =20
-> diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-cont=
-rol.c
-> index 35c862eb158b0909dac64c2e9f51f0f9f0e8bf72..b7bb325c3ad966ed2a93be4df=
-bf4e20661568509 100644
-> --- a/drivers/hwmon/axi-fan-control.c
-> +++ b/drivers/hwmon/axi-fan-control.c
-> @@ -4,9 +4,9 @@
->   *
->   * Copyright 2019 Analog Devices Inc.
->   */
-> +#include <linux/adi-axi-common.h>
->  #include <linux/bits.h>
->  #include <linux/clk.h>
-> -#include <linux/fpga/adi-axi-common.h>
->  #include <linux/hwmon.h>
->  #include <linux/hwmon-sysfs.h>
->  #include <linux/interrupt.h>
-> diff --git a/drivers/iio/adc/adi-axi-adc.c b/drivers/iio/adc/adi-axi-adc.c
-> index c7357601f0f869e57636f00bb1e26c059c3ab15c..87fa18f1ec96782556bdfad08=
-bedb5e7549fb93d 100644
-> --- a/drivers/iio/adc/adi-axi-adc.c
-> +++ b/drivers/iio/adc/adi-axi-adc.c
-> @@ -6,6 +6,7 @@
->   * Copyright 2012-2020 Analog Devices Inc.
->   */
-> =20
-> +#include <linux/adi-axi-common.h>
->  #include <linux/bitfield.h>
->  #include <linux/cleanup.h>
->  #include <linux/clk.h>
-> @@ -20,8 +21,6 @@
->  #include <linux/regmap.h>
->  #include <linux/slab.h>
-> =20
-> -#include <linux/fpga/adi-axi-common.h>
-> -
->  #include <linux/iio/backend.h>
->  #include <linux/iio/buffer-dmaengine.h>
->  #include <linux/iio/buffer.h>
-> diff --git a/drivers/iio/dac/adi-axi-dac.c b/drivers/iio/dac/adi-axi-dac.c
-> index b143f7ed6847277aeb49094627d90e5d95eed71c..581a2fe55a7fb35f1a03f96f3=
-a0e95421d1583e7 100644
-> --- a/drivers/iio/dac/adi-axi-dac.c
-> +++ b/drivers/iio/dac/adi-axi-dac.c
-> @@ -5,6 +5,7 @@
->   *
->   * Copyright 2016-2024 Analog Devices Inc.
->   */
-> +#include <linux/adi-axi-common.h>
->  #include <linux/bitfield.h>
->  #include <linux/bits.h>
->  #include <linux/cleanup.h>
-> @@ -23,7 +24,6 @@
->  #include <linux/regmap.h>
->  #include <linux/units.h>
-> =20
-> -#include <linux/fpga/adi-axi-common.h>
->  #include <linux/iio/backend.h>
->  #include <linux/iio/buffer-dmaengine.h>
->  #include <linux/iio/buffer.h>
-> diff --git a/drivers/pwm/pwm-axi-pwmgen.c b/drivers/pwm/pwm-axi-pwmgen.c
-> index 4259a0db9ff45808eecae28680473292d165d1f6..e720191e74558d15f1b04fa18=
-cf2984299f88809 100644
-> --- a/drivers/pwm/pwm-axi-pwmgen.c
-> +++ b/drivers/pwm/pwm-axi-pwmgen.c
-> @@ -18,10 +18,10 @@
->   * - Supports normal polarity. Does not support changing polarity.
->   * - On disable, the PWM output becomes low (inactive).
->   */
-> +#include <linux/adi-axi-common.h>
->  #include <linux/bits.h>
->  #include <linux/clk.h>
->  #include <linux/err.h>
-> -#include <linux/fpga/adi-axi-common.h>
->  #include <linux/io.h>
->  #include <linux/minmax.h>
->  #include <linux/module.h>
-> diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-e=
-ngine.c
-> index 7c252126b33ea83fe6a6e80c6cb87499243069f5..d498132f1ff6adf20639bf4a2=
-1f1687903934bec 100644
-> --- a/drivers/spi/spi-axi-spi-engine.c
-> +++ b/drivers/spi/spi-axi-spi-engine.c
-> @@ -5,9 +5,9 @@
->   *  Author: Lars-Peter Clausen <lars@metafoo.de>
->   */
-> =20
-> +#include <linux/adi-axi-common.h>
->  #include <linux/clk.h>
->  #include <linux/completion.h>
-> -#include <linux/fpga/adi-axi-common.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/of.h>
-> diff --git a/include/linux/fpga/adi-axi-common.h b/include/linux/adi-axi-=
-common.h
-> similarity index 100%
-> rename from include/linux/fpga/adi-axi-common.h
-> rename to include/linux/adi-axi-common.h
->=20
+Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
+Signed-off-by: Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@intel.com>
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+Link: https://lore.kernel.org/r/20250212221249.2715929-1-tien.sung.ang@intel.com
+Signed-off-by: Xu Yilun <yilun.xu@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/fpga/altera-cvp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
+index 6b09144324453..5af0bd33890c0 100644
+--- a/drivers/fpga/altera-cvp.c
++++ b/drivers/fpga/altera-cvp.c
+@@ -52,7 +52,7 @@
+ /* V2 Defines */
+ #define VSE_CVP_TX_CREDITS		0x49	/* 8bit */
+ 
+-#define V2_CREDIT_TIMEOUT_US		20000
++#define V2_CREDIT_TIMEOUT_US		40000
+ #define V2_CHECK_CREDIT_US		10
+ #define V2_POLL_TIMEOUT_US		1000000
+ #define V2_USER_TIMEOUT_US		500000
+-- 
+2.39.5
 
 
