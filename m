@@ -1,46 +1,46 @@
-Return-Path: <linux-fpga+bounces-1189-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1191-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92C36AAA426
-	for <lists+linux-fpga@lfdr.de>; Tue,  6 May 2025 01:24:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42364AAAAEB
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 May 2025 03:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0845161266
-	for <lists+linux-fpga@lfdr.de>; Mon,  5 May 2025 23:24:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B374F1882CE9
+	for <lists+linux-fpga@lfdr.de>; Tue,  6 May 2025 01:44:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0A132FC2AF;
-	Mon,  5 May 2025 22:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864EF2F10B5;
+	Mon,  5 May 2025 23:11:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B4dYW9tM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YD0hGEZm"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9495E2FC2AA;
-	Mon,  5 May 2025 22:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11DD738AC68;
+	Mon,  5 May 2025 23:01:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746483954; cv=none; b=qVHxGPX78Zped+o7wxtmZu1Aywh21SmvrNR9WYzw/PKuTd12VPLEAz8nC6900eGwjz6i6ByUkQhKXiuXoIaWp7dgfUfDrgqmToUd07P8+Yo/30x44Y0B6HJTD23wjmwS8X5M6l9AZeVAAk7oQUmc9Ew7pd2fVMCcjWb+RFVaeyU=
+	t=1746486067; cv=none; b=KdJ3/wuiwhhTpdHxRf70N0Ct+WmmPpDmeW4hY3alyD9ndu4PCP4ofS9LOK1TsAOkcEi8m7POmy2uBevycpAnBrKHIn87M4poX21T4LE9s1EROW6c77szw2mXWp6ztkB2MPa6WLCpZ5WNW80q64Jawco/6CNqq6nnlzyTeNnMSrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746483954; c=relaxed/simple;
-	bh=W2Cu9hRPMdSBIn6W4sF6wD4Okx7o3185REUr24RV8oA=;
+	s=arc-20240116; t=1746486067; c=relaxed/simple;
+	bh=8NVCDiz8iITfIRqltj6+2O2/8Z/wjMt5J+O98JIyMaA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ThhFvcIgYlf/RF0493GPTwlTLP5XhBgceW4lBdqwAjQ/MKh5PFBEUqjB7klyoOj80TRcNSd87KErnsG0o2qpSxbEcVcMKPJgMrXV6ohTqWpl+JFlIXYXfU2Q6RLS9jsmtfpRL+2/Nol+Db5Er2CzagvF1NKFY5Ct7YUvNLk3gdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B4dYW9tM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65449C4CEEF;
-	Mon,  5 May 2025 22:25:53 +0000 (UTC)
+	 MIME-Version; b=roz/ZGyO0gb3gKH7hHHvN9YSIXttu23IntZWedCBIZzSOBskFk7n0ptqdhYaroYgKsns0jj/p9hQiXkp5v+qLoJ0F11L3XROMylNPVMLOnUaJLy/VElar53Sp9auDL1h9lcY99L5atR0AdbdhH7KywwwdSqyh+ZvHu3fKLHcXCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YD0hGEZm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71FB0C4CEEF;
+	Mon,  5 May 2025 23:01:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746483954;
-	bh=W2Cu9hRPMdSBIn6W4sF6wD4Okx7o3185REUr24RV8oA=;
+	s=k20201202; t=1746486064;
+	bh=8NVCDiz8iITfIRqltj6+2O2/8Z/wjMt5J+O98JIyMaA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=B4dYW9tMP1Rqq2XnqgBEmnR2bTgfYk7TTpzKGYtYqHzFt+O61GXIUD7+dfTwzR6oT
-	 lcBS6nBkPb63iDrz3RR2yyM2ofpNkF4dDXswSz0aZHBEVIOqQS+cSg4kRDUiBqXDFq
-	 GyxGJgNCsTFzzvpp7kMeoMHCUBS+F5sdHMebuKlXhnFk/N+FZpwAL/C6LQSuYjd1N7
-	 BnHaFAJJB16O0ARAuiU5FTGJyBykmfe7VgyMrfVau7S/LFDAoHoMEpTx1w6uAyML/E
-	 JNGRnqWAYx8f+w0Ia7TweciuhFG1O/o7Bo+BF9A8h3O8sc6NNwgocXpk9+h/dSErcr
-	 7P+zI9xJMzp6w==
+	b=YD0hGEZmkaLSHuDdUq6WxMnhqXD8zmb6g8Yr9ZGSJxKsSUri6iogYbRx2mu6wyUyA
+	 Ed8a7a1PxSOWe7NjLdQGNZLiWjzMbj/x7YVZSZKCmUyHLASM1AO3tHLLBFsp2OPgoa
+	 1ugUoPVw05JBIHmH2GEZLbICiu3TGhpcYlLE5U3hD5xwliiDHNqWUbZbLq8WJOPMaK
+	 /uD94OLAWgMimZ36SyDOKGDJINqc8YPYNyXFVwhBzjbO2R7FOEIh6LPd/D1kN+nqZX
+	 47V8o1lFAb+1nhsPRn6Wg4YkOdpnGJGg6L2a9rnjmvS0tlquvEoqcQFqtUIT6RiMqk
+	 kjZgm4CkJaKmA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@intel.com>,
 	mdf@kernel.org,
 	hao.wu@intel.com,
 	linux-fpga@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 288/642] fpga: altera-cvp: Increase credit timeout
-Date: Mon,  5 May 2025 18:08:24 -0400
-Message-Id: <20250505221419.2672473-288-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 135/294] fpga: altera-cvp: Increase credit timeout
+Date: Mon,  5 May 2025 18:53:55 -0400
+Message-Id: <20250505225634.2688578-135-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
-References: <20250505221419.2672473-1-sashal@kernel.org>
+In-Reply-To: <20250505225634.2688578-1-sashal@kernel.org>
+References: <20250505225634.2688578-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.5
+X-stable-base: Linux 6.6.89
 Content-Transfer-Encoding: 8bit
 
 From: Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@intel.com>
@@ -92,7 +92,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-index 6b09144324453..5af0bd33890c0 100644
+index 4ffb9da537d82..5295ff90482bc 100644
 --- a/drivers/fpga/altera-cvp.c
 +++ b/drivers/fpga/altera-cvp.c
 @@ -52,7 +52,7 @@
