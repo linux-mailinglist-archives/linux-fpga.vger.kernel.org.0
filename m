@@ -1,112 +1,115 @@
-Return-Path: <linux-fpga+bounces-1226-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1227-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F69DAC0316
-	for <lists+linux-fpga@lfdr.de>; Thu, 22 May 2025 05:41:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CE04AC4B95
+	for <lists+linux-fpga@lfdr.de>; Tue, 27 May 2025 11:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DABC4E4017
-	for <lists+linux-fpga@lfdr.de>; Thu, 22 May 2025 03:41:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04537188F364
+	for <lists+linux-fpga@lfdr.de>; Tue, 27 May 2025 09:32:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 473BD1758B;
-	Thu, 22 May 2025 03:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BAA01F4CB1;
+	Tue, 27 May 2025 09:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GhrEOfZi"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="jLMzV1FF"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB4BC2EF
-	for <linux-fpga@vger.kernel.org>; Thu, 22 May 2025 03:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1416D1F582A
+	for <linux-fpga@vger.kernel.org>; Tue, 27 May 2025 09:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747885305; cv=none; b=Rchr/OAS6GCUyVzMvRxb9nPSq6a53CjWciTwMfCZjRvRXph3bSTpyCUmvdfRItWJL0vksf0Iae6HCvIdcLbbVGjiRI3QkqFPstTaRZG26trp94htazHjMXP1GP464xGBsQjiz1BOosd2jv5KX2/MO0Cx8Iest34a+SoWPePKO6w=
+	t=1748338318; cv=none; b=m3ucjc7/6v520PO2gl0wMsU9J1Y7IMJUYaNzJWZk1ZFeFD2ofVW4xLuxnpcb6Atw3K8A3GyIDdabAWkaVmsMGJTKk5JRNTV2CI0O4KfN/Z+MPXjuIAuhbdX8ZiQ1ux22rqvr9406TbAFFKa+dAi8sVvdyEVryXuse7P9rjnusdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747885305; c=relaxed/simple;
-	bh=3so9oONFTycEqq8evQLwgNSUOUcMgYZxPh3ha6/QruQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dlmxH0FD/cnrg7gkoc4UtMlVHgX+aM3kRLDnldh7AZcGpj2MHGcwt9QXNGgzXI0xvEaIYt8qvnq4akk2pPw+jnBmW2sE3NiFhxAO0EIRQCKXXwQalOhBIy4CLTMr76hSj6R2fx5CS8kanz3d9t53LZbvuNNNzzZfeu0XVO7+TNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GhrEOfZi; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747885303; x=1779421303;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3so9oONFTycEqq8evQLwgNSUOUcMgYZxPh3ha6/QruQ=;
-  b=GhrEOfZias32l6lmiaqYTsU9u5yyVoaXygKt+L2Frj5o3VOAsScZHpt/
-   XKo6bTnXwcjyv4w7wbv+niL+oQhnXbbH3TW83H27c8zDyUhft2QW3qa1F
-   5J48XJsq3l+q/xYfu1WrcJU3RWwVyuKwQKDIfU+vWwVOxy4O2ROaj61yP
-   30HCBIQ9ROZRUMeMjSt7pQbLr1tyT4uE4+e/uULb1rs4isAE04B1jyihe
-   okL31afwbvuJlPq862fWRYH0HP/7MsJEc1URZ6ZlHXP+eTTsduXENIQrf
-   cp2YLNN8Nr5TgF0kZ5fFVjPfB8WvH8Cd1nfxfO7B4RclWW8tVhLSNacfP
-   Q==;
-X-CSE-ConnectionGUID: UVMAsGOBSRaf8XwFqNZ1lg==
-X-CSE-MsgGUID: McU8DXYsTtCTWf3YaSV+sA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="49767687"
-X-IronPort-AV: E=Sophos;i="6.15,305,1739865600"; 
-   d="scan'208";a="49767687"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 20:41:43 -0700
-X-CSE-ConnectionGUID: 5ApnH5YCRIeVp56h780oJA==
-X-CSE-MsgGUID: +dXRMyeLQqiD5HbT7IJqrw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,305,1739865600"; 
-   d="scan'208";a="140278191"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa006.fm.intel.com with ESMTP; 21 May 2025 20:41:42 -0700
-Date: Thu, 22 May 2025 11:35:44 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: yilun.xu@intel.com, linux-fpga@vger.kernel.org, mdf@kernel.org
-Subject: Re: [GIT PULL] FPGA Manager changes for 6.16-rc1
-Message-ID: <aC6bkIgiTi45JqWe@yilunxu-OptiPlex-7050>
-References: <aCDPz42LmQ47ANDX@yilunxu-OptiPlex-7050>
- <2025052115-lance-punctured-578b@gregkh>
+	s=arc-20240116; t=1748338318; c=relaxed/simple;
+	bh=U0UIg9LP+4sSr3dQqYeBx8E/ThnysS0h8O/LIWF+2eo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=CHJtkLjQnXuq0udmQflf3q/9WW8egpGr61t6AZGMKundGuEQmjnsHQ99ir1bhIDj+jC/hajTEnX+Zij/FepPzPSsh01XHNyPKAmUplPErUf5c/D1gtggM4myrMABoD6pciQKisQWDahvUiDcGE6tkoWx5WVpM0BZhV1WxibEgLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=jLMzV1FF; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250527093153euoutp02f67d6d7dea853df98112c19f59093dd7~DWG7H1dRS1613616136euoutp02d
+	for <linux-fpga@vger.kernel.org>; Tue, 27 May 2025 09:31:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250527093153euoutp02f67d6d7dea853df98112c19f59093dd7~DWG7H1dRS1613616136euoutp02d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1748338313;
+	bh=vhSC01DGXSNQqg+V1YO3zjMGynr+vEoBkC7zcCPnkho=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=jLMzV1FFqWRSHtu6p39Q5EoD8YscvXEidTgo1wa5pzbuBEgp7cGPyhvqeShfi170J
+	 p+8iuqteyYogV73gKcGUHDy+1+mtCkrRnWS6gRf1KnxA9yb7/GnMP+GJlfwse2IZ1p
+	 5WDSfi4/ZodMHNuqRgu8k22GjFA8MPpWDj9IEfAU=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250527093152eucas1p24a904b0d973252ebc0d05034a276e9cf~DWG6qpOLo0928509285eucas1p2X;
+	Tue, 27 May 2025 09:31:52 +0000 (GMT)
+Received: from AMDC4653.digital.local (unknown [106.120.51.32]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250527093152eusmtip13122165a26979724994ec57c21158e87~DWG6Pdlvf2645826458eusmtip1Y;
+	Tue, 27 May 2025 09:31:52 +0000 (GMT)
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+To: linux-fpga@vger.kernel.org
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>, Moritz Fischer
+	<mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>, Michal Simek <michal.simek@amd.com>, Jason
+	Gunthorpe <jgg@ziepe.ca>, stable@vger.kernel.org
+Subject: [PATCH] fpga: zynq-fpga: use sgtable-based scatterlist wrappers
+Date: Tue, 27 May 2025 11:31:37 +0200
+Message-Id: <20250527093137.505621-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025052115-lance-punctured-578b@gregkh>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250527093152eucas1p24a904b0d973252ebc0d05034a276e9cf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250527093152eucas1p24a904b0d973252ebc0d05034a276e9cf
+X-EPHeader: CA
+X-CMS-RootMailID: 20250527093152eucas1p24a904b0d973252ebc0d05034a276e9cf
+References: <CGME20250527093152eucas1p24a904b0d973252ebc0d05034a276e9cf@eucas1p2.samsung.com>
 
-On Wed, May 21, 2025 at 02:10:02PM +0200, Greg KH wrote:
-> On Mon, May 12, 2025 at 12:26:55AM +0800, Xu Yilun wrote:
-> > The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
-> > 
-> >   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga tags/fpga-for-6.16-rc1
-> 
-> I've taken this but for some reason you have a commit in here with a
-> Fixes: tag but no cc: stable line, which means it will not be
-> automatically picked up for any stable backports :(
+Use common wrappers operating directly on the struct sg_table objects to
+fix incorrect use of statterlists related calls. dma_unmap_sg() function
+has to be called with the number of elements originally passed to the
+dma_map_sg() function, not the one returned in sgtable's nents.
 
-mm.. This is for Kunit test and it fixes a potential problem... I.e. I
-think it may not be for stable kernel according to
-stable-kernel-rules.rst
+CC: stable@vger.kernel.org
+Fixes: 425902f5c8e3 ("fpga zynq: Use the scatterlist interface")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/fpga/zynq-fpga.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> Please notify the stable team when it hits a release so that they can be
-> sure to include it properly where needed.  And in the future, be more
-> careful.
+diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+index f7e08f7ea9ef..9bd39d1d4048 100644
+--- a/drivers/fpga/zynq-fpga.c
++++ b/drivers/fpga/zynq-fpga.c
+@@ -406,7 +406,7 @@ static int zynq_fpga_ops_write(struct fpga_manager *mgr, struct sg_table *sgt)
+ 	}
+ 
+ 	priv->dma_nelms =
+-	    dma_map_sg(mgr->dev.parent, sgt->sgl, sgt->nents, DMA_TO_DEVICE);
++	    dma_map_sgtable(mgr->dev.parent, sgt, DMA_TO_DEVICE);
+ 	if (priv->dma_nelms == 0) {
+ 		dev_err(&mgr->dev, "Unable to DMA map (TO_DEVICE)\n");
+ 		return -ENOMEM;
+@@ -478,7 +478,7 @@ static int zynq_fpga_ops_write(struct fpga_manager *mgr, struct sg_table *sgt)
+ 	clk_disable(priv->clk);
+ 
+ out_free:
+-	dma_unmap_sg(mgr->dev.parent, sgt->sgl, sgt->nents, DMA_TO_DEVICE);
++	dma_unmap_sgtable(mgr->dev.parent, sgt, DMA_TO_DEVICE);
+ 	return err;
+ }
+ 
+-- 
+2.34.1
 
-Yes. And if it really needs to be a stable kernel patch, I'll keep the
-rule in my mind.
-
-Thanks,
-Yilun
-
-> 
-> thanks,
-> 
-> greg k-h
 
