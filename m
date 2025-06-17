@@ -1,118 +1,135 @@
-Return-Path: <linux-fpga+bounces-1250-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1251-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C960ADAFDC
-	for <lists+linux-fpga@lfdr.de>; Mon, 16 Jun 2025 14:09:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05BBBADC5E3
+	for <lists+linux-fpga@lfdr.de>; Tue, 17 Jun 2025 11:14:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31A3D169607
-	for <lists+linux-fpga@lfdr.de>; Mon, 16 Jun 2025 12:09:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0368C3B52FD
+	for <lists+linux-fpga@lfdr.de>; Tue, 17 Jun 2025 09:14:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C12BB2E425B;
-	Mon, 16 Jun 2025 12:09:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B495F291157;
+	Tue, 17 Jun 2025 09:14:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="EiMAQ/Qm"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="YCEjUtBY"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1002E425A
-	for <linux-fpga@vger.kernel.org>; Mon, 16 Jun 2025 12:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3E821B184
+	for <linux-fpga@vger.kernel.org>; Tue, 17 Jun 2025 09:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750075785; cv=none; b=XvyB5O268KWfHl7rA07IAKTgdpiH+MPkd6ubOkrgFRm7grwmapGc2eO1aST5ic6TnOW5msvfgLHc7HUKBfqb/5SR8Y6U0M+wwhgaWyJ/HBGTuaNjHoVUmoTuaSYAqpERfEnBcJk3BohdYQfvu/xOdg5QWt/GNKkfwqFB7pcLsFM=
+	t=1750151663; cv=none; b=Ff18Yjd0MlKIcisbXHPDXRvGxRSlUjy2LuAGwpVAYpfLpYR8oEy80Txgh5/DtJgMx6jWEswvIx21050ClTR8ENuJm6kO/mcFtUXD3ij4jWFmpeJG0J1O4GyTqC6sZT6RdDG5m6KKvtxe6ael41Gpjyz0vsdBLj8hGqMwinhb8a8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750075785; c=relaxed/simple;
-	bh=EYrrDilvdga+E1vzHBnZRq3OykAxV9itkfRuMPAXZ+M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=aUR9xGMDlefbrUHIAnCfIswC3xjDJJlVkjRcr0giqt8/yJz6sw6CUrJ63X1eAp/nJf5obqnq2Gxe5wm07jYfNsfaLEcr98xkU0oFzAeDOB3TVnPb3uA+OuutDkFMEEPQWKKNpsv0xkRPBF7JThpJ7gsDYjIJq8mGY9XSt7thrig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=EiMAQ/Qm; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250616120941euoutp01230d49f14c3846a44ffe55d7b825a939~JhKalg2yR3246132461euoutp01H
-	for <linux-fpga@vger.kernel.org>; Mon, 16 Jun 2025 12:09:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250616120941euoutp01230d49f14c3846a44ffe55d7b825a939~JhKalg2yR3246132461euoutp01H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1750075781;
-	bh=JJMZlZ/EXjEkuE1I03QKBankQc62X7dLkhxQ/QdZRGY=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=EiMAQ/QmH2eYiaUqGw4WMbN2SONw8s3+AofBiZgcUXdUMM4X4y6JVtS8zixkaLtha
-	 hDqwFUJSXi1X/L6BeSLK8RIRAC1tZ/dADPh8QMN7rwBkLLjt5rURcikukSlK2EL0jF
-	 ZdvWR7BTBynBoJLvWghddxGsoQw4XG43JujvqUEk=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250616120941eucas1p2329f4080332615953fa77ba5ad0c0155~JhKaR2O-O1539115391eucas1p2w;
-	Mon, 16 Jun 2025 12:09:41 +0000 (GMT)
-Received: from AMDC4653.digital.local (unknown [106.120.51.32]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250616120940eusmtip12e7864750bb508173ef4a2860829f61e~JhKZ1-4y20132101321eusmtip1J;
-	Mon, 16 Jun 2025 12:09:40 +0000 (GMT)
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-To: linux-fpga@vger.kernel.org
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>, Moritz Fischer
-	<mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>, Michal Simek <michal.simek@amd.com>, Jason
-	Gunthorpe <jgg@ziepe.ca>, stable@vger.kernel.org
-Subject: [PATCH v2] zynq_fpga: use sgtable-based scatterlist wrappers
-Date: Mon, 16 Jun 2025 14:09:32 +0200
-Message-Id: <20250616120932.1090614-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1750151663; c=relaxed/simple;
+	bh=Pg+a11153qJ1ibrfg8vK0qJ81vAzJN95tmjWPPAy6Iw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KkPl+N/fEpBnAEpr/O5rJ/TmsnBaDE2vHEMGtaZyP9GwPvjVXvoWGkASJ/WsRTk+mBCwJxqNhD3zKMKWMST1y38yodir9RNi2z1ctlZerZ9/Nng6g/yCTBA3eIvdRzIN04SKy125bnJa2fq4qinHnNKik1v/NLjsF4E0cdb89L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=YCEjUtBY; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a4fd1ba177so330374f8f.0
+        for <linux-fpga@vger.kernel.org>; Tue, 17 Jun 2025 02:14:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1750151660; x=1750756460; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UnaoVN6uaaPExRjDgZo8b3KkCScwP4IUmjW/6H1GBX0=;
+        b=YCEjUtBYQRSjsyyi0+bN2bxbBRgBocCrj6p65LOMSZlCyBry9mFsAUTfWdC0J5ZwhM
+         p/R0L/eAc8n1gkb6fFX9Xy3LtYq9FRLjjbHWZzLp5no9x0PO2AxT2bVsmL0gr9yx4DdW
+         T3oKYA/dtUYnIdz21a4MCHuuywHr04pDvUHFnAWo76VAtDKETVzcLfaFJtJT/vrLNuOT
+         IsmXdOHtHt1AlDsWrC4grYd6OZ55mGGh17mujWWeO2xVmza00jDeh1lU+Y8kAmV8iSr3
+         BJCwt5YUl3NaXlRlYhSn/KunIZt/bsJNBcStNtxsj6/NfQPf+A8fBx2nQ9kjYl1askgA
+         hGsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750151660; x=1750756460;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UnaoVN6uaaPExRjDgZo8b3KkCScwP4IUmjW/6H1GBX0=;
+        b=by2JzOjQBB0cseLXOgixjqqbBxdSGQQTpF84pjZXYGhDUldrgs8icWHOYtboY79aoe
+         H/oBd0xMKVuM4RxGB7IB2XSXBiNl9Anf3logs0s3aW5TE1+ujINEks7bDAWqEUXzp+uS
+         woQzhaR5FseqJmMqMvqu535I7eIALS/M0yxyjpr3hG2DKjg1+0Tg4KuUuIBGAQhyWbm9
+         jMoKvS8LpKcTzapyxMjR3pZlZ+bUs17OqEOdVkuv2nAVN/frIXFpNOpRDH/2Xxs6/TIK
+         2yDQYXzANGC0lk4vHbdqeKYg2+YdVqD3KVYrUgN++c+5jGJ3VU4d/3v0jH/teXWWgoA5
+         N4Yg==
+X-Forwarded-Encrypted: i=1; AJvYcCVSgzhXDgFe5BI9jqF5Uo4ZKkBQlSOnuxUn4Ozjxi2DWHCT/Ylm4AGgXFtaIDGvL0vhpg54ixfRKM5j@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMBylv2oczTO2+RulxvBxq0XwR+KRki9Spqqlt0vM+bm4fO/Wh
+	F2IZxrtH6gCborYNlnq1tjx9GljQVTkBit3N8rkbQXWJfbEMSjtkycroNZJS8g2dOa8=
+X-Gm-Gg: ASbGncuzY/VHai15XuqSNtXaK9Wzgdey9wKq5inWfCFOYkDxs/pJcAdf0ndKoNSTGCo
+	6OLk/Q1Ygpr7T2aFs+3SnFgyWZaJDLjET6FVjghBtNPlfz+oM64TXyfMtDEvsD1FQhwQwrFenmu
+	IGodiYGc0UGEyow3H6XRwlab93O1qT43dEDzm/kDYaDieSFIoyoMFzoxts4AtsiXXBg4SxS502o
+	Y3mgxmoWUM5HhW5tCJq8azr2L4ZrU0DXDQ9rQSZflC2hSj8PEMUsXNAbEPGLievPkQ1I7VMC3c+
+	+p8TFa2FzcnRW2EAhExXDd5YHq+MhL8j74375kl9yLmsJqyzNu8KUDXc4UFuxG0=
+X-Google-Smtp-Source: AGHT+IHTn2wDMsbvMniANLwl39rjbgUv/TbrwZjrJk9B4M+SEDhL4V7ekAYBvqmllDgC3dCpG6O08g==
+X-Received: by 2002:a05:6000:2504:b0:3a4:e624:4ec9 with SMTP id ffacd0b85a97d-3a572384087mr10329583f8f.3.1750151660151;
+        Tue, 17 Jun 2025 02:14:20 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:90df:ded7:9cbf:4074])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568a633ddsm13280685f8f.26.2025.06.17.02.14.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 02:14:19 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: linux-kernel@vger.kernel.org,
+	monstr@monstr.eu,
+	git@xilinx.com,
+	Michal Simek <michal.simek@amd.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Moritz Fischer <mdf@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+	Srinivas Neeli <srinivas.neeli@amd.com>,
+	Tom Rix <trix@redhat.com>,
+	Wu Hao <hao.wu@intel.com>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	"moderated list:ARM/ZYNQ ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
+	"open list:FPGA MANAGER FRAMEWORK" <linux-fpga@vger.kernel.org>,
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v3] dt-bindings: gpio: gpio-xilinx: Mark clocks as required property
+Date: Tue, 17 Jun 2025 11:14:16 +0200
+Message-ID: <175015165194.21779.15497760973651030426.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <94151cfbcff5e4ae05894981c7e398b605d4b00a.1750059796.git.michal.simek@amd.com>
+References: <94151cfbcff5e4ae05894981c7e398b605d4b00a.1750059796.git.michal.simek@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250616120941eucas1p2329f4080332615953fa77ba5ad0c0155
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250616120941eucas1p2329f4080332615953fa77ba5ad0c0155
-X-EPHeader: CA
-X-CMS-RootMailID: 20250616120941eucas1p2329f4080332615953fa77ba5ad0c0155
-References: <CGME20250616120941eucas1p2329f4080332615953fa77ba5ad0c0155@eucas1p2.samsung.com>
+Content-Transfer-Encoding: 8bit
 
-Use common wrappers operating directly on the struct sg_table objects to
-fix incorrect use of statterlists related calls. dma_unmap_sg() function
-has to be called with the number of elements originally passed to the
-dma_map_sg() function, not the one returned in sgtable's nents.
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-CC: stable@vger.kernel.org
-Fixes: 425902f5c8e3 ("fpga zynq: Use the scatterlist interface")
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
-v2:
-- fixed build break (missing flags parameter)
----
- drivers/fpga/zynq-fpga.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git drivers/fpga/zynq-fpga.c drivers/fpga/zynq-fpga.c
-index f7e08f7ea9ef..0be0d569589d 100644
---- drivers/fpga/zynq-fpga.c
-+++ drivers/fpga/zynq-fpga.c
-@@ -406,7 +406,7 @@ static int zynq_fpga_ops_write(struct fpga_manager *mgr, struct sg_table *sgt)
- 	}
- 
- 	priv->dma_nelms =
--	    dma_map_sg(mgr->dev.parent, sgt->sgl, sgt->nents, DMA_TO_DEVICE);
-+	    dma_map_sgtable(mgr->dev.parent, sgt, DMA_TO_DEVICE, 0);
- 	if (priv->dma_nelms == 0) {
- 		dev_err(&mgr->dev, "Unable to DMA map (TO_DEVICE)\n");
- 		return -ENOMEM;
-@@ -478,7 +478,7 @@ static int zynq_fpga_ops_write(struct fpga_manager *mgr, struct sg_table *sgt)
- 	clk_disable(priv->clk);
- 
- out_free:
--	dma_unmap_sg(mgr->dev.parent, sgt->sgl, sgt->nents, DMA_TO_DEVICE);
-+	dma_unmap_sgtable(mgr->dev.parent, sgt, DMA_TO_DEVICE, 0);
- 	return err;
- }
- 
+On Mon, 16 Jun 2025 09:43:18 +0200, Michal Simek wrote:
+> On Microblaze platforms there is no need to handle clocks because the
+> system is starting with clocks enabled (can be described via fixed clock
+> node or clock-frequency property or not described at all).
+> With using soft IPs with SOC platforms there is mandatory to handle clocks
+> as is explained in commit 60dbdc6e08d6 ("dt-bindings: net: emaclite: Add
+> clock support").
+> That's why make clock as required in dt binding because it is present in
+> both configurations and should be described even there is no way how to
+> handle it on Microblaze systems.
+> 
+> [...]
+
+Applied, thanks!
+
+[1/1] dt-bindings: gpio: gpio-xilinx: Mark clocks as required property
+      https://git.kernel.org/brgl/linux/c/d03b53c9139352b744ed007bf562bd35517bacff
+
+Best regards,
 -- 
-2.34.1
-
+Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
