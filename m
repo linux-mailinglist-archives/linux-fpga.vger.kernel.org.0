@@ -1,141 +1,134 @@
-Return-Path: <linux-fpga+bounces-1256-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1258-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6671DAEB650
-	for <lists+linux-fpga@lfdr.de>; Fri, 27 Jun 2025 13:27:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26ECAAEBAC0
+	for <lists+linux-fpga@lfdr.de>; Fri, 27 Jun 2025 17:00:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50E6B561DB8
-	for <lists+linux-fpga@lfdr.de>; Fri, 27 Jun 2025 11:27:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27A7F7A5A2C
+	for <lists+linux-fpga@lfdr.de>; Fri, 27 Jun 2025 14:58:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C00C829CB32;
-	Fri, 27 Jun 2025 11:26:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6562D2E88A7;
+	Fri, 27 Jun 2025 14:59:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UO0CI4yM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aP/eyYe+"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E6329B8F7;
-	Fri, 27 Jun 2025 11:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24B572E7625;
+	Fri, 27 Jun 2025 14:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751023602; cv=none; b=huhT3z7eNKdow0SeVl5Ga/fFNLC1JYgeShjJpNgcmPTzanQi5ygjxWCCjKeNNW4gvp21KvfNjnL+8B1X1chFpXuXE0Ai+NqVBHL4/qP5ZummPkjZ1TF5s8XEXf1YKRiZ1OIdKByWVf1dyeAdfviBAYpvNnrearSBLcuQCpVSoaU=
+	t=1751036355; cv=none; b=PsywMAYwd8IIRhVK1+y+4DNb0xbWo9YTGQ0whr8rGuenpKdE6Vyeg9dwS3eRE69tdYtXUeNYgijz/zFXuPrz8+fSJ1yNLCFmsU/ouh6uQlFogNrNfQqp/F8u9df/Eloh5RlDFyi7DfHwGbH5qVPRkL57zbT8zt1XTyewI28ytk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751023602; c=relaxed/simple;
-	bh=ymHj2heJ3EaEpXwaDAEWgN5F5AZ/YCUmvRRX+CctGCM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nju5rU3bbvHt+uPTKf+NPgIziDDpXYHt04JCpmyl1Ktw7JNOV20QFXJ0BiQxanJX8sUL0oAhpG1EpLIWQxMRL2T2/SwmHn1I1TEnDi/zAdmLpEZ/6/F7Mr9F35QsjKsX95fvmvHwMx1nU1HoOy5kUGWn1Nk91JDNjpauAkxbeGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UO0CI4yM; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751023601; x=1782559601;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ymHj2heJ3EaEpXwaDAEWgN5F5AZ/YCUmvRRX+CctGCM=;
-  b=UO0CI4yMwxeDZC6zeI2oN8SEELAqn+xA7kBxhBbyY0y7j20HaQuxOh31
-   XfZLcQW9+m0FX/wjKxgB5FYP84HIqlMN4aeTbQyKiK0yOzV8sa+lmJbfo
-   /qFiiJyJ641nCYXokJQPhDMb0AEO4Zi9tDs5ucuh+GZtk5MwtUIsZfbSp
-   yhbxI9mf0aQ+8G0kBbQ39u8unXKGMUWeYP+UFCajaLU5bnRVmLDj82nhw
-   xUmpFeD/rJNiCp2864otjpv2B1RBZpTXMHClSEpLnmAyWDBWjgb0bduHB
-   YKTbjW72ODLBPXGNSfkehw5TApISLUjXYl03YTjxICGfZ57GfM/b4HEWE
-   A==;
-X-CSE-ConnectionGUID: FVmULpZyQpqt9XIuK4ck+w==
-X-CSE-MsgGUID: PMcLk8pbTWKv/e95Br6AaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="53208802"
-X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
-   d="scan'208";a="53208802"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 04:26:41 -0700
-X-CSE-ConnectionGUID: CNvLs3amSLWUlOXrDX3C/g==
-X-CSE-MsgGUID: dpxZq7fuR4ij1vbYv3THBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
-   d="scan'208";a="152960312"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa007.jf.intel.com with ESMTP; 27 Jun 2025 04:26:39 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id B20E46A; Fri, 27 Jun 2025 14:26:37 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Xu Yilun <yilun.xu@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH v2 1/1] fpga: altera-cvp: Use pci_find_vsec_capability() when probing FPGA device
-Date: Fri, 27 Jun 2025 14:26:22 +0300
-Message-ID: <20250627112635.789872-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1751036355; c=relaxed/simple;
+	bh=IS+1lVLpNuNJ3U8UpcITAgJNJAxvYgVZbjciSjmZKqs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=d4ebaWa4guwb3kTTkN8J+qsxrRrf2sOobtzFWv2bVhnji4AvzO2OxBLQ14nU0ZjkPVJAdGAeqeny6cj+zhzvW0ORtswlH2tD3b9ERjxQGe1PE7d3CQu7qvuyj8SnD9FzB/HDWufoeiaa8ewiRtvAXkQn1E8X2HkOKU+A15iYcQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aP/eyYe+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 94A29C4CEE3;
+	Fri, 27 Jun 2025 14:59:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751036354;
+	bh=IS+1lVLpNuNJ3U8UpcITAgJNJAxvYgVZbjciSjmZKqs=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=aP/eyYe+9CrzSyqddtUv9A/6RBwBfw122L5dRpzI9jmdmPQDmTkHk44As+8KyNo2Q
+	 GwJ1rn2yhRw8cuU9H4VZxkmLnPzZvQ4YTeGvz/EX7kTdAUKc6KHPpOZf6L1ADOBrKK
+	 x00/qBsD0vPO/X0Q8yhlys+HGlHLYvCrtmbXiLE/9XZkrFzcbQCgjf6ibiPKNttbvR
+	 EqcN7jgOJMGnFui2iC0AzSoB6/4xrT4LSx88t3hWLuZ7AyO11r8r3xlVW7/2zE6mbI
+	 S+DVHRESiyJ5z3R3Er1ycexX24BHvJKR+9NQx09pIgz3v4zBJqNsSs33AHM8yX8dV9
+	 rQ8VCkTcO3azg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F7C6C7EE2A;
+	Fri, 27 Jun 2025 14:59:14 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH RESEND v7 0/7] clk: clk-axi-clkgen: improvements and some
+ fixes
+Date: Fri, 27 Jun 2025 15:59:09 +0100
+Message-Id: <20250627-dev-axi-clkgen-limits-v7-0-e4f3b1f76189@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+To: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org, 
+ dmaengine@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+ linux-spi@vger.kernel.org
+Cc: Stephen Boyd <sboyd@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
+ Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Jonathan Cameron <jic23@kernel.org>, Trevor Gamblin <tgamblin@baylibre.com>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
+ Mike Turquette <mturquette@linaro.org>, Xu Yilun <yilun.xu@linux.intel.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751036364; l=1954;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=IS+1lVLpNuNJ3U8UpcITAgJNJAxvYgVZbjciSjmZKqs=;
+ b=S1oYs+xF+TEEEi33Vt7+HTiDO+9YZoqqBIaiuCBkKDWnQsuBXMxxlRhSaaQkUEB9yi+llghHp
+ zRFO9EFcEzoAlc3UG0RgO7Tki8MV5bTaaAHaHi54uKsT6nv4jm4A0dK
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-Currently altera_cvp_probe() open-codes pci_find_vsec_capability().
-Refactor the former to use the latter. No functional change intended.
+This series starts with a small fix and then a bunch of small
+improvements. The main change though is to allow detecting of
+struct axi_clkgen_limits during probe().
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
+Changes in v7:
+ - Just include new tags.
 
-v2: removed unused variable (LKP)
+- Link to v6: https://lore.kernel.org/r/20250519-dev-axi-clkgen-limits-v6-0-bc4b3b61d1d4@analog.com
+- Link to v5: https://lore.kernel.org/r/20250512-dev-axi-clkgen-limits-v5-0-a86b9a368e05@analog.com
+- Link to v4: https://lore.kernel.org/r/20250505-dev-axi-clkgen-limits-v4-0-3ad5124e19e1@analog.com
+- Link to v3: https://lore.kernel.org/r/20250421-dev-axi-clkgen-limits-v3-0-4203b4fed2c9@analog.com
+- Link to v2: https://lore.kernel.org/r/20250313-dev-axi-clkgen-limits-v2-0-173ae2ad6311@analog.com
+- Link to v1: https://lore.kernel.org/r/20250219-dev-axi-clkgen-limits-v1-0-26f7ef14cd9c@analog.com
 
- drivers/fpga/altera-cvp.c | 20 +++++---------------
- 1 file changed, 5 insertions(+), 15 deletions(-)
+---
+Nuno Sá (7):
+      clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
+      clk: clk-axi-clkgen: make sure to include mod_devicetable.h
+      include: linux: move adi-axi-common.h out of fpga
+      include: adi-axi-common: add new helper macros
+      clk: clk-axi-clkgen: detect axi_clkgen_limits at runtime
+      clk: clk-axi-clkgen move to min/max()
+      clk: clk-axi-clkgen: fix coding style issues
 
-diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-index 5af0bd33890c..514d2ac18e5f 100644
---- a/drivers/fpga/altera-cvp.c
-+++ b/drivers/fpga/altera-cvp.c
-@@ -22,9 +22,6 @@
- #define TIMEOUT_US	2000	/* CVP STATUS timeout for USERMODE polling */
- 
- /* Vendor Specific Extended Capability Registers */
--#define VSE_PCIE_EXT_CAP_ID		0x0
--#define VSE_PCIE_EXT_CAP_ID_VAL		0x000b	/* 16bit */
--
- #define VSE_CVP_STATUS			0x1c	/* 32bit */
- #define VSE_CVP_STATUS_CFG_RDY		BIT(18)	/* CVP_CONFIG_READY */
- #define VSE_CVP_STATUS_CFG_ERR		BIT(19)	/* CVP_CONFIG_ERROR */
-@@ -577,25 +574,18 @@ static int altera_cvp_probe(struct pci_dev *pdev,
- {
- 	struct altera_cvp_conf *conf;
- 	struct fpga_manager *mgr;
--	int ret, offset;
--	u16 cmd, val;
-+	u16 cmd, offset;
- 	u32 regval;
--
--	/* Discover the Vendor Specific Offset for this device */
--	offset = pci_find_next_ext_capability(pdev, 0, PCI_EXT_CAP_ID_VNDR);
--	if (!offset) {
--		dev_err(&pdev->dev, "No Vendor Specific Offset.\n");
--		return -ENODEV;
--	}
-+	int ret;
- 
- 	/*
- 	 * First check if this is the expected FPGA device. PCI config
- 	 * space access works without enabling the PCI device, memory
- 	 * space access is enabled further down.
- 	 */
--	pci_read_config_word(pdev, offset + VSE_PCIE_EXT_CAP_ID, &val);
--	if (val != VSE_PCIE_EXT_CAP_ID_VAL) {
--		dev_err(&pdev->dev, "Wrong EXT_CAP_ID value 0x%x\n", val);
-+	offset = pci_find_vsec_capability(pdev, PCI_VENDOR_ID_ALTERA, 0);
-+	if (!offset) {
-+		dev_err(&pdev->dev, "Wrong EXT_CAP_ID value\n");
- 		return -ENODEV;
- 	}
- 
+ drivers/clk/clk-axi-clkgen.c        | 159 +++++++++++++++++++++++++-----------
+ drivers/dma/dma-axi-dmac.c          |   2 +-
+ drivers/hwmon/axi-fan-control.c     |   2 +-
+ drivers/iio/adc/adi-axi-adc.c       |   3 +-
+ drivers/iio/dac/adi-axi-dac.c       |   2 +-
+ drivers/pwm/pwm-axi-pwmgen.c        |   2 +-
+ drivers/spi/spi-axi-spi-engine.c    |   2 +-
+ include/linux/adi-axi-common.h      |  56 +++++++++++++
+ include/linux/fpga/adi-axi-common.h |  23 ------
+ 9 files changed, 174 insertions(+), 77 deletions(-)
+---
+base-commit: 82f69876ef45ad66c0b114b786c7c6ac0f6a4580
+change-id: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+--
+
+Thanks!
+- Nuno Sá
 -- 
-2.47.2
+Nuno Sá <nuno.sa@analog.com>
+
 
 
