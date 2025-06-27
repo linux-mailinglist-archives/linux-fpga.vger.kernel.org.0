@@ -1,89 +1,76 @@
-Return-Path: <linux-fpga+bounces-1253-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1254-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C886DAE8257
-	for <lists+linux-fpga@lfdr.de>; Wed, 25 Jun 2025 14:06:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C820AEAEDD
+	for <lists+linux-fpga@lfdr.de>; Fri, 27 Jun 2025 08:16:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1918D17B159
-	for <lists+linux-fpga@lfdr.de>; Wed, 25 Jun 2025 12:06:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5388056700D
+	for <lists+linux-fpga@lfdr.de>; Fri, 27 Jun 2025 06:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6FE225792;
-	Wed, 25 Jun 2025 12:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CE52A8D0;
+	Fri, 27 Jun 2025 06:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b5wl23uo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LyqOcJnF"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8ACC442C;
-	Wed, 25 Jun 2025 12:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076271E8322;
+	Fri, 27 Jun 2025 06:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750853184; cv=none; b=lxS5SR9N5WsImpGMx5vUw3xi6xx/C6YWUIjqr54Dc+TdW1EznAocC9kokWE90wuuUVGJglebKwSst6KVH4YJnz9CW5o3AaQq5GH0K24Z5j56XGOlQp7VH6ajFnk7PngXKN72ofZOZERvszctD5g18M9ICKL8ymvsBGWV1fAtZJE=
+	t=1751004879; cv=none; b=WA5GCh6TyM73Cm5aWP1Xddu+fR1Pmam1uOzWKUV4czdO21vNad7o1z6GTDIMyr/i4azJdt6aRgKyntsYuPCNPiX00t75kOUTEF/7c7jPnamfm+iUTrzctS0XNDR5fc4fAMlpv9nnt20nDgkYxlLCrvInC1OMh5VxK0zmrlYRjuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750853184; c=relaxed/simple;
-	bh=sk3KwBpIIrphnJBmTDIE4jith+D91+JkwVEhlPpPi5w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZaswrrM8xe6nH1CH3t0FkmHnQ+w6oMyy49k1t9b5yCghhWDJbrZLDx1wJruAxP1yE8c/eNGI0+5/0CrhITjGqxnze4CISDIqtcEIsIF0CjchgNLqBRvGdjFRWDlT0l0ByCgv2vJNNKu2Z+w7aye5/Xn4RyQFeNboyaqAulC8hU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b5wl23uo; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-234b9dfb842so59539825ad.1;
-        Wed, 25 Jun 2025 05:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750853182; x=1751457982; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wJQyZbGrLGzQaqvoMkS8YTL49u/v3LblMDiOt/0pDDQ=;
-        b=b5wl23uoEom1EiYI7jO095L8upy+fdWr0pbAIlRhrzqcQsS7LVxU69B7ZBnLU1uFkI
-         u3D2dXBDZUB2zq6QhYQhzfLlsXtktLx1s0xX0cKEVBKAoXEtxB7UnaWb4a1/4JjMdE0J
-         rRLghNODiAnZG5rnwtb6DEc82sPgAOSJJAahhbr4fWMwEStsQagYqpri6wpj0CygDM62
-         5ScJmxKZJiYYD/8mpGtey1Oq3hdlC9KW5L4cqOWl62OBTE+H3GkzPKZL5LifbWFF2bVp
-         p/ZQf9pXJm8nTZQvrvs1+TC+uo4xOyZc9PdPIejYkr9+dryP6XgOMo5YcC134XB2JXDu
-         3ijg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750853182; x=1751457982;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wJQyZbGrLGzQaqvoMkS8YTL49u/v3LblMDiOt/0pDDQ=;
-        b=iDnv1Sz1q+zx3IAHAfQyP9LWNYFnkAcZhDLg9JZvQbRE3AWwjdGwRN0dVdx+MOSwM9
-         svugehdJKa87z07SgYG9L6fdUMKFSLF04qhuu5lNZlteGLISDA3f0f1pIQWTQ7MdKstz
-         a2coi7kKecVlAxhIqblwc3iWeo51OFYKH08lT9vpRLEZDJcC/zHalnsxeAm2VlPsoboy
-         rlPyPQjy9aGEzepIYkN+LkUh45i+MLD2NqEDdqsRxY/Fv8eKFN7Q1kS2PKKshQ2gcdIR
-         PCJHHorNFdUCBgQN7iVtjVOMQKOT9zkLVjbBMACTE6jeVdhCPHPmKTVZ1TVc22P6EebN
-         HDmw==
-X-Forwarded-Encrypted: i=1; AJvYcCX1HjvzIGEvshTU8wusp49pimhgUjiWpP26CQkEvwGdzStB7fJYnMkOq6lK1yDILSMAwZ45+eP01qZ0oAlN@vger.kernel.org, AJvYcCXiLd9fOUAbXd69njmqm8FlkdD6+ponMmeJ09XbdHp7Rd2Ljl1nRo4/BGWGvIuQvrVCnYNAjyYIQY/c@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx83KPItdaHrbVRbKFi33Xr6JdXabdoy2s4P7FhzErs/zLmpFnx
-	yPuFManlVqNw4hClRSSqNxs3DmNGl1qyHCSfXiEoCOMeIDS+VRC+ZBhH/SG9heLREkw=
-X-Gm-Gg: ASbGnctTRJF6IvWE8tbI06RuWtjMc2BusyKGfk2L5zD5g5vY6QEXmo9OXaYfmXSyCQ9
-	PuD1zEXGB1dQU/NtLcnEajIanHs8TJhX5eLGwDscPj35m2IhMcREu1PWupfLJsq5LPUqspiLfNn
-	L0i8YtXtgX3Ske6e4X8hP88KeIRvDLfjZBXyVSj8Q2Wa+QA83C5bM3ccLU2qhkp302w3T2GfRLN
-	aLz+hR7uw5paJ+TMEPftAcgi1ddKj5oURQq31hvc7WGSbVhnWSV28gjj5wK/oWep4r/RriS/nmX
-	+pq5cyxNebTdY6/rZoIi1S5WuiO89pD/qClQw2s0t8jMb11c6/BbaxRvPrsAKbUzoqB/lvyhYKQ
-	=
-X-Google-Smtp-Source: AGHT+IFW/227zU1PAtWE9n/7D2wZ5EANMebxEyNLnKo86hYDOg//y7zJ4Kqtt6qG413sAQxmvbc/UA==
-X-Received: by 2002:a17:902:e543:b0:234:f182:a735 with SMTP id d9443c01a7336-2382403df32mr56141195ad.34.1750853182097;
-        Wed, 25 Jun 2025 05:06:22 -0700 (PDT)
-Received: from seokw-960QHA.. ([219.250.16.41])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d8393784sm129428705ad.11.2025.06.25.05.06.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jun 2025 05:06:21 -0700 (PDT)
-From: Ryan Chung <seokwoo.chung130@gmail.com>
-To: hao.wu@intel.com,
-	trix@redhat.com,
-	mdf@kernel.org,
-	yilun.xu@intel.com
-Cc: Ryan Chung <seokwoo.chung130@gmail.com>,
+	s=arc-20240116; t=1751004879; c=relaxed/simple;
+	bh=0FAP8h3Bqn60g8pdq2IXB//EoK8uGVAIYk1n1XgwjaY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HN5oOalqzI5hWtNOKlWoi7TdFdjzcPS8gnIRAuhxPcbi7qVR71fUnYwQCLyQkUNWqCmGKdOlcZtP8v5W7f65oSKhOK9MKAi6jtK36QdDR2e2nWXmo4DhAl61Q/M8GEze7VxpQNB2iU2UgNXM5ySynHR10Qj2TAdaZ2dbSCD+qH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LyqOcJnF; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751004878; x=1782540878;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0FAP8h3Bqn60g8pdq2IXB//EoK8uGVAIYk1n1XgwjaY=;
+  b=LyqOcJnF+AuUs73fcYslGvSCA9z6CR2ZPNJr0n/R0+YTbHPmeZ6S2J/X
+   quJslTq8uE7J23Iv49SwKzxNoKkCXp+jXUooZ6iW3m5wCJYJywkPEWPm1
+   PPXr/FP95busSmHKRJnwJ0GKhl8ixkjYxp8BWGgs0KAP20r6KuT0LIZhE
+   VmQi4xfNS0iurE02rPZhmcopLp/T1r0hJiast84nRXSH2tBhSz2Lx9U4L
+   vdGr3QaU7Bcz8Uv7DJKVmRRXq6GVHQySUdP8ce4PuiOa/QE7u2iEsQ/Cn
+   blDKyVc8kuzmVWrH4Nsc2t1IK9qMQuFhKSXrGBwrOuJCRwZIleUz5Rtnn
+   g==;
+X-CSE-ConnectionGUID: wD4QsDZpSzymRI9FO+pX4g==
+X-CSE-MsgGUID: Z2sTrkkQRMiKdQbJoNbQOA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="57118946"
+X-IronPort-AV: E=Sophos;i="6.16,269,1744095600"; 
+   d="scan'208";a="57118946"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2025 23:14:38 -0700
+X-CSE-ConnectionGUID: SxK+aZxVTPOy8PTdX3DNAw==
+X-CSE-MsgGUID: uiO6Ism6TPymVeQbjZPqsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,269,1744095600"; 
+   d="scan'208";a="158457188"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa005.jf.intel.com with ESMTP; 26 Jun 2025 23:14:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id CFB4B21E; Fri, 27 Jun 2025 09:14:33 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Xu Yilun <yilun.xu@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev
-Subject: [PATCH] dfl-fme-main.c: Replace scnprintf() with sysfs_emit()
-Date: Wed, 25 Jun 2025 21:05:49 +0900
-Message-ID: <20250625120601.18445-1-seokwoo.chung130@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	linux-kernel@vger.kernel.org
+Cc: Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH v1 1/1] fpga: altera-cvp: Use pci_find_vsec_capability() when probing FPGA device
+Date: Fri, 27 Jun 2025 09:14:31 +0300
+Message-ID: <20250627061431.522016-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -92,48 +79,60 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This change uses sysfs_emit() API usage for sysfs 'show'
-functions as recommended from Documentation/filesystems/sysfs.rst.
+Currently altera_cvp_probe() open-codes pci_find_vsec_capability().
+Refactor the former to use the latter. No functional change intended.
 
-No functional change intended.
-
-Signed-off-by: Ryan Chung <seokwoo.chung130@gmail.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/fpga/dfl-fme-main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/fpga/altera-cvp.c | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
-index 8aca2fb20e87..4be51ae60226 100644
---- a/drivers/fpga/dfl-fme-main.c
-+++ b/drivers/fpga/dfl-fme-main.c
-@@ -36,7 +36,7 @@ static ssize_t ports_num_show(struct device *dev,
+diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
+index 5af0bd33890c..f6140a56c70b 100644
+--- a/drivers/fpga/altera-cvp.c
++++ b/drivers/fpga/altera-cvp.c
+@@ -22,9 +22,6 @@
+ #define TIMEOUT_US	2000	/* CVP STATUS timeout for USERMODE polling */
  
- 	v = readq(base + FME_HDR_CAP);
+ /* Vendor Specific Extended Capability Registers */
+-#define VSE_PCIE_EXT_CAP_ID		0x0
+-#define VSE_PCIE_EXT_CAP_ID_VAL		0x000b	/* 16bit */
+-
+ #define VSE_CVP_STATUS			0x1c	/* 32bit */
+ #define VSE_CVP_STATUS_CFG_RDY		BIT(18)	/* CVP_CONFIG_READY */
+ #define VSE_CVP_STATUS_CFG_ERR		BIT(19)	/* CVP_CONFIG_ERROR */
+@@ -577,25 +574,19 @@ static int altera_cvp_probe(struct pci_dev *pdev,
+ {
+ 	struct altera_cvp_conf *conf;
+ 	struct fpga_manager *mgr;
+-	int ret, offset;
+ 	u16 cmd, val;
++	u16 offset;
+ 	u32 regval;
+-
+-	/* Discover the Vendor Specific Offset for this device */
+-	offset = pci_find_next_ext_capability(pdev, 0, PCI_EXT_CAP_ID_VNDR);
+-	if (!offset) {
+-		dev_err(&pdev->dev, "No Vendor Specific Offset.\n");
+-		return -ENODEV;
+-	}
++	int ret;
  
--	return scnprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 			 (unsigned int)FIELD_GET(FME_CAP_NUM_PORTS, v));
- }
- static DEVICE_ATTR_RO(ports_num);
-@@ -56,7 +56,7 @@ static ssize_t bitstream_id_show(struct device *dev,
- 
- 	v = readq(base + FME_HDR_BITSTREAM_ID);
- 
--	return scnprintf(buf, PAGE_SIZE, "0x%llx\n", (unsigned long long)v);
-+	return sysfs_emit(buf, "0x%llx\n", (unsigned long long)v);
- }
- static DEVICE_ATTR_RO(bitstream_id);
- 
-@@ -75,7 +75,7 @@ static ssize_t bitstream_metadata_show(struct device *dev,
- 
- 	v = readq(base + FME_HDR_BITSTREAM_MD);
- 
--	return scnprintf(buf, PAGE_SIZE, "0x%llx\n", (unsigned long long)v);
-+	return sysfs_emit(buf, "0x%llx\n", (unsigned long long)v);
- }
- static DEVICE_ATTR_RO(bitstream_metadata);
+ 	/*
+ 	 * First check if this is the expected FPGA device. PCI config
+ 	 * space access works without enabling the PCI device, memory
+ 	 * space access is enabled further down.
+ 	 */
+-	pci_read_config_word(pdev, offset + VSE_PCIE_EXT_CAP_ID, &val);
+-	if (val != VSE_PCIE_EXT_CAP_ID_VAL) {
+-		dev_err(&pdev->dev, "Wrong EXT_CAP_ID value 0x%x\n", val);
++	offset = pci_find_vsec_capability(pdev, PCI_VENDOR_ID_ALTERA, 0);
++	if (!offset) {
++		dev_err(&pdev->dev, "Wrong EXT_CAP_ID value\n");
+ 		return -ENODEV;
+ 	}
  
 -- 
-2.43.0
+2.47.2
 
 
