@@ -1,102 +1,75 @@
-Return-Path: <linux-fpga+bounces-1266-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1267-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C038BAEDEDC
-	for <lists+linux-fpga@lfdr.de>; Mon, 30 Jun 2025 15:22:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC0D7AEEBA6
+	for <lists+linux-fpga@lfdr.de>; Tue,  1 Jul 2025 02:59:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12BA13BFA5F
-	for <lists+linux-fpga@lfdr.de>; Mon, 30 Jun 2025 13:16:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A8CB3AF025
+	for <lists+linux-fpga@lfdr.de>; Tue,  1 Jul 2025 00:58:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1080728B7F8;
-	Mon, 30 Jun 2025 13:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9580E156C6A;
+	Tue,  1 Jul 2025 00:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MkOujb4V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tMZxU7R9"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA94728B7EF;
-	Mon, 30 Jun 2025 13:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F3F339A1;
+	Tue,  1 Jul 2025 00:58:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751289351; cv=none; b=Tx7Isie7ceszNj77AkSgvjpm7sKqazYoVSmfnCu0L0mdwwJWXuyKRl6QSPITPrFZUCPTBLu/nVr9ZV2EOeuRwad/QH1SBjALiKmJTxNXvRwhnVkDHQ36ar99uyXi/MXwgUSvGisJaXHdr5oO6xjPlmbvLzyYMMCYYxmhUq6aQDo=
+	t=1751331527; cv=none; b=SyLuuEUJq1hF97kGedlTSufPNIc72WWkfPgcXUkVFqumtDCwjwKDIOwRm+Yo/RC0oRAKWdymnW2vuaNZrSxKd/a1BJdijDN6IbZ71vMFtOBVxoekvKWs5kPtNYqJTjUpSKnF1qGBf8Y+X1QMdqWEw1tSjuPypopONR/QheclELI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751289351; c=relaxed/simple;
-	bh=1y6vmVuDYenWeLrLPlwct+pyU/EgPCro2JAQe6Hydgw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H3wnX3QVBF29HNJmEtuEIfcY+XZnolbBTgnAYg8OIAfKVZdkyFxlzPiUzZt1rGUEcTWC/ILWCQ9kUTi5g9p+Lv+F5bfd7vDZ1CjY4hqQ2e+UijgUYL8Xb+rsW75slQlzbPqkXtmRGdWnSqGHOyRUOy+RiYQJZEt3HpLN5sti6O0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MkOujb4V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE83C4CEF1;
-	Mon, 30 Jun 2025 13:15:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751289351;
-	bh=1y6vmVuDYenWeLrLPlwct+pyU/EgPCro2JAQe6Hydgw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MkOujb4VFvtoHPHFke1pQ9V0orbmqc6400lTZIRq0ZB2bAAZVwWgiM9mwaLEpaOXq
-	 iA6glFdeck0fPEL3sXxqaCn7ej4Nk8ywG7Lbu6jFALemjh3NESa+Ej7usegv573JuD
-	 tz6Kx4re8JK3VYHwYZNxuKx61erWb83ufs7WvzOg=
-Date: Mon, 30 Jun 2025 15:15:48 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Ryan Chung <seokwoo.chung130@gmail.com>
-Cc: hao.wu@intel.com, trix@redhat.com, mdf@kernel.org, yilun.xu@intel.com,
-	linux-fpga@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: dfl: Replace scnprintf() with sysfs_emit()
-Message-ID: <2025063046-grub-lego-59a4@gregkh>
-References: <20250630125018.48417-1-seokwoo.chung130@gmail.com>
+	s=arc-20240116; t=1751331527; c=relaxed/simple;
+	bh=9oprfdI1sJ+15xAulHIwRy8N2QDKD6U7CpCIKxB4YHQ=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=H3hpoOs0iWwkkBFJpKwd3Mp/Q0zJsdvVBs0GFZlZpiWoLlXRtjBG6CaPvih2540wVuC8x0SLGc6arrgK9lMNIXIZqfAaeApi8Uy8c1o9iELIaPziP81pylEkdwQ+7HLQad8YsjnEW6fhQnQR4KvGe78KXUaSADs1UrboRYiQJLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tMZxU7R9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA380C4CEE3;
+	Tue,  1 Jul 2025 00:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751331525;
+	bh=9oprfdI1sJ+15xAulHIwRy8N2QDKD6U7CpCIKxB4YHQ=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=tMZxU7R9gOk+G0ojtOyWmYbdMU5k2Js1MA7HZJXzVaxotkMIabWdO07r2g/4ob7sl
+	 XCxij+o9e10E4vPy2qWR+yIdkcomKjZNabTa9s7wGisQ7+R0UNSD2k1Kvzfpx1GFxY
+	 jS0t+qPsrKevD/bAI2sB5Pd/joLuKZxZ3+LdemlEJr8A7b1MJC3eOJvhWBqplY+JXT
+	 B9m0EwJKdrvagWX/nM2V9+6mhVCAAOzIMXKRe7gY7HaJ5bQRrrQV8r3R2PDcBHKRiK
+	 jA0veSn6sxj6u8dt6JQbNvxT3XmQWYFgVU+XvE1MHg7UwF0muq+fAtQt/VgQnecP+V
+	 Jq9/KPQf5tgOw==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250630125018.48417-1-seokwoo.chung130@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250519-dev-axi-clkgen-limits-v6-1-bc4b3b61d1d4@analog.com>
+References: <20250519-dev-axi-clkgen-limits-v6-0-bc4b3b61d1d4@analog.com> <20250519-dev-axi-clkgen-limits-v6-1-bc4b3b61d1d4@analog.com>
+Subject: Re: [PATCH v6 1/7] clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Michael Hennerich <Michael.Hennerich@analog.com>, Jonathan Cameron <jic23@kernel.org>, Trevor Gamblin <tgamblin@baylibre.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, Mike Turquette <mturquette@linaro.org>
+To: Nuno =?utf-8?q?S=C3=A1?= via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>, dmaengine@vger.kernel.org, linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, nuno.sa@analog.com
+Date: Mon, 30 Jun 2025 17:58:45 -0700
+Message-ID: <175133152558.4372.13862908191934557493@lazor>
+User-Agent: alot/0.11
 
-On Mon, Jun 30, 2025 at 09:50:18PM +0900, Ryan Chung wrote:
-> Signed-off-by: Ryan Chung <seokwoo.chung130@gmail.com>
-
-I know I can't take patches without any changelog text, but maybe other
-maintainers are more lax?
-
-Also, you only said what you did, but not why you did it.
-
+Quoting Nuno S=C3=A1 via B4 Relay (2025-05-19 08:41:06)
+> From: Nuno S=C3=A1 <nuno.sa@analog.com>
+>=20
+> The fpfd_max frequency should be set to 450 MHz instead of 300 MHz.
+> Well, it actually depends on the platform speed grade but we are being
+> conservative for ultrascale so let's be consistent. In a following
+> change we will set these limits at runtime.
+>=20
+> Fixes: 0e646c52cf0e ("clk: Add axi-clkgen driver")
+> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
 > ---
->  drivers/fpga/dfl-afu-main.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-> index 3bf8e7338dbe..f2dd4667a43d 100644
-> --- a/drivers/fpga/dfl-afu-main.c
-> +++ b/drivers/fpga/dfl-afu-main.c
-> @@ -156,7 +156,7 @@ id_show(struct device *dev, struct device_attribute *attr, char *buf)
->  	struct dfl_feature_dev_data *fdata = to_dfl_feature_dev_data(dev);
->  	int id = port_get_id(fdata);
->  
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", id);
-> +	return sysfs_emit(buf, PAGE_SIZE, "%d\n", id);
 
-Did you build this?  Did you test it?
-
->  }
->  static DEVICE_ATTR_RO(id);
->  
-> @@ -475,7 +475,7 @@ afu_id_show(struct device *dev, struct device_attribute *attr, char *buf)
->  	guidh = readq(base + GUID_H);
->  	mutex_unlock(&fdata->lock);
->  
-> -	return scnprintf(buf, PAGE_SIZE, "%016llx%016llx\n", guidh, guidl);
-> +	return sysfs_emit(buf, PAGE_SIZE, "%016llx%016llx\n", guidh, guidl);
-
-Same here, was this built?
-
-And what's wrong with the original code?
-
-thanks,
-
-greg k-h
+Applied to clk-next
 
