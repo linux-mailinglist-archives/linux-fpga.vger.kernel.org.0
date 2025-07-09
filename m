@@ -1,153 +1,156 @@
-Return-Path: <linux-fpga+bounces-1279-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1280-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41FB9AFDFF0
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jul 2025 08:29:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A151AFE32E
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jul 2025 10:50:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F4071BC0C4F
-	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jul 2025 06:29:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B30057B75D7
+	for <lists+linux-fpga@lfdr.de>; Wed,  9 Jul 2025 08:49:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A622926C3A6;
-	Wed,  9 Jul 2025 06:29:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76F6D27F182;
+	Wed,  9 Jul 2025 08:50:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IbjmRnP8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nY9o6Ybb"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD98F26C385;
-	Wed,  9 Jul 2025 06:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9DF272E63;
+	Wed,  9 Jul 2025 08:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752042565; cv=none; b=ZBk8B38rOeJ6/nY4aEPQfbFE18aSQO42YOQrZof/RGfMKh9ux3LJk0Pd7hVJ7sUyq2Vw+uxklIW+Dvc1LKjS7niobXEnwHsWdZC6tIoPZlRW9TmZQIS2lcaXezUS5FOycs30VTzFO6tU8yW60z/md3lRJKjzWmG9aYdWL4sDu/g=
+	t=1752051032; cv=none; b=L5R6MqDtegJlBLDiWZOzzE1QiQkCyFAiKlRQ0prYuYs7s3NY1Rh+SnVw66a5Kzth9XZiRtJvGGE5oJEI98np032K7jSRtd8bwHvyEGV/IqHDUQpDqRqQ4PSkaFNdPFHHYZwHYyXO0CHf0cXlTVJ9B+ly8t4L9Fjmfkan6HuNizI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752042565; c=relaxed/simple;
-	bh=KjKlezOc87/x+FrYSWyzyuQtDcuJRRffC14mJhcaCuY=;
+	s=arc-20240116; t=1752051032; c=relaxed/simple;
+	bh=PmijWoo8arFesx63Y/hi1iglL6Yr53cGkDtSDwK7P+o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t+TtYhi7xZ8OD3JIuKFddbJIwYTVXevOkHuCcg6KC3mUsjdtfi7A39Q+0LY5LwzUaZSgeQAK2abWzXL2sV5rROnziicr0N4PJEDn0Nx6qWzBhRZ4Rkjg19xtBS7qYLIUuxM6962sa6PCGx/HgaPPWfyAFnLekD1DZZOqJG0SEFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IbjmRnP8; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=b1lXO31uAED9EurQES/ETGIkX4ArggqLXb95EPPAiL3+V8Y0fNSvuui09jpkmnEolqyYRbNzlySbUys6qWdaIlM3c9Q07VeiFgz+3HPl+WWFWEjQBg0s7P2oFvMeLy5Ul5KAsMnJxhzO4/CViFuD7H1ofwHN2aXiuc4H5wXx6CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nY9o6Ybb; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752042564; x=1783578564;
+  t=1752051031; x=1783587031;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=KjKlezOc87/x+FrYSWyzyuQtDcuJRRffC14mJhcaCuY=;
-  b=IbjmRnP847X8bCgw3f4A6Pkk+g9aJEuD96O/BlKbUDpC073CEOex1Ys1
-   tksWtqIbk4R1LFRmQCZsQFOJZNLj7EGyZqgJXgTwWZhkPLnyDWx5Vnkh3
-   RQVw07Ymj9igS013SDpKdo+ewwthGDjdjVhuSbZFoCoha1uZHY/fWfkh6
-   aQhgSysLCv+Mf9vxVy9DCqwg/ArzrElf9LX98nsBrZNVix6UfqKvYEke/
-   jIN+Jy1zNGRuxr0KtOwCBpv/mBRLINtqJxl6viVibqsgZGKv2kSvfEsSO
-   U+QzRM/HELr0zH5qvpCFpxicWBfHG3YJBRu8JgkmXUpQclUuHCljaxuTu
-   g==;
-X-CSE-ConnectionGUID: qhzJjJvDTyiJUYGtl1hm/A==
-X-CSE-MsgGUID: xjsgLRikRBaScAD5winWLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="54435349"
+   mime-version:in-reply-to;
+  bh=PmijWoo8arFesx63Y/hi1iglL6Yr53cGkDtSDwK7P+o=;
+  b=nY9o6Ybbpbu9U4QkEZLYjvy9NLHViqN+AlwtDTrSw4FD8mi7gNuQ4/O0
+   YLSP35Cu1aH4kZ6aplVVOyMuIQZlhVCurFHIG6n5twTG+/keDcYrw7XCM
+   7XbJP3uVOnsJokn9keb+Eoh4Sg977rmoKX8x+u8xV4tNKw24LOQfxXg6d
+   Z4DH/hC+NeWO/SS7BxIa4hskBm/1nsHvFZRyoZwE07lrS72KN2waaGATH
+   +A763OsGg7HD1M3Q8IgldUaZ2JgXZO1AAZCIf54E39IUgtinohZSLFMvF
+   eNydcTAbfkRl1re0rRZdEbIV7wFM0EZ1ePypJmKapXZqYGrKoYECmmTx3
+   A==;
+X-CSE-ConnectionGUID: cOfw2RvoRD6YwKI2Y3hATA==
+X-CSE-MsgGUID: KJJcB5XYSsem96kXVQIMqA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="58110196"
 X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
-   d="scan'208";a="54435349"
+   d="scan'208";a="58110196"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2025 23:29:23 -0700
-X-CSE-ConnectionGUID: NHNnpI1PSQizcvA19THisg==
-X-CSE-MsgGUID: q/EM6XpLRR+UT0MEgoTXHA==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2025 01:50:30 -0700
+X-CSE-ConnectionGUID: VHTXJY2tQ+6+fRGT39xP7w==
+X-CSE-MsgGUID: 0wOOL00WTG+9kuIJiQNzNA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
-   d="scan'208";a="186652707"
+   d="scan'208";a="186688596"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa001.fm.intel.com with ESMTP; 08 Jul 2025 23:29:20 -0700
-Date: Wed, 9 Jul 2025 14:21:02 +0800
+  by fmviesa001.fm.intel.com with ESMTP; 09 Jul 2025 01:50:29 -0700
+Date: Wed, 9 Jul 2025 16:42:12 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: "Manne, Nava kishore" <nava.kishore.manne@amd.com>
-Cc: "mdf@kernel.org" <mdf@kernel.org>,
-	"hao.wu@intel.com" <hao.wu@intel.com>,
-	"yilun.xu@intel.com" <yilun.xu@intel.com>,
-	"trix@redhat.com" <trix@redhat.com>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"saravanak@google.com" <saravanak@google.com>,
-	"linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"git (AMD-Xilinx)" <git@amd.com>
-Subject: Re: [RFC v3 1/1] fpga-region: Introduce ConfigFS interface for
- runtime FPGA configuration
-Message-ID: <aG4KTuLExZCMw8rC@yilunxu-OptiPlex-7050>
-References: <20250519033950.2669858-1-nava.kishore.manne@amd.com>
- <20250519033950.2669858-2-nava.kishore.manne@amd.com>
- <aDxrUD9YjnFkWy3M@yilunxu-OptiPlex-7050>
- <DS7PR12MB607015CAB2781E16A4EC110ECD74A@DS7PR12MB6070.namprd12.prod.outlook.com>
- <aEv48IZSinWjJgBt@yilunxu-OptiPlex-7050>
- <DS7PR12MB6070BC635C899C637EDE71F3CD7CA@DS7PR12MB6070.namprd12.prod.outlook.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Xu Yilun <yilun.xu@intel.com>, linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH v2 1/1] fpga: altera-cvp: Use pci_find_vsec_capability()
+ when probing FPGA device
+Message-ID: <aG4rZNGgROrXXy+F@yilunxu-OptiPlex-7050>
+References: <20250627112635.789872-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DS7PR12MB6070BC635C899C637EDE71F3CD7CA@DS7PR12MB6070.namprd12.prod.outlook.com>
+In-Reply-To: <20250627112635.789872-1-andriy.shevchenko@linux.intel.com>
 
-> I’ve implemented the FPGA Region ConfigFS interface with the following hierarchy:
+On Fri, Jun 27, 2025 at 02:26:22PM +0300, Andy Shevchenko wrote:
+> Currently altera_cvp_probe() open-codes pci_find_vsec_capability().
+> Refactor the former to use the latter. No functional change intended.
 > 
-> /configfs
-> └── fpga_regions             ← Registered via configfs_register_subsystem()
->       └── region0                ← Added using configfs_add_default_group()
->            └── my_image      ← Created via mkdir from userspace
->                 ├── firmware    ← Write firmware name here
->                 └── config        ← Trigger programming/unloading
-
-Yes this is good to me.
-
-> Observation:
-> If configfs is not mounted before configfs_add_default_group() is invoked
-> (e.g., when regions are registered early via base DTB), the path
-> /configfs/fpga_regions/region0 does not appear in userspace,
-> even though it’s properly initialized in the kernel.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 > 
-> This appears to be due to how default groups function.
-> they require the configfs filesystem to be mounted prior to the group
-> addition in order to be visible. As a result, the mount order becomes
-> a strict dependency, which may affect or break early-boot FPGA flows
-> where regions are created before configfs is available.
-
-I don't have answer here. But IIUC you are describing some generic
-problem of configfs_add_default_group(). According to configfs.rst,
-subsystem is also a config_group so it doesn't make sense to me a
-subsystem works but a default subgroup can't. Unless configfs people
-have proper justification, your observation is a bug and should try to
-fix it.
-
+> v2: removed unused variable (LKP)
 > 
-> Proposal:
-> Use configfs_register_subsystem(&region->cfg_subsys) for each FPGA region
-> instead of relying on configfs_add_default_group().
+>  drivers/fpga/altera-cvp.c | 20 +++++---------------
+>  1 file changed, 5 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
+> index 5af0bd33890c..514d2ac18e5f 100644
+> --- a/drivers/fpga/altera-cvp.c
+> +++ b/drivers/fpga/altera-cvp.c
+> @@ -22,9 +22,6 @@
+>  #define TIMEOUT_US	2000	/* CVP STATUS timeout for USERMODE polling */
+>  
+>  /* Vendor Specific Extended Capability Registers */
+> -#define VSE_PCIE_EXT_CAP_ID		0x0
+> -#define VSE_PCIE_EXT_CAP_ID_VAL		0x000b	/* 16bit */
+> -
+>  #define VSE_CVP_STATUS			0x1c	/* 32bit */
+>  #define VSE_CVP_STATUS_CFG_RDY		BIT(18)	/* CVP_CONFIG_READY */
+>  #define VSE_CVP_STATUS_CFG_ERR		BIT(19)	/* CVP_CONFIG_ERROR */
+> @@ -577,25 +574,18 @@ static int altera_cvp_probe(struct pci_dev *pdev,
+>  {
+>  	struct altera_cvp_conf *conf;
+>  	struct fpga_manager *mgr;
+> -	int ret, offset;
+> -	u16 cmd, val;
+> +	u16 cmd, offset;
+>  	u32 regval;
+> -
+> -	/* Discover the Vendor Specific Offset for this device */
+> -	offset = pci_find_next_ext_capability(pdev, 0, PCI_EXT_CAP_ID_VNDR);
+> -	if (!offset) {
+> -		dev_err(&pdev->dev, "No Vendor Specific Offset.\n");
+> -		return -ENODEV;
+> -	}
+> +	int ret;
+>  
+>  	/*
+>  	 * First check if this is the expected FPGA device. PCI config
+>  	 * space access works without enabling the PCI device, memory
+>  	 * space access is enabled further down.
+>  	 */
+> -	pci_read_config_word(pdev, offset + VSE_PCIE_EXT_CAP_ID, &val);
+> -	if (val != VSE_PCIE_EXT_CAP_ID_VAL) {
+> -		dev_err(&pdev->dev, "Wrong EXT_CAP_ID value 0x%x\n", val);
+> +	offset = pci_find_vsec_capability(pdev, PCI_VENDOR_ID_ALTERA, 0);
 
-This seems a workaround. I don't prefer we give up on it so early...
+Mm.. the original code seems broken. It doesn't check the VSEC ID. And
+you filled '0'. Is '0' specified in any SPEC? I didn't see it as a
+wildcard.
+
+Anyway, we should describe the change and remove "No functional change
+intended".
+
+> +	if (!offset) {
+> +		dev_err(&pdev->dev, "Wrong EXT_CAP_ID value\n");
+
+Should be "VSEC ID not found"
 
 Thanks,
 Yilun
 
+>  		return -ENODEV;
+>  	}
+>  
+> -- 
+> 2.47.2
 > 
-> This approach places each FPGA region directly under /configfs/region0,
-> avoiding the timing issues associated with default groups.
-> The interface becomes available as soon as configfs is mounted.
-> regardless of when the region was registered
-> (boot time via base DTB or dynamically via overlays).
 > 
-> New user hierarchy:
-> /configfs
-> └── region0              ← Region appears as its own root node
->       └── my_image   ← Created via mkdir from userspace
->            ├── firmware ← Write firmware name here
->            └── config     ← Trigger programming/unloading
-> 
-> Would like to know if this approach looks good, or if there are better
-> suggestions to handle this scenario?
-> 
-> Regards,
-> Navakishore.
 
