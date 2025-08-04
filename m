@@ -1,128 +1,181 @@
-Return-Path: <linux-fpga+bounces-1289-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1290-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3BD9B19D8E
-	for <lists+linux-fpga@lfdr.de>; Mon,  4 Aug 2025 10:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 75431B1A3F2
+	for <lists+linux-fpga@lfdr.de>; Mon,  4 Aug 2025 15:57:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 080B57AB3DC
-	for <lists+linux-fpga@lfdr.de>; Mon,  4 Aug 2025 08:24:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F13E7AE43E
+	for <lists+linux-fpga@lfdr.de>; Mon,  4 Aug 2025 13:56:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE721F8AC8;
-	Mon,  4 Aug 2025 08:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970AC26058D;
+	Mon,  4 Aug 2025 13:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b="fhV5CaW0";
+	dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b="ar6Kpa82"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpx1.feld.cvut.cz (smtpx1.feld.cvut.cz [147.32.210.191])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D52A241691;
-	Mon,  4 Aug 2025 08:26:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2214F25C81C
+	for <linux-fpga@vger.kernel.org>; Mon,  4 Aug 2025 13:57:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.32.210.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754295967; cv=none; b=rGyiqVRHnLVJ5F+dr43uFN7Q8QVCTqO4epX80QKWO4LERcWePhX1hF2qXHhaxg9+6G2zhpQEJ4FmIt9pFyr+L/wsDeGt5yNpSfeI9d/LQ/D4PPQg2pUPqP19guHUL6FrOHbzGsVKMTs5anOOGTnP3gwZCE34aI5I6DibPhQ7iU0=
+	t=1754315846; cv=none; b=RuBE8KWiS3vp66Tx7A0i9lBWi1W1Hacea3ajUHQP+FUkD855YvHvyA1Y8GjX2wfyKGvps5K9wrO1y+LCnSxfnjjNijhdFl3LKoavmpCnFhKxA+bHHKAnTjwgDMJka2eAerTmgfGdce7YU6HghWfNXjnLyqD8+6S9UQn9FdPEnSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754295967; c=relaxed/simple;
-	bh=Cddy+DcniI43JyvpraSQpuTZQPqon8yTQuXKkcGKrnI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kLlEHAtpMi868HqNgSscxMwrKugDHxHVOLXAvenB0+iCmM5fW3GUUVFHBGGOy0jT5o4tW9x1ddIWHQ+e9N+wB0BC2odgrEvCFoB41e/Hcp6XNw3eCmO6nxPoNq6oyL26XHAm9x0U+mbeEf7IVbAj4S3swLMnwHPF08nLWfA8P98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b421b70f986so3186398a12.1;
-        Mon, 04 Aug 2025 01:26:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754295961; x=1754900761;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AqRpM1yXasR5AyGBrxM8/MoUt+5M85Gie/5rLIodPao=;
-        b=lk9QNF2TnZiUFxz+3fU34DTs/TzyEH5bkGAXtvXq2adxQbY/q49nEtHBehn2igl3mU
-         S7huOX3vTRUruKJ4MAFRrHVrDYlAgLNngb+XmpTWDEgE4qroRoG+GqZdH+/DBmfPMcN6
-         bTD4PnsycrqkQ7mdbTbvmW5f1DgdbZ6Bjck/8lQ6LwuA64wZEGuj0whv+KJlcSEBTDry
-         0d4oYdJ96P0GGsKVJ05v+txYs9rbMj0GGt6mH7ZFhRHm3bXRMer2XJYvO/O5Tv3QSKJS
-         RG9dWBLp6axnQdrBf+FkHgjOxhCguVq+FKBYYGZJLN1dvBIC+3DQdlWe4Ck49A8jdk+Q
-         hX2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUBL/GFCmt94tn7TyLe1iEluA0QcbJD1TxduS+yqXYncdTqSmAESVekInQfLnLfr8f+QHjH7bsmzU2+@vger.kernel.org, AJvYcCUTkAzHaKplN8XYiHM4VmWTSBQpLMn4W613cHQe21m6UXRsZnIKP5rRaTksVU+f2017S5zX0B6jP/N/V1L+@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0AQG2WMtXPfP65b6iwwCdgunLUGTX+AGElEg6bj2ZgEgSi3rx
-	0O/2aYZxho13/xH7jIf6sJUV8tW+w+ohbt13gQx6t0KR4XYDF3bUuPhP
-X-Gm-Gg: ASbGncuAkIgaChij7Npuncfq4TBtLAQgbZtba1uPxOM7JqbfwEB+I8KN92pvpz+8Ume
-	ZcPee/p3X1FrlhsswGIybIumW781jaZE4X3qm4ujQ0bKodQPsbnnHknoA8qdeaQ3HlqpygSkmFN
-	g7fZ1m8U0thq0acvq5QfBEjWkC25jDRYm6syIUtUJAyJA4+8rNRPvT1ImNhoORdrOUTnYpR8pxF
-	ZqeQg1PauUV17JR+os3SlvdIjfTdjq060TcJzQqY7KU5jH7LKxcfyFiTgytppShTSip1j7d4VGc
-	zv4HUvIHRrlIkHQUd5dWk4a6IO7I5jqpswMru+ntu6Vh6DQKQb964btWVA4y1msBn53WE3k/D+v
-	ripe5M4QEynkdp8ZhgXgIugsqCT1nAj6AbLMxY7VztBrs88k4lIgtdzw=
-X-Google-Smtp-Source: AGHT+IHKSfXg4uq3HKmm3TV1pgiHglunlc1GY7Nn+5YFfqJShlJlJ9lVByjliOQ0DOrLfGGoWUajhA==
-X-Received: by 2002:a17:90b:1c92:b0:321:265a:e0b6 with SMTP id 98e67ed59e1d1-321265ae50emr7029975a91.20.1754295961195;
-        Mon, 04 Aug 2025 01:26:01 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3207edb5884sm10968539a91.28.2025.08.04.01.25.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Aug 2025 01:26:00 -0700 (PDT)
-From: xiehongyu1@kylinos.cn
-To: yilun.xu@intel.com
-Cc: trix@redhat.com,
-	linux-kernel@vger.kernel.org,
-	linux-fpga@vger.kernel.org,
-	mdf@kernel.org,
-	Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: [PATCH v1] fpga: afu: fix potential intege overflow
-Date: Mon,  4 Aug 2025 16:25:23 +0800
-Message-Id: <20250804082523.419159-1-xiehongyu1@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1754315846; c=relaxed/simple;
+	bh=H/P1Fg6XxqRCXFQtwd8pTzggK665IMYvcG+Ob3dA0rU=;
+	h=From:To:Subject:Date:Cc:MIME-Version:Content-Type:
+	 Content-Disposition:Message-Id; b=b3mfoZTVlyGnT+X8PpL+21hgsfc2aWYOoZUO+/KN1aO8dZcZghJPdwblPkXSf8Kp/KW4RfquElsE4usGfwX2tv2xRFjHiSHZcyAMpc3taVtqlsqpK2UlagZReO6FFlRCorJgHKC/HSGRu3izhKdCBU+Ljy2M/0CF1sRBvMIApEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz; spf=pass smtp.mailfrom=fel.cvut.cz; dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b=fhV5CaW0; dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b=ar6Kpa82; arc=none smtp.client-ip=147.32.210.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fel.cvut.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
+	s=felmail; t=1754315295;
+	bh=8mfiXx+BaTiLiXSEAibUKyaE1GFC8rrl86WdRP+LNNE=;
+	h=From:To:Subject:Date:Cc:From;
+	b=fhV5CaW0tuueRLq7UImUI8Ozl5xWzteKXwt1gwXl2yzHmcRORraN597vv0dxXTwOS
+	 axEMCRPEE628u0+XMIJFxWEhR5o5r8fhNx1SuRWwFZSbToWgXsdSp7NaWsBzNnbx8u
+	 wRTKmjWefT63sZsEvlky9IPL+PTZbILIVt2BdyZtvvAN3x52zEjJSNirN3KB9EZivm
+	 ywsb6Tk8XzX7en7gyRyTbIax5gzvw9rgZOkf+3ZmpTZiuL3znJuIGA2YL65Bh/jcny
+	 BKCez98CQskKNJULaihVo7qxMBvULJmrLxCmUAiC7aR763CugMgmPO3YFhOt4lyJFf
+	 C+Jc/WHSjdp7w==
+Received: from smtpx.fel.cvut.cz (smtpx.feld.cvut.cz [147.32.210.153])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtpx1.feld.cvut.cz (Postfix) with ESMTPS id E8CD639ABB;
+	Mon,  4 Aug 2025 15:48:15 +0200 (CEST)
+Received: from localhost (unknown [192.168.200.27])
+	by smtpx.fel.cvut.cz (Postfix) with ESMTP id DE5B5561B8;
+	Mon,  4 Aug 2025 15:48:15 +0200 (CEST)
+X-Virus-Scanned: IMAP STYX AMAVIS
+Received: from smtpx.fel.cvut.cz ([192.168.200.2])
+ by localhost (cerokez-250.feld.cvut.cz [192.168.200.27]) (amavis, port 10060)
+ with ESMTP id AEfMlIzB89aI; Mon,  4 Aug 2025 15:48:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
+	s=felmail; t=1754315293;
+	bh=8mfiXx+BaTiLiXSEAibUKyaE1GFC8rrl86WdRP+LNNE=;
+	h=From:To:Subject:Date:Cc:From;
+	b=ar6Kpa82FdvW1urG+qoaYGgr5Gk4LiM+KkzII08/Nsj9fW/yzylNRcgHxiC12vLdJ
+	 ToZ/ylhe6sNMRLvajrtZsT1cozg9VaJfA/WasCgCD32MmCT7smP9CYlTE94vCazyqP
+	 8sfkkYCjoZNgRHfro0lw8QLAsbNpx0db4X8Ov8KRmbyBhwU7KKQl60JnJmMgiYbA9r
+	 P3piSmbQqN3DYAiUOnwdLJUgihNY+wtEMDtXfipL3jWQe4iW1lv/IJpwB4PbMVuFvH
+	 4lX3ZYDKEQay/j14MutvYEjFexdlk8nD06AhhJEP+Dq9CuABJl0AJceVaiwE711t/B
+	 CSt/CDcmkNWQQ==
+Received: from baree.pikron.com (static-84-242-78-234.bb.vodafone.cz [84.242.78.234])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pisa)
+	by smtpx.fel.cvut.cz (Postfix) with ESMTPSA id 8B4DA55F74;
+	Mon,  4 Aug 2025 15:48:11 +0200 (CEST)
+From: Pavel Pisa <pisa@fel.cvut.cz>
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: AMD/Xilinx Zynq FPGA manager stopped to work after 6.16.0-g283564a43383
+Date: Mon, 4 Aug 2025 15:48:22 +0200
+User-Agent: KMail/1.9.10
+Cc: linux-fpga@vger.kernel.org,
+ Michal Simek <michal.simek@amd.com>,
+ Jason Gunthorpe <jgg@nvidia.com>,
+ Xu Yilun <yilun.xu@intel.com>,
+ Pavel Hronek <hronepa1@fel.cvut.cz>,
+ Jiri Novak <jnovak@fel.cvut.cz>,
+ Ondrej Ille <ondrej.ille@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: Text/Plain;
+  charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202508041548.22955.pisa@fel.cvut.cz>
 
-From: Hongyu Xie <xiehongyu1@kylinos.cn>
+Hello Marek and others,
 
-Overflow Scenarios:
-1, region->offset + region->size Overflow:
-  When region->offset is close to U64_MAX and region->size is
-sufficiently large, the addition result may wrap around to a
-very small value (e.g., 0 or near 0).
-  In this case, even if the target range [offset, offset+size)
-falls within the region, the condition region->offset +
-region->size >= offset + size will fail due to the wrapped
-value being small. This causes the function to erroneously
-return -EINVAL.
+we are running daily tests of SocketCAN stack on mainline and RT kernel
+with our CTU CAN FD IP core
 
-2, offset + size Overflow:
-  When offset is close to U64_MAX and size is large, offset +
-size wraps around to a small value.
+   https://canbus.pages.fel.cvut.cz/#can-bus-channels-mutual-latency-testing
 
-  Here, region->offset + region->size (which would be a large
-value if not overflowing) might incorrectly satisfy
-region->offset + region->size >= offset + size due to the
-wrapped small value. This leads to a false match, even though
-the actual range [offset, offset+size) spans the wrap-around
-boundary and does not belong to this region.
+It seems that the setup is broken after the mainlie kernel version
+from 2025-07-29, 6.16.0-g283564a43383. There is only one commit
+identified in drivers/fpga after the last working version
 
-So fix these two scenarios.
+  zynq_fpga: use sgtable-based scatterlist wrappers
 
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
----
- drivers/fpga/dfl-afu-region.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+The last working mainlne kernel version is recorded in the
+last graph data 
 
-diff --git a/drivers/fpga/dfl-afu-region.c b/drivers/fpga/dfl-afu-region.c
-index b11a5b21e666..449c2ae809bd 100644
---- a/drivers/fpga/dfl-afu-region.c
-+++ b/drivers/fpga/dfl-afu-region.c
-@@ -157,7 +157,8 @@ int afu_mmio_region_get_by_offset(struct dfl_feature_dev_data *fdata,
- 	afu = dfl_fpga_fdata_get_private(fdata);
- 	for_each_region(region, afu)
- 		if (region->offset <= offset &&
--		    region->offset + region->size >= offset + size) {
-+		    region->size >= size &&
-+		    (offset - region->offset) <= (region->size - size)) {
- 			*pregion = *region;
- 			goto exit;
- 		}
--- 
-2.25.1
+  https://canbus.pages.fel.cvut.cz/can-latester/inspect.html
 
+We use the dtbocfg out of tree module to initiate update
+by devicetree overlay but fpga manager is mainline one
+and all worked for years correctly. The log messages
+
+[  104.934323] dtbocfg: loading out-of-tree module taints kernel.
+[  104.940681] dtbocfg: 0.1.0
+[  104.943543] dtbocfg: OK
+[  105.022979] fpga_manager fpga0: writing system.bit.bin to Xilinx Zynq FPGA Manager
+[  105.097721] fpga_manager fpga0: Unable to DMA map (TO_DEVICE)
+[  105.103562] fpga_manager fpga0: Error while writing image data to FPGA
+[  105.110485] fpga_region region0: failed to load FPGA image
+[  105.116059] OF: overlay: overlay changeset pre-apply notifier error -12, target: /fpga-full
+[  105.124499] dtbocfg_overlay_item_create: Failed to apply overlay (ret_val=-12)
+
+The overlay source is available there
+
+  https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top/-/blob/can-bench-2x-xcan-4x-ctu/scripts/dts/bitstream+dt.dts
+
+The base zynq-7000.dtsi could be a little dated, but I have not
+found related change except name/alias change in mainline
+
+-       fpga_full: fpga-full {
++       fpga_full: fpga-region {
+
+but there are recorded months of correct operation after
+this change. I am aware that there has been change of name
+alias 
+
+-       amba: amba {
++       amba: axi {
+
+in the sources but again, it has not been problem.
+
+It seems that mapping fails in
+
+        priv->dma_nelms =
+            dma_map_sgtable(mgr->dev.parent, sgt, DMA_TO_DEVICE, 0);
+
+The last tested failing mainline kernel version is from this
+midnight
+
+   6.16.0-ge991acf1bce7
+
+Do you have some idea what could be a problem?
+
+Do you have suggestion what to test?
+
+Best wishes
+
+                Pavel
+
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://control.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    social:     https://social.kernel.org/ppisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    RISC-V education: https://comparch.edu.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
 
