@@ -1,108 +1,102 @@
-Return-Path: <linux-fpga+bounces-1301-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1302-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 292C3B1EE10
-	for <lists+linux-fpga@lfdr.de>; Fri,  8 Aug 2025 19:53:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CB60B21B91
+	for <lists+linux-fpga@lfdr.de>; Tue, 12 Aug 2025 05:21:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A92DF1C27D0A
-	for <lists+linux-fpga@lfdr.de>; Fri,  8 Aug 2025 17:53:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DB5A1772D9
+	for <lists+linux-fpga@lfdr.de>; Tue, 12 Aug 2025 03:20:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5571EB5DB;
-	Fri,  8 Aug 2025 17:53:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 688C72E4258;
+	Tue, 12 Aug 2025 03:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BDhSFJA5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sw9tdx3S"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64378199385;
-	Fri,  8 Aug 2025 17:53:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE432E424B;
+	Tue, 12 Aug 2025 03:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754675608; cv=none; b=aMiyYbW6VFx6E2X9SFVcVJhpkeGw+n5c/Uqh+M7S+18PLA7QeLi4HnYcpmt6KbhPgvaKEt5bFaQ1Q38NuDQhDpd7ZbuFy36tuR8P1aG9RGYcWvit/gjholnM+FsfXIz34t9bBAKZRYnCzEemrfbHA59fUdhjPwXDGgWKgMgXgg0=
+	t=1754968806; cv=none; b=aY79MCa6e5b9ALBxFXu4Mbs2w0sRJ9/I1auVbk5O4uGc1st+iMIFlqjlN+mHDLKIKzmJlXY/I09R6ueDTRNzD0Ro/+tV6QV/QIaK6y9PEfHHxKzN781Vfon4BTqQHf9x0yICgTRItAJadg1T10UFeenZMVaYamtr0o6zT89ILMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754675608; c=relaxed/simple;
-	bh=+P4QpmOpqx3Lmn59o8WHoe8drfDVNqCcjJ+/me395jI=;
-	h=Subject:To:Cc:From:Date:Message-Id; b=qxeSlaSIAAkanBC9BjJH3qRHt72fsC3+VpZU2bZQYuUzb9DvtkqrCqBLLyMAP/kzi17lCKE90DUHrdFOAGgW9wJ//tJRTeOq2IlLomyc/wcyqPypJZyR0Xhj9UVJl+xdHRlUHyEMcORFcgUfJCr/u5xuzcDN3ci9eIJ3qpAT96E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BDhSFJA5; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754675606; x=1786211606;
-  h=subject:to:cc:from:date:message-id;
-  bh=+P4QpmOpqx3Lmn59o8WHoe8drfDVNqCcjJ+/me395jI=;
-  b=BDhSFJA5bHFGr5qJeBG97rF1gIYfCM9JQp8QfQ8pswU4gT+vWRwjMaw+
-   zD+ehwvJnAEy32eZU/9ms/Fj8VdOPMyr9JZxTQPDGK6DATKblKf7CYyHq
-   9bf2px5E4kWqPW/ho7bjRPEUV+vY9J+pDt+T/grqDxuHUB/BnNk9U4Vc2
-   0tXc/5ai7Qcp4NdwrQlcAGDWoJz9h69OiYHV6BOLQShGBiCWo7O0JAbpZ
-   /ZAtwh7H+kuMeohM8gpSE4oI/zVUQA3KjdabdH9RqWXduVck7y7Nu7Ylg
-   8MMlDR607JGJD9pT5gfOPBxLskH8Ou9uDdheLOnEinot+Q7EC7oL7vmJC
-   w==;
-X-CSE-ConnectionGUID: x/d1AdL3RJmzUKnQa8OIfA==
-X-CSE-MsgGUID: yarfVb1mQw2pevLd+492gA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11515"; a="57158069"
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="57158069"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2025 10:53:25 -0700
-X-CSE-ConnectionGUID: xfNexg7aRtu4dKWaSemw+g==
-X-CSE-MsgGUID: LbnFYWgjQgOg1SYrbOtlgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="169588670"
-Received: from davehans-spike.ostc.intel.com (HELO localhost.localdomain) ([10.165.164.11])
-  by orviesa003.jf.intel.com with ESMTP; 08 Aug 2025 10:53:25 -0700
-Subject: [PATCH] MAINTAINERS: Mark Intel PTP DFL ToD as orphaned
-To: linux-kernel@vger.kernel.org
-Cc: Dave Hansen <dave.hansen@linux.intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, linux-fpga@vger.kernel.org, netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, Richard Cochran <richardcochran@gmail.com>, Tianfei Zhang <tianfei.zhang@intel.com>
-From: Dave Hansen <dave.hansen@linux.intel.com>
-Date: Fri, 08 Aug 2025 10:53:24 -0700
-Message-Id: <20250808175324.8C4B7354@davehans-spike.ostc.intel.com>
+	s=arc-20240116; t=1754968806; c=relaxed/simple;
+	bh=HGwL2Cpxqc9hVM6X36G/L3EWkoN6i1ddB5veVLR6os4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=m1c8eBv4P+XNpobdtOPJu8Fwzeimvwv5y15uf2hKyQ6LgbGvx/I9mgrjsPQxuYsyWmyzEdUEiR+f6DB5Nh1w0VNGlDb7ZSzFBOYD7DzwO1BH27Bbeyiz//zbucgPiXiMxHmxZsF6n2WYwwtbbZO7C9InpX/uoBogQoBXi0x9EdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sw9tdx3S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3AC3C4CEED;
+	Tue, 12 Aug 2025 03:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754968805;
+	bh=HGwL2Cpxqc9hVM6X36G/L3EWkoN6i1ddB5veVLR6os4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Sw9tdx3SEDWyYmQIZ23jyv30G6UsjonOKiwJlvYv14u2mzcuW6QtRjdv3bHQxt5Yz
+	 FcgNC8+CYXnTtCIb5n7BvHvjYZysw1LlpmUaCMYdHPlKRKwv4AOlE73x1PtNBhxuAh
+	 ArdMp7RuB2q2TMRbP/juli0bw3QsnuFKGBJHIVLnX3bmrYJArVM75N6coME2NgD7BR
+	 KWq6rMDIvtAnKqHW0XS5mrUz/Ur6HwyEXVV6OEHIm9pYXreISQyneY5D1b764VjaMp
+	 6SRVLPsLn0fqGL3Bl5G7ydZd45nJW4IGyzA/bYex+shA3eHR1ZmCHeGAKaefH3JVQA
+	 KNRbHEHVgLIcA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C0B383BF51;
+	Tue, 12 Aug 2025 03:20:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] MAINTAINERS: Mark Intel PTP DFL ToD as orphaned
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175496881774.1990527.3789561485320833609.git-patchwork-notify@kernel.org>
+Date: Tue, 12 Aug 2025 03:20:17 +0000
+References: <20250808175324.8C4B7354@davehans-spike.ostc.intel.com>
+In-Reply-To: <20250808175324.8C4B7354@davehans-spike.ostc.intel.com>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, linux-fpga@vger.kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com, richardcochran@gmail.com,
+ tianfei.zhang@intel.com
+
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri, 08 Aug 2025 10:53:24 -0700 you wrote:
+> From: Dave Hansen <dave.hansen@linux.intel.com>
+> 
+> This maintainer's email no longer works. Remove it from MAINTAINERS.
+> Also mark the code as an Orphan.
+> 
+> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: linux-fpga@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: Richard Cochran <richardcochran@gmail.com>
+> Cc: Tianfei Zhang <tianfei.zhang@intel.com>
+> Cc: Andrew Lunn <andrew+netdev@lunn.ch>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - MAINTAINERS: Mark Intel PTP DFL ToD as orphaned
+    https://git.kernel.org/netdev/net/c/b56e9fb1c966
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-From: Dave Hansen <dave.hansen@linux.intel.com>
-
-This maintainer's email no longer works. Remove it from MAINTAINERS.
-Also mark the code as an Orphan.
-
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: linux-fpga@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Tianfei Zhang <tianfei.zhang@intel.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
----
-
- b/MAINTAINERS |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff -puN MAINTAINERS~MAINTAINERS-20250707-8 MAINTAINERS
---- a/MAINTAINERS~MAINTAINERS-20250707-8	2025-08-08 10:49:46.807294387 -0700
-+++ b/MAINTAINERS	2025-08-08 10:49:46.823295710 -0700
-@@ -12581,10 +12581,9 @@ S:	Supported
- F:	drivers/cpufreq/intel_pstate.c
- 
- INTEL PTP DFL ToD DRIVER
--M:	Tianfei Zhang <tianfei.zhang@intel.com>
- L:	linux-fpga@vger.kernel.org
- L:	netdev@vger.kernel.org
--S:	Maintained
-+S:	Orphan
- F:	drivers/ptp/ptp_dfl_tod.c
- 
- INTEL QUADRATURE ENCODER PERIPHERAL DRIVER
-_
 
