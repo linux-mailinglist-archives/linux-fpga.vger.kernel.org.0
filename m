@@ -1,96 +1,111 @@
-Return-Path: <linux-fpga+bounces-1327-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1328-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15408B2B89A
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Aug 2025 07:27:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6CC8B2C3BC
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Aug 2025 14:35:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 730D81B61142
-	for <lists+linux-fpga@lfdr.de>; Tue, 19 Aug 2025 05:26:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0294F685B8E
+	for <lists+linux-fpga@lfdr.de>; Tue, 19 Aug 2025 12:29:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6EA24C07A;
-	Tue, 19 Aug 2025 05:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3801E3043B8;
+	Tue, 19 Aug 2025 12:28:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1dIrB5q5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TIiiiak/"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E832AEFD;
-	Tue, 19 Aug 2025 05:26:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40FB26FA5B
+	for <linux-fpga@vger.kernel.org>; Tue, 19 Aug 2025 12:28:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755581162; cv=none; b=SQTlq4/m5Ls8drfapQ3TdfLsCTXwu5B0w48kmDQUCQsEAhSB69M1S6/W9g8Ulysgoz+wsjhKFZKObQt4+iL2uNtzyWgGKLwnY2y9QJa8b12ZiLhF9vHzihhJZGDv2V5nI5rXE0FJPBkP/7krDX54ZHVJEgHpbWll+wWma3UAVjk=
+	t=1755606522; cv=none; b=hnBWUZYE30ww+kCIdMENTsjvT/TltA4z+ElRMfPt5X4QSW0CwhVkQzay9bPt2GV4C6WHrkSFZyOUmoh5X3voLwy88nWQQnYr4jhTBFZEb6FEIpCCCuafVJ2f3u0DKBRP8KDGMySqL0+2MztxiAyK2A9jFkgTT/CjruC2J8deLCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755581162; c=relaxed/simple;
-	bh=os61l//22siihSz+hyw4bvM5SMXpC9bUP3xOgVQRO4A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HzrTkRwY4zG0OxQ8In+bEt11fmgCsq/su3H+jbFrrEvI2m7Xdv5o7ZXP4Wnaa+YOkvMrVM0JUhT1pK9XdjHH+ZZ2Q2jtm6wl4REIIGSRW7WJI2e99dFUNEKjiIHSonB1fsMbGQQqmTgKfn/xjaFJtJuUhowpbXD5Sw4YgoIU1QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1dIrB5q5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A56C4CEF4;
-	Tue, 19 Aug 2025 05:26:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755581161;
-	bh=os61l//22siihSz+hyw4bvM5SMXpC9bUP3xOgVQRO4A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1dIrB5q5bDTcS/QbH4Hd765zd+Ucl6ZN2UoWqD5EjDZT79Zc4hLvjPBu6FUW8IHc2
-	 4CjeT8ObSukA5hsdn3ssbD+MSJJav7YzG4x5QHj7zhGeDejxpWcusZNSYOd3SQXojy
-	 2s2C0rT5+ceHeRBq1RKFnlKsi4o9bamZdy7DnzR4=
-Date: Tue, 19 Aug 2025 07:25:57 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Pavel Pisa <pisa@fel.cvut.cz>
-Cc: Xu Yilun <yilun.xu@linux.intel.com>, jgg@nvidia.com,
-	m.szyprowski@samsung.com, yilun.xu@intel.com,
-	linux-fpga@vger.kernel.org, mdf@kernel.org,
-	linux-kernel@vger.kernel.org, Michal Simek <michal.simek@amd.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [PATCH 1/1] fpga: zynq_fpga: Fix the wrong usage of
- dma_map_sgtable()
-Message-ID: <2025081907-wireless-entail-08d5@gregkh>
-References: <20250806070605.1920909-1-yilun.xu@linux.intel.com>
- <20250806070605.1920909-2-yilun.xu@linux.intel.com>
- <202508190039.02454.pisa@fel.cvut.cz>
+	s=arc-20240116; t=1755606522; c=relaxed/simple;
+	bh=F930J8sPvbsU57FFnW6foQhbn/RAm3RZi0OeYZZPj6I=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=b2PEdw2gnXOxiaSfh85sX4tF9/a+UsMQF9+HUypE2p2pfIEis75+wLpeUW5LrtCflBCrYpPjApfm3z5iipHpeuw11aNH/QN0Fot0+A/9fgg4IYZFCEeb9CQNlWMCsCjO+0B7CFMzfGs9IKRn8i83bWetQlLXGamFghbCdpVg3hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TIiiiak/; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-24457f5835dso55401065ad.0
+        for <linux-fpga@vger.kernel.org>; Tue, 19 Aug 2025 05:28:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755606520; x=1756211320; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F930J8sPvbsU57FFnW6foQhbn/RAm3RZi0OeYZZPj6I=;
+        b=TIiiiak/D9OfoGoX5j6f+/3rmuF0y0Q9JDxU//CLyIhvIJBqid+CXxwOmCsu2FvKJ8
+         JChD4k9tsPEGDuPqxC6Jui5dra62QLUlXVAP37sJd+/3lmmHK7zaxuBj9c5wRHGztqqt
+         movl5tXKtKr0ddEuY3tne2BX1Tn+58ba+QTpJo2g5K+DNqXXu5tl5dcUbdANBgSdL7Cy
+         BnTph3h2/JD7tdzBOt5mlO5qRvzsFMWcGAjyf6OsvhYSxgaOyaD8HnLTnlW63TvzSlIA
+         jujiXHwe/HWSD6cVR4uq/EkfHV4K6QPcmhiEYM6+H1XQxTXwxpRqy0EX15hN7FPciCbc
+         4RaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755606520; x=1756211320;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F930J8sPvbsU57FFnW6foQhbn/RAm3RZi0OeYZZPj6I=;
+        b=KBWRZEzHISiaoGfv8hJZAC4r2yetgebDsKQ2hnpkGRfaTk7MTuryvPClNC81A6MMvR
+         +p0mAlbwYx4yeor9oZJZI/scuG/eaMsn1nzEKnt/TVQzaDF9Aa7o/bI+EftHPlXNsm5O
+         XIuOAd7et2MWmkG8PeqkJLl79OhKiSx5EKfUiusQdLmxeRKdtkm60tEbKYMl649FNBm4
+         IhnPFhVO9B0NVpDQrqOKep0VqjC4RQjRCmQbXj414bIWQ+AGcMkKW3yfqMto1KbCdPRJ
+         F7PE+QNXSr0F4hl7j9V7nUxnJLFmJRcxSQdoGjKBqCBkW5Kf9Lux4eTPazymnZQCzJr1
+         QvGg==
+X-Gm-Message-State: AOJu0Yyr/1XOaQLUpLTrUAXUmZ07Iuu9wVrUITWiXuIaXl5xmSuIbzsr
+	WFRjdvK5TNXW4B2NQ7QaP6oxEPhvODaG4DLxLTcZ2RLAYiR2kXqRIE8DsUlbg4rBaEkK0JUV85k
+	bdQCFlf9NAEXU+X1HTg+UB94x/+LmWRuUWAXn
+X-Gm-Gg: ASbGncvIGxfj0L8aSPE/8xgDpgdOxY2ktJPbamaXZlVygeYAOd2xomNPGwxotuQv8p6
+	XVdBd1CXyJD9P5YZkLk8RkVvnFjkV9bQ+bPlEbGsmeJAhHi6yBMdxDVE4F5rTEOONOWm21ttW0s
+	ra/GThiH3P6D8xMrkU91jm1mBeTauZTNeuqCh+P8tzAUzKZvhUf7tm2GYsplFlL6UO5BNKLiRmR
+	86Bfw==
+X-Google-Smtp-Source: AGHT+IFfVomrga1smFOqnAvQd7BfhGowk0V0w+3aGWh/pkaRsURiARTa4/o8I9tEJxDkEVNPa1SKSFoqaMwohl9Q3Cw=
+X-Received: by 2002:a17:903:196b:b0:240:640a:b2e4 with SMTP id
+ d9443c01a7336-245e04df64cmr30356755ad.49.1755606519696; Tue, 19 Aug 2025
+ 05:28:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202508190039.02454.pisa@fel.cvut.cz>
+From: Patryk <pbiel7@gmail.com>
+Date: Tue, 19 Aug 2025 14:28:28 +0200
+X-Gm-Features: Ac12FXxUFf5IwJnhY6zkr1gLlQeyUzEzm_ssIACtrEuY4SGgQX26OqTiAmQWXl8
+Message-ID: <CA+DkFDbzx+0CJVjdOGkah3amqZ8VHE6_-e-eq03-QT3bB0DSVw@mail.gmail.com>
+Subject: FPGA-HPS DDR contention on Agilex5 SoC while running Linux
+To: linux-fpga@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 19, 2025 at 12:39:02AM +0200, Pavel Pisa wrote:
-> Hello Greg and others,
-> 
-> please, is there some progress/decision about the fix for mainline?
-> 
-> Our daily test of mainline Linux kernel build and test of CAN
-> communication latency on Zynq system with loaded CTU CAN FD
-> IP core ends with unresponsive kernel. The last successful
-> mainline build is from July 29
->  
->   run-250729-042256-hist+6.16.0-g283564a43383+oaat-kern.json
->   https://canbus.pages.fel.cvut.cz/can-latester/
-> 
-> I have analyzed the cause and reported (August 4) that mainline
-> Zynq runtime FPGA bitstream loading was broken by patch
-> 
->   37e00703228a ("zynq_fpga: use sgtable-based scatterlist wrappers")
-> 
-> Xu Yilun and others from the FPGA community reacted promptly
-> with the fix on August 6. The fix has propagated into linux-next.
-> Is there a plan to accept it for the 6.17 version, or would it be
-> accepted only for 6.18?
+Hi
 
-It's in my "to apply" queue to get to for 6.17-final.
+I=E2=80=99m working on a device based on an Agilex5 SoC with HPS, which is =
+new
+hardware for me.
 
-Please give us a chance to catch up, August is usually a time for
-vacations :)
+I've been considering the following scenario: the FPGA and HPS will
+share DDR memory, and Linux is running on the HPS at the same time.
+The FPGA will be streaming a high volume of data that needs to be
+consumed by a userspace program on the CPU.
 
-thanks,
+I=E2=80=99m concerned that if the FPGA saturates the memory interconnect, t=
+he
+kernel might struggle to perform memory allocations or other
+transactions for other threads.
 
-greg k-h
+Has anyone encountered this kind of bus contention on Agilex/SoC
+platforms? What strategies do you use to prevent FPGA traffic from
+starving HPS memory accesses while Linux is running? Also, is there
+any recommendation / strategy for an FPGA and a userspace program on
+Linux to exchange data efficiently and safely in this kind of setup?
+
+I don't expect in-depth answers, and will be grateful for anything
+that will channel me in the right direction.
+
+Best regards
+Patryk
 
