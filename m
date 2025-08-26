@@ -1,124 +1,174 @@
-Return-Path: <linux-fpga+bounces-1350-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1351-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C705B37083
-	for <lists+linux-fpga@lfdr.de>; Tue, 26 Aug 2025 18:35:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3CAAB37285
+	for <lists+linux-fpga@lfdr.de>; Tue, 26 Aug 2025 20:49:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8172E7A993E
-	for <lists+linux-fpga@lfdr.de>; Tue, 26 Aug 2025 16:34:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A6878E3ED3
+	for <lists+linux-fpga@lfdr.de>; Tue, 26 Aug 2025 18:49:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8CB83680B6;
-	Tue, 26 Aug 2025 16:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A1E2370590;
+	Tue, 26 Aug 2025 18:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AgVXpgcj"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 984B5362078;
-	Tue, 26 Aug 2025 16:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7449436CC83
+	for <linux-fpga@vger.kernel.org>; Tue, 26 Aug 2025 18:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756226126; cv=none; b=WzpnlZGTV8MbtXNa1m3NS8QdCm/56MDcgWoMYggcCn3KExtxnEgZlrfI7C/hKw/GJkCI62Kfmmaz+3969AMx6CAStR10r5Ang1YXoYg5CzbnClXA26HyHkSDg2WxxQFjXE4dSpV5QxYBH/m+MkAFecXlBAsULiwB3Ym7TUHscns=
+	t=1756234143; cv=none; b=OPO1UlH1TgGhFlNNERC3Qd4Ce/bh84tohAXy35B5CKn5rV6z0prxv99kFlteyEKXmJSb1Ylf/mXtFzVAy1n+0F5sty5jSUlHLvCXl9tXMJPXcjEafOfLCCoQVsw8rmNmEPu9mzzXYnxHLYuETUlRO0RzSytH5QfId4p/cACdZWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756226126; c=relaxed/simple;
-	bh=Qr2qTi+512p+e4SYLAIsyC00OV8S61hM2BP79hz1vL4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RTnm4y7h5ZZ/UTvzOdkB5oxEB9mFnSoMaZOUaAC+YHOneg6tbAG/4vKqRoYuNWYP1XBSdhL98+tRjMJ62MELogaQz2m9KkQzdPQfi3hfj3UovIXRRcdnzzAtUayna3VLzimij34HlQwmgWMT6WH3FxGh5D/QevhHJho1AQiMA2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E4571A25;
-	Tue, 26 Aug 2025 09:35:15 -0700 (PDT)
-Received: from [10.57.4.86] (unknown [10.57.4.86])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A5A1B3F694;
-	Tue, 26 Aug 2025 09:35:17 -0700 (PDT)
-Message-ID: <8d6ac059-fc8f-4a5d-b49e-d02777c01cfb@arm.com>
-Date: Tue, 26 Aug 2025 17:35:15 +0100
+	s=arc-20240116; t=1756234143; c=relaxed/simple;
+	bh=E/Ye7/SL7tqTx9oBx/tviBmGnvw5YMp+2zk7nWejWf0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uKuydTHNF6q5nu4zsEuvzWKLeebr7DwdGV1gU1wC1zRO+rk41ptfOf9H8+rjS7bCXdBT4o10cIPMvuhSuTc+sDVtRqYUf3PRzR/1OwZn5mnFLsTG9tQEob8E4R++cZGhJTXH95Pj4o24S1x8kSy+w3mAemCUlTXasmPIapkw1oE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AgVXpgcj; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24611734e50so26045ad.1
+        for <linux-fpga@vger.kernel.org>; Tue, 26 Aug 2025 11:49:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1756234141; x=1756838941; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E/Ye7/SL7tqTx9oBx/tviBmGnvw5YMp+2zk7nWejWf0=;
+        b=AgVXpgcjDr9q0cS0bj8JMWInMebRYXt+OlXrwg9uWZtxCDEGAAIHZ3Q2+foOHm7EtJ
+         M1a1/P/1ZdmsTqvgB91Fw1oLEKJfkEpPxtdXyO1h+ZsMNoRasLukg83hO8hxEBl/vzgb
+         blej+3tX1kv8vjoxm0eeYveDe1fVratZcb+0nZ3k+zAKqfH7DstQSzftAdjrLUY3b9lP
+         VFLjfXViSByXPGHLsW5+jWUlRlaRzYxqpZOBet0a0sHAv33muLCeUj/m1cERrLdDvs2X
+         qVaW2rEgwm+AmTJUnEPaJUqi+6dDEd0JieCGzRPCDS5B94usjZMauleUCipOGgMEJZTo
+         LxLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756234141; x=1756838941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E/Ye7/SL7tqTx9oBx/tviBmGnvw5YMp+2zk7nWejWf0=;
+        b=aeNdom1XicC6H01bvfREtvFbofsbmONeGlEFbD/aaYMODUSCYlnRkP9etR/BvdcARx
+         F2AJUJjvZwMy6j600Q60O25tTKarMChvE+kb08mEJAONRkdAOaZ91zB6wUVWaegTwjwl
+         RgXbJ0ewdo9BUu1fO0Rv8+2NpQWwz/RQZeVkhihed3YarYJQjnx/tD6Nc6hKnaR3Oz3c
+         ISe1YiQ2Z1a2/efBZyPUcHQqhpFQ5nbFvuiNs5btY6VCMUMCXXwRlIEtuTdwGGo88/0k
+         XMsBJryE6hEm4TVDlxTcQPvZrnSW6L7OVvYsnsHD7lD2Nx00FbVjdp6NAEuRdSWTOalU
+         greA==
+X-Forwarded-Encrypted: i=1; AJvYcCV87J3JiYztY4q3mzmy33P1/zjwlxkc3QFAKD/EaOFcFU3Uvgn0x66yY7+z06TVwBGZBr6FUwS+Gzn/@vger.kernel.org
+X-Gm-Message-State: AOJu0YznsXeCB8tSibUnKxwD4cE3GXJhMEUqL++oK/6YBEEpVQ430VlC
+	XXb89Yo99Slbw0Y4imPZRUYyQQ013vl3YVgCL4sMsEaLyyptTQ1L4nPxKBf1AwaDwyMd5B5c8I1
+	2pO9eg2kPDkJ4rUR2qmW5vucjA29MlHBeuHx2DImU
+X-Gm-Gg: ASbGncuKEl7Ymc06qsNAhfXpsHTYdsk6FdULIwcCdmudYEWbdTCYuQaxsfDh27BwYOG
+	Od0hpCxTf0oI44KfXS2N2AsjiX7+oWL5eEmg5i2uyvtA3dvLu0TPocOQgE/P4tqkuhnqin+tztT
+	Zl/kDFvDG6kmotnabUgGtfp33DX7laHfNvGxQnmziioX2FpyL2mkXmw1oOG12tr/q82DDW1SISc
+	P5HXVGnLgEhXxDFipIfGAww1JmrivhjG1CYJuP0VyW7MCJN9qYz+Pfy0p4L4vEC
+X-Google-Smtp-Source: AGHT+IG+ollMBmiaOYcyGD4fK0EXbH34IwD2F+IqBBnZbD5S5EK8GUe1Cco16tj20beWZxJ5YP1hQInru/5q0vhDcUY=
+X-Received: by 2002:a17:903:228c:b0:243:afef:cd88 with SMTP id
+ d9443c01a7336-2486395f193mr4627105ad.11.1756234140425; Tue, 26 Aug 2025
+ 11:49:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 16/19] perf: Introduce positive capability for sampling
-To: Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: mingo@redhat.com, will@kernel.org, acme@kernel.org, namhyung@kernel.org,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
- linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
- linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
- iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
- linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-riscv@lists.infradead.org
-References: <cover.1755096883.git.robin.murphy@arm.com>
- <ae81cb65b38555c628e395cce67ac6c7eaafdd23.1755096883.git.robin.murphy@arm.com>
- <20250826130806.GY4067720@noisy.programming.kicks-ass.net>
- <aK22izKE4r6wI_D9@J2N7QTR9R3>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <aK22izKE4r6wI_D9@J2N7QTR9R3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1755096883.git.robin.murphy@arm.com> <d6cda4e2999aba5794c8178f043c91068fa8080c.1755096883.git.robin.murphy@arm.com>
+ <20250826130329.GX4067720@noisy.programming.kicks-ass.net> <6080e45d-032e-48c2-8efc-3d7e5734d705@arm.com>
+In-Reply-To: <6080e45d-032e-48c2-8efc-3d7e5734d705@arm.com>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 26 Aug 2025 11:48:48 -0700
+X-Gm-Features: Ac12FXxL0fQGFTk6-3SCJz15Qd8Ums9V_bcQA6gIxaEwQacWk3scYfeQZZ7cYZQ
+Message-ID: <CAP-5=fXF2x3hW4Sk+A362T-50cBbw6HVd7KY+QEUjFwT+JL37Q@mail.gmail.com>
+Subject: Re: [PATCH 12/19] perf: Ignore event state for group validation
+To: Robin Murphy <robin.murphy@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com, will@kernel.org, 
+	mark.rutland@arm.com, acme@kernel.org, namhyung@kernel.org, 
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org, adrian.hunter@intel.com, 
+	kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	imx@lists.linux.dev, linux-csky@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org, 
+	linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
+	intel-xe@lists.freedesktop.org, coresight@lists.linaro.org, 
+	iommu@lists.linux.dev, linux-amlogic@lists.infradead.org, 
+	linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-08-26 2:28 pm, Mark Rutland wrote:
-> On Tue, Aug 26, 2025 at 03:08:06PM +0200, Peter Zijlstra wrote:
->> On Wed, Aug 13, 2025 at 06:01:08PM +0100, Robin Murphy wrote:
->>> Sampling is inherently a feature for CPU PMUs, given that the thing
->>> to be sampled is a CPU context. These days, we have many more
->>> uncore/system PMUs than CPU PMUs, so it no longer makes much sense to
->>> assume sampling support by default and force the ever-growing majority
->>> of drivers to opt out of it (or erroneously fail to). Instead, let's
->>> introduce a positive opt-in capability that's more obvious and easier to
->>> maintain.
->>
->>> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
->>> index 4d439c24c901..bf2cfbeabba2 100644
->>> --- a/include/linux/perf_event.h
->>> +++ b/include/linux/perf_event.h
->>> @@ -294,7 +294,7 @@ struct perf_event_pmu_context;
->>>   /**
->>>    * pmu::capabilities flags
->>>    */
->>> -#define PERF_PMU_CAP_NO_INTERRUPT	0x0001
->>> +#define PERF_PMU_CAP_SAMPLING		0x0001
->>>   #define PERF_PMU_CAP_NO_NMI		0x0002
->>>   #define PERF_PMU_CAP_AUX_NO_SG		0x0004
->>>   #define PERF_PMU_CAP_EXTENDED_REGS	0x0008
->>> @@ -305,6 +305,7 @@ struct perf_event_pmu_context;
->>>   #define PERF_PMU_CAP_EXTENDED_HW_TYPE	0x0100
->>>   #define PERF_PMU_CAP_AUX_PAUSE		0x0200
->>>   #define PERF_PMU_CAP_AUX_PREFER_LARGE	0x0400
->>> +#define PERF_PMU_CAP_NO_INTERRUPT	0x0800
->>
->> So NO_INTERRUPT was supposed to be the negative of your new SAMPLING
->> (and I agree with your reasoning).
->>
->> What I'm confused/curious about is why we retain NO_INTERRUPT?
-> 
-> I see from your other reply that you spotted the next patch does that.
-> 
-> For the sake of other reviewers or anyone digging through the git
-> history it's probably worth adding a line to this commit message to say:
-> 
-> | A subsequent patch will remove PERF_PMU_CAP_NO_INTERRUPT as this
-> | requires some additional cleanup.
+On Tue, Aug 26, 2025 at 8:32=E2=80=AFAM Robin Murphy <robin.murphy@arm.com>=
+ wrote:
+>
+> On 2025-08-26 2:03 pm, Peter Zijlstra wrote:
+> > On Wed, Aug 13, 2025 at 06:01:04PM +0100, Robin Murphy wrote:
+> >> It may have been different long ago, but today it seems wrong for thes=
+e
+> >> drivers to skip counting disabled sibling events in group validation,
+> >> given that perf_event_enable() could make them schedulable again, and
+> >> thus increase the effective size of the group later. Conversely, if a
+> >> sibling event is truly dead then it stands to reason that the whole
+> >> group is dead, so it's not worth going to any special effort to try to
+> >> squeeze in a new event that's never going to run anyway. Thus, we can
+> >> simply remove all these checks.
+> >
+> > So currently you can do sort of a manual event rotation inside an
+> > over-sized group and have it work.
+> >
+> > I'm not sure if anybody actually does this, but its possible.
+> >
+> > Eg. on a PMU that supports only 4 counters, create a group of 5 and
+> > periodically cycle which of the 5 events is off.
 
-Yup, the main reason is the set of drivers getting the new cap is 
-smaller than the set of drivers currently not rejecting sampling events, 
-so I wanted it to be clearly visible in the patch. Indeed I shall 
-clarify the relationship to NO_INTERRUPT in the commit message.
+I'm not sure this is true, I thought this would fail in the
+perf_event_open when adding the 5th event and there being insufficient
+counters for the group. Not all PMUs validate a group will fit on the
+counters, but I thought at least Intel's core PMU would validate and
+not allow this. Fwiw, the metric code is reliant on this behavior as
+by default all events are placed into a weak group:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
+t/tree/tools/perf/util/metricgroup.c?h=3Dperf-tools-next#n631
+Weak groups are really just groups that when the perf_event_open fails
+retry with the grouping removed. PMUs that don't fail the
+perf_event_open are problematic as the reads just report "not counted"
+and the metric doesn't work. Sometimes the PMU can't help it due to
+errata. There are a bunch of workarounds for those cases carried in
+the perf tool, but in general weak groups working is relied upon:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
+t/tree/tools/perf/pmu-events/pmu-events.h?h=3Dperf-tools-next#n16
 
 Thanks,
-Robin.
+Ian
+
+> > So I'm not against changing this, but changing stuff like this always
+> > makes me a little fearful -- it wouldn't be the first time that when it
+> > finally trickles down to some 'enterprise' user in 5 years someone come=
+s
+> > and finally says, oh hey, you broke my shit :-(
+>
+> Eww, I see what you mean... and I guess that's probably lower-overhead
+> than actually deleting and recreating the sibling event(s) each time,
+> and potentially less bother then wrangling multiple groups for different
+> combinations of subsets when one simply must still approximate a complex
+> metric that requires more counters than the hardware offers.
+>
+> I'm also not keen to break anything that wasn't already somewhat broken,
+> especially since this patch is only intended as cleanup, so either we
+> could just drop it altogether, or perhaps I can wrap the existing
+> behaviour in a helper that can at least document this assumption and
+> discourage new drivers from copying it. Am I right that only
+> PERF_EVENT_STATE_{OFF,ERROR} would matter for this, though, and my
+> reasoning for state <=3D PERF_EVENT_STATE_EXIT should still stand? As for
+> the fiddly discrepancy with enable_on_exec between arm_pmu and others
+> I'm not really sure what to think...
+>
+> Thanks,
+> Robin.
 
