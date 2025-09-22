@@ -1,110 +1,145 @@
-Return-Path: <linux-fpga+bounces-1365-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1366-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BB05B8E501
-	for <lists+linux-fpga@lfdr.de>; Sun, 21 Sep 2025 22:21:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90F05B93797
+	for <lists+linux-fpga@lfdr.de>; Tue, 23 Sep 2025 00:22:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD41A16B30E
-	for <lists+linux-fpga@lfdr.de>; Sun, 21 Sep 2025 20:21:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CCE73A78AA
+	for <lists+linux-fpga@lfdr.de>; Mon, 22 Sep 2025 22:22:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F17528BA95;
-	Sun, 21 Sep 2025 20:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDC0C2D77E2;
+	Mon, 22 Sep 2025 22:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fm+7yGVK"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="YZkVO44L"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E3135965;
-	Sun, 21 Sep 2025 20:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BF525D540
+	for <linux-fpga@vger.kernel.org>; Mon, 22 Sep 2025 22:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758486099; cv=none; b=GKDXCaECrEMq3XlAhIO02x9rjhT0KA0zE8QjrHcF9taQ5fZBZo28yaE2wSRSESWPZPdyBfMxH8bB3bwSxR7sxF2G5rEEHAk2OKTMQzySXgY5Wg1naJ3BcREKD4mHR0miYrwj7rhSqhm55isdSlHe3+Xw78rqHChQBCRFVK13Udc=
+	t=1758579717; cv=none; b=JjMlA+NrLpgzyyJanF9G6mUSj+sEaapnNOYfqx8xYIYp1jF4XmQWk7KXRQFijTfnfJKuJhDDiaBRag31dQN+8H2vTYlV2660RCvKcJGFeuVuHg7vZf5wwEgwwWNMm9JYYVdLFr/+xw3qsnN8DoTdH9pI0r9kIp+g020ON9iZd3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758486099; c=relaxed/simple;
-	bh=bstEZ3MlozQwIr0qi9vp4rP/dEmgLKuVJDPIe2c54w8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PXdHInyQP97zwRKev452Eh8ieHqt6XQzK1Wb2Gq9MpU7ZC9L7bcJZ0QX03mdAlX4kAmfRFVYGZIo/wBkkhIp0OCBcjvSfWz5MMwTTCPwDIfP4yDPqaTJuyZVI9KBmBs7TZDZRGtTVpmUs87VaNiA7xp/DjO3Xm6GNmAd4KuyOSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fm+7yGVK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2ABDC4CEE7;
-	Sun, 21 Sep 2025 20:21:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758486098;
-	bh=bstEZ3MlozQwIr0qi9vp4rP/dEmgLKuVJDPIe2c54w8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fm+7yGVKVTF+lnHcl8xWL7Mxp5PWJgukZe4RAMz5nMDHick/Vwp/j+4eduQXSaPBI
-	 5hw+6RvKFMyJGQTyP1MNeC4AMKdI+ynm2UhGToJn+3YJf8OTJLjlgmDm3tWS9RqlBK
-	 l6mv/CoXHrTePmcZ8xC8E+5Pf0QQftA7zPtOFS51QDC7h6KtC5Oi0f5J1fjQdg3kT0
-	 d8jlvGF4B5er8Rh+QAPgK3glnvMPHwKHOCcAHytbLuTzL9zav+2sfnoRgVmfzS2Yr8
-	 O3OXZek7SR5Gtc4QeLlq3qMsjGR+utv3/D14FPlNOIcWYLv+Zy53cvZnU/7YxeONDd
-	 oHb3Gnnl4gWJw==
-Date: Sun, 21 Sep 2025 22:21:35 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: nuno.sa@analog.com
-Cc: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, Vinod Koul <vkoul@kernel.org>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Michael Hennerich <Michael.Hennerich@analog.com>, Jonathan Cameron <jic23@kernel.org>, 
-	Trevor Gamblin <tgamblin@baylibre.com>, David Lechner <dlechner@baylibre.com>, 
-	Mark Brown <broonie@kernel.org>, Mike Turquette <mturquette@linaro.org>, 
-	Xu Yilun <yilun.xu@linux.intel.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH RESEND v7 3/7] include: linux: move adi-axi-common.h out
- of fpga
-Message-ID: <vxbmatzbecktgppfexpdam4plwvynu4mzimtqbrzikeaxwjdfs@pyk3j4mmgjls>
-References: <20250627-dev-axi-clkgen-limits-v7-0-e4f3b1f76189@analog.com>
- <20250627-dev-axi-clkgen-limits-v7-3-e4f3b1f76189@analog.com>
+	s=arc-20240116; t=1758579717; c=relaxed/simple;
+	bh=5oqT/+EskjT95UQ02iVrfraL+q6+UfPBzDvXMw+0rI4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cqluzpOmLzimWYRr5XNd/ogrjVzvcTGZRZFIb4R++LGuUmaDGY38VnwbSvpo2CfVGTnpYSA65C1e/8KTkptehF1T504hL9HZFmBx+ptFDqaVvGIowwAXllgauu7TB5/lyibAAaMSZkEYtLN1ggO+OPDtQw1S3jR/4c2QjExIgv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=YZkVO44L; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-786e9b51248so475364a34.0
+        for <linux-fpga@vger.kernel.org>; Mon, 22 Sep 2025 15:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1758579715; x=1759184515; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DTLhvXVhX7GssWdco0zg+2qQigdBymvGbS2zk9aZ/b4=;
+        b=YZkVO44LUNY3vxt7kxWyDXeNqzyuR++Rz818D7Si+mbLdRujhscDfTcJzV+TqsPESd
+         2cP7Ix3AvbcWkWPDbnFJ07ZKzmLi/Io5PX+14qJM7gJ/L5EtVqOBF5nrN2gF8urJs9Sw
+         NnRA5Yb4vRvEd0C43wdbp2udt7YSKl7WZ3KzPNx6JViGUOhsKJCIRGLuQJHAHoELtC9l
+         3+5M5tt98zdj/R0mRkSNU+3RHAI4eh2hSs6Ue2ANQiEnxyGkDMjT06If4TnfbtV/hlFy
+         HcvKk6P6HmuA91N9vmGDEtsy6P/TrCK1g1MUPuEVLZrdHmLHslSFPhdcwaCnaFiBWHkg
+         xMPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758579715; x=1759184515;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DTLhvXVhX7GssWdco0zg+2qQigdBymvGbS2zk9aZ/b4=;
+        b=pxNzuu4gxJNloYBbKHB4qwOyxQ/y8pB7yPUHDnp2ezeN61RTexW97Ld+RkDk8h33p7
+         RuFnG0AT8SpcIPxWo8fSj6qZkNYPqO0M8eYP2n20ZjnL0ePHhZ2U4rSkMGUvDlvDXUA+
+         ohxOHjL/K+kuorlASkaCrJGYDa4nyYt278rEYDYPSlQoaFgbzXBRMvdFMJgEV1tWUxwy
+         verbKcAs9Nzomnld1t6sSfeWLdDDkbYAg/0agSimB3iKN6aJiEldHczWazWbMSHvGFJE
+         89rS0/lLI3NFfyNLxDqOTwu8pzGvG/f0mJlIRid96U87kLmz7GhMQfnxrwFeKIOJabTt
+         5SXw==
+X-Forwarded-Encrypted: i=1; AJvYcCVUIr3vQFTUpn6KnJ5ebH1NeJpu7s17pYfBa68qoIkCcwvFKaCNywTNgMVsKgpchBQbW3yYriYzsdy6@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuoG7Yi1G26vB37mAkyqTA84Bd9XUdK14gXR0OaJY5PJ68FeLR
+	X0v4H/ec1MX/cvyn/7CYC/9KZn1ZX/5sGZ03otiU1uofKMvEiITm/b/c0PGsEqTYsTk=
+X-Gm-Gg: ASbGncttzjTXiTqHyZtjM/C1mP3e9Fdtxt30D+8LRr6qlbd0eQHrgs3uWqyWyySuH8K
+	fGbkCmJWM5PHdFTyaf6i0m/P8ren+lpyrqoqbncIrk+PPpe7Lr9B3dCgZTNoRRbcyzcaIlARVRd
+	j9h5/cLWbLgC7h7WSCRN0rkXtT4VlmwaPE42muV7sLOtO41HUQrH1XIX9AUspRFKh5ttsFlS4mD
+	vvfEKu+ZXYCZyDdB3mPTizQ0pg7/LOg1ur8IWH0xoxSibj3NOdh7z3eCQ+MeR1+QeqgNBG6B08p
+	+yzKNZEYX5qlg7pxWTsuRe4gU6RjamEHdIWCyXoAfJTE9RgNwkEqSDgnbwY9ZL/ly9Y2OhPCL56
+	A/1UntgqGopVKheXnDUUtIRdEA/0Svmrp0m7DO0P24ERgFv7Ynm8ZQhNXHcPY6aoo9gMoRK4oqB
+	TM3yIzyKMESQ==
+X-Google-Smtp-Source: AGHT+IHIwhkhaTyaeI4QExDUkUooOZb2rugZFLrr3rg3bIJULREQlPjANVdD95uXqhOHKDLwlVrzPw==
+X-Received: by 2002:a05:6830:3891:b0:78e:fd71:8e02 with SMTP id 46e09a7af769-79157d59395mr176216a34.25.1758579714829;
+        Mon, 22 Sep 2025 15:21:54 -0700 (PDT)
+Received: from ?IPV6:2600:8803:e7e4:1d00:505f:96cd:1359:fff4? ([2600:8803:e7e4:1d00:505f:96cd:1359:fff4])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-625d881ffd9sm4392310eaf.3.2025.09.22.15.21.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Sep 2025 15:21:54 -0700 (PDT)
+Message-ID: <d1778ced-1660-424c-97eb-72a35152f13f@baylibre.com>
+Date: Mon, 22 Sep 2025 17:21:52 -0500
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qyi5knjwltel7rd5"
-Content-Disposition: inline
-In-Reply-To: <20250627-dev-axi-clkgen-limits-v7-3-e4f3b1f76189@analog.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v7 0/7] clk: clk-axi-clkgen: improvements and some
+ fixes
+To: Stephen Boyd <sboyd@kernel.org>,
+ =?UTF-8?Q?Nuno_S=C3=A1_via_B4_Relay?=
+ <devnull+nuno.sa.analog.com@kernel.org>, dmaengine@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, nuno.sa@analog.com
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+ Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>,
+ Michael Hennerich <Michael.Hennerich@analog.com>,
+ Jonathan Cameron <jic23@kernel.org>, Trevor Gamblin <tgamblin@baylibre.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ Mark Brown <broonie@kernel.org>, Mike Turquette <mturquette@linaro.org>,
+ Xu Yilun <yilun.xu@linux.intel.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <20250627-dev-axi-clkgen-limits-v7-0-e4f3b1f76189@analog.com>
+ <175847570323.4354.7019519707280531872@lazor>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <175847570323.4354.7019519707280531872@lazor>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 9/21/25 12:28 PM, Stephen Boyd wrote:
+> Quoting Nuno Sá via B4 Relay (2025-06-27 07:59:09)
+>> This series starts with a small fix and then a bunch of small
+>> improvements. The main change though is to allow detecting of
+>> struct axi_clkgen_limits during probe().
+>> ---
+>> Changes in v7:
+>>  - Just include new tags.
+>>
+>> - Link to v6: https://lore.kernel.org/r/20250519-dev-axi-clkgen-limits-v6-0-bc4b3b61d1d4@analog.com
+>> - Link to v5: https://lore.kernel.org/r/20250512-dev-axi-clkgen-limits-v5-0-a86b9a368e05@analog.com
+>> - Link to v4: https://lore.kernel.org/r/20250505-dev-axi-clkgen-limits-v4-0-3ad5124e19e1@analog.com
+>> - Link to v3: https://lore.kernel.org/r/20250421-dev-axi-clkgen-limits-v3-0-4203b4fed2c9@analog.com
+>> - Link to v2: https://lore.kernel.org/r/20250313-dev-axi-clkgen-limits-v2-0-173ae2ad6311@analog.com
+>> - Link to v1: https://lore.kernel.org/r/20250219-dev-axi-clkgen-limits-v1-0-26f7ef14cd9c@analog.com
+>>
+>> ---
+>> Nuno Sá (7):
+>>       clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
+>>       clk: clk-axi-clkgen: make sure to include mod_devicetable.h
+>>       include: linux: move adi-axi-common.h out of fpga
+>>       include: adi-axi-common: add new helper macros
+>>       clk: clk-axi-clkgen: detect axi_clkgen_limits at runtime
+>>       clk: clk-axi-clkgen move to min/max()
+>>       clk: clk-axi-clkgen: fix coding style issues
+> 
+> What is the merge strategy for this series?
+> 
+FYI, v6 of this series was pick up and merged in v6.17-rc1.
+So I don't think there is anything else to do here.
 
---qyi5knjwltel7rd5
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH RESEND v7 3/7] include: linux: move adi-axi-common.h out
- of fpga
-MIME-Version: 1.0
-
-Hello,
-
-On Fri, Jun 27, 2025 at 03:59:12PM +0100, Nuno S=E1 via B4 Relay wrote:
->  drivers/pwm/pwm-axi-pwmgen.c              | 2 +-
-
-Assuming this will go through some other tree than PWM:
-
-Acked-by: Uwe Kleine-K=F6nig <ukleinek@kernel.org>
-
-Best regards
-Uwe
-
---qyi5knjwltel7rd5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmjQXksACgkQj4D7WH0S
-/k5ueQgAgYcvo6IUp2+PMkmWCwM2DQDxPkieRxywvN1Ze7NM6pC3wo9sU19sxYTU
-UL8SLVlOE1CZQ5Z04cwp7upDXKH5sagjnZSH/w0eovHyEethV2lZUoyvQdaHudl/
-+s18xlBrfiGjT1ZMvbpy8IIJUoTXI0Aznrs6M71a8nhFfFRxr6JtC/yOoohUp30L
-7m3YaJvBmCaGeCVfS3PLlPxEl9oTng9PYu0X3Bx83c6iIaB75u7XuFSAKucadlT2
-sY3mQ+WmgAWjMXkkY9mPgKgdjxJohDbxzz5JpB71VYppT6v8Usg7P9Dnh8TGt+bY
-KtbslkMXXVK70XJjmhSXnpeBn7gsTg==
-=YEhB
------END PGP SIGNATURE-----
-
---qyi5knjwltel7rd5--
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/drivers/clk/clk-axi-clkgen.c
 
