@@ -1,149 +1,245 @@
-Return-Path: <linux-fpga+bounces-1387-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1388-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 078AFC06FC6
-	for <lists+linux-fpga@lfdr.de>; Fri, 24 Oct 2025 17:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E0DE8C07303
+	for <lists+linux-fpga@lfdr.de>; Fri, 24 Oct 2025 18:08:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B2E6A5069FF
-	for <lists+linux-fpga@lfdr.de>; Fri, 24 Oct 2025 15:32:36 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 57C784E73E1
+	for <lists+linux-fpga@lfdr.de>; Fri, 24 Oct 2025 16:08:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92BAE254AFF;
-	Fri, 24 Oct 2025 15:32:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B43B33373B;
+	Fri, 24 Oct 2025 16:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=b-kalm-com.20230601.gappssmtp.com header.i=@b-kalm-com.20230601.gappssmtp.com header.b="XFvc8vor"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bum+Sa70"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6D23191C2
-	for <linux-fpga@vger.kernel.org>; Fri, 24 Oct 2025 15:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E86202F71;
+	Fri, 24 Oct 2025 16:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761319947; cv=none; b=ac+Juhl/jLUMfpQy/lBvstZRp7cGiS68Rybg+rbdRKrH7rVhkIbD5MmCWGbEb5UPGCJNAAFc+ls5gRCBArbfIonGEU/li/CuWtSUSazLx7BikgMpAr1XtY5siiR7bcEJrV7hg6De0hIPJXVeOxfpsZgSTEL1l9lZ8LcYOiswkqQ=
+	t=1761322130; cv=none; b=GPbo437U8SZzSddePYquvffGZGteugIAI58dFpsFo9LcJ/emTs8MEt7T4U9AAhe45IdXp9pglKCfdgMK7gXQka8u6JEyxJOaMdXzf7WOLlbhCp0GYoZEJYPWXTheW1tNXxQ4RB7mYI1o8qkNb1p9xYldCDvRnMnN5onwKO3+2yI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761319947; c=relaxed/simple;
-	bh=BciTX6Ux68uryzRE05UN4beQRRyaUdhCSMPFvihcJLs=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=saoDMS5Rskl1xwNptX3MVGOL3uT5WtHCj1yXUtVpzDkXMzPTBYF72wYKq+fYkIP3ceDjV/esIDephYTlmDGl+GID36/wZ09H2EEQPdvmSNuG8ecrPRtlsh4NqG8zG7ICEHD6YGwzPHPrbzfR80hsVaCVhn7nIw64iXo4S+lpmhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=b-kalm.com; spf=pass smtp.mailfrom=b-kalm.com; dkim=pass (2048-bit key) header.d=b-kalm-com.20230601.gappssmtp.com header.i=@b-kalm-com.20230601.gappssmtp.com header.b=XFvc8vor; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=b-kalm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=b-kalm.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-42855f80f01so353264f8f.2
-        for <linux-fpga@vger.kernel.org>; Fri, 24 Oct 2025 08:32:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=b-kalm-com.20230601.gappssmtp.com; s=20230601; t=1761319944; x=1761924744; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2ZEoET82giKhTmy5g4rFJDghaE9rD04NI0HgpRPQYik=;
-        b=XFvc8vorqm26h4Dw+Z3RwRJBeO/J13m0RTsVdOrXw43+mSTNNrnXO7Jrc1WXdHupaO
-         r101ob5tnYYRjoJ5r6u28wn5EGlXi04/bQw/gVk1bXsL67x7IZirNmxOKLEIaa/qGqJr
-         ZaQr+25AZUQw2ES7EzbW1gkIXu9KtSk28Dag00ayt4jiPGNrb9Uzf3W28XVpYv78bD7B
-         7P/vNFqw0C0mjNEJQHd+5TvMYdDEy/0216GNIhnT51GpmcZ6KC5Oytyb3gf2NJ5IWbmi
-         f/GO/+W9eUYy4tJGMKCtOJmo8vYGENve+tl0ds1H0VPZzov8K2p+gfAZvaqbgMNtC07P
-         bQxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761319944; x=1761924744;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ZEoET82giKhTmy5g4rFJDghaE9rD04NI0HgpRPQYik=;
-        b=m/Ylf16fbOIkcw/cOrDodO3rN3d7etdaP/v1Dk8y+9X+7IeW1dDnZexkXhzA2XhJBj
-         ll1+vhbOZ7WoM0/e6ySf+CbI3a9QIDBh4Z0fM67mnQ8AkEKUgg4AZUEsj0EtuVzHxZ2Z
-         2gooGA/HFvI412dsS+vgvZDaYDLhHD3DMA4LtEC4g9mPKxdesHkIC89sOe1NNbTcZ4cy
-         ocDoA+XamBDP5jObKH4Egpa9YLxP5UkEdc6TXG8F9ghNxLz0JHhxEWx7fbKAHucMXyEU
-         JByzY1bKzTsXKwsFZuJGl7SWERLKKEqDUmxZnaOfE9lqkuKuXpeCOZ09MvFa216qyNBp
-         xEsw==
-X-Forwarded-Encrypted: i=1; AJvYcCUqvevBsPQC4AWtnLFLS3QeZvgoTH3rgVj1eY6dHDZx+3bF9B4gUlBqg9NEbwPM8B7+QO45nS/dsD8H@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1JXwdWmtcfk2/Y/ytVwB7o7f7AA9GNYvyYvQh0ZSjxpCb3amb
-	qk5NvVszIM6/9JHS/1lQYvhlpwwxe8H8LgXREe1VeCHqHWoylyjtpyW0gZYHx9QyQus=
-X-Gm-Gg: ASbGncssMt8sEJ2srfgMF4ClDaqAhIb8dgs7pXNHW7ji6K8fF7eZ5EM52Tdz86vPMs7
-	IkdOJyc5VCVmDU5Ldr5kNf+C1YplYQSNbR5YPbJL6X42w7UV6xT9HVQTQHuuirC2LhLyGQJlTV/
-	aLZ7Ew5NT+5E64I/Phl34IJ5pRP7zcgrBqapS1TRZ3qff+Wwgm04gUt0lj66FLaRo1Dgzsv/MXq
-	vR9IuQ/mbLD6IXhlZXUpkS/TKnHI+xd/oLLd3jzLGcJyOAtjCTeVZ4EjmpWAtktlAc9T4Cw6BF+
-	WyU8oBGBjzoO9NGzQcaDUPNHTzFJXO+g4btonb0GIaEdMERxvTXLc5mHDtKYfmJin+aO1GYUXbv
-	be6VIEH0wzfDSI0PYAwpRcDxqiS6u1SuDeqjSwdV5VbIyjIUYByCB74I0AujNyyRPjljvlKN1iX
-	Kdn/ZTwOSbvA==
-X-Google-Smtp-Source: AGHT+IFkYZmoqT/DK4AXCKWtRrvM9dv1rwVNZDFkbldlM0Ga1CTDuJqmg6CGhjQtDE3ctwk3nNQSzw==
-X-Received: by 2002:a05:600c:3b9d:b0:46e:5cb5:8ca2 with SMTP id 5b1f17b1804b1-474942bf7b2mr81184345e9.2.1761319943605;
-        Fri, 24 Oct 2025 08:32:23 -0700 (PDT)
-Received: from nuc ([94.110.157.37])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475c427f77bsm159038135e9.3.2025.10.24.08.32.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Oct 2025 08:32:23 -0700 (PDT)
-Date: Fri, 24 Oct 2025 17:32:21 +0200
-From: Koen Beel <koen.beel@b-kalm.com>
-To: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>, Michal Simek <michal.simek@amd.com>,
-	linux-fpga@vger.kernel.org
-Subject: [PATCH v2] fpga: zynq-fpga: fix setting pcap to max speed
-Message-ID: <aPucBU9cUsUmbMRI@nuc>
+	s=arc-20240116; t=1761322130; c=relaxed/simple;
+	bh=RFdw0+g6o/ZVSkbk/hwDX8wPQGif0Krg/jbYleduRas=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M+X8hQqyLscNlawcaqzLxsbIvLA37wcTBJheEz8S/W4L6Ou3JX9XxHolC1F7x5CqqYp4JIwgQ6myPDA9TSu2ZEQHc7fQ54v4h66bF4bJW7I+aEajrkKcNmu0fAuv2a/yW/6pMmuyauawR25T9pIF1MJFpGsJgy2Off8kZfdbovQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bum+Sa70; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E711C4CEF7;
+	Fri, 24 Oct 2025 16:08:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761322129;
+	bh=RFdw0+g6o/ZVSkbk/hwDX8wPQGif0Krg/jbYleduRas=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Bum+Sa70whSA6rVYrWsUq1W2SBcB00ABYF6MmaIX4jt6NOXRn/VO3LPrKPlp7tEQn
+	 LVUQs76cq1kcY5lcEgs19PwSpo8oMyYiTW9xOrqCaaIDEzkJqDB1PqdnTBb5Ys/EWM
+	 6XbYRBQVNVE8LiT5V16yg8m5t0XgBNBHOMepDM45CWpDyC1mSQWpBw6xP95b0axo8K
+	 NA2cP7b8OvsKFfe5pUP4/dgDUVuWlpDpwJQlSEI9Y1omjCjAndFoO7zt9q4pnUf7Vb
+	 YBP70aa0aEBdRs0SJ/0M137EcX6L4g5ukiFt2B+Bis0rPOx3aCxiC3p0zFoJ1dW+Dq
+	 Acucw6uwnLosQ==
+Date: Fri, 24 Oct 2025 17:08:33 +0100
+From: Lee Jones <lee@kernel.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Georgi Djakov <djakov@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Joerg Roedel <joro@8bytes.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+Message-ID: <20251024160833.GA2202059@google.com>
+References: <20251023143957.2899600-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
 
-The PCAP interface should be set to max speed if the bitstream is not
-encrypted. The code comments also show this was the original intended
-behavior.
+On Thu, 23 Oct 2025, Rob Herring (Arm) wrote:
 
-According to the "Zynq 7000 SoC Technical Reference Manual (UG585)" the
-reset value of the devcfg control register (XDCFG_CTRL_OFFSET) should be
-0x0C006000, so CTRL_PCAP_RATE_EN_MASK (bit 25) should be 0 (= max speed)
-at bootup.
-However, the devcfg control register reset value seems to be different
-in reality, and CTRL_PCAP_RATE_EN_MASK seems to be 1 (= reduced speed)
-at bootup.
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/.yamllint                  | 2 +-
+>  Documentation/devicetree/bindings/arm/psci.yaml              | 1 -
+>  .../bindings/clock/allwinner,sun4i-a10-gates-clk.yaml        | 1 -
+>  .../devicetree/bindings/clock/renesas,cpg-mssr.yaml          | 1 -
+>  .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml      | 1 -
+>  .../display/allwinner,sun4i-a10-display-frontend.yaml        | 1 -
+>  .../devicetree/bindings/display/allwinner,sun6i-a31-drc.yaml | 1 -
+>  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml       | 1 -
+>  .../devicetree/bindings/display/amlogic,meson-vpu.yaml       | 1 -
+>  .../devicetree/bindings/display/bridge/adi,adv7511.yaml      | 1 -
+>  .../devicetree/bindings/display/bridge/lvds-codec.yaml       | 1 -
+>  .../devicetree/bindings/display/bridge/toshiba,tc358767.yaml | 1 -
+>  .../devicetree/bindings/display/ilitek,ili9486.yaml          | 1 -
+>  Documentation/devicetree/bindings/display/msm/gpu.yaml       | 1 -
+>  .../devicetree/bindings/display/panel/panel-timing.yaml      | 1 -
+>  .../devicetree/bindings/display/panel/tpo,tpg110.yaml        | 1 -
+>  .../devicetree/bindings/display/rockchip/rockchip,dw-dp.yaml | 1 -
+>  .../devicetree/bindings/display/simple-framebuffer.yaml      | 1 -
+>  .../devicetree/bindings/dma/snps,dma-spear1340.yaml          | 1 -
+>  Documentation/devicetree/bindings/dma/stericsson,dma40.yaml  | 1 -
+>  .../devicetree/bindings/dma/stm32/st,stm32-dma.yaml          | 1 -
+>  Documentation/devicetree/bindings/edac/apm,xgene-edac.yaml   | 1 -
+>  .../devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml       | 1 -
+>  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
+>  .../devicetree/bindings/gpio/brcm,xgs-iproc-gpio.yaml        | 1 -
+>  .../devicetree/bindings/gpio/fairchild,74hc595.yaml          | 1 -
+>  Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml     | 1 -
+>  Documentation/devicetree/bindings/hwmon/adi,max31827.yaml    | 1 -
+>  Documentation/devicetree/bindings/hwmon/national,lm90.yaml   | 1 -
+>  Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml       | 1 -
+>  Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml     | 1 -
+>  Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.yaml     | 1 -
+>  .../devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml         | 1 -
+>  Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  | 2 --
+>  Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml    | 1 -
+>  Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml    | 1 -
+>  Documentation/devicetree/bindings/iio/adc/adi,ad7949.yaml    | 1 -
+>  Documentation/devicetree/bindings/iio/adc/adi,ade9000.yaml   | 1 -
+>  .../devicetree/bindings/iio/adc/cosmic,10001-adc.yaml        | 1 -
+>  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 1 -
+>  .../devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml     | 1 -
+>  .../devicetree/bindings/iio/afe/voltage-divider.yaml         | 1 -
+>  .../devicetree/bindings/iio/frequency/adi,admv4420.yaml      | 1 -
+>  .../devicetree/bindings/iio/pressure/murata,zpa2326.yaml     | 1 -
+>  .../devicetree/bindings/iio/proximity/semtech,sx9324.yaml    | 1 -
+>  .../devicetree/bindings/iio/temperature/adi,ltc2983.yaml     | 1 -
+>  Documentation/devicetree/bindings/input/ti,drv266x.yaml      | 1 -
+>  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
+>  .../devicetree/bindings/interrupt-controller/arm,gic-v3.yaml | 1 -
+>  .../bindings/interrupt-controller/aspeed,ast2700-intc.yaml   | 1 -
+>  .../bindings/interrupt-controller/fsl,vf610-mscm-ir.yaml     | 1 -
+>  .../bindings/interrupt-controller/loongson,liointc.yaml      | 1 -
+>  .../bindings/interrupt-controller/mediatek,mtk-cirq.yaml     | 1 -
+>  .../bindings/interrupt-controller/mscc,ocelot-icpu-intr.yaml | 1 -
+>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml        | 4 ----
+>  Documentation/devicetree/bindings/mailbox/arm,mhu.yaml       | 1 -
+>  Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml     | 1 -
+>  Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml | 1 -
+>  Documentation/devicetree/bindings/media/amphion,vpu.yaml     | 1 -
+>  Documentation/devicetree/bindings/media/i2c/adi,adv7604.yaml | 2 --
+>  .../devicetree/bindings/media/i2c/techwell,tw9900.yaml       | 1 -
+>  Documentation/devicetree/bindings/media/nxp,imx8-jpeg.yaml   | 1 -
+>  .../devicetree/bindings/media/qcom,sc8280xp-camss.yaml       | 1 -
+>  .../bindings/media/samsung,exynos4212-fimc-is.yaml           | 1 -
+>  .../devicetree/bindings/media/samsung,s5pv210-jpeg.yaml      | 1 -
+>  Documentation/devicetree/bindings/media/st,stm32-dma2d.yaml  | 1 -
+>  .../devicetree/bindings/media/video-interface-devices.yaml   | 4 ----
+>  .../memory-controllers/qcom,ebi2-peripheral-props.yaml       | 1 -
 
-On top, I don't think it's sane for the driver to just assume a register
-has a certain initial value and depend on it.
+>  Documentation/devicetree/bindings/mfd/stericsson,ab8500.yaml | 1 -
 
-Fixes: 37784706bf9e ("fpga manager: Adding FPGA Manager support for Xilinx Zynq 7000")
-Cc: stable@vger.kernel.org
-Signed-off-by: Koen Beel <koen.beel@b-kalm.com>
----
- drivers/fpga/zynq-fpga.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+Acked-by: Lee Jones <lee@kernel.org>
 
-diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-index b7629a0e4813..83030ec1f376 100644
---- a/drivers/fpga/zynq-fpga.c
-+++ b/drivers/fpga/zynq-fpga.c
-@@ -344,19 +344,14 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
- 
- 	/* set configuration register with following options:
- 	 * - enable PCAP interface
--	 * - set throughput for maximum speed (if bistream not encrypted)
-+	 * - set throughput for maximum speed (if bitstream not encrypted)
- 	 * - set CPU in user mode
- 	 */
- 	ctrl = zynq_fpga_read(priv, CTRL_OFFSET);
--	if (info->flags & FPGA_MGR_ENCRYPTED_BITSTREAM)
--		zynq_fpga_write(priv, CTRL_OFFSET,
--				(CTRL_PCAP_PR_MASK | CTRL_PCAP_MODE_MASK
--				 | CTRL_PCAP_RATE_EN_MASK | ctrl));
--	else
--		zynq_fpga_write(priv, CTRL_OFFSET,
--				(CTRL_PCAP_PR_MASK | CTRL_PCAP_MODE_MASK
--				 | ctrl));
--
-+	ctrl |= CTRL_PCAP_PR_MASK | CTRL_PCAP_MODE_MASK;
-+	FIELD_MODIFY(CTRL_PCAP_RATE_EN_MASK, &ctrl,
-+		     (info->flags & FPGA_MGR_ENCRYPTED_BITSTREAM) ? 1 : 0);
-+	zynq_fpga_write(priv, CTRL_OFFSET, ctrl);
- 
- 	/* We expect that the command queue is empty right now. */
- 	status = zynq_fpga_read(priv, STATUS_OFFSET);
+>  .../devicetree/bindings/mtd/amlogic,meson-nand.yaml          | 1 -
+>  .../devicetree/bindings/mtd/marvell,nand-controller.yaml     | 1 -
+>  Documentation/devicetree/bindings/mux/mux-controller.yaml    | 1 -
+>  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml   | 2 --
+>  Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml     | 1 -
+>  .../devicetree/bindings/net/brcm,mdio-mux-iproc.yaml         | 1 -
+>  .../devicetree/bindings/net/cortina,gemini-ethernet.yaml     | 1 -
+>  Documentation/devicetree/bindings/net/fsl,gianfar.yaml       | 2 --
+>  .../devicetree/bindings/net/mdio-mux-multiplexer.yaml        | 1 -
+>  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
+>  Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml    | 1 -
+>  .../devicetree/bindings/net/wireless/ti,wlcore.yaml          | 1 -
+>  .../devicetree/bindings/pci/altr,pcie-root-port.yaml         | 1 -
+>  Documentation/devicetree/bindings/pci/loongson.yaml          | 1 -
+>  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml  | 1 -
+>  .../devicetree/bindings/pci/starfive,jh7110-pcie.yaml        | 1 -
+>  Documentation/devicetree/bindings/pci/versatile.yaml         | 1 -
+>  .../bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml         | 1 -
+>  .../devicetree/bindings/pinctrl/brcm,bcm21664-pinctrl.yaml   | 1 -
+>  .../devicetree/bindings/pinctrl/fsl,imx9-pinctrl.yaml        | 1 -
+>  .../devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml     | 1 -
+>  .../bindings/pinctrl/qcom,sm6115-lpass-lpi-pinctrl.yaml      | 1 -
+>  .../devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml        | 1 -
+>  .../devicetree/bindings/pinctrl/renesas,rza1-ports.yaml      | 3 ---
+>  .../devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml | 1 -
+>  .../devicetree/bindings/power/supply/mt6360_charger.yaml     | 1 -
+>  .../bindings/power/supply/stericsson,ab8500-charger.yaml     | 1 -
+>  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml     | 1 -
+>  .../bindings/regulator/richtek,rt6245-regulator.yaml         | 1 -
+>  .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml      | 2 --
+>  Documentation/devicetree/bindings/reset/ti,sci-reset.yaml    | 1 -
+>  .../bindings/rng/inside-secure,safexcel-eip76.yaml           | 2 --
+>  .../devicetree/bindings/soc/fsl/cpm_qe/fsl,qe-muram.yaml     | 1 -
+>  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml     | 1 -
+>  .../bindings/soc/microchip/atmel,at91rm9200-tcb.yaml         | 1 -
+>  Documentation/devicetree/bindings/soc/rockchip/grf.yaml      | 1 -
+>  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml       | 3 ---
+>  Documentation/devicetree/bindings/sound/adi,adau1372.yaml    | 1 -
+>  Documentation/devicetree/bindings/sound/adi,adau7118.yaml    | 1 -
+>  .../devicetree/bindings/sound/rockchip,i2s-tdm.yaml          | 1 -
+>  .../devicetree/bindings/sound/rockchip,rk3328-codec.yaml     | 2 +-
+>  Documentation/devicetree/bindings/sound/samsung,tm2.yaml     | 1 -
+>  .../devicetree/bindings/sound/ti,tlv320dac3100.yaml          | 1 -
+>  Documentation/devicetree/bindings/sound/wlf,wm8903.yaml      | 1 -
+>  .../devicetree/bindings/timer/nvidia,tegra-timer.yaml        | 1 -
+>  .../devicetree/bindings/timer/nvidia,tegra186-timer.yaml     | 1 -
+>  Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml   | 1 -
+>  116 files changed, 2 insertions(+), 136 deletions(-)
+
 -- 
-2.51.0
-
-
-
-
-
+Lee Jones [李琼斯]
 
