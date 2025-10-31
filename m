@@ -1,44 +1,54 @@
-Return-Path: <linux-fpga+bounces-1397-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1398-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A49CAC236E6
-	for <lists+linux-fpga@lfdr.de>; Fri, 31 Oct 2025 07:47:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1066C26875
+	for <lists+linux-fpga@lfdr.de>; Fri, 31 Oct 2025 19:10:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2AF9834D6C7
-	for <lists+linux-fpga@lfdr.de>; Fri, 31 Oct 2025 06:47:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16A783B9BDF
+	for <lists+linux-fpga@lfdr.de>; Fri, 31 Oct 2025 18:09:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7BD2FB99F;
-	Fri, 31 Oct 2025 06:47:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586C73502AA;
+	Fri, 31 Oct 2025 18:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ngUDwiD3"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011AC2512DE;
-	Fri, 31 Oct 2025 06:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4637C2FE593;
+	Fri, 31 Oct 2025 18:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761893222; cv=none; b=uq1Zwov0nvuYmHVzV6dQ6ZP2w4DQLp7AmdWrlxh3oJYxZy5MlDJaaOZ6xCRxO/0sxAgZGhmnNjINuZoqQMdfXSEyyaGRPREBIzgHd9MTy9BZRWvttHlZSFkvkndwNSo1gyZj9xb3i0biscgdxo9PyLVoXVlKz1IV2Ru270lAIYA=
+	t=1761934195; cv=none; b=RMwEsBThcjEHHN1e4TKI0Z5p8CKoSuIeZzhr/xAjq3yNdS5lU5x3dFkHENU7LGzVurNXMgG8+ANEhwMnQdz8n6MwPVDSaas90EBYWpoH/3JXEUTAwmmzTu5fmfcMjHvOwPB0TIFGsx/UHJh+WZbKXxlcY77IU31Grh1IkgXcySA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761893222; c=relaxed/simple;
-	bh=JZ4d4kYh8rfhRKOmG05eahnty61ao/DjaXEzL0J39VE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TskgaPVQJsUCUuHXplTXXLo5eukzUN6/Q7Wkl7H7QqPVPsZEkVxtSyvpZ9hLtQbI00b+JikGCQ9r5etgDgA4AVRoE3uzfS/kUMkVb5aXHKnLdOQ1mcVfG/U7REJOiDvSqXLK5YMgJ8zFJwpCYXnQOj1EYgo4xBq+LVuMpAXgCsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=linux.starfivetech.com; spf=none smtp.mailfrom=linux.starfivetech.com; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=linux.starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.starfivetech.com
-X-QQ-mid: esmtpgz13t1761893210tf21d82f4
-X-QQ-Originating-IP: R90kadoSj/Lu9jhXDo3EOBK+P2zoChp7ZYtBXxB6TvQ=
-Received: from [192.168.125.98] ( [113.104.140.154])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 31 Oct 2025 14:46:46 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1332421492275545379
-Message-ID: <99841AD0EE6A35D4+4a6afacb-4d1c-4727-9a75-134190350aca@linux.starfivetech.com>
-Date: Fri, 31 Oct 2025 14:46:46 +0800
+	s=arc-20240116; t=1761934195; c=relaxed/simple;
+	bh=X/T7VlrmfUiETjz48xqNtteS+0WZkcyXhboH0dEXXBk=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=svTx0u0YGdf6Fk2zeevLsSfFIwGtiEp4ClZ0WjNqF6NnJm1Q980BfB9BB1HuAx5FwwaS+K5LZVreCmRMAk1s6+QFaK606zcHdTWs2ztMlbcZ3vephyS4yLi1SSHL6d/EykyYs3Z2zrCL6+xD/FL8C5lEKjUIi99Fd+Pwg7h8flY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ngUDwiD3; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1761934190; x=1762538990; i=markus.elfring@web.de;
+	bh=zLLGdw6y9rxoGlcn52s8qTx9QBXWfNxJq1UtVJsoiNQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=ngUDwiD3a6/xx2psZ4rBKVbHU1Ki1CIPJDPH7I4kQmUIVEn6b3XrAVeMCKEytPuu
+	 TQRqmjcslvaKz2iv8Ti6YUZGEqcnpUUFD0CARhg83UlFCdQmSMMtKgdAggomdVhBy
+	 nfEKnq4nFDuSXE07XLmG7xyDkpkzVK0RDsuFtnlhqbfd+JJ+CHSwk7+e+3Bebb2RJ
+	 QvJvSwQF3aa6lIaF6Jbd35lgBJJ5UDbP5Hy6zE8o1TTJDZUP+YOgxCC68YfBrL8R/
+	 5QSyvv7Q8tjQjjb+fUPGh48JZyC7RFImHhErMcdB3JfLJyuzTXOjkKNJdj8Sq/XbE
+	 Yz9U+JNATNe8F24P9g==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.206]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MSqTE-1vgpjk09ss-00KcGx; Fri, 31
+ Oct 2025 19:09:50 +0100
+Message-ID: <836861fb-c9fd-4bb4-86c0-9d39d29f6bab@web.de>
+Date: Fri, 31 Oct 2025 19:09:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -46,235 +56,128 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
-To: "Rob Herring (Arm)" <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Vinod Koul <vkoul@kernel.org>, Moritz Fischer <mdf@kernel.org>,
- Xu Yilun <yilun.xu@intel.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Guenter Roeck <linux@roeck-us.net>, Andi Shyti <andi.shyti@kernel.org>,
- Jonathan Cameron <jic23@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Georgi Djakov <djakov@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Joerg Roedel <joro@8bytes.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas
- <bhelgaas@google.com>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
- <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>,
- Mathieu Poirier <mathieu.poirier@linaro.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Olivia Mackall <olivia@selenic.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
- linux-pm@vger.kernel.org, iommu@lists.linux.dev,
- linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20251023143957.2899600-1-robh@kernel.org>
-Content-Language: en-US
-From: Hal Feng <hal.feng@linux.starfivetech.com>
-In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
+To: linux-fpga@vger.kernel.org, Alan Tull <atull@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Moritz Fischer <mdf@kernel.org>, Richard Gong <richard.gong@intel.com>,
+ Tom Rix <trix@redhat.com>, Xu Yilun <yilun.xu@intel.com>
+Content-Language: en-GB, de-DE
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
+ Miaoqian Lin <linmq006@gmail.com>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] fpga: stratix10-soc: Use pointer from memcpy() call for
+ assignment in s10_send_buf()
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:linux.starfivetech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: NqcI9G0mljVPHlZnLQw3xgw2kf/d9aF5s5+EcmMZEbvVRyQ1odkgRlRl
-	+jfT0Sidt0LxlobAov/UuxBi7zRZKcElztA9akkk9Jf1GOBzPvaDZtXD1xMUd81p8kJ6Hyz
-	EN4m3vx2HO1Fwx2f4zwGdxxIIr0yNkbGB9nRsdeno4MwsCzUWVRSm89jzWz4XgU20HkG+Bi
-	EPCLTEsgN0e6YwsD28Vn798fqTi1nH1xPULtv5+oRStTactxEaWhGZ2Ea5jBoUwrZPjNtCl
-	KtfL9Qpnl3gXMqJqPed9mGaRPgLTO2XV2K87xBoIqx3DA51puzSQPjSlObK+/xTi+aMlW+1
-	fDLmbrQzCBVwNaUic9Z8uTC1Bc5gtQH/TLs5kJLqlQtag514tIVBJ04QCs6pYonYaXsn6EG
-	2LkGw7y0X8Tz1HhEDDhPtVPtvJP8M+kzO5W0vWf21JiLG7CaQngncyqWLVa8A9d9txFIZA9
-	mQ/f6LwS2FZ4ICsdNKbWWMurhR3mHY9yTYmGXSyppy1nWpdPr2EO5e3E1qUiNnOYNd5d5jd
-	V8f6CYeN9xuI7DbWGhxoFhTuLoiEUL7CoMogQUNnAMO4plqO2VK0rrkAMIrU083OlyS4Onf
-	SMz/dzDKfGjsc4u1rGGYqfoxA8FZMK93gzdQnr8u4sIunrUJv98dX4cl/riclCVvACp6OtH
-	jda0HrhrC9NhVU2bZ5DXK8oo2xlp0AOtGom3D0Gyy9+hhP8aTeIapuUsEPRRj4wpv8bUJ2I
-	18qWpi3KC9XqEbK70FwErh4xBL/cMBO5VVI5Aw6D6Rk4AFHfvowV70/fTA2jml6v7I2r4t0
-	eiG3Vjo9wCe0n8sghLiMzSE1/U0XvJ2VNLkgbIBi2T2lBzPOGRIkM9glJMylFwKODsCC89V
-	aSwAkvc3R1W62fELjrfWLA3iIocfsjXatYoevXlYA+XazhCRU0XMTyH2HunXOrXP2xWqB9d
-	k9mhj/irc/bGlw7QrR84hCAHmWEp5hG8WgWM=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-X-QQ-RECHKSPAM: 0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:szpmJIbNBkJQld1Z6+5NznEAogcD4CX1azLjcwRxJqVQIEYkTgc
+ gFGqTzRxSDjK9KUbfwv+kCw1pT2WtRM4HxOL2UrVwiC9xnl/V6sP0dC33NsjAjnSNL+dwQJ
+ AEEeOqX5InhNYYt5bd1msOJcHnqKvLsr0r7WuDgQ1lGI25QfBQUvvlTPklkNFkM9Rewms8O
+ gTq4SiEYHLd3h3QdFgVug==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:QWFeVmZIzXs=;M5npvOdFQHaBnYA4RNKBW4cy/iQ
+ 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
 
-On 10/23/2025 10:37 PM, Rob Herring (Arm) wrote:
-> Generally at most 1 blank line is the standard style for DT schema
-> files. Remove the few cases with more than 1 so that the yamllint check
-> for this can be enabled.
-> 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/.yamllint                  | 2 +-
->  Documentation/devicetree/bindings/arm/psci.yaml              | 1 -
->  .../bindings/clock/allwinner,sun4i-a10-gates-clk.yaml        | 1 -
->  .../devicetree/bindings/clock/renesas,cpg-mssr.yaml          | 1 -
->  .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml      | 1 -
->  .../display/allwinner,sun4i-a10-display-frontend.yaml        | 1 -
->  .../devicetree/bindings/display/allwinner,sun6i-a31-drc.yaml | 1 -
->  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml       | 1 -
->  .../devicetree/bindings/display/amlogic,meson-vpu.yaml       | 1 -
->  .../devicetree/bindings/display/bridge/adi,adv7511.yaml      | 1 -
->  .../devicetree/bindings/display/bridge/lvds-codec.yaml       | 1 -
->  .../devicetree/bindings/display/bridge/toshiba,tc358767.yaml | 1 -
->  .../devicetree/bindings/display/ilitek,ili9486.yaml          | 1 -
->  Documentation/devicetree/bindings/display/msm/gpu.yaml       | 1 -
->  .../devicetree/bindings/display/panel/panel-timing.yaml      | 1 -
->  .../devicetree/bindings/display/panel/tpo,tpg110.yaml        | 1 -
->  .../devicetree/bindings/display/rockchip/rockchip,dw-dp.yaml | 1 -
->  .../devicetree/bindings/display/simple-framebuffer.yaml      | 1 -
->  .../devicetree/bindings/dma/snps,dma-spear1340.yaml          | 1 -
->  Documentation/devicetree/bindings/dma/stericsson,dma40.yaml  | 1 -
->  .../devicetree/bindings/dma/stm32/st,stm32-dma.yaml          | 1 -
->  Documentation/devicetree/bindings/edac/apm,xgene-edac.yaml   | 1 -
->  .../devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml       | 1 -
->  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
->  .../devicetree/bindings/gpio/brcm,xgs-iproc-gpio.yaml        | 1 -
->  .../devicetree/bindings/gpio/fairchild,74hc595.yaml          | 1 -
->  Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml     | 1 -
->  Documentation/devicetree/bindings/hwmon/adi,max31827.yaml    | 1 -
->  Documentation/devicetree/bindings/hwmon/national,lm90.yaml   | 1 -
->  Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml       | 1 -
->  Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml     | 1 -
->  Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.yaml     | 1 -
->  .../devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml         | 1 -
->  Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  | 2 --
->  Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ad7949.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ade9000.yaml   | 1 -
->  .../devicetree/bindings/iio/adc/cosmic,10001-adc.yaml        | 1 -
->  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 1 -
->  .../devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml     | 1 -
->  .../devicetree/bindings/iio/afe/voltage-divider.yaml         | 1 -
->  .../devicetree/bindings/iio/frequency/adi,admv4420.yaml      | 1 -
->  .../devicetree/bindings/iio/pressure/murata,zpa2326.yaml     | 1 -
->  .../devicetree/bindings/iio/proximity/semtech,sx9324.yaml    | 1 -
->  .../devicetree/bindings/iio/temperature/adi,ltc2983.yaml     | 1 -
->  Documentation/devicetree/bindings/input/ti,drv266x.yaml      | 1 -
->  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
->  .../devicetree/bindings/interrupt-controller/arm,gic-v3.yaml | 1 -
->  .../bindings/interrupt-controller/aspeed,ast2700-intc.yaml   | 1 -
->  .../bindings/interrupt-controller/fsl,vf610-mscm-ir.yaml     | 1 -
->  .../bindings/interrupt-controller/loongson,liointc.yaml      | 1 -
->  .../bindings/interrupt-controller/mediatek,mtk-cirq.yaml     | 1 -
->  .../bindings/interrupt-controller/mscc,ocelot-icpu-intr.yaml | 1 -
->  Documentation/devicetree/bindings/iommu/arm,smmu.yaml        | 4 ----
->  Documentation/devicetree/bindings/mailbox/arm,mhu.yaml       | 1 -
->  Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml     | 1 -
->  Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml | 1 -
->  Documentation/devicetree/bindings/media/amphion,vpu.yaml     | 1 -
->  Documentation/devicetree/bindings/media/i2c/adi,adv7604.yaml | 2 --
->  .../devicetree/bindings/media/i2c/techwell,tw9900.yaml       | 1 -
->  Documentation/devicetree/bindings/media/nxp,imx8-jpeg.yaml   | 1 -
->  .../devicetree/bindings/media/qcom,sc8280xp-camss.yaml       | 1 -
->  .../bindings/media/samsung,exynos4212-fimc-is.yaml           | 1 -
->  .../devicetree/bindings/media/samsung,s5pv210-jpeg.yaml      | 1 -
->  Documentation/devicetree/bindings/media/st,stm32-dma2d.yaml  | 1 -
->  .../devicetree/bindings/media/video-interface-devices.yaml   | 4 ----
->  .../memory-controllers/qcom,ebi2-peripheral-props.yaml       | 1 -
->  Documentation/devicetree/bindings/mfd/stericsson,ab8500.yaml | 1 -
->  .../devicetree/bindings/mtd/amlogic,meson-nand.yaml          | 1 -
->  .../devicetree/bindings/mtd/marvell,nand-controller.yaml     | 1 -
->  Documentation/devicetree/bindings/mux/mux-controller.yaml    | 1 -
->  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml   | 2 --
->  Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml     | 1 -
->  .../devicetree/bindings/net/brcm,mdio-mux-iproc.yaml         | 1 -
->  .../devicetree/bindings/net/cortina,gemini-ethernet.yaml     | 1 -
->  Documentation/devicetree/bindings/net/fsl,gianfar.yaml       | 2 --
->  .../devicetree/bindings/net/mdio-mux-multiplexer.yaml        | 1 -
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
->  Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml    | 1 -
->  .../devicetree/bindings/net/wireless/ti,wlcore.yaml          | 1 -
->  .../devicetree/bindings/pci/altr,pcie-root-port.yaml         | 1 -
->  Documentation/devicetree/bindings/pci/loongson.yaml          | 1 -
->  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml  | 1 -
->  .../devicetree/bindings/pci/starfive,jh7110-pcie.yaml        | 1 -
->  Documentation/devicetree/bindings/pci/versatile.yaml         | 1 -
->  .../bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml         | 1 -
->  .../devicetree/bindings/pinctrl/brcm,bcm21664-pinctrl.yaml   | 1 -
->  .../devicetree/bindings/pinctrl/fsl,imx9-pinctrl.yaml        | 1 -
->  .../devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml     | 1 -
->  .../bindings/pinctrl/qcom,sm6115-lpass-lpi-pinctrl.yaml      | 1 -
->  .../devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml        | 1 -
->  .../devicetree/bindings/pinctrl/renesas,rza1-ports.yaml      | 3 ---
->  .../devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml | 1 -
->  .../devicetree/bindings/power/supply/mt6360_charger.yaml     | 1 -
->  .../bindings/power/supply/stericsson,ab8500-charger.yaml     | 1 -
->  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml     | 1 -
->  .../bindings/regulator/richtek,rt6245-regulator.yaml         | 1 -
->  .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml      | 2 --
->  Documentation/devicetree/bindings/reset/ti,sci-reset.yaml    | 1 -
->  .../bindings/rng/inside-secure,safexcel-eip76.yaml           | 2 --
->  .../devicetree/bindings/soc/fsl/cpm_qe/fsl,qe-muram.yaml     | 1 -
->  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml     | 1 -
->  .../bindings/soc/microchip/atmel,at91rm9200-tcb.yaml         | 1 -
->  Documentation/devicetree/bindings/soc/rockchip/grf.yaml      | 1 -
->  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml       | 3 ---
->  Documentation/devicetree/bindings/sound/adi,adau1372.yaml    | 1 -
->  Documentation/devicetree/bindings/sound/adi,adau7118.yaml    | 1 -
->  .../devicetree/bindings/sound/rockchip,i2s-tdm.yaml          | 1 -
->  .../devicetree/bindings/sound/rockchip,rk3328-codec.yaml     | 2 +-
->  Documentation/devicetree/bindings/sound/samsung,tm2.yaml     | 1 -
->  .../devicetree/bindings/sound/ti,tlv320dac3100.yaml          | 1 -
->  Documentation/devicetree/bindings/sound/wlf,wm8903.yaml      | 1 -
->  .../devicetree/bindings/timer/nvidia,tegra-timer.yaml        | 1 -
->  .../devicetree/bindings/timer/nvidia,tegra186-timer.yaml     | 1 -
->  Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml   | 1 -
->  116 files changed, 2 insertions(+), 136 deletions(-)
-> 
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Fri, 31 Oct 2025 18:58:50 +0100
 
-...
+A pointer was assigned to a variable. The same pointer was used for
+the destination parameter of a memcpy() call.
+This function is documented in the way that the same value is returned.
+Thus convert two separate statements into a direct variable assignment for
+the return value from a memory copy action.
 
-> diff --git a/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> index 5f432452c815..33c80626e8ec 100644
-> --- a/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> @@ -16,7 +16,6 @@ properties:
->    compatible:
->      const: starfive,jh7110-pcie
->  
-> -
->    reg:
->      maxItems: 2
->  
+The source code was transformed by using the Coccinelle software.
 
-...
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/fpga/stratix10-soc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
-> index f3258f2fd3a4..3f14eab01c54 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
-> @@ -32,7 +32,6 @@ description: |
->      | | |     |   |   |          -------
->      UART0     UART1 --
->  
-> -
->    The big MUX in the diagram only has 7 different ways of mapping peripherals
->    on the left to pins on the right. StarFive calls the 7 configurations "signal
->    groups".
+diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+index 0a295ccf1644..2e1167668ca8 100644
+=2D-- a/drivers/fpga/stratix10-soc.c
++++ b/drivers/fpga/stratix10-soc.c
+@@ -257,8 +257,7 @@ static int s10_send_buf(struct fpga_manager *mgr, cons=
+t char *buf, size_t count)
+=20
+ 	xfer_sz =3D count < SVC_BUF_SIZE ? count : SVC_BUF_SIZE;
+=20
+-	svc_buf =3D priv->svc_bufs[i].buf;
+-	memcpy(svc_buf, buf, xfer_sz);
++	svc_buf =3D memcpy(priv->svc_bufs[i].buf, buf, xfer_sz);
+ 	ret =3D s10_svc_send_msg(priv, COMMAND_RECONFIG_DATA_SUBMIT,
+ 			       svc_buf, xfer_sz);
+ 	if (ret < 0) {
+=2D-=20
+2.51.1
 
-Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-
-Best regards,
-Hal
 
