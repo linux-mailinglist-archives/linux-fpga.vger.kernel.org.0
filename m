@@ -1,194 +1,280 @@
-Return-Path: <linux-fpga+bounces-1396-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1397-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D797C1CEDF
-	for <lists+linux-fpga@lfdr.de>; Wed, 29 Oct 2025 20:11:22 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A49CAC236E6
+	for <lists+linux-fpga@lfdr.de>; Fri, 31 Oct 2025 07:47:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0878E582E6C
-	for <lists+linux-fpga@lfdr.de>; Wed, 29 Oct 2025 19:08:47 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2AF9834D6C7
+	for <lists+linux-fpga@lfdr.de>; Fri, 31 Oct 2025 06:47:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 762A93596EB;
-	Wed, 29 Oct 2025 19:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="cz/dFH6R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7BD2FB99F;
+	Fri, 31 Oct 2025 06:47:03 +0000 (UTC)
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012033.outbound.protection.outlook.com [52.101.43.33])
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62B83596E5;
-	Wed, 29 Oct 2025 19:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.33
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761764874; cv=fail; b=eQ5BPR698qHLheGGwDlqBwgqaAGXCnvQq+d+2VM4RD2WCzCND4CWGWC4UT8ysG+kPgUV5LiBPHmIXF6UDDcpgrSp0bWh6sgM05uyzRyYEyXyYNAKBSZQkyn+NNCkyfBJQgkJbSByIwPrHFyh4mhWGQQwRVDQmKqJdUal1XKLKUg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761764874; c=relaxed/simple;
-	bh=r4UIl/UKl9DHi4g7sXMVNSaBtyekNFPsDYRmLNjsO04=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hlCSwZT8+tuhQeLoUkSaYm8o7X9rWt4a4PNBNID/CljIY9/fzn2QgiVAKLu5XYweOVi1vtSdscpK6yJ6sJnKbEDFUS6SI0SStdxWLLq7bzHn8voEEE8WoWgPGxX/JqGbVCEn2/lltjgXP8rCugIXnNNOleyNZhzAGqfqHLtCcFc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=cz/dFH6R; arc=fail smtp.client-ip=52.101.43.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eKyXGAmK5FrbUwimr0RSrHmdAvtM3w0Yji0Oywae8QzbJrZndB35eBWt74d4+azE4VHTWrJpRKmIkb4bNyt2XuLZ67DZgje2KpLxgNALPXarL/NYBBBvyEPUHEuS7RTjfJLNGZSZ5aBPeOrOXQn6625yXflsS2Fd5ktaIZX+jOfeGg7aUuoUyCfWghEjT99U8Up5r4xwwrPh60DBqXXDgnI2gfas4uXt8tni9UWk2UgcGESQYVhsFXx7N5vSG0KpM/M7YHR8rhg2GaRAu4feX7+6cnOSTcoDcaPieVsjcebwZdXYiTZK+/qIg0WYpCuX6BtquMMIr7Xo+/hALfbiBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PKF3aIJDw6pOngsBvz6oUnxUIMFaual0x1to6OhopH4=;
- b=YkWZbpzuzCC4jXyjGoBb1RqFiBPuT2hpAtw1aec1aIl24oNDxFM7L65BYKlyLD35ivJhZkWlg+jPkcEjc1CxnwlWQwkYRNwnvmJikXp0a3eE+RF/mDoTuAujK71JbpoJ6KI054d/1Gvd3n5sUNRT5p+B3xhXA9xSpg2GnRxz4z3RSrG3QBJoEKJewbTDFbpxkn1Lo3p3zhQSVFtBuvah1QlyZI5JShWJyiz5XQe2fJSexwnm5bgMsYOgtHRUemz30JwrPuiTpoi03l6i3L2PAt1aCJ4q1o5IYIafiZ6hohV2U40UVcFuVyxzOyi0yPWWtWNRe2LMRp+2B192T23HIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
- dkim=pass header.d=altera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PKF3aIJDw6pOngsBvz6oUnxUIMFaual0x1to6OhopH4=;
- b=cz/dFH6RM6m3RVqnxwaqaKpDVelQ7s9SN2TQuFn/ZeNjKjMSffJS91mZLpg0f0irgjPRoH4SO/DUWXMQq89FBNSW3fP55eSTQBI9I+PPZLKhF3KfkBW1+nYsAva8UU+Vlf8NYE6R/TDwodC66Zb7lJ4PU4Yc78gnzcigk5FCgPMEvNnYSLIlWz8PO2O07llPGpn5dY4hAhWfFjMKez+7z2b1R2rXMctwv4laMXunV167iihctAOgHNjEbgEXOEJOmTU3GUfRdQ25Wb2+dVUdFbGdhBbbFKSJNcV5VIrXLIjXgMHihjWNjZuQ+Q+9U9jaFmzmUGCAVuyhkSf7utfUvA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=altera.com;
-Received: from PH0PR03MB5893.namprd03.prod.outlook.com (2603:10b6:510:32::6)
- by DS7PR03MB5510.namprd03.prod.outlook.com (2603:10b6:5:2ce::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.12; Wed, 29 Oct
- 2025 19:07:50 +0000
-Received: from PH0PR03MB5893.namprd03.prod.outlook.com
- ([fe80::d003:bc08:7968:c605]) by PH0PR03MB5893.namprd03.prod.outlook.com
- ([fe80::d003:bc08:7968:c605%6]) with mapi id 15.20.9275.013; Wed, 29 Oct 2025
- 19:07:50 +0000
-From: Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@altera.com>
-To: Moritz Fischer <mdf@kernel.org>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@altera.com>
-Subject: [RESEND][PATCH 1/1] fpga: altera-cvp: Limit driver registration to specific device ID
-Date: Thu, 30 Oct 2025 03:05:44 +0800
-Message-Id: <0b6877dd7422e8c797bb42bf071fd85cf8a0af09.1761764670.git.kuhanh.murugasen.krishnan@altera.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1761764670.git.kuhanh.murugasen.krishnan@altera.com>
-References: <cover.1761764670.git.kuhanh.murugasen.krishnan@altera.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: KU2P306CA0072.MYSP306.PROD.OUTLOOK.COM
- (2603:1096:d10:3a::12) To PH0PR03MB5893.namprd03.prod.outlook.com
- (2603:10b6:510:32::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011AC2512DE;
+	Fri, 31 Oct 2025 06:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761893222; cv=none; b=uq1Zwov0nvuYmHVzV6dQ6ZP2w4DQLp7AmdWrlxh3oJYxZy5MlDJaaOZ6xCRxO/0sxAgZGhmnNjINuZoqQMdfXSEyyaGRPREBIzgHd9MTy9BZRWvttHlZSFkvkndwNSo1gyZj9xb3i0biscgdxo9PyLVoXVlKz1IV2Ru270lAIYA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761893222; c=relaxed/simple;
+	bh=JZ4d4kYh8rfhRKOmG05eahnty61ao/DjaXEzL0J39VE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TskgaPVQJsUCUuHXplTXXLo5eukzUN6/Q7Wkl7H7QqPVPsZEkVxtSyvpZ9hLtQbI00b+JikGCQ9r5etgDgA4AVRoE3uzfS/kUMkVb5aXHKnLdOQ1mcVfG/U7REJOiDvSqXLK5YMgJ8zFJwpCYXnQOj1EYgo4xBq+LVuMpAXgCsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=linux.starfivetech.com; spf=none smtp.mailfrom=linux.starfivetech.com; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=linux.starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.starfivetech.com
+X-QQ-mid: esmtpgz13t1761893210tf21d82f4
+X-QQ-Originating-IP: R90kadoSj/Lu9jhXDo3EOBK+P2zoChp7ZYtBXxB6TvQ=
+Received: from [192.168.125.98] ( [113.104.140.154])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 31 Oct 2025 14:46:46 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1332421492275545379
+Message-ID: <99841AD0EE6A35D4+4a6afacb-4d1c-4727-9a75-134190350aca@linux.starfivetech.com>
+Date: Fri, 31 Oct 2025 14:46:46 +0800
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
 List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR03MB5893:EE_|DS7PR03MB5510:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2ccc054c-f3ab-49d0-44bb-08de171e747a
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?fMgqGb1VFvkKfbAQVvH4d7ZJonlFJ5cnKX1QD1jMZW3IBDbNFL+jSZ2VnsOT?=
- =?us-ascii?Q?R5f0P6JE6xJtomsygIzZ9Y2TakyRUw3j2CzZUzkhMSmZVIE7yInEjCHWvQuv?=
- =?us-ascii?Q?bgeL06GAKgHcRV8+vGmqHdUsP6IIAE3jpVsE22epe99C635F5sqe4Y45eQfq?=
- =?us-ascii?Q?/I22s18JXimheEPqCURnmczu4rAgn/b0T2jKd1II5/aNPGbXxeLu5yn47aqO?=
- =?us-ascii?Q?GPk/e+5crivM3Z1Wg2qdFKQju6h84az91zi7NtIH6wbW7UwzKGmI0J3TMlys?=
- =?us-ascii?Q?kf0O37DSkIm92vM7KwxwhlDin5vmMZ0b0xEOrhHFAJu0ffXdGBIgYMRFecT/?=
- =?us-ascii?Q?+8t+8Etnzk5wspWhfRhEx26NZDiiVdr5lz7UofW5brbfGJq8ZMZc+JMURvoK?=
- =?us-ascii?Q?SyOyzd8wFqpq2eF8lC5EBtr9c4oG1/w+UZ+JsIwrLugTYtMjjgbkSfUiL5bu?=
- =?us-ascii?Q?KrfRuaZVPbhSDnULRoAEo8vVy9dxvzmUI2MSA7MX2AOScUH5Dgg7IJmTry3o?=
- =?us-ascii?Q?mFIRcMjLpuTV9G7/TvMdZaE0954jkbWrv+ZRfxnR8+TQWMuUa1+HXBSLYHk0?=
- =?us-ascii?Q?6Wz0Nq+ofcW2ySzd+pLwfVhDLk3n11bqqvjKFkXiJ7KCgs9nhIBWeYqxtCi6?=
- =?us-ascii?Q?MJmwwwwy4b9GUO694bhzbOhBsHI2Qy5Jx5u0zQQ8Kk3oFavurt0r+xUwt2pe?=
- =?us-ascii?Q?DUOHCpPKQsQUO7PYfy/JoO0WO8eH8qei1Hl0RxdKT7efyIjfFz3H0tNFJIyZ?=
- =?us-ascii?Q?gSD6ARFUeEdFUaWT/zqY0t5dc51zVThQ62D6PHOGAIVWJxadazxty2ifK0zP?=
- =?us-ascii?Q?VOonm5iqlcvNMv+SNqUi5JtSYe74g9LGgjezk+E6ty1j2ZZYPOwEjcAYE3tg?=
- =?us-ascii?Q?+By+3uEUg3vq201UkBjZc/8AyCxIDvQS6t7uyWTxghRI1YD/CTi4VN1Bq55V?=
- =?us-ascii?Q?yQBv+PIwFmM4OaYq88jpcl+Bk01gZGWHtcRmKO73kT4RhuOxHUUYeyDWXguk?=
- =?us-ascii?Q?fB2a2kCp3JwRHmDwwR3gTEUy3wgFbMR4p7Pm+XHAdCbKoS+BAETglVzcdjeQ?=
- =?us-ascii?Q?5205dK6ValwhPHQQoocR2CAgv853nVaFsz5mKwn5+1vId4k2QOdUXoGiCd0Q?=
- =?us-ascii?Q?nRjD7qbrROj3TQuPIplPJlXuB95UYHQEid7e68Ud5pOSeQGrFN7E6NiJsLe2?=
- =?us-ascii?Q?wG3baDFJdjGYvloMEbIyWde+s5ggsJdg2cOviUggv4LQ0d0BLJ82ZfDvLUF+?=
- =?us-ascii?Q?Fa86tjectb7T5IxvAUiNBWFPHkdo7jmVifeCj6zYq4pptgQEHpK0cADqgai3?=
- =?us-ascii?Q?jhSPO0jGiBFhVd8eM1ZXQL11cbcF31mCciZqAubnUEeh1Eb5sg+4v5UK0MIP?=
- =?us-ascii?Q?QijgOTE8W0pPl2EYqcYu1PeoD69Jhbp3qp19RcaSv5/MCi7X49SmcjFmTqqn?=
- =?us-ascii?Q?9ER2VmCQJGXJRrBD3GkaPtxfM7pg8Beo?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB5893.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Z7e+Q3Zudx3RGMu0WjH1BjgCPbjNAgaTYqRgk5H8IFMPT/E/H1+jgNDFDlFH?=
- =?us-ascii?Q?Tv81xgsb+ywwftN+pHZ+0UXbpUmd7xqSJMsSwFhSe1LjWE38dy8UhrbERf/4?=
- =?us-ascii?Q?CrwNb+ik4IWn7+g4iHY+R/tH0CSWWw3mqNRziINr9uIQFiMobsSigl3kxkw3?=
- =?us-ascii?Q?nWNpOTPQ8VAkD8vd7qLLL0L1cFZ4w9ClajBH6HAPOSIs/oIAY/PvNs1PVkHQ?=
- =?us-ascii?Q?0kCQ9QO7SvizAI8w57sDNtylp69SSHAXmITSuUVDb1pAVfFyGjD6oJtDnRhL?=
- =?us-ascii?Q?B3aFvtDQ/mIMlx6Q1SYVQE/mHTYQ0z6EPOR8n8bFlrorHFMaMmWtxN9+8MEa?=
- =?us-ascii?Q?N1zTRSrpdydfsrFAfSKggJHEtoziHk/N8GBrFMMMsmw1aHspcAosh0R34CF0?=
- =?us-ascii?Q?gnBn22RPwjHAX8kMJb5SGNxC9hGVwOmk155tTE/y0aNCZ4imb76lLMOXovnS?=
- =?us-ascii?Q?XxUQ7RsQ9mKjFbrZTmaro9TcAjAgpzL1hRxVRStr9jzvHbuJnPyoYd1gomjl?=
- =?us-ascii?Q?m+FVsJaZ5upLEWPv2e7hV819AWl1/rST72o+sIdd8bJ6AZXizV9oW+jBsUOn?=
- =?us-ascii?Q?eHBdOYAXiNU7aK9lC/BKXepvIDZ9sSNWwFX+B6KNKpfTbQ/x7UT0aaEUi7Wv?=
- =?us-ascii?Q?0vayEv3B3Ev+17VZGrIGToyDzl1iID0yGbDZNrUPIyfrWERFV9mUKmYraDEi?=
- =?us-ascii?Q?e7O8w8sOpapJeLtBM86nEVA7/YBiVyPZIrynWeDmVdEZJmnAr/QLw09hBnau?=
- =?us-ascii?Q?riIJk3R5gK+PDTsMtXAXoV6vDjXkyvbKlc+sOUflBceZR1YRQm6uqaoecRXf?=
- =?us-ascii?Q?xDD2G4d58rFeVFn+UZ0lXhFBuMJAiUxrjxqdxlTI2M+bJj1Ye65ZFvbIpgp5?=
- =?us-ascii?Q?cP485GseqMLsPLZUTbKI6ubWcYmUe9stBh6+TB5hCfKbWu0No/guGALa5fMH?=
- =?us-ascii?Q?rH7QBHkkk9HyPNlmO/lp8kYYoh2rjulax9dbtphhXDIyagaMCzHTeUc3f2kC?=
- =?us-ascii?Q?nuChqL9raw+h9Rvmhuh59SU9qkL9DPqFpStURkePsUggLF9LLVqW/6agFMUI?=
- =?us-ascii?Q?VWe2q4f5xWmuzPPUfHohiUwv/3Hs+CqU8qyMj4Wv2pv4wo6tNLKKBwoBb2qU?=
- =?us-ascii?Q?YsVL0VXOEgVHxPr8dubQuPkHQt3u2PqVGtnvIIYhmRM0ttJQw1LnUwaN5ADP?=
- =?us-ascii?Q?MCKx37iXIWLLFRdA5rPNf7ZA0eVIWsUxTwdIGSbfVumZCVObG/PaiGop5OMc?=
- =?us-ascii?Q?tnqzd0xc4cQiRAL6IvrskHSfdYLA8AOb19tG41CA7nWYfnHxegU2Bgv3hf2L?=
- =?us-ascii?Q?VMGG8Y+hwHXduVnocHaGL5TN87M7NzHfnabzX53sZDBPDtFdNNbpY68vZCYa?=
- =?us-ascii?Q?Q4oQQL5x1IVpvCyazBoLkDcFxKXtlhK22p+lwqnM8rhLIHke2qoStCjpPUeF?=
- =?us-ascii?Q?YUdc57JDe5elhRSIhZRxjewkCbIgHvXCSNV63Sx9A0HEA0LbrAHt2n+7gGyT?=
- =?us-ascii?Q?fGsfVUT37vmt3xR8bga0hjlR6Pb3gyL15MvmDoeVWcKk7nOePtcA/jOA3kk4?=
- =?us-ascii?Q?IryfTI8C8DxaML2/qMWNyxbeGi24U+ZLQzPkyTX33EklZsBtb8QwBq7Hjfix?=
- =?us-ascii?Q?ExNbEEwoPZJjOApXZewSlEs=3D?=
-X-OriginatorOrg: altera.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ccc054c-f3ab-49d0-44bb-08de171e747a
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB5893.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Oct 2025 19:07:50.7563
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OzcM0+LCVogykWWe3mkxsJvYyO8rsNKWQsG14W+7XI30E9/chrR8mTSSvejZ/dCPL08ORxyeUNzYuaAGeWstTX2PiUn6F/t5iZjjyuj3lt18NH9842rvagga2z3HIoxK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR03MB5510
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+To: "Rob Herring (Arm)" <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
+ Vinod Koul <vkoul@kernel.org>, Moritz Fischer <mdf@kernel.org>,
+ Xu Yilun <yilun.xu@intel.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Guenter Roeck <linux@roeck-us.net>, Andi Shyti <andi.shyti@kernel.org>,
+ Jonathan Cameron <jic23@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Georgi Djakov <djakov@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Joerg Roedel <joro@8bytes.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas
+ <bhelgaas@google.com>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
+ <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Olivia Mackall <olivia@selenic.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+ linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+ netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20251023143957.2899600-1-robh@kernel.org>
+Content-Language: en-US
+From: Hal Feng <hal.feng@linux.starfivetech.com>
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:linux.starfivetech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-QQ-XMAILINFO: NqcI9G0mljVPHlZnLQw3xgw2kf/d9aF5s5+EcmMZEbvVRyQ1odkgRlRl
+	+jfT0Sidt0LxlobAov/UuxBi7zRZKcElztA9akkk9Jf1GOBzPvaDZtXD1xMUd81p8kJ6Hyz
+	EN4m3vx2HO1Fwx2f4zwGdxxIIr0yNkbGB9nRsdeno4MwsCzUWVRSm89jzWz4XgU20HkG+Bi
+	EPCLTEsgN0e6YwsD28Vn798fqTi1nH1xPULtv5+oRStTactxEaWhGZ2Ea5jBoUwrZPjNtCl
+	KtfL9Qpnl3gXMqJqPed9mGaRPgLTO2XV2K87xBoIqx3DA51puzSQPjSlObK+/xTi+aMlW+1
+	fDLmbrQzCBVwNaUic9Z8uTC1Bc5gtQH/TLs5kJLqlQtag514tIVBJ04QCs6pYonYaXsn6EG
+	2LkGw7y0X8Tz1HhEDDhPtVPtvJP8M+kzO5W0vWf21JiLG7CaQngncyqWLVa8A9d9txFIZA9
+	mQ/f6LwS2FZ4ICsdNKbWWMurhR3mHY9yTYmGXSyppy1nWpdPr2EO5e3E1qUiNnOYNd5d5jd
+	V8f6CYeN9xuI7DbWGhxoFhTuLoiEUL7CoMogQUNnAMO4plqO2VK0rrkAMIrU083OlyS4Onf
+	SMz/dzDKfGjsc4u1rGGYqfoxA8FZMK93gzdQnr8u4sIunrUJv98dX4cl/riclCVvACp6OtH
+	jda0HrhrC9NhVU2bZ5DXK8oo2xlp0AOtGom3D0Gyy9+hhP8aTeIapuUsEPRRj4wpv8bUJ2I
+	18qWpi3KC9XqEbK70FwErh4xBL/cMBO5VVI5Aw6D6Rk4AFHfvowV70/fTA2jml6v7I2r4t0
+	eiG3Vjo9wCe0n8sghLiMzSE1/U0XvJ2VNLkgbIBi2T2lBzPOGRIkM9glJMylFwKODsCC89V
+	aSwAkvc3R1W62fELjrfWLA3iIocfsjXatYoevXlYA+XazhCRU0XMTyH2HunXOrXP2xWqB9d
+	k9mhj/irc/bGlw7QrR84hCAHmWEp5hG8WgWM=
+X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+X-QQ-RECHKSPAM: 0
 
-From: "Murugasen Krishnan, Kuhanh" <kuhanh.murugasen.krishnan@altera.com>
+On 10/23/2025 10:37 PM, Rob Herring (Arm) wrote:
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/.yamllint                  | 2 +-
+>  Documentation/devicetree/bindings/arm/psci.yaml              | 1 -
+>  .../bindings/clock/allwinner,sun4i-a10-gates-clk.yaml        | 1 -
+>  .../devicetree/bindings/clock/renesas,cpg-mssr.yaml          | 1 -
+>  .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml      | 1 -
+>  .../display/allwinner,sun4i-a10-display-frontend.yaml        | 1 -
+>  .../devicetree/bindings/display/allwinner,sun6i-a31-drc.yaml | 1 -
+>  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml       | 1 -
+>  .../devicetree/bindings/display/amlogic,meson-vpu.yaml       | 1 -
+>  .../devicetree/bindings/display/bridge/adi,adv7511.yaml      | 1 -
+>  .../devicetree/bindings/display/bridge/lvds-codec.yaml       | 1 -
+>  .../devicetree/bindings/display/bridge/toshiba,tc358767.yaml | 1 -
+>  .../devicetree/bindings/display/ilitek,ili9486.yaml          | 1 -
+>  Documentation/devicetree/bindings/display/msm/gpu.yaml       | 1 -
+>  .../devicetree/bindings/display/panel/panel-timing.yaml      | 1 -
+>  .../devicetree/bindings/display/panel/tpo,tpg110.yaml        | 1 -
+>  .../devicetree/bindings/display/rockchip/rockchip,dw-dp.yaml | 1 -
+>  .../devicetree/bindings/display/simple-framebuffer.yaml      | 1 -
+>  .../devicetree/bindings/dma/snps,dma-spear1340.yaml          | 1 -
+>  Documentation/devicetree/bindings/dma/stericsson,dma40.yaml  | 1 -
+>  .../devicetree/bindings/dma/stm32/st,stm32-dma.yaml          | 1 -
+>  Documentation/devicetree/bindings/edac/apm,xgene-edac.yaml   | 1 -
+>  .../devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml       | 1 -
+>  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
+>  .../devicetree/bindings/gpio/brcm,xgs-iproc-gpio.yaml        | 1 -
+>  .../devicetree/bindings/gpio/fairchild,74hc595.yaml          | 1 -
+>  Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml     | 1 -
+>  Documentation/devicetree/bindings/hwmon/adi,max31827.yaml    | 1 -
+>  Documentation/devicetree/bindings/hwmon/national,lm90.yaml   | 1 -
+>  Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml       | 1 -
+>  Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml     | 1 -
+>  Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.yaml     | 1 -
+>  .../devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml         | 1 -
+>  Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  | 2 --
+>  Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml    | 1 -
+>  Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml    | 1 -
+>  Documentation/devicetree/bindings/iio/adc/adi,ad7949.yaml    | 1 -
+>  Documentation/devicetree/bindings/iio/adc/adi,ade9000.yaml   | 1 -
+>  .../devicetree/bindings/iio/adc/cosmic,10001-adc.yaml        | 1 -
+>  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 1 -
+>  .../devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml     | 1 -
+>  .../devicetree/bindings/iio/afe/voltage-divider.yaml         | 1 -
+>  .../devicetree/bindings/iio/frequency/adi,admv4420.yaml      | 1 -
+>  .../devicetree/bindings/iio/pressure/murata,zpa2326.yaml     | 1 -
+>  .../devicetree/bindings/iio/proximity/semtech,sx9324.yaml    | 1 -
+>  .../devicetree/bindings/iio/temperature/adi,ltc2983.yaml     | 1 -
+>  Documentation/devicetree/bindings/input/ti,drv266x.yaml      | 1 -
+>  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
+>  .../devicetree/bindings/interrupt-controller/arm,gic-v3.yaml | 1 -
+>  .../bindings/interrupt-controller/aspeed,ast2700-intc.yaml   | 1 -
+>  .../bindings/interrupt-controller/fsl,vf610-mscm-ir.yaml     | 1 -
+>  .../bindings/interrupt-controller/loongson,liointc.yaml      | 1 -
+>  .../bindings/interrupt-controller/mediatek,mtk-cirq.yaml     | 1 -
+>  .../bindings/interrupt-controller/mscc,ocelot-icpu-intr.yaml | 1 -
+>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml        | 4 ----
+>  Documentation/devicetree/bindings/mailbox/arm,mhu.yaml       | 1 -
+>  Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml     | 1 -
+>  Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml | 1 -
+>  Documentation/devicetree/bindings/media/amphion,vpu.yaml     | 1 -
+>  Documentation/devicetree/bindings/media/i2c/adi,adv7604.yaml | 2 --
+>  .../devicetree/bindings/media/i2c/techwell,tw9900.yaml       | 1 -
+>  Documentation/devicetree/bindings/media/nxp,imx8-jpeg.yaml   | 1 -
+>  .../devicetree/bindings/media/qcom,sc8280xp-camss.yaml       | 1 -
+>  .../bindings/media/samsung,exynos4212-fimc-is.yaml           | 1 -
+>  .../devicetree/bindings/media/samsung,s5pv210-jpeg.yaml      | 1 -
+>  Documentation/devicetree/bindings/media/st,stm32-dma2d.yaml  | 1 -
+>  .../devicetree/bindings/media/video-interface-devices.yaml   | 4 ----
+>  .../memory-controllers/qcom,ebi2-peripheral-props.yaml       | 1 -
+>  Documentation/devicetree/bindings/mfd/stericsson,ab8500.yaml | 1 -
+>  .../devicetree/bindings/mtd/amlogic,meson-nand.yaml          | 1 -
+>  .../devicetree/bindings/mtd/marvell,nand-controller.yaml     | 1 -
+>  Documentation/devicetree/bindings/mux/mux-controller.yaml    | 1 -
+>  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml   | 2 --
+>  Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml     | 1 -
+>  .../devicetree/bindings/net/brcm,mdio-mux-iproc.yaml         | 1 -
+>  .../devicetree/bindings/net/cortina,gemini-ethernet.yaml     | 1 -
+>  Documentation/devicetree/bindings/net/fsl,gianfar.yaml       | 2 --
+>  .../devicetree/bindings/net/mdio-mux-multiplexer.yaml        | 1 -
+>  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
+>  Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml    | 1 -
+>  .../devicetree/bindings/net/wireless/ti,wlcore.yaml          | 1 -
+>  .../devicetree/bindings/pci/altr,pcie-root-port.yaml         | 1 -
+>  Documentation/devicetree/bindings/pci/loongson.yaml          | 1 -
+>  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml  | 1 -
+>  .../devicetree/bindings/pci/starfive,jh7110-pcie.yaml        | 1 -
+>  Documentation/devicetree/bindings/pci/versatile.yaml         | 1 -
+>  .../bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml         | 1 -
+>  .../devicetree/bindings/pinctrl/brcm,bcm21664-pinctrl.yaml   | 1 -
+>  .../devicetree/bindings/pinctrl/fsl,imx9-pinctrl.yaml        | 1 -
+>  .../devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml     | 1 -
+>  .../bindings/pinctrl/qcom,sm6115-lpass-lpi-pinctrl.yaml      | 1 -
+>  .../devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml        | 1 -
+>  .../devicetree/bindings/pinctrl/renesas,rza1-ports.yaml      | 3 ---
+>  .../devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml | 1 -
+>  .../devicetree/bindings/power/supply/mt6360_charger.yaml     | 1 -
+>  .../bindings/power/supply/stericsson,ab8500-charger.yaml     | 1 -
+>  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml     | 1 -
+>  .../bindings/regulator/richtek,rt6245-regulator.yaml         | 1 -
+>  .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml      | 2 --
+>  Documentation/devicetree/bindings/reset/ti,sci-reset.yaml    | 1 -
+>  .../bindings/rng/inside-secure,safexcel-eip76.yaml           | 2 --
+>  .../devicetree/bindings/soc/fsl/cpm_qe/fsl,qe-muram.yaml     | 1 -
+>  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml     | 1 -
+>  .../bindings/soc/microchip/atmel,at91rm9200-tcb.yaml         | 1 -
+>  Documentation/devicetree/bindings/soc/rockchip/grf.yaml      | 1 -
+>  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml       | 3 ---
+>  Documentation/devicetree/bindings/sound/adi,adau1372.yaml    | 1 -
+>  Documentation/devicetree/bindings/sound/adi,adau7118.yaml    | 1 -
+>  .../devicetree/bindings/sound/rockchip,i2s-tdm.yaml          | 1 -
+>  .../devicetree/bindings/sound/rockchip,rk3328-codec.yaml     | 2 +-
+>  Documentation/devicetree/bindings/sound/samsung,tm2.yaml     | 1 -
+>  .../devicetree/bindings/sound/ti,tlv320dac3100.yaml          | 1 -
+>  Documentation/devicetree/bindings/sound/wlf,wm8903.yaml      | 1 -
+>  .../devicetree/bindings/timer/nvidia,tegra-timer.yaml        | 1 -
+>  .../devicetree/bindings/timer/nvidia,tegra186-timer.yaml     | 1 -
+>  Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml   | 1 -
+>  116 files changed, 2 insertions(+), 136 deletions(-)
+> 
 
-The Altera CvP driver previously used PCI_ANY_ID, which caused it to
-bind to all PCIe devices with the Altera vendor ID. This led to
-incorrect driver association when multiple PCIe devices with different
-device IDs were present on the same platform.
+...
 
-Update the device ID table to use 0x00 instead of PCI_ANY_ID so that
-the driver only attaches to the intended device.
+> diff --git a/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
+> index 5f432452c815..33c80626e8ec 100644
+> --- a/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
+> @@ -16,7 +16,6 @@ properties:
+>    compatible:
+>      const: starfive,jh7110-pcie
+>  
+> -
+>    reg:
+>      maxItems: 2
+>  
 
-Reviewed-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: Ang Tien Sung <tien.sung.ang@altera.com>
-Signed-off-by: Murugasen Krishnan, Kuhanh <kuhanh.murugasen.krishnan@altera.com>
----
- drivers/fpga/altera-cvp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-index 5af0bd33890c..97e9d4d981ad 100644
---- a/drivers/fpga/altera-cvp.c
-+++ b/drivers/fpga/altera-cvp.c
-@@ -560,7 +560,7 @@ static int altera_cvp_probe(struct pci_dev *pdev,
- static void altera_cvp_remove(struct pci_dev *pdev);
- 
- static struct pci_device_id altera_cvp_id_tbl[] = {
--	{ PCI_VDEVICE(ALTERA, PCI_ANY_ID) },
-+	{ PCI_VDEVICE(ALTERA, 0x00) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(pci, altera_cvp_id_tbl);
--- 
-2.25.1
+> diff --git a/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
+> index f3258f2fd3a4..3f14eab01c54 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
+> @@ -32,7 +32,6 @@ description: |
+>      | | |     |   |   |          -------
+>      UART0     UART1 --
+>  
+> -
+>    The big MUX in the diagram only has 7 different ways of mapping peripherals
+>    on the left to pins on the right. StarFive calls the 7 configurations "signal
+>    groups".
 
+Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+
+Best regards,
+Hal
 
