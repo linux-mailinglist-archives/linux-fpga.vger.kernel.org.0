@@ -1,72 +1,75 @@
-Return-Path: <linux-fpga+bounces-1402-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1403-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6111CC2AA9E
-	for <lists+linux-fpga@lfdr.de>; Mon, 03 Nov 2025 09:59:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82D9BC2CF37
+	for <lists+linux-fpga@lfdr.de>; Mon, 03 Nov 2025 17:01:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3145B4ECD1A
-	for <lists+linux-fpga@lfdr.de>; Mon,  3 Nov 2025 08:59:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D656A56221F
+	for <lists+linux-fpga@lfdr.de>; Mon,  3 Nov 2025 15:13:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC40B2E3715;
-	Mon,  3 Nov 2025 08:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A249314D02;
+	Mon,  3 Nov 2025 15:00:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cewlsmQm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N9Lsjbvl"
 X-Original-To: linux-fpga@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8EEF2E1C6F;
-	Mon,  3 Nov 2025 08:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB98828506C;
+	Mon,  3 Nov 2025 15:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762160335; cv=none; b=lAJEKPsH/Ye1nuy0vzQKijljq7ggy7nby33RObRI9ieG0EyFFQOR9wL6LouyDr2tlnL4mPahUP5o5ISI9UPnB/0aQp0XUGz2IjsCgCS9OTh46z0f+1pLs2tLCamp8A8y56XiSgCRtcNm1N+doEapmUE8KtloL+t89N9jFgmwKqA=
+	t=1762182054; cv=none; b=swR/3G/A0bMqblZ0j8JckyMDGYSRM9G5xNA494L1/JzhXSnYZljl2mYLqWJPeHOuMN1Htm/4XT7SauepzkBfzRfZ/svr0C/8KvAKgi9qwmlTmpnLGhts8W6HN1DjC0J0o3DTtusScNrZ5lGMkW0407m9njbdg7p1ZI9fPkjC64U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762160335; c=relaxed/simple;
-	bh=kyXRFhNZF3YdGGUinVbbVFRuVlkKQVdWx2ofydZcw6w=;
+	s=arc-20240116; t=1762182054; c=relaxed/simple;
+	bh=6RwdVLCfvW/I8UZyHeN/hVkPySSPR4Zt7NQljAFMBJA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m2EIMj69T46dI7m2SwZnjcX2nljitit3KcNJ3ExHQFJQBlBCbVrV84MIl3rqOVjsct+d3/N48M5FM/XFH0Ld6eaQbMM8UdEPHDm6hVtcZ+bHykEBhkKJAv5zf1V1YZMM9Dw70BVYHTy6reYMNh4gfIOkkh1BGzkDLWrbxqgFlX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cewlsmQm; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=YxXcfS3DQVDiztMMP34bwB9dt3kQwufE0CQVO3IkcqWMqx60qZ64Txpn4vxczmvzPslOYLZEeg8NXC9GG075iFVxxq03yjgywrfbSFdXO9dYD7sJOxf59Fgq3gXeG6fc4wk3CcOlFH/lhbaTEE8RC3ANVonen6ydGFNNgcovXao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N9Lsjbvl; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762160334; x=1793696334;
+  t=1762182052; x=1793718052;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kyXRFhNZF3YdGGUinVbbVFRuVlkKQVdWx2ofydZcw6w=;
-  b=cewlsmQmU/XiJaL7zkQrQCFgEiAwyrw7qEuWwBazc7RnOcjkGcLPsBXz
-   7G2wTCzgHVcjRxkA8ro5V/2KaIRQiFwCGra5qf37k7tQDdUy948a7Sc5z
-   7AQVXL5jqhEh7AS91h6LTIqrpSKq5dnP1IuHn8IqjK2EnnbQmGNPH69yS
-   aUU4+z283FdOdCNM4fIZX23nYWg2ByhfIBofNV+NpqmYFYH1jFY8WrZrh
-   PjNhkgYsW1xDaCwDY5e2ZCVmA44fEzyZPGLxksuDl/PFRqkfKQOspCQgq
-   ZNbzxTri3dzCGcTGd8l31vjiGcvX+54i987FvA6E7rDr6r6zTbS1UCRlj
-   w==;
-X-CSE-ConnectionGUID: HwQi7OKZQ0qd1ijGoiVF2g==
-X-CSE-MsgGUID: ESWMJK/jSEumc0mSLVBaLQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="75582384"
-X-IronPort-AV: E=Sophos;i="6.19,275,1754982000"; 
-   d="scan'208";a="75582384"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 00:58:22 -0800
-X-CSE-ConnectionGUID: Zz5XKvBGQQCxotpwplrFhA==
-X-CSE-MsgGUID: 2Hdrn2n3QxOtDLyPS5vWCw==
+  bh=6RwdVLCfvW/I8UZyHeN/hVkPySSPR4Zt7NQljAFMBJA=;
+  b=N9LsjbvlQqzOY1/hlIXWANdnXLXdCCJUTEKwIlmi7yh+y59moRGa0rDJ
+   cz39HNn+sO4TrlBQ2/iQuHUFqvN1QHf3we+byViOulthEVNDRcONOOl52
+   0h0wB/X3deSXqoS0z28/yIn1JlcK7y5qgAwWaN8xXqibeW3K6e5g6wPIX
+   JzG55OuagjVYduQNks+xYNEtQ6qGHmPQNkAcuQ7VKzk6DfffnfkTA2Cjy
+   rcPJ5crIGM4z4HFfLpsaJrKL0YTMwCsvncwj4496bb3YmCNIuzKjCtWzI
+   mRpWijtE9gcm48AS1ZZQyQ9XTk3RU/mX/nmOGIym7QO6XTaq4f6OScuOA
+   g==;
+X-CSE-ConnectionGUID: knZcKNmfS++0oHCSBatJNg==
+X-CSE-MsgGUID: GYQoA4BTQ7WNPheFsLZIpg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="75368226"
+X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
+   d="scan'208";a="75368226"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 07:00:52 -0800
+X-CSE-ConnectionGUID: Ijxr1MP2TACwV7q1U6H48A==
+X-CSE-MsgGUID: VheaoV/KQX6UDEVwfnyYow==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
+   d="scan'208";a="217707603"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa003.fm.intel.com with ESMTP; 03 Nov 2025 00:58:20 -0800
-Date: Mon, 3 Nov 2025 16:44:18 +0800
+  by fmviesa001.fm.intel.com with ESMTP; 03 Nov 2025 07:00:50 -0800
+Date: Mon, 3 Nov 2025 22:46:47 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Kuhanh Murugasen Krishnan <kuhanh.murugasen.krishnan@altera.com>
-Cc: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RESEND][PATCH 1/1] fpga: altera-cvp: Limit driver registration
- to specific device ID
-Message-ID: <aQhrYucpkGBWI2zL@yilunxu-OptiPlex-7050>
-References: <cover.1761764670.git.kuhanh.murugasen.krishnan@altera.com>
- <0b6877dd7422e8c797bb42bf071fd85cf8a0af09.1761764670.git.kuhanh.murugasen.krishnan@altera.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Dinh Nguyen <dinguyen@kernel.org>, devicetree@vger.kernel.org,
+	linux-fpga@vger.kernel.org, yilun.xu@intel.com, trix@redhat.com,
+	robh+dt@kernel.org, krzysztof.kozlowskii+dt@linaro.org,
+	conor+dt@kernel.org, michal.simek@amd.com
+Subject: Re: [PATCH] dt-bindings: fpga: update link for Altera's and AMD
+ partial recon
+Message-ID: <aQjAV/fVWManlprT@yilunxu-OptiPlex-7050>
+References: <20251101190848.24271-1-dinguyen@kernel.org>
+ <20251102-ginger-pig-of-lightning-f65ef4@kuoka>
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -75,63 +78,27 @@ List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0b6877dd7422e8c797bb42bf071fd85cf8a0af09.1761764670.git.kuhanh.murugasen.krishnan@altera.com>
+In-Reply-To: <20251102-ginger-pig-of-lightning-f65ef4@kuoka>
 
-On Thu, Oct 30, 2025 at 03:05:44AM +0800, Kuhanh Murugasen Krishnan wrote:
-> From: "Murugasen Krishnan, Kuhanh" <kuhanh.murugasen.krishnan@altera.com>
+On Sun, Nov 02, 2025 at 05:41:54PM +0100, Krzysztof Kozlowski wrote:
+> On Sat, Nov 01, 2025 at 02:08:48PM -0500, Dinh Nguyen wrote:
+> > The link is giving the 404 error, so use the correct link for the
+> > documents
+> > 
+> > Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+> > ---
+> >  Documentation/devicetree/bindings/fpga/fpga-region.yaml | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Is this your first post?
+Reviewed-by: Xu Yilun <yilun.xu@linux.intel.com>
 
-https://lore.kernel.org/all/20250212223553.2717304-1-kuhanh.murugasen.krishnan@intel.com/
-
-Please mark the patch v2 if this patch is for the same issue. And please
-firstly response the talk and make clear all previous concerns, rather than
-just sent the patch and left.
+Applied to for-next, thank.
 
 > 
-> The Altera CvP driver previously used PCI_ANY_ID, which caused it to
-> bind to all PCIe devices with the Altera vendor ID. This led to
-> incorrect driver association when multiple PCIe devices with different
-> device IDs were present on the same platform.
-> 
-> Update the device ID table to use 0x00 instead of PCI_ANY_ID so that
-> the driver only attaches to the intended device.
-
-So could you please answer the previous concern here?
-
-Does dev_id 0x00 covers all supported devices? Do you have any DOC for
-this?
-
-> 
-> Reviewed-by: Dinh Nguyen <dinguyen@kernel.org>
-
-I didn't see where the tag is from. Generally we don't prefer a
-Reviewed-by tag firstly appear from other than the person named.
-
-Thanks,
-Yilun
-
-> Signed-off-by: Ang Tien Sung <tien.sung.ang@altera.com>
-> Signed-off-by: Murugasen Krishnan, Kuhanh <kuhanh.murugasen.krishnan@altera.com>
-> ---
->  drivers/fpga/altera-cvp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-> index 5af0bd33890c..97e9d4d981ad 100644
-> --- a/drivers/fpga/altera-cvp.c
-> +++ b/drivers/fpga/altera-cvp.c
-> @@ -560,7 +560,7 @@ static int altera_cvp_probe(struct pci_dev *pdev,
->  static void altera_cvp_remove(struct pci_dev *pdev);
->  
->  static struct pci_device_id altera_cvp_id_tbl[] = {
-> -	{ PCI_VDEVICE(ALTERA, PCI_ANY_ID) },
-> +	{ PCI_VDEVICE(ALTERA, 0x00) },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(pci, altera_cvp_id_tbl);
-> -- 
-> 2.25.1
+> Best regards,
+> Krzysztof
 > 
 > 
 
