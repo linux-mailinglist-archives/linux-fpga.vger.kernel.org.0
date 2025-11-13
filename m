@@ -1,48 +1,48 @@
-Return-Path: <linux-fpga+bounces-1452-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1453-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A51C8C56042
-	for <lists+linux-fpga@lfdr.de>; Thu, 13 Nov 2025 08:12:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72BF0C5605E
+	for <lists+linux-fpga@lfdr.de>; Thu, 13 Nov 2025 08:15:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 56BAA4E1B9E
-	for <lists+linux-fpga@lfdr.de>; Thu, 13 Nov 2025 07:12:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBAD03B97E9
+	for <lists+linux-fpga@lfdr.de>; Thu, 13 Nov 2025 07:12:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A550D32255D;
-	Thu, 13 Nov 2025 07:12:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E5A3218A6;
+	Thu, 13 Nov 2025 07:12:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LV3POpON"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bMSrL8ex"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7010F322522;
-	Thu, 13 Nov 2025 07:12:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12F1320CBA;
+	Thu, 13 Nov 2025 07:12:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763017923; cv=none; b=os+q48G0WHwzXye7lH2Rd4s6Ngo3/NOSeGvxIj9vKwd+sPMI/nSHlLUbWDCk7iYeONxfINeHCMMftaD/7oRYoal0k20AhAZF8PVbHK8LZb4BVG73+HikGV3v/z8TSJuU4DfsjIyaQAMx14j9Yr2LJoDS0vbpZLw6HI0ToEuuEDk=
+	t=1763017949; cv=none; b=lzq4aCUp3fg3cMYhifpn0ex5aFmYWUwg7XIuRUEbLPDP0FjyIkKdTPH86uVMSCJt7u2vyL/HsFueiCxeuTRmBJ8jRAByS0lBXhkDRptQqSA5rNKDbB+HpR+jpjxGeVCyxpZ/087eH+D2z5XxBpVU++rewU0TzYagitl4czXLkis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763017923; c=relaxed/simple;
-	bh=3nN7auRltuKc8nr6AqmVgABE9kGxZ73bqDSf2VD+iAs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ceNU+zf1s/DDxIxb28uul2KmfFfabfhJNJhue4OWiZs3p6usG1hPc1rhbm00SIIiEF1Ht2c+K1ol9MRHcCYublE66okMnRLzqvou8tme4YSXlZE5hV3TVc3io+eGgyJlAgz07x3uizBNcNysTSF9VSrqNHVUWTb3ODPGxwWzPME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LV3POpON; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0159C4CEFB;
-	Thu, 13 Nov 2025 07:11:59 +0000 (UTC)
+	s=arc-20240116; t=1763017949; c=relaxed/simple;
+	bh=z3G5Q3WnTj1vud7DVZ4U22Wma4oj3GO95N5UZDpW6wg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P6HO9vm6EP9d/3V20yLo4OEwWMeXIu2bY2Hnw+7Bu68/uVkFzsbf851P6iiXNZOm2ZrnQ/gh8ctn5DU9NZwVwbQhV58lvyJuQu3Oe0W2iIlv1Dfm1k833E9Kpfonfv1AY7bX3uWOXXYlK11RCTAnCn52CGqo6JmPI+j1DEtjvXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bMSrL8ex; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E61F2C116D0;
+	Thu, 13 Nov 2025 07:12:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763017923;
-	bh=3nN7auRltuKc8nr6AqmVgABE9kGxZ73bqDSf2VD+iAs=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=LV3POpONQ0LBGYBYWqYAXwGQvw+yxhuPJLZzZ2tH55cMPx/gsHVdwaVIGOMc5E83N
-	 +yCLcS43DOOGlXfgewFdg9tg4/TvoJuxNIkP/YCRhp3CgGptkw7SNJmrZZVRDeN49E
-	 klqOFcw/cad6eCUNGbNX+zEJiQL2DGHnq9hrW3pqXG3v8/OxLo6Hi4/NZPW1qPxjw0
-	 MFYZvc9TWkVrpBrQCBo0jaN92DxoXqQrvJTUMKi7HtflTMpX58lYFRUg3wBW/wNze2
-	 V70nyOD/CU9pEgiOnFqmcUAa0d0Ycz9XCzCFE98QN+aRhpqF/IomrVlyhV3+2g/BNj
-	 oR5T+d30pxTEw==
-Message-ID: <33f348e8-87ca-4579-b571-05c033c955bb@kernel.org>
-Date: Thu, 13 Nov 2025 08:11:57 +0100
+	s=k20201202; t=1763017949;
+	bh=z3G5Q3WnTj1vud7DVZ4U22Wma4oj3GO95N5UZDpW6wg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bMSrL8exoFLUCDwzsRy2FPHXcNd/ZMc9O0u5zjKRLAzYNCkQcHVbn/5vPbC1O/off
+	 e/DR4NhLtluTYbJQm6MoO1Re+fU7VUt4PYMhXDH5KW6CcNcbHbM4sPqyMl/AYqLpw3
+	 KrUkv0xjSivrHy+BNio8g0zL90t1EylaM39cYv21x+P+0FCjjPmad7kztUAdmfcboJ
+	 OUVH250WS3VIJY6BI18R+uDOHfsb7kkUokSDaNI6m5yqY4Ovg7pVFDyP2kujNmXXKm
+	 qxmYzlpgREJUjEd15GIZgixolz2N7cNlcI3tnEto9VwlwDcp50n/MsORxEeOhYzbu6
+	 m+0u64whE9maQ==
+Message-ID: <c7470b9e-5c8f-4498-a752-9c986de8aca2@kernel.org>
+Date: Thu, 13 Nov 2025 08:12:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -52,8 +52,9 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 2/2] arm64: dts: agilex5: add fpga-region and fpga-mgr
  nodes
-To: Khairul Anuar Romli <khairul.anuar.romli@altera.com>,
- Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+To: Xu Yilun <yilun.xu@linux.intel.com>,
+ Khairul Anuar Romli <khairul.anuar.romli@altera.com>
+Cc: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
  Tom Rix <trix@redhat.com>, Dinh Nguyen <dinguyen@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Mahesh Rao <mahesh.rao@altera.com>,
@@ -62,6 +63,7 @@ To: Khairul Anuar Romli <khairul.anuar.romli@altera.com>,
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 References: <cover.1763008269.git.khairul.anuar.romli@altera.com>
  <9a4ce6b2470328b9326402a2f00ff285be1793c3.1763008269.git.khairul.anuar.romli@altera.com>
+ <aRVyvjCny/I/rElC@yilunxu-OptiPlex-7050>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,47 +109,30 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <9a4ce6b2470328b9326402a2f00ff285be1793c3.1763008269.git.khairul.anuar.romli@altera.com>
+In-Reply-To: <aRVyvjCny/I/rElC@yilunxu-OptiPlex-7050>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 13/11/2025 05:43, Khairul Anuar Romli wrote:
-> The Intel Agilex 5 SoC contains a programmable FPGA region that requires
-> proper device tree description to enable FPGA manager support in the Linux
-> kernel. Without the 'fpga-region' and 'fpga-mgr' nodes, the kernel cannot
-> detect or manage the FPGA hardware correctly.
+On 13/11/2025 06:55, Xu Yilun wrote:
+> On Thu, Nov 13, 2025 at 12:43:56PM +0800, Khairul Anuar Romli wrote:
+>> The Intel Agilex 5 SoC contains a programmable FPGA region that requires
+>> proper device tree description to enable FPGA manager support in the Linux
+>> kernel. Without the 'fpga-region' and 'fpga-mgr' nodes, the kernel cannot
+>> detect or manage the FPGA hardware correctly.
+>>
+>> This patch adds a 'fpga-region' node with compatible = "fpga-region", along
+>> with appropriate #address-cells and #size-cells properties, to describe the
+>> FPGA region layout.
+>>
+>> Also defines specific compatible string for Agilex5 and add Agilex string
+>> as fallback for stratix10-soc driver initialization.
+>>
+>> Signed-off-by: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
 > 
-> This patch adds a 'fpga-region' node with compatible = "fpga-region", along
-> with appropriate #address-cells and #size-cells properties, to describe the
-> FPGA region layout.
-> 
-> Also defines specific compatible string for Agilex5 and add Agilex string
-> as fallback for stratix10-soc driver initialization.
-> 
-> Signed-off-by: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
-> ---
-> Changes in v2:
-> 	- All fallback compatible string to ensure driver is still able to
-> 	  initialize without new compatible string added in the driver.
-> ---
->  arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi
-> index bf7128adddde..06be0b8671c0 100644
-> --- a/arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi
-> +++ b/arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi
-> @@ -85,9 +85,21 @@ svc {
->  			method = "smc";
->  			memory-region = <&service_reserved>;
->  			iommus = <&smmu 10>;
-> +
-> +			fpga_mgr: fpga-mgr {
-> +				compatible = "intel,agilex5-soc-fpga-mgr",
-> +					     "intel,agilex-soc-fpga-mgr";
+> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
 
-
-You did not bother to test this...
+How this can be reviewed if it is completely wrong and obviously not
+matching the bindings from this patchset?
 
 Best regards,
 Krzysztof
