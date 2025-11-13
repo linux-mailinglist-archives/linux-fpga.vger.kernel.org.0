@@ -1,48 +1,48 @@
-Return-Path: <linux-fpga+bounces-1457-lists+linux-fpga=lfdr.de@vger.kernel.org>
+Return-Path: <linux-fpga+bounces-1458-lists+linux-fpga=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-fpga@lfdr.de
 Delivered-To: lists+linux-fpga@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E2B9C568F2
-	for <lists+linux-fpga@lfdr.de>; Thu, 13 Nov 2025 10:22:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9382C56816
+	for <lists+linux-fpga@lfdr.de>; Thu, 13 Nov 2025 10:11:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 84A154F102C
-	for <lists+linux-fpga@lfdr.de>; Thu, 13 Nov 2025 09:10:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F51C3A8AF4
+	for <lists+linux-fpga@lfdr.de>; Thu, 13 Nov 2025 09:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40B752D23B6;
-	Thu, 13 Nov 2025 09:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BE172D131D;
+	Thu, 13 Nov 2025 09:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="roEEkp3B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ddwA9E2Q"
 X-Original-To: linux-fpga@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BB8286A4;
-	Thu, 13 Nov 2025 09:10:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70ACC29ACC6;
+	Thu, 13 Nov 2025 09:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763025024; cv=none; b=PcOfVyAKXiQ5oZdFTwt+ufwRNCaBMbCoZZ+3S09pNihloMMD0IGWINYhDUm4XYpe+ft2DNndaCQ4qy+GquPWZVtRRZEi0iArfo/iTJHRRmVktt3aL7kuwdXTvtQeeJcokKvldoCAJ71YVkIqONgHhSvtfQU4pteU/RfXdZutcGw=
+	t=1763025072; cv=none; b=Iniy1quywgeQTcipgOu5j73Bdj9WrVY+oIC3DNJ/S41Ps/0WXm3gSPC9KQ+b2aFrTA/9EwQ6QxMnZP4ODi176o/vQYRp91xM9gaEO8ll7+vRCkflMXaWEWG63cCGcDJCj3b3z63N4viyB7oce0TcxGkp3+kRx5xY6SNtp2K28K4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763025024; c=relaxed/simple;
-	bh=vH5Li4CaTekqHCRvDV+qpLf10K31NLfs1EW5kRfcBKI=;
+	s=arc-20240116; t=1763025072; c=relaxed/simple;
+	bh=F4vYXnO4KOazwQtNvDE7fR44gVvY4KjI/Ci2Vw+Yv2M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X4z4AYEdx7vuFFusnJ2Mm9cgPbxHxIU+4hsxETk+D1I66H4NXXMIZfFkbUqQ27+HlMxTb+l9mT3LzJPZ8at7xiB9MNelJPZJrU62WJOBfb3Yy1Hz4wdqBflmj74bKVVA5Z/OeGi+mES2MRd21M5aYJypp4SYsU7h6yQy8ikHPc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=roEEkp3B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73791C4CEF1;
-	Thu, 13 Nov 2025 09:10:20 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=urWF5kK/fesugeAj5NW9f6kVPLLpWMIcqGSIzG3RwT/jW5XjO6y2BKdXJGzc7h7tsAyMxOGW9t21tJV+h7Zx0rB6kUeqLrr00/SkyCOU4H56w5MjEkUIRYX1jcKfZGd3QUPwPASESbeIM1VK0/ndjWd2DEbUAuPbmBBf3ZzQI9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ddwA9E2Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFFECC113D0;
+	Thu, 13 Nov 2025 09:11:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763025023;
-	bh=vH5Li4CaTekqHCRvDV+qpLf10K31NLfs1EW5kRfcBKI=;
+	s=k20201202; t=1763025071;
+	bh=F4vYXnO4KOazwQtNvDE7fR44gVvY4KjI/Ci2Vw+Yv2M=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=roEEkp3BUExsrQHQ9J4uGXsJFvSzNnyFjwOOBLcHYpDxJ8pyvNKH3lfnF1KdxV83L
-	 +U3cKTvQq2o5O/FBC7zGVbcLYwHkSVwheNL1n/WOfwOz26BcgqrlL1GNeL1vCFEPkx
-	 GFK3gT/tEygh0JdStjv4Y0vQ4g5s40bbeiolOt5/mZoX42Kjjusct/BNgfPIMaH0Nn
-	 QRRkynI++7oUz81j3K56gIYFX7XMVLsREnQnWUGjcVCewyScP9D0URL3qwfNJzHvfu
-	 4MVVTavvjIwzZcejIIIQDqjo9fIi4fyrQheYo9Wuat+RgBViWoz1J1xIpa4qBrXQry
-	 hB9RYVFOtKOQw==
-Message-ID: <00d09e4a-2bcb-4158-803a-d298aad33a95@kernel.org>
-Date: Thu, 13 Nov 2025 10:10:18 +0100
+	b=ddwA9E2QrvNU4TnFFDeOkvE5tN0i+t1ENd+jjyP8VkeLFFtninOl8oSqGhZ70KV++
+	 /UufdD7KbdnZmwd9awbPuu1TTcAIBYHqKL7/mTxS3+9Y1Oj8a4tGMuyWR1XaCTdUm2
+	 p68yCGyAIADKRraJ13myIQO4sqgOOqMZg8KvLJZpWJP0UhVd91m28aaZ7e5swKJuGE
+	 kgKOzRoT7tDqCkroU0i2h2cLIqnuce5AM48c40sgcU4pk89pxg+x0WHlcUBe6kAlfT
+	 2YAn1aSa7nv2niWsCsmHSNsC7a85dDmTb119FUyk2sVwfiKHHLPBGJH2z8TJGDlEd4
+	 PRaIM8luDOgpg==
+Message-ID: <a84afd6d-a9ec-48f2-b681-7ad6f6e428cb@kernel.org>
+Date: Thu, 13 Nov 2025 10:11:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-fpga@vger.kernel.org
 List-Id: <linux-fpga.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-fpga+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-fpga+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] Enable FPGA Manager support for Agilex5
+Subject: Re: [PATCH v2 2/2] arm64: dts: agilex5: add fpga-region and fpga-mgr
+ nodes
 To: "Romli, Khairul Anuar" <khairul.anuar.romli@altera.com>,
  Xu Yilun <yilun.xu@linux.intel.com>
 Cc: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
@@ -63,9 +64,10 @@ Cc: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
  "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 References: <cover.1763008269.git.khairul.anuar.romli@altera.com>
- <aRV0UCZD6fwnfWUE@yilunxu-OptiPlex-7050>
- <a0214340-d0dd-4689-9692-d934f3a80c40@kernel.org>
- <cdd2d579-65a3-4e1f-b8e8-45b30a6d9848@altera.com>
+ <9a4ce6b2470328b9326402a2f00ff285be1793c3.1763008269.git.khairul.anuar.romli@altera.com>
+ <aRVyvjCny/I/rElC@yilunxu-OptiPlex-7050>
+ <c7470b9e-5c8f-4498-a752-9c986de8aca2@kernel.org>
+ <59344226-be4f-4c90-b7dc-8c2a5a471d80@altera.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,60 +113,41 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <cdd2d579-65a3-4e1f-b8e8-45b30a6d9848@altera.com>
+In-Reply-To: <59344226-be4f-4c90-b7dc-8c2a5a471d80@altera.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 13/11/2025 10:07, Romli, Khairul Anuar wrote:
-> On 13/11/2025 3:13 pm, Krzysztof Kozlowski wrote:
->> On 13/11/2025 07:01, Xu Yilun wrote:
->>> On Thu, Nov 13, 2025 at 12:43:54PM +0800, Khairul Anuar Romli wrote:
->>>> This patch series adds device tree bindings, driver support, and DTS
->>>> updates to enable FPGA Manager functionality for Intel Agilex5 SoC.
+On 13/11/2025 10:09, Romli, Khairul Anuar wrote:
+> On 13/11/2025 3:12 pm, Krzysztof Kozlowski wrote:
+>> On 13/11/2025 06:55, Xu Yilun wrote:
+>>> On Thu, Nov 13, 2025 at 12:43:56PM +0800, Khairul Anuar Romli wrote:
+>>>> The Intel Agilex 5 SoC contains a programmable FPGA region that requires
+>>>> proper device tree description to enable FPGA manager support in the Linux
+>>>> kernel. Without the 'fpga-region' and 'fpga-mgr' nodes, the kernel cannot
+>>>> detect or manage the FPGA hardware correctly.
 >>>>
->>>> These changes are intended to enable FPGA programming and management
->>>> capabilities on Agilex5-based platforms.
+>>>> This patch adds a 'fpga-region' node with compatible = "fpga-region", along
+>>>> with appropriate #address-cells and #size-cells properties, to describe the
+>>>> FPGA region layout.
 >>>>
->>>> ---
->>>> Notes:
->>>> Patch #3 depends on  "arm64: dts: intel: Add Agilex5 SVC node with memory
->>>
->>> There is no patch #3 now. Should be Patch #2 ?
->>>
->>>> region" from
->>>> https://lore.kernel.org/all/3381ef56c1ff34a0b54cf76010889b5523ead825.1762387665.git.khairul.anuar.romli@altera.com/
+>>>> Also defines specific compatible string for Agilex5 and add Agilex string
+>>>> as fallback for stratix10-soc driver initialization.
 >>>>
->>>> This patch series is applied on socfpga maintainer's tree
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git/log/?h=socfpga_dts_for_v6.19
+>>>> Signed-off-by: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
 >>>
->>> Given that, @Dinh Nguyen could you take the series if you are good?
+>>> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
 >>
->> This was never tested, so series cannot be taken.
->>
->> NAK, Altera should test the code BEFORE sending it to upstream, not
->> after we say it was not tested.
+>> How this can be reviewed if it is completely wrong and obviously not
+>> matching the bindings from this patchset?
 >>
 >> Best regards,
 >> Krzysztof
 > 
-> If you are referring to the code being tested on the Agilex5, it was
-> tested. I even take the measure to add the debug print the in init to
-> see if the fallback is working, which it did.
-> 
-> Of course I took clock manager patch from Dinh's clock manager driver
-> for Agilex5 have local defconfig instead of using default defconfig for
-> testing the code.
-> 
-> https://lore.kernel.org/all/9326ee66cb8e33c0fe83a24e9a1effc8da252ff2.1760396607.git.khairul.anuar.romli@altera.com/
-> 
-> Are you referring to different kind of test?
+> Could you point out which part that I need to fix?
+>
 
-Yes, test by tools, because you certainly do not want to engage
-reviewers if computers do the job fine.
-
-see any DT talk (there where like four last years!) or
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
+Why? Tools tell you that. Why are you expecting the community to do the
+job of compiler/toolchain/toolset? We have better things to do.
 
 Best regards,
 Krzysztof
